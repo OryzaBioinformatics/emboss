@@ -1,5 +1,5 @@
 
-                           EMBOSS: patmatmotifs 
+                               patmatmotifs 
                                       
    
    
@@ -68,13 +68,17 @@ Description
    
 Usage
 
-   Here is a sample session with patmatmotifs.
+   Here is a sample session with patmatmotifs
    
-% patmatmotifs -full
-Matching Prosite Motif Database to a single sequence.
-Input sequence: sw:12s1_arath
-Output file [12s1_arath.patmatmotifs]:
 
+% patmatmotifs -full 
+Search a PROSITE motif database with a protein sequence
+Input sequence: tsw:opsd_human
+Output report [opsd_human.patmatmotifs]: 
+   
+   Go to the input files for this example
+   Go to the output files for this example
+   
 Command line arguments
 
    Mandatory qualifiers:
@@ -102,19 +106,133 @@ Command line arguments
    [-sequence]
    (Parameter 1) Sequence USA Readable sequence Required
    [-outfile]
-   (Parameter 2) Output report file name Report file
+   (Parameter 2) Output report file name Report output file
    Optional qualifiers Allowed values Default
-   -full Provide full documentation for matching patterns Yes/No No
+   -full Provide full documentation for matching patterns Boolean value
+   Yes/No No
    -[no]prune Ignore simple patterns. If this is true then these simple
    post-translational modification sites are not reported: myristyl,
    asn_glycosylation, camp_phospho_site, pkc_phospho_site,
-   ck2_phospho_site, and tyr_phospho_site. Yes/No Yes
+   ck2_phospho_site, and tyr_phospho_site. Boolean value Yes/No Yes
    Advanced qualifiers Allowed values Default
    (none)
    
 Input file format
 
-   A protein sequence USA.
+   patmatmotifs reads a protein sequence USA.
+   
+  Input files for usage example
+  
+   'tsw:opsd_human' is a sequence entry in the example protein database
+   'tsw'
+   
+  Database entry: tsw:opsd_human
+  
+ID   OPSD_HUMAN     STANDARD;      PRT;   348 AA.
+AC   P08100; Q16414;
+DT   01-AUG-1988 (Rel. 08, Created)
+DT   01-AUG-1988 (Rel. 08, Last sequence update)
+DT   15-JUL-1999 (Rel. 38, Last annotation update)
+DE   RHODOPSIN.
+GN   RHO.
+OS   Homo sapiens (Human).
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Mammalia;
+OC   Eutheria; Primates; Catarrhini; Hominidae; Homo.
+RN   [1]
+RP   SEQUENCE FROM N.A.
+RX   MEDLINE; 84272729.
+RA   NATHANS J., HOGNESS D.S.;
+RT   "Isolation and nucleotide sequence of the gene encoding human
+RT   rhodopsin.";
+RL   Proc. Natl. Acad. Sci. U.S.A. 81:4851-4855(1984).
+RN   [2]
+RP   SEQUENCE OF 1-120 FROM N.A.
+RA   BENNETT J., BELLER B., SUN D., KARIKO K.;
+RL   Submitted (NOV-1994) to the EMBL/GenBank/DDBJ databases.
+RN   [3]
+RP   REVIEW ON ADRP VARIANTS.
+RX   MEDLINE; 94004905.
+RA   AL-MAGHTHEH M., GREGORY C., INGLEHEARN C., HARDCASTLE A.,
+RA   BHATTACHARYA S.;
+RT   "Rhodopsin mutations in autosomal dominant retinitis pigmentosa.";
+RL   Hum. Mutat. 2:249-255(1993).
+RN   [4]
+RP   VARIANT ADRP HIS-23.
+RX   MEDLINE; 90136922.
+RA   DRYJA T.P., MCGEE T.L., REICHEI E., HAHN L.B., COWLEY G.S.,
+RA   YANDELL D.W., SANDBERG M.A., BERSON E.L.;
+RT   "A point mutation of the rhodopsin gene in one form of retinitis
+RT   pigmentosa.";
+RL   Nature 343:364-366(1990).
+RN   [5]
+RP   VARIANTS ADRP.
+RX   MEDLINE; 91051574.
+RA   FARRAR G.J., KENNA P., REDMOND R., MCWILLIAM P., BRADLEY D.G.,
+RA   HUMPHRIES M.M., SHARP E.M., INGLEHEARN C.F., BASHIR R., JAY M.,
+RA   WATTY A., LUDWIG M., SCHINZEL A., SAMANNS C., GAL A.,
+RA   BHATTACHARYA S.S., HUMPHRIES P.;
+RT   "Autosomal dominant retinitis pigmentosa: absence of the rhodopsin
+RT   proline-->histidine substitution (codon 23) in pedigrees from
+RT   Europe.";
+RL   Am. J. Hum. Genet. 47:941-945(1990).
+RN   [6]
+RP   VARIANTS ADRP HIS-23; ARG-58; LEU-347 AND SER-347.
+RX   MEDLINE; 91015273.
+
+
+  [Part of this file has been deleted for brevity]
+
+FT                                /FTId=VAR_004816.
+FT   VARIANT     209    209       V -> M (EFFECT NOT KNOWN).
+FT                                /FTId=VAR_004817.
+FT   VARIANT     211    211       H -> P (IN ADRP).
+FT                                /FTId=VAR_004818.
+FT   VARIANT     211    211       H -> R (IN ADRP).
+FT                                /FTId=VAR_004819.
+FT   VARIANT     216    216       M -> K (IN ADRP).
+FT                                /FTId=VAR_004820.
+FT   VARIANT     220    220       F -> C (IN ADRP).
+FT                                /FTId=VAR_004821.
+FT   VARIANT     222    222       C -> R (IN ADRP).
+FT                                /FTId=VAR_004822.
+FT   VARIANT     255    255       MISSING (IN ADRP).
+FT                                /FTId=VAR_004823.
+FT   VARIANT     264    264       MISSING (IN ADRP).
+FT                                /FTId=VAR_004824.
+FT   VARIANT     267    267       P -> L (IN ADRP).
+FT                                /FTId=VAR_004825.
+FT   VARIANT     267    267       P -> R (IN ADRP).
+FT                                /FTId=VAR_004826.
+FT   VARIANT     292    292       A -> E (IN CSNB4).
+FT                                /FTId=VAR_004827.
+FT   VARIANT     296    296       K -> E (IN ADRP).
+FT                                /FTId=VAR_004828.
+FT   VARIANT     297    297       S -> R (IN ADRP).
+FT                                /FTId=VAR_004829.
+FT   VARIANT     342    342       T -> M (IN ADRP).
+FT                                /FTId=VAR_004830.
+FT   VARIANT     345    345       V -> L (IN ADRP).
+FT                                /FTId=VAR_004831.
+FT   VARIANT     345    345       V -> M (IN ADRP).
+FT                                /FTId=VAR_004832.
+FT   VARIANT     347    347       P -> A (IN ADRP).
+FT                                /FTId=VAR_004833.
+FT   VARIANT     347    347       P -> L (IN ADRP; COMMON VARIANT).
+FT                                /FTId=VAR_004834.
+FT   VARIANT     347    347       P -> Q (IN ADRP).
+FT                                /FTId=VAR_004835.
+FT   VARIANT     347    347       P -> R (IN ADRP).
+FT                                /FTId=VAR_004836.
+FT   VARIANT     347    347       P -> S (IN ADRP).
+FT                                /FTId=VAR_004837.
+SQ   SEQUENCE   348 AA;  38892 MW;  07443BEA CRC32;
+     MNGTEGPNFY VPFSNATGVV RSPFEYPQYY LAEPWQFSML AAYMFLLIVL GFPINFLTLY
+     VTVQHKKLRT PLNYILLNLA VADLFMVLGG FTSTLYTSLH GYFVFGPTGC NLEGFFATLG
+     GEIALWSLVV LAIERYVVVC KPMSNFRFGE NHAIMGVAFT WVMALACAAP PLAGWSRYIP
+     EGLQCSCGID YYTLKPEVNN ESFVIYMFVV HFTIPMIIIF FCYGQLVFTV KEAAAQQQES
+     ATTQKAEKEV TRMVIIMVIA FLICWVPYAS VAFYIFTHQG SNFGPIFMTI PAFFAKSAAI
+     YNPVIYIMMN KQFRNCMLTT ICCGKNPLGD DEASATVSKT ETSQVAPA
+//
    
 Output file format
 
@@ -132,103 +250,136 @@ Output file format
    
    By default patmatmotifs writes a 'dbmotif' report file.
    
-   The output from the above example follows:
-     _________________________________________________________________
-   
+  Output files for usage example
+  
+  File: opsd_human.patmatmotifs
+  
 ########################################
 # Program: patmatmotifs
-# Rundate: Thu Apr 11 13:53:51 2002
-# Report_file: 12s1_arath.patmatmotifs
+# Rundate: Thu Nov 07 14:35:28 2002
+# Report_format: dbmotif
+# Report_file: opsd_human.patmatmotifs
 ########################################
 
 #=======================================
 #
-# Sequence: 12S1_ARATH     from: 1   to: 472
-# HitCount: 1
+# Sequence: OPSD_HUMAN     from: 1   to: 348
+# HitCount: 2
 #
 # Full: Yes
 # Prune: Yes
 # Data_file: /packages/emboss_dev/gwilliam/emboss/emboss/emboss/data/PROSITE/pr
-o
-site.lines
+osite.lines
 #
 #=======================================
 
-Length = 23
-Start = position 282 of sequence
-End = position 304 of sequence
+Length = 17
+Start = position 123 of sequence
+End = position 139 of sequence
 
+Motif = G_PROTEIN_RECEP_F1_1
 
-Motif = 11S_SEED_STORAGE
+TLGGEIALWSLVVLAIERYVVVCKPMS
+     |               |
+   123               139
 
-HGRHGNGLEETICSARCTDNLDDPSRADVYKPQ
-     |                     |
-   282                     304
+Length = 17
+Start = position 290 of sequence
+End = position 306 of sequence
+
+Motif = OPSIN
+
+PIFMTIPAFFAKSAAIYNPVIYIMMNK
+     |               |
+   290               306
 
 
 #---------------------------------------
 #
-# Motif: 11S_SEED_STORAGE
+# Motif: G_PROTEIN_RECEP_F1_1
 # Count: 1
 #
-# **********************************************
-# * 11-S plant seed storage proteins signature *
-# **********************************************
+# *****************************************
+# * G-protein coupled receptors signature *
+# *****************************************
 #
-# Plant seed storage proteins, whose  principal function appears to be the majo
-r
-# nitrogen  source for the developing plant,  can be classified, on the basis o
-f
-# their structure, into different families.  11-S are non-glycosylated  protein
-s
-# which form hexameric structures [1,2].  Each of the subunits in the hexamer i
-s
-# itself composed of an acidic and a basic chain derived from a single precurso
-r
-# and linked  by a  disulfide bond.   This  structure is  shown in the followin
-g
-# representation.
-#
-#                    +-------------------------+
-#                    |                         |
-#         xxxxxxxxxxxCxxxxxxxxxxxxxxxxxxxxxxNGxCxxxxxxxxxxxxxxxxxxxxxxx
-#                                           *********
-#         <------Acidic-subunit-------------><-----Basic-subunit------>
-#         <-----------------About-480-to-500-residues----------------->
-#
-# 'C': conserved cysteine involved in a disulfide bond.
-# '*': position of the pattern.
-#
-# Proteins that belong to the 11-S family are: pea and broad bean legumins, rap
+# G-protein coupled receptors [1 to 4,E1,E2] (also called R7G) are  an extensiv
 e
-# cruciferin, rice glutelins,  cotton beta-globulins, soybean glycinins, pumpki
-n
-# 11-S globulin, oat globulin, sunflower helianthinin G3, etc.
+# group of  hormones,  neurotransmitters,  odorants  and  light  receptors whic
+h
+
+
+  [Part of this file has been deleted for brevity]
+
+# Count: 1
 #
-# As a signature  pattern  for  this  family of proteins we used the region tha
-t
-# includes the  conserved  cleavage  site between  the acidic and basic subunit
+# *************************************************
+# * Visual pigments (opsins) retinal binding site *
+# *************************************************
+#
+# Visual pigments [1,2] are the light-absorbing  molecules that  mediate vision
+.
+# They consist of  an apoprotein, opsin,  covalently  linked  to the chromophor
+e
+# cis-retinal.  Vision is  effected through  the absorption of a  photon by cis
+-
+# retinal  which is isomerized to  trans-retinal.  This isomerization leads to
+a
+# change  of conformation  of the protein. Opsins are integral membrane protein
 s
-# (Asn-Gly) and a  proximal cysteine residue which is involved in the interchai
-n
-# disulfide bond.
+# with  seven transmembrane regions that belong to family 1 of G-protein couple
+d
+# receptors (see <PDOC00210>).
 #
-# -Consensus pattern: N-G-x-[DE](2)-x-[LIVMF]-C-[ST]-x(11,12)-[PAG]-D
-#                     [C is involved in a disulfide bond]
+# In vertebrates four different pigments are generally found.   Rod cells, whic
+h
+# mediate vision in dim light, contain the pigment rhodopsin.  Cone cells, whic
+h
+# function in bright light, are responsible  for  color vision and contain thre
+e
+# or more color pigments (for example, in mammals: red, blue and green).
+#
+# In Drosophila, the  eye   is composed   of 800   facets  or   ommatidia.  Eac
+h
+# ommatidium contains eight photoreceptor cells (R1-R8):  the R1 to R6 cells ar
+e
+# outer cells,  R7  and R8 inner cells. Each of the three types of cells (R1-R6
+,
+# R7 and R8) expresses a specific opsin.
+#
+# Proteins evolutionary related to opsins include squid retinochrome, also know
+n
+# as retinal  photoisomerase, which converts various isomers of retinal into 11
+-
+# cis retinal and mammalian retinal pigment  epithelium (RPE) RGR [3], a protei
+n
+# that may also act in retinal isomerization.
+#
+# The attachment  site  for  retinal in the above proteins is a conserved lysin
+e
+# residue in  the  middle  of  the  seventh  transmembrane helix. The pattern w
+e
+# developed includes this residue.
+#
+# -Consensus pattern: [LIVMWAC]-[PGAC]-x(3)-[SAC]-K-[STALIMR]-[GSACPNV]-[STACP]
+-
+#                     x(2)-[DENF]-[AP]-x(2)-[IY]
+#                     [K is the retinal binding site]
 # -Sequences known to belong to this class detected by the pattern: ALL.
 # -Other sequence(s) detected in SWISS-PROT: NONE.
-# -Last update: June 1994 / Pattern and text revised.
+# -Last update: July 1998 / Pattern and text revised.
 #
-# [ 1] Hayashi M., Mori H., Nishimura M., Akazawa T., Hara-Nishimura I.
-#      Eur. J. Biochem. 172:627-632(1988).
-# [ 2] Shotwell M.A., Afonso C., Davies E., Chesnut R.S., Larkins B.A.
-#      Plant Physiol. 87:698-704(1988).
+# [ 1] Applebury M.L., Hargrave P.A.
+#      Vision Res. 26:1881-1895(1986).
+# [ 2] Fryxell K.J., Meyerowitz E.M.
+#      J. Mol. Evol. 33:367-378(1991).
+# [ 3] Shen D., Jiang M., Hao W., Tao L., Salazar M., Fong H.K.W.
+#      Biochemistry 33:13117-13125(1994).
 #
 # ***************
 #
 #
 #---------------------------------------
-     _________________________________________________________________
    
 Data files
 
@@ -287,7 +438,7 @@ Known bugs
    
 See also
 
-    Program name                        Description
+    Program name                         Description
    antigenic      Finds antigenic sites in proteins
    digest         Protein proteolytic enzyme or reagent cleavage digest
    fuzzpro        Protein pattern search
@@ -296,6 +447,7 @@ See also
    oddcomp        Finds protein sequence regions with a biased composition
    patmatdb       Search a protein sequence with a motif
    pepcoil        Predicts coiled coil regions
+   pestfind       Finds PEST motifs as potential proteolytic cleavage sites
    preg           Regular expression search of a protein sequence
    pscan          Scans proteins using PRINTS
    sigcleave      Reports protein signal cleavage sites

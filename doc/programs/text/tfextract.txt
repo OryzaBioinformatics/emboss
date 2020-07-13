@@ -64,12 +64,16 @@ Description
    
 Usage
 
-   Here is a sample session with tfextract.
+   Here is a sample session with tfextract
+   
 
-% tfextract
+% tfextract 
 Extract data from TRANSFAC
-Full pathname of transfac SITE.DAT: /data/transfac/site.dat
-
+Full pathname of transfac SITE.DAT: ../../data/site.dat
+   
+   Go to the input files for this example
+   Go to the output files for this example
+   
 Command line arguments
 
    Mandatory qualifiers:
@@ -98,21 +102,146 @@ Input file format
    
    http://transfac.gbf.de/cgi-bin/download/download.pl
    
+  Input files for usage example
+  
+  File: ../../data/site.dat
+  
+AC  R00077
+XX
+ID  HS$ALBU_01
+XX
+DT  20.06.90 (created); ewi.
+DT  24.08.95 (updated); hiwi.
+XX
+TY  D
+XX
+DE  albumin; Gene: G000188.
+XX
+SQ  tGGTTAGtaattactaa.
+XX
+SF  -363
+ST  -338
+XX
+BF  T00368; HNF-1A;Quality: 1; Species: human, Homo sapiens.
+BF  T00369; HNF-1;Quality: 1; Species: rat, Rattus norvegicus.
+BF  T01950; HNF-1B;Quality: 1; Species: human, Homo sapiens.
+BF  T01951; HNF-1C;Quality: 1; Species: human, Homo sapiens.
+XX
+OS  human, Homo sapiens
+OC  eukaryota; animalia; metazoa; chordata; vertebrata;
+OC  tetrapoda; mammalia; eutheria; primates
+XX
+SO  0103; Hep3B
+SO  0289; rl
+XX
+MM  gel retardation
+MM  direct gel shift
+MM  DNase I footprinting
+MM  gel shift competition
+MM  affinity chromatography
+MM  methylation interference
+XX
+DR  EMBL: M13075; HSALBEX1(695:711).
+XX
+RN  [1]
+RA  Frain M., Swart G., Monaci P., Nicosia A., Staempfli
+RA  S., Frank R., Cortese R.
+RT  The liver-specific transcription factor LF-B1 contains
+RT  a highly diverged homeobox DNA binding domain
+RL  Cell 59:145-157 (1989).
+RN  [2]
+RA  Frain M., Hardon E., Ciliberto G., Sala-Trepat J. M.
+RT  Binding of a liver-specific factor to the human albumin
+RT  gene promoter and enhancer
+RL  Mol. Cell. Biol. 10:991-999 (1990).
+XX
+//
+
+
+  [Part of this file has been deleted for brevity]
+
+DR  EMBL: U11854; MM11854(1931:1941).
+XX
+RN  [1]
+RA  Feinman R., Qiu W. Q., Pearse R. N., Nikolajczyk B.
+RA  S., Sen R., Sheffery M., Ravetch J. V.
+RT  PU.1 and an HLH family member contribute to the myeloid-specific
+RT  transcription of the FcgammaRIIIA promoter
+RL  EMBO J. 13:3852-3860 (1994).
+XX
+//
+AC  R04413
+XX
+ID  MOUSE$FCGR3A_02
+XX
+DT  14.05.97 (created); ewi.
+DT  14.05.97 (updated); ewi.
+XX
+TY  D
+XX
+DE  FcgammaRIIIA (low-affinity Fc receptor IIIA for IgG); Gene: G001014.
+XX
+SQ  TTCCTC.
+XX
+EL  MRR
+XX
+SF  -48
+ST  -43
+XX
+BF  T00702; PU.1;Quality: 3; Species: mouse, Mus musculus.
+XX
+OS  mouse, Mus musculus
+OC  eukaryota; animalia; metazoa; chordata; vertebrata;
+OC  tetrapoda; mammalia; eutheria; rodentia; myomorpha; muridae; murinae
+XX
+SO  0495; A20
+SO  0848; RAW264.7
+XX
+MM  direct gel shift
+MM  methylation interference
+MM  supershift (antibody binding)
+XX
+DR  EMBL: U11854; MM11854(1971:1976).
+XX
+RN  [1]
+RA  Feinman R., Qiu W. Q., Pearse R. N., Nikolajczyk B.
+RA  S., Sen R., Sheffery M., Ravetch J. V.
+RT  PU.1 and an HLH family member contribute to the myeloid-specific
+RT  transcription of the FcgammaRIIIA promoter
+RL  EMBO J. 13:3852-3860 (1994).
+XX
+//
+   
 Output file format
 
+  Output files for usage example
+  
+  File: tffungi
+  
+  File: tfinsect
+  
+  File: tfother
+  
+  File: tfplant
+  
+   Y$ADH1_02            ACAATATGGACTTCCTCTTTTCTGG R04140
+
+  File: tfvertebrate
+  
+HS$ALBU_01           tGGTTAGtaattactaa R00077
+HS$ALBU_02           TTGGCA R00078
+HS$ALBU_03           TGGCA R00079
+HS$ALBU_04           TTAATAAT R00080
+HS$ALBU_05           TCTAGTTAATAATCTACAAT R00081
+MOUSE$FCGR3A_01      GTCTGCTGACC R04412
+MOUSE$FCGR3A_02      TTCCTC R04413
+   
    The output from tfextract is a set of files in the emboss/data
    directory containing reformatted sites from the transfac database.
    
    These files are used by the tfscan program to search for TRANSFAC
    sites in sequences.
-
-% ls -1s emboss/data/tf*
- 18 emboss/data/tffungi
- 17 emboss/data/tfinsect
- 56 emboss/data/tfother
-  4 emboss/data/tfplant
-112 emboss/data/tfvertebrate
-
+   
 Data files
 
    EMBOSS data files are distributed with the application and stored in
@@ -172,27 +301,10 @@ See also
    Program name Description
    aaindexextract Extract data from AAINDEX
    cutgextract Extract data from CUTG
-   domainer Reads protein coordinate files and writes domains coordinate
-   files
-   funky Reads clean coordinate files and writes file of
-   protein-heterogen contact data
-   groups Removes redundant hits from a scop families file
-   hetparse Converts raw dictionary of heterogen groups to a file in
-   embl-like format
-   nrscope Converts redundant EMBL-format SCOP file to non-redundant one
-   pdbparse Parses pdb files and writes cleaned-up protein coordinate
-   files
-   pdbtosp Convert raw swissprot:pdb equivalence file to embl-like format
    printsextract Extract data from PRINTS
    prosextract Builds the PROSITE motif database for patmatmotifs to
    search
    rebaseextract Extract data from REBASE
-   scope Convert raw scop classification file to embl-like format
-   scopnr Removes redundant domains from a scop classification file
-   scopparse Converts raw scop classification files to a file in
-   embl-like format
-   scopseqs Adds pdb and swissprot sequence records to a scop
-   classification file
    
 Author(s)
 

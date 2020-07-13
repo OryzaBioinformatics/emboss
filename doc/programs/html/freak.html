@@ -88,16 +88,22 @@ The default set of bases is 'cg' which will calculate the frequency of
  -->
 
 
-Here is a sample session with freak:
+<b>Here is a sample session with freak</b>
+<p>
 
-<pre>
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% freak embl:hsfau 
+% <b>freak tembl:hsfau </b>
 Residue/base frequency table or plot
-Residue letters [gc]: 
-Output file [hsfau.freak]: 
+Residue letters [gc]: <b></b>
+Output file [hsfau.freak]: <b></b>
 
-</pre>
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
+
+
 
 
 <H2>
@@ -198,7 +204,7 @@ IT IS DONE FOR YOU.
 <tr>
 <td>-plot</td>
 <td>Produce graphic</td>
-<td>Yes/No</td>
+<td>Boolean value Yes/No</td>
 <td>No</td>
 </tr>
 
@@ -218,7 +224,96 @@ IT IS DONE FOR YOU.
         happens in unusual cases - null input, etc. 
    -->
 
-Normal sequence USAs.
+<b>freak</b> reads normal sequence USAs.
+
+<p>
+
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+
+'tembl:hsfau' is a sequence entry in the example nucleic acid database 'tembl'
+<p>
+<p><h3>Database entry: tembl:hsfau</h3>
+<table width="90%"><tr><td bgcolor="#FFDDFF">
+<pre>
+ID   HSFAU      standard; RNA; HUM; 518 BP.
+XX
+AC   X65923;
+XX
+SV   X65923.1
+XX
+DT   13-MAY-1992 (Rel. 31, Created)
+DT   23-SEP-1993 (Rel. 37, Last updated, Version 10)
+XX
+DE   H.sapiens fau mRNA
+XX
+KW   fau gene.
+XX
+OS   Homo sapiens (human)
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia;
+OC   Eutheria; Primates; Catarrhini; Hominidae; Homo.
+XX
+RN   [1]
+RP   1-518
+RA   Michiels L.M.R.;
+RT   ;
+RL   Submitted (29-APR-1992) to the EMBL/GenBank/DDBJ databases.
+RL   L.M.R. Michiels, University of Antwerp, Dept of Biochemistry,
+RL   Universiteisplein 1, 2610 Wilrijk, BELGIUM
+XX
+RN   [2]
+RP   1-518
+RX   MEDLINE; 93368957.
+RA   Michiels L., Van der Rauwelaert E., Van Hasselt F., Kas K., Merregaert J.;
+RT   " fau cDNA encodes a ubiquitin-like-S30 fusion protein and is expressed as
+RT   an antisense sequences in the Finkel-Biskis-Reilly murine sarcoma virus";
+RL   Oncogene 8:2537-2546(1993).
+XX
+DR   SWISS-PROT; P35544; UBIM_HUMAN.
+DR   SWISS-PROT; Q05472; RS30_HUMAN.
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..518
+FT                   /chromosome="11q"
+FT                   /db_xref="taxon:9606"
+FT                   /organism="Homo sapiens"
+FT                   /tissue_type="placenta"
+FT                   /clone_lib="cDNA"
+FT                   /clone="pUIA 631"
+FT                   /map="13"
+FT   misc_feature    57..278
+FT                   /note="ubiquitin like part"
+FT   CDS             57..458
+FT                   /db_xref="SWISS-PROT:P35544"
+FT                   /db_xref="SWISS-PROT:Q05472"
+FT                   /gene="fau"
+FT                   /protein_id="CAA46716.1"
+FT                   /translation="MQLFVRAQELHTFEVTGQETVAQIKAHVASLEGIAPEDQVVLLAG
+FT                   APLEDEATLGQCGVEALTTLEVAGRMLGGKVHGSLARAGKVRGQTPKVAKQEKKKKKTG
+FT                   RAKRRMQYNRRFVNVVPTFGKKKGPNANS"
+FT   misc_feature    98..102
+FT                   /note="nucleolar localization signal"
+FT   misc_feature    279..458
+FT                   /note="S30 part"
+FT   polyA_signal    484..489
+FT   polyA_site      509
+XX
+SQ   Sequence 518 BP; 125 A; 139 C; 148 G; 106 T; 0 other;
+     ttcctctttc tcgactccat cttcgcggta gctgggaccg ccgttcagtc gccaatatgc        60
+     agctctttgt ccgcgcccag gagctacaca ccttcgaggt gaccggccag gaaacggtcg       120
+     cccagatcaa ggctcatgta gcctcactgg agggcattgc cccggaagat caagtcgtgc       180
+     tcctggcagg cgcgcccctg gaggatgagg ccactctggg ccagtgcggg gtggaggccc       240
+     tgactaccct ggaagtagca ggccgcatgc ttggaggtaa agttcatggt tccctggccc       300
+     gtgctggaaa agtgagaggt cagactccta aggtggccaa acaggagaag aagaagaaga       360
+     agacaggtcg ggctaagcgg cggatgcagt acaaccggcg ctttgtcaac gttgtgccca       420
+     cctttggcaa gaagaagggc cccaatgcca actcttaagt cttttgtaat tctggctttc       480
+     tctaataaaa aagccactta gttcagtcaa aaaaaaaa                               518
+//
+</pre>
+</td></tr></table><p>
+
 
 <H2>
     Output file format
@@ -232,9 +327,11 @@ Normal sequence USAs.
         happens in unusual cases - null output, errors etc. 
    -->
 
-The output from the above example is:
-<p>
-<hr>
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: hsfau.freak</h3>
+<table width="90%"><tr><td bgcolor="#DDFFDD">
 <pre>
 FREAK of HSFAU from 1 to 518 Window 30 Step 1
 
@@ -274,11 +371,78 @@ FREAK of HSFAU from 1 to 518 Window 30 Step 1
 34         0.633333
 35         0.600000
 36         0.600000
+37         0.566667
+38         0.566667
+39         0.533333
+40         0.533333
+41         0.500000
+42         0.500000
+43         0.500000
+44         0.500000
+45         0.533333
+46         0.566667
+47         0.566667
+48         0.600000
 
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+439        0.433333
+440        0.400000
+441        0.366667
+442        0.333333
+443        0.333333
+444        0.300000
+445        0.333333
+446        0.366667
+447        0.400000
+448        0.366667
+449        0.333333
+450        0.300000
+451        0.333333
+452        0.333333
+453        0.333333
+454        0.333333
+455        0.300000
+456        0.300000
+457        0.300000
+458        0.300000
+459        0.300000
+460        0.266667
+461        0.266667
+462        0.233333
+463        0.233333
+464        0.266667
+465        0.300000
+466        0.333333
+467        0.300000
+468        0.333333
+469        0.333333
+470        0.333333
+471        0.333333
+472        0.366667
+473        0.333333
+474        0.333333
+475        0.333333
+476        0.300000
+477        0.300000
+478        0.300000
+479        0.333333
+480        0.333333
+481        0.300000
+482        0.300000
+483        0.266667
+484        0.266667
+485        0.266667
+486        0.266667
+487        0.266667
+488        0.266667
+489        0.266667
 </pre>
-<P>
-[listing truncated for brevity]
-<P>
+</td></tr></table><p>
+
+
+<p>
 
 The ouput consists of a title line and then two columns containing the
 position of the start of the window and then the frequency in that
@@ -406,7 +570,7 @@ None.
 <tr><td><a href="btwisted.html">btwisted</a></td><td>Calculates the twisting in a B-DNA sequence</td></tr>
 <tr><td><a href="chaos.html">chaos</a></td><td>Create a chaos game representation plot for a sequence</td></tr>
 <tr><td><a href="charge.html">charge</a></td><td>Protein charge plot</td></tr>
-<tr><td><a href="checktrans.html">checktrans</a></td><td>Reports STOP codons and ORF statistics of a protein sequence</td></tr>
+<tr><td><a href="checktrans.html">checktrans</a></td><td>Reports STOP codons and ORF statistics of a protein</td></tr>
 <tr><td><a href="compseq.html">compseq</a></td><td>Counts the composition of dimer/trimer/etc words in a sequence</td></tr>
 <tr><td><a href="dan.html">dan</a></td><td>Calculates DNA RNA/DNA melting temperature</td></tr>
 <tr><td><a href="emowse.html">emowse</a></td><td>Protein identification by mass spectrometry</td></tr>
@@ -419,6 +583,7 @@ None.
 <tr><td><a href="pepstats.html">pepstats</a></td><td>Protein statistics</td></tr>
 <tr><td><a href="pepwindow.html">pepwindow</a></td><td>Displays protein hydropathy</td></tr>
 <tr><td><a href="pepwindowall.html">pepwindowall</a></td><td>Displays protein hydropathy of a set of sequences</td></tr>
+<tr><td><a href="sirna.html">sirna</a></td><td>Finds siRNA duplexes in mRNA</td></tr>
 <tr><td><a href="wordcount.html">wordcount</a></td><td>Counts words of a specified size in a DNA sequence</td></tr>
 </table>
 

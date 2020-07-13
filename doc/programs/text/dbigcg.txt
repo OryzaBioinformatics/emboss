@@ -20,22 +20,36 @@ Description
    EMBOSS, and appears to be the most generally used and publicly
    available index file format for these databases.
    
+   Having created the EMBOSS indices for this file, a database can then
+   be defined in the file emboss.defaults as something like:
+   
+DB embl [
+   type: N
+   format: embl
+   method: gcg
+   directory: /data/gcg/gcgembl
+]
+
 Usage
 
-   Here is a sample session with dbigcg.
+   Here is a sample session with dbigcg
+   
 
-% dbigcg
+% dbigcg 
+Index a GCG formatted database
       EMBL : EMBL
      SWISS : Swiss-Prot, SpTrEMBL, TrEMBLnew
-        GB : Genbank, DDBJ
+   GENBANK : Genbank, DDBJ
        PIR : NBRF
-Entry format [EMBL]:
-Database name: tembl
-Database directory [.]: /nfs/disk42/pmr/emboss/test/gcgembl/
-Wildcard database filename [*.seq]:
-Release number [0.0]:
-Index date [00/00/00]: 04/02/00
-
+Entry format [EMBL]: EMBL
+Database directory [.]: ../../embl
+Wildcard database filename [*.seq]: 
+Database name: EMBL
+Release number [0.0]: 
+Index date [00/00/00]: 
+   
+   Go to the output files for this example
+   
 Command line arguments
 
    Mandatory qualifiers:
@@ -95,8 +109,8 @@ Command line arguments
    -sortoptions Sort options, typically '-T .' to use current directory
    for work files and '-k 1,1' to force GNU sort to use the first field
    Any string is accepted -T . -k 1,1
-   -[no]systemsort Use system sort utility Yes/No Yes
-   -[no]cleanup Clean up temporary files Yes/No Yes
+   -[no]systemsort Use system sort utility Boolean value Yes/No Yes
+   -[no]cleanup Clean up temporary files Boolean value Yes/No Yes
    
 Input file format
 
@@ -106,6 +120,28 @@ Input file format
    
 Output file format
 
+  Output files for usage example
+  
+  File: acnum.hit
+  
+   This file contains non-printing characters and so cannot be displayed
+   here.
+   
+  File: acnum.trg
+  
+   This file contains non-printing characters and so cannot be displayed
+   here.
+   
+  File: division.lkp
+  
+   This file contains non-printing characters and so cannot be displayed
+   here.
+   
+  File: entrynam.idx
+  
+   This file contains non-printing characters and so cannot be displayed
+   here.
+   
    dbigcg creates four index files. All are binary but with a simple
    format.
      * division.lkp is the master index file, and has a 300 byte header

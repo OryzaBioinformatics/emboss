@@ -125,15 +125,19 @@ Files</b> below.
 </H2>
 
 
-Here is a sample session with tfextract.
+<b>Here is a sample session with tfextract</b>
+<p>
 
-<pre>
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% tfextract
+% <b>tfextract </b>
 Extract data from TRANSFAC
-Full pathname of transfac SITE.DAT: /data/transfac/site.dat
+Full pathname of transfac SITE.DAT: <b>../../data/site.dat</b>
 
-</pre>
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
 
 
 
@@ -212,30 +216,178 @@ site:
 <p>
 <A HREF="http://transfac.gbf.de/cgi-bin/download/download.pl">http://transfac.gbf.de/cgi-bin/download/download.pl</A>
 
+<p>
+
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+<p><h3>File: ../../data/site.dat</h3>
+<table width="90%"><tr><td bgcolor="#FFDDFF">
+<pre>
+AC  R00077
+XX
+ID  HS$ALBU_01
+XX
+DT  20.06.90 (created); ewi.
+DT  24.08.95 (updated); hiwi.
+XX
+TY  D
+XX
+DE  albumin; Gene: G000188.
+XX
+SQ  tGGTTAGtaattactaa.
+XX
+SF  -363 
+ST  -338 
+XX
+BF  T00368; HNF-1A;Quality: 1; Species: human, Homo sapiens.
+BF  T00369; HNF-1;Quality: 1; Species: rat, Rattus norvegicus.
+BF  T01950; HNF-1B;Quality: 1; Species: human, Homo sapiens.
+BF  T01951; HNF-1C;Quality: 1; Species: human, Homo sapiens.
+XX
+OS  human, Homo sapiens
+OC  eukaryota; animalia; metazoa; chordata; vertebrata; 
+OC  tetrapoda; mammalia; eutheria; primates
+XX
+SO  0103; Hep3B
+SO  0289; rl
+XX
+MM  gel retardation
+MM  direct gel shift
+MM  DNase I footprinting
+MM  gel shift competition
+MM  affinity chromatography
+MM  methylation interference
+XX
+DR  EMBL: M13075; HSALBEX1(695:711).
+XX
+RN  [1]
+RA  Frain M., Swart G., Monaci P., Nicosia A., Staempfli 
+RA  S., Frank R., Cortese R.
+RT  The liver-specific transcription factor LF-B1 contains 
+RT  a highly diverged homeobox DNA binding domain
+RL  Cell 59:145-157 (1989).
+RN  [2]
+RA  Frain M., Hardon E., Ciliberto G., Sala-Trepat J. M.
+RT  Binding of a liver-specific factor to the human albumin 
+RT  gene promoter and enhancer
+RL  Mol. Cell. Biol. 10:991-999 (1990).
+XX
+//
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+DR  EMBL: U11854; MM11854(1931:1941).
+XX
+RN  [1]
+RA  Feinman R., Qiu W. Q., Pearse R. N., Nikolajczyk B. 
+RA  S., Sen R., Sheffery M., Ravetch J. V.
+RT  PU.1 and an HLH family member contribute to the myeloid-specific 
+RT  transcription of the FcgammaRIIIA promoter
+RL  EMBO J. 13:3852-3860 (1994).
+XX
+//
+AC  R04413
+XX
+ID  MOUSE$FCGR3A_02
+XX
+DT  14.05.97 (created); ewi.
+DT  14.05.97 (updated); ewi.
+XX
+TY  D
+XX
+DE  FcgammaRIIIA (low-affinity Fc receptor IIIA for IgG); Gene: G001014.
+XX
+SQ  TTCCTC.
+XX
+EL  MRR
+XX
+SF  -48 
+ST  -43 
+XX
+BF  T00702; PU.1;Quality: 3; Species: mouse, Mus musculus.
+XX
+OS  mouse, Mus musculus
+OC  eukaryota; animalia; metazoa; chordata; vertebrata; 
+OC  tetrapoda; mammalia; eutheria; rodentia; myomorpha; muridae; murinae
+XX
+SO  0495; A20
+SO  0848; RAW264.7
+XX
+MM  direct gel shift
+MM  methylation interference
+MM  supershift (antibody binding)
+XX
+DR  EMBL: U11854; MM11854(1971:1976).
+XX
+RN  [1]
+RA  Feinman R., Qiu W. Q., Pearse R. N., Nikolajczyk B. 
+RA  S., Sen R., Sheffery M., Ravetch J. V.
+RT  PU.1 and an HLH family member contribute to the myeloid-specific 
+RT  transcription of the FcgammaRIIIA promoter
+RL  EMBO J. 13:3852-3860 (1994).
+XX
+//
+</pre>
+</td></tr></table><p>
+
+
 
 <H2>
     Output file format
 </H2>
 
 
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: tffungi</h3>
+<table width="90%"><tr><td bgcolor="#DDFFDD">
+<pre>
+</pre>
+</td></tr></table><p>
+<p><h3>File: tfinsect</h3>
+<table width="90%"><tr><td bgcolor="#DDFFDD">
+<pre>
+</pre>
+</td></tr></table><p>
+<p><h3>File: tfother</h3>
+<table width="90%"><tr><td bgcolor="#DDFFDD">
+<pre>
+</pre>
+</td></tr></table><p>
+<p><h3>File: tfplant</h3>
+<table width="90%"><tr><td bgcolor="#DDFFDD">
+<pre>
+Y$ADH1_02            ACAATATGGACTTCCTCTTTTCTGG R04140
+</pre>
+</td></tr></table><p>
+<p><h3>File: tfvertebrate</h3>
+<table width="90%"><tr><td bgcolor="#DDFFDD">
+<pre>
+HS$ALBU_01           tGGTTAGtaattactaa R00077
+HS$ALBU_02           TTGGCA R00078
+HS$ALBU_03           TGGCA R00079
+HS$ALBU_04           TTAATAAT R00080
+HS$ALBU_05           TCTAGTTAATAATCTACAAT R00081
+MOUSE$FCGR3A_01      GTCTGCTGACC R04412
+MOUSE$FCGR3A_02      TTCCTC R04413
+</pre>
+</td></tr></table><p>
+
+
+<p>
+
 The output from tfextract is a set of files in the emboss/data
 directory containing reformatted sites from the transfac database.
 
 <p>
+
 These files are used by the tfscan program to search for TRANSFAC sites in
 sequences.
 
 
-<pre>
-
-% ls -1s emboss/data/tf*
- 18 emboss/data/tffungi
- 17 emboss/data/tfinsect
- 56 emboss/data/tfother
-  4 emboss/data/tfplant
-112 emboss/data/tfvertebrate
-
-</pre>
 
 <H2>
     Data files
@@ -348,20 +500,9 @@ None.
 <tr><th>Program name</th><th>Description</th></tr>
 <tr><td><a href="aaindexextract.html">aaindexextract</a></td><td>Extract data from AAINDEX</td></tr>
 <tr><td><a href="cutgextract.html">cutgextract</a></td><td>Extract data from CUTG</td></tr>
-<tr><td><a href="domainer.html">domainer</a></td><td>Reads protein coordinate files and writes domains coordinate files</td></tr>
-<tr><td><a href="funky.html">funky</a></td><td>Reads clean coordinate files and writes file of protein-heterogen contact data</td></tr>
-<tr><td><a href="groups.html">groups</a></td><td>Removes redundant hits from a scop families file</td></tr>
-<tr><td><a href="hetparse.html">hetparse</a></td><td>Converts raw dictionary of heterogen groups to a file in embl-like format</td></tr>
-<tr><td><a href="nrscope.html">nrscope</a></td><td>Converts redundant EMBL-format SCOP file to non-redundant one</td></tr>
-<tr><td><a href="pdbparse.html">pdbparse</a></td><td>Parses pdb files and writes cleaned-up protein coordinate files</td></tr>
-<tr><td><a href="pdbtosp.html">pdbtosp</a></td><td>Convert raw swissprot:pdb equivalence file to embl-like format</td></tr>
 <tr><td><a href="printsextract.html">printsextract</a></td><td>Extract data from PRINTS</td></tr>
 <tr><td><a href="prosextract.html">prosextract</a></td><td>Builds the PROSITE motif database for patmatmotifs to search</td></tr>
 <tr><td><a href="rebaseextract.html">rebaseextract</a></td><td>Extract data from REBASE</td></tr>
-<tr><td><a href="scope.html">scope</a></td><td>Convert raw scop classification file to embl-like format</td></tr>
-<tr><td><a href="scopnr.html">scopnr</a></td><td>Removes redundant domains from a scop classification file</td></tr>
-<tr><td><a href="scopparse.html">scopparse</a></td><td>Converts raw scop classification files to a file in embl-like format</td></tr>
-<tr><td><a href="scopseqs.html">scopseqs</a></td><td>Adds pdb and swissprot sequence records to a scop classification file</td></tr>
 </table>
 
 <!--

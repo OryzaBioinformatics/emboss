@@ -55,13 +55,16 @@ Description
    
 Usage
 
-   Here is a sample session with whichdb:
+   Here is a sample session with whichdb
+   
 
-% whichdb
+% whichdb 
 Search all databases for an entry
-ID or Accession number: hsfau
-Output file [outfile.whichdb]:
-
+ID or Accession number: hsfau1
+Output file [outfile.whichdb]: 
+   
+   Go to the output files for this example
+   
 Command line arguments
 
    Mandatory qualifiers (* if not always prompted):
@@ -71,6 +74,7 @@ Command line arguments
    Optional qualifiers: (none)
    Advanced qualifiers:
    -get                boolean    Retrieve sequences
+   -showall            boolean    Show failed attempts
 
    General qualifiers:
   -help                boolean    Report command line options. More
@@ -86,7 +90,8 @@ Command line arguments
    Optional qualifiers Allowed values Default
    (none)
    Advanced qualifiers Allowed values Default
-   -get Retrieve sequences Yes/No No
+   -get Retrieve sequences Boolean value Yes/No No
+   -showall Show failed attempts Boolean value Yes/No No
    
 Input file format
 
@@ -96,17 +101,6 @@ Output file format
 
    The reported database entries are written out to the specified output
    file.
-   
-   The results from the above example follow:
-     _________________________________________________________________
-   
-embl:hsfau
-human:hsfau
-tembl:hsfau
-em:hsfau
-genbank:hsfau
-gb:hsfau
-     _________________________________________________________________
    
    Each database that is defined in the local implementation of EMBOSS
    which contains an entry called 'hsfau' is reported.

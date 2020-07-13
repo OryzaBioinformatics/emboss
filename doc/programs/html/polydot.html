@@ -72,17 +72,21 @@ reports all identical matches to feature files.
 </H2>
 
 
-Here is a sample session with polydot.
-
+<b>Here is a sample session with polydot</b>
 <p>
 
-<pre>
-% polydot globin.fasta -gtitle="Polydot of globin.fasta"
-</pre>
-
 <p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-<a href="./polydot0.gif">click here for result</a>
+% <b>polydot ../../data/globins.fasta -gtitle="Polydot of globins.fasta" -graph cps </b>
+Displays all-against-all dotplots of a set of sequences
+Word size [6]: <b></b>
+
+Created polydot.ps
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
 
 
 
@@ -173,14 +177,14 @@ IT IS DONE FOR YOU.
 <tr>
 <td>-[no]boxit</td>
 <td>Draw a box around each dotplot</td>
-<td>Yes/No</td>
+<td>Boolean value Yes/No</td>
 <td>Yes</td>
 </tr>
 
 <tr>
 <td>-dumpfeat</td>
 <td>Dump all matches as feature files</td>
-<td>Yes/No</td>
+<td>Boolean value Yes/No</td>
 <td>No</td>
 </tr>
 
@@ -207,7 +211,7 @@ IT IS DONE FOR YOU.
 <tr>
 <td>-data</td>
 <td>Output the match data to a file instead of plotting it</td>
-<td>Yes/No</td>
+<td>Boolean value Yes/No</td>
 <td>No</td>
 </tr>
 
@@ -233,11 +237,50 @@ IT IS DONE FOR YOU.
         happens in unusual cases - null input, etc. 
    -->
 
-It reads in a set of nucleic or protein sequences.
+<b>polydot</b> reads in a set of nucleic or protein sequences.
 
 <p>
 
 The sequences may or may not be aligned.
+
+<p>
+
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+<p><h3>File: ../../data/globins.fasta</h3>
+<table width="90%"><tr><td bgcolor="#FFDDFF">
+<pre>
+&gt;HBB_HUMAN Sw:Hbb_Human =&gt; HBB_HUMAN
+VHLTPEEKSAVTALWGKVNVDEVGGEALGRLLVVYPWTQRFFESFGDLSTPDAVMGNPKV
+KAHGKKVLGAFSDGLAHLDNLKGTFATLSELHCDKLHVDPENFRLLGNVLVCVLAHHFGK
+EFTPPVQAAYQKVVAGVANALAHKYH
+&gt;HBB_HORSE Sw:Hbb_Horse =&gt; HBB_HORSE
+VQLSGEEKAAVLALWDKVNEEEVGGEALGRLLVVYPWTQRFFDSFGDLSNPGAVMGNPKV
+KAHGKKVLHSFGEGVHHLDNLKGTFAALSELHCDKLHVDPENFRLLGNVLVVVLARHFGK
+DFTPELQASYQKVVAGVANALAHKYH
+&gt;HBA_HUMAN Sw:Hba_Human =&gt; HBA_HUMAN
+VLSPADKTNVKAAWGKVGAHAGEYGAEALERMFLSFPTTKTYFPHFDLSHGSAQVKGHGK
+KVADALTNAVAHVDDMPNALSALSDLHAHKLRVDPVNFKLLSHCLLVTLAAHLPAEFTPA
+VHASLDKFLASVSTVLTSKYR
+&gt;HBA_HORSE Sw:Hba_Horse =&gt; HBA_HORSE
+VLSAADKTNVKAAWSKVGGHAGEYGAEALERMFLGFPTTKTYFPHFDLSHGSAQVKAHGK
+KVGDALTLAVGHLDDLPGALSNLSDLHAHKLRVDPVNFKLLSHCLLSTLAVHLPNDFTPA
+VHASLDKFLSSVSTVLTSKYR
+&gt;MYG_PHYCA Sw:Myg_Phyca =&gt; MYG_PHYCA
+VLSEGEWQLVLHVWAKVEADVAGHGQDILIRLFKSHPETLEKFDRFKHLKTEAEMKASED
+LKKHGVTVLTALGAILKKKGHHEAELKPLAQSHATKHKIPIKYLEFISEAIIHVLHSRHP
+GDFGADAQGAMNKALELFRKDIAAKYKELGYQG
+&gt;GLB5_PETMA Sw:Glb5_Petma =&gt; GLB5_PETMA
+PIVDTGSVAPLSAAEKTKIRSAWAPVYSTYETSGVDILVKFFTSTPAAQEFFPKFKGLTT
+ADQLKKSADVRWHAERIINAVNDAVASMDDTEKMSMKLRDLSGKHAKSFQVDPQYFKVLA
+AVIADTVAAGDAGFEKLMSMICILLRSAY
+&gt;LGB2_LUPLU Sw:Lgb2_Luplu =&gt; LGB2_LUPLU
+GALTESQAALVKSSWEEFNANIPKHTHRFFILVLEIAPAAKDLFSFLKGTSEVPQNNPEL
+QAHAGKVFKLVYEAAIQLQVTGVVVTDATLKNLGSVHVSKGVADAHFPVVKEAILKTIKE
+VVGAKWSEELNSAWTIAYDELAIVIKKEMNDAA
+</pre>
+</td></tr></table><p>
 
 
 <H2>
@@ -251,7 +294,15 @@ The sequences may or may not be aligned.
         happens in unusual cases - null output, errors etc. 
    -->
 
-A graphical image is displayed.
+A graphical image is displayed on the specified graphics device.
+
+<p>
+
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>Graphics File: polydot.ps</h3>
+<p><img src="polydot.1.polydot.gif" alt="[polydot results]">
 
 
 <H2>

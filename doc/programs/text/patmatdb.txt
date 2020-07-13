@@ -17,14 +17,18 @@ Description
    
 Usage
 
-   Here is a sample session with patmatdb.
+   Here is a sample session with patmatdb
    
-% patmatdb
-Search a protein sequence with a motif
-Input sequence(s): sw:*
-Protein motif to search for: st[ty]s
-Output file [5h1d_fugru.patmatdb]:
 
+% patmatdb 
+Search a protein sequence with a motif
+Input sequence(s): tsw:*
+Protein motif to search for: st[ty]s
+Output report [100k_rat.patmatdb]: 
+   
+   Go to the input files for this example
+   Go to the output files for this example
+   
 Command line arguments
 
    Mandatory qualifiers:
@@ -61,7 +65,7 @@ Command line arguments
    case-independent, so 'AAA' matches 'aaa'. A string of at least 2
    characters Required
    [-outfile]
-   (Parameter 3) Output report file name Report file
+   (Parameter 3) Output report file name Report output file
    Optional qualifiers Allowed values Default
    (none)
    Advanced qualifiers Allowed values Default
@@ -69,8 +73,14 @@ Command line arguments
    
 Input file format
 
-   It reads in one or more protein sequences.
+   patmatdb reads in one or more protein sequence USAs.
    
+  Input files for usage example
+  
+   'tsw:*' is a sequence entry in the example protein database 'tsw'
+   
+  Pattern specification
+  
    Patterns for patmatdb are based on the format of pattern used in the
    PROSITE database, with the difference that the terminating dot '.' and
    the hyphens, '-', between the characters are optional.
@@ -123,48 +133,20 @@ Output file format
    
    By default patmatdb writes a 'dbmotif' report file.
    
-   The output from the above example follows:
-     _________________________________________________________________
-   
+  Output files for usage example
+  
+  File: 100k_rat.patmatdb
+  
 ########################################
 # Program: patmatdb
-# Rundate: Thu Apr 11 13:56:31 2002
-# Report_file: 5h1d_fugru.patmatdb
+# Rundate: Thu Nov 07 14:35:27 2002
+# Report_format: dbmotif
+# Report_file: 100k_rat.patmatdb
 ########################################
 
 #=======================================
 #
-# Sequence: 2AAA_YEAST     from: 1   to: 635
-# HitCount: 2
-#
-# Motif: ST[TY]S
-#
-#=======================================
-
-Length = 4
-Start = position 19 of sequence
-End = position 22 of sequence
-
-
-SAATTSTTSTTSNS
-     |  |
-    19  22
-
-Length = 4
-Start = position 22 of sequence
-End = position 25 of sequence
-
-
-TTSTTSTTSNSKDS
-     |  |
-    22  25
-
-
-#---------------------------------------
-#---------------------------------------
-#=======================================
-#
-# Sequence: 41_XENLA     from: 1   to: 801
+# Sequence: HD_FUGRU     from: 1   to: 3148
 # HitCount: 1
 #
 # Motif: ST[TY]S
@@ -172,16 +154,59 @@ TTSTTSTTSNSKDS
 #=======================================
 
 Length = 4
-Start = position 52 of sequence
-End = position 55 of sequence
+Start = position 1038 of sequence
+End = position 1041 of sequence
 
 
-SQESPSTTSPSTRK
+STPASSTTSSAVDP
      |  |
-    52  55
+  1038  1041
 
-etc.
-     _________________________________________________________________
+
+#---------------------------------------
+#---------------------------------------
+#=======================================
+#
+# Sequence: GCN4_YEAST     from: 1   to: 281
+# HitCount: 1
+#
+# Motif: ST[TY]S
+#
+#=======================================
+
+Length = 4
+Start = position 158 of sequence
+End = position 161 of sequence
+
+
+SNLEVSTTSFLPTP
+     |  |
+   158  161
+
+
+#---------------------------------------
+#---------------------------------------
+#=======================================
+#
+# Sequence: PAXI_HUMAN     from: 1   to: 557
+# HitCount: 1
+#
+# Motif: ST[TY]S
+#
+#=======================================
+
+Length = 4
+Start = position 13 of sequence
+End = position 16 of sequence
+
+
+LADLESTTSHISKR
+     |  |
+    13  16
+
+
+#---------------------------------------
+#---------------------------------------
    
 Data files
 
@@ -220,7 +245,7 @@ Known bugs
    
 See also
 
-    Program name                        Description
+    Program name                         Description
    antigenic      Finds antigenic sites in proteins
    digest         Protein proteolytic enzyme or reagent cleavage digest
    fuzzpro        Protein pattern search
@@ -229,6 +254,7 @@ See also
    oddcomp        Finds protein sequence regions with a biased composition
    patmatmotifs   Search a PROSITE motif database with a protein sequence
    pepcoil        Predicts coiled coil regions
+   pestfind       Finds PEST motifs as potential proteolytic cleavage sites
    preg           Regular expression search of a protein sequence
    pscan          Scans proteins using PRINTS
    sigcleave      Reports protein signal cleavage sites

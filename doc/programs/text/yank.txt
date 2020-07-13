@@ -17,6 +17,12 @@ Description
    sequence is nucleic, if can specify whether the sequence is the
    reverse complement.
    
+   Without the program yank you would need to use a text editor such as
+   pico to create the appropriate list files. yank makes this process
+   easy.
+   
+  List Files
+  
    Many EMBOSS programs can read in a set of sequences. (Some examples
    are emma and union) There are many ways of specifying these sequences,
    including wildcarded sequence file names, wildcarded database entry
@@ -50,47 +56,25 @@ sw:opsd_c*
    Notice the @ in front of the last entry. This is the way you tell
    EMBOSS that this file is a list file, not a regular sequence file.
    
-   Without the program yank you would need to use a text editor such as
-   pico to create the appropriate list files. yank makes this process
-   easy.
-   
 Usage
 
-   Here is a sample session with yank, adding the regions making up the
-   coding sequence of embl:hsfau1 to the list 'cds.list':
+   Here is a sample session with yank
+   
+   This is an example of adding an entry for the part of tembl:hsfau1
+   between positions 1913 and 1915 to the existing list file 'cds.list':
+   
 
-% yank
-Reads a range from a sequence, appends the full USA to a list file
-Input sequence: em:hsfau1
-     Begin at position [start]: 782
-       End at position [end]: 856
-        Reverse strand [N]:
+% yank 
+Reads a sequence range, appends the full USA to a list file
+Input sequence: tembl:hsfau1
+     Begin at position [start]: 1913
+       End at position [end]: 1915
+        Reverse strand [N]: 
 Output file [hsfau1.yank]: cds.list
-
-% yank
-Reads a range from a sequence, appends the full USA to a list file
-Input sequence: em:hsfau1
-     Begin at position [start]: 951
-       End at position [end]: 1095
-        Reverse strand [N]:
-Output file [hsfau1.yank]: cds.list
-
-% yank
-Reads a range from a sequence, appends the full USA to a list file
-Input sequence: em:hsfau1
-     Begin at position [start]: 1557
-       End at position [end]: 1612
-        Reverse strand [N]:
-Output file [hsfau1.yank]: cds.list
-
-% yank
-Reads a range from a sequence, appends the full USA to a list file
-Input sequence: em:hsfau1
-     Begin at position [start]: 1787
-       End at position [end]: 1912
-        Reverse strand [N]:
-Output file [hsfau1.yank]: cds.list
-
+   
+   Go to the input files for this example
+   Go to the output files for this example
+   
 Command line arguments
 
    Mandatory qualifiers:
@@ -115,28 +99,179 @@ Command line arguments
    Optional qualifiers Allowed values Default
    (none)
    Advanced qualifiers Allowed values Default
-   -newfile Overwrite existing output file Yes/No No
+   -newfile Overwrite existing output file Boolean value Yes/No No
    
 Input file format
 
-   Any valid sequence can be read in.
+   yank reads any valid sequence USA.
    
    You will be prompted for the start and end positions you wish to use.
    
    If the sequence is nucleic, you will be prompted whether you wish to
    use the reverse complement of the sequence.
    
+  Input files for usage example
+  
+   'tembl:hsfau1' is a sequence entry in the example nucleic acid
+   database 'tembl'
+   
+  Database entry: tembl:hsfau1
+  
+ID   HSFAU1     standard; DNA; HUM; 2016 BP.
+XX
+AC   X65921; S45242;
+XX
+SV   X65921.1
+XX
+DT   13-MAY-1992 (Rel. 31, Created)
+DT   21-JUL-1993 (Rel. 36, Last updated, Version 5)
+XX
+DE   H.sapiens fau 1 gene
+XX
+KW   fau 1 gene.
+XX
+OS   Homo sapiens (human)
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia
+;
+OC   Eutheria; Primates; Catarrhini; Hominidae; Homo.
+XX
+RN   [1]
+RP   1-2016
+RA   Kas K.;
+RT   ;
+RL   Submitted (29-APR-1992) to the EMBL/GenBank/DDBJ databases.
+RL   K. Kas, University of Antwerp, Dept of Biochemistry T3.22,
+RL   Universiteitsplein 1, 2610 Wilrijk, BELGIUM
+XX
+RN   [2]
+RP   1-2016
+RX   MEDLINE; 92412144.
+RA   Kas K., Michiels L., Merregaert J.;
+RT   "Genomic structure and expression of the human fau gene: encoding the
+RT   ribosomal protein S30 fused to a ubiquitin-like protein.";
+RL   Biochem. Biophys. Res. Commun. 187:927-933(1992).
+XX
+DR   SWISS-PROT; P35544; UBIM_HUMAN.
+DR   SWISS-PROT; Q05472; RS30_HUMAN.
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..2016
+FT                   /db_xref="taxon:9606"
+FT                   /organism="Homo sapiens"
+FT                   /clone_lib="CML cosmid"
+FT                   /clone="15.1"
+FT   mRNA            join(408..504,774..856,951..1095,1557..1612,1787..>1912)
+FT                   /gene="fau 1"
+FT   exon            408..504
+FT                   /number=1
+FT   intron          505..773
+FT                   /number=1
+FT   exon            774..856
+
+
+  [Part of this file has been deleted for brevity]
+
+FT                   RAKRRMQYNRRFVNVVPTFGKKKGPNANS"
+FT   intron          857..950
+FT                   /number=2
+FT   exon            951..1095
+FT                   /number=3
+FT   intron          1096..1556
+FT                   /number=3
+FT   exon            1557..1612
+FT                   /number=4
+FT   intron          1613..1786
+FT                   /number=4
+FT   exon            1787..>1912
+FT                   /number=5
+FT   polyA_signal    1938..1943
+XX
+SQ   Sequence 2016 BP; 421 A; 562 C; 538 G; 495 T; 0 other;
+     ctaccatttt ccctctcgat tctatatgta cactcgggac aagttctcct gatcgaaaac        6
+0
+     ggcaaaacta aggccccaag taggaatgcc ttagttttcg gggttaacaa tgattaacac       12
+0
+     tgagcctcac acccacgcga tgccctcagc tcctcgctca gcgctctcac caacagccgt       18
+0
+     agcccgcagc cccgctggac accggttctc catccccgca gcgtagcccg gaacatggta       24
+0
+     gctgccatct ttacctgcta cgccagcctt ctgtgcgcgc aactgtctgg tcccgccccg       30
+0
+     tcctgcgcga gctgctgccc aggcaggttc gccggtgcga gcgtaaaggg gcggagctag       36
+0
+     gactgccttg ggcggtacaa atagcaggga accgcgcggt cgctcagcag tgacgtgaca       42
+0
+     cgcagcccac ggtctgtact gacgcgccct cgcttcttcc tctttctcga ctccatcttc       48
+0
+     gcggtagctg ggaccgccgt tcaggtaaga atggggcctt ggctggatcc gaagggcttg       54
+0
+     tagcaggttg gctgcggggt cagaaggcgc ggggggaacc gaagaacggg gcctgctccg       60
+0
+     tggccctgct ccagtcccta tccgaactcc ttgggaggca ctggccttcc gcacgtgagc       66
+0
+     cgccgcgacc accatcccgt cgcgatcgtt tctggaccgc tttccactcc caaatctcct       72
+0
+     ttatcccaga gcatttcttg gcttctctta caagccgtct tttctttact cagtcgccaa       78
+0
+     tatgcagctc tttgtccgcg cccaggagct acacaccttc gaggtgaccg gccaggaaac       84
+0
+     ggtcgcccag atcaaggtaa ggctgcttgg tgcgccctgg gttccatttt cttgtgctct       90
+0
+     tcactctcgc ggcccgaggg aacgcttacg agccttatct ttccctgtag gctcatgtag       96
+0
+     cctcactgga gggcattgcc ccggaagatc aagtcgtgct cctggcaggc gcgcccctgg      102
+0
+     aggatgaggc cactctgggc cagtgcgggg tggaggccct gactaccctg gaagtagcag      108
+0
+     gccgcatgct tggaggtgag tgagagagga atgttctttg aagtaccggt aagcgtctag      114
+0
+     tgagtgtggg gtgcatagtc ctgacagctg agtgtcacac ctatggtaat agagtacttc      120
+0
+     tcactgtctt cagttcagag tgattcttcc tgtttacatc cctcatgttg aacacagacg      126
+0
+     tccatgggag actgagccag agtgtagttg tatttcagtc acatcacgag atcctagtct      132
+0
+     ggttatcagc ttccacacta aaaattaggt cagaccaggc cccaaagtgc tctataaatt      138
+0
+     agaagctgga agatcctgaa atgaaactta agatttcaag gtcaaatatc tgcaactttg      144
+0
+     ttctcattac ctattgggcg cagcttctct ttaaaggctt gaattgagaa aagaggggtt      150
+0
+     ctgctgggtg gcaccttctt gctcttacct gctggtgcct tcctttccca ctacaggtaa      156
+0
+     agtccatggt tccctggccc gtgctggaaa agtgagaggt cagactccta aggtgagtga      162
+0
+     gagtattagt ggtcatggtg ttaggacttt ttttcctttc acagctaaac caagtccctg      168
+0
+     ggctcttact cggtttgcct tctccctccc tggagatgag cctgagggaa gggatgctag      174
+0
+     gtgtggaaga caggaaccag ggcctgatta accttccctt ctccaggtgg ccaaacagga      180
+0
+     gaagaagaag aagaagacag gtcgggctaa gcggcggatg cagtacaacc ggcgctttgt      186
+0
+     caacgttgtg cccacctttg gcaagaagaa gggccccaat gccaactctt aagtcttttg      192
+0
+     taattctggc tttctctaat aaaaaagcca cttagttcag tcatcgcatt gtttcatctt      198
+0
+     tacttgcaag gcctcaggga gaggtgtgct tctcgg                                201
+6
+//
+   
 Output file format
 
-   The result file 'cds.list' of the example above is:
+  Output files for usage example
+  
+  File: cds.list
+  
+tembl-id:HSFAU1[782:856]
+tembl-id:HSFAU1[951:1095]
+tembl-id:HSFAU1[1557:1612]
+tembl-id:HSFAU1[1787:1912]
+tembl-id:HSFAU1[1913:1915]
    
-em-id:HSFAU1[782:856]
-em-id:HSFAU1[951:1095]
-em-id:HSFAU1[1557:1612]
-em-id:HSFAU1[1787:1912]
-
-   This can now be read in by a program such as union by specifying the
-   list file as '@cds.list' when union prompts for input.
+   The output list file can now be read in by a program such as union by
+   specifying the list file as '@cds.list' when union prompts for input.
    
 Data files
 
@@ -189,7 +324,6 @@ See also
    seqretsplit  Reads and writes (returns) sequences in individual files
    skipseq      Reads and writes (returns) sequences, skipping the first few
    splitter     Split a sequence into (overlapping) smaller sequences
-   swissparse   Retrieves sequences from swissprot using keyword search
    trimest      Trim poly-A tails off EST sequences
    trimseq      Trim ambiguous bits off the ends of sequences
    union        Reads sequence fragments and builds one sequence

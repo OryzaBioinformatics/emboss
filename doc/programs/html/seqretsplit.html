@@ -116,15 +116,21 @@ read in multiple sequence files or not.
  -->
 
 
-Here is a sample session with seqretsplit:
+<b>Here is a sample session with seqretsplit</b>
+<p>
 
-<pre>
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% seqretsplit
+% <b>seqretsplit tembl:hsfa* </b>
 Reads and writes (returns) sequences in individual files
-Input sequence(s): embl:hsfa11*
-Output sequence [hsfa110.fasta]:
-</pre>
+Output sequence [hsfau.fasta]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
+
+
 <p>
 
 The specification of the output file is not used in this case.
@@ -132,7 +138,7 @@ The specification of the output file is not used in this case.
 
 At some point this ought to change and you will not be prompted for the
 output file at all. 
-<p>
+
 
 
 <H2>
@@ -198,7 +204,7 @@ output file at all.
 <tr>
 <td>-firstonly</td>
 <td>Read one sequence and stop</td>
-<td>Yes/No</td>
+<td>Boolean value Yes/No</td>
 <td>No</td>
 </tr>
 
@@ -228,9 +234,16 @@ IT IS DONE FOR YOU.
         happens in unusual cases - null input, etc. 
    -->
 
-Normal sequence USA.
+<b>seqretsplit</b> reads a normal sequence USA.
+
+<p>
 
 
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+
+'tembl:hsfa*' is a sequence entry in the example nucleic acid database 'tembl'
+<p>
 
 
 
@@ -246,18 +259,82 @@ Normal sequence USA.
    -->
 
 
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: hsfau.fasta</h3>
+<table width="90%"><tr><td bgcolor="#DDFFDD">
+<pre>
+&gt;HSFAU X65923.1 H.sapiens fau mRNA
+ttcctctttctcgactccatcttcgcggtagctgggaccgccgttcagtcgccaatatgc
+agctctttgtccgcgcccaggagctacacaccttcgaggtgaccggccaggaaacggtcg
+cccagatcaaggctcatgtagcctcactggagggcattgccccggaagatcaagtcgtgc
+tcctggcaggcgcgcccctggaggatgaggccactctgggccagtgcggggtggaggccc
+tgactaccctggaagtagcaggccgcatgcttggaggtaaagttcatggttccctggccc
+gtgctggaaaagtgagaggtcagactcctaaggtggccaaacaggagaagaagaagaaga
+agacaggtcgggctaagcggcggatgcagtacaaccggcgctttgtcaacgttgtgccca
+cctttggcaagaagaagggccccaatgccaactcttaagtcttttgtaattctggctttc
+tctaataaaaaagccacttagttcagtcaaaaaaaaaa
+</pre>
+</td></tr></table><p>
+<p><h3>File: hsfau1.fasta</h3>
+<table width="90%"><tr><td bgcolor="#DDFFDD">
+<pre>
+&gt;HSFAU1 X65921.1 H.sapiens fau 1 gene
+ctaccattttccctctcgattctatatgtacactcgggacaagttctcctgatcgaaaac
+ggcaaaactaaggccccaagtaggaatgccttagttttcggggttaacaatgattaacac
+tgagcctcacacccacgcgatgccctcagctcctcgctcagcgctctcaccaacagccgt
+agcccgcagccccgctggacaccggttctccatccccgcagcgtagcccggaacatggta
+gctgccatctttacctgctacgccagccttctgtgcgcgcaactgtctggtcccgccccg
+tcctgcgcgagctgctgcccaggcaggttcgccggtgcgagcgtaaaggggcggagctag
+gactgccttgggcggtacaaatagcagggaaccgcgcggtcgctcagcagtgacgtgaca
+cgcagcccacggtctgtactgacgcgccctcgcttcttcctctttctcgactccatcttc
+gcggtagctgggaccgccgttcaggtaagaatggggccttggctggatccgaagggcttg
+tagcaggttggctgcggggtcagaaggcgcggggggaaccgaagaacggggcctgctccg
+tggccctgctccagtccctatccgaactccttgggaggcactggccttccgcacgtgagc
+cgccgcgaccaccatcccgtcgcgatcgtttctggaccgctttccactcccaaatctcct
+ttatcccagagcatttcttggcttctcttacaagccgtcttttctttactcagtcgccaa
+tatgcagctctttgtccgcgcccaggagctacacaccttcgaggtgaccggccaggaaac
+ggtcgcccagatcaaggtaaggctgcttggtgcgccctgggttccattttcttgtgctct
+tcactctcgcggcccgagggaacgcttacgagccttatctttccctgtaggctcatgtag
+cctcactggagggcattgccccggaagatcaagtcgtgctcctggcaggcgcgcccctgg
+aggatgaggccactctgggccagtgcggggtggaggccctgactaccctggaagtagcag
+gccgcatgcttggaggtgagtgagagaggaatgttctttgaagtaccggtaagcgtctag
+tgagtgtggggtgcatagtcctgacagctgagtgtcacacctatggtaatagagtacttc
+tcactgtcttcagttcagagtgattcttcctgtttacatccctcatgttgaacacagacg
+tccatgggagactgagccagagtgtagttgtatttcagtcacatcacgagatcctagtct
+ggttatcagcttccacactaaaaattaggtcagaccaggccccaaagtgctctataaatt
+agaagctggaagatcctgaaatgaaacttaagatttcaaggtcaaatatctgcaactttg
+ttctcattacctattgggcgcagcttctctttaaaggcttgaattgagaaaagaggggtt
+ctgctgggtggcaccttcttgctcttacctgctggtgccttcctttcccactacaggtaa
+agtccatggttccctggcccgtgctggaaaagtgagaggtcagactcctaaggtgagtga
+gagtattagtggtcatggtgttaggactttttttcctttcacagctaaaccaagtccctg
+ggctcttactcggtttgccttctccctccctggagatgagcctgagggaagggatgctag
+gtgtggaagacaggaaccagggcctgattaaccttcccttctccaggtggccaaacagga
+gaagaagaagaagaagacaggtcgggctaagcggcggatgcagtacaaccggcgctttgt
+caacgttgtgcccacctttggcaagaagaagggccccaatgccaactcttaagtcttttg
+taattctggctttctctaataaaaaagccacttagttcagtcatcgcattgtttcatctt
+tacttgcaaggcctcagggagaggtgtgcttctcgg
+</pre>
+</td></tr></table><p>
+
+
+<p>
+
 One file for each input sequence is written out.
+
 <p>
 
 The names of the files it creates are derived from the ID name of the
 sequence, followed by an extension denoting the format of the sequence. 
 You have no control over the names of the files it writes out. 
-<P>
+
+<p>
 
 For example, if the files <i>embl:hsfa11*</i> are read in and the
 output is specified as <i>wibble.seq</i>, then the following files are
 expected to be created:
-<P>
+
+<p>
 
 <pre>
 hsfa110.fasta
@@ -266,8 +343,11 @@ hsfa112.fasta
 hsfa113.fasta
 hsfa114.fasta
 </pre>
+
 <p>
+
 (No file <i>wibble.seq</i> is created.)
+
 <p>
 
 
@@ -470,7 +550,6 @@ It shouldn't really prompt for the output filename.
 <tr><td><a href="seqret.html">seqret</a></td><td>Reads and writes (returns) sequences</td></tr>
 <tr><td><a href="skipseq.html">skipseq</a></td><td>Reads and writes (returns) sequences, skipping the first few</td></tr>
 <tr><td><a href="splitter.html">splitter</a></td><td>Split a sequence into (overlapping) smaller sequences</td></tr>
-<tr><td><a href="swissparse.html">swissparse</a></td><td>Retrieves sequences from swissprot using keyword search</td></tr>
 <tr><td><a href="trimest.html">trimest</a></td><td>Trim poly-A tails off EST sequences</td></tr>
 <tr><td><a href="trimseq.html">trimseq</a></td><td>Trim ambiguous bits off the ends of sequences</td></tr>
 <tr><td><a href="union.html">union</a></td><td>Reads sequence fragments and builds one sequence</td></tr>

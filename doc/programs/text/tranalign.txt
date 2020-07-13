@@ -44,10 +44,15 @@ Description
    
 Usage
 
-   Here is a sample session with tranalign:
+   Here is a sample session with tranalign
+   
+   
+% tranalign ../../data/tranalign.seq ../../data/tranalign.pep tranalign2.seq 
+Align nucleic coding regions given the aligned proteins
 
-% tranalign tranalign.seq tranalign.pep tranalign2.seq
-
+   Go to the input files for this example
+   Go to the output files for this example
+   
 Command line arguments
 
    Mandatory qualifiers:
@@ -115,8 +120,135 @@ Input file format
    sequence which is derived from the coding region of that nucleic acid
    sequence. The two sets of sequences must be in the same order.
    
+  Input files for usage example
+  
+  File: ../../data/tranalign.seq
+  
+>HSFAU1
+ttcctctttctcgactccatcttcgcggtagctgggaccgccgttcagtcgccaatatgc
+agctctttgtccgcgcccaggagctacacaccttcgaggtgaccggccaggaaacggtcg
+cccagatcaaggctcatgtagcctcactggagggcattgccccggaagatcaagtcgtgc
+tcctggcaggccccctggaggatgaggccactctgggccagtgcggggtggaggccc
+tgactaccctggaagtagcaggccgcatgcttggaggtaaagttcatggttccctggccc
+gtgctggaaaagtgagaggtcagactcctaaggtggccaaacaggagaagaagaagaaga
+agacaggtcgggctaagcggcggatgcagtacaaccggcgctttgtcaacgttgtgccca
+cctttggcaagaagaagggccccaatgccaactcttaagtcttttgtaattctggctttc
+tctaataaaaaagccacttagttcagtcaaaaaaaaaa
+>HSFAU2
+ttcctctttctcgactccatcttcgcggtagctgggaccgccgttcagtcgccaatatgc
+agctctttgtccgcgcccaggagctacacaccttcgaggtgaccggccaggaaacggtcg
+cccagatcaaggctcatgtagcctcactggagggcattgccccggaagatcaagtcgtgc
+tcctggcaggcgcgcccctggaggatgcactctgggccagtgcggggtggaggccc
+tgactaccctggaagtagcaggccgcatgcttggaggtaaagttcatggttccctggccc
+gtgctggaaaagtgagaggtcagactcctaaggtggccaaacaggagaagaagaagaaga
+agacaggtcgggctaagcggcggatgcagtacaaccggcgctttgtcaacgttgtgccca
+cctttggcaagaagaagggccccaatgccaactcttaagtcttttgtaattctggctttc
+tctaataaaaaagccacttagttcagtcaaaaaaaaaa
+>HSFAU3
+ttcctctttctcgactccatcttcgcggtagctgggaccgccgttcagtcgccaatatgc
+agctctttgtccgcgcccaggagctacacaccttcgaggtgaccggccaggaaacggtcg
+cccagatcaaggctcatgtagcctcactggagggcattgccccggaagatcaagtcgtgc
+tcctggcaggcgcgcccctggaggatgaggccactctgggccagtgcggggtggaggccc
+tgactaccctggaagtagcaggccgcatgcttggaggtaaagttcatggttccctggccc
+gtgctggaaaagtgagaggtcagactcctaagggggccaaacaggagaagaagaagaaga
+agacaggtcgggctaagcggcggatgcagtacaaccggcgctttgtcaacgttgtgccca
+cctttggcaagaagaagggccccaatgccaactcttaagtcttttgtaattctggctttc
+tctaataaaaaagccacttagttcagtcaaaaaaaaaa
+>HSFAU4
+ttcctctttctcgactccatcttcgcggtagctgggaccgccgttcagtcgccaatatgc
+agctctttgtccgcgcccaggagctacacaccttcgaggtgaccggccaggaaacggtcg
+cccagatcaaggctcatgaaatagcctcactggagggcattgccccggaagatcaagtcgtgc
+tcctggcaggcgcgcccctggaggatgaggccactctgggccagtgcggggtggaggccc
+tgactaccctggaagtagcaggccgcatgcttgcccgaggtaaagttcatggttccctggccc
+gtgctggaaaagtgagaggtcagactcctaaggtggccaaacaggagaagaagaagaaga
+agacaggtcgggctaagcggcggatgcagtacaaccggcgctttgtcaacgttgtgccca
+cctttggcaagaagaagggccccaatgccaactcttaagtcttttgtaattctggctttc
+tctaataaaaaagccacttagttcagtcaaaaaaaaaa
+>HSFAU5
+ttcctctttctcgactccatcttcgcggtagctgggaccgccgttcagtcgccaatatgc
+agctctttgtccgcgcccaggagctacacaccttcgaggtgaccggccaggaaacggtcg
+cccagatcaaggctcatgtagcctcactggagggcattgccccggaagatcaagtcgtgc
+tcctggcaggcgcgcccctggaggatgaggccactctgggccagtgcggggtggaggccc
+tgactaccctggaagtaggccgcatgctttttggaggtaaagttcatggttccctggccc
+gtgctggaaaagtgagaggtcagactcctaaggtggccaaacaggagaagaagaagaaga
+agacaggtcgggctaagcggcggatgcagtacaaccggcgctttgtcaacgttgtgccca
+cctttggcaagaagaagggccccaatgccaactcttaagtcttttgtaattctggctttc
+tctaataaaaaagccacttagttcagtcaaaaaaaaaa
+   
+  File: ../../data/tranalign.pep
+  
+>HSFAU1_3
+PLSRLHLRGSWDRRSVANMQLFVRAQELHTFEVTGQETVAQIKAHVAS-LEGIAPEDQVV
+LLAG-PLEDEATLGQCGVEALTTLEVAGRMLG-GKVHGSLARAGKVRGQTPKVAKQEKKK
+KKTGRAKRRMQYNRRFVNVVPTFGKKKGPNANS
+>HSFAU2_3
+PLSRLHLRGSWDRRSVANMQLFVRAQELHTFEVTGQETVAQIKAHVAS-LEGIAPEDQVV
+LLAGAPLEDALWASAGWRP
+>HSFAU3_3
+PLSRLHLRGSWDRRSVANMQLFVRAQELHTFEVTGQETVAQIKAHVAS-LEGIAPEDQVV
+LLAGAPLEDEATLGQCGVEALTTLEVAGRMLG-GKVHGSLARAGKVRGQTPKGAKQEKKK
+KKTGRAKRRMQYNRRFVNVVPTFGKKKGPNANS
+>HSFAU4_3
+PLSRLHLRGSWDRRSVANMQLFVRAQELHTFEVTGQETVAQIKAHEIASLEGIAPEDQVV
+LLAGAPLEDEATLGQCGVEALTTLEVAGRMLARGKVHGSLARAGKVRGQTPKVAKQEKKK
+KKTGRAKRRMQYNRRFVNVVPTFGKKKGPNANS
+>HSFAU5_3
+PLSRLHLRGSWDRRSVANMQLFVRAQELHTFEVTGQETVAQIKAHVAS-LEGIAPEDQVV
+LLAGAPLEDEATLGQCGVEALTTLEVGRMLFG-GKVHGSLARAGKVRGQTPKVAKQEKKK
+KKTGRAKRRMQYNRRFVNVVPTFGKKKGPNANS
+   
 Output file format
 
+  Output files for usage example
+  
+  File: tranalign2.seq
+  
+>HSFAU1
+cctctttctcgactccatcttcgcggtagctgggaccgccgttcagtcgccaatatgcag
+ctctttgtccgcgcccaggagctacacaccttcgaggtgaccggccaggaaacggtcgcc
+cagatcaaggctcatgtagcctca---ctggagggcattgccccggaagatcaagtcgtg
+ctcctggcaggc---cccctggaggatgaggccactctgggccagtgcggggtggaggcc
+ctgactaccctggaagtagcaggccgcatgcttgga---ggtaaagttcatggttccctg
+gcccgtgctggaaaagtgagaggtcagactcctaaggtggccaaacaggagaagaagaag
+aagaagacaggtcgggctaagcggcggatgcagtacaaccggcgctttgtcaacgttgtg
+cccacctttggcaagaagaagggccccaatgccaactct
+>HSFAU2
+cctctttctcgactccatcttcgcggtagctgggaccgccgttcagtcgccaatatgcag
+ctctttgtccgcgcccaggagctacacaccttcgaggtgaccggccaggaaacggtcgcc
+cagatcaaggctcatgtagcctca---ctggagggcattgccccggaagatcaagtcgtg
+ctcctggcaggcgcgcccctggaggatgcactctgggccagtgcggggtggaggccc---
+------------------------------------------------------------
+------------------------------------------------------------
+------------------------------------------------------------
+---------------------------------------
+>HSFAU3
+cctctttctcgactccatcttcgcggtagctgggaccgccgttcagtcgccaatatgcag
+ctctttgtccgcgcccaggagctacacaccttcgaggtgaccggccaggaaacggtcgcc
+cagatcaaggctcatgtagcctca---ctggagggcattgccccggaagatcaagtcgtg
+ctcctggcaggcgcgcccctggaggatgaggccactctgggccagtgcggggtggaggcc
+ctgactaccctggaagtagcaggccgcatgcttgga---ggtaaagttcatggttccctg
+gcccgtgctggaaaagtgagaggtcagactcctaagggggccaaacaggagaagaagaag
+aagaagacaggtcgggctaagcggcggatgcagtacaaccggcgctttgtcaacgttgtg
+cccacctttggcaagaagaagggccccaatgccaactct
+>HSFAU4
+cctctttctcgactccatcttcgcggtagctgggaccgccgttcagtcgccaatatgcag
+ctctttgtccgcgcccaggagctacacaccttcgaggtgaccggccaggaaacggtcgcc
+cagatcaaggctcatgaaatagcctcactggagggcattgccccggaagatcaagtcgtg
+ctcctggcaggcgcgcccctggaggatgaggccactctgggccagtgcggggtggaggcc
+ctgactaccctggaagtagcaggccgcatgcttgcccgaggtaaagttcatggttccctg
+gcccgtgctggaaaagtgagaggtcagactcctaaggtggccaaacaggagaagaagaag
+aagaagacaggtcgggctaagcggcggatgcagtacaaccggcgctttgtcaacgttgtg
+cccacctttggcaagaagaagggccccaatgccaactct
+>HSFAU5
+cctctttctcgactccatcttcgcggtagctgggaccgccgttcagtcgccaatatgcag
+ctctttgtccgcgcccaggagctacacaccttcgaggtgaccggccaggaaacggtcgcc
+cagatcaaggctcatgtagcctca---ctggagggcattgccccggaagatcaagtcgtg
+ctcctggcaggcgcgcccctggaggatgaggccactctgggccagtgcggggtggaggcc
+ctgactaccctggaagtaggccgcatgctttttgga---ggtaaagttcatggttccctg
+gcccgtgctggaaaagtgagaggtcagactcctaaggtggccaaacaggagaagaagaag
+aagaagacaggtcgggctaagcggcggatgcagtacaaccggcgctttgtcaacgttgtg
+cccacctttggcaagaagaagggccccaatgccaactct
+   
    The output is the regions of the nucleic acid sequences which code for
    the corresponding protein sequence, with gap characters ('-')
    introduced so that they have the same alignment as the corresponding

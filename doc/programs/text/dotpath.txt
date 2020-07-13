@@ -42,12 +42,17 @@ Description
    
 Usage
 
-   Here is a sample session with dotpath:
+   Here is a sample session with dotpath
+   
 
-% dotpath embl:AF129756 embl:AP000504 -word 20
+% dotpath tembl:AF129756 tembl:AP000504 -word 20 -graph cps -overlaps 
 Displays a non-overlapping wordmatch dotplot of two sequences
-Graph type [x11]:
 
+Created dotpath.ps
+   
+   Go to the input files for this example
+   Go to the output files for this example
+   
 Command line arguments
 
    Mandatory qualifiers (* if not always prompted):
@@ -86,13 +91,339 @@ Command line arguments
    -outfile Output file name Output file <sequence>.dotpath
    Optional qualifiers Allowed values Default
    -overlaps Displays the overlapping matches (in red) as well as the
-   minimal set of non-overlapping matches Yes/No No
-   -[no]boxit Draw a box around dotplot Yes/No Yes
+   minimal set of non-overlapping matches Boolean value Yes/No No
+   -[no]boxit Draw a box around dotplot Boolean value Yes/No Yes
    Advanced qualifiers Allowed values Default
-   -data Output the match data to a file instead of plotting it Yes/No No
+   -data Output the match data to a file instead of plotting it Boolean
+   value Yes/No No
    
 Input file format
 
+  Input files for usage example
+  
+   'tembl:AF129756' is a sequence entry in the example nucleic acid
+   database 'tembl'
+   
+  Database entry: tembl:AF129756
+  
+ID   AF129756   standard; DNA; HUM; 184666 BP.
+XX
+AC   AF129756;
+XX
+SV   AF129756.1
+XX
+DT   12-MAR-1999 (Rel. 59, Created)
+DT   29-OCT-1999 (Rel. 61, Last updated, Version 2)
+XX
+DE   Homo sapiens MSH55 gene, partial cds; and CLIC1, DDAH, G6b, G6c, G5b, G6d,
+DE   G6e, G6f, BAT5, G5b, CSK2B, BAT4, G4, Apo M, BAT3, BAT2, AIF-1, 1C7, LST-1
+,
+DE   LTB, TNF, and LTA genes, complete cds.
+XX
+KW   .
+XX
+OS   Homo sapiens (human)
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia
+;
+OC   Eutheria; Primates; Catarrhini; Hominidae; Homo.
+XX
+RN   [1]
+RP   1-184666
+RA   Rowen L., Madan A., Qin S., Shaffer T., James R., Ratcliffe A., Abbasi N.,
+RA   Dickhoff R., Loretz C., Madan A., Dors M., Young J., Lasky S., Hood L.;
+RT   "Sequence of the human major histocompatibility complex class III region";
+RL   Unpublished.
+XX
+RN   [2]
+RP   1-184666
+RA   Rowen L.;
+RT   ;
+RL   Submitted (22-FEB-1999) to the EMBL/GenBank/DDBJ databases.
+RL   Department of Molecular Biotechnology, Box 357730 University of Washington
+,
+RL   Seattle, WA 98195, USA
+XX
+RN   [3]
+RP   1-184666
+RA   Rowen L.;
+RT   ;
+RL   Submitted (28-OCT-1999) to the EMBL/GenBank/DDBJ databases.
+RL   Multimegabase Sequencing Center, University of Washington, PO Box 357730,
+RL   Seattle, WA 98195, USA
+XX
+DR   EPD; EP11158; HS_TNFA.
+DR   EPD; EP11159; HS_TNFB.
+DR   SPTREMBL; O00452; O00452.
+DR   SPTREMBL; O14931; O14931.
+DR   SPTREMBL; O95866; O95866.
+DR   SPTREMBL; O95868; O95868.
+DR   SPTREMBL; O95869; O95869.
+DR   SPTREMBL; O95870; O95870.
+
+
+  [Part of this file has been deleted for brevity]
+
+     aaaccagttt accaccactc ctaacactaa acttaaatct gactctaaat gtaagtccaa    18174
+0
+     tctgagccac aagcctaaag ttgaacttta tcctgcttta tgaattattc atccattcct    18180
+0
+     ccatttagtg agtatctgcg tgcctaacac atgctgggca ttgtcctaag gcaggaggga    18186
+0
+     catggaggca aagggatcag agaaggtacc agcacctgtg gagcttgtat tccagtgagg    18192
+0
+     ccagacggaa aagaaagaaa ctgaagaaga aattggtact atgagaaaat aagacaggct    18198
+0
+     gatgttgtaa gagtggcagg gagctacttt taaatacagt agtcagcaaa atcctctttg    18204
+0
+     agtgtttggg tggcactgga gctgagaccc aaatgacaaa aaatagtgac caggtaaaag    18210
+0
+     tttgggagca aagcatttca ggtaaaggga gcagctactg caaaggctgg aaggcggaac    18216
+0
+     caagctgggg gtgttgacga caaacagaag gccagtgtgg ctggagcaga gagagagact    18222
+0
+     gggaggcggg tgggagatga ggtcagagag gagggcaggg gccaggtcat gcagggccat    18228
+0
+     gcaagaaggg taaagcctct agatttcatc cagccacagg aagcctttaa aggtcgtcag    18234
+0
+     agtgtgtggt gcgtgcgtgt gtgtgtgtgt gtgtgtgtgt gttgcagggg agagaggggg    18240
+0
+     agggagagag agagagagag agagaagagg gaggtgagca gaggtgattg gatttttttt    18246
+0
+     tcttttgaca tggtgtcttg ctctgtggcc taggctggag tgcagtggca ccatcatagc    18252
+0
+     ccactgcaac ctcaaaacca tgggctcaag tcatccttcc acctcagctt cccaagtatc    18258
+0
+     taggactaca ggtgtgtgcc actgtgcctg gctaatttta aaaaatattt taaaattttt    18264
+0
+     gttgagacag ggtctatgct gctcaggctg gtctcgaact cctggtttca agtgatctgc    18270
+0
+     ccatcttggc ctcccaaagt ttttttttgt tagtttgaga ggcggtttcg ctcgttgccc    18276
+0
+     aggctggagt gcaatgactg atctcatctc actgcaacct ctgcctcctg ggttcaagcg    18282
+0
+     attctcctgc ttcagcctcc caagtagctg ggattacagg tgcatgccac cattcccggc    18288
+0
+     taattttttg tatttagtag agatggggtt tcaccatgtt agtcaggctg atctcaaact    18294
+0
+     cctgacctca ggtgatccgc ctgcctcagc ctcccaaagt tttgggatta caggtgtgag    18300
+0
+     ccaccatgct gggccagcct cccaaagttt tgggattaca ggcatgagtc accacactgg    18306
+0
+     ccctggattt tttttctttc ttttttttgg agacggagtc tcactctgtt gcccaggctg    18312
+0
+     gagtgcaatg gcgtaatctc agctcactgc aacctctgct gcccgggttc aaacgattct    18318
+0
+     cctgtcttag cctcctgagt agctgggatt ataggtgcat gccaccatgc ctggctaatt    18324
+0
+     tttgtacttt tagtagagaa agtacaccat cttggccagg ctggtctcga actcctgacc    18330
+0
+     tcaggtgatc cacttgcgtc ggcctcccaa agtgctggga ttacaggcgt gagacaccgc    18336
+0
+     acccagcctt tttttttttt tttcttttaa gacagaatcg ctctgtcacc caggctggag    18342
+0
+     tgcagtggca caatctcggc tcactgcaac ctctgcctcc caggtttaag caatccacct    18348
+0
+     atgtcagtct cccaagtagc tgggattata ggtgcatgtc accatgcctg gctaattttt    18354
+0
+     gtacttttag tatagaaagt acaccatgtt ggccaggctg gtcttgaact cctgacctca    18360
+0
+     agtgatccgc ctgcctcagc ctcccgaagt gctggaatta cagacatgtg ccactgcacc    18366
+0
+     cggcctggtt ttttttttct aagagatgga gtctcacttt tctgcccagg ttggagtgca    18372
+0
+     atggcaccat catagctcac tgcagccttc aactcttggc ctcaggcaat ccttgcacct    18378
+0
+     tagcctcgca gtgttgggat tacaggcatg agccactgag ccttgcctgg actttttttt    18384
+0
+     ttttttgaga tggcgtctcg ctctgttgcc caggttggag tgctacggca tgatcttggc    18390
+0
+     tcactgcaac ttccacctcc caggttcaag cgattctctt gcctcggccc cccgagtagc    18396
+0
+     tgggattaca ggcatgcgcc accgtgcctg gctaattttg gtatttttag tagagatagg    18402
+0
+     gtttcatcat gttgggcagg ctggtcttga actcctgacc tcgtgatcca cccacctcgg    18408
+0
+     cctcccaaag tgctgggatt ataggcatag ccaacgcgcc cagcctggac ttgtttttaa    18414
+0
+     aagatcactg tggctcctgt gtttaggctg gctggtagga gacaggtggc agtggcattg    18420
+0
+     atggtgaaga gaaaatagtg gcagccatgg agatggagag aagtagacaa gtttgggata    18426
+0
+     tattatacat tccaggggta gaaacaacag gactagatga tggattgatg ggtgggagat    18432
+0
+     gtagatactg ggagagaagc aggattctga tggatggaaa aactaaaaaa ttctattttg    18438
+0
+     ggtgtggtaa gtctaagtct attagacatg caagtagaga tgtcactggg cagatacaca    18444
+0
+     tctggatttc aggggcaagg tccaagctag agaaagaaac ctgggcatgg tcagcatgag    18450
+0
+     gatggtgttt aaagccatgg aacttatctt gtgcatccct ataagacccc tttgaggcac    18456
+0
+     ttgtttcccc tcacaatgga tgcagtgcat cttccattct gaattccaga ggcaacaacc    18462
+0
+     tcctgctcct agaagctaaa ctctccagac ttagtcttct gaattc                   18466
+6
+//
+   
+  Database entry: tembl:AP000504
+  
+ID   AP000504   standard; DNA; HUM; 100000 BP.
+XX
+AC   AP000504; BA000025;
+XX
+SV   AP000504.1
+XX
+DT   28-SEP-1999 (Rel. 61, Created)
+DT   22-AUG-2001 (Rel. 68, Last updated, Version 3)
+XX
+DE   Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region, section
+DE   3/20.
+XX
+KW   .
+XX
+OS   Homo sapiens (human)
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia
+;
+OC   Eutheria; Primates; Catarrhini; Hominidae; Homo.
+XX
+RN   [1]
+RP   1-100000
+RA   Hirakawa M., Yamaguchi H., Imai K., Shimada J.;
+RT   ;
+RL   Submitted (21-SEP-1999) to the EMBL/GenBank/DDBJ databases.
+RL   Mika Hirakawa, Japan Science and Technology Corporation (JST), Advanced
+RL   Databases Department; 5-3, Yonbancho, Chiyoda-ku, Tokyo 102-0081, Japan
+RL   (E-mail:mika@tokyo.jst.go.jp, URL:http://www-alis.tokyo.jst.go.jp/,
+RL   Tel:81-3-5214-8491, Fax:81-3-5214-8470)
+XX
+RN   [2]
+RA   Shiina S., Tamiya G., Oka A., Inoko H.;
+RT   "Homo sapiens 2,229,817bp genomic DNA of 6p21.3 HLA class I region";
+RL   Unpublished.
+XX
+DR   SWISS-PROT; O00299; CLI1_HUMAN.
+DR   SWISS-PROT; O43196; MSH5_HUMAN.
+DR   SWISS-PROT; O95445; APOM_HUMAN.
+DR   SWISS-PROT; O95865; DDH2_HUMAN.
+DR   SWISS-PROT; O95867; NG24_HUMAN.
+DR   SWISS-PROT; P13862; KC2B_HUMAN.
+XX
+CC   This sequence is conducted by Tokai University as a JST sequencing
+CC   Team.
+CC   Principal Investigator: Hidetoshi Inoko Ph.D
+CC   Phone:+81-463-93-1121, Fax:+81-463-94-8884,
+CC   The sequence is submitted by Human Genome Sequencing in ALIS
+CC   project of JST
+CC   Japan Science and Technology Corporation (JST)
+CC   5-3, Yonbancyo, Chiyoda-ku, Tokyo, 102-0081 Japan
+CC   For further infomation about this sequences, please visit our
+CC   sequence archive Web site (http://www-alis.tokyo.jst.go.jp/HGS/top.
+
+
+  [Part of this file has been deleted for brevity]
+
+     gggtggatca tgaggtcaag agatcgagac tatcctggct aacatgatga aaccccgtct     9708
+0
+     ctactaaaaa tacaaaaaat tagctgggca tggtggcggg cacctgtagt cccagctact     9714
+0
+     cgggaggctg agtcaggaga atggtgtgaa cccaggagac ggagcttgca gtgagctgag     9720
+0
+     gtcgcaccac tgcactccag cctgggtgat agagcgagac tctgtctcaa aaaaaaaaaa     9726
+0
+     aaaaaaaaaa aaaacaaaaa ttagccgggt gtggtggcag gcaacttaat cccagctact     9732
+0
+     tgggaggcag aggcaggaga atcgtttgaa cctgggaggc ggaggttgaa gagaatagaa     9738
+0
+     gctctgctgg tccagagaag gattgggcca gggctctggg agaccaggga gaaagagggc     9744
+0
+     acatgtggtc cctgttgact gtgagggtgg gaatctgagg aaggctttgg ctcattgccc     9750
+0
+     cttgggtttg tccacagcca tccttcccct gcggagtatg tcgaggtgct ccaggagcta     9756
+0
+     cagcggctgg agagtcgcct ccagcccttc ttgcagcgct actacgaggt tctgggtgct     9762
+0
+     gctgccacca cggactacaa taacaatgtg agccctttga tggccctgcc ctttctcctc     9768
+0
+     agccccagta ctcccaaaac agaacaggct gaaatacaga taactctttc cctccctgga     9774
+0
+     aaaacattgc aacagggcca ggtgcagtgg ctcacgcctg taatcccagc actttgggag     9780
+0
+     gccaaggtgg gcggatcatc tgagatcggg agtttgagac cagcctggcc aacatggtgc     9786
+0
+     aaccccatct ctactgaaaa tataaacatt agctggatgt agtggtgcac acctgtaatc     9792
+0
+     ccagctactc aggaggctga ggcaggagaa tcgctagaac tcgggaggag ggggttgcag     9798
+0
+     tgagccgaga ttgcactact gcactctagc ctgggtgaca gagcgagact gtctcaaaaa     9804
+0
+     acaaaacaaa acaaaaaaac acacattgca acaaaacaat ttctctctaa acctgtaagt     9810
+0
+     gattttgtcc tcccttacag agaaggtgat aatctttgct gtaagcactg tcctcgtatc     9816
+0
+     gtaccccttg tgcccctgaa tgaatttaga aaatgtaaag tacaggagat cagtatatga     9822
+0
+     tgacttactg attcatagta gtgttttaat aggatgttcc ttatgtgaat aagatataat     9828
+0
+     ttatttgcaa agatttggtc tacatgtaaa cttccaagga tataactgaa agttttggag     9834
+0
+     gacatggtat tctcagtagg cattattgct tttattagtg agatggactc cagcttgata     9840
+0
+     ttttctgcct ttttgtgttt ggctggttgt gcgcagcacg agggccggga ggaggatcag     9846
+0
+     cggttgatca acttggtagg ggagagcctg cgactgctgg gcaacacctt tgttgcactg     9852
+0
+     tctgacctgc gctgcaatct ggcctgcacg cccccacgac acctgcatgt ggtccggcct     9858
+0
+     atgtctcact acaccacccc catggtgctc cagcaggcag ccattcccat acaggtgggt     9864
+0
+     tagggggagt ctggcctgag ggagagtgag gggtgttgat agagtgaccc agggtagcta     9870
+0
+     ctgggcctga aggaggttag gaaaggagga gactggaaac atggtgatga aggctggaga     9876
+0
+     tactttagag gtttatcatg aggttttctt ggttaggctc ttgtattttt ctcacatctg     9882
+0
+     cctgtccatc tgtctttttc agatcaatgt gggaaccact gtgaccatga caggaaatgg     9888
+0
+     gactcggccc cccccaactc ccaatgcaga ggcacctccc cctggtcctg ggcaggcctc     9894
+0
+     atccgtggct ccgtcttcta ccaatgtcga gtcctcagct gagggggctc ccccgccagg     9900
+0
+     tccagctccc ccgccagcca ccagccaccc gagggtcatc cggatttccc accagagtgt     9906
+0
+     ggaacccgtg gtcatgatgc acatgaacat tcaaggtgag aatagttgct ggcgagaaga     9912
+0
+     gcaggatcag catgatgagg gaggttcatg ctgaggtgtg agggaacagg gtggggaagg     9918
+0
+     gagaggcaca tgctggtggt ggtagcctgg ggaccagagc agaagcttaa gtagacagat     9924
+0
+     gtggggggtg tgggggttgg tttgtctttg gaggtgtgtt tgtgtggtga agggagtacc     9930
+0
+     tctccctgtt tagatggagg gaaaggcagg ctttctgatt gggggattat gggcctgaag     9936
+0
+     tatgcctgat ctcagaagga tatagttagg ccttggccct acctacctca gggccactgt     9942
+0
+     ctctgtctcc ctgcccagat tctggcacac agcctggtgg tgttccgagt gctcccactg     9948
+0
+     gccccctggg accccctggt catggccaaa ccctgggtaa gagtgagggc atcagggcag     9954
+0
+     gctgagctct gggtagagaa agggaagggc tgagtgggtg ggttgaaggg gtccaggttc     9960
+0
+     aaggttacat cagacccgcc ccccaggctc caccctcatc cagctgccct ccctgccccc     9966
+0
+     tgagttcatg cacgccgtcg cccaccagat cactcatcag gccatggtgg cagctgttgc     9972
+0
+     ctccgcggcc gcaggtaatg acctggaagg ggaggcttgg gaggtagggc acagtccatg     9978
+0
+     gtggcagctg gctggcaagg gcctggccct cagccctctt cggtctgtct cttctgccac     9984
+0
+     ccacaggaca gcaggtgcca ggcttcccaa cagctccaac ccgggtggtg attgcccggc     9990
+0
+     ccactcctcc acaggctcgg ccttcccatc ctggagggcc cccagtctct gggacactgg     9996
+0
+     tgagcaaggg tcggggagtt ctagtgcgta acagtctagg                          10000
+0
+//
+   
 Output file format
 
    In normal operation, a dotplot image is displayed.
@@ -100,151 +431,11 @@ Output file format
    With the -data qualifier a file of the positions of the matches in the
    minimal non-overlapping set of matches is output.
    
-% dotpath embl:AF129756 embl:AP000504 -word 20 -data -out af.path
-Displays a non-overlapping wordmatch dotplot of two sequences
-
-   Produces the output file:
-   
-##2D Plot
-##Title dotpath (23/10/00)
-##Graphs 1
-##Number 1
-##Points 0
-##XminA 0.000000 XmaxA 184666.000000 YminA 0.000000 YmaxA 100000.000000
-##Xmin 0.000000 Xmax 184666.000000 Ymin 0.000000 Ymax 100000.000000
-##ScaleXmin 0.000000 ScaleXmax 184666.000000 ScaleYmin 0.000000 ScaleYmax 10000
-0
-.000000
-##Maintitle
-##Xtitle AF129756
-##Ytitle AP000504
-##DataObjects
-##Number 118
-Line x1 6035.000000 y1 0.000000 x2 6881.000000 y2 846.000000 colour 0
-Line x1 6882.000000 y1 847.000000 x2 7829.000000 y2 1794.000000 colour 0
-Line x1 7830.000000 y1 1795.000000 x2 8307.000000 y2 2272.000000 colour 0
-Line x1 8307.000000 y1 2273.000000 x2 8499.000000 y2 2465.000000 colour 0
-Line x1 8500.000000 y1 2466.000000 x2 8688.000000 y2 2654.000000 colour 0
-Line x1 8688.000000 y1 2658.000000 x2 10944.000000 y2 4914.000000 colour 0
-Line x1 10962.000000 y1 4914.000000 x2 10998.000000 y2 4950.000000 colour 0
-Line x1 11001.000000 y1 4953.000000 x2 12647.000000 y2 6599.000000 colour 0
-Line x1 12647.000000 y1 6600.000000 x2 12914.000000 y2 6867.000000 colour 0
-Line x1 12915.000000 y1 6868.000000 x2 14264.000000 y2 8217.000000 colour 0
-Line x1 14264.000000 y1 8221.000000 x2 15138.000000 y2 9095.000000 colour 0
-Line x1 15139.000000 y1 9096.000000 x2 17191.000000 y2 11148.000000 colour 0
-Line x1 17192.000000 y1 11149.000000 x2 19760.000000 y2 13717.000000 colour 0
-Line x1 19761.000000 y1 13718.000000 x2 20290.000000 y2 14247.000000 colour 0
-Line x1 20291.000000 y1 14248.000000 x2 20461.000000 y2 14418.000000 colour 0
-Line x1 20462.000000 y1 14419.000000 x2 25685.000000 y2 19642.000000 colour 0
-Line x1 25686.000000 y1 19643.000000 x2 26191.000000 y2 20148.000000 colour 0
-Line x1 26192.000000 y1 20149.000000 x2 27226.000000 y2 21183.000000 colour 0
-Line x1 27227.000000 y1 21183.000000 x2 27359.000000 y2 21315.000000 colour 0
-Line x1 27359.000000 y1 21319.000000 x2 27836.000000 y2 21796.000000 colour 0
-Line x1 27837.000000 y1 21797.000000 x2 29327.000000 y2 23287.000000 colour 0
-Line x1 29328.000000 y1 23288.000000 x2 29457.000000 y2 23417.000000 colour 0
-Line x1 29458.000000 y1 23418.000000 x2 29628.000000 y2 23588.000000 colour 0
-Line x1 29646.000000 y1 23606.000000 x2 30837.000000 y2 24797.000000 colour 0
-Line x1 30838.000000 y1 24798.000000 x2 31348.000000 y2 25308.000000 colour 0
-Line x1 31349.000000 y1 25309.000000 x2 31900.000000 y2 25860.000000 colour 0
-Line x1 31901.000000 y1 25861.000000 x2 34078.000000 y2 28038.000000 colour 0
-Line x1 34078.000000 y1 28040.000000 x2 36681.000000 y2 30643.000000 colour 0
-Line x1 36682.000000 y1 30644.000000 x2 38224.000000 y2 32186.000000 colour 0
-Line x1 38226.000000 y1 32186.000000 x2 38378.000000 y2 32338.000000 colour 0
-Line x1 38379.000000 y1 32339.000000 x2 38536.000000 y2 32496.000000 colour 0
-Line x1 38537.000000 y1 32497.000000 x2 39113.000000 y2 33073.000000 colour 0
-Line x1 39114.000000 y1 33074.000000 x2 39815.000000 y2 33775.000000 colour 0
-Line x1 39816.000000 y1 33776.000000 x2 40806.000000 y2 34766.000000 colour 0
-Line x1 40807.000000 y1 34767.000000 x2 40976.000000 y2 34936.000000 colour 0
-Line x1 40977.000000 y1 34936.000000 x2 41203.000000 y2 35162.000000 colour 0
-Line x1 41204.000000 y1 35163.000000 x2 42547.000000 y2 36506.000000 colour 0
-Line x1 42548.000000 y1 36507.000000 x2 43800.000000 y2 37759.000000 colour 0
-Line x1 43800.000000 y1 37762.000000 x2 44717.000000 y2 38679.000000 colour 0
-Line x1 44717.000000 y1 38683.000000 x2 45314.000000 y2 39280.000000 colour 0
-Line x1 45315.000000 y1 39280.000000 x2 48381.000000 y2 42346.000000 colour 0
-Line x1 48382.000000 y1 42347.000000 x2 48671.000000 y2 42636.000000 colour 0
-Line x1 48671.000000 y1 42638.000000 x2 50634.000000 y2 44601.000000 colour 0
-Line x1 50635.000000 y1 44602.000000 x2 50808.000000 y2 44775.000000 colour 0
-Line x1 50809.000000 y1 44776.000000 x2 51285.000000 y2 45252.000000 colour 0
-Line x1 51286.000000 y1 45253.000000 x2 51644.000000 y2 45611.000000 colour 0
-Line x1 51645.000000 y1 45611.000000 x2 52387.000000 y2 46353.000000 colour 0
-Line x1 52388.000000 y1 46354.000000 x2 52645.000000 y2 46611.000000 colour 0
-Line x1 52646.000000 y1 46612.000000 x2 53595.000000 y2 47561.000000 colour 0
-Line x1 53596.000000 y1 47562.000000 x2 53620.000000 y2 47586.000000 colour 0
-Line x1 53621.000000 y1 47587.000000 x2 54882.000000 y2 48848.000000 colour 0
-Line x1 54883.000000 y1 48849.000000 x2 55376.000000 y2 49342.000000 colour 0
-Line x1 55377.000000 y1 49343.000000 x2 55570.000000 y2 49536.000000 colour 0
-Line x1 55571.000000 y1 49537.000000 x2 55610.000000 y2 49576.000000 colour 0
-Line x1 55611.000000 y1 49577.000000 x2 55654.000000 y2 49620.000000 colour 0
-Line x1 55661.000000 y1 49620.000000 x2 56356.000000 y2 50315.000000 colour 0
-Line x1 56357.000000 y1 50316.000000 x2 58114.000000 y2 52073.000000 colour 0
-Line x1 58115.000000 y1 52074.000000 x2 59921.000000 y2 53880.000000 colour 0
-Line x1 59922.000000 y1 53881.000000 x2 60091.000000 y2 54050.000000 colour 0
-Line x1 60092.000000 y1 54051.000000 x2 63113.000000 y2 57072.000000 colour 0
-Line x1 63114.000000 y1 57073.000000 x2 64266.000000 y2 58225.000000 colour 0
-Line x1 64271.000000 y1 58225.000000 x2 64730.000000 y2 58684.000000 colour 0
-Line x1 64731.000000 y1 58685.000000 x2 66603.000000 y2 60557.000000 colour 0
-Line x1 66604.000000 y1 60558.000000 x2 67254.000000 y2 61208.000000 colour 0
-Line x1 67254.000000 y1 61209.000000 x2 69002.000000 y2 62957.000000 colour 0
-Line x1 69002.000000 y1 62959.000000 x2 69444.000000 y2 63401.000000 colour 0
-Line x1 69445.000000 y1 63402.000000 x2 70181.000000 y2 64138.000000 colour 0
-Line x1 70195.000000 y1 64152.000000 x2 71101.000000 y2 65058.000000 colour 0
-Line x1 71102.000000 y1 65058.000000 x2 71360.000000 y2 65316.000000 colour 0
-Line x1 71360.000000 y1 65317.000000 x2 73565.000000 y2 67522.000000 colour 0
-Line x1 73566.000000 y1 67523.000000 x2 73757.000000 y2 67714.000000 colour 0
-Line x1 73758.000000 y1 67715.000000 x2 74596.000000 y2 68553.000000 colour 0
-Line x1 74597.000000 y1 68554.000000 x2 75327.000000 y2 69284.000000 colour 0
-Line x1 75327.000000 y1 69285.000000 x2 76174.000000 y2 70132.000000 colour 0
-Line x1 76176.000000 y1 70132.000000 x2 76462.000000 y2 70418.000000 colour 0
-Line x1 76463.000000 y1 70419.000000 x2 76709.000000 y2 70665.000000 colour 0
-Line x1 76710.000000 y1 70666.000000 x2 77330.000000 y2 71286.000000 colour 0
-Line x1 77331.000000 y1 71287.000000 x2 77596.000000 y2 71552.000000 colour 0
-Line x1 77597.000000 y1 71553.000000 x2 78091.000000 y2 72047.000000 colour 0
-Line x1 78092.000000 y1 72048.000000 x2 79670.000000 y2 73626.000000 colour 0
-Line x1 79671.000000 y1 73627.000000 x2 80041.000000 y2 73997.000000 colour 0
-Line x1 80042.000000 y1 73998.000000 x2 80114.000000 y2 74070.000000 colour 0
-Line x1 80115.000000 y1 74071.000000 x2 81881.000000 y2 75837.000000 colour 0
-Line x1 81882.000000 y1 75845.000000 x2 82131.000000 y2 76094.000000 colour 0
-Line x1 82132.000000 y1 76095.000000 x2 83648.000000 y2 77611.000000 colour 0
-Line x1 83649.000000 y1 77612.000000 x2 84289.000000 y2 78252.000000 colour 0
-Line x1 84290.000000 y1 78253.000000 x2 86464.000000 y2 80427.000000 colour 0
-Line x1 86465.000000 y1 80428.000000 x2 86841.000000 y2 80804.000000 colour 0
-Line x1 86844.000000 y1 80804.000000 x2 87013.000000 y2 80973.000000 colour 0
-Line x1 87014.000000 y1 80974.000000 x2 87101.000000 y2 81061.000000 colour 0
-Line x1 87102.000000 y1 81061.000000 x2 87604.000000 y2 81563.000000 colour 0
-Line x1 87605.000000 y1 81564.000000 x2 87892.000000 y2 81851.000000 colour 0
-Line x1 87893.000000 y1 81852.000000 x2 88358.000000 y2 82317.000000 colour 0
-Line x1 88359.000000 y1 82318.000000 x2 88634.000000 y2 82593.000000 colour 0
-Line x1 88635.000000 y1 82594.000000 x2 88749.000000 y2 82708.000000 colour 0
-Line x1 88750.000000 y1 82709.000000 x2 88821.000000 y2 82780.000000 colour 0
-Line x1 88826.000000 y1 82780.000000 x2 89117.000000 y2 83071.000000 colour 0
-Line x1 89118.000000 y1 83072.000000 x2 89737.000000 y2 83691.000000 colour 0
-Line x1 89738.000000 y1 83692.000000 x2 91270.000000 y2 85224.000000 colour 0
-Line x1 91271.000000 y1 85224.000000 x2 92310.000000 y2 86263.000000 colour 0
-Line x1 92311.000000 y1 86264.000000 x2 92344.000000 y2 86297.000000 colour 0
-Line x1 92345.000000 y1 86298.000000 x2 93978.000000 y2 87931.000000 colour 0
-Line x1 93979.000000 y1 87932.000000 x2 94958.000000 y2 88911.000000 colour 0
-Line x1 94959.000000 y1 88912.000000 x2 95245.000000 y2 89198.000000 colour 0
-Line x1 95246.000000 y1 89199.000000 x2 95808.000000 y2 89761.000000 colour 0
-Line x1 95810.000000 y1 89764.000000 x2 96755.000000 y2 90709.000000 colour 0
-Line x1 96756.000000 y1 90710.000000 x2 97712.000000 y2 91666.000000 colour 0
-Line x1 97713.000000 y1 91683.000000 x2 97826.000000 y2 91796.000000 colour 0
-Line x1 97827.000000 y1 91797.000000 x2 98194.000000 y2 92164.000000 colour 0
-Line x1 98195.000000 y1 92165.000000 x2 99279.000000 y2 93249.000000 colour 0
-Line x1 99280.000000 y1 93250.000000 x2 99725.000000 y2 93695.000000 colour 0
-Line x1 99726.000000 y1 93696.000000 x2 99889.000000 y2 93859.000000 colour 0
-Line x1 99890.000000 y1 93860.000000 x2 101480.000000 y2 95450.000000 colour 0
-Line x1 101481.000000 y1 95451.000000 x2 102679.000000 y2 96649.000000 colour 0
-Line x1 102680.000000 y1 96650.000000 x2 103302.000000 y2 97272.000000 colour 0
-Line x1 103302.000000 y1 97274.000000 x2 103743.000000 y2 97715.000000 colour 0
-Line x1 103744.000000 y1 97716.000000 x2 103854.000000 y2 97826.000000 colour 0
-Line x1 103855.000000 y1 97827.000000 x2 106028.000000 y2 100000.000000 colour
-0
-##GraphObjects
-##Number 0
-
-   This gives the start and end positions of the matches for the first
-   sequence in the x1 and x2 values and the start and end positions of
-   the matches for the second sequence in the y1 and y2 values.
+  Output files for usage example
+  
+  Graphics File: dotpath.ps
+  
+   [dotpath results]
    
 Data files
 

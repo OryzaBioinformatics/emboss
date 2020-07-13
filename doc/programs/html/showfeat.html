@@ -59,32 +59,54 @@ and writes a text representation of the features to standard output.
 </H2>
 
 
-Here is a sample session with showfeat. The feature table is specified
-as a -ufo qualifier (uniform feature object), in this case a file
-containing an EMBL feature table.
+<b>Here is a sample session with showfeat</b>
+<p>
 
-<pre>
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% showfeat em:paamir
+% <b>showfeat </b>
 Show features of a sequence.
-Output file [paamir.showfeat]: stdout
-PAAMIR
-Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase regulation
-|==========================================================| 2167
-&gt;                                                            misc_feature
-|----------------------------------------------------------&gt; source
-&gt;                                                            promoter
-|&gt;                                                           promoter
-  &gt;                                                          RBS
-  |-------------------------------&gt;                          CDS
-                |&gt;                                           misc_feature
-                        |------&gt;                             variation
-                                  &gt;                          conflict
-                                  |----------------&gt;         CDS
+Input sequence(s): <b>tembl:hsfau1</b>
+Output file [hsfau1.showfeat]: <b></b>
 
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 2</b>
+<p>
+Display 'joined' features on one line with positions: 
+<p>
 
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-</pre>
+% <b>showfeat -sort join -pos </b>
+Show features of a sequence.
+Input sequence(s): <b>tembl:hsfau1</b>
+Output file [hsfau1.showfeat]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.2">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 3</b>
+<p>
+Display just positions and names of CDS features - this can be used as a regions file in showseq: 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>showfeat -matchtype CDS -width 0 -noid -nodesc -noscale -pos  </b>
+Show features of a sequence.
+Input sequence(s): <b>tembl:hsfau1</b>
+Output file [hsfau1.showfeat]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.3">Go to the output files for this example</a><p><p>
 
 
 
@@ -347,28 +369,28 @@ pax* | 10</td>
 <tr>
 <td>-html</td>
 <td>Use HTML formatting</td>
-<td>Yes/No</td>
+<td>Boolean value Yes/No</td>
 <td>No</td>
 </tr>
 
 <tr>
 <td>-[no]id</td>
 <td>Set this to be false if you do not wish to display the ID name of the sequence.</td>
-<td>Yes/No</td>
+<td>Boolean value Yes/No</td>
 <td>Yes</td>
 </tr>
 
 <tr>
 <td>-[no]description</td>
 <td>Set this to be false if you do not wish to display the description of the sequence.</td>
-<td>Yes/No</td>
+<td>Boolean value Yes/No</td>
 <td>Yes</td>
 </tr>
 
 <tr>
 <td>-[no]scale</td>
 <td>Set this to be false if you do not wish to display the scale line.</td>
-<td>Yes/No</td>
+<td>Boolean value Yes/No</td>
 <td>Yes</td>
 </tr>
 
@@ -385,35 +407,35 @@ If the width is set to less than 4, the graphics lines and the scale line will n
 <td>-collapse</td>
 <td>If this is set, then features from the same source and of the same type and sense are all printed on the same line. For instance if there are several features from the EMBL feature table (ie. the same source) which are all of type 'exon' in the same sense, then they will all be displayed on the same line. This makes it hard to distinguish overlapping features.
 If this is set to false then each feature is displayed on a separate line making it easier to distinguish where features start and end.</td>
-<td>Yes/No</td>
+<td>Boolean value Yes/No</td>
 <td>No</td>
 </tr>
 
 <tr>
 <td>-[no]forward</td>
 <td>Set this to be false if you do not wish to display forward sense features.</td>
-<td>Yes/No</td>
+<td>Boolean value Yes/No</td>
 <td>Yes</td>
 </tr>
 
 <tr>
 <td>-[no]reverse</td>
 <td>Set this to be false if you do not wish to display reverse sense features.</td>
-<td>Yes/No</td>
+<td>Boolean value Yes/No</td>
 <td>Yes</td>
 </tr>
 
 <tr>
 <td>-[no]unknown</td>
 <td>Set this to be false if you do not wish to display unknown sense features. (ie. features with no directionality - all protein features are of this type and some nucleic features (for example, CG-rich regions)).</td>
-<td>Yes/No</td>
+<td>Boolean value Yes/No</td>
 <td>Yes</td>
 </tr>
 
 <tr>
 <td>-strand</td>
 <td>Set this if you wish to display the strand of the features. Protein features are always directionless (indicated by '0'), forward is indicated by '+' and reverse is '-'.</td>
-<td>Yes/No</td>
+<td>Boolean value Yes/No</td>
 <td>No</td>
 </tr>
 
@@ -421,35 +443,35 @@ If this is set to false then each feature is displayed on a separate line making
 <td>-source</td>
 <td>Set this if you wish to display the source of the features.
 The source name is usually either the name of the program that detected the feature or it is the name of the feature table (eg: EMBL) that the feature came from.</td>
-<td>Yes/No</td>
+<td>Boolean value Yes/No</td>
 <td>No</td>
 </tr>
 
 <tr>
 <td>-position</td>
 <td>Set this if you wish to display the start and end position of the features. If several features are being displayed on the same line, then the start and end positions will be joined by a comma, for example: '189-189,225-225'.</td>
-<td>Yes/No</td>
+<td>Boolean value Yes/No</td>
 <td>No</td>
 </tr>
 
 <tr>
 <td>-[no]type</td>
 <td>Set this to be false if you do not wish to display the type of the features.</td>
-<td>Yes/No</td>
+<td>Boolean value Yes/No</td>
 <td>Yes</td>
 </tr>
 
 <tr>
 <td>-tags</td>
 <td>Set this to be false if you do not wish to display the tags and values of the features.</td>
-<td>Yes/No</td>
+<td>Boolean value Yes/No</td>
 <td>No</td>
 </tr>
 
 <tr>
 <td>-[no]values</td>
 <td>Set this to be false if you do not wish to display the tag values of the features. If this is set to be false, only the tag names will be displayed. If the tags are not displayed, then the values will not be displayed. The value of the 'translation' tag is never displayed as it is often extremely long.</td>
-<td>Yes/No</td>
+<td>Boolean value Yes/No</td>
 <td>Yes</td>
 </tr>
 
@@ -462,66 +484,127 @@ The source name is usually either the name of the program that detected the feat
 </H2>
 
 
-The feature input is the feature table lines from the database entry
-in EMBL format.
+The feature input is the feature table lines from a normal sequence USA.
 
 <p>
-Here is the file:
 
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+
+'tembl:hsfau1' is a sequence entry in the example nucleic acid database 'tembl'
+<p>
+<p><h3>Database entry: tembl:hsfau1</h3>
+<table width="90%"><tr><td bgcolor="#FFDDFF">
 <pre>
-
+ID   HSFAU1     standard; DNA; HUM; 2016 BP.
+XX
+AC   X65921; S45242;
+XX
+SV   X65921.1
+XX
+DT   13-MAY-1992 (Rel. 31, Created)
+DT   21-JUL-1993 (Rel. 36, Last updated, Version 5)
+XX
+DE   H.sapiens fau 1 gene
+XX
+KW   fau 1 gene.
+XX
+OS   Homo sapiens (human)
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia;
+OC   Eutheria; Primates; Catarrhini; Hominidae; Homo.
+XX
+RN   [1]
+RP   1-2016
+RA   Kas K.;
+RT   ;
+RL   Submitted (29-APR-1992) to the EMBL/GenBank/DDBJ databases.
+RL   K. Kas, University of Antwerp, Dept of Biochemistry T3.22,
+RL   Universiteitsplein 1, 2610 Wilrijk, BELGIUM
+XX
+RN   [2]
+RP   1-2016
+RX   MEDLINE; 92412144.
+RA   Kas K., Michiels L., Merregaert J.;
+RT   "Genomic structure and expression of the human fau gene: encoding the
+RT   ribosomal protein S30 fused to a ubiquitin-like protein.";
+RL   Biochem. Biophys. Res. Commun. 187:927-933(1992).
+XX
+DR   SWISS-PROT; P35544; UBIM_HUMAN.
+DR   SWISS-PROT; Q05472; RS30_HUMAN.
+XX
 FH   Key             Location/Qualifiers
 FH
-FT   source          1..2167
-FT                   /db_xref="taxon:287"
-FT                   /organism="Pseudomonas aeruginosa"
-FT                   /strain="PAC"
-FT                   /isolate="PAC 1"
-FT                   /map="38 min"
-FT   CDS             1289..1879
-FT                   /db_xref="SWISS-PROT:P10932"
-FT                   /note="aliphatic amidase regulator, positive  regulator of
-FT                   amiE"
-FT                   /transl_table=11
-FT                   /gene="amiR"
-FT                   /protein_id="CAA32023.1"
-FT                   /translation="MSANSLLGSLRELQVLVLNPPGEVSDALVLQLIRIGCSVRQCWPP
-FT                   PEAFDVPVDVVFTSIFQNGHHDEIAALLAAGTPRTTLVALVEYESPAVLSQIIELECHG
-FT                   VITQPLDAHRVLPVLVSARRISEEMAKLKQKTEQLQDRIAGQARINQAKVLLMQRHGWD
-FT                   EREAHQHLSREAMKRREPILKIAQELLGNEPSA"
-FT   CDS             135..1292
-FT                   /db_xref="SWISS-PROT:P27017"
-FT                   /note="negative regulator of amiR"
-FT                   /transl_table=11
-FT                   /gene="amiC"
-FT                   /protein_id="CAA32024.1"
-FT                   /translation="MGSHQERPLIGLLFSETGVTADIERSHAYGALLAVEQLNREGGVG
-FT                   GRPIETLSQDPGGDPDRYRLCAEDFIRNRGVRFLVGCYMSHTRKAVMPVVERADALLCY
-FT                   PTPYEGFEYSPNIVYGGPAPNQNSAPLAAYLIRHYGERVVFIGSDYIYPRESNHVMRHL
-FT                   YRQHGGTVLEEIYIPLYPSDDDLQRAVERIYQARADVVFSTVVGTGTAELYRAIARRYG
-FT                   DGRRPPIASLTTSEAEVAKMESDVAEGQVVVAPYFSSIDTPASRAFVQACHGFFPENAT
-FT                   ITAWAEAAYWQTLLLGRAAQAAGNWRVEDVQRHLYDIDIDAPQGPVRVERQNNHSRLSS
-FT                   RIAEIDARGVFQVRWQSPEPIRPDPYVVVHNLDDWSASMGGGPLP"
-FT   promoter        8..24
-FT                   /note="proposed rpoN-dependent promoter"
-FT   promoter        65..81
-FT                   /note="proposed rpoN-dependent promoter"
-FT   RBS             121..126
-FT                   /note="proposed Shine-Dalgarno sequence"
-FT   mutation        912..1167
-FT                   /note="ClaI fragment deleted in pSW36,  constitutive
-FT                   phenotype"
-FT                   /replace=""
-FT                   /gene="amiC"
-FT   misc_feature    1
-FT                   /note="last base of an XhoI site"
-FT   misc_feature    648..653
-FT                   /note="end of 658bp XhoI fragment, deletion in  pSW3 causes
-FT                   constitutive expression of amiE"
-FT   conflict        1281
-FT                   /replace="g"
-FT                   /citation=[3]
+FT   source          1..2016
+FT                   /db_xref="taxon:9606"
+FT                   /organism="Homo sapiens"
+FT                   /clone_lib="CML cosmid"
+FT                   /clone="15.1"
+FT   mRNA            join(408..504,774..856,951..1095,1557..1612,1787..&gt;1912)
+FT                   /gene="fau 1"
+FT   exon            408..504
+FT                   /number=1
+FT   intron          505..773
+FT                   /number=1
+FT   exon            774..856
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+FT                   RAKRRMQYNRRFVNVVPTFGKKKGPNANS"
+FT   intron          857..950
+FT                   /number=2
+FT   exon            951..1095
+FT                   /number=3
+FT   intron          1096..1556
+FT                   /number=3
+FT   exon            1557..1612
+FT                   /number=4
+FT   intron          1613..1786
+FT                   /number=4
+FT   exon            1787..&gt;1912
+FT                   /number=5
+FT   polyA_signal    1938..1943
+XX
+SQ   Sequence 2016 BP; 421 A; 562 C; 538 G; 495 T; 0 other;
+     ctaccatttt ccctctcgat tctatatgta cactcgggac aagttctcct gatcgaaaac        60
+     ggcaaaacta aggccccaag taggaatgcc ttagttttcg gggttaacaa tgattaacac       120
+     tgagcctcac acccacgcga tgccctcagc tcctcgctca gcgctctcac caacagccgt       180
+     agcccgcagc cccgctggac accggttctc catccccgca gcgtagcccg gaacatggta       240
+     gctgccatct ttacctgcta cgccagcctt ctgtgcgcgc aactgtctgg tcccgccccg       300
+     tcctgcgcga gctgctgccc aggcaggttc gccggtgcga gcgtaaaggg gcggagctag       360
+     gactgccttg ggcggtacaa atagcaggga accgcgcggt cgctcagcag tgacgtgaca       420
+     cgcagcccac ggtctgtact gacgcgccct cgcttcttcc tctttctcga ctccatcttc       480
+     gcggtagctg ggaccgccgt tcaggtaaga atggggcctt ggctggatcc gaagggcttg       540
+     tagcaggttg gctgcggggt cagaaggcgc ggggggaacc gaagaacggg gcctgctccg       600
+     tggccctgct ccagtcccta tccgaactcc ttgggaggca ctggccttcc gcacgtgagc       660
+     cgccgcgacc accatcccgt cgcgatcgtt tctggaccgc tttccactcc caaatctcct       720
+     ttatcccaga gcatttcttg gcttctctta caagccgtct tttctttact cagtcgccaa       780
+     tatgcagctc tttgtccgcg cccaggagct acacaccttc gaggtgaccg gccaggaaac       840
+     ggtcgcccag atcaaggtaa ggctgcttgg tgcgccctgg gttccatttt cttgtgctct       900
+     tcactctcgc ggcccgaggg aacgcttacg agccttatct ttccctgtag gctcatgtag       960
+     cctcactgga gggcattgcc ccggaagatc aagtcgtgct cctggcaggc gcgcccctgg      1020
+     aggatgaggc cactctgggc cagtgcgggg tggaggccct gactaccctg gaagtagcag      1080
+     gccgcatgct tggaggtgag tgagagagga atgttctttg aagtaccggt aagcgtctag      1140
+     tgagtgtggg gtgcatagtc ctgacagctg agtgtcacac ctatggtaat agagtacttc      1200
+     tcactgtctt cagttcagag tgattcttcc tgtttacatc cctcatgttg aacacagacg      1260
+     tccatgggag actgagccag agtgtagttg tatttcagtc acatcacgag atcctagtct      1320
+     ggttatcagc ttccacacta aaaattaggt cagaccaggc cccaaagtgc tctataaatt      1380
+     agaagctgga agatcctgaa atgaaactta agatttcaag gtcaaatatc tgcaactttg      1440
+     ttctcattac ctattgggcg cagcttctct ttaaaggctt gaattgagaa aagaggggtt      1500
+     ctgctgggtg gcaccttctt gctcttacct gctggtgcct tcctttccca ctacaggtaa      1560
+     agtccatggt tccctggccc gtgctggaaa agtgagaggt cagactccta aggtgagtga      1620
+     gagtattagt ggtcatggtg ttaggacttt ttttcctttc acagctaaac caagtccctg      1680
+     ggctcttact cggtttgcct tctccctccc tggagatgag cctgagggaa gggatgctag      1740
+     gtgtggaaga caggaaccag ggcctgatta accttccctt ctccaggtgg ccaaacagga      1800
+     gaagaagaag aagaagacag gtcgggctaa gcggcggatg cagtacaacc ggcgctttgt      1860
+     caacgttgtg cccacctttg gcaagaagaa gggccccaat gccaactctt aagtcttttg      1920
+     taattctggc tttctctaat aaaaaagcca cttagttcag tcatcgcatt gtttcatctt      1980
+     tacttgcaag gcctcaggga gaggtgtgct tctcgg                                2016
+//
 </pre>
+</td></tr></table><p>
+
 
 <H2>
     Output file format
@@ -532,24 +615,78 @@ The output is a text representation of the feature table.
 
 <p>
 
-Here is the output from the example run:
 
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: hsfau1.showfeat</h3>
+<table width="90%"><tr><td bgcolor="#DDFFDD">
 <pre>
-
-|==========================================================| 2167
-&gt;                                                            misc_feature
+HSFAU1
+H.sapiens fau 1 gene
+|==========================================================| 2016
 |----------------------------------------------------------&gt; source
-&gt;                                                            promoter
-|&gt;                                                           promoter
-  &gt;                                                          RBS
-  |-------------------------------&gt;                          CDS
-                |&gt;                                           misc_feature
-                        |------&gt;                             variation
-                                  &gt;                          conflict
-                                  |----------------&gt;         CDS
-
+           |--&gt;                                              exon
+           |--&gt;                                              mRNA
+              |-------&gt;                                      intron
+                      |-&gt;                                    exon
+                      |-&gt;                                    mRNA
+                      |-&gt;                                    CDS
+                        |--&gt;                                 intron
+                           |---&gt;                             CDS
+                           |---&gt;                             exon
+                           |---&gt;                             mRNA
+                               |-------------&gt;               intron
+                                             |&gt;              CDS
+                                             |&gt;              exon
+                                             |&gt;              mRNA
+                                               |----&gt;        intron
+                                                    |--&gt;     CDS
+                                                    |--&gt;     exon
+                                                    |--&gt;     mRNA
+                                                        &gt;    polyA_signal
 
 </pre>
+</td></tr></table><p>
+
+<a name="output.2"></a>
+<h3>Output files for usage example 2</h3>
+<p><h3>File: hsfau1.showfeat</h3>
+<table width="90%"><tr><td bgcolor="#DDFFDD">
+<pre>
+HSFAU1
+H.sapiens fau 1 gene
+|==========================================================| 2016
+|----------------------------------------------------------&gt; 1-2016 source
+           |--&gt;       |-&gt;  |---&gt;             |&gt;     |--&gt;     408-504,774-856,951-1095,1557-1612,1787-1912 mRNA
+           |--&gt;                                              408-504 exon
+              |-------&gt;                                      505-773 intron
+                      |-&gt;                                    774-856 exon
+                      |-&gt;  |---&gt;             |&gt;     |--&gt;     782-856,951-1095,1557-1612,1787-1912 CDS
+                        |--&gt;                                 857-950 intron
+                           |---&gt;                             951-1095 exon
+                               |-------------&gt;               1096-1556 intron
+                                             |&gt;              1557-1612 exon
+                                               |----&gt;        1613-1786 intron
+                                                    |--&gt;     1787-1912 exon
+                                                        &gt;    1938-1943 polyA_signal
+
+</pre>
+</td></tr></table><p>
+
+<a name="output.3"></a>
+<h3>Output files for usage example 3</h3>
+<p><h3>File: hsfau1.showfeat</h3>
+<table width="90%"><tr><td bgcolor="#DDFFDD">
+<pre>
+782-856 CDS
+951-1095 CDS
+1557-1612 CDS
+1787-1912 CDS
+
+</pre>
+</td></tr></table><p>
+
+
 
 <H2>
     Data files
@@ -621,8 +758,9 @@ None.
 <tr><td><a href="showalign.html">showalign</a></td><td>Displays a multiple sequence alignment</td></tr>
 <tr><td><a href="showdb.html">showdb</a></td><td>Displays information on the currently available databases</td></tr>
 <tr><td><a href="showseq.html">showseq</a></td><td>Display a sequence with features, translation etc</td></tr>
-<tr><td><a href="swissparse.html">swissparse</a></td><td>Retrieves sequences from swissprot using keyword search</td></tr>
+<tr><td><a href="sixpack.html">sixpack</a></td><td>Display a DNA sequence with 6-frame translation and ORFs</td></tr>
 <tr><td><a href="textsearch.html">textsearch</a></td><td>Search sequence documentation text. SRS and Entrez are faster!</td></tr>
+<tr><td><a href="twofeat.html">twofeat</a></td><td>Finds neighbouring pairs of features in sequences</td></tr>
 </table>
 
 <!--

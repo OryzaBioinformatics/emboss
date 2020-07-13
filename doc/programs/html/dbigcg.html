@@ -61,11 +61,51 @@ the EMBL database CD-ROM distribution and by the Staden package in
 addition to EMBOSS, and appears to be the most generally used and
 publicly available index file format for these databases.
 
+<p>
+
+Having created the EMBOSS indices for this file, a database can then be
+defined in the file <b>emboss.defaults</b> as something like:
+
+<p>
+
+<pre>
+DB embl [
+   type: N
+   format: embl
+   method: gcg
+   directory: /data/gcg/gcgembl
+]
+</pre>  
+
 <H2>
     Usage
 </H2>
 
+<b>Here is a sample session with dbigcg</b>
+<p>
 
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>dbigcg </b>
+Index a GCG formatted database
+      EMBL : EMBL
+     SWISS : Swiss-Prot, SpTrEMBL, TrEMBLnew
+   GENBANK : Genbank, DDBJ
+       PIR : NBRF
+Entry format [EMBL]: <b>EMBL</b>
+Database directory [.]: <b>../../embl</b>
+Wildcard database filename [*.seq]: <b></b>
+Database name: <b>EMBL</b>
+Release number [0.0]: <b></b>
+Index date [00/00/00]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.1">Go to the output files for this example</a><p><p>
+
+
+<!--
 Here is a sample session with <b>dbigcg</b>.
 
 <pre>
@@ -83,7 +123,7 @@ Release number [0.0]:
 Index date [00/00/00]: 04/02/00
 
 </pre>
-
+-->
 
 
 <H2>
@@ -233,14 +273,14 @@ IT IS DONE FOR YOU.
 <tr>
 <td>-[no]systemsort</td>
 <td>Use system sort utility</td>
-<td>Yes/No</td>
+<td>Boolean value Yes/No</td>
 <td>Yes</td>
 </tr>
 
 <tr>
 <td>-[no]cleanup</td>
 <td>Clean up temporary files</td>
-<td>Yes/No</td>
+<td>Boolean value Yes/No</td>
 <td>Yes</td>
 </tr>
 
@@ -256,12 +296,32 @@ IT IS DONE FOR YOU.
 A GCG-format database consists of *.seq and *.ref files - only the *.seq
 files are used.  The data in these is often compressed. 
 
+<p>
+
+
+
 <H2>
     Output file format
 </H2>
 
 
-<b>dbigcg</b> creates four index files. All are binary but with a simple format.
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: acnum.hit</h3>
+<p>This file contains non-printing characters and so cannot be displayed here.
+<p><h3>File: acnum.trg</h3>
+<p>This file contains non-printing characters and so cannot be displayed here.
+<p><h3>File: division.lkp</h3>
+<p>This file contains non-printing characters and so cannot be displayed here.
+<p><h3>File: entrynam.idx</h3>
+<p>This file contains non-printing characters and so cannot be displayed here.
+
+
+<p>
+
+<b>dbigcg</b> creates four index files.  All are binary but with a
+simple format. 
 
 <ul>
 

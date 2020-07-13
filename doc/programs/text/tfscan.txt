@@ -35,10 +35,12 @@ Description
    
 Usage
 
-   Here is a sample session with tfscan.
+   Here is a sample session with tfscan
+   
 
-% tfscan
-Input sequence(s): embl:hsfos
+% tfscan 
+Scans DNA sequences for transcription factors
+Input sequence(s): tembl:hsfos
 Transcription Factor Class
          F : fungi
          I : insect
@@ -46,9 +48,12 @@ Transcription Factor Class
          V : vertebrate
          O : other
 Select class [V]: v
-Number of mismatches [0]:
-Output file [hsfos.tfscan]:
-
+Number of mismatches [0]: 
+Output file [hsfos.tfscan]: 
+   
+   Go to the input files for this example
+   Go to the output files for this example
+   
 Command line arguments
 
    Mandatory qualifiers:
@@ -85,57 +90,190 @@ Command line arguments
    
 Input file format
 
-   Normal nucleic acid sequence USA.
+   tfscan reads normal nucleic acid sequence USAs.
+   
+  Input files for usage example
+  
+   'tembl:hsfos' is a sequence entry in the example nucleic acid database
+   'tembl'
+   
+  Database entry: tembl:hsfos
+  
+ID   HSFOS      standard; DNA; HUM; 6210 BP.
+XX
+AC   K00650; M16287;
+XX
+SV   K00650.1
+XX
+DT   26-JUL-1991 (Rel. 28, Created)
+DT   02-JUL-1999 (Rel. 60, Last updated, Version 3)
+XX
+DE   Human fos proto-oncogene (c-fos), complete cds.
+XX
+KW   c-myc proto-oncogene; fos oncogene; proto-oncogene.
+XX
+OS   Homo sapiens (human)
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia
+;
+OC   Eutheria; Primates; Catarrhini; Hominidae; Homo.
+XX
+RN   [1]
+RP   1-4165
+RX   MEDLINE; 83221560.
+RA   van Straaten F., Muller R., Curran T., Van Beveren C., Verma I.M.;
+RT   "Complete nucleotide sequence of a human c-onc gene: deduced amino acid
+RT   sequence of the human c-fos protein";
+RL   Proc. Natl. Acad. Sci. U.S.A. 80(11):3183-3187(1983).
+XX
+RN   [2]
+RX   MEDLINE; 86028185.
+RA   Treisman R.;
+RT   "Transient accumulation of c-fos RNA following serum stimulation requires
+a
+RT   conserved 5' element and c-fos 3' sequences";
+RL   Cell 42(3):889-902(1985).
+XX
+RN   [3]
+RP   4166-6210
+RX   MEDLINE; 87217118.
+RA   Verma I.M., Deschamps J., Van Beveren C., Sassone-Corsi P.;
+RT   "Human fos gene";
+RL   Cold Spring Harb. Symp. Quant. Biol. 51:0-0(0).
+XX
+DR   EPD; EP11145; HS_FOS.
+DR   GDB; 119917; FOS.
+DR   SWISS-PROT; P01100; FOS_HUMAN.
+DR   TRANSFAC; R00458; HS$CFOS_01.
+DR   TRANSFAC; R00459; HS$CFOS_02.
+DR   TRANSFAC; R00460; HS$CFOS_03.
+DR   TRANSFAC; R00461; HS$CFOS_04.
+DR   TRANSFAC; R00463; HS$CFOS_06.
+DR   TRANSFAC; R00464; HS$CFOS_07.
+DR   TRANSFAC; R00465; HS$CFOS_08.
+DR   TRANSFAC; R00466; HS$CFOS_09.
+
+
+  [Part of this file has been deleted for brevity]
+
+     ccagctgtgc agctgcccac cgcaagggca gcagcagcaa tgagccttcc tctgactcgc      330
+0
+     tcagctcacc cacgctgctg gccctgtgag ggggcaggga aggggaggca gccggcaccc      336
+0
+     acaagtgcca ctgcccgagc tggtgcatta cagagaggag aaacacatct tccctagagg      342
+0
+     gttcctgtag acctagggag gaccttatct gtgcgtgaaa cacaccaggc tgtgggcctc      348
+0
+     aaggacttga aagcatccat gtgtggactc aagtccttac ctcttccgga gatgtagcaa      354
+0
+     aacgcatgga gtgtgtattg ttcccagtga cacttcagag agctggtagt tagtagcatg      360
+0
+     ttgagccagg cctgggtctg tgtctctttt ctctttctcc ttagtcttct catagcatta      366
+0
+     actaatctat tgggttcatt attggaatta acctggtgct ggatattttc aaattgtatc      372
+0
+     tagtgcagct gattttaaca ataactactg tgttcctggc aatagtgtgt tctgattaga      378
+0
+     aatgaccaat attatactaa gaaaagatac gactttattt tctggtagat agaaataaat      384
+0
+     agctatatcc atgtactgta gtttttcttc aacatcaatg ttcattgtaa tgttactgat      390
+0
+     catgcattgt tgaggtggtc tgaatgttct gacattaaca gttttccatg aaaacgtttt      396
+0
+     attgtgtttt taatttattt attaagatgg attctcagat atttatattt ttattttatt      402
+0
+     tttttctacc ttgaggtctt ttgacatgtg gaaagtgaat ttgaatgaaa aatttaagca      408
+0
+     ttgtttgctt attgttccaa gacattgtca ataaaagcat ttaagttgaa tgcgaccaac      414
+0
+     cttgtgctct tttcattctg gaagtcttgt aagtttctga aaggtattat tggagaccag      420
+0
+     tttgtcaaga agggtagctg ctggaggggg acacaccctc tgtctgatcc cttatcaaag      426
+0
+     aggacaagga aactatagag ctgattttag aatattttac aaatacatgc cttccattgg      432
+0
+     aatgctaaga ttttctactg cttctgggga cgggaaaccg ctgtgtaaca gcttttgtgg      438
+0
+     gaatacattt tttctgtttc agtactcgca gggggaaata tttaaatttt gttgtgctaa      444
+0
+     tattaaattc agatgttttg atcttaaagg aaccctttaa gcaaacagaa cctagctttg      450
+0
+     tacagactat tttaactttt tattctcaca aaatcacgtg gagggttatt ctacttcaaa      456
+0
+     gatgagcaaa ttgaagaatg gttagaataa acaactttct tgatattccg ttatcggcat      462
+0
+     tagaatcttc ctgctcgtta tcgtatccag caggctgaac tgcctcttga tacttggtta      468
+0
+     aaaaaaattt tcaggccggg cgcggtggcc catgcctgta atcctagcac tttgggaggc      474
+0
+     cgaggcaggc ggatcacctg aggtcgggag ttcgagacca gcctgaccaa catggagaaa      480
+0
+     ccccgtcttt actaaaaata caaaattagc ctggtgtggt ggtgcatgcc tgtaatccta      486
+0
+     gctacttgag aggctgagac aggaaaatca cttgaactcg ggaggcggat gttgcagcga      492
+0
+     actgagattg cgccattgca ctccagcctg ggcaacaaga ttgaaactct gtttaaaaaa      498
+0
+     aaaagttttc actaatgtgt acattttttt gtactctttt attctcgaaa gggaaggagg      504
+0
+     gctattgccc tatcccttat taataaatgc attgtggttt ctggtttctc taataccata      510
+0
+     tgcccttcat tcagtttata gtgggcggaa gtgggggaga aaaagttgct cagaaatcaa      516
+0
+     aagatatctc aaacagcaca aataatggct gatcgttctg caaacaaaaa gttacataat      522
+0
+     agctcaagaa ggagaagtca acatgactct gaacaagctt taacttagaa actttatcat      528
+0
+     cttaaggaag aacgtgacct ttgtccagga cgtctctggt aatggggcac ttacacacac      534
+0
+     atgcacacgt acaaaccaca gggaaaggag accgcccttc tgcctctgct cgcgagtatc      540
+0
+     acgcaggcac catgcactat gttttcacac acactgggtg gaagaagagc ttcagcgcca      546
+0
+     gtcttctaat gctttggtga taatgaaaat cactgggtgc ttatggggtg tcatattcaa      552
+0
+     tcgagttaaa agttttaatt caaaatgaca gttttactga ggttgatgtt ctcgtctatg      558
+0
+     atatctctgc ccctcccata aaaatggaca tttaaaagca acttaccgct ctttagatca      564
+0
+     ctcctatatc acacaccact tggggtgctg tttctgctag acttgtgatg acagtggcct      570
+0
+     taggatccct gtttgctgtt caaagggcaa atattttata gcctttaaat atacctaaac      576
+0
+     taaatacaga attaatataa ctaacaaaca cctggtctga aataacaagg tgatctaccc      582
+0
+     tggaaggaac ccagctggtg ggccaggagc ggtggctcac acctgtaatt ccagcacttt      588
+0
+     gggaggctga gacaggagga tcactggagt ccaggagttt gagaccagcc tgggcaacat      594
+0
+     ggcaaaaccc agtgtgcttc tgttgtccca gctacactac tcaggaggct gaggcaggag      600
+0
+     tatgacttga gcctgggagg gggaggttgc agagaactga tattgcacca ccactgcact      606
+0
+     ccagcctggg tgacacagca aaaccctatc tcaaaaaaaa aaaaaaaaaa aaggaaccca      612
+0
+     gctggttcct gtaggtgtgc aataataaca accagaggaa gaaaaggaag acgatttccc      618
+0
+     agatgaagaa gggcagctgg accttcggac                                       621
+0
+//
    
 Output file format
 
-   Here is part of the output from the example run. Some of the sites in
-   TRANSFAC are extremely short.
-     _________________________________________________________________
-   
+  Output files for usage example
+  
+  File: hsfos.tfscan
+  
 TFSCAN of HSFOS from 1 to 6210
 
-HS$CFOS_20           R08485   384   396   agttcccgtcaat
-DOG$ATP1A_01         R08484   3057  3063  gacatgg
-HS$CEBPA_01          R08471   4535  4540  cacgtg
-HS$GPB_05            R08210   3716  3721  gtatct
-HS$GPB_02            R08207   5837  5842  ggtggg
-HS$GPB_02            R08207   2399  2404  ggtggg
-HS$GPB_02            R08207   2077  2082  ggtggg
-MOUSE$TIMP1_02       R08168   2362  2368  caggaag
-MOUSE$BMG_11         R08167   960   965   ggatag
-RAT$RPK_02           R08166   6136  6140  tgtgc
-RAT$RPK_02           R08166   5953  5957  tgtgc
-RAT$RPK_02           R08166   4433  4437  tgtgc
-RAT$RPK_02           R08166   4143  4147  tgtgc
-RAT$RPK_02           R08166   3450  3454  tgtgc
-RAT$RPK_02           R08166   3246  3250  tgtgc
-RAT$RPK_02           R08166   3154  3158  tgtgc
-RAT$RPK_02           R08166   1128  1132  tgtgc
-HS$TIMP1_02          R08152   2361  2368  ccaggaag
-HS$TIMP1_01          R08151   2642  2648  tgagtaa
-HS$IL3_08            R05028   4376  4381  tgtggg
-HS$IL3_08            R05028   3471  3476  tgtggg
-HS$IL3_08            R05028   2584  2589  tgtggg
-HS$IL3_08            R05028   2066  2071  tgtggg
-HS$CATHD_01          R04883   1430  1435  ggcggg
-HS$CATHD_01          R04883   1092  1097  ggcggg
-HS$CATHD_01          R04883   569   574   ggcggg
-RAT$IGFBP2_02        R04793   5123  5128  gggcgg
-RAT$IGFBP2_02        R04793   1429  1434  gggcgg
-RAT$IGFBP2_02        R04793   1091  1096  gggcgg
-RAT$IGFBP2_02        R04793   607   612   gggcgg
-RAT$IGFBP2_01        R04792   5123  5128  gggcgg
-RAT$IGFBP2_01        R04792   1429  1434  gggcgg
-RAT$IGFBP2_01        R04792   1091  1096  gggcgg
-RAT$IGFBP2_01        R04792   607   612   gggcgg
-HS$A14COL_01         R04791   5123  5128  gggcgg
-HS$A14COL_01         R04791   1429  1434  gggcgg
-HS$A14COL_01         R04791   1091  1096  gggcgg
-HS$A14COL_01         R04791   607   612   gggcgg
-HS$A24COL_03         R04790   5123  5128  gggcgg
-etc......
-     _________________________________________________________________
+MOUSE$FCGR3A_02      R04413   3287  3292  ttcctc
+HS$ALBU_03           R00079   5940  5944  tggca
+HS$ALBU_03           R00079   3757  3761  tggca
+HS$ALBU_03           R00079   2776  2780  tggca
+HS$ALBU_03           R00079   2418  2422  tggca
+HS$ALBU_03           R00079   2010  2014  tggca
+HS$ALBU_03           R00079   1676  1680  tggca
+HS$ALBU_03           R00079   1356  1360  tggca
+HS$ALBU_02           R00078   2009  2014  ttggca
    
    The output consists of a title line then 5 columns separated by
    whitespace.
@@ -149,9 +287,6 @@ etc......
    
    The fifth column is the sequence of the region where a match has been
    found.
-   
-   For further details on an entry from the TRANSFAC database, see:
-   http://transfac.gbf.de/cgi-bin/qt/search.pl
    
 Data files
 

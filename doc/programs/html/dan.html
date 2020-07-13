@@ -54,7 +54,50 @@ USA 83, 3746-3750 and Baldino et al.  Methods in Enzymol.  168,
     Usage
 </H2>
 
+<b>Here is a sample session with dan</b>
+<p>
 
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>dan </b>
+Calculates DNA RNA/DNA melting temperature
+Input sequence(s): <b>tembl:paamir</b>
+Enter window size [20]: <b></b>
+Enter Shift Increment [1]: <b></b>
+Enter DNA concentration (nM) [50.]: <b></b>
+Enter salt concentration (mM) [50.]: <b></b>
+Output report [paamir.dan]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 2</b>
+<p>
+An example of producing a plot of Tm: 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>dan -plot -graph cps </b>
+Calculates DNA RNA/DNA melting temperature
+Input sequence(s): <b>tembl:paamir</b>
+Enter window size [20]: <b></b>
+Enter Shift Increment [1]: <b></b>
+Enter DNA concentration (nM) [50.]: <b></b>
+Enter salt concentration (mM) [50.]: <b></b>
+Enter minimum temperature [55.]: <b></b>
+
+Created dan.ps
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.2">Go to the output files for this example</a><p><p>
+
+
+<!--
 Here is a sample session with dan.
 
 <pre>
@@ -83,7 +126,7 @@ Enter minimum temperature [55.]:
 Graph type [x11]: 
 
 </pre>
-
+-->
 
 
 <H2>
@@ -240,7 +283,7 @@ IT IS DONE FOR YOU.
 <tr>
 <td>-outfile</td>
 <td>If a plot is not being produced then data on the melting point etc. in each window along the sequence is output to the file.</td>
-<td>Report file</td>
+<td>Report output file</td>
 <td>&nbsp;</td>
 </tr>
 
@@ -266,28 +309,28 @@ IT IS DONE FOR YOU.
 <tr>
 <td>-rna</td>
 <td>This specifies that the sequence is an RNA sequnce and not a DNA sequence.</td>
-<td>Yes/No</td>
+<td>Boolean value Yes/No</td>
 <td>No</td>
 </tr>
 
 <tr>
 <td>-product</td>
 <td>This prompts for percent formamide, percent of mismatches allowed and product length.</td>
-<td>Yes/No</td>
+<td>Boolean value Yes/No</td>
 <td>No</td>
 </tr>
 
 <tr>
 <td>-thermo</td>
 <td>Output the DeltaG, DeltaH and DeltaS values of the sequence windows to the output data file.</td>
-<td>Yes/No</td>
+<td>Boolean value Yes/No</td>
 <td>No</td>
 </tr>
 
 <tr>
 <td>-plot</td>
 <td>If this is not specified then the file of output data is produced, else a plot of the melting point along the sequence is produced.</td>
-<td>Yes/No</td>
+<td>Boolean value Yes/No</td>
 <td>No</td>
 </tr>
 
@@ -301,6 +344,126 @@ IT IS DONE FOR YOU.
 
 
 Any DNA or RNA sequence USA. 
+
+<p>
+
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+
+'tembl:paamir' is a sequence entry in the example nucleic acid database 'tembl'
+<p>
+<p><h3>Database entry: tembl:paamir</h3>
+<table width="90%"><tr><td bgcolor="#FFDDFF">
+<pre>
+ID   PAAMIR     standard; DNA; PRO; 2167 BP.
+XX
+AC   X13776; M43175;
+XX
+SV   X13776.1
+XX
+DT   19-APR-1989 (Rel. 19, Created)
+DT   17-FEB-1997 (Rel. 50, Last updated, Version 22)
+XX
+DE   Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase regulation
+XX
+KW   aliphatic amidase regulator; amiC gene; amiR gene.
+XX
+OS   Pseudomonas aeruginosa
+OC   Bacteria; Proteobacteria; gamma subdivision; Pseudomonadaceae; Pseudomonas.
+XX
+RN   [1]
+RP   1167-2167
+RA   Rice P.M.;
+RT   ;
+RL   Submitted (16-DEC-1988) to the EMBL/GenBank/DDBJ databases.
+RL   Rice P.M., EMBL, Postfach 10-2209, Meyerhofstrasse 1, 6900 Heidelberg, FRG.
+XX
+RN   [2]
+RP   1167-2167
+RX   MEDLINE; 89211409.
+RA   Lowe N., Rice P.M., Drew R.E.;
+RT   "Nucleotide sequence of the aliphatic amidase regulator gene of Pseudomonas
+RT   aeruginosa";
+RL   FEBS Lett. 246:39-43(1989).
+XX
+RN   [3]
+RP   1-1292
+RX   MEDLINE; 91317707.
+RA   Wilson S., Drew R.;
+RT   "Cloning and DNA seqence of amiC, a new gene regulating expression of the
+RT   Pseudomonas aeruginosa aliphatic amidase, and purification of the amiC
+RT   product.";
+RL   J. Bacteriol. 173:4914-4921(1991).
+XX
+RN   [4]
+RP   1-2167
+RA   Rice P.M.;
+RT   ;
+RL   Submitted (04-SEP-1991) to the EMBL/GenBank/DDBJ databases.
+RL   Rice P.M., EMBL, Postfach 10-2209, Meyerhofstrasse 1, 6900 Heidelberg, FRG.
+XX
+DR   SWISS-PROT; P10932; AMIR_PSEAE.
+DR   SWISS-PROT; P27017; AMIC_PSEAE.
+DR   SWISS-PROT; Q51417; AMIS_PSEAE.
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+FT                   phenotype"
+FT                   /replace=""
+FT                   /gene="amiC"
+FT   misc_feature    1
+FT                   /note="last base of an XhoI site"
+FT   misc_feature    648..653
+FT                   /note="end of 658bp XhoI fragment, deletion in  pSW3 causes
+FT                   constitutive expression of amiE"
+FT   conflict        1281
+FT                   /replace="g"
+FT                   /citation=[3]
+XX
+SQ   Sequence 2167 BP; 363 A; 712 C; 730 G; 362 T; 0 other;
+     ggtaccgctg gccgagcatc tgctcgatca ccaccagccg ggcgacggga actgcacgat        60
+     ctacctggcg agcctggagc acgagcgggt tcgcttcgta cggcgctgag cgacagtcac       120
+     aggagaggaa acggatggga tcgcaccagg agcggccgct gatcggcctg ctgttctccg       180
+     aaaccggcgt caccgccgat atcgagcgct cgcacgcgta tggcgcattg ctcgcggtcg       240
+     agcaactgaa ccgcgagggc ggcgtcggcg gtcgcccgat cgaaacgctg tcccaggacc       300
+     ccggcggcga cccggaccgc tatcggctgt gcgccgagga cttcattcgc aaccgggggg       360
+     tacggttcct cgtgggctgc tacatgtcgc acacgcgcaa ggcggtgatg ccggtggtcg       420
+     agcgcgccga cgcgctgctc tgctacccga ccccctacga gggcttcgag tattcgccga       480
+     acatcgtcta cggcggtccg gcgccgaacc agaacagtgc gccgctggcg gcgtacctga       540
+     ttcgccacta cggcgagcgg gtggtgttca tcggctcgga ctacatctat ccgcgggaaa       600
+     gcaaccatgt gatgcgccac ctgtatcgcc agcacggcgg cacggtgctc gaggaaatct       660
+     acattccgct gtatccctcc gacgacgact tgcagcgcgc cgtcgagcgc atctaccagg       720
+     cgcgcgccga cgtggtcttc tccaccgtgg tgggcaccgg caccgccgag ctgtatcgcg       780
+     ccatcgcccg tcgctacggc gacggcaggc ggccgccgat cgccagcctg accaccagcg       840
+     aggcggaggt ggcgaagatg gagagtgacg tggcagaggg gcaggtggtg gtcgcgcctt       900
+     acttctccag catcgatacg cccgccagcc gggccttcgt ccaggcctgc catggtttct       960
+     tcccggagaa cgcgaccatc accgcctggg ccgaggcggc ctactggcag accttgttgc      1020
+     tcggccgcgc cgcgcaggcc gcaggcaact ggcgggtgga agacgtgcag cggcacctgt      1080
+     acgacatcga catcgacgcg ccacaggggc cggtccgggt ggagcgccag aacaaccaca      1140
+     gccgcctgtc ttcgcgcatc gcggaaatcg atgcgcgcgg cgtgttccag gtccgctggc      1200
+     agtcgcccga accgattcgc cccgaccctt atgtcgtcgt gcataacctc gacgactggt      1260
+     ccgccagcat gggcggggga ccgctcccat gagcgccaac tcgctgctcg gcagcctgcg      1320
+     cgagttgcag gtgctggtcc tcaacccgcc gggggaggtc agcgacgccc tggtcttgca      1380
+     gctgatccgc atcggttgtt cggtgcgcca gtgctggccg ccgccggaag ccttcgacgt      1440
+     gccggtggac gtggtcttca ccagcatttt ccagaatggc caccacgacg agatcgctgc      1500
+     gctgctcgcc gccgggactc cgcgcactac cctggtggcg ctggtggagt acgaaagccc      1560
+     cgcggtgctc tcgcagatca tcgagctgga gtgccacggc gtgatcaccc agccgctcga      1620
+     tgcccaccgg gtgctgcctg tgctggtatc ggcgcggcgc atcagcgagg aaatggcgaa      1680
+     gctgaagcag aagaccgagc agctccagga ccgcatcgcc ggccaggccc ggatcaacca      1740
+     ggccaaggtg ttgctgatgc agcgccatgg ctgggacgag cgcgaggcgc accagcacct      1800
+     gtcgcgggaa gcgatgaagc ggcgcgagcc gatcctgaag atcgctcagg agttgctggg      1860
+     aaacgagccg tccgcctgag cgatccgggc cgaccagaac aataacaaga ggggtatcgt      1920
+     catcatgctg ggactggttc tgctgtacgt tggcgcggtg ctgtttctca atgccgtctg      1980
+     gttgctgggc aagatcagcg gtcgggaggt ggcggtgatc aacttcctgg tcggcgtgct      2040
+     gagcgcctgc gtcgcgttct acctgatctt ttccgcagca gccgggcagg gctcgctgaa      2100
+     ggccggagcg ctgaccctgc tattcgcttt tacctatctg tgggtggccg ccaaccagtt      2160
+     cctcgag                                                                2167
+//
+</pre>
+</td></tr></table><p>
+
 
 <H2>
     Output file format
@@ -339,16 +502,18 @@ for further information on report formats.
 
 By default <b>dan</b> writes a 'seqtable' report file.
 
-
 <p>
 
-This is the start and the end of the output file from the example. 
 
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: paamir.dan</h3>
+<table width="90%"><tr><td bgcolor="#DDFFDD">
 <pre>
-
 ########################################
 # Program: dan
-# Rundate: Mon Feb 11 12:07:10 2002
+# Rundate: Thu Nov 07 14:16:04 2002
+# Report_format: seqtable
 # Report_file: paamir.dan
 ########################################
 
@@ -358,34 +523,114 @@ This is the start and the end of the output file from the example.
 # HitCount: 2148
 #=======================================
 
-  Start     End Tm     GC     DeltaG DeltaH DeltaS TmProd Sequence
-      1      20 64.9   70.0   .      .      .      .      ggtaccgctggccgagcatc
-      2      21 63.7   65.0   .      .      .      .      gtaccgctggccgagcatct
-      3      22 63.7   65.0   .      .      .      .      taccgctggccgagcatctg
-      4      23 66.9   70.0   .      .      .      .      accgctggccgagcatctgc
-      5      24 66.7   70.0   .      .      .      .      ccgctggccgagcatctgct
-      6      25 65.5   70.0   .      .      .      .      cgctggccgagcatctgctc
-      7      26 65.5   70.0   .      .      .      .      gctggccgagcatctgctcg
-      8      27 63.7   65.0   .      .      .      .      ctggccgagcatctgctcga
-      9      28 62.9   60.0   .      .      .      .      tggccgagcatctgctcgat
-     10      29 62.6   65.0   .      .      .      .      ggccgagcatctgctcgatc
-     11      30 61.7   60.0   .      .      .      .      gccgagcatctgctcgatca
-     12      31 60.2   60.0   .      .      .      .      ccgagcatctgctcgatcac
-etc.
+  Start     End     Tm     GC DeltaG DeltaH DeltaS TmProd Sequence
+      1      20   64.9   70.0      .      .      .      . ggtaccgctggccgagcatc
+      2      21   63.7   65.0      .      .      .      . gtaccgctggccgagcatct
+      3      22   63.7   65.0      .      .      .      . taccgctggccgagcatctg
+      4      23   66.9   70.0      .      .      .      . accgctggccgagcatctgc
+      5      24   66.7   70.0      .      .      .      . ccgctggccgagcatctgct
+      6      25   65.5   70.0      .      .      .      . cgctggccgagcatctgctc
+      7      26   65.5   70.0      .      .      .      . gctggccgagcatctgctcg
+      8      27   63.7   65.0      .      .      .      . ctggccgagcatctgctcga
+      9      28   62.9   60.0      .      .      .      . tggccgagcatctgctcgat
+     10      29   62.6   65.0      .      .      .      . ggccgagcatctgctcgatc
+     11      30   61.7   60.0      .      .      .      . gccgagcatctgctcgatca
+     12      31   60.2   60.0      .      .      .      . ccgagcatctgctcgatcac
+     13      32   60.2   60.0      .      .      .      . cgagcatctgctcgatcacc
+     14      33   59.0   55.0      .      .      .      . gagcatctgctcgatcacca
+     15      34   59.2   55.0      .      .      .      . agcatctgctcgatcaccac
+     16      35   60.4   60.0      .      .      .      . gcatctgctcgatcaccacc
+     17      36   58.9   55.0      .      .      .      . catctgctcgatcaccacca
+     18      37   58.6   55.0      .      .      .      . atctgctcgatcaccaccag
+     19      38   61.3   60.0      .      .      .      . tctgctcgatcaccaccagc
+     20      39   62.4   65.0      .      .      .      . ctgctcgatcaccaccagcc
+     21      40   63.9   65.0      .      .      .      . tgctcgatcaccaccagccg
+     22      41   64.9   70.0      .      .      .      . gctcgatcaccaccagccgg
+     23      42   64.3   70.0      .      .      .      . ctcgatcaccaccagccggg
+     24      43   66.1   70.0      .      .      .      . tcgatcaccaccagccgggc
+     25      44   67.5   75.0      .      .      .      . cgatcaccaccagccgggcg
+     26      45   66.1   70.0      .      .      .      . gatcaccaccagccgggcga
+     27      46   66.3   70.0      .      .      .      . atcaccaccagccgggcgac
+     28      47   68.6   75.0      .      .      .      . tcaccaccagccgggcgacg
+     29      48   69.8   80.0      .      .      .      . caccaccagccgggcgacgg
+     30      49   70.7   80.0      .      .      .      . accaccagccgggcgacggg
+     31      50   70.5   80.0      .      .      .      . ccaccagccgggcgacggga
+     32      51   68.6   75.0      .      .      .      . caccagccgggcgacgggaa
+     33      52   68.6   75.0      .      .      .      . accagccgggcgacgggaac
+     34      53   68.4   75.0      .      .      .      . ccagccgggcgacgggaact
+     35      54   67.4   75.0      .      .      .      . cagccgggcgacgggaactg
+     36      55   68.9   75.0      .      .      .      . agccgggcgacgggaactgc
 
-   2143    2162 65.6   70.0   .      .      .      .      ggtggccgccaaccagttcc
-   2144    2163 64.4   65.0   .      .      .      .      gtggccgccaaccagttcct
-   2145    2164 64.1   65.0   .      .      .      .      tggccgccaaccagttcctc
-   2146    2165 65.4   70.0   .      .      .      .      ggccgccaaccagttcctcg
-   2147    2166 64.2   65.0   .      .      .      .      gccgccaaccagttcctcga
-   2148    2167 62.4   65.0   .      .      .      .      ccgccaaccagttcctcgag
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+   2101    2120   69.9   80.0      .      .      .      . ggccggagcgctgaccctgc
+   2102    2121   68.7   75.0      .      .      .      . gccggagcgctgaccctgct
+   2103    2122   65.5   70.0      .      .      .      . ccggagcgctgaccctgcta
+   2104    2123   63.5   65.0      .      .      .      . cggagcgctgaccctgctat
+   2105    2124   61.3   60.0      .      .      .      . ggagcgctgaccctgctatt
+   2106    2125   60.1   60.0      .      .      .      . gagcgctgaccctgctattc
+   2107    2126   61.7   60.0      .      .      .      . agcgctgaccctgctattcg
+   2108    2127   63.4   65.0      .      .      .      . gcgctgaccctgctattcgc
+   2109    2128   61.7   60.0      .      .      .      . cgctgaccctgctattcgct
+   2110    2129   59.5   55.0      .      .      .      . gctgaccctgctattcgctt
+   2111    2130   57.1   50.0      .      .      .      . ctgaccctgctattcgcttt
+   2112    2131   56.4   45.0      .      .      .      . tgaccctgctattcgctttt
+   2113    2132   54.7   45.0      .      .      .      . gaccctgctattcgctttta
+   2114    2133   55.0   45.0      .      .      .      . accctgctattcgcttttac
+   2115    2134   55.9   50.0      .      .      .      . ccctgctattcgcttttacc
+   2116    2135   54.7   45.0      .      .      .      . cctgctattcgcttttacct
+   2117    2136   52.0   40.0      .      .      .      . ctgctattcgcttttaccta
+   2118    2137   51.2   35.0      .      .      .      . tgctattcgcttttacctat
+   2119    2138   50.9   40.0      .      .      .      . gctattcgcttttacctatc
+   2120    2139   49.0   35.0      .      .      .      . ctattcgcttttacctatct
+   2121    2140   49.3   35.0      .      .      .      . tattcgcttttacctatctg
+   2122    2141   51.1   35.0      .      .      .      . attcgcttttacctatctgt
+   2123    2142   52.2   40.0      .      .      .      . ttcgcttttacctatctgtg
+   2124    2143   54.0   45.0      .      .      .      . tcgcttttacctatctgtgg
+   2125    2144   55.2   50.0      .      .      .      . cgcttttacctatctgtggg
+   2126    2145   53.9   45.0      .      .      .      . gcttttacctatctgtgggt
+   2127    2146   52.3   45.0      .      .      .      . cttttacctatctgtgggtg
+   2128    2147   53.5   45.0      .      .      .      . ttttacctatctgtgggtgg
+   2129    2148   56.0   50.0      .      .      .      . tttacctatctgtgggtggc
+   2130    2149   57.8   55.0      .      .      .      . ttacctatctgtgggtggcc
+   2131    2150   60.1   60.0      .      .      .      . tacctatctgtgggtggccg
+   2132    2151   63.4   65.0      .      .      .      . acctatctgtgggtggccgc
+   2133    2152   64.3   70.0      .      .      .      . cctatctgtgggtggccgcc
+   2134    2153   63.4   65.0      .      .      .      . ctatctgtgggtggccgcca
+   2135    2154   62.7   60.0      .      .      .      . tatctgtgggtggccgccaa
+   2136    2155   64.5   65.0      .      .      .      . atctgtgggtggccgccaac
+   2137    2156   66.5   70.0      .      .      .      . tctgtgggtggccgccaacc
+   2138    2157   66.8   70.0      .      .      .      . ctgtgggtggccgccaacca
+   2139    2158   66.8   70.0      .      .      .      . tgtgggtggccgccaaccag
+   2140    2159   66.8   70.0      .      .      .      . gtgggtggccgccaaccagt
+   2141    2160   65.9   65.0      .      .      .      . tgggtggccgccaaccagtt
+   2142    2161   65.6   70.0      .      .      .      . gggtggccgccaaccagttc
+   2143    2162   65.6   70.0      .      .      .      . ggtggccgccaaccagttcc
+   2144    2163   64.4   65.0      .      .      .      . gtggccgccaaccagttcct
+   2145    2164   64.1   65.0      .      .      .      . tggccgccaaccagttcctc
+   2146    2165   65.4   70.0      .      .      .      . ggccgccaaccagttcctcg
+   2147    2166   64.2   65.0      .      .      .      . gccgccaaccagttcctcga
+   2148    2167   62.4   65.0      .      .      .      . ccgccaaccagttcctcgag
 
 #---------------------------------------
-#---------------------------------------     
-
+#---------------------------------------
 </pre>
+</td></tr></table><p>
+
+<a name="output.2"></a>
+<h3>Output files for usage example 2</h3>
+<p><h3>Graphics File: dan.ps</h3>
+<p><img src="dan.2.dan.gif" alt="[dan results]">
+<p><h3>File: paamir.dan</h3>
+<table width="90%"><tr><td bgcolor="#DDFFDD">
+<pre>
+</pre>
+</td></tr></table><p>
+
 
 <p>
+
 The header information contains details of the program, date and sequence
 
 <p>
@@ -401,36 +646,15 @@ sequence as it is moved along, giving:
 <li> The sequence of the window
 </ul>
 
+
 <p>
+
 If the qualifier '-product' is used to make the program prompt for
 percent formamide percent of mismatches allowed and product length, then
-the output includes the melting temperature of the specified product:
-
-<pre>
-
-########################################
-# Program: dan
-# Rundate: Mon Feb 11 12:11:25 2002
-# Report_file: paamir.dan
-########################################
-
-#=======================================
-#
-# Sequence: PAAMIR     from: 1   to: 2167
-# HitCount: 2148
-#=======================================
-
-  Start     End Tm     GC     DeltaG DeltaH DeltaS TmProd Sequence
-      1      20 64.9   70.0   .      .      .      54.9   ggtaccgctggccgagcatc
-      2      21 63.7   65.0   .      .      .      52.8   gtaccgctggccgagcatct
-      3      22 63.7   65.0   .      .      .      52.8   taccgctggccgagcatctg
-      4      23 66.9   70.0   .      .      .      54.9   accgctggccgagcatctgc
-
-etc.
-</pre>
-
+the output includes the melting temperature of the specified product.
 
 <p>
+
 If the qualifier '-thermo' is gived then the DeltaG, DeltaH and DeltaS
 of the sequence in the window is also output. 
 
@@ -533,6 +757,7 @@ None.
 <tr><td><a href="compseq.html">compseq</a></td><td>Counts the composition of dimer/trimer/etc words in a sequence</td></tr>
 <tr><td><a href="freak.html">freak</a></td><td>Residue/base frequency table or plot</td></tr>
 <tr><td><a href="isochore.html">isochore</a></td><td>Plots isochores in large DNA sequences</td></tr>
+<tr><td><a href="sirna.html">sirna</a></td><td>Finds siRNA duplexes in mRNA</td></tr>
 <tr><td><a href="wordcount.html">wordcount</a></td><td>Counts words of a specified size in a DNA sequence</td></tr>
 </table>
 

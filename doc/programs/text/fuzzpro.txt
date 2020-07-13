@@ -21,14 +21,19 @@ Description
    
 Usage
 
-   Here is a sample session with fuzzpro.
+   Here is a sample session with fuzzpro
+   
 
-% fuzzpro
-Input sequence: sw:*
+% fuzzpro 
+Protein pattern search
+Input sequence(s): tsw:*
 Search pattern: [FY]-[LIV]-G-[DE]-E-A-Q-x-[RKQ](2)-G
-Number of mismatches [0]:
-Output file [5h1d_fugru.fuzzpro]:
-
+Number of mismatches [0]: 
+Output report [100k_rat.fuzzpro]: 
+   
+   Go to the input files for this example
+   Go to the output files for this example
+   
 Command line arguments
 
    Mandatory qualifiers:
@@ -96,7 +101,7 @@ Command line arguments
    accepted
    -mismatch Number of mismatches Integer 0 or more 0
    [-outfile]
-   (Parameter 2) Output report file name Report file
+   (Parameter 2) Output report file name Report output file
    Optional qualifiers Allowed values Default
    (none)
    Advanced qualifiers Allowed values Default
@@ -104,6 +109,14 @@ Command line arguments
    
 Input file format
 
+   fuzzpro reads in normal protein sequence USAs.
+   
+  Input files for usage example
+  
+   'tsw:*' is a sequence entry in the example protein database 'tsw'
+   
+  Pattern specification
+  
    Patterns for fuzzpro are based on the format of pattern used in the
    PROSITE database, with the difference that the terminating dot '.' and
    the hyphens, '-', between the characters are optional.
@@ -156,32 +169,20 @@ Output file format
    
    By default fuzzzpro writes a 'seqtable' report file.
    
-   The output from the above example is:
-   
+  Output files for usage example
+  
+  File: 100k_rat.fuzzpro
+  
 ########################################
 # Program: fuzzpro
-# Rundate: Thu Apr 11 13:38:06 2002
+# Rundate: Thu Nov 07 14:33:18 2002
+# Report_format: seqtable
 # Report_file: 100k_rat.fuzzpro
 ########################################
 
 #=======================================
 #
-# Sequence: ACT1_ABSGL     from: 1   to: 140
-# HitCount: 1
-#
-# Pattern: [FY]-[LIV]-G-[DE]-E-A-Q-x-[RKQ](2)-G
-# Mismatch: 0
-#
-#=======================================
-
-  Start     End Mismatch Sequence
-     55      65        . YVGDEAQSKRG
-
-#---------------------------------------
-#---------------------------------------
-#=======================================
-#
-# Sequence: ACT1_ACACA     from: 1   to: 375
+# Sequence: ACT1_FUGRU     from: 1   to: 375
 # HitCount: 1
 #
 # Pattern: [FY]-[LIV]-G-[DE]-E-A-Q-x-[RKQ](2)-G
@@ -196,7 +197,37 @@ Output file format
 #---------------------------------------
 #=======================================
 #
-# Sequence: ACT1_ARATH     from: 1   to: 377
+# Sequence: ACT2_FUGRU     from: 1   to: 375
+# HitCount: 1
+#
+# Pattern: [FY]-[LIV]-G-[DE]-E-A-Q-x-[RKQ](2)-G
+# Mismatch: 0
+#
+#=======================================
+
+  Start     End Mismatch Sequence
+     53      63        . YVGDEAQSKRG
+
+#---------------------------------------
+#---------------------------------------
+#=======================================
+#
+# Sequence: ACT3_FUGRU     from: 1   to: 375
+# HitCount: 1
+#
+# Pattern: [FY]-[LIV]-G-[DE]-E-A-Q-x-[RKQ](2)-G
+# Mismatch: 0
+#
+#=======================================
+
+  Start     End Mismatch Sequence
+     53      63        . YVGDEAQSKRG
+
+#---------------------------------------
+#---------------------------------------
+#=======================================
+#
+# Sequence: ACTC_FUGRU     from: 1   to: 377
 # HitCount: 1
 #
 # Pattern: [FY]-[LIV]-G-[DE]-E-A-Q-x-[RKQ](2)-G
@@ -209,9 +240,37 @@ Output file format
 
 #---------------------------------------
 #---------------------------------------
+#=======================================
+#
+# Sequence: ACTS_FUGRU     from: 1   to: 377
+# HitCount: 1
+#
+# Pattern: [FY]-[LIV]-G-[DE]-E-A-Q-x-[RKQ](2)-G
+# Mismatch: 0
+#
+#=======================================
 
-etc.
+  Start     End Mismatch Sequence
+     55      65        . YVGDEAQSKRG
 
+#---------------------------------------
+#---------------------------------------
+#=======================================
+#
+# Sequence: ACTT_FUGRU     from: 1   to: 377
+# HitCount: 1
+#
+# Pattern: [FY]-[LIV]-G-[DE]-E-A-Q-x-[RKQ](2)-G
+# Mismatch: 0
+#
+#=======================================
+
+  Start     End Mismatch Sequence
+     55      65        . YVGDEAQSKRG
+
+#---------------------------------------
+#---------------------------------------
+   
 Data files
 
    None.
@@ -242,7 +301,7 @@ Known bugs
    
 See also
 
-    Program name                        Description
+    Program name                         Description
    antigenic      Finds antigenic sites in proteins
    digest         Protein proteolytic enzyme or reagent cleavage digest
    fuzztran       Protein pattern search after translation
@@ -251,6 +310,7 @@ See also
    patmatdb       Search a protein sequence with a motif
    patmatmotifs   Search a PROSITE motif database with a protein sequence
    pepcoil        Predicts coiled coil regions
+   pestfind       Finds PEST motifs as potential proteolytic cleavage sites
    preg           Regular expression search of a protein sequence
    pscan          Scans proteins using PRINTS
    sigcleave      Reports protein signal cleavage sites

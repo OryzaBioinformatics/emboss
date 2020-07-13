@@ -16,35 +16,15 @@ Description
    
 Usage
 
-   Here is a sample session with prosextract.
+   Here is a sample session with prosextract
+   
 
-% prosextract
-Extracting ID, AC & PA lines from the Prosite motif Database.
-Enter name of prosite directory: data/PROSITE
-        
-% more prosite.lines
-ASN_GLYCOSYLATION PS00001
-N-glycosylation
-N-{P}-[ST]-{P}
-^N[^P][ST][^P]
-
-CAMP_PHOSPHO_SITE PS00004
-cAMP-
-[RK](2)-x-[ST]
-^[RK]{2}[^BJOUXZ][ST]
-
-PKC_PHOSPHO_SITE PS00005
-Protein
-[ST]-x-[RK]
-^[ST][^BJOUXZ][RK]
-
-CK2_PHOSPHO_SITE PS00006
-Casein
-[ST]-x(2)-[DE]
-^[ST][^BJOUXZ]{2}[DE]
-
-etc.......
-
+% prosextract 
+Builds the PROSITE motif database for patmatmotifs to search
+Enter name of prosite directory: ../../data/
+   
+   Go to the output files for this example
+   
    The output files named after the prosite accession numbers can now
    also be seen in the prosite directory. This files are automatically
    created after prosextract is run.
@@ -117,29 +97,12 @@ Known bugs
 
 See also
 
-   Program name Description
+    Program name         Description
    aaindexextract Extract data from AAINDEX
-   cutgextract Extract data from CUTG
-   domainer Reads protein coordinate files and writes domains coordinate
-   files
-   funky Reads clean coordinate files and writes file of
-   protein-heterogen contact data
-   groups Removes redundant hits from a scop families file
-   hetparse Converts raw dictionary of heterogen groups to a file in
-   embl-like format
-   nrscope Converts redundant EMBL-format SCOP file to non-redundant one
-   pdbparse Parses pdb files and writes cleaned-up protein coordinate
-   files
-   pdbtosp Convert raw swissprot:pdb equivalence file to embl-like format
-   printsextract Extract data from PRINTS
-   rebaseextract Extract data from REBASE
-   scope Convert raw scop classification file to embl-like format
-   scopnr Removes redundant domains from a scop classification file
-   scopparse Converts raw scop classification files to a file in
-   embl-like format
-   scopseqs Adds pdb and swissprot sequence records to a scop
-   classification file
-   tfextract Extract data from TRANSFAC
+   cutgextract    Extract data from CUTG
+   printsextract  Extract data from PRINTS
+   rebaseextract  Extract data from REBASE
+   tfextract      Extract data from TRANSFAC
    
 Author(s)
 

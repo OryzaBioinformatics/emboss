@@ -89,26 +89,22 @@ sequences allows you to enter disjoint sequences to be joined.
  -->
 
 
-Here is a sample session with union, the file 'cds.list' contains a list
-of the regions making up the coding sequence of the sequence
-'embl:hsfau':
+<b>Here is a sample session with union</b>
+<p>
+the file 'cds.list' contains a list of the regions making up the coding sequence of 'embl:hsfau': 
+<p>
 
-<pre>
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% union
+% <b>union </b>
 Reads sequence fragments and builds one sequence
-Input sequence(s): @cds.list
-Output sequence [hsfau1.fasta]: fau.cds 
+Input sequence(s): <b>@../../data/cds.list</b>
+Output sequence [hsfau1.fasta]: <b></b>
 
-</pre>
-
-
-
-
-
-
-
-
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
 
 
 
@@ -204,21 +200,24 @@ IT IS DONE FOR YOU.
    -->
 
 The input can be any set of sequences in a file of multiple sequence
-entries or a List file.  The sequences are concatenated in the order in
-which they appear in the file. 
+entries or in a <i>List</i> file.  The sequences are concatenated in the
+order in which they appear in the file. 
 
 <p>
 
-The input used in the above example is:
 
-<p>
-
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+<p><h3>File: ../../data/cds.list</h3>
+<table width="90%"><tr><td bgcolor="#FFDDFF">
 <pre>
-em-id:HSFAU1[782:856]
-em-id:HSFAU1[951:1095]
-em-id:HSFAU1[1557:1612]
-em-id:HSFAU1[1787:1912]
+tembl-id:HSFAU1[782:856]
+tembl-id:HSFAU1[951:1095]
+tembl-id:HSFAU1[1557:1612]
+tembl-id:HSFAU1[1787:1912]
 </pre>
+</td></tr></table><p>
+
 
 <p>
 
@@ -245,18 +244,28 @@ You may find the program <b>yank</b> useful for creating List files.
         happens in unusual cases - null output, errors etc. 
    -->
 
-The result if a normal sequence file containnig a single sequence
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: hsfau1.fasta</h3>
+<table width="90%"><tr><td bgcolor="#DDFFDD">
+<pre>
+&gt;HSFAU1 X65921.1 H.sapiens fau 1 gene
+atgcagctctttgtccgcgcccaggagctacacaccttcgaggtgaccggccaggaaacg
+gtcgcccagatcaaggctcatgtagcctcactggagggcattgccccggaagatcaagtc
+gtgctcctggcaggcgcgcccctggaggatgaggccactctgggccagtgcggggtggag
+gccctgactaccctggaagtagcaggccgcatgcttggaggtaaagtccatggttccctg
+gcccgtgctggaaaagtgagaggtcagactcctaaggtggccaaacaggagaagaagaag
+aagaagacaggtcgggctaagcggcggatgcagtacaaccggcgctttgtcaacgttgtg
+cccacctttggcaagaagaagggccccaatgccaactcttaa
+</pre>
+</td></tr></table><p>
+
+
+<p>
+
+The result is a normal sequence file containing a single sequence
 resulting from the concatenation of the input sequences. 
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -461,7 +470,6 @@ None.
 <tr><td><a href="seqretsplit.html">seqretsplit</a></td><td>Reads and writes (returns) sequences in individual files</td></tr>
 <tr><td><a href="skipseq.html">skipseq</a></td><td>Reads and writes (returns) sequences, skipping the first few</td></tr>
 <tr><td><a href="splitter.html">splitter</a></td><td>Split a sequence into (overlapping) smaller sequences</td></tr>
-<tr><td><a href="swissparse.html">swissparse</a></td><td>Retrieves sequences from swissprot using keyword search</td></tr>
 <tr><td><a href="trimest.html">trimest</a></td><td>Trim poly-A tails off EST sequences</td></tr>
 <tr><td><a href="trimseq.html">trimseq</a></td><td>Trim ambiguous bits off the ends of sequences</td></tr>
 <tr><td><a href="vectorstrip.html">vectorstrip</a></td><td>Strips out DNA between a pair of vector sequences</td></tr>

@@ -20,21 +20,44 @@ Description
    your new one, but by using the qualifier '-append' what you enter is
    appended to the existing name or description.
    
-   Note that is you append to a description, no space is inserted by
-   default bewteen the existing description and your appended text - you
+   Note that if you append to a description, no space is inserted by
+   default bewteen the existing description and your appended text. You
    have to put in a space yourself if you require one.
    
 Usage
 
+   Here is a sample session with descseq
+   
    Set the name of a sequence to "myclone23"
-% descseq -seq clone23 -out clone23.seq -name "myclone23"
+   
+   
+% descseq -seq ../../data/dna.text -out clone23.seq -name "myclone23" 
+Alter the name or description of a sequence.
 
+   Go to the input files for this example
+   Go to the output files for this example
+   
+   Example 2
+   
    Set the description of a sequence to "This is my clone number 244"
-% descseq -seq xy24 -out xy24.seq -desc "This is my clone number 244"
+   
 
+% descseq -seq ../../data/dna.text -out xy24.seq -desc "This is my clone number
+ 244" 
+Alter the name or description of a sequence.
+   
+   Go to the output files for this example
+   
+   Example 3
+   
    Append some text to the description of a sequence
-% descseq -seq est.seq -out est4.seq -desc " (submitted)" -append
+   
+   
+% descseq -seq ../../data/dna.text -out est4.seq -desc " (submitted)" -append 
+Alter the name or description of a sequence.
 
+   Go to the output files for this example
+   
 Command line arguments
 
    Mandatory qualifiers:
@@ -70,15 +93,46 @@ Command line arguments
    Advanced qualifiers Allowed values Default
    -append This allows you to append the name or description you have
    given on to the end of the existing name or description of the
-   sequence. Yes/No No
+   sequence. Boolean value Yes/No No
    
 Input file format
 
-   Normal sequence.
+   descseq reads a normal sequence USA.
+   
+  Input files for usage example
+  
+  File: ../../data/dna.text
+  
+ACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTAC
+GTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGT
    
 Output file format
 
-   The sequence file with a changed name or description.
+   descseq writes the sequence file with a changed name or description.
+   
+  Output files for usage example
+  
+  File: clone23.seq
+  
+>myclone23
+ACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGT
+ACGTACGTACGTACGTACGTACGTACGTACGTACGTACGT
+   
+  Output files for usage example 2
+  
+  File: xy24.seq
+  
+>EMBOSS_001 This is my clone number 244
+ACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGT
+ACGTACGTACGTACGTACGTACGTACGTACGTACGTACGT
+   
+  Output files for usage example 3
+  
+  File: est4.seq
+  
+>EMBOSS_001  (submitted)
+ACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGT
+ACGTACGTACGTACGTACGTACGTACGTACGTACGTACGT
    
 Data files
 
@@ -130,7 +184,6 @@ See also
    seqretsplit  Reads and writes (returns) sequences in individual files
    skipseq      Reads and writes (returns) sequences, skipping the first few
    splitter     Split a sequence into (overlapping) smaller sequences
-   swissparse   Retrieves sequences from swissprot using keyword search
    trimest      Trim poly-A tails off EST sequences
    trimseq      Trim ambiguous bits off the ends of sequences
    union        Reads sequence fragments and builds one sequence

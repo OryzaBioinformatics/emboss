@@ -188,7 +188,24 @@ That is, the curvature at base pair N is the angle between averaged normal vecto
     Usage
 </H2>
 
+<b>Here is a sample session with banana</b>
+<p>
 
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>banana -graph data </b>
+Bending and curvature plot in B-DNA
+Input sequence: <b>tembl:rnu68037</b>
+
+Created banana.dat
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
+
+
+<!--
 Here is a sample session with banana.
 
 <p>
@@ -205,8 +222,7 @@ Graph type [x11]:
 
 <p>
 
-Bending is shown in a solid line, curvature is show in a dotted line.
-
+-->
 
 <H2>
     Command line arguments
@@ -301,7 +317,7 @@ IT IS DONE FOR YOU.
 <tr>
 <td>-data</td>
 <td>Output as data</td>
-<td>Yes/No</td>
+<td>Boolean value Yes/No</td>
 <td>No</td>
 </tr>
 
@@ -315,6 +331,98 @@ IT IS DONE FOR YOU.
 
 
 Any DNA sequence USA.
+
+<p>
+
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+
+'tembl:rnu68037' is a sequence entry in the example nucleic acid database 'tembl'
+<p>
+<p><h3>Database entry: tembl:rnu68037</h3>
+<table width="90%"><tr><td bgcolor="#FFDDFF">
+<pre>
+ID   RNU68037   standard; RNA; ROD; 1218 BP.
+XX
+AC   U68037;
+XX
+SV   U68037.1
+XX
+DT   23-SEP-1996 (Rel. 49, Created)
+DT   04-MAR-2000 (Rel. 63, Last updated, Version 2)
+XX
+DE   Rattus norvegicus EP1 prostanoid receptor mRNA, complete cds.
+XX
+KW   .
+XX
+OS   Rattus norvegicus (Norway rat)
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia;
+OC   Eutheria; Rodentia; Sciurognathi; Muridae; Murinae; Rattus.
+XX
+RN   [1]
+RP   1-1218
+RA   Abramovitz M., Boie Y.;
+RT   "Cloning of the rat EP1 prostanoid receptor";
+RL   Unpublished.
+XX
+RN   [2]
+RP   1-1218
+RA   Abramovitz M., Boie Y.;
+RT   ;
+RL   Submitted (26-AUG-1996) to the EMBL/GenBank/DDBJ databases.
+RL   Biochemistry &amp; Molecular Biology, Merck Frosst Center for Therapeutic
+RL   Research, P. O. Box 1005, Pointe Claire - Dorval, Quebec H9R 4P8, Canada
+XX
+DR   SWISS-PROT; P70597; PE21_RAT.
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..1218
+FT                   /db_xref="taxon:10116"
+FT                   /organism="Rattus norvegicus"
+FT                   /strain="Sprague-Dawley"
+FT   CDS             1..1218
+FT                   /codon_start=1
+FT                   /db_xref="SWISS-PROT:P70597"
+FT                   /note="family 1 G-protein coupled receptor"
+FT                   /product="EP1 prostanoid receptor"
+FT                   /protein_id="AAB07735.1"
+FT                   /translation="MSPYGLNLSLVDEATTCVTPRVPNTSVVLPTGGNGTSPALPIFSM
+FT                   TLGAVSNVLALALLAQVAGRLRRRRSTATFLLFVASLLAIDLAGHVIPGALVLRLYTAG
+FT                   RAPAGGACHFLGGCMVFFGLCPLLLGCGMAVERCVGVTQPLIHAARVSVARARLALALL
+FT                   AAMALAVALLPLVHVGHYELQYPGTWCFISLGPPGGWRQALLAGLFAGLGLAALLAALV
+FT                   CNTLSGLALLRARWRRRRSRRFRENAGPDDRRRWGSRGLRLASASSASSITSTTAALRS
+FT                   SRGGGSARRVHAHDVEMVGQLVGIMVVSCICWSPLLVLVVLAIGGWNSNSLQRPLFLAV
+FT                   RLASWNQILDPWVYILLRQAMLRQLLRLLPLRVSAKGGPTELSLTKSAWEASSLRSSRH
+FT                   SGFSHL"
+XX
+SQ   Sequence 1218 BP; 162 A; 397 C; 387 G; 272 T; 0 other;
+     atgagcccct acgggcttaa cctgagccta gtggatgagg caacaacgtg tgtaacaccc        60
+     agggtcccca atacatctgt ggtgctgcca acaggcggta acggcacatc accagcgctg       120
+     cctatcttct ccatgacgct gggtgctgtg tccaacgtgc tggcgctggc gctgctggcc       180
+     caggttgcag gcagactgcg gcgccgccgc tcgactgcca ccttcctgtt gttcgtcgcc       240
+     agcctgcttg ccatcgacct agcaggccat gtgatcccgg gcgccttggt gcttcgcctg       300
+     tatactgcag gacgtgcgcc cgctggcggg gcctgtcatt tcctgggcgg ctgtatggtc       360
+     ttctttggcc tgtgcccact tttgcttggc tgtggcatgg ccgtggagcg ctgcgtgggt       420
+     gtcacgcagc cgctgatcca cgcggcgcgc gtgtccgtag cccgcgcacg cctggcacta       480
+     gccctgctgg ccgccatggc tttggcagtg gcgctgctgc cactagtgca cgtgggtcac       540
+     tacgagctac agtaccctgg cacttggtgt ttcattagcc ttgggcctcc tggaggttgg       600
+     cgccaggcgt tgcttgcggg cctcttcgcc ggccttggcc tggctgcgct ccttgccgca       660
+     ctagtgtgta atacgctcag cggcctggcg ctccttcgtg cccgctggag gcggcgtcgc       720
+     tctcgacgtt tccgagagaa cgcaggtccc gatgatcgcc ggcgctgggg gtcccgtgga       780
+     ctccgcttgg cctccgcctc gtctgcgtca tccatcactt caaccacagc tgccctccgc       840
+     agctctcggg gaggcggctc cgcgcgcagg gttcacgcac acgacgtgga aatggtgggc       900
+     cagctcgtgg gcatcatggt ggtgtcgtgc atctgctgga gccccctgct ggtattggtg       960
+     gtgttggcca tcgggggctg gaactctaac tccctgcagc ggccgctctt tctggctgta      1020
+     cgcctcgcgt cgtggaacca gatcctggac ccatgggtgt acatcctgct gcgccaggct      1080
+     atgctgcgcc aacttcttcg cctcctaccc ctgagggtta gtgccaaggg tggtccaacg      1140
+     gagctgagcc taaccaagag tgcctgggag gccagttcac tgcgtagctc ccggcacagt      1200
+     ggcttcagcc acttgtga                                                    1218
+//
+</pre>
+</td></tr></table><p>
+
 
 <H2>
     Output file format
@@ -330,6 +438,122 @@ bending (solid line) and macroscopic curvature (dotted line).
 
 <p>
 
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: banana.profile</h3>
+<table width="90%"><tr><td bgcolor="#DDFFDD">
+<pre>
+Base   Bend      Curve
+a       0.0      0.0
+t      19.7      0.0
+g      17.7      0.0
+a      21.1      0.0
+g      28.5      0.0
+c      26.2      0.0
+c      19.7      0.0
+c      18.7      0.0
+c      12.5      0.0
+t       9.7      0.0
+a      14.9      0.0
+c      16.5      0.0
+g      17.5      0.0
+g      26.2      0.0
+g      28.5      0.0
+c      20.7      0.0
+t      11.7      0.0
+t       6.4      0.0
+a       9.3      0.0
+a      14.9      0.0
+c      17.7     20.0
+c      15.7     19.2
+t      15.7     18.5
+g      17.7     17.9
+a      21.1     17.1
+g      28.5     15.9
+c      25.2     14.6
+c      12.5     13.3
+t       7.2     11.9
+a      13.2     10.8
+g      20.1     10.1
+t      19.5      9.6
+g      15.1      9.2
+g      14.9      9.1
+a      19.5      9.5
+t      19.7     10.2
+g      17.7     10.8
+a      17.7     11.0
+g      25.2     11.2
+g      26.2     11.3
+c      15.3     11.5
+a      11.4     11.7
+a      14.5     12.0
+c      13.9     12.2
+a      11.4     12.3
+a      14.9     12.5
+c      17.7     12.8
+g      19.5     13.3
+t      19.1     13.5
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+g      15.1     15.2
+a      17.7     15.5
+g      25.2     15.8
+g      32.5     16.0
+c      25.2     15.8
+c      15.7     15.0
+a      16.3     14.2
+g      15.5     13.5
+t      10.8     12.8
+t      13.7     12.3
+c      19.5     12.1
+a      20.1     12.1
+c      16.3     12.1
+t      16.7     11.9
+g      22.1     11.4
+c      21.1     11.1
+g      14.9     10.7
+t       9.7     10.3
+a      16.1      9.8
+g      24.5      9.4
+c      21.1      8.9
+t      15.1      8.4
+c      16.1      7.7
+c      17.5      7.3
+c      15.3      6.9
+g      24.0      6.4
+g      26.2      5.8
+c      20.5      5.4
+a      19.1      5.1
+c      15.3     26.0
+a      16.3      0.0
+g      20.1      0.0
+t      19.5      0.0
+g      25.2      0.0
+g      28.5      0.0
+c      20.7      0.0
+t      13.3      0.0
+t      13.7      0.0
+c      15.7      0.0
+a      19.1      0.0
+g      28.5      0.0
+c      25.2      0.0
+c      19.5      0.0
+a      20.1      0.0
+c      17.9      0.0
+t      13.9      0.0
+t      13.9      0.0
+g      19.1      0.0
+t      19.5      0.0
+g       0.0      0.0
+a       0.0      0.0
+</pre>
+</td></tr></table><p>
+
+
+<!--
 The output data file from the above example is as follows:
 
 <p>
@@ -383,6 +607,7 @@ a   11.4     12.3
 [output truncated for brevity]
 </pre>
 <hr>
+-->
 
 <p>
 
@@ -491,6 +716,7 @@ None.
 <tr><td><a href="dan.html">dan</a></td><td>Calculates DNA RNA/DNA melting temperature</td></tr>
 <tr><td><a href="freak.html">freak</a></td><td>Residue/base frequency table or plot</td></tr>
 <tr><td><a href="isochore.html">isochore</a></td><td>Plots isochores in large DNA sequences</td></tr>
+<tr><td><a href="sirna.html">sirna</a></td><td>Finds siRNA duplexes in mRNA</td></tr>
 <tr><td><a href="wordcount.html">wordcount</a></td><td>Counts words of a specified size in a DNA sequence</td></tr>
 </table>
 

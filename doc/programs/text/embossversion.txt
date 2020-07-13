@@ -21,12 +21,14 @@ Description
    
 Usage
 
-   Here is a sample session with embossversion:
+   Here is a sample session with embossversion
+   
 
-% embossversion
+% embossversion 
 Writes the current EMBOSS version number
-1.13.0
 
+2.5.2
+   
 Command line arguments
 
    Mandatory qualifiers: (none)
@@ -53,10 +55,10 @@ Input file format
    
 Output file format
 
-   This writes just the version number followed by a newline character to
-   end the line.
+   embossversion writes just the version number followed by a newline
+   character to end the line.
    
-   The output is written to the screen by default, but can be writetn to
+   The output is written to the screen by default, but can be written to
    a named file by using the '-outfile' option.
    
    The version number is in three parts, separated by '.'s.
@@ -67,9 +69,6 @@ Output file format
    The third number is usually '0' but if a minor bug fix has been
    released that does not warrant a minor version number, this will be
    incremented.
-   
-   An example of the version number is:
-   1.13.0
    
 Data files
 

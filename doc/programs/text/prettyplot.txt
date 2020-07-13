@@ -15,19 +15,29 @@ Description
    
 Usage
 
-   Here is a sample session with prettyplot.
+   Here is a sample session with prettyplot
    
-% prettyplot -resbreak=10 -boxcol -consensus -plurality=3
-Displays aligned sequences, with colouring and boxing
-Input sequence set: globin.msf
-Graph type [x11]:
 
-   click here for result
-$ prettyplot globin.msf -plurality=3 -docolour
+% prettyplot -resbreak=10 -boxcol -consensus -plurality=3 
 Displays aligned sequences, with colouring and boxing
-Graph type [x11]:
+Input sequence set: ../../data/globins.msf
+Graph type [x11]: cps
 
-   click here for result
+Created prettyplot.ps
+   
+   Go to the input files for this example
+   Go to the output files for this example
+   
+   Example 2
+   
+
+% prettyplot ../../data/globins.msf -plurality=3 -docolour 
+Displays aligned sequences, with colouring and boxing
+Graph type [x11]: cps
+
+Created prettyplot.ps
+   
+   Go to the output files for this example
    
 Command line arguments
 
@@ -112,15 +122,17 @@ Command line arguments
    Any integer value 50
    -resbreak Residues before a space Integer 1 or more Same as
    -residuesperline to give no breaks
-   -[no]ccolours Colour residues by their consensus value. Yes/No Yes
+   -[no]ccolours Colour residues by their consensus value. Boolean value
+   Yes/No Yes
    -cidentity Colour to display identical residues (RED) Any string is
    accepted RED
    -csimilarity Colour to display similar residues (GREEN) Any string is
    accepted GREEN
    -cother Colour to display other residues (BLACK) Any string is
    accepted BLACK
-   -docolour Colour residues by table oily, amide etc. Yes/No No
-   -[no]title Do not display the title Yes/No Yes
+   -docolour Colour residues by table oily, amide etc. Boolean value
+   Yes/No No
+   -[no]title Do not display the title Boolean value Yes/No Yes
    -shade Set to BPLW for normal shading so for pair = 1.5,1.0,0.5 and
    shade = BPLW Residues score Colour 1.5 or over....... BLACK (B) 1.0 to
    1.5 ....... BROWN (P) 0.5 to 1.0 ....... WHEAT (L) under 0.5 .......
@@ -130,18 +142,20 @@ Command line arguments
    accepted 1.5,1.0,0.5
    -identity Only match those which are identical in all sequences.
    Integer 0 or more 0
-   -[no]box Display prettyboxes Yes/No Yes
-   -boxcol Colour the background in the boxes Yes/No No
+   -[no]box Display prettyboxes Boolean value Yes/No Yes
+   -boxcol Colour the background in the boxes Boolean value Yes/No No
    -boxcolval Colour to be used for background. (GREY) Any string is
    accepted GREY
-   -[no]name Display the sequence names Yes/No Yes
+   -[no]name Display the sequence names Boolean value Yes/No Yes
    -maxnamelen Margin size for the sequence name. Any integer value 10
-   -[no]number Display the residue number Yes/No Yes
-   -[no]listoptions Display the date and options used Yes/No Yes
+   -[no]number Display the residue number Boolean value Yes/No Yes
+   -[no]listoptions Display the date and options used Boolean value
+   Yes/No Yes
    -plurality Plurality check value (totweight/2) Any numeric value Half
    the total sequence weighting
-   -consensus Display the consensus Yes/No No
-   -[no]collision Allow collisions in calculating consensus Yes/No Yes
+   -consensus Display the consensus Boolean value Yes/No No
+   -[no]collision Allow collisions in calculating consensus Boolean value
+   Yes/No Yes
    -alternative Use alternative collisions routine 0) Normal collision
    check. (default) 1) checks identical scores with the max score found.
    So if any other residue matches the identical score then a collision
@@ -157,17 +171,84 @@ Command line arguments
    EMBOSS data path EBLOSUM62 for protein
    EDNAFULL for DNA
    -showscore Print residue scores Any integer value -1
-   -portrait Set page to Portrait Yes/No No
+   -portrait Set page to Portrait Boolean value Yes/No No
    Advanced qualifiers Allowed values Default
-   -data (no help text) boolean value Yes/No No
+   -data (no help text) boolean value Boolean value Yes/No No
    
 Input file format
 
-   Any sequence USA.
+   prettyplot reads any sequence USA.
+   
+  Input files for usage example
+  
+  File: ../../data/globins.msf
+  
+!!AA_MULTIPLE_ALIGNMENT 1.0
+
+  ../data/globins.msf MSF:  164 Type: P 25/06/01 CompCheck: 4278 ..
+
+  Name: HBB_HUMAN Len: 164  Check: 6914 Weight: 0.14
+  Name: HBB_HORSE Len: 164  Check: 6007 Weight: 0.15
+  Name: HBA_HUMAN Len: 164  Check: 3921 Weight: 0.15
+  Name: HBA_HORSE Len: 164  Check: 4770 Weight: 0.19
+  Name: MYG_PHYCA Len: 164  Check: 7930 Weight: 0.23
+  Name: GLB5_PETMA Len: 164  Check: 1857 Weight: 0.21
+  Name: LGB2_LUPLU Len: 164  Check: 2879 Weight: 0.10
+
+//
+
+           1                                               50
+HBB_HUMAN  ~~~~~~~~VHLTPEEKSAVTALWGKVN.VDEVGGEALGR.LLVVYPWTQR
+HBB_HORSE  ~~~~~~~~VQLSGEEKAAVLALWDKVN.EEEVGGEALGR.LLVVYPWTQR
+HBA_HUMAN  ~~~~~~~~~~~~~~VLSPADKTNVKAA.WGKVGAHAGEYGAEALERMFLS
+HBA_HORSE  ~~~~~~~~~~~~~~VLSAADKTNVKAA.WSKVGGHAGEYGAEALERMFLG
+MYG_PHYCA  ~~~~~~~VLSEGEWQLVLHVWAKVEAD.VAGHGQDILIR.LFKSHPETLE
+GLB5_PETMA PIVDTGSVAPLSAAEKTKIRSAWAPVYSTYETSGVDILVKFFTSTPAAQE
+LGB2_LUPLU ~~~~~~~~GALTESQAALVKSSWEEFNANIPKHTHRFFILVLEIAPAAKD
+
+           51                                             100
+HBB_HUMAN  FFESFGDLSTPDAVMGNPKVKAHGKKVLGAFSDGLAHLDNLKGTFATLSE
+HBB_HORSE  FFDSFGDLSNPGAVMGNPKVKAHGKKVLHSFGEGVHHLDNLKGTFAALSE
+HBA_HUMAN  FPTTKTYFPHFDLSHGSAQVKGHGKKVADALTNAVAHVDDMPNALSALSD
+HBA_HORSE  FPTTKTYFPHFDLSHGSAQVKAHGKKVGDALTLAVGHLDDLPGALSNLSD
+MYG_PHYCA  KFDRFKHLKTEAEMKASEDLKKHGVTVLTALGAILKKKGHHEAELKPLAQ
+GLB5_PETMA FFPKFKGLTTADQLKKSADVRWHAERIINAVNDAVASMDDTEKMSMKLRD
+LGB2_LUPLU LFSFLKGTSEVPQNNPELQAHAGKVFKLVYEAAIQLQVTGVVVTDATLKN
+
+           101                                            150
+HBB_HUMAN  LHCDKLH..VDPENFRLLGNVLVCVLAHHFGKEFTPPVQAAYQKVVAGVA
+HBB_HORSE  LHCDKLH..VDPENFRLLGNVLVVVLARHFGKDFTPELQASYQKVVAGVA
+HBA_HUMAN  LHAHKLR..VDPVNFKLLSHCLLVTLAAHLPAEFTPAVHASLDKFLASVS
+HBA_HORSE  LHAHKLR..VDPVNFKLLSHCLLSTLAVHLPNDFTPAVHASLDKFLSSVS
+MYG_PHYCA  SHATKHK..IPIKYLEFISEAIIHVLHSRHPGDFGADAQGAMNKALELFR
+GLB5_PETMA LSGKHAK..SFQVDPQYFKVLAAVIADTVAAGDAGFEKLMSMICILLRSA
+LGB2_LUPLU LGSVHVSKGVADAHFPVVKEAILKTIKEVVGAKWSEELNSAWTIAYDELA
+
+           151        164
+HBB_HUMAN  NALAHKYH~~~~~~
+HBB_HORSE  NALAHKYH~~~~~~
+HBA_HUMAN  TVLTSKYR~~~~~~
+HBA_HORSE  TVLTSKYR~~~~~~
+MYG_PHYCA  KDIAAKYKELGYQG
+GLB5_PETMA Y~~~~~~~~~~~~~
+LGB2_LUPLU IVIKKEMNDAA~~~
    
 Output file format
 
-   An image of the alignment is displayed.
+   An image of the alignment is displayed on the specified graphics
+   device.
+   
+  Output files for usage example
+  
+  Graphics File: prettyplot.ps
+  
+   [prettyplot results]
+   
+  Output files for usage example 2
+  
+  Graphics File: prettyplot.ps
+  
+   [prettyplot results]
    
 Data files
 
@@ -236,6 +317,7 @@ See also
    showdb Displays information on the currently available databases
    showfeat Show features of a sequence
    showseq Display a sequence with features, translation etc
+   sixpack Display a DNA sequence with 6-frame translation and ORFs
    textsearch Search sequence documentation text. SRS and Entrez are
    faster!
    tranalign Align nucleic coding regions given the aligned proteins

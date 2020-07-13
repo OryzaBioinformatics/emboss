@@ -20,13 +20,17 @@ Description
    
 Usage
 
-   Here is a sample session with pepwheel.
+   Here is a sample session with pepwheel
    
-% pepwheel sw:hbb_human -send 30
-Shows protein sequences as helices
-Graph type [x11]:
 
-   click here for result
+% pepwheel tsw:hbb_human -send 30 
+Shows protein sequences as helices
+Graph type [x11]: cps
+
+Created pepwheel.ps
+   
+   Go to the input files for this example
+   Go to the output files for this example
    
 Command line arguments
 
@@ -84,20 +88,140 @@ Command line arguments
    -octags By default the positively charged residues HKR are marked with
    octagons. Any string is accepted HKR
    Advanced qualifiers Allowed values Default
-   -[no]wheel Plot the wheel Yes/No Yes
+   -[no]wheel Plot the wheel Boolean value Yes/No Yes
    -amphipathic If this is true then the residues ACFGILMVWY are marked
    as squares and all other residues are unmarked. This overrides any
    other markup that you may have specified using the qualifiers
-   '-squares', '-diamonds' and '-octags'. Yes/No No
-   -data Output the match data to a file instead of plotting it Yes/No No
+   '-squares', '-diamonds' and '-octags'. Boolean value Yes/No No
+   -data Output the match data to a file instead of plotting it Boolean
+   value Yes/No No
    
 Input file format
 
-   Any protein sequence USA.
+   pepwheel reads any protein sequence USA.
+   
+  Input files for usage example
+  
+   'tsw:hbb_human' is a sequence entry in the example protein database
+   'tsw'
+   
+  Database entry: tsw:hbb_human
+  
+ID   HBB_HUMAN      STANDARD;      PRT;   146 AA.
+AC   P02023;
+DT   21-JUL-1986 (Rel. 01, Created)
+DT   21-JUL-1986 (Rel. 01, Last sequence update)
+DT   15-JUL-1999 (Rel. 38, Last annotation update)
+DE   HEMOGLOBIN BETA CHAIN.
+GN   HBB.
+OS   Homo sapiens (Human), Pan troglodytes (Chimpanzee), and
+OS   Pan paniscus (Pygmy chimpanzee) (Bonobo).
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Mammalia;
+OC   Eutheria; Primates; Catarrhini; Hominidae; Homo.
+RN   [1]
+RP   SEQUENCE.
+RC   SPECIES=HUMAN;
+RA   BRAUNITZER G., GEHRING-MULLER R., HILSCHMANN N., HILSE K., HOBOM G.,
+RA   RUDLOFF V., WITTMANN-LIEBOLD B.;
+RT   "The constitution of normal adult human haemoglobin.";
+RL   Hoppe-Seyler's Z. Physiol. Chem. 325:283-286(1961).
+RN   [2]
+RP   SEQUENCE FROM N.A.
+RC   SPECIES=HUMAN;
+RX   MEDLINE; 81064667.
+RA   LAWN R.M., EFSTRATIADIS A., O'CONNELL C., MANIATIS T.;
+RT   "The nucleotide sequence of the human beta-globin gene.";
+RL   Cell 21:647-651(1980).
+RN   [3]
+RP   SEQUENCE OF 121-146 FROM N.A.
+RC   SPECIES=HUMAN;
+RX   MEDLINE; 85205333.
+RA   LANG K.M., SPRITZ R.A.;
+RT   "Cloning specific complete polyadenylylated 3'-terminal cDNA
+RT   segments.";
+RL   Gene 33:191-196(1985).
+RN   [4]
+RP   X-RAY CRYSTALLOGRAPHY (2.5 ANGSTROMS) OF DEOXYHEMOGLOBIN.
+RC   SPECIES=HUMAN;
+RX   MEDLINE; 76027820.
+RA   FERMI G.;
+RT   "Three-dimensional fourier synthesis of human deoxyhaemoglobin at
+RT   2.5-A resolution: refinement of the atomic model.";
+RL   J. Mol. Biol. 97:237-256(1975).
+RN   [5]
+RP   SEQUENCE.
+RC   SPECIES=P.TROGLODYTES;
+RX   MEDLINE; 66071496.
+RA   RIFKIN D.B., KONIGSBERG W.;
+RT   "The characterization of the tryptic peptides from the hemoglobin of
+RT   the chimpanzee (Pan troglodytes).";
+RL   Biochim. Biophys. Acta 104:457-461(1965).
+RN   [6]
+
+
+  [Part of this file has been deleted for brevity]
+
+FT   VARIANT     140    140       A -> T (IN ST JACQUES: O2 AFFINITY UP).
+FT                                /FTId=VAR_003081.
+FT   VARIANT     140    140       A -> V (IN PUTTELANGE; POLYCYTHEMIA;
+FT                                O2 AFFINITY UP).
+FT                                /FTId=VAR_003082.
+FT   VARIANT     141    141       L -> R (IN OLMSTED; UNSTABLE).
+FT                                /FTId=VAR_003083.
+FT   VARIANT     142    142       A -> D (IN OHIO; O2 AFFINITY UP).
+FT                                /FTId=VAR_003084.
+FT   VARIANT     143    143       H -> D (IN RANCHO MIRAGE).
+FT                                /FTId=VAR_003085.
+FT   VARIANT     143    143       H -> Q (IN LITTLE ROCK; O2 AFFINITY UP).
+FT                                /FTId=VAR_003086.
+FT   VARIANT     143    143       H -> P (IN SYRACUSE; O2 AFFINITY UP).
+FT                                /FTId=VAR_003087.
+FT   VARIANT     143    143       H -> R (IN ABRUZZO; O2 AFFINITY UP).
+FT                                /FTId=VAR_003088.
+FT   VARIANT     144    144       K -> E (IN MITO; O2 AFFINITY UP).
+FT                                /FTId=VAR_003089.
+FT   VARIANT     145    145       Y -> C (IN RAINIER; O2 AFFINITY UP).
+FT                                /FTId=VAR_003090.
+FT   VARIANT     145    145       Y -> H (IN BETHESDA; O2 AFFINITY UP).
+FT                                /FTId=VAR_003091.
+FT   VARIANT     146    146       H -> D (IN HIROSHIMA; O2 AFFINITY UP).
+FT                                /FTId=VAR_003092.
+FT   VARIANT     146    146       H -> L (IN COWTOWN; O2 AFFINITY UP).
+FT                                /FTId=VAR_003093.
+FT   VARIANT     146    146       H -> P (IN YORK; O2 AFFINITY UP).
+FT                                /FTId=VAR_003094.
+FT   VARIANT     146    146       H -> Q (IN KODAIRA; O2 AFFINITY UP).
+FT                                /FTId=VAR_003095.
+FT   HELIX         5     15
+FT   TURN         16     17
+FT   HELIX        20     34
+FT   HELIX        36     41
+FT   HELIX        43     45
+FT   HELIX        51     55
+FT   TURN         56     56
+FT   HELIX        58     75
+FT   TURN         76     77
+FT   HELIX        78     94
+FT   TURN         95     96
+FT   TURN        100    100
+FT   HELIX       101    121
+FT   HELIX       124    142
+FT   TURN        143    144
+SQ   SEQUENCE   146 AA;  15867 MW;  EC9744C9 CRC32;
+     VHLTPEEKSA VTALWGKVNV DEVGGEALGR LLVVYPWTQR FFESFGDLST PDAVMGNPKV
+     KAHGKKVLGA FSDGLAHLDN LKGTFATLSE LHCDKLHVDP ENFRLLGNVL VCVLAHHFGK
+     EFTPPVQAAY QKVVAGVANA LAHKYH
+//
    
 Output file format
 
-   An image is output.
+   An image is output to the specified graphics device.
+   
+  Output files for usage example
+  
+  Graphics File: pepwheel.ps
+  
+   [pepwheel results]
    
 Data files
 
@@ -167,6 +291,7 @@ See also
    showdb Displays information on the currently available databases
    showfeat Show features of a sequence
    showseq Display a sequence with features, translation etc
+   sixpack Display a DNA sequence with 6-frame translation and ORFs
    textsearch Search sequence documentation text. SRS and Entrez are
    faster!
    tmap Displays membrane spanning regions

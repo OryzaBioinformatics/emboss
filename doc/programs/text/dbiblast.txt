@@ -27,32 +27,41 @@ Description
    database type. If the answer is "unknown" dbiblast will test each
    possible set of file names until one is found.
    
+   Having created the EMBOSS indices for this file, a database can then
+   be defined in the file emboss.defaults as something like:
+   
+DB swnew [
+   type: P
+   format: embl
+   method: blast
+   directory: /data/embl
+]
+
 Usage
 
-   Here is a sample session with dbiblast, using a blast 2 protein
-   database.
+   Here is a sample session with dbiblast
+   
+   This creates EMBOSS indices for the BLAST database 'swnew'
+   
 
-% dbiblast
-      NCBI : NCBI with | characters
-       GCG : GCG format dbname:entryname
-    SIMPLE : ID and accession
-        ID : entryname
-   UNKNOWN : unknown
-Entry format [unknown]: gcg
+% dbiblast 
+Index a BLAST database
 Database name: swnew
-Database directory [.]: /nfs/disk42/pmr/emboss/test/blastp2/
-database base filename [swnew]:
-Release number [0.0]:
-Index date [00/00/00]: 04/02/00
+Database directory [.]: ../../data
+Wildcard database filename [swnew]: 
+Release number [0.0]: 
+Index date [00/00/00]: 
          N : nucleic
          P : protein
          ? : unknown
-Sequence type [unknown]: p
+Sequence type [unknown]: 
          1 : wublast and setdb/pressdb
          2 : formatdb
          0 : unknown
-Blast index version [unknown]: 2
-
+Blast index version [unknown]: 
+   
+   Go to the output files for this example
+   
 Command line arguments
 
    Mandatory qualifiers:
@@ -117,16 +126,38 @@ Command line arguments
    for work files and '-k 1,1' to force GNU sort to use the first field
    Any string is accepted -T . -k 1,1
    -maxindex Maximum index length Integer 0 or more 0
-   -[no]systemsort Use system sort utility Yes/No Yes
-   -[no]cleanup Clean up temporary files Yes/No Yes
-   -sourcefile Use FASTA source file Yes/No No
+   -[no]systemsort Use system sort utility Boolean value Yes/No Yes
+   -[no]cleanup Clean up temporary files Boolean value Yes/No Yes
+   -sourcefile Use FASTA source file Boolean value Yes/No No
    
 Input file format
 
-   An NCBI BLAST1 or BLAST2 database.
+   AI BLAST1 or BLAST2 database index files.
    
 Output file format
 
+  Output files for usage example
+  
+  File: acnum.hit
+  
+   This file contains non-printing characters and so cannot be displayed
+   here.
+   
+  File: acnum.trg
+  
+   This file contains non-printing characters and so cannot be displayed
+   here.
+   
+  File: division.lkp
+  
+   This file contains non-printing characters and so cannot be displayed
+   here.
+   
+  File: entrynam.idx
+  
+   This file contains non-printing characters and so cannot be displayed
+   here.
+   
    dbiblast creates four index files. All are binary but with a simple
    format.
      * division.lkp is the master index file, and has a 300 byte header

@@ -64,15 +64,16 @@ for the middle, hydrophobic portion and one for the terminal regions of
 the transmembrane sequence spans.  Average propensity values are
 calculated for each position along the alignment, with the contribution
 from each sequence weighted according to its dissimilarity relative to
-the other alignged sequences. 
+the other aligned sequences. 
 <p>
 
 Eight-residue segments are considered as potential cores of
 transmembrane segments and elongated if thier middle propensity values
 are above a threshold.  End propensity values are also considered as
 stop signals.  Only helices with a length of 15 to 29 residues are
-allowed and correctionbs for strictly conserved charged residues are
+allowed and corrections for strictly conserved charged residues are
 made. 
+
 <p>
 
 The method is more successful than predictions based upon single
@@ -86,14 +87,20 @@ The results are plotted on a graph and written to a text file.
 </H2>
 
 
-Here is a sample session with tmap.
+<b>Here is a sample session with tmap</b>
+<p>
 
-<pre>
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-  % tmap sw:opsd_human -out tmap.res
+% <b>tmap tsw:opsd_human -out tmap.res -graph cps </b>
+Displays membrane spanning regions
 
-</pre>
-<a href="./tmap0.gif">click here for result</a>
+Created tmap.ps
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
 
 
 
@@ -181,31 +188,145 @@ IT IS DONE FOR YOU.
 </H2>
 
 
-Any protein sequence USA for one or more aligned sequences.
+<b>tmap</b> reads a protein sequence USA for one or more aligned sequences.
+
+<p>
+
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+
+'tsw:opsd_human' is a sequence entry in the example protein database 'tsw'
+<p>
+<p><h3>Database entry: tsw:opsd_human</h3>
+<table width="90%"><tr><td bgcolor="#FFDDFF">
+<pre>
+ID   OPSD_HUMAN     STANDARD;      PRT;   348 AA.
+AC   P08100; Q16414;
+DT   01-AUG-1988 (Rel. 08, Created)
+DT   01-AUG-1988 (Rel. 08, Last sequence update)
+DT   15-JUL-1999 (Rel. 38, Last annotation update)
+DE   RHODOPSIN.
+GN   RHO.
+OS   Homo sapiens (Human).
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Mammalia;
+OC   Eutheria; Primates; Catarrhini; Hominidae; Homo.
+RN   [1]
+RP   SEQUENCE FROM N.A.
+RX   MEDLINE; 84272729.
+RA   NATHANS J., HOGNESS D.S.;
+RT   "Isolation and nucleotide sequence of the gene encoding human
+RT   rhodopsin.";
+RL   Proc. Natl. Acad. Sci. U.S.A. 81:4851-4855(1984).
+RN   [2]
+RP   SEQUENCE OF 1-120 FROM N.A.
+RA   BENNETT J., BELLER B., SUN D., KARIKO K.;
+RL   Submitted (NOV-1994) to the EMBL/GenBank/DDBJ databases.
+RN   [3]
+RP   REVIEW ON ADRP VARIANTS.
+RX   MEDLINE; 94004905.
+RA   AL-MAGHTHEH M., GREGORY C., INGLEHEARN C., HARDCASTLE A.,
+RA   BHATTACHARYA S.;
+RT   "Rhodopsin mutations in autosomal dominant retinitis pigmentosa.";
+RL   Hum. Mutat. 2:249-255(1993).
+RN   [4]
+RP   VARIANT ADRP HIS-23.
+RX   MEDLINE; 90136922.
+RA   DRYJA T.P., MCGEE T.L., REICHEI E., HAHN L.B., COWLEY G.S.,
+RA   YANDELL D.W., SANDBERG M.A., BERSON E.L.;
+RT   "A point mutation of the rhodopsin gene in one form of retinitis
+RT   pigmentosa.";
+RL   Nature 343:364-366(1990).
+RN   [5]
+RP   VARIANTS ADRP.
+RX   MEDLINE; 91051574.
+RA   FARRAR G.J., KENNA P., REDMOND R., MCWILLIAM P., BRADLEY D.G.,
+RA   HUMPHRIES M.M., SHARP E.M., INGLEHEARN C.F., BASHIR R., JAY M.,
+RA   WATTY A., LUDWIG M., SCHINZEL A., SAMANNS C., GAL A.,
+RA   BHATTACHARYA S.S., HUMPHRIES P.;
+RT   "Autosomal dominant retinitis pigmentosa: absence of the rhodopsin
+RT   proline--&gt;histidine substitution (codon 23) in pedigrees from
+RT   Europe.";
+RL   Am. J. Hum. Genet. 47:941-945(1990).
+RN   [6]
+RP   VARIANTS ADRP HIS-23; ARG-58; LEU-347 AND SER-347.
+RX   MEDLINE; 91015273.
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+FT                                /FTId=VAR_004816.
+FT   VARIANT     209    209       V -&gt; M (EFFECT NOT KNOWN).
+FT                                /FTId=VAR_004817.
+FT   VARIANT     211    211       H -&gt; P (IN ADRP).
+FT                                /FTId=VAR_004818.
+FT   VARIANT     211    211       H -&gt; R (IN ADRP).
+FT                                /FTId=VAR_004819.
+FT   VARIANT     216    216       M -&gt; K (IN ADRP).
+FT                                /FTId=VAR_004820.
+FT   VARIANT     220    220       F -&gt; C (IN ADRP).
+FT                                /FTId=VAR_004821.
+FT   VARIANT     222    222       C -&gt; R (IN ADRP).
+FT                                /FTId=VAR_004822.
+FT   VARIANT     255    255       MISSING (IN ADRP).
+FT                                /FTId=VAR_004823.
+FT   VARIANT     264    264       MISSING (IN ADRP).
+FT                                /FTId=VAR_004824.
+FT   VARIANT     267    267       P -&gt; L (IN ADRP).
+FT                                /FTId=VAR_004825.
+FT   VARIANT     267    267       P -&gt; R (IN ADRP).
+FT                                /FTId=VAR_004826.
+FT   VARIANT     292    292       A -&gt; E (IN CSNB4).
+FT                                /FTId=VAR_004827.
+FT   VARIANT     296    296       K -&gt; E (IN ADRP).
+FT                                /FTId=VAR_004828.
+FT   VARIANT     297    297       S -&gt; R (IN ADRP).
+FT                                /FTId=VAR_004829.
+FT   VARIANT     342    342       T -&gt; M (IN ADRP).
+FT                                /FTId=VAR_004830.
+FT   VARIANT     345    345       V -&gt; L (IN ADRP).
+FT                                /FTId=VAR_004831.
+FT   VARIANT     345    345       V -&gt; M (IN ADRP).
+FT                                /FTId=VAR_004832.
+FT   VARIANT     347    347       P -&gt; A (IN ADRP).
+FT                                /FTId=VAR_004833.
+FT   VARIANT     347    347       P -&gt; L (IN ADRP; COMMON VARIANT).
+FT                                /FTId=VAR_004834.
+FT   VARIANT     347    347       P -&gt; Q (IN ADRP).
+FT                                /FTId=VAR_004835.
+FT   VARIANT     347    347       P -&gt; R (IN ADRP).
+FT                                /FTId=VAR_004836.
+FT   VARIANT     347    347       P -&gt; S (IN ADRP).
+FT                                /FTId=VAR_004837.
+SQ   SEQUENCE   348 AA;  38892 MW;  07443BEA CRC32;
+     MNGTEGPNFY VPFSNATGVV RSPFEYPQYY LAEPWQFSML AAYMFLLIVL GFPINFLTLY
+     VTVQHKKLRT PLNYILLNLA VADLFMVLGG FTSTLYTSLH GYFVFGPTGC NLEGFFATLG
+     GEIALWSLVV LAIERYVVVC KPMSNFRFGE NHAIMGVAFT WVMALACAAP PLAGWSRYIP
+     EGLQCSCGID YYTLKPEVNN ESFVIYMFVV HFTIPMIIIF FCYGQLVFTV KEAAAQQQES
+     ATTQKAEKEV TRMVIIMVIA FLICWVPYAS VAFYIFTHQG SNFGPIFMTI PAFFAKSAAI
+     YNPVIYIMMN KQFRNCMLTT ICCGKNPLGD DEASATVSKT ETSQVAPA
+//
+</pre>
+</td></tr></table><p>
+
+
 
 <H2>
     Output file format
 </H2>
 
-A plot of the propensities to form the middle and the end of
-transmembrane regions is output. 
-<p>
 
-Bars are displayed in the plot above the regions predicted as being most
-likely to form transmembrane regions. 
-<p>
-
-The text file (specified by the <b>-output</b> option) gives a summary
-of these regions. 
-The text file produced by the above example is:
-<p>
-
-<hr>
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>Graphics File: tmap.ps</h3>
+<p><img src="tmap.1.tmap.gif" alt="[tmap results]">
+<p><h3>File: tmap.res</h3>
+<table width="90%"><tr><td bgcolor="#DDFFDD">
 <pre>
 Program TMAP, version 46, to predict transmembrane segments from .msf file.
 The program reads a multiple alignment file of the GCG multiple sequence format
 and predicts membrane-spanning regions according to the algorithm in
-Persson & Argos (1994), J. Mol. Biol. 237, 182-192.
+Persson &amp; Argos (1994), J. Mol. Biol. 237, 182-192.
 
 RESULTS from program TMAP, edition 46'
 
@@ -234,16 +355,34 @@ PREDICTED TRANSMEMBRANE SEGMENTS FOR PROTEIN OPSD_HUMAN
   TM  5:  201 -  229 (29)
   TM  6:  255 -  275 (21)
   TM  7:  282 -  302 (21)
+
+
 </pre>
-<hr>
+</td></tr></table><p>
+
+
+<p>
+
+A plot of the propensities to form the middle and the end of
+transmembrane regions is output. 
+
+<p>
+
+Bars are displayed in the plot above the regions predicted as being most
+likely to form transmembrane regions. 
+
+<p>
+
+The text file (specified by the <b>-outfile</b> option) gives a summary
+of these regions. 
+
 <p>
 
 
 The transmembrane regions for the complete alignment are given first,
 followed by the predictions for each individual sequence in the
-alignment.  (In the example above there is only 1 sequence in the
-alignment.)
-<p>
+alignment.  (There is only one sequence in the example alignment.)
+
 
 <H2>
     Data files

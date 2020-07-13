@@ -20,13 +20,28 @@ Description
    
 Usage
 
-   Here is a sample session with pepwindowall.
+   Here is a sample session with pepwindowall
    
-% pepwindowall globin.msf -gxtitle="Base Number" -gytitle="hydropathy"
-Displays protein hydropathy of a set of sequences
-Graph type [x11]:
 
-   click here for result
+% pepwindowall ../../data/globins.msf -gxtitle="Base Number" -gytitle="hydropat
+hy" 
+Displays protein hydropathy of a set of sequences
+Graph type [x11]: cps
+Error: ERROR only homogenous number of points allowed for multiple graphs
+
+Error: ERROR only homogenous number of points allowed for multiple graphs
+
+Error: ERROR only homogenous number of points allowed for multiple graphs
+
+Error: ERROR only homogenous number of points allowed for multiple graphs
+
+Error: ERROR only homogenous number of points allowed for multiple graphs
+
+
+Created pepwindowall.ps
+   
+   Go to the input files for this example
+   Go to the output files for this example
    
 Command line arguments
 
@@ -62,12 +77,72 @@ Command line arguments
    
 Input file format
 
-   Any protein sequence USA for one or more aligned sequences.
+   pepwindowall reads any protein sequence USA for one or more aligned
+   sequences.
+   
+  Input files for usage example
+  
+  File: ../../data/globins.msf
+  
+!!AA_MULTIPLE_ALIGNMENT 1.0
+
+  ../data/globins.msf MSF:  164 Type: P 25/06/01 CompCheck: 4278 ..
+
+  Name: HBB_HUMAN Len: 164  Check: 6914 Weight: 0.14
+  Name: HBB_HORSE Len: 164  Check: 6007 Weight: 0.15
+  Name: HBA_HUMAN Len: 164  Check: 3921 Weight: 0.15
+  Name: HBA_HORSE Len: 164  Check: 4770 Weight: 0.19
+  Name: MYG_PHYCA Len: 164  Check: 7930 Weight: 0.23
+  Name: GLB5_PETMA Len: 164  Check: 1857 Weight: 0.21
+  Name: LGB2_LUPLU Len: 164  Check: 2879 Weight: 0.10
+
+//
+
+           1                                               50
+HBB_HUMAN  ~~~~~~~~VHLTPEEKSAVTALWGKVN.VDEVGGEALGR.LLVVYPWTQR
+HBB_HORSE  ~~~~~~~~VQLSGEEKAAVLALWDKVN.EEEVGGEALGR.LLVVYPWTQR
+HBA_HUMAN  ~~~~~~~~~~~~~~VLSPADKTNVKAA.WGKVGAHAGEYGAEALERMFLS
+HBA_HORSE  ~~~~~~~~~~~~~~VLSAADKTNVKAA.WSKVGGHAGEYGAEALERMFLG
+MYG_PHYCA  ~~~~~~~VLSEGEWQLVLHVWAKVEAD.VAGHGQDILIR.LFKSHPETLE
+GLB5_PETMA PIVDTGSVAPLSAAEKTKIRSAWAPVYSTYETSGVDILVKFFTSTPAAQE
+LGB2_LUPLU ~~~~~~~~GALTESQAALVKSSWEEFNANIPKHTHRFFILVLEIAPAAKD
+
+           51                                             100
+HBB_HUMAN  FFESFGDLSTPDAVMGNPKVKAHGKKVLGAFSDGLAHLDNLKGTFATLSE
+HBB_HORSE  FFDSFGDLSNPGAVMGNPKVKAHGKKVLHSFGEGVHHLDNLKGTFAALSE
+HBA_HUMAN  FPTTKTYFPHFDLSHGSAQVKGHGKKVADALTNAVAHVDDMPNALSALSD
+HBA_HORSE  FPTTKTYFPHFDLSHGSAQVKAHGKKVGDALTLAVGHLDDLPGALSNLSD
+MYG_PHYCA  KFDRFKHLKTEAEMKASEDLKKHGVTVLTALGAILKKKGHHEAELKPLAQ
+GLB5_PETMA FFPKFKGLTTADQLKKSADVRWHAERIINAVNDAVASMDDTEKMSMKLRD
+LGB2_LUPLU LFSFLKGTSEVPQNNPELQAHAGKVFKLVYEAAIQLQVTGVVVTDATLKN
+
+           101                                            150
+HBB_HUMAN  LHCDKLH..VDPENFRLLGNVLVCVLAHHFGKEFTPPVQAAYQKVVAGVA
+HBB_HORSE  LHCDKLH..VDPENFRLLGNVLVVVLARHFGKDFTPELQASYQKVVAGVA
+HBA_HUMAN  LHAHKLR..VDPVNFKLLSHCLLVTLAAHLPAEFTPAVHASLDKFLASVS
+HBA_HORSE  LHAHKLR..VDPVNFKLLSHCLLSTLAVHLPNDFTPAVHASLDKFLSSVS
+MYG_PHYCA  SHATKHK..IPIKYLEFISEAIIHVLHSRHPGDFGADAQGAMNKALELFR
+GLB5_PETMA LSGKHAK..SFQVDPQYFKVLAAVIADTVAAGDAGFEKLMSMICILLRSA
+LGB2_LUPLU LGSVHVSKGVADAHFPVVKEAILKTIKEVVGAKWSEELNSAWTIAYDELA
+
+           151        164
+HBB_HUMAN  NALAHKYH~~~~~~
+HBB_HORSE  NALAHKYH~~~~~~
+HBA_HUMAN  TVLTSKYR~~~~~~
+HBA_HORSE  TVLTSKYR~~~~~~
+MYG_PHYCA  KDIAAKYKELGYQG
+GLB5_PETMA Y~~~~~~~~~~~~~
+LGB2_LUPLU IVIKKEMNDAA~~~
    
 Output file format
 
-   An image is displayed.
-   .ps file if postscript output requested.
+   An image is displayed on the specified graphics device.
+   
+  Output files for usage example
+  
+  Graphics File: pepwindowall.ps
+  
+   [pepwindowall results]
    
 Data files
 
@@ -130,21 +205,20 @@ Known bugs
    
 See also
 
-   Program name Description
-   backtranseq Back translate a protein sequence
-   charge Protein charge plot
-   checktrans Reports STOP codons and ORF statistics of a protein
-   sequence
-   compseq Counts the composition of dimer/trimer/etc words in a sequence
-   emowse Protein identification by mass spectrometry
-   freak Residue/base frequency table or plot
-   iep Calculates the isoelectric point of a protein
-   mwcontam Shows molwts that match across a set of files
-   mwfilter Filter noisy molwts from mass spec output
-   octanol Displays protein hydropathy
-   pepinfo Plots simple amino acid properties in parallel
-   pepstats Protein statistics
-   pepwindow Displays protein hydropathy
+   Program name                          Description
+   backtranseq  Back translate a protein sequence
+   charge       Protein charge plot
+   checktrans   Reports STOP codons and ORF statistics of a protein
+   compseq      Counts the composition of dimer/trimer/etc words in a sequence
+   emowse       Protein identification by mass spectrometry
+   freak        Residue/base frequency table or plot
+   iep          Calculates the isoelectric point of a protein
+   mwcontam     Shows molwts that match across a set of files
+   mwfilter     Filter noisy molwts from mass spec output
+   octanol      Displays protein hydropathy
+   pepinfo      Plots simple amino acid properties in parallel
+   pepstats     Protein statistics
+   pepwindow    Displays protein hydropathy
    
 Author(s)
 

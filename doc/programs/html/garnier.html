@@ -79,15 +79,20 @@ results.</b>
 </H2>
 
 
-Here is a sample session with garnier.
+<b>Here is a sample session with garnier</b>
+<p>
 
-<pre>
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% garnier
-Input sequence: sw:amic_pseae
-Output file [amic_pseae.garnier]: 
+% <b>garnier </b>
+Predicts protein secondary structure
+Input sequence(s): <b>tsw:amic_pseae</b>
+Output report [amic_pseae.garnier]: <b></b>
 
-</pre>
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
 
 
 
@@ -139,7 +144,7 @@ IT IS DONE FOR YOU.
 <tr>
 <td>[-outfile]<br>(Parameter 2)</td>
 <td>Output report file name</td>
-<td>Report file</td>
+<td>Report output file</td>
 <td>&nbsp;</td>
 </tr>
 
@@ -191,7 +196,84 @@ values from their paper."</i>
 </H2>
 
 
-Any protein sequence.
+<b>garnier</b> read any protein sequence USA.
+
+<p>
+
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+
+'tsw:amic_pseae' is a sequence entry in the example protein database 'tsw'
+<p>
+<p><h3>Database entry: tsw:amic_pseae</h3>
+<table width="90%"><tr><td bgcolor="#FFDDFF">
+<pre>
+ID   AMIC_PSEAE     STANDARD;      PRT;   384 AA.
+AC   P27017;
+DT   01-AUG-1992 (Rel. 23, Created)
+DT   01-DEC-1992 (Rel. 24, Last sequence update)
+DT   15-DEC-1998 (Rel. 37, Last annotation update)
+DE   ALIPHATIC AMIDASE EXPRESSION-REGULATING PROTEIN.
+GN   AMIC.
+OS   Pseudomonas aeruginosa.
+OC   Bacteria; Proteobacteria; gamma subdivision; Pseudomonas group;
+OC   Pseudomonas.
+RN   [1]
+RP   SEQUENCE FROM N.A., AND SEQUENCE OF 1-18.
+RC   STRAIN=PAC;
+RX   MEDLINE; 91317707.
+RA   WILSON S.A., DREW R.E.;
+RT   "Cloning and DNA sequence of amiC, a new gene regulating expression
+RT   of the Pseudomonas aeruginosa aliphatic amidase, and purification of
+RT   the amiC product.";
+RL   J. Bacteriol. 173:4914-4921(1991).
+RN   [2]
+RP   X-RAY CRYSTALLOGRAPHY.
+RX   MEDLINE; 92106343.
+RA   WILSON S.A., CHAYEN N.E., HEMMINGS A.M., DREW R.E., PEARL L.H.;
+RT   "Crystallization of and preliminary X-ray data for the negative
+RT   regulator (AmiC) of the amidase operon of Pseudomonas aeruginosa.";
+RL   J. Mol. Biol. 222:869-871(1991).
+RN   [3]
+RP   X-RAY CRYSTALLOGRAPHY (2.1 ANGSTROMS).
+RX   MEDLINE; 95112789.
+RA   PEARL L.H., O'HARA B., DREW R.E., WILSON S.A.;
+RT   "Crystal structure of AmiC: the controller of transcription
+RT   antitermination in the amidase operon of Pseudomonas aeruginosa.";
+RL   EMBO J. 13:5810-5817(1994).
+CC   -!- FUNCTION: NEGATIVELY REGULATES THE EXPRESSION OF THE ALIPHATIC
+CC       AMIDASE OPERON. AMIC FUNCTIONS BY INHIBITING THE ACTION OF AMIR
+CC       AT THE PROTEIN LEVEL. IT BINDS TO AMIR. IT EXHIBITS PROTEIN KINASE
+CC       ACTIVITY.
+CC   -!- SUBUNIT: HOMODIMER.
+CC   -!- DOMAIN: CONSISTS OF TWO BETA-ALPHA-BETA DOMAINS WITH A CENTRAL
+CC       CLEFT IN WHICH THE AMIDE BINDS.
+CC   --------------------------------------------------------------------------
+CC   This SWISS-PROT entry is copyright. It is produced through a collaboration
+CC   between  the Swiss Institute of Bioinformatics  and the  EMBL outstation -
+CC   the European Bioinformatics Institute.  There are no  restrictions on  its
+CC   use  by  non-profit  institutions as long  as its content  is  in  no  way
+CC   modified and this statement is not removed.  Usage  by  and for commercial
+CC   entities requires a license agreement (See http://www.isb-sib.ch/announce/
+CC   or send an email to license@isb-sib.ch).
+CC   --------------------------------------------------------------------------
+DR   EMBL; X13776; CAA32024.1; -.
+DR   PIR; A40359; A40359.
+DR   PDB; 1PEA; 03-APR-96.
+KW   Transferase; Kinase; Repressor; 3D-structure.
+FT   INIT_MET      0      0
+SQ   SEQUENCE   384 AA;  42704 MW;  68FF861F CRC32;
+     GSHQERPLIG LLFSETGVTA DIERSHAYGA LLAVEQLNRE GGVGGRPIET LSQDPGGDPD
+     RYRLCAEDFI RNRGVRFLVG CYMSHTRKAV MPVVERADAL LCYPTPYEGF EYSPNIVYGG
+     PAPNQNSAPL AAYLIRHYGE RVVFIGSDYI YPRESNHVMR HLYRQHGGTV LEEIYIPLYP
+     SDDDLQRAVE RIYQARADVV FSTVVGTGTA ELYRAIARRY GDGRRPPIAS LTTSEAEVAK
+     MESDVAEGQV VVAPYFSSID TPASRAFVQA CHGFFPENAT ITAWAEAAYW QTLLLGRAAQ
+     AAGNWRVEDV QRHLYDIDID APQGPVRVER QNNHSRLSSR IAEIDARGVF QVRWQSPEPI
+     RPDPYVVVHN LDDWSASMGG GPLP
+//
+</pre>
+</td></tr></table><p>
 
 
 <H2>
@@ -227,89 +309,89 @@ By default <b>garnier</b> writes a 'tagseq' report file.
 
 <p>
 
-Here is the output from the example run.
 
-<p>
-
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: amic_pseae.garnier</h3>
+<table width="90%"><tr><td bgcolor="#DDFFDD">
 <pre>
-<hr>
 ########################################
 # Program: garnier
-# Rundate: Mon Feb 11 13:42:25 2002
+# Rundate: Thu Nov 07 14:33:25 2002
+# Report_format: tagseq
 # Report_file: amic_pseae.garnier
 ########################################
 
 #=======================================
 #
 # Sequence: AMIC_PSEAE     from: 1   to: 384
-# HitCount: 113
+# HitCount: 111
 #
 # DCH = 0, DCS = 0
-#
+# 
 #  Please cite:
 #  Garnier, Osguthorpe and Robson (1978) J. Mol. Biol. 120:97-120
-#
-#
+# 
 #
 #=======================================
 
-
           .   10    .   20    .   30    .   40    .   50
-      GSHQERPLIGLLFSETGVTADIERSQRYGALLAVEQLNREGGVGGRPIET
-helix                    HHHHH        HHHHH
-sheet      EE EEEEE                 EE              EEEE
-turns        T                TTTT          TTTT
- coil CCCCC        CCCCCC         CC       C    CCCC
-
+      GSHQERPLIGLLFSETGVTADIERSHAYGALLAVEQLNREGGVGGRPIET
+helix                   HHHHHHHHHHHHHHHHHHH             
+sheet      EE EEEEE                                 EEEE
+turns        T                              TTTT        
+ coil CCCCC        CCCCC                   C    CCCC    
           .   60    .   70    .   80    .   90    .  100
       LSQDPGGDPDRYRLCAEDFIRNRGVRFLVGCYMSHTRKAVMPVVERADAL
-helix               HHHHHH            HHHH H     HHHHHH
+helix               HHHHHH            HHHH H     HHHHHH 
 sheet E         EEEE           EEEE          EEEE      E
-turns  TT TT   T          TTTTT    TTT    T T
- coil    C  CCC
-
+turns  TT TT   T          TTTTT    TTT    T T           
+ coil    C  CCC                                         
           .  110    .  120    .  130    .  140    .  150
       LCYPTPYEGFEYSPNIVYGGPAPNQNSAPLAAYLIRHYGERVVFIGSDYI
-helix                              HHH
-sheet EEE    E       EE           E   EEEE    EEEEE
-turns       T TTT  TT  T     TT           TT T     TTTT
+helix                              HHH                  
+sheet EEE    E       EE           E   EEEE    EEEEE     
+turns       T TTT  TT  T     TT           TT T     TTTT 
  coil    CCC     CC     CCCCC  CCC          C          C
-
           .  160    .  170    .  180    .  190    .  200
-      YPRESNHVMRHLYRQHGGTVLEEIYIPLYPSDDDVQRAVERIYQARADVV
-helix       HHHH                       HHHHHHHHHHHHH
+      YPRESNHVMRHLYRQHGGTVLEEIYIPLYPSDDDLQRAVERIYQARADVV
+helix       HHHH                       HHHHHHHHHHHHH    
 sheet           EEE       EEEEEEE                   EEEE
-turns   TTT        TTT             TTTT
- coil CC   C          CCCC       CC
-
+turns   TTT        TTT             TTTT                 
+ coil CC   C          CCCC       CC                     
           .  210    .  220    .  230    .  240    .  250
       FSTVVGTGTAELYRAIARRYGDGRRPPIASLTTSEAEVAKMESDVAEGQV
-helix          HHHHHHH                HHHHHHHHHHHHHHHHH
+helix          HHHHHHH                HHHHHHHHHHHHHHHHH 
 sheet EEEE            EE         EEE                   E
-turns                   TTTTTT
- coil     CCCCC               CCC   CC
-
+turns                   TTTTTT                          
+ coil     CCCCC               CCC   CC                  
           .  260    .  270    .  280    .  290    .  300
-      VVAPYFSSIDTAASRAFVQACHGFFPENATITAWAEAAYWQTLLLGRAAQ
-helix            HHHHHHH           HHHHHHHHHHHHH    HHHH
-sheet EEEE  EEE         EE                      E
-turns     TT              TTT   TT
- coil          CC            CCC  C              CCC
-
+      VVAPYFSSIDTPASRAFVQACHGFFPENATITAWAEAAYWQTLLLGRAAQ
+helix               HHHH           HHHHHHHHHHHHH    HHHH
+sheet EEEE   E          EE                      E       
+turns     TTT T   T       TTT   TT                      
+ coil          CCC C         CCC  C              CCC    
           .  310    .  320    .  330    .  340    .  350
-      AAGSWRVEDVQRHLYDICIDAPQGPVRVERQNNHSRLSSRIAEIDARGVF
-helix H     HHHH                                HHH
-sheet                 EEEE     EEEEE         EEE      EE
-turns           TTTTTT     T        TT   T         TTT
- coil  CCCCC              C CCC       CCC CCC
-
+      AAGNWRVEDVQRHLYDIDIDAPQGPVRVERQNNHSRLSSRIAEIDARGVF
+helix       HHHHHHH                             HHH     
+sheet              E  EEEE     EEEEE         EEE      EE
+turns               TT     T        TT   T         TTT  
+ coil CCCCCC              C CCC       CCC CCC           
           .  360    .  370    .  380
-      QVRWQSPEPIRPDPYVVVHNLDDWSASMGGGALP
-helix
-sheet EE           EEEEEEE     E       E
-turns   TT    TT           TTT   TTT
-<hr>
+      QVRWQSPEPIRPDPYVVVHNLDDWSASMGGGPLP
+helix                                   
+sheet EE           EEEEEEE     E        
+turns   TT    TT           TTT  TTT     
+ coil     CCCC  CCC       C   C    CCCCC
+
+#---------------------------------------
+#
+#  Residue totals: H:111   E: 98   T: 81   C: 94
+#         percent: H: 30.2 E: 26.6 T: 22.0 C: 25.5
+#
+#---------------------------------------
 </pre>
+</td></tr></table><p>
 
 
 

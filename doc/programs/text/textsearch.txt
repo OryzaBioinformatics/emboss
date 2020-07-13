@@ -16,15 +16,40 @@ Description
    
 Usage
 
-   Search for matches to 'lacZ'
-% textsearch swissprot:\*  'lacz' stdout
+   Here is a sample session with textsearch
+   
+   Search for 'lactose':
+   
 
-   Search for matches to 'lacz' or 'permease' in E.coli proteins
-% textsearch swissprot:\*_ecoli 'lacZ | permease' stdout
+% textsearch tsw:* 'lactose' 
+Search sequence documentation text. SRS and Entrez are faster!
+Output sequence details to a file [100k_rat.textsearch]: 
+   
+   Go to the input files for this example
+   Go to the output files for this example
+   
+   Example 2
+   
+   Search for 'lactose' or 'permease' in E.coli proteins:
+   
 
-   Output a search for 'transport' formatted with HTML to a file
-% textsearch embl:\* 'transport' -html -outfile embl.transport stdout
+% textsearch tsw:*_ecoli 'lactose | permease' 
+Search sequence documentation text. SRS and Entrez are faster!
+Output sequence details to a file [laci_ecoli.textsearch]: 
+   
+   Go to the output files for this example
+   
+   Example 3
+   
+   Output a search for 'lacz' formatted with HTML to a file:
+   
+   
+% textsearch tembl:* 'lacz' -html -outfile embl.lacz.html 
+Search sequence documentation text. SRS and Entrez are faster!
 
+   Go to the input files for this example
+   Go to the output files for this example
+   
 Command line arguments
 
    Mandatory qualifiers:
@@ -75,47 +100,63 @@ Command line arguments
    will write the sequence details into that file. Output file
    <sequence>.textsearch
    Optional qualifiers Allowed values Default
-   -casesensitive Do a case-sensitive search Yes/No No
-   -html Format output as an HTML table Yes/No No
+   -casesensitive Do a case-sensitive search Boolean value Yes/No No
+   -html Format output as an HTML table Boolean value Yes/No No
    Advanced qualifiers Allowed values Default
    -only This is a way of shortening the command line if you only want a
    few things to be displayed. Instead of specifying: '-nohead -noname
    -nousa -noacc -nodesc' to get only the name output, you can specify
-   '-only -name' Yes/No No
-   -heading Display column headings Yes/No @(!$(only))
-   -usa Display the USA of the sequence Yes/No @(!$(only))
-   -accession Display 'accession' column Yes/No @(!$(only))
-   -name Display 'name' column Yes/No @(!$(only))
-   -description Display 'description' column Yes/No @(!$(only))
+   '-only -name' Boolean value Yes/No No
+   -heading Display column headings Boolean value Yes/No @(!$(only))
+   -usa Display the USA of the sequence Boolean value Yes/No @(!$(only))
+   -accession Display 'accession' column Boolean value Yes/No @(!$(only))
+   -name Display 'name' column Boolean value Yes/No @(!$(only))
+   -description Display 'description' column Boolean value Yes/No
+   @(!$(only))
    
 Input file format
 
-   Normal sequence
+   textsearch reads one or more normal sequence USAs.
+   
+  Input files for usage example
+  
+   'tsw:*' is a sequence entry in the example protein database 'tsw'
+   
+  Input files for usage example 3
+  
+   'tembl:*' is a sequence entry in the example nucleic acid database
+   'tembl'
    
 Output file format
 
-   The output is displayed on the screen (stdout) by default. A typical
-   output file is:
----------------------------------------------------------------------------
-# Search for: TRANSPORT
-ANSP_SALTY    L-ASPARAGINE PERMEASE (L-ASPARAGINE TRANSPORT PROTEIN).
-CYST_SALTY    SULFATE TRANSPORT SYSTEM PERMEASE PROTEIN CYST (FRAGMENT).
-HISM_SALTY    HISTIDINE TRANSPORT SYSTEM PERMEASE PROTEIN HISM.
-HISQ_SALTY    HISTIDINE TRANSPORT SYSTEM PERMEASE PROTEIN HISQ.
-LIVH_SALTY    HIGH-AFFINITY BRANCHED-CHAIN AMINO ACID TRANSPORT PERMEASE ...
-LIVM_SALTY    HIGH-AFFINITY BRANCHED-CHAIN AMINO ACID TRANSPORT PERMEASE ...
-MALF_SALTY    MALTOSE TRANSPORT SYSTEM PERMEASE PROTEIN MALF.
-MALG_SALTY    MALTOSE TRANSPORT SYSTEM PERMEASE PROTEIN MALG.
-MELB_SALTY    MELIBIOSE CARRIER PROTEIN (THIOMETHYLGALACTOSIDE PERMEASE II) ...
-MGLC_SALTY    GALACTOSIDE TRANSPORT SYSTEM PERMEASE PROTEIN MGLC.
-OPPB_SALTY    OLIGOPEPTIDE TRANSPORT SYSTEM PERMEASE PROTEIN OPPB.
-OPPC_SALTY    OLIGOPEPTIDE TRANSPORT SYSTEM PERMEASE PROTEIN OPPC.
-POTB_SALTY    SPERMIDINE/PUTRESCINE TRANSPORT SYSTEM PERMEASE PROTEIN POTB ...
-PROW_SALTY    GLYCINE BETAINE/L-PROLINE TRANSPORT SYSTEM PERMEASE PROTEIN ...
-SAPB_SALTY    PEPTIDE TRANSPORT SYSTEM PERMEASE PROTEIN SAPB.
-SAPC_SALTY    PEPTIDE TRANSPORT SYSTEM PERMEASE PROTEIN SAPC.
----------------------------------------------------------------------------
-
+  Output files for usage example
+  
+  File: 100k_rat.textsearch
+  
+# Search for: lactose
+tsw-id:LACI_ECOLI LACI_ECOLI    P03023  LACTOSE OPERON REPRESSOR.
+tsw-id:LACY_ECOLI LACY_ECOLI    P02920  LACTOSE PERMEASE (LACTOSE-PROTON SYMPOR
+T).
+   
+  Output files for usage example 2
+  
+  File: laci_ecoli.textsearch
+  
+# Search for: lactose | permease
+tsw-id:LACI_ECOLI LACI_ECOLI    P03023  LACTOSE OPERON REPRESSOR.
+tsw-id:LACY_ECOLI LACY_ECOLI    P02920  LACTOSE PERMEASE (LACTOSE-PROTON SYMPOR
+T).
+   
+  Output files for usage example 3
+  
+  File: embl.lacz.html
+  
+   Search for: lacz
+   tembl-id:ECLAC ECLAC J01636 E.coli lactose operon with lacI, lacZ,
+   lacY and lacA genes.
+   tembl-id:ECLACZ ECLACZ V00296 E. coli gene lacZ coding for
+   beta-galactosidase (EC 3.2.1.23).
+   
    The first column in the name or ID of each sequence. The remaining
    text is the description line of the sequence.
    
@@ -179,6 +220,7 @@ See also
    showdb       Displays information on the currently available databases
    showfeat     Show features of a sequence
    showseq      Display a sequence with features, translation etc
+   sixpack      Display a DNA sequence with 6-frame translation and ORFs
    tfm          Displays a program's help documentation manual
    whichdb      Search all databases for an entry
    wossname     Finds programs by keywords in their one-line documentation

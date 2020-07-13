@@ -74,17 +74,23 @@ printed as well (see the example).
 </H2>
 
 
-Here is a sample session with est2genome.
+<b>Here is a sample session with est2genome</b>
+<p>
 
-<pre>
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% est2genome
+% <b>est2genome </b>
 Align EST and genomic DNA sequences
-EST sequence(s): embl:hs989235
-Genomic sequence: embl:hsnfg9
-Output file [hs989235.est2genome]:
+EST sequence(s): <b>tembl:hs989235</b>
+Genomic sequence: <b>tembl:hsnfg9</b>
+Output file [hs989235.est2genome]: <b></b>
 
-</pre>
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
+
+
 
 
 
@@ -248,14 +254,14 @@ IT IS DONE FOR YOU.
 <tr>
 <td>-reverse</td>
 <td>Reverse the orientation of the EST sequence</td>
-<td>Yes/No</td>
+<td>Boolean value Yes/No</td>
 <td>No</td>
 </tr>
 
 <tr>
 <td>-[no]splice</td>
 <td>Use donor and acceptor splice sites. If you want to ignore donor-acceptor sites then set this to be false.</td>
-<td>Yes/No</td>
+<td>Boolean value Yes/No</td>
 <td>Yes</td>
 </tr>
 
@@ -269,7 +275,7 @@ IT IS DONE FOR YOU.
 <tr>
 <td>-[no]best</td>
 <td>You can print out all comparisons instead of just the best one by setting this to be false.</td>
-<td>Yes/No</td>
+<td>Boolean value Yes/No</td>
 <td>Yes</td>
 </tr>
 
@@ -298,7 +304,7 @@ If you have a machine with plenty of memory you can raise this parameter (but do
 <tr>
 <td>-align</td>
 <td>Show the alignment. The alignment includes the first and last 5 bases of each intron, together with the intron width. The direction of splicing is indicated by angle brackets (forward or reverse) or ???? (unknown).</td>
-<td>Yes/No</td>
+<td>Boolean value Yes/No</td>
 <td>No</td>
 </tr>
 
@@ -322,10 +328,256 @@ If you have a machine with plenty of memory you can raise this parameter (but do
 sequence (a single read or a finished cDNA). The second is a genomic
 finished sequence.
 
+<p>
+
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+
+'tembl:hs989235' is a sequence entry in the example nucleic acid database 'tembl'
+<p>
+<p><h3>Database entry: tembl:hs989235</h3>
+<table width="90%"><tr><td bgcolor="#FFDDFF">
+<pre>
+ID   HS989235   standard; RNA; EST; 495 BP.
+XX
+AC   H45989;
+XX
+SV   H45989.1
+XX
+DT   18-NOV-1995 (Rel. 45, Created)
+DT   04-MAR-2000 (Rel. 63, Last updated, Version 2)
+XX
+DE   yo13c02.s1 Soares adult brain N2b5HB55Y Homo sapiens cDNA clone
+DE   IMAGE:177794 3', mRNA sequence.
+XX
+KW   EST.
+XX
+OS   Homo sapiens (human)
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia;
+OC   Eutheria; Primates; Catarrhini; Hominidae; Homo.
+XX
+RN   [1]
+RP   1-495
+RA   Hillier L., Clark N., Dubuque T., Elliston K., Hawkins M., Holman M.,
+RA   Hultman M., Kucaba T., Le M., Lennon G., Marra M., Parsons J., Rifkin L.,
+RA   Rohlfing T., Soares M., Tan F., Trevaskis E., Waterston R., Williamson A.,
+RA   Wohldmann P., Wilson R.;
+RT   "The WashU-Merck EST Project";
+RL   Unpublished.
+XX
+DR   RZPD; IMAGp998F03326; IMAGp998F03326.
+XX
+CC   On May 8, 1995 this sequence version replaced gi:800819.
+CC   Contact: Wilson RK
+CC   Washington University School of Medicine
+CC   4444 Forest Park Parkway, Box 8501, St. Louis, MO 63108
+CC   Tel: 314 286 1800
+CC   Fax: 314 286 1810
+CC   Email: est@watson.wustl.edu
+CC   Insert Size: 544
+CC   High quality sequence stops: 265
+CC   Source: IMAGE Consortium, LLNL
+CC   This clone is available royalty-free through LLNL ; contact the
+CC   IMAGE Consortium (info@image.llnl.gov) for further information.
+CC   Possible reversed clone: polyT not found
+CC   Insert Length: 544   Std Error: 0.00
+CC   Seq primer: SP6
+CC   High quality sequence stop: 265.
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..495
+FT                   /db_xref="taxon:9606"
+FT                   /db_xref="ESTLIB:300"
+FT                   /db_xref="RZPD:IMAGp998F03326"
+FT                   /note="Organ: brain; Vector: pT7T3D (Pharmacia) with a
+FT                   modified polylinker; Site_1: Not I; Site_2: Eco RI; 1st
+FT                   strand cDNA was primed with a Not I - oligo(dT) primer [5'
+FT                   TGTTACCAATCTGAAGTGGGAGCGGCCGCGCTTTTTTTTTTTTTTTTTTT 3'],
+FT                   double-stranded cDNA was size selected, ligated to Eco RI
+FT                   adapters (Pharmacia), digested with Not I and cloned into
+FT                   the Not I and Eco RI sites of a modified pT7T3 vector
+FT                   (Pharmacia). Library went through one round of
+FT                   normalization to a Cot = 53. Library constructed by Bento
+FT                   Soares and M.Fatima Bonaldo. The adult brain RNA was
+FT                   provided by Dr. Donald H. Gilden. Tissue was acquired 17-18
+FT                   hours after death which occurred in consequence of a
+FT                   ruptured aortic aneurysm. RNA was prepared from a pool of
+FT                   tissues representing the following areas of the brain:
+FT                   frontal, parietal, temporal and occipital cortex from the
+FT                   left and right hemispheres, subcortical white matter, basal
+FT                   ganglia, thalamus, cerebellum, midbrain, pons and medulla."
+FT                   /sex="Male"
+FT                   /organism="Homo sapiens"
+FT                   /clone="IMAGE:177794"
+FT                   /clone_lib="Soares adult brain N2b5HB55Y"
+FT                   /dev_stage="55-year old"
+FT                   /lab_host="DH10B (ampicillin resistant)"
+XX
+SQ   Sequence 495 BP; 73 A; 135 C; 169 G; 104 T; 14 other;
+     ccggnaagct cancttggac caccgactct cgantgnntc gccgcgggag ccggntggan        60
+     aacctgagcg ggactggnag aaggagcaga gggaggcagc acccggcgtg acggnagtgt       120
+     gtggggcact caggccttcc gcagtgtcat ctgccacacg gaaggcacgg ccacgggcag       180
+     gggggtctat gatcttctgc atgcccagct ggcatggccc cacgtagagt ggnntggcgt       240
+     ctcggtgctg gtcagcgaca cgttgtcctg gctgggcagg tccagctccc ggaggacctg       300
+     gggcttcagc ttcccgtagc gctggctgca gtgacggatg ctcttgcgct gccatttctg       360
+     ggtgctgtca ctgtccttgc tcactccaaa ccagttcggc ggtccccctg cggatggtct       420
+     gtgttgatgg acgtttgggc tttgcagcac cggccgccga gttcatggtn gggtnaagag       480
+     atttgggttt tttcn                                                        495
+//
+</pre>
+</td></tr></table><p>
+<p><h3>Database entry: tembl:hsnfg9</h3>
+<table width="90%"><tr><td bgcolor="#FFDDFF">
+<pre>
+ID   HSNFG9     standard; DNA; HUM; 33760 BP.
+XX
+AC   Z69719;
+XX
+SV   Z69719.1
+XX
+DT   26-FEB-1996 (Rel. 46, Created)
+DT   22-NOV-1999 (Rel. 61, Last updated, Version 3)
+XX
+DE   Human DNA sequence from cosmid NFG9 from a contig from the tip of the short
+DE   arm of chromosome 16, spanning 2Mb of 16p13.3. Contains Interleukin 9
+DE   Receptor Pseudogene, repeat polymorphism, ESTs, CpG islands and endogenous
+DE   retroviral DNA.
+XX
+KW   16p13.3; CpG island; Interleukin 9 Receptor Pseudogene;
+KW   repeat polymorphism.
+XX
+OS   Homo sapiens (human)
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia;
+OC   Eutheria; Primates; Catarrhini; Hominidae; Homo.
+XX
+RN   [1]
+RP   1-33760
+RA   Kershaw J.;
+RT   ;
+RL   Submitted (22-FEB-1996) to the EMBL/GenBank/DDBJ databases.
+RL   Sanger Centre, Hinxton, Cambridgeshire, CB10 1RQ, England. E-mail enquires:
+RL   humquery@sanger.ac.uk
+XX
+CC   IMPORTANT:  This sequence is not the entire insert of clone
+CC   NFG9.  It may be shorter because we only sequence overlapping
+CC   sections once, or longer because we arrange for a small
+CC   overlap between neighbouring submissions.
+XX
+CC   The true left end of clone NFG9 is at 1 in this sequence.
+CC   The true left end of clone RA36 is at 25872.
+XX
+CC   NFG9 is from a 280kb clone contig extending from the telomere of 16p.
+CC   Higgs D.R., Flint J. unpublished. MRC Molecular Haematology Unit,
+CC   Institute of Molecular Medicine, Oxford.
+CC   NFG9 is from the library CV007K. Choo et al.,(1986) Gene 46. 277-286.
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..33760
+FT                   /chromosome="16"
+FT                   /db_xref="taxon:9606"
+FT                   /organism="Homo sapiens"
+FT                   /map="16p13.3"
+FT                   /clone_lib="CV007K"
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+     gagacagcag agtgctcagc tcatgaagga ggcaccagcc gccatgcctc tacatccagg     30840
+     tctcctgggg ttcccacctc cacaaaaacc cccactgcta ggagtgcagg caggagggga     30900
+     cctgagaacc gacagttata ggtcctgcgg gtgggcagtg ctgggtgttc tggtctgccc     30960
+     cacccctgtg tgcctagatc cccatctggg cctcaagtgg gtgggattcc aaaggaagag     31020
+     ccggagtagg cgtggggagg ggcaggccca ggctggacaa agagtctggc cagggagcgg     31080
+     cacattgccc tcccagagac agtggctcag tgtccaggcc ttccccaggc gcacagtggg     31140
+     ctcttgttcc cagaaagccc ctcgggggga tccaaacagt gtctccccca ccccgctgac     31200
+     ccctcagtgt atggggaaac cgtggcccac ggaaggcctc actgcctggg gtcacacagc     31260
+     atctgagtca ctgcagcagc ctcacagctg ccagcccagg cccagcccca tcaggagaca     31320
+     cccaaagcca cagtgcatcc caggaccagc tgggggggct gcgggcagga ctctcgatga     31380
+     ggctgaggga cgaggagggt caagggagcc actggcgcca tgcatgctga cgtcccctct     31440
+     ggctgcctgc agagcctggt gtggaagggc tgagtggggg atggtggaga gtcctgttaa     31500
+     ctcaggtttc tgctctgggg atgtctgggc acccatcaag ctggccgcgt gcacaggtgc     31560
+     agggagagcc agaaagcagg agccgatgca gggaggccac tggggacagc ccaggctgat     31620
+     gcttgggccc catgtgtctc caccacctac aaccctaagc aagcctcagc tttcccatct     31680
+     ggaaatcagg ggtcacagca gtgcctggca cagtagcagc ggctgactcc atcacagggt     31740
+     ggtgtagcct gtgggtactt ggcactctct gaggggcagg agctgggggg tgaaaggacc     31800
+     ctagagcata tgcaacaaga gggcagccct ggggacacct ggggacagaa ccctccaaag     31860
+     gtgtcgagtt tgggaagaga ctagagagaa gctctggcca gtccaggcat agacagtggc     31920
+     cacagccagt ggagagctgc atcctcaggt gtgagcagca accacctctg tactcaggcc     31980
+     tgccctgcac actcacagga ccatgctggc agggacaact ggcggcggag ttgactgcca     32040
+     accccggggc cagaaccatc aagcctgggc tctgctccgc ccaaggaact gcctgctgcc     32100
+     gaggtcagct ggagcaaggg gcctcacccc gggacacctt cccagacgtg tcctcagctc     32160
+     acatgagcct catcccaggg ggatgtggct cctccagcat ccccacccac acgctgctct     32220
+     ctgaccctca gtcttctgtt tgactcctaa tctgaagctc aatcctagat ctcccttgag     32280
+     aagggggtca ccagctgtct ggcagcccag cctccaggtc ttctggatta atgaagggaa     32340
+     agtcacctgg cctctctgcc ttgtctatta atggcatcat gctgagaatg atatttgcta     32400
+     ggccctttgc aaaccccaaa gtgctcttca accctcccag tgaagcctct tcttttctgt     32460
+     ggaagaaatg aggttcaggg tggagcaggg caggcctgag acctttgcag ggttctctcc     32520
+     aggtccccag caggacagac tggcaccctg cctcccctca tcaccctaga caaggagaca     32580
+     gaacaagagg ttccctgcta caggccatct gtgagggaag ccgccctagg gcctgtagac     32640
+     acaggaatcc ctgaggacct gacctgtgag ggtagtgcac aaaggggcca gcacttggca     32700
+     ggaggggggg gggcactgcc ccaaggctca gctagcaaat gtggcacagg ggtcaccaga     32760
+     gctaaacccc tgactcagtt gggtctgaca ggggctgaca tggcagacac acccaggaat     32820
+     caggggacac caagtgcagc tcagggcacc tgtccaggcc acacagtcag aaaggggatg     32880
+     gcagcaagga cttagctaca ctagattctg ggggtaaact gcctggtatg ctggtcactg     32940
+     ctagtcccca gtctggagtc tagctgggtc tcaggagtta ggcgaaaaca ccctccccag     33000
+     gctgcaggtg ggagaggccc acatcccctg cacacgtctg gccagaggac agatgggcag     33060
+     cccagtcacc agtcagagcc ctccagaggt gtccctgact gaccctacac acatgcaccc     33120
+     aggtgcccag gcacccttgg gctcagcaac cctgcaaccc cctcccagga cccaccagaa     33180
+     gcaggatagg actagagagg ccacaggagg gaaaccaagt cagagcagaa atggcttcgg     33240
+     tcctcagcag cctggctcag cttcctcaaa ccagatcctg actgatcaca ctggtctgtc     33300
+     taacccctgg gaggggtcct ctgtatccat cttacagata aggaaactga ggctcagaga     33360
+     agcccatcac tgcctaaggt cccagggcct ataagggagc tcaaagcctt gggccaggtc     33420
+     tgcccaggag ctgcagtgga agggaccctg tctgcagacc cccagaagac aaggcagacc     33480
+     acctgggttc ttcagccttg tggctgtgga cggctgtcag acccttctaa gaccccttgc     33540
+     cacctgctcc atcaggggca tctcagttga agaaggaagg actcaccccc aaaatcgtcc     33600
+     aactcagaaa aaaaggcaga agccaaggaa tccaatcact gggcaaaatg tgatcctggc     33660
+     acagacactg aggtggggga actggagccg gtgtggcgga ggccctcaca gccaagagca     33720
+     actgggggtg ccctgggcag ggactgtagc tgggaagatc                           33760
+//
+</pre>
+</td></tr></table><p>
+
+
 <H2>
     Output file format
 </H2>
 
+
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: hs989235.est2genome</h3>
+<table width="90%"><tr><td bgcolor="#DDFFDD">
+<pre>
+Note Best alignment is between forward est and forward genome, but splice  sites imply REVERSED GENE
+Exon       163  91.8 25685 25874 HSNFG9           1   193 HS989235      yo13c02.s1 Soares adult brain N2b5HB55Y Homo sapiens cDNA clone IMAGE:177794 3', mRNA sequence.
+-Intron    -20   0.0 25875 26278 HSNFG9      
+Exon       207  98.1 26279 26492 HSNFG9         194   407 HS989235      yo13c02.s1 Soares adult brain N2b5HB55Y Homo sapiens cDNA clone IMAGE:177794 3', mRNA sequence.
+-Intron    -20   0.0 26493 27390 HSNFG9      
+Exon        63  86.4 27391 27476 HSNFG9         408   494 HS989235      yo13c02.s1 Soares adult brain N2b5HB55Y Homo sapiens cDNA clone IMAGE:177794 3', mRNA sequence.
+
+Span       393  93.6 25685 27476 HSNFG9           1   494 HS989235      yo13c02.s1 Soares adult brain N2b5HB55Y Homo sapiens cDNA clone IMAGE:177794 3', mRNA sequence.
+
+Segment     14  83.3 25685 25702 HSNFG9           1    18 HS989235      yo13c02.s1 Soares adult brain N2b5HB55Y Homo sapiens cDNA clone IMAGE:177794 3', mRNA sequence.
+Segment     28  85.7 25703 25737 HSNFG9          20    54 HS989235      yo13c02.s1 Soares adult brain N2b5HB55Y Homo sapiens cDNA clone IMAGE:177794 3', mRNA sequence.
+Segment      4 100.0 25738 25741 HSNFG9          56    59 HS989235      yo13c02.s1 Soares adult brain N2b5HB55Y Homo sapiens cDNA clone IMAGE:177794 3', mRNA sequence.
+Segment     13 100.0 25742 25754 HSNFG9          61    73 HS989235      yo13c02.s1 Soares adult brain N2b5HB55Y Homo sapiens cDNA clone IMAGE:177794 3', mRNA sequence.
+Segment      4 100.0 25756 25759 HSNFG9          74    77 HS989235      yo13c02.s1 Soares adult brain N2b5HB55Y Homo sapiens cDNA clone IMAGE:177794 3', mRNA sequence.
+Segment    110  97.4 25760 25874 HSNFG9          79   193 HS989235      yo13c02.s1 Soares adult brain N2b5HB55Y Homo sapiens cDNA clone IMAGE:177794 3', mRNA sequence.
+Segment     37 100.0 26279 26315 HSNFG9         194   230 HS989235      yo13c02.s1 Soares adult brain N2b5HB55Y Homo sapiens cDNA clone IMAGE:177794 3', mRNA sequence.
+Segment    162  98.8 26317 26480 HSNFG9         231   394 HS989235      yo13c02.s1 Soares adult brain N2b5HB55Y Homo sapiens cDNA clone IMAGE:177794 3', mRNA sequence.
+Segment     12 100.0 26481 26492 HSNFG9         396   407 HS989235      yo13c02.s1 Soares adult brain N2b5HB55Y Homo sapiens cDNA clone IMAGE:177794 3', mRNA sequence.
+Segment     16 100.0 27391 27406 HSNFG9         408   423 HS989235      yo13c02.s1 Soares adult brain N2b5HB55Y Homo sapiens cDNA clone IMAGE:177794 3', mRNA sequence.
+Segment     10  91.7 27407 27418 HSNFG9         425   436 HS989235      yo13c02.s1 Soares adult brain N2b5HB55Y Homo sapiens cDNA clone IMAGE:177794 3', mRNA sequence.
+Segment     19  95.2 27419 27439 HSNFG9         438   458 HS989235      yo13c02.s1 Soares adult brain N2b5HB55Y Homo sapiens cDNA clone IMAGE:177794 3', mRNA sequence.
+Segment     24  80.6 27441 27476 HSNFG9         459   494 HS989235      yo13c02.s1 Soares adult brain N2b5HB55Y Homo sapiens cDNA clone IMAGE:177794 3', mRNA sequence.
+</pre>
+</td></tr></table><p>
+
+
+<p>
 
 <h3>MSP type segments</h3>
 
@@ -336,43 +588,17 @@ There are four types of segment,
 <li>each <b>Intron</b> (marked with a ? if it does not start GT and end AG)
 <li>the complete alignment <b>Span</b>
 <li>individual ungapped matching <b>Segments</b>.
-</ol> In the above example:
+</ol>
 
-<pre>
-
-Type     score    %  gstart gstop genome estart estop EST EST doc
-
-Note Best alignment is between forward est and forward genome, but splice  sites imply REVERSED GENE
-Exon       163  91.8 25685 25874 HSNFG9   1 193 HS989235 yo13c02.s1 Soares adult brain N2b5HB55Y ...
--Intron    -20   0.0 25875 26278 HSNFG9
-Exon       207  98.1 26279 26492 HSNFG9 194 407 HS989235 yo13c02.s1 Soares adult brain N2b5HB55Y ...
--Intron    -20   0.0 26493 27390 HSNFG9
-Exon        63  86.4 27391 27476 HSNFG9 408 494 HS989235 yo13c02.s1 Soares adult brain N2b5HB55Y ...
-
-Span       393  93.6 25685 27476 HSNFG9   1 494 HS989235 yo13c02.s1 Soares adult brain N2b5HB55Y ...
-
-Segment     14  83.3 25685 25702 HSNFG9   1  18 HS989235 yo13c02.s1 Soares adult brain N2b5HB55Y ...
-Segment     28  85.7 25703 25737 HSNFG9  20  54 HS989235 yo13c02.s1 Soares adult brain N2b5HB55Y ...
-Segment      4 100.0 25738 25741 HSNFG9  56  59 HS989235 yo13c02.s1 Soares adult brain N2b5HB55Y ...
-Segment     13 100.0 25742 25754 HSNFG9  61  73 HS989235 yo13c02.s1 Soares adult brain N2b5HB55Y ...
-Segment      4 100.0 25756 25759 HSNFG9  74  77 HS989235 yo13c02.s1 Soares adult brain N2b5HB55Y ...
-Segment    110  97.4 25760 25874 HSNFG9  79 193 HS989235 yo13c02.s1 Soares adult brain N2b5HB55Y ...
-Segment     37 100.0 26279 26315 HSNFG9 194 230 HS989235 yo13c02.s1 Soares adult brain N2b5HB55Y ...
-Segment    162  98.8 26317 26480 HSNFG9 231 394 HS989235 yo13c02.s1 Soares adult brain N2b5HB55Y ...
-Segment     12 100.0 26481 26492 HSNFG9 396 407 HS989235 yo13c02.s1 Soares adult brain N2b5HB55Y ...
-Segment     16 100.0 27391 27406 HSNFG9 408 423 HS989235 yo13c02.s1 Soares adult brain N2b5HB55Y ...
-Segment     10  91.7 27407 27418 HSNFG9 425 436 HS989235 yo13c02.s1 Soares adult brain N2b5HB55Y ...
-Segment     19  95.2 27419 27439 HSNFG9 438 458 HS989235 yo13c02.s1 Soares adult brain N2b5HB55Y ...
-Segment     24  80.6 27441 27476 HSNFG9 459 494 HS989235 yo13c02.s1 Soares adult brain N2b5HB55Y ...
-
-</pre>
 
 <p>
+
 The score for <b>Exon</b> segments is the alignment score excluding
 flanking intron penalties. The <b>Span</b> score is the total
 including the intron costs.
 
 <p>
+
 The coordinates of the genomic sequence always refer to the positive
 strand, but are swapped if the est has been reversed. The splice
 direction of Introns are indicated as <b>+Intron</b> (forward, splice
@@ -387,7 +613,9 @@ You get the alignment if the -align switch is set.  The alignment
 includes the first and last 5 bases of each intron, together with the
 intron width. The direction of splicing is indicated by
 &gt;&gt;&gt;&gt; (forward) or &lt;&lt;&lt;&lt; (reverse) or ????
-(unknown):
+(unknown)
+
+<!--
 
 <pre>
 
@@ -442,7 +670,7 @@ Alignment Score: 393
 
 </pre>
 In this example there are two reverse introns, of lengths 404 and 898 bp.
-
+-->
 
 
 <H2>
@@ -582,7 +810,6 @@ None.
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
-<tr><td><a href="alignwrap.html">alignwrap</a></td><td>Aligns a set of sequences to a seed alignment</td></tr>
 <tr><td><a href="needle.html">needle</a></td><td>Needleman-Wunsch global alignment</td></tr>
 <tr><td><a href="stretcher.html">stretcher</a></td><td>Finds the best global alignment between two sequences</td></tr>
 </table>

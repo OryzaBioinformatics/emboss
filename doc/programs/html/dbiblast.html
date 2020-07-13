@@ -53,23 +53,73 @@ appears to be the most generally used and publicly available index
 file format.
 
 <p>
+
 The index files of the blast database format are not useful by
 themselves as they do not hold the entrynames or accession numbers,
 but they are used as pointers to the reference and sequence information
 in the database.
 
 <p>
+
 Because there are two sequence types (nucleic acid and protein) and two
 index formats (blast1 from pressdb or setdb, and blast2 from formatdb)
 with different index file names, <b>dbiblast</b> will ask about the database
 type. If the answer is "unknown" <b>dbiblast</b> will test each possible set
 of file names until one is found.
 
+<p>
+
+Having created the EMBOSS indices for this file, a database can then be
+defined in the file <b>emboss.defaults</b> as something like:
+
+<p>
+
+<pre>
+DB swnew [
+   type: P
+   format: embl
+   method: blast
+   directory: /data/embl
+]  
+</pre>
+
+
+
 <H2>
     Usage
 </H2>
 
 
+<b>Here is a sample session with dbiblast</b>
+<p>
+This creates EMBOSS indices for the BLAST database 'swnew' 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>dbiblast </b>
+Index a BLAST database
+Database name: <b>swnew</b>
+Database directory [.]: <b>../../data</b>
+Wildcard database filename [swnew]: <b></b>
+Release number [0.0]: <b></b>
+Index date [00/00/00]: <b></b>
+         N : nucleic
+         P : protein
+         ? : unknown
+Sequence type [unknown]: <b></b>
+         1 : wublast and setdb/pressdb
+         2 : formatdb
+         0 : unknown
+Blast index version [unknown]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.1">Go to the output files for this example</a><p><p>
+
+
+<!--
 Here is a sample session with <b>dbiblast</b>, using a blast 2 protein database.
 
 <pre>
@@ -96,7 +146,7 @@ Sequence type [unknown]: p
 Blast index version [unknown]: 2
 
 </pre>
-
+-->
 
 
 <H2>
@@ -255,21 +305,21 @@ IT IS DONE FOR YOU.
 <tr>
 <td>-[no]systemsort</td>
 <td>Use system sort utility</td>
-<td>Yes/No</td>
+<td>Boolean value Yes/No</td>
 <td>Yes</td>
 </tr>
 
 <tr>
 <td>-[no]cleanup</td>
 <td>Clean up temporary files</td>
-<td>Yes/No</td>
+<td>Boolean value Yes/No</td>
 <td>Yes</td>
 </tr>
 
 <tr>
 <td>-sourcefile</td>
 <td>Use FASTA source file</td>
-<td>Yes/No</td>
+<td>Boolean value Yes/No</td>
 <td>No</td>
 </tr>
 
@@ -281,14 +331,34 @@ IT IS DONE FOR YOU.
     Input file format
 </H2>
 
-An NCBI BLAST1 or BLAST2 database.
+AI BLAST1 or BLAST2 database index files.
+
+<p>
+
+
 
 <H2>
     Output file format
 </H2>
 
 
-<b>dbiblast</b> creates four index files. All are binary but with a simple format.
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: acnum.hit</h3>
+<p>This file contains non-printing characters and so cannot be displayed here.
+<p><h3>File: acnum.trg</h3>
+<p>This file contains non-printing characters and so cannot be displayed here.
+<p><h3>File: division.lkp</h3>
+<p>This file contains non-printing characters and so cannot be displayed here.
+<p><h3>File: entrynam.idx</h3>
+<p>This file contains non-printing characters and so cannot be displayed here.
+
+
+<p>
+
+<b>dbiblast</b> creates four index files.  All are binary but with a
+simple format. 
 
 <ul>
 
@@ -297,6 +367,8 @@ containing the database name and date plus information on the record
 size. This header is followed by one record for each database file,
 giving the full file name for the data file, and optionally a second
 sequence file.
+
+<p>
 
 <li>entryname.idx is the entry name index. It has the same 300 byte
 header, mainly used to store the record size which will depend on the

@@ -97,14 +97,18 @@ Description
    
 Usage
 
-   Here is a sample session with preg.
+   Here is a sample session with preg
    
-% preg
-regular expression search of a protein sequence
-Input sequence(s): sw:*_rat
-Output file [100k_rat.preg]: stdout
-Regular expression pattern: IA[QWF]A
 
+% preg 
+Regular expression search of a protein sequence
+Input sequence(s): tsw:*_rat
+Regular expression pattern: IA[QWF]A
+Output file [100k_rat.preg]: 
+   
+   Go to the input files for this example
+   Go to the output files for this example
+   
 Command line arguments
 
    Mandatory qualifiers:
@@ -135,79 +139,21 @@ Command line arguments
    
 Input file format
 
-   Any protein sequence.
+   preg reads any protein sequence USA.
+   
+  Input files for usage example
+  
+   'tsw:*_rat' is a sequence entry in the example protein database 'tsw'
    
 Output file format
 
-   Here is the output from the example run:
-     _________________________________________________________________
-   
-preg search of sw:*_rat with pattern IA[QWF]A
+  Output files for usage example
+  
+  File: 100k_rat.preg
+  
+preg search of tsw:*_rat with pattern IA[QWF]A
 Matches in 100K_RAT
        100K_RAT   390 IAQA
-Matches in 5H6_RAT
-        5H6_RAT   289 IAQA
-Matches in ACDS_RAT
-       ACDS_RAT   282 IAQA
-Matches in ANX2_RAT
-       ANX2_RAT    70 IAFA
-Matches in APB3_RAT
-       APB3_RAT   336 IAQA
-Matches in AQP9_RAT
-       AQP9_RAT    44 IAQA
-Matches in ATHA_RAT
-       ATHA_RAT   122 IAFA
-Matches in CD14_RAT
-       CD14_RAT   178 IAQA
-Matches in CIKE_RAT
-       CIKE_RAT   231 IAFA
-Matches in CLCB_RAT
-       CLCB_RAT    90 IAQA
-Matches in CTR1_RAT
-       CTR1_RAT   590 IAFA
-Matches in CYGF_RAT
-       CYGF_RAT   359 IAQA
-Matches in DPY2_RAT
-       DPY2_RAT   264 IAQA
-Matches in ENOB_RAT
-       ENOB_RAT   327 IAQA
-Matches in ERBP_RAT
-       ERBP_RAT    40 IAFA
-Matches in GLPK_RAT
-       GLPK_RAT   392 IAFA
-Matches in GPV_RAT
-        GPV_RAT   529 IAQA
-Matches in IRKB_RAT
-       IRKB_RAT    93 IAFA
-Matches in KGP2_RAT
-       KGP2_RAT   477 IAFA
-Matches in NPX1_RAT
-       NPX1_RAT   407 IAWA
-Matches in NTDO_RAT
-       NTDO_RAT   160 IAWA
-Matches in NTSE_RAT
-       NTSE_RAT   180 IAWA
-Matches in PAX8_RAT
-       PAX8_RAT   188 IAQA
-Matches in SRA4_RAT
-       SRA4_RAT   491 IAWA
-Matches in SYNP_RAT
-       SYNP_RAT    43 IAFA
-Matches in TGN3_RAT
-       TGN3_RAT   330 IAFA
-Matches in TGR3_RAT
-       TGR3_RAT   792 IAFA
-Matches in UDB2_RAT
-       UDB2_RAT   325 IAWA
-Matches in UDB3_RAT
-       UDB3_RAT   325 IAWA
-Matches in UDB6_RAT
-       UDB6_RAT   325 IAWA
-Matches in UDBC_RAT
-       UDBC_RAT   325 IAWA
-Matches in VMT2_RAT
-       VMT2_RAT   462 IAFA
-     _________________________________________________________________
    
 Data files
 
@@ -240,7 +186,7 @@ Known bugs
    
 See also
 
-    Program name                        Description
+    Program name                         Description
    antigenic      Finds antigenic sites in proteins
    digest         Protein proteolytic enzyme or reagent cleavage digest
    fuzzpro        Protein pattern search
@@ -250,6 +196,7 @@ See also
    patmatdb       Search a protein sequence with a motif
    patmatmotifs   Search a PROSITE motif database with a protein sequence
    pepcoil        Predicts coiled coil regions
+   pestfind       Finds PEST motifs as potential proteolytic cleavage sites
    pscan          Scans proteins using PRINTS
    sigcleave      Reports protein signal cleavage sites
    

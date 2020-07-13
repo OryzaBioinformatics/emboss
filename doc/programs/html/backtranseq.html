@@ -64,6 +64,42 @@ See the <b>Data Files</b> section below for more details on these files.
 </H2>
 
 
+<b>Here is a sample session with backtranseq</b>
+<p>
+Note that this is a human protein and so the default human codon frequency file is used ie. is not specified 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>backtranseq </b>
+Back translate a protein sequence
+Input sequence: <b>tsw:opsd_human</b>
+Output sequence [opsd_human.fasta]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 2</b>
+<p>
+This uses a drosophila sequence and codon table. 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>backtranseq -cfile Edrosophila.cut </b>
+Back translate a protein sequence
+Input sequence: <b>tsw:ach2_drome</b>
+Output sequence [ach2_drome.fasta]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.2">Go to the input files for this example</a><br><a href="#output.2">Go to the output files for this example</a><p><p>
+
+
+<!--
 Here is a sample session with backtranseq.  Note that this is a human
 protein and so the default (human) codon frequency file is used (i.e. 
 is not specified). 
@@ -88,7 +124,7 @@ Back translate a protein sequence
 Input sequence: sw:ach2_drome
 Output sequence [ach2_drome.fasta]: 
 </pre>
-
+-->
 
 <H2>
     Command line arguments
@@ -176,6 +212,221 @@ IT IS DONE FOR YOU.
 
 Any DNA sequence USA.
 
+<p>
+
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+
+'tsw:opsd_human' is a sequence entry in the example protein database 'tsw'
+<p>
+<p><h3>Database entry: tsw:opsd_human</h3>
+<table width="90%"><tr><td bgcolor="#FFDDFF">
+<pre>
+ID   OPSD_HUMAN     STANDARD;      PRT;   348 AA.
+AC   P08100; Q16414;
+DT   01-AUG-1988 (Rel. 08, Created)
+DT   01-AUG-1988 (Rel. 08, Last sequence update)
+DT   15-JUL-1999 (Rel. 38, Last annotation update)
+DE   RHODOPSIN.
+GN   RHO.
+OS   Homo sapiens (Human).
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Mammalia;
+OC   Eutheria; Primates; Catarrhini; Hominidae; Homo.
+RN   [1]
+RP   SEQUENCE FROM N.A.
+RX   MEDLINE; 84272729.
+RA   NATHANS J., HOGNESS D.S.;
+RT   "Isolation and nucleotide sequence of the gene encoding human
+RT   rhodopsin.";
+RL   Proc. Natl. Acad. Sci. U.S.A. 81:4851-4855(1984).
+RN   [2]
+RP   SEQUENCE OF 1-120 FROM N.A.
+RA   BENNETT J., BELLER B., SUN D., KARIKO K.;
+RL   Submitted (NOV-1994) to the EMBL/GenBank/DDBJ databases.
+RN   [3]
+RP   REVIEW ON ADRP VARIANTS.
+RX   MEDLINE; 94004905.
+RA   AL-MAGHTHEH M., GREGORY C., INGLEHEARN C., HARDCASTLE A.,
+RA   BHATTACHARYA S.;
+RT   "Rhodopsin mutations in autosomal dominant retinitis pigmentosa.";
+RL   Hum. Mutat. 2:249-255(1993).
+RN   [4]
+RP   VARIANT ADRP HIS-23.
+RX   MEDLINE; 90136922.
+RA   DRYJA T.P., MCGEE T.L., REICHEI E., HAHN L.B., COWLEY G.S.,
+RA   YANDELL D.W., SANDBERG M.A., BERSON E.L.;
+RT   "A point mutation of the rhodopsin gene in one form of retinitis
+RT   pigmentosa.";
+RL   Nature 343:364-366(1990).
+RN   [5]
+RP   VARIANTS ADRP.
+RX   MEDLINE; 91051574.
+RA   FARRAR G.J., KENNA P., REDMOND R., MCWILLIAM P., BRADLEY D.G.,
+RA   HUMPHRIES M.M., SHARP E.M., INGLEHEARN C.F., BASHIR R., JAY M.,
+RA   WATTY A., LUDWIG M., SCHINZEL A., SAMANNS C., GAL A.,
+RA   BHATTACHARYA S.S., HUMPHRIES P.;
+RT   "Autosomal dominant retinitis pigmentosa: absence of the rhodopsin
+RT   proline--&gt;histidine substitution (codon 23) in pedigrees from
+RT   Europe.";
+RL   Am. J. Hum. Genet. 47:941-945(1990).
+RN   [6]
+RP   VARIANTS ADRP HIS-23; ARG-58; LEU-347 AND SER-347.
+RX   MEDLINE; 91015273.
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+FT                                /FTId=VAR_004816.
+FT   VARIANT     209    209       V -&gt; M (EFFECT NOT KNOWN).
+FT                                /FTId=VAR_004817.
+FT   VARIANT     211    211       H -&gt; P (IN ADRP).
+FT                                /FTId=VAR_004818.
+FT   VARIANT     211    211       H -&gt; R (IN ADRP).
+FT                                /FTId=VAR_004819.
+FT   VARIANT     216    216       M -&gt; K (IN ADRP).
+FT                                /FTId=VAR_004820.
+FT   VARIANT     220    220       F -&gt; C (IN ADRP).
+FT                                /FTId=VAR_004821.
+FT   VARIANT     222    222       C -&gt; R (IN ADRP).
+FT                                /FTId=VAR_004822.
+FT   VARIANT     255    255       MISSING (IN ADRP).
+FT                                /FTId=VAR_004823.
+FT   VARIANT     264    264       MISSING (IN ADRP).
+FT                                /FTId=VAR_004824.
+FT   VARIANT     267    267       P -&gt; L (IN ADRP).
+FT                                /FTId=VAR_004825.
+FT   VARIANT     267    267       P -&gt; R (IN ADRP).
+FT                                /FTId=VAR_004826.
+FT   VARIANT     292    292       A -&gt; E (IN CSNB4).
+FT                                /FTId=VAR_004827.
+FT   VARIANT     296    296       K -&gt; E (IN ADRP).
+FT                                /FTId=VAR_004828.
+FT   VARIANT     297    297       S -&gt; R (IN ADRP).
+FT                                /FTId=VAR_004829.
+FT   VARIANT     342    342       T -&gt; M (IN ADRP).
+FT                                /FTId=VAR_004830.
+FT   VARIANT     345    345       V -&gt; L (IN ADRP).
+FT                                /FTId=VAR_004831.
+FT   VARIANT     345    345       V -&gt; M (IN ADRP).
+FT                                /FTId=VAR_004832.
+FT   VARIANT     347    347       P -&gt; A (IN ADRP).
+FT                                /FTId=VAR_004833.
+FT   VARIANT     347    347       P -&gt; L (IN ADRP; COMMON VARIANT).
+FT                                /FTId=VAR_004834.
+FT   VARIANT     347    347       P -&gt; Q (IN ADRP).
+FT                                /FTId=VAR_004835.
+FT   VARIANT     347    347       P -&gt; R (IN ADRP).
+FT                                /FTId=VAR_004836.
+FT   VARIANT     347    347       P -&gt; S (IN ADRP).
+FT                                /FTId=VAR_004837.
+SQ   SEQUENCE   348 AA;  38892 MW;  07443BEA CRC32;
+     MNGTEGPNFY VPFSNATGVV RSPFEYPQYY LAEPWQFSML AAYMFLLIVL GFPINFLTLY
+     VTVQHKKLRT PLNYILLNLA VADLFMVLGG FTSTLYTSLH GYFVFGPTGC NLEGFFATLG
+     GEIALWSLVV LAIERYVVVC KPMSNFRFGE NHAIMGVAFT WVMALACAAP PLAGWSRYIP
+     EGLQCSCGID YYTLKPEVNN ESFVIYMFVV HFTIPMIIIF FCYGQLVFTV KEAAAQQQES
+     ATTQKAEKEV TRMVIIMVIA FLICWVPYAS VAFYIFTHQG SNFGPIFMTI PAFFAKSAAI
+     YNPVIYIMMN KQFRNCMLTT ICCGKNPLGD DEASATVSKT ETSQVAPA
+//
+</pre>
+</td></tr></table><p>
+
+<a name="input.2"></a>
+<h3>Input files for usage example 2</h3>
+<p><h3>Database entry: tsw:ach2_drome</h3>
+<table width="90%"><tr><td bgcolor="#FFDDFF">
+<pre>
+ID   ACH2_DROME     STANDARD;      PRT;   576 AA.
+AC   P17644;
+DT   01-AUG-1990 (REL. 15, CREATED)
+DT   01-AUG-1990 (REL. 15, LAST SEQUENCE UPDATE)
+DT   01-NOV-1997 (REL. 35, LAST ANNOTATION UPDATE)
+DE   ACETYLCHOLINE RECEPTOR PROTEIN, ALPHA-LIKE CHAIN 2 PRECURSOR.
+GN   ACRE OR SAD OR ACR96AB.
+OS   DROSOPHILA MELANOGASTER (FRUIT FLY).
+OC   EUKARYOTA; METAZOA; ARTHROPODA; TRACHEATA; HEXAPODA; INSECTA;
+OC   PTERYGOTA; DIPTERA; BRACHYCERA; MUSCOMORPHA; EPHYDROIDEA;
+OC   DROSOPHILIDAE; DROSOPHILA.
+RN   [1]
+RP   SEQUENCE FROM N.A.
+RC   TISSUE=HEAD;
+RX   MEDLINE; 90301489.
+RA   BAUMANN A., JONAS P., GUNDELFINGER E.D.;
+RT   "Sequence of D alpha 2, a novel alpha-like subunit of Drosophila
+RT   nicotinic acetylcholine receptors.";
+RL   NUCLEIC ACIDS RES. 18:3640-3640(1990).
+RN   [2]
+RP   SEQUENCE FROM N.A.
+RC   TISSUE=HEAD;
+RX   MEDLINE; 90353591.
+RA   JONAS P., BAUMANN A., MERZ B., GUNDELFINGER E.D.;
+RT   "Structure and developmental expression of the D alpha 2 gene
+RT   encoding a novel nicotinic acetylcholine receptor protein of
+RT   Drosophila melanogaster.";
+RL   FEBS LETT. 269:264-268(1990).
+RN   [3]
+RP   SEQUENCE FROM N.A.
+RX   MEDLINE; 90360975.
+RA   SAWRUK E., SCHLOSS P., BETZ H., SCHMITT B.;
+RT   "Heterogeneity of Drosophila nicotinic acetylcholine receptors: SAD,
+RT   a novel developmentally regulated alpha-subunit.";
+RL   EMBO J. 9:2671-2677(1990).
+CC   -!- FUNCTION: AFTER BINDING ACETYLCHOLINE, THE ACHR RESPONDS BY AN
+CC       EXTENSIVE CHANGE IN CONFORMATION THAT AFFECTS ALL SUBUNITS AND
+CC       LEADS TO OPENING OF AN ION-CONDUCTING CHANNEL ACROSS THE PLASMA
+CC       MEMBRANE.
+CC   -!- SUBCELLULAR LOCATION: INTEGRAL MEMBRANE PROTEIN.
+CC   -!- TISSUE SPECIFICITY: CNS IN EMBRYOS.
+CC   -!- DEVELOPMENTAL STAGE: LATE EMBRYONIC AND LATE PUPAL STAGES.
+CC   -!- SIMILARITY: BELONGS TO THE LIGAND-GATED IONIC CHANNELS FAMILY.
+CC   --------------------------------------------------------------------------
+CC   This SWISS-PROT entry is copyright. It is produced through a collaboration
+CC   between  the Swiss Institute of Bioinformatics  and the  EMBL outstation -
+CC   the European Bioinformatics Institute.  There are no  restrictions on  its
+CC   use  by  non-profit  institutions as long  as its content  is  in  no  way
+CC   modified and this statement is not removed.  Usage  by  and for commercial
+CC   entities requires a license agreement (See http://www.isb-sib.ch/announce/
+CC   or send an email to license@isb-sib.ch).
+CC   --------------------------------------------------------------------------
+DR   EMBL; X52274; G7803; -.
+DR   EMBL; X53583; G8533; -.
+DR   PIR; S11679; ACFFA2.
+DR   FLYBASE; FBgn0000039; nAcR-alpha-96Ab.
+DR   PROSITE; PS00236; NEUROTR_ION_CHANNEL; 1.
+DR   PFAM; PF00065; neur_chan; 1.
+KW   RECEPTOR; POSTSYNAPTIC MEMBRANE; IONIC CHANNEL; GLYCOPROTEIN; SIGNAL;
+KW   TRANSMEMBRANE; MULTIGENE FAMILY.
+FT   SIGNAL        1     41       PROBABLE.
+FT   CHAIN        42    576       ACETYLCHOLINE RECEPTOR PROTEIN, ALPHA-2.
+FT   DOMAIN       42    261       EXTRACELLULAR (POTENTIAL).
+FT   TRANSMEM    262    285       POTENTIAL.
+FT   TRANSMEM    293    311       POTENTIAL.
+FT   TRANSMEM    327    346       POTENTIAL.
+FT   DOMAIN      347    526       CYTOPLASMIC (POTENTIAL).
+FT   TRANSMEM    527    545       POTENTIAL.
+FT   DISULFID    169    183       BY SIMILARITY.
+FT   DISULFID    243    244       ASSOCIATED WITH RECEPTOR ACTIVATION
+FT                                (BY SIMILARITY).
+FT   CARBOHYD     65     65       POTENTIAL.
+FT   CARBOHYD    254    254       POTENTIAL.
+FT   CARBOHYD    570    570       POTENTIAL.
+SQ   SEQUENCE   576 AA;  65506 MW;  7B795689 CRC32;
+     MAPGCCTTRP RPIALLAHIW RHCKPLCLLL VLLLLCETVQ ANPDAKRLYD DLLSNYNRLI
+     RPVSNNTDTV LVKLGLRLSQ LIDLNLKDQI LTTNVWLEHE WQDHKFKWDP SEYGGVTELY
+     VPSEHIWLPD IVLYNNADGE YVVTTMTKAI LHYTGKVVWT PPAIFKSSCE IDVRYFPFDQ
+     QTCFMKFGSW TYDGDQIDLK HISQKNDKDN KVEIGIDLRE YYPSVEWDIL GVPAERHEKY
+     YPCCAEPYPD IFFNITLRRK TLFYTVNLII PCVGISYLSV LVFYLPADSG EKIALCISIL
+     LSQTMFFLLI SEIIPSTSLA LPLLGKYLLF TMLLVGLSVV ITIIILNIHY RKPSTHKMRP
+     WIRSFFIKRL PKLLLMRVPK DLLRDLAANK INYGLKFSKT KFGQALMDEM QMNSGGSSPD
+     SLRRMQGRVG AGGCNGMHVT TATNRFSGLV GALGGGLSTL SGYNGLPSVL SGLDDSLSDV
+     AARKKYPFEL EKAIHNVMFI QHHMQRQDEF NAEDQDWGFV AMVMDRLFLW LFMIASLVGT
+     FVILGEAPSL YDDTKAIDVQ LSDVAKQIYN LTEKKN
+//
+</pre>
+</td></tr></table><p>
+
+
+
 <H2>
     Output file format
 </H2>
@@ -187,6 +438,74 @@ translation table (which defaults to human).
 
 <p>
 
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: opsd_human.fasta</h3>
+<table width="90%"><tr><td bgcolor="#DDFFDD">
+<pre>
+&gt;OPSD_HUMAN P08100 RHODOPSIN.
+ATGAACGGCACCGAGGGCCCCAACTTCTACGTGCCCTTCAGCAACGCCACCGGCGTGGTG
+AGAAGCCCCTTCGAGTACCCCCAGTACTACCTGGCCGAGCCCTGGCAGTTCAGCATGCTG
+GCCGCCTACATGTTCCTGCTGATCGTGCTGGGCTTCCCCATCAACTTCCTGACCCTGTAC
+GTGACCGTGCAGCACAAGAAGCTGAGAACCCCCCTGAACTACATCCTGCTGAACCTGGCC
+GTGGCCGACCTGTTCATGGTGCTGGGCGGCTTCACCAGCACCCTGTACACCAGCCTGCAC
+GGCTACTTCGTGTTCGGCCCCACCGGCTGCAACCTGGAGGGCTTCTTCGCCACCCTGGGC
+GGCGAGATCGCCCTGTGGAGCCTGGTGGTGCTGGCCATCGAGAGATACGTGGTGGTGTGC
+AAGCCCATGAGCAACTTCAGATTCGGCGAGAACCACGCCATCATGGGCGTGGCCTTCACC
+TGGGTGATGGCCCTGGCCTGCGCCGCCCCCCCCCTGGCCGGCTGGAGCAGATACATCCCC
+GAGGGCCTGCAGTGCAGCTGCGGCATCGACTACTACACCCTGAAGCCCGAGGTGAACAAC
+GAGAGCTTCGTGATCTACATGTTCGTGGTGCACTTCACCATCCCCATGATCATCATCTTC
+TTCTGCTACGGCCAGCTGGTGTTCACCGTGAAGGAGGCCGCCGCCCAGCAGCAGGAGAGC
+GCCACCACCCAGAAGGCCGAGAAGGAGGTGACCAGAATGGTGATCATCATGGTGATCGCC
+TTCCTGATCTGCTGGGTGCCCTACGCCAGCGTGGCCTTCTACATCTTCACCCACCAGGGC
+AGCAACTTCGGCCCCATCTTCATGACCATCCCCGCCTTCTTCGCCAAGAGCGCCGCCATC
+TACAACCCCGTGATCTACATCATGATGAACAAGCAGTTCAGAAACTGCATGCTGACCACC
+ATCTGCTGCGGCAAGAACCCCCTGGGCGACGACGAGGCCAGCGCCACCGTGAGCAAGACC
+GAGACCAGCCAGGTGGCCCCCGCC
+</pre>
+</td></tr></table><p>
+
+<a name="output.2"></a>
+<h3>Output files for usage example 2</h3>
+<p><h3>File: ach2_drome.fasta</h3>
+<table width="90%"><tr><td bgcolor="#DDFFDD">
+<pre>
+&gt;ACH2_DROME P17644 ACETYLCHOLINE RECEPTOR PROTEIN, ALPHA-LIKE CHAIN 2 PRECURSOR.
+ATGGCCCCCGGCTGCTGCACCACCCGCCCCCGCCCCATCGCCCTGCTGGCCCACATCTGG
+CGCCACTGCAAGCCCCTGTGCCTGCTGCTGGTGCTGCTGCTGCTGTGCGAGACCGTGCAG
+GCCAACCCCGACGCCAAGCGCCTGTACGACGACCTGCTGTCCAACTACAACCGCCTGATC
+CGCCCCGTGTCCAACAACACCGACACCGTGCTGGTGAAGCTGGGCCTGCGCCTGTCCCAG
+CTGATCGACCTGAACCTGAAGGACCAGATCCTGACCACCAACGTGTGGCTGGAGCACGAG
+TGGCAGGACCACAAGTTCAAGTGGGACCCCTCCGAGTACGGCGGCGTGACCGAGCTGTAC
+GTGCCCTCCGAGCACATCTGGCTGCCCGACATCGTGCTGTACAACAACGCCGACGGCGAG
+TACGTGGTGACCACCATGACCAAGGCCATCCTGCACTACACCGGCAAGGTGGTGTGGACC
+CCCCCCGCCATCTTCAAGTCCTCCTGCGAGATCGACGTGCGCTACTTCCCCTTCGACCAG
+CAGACCTGCTTCATGAAGTTCGGCTCCTGGACCTACGACGGCGACCAGATCGACCTGAAG
+CACATCTCCCAGAAGAACGACAAGGACAACAAGGTGGAGATCGGCATCGACCTGCGCGAG
+TACTACCCCTCCGTGGAGTGGGACATCCTGGGCGTGCCCGCCGAGCGCCACGAGAAGTAC
+TACCCCTGCTGCGCCGAGCCCTACCCCGACATCTTCTTCAACATCACCCTGCGCCGCAAG
+ACCCTGTTCTACACCGTGAACCTGATCATCCCCTGCGTGGGCATCTCCTACCTGTCCGTG
+CTGGTGTTCTACCTGCCCGCCGACTCCGGCGAGAAGATCGCCCTGTGCATCTCCATCCTG
+CTGTCCCAGACCATGTTCTTCCTGCTGATCTCCGAGATCATCCCCTCCACCTCCCTGGCC
+CTGCCCCTGCTGGGCAAGTACCTGCTGTTCACCATGCTGCTGGTGGGCCTGTCCGTGGTG
+ATCACCATCATCATCCTGAACATCCACTACCGCAAGCCCTCCACCCACAAGATGCGCCCC
+TGGATCCGCTCCTTCTTCATCAAGCGCCTGCCCAAGCTGCTGCTGATGCGCGTGCCCAAG
+GACCTGCTGCGCGACCTGGCCGCCAACAAGATCAACTACGGCCTGAAGTTCTCCAAGACC
+AAGTTCGGCCAGGCCCTGATGGACGAGATGCAGATGAACTCCGGCGGCTCCTCCCCCGAC
+TCCCTGCGCCGCATGCAGGGCCGCGTGGGCGCCGGCGGCTGCAACGGCATGCACGTGACC
+ACCGCCACCAACCGCTTCTCCGGCCTGGTGGGCGCCCTGGGCGGCGGCCTGTCCACCCTG
+TCCGGCTACAACGGCCTGCCCTCCGTGCTGTCCGGCCTGGACGACTCCCTGTCCGACGTG
+GCCGCCCGCAAGAAGTACCCCTTCGAGCTGGAGAAGGCCATCCACAACGTGATGTTCATC
+CAGCACCACATGCAGCGCCAGGACGAGTTCAACGCCGAGGACCAGGACTGGGGCTTCGTG
+GCCATGGTGATGGACCGCCTGTTCCTGTGGCTGTTCATGATCGCCTCCCTGGTGGGCACC
+TTCGTGATCCTGGGCGAGGCCCCCTCCCTGTACGACGACACCAAGGCCATCGACGTGCAG
+CTGTCCGACGTGGCCAAGCAGATCTACAACCTGACCGAGAAGAAGAAC
+</pre>
+</td></tr></table><p>
+
+
+<!--
 The output from the backtranslation of the human protein <b>sw:opsd_human</b>
 follows:
 
@@ -216,6 +535,8 @@ ATCTGCTGCGGCAAGAACCCCCTGGGCGACGACGAGGCCAGCGCCACCGTGAGCAAGACC
 GAGACCAGCCAGGTGGCCCCCGCC
 </pre>
 <hr>
+-->
+
 
 <H2>
     Data files
@@ -246,6 +567,19 @@ current directory for you to inspect or modify, run:
 % embossdata -fetch -file Emus.cut
 
 </pre>
+
+<p>
+
+
+Not every file but most are described in the README file from 
+<A href="ftp://ftp.ebi.ac.uk/pub/databases/codonusage">ftp://ftp.ebi.ac.uk/pub/databases/codonusage</A>
+
+<p>
+
+You can use the EMBOSS program 'cutgextract' on the CUTG
+database to get files with more meaningful (long) names.
+
+
 
 <H2>
     Notes
@@ -299,7 +633,7 @@ None.
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
 <tr><td><a href="charge.html">charge</a></td><td>Protein charge plot</td></tr>
-<tr><td><a href="checktrans.html">checktrans</a></td><td>Reports STOP codons and ORF statistics of a protein sequence</td></tr>
+<tr><td><a href="checktrans.html">checktrans</a></td><td>Reports STOP codons and ORF statistics of a protein</td></tr>
 <tr><td><a href="coderet.html">coderet</a></td><td>Extract CDS, mRNA and translations from feature tables</td></tr>
 <tr><td><a href="compseq.html">compseq</a></td><td>Counts the composition of dimer/trimer/etc words in a sequence</td></tr>
 <tr><td><a href="emowse.html">emowse</a></td><td>Protein identification by mass spectrometry</td></tr>
@@ -317,6 +651,7 @@ None.
 <tr><td><a href="remap.html">remap</a></td><td>Display a sequence with restriction cut sites, translation etc</td></tr>
 <tr><td><a href="showorf.html">showorf</a></td><td>Pretty output of DNA translations</td></tr>
 <tr><td><a href="showseq.html">showseq</a></td><td>Display a sequence with features, translation etc</td></tr>
+<tr><td><a href="sixpack.html">sixpack</a></td><td>Display a DNA sequence with 6-frame translation and ORFs</td></tr>
 <tr><td><a href="transeq.html">transeq</a></td><td>Translate nucleic acid sequences</td></tr>
 </table>
 

@@ -19,13 +19,17 @@ Description
    
 Usage
 
-   Here is a sample session with freak:
+   Here is a sample session with freak
+   
 
-% freak embl:hsfau
+% freak tembl:hsfau 
 Residue/base frequency table or plot
-Residue letters [gc]:
-Output file [hsfau.freak]:
-
+Residue letters [gc]: 
+Output file [hsfau.freak]: 
+   
+   Go to the input files for this example
+   Go to the output files for this example
+   
 Command line arguments
 
    Mandatory qualifiers (* if not always prompted):
@@ -60,17 +64,112 @@ Command line arguments
    -step Stepping value Any integer value 1
    -window Averaging window Any integer value 30
    Advanced qualifiers Allowed values Default
-   -plot Produce graphic Yes/No No
+   -plot Produce graphic Boolean value Yes/No No
    
 Input file format
 
-   Normal sequence USAs.
+   freak reads normal sequence USAs.
+   
+  Input files for usage example
+  
+   'tembl:hsfau' is a sequence entry in the example nucleic acid database
+   'tembl'
+   
+  Database entry: tembl:hsfau
+  
+ID   HSFAU      standard; RNA; HUM; 518 BP.
+XX
+AC   X65923;
+XX
+SV   X65923.1
+XX
+DT   13-MAY-1992 (Rel. 31, Created)
+DT   23-SEP-1993 (Rel. 37, Last updated, Version 10)
+XX
+DE   H.sapiens fau mRNA
+XX
+KW   fau gene.
+XX
+OS   Homo sapiens (human)
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia
+;
+OC   Eutheria; Primates; Catarrhini; Hominidae; Homo.
+XX
+RN   [1]
+RP   1-518
+RA   Michiels L.M.R.;
+RT   ;
+RL   Submitted (29-APR-1992) to the EMBL/GenBank/DDBJ databases.
+RL   L.M.R. Michiels, University of Antwerp, Dept of Biochemistry,
+RL   Universiteisplein 1, 2610 Wilrijk, BELGIUM
+XX
+RN   [2]
+RP   1-518
+RX   MEDLINE; 93368957.
+RA   Michiels L., Van der Rauwelaert E., Van Hasselt F., Kas K., Merregaert J.;
+RT   " fau cDNA encodes a ubiquitin-like-S30 fusion protein and is expressed as
+RT   an antisense sequences in the Finkel-Biskis-Reilly murine sarcoma virus";
+RL   Oncogene 8:2537-2546(1993).
+XX
+DR   SWISS-PROT; P35544; UBIM_HUMAN.
+DR   SWISS-PROT; Q05472; RS30_HUMAN.
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..518
+FT                   /chromosome="11q"
+FT                   /db_xref="taxon:9606"
+FT                   /organism="Homo sapiens"
+FT                   /tissue_type="placenta"
+FT                   /clone_lib="cDNA"
+FT                   /clone="pUIA 631"
+FT                   /map="13"
+FT   misc_feature    57..278
+FT                   /note="ubiquitin like part"
+FT   CDS             57..458
+FT                   /db_xref="SWISS-PROT:P35544"
+FT                   /db_xref="SWISS-PROT:Q05472"
+FT                   /gene="fau"
+FT                   /protein_id="CAA46716.1"
+FT                   /translation="MQLFVRAQELHTFEVTGQETVAQIKAHVASLEGIAPEDQVVLLA
+G
+FT                   APLEDEATLGQCGVEALTTLEVAGRMLGGKVHGSLARAGKVRGQTPKVAKQEKKKKKT
+G
+FT                   RAKRRMQYNRRFVNVVPTFGKKKGPNANS"
+FT   misc_feature    98..102
+FT                   /note="nucleolar localization signal"
+FT   misc_feature    279..458
+FT                   /note="S30 part"
+FT   polyA_signal    484..489
+FT   polyA_site      509
+XX
+SQ   Sequence 518 BP; 125 A; 139 C; 148 G; 106 T; 0 other;
+     ttcctctttc tcgactccat cttcgcggta gctgggaccg ccgttcagtc gccaatatgc        6
+0
+     agctctttgt ccgcgcccag gagctacaca ccttcgaggt gaccggccag gaaacggtcg       12
+0
+     cccagatcaa ggctcatgta gcctcactgg agggcattgc cccggaagat caagtcgtgc       18
+0
+     tcctggcagg cgcgcccctg gaggatgagg ccactctggg ccagtgcggg gtggaggccc       24
+0
+     tgactaccct ggaagtagca ggccgcatgc ttggaggtaa agttcatggt tccctggccc       30
+0
+     gtgctggaaa agtgagaggt cagactccta aggtggccaa acaggagaag aagaagaaga       36
+0
+     agacaggtcg ggctaagcgg cggatgcagt acaaccggcg ctttgtcaac gttgtgccca       42
+0
+     cctttggcaa gaagaagggc cccaatgcca actcttaagt cttttgtaat tctggctttc       48
+0
+     tctaataaaa aagccactta gttcagtcaa aaaaaaaa                               51
+8
+//
    
 Output file format
 
-   The output from the above example is:
-     _________________________________________________________________
-   
+  Output files for usage example
+  
+  File: hsfau.freak
+  
 FREAK of HSFAU from 1 to 518 Window 30 Step 1
 
 1          0.500000
@@ -109,8 +208,73 @@ FREAK of HSFAU from 1 to 518 Window 30 Step 1
 34         0.633333
 35         0.600000
 36         0.600000
+37         0.566667
+38         0.566667
+39         0.533333
+40         0.533333
+41         0.500000
+42         0.500000
+43         0.500000
+44         0.500000
+45         0.533333
+46         0.566667
+47         0.566667
+48         0.600000
 
-   [listing truncated for brevity]
+
+  [Part of this file has been deleted for brevity]
+
+439        0.433333
+440        0.400000
+441        0.366667
+442        0.333333
+443        0.333333
+444        0.300000
+445        0.333333
+446        0.366667
+447        0.400000
+448        0.366667
+449        0.333333
+450        0.300000
+451        0.333333
+452        0.333333
+453        0.333333
+454        0.333333
+455        0.300000
+456        0.300000
+457        0.300000
+458        0.300000
+459        0.300000
+460        0.266667
+461        0.266667
+462        0.233333
+463        0.233333
+464        0.266667
+465        0.300000
+466        0.333333
+467        0.300000
+468        0.333333
+469        0.333333
+470        0.333333
+471        0.333333
+472        0.366667
+473        0.333333
+474        0.333333
+475        0.333333
+476        0.300000
+477        0.300000
+478        0.300000
+479        0.333333
+480        0.333333
+481        0.300000
+482        0.300000
+483        0.266667
+484        0.266667
+485        0.266667
+486        0.266667
+487        0.266667
+488        0.266667
+489        0.266667
    
    The ouput consists of a title line and then two columns containing the
    position of the start of the window and then the frequency in that
@@ -146,27 +310,27 @@ Known bugs
    
 See also
 
-   Program name Description
-   backtranseq Back translate a protein sequence
-   banana Bending and curvature plot in B-DNA
-   btwisted Calculates the twisting in a B-DNA sequence
-   chaos Create a chaos game representation plot for a sequence
-   charge Protein charge plot
-   checktrans Reports STOP codons and ORF statistics of a protein
-   sequence
-   compseq Counts the composition of dimer/trimer/etc words in a sequence
-   dan Calculates DNA RNA/DNA melting temperature
-   emowse Protein identification by mass spectrometry
-   iep Calculates the isoelectric point of a protein
-   isochore Plots isochores in large DNA sequences
-   mwcontam Shows molwts that match across a set of files
-   mwfilter Filter noisy molwts from mass spec output
-   octanol Displays protein hydropathy
-   pepinfo Plots simple amino acid properties in parallel
-   pepstats Protein statistics
-   pepwindow Displays protein hydropathy
+   Program name                          Description
+   backtranseq  Back translate a protein sequence
+   banana       Bending and curvature plot in B-DNA
+   btwisted     Calculates the twisting in a B-DNA sequence
+   chaos        Create a chaos game representation plot for a sequence
+   charge       Protein charge plot
+   checktrans   Reports STOP codons and ORF statistics of a protein
+   compseq      Counts the composition of dimer/trimer/etc words in a sequence
+   dan          Calculates DNA RNA/DNA melting temperature
+   emowse       Protein identification by mass spectrometry
+   iep          Calculates the isoelectric point of a protein
+   isochore     Plots isochores in large DNA sequences
+   mwcontam     Shows molwts that match across a set of files
+   mwfilter     Filter noisy molwts from mass spec output
+   octanol      Displays protein hydropathy
+   pepinfo      Plots simple amino acid properties in parallel
+   pepstats     Protein statistics
+   pepwindow    Displays protein hydropathy
    pepwindowall Displays protein hydropathy of a set of sequences
-   wordcount Counts words of a specified size in a DNA sequence
+   sirna        Finds siRNA duplexes in mRNA
+   wordcount    Counts words of a specified size in a DNA sequence
    
 Author(s)
 

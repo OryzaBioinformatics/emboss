@@ -95,22 +95,40 @@ In all other respects, <b>skipseq</b> is the same as <b>seqret</b>.
  -->
 
 
-Here is a sample session with skipseq:
+<b>Here is a sample session with skipseq</b>
+<p>
+This does not skip any sequences. It is exactly equivalent to seqret: 
+<p>
 
-<pre>
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% skipseq -skip 1
+% <b>skipseq </b>
 Reads and writes (returns) sequences, skipping the first few
-Input sequence(s): tembl:eclac*
-Output sequence [eclac.fasta]: 
+Input sequence(s): <b>tembl:eclac*</b>
+Number of sequences to skip at start [0]: <b></b>
+Output sequence [eclac.fasta]: <b></b>
 
-</pre>
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 2</b>
+<p>
+This skips the first input sequence, writing out the others: 
+<p>
 
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
+% <b>skipseq -skip 1 </b>
+Reads and writes (returns) sequences, skipping the first few
+Input sequence(s): <b>tembl:eclac*</b>
+Output sequence [eclac.fasta]: <b></b>
 
-
-
-
+</pre></td></tr></table><p>
+<p>
+<a href="#output.2">Go to the output files for this example</a><p><p>
 
 
 
@@ -189,7 +207,7 @@ Output sequence [eclac.fasta]:
 <tr>
 <td>-feature</td>
 <td>Use feature information</td>
-<td>Yes/No</td>
+<td>Boolean value Yes/No</td>
 <td>No</td>
 </tr>
 
@@ -219,7 +237,17 @@ IT IS DONE FOR YOU.
         happens in unusual cases - null input, etc. 
    -->
 
-<b>skipseq</b> reads one or more sequences files.
+<b>skipseq</b> reads one or more sequence USAs.
+
+<p>
+
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+
+'tembl:eclac*' is a sequence entry in the example nucleic acid database 'tembl'
+<p>
+
 
 <p>
 
@@ -278,6 +306,237 @@ for further information on report formats.
 skipped the first few sequences. 
 
 <p>
+
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: eclac.fasta</h3>
+<table width="90%"><tr><td bgcolor="#DDFFDD">
+<pre>
+&gt;ECLAC J01636.1 E.coli lactose operon with lacI, lacZ, lacY and lacA genes.
+gacaccatcgaatggcgcaaaacctttcgcggtatggcatgatagcgcccggaagagagt
+caattcagggtggtgaatgtgaaaccagtaacgttatacgatgtcgcagagtatgccggt
+gtctcttatcagaccgtttcccgcgtggtgaaccaggccagccacgtttctgcgaaaacg
+cgggaaaaagtggaagcggcgatggcggagctgaattacattcccaaccgcgtggcacaa
+caactggcgggcaaacagtcgttgctgattggcgttgccacctccagtctggccctgcac
+gcgccgtcgcaaattgtcgcggcgattaaatctcgcgccgatcaactgggtgccagcgtg
+gtggtgtcgatggtagaacgaagcggcgtcgaagcctgtaaagcggcggtgcacaatctt
+ctcgcgcaacgcgtcagtgggctgatcattaactatccgctggatgaccaggatgccatt
+gctgtggaagctgcctgcactaatgttccggcgttatttcttgatgtctctgaccagaca
+cccatcaacagtattattttctcccatgaagacggtacgcgactgggcgtggagcatctg
+gtcgcattgggtcaccagcaaatcgcgctgttagcgggcccattaagttctgtctcggcg
+cgtctgcgtctggctggctggcataaatatctcactcgcaatcaaattcagccgatagcg
+gaacgggaaggcgactggagtgccatgtccggttttcaacaaaccatgcaaatgctgaat
+gagggcatcgttcccactgcgatgctggttgccaacgatcagatggcgctgggcgcaatg
+cgcgccattaccgagtccgggctgcgcgttggtgcggatatctcggtagtgggatacgac
+gataccgaagacagctcatgttatatcccgccgtcaaccaccatcaaacaggattttcgc
+ctgctggggcaaaccagcgtggaccgcttgctgcaactctctcagggccaggcggtgaag
+ggcaatcagctgttgcccgtctcactggtgaaaagaaaaaccaccctggcgcccaatacg
+caaaccgcctctccccgcgcgttggccgattcattaatgcagctggcacgacaggtttcc
+cgactggaaagcgggcagtgagcgcaacgcaattaatgtgagttagctcactcattaggc
+accccaggctttacactttatgcttccggctcgtatgttgtgtggaattgtgagcggata
+acaatttcacacaggaaacagctatgaccatgattacggattcactggccgtcgttttac
+aacgtcgtgactgggaaaaccctggcgttacccaacttaatcgccttgcagcacatcccc
+ctttcgccagctggcgtaatagcgaagaggcccgcaccgatcgcccttcccaacagttgc
+gcagcctgaatggcgaatggcgctttgcctggtttccggcaccagaagcggtgccggaaa
+gctggctggagtgcgatcttcctgaggccgatactgtcgtcgtcccctcaaactggcaga
+tgcacggttacgatgcgcccatctacaccaacgtaacctatcccattacggtcaatccgc
+cgtttgttcccacggagaatccgacgggttgttactcgctcacatttaatgttgatgaaa
+gctggctacaggaaggccagacgcgaattatttttgatggcgttaactcggcgtttcatc
+tgtggtgcaacgggcgctgggtcggttacggccaggacagtcgtttgccgtctgaatttg
+acctgagcgcatttttacgcgccggagaaaaccgcctcgcggtgatggtgctgcgttgga
+gtgacggcagttatctggaagatcaggatatgtggcggatgagcggcattttccgtgacg
+tctcgttgctgcataaaccgactacacaaatcagcgatttccatgttgccactcgcttta
+atgatgatttcagccgcgctgtactggaggctgaagttcagatgtgcggcgagttgcgtg
+actacctacgggtaacagtttctttatggcagggtgaaacgcaggtcgccagcggcaccg
+cgcctttcggcggtgaaattatcgatgagcgtggtggttatgccgatcgcgtcacactac
+gtctgaacgtcgaaaacccgaaactgtggagcgccgaaatcccgaatctctatcgtgcgg
+tggttgaactgcacaccgccgacggcacgctgattgaagcagaagcctgcgatgtcggtt
+tccgcgaggtgcggattgaaaatggtctgctgctgctgaacggcaagccgttgctgattc
+gaggcgttaaccgtcacgagcatcatcctctgcatggtcaggtcatggatgagcagacga
+tggtgcaggatatcctgctgatgaagcagaacaactttaacgccgtgcgctgttcgcatt
+atccgaaccatccgctgtggtacacgctgtgcgaccgctacggcctgtatgtggtggatg
+aagccaatattgaaacccacggcatggtgccaatgaatcgtctgaccgatgatccgcgct
+ggctaccggcgatgagcgaacgcgtaacgcgaatggtgcagcgcgatcgtaatcacccga
+gtgtgatcatctggtcgctggggaatgaatcaggccacggcgctaatcacgacgcgctgt
+atcgctggatcaaatctgtcgatccttcccgcccggtgcagtatgaaggcggcggagccg
+acaccacggccaccgatattatttgcccgatgtacgcgcgcgtggatgaagaccagccct
+tcccggctgtgccgaaatggtccatcaaaaaatggctttcgctacctggagagacgcgcc
+cgctgatcctttgcgaatacgcccacgcgatgggtaacagtcttggcggtttcgctaaat
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+gttacccaacttaatcgccttgcagcacatccccctttcgccagctggcgtaatagcgaa
+gaggcccgcaccgatcgcccttcccaacagttgcgcagcctgaatggcgaatggcgcttt
+gcctggtttccggcaccagaagcggtgccggaaagctggctggagtgcgatcttcctgag
+gccgatactgtcgtcgtcccctcaaactggcagatgcacggttacgatgcgcccatctac
+accaacgtaacctatcccattacggtcaatccgccgtttgttcccacggagaatccgacg
+ggttgttactcgctcacatttaatgttgatgaaagctggctacaggaaggccagacgcga
+attatttttgatggcgttaactcggcgtttcatctgtggtgcaacgggcgctgggtcggt
+tacggccaggacagtcgtttgccgtctgaatttgacctgagcgcatttttacgcgccgga
+gaaaaccgcctcgcggtgatggtgctgcgttggagtgacggcagttatctggaagatcag
+gatatgtggcggatgagcggcattttccgtgacgtctcgttgctgcataaaccgactaca
+caaatcagcgatttccatgttgccactcgctttaatgatgatttcagccgcgctgtactg
+gaggctgaagttcagatgtgcggcgagttgcgtgactacctacgggtaacagtttcttta
+tggcagggtgaaacgcaggtcgccagcggcaccgcgcctttcggcggtgaaattatcgat
+gagcgtggtggttatgccgatcgcgtcacactacgtctgaacgtcgaaaacccgaaactg
+tggagcgccgaaatcccgaatctctatcgtgcggtggttgaactgcacaccgccgacggc
+acgctgattgaagcagaagcctgcgatgtcggtttccgcgaggtgcggattgaaaatggt
+ctgctgctgctgaacggcaagccgttgctgattcgaggcgttaaccgtcacgagcatcat
+cctctgcatggtcaggtcatggatgagcagacgatggtgcaggatatcctgctgatgaag
+cagaacaactttaacgccgtgcgctgttcgcattatccgaaccatccgctgtggtacacg
+ctgtgcgaccgctacggcctgtatgtggtggatgaagccaatattgaaacccacggcatg
+gtgccaatgaatcgtctgaccgatgatccgcgctggctaccggcgatgagcgaacgcgta
+acgcgaatggtgcagcgcgatcgtaatcacccgagtgtgatcatctggtcgctggggaat
+gaatcaggccacggcgctaatcacgacgcgctgtatcgctggatcaaatctgtcgatcct
+tcccgcccggtgcagtatgaaggcggcggagccgacaccacggccaccgatattatttgc
+ccgatgtacgcgcgcgtggatgaagaccagcccttcccggctgtgccgaaatggtccatc
+aaaaaatggctttcgctacctggagagacgcgcccgctgatcctttgcgaatacgcccac
+gcgatgggtaacagtcttggcggtttcgctaaatactggcaggcgtttcgtcagtatccc
+cgtttacagggcggcttcgtctgggactgggtggatcagtcgctgattaaatatgatgaa
+aacggcaacccgtggtcggcttacggcggtgattttggcgatacgccgaacgatcgccag
+ttctgtatgaacggtctggtctttgccgaccgcacgccgcatccagcgctgacggaagca
+aaacaccagcagcagtttttccagttccgtttatccgggcaaaccatcgaagtgaccagc
+gaatacctgttccgtcatagcgataacgagctcctgcactggatggtggcgctggatggt
+aagccgctggcaagcggtgaagtgcctctggatgtcgctccacaaggtaaacagttgatt
+gaactgcctgaactaccgcagccggagagcgccgggcaactctggctcacagtacgcgta
+gtgcaaccgaacgcgaccgcatggtcagaagccgggcacatcagcgcctggcagcagtgg
+cgtctggcggaaaacctcagtgtgacgctccccgccgcgtcccacgccatcccgcatctg
+accaccagcgaaatggatttttgcatcgagctgggtaataagcgttggcaatttaaccgc
+cagtcaggctttctttcacagatgtggattggcgataaaaaacaactgctgacgccgctg
+cgcgatcagttcacccgtgcaccgctggataacgacattggcgtaagtgaagcgacccgc
+attgaccctaacgcctgggtcgaacgctggaaggcggcgggccattaccaggccgaagca
+gcgttgttgcagtgcacggcagatacacttgctgatgcggtgctgattacgaccgctcac
+gcgtggcagcatcaggggaaaaccttatttatcagccggaaaacctaccggattgatggt
+agtggtcaaatggcgattaccgttgatgttgaagtggcgagcgatacaccgcatccggcg
+cggattggcctgaactgccagctggcgcaggtagcagagcgggtaaactggctcggatta
+gggccgcaagaaaactatcccgaccgccttactgccgcctgttttgaccgctgggatctg
+ccattgtcagacatgtataccccgtacgtcttcccgagcgaaaacggtctgcgctgcggg
+acgcgcgaattgaattatggcccacaccagtggcgcggcgacttccagttcaacatcagc
+cgctacagtcaacagcaactgatggaaaccagccatcgccatctgctgcacgcggaagaa
+ggcacatggctgaatatcgacggtttccatatggggattggtggcgacgactcctggagc
+ccgtcagtatcggcggaattccagctgagcgccggtcgctaccattaccagttggtctgg
+tgtcaaaaataataataa
+</pre>
+</td></tr></table><p>
+
+<a name="output.2"></a>
+<h3>Output files for usage example 2</h3>
+<p><h3>File: eclac.fasta</h3>
+<table width="90%"><tr><td bgcolor="#DDFFDD">
+<pre>
+&gt;ECLACA X51872.1 Escherichia coli lacA gene for thiogalactoside transacetylase
+gtgaatgaagtcgcttaagcaatcaatgtcggatgcggcgcgacgcttatccgaccaaca
+tatcataacggagtgatcgcattgaacatgccaatgaccgaaagaataagagcaggcaag
+ctatttaccgatatgtgcgaaggcttaccggaaaaaagacttcgtgggaaaacgttaatg
+tatgagtttaatcactcgcatccatcagaagttgaaaaaagagaaagcctgattaaagaa
+atgtttgccacggtaggggaaaacgcctgggtagaaccgcctgtctatttctcttacggt
+tccaacatccatataggccgcaatttttatgcaaatttcaatttaaccattgtcgatgac
+tacacggtaacaatcggtgataacgtactgattgcacccaacgttactctttccgttacg
+ggacaccctgtacaccatgaattgagaaaaaacggcgagatgtactcttttccgataacg
+attggcaataacgtctggatcggaagtcatgtggttattaatccaggcgtcaccatcggg
+gataattctgttattggcgcgggtagtatcgtcacaaaagacattccaccaaacgtcgtg
+gcggctggcgttccttgtcgggttattcgcgaaataaacgaccgggataagcactattat
+ttcaaagattataaagttgaatcgtcagtttaaattataaaaattgcctgatacgctgcg
+cttatcaggcctacaagttcagcgatctacattagccgcatccggcatgaacaaagcgca
+ggaacaagcgtcgcatcatgcctctttgacccacagctgcggaaaacgtactggtgcaaa
+acgcagggttatgatcatcagcccaacgacgcacagcgcatgaaatgcccagtccatcag
+gtaattgccgctgatactacgcagcacgccagaaaaccacggggcaagcccggcgatgat
+aaaaccgattccctgcataaacgccaccagcttgccagcaatagccggttgcacagagtg
+atcgagcgccagcagcaaacagagcggaaacgcgccgcccagacctaacccacacaccat
+cgcccacaataccggcaattgcatcggcagccagataaagccgcagaaccccaccagttg
+taacaccagcgccagcattaacagtttgcgccgatcctgatggcgagccatagcaggcat
+cagcaaagctcctgcggcttgcccaagcgtcatcaatgccagtaaggaaccgctgtactg
+cgcgctggcaccaatctcaatatagaaagcgggtaaccaggcaatcaggctggcgtaacc
+gccgttaatcagaccgaagtaaacacccagcgtccacgcgcggggagtgaataccacgcg
+aaccggagtggttgttgtcttgtgggaagaggcgacctcgcgggcgctttgccaccacca
+ggcaaagagcgcaacaacggcaggcagcgccaccaggcgagtgtttgataccaggtttcg
+ctatgttgaactaaccagggcgttatggcggcaccaagcccaccgccgcccatcagagcc
+gcggaccacagccccatcaccagtggcgtgcgctgctgaaaccgccgtttaatcaccgaa
+gcatcaccgcctgaatgatgccgatccccaccccaccaagcagtgcgctgctaagcagca
+gcgcactttgcgggtaaagctcacgcatcaatgcaccgacggcaatcagcaacagactga
+tggcgacactgcgacgttcgctgacatgctgatgaagccagcttccggccagcgccagcc
+cgcccatggtaaccaccggcagagcggtcgac
+&gt;ECLACI V00294.1 E. coli laci gene (codes for the lac repressor).
+ccggaagagagtcaattcagggtggtgaatgtgaaaccagtaacgttatacgatgtcgca
+gagtatgccggtgtctcttatcagaccgtttcccgcgtggtgaaccaggccagccacgtt
+tctgcgaaaacgcgggaaaaagtggaagcggcgatggcggagctgaattacattcccaac
+cgcgtggcacaacaactggcgggcaaacagtcgttgctgattggcgttgccacctccagt
+ctggccctgcacgcgccgtcgcaaattgtcgcggcgattaaatctcgcgccgatcaactg
+ggtgccagcgtggtggtgtcgatggtagaacgaagcggcgtcgaagcctgtaaagcggcg
+gtgcacaatcttctcgcgcaacgcgtcagtgggctgatcattaactatccgctggatgac
+caggatgccattgctgtggaagctgcctgcactaatgttccggcgttatttcttgatgtc
+tctgaccagacacccatcaacagtattattttctcccatgaagacggtacgcgactgggc
+gtggagcatctggtcgcattgggtcaccagcaaatcgcgctgttagcgggcccattaagt
+tctgtctcggcgcgtctgcgtctggctggctggcataaatatctcactcgcaatcaaatt
+cagccgatagcggaacgggaaggcgactggagtgccatgtccggttttcaacaaaccatg
+caaatgctgaatgagggcatcgttcccactgcgatgctggttgccaacgatcagatggcg
+ctgggcgcaatgcgcgccattaccgagtccgggctgcgcgttggtgcggatatctcggta
+gtgggatacgacgataccgaagacagctcatgttatatcccgccgtcaaccaccatcaaa
+caggattttcgcctgctggggcaaaccagcgtggaccgcttgctgcaactctctcagggc
+caggcggtgaagggcaatcagctgttgcccgtctcactggtgaaaagaaaaaccaccctg
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+gttacccaacttaatcgccttgcagcacatccccctttcgccagctggcgtaatagcgaa
+gaggcccgcaccgatcgcccttcccaacagttgcgcagcctgaatggcgaatggcgcttt
+gcctggtttccggcaccagaagcggtgccggaaagctggctggagtgcgatcttcctgag
+gccgatactgtcgtcgtcccctcaaactggcagatgcacggttacgatgcgcccatctac
+accaacgtaacctatcccattacggtcaatccgccgtttgttcccacggagaatccgacg
+ggttgttactcgctcacatttaatgttgatgaaagctggctacaggaaggccagacgcga
+attatttttgatggcgttaactcggcgtttcatctgtggtgcaacgggcgctgggtcggt
+tacggccaggacagtcgtttgccgtctgaatttgacctgagcgcatttttacgcgccgga
+gaaaaccgcctcgcggtgatggtgctgcgttggagtgacggcagttatctggaagatcag
+gatatgtggcggatgagcggcattttccgtgacgtctcgttgctgcataaaccgactaca
+caaatcagcgatttccatgttgccactcgctttaatgatgatttcagccgcgctgtactg
+gaggctgaagttcagatgtgcggcgagttgcgtgactacctacgggtaacagtttcttta
+tggcagggtgaaacgcaggtcgccagcggcaccgcgcctttcggcggtgaaattatcgat
+gagcgtggtggttatgccgatcgcgtcacactacgtctgaacgtcgaaaacccgaaactg
+tggagcgccgaaatcccgaatctctatcgtgcggtggttgaactgcacaccgccgacggc
+acgctgattgaagcagaagcctgcgatgtcggtttccgcgaggtgcggattgaaaatggt
+ctgctgctgctgaacggcaagccgttgctgattcgaggcgttaaccgtcacgagcatcat
+cctctgcatggtcaggtcatggatgagcagacgatggtgcaggatatcctgctgatgaag
+cagaacaactttaacgccgtgcgctgttcgcattatccgaaccatccgctgtggtacacg
+ctgtgcgaccgctacggcctgtatgtggtggatgaagccaatattgaaacccacggcatg
+gtgccaatgaatcgtctgaccgatgatccgcgctggctaccggcgatgagcgaacgcgta
+acgcgaatggtgcagcgcgatcgtaatcacccgagtgtgatcatctggtcgctggggaat
+gaatcaggccacggcgctaatcacgacgcgctgtatcgctggatcaaatctgtcgatcct
+tcccgcccggtgcagtatgaaggcggcggagccgacaccacggccaccgatattatttgc
+ccgatgtacgcgcgcgtggatgaagaccagcccttcccggctgtgccgaaatggtccatc
+aaaaaatggctttcgctacctggagagacgcgcccgctgatcctttgcgaatacgcccac
+gcgatgggtaacagtcttggcggtttcgctaaatactggcaggcgtttcgtcagtatccc
+cgtttacagggcggcttcgtctgggactgggtggatcagtcgctgattaaatatgatgaa
+aacggcaacccgtggtcggcttacggcggtgattttggcgatacgccgaacgatcgccag
+ttctgtatgaacggtctggtctttgccgaccgcacgccgcatccagcgctgacggaagca
+aaacaccagcagcagtttttccagttccgtttatccgggcaaaccatcgaagtgaccagc
+gaatacctgttccgtcatagcgataacgagctcctgcactggatggtggcgctggatggt
+aagccgctggcaagcggtgaagtgcctctggatgtcgctccacaaggtaaacagttgatt
+gaactgcctgaactaccgcagccggagagcgccgggcaactctggctcacagtacgcgta
+gtgcaaccgaacgcgaccgcatggtcagaagccgggcacatcagcgcctggcagcagtgg
+cgtctggcggaaaacctcagtgtgacgctccccgccgcgtcccacgccatcccgcatctg
+accaccagcgaaatggatttttgcatcgagctgggtaataagcgttggcaatttaaccgc
+cagtcaggctttctttcacagatgtggattggcgataaaaaacaactgctgacgccgctg
+cgcgatcagttcacccgtgcaccgctggataacgacattggcgtaagtgaagcgacccgc
+attgaccctaacgcctgggtcgaacgctggaaggcggcgggccattaccaggccgaagca
+gcgttgttgcagtgcacggcagatacacttgctgatgcggtgctgattacgaccgctcac
+gcgtggcagcatcaggggaaaaccttatttatcagccggaaaacctaccggattgatggt
+agtggtcaaatggcgattaccgttgatgttgaagtggcgagcgatacaccgcatccggcg
+cggattggcctgaactgccagctggcgcaggtagcagagcgggtaaactggctcggatta
+gggccgcaagaaaactatcccgaccgccttactgccgcctgttttgaccgctgggatctg
+ccattgtcagacatgtataccccgtacgtcttcccgagcgaaaacggtctgcgctgcggg
+acgcgcgaattgaattatggcccacaccagtggcgcggcgacttccagttcaacatcagc
+cgctacagtcaacagcaactgatggaaaccagccatcgccatctgctgcacgcggaagaa
+ggcacatggctgaatatcgacggtttccatatggggattggtggcgacgactcctggagc
+ccgtcagtatcggcggaattccagctgagcgccggtcgctaccattaccagttggtctgg
+tgtcaaaaataataataa
+</pre>
+</td></tr></table><p>
+
+
+<p>
+
 
 See the documentation for
 <A href="seqret.html">seqret</a>
@@ -502,7 +761,6 @@ None.
 <tr><td><a href="seqret.html">seqret</a></td><td>Reads and writes (returns) sequences</td></tr>
 <tr><td><a href="seqretsplit.html">seqretsplit</a></td><td>Reads and writes (returns) sequences in individual files</td></tr>
 <tr><td><a href="splitter.html">splitter</a></td><td>Split a sequence into (overlapping) smaller sequences</td></tr>
-<tr><td><a href="swissparse.html">swissparse</a></td><td>Retrieves sequences from swissprot using keyword search</td></tr>
 <tr><td><a href="trimest.html">trimest</a></td><td>Trim poly-A tails off EST sequences</td></tr>
 <tr><td><a href="trimseq.html">trimseq</a></td><td>Trim ambiguous bits off the ends of sequences</td></tr>
 <tr><td><a href="union.html">union</a></td><td>Reads sequence fragments and builds one sequence</td></tr>

@@ -96,19 +96,24 @@ in compseq-style output.
 </H2>
 
 
-An example of the use of <b>oddcomp</b> to search for entries in swissprot with
-at least 1 SR AND at least 2 RS follows:
-
+<b>Here is a sample session with oddcomp</b>
+<p>
+To search for entries in swissprot with at least 1 SR AND at least 2 RS: 
 <p>
 
-<pre>
-% oddcomp
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>oddcomp </b>
 Finds protein sequence regions with a biased composition
-Input sequence(s): sw:*
-Output file [5h1d_fugru.oddcomp]: out.odd
-Input file: test.comp
-Window size to consider (e.g. 30 aa) [30]: 
-</pre>
+Input sequence(s): <b>tsw:*</b>
+Input file: <b>../../data/oddcomp.comp</b>
+Window size to consider (e.g. 30 aa) [30]: <b></b>
+Output file [100k_rat.oddcomp]: <b>out.odd</b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
 
 
 
@@ -213,7 +218,7 @@ Thus if you want to count frequencies in a 40 aa stretch you should enter 40 her
 <td>-[no]ignorebz</td>
 <td>The amino acid code B represents Asparagine or Aspartic acid and the code Z represents Glutamine or Glutamic acid.
 These are not commonly used codes and you may wish not to count words containing them, just noting them in the count of 'Other' words.</td>
-<td>Yes/No</td>
+<td>Boolean value Yes/No</td>
 <td>Yes</td>
 </tr>
 
@@ -226,10 +231,13 @@ These are not commonly used codes and you may wish not to count words containing
 </H2>
 
 
-The data file ('test.comp') used in the example follows:
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
 
-
-<hr>
+'tsw:*' is a sequence entry in the example protein database 'tsw'
+<p>
+<p><h3>File: ../../data/oddcomp.comp</h3>
+<table width="90%"><tr><td bgcolor="#FFDDFF">
 <pre>
 # Example input file for oddcomp
 Word size       2
@@ -243,7 +251,8 @@ SR      1               0               0               0
 
 Other   0               0               0               0
 </pre>
-<hr>
+</td></tr></table><p>
+
 
 <p>
 
@@ -297,29 +306,32 @@ will be ignored.
 </H2>
 
 
-A list of sequence name identifiers.
+<b>oddcomp</b> writes a list of sequence name identifiers.
 
 <p>
 
-The output from the above example follows:
 
-<p>
-
-<hr>
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: out.odd</h3>
+<table width="90%"><tr><td bgcolor="#DDFFDD">
 <pre>
 #
 # Output from 'oddcomp'
 #
-# The Expected frequencies are taken from the file: test.comp
+# The Expected frequencies are taken from the file: ../../data/oddcomp.comp
 #
-#       Word size: 2
-        CB1B_FUGRU
-        CO9_FUGRU
-        FOS_FUGRU
-        RS7_FUGRU
+#	Word size: 2
+	CB1B_FUGRU
+	CO9_FUGRU
+	FOS_FUGRU
+	RS7_FUGRU
 
-#       END     #
+#	END	#
 </pre>
+</td></tr></table><p>
+
+
 
 <H2>
     Data files
@@ -379,6 +391,7 @@ None.
 <tr><td><a href="patmatdb.html">patmatdb</a></td><td>Search a protein sequence with a motif</td></tr>
 <tr><td><a href="patmatmotifs.html">patmatmotifs</a></td><td>Search a PROSITE motif database with a protein sequence</td></tr>
 <tr><td><a href="pepcoil.html">pepcoil</a></td><td>Predicts coiled coil regions</td></tr>
+<tr><td><a href="pestfind.html">pestfind</a></td><td>Finds PEST motifs as potential proteolytic cleavage sites</td></tr>
 <tr><td><a href="preg.html">preg</a></td><td>Regular expression search of a protein sequence</td></tr>
 <tr><td><a href="pscan.html">pscan</a></td><td>Scans proteins using PRINTS</td></tr>
 <tr><td><a href="sigcleave.html">sigcleave</a></td><td>Reports protein signal cleavage sites</td></tr>

@@ -52,29 +52,34 @@ Finds a match of a large sequence against one or more sequences
 
 This is a rough and ready local alignment program for large
     sequences. The reason it is rough and ready is that wordmatch is
-    used to find all the wordmatches between the first sequence and
+    used to find all the word matches between the first sequence and
     another sequence. Then by calculating the highest score for a
     diagonal we can then use this as the centre point for a
     Smith-Waterman type calculation of a width given by the user.
     So a narrow diagonal Smith-Waterman is calculated hence the
     results will be rough but due to the space saving much larger
     sequences can be aligned.   
+
 <H2>
     Usage
 </H2>
 
 
-Here is a sample session with supermatcher.
+<b>Here is a sample session with supermatcher</b>
+<p>
 
-<pre>
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% supermatcher tembl:ec\* tembl:eclac -word 50 -sbegin2 101 -send2 -101
+% <b>supermatcher tembl:ec* tembl:eclac -word 50  </b>
 Finds a match of a large sequence against one or more sequences
-Gap opening penalty [10.0]: 3.0
-Gap extension penalty [0.5]:
-Output alignment [eclac.supermatcher]:
+Gap opening penalty [10.0]: <b></b>
+Gap extension penalty [0.5]: <b>3.0</b>
+Output alignment [eclac.supermatcher]: <b></b>
 
-</pre>
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
 
 
 
@@ -158,7 +163,7 @@ IT IS DONE FOR YOU.
 <tr>
 <td>-outfile</td>
 <td>Output alignment file name</td>
-<td>Alignment file</td>
+<td>Alignment output file</td>
 <td>&nbsp;</td>
 </tr>
 
@@ -214,7 +219,128 @@ IT IS DONE FOR YOU.
     Input file format
 </H2>
 
-Two sequence USAs.
+<b>supermatcher</b> reads two sequence USAs of the same type.  They must
+both be protein or both be nucleic acid sequences. 
+
+<p>
+
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+
+'tembl:ec*' is a sequence entry in the example nucleic acid database 'tembl'
+<p>
+<p><h3>Database entry: tembl:eclac</h3>
+<table width="90%"><tr><td bgcolor="#FFDDFF">
+<pre>
+ID   ECLAC      standard; DNA; PRO; 7477 BP.
+XX
+AC   J01636; J01637; K01483; K01793;
+XX
+SV   J01636.1
+XX
+DT   30-NOV-1990 (Rel. 26, Created)
+DT   04-MAR-2000 (Rel. 63, Last updated, Version 7)
+XX
+DE   E.coli lactose operon with lacI, lacZ, lacY and lacA genes.
+XX
+KW   acetyltransferase; beta-D-galactosidase; galactosidase; lac operon;
+KW   lac repressor protein; lacA gene; lacI gene; lactose permease; lacY gene;
+KW   lacZ gene; mutagenesis; palindrome; promoter region;
+KW   thiogalactoside acetyltransferase.
+XX
+OS   Escherichia coli
+OC   Bacteria; Proteobacteria; gamma subdivision; Enterobacteriaceae;
+OC   Escherichia.
+XX
+RN   [1]
+RP   1243-1266
+RX   MEDLINE; 74055539.
+RA   Gilbert W., Maxam A.;
+RT   "The nucleotide sequence of the lac operator";
+RL   Proc. Natl. Acad. Sci. U.S.A. 70:3581-3584(1973).
+XX
+RN   [2]
+RP   1246-1308
+RX   MEDLINE; 74055540.
+RA   Maizels N.M.;
+RT   "The nucleotide sequence of the lactose messenger ribonucleic acid
+RT   transcribed from the UV5 promoter mutant of Escherichia coli";
+RL   Proc. Natl. Acad. Sci. U.S.A. 70:3585-3589(1973).
+XX
+RN   [3]
+RX   MEDLINE; 74174501.
+RA   Gilbert W., Maizels N., Maxam A.;
+RT   "Sequences of controlling regions of the lactose operon";
+RL   Cold Spring Harb. Symp. Quant. Biol. 38:845-855(1974).
+XX
+RN   [4]
+RA   Gilbert W., Gralla J., Majors A.J., Maxam A.;
+RT   "Lactose operator sequences and the action of lac repressor";
+RL   (in) Sund H., Blauer G. (eds.);
+RL   PROTEIN-LIGAND INTERACTIONS:193-207;
+RL   Walter de Gruyter, New York (1975)
+XX
+RN   [5]
+RP   1146-1282
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+     cgatttggct acatgacatc aaccatatca gcaaaagtga tacgggtatt atttttgccg      4560
+     ctatttctct gttctcgcta ttattccaac cgctgtttgg tctgctttct gacaaactcg      4620
+     ggctgcgcaa atacctgctg tggattatta ccggcatgtt agtgatgttt gcgccgttct      4680
+     ttatttttat cttcgggcca ctgttacaat acaacatttt agtaggatcg attgttggtg      4740
+     gtatttatct aggcttttgt tttaacgccg gtgcgccagc agtagaggca tttattgaga      4800
+     aagtcagccg tcgcagtaat ttcgaatttg gtcgcgcgcg gatgtttggc tgtgttggct      4860
+     gggcgctgtg tgcctcgatt gtcggcatca tgttcaccat caataatcag tttgttttct      4920
+     ggctgggctc tggctgtgca ctcatcctcg ccgttttact ctttttcgcc aaaacggatg      4980
+     cgccctcttc tgccacggtt gccaatgcgg taggtgccaa ccattcggca tttagcctta      5040
+     agctggcact ggaactgttc agacagccaa aactgtggtt tttgtcactg tatgttattg      5100
+     gcgtttcctg cacctacgat gtttttgacc aacagtttgc taatttcttt acttcgttct      5160
+     ttgctaccgg tgaacagggt acgcgggtat ttggctacgt aacgacaatg ggcgaattac      5220
+     ttaacgcctc gattatgttc tttgcgccac tgatcattaa tcgcatcggt gggaaaaacg      5280
+     ccctgctgct ggctggcact attatgtctg tacgtattat tggctcatcg ttcgccacct      5340
+     cagcgctgga agtggttatt ctgaaaacgc tgcatatgtt tgaagtaccg ttcctgctgg      5400
+     tgggctgctt taaatatatt accagccagt ttgaagtgcg tttttcagcg acgatttatc      5460
+     tggtctgttt ctgcttcttt aagcaactgg cgatgatttt tatgtctgta ctggcgggca      5520
+     atatgtatga aagcatcggt ttccagggcg cttatctggt gctgggtctg gtggcgctgg      5580
+     gcttcacctt aatttccgtg ttcacgctta gcggccccgg cccgctttcc ctgctgcgtc      5640
+     gtcaggtgaa tgaagtcgct taagcaatca atgtcggatg cggcgcgacg cttatccgac      5700
+     caacatatca taacggagtg atcgcattga acatgccaat gaccgaaaga ataagagcag      5760
+     gcaagctatt taccgatatg tgcgaaggct taccggaaaa aagacttcgt gggaaaacgt      5820
+     taatgtatga gtttaatcac tcgcatccat cagaagttga aaaaagagaa agcctgatta      5880
+     aagaaatgtt tgccacggta ggggaaaacg cctgggtaga accgcctgtc tatttctctt      5940
+     acggttccaa catccatata ggccgcaatt tttatgcaaa tttcaattta accattgtcg      6000
+     atgactacac ggtaacaatc ggtgataacg tactgattgc acccaacgtt actctttccg      6060
+     ttacgggaca ccctgtacac catgaattga gaaaaaacgg cgagatgtac tcttttccga      6120
+     taacgattgg caataacgtc tggatcggaa gtcatgtggt tattaatcca ggcgtcacca      6180
+     tcggggataa ttctgttatt ggcgcgggta gtatcgtcac aaaagacatt ccaccaaacg      6240
+     tcgtggcggc tggcgttcct tgtcgggtta ttcgcgaaat aaacgaccgg gataagcact      6300
+     attatttcaa agattataaa gttgaatcgt cagtttaaat tataaaaatt gcctgatacg      6360
+     ctgcgcttat caggcctaca agttcagcga tctacattag ccgcatccgg catgaacaaa      6420
+     gcgcaggaac aagcgtcgca tcatgcctct ttgacccaca gctgcggaaa acgtactggt      6480
+     gcaaaacgca gggttatgat catcagccca acgacgcaca gcgcatgaaa tgcccagtcc      6540
+     atcaggtaat tgccgctgat actacgcagc acgccagaaa accacggggc aagcccggcg      6600
+     atgataaaac cgattccctg cataaacgcc accagcttgc cagcaatagc cggttgcaca      6660
+     gagtgatcga gcgccagcag caaacagagc ggaaacgcgc cgcccagacc taacccacac      6720
+     accatcgccc acaataccgg caattgcatc ggcagccaga taaagccgca gaaccccacc      6780
+     agttgtaaca ccagcgccag cattaacagt ttgcgccgat cctgatggcg agccatagca      6840
+     ggcatcagca aagctcctgc ggcttgccca agcgtcatca atgccagtaa ggaaccgctg      6900
+     tactgcgcgc tggcaccaat ctcaatatag aaagcgggta accaggcaat caggctggcg      6960
+     taaccgccgt taatcagacc gaagtaaaca cccagcgtcc acgcgcgggg agtgaatacc      7020
+     acgcgaaccg gagtggttgt tgtcttgtgg gaagaggcga cctcgcgggc gctttgccac      7080
+     caccaggcaa agagcgcaac aacggcaggc agcgccacca ggcgagtgtt tgataccagg      7140
+     tttcgctatg ttgaactaac cagggcgtta tggcggcacc aagcccaccg ccgcccatca      7200
+     gagccgcgga ccacagcccc atcaccagtg gcgtgcgctg ctgaaaccgc cgtttaatca      7260
+     ccgaagcatc accgcctgaa tgatgccgat ccccacccca ccaagcagtg cgctgctaag      7320
+     cagcagcgca ctttgcgggt aaagctcacg catcaatgca ccgacggcaa tcagcaacag      7380
+     actgatggcg acactgcgac gttcgctgac atgctgatga agccagcttc cggccagcgc      7440
+     cagcccgccc atggtaacca ccggcagagc ggtcgac                               7477
+//
+</pre>
+</td></tr></table><p>
+
 
 <H2>
     Output file format
@@ -254,14 +380,20 @@ for further information on alignment formats.
 
 <p>
 
-The output from the example follows:
+The output alignment is in <b>simple</b> format by default.
 
 <p>
 
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: eclac.supermatcher</h3>
+<table width="90%"><tr><td bgcolor="#DDFFDD">
 <pre>
 ########################################
 # Program:  supermatcher
-# Rundate:  Mon May 20 16:32:00 2002
+# Rundate:  Thu Nov 07 14:48:31 2002
+# Align_format: simple
 # Report_file: eclac.supermatcher
 ########################################
 #=======================================
@@ -270,18 +402,26 @@ The output from the example follows:
 # 1: ECLAC
 # 2: ECLAC
 # Matrix: EDNAFULL
-# Gap_penalty: 3.0
-# Extend_penalty: 0.5
+# Gap_penalty: 10.0
+# Extend_penalty: 3.0
 #
-# Length: 7277
-# Identity:    7277/7277 (100.0%)
-# Similarity:  7277/7277 (100.0%)
-# Gaps:           0/7277 ( 0.0%)
-# Score: 36385.0
-#
+# Length: 7477
+# Identity:    7477/7477 (100.0%)
+# Similarity:  7477/7477 (100.0%)
+# Gaps:           0/7477 ( 0.0%)
+# Score: 37385.0
+# 
 #
 #=======================================
 
+ECLAC              1 gacaccatcgaatggcgcaaaacctttcgcggtatggcatgatagcgccc     50
+                     ||||||||||||||||||||||||||||||||||||||||||||||||||
+ECLAC              1 gacaccatcgaatggcgcaaaacctttcgcggtatggcatgatagcgccc     50
+
+ECLAC             51 ggaagagagtcaattcagggtggtgaatgtgaaaccagtaacgttatacg    100
+                     ||||||||||||||||||||||||||||||||||||||||||||||||||
+ECLAC             51 ggaagagagtcaattcagggtggtgaatgtgaaaccagtaacgttatacg    100
+
 ECLAC            101 atgtcgcagagtatgccggtgtctcttatcagaccgtttcccgcgtggtg    150
                      ||||||||||||||||||||||||||||||||||||||||||||||||||
 ECLAC            101 atgtcgcagagtatgccggtgtctcttatcagaccgtttcccgcgtggtg    150
@@ -300,29 +440,69 @@ ECLAC            251 gcaaacagtcgttgctgattggcgttgccacctccagtctggccctgcac    300
 
 ECLAC            301 gcgccgtcgcaaattgtcgcggcgattaaatctcgcgccgatcaactggg    350
                      ||||||||||||||||||||||||||||||||||||||||||||||||||
-ECLAC            301 gcgccgtcgcaaattgtcgcggcgattaaatctcgcgccgatcaactggg    350
 
-ECLAC            351 tgccagcgtggtggtgtcgatggtagaacgaagcggcgtcgaagcctgta    400
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+ECLACZ          2501 tgctgattacgaccgctcacgcgtggcagcatcaggggaaaaccttattt   2550
                      ||||||||||||||||||||||||||||||||||||||||||||||||||
-ECLAC            351 tgccagcgtggtggtgtcgatggtagaacgaagcggcgtcgaagcctgta    400
+ECLAC           3787 tgctgattacgaccgctcacgcgtggcagcatcaggggaaaaccttattt   3836
 
-ECLAC            401 aagcggcggtgcacaatcttctcgcgcaacgcgtcagtgggctgatcatt    450
+ECLACZ          2551 atcagccggaaaacctaccggattgatggtagtggtcaaatggcgattac   2600
                      ||||||||||||||||||||||||||||||||||||||||||||||||||
-ECLAC            401 aagcggcggtgcacaatcttctcgcgcaacgcgtcagtgggctgatcatt    450
+ECLAC           3837 atcagccggaaaacctaccggattgatggtagtggtcaaatggcgattac   3886
 
-ECLAC            451 aactatccgctggatgaccaggatgccattgctgtggaagctgcctgcac    500
+ECLACZ          2601 cgttgatgttgaagtggcgagcgatacaccgcatccggcgcggattggcc   2650
                      ||||||||||||||||||||||||||||||||||||||||||||||||||
-ECLAC            451 aactatccgctggatgaccaggatgccattgctgtggaagctgcctgcac    500
+ECLAC           3887 cgttgatgttgaagtggcgagcgatacaccgcatccggcgcggattggcc   3936
 
-ECLAC            501 taatgttccggcgttatttcttgatgtctctgaccagacacccatcaaca    550
+ECLACZ          2651 tgaactgccagctggcgcaggtagcagagcgggtaaactggctcggatta   2700
                      ||||||||||||||||||||||||||||||||||||||||||||||||||
-ECLAC            501 taatgttccggcgttatttcttgatgtctctgaccagacacccatcaaca    550
+ECLAC           3937 tgaactgccagctggcgcaggtagcagagcgggtaaactggctcggatta   3986
+
+ECLACZ          2701 gggccgcaagaaaactatcccgaccgccttactgccgcctgttttgaccg   2750
+                     ||||||||||||||||||||||||||||||||||||||||||||||||||
+ECLAC           3987 gggccgcaagaaaactatcccgaccgccttactgccgcctgttttgaccg   4036
+
+ECLACZ          2751 ctgggatctgccattgtcagacatgtataccccgtacgtcttcccgagcg   2800
+                     ||||||||||||||||||||||||||||||||||||||||||||||||||
+ECLAC           4037 ctgggatctgccattgtcagacatgtataccccgtacgtcttcccgagcg   4086
+
+ECLACZ          2801 aaaacggtctgcgctgcgggacgcgcgaattgaattatggcccacaccag   2850
+                     ||||||||||||||||||||||||||||||||||||||||||||||||||
+ECLAC           4087 aaaacggtctgcgctgcgggacgcgcgaattgaattatggcccacaccag   4136
+
+ECLACZ          2851 tggcgcggcgacttccagttcaacatcagccgctacagtcaacagcaact   2900
+                     ||||||||||||||||||||||||||||||||||||||||||||||||||
+ECLAC           4137 tggcgcggcgacttccagttcaacatcagccgctacagtcaacagcaact   4186
+
+ECLACZ          2901 gatggaaaccagccatcgccatctgctgcacgcggaagaaggcacatggc   2950
+                     ||||||||||||||||||||||||||||||||||||||||||||||||||
+ECLAC           4187 gatggaaaccagccatcgccatctgctgcacgcggaagaaggcacatggc   4236
+
+ECLACZ          2951 tgaatatcgacggtttccatatggggattggtggcgacgactcctggagc   3000
+                     ||||||||||||||||||||||||||||||||||||||||||||||||||
+ECLAC           4237 tgaatatcgacggtttccatatggggattggtggcgacgactcctggagc   4286
+
+ECLACZ          3001 ccgtcagtatcggcggaattccagctgagcgccggtcgctaccattacca   3050
+                     ||||||||||||||||||||||||||||||||||||||||||||||||||
+ECLAC           4287 ccgtcagtatcggcggaattccagctgagcgccggtcgctaccattacca   4336
+
+ECLACZ          3051 gttggtctggtgtcaaaaataataataa   3078
+                     ||||||||||||||||||||||||||||
+ECLAC           4337 gttggtctggtgtcaaaaataataataa   4364
 
 
-...........  etc. .............
-
-
+#---------------------------------------
+#---------------------------------------
 </pre>
+</td></tr></table><p>
+<p><h3>File: supermatcher.error</h3>
+<table width="90%"><tr><td bgcolor="#DDFFDD">
+<pre>
+</pre>
+</td></tr></table><p>
+
 
 <p>
 
@@ -348,11 +528,13 @@ word size.  For short sequences a short word size (e.g.  4) can make it
 take a very long time.  Large word sizes (e.g.  30) for sequences that
 are very similar give a very quick result.  The default of 16 should
 give reasonable fast alignments. 
+
 <p>
 
 Because it does a Smith & Waterman alignment (albeit in a narrow region
 around the diagonal shown to be the 'best' by a word match), this
 program can use huge amounts of memory if the sequences are large. 
+
 <p>
 
 Because the alignment is made within a narrow area each side of the
@@ -360,19 +542,22 @@ Because the alignment is made within a narrow area each side of the
 sequences, then the path of the Smith & Waterman alignment can wander
 outside of this area.  Making the width larger can avoid this problem,
 but you then use more memory. 
+
 <p>
 
 The longer the sequences and the wider the specified alignment width,
 the more memory will be used. 
+
 <p>
 
 If the program terminates due to lack of memory you can try the
 following:
+
 <p>
 
 Run the UNIX command 'limit' to see if your stack or memory usage have
 been limited and if so, run 'unlimit', (e.g.: '% unlimit stacksize').
-<p>
+
 
 <H2>
     References

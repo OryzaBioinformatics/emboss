@@ -67,18 +67,24 @@ within a reasonable time-frame.
 </H2>
 
 
-Here is a sample session with seqmatchall. We use an increased word
-size to avoid accidental matches.
+<b>Here is a sample session with seqmatchall</b>
+<p>
+Here is an example using an increased word size to avoid accidental matches: 
+<p>
 
-<pre>
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% seqmatchall
+% <b>seqmatchall </b>
 Does an all-against-all comparison of a set of sequences
-Input sequence set: embl:eclac*
-Word size [4]: 15
-Output file [outfile.seqmatchall]: 
+Input sequence set: <b>tembl:eclac*</b>
+Word size [4]: <b>15</b>
+Output file [eclac.seqmatchall]: <b></b>
 
-</pre>
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
+
 
 
 
@@ -169,41 +175,61 @@ IT IS DONE FOR YOU.
 </H2>
 
 
-A set of sequences.  This can be a list file of sequence or a wildcarded
-set of sequences from a database or all sequences from a database, or a
-wildcarded set of sequence files. 
+<b>seqmatchall</b> reads a set of sequence USAs.  
 
 <p>
-The sequences must be all either protein or nucleic.
+
+The sequences must be either all protein or all nucleic acid.
+
+<p>
+
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+
+'tembl:eclac*' is a sequence entry in the example nucleic acid database 'tembl'
+<p>
+
 
 <H2>
     Output file format
 </H2>
 
 
-Here is the output from the example run.
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: eclac.seqmatchall</h3>
+<table width="90%"><tr><td bgcolor="#DDFFDD">
+<pre>
+1832  5646 7477 ECLAC 1 1832 ECLACA
+1113  49 1161 ECLAC 1 1113 ECLACI
+1500  4305 5804 ECLAC 1 1500 ECLACY
+3078  1287 4364 ECLAC 1 3078 ECLACZ
+159  1 159 ECLACA 1342 1500 ECLACY
+60  1 60 ECLACY 3019 3078 ECLACZ
+</pre>
+</td></tr></table><p>
+
+
 
 <p>
+
 ECLAC (the complete E.coli lac operon) matches ECLACI ECLACZ ECLACY
 and ECLACA (the individual genes), and there is a short overlap
 between ECLACY and the flanking genes ECLACZ and ECLACA
 
-<pre>
-
-1832  5645 7477 ECLAC 0 1832 ECLACA
-1113  48 1161 ECLAC 0 1113 ECLACI
-1500  4304 5804 ECLAC 0 1500 ECLACY
-3078  1286 4364 ECLAC 0 3078 ECLACZ
-158  1 159 ECLACA 1342 1500 ECLACY
-59  1 60 ECLACY 3019 3078 ECLACZ
-
-</pre>
+<p>
 
 The output is a list of regions of identity in pairs of sequences, each
 consisting of one line with 7 columns of data separated by TABs or space
 characters. 
 
+<p>
+
 The columns of data consist of:
+
+<p>
 
 <ul>
 <li>The length of the region of identity.
@@ -220,6 +246,8 @@ The columns of data consist of:
 </H2>
 
 
+None.
+
 <H2>
     Notes
 </H2>
@@ -233,15 +261,20 @@ regions of identitly smaller than the word size will not be reported.
 </H2>
 
 
+None.
+
 <H2>
     Warnings
 </H2>
+
+None.
 
 
 <H2>
     Diagnostic Error Messages
 </H2>
 
+None.
 
 <H2>
     Exit status
@@ -254,6 +287,8 @@ It exits with a status of 0.
     Known bugs
 </H2>
 
+
+None.
 
 <!--
 <H2>
@@ -294,6 +329,8 @@ Cambridge, CB10 1SA, UK.
 </H2>
 
 
+1999 - written.
+
 <H2>
     Target users
 </H2>
@@ -306,10 +343,6 @@ from naive users to embedded scripts.
     Comments
 </H2>
 
-
-<pre>
-
-</pre>
 
 
 </BODY>

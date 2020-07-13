@@ -61,18 +61,22 @@ Shuffles a set of sequences maintaining composition
 </H2>
 
 
-Here is a sample session with shuffleseq making two randomised copies of
-the input sequence.
+<b>Here is a sample session with shuffleseq</b>
+<p>
+This makes two randomised copies of the input sequence: 
 <p>
 
-<pre>
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% shuffleseq -shuffle 2
+% <b>shuffleseq -shuffle 2 </b>
 Shuffles a set of sequences maintaining composition
-Input sequence(s): embl:mmam
-Output sequence [mmam.fasta]: 
+Input sequence(s): <b>tembl:mmam</b>
+Output sequence [mmam.fasta]: <b></b>
 
-</pre>
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
 
 
 
@@ -158,44 +162,107 @@ IT IS DONE FOR YOU.
 <H2>
     Input file format
 </H2>
-The USA of one or more sequences.
+
+<b>shuffleseq</b> reads one or more sequence USAs.
+
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+
+'tembl:mmam' is a sequence entry in the example nucleic acid database 'tembl'
+<p>
+<p><h3>Database entry: tembl:mmam</h3>
+<table width="90%"><tr><td bgcolor="#FFDDFF">
+<pre>
+ID   MMAM       standard; RNA; MUS; 366 BP.
+XX
+AC   L48662;
+XX
+SV   L48662.1
+XX
+DT   04-NOV-1995 (Rel. 45, Created)
+DT   04-MAR-2000 (Rel. 63, Last updated, Version 4)
+XX
+DE   Mus musculus (cell line C3H/F2-11) chromosome 12 anti-DNA antibody heavy
+DE   chain mRNA.
+XX
+KW   .
+XX
+OS   Mus musculus (house mouse)
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia;
+OC   Eutheria; Rodentia; Sciurognathi; Muridae; Murinae; Mus.
+XX
+RN   [1]
+RP   1-366
+RX   MEDLINE; 96409289.
+RX   PUBMED; 8814271.
+RA   Wloch M.K., Alexander A.L., Pippen A.M., Pisetsky D.S., Gilkeson G.S.;
+RT   "Differences in V kappa gene utilization and VH CDR3 sequence among
+RT   anti-DNA from C3H-lpr mice and lupus mice with nephritis";
+RL   Eur. J. Immunol. 26(9):2225-2233(1996).
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..366
+FT                   /db_xref="taxon:10090"
+FT                   /organism="Mus musculus"
+FT                   /strain="C3H/HeJ-lpr/lpr"
+FT                   /cell_line="C3H/F2-11"
+FT                   /cell_type="hybridoma"
+FT                   /tissue_type="spleen"
+XX
+SQ   Sequence 366 BP; 100 A; 90 C; 85 G; 89 T; 2 other;
+     gagnnccagc tgcagcagtc tggacctgag ctggtaaagc ctggggcttc agtgaagatg        60
+     tcctgcaagg cttctggata cacattcact agctatgtta tgcactgggt gaatcagaag       120
+     cctgggcagg gccttgagtg gattggatat attaatcctt acaatgatgg tactaactac       180
+     aatgagaagt tcaaaggcaa ggccacactg acttcagaca aatcctccag cacagcctac       240
+     atggagttca gcagcctgac ctctgaggac tctgcggtct attactgtgc aagaaaaact       300
+     tcctactata gtaacctata ttactttgac tactggggcc aaggcaccac tctcacagtc       360
+     tcctca                                                                  366
+//
+</pre>
+</td></tr></table><p>
+
 
 <H2>
     Output file format
 </H2>
 
 
-The output is a sequence (by default in FASTA format)
-with the same base composition as the input.
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: mmam.fasta</h3>
+<table width="90%"><tr><td bgcolor="#DDFFDD">
+<pre>
+&gt;MMAM L48662.1 Mus musculus (cell line C3H/F2-11) chromosome 12 anti-DNA antibody heavy chain mRNA.
+caatccaaacgcagtggttgccgagcccggaagaaccctctagggttattacttacagct
+gacactggggtagagcggtccagcagtgttagtcttgcagtgtctgtctatcggacaagc
+ggtcataggaactcagcagatccctcctggatcgacacaccaacgagtagattcgatcta
+gctgttagcgacctaatatcaacttcactaccgccgaaccaataagctaccggctttaac
+acgcgatatttcccatagatccaataaacaatttcatgtggtttggggaaaaaaactttg
+ccagtaatttggcngtgacgccatcccaatggngagtgcataaaatgtggtggcgcgcat
+tatttc
+&gt;MMAM L48662.1 Mus musculus (cell line C3H/F2-11) chromosome 12 anti-DNA antibody heavy chain mRNA.
+tgttctctagaaaatcacgacatttgtggtgtaccaggccctcgcggaaacgcggtaaaa
+aaacgataactggccaggcgagaacataaggcaatctagagagcgacaganggggaaccg
+agttgtgcgccagtttatctatcgggcggtcgcgcccgcttcctccccaaaacttaacgg
+agctgcacattaacgtggctgacgatactatttacccagatagccttggttccttagatt
+cgaagttgcactgttgtagacgagtggaaataaagtccgcatattacttaaatccgngtc
+actggatgctatctatgtattctactacactagctggctcacacatagataactccctta
+ccggct
+</pre>
+</td></tr></table><p>
+
 
 <p>
+
 Each run will produce a different sequence.
-Here is the output from the example above:
-<p>
-<pre>
->MMAM L48662 Mus musculus (cell line C3H/F2-11) chromosome 12 anti-DNA antibody 
-heavy chain mRNA.
-ggcggcctccggtcaccaacctaattcggtgtcagtggcggccaagcatcctttatcaca
-agtcgacccattttcttcgtaccacacaatagctctaacgttcttgtgatagtttaggag
-ttgcagagcttcgagaggtacactaacaaggaaagagtgcgacaggaaccaaggagcatg
-aaatgaaacagctcctaaatctccaacgctaagactcggccattgctagtattantataa
-attcattcacagcccgttagcggccttttaatcacctgaaggcccccatatattaggcgt
-gacaggtatccaggcggacctttcgttcgtggtaagggtcgaatggagtgctacagtatn
-ctgaac
->MMAM L48662 Mus musculus (cell line C3H/F2-11) chromosome 12 anti-DNA antibody 
-heavy chain mRNA.
-ccaaaacaatcctagatgaacctctgccgattcaaggcagntagctttctgtaagctcgt
-ttgagatgctaatgtagccggtgaatagaagcctaggactcgcttcccactttctgcttt
-aagattatcgagccctacggaatgagctggaatctggtcttaggcattacgaacagnacg
-ggtggacgggggaccaaaagtggaggggatttctccctgctgacaaaagacactatagta
-tccccctggcattctagccgtcccgtctcgtgctagtaacggtcacagcaatgggagtct
-tgtagaacaataacggccgtctatgataccaagtcactttagacgtacaatcaaatctca
-tcaacc
-</pre>
+
 <p>
 
 Note that these two sequences have the same name.
-<p>
+
 
 <H2>
     Data files

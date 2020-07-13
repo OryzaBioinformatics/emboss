@@ -95,16 +95,21 @@ than the cost for opening a gap.
 </H2>
 
 
-Here is a sample session with water.
+<b>Here is a sample session with water</b>
+<p>
 
-<pre>
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% water tsw:hba_human tsw:hbb_human
+% <b>water tsw:hba_human tsw:hbb_human </b>
 Smith-Waterman local alignment.
-Gap opening penalty [10.0]:
-Gap extension penalty [0.5]:
-Output alignment [hba_human.water]:
-</pre>
+Gap opening penalty [10.0]: <b></b>
+Gap extension penalty [0.5]: <b></b>
+Output alignment [hba_human.water]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
 
 
 
@@ -156,7 +161,7 @@ IT IS DONE FOR YOU.
                                   the EMBOSS installation.
 
    Advanced qualifiers:
-   -[no]similarity     boolean    Display percent identity and similarity
+   -[no]brief          boolean    Brief identity and similarity
 
    General qualifiers:
   -help                boolean    Report command line options. More
@@ -206,7 +211,7 @@ IT IS DONE FOR YOU.
 <tr>
 <td>[-outfile]<br>(Parameter 3)</td>
 <td>Output alignment file name</td>
-<td>Alignment file</td>
+<td>Alignment output file</td>
 <td>&nbsp;</td>
 </tr>
 
@@ -230,9 +235,9 @@ IT IS DONE FOR YOU.
 </tr>
 
 <tr>
-<td>-[no]similarity</td>
-<td>Display percent identity and similarity</td>
-<td>Yes/No</td>
+<td>-[no]brief</td>
+<td>Brief identity and similarity</td>
+<td>Boolean value Yes/No</td>
 <td>Yes</td>
 </tr>
 
@@ -245,7 +250,237 @@ IT IS DONE FOR YOU.
 </H2>
 
 
-Any two sequence USAs of the same type (DNA or protein).
+<b>water</b> reads any two sequence USAs of the same type (DNA or protein).
+
+<p>
+
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+
+'tsw:hba_human' is a sequence entry in the example protein database 'tsw'
+<p>
+<p><h3>Database entry: tsw:hba_human</h3>
+<table width="90%"><tr><td bgcolor="#FFDDFF">
+<pre>
+ID   HBA_HUMAN      STANDARD;      PRT;   141 AA.
+AC   P01922;
+DT   21-JUL-1986 (Rel. 01, Created)
+DT   21-JUL-1986 (Rel. 01, Last sequence update)
+DT   15-JUL-1999 (Rel. 38, Last annotation update)
+DE   HEMOGLOBIN ALPHA CHAIN.
+GN   HBA1 AND HBA2.
+OS   Homo sapiens (Human), Pan troglodytes (Chimpanzee), and
+OS   Pan paniscus (Pygmy chimpanzee) (Bonobo).
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Mammalia;
+OC   Eutheria; Primates; Catarrhini; Hominidae; Homo.
+RN   [1]
+RP   SEQUENCE FROM N.A. (ALPHA-1).
+RX   MEDLINE; 81088339.
+RA   MICHELSON A.M., ORKIN S.H.;
+RT   "The 3' untranslated regions of the duplicated human alpha-globin
+RT   genes are unexpectedly divergent.";
+RL   Cell 22:371-377(1980).
+RN   [2]
+RP   SEQUENCE FROM N.A. (ALPHA-2).
+RX   MEDLINE; 81175088.
+RA   LIEBHABER S.A., GOOSSENS M.J., KAN Y.W.;
+RT   "Cloning and complete nucleotide sequence of human 5'-alpha-globin
+RT   gene.";
+RL   Proc. Natl. Acad. Sci. U.S.A. 77:7054-7058(1980).
+RN   [3]
+RP   SEQUENCE FROM N.A. (ALPHA-2).
+RX   MEDLINE; 80137531.
+RA   WILSON J.T., WILSON L.B., REDDY V.B., CAVALLESCO C., GHOSH P.K.,
+RA   DERIEL J.K., FORGET B.G., WEISSMAN S.M.;
+RT   "Nucleotide sequence of the coding portion of human alpha globin
+RT   messenger RNA.";
+RL   J. Biol. Chem. 255:2807-2815(1980).
+RN   [4]
+RP   SEQUENCE FROM N.A. (ALPHA-1 AND ALPHA-2).
+RA   FLINT J., HIGGS D.R.;
+RL   Submitted (JAN-1997) to the EMBL/GenBank/DDBJ databases.
+RN   [5]
+RP   SEQUENCE.
+RA   BRAUNITZER G., GEHRING-MULLER R., HILSCHMANN N., HILSE K., HOBOM G.,
+RA   RUDLOFF V., WITTMANN-LIEBOLD B.;
+RT   "The constitution of normal adult human haemoglobin.";
+RL   Hoppe-Seyler's Z. Physiol. Chem. 325:283-286(1961).
+RN   [6]
+RP   SEQUENCE.
+RA   HILL R.J., KONIGSBERG W.;
+RT   "The structure of human hemoglobin: IV. The chymotryptic digestion of
+RT   the alpha chain of human hemoglobin.";
+RL   J. Biol. Chem. 237:3151-3156(1962).
+RN   [7]
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+FT                                /FTId=VAR_002841.
+FT   VARIANT     130    130       A -&gt; D (IN YUDA; O2 AFFINITY DOWN).
+FT                                /FTId=VAR_002842.
+FT   VARIANT     131    131       S -&gt; P (IN QUESTEMBERT; HIGHLY UNSTABLE;
+FT                                CAUSES ALPHA-THALASSEMIA).
+FT                                /FTId=VAR_002843.
+FT   VARIANT     133    133       S -&gt; R (IN VAL DE MARNE; O2 AFFINITY UP).
+FT                                /FTId=VAR_002844.
+FT   VARIANT     135    135       V -&gt; E (IN PAVIE).
+FT                                /FTId=VAR_002845.
+FT   VARIANT     136    136       L -&gt; M (IN CHICAGO).
+FT                                /FTId=VAR_002846.
+FT   VARIANT     136    136       L -&gt; P (IN BIBBA; UNSTABLE;
+FT                                CAUSES ALPHA-THALASSEMIA).
+FT                                /FTId=VAR_002847.
+FT   VARIANT     138    138       S -&gt; P (IN ATTLEBORO; O2 AFFINITY UP).
+FT                                /FTId=VAR_002848.
+FT   VARIANT     139    139       K -&gt; E (IN HANAKAMI; O2 AFFINITY UP).
+FT                                /FTId=VAR_002849.
+FT   VARIANT     139    139       K -&gt; T (IN TOKONAME; O2 AFFINITY UP).
+FT                                /FTId=VAR_002850.
+FT   VARIANT     140    140       Y -&gt; H (IN ROUEN; O2 AFFINITY UP).
+FT                                /FTId=VAR_002851.
+FT   VARIANT     141    141       R -&gt; C (IN NUNOBIKI; O2 AFFINITY UP).
+FT                                /FTId=VAR_002852.
+FT   VARIANT     141    141       R -&gt; L (IN LEGNANO; O2 AFFINITY UP).
+FT                                /FTId=VAR_002853.
+FT   VARIANT     141    141       R -&gt; H (IN SURESNES; O2 AFFINITY UP).
+FT                                /FTId=VAR_002854.
+FT   VARIANT     141    141       R -&gt; P (IN SINGAPORE).
+FT                                /FTId=VAR_002855.
+FT   HELIX         4     35
+FT   HELIX        37     42
+FT   TURN         44     45
+FT   TURN         50     51
+FT   HELIX        53     71
+FT   TURN         72     74
+FT   HELIX        76     79
+FT   TURN         80     80
+FT   HELIX        81     89
+FT   TURN         90     91
+FT   TURN         95     95
+FT   HELIX        96    112
+FT   TURN        114    116
+FT   HELIX       119    136
+FT   TURN        137    139
+SQ   SEQUENCE   141 AA;  15126 MW;  5EC7DB1E CRC32;
+     VLSPADKTNV KAAWGKVGAH AGEYGAEALE RMFLSFPTTK TYFPHFDLSH GSAQVKGHGK
+     KVADALTNAV AHVDDMPNAL SALSDLHAHK LRVDPVNFKL LSHCLLVTLA AHLPAEFTPA
+     VHASLDKFLA SVSTVLTSKY R
+//
+</pre>
+</td></tr></table><p>
+<p><h3>Database entry: tsw:hbb_human</h3>
+<table width="90%"><tr><td bgcolor="#FFDDFF">
+<pre>
+ID   HBB_HUMAN      STANDARD;      PRT;   146 AA.
+AC   P02023;
+DT   21-JUL-1986 (Rel. 01, Created)
+DT   21-JUL-1986 (Rel. 01, Last sequence update)
+DT   15-JUL-1999 (Rel. 38, Last annotation update)
+DE   HEMOGLOBIN BETA CHAIN.
+GN   HBB.
+OS   Homo sapiens (Human), Pan troglodytes (Chimpanzee), and
+OS   Pan paniscus (Pygmy chimpanzee) (Bonobo).
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Mammalia;
+OC   Eutheria; Primates; Catarrhini; Hominidae; Homo.
+RN   [1]
+RP   SEQUENCE.
+RC   SPECIES=HUMAN;
+RA   BRAUNITZER G., GEHRING-MULLER R., HILSCHMANN N., HILSE K., HOBOM G.,
+RA   RUDLOFF V., WITTMANN-LIEBOLD B.;
+RT   "The constitution of normal adult human haemoglobin.";
+RL   Hoppe-Seyler's Z. Physiol. Chem. 325:283-286(1961).
+RN   [2]
+RP   SEQUENCE FROM N.A.
+RC   SPECIES=HUMAN;
+RX   MEDLINE; 81064667.
+RA   LAWN R.M., EFSTRATIADIS A., O'CONNELL C., MANIATIS T.;
+RT   "The nucleotide sequence of the human beta-globin gene.";
+RL   Cell 21:647-651(1980).
+RN   [3]
+RP   SEQUENCE OF 121-146 FROM N.A.
+RC   SPECIES=HUMAN;
+RX   MEDLINE; 85205333.
+RA   LANG K.M., SPRITZ R.A.;
+RT   "Cloning specific complete polyadenylylated 3'-terminal cDNA
+RT   segments.";
+RL   Gene 33:191-196(1985).
+RN   [4]
+RP   X-RAY CRYSTALLOGRAPHY (2.5 ANGSTROMS) OF DEOXYHEMOGLOBIN.
+RC   SPECIES=HUMAN;
+RX   MEDLINE; 76027820.
+RA   FERMI G.;
+RT   "Three-dimensional fourier synthesis of human deoxyhaemoglobin at
+RT   2.5-A resolution: refinement of the atomic model.";
+RL   J. Mol. Biol. 97:237-256(1975).
+RN   [5]
+RP   SEQUENCE.
+RC   SPECIES=P.TROGLODYTES;
+RX   MEDLINE; 66071496.
+RA   RIFKIN D.B., KONIGSBERG W.;
+RT   "The characterization of the tryptic peptides from the hemoglobin of
+RT   the chimpanzee (Pan troglodytes).";
+RL   Biochim. Biophys. Acta 104:457-461(1965).
+RN   [6]
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+FT   VARIANT     140    140       A -&gt; T (IN ST JACQUES: O2 AFFINITY UP).
+FT                                /FTId=VAR_003081.
+FT   VARIANT     140    140       A -&gt; V (IN PUTTELANGE; POLYCYTHEMIA;
+FT                                O2 AFFINITY UP).
+FT                                /FTId=VAR_003082.
+FT   VARIANT     141    141       L -&gt; R (IN OLMSTED; UNSTABLE).
+FT                                /FTId=VAR_003083.
+FT   VARIANT     142    142       A -&gt; D (IN OHIO; O2 AFFINITY UP).
+FT                                /FTId=VAR_003084.
+FT   VARIANT     143    143       H -&gt; D (IN RANCHO MIRAGE).
+FT                                /FTId=VAR_003085.
+FT   VARIANT     143    143       H -&gt; Q (IN LITTLE ROCK; O2 AFFINITY UP).
+FT                                /FTId=VAR_003086.
+FT   VARIANT     143    143       H -&gt; P (IN SYRACUSE; O2 AFFINITY UP).
+FT                                /FTId=VAR_003087.
+FT   VARIANT     143    143       H -&gt; R (IN ABRUZZO; O2 AFFINITY UP).
+FT                                /FTId=VAR_003088.
+FT   VARIANT     144    144       K -&gt; E (IN MITO; O2 AFFINITY UP).
+FT                                /FTId=VAR_003089.
+FT   VARIANT     145    145       Y -&gt; C (IN RAINIER; O2 AFFINITY UP).
+FT                                /FTId=VAR_003090.
+FT   VARIANT     145    145       Y -&gt; H (IN BETHESDA; O2 AFFINITY UP).
+FT                                /FTId=VAR_003091.
+FT   VARIANT     146    146       H -&gt; D (IN HIROSHIMA; O2 AFFINITY UP).
+FT                                /FTId=VAR_003092.
+FT   VARIANT     146    146       H -&gt; L (IN COWTOWN; O2 AFFINITY UP).
+FT                                /FTId=VAR_003093.
+FT   VARIANT     146    146       H -&gt; P (IN YORK; O2 AFFINITY UP).
+FT                                /FTId=VAR_003094.
+FT   VARIANT     146    146       H -&gt; Q (IN KODAIRA; O2 AFFINITY UP).
+FT                                /FTId=VAR_003095.
+FT   HELIX         5     15
+FT   TURN         16     17
+FT   HELIX        20     34
+FT   HELIX        36     41
+FT   HELIX        43     45
+FT   HELIX        51     55
+FT   TURN         56     56
+FT   HELIX        58     75
+FT   TURN         76     77
+FT   HELIX        78     94
+FT   TURN         95     96
+FT   TURN        100    100
+FT   HELIX       101    121
+FT   HELIX       124    142
+FT   TURN        143    144
+SQ   SEQUENCE   146 AA;  15867 MW;  EC9744C9 CRC32;
+     VHLTPEEKSA VTALWGKVNV DEVGGEALGR LLVVYPWTQR FFESFGDLST PDAVMGNPKV
+     KAHGKKVLGA FSDGLAHLDN LKGTFATLSE LHCDKLHVDP ENFRLLGNVL VCVLAHHFGK
+     EFTPPVQAAY QKVVAGVANA LAHKYH
+//
+</pre>
+</td></tr></table><p>
+
 
 <H2>
     Output file format
@@ -286,14 +521,15 @@ for further information on alignment formats.
 <p>
 
 
-Here is the output file from the example run: 
-<P>
-
-<HR>
-<PRE>
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: hba_human.water</h3>
+<table width="90%"><tr><td bgcolor="#DDFFDD">
+<pre>
 ########################################
 # Program:  water
-# Rundate:  Mon May 20 16:35:12 2002
+# Rundate:  Thu Nov 07 14:48:47 2002
+# Align_format: srspair
 # Report_file: hba_human.water
 ########################################
 #=======================================
@@ -310,12 +546,12 @@ Here is the output file from the example run:
 # Similarity:    88/145 (60.7%)
 # Gaps:           8/145 ( 5.5%)
 # Score: 293.5
-#
+# 
 #
 #=======================================
 
 HBA_HUMAN          2 LSPADKTNVKAAWGKVGAHAGEYGAEALERMFLSFPTTKTYFPHF-DLS-     49
-                     |:|.:|:.|.|.||||  :..|.|.|||.|:.:.:|.|:.:|..| |||
+                     |:|.:|:.|.|.||||  :..|.|.|||.|:.:.:|.|:.:|..| ||| 
 HBB_HUMAN          3 LTPEEKSAVTALWGKV--NVDEVGGEALGRLLVVYPWTQRFFESFGDLST     50
 
 HBA_HUMAN         50 ----HGSAQVKGHGKKVADALTNAVAHVDDMPNALSALSDLHAHKLRVDP     95
@@ -328,19 +564,21 @@ HBB_HUMAN        101 ENFRLLGNVLVCVLAHHFGKEFTPPVQAAYQKVVAGVANALAHKY    145
 
 
 #---------------------------------------
-#--------------------------------------- 
-</PRE>
-<HR>
+#---------------------------------------
+</pre>
+</td></tr></table><p>
 
-<P>
+
+<p>
 
 The <b>Identity:</b> is the percentage of identical matches between the two
 sequences over the reported aligned region (including any gaps in the length).
-<P>
+
+<p>
 
 The <b>Similarity:</b> is the percentage of matches between the two
 sequences over the reported aligned region (including any gaps in the length).
-<P>
+
 
 <H2>
     Data files
@@ -476,10 +714,16 @@ None.
    -->
 
 <p>
-<b>matcher</b> is a local alignment program that is less rigorous than <p>water</p> and therefore runs more quickly. It may be useful for database searching.
+
+<b>matcher</b> is a local alignment program that gives as good an
+alignment as <p>water</p> but it uses far less memory.  However,
+<p>water</p> runs twice as fast as <b>matcher</b>. 
 
 <p>
-<b>supermatcher</b> is designed for local alignments of very large sequences and is even less rigorous in its implementation.
+
+<b>supermatcher</b> is designed for local alignments of very large
+sequences.  It gives good results as long as there is not significant
+amounts of insertion or deletion in the alignment. 
 
 
 <p>

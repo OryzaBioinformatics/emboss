@@ -26,36 +26,43 @@ Description
    
 Usage
 
-   Here is a sample session with lindna.
+   Here is a sample session with lindna
+   
 
-% lindna
+% lindna -graph cps 
 Draws linear maps of DNA constructs
-Graph type [x11]:
-Input file [inputfile]: data.linp
-do you want a ruler (Y or N) [Y]:
-type of blocks (enter Open, Filled, or Outline) [Filled]:
+Input file [inputfile]: ../../data/data.linp
+do you want a ruler [Y]: 
+      1 : Open
+      2 : Filled
+      3 : Outline
+type of blocks (enter Open, Filled, or Outline) [Filled]: 
 
+Created lindna.ps
+   
+   Go to the input files for this example
+   Go to the output files for this example
+   
 Command line arguments
 
    Mandatory qualifiers:
    -graphout           graph      Graph type
    -inputfile          infile     input file containing mapping data
-   -ruler              string     do you want a ruler (Y or N)
-   -blocktype          string     type of blocks: Open, Filled, or Outline.
+   -[no]ruler          boolean    do you want a ruler
+   -blocktype          selection  type of blocks: Open, Filled, or Outline.
                                   Option 'Outline' draws filled blocks
                                   surrounded by a black border
 
    Optional qualifiers:
-   -intersymbol        string     type of junctions between blocks (enter
-                                  Straight, Up, Down, or No)
-   -intercolor         integer    color of junctions between blocks (enter a
-                                  color number)
-   -interticks         string     do you want horizontal junctions between
-                                  ticks (Y or N)
+   -intersymbol        selection  type of junctions between blocks
+   -intercolour        integer    colour of junctions between blocks (enter a
+                                  colour number)
+   -interticks         boolean    do you want horizontal junctions between
+                                  ticks
    -gapsize            integer    interval between ticks in the ruler (enter
                                   an integer)
-   -ticklines          string     do you want vertical lines at the ruler's
-                                  ticks (Y or N)
+   -ticklines          boolean    do you want vertical lines at the ruler's
+                                  ticks
    -textheight         float      height of text. Enter a number <1 or >1 to
                                   decrease or increase the size, respectively
    -textlength         float      length of text. Enter a number <1 or >1 to
@@ -92,21 +99,21 @@ Command line arguments
    x11, tektronics, tekt, tek4107t, tek, none, null, text, data, xterm,
    png EMBOSS_GRAPHICS value, or x11
    -inputfile input file containing mapping data Input file inputfile
-   -ruler do you want a ruler (Y or N) Any string is accepted Y
+   -[no]ruler do you want a ruler Boolean value Yes/No Yes
    -blocktype type of blocks: Open, Filled, or Outline. Option 'Outline'
-   draws filled blocks surrounded by a black border Any string is
-   accepted Filled
+   draws filled blocks surrounded by a black border Choose from selection
+   list of values Filled
    Optional qualifiers Allowed values Default
-   -intersymbol type of junctions between blocks (enter Straight, Up,
-   Down, or No) Any string is accepted Straight
-   -intercolor color of junctions between blocks (enter a color number)
-   Integer from 0 to 15 1
-   -interticks do you want horizontal junctions between ticks (Y or N)
-   Any string is accepted N
+   -intersymbol type of junctions between blocks Choose from selection
+   list of values Straight
+   -intercolour colour of junctions between blocks (enter a colour
+   number) Integer from 0 to 15 1
+   -interticks do you want horizontal junctions between ticks Boolean
+   value Yes/No No
    -gapsize interval between ticks in the ruler (enter an integer)
    Integer 0 or more 500
-   -ticklines do you want vertical lines at the ruler's ticks (Y or N)
-   Any string is accepted N
+   -ticklines do you want vertical lines at the ruler's ticks Boolean
+   value Yes/No No
    -textheight height of text. Enter a number <1 or >1 to decrease or
    increase the size, respectively Any numeric value 1
    -textlength length of text. Enter a number <1 or >1 to decrease or
@@ -130,9 +137,10 @@ Command line arguments
    
 Input file format
 
-   Here is the input file data.linp for the example run:
-     _________________________________________________________________
-   
+  Input files for usage example
+  
+  File: ../../data/data.linp
+  
 Start   1001
 End     4270
 
@@ -169,8 +177,6 @@ label
 Range   3322    3497    >       <       5       V
 MER13
 endlabel
-endgroup
-     _________________________________________________________________
    
    Blank lines in the input file are ignored.
    
@@ -246,7 +252,11 @@ Output file format
 
    Output is to the specified graphics device.
    
-   Click here to see the output of the above example.
+  Output files for usage example
+  
+  Graphics File: lindna.ps
+  
+   [lindna results]
    
 Data files
 
@@ -291,6 +301,7 @@ See also
    showdb Displays information on the currently available databases
    showfeat Show features of a sequence
    showseq Display a sequence with features, translation etc
+   sixpack Display a DNA sequence with 6-frame translation and ORFs
    textsearch Search sequence documentation text. SRS and Entrez are
    faster!
    

@@ -23,29 +23,77 @@ Description
    
 Usage
 
-   Display information on a sequence
+   Here is a sample session with infoseq
+   
+   Display information on a sequence:
+   
 
-% infoseq embl:paamir
+% infoseq tembl:paamir 
+Displays some simple information about sequences
 
-   Don't display the USA of a sequence
+# USA             Name        Accession Type Length      %GC   Description
+tembl-id:PAAMIR   PAAMIR        X13776  N    2167        66.54 Pseudomonas aeru
+ginosa amiC and amiR gene for aliphatic amidase regulation
+   
+   Go to the input files for this example
+   
+   Example 2
+   
+   Don't display the USA of a sequence:
+   
 
-% infoseq embl:paamir -nousa
+% infoseq tembl:paamir -nousa 
+Displays some simple information about sequences
 
-   Display only the name and length of a sequence
+# Name        Accession Type Length      %GC   Description
+PAAMIR        X13776    N    2167        66.54 Pseudomonas aeruginosa amiC and
+amiR gene for aliphatic amidase regulation
+   
+   Example 3
+   
+   Display only the name and length of a sequence:
+   
 
-% infoseq embl:paamir -only -name -length
+% infoseq tembl:paamir -only -name -length 
+Displays some simple information about sequences
 
-   Display only the description of a sequence
+PAAMIR        2167
+   
+   Example 4
+   
+   Display only the description of a sequence:
+   
 
-% infoseq embl:paamir -only -desc
+% infoseq tembl:paamir -only -desc 
+Displays some simple information about sequences
 
-   Display the type of a sequence
+Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase regulation
+   
+   Example 5
+   
+   Display the type of a sequence:
+   
 
-% infoseq embl:paamir -only -type
+% infoseq tembl:paamir -only -type 
+Displays some simple information about sequences
 
-   Display information formatted with HTML
+N
+   
+   Example 6
+   
+   Display information formatted with HTML:
+   
 
-% infoseq embl:paamir -html
+% infoseq tembl:paamir -html 
+Displays some simple information about sequences
+
+
+ USA Name Accession Type Length %GC Description
+
+ tembl-id:PAAMIR PAAMIR X13776 N 2167 66.54  Pseudomonas aeruginosa amiC and am
+iR gene for aliphatic amidase regulation
+
+
 
 Command line arguments
 
@@ -90,52 +138,187 @@ Command line arguments
    Optional qualifiers Allowed values Default
    -outfile If you enter the name of a file here then this program will
    write the sequence details into that file. Output file stdout
-   -html Format output as an HTML table Yes/No No
+   -html Format output as an HTML table Boolean value Yes/No No
    Advanced qualifiers Allowed values Default
    -only This is a way of shortening the command line if you only want a
    few things to be displayed. Instead of specifying: '-nohead -noname
    -noacc -notype -nopgc -nodesc' to get only the length output, you can
-   specify '-only -length' Yes/No No
-   -heading Display column headings Yes/No @(!$(only))
-   -usa Display the USA of the sequence Yes/No @(!$(only))
-   -name Display 'name' column Yes/No @(!$(only))
-   -accession Display 'accession' column Yes/No @(!$(only))
-   -gi Display 'GI' column Yes/No No
-   -version Display 'version' column Yes/No No
-   -type Display 'type' column Yes/No @(!$(only))
-   -length Display 'length' column Yes/No @(!$(only))
-   -pgc Display 'percent GC content' column Yes/No @(!$(only))
-   -description Display 'description' column Yes/No @(!$(only))
+   specify '-only -length' Boolean value Yes/No No
+   -heading Display column headings Boolean value Yes/No @(!$(only))
+   -usa Display the USA of the sequence Boolean value Yes/No @(!$(only))
+   -name Display 'name' column Boolean value Yes/No @(!$(only))
+   -accession Display 'accession' column Boolean value Yes/No @(!$(only))
+   -gi Display 'GI' column Boolean value Yes/No No
+   -version Display 'version' column Boolean value Yes/No No
+   -type Display 'type' column Boolean value Yes/No @(!$(only))
+   -length Display 'length' column Boolean value Yes/No @(!$(only))
+   -pgc Display 'percent GC content' column Boolean value Yes/No
+   @(!$(only))
+   -description Display 'description' column Boolean value Yes/No
+   @(!$(only))
    
 Input file format
 
-   Any sequence(s).
+   infoseq reads any sequence USAs.
+   
+  Input files for usage example
+  
+   'tembl:paamir' is a sequence entry in the example nucleic acid
+   database 'tembl'
+   
+  Database entry: tembl:paamir
+  
+ID   PAAMIR     standard; DNA; PRO; 2167 BP.
+XX
+AC   X13776; M43175;
+XX
+SV   X13776.1
+XX
+DT   19-APR-1989 (Rel. 19, Created)
+DT   17-FEB-1997 (Rel. 50, Last updated, Version 22)
+XX
+DE   Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase regulation
+XX
+KW   aliphatic amidase regulator; amiC gene; amiR gene.
+XX
+OS   Pseudomonas aeruginosa
+OC   Bacteria; Proteobacteria; gamma subdivision; Pseudomonadaceae; Pseudomonas
+.
+XX
+RN   [1]
+RP   1167-2167
+RA   Rice P.M.;
+RT   ;
+RL   Submitted (16-DEC-1988) to the EMBL/GenBank/DDBJ databases.
+RL   Rice P.M., EMBL, Postfach 10-2209, Meyerhofstrasse 1, 6900 Heidelberg, FRG
+.
+XX
+RN   [2]
+RP   1167-2167
+RX   MEDLINE; 89211409.
+RA   Lowe N., Rice P.M., Drew R.E.;
+RT   "Nucleotide sequence of the aliphatic amidase regulator gene of Pseudomona
+s
+RT   aeruginosa";
+RL   FEBS Lett. 246:39-43(1989).
+XX
+RN   [3]
+RP   1-1292
+RX   MEDLINE; 91317707.
+RA   Wilson S., Drew R.;
+RT   "Cloning and DNA seqence of amiC, a new gene regulating expression of the
+RT   Pseudomonas aeruginosa aliphatic amidase, and purification of the amiC
+RT   product.";
+RL   J. Bacteriol. 173:4914-4921(1991).
+XX
+RN   [4]
+RP   1-2167
+RA   Rice P.M.;
+RT   ;
+RL   Submitted (04-SEP-1991) to the EMBL/GenBank/DDBJ databases.
+RL   Rice P.M., EMBL, Postfach 10-2209, Meyerhofstrasse 1, 6900 Heidelberg, FRG
+.
+XX
+DR   SWISS-PROT; P10932; AMIR_PSEAE.
+DR   SWISS-PROT; P27017; AMIC_PSEAE.
+DR   SWISS-PROT; Q51417; AMIS_PSEAE.
+
+
+  [Part of this file has been deleted for brevity]
+
+FT                   phenotype"
+FT                   /replace=""
+FT                   /gene="amiC"
+FT   misc_feature    1
+FT                   /note="last base of an XhoI site"
+FT   misc_feature    648..653
+FT                   /note="end of 658bp XhoI fragment, deletion in  pSW3 cause
+s
+FT                   constitutive expression of amiE"
+FT   conflict        1281
+FT                   /replace="g"
+FT                   /citation=[3]
+XX
+SQ   Sequence 2167 BP; 363 A; 712 C; 730 G; 362 T; 0 other;
+     ggtaccgctg gccgagcatc tgctcgatca ccaccagccg ggcgacggga actgcacgat        6
+0
+     ctacctggcg agcctggagc acgagcgggt tcgcttcgta cggcgctgag cgacagtcac       12
+0
+     aggagaggaa acggatggga tcgcaccagg agcggccgct gatcggcctg ctgttctccg       18
+0
+     aaaccggcgt caccgccgat atcgagcgct cgcacgcgta tggcgcattg ctcgcggtcg       24
+0
+     agcaactgaa ccgcgagggc ggcgtcggcg gtcgcccgat cgaaacgctg tcccaggacc       30
+0
+     ccggcggcga cccggaccgc tatcggctgt gcgccgagga cttcattcgc aaccgggggg       36
+0
+     tacggttcct cgtgggctgc tacatgtcgc acacgcgcaa ggcggtgatg ccggtggtcg       42
+0
+     agcgcgccga cgcgctgctc tgctacccga ccccctacga gggcttcgag tattcgccga       48
+0
+     acatcgtcta cggcggtccg gcgccgaacc agaacagtgc gccgctggcg gcgtacctga       54
+0
+     ttcgccacta cggcgagcgg gtggtgttca tcggctcgga ctacatctat ccgcgggaaa       60
+0
+     gcaaccatgt gatgcgccac ctgtatcgcc agcacggcgg cacggtgctc gaggaaatct       66
+0
+     acattccgct gtatccctcc gacgacgact tgcagcgcgc cgtcgagcgc atctaccagg       72
+0
+     cgcgcgccga cgtggtcttc tccaccgtgg tgggcaccgg caccgccgag ctgtatcgcg       78
+0
+     ccatcgcccg tcgctacggc gacggcaggc ggccgccgat cgccagcctg accaccagcg       84
+0
+     aggcggaggt ggcgaagatg gagagtgacg tggcagaggg gcaggtggtg gtcgcgcctt       90
+0
+     acttctccag catcgatacg cccgccagcc gggccttcgt ccaggcctgc catggtttct       96
+0
+     tcccggagaa cgcgaccatc accgcctggg ccgaggcggc ctactggcag accttgttgc      102
+0
+     tcggccgcgc cgcgcaggcc gcaggcaact ggcgggtgga agacgtgcag cggcacctgt      108
+0
+     acgacatcga catcgacgcg ccacaggggc cggtccgggt ggagcgccag aacaaccaca      114
+0
+     gccgcctgtc ttcgcgcatc gcggaaatcg atgcgcgcgg cgtgttccag gtccgctggc      120
+0
+     agtcgcccga accgattcgc cccgaccctt atgtcgtcgt gcataacctc gacgactggt      126
+0
+     ccgccagcat gggcggggga ccgctcccat gagcgccaac tcgctgctcg gcagcctgcg      132
+0
+     cgagttgcag gtgctggtcc tcaacccgcc gggggaggtc agcgacgccc tggtcttgca      138
+0
+     gctgatccgc atcggttgtt cggtgcgcca gtgctggccg ccgccggaag ccttcgacgt      144
+0
+     gccggtggac gtggtcttca ccagcatttt ccagaatggc caccacgacg agatcgctgc      150
+0
+     gctgctcgcc gccgggactc cgcgcactac cctggtggcg ctggtggagt acgaaagccc      156
+0
+     cgcggtgctc tcgcagatca tcgagctgga gtgccacggc gtgatcaccc agccgctcga      162
+0
+     tgcccaccgg gtgctgcctg tgctggtatc ggcgcggcgc atcagcgagg aaatggcgaa      168
+0
+     gctgaagcag aagaccgagc agctccagga ccgcatcgcc ggccaggccc ggatcaacca      174
+0
+     ggccaaggtg ttgctgatgc agcgccatgg ctgggacgag cgcgaggcgc accagcacct      180
+0
+     gtcgcgggaa gcgatgaagc ggcgcgagcc gatcctgaag atcgctcagg agttgctggg      186
+0
+     aaacgagccg tccgcctgag cgatccgggc cgaccagaac aataacaaga ggggtatcgt      192
+0
+     catcatgctg ggactggttc tgctgtacgt tggcgcggtg ctgtttctca atgccgtctg      198
+0
+     gttgctgggc aagatcagcg gtcgggaggt ggcggtgatc aacttcctgg tcggcgtgct      204
+0
+     gagcgcctgc gtcgcgttct acctgatctt ttccgcagca gccgggcagg gctcgctgaa      210
+0
+     ggccggagcg ctgaccctgc tattcgcttt tacctatctg tgggtggccg ccaaccagtt      216
+0
+     cctcgag                                                                216
+7
+//
    
 Output file format
 
    The output is displayed on the screen (stdout) by default.
-   
-   A typical output file is:
-     _________________________________________________________________
-   
-# USA             Name        Accession Type Length     Description
-tsw-id:5H1D_FUGRU 5H1D_FUGRU    P79748  P    379        5-HYDROXYTRYPTAMINE 1D
-RECEPTOR (5-HT-1D) (SEROTONIN RECEPTOR).
-tsw-id:ACT1_FUGRU ACT1_FUGRU    P53484  P    375        ACTIN, CYTOPLASMIC 1 (B
-ETA-ACTIN 1).
-tsw-id:ACT2_FUGRU ACT2_FUGRU    P53485  P    375        ACTIN, CYTOPLASMIC 2 (B
-ETA-ACTIN 2).
-tsw-id:ACT3_FUGRU ACT3_FUGRU    P53486  P    375        ACTIN, CYTOPLASMIC 3 (B
-ETA-ACTIN 3).
-tsw-id:ACTC_FUGRU ACTC_FUGRU    P53480  P    377        ACTIN, ALPHA CARDIAC.
-tsw-id:ACTS_FUGRU ACTS_FUGRU    P53481  P    377        ACTIN, ALPHA SKELETAL M
-USCLE 1.
-tsw-id:ACTT_FUGRU ACTT_FUGRU    P53482  P    377        ACTIN, ALPHA SKELETAL M
-USCLE 2.
-tsw-id:ACTX_FUGRU ACTX_FUGRU    P53483  P    376        ACTIN, ALPHA ANOMALOUS.
-tsw-id:ARF3_HUMAN ARF3_HUMAN    P16587  P    180        ADP-RIBOSYLATION FACTOR
- 3.
-     _________________________________________________________________
    
    The first non-blank line is the heading. This is followed by one line
    per sequence containing the following columns of data separated by one

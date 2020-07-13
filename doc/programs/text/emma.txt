@@ -494,68 +494,77 @@ Changes to the phylogentic tree calculations and some hints
    
 Usage
 
-   Here is an example session with emma.
+   Here is a sample session with emma
+   
 
-% emma
-Input sequence: globins.fasta
-Output sequence [hbahum.aln]:
-Output file [hbahum.dnd]:
-..clustalw17 -infile=5345A -outfile=5345B -align -type=protein ...
+% emma 
+Multiple alignment program - interface to ClustalW program
+Input sequence(s): ../../data/globins.fasta
+Output sequence [hbb_human.aln]: 
+Output file [hbb_human.dnd]: 
+..clustalw -infile=16255A -outfile=16255B -align -type=protein -output=gcg -pwm
+atrix=blosum -pwgapopen=10.000 -pwgapext=0.100 -newtree=16255C -matrix=blosum -
+gapopen=10.000 -gapext=5.000 -gapdist=8 -hgapresidues=GPSNDQEKR -maxdiv=30..
 
 
 
 
- CLUSTAL W (1.74) Multiple Sequence Alignments
+
+ CLUSTAL W (1.82) Multiple Sequence Alignments
 
 
 
 Sequence type explicitly set to Protein
 Sequence format is Pearson
-Sequence 1: hbahum          141 aa
-Sequence 2: hbbhum          146 aa
-Sequence 3: hbghum          146 aa
-Sequence 4: hbhagf          148 aa
-Sequence 5: hbrlam          149 aa
-Sequence 6: mycrhi          151 aa
-Sequence 7: myohum          153 aa
+Sequence 1: HBB_HUMAN       146 aa
+Sequence 2: HBB_HORSE       146 aa
+Sequence 3: HBA_HUMAN       141 aa
+Sequence 4: HBA_HORSE       141 aa
+Sequence 5: MYG_PHYCA       153 aa
+Sequence 6: GLB5_PETMA      149 aa
+Sequence 7: LGB2_LUPLU      153 aa
 Start of Pairwise alignments
 Aligning...
-Sequences (1:2) Aligned. Score:  41
-Sequences (1:3) Aligned. Score:  39
-Sequences (1:4) Aligned. Score:  21
-Sequences (1:5) Aligned. Score:  27
-Sequences (1:6) Aligned. Score:  13
-Sequences (1:7) Aligned. Score:  26
-Sequences (2:3) Aligned. Score:  73
-Sequences (2:4) Aligned. Score:  19
-Sequences (2:5) Aligned. Score:  19
-Sequences (2:6) Aligned. Score:  15
-Sequences (2:7) Aligned. Score:  24
-Sequences (3:4) Aligned. Score:  21
-Sequences (3:5) Aligned. Score:  21
-Sequences (3:6) Aligned. Score:  15
-Sequences (3:7) Aligned. Score:  23
-Sequences (4:5) Aligned. Score:  41
-Sequences (4:6) Aligned. Score:  12
-Sequences (4:7) Aligned. Score:  16
-Sequences (5:6) Aligned. Score:  17
-Sequences (5:7) Aligned. Score:  18
+Sequences (1:2) Aligned. Score:  83
+Sequences (1:3) Aligned. Score:  43
+Sequences (1:4) Aligned. Score:  42
+Sequences (1:5) Aligned. Score:  24
+Sequences (1:6) Aligned. Score:  21
+Sequences (1:7) Aligned. Score:  14
+Sequences (2:3) Aligned. Score:  41
+Sequences (2:4) Aligned. Score:  43
+Sequences (2:5) Aligned. Score:  24
+Sequences (2:6) Aligned. Score:  19
+Sequences (2:7) Aligned. Score:  15
+Sequences (3:4) Aligned. Score:  87
+Sequences (3:5) Aligned. Score:  26
+Sequences (3:6) Aligned. Score:  29
+Sequences (3:7) Aligned. Score:  16
+Sequences (4:5) Aligned. Score:  26
+Sequences (4:6) Aligned. Score:  27
+Sequences (4:7) Aligned. Score:  12
+Sequences (5:6) Aligned. Score:  21
+Sequences (5:7) Aligned. Score:  7
 Sequences (6:7) Aligned. Score:  11
-Guide tree        file created:   [5345C]
+Guide tree        file created:   [16255C]
 Start of Multiple Alignment
 There are 6 groups
 Aligning...
-Group 1: Sequences:   2      Score:883
-Group 2: Sequences:   2      Score:2344
-Group 3: Sequences:   3      Score:934
+Group 1: Sequences:   2      Score:2194
+Group 2: Sequences:   2      Score:2165
+Group 3: Sequences:   4      Score:960
 Group 4:                     Delayed
-Group 5: Sequences:   5      Score:950
+Group 5:                     Delayed
 Group 6:                     Delayed
-Sequence:7     Score:1046
-Sequence:6     Score:986
-Alignment Score 1746
-GCG-Alignment file created      [5345B]
-
+Sequence:5     Score:865
+Sequence:6     Score:797
+Sequence:7     Score:1044
+Alignment Score 4164
+GCG-Alignment file created      [16255B]
+   
+   Go to the input files for this example
+   Go to the output files for this example
+   
 Command line arguments
 
    Mandatory qualifiers:
@@ -766,11 +775,12 @@ Command line arguments
    (Parameter 3) The dendogram output filename Output file
    <sequence>.emma
    Optional qualifiers Allowed values Default
-   -onlydend only produce dendrogram file Yes/No No
+   -onlydend only produce dendrogram file Boolean value Yes/No No
    -dend select if you want to do alignment using an old dendrogram
-   Yes/No No
+   Boolean value Yes/No No
    -dendfile name of old dendrogram file Any string is accepted NULL
-   -insist Insist that the sequence type is changed to protein Yes/No No
+   -insist Insist that the sequence type is changed to protein Boolean
+   value Yes/No No
    -slowfast A distance is calculated between every pair of sequences and
    these are used to construct the dendrogram which guides the final
    multiple alignment. The scores are calculated from separate pairwise
@@ -839,7 +849,7 @@ Command line arguments
    diagonals that will be used. Decrease for speed; increase for
    sensitivity. Positive integer 5 for protein, 4 for nucleic
    -nopercent Fast pairwise alignment: similarity scores: suppresses
-   percentage score Yes/No No
+   percentage score Boolean value Yes/No No
    -matrix This gives a menu where you are offered a choice of weight
    matrices. The default for proteins is the PAM series derived by Gonnet
    and colleagues. Note, a series is used! The actual matrix that is used
@@ -891,7 +901,8 @@ Command line arguments
    gaps for the purposes of avoiding gaps that are too close (set by 'gap
    separation distance'). If you turn this off, end gaps will be ignored
    for this purpose. This is useful when you wish to align fragments
-   where the end gaps are not biologically meaningful. Yes/No Yes
+   where the end gaps are not biologically meaningful. Boolean value
+   Yes/No Yes
    -gapdist 'Gap separation distance' tries to decrease the chances of
    gaps being too close to each other. Gaps that are less than this
    distance apart are penalised more than other gaps. This does not
@@ -901,7 +912,7 @@ Command line arguments
    penalties that reduce or increase the gap opening penalties at each
    position in the alignment or sequence. As an example, positions that
    are rich in glycine are more likely to have an adjacent gap than
-   positions that are rich in valine. Yes/No No
+   positions that are rich in valine. Boolean value Yes/No No
    -hgapres This is a set of the residues 'considered' to be hydrophilic.
    It is used when introducing Hydrophilic gap penalties. Any string is
    accepted GPSNDQEKR
@@ -909,7 +920,7 @@ Command line arguments
    of a gap within a run (5 or more residues) of hydrophilic amino acids;
    these are likely to be loop or random coil regions where gaps are more
    common. The residues that are 'considered' to be hydrophilic are set
-   by '-hgapres'. Yes/No No
+   by '-hgapres'. Boolean value Yes/No No
    -maxdiv This switch, delays the alignment of the most distantly
    related sequences until after the most closely related sequences have
    been aligned. The setting shows the percent identity level required to
@@ -917,12 +928,45 @@ Command line arguments
    than this level to any other sequences will be aligned later. Integer
    from 0 to 100 30
    Advanced qualifiers Allowed values Default
-   -prot Do not change this value Yes/No @($(insist) ?
+   -prot Do not change this value Boolean value Yes/No @($(insist) ?
    @(!$(inseqs.protein)):$(inseqs.protein))
    
 Input file format
 
    The input is two or more sequences.
+   
+  Input files for usage example
+  
+  File: ../../data/globins.fasta
+  
+>HBB_HUMAN Sw:Hbb_Human => HBB_HUMAN
+VHLTPEEKSAVTALWGKVNVDEVGGEALGRLLVVYPWTQRFFESFGDLSTPDAVMGNPKV
+KAHGKKVLGAFSDGLAHLDNLKGTFATLSELHCDKLHVDPENFRLLGNVLVCVLAHHFGK
+EFTPPVQAAYQKVVAGVANALAHKYH
+>HBB_HORSE Sw:Hbb_Horse => HBB_HORSE
+VQLSGEEKAAVLALWDKVNEEEVGGEALGRLLVVYPWTQRFFDSFGDLSNPGAVMGNPKV
+KAHGKKVLHSFGEGVHHLDNLKGTFAALSELHCDKLHVDPENFRLLGNVLVVVLARHFGK
+DFTPELQASYQKVVAGVANALAHKYH
+>HBA_HUMAN Sw:Hba_Human => HBA_HUMAN
+VLSPADKTNVKAAWGKVGAHAGEYGAEALERMFLSFPTTKTYFPHFDLSHGSAQVKGHGK
+KVADALTNAVAHVDDMPNALSALSDLHAHKLRVDPVNFKLLSHCLLVTLAAHLPAEFTPA
+VHASLDKFLASVSTVLTSKYR
+>HBA_HORSE Sw:Hba_Horse => HBA_HORSE
+VLSAADKTNVKAAWSKVGGHAGEYGAEALERMFLGFPTTKTYFPHFDLSHGSAQVKAHGK
+KVGDALTLAVGHLDDLPGALSNLSDLHAHKLRVDPVNFKLLSHCLLSTLAVHLPNDFTPA
+VHASLDKFLSSVSTVLTSKYR
+>MYG_PHYCA Sw:Myg_Phyca => MYG_PHYCA
+VLSEGEWQLVLHVWAKVEADVAGHGQDILIRLFKSHPETLEKFDRFKHLKTEAEMKASED
+LKKHGVTVLTALGAILKKKGHHEAELKPLAQSHATKHKIPIKYLEFISEAIIHVLHSRHP
+GDFGADAQGAMNKALELFRKDIAAKYKELGYQG
+>GLB5_PETMA Sw:Glb5_Petma => GLB5_PETMA
+PIVDTGSVAPLSAAEKTKIRSAWAPVYSTYETSGVDILVKFFTSTPAAQEFFPKFKGLTT
+ADQLKKSADVRWHAERIINAVNDAVASMDDTEKMSMKLRDLSGKHAKSFQVDPQYFKVLA
+AVIADTVAAGDAGFEKLMSMICILLRSAY
+>LGB2_LUPLU Sw:Lgb2_Luplu => LGB2_LUPLU
+GALTESQAALVKSSWEEFNANIPKHTHRFFILVLEIAPAAKDLFSFLKGTSEVPQNNPEL
+QAHAGKVFKLVYEAAIQLQVTGVVVTDATLKNLGSVHVSKGVADAHFPVVKEAILKTIKE
+VVGAKWSEELNSAWTIAYDELAIVIKKEMNDAA
    
    EMBOSS programs do not allow you to simply type the names of two or
    more files or database entries - they try to interpret this as all one
@@ -1048,10 +1092,62 @@ sw:opsd_c*
    
 Output file format
 
+  Output files for usage example
+  
+  File: hbb_human.aln
+  
+>HBB_HUMAN
+--------VHLTPEEKSAVTALWGKVN--VDEVGGEALGRLLVVYPWTQRFFESFGDLST
+PDAVMGNPKVKAHGKKVLGAFSDGLAHLDNLKGTFATLSELHCDKLHVDP----ENFRLL
+GNVLVCVLAHHFGKEFTPPVQAAYQKVVAGVANALAHKYH------
+>HBB_HORSE
+--------VQLSGEEKAAVLALWDKVN--EEEVGGEALGRLLVVYPWTQRFFDSFGDLSN
+PGAVMGNPKVKAHGKKVLHSFGEGVHHLDNLKGTFAALSELHCDKLHVDP----ENFRLL
+GNVLVVVLARHFGKDFTPELQASYQKVVAGVANALAHKYH------
+>HBA_HUMAN
+---------VLSPADKTNVKAAWGKVGAHAGEYGAEALERMFLSFPTTKTYFPHF-----
+-DLSHGSAQVKGHGKKVADALTNAVAHVDDMPNALSALSDLHAHKLRVDP----VNFKLL
+SHCLLVTLAAHLPAEFTPAVHASLDKFLASVSTVLTSKYR------
+>HBA_HORSE
+---------VLSAADKTNVKAAWSKVGGHAGEYGAEALERMFLGFPTTKTYFPHF-----
+-DLSHGSAQVKAHGKKVGDALTLAVGHLDDLPGALSNLSDLHAHKLRVDP----VNFKLL
+SHCLLSTLAVHLPNDFTPAVHASLDKFLSSVSTVLTSKYR------
+>MYG_PHYCA
+---------VLSEGEWQLVLHVWAKVEADVAGHGQDILIRLFKSHPETLEKFDRFKHLKT
+EAEMKASEDLKKHGVTVLTALGAILKKKGHHEAELKPLAQSHATKHKIPI----KYLEFI
+SEAIIHVLHSRHPGDFGADAQGAMNKALELFRKDIAAKYKELGYQG
+>GLB5_PETMA
+PIVDTGSVAPLSAAEKTKIRSAWAPVYSTYETSGVDILVKFFTSTPAAQEFFPKFKGLTT
+ADQLKKSADVRWHAERIINAVNDAVASMDDTEKMSMKLRDLSGKHAKSFQ----VDPQYF
+KVLAAVIADTVAAGDAGFEKLMSMICILLRSAY-------------
+>LGB2_LUPLU
+--------GALTESQAALVKSSWEEFNANIPKHTHRFFILVLEIAPAAKDLFSFLKG--T
+SEVPQNNPELQAHAGKVFKLVYEAAIQLQVTGVVVTDATLKNLGSVHVSKGVADAHFPVV
+KEAILKTIKEVVGAKWSEELNSAWTIAYDELAIVIKKEMNDAA---
+   
+  File: hbb_human.dnd
+  
+(
+(
+(
+(
+HBB_HUMAN:0.08080,
+HBB_HORSE:0.08359)
+:0.21952,
+(
+HBA_HUMAN:0.05452,
+HBA_HORSE:0.06605)
+:0.21070)
+:0.06034,
+MYG_PHYCA:0.39882)
+:0.01490,
+GLB5_PETMA:0.38267,
+LGB2_LUPLU:0.50324);
+   
   Sequences
   
    emma writes the aligned sequences and a dendrogram file showing how
-   the sequences were clusterd during the progressive alignments.
+   the sequences were clustered during the progressive alignments.
    
    The clustalw output sequences are reformatted into the default EMBOSS
    output format instead of being left as Clustal-format '.aln' files.

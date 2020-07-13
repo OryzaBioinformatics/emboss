@@ -22,15 +22,20 @@ Description
    
 Usage
 
-   Here is a sample session with union, the file 'cds.list' contains a
-   list of the regions making up the coding sequence of the sequence
-   'embl:hsfau':
+   Here is a sample session with union
+   
+   the file 'cds.list' contains a list of the regions making up the
+   coding sequence of 'embl:hsfau':
+   
 
-% union
+% union 
 Reads sequence fragments and builds one sequence
-Input sequence(s): @cds.list
-Output sequence [hsfau1.fasta]: fau.cds
-
+Input sequence(s): @../../data/cds.list
+Output sequence [hsfau1.fasta]: 
+   
+   Go to the input files for this example
+   Go to the output files for this example
+   
 Command line arguments
 
    Mandatory qualifiers:
@@ -58,21 +63,36 @@ Command line arguments
 Input file format
 
    The input can be any set of sequences in a file of multiple sequence
-   entries or a List file. The sequences are concatenated in the order in
-   which they appear in the file.
+   entries or in a List file. The sequences are concatenated in the order
+   in which they appear in the file.
    
-   The input used in the above example is:
+  Input files for usage example
+  
+  File: ../../data/cds.list
+  
+tembl-id:HSFAU1[782:856]
+tembl-id:HSFAU1[951:1095]
+tembl-id:HSFAU1[1557:1612]
+tembl-id:HSFAU1[1787:1912]
    
-em-id:HSFAU1[782:856]
-em-id:HSFAU1[951:1095]
-em-id:HSFAU1[1557:1612]
-em-id:HSFAU1[1787:1912]
-
    You may find the program yank useful for creating List files.
    
 Output file format
 
-   The result if a normal sequence file containnig a single sequence
+  Output files for usage example
+  
+  File: hsfau1.fasta
+  
+>HSFAU1 X65921.1 H.sapiens fau 1 gene
+atgcagctctttgtccgcgcccaggagctacacaccttcgaggtgaccggccaggaaacg
+gtcgcccagatcaaggctcatgtagcctcactggagggcattgccccggaagatcaagtc
+gtgctcctggcaggcgcgcccctggaggatgaggccactctgggccagtgcggggtggag
+gccctgactaccctggaagtagcaggccgcatgcttggaggtaaagtccatggttccctg
+gcccgtgctggaaaagtgagaggtcagactcctaaggtggccaaacaggagaagaagaag
+aagaagacaggtcgggctaagcggcggatgcagtacaaccggcgctttgtcaacgttgtg
+cccacctttggcaagaagaagggccccaatgccaactcttaa
+   
+   The result is a normal sequence file containing a single sequence
    resulting from the concatenation of the input sequences.
    
 Data files
@@ -126,7 +146,6 @@ See also
    seqretsplit  Reads and writes (returns) sequences in individual files
    skipseq      Reads and writes (returns) sequences, skipping the first few
    splitter     Split a sequence into (overlapping) smaller sequences
-   swissparse   Retrieves sequences from swissprot using keyword search
    trimest      Trim poly-A tails off EST sequences
    trimseq      Trim ambiguous bits off the ends of sequences
    vectorstrip  Strips out DNA between a pair of vector sequences

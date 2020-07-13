@@ -45,13 +45,17 @@ Description
    
 Usage
 
-   Here is a sample session with pepstats.
+   Here is a sample session with pepstats
    
-% pepstats
-Protein statistics
-Input sequence: sw:laci_ecoli
-Output file [laci_ecoli.pepstats]:
 
+% pepstats 
+Protein statistics
+Input sequence: tsw:laci_ecoli
+Output file [laci_ecoli.pepstats]: 
+   
+   Go to the input files for this example
+   Go to the output files for this example
+   
 Command line arguments
 
    Mandatory qualifiers:
@@ -76,19 +80,134 @@ Command line arguments
    Optional qualifiers Allowed values Default
    (none)
    Advanced qualifiers Allowed values Default
-   -[no]termini Include charge at N and C terminus Yes/No Yes
+   -[no]termini Include charge at N and C terminus Boolean value Yes/No
+   Yes
    -aadata Molecular weight data for amino acids Any string is accepted
    Eamino.dat
    
 Input file format
 
-   Normal protein sequence USA.
+   pepstats reads a normal protein sequence USA.
+   
+  Input files for usage example
+  
+   'tsw:laci_ecoli' is a sequence entry in the example protein database
+   'tsw'
+   
+  Database entry: tsw:laci_ecoli
+  
+ID   LACI_ECOLI     STANDARD;      PRT;   360 AA.
+AC   P03023; P71309; Q47338; O09196;
+DT   21-JUL-1986 (Rel. 01, Created)
+DT   01-NOV-1997 (Rel. 35, Last sequence update)
+DT   15-DEC-1998 (Rel. 37, Last annotation update)
+DE   LACTOSE OPERON REPRESSOR.
+GN   LACI.
+OS   Escherichia coli.
+OC   Bacteria; Proteobacteria; gamma subdivision; Enterobacteriaceae;
+OC   Escherichia.
+RN   [1]
+RP   SEQUENCE FROM N.A.
+RX   MEDLINE; 78246991.
+RA   FARABAUGH P.J.;
+RT   "Sequence of the lacI gene.";
+RL   Nature 274:765-769(1978).
+RN   [2]
+RP   SEQUENCE FROM N.A.
+RC   STRAIN=K12 / MG1655;
+RX   MEDLINE; 97426617.
+RA   BLATTNER F.R., PLUNKETT G. III, BLOCH C.A., PERNA N.T., BURLAND V.,
+RA   RILEY M., COLLADO-VIDES J., GLASNER F.D., RODE C.K., MAYHEW G.F.,
+RA   GREGOR J., DAVIS N.W., KIRKPATRICK H.A., GOEDEN M.A., ROSE D.J.,
+RA   MAU B., SHAO Y.;
+RT   "The complete genome sequence of Escherichia coli K-12.";
+RL   Science 277:1453-1474(1997).
+RN   [3]
+RP   SEQUENCE FROM N.A.
+RC   STRAIN=K12 / MG1655;
+RA   DUNCAN M., ALLEN E., ARAUJO R., APARICIO A.M., CHUNG E., DAVIS K.,
+RA   FEDERSPIEL N., HYMAN R., KALMAN S., KOMP C., KURDI O., LEW H.,
+RA   LIN D., NAMATH A., OEFNER P., ROBERTS D., SCHRAMM S., DAVIS R.W.;
+RL   Submitted (NOV-1996) to the EMBL/GenBank/DDBJ databases.
+RN   [4]
+RP   SEQUENCE FROM N.A.
+RA   CHEN J., MATTHEWS K.K.S.M.;
+RL   Submitted (MAY-1991) to the EMBL/GenBank/DDBJ databases.
+RN   [5]
+RP   SEQUENCE FROM N.A.
+RA   MARSH S.;
+RL   Submitted (JAN-1997) to the EMBL/GenBank/DDBJ databases.
+RN   [6]
+RP   SEQUENCE OF 1-147; 159-230 AND 233-360.
+RX   MEDLINE; 76091932.
+RA   BEYREUTHER K., ADLER K., FANNING E., MURRAY C., KLEMM A., GEISLER N.;
+RT   "Amino-acid sequence of lac repressor from Escherichia coli.
+RT   Isolation, sequence analysis and sequence assembly of tryptic
+RT   peptides and cyanogen-bromide fragments.";
+RL   Eur. J. Biochem. 59:491-509(1975).
+RN   [7]
+
+
+  [Part of this file has been deleted for brevity]
+
+CC   between  the Swiss Institute of Bioinformatics  and the  EMBL outstation -
+CC   the European Bioinformatics Institute.  There are no  restrictions on  its
+CC   use  by  non-profit  institutions as long  as its content  is  in  no  way
+CC   modified and this statement is not removed.  Usage  by  and for commercial
+CC   entities requires a license agreement (See http://www.isb-sib.ch/announce/
+CC   or send an email to license@isb-sib.ch).
+CC   --------------------------------------------------------------------------
+DR   EMBL; V00294; CAA23569.1; -.
+DR   EMBL; J01636; AAA24052.1; -.
+DR   EMBL; AE000141; AAC73448.1; -.
+DR   EMBL; U73857; AAB18069.1; ALT_INIT.
+DR   EMBL; X58469; CAA41383.1; -.
+DR   EMBL; U86347; AAB47270.1; ALT_INIT.
+DR   EMBL; U72488; AAB36549.1; -.
+DR   EMBL; U78872; AAB37348.1; -.
+DR   EMBL; U78873; AAB37351.1; -.
+DR   EMBL; U78874; AAB37354.1; -.
+DR   PIR; A03558; RPECL.
+DR   PIR; S02540; S02540.
+DR   PDB; 1LCC; 31-JAN-94.
+DR   PDB; 1LCD; 31-JAN-94.
+DR   PDB; 1LTP; 31-OCT-93.
+DR   PDB; 1TLF; 31-JUL-95.
+DR   PDB; 1LBG; 11-JUL-96.
+DR   PDB; 1LBH; 11-JUL-96.
+DR   PDB; 1LBI; 11-JUL-96.
+DR   PDB; 1LQC; 12-FEB-97.
+DR   ECO2DBASE; H039.0; 6TH EDITION.
+DR   ECOGENE; EG10525; LACI.
+DR   PFAM; PF00356; lacI; 1.
+DR   PFAM; PF00532; Peripla_BP_like; 1.
+DR   PROSITE; PS00356; HTH_LACI_FAMILY; 1.
+KW   Transcription regulation; DNA-binding; Repressor; 3D-structure.
+FT   DNA_BIND      6     25       H-T-H MOTIF.
+FT   MUTAGEN      17     17       Y->H: BROADENING OF SPECIFICITY.
+FT   MUTAGEN      22     22       R->N: RECOGNIZE AN OPERATOR VARIANT.
+FT   VARIANT     282    282       Y -> D (IN T41 MUTANT).
+FT   CONFLICT    286    286       S -> L (IN AAA24052, REF. 2, 4 AND 5).
+FT   HELIX         6     13
+FT   TURN         14     14
+FT   HELIX        17     24
+FT   HELIX        32     44
+FT   TURN         49     50
+SQ   SEQUENCE   360 AA;  38564 MW;  4CA5A1D6 CRC32;
+     MKPVTLYDVA EYAGVSYQTV SRVVNQASHV SAKTREKVEA AMAELNYIPN RVAQQLAGKQ
+     SLLIGVATSS LALHAPSQIV AAIKSRADQL GASVVVSMVE RSGVEACKAA VHNLLAQRVS
+     GLIINYPLDD QDAIAVEAAC TNVPALFLDV SDQTPINSII FSHEDGTRLG VEHLVALGHQ
+     QIALLAGPLS SVSARLRLAG WHKYLTRNQI QPIAEREGDW SAMSGFQQTM QMLNEGIVPT
+     AMLVANDQMA LGAMRAITES GLRVGADISV VGYDDTEDSS CYIPPSTTIK QDFRLLGQTS
+     VDRLLQLSQG QAVKGNQLLP VSLVKRKTTL APNTQTASPR ALADSLMQLA RQVSRLESGQ
+//
    
 Output file format
 
-   Here is the output from the example run:
-     _________________________________________________________________
-   
+  Output files for usage example
+  
+  File: laci_ecoli.pepstats
+  
 PEPSTATS of LACI_ECOLI from 1 to 360
 
 Molecular weight = 38563.97             Residues = 360
@@ -131,7 +250,6 @@ Polar           (D+E+H+K+N+Q+R+S+T+Z)   161             44.722
 Charged         (B+D+E+H+K+R+Z)         69              19.167
 Basic           (H+K+R)                 37              10.278
 Acidic          (B+D+E+Z)               32               8.889
-     _________________________________________________________________
    
 Data files
 
@@ -182,20 +300,19 @@ Known bugs
    
 See also
 
-   Program name Description
-   backtranseq Back translate a protein sequence
-   charge Protein charge plot
-   checktrans Reports STOP codons and ORF statistics of a protein
-   sequence
-   compseq Counts the composition of dimer/trimer/etc words in a sequence
-   emowse Protein identification by mass spectrometry
-   freak Residue/base frequency table or plot
-   iep Calculates the isoelectric point of a protein
-   mwcontam Shows molwts that match across a set of files
-   mwfilter Filter noisy molwts from mass spec output
-   octanol Displays protein hydropathy
-   pepinfo Plots simple amino acid properties in parallel
-   pepwindow Displays protein hydropathy
+   Program name                          Description
+   backtranseq  Back translate a protein sequence
+   charge       Protein charge plot
+   checktrans   Reports STOP codons and ORF statistics of a protein
+   compseq      Counts the composition of dimer/trimer/etc words in a sequence
+   emowse       Protein identification by mass spectrometry
+   freak        Residue/base frequency table or plot
+   iep          Calculates the isoelectric point of a protein
+   mwcontam     Shows molwts that match across a set of files
+   mwfilter     Filter noisy molwts from mass spec output
+   octanol      Displays protein hydropathy
+   pepinfo      Plots simple amino acid properties in parallel
+   pepwindow    Displays protein hydropathy
    pepwindowall Displays protein hydropathy of a set of sequences
    
 Author(s)

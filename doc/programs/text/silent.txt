@@ -20,14 +20,18 @@ Description
    
 Usage
 
-   Here is a sample session with silent:
+   Here is a sample session with silent
    
-% silent
-Silent mutation restriction enzyme scan
-Input sequence: embl:hsfau
-Comma separated enzyme list [all]: ecori,hindiii
-Output file [hsfau.silent]:
 
+% silent 
+Silent mutation restriction enzyme scan
+Input sequence: tembl:hsfau
+Comma separated enzyme list [all]: ecori,hindiii
+Output file [hsfau.silent]: 
+   
+   Go to the input files for this example
+   Go to the output files for this example
+   
 Command line arguments
 
    Mandatory qualifiers:
@@ -56,18 +60,114 @@ Command line arguments
    Optional qualifiers Allowed values Default
    (none)
    Advanced qualifiers Allowed values Default
-   -sshow Display untranslated sequence Yes/No No
-   -tshow Display translated sequence Yes/No No
-   -allmut Display all mutations Yes/No No
+   -sshow Display untranslated sequence Boolean value Yes/No No
+   -tshow Display translated sequence Boolean value Yes/No No
+   -allmut Display all mutations Boolean value Yes/No No
    
 Input file format
 
-   Nucleic acid sequence USA.
+   silent reads a nucleic acid sequence USA.
+   
+  Input files for usage example
+  
+   'tembl:hsfau' is a sequence entry in the example nucleic acid database
+   'tembl'
+   
+  Database entry: tembl:hsfau
+  
+ID   HSFAU      standard; RNA; HUM; 518 BP.
+XX
+AC   X65923;
+XX
+SV   X65923.1
+XX
+DT   13-MAY-1992 (Rel. 31, Created)
+DT   23-SEP-1993 (Rel. 37, Last updated, Version 10)
+XX
+DE   H.sapiens fau mRNA
+XX
+KW   fau gene.
+XX
+OS   Homo sapiens (human)
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia
+;
+OC   Eutheria; Primates; Catarrhini; Hominidae; Homo.
+XX
+RN   [1]
+RP   1-518
+RA   Michiels L.M.R.;
+RT   ;
+RL   Submitted (29-APR-1992) to the EMBL/GenBank/DDBJ databases.
+RL   L.M.R. Michiels, University of Antwerp, Dept of Biochemistry,
+RL   Universiteisplein 1, 2610 Wilrijk, BELGIUM
+XX
+RN   [2]
+RP   1-518
+RX   MEDLINE; 93368957.
+RA   Michiels L., Van der Rauwelaert E., Van Hasselt F., Kas K., Merregaert J.;
+RT   " fau cDNA encodes a ubiquitin-like-S30 fusion protein and is expressed as
+RT   an antisense sequences in the Finkel-Biskis-Reilly murine sarcoma virus";
+RL   Oncogene 8:2537-2546(1993).
+XX
+DR   SWISS-PROT; P35544; UBIM_HUMAN.
+DR   SWISS-PROT; Q05472; RS30_HUMAN.
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..518
+FT                   /chromosome="11q"
+FT                   /db_xref="taxon:9606"
+FT                   /organism="Homo sapiens"
+FT                   /tissue_type="placenta"
+FT                   /clone_lib="cDNA"
+FT                   /clone="pUIA 631"
+FT                   /map="13"
+FT   misc_feature    57..278
+FT                   /note="ubiquitin like part"
+FT   CDS             57..458
+FT                   /db_xref="SWISS-PROT:P35544"
+FT                   /db_xref="SWISS-PROT:Q05472"
+FT                   /gene="fau"
+FT                   /protein_id="CAA46716.1"
+FT                   /translation="MQLFVRAQELHTFEVTGQETVAQIKAHVASLEGIAPEDQVVLLA
+G
+FT                   APLEDEATLGQCGVEALTTLEVAGRMLGGKVHGSLARAGKVRGQTPKVAKQEKKKKKT
+G
+FT                   RAKRRMQYNRRFVNVVPTFGKKKGPNANS"
+FT   misc_feature    98..102
+FT                   /note="nucleolar localization signal"
+FT   misc_feature    279..458
+FT                   /note="S30 part"
+FT   polyA_signal    484..489
+FT   polyA_site      509
+XX
+SQ   Sequence 518 BP; 125 A; 139 C; 148 G; 106 T; 0 other;
+     ttcctctttc tcgactccat cttcgcggta gctgggaccg ccgttcagtc gccaatatgc        6
+0
+     agctctttgt ccgcgcccag gagctacaca ccttcgaggt gaccggccag gaaacggtcg       12
+0
+     cccagatcaa ggctcatgta gcctcactgg agggcattgc cccggaagat caagtcgtgc       18
+0
+     tcctggcagg cgcgcccctg gaggatgagg ccactctggg ccagtgcggg gtggaggccc       24
+0
+     tgactaccct ggaagtagca ggccgcatgc ttggaggtaa agttcatggt tccctggccc       30
+0
+     gtgctggaaa agtgagaggt cagactccta aggtggccaa acaggagaag aagaagaaga       36
+0
+     agacaggtcg ggctaagcgg cggatgcagt acaaccggcg ctttgtcaac gttgtgccca       42
+0
+     cctttggcaa gaagaagggc cccaatgcca actcttaagt cttttgtaat tctggctttc       48
+0
+     tctaataaaa aagccactta gttcagtcaa aaaaaaaa                               51
+8
+//
    
 Output file format
 
-   This is the result of the example above:
-   
+  Output files for usage example
+  
+  File: hsfau.silent
+  
 Results for HSFAU:
 
 KEY:
@@ -84,14 +184,13 @@ Enzyme      RS-Pattern  Match-Posn   AA  Base-Posn Mutation
 
 
 
-
 Results for reverse of HSFAU:
 
 Silent mutations
 
 Enzyme      RS-Pattern  Match-Posn   AA  Base-Posn Mutation
-
 HindIII     AAGCTT         267       A.A    268      A->T
+   
 
 Data files
 

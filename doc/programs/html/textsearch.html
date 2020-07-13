@@ -61,22 +61,53 @@ annotation, not the full annotation.
 </H2>
 
 
-Search for matches to 'lacZ'
-<pre>
-% textsearch swissprot:\*  'lacz' stdout
-</pre>
+<b>Here is a sample session with textsearch</b>
+<p>
+Search for 'lactose': 
+<p>
 
 <p>
-Search for matches to 'lacz' or 'permease' in E.coli proteins
-<pre>
-% textsearch swissprot:\*_ecoli 'lacZ | permease' stdout
-</pre>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>textsearch tsw:* 'lactose' </b>
+Search sequence documentation text. SRS and Entrez are faster!
+Output sequence details to a file [100k_rat.textsearch]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 2</b>
+<p>
+Search for 'lactose' or 'permease' in E.coli proteins: 
+<p>
 
 <p>
-Output a search for 'transport' formatted with HTML to a file
-<pre>
-% textsearch embl:\* 'transport' -html -outfile embl.transport stdout
-</pre>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>textsearch tsw:*_ecoli 'lactose | permease' </b>
+Search sequence documentation text. SRS and Entrez are faster!
+Output sequence details to a file [laci_ecoli.textsearch]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.2">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 3</b>
+<p>
+Output a search for 'lacz' formatted with HTML to a file: 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>textsearch tembl:* 'lacz' -html -outfile embl.lacz.html </b>
+Search sequence documentation text. SRS and Entrez are faster!
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.3">Go to the input files for this example</a><br><a href="#output.3">Go to the output files for this example</a><p><p>
+
 
 
 <H2>
@@ -171,14 +202,14 @@ will find text with either 'human' OR 'mouse' in the text</td>
 <tr>
 <td>-casesensitive</td>
 <td>Do a case-sensitive search</td>
-<td>Yes/No</td>
+<td>Boolean value Yes/No</td>
 <td>No</td>
 </tr>
 
 <tr>
 <td>-html</td>
 <td>Format output as an HTML table</td>
-<td>Yes/No</td>
+<td>Boolean value Yes/No</td>
 <td>No</td>
 </tr>
 
@@ -194,42 +225,42 @@ will find text with either 'human' OR 'mouse' in the text</td>
 '-nohead -noname -nousa -noacc -nodesc'
 to get only the name output, you can specify
 '-only -name'</td>
-<td>Yes/No</td>
+<td>Boolean value Yes/No</td>
 <td>No</td>
 </tr>
 
 <tr>
 <td>-heading</td>
 <td>Display column headings</td>
-<td>Yes/No</td>
+<td>Boolean value Yes/No</td>
 <td>@(!$(only))</td>
 </tr>
 
 <tr>
 <td>-usa</td>
 <td>Display the USA of the sequence</td>
-<td>Yes/No</td>
+<td>Boolean value Yes/No</td>
 <td>@(!$(only))</td>
 </tr>
 
 <tr>
 <td>-accession</td>
 <td>Display 'accession' column</td>
-<td>Yes/No</td>
+<td>Boolean value Yes/No</td>
 <td>@(!$(only))</td>
 </tr>
 
 <tr>
 <td>-name</td>
 <td>Display 'name' column</td>
-<td>Yes/No</td>
+<td>Boolean value Yes/No</td>
 <td>@(!$(only))</td>
 </tr>
 
 <tr>
 <td>-description</td>
 <td>Display 'description' column</td>
-<td>Yes/No</td>
+<td>Boolean value Yes/No</td>
 <td>@(!$(only))</td>
 </tr>
 
@@ -242,44 +273,72 @@ to get only the name output, you can specify
 </H2>
 
 
-Normal sequence
+<b>textsearch</b> reads one or more normal sequence USAs.
+
+<p>
+
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+
+'tsw:*' is a sequence entry in the example protein database 'tsw'
+<p>
+
+<a name="input.3"></a>
+<h3>Input files for usage example 3</h3>
+
+'tembl:*' is a sequence entry in the example nucleic acid database 'tembl'
+<p>
+
 
 <H2>
     Output file format
 </H2>
 
 
-The output is displayed on the screen (stdout) by default.
-	
-A typical output file is:
 
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: 100k_rat.textsearch</h3>
+<table width="90%"><tr><td bgcolor="#DDFFDD">
 <pre>
----------------------------------------------------------------------------
-# Search for: TRANSPORT
-ANSP_SALTY    L-ASPARAGINE PERMEASE (L-ASPARAGINE TRANSPORT PROTEIN).
-CYST_SALTY    SULFATE TRANSPORT SYSTEM PERMEASE PROTEIN CYST (FRAGMENT).
-HISM_SALTY    HISTIDINE TRANSPORT SYSTEM PERMEASE PROTEIN HISM.
-HISQ_SALTY    HISTIDINE TRANSPORT SYSTEM PERMEASE PROTEIN HISQ.
-LIVH_SALTY    HIGH-AFFINITY BRANCHED-CHAIN AMINO ACID TRANSPORT PERMEASE ...
-LIVM_SALTY    HIGH-AFFINITY BRANCHED-CHAIN AMINO ACID TRANSPORT PERMEASE ...
-MALF_SALTY    MALTOSE TRANSPORT SYSTEM PERMEASE PROTEIN MALF.
-MALG_SALTY    MALTOSE TRANSPORT SYSTEM PERMEASE PROTEIN MALG.
-MELB_SALTY    MELIBIOSE CARRIER PROTEIN (THIOMETHYLGALACTOSIDE PERMEASE II) ...
-MGLC_SALTY    GALACTOSIDE TRANSPORT SYSTEM PERMEASE PROTEIN MGLC.
-OPPB_SALTY    OLIGOPEPTIDE TRANSPORT SYSTEM PERMEASE PROTEIN OPPB.
-OPPC_SALTY    OLIGOPEPTIDE TRANSPORT SYSTEM PERMEASE PROTEIN OPPC.
-POTB_SALTY    SPERMIDINE/PUTRESCINE TRANSPORT SYSTEM PERMEASE PROTEIN POTB ...
-PROW_SALTY    GLYCINE BETAINE/L-PROLINE TRANSPORT SYSTEM PERMEASE PROTEIN ...
-SAPB_SALTY    PEPTIDE TRANSPORT SYSTEM PERMEASE PROTEIN SAPB.
-SAPC_SALTY    PEPTIDE TRANSPORT SYSTEM PERMEASE PROTEIN SAPC.
----------------------------------------------------------------------------
+# Search for: lactose
+tsw-id:LACI_ECOLI LACI_ECOLI    P03023	LACTOSE OPERON REPRESSOR.
+tsw-id:LACY_ECOLI LACY_ECOLI    P02920	LACTOSE PERMEASE (LACTOSE-PROTON SYMPORT).
 </pre>
+</td></tr></table><p>
+
+<a name="output.2"></a>
+<h3>Output files for usage example 2</h3>
+<p><h3>File: laci_ecoli.textsearch</h3>
+<table width="90%"><tr><td bgcolor="#DDFFDD">
+<pre>
+# Search for: lactose | permease
+tsw-id:LACI_ECOLI LACI_ECOLI    P03023	LACTOSE OPERON REPRESSOR.
+tsw-id:LACY_ECOLI LACY_ECOLI    P02920	LACTOSE PERMEASE (LACTOSE-PROTON SYMPORT).
+</pre>
+</td></tr></table><p>
+
+<a name="output.3"></a>
+<h3>Output files for usage example 3</h3>
+<p><h3>File: embl.lacz.html</h3>
+<table width="90%"><tr><td bgcolor="#DDFFDD">
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr>Search for: lacz</tr>
+<tr><td>tembl-id:ECLAC</td><td>ECLAC</td><td>J01636</td>	<td>E.coli lactose operon with lacI, lacZ, lacY and lacA genes.</td></tr>
+<tr><td>tembl-id:ECLACZ</td><td>ECLACZ</td><td>V00296</td>	<td>E. coli gene lacZ coding for beta-galactosidase (EC 3.2.1.23).</td></tr>
+</table>
+</td></tr></table><p>
+
+
 
 <p>
+
 The first column in the name or ID of each sequence.  The remaining
 text is the description line of the sequence.
 
 <p>
+
 When the -html qualifier is specified, then the output will be wrapped
 in HTML tags, ready for inclusion in a Web page.  Note that tags such
 as &lt;HTML&gt;, &lt;BODY&gt;, &lt;/BODY&gt; and &lt;/HTML&gt; are not
@@ -288,6 +347,7 @@ only part of the contents of a web page - the rest of the web page
 must be supplier by the user.
 
 <p>
+
 The lines of out information are guaranteed not to have trailing
 white-space at the end. So if '-nodesc' is used, there will not be any
 whitespace after the ID name.
@@ -371,6 +431,7 @@ None noted.
 <tr><td><a href="showdb.html">showdb</a></td><td>Displays information on the currently available databases</td></tr>
 <tr><td><a href="showfeat.html">showfeat</a></td><td>Show features of a sequence</td></tr>
 <tr><td><a href="showseq.html">showseq</a></td><td>Display a sequence with features, translation etc</td></tr>
+<tr><td><a href="sixpack.html">sixpack</a></td><td>Display a DNA sequence with 6-frame translation and ORFs</td></tr>
 <tr><td><a href="tfm.html">tfm</a></td><td>Displays a program's help documentation manual</td></tr>
 <tr><td><a href="whichdb.html">whichdb</a></td><td>Search all databases for an entry</td></tr>
 <tr><td><a href="wossname.html">wossname</a></td><td>Finds programs by keywords in their one-line documentation</td></tr>

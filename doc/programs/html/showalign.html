@@ -198,17 +198,207 @@ To put all of the consensus symbols into uppercase or lowercase, make
  -->
 
 
-Here is a sample session with showalign:
+<b>Here is a sample session with showalign</b>
+<p>
 
-<pre>
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% showalign
+% <b>showalign </b>
 Displays a multiple sequence alignment
-Input sequence set: ~/align.pep   
-Output file [align.showalign]:
+Input sequence set: <b>../../data/globins.msf</b>
+Output file [globins.showalign]: <b></b>
 
-</pre>
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 2</b>
+<p>
+Display the sequences in order of similarity to the reference sequence 
+<p>
 
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>showalign -order=s </b>
+Displays a multiple sequence alignment
+Input sequence set: <b>../../data/globins.msf</b>
+Output file [globins.showalign]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.2">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 3</b>
+<p>
+Format for HTML and highlight some interesting regions in different colours: 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>showalign -html -high '4-13 green 43-43 red 51-56 blue' </b>
+Displays a multiple sequence alignment
+Input sequence set: <b>../../data/globins.msf</b>
+Output file [globins.showalign]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.3">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 4</b>
+<p>
+No consensus line at the bottom No ruler line No numbers line Don't repeat the reference sequence at the bottom of the sequences Use sequence 1 as the reference sequence Display residues from position 10 to 30 only  
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>showalign -nocon -norule -nonum -nobot -ref=1 -sb=10 -send=30 </b>
+Displays a multiple sequence alignment
+Input sequence set: <b>../../data/globins.msf</b>
+Output file [globins.showalign]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.4">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 5</b>
+<p>
+Show non-identities between the sequences 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>showalign -show=n </b>
+Displays a multiple sequence alignment
+Input sequence set: <b>../../data/globins.msf</b>
+Output file [globins.showalign]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<p>
+<p>
+<b>Example 6</b>
+<p>
+Show all of the sequences 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>showalign -show=a </b>
+Displays a multiple sequence alignment
+Input sequence set: <b>../../data/globins.msf</b>
+Output file [globins.showalign]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.6">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 7</b>
+<p>
+Show identities between the sequences 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>showalign -show=i </b>
+Displays a multiple sequence alignment
+Input sequence set: <b>../../data/globins.msf</b>
+Output file [globins.showalign]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.7">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 8</b>
+<p>
+Show similarities between the sequences 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>showalign -show=s </b>
+Displays a multiple sequence alignment
+Input sequence set: <b>../../data/globins.msf</b>
+Output file [globins.showalign]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.8">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 9</b>
+<p>
+Show dissimilarities between the sequences 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>showalign -show=d </b>
+Displays a multiple sequence alignment
+Input sequence set: <b>../../data/globins.msf</b>
+Output file [globins.showalign]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.9">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 10</b>
+<p>
+Use the first sequence as the reference to compare to: 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>showalign -ref=1 </b>
+Displays a multiple sequence alignment
+Input sequence set: <b>../../data/globins.msf</b>
+Output file [globins.showalign]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.10">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 11</b>
+<p>
+Show a range of sequences in uppercase, everything else in lowercase 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>showalign -nocon -ref=1 -sl -upper 9-15 -nosimilarcase </b>
+Displays a multiple sequence alignment
+Input sequence set: <b>../../data/globins.msf</b>
+Output file [globins.showalign]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.11">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 12</b>
+<p>
+Display the sequences in alphabetic order: 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>showalign -order=a </b>
+Displays a multiple sequence alignment
+Input sequence set: <b>../../data/globins.msf</b>
+Output file [globins.showalign]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.12">Go to the output files for this example</a><p><p>
 
 
 
@@ -365,7 +555,7 @@ Output file [align.showalign]:
 <tr>
 <td>-[no]bottom</td>
 <td>If this is true then the refernce sequence is displayed at the bottom of the alignment as well as at the top.</td>
-<td>Yes/No</td>
+<td>Boolean value Yes/No</td>
 <td>Yes</td>
 </tr>
 
@@ -386,7 +576,7 @@ Output file [align.showalign]:
 <tr>
 <td>-[no]similarcase</td>
 <td>If this is set True, then when -show is set to 'Similarities' or 'Non-identities' and a residue is similar but not identical to the reference sequence residue, it will be changed to lower-case. If -show is set to 'All' then non-identical, non-similar residues will be changed to lower-case. If this is False then no change to the case of the residues is made on the basis of their similarity to the reference sequence.</td>
-<td>Yes/No</td>
+<td>Boolean value Yes/No</td>
 <td>Yes</td>
 </tr>
 
@@ -400,7 +590,7 @@ Output file [align.showalign]:
 <tr>
 <td>-[no]consensus</td>
 <td>If this is true then the consensus line is displayed at the bottom.</td>
-<td>Yes/No</td>
+<td>Boolean value Yes/No</td>
 <td>Yes</td>
 </tr>
 
@@ -428,14 +618,14 @@ Examples of region specifications are:
 <tr>
 <td>-[no]number</td>
 <td>If this option is true then a line giving the positions in the alignment is displayed every 10 characters above the alignment.</td>
-<td>Yes/No</td>
+<td>Boolean value Yes/No</td>
 <td>Yes</td>
 </tr>
 
 <tr>
 <td>-[no]ruler</td>
 <td>If this option is true then a ruler line marking every 5th and 10th character in the alignment is displayed.</td>
-<td>Yes/No</td>
+<td>Boolean value Yes/No</td>
 <td>Yes</td>
 </tr>
 
@@ -456,7 +646,7 @@ Examples of region specifications are:
 <tr>
 <td>-html</td>
 <td>Use HTML formatting</td>
-<td>Yes/No</td>
+<td>Boolean value Yes/No</td>
 <td>No</td>
 </tr>
 
@@ -523,6 +713,68 @@ IT IS DONE FOR YOU.
    -->
 
 <b>showalign</b> reads in a set of aligned protein or nucleic sequences. 
+
+<p>
+
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+<p><h3>File: ../../data/globins.msf</h3>
+<table width="90%"><tr><td bgcolor="#FFDDFF">
+<pre>
+!!AA_MULTIPLE_ALIGNMENT 1.0
+
+  ../data/globins.msf MSF:  164 Type: P 25/06/01 CompCheck: 4278 ..
+
+  Name: HBB_HUMAN Len: 164  Check: 6914 Weight: 0.14
+  Name: HBB_HORSE Len: 164  Check: 6007 Weight: 0.15
+  Name: HBA_HUMAN Len: 164  Check: 3921 Weight: 0.15
+  Name: HBA_HORSE Len: 164  Check: 4770 Weight: 0.19
+  Name: MYG_PHYCA Len: 164  Check: 7930 Weight: 0.23
+  Name: GLB5_PETMA Len: 164  Check: 1857 Weight: 0.21
+  Name: LGB2_LUPLU Len: 164  Check: 2879 Weight: 0.10
+
+//
+
+           1                                               50
+HBB_HUMAN  ~~~~~~~~VHLTPEEKSAVTALWGKVN.VDEVGGEALGR.LLVVYPWTQR
+HBB_HORSE  ~~~~~~~~VQLSGEEKAAVLALWDKVN.EEEVGGEALGR.LLVVYPWTQR
+HBA_HUMAN  ~~~~~~~~~~~~~~VLSPADKTNVKAA.WGKVGAHAGEYGAEALERMFLS
+HBA_HORSE  ~~~~~~~~~~~~~~VLSAADKTNVKAA.WSKVGGHAGEYGAEALERMFLG
+MYG_PHYCA  ~~~~~~~VLSEGEWQLVLHVWAKVEAD.VAGHGQDILIR.LFKSHPETLE
+GLB5_PETMA PIVDTGSVAPLSAAEKTKIRSAWAPVYSTYETSGVDILVKFFTSTPAAQE
+LGB2_LUPLU ~~~~~~~~GALTESQAALVKSSWEEFNANIPKHTHRFFILVLEIAPAAKD
+
+           51                                             100
+HBB_HUMAN  FFESFGDLSTPDAVMGNPKVKAHGKKVLGAFSDGLAHLDNLKGTFATLSE
+HBB_HORSE  FFDSFGDLSNPGAVMGNPKVKAHGKKVLHSFGEGVHHLDNLKGTFAALSE
+HBA_HUMAN  FPTTKTYFPHFDLSHGSAQVKGHGKKVADALTNAVAHVDDMPNALSALSD
+HBA_HORSE  FPTTKTYFPHFDLSHGSAQVKAHGKKVGDALTLAVGHLDDLPGALSNLSD
+MYG_PHYCA  KFDRFKHLKTEAEMKASEDLKKHGVTVLTALGAILKKKGHHEAELKPLAQ
+GLB5_PETMA FFPKFKGLTTADQLKKSADVRWHAERIINAVNDAVASMDDTEKMSMKLRD
+LGB2_LUPLU LFSFLKGTSEVPQNNPELQAHAGKVFKLVYEAAIQLQVTGVVVTDATLKN
+
+           101                                            150
+HBB_HUMAN  LHCDKLH..VDPENFRLLGNVLVCVLAHHFGKEFTPPVQAAYQKVVAGVA
+HBB_HORSE  LHCDKLH..VDPENFRLLGNVLVVVLARHFGKDFTPELQASYQKVVAGVA
+HBA_HUMAN  LHAHKLR..VDPVNFKLLSHCLLVTLAAHLPAEFTPAVHASLDKFLASVS
+HBA_HORSE  LHAHKLR..VDPVNFKLLSHCLLSTLAVHLPNDFTPAVHASLDKFLSSVS
+MYG_PHYCA  SHATKHK..IPIKYLEFISEAIIHVLHSRHPGDFGADAQGAMNKALELFR
+GLB5_PETMA LSGKHAK..SFQVDPQYFKVLAAVIADTVAAGDAGFEKLMSMICILLRSA
+LGB2_LUPLU LGSVHVSKGVADAHFPVVKEAILKTIKEVVGAKWSEELNSAWTIAYDELA
+
+           151        164
+HBB_HUMAN  NALAHKYH~~~~~~
+HBB_HORSE  NALAHKYH~~~~~~
+HBA_HUMAN  TVLTSKYR~~~~~~
+HBA_HORSE  TVLTSKYR~~~~~~
+MYG_PHYCA  KDIAAKYKELGYQG
+GLB5_PETMA Y~~~~~~~~~~~~~
+LGB2_LUPLU IVIKKEMNDAA~~~
+
+</pre>
+</td></tr></table><p>
+
 
 <p>
 
@@ -623,248 +875,461 @@ An example highlight range file is:
 
 <p>
 
-Some examples of different optional output styles follows:
 
-<p>
-
-<p>
-<hr>
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: globins.showalign</h3>
+<table width="90%"><tr><td bgcolor="#DDFFDD">
 <pre>
-% showalign g.seq stdout -show=n
-Display a multiple sequence alignment
-                  10        20        30        40        50        60
-          ----:----|----:----|----:----|----:----|----:----|----:----|
-Consensus vhltxeeksavtXlwgkvnvdevggealgrllvvypwtqrffesfgdlssxdavmxnpk
-HBB_MACFU ....P...n...T.....................................P....G...
-HBD_HUMAN ....P...t..NA........A............................P....G...
-HBB_RABIT ...sS.......A.......e.............................An...N...
-HBB_BOVIN -M..A...a...AF....K..........-...................tA....N...
-HBB_LAMGL .n.sGd..n..HG..S..K..........-........r..........tA....N...
-HBE_HUMAN ..F.A...a...S..S.m..e.A...................d...n...PS.ilG...
-HBE_RABIT ..F.P...CIisKQ..q..i..T...................dn..n...SS.i.G...
-Consensus vhltxeeksavtXlwgkvnvdevggealgrllvvypwtqrffesfgdlssxdavmxnpk
+                   10        20        30        40        50        60
+           ----:----|----:----|----:----|----:----|----:----|----:----|
+Consensus  xxxxxxxxxxxxxxexsxxxxxxxkxxxxxexgxxxlxxxxxxixpxxxxffxXfxxlxx
+HBB_HUMAN  --------VHLTPE.K.AVTALWG.VN-VD.V.GEA.GR-LLVvY.WTQR..ES.GD.ST
+HBB_HORSE  --------VQLSGE.KaAVLALWD.VN-EE.V.GEA.GR-LLVvY.WTQR..DS.GD.SN
+HBA_HUMAN  --------------VL.PADKTNV.AA-WGkV.AHAGEYGAEAlERMFLS.PTTKTYFPH
+HBA_HORSE  --------------VL.AADKTNV.AA-WSkV.GHAGEYGAEAlERMFLG.PTTKTYFPH
+MYG_PHYCA  -------VLSEGEWqLVLHVWAKVeAD-VAGH.QDI.IR-LFKSH.ETLEK.DR.KH.KT
+GLB5_PETMA PIVDTGSVAPLSAA.KtKIRSAWAPVYSTY.TSGVDiLVKFFTST.AAQE..PK.KG.TT
+LGB2_LUPLU --------GALTESqAaLVKSSWEeFNANIPKHTHRFFILVLE.A.AAKDL.SFLKGTSE
+Consensus  xxxxxxxxxxxxxxexsxxxxxxxkxxxxxexgxxxlxxxxxxixpxxxxffxXfxxlxx
+
+                   70        80        90       100       110       120
+           ----:----|----:----|----:----|----:----|----:----|----:----|
+Consensus  xxXxxxsxXvkxhgkkvlxalXxxvxxlddlxxxxaxlsdlhxxklRxxvxxxnfKllxx
+HBB_HUMAN  PDAVMGnPK..A......G.FSDGlAH..n.KGTF.T..e..CD..H--.DPE..r..GN
+HBB_HORSE  PGAVMGnPK..A......HsFGEG.HH..n.KGTF.A..e..CD..H--.DPE..r..GN
+HBA_HUMAN  FDLSHG.AQ..G.....AD..TNA.AHv..mPNALsA.....AH...--.DPV.....SH
+HBA_HORSE  FDLSHG.AQ..A.....GD..TLA.GH....PGALsN.....AH...--.DPV.....SH
+MYG_PHYCA  EAEMKA.EDl.K..VT..T..GAIlKKKGHHEAELKP.aQS.AT.Hk--iPIKYLeFiSE
+GLB5_PETMA ADQLKK.AD.rW.AeriiN.vNDA.ASm..TEKMSMK.R..SGKHAk--SFQVdPqYFKV
+LGB2_LUPLU VPQNNPELQAHAGKVFK.VYEAAIQLQvTGvVVTD.T.Kn.GSVHvSKG.ADAh.PvvKE
+Consensus  xxXxxxsxXvkxhgkkvlxalXxxvxxlddlxxxxaxlsdlhxxklRxxvxxxnfKllxx
+
+                  130       140       150       160       170       180
+           ----:----|----:----|----:----|----:----|----:----|----:----|
+Consensus  xllxvlxxxxxxdftxxvxaSxxkxlxxvaxxlxxkyXxxxxxx
+HBB_HUMAN  V.vC..AHHFGKe..PP.Q.aYQ.VvAG..NA.AH..H------
+HBB_HORSE  V.vV..ARHFGK...PElQ..YQ.VvAG..NA.AH..H------
+HBA_HUMAN  C..VT.AAHLPAe..PA.H..LD.F.AS.sTV.TS..R------
+HBA_HORSE  C..ST.AVHLPN...PA.H..LD.F.SS.sTV.TS..R------
+MYG_PHYCA  AiiH..HSRHPG..GADAQGaMN.A.ELFRKDiAA..KELGYQG
+GLB5_PETMA LAAViADTVAAG.AGFEKLM.MICI.LRS.Y-------------
+LGB2_LUPLU Ai.KTiKEVVGAKwsEElNsaWTIAYDEl.IViKKeMNDAA---
+Consensus  xllxvlxxxxxxdftxxvxaSxxkxlxxvaxxlxxkyXxxxxxx
+
 </pre>
-<hr>
-<p>
+</td></tr></table><p>
 
-
-<p>
-<hr>
+<a name="output.2"></a>
+<h3>Output files for usage example 2</h3>
+<p><h3>File: globins.showalign</h3>
+<table width="90%"><tr><td bgcolor="#DDFFDD">
 <pre>
-% showalign g.seq stdout -show=a
-Display a multiple sequence alignment
-                  10        20        30        40        50        60
-          ----:----|----:----|----:----|----:----|----:----|----:----|
-Consensus vhltxeeksavtXlwgkvnvdevggealgrllvvypwtqrffesfgdlssxdavmxnpk
-HBB_MACFU VHLTpEEKNAVTtLWGKVNVDEVGGEALGRLLVVYPWTQRFFESFGDLSSpDAVMgNPK
-HBD_HUMAN VHLTpEEKTAVnaLWGKVNVDaVGGEALGRLLVVYPWTQRFFESFGDLSSpDAVMgNPK
-HBB_RABIT VHLSsEEKSAVTaLWGKVNVEEVGGEALGRLLVVYPWTQRFFESFGDLSSaNAVMnNPK
-HBB_BOVIN -mLTaEEKAAVTafWGKVkVDEVGGEALG-LLVVYPWTQRFFESFGDLSTaDAVMnNPK
-HBB_LAMGL VNLSgDEKNAVhgLWsKVkVDEVGGEALG-LLVVYPWTRRFFESFGDLSTaDAVMnNPK
-HBE_HUMAN VHfTaEEKAAVTsLWsKMNVEEaGGEALGRLLVVYPWTQRFFDSFGNLSSpsAILgNPK
-HBE_RABIT VHfTpEEKciISkqWGQVNIDEtGGEALGRLLVVYPWTQRFFDNFGNLSSssAIMgNPK
-Consensus vhltxeeksavtXlwgkvnvdevggealgrllvvypwtqrffesfgdlssxdavmxnpk
+                   10        20        30        40        50        60
+           ----:----|----:----|----:----|----:----|----:----|----:----|
+Consensus  xxxxxxxxxxxxxxexsxxxxxxxkxxxxxexgxxxlxxxxxxixpxxxxffxXfxxlxx
+HBB_HUMAN  --------VHLTPE.K.AVTALWG.VN-VD.V.GEA.GR-LLVvY.WTQR..ES.GD.ST
+HBB_HORSE  --------VQLSGE.KaAVLALWD.VN-EE.V.GEA.GR-LLVvY.WTQR..DS.GD.SN
+HBA_HORSE  --------------VL.AADKTNV.AA-WSkV.GHAGEYGAEAlERMFLG.PTTKTYFPH
+HBA_HUMAN  --------------VL.PADKTNV.AA-WGkV.AHAGEYGAEAlERMFLS.PTTKTYFPH
+MYG_PHYCA  -------VLSEGEWqLVLHVWAKVeAD-VAGH.QDI.IR-LFKSH.ETLEK.DR.KH.KT
+GLB5_PETMA PIVDTGSVAPLSAA.KtKIRSAWAPVYSTY.TSGVDiLVKFFTST.AAQE..PK.KG.TT
+LGB2_LUPLU --------GALTESqAaLVKSSWEeFNANIPKHTHRFFILVLE.A.AAKDL.SFLKGTSE
+Consensus  xxxxxxxxxxxxxxexsxxxxxxxkxxxxxexgxxxlxxxxxxixpxxxxffxXfxxlxx
+
+                   70        80        90       100       110       120
+           ----:----|----:----|----:----|----:----|----:----|----:----|
+Consensus  xxXxxxsxXvkxhgkkvlxalXxxvxxlddlxxxxaxlsdlhxxklRxxvxxxnfKllxx
+HBB_HUMAN  PDAVMGnPK..A......G.FSDGlAH..n.KGTF.T..e..CD..H--.DPE..r..GN
+HBB_HORSE  PGAVMGnPK..A......HsFGEG.HH..n.KGTF.A..e..CD..H--.DPE..r..GN
+HBA_HORSE  FDLSHG.AQ..A.....GD..TLA.GH....PGALsN.....AH...--.DPV.....SH
+HBA_HUMAN  FDLSHG.AQ..G.....AD..TNA.AHv..mPNALsA.....AH...--.DPV.....SH
+MYG_PHYCA  EAEMKA.EDl.K..VT..T..GAIlKKKGHHEAELKP.aQS.AT.Hk--iPIKYLeFiSE
+GLB5_PETMA ADQLKK.AD.rW.AeriiN.vNDA.ASm..TEKMSMK.R..SGKHAk--SFQVdPqYFKV
+LGB2_LUPLU VPQNNPELQAHAGKVFK.VYEAAIQLQvTGvVVTD.T.Kn.GSVHvSKG.ADAh.PvvKE
+Consensus  xxXxxxsxXvkxhgkkvlxalXxxvxxlddlxxxxaxlsdlhxxklRxxvxxxnfKllxx
+
+                  130       140       150       160       170       180
+           ----:----|----:----|----:----|----:----|----:----|----:----|
+Consensus  xllxvlxxxxxxdftxxvxaSxxkxlxxvaxxlxxkyXxxxxxx
+HBB_HUMAN  V.vC..AHHFGKe..PP.Q.aYQ.VvAG..NA.AH..H------
+HBB_HORSE  V.vV..ARHFGK...PElQ..YQ.VvAG..NA.AH..H------
+HBA_HORSE  C..ST.AVHLPN...PA.H..LD.F.SS.sTV.TS..R------
+HBA_HUMAN  C..VT.AAHLPAe..PA.H..LD.F.AS.sTV.TS..R------
+MYG_PHYCA  AiiH..HSRHPG..GADAQGaMN.A.ELFRKDiAA..KELGYQG
+GLB5_PETMA LAAViADTVAAG.AGFEKLM.MICI.LRS.Y-------------
+LGB2_LUPLU Ai.KTiKEVVGAKwsEElNsaWTIAYDEl.IViKKeMNDAA---
+Consensus  xllxvlxxxxxxdftxxvxaSxxkxlxxvaxxlxxkyXxxxxxx
+
 </pre>
-<hr>
-<p>
+</td></tr></table><p>
 
-
-<p>
-<hr>
+<a name="output.3"></a>
+<h3>Output files for usage example 3</h3>
+<p><h3>File: globins.showalign</h3>
+<table width="90%"><tr><td bgcolor="#DDFFDD">
 <pre>
-% showalign g.seq stdout -show=i
-Display a multiple sequence alignment
-                  10        20        30        40        50        60
-          ----:----|----:----|----:----|----:----|----:----|----:----|
-Consensus vhltxeeksavtXlwgkvnvdevggealgrllvvypwtqrffesfgdlssxdavmxnpk
-HBB_MACFU VHLT.EEK.AVT.LWGKVNVDEVGGEALGRLLVVYPWTQRFFESFGDLSS.DAVM.NPK
-HBD_HUMAN VHLT.EEK.AV..LWGKVNVD.VGGEALGRLLVVYPWTQRFFESFGDLSS.DAVM.NPK
-HBB_RABIT VHL..EEKSAVT.LWGKVNV.EVGGEALGRLLVVYPWTQRFFESFGDLSS..AVM.NPK
-HBB_BOVIN -.LT.EEK.AVT..WGKV.VDEVGGEALG-LLVVYPWTQRFFESFGDLS..DAVM.NPK
-HBB_LAMGL V.L...EK.AV..LW.KV.VDEVGGEALG-LLVVYPWT.RFFESFGDLS..DAVM.NPK
-HBE_HUMAN VH.T.EEK.AVT.LW.K.NV.E.GGEALGRLLVVYPWTQRFF.SFG.LSS..A...NPK
-HBE_RABIT VH.T.EEK......WG.VN.DE.GGEALGRLLVVYPWTQRFF..FG.LSS..A.M.NPK
-Consensus vhltxeeksavtXlwgkvnvdevggealgrllvvypwtqrffesfgdlssxdavmxnpk
+&lt;pre&gt;
+                   10        20        30        40        50        60
+           ----:----|----:----|----:----|----:----|----:----|----:----|
+Consensus  xxx&lt;font color=green&gt;xxxxxxxxxx&lt;/font&gt;xexsxxxxxxxkxxxxxexgxxxlxxxxx&lt;font color=red&gt;x&lt;/font&gt;ixpxxxx&lt;font color=blue&gt;ffxXfx&lt;/font&gt;xlxx
+HBB_HUMAN  ---&lt;font color=green&gt;-----VHLTP&lt;/font&gt;E.K.AVTALWG.VN-VD.V.GEA.GR-LL&lt;font color=red&gt;V&lt;/font&gt;vY.WTQR&lt;font color=blue&gt;..ES.G&lt;/font&gt;D.ST
+HBB_HORSE  ---&lt;font color=green&gt;-----VQLSG&lt;/font&gt;E.KaAVLALWD.VN-EE.V.GEA.GR-LL&lt;font color=red&gt;V&lt;/font&gt;vY.WTQR&lt;font color=blue&gt;..DS.G&lt;/font&gt;D.SN
+HBA_HUMAN  ---&lt;font color=green&gt;----------&lt;/font&gt;-VL.PADKTNV.AA-WGkV.AHAGEYGAE&lt;font color=red&gt;A&lt;/font&gt;lERMFLS&lt;font color=blue&gt;.PTTKT&lt;/font&gt;YFPH
+HBA_HORSE  ---&lt;font color=green&gt;----------&lt;/font&gt;-VL.AADKTNV.AA-WSkV.GHAGEYGAE&lt;font color=red&gt;A&lt;/font&gt;lERMFLG&lt;font color=blue&gt;.PTTKT&lt;/font&gt;YFPH
+MYG_PHYCA  ---&lt;font color=green&gt;----VLSEGE&lt;/font&gt;WqLVLHVWAKVeAD-VAGH.QDI.IR-LF&lt;font color=red&gt;K&lt;/font&gt;SH.ETLE&lt;font color=blue&gt;K.DR.K&lt;/font&gt;H.KT
+GLB5_PETMA PIV&lt;font color=green&gt;DTGSVAPLSA&lt;/font&gt;A.KtKIRSAWAPVYSTY.TSGVDiLVKFF&lt;font color=red&gt;T&lt;/font&gt;ST.AAQE&lt;font color=blue&gt;..PK.K&lt;/font&gt;G.TT
+LGB2_LUPLU ---&lt;font color=green&gt;-----GALTE&lt;/font&gt;SqAaLVKSSWEeFNANIPKHTHRFFILVL&lt;font color=red&gt;E&lt;/font&gt;.A.AAKD&lt;font color=blue&gt;L.SFLK&lt;/font&gt;GTSE
+Consensus  xxx&lt;font color=green&gt;xxxxxxxxxx&lt;/font&gt;xexsxxxxxxxkxxxxxexgxxxlxxxxx&lt;font color=red&gt;x&lt;/font&gt;ixpxxxx&lt;font color=blue&gt;ffxXfx&lt;/font&gt;xlxx
+
+                   70        80        90       100       110       120
+           ----:----|----:----|----:----|----:----|----:----|----:----|
+Consensus  xxXxxxsxXvkxhgkkvlxalXxxvxxlddlxxxxaxlsdlhxxklRxxvxxxnfKllxx
+HBB_HUMAN  PDAVMGnPK..A......G.FSDGlAH..n.KGTF.T..e..CD..H--.DPE..r..GN
+HBB_HORSE  PGAVMGnPK..A......HsFGEG.HH..n.KGTF.A..e..CD..H--.DPE..r..GN
+HBA_HUMAN  FDLSHG.AQ..G.....AD..TNA.AHv..mPNALsA.....AH...--.DPV.....SH
+HBA_HORSE  FDLSHG.AQ..A.....GD..TLA.GH....PGALsN.....AH...--.DPV.....SH
+MYG_PHYCA  EAEMKA.EDl.K..VT..T..GAIlKKKGHHEAELKP.aQS.AT.Hk--iPIKYLeFiSE
+GLB5_PETMA ADQLKK.AD.rW.AeriiN.vNDA.ASm..TEKMSMK.R..SGKHAk--SFQVdPqYFKV
+LGB2_LUPLU VPQNNPELQAHAGKVFK.VYEAAIQLQvTGvVVTD.T.Kn.GSVHvSKG.ADAh.PvvKE
+Consensus  xxXxxxsxXvkxhgkkvlxalXxxvxxlddlxxxxaxlsdlhxxklRxxvxxxnfKllxx
+
+                  130       140       150       160       170       180
+           ----:----|----:----|----:----|----:----|----:----|----:----|
+Consensus  xllxvlxxxxxxdftxxvxaSxxkxlxxvaxxlxxkyXxxxxxx
+HBB_HUMAN  V.vC..AHHFGKe..PP.Q.aYQ.VvAG..NA.AH..H------
+HBB_HORSE  V.vV..ARHFGK...PElQ..YQ.VvAG..NA.AH..H------
+HBA_HUMAN  C..VT.AAHLPAe..PA.H..LD.F.AS.sTV.TS..R------
+HBA_HORSE  C..ST.AVHLPN...PA.H..LD.F.SS.sTV.TS..R------
+MYG_PHYCA  AiiH..HSRHPG..GADAQGaMN.A.ELFRKDiAA..KELGYQG
+GLB5_PETMA LAAViADTVAAG.AGFEKLM.MICI.LRS.Y-------------
+LGB2_LUPLU Ai.KTiKEVVGAKwsEElNsaWTIAYDEl.IViKKeMNDAA---
+Consensus  xllxvlxxxxxxdftxxvxaSxxkxlxxvaxxlxxkyXxxxxxx
+
+&lt;/pre&gt;
 </pre>
-<hr>
-<p>
+</td></tr></table><p>
 
-
-<p>
-<hr>
+<a name="output.4"></a>
+<h3>Output files for usage example 4</h3>
+<p><h3>File: globins.showalign</h3>
+<table width="90%"><tr><td bgcolor="#DDFFDD">
 <pre>
-% showalign g.seq stdout -show=s
-Display a multiple sequence alignment
-                  10        20        30        40        50        60
-          ----:----|----:----|----:----|----:----|----:----|----:----|
-Consensus vhltxeeksavtXlwgkvnvdevggealgrllvvypwtqrffesfgdlssxdavmxnpk
-HBB_MACFU VHLT.EEKnAVT.LWGKVNVDEVGGEALGRLLVVYPWTQRFFESFGDLSS.DAVM.NPK
-HBD_HUMAN VHLT.EEKtAV..LWGKVNVD.VGGEALGRLLVVYPWTQRFFESFGDLSS.DAVM.NPK
-HBB_RABIT VHLs.EEKSAVT.LWGKVNVeEVGGEALGRLLVVYPWTQRFFESFGDLSS.nAVM.NPK
-HBB_BOVIN -.LT.EEKaAVT..WGKV.VDEVGGEALG-LLVVYPWTQRFFESFGDLSt.DAVM.NPK
-HBB_LAMGL VnLs.dEKnAV..LW.KV.VDEVGGEALG-LLVVYPWTrRFFESFGDLSt.DAVM.NPK
-HBE_HUMAN VH.T.EEKaAVT.LW.KmNVeE.GGEALGRLLVVYPWTQRFFdSFGnLSS..Ail.NPK
-HBE_RABIT VH.T.EEK..is..WGqVNiDE.GGEALGRLLVVYPWTQRFFdnFGnLSS..AiM.NPK
-Consensus vhltxeeksavtXlwgkvnvdevggealgrllvvypwtqrffesfgdlssxdavmxnpk
+HBB_HUMAN  HLTPEEKSAVTALWGKVN-VD
+HBB_HORSE  Q.sG...a..L...D...-Ee
+HBA_HUMAN  -----VL.PADKTNV.AA-WG
+HBA_HORSE  -----VL..ADKTNV.AA-WS
+MYG_PHYCA  SEGEWqLVLHVWAKVeAd-.A
+GLB5_PETMA P.sAA..tKiRsA.AP.YSTY
+LGB2_LUPLU A..ESqAaL.KsS.EeF.ANI
+
 </pre>
-<hr>
-<p>
+</td></tr></table><p>
 
-
-<p>
-<hr>
+<a name="output.6"></a>
+<h3>Output files for usage example 6</h3>
+<p><h3>File: globins.showalign</h3>
+<table width="90%"><tr><td bgcolor="#DDFFDD">
 <pre>
-% showalign g.seq stdout -show=d
-Display a multiple sequence alignment
-                  10        20        30        40        50        60
-          ----:----|----:----|----:----|----:----|----:----|----:----|
-Consensus vhltxeeksavtXlwgkvnvdevggealgrllvvypwtqrffesfgdlssxdavmxnpk
-HBB_MACFU ....P.......T.....................................P....G...
-HBD_HUMAN ....P......NA........A............................P....G...
-HBB_RABIT ....S.......A.....................................A....N...
-HBB_BOVIN -M..A.......AF....K..........-....................A....N...
-HBB_LAMGL ....G......HG..S..K..........-....................A....N...
-HBE_HUMAN ..F.A.......S..S......A...........................PS...G...
-HBE_RABIT ..F.P...CI..KQ........T...........................SS...G...
-Consensus vhltxeeksavtXlwgkvnvdevggealgrllvvypwtqrffesfgdlssxdavmxnpk
+                   10        20        30        40        50        60
+           ----:----|----:----|----:----|----:----|----:----|----:----|
+Consensus  xxxxxxxxxxxxxxexsxxxxxxxkxxxxxexgxxxlxxxxxxixpxxxxffxXfxxlxx
+HBB_HUMAN  --------vhltpeEkSavtalwgKvn-vdEvGgeaLgr-llvVyPwtqrFFesFgdLst
+HBB_HORSE  --------vqlsgeEkAavlalwdKvn-eeEvGgeaLgr-llvVyPwtqrFFdsFgdLsn
+HBA_HUMAN  --------------vlSpadktnvKaa-wgKvGahageygaeaLermflsFpttktyfph
+HBA_HORSE  --------------vlSaadktnvKaa-wsKvGghageygaeaLermflgFpttktyfph
+MYG_PHYCA  -------vlsegewQlvlhvwakvEad-vaghGqdiLir-lfkshPetlekFdrFkhLkt
+GLB5_PETMA pivdtgsvaplsaaEkTkirsawapvystyEtsgvdIlvkfftstPaaqeFFpkFkgLtt
+LGB2_LUPLU --------galtesQaAlvkssweEfnanipkhthrffilvleIaPaakdlFsflkgtse
+Consensus  xxxxxxxxxxxxxxexsxxxxxxxkxxxxxexgxxxlxxxxxxixpxxxxffxXfxxlxx
+
+                   70        80        90       100       110       120
+           ----:----|----:----|----:----|----:----|----:----|----:----|
+Consensus  xxXxxxsxXvkxhgkkvlxalXxxvxxlddlxxxxaxlsdlhxxklRxxvxxxnfKllxx
+HBB_HUMAN  pdavmgNpkVKaHGKKVLgAfsdgLahLDNLkgtfAtLSELHcdKLh--VdpeNFRLLgn
+HBB_HORSE  pgavmgNpkVKaHGKKVLhSfgegVhhLDNLkgtfAaLSELHcdKLh--VdpeNFRLLgn
+HBA_HUMAN  fdlshgSaqVKgHGKKVadALtnaVahVDDMpnalSaLSDLHahKLR--VdpvNFKLLsh
+HBA_HORSE  fdlshgSaqVKaHGKKVgdALtlaVghLDDLpgalSnLSDLHahKLR--VdpvNFKLLsh
+MYG_PHYCA  eaemkaSedLKkHGvtVLtALgaiLkkkghheaelkpLAqsHatKhK--IpikylEfIse
+GLB5_PETMA adqlkkSadVRwHaERIInAVndaVasMDDtekmsmkLrDLsgkhaK--sfqvDpQyfkv
+LGB2_LUPLU vpqnnpelqahagkvfkLvyeaaiqlqVtgVvvtdAtLkNLgsvhVskgVadaHFpVVke
+Consensus  xxXxxxsxXvkxhgkkvlxalXxxvxxlddlxxxxaxlsdlhxxklRxxvxxxnfKllxx
+
+                  130       140       150       160       170       180
+           ----:----|----:----|----:----|----:----|----:----|----:----|
+Consensus  xllxvlxxxxxxdftxxvxaSxxkxlxxvaxxlxxkyXxxxxxx
+HBB_HUMAN  vLVcVLahhfgkEFTppVqAAyqKvVagVAnaLahKYh------
+HBB_HORSE  vLVvVLarhfgkDFTpeLqASyqKvVagVAnaLahKYh------
+HBA_HUMAN  cLLvtLaahlpaEFTpaVhASldKfLasVStvLtsKYr------
+HBA_HORSE  cLLstLavhlpnDFTpaVhASldKfLssVStvLtsKYr------
+MYG_PHYCA  aIIhVLhsrhpgDFgadaqgAmnKaLelfrkdIaaKYkelgyqg
+GLB5_PETMA laavIadtvaagDagfeklmSmiciLlrsAy-------------
+LGB2_LUPLU aILktIkevvgakWSeeLnSAwtiaydeLAivIkkEmndaa---
+Consensus  xllxvlxxxxxxdftxxvxaSxxkxlxxvaxxlxxkyXxxxxxx
+
 </pre>
-<hr>
-<p>
+</td></tr></table><p>
 
-
-<p>
-<hr>
+<a name="output.7"></a>
+<h3>Output files for usage example 7</h3>
+<p><h3>File: globins.showalign</h3>
+<table width="90%"><tr><td bgcolor="#DDFFDD">
 <pre>
-% showalign g.seq stdout -ref=1
-Display a multiple sequence alignment
-                  10        20        30        40        50        60
-          ----:----|----:----|----:----|----:----|----:----|----:----|
-HBB_MACFU VHLTPEEKNAVTTLWGKVNVDEVGGEALGRLLVVYPWTQRFFESFGDLSSPDAVMGNPK
-HBD_HUMAN ........T..NA........A.....................................
-HBB_RABIT ...sS...s...A.......e.............................An...N...
-HBB_BOVIN -M..A...A...AF....K..........-...................tA....N...
-HBB_LAMGL .n.sGd.....HG..S..K..........-........r..........tA....N...
-HBE_HUMAN ..F.A...A...s..S.m..e.A...................d...n....S.il....
-HBE_RABIT ..F.....CIisKQ..q..i..T...................dn..n...SS.i.....
-HBB_MACFU VHLTPEEKNAVTTLWGKVNVDEVGGEALGRLLVVYPWTQRFFESFGDLSSPDAVMGNPK
-Consensus vhltxeeksavtXlwgkvnvdevggealgrllvvypwtqrffesfgdlssxdavmxnpk
+                   10        20        30        40        50        60
+           ----:----|----:----|----:----|----:----|----:----|----:----|
+Consensus  xxxxxxxxxxxxxxexsxxxxxxxkxxxxxexgxxxlxxxxxxixpxxxxffxXfxxlxx
+HBB_HUMAN  --------......E.S.......K..-..E.G...L..-.....P....FF..F..L..
+HBB_HORSE  --------......E.........K..-..E.G...L..-.....P....FF..F..L..
+HBA_HUMAN  --------------..S.......K..-....G.................F.........
+HBA_HORSE  --------------..S.......K..-....G.................F.........
+MYG_PHYCA  -------....................-....G...L..-.....P.....F..F..L..
+GLB5_PETMA ..............E...............E..............P....FF..F..L..
+LGB2_LUPLU --------...................................I.P.....F........
+Consensus  xxxxxxxxxxxxxxexsxxxxxxxkxxxxxexgxxxlxxxxxxixpxxxxffxXfxxlxx
+
+                   70        80        90       100       110       120
+           ----:----|----:----|----:----|----:----|----:----|----:----|
+Consensus  xxXxxxsxXvkxhgkkvlxalXxxvxxlddlxxxxaxlsdlhxxklRxxvxxxnfKllxx
+HBB_HUMAN  .........VK.HGKKVL.A.......LD.L....A.LS.LH..KL.--V...NF.LL..
+HBB_HORSE  .........VK.HGKKVL......V..LD.L....A.LS.LH..KL.--V...NF.LL..
+HBA_HUMAN  ......S..VK.HGKKV..AL...V...DD.......LSDLH..KLR--V...NFKLL..
+HBA_HORSE  ......S..VK.HGKKV..AL...V..LDDL......LSDLH..KLR--V...NFKLL..
+MYG_PHYCA  ......S...K.HG..VL.AL................L...H..K..--...........
+GLB5_PETMA ......S..V..H......A....V...DD.......L.DL......--...........
+LGB2_LUPLU .................L.................A.L..L........V....F.....
+Consensus  xxXxxxsxXvkxhgkkvlxalXxxvxxlddlxxxxaxlsdlhxxklRxxvxxxnfKllxx
+
+                  130       140       150       160       170       180
+           ----:----|----:----|----:----|----:----|----:----|----:----|
+Consensus  xllxvlxxxxxxdftxxvxaSxxkxlxxvaxxlxxkyXxxxxxx
+HBB_HUMAN  .L..VL.......FT..V.A...K....VA..L..KY.------
+HBB_HORSE  .L..VL......DFT....AS..K....VA..L..KY.------
+HBA_HUMAN  .LL..L.......FT..V.AS..K.L..V...L..KY.------
+HBA_HORSE  .LL..L......DFT..V.AS..K.L..V...L..KY.------
+MYG_PHYCA  ....VL......DF.........K.L.........KY.......
+GLB5_PETMA ............D.......S....L...A.-------------
+LGB2_LUPLU ..L..........................A...........---
+Consensus  xllxvlxxxxxxdftxxvxaSxxkxlxxvaxxlxxkyXxxxxxx
+
 </pre>
-<hr>
-<p>
+</td></tr></table><p>
 
-
-<p>
-<hr>
+<a name="output.8"></a>
+<h3>Output files for usage example 8</h3>
+<p><h3>File: globins.showalign</h3>
+<table width="90%"><tr><td bgcolor="#DDFFDD">
 <pre>
-Display a range of sequences in uppercase, everything else in lowercase
-% showalign g.seq stdout -nocon -ref=1 -sl -upper 9-15 -nosimilarcaseDisplay a multiple sequence alignment
-                  10        20        30        40        50        60
-          ----:----|----:----|----:----|----:----|----:----|----:----|
-HBB_MACFU vhltpeekNAVTTLWgkvnvdevggealgrllvvypwtqrffesfgdlsspdavmgnpk
-HBD_HUMAN ........T..NA........a.....................................
-HBB_RABIT ...ss...S...A.......e.............................an...n...
-HBB_BOVIN -m..a...A...AF....k..........-...................ta....n...
-HBB_LAMGL .n.sgd.....HG..s..k..........-........r..........ta....n...
-HBE_HUMAN ..f.a...A...S..s.m..e.a...................d...n....s.il....
-HBE_RABIT ..f.....CIISKQ..q..i..t...................dn..n...ss.i.....
-HBB_MACFU vhltpeekNAVTTLWgkvnvdevggealgrllvvypwtqrffesfgdlsspdavmgnpk
+                   10        20        30        40        50        60
+           ----:----|----:----|----:----|----:----|----:----|----:----|
+Consensus  xxxxxxxxxxxxxxexsxxxxxxxkxxxxxexgxxxlxxxxxxixpxxxxffxXfxxlxx
+HBB_HUMAN  --------......E.S.......K..-..E.G...L..-...v.P....FF..F..L..
+HBB_HORSE  --------......E.a.......K..-..E.G...L..-...v.P....FF..F..L..
+HBA_HUMAN  --------------..S.......K..-..k.G..........l......F.........
+HBA_HORSE  --------------..S.......K..-..k.G..........l......F.........
+MYG_PHYCA  -------.......q.........e..-....G...L..-.....P.....F..F..L..
+GLB5_PETMA ..............E.t.............E.....i........P....FF..F..L..
+LGB2_LUPLU --------......q.a.......e..................I.P.....F........
+Consensus  xxxxxxxxxxxxxxexsxxxxxxxkxxxxxexgxxxlxxxxxxixpxxxxffxXfxxlxx
+
+                   70        80        90       100       110       120
+           ----:----|----:----|----:----|----:----|----:----|----:----|
+Consensus  xxXxxxsxXvkxhgkkvlxalXxxvxxlddlxxxxaxlsdlhxxklRxxvxxxnfKllxx
+HBB_HUMAN  ......n..VK.HGKKVL.A....l..LDnL....A.LSeLH..KL.--V...NFrLL..
+HBB_HORSE  ......n..VK.HGKKVL.s....V..LDnL....A.LSeLH..KL.--V...NFrLL..
+HBA_HUMAN  ......S..VK.HGKKV..AL...V..vDDm....s.LSDLH..KLR--V...NFKLL..
+HBA_HORSE  ......S..VK.HGKKV..AL...V..LDDL....s.LSDLH..KLR--V...NFKLL..
+MYG_PHYCA  ......S..lK.HG..VL.AL...l............La..H..K.k--i.....e.i..
+GLB5_PETMA ......S..Vr.H.erii.Av...V..mDD.......L.DL.....k--....d.q....
+LGB2_LUPLU .................L.........v..v....A.L.nL....v...V...hF.vv..
+Consensus  xxXxxxsxXvkxhgkkvlxalXxxvxxlddlxxxxaxlsdlhxxklRxxvxxxnfKllxx
+
+                  130       140       150       160       170       180
+           ----:----|----:----|----:----|----:----|----:----|----:----|
+Consensus  xllxvlxxxxxxdftxxvxaSxxkxlxxvaxxlxxkyXxxxxxx
+HBB_HUMAN  .Lv.VL......eFT..V.Aa..K.v..VA..L..KY.------
+HBB_HORSE  .Lv.VL......DFT..l.AS..K.v..VA..L..KY.------
+HBA_HUMAN  .LL..L......eFT..V.AS..K.L..Vs..L..KY.------
+HBA_HORSE  .LL..L......DFT..V.AS..K.L..Vs..L..KY.------
+MYG_PHYCA  .ii.VL......DF......a..K.L......i..KY.......
+GLB5_PETMA ....i.......D.......S....L...A.-------------
+LGB2_LUPLU .iL..i.......ws..l.sa.......lA..i..e.....---
+Consensus  xllxvlxxxxxxdftxxvxaSxxkxlxxvaxxlxxkyXxxxxxx
+
 </pre>
-<hr>
-<p>
+</td></tr></table><p>
 
-
-
-<p>
-<hr>
+<a name="output.9"></a>
+<h3>Output files for usage example 9</h3>
+<p><h3>File: globins.showalign</h3>
+<table width="90%"><tr><td bgcolor="#DDFFDD">
 <pre>
-Alphabetical order
-% showalign g.seq stdout -order=a
-Display a multiple sequence alignment
-                  10        20        30        40        50        60
-          ----:----|----:----|----:----|----:----|----:----|----:----|
-Consensus vhltxeeksavtXlwgkvnvdevggealgrllvvypwtqrffesfgdlssxdavmxnpk
-HBB_BOVIN -M..A...a...AF....K..........-...................tA....N...
-HBB_LAMGL .n.sGd..n..HG..S..K..........-........r..........tA....N...
-HBB_MACFU ....P...n...T.....................................P....G...
-HBB_RABIT ...sS.......A.......e.............................An...N...
-HBD_HUMAN ....P...t..NA........A............................P....G...
-HBE_HUMAN ..F.A...a...S..S.m..e.A...................d...n...PS.ilG...
-HBE_RABIT ..F.P...CIisKQ..q..i..T...................dn..n...SS.i.G...
-Consensus vhltxeeksavtXlwgkvnvdevggealgrllvvypwtqrffesfgdlssxdavmxnpk
+                   10        20        30        40        50        60
+           ----:----|----:----|----:----|----:----|----:----|----:----|
+Consensus  xxxxxxxxxxxxxxexsxxxxxxxkxxxxxexgxxxlxxxxxxixpxxxxffxXfxxlxx
+HBB_HUMAN  --------VHLTPE.K.AVTALWG.VN-VD.V.GEA.GR-LLV.Y.WTQR..ES.GD.ST
+HBB_HORSE  --------VQLSGE.K.AVLALWD.VN-EE.V.GEA.GR-LLV.Y.WTQR..DS.GD.SN
+HBA_HUMAN  --------------VL.PADKTNV.AA-WG.V.AHAGEYGAEA.ERMFLS.PTTKTYFPH
+HBA_HORSE  --------------VL.AADKTNV.AA-WS.V.GHAGEYGAEA.ERMFLG.PTTKTYFPH
+MYG_PHYCA  -------VLSEGEW.LVLHVWAKV.AD-VAGH.QDI.IR-LFKSH.ETLEK.DR.KH.KT
+GLB5_PETMA PIVDTGSVAPLSAA.K.KIRSAWAPVYSTY.TSGVD.LVKFFTST.AAQE..PK.KG.TT
+LGB2_LUPLU --------GALTES.A.LVKSSWE.FNANIPKHTHRFFILVLE.A.AAKDL.SFLKGTSE
+Consensus  xxxxxxxxxxxxxxexsxxxxxxxkxxxxxexgxxxlxxxxxxixpxxxxffxXfxxlxx
+
+                   70        80        90       100       110       120
+           ----:----|----:----|----:----|----:----|----:----|----:----|
+Consensus  xxXxxxsxXvkxhgkkvlxalXxxvxxlddlxxxxaxlsdlhxxklRxxvxxxnfKllxx
+HBB_HUMAN  PDAVMG.PK..A......G.FSDG.AH....KGTF.T.....CD..H--.DPE.....GN
+HBB_HORSE  PGAVMG.PK..A......H.FGEG.HH....KGTF.A.....CD..H--.DPE.....GN
+HBA_HUMAN  FDLSHG.AQ..G.....AD..TNA.AH....PNAL.A.....AH...--.DPV.....SH
+HBA_HORSE  FDLSHG.AQ..A.....GD..TLA.GH....PGAL.N.....AH...--.DPV.....SH
+MYG_PHYCA  EAEMKA.ED..K..VT..T..GAI.KKKGHHEAELKP..QS.AT.H.--.PIKYL.F.SE
+GLB5_PETMA ADQLKK.AD..W.A....N..NDA.AS...TEKMSMK.R..SGKHA.--SFQV.P.YFKV
+LGB2_LUPLU VPQNNPELQAHAGKVFK.VYEAAIQLQ.TG.VVTD.T.K..GSVH.SKG.ADA..P..KE
+Consensus  xxXxxxsxXvkxhgkkvlxalXxxvxxlddlxxxxaxlsdlhxxklRxxvxxxnfKllxx
+
+                  130       140       150       160       170       180
+           ----:----|----:----|----:----|----:----|----:----|----:----|
+Consensus  xllxvlxxxxxxdftxxvxaSxxkxlxxvaxxlxxkyXxxxxxx
+HBB_HUMAN  V..C..AHHFGK...PP.Q..YQ.V.AG..NA.AH..H------
+HBB_HORSE  V..V..ARHFGK...PE.Q..YQ.V.AG..NA.AH..H------
+HBA_HUMAN  C..VT.AAHLPA...PA.H..LD.F.AS..TV.TS..R------
+HBA_HORSE  C..ST.AVHLPN...PA.H..LD.F.SS..TV.TS..R------
+MYG_PHYCA  A..H..HSRHPG..GADAQG.MN.A.ELFRKD.AA..KELGYQG
+GLB5_PETMA LAAV.ADTVAAG.AGFEKLM.MICI.LRS.Y-------------
+LGB2_LUPLU A..KT.KEVVGAK..EE.N..WTIAYDE..IV.KK.MNDAA---
+Consensus  xllxvlxxxxxxdftxxvxaSxxkxlxxvaxxlxxkyXxxxxxx
+
 </pre>
-<hr>
-<p>
+</td></tr></table><p>
 
-
-<p>
-<hr>
+<a name="output.10"></a>
+<h3>Output files for usage example 10</h3>
+<p><h3>File: globins.showalign</h3>
+<table width="90%"><tr><td bgcolor="#DDFFDD">
 <pre>
-In order of similarity to the reference sequence
-% showalign g.seq stdout -order=s
-Display a multiple sequence alignment
-                  10        20        30        40        50        60
-          ----:----|----:----|----:----|----:----|----:----|----:----|
-Consensus vhltxeeksavtXlwgkvnvdevggealgrllvvypwtqrffesfgdlssxdavmxnpk
-HBB_MACFU ....P...n...T.....................................P....G...
-HBB_RABIT ...sS.......A.......e.............................An...N...
-HBD_HUMAN ....P...t..NA........A............................P....G...
-HBB_BOVIN -M..A...a...AF....K..........-...................tA....N...
-HBE_HUMAN ..F.A...a...S..S.m..e.A...................d...n...PS.ilG...
-HBB_LAMGL .n.sGd..n..HG..S..K..........-........r..........tA....N...
-HBE_RABIT ..F.P...CIisKQ..q..i..T...................dn..n...SS.i.G...
-Consensus vhltxeeksavtXlwgkvnvdevggealgrllvvypwtqrffesfgdlssxdavmxnpk
+                   10        20        30        40        50        60
+           ----:----|----:----|----:----|----:----|----:----|----:----|
+HBB_HUMAN  --------VHLTPEEKSAVTALWGKVN-VDEVGGEALGR-LLVVYPWTQRFFESFGDLST
+HBB_HORSE  --------.Q.sG...a..L...D...-Ee.........-............d......N
+HBA_HUMAN  --------------VL.PADKTNV.AA-WGk..AH.GEYGAEAlERMFLS.PTtKTYFPH
+HBA_HORSE  --------------VL..ADKTNV.AA-WSk...H.GEYGAEAlERMFLG.PTtKTYFPH
+MYG_PHYCA  -------VlSEGEWqLVLHVWAKVeAd-.AGH.QdI.I.-.FKSh.E.LEK.dR.KH.K.
+GLB5_PETMA PIVDTGSVAP.sAA..tKiRsA.AP.YSTY.TS.VDiLVKFFTST.AA.E..PK.KG.t.
+LGB2_LUPLU --------GA..ESqAaL.KsS.EeF.ANIPKHTHRFFILv.EiA.AAkDL.SFLKGT.E
+HBB_HUMAN  --------VHLTPEEKSAVTALWGKVN-VDEVGGEALGR-LLVVYPWTQRFFESFGDLST
+Consensus  xxxxxxxxxxxxxxexsxxxxxxxkxxxxxexgxxxlxxxxxxixpxxxxffxXfxxlxx
+
+                   70        80        90       100       110       120
+           ----:----|----:----|----:----|----:----|----:----|----:----|
+HBB_HUMAN  PDAVMGNPKVKAHGKKVLGAFSDGLAHLDNLKGTFATLSELHCDKLH--VDPENFRLLGN
+HBB_HORSE  .G................Hs.Ge.vH..........A..........--...........
+HBA_HUMAN  F.LSH.sAq..G.....AD.LtnAv..v.dmPNALsA..d..AH..R--...V..k..Sh
+HBA_HORSE  F.LSH.sAq........GD.LtLAvG...d.P.ALsN..d..AH..R--...V..k..Sh
+MYG_PHYCA  EAEmKAsEDl.K..VT..T.LGAI.KKKGhHeAELKP.aqS.AT.HK--iPIkYLEFiSE
+GLB5_PETMA A.QlKKsAD.rW.AeriiN.Vn.Av.Sm.dTeKMSMK.Rd.SGKHAK--SFQVdPqYFKV
+LGB2_LUPLU VPQNNPELqAH.GKVFK.VYEaAIQLQvTGvVV.D...KN.GSVHvSKG.ADAh.PvvKE
+HBB_HUMAN  PDAVMGNPKVKAHGKKVLGAFSDGLAHLDNLKGTFATLSELHCDKLH--VDPENFRLLGN
+Consensus  xxXxxxsxXvkxhgkkvlxalXxxvxxlddlxxxxaxlsdlhxxklRxxvxxxnfKllxx
+
+                  130       140       150       160       170       180
+           ----:----|----:----|----:----|----:----|----:----|----:----|
+HBB_HUMAN  VLVCVLAHHFGKEFTPPVQAAYQKVVAGVANALAHKYH------
+HBB_HORSE  ...V...R....d...El..s.................------
+HBA_HUMAN  C.lVT..A.LPA....A.H.sLD.Fl.S.sTV.TS..R------
+HBA_HORSE  C.lST..V.LPNd...A.H.sLD.FlsS.sTV.TS..R------
+MYG_PHYCA  AiiH..HSRHPGd.GADA.G.MN.AlELFRKDi.A..KELGYQG
+GLB5_PETMA lAAViADTVAAGdAGFEKLMsMICilLRS.Y-------------
+LGB2_LUPLU AilKTiKEVV.AkwsEElNs.wTIAYDEl.IViKKeMnDAA---
+HBB_HUMAN  VLVCVLAHHFGKEFTPPVQAAYQKVVAGVANALAHKYH------
+Consensus  xllxvlxxxxxxdftxxvxaSxxkxlxxvaxxlxxkyXxxxxxx
+
 </pre>
-<hr>
-<p>
+</td></tr></table><p>
 
-
-<p>
-<hr>
+<a name="output.11"></a>
+<h3>Output files for usage example 11</h3>
+<p><h3>File: globins.showalign</h3>
+<table width="90%"><tr><td bgcolor="#DDFFDD">
 <pre>
-Format for HTML and highlight some inetersting regions in different colours
-% showalign g.seq stdout -html -high '4-13 green 43-43 red 51-56 blue' 
-Display a multiple sequence alignment
-                  10        20        30        40        50        60
-          ----:----|----:----|----:----|----:----|----:----|----:----|
-Consensus vhl<font color=green>txeeksavtX</font>lwgkvnvdevggealgrllvvypwtqrff<font color=red>e</font>sfgdlss<font color=blue>xdavmx</font>npk
-HBB_MACFU ...<font color=green>.P...n...T</font>.............................<font color=red>.</font>.......<font color=blue>P....G</font>...
-HBD_HUMAN ...<font color=green>.P...t..NA</font>........A....................<font color=red>.</font>.......<font color=blue>P....G</font>...
-HBB_RABIT ...<font color=green>sS.......A</font>.......e.....................<font color=red>.</font>.......<font color=blue>An...N</font>...
-HBB_BOVIN -M.<font color=green>.A...a...A</font>F....K..........-............<font color=red>.</font>......t<font color=blue>A....N</font>...
-HBB_LAMGL .n.<font color=green>sGd..n..HG</font>..S..K..........-........r...<font color=red>.</font>......t<font color=blue>A....N</font>...
-HBE_HUMAN ..F<font color=green>.A...a...S</font>..S.m..e.A...................<font color=red>d</font>...n...<font color=blue>PS.ilG</font>...
-HBE_RABIT ..F<font color=green>.P...CIisK</font>Q..q..i..T...................<font color=red>d</font>n..n...<font color=blue>SS.i.G</font>...
-Consensus vhl<font color=green>txeeksavtX</font>lwgkvnvdevggealgrllvvypwtqrff<font color=red>e</font>sfgdlss<font color=blue>xdavmx</font>npk
+                   10        20        30        40        50        60
+           ----:----|----:----|----:----|----:----|----:----|----:----|
+HBB_HUMAN  --------VHLTPEEksavtalwgkvn-vdevggealgr-llvvypwtqrffesfgdlst
+HBB_HORSE  --------.Q.SG...a..l...d...-ee.........-............d......n
+HBA_HUMAN  --------------Vl.padktnv.aa-wgk..ah.geygaealermfls.pttktyfph
+HBA_HORSE  --------------Vl..adktnv.aa-wsk...h.geygaealermflg.pttktyfph
+MYG_PHYCA  -------vLSEGEWQlvlhvwakvead-.agh.qdi.i.-.fksh.e.lek.dr.kh.k.
+GLB5_PETMA pivdtgsvAP.SAA..tkirsa.ap.ysty.ts.vdilvkfftst.aa.e..pk.kg.t.
+LGB2_LUPLU --------GA..ESQaal.kss.eef.anipkhthrffilv.eia.aakdl.sflkgt.e
+HBB_HUMAN  --------VHLTPEEksavtalwgkvn-vdevggealgr-llvvypwtqrffesfgdlst
+
+                   70        80        90       100       110       120
+           ----:----|----:----|----:----|----:----|----:----|----:----|
+HBB_HUMAN  pdavmgnpkvkahgkkvlgafsdglahldnlkgtfatlselhcdklh--vdpenfrllgn
+HBB_HORSE  .g................hs.ge.vh..........a..........--...........
+HBA_HUMAN  f.lsh.saq..g.....ad.ltnav..v.dmpnalsa..d..ah..r--...v..k..sh
+HBA_HORSE  f.lsh.saq........gd.ltlavg...d.p.alsn..d..ah..r--...v..k..sh
+MYG_PHYCA  eaemkasedl.k..vt..t.lgai.kkkghheaelkp.aqs.at.hk--ipikylefise
+GLB5_PETMA a.qlkksad.rw.aeriin.vn.av.sm.dtekmsmk.rd.sgkhak--sfqvdpqyfkv
+LGB2_LUPLU vpqnnpelqah.gkvfk.vyeaaiqlqvtgvvv.d...kn.gsvhvskg.adah.pvvke
+HBB_HUMAN  pdavmgnpkvkahgkkvlgafsdglahldnlkgtfatlselhcdklh--vdpenfrllgn
+
+                  130       140       150       160       170       180
+           ----:----|----:----|----:----|----:----|----:----|----:----|
+HBB_HUMAN  vlvcvlahhfgkeftppvqaayqkvvagvanalahkyh------
+HBB_HORSE  ...v...r....d...el..s.................------
+HBA_HUMAN  c.lvt..a.lpa....a.h.sld.fl.s.stv.ts..r------
+HBA_HORSE  c.lst..v.lpnd...a.h.sld.flss.stv.ts..r------
+MYG_PHYCA  aiih..hsrhpgd.gada.g.mn.alelfrkdi.a..kelgyqg
+GLB5_PETMA laaviadtvaagdagfeklmsmicillrs.y-------------
+LGB2_LUPLU ailktikevv.akwseelns.wtiaydel.ivikkemndaa---
+HBB_HUMAN  vlvcvlahhfgkeftppvqaayqkvvagvanalahkyh------
+
 </pre>
-<hr>
-<p>
+</td></tr></table><p>
 
-
-
-<p>
-<hr>
+<a name="output.12"></a>
+<h3>Output files for usage example 12</h3>
+<p><h3>File: globins.showalign</h3>
+<table width="90%"><tr><td bgcolor="#DDFFDD">
 <pre>
-No consensus line at the bottom
-No ruler line
-No numbers line
-Don't repeat the reference sequence at the bottom of the sequences
-Use sequence 1 as the reference sequence
-Display residues from position 10 to 30 only
-% showalign g.seq stdout -nocon -norule -nonum -nobot -ref=1 -sb=10 -send=30
-Display a multiple sequence alignment
+                   10        20        30        40        50        60
+           ----:----|----:----|----:----|----:----|----:----|----:----|
+Consensus  xxxxxxxxxxxxxxexsxxxxxxxkxxxxxexgxxxlxxxxxxixpxxxxffxXfxxlxx
+GLB5_PETMA PIVDTGSVAPLSAA.KtKIRSAWAPVYSTY.TSGVDiLVKFFTST.AAQE..PK.KG.TT
+HBA_HORSE  --------------VL.AADKTNV.AA-WSkV.GHAGEYGAEAlERMFLG.PTTKTYFPH
+HBA_HUMAN  --------------VL.PADKTNV.AA-WGkV.AHAGEYGAEAlERMFLS.PTTKTYFPH
+HBB_HORSE  --------VQLSGE.KaAVLALWD.VN-EE.V.GEA.GR-LLVvY.WTQR..DS.GD.SN
+HBB_HUMAN  --------VHLTPE.K.AVTALWG.VN-VD.V.GEA.GR-LLVvY.WTQR..ES.GD.ST
+LGB2_LUPLU --------GALTESqAaLVKSSWEeFNANIPKHTHRFFILVLE.A.AAKDL.SFLKGTSE
+MYG_PHYCA  -------VLSEGEWqLVLHVWAKVeAD-VAGH.QDI.IR-LFKSH.ETLEK.DR.KH.KT
+Consensus  xxxxxxxxxxxxxxexsxxxxxxxkxxxxxexgxxxlxxxxxxixpxxxxffxXfxxlxx
 
-HBB_MACFU AVTTLWGKVNVDEVGGEALGR
-HBD_HUMAN ..NA........A........
-HBB_RABIT ...A.......e.........
-HBB_BOVIN ...AF....K..........-
-HBB_LAMGL ..HG..S..K..........-
-HBE_HUMAN ...s..S.m..e.A.......
-HBE_RABIT IisKQ..q..i..T.......
+                   70        80        90       100       110       120
+           ----:----|----:----|----:----|----:----|----:----|----:----|
+Consensus  xxXxxxsxXvkxhgkkvlxalXxxvxxlddlxxxxaxlsdlhxxklRxxvxxxnfKllxx
+GLB5_PETMA ADQLKK.AD.rW.AeriiN.vNDA.ASm..TEKMSMK.R..SGKHAk--SFQVdPqYFKV
+HBA_HORSE  FDLSHG.AQ..A.....GD..TLA.GH....PGALsN.....AH...--.DPV.....SH
+HBA_HUMAN  FDLSHG.AQ..G.....AD..TNA.AHv..mPNALsA.....AH...--.DPV.....SH
+HBB_HORSE  PGAVMGnPK..A......HsFGEG.HH..n.KGTF.A..e..CD..H--.DPE..r..GN
+HBB_HUMAN  PDAVMGnPK..A......G.FSDGlAH..n.KGTF.T..e..CD..H--.DPE..r..GN
+LGB2_LUPLU VPQNNPELQAHAGKVFK.VYEAAIQLQvTGvVVTD.T.Kn.GSVHvSKG.ADAh.PvvKE
+MYG_PHYCA  EAEMKA.EDl.K..VT..T..GAIlKKKGHHEAELKP.aQS.AT.Hk--iPIKYLeFiSE
+Consensus  xxXxxxsxXvkxhgkkvlxalXxxvxxlddlxxxxaxlsdlhxxklRxxvxxxnfKllxx
+
+                  130       140       150       160       170       180
+           ----:----|----:----|----:----|----:----|----:----|----:----|
+Consensus  xllxvlxxxxxxdftxxvxaSxxkxlxxvaxxlxxkyXxxxxxx
+GLB5_PETMA LAAViADTVAAG.AGFEKLM.MICI.LRS.Y-------------
+HBA_HORSE  C..ST.AVHLPN...PA.H..LD.F.SS.sTV.TS..R------
+HBA_HUMAN  C..VT.AAHLPAe..PA.H..LD.F.AS.sTV.TS..R------
+HBB_HORSE  V.vV..ARHFGK...PElQ..YQ.VvAG..NA.AH..H------
+HBB_HUMAN  V.vC..AHHFGKe..PP.Q.aYQ.VvAG..NA.AH..H------
+LGB2_LUPLU Ai.KTiKEVVGAKwsEElNsaWTIAYDEl.IViKKeMNDAA---
+MYG_PHYCA  AiiH..HSRHPG..GADAQGaMN.A.ELFRKDiAA..KELGYQG
+Consensus  xllxvlxxxxxxdftxxvxaSxxkxlxxvaxxlxxkyXxxxxxx
+
 </pre>
-<hr>
-<p>
-
-
+</td></tr></table><p>
 
 
 
@@ -1070,6 +1535,7 @@ None.
 <tr><td><a href="showdb.html">showdb</a></td><td>Displays information on the currently available databases</td></tr>
 <tr><td><a href="showfeat.html">showfeat</a></td><td>Show features of a sequence</td></tr>
 <tr><td><a href="showseq.html">showseq</a></td><td>Display a sequence with features, translation etc</td></tr>
+<tr><td><a href="sixpack.html">sixpack</a></td><td>Display a DNA sequence with 6-frame translation and ORFs</td></tr>
 <tr><td><a href="textsearch.html">textsearch</a></td><td>Search sequence documentation text. SRS and Entrez are faster!</td></tr>
 <tr><td><a href="tranalign.html">tranalign</a></td><td>Align nucleic coding regions given the aligned proteins</td></tr>
 </table>

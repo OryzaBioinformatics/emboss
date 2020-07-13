@@ -22,11 +22,14 @@ Description
    
 Usage
 
-   Here is a sample session with fuzztran, using all options.
+   Here is a sample session with fuzztran
+   
 
-% fuzztran -opt
+% fuzztran -opt 
 Protein pattern search after translation
-Input sequence(s): embl:rnops
+Input sequence(s): tembl:rnops
+Search pattern: RA
+Number of mismatches [0]: 
 Translation frames
          1 : 1
          2 : 2
@@ -58,11 +61,12 @@ asma
         21 : Trematode Mitochondrial
         22 : Scenedesmus obliquus
         23 : Thraustochytrium Mitochondrial
-Code to use [0]:
-Search pattern: RA
-Number of mismatches [0]:
-Output file [rnops.fuzztran]:
-
+Code to use [0]: 
+Output report [rnops.fuzztran]: 
+   
+   Go to the input files for this example
+   Go to the output files for this example
+   
 Command line arguments
 
    Mandatory qualifiers:
@@ -133,7 +137,7 @@ Command line arguments
    accepted
    -mismatch Number of mismatches Integer 0 or more 0
    [-outfile]
-   (Parameter 2) Output report file name Report file
+   (Parameter 2) Output report file name Report output file
    Optional qualifiers Allowed values Default
    -frame Frame(s) to translate
    1  (1)
@@ -172,6 +176,139 @@ Command line arguments
    
 Input file format
 
+   fuzztran reads in normal nucleic acid sequence USAs.
+   
+  Input files for usage example
+  
+   'tembl:rnops' is a sequence entry in the example nucleic acid database
+   'tembl'
+   
+  Database entry: tembl:rnops
+  
+ID   RNOPS      standard; RNA; ROD; 1493 BP.
+XX
+AC   Z46957;
+XX
+SV   Z46957.1
+XX
+DT   20-DEC-1994 (Rel. 42, Created)
+DT   27-AUG-1996 (Rel. 49, Last updated, Version 8)
+XX
+DE   R.norvegicus mRNA for rhodopsin.
+XX
+KW   rhodopsin.
+XX
+OS   Rattus norvegicus (Norway rat)
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia
+;
+OC   Eutheria; Rodentia; Sciurognathi; Muridae; Murinae; Rattus.
+XX
+RN   [1]
+RP   1-1493
+RA   Huber A., Sander P.H., Paulsen R.;
+RT   "Phosphorylation of the InaD gene product, a photoreceptor membrane protei
+n
+RT   required for recovery of visual excitation";
+RL   J. Biol. Chem. 271:11710-11717(1996).
+XX
+RN   [2]
+RP   1-1493
+RA   Huber A.;
+RT   ;
+RL   Submitted (20-DEC-1994) to the EMBL/GenBank/DDBJ databases.
+RL   Huber A., Universitaet Karlsruhe, Zoologie I, Kornblumenstr. 13, 76128
+RL   Karlsruhe, Germany
+XX
+DR   SWISS-PROT; P51489; OPSD_RAT.
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..1493
+FT                   /db_xref="taxon:10116"
+FT                   /organism="Rattus norvegicus"
+FT                   /strain="Sprague-Dawley"
+FT                   /clone="pRO4"
+FT                   /dev_stage="adult"
+FT                   /tissue_type="retina"
+FT                   /cell_type="rod"
+FT                   /clone_lib="rat retinal library"
+FT   5'UTR           1..83
+FT   CDS             84..1130
+FT                   /citation=[1]
+FT                   /db_xref="SWISS-PROT:P51489"
+FT                   /function="phototransduction"
+FT                   /product="rhodopsin"
+FT                   /protein_id="CAA87081.1"
+FT                   /translation="MNGTEGPNFYVPFSNITGVVRSPFEQPQYYLAEPWQFSMLAAYM
+F
+FT                   LLIVLGFPINFLTLYVTVQHKKLRTPLNYILLNLAVADLFMVFGGFTTTLYTSLHGYF
+V
+FT                   FGPTGCNLEGFFATLGGEIGLWSLVVLAIERYVVVCKPMSNFRFGENHAIMGVAFTWV
+M
+FT                   ALACAAPPLVGWSRYIPEGMQCSCGIDYYTLKPEVNNESFVIYMFVVHFTIPMIVIFF
+C
+FT                   YGQLVFTVKEAAAQQQESATTQKAEKEVTRMVIIMVIFFLICWLPYASVAMYIFTHQG
+S
+FT                   NFGPIFMTLPAFFAKTASIYNPIIYIMMNKQFRNCMLTTLCCGKNPLGDDEASATASK
+T
+FT                   ETSQVAPA"
+FT   3'UTR           1128..1493
+XX
+SQ   Sequence 1493 BP; 309 A; 475 C; 365 G; 344 T; 0 other;
+     ggagccgtag gtagctgagc tcgccaggca gccttggtct ctgtctacga acagcccgtg        6
+0
+     gggcagcctc aagggccgca gccatgaacg gcacagaggg ccccaatttt tatgtgccct       12
+0
+     tctccaacat cacgggcgtg gtgcgcagcc cctttgagca gccgcagtac tacctggcgg       18
+0
+     agccatggca gttctccatg ctggcagcct acatgttcct gctcatcgtg ctgggcttcc       24
+0
+     ccatcaactt cctcacgctc tacgtcaccg tacagcacaa gaagctgcgc acaccactca       30
+0
+     actacatcct gctcaacttg gctgtggctg acctcttcat ggtcttcgga ggattcacca       36
+0
+     ccaccctcta cacctcactg catggctact ttgtctttgg gcccacaggc tgcaaccttg       42
+0
+     agggcttctt tgccaccctt ggaggtgaaa tcggcctgtg gtccctggta gtcctggcca       48
+0
+     ttgagcgcta cgtggtggtc tgcaagccca tgagcaactt ccgctttggg gagaatcatg       54
+0
+     ccattatggg tgtggccttc acctgggtca tggcgttggc ctgtgctgct cccccactgg       60
+0
+     ttggctggtc caggtacatc cccgagggca tgcagtgttc atgtgggatt gactactata       66
+0
+     cactcaagcc tgaggtcaac aatgagtcct tcgtcatcta catgttcgtg gtccacttca       72
+0
+     ccatccccat gatcgtcatc ttcttctgct acgggcagct ggtcttcacc gtcaaggagg       78
+0
+     ccgccgccca gcaacaggag tcggctacca ctcagaaggc agagaaggaa gtcacgcgca       84
+0
+     tggtcatcat catggtcatc ttcttcctga tctgctggct tccctatgcc agtgtggcca       90
+0
+     tgtacatctt tacccaccag ggctccaact tcggccccat cttcatgacc cttcccgctt       96
+0
+     tctttgctaa gaccgcctcc atctacaacc caatcatcta catcatgatg aacaagcagt      102
+0
+     tccggaactg catgctcacc acgctctgct gcggcaagaa tccactggga gatgatgagg      108
+0
+     cctctgccac tgcctccaag acggagacca gccaggtggc tccagcctaa gcctggccag      114
+0
+     agactgtggc tgactgtagg agtctcctgt ccccactcac cccagccaca gcccccacca      120
+0
+     ggagcagcac ccgttggaat gaggtcatgc aggctccctc agtgttcttt tctttgtttt      126
+0
+     taatgaattc atgaaagcaa aatgaggctc cccactcaac agggacagcc tgacaaagga      132
+0
+     catccatcca ccaagacccc cagcctggag tccccaattc ccgggggcca gcgggatctg      138
+0
+     tacccctccc ctcagcttgt gtctcaggaa catgacaagt gtcccggctt acggctaagt      144
+0
+     gtctaggaca gaatggaaca catagtagct gattaataaa tgctacctgg atg             149
+3
+//
+   
+  Pattern specification
+  
    Patterns for fuzztran are based on the format of pattern used in the
    PROSITE database, with the difference that the terminating dot '.' and
    the hyphens, '-', between the characters are optional.
@@ -224,11 +361,14 @@ Output file format
    
    By default fuzztran writes a 'table' report file.
    
-   The output from the above example is:
-   
+  Output files for usage example
+  
+  File: rnops.fuzztran
+  
 ########################################
 # Program: fuzztran
-# Rundate: Thu Apr 11 13:46:20 2002
+# Rundate: Thu Nov 07 14:33:19 2002
+# Report_format: table
 # Report_file: rnops.fuzztran
 ########################################
 
@@ -257,7 +397,22 @@ Output file format
 
 #---------------------------------------
 #---------------------------------------
-
+   
+   The columns of data are as follows:
+   
+    1. Start - the start position of the pattern in the nucleic acids
+       sequence.
+    2. End - the end position of the pattern in the nucleic acids
+       sequence.
+    3. Score - the score of the match.
+    4. Mismatch - the number of mismatches .
+    5. Frame - the translation frame that the pattern match occurs in.
+    6. PStart - the start position of the match in the resulting protein
+       sequence.
+    7. PEnd - the end position of the match in the resulting protein
+       sequence.
+    8. Translation - the protein sequence that is matched.
+       
 Data files
 
    EMBOSS data files are distributed with the application and stored in
@@ -385,7 +540,7 @@ Known bugs
    
 See also
 
-    Program name                        Description
+    Program name                         Description
    antigenic      Finds antigenic sites in proteins
    digest         Protein proteolytic enzyme or reagent cleavage digest
    dreg           regular expression search of a nucleotide sequence
@@ -397,6 +552,7 @@ See also
    patmatdb       Search a protein sequence with a motif
    patmatmotifs   Search a PROSITE motif database with a protein sequence
    pepcoil        Predicts coiled coil regions
+   pestfind       Finds PEST motifs as potential proteolytic cleavage sites
    preg           Regular expression search of a protein sequence
    pscan          Scans proteins using PRINTS
    sigcleave      Reports protein signal cleavage sites

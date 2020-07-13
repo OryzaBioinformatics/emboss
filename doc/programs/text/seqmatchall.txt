@@ -22,15 +22,21 @@ Description
    
 Usage
 
-   Here is a sample session with seqmatchall. We use an increased word
-   size to avoid accidental matches.
+   Here is a sample session with seqmatchall
+   
+   Here is an example using an increased word size to avoid accidental
+   matches:
+   
 
-% seqmatchall
+% seqmatchall 
 Does an all-against-all comparison of a set of sequences
-Input sequence set: embl:eclac*
+Input sequence set: tembl:eclac*
 Word size [4]: 15
-Output file [outfile.seqmatchall]:
-
+Output file [eclac.seqmatchall]: 
+   
+   Go to the input files for this example
+   Go to the output files for this example
+   
 Command line arguments
 
    Mandatory qualifiers:
@@ -59,30 +65,38 @@ Command line arguments
    
 Input file format
 
-   A set of sequences. This can be a list file of sequence or a
-   wildcarded set of sequences from a database or all sequences from a
-   database, or a wildcarded set of sequence files.
+   seqmatchall reads a set of sequence USAs.
    
-   The sequences must be all either protein or nucleic.
+   The sequences must be either all protein or all nucleic acid.
+   
+  Input files for usage example
+  
+   'tembl:eclac*' is a sequence entry in the example nucleic acid
+   database 'tembl'
    
 Output file format
 
-   Here is the output from the example run.
+  Output files for usage example
+  
+  File: eclac.seqmatchall
+  
+1832  5646 7477 ECLAC 1 1832 ECLACA
+1113  49 1161 ECLAC 1 1113 ECLACI
+1500  4305 5804 ECLAC 1 1500 ECLACY
+3078  1287 4364 ECLAC 1 3078 ECLACZ
+159  1 159 ECLACA 1342 1500 ECLACY
+60  1 60 ECLACY 3019 3078 ECLACZ
    
    ECLAC (the complete E.coli lac operon) matches ECLACI ECLACZ ECLACY
    and ECLACA (the individual genes), and there is a short overlap
    between ECLACY and the flanking genes ECLACZ and ECLACA
-
-1832  5645 7477 ECLAC 0 1832 ECLACA
-1113  48 1161 ECLAC 0 1113 ECLACI
-1500  4304 5804 ECLAC 0 1500 ECLACY
-3078  1286 4364 ECLAC 0 3078 ECLACZ
-158  1 159 ECLACA 1342 1500 ECLACY
-59  1 60 ECLACY 3019 3078 ECLACZ
-
+   
    The output is a list of regions of identity in pairs of sequences,
    each consisting of one line with 7 columns of data separated by TABs
-   or space characters. The columns of data consist of:
+   or space characters.
+   
+   The columns of data consist of:
+   
      * The length of the region of identity.
      * The start position in sequence 1.
      * The end position in sequence 1.
@@ -93,6 +107,8 @@ Output file format
        
 Data files
 
+   None.
+   
 Notes
 
    The larger the word size, the faster the comparisons will proceed, but
@@ -100,16 +116,24 @@ Notes
    
 References
 
+   None.
+   
 Warnings
 
+   None.
+   
 Diagnostic Error Messages
 
+   None.
+   
 Exit status
 
    It exits with a status of 0.
    
 Known bugs
 
+   None.
+   
 See also
 
    Program name Description
@@ -129,6 +153,8 @@ Author(s)
    
 History
 
+   1999 - written.
+   
 Target users
 
    This program is intended to be used by everyone and everything, from

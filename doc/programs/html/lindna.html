@@ -69,18 +69,27 @@ the desired parameters.
 </H2>
 
 
-Here is a sample session with lindna.
+<b>Here is a sample session with lindna</b>
+<p>
 
-<pre>
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% lindna
+% <b>lindna -graph cps </b>
 Draws linear maps of DNA constructs
-Graph type [x11]:
-Input file [inputfile]: data.linp
-do you want a ruler (Y or N) [Y]:
-type of blocks (enter Open, Filled, or Outline) [Filled]:   
+Input file [inputfile]: <b>../../data/data.linp</b>
+do you want a ruler [Y]: <b></b>
+      1 : Open
+      2 : Filled
+      3 : Outline
+type of blocks (enter Open, Filled, or Outline) [Filled]: <b></b>
 
-</pre>
+Created lindna.ps
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
+
 
 
 
@@ -100,22 +109,21 @@ IT IS DONE FOR YOU.
    Mandatory qualifiers:
    -graphout           graph      Graph type
    -inputfile          infile     input file containing mapping data
-   -ruler              string     do you want a ruler (Y or N)
-   -blocktype          string     type of blocks: Open, Filled, or Outline.
+   -[no]ruler          boolean    do you want a ruler
+   -blocktype          selection  type of blocks: Open, Filled, or Outline.
                                   Option 'Outline' draws filled blocks
                                   surrounded by a black border
 
    Optional qualifiers:
-   -intersymbol        string     type of junctions between blocks (enter
-                                  Straight, Up, Down, or No)
-   -intercolor         integer    color of junctions between blocks (enter a
-                                  color number)
-   -interticks         string     do you want horizontal junctions between
-                                  ticks (Y or N)
+   -intersymbol        selection  type of junctions between blocks
+   -intercolour        integer    colour of junctions between blocks (enter a
+                                  colour number)
+   -interticks         boolean    do you want horizontal junctions between
+                                  ticks
    -gapsize            integer    interval between ticks in the ruler (enter
                                   an integer)
-   -ticklines          string     do you want vertical lines at the ruler's
-                                  ticks (Y or N)
+   -ticklines          boolean    do you want vertical lines at the ruler's
+                                  ticks
    -textheight         float      height of text. Enter a number <1 or >1 to
                                   decrease or increase the size, respectively
    -textlength         float      length of text. Enter a number <1 or >1 to
@@ -172,16 +180,16 @@ IT IS DONE FOR YOU.
 </tr>
 
 <tr>
-<td>-ruler</td>
-<td>do you want a ruler (Y or N)</td>
-<td>Any string is accepted</td>
-<td>Y</td>
+<td>-[no]ruler</td>
+<td>do you want a ruler</td>
+<td>Boolean value Yes/No</td>
+<td>Yes</td>
 </tr>
 
 <tr>
 <td>-blocktype</td>
 <td>type of blocks: Open, Filled, or Outline. Option 'Outline' draws filled blocks surrounded by a black border</td>
-<td>Any string is accepted</td>
+<td>Choose from selection list of values</td>
 <td>Filled</td>
 </tr>
 
@@ -193,23 +201,23 @@ IT IS DONE FOR YOU.
 
 <tr>
 <td>-intersymbol</td>
-<td>type of junctions between blocks (enter Straight, Up, Down, or No)</td>
-<td>Any string is accepted</td>
+<td>type of junctions between blocks</td>
+<td>Choose from selection list of values</td>
 <td>Straight</td>
 </tr>
 
 <tr>
-<td>-intercolor</td>
-<td>color of junctions between blocks (enter a color number)</td>
+<td>-intercolour</td>
+<td>colour of junctions between blocks (enter a colour number)</td>
 <td>Integer from 0 to 15</td>
 <td>1</td>
 </tr>
 
 <tr>
 <td>-interticks</td>
-<td>do you want horizontal junctions between ticks (Y or N)</td>
-<td>Any string is accepted</td>
-<td>N</td>
+<td>do you want horizontal junctions between ticks</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
 </tr>
 
 <tr>
@@ -221,9 +229,9 @@ IT IS DONE FOR YOU.
 
 <tr>
 <td>-ticklines</td>
-<td>do you want vertical lines at the ruler's ticks (Y or N)</td>
-<td>Any string is accepted</td>
-<td>N</td>
+<td>do you want vertical lines at the ruler's ticks</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
 </tr>
 
 <tr>
@@ -301,33 +309,33 @@ IT IS DONE FOR YOU.
 </H2>
 
 
-Here is the input file data.linp for the example run: 
-
-<p>
-<hr>
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+<p><h3>File: ../../data/data.linp</h3>
+<table width="90%"><tr><td bgcolor="#FFDDFF">
 <pre>
-Start   1001
-End     4270
+Start	1001
+End	4270
 
 group
 exons
 label
-Block   1011    1362    3       H
+Block	1011	1362	3	H
 ex1
 endlabel
 label
-Tick    1610    8       H
+Tick	1610	8	H
 EcoR1
 endlabel
 label
-Block   1647    1815    1       H
+Block	1647	1815	1	H
 endlabel
 label
-Tick    2459    8       H
+Tick	2459	8	H
 BamH1
 endlabel
 label
-Block   4139    4258    3       H
+Block	4139	4258	3	H
 ex2
 endlabel
 endgroup
@@ -335,55 +343,65 @@ endgroup
 group
 repeat-regions
 label
-Range   2541    2812    [       ]       5       V
+Range	2541	2812	[	]	5	V
 Alu
 endlabel
 label
-Range   3322    3497    &gt;       &lt;       5       V
+Range	3322	3497	&gt;	&lt;	5	V
 MER13
 endlabel
-endgroup
 </pre>
-<hr>
+</td></tr></table><p>
+
+
 
 <p>
+
 Blank lines in the input file are ignored. 
 
 <p>
+
 The file is organized in several fields separated by one or more space
 or TAB characters.
 
 <p>
+
 The first non-blank line gives the start position of the DNA fragment to
 be drawn after the keyword 'Start'.  The end position is on the second
 line following the keyword 'End'. 
 
 <p>
+
 Then, one or more groups (up to a maximum of 20) of genetic markers are
 defined.  Each group begins with a line consisting of the keyword
 'group' and ends with a line consisting of the keyword 'endgroup'. 
 
 <p>
+
 If desired, a group name can be given on the very next line. Spaces 
 and tabulations are allowed but only the first 20 characters of that name 
 (including spaces) will be displayed. 
 
 <p>
+
 Next, the individual markers (up to a maximum of 1000) of the group are
 described.  Each marker begins with a line consisting of the keyword
 'label' and ends with a line consisting of the keyword 'endlabel'.
 
 <p>
+
 Do not start a new marker (by using a 'label' line) before you have
 closed the previous marker (by using an 'endlabel' line).  You must end
 a previous marker specification before starting a new one.  i.e.  do not
 overlap marker specifications in the input file. 
 
 <p>
+
 For each marker, the line following the 'label' line describes the
 marker. Three types of markers can be drawn: ticks, blocks, and ranges. 
 
 <p>
+
 For a tick, the descriptive line begins with the keyword 'Tick',
 followed by the position of the tick in the DNA fragment, and a number
 from 0 to 15 specifying the color in which the tick will be drawn (a
@@ -395,6 +413,7 @@ assumed by default.  A list of one or more names can be given on the
 next lines with one name per line. 
 
 <p>
+
 For a block, the descriptive line begins with the keyword 'Block',
 followed by the start and end positions of the block in the DNA
 fragment, and the number of the block's color.  If desired, one or more
@@ -425,11 +444,13 @@ marker.  Also, try to avoid long names.
 The colors defined in the PLPLOT graphics library are:
 
 <p>
+
 0 "BLACK", 1 "RED", 2 "YELLOW", 3 "GREEN", 4 "AQUAMARINE",
 5 "PINK", 6 "WHEAT", 7 "GREY", 8 "BROWN", 9 "BLUE", 10 "BLUEVIOLET",
 11 "CYAN", 12 "TURQUOISE", 13 "MAGENTA", 14 "SALMON", and 15 "WHITE".
 
 <p>
+
 This format can also be used for the program <a
 href="cirdna.html">"cirdna". </a>
 
@@ -444,7 +465,14 @@ Output is to the specified graphics device.
 
 <p>
 
-<a href="lindna.gif">Click here to see the output of the above example.</a>
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>Graphics File: lindna.ps</h3>
+<p><img src="lindna.1.lindna.gif" alt="[lindna results]">
+
+
+
 
 <H2>
     Data files
@@ -508,6 +536,7 @@ None.
 <tr><td><a href="showdb.html">showdb</a></td><td>Displays information on the currently available databases</td></tr>
 <tr><td><a href="showfeat.html">showfeat</a></td><td>Show features of a sequence</td></tr>
 <tr><td><a href="showseq.html">showseq</a></td><td>Display a sequence with features, translation etc</td></tr>
+<tr><td><a href="sixpack.html">sixpack</a></td><td>Display a DNA sequence with 6-frame translation and ORFs</td></tr>
 <tr><td><a href="textsearch.html">textsearch</a></td><td>Search sequence documentation text. SRS and Entrez are faster!</td></tr>
 </table>
 

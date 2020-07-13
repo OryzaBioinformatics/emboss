@@ -90,17 +90,22 @@ values for each residue are added over the window.
 </H2>
 
 
-Here is a sample session with octanol.
+<b>Here is a sample session with octanol</b>
+<p>
 
-<pre>
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% octanol
-Input sequence: sw:opsd_human
-Graph type [x11]: 
+% <b>octanol </b>
+Displays protein hydropathy
+Input sequence: <b>tsw:opsd_human</b>
+Graph type [x11]: <b>ps</b>
 
-</pre>
+Created octanol.ps
 
-<a href="octanol0.gif">Click here to see the results.</a> 
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
 
 
 
@@ -183,21 +188,21 @@ IT IS DONE FOR YOU.
 <tr>
 <td>-octanolplot</td>
 <td>Display the octanol plot</td>
-<td>Yes/No</td>
+<td>Boolean value Yes/No</td>
 <td>No</td>
 </tr>
 
 <tr>
 <td>-interfaceplot</td>
 <td>Display the interface plot</td>
-<td>Yes/No</td>
+<td>Boolean value Yes/No</td>
 <td>No</td>
 </tr>
 
 <tr>
 <td>-[no]differenceplot</td>
 <td>Display the difference plot</td>
-<td>Yes/No</td>
+<td>Boolean value Yes/No</td>
 <td>Yes</td>
 </tr>
 
@@ -219,22 +224,153 @@ IT IS DONE FOR YOU.
     Input file format
 </H2>
 
-Any protein sequence.
+<b>octanol</b> reads any protein sequence USA.
+
+<p>
+
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+
+'tsw:opsd_human' is a sequence entry in the example protein database 'tsw'
+<p>
+<p><h3>Database entry: tsw:opsd_human</h3>
+<table width="90%"><tr><td bgcolor="#FFDDFF">
+<pre>
+ID   OPSD_HUMAN     STANDARD;      PRT;   348 AA.
+AC   P08100; Q16414;
+DT   01-AUG-1988 (Rel. 08, Created)
+DT   01-AUG-1988 (Rel. 08, Last sequence update)
+DT   15-JUL-1999 (Rel. 38, Last annotation update)
+DE   RHODOPSIN.
+GN   RHO.
+OS   Homo sapiens (Human).
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Mammalia;
+OC   Eutheria; Primates; Catarrhini; Hominidae; Homo.
+RN   [1]
+RP   SEQUENCE FROM N.A.
+RX   MEDLINE; 84272729.
+RA   NATHANS J., HOGNESS D.S.;
+RT   "Isolation and nucleotide sequence of the gene encoding human
+RT   rhodopsin.";
+RL   Proc. Natl. Acad. Sci. U.S.A. 81:4851-4855(1984).
+RN   [2]
+RP   SEQUENCE OF 1-120 FROM N.A.
+RA   BENNETT J., BELLER B., SUN D., KARIKO K.;
+RL   Submitted (NOV-1994) to the EMBL/GenBank/DDBJ databases.
+RN   [3]
+RP   REVIEW ON ADRP VARIANTS.
+RX   MEDLINE; 94004905.
+RA   AL-MAGHTHEH M., GREGORY C., INGLEHEARN C., HARDCASTLE A.,
+RA   BHATTACHARYA S.;
+RT   "Rhodopsin mutations in autosomal dominant retinitis pigmentosa.";
+RL   Hum. Mutat. 2:249-255(1993).
+RN   [4]
+RP   VARIANT ADRP HIS-23.
+RX   MEDLINE; 90136922.
+RA   DRYJA T.P., MCGEE T.L., REICHEI E., HAHN L.B., COWLEY G.S.,
+RA   YANDELL D.W., SANDBERG M.A., BERSON E.L.;
+RT   "A point mutation of the rhodopsin gene in one form of retinitis
+RT   pigmentosa.";
+RL   Nature 343:364-366(1990).
+RN   [5]
+RP   VARIANTS ADRP.
+RX   MEDLINE; 91051574.
+RA   FARRAR G.J., KENNA P., REDMOND R., MCWILLIAM P., BRADLEY D.G.,
+RA   HUMPHRIES M.M., SHARP E.M., INGLEHEARN C.F., BASHIR R., JAY M.,
+RA   WATTY A., LUDWIG M., SCHINZEL A., SAMANNS C., GAL A.,
+RA   BHATTACHARYA S.S., HUMPHRIES P.;
+RT   "Autosomal dominant retinitis pigmentosa: absence of the rhodopsin
+RT   proline--&gt;histidine substitution (codon 23) in pedigrees from
+RT   Europe.";
+RL   Am. J. Hum. Genet. 47:941-945(1990).
+RN   [6]
+RP   VARIANTS ADRP HIS-23; ARG-58; LEU-347 AND SER-347.
+RX   MEDLINE; 91015273.
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+FT                                /FTId=VAR_004816.
+FT   VARIANT     209    209       V -&gt; M (EFFECT NOT KNOWN).
+FT                                /FTId=VAR_004817.
+FT   VARIANT     211    211       H -&gt; P (IN ADRP).
+FT                                /FTId=VAR_004818.
+FT   VARIANT     211    211       H -&gt; R (IN ADRP).
+FT                                /FTId=VAR_004819.
+FT   VARIANT     216    216       M -&gt; K (IN ADRP).
+FT                                /FTId=VAR_004820.
+FT   VARIANT     220    220       F -&gt; C (IN ADRP).
+FT                                /FTId=VAR_004821.
+FT   VARIANT     222    222       C -&gt; R (IN ADRP).
+FT                                /FTId=VAR_004822.
+FT   VARIANT     255    255       MISSING (IN ADRP).
+FT                                /FTId=VAR_004823.
+FT   VARIANT     264    264       MISSING (IN ADRP).
+FT                                /FTId=VAR_004824.
+FT   VARIANT     267    267       P -&gt; L (IN ADRP).
+FT                                /FTId=VAR_004825.
+FT   VARIANT     267    267       P -&gt; R (IN ADRP).
+FT                                /FTId=VAR_004826.
+FT   VARIANT     292    292       A -&gt; E (IN CSNB4).
+FT                                /FTId=VAR_004827.
+FT   VARIANT     296    296       K -&gt; E (IN ADRP).
+FT                                /FTId=VAR_004828.
+FT   VARIANT     297    297       S -&gt; R (IN ADRP).
+FT                                /FTId=VAR_004829.
+FT   VARIANT     342    342       T -&gt; M (IN ADRP).
+FT                                /FTId=VAR_004830.
+FT   VARIANT     345    345       V -&gt; L (IN ADRP).
+FT                                /FTId=VAR_004831.
+FT   VARIANT     345    345       V -&gt; M (IN ADRP).
+FT                                /FTId=VAR_004832.
+FT   VARIANT     347    347       P -&gt; A (IN ADRP).
+FT                                /FTId=VAR_004833.
+FT   VARIANT     347    347       P -&gt; L (IN ADRP; COMMON VARIANT).
+FT                                /FTId=VAR_004834.
+FT   VARIANT     347    347       P -&gt; Q (IN ADRP).
+FT                                /FTId=VAR_004835.
+FT   VARIANT     347    347       P -&gt; R (IN ADRP).
+FT                                /FTId=VAR_004836.
+FT   VARIANT     347    347       P -&gt; S (IN ADRP).
+FT                                /FTId=VAR_004837.
+SQ   SEQUENCE   348 AA;  38892 MW;  07443BEA CRC32;
+     MNGTEGPNFY VPFSNATGVV RSPFEYPQYY LAEPWQFSML AAYMFLLIVL GFPINFLTLY
+     VTVQHKKLRT PLNYILLNLA VADLFMVLGG FTSTLYTSLH GYFVFGPTGC NLEGFFATLG
+     GEIALWSLVV LAIERYVVVC KPMSNFRFGE NHAIMGVAFT WVMALACAAP PLAGWSRYIP
+     EGLQCSCGID YYTLKPEVNN ESFVIYMFVV HFTIPMIIIF FCYGQLVFTV KEAAAQQQES
+     ATTQKAEKEV TRMVIIMVIA FLICWVPYAS VAFYIFTHQG SNFGPIFMTI PAFFAKSAAI
+     YNPVIYIMMN KQFRNCMLTT ICCGKNPLGD DEASATVSKT ETSQVAPA
+//
+</pre>
+</td></tr></table><p>
+
 
 <H2>
     Output file format
 </H2>
 
-octanol draws a graph showing the
+<b>octanol</b> draws a graph showing the
 free energy calcuated over a sliding window.
 
 <p>
+
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>Graphics File: octanol.ps</h3>
+<p><img src="octanol.1.octanol.gif" alt="[octanol results]">
+
+
+<p>
+
 The line on the default plot is the difference between the interface
 and octanol free energy calculations. Command line options allow the
 display of the interface and octanol values, or hiding the difference
 values.
 
 <p>
+
 In the example, the human opsin protein has 7 transmembrane
 regions: 37-61, 74-98, 114-133, 153-176, 203-230, 253-276 and 285-309.
 Each is about 20 residues in length, which is also the gap between tick
@@ -243,6 +379,7 @@ in the lipid (octanol) enviroment - shown as being above the zero
 line - or have at least no clear preference.
 
 <p>
+
 Running octanol with all three plots:
 
 <pre>
@@ -253,8 +390,9 @@ Input sequence: tsw:opsd_human
 
 </pre>
 
-gives a graph with the water-interface and water-octanol plots (link
-to the output).
+gives a graph with the water-interface and water-octanol plots.
+
+<p>
 
 For those regions where the diference plot is close to zero, both the
 other two plots are above the line, showing a preference for either
@@ -363,7 +501,7 @@ None.
 <tr><th>Program name</th><th>Description</th></tr>
 <tr><td><a href="backtranseq.html">backtranseq</a></td><td>Back translate a protein sequence</td></tr>
 <tr><td><a href="charge.html">charge</a></td><td>Protein charge plot</td></tr>
-<tr><td><a href="checktrans.html">checktrans</a></td><td>Reports STOP codons and ORF statistics of a protein sequence</td></tr>
+<tr><td><a href="checktrans.html">checktrans</a></td><td>Reports STOP codons and ORF statistics of a protein</td></tr>
 <tr><td><a href="compseq.html">compseq</a></td><td>Counts the composition of dimer/trimer/etc words in a sequence</td></tr>
 <tr><td><a href="emowse.html">emowse</a></td><td>Protein identification by mass spectrometry</td></tr>
 <tr><td><a href="freak.html">freak</a></td><td>Residue/base frequency table or plot</td></tr>

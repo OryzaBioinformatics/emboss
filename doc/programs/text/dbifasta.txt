@@ -15,26 +15,37 @@ Description
    addition to EMBOSS, and appears to be the most generally used and
    publicly available index file format for these databases.
    
+   Having created the EMBOSS indices for this file, a database can then
+   be defined in the file emboss.defaults as something like:
+DB emrod [
+   type: N
+   format: fasta
+   method: emblcd
+   directory: /data/embl/fasta
+]
+
 Usage
 
-   Here is a sample session with dbifasta, using the data in the
-   test/wormpep directory of the distribution which is normally indexed
-   as "wormpep"
+   Here is a sample session with dbifasta
+   
 
-% dbifasta
+% dbifasta 
 Index a fasta database
     simple : >ID
      idacc : >ID ACC
      gcgid : >db:ID
   gcgidacc : >db:ID ACC
-      ncbi : >blah|...[|ACC]|ID
+      dbid : >db ID
+      ncbi : | formats
 ID line format [idacc]: idacc
-Database name: wormpep
-Database directory [.]: /data/worm/
-Wildcard database filename [*.dat]: wormpep
-Release number [0.0]: 1.0
-Index date [00/00/00]: 04/02/00
-
+Database directory [.]: ../../data
+Wildcard database filename [*.dat]: emrod
+Database name: EMROD
+Release number [0.0]: 
+Index date [00/00/00]: 
+   
+   Go to the output files for this example
+   
 Command line arguments
 
    Mandatory qualifiers:
@@ -94,17 +105,38 @@ Command line arguments
    -sortoptions Sort options, typically '-T .' to use current directory
    for work files and '-k 1,1' to force GNU sort to use the first field
    Any string is accepted -T . -k 1,1
-   -[no]systemsort Use system sort utility Yes/No Yes
-   -[no]cleanup Clean up temporary files Yes/No Yes
+   -[no]systemsort Use system sort utility Boolean value Yes/No Yes
+   -[no]cleanup Clean up temporary files Boolean value Yes/No Yes
    
 Input file format
 
-   None.
-   
 Output file format
 
+  Output files for usage example
+  
+  File: acnum.hit
+  
+   This file contains non-printing characters and so cannot be displayed
+   here.
+   
+  File: acnum.trg
+  
+   This file contains non-printing characters and so cannot be displayed
+   here.
+   
+  File: division.lkp
+  
+   This file contains non-printing characters and so cannot be displayed
+   here.
+   
+  File: entrynam.idx
+  
+   This file contains non-printing characters and so cannot be displayed
+   here.
+   
    dbifasta creates four index files. All are binary but with a simple
    format.
+   
      * division.lkp is the master index file, and has a 300 byte header
        containing the database name and date plus information on the
        record size. This header is followed by one record for each

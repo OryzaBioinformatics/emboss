@@ -51,18 +51,20 @@ Searches a DNA database for matches with a set of STS primers
 </H2>
 
 
-Searches a DNA sequence database with a set of STS primers and reports
-expected matches and possible mismatches. A replacement for stssearch
-in the EGCG package.
-<P>
+<b>stssearch</b> searches a DNA sequence database with a set of STS
+primers and reports expected matches.
 
-This reads in one or more sequences to be searched.  For each pair of
-primers, this looks for exact matches between a the primers and the
-query sequence in either orientation.
 <p>
 
-Any matches found will be reported. Only one primer need match.
+<b>stssearch</b>s reads in one or more sequences to be searched.  For
+each pair of primers, it looks for matches between a the primers
+and the query sequence in either orientation. 
+
 <p>
+
+Any matches found will be reported.  Only one primer need match for it
+to be reported.. 
+
 
 
 
@@ -71,14 +73,22 @@ Any matches found will be reported. Only one primer need match.
 </H2>
 
 
-Here is a sample session with stssearch.
+<b>Here is a sample session with stssearch</b>
+<p>
 
-<pre>
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% stssearch
-Input sequence(s): embl:eclac*
-Primer file: lac.primers
-</pre>
+% <b>stssearch </b>
+Searches a DNA database for matches with a set of STS primers
+Input sequence(s): <b>tembl:eclac*</b>
+Primer file: <b>../../data/lac.primers</b>
+Output file [eclac.stssearch]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
+
 
 
 
@@ -169,9 +179,14 @@ IT IS DONE FOR YOU.
 </H2>
 
 
-Here is the primer input file for the example run:
 
-<hr>
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+
+'tembl:eclac*' is a sequence entry in the example nucleic acid database 'tembl'
+<p>
+<p><h3>File: ../../data/lac.primers</h3>
+<table width="90%"><tr><td bgcolor="#FFDDFF">
 <pre>
 PrimA ACCAGACACCCATCAACAG    TATTTATGCCAGCCAGCCAG
 PrimB CGAAAGAATAAGAGCAGGCAAG GTAAGAGAAATAGACAGGCGG
@@ -179,11 +194,14 @@ PrimC CGTCAGTATCCCCGTTTACAG  TATCGCCAAAATCACCGCC
 PrimD AATACGCAAACCGCCTCTCC   TTATCCGCTCACAATTCCACAC
 PrimE AATACGCAAACCGCCTCTCC   CACAACCCGCTCACAATTCCA
 </pre>
-<hr>
+</td></tr></table><p>
+
+
 <p>
 
-It consists of three columns separated by tabs or spaces.
-<P>
+The primers file consists of three columns separated by tabs or spaces.
+
+<p>
 
 The first column is the name of the primer pair.
 <br>
@@ -197,9 +215,11 @@ The third column is the sequence of the second primer.
 </H2>
 
 
-Here is the output from the example run:
 
-<hr>
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: eclac.stssearch</h3>
+<table width="90%"><tr><td bgcolor="#DDFFDD">
 <pre>
 ECLAC: PrimA PrimerA matched at 532
 ECLAC: (rev) PrimA PrimerB matched at 689
@@ -220,11 +240,15 @@ ECLACY: PrimB PrimerA matched at 1439
 ECLACZ: PrimC PrimerA matched at 1668
 ECLACZ: (rev) PrimC PrimerB matched at 1783
 </pre>
-<hr>
+</td></tr></table><p>
+
+
 <p>
 
-This consists of one line per match. This consists of:
+The output file consists of one line per match. This consists of:
+
 <p>
+
 <ul>
 <li>The name of the sequence that the match is found in, followed by a ':'.
 <li>If the match is in the reverse sense, it has a '(rev)'.

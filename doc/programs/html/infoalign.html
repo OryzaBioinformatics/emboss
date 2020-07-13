@@ -97,60 +97,115 @@ one or more sequence to be analysed.
  -->
 
 
-Here is a sample session with infoalign:
-<br>
-<pre>
-% infoalign globin.seq
-</pre>
-
+<b>Here is a sample session with infoalign</b>
 <p>
 
-Don't display the USA of a sequence 
-<br>
-<pre>
-% infoalign globin.seq -nousa -out stdout
-</pre>
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
+% <b>infoalign ../../data/globins.msf </b>
+Information on a multiple sequence alignment
+Output file [globins.infoalign]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 2</b>
+<p>
+This example doesn't display the USA of the sequence: 
 <p>
 
-Display only the name and sequence length of a sequence 
-<br>
-<pre>
-% infoalign globin.seq -only -name -seqlength -out stdout
-</pre>
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
+% <b>infoalign ../../data/globins.msf -nousa </b>
+Information on a multiple sequence alignment
+Output file [globins.infoalign]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.2">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 3</b>
+<p>
+Display only the name and sequence length of a sequence: 
 <p>
 
-Display only the name, number of gap characters and differences to the consensus sequence
-<br>
-<pre>
-% infoalign globin.seq -only -name -gapcount -diffcount -out stdout
-</pre>
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
+% <b>infoalign ../../data/globins.msf -only -name -seqlength </b>
+Information on a multiple sequence alignment
+Output file [globins.infoalign]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.3">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 4</b>
+<p>
+Display only the name, number of gap characters and differences to the consensus sequence: 
 <p>
 
-Display the name and  number of gaps within a sequence
-<br>
-<pre>
-% infoalign globin.seq -only -name -gaps -out stdout
-</pre>
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
+% <b>infoalign ../../data/globins.msf -only -name -gapcount -diffcount </b>
+Information on a multiple sequence alignment
+Output file [globins.infoalign]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.4">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 5</b>
+<p>
+Display the name and number of gaps within a sequence: 
 <p>
 
-Display information formatted with HTML 
-<br>
-<pre>
-% infoalign globin.seq -html -out stdout
-</pre>
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
+% <b>infoalign ../../data/globins.msf -only -name -gaps </b>
+Information on a multiple sequence alignment
+Output file [globins.infoalign]: <b></b>
 
+</pre></td></tr></table><p>
+<p>
+<a href="#output.5">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 6</b>
+<p>
+Display information formatted with HTML: 
 <p>
 
-Use the first sequence as the reference sequence to compare to
-<br>
-<pre>
-% infoalign globin.seq -refseq 1 -out stdout
-</pre>
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>infoalign ../../data/globins.msf -html </b>
+Information on a multiple sequence alignment
+Output file [globins.infoalign]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.6">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 7</b>
+<p>
+Use the first sequence as the reference sequence to compare to: 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>infoalign ../../data/globins.msf -refseq 1 </b>
+Information on a multiple sequence alignment
+Output file [globins.infoalign]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.7">Go to the output files for this example</a><p><p>
 
 
 
@@ -270,7 +325,7 @@ Use the first sequence as the reference sequence to compare to
 <tr>
 <td>-html</td>
 <td>Format output as an HTML table</td>
-<td>Yes/No</td>
+<td>Boolean value Yes/No</td>
 <td>No</td>
 </tr>
 
@@ -300,91 +355,91 @@ Use the first sequence as the reference sequence to compare to
 '-nohead -nousa -noname -noalign -nogaps -nogapcount -nosimcount -noidcount -nodiffcount'
 to get only the sequence length output, you can specify
 '-only -seqlength'</td>
-<td>Yes/No</td>
+<td>Boolean value Yes/No</td>
 <td>No</td>
 </tr>
 
 <tr>
 <td>-heading</td>
 <td>Display column headings</td>
-<td>Yes/No</td>
+<td>Boolean value Yes/No</td>
 <td>@(!$(only))</td>
 </tr>
 
 <tr>
 <td>-usa</td>
 <td>Display the USA of the sequence</td>
-<td>Yes/No</td>
+<td>Boolean value Yes/No</td>
 <td>@(!$(only))</td>
 </tr>
 
 <tr>
 <td>-name</td>
 <td>Display 'name' column</td>
-<td>Yes/No</td>
+<td>Boolean value Yes/No</td>
 <td>@(!$(only))</td>
 </tr>
 
 <tr>
 <td>-seqlength</td>
 <td>Display 'seqlength' column</td>
-<td>Yes/No</td>
+<td>Boolean value Yes/No</td>
 <td>@(!$(only))</td>
 </tr>
 
 <tr>
 <td>-alignlength</td>
 <td>Display 'alignlength' column</td>
-<td>Yes/No</td>
+<td>Boolean value Yes/No</td>
 <td>@(!$(only))</td>
 </tr>
 
 <tr>
 <td>-gaps</td>
 <td>Display number of gaps</td>
-<td>Yes/No</td>
+<td>Boolean value Yes/No</td>
 <td>@(!$(only))</td>
 </tr>
 
 <tr>
 <td>-gapcount</td>
 <td>Display number of gap positions</td>
-<td>Yes/No</td>
+<td>Boolean value Yes/No</td>
 <td>@(!$(only))</td>
 </tr>
 
 <tr>
 <td>-idcount</td>
 <td>Display number of identical positions</td>
-<td>Yes/No</td>
+<td>Boolean value Yes/No</td>
 <td>@(!$(only))</td>
 </tr>
 
 <tr>
 <td>-simcount</td>
 <td>Display number of similar positions</td>
-<td>Yes/No</td>
+<td>Boolean value Yes/No</td>
 <td>@(!$(only))</td>
 </tr>
 
 <tr>
 <td>-diffcount</td>
 <td>Display number of different positions</td>
-<td>Yes/No</td>
+<td>Boolean value Yes/No</td>
 <td>@(!$(only))</td>
 </tr>
 
 <tr>
 <td>-change</td>
 <td>Display % number of changed positions</td>
-<td>Yes/No</td>
+<td>Boolean value Yes/No</td>
 <td>@(!$(only))</td>
 </tr>
 
 <tr>
 <td>-description</td>
 <td>Display 'description' column</td>
-<td>Yes/No</td>
+<td>Boolean value Yes/No</td>
 <td>@(!$(only))</td>
 </tr>
 
@@ -414,8 +469,69 @@ IT IS DONE FOR YOU.
         happens in unusual cases - null input, etc. 
    -->
 
-A normal multiple sequence alignment file, as produced by an alignment
-program is read in. 
+<b>infoalign</b> reads a normal multiple sequence alignment file, as
+produced by a alignment program. 
+
+<p>
+
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+<p><h3>File: ../../data/globins.msf</h3>
+<table width="90%"><tr><td bgcolor="#FFDDFF">
+<pre>
+!!AA_MULTIPLE_ALIGNMENT 1.0
+
+  ../data/globins.msf MSF:  164 Type: P 25/06/01 CompCheck: 4278 ..
+
+  Name: HBB_HUMAN Len: 164  Check: 6914 Weight: 0.14
+  Name: HBB_HORSE Len: 164  Check: 6007 Weight: 0.15
+  Name: HBA_HUMAN Len: 164  Check: 3921 Weight: 0.15
+  Name: HBA_HORSE Len: 164  Check: 4770 Weight: 0.19
+  Name: MYG_PHYCA Len: 164  Check: 7930 Weight: 0.23
+  Name: GLB5_PETMA Len: 164  Check: 1857 Weight: 0.21
+  Name: LGB2_LUPLU Len: 164  Check: 2879 Weight: 0.10
+
+//
+
+           1                                               50
+HBB_HUMAN  ~~~~~~~~VHLTPEEKSAVTALWGKVN.VDEVGGEALGR.LLVVYPWTQR
+HBB_HORSE  ~~~~~~~~VQLSGEEKAAVLALWDKVN.EEEVGGEALGR.LLVVYPWTQR
+HBA_HUMAN  ~~~~~~~~~~~~~~VLSPADKTNVKAA.WGKVGAHAGEYGAEALERMFLS
+HBA_HORSE  ~~~~~~~~~~~~~~VLSAADKTNVKAA.WSKVGGHAGEYGAEALERMFLG
+MYG_PHYCA  ~~~~~~~VLSEGEWQLVLHVWAKVEAD.VAGHGQDILIR.LFKSHPETLE
+GLB5_PETMA PIVDTGSVAPLSAAEKTKIRSAWAPVYSTYETSGVDILVKFFTSTPAAQE
+LGB2_LUPLU ~~~~~~~~GALTESQAALVKSSWEEFNANIPKHTHRFFILVLEIAPAAKD
+
+           51                                             100
+HBB_HUMAN  FFESFGDLSTPDAVMGNPKVKAHGKKVLGAFSDGLAHLDNLKGTFATLSE
+HBB_HORSE  FFDSFGDLSNPGAVMGNPKVKAHGKKVLHSFGEGVHHLDNLKGTFAALSE
+HBA_HUMAN  FPTTKTYFPHFDLSHGSAQVKGHGKKVADALTNAVAHVDDMPNALSALSD
+HBA_HORSE  FPTTKTYFPHFDLSHGSAQVKAHGKKVGDALTLAVGHLDDLPGALSNLSD
+MYG_PHYCA  KFDRFKHLKTEAEMKASEDLKKHGVTVLTALGAILKKKGHHEAELKPLAQ
+GLB5_PETMA FFPKFKGLTTADQLKKSADVRWHAERIINAVNDAVASMDDTEKMSMKLRD
+LGB2_LUPLU LFSFLKGTSEVPQNNPELQAHAGKVFKLVYEAAIQLQVTGVVVTDATLKN
+
+           101                                            150
+HBB_HUMAN  LHCDKLH..VDPENFRLLGNVLVCVLAHHFGKEFTPPVQAAYQKVVAGVA
+HBB_HORSE  LHCDKLH..VDPENFRLLGNVLVVVLARHFGKDFTPELQASYQKVVAGVA
+HBA_HUMAN  LHAHKLR..VDPVNFKLLSHCLLVTLAAHLPAEFTPAVHASLDKFLASVS
+HBA_HORSE  LHAHKLR..VDPVNFKLLSHCLLSTLAVHLPNDFTPAVHASLDKFLSSVS
+MYG_PHYCA  SHATKHK..IPIKYLEFISEAIIHVLHSRHPGDFGADAQGAMNKALELFR
+GLB5_PETMA LSGKHAK..SFQVDPQYFKVLAAVIADTVAAGDAGFEKLMSMICILLRSA
+LGB2_LUPLU LGSVHVSKGVADAHFPVVKEAILKTIKEVVGAKWSEELNSAWTIAYDELA
+
+           151        164
+HBB_HUMAN  NALAHKYH~~~~~~
+HBB_HORSE  NALAHKYH~~~~~~
+HBA_HUMAN  TVLTSKYR~~~~~~
+HBA_HORSE  TVLTSKYR~~~~~~
+MYG_PHYCA  KDIAAKYKELGYQG
+GLB5_PETMA Y~~~~~~~~~~~~~
+LGB2_LUPLU IVIKKEMNDAA~~~
+
+</pre>
+</td></tr></table><p>
 
 
 
@@ -432,20 +548,195 @@ program is read in.
    -->
 
 
-A typical output file is: 
-
-<hr>
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: globins.infoalign</h3>
+<table width="90%"><tr><td bgcolor="#DDFFDD">
 <pre>
-# USA             Name        SeqLen    AlignLen        Gaps    GapLen  Ident  Similar  Differ  % Change        Description
-fasta::globin.seq:HBB_MACFU     HBB_MACFU     147       148     1       1      134      3       10      8.843537
-fasta::globin.seq:HBD_HUMAN     HBD_HUMAN     147       148     1       1      128      7       12      12.925170
-fasta::globin.seq:HBB_RABIT     HBB_RABIT     147       148     1       1      131      7       9       10.884354
-fasta::globin.seq:HBB_BOVIN     HBB_BOVIN     146       147     1       1      121      10      15      17.123287
-fasta::globin.seq:HBB_LAMGL     HBB_LAMGL     151       152     1       1      122      11      18      19.205297
-fasta::globin.seq:HBE_HUMAN     HBE_HUMAN     143       150     2       7      104      14      25      27.272728
-fasta::globin.seq:HBE_RABIT     HBE_RABIT     147       148     1       1      113      16      18      23.129251
+# USA             Name        SeqLen	AlignLen	Gaps	GapLen	Ident	Similar	Differ	% Change	Description
+msf::../../data/globins.msf:HBB_HUMAN	HBB_HUMAN     150	154	3	4	48	10	92	68.000000	
+msf::../../data/globins.msf:HBB_HORSE	HBB_HORSE     150	154	3	4	48	10	92	68.000000	
+msf::../../data/globins.msf:HBA_HUMAN	HBA_HUMAN     144	147	2	3	45	7	92	68.750000	
+msf::../../data/globins.msf:HBA_HORSE	HBA_HORSE     144	147	2	3	48	4	92	66.666664	
+msf::../../data/globins.msf:MYG_PHYCA	MYG_PHYCA     157	161	3	4	25	13	119	84.076431	
+msf::../../data/globins.msf:GLB5_PETMA	GLB5_PETMA    151	153	1	2	21	13	117	86.092712	
+msf::../../data/globins.msf:LGB2_LUPLU	LGB2_LUPLU    153	153	0	0	11	20	122	92.810455	
 </pre>
-<hr>
+</td></tr></table><p>
+
+<a name="output.2"></a>
+<h3>Output files for usage example 2</h3>
+<p><h3>File: globins.infoalign</h3>
+<table width="90%"><tr><td bgcolor="#DDFFDD">
+<pre>
+# Name        SeqLen	AlignLen	Gaps	GapLen	Ident	Similar	Differ	% Change	Description
+HBB_HUMAN     150	154	3	4	48	10	92	68.000000	
+HBB_HORSE     150	154	3	4	48	10	92	68.000000	
+HBA_HUMAN     144	147	2	3	45	7	92	68.750000	
+HBA_HORSE     144	147	2	3	48	4	92	66.666664	
+MYG_PHYCA     157	161	3	4	25	13	119	84.076431	
+GLB5_PETMA    151	153	1	2	21	13	117	86.092712	
+LGB2_LUPLU    153	153	0	0	11	20	122	92.810455	
+</pre>
+</td></tr></table><p>
+
+<a name="output.3"></a>
+<h3>Output files for usage example 3</h3>
+<p><h3>File: globins.infoalign</h3>
+<table width="90%"><tr><td bgcolor="#DDFFDD">
+<pre>
+HBB_HUMAN     150
+HBB_HORSE     150
+HBA_HUMAN     144
+HBA_HORSE     144
+MYG_PHYCA     157
+GLB5_PETMA    151
+LGB2_LUPLU    153
+</pre>
+</td></tr></table><p>
+
+<a name="output.4"></a>
+<h3>Output files for usage example 4</h3>
+<p><h3>File: globins.infoalign</h3>
+<table width="90%"><tr><td bgcolor="#DDFFDD">
+<pre>
+HBB_HUMAN     4	92
+HBB_HORSE     4	92
+HBA_HUMAN     3	92
+HBA_HORSE     3	92
+MYG_PHYCA     4	119
+GLB5_PETMA    2	117
+LGB2_LUPLU    0	122
+</pre>
+</td></tr></table><p>
+
+<a name="output.5"></a>
+<h3>Output files for usage example 5</h3>
+<p><h3>File: globins.infoalign</h3>
+<table width="90%"><tr><td bgcolor="#DDFFDD">
+<pre>
+HBB_HUMAN     3
+HBB_HORSE     3
+HBA_HUMAN     2
+HBA_HORSE     2
+MYG_PHYCA     3
+GLB5_PETMA    1
+LGB2_LUPLU    0
+</pre>
+</td></tr></table><p>
+
+<a name="output.6"></a>
+<h3>Output files for usage example 6</h3>
+<p><h3>File: globins.infoalign</h3>
+<table width="90%"><tr><td bgcolor="#DDFFDD">
+<pre>
+&lt;table border cellpadding=4 bgcolor="#FFFFF0"&gt;
+&lt;tr&gt;&lt;th&gt;USA&lt;/th&gt;&lt;th&gt;Name&lt;/th&gt;&lt;th&gt;Sequence Length&lt;/th&gt;&lt;th&gt;Aligned Length&lt;/th&gt;&lt;th&gt;Gaps&lt;/th&gt;&lt;th&gt;Gap Length&lt;/th&gt;&lt;th&gt;Identity&lt;/th&gt;&lt;th&gt;Similarity&lt;/th&gt;&lt;th&gt;Difference&lt;/th&gt;&lt;th&gt;% Change&lt;/th&gt;&lt;th&gt;Description&lt;/th&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;msf::../../data/globins.msf:HBB_HUMAN&lt;/td&gt;
+&lt;td&gt;HBB_HUMAN&lt;/td&gt;
+&lt;td&gt;150&lt;/td&gt;
+&lt;td&gt;154&lt;/td&gt;
+&lt;td&gt;3&lt;/td&gt;
+&lt;td&gt;4&lt;/td&gt;
+&lt;td&gt;48&lt;/td&gt;
+&lt;td&gt;10&lt;/td&gt;
+&lt;td&gt;92&lt;/td&gt;
+&lt;td&gt;68.000000&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;msf::../../data/globins.msf:HBB_HORSE&lt;/td&gt;
+&lt;td&gt;HBB_HORSE&lt;/td&gt;
+&lt;td&gt;150&lt;/td&gt;
+&lt;td&gt;154&lt;/td&gt;
+&lt;td&gt;3&lt;/td&gt;
+&lt;td&gt;4&lt;/td&gt;
+&lt;td&gt;48&lt;/td&gt;
+&lt;td&gt;10&lt;/td&gt;
+&lt;td&gt;92&lt;/td&gt;
+&lt;td&gt;68.000000&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;msf::../../data/globins.msf:HBA_HUMAN&lt;/td&gt;
+&lt;td&gt;HBA_HUMAN&lt;/td&gt;
+&lt;td&gt;144&lt;/td&gt;
+&lt;td&gt;147&lt;/td&gt;
+&lt;td&gt;2&lt;/td&gt;
+&lt;td&gt;3&lt;/td&gt;
+&lt;td&gt;45&lt;/td&gt;
+&lt;td&gt;7&lt;/td&gt;
+&lt;td&gt;92&lt;/td&gt;
+&lt;td&gt;68.750000&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;msf::../../data/globins.msf:HBA_HORSE&lt;/td&gt;
+&lt;td&gt;HBA_HORSE&lt;/td&gt;
+&lt;td&gt;144&lt;/td&gt;
+&lt;td&gt;147&lt;/td&gt;
+&lt;td&gt;2&lt;/td&gt;
+&lt;td&gt;3&lt;/td&gt;
+&lt;td&gt;48&lt;/td&gt;
+&lt;td&gt;4&lt;/td&gt;
+&lt;td&gt;92&lt;/td&gt;
+&lt;td&gt;66.666664&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;msf::../../data/globins.msf:MYG_PHYCA&lt;/td&gt;
+&lt;td&gt;MYG_PHYCA&lt;/td&gt;
+&lt;td&gt;157&lt;/td&gt;
+&lt;td&gt;161&lt;/td&gt;
+&lt;td&gt;3&lt;/td&gt;
+&lt;td&gt;4&lt;/td&gt;
+&lt;td&gt;25&lt;/td&gt;
+&lt;td&gt;13&lt;/td&gt;
+&lt;td&gt;119&lt;/td&gt;
+&lt;td&gt;84.076431&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;msf::../../data/globins.msf:GLB5_PETMA&lt;/td&gt;
+&lt;td&gt;GLB5_PETMA&lt;/td&gt;
+&lt;td&gt;151&lt;/td&gt;
+&lt;td&gt;153&lt;/td&gt;
+&lt;td&gt;1&lt;/td&gt;
+&lt;td&gt;2&lt;/td&gt;
+&lt;td&gt;21&lt;/td&gt;
+&lt;td&gt;13&lt;/td&gt;
+&lt;td&gt;117&lt;/td&gt;
+&lt;td&gt;86.092712&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;msf::../../data/globins.msf:LGB2_LUPLU&lt;/td&gt;
+&lt;td&gt;LGB2_LUPLU&lt;/td&gt;
+&lt;td&gt;153&lt;/td&gt;
+&lt;td&gt;153&lt;/td&gt;
+&lt;td&gt;0&lt;/td&gt;
+&lt;td&gt;0&lt;/td&gt;
+&lt;td&gt;11&lt;/td&gt;
+&lt;td&gt;20&lt;/td&gt;
+&lt;td&gt;122&lt;/td&gt;
+&lt;td&gt;92.810455&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/table&gt;
+</pre>
+</td></tr></table><p>
+
+<a name="output.7"></a>
+<h3>Output files for usage example 7</h3>
+<p><h3>File: globins.infoalign</h3>
+<table width="90%"><tr><td bgcolor="#DDFFDD">
+<pre>
+# USA             Name        SeqLen	AlignLen	Gaps	GapLen	Ident	Similar	Differ	% Change	Description
+msf::../../data/globins.msf:HBB_HUMAN	HBB_HUMAN     150	154	3	4	150	0	0	0.000000	
+msf::../../data/globins.msf:HBB_HORSE	HBB_HORSE     150	154	3	4	126	10	14	16.000000	
+msf::../../data/globins.msf:HBA_HUMAN	HBA_HUMAN     144	147	2	3	51	19	74	64.583336	
+msf::../../data/globins.msf:HBA_HORSE	HBA_HORSE     144	147	2	3	54	18	72	62.500000	
+msf::../../data/globins.msf:MYG_PHYCA	MYG_PHYCA     157	161	3	4	34	22	101	78.343948	
+msf::../../data/globins.msf:GLB5_PETMA	GLB5_PETMA    151	153	1	2	26	27	98	82.781456	
+msf::../../data/globins.msf:LGB2_LUPLU	LGB2_LUPLU    153	153	0	0	21	28	104	86.274513	
+</pre>
+</td></tr></table><p>
+
+
 
 
 The first non-blank line is the heading.  This is followed by one line

@@ -70,16 +70,21 @@ translate the codons.
 </H2>
 
 
-Here is a sample session with prettyseq.
+<b>Here is a sample session with prettyseq</b>
+<p>
 
-<pre>
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% prettyseq
+% <b>prettyseq </b>
 Output sequence with translated ranges
-Input sequence: embl:paamir
-Range(s) to translate [1-2167]: 135-1292        
-Output file [paamir.prettyseq]: 
-</pre>
+Input sequence: <b>tembl:paamir</b>
+Range(s) to translate [1-2167]: <b>135-1292</b>
+Output file [paamir.prettyseq]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
 
 
 
@@ -157,21 +162,21 @@ IT IS DONE FOR YOU.
 <tr>
 <td>-[no]ruler</td>
 <td>Add a ruler</td>
-<td>Yes/No</td>
+<td>Boolean value Yes/No</td>
 <td>Yes</td>
 </tr>
 
 <tr>
 <td>-[no]plabel</td>
 <td>Number translations</td>
-<td>Yes/No</td>
+<td>Boolean value Yes/No</td>
 <td>Yes</td>
 </tr>
 
 <tr>
 <td>-[no]nlabel</td>
 <td>Number DNA sequence</td>
-<td>Yes/No</td>
+<td>Boolean value Yes/No</td>
 <td>Yes</td>
 </tr>
 
@@ -202,6 +207,130 @@ IT IS DONE FOR YOU.
 <H2>
     Input file format
 </H2>
+
+<b>prettyseq</b> reads any nucleic acid sequence USA.
+
+<p>
+
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+
+'tembl:paamir' is a sequence entry in the example nucleic acid database 'tembl'
+<p>
+<p><h3>Database entry: tembl:paamir</h3>
+<table width="90%"><tr><td bgcolor="#FFDDFF">
+<pre>
+ID   PAAMIR     standard; DNA; PRO; 2167 BP.
+XX
+AC   X13776; M43175;
+XX
+SV   X13776.1
+XX
+DT   19-APR-1989 (Rel. 19, Created)
+DT   17-FEB-1997 (Rel. 50, Last updated, Version 22)
+XX
+DE   Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase regulation
+XX
+KW   aliphatic amidase regulator; amiC gene; amiR gene.
+XX
+OS   Pseudomonas aeruginosa
+OC   Bacteria; Proteobacteria; gamma subdivision; Pseudomonadaceae; Pseudomonas.
+XX
+RN   [1]
+RP   1167-2167
+RA   Rice P.M.;
+RT   ;
+RL   Submitted (16-DEC-1988) to the EMBL/GenBank/DDBJ databases.
+RL   Rice P.M., EMBL, Postfach 10-2209, Meyerhofstrasse 1, 6900 Heidelberg, FRG.
+XX
+RN   [2]
+RP   1167-2167
+RX   MEDLINE; 89211409.
+RA   Lowe N., Rice P.M., Drew R.E.;
+RT   "Nucleotide sequence of the aliphatic amidase regulator gene of Pseudomonas
+RT   aeruginosa";
+RL   FEBS Lett. 246:39-43(1989).
+XX
+RN   [3]
+RP   1-1292
+RX   MEDLINE; 91317707.
+RA   Wilson S., Drew R.;
+RT   "Cloning and DNA seqence of amiC, a new gene regulating expression of the
+RT   Pseudomonas aeruginosa aliphatic amidase, and purification of the amiC
+RT   product.";
+RL   J. Bacteriol. 173:4914-4921(1991).
+XX
+RN   [4]
+RP   1-2167
+RA   Rice P.M.;
+RT   ;
+RL   Submitted (04-SEP-1991) to the EMBL/GenBank/DDBJ databases.
+RL   Rice P.M., EMBL, Postfach 10-2209, Meyerhofstrasse 1, 6900 Heidelberg, FRG.
+XX
+DR   SWISS-PROT; P10932; AMIR_PSEAE.
+DR   SWISS-PROT; P27017; AMIC_PSEAE.
+DR   SWISS-PROT; Q51417; AMIS_PSEAE.
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+FT                   phenotype"
+FT                   /replace=""
+FT                   /gene="amiC"
+FT   misc_feature    1
+FT                   /note="last base of an XhoI site"
+FT   misc_feature    648..653
+FT                   /note="end of 658bp XhoI fragment, deletion in  pSW3 causes
+FT                   constitutive expression of amiE"
+FT   conflict        1281
+FT                   /replace="g"
+FT                   /citation=[3]
+XX
+SQ   Sequence 2167 BP; 363 A; 712 C; 730 G; 362 T; 0 other;
+     ggtaccgctg gccgagcatc tgctcgatca ccaccagccg ggcgacggga actgcacgat        60
+     ctacctggcg agcctggagc acgagcgggt tcgcttcgta cggcgctgag cgacagtcac       120
+     aggagaggaa acggatggga tcgcaccagg agcggccgct gatcggcctg ctgttctccg       180
+     aaaccggcgt caccgccgat atcgagcgct cgcacgcgta tggcgcattg ctcgcggtcg       240
+     agcaactgaa ccgcgagggc ggcgtcggcg gtcgcccgat cgaaacgctg tcccaggacc       300
+     ccggcggcga cccggaccgc tatcggctgt gcgccgagga cttcattcgc aaccgggggg       360
+     tacggttcct cgtgggctgc tacatgtcgc acacgcgcaa ggcggtgatg ccggtggtcg       420
+     agcgcgccga cgcgctgctc tgctacccga ccccctacga gggcttcgag tattcgccga       480
+     acatcgtcta cggcggtccg gcgccgaacc agaacagtgc gccgctggcg gcgtacctga       540
+     ttcgccacta cggcgagcgg gtggtgttca tcggctcgga ctacatctat ccgcgggaaa       600
+     gcaaccatgt gatgcgccac ctgtatcgcc agcacggcgg cacggtgctc gaggaaatct       660
+     acattccgct gtatccctcc gacgacgact tgcagcgcgc cgtcgagcgc atctaccagg       720
+     cgcgcgccga cgtggtcttc tccaccgtgg tgggcaccgg caccgccgag ctgtatcgcg       780
+     ccatcgcccg tcgctacggc gacggcaggc ggccgccgat cgccagcctg accaccagcg       840
+     aggcggaggt ggcgaagatg gagagtgacg tggcagaggg gcaggtggtg gtcgcgcctt       900
+     acttctccag catcgatacg cccgccagcc gggccttcgt ccaggcctgc catggtttct       960
+     tcccggagaa cgcgaccatc accgcctggg ccgaggcggc ctactggcag accttgttgc      1020
+     tcggccgcgc cgcgcaggcc gcaggcaact ggcgggtgga agacgtgcag cggcacctgt      1080
+     acgacatcga catcgacgcg ccacaggggc cggtccgggt ggagcgccag aacaaccaca      1140
+     gccgcctgtc ttcgcgcatc gcggaaatcg atgcgcgcgg cgtgttccag gtccgctggc      1200
+     agtcgcccga accgattcgc cccgaccctt atgtcgtcgt gcataacctc gacgactggt      1260
+     ccgccagcat gggcggggga ccgctcccat gagcgccaac tcgctgctcg gcagcctgcg      1320
+     cgagttgcag gtgctggtcc tcaacccgcc gggggaggtc agcgacgccc tggtcttgca      1380
+     gctgatccgc atcggttgtt cggtgcgcca gtgctggccg ccgccggaag ccttcgacgt      1440
+     gccggtggac gtggtcttca ccagcatttt ccagaatggc caccacgacg agatcgctgc      1500
+     gctgctcgcc gccgggactc cgcgcactac cctggtggcg ctggtggagt acgaaagccc      1560
+     cgcggtgctc tcgcagatca tcgagctgga gtgccacggc gtgatcaccc agccgctcga      1620
+     tgcccaccgg gtgctgcctg tgctggtatc ggcgcggcgc atcagcgagg aaatggcgaa      1680
+     gctgaagcag aagaccgagc agctccagga ccgcatcgcc ggccaggccc ggatcaacca      1740
+     ggccaaggtg ttgctgatgc agcgccatgg ctgggacgag cgcgaggcgc accagcacct      1800
+     gtcgcgggaa gcgatgaagc ggcgcgagcc gatcctgaag atcgctcagg agttgctggg      1860
+     aaacgagccg tccgcctgag cgatccgggc cgaccagaac aataacaaga ggggtatcgt      1920
+     catcatgctg ggactggttc tgctgtacgt tggcgcggtg ctgtttctca atgccgtctg      1980
+     gttgctgggc aagatcagcg gtcgggaggt ggcggtgatc aacttcctgg tcggcgtgct      2040
+     gagcgcctgc gtcgcgttct acctgatctt ttccgcagca gccgggcagg gctcgctgaa      2100
+     ggccggagcg ctgaccctgc tattcgcttt tacctatctg tgggtggccg ccaaccagtt      2160
+     cctcgag                                                                2167
+//
+</pre>
+</td></tr></table><p>
+
+
+<p>
 
 
 You can specifiy a file of ranges to extract by giving the '-range'
@@ -248,11 +377,11 @@ An example range file is:
 </H2>
 
 
-Here is the output from the example run.
 
-<p>
-
-<hr>
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: paamir.prettyseq</h3>
+<table width="90%"><tr><td bgcolor="#DDFFDD">
 <pre>
 PRETTYSEQ of PAAMIR from 1 to 2167
 
@@ -304,55 +433,10 @@ PRETTYSEQ of PAAMIR from 1 to 2167
        661 acattccgctgtatccctccgacgacgacttgcagcgcgccgtcgagcgcatctaccagg 720
        177   I  P  L  Y  P  S  D  D  D  L  Q  R  A  V  E  R  I  Y  Q  A 196
 
-           ---------|---------|---------|---------|---------|---------|
-       721 cgcgcgccgacgtggtcttctccaccgtggtgggcaccggcaccgccgagctgtatcgcg 780
-       197   R  A  D  V  V  F  S  T  V  V  G  T  G  T  A  E  L  Y  R  A 216
 
-           ---------|---------|---------|---------|---------|---------|
-       781 ccatcgcccgtcgctacggcgacggcaggcggccgccgatcgccagcctgaccaccagcg 840
-       217   I  A  R  R  Y  G  D  G  R  R  P  P  I  A  S  L  T  T  S  E 236
 
-           ---------|---------|---------|---------|---------|---------|
-       841 aggcggaggtggcgaagatggagagtgacgtggcagaggggcaggtggtggtcgcgcctt 900
-       237   A  E  V  A  K  M  E  S  D  V  A  E  G  Q  V  V  V  A  P  Y 256
+<font color=red>  [Part of this file has been deleted for brevity]</font>
 
-           ---------|---------|---------|---------|---------|---------|
-       901 acttctccagcatcgatacgcccgccagccgggccttcgtccaggcctgccatggtttct 960
-       257   F  S  S  I  D  T  P  A  S  R  A  F  V  Q  A  C  H  G  F  F 276
-
-           ---------|---------|---------|---------|---------|---------|
-       961 tcccggagaacgcgaccatcaccgcctgggccgaggcggcctactggcagaccttgttgc 1020
-       277   P  E  N  A  T  I  T  A  W  A  E  A  A  Y  W  Q  T  L  L  L 296
-
-           ---------|---------|---------|---------|---------|---------|
-      1021 tcggccgcgccgcgcaggccgcaggcaactggcgggtggaagacgtgcagcggcacctgt 1080
-       297   G  R  A  A  Q  A  A  G  N  W  R  V  E  D  V  Q  R  H  L  Y 316
-
-           ---------|---------|---------|---------|---------|---------|
-      1081 acgacatcgacatcgacgcgccacaggggccggtccgggtggagcgccagaacaaccaca 1140
-       317   D  I  D  I  D  A  P  Q  G  P  V  R  V  E  R  Q  N  N  H  S 336
-
-           ---------|---------|---------|---------|---------|---------|
-      1141 gccgcctgtcttcgcgcatcgcggaaatcgatgcgcgcggcgtgttccaggtccgctggc 1200
-       337   R  L  S  S  R  I  A  E  I  D  A  R  G  V  F  Q  V  R  W  Q 356
-
-           ---------|---------|---------|---------|---------|---------|
-      1201 agtcgcccgaaccgattcgccccgacccttatgtcgtcgtgcataacctcgacgactggt 1260
-       357   S  P  E  P  I  R  P  D  P  Y  V  V  V  H  N  L  D  D  W  S 376
-
-           ---------|---------|---------|---------|---------|---------|
-      1261 ccgccagcatgggcgggggaccgctcccatgaGCGCCAACTCGCTGCTCGGCAGCCTGCG 1320
-       377   A  S  M  G  G  G  P  L  P  *                               385
-
-           ---------|---------|---------|---------|---------|---------|
-      1321 CGAGTTGCAGGTGCTGGTCCTCAACCCGCCGGGGGAGGTCAGCGACGCCCTGGTCTTGCA 1380
-                                                                        
-
-           ---------|---------|---------|---------|---------|---------|
-      1381 GCTGATCCGCATCGGTTGTTCGGTGCGCCAGTGCTGGCCGCCGCCGGAAGCCTTCGACGT 1440
-                                                                        
-
-           ---------|---------|---------|---------|---------|---------|
       1441 GCCGGTGGACGTGGTCTTCACCAGCATTTTCCAGAATGGCCACCACGACGAGATCGCTGC 1500
                                                                         
 
@@ -402,8 +486,11 @@ PRETTYSEQ of PAAMIR from 1 to 2167
 
            -------
       2161 CCTCGAG 2167
+                   
+
 </pre>
-<hr>
+</td></tr></table><p>
+
 
 
 <H2>
@@ -501,6 +588,7 @@ None.
 <tr><td><a href="showfeat.html">showfeat</a></td><td>Show features of a sequence</td></tr>
 <tr><td><a href="showorf.html">showorf</a></td><td>Pretty output of DNA translations</td></tr>
 <tr><td><a href="showseq.html">showseq</a></td><td>Display a sequence with features, translation etc</td></tr>
+<tr><td><a href="sixpack.html">sixpack</a></td><td>Display a DNA sequence with 6-frame translation and ORFs</td></tr>
 <tr><td><a href="textsearch.html">textsearch</a></td><td>Search sequence documentation text. SRS and Entrez are faster!</td></tr>
 <tr><td><a href="transeq.html">transeq</a></td><td>Translate nucleic acid sequences</td></tr>
 </table>

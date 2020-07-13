@@ -129,113 +129,18 @@ Name of log file for the build [contacts.log]:
 
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
-   Mandatory qualifiers:
-  [-cpdb]              string     Location of coordinate files (embl format
-                                  input)
-  [-cpdbextn]          string     Extension of coordinate files
-   -vdwf               string     Name of data file with van der Waals radii
-   -thresh             float      Threshold contact distance
-  [-con]               string     Location of contact files for output
-  [-conextn]           string     Extension of contact files
-   -conerrf            outfile    Name of log file for the build
 
-   Optional qualifiers: (none)
-   Advanced qualifiers:
-   -ignore             float      If any two atoms from two different residues
-                                  are at least this distance apart then no
-                                  futher inter-atomic contacts will be checked
-                                  for for that residue pair . This speeds the
-                                  calculation up considerably.
-
-   General qualifiers:
-  -help                boolean    Report command line options. More
-                                  information on associated and general
-                                  qualifiers can be found with -help -verbose
+   EMBOSS An error in ajacd.c at line 1531:
+acdfile '/packages/emboss_dev/gwilliam/emboss/emboss/emboss/acd/contacts.acd' not opened
 
 
 </pre>
 </td></tr></table>
 <P>
-<table border cellspacing=0 cellpadding=3 bgcolor="#f5f5ff">
-<tr bgcolor="#FFFFD0">
-<th align="left" colspan=2>Mandatory qualifiers</th>
-<th align="left">Allowed values</th>
-<th align="left">Default</th>
-</tr>
 
-<tr>
-<td>[-cpdb]<br>(Parameter 1)</td>
-<td>Location of coordinate files (embl format input)</td>
-<td>Any string is accepted</td>
-<td>./</td>
-</tr>
+   EMBOSS An error in ajacd.c at line 1531:
+acdfile '/packages/emboss_dev/gwilliam/emboss/emboss/emboss/acd/contacts.acd' not opened
 
-<tr>
-<td>[-cpdbextn]<br>(Parameter 2)</td>
-<td>Extension of coordinate files</td>
-<td>Any string is accepted</td>
-<td>.pxyz</td>
-</tr>
-
-<tr>
-<td>-vdwf</td>
-<td>Name of data file with van der Waals radii</td>
-<td>Any string is accepted</td>
-<td>Evdw.dat</td>
-</tr>
-
-<tr>
-<td>-thresh</td>
-<td>Threshold contact distance</td>
-<td>Any numeric value</td>
-<td>1.0</td>
-</tr>
-
-<tr>
-<td>[-con]<br>(Parameter 3)</td>
-<td>Location of contact files for output</td>
-<td>Any string is accepted</td>
-<td>./</td>
-</tr>
-
-<tr>
-<td>[-conextn]<br>(Parameter 4)</td>
-<td>Extension of contact files</td>
-<td>Any string is accepted</td>
-<td>.con</td>
-</tr>
-
-<tr>
-<td>-conerrf</td>
-<td>Name of log file for the build</td>
-<td>Output file</td>
-<td>contacts.log</td>
-</tr>
-
-<tr bgcolor="#FFFFD0">
-<th align="left" colspan=2>Optional qualifiers</th>
-<th align="left">Allowed values</th>
-<th align="left">Default</th>
-</tr>
-
-<tr>
-<td colspan=4>(none)</td>
-</tr>
-
-<tr bgcolor="#FFFFD0">
-<th align="left" colspan=2>Advanced qualifiers</th>
-<th align="left">Allowed values</th>
-<th align="left">Default</th>
-</tr>
-
-<tr>
-<td>-ignore</td>
-<td>If any two atoms from two different residues are at least this distance apart then no futher inter-atomic contacts will be checked for for that residue pair . This speeds the calculation up considerably.</td>
-<td>Any numeric value</td>
-<td>20.0</td>
-</tr>
-
-</table>
 
 
 <!--
@@ -647,7 +552,8 @@ None.
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
 <tr><td><a href="dichet.html">dichet</a></td><td>Parse dictionary of heterogen groups</td></tr>
-<tr><td><a href="hmmgen.html">hmmgen</a></td><td>Generates a hidden Markov model for each alignment in a directory</td></tr>
+<tr><td><a href="fraggle.html">fraggle</a></td><td>Removes fragment sequences from files of hits for scop families</td></tr>
+<tr><td><a href="hmmgen.html">hmmgen</a></td><td>Generates a hidden Markov model for each alignment in a directory by using the HMMER package</td></tr>
 <tr><td><a href="interface.html">interface</a></td><td>Reads coordinate files and writes files of inter-chain residue-residue contact data</td></tr>
 <tr><td><a href="profgen.html">profgen</a></td><td>Generates various profiles for each alignment in a directory</td></tr>
 <tr><td><a href="psiblasts.html">psiblasts</a></td><td>Runs PSI-BLAST given scopalign alignments</td></tr>
@@ -656,10 +562,10 @@ None.
 <tr><td><a href="scopreso.html">scopreso</a></td><td>Removes low resolution domains from a scop classification file</td></tr>
 <tr><td><a href="seqalign.html">seqalign</a></td><td>Generate extended alignments for families in a scop families file by using CLUSTALW with seed alignments</td></tr>
 <tr><td><a href="seqsearch.html">seqsearch</a></td><td>Generate files of hits for families in a scop classification file by using PSI-BLAST with seed alignments</td></tr>
-<tr><td><a href="seqsort.html">seqsort</a></td><td>Reads multiple files of hits and writes a non-ambiguous file of hits (scop families file) plus a validation file</td></tr>
+<tr><td><a href="seqsort.html">seqsort</a></td><td>Reads multiple files of hits and writes (i) a scop families file and (ii) a scop ambiguities file</td></tr>
 <tr><td><a href="seqwords.html">seqwords</a></td><td>Generate file of hits for scop families by searching swissprot with keywords</td></tr>
 <tr><td><a href="siggen.html">siggen</a></td><td>Generates a sparse protein signature from an alignment and residue contact data</td></tr>
-<tr><td><a href="sigscan.html">sigscan</a></td><td>Scans a signature against swissprot and writes a signature hits files</td></tr>
+<tr><td><a href="sigscan.html">sigscan</a></td><td>Scans a signature against swissprot and writes a signature hits file</td></tr>
 </table>
 
 <!-- 

@@ -62,7 +62,7 @@ sequences.
 In fact, if does more than just this as it removes <b>ANY</b>
 non-alphabetic character from the input sequence, so as well as removing
 the gap-characters, it will remove such things as the '*' in protein
-sequenecs that indicates the position of a 'translated' STOP codon. 
+sequences that indicates the position of a 'translated' STOP codon. 
 
 <p>
 
@@ -108,7 +108,21 @@ sequence is then written out.
         Many examples illustrating different behaviours is good.
  -->
 
+<b>Here is a sample session with degapseq</b>
+<p>
 
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>degapseq ../../data/dnagap.fasta nogaps.seq </b>
+Removes gap characters from sequences
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
+
+
+<!--
 Here is a sample session with degapseq:
 
 <pre>
@@ -116,7 +130,7 @@ Here is a sample session with degapseq:
 % degapseq alignment.seq nogaps.seq
 
 </pre>
-
+-->
 
 
 
@@ -228,6 +242,21 @@ The input sequence can be gapped or ungapped.
 
 <p>
 
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+<p><h3>File: ../../data/dnagap.fasta</h3>
+<table width="90%"><tr><td bgcolor="#FFDDFF">
+<pre>
+&gt;FASTA F10002 FASTA FORMAT DNA SEQUENCE
+ACGT....ACGTACGTACGTACGTACGTACGTACGTACGT
+ACGTACGTACGTACGTACGTACGTACGTACGTACGTACGT
+ACGTACGTACGTACGTACGT
+</pre>
+</td></tr></table><p>
+
+
+<!--
 An example of a sequence with gaps might be:
 
 <p>
@@ -241,7 +270,7 @@ ATGCGCAGGTACGTATG....CTGACGGTACGTGATCGA-GCTGA-CGAGCGTATGC-----
 ATGCGCAGGTACGTATGCTGACGGTACGTGATCGA-GCTGA-CGAGCGTATGC-----
 </pre>
 
-
+-->
 
 
 
@@ -265,6 +294,20 @@ The output is a sequence with no gaps.
 
 <p>
 
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: nogaps.seq</h3>
+<table width="90%"><tr><td bgcolor="#DDFFDD">
+<pre>
+&gt;FASTA F10002 FASTA FORMAT DNA SEQUENCE
+ACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGT
+ACGTACGTACGTACGTACGTACGTACGTACGTACGT
+</pre>
+</td></tr></table><p>
+
+
+<!--
 An example is the ouput of the above input sequence:
 
 <p>
@@ -277,7 +320,7 @@ TGACTGATGCTGACTGACGTGACTGATGCTGATCGTGACTGATCGTGAC
 >myclone1
 ATGCGCAGGTACGTATGCTGACGGTACGTGATCGAGCTGACGAGCGTATGC
 </pre>
-
+-->
 
 
 
@@ -493,7 +536,6 @@ None.
 <tr><td><a href="seqretsplit.html">seqretsplit</a></td><td>Reads and writes (returns) sequences in individual files</td></tr>
 <tr><td><a href="skipseq.html">skipseq</a></td><td>Reads and writes (returns) sequences, skipping the first few</td></tr>
 <tr><td><a href="splitter.html">splitter</a></td><td>Split a sequence into (overlapping) smaller sequences</td></tr>
-<tr><td><a href="swissparse.html">swissparse</a></td><td>Retrieves sequences from swissprot using keyword search</td></tr>
 <tr><td><a href="trimest.html">trimest</a></td><td>Trim poly-A tails off EST sequences</td></tr>
 <tr><td><a href="trimseq.html">trimseq</a></td><td>Trim ambiguous bits off the ends of sequences</td></tr>
 <tr><td><a href="union.html">union</a></td><td>Reads sequence fragments and builds one sequence</td></tr>

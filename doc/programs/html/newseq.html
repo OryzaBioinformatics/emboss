@@ -72,37 +72,29 @@ would you?)
 </H2>
 
 
-Type in a short sequence to the file 'mycc.pep' in EMBL format:
-
+<b>Here is a sample session with newseq</b>
+<p>
+Type in a short sequence to the file 'mycc.pep' in SWISSPROT format: 
 <p>
 
-<pre>
-% newseq
-Type in a short new sequence.
-Output sequence [outfile.fasta]: embl::mycc.pep
-Name of the sequence: cytoc
-Description of the sequence: fragment of cytochrome C
-Type of sequence
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
+% <b>newseq </b>
+Type in a short new sequence.
+Output sequence [outfile.fasta]: <b>swiss::mycc.pep</b>
+Name of the sequence: <b>cytoc</b>
+Description of the sequence: <b>fragment of cytochrome c</b>
+Type of sequence
          N : Nucleic
          P : Protein
-Type of sequence [N]: p
-Enter the sequence: KKKEERADLIAY
-</pre>
+Type of sequence [N]: <b>p</b>
+Enter the sequence: <b>KKKEERADLIAY</b>
 
+</pre></td></tr></table><p>
 <p>
+<a href="#output.1">Go to the output files for this example</a><p><p>
 
-Display the resulting new file:
-
-<p>
-<pre>
-% more mycc.pep
-ID   cytoc          STANDARD;      PRT;    12 AA.
-DE   fragment of cytochrome C
-SQ   SEQUENCE    12 AA;   1464 MW;  2BF1DB53 CRC32;
-     KKKEERADLI AY
-//
-</pre>
 	
 
 <H2>
@@ -222,14 +214,31 @@ The keyboard will beep at you when you have reached this limit and you will not 
 </H2>
 
 
-None.
+
 
 <H2>
     Output file format
 </H2>
 
 
-Normal sequence.
+<b>newseq</b> writes a normal sequence file.
+
+<p>
+
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: mycc.pep</h3>
+<table width="90%"><tr><td bgcolor="#DDFFDD">
+<pre>
+ID   cytoc          STANDARD;      PRT;    12 AA.
+DE   fragment of cytochrome c
+SQ   SEQUENCE    12 AA;   1464 MW;  0000000000000000 CRC64;
+     KKKEERADLI AY
+//
+</pre>
+</td></tr></table><p>
+
 
 <H2>
     Data files
@@ -310,7 +319,6 @@ None.
 <tr><td><a href="seqretsplit.html">seqretsplit</a></td><td>Reads and writes (returns) sequences in individual files</td></tr>
 <tr><td><a href="skipseq.html">skipseq</a></td><td>Reads and writes (returns) sequences, skipping the first few</td></tr>
 <tr><td><a href="splitter.html">splitter</a></td><td>Split a sequence into (overlapping) smaller sequences</td></tr>
-<tr><td><a href="swissparse.html">swissparse</a></td><td>Retrieves sequences from swissprot using keyword search</td></tr>
 <tr><td><a href="trimest.html">trimest</a></td><td>Trim poly-A tails off EST sequences</td></tr>
 <tr><td><a href="trimseq.html">trimseq</a></td><td>Trim ambiguous bits off the ends of sequences</td></tr>
 <tr><td><a href="union.html">union</a></td><td>Reads sequence fragments and builds one sequence</td></tr>

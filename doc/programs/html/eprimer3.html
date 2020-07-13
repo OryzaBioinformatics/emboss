@@ -169,19 +169,18 @@ Try setting the '-explain' option.
         Many examples illustrating different behaviours is good.
  -->
 
+<b>Here is a sample session with eprimer3</b>
+<p>
 
-Here is a sample session with eprimer3:
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-<pre>
+% <b>eprimer3 tembl:hsfau1 hsfau.eprimer3 -explain </b>
+Picks PCR primers and hybridization oligos
 
-% eprimer3 em:hsfau1 hsfau.eprimer3 -explain
-
-</pre>
-
-
-
-
-
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
 
 
 
@@ -1073,14 +1072,14 @@ INTERNAL-OLIGO-SELF-END is meaningless when applied to internal oligos used for 
 <tr>
 <td>-explainflag</td>
 <td>If this flag is non-0, produce LEFT-EXPLAIN, RIGHT-EXPLAIN, and INTERNAL-OLIGO-EXPLAIN output tags, which are intended to provide information on the number of oligos and primer pairs that EPrimer3 examined, and statistics on the number discarded for various reasons.</td>
-<td>Yes/No</td>
+<td>Boolean value Yes/No</td>
 <td>No</td>
 </tr>
 
 <tr>
 <td>-fileflag</td>
 <td>If the associated value is non-0, then EPrimer3 creates two output files for each input SEQUENCE. File (sequence-id).for lists all acceptable forward primers for (sequence-id), and (sequence-id).rev lists all acceptable reverse primers for (sequence-id), where (sequence-id) is the value of the SEQUENCE-ID tag (which must be supplied). In addition, if the input tag TASK is 1 or 4, EPrimer3 produces a file (sequence-id).int, which lists all acceptable internal oligos.</td>
-<td>Yes/No</td>
+<td>Boolean value Yes/No</td>
 <td>No</td>
 </tr>
 
@@ -1094,7 +1093,7 @@ INTERNAL-OLIGO-SELF-END is meaningless when applied to internal oligos used for 
 <tr>
 <td>-pickanyway</td>
 <td>If true pick a primer pair even if LEFT-INPUT, RIGHT-INPUT, or INTERNAL-OLIGO-INPUT violates specific constraints.</td>
-<td>Yes/No</td>
+<td>Boolean value Yes/No</td>
 <td>No</td>
 </tr>
 
@@ -1208,7 +1207,126 @@ IT IS DONE FOR YOU.
         happens in unusual cases - null input, etc. 
    -->
 
-It reads a normal nucleic acid sequence
+<b>eprimer3</b> reads a normal nucleic acid sequence USA.
+
+<p>
+
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+
+'tembl:hsfau1' is a sequence entry in the example nucleic acid database 'tembl'
+<p>
+<p><h3>Database entry: tembl:hsfau1</h3>
+<table width="90%"><tr><td bgcolor="#FFDDFF">
+<pre>
+ID   HSFAU1     standard; DNA; HUM; 2016 BP.
+XX
+AC   X65921; S45242;
+XX
+SV   X65921.1
+XX
+DT   13-MAY-1992 (Rel. 31, Created)
+DT   21-JUL-1993 (Rel. 36, Last updated, Version 5)
+XX
+DE   H.sapiens fau 1 gene
+XX
+KW   fau 1 gene.
+XX
+OS   Homo sapiens (human)
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia;
+OC   Eutheria; Primates; Catarrhini; Hominidae; Homo.
+XX
+RN   [1]
+RP   1-2016
+RA   Kas K.;
+RT   ;
+RL   Submitted (29-APR-1992) to the EMBL/GenBank/DDBJ databases.
+RL   K. Kas, University of Antwerp, Dept of Biochemistry T3.22,
+RL   Universiteitsplein 1, 2610 Wilrijk, BELGIUM
+XX
+RN   [2]
+RP   1-2016
+RX   MEDLINE; 92412144.
+RA   Kas K., Michiels L., Merregaert J.;
+RT   "Genomic structure and expression of the human fau gene: encoding the
+RT   ribosomal protein S30 fused to a ubiquitin-like protein.";
+RL   Biochem. Biophys. Res. Commun. 187:927-933(1992).
+XX
+DR   SWISS-PROT; P35544; UBIM_HUMAN.
+DR   SWISS-PROT; Q05472; RS30_HUMAN.
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..2016
+FT                   /db_xref="taxon:9606"
+FT                   /organism="Homo sapiens"
+FT                   /clone_lib="CML cosmid"
+FT                   /clone="15.1"
+FT   mRNA            join(408..504,774..856,951..1095,1557..1612,1787..&gt;1912)
+FT                   /gene="fau 1"
+FT   exon            408..504
+FT                   /number=1
+FT   intron          505..773
+FT                   /number=1
+FT   exon            774..856
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+FT                   RAKRRMQYNRRFVNVVPTFGKKKGPNANS"
+FT   intron          857..950
+FT                   /number=2
+FT   exon            951..1095
+FT                   /number=3
+FT   intron          1096..1556
+FT                   /number=3
+FT   exon            1557..1612
+FT                   /number=4
+FT   intron          1613..1786
+FT                   /number=4
+FT   exon            1787..&gt;1912
+FT                   /number=5
+FT   polyA_signal    1938..1943
+XX
+SQ   Sequence 2016 BP; 421 A; 562 C; 538 G; 495 T; 0 other;
+     ctaccatttt ccctctcgat tctatatgta cactcgggac aagttctcct gatcgaaaac        60
+     ggcaaaacta aggccccaag taggaatgcc ttagttttcg gggttaacaa tgattaacac       120
+     tgagcctcac acccacgcga tgccctcagc tcctcgctca gcgctctcac caacagccgt       180
+     agcccgcagc cccgctggac accggttctc catccccgca gcgtagcccg gaacatggta       240
+     gctgccatct ttacctgcta cgccagcctt ctgtgcgcgc aactgtctgg tcccgccccg       300
+     tcctgcgcga gctgctgccc aggcaggttc gccggtgcga gcgtaaaggg gcggagctag       360
+     gactgccttg ggcggtacaa atagcaggga accgcgcggt cgctcagcag tgacgtgaca       420
+     cgcagcccac ggtctgtact gacgcgccct cgcttcttcc tctttctcga ctccatcttc       480
+     gcggtagctg ggaccgccgt tcaggtaaga atggggcctt ggctggatcc gaagggcttg       540
+     tagcaggttg gctgcggggt cagaaggcgc ggggggaacc gaagaacggg gcctgctccg       600
+     tggccctgct ccagtcccta tccgaactcc ttgggaggca ctggccttcc gcacgtgagc       660
+     cgccgcgacc accatcccgt cgcgatcgtt tctggaccgc tttccactcc caaatctcct       720
+     ttatcccaga gcatttcttg gcttctctta caagccgtct tttctttact cagtcgccaa       780
+     tatgcagctc tttgtccgcg cccaggagct acacaccttc gaggtgaccg gccaggaaac       840
+     ggtcgcccag atcaaggtaa ggctgcttgg tgcgccctgg gttccatttt cttgtgctct       900
+     tcactctcgc ggcccgaggg aacgcttacg agccttatct ttccctgtag gctcatgtag       960
+     cctcactgga gggcattgcc ccggaagatc aagtcgtgct cctggcaggc gcgcccctgg      1020
+     aggatgaggc cactctgggc cagtgcgggg tggaggccct gactaccctg gaagtagcag      1080
+     gccgcatgct tggaggtgag tgagagagga atgttctttg aagtaccggt aagcgtctag      1140
+     tgagtgtggg gtgcatagtc ctgacagctg agtgtcacac ctatggtaat agagtacttc      1200
+     tcactgtctt cagttcagag tgattcttcc tgtttacatc cctcatgttg aacacagacg      1260
+     tccatgggag actgagccag agtgtagttg tatttcagtc acatcacgag atcctagtct      1320
+     ggttatcagc ttccacacta aaaattaggt cagaccaggc cccaaagtgc tctataaatt      1380
+     agaagctgga agatcctgaa atgaaactta agatttcaag gtcaaatatc tgcaactttg      1440
+     ttctcattac ctattgggcg cagcttctct ttaaaggctt gaattgagaa aagaggggtt      1500
+     ctgctgggtg gcaccttctt gctcttacct gctggtgcct tcctttccca ctacaggtaa      1560
+     agtccatggt tccctggccc gtgctggaaa agtgagaggt cagactccta aggtgagtga      1620
+     gagtattagt ggtcatggtg ttaggacttt ttttcctttc acagctaaac caagtccctg      1680
+     ggctcttact cggtttgcct tctccctccc tggagatgag cctgagggaa gggatgctag      1740
+     gtgtggaaga caggaaccag ggcctgatta accttccctt ctccaggtgg ccaaacagga      1800
+     gaagaagaag aagaagacag gtcgggctaa gcggcggatg cagtacaacc ggcgctttgt      1860
+     caacgttgtg cccacctttg gcaagaagaa gggccccaat gccaactctt aagtcttttg      1920
+     taattctggc tttctctaat aaaaaagcca cttagttcag tcatcgcatt gtttcatctt      1980
+     tacttgcaag gcctcaggga gaggtgtgct tctcgg                                2016
+//
+</pre>
+</td></tr></table><p>
 
 
 
@@ -1232,72 +1350,81 @@ It reads a normal nucleic acid sequence
         happens in unusual cases - null output, errors etc. 
    -->
 
-An example output file follows:
 
-<p>
-<hr>
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: hsfau.eprimer3</h3>
+<table width="90%"><tr><td bgcolor="#DDFFDD">
 <pre>
+
 # EPRIMER3 RESULTS FOR HSFAU1
 
 # FORWARD PRIMER STATISTICS:
-# considered 18855
+# considered 16422
 # GC content failed 156
 # low tm 3616
-# high tm 11295
-# high any compl 1
-# high end compl 1
+# high tm 9306
+# high any compl 9
+# high end compl 26
 # long poly-x seq 45
-# ok 3741
+#high 3' stability 304
+# ok 2960
 
 # REVERSE PRIMER STATISTICS:
-# considered 18706
+# considered 16330
 # GC content failed 161
 # low tm 3580
-# high tm 11241
+# high tm 9309
+# high any compl 2
+# high end compl 9
 # long poly-x seq 66
-# ok 3658
+#high 3' stability 301
+# ok 2902
 
 # PRIMER PAIR STATISTICS:
-# considered 188
-# unacceptable product size 169
-# high end compl 4
-# ok 15
+# considered 2652
+# unacceptable product size 2444
+# high any compl 2
+# high end compl 20
+# ok 186
 
 #                      Start  Len   Tm     GC%   Sequence
 
-   1 PRODUCT SIZE: 289
-     FORWARD PRIMER    1725   20  59.96  55.00  AGGGAAGGGATGCTAGGTGT
+   1 PRODUCT SIZE: 202
+     FORWARD PRIMER     801   20  59.72  60.00  CCCAGGAGCTACACACCTTC
 
-     REVERSE PRIMER    1994   20  59.99  55.00  AGAAGCACACCTCTCCCTGA
-
-
-   2 PRODUCT SIZE: 290
-     FORWARD PRIMER    1725   20  59.96  55.00  AGGGAAGGGATGCTAGGTGT
-
-     REVERSE PRIMER    1995   20  59.99  60.00  GAGAAGCACACCTCTCCCTG
+     REVERSE PRIMER     983   20  59.81  55.00  GGAGCACGACTTGATCTTCC
 
 
-   3 PRODUCT SIZE: 288
-     FORWARD PRIMER    1725   20  59.96  55.00  AGGGAAGGGATGCTAGGTGT
+   2 PRODUCT SIZE: 203
+     FORWARD PRIMER    1810   20  59.43  55.00  GAAGAAGACAGGTCGGGCTA
 
      REVERSE PRIMER    1993   20  59.99  60.00  GAAGCACACCTCTCCCTGAG
 
 
-   4 PRODUCT SIZE: 286
-     FORWARD PRIMER    1728   20  60.07  55.00  GAAGGGATGCTAGGTGTGGA
+   3 PRODUCT SIZE: 204
+     FORWARD PRIMER    1810   20  59.43  55.00  GAAGAAGACAGGTCGGGCTA
 
      REVERSE PRIMER    1994   20  59.99  55.00  AGAAGCACACCTCTCCCTGA
 
 
-   5 PRODUCT SIZE: 284
-     FORWARD PRIMER    1731   20  60.07  55.00  GGGATGCTAGGTGTGGAAGA
+   4 PRODUCT SIZE: 196
+     FORWARD PRIMER    1266   20  59.43  60.00  GGGAGACTGAGCCAGAGTGT
 
-     REVERSE PRIMER    1995   20  59.99  60.00  GAGAAGCACACCTCTCCCTG
+     REVERSE PRIMER    1442   20  60.06  50.00  GCGCCCAATAGGTAATGAGA
+
+
+   5 PRODUCT SIZE: 205
+     FORWARD PRIMER     801   20  59.72  60.00  CCCAGGAGCTACACACCTTC
+
+     REVERSE PRIMER     986   20  60.41  55.00  CCAGGAGCACGACTTGATCT
 
 
 
 </pre>
-<hr>
+</td></tr></table><p>
+
+
 <p>
 
 If the '-explain' flag has been used, as in the example, then statistics
@@ -1328,8 +1455,8 @@ for both the forward and reverse primer (and for the internal oligos).
 Note that if you compare the results to the output from the public
 Primer3 web site you will see a difference in the reverse primer
 positions - this is because the original Primer3 program reports the
-reverse primer positions as couted from the 3' end.  The convention in
-EMBOSS is to report both forward and reverse featyres as counted from
+reverse primer positions as counted from the 3' end.  The convention in
+EMBOSS is to report both forward and reverse features as counted from
 the 5' end, so the reverse primer positions are given counted from the
 5' start of the sequence. 
 

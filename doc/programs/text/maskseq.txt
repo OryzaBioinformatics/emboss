@@ -23,20 +23,39 @@ Description
    
 Usage
 
-   To mask off bases 10 to 12 from a sequence 'gatta.seq' and write to
-   the new sequence file 'gatta2.seq':
+   Here is a sample session with maskseq
    
-% maskseq gatta.seq gatta2.seq -reg=10-12
-
-   To mask off bases 20 to 30 from a sequence 'hdh.seq' using the
-   character 'n' and write to the new sequence file 'hdh2.seq':
+   Mask off bases 10 to 12 from a sequence 'prot.fasta' and write to the
+   new sequence file 'prot2.seq':
    
-% maskseq hdh.seq hdh2.seq -reg=20-30 -mask=n
-
-   To mask off the regions 20 to 23, 34 to 45 and 88 to 90 in 'yuy.seq':
    
-% maskseq yuy.seq yuy2.seq -reg=20-23,34-45,88-90
+% maskseq ../../data/prot.fasta prot2.seq -reg=10-12 
+Mask off regions of a sequence.
 
+   Go to the input files for this example
+   Go to the output files for this example
+   
+   Example 2
+   
+   Mask off bases 20 to 30 from a sequence 'prot.fasta' using the
+   character 'x' and write to the new sequence file 'prot2.seq':
+   
+   
+% maskseq ../../data/prot.fasta prot2.seq -reg=20-30 -mask=x 
+Mask off regions of a sequence.
+
+   Go to the output files for this example
+   
+   Example 3
+   
+   Mask off the regions 20 to 23, 34 to 45 and 88 to 90 in 'prot.fasta':
+   
+   
+% maskseq ../../data/prot.fasta prot2.seq -reg=20-23,34-45,88-90 
+Mask off regions of a sequence.
+
+   Go to the output files for this example
+   
 Command line arguments
 
    Mandatory qualifiers:
@@ -84,7 +103,18 @@ Command line arguments
    
 Input file format
 
-   This program reads in a single sequence file.
+   maskseq reads in a single sequence USA.
+   
+  Input files for usage example
+  
+  File: ../../data/prot.fasta
+  
+>FASTA F00001 FASTA FORMAT PROTEIN SEQUENCE
+ACDEFGHIKLMNPQRSTVWY
+ACDEFGHIKLMNPQRSTVWY
+ACDEFGHIKLMNPQRSTVWY
+ACDEFGHIKLMNPQRSTVWY
+ACDEFGHIKLMNPQRSTVWY
    
    You can specify a file of ranges to mask out by giving the '-regions'
    qualifier the value '@' followed by the name of the file containing
@@ -112,7 +142,31 @@ Input file format
    
 Output file format
 
-   Single sequence file.
+   maskseq writes s single masked sequence file.
+   
+  Output files for usage example
+  
+  File: prot2.seq
+  
+>FASTA F00001 FASTA FORMAT PROTEIN SEQUENCE
+ACDEFGHIKXXXPQRSTVWYACDEFGHIKLMNPQRSTVWYACDEFGHIKLMNPQRSTVWY
+ACDEFGHIKLMNPQRSTVWYACDEFGHIKLMNPQRSTVWY
+   
+  Output files for usage example 2
+  
+  File: prot2.seq
+  
+>FASTA F00001 FASTA FORMAT PROTEIN SEQUENCE
+ACDEFGHIKLMNPQRSTVWxxxxxxxxxxxMNPQRSTVWYACDEFGHIKLMNPQRSTVWY
+ACDEFGHIKLMNPQRSTVWYACDEFGHIKLMNPQRSTVWY
+   
+  Output files for usage example 3
+  
+  File: prot2.seq
+  
+>FASTA F00001 FASTA FORMAT PROTEIN SEQUENCE
+ACDEFGHIKLMNPQRSTVWXXXXEFGHIKLMNPXXXXXXXXXXXXGHIKLMNPQRSTVWY
+ACDEFGHIKLMNPQRSTVWYACDEFGHXXXMNPQRSTVWY
    
 Data files
 
@@ -170,7 +224,6 @@ See also
    seqretsplit  Reads and writes (returns) sequences in individual files
    skipseq      Reads and writes (returns) sequences, skipping the first few
    splitter     Split a sequence into (overlapping) smaller sequences
-   swissparse   Retrieves sequences from swissprot using keyword search
    trimest      Trim poly-A tails off EST sequences
    trimseq      Trim ambiguous bits off the ends of sequences
    union        Reads sequence fragments and builds one sequence

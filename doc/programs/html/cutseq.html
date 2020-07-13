@@ -57,7 +57,55 @@ It removes the sequence from the specified start to the end positions
     Usage
 </H2>
 
+<b>Here is a sample session with cutseq</b>
+<p>
+To remove bases 10 to 12 from a database entry and write to the new sequence file 'gatta2.seq': 
+<p>
 
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>cutseq tembl:paamir gatta2.seq -from=10 -to=12 </b>
+Removes a specified section from a sequence.
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 2</b>
+<p>
+To remove the first 20 bases from 'tembl:paamir' and write it to 'jsh.seq':  
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>cutseq tembl:paamir -from=1 -to=20 -out=jsh.seq </b>
+Removes a specified section from a sequence.
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.2">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 3</b>
+<p>
+If the default start and end positions are accepted, then all of the sequence is removed! 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>cutseq tembl:paamir starta.seq -sbeg=-1000 -send=1290 </b>
+Removes a specified section from a sequence.
+Start of region to delete [1168]: <b></b>
+End of region to delete [1290]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.3">Go to the output files for this example</a><p><p>
+
+
+<!--
 To remove bases 10 to 12 from a sequence 'gatta.seq' and write
 to the new sequence file 'gatta2.seq':
 
@@ -71,7 +119,7 @@ To remove the first 20 bases from 'hatta.seq' and write it to 'jsh.seq':
 <pre>
 % cutseq -seq=hatta.seq -from=1 -to=20 -out=jsh.seq
 </pre>
-
+-->
 
 
 
@@ -174,14 +222,238 @@ IT IS DONE FOR YOU.
 </H2>
 
 
-	Single sequence.
+<b>cutseq</b> reads a single sequence USA.
+
+<p>
+
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+
+'tembl:paamir' is a sequence entry in the example nucleic acid database 'tembl'
+<p>
+<p><h3>Database entry: tembl:paamir</h3>
+<table width="90%"><tr><td bgcolor="#FFDDFF">
+<pre>
+ID   PAAMIR     standard; DNA; PRO; 2167 BP.
+XX
+AC   X13776; M43175;
+XX
+SV   X13776.1
+XX
+DT   19-APR-1989 (Rel. 19, Created)
+DT   17-FEB-1997 (Rel. 50, Last updated, Version 22)
+XX
+DE   Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase regulation
+XX
+KW   aliphatic amidase regulator; amiC gene; amiR gene.
+XX
+OS   Pseudomonas aeruginosa
+OC   Bacteria; Proteobacteria; gamma subdivision; Pseudomonadaceae; Pseudomonas.
+XX
+RN   [1]
+RP   1167-2167
+RA   Rice P.M.;
+RT   ;
+RL   Submitted (16-DEC-1988) to the EMBL/GenBank/DDBJ databases.
+RL   Rice P.M., EMBL, Postfach 10-2209, Meyerhofstrasse 1, 6900 Heidelberg, FRG.
+XX
+RN   [2]
+RP   1167-2167
+RX   MEDLINE; 89211409.
+RA   Lowe N., Rice P.M., Drew R.E.;
+RT   "Nucleotide sequence of the aliphatic amidase regulator gene of Pseudomonas
+RT   aeruginosa";
+RL   FEBS Lett. 246:39-43(1989).
+XX
+RN   [3]
+RP   1-1292
+RX   MEDLINE; 91317707.
+RA   Wilson S., Drew R.;
+RT   "Cloning and DNA seqence of amiC, a new gene regulating expression of the
+RT   Pseudomonas aeruginosa aliphatic amidase, and purification of the amiC
+RT   product.";
+RL   J. Bacteriol. 173:4914-4921(1991).
+XX
+RN   [4]
+RP   1-2167
+RA   Rice P.M.;
+RT   ;
+RL   Submitted (04-SEP-1991) to the EMBL/GenBank/DDBJ databases.
+RL   Rice P.M., EMBL, Postfach 10-2209, Meyerhofstrasse 1, 6900 Heidelberg, FRG.
+XX
+DR   SWISS-PROT; P10932; AMIR_PSEAE.
+DR   SWISS-PROT; P27017; AMIC_PSEAE.
+DR   SWISS-PROT; Q51417; AMIS_PSEAE.
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+FT                   phenotype"
+FT                   /replace=""
+FT                   /gene="amiC"
+FT   misc_feature    1
+FT                   /note="last base of an XhoI site"
+FT   misc_feature    648..653
+FT                   /note="end of 658bp XhoI fragment, deletion in  pSW3 causes
+FT                   constitutive expression of amiE"
+FT   conflict        1281
+FT                   /replace="g"
+FT                   /citation=[3]
+XX
+SQ   Sequence 2167 BP; 363 A; 712 C; 730 G; 362 T; 0 other;
+     ggtaccgctg gccgagcatc tgctcgatca ccaccagccg ggcgacggga actgcacgat        60
+     ctacctggcg agcctggagc acgagcgggt tcgcttcgta cggcgctgag cgacagtcac       120
+     aggagaggaa acggatggga tcgcaccagg agcggccgct gatcggcctg ctgttctccg       180
+     aaaccggcgt caccgccgat atcgagcgct cgcacgcgta tggcgcattg ctcgcggtcg       240
+     agcaactgaa ccgcgagggc ggcgtcggcg gtcgcccgat cgaaacgctg tcccaggacc       300
+     ccggcggcga cccggaccgc tatcggctgt gcgccgagga cttcattcgc aaccgggggg       360
+     tacggttcct cgtgggctgc tacatgtcgc acacgcgcaa ggcggtgatg ccggtggtcg       420
+     agcgcgccga cgcgctgctc tgctacccga ccccctacga gggcttcgag tattcgccga       480
+     acatcgtcta cggcggtccg gcgccgaacc agaacagtgc gccgctggcg gcgtacctga       540
+     ttcgccacta cggcgagcgg gtggtgttca tcggctcgga ctacatctat ccgcgggaaa       600
+     gcaaccatgt gatgcgccac ctgtatcgcc agcacggcgg cacggtgctc gaggaaatct       660
+     acattccgct gtatccctcc gacgacgact tgcagcgcgc cgtcgagcgc atctaccagg       720
+     cgcgcgccga cgtggtcttc tccaccgtgg tgggcaccgg caccgccgag ctgtatcgcg       780
+     ccatcgcccg tcgctacggc gacggcaggc ggccgccgat cgccagcctg accaccagcg       840
+     aggcggaggt ggcgaagatg gagagtgacg tggcagaggg gcaggtggtg gtcgcgcctt       900
+     acttctccag catcgatacg cccgccagcc gggccttcgt ccaggcctgc catggtttct       960
+     tcccggagaa cgcgaccatc accgcctggg ccgaggcggc ctactggcag accttgttgc      1020
+     tcggccgcgc cgcgcaggcc gcaggcaact ggcgggtgga agacgtgcag cggcacctgt      1080
+     acgacatcga catcgacgcg ccacaggggc cggtccgggt ggagcgccag aacaaccaca      1140
+     gccgcctgtc ttcgcgcatc gcggaaatcg atgcgcgcgg cgtgttccag gtccgctggc      1200
+     agtcgcccga accgattcgc cccgaccctt atgtcgtcgt gcataacctc gacgactggt      1260
+     ccgccagcat gggcggggga ccgctcccat gagcgccaac tcgctgctcg gcagcctgcg      1320
+     cgagttgcag gtgctggtcc tcaacccgcc gggggaggtc agcgacgccc tggtcttgca      1380
+     gctgatccgc atcggttgtt cggtgcgcca gtgctggccg ccgccggaag ccttcgacgt      1440
+     gccggtggac gtggtcttca ccagcatttt ccagaatggc caccacgacg agatcgctgc      1500
+     gctgctcgcc gccgggactc cgcgcactac cctggtggcg ctggtggagt acgaaagccc      1560
+     cgcggtgctc tcgcagatca tcgagctgga gtgccacggc gtgatcaccc agccgctcga      1620
+     tgcccaccgg gtgctgcctg tgctggtatc ggcgcggcgc atcagcgagg aaatggcgaa      1680
+     gctgaagcag aagaccgagc agctccagga ccgcatcgcc ggccaggccc ggatcaacca      1740
+     ggccaaggtg ttgctgatgc agcgccatgg ctgggacgag cgcgaggcgc accagcacct      1800
+     gtcgcgggaa gcgatgaagc ggcgcgagcc gatcctgaag atcgctcagg agttgctggg      1860
+     aaacgagccg tccgcctgag cgatccgggc cgaccagaac aataacaaga ggggtatcgt      1920
+     catcatgctg ggactggttc tgctgtacgt tggcgcggtg ctgtttctca atgccgtctg      1980
+     gttgctgggc aagatcagcg gtcgggaggt ggcggtgatc aacttcctgg tcggcgtgct      2040
+     gagcgcctgc gtcgcgttct acctgatctt ttccgcagca gccgggcagg gctcgctgaa      2100
+     ggccggagcg ctgaccctgc tattcgcttt tacctatctg tgggtggccg ccaaccagtt      2160
+     cctcgag                                                                2167
+//
+</pre>
+</td></tr></table><p>
+
 
 <H2>
     Output file format
 </H2>
 
+<b>cutseq</b> writes a single sequence file.
 
-	Single sequence file.
+<p>
+
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: gatta2.seq</h3>
+<table width="90%"><tr><td bgcolor="#DDFFDD">
+<pre>
+&gt;PAAMIR X13776.1 Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase regulation
+ggtaccgctcgagcatctgctcgatcaccaccagccgggcgacgggaactgcacgatcta
+cctggcgagcctggagcacgagcgggttcgcttcgtacggcgctgagcgacagtcacagg
+agaggaaacggatgggatcgcaccaggagcggccgctgatcggcctgctgttctccgaaa
+ccggcgtcaccgccgatatcgagcgctcgcacgcgtatggcgcattgctcgcggtcgagc
+aactgaaccgcgagggcggcgtcggcggtcgcccgatcgaaacgctgtcccaggaccccg
+gcggcgacccggaccgctatcggctgtgcgccgaggacttcattcgcaaccggggggtac
+ggttcctcgtgggctgctacatgtcgcacacgcgcaaggcggtgatgccggtggtcgagc
+gcgccgacgcgctgctctgctacccgaccccctacgagggcttcgagtattcgccgaaca
+tcgtctacggcggtccggcgccgaaccagaacagtgcgccgctggcggcgtacctgattc
+gccactacggcgagcgggtggtgttcatcggctcggactacatctatccgcgggaaagca
+accatgtgatgcgccacctgtatcgccagcacggcggcacggtgctcgaggaaatctaca
+ttccgctgtatccctccgacgacgacttgcagcgcgccgtcgagcgcatctaccaggcgc
+gcgccgacgtggtcttctccaccgtggtgggcaccggcaccgccgagctgtatcgcgcca
+tcgcccgtcgctacggcgacggcaggcggccgccgatcgccagcctgaccaccagcgagg
+cggaggtggcgaagatggagagtgacgtggcagaggggcaggtggtggtcgcgccttact
+tctccagcatcgatacgcccgccagccgggccttcgtccaggcctgccatggtttcttcc
+cggagaacgcgaccatcaccgcctgggccgaggcggcctactggcagaccttgttgctcg
+gccgcgccgcgcaggccgcaggcaactggcgggtggaagacgtgcagcggcacctgtacg
+acatcgacatcgacgcgccacaggggccggtccgggtggagcgccagaacaaccacagcc
+gcctgtcttcgcgcatcgcggaaatcgatgcgcgcggcgtgttccaggtccgctggcagt
+cgcccgaaccgattcgccccgacccttatgtcgtcgtgcataacctcgacgactggtccg
+ccagcatgggcgggggaccgctcccatgagcgccaactcgctgctcggcagcctgcgcga
+gttgcaggtgctggtcctcaacccgccgggggaggtcagcgacgccctggtcttgcagct
+gatccgcatcggttgttcggtgcgccagtgctggccgccgccggaagccttcgacgtgcc
+ggtggacgtggtcttcaccagcattttccagaatggccaccacgacgagatcgctgcgct
+gctcgccgccgggactccgcgcactaccctggtggcgctggtggagtacgaaagccccgc
+ggtgctctcgcagatcatcgagctggagtgccacggcgtgatcacccagccgctcgatgc
+ccaccgggtgctgcctgtgctggtatcggcgcggcgcatcagcgaggaaatggcgaagct
+gaagcagaagaccgagcagctccaggaccgcatcgccggccaggcccggatcaaccaggc
+caaggtgttgctgatgcagcgccatggctgggacgagcgcgaggcgcaccagcacctgtc
+gcgggaagcgatgaagcggcgcgagccgatcctgaagatcgctcaggagttgctgggaaa
+cgagccgtccgcctgagcgatccgggccgaccagaacaataacaagaggggtatcgtcat
+catgctgggactggttctgctgtacgttggcgcggtgctgtttctcaatgccgtctggtt
+gctgggcaagatcagcggtcgggaggtggcggtgatcaacttcctggtcggcgtgctgag
+cgcctgcgtcgcgttctacctgatcttttccgcagcagccgggcagggctcgctgaaggc
+cggagcgctgaccctgctattcgcttttacctatctgtgggtggccgccaaccagttcct
+cgag
+</pre>
+</td></tr></table><p>
+
+<a name="output.2"></a>
+<h3>Output files for usage example 2</h3>
+<p><h3>File: jsh.seq</h3>
+<table width="90%"><tr><td bgcolor="#DDFFDD">
+<pre>
+&gt;PAAMIR X13776.1 Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase regulation
+tgctcgatcaccaccagccgggcgacgggaactgcacgatctacctggcgagcctggagc
+acgagcgggttcgcttcgtacggcgctgagcgacagtcacaggagaggaaacggatggga
+tcgcaccaggagcggccgctgatcggcctgctgttctccgaaaccggcgtcaccgccgat
+atcgagcgctcgcacgcgtatggcgcattgctcgcggtcgagcaactgaaccgcgagggc
+ggcgtcggcggtcgcccgatcgaaacgctgtcccaggaccccggcggcgacccggaccgc
+tatcggctgtgcgccgaggacttcattcgcaaccggggggtacggttcctcgtgggctgc
+tacatgtcgcacacgcgcaaggcggtgatgccggtggtcgagcgcgccgacgcgctgctc
+tgctacccgaccccctacgagggcttcgagtattcgccgaacatcgtctacggcggtccg
+gcgccgaaccagaacagtgcgccgctggcggcgtacctgattcgccactacggcgagcgg
+gtggtgttcatcggctcggactacatctatccgcgggaaagcaaccatgtgatgcgccac
+ctgtatcgccagcacggcggcacggtgctcgaggaaatctacattccgctgtatccctcc
+gacgacgacttgcagcgcgccgtcgagcgcatctaccaggcgcgcgccgacgtggtcttc
+tccaccgtggtgggcaccggcaccgccgagctgtatcgcgccatcgcccgtcgctacggc
+gacggcaggcggccgccgatcgccagcctgaccaccagcgaggcggaggtggcgaagatg
+gagagtgacgtggcagaggggcaggtggtggtcgcgccttacttctccagcatcgatacg
+cccgccagccgggccttcgtccaggcctgccatggtttcttcccggagaacgcgaccatc
+accgcctgggccgaggcggcctactggcagaccttgttgctcggccgcgccgcgcaggcc
+gcaggcaactggcgggtggaagacgtgcagcggcacctgtacgacatcgacatcgacgcg
+ccacaggggccggtccgggtggagcgccagaacaaccacagccgcctgtcttcgcgcatc
+gcggaaatcgatgcgcgcggcgtgttccaggtccgctggcagtcgcccgaaccgattcgc
+cccgacccttatgtcgtcgtgcataacctcgacgactggtccgccagcatgggcggggga
+ccgctcccatgagcgccaactcgctgctcggcagcctgcgcgagttgcaggtgctggtcc
+tcaacccgccgggggaggtcagcgacgccctggtcttgcagctgatccgcatcggttgtt
+cggtgcgccagtgctggccgccgccggaagccttcgacgtgccggtggacgtggtcttca
+ccagcattttccagaatggccaccacgacgagatcgctgcgctgctcgccgccgggactc
+cgcgcactaccctggtggcgctggtggagtacgaaagccccgcggtgctctcgcagatca
+tcgagctggagtgccacggcgtgatcacccagccgctcgatgcccaccgggtgctgcctg
+tgctggtatcggcgcggcgcatcagcgaggaaatggcgaagctgaagcagaagaccgagc
+agctccaggaccgcatcgccggccaggcccggatcaaccaggccaaggtgttgctgatgc
+agcgccatggctgggacgagcgcgaggcgcaccagcacctgtcgcgggaagcgatgaagc
+ggcgcgagccgatcctgaagatcgctcaggagttgctgggaaacgagccgtccgcctgag
+cgatccgggccgaccagaacaataacaagaggggtatcgtcatcatgctgggactggttc
+tgctgtacgttggcgcggtgctgtttctcaatgccgtctggttgctgggcaagatcagcg
+gtcgggaggtggcggtgatcaacttcctggtcggcgtgctgagcgcctgcgtcgcgttct
+acctgatcttttccgcagcagccgggcagggctcgctgaaggccggagcgctgaccctgc
+tattcgcttttacctatctgtgggtggccgccaaccagttcctcgag
+</pre>
+</td></tr></table><p>
+
+<a name="output.3"></a>
+<h3>Output files for usage example 3</h3>
+<p><h3>File: starta.seq</h3>
+<table width="90%"><tr><td bgcolor="#DDFFDD">
+<pre>
+&gt;PAAMIR X13776.1 Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase regulation
+</pre>
+</td></tr></table><p>
+
+
 
 <H2>
     Data files
@@ -260,7 +532,6 @@ None.
 <tr><td><a href="seqretsplit.html">seqretsplit</a></td><td>Reads and writes (returns) sequences in individual files</td></tr>
 <tr><td><a href="skipseq.html">skipseq</a></td><td>Reads and writes (returns) sequences, skipping the first few</td></tr>
 <tr><td><a href="splitter.html">splitter</a></td><td>Split a sequence into (overlapping) smaller sequences</td></tr>
-<tr><td><a href="swissparse.html">swissparse</a></td><td>Retrieves sequences from swissprot using keyword search</td></tr>
 <tr><td><a href="trimest.html">trimest</a></td><td>Trim poly-A tails off EST sequences</td></tr>
 <tr><td><a href="trimseq.html">trimseq</a></td><td>Trim ambiguous bits off the ends of sequences</td></tr>
 <tr><td><a href="union.html">union</a></td><td>Reads sequence fragments and builds one sequence</td></tr>

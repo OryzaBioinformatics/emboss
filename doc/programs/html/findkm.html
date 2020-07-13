@@ -46,7 +46,7 @@ Find Km and Vmax for an enzyme reaction by a Hanes/Woolf plot
 
 
 Takes a file of enzymatic data and plots Michaelis Menten and
-Hanes Woolf plots of the data. From these ot calculates the Michaelis
+Hanes Woolf plots of the data. From these it calculates the Michaelis
 Menten constant (Km) and the maximum velocity (Vmax) of the reaction.
 
 <H2>
@@ -54,16 +54,23 @@ Menten constant (Km) and the maximum velocity (Vmax) of the reaction.
 </H2>
 
 
-Here is a sample session with findkm.
+<b>Here is a sample session with findkm</b>
+<p>
 
-<pre>
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-%findkm
-Calculates Km and Vmax for an enzyme reaction.
-Enter name of file containing data: enztest.dat   
-Display on device [xwin]: 
+% <b>findkm -graph cps </b>
+Find Km and Vmax for an enzyme reaction by a Hanes/Woolf plot
+Enter name of file containing data: <b>../../data/enztest.dat</b>
+Output file [enztest.findkm]: <b></b>
 
-</pre>
+Created findkm.ps
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
+
 
 
 
@@ -146,7 +153,7 @@ IT IS DONE FOR YOU.
 <tr>
 <td>-[no]plot</td>
 <td>S/V vs S</td>
-<td>Yes/No</td>
+<td>Boolean value Yes/No</td>
 <td>Yes</td>
 </tr>
 
@@ -163,10 +170,13 @@ The input file is a file of enzymatic data, [S] against V, Substrate
 concentration against reaction velocity.
 
 <p>
-The data for the example run are shown below:
 
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+<p><h3>File: ../../data/enztest.dat</h3>
+<table width="90%"><tr><td bgcolor="#FFDDFF">
 <pre>
-
   0.10   2
   0.20   4
   0.50   9
@@ -177,19 +187,22 @@ The data for the example run are shown below:
  20.00  80
  50.00  91
 100.00  95
-
-
 </pre>
+</td></tr></table><p>
+
+
 
 <H2>
     Output file format
 </H2>
 
 
-Here is a sample output from the example above, together with the plots:
-        
-<pre>
 
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: enztest.findkm</h3>
+<table width="90%"><tr><td bgcolor="#DDFFDD">
+<pre>
 ---Hanes Woolf Plot Calculations---
 Slope of best fit line is a = 0.01
 Coefficient in Eqn of line y = ma +b is b = 0.05
@@ -198,22 +211,24 @@ Where line cuts y axis = (0, 0.05)
 Limit-point of graph for plot = (103.00, 1.08)
 
 Vmax = 99.70, Km = 4.894612
-        
 </pre>
+</td></tr></table><p>
+<p><h3>Graphics File: findkm.ps</h3>
+<p><img src="findkm.1.findkm.gif" alt="[findkm results]">
 
-<a href="findkm0.gif">Click here for the graphical output</a>
-      
+
 <H2>
     Data files
 </H2>
 
 
-See Input File Format
+None.
         
 <H2>
     Notes
 </H2>
 
+None.
 
 <H2>
     References
@@ -246,20 +261,26 @@ Portland Press, London.
     Warnings
 </H2>
 
+None.
 
 <H2>
     Diagnostic Error Messages
 </H2>
+
+None.
 
 
 <H2>
     Exit status
 </H2>
 
+It exits with a status of 0.
 
 <H2>
     Known bugs
 </H2>
+
+None.
 
 
 <!--

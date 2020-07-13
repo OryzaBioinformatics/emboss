@@ -48,16 +48,22 @@ Description
    
 Usage
 
-   An example of the use of oddcomp to search for entries in swissprot
-   with at least 1 SR AND at least 2 RS follows:
+   Here is a sample session with oddcomp
    
-% oddcomp
-Finds protein sequence regions with a biased composition
-Input sequence(s): sw:*
-Output file [5h1d_fugru.oddcomp]: out.odd
-Input file: test.comp
-Window size to consider (e.g. 30 aa) [30]:
+   To search for entries in swissprot with at least 1 SR AND at least 2
+   RS:
+   
 
+% oddcomp 
+Finds protein sequence regions with a biased composition
+Input sequence(s): tsw:*
+Input file: ../../data/oddcomp.comp
+Window size to consider (e.g. 30 aa) [30]: 
+Output file [100k_rat.oddcomp]: out.odd
+   
+   Go to the input files for this example
+   Go to the output files for this example
+   
 Command line arguments
 
    Mandatory qualifiers:
@@ -107,13 +113,17 @@ Command line arguments
    -[no]ignorebz The amino acid code B represents Asparagine or Aspartic
    acid and the code Z represents Glutamine or Glutamic acid. These are
    not commonly used codes and you may wish not to count words containing
-   them, just noting them in the count of 'Other' words. Yes/No Yes
+   them, just noting them in the count of 'Other' words. Boolean value
+   Yes/No Yes
    
 Input file format
 
-   The data file ('test.comp') used in the example follows:
-     _________________________________________________________________
+  Input files for usage example
+  
+   'tsw:*' is a sequence entry in the example protein database 'tsw'
    
+  File: ../../data/oddcomp.comp
+  
 # Example input file for oddcomp
 Word size       2
 Total count     0
@@ -125,7 +135,6 @@ RS      2               0               0               0
 SR      1               0               0               0
 
 Other   0               0               0               0
-     _________________________________________________________________
    
    The columns "Obs Frequency", "Exp Frequency" and "Obs/Exp Frequency"
    are not required - they were simply included in this example to show
@@ -159,15 +168,16 @@ SR      1
    
 Output file format
 
-   A list of sequence name identifiers.
+   oddcomp writes a list of sequence name identifiers.
    
-   The output from the above example follows:
-     _________________________________________________________________
-   
+  Output files for usage example
+  
+  File: out.odd
+  
 #
 # Output from 'oddcomp'
 #
-# The Expected frequencies are taken from the file: test.comp
+# The Expected frequencies are taken from the file: ../../data/oddcomp.comp
 #
 #       Word size: 2
         CB1B_FUGRU
@@ -176,7 +186,7 @@ Output file format
         RS7_FUGRU
 
 #       END     #
-
+   
 Data files
 
    None.
@@ -207,7 +217,7 @@ Known bugs
    
 See also
 
-    Program name                        Description
+    Program name                         Description
    antigenic      Finds antigenic sites in proteins
    digest         Protein proteolytic enzyme or reagent cleavage digest
    fuzzpro        Protein pattern search
@@ -216,6 +226,7 @@ See also
    patmatdb       Search a protein sequence with a motif
    patmatmotifs   Search a PROSITE motif database with a protein sequence
    pepcoil        Predicts coiled coil regions
+   pestfind       Finds PEST motifs as potential proteolytic cleavage sites
    preg           Regular expression search of a protein sequence
    pscan          Scans proteins using PRINTS
    sigcleave      Reports protein signal cleavage sites

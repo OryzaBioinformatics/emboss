@@ -14,13 +14,17 @@ Description
    
 Usage
 
-   Here is a sample session with pepwindow.
+   Here is a sample session with pepwindow
    
-% pepwindow sw:hba_human
-Displays protein hydropathy
-Graph type [x11]:
 
-   click here for result
+% pepwindow tsw:hba_human 
+Displays protein hydropathy
+Graph type [x11]: cps
+
+Created pepwindow.ps
+   
+   Go to the input files for this example
+   Go to the output files for this example
    
 Command line arguments
 
@@ -54,12 +58,130 @@ Command line arguments
    
 Input file format
 
-   Any protein sequence USA.
+   pepwindow reads any protein sequence USA.
+   
+  Input files for usage example
+  
+   'tsw:hba_human' is a sequence entry in the example protein database
+   'tsw'
+   
+  Database entry: tsw:hba_human
+  
+ID   HBA_HUMAN      STANDARD;      PRT;   141 AA.
+AC   P01922;
+DT   21-JUL-1986 (Rel. 01, Created)
+DT   21-JUL-1986 (Rel. 01, Last sequence update)
+DT   15-JUL-1999 (Rel. 38, Last annotation update)
+DE   HEMOGLOBIN ALPHA CHAIN.
+GN   HBA1 AND HBA2.
+OS   Homo sapiens (Human), Pan troglodytes (Chimpanzee), and
+OS   Pan paniscus (Pygmy chimpanzee) (Bonobo).
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Mammalia;
+OC   Eutheria; Primates; Catarrhini; Hominidae; Homo.
+RN   [1]
+RP   SEQUENCE FROM N.A. (ALPHA-1).
+RX   MEDLINE; 81088339.
+RA   MICHELSON A.M., ORKIN S.H.;
+RT   "The 3' untranslated regions of the duplicated human alpha-globin
+RT   genes are unexpectedly divergent.";
+RL   Cell 22:371-377(1980).
+RN   [2]
+RP   SEQUENCE FROM N.A. (ALPHA-2).
+RX   MEDLINE; 81175088.
+RA   LIEBHABER S.A., GOOSSENS M.J., KAN Y.W.;
+RT   "Cloning and complete nucleotide sequence of human 5'-alpha-globin
+RT   gene.";
+RL   Proc. Natl. Acad. Sci. U.S.A. 77:7054-7058(1980).
+RN   [3]
+RP   SEQUENCE FROM N.A. (ALPHA-2).
+RX   MEDLINE; 80137531.
+RA   WILSON J.T., WILSON L.B., REDDY V.B., CAVALLESCO C., GHOSH P.K.,
+RA   DERIEL J.K., FORGET B.G., WEISSMAN S.M.;
+RT   "Nucleotide sequence of the coding portion of human alpha globin
+RT   messenger RNA.";
+RL   J. Biol. Chem. 255:2807-2815(1980).
+RN   [4]
+RP   SEQUENCE FROM N.A. (ALPHA-1 AND ALPHA-2).
+RA   FLINT J., HIGGS D.R.;
+RL   Submitted (JAN-1997) to the EMBL/GenBank/DDBJ databases.
+RN   [5]
+RP   SEQUENCE.
+RA   BRAUNITZER G., GEHRING-MULLER R., HILSCHMANN N., HILSE K., HOBOM G.,
+RA   RUDLOFF V., WITTMANN-LIEBOLD B.;
+RT   "The constitution of normal adult human haemoglobin.";
+RL   Hoppe-Seyler's Z. Physiol. Chem. 325:283-286(1961).
+RN   [6]
+RP   SEQUENCE.
+RA   HILL R.J., KONIGSBERG W.;
+RT   "The structure of human hemoglobin: IV. The chymotryptic digestion of
+RT   the alpha chain of human hemoglobin.";
+RL   J. Biol. Chem. 237:3151-3156(1962).
+RN   [7]
+
+
+  [Part of this file has been deleted for brevity]
+
+FT                                /FTId=VAR_002841.
+FT   VARIANT     130    130       A -> D (IN YUDA; O2 AFFINITY DOWN).
+FT                                /FTId=VAR_002842.
+FT   VARIANT     131    131       S -> P (IN QUESTEMBERT; HIGHLY UNSTABLE;
+FT                                CAUSES ALPHA-THALASSEMIA).
+FT                                /FTId=VAR_002843.
+FT   VARIANT     133    133       S -> R (IN VAL DE MARNE; O2 AFFINITY UP).
+FT                                /FTId=VAR_002844.
+FT   VARIANT     135    135       V -> E (IN PAVIE).
+FT                                /FTId=VAR_002845.
+FT   VARIANT     136    136       L -> M (IN CHICAGO).
+FT                                /FTId=VAR_002846.
+FT   VARIANT     136    136       L -> P (IN BIBBA; UNSTABLE;
+FT                                CAUSES ALPHA-THALASSEMIA).
+FT                                /FTId=VAR_002847.
+FT   VARIANT     138    138       S -> P (IN ATTLEBORO; O2 AFFINITY UP).
+FT                                /FTId=VAR_002848.
+FT   VARIANT     139    139       K -> E (IN HANAKAMI; O2 AFFINITY UP).
+FT                                /FTId=VAR_002849.
+FT   VARIANT     139    139       K -> T (IN TOKONAME; O2 AFFINITY UP).
+FT                                /FTId=VAR_002850.
+FT   VARIANT     140    140       Y -> H (IN ROUEN; O2 AFFINITY UP).
+FT                                /FTId=VAR_002851.
+FT   VARIANT     141    141       R -> C (IN NUNOBIKI; O2 AFFINITY UP).
+FT                                /FTId=VAR_002852.
+FT   VARIANT     141    141       R -> L (IN LEGNANO; O2 AFFINITY UP).
+FT                                /FTId=VAR_002853.
+FT   VARIANT     141    141       R -> H (IN SURESNES; O2 AFFINITY UP).
+FT                                /FTId=VAR_002854.
+FT   VARIANT     141    141       R -> P (IN SINGAPORE).
+FT                                /FTId=VAR_002855.
+FT   HELIX         4     35
+FT   HELIX        37     42
+FT   TURN         44     45
+FT   TURN         50     51
+FT   HELIX        53     71
+FT   TURN         72     74
+FT   HELIX        76     79
+FT   TURN         80     80
+FT   HELIX        81     89
+FT   TURN         90     91
+FT   TURN         95     95
+FT   HELIX        96    112
+FT   TURN        114    116
+FT   HELIX       119    136
+FT   TURN        137    139
+SQ   SEQUENCE   141 AA;  15126 MW;  5EC7DB1E CRC32;
+     VLSPADKTNV KAAWGKVGAH AGEYGAEALE RMFLSFPTTK TYFPHFDLSH GSAQVKGHGK
+     KVADALTNAV AHVDDMPNAL SALSDLHAHK LRVDPVNFKL LSHCLLVTLA AHLPAEFTPA
+     VHASLDKFLA SVSTVLTSKY R
+//
    
 Output file format
 
-   An image is displayed.
-   .ps file if postscript output requested.
+   An image is displayed on the specified graphics device.
+   
+  Output files for usage example
+  
+  Graphics File: pepwindow.ps
+  
+   [pepwindow results]
    
 Data files
 
@@ -122,20 +244,19 @@ Known bugs
    
 See also
 
-   Program name Description
-   backtranseq Back translate a protein sequence
-   charge Protein charge plot
-   checktrans Reports STOP codons and ORF statistics of a protein
-   sequence
-   compseq Counts the composition of dimer/trimer/etc words in a sequence
-   emowse Protein identification by mass spectrometry
-   freak Residue/base frequency table or plot
-   iep Calculates the isoelectric point of a protein
-   mwcontam Shows molwts that match across a set of files
-   mwfilter Filter noisy molwts from mass spec output
-   octanol Displays protein hydropathy
-   pepinfo Plots simple amino acid properties in parallel
-   pepstats Protein statistics
+   Program name                          Description
+   backtranseq  Back translate a protein sequence
+   charge       Protein charge plot
+   checktrans   Reports STOP codons and ORF statistics of a protein
+   compseq      Counts the composition of dimer/trimer/etc words in a sequence
+   emowse       Protein identification by mass spectrometry
+   freak        Residue/base frequency table or plot
+   iep          Calculates the isoelectric point of a protein
+   mwcontam     Shows molwts that match across a set of files
+   mwfilter     Filter noisy molwts from mass spec output
+   octanol      Displays protein hydropathy
+   pepinfo      Plots simple amino acid properties in parallel
+   pepstats     Protein statistics
    pepwindowall Displays protein hydropathy of a set of sequences
    
 Author(s)

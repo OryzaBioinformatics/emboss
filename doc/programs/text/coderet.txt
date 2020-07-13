@@ -86,11 +86,102 @@ FT                   THEIIGFLDQTLYRWNRLGIESPRSEKLARELLKELRTQV"
    
 Usage
 
-   Here is a sample session with coderet:
+   Here is a sample session with coderet
    
-   The EMBL sequence X03487's feature table is as follows:
-     _________________________________________________________________
+   To extract all of the CDS, mRNA and the protein translations:
    
+
+% coderet 
+Extract CDS, mRNA and translations from feature tables
+Input sequence(s): tembl:X03487
+Output sequence [hsferg1.fasta]: 
+   
+   Go to the input files for this example
+   Go to the output files for this example
+   
+   Example 2
+   
+   To only extract the mRNA sequence:
+   
+
+% coderet -nocds -notranslation 
+Extract CDS, mRNA and translations from feature tables
+Input sequence(s): tembl:X03487
+Output sequence [hsferg1.fasta]: 
+   
+   Go to the output files for this example
+   
+Command line arguments
+
+   Mandatory qualifiers:
+  [-seqall]            seqall     Sequence database USA
+  [-seqout]            seqout     Output sequence USA
+
+   Optional qualifiers: (none)
+   Advanced qualifiers:
+   -[no]cds            boolean    Extract CDS sequences
+   -[no]mrna           boolean    Extract mrna sequences
+   -[no]translation    boolean    Extract translated sequences
+
+   General qualifiers:
+  -help                boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   
+
+   Mandatory qualifiers Allowed values Default
+   [-seqall]
+   (Parameter 1) Sequence database USA Readable sequence(s) Required
+   [-seqout]
+   (Parameter 2) Output sequence USA Writeable sequence <sequence>.format
+   Optional qualifiers Allowed values Default
+   (none)
+   Advanced qualifiers Allowed values Default
+   -[no]cds Extract CDS sequences Boolean value Yes/No Yes
+   -[no]mrna Extract mrna sequences Boolean value Yes/No Yes
+   -[no]translation Extract translated sequences Boolean value Yes/No Yes
+   
+Input file format
+
+   coderet reads one or more nucleic sequence USAs having CDS, mRNA or
+   translation headings in their feature tables.
+   
+  Input files for usage example
+  
+   'tembl:X03487' is a sequence entry in the example nucleic acid
+   database 'tembl'
+   
+  Database entry: tembl:X03487
+  
+ID   HSFERG1    standard; DNA; HUM; 512 BP.
+XX
+AC   X03487;
+XX
+SV   X03487.1
+XX
+DT   02-JUL-1986 (Rel. 09, Created)
+DT   04-APR-1995 (Rel. 43, Last updated, Version 2)
+XX
+DE   Human apoferritin H gene exon 1
+XX
+KW   ferritin.
+XX
+OS   Homo sapiens (human)
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia
+;
+OC   Eutheria; Primates; Catarrhini; Hominidae; Homo.
+XX
+RN   [1]
+RP   1-512
+RX   MEDLINE; 86120367.
+RA   Costanzo F., Colombo M., Staempfli S., Santoro C., Marone M., Frank R.,
+RA   Delius H., Cortese R.;
+RT   "Structure of gene and pseudogenes of human apoferritin H";
+RL   Nucleic Acids Res. 14:721-736(1986).
+XX
+DR   EPD; EP11112; HS_FRIH.
+DR   SWISS-PROT; P02794; FRIH_HUMAN.
+XX
 FH   Key             Location/Qualifiers
 FH
 FT   source          1..512
@@ -121,7 +212,27 @@ E
 FT                   SGLAEYLFDKHTLGDSDNES"
 FT   intron          501..>512
 FT                   /note="intron I"
-     _________________________________________________________________
+XX
+SQ   Sequence 512 BP; 80 A; 212 C; 152 G; 64 T; 4 other;
+     agnncaaacc tnagctccgc cagagcgcgc gaggcctcca gcggccgccc ctcccccaca        6
+0
+     gcaggggcgg ggntcccgcg cccaccggaa ggagcgggct cggggcgggc ggcgctgatt       12
+0
+     ggccggggcg ggcctgacgc cgacgcggct ataagagacc acaagcgacc cgcagggcca       18
+0
+     gacgttcttc gccgagagtc gtcggggttt cctgcttcaa cagtgcttgg acggaacccg       24
+0
+     gcgctcgttc cccaccccgg ccggccgccc atagccagcc ctccgtcgac ctcttcaccg       30
+0
+     caccctcgga ctgccccaag gcccccgccg ccgctccagc gccgcgcagc caccgccgcc       36
+0
+     gccgccgcct ctccttagtc gccgccatga cgaccgcgtc cacctcgcag gtgcgccaga       42
+0
+     actaccacca ggactcagag gccgccatca accgccagat caacctggag ctctacgcct       48
+0
+     cctacgttta cctgtccatg gtgagcgcgg gc                                     51
+2
+//
    
    This means that the mRNA sequence is from position 179 to 500 in this
    sequence.
@@ -130,16 +241,30 @@ FT                   /note="intron I"
    database: X03488 and X03488.
    The translation of the coding sequence is also given.
    
-   To extract all of the CDS, mRNA and the protein translations, type:
-   
-% coderet
-Extract CDS, mRNA and translations from feature tables
-Input sequence(s): embl:X03487
-Output sequence [hsferg1.fasta]:
+Output file format
 
-   The result is as follows:
-     _________________________________________________________________
+   The output is a sequence file containing any CDS, mRNA and protein
+   translation sequences as specified by the feature table of the
+   sequence(s).
    
+   One or more of CDS, mRNA, translation can be excluded from the output
+   by using the appropriate qualifiers to the program (i.e. -nocds, etc.)
+   
+   The ID names of the output sequences are constructed from the name of
+   the input sequence, the type of feature being output (i.e. cds, mrna,
+   pro) and a unique ordinal number for this type to distinguish it from
+   others in this sequence. The name, type and number of separated by
+   underscore characters. Thus the second CDS feature in the sequence
+   'HSXYZ' would be named 'HSXYZ_cds_2'.
+   
+   The translations are not made from the coding sequence, they are
+   extracted directly from the translation sequence held in the feature
+   table.
+   
+  Output files for usage example
+  
+  File: hsferg1.fasta
+  
 >x03487_cds_1
 atgacgaccgcgtccacctcgcaggtgcgccagaactaccaccaggactcagaggccgcc
 atcaaccgccagatcaacctggagctctacgcctcctacgtttacctgtccatgtcttac
@@ -163,72 +288,18 @@ MTTASTSQVRQNYHQDSEAAINRQINLELYASYVYLSMSYYFDRDDVALKNFAKYFLHQS
 HEEREHAEKLMKLQNQRGGRIFLQDIKKPDCDDWESGLNAMECALHLEKNVNQSLLELHK
 LATDKNDPHLCDFIETHYLNEQVKAIKELGDHVTNLRKMGAPESGLAEYLFDKHTLGDSD
 NES
-     _________________________________________________________________
    
-   Note that there is a mixture of nucleic and protein sequences in this
-   file
-   
-   To only extract the mRNA sequence, type:
-   
-% coderet -nocds -notranslation
-Extract CDS, mRNA and translations from feature tables
-Input sequence(s): embl:X03487
-Output sequence [hsferg1.fasta]:
-
-Command line arguments
-
-   Mandatory qualifiers:
-  [-seqall]            seqall     Sequence database USA
-  [-seqout]            seqout     Output sequence USA
-
-   Optional qualifiers: (none)
-   Advanced qualifiers:
-   -[no]cds            boolean    Extract CDS sequences
-   -[no]mrna           boolean    Extract mrna sequences
-   -[no]translation    boolean    Extract translated sequences
-
-   General qualifiers:
-  -help                boolean    Report command line options. More
-                                  information on associated and general
-                                  qualifiers can be found with -help -verbose
-   
-
-   Mandatory qualifiers Allowed values Default
-   [-seqall]
-   (Parameter 1) Sequence database USA Readable sequence(s) Required
-   [-seqout]
-   (Parameter 2) Output sequence USA Writeable sequence <sequence>.format
-   Optional qualifiers Allowed values Default
-   (none)
-   Advanced qualifiers Allowed values Default
-   -[no]cds Extract CDS sequences Yes/No Yes
-   -[no]mrna Extract mrna sequences Yes/No Yes
-   -[no]translation Extract translated sequences Yes/No Yes
-   
-Input file format
-
-   USA of one or more nucleic sequences having CDS, mRNA or translation
-   headings in their feature tables.
-   
-Output file format
-
-   The output is a sequence file containing any CDS, mRNA and protein
-   translation sequences as specified by the feature table of the
-   sequence(s).
-   
-   One or more of CDS, mRNA, translation can be excluded from the output
-   by using the appropriate qualifiers to the program (i.e. -nocds, etc.)
-   
-   The ID names of the output sequences are constructed from the name of
-   the input sequence, the type of feature being output (i.e. cds, mrna,
-   pro) and a unique ordinal number for this type to distinguish it from
-   others in this sequence. The name, type and number of separated by
-   underscore characters. Thus the second CDS feature in the sequence
-   'HSXYZ' would be named 'HSXYZ_cds_2'.
-   
-   The translations are not made from the coding sequence, they are
-   extracted directly from the translation sequence held in the feature
-   table.
+  Output files for usage example 2
+  
+  File: hsferg1.fasta
+  
+>x03487_mrna_1
+cagacgttcttcgccgagagtcgtcggggtttcctgcttcaacagtgcttggacggaacc
+cggcgctcgttccccaccccggccggccgcccatagccagccctccgtcgacctcttcac
+cgcaccctcggactgccccaaggcccccgccgccgctccagcgccgcgcagccaccgccg
+ccgccgccgcctctccttagtcgccgccatgacgaccgcgtccacctcgcaggtgcgcca
+gaactaccaccaggactcagaggccgccatcaaccgccagatcaacctggagctctacgc
+ctcctacgtttacctgtccatg
    
 Data files
 
@@ -272,8 +343,9 @@ See also
    showfeat     Show features of a sequence
    showorf      Pretty output of DNA translations
    showseq      Display a sequence with features, translation etc
-   swissparse   Retrieves sequences from swissprot using keyword search
+   sixpack      Display a DNA sequence with 6-frame translation and ORFs
    transeq      Translate nucleic acid sequences
+   twofeat      Finds neighbouring pairs of features in sequences
    
 Author(s)
 

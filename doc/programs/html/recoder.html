@@ -78,19 +78,6 @@ which maintain the same translation.
 The output for 'recoder' is similar to the format used by 'silent'.
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 <H2>
     Usage
 </H2>
@@ -101,22 +88,21 @@ The output for 'recoder' is similar to the format used by 'silent'.
  -->
 
 
-Here is a sample session with recoder:
+<b>Here is a sample session with recoder</b>
+<p>
 
-<pre>
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% recoder
-Find and remove restriction sites but maintain the same translation
-Input sequence: em:hsfau
-Comma separated enzyme list [all]: EcoRII
-Output file [hsfau.recoder]:
-</pre>
+% <b>recoder </b>
+Remove restriction sites but maintain the same translation
+Input sequence: <b>tembl:hsfau</b>
+Comma separated enzyme list [all]: <b>EcoRII</b>
+Output file [hsfau.recoder]: <b></b>
 
-
-
-
-
-
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
 
 
 
@@ -193,14 +179,14 @@ Output file [hsfau.recoder]:
 <tr>
 <td>-sshow</td>
 <td>Display untranslated sequence</td>
-<td>Yes/No</td>
+<td>Boolean value Yes/No</td>
 <td>No</td>
 </tr>
 
 <tr>
 <td>-tshow</td>
 <td>Display translated sequence</td>
-<td>Yes/No</td>
+<td>Boolean value Yes/No</td>
 <td>No</td>
 </tr>
 
@@ -230,12 +216,95 @@ IT IS DONE FOR YOU.
         happens in unusual cases - null input, etc. 
    -->
 
-Normal nucleic acid USA.
+<b>recoder</b> reads a normal nucleic acid sequence USA.
+
+<p>
 
 
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
 
-
-
+'tembl:hsfau' is a sequence entry in the example nucleic acid database 'tembl'
+<p>
+<p><h3>Database entry: tembl:hsfau</h3>
+<table width="90%"><tr><td bgcolor="#FFDDFF">
+<pre>
+ID   HSFAU      standard; RNA; HUM; 518 BP.
+XX
+AC   X65923;
+XX
+SV   X65923.1
+XX
+DT   13-MAY-1992 (Rel. 31, Created)
+DT   23-SEP-1993 (Rel. 37, Last updated, Version 10)
+XX
+DE   H.sapiens fau mRNA
+XX
+KW   fau gene.
+XX
+OS   Homo sapiens (human)
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia;
+OC   Eutheria; Primates; Catarrhini; Hominidae; Homo.
+XX
+RN   [1]
+RP   1-518
+RA   Michiels L.M.R.;
+RT   ;
+RL   Submitted (29-APR-1992) to the EMBL/GenBank/DDBJ databases.
+RL   L.M.R. Michiels, University of Antwerp, Dept of Biochemistry,
+RL   Universiteisplein 1, 2610 Wilrijk, BELGIUM
+XX
+RN   [2]
+RP   1-518
+RX   MEDLINE; 93368957.
+RA   Michiels L., Van der Rauwelaert E., Van Hasselt F., Kas K., Merregaert J.;
+RT   " fau cDNA encodes a ubiquitin-like-S30 fusion protein and is expressed as
+RT   an antisense sequences in the Finkel-Biskis-Reilly murine sarcoma virus";
+RL   Oncogene 8:2537-2546(1993).
+XX
+DR   SWISS-PROT; P35544; UBIM_HUMAN.
+DR   SWISS-PROT; Q05472; RS30_HUMAN.
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..518
+FT                   /chromosome="11q"
+FT                   /db_xref="taxon:9606"
+FT                   /organism="Homo sapiens"
+FT                   /tissue_type="placenta"
+FT                   /clone_lib="cDNA"
+FT                   /clone="pUIA 631"
+FT                   /map="13"
+FT   misc_feature    57..278
+FT                   /note="ubiquitin like part"
+FT   CDS             57..458
+FT                   /db_xref="SWISS-PROT:P35544"
+FT                   /db_xref="SWISS-PROT:Q05472"
+FT                   /gene="fau"
+FT                   /protein_id="CAA46716.1"
+FT                   /translation="MQLFVRAQELHTFEVTGQETVAQIKAHVASLEGIAPEDQVVLLAG
+FT                   APLEDEATLGQCGVEALTTLEVAGRMLGGKVHGSLARAGKVRGQTPKVAKQEKKKKKTG
+FT                   RAKRRMQYNRRFVNVVPTFGKKKGPNANS"
+FT   misc_feature    98..102
+FT                   /note="nucleolar localization signal"
+FT   misc_feature    279..458
+FT                   /note="S30 part"
+FT   polyA_signal    484..489
+FT   polyA_site      509
+XX
+SQ   Sequence 518 BP; 125 A; 139 C; 148 G; 106 T; 0 other;
+     ttcctctttc tcgactccat cttcgcggta gctgggaccg ccgttcagtc gccaatatgc        60
+     agctctttgt ccgcgcccag gagctacaca ccttcgaggt gaccggccag gaaacggtcg       120
+     cccagatcaa ggctcatgta gcctcactgg agggcattgc cccggaagat caagtcgtgc       180
+     tcctggcagg cgcgcccctg gaggatgagg ccactctggg ccagtgcggg gtggaggccc       240
+     tgactaccct ggaagtagca ggccgcatgc ttggaggtaa agttcatggt tccctggccc       300
+     gtgctggaaa agtgagaggt cagactccta aggtggccaa acaggagaag aagaagaaga       360
+     agacaggtcg ggctaagcgg cggatgcagt acaaccggcg ctttgtcaac gttgtgccca       420
+     cctttggcaa gaagaagggc cccaatgcca actcttaagt cttttgtaat tctggctttc       480
+     tctaataaaa aagccactta gttcagtcaa aaaaaaaa                               518
+//
+</pre>
+</td></tr></table><p>
 
 
 
@@ -253,45 +322,47 @@ Normal nucleic acid USA.
    -->
 
 
-This is the out[ut from the above example:
-<p>
-<hr>
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: hsfau.recoder</h3>
+<table width="90%"><tr><td bgcolor="#DDFFDD">
 <pre>
 Results for HSFAU:
 
 KEY:
-        Enzyme          Enzyme name
-        RS-Pattern      Restriction enzyme recognition site pattern
-        Match-Posn      Position of the first base of RS pattern in sequence
-        AA              Amino acid. Original sequence(.)After mutation
-        Base-Posn       Position of base to be mutated in sequence
-        Mutation        The base mutation to perform
+	Enzyme		Enzyme name
+	RS-Pattern	Restriction enzyme recognition site pattern
+	Match-Posn	Position of the first base of RS pattern in sequence
+	AA		Amino acid. Original sequence(.)After mutation
+	Base-Posn	Position of base to be mutated in sequence
+	Mutation	The base mutation to perform
 
 Creating silent mutations
 
 Enzyme      RS-Pattern  Match-Posn   AA  Base-Posn Mutation
-EcoRII      CCWGG          77        P.P    78       C->G  
-EcoRII      CCWGG          77        P.P    78       C->A  
-EcoRII      CCWGG          77        P.P    78       C->T  
-EcoRII      CCWGG          77        R.R    79       A->C  
-EcoRII      CCWGG          77        R.R    81       G->A  
-EcoRII      CCWGG          107       A.A    108      C->G  
-EcoRII      CCWGG          107       A.A    108      C->A  
-EcoRII      CCWGG          107       A.A    108      C->T  
-EcoRII      CCWGG          107       R.R    109      A->C  
-EcoRII      CCWGG          107       R.R    111      G->A  
-EcoRII      CCWGG          182       S.S    183      C->G  
-EcoRII      CCWGG          182       S.S    183      C->A  
-EcoRII      CCWGG          182       S.S    183      C->T  
-EcoRII      CCWGG          197       P.P    198      C->G  
-EcoRII      CCWGG          197       P.P    198      C->A  
-EcoRII      CCWGG          197       P.P    198      C->T  
-EcoRII      CCWGG          248       P.P    249      C->G  
-EcoRII      CCWGG          248       P.P    249      C->A  
-EcoRII      CCWGG          248       P.P    249      C->T  
-EcoRII      CCWGG          293       P.P    294      C->G  
-EcoRII      CCWGG          293       P.P    294      C->A  
-EcoRII      CCWGG          293       P.P    294      C->T  
+EcoRII      CCWGG          77        P.P    78       C-&gt;G  
+EcoRII      CCWGG          77        P.P    78       C-&gt;A  
+EcoRII      CCWGG          77        P.P    78       C-&gt;T  
+EcoRII      CCWGG          77        R.R    79       A-&gt;C  
+EcoRII      CCWGG          77        R.R    81       G-&gt;A  
+EcoRII      CCWGG          107       A.A    108      C-&gt;G  
+EcoRII      CCWGG          107       A.A    108      C-&gt;A  
+EcoRII      CCWGG          107       A.A    108      C-&gt;T  
+EcoRII      CCWGG          107       R.R    109      A-&gt;C  
+EcoRII      CCWGG          107       R.R    111      G-&gt;A  
+EcoRII      CCWGG          182       S.S    183      C-&gt;G  
+EcoRII      CCWGG          182       S.S    183      C-&gt;A  
+EcoRII      CCWGG          182       S.S    183      C-&gt;T  
+EcoRII      CCWGG          197       P.P    198      C-&gt;G  
+EcoRII      CCWGG          197       P.P    198      C-&gt;A  
+EcoRII      CCWGG          197       P.P    198      C-&gt;T  
+EcoRII      CCWGG          248       P.P    249      C-&gt;G  
+EcoRII      CCWGG          248       P.P    249      C-&gt;A  
+EcoRII      CCWGG          248       P.P    249      C-&gt;T  
+EcoRII      CCWGG          293       P.P    294      C-&gt;G  
+EcoRII      CCWGG          293       P.P    294      C-&gt;A  
+EcoRII      CCWGG          293       P.P    294      C-&gt;T  
 
 
 
@@ -300,36 +371,22 @@ Results for reverse of HSFAU:
 Creating silent mutations
 
 Enzyme      RS-Pattern  Match-Posn   AA  Base-Posn Mutation
-EcoRII      CCWGG          77        P.P    79       T->G  
-EcoRII      CCWGG          77        P.P    79       T->C  
-EcoRII      CCWGG          107       P.P    109      T->G  
-EcoRII      CCWGG          107       P.P    109      T->C  
-EcoRII      CCWGG          182       P.P    184      A->G  
-EcoRII      CCWGG          182       P.P    184      A->C  
-EcoRII      CCWGG          197       P.P    199      A->G  
-EcoRII      CCWGG          197       P.P    199      A->C  
-EcoRII      CCWGG          248       P.P    250      A->G  
-EcoRII      CCWGG          248       P.P    250      A->C  
-EcoRII      CCWGG          293       P.P    295      A->C  
-EcoRII      CCWGG          293       P.P    295      A->G  
+EcoRII      CCWGG          77        P.P    79       T-&gt;G  
+EcoRII      CCWGG          77        P.P    79       T-&gt;C  
+EcoRII      CCWGG          107       P.P    109      T-&gt;G  
+EcoRII      CCWGG          107       P.P    109      T-&gt;C  
+EcoRII      CCWGG          182       P.P    184      A-&gt;G  
+EcoRII      CCWGG          182       P.P    184      A-&gt;C  
+EcoRII      CCWGG          197       P.P    199      A-&gt;G  
+EcoRII      CCWGG          197       P.P    199      A-&gt;C  
+EcoRII      CCWGG          248       P.P    250      A-&gt;G  
+EcoRII      CCWGG          248       P.P    250      A-&gt;C  
+EcoRII      CCWGG          293       P.P    295      A-&gt;C  
+EcoRII      CCWGG          293       P.P    295      A-&gt;G  
+
 
 </pre>
-<hr>
-<p>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+</td></tr></table><p>
 
 
 

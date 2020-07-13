@@ -60,38 +60,22 @@ be called 'prosite.lines'.
 </H2>
 
 
-Here is a sample session with prosextract.
+<b>Here is a sample session with prosextract</b>
+<p>
 
-<pre>
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% prosextract
-Extracting ID, AC & PA lines from the Prosite motif Database.
-Enter name of prosite directory: data/PROSITE
-	
-% more prosite.lines
-ASN_GLYCOSYLATION PS00001
-N-glycosylation
-N-{P}-[ST]-{P}
-^N[^P][ST][^P]
+% <b>prosextract </b>
+Builds the PROSITE motif database for patmatmotifs to search
+Enter name of prosite directory: <b>../../data/</b>
 
-CAMP_PHOSPHO_SITE PS00004
-cAMP-
-[RK](2)-x-[ST]
-^[RK]{2}[^BJOUXZ][ST]
+</pre></td></tr></table><p>
+<p>
+<a href="#output.1">Go to the output files for this example</a><p><p>
 
-PKC_PHOSPHO_SITE PS00005
-Protein
-[ST]-x-[RK]
-^[ST][^BJOUXZ][RK]
 
-CK2_PHOSPHO_SITE PS00006
-Casein
-[ST]-x(2)-[DE]
-^[ST][^BJOUXZ]{2}[DE]
-
-etc.......
-
-</pre>
+<p>
 
 The output files named after the prosite accession numbers can now
 also be seen in the prosite directory. This files are automatically
@@ -172,6 +156,10 @@ IT IS DONE FOR YOU.
 These files must be the "prosite.dat" and "prosite.doc" file of a
 Prosite distribution, containing all current prosite data.
 
+<p>
+
+
+
 <H2>
     Output file format
 </H2>
@@ -180,6 +168,11 @@ Prosite distribution, containing all current prosite data.
 These files are held in the prosite subdirectory of the emboss data
 directory. The default names are "prosite.lines" and "PS*****"
 (accession number documentation files)
+
+<p>
+
+
+
 
 <H2>
     Data files
@@ -248,19 +241,8 @@ Always exits with status 0
 <tr><th>Program name</th><th>Description</th></tr>
 <tr><td><a href="aaindexextract.html">aaindexextract</a></td><td>Extract data from AAINDEX</td></tr>
 <tr><td><a href="cutgextract.html">cutgextract</a></td><td>Extract data from CUTG</td></tr>
-<tr><td><a href="domainer.html">domainer</a></td><td>Reads protein coordinate files and writes domains coordinate files</td></tr>
-<tr><td><a href="funky.html">funky</a></td><td>Reads clean coordinate files and writes file of protein-heterogen contact data</td></tr>
-<tr><td><a href="groups.html">groups</a></td><td>Removes redundant hits from a scop families file</td></tr>
-<tr><td><a href="hetparse.html">hetparse</a></td><td>Converts raw dictionary of heterogen groups to a file in embl-like format</td></tr>
-<tr><td><a href="nrscope.html">nrscope</a></td><td>Converts redundant EMBL-format SCOP file to non-redundant one</td></tr>
-<tr><td><a href="pdbparse.html">pdbparse</a></td><td>Parses pdb files and writes cleaned-up protein coordinate files</td></tr>
-<tr><td><a href="pdbtosp.html">pdbtosp</a></td><td>Convert raw swissprot:pdb equivalence file to embl-like format</td></tr>
 <tr><td><a href="printsextract.html">printsextract</a></td><td>Extract data from PRINTS</td></tr>
 <tr><td><a href="rebaseextract.html">rebaseextract</a></td><td>Extract data from REBASE</td></tr>
-<tr><td><a href="scope.html">scope</a></td><td>Convert raw scop classification file to embl-like format</td></tr>
-<tr><td><a href="scopnr.html">scopnr</a></td><td>Removes redundant domains from a scop classification file</td></tr>
-<tr><td><a href="scopparse.html">scopparse</a></td><td>Converts raw scop classification files to a file in embl-like format</td></tr>
-<tr><td><a href="scopseqs.html">scopseqs</a></td><td>Adds pdb and swissprot sequence records to a scop classification file</td></tr>
 <tr><td><a href="tfextract.html">tfextract</a></td><td>Extract data from TRANSFAC</td></tr>
 </table>
 

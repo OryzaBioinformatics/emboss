@@ -58,23 +58,39 @@ various ways.
 </H2>
 
 
-Here is a sample session with prettyplot.
-
+<b>Here is a sample session with prettyplot</b>
 <p>
 
-<pre>
-% prettyplot -resbreak=10 -boxcol -consensus -plurality=3
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>prettyplot -resbreak=10 -boxcol -consensus -plurality=3 </b>
 Displays aligned sequences, with colouring and boxing
-Input sequence set: globin.msf
-Graph type [x11]:
-</pre>
-<a href="./prettyplot3.gif">click here for result</a>
-<pre>
-$ prettyplot globin.msf -plurality=3 -docolour
+Input sequence set: <b>../../data/globins.msf</b>
+Graph type [x11]: <b>cps</b>
+
+Created prettyplot.ps
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 2</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>prettyplot ../../data/globins.msf -plurality=3 -docolour </b>
 Displays aligned sequences, with colouring and boxing
-Graph type [x11]: 
-</pre>
-<a href="./prettyplot4.gif">click here for result</a>
+Graph type [x11]: <b>cps</b>
+
+Created prettyplot.ps
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.2">Go to the output files for this example</a><p><p>
+
 
 
 <H2>
@@ -206,7 +222,7 @@ IT IS DONE FOR YOU.
 <tr>
 <td>-[no]ccolours</td>
 <td>Colour residues by their consensus value.</td>
-<td>Yes/No</td>
+<td>Boolean value Yes/No</td>
 <td>Yes</td>
 </tr>
 
@@ -234,14 +250,14 @@ IT IS DONE FOR YOU.
 <tr>
 <td>-docolour</td>
 <td>Colour residues by table oily, amide etc.</td>
-<td>Yes/No</td>
+<td>Boolean value Yes/No</td>
 <td>No</td>
 </tr>
 
 <tr>
 <td>-[no]title</td>
 <td>Do not display the title</td>
-<td>Yes/No</td>
+<td>Boolean value Yes/No</td>
 <td>Yes</td>
 </tr>
 
@@ -276,14 +292,14 @@ The only four letters allowed are BPLW, in any order.</td>
 <tr>
 <td>-[no]box</td>
 <td>Display prettyboxes</td>
-<td>Yes/No</td>
+<td>Boolean value Yes/No</td>
 <td>Yes</td>
 </tr>
 
 <tr>
 <td>-boxcol</td>
 <td>Colour the background in the boxes</td>
-<td>Yes/No</td>
+<td>Boolean value Yes/No</td>
 <td>No</td>
 </tr>
 
@@ -297,7 +313,7 @@ The only four letters allowed are BPLW, in any order.</td>
 <tr>
 <td>-[no]name</td>
 <td>Display the sequence names</td>
-<td>Yes/No</td>
+<td>Boolean value Yes/No</td>
 <td>Yes</td>
 </tr>
 
@@ -311,14 +327,14 @@ The only four letters allowed are BPLW, in any order.</td>
 <tr>
 <td>-[no]number</td>
 <td>Display the residue number</td>
-<td>Yes/No</td>
+<td>Boolean value Yes/No</td>
 <td>Yes</td>
 </tr>
 
 <tr>
 <td>-[no]listoptions</td>
 <td>Display the date and options used</td>
-<td>Yes/No</td>
+<td>Boolean value Yes/No</td>
 <td>Yes</td>
 </tr>
 
@@ -332,14 +348,14 @@ The only four letters allowed are BPLW, in any order.</td>
 <tr>
 <td>-consensus</td>
 <td>Display the consensus</td>
-<td>Yes/No</td>
+<td>Boolean value Yes/No</td>
 <td>No</td>
 </tr>
 
 <tr>
 <td>-[no]collision</td>
 <td>Allow collisions in calculating consensus</td>
-<td>Yes/No</td>
+<td>Boolean value Yes/No</td>
 <td>Yes</td>
 </tr>
 
@@ -371,7 +387,7 @@ The only four letters allowed are BPLW, in any order.</td>
 <tr>
 <td>-portrait</td>
 <td>Set page to Portrait</td>
-<td>Yes/No</td>
+<td>Boolean value Yes/No</td>
 <td>No</td>
 </tr>
 
@@ -384,7 +400,7 @@ The only four letters allowed are BPLW, in any order.</td>
 <tr>
 <td>-data</td>
 <td>(no help text) boolean value</td>
-<td>Yes/No</td>
+<td>Boolean value Yes/No</td>
 <td>No</td>
 </tr>
 
@@ -396,13 +412,89 @@ The only four letters allowed are BPLW, in any order.</td>
     Input file format
 </H2>
 
-Any sequence USA.
+<b>prettyplot</b> reads any sequence USA.
+
+<p>
+
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+<p><h3>File: ../../data/globins.msf</h3>
+<table width="90%"><tr><td bgcolor="#FFDDFF">
+<pre>
+!!AA_MULTIPLE_ALIGNMENT 1.0
+
+  ../data/globins.msf MSF:  164 Type: P 25/06/01 CompCheck: 4278 ..
+
+  Name: HBB_HUMAN Len: 164  Check: 6914 Weight: 0.14
+  Name: HBB_HORSE Len: 164  Check: 6007 Weight: 0.15
+  Name: HBA_HUMAN Len: 164  Check: 3921 Weight: 0.15
+  Name: HBA_HORSE Len: 164  Check: 4770 Weight: 0.19
+  Name: MYG_PHYCA Len: 164  Check: 7930 Weight: 0.23
+  Name: GLB5_PETMA Len: 164  Check: 1857 Weight: 0.21
+  Name: LGB2_LUPLU Len: 164  Check: 2879 Weight: 0.10
+
+//
+
+           1                                               50
+HBB_HUMAN  ~~~~~~~~VHLTPEEKSAVTALWGKVN.VDEVGGEALGR.LLVVYPWTQR
+HBB_HORSE  ~~~~~~~~VQLSGEEKAAVLALWDKVN.EEEVGGEALGR.LLVVYPWTQR
+HBA_HUMAN  ~~~~~~~~~~~~~~VLSPADKTNVKAA.WGKVGAHAGEYGAEALERMFLS
+HBA_HORSE  ~~~~~~~~~~~~~~VLSAADKTNVKAA.WSKVGGHAGEYGAEALERMFLG
+MYG_PHYCA  ~~~~~~~VLSEGEWQLVLHVWAKVEAD.VAGHGQDILIR.LFKSHPETLE
+GLB5_PETMA PIVDTGSVAPLSAAEKTKIRSAWAPVYSTYETSGVDILVKFFTSTPAAQE
+LGB2_LUPLU ~~~~~~~~GALTESQAALVKSSWEEFNANIPKHTHRFFILVLEIAPAAKD
+
+           51                                             100
+HBB_HUMAN  FFESFGDLSTPDAVMGNPKVKAHGKKVLGAFSDGLAHLDNLKGTFATLSE
+HBB_HORSE  FFDSFGDLSNPGAVMGNPKVKAHGKKVLHSFGEGVHHLDNLKGTFAALSE
+HBA_HUMAN  FPTTKTYFPHFDLSHGSAQVKGHGKKVADALTNAVAHVDDMPNALSALSD
+HBA_HORSE  FPTTKTYFPHFDLSHGSAQVKAHGKKVGDALTLAVGHLDDLPGALSNLSD
+MYG_PHYCA  KFDRFKHLKTEAEMKASEDLKKHGVTVLTALGAILKKKGHHEAELKPLAQ
+GLB5_PETMA FFPKFKGLTTADQLKKSADVRWHAERIINAVNDAVASMDDTEKMSMKLRD
+LGB2_LUPLU LFSFLKGTSEVPQNNPELQAHAGKVFKLVYEAAIQLQVTGVVVTDATLKN
+
+           101                                            150
+HBB_HUMAN  LHCDKLH..VDPENFRLLGNVLVCVLAHHFGKEFTPPVQAAYQKVVAGVA
+HBB_HORSE  LHCDKLH..VDPENFRLLGNVLVVVLARHFGKDFTPELQASYQKVVAGVA
+HBA_HUMAN  LHAHKLR..VDPVNFKLLSHCLLVTLAAHLPAEFTPAVHASLDKFLASVS
+HBA_HORSE  LHAHKLR..VDPVNFKLLSHCLLSTLAVHLPNDFTPAVHASLDKFLSSVS
+MYG_PHYCA  SHATKHK..IPIKYLEFISEAIIHVLHSRHPGDFGADAQGAMNKALELFR
+GLB5_PETMA LSGKHAK..SFQVDPQYFKVLAAVIADTVAAGDAGFEKLMSMICILLRSA
+LGB2_LUPLU LGSVHVSKGVADAHFPVVKEAILKTIKEVVGAKWSEELNSAWTIAYDELA
+
+           151        164
+HBB_HUMAN  NALAHKYH~~~~~~
+HBB_HORSE  NALAHKYH~~~~~~
+HBA_HUMAN  TVLTSKYR~~~~~~
+HBA_HORSE  TVLTSKYR~~~~~~
+MYG_PHYCA  KDIAAKYKELGYQG
+GLB5_PETMA Y~~~~~~~~~~~~~
+LGB2_LUPLU IVIKKEMNDAA~~~
+
+</pre>
+</td></tr></table><p>
+
 
 <H2>
     Output file format
 </H2>
 
-An image of the alignment is displayed.
+An image of the alignment is displayed on the specified graphics device.
+
+<p>
+
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>Graphics File: prettyplot.ps</h3>
+<p><img src="prettyplot.1.prettyplot.gif" alt="[prettyplot results]">
+
+<a name="output.2"></a>
+<h3>Output files for usage example 2</h3>
+<p><h3>Graphics File: prettyplot.ps</h3>
+<p><img src="prettyplot.2.prettyplot.gif" alt="[prettyplot results]">
+
 
 <H2>
     Data files
@@ -501,6 +593,7 @@ plplot.
 <tr><td><a href="showdb.html">showdb</a></td><td>Displays information on the currently available databases</td></tr>
 <tr><td><a href="showfeat.html">showfeat</a></td><td>Show features of a sequence</td></tr>
 <tr><td><a href="showseq.html">showseq</a></td><td>Display a sequence with features, translation etc</td></tr>
+<tr><td><a href="sixpack.html">sixpack</a></td><td>Display a DNA sequence with 6-frame translation and ORFs</td></tr>
 <tr><td><a href="textsearch.html">textsearch</a></td><td>Search sequence documentation text. SRS and Entrez are faster!</td></tr>
 <tr><td><a href="tranalign.html">tranalign</a></td><td>Align nucleic coding regions given the aligned proteins</td></tr>
 </table>

@@ -49,30 +49,433 @@ Description
    
 Usage
 
+   Here is a sample session with showdb
+   
    Display information on the currently available databases:
-% showdb
+   
 
-   Write out the display to a file:
-% showdb -outfile showdb.out
+% showdb 
+Displays information on the currently available databases
 
+# Name        Type ID  Qry All Comment
+# ====        ==== ==  === === =======
+enspep        P    OK  OK  OK  ENSEMBL pep
+enspepp       P    OK  OK  OK  ENSEMBL pep predicted
+enspeppredicted P    OK  OK  OK  ENSEMBL pep predicted
+remtrembl     P    OK  OK  OK  REMTREMBL sequences
+sptrembl      P    OK  OK  OK  SPTREMBL sequences
+sw            P    OK  OK  OK  SWISSPROT sequences
+swissprot     P    OK  OK  OK  SWISSPROT sequences
+tpir          P    OK  OK  OK  PIR using NBRF access for 4 files
+trembl        P    OK  OK  OK  TREMBL sequences
+tsw           P    OK  OK  OK  Swissprot native format with EMBL CD-ROM index
+tswnew        P    OK  OK  OK  Swissnew as 3 files in native format with EMBL C
+D-ROM index
+twp           P    OK  OK  OK  EMBL new in native format with EMBL CD-ROM index
+em            N    OK  OK  OK  EMBL sequences
+embl          N    OK  OK  OK  EMBL sequences
+emblnew       N    OK  OK  OK  New EMBL sequences
+enscdna       N    OK  OK  OK  ENSEMBL cdna
+ensdna        N    OK  OK  OK  ENSEMBL dna
+ensdnam       N    OK  OK  OK  ENSEMBL dna masked
+ensdnamasked  N    OK  OK  OK  ENSEMBL dna masked
+ensembl       N    OK  OK  OK  ENSEMBL
+est           N    OK  OK  OK  EMBL EST sequences
+fungal        N    OK  OK  OK  EMBL fungal sequences
+gb            N    OK  OK  OK  Genbank
+genbank       N    OK  OK  OK  Genbank
+gss           N    OK  OK  OK  EMBL GSS sequences
+hsunigene     N    OK  -   -   hsunigene
+htg           N    OK  OK  OK  EMBL HTG sequences
+human         N    OK  OK  OK  EMBL human sequences
+humanest      N    OK  OK  OK  EMBL human EST sequences
+invertebrate  N    OK  OK  OK  EMBL invertebrate sequences
+mammalian     N    OK  OK  OK  EMBL mammalian sequences
+maskutrdb     N    OK  OK  OK  Masked 3' UTR database for Chris Sanderson proje
+ct
+mmunigene     N    OK  OK  OK  mmunigene
+mouseest      N    OK  OK  OK  EMBL mouse EST sequences
+organelle     N    OK  OK  OK  EMBL organelle sequences
+otherest      N    OK  OK  OK  EMBL other EST sequences
+othervertebrate N    OK  OK  OK  EMBL other vertebrate sequences
+patent        N    OK  OK  OK  EMBL patented sequences
+phage         N    OK  OK  OK  EMBL phage sequences
+plant         N    OK  OK  OK  EMBL plant sequences
+prokaryotic   N    OK  OK  OK  EMBL prokaryotic sequences
+refseq        N    OK  OK  OK  REFSEQ sequences
+rodent        N    OK  OK  OK  EMBL rodent sequences
+sts           N    OK  OK  OK  EMBL STS sequences
+synthetic     N    OK  OK  OK  EMBL synthetic sequences
+tembl         N    OK  OK  OK  EMBL in native format with EMBL CD-ROM index
+tgenbank      N    OK  OK  OK  GenBank in native format with EMBL CD-ROM index
+tigregad      N    OK  OK  OK  TIGR EGAD sequences
+tigrhgi       N    OK  OK  OK  TIGR HGI sequences
+tigrmgi       N    OK  OK  OK  TIGR MGI sequences
+unclassified  N    OK  OK  OK  EMBL unclassified sequences
+utrdb         N    OK  OK  OK  3' UTR database for Chris Sanderson project
+vertebrate    N    OK  OK  OK  EMBL vertebrate sequences
+viral         N    OK  OK  OK  EMBL viral sequences
+   
+   Example 2
+   
+   Write the results to a file:
+   
+   
+% showdb -outfile showdb.out 
+Displays information on the currently available databases
+
+   Go to the output files for this example
+   
+   Example 3
+   
    Display information on one explicit database:
-% showdb -database swissprot
+   
 
-   Display information on the databases formatted for inclusion in HTML:
-% showdb -html
+% showdb -database tsw 
+Displays information on the currently available databases
 
+# Name        Type ID  Qry All Comment
+# ====        ==== ==  === === =======
+tsw           P    OK  OK  OK  Swissprot native format with EMBL CD-ROM index
+   
+   Go to the input files for this example
+   
+   Example 4
+   
+   Display information on the databases formatted in HTML:
+   
+
+% showdb -html 
+Displays information on the currently available databases
+
+
+ Name Type ID Qry All Comment
+
+ enspep P OK   OK   OK   ENSEMBL pep
+
+ enspepp P OK   OK   OK   ENSEMBL pep predicted
+
+ enspeppredicted P OK   OK   OK   ENSEMBL pep predicted
+
+ remtrembl P OK   OK   OK   REMTREMBL sequences
+
+ sptrembl P OK   OK   OK   SPTREMBL sequences
+
+ sw P OK   OK   OK   SWISSPROT sequences
+
+ swissprot P OK   OK   OK   SWISSPROT sequences
+
+ tpir P OK   OK   OK   PIR using NBRF access for 4 files
+
+ trembl P OK   OK   OK   TREMBL sequences
+
+ tsw P OK   OK   OK   Swissprot native format with EMBL CD-ROM index
+
+ tswnew P OK   OK   OK   Swissnew as 3 files in native format with EMBL CD-ROM
+index
+
+ twp P OK   OK   OK   EMBL new in native format with EMBL CD-ROM index
+
+ em N OK   OK   OK   EMBL sequences
+
+ embl N OK   OK   OK   EMBL sequences
+
+ emblnew N OK   OK   OK   New EMBL sequences
+
+ enscdna N OK   OK   OK   ENSEMBL cdna
+
+ ensdna N OK   OK   OK   ENSEMBL dna
+
+ ensdnam N OK   OK   OK   ENSEMBL dna masked
+
+ ensdnamasked N OK   OK   OK   ENSEMBL dna masked
+
+ ensembl N OK   OK   OK   ENSEMBL
+
+ est N OK   OK   OK   EMBL EST sequences
+
+ fungal N OK   OK   OK   EMBL fungal sequences
+
+ gb N OK   OK   OK   Genbank
+
+ genbank N OK   OK   OK   Genbank
+
+ gss N OK   OK   OK   EMBL GSS sequences
+
+ hsunigene N OK   -    -    hsunigene
+
+ htg N OK   OK   OK   EMBL HTG sequences
+
+ human N OK   OK   OK   EMBL human sequences
+
+ humanest N OK   OK   OK   EMBL human EST sequences
+
+ invertebrate N OK   OK   OK   EMBL invertebrate sequences
+
+ mammalian N OK   OK   OK   EMBL mammalian sequences
+
+ maskutrdb N OK   OK   OK   Masked 3' UTR database for Chris Sanderson project
+
+ mmunigene N OK   OK   OK   mmunigene
+
+ mouseest N OK   OK   OK   EMBL mouse EST sequences
+
+ organelle N OK   OK   OK   EMBL organelle sequences
+
+ otherest N OK   OK   OK   EMBL other EST sequences
+
+ othervertebrate N OK   OK   OK   EMBL other vertebrate sequences
+
+ patent N OK   OK   OK   EMBL patented sequences
+
+ phage N OK   OK   OK   EMBL phage sequences
+
+ plant N OK   OK   OK   EMBL plant sequences
+
+ prokaryotic N OK   OK   OK   EMBL prokaryotic sequences
+
+ refseq N OK   OK   OK   REFSEQ sequences
+
+ rodent N OK   OK   OK   EMBL rodent sequences
+
+ sts N OK   OK   OK   EMBL STS sequences
+
+ synthetic N OK   OK   OK   EMBL synthetic sequences
+
+ tembl N OK   OK   OK   EMBL in native format with EMBL CD-ROM index
+
+ tgenbank N OK   OK   OK   GenBank in native format with EMBL CD-ROM index
+
+ tigregad N OK   OK   OK   TIGR EGAD sequences
+
+ tigrhgi N OK   OK   OK   TIGR HGI sequences
+
+ tigrmgi N OK   OK   OK   TIGR MGI sequences
+
+ unclassified N OK   OK   OK   EMBL unclassified sequences
+
+ utrdb N OK   OK   OK   3' UTR database for Chris Sanderson project
+
+ vertebrate N OK   OK   OK   EMBL vertebrate sequences
+
+ viral N OK   OK   OK   EMBL viral sequences
+
+
+
+   Example 5
+   
    Display protein databases only:
-% showdb -nonucleic
+   
 
-   Display the information with no headings
-% showdb -noheading
+% showdb -nonucleic 
+Displays information on the currently available databases
 
-   Display just a list of the available database names
-% showdb -noheading -notype -noid -noquery -noall -nocomment -auto
+# Name        Type ID  Qry All Comment
+# ====        ==== ==  === === =======
+enspep        P    OK  OK  OK  ENSEMBL pep
+enspepp       P    OK  OK  OK  ENSEMBL pep predicted
+enspeppredicted P    OK  OK  OK  ENSEMBL pep predicted
+remtrembl     P    OK  OK  OK  REMTREMBL sequences
+sptrembl      P    OK  OK  OK  SPTREMBL sequences
+sw            P    OK  OK  OK  SWISSPROT sequences
+swissprot     P    OK  OK  OK  SWISSPROT sequences
+tpir          P    OK  OK  OK  PIR using NBRF access for 4 files
+trembl        P    OK  OK  OK  TREMBL sequences
+tsw           P    OK  OK  OK  Swissprot native format with EMBL CD-ROM index
+tswnew        P    OK  OK  OK  Swissnew as 3 files in native format with EMBL C
+D-ROM index
+twp           P    OK  OK  OK  EMBL new in native format with EMBL CD-ROM index
+   
+   Example 6
+   
+   Display the information with no headings:
+   
 
-   Display only the names and types
-% showdb -only -type
+% showdb -noheading 
+Displays information on the currently available databases
 
+enspep        P    OK  OK  OK  ENSEMBL pep
+enspepp       P    OK  OK  OK  ENSEMBL pep predicted
+enspeppredicted P    OK  OK  OK  ENSEMBL pep predicted
+remtrembl     P    OK  OK  OK  REMTREMBL sequences
+sptrembl      P    OK  OK  OK  SPTREMBL sequences
+sw            P    OK  OK  OK  SWISSPROT sequences
+swissprot     P    OK  OK  OK  SWISSPROT sequences
+tpir          P    OK  OK  OK  PIR using NBRF access for 4 files
+trembl        P    OK  OK  OK  TREMBL sequences
+tsw           P    OK  OK  OK  Swissprot native format with EMBL CD-ROM index
+tswnew        P    OK  OK  OK  Swissnew as 3 files in native format with EMBL C
+D-ROM index
+twp           P    OK  OK  OK  EMBL new in native format with EMBL CD-ROM index
+em            N    OK  OK  OK  EMBL sequences
+embl          N    OK  OK  OK  EMBL sequences
+emblnew       N    OK  OK  OK  New EMBL sequences
+enscdna       N    OK  OK  OK  ENSEMBL cdna
+ensdna        N    OK  OK  OK  ENSEMBL dna
+ensdnam       N    OK  OK  OK  ENSEMBL dna masked
+ensdnamasked  N    OK  OK  OK  ENSEMBL dna masked
+ensembl       N    OK  OK  OK  ENSEMBL
+est           N    OK  OK  OK  EMBL EST sequences
+fungal        N    OK  OK  OK  EMBL fungal sequences
+gb            N    OK  OK  OK  Genbank
+genbank       N    OK  OK  OK  Genbank
+gss           N    OK  OK  OK  EMBL GSS sequences
+hsunigene     N    OK  -   -   hsunigene
+htg           N    OK  OK  OK  EMBL HTG sequences
+human         N    OK  OK  OK  EMBL human sequences
+humanest      N    OK  OK  OK  EMBL human EST sequences
+invertebrate  N    OK  OK  OK  EMBL invertebrate sequences
+mammalian     N    OK  OK  OK  EMBL mammalian sequences
+maskutrdb     N    OK  OK  OK  Masked 3' UTR database for Chris Sanderson proje
+ct
+mmunigene     N    OK  OK  OK  mmunigene
+mouseest      N    OK  OK  OK  EMBL mouse EST sequences
+organelle     N    OK  OK  OK  EMBL organelle sequences
+otherest      N    OK  OK  OK  EMBL other EST sequences
+othervertebrate N    OK  OK  OK  EMBL other vertebrate sequences
+patent        N    OK  OK  OK  EMBL patented sequences
+phage         N    OK  OK  OK  EMBL phage sequences
+plant         N    OK  OK  OK  EMBL plant sequences
+prokaryotic   N    OK  OK  OK  EMBL prokaryotic sequences
+refseq        N    OK  OK  OK  REFSEQ sequences
+rodent        N    OK  OK  OK  EMBL rodent sequences
+sts           N    OK  OK  OK  EMBL STS sequences
+synthetic     N    OK  OK  OK  EMBL synthetic sequences
+tembl         N    OK  OK  OK  EMBL in native format with EMBL CD-ROM index
+tgenbank      N    OK  OK  OK  GenBank in native format with EMBL CD-ROM index
+tigregad      N    OK  OK  OK  TIGR EGAD sequences
+tigrhgi       N    OK  OK  OK  TIGR HGI sequences
+tigrmgi       N    OK  OK  OK  TIGR MGI sequences
+unclassified  N    OK  OK  OK  EMBL unclassified sequences
+utrdb         N    OK  OK  OK  3' UTR database for Chris Sanderson project
+vertebrate    N    OK  OK  OK  EMBL vertebrate sequences
+viral         N    OK  OK  OK  EMBL viral sequences
+   
+   Example 7
+   
+   Display just a list of the available database names:
+   
+
+% showdb -noheading -notype -noid -noquery -noall -nocomment -auto 
+
+enspep
+enspepp
+enspeppredicted
+remtrembl
+sptrembl
+sw
+swissprot
+tpir
+trembl
+tsw
+tswnew
+twp
+em
+embl
+emblnew
+enscdna
+ensdna
+ensdnam
+ensdnamasked
+ensembl
+est
+fungal
+gb
+genbank
+gss
+hsunigene
+htg
+human
+humanest
+invertebrate
+mammalian
+maskutrdb
+mmunigene
+mouseest
+organelle
+otherest
+othervertebrate
+patent
+phage
+plant
+prokaryotic
+refseq
+rodent
+sts
+synthetic
+tembl
+tgenbank
+tigregad
+tigrhgi
+tigrmgi
+unclassified
+utrdb
+vertebrate
+viral
+   
+   Example 8
+   
+   Display only the names and types:
+   
+
+% showdb -only -type 
+Displays information on the currently available databases
+
+enspep        P
+enspepp       P
+enspeppredicted P
+remtrembl     P
+sptrembl      P
+sw            P
+swissprot     P
+tpir          P
+trembl        P
+tsw           P
+tswnew        P
+twp           P
+em            N
+embl          N
+emblnew       N
+enscdna       N
+ensdna        N
+ensdnam       N
+ensdnamasked  N
+ensembl       N
+est           N
+fungal        N
+gb            N
+genbank       N
+gss           N
+hsunigene     N
+htg           N
+human         N
+humanest      N
+invertebrate  N
+mammalian     N
+maskutrdb     N
+mmunigene     N
+mouseest      N
+organelle     N
+otherest      N
+othervertebrate N
+patent        N
+phage         N
+plant         N
+prokaryotic   N
+refseq        N
+rodent        N
+sts           N
+synthetic     N
+tembl         N
+tgenbank      N
+tigregad      N
+tigrhgi       N
+tigrmgi       N
+unclassified  N
+utrdb         N
+vertebrate    N
+viral         N
+   
 Command line arguments
 
    Mandatory qualifiers: (none)
@@ -113,40 +516,99 @@ Command line arguments
    Optional qualifiers Allowed values Default
    -database Name of a single database to give information on Any string
    is accepted An empty string is accepted
-   -html Format output as an HTML table Yes/No No
-   -[no]protein Display protein databases Yes/No Yes
-   -[no]nucleic Display nucleic acid databases Yes/No Yes
-   -release Display 'release' column Yes/No No
+   -html Format output as an HTML table Boolean value Yes/No No
+   -[no]protein Display protein databases Boolean value Yes/No Yes
+   -[no]nucleic Display nucleic acid databases Boolean value Yes/No Yes
+   -release Display 'release' column Boolean value Yes/No No
    -outfile If you enter the name of a file here then this program will
    write the database details into that file. Output file stdout
    Advanced qualifiers Allowed values Default
    -only This is a way of shortening the command line if you only want a
    few things to be displayed. Instead of specifying: '-nohead -notype
    -noid -noquery -noall' to get only the comment output, you can specify
-   '-only -comment' Yes/No No
-   -heading Display column headings Yes/No @(!$(only))
-   -type Display 'type' column Yes/No @(!$(only))
-   -id Display 'id' column Yes/No @(!$(only))
-   -query Display 'qry' column Yes/No @(!$(only))
-   -all Display 'all' column Yes/No @(!$(only))
-   -comment Display 'comment' column Yes/No @(!$(only))
+   '-only -comment' Boolean value Yes/No No
+   -heading Display column headings Boolean value Yes/No @(!$(only))
+   -type Display 'type' column Boolean value Yes/No @(!$(only))
+   -id Display 'id' column Boolean value Yes/No @(!$(only))
+   -query Display 'qry' column Boolean value Yes/No @(!$(only))
+   -all Display 'all' column Boolean value Yes/No @(!$(only))
+   -comment Display 'comment' column Boolean value Yes/No @(!$(only))
    
 Input file format
 
    None.
    
+  Input files for usage example 3
+  
+   'tsw' is a sequence entry in the example protein database 'tsw'
+   
 Output file format
 
-   The output is a simple table, e.g.:
-
-------------------------------------------------------------------------------
+  Output files for usage example 2
+  
+  File: showdb.out
+  
 # Name        Type ID  Qry All Comment
 # ====        ==== ==  === === =======
-swissprot     P    OK  OK  OK  -
-sw            P    OK  OK  OK  Swissprot native format with EMBL CD-ROM index
-em            N    OK  OK  OK  EMBL in native format with EMBL CD-ROM index
-------------------------------------------------------------------------------
-
+enspep        P    OK  OK  OK  ENSEMBL pep
+enspepp       P    OK  OK  OK  ENSEMBL pep predicted
+enspeppredicted P    OK  OK  OK  ENSEMBL pep predicted
+remtrembl     P    OK  OK  OK  REMTREMBL sequences
+sptrembl      P    OK  OK  OK  SPTREMBL sequences
+sw            P    OK  OK  OK  SWISSPROT sequences
+swissprot     P    OK  OK  OK  SWISSPROT sequences
+tpir          P    OK  OK  OK  PIR using NBRF access for 4 files
+trembl        P    OK  OK  OK  TREMBL sequences
+tsw           P    OK  OK  OK  Swissprot native format with EMBL CD-ROM index
+tswnew        P    OK  OK  OK  Swissnew as 3 files in native format with EMBL C
+D-ROM index
+twp           P    OK  OK  OK  EMBL new in native format with EMBL CD-ROM index
+em            N    OK  OK  OK  EMBL sequences
+embl          N    OK  OK  OK  EMBL sequences
+emblnew       N    OK  OK  OK  New EMBL sequences
+enscdna       N    OK  OK  OK  ENSEMBL cdna
+ensdna        N    OK  OK  OK  ENSEMBL dna
+ensdnam       N    OK  OK  OK  ENSEMBL dna masked
+ensdnamasked  N    OK  OK  OK  ENSEMBL dna masked
+ensembl       N    OK  OK  OK  ENSEMBL
+est           N    OK  OK  OK  EMBL EST sequences
+fungal        N    OK  OK  OK  EMBL fungal sequences
+gb            N    OK  OK  OK  Genbank
+genbank       N    OK  OK  OK  Genbank
+gss           N    OK  OK  OK  EMBL GSS sequences
+hsunigene     N    OK  -   -   hsunigene
+htg           N    OK  OK  OK  EMBL HTG sequences
+human         N    OK  OK  OK  EMBL human sequences
+humanest      N    OK  OK  OK  EMBL human EST sequences
+invertebrate  N    OK  OK  OK  EMBL invertebrate sequences
+mammalian     N    OK  OK  OK  EMBL mammalian sequences
+maskutrdb     N    OK  OK  OK  Masked 3' UTR database for Chris Sanderson proje
+ct
+mmunigene     N    OK  OK  OK  mmunigene
+mouseest      N    OK  OK  OK  EMBL mouse EST sequences
+organelle     N    OK  OK  OK  EMBL organelle sequences
+otherest      N    OK  OK  OK  EMBL other EST sequences
+othervertebrate N    OK  OK  OK  EMBL other vertebrate sequences
+patent        N    OK  OK  OK  EMBL patented sequences
+phage         N    OK  OK  OK  EMBL phage sequences
+plant         N    OK  OK  OK  EMBL plant sequences
+prokaryotic   N    OK  OK  OK  EMBL prokaryotic sequences
+refseq        N    OK  OK  OK  REFSEQ sequences
+rodent        N    OK  OK  OK  EMBL rodent sequences
+sts           N    OK  OK  OK  EMBL STS sequences
+synthetic     N    OK  OK  OK  EMBL synthetic sequences
+tembl         N    OK  OK  OK  EMBL in native format with EMBL CD-ROM index
+tgenbank      N    OK  OK  OK  GenBank in native format with EMBL CD-ROM index
+tigregad      N    OK  OK  OK  TIGR EGAD sequences
+tigrhgi       N    OK  OK  OK  TIGR HGI sequences
+tigrmgi       N    OK  OK  OK  TIGR MGI sequences
+unclassified  N    OK  OK  OK  EMBL unclassified sequences
+utrdb         N    OK  OK  OK  3' UTR database for Chris Sanderson project
+vertebrate    N    OK  OK  OK  EMBL vertebrate sequences
+viral         N    OK  OK  OK  EMBL viral sequences
+   
+   The output is a simple table.
+   
    Type 'P' indicates that this is a Protein database.
    
    Type 'N' indicates that this is a Nucleic database.
@@ -154,6 +616,13 @@ em            N    OK  OK  OK  EMBL in native format with EMBL CD-ROM index
    'OK' under ID, Qry or All indicates that that access method can be
    used on this database. A '-' indicates that you cannot access this
    database in that way.
+   
+   Note that 'OK' does not mean that the database is working correctly.
+   It simply means that showdb has read the database definition correctly
+   and that this method of access to the database should be possible.
+   
+   If you are setting up a new database, then you should check that it
+   works correctly by extracting entries from it using seqret.
    
    When the -html qualifier is specified, then the output will be wrapped
    in HTML tags, ready for inclusion in a Web page. Note that tags such
@@ -169,7 +638,38 @@ Data files
    
 Notes
 
-   None.
+   Note that 'OK' in the output does not mean that the database is
+   working correctly. It simply means that showdb has read the database
+   definition correctly and that this method of access to the database
+   should be possible.
+   
+   If you are setting up a new database, then you should check that it
+   works correctly by extracting entries from it using seqret.
+   
+   You can set up your own private databases by editing a file called
+   '.embossrc' to contain database specifications.
+   
+   You can set up public databases by editing the file
+   '/usr/local/share/EMBOSS/emboss.default' (if you have the permission
+   to do this).
+   
+   The 'emboss.default' file will already have the definitions of the
+   test databases in: tsw, tembl, tpir, etc. These are the databases that
+   are used in the examples shown in the documentation of the programs.
+   
+   For details of the database definitions, you should first read David's
+   Administration Guide:
+   http://www.uk.embnet.org/Software/EMBOSS/Doc/Admin_guide/adminguide/
+   especially:
+   http://www.uk.embnet.org/Software/EMBOSS/Doc/Admin_guide/adminguide/no
+   de4.html 
+   
+   See also: http://www.uk.embnet.org/Software/EMBOSS/Usa/databases.html
+   for a lot of detail of the syntax of database definition.
+   
+   Just because showdb can display the database definitions, it does NOT
+   mean that the databases are set up correctly. You must now test them
+   using seqret.
    
 References
 
@@ -211,6 +711,7 @@ See also
    showalign Displays a multiple sequence alignment
    showfeat Show features of a sequence
    showseq Display a sequence with features, translation etc
+   sixpack Display a DNA sequence with 6-frame translation and ORFs
    textsearch Search sequence documentation text. SRS and Entrez are
    faster!
    tfm Displays a program's help documentation manual

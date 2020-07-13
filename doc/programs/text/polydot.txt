@@ -27,11 +27,18 @@ Description
    
 Usage
 
-   Here is a sample session with polydot.
+   Here is a sample session with polydot
    
-% polydot globin.fasta -gtitle="Polydot of globin.fasta"
 
-   click here for result
+% polydot ../../data/globins.fasta -gtitle="Polydot of globins.fasta" -graph cp
+s 
+Displays all-against-all dotplots of a set of sequences
+Word size [6]: 
+
+Created polydot.ps
+   
+   Go to the input files for this example
+   Go to the output files for this example
    
 Command line arguments
 
@@ -72,25 +79,65 @@ Command line arguments
    png EMBOSS_GRAPHICS value, or x11
    -outfile Output file name Output file <sequence>.polydot
    Optional qualifiers Allowed values Default
-   -[no]boxit Draw a box around each dotplot Yes/No Yes
-   -dumpfeat Dump all matches as feature files Yes/No No
+   -[no]boxit Draw a box around each dotplot Boolean value Yes/No Yes
+   -dumpfeat Dump all matches as feature files Boolean value Yes/No No
    -format format to Dump out as Any string is accepted gff
    -ext Extension for feature file Any string is accepted gff
    Advanced qualifiers Allowed values Default
-   -data Output the match data to a file instead of plotting it Yes/No No
+   -data Output the match data to a file instead of plotting it Boolean
+   value Yes/No No
    -gap This specifies the size of the gap that is used to separate the
    individual dotplots in the display. The size is measured in residues,
    as displayed in the output. Integer 0 or more 10
    
 Input file format
 
-   It reads in a set of nucleic or protein sequences.
+   polydot reads in a set of nucleic or protein sequences.
    
    The sequences may or may not be aligned.
    
+  Input files for usage example
+  
+  File: ../../data/globins.fasta
+  
+>HBB_HUMAN Sw:Hbb_Human => HBB_HUMAN
+VHLTPEEKSAVTALWGKVNVDEVGGEALGRLLVVYPWTQRFFESFGDLSTPDAVMGNPKV
+KAHGKKVLGAFSDGLAHLDNLKGTFATLSELHCDKLHVDPENFRLLGNVLVCVLAHHFGK
+EFTPPVQAAYQKVVAGVANALAHKYH
+>HBB_HORSE Sw:Hbb_Horse => HBB_HORSE
+VQLSGEEKAAVLALWDKVNEEEVGGEALGRLLVVYPWTQRFFDSFGDLSNPGAVMGNPKV
+KAHGKKVLHSFGEGVHHLDNLKGTFAALSELHCDKLHVDPENFRLLGNVLVVVLARHFGK
+DFTPELQASYQKVVAGVANALAHKYH
+>HBA_HUMAN Sw:Hba_Human => HBA_HUMAN
+VLSPADKTNVKAAWGKVGAHAGEYGAEALERMFLSFPTTKTYFPHFDLSHGSAQVKGHGK
+KVADALTNAVAHVDDMPNALSALSDLHAHKLRVDPVNFKLLSHCLLVTLAAHLPAEFTPA
+VHASLDKFLASVSTVLTSKYR
+>HBA_HORSE Sw:Hba_Horse => HBA_HORSE
+VLSAADKTNVKAAWSKVGGHAGEYGAEALERMFLGFPTTKTYFPHFDLSHGSAQVKAHGK
+KVGDALTLAVGHLDDLPGALSNLSDLHAHKLRVDPVNFKLLSHCLLSTLAVHLPNDFTPA
+VHASLDKFLSSVSTVLTSKYR
+>MYG_PHYCA Sw:Myg_Phyca => MYG_PHYCA
+VLSEGEWQLVLHVWAKVEADVAGHGQDILIRLFKSHPETLEKFDRFKHLKTEAEMKASED
+LKKHGVTVLTALGAILKKKGHHEAELKPLAQSHATKHKIPIKYLEFISEAIIHVLHSRHP
+GDFGADAQGAMNKALELFRKDIAAKYKELGYQG
+>GLB5_PETMA Sw:Glb5_Petma => GLB5_PETMA
+PIVDTGSVAPLSAAEKTKIRSAWAPVYSTYETSGVDILVKFFTSTPAAQEFFPKFKGLTT
+ADQLKKSADVRWHAERIINAVNDAVASMDDTEKMSMKLRDLSGKHAKSFQVDPQYFKVLA
+AVIADTVAAGDAGFEKLMSMICILLRSAY
+>LGB2_LUPLU Sw:Lgb2_Luplu => LGB2_LUPLU
+GALTESQAALVKSSWEEFNANIPKHTHRFFILVLEIAPAAKDLFSFLKGTSEVPQNNPEL
+QAHAGKVFKLVYEAAIQLQVTGVVVTDATLKNLGSVHVSKGVADAHFPVVKEAILKTIKE
+VVGAKWSEELNSAWTIAYDELAIVIKKEMNDAA
+   
 Output file format
 
-   A graphical image is displayed.
+   A graphical image is displayed on the specified graphics device.
+   
+  Output files for usage example
+  
+  Graphics File: polydot.ps
+  
+   [polydot results]
    
 Data files
 

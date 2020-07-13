@@ -27,14 +27,18 @@ Description
    
 Usage
 
-   Here is a sample session with restover:
+   Here is a sample session with restover
+   
 
-% restover
+% restover 
 Finds restriction enzymes that produce a specific overhang
-Input sequence(s): em:hsfau
+Input sequence(s): tembl:hsfau
 Overlap sequence: cg
-Output file [hsfau.restover]:
-
+Output file [hsfau.restover]: 
+   
+   Go to the input files for this example
+   Go to the output files for this example
+   
 Command line arguments
 
    Mandatory qualifiers:
@@ -82,42 +86,139 @@ Command line arguments
    Advanced qualifiers Allowed values Default
    -min Minimum cuts per RE Integer from 1 to 1000 1
    -max Maximum cuts per RE Integer up to 2000000000 2000000000
-   -single Force single site only cuts Yes/No No
+   -single Force single site only cuts Boolean value Yes/No No
    -threeprime 3' overhang? (else 5') e.g. BamHI has CTAG as a 5'
-   overhang, and ApaI has CCGG as 3' overhang. Yes/No No
-   -[no]blunt Allow blunt end cutters Yes/No Yes
-   -[no]sticky Allow sticky end cutters Yes/No Yes
-   -[no]ambiguity Allow ambiguous matches Yes/No Yes
-   -plasmid Allow circular DNA Yes/No No
-   -[no]commercial Only enzymes with suppliers Yes/No Yes
+   overhang, and ApaI has CCGG as 3' overhang. Boolean value Yes/No No
+   -[no]blunt Allow blunt end cutters Boolean value Yes/No Yes
+   -[no]sticky Allow sticky end cutters Boolean value Yes/No Yes
+   -[no]ambiguity Allow ambiguous matches Boolean value Yes/No Yes
+   -plasmid Allow circular DNA Boolean value Yes/No No
+   -[no]commercial Only enzymes with suppliers Boolean value Yes/No Yes
    -datafile Alternative RE data file Any string is accepted An empty
    string is accepted
-   -html Create HTML output Yes/No No
-   -[no]limit Limits reports to one isoschizomer Yes/No Yes
-   -preferred Report preferred isoschizomers Yes/No No
-   -alphabetic Sort output alphabetically Yes/No No
-   -fragments Show fragment lengths Yes/No No
-   -name Show sequence name Yes/No No
+   -html Create HTML output Boolean value Yes/No No
+   -[no]limit Limits reports to one isoschizomer Boolean value Yes/No Yes
+   -preferred Report preferred isoschizomers Boolean value Yes/No No
+   -alphabetic Sort output alphabetically Boolean value Yes/No No
+   -fragments Show fragment lengths Boolean value Yes/No No
+   -name Show sequence name Boolean value Yes/No No
    
 Input file format
 
-   It reads in a normal DNA sequence USA.
+   restover
+   reads in a normal nucleic acid sequence USA.
+   
+  Input files for usage example
+  
+   'tembl:hsfau' is a sequence entry in the example nucleic acid database
+   'tembl'
+   
+  Database entry: tembl:hsfau
+  
+ID   HSFAU      standard; RNA; HUM; 518 BP.
+XX
+AC   X65923;
+XX
+SV   X65923.1
+XX
+DT   13-MAY-1992 (Rel. 31, Created)
+DT   23-SEP-1993 (Rel. 37, Last updated, Version 10)
+XX
+DE   H.sapiens fau mRNA
+XX
+KW   fau gene.
+XX
+OS   Homo sapiens (human)
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia
+;
+OC   Eutheria; Primates; Catarrhini; Hominidae; Homo.
+XX
+RN   [1]
+RP   1-518
+RA   Michiels L.M.R.;
+RT   ;
+RL   Submitted (29-APR-1992) to the EMBL/GenBank/DDBJ databases.
+RL   L.M.R. Michiels, University of Antwerp, Dept of Biochemistry,
+RL   Universiteisplein 1, 2610 Wilrijk, BELGIUM
+XX
+RN   [2]
+RP   1-518
+RX   MEDLINE; 93368957.
+RA   Michiels L., Van der Rauwelaert E., Van Hasselt F., Kas K., Merregaert J.;
+RT   " fau cDNA encodes a ubiquitin-like-S30 fusion protein and is expressed as
+RT   an antisense sequences in the Finkel-Biskis-Reilly murine sarcoma virus";
+RL   Oncogene 8:2537-2546(1993).
+XX
+DR   SWISS-PROT; P35544; UBIM_HUMAN.
+DR   SWISS-PROT; Q05472; RS30_HUMAN.
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..518
+FT                   /chromosome="11q"
+FT                   /db_xref="taxon:9606"
+FT                   /organism="Homo sapiens"
+FT                   /tissue_type="placenta"
+FT                   /clone_lib="cDNA"
+FT                   /clone="pUIA 631"
+FT                   /map="13"
+FT   misc_feature    57..278
+FT                   /note="ubiquitin like part"
+FT   CDS             57..458
+FT                   /db_xref="SWISS-PROT:P35544"
+FT                   /db_xref="SWISS-PROT:Q05472"
+FT                   /gene="fau"
+FT                   /protein_id="CAA46716.1"
+FT                   /translation="MQLFVRAQELHTFEVTGQETVAQIKAHVASLEGIAPEDQVVLLA
+G
+FT                   APLEDEATLGQCGVEALTTLEVAGRMLGGKVHGSLARAGKVRGQTPKVAKQEKKKKKT
+G
+FT                   RAKRRMQYNRRFVNVVPTFGKKKGPNANS"
+FT   misc_feature    98..102
+FT                   /note="nucleolar localization signal"
+FT   misc_feature    279..458
+FT                   /note="S30 part"
+FT   polyA_signal    484..489
+FT   polyA_site      509
+XX
+SQ   Sequence 518 BP; 125 A; 139 C; 148 G; 106 T; 0 other;
+     ttcctctttc tcgactccat cttcgcggta gctgggaccg ccgttcagtc gccaatatgc        6
+0
+     agctctttgt ccgcgcccag gagctacaca ccttcgaggt gaccggccag gaaacggtcg       12
+0
+     cccagatcaa ggctcatgta gcctcactgg agggcattgc cccggaagat caagtcgtgc       18
+0
+     tcctggcagg cgcgcccctg gaggatgagg ccactctggg ccagtgcggg gtggaggccc       24
+0
+     tgactaccct ggaagtagca ggccgcatgc ttggaggtaa agttcatggt tccctggccc       30
+0
+     gtgctggaaa agtgagaggt cagactccta aggtggccaa acaggagaag aagaagaaga       36
+0
+     agacaggtcg ggctaagcgg cggatgcagt acaaccggcg ctttgtcaac gttgtgccca       42
+0
+     cctttggcaa gaagaagggc cccaatgcca actcttaagt cttttgtaat tctggctttc       48
+0
+     tctaataaaa aagccactta gttcagtcaa aaaaaaaa                               51
+8
+//
    
 Output file format
 
-   The output file from the above example is:
-     _________________________________________________________________
-   
+  Output files for usage example
+  
+  File: hsfau.restover
+  
 # Restrict of HSFAU from 1 to 518
 #
 # Minimum cuts per enzyme: 1
 # Maximum cuts per enzyme: 2000000000
 # Minimum length of recognition site: 2
-# Number of hits with any overlap: 208
+# Number of hits with any overlap: 53
 # Base Number   Enzyme          Site            5'      3'      [5'     3']
         11      TaqI            TCGA            11      13
         28      AciI            CCGC            25      27
         38      AciI            CCGC            38      40
+        44      BceAI           ACGGC           25      27
         71      AciI            CCGC            71      73
         73      Hin6I           GCGC            73      75
         94      TaqI            TCGA            94      96
@@ -134,7 +235,6 @@ Output file format
         398     Hin6I           GCGC            398     400
         408     AclI            AACGTT          409     411
         409     HpyCH4IV        ACGT            409     411
-     _________________________________________________________________
    
    The output from restover is a simple text one. The base number,
    restriction enzyme name, recognition site and cut positions are shown.

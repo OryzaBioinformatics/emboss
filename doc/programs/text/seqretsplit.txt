@@ -48,13 +48,16 @@ hsfa114.fasta
    
 Usage
 
-   Here is a sample session with seqretsplit:
+   Here is a sample session with seqretsplit
+   
 
-% seqretsplit
+% seqretsplit tembl:hsfa* 
 Reads and writes (returns) sequences in individual files
-Input sequence(s): embl:hsfa11*
-Output sequence [hsfa110.fasta]:
-
+Output sequence [hsfau.fasta]: 
+   
+   Go to the input files for this example
+   Go to the output files for this example
+   
    The specification of the output file is not used in this case.
    
    At some point this ought to change and you will not be prompted for
@@ -85,14 +88,72 @@ Command line arguments
    Optional qualifiers Allowed values Default
    (none)
    Advanced qualifiers Allowed values Default
-   -firstonly Read one sequence and stop Yes/No No
+   -firstonly Read one sequence and stop Boolean value Yes/No No
    
 Input file format
 
-   Normal sequence USA.
+   seqretsplit reads a normal sequence USA.
+   
+  Input files for usage example
+  
+   'tembl:hsfa*' is a sequence entry in the example nucleic acid database
+   'tembl'
    
 Output file format
 
+  Output files for usage example
+  
+  File: hsfau.fasta
+  
+>HSFAU X65923.1 H.sapiens fau mRNA
+ttcctctttctcgactccatcttcgcggtagctgggaccgccgttcagtcgccaatatgc
+agctctttgtccgcgcccaggagctacacaccttcgaggtgaccggccaggaaacggtcg
+cccagatcaaggctcatgtagcctcactggagggcattgccccggaagatcaagtcgtgc
+tcctggcaggcgcgcccctggaggatgaggccactctgggccagtgcggggtggaggccc
+tgactaccctggaagtagcaggccgcatgcttggaggtaaagttcatggttccctggccc
+gtgctggaaaagtgagaggtcagactcctaaggtggccaaacaggagaagaagaagaaga
+agacaggtcgggctaagcggcggatgcagtacaaccggcgctttgtcaacgttgtgccca
+cctttggcaagaagaagggccccaatgccaactcttaagtcttttgtaattctggctttc
+tctaataaaaaagccacttagttcagtcaaaaaaaaaa
+   
+  File: hsfau1.fasta
+  
+>HSFAU1 X65921.1 H.sapiens fau 1 gene
+ctaccattttccctctcgattctatatgtacactcgggacaagttctcctgatcgaaaac
+ggcaaaactaaggccccaagtaggaatgccttagttttcggggttaacaatgattaacac
+tgagcctcacacccacgcgatgccctcagctcctcgctcagcgctctcaccaacagccgt
+agcccgcagccccgctggacaccggttctccatccccgcagcgtagcccggaacatggta
+gctgccatctttacctgctacgccagccttctgtgcgcgcaactgtctggtcccgccccg
+tcctgcgcgagctgctgcccaggcaggttcgccggtgcgagcgtaaaggggcggagctag
+gactgccttgggcggtacaaatagcagggaaccgcgcggtcgctcagcagtgacgtgaca
+cgcagcccacggtctgtactgacgcgccctcgcttcttcctctttctcgactccatcttc
+gcggtagctgggaccgccgttcaggtaagaatggggccttggctggatccgaagggcttg
+tagcaggttggctgcggggtcagaaggcgcggggggaaccgaagaacggggcctgctccg
+tggccctgctccagtccctatccgaactccttgggaggcactggccttccgcacgtgagc
+cgccgcgaccaccatcccgtcgcgatcgtttctggaccgctttccactcccaaatctcct
+ttatcccagagcatttcttggcttctcttacaagccgtcttttctttactcagtcgccaa
+tatgcagctctttgtccgcgcccaggagctacacaccttcgaggtgaccggccaggaaac
+ggtcgcccagatcaaggtaaggctgcttggtgcgccctgggttccattttcttgtgctct
+tcactctcgcggcccgagggaacgcttacgagccttatctttccctgtaggctcatgtag
+cctcactggagggcattgccccggaagatcaagtcgtgctcctggcaggcgcgcccctgg
+aggatgaggccactctgggccagtgcggggtggaggccctgactaccctggaagtagcag
+gccgcatgcttggaggtgagtgagagaggaatgttctttgaagtaccggtaagcgtctag
+tgagtgtggggtgcatagtcctgacagctgagtgtcacacctatggtaatagagtacttc
+tcactgtcttcagttcagagtgattcttcctgtttacatccctcatgttgaacacagacg
+tccatgggagactgagccagagtgtagttgtatttcagtcacatcacgagatcctagtct
+ggttatcagcttccacactaaaaattaggtcagaccaggccccaaagtgctctataaatt
+agaagctggaagatcctgaaatgaaacttaagatttcaaggtcaaatatctgcaactttg
+ttctcattacctattgggcgcagcttctctttaaaggcttgaattgagaaaagaggggtt
+ctgctgggtggcaccttcttgctcttacctgctggtgccttcctttcccactacaggtaa
+agtccatggttccctggcccgtgctggaaaagtgagaggtcagactcctaaggtgagtga
+gagtattagtggtcatggtgttaggactttttttcctttcacagctaaaccaagtccctg
+ggctcttactcggtttgccttctccctccctggagatgagcctgagggaagggatgctag
+gtgtggaagacaggaaccagggcctgattaaccttcccttctccaggtggccaaacagga
+gaagaagaagaagaagacaggtcgggctaagcggcggatgcagtacaaccggcgctttgt
+caacgttgtgcccacctttggcaagaagaagggccccaatgccaactcttaagtcttttg
+taattctggctttctctaataaaaaagccacttagttcagtcatcgcattgtttcatctt
+tacttgcaaggcctcagggagaggtgtgcttctcgg
+   
    One file for each input sequence is written out.
    
    The names of the files it creates are derived from the ID name of the
@@ -162,7 +223,6 @@ See also
    seqret       Reads and writes (returns) sequences
    skipseq      Reads and writes (returns) sequences, skipping the first few
    splitter     Split a sequence into (overlapping) smaller sequences
-   swissparse   Retrieves sequences from swissprot using keyword search
    trimest      Trim poly-A tails off EST sequences
    trimseq      Trim ambiguous bits off the ends of sequences
    union        Reads sequence fragments and builds one sequence

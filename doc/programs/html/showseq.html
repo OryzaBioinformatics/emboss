@@ -59,16 +59,83 @@ can write the results to a file.
 The display style of the output is very flexible.  The user can select a
 style from the pre-set choice of formats, or can design a style to suit
 their purposes and aesthetic tastes.
+
 <p>
+
+If designing a new format, you can choose the order in which things are
+printed around the sequence. The things that you can display are:
+
+<p>
+
+<pre>
+s	Sequence
+b	Blank line
+1	Frame 1 translation
+2	Frame 2 translation
+3	Frame 3 translation
+-1	Frame -1 translation
+-2	Frame -2 translation
+-2	Frame -3 translation
+t	Ticks line
+n	Number ticks line
+c	Complement sequence
+f	Features (from the feature table or from a command line -ufo file)
+r	Restriction enzyme cut sites in the forward sense
+-r	Restriction enzyme cut sites in the reverse sense
+a	User Annotation
+</pre>
+
+<p>
+
+The letters for these things can be in upper or lower case.
+<br>
+They can be displayed in any order.
+
+<p>
+
+You do not have to make your own format; there is a selection of
+pre-defined standard formats for you to choose from. 
+
+<p>
+
+
+The default standard format displays the following: for every new line
+that the sequence starts to write, the output display will contain first
+a blank line ('b'), then the position numbers of the ticks ('n') then
+the ticks every 10 characters ('t') then the sequence itself ('s') then
+any user-supplied annotation ('a') then the features from the feature
+table ('f').  Subsequent lines of the sequence output will repeat this
+format. 
+
+<p>
+         
+The 'thing' codes used in the list of standard formats are:
+
+<p>
+
+<pre>
+Sequence only:                  S A
+Default sequence:               B N T S A F
+Pretty sequence:                B N T S A
+One frame translation:          B N T S B 1 A F
+Three frame translations:       B N T S B 1 2 3 A F
+Six frame translations:         B N T S B 1 2 3 T -3 -2 -1 A F
+Restriction enzyme map:         B R S N T C -R B 1 2 3 T -3 -2 -1 A
+Baroque:                        B 1 2 3 N T R S T C -R T -3 -2 -1 A F
+</pre>          
+
+<p>          
 
 The displayed sequence can be numbered either by numbering the start and
 ending positions, or by placing a ruler with ticks above or below the
 sequence.
+
 <p>
 
 The width of a line can be set.  The width of a margin around the
 sequence reserved for numbering can be set.  The initial position to
 start numbering from can be set.
+
 <p>
 
 The sequence can be translated, using the selectable genetic code
@@ -77,17 +144,21 @@ translation can be displayed in one-letter or three-letter amino acid
 codes.  The translation can optionally be displayed only when it is in
 open reading frames (ORFs) of a specified minimum size.  One or more
 specified regions of the sequence can be individually translated.
+
 <p>
 
 Specified regions of the sequence can be displayed in uppercase to
 highlight them.
+
 <p>
 
 The output can be formatted for HTML.
+
 <p>
 
 If the output is being formatted for HTML, then specified regions of the
 sequence can be displayed in any valid HTML colours.
+
 <p>
 
 The Restriction Enzyme database (REBASE) is a collection of information
@@ -99,30 +170,35 @@ nicking enzymes, specificity subunits and control proteins are also
 included.  Most recently, putative DNA methyltransferases and
 restriction enzymes, as predicted from analysis of genomic sequences,
 are also listed.
+
 <p>
 
 The home page of REBASE is: 
 <A HREF="http://rebase.neb.com/">
 http://rebase.neb.com/</A>
+
 <p>
 
 This program can use REBASE data to find the recognition sites and/or
 cut sites of restriction enzymes in a nucleic acid sequence.
+
 <p>
 
 This program can display the cut sites on both strands.
+
 <p>
 
 One potentially very useful option is '-flatreformat' that displays not
 only the cut sites which many other restriction cut-site programs will
 show, but also shows the recognition site.
+
 <p>
 
 If the sequence is in EMBL, Genbank or SwissProt format, the feature table
 of the sequence can be dispalyed with the sequence. GFF file features can also
 be displayed if they are included on the command line with the <b>-ufo=file</b>
 qualifier.
-<p>
+
 
 
 <H2>
@@ -130,13 +206,13 @@ qualifier.
 </H2>
 
 
-Here is a sample session with <b>showseq</b>. By default the output appears
-on standard output (the terminal) but can be saved to a file. We only look at a
-small section of the sequence to save space.
+<b>Here is a sample session with showseq</b>
 <p>
 
-<pre>
-% showseq tembl:eclac -sbeg 1 -send 100
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>showseq tembl:paamir -sbeg 1 -send 100 </b>
 Display a sequence with features, translation etc..
 Things to display
          0 : Enter your own list of things to display
@@ -148,47 +224,23 @@ Things to display
          6 : Six frame translations
          7 : Restriction enzyme map
          8 : Baroque
-Display format [2]: 
-Output file [eclac.showseq]: stdout
-ECLAC
-E.coli lactose operon with lacI, lacZ, lacY and lacA genes.
+Display format [2]: <b></b>
+Output file [paamir.showseq]: <b></b>
 
-                   10        20        30        40        50        60        
-          ----:----|----:----|----:----|----:----|----:----|----:----|
-          gacaccatcgaatggcgcaaaacctttcgcggtatggcatgatagcgcccggaagagagt
-                         |
-          variation note="c in wild-type; t in 'up' promoter mutant I-Q [11]"
-                                                            |=========
-          mRNA note="lacI (repressor) mRNA; preferred in vivo 3' end [12],[29]"
-
-                   70        80        90        100       110       120       
-          ----:----|----:----|----:----|----:----|----:----|----:----|
-          caattcagggtggtgaatgtgaaaccagtaacgttatacgatgtcgcagagtatgccggt
-          ============================================================
-          mRNA note="lacI (repressor) mRNA; preferred in vivo 3' end [12],[29]"
-                            |=========================================
-          CDS codon_start="1" db_xref="SWISS-PROT:P03023" note="lac repressor p
-
-
-</pre>
-<p>    
-        
-Note that although we asked for the sequence display to end at position
-'100', it has displayed the sequence up to the end of the line -
-position '120'.  This is a feature of this program to make the display
-of things like restriction enzyme cutting sites easier.
+</pre></td></tr></table><p>
 <p>
-          
-The standard list of output formats are only a small selection of the 
-possible ways in which a sequence might be displayed.  Precise control
-over the output format is acheived by selecting the qualifier '-format
-0' (Option 0 in the list of things to display).  For example:
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 2</b>
+<p>
+The standard list of output formats are only a small selection of the possible ways in which a sequence might be displayed.  Precise control over the output format is acheived by selecting the qualifier '-format 0'  (Option 0 in the list of things to display).  For example, by choosing format '0' and then specifying that we want to display the things: 'b,s,t,c', we will output the sequence in the following way: 
 <p>
 
-<pre>
-% showseq tembl:eclac -sbeg 1 -send 120
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>showseq tembl:paamir -sbeg 1 -send 120 </b>
 Display a sequence with features, translation etc..
-Output file [stdout]:
 Things to display
          0 : Enter your own list of things to display
          1 : Sequence only
@@ -199,7 +251,7 @@ Things to display
          6 : Six frame translations
          7 : Restriction enzyme map
          8 : Baroque
-Display format [2]: 0
+Display format [2]: <b>0</b>
 Specify your own things to display
          S : Sequence
          B : Blank line
@@ -216,187 +268,126 @@ Specify your own things to display
          R : Restriction enzyme cut sites in forward sense
         -R : Restriction enzyme cut sites in reverse sense
          A : Annotation
-Enter a list of things to display [B N T S A F]: b,s,t,c
-Output file [eclac.showseq]: stdout
-ECLAC
-E.coli lactose operon with lacI, lacZ, lacY and lacA genes.
-          
-          gacaccatcgaatggcgcaaaacctttcgcggtatggcatgatagcgcccggaagagagt
-          ----:----|----:----|----:----|----:----|----:----|----:----|
-          ctgtggtagcttaccgcgttttggaaagcgccataccgtactatcgcgggccttctctca
+Enter a list of things to display [B,N,T,S,A,F]: <b>b,s,t,c</b>
+Output file [paamir.showseq]: <b></b>
 
-          caattcagggtggtgaatgtgaaaccagtaacgttatacgatgtcgcagagtatgccggt
-          ----:----|----:----|----:----|----:----|----:----|----:----|
-          gttaagtcccaccacttacactttggtcattgcaatatgctacagcgtctcatacggcca
-</pre>
+</pre></td></tr></table><p>
+<p>
+<a href="#output.2">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 3</b>
+<p>
+Display only the sequence: 
 <p>
 
-By choosing format '0' and then specifying that we want to display the
-things: 'b,s,t,c', we will output the sequence in the following way:
 <p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-For every new line that the sequence starts to write, the output display
-will contain first a blank line ('b'), then the sequence itself ('s')
-then a line of with ticks every 10 characters ('t') then the reverse
-complement of the sequence ('c').  Subsequent lines of the sequence
-output will repeat this format.
-<p>
-         
-The 'thing' codes used in the list of standard formats are:
-<p>
-<pre>
-Sequence only:                  S A
-Default sequence:               B N T S A F
-Pretty sequence:                B N T S A
-One frame translation:          B N T S B 1 A F
-Three frame translations:       B N T S B 1 2 3 A F
-Six frame translations:         B N T S B 1 2 3 T -3 -2 -1 A F
-Restriction enzyme map:         B R S N T C -R B 1 2 3 T -3 -2 -1 A
-Baroque:                        B 1 2 3 N T R S T C -R T -3 -2 -1 A F
-</pre>          
-<p>          
-        
-The following are some examples of different formats:
-<p>
-<pre>
-Just sequence:
-
-% showseq embl:eclac stdout -sbeg 1 -send 120 -noname -nodesc -format 0 -thing S
+% <b>showseq tembl:paamir -sbeg 1 -send 100 -noname -nodesc -format 0 -thing S </b>
 Display a sequence with features, translation etc..
-          gacaccatcgaatggcgcaaaacctttcgcggtatggcatgatagcgcccggaagagagt
-          caattcagggtggtgaatgtgaaaccagtaacgttatacgatgtcgcagagtatgccggt
-</pre>
+Output file [paamir.showseq]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.3">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 4</b>
+<p>
+Protein sequence can be displayed in three-letter codes. (The codes are displayed downwards, so the first code is 'Met'):  
 <p>
 
-Protein sequence displayed in three-letter codes.  (The codes are
-displayed downwards, so the first code is 'Met'):
 <p>
-<pre>
-% showseq tsw:rs24_fugru stdout -three -format 2
-RS24_FUGRU
-40S RIBOSOMAL PROTEIN S24.   
-         
-                   10        20        30        40        50        60
-          ----:----|----:----|----:----|----:----|----:----|----:----|
-          MAATVTVATALPMTAALLGALGMVVAVLHPGLATVPLTGIAGLLALMTLTTPAVVPVPGP
-          esshaharhryhehsreelryleaasaeirlylharyhllrlyelyeyyhhrsaahahlh
-          tnprlrlgrgsetrnguungsntllplusoysarlosruegusuastrsrroplleleye
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-                   70        80        90        100       110       120
-          ----:----|----:----|----:----|----:----|----:----|----:----|
-          ATGPGGGLTTGPAMVTASLATALLAGPLHALAAHGLPGLLLTSALGALGALAAMLLVAGT
-          rhlhlllyhhlhleayseesylyyslryirelrilehlyyyherylrylrysreyyarlh
-          grneyyysrryeatlrpruprassnuossguagsyueusssrrgsngsugsngtsslgyr
-        
-                   130       140       150       160       170       180
-          ----:----|----:----|----:----|----:----|----:----|----:----|
-          LLASVGASLLLA 
-          yylealleyyys
-          ssarlyarsssp
-</pre>
-<p>
-Number the sequence lines in the margin:
-<p>
-<pre>
-% showseq tembl:mmam stdout -format 1 -number
+% <b>showseq tsw:rs24_fugru -three -format 2 </b>
 Display a sequence with features, translation etc..
-Output file [stdout]:
-MMAM      
-Mus musculus (cell line C3H/F2-11) chromosome 12 anti-DNA antibody
-heavy chain mRNA.
-        1 gagnnccagctgcagcagtctggacctgagctggtaaagcctggggcttcagtgaagatg 60
-       61 tcctgcaaggcttctggatacacattcactagctatgttatgcactgggtgaatcagaag 120
-      121 cctgggcagggccttgagtggattggatatattaatccttacaatgatggtactaactac 180
-      181 aatgagaagttcaaaggcaaggccacactgacttcagacaaatcctccagcacagcctac 240
-      241 atggagttcagcagcctgacctctgaggactctgcggtctattactgtgcaagaaaaact 300
-      301 tcctactatagtaacctatattactttgactactggggccaaggcaccactctcacagtc 360
-      361 tcctca                                                       366
-</pre>
+Output file [rs24_fugru.showseq]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.4">Go to the input files for this example</a><br><a href="#output.4">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 5</b>
+<p>
+Number the sequence lines in the margin:  
 <p>
 
-Start the numbering at a specified value ('123' in this case):
 <p>
-<pre>
-% showseq tembl:mmam stdout -format 1 -number -offset 123
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>showseq tembl:paamir -sbeg 1 -send 100 -format 1 -number </b>
 Display a sequence with features, translation etc..
-MMAM
-Mus musculus (cell line C3H/F2-11) chromosome 12 anti-DNA antibody 
-heavy chain mRNA.
-      123 gagnnccagctgcagcagtctggacctgagctggtaaagcctggggcttcagtgaagatg 182
-      183 tcctgcaaggcttctggatacacattcactagctatgttatgcactgggtgaatcagaag 242
-      243 cctgggcagggccttgagtggattggatatattaatccttacaatgatggtactaactac 302
-      303 aatgagaagttcaaaggcaaggccacactgacttcagacaaatcctccagcacagcctac 362
-      363 atggagttcagcagcctgacctctgaggactctgcggtctattactgtgcaagaaaaact 422
-      423 tcctactatagtaacctatattactttgactactggggccaaggcaccactctcacagtc 482
-      483 tcctca                                                       488
-</pre>
+Output file [paamir.showseq]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.5">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 6</b>
+<p>
+Start the numbering at a specified value ('123' in this case): 
 <p>
 
-Make selected regions uppercase.  (Use '-slower' to force the rest of
-the sequence to be lowercase).
 <p>
-<pre>          
-% showseq tembl:mmam stdout -format 1 -slower -upper '25-45,101-203,333-362'
-Display a sequence with features, translation etc..  
-MMAM
-Mus musculus (cell line C3H/F2-11) chromosome 12 anti-DNA antibody
-heavy chain mRNA.
-          gagnnccagctgcagcagtctggaCCTGAGCTGGTAAAGCCTGGGgcttcagtgaagatg
-          tcctgcaaggcttctggatacacattcactagctatgttaTGCACTGGGTGAATCAGAAG
-          CCTGGGCAGGGCCTTGAGTGGATTGGATATATTAATCCTTACAATGATGGTACTAACTAC
-          AATGAGAAGTTCAAAGGCAAGGCcacactgacttcagacaaatcctccagcacagcctac
-          atggagttcagcagcctgacctctgaggactctgcggtctattactgtgcaagaaaaact
-          tcctactatagtaacctatattactttgactaCTGGGGCCAAGGCACCACTCTCACAGTC
-          TCctca
-</pre>
-<p>
-Translate selected regions:
-<p>
-<pre>
-% showseq embl:mmam tstdout -format 4 -send 120 -trans 25-49,66-76
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>showseq tembl:paamir -sbeg 1 -send 100 -format 1 -number -offset 123 </b>
 Display a sequence with features, translation etc..
-MMAM
-Mus musculus (cell line C3H/F2-11) chromosome 12 anti-DNA antibody
-heavy chain mRNA.
-          
-                   10        20        30        40        50        60
-          ----:----|----:----|----:----|----:----|----:----|----:----|
-          gagnnccagctgcagcagtctggacctgagctggtaaagcctggggcttcagtgaagatg
+Output file [paamir.showseq]: <b></b>
 
-                                  P  E  L  V  K  P  G  A  S
-          
-                   70        80        90        100       110       120
-          ----:----|----:----|----:----|----:----|----:----|----:----|
-          tcctgcaaggcttctggatacacattcactagctatgttatgcactgggtgaatcagaag
-        
-                 R  L  L
-</pre>
-<p>          
-          
-Add your own annotation to the display
+</pre></td></tr></table><p>
 <p>
-<pre>
-% showseq tembl:mmam stdout -format 2 -send 120 -annotation '13-26 binding site 15-15 SNP'
+<a href="#output.6">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 7</b>
+<p>
+Make selected regions uppercase. (Use '-slower' to force the rest of the sequence to be lowercase).  
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>showseq tembl:paamir -sbeg 1 -send 100 -format 1 -slower -upper '25-45,101-203,333-362' </b>
 Display a sequence with features, translation etc..
-MMAM
-Mus musculus (cell line C3H/F2-11) chromosome 12 anti-DNA antibody
-heavy chain mRNA.
+Output file [paamir.showseq]: <b></b>
 
-                   10        20        30        40        50        60        
-          ----:----|----:----|----:----|----:----|----:----|----:----|
-          gagnnccagctgcagcagtctggacctgagctggtaaagcctggggcttcagtgaagatg
-                      |------------|
-                      binding site
-                        |
-                        SNP
+</pre></td></tr></table><p>
+<p>
+<a href="#output.7">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 8</b>
+<p>
+Translate selected regions:  
+<p>
 
-                   70        80        90        100       110       120       
-          ----:----|----:----|----:----|----:----|----:----|----:----|
-          tcctgcaaggcttctggatacacattcactagctatgttatgcactgggtgaatcagaag
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>showseq tembl:paamir -sbeg 1 -send 120 -format 4 -trans 25-49,66-76 </b>
+Display a sequence with features, translation etc..
+Output file [paamir.showseq]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.8">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 9</b>
+<p>
+Add your own annotation to the display: 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>showseq tembl:paamir -sbeg 1 -send 100 -format 2 -send 120 -annotation '13-26 binding site 15-15 SNP' </b>
+Display a sequence with features, translation etc..
+Output file [paamir.showseq]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.9">Go to the output files for this example</a><p><p>
 
 
-</pre>
-<p>  
 
 
 <H2>
@@ -822,7 +813,7 @@ pax* | 10</td>
 <tr>
 <td>-flatreformat</td>
 <td>Display RE sites in flat format</td>
-<td>Yes/No</td>
+<td>Boolean value Yes/No</td>
 <td>No</td>
 </tr>
 
@@ -850,70 +841,70 @@ pax* | 10</td>
 <tr>
 <td>-single</td>
 <td>Force single RE site only cuts</td>
-<td>Yes/No</td>
+<td>Boolean value Yes/No</td>
 <td>No</td>
 </tr>
 
 <tr>
 <td>-[no]blunt</td>
 <td>Allow blunt end RE cutters</td>
-<td>Yes/No</td>
+<td>Boolean value Yes/No</td>
 <td>Yes</td>
 </tr>
 
 <tr>
 <td>-[no]sticky</td>
 <td>Allow sticky end RE cutters</td>
-<td>Yes/No</td>
+<td>Boolean value Yes/No</td>
 <td>Yes</td>
 </tr>
 
 <tr>
 <td>-[no]ambiguity</td>
 <td>Allow ambiguous RE matches</td>
-<td>Yes/No</td>
+<td>Boolean value Yes/No</td>
 <td>Yes</td>
 </tr>
 
 <tr>
 <td>-plasmid</td>
 <td>Allow circular DNA</td>
-<td>Yes/No</td>
+<td>Boolean value Yes/No</td>
 <td>No</td>
 </tr>
 
 <tr>
 <td>-[no]commercial</td>
 <td>Only use restriction enzymes with suppliers</td>
-<td>Yes/No</td>
+<td>Boolean value Yes/No</td>
 <td>Yes</td>
 </tr>
 
 <tr>
 <td>-[no]limit</td>
 <td>Limits RE hits to one isoschizomer</td>
-<td>Yes/No</td>
+<td>Boolean value Yes/No</td>
 <td>Yes</td>
 </tr>
 
 <tr>
 <td>-preferred</td>
 <td>Report preferred isoschizomers</td>
-<td>Yes/No</td>
+<td>Boolean value Yes/No</td>
 <td>No</td>
 </tr>
 
 <tr>
 <td>-threeletter</td>
 <td>Display protein sequences in three-letter code</td>
-<td>Yes/No</td>
+<td>Boolean value Yes/No</td>
 <td>No</td>
 </tr>
 
 <tr>
 <td>-number</td>
 <td>Number the sequences</td>
-<td>Yes/No</td>
+<td>Boolean value Yes/No</td>
 <td>No</td>
 </tr>
 
@@ -941,14 +932,14 @@ pax* | 10</td>
 <tr>
 <td>-[no]name</td>
 <td>Set this to be false if you do not wish to display the ID name of the sequence</td>
-<td>Yes/No</td>
+<td>Boolean value Yes/No</td>
 <td>Yes</td>
 </tr>
 
 <tr>
 <td>-[no]description</td>
 <td>Set this to be false if you do not wish to display the description of the sequence</td>
-<td>Yes/No</td>
+<td>Boolean value Yes/No</td>
 <td>Yes</td>
 </tr>
 
@@ -962,7 +953,7 @@ pax* | 10</td>
 <tr>
 <td>-html</td>
 <td>Use HTML formatting</td>
-<td>Yes/No</td>
+<td>Boolean value Yes/No</td>
 <td>No</td>
 </tr>
 
@@ -974,13 +965,174 @@ pax* | 10</td>
     Input file format
 </H2>
 
+<b>showseq</b> reads normal sequence USAs.
+
+<p>
+
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+
+'tembl:paamir' is a sequence entry in the example nucleic acid database 'tembl'
+<p>
+<p><h3>Database entry: tembl:paamir</h3>
+<table width="90%"><tr><td bgcolor="#FFDDFF">
+<pre>
+ID   PAAMIR     standard; DNA; PRO; 2167 BP.
+XX
+AC   X13776; M43175;
+XX
+SV   X13776.1
+XX
+DT   19-APR-1989 (Rel. 19, Created)
+DT   17-FEB-1997 (Rel. 50, Last updated, Version 22)
+XX
+DE   Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase regulation
+XX
+KW   aliphatic amidase regulator; amiC gene; amiR gene.
+XX
+OS   Pseudomonas aeruginosa
+OC   Bacteria; Proteobacteria; gamma subdivision; Pseudomonadaceae; Pseudomonas.
+XX
+RN   [1]
+RP   1167-2167
+RA   Rice P.M.;
+RT   ;
+RL   Submitted (16-DEC-1988) to the EMBL/GenBank/DDBJ databases.
+RL   Rice P.M., EMBL, Postfach 10-2209, Meyerhofstrasse 1, 6900 Heidelberg, FRG.
+XX
+RN   [2]
+RP   1167-2167
+RX   MEDLINE; 89211409.
+RA   Lowe N., Rice P.M., Drew R.E.;
+RT   "Nucleotide sequence of the aliphatic amidase regulator gene of Pseudomonas
+RT   aeruginosa";
+RL   FEBS Lett. 246:39-43(1989).
+XX
+RN   [3]
+RP   1-1292
+RX   MEDLINE; 91317707.
+RA   Wilson S., Drew R.;
+RT   "Cloning and DNA seqence of amiC, a new gene regulating expression of the
+RT   Pseudomonas aeruginosa aliphatic amidase, and purification of the amiC
+RT   product.";
+RL   J. Bacteriol. 173:4914-4921(1991).
+XX
+RN   [4]
+RP   1-2167
+RA   Rice P.M.;
+RT   ;
+RL   Submitted (04-SEP-1991) to the EMBL/GenBank/DDBJ databases.
+RL   Rice P.M., EMBL, Postfach 10-2209, Meyerhofstrasse 1, 6900 Heidelberg, FRG.
+XX
+DR   SWISS-PROT; P10932; AMIR_PSEAE.
+DR   SWISS-PROT; P27017; AMIC_PSEAE.
+DR   SWISS-PROT; Q51417; AMIS_PSEAE.
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+FT                   phenotype"
+FT                   /replace=""
+FT                   /gene="amiC"
+FT   misc_feature    1
+FT                   /note="last base of an XhoI site"
+FT   misc_feature    648..653
+FT                   /note="end of 658bp XhoI fragment, deletion in  pSW3 causes
+FT                   constitutive expression of amiE"
+FT   conflict        1281
+FT                   /replace="g"
+FT                   /citation=[3]
+XX
+SQ   Sequence 2167 BP; 363 A; 712 C; 730 G; 362 T; 0 other;
+     ggtaccgctg gccgagcatc tgctcgatca ccaccagccg ggcgacggga actgcacgat        60
+     ctacctggcg agcctggagc acgagcgggt tcgcttcgta cggcgctgag cgacagtcac       120
+     aggagaggaa acggatggga tcgcaccagg agcggccgct gatcggcctg ctgttctccg       180
+     aaaccggcgt caccgccgat atcgagcgct cgcacgcgta tggcgcattg ctcgcggtcg       240
+     agcaactgaa ccgcgagggc ggcgtcggcg gtcgcccgat cgaaacgctg tcccaggacc       300
+     ccggcggcga cccggaccgc tatcggctgt gcgccgagga cttcattcgc aaccgggggg       360
+     tacggttcct cgtgggctgc tacatgtcgc acacgcgcaa ggcggtgatg ccggtggtcg       420
+     agcgcgccga cgcgctgctc tgctacccga ccccctacga gggcttcgag tattcgccga       480
+     acatcgtcta cggcggtccg gcgccgaacc agaacagtgc gccgctggcg gcgtacctga       540
+     ttcgccacta cggcgagcgg gtggtgttca tcggctcgga ctacatctat ccgcgggaaa       600
+     gcaaccatgt gatgcgccac ctgtatcgcc agcacggcgg cacggtgctc gaggaaatct       660
+     acattccgct gtatccctcc gacgacgact tgcagcgcgc cgtcgagcgc atctaccagg       720
+     cgcgcgccga cgtggtcttc tccaccgtgg tgggcaccgg caccgccgag ctgtatcgcg       780
+     ccatcgcccg tcgctacggc gacggcaggc ggccgccgat cgccagcctg accaccagcg       840
+     aggcggaggt ggcgaagatg gagagtgacg tggcagaggg gcaggtggtg gtcgcgcctt       900
+     acttctccag catcgatacg cccgccagcc gggccttcgt ccaggcctgc catggtttct       960
+     tcccggagaa cgcgaccatc accgcctggg ccgaggcggc ctactggcag accttgttgc      1020
+     tcggccgcgc cgcgcaggcc gcaggcaact ggcgggtgga agacgtgcag cggcacctgt      1080
+     acgacatcga catcgacgcg ccacaggggc cggtccgggt ggagcgccag aacaaccaca      1140
+     gccgcctgtc ttcgcgcatc gcggaaatcg atgcgcgcgg cgtgttccag gtccgctggc      1200
+     agtcgcccga accgattcgc cccgaccctt atgtcgtcgt gcataacctc gacgactggt      1260
+     ccgccagcat gggcggggga ccgctcccat gagcgccaac tcgctgctcg gcagcctgcg      1320
+     cgagttgcag gtgctggtcc tcaacccgcc gggggaggtc agcgacgccc tggtcttgca      1380
+     gctgatccgc atcggttgtt cggtgcgcca gtgctggccg ccgccggaag ccttcgacgt      1440
+     gccggtggac gtggtcttca ccagcatttt ccagaatggc caccacgacg agatcgctgc      1500
+     gctgctcgcc gccgggactc cgcgcactac cctggtggcg ctggtggagt acgaaagccc      1560
+     cgcggtgctc tcgcagatca tcgagctgga gtgccacggc gtgatcaccc agccgctcga      1620
+     tgcccaccgg gtgctgcctg tgctggtatc ggcgcggcgc atcagcgagg aaatggcgaa      1680
+     gctgaagcag aagaccgagc agctccagga ccgcatcgcc ggccaggccc ggatcaacca      1740
+     ggccaaggtg ttgctgatgc agcgccatgg ctgggacgag cgcgaggcgc accagcacct      1800
+     gtcgcgggaa gcgatgaagc ggcgcgagcc gatcctgaag atcgctcagg agttgctggg      1860
+     aaacgagccg tccgcctgag cgatccgggc cgaccagaac aataacaaga ggggtatcgt      1920
+     catcatgctg ggactggttc tgctgtacgt tggcgcggtg ctgtttctca atgccgtctg      1980
+     gttgctgggc aagatcagcg gtcgggaggt ggcggtgatc aacttcctgg tcggcgtgct      2040
+     gagcgcctgc gtcgcgttct acctgatctt ttccgcagca gccgggcagg gctcgctgaa      2100
+     ggccggagcg ctgaccctgc tattcgcttt tacctatctg tgggtggccg ccaaccagtt      2160
+     cctcgag                                                                2167
+//
+</pre>
+</td></tr></table><p>
+
+<a name="input.4"></a>
+<h3>Input files for usage example 4</h3>
+
+'tsw:rs24_fugru' is a sequence entry in the example protein database 'tsw'
+<p>
+<p><h3>Database entry: tsw:rs24_fugru</h3>
+<table width="90%"><tr><td bgcolor="#FFDDFF">
+<pre>
+ID   RS24_FUGRU     STANDARD;      PRT;   132 AA.
+AC   O42387;
+DT   15-JUL-1998 (REL. 36, CREATED)
+DT   15-JUL-1998 (REL. 36, LAST SEQUENCE UPDATE)
+DT   15-JUL-1998 (REL. 36, LAST ANNOTATION UPDATE)
+DE   40S RIBOSOMAL PROTEIN S24.
+GN   RPS24.
+OS   FUGU RUBRIPES (JAPANESE PUFFERFISH) (TAKIFUGU RUBRIPES).
+OC   EUKARYOTA; METAZOA; CHORDATA; VERTEBRATA; PISCES; GNATHOSTOMATA;
+OC   OSTEICHTHYES; ACTINOPTERYGII; TETRAODONTIFORMES.
+RN   [1]
+RP   SEQUENCE FROM N.A.
+RA   CROSIO C., CECCONI F., GIORGI M., AMALDI F., MARIOTTINI P.;
+RL   SUBMITTED (SEP-1997) TO EMBL/GENBANK/DDBJ DATA BANKS.
+CC   -!- SIMILARITY: BELONGS TO THE S24E FAMILY OF RIBOSOMAL PROTEINS.
+DR   EMBL; AJ001398; E339629; -.
+DR   PROSITE; PS00529; RIBOSOMAL_S24E; 1.
+KW   RIBOSOMAL PROTEIN.
+SQ   SEQUENCE   132 AA;  15305 MW;  BCF9EB31 CRC32;
+     MNDTVTVRTR KFMTNRLLQR KQMVVDVLHP GKATVPKTEI REKLAKMYKT TPDVVFVFGF
+     RTQFGGGKTT GFAMVYDSLD YAKKNEPKHR LARHGLFEKK KTSRKQRKER KNRMKKVRGT
+     KKASVGASKK KD
+//
+</pre>
+</td></tr></table><p>
+
+
+<p>
+
 You can specifiy a file of ranges to display in uppercase by giving the
 '-uppercase' qualifier the value '@' followed by the name of the file
 containing the ranges.  (eg: '-upper @myfile').
+
 <p>
           
 The format of the range file is:
+
 <p>
+
 <ul>
       <li>Comment lines start with '#' in the first column.
       <li>Comment lines and blank lines are ignored.
@@ -992,8 +1144,11 @@ The format of the range file is:
       <li>There can be optional text after the two numbers to annotate the line.
       <li>White-space before or after the text is removed.
 </ul>
+
 <p>
+
 An example range file is:
+
 <p>
 
 <pre>          
@@ -1002,12 +1157,14 @@ An example range file is:
  4   5       this is like 12-23, but smaller
 67   10348   interesting region
 </pre>
+
 <p>
 
 You can specifiy a file of ranges to highlight in a different colour
 when outputting in HTML format (using the '-html' qualifier) by giving
 the '-highlight' qualifier the value '@' followed by the name of the
 file containing the ranges.  (eg: '-highlight @myfile').
+
 <p>
 
 The format of this file is very similar to the format of the above
@@ -1015,9 +1172,11 @@ uppercase range file, except that the text after the start and end
 positions is used as the HTML colour name.  This colour name is used 'as
 is' when specifying the colour in HTML in a '<FONT COLOR=xxx>'
 construct, (where 'xxx' is the name of the colour).
+
 <p>
 
 The standard names of HTML font colours are given in:
+
 <br>
 
 <A HREF="http://http://www.w3.org/TR/REC-html40/types.html">
@@ -1034,6 +1193,7 @@ http://mindprod.com/htmlcolours.html</A>
 <p>
 
 An example highlight range file is:
+
 <p>
 
 <pre>          
@@ -1042,20 +1202,24 @@ An example highlight range file is:
  4   5          darkturquoise
 67   10348      #FFE4E1
 </pre>
+
 <p>
 
 You can specifiy a file of ranges to annotate
 by giving
 the '-annotate' qualifier the value '@' followed by the name of the
 file containing the ranges.  (eg: '-annotate @myfile').
+
 <p>
      
 The format of this file is very similar to the format of the above
 highlight range file, except that the text after the start and end
 positions is used as the displayed text of the annotated region.
+
 <p>
 
 An example annotation range file is:
+
 <p>
    
 <pre>
@@ -1064,20 +1228,24 @@ An example annotation range file is:
  4   5          CAP site
 67   10348      exon 2
 </pre>
+
 <p>
 
 
 You can specify a file of enzyme names to read in by giving the
 '-enzymes' qualifier the name of the file holding the enzyme names with
 a '@' character in front of it, for example, '@enz.list'.
+
 <p>
 
 Blank lines and lines starting with a '#' or '!' character are ignored
 and all other lines are concatenated together with a comma character ','
 and then treated as the list of enzymes to search for.
+
 <p>
          
 An example of a file of enzyme names is:
+
 <p>
 
 <pre>      
@@ -1087,6 +1255,7 @@ HincII, ppiI
 hindiii
 HinfI
 </pre>
+
 <p>            
 
 
@@ -1094,13 +1263,207 @@ HinfI
     Output file format
 </H2>
 
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+Note that although we asked for the sequence display to end at position '100', it has displayed the sequence up to the end of the line - position '120'.  This is a feature of this program to make the display of things like restriction enzyme cutting sites easier.  <p><h3>File: paamir.showseq</h3>
+<table width="90%"><tr><td bgcolor="#DDFFDD">
+<pre>
+PAAMIR
+Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase
+regulation
+
+                   10        20        30        40        50        60        
+          ----:----|----:----|----:----|----:----|----:----|----:----|
+          ggtaccgctggccgagcatctgctcgatcaccaccagccgggcgacgggaactgcacgat
+                 |===============|
+                 promoter note="proposed rpoN-dependent promoter"
+          |
+          misc_feature note="last base of an XhoI site"
+
+                   70        80        90        100       110       120       
+          ----:----|----:----|----:----|----:----|----:----|----:----|
+          ctacctggcgagcctggagcacgagcgggttcgcttcgtacggcgctgagcgacagtcac
+              |===============|
+              promoter note="proposed rpoN-dependent promoter"
+
+</pre>
+</td></tr></table><p>
+
+<a name="output.2"></a>
+<h3>Output files for usage example 2</h3>
+<p><h3>File: paamir.showseq</h3>
+<table width="90%"><tr><td bgcolor="#DDFFDD">
+<pre>
+PAAMIR
+Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase
+regulation
+
+          ggtaccgctggccgagcatctgctcgatcaccaccagccgggcgacgggaactgcacgat
+          ----:----|----:----|----:----|----:----|----:----|----:----|
+          ccatggcgaccggctcgtagacgagctagtggtggtcggcccgctgcccttgacgtgcta
+
+          ctacctggcgagcctggagcacgagcgggttcgcttcgtacggcgctgagcgacagtcac
+          ----:----|----:----|----:----|----:----|----:----|----:----|
+          gatggaccgctcggacctcgtgctcgcccaagcgaagcatgccgcgactcgctgtcagtg
+
+</pre>
+</td></tr></table><p>
+
+<a name="output.3"></a>
+<h3>Output files for usage example 3</h3>
+<p><h3>File: paamir.showseq</h3>
+<table width="90%"><tr><td bgcolor="#DDFFDD">
+<pre>
+          ggtaccgctggccgagcatctgctcgatcaccaccagccgggcgacgggaactgcacgat
+          ctacctggcgagcctggagcacgagcgggttcgcttcgtacggcgctgagcgacagtcac
+
+</pre>
+</td></tr></table><p>
+
+<a name="output.4"></a>
+<h3>Output files for usage example 4</h3>
+<p><h3>File: rs24_fugru.showseq</h3>
+<table width="90%"><tr><td bgcolor="#DDFFDD">
+<pre>
+RS24_FUGRU
+40S RIBOSOMAL PROTEIN S24.
+
+                   10        20        30        40        50        60        
+          ----:----|----:----|----:----|----:----|----:----|----:----|
+          MAATVTVATALPMTAALLGALGMVVAVLHPGLATVPLTGIAGLLALMTLTTPAVVPVPGP
+          esshaharhryhehsreelryleaasaeirlylharyhllrlyelyeyyhhrsaahahlh
+          tnprlrlgrgsetrnguungsntllplusoysarlosruegusuastrsrroplleleye
+
+                   70        80        90        100       110       120       
+          ----:----|----:----|----:----|----:----|----:----|----:----|
+          ATGPGGGLTTGPAMVTASLATALLAGPLHALAAHGLPGLLLTSALGALGALAAMLLVAGT
+          rhlhlllyhhlhleayseesylyyslryirelrilehlyyyherylrylrysreyyarlh
+          grneyyysrryeatlrpruprassnuossguagsyueusssrrgsngsugsngtsslgyr
+
+                   130       140       150       160       170       180       
+          ----:----|----:----|----:----|----:----|----:----|----:----|
+          LLASVGASLLLA
+          yylealleyyys
+          ssarlyarsssp
+
+</pre>
+</td></tr></table><p>
+
+<a name="output.5"></a>
+<h3>Output files for usage example 5</h3>
+<p><h3>File: paamir.showseq</h3>
+<table width="90%"><tr><td bgcolor="#DDFFDD">
+<pre>
+PAAMIR
+Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase
+regulation
+        1 ggtaccgctggccgagcatctgctcgatcaccaccagccgggcgacgggaactgcacgat 60
+       61 ctacctggcgagcctggagcacgagcgggttcgcttcgtacggcgctgagcgacagtcac 120
+
+</pre>
+</td></tr></table><p>
+
+<a name="output.6"></a>
+<h3>Output files for usage example 6</h3>
+<p><h3>File: paamir.showseq</h3>
+<table width="90%"><tr><td bgcolor="#DDFFDD">
+<pre>
+PAAMIR
+Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase
+regulation
+      123 ggtaccgctggccgagcatctgctcgatcaccaccagccgggcgacgggaactgcacgat 182
+      183 ctacctggcgagcctggagcacgagcgggttcgcttcgtacggcgctgagcgacagtcac 242
+
+</pre>
+</td></tr></table><p>
+
+<a name="output.7"></a>
+<h3>Output files for usage example 7</h3>
+<p><h3>File: paamir.showseq</h3>
+<table width="90%"><tr><td bgcolor="#DDFFDD">
+<pre>
+PAAMIR
+Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase
+regulation
+          ggtaccgctggccgagcatctgctCGATCACCACCAGCCGGGCGAcgggaactgcacgat
+          ctacctggcgagcctggagcacgagcgggttcgcttcgtaCGGCGCTGAGCGACAGTCAC
+
+</pre>
+</td></tr></table><p>
+
+<a name="output.8"></a>
+<h3>Output files for usage example 8</h3>
+<p><h3>File: paamir.showseq</h3>
+<table width="90%"><tr><td bgcolor="#DDFFDD">
+<pre>
+PAAMIR
+Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase
+regulation
+
+                   10        20        30        40        50        60        
+          ----:----|----:----|----:----|----:----|----:----|----:----|
+          ggtaccgctggccgagcatctgctcgatcaccaccagccgggcgacgggaactgcacgat
+
+                                  R  S  P  P  A  G  R  R  V           
+                 |===============|
+                 promoter note="proposed rpoN-dependent promoter"
+          |
+          misc_feature note="last base of an XhoI site"
+
+                   70        80        90        100       110       120       
+          ----:----|----:----|----:----|----:----|----:----|----:----|
+          ctacctggcgagcctggagcacgagcgggttcgcttcgtacggcgctgagcgacagtcac
+
+                 A  S  L                                              
+              |===============|
+              promoter note="proposed rpoN-dependent promoter"
+
+</pre>
+</td></tr></table><p>
+
+<a name="output.9"></a>
+<h3>Output files for usage example 9</h3>
+<p><h3>File: paamir.showseq</h3>
+<table width="90%"><tr><td bgcolor="#DDFFDD">
+<pre>
+PAAMIR
+Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase
+regulation
+
+                   10        20        30        40        50        60        
+          ----:----|----:----|----:----|----:----|----:----|----:----|
+          ggtaccgctggccgagcatctgctcgatcaccaccagccgggcgacgggaactgcacgat
+                      |------------|
+                      binding site
+                        |
+                        SNP
+                 |===============|
+                 promoter note="proposed rpoN-dependent promoter"
+          |
+          misc_feature note="last base of an XhoI site"
+
+                   70        80        90        100       110       120       
+          ----:----|----:----|----:----|----:----|----:----|----:----|
+          ctacctggcgagcctggagcacgagcgggttcgcttcgtacggcgctgagcgacagtcac
+              |===============|
+              promoter note="proposed rpoN-dependent promoter"
+
+</pre>
+</td></tr></table><p>
+
+
+<p>
+
 Most of the variants of the output format have already been described in
 the 'Description' and 'Usage' sections, but here is some more just to
 fill out this section ;-)
+
 <p>
 
 The output format is extremely variable and under the control of the 
 qualifiers used.
+
 <p>
           
 The sequence can be formatted for HTML display by using the '-html'
@@ -1108,26 +1471,31 @@ qualifier.  The top and tail html tags &lt;HEAD&gt;, &lt;BODY&gt; etc.  are not
 included as it is expected that the output of this program will be
 included in a more extensive HTML page and so these parts are left to
 the user to provide.
+
 <p>
 
 The name of the sequence is displayed, followed by the description of
 the sequence.  These can be turned off with the '-noname' and
 '-nodescription' qualifiers.
+
 <p>
       
 Then the sequence is output, one line at a time.  Any associated
 information to be displayed is also output above and below the sequence
 line, as specified by the '-format' and or '-things' qualifiers.  (See
 the 'Description' section for detals).
+
 <p>
           
 The margins around the sequence are specified by the use of the
 '-margin' qaulifier and any numbering of the sequence and its
 translations are placed in the margin.
+
 <p>
 
 A display of the restriction enzyme cut sites can be selected via
 '-format 6' option or the '-format 0 -thing b,r,s,-r' style of options.
+
 <p>
 
 The option '-format 7' will produce a formatted display of cut sites on
@@ -1136,11 +1504,13 @@ are indicated by a slash character '\' that points to the poition
 between the nucleotides where the cuts occur.  Cuts by many enzymes at
 the same position are indicated by stacking the enzyme names on top of
 each other.
+
 <p>
 
 At the end the section header 'Enzymes that cut' is displayed followed
 by a list of the enzymes that cut the specified sequence and the number
 of times that they cut.
+
 <p>
 
 The '-flatreformat' qualifier changes the display to emphasise the
@@ -1148,6 +1518,7 @@ recognition site of the restriction enzyme, which is indicated by a row
 of '=' characters.  The cut site if pointed to by a '>' or '<' character
 and if the cut site is not within or imemdiately adjacent to the
 recognition site, they are linked by a row or '.' characters.
+
 <p>
 
 The name of the enzyme is displayed above (or below when the reverse
@@ -1155,37 +1526,6 @@ sense site if displayed) the recognition site.  The name of the enzyme
 is also displayed above the cut site if this occurs on a different
 display line to the recognition site (i.e.  if it wraps onto the next
 line of sequence).
-<p>
-
-An example of this display follows:
-<p>
-
-<pre>
-% showseq tembl:eclac stdout -send 60 -format 7 -enz TaqI,Hin6I,AciI,Hin6I,BssKI,Bsu6
-Display a sequence with features, translation etc..
-ECLAC
-E.coli lactose operon with lacI, lacZ, lacY and lacA genes.
-          
-                                                      Hin6I
-                 TaqI   Hin6I         AciI            | BssKI
-                 \      \             \               \ \
-          GACACCATCGAATGGCGCAAAACCTTTCGCGGTATGGCATGATAGCGCCCGGAAGAGAGT
-                   10        20        30        40        50        60        
-          ----:----|----:----|----:----|----:----|----:----|----:----|
-          CTGTGGTAGCTTACCGCGTTTTGGAAAGCGCCATACCGTACTATCGCGGGCCTTCTCTCA
-                   /      /             /               /    /
-                   TaqI   Hin6I         AciI            |    BssKI
-                                                        Hin6I
-
-          D  T  I  E  W  R  K  T  F  R  G  M  A  *  *  R  P  E  E  S  
-           T  P  S  N  G  A  K  P  F  A  V  W  H  D  S  A  R  K  R  V 
-            H  H  R  M  A  Q  N  L  S  R  Y  G  M  I  A  P  G  R  E  S
-          ----:----|----:----|----:----|----:----|----:----|----:----|
-           S  V  M  S  H  R  L  V  K  R  P  I  A  H  Y  R  G  S  S  L 
-          X  C  W  R  I  A  C  F  R  E  R  Y  P  M  I  A  G  P  L  S  
-            V  G  D  F  P  A  F  G  K  A  T  H  C  S  L  A  R  F  L  T
-</pre>
-<p>
 
 
 
@@ -1363,6 +1703,7 @@ It is not a bug. Please don't report it.
 <tr><td><a href="showfeat.html">showfeat</a></td><td>Show features of a sequence</td></tr>
 <tr><td><a href="showorf.html">showorf</a></td><td>Pretty output of DNA translations</td></tr>
 <tr><td><a href="silent.html">silent</a></td><td>Silent mutation restriction enzyme scan</td></tr>
+<tr><td><a href="sixpack.html">sixpack</a></td><td>Display a DNA sequence with 6-frame translation and ORFs</td></tr>
 <tr><td><a href="textsearch.html">textsearch</a></td><td>Search sequence documentation text. SRS and Entrez are faster!</td></tr>
 <tr><td><a href="transeq.html">transeq</a></td><td>Translate nucleic acid sequences</td></tr>
 </table>

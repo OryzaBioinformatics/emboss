@@ -68,18 +68,27 @@ The score is +1 for a match to the corresponding base
 </H2>
 
 
-Here is a sample session with equicktandem. The input sequence is the
-human herpesvirus tandem repeat.
+<b>Here is a sample session with equicktandem</b>
+<p>
+The input sequence is the human herpesvirus tandem repeat. 
+<p>
 
-<pre>
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% equicktandem
-Input sequence: embl:hhtetra
-Output file [hhtetra.qtan]: 
-Maximum repeat size [600]: 
-Threshold score [20]: 
+% <b>equicktandem </b>
+Finds tandem repeats
+Input sequence: <b>tembl:hhtetra</b>
+Maximum repeat size [600]: <b></b>
+Threshold score [20]: <b></b>
+Output report [hhtetra.qtan]: <b></b>
 
-</pre>
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
+
+
+
 
 
 
@@ -147,7 +156,7 @@ IT IS DONE FOR YOU.
 <tr>
 <td>[-outfile]<br>(Parameter 2)</td>
 <td>Output report file name</td>
-<td>Report file</td>
+<td>Report output file</td>
 <td>&nbsp;</td>
 </tr>
 
@@ -183,7 +192,87 @@ IT IS DONE FOR YOU.
 </H2>
 
 
-The input for equicktandem is a nucleotide sequence
+The input for equicktandem is a nucleotide sequence USA.
+
+<p>
+
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+
+'tembl:hhtetra' is a sequence entry in the example nucleic acid database 'tembl'
+<p>
+<p><h3>Database entry: tembl:hhtetra</h3>
+<table width="90%"><tr><td bgcolor="#FFDDFF">
+<pre>
+ID   HHTETRA    standard; DNA; VRL; 1272 BP.
+XX
+AC   L46634; L46689;
+XX
+SV   L46634.1
+XX
+DT   06-NOV-1995 (Rel. 45, Created)
+DT   04-MAR-2000 (Rel. 63, Last updated, Version 3)
+XX
+DE   Human herpesvirus 7 (clone ED132'1.2) telomeric repeat region.
+XX
+KW   telomeric repeat.
+XX
+OS   Human herpesvirus 7
+OC   Viruses; dsDNA viruses, no RNA stage; Herpesviridae; Betaherpesvirinae.
+XX
+RN   [1]
+RP   1-1272
+RX   MEDLINE; 96079055.
+RA   Secchiero P., Nicholas J., Deng H., Xiaopeng T., van Loon N., Ruvolo V.R.,
+RA   Berneman Z.N., Reitz M.S. Jr., Dewhurst S.;
+RT   "Identification of human telomeric repeat motifs at the genome termini of
+RT   human herpesvirus 7: structural analysis and heterogeneity";
+RL   J. Virol. 69(12):8041-8045(1995).
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..1272
+FT                   /db_xref="taxon:10372"
+FT                   /organism="Human herpesvirus 7"
+FT                   /strain="JI"
+FT                   /clone="ED132'1.2"
+FT   repeat_region   207..928
+FT                   /note="long and complex repeat region composed of various
+FT                   direct repeats, including TAACCC (TRS), degenerate copies
+FT                   of TRS motifs and a 14-bp repeat, TAGGGCTGCGGCCC"
+FT   misc_signal     938..998
+FT                   /note="pac2 motif"
+FT   misc_feature    1009
+FT                   /note="right genome terminus (...ACA)"
+XX
+SQ   Sequence 1272 BP; 346 A; 455 C; 222 G; 249 T; 0 other;
+     aagcttaaac tgaggtcaca cacgacttta attacggcaa cgcaacagct gtaagctgca        60
+     ggaaagatac gatcgtaagc aaatgtagtc ctacaatcaa gcgaggttgt agacgttacc       120
+     tacaatgaac tacacctcta agcataacct gtcgggcaca gtgagacacg cagccgtaaa       180
+     ttcaaaactc aacccaaacc gaagtctaag tctcacccta atcgtaacag taaccctaca       240
+     actctaatcc tagtccgtaa ccgtaacccc aatcctagcc cttagcccta accctagccc       300
+     taaccctagc tctaacctta gctctaactc tgaccctagg cctaacccta agcctaaccc       360
+     taaccgtagc tctaagttta accctaaccc taaccctaac catgaccctg accctaaccc       420
+     tagggctgcg gccctaaccc tagccctaac cctaacccta atcctaatcc tagccctaac       480
+     cctagggctg cggccctaac cctagcccta accctaaccc taaccctagg gctgcggccc       540
+     taaccctaac cctagggctg cggcccgaac cctaacccta accctaaccc taaccctagg       600
+     gctgcggccc taaccctaac cctagggctg cggccctaac cctaacccta gggctgcggc       660
+     ccgaacccta accctaaccc taaccctagg gctgcggccc taaccctaac cctagggctg       720
+     cggccctaac cctaacccta actctagggc tgcggcccta accctaaccc taaccctaac       780
+     cctagggctg cggcccgaac cctagcccta accctaaccc tgaccctgac cctaacccta       840
+     accctaaccc taaccctaac cctaacccta accctaaccc taaccctaac cctaacccta       900
+     accctaaccc taaccctaac cctaaccccg cccccactgg cagccaatgt cttgtaatgc       960
+     cttcaaggca ctttttctgc gagccgcgcg cagcactcag tgaaaaacaa gtttgtgcac      1020
+     gagaaagacg ctgccaaacc gcagctgcag catgaaggct gagtgcacaa ttttggcttt      1080
+     agtcccataa aggcgcggct tcccgtagag tagaaaaccg cagcgcggcg cacagagcga      1140
+     aggcagcggc tttcagactg tttgccaagc gcagtctgca tcttaccaat gatgatcgca      1200
+     agcaagaaaa atgttctttc ttagcatatg cgtggttaat cctgttgtgg tcatcactaa      1260
+     gttttcaagc tt                                                          1272
+//
+</pre>
+</td></tr></table><p>
+
 
 <H2>
     Output file format
@@ -218,15 +307,17 @@ By default <b>equicktandem</b> writes a 'table' report file.
 
 <p>
 
-The output from the above example is:
 
-<p>
-
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: hhtetra.qtan</h3>
+<table width="90%"><tr><td bgcolor="#DDFFDD">
 <pre>
 ########################################
 # Program: equicktandem
-# Rundate: Thu Apr 11 13:28:55 2002
-# Report_file: stdout
+# Rundate: Thu Nov 07 14:23:56 2002
+# Report_format: table
+# Report_file: hhtetra.qtan
 ########################################
 
 #=======================================
@@ -243,8 +334,11 @@ The output from the above example is:
     191     935     339      6    124
 
 #---------------------------------------
-#--------------------------------------- 
+#---------------------------------------
 </pre>
+</td></tr></table><p>
+
+
 
 <H2>
     Data files

@@ -29,29 +29,24 @@ Description
    
 Usage
 
-   Type in a short sequence to the file 'mycc.pep' in EMBL format:
+   Here is a sample session with newseq
    
-% newseq
-Type in a short new sequence.
-Output sequence [outfile.fasta]: embl::mycc.pep
-Name of the sequence: cytoc
-Description of the sequence: fragment of cytochrome C
-Type of sequence
+   Type in a short sequence to the file 'mycc.pep' in SWISSPROT format:
+   
 
+% newseq 
+Type in a short new sequence.
+Output sequence [outfile.fasta]: swiss::mycc.pep
+Name of the sequence: cytoc
+Description of the sequence: fragment of cytochrome c
+Type of sequence
          N : Nucleic
          P : Protein
 Type of sequence [N]: p
 Enter the sequence: KKKEERADLIAY
-
-   Display the resulting new file:
    
-% more mycc.pep
-ID   cytoc          STANDARD;      PRT;    12 AA.
-DE   fragment of cytochrome C
-SQ   SEQUENCE    12 AA;   1464 MW;  2BF1DB53 CRC32;
-     KKKEERADLI AY
-//
-
+   Go to the output files for this example
+   
 Command line arguments
 
    Mandatory qualifiers:
@@ -111,11 +106,19 @@ Command line arguments
    
 Input file format
 
-   None.
-   
 Output file format
 
-   Normal sequence.
+   newseq writes a normal sequence file.
+   
+  Output files for usage example
+  
+  File: mycc.pep
+  
+ID   cytoc          STANDARD;      PRT;    12 AA.
+DE   fragment of cytochrome c
+SQ   SEQUENCE    12 AA;   1464 MW;  0000000000000000 CRC64;
+     KKKEERADLI AY
+//
    
 Data files
 
@@ -170,7 +173,6 @@ See also
    seqretsplit  Reads and writes (returns) sequences in individual files
    skipseq      Reads and writes (returns) sequences, skipping the first few
    splitter     Split a sequence into (overlapping) smaller sequences
-   swissparse   Retrieves sequences from swissprot using keyword search
    trimest      Trim poly-A tails off EST sequences
    trimseq      Trim ambiguous bits off the ends of sequences
    union        Reads sequence fragments and builds one sequence

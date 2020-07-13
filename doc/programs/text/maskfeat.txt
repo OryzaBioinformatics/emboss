@@ -39,13 +39,19 @@ Description
    
 Usage
 
-   Here is a sample session with maskfeat. It masks out a feature whose
-   type is "repeat_region" from position 2331 to 2356:
+   Here is a sample session with maskfeat
    
-% maskfeat em:AB000360
-Mask off features of a sequence.
-Output sequence [ab000360.fasta]:
+   Mask out a feature whose type is "repeat_region" from position 2331 to
+   2356:
+   
 
+% maskfeat tembl:ab000360 
+Mask off features of a sequence.
+Output sequence [ab000360.fasta]: 
+   
+   Go to the input files for this example
+   Go to the output files for this example
+   
 Command line arguments
 
    Mandatory qualifiers:
@@ -100,17 +106,177 @@ Command line arguments
    
 Input file format
 
-   It reads in a sequence USA. You can optionally specify a GFF feature
-   file to use with the command-line option '-gff filename'.
+   maskfeat reads in a sequence USA. You can optionally specify a GFF
+   feature file to use with the command-line option '-gff filename'.
+   
+  Input files for usage example
+  
+   'tembl:ab000360' is a sequence entry in the example nucleic acid
+   database 'tembl'
+   
+  Database entry: tembl:ab000360
+  
+ID   AB000360   standard; DNA; HUM; 2582 BP.
+XX
+AC   AB000360;
+XX
+SV   AB000360.1
+XX
+DT   27-OCT-1997 (Rel. 53, Created)
+DT   27-OCT-1997 (Rel. 53, Last updated, Version 1)
+XX
+DE   Homo sapiens PIGC gene, complete cds.
+XX
+KW   glycosylphosphatidylinositol-synthesis gene; PIGC.
+XX
+OS   Homo sapiens (human)
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia
+;
+OC   Eutheria; Primates; Catarrhini; Hominidae; Homo.
+XX
+RN   [1]
+RP   1-2582
+RA   Hong Y.;
+RT   ;
+RL   Submitted (08-JAN-1997) to the EMBL/GenBank/DDBJ databases.
+RL   Yeongjin Hong, Research Institute for Microbial Diseases, Immunoregulation
+;
+RL   3-1 Yamada-oka, Suita, Osaka 565, Japan
+RL   (E-mail:kohishi@biken.osaka-u.ac.jp, Tel:81-6-879-8329, Fax:81-6-875-5233)
+XX
+RN   [2]
+RA   Hong Y., Ohishi K., Inoue N., Endo Y., Fujita T., Takeda J., Kinoshita T.;
+RT   "Structures and chromosomal localizations of the
+RT   glycosylphosphatidylinositol synthesis gene PIGC and its pseudogene
+RT   PIGCP1";
+RL   Genomics 44:347-349(1997).
+XX
+DR   SWISS-PROT; Q92535; PIGC_HUMAN.
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..2582
+FT                   /chromosome="1"
+FT                   /db_xref="taxon:9606"
+FT                   /sequenced_mol="DNA"
+FT                   /organism="Homo sapiens"
+FT                   /map="1q23-q25"
+FT   exon            808..2266
+FT   CDS             1101..1994
+FT                   /codon_start=1
+FT                   /db_xref="SWISS-PROT:Q92535"
+FT                   /transl_table=1
+FT                   /gene="PIGC"
+FT                   /standard_name="glycosylphosphatidylinositol-synthesis
+
+
+  [Part of this file has been deleted for brevity]
+
+FT   variation       2259
+FT                   /replace="t"
+FT   repeat_region   2331..2356
+FT                   /rpt_unit=gt
+XX
+SQ   Sequence 2582 BP; 694 A; 494 C; 581 G; 813 T; 0 other;
+     ggatccctgc tgcagagggg gtaacggtgt ctggcttgcc aagcaatatt tgttgtggtc        6
+0
+     tatcatggaa gaaataaagt cgggcaatat gaattttttt tttctcaaat ttgccggatg       12
+0
+     gctgtggtgt ttctgactct tagttttctc attgtgaaaa aggaatgatt atcttcttcg       18
+0
+     atcctctcaa gagtttcctt gttttgagta gattgatagc tctttaaagg atgctaagct       24
+0
+     cagctaatgg aagaagagtc tagtttcttt gaggctttga ttttggttaa actatagagc       30
+0
+     tcataccttt ctgtatggtg cagcttacta ttgtctttgg attggtaact taaaaaatac       36
+0
+     aaataacatg cctttgagaa ccaataaaaa ctatggatat tatccctata aatttacaca       42
+0
+     aatccagata taagcatgca atgtgatata cctaagggat atgtgaacca ctgagttaag       48
+0
+     aactgcttta gagggagata caatgtgaga cacaggcttt gggataagac tttggtttga       54
+0
+     atcctggctc tgctctgtta ccttagggca aagttactta agcatcttga atctcagctt       60
+0
+     ttttaccaaa gcaggactaa tactaactta caaggtggtg aggattaagt gaaagaagat       66
+0
+     acataaggca cttagcacat agtaggtact caataagcga tagctaacag atgtctatta       72
+0
+     ttattcaagg aattataatt ttcaaatctg aaatgcagtt ttaatgtccc ataaggtgac       78
+0
+     taccacatac atttttctca gacttttagt aaactgagtt gatttgactt tatctcagta       84
+0
+     ctactcttga cctttcacaa ctttcgtagg ttcacagtct ctctttttct aggaacttgg       90
+0
+     ctgtgttgtc ctgcctcaga gacaaattca tctattgtag gcctagcccc tgcctttgaa       96
+0
+     aacaaggaaa ggttggtaga acatcaacac agcatggaat ttccagggag gtctcatttc      102
+0
+     aaaacttcat aaagaacaag aaccacctgg acttctgtga gggcgatgat taaactggcc      108
+0
+     tgagtttgaa tgaaaggata atgtatgctc aacctgtgac taacaccaag gaggtcaagt      114
+0
+     ggcagaaggt cttgtatgag cgacagccct ttcctgataa ctatgtggac cggcgattcc      120
+0
+     tggaagagct ccggaaaaac atccatgctc ggaaatacca atattgggct gtggtatttg      126
+0
+     agtccagtgt ggtgatccag cagctgtgca gtgtttgtgt ttttgtggtt atctggtggt      132
+0
+     atatggatga gggtcttctg gccccccatt ggcttttagg gactggcctg gcttcttcac      138
+0
+     tgattgggta tgttttgttt gatctcattg atggaggtga agggcggaag aagagtgggc      144
+0
+     agacccggtg ggctgacctg aagagtgccc tagtcttcat tactttcact tatgggtttt      150
+0
+     caccagtgct gaagaccctt acagagtctg tcagcactga caccatctat gccatgtcag      156
+0
+     tcttcatgct gttaggccat ctcatctttt ttgactatgg tgccaatgct gccattgtat      162
+0
+     ccagcacact atccttgaac atggccatct ttgcttctgt atgcttggca tcacgtcttc      168
+0
+     cccggtccct gcatgccttc atcatggtga catttgccat tcagattttt gccctgtggc      174
+0
+     ccatgttgca gaagaaacta aaggcatgta ctccccggag ctatgtgggg gtcacactgc      180
+0
+     tttttgcatt ttcagccgtg ggaggcctac tgtccattag tgctgtggga gccgtactct      186
+0
+     ttgcccttct gctgatgtct atctcatgtc tgtgttcatt ctacctcatt cgcttgcagc      192
+0
+     tttttaaaga aaacattcat gggccttggg atgaagctga aatcaaggaa gacttgtcca      198
+0
+     ggttcctcag ttaaattagg acatccatta cattattaaa gcaagctgat agattagcct      204
+0
+     cctaactagt atagaactta aagacagagt tccattctgg aagcagcatg tcattgtggt      210
+0
+     aagagaatag agatcaaaac caaaaaaaat gaaccaaagg cttgggtggt gagggtgctt      216
+0
+     atcctttctg ttattttgta gatgaaaaaa ctttctgggg acctcttgaa ttacatgctg      222
+0
+     taacatatga agtgatgtgg tttctattaa aaaaataaca catccatcaa gttgtctcat      228
+0
+     gatttttcca taaacaggag gcagacagag gggcatgaag agtgaagtaa gtgtgtgtgt      234
+0
+     gtgtgtgtgt gtgtgtaaag tcacttcttt ctaccctttt caatgtgcta atgctctttt      240
+0
+     atttatctag ggctcaaatc ttagaacaca gggtgctatg ctcagttttg ttgcccaaga      246
+0
+     tcacagaatt ggttacttaa ccttgactca gagtttctac cttgttctta gggaagcata      252
+0
+     tcacaactaa ttgcaaagca gagtgtgatg tgtcacaata agcagaatgc tagggggaat      258
+0
+     tc                                                                     258
+2
+//
    
 Output file format
 
-   A normal, masked, sequence file.
+   maskfeat writes out a normal, masked, sequence file.
    
-   The output from the above example is:
-     _________________________________________________________________
-   
->AB000360 AB000360 Homo sapiens PIGC gene, complete cds.
+  Output files for usage example
+  
+  File: ab000360.fasta
+  
+>AB000360 AB000360.1 Homo sapiens PIGC gene, complete cds.
 ggatccctgctgcagagggggtaacggtgtctggcttgccaagcaatatttgttgtggtc
 tatcatggaagaaataaagtcgggcaatatgaattttttttttctcaaatttgccggatg
 gctgtggtgtttctgactcttagttttctcattgtgaaaaaggaatgattatcttcttcg
@@ -155,7 +321,6 @@ atttatctagggctcaaatcttagaacacagggtgctatgctcagttttgttgcccaaga
 tcacagaattggttacttaaccttgactcagagtttctaccttgttcttagggaagcata
 tcacaactaattgcaaagcagagtgtgatgtgtcacaataagcagaatgctagggggaat
 tc
-     _________________________________________________________________
    
 Data files
 
@@ -209,9 +374,9 @@ See also
    showfeat     Show features of a sequence
    skipseq      Reads and writes (returns) sequences, skipping the first few
    splitter     Split a sequence into (overlapping) smaller sequences
-   swissparse   Retrieves sequences from swissprot using keyword search
    trimest      Trim poly-A tails off EST sequences
    trimseq      Trim ambiguous bits off the ends of sequences
+   twofeat      Finds neighbouring pairs of features in sequences
    union        Reads sequence fragments and builds one sequence
    vectorstrip  Strips out DNA between a pair of vector sequences
    yank         Reads a sequence range, appends the full USA to a list file

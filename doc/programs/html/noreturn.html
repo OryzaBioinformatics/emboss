@@ -77,15 +77,20 @@ not necessary for you to use this utility all of the time.
 </H2>
 
 
-Here is a sample session with noreturn.
+<b>Here is a sample session with noreturn</b>
+<p>
 
-<pre>
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% noreturn
-Input file: abc.dat
-Output file [abc.noreturn]: 
+% <b>noreturn ../../data/abc.dat </b>
+Removes carriage return from ASCII files
+Output file [abc.noreturn]: <b></b>
 
-</pre>
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
+
 
 
 
@@ -170,10 +175,38 @@ IT IS DONE FOR YOU.
 
 The input file is a text data file with unwanted trailing carriage returns.
 
+<p>
+
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+<p><h3>File: ../../data/abc.dat</h3>
+<table width="90%"><tr><td bgcolor="#FFDDFF">
+<pre>
+&gt;ABC Test sequence with PC carriage return format
+ACDEFGHIKLMNPQRSTVWY
+</pre>
+</td></tr></table><p>
+
+
 <H2>
     Output file format
 </H2>
 
+
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: abc.noreturn</h3>
+<table width="90%"><tr><td bgcolor="#DDFFDD">
+<pre>
+&gt;ABC Test sequence with PC carriage return format
+ACDEFGHIKLMNPQRSTVWY
+</pre>
+</td></tr></table><p>
+
+
+<p>
 
 The output file is identical to the input file, except that any trailing
 carriage returns have been removed. For most files this will make
@@ -250,7 +283,6 @@ None.
 <tr><td><a href="seqretsplit.html">seqretsplit</a></td><td>Reads and writes (returns) sequences in individual files</td></tr>
 <tr><td><a href="skipseq.html">skipseq</a></td><td>Reads and writes (returns) sequences, skipping the first few</td></tr>
 <tr><td><a href="splitter.html">splitter</a></td><td>Split a sequence into (overlapping) smaller sequences</td></tr>
-<tr><td><a href="swissparse.html">swissparse</a></td><td>Retrieves sequences from swissprot using keyword search</td></tr>
 <tr><td><a href="trimest.html">trimest</a></td><td>Trim poly-A tails off EST sequences</td></tr>
 <tr><td><a href="trimseq.html">trimseq</a></td><td>Trim ambiguous bits off the ends of sequences</td></tr>
 <tr><td><a href="union.html">union</a></td><td>Reads sequence fragments and builds one sequence</td></tr>

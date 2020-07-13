@@ -16,7 +16,7 @@ Description
    In fact, if does more than just this as it removes ANY non-alphabetic
    character from the input sequence, so as well as removing the
    gap-characters, it will remove such things as the '*' in protein
-   sequenecs that indicates the position of a 'translated' STOP codon.
+   sequences that indicates the position of a 'translated' STOP codon.
    
    There are many different formats for storing sequences in files. Some
    sequence formats allow you to store aligned sequences, including the
@@ -42,10 +42,15 @@ Description
    
 Usage
 
-   Here is a sample session with degapseq:
+   Here is a sample session with degapseq
+   
+   
+% degapseq ../../data/dnagap.fasta nogaps.seq 
+Removes gap characters from sequences
 
-% degapseq alignment.seq nogaps.seq
-
+   Go to the input files for this example
+   Go to the output files for this example
+   
 Command line arguments
 
    Mandatory qualifiers:
@@ -79,28 +84,31 @@ Input file format
    
    The input sequence can be gapped or ungapped.
    
-   An example of a sequence with gaps might be:
+  Input files for usage example
+  
+  File: ../../data/dnagap.fasta
+  
+>FASTA F10002 FASTA FORMAT DNA SEQUENCE
+ACGT....ACGTACGTACGTACGTACGTACGTACGTACGT
+ACGTACGTACGTACGTACGTACGTACGTACGTACGTACGT
+ACGTACGTACGTACGTACGT
    
->dgshsh
-ATGCGCAGGTACGTATG....CTGACGGTACGTGATCGA-GCTGA-CGAGCGTATGC-----
->hsf1
---------TGACTGATGCTGA~~~~CTG-ACGTGACTGATGCTGATCGTGACTGATCGTGAC
->myclone1
-ATGCGCAGGTACGTATGCTGACGGTACGTGATCGA-GCTGA-CGAGCGTATGC-----
-
+   hsf1 --------TGACTGATGCTGA~~~~CTG-ACGTGACTGATGCTGATCGTGACTGATCGTGAC
+   >myclone1 ATGCGCAGGTACGTATGCTGACGGTACGTGATCGA-GCTGA-CGAGCGTATGC-----
+   -->
+   
 Output file format
 
    The output is a sequence with no gaps.
    
-   An example is the ouput of the above input sequence:
+  Output files for usage example
+  
+  File: nogaps.seq
+  
+>FASTA F10002 FASTA FORMAT DNA SEQUENCE
+ACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGT
+ACGTACGTACGTACGTACGTACGTACGTACGTACGT
    
->dgshsh
-ATGCGCAGGTACGTATGCTGACGGTACGTGATCGAGCTGACGAGCGTATGC
->hsf1
-TGACTGATGCTGACTGACGTGACTGATGCTGATCGTGACTGATCGTGAC
->myclone1
-ATGCGCAGGTACGTATGCTGACGGTACGTGATCGAGCTGACGAGCGTATGC
-
 Data files
 
    None.
@@ -152,7 +160,6 @@ See also
    seqretsplit  Reads and writes (returns) sequences in individual files
    skipseq      Reads and writes (returns) sequences, skipping the first few
    splitter     Split a sequence into (overlapping) smaller sequences
-   swissparse   Retrieves sequences from swissprot using keyword search
    trimest      Trim poly-A tails off EST sequences
    trimseq      Trim ambiguous bits off the ends of sequences
    union        Reads sequence fragments and builds one sequence

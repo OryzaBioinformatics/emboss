@@ -32,7 +32,7 @@ domainer
 <H2>
     Function
 </H2>
-Reads protein coordinate files and writes domains coordinate files
+Reads protein coordinate files and writes domain coordinate files
 
 <!--
 DON'T WRITE ANYTHING HERE.
@@ -164,115 +164,18 @@ D7HBIB_
 
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
-   Mandatory qualifiers:
-   -scop               infile     Name of scop classification file (embl
-                                  format input)
-  [-cpdb]              string     Location of protein coordinate files (embl
-                                  format input)
-  [-cpdbextn]          string     Extension of coordinate files (embl format)
-  [-cpdbscop]          string     Location of domain coordinate files (embl
-                                  format output)
-  [-pdbscop]           string     Location of domain coordinate files (pdb
-                                  format output)
-  [-pdbextn]           string     Extension of coordinate files (pdb format)
-   -cpdberrf           outfile    Name of log file for the embl format build
-   -pdberrf            outfile    Name of log file for the pdb format build
 
-   Optional qualifiers: (none)
-   Advanced qualifiers: (none)
-   General qualifiers:
-  -help                boolean    Report command line options. More
-                                  information on associated and general
-                                  qualifiers can be found with -help -verbose
+   EMBOSS An error in ajacd.c at line 1531:
+acdfile '/packages/emboss_dev/gwilliam/emboss/emboss/emboss/acd/domainer.acd' not opened
 
 
 </pre>
 </td></tr></table>
 <P>
-<table border cellspacing=0 cellpadding=3 bgcolor="#f5f5ff">
-<tr bgcolor="#FFFFD0">
-<th align="left" colspan=2>Mandatory qualifiers</th>
-<th align="left">Allowed values</th>
-<th align="left">Default</th>
-</tr>
 
-<tr>
-<td>-scop</td>
-<td>Name of scop classification file (embl format input)</td>
-<td>Input file</td>
-<td>Escop.dat</td>
-</tr>
+   EMBOSS An error in ajacd.c at line 1531:
+acdfile '/packages/emboss_dev/gwilliam/emboss/emboss/emboss/acd/domainer.acd' not opened
 
-<tr>
-<td>[-cpdb]<br>(Parameter 1)</td>
-<td>Location of protein coordinate files (embl format input)</td>
-<td>Any string is accepted</td>
-<td>./</td>
-</tr>
-
-<tr>
-<td>[-cpdbextn]<br>(Parameter 2)</td>
-<td>Extension of coordinate files (embl format)</td>
-<td>Any string is accepted</td>
-<td>.pxyz</td>
-</tr>
-
-<tr>
-<td>[-cpdbscop]<br>(Parameter 3)</td>
-<td>Location of domain coordinate files (embl format output)</td>
-<td>Any string is accepted</td>
-<td>./</td>
-</tr>
-
-<tr>
-<td>[-pdbscop]<br>(Parameter 4)</td>
-<td>Location of domain coordinate files (pdb format output)</td>
-<td>Any string is accepted</td>
-<td>./</td>
-</tr>
-
-<tr>
-<td>[-pdbextn]<br>(Parameter 5)</td>
-<td>Extension of coordinate files (pdb format)</td>
-<td>Any string is accepted</td>
-<td>.ent</td>
-</tr>
-
-<tr>
-<td>-cpdberrf</td>
-<td>Name of log file for the embl format build</td>
-<td>Output file</td>
-<td>domainer_embl.log</td>
-</tr>
-
-<tr>
-<td>-pdberrf</td>
-<td>Name of log file for the pdb format build</td>
-<td>Output file</td>
-<td>domainer_pdb.log</td>
-</tr>
-
-<tr bgcolor="#FFFFD0">
-<th align="left" colspan=2>Optional qualifiers</th>
-<th align="left">Allowed values</th>
-<th align="left">Default</th>
-</tr>
-
-<tr>
-<td colspan=4>(none)</td>
-</tr>
-
-<tr bgcolor="#FFFFD0">
-<th align="left" colspan=2>Advanced qualifiers</th>
-<th align="left">Allowed values</th>
-<th align="left">Default</th>
-</tr>
-
-<tr>
-<td colspan=4>(none)</td>
-</tr>
-
-</table>
 
 
 <!--
@@ -752,7 +655,6 @@ None.
 <tr><td><a href="aaindexextract.html">aaindexextract</a></td><td>Extract data from AAINDEX</td></tr>
 <tr><td><a href="cutgextract.html">cutgextract</a></td><td>Extract data from CUTG</td></tr>
 <tr><td><a href="funky.html">funky</a></td><td>Reads clean coordinate files and writes file of protein-heterogen contact data</td></tr>
-<tr><td><a href="groups.html">groups</a></td><td>Removes redundant hits from a scop families file</td></tr>
 <tr><td><a href="hetparse.html">hetparse</a></td><td>Converts raw dictionary of heterogen groups to a file in embl-like format</td></tr>
 <tr><td><a href="nrscope.html">nrscope</a></td><td>Converts redundant EMBL-format SCOP file to non-redundant one</td></tr>
 <tr><td><a href="pdbparse.html">pdbparse</a></td><td>Parses pdb files and writes cleaned-up protein coordinate files</td></tr>
@@ -764,6 +666,7 @@ None.
 <tr><td><a href="scopnr.html">scopnr</a></td><td>Removes redundant domains from a scop classification file</td></tr>
 <tr><td><a href="scopparse.html">scopparse</a></td><td>Converts raw scop classification files to a file in embl-like format</td></tr>
 <tr><td><a href="scopseqs.html">scopseqs</a></td><td>Adds pdb and swissprot sequence records to a scop classification file</td></tr>
+<tr><td><a href="seqnr.html">seqnr</a></td><td>Reads a scop families file and a scop ambiguities file and writes (i) a non-redundant scop families file and (ii) a scop validation file</td></tr>
 <tr><td><a href="tfextract.html">tfextract</a></td><td>Extract data from TRANSFAC</td></tr>
 </table>
 

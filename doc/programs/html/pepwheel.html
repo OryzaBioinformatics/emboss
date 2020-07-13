@@ -63,19 +63,21 @@ residues around a helix.
 </H2>
 
 
-Here is a sample session with pepwheel.
-
+<b>Here is a sample session with pepwheel</b>
 <p>
 
-<pre>
-% pepwheel sw:hbb_human -send 30
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>pepwheel tsw:hbb_human -send 30 </b>
 Shows protein sequences as helices
-Graph type [x11]: 
-</pre>
+Graph type [x11]: <b>cps</b>
 
+Created pepwheel.ps
+
+</pre></td></tr></table><p>
 <p>
-
-<a href="./pepwheel0.gif">click here for result</a>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
 
 
 
@@ -208,21 +210,21 @@ IT IS DONE FOR YOU.
 <tr>
 <td>-[no]wheel</td>
 <td>Plot the wheel</td>
-<td>Yes/No</td>
+<td>Boolean value Yes/No</td>
 <td>Yes</td>
 </tr>
 
 <tr>
 <td>-amphipathic</td>
 <td>If this is true then the residues ACFGILMVWY are marked as squares and all other residues are unmarked. This overrides any other markup that you may have specified using the qualifiers '-squares', '-diamonds' and '-octags'.</td>
-<td>Yes/No</td>
+<td>Boolean value Yes/No</td>
 <td>No</td>
 </tr>
 
 <tr>
 <td>-data</td>
 <td>Output the match data to a file instead of plotting it</td>
-<td>Yes/No</td>
+<td>Boolean value Yes/No</td>
 <td>No</td>
 </tr>
 
@@ -234,13 +236,141 @@ IT IS DONE FOR YOU.
     Input file format
 </H2>
 
-Any protein sequence USA.
+<b>pepwheel</b> reads any protein sequence USA.
+
+<p>
+
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+
+'tsw:hbb_human' is a sequence entry in the example protein database 'tsw'
+<p>
+<p><h3>Database entry: tsw:hbb_human</h3>
+<table width="90%"><tr><td bgcolor="#FFDDFF">
+<pre>
+ID   HBB_HUMAN      STANDARD;      PRT;   146 AA.
+AC   P02023;
+DT   21-JUL-1986 (Rel. 01, Created)
+DT   21-JUL-1986 (Rel. 01, Last sequence update)
+DT   15-JUL-1999 (Rel. 38, Last annotation update)
+DE   HEMOGLOBIN BETA CHAIN.
+GN   HBB.
+OS   Homo sapiens (Human), Pan troglodytes (Chimpanzee), and
+OS   Pan paniscus (Pygmy chimpanzee) (Bonobo).
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Mammalia;
+OC   Eutheria; Primates; Catarrhini; Hominidae; Homo.
+RN   [1]
+RP   SEQUENCE.
+RC   SPECIES=HUMAN;
+RA   BRAUNITZER G., GEHRING-MULLER R., HILSCHMANN N., HILSE K., HOBOM G.,
+RA   RUDLOFF V., WITTMANN-LIEBOLD B.;
+RT   "The constitution of normal adult human haemoglobin.";
+RL   Hoppe-Seyler's Z. Physiol. Chem. 325:283-286(1961).
+RN   [2]
+RP   SEQUENCE FROM N.A.
+RC   SPECIES=HUMAN;
+RX   MEDLINE; 81064667.
+RA   LAWN R.M., EFSTRATIADIS A., O'CONNELL C., MANIATIS T.;
+RT   "The nucleotide sequence of the human beta-globin gene.";
+RL   Cell 21:647-651(1980).
+RN   [3]
+RP   SEQUENCE OF 121-146 FROM N.A.
+RC   SPECIES=HUMAN;
+RX   MEDLINE; 85205333.
+RA   LANG K.M., SPRITZ R.A.;
+RT   "Cloning specific complete polyadenylylated 3'-terminal cDNA
+RT   segments.";
+RL   Gene 33:191-196(1985).
+RN   [4]
+RP   X-RAY CRYSTALLOGRAPHY (2.5 ANGSTROMS) OF DEOXYHEMOGLOBIN.
+RC   SPECIES=HUMAN;
+RX   MEDLINE; 76027820.
+RA   FERMI G.;
+RT   "Three-dimensional fourier synthesis of human deoxyhaemoglobin at
+RT   2.5-A resolution: refinement of the atomic model.";
+RL   J. Mol. Biol. 97:237-256(1975).
+RN   [5]
+RP   SEQUENCE.
+RC   SPECIES=P.TROGLODYTES;
+RX   MEDLINE; 66071496.
+RA   RIFKIN D.B., KONIGSBERG W.;
+RT   "The characterization of the tryptic peptides from the hemoglobin of
+RT   the chimpanzee (Pan troglodytes).";
+RL   Biochim. Biophys. Acta 104:457-461(1965).
+RN   [6]
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+FT   VARIANT     140    140       A -&gt; T (IN ST JACQUES: O2 AFFINITY UP).
+FT                                /FTId=VAR_003081.
+FT   VARIANT     140    140       A -&gt; V (IN PUTTELANGE; POLYCYTHEMIA;
+FT                                O2 AFFINITY UP).
+FT                                /FTId=VAR_003082.
+FT   VARIANT     141    141       L -&gt; R (IN OLMSTED; UNSTABLE).
+FT                                /FTId=VAR_003083.
+FT   VARIANT     142    142       A -&gt; D (IN OHIO; O2 AFFINITY UP).
+FT                                /FTId=VAR_003084.
+FT   VARIANT     143    143       H -&gt; D (IN RANCHO MIRAGE).
+FT                                /FTId=VAR_003085.
+FT   VARIANT     143    143       H -&gt; Q (IN LITTLE ROCK; O2 AFFINITY UP).
+FT                                /FTId=VAR_003086.
+FT   VARIANT     143    143       H -&gt; P (IN SYRACUSE; O2 AFFINITY UP).
+FT                                /FTId=VAR_003087.
+FT   VARIANT     143    143       H -&gt; R (IN ABRUZZO; O2 AFFINITY UP).
+FT                                /FTId=VAR_003088.
+FT   VARIANT     144    144       K -&gt; E (IN MITO; O2 AFFINITY UP).
+FT                                /FTId=VAR_003089.
+FT   VARIANT     145    145       Y -&gt; C (IN RAINIER; O2 AFFINITY UP).
+FT                                /FTId=VAR_003090.
+FT   VARIANT     145    145       Y -&gt; H (IN BETHESDA; O2 AFFINITY UP).
+FT                                /FTId=VAR_003091.
+FT   VARIANT     146    146       H -&gt; D (IN HIROSHIMA; O2 AFFINITY UP).
+FT                                /FTId=VAR_003092.
+FT   VARIANT     146    146       H -&gt; L (IN COWTOWN; O2 AFFINITY UP).
+FT                                /FTId=VAR_003093.
+FT   VARIANT     146    146       H -&gt; P (IN YORK; O2 AFFINITY UP).
+FT                                /FTId=VAR_003094.
+FT   VARIANT     146    146       H -&gt; Q (IN KODAIRA; O2 AFFINITY UP).
+FT                                /FTId=VAR_003095.
+FT   HELIX         5     15
+FT   TURN         16     17
+FT   HELIX        20     34
+FT   HELIX        36     41
+FT   HELIX        43     45
+FT   HELIX        51     55
+FT   TURN         56     56
+FT   HELIX        58     75
+FT   TURN         76     77
+FT   HELIX        78     94
+FT   TURN         95     96
+FT   TURN        100    100
+FT   HELIX       101    121
+FT   HELIX       124    142
+FT   TURN        143    144
+SQ   SEQUENCE   146 AA;  15867 MW;  EC9744C9 CRC32;
+     VHLTPEEKSA VTALWGKVNV DEVGGEALGR LLVVYPWTQR FFESFGDLST PDAVMGNPKV
+     KAHGKKVLGA FSDGLAHLDN LKGTFATLSE LHCDKLHVDP ENFRLLGNVL VCVLAHHFGK
+     EFTPPVQAAY QKVVAGVANA LAHKYH
+//
+</pre>
+</td></tr></table><p>
+
 
 <H2>
     Output file format
 </H2>
 
-An image is output.
+An image is output to the specified graphics device.
+
+<p>
+
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>Graphics File: pepwheel.ps</h3>
+<p><img src="pepwheel.1.pepwheel.gif" alt="[pepwheel results]">
 
 
 <H2>
@@ -346,6 +476,7 @@ None.
 <tr><td><a href="showdb.html">showdb</a></td><td>Displays information on the currently available databases</td></tr>
 <tr><td><a href="showfeat.html">showfeat</a></td><td>Show features of a sequence</td></tr>
 <tr><td><a href="showseq.html">showseq</a></td><td>Display a sequence with features, translation etc</td></tr>
+<tr><td><a href="sixpack.html">sixpack</a></td><td>Display a DNA sequence with 6-frame translation and ORFs</td></tr>
 <tr><td><a href="textsearch.html">textsearch</a></td><td>Search sequence documentation text. SRS and Entrez are faster!</td></tr>
 <tr><td><a href="tmap.html">tmap</a></td><td>Displays membrane spanning regions</td></tr>
 </table>

@@ -10,18 +10,24 @@ Function
 Description
 
    Takes a file of enzymatic data and plots Michaelis Menten and Hanes
-   Woolf plots of the data. From these ot calculates the Michaelis Menten
+   Woolf plots of the data. From these it calculates the Michaelis Menten
    constant (Km) and the maximum velocity (Vmax) of the reaction.
    
 Usage
 
-   Here is a sample session with findkm.
+   Here is a sample session with findkm
+   
 
-%findkm
-Calculates Km and Vmax for an enzyme reaction.
-Enter name of file containing data: enztest.dat
-Display on device [xwin]:
+% findkm -graph cps 
+Find Km and Vmax for an enzyme reaction by a Hanes/Woolf plot
+Enter name of file containing data: ../../data/enztest.dat
+Output file [enztest.findkm]: 
 
+Created findkm.ps
+   
+   Go to the input files for this example
+   Go to the output files for this example
+   
 Command line arguments
 
    Mandatory qualifiers:
@@ -51,15 +57,17 @@ Command line arguments
    Optional qualifiers Allowed values Default
    (none)
    Advanced qualifiers Allowed values Default
-   -[no]plot S/V vs S Yes/No Yes
+   -[no]plot S/V vs S Boolean value Yes/No Yes
    
 Input file format
 
    The input file is a file of enzymatic data, [S] against V, Substrate
    concentration against reaction velocity.
    
-   The data for the example run are shown below:
-
+  Input files for usage example
+  
+  File: ../../data/enztest.dat
+  
   0.10   2
   0.20   4
   0.50   9
@@ -70,13 +78,13 @@ Input file format
  20.00  80
  50.00  91
 100.00  95
-
-
+   
 Output file format
 
-   Here is a sample output from the example above, together with the
-   plots:
-
+  Output files for usage example
+  
+  File: enztest.findkm
+  
 ---Hanes Woolf Plot Calculations---
 Slope of best fit line is a = 0.01
 Coefficient in Eqn of line y = ma +b is b = 0.05
@@ -85,15 +93,19 @@ Where line cuts y axis = (0, 0.05)
 Limit-point of graph for plot = (103.00, 1.08)
 
 Vmax = 99.70, Km = 4.894612
-
-   Click here for the graphical output
+   
+  Graphics File: findkm.ps
+  
+   [findkm results]
    
 Data files
 
-   See Input File Format
+   None.
    
 Notes
 
+   None.
+   
 References
 
     1. Voet & Voet (1993) 'Biochemistry'
@@ -107,12 +119,20 @@ References
        
 Warnings
 
+   None.
+   
 Diagnostic Error Messages
 
+   None.
+   
 Exit status
 
+   It exits with a status of 0.
+   
 Known bugs
 
+   None.
+   
 See also
 
    Program name Description

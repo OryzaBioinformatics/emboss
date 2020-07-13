@@ -158,17 +158,21 @@ The pattern 'AAAA' will not match the sequence 'aaaa'.
 </H2>
 
 
-Here is a sample session with preg.
-
+<b>Here is a sample session with preg</b>
 <p>
 
-<pre>
-% preg
-regular expression search of a protein sequence
-Input sequence(s): sw:*_rat
-Output file [100k_rat.preg]: stdout
-Regular expression pattern: IA[QWF]A
-</pre>
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>preg </b>
+Regular expression search of a protein sequence
+Input sequence(s): <b>tsw:*_rat</b>
+Regular expression pattern: <b>IA[QWF]A</b>
+Output file [100k_rat.preg]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
 
 
 
@@ -259,84 +263,37 @@ IT IS DONE FOR YOU.
 </H2>
 
 
-Any protein sequence.
+<b>preg</b> reads any protein sequence USA.
+
+<p>
+
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+
+'tsw:*_rat' is a sequence entry in the example protein database 'tsw'
+<p>
+
+
 
 <H2>
     Output file format
 </H2>
 
 
-Here is the output from the example run:
 
-<hr>
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: 100k_rat.preg</h3>
+<table width="90%"><tr><td bgcolor="#DDFFDD">
 <pre>
-preg search of sw:*_rat with pattern IA[QWF]A
+preg search of tsw:*_rat with pattern IA[QWF]A
 Matches in 100K_RAT
        100K_RAT   390 IAQA
-Matches in 5H6_RAT
-        5H6_RAT   289 IAQA
-Matches in ACDS_RAT
-       ACDS_RAT   282 IAQA
-Matches in ANX2_RAT
-       ANX2_RAT    70 IAFA
-Matches in APB3_RAT
-       APB3_RAT   336 IAQA
-Matches in AQP9_RAT
-       AQP9_RAT    44 IAQA
-Matches in ATHA_RAT
-       ATHA_RAT   122 IAFA
-Matches in CD14_RAT
-       CD14_RAT   178 IAQA
-Matches in CIKE_RAT
-       CIKE_RAT   231 IAFA
-Matches in CLCB_RAT
-       CLCB_RAT    90 IAQA
-Matches in CTR1_RAT
-       CTR1_RAT   590 IAFA
-Matches in CYGF_RAT
-       CYGF_RAT   359 IAQA
-Matches in DPY2_RAT
-       DPY2_RAT   264 IAQA
-Matches in ENOB_RAT
-       ENOB_RAT   327 IAQA
-Matches in ERBP_RAT
-       ERBP_RAT    40 IAFA
-Matches in GLPK_RAT
-       GLPK_RAT   392 IAFA
-Matches in GPV_RAT
-        GPV_RAT   529 IAQA
-Matches in IRKB_RAT
-       IRKB_RAT    93 IAFA
-Matches in KGP2_RAT
-       KGP2_RAT   477 IAFA
-Matches in NPX1_RAT
-       NPX1_RAT   407 IAWA
-Matches in NTDO_RAT
-       NTDO_RAT   160 IAWA
-Matches in NTSE_RAT
-       NTSE_RAT   180 IAWA
-Matches in PAX8_RAT
-       PAX8_RAT   188 IAQA
-Matches in SRA4_RAT
-       SRA4_RAT   491 IAWA
-Matches in SYNP_RAT
-       SYNP_RAT    43 IAFA
-Matches in TGN3_RAT
-       TGN3_RAT   330 IAFA
-Matches in TGR3_RAT
-       TGR3_RAT   792 IAFA
-Matches in UDB2_RAT
-       UDB2_RAT   325 IAWA
-Matches in UDB3_RAT
-       UDB3_RAT   325 IAWA
-Matches in UDB6_RAT
-       UDB6_RAT   325 IAWA
-Matches in UDBC_RAT
-       UDBC_RAT   325 IAWA
-Matches in VMT2_RAT
-       VMT2_RAT   462 IAFA
 </pre>
-<hr>
+</td></tr></table><p>
+
+
 
 <H2>
     Data files
@@ -400,6 +357,7 @@ None.
 <tr><td><a href="patmatdb.html">patmatdb</a></td><td>Search a protein sequence with a motif</td></tr>
 <tr><td><a href="patmatmotifs.html">patmatmotifs</a></td><td>Search a PROSITE motif database with a protein sequence</td></tr>
 <tr><td><a href="pepcoil.html">pepcoil</a></td><td>Predicts coiled coil regions</td></tr>
+<tr><td><a href="pestfind.html">pestfind</a></td><td>Finds PEST motifs as potential proteolytic cleavage sites</td></tr>
 <tr><td><a href="pscan.html">pscan</a></td><td>Scans proteins using PRINTS</td></tr>
 <tr><td><a href="sigcleave.html">sigcleave</a></td><td>Reports protein signal cleavage sites</td></tr>
 </table>

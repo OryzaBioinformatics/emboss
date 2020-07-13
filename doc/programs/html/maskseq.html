@@ -68,35 +68,51 @@ You may find other uses for it.
 </H2>
 
 
-To mask off bases 10 to 12 from a sequence 'gatta.seq' and write
-to the new sequence file 'gatta2.seq':
-
+<b>Here is a sample session with maskseq</b>
+<p>
+Mask off bases 10 to 12 from a sequence 'prot.fasta' and write to the new sequence file 'prot2.seq': 
 <p>
 
-<pre>
-% maskseq gatta.seq gatta2.seq -reg=10-12
-</pre>
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
+% <b>maskseq ../../data/prot.fasta prot2.seq -reg=10-12 </b>
+Mask off regions of a sequence.
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 2</b>
+<p>
+Mask off bases 20 to 30 from a sequence 'prot.fasta' using the character 'x' and write to the new sequence file 'prot2.seq':  
 <p>
 
-To mask off bases 20 to 30 from a sequence 'hdh.seq' using the
-character 'n' and write to the new sequence file 'hdh2.seq':
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
+% <b>maskseq ../../data/prot.fasta prot2.seq -reg=20-30 -mask=x </b>
+Mask off regions of a sequence.
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.2">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 3</b>
+<p>
+Mask off the regions 20 to 23, 34 to 45 and 88 to 90 in 'prot.fasta': 
 <p>
 
-<pre>
-% maskseq hdh.seq hdh2.seq -reg=20-30 -mask=n
-</pre>
-
 <p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-To mask off the regions 20 to 23, 34 to 45 and 88 to 90 in 'yuy.seq':
+% <b>maskseq ../../data/prot.fasta prot2.seq -reg=20-23,34-45,88-90 </b>
+Mask off regions of a sequence.
 
+</pre></td></tr></table><p>
 <p>
+<a href="#output.3">Go to the output files for this example</a><p><p>
 
-<pre>
-% maskseq yuy.seq yuy2.seq -reg=20-23,34-45,88-90
-</pre>
 
 
 <H2>
@@ -210,7 +226,25 @@ Default is 'X' for protein sequences, 'N' for nucleic sequences.</td>
 </H2>
 
 
-This program reads in a single sequence file.
+<b>maskseq</b> reads in a single sequence USA.
+
+<p>
+
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+<p><h3>File: ../../data/prot.fasta</h3>
+<table width="90%"><tr><td bgcolor="#FFDDFF">
+<pre>
+&gt;FASTA F00001 FASTA FORMAT PROTEIN SEQUENCE
+ACDEFGHIKLMNPQRSTVWY
+ACDEFGHIKLMNPQRSTVWY
+ACDEFGHIKLMNPQRSTVWY
+ACDEFGHIKLMNPQRSTVWY
+ACDEFGHIKLMNPQRSTVWY
+</pre>
+</td></tr></table><p>
+
 
 <p>
 
@@ -253,7 +287,44 @@ An example range file is:
 </H2>
 
 
-Single sequence file.
+<b>maskseq</b> writes s single masked sequence file.
+
+<p>
+
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: prot2.seq</h3>
+<table width="90%"><tr><td bgcolor="#DDFFDD">
+<pre>
+&gt;FASTA F00001 FASTA FORMAT PROTEIN SEQUENCE
+ACDEFGHIKXXXPQRSTVWYACDEFGHIKLMNPQRSTVWYACDEFGHIKLMNPQRSTVWY
+ACDEFGHIKLMNPQRSTVWYACDEFGHIKLMNPQRSTVWY
+</pre>
+</td></tr></table><p>
+
+<a name="output.2"></a>
+<h3>Output files for usage example 2</h3>
+<p><h3>File: prot2.seq</h3>
+<table width="90%"><tr><td bgcolor="#DDFFDD">
+<pre>
+&gt;FASTA F00001 FASTA FORMAT PROTEIN SEQUENCE
+ACDEFGHIKLMNPQRSTVWxxxxxxxxxxxMNPQRSTVWYACDEFGHIKLMNPQRSTVWY
+ACDEFGHIKLMNPQRSTVWYACDEFGHIKLMNPQRSTVWY
+</pre>
+</td></tr></table><p>
+
+<a name="output.3"></a>
+<h3>Output files for usage example 3</h3>
+<p><h3>File: prot2.seq</h3>
+<table width="90%"><tr><td bgcolor="#DDFFDD">
+<pre>
+&gt;FASTA F00001 FASTA FORMAT PROTEIN SEQUENCE
+ACDEFGHIKLMNPQRSTVWXXXXEFGHIKLMNPXXXXXXXXXXXXGHIKLMNPQRSTVWY
+ACDEFGHIKLMNPQRSTVWYACDEFGHXXXMNPQRSTVWY
+</pre>
+</td></tr></table><p>
+
 
 <H2>
     Data files
@@ -337,7 +408,6 @@ None.
 <tr><td><a href="seqretsplit.html">seqretsplit</a></td><td>Reads and writes (returns) sequences in individual files</td></tr>
 <tr><td><a href="skipseq.html">skipseq</a></td><td>Reads and writes (returns) sequences, skipping the first few</td></tr>
 <tr><td><a href="splitter.html">splitter</a></td><td>Split a sequence into (overlapping) smaller sequences</td></tr>
-<tr><td><a href="swissparse.html">swissparse</a></td><td>Retrieves sequences from swissprot using keyword search</td></tr>
 <tr><td><a href="trimest.html">trimest</a></td><td>Trim poly-A tails off EST sequences</td></tr>
 <tr><td><a href="trimseq.html">trimseq</a></td><td>Trim ambiguous bits off the ends of sequences</td></tr>
 <tr><td><a href="union.html">union</a></td><td>Reads sequence fragments and builds one sequence</td></tr>

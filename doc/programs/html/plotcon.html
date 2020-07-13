@@ -65,11 +65,39 @@ one position is taken to be the average of all the possible pairwise
 scores of the bases or residues at that position.  The pairwise scores
 are taken from the specified similarity matrix.  The average of the
 position similarities within the window is plotted. 
+
 <p>
 
 The program is useful for determining where the quality of alignments
 is good or bad. 
 
+<p>
+
+
+The average similarity is calculated by:
+
+<p>
+
+<pre>
+Av. Sim. =       sum( Mij*wi + Mji*w2  )
+                      -------------------
+                  (Nseq*Wsize)*((Nseq-1)*Wsize)
+</pre>
+
+<p>
+
+
+sum - over column*window size
+<br>
+w - sequence weighting
+<br>
+M - matrix comparison table
+<br>
+i,j - with respect to residue i or j
+<br>
+Nseq - number of sequences in the alignment
+<br>
+Wsize - window size
 
 
 <H2>
@@ -82,16 +110,21 @@ is good or bad.
  -->
 
 
-Here is a sample session with <b>plotcon</b>:
+<b>Here is a sample session with plotcon</b>
+<p>
 
-<pre>
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% plotcon -sformat msf alignment.msf
+% <b>plotcon -sformat msf ../../data/globins.msf -graph cps </b>
+Plots the quality of conservation of a sequence alignment
+Window size [4]: <b></b>
 
-</pre>
+Created plotcon.ps
 
-
-
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
 
 
 
@@ -187,7 +220,7 @@ Here is a sample session with <b>plotcon</b>:
 <tr>
 <td>-data</td>
 <td>Output the match data to a file instead of plotting it</td>
-<td>Yes/No</td>
+<td>Boolean value Yes/No</td>
 <td>No</td>
 </tr>
 
@@ -218,7 +251,68 @@ IT IS DONE FOR YOU.
    -->
 
 
-A set of gapped, aligned sequences.
+<b>plotcon</b> reads a set of gapped, aligned sequences.
+
+<p>
+
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+<p><h3>File: ../../data/globins.msf</h3>
+<table width="90%"><tr><td bgcolor="#FFDDFF">
+<pre>
+!!AA_MULTIPLE_ALIGNMENT 1.0
+
+  ../data/globins.msf MSF:  164 Type: P 25/06/01 CompCheck: 4278 ..
+
+  Name: HBB_HUMAN Len: 164  Check: 6914 Weight: 0.14
+  Name: HBB_HORSE Len: 164  Check: 6007 Weight: 0.15
+  Name: HBA_HUMAN Len: 164  Check: 3921 Weight: 0.15
+  Name: HBA_HORSE Len: 164  Check: 4770 Weight: 0.19
+  Name: MYG_PHYCA Len: 164  Check: 7930 Weight: 0.23
+  Name: GLB5_PETMA Len: 164  Check: 1857 Weight: 0.21
+  Name: LGB2_LUPLU Len: 164  Check: 2879 Weight: 0.10
+
+//
+
+           1                                               50
+HBB_HUMAN  ~~~~~~~~VHLTPEEKSAVTALWGKVN.VDEVGGEALGR.LLVVYPWTQR
+HBB_HORSE  ~~~~~~~~VQLSGEEKAAVLALWDKVN.EEEVGGEALGR.LLVVYPWTQR
+HBA_HUMAN  ~~~~~~~~~~~~~~VLSPADKTNVKAA.WGKVGAHAGEYGAEALERMFLS
+HBA_HORSE  ~~~~~~~~~~~~~~VLSAADKTNVKAA.WSKVGGHAGEYGAEALERMFLG
+MYG_PHYCA  ~~~~~~~VLSEGEWQLVLHVWAKVEAD.VAGHGQDILIR.LFKSHPETLE
+GLB5_PETMA PIVDTGSVAPLSAAEKTKIRSAWAPVYSTYETSGVDILVKFFTSTPAAQE
+LGB2_LUPLU ~~~~~~~~GALTESQAALVKSSWEEFNANIPKHTHRFFILVLEIAPAAKD
+
+           51                                             100
+HBB_HUMAN  FFESFGDLSTPDAVMGNPKVKAHGKKVLGAFSDGLAHLDNLKGTFATLSE
+HBB_HORSE  FFDSFGDLSNPGAVMGNPKVKAHGKKVLHSFGEGVHHLDNLKGTFAALSE
+HBA_HUMAN  FPTTKTYFPHFDLSHGSAQVKGHGKKVADALTNAVAHVDDMPNALSALSD
+HBA_HORSE  FPTTKTYFPHFDLSHGSAQVKAHGKKVGDALTLAVGHLDDLPGALSNLSD
+MYG_PHYCA  KFDRFKHLKTEAEMKASEDLKKHGVTVLTALGAILKKKGHHEAELKPLAQ
+GLB5_PETMA FFPKFKGLTTADQLKKSADVRWHAERIINAVNDAVASMDDTEKMSMKLRD
+LGB2_LUPLU LFSFLKGTSEVPQNNPELQAHAGKVFKLVYEAAIQLQVTGVVVTDATLKN
+
+           101                                            150
+HBB_HUMAN  LHCDKLH..VDPENFRLLGNVLVCVLAHHFGKEFTPPVQAAYQKVVAGVA
+HBB_HORSE  LHCDKLH..VDPENFRLLGNVLVVVLARHFGKDFTPELQASYQKVVAGVA
+HBA_HUMAN  LHAHKLR..VDPVNFKLLSHCLLVTLAAHLPAEFTPAVHASLDKFLASVS
+HBA_HORSE  LHAHKLR..VDPVNFKLLSHCLLSTLAVHLPNDFTPAVHASLDKFLSSVS
+MYG_PHYCA  SHATKHK..IPIKYLEFISEAIIHVLHSRHPGDFGADAQGAMNKALELFR
+GLB5_PETMA LSGKHAK..SFQVDPQYFKVLAAVIADTVAAGDAGFEKLMSMICILLRSA
+LGB2_LUPLU LGSVHVSKGVADAHFPVVKEAILKTIKEVVGAKWSEELNSAWTIAYDELA
+
+           151        164
+HBB_HUMAN  NALAHKYH~~~~~~
+HBB_HORSE  NALAHKYH~~~~~~
+HBA_HUMAN  TVLTSKYR~~~~~~
+HBA_HORSE  TVLTSKYR~~~~~~
+MYG_PHYCA  KDIAAKYKELGYQG
+GLB5_PETMA Y~~~~~~~~~~~~~
+LGB2_LUPLU IVIKKEMNDAA~~~
+
+</pre>
+</td></tr></table><p>
 
 
 
@@ -238,16 +332,16 @@ A set of gapped, aligned sequences.
    -->
 
 
-A graph of the quality of the alignment is plotted.
+A graph of the quality of the alignment is dispalyed on the specifed
+graphics device. 
+
+<p>
 
 
-
-
-
-
-
-
-
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>Graphics File: plotcon.ps</h3>
+<p><img src="plotcon.1.plotcon.gif" alt="[plotcon results]">
 
 
 

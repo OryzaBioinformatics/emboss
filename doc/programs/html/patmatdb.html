@@ -59,17 +59,21 @@ writes out an alignment.
 </H2>
 
 
-Here is a sample session with patmatdb.
-
+<b>Here is a sample session with patmatdb</b>
 <p>
 
-<pre>
-% patmatdb
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>patmatdb </b>
 Search a protein sequence with a motif
-Input sequence(s): sw:*
-Protein motif to search for: st[ty]s
-Output file [5h1d_fugru.patmatdb]:
-</pre>
+Input sequence(s): <b>tsw:*</b>
+Protein motif to search for: <b>st[ty]s</b>
+Output report [100k_rat.patmatdb]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
 
 
 
@@ -136,7 +140,7 @@ IT IS DONE FOR YOU.
 <tr>
 <td>[-outfile]<br>(Parameter 3)</td>
 <td>Output report file name</td>
-<td>Report file</td>
+<td>Report output file</td>
 <td>&nbsp;</td>
 </tr>
 
@@ -168,9 +172,21 @@ IT IS DONE FOR YOU.
     Input file format
 </H2>
 
-It reads in one or more protein sequences.
+<b>patmatdb</b> reads in one or more protein sequence USAs.
 
 <p>
+
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+
+'tsw:*' is a sequence entry in the example protein database 'tsw'
+<p>
+
+
+<p>
+
+<h3>Pattern specification</h3>
 
 Patterns for patmatdb are based on the format of pattern used in the
 PROSITE database, with the difference that the terminating dot '.' and
@@ -264,51 +280,22 @@ By default <b>patmatdb</b> writes a 'dbmotif' report file.
 
 <p>
 
-The output from the above example follows:
 
-<p>
-
-<hr>
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: 100k_rat.patmatdb</h3>
+<table width="90%"><tr><td bgcolor="#DDFFDD">
 <pre>
 ########################################
 # Program: patmatdb
-# Rundate: Thu Apr 11 13:56:31 2002
-# Report_file: 5h1d_fugru.patmatdb
+# Rundate: Thu Nov 07 14:35:27 2002
+# Report_format: dbmotif
+# Report_file: 100k_rat.patmatdb
 ########################################
 
 #=======================================
 #
-# Sequence: 2AAA_YEAST     from: 1   to: 635
-# HitCount: 2
-#
-# Motif: ST[TY]S
-#
-#=======================================
-
-Length = 4
-Start = position 19 of sequence
-End = position 22 of sequence
-
-
-SAATTSTTSTTSNS
-     |  | 
-    19  22
-
-Length = 4
-Start = position 22 of sequence
-End = position 25 of sequence
-
-
-TTSTTSTTSNSKDS
-     |  |
-    22  25
-
-
-#---------------------------------------
-#---------------------------------------
-#=======================================
-#
-# Sequence: 41_XENLA     from: 1   to: 801
+# Sequence: HD_FUGRU     from: 1   to: 3148
 # HitCount: 1
 #
 # Motif: ST[TY]S
@@ -316,17 +303,63 @@ TTSTTSTTSNSKDS
 #=======================================
 
 Length = 4
-Start = position 52 of sequence
-End = position 55 of sequence
+Start = position 1038 of sequence
+End = position 1041 of sequence
 
 
-SQESPSTTSPSTRK
+STPASSTTSSAVDP
      |  |
-    52  55
+  1038  1041
 
-etc.
+
+#---------------------------------------
+#---------------------------------------
+#=======================================
+#
+# Sequence: GCN4_YEAST     from: 1   to: 281
+# HitCount: 1
+#
+# Motif: ST[TY]S
+#
+#=======================================
+
+Length = 4
+Start = position 158 of sequence
+End = position 161 of sequence
+
+
+SNLEVSTTSFLPTP
+     |  |
+   158  161
+
+
+#---------------------------------------
+#---------------------------------------
+#=======================================
+#
+# Sequence: PAXI_HUMAN     from: 1   to: 557
+# HitCount: 1
+#
+# Motif: ST[TY]S
+#
+#=======================================
+
+Length = 4
+Start = position 13 of sequence
+End = position 16 of sequence
+
+
+LADLESTTSHISKR
+     |  |
+    13  16
+
+
+#---------------------------------------
+#---------------------------------------
 </pre>
-<hr>
+</td></tr></table><p>
+
+
 
 <H2>
     Data files
@@ -403,6 +436,7 @@ None.
 <tr><td><a href="oddcomp.html">oddcomp</a></td><td>Finds protein sequence regions with a biased composition</td></tr>
 <tr><td><a href="patmatmotifs.html">patmatmotifs</a></td><td>Search a PROSITE motif database with a protein sequence</td></tr>
 <tr><td><a href="pepcoil.html">pepcoil</a></td><td>Predicts coiled coil regions</td></tr>
+<tr><td><a href="pestfind.html">pestfind</a></td><td>Finds PEST motifs as potential proteolytic cleavage sites</td></tr>
 <tr><td><a href="preg.html">preg</a></td><td>Regular expression search of a protein sequence</td></tr>
 <tr><td><a href="pscan.html">pscan</a></td><td>Scans proteins using PRINTS</td></tr>
 <tr><td><a href="sigcleave.html">sigcleave</a></td><td>Reports protein signal cleavage sites</td></tr>

@@ -27,12 +27,70 @@ Description
    
 Usage
 
-   Extract the region from position 10 to 20.
-% extractseq main.seq result.seq -regions '10-20'
+   Here is a sample session with extractseq
+   
+   Extract the region from position 10 to 20:
+   
+   
+% extractseq tembl:hsfau result.seq -regions '10-20' 
+Extract regions from a sequence
 
-   Extract the regions 10 to 20, 30 to 45, 533 to 537
-% extractseq main.seq result2.seq -regions '10-20, 30-45, 533-537'
+   Go to the input files for this example
+   Go to the output files for this example
+   
+   Example 2
+   
+   Extract the regions 10 to 20, 30 to 45, 533 to 537:
+   
+   
+% extractseq tembl:hsfau1 result2.seq -regions '10-20 30-45 533-537' 
+Extract regions from a sequence
 
+   Go to the input files for this example
+   Go to the output files for this example
+   
+   Example 3
+   
+   Extract the regions 782-856, 951-1095, 1557-1612 and 1787-1912:
+   
+
+% extractseq tembl:hsfau1 -reg "782..856,951..1095,1557..1612,1787..1912" stdou
+t 
+Extract regions from a sequence
+
+>HSFAU1 X65921.1 H.sapiens fau 1 gene
+atgcagctctttgtccgcgcccaggagctacacaccttcgaggtgaccggccaggaaacg
+gtcgcccagatcaaggctcatgtagcctcactggagggcattgccccggaagatcaagtc
+gtgctcctggcaggcgcgcccctggaggatgaggccactctgggccagtgcggggtggag
+gccctgactaccctggaagtagcaggccgcatgcttggaggtaaagtccatggttccctg
+gcccgtgctggaaaagtgagaggtcagactcctaaggtggccaaacaggagaagaagaag
+aagaagacaggtcgggctaagcggcggatgcagtacaaccggcgctttgtcaacgttgtg
+cccacctttggcaagaagaagggccccaatgccaactcttaa
+   
+   Example 4
+   
+   Extract the regions 782-856, 951-1095, 1557-1612 and 1787-1912 all to
+   separate output sequences:
+   
+
+% extractseq tembl:hsfau1 -reg "782..856,951..1095,1557..1612,1787..1912" stdou
+t -separate 
+Extract regions from a sequence
+
+>HSFAU1_782_856 H.sapiens fau 1 gene
+atgcagctctttgtccgcgcccaggagctacacaccttcgaggtgaccggccaggaaacg
+gtcgcccagatcaag
+>HSFAU1_951_1095 H.sapiens fau 1 gene
+gctcatgtagcctcactggagggcattgccccggaagatcaagtcgtgctcctggcaggc
+gcgcccctggaggatgaggccactctgggccagtgcggggtggaggccctgactaccctg
+gaagtagcaggccgcatgcttggag
+>HSFAU1_1557_1612 H.sapiens fau 1 gene
+gtaaagtccatggttccctggcccgtgctggaaaagtgagaggtcagactcctaag
+>HSFAU1_1787_1912 H.sapiens fau 1 gene
+gtggccaaacaggagaagaagaagaagaagacaggtcgggctaagcggcggatgcagtac
+aaccggcgctttgtcaacgttgtgcccacctttggcaagaagaagggccccaatgccaac
+tcttaa
+   
 Command line arguments
 
    Mandatory qualifiers:
@@ -82,13 +140,252 @@ Command line arguments
    out as a separate sequence. The name of the sequence is created from
    the name of the original sequence with the start and end positions of
    the range appended with underscore characters between them, eg: XYZ
-   region 2 to 34 is written as: XYZ_2_34 Yes/No No
+   region 2 to 34 is written as: XYZ_2_34 Boolean value Yes/No No
    Advanced qualifiers Allowed values Default
    (none)
    
 Input file format
 
-   Normal sequence.
+   extractseq reads a normal sequence USA.
+   
+  Input files for usage example
+  
+   'tembl:hsfau' is a sequence entry in the example nucleic acid database
+   'tembl'
+   
+  Database entry: tembl:hsfau
+  
+ID   HSFAU      standard; RNA; HUM; 518 BP.
+XX
+AC   X65923;
+XX
+SV   X65923.1
+XX
+DT   13-MAY-1992 (Rel. 31, Created)
+DT   23-SEP-1993 (Rel. 37, Last updated, Version 10)
+XX
+DE   H.sapiens fau mRNA
+XX
+KW   fau gene.
+XX
+OS   Homo sapiens (human)
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia
+;
+OC   Eutheria; Primates; Catarrhini; Hominidae; Homo.
+XX
+RN   [1]
+RP   1-518
+RA   Michiels L.M.R.;
+RT   ;
+RL   Submitted (29-APR-1992) to the EMBL/GenBank/DDBJ databases.
+RL   L.M.R. Michiels, University of Antwerp, Dept of Biochemistry,
+RL   Universiteisplein 1, 2610 Wilrijk, BELGIUM
+XX
+RN   [2]
+RP   1-518
+RX   MEDLINE; 93368957.
+RA   Michiels L., Van der Rauwelaert E., Van Hasselt F., Kas K., Merregaert J.;
+RT   " fau cDNA encodes a ubiquitin-like-S30 fusion protein and is expressed as
+RT   an antisense sequences in the Finkel-Biskis-Reilly murine sarcoma virus";
+RL   Oncogene 8:2537-2546(1993).
+XX
+DR   SWISS-PROT; P35544; UBIM_HUMAN.
+DR   SWISS-PROT; Q05472; RS30_HUMAN.
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..518
+FT                   /chromosome="11q"
+FT                   /db_xref="taxon:9606"
+FT                   /organism="Homo sapiens"
+FT                   /tissue_type="placenta"
+FT                   /clone_lib="cDNA"
+FT                   /clone="pUIA 631"
+FT                   /map="13"
+FT   misc_feature    57..278
+FT                   /note="ubiquitin like part"
+FT   CDS             57..458
+FT                   /db_xref="SWISS-PROT:P35544"
+FT                   /db_xref="SWISS-PROT:Q05472"
+FT                   /gene="fau"
+FT                   /protein_id="CAA46716.1"
+FT                   /translation="MQLFVRAQELHTFEVTGQETVAQIKAHVASLEGIAPEDQVVLLA
+G
+FT                   APLEDEATLGQCGVEALTTLEVAGRMLGGKVHGSLARAGKVRGQTPKVAKQEKKKKKT
+G
+FT                   RAKRRMQYNRRFVNVVPTFGKKKGPNANS"
+FT   misc_feature    98..102
+FT                   /note="nucleolar localization signal"
+FT   misc_feature    279..458
+FT                   /note="S30 part"
+FT   polyA_signal    484..489
+FT   polyA_site      509
+XX
+SQ   Sequence 518 BP; 125 A; 139 C; 148 G; 106 T; 0 other;
+     ttcctctttc tcgactccat cttcgcggta gctgggaccg ccgttcagtc gccaatatgc        6
+0
+     agctctttgt ccgcgcccag gagctacaca ccttcgaggt gaccggccag gaaacggtcg       12
+0
+     cccagatcaa ggctcatgta gcctcactgg agggcattgc cccggaagat caagtcgtgc       18
+0
+     tcctggcagg cgcgcccctg gaggatgagg ccactctggg ccagtgcggg gtggaggccc       24
+0
+     tgactaccct ggaagtagca ggccgcatgc ttggaggtaa agttcatggt tccctggccc       30
+0
+     gtgctggaaa agtgagaggt cagactccta aggtggccaa acaggagaag aagaagaaga       36
+0
+     agacaggtcg ggctaagcgg cggatgcagt acaaccggcg ctttgtcaac gttgtgccca       42
+0
+     cctttggcaa gaagaagggc cccaatgcca actcttaagt cttttgtaat tctggctttc       48
+0
+     tctaataaaa aagccactta gttcagtcaa aaaaaaaa                               51
+8
+//
+   
+  Input files for usage example 2
+  
+  Database entry: tembl:hsfau1
+  
+ID   HSFAU1     standard; DNA; HUM; 2016 BP.
+XX
+AC   X65921; S45242;
+XX
+SV   X65921.1
+XX
+DT   13-MAY-1992 (Rel. 31, Created)
+DT   21-JUL-1993 (Rel. 36, Last updated, Version 5)
+XX
+DE   H.sapiens fau 1 gene
+XX
+KW   fau 1 gene.
+XX
+OS   Homo sapiens (human)
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia
+;
+OC   Eutheria; Primates; Catarrhini; Hominidae; Homo.
+XX
+RN   [1]
+RP   1-2016
+RA   Kas K.;
+RT   ;
+RL   Submitted (29-APR-1992) to the EMBL/GenBank/DDBJ databases.
+RL   K. Kas, University of Antwerp, Dept of Biochemistry T3.22,
+RL   Universiteitsplein 1, 2610 Wilrijk, BELGIUM
+XX
+RN   [2]
+RP   1-2016
+RX   MEDLINE; 92412144.
+RA   Kas K., Michiels L., Merregaert J.;
+RT   "Genomic structure and expression of the human fau gene: encoding the
+RT   ribosomal protein S30 fused to a ubiquitin-like protein.";
+RL   Biochem. Biophys. Res. Commun. 187:927-933(1992).
+XX
+DR   SWISS-PROT; P35544; UBIM_HUMAN.
+DR   SWISS-PROT; Q05472; RS30_HUMAN.
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..2016
+FT                   /db_xref="taxon:9606"
+FT                   /organism="Homo sapiens"
+FT                   /clone_lib="CML cosmid"
+FT                   /clone="15.1"
+FT   mRNA            join(408..504,774..856,951..1095,1557..1612,1787..>1912)
+FT                   /gene="fau 1"
+FT   exon            408..504
+FT                   /number=1
+FT   intron          505..773
+FT                   /number=1
+FT   exon            774..856
+
+
+  [Part of this file has been deleted for brevity]
+
+FT                   RAKRRMQYNRRFVNVVPTFGKKKGPNANS"
+FT   intron          857..950
+FT                   /number=2
+FT   exon            951..1095
+FT                   /number=3
+FT   intron          1096..1556
+FT                   /number=3
+FT   exon            1557..1612
+FT                   /number=4
+FT   intron          1613..1786
+FT                   /number=4
+FT   exon            1787..>1912
+FT                   /number=5
+FT   polyA_signal    1938..1943
+XX
+SQ   Sequence 2016 BP; 421 A; 562 C; 538 G; 495 T; 0 other;
+     ctaccatttt ccctctcgat tctatatgta cactcgggac aagttctcct gatcgaaaac        6
+0
+     ggcaaaacta aggccccaag taggaatgcc ttagttttcg gggttaacaa tgattaacac       12
+0
+     tgagcctcac acccacgcga tgccctcagc tcctcgctca gcgctctcac caacagccgt       18
+0
+     agcccgcagc cccgctggac accggttctc catccccgca gcgtagcccg gaacatggta       24
+0
+     gctgccatct ttacctgcta cgccagcctt ctgtgcgcgc aactgtctgg tcccgccccg       30
+0
+     tcctgcgcga gctgctgccc aggcaggttc gccggtgcga gcgtaaaggg gcggagctag       36
+0
+     gactgccttg ggcggtacaa atagcaggga accgcgcggt cgctcagcag tgacgtgaca       42
+0
+     cgcagcccac ggtctgtact gacgcgccct cgcttcttcc tctttctcga ctccatcttc       48
+0
+     gcggtagctg ggaccgccgt tcaggtaaga atggggcctt ggctggatcc gaagggcttg       54
+0
+     tagcaggttg gctgcggggt cagaaggcgc ggggggaacc gaagaacggg gcctgctccg       60
+0
+     tggccctgct ccagtcccta tccgaactcc ttgggaggca ctggccttcc gcacgtgagc       66
+0
+     cgccgcgacc accatcccgt cgcgatcgtt tctggaccgc tttccactcc caaatctcct       72
+0
+     ttatcccaga gcatttcttg gcttctctta caagccgtct tttctttact cagtcgccaa       78
+0
+     tatgcagctc tttgtccgcg cccaggagct acacaccttc gaggtgaccg gccaggaaac       84
+0
+     ggtcgcccag atcaaggtaa ggctgcttgg tgcgccctgg gttccatttt cttgtgctct       90
+0
+     tcactctcgc ggcccgaggg aacgcttacg agccttatct ttccctgtag gctcatgtag       96
+0
+     cctcactgga gggcattgcc ccggaagatc aagtcgtgct cctggcaggc gcgcccctgg      102
+0
+     aggatgaggc cactctgggc cagtgcgggg tggaggccct gactaccctg gaagtagcag      108
+0
+     gccgcatgct tggaggtgag tgagagagga atgttctttg aagtaccggt aagcgtctag      114
+0
+     tgagtgtggg gtgcatagtc ctgacagctg agtgtcacac ctatggtaat agagtacttc      120
+0
+     tcactgtctt cagttcagag tgattcttcc tgtttacatc cctcatgttg aacacagacg      126
+0
+     tccatgggag actgagccag agtgtagttg tatttcagtc acatcacgag atcctagtct      132
+0
+     ggttatcagc ttccacacta aaaattaggt cagaccaggc cccaaagtgc tctataaatt      138
+0
+     agaagctgga agatcctgaa atgaaactta agatttcaag gtcaaatatc tgcaactttg      144
+0
+     ttctcattac ctattgggcg cagcttctct ttaaaggctt gaattgagaa aagaggggtt      150
+0
+     ctgctgggtg gcaccttctt gctcttacct gctggtgcct tcctttccca ctacaggtaa      156
+0
+     agtccatggt tccctggccc gtgctggaaa agtgagaggt cagactccta aggtgagtga      162
+0
+     gagtattagt ggtcatggtg ttaggacttt ttttcctttc acagctaaac caagtccctg      168
+0
+     ggctcttact cggtttgcct tctccctccc tggagatgag cctgagggaa gggatgctag      174
+0
+     gtgtggaaga caggaaccag ggcctgatta accttccctt ctccaggtgg ccaaacagga      180
+0
+     gaagaagaag aagaagacag gtcgggctaa gcggcggatg cagtacaacc ggcgctttgt      186
+0
+     caacgttgtg cccacctttg gcaagaagaa gggccccaat gccaactctt aagtcttttg      192
+0
+     taattctggc tttctctaat aaaaaagcca cttagttcag tcatcgcatt gtttcatctt      198
+0
+     tacttgcaag gcctcaggga gaggtgtgct tctcgg                                201
+6
+//
    
    You can specifiy a file of ranges to extract by giving the '-regions'
    qualifier the value '@' followed by the name of the file containing
@@ -114,21 +411,22 @@ Input file format
 
 Output file format
 
+  Output files for usage example
+  
+  File: result.seq
+  
+>HSFAU X65923.1 H.sapiens fau mRNA
+ctcgactccat
+   
+  Output files for usage example 2
+  
+  File: result2.seq
+  
+>HSFAU1 X65921.1 H.sapiens fau 1 gene
+tccctctcgatacactcgggacaagttagggc
+   
    The output is a normal sequence file.
    
-   For example, the coding regions of em:hsfau1 are joined as:
-   
-% extractseq em:hsfau1 -reg "782..856,951..1095,1557..1612,1787..1912" stdout
-
->HSFAU X65923 H.sapiens fau mRNA
-atgcagctctttgtccgcgcccaggagctacacaccttcgaggtgaccggccaggaaacg
-gtcgcccagatcaaggctcatgtagcctcactggagggcattgccccggaagatcaagtc
-gtgctcctggcaggcgcgcccctggaggatgaggccactctgggccagtgcggggtggag
-gccctgactaccctggaagtagcaggccgcatgcttggaggtaaagttcatggttccctg
-gcccgtgctggaaaagtgagaggtcagactcctaaggtggccaaacaggagaagaagaag
-aagaagacaggtcgggctaagcggcggatgcagtacaaccggcgctttgtcaacgttgtg
-cccacctttggcaagaagaagggccccaatgccaactcttaa
-
    If the option '-separate' is used then each specified region is
    written to the output file as a separate sequence. The name of the
    sequence is created from the name of the original sequence with the
@@ -137,25 +435,6 @@ cccacctttggcaagaagaagggccccaatgccaactcttaa
    
    For example: "XYZ region 2 to 34" is written as: "XYZ_2_34"
    
-   To output each of the exons in em:hsfau1 to a separate entry:
-   
-% extractseq em:hsfau1 -reg "782..856,951..1095,1557..1612,1787..1912" stdout -
-separate
-
->HSFAU1_782_856 H.sapiens fau 1 gene
-atgcagctctttgtccgcgcccaggagctacacaccttcgaggtgaccggccaggaaacg
-gtcgcccagatcaag
->HSFAU1_951_1095 H.sapiens fau 1 gene
-gctcatgtagcctcactggagggcattgccccggaagatcaagtcgtgctcctggcaggc
-gcgcccctggaggatgaggccactctgggccagtgcggggtggaggccctgactaccctg
-gaagtagcaggccgcatgcttggag
->HSFAU1_1557_1612 H.sapiens fau 1 gene
-gtaaagtccatggttccctggcccgtgctggaaaagtgagaggtcagactcctaag
->HSFAU1_1787_1912 H.sapiens fau 1 gene
-gtggccaaacaggagaagaagaagaagaagacaggtcgggctaagcggcggatgcagtac
-aaccggcgctttgtcaacgttgtgcccacctttggcaagaagaagggccccaatgccaac
-tcttaa
-
 Data files
 
    None.
@@ -211,7 +490,6 @@ See also
    seqretsplit  Reads and writes (returns) sequences in individual files
    skipseq      Reads and writes (returns) sequences, skipping the first few
    splitter     Split a sequence into (overlapping) smaller sequences
-   swissparse   Retrieves sequences from swissprot using keyword search
    trimest      Trim poly-A tails off EST sequences
    trimseq      Trim ambiguous bits off the ends of sequences
    union        Reads sequence fragments and builds one sequence

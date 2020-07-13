@@ -27,14 +27,32 @@ Description
    
 Usage
 
-   Here is a sample session with antigenic.
+   Here is a sample session with antigenic
+   
 
-% antigenic
+% antigenic 
 Finds antigenic sites in proteins
-Input sequence: sw:act1_fugru
-Minimum length [6]:
-Output file [act1_fugru.antigenic]:
+Input sequence(s): tsw:act1_fugru
+Minimum length [6]: 
+Output report [act1_fugru.antigenic]: 
+   
+   Go to the input files for this example
+   Go to the output files for this example
+   
+   Example 2
+   
+   By using the '-rformat gff' qualifier, a GFF file of the predicted
+   regions can be produced.
+   
 
+% antigenic -rformat gff 
+Finds antigenic sites in proteins
+Input sequence(s): tsw:act1_fugru
+Minimum length [6]: 
+Output report [act1_fugru.antigenic]: 
+   
+   Go to the output files for this example
+   
 Command line arguments
 
    Mandatory qualifiers:
@@ -55,7 +73,7 @@ Command line arguments
    (Parameter 1) Sequence database USA Readable sequence(s) Required
    -minlen Minimum length Integer from 1 to 50 6
    [-outfile]
-   (Parameter 2) Output report file name Report file
+   (Parameter 2) Output report file name Report output file
    Optional qualifiers Allowed values Default
    (none)
    Advanced qualifiers Allowed values Default
@@ -64,6 +82,65 @@ Command line arguments
 Input file format
 
    The input sequence can be one or more protein sequences.
+   
+  Input files for usage example
+  
+   'tsw:act1_fugru' is a sequence entry in the example protein database
+   'tsw'
+   
+  Database entry: tsw:act1_fugru
+  
+ID   ACT1_FUGRU     STANDARD;      PRT;   375 AA.
+AC   P53484;
+DT   01-OCT-1996 (REL. 34, CREATED)
+DT   01-OCT-1996 (REL. 34, LAST SEQUENCE UPDATE)
+DT   01-OCT-1996 (REL. 34, LAST ANNOTATION UPDATE)
+DE   ACTIN, CYTOPLASMIC 1 (BETA-ACTIN 1).
+OS   FUGU RUBRIPES (JAPANESE PUFFERFISH) (TAKIFUGU RUBRIPES).
+OC   EUKARYOTA; METAZOA; CHORDATA; VERTEBRATA; PISCES; GNATHOSTOMATA;
+OC   OSTEICHTHYES; ACTINOPTERYGII; TETRAODONTIFORMES.
+RN   [1]
+RP   SEQUENCE FROM N.A.
+RX   MEDLINE; 96275651.
+RA   VENKATESH B., TAY B.H., ELGAR G., BRENNER S.;
+RL   J. MOL. BIOL. 259:655-665(1996).
+CC   -!- FUNCTION: ACTINS ARE HIGHLY CONSERVED PROTEINS THAT ARE INVOLVED
+CC       IN VARIOUS TYPES OF CELL MOTILITY AND ARE UBIQUITOUSLY EXPRESSED
+CC       IN ALL EUKARYOTIC CELLS.
+CC   -!- SUBUNIT: POLYMERIZATION OF GLOBULAR ACTIN (G-ACTIN) LEADS TO A
+CC       STRUCTURAL FILAMENT (F-ACTIN) IN THE FORM OF A TWO-STRANDED
+CC       HELIX. EACH ACTIN CAN BIND TO 4 OTHERS.
+CC   -!- SUBCELLULAR LOCATION: CYTOPLASMIC.
+CC   -!- TISSUE SPECIFICITY: WIDELY DISTRIBUTED. NOT EXPRESSED IN SKELETAL
+CC       MUSCLE.
+CC   -!- IN VERTEBRATES 3 MAIN GROUPS OF ACTIN ISOFORMS, ALPHA, BETA AND
+CC       GAMMA HAVE BEEN IDENTIFIED. THE ALPHA ACTINS ARE FOUND IN MUSCLE
+CC       TISSUES AND ARE A MAJOR CONSTITUENT OF THE CONTRACTILE APPARATUS.
+CC       THE BETA AND GAMMA ACTINS CO-EXISTS IN MOST CELL TYPES AS
+CC       COMPONENTS OF THE CYTOSKELETON AND AS MEDIATORS OF INTERNAL CELL
+CC       MOTILITY.
+CC   -!- THERE ARE THREE DIFFERENT BETA-CYTOPLASMIC ACTINS IN FUGU
+CC       RUBRIPES.
+DR   EMBL; U37499; G1335821; -.
+DR   PROSITE; PS00406; ACTINS_1; 1.
+DR   PROSITE; PS00432; ACTINS_2; 1.
+DR   PROSITE; PS01132; ACTINS_ACT_LIKE; 1.
+KW   MULTIGENE FAMILY; STRUCTURAL PROTEIN; METHYLATION; ACETYLATION;
+KW   CYTOSKELETON.
+FT   PROPEP        1      1       REMOVED IN MATURE FORM (BY SIMILARITY).
+FT   CHAIN         2    375       ACTIN, CYTOPLASMIC 1.
+FT   MOD_RES       1      1       ACETYLATION (BY SIMILARITY).
+FT   MOD_RES       2      2       ACETYLATION (BY SIMILARITY).
+FT   MOD_RES      73     73       METHYLATION (BY SIMILARITY).
+SQ   SEQUENCE   375 AA;  41766 MW;  3A0543DF CRC32;
+     MEDEIAALVV DNGSGMCKAG FAGDDAPRAV FPSIVGRPRH QGVMVGMGQK DSYVGDEAQS
+     KRGILTLKYP IEHGIVTNWD DMEKIWHHTF YNELRVAPEE HPVLLTEAPL NPKANREKMT
+     QIMFETFNTP AMYVAIQAVL SLYASGRTTG IVMDSGDGVT HTVPIYEGYA LPHAILRLDL
+     AGRDLTDYLM KILTERGYSF TTTAEREIVR DIKEKLCYVA LDFEQEMGTA ASSSSLEKSY
+     ELPDGQVITI GNERFRCPEA LFQPSFLGME SCGIHETTYN SIMKCDVDIR KDLYANTVLS
+     GGTTMYPGIA DRMQKEITAL APSTMKIKII APPERKYSVW IGGSILASLS TFQQMWISKQ
+     EYDESGPSIV HRKCF
+//
    
 Output file format
 
@@ -81,12 +158,14 @@ Output file format
    
    By default antigenic writes a 'motif' report file.
    
-   The output from the above example is:
-     _________________________________________________________________
-   
+  Output files for usage example
+  
+  File: act1_fugru.antigenic
+  
 ########################################
 # Program: antigenic
-# Rundate: Mon Feb 11 12:01:10 2002
+# Rundate: Thu Nov 07 14:15:47 2002
+# Report_format: motif
 # Report_file: act1_fugru.antigenic
 ########################################
 
@@ -134,29 +213,8 @@ Max_score_pos at "*"
            |    |
          367    372
 
-(7) Score 1.116 length 16 at residues 93->108
-                     *
- Sequence: ELRVAPEEHPVLLTEA
-           |              |
-          93              108
 
-(8) Score 1.113 length 7 at residues 295->301
-            *
- Sequence: ANTVLSG
-           |     |
-         295     301
-
-(9) Score 1.110 length 11 at residues 256->266
-                   *
- Sequence: RCPEALFQPSF
-           |         |
-         256         266
-
-(10) Score 1.107 length 17 at residues 336->352
-                      *
- Sequence: KYSVWIGGSILASLSTF
-           |               |
-         336               352
+  [Part of this file has been deleted for brevity]
 
 (11) Score 1.102 length 15 at residues 62->76
                  *
@@ -209,20 +267,13 @@ Max_score_pos at "*"
 
 #---------------------------------------
 #---------------------------------------
-     _________________________________________________________________
    
-   By using the '-rformat gff' qualifier, a GFF file of the predicted
-   regions can be produced. For example:
-   
-% antigenic -rformat gff
-Finds antigenic sites in proteins
-Input sequence(s): sw:act1_fugru
-Minimum length [6]:
-Output file [act1_fugru.antigenic]:
-
-% more act1_fugru.antigenic
+  Output files for usage example 2
+  
+  File: act1_fugru.antigenic
+  
 ##gff-version 2.0
-##date 2002-02-11
+##date 2002-11-07
 ##Type Protein ACT1_FUGRU
 ACT1_FUGRU      antigenic       site    214     222     1.207   +       .
 Sequence "ACT1_FUGRU.1" ; note "*pos 218"
@@ -260,7 +311,7 @@ ACT1_FUGRU      antigenic       site    269     275     1.045   +       .
 Sequence "ACT1_FUGRU.17" ; note "*pos 269"
 ACT1_FUGRU      antigenic       site    51      57      1.034   +       .
 Sequence "ACT1_FUGRU.18" ; note "*pos 52"
-
+   
 Data files
 
    Antigenic uses a data file called Eantigenic.dat.
@@ -335,7 +386,7 @@ Known bugs
    
 See also
 
-    Program name                        Description
+    Program name                         Description
    digest         Protein proteolytic enzyme or reagent cleavage digest
    fuzzpro        Protein pattern search
    fuzztran       Protein pattern search after translation
@@ -344,6 +395,7 @@ See also
    patmatdb       Search a protein sequence with a motif
    patmatmotifs   Search a PROSITE motif database with a protein sequence
    pepcoil        Predicts coiled coil regions
+   pestfind       Finds PEST motifs as potential proteolytic cleavage sites
    preg           Regular expression search of a protein sequence
    pscan          Scans proteins using PRINTS
    sigcleave      Reports protein signal cleavage sites

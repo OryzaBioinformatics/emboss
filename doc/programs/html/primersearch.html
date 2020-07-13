@@ -104,134 +104,40 @@ opposite orientations.
  -->
 
 
-Here is a sample session with primersearch:
+<b>Here is a sample session with primersearch</b>
+<p>
 
-<pre>
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-unix% primersearch embl:Z52466
+% <b>primersearch tembl:z52466 </b>
 Searches DNA sequences for matches with primer pairs
-Primer file: primers
-Output file [hsa203yc1.primersearch]: stdout
-Allowed percent mismatch [0]: 
+Primer file: <b>../../data/primers</b>
+Allowed percent mismatch [0]: <b></b>
+Output file [hsa203yc1.primersearch]: <b></b>
 
-Primer name D1S243
-
-Primer name D1S468
-
-Primer name D1S2845
-
-Primer name D1S1608
-
-Primer name D1S2893
-
-Primer name D1S2660
-Amplimer 1
-        Sequence: HSA203YC1 Z52466 
-        H.sapiens (D1S2660) DNA segment containing (CA) repeat; clone AFMa203yc1; single read.
-        CACACATGCACATGCAC hits forward strand at 27 with 0 mismatches
-        AGTGACACCAGCAGGG hits reverse strand at [103] with 0 mismatches
-        Amplimer length: 261 bp
-
-</pre>
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 2</b>
+<p>
+Here we run the same example but allowing 20% mismatch between the primers and the sequence: 
 <p>
 
-Here we run the same example but allowing 20% mismatch between the 
-primers and the sequence.
 <p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-<pre>
-unix % primersearch embl:Z52466
+% <b>primersearch tembl:z52466 </b>
 Searches DNA sequences for matches with primer pairs
-Primer file: primers
-Output file [hsa203yc1.primersearch]: stdout
-Allowed percent mismatch [0]: 20
+Primer file: <b>../../data/primers</b>
+Allowed percent mismatch [0]: <b>20</b>
+Output file [hsa203yc1.primersearch]: <b></b>
 
-Primer name D1S243
-
-Primer name D1S468
-
-Primer name D1S2845
-
-Primer name D1S1608
-
-Primer name D1S2893
-
-Primer name D1S2660
-Amplimer 1
-        Sequence: HSA203YC1 Z52466 
-        H.sapiens (D1S2660) DNA segment containing (CA) repeat; clone AFMa203yc1; single read.
-        CACACATGCACATGCAC hits forward strand at 49 with 2 mismatches
-        AGTGACACCAGCAGGG hits reverse strand at [103] with 0 mismatches
-        Amplimer length: 239 bp
-Amplimer 2
-        Sequence: HSA203YC1 Z52466 
-        H.sapiens (D1S2660) DNA segment containing (CA) repeat; clone AFMa203yc1; single read.
-        CACACATGCACATGCAC hits forward strand at 27 with 0 mismatches
-        AGTGACACCAGCAGGG hits reverse strand at [103] with 0 mismatches
-        Amplimer length: 261 bp
-
-</pre>
+</pre></td></tr></table><p>
 <p>
+<a href="#output.2">Go to the output files for this example</a><p><p>
 
-Here is an example of running with a file containing a list of sequences.
-<p>
-<pre>
-curium % primersearch @seqs.list
-Searches DNA sequences for matches with primer pairs
-Primer file: primers
-Output file [hs214yg7.primersearch]: stdout
-Allowed percent mismatch [0]: 
-
-Primer name D1S243
-Amplimer 1
-        Sequence: HS214YG7 Z16979 
-        H. sapiens (D1S243) DNA segment containing (CA) repeat; clone AFM214yg7; single read.
-        CACACAGGCTCACATGCC hits forward strand at 122 with 0 mismatches
-        GCTCCAGCGTCATGGACT hits reverse strand at [36] with 0 mismatches
-        Amplimer length: 162 bp
-
-Primer name D1S468
-Amplimer 1
-        Sequence: HS280WE5 Z23994 
-        H. sapiens (D1S468) DNA segment containing (CA) repeat; clone AFM280we5; single read.
-        AATTAACCGTTTTGGTCCT hits forward strand at 47 with 0 mismatches
-        GCGACACACACTTCCC hits reverse strand at [96] with 0 mismatches
-        Amplimer length: 185 bp
-
-Primer name D1S2845
-Amplimer 1
-        Sequence: HS344WE9 Z51474 
-        H.sapiens (D1S2845) DNA segment containing (CA) repeat; clone AFM344we9; single read.
-        CCAAAGGGTGCTTCTC hits forward strand at 29 with 0 mismatches
-        GTGGCATTCCAACCTC hits reverse strand at [157] with 0 mismatches
-        Amplimer length: 201 bp
-
-Primer name D1S1608
-Amplimer 1
-        Sequence: HS829186 G07829 
-        human STS CHLC.GATA49A06.P15262 clone GATA49A06, sequence tagged site.
-        GATGGCTTTTGGGGACTATT hits forward strand at 13 with 0 mismatches
-        CACTGAGCCAAGTGACACAG hits reverse strand at [92] with 0 mismatches
-        Amplimer length: 270 bp
-
-Primer name D1S2893
-Amplimer 1
-        Sequence: HS123XC3 Z50993 
-        H.sapiens (D1S2893) DNA segment containing (CA) repeat; clone AFM123xc3; single read.
-        AAAACATCAACTCTCCCCTG hits forward strand at 5 with 0 mismatches
-        CTCAAACCCCAATAAGCCTT hits reverse strand at [3] with 0 mismatches
-        Amplimer length: 215 bp
-
-Primer name D1S2660
-Amplimer 1
-        Sequence: HSA203YC1 Z52466 
-        H.sapiens (D1S2660) DNA segment containing (CA) repeat; clone AFMa203yc1; single read.
-        CACACATGCACATGCAC hits forward strand at 27 with 0 mismatches
-        AGTGACACCAGCAGGG hits reverse strand at [103] with 0 mismatches
-        Amplimer length: 261 bp
-
-
-</pre>
 
 
 <H2>
@@ -334,7 +240,96 @@ IT IS DONE FOR YOU.
         happens in unusual cases - null input, etc. 
    -->
 
-The input primer file used in the example above has the following format:
+<b>primersearch</b> reads in any nucleic acid sequence USAs.
+
+<p>
+
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+
+'tembl:z52466' is a sequence entry in the example nucleic acid database 'tembl'
+<p>
+<p><h3>File: ../../data/primers</h3>
+<table width="90%"><tr><td bgcolor="#FFDDFF">
+<pre>
+# This is my primer file
+D1S243  cacacaggctcacatgcc      gctccagcgtcatggact
+D1S468 aattaaccgttttggtcct     gcgacacacacttccc 
+D1S2845 ccaaagggtgcttctc        gtggcattccaacctc
+D1S1608 gatggcttttggggactatt    cactgagccaagtgacacag
+D1S2893 aaaacatcaactctcccctg    ctcaaaccccaataagcctt
+D1S2660 cacacatgcacatgcac       agtgacaccagcaggg
+</pre>
+</td></tr></table><p>
+<p><h3>Database entry: tembl:z52466</h3>
+<table width="90%"><tr><td bgcolor="#FFDDFF">
+<pre>
+ID   HSA203YC1  standard; DNA; STS; 389 BP.
+XX
+AC   Z52466;
+XX
+SV   Z52466.1
+XX
+DT   18-MAR-1996 (Rel. 47, Created)
+DT   23-MAR-1996 (Rel. 47, Last updated, Version 3)
+XX
+DE   H.sapiens (D1S2660) DNA segment containing (CA) repeat; clone AFMa203yc1;
+DE   single read.
+XX
+KW   CA repeat; dinucleotide repeat; GT repeat; microsatellite DNA;
+KW   microsatellite marker; repeat polymorphism; STS.
+XX
+OS   Homo sapiens (human)
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia;
+OC   Eutheria; Primates; Catarrhini; Hominidae; Homo.
+XX
+RN   [1]
+RP   1-389
+RA   Weissenbach J.;
+RT   ;
+RL   Submitted (01-SEP-1995) to the EMBL/GenBank/DDBJ databases.
+RL   Genethon, B.P. 60, 91002 Evry Cedex France. E-mail:
+RL   Jean.Weissenbach@genethon.fr
+XX
+RN   [2]
+RP   1-389
+RX   MEDLINE; 96176476.
+RA   Dib C., Faure S., Fizames C., Samson D., Drouot N., Vignal A.,
+RA   Millasseau P., Marc S., Hazan J., Seboun E., Lathrop M., Gyapay G.,
+RA   Morissette J., Weissenbach J.;
+RT   "A comprehensive genetic map of the human genome based on 5,264
+RT   microsatellites";
+RL   Nature 380:152-154(1996).
+XX
+CC   full automatic;
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..389
+FT                   /chromosome="1"
+FT                   /db_xref="taxon:9606"
+FT                   /note="cloning vector is M13mp18"
+FT                   /organism="Homo sapiens"
+FT                   /cell_line="CEPH 134702"
+FT                   /clone_lib="genomic DNA"
+XX
+SQ   Sequence 389 BP; 118 A; 124 C; 86 G; 57 T; 4 other;
+     agctgtgtgc acacaacatg anggggcaca catgcacatg cacacatgcc cacatgcata        60
+     tgcacacaca cacacacaca cacacacaca ttcatgccca agcacgccca ccctcatgtc       120
+     tcaccatgtg cacataacac acagtcacat ataccctggc acacatgccc acatgcagac       180
+     acgaaacaca ggcccacgnt tncatgcaca caggtatggg cacacatacc atgcacacat       240
+     aangacaaat accaggccag acatgatttg cccctgctgg tgtcactgtt aagtgtgaca       300
+     gacaagcaga ggacacacac ccacctggga cgcggggctt caggagagag gcagacctaa       360
+     tagggcccgg attcggggct ggggaggct                                         389
+//
+</pre>
+</td></tr></table><p>
+
+
+<p>
+
+The input primer file has the following format:
 
 <p>
 Comment lines start with a '#'
@@ -352,41 +347,6 @@ Lines with primer information have three fields separated by spaces or TAB chara
 Empty files will cause primersearch to note that no primers have 
 been found, and to exit.
 
-<p>
-
-An example of the primer file follows:
-
-<p>
-
-<hr>
-<pre>
-# This is my primer file
-D1S243  cacacaggctcacatgcc      gctccagcgtcatggact
-D1S468 aattaaccgttttggtcct     gcgacacacacttccc 
-D1S2845 ccaaagggtgcttctc        gtggcattccaacctc
-D1S1608 gatggcttttggggactatt    cactgagccaagtgacacag
-D1S2893 aaaacatcaactctcccctg    ctcaaaccccaataagcctt
-D1S2660 cacacatgcacatgcac       agtgacaccagcaggg    
-</pre>
-<hr>
-
-<p>
-
-
-In the example usage given above, the file 'seqs.list' contains the following sequences:
-<p>
-
-<hr>
-<pre>
-embl:Z16979
-embl:Z23994  
-embl:Z51474  
-embl:G07829  
-embl:Z50993  
-embl:Z52466
-</pre>
-<hr>
-<p>
 
 <H2>
     Output file format
@@ -400,10 +360,13 @@ embl:Z52466
         happens in unusual cases - null output, errors etc. 
    -->
 
-Here is an exmaple of the output file:
-<p>
-<hr>
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: hsa203yc1.primersearch</h3>
+<table width="90%"><tr><td bgcolor="#DDFFDD">
 <pre>
+
 Primer name D1S243
 
 Primer name D1S468
@@ -416,13 +379,46 @@ Primer name D1S2893
 
 Primer name D1S2660
 Amplimer 1
-        Sequence: HSA203YC1 Z52466 
-        H.sapiens (D1S2660) DNA segment containing (CA) repeat; clone AFMa203yc1; single read.
-        CACACATGCACATGCAC hits forward strand at 27 with 0 mismatches
-        AGTGACACCAGCAGGG hits reverse strand at [103] with 0 mismatches
-        Amplimer length: 261 bp
+	Sequence: HSA203YC1 Z52466 
+	H.sapiens (D1S2660) DNA segment containing (CA) repeat; clone AFMa203yc1; single read.
+	CACACATGCACATGCAC hits forward strand at 27 with 0 mismatches
+	AGTGACACCAGCAGGG hits reverse strand at [103] with 0 mismatches
+	Amplimer length: 261 bp
 </pre>
-<hr>
+</td></tr></table><p>
+
+<a name="output.2"></a>
+<h3>Output files for usage example 2</h3>
+<p><h3>File: hsa203yc1.primersearch</h3>
+<table width="90%"><tr><td bgcolor="#DDFFDD">
+<pre>
+
+Primer name D1S243
+
+Primer name D1S468
+
+Primer name D1S2845
+
+Primer name D1S1608
+
+Primer name D1S2893
+
+Primer name D1S2660
+Amplimer 1
+	Sequence: HSA203YC1 Z52466 
+	H.sapiens (D1S2660) DNA segment containing (CA) repeat; clone AFMa203yc1; single read.
+	CACACATGCACATGCAC hits forward strand at 49 with 2 mismatches
+	AGTGACACCAGCAGGG hits reverse strand at [103] with 0 mismatches
+	Amplimer length: 239 bp
+Amplimer 2
+	Sequence: HSA203YC1 Z52466 
+	H.sapiens (D1S2660) DNA segment containing (CA) repeat; clone AFMa203yc1; single read.
+	CACACATGCACATGCAC hits forward strand at 27 with 0 mismatches
+	AGTGACACCAGCAGGG hits reverse strand at [103] with 0 mismatches
+	Amplimer length: 261 bp
+</pre>
+</td></tr></table><p>
+
 
 <H2>
     Data files

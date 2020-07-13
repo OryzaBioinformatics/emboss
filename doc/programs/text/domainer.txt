@@ -5,7 +5,7 @@
    
 Function
 
-   Reads protein coordinate files and writes domains coordinate files
+   Reads protein coordinate files and writes domain coordinate files
    
 Description
 
@@ -65,54 +65,15 @@ D7HBIB_
 
 Command line arguments
 
-   Mandatory qualifiers:
-   -scop               infile     Name of scop classification file (embl
-                                  format input)
-  [-cpdb]              string     Location of protein coordinate files (embl
-                                  format input)
-  [-cpdbextn]          string     Extension of coordinate files (embl format)
-  [-cpdbscop]          string     Location of domain coordinate files (embl
-                                  format output)
-  [-pdbscop]           string     Location of domain coordinate files (pdb
-                                  format output)
-  [-pdbextn]           string     Extension of coordinate files (pdb format)
-   -cpdberrf           outfile    Name of log file for the embl format build
-   -pdberrf            outfile    Name of log file for the pdb format build
 
-   Optional qualifiers: (none)
-   Advanced qualifiers: (none)
-   General qualifiers:
-  -help                boolean    Report command line options. More
-                                  information on associated and general
-                                  qualifiers can be found with -help -verbose
+   EMBOSS An error in ajacd.c at line 1531:
+acdfile '/packages/emboss_dev/gwilliam/emboss/emboss/emboss/acd/domainer.acd' n
+ot opened
    
 
-   Mandatory qualifiers Allowed values Default
-   -scop Name of scop classification file (embl format input) Input file
-   Escop.dat
-   [-cpdb]
-   (Parameter 1) Location of protein coordinate files (embl format input)
-   Any string is accepted ./
-   [-cpdbextn]
-   (Parameter 2) Extension of coordinate files (embl format) Any string
-   is accepted .pxyz
-   [-cpdbscop]
-   (Parameter 3) Location of domain coordinate files (embl format output)
-   Any string is accepted ./
-   [-pdbscop]
-   (Parameter 4) Location of domain coordinate files (pdb format output)
-   Any string is accepted ./
-   [-pdbextn]
-   (Parameter 5) Extension of coordinate files (pdb format) Any string is
-   accepted .ent
-   -cpdberrf Name of log file for the embl format build Output file
-   domainer_embl.log
-   -pdberrf Name of log file for the pdb format build Output file
-   domainer_pdb.log
-   Optional qualifiers Allowed values Default
-   (none)
-   Advanced qualifiers Allowed values Default
-   (none)
+   EMBOSS An error in ajacd.c at line 1531: acdfile
+   '/packages/emboss_dev/gwilliam/emboss/emboss/emboss/acd/domainer.acd'
+   not opened
    
 Input file format
 
@@ -363,7 +324,6 @@ See also
    cutgextract Extract data from CUTG
    funky Reads clean coordinate files and writes file of
    protein-heterogen contact data
-   groups Removes redundant hits from a scop families file
    hetparse Converts raw dictionary of heterogen groups to a file in
    embl-like format
    nrscope Converts redundant EMBL-format SCOP file to non-redundant one
@@ -380,6 +340,9 @@ See also
    embl-like format
    scopseqs Adds pdb and swissprot sequence records to a scop
    classification file
+   seqnr Reads a scop families file and a scop ambiguities file and
+   writes (i) a non-redundant scop families file and (ii) a scop
+   validation file
    tfextract Extract data from TRANSFAC
    
 Author(s)

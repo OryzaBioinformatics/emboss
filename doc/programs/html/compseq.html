@@ -97,7 +97,53 @@ specifying it with '-infile filename' on the command-line.
     Usage
 </H2>
 
+<b>Here is a sample session with compseq</b>
+<p>
+To count the frequencies of dinucleotides in a file: 
+<p>
 
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>compseq tembl:hsfau 2 result3.comp </b>
+Counts the composition of dimer/trimer/etc words in a sequence
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 2</b>
+<p>
+To count the frequencies of hexanucleotides, without outputting the results of hexanucleotides that do not occur in the sequence: 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>compseq tembl:hsfau 6 result6.comp -nozero </b>
+Counts the composition of dimer/trimer/etc words in a sequence
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.2">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 3</b>
+<p>
+To count the frequencies of trinucleotides in frame 2 of a sequence and use a previously prepared compseq output to show the expected frequencies: 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>compseq tembl:hsfau 3 result3.comp -frame 2 -in ../../data/prev.comp </b>
+Counts the composition of dimer/trimer/etc words in a sequence
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.3">Go to the input files for this example</a><br><a href="#output.3">Go to the output files for this example</a><p><p>
+
+
+<!--
 Here is a sample session with compseq.
 
 <pre>
@@ -118,7 +164,7 @@ frequencies:
 % compseq  embl:hsfau  3  result3.comp  -frame 2  -in prev.comp
 
 </pre>
-
+-->
 
 
 <H2>
@@ -249,21 +295,21 @@ If you set it to 1 it will only count the words in frame 1, 2 will only count th
 <td>-[no]ignorebz</td>
 <td>The amino acid code B represents Asparagine or Aspartic acid and the code Z represents Glutamine or Glutamic acid.
 These are not commonly used codes and you may wish not to count words containing them, just noting them in the count of 'Other' words.</td>
-<td>Yes/No</td>
+<td>Boolean value Yes/No</td>
 <td>Yes</td>
 </tr>
 
 <tr>
 <td>-reverse</td>
 <td>Set this to be true if you also wish to also count words in the reverse complement of a nucleic sequence.</td>
-<td>Yes/No</td>
+<td>Boolean value Yes/No</td>
 <td>No</td>
 </tr>
 
 <tr>
 <td>-[no]zerocount</td>
 <td>You can make the output results file much smaller if you do not display the words with a zero count.</td>
-<td>Yes/No</td>
+<td>Boolean value Yes/No</td>
 <td>Yes</td>
 </tr>
 
@@ -288,6 +334,185 @@ These are not commonly used codes and you may wish not to count words containing
 
 Normal sequence(s) USA.
 
+<p>
+
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+
+'tembl:hsfau' is a sequence entry in the example nucleic acid database 'tembl'
+<p>
+<p><h3>Database entry: tembl:hsfau</h3>
+<table width="90%"><tr><td bgcolor="#FFDDFF">
+<pre>
+ID   HSFAU      standard; RNA; HUM; 518 BP.
+XX
+AC   X65923;
+XX
+SV   X65923.1
+XX
+DT   13-MAY-1992 (Rel. 31, Created)
+DT   23-SEP-1993 (Rel. 37, Last updated, Version 10)
+XX
+DE   H.sapiens fau mRNA
+XX
+KW   fau gene.
+XX
+OS   Homo sapiens (human)
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia;
+OC   Eutheria; Primates; Catarrhini; Hominidae; Homo.
+XX
+RN   [1]
+RP   1-518
+RA   Michiels L.M.R.;
+RT   ;
+RL   Submitted (29-APR-1992) to the EMBL/GenBank/DDBJ databases.
+RL   L.M.R. Michiels, University of Antwerp, Dept of Biochemistry,
+RL   Universiteisplein 1, 2610 Wilrijk, BELGIUM
+XX
+RN   [2]
+RP   1-518
+RX   MEDLINE; 93368957.
+RA   Michiels L., Van der Rauwelaert E., Van Hasselt F., Kas K., Merregaert J.;
+RT   " fau cDNA encodes a ubiquitin-like-S30 fusion protein and is expressed as
+RT   an antisense sequences in the Finkel-Biskis-Reilly murine sarcoma virus";
+RL   Oncogene 8:2537-2546(1993).
+XX
+DR   SWISS-PROT; P35544; UBIM_HUMAN.
+DR   SWISS-PROT; Q05472; RS30_HUMAN.
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..518
+FT                   /chromosome="11q"
+FT                   /db_xref="taxon:9606"
+FT                   /organism="Homo sapiens"
+FT                   /tissue_type="placenta"
+FT                   /clone_lib="cDNA"
+FT                   /clone="pUIA 631"
+FT                   /map="13"
+FT   misc_feature    57..278
+FT                   /note="ubiquitin like part"
+FT   CDS             57..458
+FT                   /db_xref="SWISS-PROT:P35544"
+FT                   /db_xref="SWISS-PROT:Q05472"
+FT                   /gene="fau"
+FT                   /protein_id="CAA46716.1"
+FT                   /translation="MQLFVRAQELHTFEVTGQETVAQIKAHVASLEGIAPEDQVVLLAG
+FT                   APLEDEATLGQCGVEALTTLEVAGRMLGGKVHGSLARAGKVRGQTPKVAKQEKKKKKTG
+FT                   RAKRRMQYNRRFVNVVPTFGKKKGPNANS"
+FT   misc_feature    98..102
+FT                   /note="nucleolar localization signal"
+FT   misc_feature    279..458
+FT                   /note="S30 part"
+FT   polyA_signal    484..489
+FT   polyA_site      509
+XX
+SQ   Sequence 518 BP; 125 A; 139 C; 148 G; 106 T; 0 other;
+     ttcctctttc tcgactccat cttcgcggta gctgggaccg ccgttcagtc gccaatatgc        60
+     agctctttgt ccgcgcccag gagctacaca ccttcgaggt gaccggccag gaaacggtcg       120
+     cccagatcaa ggctcatgta gcctcactgg agggcattgc cccggaagat caagtcgtgc       180
+     tcctggcagg cgcgcccctg gaggatgagg ccactctggg ccagtgcggg gtggaggccc       240
+     tgactaccct ggaagtagca ggccgcatgc ttggaggtaa agttcatggt tccctggccc       300
+     gtgctggaaa agtgagaggt cagactccta aggtggccaa acaggagaag aagaagaaga       360
+     agacaggtcg ggctaagcgg cggatgcagt acaaccggcg ctttgtcaac gttgtgccca       420
+     cctttggcaa gaagaagggc cccaatgcca actcttaagt cttttgtaat tctggctttc       480
+     tctaataaaa aagccactta gttcagtcaa aaaaaaaa                               518
+//
+</pre>
+</td></tr></table><p>
+
+<a name="input.3"></a>
+<h3>Input files for usage example 3</h3>
+<p><h3>File: ../../data/prev.comp</h3>
+<table width="90%"><tr><td bgcolor="#FFDDFF">
+<pre>
+#
+# Output from 'compseq'
+#
+# The Expected frequencies are calculated on the (false) assumption that every
+# word has equal frequency.
+#
+# The input sequences are:
+#	HSFAU
+
+
+Word size	3
+Total count	516
+
+#
+# Word	Obs Count	Obs Frequency	Exp Frequency	Obs/Exp Frequency
+#
+AAA	17		0.0329457	0.0156250	2.1085271
+AAC	5		0.0096899	0.0156250	0.6201550
+AAG	18		0.0348837	0.0156250	2.2325581
+AAT	4		0.0077519	0.0156250	0.4961240
+ACA	5		0.0096899	0.0156250	0.6201550
+ACC	6		0.0116279	0.0156250	0.7441860
+ACG	2		0.0038760	0.0156250	0.2480620
+ACT	7		0.0135659	0.0156250	0.8682171
+AGA	12		0.0232558	0.0156250	1.4883721
+AGC	7		0.0135659	0.0156250	0.8682171
+AGG	16		0.0310078	0.0156250	1.9844961
+AGT	10		0.0193798	0.0156250	1.2403101
+ATA	2		0.0038760	0.0156250	0.2480620
+ATC	3		0.0058140	0.0156250	0.3720930
+ATG	7		0.0135659	0.0156250	0.8682171
+ATT	2		0.0038760	0.0156250	0.2480620
+CAA	10		0.0193798	0.0156250	1.2403101
+CAC	6		0.0116279	0.0156250	0.7441860
+CAG	13		0.0251938	0.0156250	1.6124031
+CAT	5		0.0096899	0.0156250	0.6201550
+CCA	12		0.0232558	0.0156250	1.4883721
+CCC	13		0.0251938	0.0156250	1.6124031
+CCG	8		0.0155039	0.0156250	0.9922481
+CCT	10		0.0193798	0.0156250	1.2403101
+CGA	2		0.0038760	0.0156250	0.2480620
+CGC	10		0.0193798	0.0156250	1.2403101
+CGG	9		0.0174419	0.0156250	1.1162791
+CGT	4		0.0077519	0.0156250	0.4961240
+CTA	5		0.0096899	0.0156250	0.6201550
+CTC	11		0.0213178	0.0156250	1.3643411
+CTG	10		0.0193798	0.0156250	1.2403101
+CTT	11		0.0213178	0.0156250	1.3643411
+GAA	11		0.0213178	0.0156250	1.3643411
+GAC	6		0.0116279	0.0156250	0.7441860
+GAG	10		0.0193798	0.0156250	1.2403101
+GAT	4		0.0077519	0.0156250	0.4961240
+GCA	7		0.0135659	0.0156250	0.8682171
+GCC	18		0.0348837	0.0156250	2.2325581
+GCG	8		0.0155039	0.0156250	0.9922481
+GCT	10		0.0193798	0.0156250	1.2403101
+GGA	13		0.0251938	0.0156250	1.6124031
+GGC	17		0.0329457	0.0156250	2.1085271
+GGG	7		0.0135659	0.0156250	0.8682171
+GGT	9		0.0174419	0.0156250	1.1162791
+GTA	6		0.0116279	0.0156250	0.7441860
+GTC	9		0.0174419	0.0156250	1.1162791
+GTG	8		0.0155039	0.0156250	0.9922481
+GTT	5		0.0096899	0.0156250	0.6201550
+TAA	7		0.0135659	0.0156250	0.8682171
+TAC	3		0.0058140	0.0156250	0.3720930
+TAG	4		0.0077519	0.0156250	0.4961240
+TAT	1		0.0019380	0.0156250	0.1240310
+TCA	10		0.0193798	0.0156250	1.2403101
+TCC	6		0.0116279	0.0156250	0.7441860
+TCG	7		0.0135659	0.0156250	0.8682171
+TCT	10		0.0193798	0.0156250	1.2403101
+TGA	4		0.0077519	0.0156250	0.4961240
+TGC	9		0.0174419	0.0156250	1.1162791
+TGG	14		0.0271318	0.0156250	1.7364341
+TGT	5		0.0096899	0.0156250	0.6201550
+TTA	2		0.0038760	0.0156250	0.2480620
+TTC	10		0.0193798	0.0156250	1.2403101
+TTG	7		0.0135659	0.0156250	0.8682171
+TTT	7		0.0135659	0.0156250	0.8682171
+
+Other	0		0.0000000	0.0000000	10000000000.0000000
+</pre>
+</td></tr></table><p>
+
+
 <H2>
     Output file format
 </H2>
@@ -311,7 +536,257 @@ observed to expected frequency.
 After a blank line at the end, the results of 'Other' words is
 given - this is the number of words with a sequence which has
 IUPAC ambiguity codes or other unusual characters in. 
+
 <p>
+
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: result3.comp</h3>
+<table width="90%"><tr><td bgcolor="#DDFFDD">
+<pre>
+#
+# Output from 'compseq'
+#
+# The Expected frequencies are calculated on the (false) assumption that every
+# word has equal frequency.
+#
+# The input sequences are:
+#	HSFAU
+
+
+Word size	2
+Total count	517
+
+#
+# Word	Obs Count	Obs Frequency	Exp Frequency	Obs/Exp Frequency
+#
+AA	45		0.0870406	0.0625000	1.3926499
+AC	20		0.0386847	0.0625000	0.6189555
+AG	45		0.0870406	0.0625000	1.3926499
+AT	14		0.0270793	0.0625000	0.4332689
+CA	34		0.0657640	0.0625000	1.0522244
+CC	43		0.0831721	0.0625000	1.3307544
+CG	25		0.0483559	0.0625000	0.7736944
+CT	37		0.0715667	0.0625000	1.1450677
+GA	31		0.0599613	0.0625000	0.9593810
+GC	43		0.0831721	0.0625000	1.3307544
+GG	46		0.0889749	0.0625000	1.4235977
+GT	28		0.0541586	0.0625000	0.8665377
+TA	15		0.0290135	0.0625000	0.4642166
+TC	33		0.0638298	0.0625000	1.0212766
+TG	32		0.0618956	0.0625000	0.9903288
+TT	26		0.0502901	0.0625000	0.8046422
+
+Other	0		0.0000000	0.0000000	10000000000.0000000
+</pre>
+</td></tr></table><p>
+
+<a name="output.2"></a>
+<h3>Output files for usage example 2</h3>
+<p><h3>File: result6.comp</h3>
+<table width="90%"><tr><td bgcolor="#DDFFDD">
+<pre>
+#
+# Output from 'compseq'
+#
+# Words with a frequency of zero are not reported.
+# The Expected frequencies are calculated on the (false) assumption that every
+# word has equal frequency.
+#
+# The input sequences are:
+#	HSFAU
+
+
+Word size	6
+Total count	513
+
+#
+# Word	Obs Count	Obs Frequency	Exp Frequency	Obs/Exp Frequency
+#
+AAAAAA	6		0.0116959	0.0002441	47.9064327
+AAAAAG	1		0.0019493	0.0002441	7.9844055
+AAAAGC	1		0.0019493	0.0002441	7.9844055
+AAAAGT	1		0.0019493	0.0002441	7.9844055
+AAACAG	1		0.0019493	0.0002441	7.9844055
+AAACGG	1		0.0019493	0.0002441	7.9844055
+AAAGCC	1		0.0019493	0.0002441	7.9844055
+AAAGTG	1		0.0019493	0.0002441	7.9844055
+AAAGTT	1		0.0019493	0.0002441	7.9844055
+AACAGG	1		0.0019493	0.0002441	7.9844055
+AACCGG	1		0.0019493	0.0002441	7.9844055
+AACGGT	1		0.0019493	0.0002441	7.9844055
+AACGTT	1		0.0019493	0.0002441	7.9844055
+AACTCT	1		0.0019493	0.0002441	7.9844055
+AAGAAG	6		0.0116959	0.0002441	47.9064327
+AAGACA	1		0.0019493	0.0002441	7.9844055
+AAGATC	1		0.0019493	0.0002441	7.9844055
+AAGCCA	1		0.0019493	0.0002441	7.9844055
+AAGCGG	1		0.0019493	0.0002441	7.9844055
+AAGGCT	1		0.0019493	0.0002441	7.9844055
+AAGGGC	1		0.0019493	0.0002441	7.9844055
+AAGGTG	1		0.0019493	0.0002441	7.9844055
+AAGTAG	1		0.0019493	0.0002441	7.9844055
+AAGTCG	1		0.0019493	0.0002441	7.9844055
+AAGTCT	1		0.0019493	0.0002441	7.9844055
+AAGTGA	1		0.0019493	0.0002441	7.9844055
+AAGTTC	1		0.0019493	0.0002441	7.9844055
+AATAAA	1		0.0019493	0.0002441	7.9844055
+AATATG	1		0.0019493	0.0002441	7.9844055
+AATGCC	1		0.0019493	0.0002441	7.9844055
+AATTCT	1		0.0019493	0.0002441	7.9844055
+ACAACC	1		0.0019493	0.0002441	7.9844055
+ACACAC	1		0.0019493	0.0002441	7.9844055
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+TGAGGC	1		0.0019493	0.0002441	7.9844055
+TGCAGC	1		0.0019493	0.0002441	7.9844055
+TGCAGT	1		0.0019493	0.0002441	7.9844055
+TGCCAA	1		0.0019493	0.0002441	7.9844055
+TGCCCA	1		0.0019493	0.0002441	7.9844055
+TGCCCC	1		0.0019493	0.0002441	7.9844055
+TGCGGG	1		0.0019493	0.0002441	7.9844055
+TGCTCC	1		0.0019493	0.0002441	7.9844055
+TGCTGG	1		0.0019493	0.0002441	7.9844055
+TGCTTG	1		0.0019493	0.0002441	7.9844055
+TGGAAA	1		0.0019493	0.0002441	7.9844055
+TGGAAG	1		0.0019493	0.0002441	7.9844055
+TGGAGG	4		0.0077973	0.0002441	31.9376218
+TGGCAA	1		0.0019493	0.0002441	7.9844055
+TGGCAG	1		0.0019493	0.0002441	7.9844055
+TGGCCA	1		0.0019493	0.0002441	7.9844055
+TGGCCC	1		0.0019493	0.0002441	7.9844055
+TGGCTT	1		0.0019493	0.0002441	7.9844055
+TGGGAC	1		0.0019493	0.0002441	7.9844055
+TGGGCC	1		0.0019493	0.0002441	7.9844055
+TGGTTC	1		0.0019493	0.0002441	7.9844055
+TGTAAT	1		0.0019493	0.0002441	7.9844055
+TGTAGC	1		0.0019493	0.0002441	7.9844055
+TGTCAA	1		0.0019493	0.0002441	7.9844055
+TGTCCG	1		0.0019493	0.0002441	7.9844055
+TGTGCC	1		0.0019493	0.0002441	7.9844055
+TTAAGT	1		0.0019493	0.0002441	7.9844055
+TTAGTT	1		0.0019493	0.0002441	7.9844055
+TTCAGT	2		0.0038986	0.0002441	15.9688109
+TTCATG	1		0.0019493	0.0002441	7.9844055
+TTCCCT	1		0.0019493	0.0002441	7.9844055
+TTCCTC	1		0.0019493	0.0002441	7.9844055
+TTCGAG	1		0.0019493	0.0002441	7.9844055
+TTCGCG	1		0.0019493	0.0002441	7.9844055
+TTCTCG	1		0.0019493	0.0002441	7.9844055
+TTCTCT	1		0.0019493	0.0002441	7.9844055
+TTCTGG	1		0.0019493	0.0002441	7.9844055
+TTGCCC	1		0.0019493	0.0002441	7.9844055
+TTGGAG	1		0.0019493	0.0002441	7.9844055
+TTGGCA	1		0.0019493	0.0002441	7.9844055
+TTGTAA	1		0.0019493	0.0002441	7.9844055
+TTGTCA	1		0.0019493	0.0002441	7.9844055
+TTGTCC	1		0.0019493	0.0002441	7.9844055
+TTGTGC	1		0.0019493	0.0002441	7.9844055
+TTTCTC	2		0.0038986	0.0002441	15.9688109
+TTTGGC	1		0.0019493	0.0002441	7.9844055
+TTTGTA	1		0.0019493	0.0002441	7.9844055
+TTTGTC	2		0.0038986	0.0002441	15.9688109
+TTTTGT	1		0.0019493	0.0002441	7.9844055
+
+Other	0		0.0000000	0.0000000	10000000000.0000000
+</pre>
+</td></tr></table><p>
+
+<a name="output.3"></a>
+<h3>Output files for usage example 3</h3>
+<p><h3>File: result3.comp</h3>
+<table width="90%"><tr><td bgcolor="#DDFFDD">
+<pre>
+#
+# Output from 'compseq'
+#
+# Only words in frame 2 will be counted.
+# The Expected frequencies are taken from the file: ../../data/prev.comp
+#
+# The input sequences are:
+#	HSFAU
+
+
+Word size	3
+Total count	172
+
+#
+# Word	Obs Count	Obs Frequency	Exp Frequency	Obs/Exp Frequency
+#
+AAA	7		0.0406977	0.0329457	1.2352955
+AAC	3		0.0174419	0.0096899	1.8000042
+AAG	11		0.0639535	0.0348837	1.8333344
+AAT	3		0.0174419	0.0077519	2.2500110
+ACA	1		0.0058140	0.0096899	0.6000014
+ACC	4		0.0232558	0.0116279	2.0000012
+ACG	1		0.0058140	0.0038760	1.4999880
+ACT	3		0.0174419	0.0135659	1.2857135
+AGA	1		0.0058140	0.0232558	0.2500002
+AGC	2		0.0116279	0.0135659	0.8571423
+AGG	0		0.0000000	0.0310078	0.0000000
+AGT	0		0.0000000	0.0193798	0.0000000
+ATA	0		0.0000000	0.0038760	0.0000000
+ATC	1		0.0058140	0.0058140	0.9999920
+ATG	3		0.0174419	0.0135659	1.2857135
+ATT	1		0.0058140	0.0038760	1.4999880
+CAA	1		0.0058140	0.0193798	0.3000007
+CAC	2		0.0116279	0.0116279	1.0000006
+CAG	9		0.0523256	0.0251938	2.0769229
+CAT	3		0.0174419	0.0096899	1.8000042
+CCA	0		0.0000000	0.0232558	0.0000000
+CCC	3		0.0174419	0.0251938	0.6923076
+CCG	1		0.0058140	0.0155039	0.3749994
+CCT	2		0.0116279	0.0193798	0.6000014
+CGA	1		0.0058140	0.0038760	1.4999880
+CGC	5		0.0290698	0.0193798	1.5000035
+CGG	4		0.0232558	0.0174419	1.3333303
+CGT	2		0.0116279	0.0077519	1.5000074
+CTA	1		0.0058140	0.0096899	0.6000014
+CTC	4		0.0232558	0.0213178	1.0909106
+CTG	7		0.0406977	0.0193798	2.1000049
+CTT	3		0.0174419	0.0213178	0.8181829
+GAA	3		0.0174419	0.0213178	0.8181829
+GAC	1		0.0058140	0.0116279	0.5000003
+GAG	7		0.0406977	0.0193798	2.1000049
+GAT	2		0.0116279	0.0077519	1.5000074
+GCA	2		0.0116279	0.0135659	0.8571423
+GCC	10		0.0581395	0.0348837	1.6666677
+GCG	1		0.0058140	0.0155039	0.3749994
+GCT	3		0.0174419	0.0193798	0.9000021
+GGA	2		0.0116279	0.0251938	0.4615384
+GGC	8		0.0465116	0.0329457	1.4117663
+GGG	1		0.0058140	0.0135659	0.4285712
+GGT	5		0.0290698	0.0174419	1.6666629
+GTA	2		0.0116279	0.0116279	1.0000006
+GTC	6		0.0348837	0.0174419	1.9999955
+GTG	6		0.0348837	0.0155039	2.2499965
+GTT	3		0.0174419	0.0096899	1.8000042
+TAA	3		0.0174419	0.0135659	1.2857135
+TAC	1		0.0058140	0.0058140	0.9999920
+TAG	0		0.0000000	0.0077519	0.0000000
+TAT	0		0.0000000	0.0019380	0.0000000
+TCA	3		0.0174419	0.0193798	0.9000021
+TCC	1		0.0058140	0.0116279	0.5000003
+TCG	0		0.0000000	0.0135659	0.0000000
+TCT	3		0.0174419	0.0193798	0.9000021
+TGA	0		0.0000000	0.0077519	0.0000000
+TGC	1		0.0058140	0.0174419	0.3333326
+TGG	1		0.0058140	0.0271318	0.2142856
+TGT	1		0.0058140	0.0096899	0.6000014
+TTA	1		0.0058140	0.0038760	1.4999880
+TTC	1		0.0058140	0.0193798	0.3000007
+TTG	0		0.0000000	0.0135659	0.0000000
+TTT	5		0.0290698	0.0135659	2.1428558
+
+Other	0		0.0290698	0.0000000	10000000000.0000000
+</pre>
+</td></tr></table><p>
+
+
+<!--
 Example:	
 <pre>
 #
@@ -349,6 +824,8 @@ TT      5               0.0255102       0.0255102       1.0000002
 Other   21              0.0255102       0.1071429       0.2380951
 
 </pre>
+-->
+
 
 <H2>
     Data files
@@ -450,7 +927,7 @@ amounts of memory.
 <tr><td><a href="btwisted.html">btwisted</a></td><td>Calculates the twisting in a B-DNA sequence</td></tr>
 <tr><td><a href="chaos.html">chaos</a></td><td>Create a chaos game representation plot for a sequence</td></tr>
 <tr><td><a href="charge.html">charge</a></td><td>Protein charge plot</td></tr>
-<tr><td><a href="checktrans.html">checktrans</a></td><td>Reports STOP codons and ORF statistics of a protein sequence</td></tr>
+<tr><td><a href="checktrans.html">checktrans</a></td><td>Reports STOP codons and ORF statistics of a protein</td></tr>
 <tr><td><a href="dan.html">dan</a></td><td>Calculates DNA RNA/DNA melting temperature</td></tr>
 <tr><td><a href="emowse.html">emowse</a></td><td>Protein identification by mass spectrometry</td></tr>
 <tr><td><a href="freak.html">freak</a></td><td>Residue/base frequency table or plot</td></tr>
@@ -463,6 +940,7 @@ amounts of memory.
 <tr><td><a href="pepstats.html">pepstats</a></td><td>Protein statistics</td></tr>
 <tr><td><a href="pepwindow.html">pepwindow</a></td><td>Displays protein hydropathy</td></tr>
 <tr><td><a href="pepwindowall.html">pepwindowall</a></td><td>Displays protein hydropathy of a set of sequences</td></tr>
+<tr><td><a href="sirna.html">sirna</a></td><td>Finds siRNA duplexes in mRNA</td></tr>
 <tr><td><a href="wordcount.html">wordcount</a></td><td>Counts words of a specified size in a DNA sequence</td></tr>
 </table>
 

@@ -60,18 +60,24 @@ force the reporting of single cleavage sites.
 </H2>
 
 
-Here is a sample session with restrict.
+<b>Here is a sample session with restrict</b>
+<p>
 
-<pre>
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% restrict
+% <b>restrict </b>
 Finds restriction enzyme cleavage sites
-Input sequence(s): embl:hsfau
-Minimum recognition site length [4]: 
-Comma separated enzyme list [all]: 
-Output file [hsfau.restrict]: 
+Input sequence(s): <b>tembl:hsfau</b>
+Minimum recognition site length [4]: <b></b>
+Comma separated enzyme list [all]: <b></b>
+Output report [hsfau.restrict]: <b></b>
 
-</pre>
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
+
+
 
 <H2>
     Command line arguments
@@ -180,7 +186,7 @@ PpiI</td>
 <tr>
 <td>[-outfile]<br>(Parameter 2)</td>
 <td>Output report file name</td>
-<td>Report file</td>
+<td>Report output file</td>
 <td>&nbsp;</td>
 </tr>
 
@@ -217,42 +223,42 @@ PpiI</td>
 <tr>
 <td>-single</td>
 <td>Force single site only cuts</td>
-<td>Yes/No</td>
+<td>Boolean value Yes/No</td>
 <td>No</td>
 </tr>
 
 <tr>
 <td>-[no]blunt</td>
 <td>Allow blunt end cutters</td>
-<td>Yes/No</td>
+<td>Boolean value Yes/No</td>
 <td>Yes</td>
 </tr>
 
 <tr>
 <td>-[no]sticky</td>
 <td>Allow sticky end cutters</td>
-<td>Yes/No</td>
+<td>Boolean value Yes/No</td>
 <td>Yes</td>
 </tr>
 
 <tr>
 <td>-[no]ambiguity</td>
 <td>Allow ambiguous matches</td>
-<td>Yes/No</td>
+<td>Boolean value Yes/No</td>
 <td>Yes</td>
 </tr>
 
 <tr>
 <td>-plasmid</td>
 <td>Allow circular DNA</td>
-<td>Yes/No</td>
+<td>Boolean value Yes/No</td>
 <td>No</td>
 </tr>
 
 <tr>
 <td>-[no]commercial</td>
 <td>Only enzymes with suppliers</td>
-<td>Yes/No</td>
+<td>Boolean value Yes/No</td>
 <td>Yes</td>
 </tr>
 
@@ -266,35 +272,35 @@ PpiI</td>
 <tr>
 <td>-[no]limit</td>
 <td>Limits reports to one isoschizomer</td>
-<td>Yes/No</td>
+<td>Boolean value Yes/No</td>
 <td>Yes</td>
 </tr>
 
 <tr>
 <td>-preferred</td>
 <td>Report preferred isoschizomers</td>
-<td>Yes/No</td>
+<td>Boolean value Yes/No</td>
 <td>No</td>
 </tr>
 
 <tr>
 <td>-alphabetic</td>
 <td>Sort output alphabetically</td>
-<td>Yes/No</td>
+<td>Boolean value Yes/No</td>
 <td>No</td>
 </tr>
 
 <tr>
 <td>-fragments</td>
 <td>Show fragment lengths</td>
-<td>Yes/No</td>
+<td>Boolean value Yes/No</td>
 <td>No</td>
 </tr>
 
 <tr>
 <td>-name</td>
 <td>Show sequence name</td>
-<td>Yes/No</td>
+<td>Boolean value Yes/No</td>
 <td>No</td>
 </tr>
 
@@ -307,7 +313,96 @@ PpiI</td>
 </H2>
 
 
-The input sequence can be one or more DNA sequences.
+<b>restrict</b> reads one or more DNA sequence USAs.
+
+<p>
+
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+
+'tembl:hsfau' is a sequence entry in the example nucleic acid database 'tembl'
+<p>
+<p><h3>Database entry: tembl:hsfau</h3>
+<table width="90%"><tr><td bgcolor="#FFDDFF">
+<pre>
+ID   HSFAU      standard; RNA; HUM; 518 BP.
+XX
+AC   X65923;
+XX
+SV   X65923.1
+XX
+DT   13-MAY-1992 (Rel. 31, Created)
+DT   23-SEP-1993 (Rel. 37, Last updated, Version 10)
+XX
+DE   H.sapiens fau mRNA
+XX
+KW   fau gene.
+XX
+OS   Homo sapiens (human)
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia;
+OC   Eutheria; Primates; Catarrhini; Hominidae; Homo.
+XX
+RN   [1]
+RP   1-518
+RA   Michiels L.M.R.;
+RT   ;
+RL   Submitted (29-APR-1992) to the EMBL/GenBank/DDBJ databases.
+RL   L.M.R. Michiels, University of Antwerp, Dept of Biochemistry,
+RL   Universiteisplein 1, 2610 Wilrijk, BELGIUM
+XX
+RN   [2]
+RP   1-518
+RX   MEDLINE; 93368957.
+RA   Michiels L., Van der Rauwelaert E., Van Hasselt F., Kas K., Merregaert J.;
+RT   " fau cDNA encodes a ubiquitin-like-S30 fusion protein and is expressed as
+RT   an antisense sequences in the Finkel-Biskis-Reilly murine sarcoma virus";
+RL   Oncogene 8:2537-2546(1993).
+XX
+DR   SWISS-PROT; P35544; UBIM_HUMAN.
+DR   SWISS-PROT; Q05472; RS30_HUMAN.
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..518
+FT                   /chromosome="11q"
+FT                   /db_xref="taxon:9606"
+FT                   /organism="Homo sapiens"
+FT                   /tissue_type="placenta"
+FT                   /clone_lib="cDNA"
+FT                   /clone="pUIA 631"
+FT                   /map="13"
+FT   misc_feature    57..278
+FT                   /note="ubiquitin like part"
+FT   CDS             57..458
+FT                   /db_xref="SWISS-PROT:P35544"
+FT                   /db_xref="SWISS-PROT:Q05472"
+FT                   /gene="fau"
+FT                   /protein_id="CAA46716.1"
+FT                   /translation="MQLFVRAQELHTFEVTGQETVAQIKAHVASLEGIAPEDQVVLLAG
+FT                   APLEDEATLGQCGVEALTTLEVAGRMLGGKVHGSLARAGKVRGQTPKVAKQEKKKKKTG
+FT                   RAKRRMQYNRRFVNVVPTFGKKKGPNANS"
+FT   misc_feature    98..102
+FT                   /note="nucleolar localization signal"
+FT   misc_feature    279..458
+FT                   /note="S30 part"
+FT   polyA_signal    484..489
+FT   polyA_site      509
+XX
+SQ   Sequence 518 BP; 125 A; 139 C; 148 G; 106 T; 0 other;
+     ttcctctttc tcgactccat cttcgcggta gctgggaccg ccgttcagtc gccaatatgc        60
+     agctctttgt ccgcgcccag gagctacaca ccttcgaggt gaccggccag gaaacggtcg       120
+     cccagatcaa ggctcatgta gcctcactgg agggcattgc cccggaagat caagtcgtgc       180
+     tcctggcagg cgcgcccctg gaggatgagg ccactctggg ccagtgcggg gtggaggccc       240
+     tgactaccct ggaagtagca ggccgcatgc ttggaggtaa agttcatggt tccctggccc       300
+     gtgctggaaa agtgagaggt cagactccta aggtggccaa acaggagaag aagaagaaga       360
+     agacaggtcg ggctaagcgg cggatgcagt acaaccggcg ctttgtcaac gttgtgccca       420
+     cctttggcaa gaagaagggc cccaatgcca actcttaagt cttttgtaat tctggctttc       480
+     tctaataaaa aagccactta gttcagtcaa aaaaaaaa                               518
+//
+</pre>
+</td></tr></table><p>
+
 
 <H2>
     Output file format
@@ -342,6 +437,97 @@ By default <b>restrict</b> writes a 'table' report file.
 
 <p>
 
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: hsfau.restrict</h3>
+<table width="90%"><tr><td bgcolor="#DDFFDD">
+<pre>
+########################################
+# Program: restrict
+# Rundate: Thu Nov 07 14:42:26 2002
+# Report_format: table
+# Report_file: hsfau.restrict
+########################################
+
+#=======================================
+#
+# Sequence: HSFAU     from: 1   to: 518
+# HitCount: 53
+#
+# Minimum cuts per enzyme: 1
+# Maximum cuts per enzyme: 2000000000
+# Minimum length of recognition site: 4
+# Blunt ends allowed
+# Sticky ends allowed
+# DNA is linear
+# Ambiguities allowed
+#
+#=======================================
+
+  Start     End   Score Enzyme_name Restriction_site 5prime 3prime 5primerev 3primerev
+     11      14        0 TaqI        TCGA                 11     13         .         .
+     28      31        0 AciI        CCGC                 25     27         .         .
+     38      41        0 AciI        CCGC                 38     40         .         .
+     44      48        0 BceAI       ACGGC                25     27         .         .
+     71      74        0 AciI        CCGC                 71     73         .         .
+     71      81        0 Bsc4I       CCNNNNNNNGG          77     74         .         .
+     73      76        0 HhaI        GCGC                 75     73         .         .
+     73      76        0 Hin6I       GCGC                 73     75         .         .
+     77      81        0 BssKI       CCNGG                76     81         .         .
+     77      81        0 EcoRII      CCWGG                76     81         .         .
+     94      97        0 TaqI        TCGA                 94     96         .         .
+    103     106        0 BsiSI       CCGG                103    105         .         .
+    105     108        0 BshI        GGCC                106    106         .         .
+    107     117        0 Bsc4I       CCNNNNNNNGG         113    110         .         .
+    107     111        0 BssKI       CCNGG               106    111         .         .
+    107     111        0 EcoRII      CCWGG               106    111         .         .
+    122     132        0 Bsc4I       CCNNNNNNNGG         128    125         .         .
+    125     135        0 Hin4I       GAYNNNNNVTC         116    111       148       143
+    146     150        0 Bse1I       ACTGG               151    149         .         .
+    161     165        0 BssKI       CCNGG               160    165         .         .
+    162     165        0 BsiSI       CCGG                162    164         .         .
+    182     186        0 BssKI       CCNGG               181    186         .         .
+    182     186        0 EcoRII      CCWGG               181    186         .         .
+    190     193        0 HhaI        GCGC                192    190         .         .
+    190     193        0 Hin6I       GCGC                190    192         .         .
+    192     195        0 Hin6I       GCGC                192    194         .         .
+    192     195        0 HhaI        GCGC                194    192         .         .
+    197     201        0 BssKI       CCNGG               196    201         .         .
+    197     201        0 EcoRII      CCWGG               196    201         .         .
+    209     212        0 BshI        GGCC                210    210         .         .
+    219     222        0 BshI        GGCC                220    220         .         .
+    221     231        0 Bsc4I       CCNNNNNNNGG         227    224         .         .
+    225     229        0 Bse1I       ACTGG               221    219         .         .
+    229     232        0 AciI        CCGC                226    228         .         .
+    236     239        0 BshI        GGCC                237    237         .         .
+    248     252        0 BssKI       CCNGG               247    252         .         .
+    248     252        0 EcoRII      CCWGG               247    252         .         .
+    261     264        0 BshI        GGCC                262    262         .         .
+    263     266        0 AciI        CCGC                263    265         .         .
+    293     297        0 BssKI       CCNGG               292    297         .         .
+    293     297        0 EcoRII      CCWGG               292    297         .         .
+    296     299        0 BshI        GGCC                297    297         .         .
+    335     338        0 BshI        GGCC                336    336         .         .
+    380     383        0 AciI        CCGC                377    379         .         .
+    383     386        0 AciI        CCGC                380    382         .         .
+    395     398        0 BsiSI       CCGG                395    397         .         .
+    398     401        0 HhaI        GCGC                400    398         .         .
+    398     401        0 Hin6I       GCGC                398    400         .         .
+    405     410        0 HindII      GTYRAC              407    407         .         .
+    408     413        0 AclI        AACGTT              409    411         .         .
+    409     412        0 HpyCH4IV    ACGT                409    411         .         .
+    417     427        0 Bsc4I       CCNNNNNNNGG         423    420         .         .
+    438     441        0 BshI        GGCC                439    439         .         .
+
+#---------------------------------------
+#---------------------------------------
+</pre>
+</td></tr></table><p>
+
+
+<p>
+
 The output from restrict is a simple text one. The base number,
 restriction enzyme name, recognition site and cut positions are
 shown. Note that cuts are always to the right of the residue
@@ -354,66 +540,6 @@ The program reports enzymes that cut at two or four sites. The
 program also reports isoschizomers and enzymes having the same
 recognition sequence but different cut sites.
 
-<p>
-
-Here is part of a sample output:
-
-<p>
-
-<pre>
-<hr>
-########################################
-# Program: restrict
-# Rundate: Mon Feb 11 13:46:44 2002
-# Report_file: hsfau.restrict
-########################################
-
-#=======================================
-#
-# Sequence: HSFAU     from: 1   to: 518
-# HitCount: 214
-#
-# Minimum cuts per enzyme: 1
-# Maximum cuts per enzyme: 2000000000
-# Minimum length of recognition site: 4
-# Blunt ends allowed
-# Sticky ends allowed
-# DNA is linear
-# Ambiguities allowed
-#
-#
-#=======================================
-
-USA               Start     End   Score Enzyme_name Restriction_site 5prime 3prime 5primerev 3primerev
-HSFAU                 3       6   0.000 MnlI        CCTC             13     12   .         .
-HSFAU                 9      14   0.000 Hpy188III   TCNNGA           10     12   .         .
-HSFAU                11      14   0.000 TaqI        TCGA             11     13   .         .
-HSFAU                13      17   0.000 HinfI       GANTC            13     16   .         .
-HSFAU                17      21   0.000 MlyI        GAGTC            7      7   .         .
-HSFAU                17      21   0.000 PleI        GAGTC            7      8   .         .
-HSFAU                24      27   0.000 AccII       CGCG             25     25   .         .
-HSFAU                24      28   0.000 MboII       GAAGA            12     11   .         .
-HSFAU                28      31   0.000 AciI        CCGC             25     27   .         .
-
-etc.
-
-HSFAU               437     443   0.000 DraII       RGGNCCY          438    441   .         .
-HSFAU               438     442   0.000 AspS9I      GGNCC            438    441   .         .
-HSFAU               438     443   0.000 BscBI       GGNNCC           440    440   .         .
-HSFAU               438     441   0.000 BshFI       GGCC             439    439   .         .
-HSFAU               438     441   0.000 CviJI       RGCY             439    439   .         .
-HSFAU               454     459   0.000 AflII       CTTAAG           454    458   .         .
-HSFAU               454     459   0.000 SmlI        CTYRAG           454    458   .         .
-HSFAU               455     458   0.000 MseI        TTAA             455    457   .         .
-HSFAU               468     471   0.000 Sse9I       AATT             467    471   .         .
-HSFAU               474     477   0.000 CviJI       RGCY             475    475   .         .
-HSFAU               492     495   0.000 CviJI       RGCY             493    493   .         .
-HSFAU               497     501   0.000 BstDEI      CTNAG            497    500   .         .
-
-#---------------------------------------
-#---------------------------------------
-<hr>
-</pre>
 
 <H2>
     Data files
@@ -470,6 +596,8 @@ The program will warn you if a protein sequence is given.
     Diagnostic Error Messages
 </H2>
 
+None.
+
 
 <H2>
     Exit status
@@ -482,6 +610,8 @@ It exits with status 0 unless an error is reported.
     Known bugs
 </H2>
 
+
+None.
 
 <!--
 <H2>

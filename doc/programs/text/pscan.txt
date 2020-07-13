@@ -47,16 +47,19 @@ Description
    
 Usage
 
-   Here is a sample session with pscan.
+   Here is a sample session with pscan
+   
 
-% pscan
+% pscan 
 Scans proteins using PRINTS
-Input sequence(s): sw:OPSD_HUMAN
-Minimum number of elements per fingerprint [2]:
-Maximum number of elements per fingerprint [20]:
-Output file [opsd_human.pscan]:
-%
-
+Input sequence(s): tsw:opsd_human
+Minimum number of elements per fingerprint [2]: 
+Maximum number of elements per fingerprint [20]: 
+Output file [opsd_human.pscan]: 
+   
+   Go to the input files for this example
+   Go to the output files for this example
+   
 Command line arguments
 
    Mandatory qualifiers:
@@ -88,10 +91,163 @@ Command line arguments
    
 Input file format
 
-   The input sequence can be one or more protein sequences.
+   pscan reads one or more protein sequence USAs.
+   
+  Input files for usage example
+  
+   'tsw:opsd_human' is a sequence entry in the example protein database
+   'tsw'
+   
+  Database entry: tsw:opsd_human
+  
+ID   OPSD_HUMAN     STANDARD;      PRT;   348 AA.
+AC   P08100; Q16414;
+DT   01-AUG-1988 (Rel. 08, Created)
+DT   01-AUG-1988 (Rel. 08, Last sequence update)
+DT   15-JUL-1999 (Rel. 38, Last annotation update)
+DE   RHODOPSIN.
+GN   RHO.
+OS   Homo sapiens (Human).
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Mammalia;
+OC   Eutheria; Primates; Catarrhini; Hominidae; Homo.
+RN   [1]
+RP   SEQUENCE FROM N.A.
+RX   MEDLINE; 84272729.
+RA   NATHANS J., HOGNESS D.S.;
+RT   "Isolation and nucleotide sequence of the gene encoding human
+RT   rhodopsin.";
+RL   Proc. Natl. Acad. Sci. U.S.A. 81:4851-4855(1984).
+RN   [2]
+RP   SEQUENCE OF 1-120 FROM N.A.
+RA   BENNETT J., BELLER B., SUN D., KARIKO K.;
+RL   Submitted (NOV-1994) to the EMBL/GenBank/DDBJ databases.
+RN   [3]
+RP   REVIEW ON ADRP VARIANTS.
+RX   MEDLINE; 94004905.
+RA   AL-MAGHTHEH M., GREGORY C., INGLEHEARN C., HARDCASTLE A.,
+RA   BHATTACHARYA S.;
+RT   "Rhodopsin mutations in autosomal dominant retinitis pigmentosa.";
+RL   Hum. Mutat. 2:249-255(1993).
+RN   [4]
+RP   VARIANT ADRP HIS-23.
+RX   MEDLINE; 90136922.
+RA   DRYJA T.P., MCGEE T.L., REICHEI E., HAHN L.B., COWLEY G.S.,
+RA   YANDELL D.W., SANDBERG M.A., BERSON E.L.;
+RT   "A point mutation of the rhodopsin gene in one form of retinitis
+RT   pigmentosa.";
+RL   Nature 343:364-366(1990).
+RN   [5]
+RP   VARIANTS ADRP.
+RX   MEDLINE; 91051574.
+RA   FARRAR G.J., KENNA P., REDMOND R., MCWILLIAM P., BRADLEY D.G.,
+RA   HUMPHRIES M.M., SHARP E.M., INGLEHEARN C.F., BASHIR R., JAY M.,
+RA   WATTY A., LUDWIG M., SCHINZEL A., SAMANNS C., GAL A.,
+RA   BHATTACHARYA S.S., HUMPHRIES P.;
+RT   "Autosomal dominant retinitis pigmentosa: absence of the rhodopsin
+RT   proline-->histidine substitution (codon 23) in pedigrees from
+RT   Europe.";
+RL   Am. J. Hum. Genet. 47:941-945(1990).
+RN   [6]
+RP   VARIANTS ADRP HIS-23; ARG-58; LEU-347 AND SER-347.
+RX   MEDLINE; 91015273.
+
+
+  [Part of this file has been deleted for brevity]
+
+FT                                /FTId=VAR_004816.
+FT   VARIANT     209    209       V -> M (EFFECT NOT KNOWN).
+FT                                /FTId=VAR_004817.
+FT   VARIANT     211    211       H -> P (IN ADRP).
+FT                                /FTId=VAR_004818.
+FT   VARIANT     211    211       H -> R (IN ADRP).
+FT                                /FTId=VAR_004819.
+FT   VARIANT     216    216       M -> K (IN ADRP).
+FT                                /FTId=VAR_004820.
+FT   VARIANT     220    220       F -> C (IN ADRP).
+FT                                /FTId=VAR_004821.
+FT   VARIANT     222    222       C -> R (IN ADRP).
+FT                                /FTId=VAR_004822.
+FT   VARIANT     255    255       MISSING (IN ADRP).
+FT                                /FTId=VAR_004823.
+FT   VARIANT     264    264       MISSING (IN ADRP).
+FT                                /FTId=VAR_004824.
+FT   VARIANT     267    267       P -> L (IN ADRP).
+FT                                /FTId=VAR_004825.
+FT   VARIANT     267    267       P -> R (IN ADRP).
+FT                                /FTId=VAR_004826.
+FT   VARIANT     292    292       A -> E (IN CSNB4).
+FT                                /FTId=VAR_004827.
+FT   VARIANT     296    296       K -> E (IN ADRP).
+FT                                /FTId=VAR_004828.
+FT   VARIANT     297    297       S -> R (IN ADRP).
+FT                                /FTId=VAR_004829.
+FT   VARIANT     342    342       T -> M (IN ADRP).
+FT                                /FTId=VAR_004830.
+FT   VARIANT     345    345       V -> L (IN ADRP).
+FT                                /FTId=VAR_004831.
+FT   VARIANT     345    345       V -> M (IN ADRP).
+FT                                /FTId=VAR_004832.
+FT   VARIANT     347    347       P -> A (IN ADRP).
+FT                                /FTId=VAR_004833.
+FT   VARIANT     347    347       P -> L (IN ADRP; COMMON VARIANT).
+FT                                /FTId=VAR_004834.
+FT   VARIANT     347    347       P -> Q (IN ADRP).
+FT                                /FTId=VAR_004835.
+FT   VARIANT     347    347       P -> R (IN ADRP).
+FT                                /FTId=VAR_004836.
+FT   VARIANT     347    347       P -> S (IN ADRP).
+FT                                /FTId=VAR_004837.
+SQ   SEQUENCE   348 AA;  38892 MW;  07443BEA CRC32;
+     MNGTEGPNFY VPFSNATGVV RSPFEYPQYY LAEPWQFSML AAYMFLLIVL GFPINFLTLY
+     VTVQHKKLRT PLNYILLNLA VADLFMVLGG FTSTLYTSLH GYFVFGPTGC NLEGFFATLG
+     GEIALWSLVV LAIERYVVVC KPMSNFRFGE NHAIMGVAFT WVMALACAAP PLAGWSRYIP
+     EGLQCSCGID YYTLKPEVNN ESFVIYMFVV HFTIPMIIIF FCYGQLVFTV KEAAAQQQES
+     ATTQKAEKEV TRMVIIMVIA FLICWVPYAS VAFYIFTHQG SNFGPIFMTI PAFFAKSAAI
+     YNPVIYIMMN KQFRNCMLTT ICCGKNPLGD DEASATVSKT ETSQVAPA
+//
    
 Output file format
 
+  Output files for usage example
+  
+  File: opsd_human.pscan
+  
+
+
+CLASS 1
+Fingerprints with all elements in order
+
+
+
+CLASS 2
+All elements match but not all in the correct order
+
+
+
+CLASS 3
+Not all elements match but those that do are in order
+
+
+
+CLASS 4
+Remaining partial matches
+
+Fingerprint GPCRRHODOPSN Elements 7
+    Accession number PR00237
+    Rhodopsin-like GPCR superfamily signature
+  Element 2 Threshold 49% Score 75%
+             Start position 72 Length 22
+  Element 3 Threshold 48% Score 56%
+             Start position 117 Length 23
+  Element 4 Threshold 50% Score 69%
+             Start position 152 Length 22
+  Element 5 Threshold 51% Score 74%
+             Start position 204 Length 24
+  Element 6 Threshold 42% Score 75%
+             Start position 250 Length 25
+  Element 7 Threshold 46% Score 67%
+             Start position 288 Length 27
+   
    The program reports hits in four classes.
    
    Class1:
@@ -108,71 +264,6 @@ Output file format
    Class4:
           Miscellaneous matches
           
-   Here is part of a sample output:
-
-CLASS 1
-Fingerprints with all elements in order
-
-Fingerprint GPCRRHODOPSN Elements 7
-    Accession number PR00237
-    Rhodopsin-like GPCR superfamily signature
-  Element 1 Threshold 54% Score 64%
-             Start position 39 Length 25
-  Element 2 Threshold 49% Score 75%
-             Start position 72 Length 22
-  Element 3 Threshold 48% Score 56%
-             Start position 117 Length 23
-  Element 4 Threshold 50% Score 69%
-             Start position 152 Length 22
-  Element 5 Threshold 51% Score 74%
-             Start position 204 Length 24
-  Element 6 Threshold 42% Score 75%
-             Start position 250 Length 25
-  Element 7 Threshold 46% Score 67%
-             Start position 288 Length 27
-
-
-CLASS 2
-All elements match but not all in the correct order
-
-Fingerprint RHODOPSIN Elements 6
-    Accession number PR00579
-    Rhodopsin signature
-  Element 1 Threshold 80% Score 96%
-             Start position 3 Length 19
-  Element 2 Threshold 76% Score 100%
-             Start position 22 Length 17
-  Element 3 Threshold 53% Score 92%
-             Start position 85 Length 17
-  Element 4 Threshold 71% Score 100%
-             Start position 191 Length 17
-  Element 5 Threshold 56% Score 99%
-             Start position 271 Length 19
-  Element 6 Threshold 81% Score 93%
-             Start position 319 Length 14
-
-
-CLASS 3
-Not all elements match but those that do are in order
-
-Fingerprint PROFILIN Elements 6
-    Accession number PR00392
-    Profilin signature
-  Element 6 Threshold 31% Score 31%
-             Start position 18 Length 18
-  Element 6 Threshold 37% Score 37%
-             Start position 318 Length 15
-
-
-CLASS 4
-Remaining partial matches
-
-Fingerprint NANEUSMPORT Elements 8
-    Accession number PR00176
-    Sodium/chloride neurotransmitter symporter signature
-  Element 2 Threshold 47% Score 47%
-             Start position 38 Length 20
-
 Data files
 
    The data file is stored in the PRINTS directory of the standard EMBOSS
@@ -261,7 +352,7 @@ Known bugs
 
 See also
 
-    Program name                        Description
+    Program name                         Description
    antigenic      Finds antigenic sites in proteins
    digest         Protein proteolytic enzyme or reagent cleavage digest
    fuzzpro        Protein pattern search
@@ -271,6 +362,7 @@ See also
    patmatdb       Search a protein sequence with a motif
    patmatmotifs   Search a PROSITE motif database with a protein sequence
    pepcoil        Predicts coiled coil regions
+   pestfind       Finds PEST motifs as potential proteolytic cleavage sites
    preg           Regular expression search of a protein sequence
    sigcleave      Reports protein signal cleavage sites
    

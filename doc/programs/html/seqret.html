@@ -53,59 +53,78 @@ The simplicity of the above description of this program greatly
 understates the rich functionality of this program. 
 
 <p>
+
 Because EMBOSS programs can take a wide range of qualifiers that
 slightly change the behaviour of the program when reading or writing a
 sequence, this program can do many more things than simply "read and
 write a sequence". 
 
 <p>
-seqret can read a sequence or many sequences from databases, files,
+
+<b>seqret</b> can read a sequence or many sequences from databases, files,
 files of sequence names, the command-line or the output of other
 programs and then can write them to files, the screen or pass them to
 other programs.  Because it can read in a sequence from a database and
-write it to a file, seqret is a program for extracting sequences from
-databases.  Because it can write the sequence to the screen, seqret is a
+write it to a file, <b>seqret</b> is a program for extracting sequences from
+databases.  Because it can write the sequence to the screen, <b>seqret</b> is a
 program for displaying sequences. 
 
 <p>
-seqret can read sequences in any of a wide range of standard sequence
+
+<b>seqret</b> can read sequences in any of a wide range of standard sequence
 formats.  You can specify the input and output formats being used.  If
-you don't specify the input format, seqret will try a set of possible
+you don't specify the input format, <b>seqret</b> will try a set of possible
 formats until it reads it in successfully.  Because you can specify the
-output sequence format, seqret is a program to reformat a sequence. 
+output sequence format, <b>seqret</b> is a program to reformat a sequence. 
 
 <p>
-seqret can read in the reverse complement of a nucleic acid sequence. 
+
+<b>seqret</b> can read in the reverse complement of a nucleic acid sequence. 
 It therefore is a program for producing the reverse complement of a
 sequence. 
 
 <p>
-seqret can read in a sequence whose begin and end positions you have
+
+<b>seqret</b> can read in a sequence whose begin and end positions you have
 specified and write out that fragment.  It is therefore a utility for
 doing simple extraction of a region of a sequence. 
 
 <p>
-seqret can change the case of the sequence being read in to upper or to
+
+<b>seqret</b> can change the case of the sequence being read in to upper or to
 lower case.  It is therefore a simple sequence beautification utility. 
 
 <p>
-seqret can do any combination of the above functions.
+
+<b>seqret</b> can do any combination of the above functions.
 
 <p>
+
 The sequence input and output specification of this (and many other
 EMBOSS programs) is described as being a Uniform Sequence Address. 
 
 <p>
+
 The Uniform Sequence Address, or USA, is a somewhat tongue-in-cheek
 reference to a URL-style sequence naming used by all EMBOSS
 applications. 
 
 <p>
+
 The USA is a very flexible way of specifying one or more sequences from
 a variety of sources and includes sequence files, database queries and
 external applications. 
 
 <p>
+
+See the full specification of USA syntax at:
+<br>
+<a href="http://www.uk.embnet.org/Software/EMBOSS/Themes/UniformSequenceAddress.html">
+http://www.uk.embnet.org/Software/EMBOSS/Themes/UniformSequenceAddress.html
+</a>
+
+<p>
+
 The basic USA syntax is one of: 
 
 <ul>
@@ -119,11 +138,13 @@ The basic USA syntax is one of:
 </ul>
 
 <p>
+
 Note that ':' separates the name of a file containing many possible
 entries from the specific name of a sequence entry in that file.  It
 also separates the name of a database from an entry in that database
 
 <p>
+
 Note also that '::' separates the specified format of a file from the
 name of the file.  Normally the format can be omitted, in which case the
 program will attempt to identify the correct format when reading the
@@ -131,10 +152,12 @@ sequence in and will default to using FASTA format when writing the
 sequence out. 
 
 <p>
+
 Valid names of the databases set up in your local implementation of
 EMBOSS can be seen by using the program <a href="showdb.html">'showdb'.</a>
 
 <p>
+
 Database queries, and individual entries in files that have more than
 one sequence entry, use wildcards of "?" for any character and "*" for
 any string of characters.  There are some problems with the Unix shell
@@ -143,6 +166,7 @@ preceded by a backslash on the Unix command line, (for example
 "embl:hs\*")
 
 <p>
+
 The output USA name 'stdout' is special.  It makes the output go to the
 device 'standard output'.  This is the screen, by default. 
 
@@ -153,6 +177,7 @@ device 'standard output'.  This is the screen, by default.
 The following are valid USAs for sequences:
 
 <p>
+
 <TABLE border=3>
 <TR>
 <TH>USA</TH>
@@ -268,6 +293,7 @@ LAST UPDATED: 23 OCT 2000 - GWW
 -->
 
 <p>
+
 <table border=3>
 <tr><th>Input Format</th><th>Comments</th></tr>
 
@@ -497,6 +523,7 @@ LAST UPDATED: 30 OCT 2000 - GWW
 -->
 
 <p>
+
 <table border=3>
 <tr><th>Output Format</th><th>Single/<br>Multiple</th><th>Comments</th></tr>
 
@@ -660,14 +687,16 @@ suggestions are always welcome.
 <h3>Associated qualifiers</h3>
 
 <p>
+
 As noted previously there are many 'associated' qualifiers that alter
-the behaviour of seqret when it reads in or writes out a sequence.  As
+the behaviour of <b>seqret</b> when it reads in or writes out a sequence.  As
 these are used in all EMBOSS programs that read in or write out
 sequences, they are not reported by the '-help' qualifier.  They are
 however reported by the pair of qualifiers: '-help -verbose':
 
 
 <p>
+
 Some of the more useful associated qualifiers are:
 
 <table border=3>
@@ -690,25 +719,30 @@ Some of the more useful associated qualifiers are:
 </table>
 
 <p>
+
 The set of associated qualifiers for sequences behave in different ways
 depending on where they appear. 
 
 <p>
+
 If these qualifiers immediately follow a parameter they apply only to
 that parameter and not to all cases.  If they occur before any
 parameters, they apply to all following sequence parameters. 
 
 <p>
+
 If there are no two parameters of equal type, the order of parameters
 and their qualifiers is irrelevant. 
 
 <p>
+
 Where a qualifier is defined more than once, for example "-sformat" for
 2 input sequences to be aligned, the qualifier name can have a number to
 indicate which sequence is meant.  "-sbegin2=25" will apply only to the
 second sequence, no matter where it appears on the command line. 
 
 <p>
+
 The -sbegin and -send qualifiers take an integer number specifying the
 position to begin or end reading a sequence.  If the number is positive,
 the number is the position counting from the first base or residue of
@@ -718,6 +752,7 @@ the sequence.  (If -sbegin 0 is used, it is assumed to be the same as
 -sbegin 1 and -send 0 is the same as -send -1.)
 
 <p>
+
 The filter qualifier makes the program behave like a filter, reading its
 (first) input 'file' from the standard input, and writing its (first)
 output 'file' to the standard output.  The -filter qualifier will also
@@ -725,6 +760,7 @@ invoke the -auto qualifier, so the user is never prompted for any
 missing values. 
 
 <p>
+
 Example:
 
 <pre>
@@ -734,12 +770,14 @@ Example:
 </pre>
 
 <p>
-The example shows the application seqret being run with the -filter
+
+The example shows the application <b>seqret</b> being run with the -filter
 qualifier.  The input file is 'piped' into the program using the unix
 command cat and the output is 'piped' directly to the unix program lpr,
 which will print it on the printer. 
 
 <p>
+
 When the -options qualifier is used and not all the parameters are given
 on the command line, it will query the user for those parameters.  It
 will not only query the user for the required parameters as it would do
@@ -747,6 +785,7 @@ without the -options qualifier, but it will also query the user for the
 optional parameters.
 
 <p>
+
 When the -stdout qualifier is used, the user will still be prompted for
 all the info that is required, but will write to standard output by
 default.  The user will also still be prompted for an output filename,
@@ -757,192 +796,200 @@ in case the user wants to save the output to a file.
 </H2>
 
 
-Here is a sample session with seqret.   It is used to extract an entry
-from a database and write it to a file:
-
-<pre>
-
-% seqret
-Input sequence: embl:paamir
-Output sequence [paamir.fasta]: 
-
-</pre>
-
-
+<b>Here is a sample session with seqret</b>
 <p>
-Here seqret is used to display the contents of the sequence on the
-screen:
-
-<pre>
-
-% seqret 
-Reads and writes (returns) sequences
-Input sequence: embl:paamir
-Output sequence [paamir.fasta]: stdout
-
-</pre>
-
-<p>
-Here it is used in three different ways to write the result to a file in
-GCG format.  Once by using the qualifier '-osformat', once by using the
-format in the output USA on the command line and once by specifying the
-format in the USA at the prompt. 
-
-<pre>
-
-% seqret -osf gcg
-Reads and writes (returns) sequences
-Input sequence: embl:paamir
-Output sequence [paamir.gcg]:
-
-</pre>
-
-<pre>
-
-% seqret -outseq gcg::paamir.gcg
-Reads and writes (returns) sequences
-Input sequence: embl:paamir
-
-</pre>
-
-<pre>
-
-% seqret
-Reads and writes (returns) sequences
-Input sequence: embl:paamir
-Output sequence [paamir.fasta]: gcg::paamir.gcg
-
-</pre>
-
-<p>
-Here seqret is used to produce the reverse-complement of a sequence:
-
-<pre>
-
-% seqret -srev
-Reads and writes (returns) sequences
-Input sequence: embl:paamir
-Output sequence [paamir.fasta]: 
-
-</pre>
-
-<p>
-Here seqret is used to extract the bases between the positions starting
-at 5 and ending at 25:
-
-<pre>
-
-% seqret -sbegin 5 -send 25
-Reads and writes (returns) sequences
-Input sequence: embl:paamir
-Output sequence [paamir.fasta]:
-
-</pre>
-
-<p>
-Here seqret is used to extract the bases between the positions starting
-at 5 and ending at 5 bases before the end of the sequence:
-
-<pre>
-
-% seqret -sbegin 5 -send -5
-Reads and writes (returns) sequences
-Input sequence: embl:paamir
-Output sequence [paamir.fasta]:
-
-</pre>
-
-<p>
-Here seqret is used to read all entries in the database 'tembl' that
-start with 'hs' and writes them to a file:
-
-<pre>
-
-% seqret
-Reads and writes (returns) sequences
-Input sequence(s): embl:hs*
-Output sequence [hs989235.fasta]:
-
-</pre>
-
-<p>
-Here seqret is used to read all entries in the database 'tembl' that
-start with 'hs' and writes them to a file. In this example the
-specification is all done in the command line and to stop Unix getting
-confused by the '*' character, it has to have a backslash ('\') before
-it:
-
-<pre>
-
-% seqret embl:hs\*  hs989235.fasta
-Reads and writes (returns) sequences
-
-</pre>
-
-<p>
-Here seqret is used to read only the entry 'hsfau' from the file
-'hs989235.fasta' which contains many entries:
-
-<pre>
-
-% seqret
-Reads and writes (returns) sequences
-Input sequence(s): hs989235.fasta:hsfau
-Output sequence [hsfau.fasta]: 
-
-</pre>
-
-<p>
-Here seqret is used to read all entries in the file 'hs989235.fasta', but
-only writes the first one of these entries out to a file:
-
-<pre>
-
-% seqret -firstonly
-Reads and writes (returns) sequences
-Input sequence(s): hs989235.fasta
-Output sequence [hs989235.fasta]: first.fasta
-
-</pre>
-
-
-<p>
-Here seqret is used to display on the screen the short sequence
-"actgatcgtg" in uppercase in EMBL format:
-
-<pre>
-
-% seqret -supper -osf embl asis::actgatcgtg stdout
-Reads and writes (returns) sequences
-ID              standard; DNA; UNC; 10 BP.
-SQ   Sequence 10 BP; 2 A; 2 C; 3 G; 3 T; 0 other;
-     ACTGATCGTG                                10
-//
-
-</pre>
-
-
+Extract an entry from a database and write it to a file:  
 <p>
 
-To force <b>seqret</b> to both read in and write out features, use the
-command-line qualifier '<b>-feature</b>'. 
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
+% <b>seqret </b>
+Reads and writes (returns) sequences
+Input sequence(s): <b>tembl:hsfau</b>
+Output sequence [hsfau.fasta]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 2</b>
+<p>
+Read all entries in the database 'tembl' that start with 'hs' and write them to a file. In this example the specification is all done in the command line and to stop Unix getting confused by the '*' character, it has to have a backslash ('\') before it: 
 <p>
 
-<b>seqret</b> does not read in features by default
-because this results in slightly faster performance.  If however you wish to
-read in features with your sequence and write them out on output, using
-'-feature' will change the default behaviour to use any features
-present in the sequence.    
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-<pre>
-
-% seqret -feature
+% <b>seqret tembl:hs\*  hsall.seq </b>
 Reads and writes (returns) sequences
-Input sequence(s): em:hs989235
-Output sequence [hs989235.fasta]: embl::hs989235.embl
 
-</pre>   
+</pre></td></tr></table><p>
+<p>
+<a href="#output.2">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 3</b>
+<p>
+seqret does not read in features by default because this results in slightly faster performance.  If however you wish to read in features with your sequence and write them out on output, using '-feature' will change the default behaviour to use any features present in the sequence.  N.B. use embl format for the output file as the default format 'fasta' cannot display a feature table. 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>seqret -feature </b>
+Reads and writes (returns) sequences
+Input sequence(s): <b>tembl:hsfau</b>
+Output sequence [hsfau.fasta]: <b>embl::hsfau.embl</b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.3">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 4</b>
+<p>
+Display the contents of the sequence on the screen: 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>seqret </b>
+Reads and writes (returns) sequences
+Input sequence(s): <b>tembl:hsfau</b>
+Output sequence [hsfau.fasta]: <b>stdout</b>
+
+>HSFAU X65923.1 H.sapiens fau mRNA
+ttcctctttctcgactccatcttcgcggtagctgggaccgccgttcagtcgccaatatgc
+agctctttgtccgcgcccaggagctacacaccttcgaggtgaccggccaggaaacggtcg
+cccagatcaaggctcatgtagcctcactggagggcattgccccggaagatcaagtcgtgc
+tcctggcaggcgcgcccctggaggatgaggccactctgggccagtgcggggtggaggccc
+tgactaccctggaagtagcaggccgcatgcttggaggtaaagttcatggttccctggccc
+gtgctggaaaagtgagaggtcagactcctaaggtggccaaacaggagaagaagaagaaga
+agacaggtcgggctaagcggcggatgcagtacaaccggcgctttgtcaacgttgtgccca
+cctttggcaagaagaagggccccaatgccaactcttaagtcttttgtaattctggctttc
+tctaataaaaaagccacttagttcagtcaaaaaaaaaa
+
+</pre></td></tr></table><p>
+<p>
+<p>
+<p>
+<b>Example 5</b>
+<p>
+Write the result in GCG format by using the qualifier '-osformat'. 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>seqret -osf gcg </b>
+Reads and writes (returns) sequences
+Input sequence(s): <b>tembl:hsfau</b>
+Output sequence [hsfau.gcg]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.5">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 6</b>
+<p>
+Write the result in GCG format by specifying the format in the output USA on the command line. 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>seqret -outseq gcg::hsfau.gcg </b>
+Reads and writes (returns) sequences
+Input sequence(s): <b>tembl:hsfau</b>
+
+</pre></td></tr></table><p>
+<p>
+<p>
+<p>
+<b>Example 7</b>
+<p>
+Write the result in GCG format by specifying the format in the output USA at the prompt. 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>seqret </b>
+Reads and writes (returns) sequences
+Input sequence(s): <b>tembl:hsfau</b>
+Output sequence [hsfau.fasta]: <b>gcg::hsfau.gcg</b>
+
+</pre></td></tr></table><p>
+<p>
+<p>
+<p>
+<b>Example 8</b>
+<p>
+Write the reverse-complement of a sequence: 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>seqret -srev </b>
+Reads and writes (returns) sequences
+Input sequence(s): <b>tembl:hsfau</b>
+Output sequence [hsfau.fasta]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.8">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 9</b>
+<p>
+Extract the bases between the positions starting at 5 and ending at 25: 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>seqret -sbegin 5 -send 25 </b>
+Reads and writes (returns) sequences
+Input sequence(s): <b>tembl:hsfau</b>
+Output sequence [hsfau.fasta]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.9">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 10</b>
+<p>
+Extract the bases between the positions starting at 5 and ending at 5 bases before the end of the sequence: 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>seqret -sbegin 5 -send -5 </b>
+Reads and writes (returns) sequences
+Input sequence(s): <b>tembl:hsfau</b>
+Output sequence [hsfau.fasta]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.10">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 11</b>
+<p>
+Read all entries in the database 'tembl' that start with 'hs' and write them to a file: 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>seqret </b>
+Reads and writes (returns) sequences
+Input sequence(s): <b>tembl:hs*</b>
+Output sequence [hs989235.fasta]: <b>hsall.seq</b>
+
+</pre></td></tr></table><p>
+<p>
+<p>
 
 
 
@@ -1018,14 +1065,14 @@ IT IS DONE FOR YOU.
 <tr>
 <td>-feature</td>
 <td>Use feature information</td>
-<td>Yes/No</td>
+<td>Boolean value Yes/No</td>
 <td>No</td>
 </tr>
 
 <tr>
 <td>-firstonly</td>
 <td>Read one sequence and stop</td>
-<td>Yes/No</td>
+<td>Boolean value Yes/No</td>
 <td>No</td>
 </tr>
 
@@ -1038,7 +1085,95 @@ IT IS DONE FOR YOU.
 </H2>
 
 
-The USA of one or more sequences.
+<b>seqret</b> reads one or more sequence USAs.
+
+<p>
+
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+
+'tembl:hsfau' is a sequence entry in the example nucleic acid database 'tembl'
+<p>
+<p><h3>Database entry: tembl:hsfau</h3>
+<table width="90%"><tr><td bgcolor="#FFDDFF">
+<pre>
+ID   HSFAU      standard; RNA; HUM; 518 BP.
+XX
+AC   X65923;
+XX
+SV   X65923.1
+XX
+DT   13-MAY-1992 (Rel. 31, Created)
+DT   23-SEP-1993 (Rel. 37, Last updated, Version 10)
+XX
+DE   H.sapiens fau mRNA
+XX
+KW   fau gene.
+XX
+OS   Homo sapiens (human)
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia;
+OC   Eutheria; Primates; Catarrhini; Hominidae; Homo.
+XX
+RN   [1]
+RP   1-518
+RA   Michiels L.M.R.;
+RT   ;
+RL   Submitted (29-APR-1992) to the EMBL/GenBank/DDBJ databases.
+RL   L.M.R. Michiels, University of Antwerp, Dept of Biochemistry,
+RL   Universiteisplein 1, 2610 Wilrijk, BELGIUM
+XX
+RN   [2]
+RP   1-518
+RX   MEDLINE; 93368957.
+RA   Michiels L., Van der Rauwelaert E., Van Hasselt F., Kas K., Merregaert J.;
+RT   " fau cDNA encodes a ubiquitin-like-S30 fusion protein and is expressed as
+RT   an antisense sequences in the Finkel-Biskis-Reilly murine sarcoma virus";
+RL   Oncogene 8:2537-2546(1993).
+XX
+DR   SWISS-PROT; P35544; UBIM_HUMAN.
+DR   SWISS-PROT; Q05472; RS30_HUMAN.
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..518
+FT                   /chromosome="11q"
+FT                   /db_xref="taxon:9606"
+FT                   /organism="Homo sapiens"
+FT                   /tissue_type="placenta"
+FT                   /clone_lib="cDNA"
+FT                   /clone="pUIA 631"
+FT                   /map="13"
+FT   misc_feature    57..278
+FT                   /note="ubiquitin like part"
+FT   CDS             57..458
+FT                   /db_xref="SWISS-PROT:P35544"
+FT                   /db_xref="SWISS-PROT:Q05472"
+FT                   /gene="fau"
+FT                   /protein_id="CAA46716.1"
+FT                   /translation="MQLFVRAQELHTFEVTGQETVAQIKAHVASLEGIAPEDQVVLLAG
+FT                   APLEDEATLGQCGVEALTTLEVAGRMLGGKVHGSLARAGKVRGQTPKVAKQEKKKKKTG
+FT                   RAKRRMQYNRRFVNVVPTFGKKKGPNANS"
+FT   misc_feature    98..102
+FT                   /note="nucleolar localization signal"
+FT   misc_feature    279..458
+FT                   /note="S30 part"
+FT   polyA_signal    484..489
+FT   polyA_site      509
+XX
+SQ   Sequence 518 BP; 125 A; 139 C; 148 G; 106 T; 0 other;
+     ttcctctttc tcgactccat cttcgcggta gctgggaccg ccgttcagtc gccaatatgc        60
+     agctctttgt ccgcgcccag gagctacaca ccttcgaggt gaccggccag gaaacggtcg       120
+     cccagatcaa ggctcatgta gcctcactgg agggcattgc cccggaagat caagtcgtgc       180
+     tcctggcagg cgcgcccctg gaggatgagg ccactctggg ccagtgcggg gtggaggccc       240
+     tgactaccct ggaagtagca ggccgcatgc ttggaggtaa agttcatggt tccctggccc       300
+     gtgctggaaa agtgagaggt cagactccta aggtggccaa acaggagaag aagaagaaga       360
+     agacaggtcg ggctaagcgg cggatgcagt acaaccggcg ctttgtcaac gttgtgccca       420
+     cctttggcaa gaagaagggc cccaatgcca actcttaagt cttttgtaat tctggctttc       480
+     tctaataaaa aagccactta gttcagtcaa aaaaaaaa                               518
+//
+</pre>
+</td></tr></table><p>
 
 
 <H2>
@@ -1046,22 +1181,291 @@ The USA of one or more sequences.
 </H2>
 
 
-An output USA.
-
-<p>
-The output from seqret is one or more sequences, and by default will be
+The output from <b>seqret</b> is one or more sequences, and by default will be
 written in FASTA format. 
 
 <p>
+
 If the '-firstonly' qualifier is used then only the first sequence of the
 input USA specification will be written out. 
 
 <p>
+
 In some cases the output filename will be the same as the input
-filename, but as seqret reads only the first sequence before opening
+filename, but as <b>seqret</b> reads only the first sequence before opening
 the output file it may try to overwrite the input.  Note that this is
-not true of seqretset which reads all sequences into memory at
-startup, but which can need a large amount of memory for many sequences..
+not true of <b>seqretset</b> which reads all sequences into memory at
+startup, but which can need a large amount of memory for many sequences.
+
+<p>
+
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: hsfau.fasta</h3>
+<table width="90%"><tr><td bgcolor="#DDFFDD">
+<pre>
+&gt;HSFAU X65923.1 H.sapiens fau mRNA
+ttcctctttctcgactccatcttcgcggtagctgggaccgccgttcagtcgccaatatgc
+agctctttgtccgcgcccaggagctacacaccttcgaggtgaccggccaggaaacggtcg
+cccagatcaaggctcatgtagcctcactggagggcattgccccggaagatcaagtcgtgc
+tcctggcaggcgcgcccctggaggatgaggccactctgggccagtgcggggtggaggccc
+tgactaccctggaagtagcaggccgcatgcttggaggtaaagttcatggttccctggccc
+gtgctggaaaagtgagaggtcagactcctaaggtggccaaacaggagaagaagaagaaga
+agacaggtcgggctaagcggcggatgcagtacaaccggcgctttgtcaacgttgtgccca
+cctttggcaagaagaagggccccaatgccaactcttaagtcttttgtaattctggctttc
+tctaataaaaaagccacttagttcagtcaaaaaaaaaa
+</pre>
+</td></tr></table><p>
+
+<a name="output.2"></a>
+<h3>Output files for usage example 2</h3>
+<p><h3>File: hsall.seq</h3>
+<table width="90%"><tr><td bgcolor="#DDFFDD">
+<pre>
+&gt;HS989235 H45989.1 yo13c02.s1 Soares adult brain N2b5HB55Y Homo sapiens cDNA clone IMAGE:177794 3', mRNA sequence.
+ccggnaagctcancttggaccaccgactctcgantgnntcgccgcgggagccggntggan
+aacctgagcgggactggnagaaggagcagagggaggcagcacccggcgtgacggnagtgt
+gtggggcactcaggccttccgcagtgtcatctgccacacggaaggcacggccacgggcag
+gggggtctatgatcttctgcatgcccagctggcatggccccacgtagagtggnntggcgt
+ctcggtgctggtcagcgacacgttgtcctggctgggcaggtccagctcccggaggacctg
+gggcttcagcttcccgtagcgctggctgcagtgacggatgctcttgcgctgccatttctg
+ggtgctgtcactgtccttgctcactccaaaccagttcggcggtccccctgcggatggtct
+gtgttgatggacgtttgggctttgcagcaccggccgccgagttcatggtngggtnaagag
+atttgggttttttcn
+&gt;HSCAD5 X59796.1 H.sapiens mRNA for cadherin-5
+ctccactcacgctcagccctggacggacaggcagtccaacggaacagaaacatccctcag
+cccacaggcacgatctgttcctcctgggaagatgcagaggctcatgatgctcctcgccac
+atcgggcgcctgcctgggcctgctggcagtggcagcagtggcagcagcaggtgctaaccc
+tgcccaacgggacacccacagcctgctgcccacccaccggcgccaaaagagagattggat
+ttggaaccagatgcacattgatgaagagaaaaacacctcacttccccatcatgtaggcaa
+gatcaagtcaagcgtgagtcgcaagaatgccaagtacctgctcaaaggagaatatgtggg
+caaggtcttccgggtcgatgcagagacaggagacgtgttcgccattgagaggctggaccg
+ggagaatatctcagagtaccacctcactgctgtcattgtggacaaggacactggcgaaaa
+cctggagactccttccagcttcaccatcaaagttcatgacgtgaacgacaactggcctgt
+gttcacgcatcggttgttcaatgcgtccgtgcctgagtcgtcggctgtggggacctcagt
+catctctgtgacagcagtggatgcagacgaccccactgtgggagaccacgcctctgtcat
+gtaccaaatcctgaaggggaaagagtattttgccatcgataattctggacgtattatcac
+aataacgaaaagcttggaccgagagaagcaggccaggtatgagatcgtggtggaagcgcg
+agatgcccagggcctccggggggactcgggcacggccaccgtgctggtcactctgcaaga
+catcaatgacaacttccccttcttcacccagaccaagtacacatttgtcgtgcctgaaga
+cacccgtgtgggcacctctgtgggctctctgtttgttgaggacccagatgagccccagaa
+ccggatgaccaagtacagcatcttgcggggcgactaccaggacgctttcaccattgagac
+aaaccccgcccacaacgagggcatcatcaagcccatgaagcctctggattatgaatacat
+ccagcaatacagcttcatagtcgaggccacagaccccaccatcgacctccgatacatgag
+ccctcccgcgggaaacagagcccaggtcattatcaacatcacagatgtggacgagccccc
+cattttccagcagcctttctaccacttccagctgaaggaaaaccagaagaagcctctgat
+tggcacagtgctggccatggaccctgatgcggctaggcatagcattggatactccatccg
+caggaccagtgacaagggccagttcttccgagtcacaaaaaagggggacatttacaatga
+gaaagaactggacagagaagtctacccctggtataacctgactgtggaggccaaagaact
+ggattccactggaacccccacaggaaaagaatccattgtgcaagtccacattgaagtttt
+ggatgagaatgacaatgccccggagtttgccaagccctaccagcccaaagtgtgtgagaa
+cgctgtccatggccagctggtcctgcagatctccgcaatagacaaggacataacaccacg
+aaacgtgaagttcaaattcatcttgaatactgagaacaactttaccctcacggataatca
+cgataacacggccaacatcacagtcaagtatgggcagtttgaccgggagcataccaaggt
+ccacttcctacccgtggtcatctcagacaatgggatgccaagtcgcacgggcaccagcac
+gctgaccgtggccgtgtgcaagtgcaacgagcagggcgagttcaccttctgcgaggatat
+ggccgcccaggtgggcgtgagcatccaggcagtggtagccatcttactctgcatcctcac
+catcacagtgatcaccctgctcatcttcctgcggcggcggctccggaagcaggcccgcgc
+gcacggcaagagcgtgccggagatccacgagcagctggtcacctacgacgaggagggcgg
+cggcgagatggacaccaccagctacgatgtgtcggtgctcaactcggtgcgccgcggcgg
+ggccaagcccccgcggcccgcgctggacgcccggccttccctctatgcgcaggtgcagaa
+gccaccgaggcacgcgcctggggcacacggagggcccggggagatggcagccatgatcga
+ggtgaagaaggacgaggcggaccacgacggcgacggccccccctacgacacgctgcacat
+ctacggctacgagggctccgagtccatagccgagtccctcagctccctgggcaccgactc
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+aacaaaaaaagagaatgttacaccaatatccttgatgaacatcgatgcaaaaatcctcaa
+taaaatactggcaaactgaatccagcagcacatcaaaaagcttatcctccatgatcaagt
+gggcttcatccctgccatgcaaggctggttcaacatacgaaatcaataaacataatccag
+catataaacagaaccaaagacacaaaccatatgattatctcaatagatgcagaaaaggcc
+tttgacaaaattcaacaatgcttcatgctaaaaactctcaataaattaggtattgatggg
+acatatctcaaaataataagagctatctatgacaaacccacagccaatatcatactgagt
+ggacaaaaactggaagcattccctttgaaaactggcacaaggcagggatgccctctctca
+ccactcctattcaacatagtgttggaagttctggccagggcaatcaggcaggagaaggaa
+ataaagggcattcaattaggaaaagaggaaggtgaaattgtccctgtttgcagatgacat
+gattgtatatctagaaaaccccattgtctcagcccaaaatctccttaagctgataagcaa
+cttcagcaaagtctcaggatataaaatcagtgtgcaaaaatcacaagtattcctatgcac
+caataacagacaaacagagagccaaatcatgagtgaactcccattcacaattgcttcaaa
+gagaataaaatacctaggaatccaacttacaagggatgtgaaggacctcttcaaggagaa
+ctacaaaccactgctcaatgaaataaaagaggatacaaacaaatggaagaacattccatg
+cttatgggtaggaagaatcatatcgtgaaaatggtcatactgcccaaggtaatttataga
+ttcaatgccatccccatcaagctaccaatgactttcttcacagaactggaaaaaactact
+ttaaagttcatatggaatcaaaaaagagcccacatcaccaaggcaatcctaagccaaaag
+aacaaagctggaggcatcacgctacctgacttcaaactatactacaatgctacggtaacc
+aaaacagcatggtactggtaccaaaacagagatctagaccaatggaacagaacagagccc
+tcagaaataatgccgcatatctacaactatccgatctttgacaaacctgagagaaacaag
+caatggggaaaggattccctatttaataaatggtgctgggaaaactggctagccatatgt
+agaaagctgaaactggatccttccttacaccttatacaaaaattaattcaagatggatta
+aagacttaaacattagacctaaaaccataaaaaccctagaaaaaaacctaggcaatacca
+ttcaggacataggcatgggcaaggacttcatgtctaaaacaccaaaacgaatggcaacaa
+aagacaaaatggacaaacgggatctaattaaactaaagagcttctgcacagctaaagaaa
+ctaccatcagagtgaacaggcaacctacaaaatgggagaaaatttttgcaatctactcat
+ctgacaaagggctaatatccagaatctacaatgaactcaaacaaatttacaagaaaaaac
+aaacaaccccatcaaaaagtgggcaaaggatatgaacagacacttctcaaaagaagacat
+ttatgtaatcaaaaaacacatgaaaaaatgctcatcatcactagccatcagagaaatgca
+aatcaaaaccacaatgagataccatctcacaccagttagaatggcgatcattaaaaagtc
+aggaaacaacaggtgctggagaggatgtggagaaacaggaacaacttttacactgttggt
+gggactgtaaactagttcaaccattgcggaagtcagtgtggcaattcctcaggaatctag
+aactagaaataccatttgacccagccatcccattactgggtagatacccaaaggattata
+aatcatgctgctataaagacacatgcacacgtatgtttattgcagcactattcacaatag
+caaagacttggaaccaacccaaatgtccaacaacgatagattggattaagaaaatgtggc
+acatatacaccatggaatactatgcagccataaaaaatgatgagttcatgtcctttgtag
+ggacatggatgaagctggaaactatcattctcagcaaactatcacaaggacaataaacca
+aacaccgcatgttctcactcataggtgggaattgaacaatgagaacacatggacacatga
+agaggaacatcacactctggggactgttatggggtggggggcaggggcagggatagcact
+aggagatatacctaatgctaaatgacgagttaatgggtgcagcacaccaacatggcacat
+gtatacatatataacaaacctgccgttgtgcacatgtaccctaaaacttgaagtataata
+ataaaaaaaagttatcctattaaaactgatctcacacatccgtagagccattatcaagtc
+tttctctttgaaacagacagaaatttagtgttttctcagtcagttaac
+&gt;HSA203YC1 Z52466.1 H.sapiens (D1S2660) DNA segment containing (CA) repeat; clone AFMa203yc1; single read.
+agctgtgtgcacacaacatganggggcacacatgcacatgcacacatgcccacatgcata
+tgcacacacacacacacacacacacacacattcatgcccaagcacgcccaccctcatgtc
+tcaccatgtgcacataacacacagtcacatataccctggcacacatgcccacatgcagac
+acgaaacacaggcccacgnttncatgcacacaggtatgggcacacataccatgcacacat
+aangacaaataccaggccagacatgatttgcccctgctggtgtcactgttaagtgtgaca
+gacaagcagaggacacacacccacctgggacgcggggcttcaggagagaggcagacctaa
+tagggcccggattcggggctggggaggct
+</pre>
+</td></tr></table><p>
+
+<a name="output.3"></a>
+<h3>Output files for usage example 3</h3>
+<p><h3>File: hsfau.embl</h3>
+<table width="90%"><tr><td bgcolor="#DDFFDD">
+<pre>
+ID   HSFAU      standard; DNA; UNC; 518 BP.
+AC   X65923;
+SV   X65923.1
+DE   H.sapiens fau mRNA
+KW   fau gene.
+OS   Homo sapiens (human)
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi;
+OC   Mammalia; Eutheria; Primates; Catarrhini; Hominidae; Homo.
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..518
+FT                   /chromosome="11q"
+FT                   /db_xref="taxon:9606"
+FT                   /organism="Homo sapiens"
+FT                   /tissue_type="placenta"
+FT                   /clone_lib="cDNA"
+FT                   /clone="pUIA 631"
+FT                   /map="13"
+FT   misc_feature    57..278
+FT                   /note="ubiquitin like part"
+FT   CDS             57..458
+FT                   /db_xref="SWISS-PROT:P35544"
+FT                   /db_xref="SWISS-PROT:Q05472"
+FT                   /gene="fau"
+FT                   /protein_id="CAA46716.1"
+FT                   /translation="MQLFVRAQELHTFEVTGQETVAQIKAHVASLEGIAPEDQVVLLAG
+FT                   APLEDEATLGQCGVEALTTLEVAGRMLGGKVHGSLARAGKVRGQTPKVAKQEKKKKKTG
+FT                   RAKRRMQYNRRFVNVVPTFGKKKGPNANS"
+FT   misc_feature    98..102
+FT                   /note="nucleolar localization signal"
+FT   misc_feature    279..458
+FT                   /note="S30 part"
+FT   polyA_signal    484..489
+FT   polyA_site      509
+SQ   Sequence 518 BP; 125 A; 139 C; 148 G; 106 T; 0 other;
+     ttcctctttc tcgactccat cttcgcggta gctgggaccg ccgttcagtc gccaatatgc        60
+     agctctttgt ccgcgcccag gagctacaca ccttcgaggt gaccggccag gaaacggtcg       120
+     cccagatcaa ggctcatgta gcctcactgg agggcattgc cccggaagat caagtcgtgc       180
+     tcctggcagg cgcgcccctg gaggatgagg ccactctggg ccagtgcggg gtggaggccc       240
+     tgactaccct ggaagtagca ggccgcatgc ttggaggtaa agttcatggt tccctggccc       300
+     gtgctggaaa agtgagaggt cagactccta aggtggccaa acaggagaag aagaagaaga       360
+     agacaggtcg ggctaagcgg cggatgcagt acaaccggcg ctttgtcaac gttgtgccca       420
+     cctttggcaa gaagaagggc cccaatgcca actcttaagt cttttgtaat tctggctttc       480
+     tctaataaaa aagccactta gttcagtcaa aaaaaaaa                               518
+//
+</pre>
+</td></tr></table><p>
+
+<a name="output.5"></a>
+<h3>Output files for usage example 5</h3>
+<p><h3>File: hsfau.gcg</h3>
+<table width="90%"><tr><td bgcolor="#DDFFDD">
+<pre>
+!!NA_SEQUENCE 1.0
+
+H.sapiens fau mRNA
+
+HSFAU  Length: 518  Type: N  Check: 2981 ..
+
+   1 ttcctctttc tcgactccat cttcgcggta gctgggaccg ccgttcagtc
+
+  51 gccaatatgc agctctttgt ccgcgcccag gagctacaca ccttcgaggt
+
+ 101 gaccggccag gaaacggtcg cccagatcaa ggctcatgta gcctcactgg
+
+ 151 agggcattgc cccggaagat caagtcgtgc tcctggcagg cgcgcccctg
+
+ 201 gaggatgagg ccactctggg ccagtgcggg gtggaggccc tgactaccct
+
+ 251 ggaagtagca ggccgcatgc ttggaggtaa agttcatggt tccctggccc
+
+ 301 gtgctggaaa agtgagaggt cagactccta aggtggccaa acaggagaag
+
+ 351 aagaagaaga agacaggtcg ggctaagcgg cggatgcagt acaaccggcg
+
+ 401 ctttgtcaac gttgtgccca cctttggcaa gaagaagggc cccaatgcca
+
+ 451 actcttaagt cttttgtaat tctggctttc tctaataaaa aagccactta
+
+ 501 gttcagtcaa aaaaaaaa
+
+</pre>
+</td></tr></table><p>
+
+<a name="output.8"></a>
+<h3>Output files for usage example 8</h3>
+<p><h3>File: hsfau.fasta</h3>
+<table width="90%"><tr><td bgcolor="#DDFFDD">
+<pre>
+&gt;HSFAU X65923.1 H.sapiens fau mRNA
+ttttttttttgactgaactaagtggcttttttattagagaaagccagaattacaaaagac
+ttaagagttggcattggggcccttcttcttgccaaaggtgggcacaacgttgacaaagcg
+ccggttgtactgcatccgccgcttagcccgacctgtcttcttcttcttcttctcctgttt
+ggccaccttaggagtctgacctctcacttttccagcacgggccagggaaccatgaacttt
+acctccaagcatgcggcctgctacttccagggtagtcagggcctccaccccgcactggcc
+cagagtggcctcatcctccaggggcgcgcctgccaggagcacgacttgatcttccggggc
+aatgccctccagtgaggctacatgagccttgatctgggcgaccgtttcctggccggtcac
+ctcgaaggtgtgtagctcctgggcgcggacaaagagctgcatattggcgactgaacggcg
+gtcccagctaccgcgaagatggagtcgagaaagaggaa
+</pre>
+</td></tr></table><p>
+
+<a name="output.9"></a>
+<h3>Output files for usage example 9</h3>
+<p><h3>File: hsfau.fasta</h3>
+<table width="90%"><tr><td bgcolor="#DDFFDD">
+<pre>
+&gt;HSFAU X65923.1 H.sapiens fau mRNA
+tctttctcgactccatcttcg
+</pre>
+</td></tr></table><p>
+
+<a name="output.10"></a>
+<h3>Output files for usage example 10</h3>
+<p><h3>File: hsfau.fasta</h3>
+<table width="90%"><tr><td bgcolor="#DDFFDD">
+<pre>
+&gt;HSFAU X65923.1 H.sapiens fau mRNA
+tctttctcgactccatcttcgcggtagctgggaccgccgttcagtcgccaatatgcagct
+ctttgtccgcgcccaggagctacacaccttcgaggtgaccggccaggaaacggtcgccca
+gatcaaggctcatgtagcctcactggagggcattgccccggaagatcaagtcgtgctcct
+ggcaggcgcgcccctggaggatgaggccactctgggccagtgcggggtggaggccctgac
+taccctggaagtagcaggccgcatgcttggaggtaaagttcatggttccctggcccgtgc
+tggaaaagtgagaggtcagactcctaaggtggccaaacaggagaagaagaagaagaagac
+aggtcgggctaagcggcggatgcagtacaaccggcgctttgtcaacgttgtgcccacctt
+tggcaagaagaagggccccaatgccaactcttaagtcttttgtaattctggctttctcta
+ataaaaaagccacttagttcagtcaaaaaa
+</pre>
+</td></tr></table><p>
+
 
 <H2>
     Data files
@@ -1076,18 +1480,20 @@ None.
 
 
 This description of what you can do when reading or writing files is not
-specific to the program seqret.  All EMBOSS programs that read or write
+specific to the program <b>seqret</b>.  All EMBOSS programs that read or write
 sequences can do the same. 
 
 <p>
-seqret is often one of the first programs taught in EMBOSS training
+
+<b>seqret</b> is often one of the first programs taught in EMBOSS training
 courses.  This is because it is versatile, it is extremely powerful for
 its size (17 lines of code) it illustrates many aspects of EMBOSS
 programs and it was one of the first EMBOSS programs to be written, so
 it has a special place in the hearts of EMBOSS developers. 
 
 <p>
-The name 'seqret' derives both from its function ("sequence return") and
+
+The name '<b>seqret</b>' derives both from its function ("sequence return") and
 from the fact that immense amounts of functionality can come from so few
 lines of source code - most of the work is done by the EMBOSS libraries
 which the program calls and whose complexity is hidden, or "secret". 
@@ -1153,7 +1559,6 @@ None.
 <tr><td><a href="seqretsplit.html">seqretsplit</a></td><td>Reads and writes (returns) sequences in individual files</td></tr>
 <tr><td><a href="skipseq.html">skipseq</a></td><td>Reads and writes (returns) sequences, skipping the first few</td></tr>
 <tr><td><a href="splitter.html">splitter</a></td><td>Split a sequence into (overlapping) smaller sequences</td></tr>
-<tr><td><a href="swissparse.html">swissparse</a></td><td>Retrieves sequences from swissprot using keyword search</td></tr>
 <tr><td><a href="trimest.html">trimest</a></td><td>Trim poly-A tails off EST sequences</td></tr>
 <tr><td><a href="trimseq.html">trimseq</a></td><td>Trim ambiguous bits off the ends of sequences</td></tr>
 <tr><td><a href="union.html">union</a></td><td>Reads sequence fragments and builds one sequence</td></tr>
@@ -1170,6 +1575,7 @@ None.
 
 
 <p>
+
 Valid names of the databases set up in your local implementation of
 EMBOSS can be seen by using the program 'showdb'. 
 
@@ -1209,9 +1615,10 @@ from naive users to embedded scripts.
 
 <h4>Question</h4>
 When i tried to convert the EMBL format file into fasta format using the
-program "seqret", I found that the Access.no appears twice... 
+program "<b>seqret</b>", I found that the Access.no appears twice... 
 
 <p>
+
 <pre>
 &gt;AF102796 AF102796 Homo sapiens alphaE-catenin (CTNNA1) gene, exon 11.
 </pre>
@@ -1221,6 +1628,7 @@ program "seqret", I found that the Access.no appears twice...
 
 "It is not a bug ... it is a feature"
 <p>
+
 
 There are many "FASTA formats". EMBOSS uses the format that ACEDB and the
 Sanger Centre genome projects use. The first field after the ID is the

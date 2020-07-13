@@ -51,27 +51,66 @@ Split a sequence into (overlapping) smaller sequences
 </H2>
 
 
-	This simple editing program allows you to split a long sequence
-	into smaller, optionally overlapping, subsequences. 
+This simple editing program allows you to split a long sequence
+into smaller, optionally overlapping, subsequences. 
+
+<p>
+
+
+
+There should be little requirement to split sequences into smaller
+sub-sequences in EMBOSS, but there may be circumstances where memory
+usage becomes restrictive when dealing with truly large sequences.  In
+this case, memory usage may be reduced by repeating the analysis several
+times on split sub-sequences. 
+
+<p>
+
+If you need to split a large sequence into smaller subsequences so that
+a non-EMBOSS program can analyse the smaller sequence, it may also be
+useful to write the sub-sequences into separate files instead of the
+default EMBOSS behaviour of concatenating them together into one file. 
+
+<p>
+
+To write the output sequences to separate files, use the command-line
+switch '-ossingle'. 
 
 <H2>
     Usage
 </H2>
 
 
-	To split a sequence into sub-sequences of 10,000 bases (the
-	default size) with no overlap between the sub-sequences:
+<b>Here is a sample session with splitter</b>
+<p>
+Split a sequence into sub-sequences of 10,000 bases (the default size) with no overlap between the sub-sequences: 
+<p>
 
-<pre>
-	% splitter one_huge.seq many_small.seq
-</pre>
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-	To split a sequence into sub-sequences of 50,000 bases with an
-	overlap of 3,000 bases on each sub-sequence. 
+% <b>splitter tembl:AP000504 ap000504.split </b>
+Split a sequence into (overlapping) smaller sequences
 
-<pre>
-	% splitter one_huge.seq many_small.seq -size=50000 -over=3000
-</pre>
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 2</b>
+<p>
+Split a sequence into sub-sequences of 50,000 bases with an overlap of 3,000 bases on each sub-sequence: 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>splitter tembl:AP000504 ap000504.split -size=50000 -over=3000 </b>
+Split a sequence into (overlapping) smaller sequences
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.2">Go to the output files for this example</a><p><p>
+
 
 
 <H2>
@@ -95,7 +134,9 @@ IT IS DONE FOR YOU.
    -size               integer    Size to split at
    -overlap            integer    Overlap between split sequences
 
-   Advanced qualifiers: (none)
+   Advanced qualifiers:
+   -addoverlap         boolean    Add overlap to size
+
    General qualifiers:
   -help                boolean    Report command line options. More
                                   information on associated and general
@@ -154,7 +195,10 @@ IT IS DONE FOR YOU.
 </tr>
 
 <tr>
-<td colspan=4>(none)</td>
+<td>-addoverlap</td>
+<td>Add overlap to size</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
 </tr>
 
 </table>
@@ -166,15 +210,361 @@ IT IS DONE FOR YOU.
 </H2>
 
 
-	One or more sequences
+<b>splitter</b>	reads one or more sequence USAs.
+
+<p>
+
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+
+'tembl:AP000504' is a sequence entry in the example nucleic acid database 'tembl'
+<p>
+<p><h3>Database entry: tembl:AP000504</h3>
+<table width="90%"><tr><td bgcolor="#FFDDFF">
+<pre>
+ID   AP000504   standard; DNA; HUM; 100000 BP.
+XX
+AC   AP000504; BA000025;
+XX
+SV   AP000504.1
+XX
+DT   28-SEP-1999 (Rel. 61, Created)
+DT   22-AUG-2001 (Rel. 68, Last updated, Version 3)
+XX
+DE   Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region, section
+DE   3/20.
+XX
+KW   .
+XX
+OS   Homo sapiens (human)
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia;
+OC   Eutheria; Primates; Catarrhini; Hominidae; Homo.
+XX
+RN   [1]
+RP   1-100000
+RA   Hirakawa M., Yamaguchi H., Imai K., Shimada J.;
+RT   ;
+RL   Submitted (21-SEP-1999) to the EMBL/GenBank/DDBJ databases.
+RL   Mika Hirakawa, Japan Science and Technology Corporation (JST), Advanced
+RL   Databases Department; 5-3, Yonbancho, Chiyoda-ku, Tokyo 102-0081, Japan
+RL   (E-mail:mika@tokyo.jst.go.jp, URL:http://www-alis.tokyo.jst.go.jp/,
+RL   Tel:81-3-5214-8491, Fax:81-3-5214-8470)
+XX
+RN   [2]
+RA   Shiina S., Tamiya G., Oka A., Inoko H.;
+RT   "Homo sapiens 2,229,817bp genomic DNA of 6p21.3 HLA class I region";
+RL   Unpublished.
+XX
+DR   SWISS-PROT; O00299; CLI1_HUMAN.
+DR   SWISS-PROT; O43196; MSH5_HUMAN.
+DR   SWISS-PROT; O95445; APOM_HUMAN.
+DR   SWISS-PROT; O95865; DDH2_HUMAN.
+DR   SWISS-PROT; O95867; NG24_HUMAN.
+DR   SWISS-PROT; P13862; KC2B_HUMAN.
+XX
+CC   This sequence is conducted by Tokai University as a JST sequencing
+CC   Team.
+CC   Principal Investigator: Hidetoshi Inoko Ph.D
+CC   Phone:+81-463-93-1121, Fax:+81-463-94-8884,
+CC   The sequence is submitted by Human Genome Sequencing in ALIS
+CC   project of JST
+CC   Japan Science and Technology Corporation (JST)
+CC   5-3, Yonbancyo, Chiyoda-ku, Tokyo, 102-0081 Japan
+CC   For further infomation about this sequences, please visit our
+CC   sequence archive Web site (http://www-alis.tokyo.jst.go.jp/HGS/top.
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+     gggtggatca tgaggtcaag agatcgagac tatcctggct aacatgatga aaccccgtct     97080
+     ctactaaaaa tacaaaaaat tagctgggca tggtggcggg cacctgtagt cccagctact     97140
+     cgggaggctg agtcaggaga atggtgtgaa cccaggagac ggagcttgca gtgagctgag     97200
+     gtcgcaccac tgcactccag cctgggtgat agagcgagac tctgtctcaa aaaaaaaaaa     97260
+     aaaaaaaaaa aaaacaaaaa ttagccgggt gtggtggcag gcaacttaat cccagctact     97320
+     tgggaggcag aggcaggaga atcgtttgaa cctgggaggc ggaggttgaa gagaatagaa     97380
+     gctctgctgg tccagagaag gattgggcca gggctctggg agaccaggga gaaagagggc     97440
+     acatgtggtc cctgttgact gtgagggtgg gaatctgagg aaggctttgg ctcattgccc     97500
+     cttgggtttg tccacagcca tccttcccct gcggagtatg tcgaggtgct ccaggagcta     97560
+     cagcggctgg agagtcgcct ccagcccttc ttgcagcgct actacgaggt tctgggtgct     97620
+     gctgccacca cggactacaa taacaatgtg agccctttga tggccctgcc ctttctcctc     97680
+     agccccagta ctcccaaaac agaacaggct gaaatacaga taactctttc cctccctgga     97740
+     aaaacattgc aacagggcca ggtgcagtgg ctcacgcctg taatcccagc actttgggag     97800
+     gccaaggtgg gcggatcatc tgagatcggg agtttgagac cagcctggcc aacatggtgc     97860
+     aaccccatct ctactgaaaa tataaacatt agctggatgt agtggtgcac acctgtaatc     97920
+     ccagctactc aggaggctga ggcaggagaa tcgctagaac tcgggaggag ggggttgcag     97980
+     tgagccgaga ttgcactact gcactctagc ctgggtgaca gagcgagact gtctcaaaaa     98040
+     acaaaacaaa acaaaaaaac acacattgca acaaaacaat ttctctctaa acctgtaagt     98100
+     gattttgtcc tcccttacag agaaggtgat aatctttgct gtaagcactg tcctcgtatc     98160
+     gtaccccttg tgcccctgaa tgaatttaga aaatgtaaag tacaggagat cagtatatga     98220
+     tgacttactg attcatagta gtgttttaat aggatgttcc ttatgtgaat aagatataat     98280
+     ttatttgcaa agatttggtc tacatgtaaa cttccaagga tataactgaa agttttggag     98340
+     gacatggtat tctcagtagg cattattgct tttattagtg agatggactc cagcttgata     98400
+     ttttctgcct ttttgtgttt ggctggttgt gcgcagcacg agggccggga ggaggatcag     98460
+     cggttgatca acttggtagg ggagagcctg cgactgctgg gcaacacctt tgttgcactg     98520
+     tctgacctgc gctgcaatct ggcctgcacg cccccacgac acctgcatgt ggtccggcct     98580
+     atgtctcact acaccacccc catggtgctc cagcaggcag ccattcccat acaggtgggt     98640
+     tagggggagt ctggcctgag ggagagtgag gggtgttgat agagtgaccc agggtagcta     98700
+     ctgggcctga aggaggttag gaaaggagga gactggaaac atggtgatga aggctggaga     98760
+     tactttagag gtttatcatg aggttttctt ggttaggctc ttgtattttt ctcacatctg     98820
+     cctgtccatc tgtctttttc agatcaatgt gggaaccact gtgaccatga caggaaatgg     98880
+     gactcggccc cccccaactc ccaatgcaga ggcacctccc cctggtcctg ggcaggcctc     98940
+     atccgtggct ccgtcttcta ccaatgtcga gtcctcagct gagggggctc ccccgccagg     99000
+     tccagctccc ccgccagcca ccagccaccc gagggtcatc cggatttccc accagagtgt     99060
+     ggaacccgtg gtcatgatgc acatgaacat tcaaggtgag aatagttgct ggcgagaaga     99120
+     gcaggatcag catgatgagg gaggttcatg ctgaggtgtg agggaacagg gtggggaagg     99180
+     gagaggcaca tgctggtggt ggtagcctgg ggaccagagc agaagcttaa gtagacagat     99240
+     gtggggggtg tgggggttgg tttgtctttg gaggtgtgtt tgtgtggtga agggagtacc     99300
+     tctccctgtt tagatggagg gaaaggcagg ctttctgatt gggggattat gggcctgaag     99360
+     tatgcctgat ctcagaagga tatagttagg ccttggccct acctacctca gggccactgt     99420
+     ctctgtctcc ctgcccagat tctggcacac agcctggtgg tgttccgagt gctcccactg     99480
+     gccccctggg accccctggt catggccaaa ccctgggtaa gagtgagggc atcagggcag     99540
+     gctgagctct gggtagagaa agggaagggc tgagtgggtg ggttgaaggg gtccaggttc     99600
+     aaggttacat cagacccgcc ccccaggctc caccctcatc cagctgccct ccctgccccc     99660
+     tgagttcatg cacgccgtcg cccaccagat cactcatcag gccatggtgg cagctgttgc     99720
+     ctccgcggcc gcaggtaatg acctggaagg ggaggcttgg gaggtagggc acagtccatg     99780
+     gtggcagctg gctggcaagg gcctggccct cagccctctt cggtctgtct cttctgccac     99840
+     ccacaggaca gcaggtgcca ggcttcccaa cagctccaac ccgggtggtg attgcccggc     99900
+     ccactcctcc acaggctcgg ccttcccatc ctggagggcc cccagtctct gggacactgg     99960
+     tgagcaaggg tcggggagtt ctagtgcgta acagtctagg                          100000
+//
+</pre>
+</td></tr></table><p>
+
 
 <H2>
     Output File Format
 </H2>
 
 
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: ap000504.split</h3>
+<table width="90%"><tr><td bgcolor="#DDFFDD">
+<pre>
+&gt;AP000504_1-10000 Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region, section 3/20.
+gaccaatctcactgtgaggaggcagtcaaagggaataatggaagagaggaagaggatttt
+ctcagtggcagtcatggcgtctgggatgaaggagtagtttccagaaaggaggcgttgttt
+gcttatctccagacctatttgagggaggcaagcaaagggaacggtcttgtagctcaattt
+tttcaccccattttaagaatgagacaatagaagcaagagagattatttgacttgcccaag
+ctcacacaggcagttaatggaaagctagagcaagaaccaaattttcagactcttagtcta
+attctctttttattctacatataatataaagatacttgtctgaaagcacagcctgagaaa
+gataaatggctgaggaaagtagacatctgtctggaattgaggattttggtcaaaataatg
+gtattaatagaactagtaacactaatgccttaatatctaattaggatagtacactcctgt
+tcttattgtaaacctaggaaagttatagaagtgccttatggatcataataagggtcactg
+aggcagtgccttttggtttggtgataaaaggctttaacttaatggggagaattccaacaa
+taaaaccctgtccaaaaagtgtcaccactcctcaggggaggccctcatccctagacatga
+cttaagcagaggcttcccaataagctgcaggttattaaagggtagggagcaggagagatc
+ttggggggacaggtcatagggcatgaggagcacaaaggtttaggatgacataaggcagag
+gggagatctgtgatgatgaaggtagagttgggggaaagaatgggacaccggaacagggag
+ttaggcaaagcaaaaggaaggagataccaaaatccacacttggcaaaaatatgatttcag
+gtcttttaggctctctgtgctcctgggaggctgtgggggaggaaagaaaaggctatcatt
+ctttacatctcagtccttctacctctgtctgacactccctctcacccaattctagccccc
+tggaatattccatatattagtccttccccattttccctctatcctttaccaagtccttac
+caagctttcccagaaatcgagtcatattctcatcctgtttggcactcgtaacaacagact
+ggggattgatctcatccagaacttggaaggagaacagagatcaaatgagttaaaggatct
+ttgtctttgactaagagaaaacccatagccctcctcttcctacccctctccttctcaaaa
+acatttcctccctaggagtagggagtgctctgcacagtgggaacacaggtagaagttgag
+atttagaaaagtagttaagagtggtgggatggtgagagggaagtgggatgttctggatgt
+tgtcactaggctgtaaacccctggagaacagacatgactgatttgcccagggctgaatct
+gaagcacctgaaacattgtaaatacgtcatatatatttgtggccaggcacagtggctcat
+gcctataatccctgccctttgggaggccaaggcaggcagatcactggaggccaggagctc
+aagacaagcctagccaacgtggtgaaaccctgcctctactaaaaatataaaaattagcca
+ggcgtgatggcagattcttgtaatcccagctactcgggagactgaggcaggagaattgct
+tgaatccgggagacggaggttgcagtgagccaagatggcaccactacacttccagcctga
+gtgacggagcaagacactgtctcaaaaaagaacaaccaaacaaaccaaaaaacagcctca
+caaatatttgttaaataatgaaatgaattcataaaaacaaaagagggagcctctgtgaag
+caactgtaaaatatattgagtcagtgctatagtttggatgtgatttgtccctgccaaata
+tcgtgttgaaatttaatccccagtgtgatagtgttgtgaggtagggcctagcaggaggtg
+tgtgggtgatgggagtggatcgctcatgaacagattaatgcccttcctggagtgtgttgg
+tgggtatgagtgagaggttctcactctattagttcctgagagagctggttgtcaaaaaga
+gcctggcatctccctcccccttgcttcttctctgccatgtgacctctacacaccctgcct
+tcccttcttccatgagttgaagcagtctgaggctctcaccagtgaagatgcccaattttg
+agctttccaaccatccagaaccataagccaaataaaactttttttttttttttaacaaat
+tactcagagtcaggtatttccttacagcaacacaaaatatgctagacagtgaggtgagtt
+aatgtaagtaaaacatggctgggcgtggtgactcacacctgtagtcccagcactttagga
+ggccaaggtgggcggatcacaaggtcaggagtttgagaccaccctggccaacatggtgaa
+acaccgtctgtgctaaaaacacacacaaaaaactagctgggtgtggtggcacacgcctgt
+agtcccagctactcgggaggttgagtcaggagaattgcttgaacccaggaggtggaggct
+gcagtgagccaagattgcgccactgcacttgagcctgggtaacagagcaagactctgtct
+agaaaaaaaaaatatgtgtgtgtgtgtgtgtgtgtgtgtgtgtgtgtgtgtgtgtgtgtg
+taacacatctgcaatcccagagagcagaggaattcatggttccatccccacctctctgga
+gaagcttgaggctctcgtggtctggggcatctggcatgaagtggatagtggagtcactag
+tatcatagtaggcaatgcccaagtatcctgaattccacagcacacacagatggatctgtc
+cagcaaggaagaaaggaaatcactattagaatcactcataagtgtagggtttaccatgtc
 
-	Many sequences.
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+aaatacaggccgggcacagtggctcacgcctgtaatcccagcactttgggaggccgaggc
+gggtggatcatgaggtcaagagatcgagactatcctggctaacatgatgaaaccccgtct
+ctactaaaaatacaaaaaattagctgggcatggtggcgggcacctgtagtcccagctact
+cgggaggctgagtcaggagaatggtgtgaacccaggagacggagcttgcagtgagctgag
+gtcgcaccactgcactccagcctgggtgatagagcgagactctgtctcaaaaaaaaaaaa
+aaaaaaaaaaaaaacaaaaattagccgggtgtggtggcaggcaacttaatcccagctact
+tgggaggcagaggcaggagaatcgtttgaacctgggaggcggaggttgaagagaatagaa
+gctctgctggtccagagaaggattgggccagggctctgggagaccagggagaaagagggc
+acatgtggtccctgttgactgtgagggtgggaatctgaggaaggctttggctcattgccc
+cttgggtttgtccacagccatccttcccctgcggagtatgtcgaggtgctccaggagcta
+cagcggctggagagtcgcctccagcccttcttgcagcgctactacgaggttctgggtgct
+gctgccaccacggactacaataacaatgtgagccctttgatggccctgccctttctcctc
+agccccagtactcccaaaacagaacaggctgaaatacagataactctttccctccctgga
+aaaacattgcaacagggccaggtgcagtggctcacgcctgtaatcccagcactttgggag
+gccaaggtgggcggatcatctgagatcgggagtttgagaccagcctggccaacatggtgc
+aaccccatctctactgaaaatataaacattagctggatgtagtggtgcacacctgtaatc
+ccagctactcaggaggctgaggcaggagaatcgctagaactcgggaggagggggttgcag
+tgagccgagattgcactactgcactctagcctgggtgacagagcgagactgtctcaaaaa
+acaaaacaaaacaaaaaaacacacattgcaacaaaacaatttctctctaaacctgtaagt
+gattttgtcctcccttacagagaaggtgataatctttgctgtaagcactgtcctcgtatc
+gtaccccttgtgcccctgaatgaatttagaaaatgtaaagtacaggagatcagtatatga
+tgacttactgattcatagtagtgttttaataggatgttccttatgtgaataagatataat
+ttatttgcaaagatttggtctacatgtaaacttccaaggatataactgaaagttttggag
+gacatggtattctcagtaggcattattgcttttattagtgagatggactccagcttgata
+ttttctgcctttttgtgtttggctggttgtgcgcagcacgagggccgggaggaggatcag
+cggttgatcaacttggtaggggagagcctgcgactgctgggcaacacctttgttgcactg
+tctgacctgcgctgcaatctggcctgcacgcccccacgacacctgcatgtggtccggcct
+atgtctcactacaccacccccatggtgctccagcaggcagccattcccatacaggtgggt
+tagggggagtctggcctgagggagagtgaggggtgttgatagagtgacccagggtagcta
+ctgggcctgaaggaggttaggaaaggaggagactggaaacatggtgatgaaggctggaga
+tactttagaggtttatcatgaggttttcttggttaggctcttgtatttttctcacatctg
+cctgtccatctgtctttttcagatcaatgtgggaaccactgtgaccatgacaggaaatgg
+gactcggccccccccaactcccaatgcagaggcacctccccctggtcctgggcaggcctc
+atccgtggctccgtcttctaccaatgtcgagtcctcagctgagggggctcccccgccagg
+tccagctcccccgccagccaccagccacccgagggtcatccggatttcccaccagagtgt
+ggaacccgtggtcatgatgcacatgaacattcaaggtgagaatagttgctggcgagaaga
+gcaggatcagcatgatgagggaggttcatgctgaggtgtgagggaacagggtggggaagg
+gagaggcacatgctggtggtggtagcctggggaccagagcagaagcttaagtagacagat
+gtggggggtgtgggggttggtttgtctttggaggtgtgtttgtgtggtgaagggagtacc
+tctccctgtttagatggagggaaaggcaggctttctgattgggggattatgggcctgaag
+tatgcctgatctcagaaggatatagttaggccttggccctacctacctcagggccactgt
+ctctgtctccctgcccagattctggcacacagcctggtggtgttccgagtgctcccactg
+gccccctgggaccccctggtcatggccaaaccctgggtaagagtgagggcatcagggcag
+gctgagctctgggtagagaaagggaagggctgagtgggtgggttgaaggggtccaggttc
+aaggttacatcagacccgccccccaggctccaccctcatccagctgccctccctgccccc
+tgagttcatgcacgccgtcgcccaccagatcactcatcaggccatggtggcagctgttgc
+ctccgcggccgcaggtaatgacctggaaggggaggcttgggaggtagggcacagtccatg
+gtggcagctggctggcaagggcctggccctcagccctcttcggtctgtctcttctgccac
+ccacaggacagcaggtgccaggcttcccaacagctccaacccgggtggtgattgcccggc
+ccactcctccacaggctcggccttcccatcctggagggcccccagtctctgggacactgg
+tgagcaagggtcggggagttctagtgcgtaacagtctagg
+</pre>
+</td></tr></table><p>
+
+<a name="output.2"></a>
+<h3>Output files for usage example 2</h3>
+<p><h3>File: ap000504.split</h3>
+<table width="90%"><tr><td bgcolor="#DDFFDD">
+<pre>
+&gt;AP000504_1-50000 Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region, section 3/20.
+gaccaatctcactgtgaggaggcagtcaaagggaataatggaagagaggaagaggatttt
+ctcagtggcagtcatggcgtctgggatgaaggagtagtttccagaaaggaggcgttgttt
+gcttatctccagacctatttgagggaggcaagcaaagggaacggtcttgtagctcaattt
+tttcaccccattttaagaatgagacaatagaagcaagagagattatttgacttgcccaag
+ctcacacaggcagttaatggaaagctagagcaagaaccaaattttcagactcttagtcta
+attctctttttattctacatataatataaagatacttgtctgaaagcacagcctgagaaa
+gataaatggctgaggaaagtagacatctgtctggaattgaggattttggtcaaaataatg
+gtattaatagaactagtaacactaatgccttaatatctaattaggatagtacactcctgt
+tcttattgtaaacctaggaaagttatagaagtgccttatggatcataataagggtcactg
+aggcagtgccttttggtttggtgataaaaggctttaacttaatggggagaattccaacaa
+taaaaccctgtccaaaaagtgtcaccactcctcaggggaggccctcatccctagacatga
+cttaagcagaggcttcccaataagctgcaggttattaaagggtagggagcaggagagatc
+ttggggggacaggtcatagggcatgaggagcacaaaggtttaggatgacataaggcagag
+gggagatctgtgatgatgaaggtagagttgggggaaagaatgggacaccggaacagggag
+ttaggcaaagcaaaaggaaggagataccaaaatccacacttggcaaaaatatgatttcag
+gtcttttaggctctctgtgctcctgggaggctgtgggggaggaaagaaaaggctatcatt
+ctttacatctcagtccttctacctctgtctgacactccctctcacccaattctagccccc
+tggaatattccatatattagtccttccccattttccctctatcctttaccaagtccttac
+caagctttcccagaaatcgagtcatattctcatcctgtttggcactcgtaacaacagact
+ggggattgatctcatccagaacttggaaggagaacagagatcaaatgagttaaaggatct
+ttgtctttgactaagagaaaacccatagccctcctcttcctacccctctccttctcaaaa
+acatttcctccctaggagtagggagtgctctgcacagtgggaacacaggtagaagttgag
+atttagaaaagtagttaagagtggtgggatggtgagagggaagtgggatgttctggatgt
+tgtcactaggctgtaaacccctggagaacagacatgactgatttgcccagggctgaatct
+gaagcacctgaaacattgtaaatacgtcatatatatttgtggccaggcacagtggctcat
+gcctataatccctgccctttgggaggccaaggcaggcagatcactggaggccaggagctc
+aagacaagcctagccaacgtggtgaaaccctgcctctactaaaaatataaaaattagcca
+ggcgtgatggcagattcttgtaatcccagctactcgggagactgaggcaggagaattgct
+tgaatccgggagacggaggttgcagtgagccaagatggcaccactacacttccagcctga
+gtgacggagcaagacactgtctcaaaaaagaacaaccaaacaaaccaaaaaacagcctca
+caaatatttgttaaataatgaaatgaattcataaaaacaaaagagggagcctctgtgaag
+caactgtaaaatatattgagtcagtgctatagtttggatgtgatttgtccctgccaaata
+tcgtgttgaaatttaatccccagtgtgatagtgttgtgaggtagggcctagcaggaggtg
+tgtgggtgatgggagtggatcgctcatgaacagattaatgcccttcctggagtgtgttgg
+tgggtatgagtgagaggttctcactctattagttcctgagagagctggttgtcaaaaaga
+gcctggcatctccctcccccttgcttcttctctgccatgtgacctctacacaccctgcct
+tcccttcttccatgagttgaagcagtctgaggctctcaccagtgaagatgcccaattttg
+agctttccaaccatccagaaccataagccaaataaaactttttttttttttttaacaaat
+tactcagagtcaggtatttccttacagcaacacaaaatatgctagacagtgaggtgagtt
+aatgtaagtaaaacatggctgggcgtggtgactcacacctgtagtcccagcactttagga
+ggccaaggtgggcggatcacaaggtcaggagtttgagaccaccctggccaacatggtgaa
+acaccgtctgtgctaaaaacacacacaaaaaactagctgggtgtggtggcacacgcctgt
+agtcccagctactcgggaggttgagtcaggagaattgcttgaacccaggaggtggaggct
+gcagtgagccaagattgcgccactgcacttgagcctgggtaacagagcaagactctgtct
+agaaaaaaaaaatatgtgtgtgtgtgtgtgtgtgtgtgtgtgtgtgtgtgtgtgtgtgtg
+taacacatctgcaatcccagagagcagaggaattcatggttccatccccacctctctgga
+gaagcttgaggctctcgtggtctggggcatctggcatgaagtggatagtggagtcactag
+tatcatagtaggcaatgcccaagtatcctgaattccacagcacacacagatggatctgtc
+cagcaaggaagaaaggaaatcactattagaatcactcataagtgtagggtttaccatgtc
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+gaaaccctgtctctactaaaaaatacaggccgggcacagtggctcacgcctgtaatccca
+gcactttgggaggccgaggcgggtggatcatgaggtcaagagatcgagactatcctggct
+aacatgatgaaaccccgtctctactaaaaatacaaaaaattagctgggcatggtggcggg
+cacctgtagtcccagctactcgggaggctgagtcaggagaatggtgtgaacccaggagac
+ggagcttgcagtgagctgaggtcgcaccactgcactccagcctgggtgatagagcgagac
+tctgtctcaaaaaaaaaaaaaaaaaaaaaaaaaacaaaaattagccgggtgtggtggcag
+gcaacttaatcccagctacttgggaggcagaggcaggagaatcgtttgaacctgggaggc
+ggaggttgaagagaatagaagctctgctggtccagagaaggattgggccagggctctggg
+agaccagggagaaagagggcacatgtggtccctgttgactgtgagggtgggaatctgagg
+aaggctttggctcattgccccttgggtttgtccacagccatccttcccctgcggagtatg
+tcgaggtgctccaggagctacagcggctggagagtcgcctccagcccttcttgcagcgct
+actacgaggttctgggtgctgctgccaccacggactacaataacaatgtgagccctttga
+tggccctgccctttctcctcagccccagtactcccaaaacagaacaggctgaaatacaga
+taactctttccctccctggaaaaacattgcaacagggccaggtgcagtggctcacgcctg
+taatcccagcactttgggaggccaaggtgggcggatcatctgagatcgggagtttgagac
+cagcctggccaacatggtgcaaccccatctctactgaaaatataaacattagctggatgt
+agtggtgcacacctgtaatcccagctactcaggaggctgaggcaggagaatcgctagaac
+tcgggaggagggggttgcagtgagccgagattgcactactgcactctagcctgggtgaca
+gagcgagactgtctcaaaaaacaaaacaaaacaaaaaaacacacattgcaacaaaacaat
+ttctctctaaacctgtaagtgattttgtcctcccttacagagaaggtgataatctttgct
+gtaagcactgtcctcgtatcgtaccccttgtgcccctgaatgaatttagaaaatgtaaag
+tacaggagatcagtatatgatgacttactgattcatagtagtgttttaataggatgttcc
+ttatgtgaataagatataatttatttgcaaagatttggtctacatgtaaacttccaagga
+tataactgaaagttttggaggacatggtattctcagtaggcattattgcttttattagtg
+agatggactccagcttgatattttctgcctttttgtgtttggctggttgtgcgcagcacg
+agggccgggaggaggatcagcggttgatcaacttggtaggggagagcctgcgactgctgg
+gcaacacctttgttgcactgtctgacctgcgctgcaatctggcctgcacgcccccacgac
+acctgcatgtggtccggcctatgtctcactacaccacccccatggtgctccagcaggcag
+ccattcccatacaggtgggttagggggagtctggcctgagggagagtgaggggtgttgat
+agagtgacccagggtagctactgggcctgaaggaggttaggaaaggaggagactggaaac
+atggtgatgaaggctggagatactttagaggtttatcatgaggttttcttggttaggctc
+ttgtatttttctcacatctgcctgtccatctgtctttttcagatcaatgtgggaaccact
+gtgaccatgacaggaaatgggactcggccccccccaactcccaatgcagaggcacctccc
+cctggtcctgggcaggcctcatccgtggctccgtcttctaccaatgtcgagtcctcagct
+gagggggctcccccgccaggtccagctcccccgccagccaccagccacccgagggtcatc
+cggatttcccaccagagtgtggaacccgtggtcatgatgcacatgaacattcaaggtgag
+aatagttgctggcgagaagagcaggatcagcatgatgagggaggttcatgctgaggtgtg
+agggaacagggtggggaagggagaggcacatgctggtggtggtagcctggggaccagagc
+agaagcttaagtagacagatgtggggggtgtgggggttggtttgtctttggaggtgtgtt
+tgtgtggtgaagggagtacctctccctgtttagatggagggaaaggcaggctttctgatt
+gggggattatgggcctgaagtatgcctgatctcagaaggatatagttaggccttggccct
+acctacctcagggccactgtctctgtctccctgcccagattctggcacacagcctggtgg
+tgttccgagtgctcccactggccccctgggaccccctggtcatggccaaaccctgggtaa
+gagtgagggcatcagggcaggctgagctctgggtagagaaagggaagggctgagtgggtg
+ggttgaaggggtccaggttcaaggttacatcagacccgccccccaggctccaccctcatc
+cagctgccctccctgccccctgagttcatgcacgccgtcgcccaccagatcactcatcag
+gccatggtggcagctgttgcctccgcggccgcaggtaatgacctggaaggggaggcttgg
+gaggtagggcacagtccatggtggcagctggctggcaagggcctggccctcagccctctt
+cggtctgtctcttctgccacccacaggacagcaggtgccaggcttcccaacagctccaac
+ccgggtggtgattgcccggcccactcctccacaggctcggccttcccatcctggagggcc
+cccagtctctgggacactggtgagcaagggtcggggagttctagtgcgtaacagtctagg
+</pre>
+</td></tr></table><p>
+
+
+
 <p>
 	The names of the sequences are the same as the original
 	sequence, with '_start-end' appended, where 'start', and 'end' are the
@@ -263,7 +653,6 @@ IT IS DONE FOR YOU.
 <tr><td><a href="seqret.html">seqret</a></td><td>Reads and writes (returns) sequences</td></tr>
 <tr><td><a href="seqretsplit.html">seqretsplit</a></td><td>Reads and writes (returns) sequences in individual files</td></tr>
 <tr><td><a href="skipseq.html">skipseq</a></td><td>Reads and writes (returns) sequences, skipping the first few</td></tr>
-<tr><td><a href="swissparse.html">swissparse</a></td><td>Retrieves sequences from swissprot using keyword search</td></tr>
 <tr><td><a href="trimest.html">trimest</a></td><td>Trim poly-A tails off EST sequences</td></tr>
 <tr><td><a href="trimseq.html">trimseq</a></td><td>Trim ambiguous bits off the ends of sequences</td></tr>
 <tr><td><a href="union.html">union</a></td><td>Reads sequence fragments and builds one sequence</td></tr>

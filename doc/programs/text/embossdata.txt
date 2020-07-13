@@ -46,19 +46,842 @@ Description
    
 Usage
 
+   Here is a sample session with embossdata
+   
    Display the directories searched for EMBOSS data files:
-% embossdata
+   
 
+% embossdata 
+Finds or fetches the data files read in by the EMBOSS programs
+
+# The following directories can contain EMBOSS data files.
+# They are searched in the following order until the file is found.
+# If the directory does not exist, then this is noted below.
+# '.' is the UNIX name for your current working directory.
+
+.                                                            Exists
+.embossdata                                                  Does not exist
+/people/gwilliam                                             Exists
+/people/gwilliam/.embossdata                                 Does not exist
+/packages/emboss_dev/gwilliam/emboss/emboss/emboss/data      Exists
+   
+   Example 2
+   
    Display the names of data file in all of the possible data
    directories:
-% embossdata -showall
+   
 
-   Display the directories which contain a particular EMBOSS data file:
-% embossdata -filename EPAM60
+% embossdata -showall 
+Finds or fetches the data files read in by the EMBOSS programs
 
+
+
+DIRECTORY: /packages/emboss_dev/gwilliam/emboss/emboss/emboss/data
+
+  EBLOSUM62-12
+  EBLOSUM30
+  EBLOSUM35
+  EBLOSUM40
+  EBLOSUM45
+  EBLOSUM50
+  EBLOSUM55
+  EBLOSUM60
+  EBLOSUM62
+  ENUC.4.2
+  EBLOSUM65
+  EBLOSUM70
+  EBLOSUM75
+  EBLOSUM80
+  EBLOSUM85
+  EBLOSUM90
+  EBLOSUMN
+  EDNAFULL
+  EDNAMAT
+  EGC.0
+  EGC.1
+  EGC.10
+  EGC.11
+  EGC.12
+  EGC.13
+  EGC.14
+  EGC.15
+  EGC.2
+  EGC.3
+  EGC.4
+  EGC.5
+  EGC.6
+  EGC.9
+  ENUC.4.4
+  EPAM10
+  EPAM100
+  EPAM110
+  EPAM120
+  EPAM130
+  EPAM140
+  EPAM150
+  EPAM160
+  EPAM170
+  EPAM180
+  EPAM190
+  EPAM20
+  EPAM200
+  EPAM210
+  EPAM220
+  EPAM230
+  EPAM240
+  EPAM250
+  EPAM260
+  EPAM270
+  EPAM280
+  Eaa_acc_surface.dat
+  EPAM290
+  EPAM30
+  EPAM300
+  EPAM310
+  EPAM320
+  EPAM330
+  EPAM340
+  EPAM350
+  EPAM360
+  EPAM370
+  EPAM380
+  EPAM390
+  EPAM40
+  EPAM400
+  EPAM410
+  EPAM420
+  EPAM430
+  EPAM440
+  EPAM450
+  EPAM460
+  EPAM470
+  EPAM480
+  EPAM490
+  EPAM50
+  EPAM500
+  EPAM60
+  EPAM70
+  EPAM80
+  EPAM90
+  Eangles.dat
+  Eamino.dat
+  Eaa_hydropathy.dat
+  Eaa_properties.dat
+  Eangles_tri.dat
+  Eantigenic.dat
+  Ebases.iub
+  Edayhoff.freq
+  Edna.melt
+  Eenergy.dat
+  Efeatures.embl
+  Efeatures.gff
+  Efreqs.dat
+  Ehth.dat
+  Ehth87.dat
+  Enakai.dat
+  Epepcoil.dat
+  Epk.dat
+  Epprofile
+  Erna.melt
+  Esig.euk
+  Esig.pro
+  Etags.embl
+  Etags.gff
+  Ewhite-wimley.dat
+  Makefile.am
+  embossre.equ
+  Makefile.in
+  Makefile
+  Eprior1.plib
+  Ememe.dat
+  EGC.16
+  jjj
+  Eprior30.plib
+  Eembl.ior
+  tfinsect
+  tfvertebrate
+  tfplant
+  tfother
+  EGC.21
+  EGC.22
+  EGC.23
+  Ecolour.map
+  Evdw.dat
+  Efeatures.emboss
+  Efeatures.swiss
+  Etags.emboss
+  Etags.swiss
+  Efeatures.pir
+  Efeatures.protein
+  Etags.pir
+  Etags.protein
+  Emwfilter.dat
+  Emassmod.dat
+  Emass.dat
+
+
+DIRECTORY: /packages/emboss_dev/gwilliam/emboss/emboss/emboss/data/CODONS
+
+  Eaidlav.cut
+  Eacc.cut
+  Makefile.in
+  Eadenovirus5.cut
+  Eadenovirus7.cut
+  Eanasp.cut
+  Eani.cut
+  Eani_h.cut
+  Eanidmit.cut
+  Easn.cut
+  Eath.cut
+  Eatu.cut
+  Eavi.cut
+  Ebja.cut
+  Ebly.cut
+  Ebme.cut
+  Ebmo.cut
+  Ebna.cut
+  Ebov.cut
+  Ebovsp.cut
+  Ebst.cut
+  Ebsu.cut
+  Ebsu_h.cut
+  Ecac.cut
+  Ecal.cut
+  Eccr.cut
+  Ecel.cut
+  Echi.cut
+  Echicken.cut
+  Echisp.cut
+  Echk.cut
+  Echmp.cut
+  Echnt.cut
+  Echos.cut
+  Echzm.cut
+  Echzmrubp.cut
+  Ecpx.cut
+  Ecre.cut
+  Ecrisp.cut
+  Ectr.cut
+  Edayhoff.cut
+  Eddi.cut
+  Eddi_h.cut
+  Edog.cut
+  Edro.cut
+  Edro_h.cut
+  Eeca.cut
+  Edrosophila.cut
+  Eeco.cut
+  Eeco_h.cut
+  Eecoli.cut
+  Ef1.cut
+  Efish.cut
+  Efmdvpolyp.cut
+  Eham.cut
+  Ehha.cut
+  Ehin.cut
+  Ehma.cut
+  Ehum.cut
+  Ehuman.cut
+  Ekla.cut
+  Ekpn.cut
+  Ella.cut
+  Emac.cut
+  Emaize.cut
+  Emam_h.cut
+  Emixlg.cut
+  Emouse.cut
+  Emsa.cut
+  Emse.cut
+  Emta.cut
+  Emtu.cut
+  Emus.cut
+  Emussp.cut
+  Emva.cut
+  Emze.cut
+  Emzecp.cut
+  Encr.cut
+  Eneu.cut
+  Engo.cut
+  Eoncsp.cut
+  Epae.cut
+  Epea.cut
+  Epet.cut
+  Epfa.cut
+  Ephix174.cut
+  Ephv.cut
+  Ephy.cut
+  Epig.cut
+  Epolyomaa2.cut
+  Epombe.cut
+  Epombecai.cut
+  Epot.cut
+  Eppu.cut
+  Epse.cut
+  Epsy.cut
+  Epvu.cut
+  Erab.cut
+  Erabbit.cut
+  Erabsp.cut
+  Erat.cut
+  Eratsp.cut
+  Erca.cut
+  Erhm.cut
+  Eric.cut
+  Erle.cut
+  Erme.cut
+  Ersp.cut
+  Esalsp.cut
+  Esau.cut
+  Esco.cut
+  Esgi.cut
+  Eshp.cut
+  Eshpsp.cut
+  Esli.cut
+  Eslm.cut
+  Esma.cut
+  Esmi.cut
+  Esmu.cut
+  Esoy.cut
+  Espi.cut
+  Espn.cut
+  Espo.cut
+  Espo_h.cut
+  Espu.cut
+  Esta.cut
+  Esty.cut
+  Esus.cut
+  Esv40.cut
+  Esyhsp.cut
+  Esynsp.cut
+  Etbr.cut
+  Etcr.cut
+  Eter.cut
+  Etetsp.cut
+  Etob.cut
+  Etobcp.cut
+  Etom.cut
+  Etrb.cut
+  Evco.cut
+  Ewht.cut
+  Exel.cut
+  Exenopus.cut
+  Eyeast.cut
+  Eyeastcai.cut
+  Eyen.cut
+  Eysc.cut
+  Eysc_h.cut
+  Eyscmt.cut
+  Eysp.cut
+  Ezebrafish.cut
+  Ezma.cut
+  Makefile.am
+  Makefile
+  EAedes_atropalpus.cut
+  EDictyostelium_discoideum.cut
+  EAndroctonus_australis.cut
+  EAmblyomma_americanum.cut
+  EAedes_albopictus.cut
+  EAphrodite_aculeata.cut
+  EAsellus_aquaticus.cut
+  EAcanthocheilonema_viteae.cut
+  EAstacus_astacus.cut
+  EAedes_aegypti.cut
+  EAgelenopsis_aperta.cut
+  EAcrolepiopsis_assectella.cut
+  EAnadara_trapezia.cut
+
+
+DIRECTORY: /packages/emboss_dev/gwilliam/emboss/emboss/emboss/data/REBASE
+
+  Makefile.in
+  Makefile.am
+  dummyfile
+  Makefile
+  embossre.enz
+  embossre.ref
+  embossre.sup
+
+
+DIRECTORY: /packages/emboss_dev/gwilliam/emboss/emboss/emboss/data/AAINDEX
+
+  Makefile.in
+  Makefile.am
+  dummyfile
+  Makefile
+  andn920101
+  argp820101
+  argp820102
+  argp820103
+  begf750101
+  begf750102
+  begf750103
+  bhar880101
+  bigc670101
+  biov880101
+  biov880102
+  broc820101
+  broc820102
+  bulh740101
+  bulh740102
+  buna790101
+  buna790102
+  buna790103
+  bura740101
+  bura740102
+  cham810101
+  cham820101
+  cham820102
+  cham830101
+  cham830102
+  cham830103
+  cham830104
+  cham830105
+  cham830106
+  cham830107
+  cham830108
+  choc750101
+  choc760101
+  choc760102
+  choc760103
+  choc760104
+  chop780101
+  chop780201
+  chop780202
+  chop780203
+  chop780204
+  chop780205
+  chop780206
+  chop780207
+  chop780208
+  chop780209
+  chop780210
+  chop780211
+  chop780212
+  chop780213
+  chop780214
+  chop780215
+  chop780216
+  cidh920101
+  cidh920102
+  cidh920103
+  cidh920104
+  cidh920105
+  cohe430101
+  craj730101
+  craj730102
+  craj730103
+  dawd720101
+  daym780101
+  daym780201
+  desm900101
+  desm900102
+  eisd840101
+  eisd860101
+  eisd860102
+  eisd860103
+  fasg760101
+  fasg760102
+  fasg760103
+  fasg760104
+  fasg760105
+  fauj830101
+  fauj880101
+  fauj880102
+  fauj880103
+  fauj880104
+  fauj880105
+  fauj880106
+  fauj880107
+  fauj880108
+  fauj880109
+  fauj880110
+  fauj880111
+  fauj880112
+  fauj880113
+  fina770101
+  fina910101
+  fina910102
+  fina910103
+  fina910104
+  garj730101
+  geim800101
+  geim800102
+  geim800103
+  geim800104
+  geim800105
+  geim800106
+  geim800107
+  geim800108
+  geim800109
+  geim800110
+  geim800111
+  gold730101
+  gold730102
+  grar740101
+  grar740102
+  grar740103
+  guyh850101
+  hopa770101
+  hopt810101
+  hutj700101
+  hutj700102
+  hutj700103
+  isoy800101
+  isoy800102
+  isoy800103
+  isoy800104
+  isoy800105
+  isoy800106
+  isoy800107
+  isoy800108
+  janj780101
+  janj780102
+  janj780103
+  janj790101
+  janj790102
+  jond750101
+  jond750102
+  jond920101
+  jond920102
+  jukt750101
+  junj780101
+  kanm800101
+  kanm800102
+  kanm800103
+  kanm800104
+  karp850101
+  karp850102
+  karp850103
+  khag800101
+  klep840101
+  kriw710101
+  kriw790101
+  kriw790102
+  kriw790103
+  kytj820101
+  lawe840101
+  levm760101
+  levm760102
+  levm760103
+  levm760104
+  levm760105
+  levm760106
+  levm760107
+  levm780101
+  levm780102
+  levm780103
+  levm780104
+  levm780105
+  levm780106
+  lewp710101
+  lifs790101
+  lifs790102
+  lifs790103
+  manp780101
+  maxf760101
+  maxf760102
+  maxf760103
+  maxf760104
+  maxf760105
+  maxf760106
+  mcmt640101
+  meej800101
+  meej800102
+  meej810101
+  meej810102
+  meih800101
+  meih800102
+  meih800103
+  miys850101
+  nagk730101
+  nagk730102
+  nagk730103
+  nakh900101
+  nakh900102
+  nakh900103
+  nakh900104
+  nakh900105
+  nakh900106
+  nakh900107
+  nakh900108
+  nakh900109
+  nakh900110
+  nakh900111
+  nakh900112
+  nakh900113
+  nakh920101
+  nakh920102
+  nakh920103
+  nakh920104
+  nakh920105
+  nakh920106
+  nakh920107
+  nakh920108
+  nisk800101
+  nisk860101
+  nozy710101
+  oobm770101
+  oobm770102
+  oobm770103
+  oobm770104
+  oobm770105
+  oobm850101
+  oobm850102
+  oobm850103
+  oobm850104
+  oobm850105
+  palj810101
+  palj810102
+  palj810103
+  palj810104
+  palj810105
+  palj810106
+  palj810107
+  palj810108
+  palj810109
+  palj810110
+  palj810111
+  palj810112
+  palj810113
+  palj810114
+  palj810115
+  palj810116
+  parj860101
+  pliv810101
+  ponp800101
+  ponp800102
+  ponp800103
+  ponp800104
+  ponp800105
+  ponp800106
+  ponp800107
+  ponp800108
+  pram820101
+  pram820102
+  pram820103
+  pram900101
+  pram900102
+  pram900103
+  pram900104
+  ptio830101
+  ptio830102
+  qian880101
+  qian880102
+  qian880103
+  qian880104
+  qian880105
+  qian880106
+  qian880107
+  qian880108
+  qian880109
+  qian880110
+  qian880111
+  qian880112
+  qian880113
+  qian880114
+  qian880115
+  qian880116
+  qian880117
+  qian880118
+  qian880119
+  qian880120
+  qian880121
+  qian880122
+  qian880123
+  qian880124
+  qian880125
+  qian880126
+  qian880127
+  qian880128
+  qian880129
+  qian880130
+  qian880131
+  qian880132
+  qian880133
+  qian880134
+  qian880135
+  qian880136
+  qian880137
+  qian880138
+  qian880139
+  racs770101
+  racs770102
+  racs770103
+  racs820101
+  racs820102
+  racs820103
+  racs820104
+  racs820105
+  racs820106
+  racs820107
+  racs820108
+  racs820109
+  racs820110
+  racs820111
+  racs820112
+  racs820113
+  racs820114
+  rada880101
+  rada880102
+  rada880103
+  rada880104
+  rada880105
+  rada880106
+  rada880107
+  rada880108
+  ricj880101
+  ricj880102
+  ricj880103
+  ricj880104
+  ricj880105
+  ricj880106
+  ricj880107
+  ricj880108
+  ricj880109
+  ricj880110
+  ricj880111
+  ricj880112
+  ricj880113
+  ricj880114
+  ricj880115
+  ricj880116
+  ricj880117
+  robb760101
+  robb760102
+  robb760103
+  robb760104
+  robb760105
+  robb760106
+  robb760107
+  robb760108
+  robb760109
+  robb760110
+  robb760111
+  robb760112
+  robb760113
+  robb790101
+  rosg850101
+  rosg850102
+  rosm880101
+  rosm880102
+  rosm880103
+  simz760101
+  snep660101
+  snep660102
+  snep660103
+  snep660104
+  suem840101
+  suem840102
+  swer830101
+  tans770101
+  tans770102
+  tans770103
+  tans770104
+  tans770105
+  tans770106
+  tans770107
+  tans770108
+  tans770109
+  tans770110
+  vasm830101
+  vasm830102
+  vasm830103
+  velv850101
+  vent840101
+  vheg790101
+  warp780101
+  weba780101
+  werd780101
+  werd780102
+  werd780103
+  werd780104
+  woec730101
+  wolr810101
+  wols870101
+  wols870102
+  wols870103
+  yutk870101
+  yutk870102
+  yutk870103
+  yutk870104
+  zasb820101
+  zimj680101
+  zimj680102
+  zimj680103
+  zimj680104
+  zimj680105
+  aurr980101
+  aurr980102
+  aurr980103
+  aurr980104
+  aurr980105
+  aurr980106
+  aurr980107
+  aurr980108
+  aurr980109
+  aurr980110
+  aurr980111
+  aurr980112
+  aurr980113
+  aurr980114
+  aurr980115
+  aurr980116
+  aurr980117
+  aurr980118
+  aurr980119
+  aurr980120
+  onek900101
+  onek900102
+  vinm940101
+  vinm940102
+  vinm940103
+  vinm940104
+  munv940101
+  munv940102
+  munv940103
+  munv940104
+  munv940105
+  wimw960101
+  kimc930101
+  monm990101
+  blam930101
+   
+   Example 3
+   
    Make a copy of an EMBOSS data file in the current directory:
-% embossdata -fetch -filename Epepcoil.dat
+   
 
+% embossdata -fetch -filename Epepcoil.dat 
+Finds or fetches the data files read in by the EMBOSS programs
+
+File '/packages/emboss_dev/gwilliam/emboss/emboss/emboss/data/Epepcoil.dat' has
+ been copied successfully.
+   
+   Go to the output files for this example
+   
+   Example 4
+   
+   Display the directories which contain a particular EMBOSS data file:
+   
+
+% embossdata -filename EPAM60 
+Finds or fetches the data files read in by the EMBOSS programs
+
+# The following directories can contain EMBOSS data files.
+# They are searched in the following order until the file is found.
+# If the directory does not exist, then this is noted below.
+# '.' is the UNIX name for your current working directory.
+
+File ./EPAM60                                                     Does not exis
+t
+File .embossdata/EPAM60                                           Does not exis
+t
+File /people/gwilliam/EPAM60                                      Does not exis
+t
+File /people/gwilliam/.embossdata/EPAM60                          Does not exis
+t
+File /packages/emboss_dev/gwilliam/emboss/emboss/emboss/data/EPAM Exists
+   
 Command line arguments
 
    Mandatory qualifiers (* if not always prompted):
@@ -97,15 +920,15 @@ Command line arguments
    the file is not altered when it is fetched. Any string is accepted An
    empty string is accepted
    Optional qualifiers Allowed values Default
-   -showall Show all potential EMBOSS data files Yes/No No
-   -fetch Fetch a data file Yes/No No
+   -showall Show all potential EMBOSS data files Boolean value Yes/No No
+   -fetch Fetch a data file Boolean value Yes/No No
    -outf This specifies the name of the file that the results of a search
    for a file in the various data directories is written to. By default
    these results are written to the screen (stdout). Output file stdout
    Advanced qualifiers Allowed values Default
    -reject This specifies the names of the sub-directories of the EMBOSS
    data directory that should be ignored when displaying data
-   directories. Choose from selection list of values 2, 3, 4
+   directories. Choose from selection list of values 3, 5, 6
    
 Input file format
 
@@ -115,102 +938,36 @@ Output file format
 
    All output is to stdout.
    
-   When reporting the directories searched for EMBOSS data files:
-----------------------------------------------------------------------
-# The following directories can contain EMBOSS data files.
-# They are searched in the following order until the file is found.
-# If the directory does not exist, then this is noted below.
-# '.' is the UNIX name for your current working directory.
-
-.                                                            Exists
-.embossdata                                                  Does not exist
-/people/gwilliam                                             Exists
-/people/gwilliam/.embossdata                                 Does not exist
-/packages/emboss_dev/gwilliam/emboss/emboss/data             Exists
-----------------------------------------------------------------------
-
-   When reporting the datafiles found in directories:
-----------------------------------------------------------------------
-DIRECTORY: /packages/emboss/emboss/data
-
-  Ebases.iub
-  Eamino.dat
-  Epk.dat
-  Edna.melt
-  Erna.melt
-  EDNAFULL
-  EDNAMAT
-  Edayhoff.freq
-  Ewhite-wimley.dat
-  Eembossre.equ
-  Eantigenic.dat
-  Ehth.dat
-  Ehth87.dat
-  Esig.euk
-  Esig.pro
-  Epepcoil.dat
-  EGC.0
-  EGC.1
-  EGC.2
-  EGC.3
-  EGC.4
-  EGC.5
-  EGC.6
-  EBLOSUM62
-  EGC.9
-  EGC.10
-  EGC.12
-  EGC.11
-  EGC.13
-  EGC.14
-  EGC.15
-  Enakai.dat
-  Eaa_acc_surface.dat
-  Eaa_hydropathy.dat
-  Eaa_properties.dat
-  Eangles_tri.dat
-  EBLOSUM30
-  EBLOSUM35
-  EBLOSUM40
-  EBLOSUM45
-
-etc.
-
-DIRECTORY: /packages/emboss/emboss/data/CODONS
-
-  Eacc.cut
-  Eadenovirus5.cut
-  Eadenovirus7.cut
-  Eaidlav.cut
-  Eanasp.cut
-  Eani.cut
-  Eani_h.cut
-  Eanidmit.cut
-  Easn.cut
-  Eath.cut
-  Eatu.cut
-  Eavi.cut
-  Ebja.cut
-  Ebly.cut
-  Ebme.cut
-
-
-----------------------------------------------------------------------
-
-   When reporting the location of a particular EMBOSS data file:
-----------------------------------------------------------------------
-# The following directories can contain EMBOSS data files.
-# They are searched in the following order until the file is found.
-# If the directory does not exist, then this is noted below.
-# '.' is the UNIX name for your current working directory.
-
-File ./EPAM60                                           Exists
-File .embossdata/EPAM60                                 Does not exist
-File /people/gwilliam/EPAM60                            Does not exist
-File /people/gwilliam/.embossdata/EPAM60                Does not exist
-File /packages/emboss/emboss/data/EPAM60                Exists
-----------------------------------------------------------------------
-
+  Output files for usage example 3
+  
+  File: Epepcoil.dat
+  
+# Input data for PEPCOIL
+# from Lupas A, van Dyke M & Stock J; Science 252:1162-4 (1991)
+#
+#   Freq in       Relative occurrence at heptad position
+# R GenBank     a      b      c      d      e      f      g
+  L  9.33     3.167  0.297  0.398  3.902  0.585  0.501  0.483
+  I  5.35     2.597  0.098  0.345  0.894  0.514  0.471  0.431
+  V  6.42     1.665  0.403  0.386  0.949  0.211  0.342  0.360
+  M  2.34     2.240  0.370  0.480  1.409  0.541  0.772  0.663
+  F  3.88     0.531  0.076  0.403  0.662  0.189  0.106  0.013
+  Y  3.16     1.417  0.090  0.122  1.659  0.190  0.130  0.155
+  G  7.10     0.045  0.275  0.578  0.216  0.211  0.426  0.156
+  A  7.59     1.297  1.551  1.084  2.612  0.377  1.248  0.877
+  K  5.72     1.375  2.639  1.763  0.191  1.815  1.961  2.795
+  R  5.39     0.659  1.163  1.210  0.031  1.358  1.937  1.798
+  H  2.25     0.347  0.275  0.679  0.395  0.294  0.579  0.213
+  E  6.10     0.262  3.496  3.108  0.998  5.685  2.494  3.048
+  D  5.03     0.030  2.352  2.268  0.237  0.663  1.620  1.448
+  Q  4.27     0.179  2.114  1.778  0.631  2.550  1.578  2.526
+  N  4.25     0.835  1.475  1.534  0.039  1.722  2.456  2.280
+  S  7.28     0.382  0.583  1.052  0.419  0.525  0.916  0.628
+  T  5.97     0.169  0.702  0.955  0.654  0.791  0.843  0.647
+  C  1.86     0.824  0.022  0.308  0.152  0.180  0.156  0.044
+  W  1.41     0.240  0.0    0.0    0.456  0.019  0.0    0.0
+  P  5.28     0.0    0.008  0.0    0.013  0.0    0.0    0.0
+   
 Data files
 
    No data files are read by this program.

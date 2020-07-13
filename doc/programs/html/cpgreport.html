@@ -69,7 +69,10 @@ decrement running-Sum counter, but if CpG then running-Sum counter is
 incremented by the CPGSCORE.  Spans greater than the threshold are
 searched for recursively. 
 
+<p>
 
+This method overpredicts islands but finds the smaller ones around
+primary exons. 
 
 
 <H2>
@@ -77,6 +80,23 @@ searched for recursively.
 </H2>
 
 
+<b>Here is a sample session with cpgreport</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>cpgreport tembl:rnu68037 </b>
+Reports all CpG rich regions
+CpG score [17]: <b></b>
+Output file [rnu68037.cpgreport]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
+
+
+<!--
 Here is a sample session with cpgreport.
 
 <pre>
@@ -87,7 +107,7 @@ CpG score [17]:
 Output file [rnu68037.cpgreport]: 
 
 </pre>
-
+-->
 
 
 <H2>
@@ -185,11 +205,139 @@ IT IS DONE FOR YOU.
 
 Any DNA sequence USA.
 
+<p>
+
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+
+'tembl:rnu68037' is a sequence entry in the example nucleic acid database 'tembl'
+<p>
+<p><h3>Database entry: tembl:rnu68037</h3>
+<table width="90%"><tr><td bgcolor="#FFDDFF">
+<pre>
+ID   RNU68037   standard; RNA; ROD; 1218 BP.
+XX
+AC   U68037;
+XX
+SV   U68037.1
+XX
+DT   23-SEP-1996 (Rel. 49, Created)
+DT   04-MAR-2000 (Rel. 63, Last updated, Version 2)
+XX
+DE   Rattus norvegicus EP1 prostanoid receptor mRNA, complete cds.
+XX
+KW   .
+XX
+OS   Rattus norvegicus (Norway rat)
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia;
+OC   Eutheria; Rodentia; Sciurognathi; Muridae; Murinae; Rattus.
+XX
+RN   [1]
+RP   1-1218
+RA   Abramovitz M., Boie Y.;
+RT   "Cloning of the rat EP1 prostanoid receptor";
+RL   Unpublished.
+XX
+RN   [2]
+RP   1-1218
+RA   Abramovitz M., Boie Y.;
+RT   ;
+RL   Submitted (26-AUG-1996) to the EMBL/GenBank/DDBJ databases.
+RL   Biochemistry &amp; Molecular Biology, Merck Frosst Center for Therapeutic
+RL   Research, P. O. Box 1005, Pointe Claire - Dorval, Quebec H9R 4P8, Canada
+XX
+DR   SWISS-PROT; P70597; PE21_RAT.
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..1218
+FT                   /db_xref="taxon:10116"
+FT                   /organism="Rattus norvegicus"
+FT                   /strain="Sprague-Dawley"
+FT   CDS             1..1218
+FT                   /codon_start=1
+FT                   /db_xref="SWISS-PROT:P70597"
+FT                   /note="family 1 G-protein coupled receptor"
+FT                   /product="EP1 prostanoid receptor"
+FT                   /protein_id="AAB07735.1"
+FT                   /translation="MSPYGLNLSLVDEATTCVTPRVPNTSVVLPTGGNGTSPALPIFSM
+FT                   TLGAVSNVLALALLAQVAGRLRRRRSTATFLLFVASLLAIDLAGHVIPGALVLRLYTAG
+FT                   RAPAGGACHFLGGCMVFFGLCPLLLGCGMAVERCVGVTQPLIHAARVSVARARLALALL
+FT                   AAMALAVALLPLVHVGHYELQYPGTWCFISLGPPGGWRQALLAGLFAGLGLAALLAALV
+FT                   CNTLSGLALLRARWRRRRSRRFRENAGPDDRRRWGSRGLRLASASSASSITSTTAALRS
+FT                   SRGGGSARRVHAHDVEMVGQLVGIMVVSCICWSPLLVLVVLAIGGWNSNSLQRPLFLAV
+FT                   RLASWNQILDPWVYILLRQAMLRQLLRLLPLRVSAKGGPTELSLTKSAWEASSLRSSRH
+FT                   SGFSHL"
+XX
+SQ   Sequence 1218 BP; 162 A; 397 C; 387 G; 272 T; 0 other;
+     atgagcccct acgggcttaa cctgagccta gtggatgagg caacaacgtg tgtaacaccc        60
+     agggtcccca atacatctgt ggtgctgcca acaggcggta acggcacatc accagcgctg       120
+     cctatcttct ccatgacgct gggtgctgtg tccaacgtgc tggcgctggc gctgctggcc       180
+     caggttgcag gcagactgcg gcgccgccgc tcgactgcca ccttcctgtt gttcgtcgcc       240
+     agcctgcttg ccatcgacct agcaggccat gtgatcccgg gcgccttggt gcttcgcctg       300
+     tatactgcag gacgtgcgcc cgctggcggg gcctgtcatt tcctgggcgg ctgtatggtc       360
+     ttctttggcc tgtgcccact tttgcttggc tgtggcatgg ccgtggagcg ctgcgtgggt       420
+     gtcacgcagc cgctgatcca cgcggcgcgc gtgtccgtag cccgcgcacg cctggcacta       480
+     gccctgctgg ccgccatggc tttggcagtg gcgctgctgc cactagtgca cgtgggtcac       540
+     tacgagctac agtaccctgg cacttggtgt ttcattagcc ttgggcctcc tggaggttgg       600
+     cgccaggcgt tgcttgcggg cctcttcgcc ggccttggcc tggctgcgct ccttgccgca       660
+     ctagtgtgta atacgctcag cggcctggcg ctccttcgtg cccgctggag gcggcgtcgc       720
+     tctcgacgtt tccgagagaa cgcaggtccc gatgatcgcc ggcgctgggg gtcccgtgga       780
+     ctccgcttgg cctccgcctc gtctgcgtca tccatcactt caaccacagc tgccctccgc       840
+     agctctcggg gaggcggctc cgcgcgcagg gttcacgcac acgacgtgga aatggtgggc       900
+     cagctcgtgg gcatcatggt ggtgtcgtgc atctgctgga gccccctgct ggtattggtg       960
+     gtgttggcca tcgggggctg gaactctaac tccctgcagc ggccgctctt tctggctgta      1020
+     cgcctcgcgt cgtggaacca gatcctggac ccatgggtgt acatcctgct gcgccaggct      1080
+     atgctgcgcc aacttcttcg cctcctaccc ctgagggtta gtgccaaggg tggtccaacg      1140
+     gagctgagcc taaccaagag tgcctgggag gccagttcac tgcgtagctc ccggcacagt      1200
+     ggcttcagcc acttgtga                                                    1218
+//
+</pre>
+</td></tr></table><p>
+
+
 <H2>
     Output file format
 </H2>
 
 
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: rnu68037.cpgreport</h3>
+<table width="90%"><tr><td bgcolor="#DDFFDD">
+<pre>
+
+
+CPGREPORT of RNU68037 from 1 to 1218
+
+Sequence              Begin    End Score        CpG   %CG  CG/GC
+RNU68037                 12     13    17          1 100.0    -
+RNU68037                 47     48    17          1 100.0    -
+RNU68037                 96   1032   630         87  66.1   0.65
+RNU68037               1072   1100    26          3  62.1   0.00
+RNU68037               1139   1140    17          1 100.0    -
+RNU68037               1183   1193    26          2  72.7   2.00
+</pre>
+</td></tr></table><p>
+<p><h3>File: rnu68037.out2</h3>
+<table width="90%"><tr><td bgcolor="#DDFFDD">
+<pre>
+##gff-version 2.0
+##date 2002-11-07
+##Type DNA RNU68037
+RNU68037	cpgreport	misc_feature	12	13	17.000	+	.	Sequence "RNU68037.1"
+RNU68037	cpgreport	misc_feature	47	48	17.000	+	.	Sequence "RNU68037.2"
+RNU68037	cpgreport	misc_feature	96	1032	630.000	+	.	Sequence "RNU68037.3"
+RNU68037	cpgreport	misc_feature	1072	1100	26.000	+	.	Sequence "RNU68037.4"
+RNU68037	cpgreport	misc_feature	1139	1140	17.000	+	.	Sequence "RNU68037.5"
+RNU68037	cpgreport	misc_feature	1183	1193	26.000	+	.	Sequence "RNU68037.6"
+</pre>
+</td></tr></table><p>
+
+
+<!--
 The output file from the above example (rnu68037.cpgreport) follows: 
 
 <pre>
@@ -205,17 +353,23 @@ RNU68037               1139   1140    17          1 100.0    -
 RNU68037               1183   1193    26          2  72.7   2.00
 
 </pre>
+-->
 
 <p>
-The first non-blank line of the output file is the title line giving the
-program name, the name of sequence being analysed and the start and end
-positions of the sequence. 
+
+The first non-blank line of the output file 'rnu68037.cpgreport' is the
+title line giving the program name, the name of sequence being analysed
+and the start and end positions of the sequence. 
 
 <p>
-The second non-blank line contains the headings of teh columns.
+
+The second non-blank line contains the headings of the columns.
 
 <p>
+
 Subsequent lines contain columns with the following information:
+
+<p>
 
 <ul>
 <li>The name of the sequence.
@@ -227,6 +381,7 @@ Subsequent lines contain columns with the following information:
 </ul>
 
 <p>
+
 If the count of GpC in the region is zero, then the ratio of CG/GC is
 reported as '-'. 
 
@@ -292,8 +447,52 @@ None.
         data files?) that seealso doesn't find.
    -->
 
+<p>
 
+<p>
 
+As there is no official definition of what is a cpg island is, and worst
+where they begin and end, we have to live with 2 definitions and thus
+two methods.  These are:
+
+<p>
+
+1.  <b>newcpgseek</b> and <b>cpgreport</b> - both declare a putative
+island if the score is higher than a threshold (17 at the moment).  They
+now also displaying the actual CpG count, the % CG and the
+observed/expected ration in the region where the score is above the
+threshold.  This scoring method based on sum/frequencies overpredicts
+islands but finds the smaller ones around primary exons.
+<b>newcpgseek</b> uses the same method as <b>cpgreport</b> but the
+output is different and more readable.
+
+<p>
+
+2.  <b>newcpgreport</b> and <b>cpgplot</b> use a sliding window within
+which the Obs/Exp ratio of CpG is calculated.  The important thing to
+note in this method is that an island, in order to be reported, is
+defined as a region that satisfies the following contraints:
+
+<p>
+<pre>
+   Obs/Exp ratio > 0.6
+   % C + % G > 50%
+   Length > 200.
+</pre>
+<p>
+
+<p>
+
+For all practical purposes you should probably use newcpgreport.  It is
+actually used to produce the human cpgisland database you can find on
+the EBI's ftp server as well as on the EBI's SRS server.
+
+<p>
+
+<b>geecee</b> measures CG content in the entire input sequence and is
+not to be used to detect CpG islands.  It can be usefull for detecting
+sequences that MIGHT contain an island.
+          
 
 <H2>
     Author(s)

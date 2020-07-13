@@ -42,10 +42,12 @@ Description
    
 Usage
 
-   Here is a sample session with digest.
+   Here is a sample session with digest
+   
 
-% digest
-Input sequence: sw:opsd_human
+% digest 
+Protein proteolytic enzyme or reagent cleavage digest
+Input sequence: tsw:opsd_human
 Enzymes and Reagents
          1 : Trypsin
          2 : Lys-C
@@ -55,9 +57,12 @@ Enzymes and Reagents
          6 : V8-phosph
          7 : Chymotrypsin
          8 : CNBr
-Select number [1]:
-Output file [opsd_human.digest]:
-
+Select number [1]: 
+Output report [opsd_human.digest]: 
+   
+   Go to the input files for this example
+   Go to the output files for this example
+   
 Command line arguments
 
    Mandatory qualifiers:
@@ -100,25 +105,138 @@ Command line arguments
    8 (CNBr)
    1
    [-outfile]
-   (Parameter 2) Output report file name Report file
+   (Parameter 2) Output report file name Report output file
    Optional qualifiers Allowed values Default
    (none)
    Advanced qualifiers Allowed values Default
    -unfavoured Trypsin will not normally cut after a K if it is followed
    by (e.g.) another K or a P. Specifying this shows those cuts. as well
-   as the favoured ones. Yes/No No
+   as the favoured ones. Boolean value Yes/No No
    -aadata Molecular weight data for amino acids Any string is accepted
    Eamino.dat
    -overlap Used for partial digestion. Shows all cuts from favoured cut
    sites plus 1..3, 2..4, 3..5 etc but not (e.g.) 2..5. Overlaps are
    therefore fragments with exactly one potential cut site within it.
-   Yes/No No
+   Boolean value Yes/No No
    -allpartials As for overlap but fragments containing more than one
-   potential cut site are included. Yes/No No
+   potential cut site are included. Boolean value Yes/No No
    
 Input file format
 
    Any protein sequence.
+   
+  Input files for usage example
+  
+   'tsw:opsd_human' is a sequence entry in the example protein database
+   'tsw'
+   
+  Database entry: tsw:opsd_human
+  
+ID   OPSD_HUMAN     STANDARD;      PRT;   348 AA.
+AC   P08100; Q16414;
+DT   01-AUG-1988 (Rel. 08, Created)
+DT   01-AUG-1988 (Rel. 08, Last sequence update)
+DT   15-JUL-1999 (Rel. 38, Last annotation update)
+DE   RHODOPSIN.
+GN   RHO.
+OS   Homo sapiens (Human).
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Mammalia;
+OC   Eutheria; Primates; Catarrhini; Hominidae; Homo.
+RN   [1]
+RP   SEQUENCE FROM N.A.
+RX   MEDLINE; 84272729.
+RA   NATHANS J., HOGNESS D.S.;
+RT   "Isolation and nucleotide sequence of the gene encoding human
+RT   rhodopsin.";
+RL   Proc. Natl. Acad. Sci. U.S.A. 81:4851-4855(1984).
+RN   [2]
+RP   SEQUENCE OF 1-120 FROM N.A.
+RA   BENNETT J., BELLER B., SUN D., KARIKO K.;
+RL   Submitted (NOV-1994) to the EMBL/GenBank/DDBJ databases.
+RN   [3]
+RP   REVIEW ON ADRP VARIANTS.
+RX   MEDLINE; 94004905.
+RA   AL-MAGHTHEH M., GREGORY C., INGLEHEARN C., HARDCASTLE A.,
+RA   BHATTACHARYA S.;
+RT   "Rhodopsin mutations in autosomal dominant retinitis pigmentosa.";
+RL   Hum. Mutat. 2:249-255(1993).
+RN   [4]
+RP   VARIANT ADRP HIS-23.
+RX   MEDLINE; 90136922.
+RA   DRYJA T.P., MCGEE T.L., REICHEI E., HAHN L.B., COWLEY G.S.,
+RA   YANDELL D.W., SANDBERG M.A., BERSON E.L.;
+RT   "A point mutation of the rhodopsin gene in one form of retinitis
+RT   pigmentosa.";
+RL   Nature 343:364-366(1990).
+RN   [5]
+RP   VARIANTS ADRP.
+RX   MEDLINE; 91051574.
+RA   FARRAR G.J., KENNA P., REDMOND R., MCWILLIAM P., BRADLEY D.G.,
+RA   HUMPHRIES M.M., SHARP E.M., INGLEHEARN C.F., BASHIR R., JAY M.,
+RA   WATTY A., LUDWIG M., SCHINZEL A., SAMANNS C., GAL A.,
+RA   BHATTACHARYA S.S., HUMPHRIES P.;
+RT   "Autosomal dominant retinitis pigmentosa: absence of the rhodopsin
+RT   proline-->histidine substitution (codon 23) in pedigrees from
+RT   Europe.";
+RL   Am. J. Hum. Genet. 47:941-945(1990).
+RN   [6]
+RP   VARIANTS ADRP HIS-23; ARG-58; LEU-347 AND SER-347.
+RX   MEDLINE; 91015273.
+
+
+  [Part of this file has been deleted for brevity]
+
+FT                                /FTId=VAR_004816.
+FT   VARIANT     209    209       V -> M (EFFECT NOT KNOWN).
+FT                                /FTId=VAR_004817.
+FT   VARIANT     211    211       H -> P (IN ADRP).
+FT                                /FTId=VAR_004818.
+FT   VARIANT     211    211       H -> R (IN ADRP).
+FT                                /FTId=VAR_004819.
+FT   VARIANT     216    216       M -> K (IN ADRP).
+FT                                /FTId=VAR_004820.
+FT   VARIANT     220    220       F -> C (IN ADRP).
+FT                                /FTId=VAR_004821.
+FT   VARIANT     222    222       C -> R (IN ADRP).
+FT                                /FTId=VAR_004822.
+FT   VARIANT     255    255       MISSING (IN ADRP).
+FT                                /FTId=VAR_004823.
+FT   VARIANT     264    264       MISSING (IN ADRP).
+FT                                /FTId=VAR_004824.
+FT   VARIANT     267    267       P -> L (IN ADRP).
+FT                                /FTId=VAR_004825.
+FT   VARIANT     267    267       P -> R (IN ADRP).
+FT                                /FTId=VAR_004826.
+FT   VARIANT     292    292       A -> E (IN CSNB4).
+FT                                /FTId=VAR_004827.
+FT   VARIANT     296    296       K -> E (IN ADRP).
+FT                                /FTId=VAR_004828.
+FT   VARIANT     297    297       S -> R (IN ADRP).
+FT                                /FTId=VAR_004829.
+FT   VARIANT     342    342       T -> M (IN ADRP).
+FT                                /FTId=VAR_004830.
+FT   VARIANT     345    345       V -> L (IN ADRP).
+FT                                /FTId=VAR_004831.
+FT   VARIANT     345    345       V -> M (IN ADRP).
+FT                                /FTId=VAR_004832.
+FT   VARIANT     347    347       P -> A (IN ADRP).
+FT                                /FTId=VAR_004833.
+FT   VARIANT     347    347       P -> L (IN ADRP; COMMON VARIANT).
+FT                                /FTId=VAR_004834.
+FT   VARIANT     347    347       P -> Q (IN ADRP).
+FT                                /FTId=VAR_004835.
+FT   VARIANT     347    347       P -> R (IN ADRP).
+FT                                /FTId=VAR_004836.
+FT   VARIANT     347    347       P -> S (IN ADRP).
+FT                                /FTId=VAR_004837.
+SQ   SEQUENCE   348 AA;  38892 MW;  07443BEA CRC32;
+     MNGTEGPNFY VPFSNATGVV RSPFEYPQYY LAEPWQFSML AAYMFLLIVL GFPINFLTLY
+     VTVQHKKLRT PLNYILLNLA VADLFMVLGG FTSTLYTSLH GYFVFGPTGC NLEGFFATLG
+     GEIALWSLVV LAIERYVVVC KPMSNFRFGE NHAIMGVAFT WVMALACAAP PLAGWSRYIP
+     EGLQCSCGID YYTLKPEVNN ESFVIYMFVV HFTIPMIIIF FCYGQLVFTV KEAAAQQQES
+     ATTQKAEKEV TRMVIIMVIA FLICWVPYAS VAFYIFTHQG SNFGPIFMTI PAFFAKSAAI
+     YNPVIYIMMN KQFRNCMLTT ICCGKNPLGD DEASATVSKT ETSQVAPA
+//
    
 Output file format
 
@@ -135,11 +253,15 @@ Output file format
    further information on report formats.
    
    By default digest writes a 'seqtable' report file.
-     _________________________________________________________________
    
+  Output files for usage example
+  
+  File: opsd_human.digest
+  
 ########################################
 # Program: digest
-# Rundate: Mon Feb 11 13:36:16 2002
+# Rundate: Thu Nov 07 14:17:55 2002
+# Report_format: seqtable
 # Report_file: opsd_human.digest
 ########################################
 
@@ -153,32 +275,31 @@ Output file format
 #=======================================
 
   Start     End Mol_Weight cterm  nterm  Sequence
-     70     135 7129.319   R      Y      TPLNYILLNLAVADLFMVLGGFTSTLYTSLHGYFVFGP
+     70     135   7129.319 R      Y      TPLNYILLNLAVADLFMVLGGFTSTLYTSLHGYFVFGP
 TGCNLEGFFATLGGEIALWSLVVLAIER
-    178     231 6335.495   R      E      YIPEGLQCSCGIDYYTLKPEVNNESFVIYMFVVHFTIP
+    178     231   6335.495 R      E      YIPEGLQCSCGIDYYTLKPEVNNESFVIYMFVVHFTIP
 MIIIFFCYGQLVFTVK
-     22      69 5788.873   R      T      SPFEYPQYYLAEPWQFSMLAAYMFLLIVLGFPINFLTL
+     22      69   5788.873 R      T      SPFEYPQYYLAEPWQFSMLAAYMFLLIVLGFPINFLTL
 YVTVQHKKLR
-    253     296 5004.085   R      S      MVIIMVIAFLICWVPYASVAFYIFTHQGSNFGPIFMTI
+    253     296   5004.085 R      S      MVIIMVIAFLICWVPYASVAFYIFTHQGSNFGPIFMTI
 PAFFAK
-    136     177 4600.460   R      Y      YVVVCKPMSNFRFGENHAIMGVAFTWVMALACAAPPLA
+    136     177   4600.460 R      Y      YVVVCKPMSNFRFGENHAIMGVAFTWVMALACAAPPLA
 GWSR
-      1      21 2257.495   .      S      MNGTEGPNFYVPFSNATGVVR
-    297     311 1728.089   K      Q      SAAIYNPVIYIMMNK
-    232     245 1490.538   K      A      EAAAQQQESATTQK
-    326     339 1403.457   K      T      NPLGDDEASATVSK
-    315     325 1186.476   R      N      NCMLTTICCGK
-    340     348 902.950    K      .      TETSQVAPA
-    249     252 503.550    K      M      EVTR
-    312     314 449.504    K      N      QFR
-    246     248 346.378    K      E      AEK
+      1      21   2257.495 .      S      MNGTEGPNFYVPFSNATGVVR
+    297     311   1728.089 K      Q      SAAIYNPVIYIMMNK
+    232     245   1490.538 K      A      EAAAQQQESATTQK
+    326     339   1403.457 K      T      NPLGDDEASATVSK
+    315     325   1186.476 R      N      NCMLTTICCGK
+    340     348    902.950 K      .      TETSQVAPA
+    249     252    503.550 K      M      EVTR
+    312     314    449.504 K      N      QFR
+    246     248    346.378 K      E      AEK
 
 #---------------------------------------
 #---------------------------------------
-     _________________________________________________________________
    
-   The header information contains the propgram name, date of run, name
-   of the reagent used to digest the protein and the number of fragments
+   The header information contains the program name, date of run, name of
+   the reagent used to digest the protein and the number of fragments
    reported. The header will report if complete or partial digestion was
    chosen.
    
@@ -220,7 +341,7 @@ Known bugs
    
 See also
 
-    Program name                        Description
+    Program name                         Description
    antigenic      Finds antigenic sites in proteins
    fuzzpro        Protein pattern search
    fuzztran       Protein pattern search after translation
@@ -229,6 +350,7 @@ See also
    patmatdb       Search a protein sequence with a motif
    patmatmotifs   Search a PROSITE motif database with a protein sequence
    pepcoil        Predicts coiled coil regions
+   pestfind       Finds PEST motifs as potential proteolytic cleavage sites
    preg           Regular expression search of a protein sequence
    pscan          Scans proteins using PRINTS
    sigcleave      Reports protein signal cleavage sites

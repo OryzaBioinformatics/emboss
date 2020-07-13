@@ -110,36 +110,41 @@ found are simply ignored.
  -->
 
 
-Here is a sample session with notseq.  In this case the excluded
-sequences ('clone186' and 'clone876') are simply thrown away and not
-saved to any file. 
+<b>Here is a sample session with notseq</b>
+<p>
+In this case the excluded sequences (myg_phyca and lgb2_luplu) are not saved to any file: 
 <p>
 
-<pre>
-% notseq
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>notseq </b>
 Excludes a set of sequences and writes out the remaining ones
-Input sequence(s): globins.fasta
-Sequence names to exclude: myg_phyca,lgb2_luplu
-Output sequence [hbb_human.fasta]: mydata.seq
-</pre>
+Input sequence(s): <b>../../data/globins.fasta</b>
+Sequence names to exclude: <b>myg_phyca,lgb2_luplu</b>
+Output sequence [hbb_human.fasta]: <b>mydata.seq</b>
 
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 2</b>
+<p>
+Here is an example where the sequences to be excluded are saved to another file: 
 <p>
 
-Here is an example where the sequences to be excluded are saved to
-another file:
-
 <p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-<pre>
-% notseq -junkout excluded.seq
+% <b>notseq -junkout hb.seq </b>
 Excludes a set of sequences and writes out the remaining ones
-Input sequence(s): globins.fasta
-Sequence names to exclude: hb*
-Output sequence [hbb_human.fasta]: mydata.seq
-</pre>
+Input sequence(s): <b>../../data/globins.fasta</b>
+Sequence names to exclude: <b>hb*</b>
+Output sequence [hbb_human.fasta]: <b>mydata.seq</b>
 
-
-
+</pre></td></tr></table><p>
+<p>
+<a href="#output.2">Go to the output files for this example</a><p><p>
 
 
 
@@ -269,10 +274,49 @@ IT IS DONE FOR YOU.
         happens in unusual cases - null input, etc. 
    -->
 
-The input sequences are a normal sequence USA.
+<b>notseq</b> reads normal sequence USAs.
 
 <p>
 
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+<p><h3>File: ../../data/globins.fasta</h3>
+<table width="90%"><tr><td bgcolor="#FFDDFF">
+<pre>
+&gt;HBB_HUMAN Sw:Hbb_Human =&gt; HBB_HUMAN
+VHLTPEEKSAVTALWGKVNVDEVGGEALGRLLVVYPWTQRFFESFGDLSTPDAVMGNPKV
+KAHGKKVLGAFSDGLAHLDNLKGTFATLSELHCDKLHVDPENFRLLGNVLVCVLAHHFGK
+EFTPPVQAAYQKVVAGVANALAHKYH
+&gt;HBB_HORSE Sw:Hbb_Horse =&gt; HBB_HORSE
+VQLSGEEKAAVLALWDKVNEEEVGGEALGRLLVVYPWTQRFFDSFGDLSNPGAVMGNPKV
+KAHGKKVLHSFGEGVHHLDNLKGTFAALSELHCDKLHVDPENFRLLGNVLVVVLARHFGK
+DFTPELQASYQKVVAGVANALAHKYH
+&gt;HBA_HUMAN Sw:Hba_Human =&gt; HBA_HUMAN
+VLSPADKTNVKAAWGKVGAHAGEYGAEALERMFLSFPTTKTYFPHFDLSHGSAQVKGHGK
+KVADALTNAVAHVDDMPNALSALSDLHAHKLRVDPVNFKLLSHCLLVTLAAHLPAEFTPA
+VHASLDKFLASVSTVLTSKYR
+&gt;HBA_HORSE Sw:Hba_Horse =&gt; HBA_HORSE
+VLSAADKTNVKAAWSKVGGHAGEYGAEALERMFLGFPTTKTYFPHFDLSHGSAQVKAHGK
+KVGDALTLAVGHLDDLPGALSNLSDLHAHKLRVDPVNFKLLSHCLLSTLAVHLPNDFTPA
+VHASLDKFLSSVSTVLTSKYR
+&gt;MYG_PHYCA Sw:Myg_Phyca =&gt; MYG_PHYCA
+VLSEGEWQLVLHVWAKVEADVAGHGQDILIRLFKSHPETLEKFDRFKHLKTEAEMKASED
+LKKHGVTVLTALGAILKKKGHHEAELKPLAQSHATKHKIPIKYLEFISEAIIHVLHSRHP
+GDFGADAQGAMNKALELFRKDIAAKYKELGYQG
+&gt;GLB5_PETMA Sw:Glb5_Petma =&gt; GLB5_PETMA
+PIVDTGSVAPLSAAEKTKIRSAWAPVYSTYETSGVDILVKFFTSTPAAQEFFPKFKGLTT
+ADQLKKSADVRWHAERIINAVNDAVASMDDTEKMSMKLRDLSGKHAKSFQVDPQYFKVLA
+AVIADTVAAGDAGFEKLMSMICILLRSAY
+&gt;LGB2_LUPLU Sw:Lgb2_Luplu =&gt; LGB2_LUPLU
+GALTESQAALVKSSWEEFNANIPKHTHRFFILVLEIAPAAKDLFSFLKGTSEVPQNNPEL
+QAHAGKVFKLVYEAAIQLQVTGVVVTDATLKNLGSVHVSKGVADAHFPVVKEAILKTIKE
+VVGAKWSEELNSAWTIAYDELAIVIKKEMNDAA
+</pre>
+</td></tr></table><p>
+
+
+<p>
 
 The names (or accession numbers) of the sequences to be excluded can be
 entered as a file of such names by specifying an '@' followed by the
@@ -300,7 +344,79 @@ number can be specified, you cannot specify the sequences as
         happens in unusual cases - null output, errors etc. 
    -->
 
-Normal sequence USA.
+<b>notseq</b> writes normal a sequence file.
+
+<p>
+
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: mydata.seq</h3>
+<table width="90%"><tr><td bgcolor="#DDFFDD">
+<pre>
+&gt;HBB_HUMAN Sw:Hbb_Human =&gt; HBB_HUMAN
+VHLTPEEKSAVTALWGKVNVDEVGGEALGRLLVVYPWTQRFFESFGDLSTPDAVMGNPKV
+KAHGKKVLGAFSDGLAHLDNLKGTFATLSELHCDKLHVDPENFRLLGNVLVCVLAHHFGK
+EFTPPVQAAYQKVVAGVANALAHKYH
+&gt;HBB_HORSE Sw:Hbb_Horse =&gt; HBB_HORSE
+VQLSGEEKAAVLALWDKVNEEEVGGEALGRLLVVYPWTQRFFDSFGDLSNPGAVMGNPKV
+KAHGKKVLHSFGEGVHHLDNLKGTFAALSELHCDKLHVDPENFRLLGNVLVVVLARHFGK
+DFTPELQASYQKVVAGVANALAHKYH
+&gt;HBA_HUMAN Sw:Hba_Human =&gt; HBA_HUMAN
+VLSPADKTNVKAAWGKVGAHAGEYGAEALERMFLSFPTTKTYFPHFDLSHGSAQVKGHGK
+KVADALTNAVAHVDDMPNALSALSDLHAHKLRVDPVNFKLLSHCLLVTLAAHLPAEFTPA
+VHASLDKFLASVSTVLTSKYR
+&gt;HBA_HORSE Sw:Hba_Horse =&gt; HBA_HORSE
+VLSAADKTNVKAAWSKVGGHAGEYGAEALERMFLGFPTTKTYFPHFDLSHGSAQVKAHGK
+KVGDALTLAVGHLDDLPGALSNLSDLHAHKLRVDPVNFKLLSHCLLSTLAVHLPNDFTPA
+VHASLDKFLSSVSTVLTSKYR
+&gt;GLB5_PETMA Sw:Glb5_Petma =&gt; GLB5_PETMA
+PIVDTGSVAPLSAAEKTKIRSAWAPVYSTYETSGVDILVKFFTSTPAAQEFFPKFKGLTT
+ADQLKKSADVRWHAERIINAVNDAVASMDDTEKMSMKLRDLSGKHAKSFQVDPQYFKVLA
+AVIADTVAAGDAGFEKLMSMICILLRSAY
+</pre>
+</td></tr></table><p>
+
+<a name="output.2"></a>
+<h3>Output files for usage example 2</h3>
+<p><h3>File: hb.seq</h3>
+<table width="90%"><tr><td bgcolor="#DDFFDD">
+<pre>
+&gt;HBB_HUMAN Sw:Hbb_Human =&gt; HBB_HUMAN
+VHLTPEEKSAVTALWGKVNVDEVGGEALGRLLVVYPWTQRFFESFGDLSTPDAVMGNPKV
+KAHGKKVLGAFSDGLAHLDNLKGTFATLSELHCDKLHVDPENFRLLGNVLVCVLAHHFGK
+EFTPPVQAAYQKVVAGVANALAHKYH
+&gt;HBB_HORSE Sw:Hbb_Horse =&gt; HBB_HORSE
+VQLSGEEKAAVLALWDKVNEEEVGGEALGRLLVVYPWTQRFFDSFGDLSNPGAVMGNPKV
+KAHGKKVLHSFGEGVHHLDNLKGTFAALSELHCDKLHVDPENFRLLGNVLVVVLARHFGK
+DFTPELQASYQKVVAGVANALAHKYH
+&gt;HBA_HUMAN Sw:Hba_Human =&gt; HBA_HUMAN
+VLSPADKTNVKAAWGKVGAHAGEYGAEALERMFLSFPTTKTYFPHFDLSHGSAQVKGHGK
+KVADALTNAVAHVDDMPNALSALSDLHAHKLRVDPVNFKLLSHCLLVTLAAHLPAEFTPA
+VHASLDKFLASVSTVLTSKYR
+&gt;HBA_HORSE Sw:Hba_Horse =&gt; HBA_HORSE
+VLSAADKTNVKAAWSKVGGHAGEYGAEALERMFLGFPTTKTYFPHFDLSHGSAQVKAHGK
+KVGDALTLAVGHLDDLPGALSNLSDLHAHKLRVDPVNFKLLSHCLLSTLAVHLPNDFTPA
+VHASLDKFLSSVSTVLTSKYR
+</pre>
+</td></tr></table><p>
+<p><h3>File: mydata.seq</h3>
+<table width="90%"><tr><td bgcolor="#DDFFDD">
+<pre>
+&gt;MYG_PHYCA Sw:Myg_Phyca =&gt; MYG_PHYCA
+VLSEGEWQLVLHVWAKVEADVAGHGQDILIRLFKSHPETLEKFDRFKHLKTEAEMKASED
+LKKHGVTVLTALGAILKKKGHHEAELKPLAQSHATKHKIPIKYLEFISEAIIHVLHSRHP
+GDFGADAQGAMNKALELFRKDIAAKYKELGYQG
+&gt;GLB5_PETMA Sw:Glb5_Petma =&gt; GLB5_PETMA
+PIVDTGSVAPLSAAEKTKIRSAWAPVYSTYETSGVDILVKFFTSTPAAQEFFPKFKGLTT
+ADQLKKSADVRWHAERIINAVNDAVASMDDTEKMSMKLRDLSGKHAKSFQVDPQYFKVLA
+AVIADTVAAGDAGFEKLMSMICILLRSAY
+&gt;LGB2_LUPLU Sw:Lgb2_Luplu =&gt; LGB2_LUPLU
+GALTESQAALVKSSWEEFNANIPKHTHRFFILVLEIAPAAKDLFSFLKGTSEVPQNNPEL
+QAHAGKVFKLVYEAAIQLQVTGVVVTDATLKNLGSVHVSKGVADAHFPVVKEAILKTIKE
+VVGAKWSEELNSAWTIAYDELAIVIKKEMNDAA
+</pre>
+</td></tr></table><p>
 
 
 
@@ -507,7 +623,6 @@ None.
 <tr><td><a href="seqretsplit.html">seqretsplit</a></td><td>Reads and writes (returns) sequences in individual files</td></tr>
 <tr><td><a href="skipseq.html">skipseq</a></td><td>Reads and writes (returns) sequences, skipping the first few</td></tr>
 <tr><td><a href="splitter.html">splitter</a></td><td>Split a sequence into (overlapping) smaller sequences</td></tr>
-<tr><td><a href="swissparse.html">swissparse</a></td><td>Retrieves sequences from swissprot using keyword search</td></tr>
 <tr><td><a href="trimest.html">trimest</a></td><td>Trim poly-A tails off EST sequences</td></tr>
 <tr><td><a href="trimseq.html">trimseq</a></td><td>Trim ambiguous bits off the ends of sequences</td></tr>
 <tr><td><a href="union.html">union</a></td><td>Reads sequence fragments and builds one sequence</td></tr>

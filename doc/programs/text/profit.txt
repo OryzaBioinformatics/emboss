@@ -32,9 +32,11 @@ Description
    
 Usage
 
-   Here is a sample session with profit.
+   Before running the example, we need to make a simple frequency matrix
+   using prophecy
    
-(My aligned set of sequences:)
+   This is the ungapped aligned set of sequences used to make the matrix:
+   
 % more m.seq
 >one
 DEVGGEALGRLLVVYPWTQR
@@ -47,7 +49,6 @@ DEVGGEAAGRVLVVYPWTQR
 
 
 
-(Make a simple frequency matrix using prophecy)
 % prophecy
 Creates matrices/profiles from multiple alignments
 Input sequence set: m.seq
@@ -60,13 +61,18 @@ Enter a name for the profile [mymatrix]:
 Enter threshold reporting percentage [75]:
 Output file [outfile.prophecy]:
 
-(Search using profit)
-% profit
-Scan a sequence or database with a matrix or profile
-Profile or matrix file: outfile.prophecy
-Input sequence(s): sw:*
-Output file [outfile.profit]:
+   Here is a sample session with profit
+   
 
+% profit 
+Scan a sequence or database with a matrix or profile
+Profile or matrix file: ../../data/outfile.prophecy
+Input sequence(s): tsw:*
+Output file [outfile.profit]: 
+   
+   Go to the input files for this example
+   Go to the output files for this example
+   
 Command line arguments
 
    Mandatory qualifiers:
@@ -96,11 +102,76 @@ Command line arguments
    
 Input file format
 
-   It reads a simple frequency matrix produced by prophecy and searches
-   one or more sequences.
+   profit reads a simple frequency matrix produced by prophecy and uses
+   it to search searches one or more protein or nucleic acid sequence
+   USAs.
+   
+  Input files for usage example
+  
+   'tsw:*' is a sequence entry in the example protein database 'tsw'
+   
+  File: ../../data/outfile.prophecy
+  
+# Pure Frequency Matrix
+# Columns are amino acid counts A->Z
+# Rows are alignment positions 1->n
+Simple
+Name            mymatrix
+Length          20
+Maximum score   76
+Thresh          75
+Consensus       DEVGGEALGRLLVVYPWTQR
+0  0  0  4  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+
+0  0  0  0  4  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+
+0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  4  0  0  0  0  0
+
+0  0  0  0  0  0  4  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+
+0  0  0  0  0  0  3  0  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0  0  0  0  0
+
+0  0  0  0  4  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+
+4  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+
+1  0  0  0  0  0  0  0  0  0  0  3  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+
+0  0  0  0  0  0  4  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+
+0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  4  0  0  0  0  0  0  0  0  0
+
+0  0  0  0  0  0  0  0  1  0  0  2  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0
+
+0  0  0  0  0  0  0  0  0  0  0  4  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+
+0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  4  0  0  0  0  0
+
+0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  4  0  0  0  0  0
+
+0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  4  0  0
+
+0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  4  0  0  0  0  0  0  0  0  0  0  0
+
+0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  4  0  0  0  0
+
+0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  4  0  0  0  0  0  0  0
+
+0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  4  0  0  0  0  0  0  0  0  0  0
+
+0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  4  0  0  0  0  0  0  0  0  0
    
 Output file format
 
+  Output files for usage example
+  
+  File: outfile.profit
+  
+# PROF scan using simple frequency matrix mymatrix
+# Scores >= threshold 75 (max score 76)
+#
+HBB_HUMAN 21 Percentage: 100
+   
    The ouput is a list of three columns.
    
    The first column is the name of the matching sequence found.
@@ -108,217 +179,6 @@ Output file format
    The third column (after the word 'Percentage:') is the percentage of
    the maximum possible score (sum of the highest value at each position
    in the frequency matrix).
-   
-   The output from the above example follows:
-     _________________________________________________________________
-   
-# PROF scan using simple frequency matrix mymatrix
-# Scores >= threshold 75 (max score 76)
-#
-HBB0_MOUSE 21 Percentage: 78
-HBB1_MOUSE 21 Percentage: 100
-HBB1_RAT 21 Percentage: 94
-HBB1_SPHPU 21 Percentage: 84
-HBB1_TAPTE 21 Percentage: 94
-HBB2_MOUSE 21 Percentage: 100
-HBB2_PANLE 21 Percentage: 100
-HBB2_RAT 21 Percentage: 90
-HBB2_SPHPU 21 Percentage: 89
-HBB2_TAPTE 21 Percentage: 89
-HBBA_BOSJA 20 Percentage: 100
-HBBA_CAPHI 20 Percentage: 96
-HBBC_CAPHI 16 Percentage: 96
-HBBC_SHEEP 16 Percentage: 96
-HBBF_BOVIN 20 Percentage: 100
-HBBF_CAPHI 20 Percentage: 94
-HBBF_SHEEP 20 Percentage: 94
-HBBN_AMMLE 16 Percentage: 75
-HBBZ_MOUSE 21 Percentage: 78
-HBB_AILFU 21 Percentage: 100
-HBB_AILME 21 Percentage: 100
-HBB_ALCAA 20 Percentage: 100
-HBB_ANTPA 21 Percentage: 94
-HBB_AOTTR 21 Percentage: 100
-HBB_APTFO 21 Percentage: 75
-HBB_ATEGE 21 Percentage: 100
-HBB_BALAC 21 Percentage: 94
-HBB_BISBO 20 Percentage: 100
-HBB_BOSGF 20 Percentage: 100
-HBB_BOSMU 20 Percentage: 100
-HBB_BOVIN 20 Percentage: 100
-HBB_BRATR 21 Percentage: 84
-HBB_CALAR 21 Percentage: 100
-HBB_CAMDR 21 Percentage: 94
-HBB_CANFA 21 Percentage: 94
-HBB_CAVPO 21 Percentage: 85
-HBB_CEBAL 21 Percentage: 100
-HBB_CEBAP 21 Percentage: 100
-HBB_CERAE 21 Percentage: 100
-HBB_CERSI 21 Percentage: 100
-HBB_CERTO 21 Percentage: 100
-HBB_CHICK 21 Percentage: 75
-HBB_CHRPI 21 Percentage: 75
-HBB_CICCI 21 Percentage: 80
-HBB_COLBA 21 Percentage: 100
-HBB_COLPO 21 Percentage: 100
-HBB_COTJA 21 Percentage: 75
-HBB_CROCR 21 Percentage: 100
-HBB_CTEGU 21 Percentage: 94
-HBB_CYNSP 21 Percentage: 100
-HBB_CYPCA 21 Percentage: 77
-HBB_DASNO 21 Percentage: 78
-HBB_DIDMA 21 Percentage: 81
-HBB_ECHTE 21 Percentage: 78
-HBB_ELEEL 21 Percentage: 75
-HBB_ELEMA 21 Percentage: 78
-HBB_EQUHE 21 Percentage: 94
-HBB_ERIEU 21 Percentage: 89
-HBB_EULFU 21 Percentage: 89
-HBB_FELCA 21 Percentage: 100
-HBB_FRAPO 21 Percentage: 75
-HBB_GALCR 21 Percentage: 94
-HBB_GORGO 21 Percentage: 100
-HBB_HIPAM 21 Percentage: 94
-HBB_HORSE 21 Percentage: 94
-HBB_HUMAN 21 Percentage: 100
-HBB_HYLLA 21 Percentage: 100
-HBB_LAMGL 21 Percentage: 94
-HBB_LATCH 21 Percentage: 76
-HBB_LEMCA 21 Percentage: 89
-HBB_LEMVA 21 Percentage: 89
-HBB_LEPEU 21 Percentage: 89
-HBB_LEPWE 21 Percentage: 100
-HBB_LORTA 21 Percentage: 89
-HBB_LOXAF 21 Percentage: 78
-HBB_LUTLU 21 Percentage: 100
-HBB_LYNLY 21 Percentage: 100
-HBB_MACCA 21 Percentage: 89
-HBB_MACFU 21 Percentage: 100
-HBB_MACGG 21 Percentage: 94
-HBB_MACMU 21 Percentage: 94
-HBB_MANSP 21 Percentage: 100
-HBB_MARMA 21 Percentage: 80
-HBB_MEGLY 21 Percentage: 94
-HBB_MELCA 21 Percentage: 100
-HBB_MELME 21 Percentage: 100
-HBB_MESAU 21 Percentage: 90
-HBB_MESBR 21 Percentage: 85
-HBB_MUSLU 21 Percentage: 100
-HBB_MUSPF 21 Percentage: 94
-HBB_MYOVE 21 Percentage: 100
-HBB_NASNA 21 Percentage: 100
-HBB_NYCCO 21 Percentage: 94
-HBB_ODORO 21 Percentage: 100
-HBB_ODOVI 20 Percentage: 90
-HBB_ONDZI 21 Percentage: 90
-HBB_ORNAN 21 Percentage: 89
-HBB_OVIMU 20 Percentage: 96
-HBB_PAGLA 21 Percentage: 100
-HBB_PANPO 21 Percentage: 100
-HBB_PANTS 21 Percentage: 100
-HBB_PAPCY 21 Percentage: 100
-HBB_PASMO 21 Percentage: 78
-HBB_PHACA 21 Percentage: 75
-HBB_PHOVI 21 Percentage: 100
-HBB_PHYCA 21 Percentage: 89
-HBB_PIG 21 Percentage: 100
-HBB_PREEN 21 Percentage: 100
-HBB_PROCR 21 Percentage: 100
-HBB_PROHA 21 Percentage: 94
-HBB_PROLO 21 Percentage: 94
-HBB_PSIKR 21 Percentage: 75
-HBB_PTEAL 21 Percentage: 100
-HBB_PTEBR 21 Percentage: 100
-HBB_PTEPO 21 Percentage: 100
-HBB_RABIT 21 Percentage: 94
-HBB_RANCA 15 Percentage: 78
-HBB_RANES 15 Percentage: 78
-HBB_RANTA 20 Percentage: 96
-HBB_RHIUN 21 Percentage: 100
-HBB_ROUAE 21 Percentage: 94
-HBB_SAGFU 21 Percentage: 94
-HBB_SAGMY 21 Percentage: 94
-HBB_SAGNI 21 Percentage: 94
-HBB_SAISC 21 Percentage: 89
-HBB_SHEEP 20 Percentage: 96
-HBB_SPAEH 21 Percentage: 94
-HBB_SPECI 21 Percentage: 90
-HBB_SPETO 21 Percentage: 85
-HBB_STUVU 21 Percentage: 75
-HBB_SUNMU 21 Percentage: 96
-HBB_TACAC 21 Percentage: 89
-HBB_TADBR 21 Percentage: 94
-HBB_TALEU 21 Percentage: 100
-HBB_TAPGE 21 Percentage: 100
-HBB_TARBA 21 Percentage: 89
-HBB_TARSY 21 Percentage: 89
-HBB_THEGE 21 Percentage: 100
-HBB_TRAST 20 Percentage: 100
-HBB_TRIIN 21 Percentage: 89
-HBB_TURME 21 Percentage: 78
-HBB_TURTR 21 Percentage: 94
-HBB_URSMA 21 Percentage: 100
-HBB_VULGR 21 Percentage: 75
-HBB_VULVU 21 Percentage: 94
-HBD_AOTTR 21 Percentage: 94
-HBD_ATEFU 21 Percentage: 100
-HBD_ATEGE 21 Percentage: 100
-HBD_COLPO 21 Percentage: 94
-HBD_GALCR 21 Percentage: 94
-HBD_HUMAN 21 Percentage: 94
-HBD_PANTR 21 Percentage: 94
-HBD_SAGMY 21 Percentage: 100
-HBD_SAISC 21 Percentage: 100
-HBD_TARSY 21 Percentage: 89
-HBE1_CAPHI 21 Percentage: 89
-HBE_AOTAZ 21 Percentage: 89
-HBE_ATEBE 21 Percentage: 89
-HBE_CAIMO 21 Percentage: 75
-HBE_CALJA 21 Percentage: 89
-HBE_CEBAL 21 Percentage: 89
-HBE_CHEME 21 Percentage: 89
-HBE_CHICK 21 Percentage: 75
-HBE_DAUMA 21 Percentage: 89
-HBE_DIDMA 21 Percentage: 78
-HBE_EULFU 21 Percentage: 89
-HBE_GALCR 21 Percentage: 89
-HBE_HUMAN 21 Percentage: 89
-HBE_HYLSY 21 Percentage: 89
-HBE_LAGLA 21 Percentage: 89
-HBE_LEORO 21 Percentage: 84
-HBE_MACEU 21 Percentage: 89
-HBE_MACMU 21 Percentage: 89
-HBE_MICMU 21 Percentage: 89
-HBE_MOUSE 21 Percentage: 94
-HBE_PANPA 21 Percentage: 84
-HBE_PIG 21 Percentage: 80
-HBE_PITIR 21 Percentage: 89
-HBE_PONPY 21 Percentage: 89
-HBE_PROVE 21 Percentage: 89
-HBE_RABIT 21 Percentage: 94
-HBE_SAGMI 21 Percentage: 89
-HBE_SAISC 21 Percentage: 89
-HBE_SMICR 21 Percentage: 89
-HBE_TARSY 21 Percentage: 94
-HBG1_PONPY 21 Percentage: 78
-HBG_ALOBE 21 Percentage: 78
-HBG_ALOSE 21 Percentage: 78
-HBG_ATEGE 21 Percentage: 78
-HBG_CEBAP 21 Percentage: 78
-HBG_CHEME 21 Percentage: 89
-HBG_EULFU 21 Percentage: 89
-HBG_GALCR 21 Percentage: 89
-HBG_GORGO 21 Percentage: 78
-HBG_HUMAN 21 Percentage: 78
-HBG_HYLLA 21 Percentage: 78
-HBG_MACMU 21 Percentage: 78
-HBG_MACNE 21 Percentage: 78
-HBG_RABIT 21 Percentage: 80
-HBG_TARSY 21 Percentage: 89
-HBO_MACEU 21 Percentage: 75
-HBRH_CHICK 21 Percentage: 75
-HBT_PIG 21 Percentage: 85
-     _________________________________________________________________
    
 Data files
 

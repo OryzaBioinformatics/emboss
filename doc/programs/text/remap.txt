@@ -36,24 +36,50 @@ Description
    
 Usage
 
-   Here is a sample session with remap. We only look at a small section
-   of the sequence to save space.
-% remap -notran -sbeg 1 -send 60
-Display a sequence with restriction cut sites, translation etc..
-Input sequence(s): embl:eclac
-Output file [eclac.remap]:
-Comma separated enzyme list [all]: taqi,bsu6i,acii,bsski
-Minimum recognition site length [4]:
-
-   Here is an example where all enzymes in the REBASE database are used:
+   Here is a sample session with remap
    
-% remap -notran -sbeg 1 -send 60
-Display a sequence with restriction cut sites, translation etc..
-Input sequence(s): embl:eclac
-Output file [eclac.remap]:
-Comma separated enzyme list [all]:
-Minimum recognition site length [4]:
+   This example uses only a small region of the input sequence to save
+   space.
+   
 
+% remap -notran -sbeg 1 -send 60 
+Display a sequence with restriction cut sites, translation etc..
+Input sequence(s): tembl:eclac
+Comma separated enzyme list [all]: taqi,bsu6i,acii,bsski
+Minimum recognition site length [4]: 
+Output file [eclac.remap]: 
+   
+   Go to the input files for this example
+   Go to the output files for this example
+   
+   Example 2
+   
+   This is an example where all enzymes in the REBASE database are used:
+   
+
+% remap -notran -sbeg 1 -send 60 
+Display a sequence with restriction cut sites, translation etc..
+Input sequence(s): tembl:eclac
+Comma separated enzyme list [all]: 
+Minimum recognition site length [4]: 
+Output file [eclac.remap]: 
+   
+   Go to the output files for this example
+   
+   Example 3
+   
+   This shows the 'flat' format:
+   
+
+% remap -notran -sbeg 1 -send 60 -flat 
+Display a sequence with restriction cut sites, translation etc..
+Input sequence(s): tembl:eclac
+Comma separated enzyme list [all]: 
+Minimum recognition site length [4]: 
+Output file [eclac.remap]: 
+   
+   Go to the output files for this example
+   
 Command line arguments
 
    Mandatory qualifiers:
@@ -172,12 +198,12 @@ Command line arguments
    Optional qualifiers Allowed values Default
    -mincuts Minimum cuts per RE Integer from 1 to 1000 1
    -maxcuts Maximum cuts per RE Integer up to 2000000000 2000000000
-   -single Force single site only cuts Yes/No No
-   -[no]blunt Allow blunt end cutters Yes/No Yes
-   -[no]sticky Allow sticky end cutters Yes/No Yes
-   -[no]ambiguity Allow ambiguous matches Yes/No Yes
-   -plasmid Allow circular DNA Yes/No No
-   -[no]commercial Only enzymes with suppliers Yes/No Yes
+   -single Force single site only cuts Boolean value Yes/No No
+   -[no]blunt Allow blunt end cutters Boolean value Yes/No Yes
+   -[no]sticky Allow sticky end cutters Boolean value Yes/No Yes
+   -[no]ambiguity Allow ambiguous matches Boolean value Yes/No Yes
+   -plasmid Allow circular DNA Boolean value Yes/No No
+   -[no]commercial Only enzymes with suppliers Boolean value Yes/No Yes
    -table Code to use
    0 (Standard)
    1 (Standard (with alternative initiation codons))
@@ -199,14 +225,14 @@ Command line arguments
    22 (Scenedesmus obliquus)
    23 (Thraustochytrium Mitochondrial)
    0
-   -[no]cutlist List the enzymes that cut Yes/No Yes
-   -flatreformat Display RE sites in flat format Yes/No No
-   -[no]limit Limits reports to one isoschizomer Yes/No Yes
-   -preferred Report preferred isoschizomers Yes/No No
+   -[no]cutlist List the enzymes that cut Boolean value Yes/No Yes
+   -flatreformat Display RE sites in flat format Boolean value Yes/No No
+   -[no]limit Limits reports to one isoschizomer Boolean value Yes/No Yes
+   -preferred Report preferred isoschizomers Boolean value Yes/No No
    Advanced qualifiers Allowed values Default
-   -[no]translation Display translation Yes/No Yes
-   -[no]reverse Display cut sites and translation of reverse sense Yes/No
-   Yes
+   -[no]translation Display translation Boolean value Yes/No Yes
+   -[no]reverse Display cut sites and translation of reverse sense
+   Boolean value Yes/No Yes
    -orfminsize Minimum size of Open Reading Frames (ORFs) to display in
    the translations. Integer 0 or more 0
    -uppercase Regions to put in uppercase. If this is left blank, then
@@ -223,26 +249,191 @@ Command line arguments
    specifications are: 24-45 blue 56-78 orange 1-100 green 120-156 red A
    file of ranges to colour (one range per line) can be specifed as
    '@filename'. Sequence range full sequence
-   -threeletter Display protein sequences in three-letter code Yes/No No
-   -number Number the sequences Yes/No No
+   -threeletter Display protein sequences in three-letter code Boolean
+   value Yes/No No
+   -number Number the sequences Boolean value Yes/No No
    -width Width of sequence to display Integer 1 or more 60
    -length Line length of page (0 for indefinite) Integer 0 or more 0
    -margin Margin around sequence for numbering Integer 0 or more 10
    -[no]name Set this to be false if you do not wish to display the ID
-   name of the sequence Yes/No Yes
+   name of the sequence Boolean value Yes/No Yes
    -[no]description Set this to be false if you do not wish to display
-   the description of the sequence Yes/No Yes
+   the description of the sequence Boolean value Yes/No Yes
    -offset Offset to start numbering the sequence from Any integer value
    1
-   -html Use HTML formatting Yes/No No
+   -html Use HTML formatting Boolean value Yes/No No
    
 Input file format
 
+  Input files for usage example
+  
+   'tembl:eclac' is a sequence entry in the example nucleic acid database
+   'tembl'
+   
+  Database entry: tembl:eclac
+  
+ID   ECLAC      standard; DNA; PRO; 7477 BP.
+XX
+AC   J01636; J01637; K01483; K01793;
+XX
+SV   J01636.1
+XX
+DT   30-NOV-1990 (Rel. 26, Created)
+DT   04-MAR-2000 (Rel. 63, Last updated, Version 7)
+XX
+DE   E.coli lactose operon with lacI, lacZ, lacY and lacA genes.
+XX
+KW   acetyltransferase; beta-D-galactosidase; galactosidase; lac operon;
+KW   lac repressor protein; lacA gene; lacI gene; lactose permease; lacY gene;
+KW   lacZ gene; mutagenesis; palindrome; promoter region;
+KW   thiogalactoside acetyltransferase.
+XX
+OS   Escherichia coli
+OC   Bacteria; Proteobacteria; gamma subdivision; Enterobacteriaceae;
+OC   Escherichia.
+XX
+RN   [1]
+RP   1243-1266
+RX   MEDLINE; 74055539.
+RA   Gilbert W., Maxam A.;
+RT   "The nucleotide sequence of the lac operator";
+RL   Proc. Natl. Acad. Sci. U.S.A. 70:3581-3584(1973).
+XX
+RN   [2]
+RP   1246-1308
+RX   MEDLINE; 74055540.
+RA   Maizels N.M.;
+RT   "The nucleotide sequence of the lactose messenger ribonucleic acid
+RT   transcribed from the UV5 promoter mutant of Escherichia coli";
+RL   Proc. Natl. Acad. Sci. U.S.A. 70:3585-3589(1973).
+XX
+RN   [3]
+RX   MEDLINE; 74174501.
+RA   Gilbert W., Maizels N., Maxam A.;
+RT   "Sequences of controlling regions of the lactose operon";
+RL   Cold Spring Harb. Symp. Quant. Biol. 38:845-855(1974).
+XX
+RN   [4]
+RA   Gilbert W., Gralla J., Majors A.J., Maxam A.;
+RT   "Lactose operator sequences and the action of lac repressor";
+RL   (in) Sund H., Blauer G. (eds.);
+RL   PROTEIN-LIGAND INTERACTIONS:193-207;
+RL   Walter de Gruyter, New York (1975)
+XX
+RN   [5]
+RP   1146-1282
+
+
+  [Part of this file has been deleted for brevity]
+
+     cgatttggct acatgacatc aaccatatca gcaaaagtga tacgggtatt atttttgccg      456
+0
+     ctatttctct gttctcgcta ttattccaac cgctgtttgg tctgctttct gacaaactcg      462
+0
+     ggctgcgcaa atacctgctg tggattatta ccggcatgtt agtgatgttt gcgccgttct      468
+0
+     ttatttttat cttcgggcca ctgttacaat acaacatttt agtaggatcg attgttggtg      474
+0
+     gtatttatct aggcttttgt tttaacgccg gtgcgccagc agtagaggca tttattgaga      480
+0
+     aagtcagccg tcgcagtaat ttcgaatttg gtcgcgcgcg gatgtttggc tgtgttggct      486
+0
+     gggcgctgtg tgcctcgatt gtcggcatca tgttcaccat caataatcag tttgttttct      492
+0
+     ggctgggctc tggctgtgca ctcatcctcg ccgttttact ctttttcgcc aaaacggatg      498
+0
+     cgccctcttc tgccacggtt gccaatgcgg taggtgccaa ccattcggca tttagcctta      504
+0
+     agctggcact ggaactgttc agacagccaa aactgtggtt tttgtcactg tatgttattg      510
+0
+     gcgtttcctg cacctacgat gtttttgacc aacagtttgc taatttcttt acttcgttct      516
+0
+     ttgctaccgg tgaacagggt acgcgggtat ttggctacgt aacgacaatg ggcgaattac      522
+0
+     ttaacgcctc gattatgttc tttgcgccac tgatcattaa tcgcatcggt gggaaaaacg      528
+0
+     ccctgctgct ggctggcact attatgtctg tacgtattat tggctcatcg ttcgccacct      534
+0
+     cagcgctgga agtggttatt ctgaaaacgc tgcatatgtt tgaagtaccg ttcctgctgg      540
+0
+     tgggctgctt taaatatatt accagccagt ttgaagtgcg tttttcagcg acgatttatc      546
+0
+     tggtctgttt ctgcttcttt aagcaactgg cgatgatttt tatgtctgta ctggcgggca      552
+0
+     atatgtatga aagcatcggt ttccagggcg cttatctggt gctgggtctg gtggcgctgg      558
+0
+     gcttcacctt aatttccgtg ttcacgctta gcggccccgg cccgctttcc ctgctgcgtc      564
+0
+     gtcaggtgaa tgaagtcgct taagcaatca atgtcggatg cggcgcgacg cttatccgac      570
+0
+     caacatatca taacggagtg atcgcattga acatgccaat gaccgaaaga ataagagcag      576
+0
+     gcaagctatt taccgatatg tgcgaaggct taccggaaaa aagacttcgt gggaaaacgt      582
+0
+     taatgtatga gtttaatcac tcgcatccat cagaagttga aaaaagagaa agcctgatta      588
+0
+     aagaaatgtt tgccacggta ggggaaaacg cctgggtaga accgcctgtc tatttctctt      594
+0
+     acggttccaa catccatata ggccgcaatt tttatgcaaa tttcaattta accattgtcg      600
+0
+     atgactacac ggtaacaatc ggtgataacg tactgattgc acccaacgtt actctttccg      606
+0
+     ttacgggaca ccctgtacac catgaattga gaaaaaacgg cgagatgtac tcttttccga      612
+0
+     taacgattgg caataacgtc tggatcggaa gtcatgtggt tattaatcca ggcgtcacca      618
+0
+     tcggggataa ttctgttatt ggcgcgggta gtatcgtcac aaaagacatt ccaccaaacg      624
+0
+     tcgtggcggc tggcgttcct tgtcgggtta ttcgcgaaat aaacgaccgg gataagcact      630
+0
+     attatttcaa agattataaa gttgaatcgt cagtttaaat tataaaaatt gcctgatacg      636
+0
+     ctgcgcttat caggcctaca agttcagcga tctacattag ccgcatccgg catgaacaaa      642
+0
+     gcgcaggaac aagcgtcgca tcatgcctct ttgacccaca gctgcggaaa acgtactggt      648
+0
+     gcaaaacgca gggttatgat catcagccca acgacgcaca gcgcatgaaa tgcccagtcc      654
+0
+     atcaggtaat tgccgctgat actacgcagc acgccagaaa accacggggc aagcccggcg      660
+0
+     atgataaaac cgattccctg cataaacgcc accagcttgc cagcaatagc cggttgcaca      666
+0
+     gagtgatcga gcgccagcag caaacagagc ggaaacgcgc cgcccagacc taacccacac      672
+0
+     accatcgccc acaataccgg caattgcatc ggcagccaga taaagccgca gaaccccacc      678
+0
+     agttgtaaca ccagcgccag cattaacagt ttgcgccgat cctgatggcg agccatagca      684
+0
+     ggcatcagca aagctcctgc ggcttgccca agcgtcatca atgccagtaa ggaaccgctg      690
+0
+     tactgcgcgc tggcaccaat ctcaatatag aaagcgggta accaggcaat caggctggcg      696
+0
+     taaccgccgt taatcagacc gaagtaaaca cccagcgtcc acgcgcgggg agtgaatacc      702
+0
+     acgcgaaccg gagtggttgt tgtcttgtgg gaagaggcga cctcgcgggc gctttgccac      708
+0
+     caccaggcaa agagcgcaac aacggcaggc agcgccacca ggcgagtgtt tgataccagg      714
+0
+     tttcgctatg ttgaactaac cagggcgtta tggcggcacc aagcccaccg ccgcccatca      720
+0
+     gagccgcgga ccacagcccc atcaccagtg gcgtgcgctg ctgaaaccgc cgtttaatca      726
+0
+     ccgaagcatc accgcctgaa tgatgccgat ccccacccca ccaagcagtg cgctgctaag      732
+0
+     cagcagcgca ctttgcgggt aaagctcacg catcaatgca ccgacggcaa tcagcaacag      738
+0
+     actgatggcg acactgcgac gttcgctgac atgctgatga agccagcttc cggccagcgc      744
+0
+     cagcccgccc atggtaacca ccggcagagc ggtcgac                               747
+7
+//
+   
    You can specifiy a file of ranges to display in uppercase by giving
    the '-uppercase' qualifier the value '@' followed by the name of the
    file containing the ranges. (eg: '-upper @myfile').
    
    The format of the range file is:
+   
      * Comment lines start with '#' in the first column.
      * Comment lines and blank lines are ignored.
      * The line may start with white-space.
@@ -287,54 +478,30 @@ Input file format
    
 Output file format
 
-   The output file from the example above, where all enzymes were used,
-   follows:
-     _________________________________________________________________
-   
+  Output files for usage example
+  
+  File: eclac.remap
+  
 ECLAC
 E.coli lactose operon with lacI, lacZ, lacY and lacA genes.
 
-                                                  Hsp92II
-                                                  |   Hin6I
-                                                  |   | Bsu6I
-                                                  |   | BssKI
-                 TaqI                             |   | AspLEI
-                 |  Bsc4I                         |   | |Bsp143II
-                 |  AccB7I                        |   | ||BsiSI
-                 |  |   Hin6I         AciI        |   | ||AsuC2I
-                 |  |   | AspLEI      AccII       |   | ||Bme1390I
-                 \  \   \ \           \           \   \ \\\
+                                                        Bsu6I
+                 TaqI                 AciI              BssKI
+                 \                    \                 \
           GACACCATCGAATGGCGCAAAACCTTTCGCGGTATGGCATGATAGCGCCCGGAAGAGAGT
                    10        20        30        40        50        60
           ----:----|----:----|----:----|----:----|----:----|----:----|
           CTGTGGTAGCTTACCGCGTTTTGGAAAGCGCCATACCGTACTATCGCGGGCCTTCTCTCA
-                 / /    / /           / /     /      // /  ///
-                 | TaqI | Hin6I       | AciI  |      || |  ||BssKI
-                 AccB7I AspLEI        AccII   |      || |  |BsiSI
-                 Bsc4I                        |      || |  Bme1390I
-                                              |      || |  AsuC2I
-                                              |      || |  Bsu6I
-                                              |      || Hin6I
-                                              |      |AspLEI
-                                              |      Bsp143II
-                                              Hsp92II
+                   /                    /                  / /
+                   TaqI                 AciI               | BssKI
+                                                           Bsu6I
 
 
 # Enzymes that cut  Frequency   Isoschizomers
-    AccB7I          1   PflBI,PflMI,Van91I
-     AccII          1   Bsh1236I,BstFNI,BstUI,MvnI,ThaI
       AciI          1
-    AspLEI          2   BstHHI,CfoI,HhaI
-    AsuC2I          1   BcnI,NciI
-  Bme1390I          1   MspR9I,ScrFI
-     Bsc4I          1   BseLI,BsiYI,BslI
-     BsiSI          1   HapII,HpaII,MspI
-  Bsp143II          1   BstH2I,HaeII
      BssKI          1
-     Bsu6I          1   Eam1104I,EarI,Ksp632I
-     Hin6I          2   HinP1I,HspAI
-   Hsp92II          1   NlaIII
-      TaqI          1   TthHB8I
+     Bsu6I          1
+      TaqI          1
 
 
 
@@ -348,141 +515,130 @@ E.coli lactose operon with lacI, lacZ, lacY and lacA genes.
 
 # Enzymes that do not cut
 
-AarI      AatI      AatII     AauI      Acc113I   Acc16I    Acc36I    Acc65I
 
-AccB1I    AccBSI    AccI      AccIII    AclI      AclWI     AcsI      AcyI
-
-AdeI      AfaI      AfeI      AflI      AflII     AflIII    AgeI      AhdI
-
-AhlI      AloI      AluI      Alw21I    Alw26I    Alw44I    AlwI      AlwNI
-
-Ama87I    AocI      Aor51HI   ApaI      ApaLI     ApoI      AscI      AseI
-
-AsiAI     AsnI      Asp700I   Asp718I   AspEI     AspHI     AspI      AspS9I
-
-AsuHPI    AsuII     AsuNHI    AvaI      AvaII     AviII     AvrII     AxyI
-
-BaeI      BalI      BamHI     BanI      BanII     BanIII    BbeI      BbrPI
-
-BbsI      BbuI      Bbv12I    BbvCI     BbvI      BceAI     BcgI      BciVI
-
-BclI      BcoI      BcuI      BfaI      BfiI      BfmI      BfrBI     BfrI
-
-BfuI      BglI      BglII     BlnI      BlpI      Bme18I    BmrI      BmyI
-
-BoxI      BpiI      BplI      BpmI      Bpu10I    Bpu1102I  Bpu14I    BpuAI
-
-Bsa29I    BsaAI     BsaBI     BsaHI     BsaI      BsaJI     BsaMI     BsaOI
-
-BsaWI     BsaXI     BscBI     BscCI     BscFI     BscI      Bse118I   Bse1I
-
-Bse21I    Bse3DI    Bse8I     BseAI     BseBI     BseCI     BseDI     BseGI
-
-BseMI     BseMII    BseNI     BsePI     BseRI     BseSI     BseX3I    BseXI
-
-BsgI      Bsh1285I  Bsh1365I  BshFI     BshI      BshNI     BshTI     BsiBI
-
-BsiCI     BsiEI     BsiHKAI   BsiLI     BsiMI     BsiQI     BsiWI     BsiXI
-
-BsiZI     BsmAI     BsmBI     BsmFI     BsmI      Bso31I    BsoBI     BsoMAI
-
-Bsp106I   Bsp119I   Bsp120I   Bsp1286I  Bsp13I    Bsp1407I  Bsp143I   Bsp1720I
-
-Bsp19I    Bsp68I    BspA2I    BspCI     BspCNI    BspDI     BspEI     BspHI
-
-BspLI     BspLU11I  BspMI     BspPI     BspT104I  BspT107I  BspTI     BspXI
-
-BsrBI     BsrBRI    BsrDI     BsrFI     BsrGI     BsrI      BsrSI     BssAI
-
-BssECI    BssHI     BssHII    BssNAI    BssSI     BssT1I    Bst1107I  Bst2BI
-
-Bst2UI    Bst4CI    Bst71I    Bst98I    BstACI    BstAPI    BstBAI    BstBI
-
-BstDEI    BstDSI    BstEII    BstENI    BstENII   BstF5I    BstHPI    BstMCI
-
-BstNI     BstNSI    BstOI     BstPAI    BstPI     BstSFI    BstSNI    BstV2I
-
-BstX2I    BstXI     BstYI     BstZ17I   BstZI     Bsu15I    Bsu36I    BsuRI
-
-BtgI      BtrI      BtsI      Cac8I     CaiI      CciNI     CelII     Cfr10I
-
-Cfr13I    Cfr42I    Cfr9I     CfrI      ClaI      CpoI      Csp45I    Csp6I
-
-CspAI     CspI      CviJI     CviRI     CviTI     CvnI      DdeI      DpnI
-
-DpnII     DraI      DraII     DraIII    DrdI      DsaI      DseDI     EaeI
-
-EagI      Eam1105I  EciI      Ecl136II  EclHKI    EclXI     Eco105I   Eco130I
-
-Eco147I   Eco24I    Eco31I    Eco32I    Eco47I    Eco47III  Eco52I    Eco57I
-
-Eco57MI   Eco64I    Eco72I    Eco81I    Eco88I    Eco91I    EcoICRI   EcoNI
-
-EcoO109I  EcoO65I   EcoRI     EcoRII    EcoRV     EcoT14I   EcoT22I   EcoT38I
-
-EgeI      EheI      ErhI      Esp3I     FauI      FauNDI    FbaI      FblI
-
-Fnu4HI    FokI      FriOI     FseI      Fsp4HI    FspAI     FspI      FunI
-
-FunII     GsuI      HaeIII    HgaI      HgiEI     Hin1I     Hin4I     HincII
-
-HindII    HindIII   HinfI     HpaI      HphI      Hpy188I   Hpy188III Hpy8I
-
-Hpy99I    HpyCH4III HpyCH4IV  HpyCH4V   HpyF44III Hsp92I    ItaI      KasI
-
-Kpn2I     KpnI      Ksp22I    KspAI     KspI      Kzo9I     LspI      LweI
-
-MabI      MaeI      MaeII     MaeIII    MamI      MbiI      MboI      MboII
-
-MfeI      MflI      MhlI      MlsI      MluI      MluNI     Mly113I   MlyI
-
-MnlI      Mph1103I  MroI      MroNI     MroXI     MscI      MseI      MslI
-
-Msp17I    MspA1I    MspCI     MssI      MunI      Mva1269I  MvaI      MwoI
-
-NaeI      NarI      NcoI      NdeI      NdeII     NgoAIV    NgoMIV    NheI
-
-NlaIV     NmuCI     NotI      NruGI     NruI      NsbI      NsiI      NspI
-
-NspIII    NspV      OliI      PacI      PaeI      PaeR7I    PagI      PalI
-
-PauI      PciI      PctI      PdiI      PdmI      Pfl23II   PflFI     PinAI
-
-Ple19I    PleI      PmaCI     Pme55I    PmeI      PmlI      PpiI      PpsI
-
-Ppu10I    PpuMI     PpuXI     PshAI     PshBI     PsiI      Psp124BI  Psp1406I
-
-Psp5II    PspAI     PspEI     PspGI     PspLI     PspN4I    PspOMI    PspPI
-
-PspPPI    PsrI      PstI      PsuI      PsyI      PvuI      PvuII     RcaI
-
-RsaI      Rsr2I     RsrII     SacI      SacII     SalI      SanDI     SapI
-
-SatI      Sau3AI    Sau96I    SbfI      ScaI      SchI      SdaI      SduI
-
-SexAI     SfaNI     SfcI      SfiI      SfoI      Sfr274I   Sfr303I   SfuI
-
-SgfI      SgrAI     SgrBI     SinI      SlaI      SmaI      SmiI      SmiMI
-
-SmlI      SmuI      SnaBI     SpaHI     SpeI      SphI      SrfI      Sse8387I
-
-Sse9I     SseBI     SspBI     SspI      SstI      SstII     StuI      StyI
-
-SunI      SwaI      TaaI      TaiI      TasI      TatI      TauI      TelI
-
-TfiI      TliI      Tru1I     Tru9I     TscI      TseI      Tsp45I    Tsp509I
-
-TspEI     TspRI     Tth111I   Vha464I   VneI      VpaK11BI  VspI      XagI
-
-XapI      XbaI      XceI      XcmI      XhoI      XhoII     XmaCI     XmaI
-
-XmaIII    XmaJI     XmiI      XmnI      XspI      ZhoI      Zsp2I
 
 
 # Number of enzymes not matching SITELEN, BLUNT, STICKY, COMMERCIAL criteria
 
-633
-     _________________________________________________________________
+0
+   
+  Output files for usage example 2
+  
+  File: eclac.remap
+  
+ECLAC
+E.coli lactose operon with lacI, lacZ, lacY and lacA genes.
+
+                                                      Hin6I
+                 TaqI                                 | HhaI
+                 |  Bsc4I                             | Bsu6I
+                 |  |   Hin6I                         | BssKI
+                 |  |   | HhaI        AciI            | | BsiSI
+                 \  \   \ \           \               \ \ \
+          GACACCATCGAATGGCGCAAAACCTTTCGCGGTATGGCATGATAGCGCCCGGAAGAGAGT
+                   10        20        30        40        50        60
+          ----:----|----:----|----:----|----:----|----:----|----:----|
+          CTGTGGTAGCTTACCGCGTTTTGGAAAGCGCCATACCGTACTATCGCGGGCCTTCTCTCA
+                 / /    / /             /             / /  ///
+                 | TaqI | Hin6I         AciI          | |  ||BssKI
+                 Bsc4I  HhaI                          | |  |BsiSI
+                                                      | |  Bsu6I
+                                                      | Hin6I
+                                                      HhaI
+
+
+# Enzymes that cut  Frequency   Isoschizomers
+      AciI          1
+     Bsc4I          1
+     BsiSI          1
+     BssKI          1
+     Bsu6I          1
+      HhaI          2
+     Hin6I          2   HinP1I,HspAI
+      TaqI          1
+
+
+
+# Enzymes < MINCUTS Frequency   Isoschizomers
+
+
+
+# Enzymes > MAXCUTS Frequency   Isoschizomers
+
+
+
+# Enzymes that do not cut
+
+AclI      BamHI     BceAI     Bse1I     BshI      ClaI      EcoRI     EcoRII
+
+Hin4I     HindII    HindIII   HpyCH4IV  KpnI      NotI
+
+
+# Number of enzymes not matching SITELEN, BLUNT, STICKY, COMMERCIAL criteria
+
+0
+   
+  Output files for usage example 3
+  
+  File: eclac.remap
+  
+ECLAC
+E.coli lactose operon with lacI, lacZ, lacY and lacA genes.
+
+                                                                  Bsu6I
+                                                        >.........====
+                                                          BsiSI
+                                                          >===
+                        HhaI                             BssKI
+                        ==>=                            >=====
+                 TaqI   Hin6I                         HhaI
+                 >===   >===                          ==>=
+              Bsc4I                      AciI         Hin6I
+              ======>====             >..====         >===
+          GACACCATCGAATGGCGCAAAACCTTTCGCGGTATGGCATGATAGCGCCCGGAAGAGAGT
+                   10        20        30        40        50        60
+          ----:----|----:----|----:----|----:----|----:----|----:----|
+          CTGTGGTAGCTTACCGCGTTTTGGAAAGCGCCATACCGTACTATCGCGGGCCTTCTCTCA
+              ====<======                <===         ===<
+              Bsc4I                      AciI         Hin6I
+                 ===<   ===<                          =<==  <.....====
+                 TaqI   Hin6I                         HhaI        Bsu6I
+                        =<==                             =====<
+                        HhaI                             BssKI
+                                                          ===<
+                                                          BsiSI
+
+
+# Enzymes that cut  Frequency   Isoschizomers
+      AciI          1
+     Bsc4I          1
+     BsiSI          1
+     BssKI          1
+     Bsu6I          1
+      HhaI          2
+     Hin6I          2   HinP1I,HspAI
+      TaqI          1
+
+
+
+# Enzymes < MINCUTS Frequency   Isoschizomers
+
+
+
+# Enzymes > MAXCUTS Frequency   Isoschizomers
+
+
+
+# Enzymes that do not cut
+
+AclI      BamHI     BceAI     Bse1I     BshI      ClaI      EcoRI     EcoRII
+
+Hin4I     HindII    HindIII   HpyCH4IV  KpnI      NotI
+
+
+# Number of enzymes not matching SITELEN, BLUNT, STICKY, COMMERCIAL criteria
+
+0
    
    The name of the sequence is displayed, followed by the description of
    the sequence.
@@ -528,60 +684,6 @@ XmaIII    XmaJI     XmiI      XmnI      XspI      ZhoI      Zsp2I
    display line to the recognition site (i.e. if it wraps onto the next
    line of sequence).
    
-   An example of this display follows with the translation turned off to
-   save space:
-
-% remap embl:eclac stdout -enz taqi,bsu6i,acii,hin6i,bsski -site 4
--sbeg 1 -send 60 -flat -notran
-Display a sequence with restriction cut sites, translation etc..
-
-ECLAC
-E.coli lactose operon with lacI, lacZ, lacY and lacA genes.
-
-                                                                  Bsu6I
-                                                        >.........====
-                                                         BssKI
-                                                        >=====
-                 TaqI   Hin6I            AciI         Hin6I
-                 >===   >===          >..====         >===
-          GACACCATCGAATGGCGCAAAACCTTTCGCGGTATGGCATGATAGCGCCCGGAAGAGAGT
-                   10        20        30        40        50        60
-          ----:----|----:----|----:----|----:----|----:----|----:----|
-          CTGTGGTAGCTTACCGCGTTTTGGAAAGCGCCATACCGTACTATCGCGGGCCTTCTCTCA
-                 ===<   ===<             <===         ===<
-                 TaqI   Hin6I            AciI         Hin6I
-                                                         =====<
-                                                         BssKI
-                                                            <.....====
-                                                                  Bsu6I
-
-
-# Enzymes that cut  Frequency   Isoschizomers
-      AciI          1
-     BssKI          1
-     Bsu6I          1
-     Hin6I          2
-      TaqI          1
-
-
-
-# Enzymes < MINCUTS Frequency   Isoschizomers
-
-
-
-# Enzymes > MAXCUTS Frequency   Isoschizomers
-
-
-
-# Enzymes that do not cut
-
-
-
-
-# Number of enzymes not matching SITELEN, BLUNT, STICKY, COMMERCIAL criteria
-
-0
-
 Data files
 
    This uses the EMBOSS REBASE data files in 'data/REBASE/*' under the
@@ -638,6 +740,7 @@ See also
    showorf Pretty output of DNA translations
    showseq Display a sequence with features, translation etc
    silent Silent mutation restriction enzyme scan
+   sixpack Display a DNA sequence with 6-frame translation and ORFs
    textsearch Search sequence documentation text. SRS and Entrez are
    faster!
    transeq Translate nucleic acid sequences

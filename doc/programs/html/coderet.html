@@ -151,51 +151,45 @@ directly from the translation sequence held in the feature table.
         Many examples illustrating different behaviours is good.
  -->
 
+<b>Here is a sample session with coderet</b>
+<p>
+To extract all of the CDS, mRNA and the protein translations: 
+<p>
 
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>coderet </b>
+Extract CDS, mRNA and translations from feature tables
+Input sequence(s): <b>tembl:X03487</b>
+Output sequence [hsferg1.fasta]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 2</b>
+<p>
+To only extract the mRNA sequence: 
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>coderet -nocds -notranslation </b>
+Extract CDS, mRNA and translations from feature tables
+Input sequence(s): <b>tembl:X03487</b>
+Output sequence [hsferg1.fasta]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.2">Go to the output files for this example</a><p><p>
+
+
+<!--
 Here is a sample session with coderet:
 <p>
 
-The EMBL sequence X03487's feature table is as follows:
-<p>
-<hr>
-<pre>
-FH   Key             Location/Qualifiers
-FH
-FT   source          1..512
-FT                   /db_xref="taxon:9606"
-FT                   /organism="Homo sapiens"
-FT   misc_feature    65..70
-FT                   /note="GGGCGG box"
-FT   misc_feature    103..108
-FT                   /note="GGGCGG box"
-FT   misc_feature    126..131
-FT                   /note="GGGCGG box"
-FT   promoter        150..154
-FT                   /note="put. TATA box"
-FT   mRNA            179..500
-FT                   /note="exon 1"
-FT   CDS             join(387..500,X03488.1:50..196,X03488.1:453..578,
-FT                   X03488.1:674..838)
-FT                   /db_xref="SWISS-PROT:P02794"
-FT                   /label=apoh_cds
-FT                   /product="apoferritin H subunit"
-FT                   /protein_id="CAA27205.1"
-FT                   /translation="MTTASTSQVRQNYHQDSEAAINRQINLELYASYVYLSMSYYFDRD
-FT                   DVALKNFAKYFLHQSHEEREHAEKLMKLQNQRGGRIFLQDIKKPDCDDWESGLNAMECA
-FT                   LHLEKNVNQSLLELHKLATDKNDPHLCDFIETHYLNEQVKAIKELGDHVTNLRKMGAPE
-FT                   SGLAEYLFDKHTLGDSDNES"
-FT   intron          501..>512
-FT                   /note="intron I"
-</pre>
-<hr>
-<p>
-
-This means that the mRNA sequence is from position 179 to 500 in this sequence.
-<br>
-The coding sequence is formed by joining the region from 387 to 500 in this sequence together with regions from two other entries in this database: X03488 and X03488.
-<br>
-The translation of the coding sequence is also given.
-<p>
 
 To extract all of the CDS, mRNA and the protein translations, type:
 <p>
@@ -207,34 +201,6 @@ Output sequence [hsferg1.fasta]:
 </pre>
 <p>
 
-The result is as follows:
-<p>
-<hr>
-<pre>
->x03487_cds_1
-atgacgaccgcgtccacctcgcaggtgcgccagaactaccaccaggactcagaggccgcc
-atcaaccgccagatcaacctggagctctacgcctcctacgtttacctgtccatgtcttac
-tactttgaccgcgatgatgtggctttgaagaactttgccaaatactttcttcaccaatct
-catgaggagagggaacatgctgagaaactgatgaagctgcagaaccaacgaggtggccga
-atcttccttcaggatatcaagaaaccagactgtgatgactgggagagcgggctgaatgca
-atggagtgtgcattacatttggaaaaaaatgtgaatcagtcactactggaactgcacaaa
-ctggccactgacaaaaatgacccccatttgtgtgacttcattgagacacattacctgaat
-gagcaggtgaaagccatcaaagaattgggtgaccacgtgaccaacttgcgcaagatggga
-gcgcccgaatctggcttggcggaatatctctttgacaagcacaccctgggagacagtgat
-aatgaaagctaa
->x03487_mrna_1
-cagacgttcttcgccgagagtcgtcggggtttcctgcttcaacagtgcttggacggaacc
-cggcgctcgttccccaccccggccggccgcccatagccagccctccgtcgacctcttcac
-cgcaccctcggactgccccaaggcccccgccgccgctccagcgccgcgcagccaccgccg
-ccgccgccgcctctccttagtcgccgccatgacgaccgcgtccacctcgcaggtgcgcca
-gaactaccaccaggactcagaggccgccatcaaccgccagatcaacctggagctctacgc
-ctcctacgtttacctgtccatg
->x03487_pro_1
-MTTASTSQVRQNYHQDSEAAINRQINLELYASYVYLSMSYYFDRDDVALKNFAKYFLHQS
-HEEREHAEKLMKLQNQRGGRIFLQDIKKPDCDDWESGLNAMECALHLEKNVNQSLLELHK
-LATDKNDPHLCDFIETHYLNEQVKAIKELGDHVTNLRKMGAPESGLAEYLFDKHTLGDSD
-NES
-</pre>
 <hr>  
 <p> 
 
@@ -252,7 +218,7 @@ Input sequence(s): embl:X03487
 Output sequence [hsferg1.fasta]: 
 </pre>
 <p>
-
+-->
 
 
 
@@ -324,21 +290,21 @@ Output sequence [hsferg1.fasta]:
 <tr>
 <td>-[no]cds</td>
 <td>Extract CDS sequences</td>
-<td>Yes/No</td>
+<td>Boolean value Yes/No</td>
 <td>Yes</td>
 </tr>
 
 <tr>
 <td>-[no]mrna</td>
 <td>Extract mrna sequences</td>
-<td>Yes/No</td>
+<td>Boolean value Yes/No</td>
 <td>Yes</td>
 </tr>
 
 <tr>
 <td>-[no]translation</td>
 <td>Extract translated sequences</td>
-<td>Yes/No</td>
+<td>Boolean value Yes/No</td>
 <td>Yes</td>
 </tr>
 
@@ -368,8 +334,100 @@ IT IS DONE FOR YOU.
         happens in unusual cases - null input, etc. 
    -->
 
-USA of one or more nucleic sequences having CDS, mRNA or translation
-headings in their feature tables. 
+<b>coderet</b> reads one or more nucleic sequence USAs having CDS, mRNA
+or translation headings in their feature tables. 
+
+<p>
+
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+
+'tembl:X03487' is a sequence entry in the example nucleic acid database 'tembl'
+<p>
+<p><h3>Database entry: tembl:X03487</h3>
+<table width="90%"><tr><td bgcolor="#FFDDFF">
+<pre>
+ID   HSFERG1    standard; DNA; HUM; 512 BP.
+XX
+AC   X03487;
+XX
+SV   X03487.1
+XX
+DT   02-JUL-1986 (Rel. 09, Created)
+DT   04-APR-1995 (Rel. 43, Last updated, Version 2)
+XX
+DE   Human apoferritin H gene exon 1
+XX
+KW   ferritin.
+XX
+OS   Homo sapiens (human)
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia;
+OC   Eutheria; Primates; Catarrhini; Hominidae; Homo.
+XX
+RN   [1]
+RP   1-512
+RX   MEDLINE; 86120367.
+RA   Costanzo F., Colombo M., Staempfli S., Santoro C., Marone M., Frank R.,
+RA   Delius H., Cortese R.;
+RT   "Structure of gene and pseudogenes of human apoferritin H";
+RL   Nucleic Acids Res. 14:721-736(1986).
+XX
+DR   EPD; EP11112; HS_FRIH.
+DR   SWISS-PROT; P02794; FRIH_HUMAN.
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..512
+FT                   /db_xref="taxon:9606"
+FT                   /organism="Homo sapiens"
+FT   misc_feature    65..70
+FT                   /note="GGGCGG box"
+FT   misc_feature    103..108
+FT                   /note="GGGCGG box"
+FT   misc_feature    126..131
+FT                   /note="GGGCGG box"
+FT   promoter        150..154
+FT                   /note="put. TATA box"
+FT   mRNA            179..500
+FT                   /note="exon 1"
+FT   CDS             join(387..500,X03488.1:50..196,X03488.1:453..578,
+FT                   X03488.1:674..838)
+FT                   /db_xref="SWISS-PROT:P02794"
+FT                   /label=apoh_cds
+FT                   /product="apoferritin H subunit"
+FT                   /protein_id="CAA27205.1"
+FT                   /translation="MTTASTSQVRQNYHQDSEAAINRQINLELYASYVYLSMSYYFDRD
+FT                   DVALKNFAKYFLHQSHEEREHAEKLMKLQNQRGGRIFLQDIKKPDCDDWESGLNAMECA
+FT                   LHLEKNVNQSLLELHKLATDKNDPHLCDFIETHYLNEQVKAIKELGDHVTNLRKMGAPE
+FT                   SGLAEYLFDKHTLGDSDNES"
+FT   intron          501..&gt;512
+FT                   /note="intron I"
+XX
+SQ   Sequence 512 BP; 80 A; 212 C; 152 G; 64 T; 4 other;
+     agnncaaacc tnagctccgc cagagcgcgc gaggcctcca gcggccgccc ctcccccaca        60
+     gcaggggcgg ggntcccgcg cccaccggaa ggagcgggct cggggcgggc ggcgctgatt       120
+     ggccggggcg ggcctgacgc cgacgcggct ataagagacc acaagcgacc cgcagggcca       180
+     gacgttcttc gccgagagtc gtcggggttt cctgcttcaa cagtgcttgg acggaacccg       240
+     gcgctcgttc cccaccccgg ccggccgccc atagccagcc ctccgtcgac ctcttcaccg       300
+     caccctcgga ctgccccaag gcccccgccg ccgctccagc gccgcgcagc caccgccgcc       360
+     gccgccgcct ctccttagtc gccgccatga cgaccgcgtc cacctcgcag gtgcgccaga       420
+     actaccacca ggactcagag gccgccatca accgccagat caacctggag ctctacgcct       480
+     cctacgttta cctgtccatg gtgagcgcgg gc                                     512
+//
+</pre>
+</td></tr></table><p>
+
+
+<p>
+
+This means that the mRNA sequence is from position 179 to 500 in this sequence.
+<br>
+The coding sequence is formed by joining the region from 387 to 500 in this sequence together with regions from two other entries in this database: X03488 and X03488.
+<br>
+The translation of the coding sequence is also given.
+
+<p>
 
 
 
@@ -395,11 +453,13 @@ headings in their feature tables.
 
 The output is a sequence file containing any CDS, mRNA and protein
 translation sequences as specified by the feature table of the sequence(s).
+
 <p>
 
 One or more of CDS, mRNA, translation can be excluded from the output by
 using the appropriate qualifiers to the program (i.e.  <b>-nocds</b>,
 etc.)
+
 <p>
 
 The ID names of the output sequences are constructed from the name of
@@ -408,10 +468,60 @@ the input sequence, the type of feature being output (i.e.  <b>cds</b>,
 distinguish it from others in this sequence.  The name, type and number
 of separated by underscore characters.  Thus the second CDS feature in
 the sequence 'HSXYZ' would be named 'HSXYZ_cds_2'. 
+
 <p>
 
 The translations are not made from the coding sequence, they are extracted
 directly from the translation sequence held in the feature table. 
+
+<p>
+
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: hsferg1.fasta</h3>
+<table width="90%"><tr><td bgcolor="#DDFFDD">
+<pre>
+&gt;x03487_cds_1
+atgacgaccgcgtccacctcgcaggtgcgccagaactaccaccaggactcagaggccgcc
+atcaaccgccagatcaacctggagctctacgcctcctacgtttacctgtccatgtcttac
+tactttgaccgcgatgatgtggctttgaagaactttgccaaatactttcttcaccaatct
+catgaggagagggaacatgctgagaaactgatgaagctgcagaaccaacgaggtggccga
+atcttccttcaggatatcaagaaaccagactgtgatgactgggagagcgggctgaatgca
+atggagtgtgcattacatttggaaaaaaatgtgaatcagtcactactggaactgcacaaa
+ctggccactgacaaaaatgacccccatttgtgtgacttcattgagacacattacctgaat
+gagcaggtgaaagccatcaaagaattgggtgaccacgtgaccaacttgcgcaagatggga
+gcgcccgaatctggcttggcggaatatctctttgacaagcacaccctgggagacagtgat
+aatgaaagctaa
+&gt;x03487_mrna_1
+cagacgttcttcgccgagagtcgtcggggtttcctgcttcaacagtgcttggacggaacc
+cggcgctcgttccccaccccggccggccgcccatagccagccctccgtcgacctcttcac
+cgcaccctcggactgccccaaggcccccgccgccgctccagcgccgcgcagccaccgccg
+ccgccgccgcctctccttagtcgccgccatgacgaccgcgtccacctcgcaggtgcgcca
+gaactaccaccaggactcagaggccgccatcaaccgccagatcaacctggagctctacgc
+ctcctacgtttacctgtccatg
+&gt;x03487_pro_1
+MTTASTSQVRQNYHQDSEAAINRQINLELYASYVYLSMSYYFDRDDVALKNFAKYFLHQS
+HEEREHAEKLMKLQNQRGGRIFLQDIKKPDCDDWESGLNAMECALHLEKNVNQSLLELHK
+LATDKNDPHLCDFIETHYLNEQVKAIKELGDHVTNLRKMGAPESGLAEYLFDKHTLGDSD
+NES
+</pre>
+</td></tr></table><p>
+
+<a name="output.2"></a>
+<h3>Output files for usage example 2</h3>
+<p><h3>File: hsferg1.fasta</h3>
+<table width="90%"><tr><td bgcolor="#DDFFDD">
+<pre>
+&gt;x03487_mrna_1
+cagacgttcttcgccgagagtcgtcggggtttcctgcttcaacagtgcttggacggaacc
+cggcgctcgttccccaccccggccggccgcccatagccagccctccgtcgacctcttcac
+cgcaccctcggactgccccaaggcccccgccgccgctccagcgccgcgcagccaccgccg
+ccgccgccgcctctccttagtcgccgccatgacgaccgcgtccacctcgcaggtgcgcca
+gaactaccaccaggactcagaggccgccatcaaccgccagatcaacctggagctctacgc
+ctcctacgtttacctgtccatg
+</pre>
+</td></tr></table><p>
 
 
 
@@ -608,8 +718,9 @@ None.
 <tr><td><a href="showfeat.html">showfeat</a></td><td>Show features of a sequence</td></tr>
 <tr><td><a href="showorf.html">showorf</a></td><td>Pretty output of DNA translations</td></tr>
 <tr><td><a href="showseq.html">showseq</a></td><td>Display a sequence with features, translation etc</td></tr>
-<tr><td><a href="swissparse.html">swissparse</a></td><td>Retrieves sequences from swissprot using keyword search</td></tr>
+<tr><td><a href="sixpack.html">sixpack</a></td><td>Display a DNA sequence with 6-frame translation and ORFs</td></tr>
 <tr><td><a href="transeq.html">transeq</a></td><td>Translate nucleic acid sequences</td></tr>
+<tr><td><a href="twofeat.html">twofeat</a></td><td>Finds neighbouring pairs of features in sequences</td></tr>
 </table>
 
 <!-- 

@@ -51,21 +51,122 @@ Description
    
 Usage
 
-   Here are several examples of running vectorstrip. The vectorfile and
-   the sequence files used in these example are given below. In each
-   case, the same fragment has been cloned into the XhoI site of the
-   polylinker of each vector. The cloned fragment is represented in lower
-   case and the vector sequence in upper case so the sequence trimming
-   can be readily seen.
-    1. Running vectorstrip on a list of sequences with default parameters
-unix % vectorstrip @seqs.list
+   Here is a sample session with vectorstrip
+   
+
+% vectorstrip @../../data/vecseqs.list 
 Strips out DNA between a pair of vector sequences
-Are your vector sequences in a file? [Y]:
-Name of vectorfile: vectors
-Max allowed % mismatch [10]:
-Show only the best hits (minimise mismatches)? [Y]:
-Output file [pbluescript.vectorstrip]:stdout
-Output sequence [pbluescript.fasta]:
+Are your vector sequences in a file? [Y]: 
+Name of vectorfile: ../../data/vectors
+Max allowed % mismatch [10]: 
+Show only the best hits (minimise mismatches)? [Y]: 
+Output file [pbluescript.vectorstrip]: vector.strip
+Output sequence [pbluescript.fasta]: vector.fasta
+   
+   Go to the input files for this example
+   Go to the output files for this example
+   
+Command line arguments
+
+   Mandatory qualifiers (* if not always prompted):
+  [-sequence]          seqall     Sequence database USA
+  [-[no]vectorfile]    boolean    Are your vector sequences in a file?
+* [-vectors]           infile     Name of vectorfile
+   -mismatch           integer    Max allowed % mismatch
+   -[no]besthits       boolean    Show only the best hits (minimise
+                                  mismatches)?
+*  -linkera            string     5' sequence
+*  -linkerb            string     3' sequence
+  [-outf]              outfile    Output file name
+  [-outseq]            seqoutall  Output sequence(s) USA
+
+   Optional qualifiers: (none)
+   Advanced qualifiers: (none)
+   General qualifiers:
+  -help                boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   
+
+   Mandatory qualifiers Allowed values Default
+   [-sequence]
+   (Parameter 1) Sequence database USA Readable sequence(s) Required
+   [-[no]vectorfile]
+   (Parameter 2) Are your vector sequences in a file? Boolean value
+   Yes/No Yes
+   [-vectors]
+   (Parameter 3) Name of vectorfile Input file Required
+   -mismatch Max allowed % mismatch Any integer value 10
+   -[no]besthits Show only the best hits (minimise mismatches)? Boolean
+   value Yes/No Yes
+   -linkera 5' sequence Any string is accepted An empty string is
+   accepted
+   -linkerb 3' sequence Any string is accepted An empty string is
+   accepted
+   [-outf]
+   (Parameter 4) Output file name Output file <sequence>.vectorstrip
+   [-outseq]
+   (Parameter 5) Output sequence(s) USA Writeable sequence(s)
+   <sequence>.format
+   Optional qualifiers Allowed values Default
+   (none)
+   Advanced qualifiers Allowed values Default
+   (none)
+   
+Input file format
+
+  Input files for usage example
+  
+  File: ../../data/vecseqs.list
+  
+../../data/bluescript.seq
+../../data/litmus.seq
+../../data/pTYB1.seq
+   
+  File: ../../data/vectors
+  
+# Example vector file for use by vectorstrip
+
+# Vector        5'                      3'
+
+pTYB1   GACGGCGGCCGCGAATTCC     TCGAGGGCTCTTCCTGC
+pBS_KS+ GGGTACCGGGCCCCCCC       TCGAGGTCGACGGTA
+pLITMUS GATATCCTGCAGGAATTCC     TCGAGACCGTACGTGCG
+   
+   The same fragment has been cloned into the XhoI site of the polylinker
+   of each vector. The cloned fragment is represented in lower case and
+   the vector sequence in upper case so the sequence trimming can be
+   readily seen.
+   
+   Each line of the vector file should contain the name of the vector,
+   the 5' pattern and the 3' pattern.
+   Lines beginning with # are treated as comments and ignored.
+   If only one vector sequence is given in the it will be assumed that
+   this is the 5' pattern.
+   If a vector name is given but no pattern data, the vector will not be
+   used.
+   
+Output file format
+
+  Output files for usage example
+  
+  File: vector.fasta
+  
+>pBlueScript_from_84_to_204 KS+
+tcgagagccgtattgcgatatagcgcacatgcgttggacacagatgagcacacagtgaca
+tgagagacacagatatagagacagatagacgatagacagacagcatatatagacagatag
+c
+>litmus.seq_from_62_to_182
+tcgagagccgtattgcgatatagcgcacatgcgttggacacagatgagcacacagtgaca
+tgagagacacagatatagagacagatagacgatagacagacagcatatatagacagatag
+c
+>pTYB1.seq_from_59_to_179
+tcgagagccgtattgcgatatagcgcacatgcgttggacacagatgagcacacagtgaca
+tgagagacacagatatagagacagatagacgatagacagacagcatatatagacagatag
+c
+   
+  File: vector.strip
+  
 
 Sequence: pBlueScript    Vector: pTYB1  No match
 
@@ -107,6 +208,10 @@ Sequences output to file:
         sequence trimmed from 5' end:
                 TCTAGAACCGGTGACGTCTCCCATGGTGAAGCTTGGATCCACGATATCCT
                 GCAGGAATTCC
+        sequence trimmed from 3' end:
+                TCGAGACCGTACGTGCGCGCGAATGCATCCAGATCTTCCCTCTAGTCAAG
+                GCCTTAAGTGAGTCGTATTACGGA
+
 
 
 Sequence: pTYB1.seq      Vector: pTYB1
@@ -129,247 +234,13 @@ Sequences output to file:
 Sequence: pTYB1.seq      Vector: pBS_KS+        No match
 
 Sequence: pTYB1.seq      Vector: pLITMUS        No match
-
-
-unix % more pbluescript.fasta
->pBlueScript_from_84_to_204 KS+
-tcgagagccgtattgcgatatagcgcacatgcgttggacacagatgagcacacagtgaca
-tgagagacacagatatagagacagatagacgatagacagacagcatatatagacagatag
-c
->litmus.seq_from_62_to_182
-tcgagagccgtattgcgatatagcgcacatgcgttggacacagatgagcacacagtgaca
-tgagagacacagatatagagacagatagacgatagacagacagcatatatagacagatag
-c
->pTYB1.seq_from_59_to_179
-tcgagagccgtattgcgatatagcgcacatgcgttggacacagatgagcacacagtgaca
-tgagagacacagatatagagacagatagacgatagacagacagcatatatagacagatag
-c
-    2. Running vectorstrip allowing maximum 30% mismatch, and asking only
-       for best hits
-unix % vectorstrip litmus.seq
-Strips out DNA between a pair of vector sequences
-Are your vector sequences in a file? [Y]:
-Name of vectorfile: vectors
-Max allowed % mismatch [10]: 30
-Show only the best hits (minimise mismatches)? [Y]:
-Output file [litmus.vectorstrip]: stdout
-Output sequence [litmus.fasta]:
-
-Sequence: litmus.seq     Vector: pTYB1  No match
-
-Sequence: litmus.seq     Vector: pBS_KS+        No match
-
-
-Sequence: litmus.seq     Vector: pLITMUS
-5' sequence matches:
-        From 43 to 61 with 0 mismatches
-3' sequence matches:
-        From 183 to 199 with 0 mismatches
-Sequences output to file:
-        from 62 to 182
-                tcgagagccgtattgcgatatagcgcacatgcgttggacacagatgagca
-                cacagtgacatgagagacacagatatagagacagatagacgatagacaga
-                cagcatatatagacagatagc
-        sequence trimmed from 5' end:
-                TCTAGAACCGGTGACGTCTCCCATGGTGAAGCTTGGATCCACGATATCCT
-                GCAGGAATTCC
-        sequence trimmed from 3' end:
-                TCGAGACCGTACGTGCGCGCGAATGCATCCAGATCTTCCCTCTAGTCAAG
-                GCCTTAAGTGAGTCGTATTACGGA
-    3. Running vectorstrip allowing maximum 30% mismatch, and asking for
-       all hits
-unix % vectorstrip litmus.seq
-Strips out DNA between a pair of vector sequences
-Are your vector sequences in a file? [Y]:
-Name of vectorfile: vectors
-Max allowed % mismatch [10]: 30
-Show only the best hits (minimise mismatches)? [Y]: N
-Output file [litmus.vectorstrip]: stdout
-Output sequence [litmus.fasta]:
-
-Sequence: litmus.seq     Vector: pTYB1  No match
-
-Sequence: litmus.seq     Vector: pBS_KS+        No match
-
-
-Sequence: litmus.seq     Vector: pLITMUS
-5' sequence matches:
-        From 43 to 61 with 0 mismatches
-3' sequence matches:
-        From 183 to 199 with 0 mismatches
-        From 228 to 244 with 5 mismatches
-Sequences output to file:
-        from 62 to 182
-                tcgagagccgtattgcgatatagcgcacatgcgttggacacagatgagca
-                cacagtgacatgagagacacagatatagagacagatagacgatagacaga
-                cagcatatatagacagatagc
-        sequence trimmed from 5' end:
-                TCTAGAACCGGTGACGTCTCCCATGGTGAAGCTTGGATCCACGATATCCT
-                GCAGGAATTCC
-        sequence trimmed from 3' end:
-                TCGAGACCGTACGTGCGCGCGAATGCATCCAGATCTTCCCTCTAGTCAAG
-                GCCTTAAGTGAGTCGTATTACGGA
-
-        from 62 to 227
-                tcgagagccgtattgcgatatagcgcacatgcgttggacacagatgagca
-                cacagtgacatgagagacacagatatagagacagatagacgatagacaga
-                cagcatatatagacagatagcTCGAGACCGTACGTGCGCGCGAATGCATC
-                CAGATCTTCCCTCTAG
-        sequence trimmed from 5' end:
-                TCTAGAACCGGTGACGTCTCCCATGGTGAAGCTTGGATCCACGATATCCT
-                GCAGGAATTCC
-        sequence trimmed from 3' end:
-                TCAAGGCCTTAAGTGAGTCGTATTACGGA
-    4. Running vectorstrip against a sequence containing Ns
-unix % vectorstrip pTYB1_N.seq
-Strips out DNA between a pair of vector sequences
-Are your vector sequences in a file? [Y]:
-Name of vectorfile: vectors
-Max allowed % mismatch [10]: 30
-Show only the best hits (minimise mismatches)? [Y]:
-Output file [ptyb1.vectorstrip]: stdout
-Output sequence [ptyb1.fasta]:
-
-
-Sequence: pTYB1.seq      Vector: pTYB1
-5' sequence matches:
-        From 40 to 58 with 2 mismatches
-3' sequence matches:
-        From 180 to 196 with 2 mismatches
-Sequences output to file:
-        from 59 to 179
-                tcnagagccgtatngcgatatngcgcacatgcgntggacacagangagca
-                cacagtnacatgagagncacagatntagagacagatngacgataganaga
-                cagcatanatagacanatagc
-        sequence trimmed from 5' end:
-                CTTTAAGNAGGAGANATACANATGGCNAGCTCGCGANTCGACGGCGGNCG
-                CGAATNCC
-        sequence trimmed from 3' end:
-                TCGNGGGCTCTTCCNGCTTTGCCANGGGTACCAANGTTTTAATGGCNGAT
-
-
-Sequence: pTYB1.seq      Vector: pBS_KS+        No match
-
-Sequence: pTYB1.seq      Vector: pLITMUS        No match
-
-Command line arguments
-
-   Mandatory qualifiers (* if not always prompted):
-  [-sequence]          seqall     Sequence database USA
-  [-[no]vectorfile]    boolean    Are your vector sequences in a file?
-* [-vectors]           infile     Name of vectorfile
-   -mismatch           integer    Max allowed % mismatch
-   -[no]besthits       boolean    Show only the best hits (minimise
-                                  mismatches)?
-*  -linkera            string     5' sequence
-*  -linkerb            string     3' sequence
-  [-outf]              outfile    Output file name
-  [-outseq]            seqoutall  Output sequence(s) USA
-
-   Optional qualifiers: (none)
-   Advanced qualifiers: (none)
-   General qualifiers:
-  -help                boolean    Report command line options. More
-                                  information on associated and general
-                                  qualifiers can be found with -help -verbose
    
-
-   Mandatory qualifiers Allowed values Default
-   [-sequence]
-   (Parameter 1) Sequence database USA Readable sequence(s) Required
-   [-[no]vectorfile]
-   (Parameter 2) Are your vector sequences in a file? Yes/No Yes
-   [-vectors]
-   (Parameter 3) Name of vectorfile Input file Required
-   -mismatch Max allowed % mismatch Any integer value 10
-   -[no]besthits Show only the best hits (minimise mismatches)? Yes/No
-   Yes
-   -linkera 5' sequence Any string is accepted An empty string is
-   accepted
-   -linkerb 3' sequence Any string is accepted An empty string is
-   accepted
-   [-outf]
-   (Parameter 4) Output file name Output file <sequence>.vectorstrip
-   [-outseq]
-   (Parameter 5) Output sequence(s) USA Writeable sequence(s)
-   <sequence>.format
-   Optional qualifiers Allowed values Default
-   (none)
-   Advanced qualifiers Allowed values Default
-   (none)
-   
-Input file format
-
-   Each line should contain the name of the vector, the 5' pattern and
-   the 3' pattern.
-   Lines beginning with # are treated as comments and ignored.
-   If only one vector sequence is given in the it will be assumed that
-   this is the 5' pattern.
-   If a vector name is given but no pattern data, the vector will not be
-   used.
-   
-   For example, the file used in the examples above is:
-pTYB1   GACGGCGGCCGCGAATTCC     TCGAGGGCTCTTCCTGC
-pBS_KS+ GGGTACCGGGCCCCCCC       TCGAGGTCGACGGTA
-pLITMUS GATATCCTGCAGGAATTCC     TCGAGACCGTACGTGCG
-
-   The sequence files used in the examples above are:
-    1. seqs.list
-bluescript.seq
-litmus.seq
-pTYB1.seq
-    2. bluescript.seq
-> pBlueScript KS+
-GGAAACAGCTAATGACCATGATTACGCCAAGCGCGCAATTAACCCTCACTAAAGGGAAC
-AAAAGCTGGGTACCGGGCCCCCCCtcgagagccgtattgcgatatagcgcacatgcgtt
-ggacacagatgagcacacagtgacatgagagacacagatatagagacagatagacgata
-gacagacagcatatatagacagatagcTCGAGGTCGACGGTATCGATAAGCTTGATATCG
-    3. litmus.seq
-> litmus.seq
-TCTAGAACCGGTGACGTCTCCCATGGTGAAGCTTGGATCCACGATATCCTGCAGGAATT
-CCtcgagagccgtattgcgatatagcgcacatgcgttggacacagatgagcacacagtg
-acatgagagacacagatatagagacagatagacgatagacagacagcatatatagacag
-atagcTCGAGACCGTACGTGCGCGCGAATGCATCCAGATCTTCCCTCTAGTCAAGGCCT
-TAAGTGAGTCGTATTACGGA
-    4. pTYB1.seq
->pTYB1.seq
-CTTTAAGAAGGAGATATACATATGGCTAGCTCGCGAGTCGACGGCGGCCGCGAATTCCtc
-gagagccgtattgcgatatagcgcacatgcgttggacacagatgagcacacagtgacatg
-agagacacagatatagagacagatagacgatagacagacagcatatatagacagatagcT
-CGAGGGCTCTTCCTGCTTTGCCAAGGGTACCAATGTTTTAATGGCGGAT
-    5. pTYB1_N.seq
->pTYB1.seq lower quality
-CTTTAAGNAGGAGANATACANATGGCNAGCTCGCGANTCGACGGCGGNCGCGAATNCCtc
-nagagccgtatngcgatatngcgcacatgcgntggacacagangagcacacagtnacatg
-agagncacagatntagagacagatngacgataganagacagcatanatagacanatagcT
-CGNGGGCTCTTCCNGCTTTGCCANGGGTACCAANGTTTTAATGGCNGAT
-
-   In each case the vector sequence is given in upper case and the cloned
-   sequence in lower case.
-   
-Output file format
-
    Two types of output file are produced:
     1. The sequence file(s) - contain the trimmed subsequence(s) produced
        by vectorstrip either all in one file, or in separate files if the
        command line flag -ossingle is used.
-    2. Results summary file eg
-Sequence: pTYB1.seq      Vector: pTYB1
-5' sequence matches:
-        From 40 to 58 with 2 mismatches
-3' sequence matches:
-        From 180 to 196 with 2 mismatches
-Sequences output to file:
-        from 59 to 179
-                tcnagagccgtatngcgatatngcgcacatgcgntggacacagangagca
-                cacagtnacatgagagncacagatntagagacagatngacgataganaga
-                cagcatanatagacanatagc
-        sequence trimmed from 5' end:
-                CTTTAAGNAGGAGANATACANATGGCNAGCTCGCGANTCGACGGCGGNCG
-                CGAATNCC
-        sequence trimmed from 3' end:
-                TCGNGGGCTCTTCCNGCTTTGCCANGGGTACCAANGTTTTAATGGCNGAT
-
+    2. Results summary file
+       
 Data files
 
    None.
@@ -434,7 +305,6 @@ See also
    seqretsplit  Reads and writes (returns) sequences in individual files
    skipseq      Reads and writes (returns) sequences, skipping the first few
    splitter     Split a sequence into (overlapping) smaller sequences
-   swissparse   Retrieves sequences from swissprot using keyword search
    trimest      Trim poly-A tails off EST sequences
    trimseq      Trim ambiguous bits off the ends of sequences
    union        Reads sequence fragments and builds one sequence

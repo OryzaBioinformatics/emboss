@@ -45,13 +45,17 @@ Description
    
 Usage
 
-   Here is a sample session with cons:
+   Here is a sample session with cons
+   
 
-% cons
+% cons 
 Creates a consensus from multiple alignments
-Input sequence set: aligned.fasta
-Output file [outfile.cons]: aligned.cons
-
+Input sequence set: ../../data/dna.msf
+Output sequence [dna.fasta]: aligned.cons
+   
+   Go to the input files for this example
+   Go to the output files for this example
+   
 Command line arguments
 
    Mandatory qualifiers:
@@ -123,15 +127,43 @@ Input file format
 
    The USA of a set of aligned sequences.
    
+  Input files for usage example
+  
+  File: ../../data/dna.msf
+  
+!!NA_MULTIPLE_ALIGNMENT
+
+ dna.msf  MSF: 120  Type: N  January 01, 1776  12:00  Check: 3196 ..
+
+ Name: MSFM1          Len:   120  Check:  8587  Weight:  1.00
+ Name: MSFM2          Len:   120  Check:  6178  Weight:  1.00
+ Name: MSFM3          Len:   120  Check:  8431  Weight:  1.00
+
+//
+
+        MSFM1  ACGTACGTAC GTACGTACGT ACGTACGTAC GTACGTACGT ACGTACGTAC
+        MSFM2  ACGTACGTAC GTACGTACGT ....ACGTAC GTACGTACGT ACGTACGTAC
+        MSFM3  ACGTACGTAC GTACGTACGT ACGTACGTAC GTACGTACGT CGTACGTACG
+
+        MSFM1  GTACGTACGT ACGTACGTAC GTACGTACGT ACGTACGTAC GTACGTACGT
+        MSFM2  GTACGTACGT ACGTACGTAC GTACGTACGT ACGTACGTAC GTACGTACGT
+        MSFM3  TACGTACGTA CGTACGTACG TACGTACGTA ACGTACGTAC GTACGTACGT
+
+        MSFM1  ACGTACGTAC GTACGTACGT
+        MSFM2  ACGTACGTTG CAACGTACGT
+        MSFM3  ACGTACGTAC GTACGTACGT
+   
 Output file format
 
    The output consists of a sequence file holding the consensus sequence.
-   For example:
-     _________________________________________________________________
    
+  Output files for usage example
+  
+  File: aligned.cons
+  
 >EMBOSS_001
-tagctgacctgacgggactgatgcgt
-     _________________________________________________________________
+acgtacgtacgtacgtacgtnnnnacgtacgtacgtacgtnnnnnnnnnnnnnnnnnnnn
+nnnnnnnnnnnnnnnnnnnnacgtacgtacgtacgtacgtacgtacgtnnnnacgtacgt
    
 Data files
 

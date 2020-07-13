@@ -29,13 +29,16 @@ Description
    
 Usage
 
-   Here is a sample session with redata.
+   Here is a sample session with redata
+   
 
-% redata
+% redata 
 Search REBASE for enzyme name, references, suppliers etc.
-Restriction enzyme name [BamHI]:
-Output file [outfile.redata]:
-
+Restriction enzyme name [BamHI]: BamHI
+Output file [outfile.redata]: 
+   
+   Go to the output files for this example
+   
 Command line arguments
 
    Mandatory qualifiers:
@@ -72,18 +75,18 @@ Command line arguments
    (none)
    Advanced qualifiers Allowed values Default
    -[no]isoschizomers Show other enzymes with this specificity.
-   (Isoschizomers) Yes/No Yes
-   -[no]references Show references Yes/No Yes
-   -[no]suppliers Show suppliers Yes/No Yes
+   (Isoschizomers) Boolean value Yes/No Yes
+   -[no]references Show references Boolean value Yes/No Yes
+   -[no]suppliers Show suppliers Boolean value Yes/No Yes
    
 Input file format
 
 Output file format
 
-   Here is the output from the example run. It includes the full list of
-   isoschizomers (enzymes with the same target sequence), suppliers and
-   references from the REBASE database.
-
+  Output files for usage example
+  
+  File: outfile.redata
+  
 BamHI
 
 Recognition site is GGATCC leaving sticky ends
@@ -101,34 +104,36 @@ Isoschizomers:
    Bst1126I    Bst2464I    Bst2902I    BstQI       Bsu90I      Bsu8565I
    Bsu8646I    BsuB519I    BsuB763I    CelI        DdsI        GdoI
    GinI        GoxI        GseIII      MleI        Mlu23I      NasBI
-   Nsp29132II  NspSAIV     OkrAI       Pac1110I    Pae177I     Psp56I
-   RhsI        Rlu4I       RspLKII     SolI        SpvI        SurI
-   Uba19I      Uba31I      Uba38I      Uba51I      Uba88I      Uba1098I
-   Uba1163I    Uba1167I    Uba1172I    Uba1173I    Uba1205I    Uba1224I
-   Uba1242I    Uba1250I    Uba1258I    Uba1297I    Uba1302I    Uba1324I
-   Uba1325I    Uba1334I    Uba1339I    Uba1346I    Uba1383I    Uba1398I
-   Uba1402I    Uba1414I
+   Nsp29132II  NspSAIV     OkrAI       Pac1110I    Pae177I     Pfl8I
+   Psp56I      RhsI        Rlu4I       RspLKII     SolI        SpvI
+   SurI        Uba19I      Uba31I      Uba38I      Uba51I      Uba88I
+   Uba1098I    Uba1163I    Uba1167I    Uba1172I    Uba1173I    Uba1205I
+   Uba1224I    Uba1242I    Uba1250I    Uba1258I    Uba1297I    Uba1302I
+   Uba1324I    Uba1325I    Uba1334I    Uba1339I    Uba1346I    Uba1383I
+   Uba1398I    Uba1402I    Uba1414I
 
 Suppliers:
-Amersham Pharmacia Biotech (11/98)
+Amersham Pharmacia Biotech (1/01)
 Life Technologies Inc. (1/98)
-Minotech, Molecular Biology Products (3/99)
-Angewandte Gentechnologie Systeme (10/97)
-Stratagene (1/98)
-Fermentas AB (8/99)
-Appligene Oncor (10/97)
+Minotech, Molecular Biology Products (12/00)
+HYBAID GmbH (12/00)
+Stratagene (11/00)
+Fermentas AB (5/01)
+Q-BIOgene (1/01)
 American Allied Biochemical, Inc. (10/98)
-SibEnzyme Ltd. (9/99)
-Nippon Gene Co., Ltd. (10/97)
-Takara Shuzo Co. Ltd. (11/98)
-Kramel Biotech (7/98)
-Roche Molecular Biochemicals (3/99)
-New England BioLabs (2/00)
+SibEnzyme Ltd. (1/01)
+Nippon Gene Co., Ltd. (6/00)
+Takara Shuzo Co. Ltd. (2/01)
+Transgenomic Ltd. (1/01)
+Roche Molecular Biochemicals (1/01)
+New England BioLabs (12/00)
 Toyobo Biochemicals (11/98)
 CHIMERx (10/97)
 Promega Corporation (6/99)
 Sigma Chemical Corporation (11/98)
 Advanced Biotechnologies Ltd. (3/98)
+Bangalore Genei (2/01)
+MRC-Holland (3/01)
 
 References:
 Brooks, J.E., Howard, K.A., US Patent Office, 1994.
@@ -148,7 +153,10 @@ Strzelecka, T., Newman, M., Dorner, L.F., Knott, R., Schildkraut, I., Aggarwal,
  A.K., (1994) J. Mol. Biol., vol. 239, pp. 430-432.
 Wilson, G.A., Young, F.E., (1975) J. Mol. Biol., vol. 97, pp. 123-125.
 Xu, S.-Y., Fomenkov, A., (1994) Biotechniques, vol. 17, pp. 57.
-
+   
+   This includes the full list of isoschizomers (enzymes with the same
+   target sequence), suppliers and references from the REBASE database.
+   
 Data files
 
    This uses the EMBOSS REBASE data files in 'data/REBASE/*' under the
@@ -159,16 +167,28 @@ Data files
    
 Notes
 
+   None.
+   
 References
 
+   None.
+   
 Warnings
 
+   None.
+   
 Diagnostic Error Messages
 
+   None.
+   
 Exit status
 
+   It always exits with a status of 0.
+   
 Known bugs
 
+   None.
+   
 See also
 
    Program name                          Description
@@ -185,6 +205,8 @@ Author(s)
    
 History
 
+   Written 1999.
+   
 Target users
 
    This program is intended to be used by everyone and everything, from

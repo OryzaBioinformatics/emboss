@@ -26,38 +26,15 @@ Usage
 
 Command line arguments
 
-   Mandatory qualifiers (* if not always prompted):
-  [-inf]               infile     Name of input file (raw dictionary of
-                                  heterogen groups)
-   -dogrep             boolean    Search a directory of files with keywords?
-*  -path               string     Directory to search with keywords
-*  -extn               string     Exension of files to search in above
-                                  directory
-  [-outf]              outfile    Name of output file (embl format)
 
-   Optional qualifiers: (none)
-   Advanced qualifiers: (none)
-   General qualifiers:
-  -help                boolean    Report command line options. More
-                                  information on associated and general
-                                  qualifiers can be found with -help -verbose
+   EMBOSS An error in ajacd.c at line 1531:
+acdfile '/packages/emboss_dev/gwilliam/emboss/emboss/emboss/acd/hetparse.acd' n
+ot opened
    
 
-   Mandatory qualifiers Allowed values Default
-   [-inf]
-   (Parameter 1) Name of input file (raw dictionary of heterogen groups)
-   Input file Required
-   -dogrep Search a directory of files with keywords? Yes/No No
-   -path Directory to search with keywords Any string is accepted ./
-   -extn Exension of files to search in above directory Any string is
-   accepted .ent
-   [-outf]
-   (Parameter 2) Name of output file (embl format) Output file
-   <sequence>.hetparse
-   Optional qualifiers Allowed values Default
-   (none)
-   Advanced qualifiers Allowed values Default
-   (none)
+   EMBOSS An error in ajacd.c at line 1531: acdfile
+   '/packages/emboss_dev/gwilliam/emboss/emboss/emboss/acd/hetparse.acd'
+   not opened
    
 Input file format
 
@@ -94,11 +71,10 @@ See also
    Program name Description
    aaindexextract Extract data from AAINDEX
    cutgextract Extract data from CUTG
-   domainer Reads protein coordinate files and writes domains coordinate
+   domainer Reads protein coordinate files and writes domain coordinate
    files
    funky Reads clean coordinate files and writes file of
    protein-heterogen contact data
-   groups Removes redundant hits from a scop families file
    nrscope Converts redundant EMBL-format SCOP file to non-redundant one
    pdbparse Parses pdb files and writes cleaned-up protein coordinate
    files
@@ -113,6 +89,9 @@ See also
    embl-like format
    scopseqs Adds pdb and swissprot sequence records to a scop
    classification file
+   seqnr Reads a scop families file and a scop ambiguities file and
+   writes (i) a non-redundant scop families file and (ii) a scop
+   validation file
    tfextract Extract data from TRANSFAC
    
 Author(s)

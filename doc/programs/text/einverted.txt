@@ -31,16 +31,20 @@ Description
    
 Usage
 
-   Here is a sample session with einverted.
+   Here is a sample session with einverted
+   
 
-% einverted
-Input sequence: embl:hsts1
-Output file [hsts1.inv]:
-Gap penalty [12]:
-Minimum score threshold [50]:
-Match score [3]:
-Mismatch score [-4]:
-
+% einverted tembl:hsts1 
+Finds DNA inverted repeats
+Gap penalty [12]: 
+Minimum score threshold [50]: 
+Match score [3]: 
+Mismatch score [-4]: 
+Output file [hsts1.inv]: 
+   
+   Go to the input files for this example
+   Go to the output files for this example
+   
 Command line arguments
 
    Mandatory qualifiers:
@@ -83,25 +87,273 @@ Input file format
 
    The input for einverted is a nucleotide sequence
    
+  Input files for usage example
+  
+   'tembl:hsts1' is a sequence entry in the example nucleic acid database
+   'tembl'
+   
+  Database entry: tembl:hsts1
+  
+ID   HSTS1      standard; DNA; HUM; 18596 BP.
+XX
+AC   D00596;
+XX
+SV   D00596.1
+XX
+DT   17-JUL-1991 (Rel. 28, Created)
+DT   27-OCT-1998 (Rel. 57, Last updated, Version 2)
+XX
+DE   Homo sapiens gene for thymidylate synthase, exons 1, 2, 3, 4, 5, 6, 7,
+DE   complete cds.
+XX
+KW   thymidylate syntase.
+XX
+OS   Homo sapiens (human)
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia
+;
+OC   Eutheria; Primates; Catarrhini; Hominidae; Homo.
+XX
+RN   [1]
+RP   1-18596
+RX   MEDLINE; 91056070.
+RA   Kaneda S., Nalbantoglu J., Takeishi K., Shimizu K., Gotoh O., Seno T.,
+RA   Ayusawa D.;
+RT   "Structural and Functional Analysis of the Human Thymidylate Synthase
+RT   Gene";
+RL   J. Biol. Chem. 265:20277-20284(1990).
+XX
+DR   SWISS-PROT; P04818; TYSY_HUMAN.
+XX
+CC   These data kindly submitted in computer readable form by:
+CC   Sumiko Kaneda
+CC   National Institute of Genetics
+CC   1111 Yata
+CC   Mishima 411
+CC   Japan
+CC   Phone:  +81-559-72-2732
+CC   Fax:    +81-559-71-3651
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..18596
+FT                   /chromosome="18"
+FT                   /db_xref="taxon:9606"
+FT                   /sequenced_mol="DNA"
+FT                   /organism="Homo sapiens"
+FT                   /clone="lambdaHTS-1 and lambdaHTS-3"
+FT                   /map="18p11.32"
+FT   repeat_unit     1..148
+FT                   /note="Alu sequence"
+FT   repeat_unit     202..477
+
+
+  [Part of this file has been deleted for brevity]
+
+     ttttgttttt agcttcagcg agaacccaga cctttcccaa agctcaggat tcttcgaaaa     1566
+0
+     gttgagaaaa ttgatgactt caaagctgaa gactttcaga ttgaagggta caatccgcat     1572
+0
+     ccaactatta aaatggaaat ggctgtttag ggtgctttca aaggagctcg aaggatattg     1578
+0
+     tcagtcttta ggggttgggc tggatgccga ggtaaaagtt ctttttgctc taaaagaaaa     1584
+0
+     aggaactagg tcaaaaatct gtccgtgacc tatcagttat taatttttaa ggatgttgcc     1590
+0
+     actggcaaat gtaactgtgc cagttctttc cataataaaa ggctttgagt taactcactg     1596
+0
+     agggtatctg acaatgctga ggttatgaac aaagtgagga gaatgaaatg tatgtgctct     1602
+0
+     tagcaaaaac atgtatgtgc atttcaatcc cacgtactta taaagaaggt tggtgaattt     1608
+0
+     cacaagctat ttttggaata tttttagaat attttaagaa tttcacaagc tattccctca     1614
+0
+     aatctgaggg agctgagtaa caccatcgat catgatgtag agtgtggtta tgaactttaa     1620
+0
+     agttatagtt gttttatatg ttgctataat aaagaagtgt tctgcattcg tccacgcttt     1626
+0
+     gttcattctg tactgccact tatctgctca gttccttcct aaaatagatt aaagaactct     1632
+0
+     ccttaagtaa acatgtgctg tattctggtt tggatgctac ttaaaagagt atattttaga     1638
+0
+     aataatagtg aatatatttt gccctatttt tctcatttta actgcatctt atcctcaaaa     1644
+0
+     tataatgacc atttaggata gagttttttt tttttttttt taaactttta taaccttaaa     1650
+0
+     gggttatttt aaaataatct atggactacc attttgccct cattagcttc agcatggtgt     1656
+0
+     gacttctcta ataatatgct tagattaagc aaggaaaaga tgcaaaacca cttcggggtt     1662
+0
+     aatcagtgaa atatttttcc cttcgttgca taccagatac ccccggtgtt gcacgactat     1668
+0
+     ttttattctg ctaatttatg acaagtgtta aacagaacaa ggaattattc caacaagtta     1674
+0
+     tgcaacatgt tgcttatttt caaattacag tttaatgtct aggtgccagc ccttgatata     1680
+0
+     gctatttttg taagaacatc ctcctggact ttgggttagt taaatctaaa cttatttaag     1686
+0
+     gattaagtag gataacgtgc attgatttgc taaaagaatc aagtaataat tacttagctg     1692
+0
+     attcctgagg gtggtatgac ttctagctga actcatcttg atcggtagga ttttttaaat     1698
+0
+     ccatttttgt aaaactattt ccaagaaatt ttaagccctt tcacttcaga aagaaaaaag     1704
+0
+     ttgttggggc tgagcactta attttcttga gcaggaagga gtttcttcca aacttcacca     1710
+0
+     tctggagact ggtgtttctt tacagattcc tccttcattt ctgttgagta gccgggatcc     1716
+0
+     tatcaaagac caaaaaaatg agtcctgtta acaaccacct ggaacaaaaa cagattttat     1722
+0
+     gcatttatgc tgctccaaga aatgctttta cgtctaagcc agaggcaatt aattaatttt     1728
+0
+     tttttttttg acatggagtc actgtccgtt gcccaggctg cagtgcagtg gcgcaatctt     1734
+0
+     ggctcactgc aacctccacc tcccaggttc aagtgattct cctgcctcag cctcccatgt     1740
+0
+     agctgggatc acaggcacct gccaccatgc ccggctaatt ttttgtattt tttgtagaga     1746
+0
+     cagggtttca ccatgttggc caggctggtc tcaaacacct gacctcaaat gatccacctg     1752
+0
+     cctcagcctc ccaaagtgtt gggattacag gcgtaagcca ccatgcccag ccctgaatta     1758
+0
+     atatttttaa aataagtttg gagactgttg gaaataatag ggcagaggaa catattttac     1764
+0
+     tggctacttg ccagagttag ttaactcatc aaactctttg ataatagttt gacctctgtt     1770
+0
+     ggtgaaaatg agccatgatc tcttgaacat gatcagaata aatgccccag ccacacaatt     1776
+0
+     gtagtccaaa ctttttaggt cactaacttg ctagatggtg ccaggttttt ttgcacaagg     1782
+0
+     agtgcaaatg ttaagatctc cactagtgag gaaaggctag tattacagaa gccttgtcag     1788
+0
+     aggcaattga acctccaagc cctggccctc aggcctgagg attttgatac agacaaactg     1794
+0
+     aagaaccgtt tgttagtgga tattgcaaac aaacaggagt caaagcttgg tgctccacag     1800
+0
+     tctagttcac gagacaggcg tggcagtggc tggcagcatc tcttctcaca ggggccctca     1806
+0
+     ggcacagctt accttgggag gcatgtagga agcccgctgg atcatcacgg gatacttgaa     1812
+0
+     atgctcatgc aggtggtcaa catactcaca caccctagga ggagggaatc agatcggggc     1818
+0
+     aatgatgcct gaagtcagat tattcacgtg gtgctaactt aaagcagaag gagcgagtac     1824
+0
+     cactcaattg acagtgttgg ccaaggctta gctgtgttac catgcgtttc taggcaagtc     1830
+0
+     cctaaacctc tgtgcctcag gtccttttct tctaaaatat agcaatgtga ggtggggact     1836
+0
+     ttgatgacat gaacacacga agtccctctg agaggttttg tggtgccctt taaaagggat     1842
+0
+     caattcagac tctgtaaata tccagaatta tttgggttcc tctggtcaaa agtcagatga     1848
+0
+     atagattaaa atcaccacat tttgtgatct atttttcaag aagcgtttgt attttttcat     1854
+0
+     atggctgcag cagctgccag gggcttgggg tttttttggc aggtagggtt gggagg         1859
+6
+//
+   
 Output file format
 
-   Here is the output form the example run. The first two hits are
-   removed to avoid the output lines being too wide.
+  Output files for usage example
+  
+  File: hsts1.inv
+  
 
-......................
+Score 236: 108/130 ( 83%) matches, 0 gaps
+      13 gctacgcgagaggctgaggcagcagaattacttgaacccaggaggcggaggttgcagtgagccgagatcg
+cgccactgcactccagcctgggtgagagagcgagactctgtctcaaaaaaaaaaaaaaaa 142
+         |||||  | ||||||||||||| |||||| ||||||||  |||||| |||||||||||||||| |||||
+  ||| || ||||||||||||| || ||||| ||||| |  |  ||||||||||||||||
+     328 cgatgaaccctccgactccgtcttcttaacgaacttggaccctccgtctccaacgtcactcggttctagg
+ctggtaacatgaggtcggacccgctgtctcgttctgacagggtttttttttttttttttt 199
+
+Score 228: 108/132 ( 81%) matches, 0 gaps
+      11 cagctacgcgagaggctgaggcagcagaattacttgaacccaggaggcggaggttgcagtgagccgagat
+cgcgccactgcactccagcctgggtgagagagcgagactctgtctcaaaaaaaaaaaaaaaa 142
+           |||||  | ||||||||||||| |||||| ||||||||  |||||| |||||||||||||||| ||||
+|   ||| || ||||||||||||| || ||||| ||||| |  |  ||||||||||||||||
+     330 accgatgaaccctccgactccgtcttcttaacgaacttggaccctccgtctccaacgtcactcggttcta
+ggctggtaacatgaggtcggacccgctgtctcgttctgacagggtttttttttttttttttt 199
+
+Score 226: 110/136 ( 80%) matches, 0 gaps
+       7 gtcccagctacgcgagaggctgaggcagcagaattacttgaacccaggaggcggaggttgcagtgagccg
+agatcgcgccactgcactccagcctgggtgagagagcgagactctgtctcaaaaaaaaaaaaaaaa 142
+         ||    |||||  | ||||||||||||| |||||| ||||||||  |||||| ||||||||||||||||
+|||||   ||| || ||||||||||||| || ||||| ||||| |  |  ||||||||||||||||
+     334 caccaccgatgaaccctccgactccgtcttcttaacgaacttggaccctccgtctccaacgtcactcggt
+tctaggctggtaacatgaggtcggacccgctgtctcgttctgacagggtttttttttttttttttt 199
+
+Score 221: 111/139 ( 79%) matches, 0 gaps
+       4 gtagtcccagctacgcgagaggctgaggcagcagaattacttgaacccaggaggcggaggttgcagtgag
+ccgagatcgcgccactgcactccagcctgggtgagagagcgagactctgtctcaaaaaaaaaaaaaaaa 142
+         |  ||    |||||  | ||||||||||||| |||||| ||||||||  |||||| ||||||||||||||
+|| |||||   ||| || ||||||||||||| || ||||| ||||| |  |  ||||||||||||||||
+     337 ccgcaccaccgatgaaccctccgactccgtcttcttaacgaacttggaccctccgtctccaacgtcactc
+ggttctaggctggtaacatgaggtcggacccgctgtctcgttctgacagggtttttttttttttttttt 199
+
+Score 216: 112/142 ( 78%) matches, 0 gaps
+       1 cctgtagtcccagctacgcgagaggctgaggcagcagaattacttgaacccaggaggcggaggttgcagt
+gagccgagatcgcgccactgcactccagcctgggtgagagagcgagactctgtctcaaaaaaaaaaaaaaaa 142
+
+         |  |  ||    |||||  | ||||||||||||| |||||| ||||||||  |||||| |||||||||||
+||||| |||||   ||| || ||||||||||||| || ||||| ||||| |  |  ||||||||||||||||
+     340 gacccgcaccaccgatgaaccctccgactccgtcttcttaacgaacttggaccctccgtctccaacgtca
+ctcggttctaggctggtaacatgaggtcggacccgctgtctcgttctgacagggtttttttttttttttttt 199
+
+
+Score 199: 54/170 ( 31%) matches, 1 gaps
+       1 -cctgtagtcccagctacgcgagaggctgaggcagcagaattacttgaacccaggaggcggaggttgcag
+tgagccgagatcgcgccactgcactccagcctgggtgagagagcgagactctgtctcaaaaaaaaaaaaaaaagaccgc
+cagggctcaaacaaaaaacctc 170
+           |||        |        |  |     |    |  | |   |  | || ||  |     | |
+     | |     || |  |      |   |  ||          |        |  |||||||||||||||| |
+ |     |   ||       ||
+     342 tcgacccgcaccaccgatgaaccctccgactccgtcttcttaacgaacttggaccctccgtctccaacgt
+cactcggttctaggctggtaacatgaggtcggacccgctgtctcgttctgacagggttttttttttttttttttttttt
+tttttctggcggtcccgaaaag 172
+
+Score 175: 56/171 ( 32%) matches, 1 gaps
+       1 -cctgtagtcccagctacgcgagaggctgaggcagcagaattacttgaacccaggaggcggaggttgcag
+tgagccgagatcgcgccactgcactccagcctgggtgagagagcgagactctgtctcaaaaaaaaaaaaaaaagaccgc
+cagggctcaaacaaaaaacctcg 171
+              | | |   |   |      ||  |  |  ||||||  | |           || ||  |  |  |
+      |  |     | ||     | |  |      |          |        | ||||||||||||||| |
+ |      |     |   | |
+     344 aatcgacccgcaccaccgatgaaccctccgactccgtcttcttaacgaacttggaccctccgtctccaac
+gtcactcggttctaggctggtaacatgaggtcggacccgctgtctcgttctgacagggttttttttttttttttttttt
+tttttttctggcggtcccgaaaa 173
+
+Score 172: 100/120 ( 83%) matches, 4 gaps
+     345 tttttgtacttttagtagagacgggggtttcaccatgttgtccaggctggtcttgaactcctgacctcag
+gtgatccacccgcctcggccccccaaagtactaggattacaggcgtgagccacc 468
+         |||||||  | ||||||||||| ||||| || |||||||| |||||||||||   || |||| |||||||
+|||||    | | ||| ||| |||||||   | |||||||||||||||||||||
+    3177 aaaaacacaataatcatctctgaccccacagcggtacaaccggtccgaccagggtttaaggattggagtc
+cacta----gactgagtcggagggtttcgccaccctaatgtccgcactcggtgg 3058
+
+Score 164: 128/174 ( 73%) matches, 3 gaps
+   12128 agaggatttttttttttttttttttttttgagacagagttttgctctgttgcccaggctggaatgcaacg
+gcgtgatcttggctcactgtaacctctgcctcc-tgggttcgagtgattctcctgcctcagcctc-caagtagctggga
+ttaca-gcatgtgccaccatgcctggct 12301
+         ||||  || || || || || |||||    |  ||| || |  |||||||||||||| |||| ||||| |
+|||||||| || ||||||  | ||||    ||| ||||||| | |||| |||  ||||  |||||   ||| | ||| |
+||||| |  || |||||||  |||||||
+   12749 tctcaaaacaacaacaacaacaaaaatttataagtcccagagtgagacaacgggtcctacctcacgttac
+cgcactagtactgagtgatgtcggagtttaaggcacccaagtttactaggagagcggaaccggagacctcaacaacctt
+aatgtccacactcggtggtgtggaccga 12573
 
 Score 80: 44/51 ( 86%) matches, 2 gaps
    12246 ctcctgcctcag-cctccaagtagctgggattaca-gcatgtgccaccatgcc 12296
          |||||| ||||| | |||||   |||||||||||| ||||| |||||||| ||
    13938 gaggacagagtcagaaggtttcacgaccctaatgtccgtactcggtggtatgg 13886
 
-Score 99: 53/65 ( 81%) matches, 1 gaps
-   13884 tgggtatggtggctcatgcctgtaatcccagcactttggaagactgagacaggagcaattgcttga 139
-49
-         ||||| |||||||   ||||||||||||||||    ||| || ||||| ||| || ||||||||||
-   14692 acccacaccaccgtacacggacattagggtcgatggaccctccgactccgtcttc-ttaacgaact 146
-28
-
+Score 130: 74/94 ( 78%) matches, 1 gaps
+   13890 tggtggctcatgcctgtaatcccagcactttggaagactgagacaggagcaattgcttgaggtctggagt
+tcaataccagcctgggcaacataac 13984
+         |||||||| ||||||||||| |||| ||||| | || ||||| |||| |  |   ||||| ||| |||||
+|  | | |||||||| |||||| ||
+   14822 accaccgaatacggacattaaggtcttgaaagcctccgactccgtccaccat-gtgaacttcagtcctca
+aactctagtcggaccggttgtactg 14729
+   
 Data files
 
    None.
@@ -143,23 +395,8 @@ Score 33: 11/11 (100%) matches, 0 gaps
    
 References
 
-   Some assorted references on inverted repeats:
+   None.
    
-    1. Pearson CE, Zorbas H, Price GB, Zannis-Hadjopoulos M Inverted
-       repeats, stem-loops, and cruciforms: significance for initiation
-       of DNA replication. J Cell Biochem 1996 Oct;63(1):1-22
-    2. Waldman AS, Tran H, Goldsmith EC, Resnick MA. q Long inverted
-       repeats are an at-risk motif for recombination in mammalian cells.
-       Genetics. 1999 Dec;153(4):1873-83. PMID: 10581292; UI: 20050682
-    3. Jacobsen SE Gene silencing: Maintaining methylation patterns. Curr
-       Biol 1999 Aug 26;9(16):R617-9
-    4. Lewis S, Akgun E, Jasin M. Palindromic DNA and genome stability.
-       Further studies. Ann N Y Acad Sci. 1999 May 18;870:45-57. PMID:
-       10415472; UI: 99343961
-    5. Dai X, Greizerstein MB, Nadas-Chinni K, Rothman-Denes LB
-       Supercoil-induced extrusion of a regulatory DNA hairpin. Proc Natl
-       Acad Sci U S A 1997 Mar 18;94(6):2174-9
-       
 Warnings
 
    None.

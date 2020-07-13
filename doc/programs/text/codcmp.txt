@@ -25,14 +25,20 @@ Description
    
 Usage
 
-   Here is a sample session with codcmp, comparing the codon usage tables
-   for Escherichia coli and Haemophilus influenzae.
+   Here is a sample session with codcmp
    
-% codcmp
+   This compares the codon usage tables for Escherichia coli and
+   Haemophilus influenzae.
+   
+
+% codcmp 
+Codon usage table comparison
 Codon usage file [Ehum.cut]: Eeco.cut
 Codon usage file [Ehum.cut]: Ehin.cut
-Output file [outfile.codcmp]:
-
+Output file [outfile.codcmp]: 
+   
+   Go to the output files for this example
+   
 Command line arguments
 
    Mandatory qualifiers:
@@ -69,9 +75,10 @@ Input file format
    
 Output file format
 
-   This is the result of the example run:
-     _________________________________________________________________
-   
+  Output files for usage example
+  
+  File: outfile.codcmp
+  
 # CODCMP codon usage table comparison
 # Eeco.cut vs Ehin.cut
 
@@ -81,7 +88,6 @@ Root Mean Squared Difference = 0.191
 Sum Difference         = 9.840
 Mean Difference         = 0.154
 Codons not appearing   = 0
-     _________________________________________________________________
    
 Data files
 

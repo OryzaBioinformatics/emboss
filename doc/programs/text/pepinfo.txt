@@ -24,17 +24,19 @@ Description
    
 Usage
 
-   Here is a sample session with pepinfo.
+   Here is a sample session with pepinfo
    
-% pepinfo
-Plots simple amino acid properties in parallel
-Input sequence: sw:opsd_human
-Graph type [x11]:
-Output file [pepinfo.out]:
 
-   Click here to see the histogram
+% pepinfo 
+Plots simple amino acid properties in parallel
+Input sequence: tsw:opsd_human
+Graph type [x11]: cps
+Output file [pepinfo.out]: 
+
+Created pepinfo.ps
    
-   Click here to see the hydrophobicity plots
+   Go to the input files for this example
+   Go to the output files for this example
    
 Command line arguments
 
@@ -74,23 +76,135 @@ Command line arguments
    -aahydropathy User defined hydropathy data Any string is accepted
    Eaa_hydropathy.dat
    Advanced qualifiers Allowed values Default
-   -[no]generalplot plot histogram of general properties Yes/No Yes
-   -[no]hydropathyplot plot graphs of hydropathy Yes/No Yes
+   -[no]generalplot plot histogram of general properties Boolean value
+   Yes/No Yes
+   -[no]hydropathyplot plot graphs of hydropathy Boolean value Yes/No Yes
    
 Input file format
 
-   It reads in a protein sequence.
+   pepinfo reads a protein sequence USA.
+   
+  Input files for usage example
+  
+   'tsw:opsd_human' is a sequence entry in the example protein database
+   'tsw'
+   
+  Database entry: tsw:opsd_human
+  
+ID   OPSD_HUMAN     STANDARD;      PRT;   348 AA.
+AC   P08100; Q16414;
+DT   01-AUG-1988 (Rel. 08, Created)
+DT   01-AUG-1988 (Rel. 08, Last sequence update)
+DT   15-JUL-1999 (Rel. 38, Last annotation update)
+DE   RHODOPSIN.
+GN   RHO.
+OS   Homo sapiens (Human).
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Mammalia;
+OC   Eutheria; Primates; Catarrhini; Hominidae; Homo.
+RN   [1]
+RP   SEQUENCE FROM N.A.
+RX   MEDLINE; 84272729.
+RA   NATHANS J., HOGNESS D.S.;
+RT   "Isolation and nucleotide sequence of the gene encoding human
+RT   rhodopsin.";
+RL   Proc. Natl. Acad. Sci. U.S.A. 81:4851-4855(1984).
+RN   [2]
+RP   SEQUENCE OF 1-120 FROM N.A.
+RA   BENNETT J., BELLER B., SUN D., KARIKO K.;
+RL   Submitted (NOV-1994) to the EMBL/GenBank/DDBJ databases.
+RN   [3]
+RP   REVIEW ON ADRP VARIANTS.
+RX   MEDLINE; 94004905.
+RA   AL-MAGHTHEH M., GREGORY C., INGLEHEARN C., HARDCASTLE A.,
+RA   BHATTACHARYA S.;
+RT   "Rhodopsin mutations in autosomal dominant retinitis pigmentosa.";
+RL   Hum. Mutat. 2:249-255(1993).
+RN   [4]
+RP   VARIANT ADRP HIS-23.
+RX   MEDLINE; 90136922.
+RA   DRYJA T.P., MCGEE T.L., REICHEI E., HAHN L.B., COWLEY G.S.,
+RA   YANDELL D.W., SANDBERG M.A., BERSON E.L.;
+RT   "A point mutation of the rhodopsin gene in one form of retinitis
+RT   pigmentosa.";
+RL   Nature 343:364-366(1990).
+RN   [5]
+RP   VARIANTS ADRP.
+RX   MEDLINE; 91051574.
+RA   FARRAR G.J., KENNA P., REDMOND R., MCWILLIAM P., BRADLEY D.G.,
+RA   HUMPHRIES M.M., SHARP E.M., INGLEHEARN C.F., BASHIR R., JAY M.,
+RA   WATTY A., LUDWIG M., SCHINZEL A., SAMANNS C., GAL A.,
+RA   BHATTACHARYA S.S., HUMPHRIES P.;
+RT   "Autosomal dominant retinitis pigmentosa: absence of the rhodopsin
+RT   proline-->histidine substitution (codon 23) in pedigrees from
+RT   Europe.";
+RL   Am. J. Hum. Genet. 47:941-945(1990).
+RN   [6]
+RP   VARIANTS ADRP HIS-23; ARG-58; LEU-347 AND SER-347.
+RX   MEDLINE; 91015273.
+
+
+  [Part of this file has been deleted for brevity]
+
+FT                                /FTId=VAR_004816.
+FT   VARIANT     209    209       V -> M (EFFECT NOT KNOWN).
+FT                                /FTId=VAR_004817.
+FT   VARIANT     211    211       H -> P (IN ADRP).
+FT                                /FTId=VAR_004818.
+FT   VARIANT     211    211       H -> R (IN ADRP).
+FT                                /FTId=VAR_004819.
+FT   VARIANT     216    216       M -> K (IN ADRP).
+FT                                /FTId=VAR_004820.
+FT   VARIANT     220    220       F -> C (IN ADRP).
+FT                                /FTId=VAR_004821.
+FT   VARIANT     222    222       C -> R (IN ADRP).
+FT                                /FTId=VAR_004822.
+FT   VARIANT     255    255       MISSING (IN ADRP).
+FT                                /FTId=VAR_004823.
+FT   VARIANT     264    264       MISSING (IN ADRP).
+FT                                /FTId=VAR_004824.
+FT   VARIANT     267    267       P -> L (IN ADRP).
+FT                                /FTId=VAR_004825.
+FT   VARIANT     267    267       P -> R (IN ADRP).
+FT                                /FTId=VAR_004826.
+FT   VARIANT     292    292       A -> E (IN CSNB4).
+FT                                /FTId=VAR_004827.
+FT   VARIANT     296    296       K -> E (IN ADRP).
+FT                                /FTId=VAR_004828.
+FT   VARIANT     297    297       S -> R (IN ADRP).
+FT                                /FTId=VAR_004829.
+FT   VARIANT     342    342       T -> M (IN ADRP).
+FT                                /FTId=VAR_004830.
+FT   VARIANT     345    345       V -> L (IN ADRP).
+FT                                /FTId=VAR_004831.
+FT   VARIANT     345    345       V -> M (IN ADRP).
+FT                                /FTId=VAR_004832.
+FT   VARIANT     347    347       P -> A (IN ADRP).
+FT                                /FTId=VAR_004833.
+FT   VARIANT     347    347       P -> L (IN ADRP; COMMON VARIANT).
+FT                                /FTId=VAR_004834.
+FT   VARIANT     347    347       P -> Q (IN ADRP).
+FT                                /FTId=VAR_004835.
+FT   VARIANT     347    347       P -> R (IN ADRP).
+FT                                /FTId=VAR_004836.
+FT   VARIANT     347    347       P -> S (IN ADRP).
+FT                                /FTId=VAR_004837.
+SQ   SEQUENCE   348 AA;  38892 MW;  07443BEA CRC32;
+     MNGTEGPNFY VPFSNATGVV RSPFEYPQYY LAEPWQFSML AAYMFLLIVL GFPINFLTLY
+     VTVQHKKLRT PLNYILLNLA VADLFMVLGG FTSTLYTSLH GYFVFGPTGC NLEGFFATLG
+     GEIALWSLVV LAIERYVVVC KPMSNFRFGE NHAIMGVAFT WVMALACAAP PLAGWSRYIP
+     EGLQCSCGID YYTLKPEVNN ESFVIYMFVV HFTIPMIIIF FCYGQLVFTV KEAAAQQQES
+     ATTQKAEKEV TRMVIIMVIA FLICWVPYAS VAFYIFTHQG SNFGPIFMTI PAFFAKSAAI
+     YNPVIYIMMN KQFRNCMLTT ICCGKNPLGD DEASATVSKT ETSQVAPA
+//
    
 Output file format
 
    Graphs are written to the selected graphics device.
    
-   The output file contains the coordinates from the graphs.
-   
-   For the first set of graphs, 9 sets of true/false values are written
-   out. For the second set of graphs, 3 sets of hydrophobicity values are
-   written.
-   
+  Output files for usage example
+  
+  File: pepinfo.out
+  
 Printing out Tiny residues in OPSD_HUMAN from position 1 to 348
 
 Position  Residue                       Result
@@ -104,34 +218,109 @@ Position  Residue                       Result
        8       N                               0
        9       F                               0
       10       Y                               0
+      11       V                               0
+      12       P                               0
+      13       F                               0
+      14       S                               1
+      15       N                               0
+      16       A                               1
+      17       T                               1
+      18       G                               1
+      19       V                               0
+      20       V                               0
+      21       R                               0
+      22       S                               1
+      23       P                               0
+      24       F                               0
+      25       E                               0
+      26       Y                               0
+      27       P                               0
+      28       Q                               0
+      29       Y                               0
+      30       Y                               0
+      31       L                               0
+      32       A                               1
+      33       E                               0
+      34       P                               0
+      35       W                               0
+      36       Q                               0
+      37       F                               0
+      38       S                               1
+      39       M                               0
+      40       L                               0
+      41       A                               1
+      42       A                               1
+      43       Y                               0
+      44       M                               0
+      45       F                               0
+      46       L                               0
+      47       L                               0
 
-....................
 
-     341       E                               0
-     342       T                               1
-     343       S                               1
-     344       Q                               0
-     345       V                               0
-     346       A                               1
-     347       P                               0
-     348       A                               1
+  [Part of this file has been deleted for brevity]
+
+  301       Y                           0.500
+  302       N                           0.549
+  303       P                           0.633
+  304       V                           0.636
+  305       I                           0.553
+  306       Y                           0.438
+  307       I                           0.358
+  308       M                           0.250
+  309       M                           0.262
+  310       N                          -0.172
+  311       K                          -0.288
+  312       Q                          -0.409
+  313       F                          -0.409
+  314       R                          -0.362
+  315       N                          -0.281
+  316       C                          -0.120
+  317       M                           0.128
+  318       L                           0.028
+  319       T                           0.341
+  320       T                           0.481
+  321       I                           0.282
+  322       C                           0.124
+  323       C                           0.020
+  324       G                           0.143
+  325       K                           0.202
+  326       N                          -0.051
+  327       P                          -0.183
+  328       L                          -0.298
+  329       G                          -0.282
+  330       D                          -0.136
+  331       D                           0.020
+  332       E                           0.001
+  333       A                           0.003
+  334       S                          -0.070
+  335       A                          -0.137
+  336       T                          -0.042
+  337       V                          -0.042
+  338       S                          -0.117
+  339       K                          -0.117
+  340       T                          -0.280
+  341       E                          -0.154
+  342       T                          -0.206
+  343       S                          -0.172
+  344       Q                           0.063
+  345       V                           0.000
+  346       A                           0.000
+  347       P                           0.000
+  348       A                           0.000
+   
 
 
-
-Printing out Small residues in OPSD_HUMAN from position 1 to 348
-
-Position  Residue                       Result
-       1       M                               0
-       2       N                               1
-       3       G                               1
-       4       T                               1
-       5       E                               0
-       6       G                               1
-       7       P                               1
-       8       N                               1
-       9       F                               0
-      10       Y                               0
-
+  Graphics File: pepinfo.ps
+  
+   [pepinfo results]
+   
+   The output file 'pepinfo.out' contains the coordinates from the
+   graphs.
+   
+   For the first set of graphs, 9 sets of true/false values are written
+   out. For the second set of graphs, 3 sets of hydrophobicity values are
+   written.
+   
 Data files
 
    The physico-chemical properties of the residues are read from the
@@ -196,20 +385,19 @@ Known bugs
    
 See also
 
-   Program name Description
-   backtranseq Back translate a protein sequence
-   charge Protein charge plot
-   checktrans Reports STOP codons and ORF statistics of a protein
-   sequence
-   compseq Counts the composition of dimer/trimer/etc words in a sequence
-   emowse Protein identification by mass spectrometry
-   freak Residue/base frequency table or plot
-   iep Calculates the isoelectric point of a protein
-   mwcontam Shows molwts that match across a set of files
-   mwfilter Filter noisy molwts from mass spec output
-   octanol Displays protein hydropathy
-   pepstats Protein statistics
-   pepwindow Displays protein hydropathy
+   Program name                          Description
+   backtranseq  Back translate a protein sequence
+   charge       Protein charge plot
+   checktrans   Reports STOP codons and ORF statistics of a protein
+   compseq      Counts the composition of dimer/trimer/etc words in a sequence
+   emowse       Protein identification by mass spectrometry
+   freak        Residue/base frequency table or plot
+   iep          Calculates the isoelectric point of a protein
+   mwcontam     Shows molwts that match across a set of files
+   mwfilter     Filter noisy molwts from mass spec output
+   octanol      Displays protein hydropathy
+   pepstats     Protein statistics
+   pepwindow    Displays protein hydropathy
    pepwindowall Displays protein hydropathy of a set of sequences
    
 Author(s)

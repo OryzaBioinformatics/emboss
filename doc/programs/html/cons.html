@@ -107,6 +107,23 @@ is in lower-case.
  -->
 
 
+<b>Here is a sample session with cons</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>cons </b>
+Creates a consensus from multiple alignments
+Input sequence set: <b>../../data/dna.msf</b>
+Output sequence [dna.fasta]: <b>aligned.cons</b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
+
+
+<!--
 Here is a sample session with cons:
 
 <pre>
@@ -118,7 +135,7 @@ Output file [outfile.cons]: aligned.cons
 
 </pre>
 
-
+-->
 
 
 
@@ -268,6 +285,39 @@ IT IS DONE FOR YOU.
 
 The USA of a set of aligned sequences.
 
+<p>
+
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+<p><h3>File: ../../data/dna.msf</h3>
+<table width="90%"><tr><td bgcolor="#FFDDFF">
+<pre>
+!!NA_MULTIPLE_ALIGNMENT
+
+ dna.msf  MSF: 120  Type: N  January 01, 1776  12:00  Check: 3196 ..
+
+ Name: MSFM1          Len:   120  Check:  8587  Weight:  1.00
+ Name: MSFM2          Len:   120  Check:  6178  Weight:  1.00
+ Name: MSFM3          Len:   120  Check:  8431  Weight:  1.00
+
+//
+
+        MSFM1  ACGTACGTAC GTACGTACGT ACGTACGTAC GTACGTACGT ACGTACGTAC
+        MSFM2  ACGTACGTAC GTACGTACGT ....ACGTAC GTACGTACGT ACGTACGTAC
+        MSFM3  ACGTACGTAC GTACGTACGT ACGTACGTAC GTACGTACGT CGTACGTACG
+
+        MSFM1  GTACGTACGT ACGTACGTAC GTACGTACGT ACGTACGTAC GTACGTACGT
+        MSFM2  GTACGTACGT ACGTACGTAC GTACGTACGT ACGTACGTAC GTACGTACGT
+        MSFM3  TACGTACGTA CGTACGTACG TACGTACGTA ACGTACGTAC GTACGTACGT
+
+        MSFM1  ACGTACGTAC GTACGTACGT
+        MSFM2  ACGTACGTTG CAACGTACGT
+        MSFM3  ACGTACGTAC GTACGTACGT
+
+</pre>
+</td></tr></table><p>
+
 
 
 
@@ -291,6 +341,23 @@ The USA of a set of aligned sequences.
    -->
 
 The output consists of a sequence file holding the consensus sequence. 
+
+<p>
+
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: aligned.cons</h3>
+<table width="90%"><tr><td bgcolor="#DDFFDD">
+<pre>
+&gt;EMBOSS_001
+acgtacgtacgtacgtacgtnnnnacgtacgtacgtacgtnnnnnnnnnnnnnnnnnnnn
+nnnnnnnnnnnnnnnnnnnnacgtacgtacgtacgtacgtacgtacgtnnnnacgtacgt
+</pre>
+</td></tr></table><p>
+
+
+<!--
 For example:
 
 <P>
@@ -300,7 +367,7 @@ For example:
 tagctgacctgacgggactgatgcgt
 </pre>
 <HR>
-
+-->
 
 
 

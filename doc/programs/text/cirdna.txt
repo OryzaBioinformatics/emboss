@@ -28,44 +28,56 @@ Description
    
 Usage
 
-   Here is a sample session with cirdna.
+   Here is a sample session with cirdna
+   
 
-% cirdna
+% cirdna -graph cps 
 Draws circular maps of DNA constructs
-Graph type [x11]:
-Input file [inputfile]: data.cirp
-do you want a ruler (Y or N) [Y]:
-type of blocks (enter Open, Filled, or Outline) [Filled]:
-ticks inside or outside the circle (enter In or Out) [Out]:
-text inside or outside the blocks (enter In or Out) [In]:
+Input file [inputfile]: ../../data/data.cirp
+do you want a ruler [Y]: 
+      1 : Open
+      2 : Filled
+      3 : Outline
+type of blocks [Filled]: 
+      1 : In
+      2 : Out
+ticks inside or outside the circle (enter In or Out) [Out]: 
+      1 : In
+      2 : Out
+text inside or outside the blocks (enter In or Out) [In]: 
 
+Created cirdna.ps
+   
+   Go to the input files for this example
+   Go to the output files for this example
+   
 Command line arguments
 
    Mandatory qualifiers:
    -graphout           graph      Graph type
    -inputfile          infile     input file containing mapping data
-   -ruler              string     do you want a ruler (Y or N)
-   -blocktype          string     type of blocks: Open, Filled, or Outline.
+   -[no]ruler          boolean    do you want a ruler
+   -blocktype          selection  type of blocks: Open, Filled, or Outline.
                                   Option 'Outline' draws filled blocks
                                   surrounded by a black border
-   -posticks           string     ticks inside or outside the circle (enter In
+   -posticks           selection  ticks inside or outside the circle (enter In
                                   or Out)
-   -posblocks          string     text inside or outside the blocks (enter In
+   -posblocks          selection  text inside or outside the blocks (enter In
                                   or Out)
 
    Optional qualifiers:
    -originangle        float      position of the molecule's origin on the
                                   circle (enter a number in the range 0 - 360)
-   -intersymbol        string     do you want horizontal junctions between
-                                  blocks (Y or N)
-   -intercolor         integer    color of junctions between blocks (enter a
-                                  color number)
-   -interticks         string     do you want horizontal junctions between
-                                  ticks (Y or N)
+   -[no]intersymbol    boolean    do you want horizontal junctions between
+                                  blocks
+   -intercolour        integer    colour of junctions between blocks (enter a
+                                  colour number)
+   -interticks         boolean    do you want horizontal junctions between
+                                  ticks
    -gapsize            integer    interval between ticks in the ruler (enter
                                   an integer)
-   -ticklines          string     do you want vertical lines at the ruler's
-                                  ticks (Y or N)
+   -ticklines          boolean    do you want vertical lines at the ruler's
+                                  ticks
    -textheight         float      height of text. Enter a number <1 or >1 to
                                   decrease or increase the size, respectively
    -textlength         float      length of text. Enter a number <1 or >1 to
@@ -97,27 +109,27 @@ Command line arguments
    x11, tektronics, tekt, tek4107t, tek, none, null, text, data, xterm,
    png EMBOSS_GRAPHICS value, or x11
    -inputfile input file containing mapping data Input file inputfile
-   -ruler do you want a ruler (Y or N) Any string is accepted Y
+   -[no]ruler do you want a ruler Boolean value Yes/No Yes
    -blocktype type of blocks: Open, Filled, or Outline. Option 'Outline'
-   draws filled blocks surrounded by a black border Any string is
-   accepted Filled
-   -posticks ticks inside or outside the circle (enter In or Out) Any
-   string is accepted Out
-   -posblocks text inside or outside the blocks (enter In or Out) Any
-   string is accepted In
+   draws filled blocks surrounded by a black border Choose from selection
+   list of values Filled
+   -posticks ticks inside or outside the circle (enter In or Out) Choose
+   from selection list of values Out
+   -posblocks text inside or outside the blocks (enter In or Out) Choose
+   from selection list of values In
    Optional qualifiers Allowed values Default
    -originangle position of the molecule's origin on the circle (enter a
    number in the range 0 - 360) Number from 0.000 to 360.000 90
-   -intersymbol do you want horizontal junctions between blocks (Y or N)
-   Any string is accepted Y
-   -intercolor color of junctions between blocks (enter a color number)
-   Integer from 0 to 15 1
-   -interticks do you want horizontal junctions between ticks (Y or N)
-   Any string is accepted N
+   -[no]intersymbol do you want horizontal junctions between blocks
+   Boolean value Yes/No Yes
+   -intercolour colour of junctions between blocks (enter a colour
+   number) Integer from 0 to 15 1
+   -interticks do you want horizontal junctions between ticks Boolean
+   value Yes/No No
    -gapsize interval between ticks in the ruler (enter an integer)
    Integer 0 or more 500
-   -ticklines do you want vertical lines at the ruler's ticks (Y or N)
-   Any string is accepted N
+   -ticklines do you want vertical lines at the ruler's ticks Boolean
+   value Yes/No No
    -textheight height of text. Enter a number <1 or >1 to decrease or
    increase the size, respectively Any numeric value 1
    -textlength length of text. Enter a number <1 or >1 to decrease or
@@ -138,10 +150,10 @@ Command line arguments
    
 Input file format
 
-   Here is the input file data.cirp for the example run:
-   
-
-----------------------------------------------------------------------
+  Input files for usage example
+  
+  File: ../../data/data.cirp
+  
 Start   1001
 End     4270
 
@@ -179,8 +191,7 @@ Range    3322    3497    >       <       5
 MER13
 endlabel
 endgroup
--------------------------------------------------------------------------
-
+   
    Blank lines in the input file are ignored.
    
    The file is organized in several fields separated by one or more space
@@ -249,8 +260,13 @@ endgroup
    
 Output file format
 
-   Output is to the specified graphics device. Click here to see the
-   output of the above example.
+   Output is to the specified graphics device.
+   
+  Output files for usage example
+  
+  Graphics File: cirdna.ps
+  
+   [cirdna results]
    
 Data files
 
@@ -295,6 +311,7 @@ See also
    showdb Displays information on the currently available databases
    showfeat Show features of a sequence
    showseq Display a sequence with features, translation etc
+   sixpack Display a DNA sequence with 6-frame translation and ORFs
    textsearch Search sequence documentation text. SRS and Entrez are
    faster!
    

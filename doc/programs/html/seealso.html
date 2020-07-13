@@ -84,19 +84,26 @@ The groups that the program belongs to can be output by using the
 </H2>
 
 
-Here is a sample session with seealso.
+<b>Here is a sample session with seealso</b>
+<p>
 
-<pre>
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% seealso
-Program to search for: matcher
+% <b>seealso </b>
+Finds programs sharing group names
+Program to search for: <b>matcher</b>
+
 SEE ALSO
 seqmatchall      Does an all-against-all comparison of a set of sequences
 supermatcher     Finds a match of a large sequence against one or more sequences
 water            Smith-Waterman local alignment
 wordmatch        Finds all exact matches of a given size between 2 sequences
 
-</pre>
+
+</pre></td></tr></table><p>
+<p>
+<p>
 
 
 
@@ -221,8 +228,8 @@ IT IS DONE FOR YOU.
 <tr>
 <td>[-search]<br>(Parameter 1)</td>
 <td>Enter the name of an EMBOSS program</td>
-<td>Any string is accepted</td>
-<td><i>An empty string is accepted</i></td>
+<td>A string of at least 1 characters</td>
+<td><b>Required</b></td>
 </tr>
 
 <tr bgcolor="#FFFFD0">
@@ -235,7 +242,7 @@ IT IS DONE FOR YOU.
 <td>-explode</td>
 <td>The groups that EMBOSS applications belong to have two forms, exploded and not exploded. The exploded group names are more numerous and often vaguely phrased than the non-exploded ones. The exploded names are formed from definitions of the group names that start like NAME1:NAME2 and which are then expanded into many combinations of the names as: 'NAME1', 'NAME2', 'NAME1 NAME2', NAME2 NAME1'. The non-expanded names are simply like: 'NAME1 NAME2'.
 Using expanded group names will find many more programs which share at least some of the expanded names than using the non-exploded names and so you will get more programs reported as sharing a similar function than you will if you specify that you wish to use non-exploded names</td>
-<td>Yes/No</td>
+<td>Boolean value Yes/No</td>
 <td>No</td>
 </tr>
 
@@ -249,7 +256,7 @@ Using expanded group names will find many more programs which share at least som
 <tr>
 <td>-html</td>
 <td>If you are sending the output to a file, this will format it for displaying as a table in a WWW document.</td>
-<td>Yes/No</td>
+<td>Boolean value Yes/No</td>
 <td>No</td>
 </tr>
 
@@ -279,7 +286,7 @@ then if you enter '.html' here, the second half of the URL after the program nam
 <tr>
 <td>-groups</td>
 <td>If you use this option, then only the group names will output to the file</td>
-<td>Yes/No</td>
+<td>Boolean value Yes/No</td>
 <td>No</td>
 </tr>
 
@@ -292,21 +299,21 @@ then if you enter '.html' here, the second half of the URL after the program nam
 <tr>
 <td>-[no]emboss</td>
 <td>If you use this option then EMBOSS program documentation will be searched. If this option is set to be false, then only the EMBASSY programs will be searched (if the -embassy option is true). EMBASSY programs are not strictly part of EMBOSS, but use the same code libraries and share the same look and feel, but are generally developed by people who wish the programs to be outside of the GNU Public Licence scheme, ie. they may wish to charge money for them.</td>
-<td>Yes/No</td>
+<td>Boolean value Yes/No</td>
 <td>Yes</td>
 </tr>
 
 <tr>
 <td>-[no]embassy</td>
 <td>If you use this option then EMBASSY program documentation will be searched. If this option is set to be false, then only the EMBOSS programs will be searched (if the -emboss option is true). EMBASSY programs are not strictly part of EMBOSS, but use the same code libraries and share the same look and feel, but are generally developed by people who wish the programs to be outside of the GNU Public Licence scheme, ie. they may wish to charge money for them.</td>
-<td>Yes/No</td>
+<td>Boolean value Yes/No</td>
 <td>Yes</td>
 </tr>
 
 <tr>
 <td>-colon</td>
 <td>The groups that EMBOSS applications belong to have up to two levels, for example the primary group 'ALIGNMENT' has several sub-groups, or second-level groups, e.g.: CONSENSUS, DIFFERENCES, DOT PLOTS, GLOBAL, LOCAL, MULTIPLE. To aid programs that parse the output of seealso that require the names of these subgroups, a colon ':' will be placed between the first and second level of the group name if this option is true.</td>
-<td>Yes/No</td>
+<td>Boolean value Yes/No</td>
 <td>No</td>
 </tr>
 
@@ -319,15 +326,21 @@ then if you enter '.html' here, the second half of the URL after the program nam
 </H2>
 
 
+
 <H2>
     Output file format
 </H2>
 
 
+
+
+<p>
+
 The result is header line 'SEE ALSO' then a simple list of program names
 followed by the one-line description of the program. 
 
 <p>
+
 If the '-html' qualifier is used, then the result is an HTML-formatted
 table, lacking the HTML document structures such as &lt;HTML&gt;,
 &lt;BODY&gt;, &lt;/BODY&gt;, &lt;/HTML&gt; which the user is expected
@@ -414,6 +427,7 @@ None.
 <tr><td><a href="showdb.html">showdb</a></td><td>Displays information on the currently available databases</td></tr>
 <tr><td><a href="showfeat.html">showfeat</a></td><td>Show features of a sequence</td></tr>
 <tr><td><a href="showseq.html">showseq</a></td><td>Display a sequence with features, translation etc</td></tr>
+<tr><td><a href="sixpack.html">sixpack</a></td><td>Display a DNA sequence with 6-frame translation and ORFs</td></tr>
 <tr><td><a href="textsearch.html">textsearch</a></td><td>Search sequence documentation text. SRS and Entrez are faster!</td></tr>
 <tr><td><a href="tfm.html">tfm</a></td><td>Displays a program's help documentation manual</td></tr>
 <tr><td><a href="whichdb.html">whichdb</a></td><td>Search all databases for an entry</td></tr>

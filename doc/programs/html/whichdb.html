@@ -131,18 +131,20 @@ databases.
  -->
 
 
-Here is a sample session with whichdb:
+<b>Here is a sample session with whichdb</b>
+<p>
 
-<pre>
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% whichdb
+% <b>whichdb </b>
 Search all databases for an entry
-ID or Accession number: hsfau
-Output file [outfile.whichdb]: 
+ID or Accession number: <b>hsfau1</b>
+Output file [outfile.whichdb]: <b></b>
 
-</pre>
-
-
+</pre></td></tr></table><p>
+<p>
+<a href="#output.1">Go to the output files for this example</a><p><p>
 
 
 
@@ -161,6 +163,7 @@ Output file [outfile.whichdb]:
    Optional qualifiers: (none)
    Advanced qualifiers:
    -get                boolean    Retrieve sequences
+   -showall            boolean    Show failed attempts
 
    General qualifiers:
   -help                boolean    Report command line options. More
@@ -211,7 +214,14 @@ Output file [outfile.whichdb]:
 <tr>
 <td>-get</td>
 <td>Retrieve sequences</td>
-<td>Yes/No</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-showall</td>
+<td>Show failed attempts</td>
+<td>Boolean value Yes/No</td>
 <td>No</td>
 </tr>
 
@@ -243,6 +253,9 @@ IT IS DONE FOR YOU.
 
 None.
 
+<p>
+
+
 
 
 
@@ -266,24 +279,11 @@ None.
         happens in unusual cases - null output, errors etc. 
    -->
 
+
+
+<p>
+
 The reported database entries are written out to the specified output file.
-
-<p>
-
-The results from the above example follow:
-
-<p>
-
-<hr>
-<pre>
-embl:hsfau
-human:hsfau
-tembl:hsfau
-em:hsfau
-genbank:hsfau
-gb:hsfau   
-</pre>
-<hr>
 
 <p>
 

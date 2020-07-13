@@ -72,6 +72,13 @@ complement.
 
 <p>
 
+Without the program <b>yank</b> you would need to use a text editor such
+as <i>pico</i> to create the appropriate list files.  <b>yank</b>
+makes this process easy. 
+
+
+<H3>List Files</H3>
+
 Many EMBOSS programs can read in a set of sequences.  (Some examples are
 <b>emma</b> and <b>union</b>) There are many ways of specifying these
 sequences, including wildcarded sequence file names, wildcarded database
@@ -118,11 +125,6 @@ EMBOSS that this file is a list file, not a regular sequence file.
 
 <p>
 
-Without the program <b>yank</b> you would need to use a text editor such
-as pico to create the appropriate list files.  <b>yank</b>
-makes this process easy. 
-
-
 
 
 <H2>
@@ -135,53 +137,25 @@ makes this process easy.
  -->
 
 
-Here is a sample session with yank, adding the regions making up the
-coding sequence of embl:hsfau1 to the list 'cds.list':
+<b>Here is a sample session with yank</b>
+<p>
+This is an example of adding an entry for the part of tembl:hsfau1 between positions 1913 and 1915 to the existing list file 'cds.list': 
+<p>
 
-<pre>
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% yank
-Reads a range from a sequence, appends the full USA to a list file
-Input sequence: em:hsfau1
-     Begin at position [start]: 782
-       End at position [end]: 856
-        Reverse strand [N]:
-Output file [hsfau1.yank]: cds.list
+% <b>yank </b>
+Reads a sequence range, appends the full USA to a list file
+Input sequence: <b>tembl:hsfau1</b>
+     Begin at position [start]: <b>1913</b>
+       End at position [end]: <b>1915</b>
+        Reverse strand [N]: <b></b>
+Output file [hsfau1.yank]: <b>cds.list</b>
 
-% yank
-Reads a range from a sequence, appends the full USA to a list file
-Input sequence: em:hsfau1
-     Begin at position [start]: 951
-       End at position [end]: 1095
-        Reverse strand [N]:
-Output file [hsfau1.yank]: cds.list
-
-% yank
-Reads a range from a sequence, appends the full USA to a list file
-Input sequence: em:hsfau1
-     Begin at position [start]: 1557
-       End at position [end]: 1612
-        Reverse strand [N]:
-Output file [hsfau1.yank]: cds.list
-
-% yank
-Reads a range from a sequence, appends the full USA to a list file
-Input sequence: em:hsfau1
-     Begin at position [start]: 1787
-       End at position [end]: 1912
-        Reverse strand [N]:
-Output file [hsfau1.yank]: cds.list
-</pre>
-
-
-
-
-
-
-
-
-
-
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
 
 
 
@@ -249,7 +223,7 @@ Output file [hsfau1.yank]: cds.list
 <tr>
 <td>-newfile</td>
 <td>Overwrite existing output file</td>
-<td>Yes/No</td>
+<td>Boolean value Yes/No</td>
 <td>No</td>
 </tr>
 
@@ -279,7 +253,7 @@ IT IS DONE FOR YOU.
         happens in unusual cases - null input, etc. 
    -->
 
-Any valid sequence can be read in.
+<b>yank</b> reads any valid sequence USA.
 
 <p>
 
@@ -290,7 +264,124 @@ You will be prompted for the start and end positions you wish to use.
 If the sequence is nucleic, you will be prompted whether you wish to use
 the reverse complement of the sequence. 
 
+<p>
 
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+
+'tembl:hsfau1' is a sequence entry in the example nucleic acid database 'tembl'
+<p>
+<p><h3>Database entry: tembl:hsfau1</h3>
+<table width="90%"><tr><td bgcolor="#FFDDFF">
+<pre>
+ID   HSFAU1     standard; DNA; HUM; 2016 BP.
+XX
+AC   X65921; S45242;
+XX
+SV   X65921.1
+XX
+DT   13-MAY-1992 (Rel. 31, Created)
+DT   21-JUL-1993 (Rel. 36, Last updated, Version 5)
+XX
+DE   H.sapiens fau 1 gene
+XX
+KW   fau 1 gene.
+XX
+OS   Homo sapiens (human)
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia;
+OC   Eutheria; Primates; Catarrhini; Hominidae; Homo.
+XX
+RN   [1]
+RP   1-2016
+RA   Kas K.;
+RT   ;
+RL   Submitted (29-APR-1992) to the EMBL/GenBank/DDBJ databases.
+RL   K. Kas, University of Antwerp, Dept of Biochemistry T3.22,
+RL   Universiteitsplein 1, 2610 Wilrijk, BELGIUM
+XX
+RN   [2]
+RP   1-2016
+RX   MEDLINE; 92412144.
+RA   Kas K., Michiels L., Merregaert J.;
+RT   "Genomic structure and expression of the human fau gene: encoding the
+RT   ribosomal protein S30 fused to a ubiquitin-like protein.";
+RL   Biochem. Biophys. Res. Commun. 187:927-933(1992).
+XX
+DR   SWISS-PROT; P35544; UBIM_HUMAN.
+DR   SWISS-PROT; Q05472; RS30_HUMAN.
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..2016
+FT                   /db_xref="taxon:9606"
+FT                   /organism="Homo sapiens"
+FT                   /clone_lib="CML cosmid"
+FT                   /clone="15.1"
+FT   mRNA            join(408..504,774..856,951..1095,1557..1612,1787..&gt;1912)
+FT                   /gene="fau 1"
+FT   exon            408..504
+FT                   /number=1
+FT   intron          505..773
+FT                   /number=1
+FT   exon            774..856
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+FT                   RAKRRMQYNRRFVNVVPTFGKKKGPNANS"
+FT   intron          857..950
+FT                   /number=2
+FT   exon            951..1095
+FT                   /number=3
+FT   intron          1096..1556
+FT                   /number=3
+FT   exon            1557..1612
+FT                   /number=4
+FT   intron          1613..1786
+FT                   /number=4
+FT   exon            1787..&gt;1912
+FT                   /number=5
+FT   polyA_signal    1938..1943
+XX
+SQ   Sequence 2016 BP; 421 A; 562 C; 538 G; 495 T; 0 other;
+     ctaccatttt ccctctcgat tctatatgta cactcgggac aagttctcct gatcgaaaac        60
+     ggcaaaacta aggccccaag taggaatgcc ttagttttcg gggttaacaa tgattaacac       120
+     tgagcctcac acccacgcga tgccctcagc tcctcgctca gcgctctcac caacagccgt       180
+     agcccgcagc cccgctggac accggttctc catccccgca gcgtagcccg gaacatggta       240
+     gctgccatct ttacctgcta cgccagcctt ctgtgcgcgc aactgtctgg tcccgccccg       300
+     tcctgcgcga gctgctgccc aggcaggttc gccggtgcga gcgtaaaggg gcggagctag       360
+     gactgccttg ggcggtacaa atagcaggga accgcgcggt cgctcagcag tgacgtgaca       420
+     cgcagcccac ggtctgtact gacgcgccct cgcttcttcc tctttctcga ctccatcttc       480
+     gcggtagctg ggaccgccgt tcaggtaaga atggggcctt ggctggatcc gaagggcttg       540
+     tagcaggttg gctgcggggt cagaaggcgc ggggggaacc gaagaacggg gcctgctccg       600
+     tggccctgct ccagtcccta tccgaactcc ttgggaggca ctggccttcc gcacgtgagc       660
+     cgccgcgacc accatcccgt cgcgatcgtt tctggaccgc tttccactcc caaatctcct       720
+     ttatcccaga gcatttcttg gcttctctta caagccgtct tttctttact cagtcgccaa       780
+     tatgcagctc tttgtccgcg cccaggagct acacaccttc gaggtgaccg gccaggaaac       840
+     ggtcgcccag atcaaggtaa ggctgcttgg tgcgccctgg gttccatttt cttgtgctct       900
+     tcactctcgc ggcccgaggg aacgcttacg agccttatct ttccctgtag gctcatgtag       960
+     cctcactgga gggcattgcc ccggaagatc aagtcgtgct cctggcaggc gcgcccctgg      1020
+     aggatgaggc cactctgggc cagtgcgggg tggaggccct gactaccctg gaagtagcag      1080
+     gccgcatgct tggaggtgag tgagagagga atgttctttg aagtaccggt aagcgtctag      1140
+     tgagtgtggg gtgcatagtc ctgacagctg agtgtcacac ctatggtaat agagtacttc      1200
+     tcactgtctt cagttcagag tgattcttcc tgtttacatc cctcatgttg aacacagacg      1260
+     tccatgggag actgagccag agtgtagttg tatttcagtc acatcacgag atcctagtct      1320
+     ggttatcagc ttccacacta aaaattaggt cagaccaggc cccaaagtgc tctataaatt      1380
+     agaagctgga agatcctgaa atgaaactta agatttcaag gtcaaatatc tgcaactttg      1440
+     ttctcattac ctattgggcg cagcttctct ttaaaggctt gaattgagaa aagaggggtt      1500
+     ctgctgggtg gcaccttctt gctcttacct gctggtgcct tcctttccca ctacaggtaa      1560
+     agtccatggt tccctggccc gtgctggaaa agtgagaggt cagactccta aggtgagtga      1620
+     gagtattagt ggtcatggtg ttaggacttt ttttcctttc acagctaaac caagtccctg      1680
+     ggctcttact cggtttgcct tctccctccc tggagatgag cctgagggaa gggatgctag      1740
+     gtgtggaaga caggaaccag ggcctgatta accttccctt ctccaggtgg ccaaacagga      1800
+     gaagaagaag aagaagacag gtcgggctaa gcggcggatg cagtacaacc ggcgctttgt      1860
+     caacgttgtg cccacctttg gcaagaagaa gggccccaat gccaactctt aagtcttttg      1920
+     taattctggc tttctctaat aaaaaagcca cttagttcag tcatcgcatt gtttcatctt      1980
+     tacttgcaag gcctcaggga gaggtgtgct tctcgg                                2016
+//
+</pre>
+</td></tr></table><p>
 
 
 
@@ -308,31 +399,27 @@ the reverse complement of the sequence.
         happens in unusual cases - null output, errors etc. 
    -->
 
-The result file 'cds.list' of the example above is:
 
-<p>
-
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: cds.list</h3>
+<table width="90%"><tr><td bgcolor="#DDFFDD">
 <pre>
-em-id:HSFAU1[782:856]
-em-id:HSFAU1[951:1095]
-em-id:HSFAU1[1557:1612]
-em-id:HSFAU1[1787:1912]     
+tembl-id:HSFAU1[782:856]
+tembl-id:HSFAU1[951:1095]
+tembl-id:HSFAU1[1557:1612]
+tembl-id:HSFAU1[1787:1912]
+tembl-id:HSFAU1[1913:1915]
 </pre>
+</td></tr></table><p>
+
 
 
 <p>
 
-This can now be read in by a program such as <b>union</b> by specifying
-the list file as '@cds.list' when <b>union</b> prompts for
-input. 
-
-
-
-
-
-
-
-
+The output list file can now be read in by a program such as
+<b>union</b> by specifying the list file as '@cds.list' when
+<b>union</b> prompts for input. 
 
 
 
@@ -538,7 +625,6 @@ None.
 <tr><td><a href="seqretsplit.html">seqretsplit</a></td><td>Reads and writes (returns) sequences in individual files</td></tr>
 <tr><td><a href="skipseq.html">skipseq</a></td><td>Reads and writes (returns) sequences, skipping the first few</td></tr>
 <tr><td><a href="splitter.html">splitter</a></td><td>Split a sequence into (overlapping) smaller sequences</td></tr>
-<tr><td><a href="swissparse.html">swissparse</a></td><td>Retrieves sequences from swissprot using keyword search</td></tr>
 <tr><td><a href="trimest.html">trimest</a></td><td>Trim poly-A tails off EST sequences</td></tr>
 <tr><td><a href="trimseq.html">trimseq</a></td><td>Trim ambiguous bits off the ends of sequences</td></tr>
 <tr><td><a href="union.html">union</a></td><td>Reads sequence fragments and builds one sequence</td></tr>

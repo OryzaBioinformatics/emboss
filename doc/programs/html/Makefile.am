@@ -1,51 +1,54 @@
-pkgdata_DATA =  abiview0.gif banana0.gif chaos0.gif cirdna.gif cpgplot0.gif \
-               dotmatcher0.gif dottup0.gif emboss_icon.gif findkm0.gif \
-               isochore0.gif lindna.gif octanol0.gif pepinfo1.gif emboss_icon.jpg \
-               pepinfo2.gif pepnet0.gif pepwheel0.gif pepwindow0.gif \
-               pepwindowall0.gif plotorf0.gif polydot0.gif prettyplot3.gif \
-               prettyplot4.gif syco0.gif syco1.gif tmap0.gif topo.gif \
-               wobble0.gif aaindexextract.html abiview.html ajtest.html \
+pkgdata_DATA =  abiview.1.abiview.gif chaos.1.chaos.gif cirdna.1.cirdna.gif \
+               cpgplot.1.cpgplot.gif dan.2.dan.gif \
+               dotmatcher.1.dotmatcher.gif dotpath.1.dotpath.gif \
+               dottup.1.dottup.gif emboss_icon.gif findkm.1.findkm.gif \
+               isochore.1.isochore.gif lindna.1.lindna.gif \
+               octanol.1.octanol.gif pepinfo.1.pepinfo.gif \
+               pepnet.1.pepnet.gif pepwheel.1.pepwheel.gif \
+               pepwindow.1.pepwindow.gif pepwindowall.1.pepwindowall.gif \
+               plotcon.1.plotcon.gif plotorf.1.plotorf.gif \
+               plotorf.2.plotorf.gif polydot.1.polydot.gif \
+               prettyplot.1.prettyplot.gif prettyplot.2.prettyplot.gif \
+               syco.1.syco.gif tmap.1.tmap.gif topo.gif wobble.1.wobble.gif \
+               aaindexextract.html abiview.html \
                alignment_consensus_group.html \
                alignment_differences_group.html \
                alignment_dot_plots_group.html alignment_global_group.html \
                alignment_local_group.html alignment_multiple_group.html \
-               alignwrap.html antigenic.html backtranseq.html banana.html \
-               biosed.html btwisted.html cai.html chaos.html charge.html \
+               antigenic.html backtranseq.html banana.html biosed.html \
+               btwisted.html cai.html chaos.html charge.html \
                checktrans.html chips.html cirdna.html clique.html \
                codcmp.html coderet.html compseq.html cons.html \
                consense.html contacts.html contml.html contrast.html \
                cpgplot.html cpgreport.html cusp.html cutgextract.html \
                cutseq.html dan.html dbiblast.html dbifasta.html \
                dbiflat.html dbigcg.html degapseq.html descseq.html \
-               dichet.html diffseq.html digest.html display_group.html \
-               distmat.html dnacomp.html dnadist.html dnainvar.html \
-               dnaml.html dnamlk.html dnapars.html dnapenny.html \
-               dollop.html dolpenny.html domainer.html dotmatcher.html \
-               dotpath.html dottup.html dreg.html eclique.html \
-               econsense.html econtml.html econtrast.html edit_group.html \
-               ednacomp.html ednadist.html ednainvar.html ednaml.html \
-               ednamlk.html ednapars.html ednapenny.html edollop.html \
-               edolpenny.html efactor.html efitch.html egendist.html \
-               einverted.html ekitsch.html embossdata.html \
-               embossversion.html emix.html emma.html emowse.html \
-               eneighbor.html entret.html enzyme_kinetics_group.html \
-               epenny.html eprimer3.html eprotdist.html eprotpars.html \
-               equicktandem.html erestml.html eseqboot.html est2genome.html \
-               etandem.html extractfeat.html extractseq.html factor.html \
-               feature_tables_group.html findkm.html fitch.html freak.html \
-               funky.html fuzznuc.html fuzzpro.html fuzztran.html \
-               garnier.html geecee.html gendist.html getorf.html \
-               groups.html helixturnhelix.html hetparse.html \
-               histogramtest.html hmmgen.html hmoment.html iep.html \
-               index.html infoalign.html information_group.html \
-               infoseq.html interface.html isochore.html jembossctl.html
-pkgdata2_DATA = kitsch.html lindna.html listor.html marscan.html \
-               maskfeat.html maskseq.html matcher.html megamerger.html \
-               menus_group.html merger.html mix.html msbar.html mse.html \
+               diffseq.html digest.html display_group.html distmat.html \
+               dnacomp.html dnadist.html dnainvar.html dnaml.html \
+               dnamlk.html dnapars.html dnapenny.html dollop.html \
+               dolpenny.html domainer.html dotmatcher.html dotpath.html \
+               dottup.html dreg.html eclique.html econsense.html \
+               econtml.html econtrast.html edit_group.html ednacomp.html \
+               ednadist.html ednainvar.html ednaml.html ednamlk.html \
+               ednapars.html ednapenny.html edollop.html edolpenny.html \
+               efactor.html efitch.html egendist.html einverted.html \
+               ekitsch.html embossdata.html embossversion.html emix.html \
+               emma.html emowse.html eneighbor.html entret.html \
+               enzyme_kinetics_group.html epenny.html eprimer3.html \
+               eprotdist.html eprotpars.html equicktandem.html erestml.html \
+               eseqboot.html est2genome.html etandem.html extractfeat.html \
+               extractseq.html factor.html feature_tables_group.html \
+               findkm.html fitch.html freak.html fuzznuc.html fuzzpro.html \
+               fuzztran.html garnier.html geecee.html gendist.html \
+               getorf.html groups.html helixturnhelix.html hetparse.html \
+               hmmgen.html hmoment.html iep.html index.html infoalign.html \
+               information_group.html infoseq.html interface.html
+pkgdata2_DATA = isochore.html kitsch.html lindna.html listor.html \
+               marscan.html maskfeat.html maskseq.html matcher.html \
+               megamerger.html merger.html mix.html msbar.html mse.html \
                mwcontam.html mwfilter.html needle.html neighbor.html \
                newcpgreport.html newcpgseek.html newseq.html noreturn.html \
-               notseq.html nrscope.html nthseq.html \
-               nucleic_2d_structure_group.html \
+               notseq.html nthseq.html nucleic_2d_structure_group.html \
                nucleic_codon_usage_group.html \
                nucleic_composition_group.html \
                nucleic_cpg_islands_group.html \
@@ -56,37 +59,32 @@ pkgdata2_DATA = kitsch.html lindna.html listor.html marscan.html \
                nucleic_transcription_group.html \
                nucleic_translation_group.html octanol.html oddcomp.html \
                palindrome.html pasteseq.html patmatdb.html \
-               patmatmotifs.html pdbparse.html pdbtosp.html penny.html \
-               pepcoil.html pepinfo.html pepnet.html pepstats.html \
-               pepwheel.html pepwindow.html pepwindowall.html \
-               phylogeny_group.html plotcon.html plotorf.html polydot.html \
-               preg.html prettyplot.html prettyseq.html primersearch.html \
-               printsextract.html profgen.html profit.html prophecy.html \
-               prophet.html prosextract.html protdist.html \
+               patmatmotifs.html penny.html pepcoil.html pepinfo.html \
+               pepnet.html pepstats.html pepwheel.html pepwindow.html \
+               pepwindowall.html pestfind.html phylogeny_group.html \
+               plotcon.html plotorf.html polydot.html preg.html \
+               prettyplot.html prettyseq.html primersearch.html \
+               printsextract.html profit.html prophecy.html prophet.html \
+               prosextract.html protdist.html \
                protein_2d_structure_group.html \
                protein_3d_structure_group.html \
                protein_composition_group.html protein_motifs_group.html \
                protein_mutation_group.html protein_profiles_group.html \
-               protein_structure_group.html pscan.html psiblasts.html \
-               rebaseextract.html recode.html recoder.html redata.html \
+               pscan.html rebaseextract.html recoder.html redata.html \
                remap.html restml.html restover.html restrict.html \
-               revseq.html scopalign.html scope.html scopnr.html \
-               scopparse.html scoprep.html scopreso.html scopseqs.html \
-               seealso.html seqalign.html seqboot.html seqmatchall.html \
-               seqnr.html seqret.html seqretall.html seqretallfeat.html \
-               seqretfeat.html seqretset.html seqretsplit.html \
-               seqsearch.html seqsort.html seqwords.html showalign.html \
+               revseq.html scope.html seealso.html seqboot.html \
+               seqmatchall.html seqret.html seqretsplit.html showalign.html \
                showdb.html showfeat.html showorf.html showseq.html \
-               shuffleseq.html sigcleave.html siggen.html sigscan.html \
-               silent.html skipseq.html splitter.html stamps.html \
-               stretcher.html stssearch.html supermatcher.html \
-               swissparse.html syco.html test_group.html textsearch.html \
+               shuffleseq.html sigcleave.html silent.html sirna.html \
+               sixpack.html skipseq.html splitter.html stretcher.html \
+               stssearch.html supermatcher.html syco.html textsearch.html \
                tfextract.html tfm.html tfscan.html tmap.html topo.html \
                tranalign.html transeq.html trimest.html trimseq.html \
-               union.html utils_database_creation_group.html \
+               twofeat.html union.html utils_database_creation_group.html \
                utils_database_indexing_group.html utils_misc_group.html \
                vectorstrip.html water.html whichdb.html wobble.html \
-               wordcount.html wordmatch.html wossname.html yank.html
+               wordcount.html wordmatch.html wossname.html yank.html \
+               emboss_icon.jpg
 
 pkgdatadir=$(prefix)/share/$(PACKAGE)/doc/programs/html
 pkgdata2dir=$(prefix)/share/$(PACKAGE)/doc/programs/html

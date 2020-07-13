@@ -19,13 +19,19 @@ Description
    
 Usage
 
-   Here is a sample session with abiview:
+   Here is a sample session with abiview
+   
 
-% abiview
-Name of the ABI trace file: ba16d2.s1
-Output sequence [outfile.fasta]:
-Graph type [x11]:
+% abiview -graph cps 
+Reads ABI file and display the trace
+Input file: ../../data/abiview.abi
+Output sequence [abiview.fasta]: 
 
+Created abiview.ps
+   
+   Go to the input files for this example
+   Go to the output files for this example
+   
 Command line arguments
 
    Mandatory qualifiers:
@@ -67,23 +73,58 @@ Command line arguments
    -endbase Last sequence base to report or display. If the default is
    set to zero then the value of this is taken as the maximum number of
    bases. Any integer value 0
-   -yticks Display y-axis ticks Yes/No No
-   -[no]sequence Display the sequence on the graph Yes/No Yes
+   -yticks Display y-axis ticks Boolean value Yes/No No
+   -[no]sequence Display the sequence on the graph Boolean value Yes/No
+   Yes
    -window Sequence display window size Any integer value 40
    -bases Base graphs to be displayed Any string is accepted GATC
    Advanced qualifiers Allowed values Default
-   -separate Separate the trace graphs for the 4 bases Yes/No No
+   -separate Separate the trace graphs for the 4 bases Boolean value
+   Yes/No No
    
 Input file format
 
    This reads in a standard ABI trace file.
    
+  Input files for usage example
+  
+  File: ../../data/abiview.abi
+  
+   This file contains non-printing characters and so cannot be displayed
+   here.
+   
+  File: ../../data/abiview.abi
+  
+   This file contains non-printing characters and so cannot be displayed
+   here.
+   
 Output file format
 
    It outputs a file holding a normal nucleotide sequence.
    
-   It outputs a graphical image of the traces.
-   The graphical output from the above example is here.
+  Output files for usage example
+  
+  File: abiview.fasta
+  
+>../../data/abiview.abi
+GNNNNNNNNNGNGNNGGGGTTTNANNNTNNNAGAACCCCCCTTNGAAAANNNCCACCCCA
+NNATAGTNGTANGAATAGTNCCCAGGCCANGCCTATCTGTGATGATTACATAGGCTAACA
+CATGACAAACATTTAAAAACACTAAACAATTGTTATTTATTCTTTGTTCCTATAAACCAC
+ACCCATTAAGCCCTTACTATATATAAGAGTTTTCAAGCCAAGAACCTGCTGCTTGGGAGG
+CTGATGCAGGAGAATTGCCAAGTACAAACCCTGCCTGGACTGTAAAGTGAAACCAAGGCT
+AGTTGTCTCACAATAAAAGATGAAGGGCAAGTGGGATCAATGCATAAAGGAGCTTGTGCC
+CAAGCCTGTTAGCCTTAGTTCAATTCCTGAGTACCATGAAAAGGTAGAAGGAGAGAAATG
+ATTTGGTACAATTTTTCTCTGTGCTGTGACACAGTACCACCCTCCTACTAATAACAAATA
+AAATAATGTTTAAAACAAAATAAAATAAAAATGGACTGGGATGTAGCACAATGGTAGGGT
+ACTTGCATAGCATGTACAAGGACCTGATTTCAATCCCCTGTGATAAAAGAAAATAAGGAA
+GGGAGGAAGCGTTAGGAGGAAAAATGGAATACAGAAGACACAGTGCATGGGAAGGATATG
+TATGTTATGAACACCAGAAATTCACTTGAAAATGAGTAAAATTTTTTTATTATTATATCA
+TTATTATTGGGGGGGATGTGGGCGGGGCTTGCAGAGGTATCTTTTAGAGGANGATCATTT
+TCCGGTTGTTGAGCAGGGCTCTGTTATGTAGGATATCTCAGANTAACAGACCCCAGGT
+   
+  Graphics File: abiview.ps
+  
+   [abiview results]
    
    The horizontal scale of the output image labelled 'Residue Position'
    is only a very approximate indication of the spacing of residues in
@@ -135,6 +176,7 @@ See also
    showdb Displays information on the currently available databases
    showfeat Show features of a sequence
    showseq Display a sequence with features, translation etc
+   sixpack Display a DNA sequence with 6-frame translation and ORFs
    textsearch Search sequence documentation text. SRS and Entrez are
    faster!
    

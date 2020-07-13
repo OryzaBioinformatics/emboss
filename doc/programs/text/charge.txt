@@ -15,12 +15,16 @@ Description
    
 Usage
 
-   Here is a sample session with charge:
+   Here is a sample session with charge
    
-% charge sw:hbb_human
-Protein charge plot
-Output file [hbb_human.charge]:
 
+% charge tsw:hbb_human 
+Protein charge plot
+Output file [hbb_human.charge]: 
+   
+   Go to the input files for this example
+   Go to the output files for this example
+   
 Command line arguments
 
    Mandatory qualifiers (* if not always prompted):
@@ -54,11 +58,124 @@ Command line arguments
    Advanced qualifiers Allowed values Default
    -aadata Amino acid property data file name Any string is accepted
    Eamino.dat
-   -plot Produce graphic Yes/No No
+   -plot Produce graphic Boolean value Yes/No No
    
 Input file format
 
    charge reads in a protein sequence.
+   
+  Input files for usage example
+  
+   'tsw:hbb_human' is a sequence entry in the example protein database
+   'tsw'
+   
+  Database entry: tsw:hbb_human
+  
+ID   HBB_HUMAN      STANDARD;      PRT;   146 AA.
+AC   P02023;
+DT   21-JUL-1986 (Rel. 01, Created)
+DT   21-JUL-1986 (Rel. 01, Last sequence update)
+DT   15-JUL-1999 (Rel. 38, Last annotation update)
+DE   HEMOGLOBIN BETA CHAIN.
+GN   HBB.
+OS   Homo sapiens (Human), Pan troglodytes (Chimpanzee), and
+OS   Pan paniscus (Pygmy chimpanzee) (Bonobo).
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Mammalia;
+OC   Eutheria; Primates; Catarrhini; Hominidae; Homo.
+RN   [1]
+RP   SEQUENCE.
+RC   SPECIES=HUMAN;
+RA   BRAUNITZER G., GEHRING-MULLER R., HILSCHMANN N., HILSE K., HOBOM G.,
+RA   RUDLOFF V., WITTMANN-LIEBOLD B.;
+RT   "The constitution of normal adult human haemoglobin.";
+RL   Hoppe-Seyler's Z. Physiol. Chem. 325:283-286(1961).
+RN   [2]
+RP   SEQUENCE FROM N.A.
+RC   SPECIES=HUMAN;
+RX   MEDLINE; 81064667.
+RA   LAWN R.M., EFSTRATIADIS A., O'CONNELL C., MANIATIS T.;
+RT   "The nucleotide sequence of the human beta-globin gene.";
+RL   Cell 21:647-651(1980).
+RN   [3]
+RP   SEQUENCE OF 121-146 FROM N.A.
+RC   SPECIES=HUMAN;
+RX   MEDLINE; 85205333.
+RA   LANG K.M., SPRITZ R.A.;
+RT   "Cloning specific complete polyadenylylated 3'-terminal cDNA
+RT   segments.";
+RL   Gene 33:191-196(1985).
+RN   [4]
+RP   X-RAY CRYSTALLOGRAPHY (2.5 ANGSTROMS) OF DEOXYHEMOGLOBIN.
+RC   SPECIES=HUMAN;
+RX   MEDLINE; 76027820.
+RA   FERMI G.;
+RT   "Three-dimensional fourier synthesis of human deoxyhaemoglobin at
+RT   2.5-A resolution: refinement of the atomic model.";
+RL   J. Mol. Biol. 97:237-256(1975).
+RN   [5]
+RP   SEQUENCE.
+RC   SPECIES=P.TROGLODYTES;
+RX   MEDLINE; 66071496.
+RA   RIFKIN D.B., KONIGSBERG W.;
+RT   "The characterization of the tryptic peptides from the hemoglobin of
+RT   the chimpanzee (Pan troglodytes).";
+RL   Biochim. Biophys. Acta 104:457-461(1965).
+RN   [6]
+
+
+  [Part of this file has been deleted for brevity]
+
+FT   VARIANT     140    140       A -> T (IN ST JACQUES: O2 AFFINITY UP).
+FT                                /FTId=VAR_003081.
+FT   VARIANT     140    140       A -> V (IN PUTTELANGE; POLYCYTHEMIA;
+FT                                O2 AFFINITY UP).
+FT                                /FTId=VAR_003082.
+FT   VARIANT     141    141       L -> R (IN OLMSTED; UNSTABLE).
+FT                                /FTId=VAR_003083.
+FT   VARIANT     142    142       A -> D (IN OHIO; O2 AFFINITY UP).
+FT                                /FTId=VAR_003084.
+FT   VARIANT     143    143       H -> D (IN RANCHO MIRAGE).
+FT                                /FTId=VAR_003085.
+FT   VARIANT     143    143       H -> Q (IN LITTLE ROCK; O2 AFFINITY UP).
+FT                                /FTId=VAR_003086.
+FT   VARIANT     143    143       H -> P (IN SYRACUSE; O2 AFFINITY UP).
+FT                                /FTId=VAR_003087.
+FT   VARIANT     143    143       H -> R (IN ABRUZZO; O2 AFFINITY UP).
+FT                                /FTId=VAR_003088.
+FT   VARIANT     144    144       K -> E (IN MITO; O2 AFFINITY UP).
+FT                                /FTId=VAR_003089.
+FT   VARIANT     145    145       Y -> C (IN RAINIER; O2 AFFINITY UP).
+FT                                /FTId=VAR_003090.
+FT   VARIANT     145    145       Y -> H (IN BETHESDA; O2 AFFINITY UP).
+FT                                /FTId=VAR_003091.
+FT   VARIANT     146    146       H -> D (IN HIROSHIMA; O2 AFFINITY UP).
+FT                                /FTId=VAR_003092.
+FT   VARIANT     146    146       H -> L (IN COWTOWN; O2 AFFINITY UP).
+FT                                /FTId=VAR_003093.
+FT   VARIANT     146    146       H -> P (IN YORK; O2 AFFINITY UP).
+FT                                /FTId=VAR_003094.
+FT   VARIANT     146    146       H -> Q (IN KODAIRA; O2 AFFINITY UP).
+FT                                /FTId=VAR_003095.
+FT   HELIX         5     15
+FT   TURN         16     17
+FT   HELIX        20     34
+FT   HELIX        36     41
+FT   HELIX        43     45
+FT   HELIX        51     55
+FT   TURN         56     56
+FT   HELIX        58     75
+FT   TURN         76     77
+FT   HELIX        78     94
+FT   TURN         95     96
+FT   TURN        100    100
+FT   HELIX       101    121
+FT   HELIX       124    142
+FT   TURN        143    144
+SQ   SEQUENCE   146 AA;  15867 MW;  EC9744C9 CRC32;
+     VHLTPEEKSA VTALWGKVNV DEVGGEALGR LLVVYPWTQR FFESFGDLST PDAVMGNPKV
+     KAHGKKVLGA FSDGLAHLDN LKGTFATLSE LHCDKLHVDP ENFRLLGNVL VCVLAHHFGK
+     EFTPPVQAAY QKVVAGVANA LAHKYH
+//
    
 Output file format
 
@@ -68,13 +185,14 @@ Output file format
    sequence.
    
    The output file contains two columns separated by space or TAB
-   characters. The first column is the position of teh start of the
+   characters. The first column is the position of the start of the
    window. The second column is the charge of the amino acids within that
    window.
    
-   The output of the example above is as follows:
-     _________________________________________________________________
-   
+  Output files for usage example
+  
+  File: hbb_human.charge
+  
 CHARGE of HBB_HUMAN from 1 to 146: window 5
 
 Position        Charge
@@ -125,50 +243,10 @@ Position        Charge
 45              -0.200
 46              -0.200
 47              -0.200
-48              -0.200
-49              -0.200
-50              -0.200
-51              -0.200
-52              -0.200
-53              0.000
-54              0.000
-55              0.200
-56              0.200
-57              0.400
-58              0.400
-59              0.500
-60              0.300
-61              0.500
-62              0.500
-63              0.500
-64              0.400
-65              0.400
-66              0.200
-67              0.000
-68              0.000
-69              -0.200
-70              -0.200
-71              -0.200
-72              -0.200
-73              -0.100
-74              0.100
-75              -0.100
-76              -0.100
-77              -0.100
-78              0.000
-79              0.000
-80              0.200
-81              0.200
-82              0.200
-83              0.000
-84              0.000
-85              0.000
-86              -0.200
-87              -0.200
-88              -0.100
-89              -0.100
-90              -0.300
-91              0.100
+
+
+  [Part of this file has been deleted for brevity]
+
 92              0.100
 93              0.100
 94              0.100
@@ -220,7 +298,6 @@ Position        Charge
 140             0.300
 141             0.300
 142             0.400
-     _________________________________________________________________
    
 Data files
 
@@ -278,20 +355,19 @@ Known bugs
    
 See also
 
-   Program name Description
-   backtranseq Back translate a protein sequence
-   checktrans Reports STOP codons and ORF statistics of a protein
-   sequence
-   compseq Counts the composition of dimer/trimer/etc words in a sequence
-   emowse Protein identification by mass spectrometry
-   freak Residue/base frequency table or plot
-   iep Calculates the isoelectric point of a protein
-   mwcontam Shows molwts that match across a set of files
-   mwfilter Filter noisy molwts from mass spec output
-   octanol Displays protein hydropathy
-   pepinfo Plots simple amino acid properties in parallel
-   pepstats Protein statistics
-   pepwindow Displays protein hydropathy
+   Program name                          Description
+   backtranseq  Back translate a protein sequence
+   checktrans   Reports STOP codons and ORF statistics of a protein
+   compseq      Counts the composition of dimer/trimer/etc words in a sequence
+   emowse       Protein identification by mass spectrometry
+   freak        Residue/base frequency table or plot
+   iep          Calculates the isoelectric point of a protein
+   mwcontam     Shows molwts that match across a set of files
+   mwfilter     Filter noisy molwts from mass spec output
+   octanol      Displays protein hydropathy
+   pepinfo      Plots simple amino acid properties in parallel
+   pepstats     Protein statistics
+   pepwindow    Displays protein hydropathy
    pepwindowall Displays protein hydropathy of a set of sequences
    
 Author(s)

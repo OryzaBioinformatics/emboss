@@ -91,16 +91,20 @@ medium.
 </H2>
 
 
-Here is a sample session with pepstats.
-
+<b>Here is a sample session with pepstats</b>
 <p>
 
-<pre>
-% pepstats
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>pepstats </b>
 Protein statistics
-Input sequence: sw:laci_ecoli
-Output file [laci_ecoli.pepstats]:
-</pre>
+Input sequence: <b>tsw:laci_ecoli</b>
+Output file [laci_ecoli.pepstats]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
 
 
 
@@ -176,7 +180,7 @@ IT IS DONE FOR YOU.
 <tr>
 <td>-[no]termini</td>
 <td>Include charge at N and C terminus</td>
-<td>Yes/No</td>
+<td>Boolean value Yes/No</td>
 <td>Yes</td>
 </tr>
 
@@ -195,7 +199,126 @@ IT IS DONE FOR YOU.
     Input file format
 </H2>
 
-Normal protein sequence USA.
+<b>pepstats</b> reads a normal protein sequence USA.
+
+<p>
+
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+
+'tsw:laci_ecoli' is a sequence entry in the example protein database 'tsw'
+<p>
+<p><h3>Database entry: tsw:laci_ecoli</h3>
+<table width="90%"><tr><td bgcolor="#FFDDFF">
+<pre>
+ID   LACI_ECOLI     STANDARD;      PRT;   360 AA.
+AC   P03023; P71309; Q47338; O09196;
+DT   21-JUL-1986 (Rel. 01, Created)
+DT   01-NOV-1997 (Rel. 35, Last sequence update)
+DT   15-DEC-1998 (Rel. 37, Last annotation update)
+DE   LACTOSE OPERON REPRESSOR.
+GN   LACI.
+OS   Escherichia coli.
+OC   Bacteria; Proteobacteria; gamma subdivision; Enterobacteriaceae;
+OC   Escherichia.
+RN   [1]
+RP   SEQUENCE FROM N.A.
+RX   MEDLINE; 78246991.
+RA   FARABAUGH P.J.;
+RT   "Sequence of the lacI gene.";
+RL   Nature 274:765-769(1978).
+RN   [2]
+RP   SEQUENCE FROM N.A.
+RC   STRAIN=K12 / MG1655;
+RX   MEDLINE; 97426617.
+RA   BLATTNER F.R., PLUNKETT G. III, BLOCH C.A., PERNA N.T., BURLAND V.,
+RA   RILEY M., COLLADO-VIDES J., GLASNER F.D., RODE C.K., MAYHEW G.F.,
+RA   GREGOR J., DAVIS N.W., KIRKPATRICK H.A., GOEDEN M.A., ROSE D.J.,
+RA   MAU B., SHAO Y.;
+RT   "The complete genome sequence of Escherichia coli K-12.";
+RL   Science 277:1453-1474(1997).
+RN   [3]
+RP   SEQUENCE FROM N.A.
+RC   STRAIN=K12 / MG1655;
+RA   DUNCAN M., ALLEN E., ARAUJO R., APARICIO A.M., CHUNG E., DAVIS K.,
+RA   FEDERSPIEL N., HYMAN R., KALMAN S., KOMP C., KURDI O., LEW H.,
+RA   LIN D., NAMATH A., OEFNER P., ROBERTS D., SCHRAMM S., DAVIS R.W.;
+RL   Submitted (NOV-1996) to the EMBL/GenBank/DDBJ databases.
+RN   [4]
+RP   SEQUENCE FROM N.A.
+RA   CHEN J., MATTHEWS K.K.S.M.;
+RL   Submitted (MAY-1991) to the EMBL/GenBank/DDBJ databases.
+RN   [5]
+RP   SEQUENCE FROM N.A.
+RA   MARSH S.;
+RL   Submitted (JAN-1997) to the EMBL/GenBank/DDBJ databases.
+RN   [6]
+RP   SEQUENCE OF 1-147; 159-230 AND 233-360.
+RX   MEDLINE; 76091932.
+RA   BEYREUTHER K., ADLER K., FANNING E., MURRAY C., KLEMM A., GEISLER N.;
+RT   "Amino-acid sequence of lac repressor from Escherichia coli.
+RT   Isolation, sequence analysis and sequence assembly of tryptic
+RT   peptides and cyanogen-bromide fragments.";
+RL   Eur. J. Biochem. 59:491-509(1975).
+RN   [7]
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+CC   between  the Swiss Institute of Bioinformatics  and the  EMBL outstation -
+CC   the European Bioinformatics Institute.  There are no  restrictions on  its
+CC   use  by  non-profit  institutions as long  as its content  is  in  no  way
+CC   modified and this statement is not removed.  Usage  by  and for commercial
+CC   entities requires a license agreement (See http://www.isb-sib.ch/announce/
+CC   or send an email to license@isb-sib.ch).
+CC   --------------------------------------------------------------------------
+DR   EMBL; V00294; CAA23569.1; -.
+DR   EMBL; J01636; AAA24052.1; -.
+DR   EMBL; AE000141; AAC73448.1; -.
+DR   EMBL; U73857; AAB18069.1; ALT_INIT.
+DR   EMBL; X58469; CAA41383.1; -.
+DR   EMBL; U86347; AAB47270.1; ALT_INIT.
+DR   EMBL; U72488; AAB36549.1; -.
+DR   EMBL; U78872; AAB37348.1; -.
+DR   EMBL; U78873; AAB37351.1; -.
+DR   EMBL; U78874; AAB37354.1; -.
+DR   PIR; A03558; RPECL.
+DR   PIR; S02540; S02540.
+DR   PDB; 1LCC; 31-JAN-94.
+DR   PDB; 1LCD; 31-JAN-94.
+DR   PDB; 1LTP; 31-OCT-93.
+DR   PDB; 1TLF; 31-JUL-95.
+DR   PDB; 1LBG; 11-JUL-96.
+DR   PDB; 1LBH; 11-JUL-96.
+DR   PDB; 1LBI; 11-JUL-96.
+DR   PDB; 1LQC; 12-FEB-97.
+DR   ECO2DBASE; H039.0; 6TH EDITION.
+DR   ECOGENE; EG10525; LACI.
+DR   PFAM; PF00356; lacI; 1.
+DR   PFAM; PF00532; Peripla_BP_like; 1.
+DR   PROSITE; PS00356; HTH_LACI_FAMILY; 1.
+KW   Transcription regulation; DNA-binding; Repressor; 3D-structure.
+FT   DNA_BIND      6     25       H-T-H MOTIF.
+FT   MUTAGEN      17     17       Y-&gt;H: BROADENING OF SPECIFICITY.
+FT   MUTAGEN      22     22       R-&gt;N: RECOGNIZE AN OPERATOR VARIANT.
+FT   VARIANT     282    282       Y -&gt; D (IN T41 MUTANT).
+FT   CONFLICT    286    286       S -&gt; L (IN AAA24052, REF. 2, 4 AND 5).
+FT   HELIX         6     13
+FT   TURN         14     14
+FT   HELIX        17     24
+FT   HELIX        32     44
+FT   TURN         49     50
+SQ   SEQUENCE   360 AA;  38564 MW;  4CA5A1D6 CRC32;
+     MKPVTLYDVA EYAGVSYQTV SRVVNQASHV SAKTREKVEA AMAELNYIPN RVAQQLAGKQ
+     SLLIGVATSS LALHAPSQIV AAIKSRADQL GASVVVSMVE RSGVEACKAA VHNLLAQRVS
+     GLIINYPLDD QDAIAVEAAC TNVPALFLDV SDQTPINSII FSHEDGTRLG VEHLVALGHQ
+     QIALLAGPLS SVSARLRLAG WHKYLTRNQI QPIAEREGDW SAMSGFQQTM QMLNEGIVPT
+     AMLVANDQMA LGAMRAITES GLRVGADISV VGYDDTEDSS CYIPPSTTIK QDFRLLGQTS
+     VDRLLQLSQG QAVKGNQLLP VSLVKRKTTL APNTQTASPR ALADSLMQLA RQVSRLESGQ
+//
+</pre>
+</td></tr></table><p>
 
 
 <H2>
@@ -203,56 +326,58 @@ Normal protein sequence USA.
 </H2>
 
 
-Here is the output from the example run:
 
-<p>
-
-<hr>
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: laci_ecoli.pepstats</h3>
+<table width="90%"><tr><td bgcolor="#DDFFDD">
 <pre>
 PEPSTATS of LACI_ECOLI from 1 to 360
 
-Molecular weight = 38563.97             Residues = 360
-Average Residue Weight  = 107.122       Charge   = 1.5
+Molecular weight = 38563.97  		Residues = 360   
+Average Residue Weight  = 107.122 	Charge   = 1.5   
 Isoelectric Point = 6.8820
 Improbability of expression in inclusion bodies = 0.670
 
-Residue         Number          Mole%           DayhoffStat
-A = Ala         44              12.222          1.421
-B = Asx         0               0.000           0.000
-C = Cys         3               0.833           0.287
-D = Asp         17              4.722           0.859
-E = Glu         15              4.167           0.694
-F = Phe         4               1.111           0.309
-G = Gly         22              6.111           0.728
-H = His         7               1.944           0.972
-I = Ile         18              5.000           1.111
-K = Lys         11              3.056           0.463
-L = Leu         40              11.111          1.502
-M = Met         10              2.778           1.634
-N = Asn         12              3.333           0.775
-P = Pro         14              3.889           0.748
-Q = Gln         28              7.778           1.994
-R = Arg         19              5.278           1.077
-S = Ser         33              9.167           1.310
-T = Thr         19              5.278           0.865
-V = Val         34              9.444           1.431
-W = Trp         2               0.556           0.427
-X = Xaa         0               0.000           0.000
-Y = Tyr         8               2.222           0.654
-Z = Glx         0               0.000           0.000
+Residue		Number		Mole%		DayhoffStat
+A = Ala		44		12.222 		1.421  	
+B = Asx		0		0.000  		0.000  	
+C = Cys		3		0.833  		0.287  	
+D = Asp		17		4.722  		0.859  	
+E = Glu		15		4.167  		0.694  	
+F = Phe		4		1.111  		0.309  	
+G = Gly		22		6.111  		0.728  	
+H = His		7		1.944  		0.972  	
+I = Ile		18		5.000  		1.111  	
+K = Lys		11		3.056  		0.463  	
+L = Leu		40		11.111 		1.502  	
+M = Met		10		2.778  		1.634  	
+N = Asn		12		3.333  		0.775  	
+P = Pro		14		3.889  		0.748  	
+Q = Gln		28		7.778  		1.994  	
+R = Arg		19		5.278  		1.077  	
+S = Ser		33		9.167  		1.310  	
+T = Thr		19		5.278  		0.865  	
+V = Val		34		9.444  		1.431  	
+W = Trp		2		0.556  		0.427  	
+X = Xaa		0		0.000  		0.000  	
+Y = Tyr		8		2.222  		0.654  	
+Z = Glx		0		0.000  		0.000  	
 
-Property        Residues                Number          Mole%
-Tiny            (A+C+G+S+T)             121             33.611
-Small           (A+B+C+D+G+N+P+S+T+V)   198             55.000
-Aliphatic       (I+L+V)                 92              25.556
-Aromatic        (F+H+W+Y)               21               5.833
-Non-polar       (A+C+F+G+I+L+M+P+V+W+Y) 199             55.278
-Polar           (D+E+H+K+N+Q+R+S+T+Z)   161             44.722
-Charged         (B+D+E+H+K+R+Z)         69              19.167
-Basic           (H+K+R)                 37              10.278
-Acidic          (B+D+E+Z)               32               8.889   
+Property	Residues		Number		Mole%
+Tiny		(A+C+G+S+T)		121		33.611
+Small		(A+B+C+D+G+N+P+S+T+V)	198		55.000
+Aliphatic	(I+L+V)			92		25.556
+Aromatic	(F+H+W+Y)		21		 5.833
+Non-polar	(A+C+F+G+I+L+M+P+V+W+Y)	199		55.278
+Polar		(D+E+H+K+N+Q+R+S+T+Z)	161		44.722
+Charged		(B+D+E+H+K+R+Z)		69		19.167
+Basic		(H+K+R)			37		10.278
+Acidic		(B+D+E+Z)		32		 8.889
 </pre>
-<hr>
+</td></tr></table><p>
+
+
 
 <H2>
     Data files
@@ -334,7 +459,7 @@ None.
 <tr><th>Program name</th><th>Description</th></tr>
 <tr><td><a href="backtranseq.html">backtranseq</a></td><td>Back translate a protein sequence</td></tr>
 <tr><td><a href="charge.html">charge</a></td><td>Protein charge plot</td></tr>
-<tr><td><a href="checktrans.html">checktrans</a></td><td>Reports STOP codons and ORF statistics of a protein sequence</td></tr>
+<tr><td><a href="checktrans.html">checktrans</a></td><td>Reports STOP codons and ORF statistics of a protein</td></tr>
 <tr><td><a href="compseq.html">compseq</a></td><td>Counts the composition of dimer/trimer/etc words in a sequence</td></tr>
 <tr><td><a href="emowse.html">emowse</a></td><td>Protein identification by mass spectrometry</td></tr>
 <tr><td><a href="freak.html">freak</a></td><td>Residue/base frequency table or plot</td></tr>

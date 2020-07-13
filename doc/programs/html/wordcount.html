@@ -58,14 +58,19 @@ times it occurs.
 </H2>
 
 
-Here is a sample session with wordcount.
+<b>Here is a sample session with wordcount</b>
 <p>
 
-<pre>
-% wordcount embl:rnu68037 -wordsize=3
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>wordcount tembl:rnu68037 -wordsize=3 </b>
 Counts words of a specified size in a DNA sequence
-Output file [rnu68037.wordcount]:
-</pre>
+Output file [rnu68037.wordcount]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
 
 
 
@@ -156,90 +161,187 @@ IT IS DONE FOR YOU.
 </H2>
 
 
-Any sequence USA.
+<b>wordcount</b> reads any sequence USA.
+
+<p>
+
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+
+'tembl:rnu68037' is a sequence entry in the example nucleic acid database 'tembl'
+<p>
+<p><h3>Database entry: tembl:rnu68037</h3>
+<table width="90%"><tr><td bgcolor="#FFDDFF">
+<pre>
+ID   RNU68037   standard; RNA; ROD; 1218 BP.
+XX
+AC   U68037;
+XX
+SV   U68037.1
+XX
+DT   23-SEP-1996 (Rel. 49, Created)
+DT   04-MAR-2000 (Rel. 63, Last updated, Version 2)
+XX
+DE   Rattus norvegicus EP1 prostanoid receptor mRNA, complete cds.
+XX
+KW   .
+XX
+OS   Rattus norvegicus (Norway rat)
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia;
+OC   Eutheria; Rodentia; Sciurognathi; Muridae; Murinae; Rattus.
+XX
+RN   [1]
+RP   1-1218
+RA   Abramovitz M., Boie Y.;
+RT   "Cloning of the rat EP1 prostanoid receptor";
+RL   Unpublished.
+XX
+RN   [2]
+RP   1-1218
+RA   Abramovitz M., Boie Y.;
+RT   ;
+RL   Submitted (26-AUG-1996) to the EMBL/GenBank/DDBJ databases.
+RL   Biochemistry &amp; Molecular Biology, Merck Frosst Center for Therapeutic
+RL   Research, P. O. Box 1005, Pointe Claire - Dorval, Quebec H9R 4P8, Canada
+XX
+DR   SWISS-PROT; P70597; PE21_RAT.
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..1218
+FT                   /db_xref="taxon:10116"
+FT                   /organism="Rattus norvegicus"
+FT                   /strain="Sprague-Dawley"
+FT   CDS             1..1218
+FT                   /codon_start=1
+FT                   /db_xref="SWISS-PROT:P70597"
+FT                   /note="family 1 G-protein coupled receptor"
+FT                   /product="EP1 prostanoid receptor"
+FT                   /protein_id="AAB07735.1"
+FT                   /translation="MSPYGLNLSLVDEATTCVTPRVPNTSVVLPTGGNGTSPALPIFSM
+FT                   TLGAVSNVLALALLAQVAGRLRRRRSTATFLLFVASLLAIDLAGHVIPGALVLRLYTAG
+FT                   RAPAGGACHFLGGCMVFFGLCPLLLGCGMAVERCVGVTQPLIHAARVSVARARLALALL
+FT                   AAMALAVALLPLVHVGHYELQYPGTWCFISLGPPGGWRQALLAGLFAGLGLAALLAALV
+FT                   CNTLSGLALLRARWRRRRSRRFRENAGPDDRRRWGSRGLRLASASSASSITSTTAALRS
+FT                   SRGGGSARRVHAHDVEMVGQLVGIMVVSCICWSPLLVLVVLAIGGWNSNSLQRPLFLAV
+FT                   RLASWNQILDPWVYILLRQAMLRQLLRLLPLRVSAKGGPTELSLTKSAWEASSLRSSRH
+FT                   SGFSHL"
+XX
+SQ   Sequence 1218 BP; 162 A; 397 C; 387 G; 272 T; 0 other;
+     atgagcccct acgggcttaa cctgagccta gtggatgagg caacaacgtg tgtaacaccc        60
+     agggtcccca atacatctgt ggtgctgcca acaggcggta acggcacatc accagcgctg       120
+     cctatcttct ccatgacgct gggtgctgtg tccaacgtgc tggcgctggc gctgctggcc       180
+     caggttgcag gcagactgcg gcgccgccgc tcgactgcca ccttcctgtt gttcgtcgcc       240
+     agcctgcttg ccatcgacct agcaggccat gtgatcccgg gcgccttggt gcttcgcctg       300
+     tatactgcag gacgtgcgcc cgctggcggg gcctgtcatt tcctgggcgg ctgtatggtc       360
+     ttctttggcc tgtgcccact tttgcttggc tgtggcatgg ccgtggagcg ctgcgtgggt       420
+     gtcacgcagc cgctgatcca cgcggcgcgc gtgtccgtag cccgcgcacg cctggcacta       480
+     gccctgctgg ccgccatggc tttggcagtg gcgctgctgc cactagtgca cgtgggtcac       540
+     tacgagctac agtaccctgg cacttggtgt ttcattagcc ttgggcctcc tggaggttgg       600
+     cgccaggcgt tgcttgcggg cctcttcgcc ggccttggcc tggctgcgct ccttgccgca       660
+     ctagtgtgta atacgctcag cggcctggcg ctccttcgtg cccgctggag gcggcgtcgc       720
+     tctcgacgtt tccgagagaa cgcaggtccc gatgatcgcc ggcgctgggg gtcccgtgga       780
+     ctccgcttgg cctccgcctc gtctgcgtca tccatcactt caaccacagc tgccctccgc       840
+     agctctcggg gaggcggctc cgcgcgcagg gttcacgcac acgacgtgga aatggtgggc       900
+     cagctcgtgg gcatcatggt ggtgtcgtgc atctgctgga gccccctgct ggtattggtg       960
+     gtgttggcca tcgggggctg gaactctaac tccctgcagc ggccgctctt tctggctgta      1020
+     cgcctcgcgt cgtggaacca gatcctggac ccatgggtgt acatcctgct gcgccaggct      1080
+     atgctgcgcc aacttcttcg cctcctaccc ctgagggtta gtgccaaggg tggtccaacg      1140
+     gagctgagcc taaccaagag tgcctgggag gccagttcac tgcgtagctc ccggcacagt      1200
+     ggcttcagcc acttgtga                                                    1218
+//
+</pre>
+</td></tr></table><p>
+
 
 <H2>
     Output file format
 </H2>
 
-The output sequence produced in the above example is:
-<p>
 
-<hr>
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: rnu68037.wordcount</h3>
+<table width="90%"><tr><td bgcolor="#DDFFDD">
 <pre>
-ctg     54
-tgg     53
-gcc     53
-ggc     51
-cgc     47
-gct     47
-gtg     40
-tgc     39
-cct     38
-gcg     36
-cca     29
-ggg     26
-cag     25
-ctt     25
-tcc     25
-ggt     24
-ccc     24
-ctc     23
-tgt     23
-gca     22
-cgt     22
-ccg     22
-cac     22
-agc     21
-acg     19
-ttg     19
-cgg     19
-tcg     18
-ttc     17
-cat     17
-agg     17
-act     16
-gtc     16
-gag     16
-aac     15
-gga     14
-atc     14
-tct     14
-tca     13
-cta     13
-atg     12
-gtt     11
-acc     11
-gta     11
-aca     10
-tac     10
-tga     10
-caa     10
-gac     9
-agt     9
-tag     9
-ttt     8
-cga     7
-gat     6
-taa     6
-tat     5
-aga     5
-gaa     4
-aat     3
-ata     3
-tta     3
-att     3
-aag     2
-aaa     1
+ctg	54
+tgg	53
+gcc	53
+ggc	51
+cgc	47
+gct	47
+gtg	40
+tgc	39
+cct	38
+gcg	36
+cca	29
+ggg	26
+cag	25
+ctt	25
+tcc	25
+ggt	24
+ccc	24
+ctc	23
+tgt	23
+gca	22
+cgt	22
+ccg	22
+cac	22
+agc	21
+acg	19
+ttg	19
+cgg	19
+tcg	18
+ttc	17
+cat	17
+agg	17
+act	16
+gtc	16
+gag	16
+aac	15
+gga	14
+atc	14
+tct	14
+tca	13
+cta	13
+atg	12
+gtt	11
+acc	11
+gta	11
+aca	10
+tac	10
+tga	10
+caa	10
+gac	9
+agt	9
+tag	9
+ttt	8
+cga	7
+gat	6
+taa	6
+tat	5
+aga	5
+gaa	4
+aat	3
+ata	3
+tta	3
+att	3
+aag	2
+aaa	1
 </pre>
-<hr>
+</td></tr></table><p>
+
+
 <p>
 
 The file simply consists of two columns, separated by spaces or TAB characters.
+
 <p>
 
-The first column consists of all the possible words of size <b>wordsize</b>.  The second column consists of
-the count of those words in the input sequence. 
+The first column consists of all the possible words of size
+<b>wordsize</b>.  The second column consists of the count of those words
+in the input sequence. 
 
 <H2>
     Data files
@@ -303,6 +405,7 @@ None.
 <tr><td><a href="dan.html">dan</a></td><td>Calculates DNA RNA/DNA melting temperature</td></tr>
 <tr><td><a href="freak.html">freak</a></td><td>Residue/base frequency table or plot</td></tr>
 <tr><td><a href="isochore.html">isochore</a></td><td>Plots isochores in large DNA sequences</td></tr>
+<tr><td><a href="sirna.html">sirna</a></td><td>Finds siRNA duplexes in mRNA</td></tr>
 </table>
 
 <!--

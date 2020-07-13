@@ -26,45 +26,15 @@ Usage
 
 Command line arguments
 
-   Mandatory qualifiers:
-  [-in]                infile     Name of protein coordinate file for input
-                                  (embl format)
-   -vdwf               string     Name of data file with van der Waals radii
-   -thresh             float      Threshold contact distance
-  [-out]               outfile    Name of contact file for output
-   -conerrf            outfile    Name of log file for the build
 
-   Optional qualifiers:
-   -ignore             float      If any two atoms from two different residues
-                                  are at least this distance apart then no
-                                  futher inter-atomic contacts will be checked
-                                  for for that residue pair . This speeds the
-                                  calculation up considerably.
-
-   Advanced qualifiers: (none)
-   General qualifiers:
-  -help                boolean    Report command line options. More
-                                  information on associated and general
-                                  qualifiers can be found with -help -verbose
+   EMBOSS An error in ajacd.c at line 1531:
+acdfile '/packages/emboss_dev/gwilliam/emboss/emboss/emboss/acd/interface.acd'
+not opened
    
 
-   Mandatory qualifiers Allowed values Default
-   [-in]
-   (Parameter 1) Name of protein coordinate file for input (embl format)
-   Input file Required
-   -vdwf Name of data file with van der Waals radii Any string is
-   accepted Evdw.dat
-   -thresh Threshold contact distance Any numeric value 1.0
-   [-out]
-   (Parameter 2) Name of contact file for output Output file test.con
-   -conerrf Name of log file for the build Output file interface.log
-   Optional qualifiers Allowed values Default
-   -ignore If any two atoms from two different residues are at least this
-   distance apart then no futher inter-atomic contacts will be checked
-   for for that residue pair . This speeds the calculation up
-   considerably. Any numeric value 20.0
-   Advanced qualifiers Allowed values Default
-   (none)
+   EMBOSS An error in ajacd.c at line 1531: acdfile
+   '/packages/emboss_dev/gwilliam/emboss/emboss/emboss/acd/interface.acd'
+   not opened
    
 Input file format
 
@@ -102,8 +72,10 @@ See also
    contacts Reads coordinate files and writes files of intra-chain
    residue-residue contact data
    dichet Parse dictionary of heterogen groups
+   fraggle Removes fragment sequences from files of hits for scop
+   families
    hmmgen Generates a hidden Markov model for each alignment in a
-   directory
+   directory by using the HMMER package
    profgen Generates various profiles for each alignment in a directory
    psiblasts Runs PSI-BLAST given scopalign alignments
    scopalign Generate alignments for families in a scop classification
@@ -116,14 +88,14 @@ See also
    file by using CLUSTALW with seed alignments
    seqsearch Generate files of hits for families in a scop classification
    file by using PSI-BLAST with seed alignments
-   seqsort Reads multiple files of hits and writes a non-ambiguous file
-   of hits (scop families file) plus a validation file
+   seqsort Reads multiple files of hits and writes (i) a scop families
+   file and (ii) a scop ambiguities file
    seqwords Generate file of hits for scop families by searching
    swissprot with keywords
    siggen Generates a sparse protein signature from an alignment and
    residue contact data
    sigscan Scans a signature against swissprot and writes a signature
-   hits files
+   hits file
    
 Author(s)
 

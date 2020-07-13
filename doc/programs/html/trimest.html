@@ -120,18 +120,18 @@ complement]' is appended.
  -->
 
 
-Here is a sample session with trimest:
+<b>Here is a sample session with trimest</b>
+<p>
 
-<pre>
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% trimest embl:hsfau hsfau.seq
+% <b>trimest tembl:hsfau hsfau.seq </b>
+Trim poly-A tails off EST sequences
 
-</pre>
-
-
-
-
-
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
 
 
 
@@ -235,7 +235,7 @@ For example the terminal 4 A's of GCAGAAAA would be removed with the default val
 <tr>
 <td>-[no]reverse</td>
 <td>When a poly-T region at the 5' end of the sequence is found and removed, it is likely that the sequence is in the reverse sense. This option will change the sequence to the forward sense when it is written out. If this option is not set, then the sense will not be changed.</td>
-<td>Yes/No</td>
+<td>Boolean value Yes/No</td>
 <td>Yes</td>
 </tr>
 
@@ -248,7 +248,7 @@ For example the terminal 4 A's of GCAGAAAA would be removed with the default val
 <tr>
 <td>-[no]fiveprime</td>
 <td>If this is set true, then the 5' end of teh sequence is inspected for poly-T tails. These will be removed if they are longer than any 3' poly-A tails. If this is false, then the 5' end is ignored.</td>
-<td>Yes/No</td>
+<td>Boolean value Yes/No</td>
 <td>Yes</td>
 </tr>
 
@@ -278,14 +278,95 @@ IT IS DONE FOR YOU.
         happens in unusual cases - null input, etc. 
    -->
 
-Normal nucleic acid sequences USA.
+<b>trimest</b> reads the USA of one or more normal nucleic acid sequences.
+
+<p>
 
 
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
 
-
-
-
-
+'tembl:hsfau' is a sequence entry in the example nucleic acid database 'tembl'
+<p>
+<p><h3>Database entry: tembl:hsfau</h3>
+<table width="90%"><tr><td bgcolor="#FFDDFF">
+<pre>
+ID   HSFAU      standard; RNA; HUM; 518 BP.
+XX
+AC   X65923;
+XX
+SV   X65923.1
+XX
+DT   13-MAY-1992 (Rel. 31, Created)
+DT   23-SEP-1993 (Rel. 37, Last updated, Version 10)
+XX
+DE   H.sapiens fau mRNA
+XX
+KW   fau gene.
+XX
+OS   Homo sapiens (human)
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia;
+OC   Eutheria; Primates; Catarrhini; Hominidae; Homo.
+XX
+RN   [1]
+RP   1-518
+RA   Michiels L.M.R.;
+RT   ;
+RL   Submitted (29-APR-1992) to the EMBL/GenBank/DDBJ databases.
+RL   L.M.R. Michiels, University of Antwerp, Dept of Biochemistry,
+RL   Universiteisplein 1, 2610 Wilrijk, BELGIUM
+XX
+RN   [2]
+RP   1-518
+RX   MEDLINE; 93368957.
+RA   Michiels L., Van der Rauwelaert E., Van Hasselt F., Kas K., Merregaert J.;
+RT   " fau cDNA encodes a ubiquitin-like-S30 fusion protein and is expressed as
+RT   an antisense sequences in the Finkel-Biskis-Reilly murine sarcoma virus";
+RL   Oncogene 8:2537-2546(1993).
+XX
+DR   SWISS-PROT; P35544; UBIM_HUMAN.
+DR   SWISS-PROT; Q05472; RS30_HUMAN.
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..518
+FT                   /chromosome="11q"
+FT                   /db_xref="taxon:9606"
+FT                   /organism="Homo sapiens"
+FT                   /tissue_type="placenta"
+FT                   /clone_lib="cDNA"
+FT                   /clone="pUIA 631"
+FT                   /map="13"
+FT   misc_feature    57..278
+FT                   /note="ubiquitin like part"
+FT   CDS             57..458
+FT                   /db_xref="SWISS-PROT:P35544"
+FT                   /db_xref="SWISS-PROT:Q05472"
+FT                   /gene="fau"
+FT                   /protein_id="CAA46716.1"
+FT                   /translation="MQLFVRAQELHTFEVTGQETVAQIKAHVASLEGIAPEDQVVLLAG
+FT                   APLEDEATLGQCGVEALTTLEVAGRMLGGKVHGSLARAGKVRGQTPKVAKQEKKKKKTG
+FT                   RAKRRMQYNRRFVNVVPTFGKKKGPNANS"
+FT   misc_feature    98..102
+FT                   /note="nucleolar localization signal"
+FT   misc_feature    279..458
+FT                   /note="S30 part"
+FT   polyA_signal    484..489
+FT   polyA_site      509
+XX
+SQ   Sequence 518 BP; 125 A; 139 C; 148 G; 106 T; 0 other;
+     ttcctctttc tcgactccat cttcgcggta gctgggaccg ccgttcagtc gccaatatgc        60
+     agctctttgt ccgcgcccag gagctacaca ccttcgaggt gaccggccag gaaacggtcg       120
+     cccagatcaa ggctcatgta gcctcactgg agggcattgc cccggaagat caagtcgtgc       180
+     tcctggcagg cgcgcccctg gaggatgagg ccactctggg ccagtgcggg gtggaggccc       240
+     tgactaccct ggaagtagca ggccgcatgc ttggaggtaa agttcatggt tccctggccc       300
+     gtgctggaaa agtgagaggt cagactccta aggtggccaa acaggagaag aagaagaaga       360
+     agacaggtcg ggctaagcgg cggatgcagt acaaccggcg ctttgtcaac gttgtgccca       420
+     cctttggcaa gaagaagggc cccaatgcca actcttaagt cttttgtaat tctggctttc       480
+     tctaataaaa aagccactta gttcagtcaa aaaaaaaa                               518
+//
+</pre>
+</td></tr></table><p>
 
 
 
@@ -302,20 +383,13 @@ Normal nucleic acid sequences USA.
         happens in unusual cases - null output, errors etc. 
    -->
 
-The output is a set of sequences with the poly-A (or poly-T) tails
-removed.  If the sequences had a 5' poly-T tail then are
-reverse-complemented by default.  The description line has a comment
-appended about the changes made to the sequence. 
 
-<p>
-
-For example, the sequence embl:hsfau is written out as:
-
-<p>
-
-<hr>
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: hsfau.seq</h3>
+<table width="90%"><tr><td bgcolor="#DDFFDD">
 <pre>
->HSFAU X65923 H.sapiens fau mRNA [poly-A tail removed]
+&gt;HSFAU X65923.1 H.sapiens fau mRNA [poly-A tail removed]
 ttcctctttctcgactccatcttcgcggtagctgggaccgccgttcagtcgccaatatgc
 agctctttgtccgcgcccaggagctacacaccttcgaggtgaccggccaggaaacggtcg
 cccagatcaaggctcatgtagcctcactggagggcattgccccggaagatcaagtcgtgc
@@ -326,12 +400,15 @@ agacaggtcgggctaagcggcggatgcagtacaaccggcgctttgtcaacgttgtgccca
 cctttggcaagaagaagggccccaatgccaactcttaagtcttttgtaattctggctttc
 tctaataaaaaagccacttagttcagtc
 </pre>
-<hr>
+</td></tr></table><p>
 
 
+<p>
 
-
-
+The output is a set of sequences with the poly-A (or poly-T) tails
+removed.  If a sequence had a 5' poly-T tail then the resulting sequence
+is reverse-complemented by default.  The description line has a comment
+appended about the changes made to the sequence. 
 
 
 
@@ -537,7 +614,6 @@ None.
 <tr><td><a href="seqretsplit.html">seqretsplit</a></td><td>Reads and writes (returns) sequences in individual files</td></tr>
 <tr><td><a href="skipseq.html">skipseq</a></td><td>Reads and writes (returns) sequences, skipping the first few</td></tr>
 <tr><td><a href="splitter.html">splitter</a></td><td>Split a sequence into (overlapping) smaller sequences</td></tr>
-<tr><td><a href="swissparse.html">swissparse</a></td><td>Retrieves sequences from swissprot using keyword search</td></tr>
 <tr><td><a href="trimseq.html">trimseq</a></td><td>Trim ambiguous bits off the ends of sequences</td></tr>
 <tr><td><a href="union.html">union</a></td><td>Reads sequence fragments and builds one sequence</td></tr>
 <tr><td><a href="vectorstrip.html">vectorstrip</a></td><td>Strips out DNA between a pair of vector sequences</td></tr>

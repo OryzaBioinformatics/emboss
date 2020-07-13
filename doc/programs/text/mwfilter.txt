@@ -23,14 +23,18 @@ Description
    
 Usage
 
-   Here is a sample session with mwfilter:
+   Here is a sample session with mwfilter
+   
 
-% mwfilter
+% mwfilter 
 Filter noisy molwts from mass spec output
-Input file: molwts.dat
-ppm tolerance [50.0]:
-Output file [molwts.mwfilter]:
-
+Input file: ../../data/molwts.dat
+ppm tolerance [50.0]: 
+Output file [molwts.mwfilter]: 
+   
+   Go to the input files for this example
+   Go to the output files for this example
+   
 Command line arguments
 
    Mandatory qualifiers:
@@ -57,23 +61,17 @@ Command line arguments
    [-outfile]
    (Parameter 2) Output file name Output file <sequence>.mwfilter
    Optional qualifiers Allowed values Default
-   -showdel Output deleted mwts Yes/No No
+   -showdel Output deleted mwts Boolean value Yes/No No
    Advanced qualifiers Allowed values Default
    -datafile Data file of noisy molecular weights Any string is accepted
    Emwfilter.dat
    
 Input file format
 
-   The input file is a simple list of the experimental molecular weights.
-   There should be one weight per line.
-   
-   Comments in the data file start with a '#' character in the first
-   column.
-   Blank lines are ignored.
-   
-   An example of the input data follows:
-  __________________________________________________________________________
-
+  Input files for usage example
+  
+  File: ../../data/molwts.dat
+  
 874.364756
 927.450380
 1045.572
@@ -92,16 +90,23 @@ Input file format
 1753.745298
 1880.841178
 2383.99
-  __________________________________________________________________________
-
+   
+   The input file is a simple list of the experimental molecular weights.
+   There should be one weight per line.
+   
+   Comments in the data file start with a '#' character in the first
+   column.
+   Blank lines are ignored.
+   
 Output file format
 
    The output is a list of the molecular weights with the unwanted
    (noisy) data removed.
    
-   An example of the output data follows:
-  __________________________________________________________________________
-
+  Output files for usage example
+  
+  File: molwts.mwfilter
+  
 874.364756
 927.450380
 1068.397129
@@ -117,8 +122,8 @@ Output file format
 1639.868056
 1748.611920
 1753.745298
-  __________________________________________________________________________
-
+1880.841178
+   
 Data files
 
    The program reads the data file Emwfilter.dat for the molecular
@@ -175,20 +180,19 @@ Known bugs
    
 See also
 
-   Program name Description
-   backtranseq Back translate a protein sequence
-   charge Protein charge plot
-   checktrans Reports STOP codons and ORF statistics of a protein
-   sequence
-   compseq Counts the composition of dimer/trimer/etc words in a sequence
-   emowse Protein identification by mass spectrometry
-   freak Residue/base frequency table or plot
-   iep Calculates the isoelectric point of a protein
-   mwcontam Shows molwts that match across a set of files
-   octanol Displays protein hydropathy
-   pepinfo Plots simple amino acid properties in parallel
-   pepstats Protein statistics
-   pepwindow Displays protein hydropathy
+   Program name                          Description
+   backtranseq  Back translate a protein sequence
+   charge       Protein charge plot
+   checktrans   Reports STOP codons and ORF statistics of a protein
+   compseq      Counts the composition of dimer/trimer/etc words in a sequence
+   emowse       Protein identification by mass spectrometry
+   freak        Residue/base frequency table or plot
+   iep          Calculates the isoelectric point of a protein
+   mwcontam     Shows molwts that match across a set of files
+   octanol      Displays protein hydropathy
+   pepinfo      Plots simple amino acid properties in parallel
+   pepstats     Protein statistics
+   pepwindow    Displays protein hydropathy
    pepwindowall Displays protein hydropathy of a set of sequences
    
 Author(s)
