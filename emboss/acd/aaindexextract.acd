@@ -1,0 +1,16 @@
+appl: aaindexextract [
+  documentation: "Extract data from AAINDEX"
+  groups: "Utils:Database creation"
+  gui: yes
+  batch: yes
+  cpu: medium
+]
+
+section: input [ info: "input Section" type: page ]
+infile: inf  [
+  parameter: "Y"
+  prompt: "Full pathname of file aaindex1"
+]
+
+
+endsection: input

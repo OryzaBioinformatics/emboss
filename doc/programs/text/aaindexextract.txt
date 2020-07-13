@@ -1,0 +1,170 @@
+
+                              aaindexextract 
+                                      
+   
+   
+Function
+
+   Extract data from AAINDEX
+   
+Description
+
+   aaextractindex extracts information from the AAINDEX database for use
+   by pepwindow and pepwindowall
+   
+   AAINDEX is a database of properties of amino acids. See references [1]
+   [2] [3].
+   
+   The programs pepwindow and pepwindowall normally use the standard
+   EMBOSS data file 'Enakai.dat' by default, but you can set their
+   '-data' qualifier to use any of the files produced by aaextractindex
+   from the AAINDEX database.
+   
+   The AAINDEX database file 'aaindex1' can be downloaded from the
+   AAINDEX site: ftp://ftp.genome.ad.jp/pub/db/genomenet/aaindex/aaindex1
+   
+Usage
+
+   Here is a sample session with aaindexextract:
+
+% aaindexextract
+Extract data from AAINDEX
+Full pathname of file aaindex1: ~/aaindex1
+
+Command line arguments
+
+   Mandatory qualifiers:
+  [-inf]               infile     Full pathname of file aaindex1
+
+   Optional qualifiers: (none)
+   Advanced qualifiers: (none)
+   General qualifiers:
+  -help                boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   
+
+   Mandatory qualifiers Allowed values Default
+   [-inf]
+   (Parameter 1) Full pathname of file aaindex1 Input file Required
+   Optional qualifiers Allowed values Default
+   (none)
+   Advanced qualifiers Allowed values Default
+   (none)
+   
+Input file format
+
+   The AAINDEX database file 'aaindex1' can be downloaded from the
+   AAINDEX site: ftp://ftp.genome.ad.jp/pub/db/genomenet/aaindex/
+   
+Output file format
+
+   One file for every entry in the AAINDEX database is created in the
+   EMBOSS standard 'data/AAINDEX' directory. For example, the file
+   'cham830102':
+   
+H CHAM830102
+D A parameter defined from the residuals obtained from the best correlation
+  of the Chou-Fasman parameter of beta-sheet (Charton-Charton, 1983)
+R LIT:0907093b PMID:6876837
+A Charton, M. and Charton, B.
+T The dependence of the Chou-Fasman parameters on amino acid side chain
+  structure
+J J. Theor. Biol. 111, 447-450 (1983)
+* (Pro !)
+C
+I   A/L    R/K    N/M    D/F    C/P    Q/S    E/T    G/W    H/Y    I/V
+   -0.118  0.124  0.289  0.048  0.083 -0.105 -0.245  0.104  0.138  0.230
+   -0.052  0.032 -0.258  0.015  0.     0.225  0.166  0.158  0.094  0.513
+//
+
+Data files
+
+   None.
+   
+Notes
+
+   If aaindexextract tries to write the data to an unexpected location
+   you can explicitly set the location of the EMBOSS data directory by
+   putting the line:
+   
+   ENV EMBOSS_DATA /path/to/the/EMBOSS/data/directory
+   in the EMBOSS emboss.default file.
+   
+   (Where '/path/to/the/EMBOSS/data/directory' is the location of your
+   EMBOSS data as unpacked from the distribution file.)
+   
+References
+
+    1. Nakai, K., Kidera, A., and Kanehisa, M.; Cluster analysis of amino
+       acid indices for prediction of protein structure and function.
+       Protein Eng. 2, 93-100 (1988). [UI:89221001]
+    2. Tomii, K. and Kanehisa, M.; Analysis of amino acid indices and
+       mutation matrices for sequence comparison and structure prediction
+       of proteins. Protein Eng. 9, 27-36 (1996). [UI:96272030]
+    3. Kawashima, S., Ogata, H., and Kanehisa, M.; AAindex: amino acid
+       index database. Nucleic Acids Res. 27, 368-369 (1999).
+       [UI:99063742]
+       
+Warnings
+
+   None.
+   
+Diagnostic Error Messages
+
+   None.
+   
+Exit status
+
+   It always exits with status 0.
+   
+Known bugs
+
+   None.
+   
+See also
+
+   Program name Description
+   cutgextract Extract data from CUTG
+   domainer Reads protein coordinate files and writes domains coordinate
+   files
+   funky Reads clean coordinate files and writes file of
+   protein-heterogen contact data
+   groups Removes redundant hits from a scop families file
+   hetparse Converts raw dictionary of heterogen groups to a file in
+   embl-like format
+   nrscope Converts redundant EMBL-format SCOP file to non-redundant one
+   pdbparse Parses pdb files and writes cleaned-up protein coordinate
+   files
+   pdbtosp Convert raw swissprot:pdb equivalence file to embl-like format
+   printsextract Extract data from PRINTS
+   prosextract Builds the PROSITE motif database for patmatmotifs to
+   search
+   rebaseextract Extract data from REBASE
+   scope Convert raw scop classification file to embl-like format
+   scopnr Removes redundant domains from a scop classification file
+   scopparse Converts raw scop classification files to a file in
+   embl-like format
+   scopseqs Adds pdb and swissprot sequence records to a scop
+   classification file
+   tfextract Extract data from TRANSFAC
+   
+   The programs pepwindow and pepwindowall normally use the standard
+   EMBOSS data file 'Enakai.dat' by default, but you can set their
+   '-data' qualifier to use any of the files produced by aaextractindex.
+   
+Author(s)
+
+   This application was written by Peter Rice
+   (peter.rice@uk.lionbioscience.com)
+   
+History
+
+   Written (25 June 2002) - Peter Rice
+   
+Target users
+
+   This program is intended to be used by administrators responsible for
+   software and database installation and maintenance.
+   
+Comments
