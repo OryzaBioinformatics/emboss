@@ -1,9 +1,8 @@
 
-                             EMBOSS: swissparse
-     _________________________________________________________________
+                                swissparse 
+                                      
    
-                              Program swissparse
-                                       
+   
 Function
 
    Retrieves sequences from swissprot using keyword search
@@ -30,7 +29,7 @@ Command line arguments
    Optional qualifiers: (none)
    Advanced qualifiers: (none)
    General qualifiers:
-  -help                bool       report command line options. More
+  -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    
@@ -107,6 +106,7 @@ See also
    seqret       Reads and writes (returns) sequences
    seqretsplit  Reads and writes (returns) sequences in individual files
    showfeat     Show features of a sequence
+   skipseq      Reads and writes (returns) sequences, skipping the first few
    splitter     Split a sequence into (overlapping) smaller sequences
    trimest      Trim poly-A tails off EST sequences
    trimseq      Trim ambiguous bits off the ends of sequences
