@@ -96,7 +96,7 @@ int main(int argc, char **argv)
 
 
 
-/* @funcstatic  seqmatchall_matchListPrint ***********************************
+/* @funcstatic seqmatchall_matchListPrint *************************************
 **
 ** Undocumented.
 **
@@ -122,7 +122,7 @@ static void seqmatchall_matchListPrint(void **x,void *cl)
 
 
 
-/* @funcstatic  seqmatchall_listPrint ****************************************
+/* @funcstatic seqmatchall_listPrint ******************************************
 **
 ** Undocumented.
 **

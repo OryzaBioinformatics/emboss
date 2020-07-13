@@ -460,7 +460,7 @@ static void getorf_FindORFs(AjPSeq seq, ajint len, AjPTrn trnTable,
     return;
 }
 
-/* @funcstatic  getorf_WriteORF **********************************************
+/* @funcstatic getorf_WriteORF ************************************************
 **
 ** Undocumented.
 **

@@ -1,8 +1,9 @@
 /* @source contacts application
 **
-** Calculate residue contacts from clean coordinate files
+** Reads coordinate files and writes files of intra-chain 
+** residue-residue contact data.
+**
 ** @author: Copyright (C) Jon Ison (jison@hgmp.mrc.ac.uk)
-** @author: Copyright (C) Alan Bleasby (ableasby@hgmp.mrc.ac.uk)
 ** @@
 **
 ** This program is free software; you can redistribute it and/or
@@ -22,6 +23,18 @@
 ** 
 ** 
 ** 
+******************************************************************************
+**IMPORTANT NOTE      IMPORTANT NOTE      IMPORTANT NOTE        IMPORTANT NOTE     
+******************************************************************************
+**
+** Mon May 20 11:43:39 BST 2002
+**
+** The following documentation is out-of-date and should be disregarded.  It 
+** will be updated shortly. 
+** 
+******************************************************************************
+**IMPORTANT NOTE      IMPORTANT NOTE      IMPORTANT NOTE        IMPORTANT NOTE     
+******************************************************************************
 ** 
 ** 
 ** 
@@ -128,11 +141,6 @@
 **
 ** Important Note
 **
-** Contacts is designed to work with OLD FORMAT clean pdb files - i.e. the 
-** ones currently found in /data/cpdb/ on the HGMP server.  To convert to 
-** parsing of new format files (when available) change ajXyzCpdbReadOld to 
-** ajXyzCpdbRead().
-**
 ******************************************************************************/
 
 
@@ -190,8 +198,10 @@ int main(ajint argc, char **argv)
     AjPVdwall  vdw           =NULL;     /* Structure for vdw radii */
     
 
-
-
+    /* JISON DEBUG */
+    AjBool found=ajFalse;
+    
+    
     
     /* Initialise strings */
     temp          = ajStrNew();
@@ -254,6 +264,42 @@ int main(ajint argc, char **argv)
     /*Start of main application loop*/
     while(ajListPop(list,(void **)&temp))
     {
+/* 
+This error was also reported - could easily be more like this
+D1CQNB_
+Warning: Zero sized list of sequences passed into contacts_ContactMapCalc
+Warning: ERROR  file write error /data/structure/con_new/d1qjha_.con
+rm /data/structure/con_new/d1qjha_.conD1G1XA_
+*/
+
+	/* JISON DEBUG start*/
+/*	if(ajStrFindC(temp, "d1bd7a_")!=-1)  BUILD1_1 */
+/*	if(ajStrFindC(temp, "d1du1a_")!=-1)  BUILD3_1 */
+/*	if(ajStrFindC(temp, "d1f02t_")!=-1)  BUILD3_2 */
+/*	if(ajStrFindC(temp, "d1du1a_")!=-1)  BUILD3_3 */
+/*	if(ajStrFindC(temp, "d1f3mb_")!=-1)  BUILD3_3 */
+	if(ajStrFindC(temp, "d1dt7x_")!=-1)  /* BUILD3_3 */
+	{                       
+	    found=ajTrue;
+	    continue;
+	}
+	
+
+	if(!found)
+	    continue;
+
+	if((ajStrFindC(temp, "d1bd7a_")!=-1)||
+	   (ajStrFindC(temp, "d1bd7b_")!=-1)||
+	   (ajStrFindC(temp, "d1f02t_")!=-1)||
+	   (ajStrFindC(temp, "d1du1a_")!=-1)||
+	   (ajStrFindC(temp, "d1f3mb_")!=-1)||
+	   (ajStrFindC(temp, "d1dt7x_")!=-1))
+	    continue;
+	
+
+	/* JISON DEBUG end*/
+
+
 	/* Read clean coordinate file*/
 	if((cpdb_inf=ajFileNewIn(temp))==NULL)
 	{
@@ -269,7 +315,7 @@ int main(ajint argc, char **argv)
 
 
 	/* Read pdb structure */
-	if(!ajXyzCpdbReadOld(cpdb_inf, &pdb))	       
+	if(!ajXyzCpdbRead(cpdb_inf, &pdb))	       
 	{
 	    ajFmtPrintS(&msg, "ERROR file read error %S", temp);
 	    ajWarn(ajStrStr(msg));
@@ -280,6 +326,10 @@ int main(ajint argc, char **argv)
 	    continue;
 	}
 
+	/* Write diagnostic */
+	ajFmtPrint("%S\n", pdb->Pdb);   
+	fflush(stdout);
+	ajFmtPrintF(logf, "%S\n", pdb->Pdb);   
 
 
 
@@ -321,9 +371,6 @@ int main(ajint argc, char **argv)
 	    continue;
 	}
 
-	/* Write diagnostic */
-	ajFmtPrint("%S\n", pdb->Pdb);   
-	ajFmtPrintF(logf, "%S\n", pdb->Pdb);   
 	
 
 	/* Tidy up*/
@@ -333,8 +380,6 @@ int main(ajint argc, char **argv)
 	ajStrDel(&temp);	
     }
     /*End of main application loop*/    
-
-
 
 
 
@@ -364,7 +409,7 @@ int main(ajint argc, char **argv)
 
 
 
-/* @funcstatic contacts_WriteFile *****************************************
+/* @funcstatic contacts_WriteFile *********************************************
 **
 ** Writes a file of INTRA-chain residue contact data in embl-like format 
 ** for a pdb structure.
@@ -582,14 +627,29 @@ static AjBool contacts_ContactMapWrite(AjPFile outf, AjPInt2d mat, char *txt,
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /* @funcstatic contacts_ContactMapCalc **************************************
 **
 ** Write a contact map for a certain model and chain in a pdb structure. The
 ** contact map must contain intra-chain contacts. Rows and columns in the 
 ** square contact map correspond to residues in the chain.
 **
-** @param [w] mat    [AjPInt2d*]  Contact map
-** @param [w] ncon   [ajint*]     No. contacts
+** @param [w] mat    [AjPInt2d *] Contact map
+** @param [w] ncon   [ajint *]    No. contacts
 ** @param [r] dim    [ajint]      Dimension of matrix (no. residues) 
 ** @param [r] thresh [float]      Threshold distance at which contact between 
 **                                two residues is defined.
@@ -600,31 +660,34 @@ static AjBool contacts_ContactMapWrite(AjPFile outf, AjPInt2d mat, char *txt,
 ** @param [r] mod    [ajint]      Model number
 ** @param [r] chn    [ajint]      Chain number
 ** @param [r] pdb    [AjPPdb]     Pdb object
-** @param [r] vdw    [AjPVdwall]  Vdw object
+** @param [r] vdw    [AjPVdwall]  Vdwall object
 ** 
 ** @return [AjBool] True if file was succesfully written.
 ** @@
 **
 ****************************************************************************/
 static AjBool contacts_ContactMapCalc(AjPInt2d *mat, ajint *ncon, ajint dim, 
-				      float thresh, float ignore, ajint mod,
-				      ajint chn,
-				      AjPPdb pdb, AjPVdwall vdw)
+				       float thresh, float ignore, ajint mod, 
+				      ajint chn, AjPPdb pdb, AjPVdwall vdw)
 {	
     /* Contact is checked for between two residues, residue 1 and residue 2 */
     
     
-    AjPAtom    *arr  =NULL;   /* Array of AjPAtom objects from list of AjPAtom objects
-				 for chain <chn> from <pdb>*/
+    AjPAtom    *arr  =NULL;   /* Array of AjPAtom objects from list of 
+				 AjPAtom objects for chain <chn> from <pdb>*/
     ajint       siz  =0;      /* Size of <arr> */
     
     
-    ajint       idxfirst=0;   /* Index in <arr> of first atom belonging to model <mod> */
-    ajint       idxlast=0;    /* Index in <arr> of last atom belonging to model <mod> */
+    ajint       idxfirst=0;   /* Index in <arr> of first atom belonging to 
+				 model <mod> */
+    ajint       idxlast=0;    /* Index in <arr> of last atom belonging to 	
+				 model <mod> */
     
     
-    ajint       resfirst=0;   /* Residue number of first atom belonging to model <mod> */
-    ajint       reslast=0;    /* Residue number of last atom belonging to model <mod> */
+    ajint       resfirst=0;   /* Residue number of first atom belonging 
+				 to model <mod> */
+    ajint       reslast=0;    /* Residue number of last atom belonging 
+				 to model <mod> */
     
     
     ajint       idx1=0;       /* Index in <arr> for atom from residue 1 */
@@ -785,7 +848,8 @@ static AjBool contacts_ContactMapCalc(AjPInt2d *mat, ajint *ncon, ajint dim,
 		    if(arr[idx2]->Idx != res2)
 			break;
 		    
-		    /*ajFmtPrintF(xxxtemp, "Trying%5d%5d (res %5d-%-5d)...", idx1, idx2,arr[idx1]->Idx, arr[idx2]->Idx);
+		    /*ajFmtPrintF(xxxtemp, "Trying%5d%5d (res %5d-%-5d)...", 
+		      idx1, idx2,arr[idx1]->Idx, arr[idx2]->Idx);
 		    fflush(xxxtemp->fp); */
 		    
 		    

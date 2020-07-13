@@ -211,7 +211,7 @@ int main(int argc, char **argv)
 
 
 
-/* @funcstatic  isochore_FltarrNew0 ******************************************
+/* @funcstatic isochore_FltarrNew0 ********************************************
 **
 ** Undocumented.
 **

@@ -308,7 +308,7 @@ int main(int argc, char **argv)
 }
 
 
-/* @funcstatic tmap_refpos2 **************************************************
+/* @funcstatic tmap_refpos2 ***************************************************
 **
 ** tmap_refpos2, utg. 44
 ** ----------------
@@ -387,7 +387,7 @@ static ajint tmap_all_charged(ajint pos, ajint nr)
 }
 
 
-/* @funcstatic tmap_length1 **************************************************
+/* @funcstatic tmap_length1 ***************************************************
 **
 ** Calculates the real medium length of TM segment
 ** Eliminates from the calculations sequences with less than 4 positions
@@ -443,7 +443,7 @@ static float tmap_length1(ajint nr, ajint start, ajint stopp)
 }
 
 
-/* @funcstatic  tmap_present3p ***********************************************
+/* @funcstatic tmap_present3p *************************************************
 **
 ** Presents results from predictions
 **
@@ -904,7 +904,7 @@ static ajint tmap_pred1(float m_limit, float ml_limit, float e_limit, ajint nr)
 }
 
 
-/* @funcstatic tmap_peak1 ****************************************************
+/* @funcstatic tmap_peak1 *****************************************************
 **
 ** Finds peak value in the vector 'parameter'
 ** and returns position of peak value
@@ -941,7 +941,7 @@ static ajint tmap_peak1(ajint start, ajint stopp, float *parameter)
 #define MAX_TM_LANGD 30        
 #define MIN_TM_LANGD 25
 
-/* @funcstatic tmap_summa1 ***************************************************
+/* @funcstatic tmap_summa1 ****************************************************
 **
 ** Sums the values for 'parameter' in span 'start' to 'stopp'
 **
@@ -963,7 +963,7 @@ static float tmap_summa1(ajint start, ajint stopp, float *parameter)
     return summa;
 }
 
-/* @funcstatic tmap_tm_in_vector *********************************************
+/* @funcstatic tmap_tm_in_vector **********************************************
 **
 ** Checks if segment already in TM vector
 **
@@ -989,7 +989,7 @@ static ajint tmap_tm_in_vector(ajint *start, ajint *stopp, ajint max,
     return temp;
 }
 
-/* @funcstatic tmap_insert_in_vector *****************************************
+/* @funcstatic tmap_insert_in_vector ******************************************
 **
 ** Insert segment in TM vector
 **
@@ -1042,7 +1042,7 @@ static ajint tmap_insert_in_vector(ajint *start, ajint *stopp, ajint max,
     return max+1;
 }
   
-/* @funcstatic tmap_vec_to_stst **********************************************
+/* @funcstatic tmap_vec_to_stst ***********************************************
 **
 ** Transfers information in vector vec[] to start[] and stopp[]
 ** Returns number of elements in start[] and stopp[]
@@ -1087,12 +1087,12 @@ static ajint tmap_vec_to_stst(ajint *vec, ajint *start, ajint *stopp,
 
 
 
-/* @funcstatic tmap_weights **************************************************
+/* @funcstatic tmap_weights ***************************************************
 **
 ** Calculates number of differences between sequence 'testnr' and all
 **  other sequences (Ref. Vingron & Argos, CABIOS 5 (1989) 115-121).  
 **
-** @param [r] s [char {}{LENGTH}] sekvensmatris (sequence matrix)
+** @param [r] s [char{}{LENGTH}] sekvensmatris (sequence matrix)
 ** @param [r] poss [ajint] antal positioner i sekvenserna
 **                         (position in sequence)
 ** @param [r] nr [ajint] max nr av sekvenserna (max number of sequences)
@@ -1140,7 +1140,7 @@ static void tmap_weights(char s[][LENGTH], ajint poss, ajint nr,
 
 
 
-/* @funcstatic tmap_profile2 *************************************************
+/* @funcstatic tmap_profile2 **************************************************
 **
 **  Calculates mean values of 'P[]' over 'span' a.a.
 ** and stores the result in 'profile[]'.
@@ -1204,7 +1204,7 @@ static void tmap_profile2(ajint prof, ajint antal, ajint poss, ajint span)
 
 
 
-/* @funcstatic  tmap_align_rel ***********************************************
+/* @funcstatic tmap_align_rel *************************************************
 **
 ** Undocumented.
 **
@@ -1235,7 +1235,7 @@ static void tmap_align_rel(ajint antal, ajint poss, ajint span)
 }
 
 
-/* @funcstatic tmap_plot2 ****************************************************
+/* @funcstatic tmap_plot2 *****************************************************
 **
 ** Undocumented.
 **

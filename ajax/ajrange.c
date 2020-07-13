@@ -531,9 +531,11 @@ AjBool ajRangeBegin (AjPRange thys, ajint begin) {
 
 }
 
-/* @func ajRangeStrExtractList *******************************************************
+/* @func ajRangeStrExtractList ************************************************
 **
-** Extract the range from a String and place the resulting text in a list of strings.
+** Extract the range from a String and place the resulting text in a
+** list of strings.
+**
 ** N.B. the resulting list will be regions of the input string listed
 ** in the order specified in the set of ranges. If these are not in ascending
 ** order, the resulting list of strings will not be in ascending order either.
@@ -544,7 +546,8 @@ AjBool ajRangeBegin (AjPRange thys, ajint begin) {
 ** @return [AjBool] true if string modified
 ** @@
 ******************************************************************************/
-AjBool ajRangeStrExtractList (AjPList outliststr, AjPRange thys, AjPStr instr) {
+AjBool ajRangeStrExtractList (AjPList outliststr, AjPRange thys,
+			      AjPStr instr) {
 
     ajint nr = ajRangeNumber(thys);
     ajint i;
@@ -565,7 +568,7 @@ AjBool ajRangeStrExtractList (AjPList outliststr, AjPRange thys, AjPStr instr) {
 }
 
 
-/* @func ajRangeStrExtract *******************************************************
+/* @func ajRangeStrExtract ****************************************************
 **
 ** Extract the range from a String (Remove regions not in the range(s))
 ** N.B. the resulting string will be regions of the input string appended
@@ -596,7 +599,7 @@ AjBool ajRangeStrExtract (AjPStr *outstr, AjPRange thys, AjPStr instr) {
 }
 
 
-/* @func ajRangeStrStuff *******************************************************
+/* @func ajRangeStrStuff ******************************************************
 **
 ** The opposite of ajRangeStrExtract()
 ** Stuff space characters into a string to pad out to the range.
@@ -721,7 +724,7 @@ ajint ajRangeOverlapSingle (ajint start, ajint end, ajint pos, ajint length)
 
 
 
-/* @func ajRangeOverlaps *******************************************************
+/* @func ajRangeOverlaps ******************************************************
 **
 ** Detect overlaps of a set of ranges to a region of a sequence
 ** @param [r] thys [AjPRange] range object

@@ -271,7 +271,7 @@ int main(int argc, char **argv)
 	    ajStrAssC(&pro,"");
 	}
 	
-	if (ajFeatSize(tab))
+	if (ajFeattableSize(tab))
 	{
 	  (void) ajReportWrite(report, tab, seq);
 	  ajFeattableDel(&tab);
@@ -307,6 +307,7 @@ int main(int argc, char **argv)
 ** @param [?] l [AjPList*] List of hits stored as EmbPMatch objects
 ** @param [?] hits [ajint] Number of hits
 ** @param [?] fnum [ajint] Frame number 1, 2, 3, -1, -2 or -3.
+** @param [r] pro [AjPStr] Protein translation
 ** @param [?] ptab [AjPFeattable*] Feature table (created if first use)
 ** @param [?] seq [AjPSeq] Sequence
 ** @@

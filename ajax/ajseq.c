@@ -2987,7 +2987,7 @@ ajint ajSeqBegin (AjPSeq seq)
 ** has been set.
 **
 ** @param [P] seq [AjPSeq] Sequence object
-** @return [ajint] Start position.
+** @return [ajint] End position.
 ** @@
 ******************************************************************************/
 
@@ -3957,7 +3957,7 @@ ajint ajSeqPosII (ajint ilen, ajint imin, ajint ipos)
     if (jpos < imin)
 	jpos = imin;
 
-    ajDebug("ajSeqPosII(ilen: %d imin: %d ipos: %d) = %d\n",
+    ajDebug("ajSeqPosII ilen: %d imin: %d ipos: %d) = %d\n",
 	    ilen, imin, ipos, jpos);
 
     return jpos;

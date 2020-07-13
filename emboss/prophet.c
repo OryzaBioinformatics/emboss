@@ -185,7 +185,7 @@ int main(int argc, char **argv)
 
 
 
-/* @funcstatic prophet_getType ***********************************************
+/* @funcstatic prophet_getType ************************************************
 **
 ** Undocumented.
 **
@@ -224,7 +224,7 @@ static ajint prophet_getType(AjPFile inf, AjPStr *tname)
 
 
 
-/* @funcstatic  prophet_read_profile ******************************************
+/* @funcstatic prophet_read_profile *******************************************
 **
 ** Read Gribskov or Henikoff profile
 **

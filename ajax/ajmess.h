@@ -15,6 +15,7 @@ extern "C"
 #include <stdarg.h>
 
 extern AjBool acdDebugSet;
+extern AjBool acdDebugBuffer;
 extern AjBool acdDebug;
 extern AjPStr acdProgram;
 

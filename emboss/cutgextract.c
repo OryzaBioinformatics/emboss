@@ -34,7 +34,10 @@ static void cutgextract_readcodons(AjPFile inf, AjPInt *count);
 
 /* @prog cutgextract **********************************************************
 **
-** Extract data from CUTG
+** Extract data from CUTG.
+**
+** Reads all *.codon files in the input, and builds a table for each organism.
+** Writes the tables to the EMBOSS_DATA/CODONS directory at the end.
 **
 ******************************************************************************/
 
@@ -115,10 +118,10 @@ int main(int argc, char **argv)
 	    cutgextract_readcodons(inf,&count);
 
 	    ajStrAssC(&tmpkey,entryname);
-	    /* See if organism already in the table */
+	    /* See if organism is already in the table */
 
 	    value = ajTableGet(table,tmpkey);
-	    if(!value)			/* Initialiase */
+	    if(!value)			/* Initialise */
 	    {
 		key = ajStrNewC(ajStrStr(tmpkey));
 		ajTablePut(table,(const void *)key,(void *)count);
@@ -191,7 +194,7 @@ int main(int argc, char **argv)
 
 
 
-/* @funcstatic  cutgextract_next **********************************************
+/* @funcstatic cutgextract_next ***********************************************
 **
 ** Undocumented.
 **
@@ -247,7 +250,7 @@ static char* cutgextract_next(AjPFile inf, AjPInt *array)
 }
 
 
-/* @funcstatic  cutgextract_readcodons ****************************************
+/* @funcstatic cutgextract_readcodons *****************************************
 **
 ** Undocumented.
 **

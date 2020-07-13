@@ -117,7 +117,7 @@ static void etandem_consDestroy (Cons cons)
 static struct cons reportRootStruct ;
 static Cons reportRoot = &reportRootStruct ;
 
-/* @funcstatic  etandem_basicReport ******************************************
+/* @funcstatic etandem_basicReport *******************************************
 **
 ** Undocumented.
 **

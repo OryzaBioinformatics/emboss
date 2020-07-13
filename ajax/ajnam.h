@@ -28,6 +28,7 @@ void   ajNamInit(char* prefix);
 void   ajNamListDatabases(void); /* test routine */
 void   ajNamListListDatabases (AjPList dbnames);
 void   ajNamListOrigin (void);
+void   ajNamPrintDbAttr (AjPFile outf, AjBool full);
 AjBool ajNamResolve (AjPStr* name);
 AjBool ajNamRoot (AjPStr* root);
 AjBool ajNamRootBase (AjPStr* rootbase);
@@ -39,3 +40,4 @@ AjBool ajNamRootVersion (AjPStr* version);
 #ifdef __cplusplus
 }
 #endif
+

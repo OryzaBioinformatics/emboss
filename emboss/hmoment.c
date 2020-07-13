@@ -82,10 +82,10 @@ int main(int argc, char **argv)
     baseline  = ajAcdGetFloat("baseline");
     twin      = ajAcdGetBool("double");
     
-    if(!plot)
-	outf  = ajAcdGetOutfile("outfile");
-    else
-	graph = ajAcdGetGraphxy("graph");
+    /* only one will be used - see variable 'plot' */
+
+    outf  = ajAcdGetOutfile("outfile");
+    graph = ajAcdGetGraphxy("graph");
     
 
     str = ajStrNew();

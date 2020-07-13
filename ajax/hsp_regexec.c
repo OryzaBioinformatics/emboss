@@ -116,7 +116,7 @@ ajint nope=0;
 ** @param [r] preg [const regex_t*] Undocumented
 ** @param [r] string [const char*] Undocumented
 ** @param [r] nmatch [size_t] Undocumented
-** @param [r] pmatch [regmatch_t []] Undocumented
+** @param [r] pmatch [regmatch_t[]] Undocumented
 ** @param [r] eflags [ajint] Undocumented
 ** @return [ajint] 0 success, REG_NOMATCH failure
 ******************************************************************************/

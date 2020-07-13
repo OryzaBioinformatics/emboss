@@ -61,10 +61,10 @@ int main(int argc, char **argv)
 
     str = ajStrNew();
 
-    begin = ajSeqBegin(sequence);
-    end   = ajSeqEnd(sequence);
+    begin = ajSeqBegin(sequence) - 1;
+    end   = ajSeqEnd(sequence) - 1;
     
-    ajStrAssSub(&str,ajSeqStr(sequence),--begin,--end);
+    ajStrAssSub(&str,ajSeqStr(sequence),begin,end);
     
 
     ajStrToLower(&str);

@@ -85,8 +85,9 @@ typedef struct AjSFeattable {
   ajint             DefFormat ; /* Original input or 'source' format
 				   of the feature table */
   AjPList           Features ;	/* List of AjPFeatures... */
-  ajint             Start;      /* First and last position used */
-  ajint             End;        /* Rather like begin and end for sequences */
+  ajint             Start;      /* First position used (like sequence begin) */
+  ajint             End;        /* Last position used (like sequence end) */
+  ajint             Len;        /* Maximum length */
   ajint             Groups;	/* Number of current group being added */
 }  AjOFeattable, *AjPFeattable ;  
 

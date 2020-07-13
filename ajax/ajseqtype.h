@@ -9,6 +9,7 @@ extern "C"
 void         ajSeqGap (AjPSeq thys, char gapc, char padc);
 void         ajSeqGapLen (AjPSeq thys, char gapc, char padc, ajint ilen);
 void         ajSeqGapS (AjPStr* seq, char gapc);
+void         ajSeqPrintType (AjPFile outf, AjBool full);
 void         ajSeqSetNuc (AjPSeq thys);
 void         ajSeqSetProt (AjPSeq thys);
 char         ajSeqTypeAny (AjPSeq thys);

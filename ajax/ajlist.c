@@ -508,7 +508,7 @@ AjPList ajListCopy(AjPList thys)
     return newlist;
 }
 
-/* @func ajListstrClone ************************************************
+/* @func ajListstrClone *******************************************************
 **
 ** Copy a string list. The destination list should be empty.
 ** If it is not, new entries are appended.
@@ -518,9 +518,9 @@ AjPList ajListCopy(AjPList thys)
 **
 ** @param [r] thys [AjPList] list to be copied
 ** @param [r] newlist [AjPList] (empty) target list
-** @return [AjPList] new copied list.
+** @return [ajint] number of nodes.
 ** @@
-*******************************************************************/
+******************************************************************************/
 
 ajint ajListstrClone(AjPList thys, AjPList newlist)
 {
@@ -1743,13 +1743,13 @@ void ajListSort (AjPList thys, int (*compar) (const void*, const void*))
 }
 
 
-/* @func ajListUnique *******************************************************
+/* @func ajListUnique *********************************************************
 **
 ** Sort the items in a list, and remove duplicates
 **
 ** @param [r] thys [AjPList] List.
 ** @param [r] compar [int* function] Function to compare two list items.
-** @param [r] nodelete [void function] Function to delete an item
+** @param [r] nodedelete [void function] Function to delete an item
 ** @return [void]
 ** @@
 ******************************************************************************/

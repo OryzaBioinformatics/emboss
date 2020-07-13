@@ -1037,7 +1037,7 @@ static void eprimer3_write_primer(AjPFile outfile, char *tag, AjPStr pos,
     ajStrToFloat(gc, &gcfloat);
     comma = ajStrFindC(pos, ",");
     ajStrAss(&start, pos);
-    ajStrCut(&start, comma, ajStrLen(start));
+    ajStrCut(&start, comma, ajStrLen(start)-1);
     ajStrToInt(start, &startint);
     ajStrCut(&pos, 0, comma);
     ajStrToInt(pos, &lenint);

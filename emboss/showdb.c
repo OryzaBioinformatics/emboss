@@ -244,7 +244,7 @@ int main(int argc, char **argv)
 }
 
 
-/* @funcstatic  showdb_DBOut *************************************************
+/* @funcstatic showdb_DBOut ***************************************************
 **
 ** Output db information
 **

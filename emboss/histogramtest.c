@@ -37,37 +37,35 @@ int main(int argc, char **argv)
     ajint i,j,k=1;
     ajint sets,points;
     char temp[20];
+    ajint ibins;
+    ajint xstart;
+    ajint xend;
 
     (void) ajGraphInit ("histogramtest", argc, argv);
-
-    ajUser ("init done");
 
     graph = ajAcdGetGraphxy ("graph");
     sets = ajAcdGetInt ("sets");
 
     points = ajAcdGetInt ("points");
 
-    ajUser("ajHistNewG");
     hist = ajHistNewG(sets,points, graph);
 
-    hist->bins = ajAcdGetInt ("bins");
+    ibins = ajAcdGetInt ("bins");
+    hist->bins = ibins;
 
     hist->displaytype=HIST_ONTOP;
 
-    hist->xmin = ajAcdGetInt ("xstart");
+    xstart = ajAcdGetInt ("xstart");
+    hist->xmin = xstart;
+    xend = ajAcdGetInt ("xend");
+    hist->xmax = xend;
 
-    hist->xmax = ajAcdGetInt ("xend");
-
-    ajUser("ajHistSetTitleC");
     ajHistSetTitleC(hist, "A demo of the Histogram suite");
 
-    ajUser("ajHistSetXAxisC");
     ajHistSetXAxisC(hist, "X axis");
   
-    ajUser("ajHistSetYAxisLeftC");
     ajHistSetYAxisLeftC(hist, "LEFT");
   
-    ajUser("ajHistSetYAxisRightC");
     ajHistSetYAxisRightC(hist, "RIGHT");
 
     AJCNEW(data, sets);
@@ -78,11 +76,9 @@ int main(int argc, char **argv)
 	for(j=0;j<points;j++)
 	    data2[j] = k++;
 
-	ajUser("ajHistSetPtrToData (%d)", i);
 	ajHistSetPtrToData(hist, i, data2);
     }
 
-    ajUser("DOING 1st");
     ajHistDisplay (hist);
 
     /* free all memory */
@@ -93,14 +89,14 @@ int main(int argc, char **argv)
     /* now do again but copy the data */
     hist = ajHistNewG(sets,points, graph);
 
-    hist->bins = ajAcdGetInt ("bins");
+    hist->bins = ibins;
 
     /*  hist->displaytype = ajAcdGetInt ("sidebyside");*/
     hist->displaytype=HIST_SIDEBYSIDE;
 
-    hist->xmin = ajAcdGetInt ("xstart");
+    hist->xmin = xstart;
 
-    hist->xmax = ajAcdGetInt ("xend");
+    hist->xmax = xend;
 
     ajHistSetTitleC(hist, "A demo of the Histogram suite");
 
@@ -127,10 +123,8 @@ int main(int argc, char **argv)
 
     ajHistSetBlackandWhite(hist , AJTRUE);
 
-    ajUser("DOING 2nd");
     ajHistDisplay (hist);
 
-    ajUser("DOING 3rd");
     hist->displaytype=HIST_SEPARATE;
 
     for(i=0;i<sets;i++)

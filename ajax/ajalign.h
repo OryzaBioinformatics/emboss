@@ -28,7 +28,6 @@ typedef struct AjSAlign {
   AjPStr Type;			/* "P" Protein or "N" Nucleotide */
   AjPStr Formatstr;		/* Report format (-aformat) */
   AjEnum Format;		/* Report format (index number) */
-  AjPStr Filename;		/* Output file name */
   AjPStr Extension;		/* Output file extension */
   AjPFile File;			/* Output file object */
   AjPStr Header;		/* Text to add to header with newlines */
@@ -63,6 +62,7 @@ AjBool       ajAlignOpen (AjPAlign thys, AjPStr name);
 AjBool       ajAlignFindFormat (AjPStr format, ajint* iformat);
 AjBool       ajAlignFormatDefault (AjPStr* pformat);
 AjPAlign     ajAlignNew (void);
+void         ajAlignPrintFormat (AjPFile outf, AjBool full);
 void         ajAlignReset (AjPAlign thys);
 void         ajAlignSetExternal (AjPAlign thys, AjBool external);
 void         ajAlignSetHeader (AjPAlign thys, AjPStr header);

@@ -200,7 +200,7 @@ static void equicktandem_print (AjPFile outf, ajint begin)
 
     return;
 }
-/* @funcstatic equicktandem_savefeat ******************************************
+/* @funcstatic equicktandem_report ********************************************
 **
 ** Saves a result as a feature.
 **

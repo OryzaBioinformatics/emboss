@@ -210,7 +210,7 @@ int main(int argc, char **argv)
     (void) ajFmtPrintF(outfile,"\n\nWord size\t%d\n", word);
 
     /* Now output the Total count */
-    (void) ajFmtPrintF(outfile,"Total count\t%lu\n\n", total);
+    (void) ajFmtPrintF(outfile,"Total count\t%Lu\n\n", total);
 
     /* we have now counted the frequency of the words in the sequences */
     (void) ajFmtPrintF(outfile, 
@@ -254,7 +254,7 @@ int main(int argc, char **argv)
 	    obs_exp = obs_freq/exp_freq;
 	}
 
-	(void) ajFmtPrintF(outfile, "%S\t%lu\t\t%.7f\t%.7f\t%.7f\n", dispseq,
+	(void) ajFmtPrintF(outfile, "%S\t%Lu\t\t%.7f\t%.7f\t%.7f\n", dispseq,
 			   bigarray[count], obs_freq, exp_freq, obs_exp);
     }
 
@@ -278,7 +278,7 @@ int main(int argc, char **argv)
 	obs_exp = obs_freq/exp_freq;    
 
 
-    (void) ajFmtPrintF(outfile, "\nOther\t%lu\t\t%.7f\t%.7f\t%.7f\n", other,
+    (void) ajFmtPrintF(outfile, "\nOther\t%Lu\t\t%.7f\t%.7f\t%.7f\n", other,
 		       obs_freq, exp_freq, obs_exp);
 
     (void) ajFileClose(&outfile);
@@ -358,7 +358,7 @@ static ajint compseq_readexpfreq(AjPTable *exptable, AjPFile infile,
 	/* look for the word size */
 	if (!ajStrFindC(line, "Word size"))
 	{
-	    (void) ajStrAssSub(&sizestr, line, 10, ajStrLen(line));
+	    (void) ajStrAssSub(&sizestr, line, 10, ajStrLen(line)-1);
 	    (void) ajStrChomp(&sizestr);
 	    (void) ajStrToInt(sizestr, &thissize);
 	    if (size == thissize) break;

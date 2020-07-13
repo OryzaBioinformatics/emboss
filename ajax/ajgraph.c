@@ -393,8 +393,14 @@ static void GraphSetWin2(float xmin, float xmax, float ymin, float ymax){
 ******************************************************************************/
 
 static void GraphArray(ajint numofpoints, float *x, float *y){
-  ajDebug("=g= plline ( %d, %.2f .. %.2f, %.2f .. %.2f) [num x..x y..y]\n",
-	  numofpoints, x[0], x[numofpoints-1], y[0], y[numofpoints-1] );
+
+  if (numofpoints)
+    ajDebug("=g= plline ( %d, %.2f .. %.2f, %.2f .. %.2f) [num x..x y..y]\n",
+	    numofpoints, x[0], x[numofpoints-1], y[0], y[numofpoints-1] );
+  else
+    ajDebug("=g= plline ( %d, <> .. <>, <> .. <>) [num x..x y..y]\n",
+	    numofpoints );
+
   plline(numofpoints, x,y);
 } 
 
@@ -480,8 +486,13 @@ static void GraphArrayGapsI(ajint numofpoints, ajint *x, ajint *y){
 
 static void GraphFill(ajint numofpoints, float *x, float *y){
 
-  ajDebug("=g= plfill ( %d, %.2f .. %.2f, %.2f .. %.2f) [num x..x y..y]\n",
-	  numofpoints, x[0], x[numofpoints-1], y[0], y[numofpoints-1] );
+  if (numofpoints)
+    ajDebug("=g= plfill ( %d, %.2f .. %.2f, %.2f .. %.2f) [num x..x y..y]\n",
+	    numofpoints, x[0], x[numofpoints-1], y[0], y[numofpoints-1] );
+  else
+    ajDebug("=g= plfill ( %d, <> .. <>, <> .. <>) [num x..x y..y]\n",
+	    numofpoints );
+    
   plfill(numofpoints, x, y);
 }
 
@@ -1962,8 +1973,14 @@ void ajGraphTextMid (PLFLT x1, PLFLT y1, char *text){
 ** @@
 *************************************************************************/
 void ajGraphVertBars(ajint numofpoints, PLFLT *x, PLFLT *ymin, PLFLT *ymax){
-  ajDebug ("=g= plerry (%d %.2f .. %.2f, %.2f, %.2f) [num, x..x, ymin, ymax]\n",
-	   numofpoints, x[0], x[numofpoints-1], ymin, ymax); 
+
+  if (numofpoints)
+    ajDebug ("=g= plerry (%d %.2f..%.2f, %.2f, %.2f) [num,x..x,ymin,ymax]\n",
+	     numofpoints, x[0], x[numofpoints-1], ymin, ymax);
+  else
+    ajDebug ("=g= plerry (%d <>..<>, %.2f, %.2f) [num,x..x,ymin,ymax]\n",
+	     numofpoints, ymin, ymax); 
+
   plerry(numofpoints,x,ymin,ymax);
 }
 
@@ -1981,8 +1998,14 @@ void ajGraphVertBars(ajint numofpoints, PLFLT *x, PLFLT *ymin, PLFLT *ymax){
 ** @@
 *************************************************************************/
 void ajGraphHoriBars(ajint numofpoints, PLFLT *y, PLFLT *xmin, PLFLT *xmax){
-  ajDebug ("=g= plerrx (%d %.2f .. %.2f, %.2f, %.2f) [num, y..y, xmin, xmax]\n",
-	   numofpoints, y[0], y[numofpoints-1], xmin, xmax); 
+
+  if (numofpoints)
+    ajDebug ("=g= plerrx (%d %.2f..%.2f, %.2f, %.2f) [num,y..y,xmin,xmax]\n",
+	     numofpoints, y[0], y[numofpoints-1], xmin, xmax); 
+  else
+    ajDebug ("=g= plerrx (%d <>..<>, %.2f, %.2f) [num,y..y,xmin,xmax]\n",
+	     numofpoints, xmin, xmax); 
+
   plerrx(numofpoints,y,xmin,xmax);
 }
 
@@ -4960,11 +4983,11 @@ void ajGraphRectangleOnCurve(PLFLT xcentre, PLFLT ycentre, PLFLT Radius, PLFLT B
   return;
 }
 
-/* @func ajGraphInfo **************************************************
+/* @func ajGraphInfo **********************************************************
 **
 ** Information on files created for graph output
 **
-** @param [w] files [AjPList] List of graph files
+** @param [w] files [AjPList*] List of graph files
 ** @return [ajint] Number of files (will match length of list)
 ** @@
 ******************************************************************************/
@@ -5003,6 +5026,50 @@ ajint ajGraphInfo(AjPList* files)
   }
   return i;
 }
+
+
+/* @func ajGraphFillRectangleOnCurve ***********************************
+**
+** Draw a rectangle along a curve and fill it with the current pen colour/style.
+**
+** @param  [r] xcentre [PLFLT] x coor for centre.
+** @param  [r] ycentre [PLFLT] y coor for centre.
+** @param  [r] Radius  [PLFLT] radius of the circle.
+** @param  [r] BoxHeight [PLFLT] The height of the rectangle in user coordinates.
+** @param  [r] StartAngle [PLFLT] angle of the start of the rectangle.
+** @param  [r] EndAngle [PLFLT] angle of the end of the rectangle.
+** @return [void]
+** @@
+*********************************************************************/
+void ajGraphFillRectangleOnCurve(PLFLT xcentre, PLFLT ycentre, PLFLT Radius,
+				 PLFLT BoxHeight, PLFLT StartAngle,
+				 PLFLT EndAngle)
+{
+  PLFLT angle;
+  ajint i;
+  PLFLT x[4];
+  PLFLT y[4];
+  ajint numofpoints;
+  PLFLT r1Blocks = Radius;
+  PLFLT r2Blocks = r1Blocks+BoxHeight;
+
+  for(i=0, angle=StartAngle; angle<EndAngle; angle++, i++)
+  {
+    x[0]=xcentre + ( r1Blocks*(float)cos(ajDegToRad(angle)) );
+    y[0]=ycentre + ( r1Blocks*(float)sin(ajDegToRad(angle)) );
+    x[1]=xcentre + ( r2Blocks*(float)cos(ajDegToRad(angle)) );
+    y[1]=ycentre + ( r2Blocks*(float)sin(ajDegToRad(angle)) );
+    x[2]=xcentre + ( r2Blocks*(float)cos(ajDegToRad(angle+1)) );
+    y[2]=ycentre + ( r2Blocks*(float)sin(ajDegToRad(angle+1)) );
+    x[3]=xcentre + ( r1Blocks*(float)cos(ajDegToRad(angle+1)) );
+    y[3]=ycentre + ( r1Blocks*(float)sin(ajDegToRad(angle+1)) );
+    numofpoints = 4;
+    ajGraphPolyFill(numofpoints, x, y);
+  }
+
+  return;
+}
+
 
 /* @func ajGraphUnused **************************************************
 **

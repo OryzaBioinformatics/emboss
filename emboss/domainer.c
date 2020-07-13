@@ -1,9 +1,8 @@
 /* @source domainer application
 **
-** Extract domains from clean PDB files
+** Reads protein coordinate files and writes domains coordinate files.
+** 
 ** @author: Copyright (C) Jon Ison (jison@hgmp.mrc.ac.uk)
-** @author: Copyright (C) Ranjeeva Ranasinghe (rranasin@hgmp.mrc.ac.uk)
-** @author: Copyright (C) Alan Bleasby (ableasby@hgmp.mrc.ac.uk)
 ** @@
 **
 ** This program is free software; you can redistribute it and/or
@@ -23,6 +22,18 @@
 ** 
 ** 
 ** 
+******************************************************************************
+**IMPORTANT NOTE      IMPORTANT NOTE      IMPORTANT NOTE        IMPORTANT NOTE     
+******************************************************************************
+**
+** Mon May 20 11:43:39 BST 2002
+**
+** The following documentation is out-of-date and should be disregarded.  It 
+** will be updated shortly. 
+** 
+******************************************************************************
+**IMPORTANT NOTE      IMPORTANT NOTE      IMPORTANT NOTE        IMPORTANT NOTE     
+******************************************************************************
 ** 
 ** 
 ** 
@@ -186,9 +197,11 @@
 ** are written. The text 'WARN  filename not found' is given in cases where a 
 ** clean coordinate file could not be found. 'ERROR filename file read error' 
 ** or 'ERROR filename file write error' will be reported when an error was 
-** encountered during a file read or write respectively.  Various other error
-** messages may also be given (in case of difficulty email Jon Ison, 
-** jison@hgmp.mrc.ac.uk).
+** encountered during a file read or write respectively.  The 'ERROR Domain 
+** start found by wildcard match only' is reported when wildcard matching 
+** was needed to find the start (or end) of a domain in a pdb file (see below).
+** Various other error messages may also be given (in case of difficulty 
+** email Jon Ison, jison@hgmp.mrc.ac.uk).
 **
 ** Figure 3 Excerpt of log file
 ** //
@@ -199,12 +212,40 @@
 ** WARN  Could not open for reading cpdb file s003.pxyz
 **
 ** Important Note
+** Messages of the type:
+** //
+** D0LPC_1
+** WARN  0lpc.pxyz not found
+** 
+** can appear in the log file if 
+** (i)  The domain is of a pdb file which is in holding, but has not made it
+** into the main pdb release yet.
+** (ii) The domain is of a pdb file that is now obsolete - having been replaced
+** by a more recent entry.
+** There may be other cases too.
 **
-** domainer is designed to work with OLD FORMAT clean pdb files - i.e. the 
-** ones currently found in /data/cpdb/ on the HGMP server.  To convert to 
-** parsing of new format files (when available) change ajXyzCpdbReadOld to 
-** ajXyzCpdbRead().
 **
+** Messages of the type:
+** The start and end positions of domains in SCOP coincide in several cases 
+** to residues which either lack a CA atom or which have a single atom only
+** structured. Therefore to avoid these domains being rejected during a 
+** domainer run, it is important to use clean coordinate data which has NOT
+** been masked to remove such residues.
+** Otherwise errors of the following type may occur:
+** //
+** D1QFUL1
+** ERROR Domain end not found in ajXyzCpdbWriteDomain 
+**
+** //
+** D1QFUL1
+** ERROR Domain start not found in ajXyzCpdbWriteDomain 
+** 
+** 
+** Wildcard matching of scop domain start and end points
+** SCOP treats pdb residue numbers as integers and this is a potential source
+** of error in the domain ranges. It means that domainer (via library calls)
+** must use wild card strings when matching a scop start / end point to the
+** pdb residue number strings.
 ******************************************************************************/
 
 
@@ -317,7 +358,7 @@ int main(int argc, char **argv)
 	
 	
 	/* Write pdb structure */
-	if(!ajXyzCpdbReadOld(cpdb_inf, &pdb))	       
+	if(!ajXyzCpdbRead(cpdb_inf, &pdb))	       
 	{
 	    ajFmtPrintS(&msg, "Error reading cpdb file %S", cpdb_name);
 	    ajWarn(ajStrStr(msg));

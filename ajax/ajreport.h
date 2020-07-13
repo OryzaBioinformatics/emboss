@@ -29,7 +29,6 @@ typedef struct AjSReport {
   AjEnum Format;		/* Report format (index number) */
   AjPFeattable Fttable;		/* Feature table to use (obsolete?) */
   AjPFeattabOut Ftquery;	/* Output definition for features*/
-  AjPStr Filename;		/* Output file name */
   AjPStr Extension;		/* Output file extension */
   AjPFile File;			/* Output file object */
   AjPList Tagnames;		/* List of extra tag names (from ACD) */
@@ -57,6 +56,7 @@ AjBool       ajReportFormatDefault (AjPStr* pformat);
 ajint        ajReportLists (AjPReport thys, AjPStr** types, AjPStr** names,
 			    AjPStr** prints, ajint** tagsizes);
 AjPReport    ajReportNew (void);
+void         ajReportPrintFormat (AjPFile outf, AjBool full);
 AjPStr       ajReportSeqName (AjPReport thys, AjPSeq seq);
 void         ajReportSetHeader (AjPReport thys, AjPStr header);
 void         ajReportSetHeaderC (AjPReport thys, const char* header);

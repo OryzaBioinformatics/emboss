@@ -155,7 +155,7 @@ int main(int argc, char **argv)
 
 /* "constructors" */
 
-/* @funcstatic  psearch_initialise_pguts *************************************
+/* @funcstatic psearch_initialise_pguts ***************************************
 **
 ** Initialise primer guts
 **
@@ -191,7 +191,7 @@ static void psearch_initialise_pguts(PGuts* primer)
 
 /* "destructors" */
 
-/* @funcstatic  psearch_free_pguts *******************************************
+/* @funcstatic psearch_free_pguts *********************************************
 **
 ** Frees up all the internal members of a PGuts struct
 **
@@ -272,7 +272,7 @@ static void psearch_free_primer(void **x, void *cl)
 
 
 
-/* @funcstatic psearch_clean_hitlist *****************************************
+/* @funcstatic psearch_clean_hitlist ******************************************
 **
 ** Clean the hitlist
 **
@@ -302,7 +302,7 @@ static void psearch_clean_hitlist(AjPList hlist)
 
 /* utilities */
 
-/* @funcstatic psearch_read_primers ******************************************
+/* @funcstatic psearch_read_primers *******************************************
 **
 ** read primers in from primerfile, classify and compile the patterns
 **
@@ -385,7 +385,7 @@ static void psearch_read_primers(AjPList *primerList, AjPFile primerFile,
 
 
 
-/* @funcstatic psearch_classify_and_compile **********************************
+/* @funcstatic psearch_classify_and_compile ***********************************
 **
 ** determines pattern type and compiles it
 **
@@ -447,7 +447,7 @@ static AjBool psearch_classify_and_compile(Primer* primdata)
 
 
 
-/* @funcstatic psearch_primer_search *****************************************
+/* @funcstatic psearch_primer_search ******************************************
 **
 ** tests the primers in primdata against seq and writes results to outfile
 **
@@ -479,7 +479,7 @@ static void psearch_primer_search(AjPList primerList, AjPSeq seq, AjPFile outf)
 
 
 
-/* @funcstatic psearch_scan_seq **********************************************
+/* @funcstatic psearch_scan_seq ***********************************************
 **
 ** scans the primer pairs against the sequence in either forward 
 ** sense or reverse complemented 
@@ -623,7 +623,7 @@ static void psearch_scan_seq(Primer primdata, AjPSeq seq, AjBool reverse,
 
 
 
-/* @funcstatic psearch_store_hits ********************************************
+/* @funcstatic psearch_store_hits *********************************************
 **
 ** Store primer hits
 **
@@ -709,7 +709,7 @@ static void psearch_store_hits(Primer primdata, AjPList fhits, AjPList rhits,
 
 
 
-/* @funcstatic  psearch_print_hits ******************************************
+/* @funcstatic psearch_print_hits *********************************************
 **
 ** Print primer hits
 **

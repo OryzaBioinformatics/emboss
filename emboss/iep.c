@@ -93,8 +93,9 @@ int main(int argc, char **argv)
     embIepPkRead();				/* read pK's */
     embIepCalcK(K);				/* Convert to dissoc consts */
 
-    if(doplot)
-      graph = ajAcdGetGraphxy("graph");
+     /* only used if variable 'plot' is ajTrue */
+
+   graph = ajAcdGetGraphxy("graph");
 
     while(ajSeqallNext(all,&a))
     {

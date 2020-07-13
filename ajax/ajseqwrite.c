@@ -425,6 +425,7 @@ static void seqWriteFasta (AjPSeqout outseq) {
   ajint ilen;
   static AjPStr seq = NULL;
   ajint linelen = 60;
+  ajint iend;
 
   seqDbName (&outseq->Name, outseq->Setdb);
 
@@ -443,7 +444,8 @@ static void seqWriteFasta (AjPSeqout outseq) {
 
   ilen = ajStrLen(outseq->Seq);
   for (i=0; i < ilen; i += linelen) {
-    (void) ajStrAssSub (&seq, outseq->Seq, i, i+linelen-1);
+    iend = AJMIN(ilen-1, i+linelen-1);
+    (void) ajStrAssSub (&seq, outseq->Seq, i, iend);
     (void) ajFmtPrintF (outseq->File, "%S\n", seq);
   }
 
@@ -465,6 +467,7 @@ static void seqWriteNcbi (AjPSeqout outseq) {
   ajint ilen;
   static AjPStr seq = NULL;
   ajint linelen = 60;
+  ajint iend;
 
   if (ajStrLen(outseq->Gi))
     (void) ajFmtPrintF (outseq->File, ">gi|%S|gnl|", outseq->Gi);
@@ -472,6 +475,8 @@ static void seqWriteNcbi (AjPSeqout outseq) {
     (void) ajFmtPrintF (outseq->File, ">gnl|");
   if (ajStrLen(outseq->Db))
     (void) ajFmtPrintF (outseq->File, "%S|", outseq->Db);
+  else if (ajStrLen(outseq->Setdb))
+    (void) ajFmtPrintF (outseq->File, "%S|", outseq->Setdb);
   else
     (void) ajFmtPrintF (outseq->File, "unk|");
 
@@ -489,7 +494,8 @@ static void seqWriteNcbi (AjPSeqout outseq) {
 
   ilen = ajStrLen(outseq->Seq);
   for (i=0; i < ilen; i += linelen) {
-    (void) ajStrAssSub (&seq, outseq->Seq, i, i+linelen-1);
+    iend = AJMIN(ilen-1, i+linelen-1);
+    (void) ajStrAssSub (&seq, outseq->Seq, i, iend);
     (void) ajFmtPrintF (outseq->File, "%S\n", seq);
   }
 
@@ -2909,8 +2915,9 @@ AjBool ajSeqOutSetFormatC (AjPSeqout thys, char* format) {
 
 /* @func ajSeqOutFormatDefault ************************************************
 **
-** Sets the default output format. Currently hard coded but will be replaced
-** in future by a variable.
+** Sets the default output format.
+** Checks the _OUTFORMAT variable,
+** and uses FASTA if no other definition is found.
 **
 ** @param [wP] pformat [AjPStr*] Default output format.
 ** @return [AjBool] ajTrue on success.
@@ -2924,8 +2931,16 @@ AjBool ajSeqOutFormatDefault (AjPStr* pformat) {
   }
   else {
     /* ajStrSetC (pformat, seqOutFormat[0].Name);*/
-    (void) ajStrSetC (pformat, "fasta"); /* use the real name */
-    ajDebug ("... output format not set, default to '%S'\n", *pformat);
+    if  (ajNamGetValueC("outformat", pformat))
+    {
+	ajDebug ("ajSeqOutFormatDefault '%S' from EMBOSS_OUTFORMAT\n",
+		 *pformat);
+    }
+    else
+    {
+      (void) ajStrSetC (pformat, "fasta"); /* use the real name */
+      ajDebug ("... output format not set, default to '%S'\n", *pformat);
+    }
   }
 
   return ajTrue;
@@ -2947,12 +2962,16 @@ void ajSeqPrintOutFormat (AjPFile outf, AjBool full) {
 
   ajFmtPrintF (outf, "\n");
   ajFmtPrintF (outf, "# sequence output formats\n");
-  ajFmtPrintF (outf, "# Name         Single (if true, 1 sequence per file)\n");
+  ajFmtPrintF (outf, "# Single: If true, write each sequence to a new file\n");
+  ajFmtPrintF (outf, "# Save: If true, save sequences, write when closed\n");
+  ajFmtPrintF (outf, "# Name         Single Save\n");
   ajFmtPrintF (outf, "\n");
   ajFmtPrintF (outf, "OutFormat {\n");
   for (i=0; seqOutFormat[i].Name; i++) {
-    ajFmtPrintF (outf, "  %-12s %B\n",
-		 seqOutFormat[i].Name, seqOutFormat[i].Single);
+    ajFmtPrintF (outf, "  %-12s    %3B  %3B\n",
+		 seqOutFormat[i].Name,
+		 seqOutFormat[i].Single,
+		 seqOutFormat[i].Save);
   }
   ajFmtPrintF (outf, "}\n\n");
 
@@ -2974,10 +2993,19 @@ AjBool ajSeqFindOutFormat (AjPStr format, ajint* iformat) {
   AjPStr tmpformat = NULL;
   ajint i = 0;
 
-  if (!ajStrLen(format))
-    return ajFalse;
+  if (!ajStrLen(format)) {
+    if  (ajNamGetValueC("outformat", &tmpformat)) {
+      ajDebug ("ajSeqFindOutFormat '%S' from EMBOSS_OUTFORMAT\n",
+	       tmpformat);
+    }
+    else {
+      return ajFalse;
+    }
+  }
+  else {
+    (void) ajStrAss (&tmpformat, format);
+  }
 
-  (void) ajStrAss (&tmpformat, format);
   (void) ajStrToLower(&tmpformat);
 
   while (seqOutFormat[i].Name) {
@@ -3319,7 +3347,11 @@ static void seqClone (AjPSeqout outseq, AjPSeq seq) {
 
   outseq->Fttable = seq->Fttable;
   outseq->Offset = ibegin;
-  (void) ajStrAssSub (&outseq->Seq, seq->Seq, ibegin-1, iend-1);
+
+  if (iend >= ibegin)
+    (void) ajStrAssSub (&outseq->Seq, seq->Seq, ibegin-1, iend-1);
+  else				/* empty sequence */
+    (void) ajStrAssC (&outseq->Seq, "");
 
   ajDebug ("seqClone %d .. %d %d .. %d len: %d type: '%S'\n",
 	   seq->Begin, seq->End, ibegin, iend,
@@ -3374,7 +3406,10 @@ static void seqAllClone (AjPSeqout outseq, AjPSeq seq) {
   outseq->Fttable = seq->Fttable;
   outseq->Offset = ibegin;
 
-  (void) ajStrAssSub (&outseq->Seq, seq->Seq, ibegin-1, iend-1);
+  if (iend >= ibegin)
+    (void) ajStrAssSub (&outseq->Seq, seq->Seq, ibegin-1, iend-1);
+  else				/* empty sequence */
+    (void) ajStrAssC (&outseq->Seq, "");
 
   ajDebug ("seqAllClone %d .. %d %d .. %d len: %d type: '%S'\n",
 	   seq->Begin, seq->End, ibegin, iend,

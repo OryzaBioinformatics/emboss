@@ -75,13 +75,13 @@ int main(int argc, char **argv)
     if(omnia)
     { 
 	embComWriteFile(outfile,jmin,jmax,lwin,step,sim);
-	ajUser("do embComWriteFile\n");
+
 	while (ajSeqallNext(seqall, &seq))
 	{
 	    ajSeqAllWrite (seqout,seq);
 	    len = ajSeqLen(seq);
 	    name = ajSeqName(seq);
-	    ajUser("%s %d",name,len);
+
 	    charseq = ajSeqChar(seq);
 	    if(len >= lwin)
 	    {
@@ -113,7 +113,7 @@ int main(int argc, char **argv)
   
     ajFileClose (&outfile); 
 
-    ajUser("%d %d %d %d %d",lwin,step,sim,jmin,jmax);
+    /*    ajUser("%d %d %d %d %d",lwin,step,sim,jmin,jmax); */
     /*embComGraphComplex();*/
  
     ajExit();

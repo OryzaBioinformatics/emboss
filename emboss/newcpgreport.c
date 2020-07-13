@@ -118,7 +118,7 @@ int main(int argc, char **argv)
 }
 
 
-/* @funcstatic  newcpgreport_findbases ***************************************
+/* @funcstatic newcpgreport_findbases *****************************************
 **
 ** Undocumented.
 **
@@ -193,7 +193,7 @@ static void newcpgreport_findbases(AjPStr *substr, ajint begin, ajint len,
 
 
 
-/* @funcstatic  newcpgreport_countbases **************************************
+/* @funcstatic newcpgreport_countbases ****************************************
 **
 ** Undocumented.
 **
@@ -239,7 +239,7 @@ static void newcpgreport_countbases(char *seq, char *bases, ajint window,
 
 
 
-/* @funcstatic newcpgreport_identify *****************************************
+/* @funcstatic newcpgreport_identify ******************************************
 **
 **    This subroutine identifies the CpG line, identifying the possible
 **    dinucleotide 'islands' in the sequence. These are defined as
@@ -339,7 +339,7 @@ static void newcpgreport_identify(AjPFile outf, float *obsexp, float *xypc,
 
 
 
-/* @funcstatic newcpgreport_reportislands ************************************
+/* @funcstatic newcpgreport_reportislands *************************************
 **
 ** Undocumented.
 **
@@ -436,7 +436,7 @@ static void newcpgreport_reportislands(AjPFile outf, AjBool *thresh,
 
 
 
-/* @funcstatic  newcpgreport_compisl *****************************************
+/* @funcstatic newcpgreport_compisl *******************************************
 **
 ** Undocumented.
 **

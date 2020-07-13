@@ -172,9 +172,10 @@ typedef struct AjSScopalg
     AjPStr   Fold;
     AjPStr   Superfamily;
     AjPStr   Family;
+    ajint    Sunid_Family;        /* SCOP sunid for family */
     ajint    width;        /* Width (residues) of widest part of alignment */
     ajint    N;            /* No. of sequences in alignment */
-    AjPStr  *Codes;        /* Array of id codes of sequences */
+    AjPStr  *Codes;        /* Array of domain id codes of sequences */
     AjPStr  *Seqs;         /* Array of sequences */
     AjPStr   Post_similar; /* Post_similar line from alignment */
 } AjOScopalg, *AjPScopalg;
@@ -206,21 +207,24 @@ typedef struct AjSScophit
     AjPStr    Fold;
     AjPStr    Superfamily;
     AjPStr    Family;
+    ajint    Sunid_Family;        /* SCOP sunid for family */
     AjPStr    Seq;	  /* Sequence as string */
     ajint     Start;      /* Start of sequence or signature alignment relative to full length 
 			    swissprot sequence */
     ajint     End;        /* End of sequence or signature alignment relative to full length 
 			    swissprot sequence */
-    AjPStr    Id;         /* Identifier */  
+    AjPStr    Acc;        /* Accession number of sequence entry  */
+    AjPStr    Spr;        /* Swissprot code of sequence entry */
     AjPStr    Typeobj;    /* Bibliographic information ... objective*/ 
     AjPStr    Typesbj;    /* Bibliographic information ... subjective */ 
-    ajint     Group;      /* Group no. of sequence */
+    AjPStr    Group;      /* 'REDUNDANT' or 'NON_REDUNDANT' */
     ajint     Rank;       /* Rank order of hit */	
     float     Score;      /* Score of hit */
     float     Eval;       /* E-value of hit */
     AjPStr    Alg;        /* Alignment, e.g. of a signature to the sequence */
     AjBool    Target;     /* True if the Scophit is targetted for removal from 
 			     a list of Scophit objects */
+    AjBool    Target2;    /* Also used for garbage collection */
     AjBool    Priority;   /* True if the Scop hit is high priority. */
 } AjOScophit, *AjPScophit;
 
@@ -250,16 +254,17 @@ typedef struct AjSHit
 			    swissprot sequence */
   ajint     End;        /* End of sequence or signature alignment relative to full length 
 			    swissprot sequence */
-  AjPStr    Id;         /* Identifier */  
+  AjPStr Acc;           /* Accession number of sequence entry  */
   AjPStr    Typeobj;    /* Primary classification of hit - objective*/
   AjPStr    Typesbj;    /* Secondary classification of hit */
   AjPStr    Alg;        /* Alignment, e.g. of a signature to the sequence */
-  ajint     Group;      /* Group no. of sequence */
+  AjPStr    Group;      /* 'REDUNDANT' or 'NON_REDUNDANT' */
   ajint     Rank;       /* Rank order of hit */	
   float     Score;      /* Score of hit */
   float     Eval;       /* E-value of hit */
   AjBool    Target;     /* True if the Scophit is targetted for removal from 
 			     a list of Scophit objects */
+  AjBool    Target2;    /* Also used for garbage collection */
   AjBool    Priority;   /* True if the Scop hit is high priority. */
 } AjOHit, *AjPHit;
 
@@ -285,6 +290,7 @@ typedef struct AjSHitlist
     AjPStr  Fold;
     AjPStr  Superfamily;
     AjPStr  Family;
+    ajint    Sunid_Family;        /* SCOP sunid for family */
     AjBool  Priority;   /* True if the Hitlist is high priority. */
     ajint   N;            /* No. of hits */
     AjPHit *hits;        /* Array of hits */
@@ -476,7 +482,14 @@ typedef struct AjSScop
     AjPStr *Start;        /* PDB residue number of first residue in domain */
     AjPStr *End;          /* PDB residue number of last residue in domain */
 
-    ajint  Sunid;         /* SCOP sunid for domain data */
+    ajint  Sunid_Class;         /* SCOP sunid for class */
+    ajint  Sunid_Fold;          /* SCOP sunid for fold */
+    ajint  Sunid_Superfamily;   /* SCOP sunid for superfamily */
+    ajint  Sunid_Family;        /* SCOP sunid for family */
+    ajint  Sunid_Domain;        /* SCOP sunid for domain */  
+    ajint  Sunid_Source;        /* SCOP sunid for species */
+    ajint  Sunid_Domdat;        /* SCOP sunid for domain data */
+
     AjPStr Acc;           /* Accession number of sequence entry  */
     AjPStr Spr;           /* Swissprot code of sequence entry */
     AjPStr SeqPdb;	  /* Sequence (from pdb) as string */
@@ -681,6 +694,7 @@ typedef struct AjSSignature
     AjPStr     Fold;
     AjPStr     Superfamily;
     AjPStr     Family;
+    ajint    Sunid_Family;        /* SCOP sunid for family */
     ajint      npos;       /*No. of signature positions*/
     AjPSigpos *pos;        /*Array of derived data for puropses of 
 			     alignment*/
@@ -693,47 +707,47 @@ typedef struct AjSSignature
 
 
 
-/* @data AjPDichetent ***********************************************************
+/* @data AjPHetent ***********************************************************
 **
-** Ajax Dichetent object.
+** Ajax Hetent object.
 **
 ** Holds a single entry from a dictionary of heterogen groups.
 **
-** AjPDichetent is implemented as a pointer to a C data structure.
+** AjPHetent is implemented as a pointer to a C data structure.
 **
-** @alias AjSDichetent
-** @alias AjODichetent
+** @alias AjSHetent
+** @alias AjOHetent
 **
 ** @@
 ******************************************************************************/
-typedef struct AjSDichetent
+typedef struct AjSHetent
 {
     AjPStr   abv;   /* 3-letter abbreviation of heterogen */
     AjPStr   syn;   /* Synonym */
     AjPStr   ful;   /* Full name */
     ajint    cnt;   /* No. of occurences (files) of this heterogen in a directory */
-} AjODichetent, *AjPDichetent;
+} AjOHetent, *AjPHetent;
 
 
 
 
-/* @data AjPDichet ***********************************************************
+/* @data AjPHet ***********************************************************
 **
-** Ajax Dichet object.
+** Ajax Het object.
 ** Holds a dictionary of heterogen groups.
 **
-** AjPDichet is implemented as a pointer to a C data structure.
+** AjPHet is implemented as a pointer to a C data structure.
 **
-** @alias AjSDichet
-** @alias AjODichet
+** @alias AjSHet
+** @alias AjOHet
 **
 ** @@
 ******************************************************************************/
-typedef struct AjSDichet
+typedef struct AjSHet
 {
     ajint         n;        /* Number of entries */
-    AjPDichetent *entries;  /* Array of entries */
-} AjODichet, *AjPDichet;
+    AjPHetent *entries;  /* Array of entries */
+} AjOHet, *AjPHet;
 
 
 
@@ -787,18 +801,35 @@ AjBool        ajXyzPdbWriteDomain(AjPFile errf, AjPFile outf, AjPPdb pdb,
 AjBool        ajXyzPdbChain(char id, AjPPdb pdb, ajint *chn);
 AjBool        ajXyzPdbAtomIndexI(AjPPdb pdb, ajint chn, AjPInt *idx);
 AjBool        ajXyzPdbAtomIndexC(AjPPdb pdb, char chn, AjPInt *idx);
+AjBool        ajXyzPdbAtomIndexICA(AjPPdb pdb, ajint chn, AjPInt *idx, ajint *nres);
+AjBool        ajXyzPdbAtomIndexCCA(AjPPdb pdb, char chn, AjPInt *idx, ajint *nres);
+AjBool        ajXyzPdbToSp(AjPStr pdb, AjPStr *spr, AjPList list);
+AjBool        ajXyzPdbToAcc(AjPStr pdb, AjPStr *acc, AjPList list);
+
+AjBool        ajXyzCpdbRead(AjPFile inf, AjPPdb *thys);
+AjBool        ajXyzCpdbReadFirstModel(AjPFile inf, AjPPdb *thys);
+AjBool        ajXyzCpdbReadOld(AjPFile inf, AjPPdb *thys);
+AjBool        ajXyzCpdbWriteAll(AjPFile out, AjPPdb thys);
+AjBool        ajXyzCpdbWriteDomain(AjPFile errf, AjPFile outf, AjPPdb pdb,
+			      AjPScop scop);
+
 
 
 AjPScop       ajXyzScopNew(ajint n);
 void          ajXyzScopDel(AjPScop *pthis);
 AjBool        ajXyzScopRead(AjPFile inf, AjPStr entry, AjPScop *thys);
 AjBool        ajXyzScopReadC(AjPFile inf, char *entry, AjPScop *thys);
+AjBool        ajXyzScopReadAll(AjPFile fptr, AjPList *list); 
 void          ajXyzScopWrite(AjPFile outf, AjPScop thys);
 AjPStr        ajXyzScopToPdb(AjPStr scop, AjPStr *pdb);
-AjBool        ajXyzPdbToSp(AjPStr pdb, AjPStr *spr, AjPList list);
 AjBool        ajXyzScopToSp(AjPStr scop, AjPStr *spr, AjPList list);
-AjBool        ajXyzPdbToAcc(AjPStr pdb, AjPStr *acc, AjPList list);
 AjBool        ajXyzScopToAcc(AjPStr scop, AjPStr *acc, AjPList list);
+AjBool        ajXyzScopToScophit(AjPScop source, AjPScophit* target);
+ajint         ajXyzScopBinSearch(AjPStr id, AjPScop *arr, ajint siz);
+ajint         ajXyzScopCompId(const void *hit1, const void *hit2);
+AjBool        ajXyzScopCopy(AjPScop *to, AjPScop from);
+
+
 
 
 AjPScopcla    ajXyzScopclaNew(ajint chains);
@@ -825,16 +856,18 @@ AjPList       ajXyzScophitListCopy(AjPList ptr);
 AjBool        ajXyzScophitToHit(AjPHit *to, AjPScophit from);
 AjBool        ajXyzScophitCheckTarget(AjPScophit ptr);
 AjBool        ajXyzScophitTarget(AjPScophit *h);
+AjBool        ajXyzScophitTarget2(AjPScophit *h);
 AjBool        ajXyzScophitTargetLowPriority(AjPScophit *h);
 AjBool        ajXyzScophitMergeInsertThis(AjPList list, AjPScophit hit1, 
 				   AjPScophit hit2,  AjIList iter);
 AjBool        ajXyzScophitMergeInsertOther(AjPList list, AjPScophit hit1, AjPScophit hit2);
 AjPScophit    ajXyzScophitMerge(AjPScophit hit1, AjPScophit hit2);
-ajint         ajXyzScophitCompId(const void *hit1, const void *hit2);
+ajint         ajXyzScophitCompSpr(const void *hit1, const void *hit2);
 ajint         ajXyzScophitCompStart(const void *hit1, const void *hit2);
 ajint         ajXyzScophitCompFold(const void *hit1, const void *hit2);
 ajint         ajXyzScophitCompSfam(const void *hit1, const void *hit2);
 ajint         ajXyzScophitCompFam(const void *hit1, const void *hit2);
+ajint         ajXyzScophitCompAcc(const void *hit1, const void *hit2);
 
 
 AjPHit        ajXyzHitNew(void);
@@ -844,7 +877,7 @@ ajint         ajXyzCompScore(const void *hit1, const void *hit2);
 ajint         ajXyzCompScoreInv(const void *hit1, const void *hit2);
 ajint         ajXyzCompId(const void *hit1, const void *hit2);
 
-AjPHitlist    ajXyzHitlistNew(int n);
+AjPHitlist    ajXyzHitlistNew(ajint n);
 void          ajXyzHitlistDel(AjPHitlist *pthis);
 AjBool        ajXyzHitlistRead(AjPFile inf, char *delim, AjPHitlist *thys);
 AjBool        ajXyzHitlistReadNode(AjPFile scopf, AjPList *list, AjPStr fam, AjPStr sfam, AjPStr fold, AjPStr class);
@@ -861,12 +894,6 @@ AjBool        ajXyzHitlistToThreeScophits(AjPList in, AjPList *fam, AjPList *sfa
 
 AjBool        ajXyzHitlistsWriteFasta(AjPList *list, AjPFile *outf);
 
-
-AjBool        ajXyzCpdbRead(AjPFile inf, AjPPdb *thys);
-AjBool        ajXyzCpdbReadOld(AjPFile inf, AjPPdb *thys);
-AjBool        ajXyzCpdbWriteAll(AjPFile out, AjPPdb thys);
-AjBool        ajXyzCpdbWriteDomain(AjPFile errf, AjPFile outf, AjPPdb pdb,
-			      AjPScop scop);
 
 
 AjBool        ajXyzPrintPdbSeqresChain(AjPFile errf, AjPFile outf, AjPPdb pdb,
@@ -888,14 +915,15 @@ AjBool        ajXyzPrintPdbResolution(AjPFile outf, AjPPdb pdb);
 
 
 AjBool        ajXyzScopalgRead(AjPFile inf, AjPScopalg *thys);
-AjBool        ajXyzScopalgWrite(AjPFile outf, AjPScopalg *thys);
+AjBool        ajXyzScopalgWrite(AjPFile outf, AjPScopalg scop);
 AjBool        ajXyzScopalgWriteClustal(AjPScopalg align, AjPFile* outf);
-AjPScopalg    ajXyzScopalgNew(int n);
+AjBool        ajXyzScopalgWriteClustal2(AjPScopalg align, AjPFile* outf);
+AjPScopalg    ajXyzScopalgNew(ajint n);
 void          ajXyzScopalgDel(AjPScopalg *pthis);
 ajint         ajXyzScopalgGetseqs(AjPScopalg thys, AjPStr **arr);
 
 
-AjPCmap       ajXyzCmapNew(int dim);
+AjPCmap       ajXyzCmapNew(ajint dim);
 void          ajXyzCmapDel(AjPCmap *pthis);
 AjBool        ajXyzCmapRead(AjPFile inf, ajint mode, ajint chn, ajint mod, AjPCmap *thys);
 AjBool        ajXyzCmapReadC(AjPFile inf, char chn, ajint mod, AjPCmap *thys);
@@ -917,7 +945,7 @@ AjPScorealg   ajXyzScorealgNew(ajint len);
 void          ajXyzScorealgDel(AjPScorealg *pthis);
 
 
-AjPSigdat     ajXyzSigdatNew(int nres, int ngap);
+AjPSigdat     ajXyzSigdatNew(ajint nres, ajint ngap);
 AjPSigpos     ajXyzSigposNew(ajint ngap);
 
 
@@ -927,10 +955,10 @@ void          ajXyzSigposDel(AjPSigpos *thys);
 
 AjPHitidx     ajXyzHitidxNew(void);
 void          ajXyzHitidxDel(AjPHitidx *pthis);
-ajint         ajXyzBinSearch(AjPStr id, AjPHitidx *arr, ajint siz);
+ajint         ajXyzHitidxBinSearch(AjPStr id, AjPHitidx *arr, ajint siz);
 
 
-AjPSignature  ajXyzSignatureNew(int n);
+AjPSignature  ajXyzSignatureNew(ajint n);
 void          ajXyzSignatureDel(AjPSignature *pthis);
 AjBool        ajXyzSignatureRead(AjPFile inf, AjPSignature *thys);
 AjBool        ajXyzSignatureWrite(AjPFile outf, AjPSignature thys);
@@ -946,14 +974,14 @@ AjBool        ajXyzSignatureAlignWrite(AjPFile outf, AjPSignature sig,
 				       AjPHitlist hits);
 
 
-AjPDichetent  ajXyzDichetentNew(void);
-void          ajXyzDichetentDel(AjPDichetent *ptr);
+AjPHetent     ajXyzHetentNew(void);
+void          ajXyzHetentDel(AjPHetent *ptr);
 
-AjPDichet      ajXyzDichetNew(ajint n);
-void          ajXyzDichetDel(AjPDichet *ptr);
-AjBool        ajXyzDichetRawRead(AjPFile fptr, AjPDichet *ptr);
-AjBool        ajXyzDichetRead(AjPFile fptr, AjPDichet *ptr);
-AjBool        ajXyzDichetWrite(AjPFile fptr, AjPDichet ptr, AjBool dogrep);
+AjPHet        ajXyzHetNew(ajint n);
+void          ajXyzHetDel(AjPHet *ptr);
+AjBool        ajXyzHetRawRead(AjPFile fptr, AjPHet *ptr);
+AjBool        ajXyzHetRead(AjPFile fptr, AjPHet *ptr);
+AjBool        ajXyzHetWrite(AjPFile fptr, AjPHet ptr, AjBool dogrep);
 
 
 

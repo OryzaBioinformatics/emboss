@@ -1,6 +1,7 @@
 /* @source interface application
 **
-** Reads coordinate files and writes inter-chain contact files
+** Reads coordinate files and writes files of inter-chain 
+** residue-residue contact data.
 ** 
 ** @author: Copyright (C) Jon Ison (jison@hgmp.mrc.ac.uk)
 ** @@
@@ -22,6 +23,18 @@
 ** 
 ** 
 ** 
+******************************************************************************
+**IMPORTANT NOTE      IMPORTANT NOTE      IMPORTANT NOTE        IMPORTANT NOTE     
+******************************************************************************
+**
+** Mon May 20 11:43:39 BST 2002
+**
+** The following documentation is out-of-date and should be disregarded.  It 
+** will be updated shortly. 
+** 
+******************************************************************************
+**IMPORTANT NOTE      IMPORTANT NOTE      IMPORTANT NOTE        IMPORTANT NOTE     
+******************************************************************************
 ** 
 ** 
 ** 
@@ -121,11 +134,6 @@
 ** //
 **
 ** Important Note
-**
-** Interface is designed to work with OLD FORMAT clean pdb files - i.e. the 
-** ones currently found in /data/cpdb/ on the HGMP server.  To convert to 
-** parsing of new format files (when available) change ajXyzCpdbReadOld to 
-** ajXyzCpdbRead().
 ******************************************************************************/
 
 
@@ -140,11 +148,14 @@ static AjBool interface_WriteFile(AjPFile logf, AjPFile outf, float thresh,
 				     float ignore, AjPPdb pdb, AjPVdwall vdw);
 
 static AjBool interface_ContactMapWrite(AjPFile outf, AjPInt2d mat, char *txt, 
-						  ajint mod, ajint chn1, ajint chn2, AjPPdb pdb);
+						  ajint mod, ajint chn1, 
+					ajint chn2, AjPPdb pdb);
 
 static AjBool interface_ContactMapCalc(AjPInt2d *mat, ajint *ncon, 
-					    float thresh, float ignore, ajint mod, ajint chn1, 
-					    ajint chn2, AjPPdb pdb, AjPVdwall vdw);
+				       float thresh, float ignore, 
+				       ajint mod, ajint chn1, 
+				       ajint chn2, AjPPdb pdb, 
+				       AjPVdwall vdw);
 
 
 
@@ -204,7 +215,7 @@ int main(ajint argc, char **argv)
 
 
     /* Read pdb structure */
-    if(!ajXyzCpdbReadOld(cpdb_inf, &pdb))	       
+    if(!ajXyzCpdbRead(cpdb_inf, &pdb))	       
     {
 	ajFmtPrintS(&msg, "ERROR file read error");
 	ajWarn(ajStrStr(msg));
@@ -536,31 +547,33 @@ static AjBool interface_ContactMapWrite(AjPFile outf, AjPInt2d mat,
 
 /* @funcstatic interface_ContactMapCalc **************************************
 **
-** Write a contact map for a certain model and chain in a pdb structure. The
-** contact map must contain intra-chain contacts. Rows and columns in the 
-** square contact map correspond to residues in the chain.
+** Write a contact map for a certain pair of chains in a pdb structure. The
+** contact map must contain inter-chain contacts. Rows and columns in the 
+** contact map correspond to residues in the two chains, chn1 and chn2 
+** respectively.
 **
 ** @param [w] mat    [AjPInt2d*]  Contact map
 ** @param [w] ncon   [ajint *]    No. contacts
 ** @param [r] thresh [float]      Threshold distance at which contact between 
 **                                two residues is defined.
 ** @param [r] ignore [float]      Threshold "ignore" distance - this is a 
-**                                speed-up.  Contact is not checked for 
-**                                between residues with CA atoms a further 
-**                                distance apart than this.
+**                                speed-up.  Contact is not checked for between 
+**                                residues with CA atoms a further distance 
+**                                apart than this.
 ** @param [r] mod    [ajint]      Model number
 ** @param [r] chn1   [ajint]      Chain number
 ** @param [r] chn2   [ajint]      Chain number
 ** @param [r] pdb    [AjPPdb]     Pdb object
-** @param [r] vdw    [AjPVdwall]  Vdw object
+** @param [r] vdw    [AjPVdwall]  Vdwall object
 ** 
 ** @return [AjBool] True if file was succesfully written.
 ** @@
 **
 ****************************************************************************/
 static AjBool interface_ContactMapCalc(AjPInt2d *mat, ajint *ncon, 
-					    float thresh, float ignore, ajint mod, ajint chn1,
-					    ajint chn2, AjPPdb pdb, AjPVdwall vdw)
+				       float thresh, float ignore, 
+				       ajint mod, ajint chn1,
+				       ajint chn2, AjPPdb pdb, AjPVdwall vdw)
 {	
     /* Contact is checked for between two residues, res1 (belonging to chn1)
        and res2 (belonging to chn2)*/
@@ -574,15 +587,23 @@ static AjBool interface_ContactMapCalc(AjPInt2d *mat, ajint *ncon,
     ajint       siz2  =0;      /* Size of <arr2> */
     
     
-    ajint       idx1first=0;   /* Index in <arr1> of first atom belonging to model <mod> chain <chn1> */
-    ajint       idx2first=0;   /* Index in <arr2> of first atom belonging to model <mod> chain <chn1> */
-    ajint       idx1last=0;    /* Index in <arr1> of last atom belonging to model <mod> chain <chn1> */
-    ajint       idx2last=0;    /* Index in <arr2> of last atom belonging to model <mod> chain <chn1> */
+    ajint       idx1first=0;   /* Index in <arr1> of first atom belonging 
+				  to model <mod> chain <chn1> */
+    ajint       idx2first=0;   /* Index in <arr2> of first atom belonging 
+				  to model <mod> chain <chn1> */
+    ajint       idx1last=0;    /* Index in <arr1> of last atom belonging 
+				  to model <mod> chain <chn1> */
+    ajint       idx2last=0;    /* Index in <arr2> of last atom belonging 
+				  to model <mod> chain <chn1> */
     
-    ajint       res1first=0;   /* Residue number of first atom belonging to model <mod> chain <chn1> */
-    ajint       res1last=0;    /* Residue number of last atom belonging to model <mod> chain <chn2> */
-    ajint       res2first=0;   /* Residue number of first atom belonging to model <mod> chain <chn1> */
-    ajint       res2last=0;    /* Residue number of last atom belonging to model <mod> chain <chn2> */
+    ajint       res1first=0;   /* Residue number of first atom belonging 
+				  to model <mod> chain <chn1> */
+    ajint       res1last=0;    /* Residue number of last atom belonging 
+				  to model <mod> chain <chn2> */
+    ajint       res2first=0;   /* Residue number of first atom belonging 
+				  to model <mod> chain <chn1> */
+    ajint       res2last=0;    /* Residue number of last atom belonging 
+				  to model <mod> chain <chn2> */
     
     
     ajint       idx1=0;       /* Index in <arr1> for atom from residue 1 */
@@ -652,10 +673,12 @@ static AjBool interface_ContactMapCalc(AjPInt2d *mat, ajint *ncon,
 
 
     
-    /* Find index in <arr1> of first atom belonging to correct model for <chn1> */
+    /* Find index in <arr1> of first atom belonging to correct 
+       model for <chn1> */
     for(done=ajFalse, idx1first=0; idx1first<siz1; idx1first++) 
 	/* Find the correct model */
-	if(arr1[idx1first]->Mod==mod && arr1[idx1first]->Chn==chn1 && arr1[idx1first]->Type=='P')
+	if(arr1[idx1first]->Mod==mod && arr1[idx1first]->Chn==chn1 && 
+	   arr1[idx1first]->Type=='P')
 	{
 	    done=ajTrue;
 	    res1first=arr1[idx1first]->Idx;
@@ -672,13 +695,16 @@ static AjBool interface_ContactMapCalc(AjPInt2d *mat, ajint *ncon,
     
     
 
-/*    printf("idx1first : %d   idx1last : %d    siz1 : %d\n", idx1first, idx1last, siz1);
+/*    printf("idx1first : %d   idx1last : %d    siz1 : %d\n", 
+      idx1first, idx1last, siz1);
     fflush(stdout); */
 
-    /* Find index in <arr1> of last atom belonging to correct model for <chn1> */
+    /* Find index in <arr1> of last atom belonging to correct model 
+       for <chn1> */
     for(idx1last=idx1first; idx1last<siz1; idx1last++)
     {
-	if(arr1[idx1last]->Mod!=mod  || arr1[idx1last]->Chn!=chn1 || arr1[idx1last]->Type!='P')
+	if(arr1[idx1last]->Mod!=mod  || arr1[idx1last]->Chn!=chn1 || 
+	   arr1[idx1last]->Type!='P')
 	{
 	    idx1last--;
 	    break;	
@@ -699,10 +725,12 @@ static AjBool interface_ContactMapCalc(AjPInt2d *mat, ajint *ncon,
     
 
 
-    /* Find index in <arr2> of first atom belonging to correct model for <chn2> */
+    /* Find index in <arr2> of first atom belonging to correct 
+       model for <chn2> */
     for(done=ajFalse, idx2first=0; idx2first<siz2; idx2first++) 
 	/* Find the correct model */
-	if(arr2[idx2first]->Mod==mod && arr2[idx2first]->Chn==chn2 && arr2[idx2first]->Type=='P')
+	if(arr2[idx2first]->Mod==mod && arr2[idx2first]->Chn==chn2 && 
+	   arr2[idx2first]->Type=='P')
 	{
 	    done=ajTrue;
 	    res2first=arr2[idx2first]->Idx;
@@ -718,10 +746,12 @@ static AjBool interface_ContactMapCalc(AjPInt2d *mat, ajint *ncon,
     
     
 
-    /* Find index in <arr2> of last atom belonging to correct model for <chn2> */
+    /* Find index in <arr2> of last atom belonging to correct 
+       model for <chn2> */
     for(idx2last=idx2first; idx2last<siz2; idx2last++)
     {
-	if(arr2[idx2last]->Mod!=mod  || arr2[idx2last]->Chn!=chn2 || arr2[idx2last]->Type!='P')
+	if(arr2[idx2last]->Mod!=mod  || arr2[idx2last]->Chn!=chn2 || 
+	   arr2[idx2last]->Type!='P')
 	{
 	    idx2last--;
 	    break;	
@@ -744,7 +774,8 @@ static AjBool interface_ContactMapCalc(AjPInt2d *mat, ajint *ncon,
     for(res1=res1first,  idx1=idx1first; res1<res1last; res1++)
     {
 	/*Assign position of first atom of res1 */
-	for(done=ajFalse, idx1firstres=idx1; idx1firstres<idx1last; idx1firstres++)
+	for(done=ajFalse, idx1firstres=idx1; idx1firstres<idx1last; 
+	    idx1firstres++)
 	    if(arr1[idx1firstres]->Idx == res1)
 	    {
 		done=ajTrue;
@@ -758,7 +789,8 @@ static AjBool interface_ContactMapCalc(AjPInt2d *mat, ajint *ncon,
 	for(res2=res2first, idx2=idx2first; res2<=res2last; res2++)
 	{
 	    /*Assign position of first atom of res2 */
-	    for(done=ajFalse, idx2firstres=idx2; idx2firstres<idx2last; idx2firstres++)
+	    for(done=ajFalse, idx2firstres=idx2; idx2firstres<idx2last; 
+		idx2firstres++)
 		if(arr2[idx2firstres]->Idx == res2)
 		{
 		    done=ajTrue;
@@ -779,7 +811,8 @@ static AjBool interface_ContactMapCalc(AjPInt2d *mat, ajint *ncon,
 		    if(arr2[idx2]->Idx != res2)
 			break;
 		    
-		    /*ajFmtPrintF(xxxtemp, "Trying%5d%5d (res %5d-%-5d)...", idx1, idx2,arr1[idx1]->Idx, arr2[idx2]->Idx);
+		    /*ajFmtPrintF(xxxtemp, "Trying%5d%5d (res %5d-%-5d)...", 
+		      idx1, idx2,arr1[idx1]->Idx, arr2[idx2]->Idx);
 		    fflush(xxxtemp->fp); */
 		    
 		    

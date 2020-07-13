@@ -87,12 +87,12 @@ int main(int argc, char **argv)
     window    = ajAcdGetInt("window");
     aadata    = ajAcdGetString("aadata");
     
-    
-    if(!plot)
-	outf  = ajAcdGetOutfile("outfile");
-    else
-	graph = ajAcdGetGraphxy("graph");
-     ajFileDataNew(aadata,&cdata);
+    /* only one will be used - see variable 'plot' */
+
+    outf  = ajAcdGetOutfile("outfile");
+    graph = ajAcdGetGraphxy("graph");
+
+    ajFileDataNew(aadata,&cdata);
     if(!cdata)
 	ajFatal("Cannot open amino acid data file %S",aadata);
 
@@ -100,7 +100,7 @@ int main(int argc, char **argv)
     chg = charge_read_amino(&cdata);
 
     str = ajStrNew();
-    
+
     while(ajSeqallNext(seqall, &seq))
     {
 	beg = ajSeqallBegin(seqall);

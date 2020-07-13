@@ -29,6 +29,7 @@
 
 /* next three moved from acd for library splitting */
 AjBool acdDebugSet = 0;
+AjBool acdDebugBuffer = 0;
 AjBool acdDebug = 0;
 AjPStr acdProgram = NULL;
 AjOError AjErrorLevel =
@@ -1443,6 +1444,7 @@ void ajDebug (char* fmt, ...) {
   va_list args ;
   static ajint debugset = 0;
   static ajint depth = 0;
+  AjPStr bufstr=NULL;
 
   if (depth) {			/* recursive call, get out quick */
     if (fileDebugFile) {
@@ -1461,7 +1463,14 @@ void ajDebug (char* fmt, ...) {
       fileDebugFile = ajFileNewOut (fileDebugName);
       if(!fileDebugFile)
 	  ajFatal("Cannot open debug file %S",fileDebugName);
-      ajFileUnbuffer (fileDebugFile);
+      if (ajNamGetValueC("debugbuffer", &bufstr)) {
+	ajStrToBool (bufstr, &acdDebugBuffer);
+      }
+      if (!acdDebugBuffer)
+	ajFileUnbuffer (fileDebugFile);
+      ajFmtPrintF (fileDebugFile, "Debug file %F buffered:%B\n",
+		   fileDebugFile, acdDebugBuffer);
+      ajStrDel(&bufstr);
     }
     debugset = 1;
   }

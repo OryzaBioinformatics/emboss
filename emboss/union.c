@@ -22,9 +22,9 @@
 #include "emboss.h"
 
 
-/* @prog seqret ***************************************************************
+/* @prog union ***************************************************************
 **
-** Reads and writes (returns) sequences
+** Reads sequence fragments and builds one sequence
 **
 ******************************************************************************/
 

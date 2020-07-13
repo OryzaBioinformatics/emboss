@@ -113,7 +113,15 @@ int main(int argc, char **argv)
     return 0;
 }  
 			    
-
+/* @funcstatic pepwindow_getnakaidata *****************************************
+**
+** Read the NAKAI (AAINDEX) data file
+**
+** @param [W] file [AjPFile] Input file
+** @param [W] matrix [float[]] Data values for each amino acid
+** @return [AjBool] ajTrue on success
+** @@
+******************************************************************************/
 
 
 static AjBool pepwindow_getnakaidata(AjPFile file, float matrix[])

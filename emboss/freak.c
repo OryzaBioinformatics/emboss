@@ -70,10 +70,11 @@ int main(int argc, char **argv)
     step      = ajAcdGetInt("step");
     window    = ajAcdGetInt("window");
     bases     = ajAcdGetString("letters");
-    if(!plot)
-	outf  = ajAcdGetOutfile("outfile");
-    else
-	graph = ajAcdGetGraphxy("graph");
+
+    /* only one will be used - see variable 'plot' */
+
+    outf  = ajAcdGetOutfile("outfile");
+    graph = ajAcdGetGraphxy("graph");
     
 
     st = ajStrNew();

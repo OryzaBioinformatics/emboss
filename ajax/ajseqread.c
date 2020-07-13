@@ -20,6 +20,8 @@
 static ajint seqMaxGcglines = 5000;
 static AjPRegexp qrywildexp = 0;
 
+static AjBool seqInFormatSet = AJFALSE;
+
 typedef struct SeqSInFormat
 {
   char *Name;
@@ -90,7 +92,7 @@ static AjBool     seqReadDbId (AjPSeq thys, AjPSeqin seqin);
 static AjBool     seqReadEmbl (AjPSeq thys, AjPSeqin seqin);
 static AjBool     seqReadFasta (AjPSeq thys, AjPSeqin seqin);
 static AjBool     seqReadFmt (AjPSeq thys, AjPSeqin seqin,
-			      SeqPInFormat inform, ajint format);
+			      ajint format);
 static AjBool     seqReadGcg (AjPSeq thys, AjPSeqin seqin);
 static AjBool     seqReadGenbank (AjPSeq thys, AjPSeqin seqin);
 static AjBool     seqReadGff (AjPSeq thys, AjPSeqin seqin);
@@ -122,7 +124,7 @@ static AjBool     seqSelexHeader(AjPSelex *thys, AjPStr line, ajint n,
 static void       seqSelexPos(AjPStr line, ajint *begin, ajint *end);
 static AjBool     seqSelexReadBlock(AjPSelex *thys, AjBool *named, ajint n,
 				    AjPStr *line, AjPFileBuff buff);
-static AjBool     seqSetInFormat (AjPStr format, SeqPInFormat inform);
+static AjBool     seqSetInFormat (AjPStr format);
 static void       seqSetName (AjPStr* name, AjPStr str);
 
 static void       seqStockholmCopy(AjPSeq *thys, AjPSeqin seqin, ajint n);
@@ -153,9 +155,9 @@ static SeqOInFormat seqInFormatDef[] = { /* AJFALSE = ignore (duplicates) */
   {"swissprot",  AJTRUE,  seqReadSwiss},
   {"nbrf",       AJTRUE,  seqReadNbrf},	/* test before NCBI */
   {"pir",        AJFALSE, seqReadNbrf},	/* alias for nbrf */
-  {"ncbi",       AJTRUE,  seqReadNcbi},	/* test before FASTA */
-  {"fasta",      AJTRUE,  seqReadFasta},
-  {"pearson",    AJFALSE, seqReadFasta}, /* alias for fasta */
+  {"fasta",      AJTRUE,  seqReadNcbi}, /* alias for ncbi, preferred name */
+  {"ncbi",       AJFALSE, seqReadNcbi}, /* test before pearson */
+  {"pearson",    AJTRUE,  seqReadFasta}, /* plain fasta can read bad files */
   {"genbank",    AJTRUE,  seqReadGenbank},
   {"gb",         AJFALSE, seqReadGenbank}, /* alias for genbank */
   {"ddbj",       AJFALSE, seqReadGenbank}, /* alias for genbank */
@@ -190,8 +192,6 @@ static SeqOInFormat seqInFormatDef[] = { /* AJFALSE = ignore (duplicates) */
   {"raw",        AJTRUE,  seqReadRaw}, /* OK - only sequence chars allowed */
   {NULL, 0, NULL}
 };
-
-static SeqPInFormat seqInFormat = seqInFormatDef;
 
 /* ==================================================================== */
 /* ========================= constructors ============================= */
@@ -466,6 +466,18 @@ void ajSeqinUsa (AjPSeqin* pthis, AjPStr Usa)
 AjBool ajSeqAllRead (AjPSeq thys, AjPSeqin seqin)
 {
     AjBool ret = ajFalse;
+    AjPStr tmpformat = NULL;
+
+    if (!seqInFormatSet)
+    {					/* we need a copy of the formatlist */
+	if (ajNamGetValueC("format", &tmpformat))
+	{
+	    (void) seqSetInFormat(tmpformat);
+	    ajDebug ("seqSetInFormat '%S' from EMBOSS_FORMAT\n", tmpformat);
+	}
+	ajStrDel(&tmpformat);
+	seqInFormatSet = ajTrue;
+    }
 
 
     if (!seqin->Filebuff) {	/* First call. No file open yet ... */
@@ -701,20 +713,16 @@ AjBool ajSeqRead (AjPSeq thys, AjPSeqin seqin)
     AjPStr tmpformat = NULL;
     AjBool ret = ajFalse;
     SeqPListUsa node = NULL;
-    ajint i;
-    static ajint calls = 0;
 
-    if (!calls)
+    if (!seqInFormatSet)
     {					/* we need a copy of the formatlist */
-	for (i=0; seqInFormatDef[i].Name; i++); 
-	ajDebug("Initializing seqInFormat, %d formats\n", i);
-	AJCNEW(seqInFormat,i+1);
-	for (i=0; seqInFormatDef[i].Name; i++)
-	    seqInFormat[i] = seqInFormatDef[i];
 	if (ajNamGetValueC("format", &tmpformat))
-	    (void) seqSetInFormat(tmpformat, seqInFormat);
+	{
+	    (void) seqSetInFormat(tmpformat);
+	    ajDebug ("seqSetInFormat '%S' from EMBOSS_FORMAT\n", tmpformat);
+	}
 	ajStrDel(&tmpformat);
-	calls = 1;
+	seqInFormatSet = ajTrue;
     }
 
     if (seqin->Filebuff)
@@ -1020,7 +1028,6 @@ ajint ajSeqsetApp (AjPSeqset thys, AjPSeq seq)
 **
 ** @param [r] thys [AjPSeq] Sequence object
 ** @param [r] seqin [AjPSeqin] Sequence input object
-** @param [r] inform [SeqPInFormat] Input format structure
 ** @param [r] format [ajint] input format code
 ** @return [ajint] 0 if successful.
 **                 1 if the query match failed.
@@ -1038,20 +1045,21 @@ ajint ajSeqsetApp (AjPSeqset thys, AjPSeq seq)
 **
 ******************************************************************************/
 
-static ajint seqReadFmt (AjPSeq thys, AjPSeqin seqin, SeqPInFormat inform,
+static ajint seqReadFmt (AjPSeq thys, AjPSeqin seqin,
 		       ajint format)
 {
     ajDebug ("++seqReadFmt format %d (%s) '%S' feat %B\n",
-		 format, inform[format].Name, seqin->Usa, seqin->Features);
+	     format, seqInFormatDef[format].Name,
+	     seqin->Usa, seqin->Features);
 
     /* Calling funclist seqInFormatDef() */
-    if (inform[format].Read (thys, seqin))
+    if (seqInFormatDef[format].Read (thys, seqin))
     {
 	ajDebug ("seqReadFmt success with format %d (%s)\n",
-		 format, inform[format].Name);
+		 format, seqInFormatDef[format].Name);
 	seqin->Format = format;
-	(void) ajStrAssC(&seqin->Formatstr, inform[format].Name);
-	(void) ajStrAssC(&thys->Formatstr, inform[format].Name);
+	(void) ajStrAssC(&seqin->Formatstr, seqInFormatDef[format].Name);
+	(void) ajStrAssC(&thys->Formatstr, seqInFormatDef[format].Name);
 	(void) ajStrAssS(&thys->Db, seqin->Db);
 	(void) ajStrAssS(&thys->Entryname, seqin->Entryname);
 	(void) ajStrAssS(&thys->Filename, seqin->Filename);
@@ -1109,7 +1117,7 @@ static ajint seqReadFmt (AjPSeq thys, AjPSeqin seqin, SeqPInFormat inform,
     {
       ajFileBuffReset(seqin->Filebuff);
       ajDebug("Format %d (%s) failed, file buffer reset by seqReadFmt\n",
-	      format, inform[format].Name);
+	      format, seqInFormatDef[format].Name);
       /* ajFileBuffTraceFull(seqin->Filebuff, 10, 10);*/
     }
     ajDebug ("++seqReadFmt failed - nothing read\n");
@@ -1133,7 +1141,6 @@ static AjBool seqRead (AjPSeq thys, AjPSeqin seqin)
     ajint stat;
 
 /*    AjPFileBuff buff = seqin->Filebuff; unused */
-    SeqPInFormat inform = seqInFormat;
 
     if (seqin->Single && seqin->Count)
     {
@@ -1165,17 +1172,16 @@ static AjBool seqRead (AjPSeq thys, AjPSeqin seqin)
 
     if (!seqin->Format)
     {	/* no format specified, try all defaults */
-	if (ajStrMatchCaseC(seqin->Formatstr,inform[0].Name))
-	    inform = seqInFormatDef;	/* explicitly unknown - use defaults */
 
-	for (i = 1; inform[i].Name; i++)
+	for (i = 1; seqInFormatDef[i].Name; i++)
 	{
-	    if (!inform[i].Try) /* skip if Try is ajFalse */
+	    if (!seqInFormatDef[i].Try) /* skip if Try is ajFalse */
 		continue;
 
-	    ajDebug ("seqRead:try format %d (%s)\n", i, inform[i].Name);
+	    ajDebug ("seqRead:try format %d (%s)\n",
+		     i, seqInFormatDef[i].Name);
 
-	    stat = seqReadFmt (thys, seqin, inform, i);
+	    stat = seqReadFmt (thys, seqin, i);
 	    switch (stat) {
 	    case FMT_OK:
 	      ajDebug("++seqRead OK, set format %d\n", seqin->Format);
@@ -1208,7 +1214,7 @@ static AjBool seqRead (AjPSeq thys, AjPSeqin seqin)
 	ajFileBuffNobuff (seqin->Filebuff);
 
 	ajDebug ("++seqRead known format %d\n", seqin->Format);
-	stat = seqReadFmt (thys, seqin, inform, seqin->Format);
+	stat = seqReadFmt (thys, seqin, seqin->Format);
 	switch (stat) {
 	case FMT_OK:
 	  return ajTrue;
@@ -1231,12 +1237,12 @@ static AjBool seqRead (AjPSeq thys, AjPSeqin seqin)
     /* failed - probably entry/accession query failed. Can we try again? */
 
     ajDebug("seqRead failed - try again with format %d '%s'\n",
-	    seqin->Format, inform[seqin->Format].Name);
+	    seqin->Format, seqInFormatDef[seqin->Format].Name);
 
     /*while (seqin->Search && !ajFileBuffEmpty (buff))*/
     while (seqin->Search)
     {
-	stat = seqReadFmt (thys, seqin, inform, seqin->Format);
+	stat = seqReadFmt (thys, seqin, seqin->Format);
 	switch (stat) {
 	case FMT_OK:
 	  return ajTrue;
@@ -1257,7 +1263,7 @@ static AjBool seqRead (AjPSeq thys, AjPSeqin seqin)
 
     if (seqin->Format)
 	ajDebug ("seqRead: *failed* to read sequence %S using format %s\n",
-		 seqin->Usa, inform[seqin->Format].Name);
+		 seqin->Usa, seqInFormatDef[seqin->Format].Name);
     else
 	ajDebug ("seqRead: *failed* to read sequence %S using any format\n",
 		 seqin->Usa);
@@ -4499,6 +4505,11 @@ static AjBool seqReadGenbank (AjPSeq thys, AjPSeqin seqin)
     if (ajStrLen(seqin->Inseq))
     {					/* we have a sequence to use */
 	ajDebug("Got an Inseq sequence\n");
+	if(ajStrMatchC(qry->Method,"gcg"))
+	{
+	    while(!ajStrPrefixC(rdline,"ORIGIN"))
+	      ajFileBuffGetStore(buff,&rdline, seqin->Text, &thys->TextPtr);
+	}
 	ajStrAssS (&thys->Seq, seqin->Inseq);
 	if (seqin->Text)
 	{
@@ -4526,12 +4537,10 @@ static AjBool seqReadGenbank (AjPSeq thys, AjPSeqin seqin)
     }
 
     if(!ajStrMatchC(qry->Method,"gcg"))
+    {
 	while(!ajStrPrefixC(rdline,"//"))
 	    ajFileBuffGetStore(buff,&rdline, seqin->Text, &thys->TextPtr);
-    else
-	while(!ajStrPrefixC(rdline,"ORIGIN"))
-	    ajFileBuffGetStore(buff,&rdline, seqin->Text, &thys->TextPtr);
-
+    }
 
     ajFileBuffClear (buff, 0);
 
@@ -4753,15 +4762,15 @@ void ajSeqPrintInFormat (AjPFile outf, AjBool full)
 
     ajFmtPrintF (outf, "\n");
     ajFmtPrintF (outf, "# sequence input formats\n");
-    ajFmtPrintF (outf, "# Name         Single (if true, split into single"
+    ajFmtPrintF (outf, "# Name         Try (test for unknown input)"
 		 " files)\n");
     ajFmtPrintF (outf, "\n");
     ajFmtPrintF (outf, "InFormat {\n");
-    for (i=0; seqInFormat[i].Name; i++)
+    for (i=0; seqInFormatDef[i].Name; i++)
     {
-	if (full || seqInFormat[i].Try)
-	    ajFmtPrintF (outf, "  %-12s %B\n", seqInFormat[i].Name,
-			 seqInFormat[i].Try);
+	if (full || seqInFormatDef[i].Try)
+	    ajFmtPrintF (outf, "  %-12s %B\n", seqInFormatDef[i].Name,
+			 seqInFormatDef[i].Try);
     }
     ajFmtPrintF (outf, "}\n\n");
 
@@ -4773,10 +4782,7 @@ void ajSeqPrintInFormat (AjPFile outf, AjBool full)
 ** Looks for the specified format(s) in the internal definitions and
 ** returns the index.
 **
-** Given a single format, sets iformat.
-**
-** Given multiple formats, resets the Try variables for all formats
-** so that only these ones are tested.
+** Sets iformat as the recognized format, and returns ajTrue.
 **
 ** @param [P] format [AjPStr] Format required.
 ** @param [w] iformat [ajint*] Index
@@ -4797,14 +4803,14 @@ static AjBool seqFindInFormat (AjPStr format, ajint* iformat)
     (void) ajStrAss (&tmpformat, format);
     (void) ajStrToLower(&tmpformat);
 
-    for (i=0; seqInFormat[i].Name; i++)
+    for (i=0; seqInFormatDef[i].Name; i++)
     {
-	/* ajDebug ("test %d '%s' \n", i, seqInFormat[i].Name); */
-	if (ajStrMatchCaseC(tmpformat, seqInFormat[i].Name))
+	/* ajDebug ("test %d '%s' \n", i, seqInFormatDef[i].Name); */
+	if (ajStrMatchCaseC(tmpformat, seqInFormatDef[i].Name))
 	{
 	    *iformat = i;
 	    ajStrDel(&tmpformat);
-	    /* ajDebug ("found '%s' at %d\n", seqInFormat[i].Name, i); */
+	    /* ajDebug ("found '%s' at %d\n", seqInFormatDef[i].Name, i); */
 	    return ajTrue;
 	}
     }
@@ -4822,12 +4828,11 @@ static AjBool seqFindInFormat (AjPStr format, ajint* iformat)
 ** if not.
 **
 ** @param [P] format [AjPStr] Format list, punctuated by whitespace or commas
-** @param [P] inform [SeqPInFormat] Known formats list
 ** @return [AjBool] ajTrue if all formats were accepted
 ** @@
 ******************************************************************************/
 
-static AjBool seqSetInFormat (AjPStr format, SeqPInFormat inform)
+static AjBool seqSetInFormat (AjPStr format)
 {
     ajint i;
     AjPStr fmtstr = NULL;
@@ -4835,21 +4840,21 @@ static AjBool seqSetInFormat (AjPStr format, SeqPInFormat inform)
     ajint ifound;
     AjBool ret = ajTrue;
 
-    for (i=0; inform[i].Name; i++)
-	inform[i].Try = ajFalse;
+    for (i=0; seqInFormatDef[i].Name; i++)
+	seqInFormatDef[i].Try = ajFalse;
 
-    /* ajDebug("seqSetInformat '%S'\n", format); */
+    ajDebug("seqSetInformat '%S'\n", format);
 
     (void) ajStrTokenAss (&handle, format, " \t\n\r,;:");
     while (ajStrToken (&fmtstr, &handle, " \t\n\r,;:"))
     {
 	ifound = 0;
-	for (i=0; inform[i].Name; i++)
+	for (i=0; seqInFormatDef[i].Name; i++)
 	{
-	    if (ajStrMatchCaseC(fmtstr, inform[i].Name))
+	    if (ajStrMatchCaseC(fmtstr, seqInFormatDef[i].Name))
 	    {
 		/* ajDebug("found '%S' %d\n", fmtstr, i); */
-		inform[i].Try = ajTrue;
+		seqInFormatDef[i].Try = ajTrue;
 		ifound = 1;
 		break;
 	    }
@@ -4945,7 +4950,7 @@ static AjBool seqGcgDots (AjPSeq thys, AjPSeqin seqin, AjPStr* pline,
 	chkexp = ajRegCompC("[Cc][Hh][Ee][Cc][Kk]:[ \t]*([0-9]+)");
 	lenexp = ajRegCompC("[Ll][Ee][Nn][Gg][Tt][Hh]:[ \t]*([0-9]+)");
 	typexp = ajRegCompC("[Tt][Yy][Pp][Ee]:[ \t]*([NP])");
-	namexp = ajRegCompC("[^ \t]+");
+	namexp = ajRegCompC("[^ \t>]+");
 	msfexp = ajRegCompC("[Mm][Ss][Ff]:[ \t]*([0-9]+)");
     }
 
@@ -5300,7 +5305,7 @@ static AjBool seqUsaProcess (AjPSeq thys, AjPSeqin seqin)
     {
 	ajRegSubI (fmtexp, 1, &qry->Formatstr);
 	/* default unknown */
-	(void) ajStrSetC (&qry->Formatstr, seqInFormat[0].Name);
+	(void) ajStrSetC (&qry->Formatstr, seqInFormatDef[0].Name);
 	ajRegSubI (fmtexp, 2, &usatest);
 	ajDebug ("found format %S\n", qry->Formatstr);
 	if (seqFindInFormat (qry->Formatstr, &seqin->Format))
@@ -5877,7 +5882,7 @@ static void seqTaxSave (AjPSeq thys, AjPStr tax)
 ** Adds a sequence version number to the stored data for a sequence.
 **
 ** @param [u] thys [AjPSeq] Sequence object
-** @param [r] acc [AjPStr] SeqVersion number
+** @param [r] sv [AjPStr] SeqVersion number
 ** @return [void]
 ** @@
 ******************************************************************************/

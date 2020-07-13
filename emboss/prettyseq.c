@@ -118,7 +118,7 @@ int main(int argc, char **argv)
 }
 
 
-/* @funcstatic  prettyseq_Translate *******************************************
+/* @funcstatic prettyseq_Translate ********************************************
 **
 ** Undocumented.
 **
@@ -224,7 +224,7 @@ static void prettyseq_Translate(AjPFile outf, ajint beg, ajint end, AjPStr s,
 
 
 
-/* @funcstatic  prettyseq_makeRuler *******************************************
+/* @funcstatic prettyseq_makeRuler ********************************************
 **
 ** Create a ruler
 **
@@ -322,7 +322,7 @@ static void prettyseq_calcProteinPos(ajint *ppos, AjPStr pro, ajint len)
 
 
 
-/* @funcstatic prettyseq_showTrans *******************************************
+/* @funcstatic prettyseq_showTrans ********************************************
 **
 ** Show translations
 **
@@ -374,7 +374,7 @@ static void prettyseq_showTrans(ajint *ppos, ajint *npos, AjPStr pro,
 
 
 
-/* @funcstatic prettyseq_showTransb ******************************************
+/* @funcstatic prettyseq_showTransb *******************************************
 **
 ** Low level display
 **

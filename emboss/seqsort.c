@@ -1,6 +1,8 @@
 /* @source seqsort application
 **
-** Removes ambiguities from a file of family members (hits)
+** Reads multiple files of hits and writes a non-ambiguous file of hits 
+** (scop families file) plus a validation file.
+**
 ** @author: Copyright (C) Ranjeeva Ranasinghe (rranasin@hgmp.mrc.ac.uk)
 ** @author: Copyright (C) Jon Ison (jison@hgmp.mrc.ac.uk)
 ** @author: Copyright (C) Alan Bleasby (ableasby@hgmp.mrc.ac.uk)
@@ -20,6 +22,32 @@
 ** along with this program; if not, write to the Free Software
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 ** 02111-1307, USA.
+**
+**
+**
+**
+**
+******************************************************************************
+**IMPORTANT NOTE      IMPORTANT NOTE      IMPORTANT NOTE        IMPORTANT NOTE
+******************************************************************************
+**
+**
+** Mon May 20 11:43:39 BST 2002
+**
+** The following documentation is out-of-date and should be disregarded.  It 
+** will be updated shortly. 
+** 
+******************************************************************************
+**IMPORTANT NOTE      IMPORTANT NOTE      IMPORTANT NOTE        IMPORTANT NOTE
+******************************************************************************
+** 
+**
+** If a hit was merged then the TY record will have a value depending on 
+** the classification of the two individual hits as follows:
+** If hit1 or hit2 is a SEED, the merged hit is classified as a SEED.
+** Otherwise, if hit1 or hit2 is HIT, the merged hit is clsasified as a HIT.
+** If hit1 and hit2 are both OTHER, the merged hit remains classified as OTHER.
+******************************************************************************
 **/
 
 #include "emboss.h"
@@ -27,91 +55,107 @@
 #define MODE_PSIBLAST    1
 #define MODE_SWISSPARSE  2
 #define MODE_MERGE       3
-#define FAMILY           1
-#define SUPERFAMILY      2
-#define FOLD             3
+#define SEQSORT_FAMILY           1
+#define SEQSORT_SUPERFAMILY      2
+#define SEQSORT_FOLD             3
 
 
-static AjPList      seqsort_HitlistListRead(AjPStr path, AjPStr extn);
-static AjBool       seqsort_PsiblastHitSort(AjPList* famlist,
-						 AjPList* supfamlist,
-						 AjPList* foldlist,
-						 ajint sig_overlap,
-						 AjPStr path,
-						 AjPStr extn);
-static AjBool       seqsort_SwissparseHitSort(AjPList* famlist,
-						   AjPList* supfamlist,
-						   AjPList* foldlist,
-						   ajint sig_overlap,
-						   AjPStr path, AjPStr extn);
-static AjBool       seqsort_MergeHitSort(AjPList* famlist,
-					      AjPList* supfamlist,
-					      AjPList* foldlist,
-					      ajint sig_overlap,
-					      AjPStr file1, AjPStr file2);
-static AjBool       seqsort_IdentifyMembers(AjPList* list, ajint node,
-						 ajint sig_overlap);
-static AjPList      seqsort_FileMerge(AjPFile* file1, AjPFile* file2);
-static AjBool       seqsort_WriteOutputFile(AjPFile fptr, AjPList famlist,
-					    AjPList supfamlist,
-					    AjPList foldlist);
+static AjPList seqsort_HitlistListRead(AjPStr path, AjPStr extn);
+static AjBool  seqsort_PsiblastHitSort(AjPList* famlist, AjPList* 
+					    supfamlist, AjPList* foldlist, 
+				       ajint sig_overlap,AjPStr path, 
+				       AjPStr extn);
+static AjBool  seqsort_SwissparseHitSort(AjPList* famlist,
+					 AjPList* supfamlist, 
+					 AjPList* foldlist,
+					 ajint sig_overlap, 	
+					 AjPStr path, AjPStr extn);
+static AjBool  seqsort_MergeHitSort(AjPList* famlist, AjPList* supfamlist, 
+				    AjPList* foldlist,
+				    ajint sig_overlap,
+				    AjPStr file1, AjPStr file2);
+static AjBool  seqsort_IdentifyMembers(AjPList* list, ajint node, 
+				       ajint sig_overlap);
+static AjPList seqsort_FileMerge(AjPFile* file1, AjPFile* file2);
+static AjBool  seqsort_WriteOutputFiles(AjPFile fptr1, AjPFile fptr2, 
+					AjPList famlist, AjPList supfamlist, 
+					AjPList foldlist);
 
-/* @prog seqsort *******************************************************
+
+
+
+/* @prog seqsort *************************************************************
 **
-** Removes ambiguities from a set of hits resulting from a database search
+** Testing
 **
 ******************************************************************************/
-
 int main(int argc, char **argv)
 {
-    ajint  sig_overlap  = 0;        /* the minimum overlapping
-                                       residues required for merging
-                                       of two hits */
+    ajint  sig_overlap  = 0;        /* the minimum overlaping residues 
+				       required for merging of two hits */
  
-    AjPStr psipath      = NULL;     /* the name of the directory where
-                                       psiblasts results are kept */
-
+    AjPStr psipath      = NULL;     /* the name of the directory where 
+				       psiblasts results are kept */
     AjPStr psiextn      = NULL;     /* the psiblasts file extension */
 
-    AjPStr swisspath    = NULL;     /* the name of the directory where
-                                       swissparse results are kept */
 
-    AjPStr swissextn    = NULL;     /* the swissparse file extension */
    
     AjPList famlist     = NULL;     /* a list of family members */
-
-    AjPList supfamlist  = NULL;     /* a list of superfamily members,
-                                       which is initially empty */
-
-    AjPList foldlist    = NULL;     /* a list of fold members, which
-                                       is initiallu empty */
+    AjPList supfamlist  = NULL;     /* a list of superfamily members, 
+				       which is initially empty */
+    AjPList foldlist    = NULL;     /* a list of fold members, which is 
+				       initiallu empty */
     
     AjPStr file1        = NULL;     /* input file 1 in mode 3 */
     AjPStr file2        = NULL;     /* input file 2 in mode 3 */
 
     AjPStr      *mode   =NULL;      /* Mode of operation from acd*/
 /*  AjPStr      outfile = NULL; */  /* Name of the output file */
-    AjPFile     outf    = NULL;     /* File pointer for output file */
+    AjPFile     validf    = NULL;     /* File pointer for validation
+                                         output file */
+    AjPFile     hitsf    = NULL;     /* File pointer for hits output file */
     
+    AjPScophit  tmp      =NULL;      /* Temp. pointer for freeing
+                                        famlist, supfamlist,
+                                        foldlist*/
+
+    
+
+    embInit("seqsort",argc,argv);
+    mode     = ajAcdGetList("mode");
+    sig_overlap = ajAcdGetInt("overlap");
+/*  outfile = ajAcdGetString("outfile"); */
+    validf = ajAcdGetOutfile("validf");
+    hitsf = ajAcdGetOutfile("hitsf");
+
+
 
     famlist    = ajListNew();
     supfamlist = ajListNew();
     foldlist   = ajListNew();
            
-    embInit("seqsort",argc,argv);
-    mode     = ajAcdGetList("mode");
-    sig_overlap = ajAcdGetInt("overlap");
-/*  outfile = ajAcdGetString("outfile"); */
-    outf = ajAcdGetOutfile("outfile");
+
 
 
     if(ajStrChar(*mode, 0) == '1')
     {
       psipath = ajAcdGetString("psipath");
+
+      if(!ajFileDir(&psipath))
+      {
+	  ajListDel(&famlist);
+	  ajListDel(&supfamlist);
+	  ajListDel(&foldlist);
+	  ajWarn("Could not open psiblast results directory");
+	  ajExit();
+	  return 1;
+      }
+      
+
       psiextn = ajAcdGetString("psiextn");
       /* Process results of psiblast searches for scop families */ 
-      seqsort_PsiblastHitSort(&famlist,&supfamlist,&foldlist,
-			      sig_overlap,psipath,psiextn);
+      seqsort_PsiblastHitSort(&famlist,&supfamlist,&foldlist, sig_overlap,
+			      psipath,psiextn);
 
     }
     else if(ajStrChar(*mode, 0) == '2')
@@ -124,30 +168,56 @@ int main(int argc, char **argv)
     }
 
 
+    ajFmtPrint("List length (main)= %d\n", ajListLength(famlist));
+
+
     /* Write output file */
 /*    if((outf=ajFileNewOut(outfile))==NULL)
 	ajWarn("Could not open output file for writing");
     else	
     { */
-	seqsort_WriteOutputFile(outf, famlist, supfamlist, foldlist);
-	ajFileClose(&outf);
+    seqsort_WriteOutputFiles(validf, hitsf, famlist, supfamlist, foldlist);
+	ajFileClose(&validf);
 /*    } */
     
     
+    
 	    
-
+	ajFileClose(&hitsf);
   
     /* clean up */
     ajStrDel(&mode[0]);
     AJFREE(mode);
+
+
+    while(ajListPop(famlist,(void**)&tmp))
+    {
+	ajXyzScophitDel(&tmp);
+    }
+    
     ajListDel(&famlist);
+
+
+    while(ajListPop(supfamlist,(void**)&tmp))
+	ajXyzScophitDel(&tmp);
     ajListDel(&supfamlist);
+
+
+    while(ajListPop(foldlist,(void**)&tmp))
+	ajXyzScophitDel(&tmp);
     ajListDel(&foldlist);
-    ajStrDel(&psipath);
-    ajStrDel(&psiextn);
-    ajStrDel(&swisspath);
-    ajStrDel(&swissextn);
-    ajStrDel(&file1);
+
+
+    if(psipath)
+	ajStrDel(&psipath);
+
+    if(psiextn)
+	ajStrDel(&psiextn);
+
+    if(file1)
+	ajStrDel(&file1);
+
+if(file2)
     ajStrDel(&file2);
 /*    ajStrDel(&outfile); */
     
@@ -156,34 +226,33 @@ int main(int argc, char **argv)
     return 0;
 }
 
-/* @funcstatic seqsort_HitlistListRead  **********************************
+/* @funcstatic seqsort_HitlistListRead ****************************************
 **
-** Looks in a specified directory for a given extension and create a list of
-** hitlist structures of the hits in the file matching this extension.
+** Reads scop hits files with a given file extension from a specified
+** directory.  A list of Hitlist structures is allocated and returned.
 **
 ** @param [r] path       [AjPStr]    File path of hits files.
 ** @param [r] extn       [AjPStr]    File extension of hits files.
 ** 
-** @return [AjPList] tmplist, which is a list of hitlist structures.
+** @return [AjPList] which is a list of Hitlist structures.
 ** @@
 ******************************************************************************/
 
 static AjPList seqsort_HitlistListRead(AjPStr path, AjPStr extn)
 {
-    AjPStr tmp         = NULL;	 /* temparary string */
-    AjPStr filename    = NULL;	 /* the name of the file containing
-                                    the results of a psiblasts run */
+    AjPStr tmp         = NULL;	 /* temporary string */
+    AjPStr filename    = NULL;	 /* the name of the file containing the 
+				    results of a psiblasts run */
     AjPStr logf        = NULL;   /* log file pointer */
      
     AjPList list       = NULL;   /* a list to hold the file names */
-    AjPList tmplist    = NULL;	 /* temparary list */
+    AjPList tmplist    = NULL;	 /* temporary list */
 
-    AjPHitlist hitlist = NULL;   /* hitlist structure for reading a
-                                    psiblasts or swissparse results
-                                    file */
+    AjPHitlist hitlist = NULL;   /* hitlist structure for reading a psiblasts 
+				    or swissparse results file */
     
-    AjPFile  inf       = NULL;   /* file containing the results of a
-                                    psiblasts or swissparse run */
+    AjPFile  inf       = NULL;   /* file containing the results of a psiblasts 
+				    or swissparse run */
     
     
     tmp      = ajStrNew();
@@ -193,31 +262,39 @@ static AjPList seqsort_HitlistListRead(AjPStr path, AjPStr extn)
     list     = ajListNew();
     tmplist  = ajListNew();
     
-    inf      = ajFileNew();
+
     
     /* Check directories */
-    if((!ajFileDir(&path)) || (!(extn)))
-	ajFatal("Could not open psiblast results directory");    
+
+/*    if((!ajFileDir(&path)) || (!(extn)))
+	ajFatal("Could not open psiblast results directory");     */
+
+    if(!path || !extn)
+    {
+	ajFatal("Bad arg's passed to seqsort_HitlistListRead\n");
+    }
+    
     
     /* Create list of files in the path */
     ajStrAssC(&tmp, "*");  		/* assign a wildcard to tmp */
 	
-    if((ajStrChar(extn, 0)=='.')) 	/* checks if the file
-                                           extension starts with "."  */
-	ajStrApp(&tmp, extn);    	/* assign the acd input file
-                                           extension to tmp */
+    if((ajStrChar(extn, 0)=='.')) 	/* checks if the file extension 
+					   starts with "." */
+	ajStrApp(&tmp, extn);    	/* assign the acd input file 
+					   extension to tmp */
  
-    /* this picks up situations where the user has specified an
-       extension without a "." */
+    /* this picks up situations where the user has specified an extension 
+       without a "." */
     else
     {
 	ajStrAppC(&tmp, ".");       	/* assign "." to tmp */  
-	ajStrApp(&tmp, extn);       	/* append tmp with a user
-                                           specified extension */
+	ajStrApp(&tmp, extn);       	/* append tmp with a user specified 
+					   extension */  
     }	
 
     /* all files containing hits will be in a list */
     ajFileScan(path, tmp, &list, ajFalse, ajFalse, NULL, NULL, ajFalse, NULL);
+
     
     /* read each psiblast file and create a list of Scophit structures */
     while(ajListPop(list,(void **)&filename))
@@ -229,11 +306,12 @@ static AjPList seqsort_HitlistListRead(AjPStr path, AjPStr extn)
 	  continue;	    
 	}	
 	
-	ajXyzHitlistRead(inf,"//",&hitlist); /* read each psiblast file
-//into a Hitlist structure */
-	ajListPushApp(tmplist, hitlist);        /* create a temporary
-                                                   list of hitlist
-                                                   structures */
+	ajXyzHitlistRead(inf,"//",&hitlist);    /* read each psblast file into 
+						   a Hitlist structure */
+	ajListPushApp(tmplist, hitlist);        /* create a temporary list of 
+						   hitlist structures */
+	ajStrDel(&filename);
+	ajFileClose(&inf); 
     }
     
     /* clean up */
@@ -241,20 +319,20 @@ static AjPList seqsort_HitlistListRead(AjPStr path, AjPStr extn)
     ajStrDel(&filename);
     ajStrDel(&logf);
     ajListDel(&list);
-    ajFileClose(&inf);
+
     
     return tmplist;
 }
 
 
-/* @funcstatic seqsort_FileMerge *****************************************
+/* @funcstatic seqsort_FileMerge **********************************************
 **
-** Looks at a specific directory for the given files(2) and creates a list
-** of hitlist structures. The Hitlist object from file1 is set to high 
-** priority and that from file2 is set to low priority.
+** Reads two scop hits files. A list of Hitlist structures is allocated and 
+** returned. The Hitlist object from file1 is set to high priority and that 
+** from file2 is set to low priority (the <Priority> element is written).
 **
-** @param [r] file1       [AjPFile *]    Hits file 1.
-** @param [r] file2       [AjPFile *]    Hits file 2.
+** @param [r] file1       [AjPFile*]    Hits file 1.
+** @param [r] file2       [AjPFile*]    Hits file 2.
 **
 ** @return [AjPList] tmplist, which is a list of hitlist structures.
 ** @@
@@ -262,10 +340,9 @@ static AjPList seqsort_HitlistListRead(AjPStr path, AjPStr extn)
 
 static AjPList seqsort_FileMerge(AjPFile* file1, AjPFile* file2)
 {
-    AjPList tmplist    = NULL;  /* temparary list */
-    AjPHitlist hitlist = NULL;  /* hit structure for reading a
-                                   psiblasts or swissparse results
-                                   file */
+    AjPList tmplist    = NULL;  /* temporary list */
+    AjPHitlist hitlist = NULL;  /* hit structure for reading a psiblasts or 
+				   swissparse results file */
   
     tmplist  = ajListNew();
     
@@ -283,16 +360,17 @@ static AjPList seqsort_FileMerge(AjPFile* file1, AjPFile* file2)
 }
 
 
-/* @funcstatic seqsort_PsiblastHitSort  **********************************
+
+/* @funcstatic seqsort_PsiblastHitSort ****************************************
 **
-** Sorts the results of a psiblasts run. Add the hits to the relavent list 
-** created in main.
+** Processes the results of a seqsearch run as held in three lists of Scophit 
+** objects (for families, superfamilies and folds). The lists are modified.
 **
-** @param [w] famlist    [AjPList *] Families list
-** @param [w] supfamlist [AjPList *] Superfamilies list
-** @param [w] foldlist   [AjPList *] Folds list
-** @param [r] sig_overlap [ajint]    The minimum overlaping residues required
-**                                   for merging of two hits
+** @param [w] famlist    [AjPList*] Families list
+** @param [w] supfamlist [AjPList*] Superfamilies list
+** @param [w] foldlist   [AjPList*] Folds list
+** @param [r] sig_overlap [ajint]    The minimum overlaping residues 
+**                		required for merging of two hits
 ** @param [r] path       [AjPStr]    File path of hits files.
 ** @param [r] extn       [AjPStr]    File extension of hits files.
 ** 
@@ -300,11 +378,9 @@ static AjPList seqsort_FileMerge(AjPFile* file1, AjPFile* file2)
 ** @@
 ******************************************************************************/
 
-static AjBool seqsort_PsiblastHitSort(AjPList* famlist,
-					   AjPList* supfamlist,
-					   AjPList* foldlist,
-					   ajint sig_overlap, AjPStr path,
-					   AjPStr extn)
+static AjBool seqsort_PsiblastHitSort(AjPList* famlist, AjPList* supfamlist, 
+				      AjPList* foldlist, ajint sig_overlap, 
+				      AjPStr path, AjPStr extn)
 {
 
     AjPList hitslist   = NULL;		/* a list of hitlist structures */
@@ -313,6 +389,8 @@ static AjBool seqsort_PsiblastHitSort(AjPList* famlist,
     AjPScophit  hit    = NULL;		/* a given hit in the list */
     AjPScophit  nexthit= NULL;		/* the next hit in the list */
 
+    AjPHitlist  tmp    = NULL;          /* Pointer for freeing hitslist */
+    
    
     /* Check args */
     if((!(*famlist)) || (!(*supfamlist)) || (!(*foldlist)) || (!path)
@@ -320,20 +398,21 @@ static AjBool seqsort_PsiblastHitSort(AjPList* famlist,
 	return ajFalse;
     
 
-    hitslist    = ajListNew();
-
     /***********************************************************************/
     /** FIGURE A.2 Preparation of list for processing results of PSIBLAST **/
     /** searches for SCOP families.                                       **/
     /***********************************************************************/
  
-    /* read the files containing the psiblasts hits and construct a
-       list of hitlist structures */
+    /* read the files containing the psiblasts hits and construct a list 
+       of hitlist structures */ 
     hitslist  =  seqsort_HitlistListRead(path,extn);
 
-    /* Convert the hitslist to a single list of Scophit structures
+    /* Convert the hitslist to a single list of Scophit structures 
        (families list)*/
     ajXyzHitlistToScophits(hitslist,famlist);
+
+
+    
 
     /***********************************************************************/
     /** FIGURE A.3 Identify members of families (merge overlapping hits)  **/
@@ -341,10 +420,11 @@ static AjBool seqsort_PsiblastHitSort(AjPList* famlist,
 
     iter=ajListIter(*famlist); 
 
-    /* sort list, first by Family, then by Accession number, and
+    /* sort list, first by Family, then by Accession number, and 
        finally by Start */
-    ajListSort3(*famlist, ajXyzScophitCompFam, ajXyzScophitCompId,
+    ajListSort3(*famlist, ajXyzScophitCompFam, ajXyzScophitCompAcc, 
 		ajXyzScophitCompStart);
+
         
     /* get the first node in the list, only once */
     hit = (AjPScophit)ajListIterNext(iter);
@@ -352,22 +432,22 @@ static AjBool seqsort_PsiblastHitSort(AjPList* famlist,
     /* Loop while we can get another hit */
     while((nexthit=(AjPScophit)ajListIterNext(iter)))
     {
-	/* check if the accession numbers are the same and if there is
-           significant overlap */
+	/* check if the accession numbers are the same and if there is 
+	   significant overlap */
 	if(ajXyzScophitsOverlapAcc(hit,nexthit,sig_overlap))
 	{
 	    /* are the families identical */
 	    if(ajStrMatch(hit->Family,nexthit->Family))
 	    {
 		/* Replace 2 hits in list with a merged hit write back
-                   to the same list*/
+		   to the same list*/
 		ajXyzScophitMergeInsertThis(*famlist,hit,nexthit,iter);
 		hit = (AjPScophit)ajListIterNext(iter);
 	    }
 	}	
 
-	/* would mean that the two hits were distinct and should be
-           left in the list */
+	/* would mean that the two hits were distinct and should be left 
+	   in the list */
 	else
 	{
 	    /* move one node along */
@@ -376,51 +456,53 @@ static AjBool seqsort_PsiblastHitSort(AjPList* famlist,
     }
     ajListIterFree(iter);
 
+
+
     /* The end of the list been reached */
     /* Delete hits in the list that are targetted for removal */
-    ajListGarbageCollect(*famlist, ajXyzScophitDelWrap,
+    ajListGarbageCollect(*famlist, ajXyzScophitDelWrap, 
 			 (const void *) ajXyzScophitCheckTarget);
     
-    /* sort list , first by accession number,then by start and finally
+
+
+    /* sort list , first by accession number,then by start and finally 
        by family */
-    ajListSort3(*famlist, ajXyzScophitCompId, ajXyzScophitCompStart,
+    ajListSort3(*famlist, ajXyzScophitCompAcc, ajXyzScophitCompStart, 
 		ajXyzScophitCompFam);
 
-    ajListIterFree(iter);
+
 
    
-    /***********************************************************************
-    ** FIGURE A.4 Identify members of families (remove superfamily and
-    ** fold members from family list).
-    ***********************************************************************/
-
+    /***********************************************************************/
+    /** FIGURE A.4 Identify members of families  (remove superfamily and  **/
+    /** fold members from family list).                                   **/
+    /***********************************************************************/
+    
     iter= ajListIter(*famlist);
     
     /* get the first node in the list, only once */
     hit = (AjPScophit)ajListIterNext(iter); 
     while((nexthit=(AjPScophit)ajListIterNext(iter)))
     {
-	/* check if the accession numbers are the same and if there is
-           significant overlap */
+	/* check if the accession numbers are the same and if there 
+	   is significant overlap */
 	if(ajXyzScophitsOverlapAcc(hit,nexthit,sig_overlap))
 	{
 	    /* are the superfamilies identical */
 	    if(ajStrMatch(hit->Superfamily,nexthit->Superfamily)&&
 	       !(ajStrMatch(hit->Family,nexthit->Family)))
 	    {
-		/* Target both hits for removal.  Place a hit
-                   corresponding to the merging of the two hits into
-                   the supfamlist */
+		/* Target both hits for removal.  Place a hit corresponding 
+		   to the merging of the two hits into the supfamlist */
 		ajXyzScophitMergeInsertOther(*supfamlist,hit,nexthit);     
 	    }	
 	    /* are the folds identical */
-	    else if(ajStrMatch(hit->Fold,nexthit->Fold)&&
-		    !(ajStrMatch(hit->Superfamily,nexthit->Superfamily))&&
+	    else if(ajStrMatch(hit->Fold,nexthit->Fold)&&!
+		    (ajStrMatch(hit->Superfamily,nexthit->Superfamily))&&
 		    !(ajStrMatch(hit->Family,nexthit->Family)))
 	    {
-		/* Target both hits for removal.  Place a hit
-                   corresponding to the merging of the two hits into
-                   the foldlist */
+		/* Target both hits for removal.  Place a hit corresponding 
+		   to the merging of the two hits into the foldlist */
 		ajXyzScophitMergeInsertOther(*foldlist,hit,nexthit);    
 	    }
 	    else
@@ -437,35 +519,38 @@ static AjBool seqsort_PsiblastHitSort(AjPList* famlist,
     
     /* The end of the list been reached */
     /* Delete hits in the list that are targetted for removal */
-    ajListGarbageCollect(*famlist, ajXyzScophitDelWrap,
+    ajListGarbageCollect(*famlist, ajXyzScophitDelWrap, 
 			 (const void *) ajXyzScophitCheckTarget);
 
-    /* sort list, first by Family, then by accession number, and
+
+
+    /* sort list, first by Family, then by accession number, and 
        finally by Start */
-    ajListSort3(*famlist, ajXyzScophitCompFam, ajXyzScophitCompId,
+    ajListSort3(*famlist, ajXyzScophitCompFam, ajXyzScophitCompAcc, 
 		ajXyzScophitCompStart);
+
+
     
     /* the iterator */
     ajListIterFree(iter);
     
-    /***********************************************************************
-    ** FIGURE A.5 Identify members of superfamilies (merge overlapping
-    ** hits)
-    ************************************************************************/
+    /*************************************************************************/
+    /** FIGURE A.5 Identify members of superfamilies (merge overlapping hits)*/
+    /*************************************************************************/
 
     iter= ajListIter(*supfamlist);
     
-    /* sort list, first by superfamily, then by accession number and
+    /* sort list, first by superfamily, then by accession number and 
        finally by the start */
-    ajListSort3(*supfamlist, ajXyzScophitCompSfam, ajXyzScophitCompId,
+    ajListSort3(*supfamlist, ajXyzScophitCompSfam, ajXyzScophitCompAcc, 
 		ajXyzScophitCompStart);
     
     /* get the first node in the list, only once */ 
     hit = (AjPScophit)ajListIterNext(iter);	                
     while((nexthit=(AjPScophit)ajListIterNext(iter)))
     {   	   
-	/* check if the accession numbers are the same and if there is
-           significant overlap */
+	/* check if the accession numbers are the same and if there is 
+	   significant overlap */
 	if(ajXyzScophitsOverlapAcc(hit,nexthit,sig_overlap))
 	{
 	    /* are the superfamilies identical */
@@ -476,8 +561,8 @@ static AjBool seqsort_PsiblastHitSort(AjPList* famlist,
 		hit = (AjPScophit)ajListIterNext(iter);
 	    }	
 	}
-	/* would mean that the two hits were distinct and should be
-           left in the list */
+	/* would mean that the two hits were distinct and should be left 
+	   in the list */
 	else
 	{
 	    /* move one node along */
@@ -487,20 +572,20 @@ static AjBool seqsort_PsiblastHitSort(AjPList* famlist,
 
     /* The end of the list been reached */
     /* Delete hits in the list that are targetted for removal */
-    ajListGarbageCollect(*supfamlist, ajXyzScophitDelWrap,
+    ajListGarbageCollect(*supfamlist, ajXyzScophitDelWrap, 
 			 (const void *) ajXyzScophitCheckTarget);
 
     /* sort list , first by accession number,then by start and finally
        by family */
-    ajListSort3(*supfamlist, ajXyzScophitCompId, ajXyzScophitCompStart,
+    ajListSort3(*supfamlist, ajXyzScophitCompAcc, ajXyzScophitCompStart,
 		ajXyzScophitCompSfam);
     
     ajListIterFree(iter);
     
-    /************************************************************************
-    ** FIGURE A.6 Identify members of superfamilies (remove fold
-    ** members from the superfamilies list.
-    **********************************************************************/
+    /***************************************************************/
+    /** FIGURE A.6 Identify members of superfamilies (remove fold **/
+    /** members from the superfamilies list.                      **/
+    /***************************************************************/
     
     iter= ajListIter(*supfamlist);
     
@@ -508,18 +593,18 @@ static AjBool seqsort_PsiblastHitSort(AjPList* famlist,
     hit = (AjPScophit)ajListIterNext(iter);                     
     while((nexthit=(AjPScophit)ajListIterNext(iter)))
     {
-	/* check if the accession numbers are the same and if there is
-           significant overlap */
+	/* check if the accession numbers are the same and if there 
+	   is significant overlap */
 	if(ajXyzScophitsOverlapAcc(hit,nexthit,sig_overlap))
 	{
 	    /* are the folds identical */
-	    if(ajStrMatch(hit->Fold,nexthit->Fold)&&
-	       !(ajStrMatch(hit->Superfamily,nexthit->Superfamily))&&
+	    if(ajStrMatch(hit->Fold,nexthit->Fold)&&!
+	       (ajStrMatch(hit->Superfamily,nexthit->Superfamily))&&
 	       !(ajStrMatch(hit->Family,nexthit->Family)))
 	    {
-		/* target both hits for removal. Place a hit
-		   corresponding to the merging of the two hits into
-		   the folds list */
+		/* target both hits for removal. Place a hit corresponding 
+		   to the merging of the 
+		   two hits into the folds list */
 		ajXyzScophitMergeInsertOther(*foldlist,hit,nexthit);
 	    }
 	    else
@@ -536,42 +621,42 @@ static AjBool seqsort_PsiblastHitSort(AjPList* famlist,
     
     /* The end of the list has been reached */
     /* Delete hits in the list that are targeted for removal */
-    ajListGarbageCollect(*supfamlist, ajXyzScophitDelWrap,
+    ajListGarbageCollect(*supfamlist, ajXyzScophitDelWrap, 
 			 (const void *) ajXyzScophitCheckTarget);
 
-    /* sort list, first by Family, then by accession number, and
+    /* sort list, first by Family, then by accession number, and 
        finally by Start */
-    ajListSort3(*supfamlist, ajXyzScophitCompSfam, ajXyzScophitCompId,
+    ajListSort3(*supfamlist, ajXyzScophitCompSfam, ajXyzScophitCompAcc, 
 		ajXyzScophitCompStart);
     
     ajListIterFree(iter);
     
-    /************************************************************************
-    ** FIGURE A.7 Identify members of folds (merge overlapping hits
-    ** and remove hits of unknown classification).
-    *********************************************************************/
+    /*************************************************************/
+    /** FIGURE A.7 Identify members of folds (merge overlapping **/
+    /** hits and remove hits of  unknown classification).       **/ 
+    /*************************************************************/
     
     iter= ajListIter(*foldlist);
     
-    /* sort list, first by fold, then by accession number and finally
-       by the start */
-    ajListSort3(*foldlist, ajXyzScophitCompFold, ajXyzScophitCompId,
+    /* sort list, first by fold, then by accession number and 
+       finally by the start */
+    ajListSort3(*foldlist, ajXyzScophitCompFold, ajXyzScophitCompAcc, 
 		ajXyzScophitCompStart);
     
     /* get the first node in the list, only once */ 
     hit = (AjPScophit)ajListIterNext(iter);	
     while((nexthit=(AjPScophit)ajListIterNext(iter)))
     {
-	/* check if the accession numbers are the same and if there is
-           significant overlap */
+	/* check if the accession numbers are the same and if there 
+	   is significant overlap */
 	if(ajXyzScophitsOverlapAcc(hit,nexthit,sig_overlap))
 	{
 	    /* are the folds identical */
 	    if(ajStrMatch(hit->Fold,nexthit->Fold))
 	    {
-		/* target both hits for removal. Place a hit
-		   corresponding to the merging of the two hits into
-		   the folds (same) list */
+		/* target both hits for removal. Place a hit corresponding 
+		   to the merging of the 
+		   two hits into the folds (same) list */
 		ajXyzScophitMergeInsertThis(*foldlist,hit,nexthit, iter);
 		hit = (AjPScophit)ajListIterNext(iter);
 	    }
@@ -589,15 +674,20 @@ static AjBool seqsort_PsiblastHitSort(AjPList* famlist,
     
     /* The end of the list has been reached */
     /* Delete hits in the list that are targeted for removal */
-    ajListGarbageCollect(*foldlist, ajXyzScophitDelWrap,
+    ajListGarbageCollect(*foldlist, ajXyzScophitDelWrap, 
 			 (const void *) ajXyzScophitCheckTarget);
     
-    ajListSort3(*foldlist, ajXyzScophitCompSfam, ajXyzScophitCompId,
+    ajListSort3(*foldlist, ajXyzScophitCompSfam, ajXyzScophitCompAcc, 
 		ajXyzScophitCompStart);
     
     ajListIterFree(iter);
     
     /* clean up */
+
+
+    while(ajListPop(hitslist,(void**)&tmp))
+	ajXyzHitlistDel(&tmp);
+
     ajListDel(&hitslist);
     
     return ajTrue;
@@ -605,28 +695,26 @@ static AjBool seqsort_PsiblastHitSort(AjPList* famlist,
 
 
 
-/* @funcstatic seqsort_SwissparseHitSort  ********************************
+/* @funcstatic seqsort_SwissparseHitSort **************************************
 **
-** Sorts the results of a swissparse run. Add the hits to the relavent list 
-** created in main.
+** Processes the results of a seqsearch run as held in three lists of Scophit 
+** objects (for families, superfamilies and folds). The lists are modified.
 **
-** @param [w] famlist    [AjPList *] Families list
-** @param [w] supfamlist [AjPList *] Superfamilies list
-** @param [w] foldlist   [AjPList *] Folds list
-** @param [r] sig_overlap [ajint]    The minimum overlapping residues
-**                                   required for merging of two hits
+** @param [w] famlist    [AjPList*] Families list
+** @param [w] supfamlist [AjPList*] Superfamilies list
+** @param [w] foldlist   [AjPList*] Folds list
+** @param [r] sig_overlap [ajint]    The minimum overlaping residues required 
+** 					for merging of two hits
 ** @param [r] path       [AjPStr]    File path of hits files.
 ** @param [r] extn       [AjPStr]    File extension of hits files.
 ** 
 ** @return [AjBool] ajTrue if the list has been sorted, ajFalse otherwise.
 ** @@
-*****************************************************************************/
+******************************************************************************/
 
-static AjBool seqsort_SwissparseHitSort(AjPList* famlist,
-					     AjPList* supfamlist,
-					     AjPList* foldlist,
-					     ajint sig_overlap,
-					     AjPStr path, AjPStr extn)
+static AjBool seqsort_SwissparseHitSort(AjPList* famlist, AjPList* supfamlist, 
+					AjPList* foldlist, ajint sig_overlap, 
+					AjPStr path, AjPStr extn)
 {
     AjPList hitslist       = NULL;	/* a list of hitlist structures */
     AjPList copiedfamlist  = NULL;	/* a copy of the family list */
@@ -646,33 +734,34 @@ static AjBool seqsort_SwissparseHitSort(AjPList* famlist,
     tmp     = ajXyzScophitNew();
     
     /* Check args */
-    if((!(*famlist)) || (!(*supfamlist)) || (!(*foldlist)) || (!path) ||
-       (!extn))
+    if((!(*famlist)) || (!(*supfamlist)) || (!(*foldlist)) || (!path)
+       || (!extn))
 	return ajFalse;
     
-    /*************************************************************************
-    ** FIGURE B.2 Preparation of list for processing results of
-    ** SWISSPARSE searches for SCOP families
-    ************************************************************************/
+    /*************************************************************************/
+    /** FIGURE B.2 Preparation of list for processing results of SWISSPARSE **/
+    /** searches for SCOP families.                                         **/
+    /*************************************************************************/
+       
     
-    /* read the files containing the swissparse hits and construct a
-       list of hitlist structure for each type of hit */
+    /* read the files containing the swissparse hits and construct a list 
+       of hitlist structure for each type of hit */ 
     hitslist  =  seqsort_HitlistListRead(path,extn);
     
     /* Convert the list of hitlist to three populated lists of Scophit
        structures */
     ajXyzHitlistToThreeScophits(hitslist,famlist,supfamlist,foldlist);
     
-    /************************************************************************
-    ** FIGURE B.3 Identify members of families (remove super-family
-    ** and fold members from family list)
-    ***********************************************************************/
+    /*******************************************************************/
+    /** FIGURE B.3  Identify members of families (remove super-family **/
+    /** and fold members from family list)	            	      **/ 
+    /*******************************************************************/
     
     iter = ajListIter(*famlist);
     
-    /* sort list, first by Family, then by Accession number and
-       finally by the Start */
-    ajListSort3(*famlist, ajXyzScophitCompFam, ajXyzScophitCompId,
+    /* sort list, first by Family, then by Accession number and finally 
+       by the Start */
+    ajListSort3(*famlist, ajXyzScophitCompFam, ajXyzScophitCompAcc, 
 		ajXyzScophitCompStart);
     
     /* get the first node in the list, only once */
@@ -681,27 +770,25 @@ static AjBool seqsort_SwissparseHitSort(AjPList* famlist,
     /* Loop while we can get another hit */
     while((nexthit=(AjPScophit)ajListIterNext(iter)))
     {
-	/* check if the accession numbers are the same and if there is
-           significant overlap */
+	/* check if the accession numbers are the same and if there is 
+	   significant overlap */
 	if(ajXyzScophitsOverlapAcc(hit,nexthit,sig_overlap))
 	{
 	    /* are the superfamilies identical */
-	    if(ajStrMatch(hit->Superfamily,nexthit->Superfamily) &&
+	    if(ajStrMatch(hit->Superfamily,nexthit->Superfamily) && 
 	       !(ajStrMatch(hit->Family,nexthit->Family)))
 	    {
-		/* Target both hits for removal.  Place a hit
-                   corresponding to the merging of the two hits into
-                   the supfamlist */
+		/* Target both hits for removal.  Place a hit corresponding 
+		   to the merging of the two hits into the supfamlist */
 		ajXyzScophitMergeInsertOther(*supfamlist,hit,nexthit);     
 	    }
 	    /* are the folds identical */
-	    else if(ajStrMatch(hit->Fold,nexthit->Fold) &&
-		    !(ajStrMatch(hit->Superfamily,nexthit->Superfamily)) &&
+	    else if(ajStrMatch(hit->Fold,nexthit->Fold)&&
+		    !(ajStrMatch(hit->Superfamily,nexthit->Superfamily))&&
 		    !(ajStrMatch(hit->Family,nexthit->Family)))
 	    {
-		/* Target both hits for removal.  Place a hit
-                   corresponding to the merging of the two hits into
-                   the supfamlist */
+		/* Target both hits for removal.  Place a hit corresponding 
+		   to the merging of the two hits into the supfamlist */
 		ajXyzScophitMergeInsertOther(*foldlist,hit,nexthit);     
 	    }
 	    else
@@ -718,53 +805,51 @@ static AjBool seqsort_SwissparseHitSort(AjPList* famlist,
     
     /* the end of the list has been reached */
     /* delete hits in the list that are targeted for removal */
-    ajListGarbageCollect(*famlist, ajXyzScophitDelWrap,
+    ajListGarbageCollect(*famlist, ajXyzScophitDelWrap, 
 			 (const void *) ajXyzScophitCheckTarget);
     
     /* Sort list again */
-    ajListSort3(*famlist, ajXyzScophitCompFam, ajXyzScophitCompId,
+    ajListSort3(*famlist, ajXyzScophitCompFam, ajXyzScophitCompAcc, 
 		ajXyzScophitCompStart);
     
     ajListIterFree(iter);
     
     
     
-    /************************************************************************
-    ** FIGURE B.4 Identify members of superfamilies (remove duplicate
-    ** hits and fold members from superfamily list)
-    ****************************************************************/
+    /*********************************************************************/
+    /** FIGURE B.4  Identify members of superfamilies (remove duplicate **/ 
+    /** hits and fold members from superfamily list)			**/ 
+    /*********************************************************************/
     
     iter = ajListIter(*supfamlist);
-    /* sort list, first by superfamily, then by accession number and
+    /* sort list, first by superfamily, then by accession number and 
        finally by the start */
-    ajListSort3(*supfamlist, ajXyzScophitCompSfam, ajXyzScophitCompId,
+    ajListSort3(*supfamlist, ajXyzScophitCompSfam, ajXyzScophitCompAcc, 
 		ajXyzScophitCompStart);
     
     
     hit  = (AjPScophit)ajListIterNext(iter);
     while((nexthit=(AjPScophit)ajListIterNext(iter)))
     {
-	/*check if the accession numbers are the same and if there is
-          significant overlap */
+	/*check if the accession numbers are the same and if there is 
+	  significant overlap */
 	if(ajXyzScophitsOverlapAcc(hit,nexthit,sig_overlap))
 	{
 	    /* are the superfamilies identical */
 	    if(ajStrMatch(hit->Superfamily,nexthit->Superfamily))
 	    {
-		/* Target both hits for removal.  Place a hit
-                   corresponding to the merging of the two hits into
-                   the supfamlist */
+		/* Target both hits for removal.  Place a hit corresponding 
+		   to the merging of the two hits into the supfamlist */
 		ajXyzScophitMergeInsertThis(*supfamlist,hit,nexthit,iter);
 		hit = (AjPScophit)ajListIterNext(iter);
 	    }
 	    /* are the folds identical */
-	    else if(ajStrMatch(hit->Fold,nexthit->Fold) &&
-		    !(ajStrMatch(hit->Superfamily,nexthit->Superfamily)) &&
+	    else if(ajStrMatch(hit->Fold,nexthit->Fold)&&
+		    !(ajStrMatch(hit->Superfamily,nexthit->Superfamily))&&
 		    !(ajStrMatch(hit->Family,nexthit->Family)))
 	    {
-		/* Target both hits for removal.  Place a hit
-                   corresponding to the merging of the two hits into
-                   the supfamlist */
+		/* Target both hits for removal.  Place a hit corresponding
+		   to the merging of the two hits into the supfamlist */
 		ajXyzScophitMergeInsertOther(*foldlist,hit,nexthit);
 	    }
 	    else
@@ -781,41 +866,40 @@ static AjBool seqsort_SwissparseHitSort(AjPList* famlist,
     
     /* the end of the list has been reached */
     /* delete hits in the list that are targeted for removal */
-    ajListGarbageCollect(*supfamlist, ajXyzScophitDelWrap,
+    ajListGarbageCollect(*supfamlist, ajXyzScophitDelWrap, 
 			 (const void *) ajXyzScophitCheckTarget);
     
     /* Sort list again */
-    ajListSort3(*supfamlist, ajXyzScophitCompSfam, ajXyzScophitCompId,
+    ajListSort3(*supfamlist, ajXyzScophitCompSfam, ajXyzScophitCompAcc, 
 		ajXyzScophitCompStart);
     
     ajListIterFree(iter);
     
     
-    /************************************************************************
-    ** FIGURE B.5 Identify members of folds (remove super-family and
-    ** fold members from folds list)
-    ************************************************************************/
+    /***********************************************************************/
+    /** FIGURE B.5 Identify members of folds (remove super-family and fold**/
+    /** members from folds list)					  **/ 
+    /***********************************************************************/
     
     iter = ajListIter(*foldlist);
-    /* sort list, first by fold, then by accession number and finally
-       by the start */
-    ajListSort3(*foldlist, ajXyzScophitCompFold, ajXyzScophitCompId,
+    /* sort list, first by fold, then by accession number and finally by 
+       the start */
+    ajListSort3(*foldlist, ajXyzScophitCompFold, ajXyzScophitCompAcc, 
 		ajXyzScophitCompStart);
     
     
     hit  = (AjPScophit)ajListIterNext(iter);
     while((nexthit=(AjPScophit)ajListIterNext(iter)))
     {
-	/*check if the accession numbers are the same and if there is
-          significant overlap */
+	/*check if the accession numbers are the same and if there is 
+	  significant overlap */
 	if(ajXyzScophitsOverlapAcc(hit,nexthit,sig_overlap))
 	{
 	    /* are the folds identical */
 	    if(ajStrMatch(hit->Fold,nexthit->Fold))
 	    {
-		/* Target both hits for removal.  Place a hit
-                   corresponding to the merging of the two hits into
-                   the supfamlist */
+		/* Target both hits for removal.  Place a hit corresponding 
+		   to the merging of the two hits into the supfamlist */
 		ajXyzScophitMergeInsertThis(*foldlist,hit,nexthit,iter);
 	    }		
 	    else	
@@ -832,20 +916,20 @@ static AjBool seqsort_SwissparseHitSort(AjPList* famlist,
     
     /* the end of the list has been reached */
     /* delete hits in the list that are targeted for removal */
-    ajListGarbageCollect(*foldlist, ajXyzScophitDelWrap,
+    ajListGarbageCollect(*foldlist, ajXyzScophitDelWrap, 
 			 (const void *) ajXyzScophitCheckTarget);
     
     /* Sort list again */
-    ajListSort3(*foldlist, ajXyzScophitCompFold, ajXyzScophitCompId,
+    ajListSort3(*foldlist, ajXyzScophitCompFold, ajXyzScophitCompAcc, 
 		ajXyzScophitCompStart);
     
     ajListIterFree(iter);
     
     
-    /**************************************************************************
-    ** FIGURE B.6 Identify members of superfamilies (remove known
-    ** family members from superfamilies list)
-    ************************************************************************/
+    /*************************************************************************/
+    /** FIGURE B.6 Identify members of superfamilies (remove known          **/
+    /** family members from superfamilies list)	                            **/
+    /*************************************************************************/
     
     /* make a copy of the families list */
     copiedfamlist = ajXyzScophitListCopy(*famlist);
@@ -858,9 +942,9 @@ static AjBool seqsort_SwissparseHitSort(AjPList* famlist,
 	ajListPushApp(*supfamlist,tmp);        
     }
     
-    /* sort list, first by superfamily, then by accession number and
+    /* sort list, first by superfamily, then by accession number and 
        finally by the start */
-    ajListSort3(*supfamlist, ajXyzScophitCompSfam, ajXyzScophitCompId,
+    ajListSort3(*supfamlist, ajXyzScophitCompSfam, ajXyzScophitCompAcc, 
 		ajXyzScophitCompStart);;
     
     iter = ajListIter(*supfamlist);
@@ -868,13 +952,14 @@ static AjBool seqsort_SwissparseHitSort(AjPList* famlist,
     hit  = (AjPScophit)ajListIterNext(iter);
     while((nexthit=(AjPScophit)ajListIterNext(iter)))
     {	
-	/*check if the accession numbers are the same and if there is
-          significant overlap */
+	/*check if the accession numbers are the same and if there is 
+	  significant overlap */
 	if(ajXyzScophitsOverlapAcc(hit,nexthit,sig_overlap))
 	{
 	    /* Check that one of the hits is targetted for removal */
 	    if(!hit->Target && !nexthit->Target)
-		ajWarn("Neither hit targetted for removal ajXyzSwissparseHitSort.\n"
+		ajWarn("Neither hit targetted for removal "
+		       "seqsort_SwissparseHitSort.\n"
 		       "Unexpected behaviour.");
 	  
 	    /* Identify the hit that is not targeted for removal
@@ -891,20 +976,20 @@ static AjBool seqsort_SwissparseHitSort(AjPList* famlist,
     }
     /* the end of the list has been reached */
     /* delete hits in the list that are targeted for removal. */
-    ajListGarbageCollect(*supfamlist, ajXyzScophitDelWrap,
+    ajListGarbageCollect(*supfamlist, ajXyzScophitDelWrap, 
 			 (const void *) ajXyzScophitCheckTarget);
     
     /* Sort list again */
-    ajListSort3(*supfamlist, ajXyzScophitCompSfam, ajXyzScophitCompId,
+    ajListSort3(*supfamlist, ajXyzScophitCompSfam, ajXyzScophitCompAcc, 
 		ajXyzScophitCompStart);
     
     ajListIterFree(iter);
     
     
-    /*************************************************************************
-    ** FIGURE B.7 Identify members of folds (remove known family and
-    ** superfamily members from folds list)
-    ************************************************************************/
+    /*******************************************************************/
+    /** FIGURE B.7 Identify members of folds (remove known family and **/ 
+    /** superfamily members from folds list)        		      **/ 
+    /*******************************************************************/
     
     /* make a copy of the families list */
     copiedfamlist = ajXyzScophitListCopy(*famlist);
@@ -934,21 +1019,22 @@ static AjBool seqsort_SwissparseHitSort(AjPList* famlist,
 
     iter = ajListIter(*foldlist);
 
-    /* sort list, first by superfamily, then by accession number and
+    /* sort list, first by superfamily, then by accession number and 
        finally by the start */
-    ajListSort3(*foldlist, ajXyzScophitCompFold, ajXyzScophitCompId,
+    ajListSort3(*foldlist, ajXyzScophitCompFold, ajXyzScophitCompAcc, 
 		ajXyzScophitCompStart);
 
     hit  = (AjPScophit)ajListIterNext(iter);
     while((nexthit=(AjPScophit)ajListIterNext(iter)))
     {	
-	/*check if the accession numbers are the same and if there is
-          significant overlap */
+	/*check if the accession numbers are the same and if there is 
+	  significant overlap */
 	if(ajXyzScophitsOverlapAcc(hit,nexthit,sig_overlap))
 	{
 	    /* Check that one of the hits is targetted for removal */
 	    if(!hit->Target && !nexthit->Target)
-		ajWarn("Neither hit targetted for removal ajXyzSwissparseHitSort.\n"
+		ajWarn("Neither hit targetted for removal "
+		       "seqsort_SwissparseHitSort.\n"
 		       "Unexpected behaviour.");
 
 	    /* Identify the hit that is not targeted for removal
@@ -965,11 +1051,11 @@ static AjBool seqsort_SwissparseHitSort(AjPList* famlist,
 
     /* the end of the list has been reached */
     /* delete hits in the list that are targeted for removal. */
-    ajListGarbageCollect(*foldlist, ajXyzScophitDelWrap,
+    ajListGarbageCollect(*foldlist, ajXyzScophitDelWrap, 
 			 (const void *) ajXyzScophitCheckTarget);
 	
     /* Sort list again */
-    ajListSort3(*foldlist, ajXyzScophitCompFold, ajXyzScophitCompId,
+    ajListSort3(*foldlist, ajXyzScophitCompFold, ajXyzScophitCompAcc, 
 		ajXyzScophitCompStart);
 
     ajListIterFree(iter);
@@ -981,20 +1067,22 @@ static AjBool seqsort_SwissparseHitSort(AjPList* famlist,
 }
 
 
-/* @funcstatic seqsort_IdentifyMembers ***********************************
+/* @funcstatic seqsort_IdentifyMembers ****************************************
 **
-** Identifies members of a scop node for a given list. Removes overlaping 
-** low-priority hits from list.
+** Identifies unique members of a scop node (family, superfamily or fold) 
+** for a given list. Removes overlaping low-priority hits from list.
 **
-** @param [r] list       [AjPList *] working list.
-** @param [r] node       [ajint]     the scop node 
-** @param [r] sig_overlap [ajint]    The minimum overlapping residues
-**                                   required for merging of two hits
+** @param [r] list       [AjPList*] List of Scophit objects.
+** @param [r] node       [ajint]     The scop node  (SEQSORT_FAMILY, 
+** 					SEQSORT_SUPERFAMILY or SEQSORT_FOLD)
+** @param [r] sig_overlap [ajint]    The minimum number of common residues 
+** 				        for two hits to be considered as 
+** 					overlapping.
 **
 ** @return [AjBool] ajTrue if the list has been processed, ajFalse otherwise.
 ** @@
 ******************************************************************************/
-static AjBool seqsort_IdentifyMembers(AjPList* list, ajint node,
+static AjBool seqsort_IdentifyMembers(AjPList* list, ajint node, 
 				      ajint sig_overlap)
 {
     AjIList iter      = NULL;   /* a list iterator */
@@ -1007,18 +1095,18 @@ static AjBool seqsort_IdentifyMembers(AjPList* list, ajint node,
 	return ajFalse;    
 
     /* sort list */
-    if(node == FAMILY)
-	ajListSort3(*list, ajXyzScophitCompFam, ajXyzScophitCompId,
+    if(node == SEQSORT_FAMILY)
+	ajListSort3(*list, ajXyzScophitCompFam, ajXyzScophitCompAcc, 
 		    ajXyzScophitCompStart);
 
 
-    else if(node == SUPERFAMILY)
-	ajListSort3(*list, ajXyzScophitCompSfam, ajXyzScophitCompId,
+    else if(node == SEQSORT_SUPERFAMILY)
+	ajListSort3(*list, ajXyzScophitCompSfam, ajXyzScophitCompAcc, 
 		    ajXyzScophitCompStart);
 
 
-    else if(node  == FOLD)
-	ajListSort3(*list, ajXyzScophitCompFold, ajXyzScophitCompId,
+    else if(node  == SEQSORT_FOLD)
+	ajListSort3(*list, ajXyzScophitCompFold, ajXyzScophitCompAcc, 
 		    ajXyzScophitCompStart);
 	
 
@@ -1030,26 +1118,26 @@ static AjBool seqsort_IdentifyMembers(AjPList* list, ajint node,
     /* Loop while we can get another hit */
     while((nexthit=(AjPScophit)ajListIterNext(iter)))
     {
-	/* check if the accession numbers are the same and if there is
-           significant overlap */
+	/* check if the accession numbers are the same and if there 
+	   is significant overlap */
 	if(ajXyzScophitsOverlapAcc(hit,nexthit,sig_overlap))
 	{
-	    if(node == FAMILY && ajStrMatch(hit->Family,nexthit->Family))
+	    if(node == SEQSORT_FAMILY && 
+	       ajStrMatch(hit->Family,nexthit->Family))
 	    {
-		/* target low priority hit for removal from the
-                   families list */
+		/* target low priority hit for removal from the families list */
 		ajXyzScophitTargetLowPriority(&hit);
 		ajXyzScophitTargetLowPriority(&nexthit);
 	    }   	    
-	    else if(node == SUPERFAMILY &&
+	    else if(node == SEQSORT_SUPERFAMILY && 
 		    ajStrMatch(hit->Superfamily,nexthit->Superfamily))
 	    {
-		/* target low priority hit for removal from the
-                   superfamilies list */
+		/* target low priority hit for removal from the superfamilies list */
 		ajXyzScophitTargetLowPriority(&hit);
 		ajXyzScophitTargetLowPriority(&nexthit);
 	    }
-	    else if(node == FOLD && ajStrMatch(hit->Fold,nexthit->Fold))
+	    else if(node == SEQSORT_FOLD && 
+		    ajStrMatch(hit->Fold,nexthit->Fold))
 	    {
 		/* target low priority hit for removal from the folds list */
 		ajXyzScophitTargetLowPriority(&hit);
@@ -1062,19 +1150,23 @@ static AjBool seqsort_IdentifyMembers(AjPList* list, ajint node,
     }
 
     /* Remove hits that are targetted for removal */
-    ajListGarbageCollect(*list, ajXyzScophitDelWrap, (const void *) ajXyzScophitCheckTarget);
+    ajListGarbageCollect(*list, ajXyzScophitDelWrap, 
+			 (const void *) ajXyzScophitCheckTarget);
 
 
     /* the end of the list has been reached */
     /* sort the list */
-     if(node == FAMILY)
-	 ajListSort3(*list, ajXyzScophitCompFam, ajXyzScophitCompId, ajXyzScophitCompStart);
+     if(node == SEQSORT_FAMILY)
+	 ajListSort3(*list, ajXyzScophitCompFam, 
+		     ajXyzScophitCompAcc, ajXyzScophitCompStart);
 	
-    else if(node == SUPERFAMILY)
-	 ajListSort3(*list, ajXyzScophitCompSfam, ajXyzScophitCompId, ajXyzScophitCompStart);
+    else if(node == SEQSORT_SUPERFAMILY)
+	 ajListSort3(*list, ajXyzScophitCompSfam, 
+		     ajXyzScophitCompAcc, ajXyzScophitCompStart);
 
-    else if(node == FOLD)
-	ajListSort3(*list, ajXyzScophitCompFold, ajXyzScophitCompId, ajXyzScophitCompStart);
+    else if(node == SEQSORT_FOLD)
+	ajListSort3(*list, ajXyzScophitCompFold, 
+		    ajXyzScophitCompAcc, ajXyzScophitCompStart);
 
     else
 	ajFatal("incompatible scop node\n");
@@ -1090,27 +1182,27 @@ static AjBool seqsort_IdentifyMembers(AjPList* list, ajint node,
 
 
 
-/* @funcstatic seqsort_MergeHitSort **************************************
- **
- ** Combine results of SWISSPARSE and PSIBLAST searches.
- **
- ** @param [w] famlist    [AjPList *] Families list.
- ** @param [w] supfamlist [AjPList *] Superfamilies list.
- ** @param [w] foldlist   [AjPList *] Folds list.
- ** @param [r] sig_overlap [ajint]    The minimum overlapping residues
- **                                   required for merging of two hits
- ** @param [r] file1      [AjPStr]   name of hits file 1.
- ** @param [r] file2      [AjPStr]   name of hits file 2.
- ** 
- ** @return [AjBool] ajTrue if the list has been sorted, ajFalse otherwise.
- ** @@
- ****************************************************************************/
+/* @funcstatic seqsort_MergeHitSort *******************************************
+**
+** Combine results of seqwords and seqsearch searches.  Three lists
+** of Scophit objects (for families, superfamilies and folds) are
+** written.
+**
+** @param [w] famlist    [AjPList*] Families list.
+** @param [w] supfamlist [AjPList*] Superfamilies list.
+** @param [w] foldlist   [AjPList*] Folds list.
+** @param [r] sig_overlap [ajint]    The minimum overlaping residues required 
+**  					for merging of two hits
+** @param [r] file1      [AjPStr]   Name of hits file 1.
+** @param [r] file2      [AjPStr]   Name of hits file 2.
+** 
+** @return [AjBool] ajTrue if the list has been sorted, ajFalse otherwise.
+** @@
+******************************************************************************/
 
-static AjBool seqsort_MergeHitSort(AjPList* famlist,
-					AjPList* supfamlist,
-					AjPList* foldlist,
-					ajint sig_overlap,
-					AjPStr file1, AjPStr file2)
+static AjBool  seqsort_MergeHitSort(AjPList* famlist,AjPList* supfamlist,
+				    AjPList* foldlist, ajint sig_overlap, 
+				    AjPStr file1, AjPStr file2)
 {
     AjPList hitslist       = NULL;	/* a list of hitlist structures */
     AjPList copiedfamlist  = NULL;	/* a copy of the family list */
@@ -1120,9 +1212,10 @@ static AjBool seqsort_MergeHitSort(AjPList* famlist,
 
     AjPScophit hit         = NULL;	/* a given hit in the list */ 
     AjPScophit nexthit     = NULL;	/* the next hit in the list */
-    AjPScophit tmp         = NULL;	/* temparary Scophit structure */
+    AjPScophit tmp         = NULL;	/* temporary Scophit structure */
 
-    AjPFile    inf1        = NULL;      /* file containing the hits from psiblasts */
+    AjPFile    inf1        = NULL;      /* file containing the hits
+                                           from psiblasts */
     AjPFile    inf2        = NULL;      /* file containing the hits
                                            from swissparse */
     
@@ -1130,46 +1223,45 @@ static AjBool seqsort_MergeHitSort(AjPList* famlist,
     inf1 = ajFileNewIn(file1);
     inf2 = ajFileNewIn(file2);
 
-    /***********************************************************************
-    ** FIGURE C.2 Preparation and sorting of lists for merging two input
-    ** files.
-    ***********************************************************************/ 
-
-    /* read the files containing the swissparse and psiblasts hits and
-       construct a list of hitlist structures.  This call sets the
-       Hitlist object from file1 is to high priority, that from file2
-       is set to low priority. */
+    /***********************************************************************/
+    /** FIGURE C.2 Preparation and sorting of lists for merging two input **/ 
+    /** files.								  **/
+    /***********************************************************************/ 
+    /* read the files containing the swissparse and psiblasts hits and 
+       construct a list of hitlist structures. 
+       This call sets the Hitlist object from file1 is to high priority, 
+       that from file2 is set to low priority. */
     hitslist = seqsort_FileMerge(&inf1,&inf2);
 
-    /* converts the list of hitlist to three lists of Scophit
-       structures i.e. famlist, supfamlist and foldlist. */
+    /* converts the list of hitlist to three lists of Scophit structures 
+       i.e. famlist, supfamlist and foldlist. */
     ajXyzHitlistToThreeScophits(hitslist,famlist,supfamlist,foldlist);
     
-    /*************************************************************************
-    ** FIGURE C.3 Identify members of families (remove overlapping
-    ** low-priority hits from families list)
-    *************************************************************************/
-    seqsort_IdentifyMembers(famlist,FAMILY,sig_overlap);
+    /**********************************************************************/
+    /** FIGURE C.3  Identify members of families (remove overlapping     **/
+    /** low-priority hits from families list)				 **/ 
+    /**********************************************************************/
+    seqsort_IdentifyMembers(famlist,SEQSORT_FAMILY,sig_overlap);
 
 
-    /*************************************************************************
-    ** FIGURE C.4 Identify members of superfamilies (remove
-    ** overlapping low-priority hits from superfamilies list)
-    *************************************************************************/
-    seqsort_IdentifyMembers(supfamlist,SUPERFAMILY,sig_overlap);
+    /**********************************************************************/
+    /** FIGURE C.4  Identify members of superfamilies (remove overlapping**/
+    /** low-priority hits from superfamilies list)			 **/ 
+    /**********************************************************************/
+    seqsort_IdentifyMembers(supfamlist,SEQSORT_SUPERFAMILY,sig_overlap);
 
 
-    /*************************************************************************
-    ** FIGURE C.5 Identify members of folds (remove overlapping
-    ** low-priority hits from the folds list)
-    *************************************************************************/
-    seqsort_IdentifyMembers(foldlist,FOLD,sig_overlap);
+    /**********************************************************************/
+    /** FIGURE C.5  Identify members of folds (remove overlapping        **/
+    /** low-priority hits from the folds list)               	         **/ 
+    /**********************************************************************/
+    seqsort_IdentifyMembers(foldlist,SEQSORT_FOLD,sig_overlap);
     
     
-    /*************************************************************************
-    ** FIGURE C.6 Identify members of superfamilies (remove known
-    ** family members from superfamilies list)
-    *************************************************************************/
+    /************************************************************************/
+    /** FIGURE C.6 Identify members of superfamilies (remove known         **/
+    /** family members from superfamilies list)				   **/ 
+    /************************************************************************/
     
     /* make a copy of the families list */
     copiedfamlist = ajXyzScophitListCopy(*famlist);
@@ -1184,9 +1276,9 @@ static AjBool seqsort_MergeHitSort(AjPList* famlist,
 	ajListPushApp(*supfamlist,tmp);        
     }	
     
-    /* sort list, first by superfamily, then by accession number and
+    /* sort list, first by superfamily, then by accession number and 
        finally by the start */
-    ajListSort3(*supfamlist, ajXyzScophitCompSfam, ajXyzScophitCompId,
+    ajListSort3(*supfamlist, ajXyzScophitCompSfam, ajXyzScophitCompAcc, 
 		ajXyzScophitCompStart);
     
     
@@ -1194,13 +1286,14 @@ static AjBool seqsort_MergeHitSort(AjPList* famlist,
     hit  = (AjPScophit)ajListIterNext(iter);
     while((nexthit=(AjPScophit)ajListIterNext(iter)))
     {	
-	/*check if the accession numbers are the same and if there is
-          significant overlap */
+	/*check if the accession numbers are the same and if there is 
+	  significant overlap */
 	if(ajXyzScophitsOverlapAcc(hit,nexthit,sig_overlap))
 	{
 	    /* Check that one of the hits is targetted for removal */
 	    if(!hit->Target && !nexthit->Target)
-		ajWarn("Neither hit targetted for removal ajXyzSwissparseHitSort.\n"
+		ajWarn("Neither hit targetted for removal "
+		       "seqsort_SwissparseHitSort.\n"
 		       "Unexpected behaviour.");
 
 	    /* Identify the hit that is not targeted for removal
@@ -1217,21 +1310,21 @@ static AjBool seqsort_MergeHitSort(AjPList* famlist,
 
     /* the end of the list has been reached */
     /* delete hits in the list that are targeted for removal. */
-    ajListGarbageCollect(*supfamlist, ajXyzScophitDelWrap,
+    ajListGarbageCollect(*supfamlist, ajXyzScophitDelWrap, 
 			 (const void *) ajXyzScophitCheckTarget);
 
 	
     /* Sort list again */
-    ajListSort3(*supfamlist, ajXyzScophitCompSfam, ajXyzScophitCompId,
+    ajListSort3(*supfamlist, ajXyzScophitCompSfam, ajXyzScophitCompAcc, 
 		ajXyzScophitCompStart);
 
     ajListIterFree(iter);
     
     
-    /************************************************************************
-    ** FIGURE C.7 Identify members of folds (remove known family and
-    ** superfamily members from folds list)
-    *************************************************************************/
+    /***********************************************************************/
+    /** FIGURE C.7 Identify members of folds (remove known family and     **/
+    /** superfamily members from folds list)  		                  **/ 
+    /***********************************************************************/
     
     /* make a copy of the families list */
     copiedfamlist = ajXyzScophitListCopy(*famlist);
@@ -1258,21 +1351,22 @@ static AjBool seqsort_MergeHitSort(AjPList* famlist,
     }   
 
     iter = ajListIter(*foldlist);
-    /* sort list, first by superfamily, then by accession number and
+    /* sort list, first by superfamily, then by accession number and 
        finally by the start */
-    ajListSort3(*foldlist, ajXyzScophitCompFold, ajXyzScophitCompId,
+    ajListSort3(*foldlist, ajXyzScophitCompFold, ajXyzScophitCompAcc, 
 		ajXyzScophitCompStart);
 
     hit  = (AjPScophit)ajListIterNext(iter);
     while((nexthit=(AjPScophit)ajListIterNext(iter)))
     {	
-	/*check if the accession numbers are the same and if there is
-          significant overlap */
+	/*check if the accession numbers are the same and if there is 
+	  significant overlap */
 	if(ajXyzScophitsOverlapAcc(hit,nexthit,sig_overlap))
 	{
 	    /* Check that one of the hits is targetted for removal */
 	    if(!hit->Target && !nexthit->Target)
-		ajWarn("Neither hit targetted for removal seqsort_SwissparseHitSort.\n"
+		ajWarn("Neither hit targetted for removal "
+		       "seqsort_SwissparseHitSort.\n"
 		       "Unexpected behaviour.");
 
 	    /* Identify the hit that is not targeted for removal
@@ -1289,12 +1383,12 @@ static AjBool seqsort_MergeHitSort(AjPList* famlist,
 
     /* the end of the list has been reached */
     /* delete hits in the list that are targeted for removal. */
-    ajListGarbageCollect(*foldlist, ajXyzScophitDelWrap,
+    ajListGarbageCollect(*foldlist, ajXyzScophitDelWrap, 
 			 (const void *) ajXyzScophitCheckTarget);
 
 	
-    ajListSort3(*foldlist, ajXyzScophitCompFold, ajXyzScophitCompId,
-		ajXyzScophitCompStart);
+    ajListSort3(*foldlist, ajXyzScophitCompFold, 
+		ajXyzScophitCompAcc, ajXyzScophitCompStart);
     ajListIterFree(iter);
 
       
@@ -1315,21 +1409,26 @@ static AjBool seqsort_MergeHitSort(AjPList* famlist,
 
 
 
-
-
-/* @funcstatic seqsort_WriteOutputFile ****************************************
+/* @funcstatic seqsort_WriteOutputFiles ***************************************
 **
-** Undocumented.
+** Writes the contents of three lists of Scophit objects (for families, 
+** superfamilies and folds) to file.  A validation file (containing all 
+** the hits that could NOT be uniquely assigned to a single family) and a 
+** hits file (containing only hits that were uniquely assigned to a single 
+** family) are written.
 **
-** @param [?] fptr [AjPFile] Undocumented
-** @param [?] famlist [AjPList] Undocumented
-** @param [?] supfamlist [AjPList] Undocumented
-** @param [?] foldlist [AjPList] Undocumented
-** @return [AjBool] Undocumented
+** @param [w] fptr1      [AjPFile]   validation file
+** @param [w] fptr2      [AjPFile]   hits file
+** @param [r] famlist    [AjPList] Families list.
+** @param [r] supfamlist [AjPList] Superfamilies list.
+** @param [r] foldlist   [AjPList] Folds list.
+** 
+** @return [AjBool] ajTrue if the files were written, ajFalse otherwise.
 ** @@
 ******************************************************************************/
-
-static AjBool seqsort_WriteOutputFile(AjPFile fptr, AjPList famlist, AjPList supfamlist, AjPList foldlist)
+static AjBool seqsort_WriteOutputFiles(AjPFile fptr1, AjPFile fptr2, 
+				       AjPList famlist, AjPList supfamlist, 
+				       AjPList foldlist)
 {
     AjPHitlist hitlist = NULL;
     AjIList iter       = NULL;
@@ -1342,39 +1441,66 @@ static AjBool seqsort_WriteOutputFile(AjPFile fptr, AjPList famlist, AjPList sup
 
     while((ajXyzScophitsToHitlist(foldlist, &hitlist, &iter)))
     {
-	ajXyzHitlistWrite(fptr, hitlist);
+	ajXyzHitlistWrite(fptr1, hitlist);
 	ajXyzHitlistDel(&hitlist);
 	hitlist=NULL;
     }
-    ajListIterFree(iter);
-    iter=NULL;
 
+    if(iter)
+	{
+	    ajListIterFree(iter);
+	    iter=NULL;
+	}
+    
 
     while((ajXyzScophitsToHitlist(supfamlist, &hitlist, &iter)))
     {
-	ajXyzHitlistWrite(fptr, hitlist);
+	ajXyzHitlistWrite(fptr1, hitlist);
 	ajXyzHitlistDel(&hitlist);
 	hitlist=NULL;
     }
 
-    ajListIterFree(iter);
-    iter=NULL;
+    if(iter)
+    {
+	ajListIterFree(iter);
+	iter=NULL;
+    }
 
+    ajFmtPrint("List length (func) = %d\n", ajListLength(famlist));
+
+    
     while((ajXyzScophitsToHitlist(famlist, &hitlist, &iter)))
     {
-	ajXyzHitlistWrite(fptr, hitlist);
+	/* Hits that could be uniquely assigned to a family are no longer 
+	   written to the validation file */
+	/* ajXyzHitlistWrite(fptr1, hitlist); */
+
+	ajFmtPrint("Hitlist length (func) = %d\n", hitlist->N);
+	
+
+	ajXyzHitlistWrite(fptr2, hitlist);
 	ajXyzHitlistDel(&hitlist);
 	hitlist=NULL;
     }
-    ajListIterFree(iter);
-    iter=NULL;
-
+    if(iter)
+    {
+	ajListIterFree(iter);
+	iter=NULL;
+    }
+    
     return ajTrue;
 }
 
 
+/* @func seqsort_unused *******************************************************
+**
+** Undocumented
+**
+** @return [void]
+******************************************************************************/
+
 void seqsort_unused()
 {
-  seqsort_SwissparseHitSort(NULL,NULL,NULL,0,NULL,NULL);
+  seqsort_SwissparseHitSort(NULL, NULL, NULL, 0, NULL, NULL); 
   return;
 }

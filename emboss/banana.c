@@ -116,7 +116,7 @@ int main(int argc, char **argv)
     ibeg = ajSeqBegin(seq);
     iend = ajSeqEnd(seq);
 
-    ajStrAssSub (&sstr, ajSeqStr(seq), ibeg, iend);
+    ajStrAssSub (&sstr, ajSeqStr(seq), ibeg-1, iend-1);
     ilen = ajStrLen(sstr);
 
     AJCNEW0(iseq,  ilen+1);

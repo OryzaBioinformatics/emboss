@@ -943,3 +943,28 @@ void ajSeqType (AjPSeq thys) {
   ajDebug ("ajSeqType unknown: %S\n", thys->Type);
   return;
 }
+
+/* @func ajSeqPrintType *******************************************************
+**
+** Prints the seqType definitions.
+** For EMBOSS entrails output
+**
+** @param [R] outf [AjPFile] Output file
+** @param [R] full [AjBool] Full output
+** @return [void]
+******************************************************************************/
+
+void ajSeqPrintType (AjPFile outf, AjBool full) {
+  ajint i;
+
+  char* typeName[] = {"ANY", "NUC", "PRO"};
+
+  ajFmtPrintF (outf, "\n#Sequence Types\n");
+  ajFmtPrintF (outf, "# Name            Gap N/P Desciption\n");
+  for (i=0; seqType[i].Name; i++) {
+    ajFmtPrintF (outf, "  %-15s %3B %s \"%s\"\n",
+		 seqType[i].Name, seqType[i].Gaps,
+		 typeName[seqType[i].Type], seqType[i].Desc);
+    
+  }
+}

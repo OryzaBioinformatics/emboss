@@ -92,36 +92,39 @@ static ajint namParseType = 0;
 typedef struct NamSAttr {
   char* Name;
   char* Defval;
+  char* Comment;
 } NamOAttr, *NamPAttr;
 
+
 NamOAttr namAttr[] = {
-  {"name", ""},
-  {"directory", ""},
-  {"filename", ""},
-  {"indexdirectory", ""},
-  {"url", ""},
-  {"method", ""},
-  {"methodentry", ""},
-  {"methodquery", ""},
-  {"methodall", ""},
-  {"release", ""},
-  {"type", ""},
-  {"format", ""},
-  {"formatentry", ""},
-  {"formatquery", ""},
-  {"formatall", ""},
-  {"command", ""},
-  {"comment", ""},
-  {"description", ""},
-  {"dbalias", ""},
-  {"app", ""},
-  {"appentry", ""},
-  {"appquery", ""},
-  {"appall", ""},
-  {"exclude", ""},
-  {"fields", ""},
-  {"proxy", ""},
-  {NULL, NULL}
+  {"name", "", "Database name (required)"},
+  {"directory", "", "Data directory"},
+  {"filename", "", "(Wildcard) database filename"},
+  {"indexdirectory", "", "Index directory, defaults to data directory"},
+  {"url", "", "URL skeleton for entry level access"},
+  {"method", "", "access method, default for all access levels"},
+  {"methodentry", "","access method for single entry"},
+  {"methodquery", "", "access method for query (several entries)"},
+  {"methodall", "", "access method for all entries"},
+  {"release", "", "release of the database, comment only"},
+  {"type", "", "database type 'N' or 'P' (rerquired)"},
+  {"format", "", "database entry format (required)"},
+  {"formatentry", "", "database entry format for 'methodentry' access"},
+  {"formatquery", "", "database entry format for 'methodall' access"},
+  {"formatall", "", "database entry format for 'methodall' access"},
+  {"command", "", "command line to return entry/ies"},
+  {"comment", "", "text comment for the DB definition"},
+  {"description", "", "Short database description"},
+  {"dbalias", "", "database name to be used by the access method if different"},
+  {"app", "", "external application command line"},
+  {"appentry", "", "external command line for 'methodentry'"},
+  {"appquery", "", "external command line for 'methodquery'"},
+  {"appall", "", "external command line for 'methodall'"},
+  {"exclude", "", "wildcard filenames to exclude from 'filename'"},
+  {"fields", "", "extra database fields available, 'id' and 'acc' are standard"},
+  {"proxy", "", "http proxy server, or ':' to cancel a global proxy"},
+  {"httpversion", "", "HTTP version for GET requests"},
+  {NULL, NULL, NULL}
 };
 
 typedef struct AjSNamStandards {
@@ -237,6 +240,23 @@ static void namPrintDatabase (AjPStr* dbattr){
   return;
 }
 
+/* @func ajNamPrintDbAttr *****************************************************
+**
+** Prints a report of the database attributes available (for entrails)
+**
+** @param [R] outf [AjPFile] Output file
+** @param [R] full [AjBool] Full output if AjTrue
+** @return [void]
+******************************************************************************/
+
+void ajNamPrintDbAttr (AjPFile outf, AjBool full) {
+  ajint i;
+  for (i=0; namAttr[i].Name; i++) {
+    ajFmtPrintF (outf, "%12s %10s %s\n",
+		 namAttr[i].Name, namAttr[i].Defval, namAttr[i].Comment);
+  }
+  return;
+}
 /* @funcstatic namDebugDatabase ***********************************************
 **
 ** Prints a report of defined attributes for a database definition.
@@ -1408,7 +1428,7 @@ AjBool ajNamDbData (AjPSeqQuery qry) {
   (void) namDbSetAttr(dbattr, "filename", &qry->Filename);
   (void) namDbSetAttr(dbattr, "fields", &qry->DbFields);
   (void) namDbSetAttr(dbattr, "proxy", &qry->DbProxy);
-
+  (void) namDbSetAttr(dbattr, "httpversion", &qry->DbHttpVer);
   /*
   ajDebug ("ajNamDbQuery DbName '%S'\n", qry->DbName);
   ajDebug ("    Id '%S' Acc '%S' Des '%S'\n", qry->Id, qry->Acc, qry->Des);

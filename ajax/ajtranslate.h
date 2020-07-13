@@ -29,10 +29,13 @@ extern "C"
 ** @use ajTrnRevCodonK Reverse complement translating a codon from a char * to a char
 ** @use ajTrnC Translating a sequence from a char *
 ** @use ajTrnRevC Reverse complement translating a sequence from a char *
+** @use ajTrnAltRevC (Alt) Reverse complement translating a sequence from a char *
 ** @use ajTrnStr Translating a sequence from a AjPStr
 ** @use ajTrnRevStr Reverse complement translating a sequence from a AjPStr
+** @use ajTrnAltRevStr (Alt) Reverse complement translating a sequence from a AjPStr
 ** @use ajTrnSeq Translating a sequence from a AjPSeq
 ** @use ajTrnRevSeq Reverse complement translating a sequence from a AjPSeq
+** @use ajTrnAltRevSeq Reverse complement translating a sequence from a AjPSeq
 ** @use ajTrnCFrame Translating a sequence from a char * in a frame
 ** @use ajTrnStrFrame Translating a sequence from a AjPStr in a frame
 ** @use ajTrnSeqFrame Translating a sequence from a AjPSeq in a frame
@@ -94,10 +97,13 @@ char ajTrnCodonK (AjPTrn trnObj, char *codon);
 char ajTrnRevCodonK (AjPTrn trnObj, char *codon);
 void ajTrnC (AjPTrn trnObj, char *str, ajint len, AjPStr *pep);
 void ajTrnRevC (AjPTrn trnObj, char *str, ajint len, AjPStr *pep);
+void ajTrnAltRevC (AjPTrn trnObj, char *str, ajint len, AjPStr *pep);
 void ajTrnStr (AjPTrn trnObj, AjPStr str, AjPStr *pep);
 void ajTrnRevStr (AjPTrn trnObj, AjPStr str, AjPStr *pep);
+void ajTrnAltRevStr (AjPTrn trnObj, AjPStr str, AjPStr *pep);
 void ajTrnSeq (AjPTrn trnObj, AjPSeq seq, AjPStr *pep);
 void ajTrnRevSeq (AjPTrn trnObj, AjPSeq seq, AjPStr *pep);
+void ajTrnAltRevSeq (AjPTrn trnObj, AjPSeq seq, AjPStr *pep);
 void ajTrnCFrame (AjPTrn trnObj, char *seq, ajint len, ajint frame, AjPStr *pep);
 void ajTrnStrFrame (AjPTrn trnObj, AjPStr seq, ajint frame, AjPStr *pep);
 void ajTrnSeqFrame (AjPTrn trnObj, AjPSeq seq, ajint frame, AjPStr *pep);

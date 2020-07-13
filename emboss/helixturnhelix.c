@@ -92,7 +92,7 @@ int main(int argc, char **argv)
     ajint cols;
     ajint lastcol;
 
-    ajint n;
+    ajint n=0;
 
     ajint sp;
     ajint se;
@@ -123,7 +123,6 @@ int main(int argc, char **argv)
 
     lastcol = cols-3;
 
-    n = 0;
     minscore = mean + (minsd*sd);    
 
     ajb=ajListNew();
@@ -135,15 +134,18 @@ int main(int argc, char **argv)
 
     while(ajSeqallNext(seqall, &seq))
     {
+	n=0;
 	begin = ajSeqallBegin(seqall);
 	end   = ajSeqallEnd(seqall);
 
-	TabRpt = ajFeattableNewSeq(seq);
+
 	strand = ajSeqStrCopy(seq);
 	ajStrToUpper(&strand);
 
 	ajStrAssSubC(&substr,ajStrStr(strand),begin-1,end-1);
 	len    = ajStrLen(substr);
+
+	TabRpt = ajFeattableNewSeq(seq);
 
 	q = p = ajStrStr(substr);
 	for(i=0;i<len;++i,++p)
@@ -461,7 +463,8 @@ static void hth_report_hits(AjPList *ajb, ajint lastcol,
     
     AjPStr tmpStr = NULL;
     static AjPStr fthit = NULL;
-
+    struct DNAB *dnab;
+    
     if (!fthit)
       ajStrAssC(&fthit, "hit");
 
@@ -502,11 +505,20 @@ static void hth_report_hits(AjPList *ajb, ajint lastcol,
     /*
      *  Tidy up memory
      */
-    for(i=0;i<n;++i)
+    while(ajListPop(*ajb,(void **)&dnab))
+    {
+	ajStrDel(&dnab->name);
+	ajStrDel(&dnab->seq);
+	AJFREE(dnab);
+    }
+    
+
+/*    for(i=0;i<n;++i)
     {
 	ajStrDel(&lp[i]->name);
 	ajStrDel(&lp[i]->seq);
     }
+*/
     AJFREE (lp);
     ajIntDel(&hp);
     

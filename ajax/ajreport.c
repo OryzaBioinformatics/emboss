@@ -1554,10 +1554,16 @@ static void reportWriteTagseq (AjPReport thys,
   ajint jwid=6;
   ajint jmin=6;			/* minimum width for printing special tags */
   AjPStr* seqmarkup;
+  AjPStr seqnumber=NULL;
+  ajint seqbeg;
+  ajint seqend;
   ajint seqlen;
   ajint ilast;
+  ajint jlast;
 
   seqlen = ajSeqLen(seq);
+  seqbeg = ajSeqBegin(seq);
+  seqend = ajSeqEnd(seq);
 
   ajReportWriteHeader (thys, ftable, seq);
 
@@ -1567,6 +1573,10 @@ static void reportWriteTagseq (AjPReport thys,
   for (j=0; j < ntags; j++) {
     jwid = AJMAX(jmin, ajStrLen(tagprints[j]));
     ajStrAppKI(&seqmarkup[j], ' ', seqlen);
+  }
+
+  for (i=0; i < seqend-9; i+=10) {
+    ajFmtPrintAppS (&seqnumber, "    .%5d", i+10);
   }
 
   iterft = ajListIter(ftable->Features) ;
@@ -1585,16 +1595,15 @@ static void reportWriteTagseq (AjPReport thys,
     }    
   }
 
-  for (i=0; i < seqlen; i+=50) {
-    ilast = AJMIN (i+50-1, seqlen);
+  for (i=seqbeg-1; i < seqend; i+=50) {
+    ilast = AJMIN (i+50-1, seqend-1);
+    jlast = AJMIN (i+50-1, ajStrLen(seqnumber)-1);
+
+    ajStrAssSub(&substr, seqnumber, i, jlast);
+    ajFmtPrintF (outf, "      %S\n", substr);
+
     ajStrAssSub(&subseq, ajSeqStr(seq), i, ilast);
     /* ajStrToUpper(&subseq); */
-    ajFmtPrintF (outf, "\n      ");
-
-    for (j=i+9; j <= ilast; j+=10) {
-      ajFmtPrintF (outf, "    .%5d", j+1);
-    }
-    ajFmtPrintF (outf, "\n");
 
     ajFmtPrintF (outf, "      %S\n", subseq);
     for (j=0; j < ntags; j++) {
@@ -1614,6 +1623,7 @@ static void reportWriteTagseq (AjPReport thys,
   AJFREE(seqmarkup);
 
   ajStrDel(&substr);
+  ajStrDel(&seqnumber);
   ajListIterFree(iterft);
   return;
 }
@@ -1635,7 +1645,6 @@ void ajReportDel (AjPReport* pthys) {
   ajStrDel (&thys->Name);
   ajStrDel (&thys->Type);
   ajStrDel (&thys->Formatstr);
-  ajStrDel (&thys->Filename);
   ajStrDel (&thys->Extension);
 
   while(ajListPop(thys->FileTypes,(void **)&str))
@@ -1861,7 +1870,6 @@ AjPReport ajReportNew (void) {
   pthis->Format = 0;
   pthis->Fttable = NULL;
   pthis->Ftquery = ajFeattabOutNew();
-  pthis->Filename = ajStrNew();
   pthis->Extension = ajStrNew();
   pthis->Precision = 3;
   pthis->File = NULL;
@@ -1892,7 +1900,7 @@ void ajReportWrite (AjPReport thys, AjPFeattable ftable, AjPSeq seq) {
 
   ajDebug ("ajReportWrite %d '%s' %d\n",
 	   thys->Format, reportFormat[thys->Format].Name,
-	   ajFeatSize(ftable));
+	   ajFeattableSize(ftable));
 
   ajReportSetType (thys, ftable, seq);
 
@@ -1989,6 +1997,7 @@ void ajReportWriteHeader (AjPReport thys, AjPFeattable ftable, AjPSeq seq) {
     ajFmtPrintF (outf, "########################################\n");
     ajFmtPrintF (outf, "# Program: %s\n", ajAcdProgram());
     ajFmtPrintF (outf, "# Rundate: %D\n", ajTimeTodayF("log"));
+    ajFmtPrintF (outf, "# Report_format: %S\n", thys->Formatstr);
     ajFmtPrintF (outf, "# Report_file: %F\n", outf);
     if (ajListLength(thys->FileNames))
     {
@@ -2030,7 +2039,7 @@ void ajReportWriteHeader (AjPReport thys, AjPFeattable ftable, AjPSeq seq) {
     ajFmtPrintF (outf, "# Description: %S\n", ajSeqGetDesc(seq));
 
   ajFmtPrintF (outf, "# HitCount: %d\n",
-		 ajFeatSize(ftable));
+		 ajFeattableSize(ftable));
 
   if (ajStrLen(thys->Header)) {
     ajStrAssS (&tmpstr, thys->Header);
@@ -2279,3 +2288,35 @@ void ajReportFileAdd (AjPReport thys, AjPFile file, AjPStr type) {
   return;
 }
  
+/* @func ajReportPrintFormat ************************************************
+**
+** Reports the internal data structures
+**
+** @param [r] outf [AjPFile] Output file
+** @param [r] full [AjBool] Full report (usually ajFalse)
+** @return [void]
+** @@
+******************************************************************************/
+
+void ajReportPrintFormat (AjPFile outf, AjBool full)
+{
+    ajint i=0;
+
+    ajFmtPrintF (outf, "\n");
+    ajFmtPrintF (outf, "# report output formats\n");
+    ajFmtPrintF (outf, "# Name         Mintags Showseq Nuc Pro\n");
+    ajFmtPrintF (outf, "\n");
+    ajFmtPrintF (outf, "RFormat {\n");
+    for (i=0; reportFormat[i].Name; i++)
+    {
+	ajFmtPrintF (outf, "  %-12s %7d     %3B %3B %3B\n",
+		     reportFormat[i].Name,
+		     reportFormat[i].Mintags,
+		     reportFormat[i].Showseq,
+		     reportFormat[i].Nuc,
+		     reportFormat[i].Prot);
+    }
+    ajFmtPrintF (outf, "}\n\n");
+
+    return;
+}

@@ -21,6 +21,18 @@
 ** 
 ** 
 ** 
+******************************************************************************
+**IMPORTANT NOTE      IMPORTANT NOTE      IMPORTANT NOTE        IMPORTANT NOTE     
+******************************************************************************
+**
+** Mon May 20 11:43:39 BST 2002
+**
+** The following documentation is out-of-date and should be disregarded.  It 
+** will be updated shortly. 
+** 
+******************************************************************************
+**IMPORTANT NOTE      IMPORTANT NOTE      IMPORTANT NOTE        IMPORTANT NOTE     
+******************************************************************************
 ** 
 ** 
 ** 
@@ -113,7 +125,7 @@
 
 
 
-/* @prog pdbtosp ***************************************************************
+/* @prog pdbtosp *************************************************************
 **
 ** Convert raw swissprot:pdb equivalence file to embl-like format
 **
@@ -137,6 +149,8 @@ int main(int argc, char **argv)
     AjBool     ok      =ajFalse;/* True if "____  _" has been found and we can start
 				  parsing */
     AjBool     done_1st=ajFalse;/* True if the first line of data has been parsed*/
+
+    
     
     
 

@@ -425,7 +425,7 @@ static void antigenic_readAunty(AjPFloat *agp)
 }
 
 
-/* @funcstatic  antigenic_padit **********************************************
+/* @funcstatic antigenic_padit ************************************************
 **
 ** Undocumented.
 **

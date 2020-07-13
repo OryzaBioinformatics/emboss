@@ -276,11 +276,12 @@ AjPTrn ajTrnNew (AjPStr trnFileName) {
 
   /* if the file is not specified, use the standard table file */
   if (!ajStrLen(trnFileName)) {
-  	trnFileName = ajStrNewC (TGCFILE);
+    trnFileName = ajStrNewC (TGCFILE);
   }
   
   ajFileDataNew(trnFileName, &trnFile);
-  if (trnFile==NULL) ajDie ("Translation table file '%S' not found\n", trnFileName);
+  if (trnFile==NULL) 
+    ajDie ("Translation table file '%S' not found\n", trnFileName);
 
 /* create and initialise the translation object */
   AJNEW0(pthis);
@@ -336,8 +337,10 @@ void ajTrnReadFile (AjPTrn trnObj, AjPFile trnFile) {
   char *base3;
   ajint dlen;
   ajint i, j;
-  ajint firstaa[256];	/* positions of first use of a residue in the aa line */
-  AjBool w1a, w1c, w1g, w1t, w3a, w3c, w3g, w3t; /* first and last base wobble results */
+/* positions of first use of a residue in the aa line */
+  ajint firstaa[256];
+/* first and last base wobble results */
+  AjBool w1a, w1c, w1g, w1t, w3a, w3c, w3g, w3t; 
 /* NB '-' and '*' are valid characters,
    don't skip over them when parsing tokens */
   char white[] = " \t\n\r!@#$%^&()_+=|\\~`{[}]:;\"'<,>.?/";
@@ -426,7 +429,9 @@ void ajTrnReadFile (AjPTrn trnObj, AjPFile trnFile) {
 /* populate the Starts (Initiation sites) table */
   dlen = ajStrLen(startsline);
   for (i=0; i<dlen; i++) {
-    trnObj->Starts[trnconv[(ajint)base1[i]]][trnconv[(ajint)base2[i]]][trnconv[(ajint)base3[i]]]
+    trnObj->Starts[trnconv[(ajint)base1[i]]]
+		  [trnconv[(ajint)base2[i]]]
+		  [trnconv[(ajint)base3[i]]]
       = starts[i];
   }
 
@@ -438,7 +443,9 @@ void ajTrnReadFile (AjPTrn trnObj, AjPFile trnFile) {
   for (i=0; i<256; i++) firstaa[i] = -1;
   for (i=0; i<dlen; i++) {
 /* put the residue in the table using the unambiguous codon */
-    trnObj->GC[trnconv[(ajint)base1[i]]][trnconv[(ajint)base2[i]]][trnconv[(ajint)base3[i]]]
+    trnObj->GC  [trnconv[(ajint)base1[i]]]
+		[trnconv[(ajint)base2[i]]]
+		[trnconv[(ajint)base3[i]]]
       = aa[i];
 /* now work out the ambiguous codons for this residue so far */
 /* is this the first use of the residue in the aa line? */
@@ -447,20 +454,24 @@ void ajTrnReadFile (AjPTrn trnObj, AjPFile trnFile) {
       firstaa[(ajint)aa[i]] = i;
     } else {
 /* no - see if we can construct some ambiguous codons */
-      getwobblebases(trnObj, &w1a, &w1c, &w1g, &w1t, &w3a, &w3c, &w3g, &w3t, base1[i], base2[i], base3[i], aa[i]);
+      getwobblebases(trnObj, &w1a, &w1c, &w1g, &w1t, &w3a, &w3c, &w3g,
+		&w3t, base1[i], base2[i], base3[i], aa[i]);
       for (j=i-1; j>=firstaa[(ajint)aa[i]]; j--) {
 /* if previous aa is the same as aa[i] then construct abiguity codon */
         if (aa[i] == aa[j]) {
 /* there are no ambiguous codons with a differing middle base */
           if (base2[i] != base2[j]) continue;
-/* don't look for ambiguous codons with a differing start and a differing end base */
+/* don't look for ambiguous codons with a differing start and a
+differing end base */
           if (base1[i] != base1[j] && base3[i] != base3[j]) continue;
 /* we therefore have either only a differing start base */
           if (base1[i] != base1[j]) {
-            explode(trnObj, w1a, w1c, w1g, w1t, base1[i], base2[i], base3[i], aa[i], ajTrue);
+            explode(trnObj, w1a, w1c, w1g, w1t, base1[i], base2[i],
+		base3[i], aa[i], ajTrue);
           } else {
 /* or only a differing end base */
-            explode(trnObj, w3a, w3c, w3g, w3t, base1[i], base2[i], base3[i], aa[i], ajFalse);
+            explode(trnObj, w3a, w3c, w3g, w3t, base1[i], base2[i],
+		base3[i], aa[i], ajFalse);
           }
         }
       }
@@ -537,29 +548,45 @@ static void getwobblebases(AjPTrn trnObj, AjBool *w1a, AjBool *w1c,
 
   *w1a = *w1c = *w1g = *w1t = *w3a = *w3c = *w3g = *w3t = ajFalse;
 
-  if (trnObj->GC[trnconv[(ajint)'A']][trnconv[(ajint)base2]][trnconv[(ajint)base3]] == aa) {
+  if (trnObj->GC[trnconv[(ajint)'A']]
+		[trnconv[(ajint)base2]]
+		[trnconv[(ajint)base3]] == aa) {
     *w1a = ajTrue;
   }
-  if (trnObj->GC[trnconv[(ajint)'C']][trnconv[(ajint)base2]][trnconv[(ajint)base3]] == aa) {
+  if (trnObj->GC[trnconv[(ajint)'C']]
+		[trnconv[(ajint)base2]]
+		[trnconv[(ajint)base3]] == aa) {
     *w1c = ajTrue;
   }
-  if (trnObj->GC[trnconv[(ajint)'G']][trnconv[(ajint)base2]][trnconv[(ajint)base3]] == aa) {
+  if (trnObj->GC[trnconv[(ajint)'G']]
+		[trnconv[(ajint)base2]]
+		[trnconv[(ajint)base3]] == aa) {
     *w1g = ajTrue;
   }
-  if (trnObj->GC[trnconv[(ajint)'T']][trnconv[(ajint)base2]][trnconv[(ajint)base3]] == aa) {
+  if (trnObj->GC[trnconv[(ajint)'T']]
+		[trnconv[(ajint)base2]]
+		[trnconv[(ajint)base3]] == aa) {
     *w1t = ajTrue;
   }
 
-  if (trnObj->GC[trnconv[(ajint)base1]][trnconv[(ajint)base2]][trnconv[(ajint)'A']] == aa) {
+  if (trnObj->GC[trnconv[(ajint)base1]]
+		[trnconv[(ajint)base2]]
+		[trnconv[(ajint)'A']] == aa) {
     *w3a = ajTrue;
   }
-  if (trnObj->GC[trnconv[(ajint)base1]][trnconv[(ajint)base2]][trnconv[(ajint)'C']] == aa) {
+  if (trnObj->GC[trnconv[(ajint)base1]]
+		[trnconv[(ajint)base2]]
+		[trnconv[(ajint)'C']] == aa) {
     *w3c = ajTrue;
   }
-  if (trnObj->GC[trnconv[(ajint)base1]][trnconv[(ajint)base2]][trnconv[(ajint)'G']] == aa) {
+  if (trnObj->GC[trnconv[(ajint)base1]]
+		[trnconv[(ajint)base2]]
+		[trnconv[(ajint)'G']] == aa) {
     *w3g = ajTrue;
   }
-  if (trnObj->GC[trnconv[(ajint)base1]][trnconv[(ajint)base2]][trnconv[(ajint)'T']] == aa) {
+  if (trnObj->GC[trnconv[(ajint)base1]]
+		[trnconv[(ajint)base2]]
+		[trnconv[(ajint)'T']] == aa) {
     *w3t = ajTrue;
   }
 
@@ -589,28 +616,40 @@ static void explode(AjPTrn trnObj, AjBool wa, AjBool wc, AjBool wg,
 
   if (start) {
     if (wt && wc) {
-      trnObj->GC[trnconv[(ajint)'Y']][trnconv[(ajint)base2]][trnconv[(ajint)base3]] = aa;
+      trnObj->GC[trnconv[(ajint)'Y']]
+		[trnconv[(ajint)base2]]
+		[trnconv[(ajint)base3]] = aa;
       doneone = ajTrue;
     }
  
     if (wt && wa) {
-      trnObj->GC[trnconv[(ajint)'W']][trnconv[(ajint)base2]][trnconv[(ajint)base3]] = aa;
+      trnObj->GC[trnconv[(ajint)'W']]
+		[trnconv[(ajint)base2]]
+		[trnconv[(ajint)base3]] = aa;
     doneone = ajTrue;
     }
     if (wt && wg) {
-      trnObj->GC[trnconv[(ajint)'K']][trnconv[(ajint)base2]][trnconv[(ajint)base3]] = aa;
+      trnObj->GC[trnconv[(ajint)'K']]
+		[trnconv[(ajint)base2]]
+		[trnconv[(ajint)base3]] = aa;
       doneone = ajTrue;
     }
     if (wc && wa) {
-      trnObj->GC[trnconv[(ajint)'M']][trnconv[(ajint)base2]][trnconv[(ajint)base3]] = aa;
+      trnObj->GC[trnconv[(ajint)'M']]
+		[trnconv[(ajint)base2]]
+		[trnconv[(ajint)base3]] = aa;
       doneone = ajTrue;
     }
     if (wc && wg) {
-      trnObj->GC[trnconv[(ajint)'S']][trnconv[(ajint)base2]][trnconv[(ajint)base3]] = aa;
+      trnObj->GC[trnconv[(ajint)'S']]
+		[trnconv[(ajint)base2]]
+		[trnconv[(ajint)base3]] = aa;
       doneone = ajTrue;
     }
     if (wa && wg) {
-      trnObj->GC[trnconv[(ajint)'R']][trnconv[(ajint)base2]][trnconv[(ajint)base3]] = aa;
+      trnObj->GC[trnconv[(ajint)'R']]
+		[trnconv[(ajint)base2]]
+		[trnconv[(ajint)base3]] = aa;
       doneone = ajTrue;
     }
 
@@ -619,47 +658,69 @@ then there is no point in testing triples */
     if (!doneone) return;
 
     if (wc && wa && wg) {
-      trnObj->GC[trnconv[(ajint)'V']][trnconv[(ajint)base2]][trnconv[(ajint)base3]] = aa;
+      trnObj->GC[trnconv[(ajint)'V']]
+		[trnconv[(ajint)base2]]
+		[trnconv[(ajint)base3]] = aa;
     }
     if (wt && wc && wa) {
-      trnObj->GC[trnconv[(ajint)'H']][trnconv[(ajint)base2]][trnconv[(ajint)base3]] = aa;
+      trnObj->GC[trnconv[(ajint)'H']]
+		[trnconv[(ajint)base2]]
+		[trnconv[(ajint)base3]] = aa;
     }
     if (wt && wa && wg) {
-      trnObj->GC[trnconv[(ajint)'D']][trnconv[(ajint)base2]][trnconv[(ajint)base3]] = aa;
+      trnObj->GC[trnconv[(ajint)'D']]
+		[trnconv[(ajint)base2]]
+		[trnconv[(ajint)base3]] = aa;
     }
     if (wt && wc && wg) {
-      trnObj->GC[trnconv[(ajint)'B']][trnconv[(ajint)base2]][trnconv[(ajint)base3]] = aa;
+      trnObj->GC[trnconv[(ajint)'B']]
+		[trnconv[(ajint)base2]]
+		[trnconv[(ajint)base3]] = aa;
     }
 
 
     if (wt && wc && wa && wg) {
-      trnObj->GC[trnconv[(ajint)'N']][trnconv[(ajint)base2]][trnconv[(ajint)base3]] = aa;
+      trnObj->GC[trnconv[(ajint)'N']]
+		[trnconv[(ajint)base2]]
+		[trnconv[(ajint)base3]] = aa;
     }
   } else {	/* not start */
   
 
     if (wt && wc) {
-      trnObj->GC[trnconv[(ajint)base1]][trnconv[(ajint)base2]][trnconv[(ajint)'Y']] = aa;
+      trnObj->GC[trnconv[(ajint)base1]]
+		[trnconv[(ajint)base2]]
+		[trnconv[(ajint)'Y']] = aa;
       doneone = ajTrue;
     }
     if (wt && wa) {
-      trnObj->GC[trnconv[(ajint)base1]][trnconv[(ajint)base2]][trnconv[(ajint)'W']] = aa;
+      trnObj->GC[trnconv[(ajint)base1]]
+		[trnconv[(ajint)base2]]
+		[trnconv[(ajint)'W']] = aa;
       doneone = ajTrue;
     }
     if (wt && wg) {
-      trnObj->GC[trnconv[(ajint)base1]][trnconv[(ajint)base2]][trnconv[(ajint)'K']] = aa;
+      trnObj->GC[trnconv[(ajint)base1]]
+		[trnconv[(ajint)base2]]
+		[trnconv[(ajint)'K']] = aa;
       doneone = ajTrue;
     }
     if (wc && wa) {
-      trnObj->GC[trnconv[(ajint)base1]][trnconv[(ajint)base2]][trnconv[(ajint)'M']] = aa;
+      trnObj->GC[trnconv[(ajint)base1]]
+		[trnconv[(ajint)base2]]
+		[trnconv[(ajint)'M']] = aa;
       doneone = ajTrue;
     }
     if (wc && wg) {
-      trnObj->GC[trnconv[(ajint)base1]][trnconv[(ajint)base2]][trnconv[(ajint)'S']] = aa;
+      trnObj->GC[trnconv[(ajint)base1]]
+		[trnconv[(ajint)base2]]
+		[trnconv[(ajint)'S']] = aa;
       doneone = ajTrue;
     }
     if (wa && wg) {
-      trnObj->GC[trnconv[(ajint)base1]][trnconv[(ajint)base2]][trnconv[(ajint)'R']] = aa;
+      trnObj->GC[trnconv[(ajint)base1]]
+		[trnconv[(ajint)base2]]
+		[trnconv[(ajint)'R']] = aa;
       doneone = ajTrue;
     }
 
@@ -668,28 +729,38 @@ then there is no point in testing triples */
     if (!doneone) return;
 
     if (wc && wa && wg) {
-      trnObj->GC[trnconv[(ajint)base1]][trnconv[(ajint)base2]][trnconv[(ajint)'V']] = aa;
+      trnObj->GC[trnconv[(ajint)base1]]
+		[trnconv[(ajint)base2]]
+		[trnconv[(ajint)'V']] = aa;
     }
     if (wt && wc && wa) {
-      trnObj->GC[trnconv[(ajint)base1]][trnconv[(ajint)base2]][trnconv[(ajint)'H']] = aa;
+      trnObj->GC[trnconv[(ajint)base1]]
+		[trnconv[(ajint)base2]]
+		[trnconv[(ajint)'H']] = aa;
     }    
     if (wt && wa && wg) {
-      trnObj->GC[trnconv[(ajint)base1]][trnconv[(ajint)base2]][trnconv['D']] = aa;
+      trnObj->GC[trnconv[(ajint)base1]]
+		[trnconv[(ajint)base2]]
+		[trnconv['D']] = aa;
     }    
     if (wt && wc && wg) {
-      trnObj->GC[trnconv[(ajint)base1]][trnconv[(ajint)base2]][trnconv[(ajint)'B']] = aa;
+      trnObj->GC[trnconv[(ajint)base1]]
+		[trnconv[(ajint)base2]]
+		[trnconv[(ajint)'B']] = aa;
     }    
 
 
     if (wt && wc && wa && wg) {
-      trnObj->GC[trnconv[(ajint)base1]][trnconv[(ajint)base2]][trnconv[(ajint)'N']] = aa;
+      trnObj->GC[trnconv[(ajint)base1]]
+		[trnconv[(ajint)base2]]
+		[trnconv[(ajint)'N']] = aa;
     }    
 
   } /* end start */
 
 }
 
-/* @func ajTrnNewPep ************************************************************
+/* @func ajTrnNewPep ********************************************************
 **
 ** Creates a new AjPSeq set up with an appropriate name and description
 **
@@ -699,11 +770,13 @@ then there is no point in testing triples */
 **  Sets the description as being the same as that description of the nucleic
 **    acid sequence it was translated from.
 **  Gives it the same name as the nucleic acid sequence it is translated from.
-**  If the frame is not specified as being '0' it will then append a '_' and the
-**  number of the frame to form a unique name for the protein sequence in the event
-**  of many frames being translated. If the frame number is negative, it will
-**  use a number in the range 4, 5, 6, this is because ID names with '-' in them
-**  were causing problems in the sequence reading routines.
+**
+** If the frame is not specified as being '0' it will then append a '_'
+** and the number of the frame to form a unique name for the protein
+** sequence in the event of many frames being translated.  If the frame
+** number is negative, it will use a number in the range 4, 5, 6, this is
+** because ID names with '-' in them were causing problems in the sequence
+** reading routines. 
 **
 ** Frame 4 is the same as frame -1, 5 is -2, 6 is -3.
 **
@@ -736,6 +809,7 @@ AjPSeq ajTrnNewPep(AjPSeq nucleicSeq, ajint frame) {
 /* if the frame is not 0 then append the frame number to the name to
 make it unique */
   if (frame != 0) {
+    if (frame < -3) frame = frame + 3;
     if (frame < 0) frame = -frame + 3;
     (void) ajStrAppC(&name, "_");
 
@@ -775,14 +849,16 @@ AjPStr ajTrnCodon (AjPTrn trnObj, AjPStr codon) {
   store[1] = '\0';	/* end the char * of store */
 
   res = ajStrStr(codon);
-  store[0] = trnObj->GC[trnconv[(ajint)res[0]]][trnconv[(ajint)res[1]]][trnconv[(ajint)res[2]]];
+  store[0] = trnObj->GC[trnconv[(ajint)res[0]]]
+		       [trnconv[(ajint)res[1]]]
+		       [trnconv[(ajint)res[2]]];
 
   (void) ajStrAssC (&trnResidue, store);
 
   return trnResidue;
 }
 
-/* @func ajTrnRevCodon ************************************************************
+/* @func ajTrnRevCodon ********************************************************
 **
 ** Translates the reverse complement of a codon
 **
@@ -801,14 +877,16 @@ AjPStr ajTrnRevCodon (AjPTrn trnObj, AjPStr codon) {
   store[1] = '\0';	/* end the char * of store */
 
   res = ajStrStr(codon);
-  store[0] = trnObj->GC[trncomp[(ajint)res[2]]][trncomp[(ajint)res[1]]][trncomp[(ajint)res[0]]];
+  store[0] = trnObj->GC[trncomp[(ajint)res[2]]]
+		       [trncomp[(ajint)res[1]]]
+		       [trncomp[(ajint)res[0]]];
 
   (void) ajStrAssC (&trnResidue, store);
 
   return trnResidue;
 }
 
-/* @func ajTrnCodonC ************************************************************
+/* @func ajTrnCodonC *******************************************************
 **
 ** Translates a const char * codon
 **
@@ -824,14 +902,16 @@ AjPStr ajTrnCodonC (AjPTrn trnObj, char *codon) {
   char store[2];
   
   store[1] = '\0';	/* end the char * of store */
-  store[0] = trnObj->GC[trnconv[(ajint)codon[0]]][trnconv[(ajint)codon[1]]][trnconv[(ajint)codon[2]]];
+  store[0] = trnObj->GC[trnconv[(ajint)codon[0]]]
+		       [trnconv[(ajint)codon[1]]]
+		       [trnconv[(ajint)codon[2]]];
   
   (void) ajStrAssC (&trnResidue, store);
 
   return trnResidue;
 }
 
-/* @func ajTrnRevCodonC ************************************************************
+/* @func ajTrnRevCodonC ****************************************************
 **
 ** Translates the reverse complement of a const char * codon
 **
@@ -847,14 +927,16 @@ AjPStr ajTrnRevCodonC (AjPTrn trnObj, char *codon) {
   char store[2];
   
   store[1] = '\0';	/* end the char * of store */
-  store[0] = trnObj->GC[trncomp[(ajint)codon[2]]][trncomp[(ajint)codon[1]]][trncomp[(ajint)codon[0]]];
+  store[0] = trnObj->GC[trncomp[(ajint)codon[2]]]
+		       [trncomp[(ajint)codon[1]]]
+		       [trncomp[(ajint)codon[0]]];
   
   (void) ajStrAssC (&trnResidue, store);
 
   return trnResidue;
 }
 
-/* @func ajTrnCodonK ************************************************************
+/* @func ajTrnCodonK *********************************************************
 **
 ** Translates a const char * codon to a char
 **
@@ -866,11 +948,13 @@ AjPStr ajTrnRevCodonC (AjPTrn trnObj, char *codon) {
 
 char ajTrnCodonK (AjPTrn trnObj, char *codon) {
 
-  return trnObj->GC[trnconv[(ajint)codon[0]]][trnconv[(ajint)codon[1]]][trnconv[(ajint)codon[2]]];
+  return trnObj->GC[trnconv[(ajint)codon[0]]]
+		   [trnconv[(ajint)codon[1]]]
+		   [trnconv[(ajint)codon[2]]];
 
 }
 
-/* @func ajTrnRevCodonK ************************************************************
+/* @func ajTrnRevCodonK ******************************************************
 **
 ** Translates a the reverse complement of a const char * codon to a char
 **
@@ -882,7 +966,9 @@ char ajTrnCodonK (AjPTrn trnObj, char *codon) {
 
 char ajTrnRevCodonK (AjPTrn trnObj, char *codon) {
 
-  return trnObj->GC[trncomp[(ajint)codon[2]]][trncomp[(ajint)codon[1]]][trncomp[(ajint)codon[0]]];
+  return trnObj->GC[trncomp[(ajint)codon[2]]]
+		   [trncomp[(ajint)codon[1]]]
+		   [trncomp[(ajint)codon[0]]];
 
 }
 
@@ -899,7 +985,7 @@ char ajTrnRevCodonK (AjPTrn trnObj, char *codon) {
 ** @param [r] trnObj [AjPTrn] Translation tables
 ** @param [r] str [char *] sequence string to translate
 ** @param [r] len [ajint] length of sequence string to translate
-** @param [u] pep [AjPStr *] returned peptide translation (appended to input contents)
+** @param [u] pep [AjPStr *] returned peptide translation (APPENDED TO INPUT)
 **
 ** @return [void]
 ** @@
@@ -916,8 +1002,8 @@ void ajTrnC (AjPTrn trnObj, char *str, ajint len, AjPStr *pep) {
 /* speed up slightly by putting the routine in-line */
 /*  (void) ajStrApp(pep, ajTrnCodonC (trnObj, &str[i])); */
     (void) ajStrAppK(pep, trnObj->GC[trnconv[(ajint)str[i]]]
-    				     [trnconv[(ajint)str[i+1]]]
-    				     [trnconv[(ajint)str[i+2]]]);
+    				    [trnconv[(ajint)str[i+1]]]
+    				    [trnconv[(ajint)str[i+2]]]);
   }
 
 }
@@ -926,15 +1012,15 @@ void ajTrnC (AjPTrn trnObj, char *str, ajint len, AjPStr *pep) {
 ** Translates the reverse complement of a sequence in a char *.
 ** ajTrnInit must be called before this routine to set up the translation table.
 **
-** This routine translates in frame -1 (from the first base) to the last full
-** triplet codon, (i.e. if there are 1 or 2 bases extra at the end, they are
-** ignored)
+** This routine translates in frame -1 (using the frame '1' codons)
+** to the first full triplet codon, 
+** (i.e. if there are 1 or 2 bases extra at the start, they are ignored)
 **
 ** 
 ** @param [r] trnObj [AjPTrn] Translation tables
 ** @param [r] str [char *] sequence string to translate
 ** @param [r] len [ajint] length of sequence string to translate
-** @param [u] pep [AjPStr *] returned peptide translation (appended to input contents)
+** @param [u] pep [AjPStr *] returned peptide translation (APPENDED TO INPUT)
 **
 ** @return [void]
 ** @@
@@ -943,14 +1029,46 @@ void ajTrnC (AjPTrn trnObj, char *str, ajint len, AjPStr *pep) {
 void ajTrnRevC (AjPTrn trnObj, char *str, ajint len, AjPStr *pep) {
 
   ajint i;
-  ajint ajb;
+  ajint end;
   
-  ajb = (len/3)*3-1;
-  ajDebug("ajTrnRevC start position=%d\n", ajb);
-  for(i=ajb;i>1;i-=3)
+  end = (len/3)*3-1;
+  /* ajDebug("ajTrnRevC start position=%d\n", end); */
+  for(i=end; i>1; i-=3)
     (void) ajStrAppK(pep, trnObj->GC[trncomp[(ajint)str[i]]]
-    				     [trncomp[(ajint)str[i-1]]]
-    				     [trncomp[(ajint)str[i-2]]]);
+    				    [trncomp[(ajint)str[i-1]]]
+    				    [trncomp[(ajint)str[i-2]]]);
+
+}
+/* @func ajTrnAltRevC ************************************************************
+**
+** Translates the reverse complement of a sequence in a char *.
+** ajTrnInit must be called before this routine to set up the translation table.
+**
+** This routine translates in frame -4 (from the last base) to the first full
+** triplet codon, (i.e. if there are 1 or 2 bases extra at the start, they are
+** ignored).
+** This routine is for those people who define frame '-1' as being the
+** frame starting from the first base of a reverse-complemented sequence.
+** 
+** 
+** @param [r] trnObj [AjPTrn] Translation tables
+** @param [r] str [char *] sequence string to translate
+** @param [r] len [ajint] length of sequence string to translate
+** @param [u] pep [AjPStr *] returned peptide translation (APPENDED TO INPUT)
+**
+** @return [void]
+** @@
+******************************************************************************/
+
+void ajTrnAltRevC (AjPTrn trnObj, char *str, ajint len, AjPStr *pep) {
+
+  ajint i;
+
+  /* ajDebug("ajTrnAltRevC start position=%d\n", len); */
+  for(i=len-1; i>1; i-=3)
+    (void) ajStrAppK(pep, trnObj->GC[trncomp[(ajint)str[i]]]
+    				    [trncomp[(ajint)str[i-1]]]
+    				    [trncomp[(ajint)str[i-2]]]);
 
 }
 /* @func ajTrnStr ************************************************************
@@ -965,7 +1083,7 @@ void ajTrnRevC (AjPTrn trnObj, char *str, ajint len, AjPStr *pep) {
 ** 
 ** @param [r] trnObj [AjPTrn] Translation tables
 ** @param [r] str [AjPStr] sequence string to translate
-** @param [u] pep [AjPStr *] returned peptide translation (appended to input contents)
+** @param [u] pep [AjPStr *] returned peptide translation (APPENDED TO INPUT)
 **
 ** @return [void]
 ** @@
@@ -976,7 +1094,7 @@ void ajTrnStr (AjPTrn trnObj, AjPStr str, AjPStr *pep) {
   ajTrnC(trnObj, ajStrStr(str), ajStrLen(str), pep);
 
 }
-/* @func ajTrnRevStr ************************************************************
+/* @func ajTrnRevStr **********************************************************
 **
 ** Translates the reverse complement of a sequence in a AjPStr.
 ** ajTrnInit must be called before this routine to set up the translation table.
@@ -988,7 +1106,7 @@ void ajTrnStr (AjPTrn trnObj, AjPStr str, AjPStr *pep) {
 ** 
 ** @param [r] trnObj [AjPTrn] Translation tables
 ** @param [r] str [AjPStr] sequence string to translate
-** @param [u] pep [AjPStr *] returned peptide translation (appended to input contents)
+** @param [u] pep [AjPStr *] returned peptide translation (APPENDED TO INPUT)
 **
 ** @return [void]
 ** @@
@@ -997,6 +1115,31 @@ void ajTrnStr (AjPTrn trnObj, AjPStr str, AjPStr *pep) {
 void ajTrnRevStr (AjPTrn trnObj, AjPStr str, AjPStr *pep) {
 
   ajTrnRevC(trnObj, ajStrStr(str), ajStrLen(str), pep);
+
+}
+/* @func ajTrnAltRevStr **********************************************************
+**
+** Translates the reverse complement of a sequence in a AjPStr.
+** ajTrnInit must be called before this routine to set up the translation table.
+**
+** This routine translates in frame -4 (from the last base) to the first full
+** triplet codon, (i.e. if there are 1 or 2 bases extra at the start, they are
+** ignored).
+** This routine is for those people who define frame '-1' as being the
+** frame starting from the first base of a reverse-complemented sequence.
+**
+**
+** @param [r] trnObj [AjPTrn] Translation tables
+** @param [r] str [AjPStr] sequence string to translate
+** @param [u] pep [AjPStr *] returned peptide translation (APPENDED TO INPUT)
+**
+** @return [void]
+** @@
+******************************************************************************/
+
+void ajTrnAltRevStr (AjPTrn trnObj, AjPStr str, AjPStr *pep) {
+
+  ajTrnAltRevC(trnObj, ajStrStr(str), ajStrLen(str), pep);
 
 }
 /* @func ajTrnSeq ************************************************************
@@ -1011,7 +1154,7 @@ void ajTrnRevStr (AjPTrn trnObj, AjPStr str, AjPStr *pep) {
 ** 
 ** @param [r] trnObj [AjPTrn] Translation tables
 ** @param [r] seq [AjPSeq] sequence to translate
-** @param [u] pep [AjPStr *] returned peptide translation (appended to input contents)
+** @param [u] pep [AjPStr *] returned peptide translation (APPENDED TO INPUT)
 **
 ** @return [void]
 ** @@
@@ -1023,7 +1166,7 @@ void ajTrnSeq (AjPTrn trnObj, AjPSeq seq, AjPStr *pep) {
 
 }
 
-/* @func ajTrnRevSeq ************************************************************
+/* @func ajTrnRevSeq **********************************************************
 **
 ** Translates the reverse complement of a sequence in a AjPSeq
 ** The translation is APPENDED to the input peptide.
@@ -1037,7 +1180,7 @@ void ajTrnSeq (AjPTrn trnObj, AjPSeq seq, AjPStr *pep) {
 ** 
 ** @param [r] trnObj [AjPTrn] Translation tables
 ** @param [r] seq [AjPSeq] sequence to translate
-** @param [u] pep [AjPStr *] returned peptide translation (appended to input contents)
+** @param [u] pep [AjPStr *] returned peptide translation (APPENDED TO INPUT)
 **
 ** @return [void]
 ** @@
@@ -1046,6 +1189,35 @@ void ajTrnSeq (AjPTrn trnObj, AjPSeq seq, AjPStr *pep) {
 void ajTrnRevSeq (AjPTrn trnObj, AjPSeq seq, AjPStr *pep) {
 
   ajTrnRevC(trnObj, ajSeqChar(seq), ajSeqLen(seq), pep);
+
+}
+
+/* @func ajTrnAltRevSeq **********************************************************
+**
+** Translates the reverse complement of a sequence in a AjPSeq
+** The translation is APPENDED to the input peptide.
+**
+** ajTrnInit must be called before this routine to set up the translation table.
+**
+** This routine translates in frame -4 (from the last base) to the first full
+** triplet codon, (i.e. if there are 1 or 2 bases extra at the start, they are
+** ignored).
+** This routine is for those people who define frame '-1' as being the
+** frame starting from the first base of a reverse-complemented sequence.
+**
+**
+** 
+** @param [r] trnObj [AjPTrn] Translation tables
+** @param [r] seq [AjPSeq] sequence to translate
+** @param [u] pep [AjPStr *] returned peptide translation (APPENDED TO INPUT)
+**
+** @return [void]
+** @@
+******************************************************************************/
+
+void ajTrnAltRevSeq (AjPTrn trnObj, AjPSeq seq, AjPStr *pep) {
+
+  ajTrnAltRevC(trnObj, ajSeqChar(seq), ajSeqLen(seq), pep);
 
 }
 
@@ -1059,27 +1231,36 @@ void ajTrnRevSeq (AjPTrn trnObj, AjPSeq seq, AjPStr *pep) {
 ** ajTrnInit must be called before this routine to set up the translation table.
 **
 ** This routine translates in the specified frame (one of:
-* 1,2,3,-1,-2,-3,4,5,6) to the last full triplet codon, (i.e.  if there
-** are 1 or 2 bases extra at the end, they are ignored). 
+** 1,2,3,-1,-2,-3,4,5,6,-4,-5,-6) to the last full triplet codon, 
+** (i.e.  if there are 1 or 2 bases extra at the end, they are ignored). 
 **
 ** Frame -1 is defined as the translation of the reverse complement
 ** sequence which matches the codons used in frame 1.  ie.  in the sequence
 ** ACGT, the first codon of frame 1 is ACG and the last codon of frame -1
 ** is the reverse complement of ACG (ie.  CGT). 
 ** 
+** Frame -4 is defined as the translation from the last base to the first full
+** triplet codon.
+** This routine is for those people who define frame '-1' as being the
+** frame starting from the first base of a reverse-complemented sequence.
+** This is also known as the 'alternative frame -1'.
+** Frame -5 starts on the penultimate base. (Alternative frame -2)
+** Frame -6 starts on the ante-penultimate base. (Alternative frame -3)
+**
 ** Frame 4 is the same as frame -1, 5 is -2, 6 is -3.
 **
 ** @param [r] trnObj [AjPTrn] Translation tables
 ** @param [r] seq [char *] sequence string to translate
 ** @param [r] len [ajint] length of sequence string to translate
 ** @param [r] frame [ajint] frame to translate in
-** @param [u] pep [AjPStr *] returned peptide translation (appended to input contents)
+** @param [u] pep [AjPStr *] returned peptide translation (APPENDED TO INPUT)
 **
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-void ajTrnCFrame (AjPTrn trnObj, char *seq, ajint len, ajint frame, AjPStr *pep) {
+void ajTrnCFrame (AjPTrn trnObj, char *seq, ajint len, ajint frame,
+	AjPStr *pep) {
 
   if (frame > 3) frame = -frame + 3;
 
@@ -1089,6 +1270,8 @@ void ajTrnCFrame (AjPTrn trnObj, char *seq, ajint len, ajint frame, AjPStr *pep)
   } else if (frame >= -3 && frame <= -1) {
 /* want to make the len the REAL length passed over */
     ajTrnRevC (trnObj, &seq[-frame-1], len+frame+1, pep);
+  } else if (frame >= -6 && frame <= -4) {
+    ajTrnAltRevC (trnObj, seq, len+frame+4 , pep);
   } else {
     ajDie("Invalid frame '%d' in ajTrnCFrame()\n", frame);
   }
@@ -1104,20 +1287,28 @@ void ajTrnCFrame (AjPTrn trnObj, char *seq, ajint len, ajint frame, AjPStr *pep)
 ** ajTrnInit must be called before this routine to set up the translation table.
 **
 ** This routine translates in the specified frame (one of:
-** 1,2,3,-1,-2,-3) to the last full triplet codon, (i.e.  if there are 1 or
-** 2 bases extra at the end, they are ignored). 
+** 1,2,3,-1,-2,-3,4,5,6,-4,-5,-6) to the last full triplet codon, 
+** (i.e.  if there are 1 or 2 bases extra at the end, they are ignored). 
 **
 ** Frame -1 is defined as the translation of the reverse complement
 ** sequence which matches the codons used in frame 1.  ie.  in the sequence
 ** ACGT, the first codon of frame 1 is ACG and the last codon of frame -1
 ** is the reverse complement of ACG (ie.  CGT). 
 **
+** Frame -4 is defined as the translation from the last base to the first full
+** triplet codon.
+** This routine is for those people who define frame '-1' as being the
+** frame starting from the first base of a reverse-complemented sequence.
+** This is also known as the 'alternative frame -1'.
+** Frame -5 starts on the penultimate base. (Alternative frame -2)
+** Frame -6 starts on the ante-penultimate base. (Alternative frame -3)
+**
 ** Frame 4 is the same as frame -1, 5 is -2, 6 is -3.
 ** 
 ** @param [r] trnObj [AjPTrn] Translation tables
 ** @param [r] seq [AjPStr] sequence string to translate
 ** @param [r] frame [ajint] frame to translate in
-** @param [u] pep [AjPStr *] returned peptide translation (appended to input contents)
+** @param [u] pep [AjPStr *] returned peptide translation (APPENDED TO INPUT)
 **
 ** @return [void]
 ** @@
@@ -1130,7 +1321,7 @@ void ajTrnStrFrame (AjPTrn trnObj, AjPStr seq, ajint frame, AjPStr *pep) {
 }
 
 
-/* @func ajTrnSeqFrame ************************************************************
+/* @func ajTrnSeqFrame ******************************************************
 **
 ** Translates a sequence in a AjSeq in the specified frame.
 ** The translation is APPENDED to the input peptide.
@@ -1138,20 +1329,29 @@ void ajTrnStrFrame (AjPTrn trnObj, AjPStr seq, ajint frame, AjPStr *pep) {
 ** ajTrnInit must be called before this routine to set up the translation table.
 **
 ** This routine translates in the specified frame (one of:
-** 1,2,3,-1,-2,-3) to the last full triplet codon, (i.e.  if there are 1 or
-** 2 bases extra at the end, they are ignored). 
+** 1,2,3,-1,-2,-3,4,5,6,-4,-5,-6) to the last full triplet codon, 
+** (i.e.  if there are 1 or 2 bases extra at the end, they are ignored). 
 **
 ** Frame -1 is defined as the translation of the reverse complement
 ** sequence which matches the codons used in frame 1.  ie.  in the sequence
 ** ACGT, the first codon of frame 1 is ACG and the last codon of frame -1
 ** is the reverse complement of ACG (ie.  CGT). 
 **
+** Frame -4 is defined as the translation from the last base to the first full
+** triplet codon.
+** This routine is for those people who define frame '-1' as being the
+** frame starting from the first base of a reverse-complemented sequence.
+** This is also known as the 'alternative frame -1'.
+** Frame -5 starts on the penultimate base. (Alternative frame -2)
+** Frame -6 starts on the ante-penultimate base. (Alternative frame -3)
+**
 ** Frame 4 is the same as frame -1, 5 is -2, 6 is -3.
+**
 ** 
 ** @param [r] trnObj [AjPTrn] Translation tables
 ** @param [r] seq [AjPSeq] sequence string to translate
 ** @param [r] frame [ajint] frame to translate in
-** @param [u] pep [AjPStr *] returned peptide translation (appended to input contents)
+** @param [u] pep [AjPStr *] returned peptide translation (APPENDED TO INPUT)
 **
 ** @return [void]
 ** @@
@@ -1164,23 +1364,31 @@ void ajTrnSeqFrame (AjPTrn trnObj, AjPSeq seq, ajint frame, AjPStr *pep) {
 }
 
 
-/* @func ajTrnSeqFramePep ************************************************************
+/* @func ajTrnSeqFramePep *****************************************************
 **
 ** Translates a sequence in a AjSeq in the specified frame and returns a
 ** new peptide. 
 ** ajTrnInit must be called before this routine to set up the translation table.
 **
-** This routine translates in the specified frame (one of: 1,2,3,-1,-2,-3) 
-** to the last full triplet codon, (i.e.  if there are 1 or 2 bases
-** extra at the end, they are ignored). 
+** This routine translates in the specified frame (one of:
+** 1,2,3,-1,-2,-3,4,5,6,-4,-5,-6) to the last full triplet codon, 
+** (i.e.  if there are 1 or 2 bases extra at the end, they are ignored). 
 **
 ** Frame -1 is defined as the translation of the reverse complement
 ** sequence which matches the codons used in frame 1.  ie.  in the sequence
 ** ACGT, the first codon of frame 1 is ACG and the last codon of frame -1
 ** is the reverse complement of ACG (ie.  CGT). 
 **
+** Frame -4 is defined as the translation from the last base to the first full
+** triplet codon.
+** This routine is for those people who define frame '-1' as being the
+** frame starting from the first base of a reverse-complemented sequence.
+** This is also known as the 'alternative frame -1'.
+** Frame -5 starts on the penultimate base. (Alternative frame -2)
+** Frame -6 starts on the ante-penultimate base. (Alternative frame -3)
+**
 ** Frame 4 is the same as frame -1, 5 is -2, 6 is -3.
-** 
+**
 ** NB.  that the naming of the output sequence is always to take
 ** the name of the input sequence (eg.  ECARGS) and to append an underscore
 ** character and the frame number 1 to 3 for forward frames and 4 to 6 for
@@ -1215,7 +1423,7 @@ AjPSeq ajTrnSeqFramePep (AjPTrn trnObj, AjPSeq seq, ajint frame) {
 }
 
 
-/* @func ajTrnCDangle ************************************************************
+/* @func ajTrnCDangle *********************************************************
 **
 ** Translates the last 1 or two bases of a sequence in a char * 
 ** that would not be translated if just translating complete codons
@@ -1228,7 +1436,7 @@ AjPSeq ajTrnSeqFramePep (AjPTrn trnObj, AjPSeq seq, ajint frame) {
 ** @param [r] seq [char *] sequence string to translate
 ** @param [r] len [ajint] sequence string length
 ** @param [r] frame [ajint] frame to translate in
-** @param [u] pep [AjPStr *] returned peptide translation (appended to input contents)
+** @param [u] pep [AjPStr *] returned peptide translation (APPENDED TO INPUT)
 **
 ** @return [ajint] Number of dangling bases (0,1 or 2)
 ** @@
@@ -1240,25 +1448,36 @@ ajint ajTrnCDangle (AjPTrn trnObj, char *seq, ajint len, ajint frame,
   ajint end=0;	/* end base of last complete codon in forward sense */
   ajint dangle;	/* number of bases at the end */
 
-  if (frame > 3) frame = -frame + 3;
+  if (frame > 3)		/* convert frames 4,5,6 to -1,-2,-3 */
+    frame = -frame + 3;
 
-  if (frame > 0) {
+  if (frame > 0) {		/* forward 3 frames */
     end = (len/3)*3 + frame-1;
     dangle = len - end;
-  } else {
+  } else if (frame <= -4) {	/* alternative reverse frames */
+    /* ajDebug("len=%d frame=%d\n", len, frame); */
+    dangle = (len+frame+4)%3;
+  } else {			/* standard reverse frames */
     dangle = -frame-1;
   }
+  /* ajDebug("dangle = %d\n", dangle); */
 
 /* translate any dangling pair of bases at the end */
   if (dangle == 2) {
     if (frame >= 1 && frame <= 3) {
-      (void) ajStrAppK(pep, trnObj->GC[trnconv[(ajint)seq[end]]][trnconv[(ajint)seq[end+1]]][trnconv[0]]);
+      (void) ajStrAppK(pep, trnObj->GC[trnconv[(ajint)seq[end]]]
+				      [trnconv[(ajint)seq[end+1]]]
+				      [trnconv[0]]);
     } else {	/* reverse sense */
-      (void) ajStrAppK(pep, trnObj->GC[trncomp[(ajint)seq[1]]][trncomp[(ajint)seq[0]]][trncomp[0]]);
+      (void) ajStrAppK(pep, trnObj->GC[trncomp[(ajint)seq[1]]]
+				      [trncomp[(ajint)seq[0]]]
+				      [trncomp[0]]);
     }
   } else if (dangle == 1) {
-/* I don't seriously expect a single base to translate sensibly, but
-they asked for it, so here it is ...  */
+/* 
+** I don't seriously expect a single base to translate sensibly, but
+** they asked for it, so here it is ...  
+*/
     (void) ajStrAppK(pep, 'X');
   }
   
@@ -1266,7 +1485,7 @@ they asked for it, so here it is ...  */
   
 }
 
-/* @func ajTrnStrDangle ************************************************************
+/* @func ajTrnStrDangle *****************************************************
 **
 ** Translates the last 1 or two bases of a sequence in a AjStr
 ** that would not be translated if just translating complete codons
@@ -1278,7 +1497,7 @@ they asked for it, so here it is ...  */
 ** @param [r] trnObj [AjPTrn] Translation tables
 ** @param [r] seq [AjPStr] sequence string to translate
 ** @param [r] frame [ajint] frame to translate in
-** @param [u] pep [AjPStr *] returned peptide translation (appended to input contents)
+** @param [u] pep [AjPStr *] returned peptide translation (APPENDED TO INPUT)
 **
 ** @return [ajint] Number of dangling bases (0,1 or 2)
 ** @@
@@ -1293,14 +1512,28 @@ ajint ajTrnStrDangle (AjPTrn trnObj, AjPStr seq, ajint frame, AjPStr *pep) {
 
 
 
-/* @func ajTrnSeqOrig ************************************************************
+/* @func ajTrnSeqOrig *********************************************************
 **
 ** Translates a sequence.
 ** ajTrnInit must be called before this routine to set up the translation table.
 **
 ** The frame to translate is in the range -3 to 6.
 ** Frames 1 to 3 give normal forward translations.
-** Frames -3 to -1 rev-complement the DNA sequence then give normal translations.
+**
+** Frames -3 to -1 give translations in the reverse sense.
+** Frame -1 is defined as the translation of the reverse complement
+** sequence which matches the codons used in frame 1.  ie.  in the sequence
+** ACGT, the first codon of frame 1 is ACG and the last codon of frame -1
+** is the reverse complement of ACG (ie.  CGT). 
+**
+** Frames -4 to -6 give translations in the reverse sense.
+** Frame -4 is defined as the translation of the reverse complement,
+** starting the translation in the first codon of the reversed sequence.
+** ie.  in the sequence ACGT, the last codon is CGT and so frame -4 
+** translates from the reverse complement of CGT (ie.  ACG) - this is
+** for those people who define frame -1 as using the first codon when the
+** sequence is reverse-complemented. 
+**
 ** Frames 4 to 6 rev-comp the DNA sequence then reverse the peptide sequence
 **
 ** Frames 4 to 6 are therefore a reversed protein sequence useful mainly for
@@ -1315,7 +1548,7 @@ ajint ajTrnStrDangle (AjPTrn trnObj, AjPStr seq, ajint frame, AjPStr *pep) {
 ** 
 ** @param [r] trnObj [AjPTrn] Translation tables
 ** @param [r] seq [AjPSeq] sequence to translate
-** @param [r] frame [ajint] frame to translate in (-3, -2, -1, 1, 2, 3, 4, 5, 6)
+** @param [r] frame [ajint] frame to translate in (-6 to 6)
 **
 ** @return [AjPSeq] Peptide translation
 ** @@
@@ -1323,11 +1556,11 @@ ajint ajTrnStrDangle (AjPTrn trnObj, AjPStr seq, ajint frame, AjPStr *pep) {
 AjPSeq ajTrnSeqOrig (AjPTrn trnObj, AjPSeq seq, ajint frame) {
 
   AjPSeq pep=NULL; /* the returned new peptide */
-/*  AjPStr str=NULL; *//* the string holding the nucleic sequence */
   AjPStr trn=NULL; /* the string holding the peptide sequence */
-  
+
   pep = ajTrnNewPep(seq, frame);
   trn = ajStrNew();
+
   ajTrnSeqFrame (trnObj, seq, frame, &trn);
 
 /* if there are any dangling bases, then attempt to translate them */
@@ -1367,7 +1600,7 @@ AjPStr ajTrnGetTitle (AjPTrn thys) {
 }
 
 
-/* @func ajTrnGetFileName ********************************************************
+/* @func ajTrnGetFileName *****************************************************
 **
 ** Returns the file that the translation table was read from.
 ** Because this is a pointer to the real internal string
@@ -1387,14 +1620,14 @@ AjPStr ajTrnGetFileName (AjPTrn thys) {
 
 
 
-/* @func ajTrnStartStop ************************************************************
+/* @func ajTrnStartStop *******************************************************
 **
 ** Checks whether the input codon is a Start codon, a Stop codon or
 ** something else
 **
 ** @param [r] trnObj [AjPTrn] Translation tables
 ** @param [r] codon [AjPStr] codon to checks
-** @param [w] aa [char *] returned translated amino acid (a char*, not a NULL-terminated array of char)
+** @param [w] aa [char *] returned translated amino acid (not a NULL-terminated array of char)
 ** @return [ajint] 1 if it is a start codon, -1 if it is a stop codon, else 0
 ** @@
 ******************************************************************************/
@@ -1407,11 +1640,15 @@ ajint ajTrnStartStop (AjPTrn trnObj, AjPStr codon, char *aa) {
   ajint tc2 = trnconv[(ajint)res[1]];
   ajint tc3 = trnconv[(ajint)res[2]];
 
-  *aa = trnObj->GC[tc1][tc2][tc3];
+  *aa = trnObj->GC[tc1]
+		[tc2]
+		[tc3];
   
   res = ajStrStr(codon);
 
-  if (trnObj->Starts[tc1][tc2][tc3] == 'M')
+  if (trnObj->Starts[tc1]
+		[tc2]
+		[tc3] == 'M')
       return 1;
 
   if (*aa == '*')
@@ -1420,14 +1657,14 @@ ajint ajTrnStartStop (AjPTrn trnObj, AjPStr codon, char *aa) {
   return 0;
 }
 
-/* @func ajTrnStartStopC ************************************************************
+/* @func ajTrnStartStopC ****************************************************
 **
 ** Checks whether a const char * codon is a Start codon, a Stop codon or
 ** something else
 **
 ** @param [r] trnObj [AjPTrn] Translation tables
 ** @param [r] codon [char *] codon to translate (these 3 characters need not be NULL-terminated)
-** @param [w] aa [char *] returned translated amino acid (a char*, not a NULL-terminated array of char)
+** @param [w] aa [char *] returned translated amino acid (not a NULL-terminated array of char)
 ** @return [ajint] 1 if it is a start codon, -1 if it is a stop codon, else 0
 ** @@
 ******************************************************************************/
@@ -1438,9 +1675,13 @@ ajint ajTrnStartStopC (AjPTrn trnObj, char *codon, char *aa) {
   ajint tc2 = trnconv[(ajint)codon[1]];
   ajint tc3 = trnconv[(ajint)codon[2]];
 
-  *aa = trnObj->GC[tc1][tc2][tc3];
+  *aa = trnObj->GC[tc1]
+		[tc2]
+		[tc3];
   
-  if (trnObj->Starts[tc1][tc2][tc3] == 'M')
+  if (trnObj->Starts[tc1]
+		[tc2]
+		[tc3] == 'M')
     return 1;
 
   if (*aa == '*')

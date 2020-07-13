@@ -285,7 +285,7 @@ int main(int argc, char **argv)
 
 
 
-/* @funcstatic polydot_drawPlotlines *****************************************
+/* @funcstatic polydot_drawPlotlines ******************************************
 **
 ** Undocumented.
 **
@@ -313,7 +313,7 @@ static void polydot_drawPlotlines(void **x, void *cl)
 
 
 
-/* @funcstatic  polydot_dataPlotlines ****************************************
+/* @funcstatic polydot_dataPlotlines ******************************************
 **
 ** Undocumented.
 **
@@ -341,7 +341,7 @@ static void polydot_dataPlotlines(void **x, void *cl)
 
 
 
-/* @funcstatic polydot_plotMatches *******************************************
+/* @funcstatic polydot_plotMatches ********************************************
 **
 ** Undocumented.
 **

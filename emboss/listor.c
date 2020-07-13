@@ -145,7 +145,7 @@ lengths */
 
 
 
-/* @funcstatic listor_Output *****************************************************  
+/* @funcstatic listor_Output **************************************************
 **
 ** Writes out USA of a sequence to a file
 **
@@ -204,7 +204,7 @@ static void listor_Output(AjPFile list, ajint Operator, AjPSeqset seq1,
   return;
 }
 
-/* @funcstatic listor_Write *****************************************************  
+/* @funcstatic listor_Write ***************************************************
 **   
 ** Writes out USA of a sequence to a file
 **

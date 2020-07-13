@@ -22,9 +22,9 @@
 #include "emboss.h"
 
 
-/* @prog seqret ***************************************************************
+/* @prog yank ***************************************************************
 **
-** Reads and writes (returns) sequences
+** Reads a sequence range, appends the full USA to a list file
 **
 ******************************************************************************/
 

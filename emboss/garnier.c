@@ -340,9 +340,11 @@ int main(int argc, char **argv)
 
 	len=ajStrLen(substr);
 
-	garnier_report(report, TabRpt, seq, 0,len, ajStrStr(substr),begin,Idc);
+	garnier_report(report, TabRpt, seq, 1, len,
+		       ajStrStr(substr),begin-1,Idc);
 	if (outf)
-	  garnier_do(outf,0,len,ajStrStr(substr),ajSeqName(seq),begin,Idc);
+	  garnier_do(outf,0,len,
+		     ajStrStr(substr),ajSeqName(seq),begin-1,Idc);
 
 	ajStrDel(&strand);
 
@@ -568,6 +570,7 @@ static void garnier_report(AjPReport report, AjPFeattable TabRpt,
     AjPStr strCoil=NULL;
     AjPFeature gf=NULL;
     char testch = ' ';
+    ajint ito;
 
     if (!strHelix) {
       ajStrAssC (&strHelix, "helix");
@@ -599,7 +602,6 @@ static void garnier_report(AjPReport report, AjPFeattable TabRpt,
 
     
 /* copy from garnier.c original */
-    --n0;  /* AJB: Added as n0 was one greater than the sequence length */
     
   for (i=0; i<n0; i++)  {
 /*      ajDebug("seq[%d] '%c' %x", i, seq[i], seq[i]);
@@ -679,37 +681,38 @@ static void garnier_report(AjPReport report, AjPFeattable TabRpt,
   */
 
   testch = ' ';
-  l0=1;
+  l0=begin+1;
   l1=0;
 
   for (i=0; i<=n0; i++) {
     if (i==n0 || type[i] != testch) {
       if (i) {
+	ito = i + begin;
 	switch (testch) {
 	case 'H':
-	  gf = ajFeatNewProt (TabRpt, NULL, strHelix, l0, i, 0.0);
+	  gf = ajFeatNewProt (TabRpt, NULL, strHelix, l0, ito, 0.0);
 	  ajFmtPrintS(&tmpStr, "*helix H");
 	  ajFeatTagAdd(gf,  NULL, tmpStr);
 	  break;
 	case 'E':
-	  gf = ajFeatNewProt (TabRpt, NULL, strExtend, l0, i, 0.0);
+	  gf = ajFeatNewProt (TabRpt, NULL, strExtend, l0, ito, 0.0);
 	  ajFmtPrintS(&tmpStr, "*sheet E");
 	  ajFeatTagAdd(gf,  NULL, tmpStr);
 	  break;
 	case 'T':
-	  gf = ajFeatNewProt (TabRpt, NULL, strTurns, l0, i, 0.0);
+	  gf = ajFeatNewProt (TabRpt, NULL, strTurns, l0, ito, 0.0);
 	  ajFmtPrintS(&tmpStr, "*turns T");
 	  ajFeatTagAdd(gf,  NULL, tmpStr);
 	  break;
 	case 'C':
-	  gf = ajFeatNewProt (TabRpt, NULL, strCoil, l0, i, 0.0);
+	  gf = ajFeatNewProt (TabRpt, NULL, strCoil, l0, ito, 0.0);
 	  ajFmtPrintS(&tmpStr, "*coil C");
 	  ajFeatTagAdd(gf,  NULL, tmpStr);
 	  break;
 	default:
 	  break;
 	}
-	l0=i+1;
+	l0=i+begin+1;
       }
       if (i < n0) testch = type[i];
     }

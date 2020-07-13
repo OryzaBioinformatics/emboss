@@ -518,7 +518,7 @@ int main(int argc, char **argv)
 }
 
 
-/* @funcstatic prima_primalign ***********************************************
+/* @funcstatic prima_primalign ************************************************
 **
 ** Align two sequences and return match percentage
 **
@@ -615,7 +615,7 @@ static ajint prima_primalign(char *a, char *b)
 */
 
 
-/* @funcstatic prima_testproduct *********************************************
+/* @funcstatic prima_testproduct **********************************************
 **
 ** Undocumented.
 **
@@ -777,7 +777,7 @@ static void prima_testproduct
 
 
 
-/* @funcstatic prima_reject_self *********************************************
+/* @funcstatic prima_reject_self **********************************************
 **
 ** reject self complementary primers
 **
@@ -871,7 +871,7 @@ static void prima_reject_self(AjPList *forlist,AjPList *revlist, ajint *neric,
     
 }
 
-/* @funcstatic prima_best_primer *********************************************
+/* @funcstatic prima_best_primer **********************************************
 **
 ** BEST PRIMER FUNCTION
 **
@@ -988,7 +988,7 @@ static void prima_best_primer(AjPList *forlist, AjPList *revlist,
 }
 
 
-/* @funcstatic prima_PrimerDel ***********************************************
+/* @funcstatic prima_PrimerDel ************************************************
 **
 ** Free memory from primers
 **
@@ -1006,7 +1006,7 @@ static void prima_PrimerDel(AjPPrimer *p)
   
   
 
-/* @funcstatic  prima_Compare ************************************************
+/* @funcstatic prima_PrimerCompare ********************************************
 **
 ** Undocumented.
 **
@@ -1024,7 +1024,7 @@ static ajint prima_Compare(const void *a, const void *b)
 
 
 
-/* @funcstatic  prima_PosCompare *********************************************
+/* @funcstatic prima_PosCompare ***********************************************
 **
 ** Undocumented.
 **
@@ -1042,7 +1042,7 @@ static ajint prima_PosCompare(const void *a, const void *b)
 }
 
 
-/* @funcstatic  prima_PosEndCompare *******************************************
+/* @funcstatic prima_PosEndCompare ********************************************
 **
 ** Undocumented.
 **
@@ -1062,7 +1062,7 @@ static ajint prima_PosEndCompare(const void *a, const void *b)
 
 
 
-/* @funcstatic prima_testtarget **********************************************
+/* @funcstatic prima_testtarget ***********************************************
 **
 ** Undocumented.
 **
@@ -1344,7 +1344,7 @@ static void prima_testtarget(AjPStr seqstr, AjPStr revstr, ajint targetstart,
 
 
 
-/* @funcstatic prima_test_multi **********************************************
+/* @funcstatic prima_test_multi ***********************************************
 **
 ** Undocumented.
 **
@@ -1458,7 +1458,7 @@ static void prima_test_multi(AjPList *forlist, AjPList *revlist, ajint *neric,
 }
 
 
-/* @funcstatic prima_seq_align ***********************************************
+/* @funcstatic prima_seq_align ************************************************
 **
 ** Undocumented.
 **
@@ -1487,7 +1487,7 @@ static ajint prima_seq_align(char *a, char *b, ajint len)
 
 
 
-/* @funcstatic prima_prune_nearby ********************************************
+/* @funcstatic prima_prune_nearby *********************************************
 **
 ** Undocumented.
 **
@@ -1557,7 +1557,7 @@ static void prima_prune_nearby(AjPList *pairlist, ajint *npair, ajint range)
 
 
 
-/* @funcstatic prima_check_overlap *******************************************
+/* @funcstatic prima_check_overlap ********************************************
 **
 ** Undocumented.
 **
@@ -1612,7 +1612,7 @@ static void prima_check_overlap(AjPList *pairlist, ajint *npair, ajint overlap)
     return;
 }
 
-/* @funcstatic prima_TwoSortscorepos *****************************************
+/* @funcstatic prima_TwoSortscorepos ******************************************
 **
 ** Sort on basis of score then, within that block on the basis of
 ** product start then within that block on the basis of product end
@@ -1670,7 +1670,7 @@ static void prima_TwoSortscorepos(AjPList *pairlist)
     return;
 }
 
-/* @funcstatic prima_RevSort ************************************************
+/* @funcstatic prima_RevSort **************************************************
 **
 ** See TwoSortscorepos
 **

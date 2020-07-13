@@ -264,6 +264,11 @@ PLFLT          ajGraphFitTextOnLine(PLFLT x1, PLFLT y1, PLFLT x2, PLFLT y2,
 float         ajGraphSetCharSize (float size);
 float         ajGraphSetDefCharSize (float size);
 
+void          ajGraphFillRectangleOnCurve(PLFLT xcentre, PLFLT ycentre,
+					  PLFLT Radius, PLFLT BoxHeight, 
+					  PLFLT StartAngle, PLFLT EndAngle);
+
+
 #endif /* ajgraph_h */
 
 #ifdef __cplusplus

@@ -239,7 +239,7 @@ int main(int argc, char **argv)
 
 
 
-/* @funcstatic profit_getType ************************************************
+/* @funcstatic profit_getType *************************************************
 **
 ** Get type of matrix
 **
@@ -276,7 +276,7 @@ static ajint profit_getType(AjPFile inf)
 
 
 
-/* @funcstatic  profit_read_simple ********************************************
+/* @funcstatic profit_read_simple *********************************************
 **
 ** Undocumented.
 **
@@ -345,7 +345,7 @@ static void profit_read_simple(AjPFile inf, AjPStr *name, ajint *mlen,
 
 
 
-/* @funcstatic  profit_read_profile ******************************************
+/* @funcstatic profit_read_profile ********************************************
 **
 ** Read profile
 **
@@ -446,7 +446,7 @@ static void profit_read_profile(AjPFile inf, AjPStr *name, AjPStr *mname,
 
 
 
-/* @funcstatic profit_scan_simple ********************************************
+/* @funcstatic profit_scan_simple *********************************************
 **
 ** Scan sequence with a frequency matrix
 **
@@ -495,7 +495,7 @@ static void profit_scan_simple(AjPStr substr, AjPStr pname, AjPStr name,
 
 
 
-/* @funcstatic profit_printHits **********************************************
+/* @funcstatic profit_printHits ***********************************************
 **
 ** Print results for profit
 **
@@ -522,7 +522,7 @@ static void profit_printHits(AjPStr substr,AjPStr pname, ajint pos,
 }
 
 
-/* @funcstatic profit_scan_profile *******************************************
+/* @funcstatic profit_scan_profile ********************************************
 **
 ** Scan sequence with a profile
 **

@@ -296,7 +296,7 @@ int main(int argc, char **argv)
 
 
 
-/* @funcstatic  plotcon_pushpoint ********************************************
+/* @funcstatic plotcon_pushpoint **********************************************
 **
 ** Adds data points to the list.
 **
@@ -328,7 +328,7 @@ static void plotcon_pushpoint(AjPList *l, float x1, float y1, float x2,
 
 
 
-/* @funcstatic plotcon_datapoints ********************************************
+/* @funcstatic plotcon_datapoints *********************************************
 **
 ** Output a list of data points to a text file
 **

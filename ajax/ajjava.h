@@ -26,6 +26,9 @@ extern "C" {
 #define GET_FILE       8
 #define PUT_FILE       9
 #define BATCH_FORK     10
+#define RENAME_FILE    11
+#define SEQ_ATTRIB     12
+#define SEQSET_ATTRIB  13
 
 JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_seqType 
     (JNIEnv *, jobject, jstring);
@@ -81,6 +84,9 @@ JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_delFile
 (JNIEnv *env, jobject obj, jstring door, jbyteArray key,
  jstring environment, jstring filename);
 
+JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_renameFile
+(JNIEnv *env, jobject obj, jstring door, jbyteArray key,
+ jstring environment, jstring filename, jstring filename2);
 
 JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_delDir
 (JNIEnv *env, jobject obj, jstring door, jbyteArray key,
@@ -105,6 +111,17 @@ JNIEXPORT jbyteArray JNICALL Java_org_emboss_jemboss_parser_Ajax_getFile
 JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_putFile
 (JNIEnv *env, jobject obj, jstring door, jbyteArray key,
  jstring environment, jstring filename, jbyteArray arr);
+
+
+JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_seqAttrib
+(JNIEnv *env, jobject obj, jstring door, jbyteArray key,
+ jstring environment, jstring filename);
+
+
+JNIEXPORT jboolean JNICALL Java_org_emboss_jemboss_parser_Ajax_seqsetAttrib
+(JNIEnv *env, jobject obj, jstring door, jbyteArray key,
+ jstring environment, jstring filename);
+
 
 
 #ifdef __cplusplus

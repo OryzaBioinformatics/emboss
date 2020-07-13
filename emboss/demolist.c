@@ -215,7 +215,7 @@ static void  demolist_freegff (void **x, void *cl)
 
 
 
-/* @funcstatic  demolist_creategff ********************************************
+/* @funcstatic demolist_creategff *********************************************
 **
 ** Not important to understand for demo but this function
 ** merely passes back a gff struct

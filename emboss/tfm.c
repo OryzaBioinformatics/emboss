@@ -87,7 +87,7 @@ int main(int argc, char **argv)
 
 
 
-/* @funcstatic  tfm_FindAppDocRoot ********************************************
+/* @funcstatic tfm_FindAppDocRoot *********************************************
 **
 ** return the path to the program doc directory
 **
@@ -131,7 +131,7 @@ static void tfm_FindAppDocRoot (AjPStr* docroot)
     return;
 }
 
-/* @funcstatic  tfm_FindAppDoc ***********************************************
+/* @funcstatic tfm_FindAppDoc *************************************************
 **
 ** return the path to the program documentation html or text file
 **

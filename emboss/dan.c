@@ -224,10 +224,10 @@ int main(int argc, char **argv)
 ** @param [R] dothermo [AjBool] Undocumented
 ** @param [R] outf [AjPFile] Undocumented
 ** @param [R] doplot [AjBool] Undocumented
-** @param [R] xa [float []] Undocumented
-** @param [R] ta [float []] Undocumented
-** @param [R] tpa [float []] Undocumented
-** @param [R] cga [float []] Undocumented
+** @param [R] xa [float[]] Undocumented
+** @param [R] ta [float[]] Undocumented
+** @param [R] tpa [float[]] Undocumented
+** @param [R] cga [float[]] Undocumented
 ** @param [R] np [ajint*] Undocumented
 ** @@
 ******************************************************************************/
@@ -352,10 +352,10 @@ static void dan_findgc(AjPStr *strand, ajint begin, ajint end, ajint window,
 ** @param [R] isproduct [AjBool] Undocumented
 ** @param [R] dothermo [AjBool] Undocumented
 ** @param [R] doplot [AjBool] Undocumented
-** @param [R] xa [float []] Undocumented
-** @param [R] ta [float []] Undocumented
-** @param [R] tpa [float []] Undocumented
-** @param [R] cga [float []] Undocumented
+** @param [R] xa [float[]] Undocumented
+** @param [R] ta [float[]] Undocumented
+** @param [R] tpa [float[]] Undocumented
+** @param [R] cga [float[]] Undocumented
 ** @param [R] np [ajint*] Undocumented
 ** @@
 ******************************************************************************/

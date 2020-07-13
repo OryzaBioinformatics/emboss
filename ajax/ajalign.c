@@ -1324,7 +1324,6 @@ void ajAlignDel (AjPAlign* pthys) {
 
   ajStrDel (&thys->Name);
   ajStrDel (&thys->Formatstr);
-  ajStrDel (&thys->Filename);
   ajStrDel (&thys->Extension);
   ajStrDel(&thys->Type);
   ajStrDel(&thys->Usa);
@@ -1519,7 +1518,6 @@ AjPAlign ajAlignNew (void) {
   pthis->Name = ajStrNew();
   pthis->Formatstr = ajStrNew();
   pthis->Format = 0;
-  pthis->Filename = ajStrNew();
   pthis->Extension = ajStrNew();
   pthis->File = NULL;
   pthis->Data = ajListNew();
@@ -1601,6 +1599,7 @@ void ajAlignWriteHeader (AjPAlign thys) {
     ajFmtPrintF (outf, "########################################\n");
     ajFmtPrintF (outf, "# Program:  %s\n", ajAcdProgram());
     ajFmtPrintF (outf, "# Rundate:  %D\n", ajTimeTodayF("log"));
+    ajFmtPrintF (outf, "# Align_format: %S\n", thys->Formatstr);
     ajFmtPrintF (outf, "# Report_file: %F\n", outf);
     if (!doSingle || thys->Multi) {
       ajFmtPrintF (outf, "########################################\n");
@@ -2943,7 +2942,6 @@ void ajAlignTrace (AjPAlign thys) {
   ajDebug("Type: '%S'\n", thys->Type);
   ajDebug("Formatstr: '%S'\n", thys->Formatstr);
   ajDebug("Format: %d\n", thys->Format);
-  ajDebug("Filename: '%S'\n", thys->Filename);
   ajDebug("Extension: '%S'\n", thys->Extension);
   ajDebug("File: '%F'\n", thys->File);
   ajDebug("Header: '%S'\n", thys->Header);
@@ -3037,4 +3035,37 @@ static void alignTraceData (AjPAlign thys) {
   AJFREE (pdata);
 
   return;
+}
+
+/* @func ajAlignPrintFormat ************************************************
+**
+** Reports the internal data structures
+**
+** @param [r] outf [AjPFile] Output file
+** @param [r] full [AjBool] Full report (usually ajFalse)
+** @return [void]
+** @@
+******************************************************************************/
+
+void ajAlignPrintFormat (AjPFile outf, AjBool full)
+{
+    ajint i=0;
+
+    ajFmtPrintF (outf, "\n");
+    ajFmtPrintF (outf, "# alignment output formats\n");
+    ajFmtPrintF (outf, "# Name         Minseq Maxseq Nuc Pro\n");
+    ajFmtPrintF (outf, "\n");
+    ajFmtPrintF (outf, "AFormat {\n");
+    for (i=0; alignFormat[i].Name; i++)
+    {
+	ajFmtPrintF (outf, "  %-12s %6d %6d %3B %3B\n",
+		     alignFormat[i].Name,
+		     alignFormat[i].Minseq,
+		     alignFormat[i].Maxseq,
+		     alignFormat[i].Nuc,
+		     alignFormat[i].Prot);
+    }
+    ajFmtPrintF (outf, "}\n\n");
+
+    return;
 }
