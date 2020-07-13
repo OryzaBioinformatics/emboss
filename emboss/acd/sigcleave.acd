@@ -30,24 +30,24 @@ bool: prokaryote  [
   information: "Use prokaryotic cleavage data"
 ]
 
-integer: pval  [
-  required: "N"
-  minimum: "-13"
-  maximum: "-1"
-  default: "-13"
-  information: "Pval"
-  help: "Specifies the number of columns before the residue at the cleavage site in the weight matrix table"
-]
-
-integer: nval  [
-  required: "N"
-  minimum: "1"
-  maximum: "@(15+$(pval))"
-  default: "@(15+$(pval))"
-  information: "Nval"
-  help: "specifies the number of columns after the residue at the cleavage site in the weight matrix table"
-  expected: "Pval+15 (2)"
-]
+#integer: pval  [
+#  required: "N"
+#  minimum: "-13"
+#  maximum: "-1"
+#  default: "-13"
+#  information: "Pval"
+#  help: "Specifies the number of columns before the residue at the cleavage site in the weight matrix table"
+#]
+#
+#integer: nval  [
+#  required: "N"
+#  minimum: "1"
+#  maximum: "@(15+$(pval))"
+#  default: "@(15+$(pval))"
+#  information: "Nval"
+#  help: "specifies the number of columns after the residue at the cleavage site in the weight matrix table"
+#  expected: "Pval+15 (2)"
+#]
 
 endsection: advanced
 

@@ -14,12 +14,12 @@
 ** modify it under the terms of the GNU General Public License
 ** as published by the Free Software Foundation; either version 2
 ** of the License, or (at your option) any later version.
-** 
+**
 ** This program is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ** GNU General Public License for more details.
-** 
+**
 ** You should have received a copy of the GNU General Public License
 ** along with this program; if not, write to the Free Software
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
@@ -65,7 +65,7 @@ int main(int argc, char **argv)
     AjBool    prokaryote=ajFalse;
 
     AjPFloat2d matrix=NULL;
-    
+
     ajint begin;
     ajint end;
     ajint len;
@@ -80,10 +80,10 @@ int main(int argc, char **argv)
     AjPInt hi=NULL;
     AjPInt hp=NULL;
     AjPFloat hwt=NULL;
-    
+
     char *p;
     char *q;
-    
+
     ajint i;
     ajint j;
 
@@ -98,10 +98,10 @@ int main(int argc, char **argv)
     AjPStr fthit = NULL;
 
     embInit("sigcleave",argc,argv);
-    
+
     seqall    = ajAcdGetSeqall("sequence");
-    opval     = ajAcdGetInt("pval");
-    nval      = ajAcdGetInt("nval");
+    opval     = -13;		/* was ajAcdGetInt */
+    nval      = 2;		/* was ajAcdGetInt */
     prokaryote   = ajAcdGetBool("prokaryote");
     minweight    = ajAcdGetFloat("minweight");
     report      = ajAcdGetReport("outfile");
@@ -114,7 +114,7 @@ int main(int argc, char **argv)
     hwt    = ajFloatNew();
     hi     = ajIntNew();
     hp     = ajIntNew();
-    
+
     substr = ajStrNew();
     stmp   = ajStrNew();
     sstr   = ajStrNew();
@@ -264,7 +264,7 @@ int main(int argc, char **argv)
 		      ajFmtPrintF(outf,"\n\nScore %.1f at residue %d\n\n",
 				  xweight,isite+begin);
 
-		    
+
 		    ajStrAssSubC(&stmp,ajStrStr(sstr),isite+pval,isite-1);
 		    if (outf)
 		      ajFmtPrintF(outf," Sequence:  %s-",ajStrStr(stmp));
@@ -298,7 +298,7 @@ int main(int argc, char **argv)
 	ajFeattableDel(&TabRpt);
 	ajStrDelReuse(&strand);
     }
-    
+
 
     ajSeqDel(&seq);
     ajStrDel(&substr);
@@ -312,7 +312,7 @@ int main(int argc, char **argv)
 
     if (outf)
       ajFileClose(&outf);
-    
+
     (void) ajReportClose(report);
 
     ajExit();
@@ -322,7 +322,7 @@ int main(int argc, char **argv)
 
 
 
-/* @funcstatic sigcleave_readSig *********************************************
+/* @funcstatic sigcleave_readSig **********************************************
 **
 ** Read signal peptide data file
 **
@@ -341,25 +341,25 @@ static ajint sigcleave_readSig(AjPFloat2d *matrix,AjBool prokaryote)
     AjBool  pass;
 
     float **mat;
-    
+
     char *p;
     char *q;
-    
+
     ajint xcols=0;
     ajint cols=0;
     float rt;
     float v;
-    
+
     float sample;
     float expected;
 
     ajint   i;
     ajint   j;
     ajint   c;
-    
+
     ajint d1;
     ajint d2;
-    
+
     if(prokaryote)
 	ajFileDataNewC(PROFILE,&mfptr);
     else
@@ -371,7 +371,7 @@ static ajint sigcleave_readSig(AjPFloat2d *matrix,AjBool prokaryote)
     delim=ajStrNewC(" :\t\n");
 
     pass = ajTrue;
-    
+
     while(ajFileGets(mfptr, &line))
     {
 	p=ajStrStr(line);
@@ -391,7 +391,7 @@ static ajint sigcleave_readSig(AjPFloat2d *matrix,AjBool prokaryote)
 	}
 	else
 	    if(xcols!=cols)
-		ajFatal("Assymetric table");
+		ajFatal("Asymmetric table");
 
 	q=ajStrStr(line);
 	q=ajSysStrtok(q,ajStrStr(delim));
@@ -408,11 +408,11 @@ static ajint sigcleave_readSig(AjPFloat2d *matrix,AjBool prokaryote)
 
     ajFloat2dLen(*matrix,&d1,&d2);
     mat = ajFloat2dFloat(*matrix);
-    
+
     for(j=0;j<d2;++j)
     {
 	rt=0.;
-	
+
 	for(i=0;i<d1;++i)
 	    rt += mat[i][j];
 
@@ -446,7 +446,7 @@ static ajint sigcleave_readSig(AjPFloat2d *matrix,AjBool prokaryote)
 	}
     }
 
-    
+
     for(i=0;i<d1;++i)
 	for(j=0;j<d2;++j)
 	    ajFloat2dPut(matrix,i,j,mat[i][j]);
@@ -462,3 +462,4 @@ static ajint sigcleave_readSig(AjPFloat2d *matrix,AjBool prokaryote)
 
     return cols;
 }
+
