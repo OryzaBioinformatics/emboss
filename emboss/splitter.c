@@ -3,6 +3,7 @@
 ** Split a sequence into (overlapping) smaller sequences
 **
 ** @author: Copyright (C) Gary Williams (gwilliam@hgmp.mrc.ac.uk)
+** @Modified: Rewritten for more intuitive overlaps (ableasby@hgmp.mrc.ac.uk)
 ** @@
 **
 ** This program is free software; you can redistribute it and/or
@@ -23,6 +24,10 @@
 #include "emboss.h"
 
 
+static void splitter_write(AjPSeqout seqout, AjPSeq subseq, ajint start,
+			   ajint end, AjPSeq seq);
+
+
 /* @prog splitter *************************************************************
 **
 ** Split a sequence into (overlapping) smaller sequences
@@ -37,69 +42,115 @@ int main(int argc, char **argv)
     AjPSeq seq;
     AjPSeq subseq = NULL;
     AjPStr str = NULL;
-    AjPStr name = NULL;
-    AjPStr value = NULL;
     ajint size;
     ajint overlap;
-    ajint from;
-    ajint to;
-    ajint start;
-    ajint end;
-    ajint seqlen;
-  
+    ajint len;
+    ajint pos;
+    AjBool addover;
+    
     (void) embInit ("splitter", argc, argv);
 
     seqout = ajAcdGetSeqoutall ("outseq");
     seqall = ajAcdGetSeqall ("sequence");
     size = ajAcdGetInt ("size");
     overlap = ajAcdGetInt ("overlap");
+    addover = ajAcdGetBool("addoverlap");
+    
+    subseq = ajSeqNew ();
+    str    = ajStrNew();
 
     while (ajSeqallNext(seqall, &seq))
     {
-	seqlen = ajSeqLen (seq)-1;
-	if (seqlen > size)
+	ajSeqTrim(seq);
+
+	len = ajSeqLen (seq);
+	pos = 0;
+
+	if(!addover)
 	{
-	    subseq = ajSeqNew ();
-	    for (from = 0; from <= seqlen; from += size)
+	    while(pos+size < len-1)
 	    {
-		to = from + size-1;
-		start = from;
-		if (start < 0) {start = 0;}
-
-		end = to + overlap;
-		if (end > seqlen)
-		    end = seqlen;
-
-		(void) ajStrAssSub(&str, ajSeqStr(seq), start, end);
-		(void) ajSeqReplace(subseq, str);
-
-		/* create a nice name for the subsequence */
-		(void) ajStrAss(&name, ajSeqGetName(seq));
-		(void) ajStrAppC(&name, "_");
-		(void) ajStrFromInt(&value, start+1);
-		(void) ajStrApp(&name, value);
-		(void) ajStrAppC(&name, "-");
-		(void) ajStrFromInt(&value, end+1);	
-		(void) ajStrApp(&name, value);
-		(void) ajSeqAssName(subseq, name);
-
-		/* set the description of the subsequence */
-		(void) ajSeqAssDesc(subseq, ajSeqGetDesc(seq));
-
-		/* set the type of the subsequence */
-		(void) ajSeqType(subseq);
-
-		(void) ajSeqAllWrite (seqout, subseq);
+		ajStrAssSubC(&str,ajSeqChar(seq),pos,pos+size-1);
+		ajSeqReplace(subseq, str);
+		splitter_write(seqout,subseq,pos,pos+size-1,seq);
+		pos += size-overlap;
 	    }
 
-	    (void) ajSeqDel (&subseq);
+	    ajStrAssSubC(&str,ajSeqChar(seq),pos,len-1);
+	    ajSeqReplace(subseq, str);
+	    splitter_write(seqout,subseq,pos,len-1,seq);
 	}
 	else
-	    (void) ajSeqAllWrite (seqout, seq);
+	{
+	    while(pos+size+overlap < len-1)
+	    {
+		ajStrAssSubC(&str,ajSeqChar(seq),pos,pos+size+overlap-1);
+		ajSeqReplace(subseq,str);
+		splitter_write(seqout,subseq,pos,pos+size+overlap-1,seq);
+		pos += size;
+	    }
+
+	    ajStrAssSubC(&str,ajSeqChar(seq),pos,len-1);
+	    ajSeqReplace(subseq, str);
+	    splitter_write(seqout,subseq,pos,len-1,seq);
+	}
+	
     }
   
-    (void) ajSeqWriteClose (seqout);
+    ajSeqWriteClose(seqout);
+
+    ajSeqDel(&subseq);
+    ajStrDel(&str);
 
     ajExit ();
     return 0;
+}
+
+
+/* @funcstatic splitter_write  *********************************************
+**
+** Write out split sequence
+**
+** @param [w] seqout [AjPSeqout] Output object
+** @param [w] subseq [AjPSeq] sequence to write
+** @param [r] start [ajint] start offset
+** @param [r] end [ajint] end offset
+** @param [r] seq [AjPSeq] original trimmed sequence
+** @return [void]
+** @@
+******************************************************************************/
+
+static void splitter_write(AjPSeqout seqout, AjPSeq subseq, ajint start,
+			   ajint end, AjPSeq seq)
+{
+    AjPStr name  = NULL;
+    AjPStr value = NULL;
+    
+    name  = ajStrNew();
+    value = ajStrNew();
+
+
+    /* create a nice name for the subsequence */
+    ajStrAss(&name, ajSeqGetName(seq));
+    ajStrAppC(&name, "_");
+    ajStrFromInt(&value, ajSeqBegin(seq)+start);
+    ajStrApp(&name, value);
+    ajStrAppC(&name, "-");
+    ajStrFromInt(&value, ajSeqBegin(seq)+end);	
+    ajStrApp(&name, value);
+    ajSeqAssName(subseq, name);
+    
+    /* set the description of the subsequence */
+    ajSeqAssDesc(subseq, ajSeqGetDesc(seq));
+    
+    /* set the type of the subsequence */
+    ajSeqType(subseq);
+    
+    ajSeqAllWrite (seqout, subseq);
+    
+
+    ajStrDel(&name);
+    ajStrDel(&value);
+
+    return;
 }

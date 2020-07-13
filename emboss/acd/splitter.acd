@@ -22,9 +22,17 @@ integer: size  [
 integer: overlap  [
   optional: "Y"
   minimum: "0"
+  maximum: "@($(size)-1)"
   default: "0"
   prompt: "Overlap between split sequences"
 ]
+
+bool: addoverlap  [
+  optional: "N"
+  default: "N"
+  prompt: "Add overlap to size"
+]
+
 endsection: advanced
 
 section: output [ info: "output Section" type: page ]
