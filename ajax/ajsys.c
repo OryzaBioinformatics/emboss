@@ -564,11 +564,20 @@ char* ajSysStrdup(const char *s)
 
 AjBool ajSysIsRegular(const char *s)
 {
+#if defined (HAVE64)
+    static struct stat64 buf;
+#else
     static struct stat buf;
+#endif
 
+#if defined (HAVE64)
+    if(stat64(s,&buf)==-1)
+	return ajFalse;
+#else
     if(stat(s,&buf)==-1)
 	return ajFalse;
-    
+#endif    
+
     if((ajint)buf.st_mode & AJ_FILE_REG)
 	return ajTrue;
 
@@ -587,10 +596,19 @@ AjBool ajSysIsRegular(const char *s)
 
 AjBool ajSysIsDirectory(const char *s)
 {
+#if defined (HAVE64)
+    static struct stat64 buf;
+#else
     static struct stat buf;
+#endif
 
+#if defined (HAVE64)
+    if(stat64(s,&buf)==-1)
+	return ajFalse;
+#else
     if(stat(s,&buf)==-1)
 	return ajFalse;
+#endif
     
     if((ajint)buf.st_mode & AJ_FILE_DIR)
 	return ajTrue;
@@ -687,7 +705,7 @@ char* ajSysStrtokR(const char *s, const char *t, char **ptrptr, AjPStr *buf)
     return ajStrStr(*buf);
 }
 
-/* @func ajSysFgets ******************************************************
+/* @func ajSysFgets ***********************************************************
 **
 ** An fgets replacement that will cope with Mac OSX <CR> files
 **
@@ -699,7 +717,7 @@ char* ajSysStrtokR(const char *s, const char *t, char **ptrptr, AjPStr *buf)
 ** @@
 ******************************************************************************/
 
-char *ajSysFgets(char *buf, int size, FILE *fp)
+char* ajSysFgets(char *buf, int size, FILE *fp)
 {
 #ifdef __ppc__
     int c;
