@@ -44,20 +44,8 @@ print OUT "
 </HEAD>
 <BODY BGCOLOR=\"#FFFFFF\" text=\"#000000\">
 
-<table align=center bgcolor=\"#000070\" border=0 cellspacing=0 cellpadding=10>
-<tr>
-<td>
 
-<a href=\"../index.html\" onmouseover=\"self.status='Go to the EMBOSS home page';return true\">
-<img border=0 src=\"../emboss_icon.gif\" alt=\"\" width=55 height=55>
-</a>
-
-</td>
-
-<td align=middle valign=middle>
-<font face=\"Arial,Helvetica\" size=6 color=\"#ffffff\">
-<H2>
-EMBOSS: ";
+<!--#include file=\"header1.inc\" -->\n";
 
 }
 
@@ -67,18 +55,7 @@ sub header2 (*) {
     local (*OUT) = @_;
    
 print OUT "
-</H2>
-</font>
-</td>
-
-</tr>
-</table>
-</td>
-
-</tr>
-</table>
-
-<p><hr><p>
+<!--#include file=\"header2.inc\" -->
 
 <!--END OF HEADER-->
 
@@ -94,11 +71,6 @@ print OUT "
 sub footer (*) {
     local (*OUT) = @_;
 print OUT "
-
-</table>
-
-</TD></TR></TABLE>
-</CENTER>
 
 </BODY>
 </HTML>
@@ -121,34 +93,24 @@ print OUT "
 </HEAD>
 <BODY BGCOLOR=\"#FFFFFF\" text=\"#000000\">
 
-<table align=center bgcolor=\"#000070\" border=0 cellspacing=0 cellpadding=10>
-<tr>
-<td>
 
-<a href=\"http://www.uk.embnet.org/Software/EMBOSS/index.html\" onmouseover=\"self.status='Go to the EMBOSS home page';return true\">
-<img border=0 src=\"emboss_icon.gif\" alt=\"\" width=55 height=55>
-</a>
 
+<table align=center border=0 cellspacing=0 cellpadding=0>
+<tr><td valign=top>
+<A HREF=\"http://www.uk.embnet.org/Software/EMBOSS/index.html\" ONMOUSEOVER=\"self.status='Go to the EMBOSS home page';return true\">
+<img border=0 src=\"emboss_icon.jpg\" alt=\"\" width=150 height=48></a>
 </td>
-
-<td align=middle valign=middle>
-<font face=\"Arial,Helvetica\" size=6 color=\"#ffffff\">
-<H2>
-EMBOSS: The Applications (programs)
-</H2>
-
-
-</font>
-</td>
-
-</tr>
+<td align=left valign=middle>
+<b><font size=\"+6\"> 
+The Applications (programs)
+</font></b>
+</td></tr>
 </table>
-</td>
+<br>&nbsp;
+<p>
 
-</tr>
-</table>
 
-<p><hr><p>
+
 
 The programs are listed in alphabetical order, Look at the individual
 applications or go to the 
@@ -183,9 +145,6 @@ print OUT "
 
 
 
-</TD></TR></TABLE>
-</CENTER>
-
 </BODY>
 </HTML>
 ";
@@ -207,10 +166,10 @@ print OUT "
 
 ###################################################################
 # check that we are on the CVS machine
-require 'hostname.pl';
-if (hostname() ne "tin") {
-  die "This script should be executed on the CVS machine 'tin'\n";
-}
+#require 'hostname.pl';
+#if (hostname() ne "tin") {
+#  die "This script should be executed on the CVS machine 'tin'\n";
+#}
 ###################################################################
 
 
@@ -437,9 +396,9 @@ REMEMBER TO EDIT THESE FILES:
       if (-e "$cvsdoc/html/$x.html") {
 # check to see if the html file has changed
       system "lynx -source $url/$x.html > x.x";
-# change ../emboss_icon.gif and ../index.html to current directory
+# change ../emboss_icon.jpg and ../index.html to current directory
       system "perl -p -i -e 's#\.\.\/index.html#index.html#g;' x.x";
-      system "perl -p -i -e 's#\.\.\/emboss_icon.gif#emboss_icon.gif#g;' x.x";
+      system "perl -p -i -e 's#\.\.\/emboss_icon.jpg#emboss_icon.jpg#g;' x.x";
       if (filediff (0, "$cvsdoc/html/$x.html", "x.x")) {
 	system "cp x.x $cvsdoc/html/$x.html";
 	chmod 0664, "$cvsdoc/html/$x.html";
@@ -451,9 +410,9 @@ REMEMBER TO EDIT THESE FILES:
     } else {
 # it doesn't exist, so create the new html output
       system "lynx -source $url/$x.html > $cvsdoc/html/$x.html";
-# change ../emboss_icon.gif and ../index.html to current directory
+# change ../emboss_icon.jpg and ../index.html to current directory
       system "perl -p -i -e 's#\.\.\/index.html#index.html#g;' $cvsdoc/html/$x.html";
-      system "perl -p -i -e 's#\.\.\/emboss_icon.gif#emboss_icon.gif#g;' $cvsdoc/html/$x.html";
+      system "perl -p -i -e 's#\.\.\/emboss_icon.jpg#emboss_icon.jpg#g;' $cvsdoc/html/$x.html";
       chmod 0664, "$cvsdoc/html/$x.html";
 #     system "cvs add -m'documentation created' $cvsdoc/html/$x.html";
       $cvsdochtmladd .= " $x.html";
@@ -594,9 +553,9 @@ $progs{$p}
   if (-e "$cvsdoc/html/$filename\_group.html") {
 # check to see if the html file has changed
     system "lynx -source $url/$filename\_group.html > x.x";
-# change ../emboss_icon.gif and ../index.html to current directory
+# change ../emboss_icon.jpg and ../index.html to current directory
     system "perl -p -i -e 's#\.\.\/index.html#index.html#g;' x.x";
-    system "perl -p -i -e 's#\.\.\/emboss_icon.gif#emboss_icon.gif#g;' x.x";
+    system "perl -p -i -e 's#\.\.\/emboss_icon.jpg#emboss_icon.jpg#g;' x.x";
     if (filediff (1, "$cvsdoc/html/$filename\_group.html", "x.x")) {
       system "cp x.x $cvsdoc/html/$filename\_group.html";
       chmod 0664, "$cvsdoc/html/$filename\_group.html";
@@ -608,9 +567,9 @@ $progs{$p}
   } else {
 # it doesn't exist, so create the new html output
     system "lynx -source $url/$filename\_group.html > $cvsdoc/html/$filename\_group.html";
-# change ../emboss_icon.gif and ../index.html to current directory
+# change ../emboss_icon.jpg and ../index.html to current directory
     system "perl -p -i -e 's#\.\.\/index.html#index.html#g;' $cvsdoc/html/$filename\_group.html";
-    system "perl -p -i -e 's#\.\.\/emboss_icon.gif#emboss_icon.gif#g;' $cvsdoc/html/$filename\_group.html";
+    system "perl -p -i -e 's#\.\.\/emboss_icon.jpg#emboss_icon.jpg#g;' $cvsdoc/html/$filename\_group.html";
     chmod 0664, "$cvsdoc/html/$filename\_group.html";
 #   system "cvs add -m'documentation created' $cvsdoc/html/$filename\_group.html";
     $cvsdochtmladd .= " $filename\_group.html";
@@ -641,9 +600,9 @@ if (filediff (0, "$docdir/groups.html", "g.g")) {
 if (-e "$cvsdoc/html/groups.html") {
 # check to see if the html file has changed
   system "lynx -source $url/groups.html > x.x";
-# change ../emboss_icon.gif and ../index.html to current directory
+# change ../emboss_icon.jpg and ../index.html to current directory
   system "perl -p -i -e 's#\.\.\/index.html#index.html#g;' x.x";
-  system "perl -p -i -e 's#\.\.\/emboss_icon.gif#emboss_icon.gif#g;' x.x";
+  system "perl -p -i -e 's#\.\.\/emboss_icon.jpg#emboss_icon.jpg#g;' x.x";
   if (filediff (1, "$cvsdoc/html/groups.html", "x.x")) {
     system "cp x.x $cvsdoc/html/groups.html";
     chmod 0664, "$cvsdoc/html/groups.html";
@@ -655,9 +614,9 @@ if (-e "$cvsdoc/html/groups.html") {
 } else {
 # it doesn't exist, so create the new html output
   system "lynx -source $url/groups.html > $cvsdoc/html/groups.html";
-# change ../emboss_icon.gif and ../index.html to current directory
+# change ../emboss_icon.jpg and ../index.html to current directory
   system "perl -p -i -e 's#\.\.\/index.html#index.html#g;' $cvsdoc/html/groups.html";
-  system "perl -p -i -e 's#\.\.\/emboss_icon.gif#emboss_icon.gif#g;' $cvsdoc/html/groups.html";
+  system "perl -p -i -e 's#\.\.\/emboss_icon.jpg#emboss_icon.jpg#g;' $cvsdoc/html/groups.html";
   chmod 0664, "$cvsdoc/html/groups.html";
 # system "cvs add -m'documentation created' $cvsdoc/html/groups.html";
   $cvsdochtmladd .= " groups.html";
