@@ -7,32 +7,28 @@
   </TITLE>
 </HEAD>
 <BODY BGCOLOR="#FFFFFF" text="#000000">
-<table align=center bgcolor="#000070" border=0 cellspacing=0 cellpadding=10>
-<tr>
-<td>
-<a href="index.html" onmouseover="self.status='Go to the EMBOSS home page';return true">
-<img border=0 src="emboss_icon.gif" alt="" width=55 height=55>
-</a>
+
+
+<table align=center border=0 cellspacing=0 cellpadding=0>
+<tr><td valign=top>
+<A HREF="index.html" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
 </td>
-<td align=middle valign=middle>
-<font face="Arial,Helvetica" size=6 color="#ffffff">
-<H2>
-EMBOSS: infoalign
-</H2>
-</font>
-</td>
-</tr>
+<td align=left valign=middle>
+<b><font size="+6">
+
+infoalign
+</font></b>
+</td></tr>
 </table>
-</td>
-</tr>
-</table>
-<p><hr><p>
+<br>&nbsp;
+<p>
+
+
+
 
 <!--END OF HEADER-->
 
-<H1>
-Program infoalign
-</H1>
+
 <H2>
     Function
 </H2>
@@ -112,7 +108,7 @@ Here is a sample session with infoalign:
 Don't display the USA of a sequence 
 <br>
 <pre>
-% infoalign globin.seq -nousa
+% infoalign globin.seq -nousa -out stdout
 </pre>
 
 <p>
@@ -120,7 +116,7 @@ Don't display the USA of a sequence
 Display only the name and sequence length of a sequence 
 <br>
 <pre>
-% infoalign globin.seq -only -name -seqlength
+% infoalign globin.seq -only -name -seqlength -out stdout
 </pre>
 
 <p>
@@ -128,7 +124,7 @@ Display only the name and sequence length of a sequence
 Display only the name, number of gap characters and differences to the consensus sequence
 <br>
 <pre>
-% infoalign globin.seq -only -name -gapcount -diffcount
+% infoalign globin.seq -only -name -gapcount -diffcount -out stdout
 </pre>
 
 <p>
@@ -136,7 +132,7 @@ Display only the name, number of gap characters and differences to the consensus
 Display the name and  number of gaps within a sequence
 <br>
 <pre>
-% infoalign globin.seq -only -name -gaps
+% infoalign globin.seq -only -name -gaps -out stdout
 </pre>
 
 <p>
@@ -144,7 +140,7 @@ Display the name and  number of gaps within a sequence
 Display information formatted with HTML 
 <br>
 <pre>
-% infoalign globin.seq -html
+% infoalign globin.seq -html -out stdout
 </pre>
 
 
@@ -153,7 +149,7 @@ Display information formatted with HTML
 Use the first sequence as the reference sequence to compare to
 <br>
 <pre>
-% infoalign globin.seq -refseq 1
+% infoalign globin.seq -refseq 1 -out stdout
 </pre>
 
 
@@ -166,6 +162,9 @@ Use the first sequence as the reference sequence to compare to
 <pre>
    Mandatory qualifiers:
   [-sequence]          seqset     The sequence alignment to be displayed.
+  [-outfile]           outfile    If you enter the name of a file here then
+                                  this program will write the sequence details
+                                  into that file.
 
    Optional qualifiers:
    -refseq             string     If you give the number in the alignment or
@@ -177,11 +176,13 @@ Use the first sequence as the reference sequence to compare to
                                   used as the reference sequence. By default
                                   the consensus sequence is used as the
                                   reference sequence.
-   -matrix             matrix     Similarity scoring Matrix file
-   -outfile            outfile    If you enter the name of a file here then
-                                  this program will write the sequence details
-                                  into that file.
-   -html               bool       Format output as an HTML table
+   -matrix             matrix     This is the scoring matrix file used when
+                                  comparing sequences. By default it is the
+                                  file 'EBLOSUM62' (for proteins) or the file
+                                  'EDNAFULL' (for nucleic sequences). These
+                                  files are found in the 'data' directory of
+                                  the EMBOSS installation.
+   -html               boolean    Format output as an HTML table
 
    Advanced qualifiers:
    -plurality          float      Set a cut-off for the % of positive scoring
@@ -194,7 +195,7 @@ Use the first sequence as the reference sequence to compare to
                                   for it to give a consensus. Therefore, if
                                   this is set to 100% only columns of
                                   identities contribute to the consensus.
-   -only               bool       This is a way of shortening the command line
+   -only               boolean    This is a way of shortening the command line
                                   if you only want a few things to be
                                   displayed. Instead of specifying:
                                   '-nohead -nousa -noname -noalign -nogaps
@@ -203,21 +204,21 @@ Use the first sequence as the reference sequence to compare to
                                   to get only the sequence length output, you
                                   can specify
                                   '-only -seqlength'
-   -heading            bool       Display column headings
-   -usa                bool       Display the USA of the sequence
-   -name               bool       Display 'name' column
-   -seqlength          bool       Display 'seqlength' column
-   -alignlength        bool       Display 'alignlength' column
-   -gaps               bool       Display number of gaps
-   -gapcount           bool       Display number of gap positions
-   -idcount            bool       Display number of identical positions
-   -simcount           bool       Display number of similar positions
-   -diffcount          bool       Display number of different positions
-   -change             bool       Display % number of changed positions
-   -description        bool       Display 'description' column
+   -heading            boolean    Display column headings
+   -usa                boolean    Display the USA of the sequence
+   -name               boolean    Display 'name' column
+   -seqlength          boolean    Display 'seqlength' column
+   -alignlength        boolean    Display 'alignlength' column
+   -gaps               boolean    Display number of gaps
+   -gapcount           boolean    Display number of gap positions
+   -idcount            boolean    Display number of identical positions
+   -simcount           boolean    Display number of similar positions
+   -diffcount          boolean    Display number of different positions
+   -change             boolean    Display % number of changed positions
+   -description        boolean    Display 'description' column
 
    General qualifiers:
-  -help                bool       report command line options. More
+  -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
 
@@ -239,6 +240,13 @@ Use the first sequence as the reference sequence to compare to
 <td><b>Required</b></td>
 </tr>
 
+<tr>
+<td>[-outfile]<br>(Parameter 2)</td>
+<td>If you enter the name of a file here then this program will write the sequence details into that file.</td>
+<td>Output file</td>
+<td><i>&lt;sequence&gt;</i>.infoalign</td>
+</tr>
+
 <tr bgcolor="#FFFFD0">
 <th align="left" colspan=2>Optional qualifiers</th>
 <th align="left">Allowed values</th>
@@ -254,16 +262,9 @@ Use the first sequence as the reference sequence to compare to
 
 <tr>
 <td>-matrix</td>
-<td>Similarity scoring Matrix file</td>
+<td>This is the scoring matrix file used when comparing sequences. By default it is the file 'EBLOSUM62' (for proteins) or the file 'EDNAFULL' (for nucleic sequences). These files are found in the 'data' directory of the EMBOSS installation.</td>
 <td>Comparison matrix file in EMBOSS data path</td>
 <td>EBLOSUM62 for protein<br>EDNAFULL for DNA</td>
-</tr>
-
-<tr>
-<td>-outfile</td>
-<td>If you enter the name of a file here then this program will write the sequence details into that file.</td>
-<td>Output file</td>
-<td>stdout</td>
 </tr>
 
 <tr>
@@ -430,7 +431,6 @@ program is read in.
         happens in unusual cases - null output, errors etc. 
    -->
 
-The output is displayed on the screen (stdout) by default. 
 
 A typical output file is: 
 
@@ -782,9 +782,6 @@ This program is intended to be used by everyone and everything, from naive users
 
 
 
-
-</TD></TR></TABLE>
-</CENTER>
 
 </BODY>
 </HTML>

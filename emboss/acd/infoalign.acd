@@ -24,6 +24,7 @@ matrix: matrix  [
   optional: "Y"
   information: "Similarity scoring Matrix file"
   protein: "$(sequence.protein)"
+  help: "This is the scoring matrix file used when comparing sequences.  By default it is the file 'EBLOSUM62' (for proteins) or the file 'EDNAFULL' (for nucleic sequences).  These files are found in the 'data' directory of the EMBOSS installation."
 ]
 
 float: plurality  [
@@ -46,8 +47,9 @@ endsection: advanced
 
 section: output [ info: "output Section" type: page ]
 outfile: outfile  [
-  optional: "Y"
-  default: "stdout"
+  parameter: "Y"
+  extension: "infoalign"
+#  default: "stdout"
   information: "Output sequence details to a file"
   help: "If you enter the name of a file here then this program will write the sequence details into that file."
 ]

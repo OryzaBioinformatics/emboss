@@ -1,9 +1,8 @@
 
-                             EMBOSS: infoalign
-     _________________________________________________________________
+                                 infoalign 
+                                      
    
-                               Program infoalign
-                                       
+   
 Function
 
    Information on a multiple sequence alignment
@@ -40,28 +39,31 @@ Usage
 % infoalign globin.seq
 
    Don't display the USA of a sequence
-% infoalign globin.seq -nousa
+% infoalign globin.seq -nousa -out stdout
 
    Display only the name and sequence length of a sequence
-% infoalign globin.seq -only -name -seqlength
+% infoalign globin.seq -only -name -seqlength -out stdout
 
    Display only the name, number of gap characters and differences to the
    consensus sequence
-% infoalign globin.seq -only -name -gapcount -diffcount
+% infoalign globin.seq -only -name -gapcount -diffcount -out stdout
 
    Display the name and number of gaps within a sequence
-% infoalign globin.seq -only -name -gaps
+% infoalign globin.seq -only -name -gaps -out stdout
 
    Display information formatted with HTML
-% infoalign globin.seq -html
+% infoalign globin.seq -html -out stdout
 
    Use the first sequence as the reference sequence to compare to
-% infoalign globin.seq -refseq 1
+% infoalign globin.seq -refseq 1 -out stdout
 
 Command line arguments
 
    Mandatory qualifiers:
   [-sequence]          seqset     The sequence alignment to be displayed.
+  [-outfile]           outfile    If you enter the name of a file here then
+                                  this program will write the sequence details
+                                  into that file.
 
    Optional qualifiers:
    -refseq             string     If you give the number in the alignment or
@@ -73,11 +75,13 @@ Command line arguments
                                   used as the reference sequence. By default
                                   the consensus sequence is used as the
                                   reference sequence.
-   -matrix             matrix     Similarity scoring Matrix file
-   -outfile            outfile    If you enter the name of a file here then
-                                  this program will write the sequence details
-                                  into that file.
-   -html               bool       Format output as an HTML table
+   -matrix             matrix     This is the scoring matrix file used when
+                                  comparing sequences. By default it is the
+                                  file 'EBLOSUM62' (for proteins) or the file
+                                  'EDNAFULL' (for nucleic sequences). These
+                                  files are found in the 'data' directory of
+                                  the EMBOSS installation.
+   -html               boolean    Format output as an HTML table
 
    Advanced qualifiers:
    -plurality          float      Set a cut-off for the % of positive scoring
@@ -90,7 +94,7 @@ Command line arguments
                                   for it to give a consensus. Therefore, if
                                   this is set to 100% only columns of
                                   identities contribute to the consensus.
-   -only               bool       This is a way of shortening the command line
+   -only               boolean    This is a way of shortening the command line
                                   if you only want a few things to be
                                   displayed. Instead of specifying:
                                   '-nohead -nousa -noname -noalign -nogaps
@@ -99,21 +103,21 @@ Command line arguments
                                   to get only the sequence length output, you
                                   can specify
                                   '-only -seqlength'
-   -heading            bool       Display column headings
-   -usa                bool       Display the USA of the sequence
-   -name               bool       Display 'name' column
-   -seqlength          bool       Display 'seqlength' column
-   -alignlength        bool       Display 'alignlength' column
-   -gaps               bool       Display number of gaps
-   -gapcount           bool       Display number of gap positions
-   -idcount            bool       Display number of identical positions
-   -simcount           bool       Display number of similar positions
-   -diffcount          bool       Display number of different positions
-   -change             bool       Display % number of changed positions
-   -description        bool       Display 'description' column
+   -heading            boolean    Display column headings
+   -usa                boolean    Display the USA of the sequence
+   -name               boolean    Display 'name' column
+   -seqlength          boolean    Display 'seqlength' column
+   -alignlength        boolean    Display 'alignlength' column
+   -gaps               boolean    Display number of gaps
+   -gapcount           boolean    Display number of gap positions
+   -idcount            boolean    Display number of identical positions
+   -simcount           boolean    Display number of similar positions
+   -diffcount          boolean    Display number of different positions
+   -change             boolean    Display % number of changed positions
+   -description        boolean    Display 'description' column
 
    General qualifiers:
-  -help                bool       report command line options. More
+  -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    
@@ -122,6 +126,10 @@ Command line arguments
    [-sequence]
    (Parameter 1) The sequence alignment to be displayed. Readable
    sequences Required
+   [-outfile]
+   (Parameter 2) If you enter the name of a file here then this program
+   will write the sequence details into that file. Output file
+   <sequence>.infoalign
    Optional qualifiers Allowed values Default
    -refseq If you give the number in the alignment or the name of a
    sequence, it will be taken to be the reference sequence. The reference
@@ -129,11 +137,12 @@ Command line arguments
    compared. If this is set to 0 then the consensus sequence will be used
    as the reference sequence. By default the consensus sequence is used
    as the reference sequence. Any string is accepted 0
-   -matrix Similarity scoring Matrix file Comparison matrix file in
+   -matrix This is the scoring matrix file used when comparing sequences.
+   By default it is the file 'EBLOSUM62' (for proteins) or the file
+   'EDNAFULL' (for nucleic sequences). These files are found in the
+   'data' directory of the EMBOSS installation. Comparison matrix file in
    EMBOSS data path EBLOSUM62 for protein
    EDNAFULL for DNA
-   -outfile If you enter the name of a file here then this program will
-   write the sequence details into that file. Output file stdout
    -html Format output as an HTML table Yes/No No
    Advanced qualifiers Allowed values Default
    -plurality Set a cut-off for the % of positive scoring matches below
@@ -169,8 +178,7 @@ Input file format
    
 Output file format
 
-   The output is displayed on the screen (stdout) by default. A typical
-   output file is:
+   A typical output file is:
      _________________________________________________________________
    
 # USA             Name        SeqLen    AlignLen        Gaps    GapLen  Ident
