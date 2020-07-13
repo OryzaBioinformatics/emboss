@@ -1,9 +1,30 @@
-#SET emboss_tempdata path_to_directory_$EMBOSS/test
+# tempdata - this is the directory used by the test databases TEMBL, TSW, etc.
+# If you use these databases for testing you must uncomment this line and set
+# the definition to the directory where the databases are installed.
+# By default this is /usr/local/share/EMBOSS/test but the directory can
+# be changed with --prefix when you configure EMBOSS.
+
+# SET emboss_tempdata path_to_directory_$EMBOSS/test
+
+# Proxy - set this if any databases are accessed through a proxy web server.
+# Turn off in the DB definition with proxy: ":" for any
+# databases that are internal and should not go through the proxy.
+
+# SET emboss_proxy "proxy.mydomain.ac.uk:8080"
 
 # Logfile - set this to a file that any user can append to
 # and EMBOSS applications will automatically write log information
 
-#SET emboss_logfile /packages/emboss/emboss/log
+# SET emboss_logfile /packages/emboss/emboss/log
+
+##################################################################
+# Test Databases
+# Used by the qatest.pl scriupt to test an EMBOSS installation.
+# Comment them out if you do not want your users to use them.
+# Examples in the EMBOSS documentation should all run by using
+# TEMBL: in place of EMBL:, TSW: in place of SW:, and so on.
+##################################################################
+
 
 # swissprot (Puffer fish entries)
 # =========
@@ -47,11 +68,17 @@ DB tpir [ type: P dir: $emboss_tempdata/pir
    fields: "des org key"
    comment: "PIR using NBRF access for 4 files" ]
 
+# Genbank (Canadian EMBnet node - so long as they are running SRS version 6)
+# =======
+
 DB tgb [ type: N method: srswww format: genbank
    url: "http://www.cbr.nrc.ca/srs6bin/cgi-bin/wgetz"
    dbalias: genbank
    fields: "sv des org key"
    comment: "Genbank IDs" ]
+
+# Genbank (local copy of the TEMBL entries from Genbank)
+# =======
 
 DB tgenbank [ type: N dir: $emboss_tempdata/genbank
    method: emblcd format: genbank release: 01 
@@ -60,6 +87,12 @@ DB tgenbank [ type: N dir: $emboss_tempdata/genbank
 
 #############################################
 # DATABASE SETTING EXAMPLES
+#
+# Modify these for your own
+# local and remote database definitions
+#
+# See the EMBOSS Administrators Guide 3.0.0
+# for full documentation on DB definitions.
 #############################################
 
 #######################################################################
