@@ -253,11 +253,11 @@ void embPropCalcFragments(char *s, ajint n, ajint begin, AjPList *l, AjPList *pa
     ajint *endsa=NULL;
     double molwt;
     double *molwtsa=NULL;
-    ajint v;
+    AjBool *afrag=NULL;
     ajint mark;
     ajint bwp;
     ajint ewp;
-    
+    ajint *ival;
     ajint defcnt;
 
 
@@ -275,20 +275,25 @@ void embPropCalcFragments(char *s, ajint n, ajint begin, AjPList *l, AjPList *pa
 	if(len==i+1) continue;			   /* Is there a followup? */
 	if(strchr(PROPENZUnfavoured[n],s[i+1])      /* Followed by naughty? */
 	   && !unfavoured) continue;
-	ajListPushApp(t,(void *)i);
+	AJNEW0(ival);
+	*ival=i;
+	ajListPushApp(t,(void *)ival);
 	++defcnt;
     }
 
-    if(defcnt) {
+    if(defcnt)
+    {
       AJCNEW (begsa, (defcnt+1));
       AJCNEW (endsa, (defcnt+1));
       AJCNEW (molwtsa, (defcnt+1));
+      AJCNEW (afrag, (defcnt+1));
     }
 
     for(i=0;i<defcnt;++i)	/* Pop them into a temporary array 	 */
     {
-	(void) ajListPop(t,(void **)&v);
-	endsa[i]=v;
+	(void) ajListPop(t,(void **)&ival);
+	endsa[i]=*ival;
+	AJFREE(ival);
     }
 
 
@@ -304,6 +309,7 @@ void embPropCalcFragments(char *s, ajint n, ajint begin, AjPList *l, AjPList *pa
 	begsa[i]=mark;
 	endsa[i]=ewp;
 	molwtsa[i]=molwt;
+	afrag[i]=ajFalse;
 	mark=ewp+1;
     }
     if(defcnt)			/* Special treatment for last fragment   */
@@ -314,6 +320,7 @@ void embPropCalcFragments(char *s, ajint n, ajint begin, AjPList *l, AjPList *pa
 	begsa[i]=mark;
 	endsa[i]=len-1;
 	molwtsa[i]=molwt;
+	afrag[i]=ajFalse;
 	++defcnt;
     }
 
@@ -324,6 +331,7 @@ void embPropCalcFragments(char *s, ajint n, ajint begin, AjPList *l, AjPList *pa
 	fr->start = begsa[i];
 	fr->end   = endsa[i];
 	fr->molwt = molwtsa[i];
+	fr->isfrag = afrag[i];
 	ajListPush(*l,(void *) fr);
     }
     
@@ -340,6 +348,7 @@ void embPropCalcFragments(char *s, ajint n, ajint begin, AjPList *l, AjPList *pa
 	for(i=0;i<lim;++i)
 	{
 	    AJNEW0 (fr);
+	    fr->isfrag = ajTrue;
 	    fr->molwt=embPropCalcMolwt(s,begsa[i],endsa[i+1]);
 	    if(n==PROPENZCNBR)
 		fr->molwt -= (17.045 + 31.095);
@@ -362,6 +371,7 @@ void embPropCalcFragments(char *s, ajint n, ajint begin, AjPList *l, AjPList *pa
 	    for(j=i+1;j<lim;++j)
 	    {
 		AJNEW0 (fr);
+		fr->isfrag = ajTrue;
 		fr->molwt=embPropCalcMolwt(s,begsa[i],endsa[j]);
 		if(n==PROPENZCNBR)
 		    fr->molwt -= (17.045 + 31.095);
@@ -380,9 +390,10 @@ void embPropCalcFragments(char *s, ajint n, ajint begin, AjPList *l, AjPList *pa
 		
     if(defcnt)
     {
-	AJFREE (molwtsa);
-	AJFREE (endsa);
-	AJFREE (begsa);
+	AJFREE(molwtsa);
+	AJFREE(endsa);
+	AJFREE(begsa);
+	AJFREE(afrag);
     }
     
     ajListFree(&t);
