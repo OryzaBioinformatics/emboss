@@ -9,12 +9,12 @@
 ** modify it under the terms of the GNU General Public License
 ** as published by the Free Software Foundation; either version 2
 ** of the License, or (at your option) any later version.
-** 
+**
 ** This program is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ** GNU General Public License for more details.
-** 
+**
 ** You should have received a copy of the GNU General Public License
 ** along with this program; if not, write to the Free Software
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
@@ -112,6 +112,7 @@ int main(int argc, char **argv)
     ajint idtype=0;
 
     ajint idCount=0;
+    ajint idDone;
     AjPList listInputFiles = NULL;
     void ** inputFiles = NULL;
     ajint nfiles;
@@ -239,12 +240,17 @@ int main(int argc, char **argv)
     embDbiHeader (entFile, filesize, idCount, recsize, dbname, release, date);
 
     if (systemsort)
-        idCount = embDbiSortWriteEntry (entFile, maxidlen,
+        idDone = embDbiSortWriteEntry (entFile, maxidlen,
 					dbname, nfiles, cleanup, sortopt);
     else			/* save entries in entryIds array */
-        embDbiMemWriteEntry (entFile, maxidlen,
-			     idlist, &entryIds);
+    {
+        idDone = embDbiMemWriteEntry (entFile, maxidlen,
+				      idlist, &entryIds);
+	if (idDone != idCount)
+	  ajFatal ("Duplicates not allowed for in-memory processing");
+    }
 
+    embDbiHeaderSize (entFile, 300+(idDone*(ajint)recsize), idDone);
     ajFileClose (&entFile);
 
     /*
@@ -271,7 +277,7 @@ int main(int argc, char **argv)
     if (systemsort)
       embDbiRmEntryFile (dbname, cleanup);
 
-    ajListDel(&listInputFiles);    
+    ajListDel(&listInputFiles);
 
     ajExit ();
     return 0;
@@ -386,7 +392,7 @@ static EmbPEntry dbifasta_NextFlatEntry (AjPFile libr, ajint ifile,
 static AjPRegexp dbifasta_getExpr(AjPStr idformat, ajint *type)
 {
     AjPRegexp exp=NULL;
-    
+
     if(ajStrMatchC(idformat,"simple"))
     {
 	*type = FASTATYPE_SIMPLE;
@@ -431,7 +437,7 @@ static AjPRegexp dbifasta_getExpr(AjPStr idformat, ajint *type)
     }
     else
 	return NULL;
-    
+
     return exp;
 }
 
@@ -460,10 +466,10 @@ static AjBool dbifasta_ParseFasta (AjPFile libr, ajint* dpos,
 				   AjBool systemsort, AjPStr* fields)
 {
   static AjPRegexp wrdexp = NULL;
-  static AjPStr tmpac = NULL; 
-  static AjPStr tmpsv = NULL; 
-  static AjPStr tmpgi = NULL; 
-  static AjPStr tmpdes = NULL; 
+  static AjPStr tmpac = NULL;
+  static AjPStr tmpsv = NULL;
+  static AjPStr tmpgi = NULL;
+  static AjPStr tmpdes = NULL;
   static AjPStr tmpfd = NULL;
   static AjPStr rline = NULL;
   char* fd;
@@ -509,14 +515,14 @@ static AjBool dbifasta_ParseFasta (AjPFile libr, ajint* dpos,
 
   *dpos = ajFileTell(libr);
   ajFileGets (libr, &rline);
-  
+
   if(!ajRegExec(exp,rline))
   {
       ajStrDelReuse(&tmpac);
       ajDebug("Invalid ID line [%S]",rline);
       return ajFalse;
   }
-  
+
   /*
   ** each case needs to set id, tmpac, tmpsv, tmpdes
   ** using empty values if they are not found

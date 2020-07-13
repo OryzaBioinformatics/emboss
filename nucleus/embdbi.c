@@ -102,7 +102,7 @@ EmbPEntry embDbiEntryNew (ajint nfields) {
   return ret;
 }
 
-/* @func embDbiFileList ********************************************
+/* @func embDbiFileList *******************************************************
 **
 ** Makes a list of all files in a directory matching a wildcard file name.
 **
@@ -110,13 +110,13 @@ EmbPEntry embDbiEntryNew (ajint nfields) {
 ** @param [r] wildfile [AjPStr] Wildcard file name
 ** @param [r] trim [AjBool] Expand to search, trim results
 ** @return [AjPList] New list of all files with full paths
-** @@ 
+** @@
 ******************************************************************************/
 
 AjPList embDbiFileList (AjPStr dir, AjPStr wildfile, AjBool trim) {
 
   AjPList retlist=NULL;
-    
+
   DIR* dp;
   struct dirent* de;
   int dirsize;
@@ -127,19 +127,19 @@ AjPList embDbiFileList (AjPStr dir, AjPStr wildfile, AjBool trim) {
   AjPStr s;
   AjPStr s2;
   AjPStr t;
-  
+
   char *p;
   char *q;
   AjPList l;
   int ll;
   int i;
   AjBool d;
-  
+
   ajDebug("embDbiFileList dir '%S' wildfile '%S'\n",
 	  dir, wildfile);
 
   ajStrAssS(&wwildfile,wildfile);
-  
+
   tmp = ajStrNewC(ajStrStr(wwildfile));
 
   if (ajStrLen(dir))
@@ -173,9 +173,9 @@ AjPList embDbiFileList (AjPStr dir, AjPStr wildfile, AjBool trim) {
 	*p='\0';
     }
     s2 = ajStrNewC(q);
-    
+
     ll=ajListLength(l);
-    
+
     d=ajFalse;
     for(i=0;i<ll;++i)
     {
@@ -206,7 +206,7 @@ AjPList embDbiFileList (AjPStr dir, AjPStr wildfile, AjBool trim) {
       ajStrDel(&t);
 
   ajListDel(&l);
-  
+
   ajStrDel(&s);
   ajStrDel(&tmp);
 
@@ -225,7 +225,7 @@ AjPList embDbiFileList (AjPStr dir, AjPStr wildfile, AjBool trim) {
 ** @param [r] wildfile [AjPStr] Wildcard file list
 ** @param [r] exclude [AjPStr] Wildcard file list (NULL if none to exclude)
 ** @return [AjPList] New list of all files with full paths
-** @@ 
+** @@
 ******************************************************************************/
 
 AjPList embDbiFileListExc (AjPStr dir, AjPStr wildfile, AjPStr exclude) {
@@ -241,7 +241,7 @@ AjPList embDbiFileListExc (AjPStr dir, AjPStr wildfile, AjPStr exclude) {
 
   ajDebug("embDbiFileListExc dir '%S' wildfile '%S' exclude '%S'\n",
 	  dir, wildfile, exclude);
-  
+
   if (ajStrLen(dir))
     (void) ajStrAss (&dirfix, dir);
   else
@@ -298,11 +298,11 @@ AjBool embDbiFlatOpenlib(AjPStr lname, AjPFile* libr) {
 	    lname);
     return ajFalse;
   }
-  
+
   return ajTrue;
 }
 
-/* @func embDbiRmFile ********************************************************
+/* @func embDbiRmFile *********************************************************
 **
 ** Remove a file or a set of numbered files
 **
@@ -330,7 +330,7 @@ void embDbiRmFile (AjPStr dbname, const char* ext, ajint nfiles,
   }
   else
     ajFmtPrintS (&cmdstr, "rm %S.%s", dbname, ext);
-    
+
 
   embDbiSysCmd (cmdstr);
 
@@ -362,7 +362,7 @@ void embDbiRmFileI (AjPStr dbname, const char* ext, ajint ifile,
   return;
 }
 
-/* @func embDbiRmEntryFile ***************************************************
+/* @func embDbiRmEntryFile ****************************************************
 **
 ** Remove the sorted entryname file (kept until end of processing
 ** as it is the sorted list of all entries, used to count entries for
@@ -496,7 +496,7 @@ void embDbiHeaderSize (AjPFile file, ajint filesize, ajint recordcnt) {
   return;
 }
 
-/* @func embDbiHeader *******************************************************
+/* @func embDbiHeader *********************************************************
 **
 ** Writes the header for an index file. Resets the file pointer to beginning
 ** of file, and leaves the file pointer at the start of the first record.
@@ -569,7 +569,7 @@ AjPFile embDbiFileSingle (AjPStr dbname, char* extension, ajint num) {
   return ret;
 }
 
-/* @func embDbiFileIn ****************************************************
+/* @func embDbiFileIn *********************************************************
 **
 ** Builds a filename for a summary file to read IDs or some other
 ** index field, for example EMBL.acnum_sort
@@ -591,7 +591,7 @@ AjPFile embDbiFileIn (AjPStr dbname, char* extension) {
   return ret;
 }
 
-/* @func embDbiFileOut ****************************************************
+/* @func embDbiFileOut ********************************************************
 **
 ** Builds a filename for a summary file to save IDs or some other
 ** index field, for example EMBL.acnum_srt2
@@ -882,7 +882,7 @@ void embDbiMemEntry (AjPList idlist, AjPList* fieldList, ajint nfields,
 ******************************************************************************/
 
 ajint embDbiSortWriteEntry (AjPFile entFile, ajint maxidlen,
-			    AjPStr dbname, ajint nfiles, 
+			    AjPStr dbname, ajint nfiles,
 			    AjBool cleanup, AjPStr sortopt)
 {
     AjPFile esortfile;
@@ -907,7 +907,9 @@ ajint embDbiSortWriteEntry (AjPFile entFile, ajint maxidlen,
 	ajRegSubI (idsrtexp, 1, &idstr);
 	if (ajStrMatchCase(idstr, lastidstr))
 	{
-	    ajWarn ("Duplicate ID skipped: '%S'", idstr);
+	    ajWarn ("Duplicate ID skipped: '%S' "
+		    "All hits will point to first ID found",
+		    idstr);
 	    continue;
 	}
 	ajRegSubI (idsrtexp, 2, &tmpstr);
@@ -936,17 +938,18 @@ ajint embDbiSortWriteEntry (AjPFile entFile, ajint maxidlen,
 ** @param [r] maxidlen [ajint] Maximum entry id length
 ** @param [r] idlist [AjPList] List of entry IDs to be written
 ** @param [w] ids [void***] AjPStr* array of IDs from list
-** @return [void]
+** @return [ajint] Number of entries written (excluding duplicates)
 ******************************************************************************/
 
-void embDbiMemWriteEntry (AjPFile entFile, ajint maxidlen,
+ajint embDbiMemWriteEntry (AjPFile entFile, ajint maxidlen,
 			  AjPList idlist, void ***ids)
 {
     ajint idCount;
     ajint i;
     static AjPStr idstr=NULL;
     EmbPEntry entry;
-    
+    ajint idcnt = 0;
+
     idCount = ajListToArray (idlist, ids);
     qsort (*ids, idCount, sizeof(void*), embDbiCmpId);
     ajDebug ("ids sorted\n");
@@ -954,12 +957,18 @@ void embDbiMemWriteEntry (AjPFile entFile, ajint maxidlen,
     for (i = 0; i < idCount; i++)
     {
 	entry = (EmbPEntry)(*ids)[i];
+	if (ajStrMatchCaseC(idstr, entry->entry))
+	{
+	    ajErr ("Duplicate ID found: '%S'. ", idstr);
+	    continue;
+	}
 	ajStrAssC(&idstr, entry->entry);
 	embDbiWriteEntryRecord (entFile, maxidlen, idstr,
 				entry->rpos, entry->spos, entry->filenum);
+	idcnt++;
     }
 
-    return;
+    return idcnt;
 }
 
 /* @func embDbiSortWriteFields ************************************************
@@ -1022,7 +1031,7 @@ ajint embDbiSortWriteFields (AjPStr dbname, AjPStr release,
 
     ajFmtPrintS(&tmpstr, "%d", nentries);
     idwidth = ajStrLen(tmpstr);
-      
+
     if (!idsrtexp)
       idsrtexp = ajRegCompC ("^([^ ]+) +");
     if (!toksrtexp)
@@ -1060,12 +1069,15 @@ ajint embDbiSortWriteFields (AjPStr dbname, AjPStr release,
 	ajRegSubI (toksrtexp, 2, &fieldStr);
 	while (!ajStrMatch(idstr, currentid))
 	{
-	    ient++;
+	    ajStrAssS(&lastidstr, currentid);
 	    if (!ajFileGets(elistfile, &eline))
-	      ajFatal ("Error in embDbiSortWriteFields, expected entry %S not found",
+	      ajFatal ("Error in embDbiSortWriteFields, "
+		       "expected entry %S not found",
 		       idstr);
 	    ajRegExec (idsrtexp, eline);
 	    ajRegSubI (idsrtexp, 1, &currentid);
+	    if (!ajStrMatch(lastidstr, currentid))
+	      ient++;
 	}
 	ajFmtPrintF (blistfile, "%S %0*d\n", fieldStr, idwidth, ient);
 	fieldCount++;
@@ -1151,7 +1163,7 @@ ajint embDbiSortWriteFields (AjPStr dbname, AjPStr release,
     return fieldCount;
 }
 
-/* @func embDbiMemWriteFields ************************************************
+/* @func embDbiMemWriteFields *************************************************
 **
 ** Write the fields indices
 **
