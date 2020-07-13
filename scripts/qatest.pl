@@ -80,7 +80,9 @@ sub runtest ($) {
   my %testdir = ();
   my %outdir = ();
   my $testq = 0;
+  my $testa = 0;
   my $testpath="";
+  my $packa="";
 
 # these are globals, used by the caller
 
@@ -126,6 +128,8 @@ sub runtest ($) {
     elsif ($line =~ /^QQ\s*(.*)/) {$qqcmd .= " ; $1"}
     elsif ($line =~ /^IN\s*(.*)/) {$testin .= "$1\n"}
     elsif ($line =~ /^AQ\s*(.*)/) {$testq = 1; $testapp = $1; $apcount{$testapp}++}
+    elsif ($line =~ /^AA\s*(.*)/) {$testa = 1; $testapp = $1; $apcount{$testapp}++}
+    elsif ($line =~ /^AB\s*(.*)/) {$packa = $1}
     elsif ($line =~ /^CL\s+(.*)/) {
       if ($cmdline ne "") {$cmdline .= " "}
       $cmdline .= $1;
@@ -220,12 +224,21 @@ sub runtest ($) {
   }
 
   if ($testq) {	# for "make check" apps (AQ lines) we can skip
-    $testpath = "../../emboss/";
-    if (! (-e "$testpath$testapp")) {return 0} # make check not run
+    $testpath = "../../emboss/"; #  up from the test/qa directory
+    if (! (-e "$testpath$testapp")) {$skipcheck++; return 0} # make check not run
     if ($testappname && defined($acdname{$testapp}) && $acdname{$testapp}) {
       print STDERR "check application $testapp installed - possible old version\n";
     }
-    $testpath = "../$testpath";
+    $testpath = "../$testpath";	# we run from the test/qa/* subdirectory
+  }
+
+  if ($testa) {	# for "embassy" apps (AA lines) we can skip
+    if ($testappname && !defined($acdname{$testapp})) { # embassy make not run
+      $skipembassy++;
+      return 0;
+    }
+
+#    if ($testappname && !defined($acdname{$testapp})) {$skipembassy++; return 0} # embassy make not run
   }
 
 # cd to the test directory (created when ID was parsed)
@@ -628,7 +641,8 @@ $lastid = "";
 $testdef = "";
 $tcount=0;
 $tfail=0;
-
+$skipcheck=0;
+$skipembassy=0;
 $globaltestdelete=$defdelete;
 $globalcomment = "";
 
@@ -686,12 +700,13 @@ if (!$numtests) {
     if (/^[a-z]\S+/) {
       $app = $&;
       if (defined($acdname{$app})) {$acdname{$app} = 1}
+      else {$acdname{$app} = 1}	# embassy apps
     } 
   }
   close WOSSNAME;
 
 #  foreach $app (sort (keys (%acdname))) {
-#    if ($acdname{$app}) {print "$app\n"}
+#    if ($acdname{$app}) {print STDERR "$app\n"}
 #  }
 
 }
@@ -817,7 +832,10 @@ if ($testappname) {
   }
 }
 
+$totskip = $skipcheck + $skipembassy;
+
 print STDERR "Tests total: $tcount pass: $tpass fail: $tfail\n";
+print STDERR "Skipped: $totskip check: $skipcheck embassy: $skipembassy\n";
 
 print STDERR "Time: $alltime seconds\n";
 print LOG "Time: $alltime seconds\n";
