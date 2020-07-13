@@ -28,6 +28,7 @@ matrix: scorefile  [
   optional: "Y"
   information: "Comparison matrix file"
   protein: "$(msf.protein)"
+  help: "This is the scoring matrix file used when comparing sequences.  By default it is the file 'EBLOSUM62' (for proteins) or the file 'EDNAFULL' (for nucleic sequences).  These files are found in the 'data' directory of the EMBOSS installation."
 ]
 
 endsection: advanced

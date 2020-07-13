@@ -16,5 +16,5 @@ bool: get  [
 
 outfile: outfile  [
   required: "@(!$(get))"
-  nullok: "Y"
+  nullok: "$(get)"
 ]

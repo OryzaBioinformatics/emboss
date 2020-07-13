@@ -17,12 +17,6 @@ codon: cfile  [
   information: "Codon usage file"
 ]
 
-integer: window  [
-  optional: "N"
-  default: "30"
-  information: "Averaging window"
-]
-
 endsection: advanced
 
 section: output [ info: "output Section" type: page ]

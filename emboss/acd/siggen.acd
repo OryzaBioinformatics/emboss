@@ -1,39 +1,46 @@
 appl: siggen [
-  documentation: "Generates a sparse protein signature"
-  groups: "PROTEIN:3D STRUCTURE"
+  documentation: "Generates a sparse protein signature from an alignment and residue contact data."
+  groups: "Protein:3D Structure"
+  gui: "yes"
+  batch: "yes"
+  cpu: "low"
 ]
+
+
+
+
 
 section: input [ info: "input Section" type: page ]
 string: algpath  [
   parameter: "Y"
-  prompt: "Location of alignment files for input"
+  prompt: "Location of scop structure-based sequence alignment files (input)"
   default: "./"
 ]
 
 string: algextn  [
   parameter: "Y"
-  prompt: "Extension of alignment files for input"
-  default: ".align"
+  prompt: "Extension of alignment files"
+  default: ".salign"
 ]
-
 endsection: input
+
+
+
+
 
 section: required [ info: "required Section" type: page ]
 integer: sparsity  [
-  parameter: "Y"
+  required: "Y"
   prompt: "% sparsity of signature"
   default: "10"
 ]
 
 bool: randomise  [
-  parameter: "Y"
+  optional: "N"
   prompt: "Generate a randomised signature"
   default: "N"
 ]
 
-endsection: required
-
-section: advanced [ info: "advanced Section" type: page ]
 list: seqoption  [
   required: "@(!$(randomise))"
   default: "3"
@@ -49,7 +56,8 @@ list: seqoption  [
 matrixf: datafile  [
   required: "@($(seqoption)==1)"
   prompt: "Substitution matrix to be used"
-  default: "./EBLOSUM62"
+  default: "EBLOSUM62"
+  help: "This is the scoring matrix file used when comparing sequences."
 ]
 
 list: conoption  [
@@ -78,8 +86,8 @@ integer: conthresh  [
 
 string: conpath  [
   required: "@(!$(randomise))"
-  prompt: "Location of contact files for input"
-  default: "/data/contacts/"
+  prompt: "Location of contact files (input)"
+  default: "./"
 ]
 
 string: conextn  [
@@ -90,13 +98,13 @@ string: conextn  [
 
 string: cpdbpath  [
   required: "@(!$(randomise))"
-  information: "Location of coordinate files for input (embl-like format)"
-  default: "/data/cpdbscop/"
+  information: "Location of domain coordinate files (embl format input)"
+  default: "./"
 ]
 
 string: cpdbextn  [
   required: "@(!$(randomise))"
-  information: "Extension of coordinate files (embl-like format)"
+  information: "Extension of coordinate files"
   default: ".pxyz"
 ]
 
@@ -105,21 +113,28 @@ bool: filterpsim  [
   prompt: "Ignore alignment postitions with post_similar value of 0"
   default: "N"
 ]
+endsection: required
 
-endsection: advanced
+
+
+
 
 section: output [ info: "output Section" type: page ]
 string: sigpath  [
   parameter: "Y"
-  prompt: "Location of signature files for output"
+  prompt: "Location of signature files (output)"
   default: "./"
 ]
 
 string: sigextn  [
   parameter: "Y"
-  prompt: "Extension of signature files for output"
+  prompt: "Extension of signature files"
   default: ".sig"
 ]
-
 endsection: output
+
+
+
+
+
 

@@ -65,7 +65,7 @@ list: fields  [
   information: "Index fields"
   values: "acnum:Accession number;seqvn:Sequence Version and GI;des:Description;"
   minimum: 0
-  maximum: 5
+  maximum: 3
   default: "acnum"
 ]
 

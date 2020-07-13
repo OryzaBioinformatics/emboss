@@ -1,40 +1,141 @@
-appl: sigplot [
-  documentation: "Generates gnuplot data files of signature performance"
-  groups: "PROTEIN:3D STRUCTURE"
+appl: sigplot
+[
+        doc: "Generates data files of signature performance"
+        groups: "PROTEIN:3D STRUCTURE"
+	gui: "yes"
+	batch: "no"
+	cpu: "low"
 ]
 
-infile: hitsin  [
-  parameter: "Y"
-  prompt: "Name of signature hits file for input"
-  default: "my.hits"
+
+
+
+
+section: input [ info: "input Section" type: page ]
+infile: hitsin
+[
+        param: Y
+        prompt: "Name of signature hits file for input"
+        def: "test.sighits.in"
+
 ]
 
-outfile: datafile  [
-  parameter: "Y"
-  prompt: "Name of gnuplot data file for output"
-  default: "my.dat"
+infile: validatin
+[
+        param: Y
+        prompt: "Name of seqsort validation file for input"
+        def: "test.valid.in"
+]
+endsection: input
+
+
+section: required [ info: "required Section" type: page ]
+bool: splithit
+[
+  param: Y
+  required: Y
+  prompt: "Graph 'true' hits as proportion of redundant and non-redundant hits"
+  default: "Y"
+]
+bool: seedid
+[
+  param: Y
+  prompt: "Generate matrix of %id between seed proteins and hits"
+  default: "Y"
 ]
 
-string: true  [
-  parameter: "Y"
-  prompt: "Name of data file for true hits"
-  default: "my_true.dat"
+infile: alignfile  
+[
+  required: "$(seedid)"
+  prompt: "Name of seed alignment file for input"
+
+  default: "test.salign.in"
+  nullok: "Y"	
 ]
 
-string: false  [
-  parameter: "Y"
-  prompt: "Name of data file for false hits"
-  default: "my_false.dat"
+infile: sigalignfile  
+[
+  required: "$(seedid)"
+  prompt: "Name of sigscan alignment file for input"
+  default: "test.sigalign.in"
+  nullok: "Y"	
 ]
 
-string: cross  [
-  parameter: "Y"
-  prompt: "Name of data file for cross hits"
-  default: "my_cross.dat"
+matrixf: submat  
+[
+  required: "$(seedid)"
+  prompt: "Substitution matrix to be used"
+  default: "EBLOSUM62"
+  help: "This is the scoring matrix file used when comparing sequences."
 ]
 
-string: unknown  [
-  parameter: "Y"
-  prompt: "Name of data file for unknown hits"
-  default: "my_unknown.dat"
+
+float: gapopen  
+[
+  required: "$(seedid)"
+  prompt: "Gap insertion penalty"
+  minimum: "1."
+  maximum: "100."
+  default: "10"
+  valid: "Floating point number from 1.0 to 100.0"
+  expected: "10.0 for any sequence"
+  help: "The gap insertion penalty is the score taken away when a gap is created. The best value depends on the choice of comparison matrix. The default value assumes you are using the EBLOSUM62 matrix for protein sequences, and the EDNAFULL matrix for nucleotide sequences."
 ]
+
+float: gapextn  
+[
+  required: "$(seedid)"
+  prompt: "Gap extension penalty"
+  minimum: "0.0"
+  maximum: "10."
+  default: "0.5"
+  valid: "Floating point number from 0.0 to 10.0"
+  expected: "0.5 for any sequence"
+  help: "The gap extension, penalty is added to the standard gap penalty for each base or residue in the gap. This is how long gaps are penalized. Usually you will expect a few long gaps rather than many short gaps, so the gap extension penalty should be lower than the gap penalty. An exception is where one or both sequences are single reads with possible sequencing errors in which case you would expect many single base gaps. You can get this result by setting the gap open penalty to zero (or very low) and using the gap extension penalty to control gap scoring."
+]
+endsection: required
+
+
+
+
+
+
+section: output [ info: "output Section" type: page ]
+outfile: datafile
+[ 
+        param: Y
+        prompt: "Name of GNUPLOT class data file for output"
+        def: "test.dat"
+]
+outfile: ssdatafile
+[ 
+        param: Y
+        prompt: "Name of GNUPLOT specificty/sensitivity data file for output"
+        def: "sensi_speci.dat"
+]
+outfile: matrixout
+[ 
+        required: "$(seedid)"
+        prompt: "Name of output file for %id matrix"
+        def: "testid.mat"
+]
+endsection: output
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

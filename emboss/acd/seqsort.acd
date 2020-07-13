@@ -1,11 +1,18 @@
 appl: seqsort [
-  documentation: "Removes ambiguities from a set of hits resulting from a database search"
-  groups: "PROTEIN: 3D STRUCTURE"
+  documentation: "Reads multiple files of hits and writes a non-ambiguous file of hits (scop families file) plus a validation file."
+  groups: "Protein:3D Structure"
+  gui: "yes"
+  batch: "yes"
+  cpu: "medium"
 ]
+
+
+
+
 
 section: required [ info: "required Section" type: page ]
 list: mode  [
-  parameter: "Y"
+  required: "Y"
   default: "1"
   minimum: "1"
   maximum: "3"
@@ -16,58 +23,62 @@ list: mode  [
   prompt: "Select mode"
 ]
 
-integer: overlap  [
-  parameter: "Y"
-  prompt: "number of overlapping residues required for merging of two hits"
-  default: "10"
-]
-
-endsection: required
-
-section: advanced [ info: "advanced Section" type: page ]
-section: modesection [ info: "modesection Section" type: frame ]
 string: psipath  [
   required: "@($(mode)==1)"
-  prompt: "Location of psiblasts hits files"
+  prompt: "Location of scop hits files (input)"
   default: "./"
 ]
 
 string: psiextn  [
   required: "@($(mode)==1)"
-  information: "Extension of psiblasts hits files"
-  default: ".psiblasts"
+  information: "Extension of scop hits files"
+  default: ".hits"
 ]
 
 string: swisspath  [
   required: "@($(mode)==2)"
-  prompt: "Location of swissparse hits files"
+  prompt: "Location of seqwords hits files"
   default: "./"
 ]
 
 string: swissextn  [
   required: "@($(mode)==2)"
-  information: "Extension of swissparse input files"
+  information: "Extension of seqwords input files"
   default: ".swissparse"
 ]
 
 string: psifile  [
   required: "@($(mode)==3)"
-  prompt: "Name of file containing sorted psiblasts results"
+  prompt: "Name of file containing processed scop hits file (input)"
 ]
 
 string: swissfile  [
   required: "@($(mode)==3)"
-  information: "Name of file containing sorted swissparse results"
+  information: "Name of file containing processed seqwords hits file (input)"
 ]
 
-endsection: modesection
+integer: overlap  [
+  required: "Y"
+  prompt: "number of overlapping residues required for merging of two hits"
+  default: "10"
+]
+endsection: required
 
-endsection: advanced
+
+
+
 
 section: output [ info: "output Section" type: page ]
-string: outfile  [
+outfile: hitsf  [
   parameter: "Y"
-  prompt: "Name of output file"
+  prompt: "Name of scop hits file (output)"
+  default: "seqsort.fam"
 ]
 
+outfile: validf  [
+  parameter: "Y"
+  prompt: "Name of validation file (output)"
+  default: "seqsort.all"
+]
 endsection: output
+

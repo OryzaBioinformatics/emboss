@@ -17,6 +17,7 @@ section: advanced [ info: "advanced Section" type: page ]
 datafile: datafile  [
   optional: "Y"
   information: "nakai database file"
+  directory: "AAINDEX"
   default: "Enakai.dat"
 ]
 

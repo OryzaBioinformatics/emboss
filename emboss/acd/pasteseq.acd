@@ -12,7 +12,7 @@ sequence: sequence  [
 sequence: insseq  [
   parameter: "Y"
   information: "Sequence to insert"
-  type: "@($(sequence.protein) ? protein : nucleotide)"
+  type: "@($(sequence.protein) ? stopprotein : nucleotide)"
 ]
 
 endsection: input

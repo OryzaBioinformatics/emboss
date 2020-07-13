@@ -1,47 +1,61 @@
 appl: contacts [
-  documentation: "Reads coordinate files and writes contact files"
+  documentation: "Reads coordinate files and writes files of intra-chain residue-residue contact data."
   groups: "Protein:3D Structure"
-  gui: yes
-  batch: yes
-  cpu: high
+  gui: "yes"
+  batch: "yes"
+  cpu: "high"
 ]
+
+
 
 section: input [ info: "input Section" type: page ]
 string: cpdb  [
   parameter: "Y"
-  information: "Location of coordinate files for input (embl-like format)"
+  information: "Location of coordinate files (embl format input)"
   default: "./"
 ]
 
 string: cpdbextn  [
   parameter: "Y"
-  information: "Extension of coordinate files (embl-like format)"
+  information: "Extension of coordinate files"
   default: ".pxyz"
 ]
 
+string: vdwf  [
+  required: "Y"
+  prompt: "Name of data file with van der Waals radii"
+  default: "Evdw.dat"
+]
 endsection: input
+
+
+
+
 
 section: required [ info: "required Section" type: page ]
 float: thresh  [
-  parameter: "Y"
+  required: "Y"
   information: "Threshold contact distance"
   default: "1.0"
 ]
+endsection: required
 
+
+
+
+
+section: advanced [ info: "advanced Section" type: page ]
 float: ignore  [
-  parameter: "Y"
+  optional: "N"
   information: "Threshold ignore distance"
   help: "If any two atoms from two different residues are at least this distance apart then no futher inter-atomic contacts will be checked for for that residue pair . This speeds the calculation up considerably."
   default: "20.0"
 ]
+endsection: advanced
 
-string: vdwf  [
-  parameter: "Y"
-  prompt: "Name of data file with van der Waals radii"
-  default: "Evdw.dat"
-]
 
-endsection: required
+
+
 
 section: output [ info: "output Section" type: page ]
 string: con  [
@@ -55,11 +69,22 @@ string: conextn  [
   information: "Extension of contact files"
   default: ".con"
 ]
+
 outfile: conerrf  [
-  parameter: "Y"
+  required: "Y"
   prompt: "Name of log file for the build"
   default: "contacts.log"
 ]
-
 endsection: output
+
+
+
+
+
+
+
+
+
+
+
 

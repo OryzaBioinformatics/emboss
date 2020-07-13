@@ -14,7 +14,7 @@ sequence: sequencea  [
 
 sequence: sequenceb  [
   parameter: "y"
-  type: "@($(sequencea.protein) ? protein : nucleotide)"
+  type: "@($(sequencea.protein) ? stopprotein : nucleotide)"
 ]
 
 endsection: input

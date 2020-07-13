@@ -1,47 +1,54 @@
 appl: sigscan [
-  documentation: "Scans a sparse protein signature against swissprot"
-  groups: "PROTEIN:3D STRUCTURE"
-  gui: yes
-  batch: yes
-  cpu: medium
+  documentation: "Scans a signature against swissprot and writes a signature hits files"
+  groups: "Protein:3D Structure"
+  gui: "yes"
+  batch: "yes"
+  cpu: "medium"
 ]
+
+
+
 
 section: input [ info: "input Section" type: page ]
 infile: sigin  [
   parameter: "Y"
-  prompt: "Name of signature file for input"
+  prompt: "Name of signature file (input)"
   default: "test.sig"
 ]
 
 seqall: database  [
-  parameter: "Y"
-  prompt: "Name of sequence database to search"
+  required: "Y"
+  prompt: "Name of swissprot sequence database to search"
   default: "./test.seq"
 ]
 
 infile: targetf  [
-  parameter: "Y"
-  prompt: "Name of (optionally grouped) scop families file for input"
-  default: "test.fam"
+  prompt: "Name of validation (input)"
+  required: "Y"
+  default: "test.valid.in"
 ]
-
 endsection: input
+
+
+
+
 
 section: required [ info: "required Section" type: page ]
 integer: thresh  [
-  parameter: "Y"
+  required: "Y"
   information: "Minimum length (residues) of overlap required for two hits with the same code to be counted as the same hit."
   default: "20"
 ]
 
 matrixf: sub  [
-  parameter: "Y"
+  required: "Y"
   prompt: "Residue substitution matrix"
-  default: "./EBLOSUM62"
+  default: "EBLOSUM62"
+  help: "This is the scoring matrix file used when comparing sequences."
 ]
 
 float: gapo  [
-  parameter: "Y"
+  required: "Y"
   information: "Gap insertion penalty"
   minimum: "1."
   maximum: "100."
@@ -52,7 +59,7 @@ float: gapo  [
 ]
 
 float: gape  [
-  parameter: "Y"
+  required: "Y"
   information: "Gap extension penalty"
   minimum: "0.0"
   maximum: "10."
@@ -66,7 +73,7 @@ list: nterm  [
   required: "Y"
   default: "1"
   minimum: "1"
-  maximum: "1"
+  maximum: "3"
   values: "1: Align anywhere and allow only complete signature-sequence fit,2: Align anywhere and allow partial signature-sequence fit,3: Use empirical gaps only"
   delimiter: ","
   codedelimiter: ":"
@@ -74,26 +81,36 @@ list: nterm  [
   prompt: "Select number"
 ]
 
-endsection: required
-
-section: output [ info: "output Section" type: page ]
 integer: nhits  [
-  parameter: "Y"
+  required: "Y"
   information: "Number of hits to output"
   default: "100"
 ]
+endsection: required
 
+
+
+
+
+section: output [ info: "output Section" type: page ]
 outfile: hitsf  [
   parameter: "Y"
-  prompt: "Name of signature hits file for output"
-  default: "test.hits"
+  prompt: "Name of signature hits file (output)"
+  default: "test.sighits"
 ]
 
 outfile: alignf  [
   parameter: "Y"
-  prompt: "Name of signature alignments file for output"
-  default: "test.align"
+  prompt: "Name of signature alignments file (output)"
+  default: "test.sigalign"
 ]
-
 endsection: output
+
+
+
+
+
+
+
+
 

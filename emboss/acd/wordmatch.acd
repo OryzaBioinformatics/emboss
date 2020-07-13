@@ -11,7 +11,7 @@ sequence: asequence  [
 
 sequence: bsequence  [
   parameter: "Y"
-  type: "@($(asequence.protein) ? protein : nucleotide)"
+  type: "@($(asequence.protein) ? stopprotein : nucleotide)"
 ]
 
 endsection: input

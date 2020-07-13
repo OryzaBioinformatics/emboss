@@ -14,7 +14,7 @@ sequence: sequencea  [
 
 seqall: seqall  [
   parameter: "Y"
-  type: "@($(sequencea.protein) ? protein : nucleotide)"
+  type: "@($(sequencea.protein) ? stopprotein : nucleotide)"
 ]
 
 endsection: input
@@ -37,7 +37,7 @@ float: gapextend  [
   maximum: "10.0"
   default: "@($(sequencea.protein)? 0.5 : 0.5)"
   expected: "0.5 for any sequence"
-  help: "The gap extension, penalty is added to the standard gap penalty for each base or residue in the gap. This is how long gaps are penalized. Usually you will expect a few long gaps rather than many short gaps, so the gap extension penalty should be lower than the gap penalty. An exception is where one or both sequences are single reads with possible sequencing errors in which case you would expect many single base gaps. You can get this result by setting the gap open penalty to zero (or very low) and using the gap extension penalty to control gap scoring."
+  help: "The gap extension penalty is added to the standard gap penalty for each base or residue in the gap. This is how long gaps are penalized. Usually you will expect a few long gaps rather than many short gaps, so the gap extension penalty should be lower than the gap penalty. An exception is where one or both sequences are single reads with possible sequencing errors in which case you would expect many single base gaps. You can get this result by setting the gap open penalty to zero (or very low) and using the gap extension penalty to control gap scoring."
 ]
 
 endsection: required
@@ -47,6 +47,7 @@ matrixf: datafile  [
   optional: "Y"
   information: "Matrix file"
   protein: "$(sequencea.protein)"
+  help: "This is the scoring matrix file used when comparing sequences.  By default it is the file 'EBLOSUM62' (for proteins) or the file 'EDNAFULL' (for nucleic sequences).  These files are found in the 'data' directory of the EMBOSS installation."
 ]
 
 endsection: advanced

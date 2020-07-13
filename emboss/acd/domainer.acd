@@ -1,39 +1,49 @@
 appl: domainer [
-  documentation: "Build domain coordinate files"
+  documentation: " Reads protein coordinate files and writes domains coordinate files."
   groups: "Utils:Database creation"
+  gui: "yes"
+  batch: "yes"
+  cpu: "low"
 ]
+
+
+
+
 
 section: input [ info: "input Section" type: page ]
 infile: scop  [
-  parameter: "Y"
-  prompt: "Name of scop file for input (embl-like format)"
+  required: "Y"
+  prompt: "Name of scop classification file (embl format input)"
   default: "Escop.dat"
 ]
 
 string: cpdb  [
   parameter: "Y"
-  information: "Location of coordinate files for input (embl-like format)"
-  default: "./"
-]
-
-endsection: input
-
-section: output [ info: "output Section" type: page ]
-string: cpdbscop  [
-  parameter: "Y"
-  information: "Location of coordinate files for output (embl-like format)"
+  information: "Location of protein coordinate files (embl format input)"
   default: "./"
 ]
 
 string: cpdbextn  [
   parameter: "Y"
-  information: "Extension of coordinate files (embl-like format)"
+  information: "Extension of coordinate files (embl format)"
   default: ".pxyz"
+]
+endsection: input
+
+
+
+
+
+section: output [ info: "output Section" type: page ]
+string: cpdbscop  [
+  parameter: "Y"
+  information: "Location of domain coordinate files (embl format output)"
+  default: "./"
 ]
 
 string: pdbscop  [
   parameter: "Y"
-  information: "Location of coordinate files for output (pdb format)"
+  information: "Location of domain coordinate files (pdb format output)"
   default: "./"
 ]
 
@@ -44,15 +54,24 @@ string: pdbextn  [
 ]
 
 outfile: cpdberrf  [
-  parameter: "Y"
-  prompt: "Name of log file for the embl-like format build"
-  default: "domainer.log1"
+  required: "Y"
+  prompt: "Name of log file for the embl format build"
+  default: "domainer_embl.log"
 ]
 
 outfile: pdberrf  [
-  parameter: "Y"
+  required: "Y"
   prompt: "Name of log file for the pdb format build"
-  default: "domainer.log2"
+  default: "domainer_pdb.log"
 ]
 endsection: output
+
+
+
+
+
+
+
+
+
 

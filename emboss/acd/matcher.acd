@@ -11,7 +11,7 @@ sequence: sequencea  [
 
 sequence: sequenceb  [
   parameter: "Y"
-  type: "@($(sequencea.protein) ? protein : nucleotide)"
+  type: "@($(sequencea.protein) ? stopprotein : nucleotide)"
 ]
 
 endsection: input
@@ -21,6 +21,7 @@ matrix: datafile  [
   optional: "Y"
   information: "Matrix file"
   protein: "$(sequencea.protein)"
+  help: "This is the scoring matrix file used when comparing sequences.  By default it is the file 'EBLOSUM62' (for proteins) or the file 'EDNAFULL' (for nucleic sequences).  These files are found in the 'data' directory of the EMBOSS installation."
 ]
 
 integer: alternatives  [

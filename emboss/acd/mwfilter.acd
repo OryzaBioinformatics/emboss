@@ -19,6 +19,12 @@ float: tolerance  [
   default: "50.0"
 ]
 
+bool: showdel [
+  optional: Y
+  information: "Output deleted mwts"
+  default: N
+]
+
 endsection: required
 
 section: advanced [ info: "advanced Section" type: page ]

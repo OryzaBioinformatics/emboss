@@ -27,13 +27,13 @@ integer: bins  [
   information: "Number of bars"
 ]
 
-integer: sidebyside  [
-  optional: "y"
-  default: "1"
-  minimum: "0"
-  maximum: "1"
-  information: "Display sets next to each other"
-]
+#integer: sidebyside  [
+#  optional: "y"
+#  default: "1"
+#  minimum: "0"
+#  maximum: "1"
+#  information: "Display sets next to each other"
+#]
 
 integer: xstart  [
   optional: "y"
