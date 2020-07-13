@@ -1,7 +1,7 @@
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #    $RCSfile: efunc.i,v $
-#    $Revision: 1.1 $
-#    $Date: 2001/07/16 08:42:02 $
+#    $Revision: 1.2 $
+#    $Date: 2002/08/06 10:07:21 $
 #    $Author: rice $
 #
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -24,13 +24,23 @@ $EFUNC_DB=$Library:[EFUNC group:$MISC_LIBS
 $EFUNC_FORMAT=$LibFormat:[fileType:$EFUNC_FILE syntax:$EFUNC_SYNTAX 
   printFormat:table3 fields:{
     $Field:[$DF_ALL]
-    $Field:[$DF_ID code:id index:id indexToken:id]
-    $Field:[$DF_Module code:mod index:str indexToken:mod ]
-    $Field:[$DF_Library code:lib index:str indexToken:lib ]
-    $Field:[$DF_Type code:typ index:str indexToken:typ ]
+    $Field:[$DF_ID code:id index:id indexToken:id
+#      sortable:y sortTokens:{id}
+    ]
+    $Field:[$DF_Module code:mod index:str indexToken:mod
+#      sortable:y sortTokens:{mod}
+    ]
+    $Field:[$DF_Library code:lib index:str indexToken:lib
+#      sortable:y sortTokens:{lib}
+    ]
+    $Field:[$DF_Type code:typ index:str indexToken:typ
+#      sortable:y sortTokens:{typ}
+    ]
     $Field:[$DF_Description code:des index:str indexToken:des ]
     $Field:[$DF_Input code:par index:str indexToken:par ]
-    $Field:[$DF_Returns code:ret index:str indexToken:retType]
+    $Field:[$DF_Returns code:ret index:str indexToken:retType
+#      sortable:y sortTokens:{retType}
+    ]
     $Field:[$DF_Prototype code:proto]
     $Field:[$DF_Body code:body index:str indexToken:btext]
   }
