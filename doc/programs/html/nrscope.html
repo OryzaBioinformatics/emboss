@@ -7,32 +7,29 @@
   </TITLE>
 </HEAD>
 <BODY BGCOLOR="#FFFFFF" text="#000000">
-<table align=center bgcolor="#000070" border=0 cellspacing=0 cellpadding=10>
-<tr>
-<td>
-<a href="index.html" onmouseover="self.status='Go to the EMBOSS home page';return true">
-<img border=0 src="emboss_icon.gif" alt="" width=55 height=55>
-</a>
+
+
+
+<table align=center border=0 cellspacing=0 cellpadding=0>
+<tr><td valign=top>
+<A HREF="index.html" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
 </td>
-<td align=middle valign=middle>
-<font face="Arial,Helvetica" size=6 color="#ffffff">
-<H2>
-EMBOSS: nrscope
-</H2>
-</font>
-</td>
-</tr>
+<td align=left valign=middle>
+<b><font size="+6">
+
+nrscope
+</font></b>
+</td></tr>
 </table>
-</td>
-</tr>
-</table>
-<p><hr><p>
+<br>&nbsp;
+<p>
+
+
+
+
 
 <!--END OF HEADER-->
 
-<H1>
-Program nrscope
-</H1>
 <H2>
     Function
 </H2>
@@ -172,7 +169,8 @@ D5HBIB_
   [-extn]              string     File extension of clean domain coordinate
                                   files
   [-thresh]            float      The % sequence identity redundancy threshold
-  [-datafile]          matrixf    Residue substitution matrix
+  [-datafile]          matrixf    This is the scoring matrix file used when
+                                  comparing sequences.
   [-gapopen]           float      The gap insertion penalty is the score taken
                                   away when a gap is created. The best value
                                   depends on the choice of comparison matrix.
@@ -201,7 +199,7 @@ D5HBIB_
    Optional qualifiers: (none)
    Advanced qualifiers: (none)
    General qualifiers:
-  -help                bool       report command line options. More
+  -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
 
@@ -240,13 +238,13 @@ D5HBIB_
 <tr>
 <td>[-thresh]<br>(Parameter 4)</td>
 <td>The % sequence identity redundancy threshold</td>
-<td>Any integer value</td>
+<td>Any numeric value</td>
 <td>95.0</td>
 </tr>
 
 <tr>
 <td>[-datafile]<br>(Parameter 5)</td>
-<td>Residue substitution matrix</td>
+<td>This is the scoring matrix file used when comparing sequences.</td>
 <td>Comparison matrix file in EMBOSS data path</td>
 <td>EBLOSUM62</td>
 </tr>
@@ -648,15 +646,21 @@ None.
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
+<tr><td><a href="aaindexextract.html">aaindexextract</a></td><td>Extract data from AAINDEX</td></tr>
 <tr><td><a href="cutgextract.html">cutgextract</a></td><td>Extract data from CUTG</td></tr>
-<tr><td><a href="domainer.html">domainer</a></td><td>Build domain coordinate files</td></tr>
+<tr><td><a href="domainer.html">domainer</a></td><td>Reads protein coordinate files and writes domains coordinate files</td></tr>
+<tr><td><a href="funky.html">funky</a></td><td>Reads clean coordinate files and writes file of protein-heterogen contact data</td></tr>
+<tr><td><a href="groups.html">groups</a></td><td>Removes redundant hits from a scop families file</td></tr>
+<tr><td><a href="hetparse.html">hetparse</a></td><td>Converts raw dictionary of heterogen groups to a file in embl-like format</td></tr>
+<tr><td><a href="pdbparse.html">pdbparse</a></td><td>Parses pdb files and writes cleaned-up protein coordinate files</td></tr>
 <tr><td><a href="pdbtosp.html">pdbtosp</a></td><td>Convert raw swissprot:pdb equivalence file to embl-like format</td></tr>
 <tr><td><a href="printsextract.html">printsextract</a></td><td>Extract data from PRINTS</td></tr>
 <tr><td><a href="prosextract.html">prosextract</a></td><td>Builds the PROSITE motif database for patmatmotifs to search</td></tr>
 <tr><td><a href="rebaseextract.html">rebaseextract</a></td><td>Extract data from REBASE</td></tr>
 <tr><td><a href="scope.html">scope</a></td><td>Convert raw scop classification file to embl-like format</td></tr>
-<tr><td><a href="scopparse.html">scopparse</a></td><td>Reads raw scop classifications file and writes embl-like format scop classification file</td></tr>
-<tr><td><a href="seqnr.html">seqnr</a></td><td>Converts redundant database results to a non-redundant set of hits</td></tr>
+<tr><td><a href="scopnr.html">scopnr</a></td><td>Removes redundant domains from a scop classification file</td></tr>
+<tr><td><a href="scopparse.html">scopparse</a></td><td>Converts raw scop classification files to a file in embl-like format</td></tr>
+<tr><td><a href="scopseqs.html">scopseqs</a></td><td>Adds pdb and swissprot sequence records to a scop classification file</td></tr>
 <tr><td><a href="tfextract.html">tfextract</a></td><td>Extract data from TRANSFAC</td></tr>
 </table>
 
@@ -762,9 +766,6 @@ for use by others.
 
 
 
-
-</TD></TR></TABLE>
-</CENTER>
 
 </BODY>
 </HTML>

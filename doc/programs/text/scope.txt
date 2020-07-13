@@ -1,9 +1,8 @@
 
-                               EMBOSS: scope
-     _________________________________________________________________
+                                   scope 
+                                      
    
-                                 Program scope
-                                       
+   
 Function
 
    Convert raw scop classification file to embl-like format
@@ -57,7 +56,7 @@ Command line arguments
    Optional qualifiers: (none)
    Advanced qualifiers: (none)
    General qualifiers:
-  -help                bool       report command line options. More
+  -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    
@@ -214,17 +213,28 @@ Known bugs
 See also
 
    Program name Description
+   aaindexextract Extract data from AAINDEX
    cutgextract Extract data from CUTG
-   domainer Build domain coordinate files
+   domainer Reads protein coordinate files and writes domains coordinate
+   files
+   funky Reads clean coordinate files and writes file of
+   protein-heterogen contact data
+   groups Removes redundant hits from a scop families file
+   hetparse Converts raw dictionary of heterogen groups to a file in
+   embl-like format
    nrscope Converts redundant EMBL-format SCOP file to non-redundant one
+   pdbparse Parses pdb files and writes cleaned-up protein coordinate
+   files
    pdbtosp Convert raw swissprot:pdb equivalence file to embl-like format
    printsextract Extract data from PRINTS
    prosextract Builds the PROSITE motif database for patmatmotifs to
    search
    rebaseextract Extract data from REBASE
-   scopparse Reads raw-, and writes EMBL-like, scop classification files
-   seqnr Converts redundant database results to a non-redundant set of
-   hits
+   scopnr Removes redundant domains from a scop classification file
+   scopparse Converts raw scop classification files to a file in
+   embl-like format
+   scopseqs Adds pdb and swissprot sequence records to a scop
+   classification file
    tfextract Extract data from TRANSFAC
    
 Author(s)

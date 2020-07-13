@@ -1,9 +1,8 @@
 
-                              EMBOSS: nrscope
-     _________________________________________________________________
+                                  nrscope 
+                                      
    
-                                Program nrscope
-                                       
+   
 Function
 
    Converts redundant EMBL-format SCOP file to non-redundant one
@@ -77,7 +76,8 @@ Command line arguments
   [-extn]              string     File extension of clean domain coordinate
                                   files
   [-thresh]            float      The % sequence identity redundancy threshold
-  [-datafile]          matrixf    Residue substitution matrix
+  [-datafile]          matrixf    This is the scoring matrix file used when
+                                  comparing sequences.
   [-gapopen]           float      The gap insertion penalty is the score taken
                                   away when a gap is created. The best value
                                   depends on the choice of comparison matrix.
@@ -106,7 +106,7 @@ Command line arguments
    Optional qualifiers: (none)
    Advanced qualifiers: (none)
    General qualifiers:
-  -help                bool       report command line options. More
+  -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    
@@ -122,11 +122,11 @@ Command line arguments
    (Parameter 3) File extension of clean domain coordinate files Any
    string is accepted .pxyz
    [-thresh]
-   (Parameter 4) The % sequence identity redundancy threshold Any integer
+   (Parameter 4) The % sequence identity redundancy threshold Any numeric
    value 95.0
    [-datafile]
-   (Parameter 5) Residue substitution matrix Comparison matrix file in
-   EMBOSS data path EBLOSUM62
+   (Parameter 5) This is the scoring matrix file used when comparing
+   sequences. Comparison matrix file in EMBOSS data path EBLOSUM62
    [-gapopen]
    (Parameter 6) The gap insertion penalty is the score taken away when a
    gap is created. The best value depends on the choice of comparison
@@ -278,17 +278,28 @@ Known bugs
 See also
 
    Program name Description
+   aaindexextract Extract data from AAINDEX
    cutgextract Extract data from CUTG
-   domainer Build domain coordinate files
+   domainer Reads protein coordinate files and writes domains coordinate
+   files
+   funky Reads clean coordinate files and writes file of
+   protein-heterogen contact data
+   groups Removes redundant hits from a scop families file
+   hetparse Converts raw dictionary of heterogen groups to a file in
+   embl-like format
+   pdbparse Parses pdb files and writes cleaned-up protein coordinate
+   files
    pdbtosp Convert raw swissprot:pdb equivalence file to embl-like format
    printsextract Extract data from PRINTS
    prosextract Builds the PROSITE motif database for patmatmotifs to
    search
    rebaseextract Extract data from REBASE
    scope Convert raw scop classification file to embl-like format
-   scopparse Reads raw-, and writes EMBL-like, scop classification files
-   seqnr Converts redundant database results to a non-redundant set of
-   hits
+   scopnr Removes redundant domains from a scop classification file
+   scopparse Converts raw scop classification files to a file in
+   embl-like format
+   scopseqs Adds pdb and swissprot sequence records to a scop
+   classification file
    tfextract Extract data from TRANSFAC
    
 Author(s)

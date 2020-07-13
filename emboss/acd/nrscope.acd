@@ -35,6 +35,7 @@ matrixf: datafile  [
   parameter: "Y"
   prompt: "Residue substitution matrix"
   default: "EBLOSUM62"
+  help: "This is the scoring matrix file used when comparing sequences."
 ]
 
 float: gapopen  [
