@@ -7,32 +7,32 @@
   </TITLE>
 </HEAD>
 <BODY BGCOLOR="#FFFFFF" text="#000000">
-<table align=center bgcolor="#000070" border=0 cellspacing=0 cellpadding=10>
-<tr>
-<td>
-<a href="index.html" onmouseover="self.status='Go to the EMBOSS home page';return true">
-<img border=0 src="emboss_icon.gif" alt="" width=55 height=55>
-</a>
+
+
+
+
+
+<table align=center border=0 cellspacing=0 cellpadding=0>
+<tr><td valign=top>
+<A HREF="index.html" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
 </td>
-<td align=middle valign=middle>
-<font face="Arial,Helvetica" size=6 color="#ffffff">
-<H2>
-EMBOSS: psiblasts
-</H2>
-</font>
-</td>
-</tr>
+<td align=left valign=middle>
+<b><font size="+6">
+
+psiblasts
+</font></b>
+</td></tr>
 </table>
-</td>
-</tr>
-</table>
-<p><hr><p>
+<br>&nbsp;
+<p>
+
+
+
+
+
 
 <!--END OF HEADER-->
 
-<H1>
-Program psiblasts
-</H1>
 <H2>
     Function
 </H2>
@@ -141,7 +141,7 @@ Here is a sample session with psiblasts:
    Optional qualifiers: (none)
    Advanced qualifiers: (none)
    General qualifiers:
-  -help                bool       report command line options. More
+  -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
 
@@ -180,7 +180,7 @@ Here is a sample session with psiblasts:
 <tr>
 <td>[-evalue]<br>(Parameter 4)</td>
 <td>Threshold E-value for inclusion in family</td>
-<td>Any integer value</td>
+<td>Any numeric value</td>
 <td>0.001</td>
 </tr>
 
@@ -503,13 +503,20 @@ None.
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
-<tr><td><a href="contacts.html">contacts</a></td><td>Reads coordinate files and writes contact files</td></tr>
+<tr><td><a href="contacts.html">contacts</a></td><td>Reads coordinate files and writes files of intra-chain residue-residue contact data</td></tr>
 <tr><td><a href="dichet.html">dichet</a></td><td>Parse dictionary of heterogen groups</td></tr>
-<tr><td><a href="interface.html">interface</a></td><td>Reads coordinate files and writes inter-chain contact files</td></tr>
-<tr><td><a href="scopalign.html">scopalign</a></td><td>Generate alignments for SCOP families</td></tr>
-<tr><td><a href="seqsort.html">seqsort</a></td><td>Removes ambiguities from a set of hits resulting from a database search</td></tr>
-<tr><td><a href="siggen.html">siggen</a></td><td>Generates a sparse protein signature</td></tr>
-<tr><td><a href="sigscan.html">sigscan</a></td><td>Scans a sparse protein signature against swissprot</td></tr>
+<tr><td><a href="hmmgen.html">hmmgen</a></td><td>Generates a hidden Markov model for each alignment in a directory</td></tr>
+<tr><td><a href="interface.html">interface</a></td><td>Reads coordinate files and writes files of inter-chain residue-residue contact data</td></tr>
+<tr><td><a href="profgen.html">profgen</a></td><td>Generates various profiles for each alignment in a directory</td></tr>
+<tr><td><a href="scopalign.html">scopalign</a></td><td>Generate alignments for families in a scop classification file by using STAMP</td></tr>
+<tr><td><a href="scoprep.html">scoprep</a></td><td>Reorder scop classificaiton file so that the representative structure of each family is given first</td></tr>
+<tr><td><a href="scopreso.html">scopreso</a></td><td>Removes low resolution domains from a scop classification file</td></tr>
+<tr><td><a href="seqalign.html">seqalign</a></td><td>Generate extended alignments for families in a scop families file by using CLUSTALW with seed alignments</td></tr>
+<tr><td><a href="seqsearch.html">seqsearch</a></td><td>Generate files of hits for families in a scop classification file by using PSI-BLAST with seed alignments</td></tr>
+<tr><td><a href="seqsort.html">seqsort</a></td><td>Reads multiple files of hits and writes a non-ambiguous file of hits (scop families file) plus a validation file</td></tr>
+<tr><td><a href="seqwords.html">seqwords</a></td><td>Generate file of hits for scop families by searching swissprot with keywords</td></tr>
+<tr><td><a href="siggen.html">siggen</a></td><td>Generates a sparse protein signature from an alignment and residue contact data</td></tr>
+<tr><td><a href="sigscan.html">sigscan</a></td><td>Scans a signature against swissprot and writes a signature hits files</td></tr>
 </table>
 
 <!-- 
@@ -615,9 +622,6 @@ This program is intended to be used by everyone and everything, from naive users
 
 
 
-
-</TD></TR></TABLE>
-</CENTER>
 
 </BODY>
 </HTML>
