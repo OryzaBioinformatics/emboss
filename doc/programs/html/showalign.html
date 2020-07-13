@@ -7,32 +7,33 @@
   </TITLE>
 </HEAD>
 <BODY BGCOLOR="#FFFFFF" text="#000000">
-<table align=center bgcolor="#000070" border=0 cellspacing=0 cellpadding=10>
-<tr>
-<td>
-<a href="index.html" onmouseover="self.status='Go to the EMBOSS home page';return true">
-<img border=0 src="emboss_icon.gif" alt="" width=55 height=55>
-</a>
+
+
+
+
+
+
+<table align=center border=0 cellspacing=0 cellpadding=0>
+<tr><td valign=top>
+<A HREF="index.html" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
 </td>
-<td align=middle valign=middle>
-<font face="Arial,Helvetica" size=6 color="#ffffff">
-<H2>
-EMBOSS: showalign
-</H2>
-</font>
-</td>
-</tr>
+<td align=left valign=middle>
+<b><font size="+6">
+
+showalign
+</font></b>
+</td></tr>
 </table>
-</td>
-</tr>
-</table>
-<p><hr><p>
+<br>&nbsp;
+<p>
+
+
+
+
+
 
 <!--END OF HEADER-->
 
-<H1>
-Program showalign
-</H1>
 <H2>
     Function
 </H2>
@@ -202,44 +203,10 @@ Here is a sample session with showalign:
 <pre>
 
 % showalign
-Display a multiple sequence alignment
-Input sequence set: globin.seq
-Output file [stdout]: 
-                  10        20        30        40        50        60
-          ----:----|----:----|----:----|----:----|----:----|----:----|
-Consensus vhltxeeksavtXlwgkvnvdevggealgrllvvypwtqrffesfgdlssxdavmxnpkv
-HBB_MACFU ....P...n...T.....................................P....G....
-HBD_HUMAN ....P...t..NA........A............................P....G....
-HBB_RABIT ...sS.......A.......e.............................An...N....
-HBB_BOVIN -M..A...a...AF....K..........-...................tA....N....
-HBB_LAMGL .n.sGd..n..HG..S..K..........-........r..........tA....N....
-HBE_HUMAN ..F.A...a...S..S.m..e.A...................d...n...PS.ilG....
-HBE_RABIT ..F.P...CIisKQ..q..i..T...................dn..n...SS.i.G....
-Consensus vhltxeeksavtXlwgkvnvdevggealgrllvvypwtqrffesfgdlssxdavmxnpkv
+Displays a multiple sequence alignment
+Input sequence set: ~/align.pep   
+Output file [align.showalign]:
 
-                  70        80        90       100       110       120
-          ----:----|----:----|----:----|----:----|----:----|----:----|
-Consensus kahgkkvlxsfxdglXhldnlkgtfaklselhcdxxhvdpenfkllgnvlvivlaxhfgk
-HBB_MACFU ........Ga.S...N..........q.......--...............C...H....
-HBD_HUMAN ........Ga.S...A.........sq.......--.......r.......C...Rn...
-HBB_RABIT ........Aa.Se..S..................KL.......r..........sH....
-HBB_BOVIN ........D..Sn.mK...d......A.......KL...............v...Rn...
-HBB_LAMGL ....S...N..G...S........y.........KL.......r.......v...R....
-HBE_HUMAN ........T..G.AiKnm....PA..........--.............m..i..T....
-HBE_RABIT ........T..G.AiKnm.....A..........--..............l....T....
-Consensus kahgkkvlxsfxdglXhldnlkgtfaklselhcdxxhvdpenfkllgnvlvivlaxhfgk
-
-                 130       140       150       160       170       180
-          ----:----|----:----|----:----|----:----|----:----|----:----|
-Consensus eftpqvqaayqkvvagvanalahkyhxxxx
-HBB_MACFU ..........................
-HBD_HUMAN .....m....................
-HBB_RABIT ..........................
-HBB_BOVIN ....Vl..Df.............r..
-HBB_LAMGL ....Dl.................r..ACDH
-HBE_HUMAN ....e....w..l.sA
-HBE_RABIT ....e....w..l.s...I.......
-Consensus eftpqvqaayqkvvagvanalahkyhxxxx
 </pre>
 
 
@@ -267,12 +234,12 @@ Consensus eftpqvqaayqkvvagvanalahkyhxxxx
                                   consensus sequence will be used as the
                                   reference sequence. By default the consensus
                                   sequence is used as the reference sequence.
-   -[no]bottom         bool       If this is true then the refernce sequence
+   -[no]bottom         boolean    If this is true then the refernce sequence
                                   is displayed at the bottom of the alignment
                                   as well as at the top.
    -show               menu       What to show
    -order              menu       Output order of the sequences
-   -[no]similarcase    bool       If this is set True, then when -show is set
+   -[no]similarcase    boolean    If this is set True, then when -show is set
                                   to 'Similarities' or 'Non-identities' and a
                                   residue is similar but not identical to the
                                   reference sequence residue, it will be
@@ -282,8 +249,13 @@ Consensus eftpqvqaayqkvvagvanalahkyhxxxx
                                   this is False then no change to the case of
                                   the residues is made on the basis of their
                                   similarity to the reference sequence.
-   -matrix             matrix     Similarity scoring Matrix file
-   -[no]consensus      bool       If this is true then the consensus line is
+   -matrix             matrix     This is the scoring matrix file used when
+                                  comparing sequences. By default it is the
+                                  file 'EBLOSUM62' (for proteins) or the file
+                                  'EDNAFULL' (for nucleic sequences). These
+                                  files are found in the 'data' directory of
+                                  the EMBOSS installation.
+   -[no]consensus      boolean    If this is true then the consensus line is
                                   displayed at the bottom.
 
    Advanced qualifiers:
@@ -299,10 +271,10 @@ Consensus eftpqvqaayqkvvagvanalahkyhxxxx
                                   24-45, 56-78
                                   1:45, 67=99;765..888
                                   1,5,8,10,23,45,57,99
-   -[no]number         bool       If this option is true then a line giving
+   -[no]number         boolean    If this option is true then a line giving
                                   the positions in the alignment is displayed
                                   every 10 characters above the alignment.
-   -[no]ruler          bool       If this option is true then a ruler line
+   -[no]ruler          boolean    If this option is true then a ruler line
                                   marking every 5th and 10th character in the
                                   alignment is displayed.
    -width              integer    Width of sequence to display
@@ -318,9 +290,7 @@ Consensus eftpqvqaayqkvvagvanalahkyhxxxx
                                   sequence names to be displayed in full plus
                                   a space at the end of the name will
                                   automatically be selected.
-   -[no]names          bool       Set this to be false if you do not wish to
-                                  display the ID name of the sequences
-   -html               bool       Use HTML formatting
+   -html               boolean    Use HTML formatting
    -highlight          range      Regions to colour if formatting for HTML.
                                   If this is left blank, then the sequence is
                                   left alone.
@@ -350,7 +320,7 @@ Consensus eftpqvqaayqkvvagvanalahkyhxxxx
                                   identities contribute to the consensus.
 
    General qualifiers:
-  -help                bool       report command line options. More
+  -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
 
@@ -376,7 +346,7 @@ Consensus eftpqvqaayqkvvagvanalahkyhxxxx
 <td>[-outfile]<br>(Parameter 2)</td>
 <td>If you enter the name of a file here then this program will write the sequence details into that file.</td>
 <td>Output file</td>
-<td>stdout</td>
+<td><i>&lt;sequence&gt;</i>.showalign</td>
 </tr>
 
 <tr bgcolor="#FFFFD0">
@@ -422,7 +392,7 @@ Consensus eftpqvqaayqkvvagvanalahkyhxxxx
 
 <tr>
 <td>-matrix</td>
-<td>Similarity scoring Matrix file</td>
+<td>This is the scoring matrix file used when comparing sequences. By default it is the file 'EBLOSUM62' (for proteins) or the file 'EDNAFULL' (for nucleic sequences). These files are found in the 'data' directory of the EMBOSS installation.</td>
 <td>Comparison matrix file in EMBOSS data path</td>
 <td>EBLOSUM62 for protein<br>EDNAFULL for DNA</td>
 </tr>
@@ -484,13 +454,6 @@ Examples of region specifications are:
 </tr>
 
 <tr>
-<td>-[no]names</td>
-<td>Set this to be false if you do not wish to display the ID name of the sequences</td>
-<td>Yes/No</td>
-<td>Yes</td>
-</tr>
-
-<tr>
 <td>-html</td>
 <td>Use HTML formatting</td>
 <td>Yes/No</td>
@@ -522,7 +485,7 @@ A file of ranges to colour (one range per line) can be specified as '@filename'.
 <tr>
 <td>-setcase</td>
 <td>Sets the threshold for the scores of the positive matches above which the consensus is is upper-case and below which the consensus is in lower-case.</td>
-<td>Any integer value</td>
+<td>Any numeric value</td>
 <td>0</td>
 </tr>
 
@@ -1214,9 +1177,6 @@ This program is intended to be used by everyone and everything, from naive users
 
 
 
-
-</TD></TR></TABLE>
-</CENTER>
 
 </BODY>
 </HTML>

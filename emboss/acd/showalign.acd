@@ -62,6 +62,7 @@ matrix: matrix  [
   optional: "Y"
   information: "Similarity scoring Matrix file"
   protein: "$(sequence.protein)"
+  help: "This is the scoring matrix file used when comparing sequences.  By default it is the file 'EBLOSUM62' (for proteins) or the file 'EDNAFULL' (for nucleic sequences).  These files are found in the 'data' directory of the EMBOSS installation."
 ]
 
 range: uppercase  [
@@ -96,11 +97,11 @@ integer: margin  [
   help: "This sets the length of the left-hand margin for sequence names. If the margin is set at 0 then no margin and no names are displayed. If the margin is set to a value that is less than the length of a sequence name then the sequence name is displayed truncated to the length of the margin. If the margin is set to -1 then the minimum margin width that will allow all the sequence names to be displayed in full plus a space at the end of the name will automatically be selected."
 ]
 
-bool: names  [
-  default: "Y"
-  information: "Show sequence IDs"
-  help: "Set this to be false if you do not wish to display the ID name of the sequences"
-]
+#bool: names  [
+#  default: "Y"
+#  information: "Show sequence IDs"
+#  help: "Set this to be false if you do not wish to display the ID name of the sequences"
+#]
 
 bool: html  [
   default: "N"
@@ -146,7 +147,8 @@ endsection: advanced
 section: output [ info: "output Section" type: page ]
 outfile: outfile  [
   parameter: "Y"
-  default: "stdout"
+  extension: "showalign"
+#  default: "stdout"
   information: "Output sequence details to a file"
   help: "If you enter the name of a file here then this program will write the sequence details into that file."
 ]

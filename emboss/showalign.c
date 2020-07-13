@@ -260,7 +260,7 @@ static ajint showalign_Getrefseq (AjPStr refseq, AjPSeqset seqset)
 
 
  
-/* @funcstatic showalign_NiceMargin ******************************************
+/* @funcstatic showalign_NiceMargin *******************************************
 **
 ** If margin is input as -1, change it to the margin which allows
 ** the longest name to be displayed plus one extra space after it
@@ -309,7 +309,7 @@ static void showalign_NiceMargin(AjPSeqset seqset, ajint *margin,
 
 
 
-/* @funcstatic showalign_Convert ********************************************
+/* @funcstatic showalign_Convert **********************************************
 ** 
 ** Convert all sequences except the refseq to the required symbols
 **
@@ -371,7 +371,7 @@ static void showalign_Convert (AjPSeqset seqset, AjPStr *show,
     return;
 }
 
-/* @funcstatic showalign_MakeAll ********************************************
+/* @funcstatic showalign_MakeAll **********************************************
 **
 ** Leave the sequence unchanged unless we are changing the case depending
 ** on the similarity to the reference sequence
@@ -419,7 +419,7 @@ static void showalign_MakeAll (AjPSeq ref, AjPSeq seq, ajint **sub,
 
 
 
-/* @funcstatic showalign_MakeIdentity ****************************************
+/* @funcstatic showalign_MakeIdentity *****************************************
 **
 ** Convert 'seq' to '.'s except where identical to 'ref'
 **
@@ -454,7 +454,7 @@ static void showalign_MakeIdentity (AjPSeq ref, AjPSeq seq)
 
 
 
-/* @funcstatic showalign_MakeNonidentity *************************************
+/* @funcstatic showalign_MakeNonidentity **************************************
 **
 ** Convert 'seq' to '.'s where identical to 'ref'
 ** Change case to lowercase where similar as given by scoring matrix.
@@ -511,7 +511,7 @@ static void showalign_MakeNonidentity (AjPSeq ref, AjPSeq seq, ajint **sub,
 
 
 
-/* @funcstatic showalign_MakeSimilar ********************************************
+/* @funcstatic showalign_MakeSimilar ******************************************
 **
 ** Convert 'seq' to '.'s except where similar to 'ref', as defined by
 ** similarity scoring matrix.
@@ -567,7 +567,7 @@ static void showalign_MakeSimilar (AjPSeq ref, AjPSeq seq, ajint **sub,
 
 
 
-/* @funcstatic showalign_MakeDissimilar **************************************
+/* @funcstatic showalign_MakeDissimilar ***************************************
 **
 ** Convert 'seq' to '.'s where identical or similar to 'ref', as defined by
 ** similarity scoring matrix.
@@ -601,7 +601,7 @@ static void showalign_MakeDissimilar (AjPSeq ref, AjPSeq seq, ajint **sub,
 
 
 
-/* @funcstatic showalign_Order ********************************************
+/* @funcstatic showalign_Order ************************************************
 **
 ** Orders the sequences
 **
@@ -701,7 +701,7 @@ static void showalign_Order(AjPStr *order, AjPSeqset seqset, AjPSeq consensus,
 
 
 
-/* @funcstatic showalign_Output ********************************************
+/* @funcstatic showalign_Output ***********************************************
 **
 ** Writes the sequences to the output file
 **
@@ -712,7 +712,8 @@ static void showalign_Order(AjPStr *order, AjPSeqset seqset, AjPSeq consensus,
 ** @param [r] margin [ajint] width of margin on left side
 ** @param [r] consensus [AjPSeq] consensus sequence
 ** @param [r] docon [AjBool] display consensus sequence at the bottom
-** @param [r] bottom [AjBool] display refseq at the botton of the alignment as well
+** @param [r] bottom [AjBool] display refseq at the botton of the alignment
+**                            as well
 ** @param [rw] aorder [AjOOrder *] order to display the sequences
 ** @param [r] html [AjBool] format for html display
 ** @param [r] highlight [AjPRange] ranges to highlight
@@ -803,7 +804,7 @@ static ajint showalign_Output (AjPFile outf, AjPSeqset seqset, ajint nrefseq,
 
 
 
-/* @funcstatic showalign_OutputNums *****************************************
+/* @funcstatic showalign_OutputNums *******************************************
 ** 
 ** Writes the numbers line
 **
@@ -857,7 +858,7 @@ static ajint showalign_OutputNums (AjPFile outf, ajint pos, ajint width,
 
 
 
-/* @funcstatic showalign_OutputTicks *****************************************
+/* @funcstatic showalign_OutputTicks ******************************************
 ** 
 ** Writes the ticks line
 **
@@ -901,7 +902,7 @@ static ajint showalign_OutputTicks (AjPFile outf, ajint pos, ajint width,
 
 
 
-/* @funcstatic showalign_OutputSeq ******************************************
+/* @funcstatic showalign_OutputSeq ********************************************
 ** 
 ** Writes the specified sequence line to the output file
 **
@@ -966,7 +967,7 @@ static ajint showalign_OutputSeq (AjPFile outf, AjPSeq seq, ajint pos,
 
 
 
-/* @funcstatic showalign_CompareTwoSeqNames **********************************
+/* @funcstatic showalign_CompareTwoSeqNames ***********************************
 **
 ** Compare two Sequences' Names
 **
@@ -984,7 +985,7 @@ static ajint showalign_CompareTwoSeqNames(const void * a, const void * b)
 }
                
               
-/* @funcstatic  showalign_CompareTwoSeqSimilarities **************************
+/* @funcstatic showalign_CompareTwoSeqSimilarities ****************************
 **
 ** Compare two Sequences by their similarity to the reference sequence
 **
