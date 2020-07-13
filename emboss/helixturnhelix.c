@@ -394,7 +394,7 @@ static void hth_print_hits(AjPList *ajb, ajint n, float minsd, ajint lastcol,
 	ajIntPut(&hp,i,i);
 	ajFloatPut(&hsd,i,lp[i]->sd);
     }
-    ajSortFloatIncI(ajFloatFloat(hsd),ajIntInt(hp),n);
+    ajSortFloatDecI(ajFloatFloat(hsd),ajIntInt(hp),n);
     ajFloatDel(&hsd);
 
     for(i=0;i<n;++i)
@@ -486,7 +486,7 @@ static void hth_report_hits(AjPList *ajb, ajint lastcol,
 	ajIntPut(&hp,i,i);
 	ajFloatPut(&hsd,i,lp[i]->sd);
     }
-    ajSortFloatIncI(ajFloatFloat(hsd),ajIntInt(hp),n);
+    ajSortFloatDecI(ajFloatFloat(hsd),ajIntInt(hp),n);
     ajFloatDel(&hsd);
 
     for(i=0;i<n;++i)
@@ -495,7 +495,7 @@ static void hth_report_hits(AjPList *ajb, ajint lastcol,
 			    lp[ajIntGet(hp,i)]->pos,
 			    lp[ajIntGet(hp,i)]->pos+lastcol-1,
 			    lp[ajIntGet(hp,i)]->wt);
-	ajFmtPrintS(&tmpStr, "*pos %.2f", lp[ajIntGet(hp,i)]->pos);
+	ajFmtPrintS(&tmpStr, "*pos %d", lp[ajIntGet(hp,i)]->pos);
 	ajFeatTagAdd (gf, NULL, tmpStr);
 	ajFmtPrintS(&tmpStr, "*sd %.2f", lp[ajIntGet(hp,i)]->sd);
 	ajFeatTagAdd (gf, NULL, tmpStr);
