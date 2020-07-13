@@ -22,10 +22,10 @@ $docdir = "/data/www/Software/EMBOSS/Apps";
 
 ###################################################################
 # check that we are on the CVS machine
-require 'hostname.pl';
-if (hostname() ne "tin") {
-	die "This script should be executed on the CVS machine 'tin'\n";
-}
+#require 'hostname.pl';
+#if (hostname() ne "tin") {
+#	die "This script should be executed on the CVS machine 'tin'\n";
+#}
 
 
 ###################################################################
@@ -207,9 +207,9 @@ if ($ans !~ /^y/) {
       system "lynx -source $url/$application.html > html/$application.html";
       chmod 0664, "html/$application.html";
     }
-# change ../emboss_icon.gif and ../index.html to current directory
+# change ../emboss_icon.jpg and ../index.html to current directory
     system "perl -p -i -e 's#\.\.\/index.html#index.html#g;' html/$application.html";
-    system "perl -p -i -e 's#\.\.\/emboss_icon.gif#emboss_icon.gif#g;' html/$application.html";
+    system "perl -p -i -e 's#\.\.\/emboss_icon.jpg#emboss_icon.jpg#g;' html/$application.html";
     system "cvs commit -m'documentation created' html/$application.html";
     print "$application.html *created*\n";
 }
