@@ -97,7 +97,7 @@ am__quote = @am__quote@
 havejavac = @havejavac@
 install_sh = @install_sh@
 
-pkgdata_DATA = jemboss.properties readme.txt version filemgr.html
+pkgdata_DATA = jemboss.properties readme.txt version filemgr.html seqList.html
 subdir = jemboss/resources
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_CLEAN_FILES =

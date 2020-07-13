@@ -774,7 +774,8 @@ public class JembossAuthServer
 *
 * Returns the results for a saved project.
 * @param project/directory name
-* @param unused
+* @param unused if showing all results otherwise this
+*        is the name of the file to display
 * @return saved results files
 *
 */
@@ -791,9 +792,27 @@ public class JembossAuthServer
 
     project = tmproot.concat(project);
     File projectDir = new File(project);
-    ssr = loadFilesContent(aj,userName,passwd,
+
+//  ssr = loadFilesContent(aj,userName,passwd,
+//                    projectDir,project,ssr,null);
+    if(cl.equals(""))
+    {
+      ssr = loadFilesContent(aj,userName,passwd,
                       projectDir,project,ssr,null);
-     
+    }
+    else
+    {
+      byte fbuf[]=null;
+      try
+      {
+        fbuf =  aj.getFile(userName,passwd,environ,
+                                  project+"/"+cl);
+        ssr.add(cl);
+        ssr.add(new String(fbuf));
+      }
+      catch(Exception exp){}
+    }
+ 
     ssr.add("status");
     ssr.add("0");
 
@@ -806,6 +825,45 @@ public class JembossAuthServer
     return ssr;
   }
 
+/**
+*  
+* Private server
+*
+* Save a file to a project directory on the server.
+* @return message
+*
+*/
+  public Vector save_project_file(String project, String filename, 
+                    String notes, String userName, byte[] passwd)
+  {
+    Ajax aj = new Ajax();
+    Vector v = new Vector();
+    if(!verifyUser(aj,userName,passwd,v))
+      return v;
+
+    String fn = tmproot + fs + userName+ fs + 
+                     project + fs + filename;
+    boolean ok = aj.putFile(userName,passwd,environ,
+                            fn,notes.getBytes());
+
+    v.add("status");
+    v.add("0");
+    v.add("msg");
+
+    if(ok)
+      v.add("OK"); 
+    else
+    {
+      appendToLogFile("Failed to save file "+fn,errorLog);
+      appendToLogFile("STDERR "+aj.getErrStd(),errorLog);
+      appendToLogFile("STDOUT "+aj.getOutStd(),errorLog);
+    }
+   
+    for(int i=0;i<passwd.length;i++)
+      passwd[i] = '\0';
+        
+    return v;
+  }
 
 /**
 *  
@@ -870,7 +928,7 @@ public class JembossAuthServer
 
     tmproot = tmproot.concat(userName+fs);
 
-    tmprootDir = new File(tmproot);
+//  tmprootDir = new File(tmproot);
    
     lsr.add("status");
     lsr.add("0");

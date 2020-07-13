@@ -51,6 +51,7 @@ public class BuildJembossForm implements ActionListener
 {
 
   private ReportFormat rf;
+  private AlignFormat af;
   private TextFieldSink textf[];
   private TextFieldInt textInt[];
   private TextFieldFloat textFloat[];
@@ -160,15 +161,25 @@ public class BuildJembossForm implements ActionListener
         {
           try
           {
-            new Browser(url,applName,true,text);
+            new Browser(url,applName,true,text,mysettings);
           }
           catch(IOException ioe1){}
+        }
+        else if(mysettings.isUseTFM())
+        {
+          GetHelp thishelp = new GetHelp(applName,mysettings);
+          text = thishelp.getHelpText();
+          try
+          {
+            new Browser(url,applName,true,text,mysettings);
+          }
+          catch(IOException ioe3){}
         }
         else
         { 
           try
           { 
-            new Browser(url,applName);  
+            new Browser(url,applName,mysettings);  
           }
           catch(IOException ioe2)
           {
@@ -177,7 +188,7 @@ public class BuildJembossForm implements ActionListener
             
             try
             {
-              new Browser(url,applName,true,text);
+              new Browser(url,applName,true,text,mysettings);
             }
             catch(IOException ioe3){}
           }
@@ -339,6 +350,9 @@ public class BuildJembossForm implements ActionListener
 
         if(sp.isReportFormat())
           rf = sp.getReportFormat();
+
+        if(sp.isAlignFormat())
+          af = sp.getAlignFormat();
 
         if(sp.isAdvancedSection())
         {
@@ -672,6 +686,10 @@ public class BuildJembossForm implements ActionListener
       else if ( att.startsWith("report") )
       {
         options = options.concat(rf.getReportFormat());
+      }
+      else if ( att.startsWith("align") )
+      {
+        options = options.concat(af.getAlignFormat());
       }
       else if ( att.startsWith("bool") && checkBox[h].isVisible()
                                        && checkBox[h].isEnabled())

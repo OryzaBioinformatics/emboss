@@ -23,6 +23,7 @@
 package org.emboss.jemboss.gui;
 
 import java.util.Hashtable;
+import java.util.Vector;
 import java.awt.*;
 import javax.swing.*;
 import javax.swing.event.*;
@@ -32,10 +33,14 @@ import javax.swing.border.*;
 import javax.swing.undo.UndoManager;
 import javax.swing.undo.CannotRedoException;
 import javax.swing.text.JTextComponent;
+import org.apache.soap.rpc.Parameter;
 
+import org.emboss.jemboss.soap.PrivateRequest;
+import org.emboss.jemboss.soap.JembossSoapException;
 import org.emboss.jemboss.gui.sequenceChooser.SequenceFilter;
 import org.emboss.jemboss.gui.filetree.*;
 import org.emboss.jemboss.gui.AdvancedOptions;
+import org.emboss.jemboss.JembossParams;
 
 /**
 *
@@ -47,11 +52,20 @@ public class ResultsMenuBar extends JMenuBar
 {
 
   private JMenuItem fileMenuShowres;
+  private JMenuItem saveToRemoteFile;
   private JFrame frame;
   private JToolBar toolBar = new JToolBar();
   private JMenuItem undo = new JMenuItem("Undo");
   private JMenuItem redo = new JMenuItem("Redo");
   private UndoManager undoManager = new UndoManager();
+
+
+  public ResultsMenuBar(final JFrame frame, final JTabbedPane rtb,
+                        final Hashtable hashOut, final Hashtable hashIn)
+  {
+    this(frame,rtb,hashOut,hashIn,null,null);
+  }
+
 
 /**
 *
@@ -59,14 +73,20 @@ public class ResultsMenuBar extends JMenuBar
 * @param JFrame frame containing the results
 *
 */
-  public ResultsMenuBar(final JFrame frame)
+  public void setResultsMenuBar(final JFrame frame, boolean addRemoteSaveMenu)
   {
     this.frame = frame;
     add(Box.createRigidArea(new Dimension(5,24)));
 
     JMenu fileMenu = new JMenu("File");
     fileMenu.setMnemonic(KeyEvent.VK_F);
-    fileMenuShowres = new JMenuItem("Save...");
+
+    if(addRemoteSaveMenu)
+    {
+      saveToRemoteFile = new JMenuItem("Save to Server File");
+      fileMenu.add(saveToRemoteFile);
+    }
+    fileMenuShowres = new JMenuItem("Save to Local File...");
     fileMenu.add(fileMenuShowres);
     fileMenu.addSeparator();
 
@@ -111,7 +131,7 @@ public class ResultsMenuBar extends JMenuBar
 */
   public ResultsMenuBar(final JFrame frame, final FileEditorDisplay fed)
   {
-    this(frame);
+    setResultsMenuBar(frame,false);
 
 
     fileMenuShowres.addActionListener(new ActionListener()
@@ -308,10 +328,14 @@ public class ResultsMenuBar extends JMenuBar
 *
 */
   public ResultsMenuBar(final JFrame frame, final JTabbedPane rtb,
-                        final Hashtable hashOut, final Hashtable hashIn)
+                        final Hashtable hashOut, final Hashtable hashIn,
+                        final String project, final JembossParams mysettings)
   {
+    boolean addRemoteSaveMenu = false;
+    if(mysettings != null)
+      addRemoteSaveMenu = true;
 
-    this(frame);
+    setResultsMenuBar(frame, addRemoteSaveMenu);
 
     fileMenuShowres.addActionListener(new ActionListener()
     {
@@ -421,6 +445,34 @@ public class ResultsMenuBar extends JMenuBar
     colourMenu.add(cm);
     add(colourMenu);
 
+  
+    // saving to the remote file system
+    if(addRemoteSaveMenu)
+    {
+      saveToRemoteFile.addActionListener(new ActionListener()
+      {
+        public void actionPerformed(ActionEvent e)
+        {
+          JTextComponent jtc = getJTextComponentAt(rtb,rtb.getSelectedIndex());      
+
+          Vector params = new Vector();
+          params.addElement(new Parameter("project", String.class,
+                            project, null));
+          params.addElement(new Parameter("filename", String.class,
+                            rtb.getTitleAt(rtb.getSelectedIndex()), null));
+          params.addElement(new Parameter("filecontent", String.class,
+                            jtc.getText(), null));
+
+          try
+          {
+            PrivateRequest gReq = new PrivateRequest(mysettings,
+                                    "save_project_file",params);
+          }
+          catch(JembossSoapException jse){}
+
+        }
+      });
+    } 
 
     //Font size selection
     String sizes[] = {"10", "12", "14", "16", "18"};
@@ -536,6 +588,7 @@ public class ResultsMenuBar extends JMenuBar
     {
       JScrollPane jsp = (JScrollPane)(rtb.getComponentAt(index));
       jp = (JPanel)(jsp.getViewport().getView());
+
     }
     catch(ClassCastException cce)
     {

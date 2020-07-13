@@ -97,7 +97,7 @@ am__quote = @am__quote@
 havejavac = @havejavac@
 install_sh = @install_sh@
 pkgdata_DATA = install-jemboss-server.sh keys.sh makeJar.csh \
-makeJNLP.sh template.html README
+makeJNLP.sh makeFileManagerJNLP.sh template.html README
 
 subdir = jemboss/utils
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs

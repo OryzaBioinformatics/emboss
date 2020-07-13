@@ -60,6 +60,18 @@ public class JembossParams
   private int proxyPortNum = 8080;
   private String proxyPortNumName = "proxy.port";
 
+//browser proxy
+
+  private boolean useBrowserProxy = false;
+  private String useBrowserProxyName = "browserProxy.use";
+  private String browserProxyHost = "wwwcache";
+  private String browserProxyHostName = "browserProxy.host";
+  private int browserProxyPort = 8080;
+  private String browserProxyPortName = "browserProxy.port";
+ 
+  private boolean useTFM;
+  private String useTFMName = "tfm.use";
+
   private boolean useProxyAuth = false;
   private String useProxyAuthName = "proxy.auth";
 
@@ -181,6 +193,12 @@ public class JembossParams
     defaults.put(embossEnvironmentName,embossEnvironment);
     defaults.put(acdDirToParseName,acdDirToParse);
 
+    defaults.put(useBrowserProxyName, new Boolean(useBrowserProxy).toString());
+    defaults.put(browserProxyHostName,browserProxyHost);
+    defaults.put(browserProxyPortName,new Integer(browserProxyPort).toString());
+
+    defaults.put(useTFMName,new Boolean(useTFM).toString());
+
     defaults.put(useProxyName, new Boolean(useProxy).toString());
     defaults.put(proxyHostName,proxyHost);
     defaults.put(proxyPortNumName, new Integer(proxyPortNum).toString());
@@ -232,9 +250,15 @@ public class JembossParams
       {
 	useJavaProxy = true;
         useProxy = useJavaProxy;
+        useBrowserProxy = useJavaProxy;
+
 	javaProxyPort = System.getProperty("proxyPort");
 	javaProxyPortNum = Integer.parseInt(javaProxyPort);
 	javaProxyHost = System.getProperty("proxyHost");
+
+        browserProxyHost = javaProxyHost;
+        browserProxyPort = javaProxyPortNum;
+        
 	if(System.getProperty("http.nonProxyHosts") != null) 
         {
 	  useJavaNoProxy = true;
@@ -286,6 +310,7 @@ public class JembossParams
 
   protected void updateSettingsFromProperties()
   {
+
     try
     {
       String tmp;
@@ -299,12 +324,23 @@ public class JembossParams
       acdDirToParse = jembossSettings.getProperty(acdDirToParseName);
       tmp = jembossSettings.getProperty(jembossServerName);
       jembossServer = new Boolean(tmp).booleanValue();
-
+ 
+      
       tmp = jembossSettings.getProperty(useProxyName);
       useProxy = new Boolean(tmp).booleanValue();
       proxyHost = jembossSettings.getProperty(proxyHostName);
       tmp = jembossSettings.getProperty(proxyPortNumName);
       proxyPortNum = Integer.parseInt(tmp);
+
+      tmp = jembossSettings.getProperty(useBrowserProxyName);
+      useBrowserProxy = new Boolean(tmp).booleanValue();
+      browserProxyHost = jembossSettings.getProperty(browserProxyHostName);
+      tmp = jembossSettings.getProperty(browserProxyPortName);
+      browserProxyPort = Integer.parseInt(tmp);
+
+      tmp = jembossSettings.getProperty(useTFMName);
+      useTFM = new Boolean(tmp).booleanValue();
+
       tmp = jembossSettings.getProperty(useProxyAuthName);
       useProxyAuth = new Boolean(tmp).booleanValue();
       proxyAuthUser = jembossSettings.getProperty(proxyAuthUserName);
@@ -455,6 +491,41 @@ public class JembossParams
 	return javaProxyPortNum;
     }
   }
+
+/**
+*
+* True is using a proxy server for the browser
+*
+*/
+  public boolean isBrowserProxy()
+  {
+    return useBrowserProxy;
+  }
+
+/**
+*
+* The name of the proxy server for the browser
+*
+*/
+  public String getBrowserProxyHost()
+  {
+    return browserProxyHost;
+  }
+
+
+/**
+*
+* The port number of the proxy server for the browser
+*
+*/
+  public int getBrowserProxyPort()
+  {
+    return browserProxyPort;
+  }
+
+
+  public boolean isUseTFM() { return useTFM; }
+  
 
 /**
 *

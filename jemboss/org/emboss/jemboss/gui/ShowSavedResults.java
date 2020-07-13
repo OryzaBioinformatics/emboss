@@ -90,7 +90,7 @@ public class ShowSavedResults
 * Show the saved results on the server.
 *
 */
-  public ShowSavedResults(final JembossParams mysettings, final JFrame f) 
+  public ShowSavedResults(final JembossParams mysettings, final JFrame f)
   {
 
     this("Saved Results on Server");
@@ -231,10 +231,10 @@ public class ShowSavedResults
             try
             {
               savedResFrame.setCursor(cbusy);
-              ResultList thisres = new ResultList(mysettings,
-                           convertToOriginal(st.getSelectedValue()),
+              String project = convertToOriginal(st.getSelectedValue());
+              ResultList thisres = new ResultList(mysettings,project,
                                               "show_saved_results");
-              new ShowResultSet(thisres.hash());
+              new ShowResultSet(thisres.hash(),project,mysettings);
               savedResFrame.setCursor(cdone);
             } 
             catch (JembossSoapException eae) 
@@ -265,7 +265,7 @@ public class ShowSavedResults
 	      savedResFrame.setCursor(cbusy);
 	      ResultList thisres = new ResultList(mysettings,
                                    sel,"show_saved_results"); 
-              new ShowResultSet(thisres.hash());
+              new ShowResultSet(thisres.hash(),sel,mysettings);
 	      savedResFrame.setCursor(cdone);
 	    } 
             catch (JembossSoapException eae)
@@ -281,6 +281,39 @@ public class ShowSavedResults
   	  {
             statusField.setText("Nothing selected to be displayed.");
   	  }
+        }
+      });
+
+      // add a users note for that project
+      JButton addNoteButton = new JButton("Show Notes");
+      addNoteButton.addActionListener(new ActionListener()
+      {
+        public void actionPerformed(ActionEvent e)
+        {
+          String sel = convertToOriginal(st.getSelectedValue());
+          if(sel != null)
+          {
+            try
+            {
+              savedResFrame.setCursor(cbusy);
+              ResultList thisres = new ResultList(mysettings,
+                           sel,"Notes","show_saved_results");
+              new ShowResultSet(thisres.hash(),sel,mysettings);
+              savedResFrame.setCursor(cdone);
+            }
+            catch (JembossSoapException eae)
+            {
+              AuthPopup ap = new AuthPopup(mysettings,f);
+              ap.setBottomPanel();
+              ap.setSize(380,170);
+              ap.pack();
+              ap.setVisible(true);
+            }
+          }
+          else
+          {
+            statusField.setText("Selected a project!");
+          }
         }
       });
         
@@ -340,6 +373,7 @@ public class ShowSavedResults
 	}
       });
       resButtonPanel.add(delResButton);
+      resButtonPanel.add(addNoteButton);
       resButtonPanel.add(showResButton);
       resButtonStatus.add(resButtonPanel, BorderLayout.CENTER);
       resButtonStatus.add(statusField, BorderLayout.SOUTH);
@@ -451,12 +485,12 @@ public class ShowSavedResults
 	  try
           {
 	    savedResFrame.setCursor(cbusy);
-	    ResultList thisres = new ResultList(mysettings, 
-                  convertToOriginal(st.getSelectedValue()), 
-                                     "show_saved_results");
+            String project = convertToOriginal(st.getSelectedValue());
+	    ResultList thisres = new ResultList(mysettings,project, 
+                                     "        show_saved_results");
 	    savedResFrame.setCursor(cdone);
 	    if (thisres.getStatus().equals("0")) 
-              new ShowResultSet(thisres.hash());
+              new ShowResultSet(thisres.hash(),project,mysettings);
             else 
               JOptionPane.showMessageDialog(savedResFrame,
                      thisres.getStatusMsg(), "Soap Error",
@@ -488,12 +522,12 @@ public class ShowSavedResults
 	  try
           {
 	    savedResFrame.setCursor(cbusy);
-	    ResultList thisres = new ResultList(mysettings, 
-                  convertToOriginal(st.getSelectedValue()), 
-                                     "show_saved_results");
+            String project = convertToOriginal(st.getSelectedValue());
+	    ResultList thisres = new ResultList(mysettings,project, 
+                                             "show_saved_results");
 	    savedResFrame.setCursor(cdone);
 	    if (thisres.getStatus().equals("0")) 
-              new ShowResultSet(thisres.hash());
+              new ShowResultSet(thisres.hash(),project,mysettings);
             else 
               JOptionPane.showMessageDialog(savedResFrame,
                      thisres.getStatusMsg(), "Soap Error",

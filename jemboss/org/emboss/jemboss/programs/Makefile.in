@@ -96,7 +96,8 @@ am__quote = @am__quote@
 havejavac = @havejavac@
 install_sh = @install_sh@
 pkgdata_DATA = BatchUpdateTimer.java JembossProcess.java ListFile.java \
-ResultList.java ResultsUpdateTimer.java RunEmbossApplication.java
+ResultList.java ResultsUpdateTimer.java RunEmbossApplication.java \
+RunEmbossApplication2.java
 
 subdir = jemboss/org/emboss/jemboss/programs
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs

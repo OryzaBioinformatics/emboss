@@ -30,6 +30,7 @@ import java.util.Hashtable;
 import java.util.Enumeration;
 
 import org.emboss.jemboss.gui.filetree.FileEditorDisplay;
+import org.emboss.jemboss.JembossParams;
 
 /**
 *
@@ -44,9 +45,14 @@ public class ShowResultSet extends JFrame
 * @param the result data to display
 *
 */
-  public ShowResultSet(Hashtable reslist)
+  public ShowResultSet(Hashtable reslist, String project, JembossParams mysettings)
   {
-    this(reslist,null);
+    this(reslist,null,project,mysettings);
+  }
+
+  public ShowResultSet(Hashtable reslist, Hashtable inputFiles)
+  {
+    this(reslist,inputFiles,null,null);
   }
 
 /**
@@ -55,14 +61,13 @@ public class ShowResultSet extends JFrame
 * @param the input data to display
 *
 */
-  public ShowResultSet(Hashtable reslist, Hashtable inputFiles)
+  public ShowResultSet(Hashtable reslist, Hashtable inputFiles, String project,
+                       JembossParams mysettings)
   {
     super("Saved Results on the Server");
     JTabbedPane rtp = new JTabbedPane();
 
     setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-
-    int ntabs = 0;
 
     JPanel s1;
     JScrollPane r1;
@@ -91,6 +96,7 @@ public class ShowResultSet extends JFrame
     {
       s1 = new JPanel(new BorderLayout());
       r1 = new JScrollPane(s1);
+
       FileEditorDisplay fed = new FileEditorDisplay(null,cmd,
                                          reslist.get(cmd));
       fed.setCaretPosition(0);
@@ -98,7 +104,7 @@ public class ShowResultSet extends JFrame
       rtp.add(cmd,r1);
     }
 
-    new ResultsMenuBar(this,rtp,reslist,inputFiles);
+    new ResultsMenuBar(this,rtp,reslist,inputFiles,project,mysettings);
 
     setSize(640,480);
     getContentPane().add(rtp,BorderLayout.CENTER);

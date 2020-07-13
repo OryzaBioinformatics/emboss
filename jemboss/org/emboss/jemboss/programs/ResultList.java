@@ -49,6 +49,12 @@ public class ResultList
     this(mysettings,null,"list_saved_results");
   }
 
+   public ResultList(JembossParams mysettings, String dataset,
+                     String methodname) throws JembossSoapException
+   {
+     this(mysettings,dataset,"",methodname);
+   }
+
 /**
 *
 * Manipulate a dataset.
@@ -58,10 +64,9 @@ public class ResultList
 *
 */
    public ResultList(JembossParams mysettings, String dataset, 
-                              String methodname) throws JembossSoapException 
+                     String options, String methodname) throws JembossSoapException 
    {
 
-     String options = "";
      PrivateRequest eRun;
 
      Vector params = new Vector();

@@ -25,6 +25,8 @@ package org.emboss.jemboss.gui.form;
 import org.emboss.jemboss.parser.ParseAcd;
 import java.awt.Dimension;
 import javax.swing.JCheckBox;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
 
 public class ReportFormat
 {
@@ -108,6 +110,31 @@ public class ReportFormat
     return report;
   }
 
+
+  protected Box getReportCheckBox()
+  {
+    Box pan = new Box(BoxLayout.X_AXIS);
+    // -raccshow  show accession
+    pan.add(getAccCheckBox());
+    pan.add(new LabelTextBox("Accession number",
+        "Displays the accession number in the report"));
+    pan.add(Box.createHorizontalStrut(20));
+
+    // -rdesshow  show description
+    pan.add(getDesCheckBox());
+    pan.add(new LabelTextBox("Description",
+        "Displays the sequence description in the report"));
+    pan.add(Box.createHorizontalStrut(20));
+
+    // -rusashow  show the full USA
+    pan.add(getUsaDesCheckBox());
+    pan.add(new LabelTextBox("Full USA",
+        "Displays the universal sequence address in the report"));
+
+    pan.add(Box.createHorizontalGlue());
+    return pan;
+
+  }
 
 /**
 *

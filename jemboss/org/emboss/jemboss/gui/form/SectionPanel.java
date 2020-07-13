@@ -40,7 +40,6 @@ import org.emboss.jemboss.soap.CallAjax;
 import org.emboss.jemboss.soap.JembossSoapException;
 import org.emboss.jemboss.JembossParams;
 
-
 /**
 *
 * Responsible for displaying the graphical representation
@@ -94,6 +93,7 @@ public class SectionPanel
   private final int maxSectionWidth = 498;
   private JFrame f;
   private ReportFormat rf=null;
+  private AlignFormat af=null;
 
 /**
 *
@@ -212,8 +212,9 @@ public class SectionPanel
         section.add(pan);
 
         String l = getMinMaxDefault(null,null,null,nf);
-        lab[nf] = setLabelText(parseAcd.getInfoParamValue(nf),
-                               parseAcd.getHelpParamValue(nf));
+
+	lab[nf] = new LabelTextBox(parseAcd.getInfoParamValue(nf),
+                                  parseAcd.getHelpParamValue(nf));
 
         if(l != null && !att.startsWith("bool"))
         {
@@ -399,29 +400,19 @@ public class SectionPanel
           rf = new ReportFormat(parseAcd,nf);
 
           pan.add(rf.getComboPopup());
-          pan.add(setLabelText(" Report format ("+rf.getDefaultFormat()+")",
-                  ReportFormat.getToolTip()));
+          pan.add(new LabelTextBox(" Report format ("+
+                             rf.getDefaultFormat()+")",
+                             ReportFormat.getToolTip()));
 
-          Box pan2 = new Box(BoxLayout.X_AXIS);
-          section.add(pan2);
-          // -raccshow  show accession 
-          pan2.add(rf.getAccCheckBox());
-          pan2.add(setLabelText("Accession number",
-              "Displays the accession number in the report"));
-          pan2.add(Box.createHorizontalStrut(20));
-
-          // -rdesshow  show description
-          pan2.add(rf.getDesCheckBox());
-          pan2.add(setLabelText("Description", 
-              "Displays the sequence description in the report"));
-          pan2.add(Box.createHorizontalStrut(20));
-
-          // -rusashow  show the full USA
-          pan2.add(rf.getUsaDesCheckBox());
-          pan2.add(setLabelText("Full USA", 
-              "Displays the universal sequence address in the report"));
-
-          pan2.add(Box.createHorizontalGlue());
+          section.add(rf.getReportCheckBox());
+        }
+        else if(att.startsWith("align"))
+        {
+          af = new AlignFormat(parseAcd,nf);
+          pan.add(af.getComboPopup());
+          pan.add(new LabelTextBox(" Align format ("+
+                           af.getDefaultFormat()+")",
+                           af.getToolTip()));
         }
         else if(att.startsWith("list") || att.startsWith("select"))
         {
@@ -509,112 +500,34 @@ public class SectionPanel
     
   }
 
-  protected ReportFormat getReportFormat()
-  {
-    return rf;
-  }
- 
+  protected ReportFormat getReportFormat() { return rf; }
+
   protected boolean isReportFormat()
   {
     if(rf==null)
       return false;
+    return true;
+  }
 
+  protected AlignFormat getAlignFormat() { return af; }
+  
+  protected boolean isAlignFormat()
+  {
+    if(af==null)
+      return false;
     return true;
   }
 
 
-  protected JPanel getSectionPanel()
-  {
-    return sectionPane;
-  }
+  protected JPanel getSectionPanel() { return sectionPane; }
+  protected Box getSectionBox() { return sectionBox; }
 
+  protected boolean isInputSection() { return isInp; }
+  protected boolean isOutputSection() { return isOut; }
+  protected boolean isRequiredSection() { return isReq; }
+  protected boolean isAdvancedSection() { return isAdv; }
 
-  protected Box getSectionBox()
-  {
-    return sectionBox;
-  }
-
-
-  protected boolean isInputSection()
-  {
-    return isInp;
-  }
-
-  protected boolean isOutputSection()
-  {
-    return isOut;
-  }
-
-  protected boolean isRequiredSection()
-  {
-    return isReq;
-  }
-
-  protected boolean isAdvancedSection()
-  {
-    return isAdv;
-  }
-
-/**
-*
-* @param String info text for the Component label
-* @param String help text for the tool tip
-* @return Box containing the label wrapped information label
-*
-*/
-  private Box setLabelText(String sl, String tt)
-  {
-    int stop;
-    int width = 335;
-    JLabel l;
-    Box blab = new Box(BoxLayout.Y_AXIS);
-
-    l = new JLabel();
-    FontMetrics fm = l.getFontMetrics(labfont);
-
-
-    if(!sl.equals(""))
-    {
-      if(!tt.equals(""))
-        tt = tt.replace('\\',' ');
-
-      sl = sl.replace('\n',' ');
-      String subLabel;
-
-      while(fm.stringWidth(sl) > width)
-      {
-        stop = sl.lastIndexOf(" ");
-        subLabel = sl.substring(0,stop);
-        while(fm.stringWidth(subLabel) > width)
-        {
-          stop = subLabel.lastIndexOf(" ");
-          subLabel = subLabel.substring(0,stop);
-        }
-
-        l = new JLabel(" " + subLabel);
-        blab.add(l);
-        sl = sl.substring(stop+1,sl.length());
-        l.setFont(labfont);
-        l.setForeground(labelColor);
-        if(!tt.equals(""))
-          l.setToolTipText(tt);
-      }
-      l = new JLabel(" " + sl);
-      l.setFont(labfont);
-      l.setForeground(labelColor);
-      if(!tt.equals(""))
-        l.setToolTipText(tt);
-      blab.add(l);
-    }
-
-    return blab;
-  }
-
-
-  protected int getFieldNum()
-  {
-    return nf;
-  }
+  protected int getFieldNum() { return nf; }
 
 /**
 *
@@ -627,23 +540,44 @@ public class SectionPanel
     appName = parseAcd.getParamValueStr(nf,0).toUpperCase();
     Box bylabP = new Box(BoxLayout.Y_AXIS);
     Box bxlabP = new Box(BoxLayout.X_AXIS);
-    
-    JLabel labP = new JLabel("<html><font size=+1><FONT COLOR=RED>"  +
-                                  appName + "</FONT>");
-    bxlabP.add(Box.createHorizontalStrut(10));
-    bxlabP.add(labP);
+
+    final ApplicationNamePanel namePanel = new ApplicationNamePanel(
+                                              appName,10,18,18);
+    bxlabP.add(namePanel);
     bxlabP.add(Box.createHorizontalGlue());
     bylabP.add(bxlabP);
-    labP = new JLabel(des);
+
+    JLabel labP = new JLabel(des);
     labP.setForeground(Color.black);
     labP.setFont(labfont);
-
     bxlabP = new Box(BoxLayout.X_AXIS);
     bxlabP.add(Box.createHorizontalStrut(10));
     bxlabP.add(labP);
     bxlabP.add(Box.createHorizontalGlue());
     bylabP.add(bxlabP);
     p3.add(bylabP, BorderLayout.NORTH);
+
+//  appName = parseAcd.getParamValueStr(nf,0).toUpperCase();
+//  Box bylabP = new Box(BoxLayout.Y_AXIS);
+//  Box bxlabP = new Box(BoxLayout.X_AXIS);
+
+//  JLabel labP = new JLabel("<html><font size=+1><FONT COLOR=RED>"  +
+//                                appName + "</FONT>");
+//  bxlabP.add(Box.createHorizontalStrut(10));
+//  bxlabP.add(labP);
+//  bxlabP.add(Box.createHorizontalGlue());
+//  bylabP.add(bxlabP);
+//  labP = new JLabel(des);
+//  labP.setForeground(Color.black);
+//  labP.setFont(labfont);
+
+//  bxlabP = new Box(BoxLayout.X_AXIS);
+//  bxlabP.add(Box.createHorizontalStrut(10));
+//  bxlabP.add(labP);
+//  bxlabP.add(Box.createHorizontalGlue());
+//  bylabP.add(bxlabP);
+//  p3.add(bylabP, BorderLayout.NORTH);
+
   }
 
 

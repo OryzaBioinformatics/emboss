@@ -40,9 +40,13 @@ public class ServerSetup extends JTabbedPane
   private MemoryComboBox privateName;
   private MemoryComboBox proxyName;
   private MemoryComboBox proxyPort;
+  private MemoryComboBox proxyBrowserName;
+  private MemoryComboBox proxyBrowserPort;
 
   private JCheckBox userAuth;
   private JCheckBox useProxy;
+  private JCheckBox useBrowserProxy;
+  private JCheckBox callTFM;
 
   private JembossParams myset; 
 
@@ -75,10 +79,13 @@ public class ServerSetup extends JTabbedPane
     Vector proxyPortSettings = new Vector();
     proxyPortSettings.add(new Integer(myset.getProxyPortNum()));
 
-
+    Vector proxyBrowserNameSettings = new Vector();
+    proxyBrowserNameSettings.add(myset.getBrowserProxyHost());
+    
+    Vector proxyBrowserPortSettings = new Vector();
+    proxyBrowserPortSettings.add(new Integer(myset.getBrowserProxyPort()));
 //servers tabbed pane
-
-    GridLayout gl = new GridLayout(6,1,6,6);
+    GridLayout gl = new GridLayout(7,1,6,6);
  
     JPanel general  = new JPanel(new BorderLayout());   
     JPanel jpWest   = new JPanel(gl);
@@ -115,27 +122,38 @@ public class ServerSetup extends JTabbedPane
     jpCenter.add(new JLabel(""));
 
 //authentication 
-    userAuth = new JCheckBox("User authentication required by private server",
-                              myset.getUseAuth());
+    userAuth = new JCheckBox("User authentication required "+
+                             "by private server",
+                             myset.getUseAuth());
+
+//separator
+    jpWest.add(new JLabel(""));
+    jpCenter.add(userAuth);
 
     general.add(jpWest,BorderLayout.WEST);
     general.add(jpCenter,BorderLayout.CENTER);
-    general.add(userAuth,BorderLayout.SOUTH);
+//  general.add(userAuth,BorderLayout.SOUTH);
+
     addTab("Servers",general);
 
 
 //proxy tabbed pane
 
-    gl = new GridLayout(6,1,6,6);
+    gl = new GridLayout(7,1,6,6);
     JPanel proxy = new JPanel(new BorderLayout());
-    useProxy = new JCheckBox("Use proxy settings",
+    useProxy = new JCheckBox("Use proxy settings to connect to the server",
                               myset.getUseProxy());
 
     jpWest = new JPanel(gl);
     jpCenter = new JPanel(gl);
-    jpWest.add(useProxy);
+//separator
+    jpWest.add(new JLabel(""));
     jpCenter.add(new JLabel(""));
 
+    jpWest.add(new JLabel(""));
+    jpCenter.add(useProxy);
+
+// HTTPS proxys
     lab = new JLabel("Proxy ");
     jpWest.add(lab);
     proxyName = new MemoryComboBox(proxyNameSettings);
@@ -160,18 +178,74 @@ public class ServerSetup extends JTabbedPane
         myset.updateJembossPropStrings(settings);
       }
     });
-  
-    jpWest.add(new JLabel(myset.proxyDescription()));
 
-//separator
+    jpWest.add(new JLabel(myset.proxyDescription()));
+    jpCenter.add(new JLabel(""));
+
     jpWest.add(new JLabel(""));
     jpCenter.add(new JLabel(""));
-    
 
     proxy.add(jpWest, BorderLayout.WEST);
     proxy.add(jpCenter, BorderLayout.CENTER);
 
     addTab("Proxies",proxy);
+
+// HTTP proxys
+    proxy = new JPanel(new BorderLayout());
+    gl = new GridLayout(7,1,6,6);
+    jpWest = new JPanel(gl);
+    jpCenter = new JPanel(gl);
+
+    useBrowserProxy = new JCheckBox("Use proxy settings for HTTP "+
+                                    "browser connection",
+                                    myset.isBrowserProxy());
+
+    jpWest.add(new JLabel(""));
+    jpCenter.add(new JLabel(""));
+
+    jpWest.add(new JLabel(""));
+    jpCenter.add(useBrowserProxy);
+
+    lab = new JLabel("Proxy ");
+    jpWest.add(lab);
+    proxyBrowserName = new MemoryComboBox(proxyBrowserNameSettings);
+    jpCenter.add(proxyBrowserName);
+
+    lab = new JLabel("Proxy Port   ");
+    jpWest.add(lab);
+    proxyBrowserPort = new MemoryComboBox(proxyBrowserPortSettings);
+    jpCenter.add(proxyBrowserPort);
+    
+    proxyBrowserName.setEnabled(useBrowserProxy.isSelected());
+    proxyBrowserPort.setEnabled(useBrowserProxy.isSelected());
+    
+    useBrowserProxy.addActionListener(new ActionListener()
+    {
+      public void actionPerformed(ActionEvent e)
+      {
+        proxyBrowserName.setEnabled(useBrowserProxy.isSelected());
+        proxyBrowserPort.setEnabled(useBrowserProxy.isSelected());
+      }
+    }); 
+
+    callTFM = new JCheckBox("Get help page directly from the server");
+    callTFM.addActionListener(new ActionListener()
+    {
+      public void actionPerformed(ActionEvent e)
+      {
+        useBrowserProxy.setEnabled(!callTFM.isSelected());
+        proxyBrowserName.setEnabled(!callTFM.isSelected());
+        proxyBrowserPort.setEnabled(!callTFM.isSelected());
+      }
+    });
+    jpWest.add(new JLabel(""));
+    jpCenter.add(callTFM);
+    jpCenter.add(Box.createVerticalGlue());
+
+    proxy.add(jpWest, BorderLayout.WEST);
+    proxy.add(jpCenter, BorderLayout.CENTER);
+
+    addTab("Browser Proxies",proxy);
 
 
 //client tabbed pane
@@ -202,7 +276,7 @@ public class ServerSetup extends JTabbedPane
 
   public JembossParams setNewSettings()
   {
-    String settings[] = new String[8];
+    String settings[] = new String[12];
     settings[0] = new String("server.public="+
                              (String)publicURL.getSelectedItem());
     settings[1] = new String("server.private="+
@@ -226,6 +300,21 @@ public class ServerSetup extends JTabbedPane
       settings[5] = new String("proxy.use=true");
     else
       settings[5] = new String("proxy.use=false");
+
+    settings[8] = new String("browserProxy.host="+
+                             (String)proxyBrowserName.getSelectedItem());
+    settings[9] = new String("browserProxy.port="+
+               ((Integer)proxyBrowserPort.getSelectedItem()).toString());
+
+    if(callTFM.isSelected())
+      settings[10] = new String("tfm.use=true");
+    else
+      settings[10] = new String("tfm.use=false");
+
+    if(useBrowserProxy.isSelected())
+      settings[11] = new String("browserProxy.use=true");
+    else
+      settings[11] = new String("browserProxy.use=false");
 
     myset.updateJembossPropStrings(settings);
 

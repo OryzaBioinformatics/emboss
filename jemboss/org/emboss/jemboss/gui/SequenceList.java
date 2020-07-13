@@ -30,7 +30,8 @@ import javax.swing.event.*;
 import javax.swing.table.*;
 import javax.swing.border.*;
 import java.awt.event.*;
-
+import java.net.MalformedURLException;
+import java.net.URL;
 import org.emboss.jemboss.parser.*;
 import org.emboss.jemboss.soap.*;
 
@@ -115,34 +116,7 @@ public class SequenceList extends JFrame
     });
     fileMenu.add(openMenuItem);
 
-    JMenuItem addSeq = new JMenuItem("Add sequence");
-    addSeq.addActionListener(new ActionListener()
-    {
-      public void actionPerformed(ActionEvent e)
-      {
-        int row = table.getSelectedRow();
-        seqModel.insertRow(row+1);
-        table.tableChanged(new TableModelEvent(seqModel, row+1, row+1, 
-                TableModelEvent.ALL_COLUMNS, TableModelEvent.INSERT));
-      }
-    });
-    toolMenu.add(addSeq);
-
-    JMenuItem deleteSeq = new JMenuItem("Delete  sequence");
-    deleteSeq.addActionListener(new ActionListener()
-    {
-      public void actionPerformed(ActionEvent e)
-      {
-        int row = table.getSelectedRow();
-        if(seqModel.deleteRow(row))
-          table.tableChanged(new TableModelEvent(seqModel, row, row,
-                TableModelEvent.ALL_COLUMNS, TableModelEvent.DELETE));
-        
-      }
-    });
-    toolMenu.add(deleteSeq);
- 
-    JMenuItem ajaxSeq = new JMenuItem("Calculate sequence attributes");
+    JMenuItem ajaxSeq = new JMenuItem("Calculate Sequence Attributes");
     ajaxSeq.addActionListener(new ActionListener()
     {
       public void actionPerformed(ActionEvent e)
@@ -197,11 +171,24 @@ public class SequenceList extends JFrame
             }
           }
 
-          if(!ok && fc!=null)                       //Ajax failed
-            JOptionPane.showMessageDialog(null,
-                     "Sequence not found." +
-                     "\nCheck the sequence entered.",
-                     "Error Message", JOptionPane.ERROR_MESSAGE);
+          if(!ok && fc!=null)                          //Ajax failed
+          {
+            if( mysettings.getServicePasswdByte()!=null ||
+                mysettings.getUseAuth() == false )
+            {
+              JOptionPane.showMessageDialog(null,
+                     "Sequence not found!", "Error Message",
+                     JOptionPane.ERROR_MESSAGE);
+            }
+            else 
+            {
+              AuthPopup ap = new AuthPopup(mysettings,null);
+              ap.setBottomPanel();
+              ap.setSize(380,170);
+              ap.pack();
+              ap.setVisible(true);
+            }
+          }
           else
           {
             seqModel.setValueAt(new Integer(1),row,
@@ -215,6 +202,47 @@ public class SequenceList extends JFrame
       }
     });
     toolMenu.add(ajaxSeq);
+
+
+    JMenuItem addSeq = new JMenuItem("Add Sequence");
+    addSeq.addActionListener(new ActionListener()
+    {
+      public void actionPerformed(ActionEvent e)
+      {
+        int row = table.getSelectedRow();
+        seqModel.insertRow(row+1);
+        table.tableChanged(new TableModelEvent(seqModel, row+1, row+1, 
+                TableModelEvent.ALL_COLUMNS, TableModelEvent.INSERT));
+      }
+    });
+    toolMenu.add(addSeq);
+
+    JMenuItem deleteSeq = new JMenuItem("Delete Sequence");
+    deleteSeq.addActionListener(new ActionListener()
+    {
+      public void actionPerformed(ActionEvent e)
+      {
+        int row = table.getSelectedRow();
+        if(seqModel.deleteRow(row))
+          table.tableChanged(new TableModelEvent(seqModel, row, row,
+                TableModelEvent.ALL_COLUMNS, TableModelEvent.DELETE));
+        
+      }
+    });
+    toolMenu.add(deleteSeq);
+ 
+
+    JMenuItem reset = new JMenuItem("Remove All Sequences");
+    reset.addActionListener(new ActionListener()
+    {
+      public void actionPerformed(ActionEvent e)
+      {
+        seqModel.setDefaultData();
+        table.repaint();
+      }
+    });
+    toolMenu.add(reset);
+
     toolMenu.addSeparator();
 
     storeSeqList = new JCheckBoxMenuItem("Save Sequence List");
@@ -227,20 +255,12 @@ public class SequenceList extends JFrame
       storeSeqList.setSelected(false);
     toolMenu.add(storeSeqList);
 
-    JMenuItem reset = new JMenuItem("Reset Table");
-    reset.addActionListener(new ActionListener()
-    {
-      public void actionPerformed(ActionEvent e)
-      {
-        seqModel.setDefaultData();
-        table.repaint();
-      }
-    });
-    fileMenu.add(reset);
-
     fileMenu.addSeparator();
 
     JMenuItem closeFrame = new JMenuItem("Close");
+    closeFrame.setAccelerator(KeyStroke.getKeyStroke(
+                    KeyEvent.VK_E, ActionEvent.CTRL_MASK));
+
     closeFrame.addActionListener(new ActionListener()
     {
       public void actionPerformed(ActionEvent e)
@@ -249,6 +269,34 @@ public class SequenceList extends JFrame
       }
     });
     fileMenu.add(closeFrame);
+
+    // help menu
+   JMenu helpMenu = new JMenu("Help");
+   helpMenu.setMnemonic(KeyEvent.VK_H);
+   JMenuItem fmh = new JMenuItem("About File Manager");
+   fmh.addActionListener(new ActionListener()
+   {
+     public void actionPerformed(ActionEvent e)
+     {
+        ClassLoader cl = this.getClass().getClassLoader();
+        try
+        {
+          URL inURL = cl.getResource("resources/seqList.html");
+          new Browser(inURL,"resources/seqList.html");
+        }
+        catch (MalformedURLException mex)
+        {
+          System.out.println("Didn't find resources/seqList.html");
+        }
+        catch (IOException iex)
+        {
+          System.out.println("Didn't find resources/seqList.html");
+        }
+      }
+    });
+    helpMenu.add(fmh);
+    menuPanel.add(helpMenu);
+
 
   }
 
@@ -515,7 +563,7 @@ class SequenceListTableModel extends AbstractTableModel
 
   public static final ColumnData modelColumns[] =
   {
-    new ColumnData("File",170,JLabel.LEFT),
+    new ColumnData("File / Database Entry",170,JLabel.LEFT),
     new ColumnData("Start",45,JLabel.LEFT),
     new ColumnData("End",45,JLabel.LEFT),
     new ColumnData("List File",15,JLabel.LEFT),

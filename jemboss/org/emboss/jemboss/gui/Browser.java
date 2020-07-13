@@ -30,6 +30,7 @@ import java.awt.event.*;
 import java.net.*;
 import java.io.*;
 import java.util.Vector;
+import org.emboss.jemboss.JembossParams;
 
 public class Browser extends JFrame implements HyperlinkListener, 
                                  ActionListener 
@@ -42,13 +43,14 @@ public class Browser extends JFrame implements HyperlinkListener,
   private Cursor cdone = new Cursor(Cursor.DEFAULT_CURSOR);
 
 
-  public Browser(String initialURL, String name) throws IOException
+  public Browser(String initialURL, String name, 
+                 JembossParams mysettings) throws IOException
   {
-    this(initialURL,name,false,"");
+    this(initialURL,name,false,"",mysettings);
   }
 
   public Browser(String initialURL, String name,  boolean ltext, 
-                         String text) throws IOException
+                 String text, JembossParams mysettings) throws IOException
   {
 
     super(name);
@@ -60,6 +62,13 @@ public class Browser extends JFrame implements HyperlinkListener,
     else
       urlCache.add(name+".html");
 
+    if(mysettings.isBrowserProxy())
+    {
+      System.setProperty("proxyHost",mysettings.getBrowserProxyHost());
+      System.setProperty("proxyPort", Integer.toString(
+                          mysettings.getBrowserProxyPort()));
+    }
+
     if(ltext)
     {
       htmlPane = new JEditorPane();
@@ -67,6 +76,7 @@ public class Browser extends JFrame implements HyperlinkListener,
           (text.indexOf("<HTML>") > -1) )
         htmlPane.setContentType("text/html");
       htmlPane.setText(text);
+      htmlPane.addHyperlinkListener(this);
     }
     else 
     {

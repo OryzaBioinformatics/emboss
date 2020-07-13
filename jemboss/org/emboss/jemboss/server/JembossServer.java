@@ -20,16 +20,16 @@
 
 package org.emboss.jemboss.server;
 
-import org.emboss.jemboss.*;
-import org.emboss.jemboss.programs.*;
-import org.emboss.jemboss.parser.*;
+import org.emboss.jemboss.JembossParams;
+import org.emboss.jemboss.programs.RunEmbossApplication2;
+import org.emboss.jemboss.parser.Ajax;
 
 import java.io.*;
 import java.util.*;
 
 /**
 *
-* Jemboss Server for SOAP
+* Jemboss Non-authenticating Server for SOAP
 *
 */
 public class JembossServer
@@ -48,26 +48,25 @@ public class JembossServer
   String embossPath = jp.getEmbossPath();
   String acdDirToParse = jp.getAcdDirToParse();
 
-  private String homeDirectory = new String(System.getProperty("user.home") + fs);
-  
+  private String homeDirectory = new String(System.getProperty("user.home")
+                                                                     + fs);
   private String username = new String(System.getProperty("user.name") + fs);
   private String tmproot = new String("/tmp/SOAP/emboss/" + username );
   private File tmprootDir = new File(tmproot);
 
-  private String[] envp = 
+  private String[] envp_emboss = 
   {
     "PATH=" + embossPath + ps + embossBin,
     "PLPLOT_LIB=" + plplot,
     "EMBOSS_DATA=" + embossData,
     "HOME=" + homeDirectory
 //  ,"LD_LIBRARY_PATH=/usr/local/lib"
-// FIX FOR SOME SUNOS
+// FIX FOR SOME SUNOS OR USE embossEnvironment
 
   };
+
+  private String[] envp = jp.getEmbossEnvironmentArray(envp_emboss);
  
-  private static Hashtable acdStore;
-
-
   public String name()
   {
     return "The EMBOSS Application Suite";
@@ -76,8 +75,15 @@ public class JembossServer
   public String version()
   {
     String embossCommand = new String(embossBin + "embossversion");
-    RunEmbossApplication rea = new RunEmbossApplication(embossCommand,envp,null);
-    rea.isProcessStdout();
+    RunEmbossApplication2 rea = new RunEmbossApplication2(embossCommand,
+                                                           envp,null);
+    try
+    {
+      Process p = rea.getProcess();
+      p.waitFor();
+    }
+    catch(InterruptedException iexp){}
+
     return rea.getProcessStdout();
   }
 
@@ -85,8 +91,15 @@ public class JembossServer
   public String appversion()
   {
     String embossCommand = new String(embossBin + "embossversion");
-    RunEmbossApplication rea = new RunEmbossApplication(embossCommand,envp,null);
-    rea.isProcessStdout();
+    RunEmbossApplication2 rea = new RunEmbossApplication2(embossCommand,
+                                                           envp,null);
+    try
+    {
+      Process p = rea.getProcess();
+      p.waitFor();
+    }
+    catch(InterruptedException iexp){}
+
     return rea.getProcessStdout();
   }
 
@@ -176,10 +189,17 @@ public class JembossServer
   {
     Vector wossOut = new Vector();
     String embossCommand = new String(embossBin + "wossname -colon -auto");
-    RunEmbossApplication rea = new RunEmbossApplication(embossCommand,envp,null);
+    RunEmbossApplication2 rea = new RunEmbossApplication2(embossCommand,
+                                                           envp,null);
     wossOut.add("status");
     wossOut.add("0");
-    rea.isProcessStdout();
+    try
+    {
+      Process p = rea.getProcess();
+      p.waitFor();
+    }
+    catch(InterruptedException iexp){}
+//  rea.isProcessStdout();
     wossOut.add("wossname");
     wossOut.add(rea.getProcessStdout());
 
@@ -196,8 +216,18 @@ public class JembossServer
 */
   public Vector show_help(String applName)
   {
-    String command = embossBin.concat("tfm " + applName + " -html -nomore");
-    RunEmbossApplication rea = new RunEmbossApplication(command,envp,null);
+    String command = embossBin.concat("tfm " + applName + 
+                                       " -html -nomore");
+    RunEmbossApplication2 rea = new RunEmbossApplication2(command,
+                                                     envp,null);
+
+    try
+    {
+      Process p = rea.getProcess();
+      p.waitFor();
+    }
+    catch(InterruptedException iexp){}
+
     String helptext = "";
     if(rea.isProcessStdout())
       helptext = rea.getProcessStdout();
@@ -280,7 +310,6 @@ public class JembossServer
 
     if(ok)
     {
-      System.out.println("STATUS OK");
       vans.add("length");
       vans.add(new Integer(aj.length));
       vans.add("protein");
@@ -292,7 +321,6 @@ public class JembossServer
     }
     else
     {
-      System.out.println("STATUS NOT OK");
       vans.add("status");
       vans.add("1");
     }
@@ -314,10 +342,18 @@ public class JembossServer
   {
     Vector showdbOut = new Vector();
     String embossCommand = new String(embossBin + "showdb -auto");
-    RunEmbossApplication rea = new RunEmbossApplication(embossCommand,envp,null);
+    RunEmbossApplication2 rea = new RunEmbossApplication2(embossCommand,
+                                                          envp,null);
     showdbOut.add("status");
     showdbOut.add("0");
-    rea.isProcessStdout();
+
+    try
+    {
+      Process p = rea.getProcess();
+      p.waitFor();
+    }
+    catch(InterruptedException iexp){}
+
     showdbOut.add("showdb");
     showdbOut.add(rea.getProcessStdout());
      
@@ -367,7 +403,8 @@ public class JembossServer
 * @return output files from application run
 *
 */
-  public Vector run_prog(String embossCommand, String options, String[] inFiles)
+  public Vector run_prog(String embossCommand, String options, 
+                                             String[] inFiles)
   {
     Vector result = new Vector();
 
@@ -409,12 +446,11 @@ public class JembossServer
 * @return output files from application run
 *
 */
-  public Vector run_prog(String embossCommand, String options, Hashtable inFiles)
+  public Vector run_prog(String embossCommand, String options, 
+                                            Hashtable inFiles)
   {
 
     Vector result = new Vector();
-//  System.out.println("Running runProg now.... " + tmproot);
-    
 
     //disallow multiple command constructions
     if(embossCommand.indexOf(";") > -1) 
@@ -425,6 +461,16 @@ public class JembossServer
        result.add("1");
 
        return result;
+    }
+
+    //trap anything that is trying to write to stdout
+    int stdIndex = embossCommand.indexOf(" stdout ");
+    if(stdIndex > -1)
+    {
+      String startCmd = embossCommand.substring(0,stdIndex+7);
+      String endCmd = embossCommand.substring(stdIndex+8);
+      embossCommand = startCmd.concat("file ");
+      embossCommand = embossCommand.concat(endCmd);
     }
 
     Enumeration enum = inFiles.keys();
@@ -494,7 +540,7 @@ public class JembossServer
     }
     catch (IOException ioe) {} 
 
-    RunEmbossApplication rea = new RunEmbossApplication(embossCommand,
+    RunEmbossApplication2 rea = new RunEmbossApplication2(embossCommand,
                                                envp,new File(project));
     
     result.add("cmd");
@@ -506,6 +552,11 @@ public class JembossServer
 
     if(options.toLowerCase().indexOf("interactive") > -1)
     {
+      try
+      {
+        rea.getProcess().waitFor();
+      }
+      catch(InterruptedException iexp){}    
       if(rea.isProcessStdout())
       {
         result.add("stdout");
@@ -529,8 +580,6 @@ public class JembossServer
       result.add(descript+ls+"Application pending"+ls);
     }
 
-//  System.out.println("JEMBOSSSERVER running");
-    
 //get the output files
     result = loadFilesContent(projectDir,project,result,inFiles);
     result = loadPNGContent(projectDir,project,result);
@@ -564,7 +613,8 @@ public class JembossServer
 *
 * Returns the results for a saved project.
 * @param project/directory name
-* @param unused
+* @param unused if showing all results otherwise this
+*        is the name of the file to display
 * @return saved results files
 *
 */
@@ -583,7 +633,8 @@ public class JembossServer
 *
 * Returns the results for a saved project.
 * @param project/directory name
-* @param unused
+* @param unused if showing all results otherwise this
+*        is the name of the file to display
 * @return saved results files
 *
 */
@@ -593,9 +644,34 @@ public class JembossServer
    
     project = tmproot.concat(project);
     File projectDir = new File(project);
-    ssr = loadFilesContent(projectDir,project,ssr,null);
-    ssr = loadPNGContent(projectDir,project,ssr);
-        
+
+    if(cl.equals(""))
+    {
+      ssr = loadFilesContent(projectDir,project,ssr,null);
+      ssr = loadPNGContent(projectDir,project,ssr);
+    }
+    else
+    {
+      try
+      {
+        String fc = "";
+        String line;
+        File fn = new File(project + fs + cl);
+
+        if(fn.exists())
+        {
+          BufferedReader in = new BufferedReader(new FileReader(project +
+                                                       fs + cl));
+          while((line = in.readLine()) != null)
+            fc = fc.concat(line + "\n");
+        }
+  
+        ssr.add(cl);
+        ssr.add(fc);
+      }
+      catch (IOException ioe){}
+    }
+
     ssr.add("status");
     ssr.add("0");
 
@@ -604,6 +680,47 @@ public class JembossServer
 
     return ssr;
   }
+
+
+/**
+*
+* Private server
+*
+* Save a file to a project directory on the server.
+* @return message
+*
+*/
+  public Vector save_project_file(String project, String filename,
+                                  String notes, String userName)
+  {
+    Vector v = new Vector();
+    String msg = "OK";
+
+    String fn = tmproot + fs + userName+ fs +
+                     project + fs + filename;
+
+    File f = new File(fn);
+    try
+    {
+      if(!f.exists())
+        f.createNewFile();
+      FileOutputStream out = new FileOutputStream(f);
+      out.write(notes.getBytes());
+      out.close();
+    }
+    catch(IOException ioe)
+    {
+      msg = new String("Error making input file");
+    }
+
+    v.add("status");
+    v.add("0");
+    v.add("msg");
+    v.add(msg);
+
+    return v;
+  }
+
 
 
 /**

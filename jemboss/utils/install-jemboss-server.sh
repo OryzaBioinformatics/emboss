@@ -189,7 +189,7 @@ output_auth_xml()
   echo '  methods="name version abouturl show_acd getWossname' >> $XML_FILE
   echo '  show_help show_db run_prog show_saved_results' >> $XML_FILE
   echo '  delete_saved_results list_saved_results call_ajax' >> $XML_FILE
-  echo '  update_result_status">' >> $XML_FILE
+  echo '  update_result_status save_project_file">' >> $XML_FILE
   echo '  <isd:java class="'$JEM_CLASS'"' >> $XML_FILE
   echo '  static="false"/>' >> $XML_FILE
   echo ' </isd:provider>' >>$XML_FILE
@@ -554,14 +554,14 @@ else
   $JAVA_HOME/bin/javac -classpath $JEMBOSS:$JEMBOSS/lib/soap.jar $JEMBOSS/org/emboss/jemboss/server/JembossFileServer.java
 fi
 
-cd $WORK_DIR
-
-
-
 if [ "$MACOSX" = "y" ]; then
-  ln -s $EMBOSS_INSTALL/lib/libajax.dylib $EMBOSS_INSTALL/lib/libajax.jnilib
+  cd $EMBOSS_INSTALL/lib/
+  ln -s libajax.dylib libajax.jnilib
+# ln -s $EMBOSS_INSTALL/lib/libajax.dylib $EMBOSS_INSTALL/lib/libajax.jnilib
 # cp $EMBOSS_INSTALL/lib/libajax.[0-9].dylib /System/Library/Frameworks/JavaVM.framework/Libraries/libajax.jnilib
 fi
+
+cd $WORK_DIR
 
 if [ "$PLATFORM" = "hpux" ]; then
   ln -s $EMBOSS_INSTALL/lib/libajax.sl $EMBOSS_INSTALL/lib/libajax.so
@@ -592,7 +592,7 @@ else
 fi
 
 if [ "$MACOSX" = "y" ]; then
- echo "setenv DYLD_LIBRARY_PATH /usr/local/emboss/lib" >> tomstart
+ echo "setenv DYLD_LIBRARY_PATH $EMBOSS_INSTALL/lib" >> tomstart
 fi
 
 if [ "$PLATFORM" = "hpux" ]; then
