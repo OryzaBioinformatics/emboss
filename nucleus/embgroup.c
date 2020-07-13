@@ -24,27 +24,27 @@
 #include <sys/stat.h>   /* for stat */  
 
 
-static void getACDfiles (AjPList glist, AjPList alpha, char **env,
+static void grpGetAcdFiles (AjPList glist, AjPList alpha, char **env,
 			 AjPStr acddir, AjBool explode, AjBool colon,
 			 AjBool gui);
-static void getACDdirs (AjPList glist, AjPList alpha, char **env,
+static void grpGetAcdDirs (AjPList glist, AjPList alpha, char **env,
 			 AjPStr acddir, AjBool explode, AjBool colon,
 			 AjBool gui);
-static void parse(AjPFile file, AjPStr *appl, AjPStr *doc, AjPList groups,
+static void grpParse(AjPFile file, AjPStr *appl, AjPStr *doc, AjPList groups,
 			AjBool explode, AjBool colon, AjBool *gui);
-static void groupNoComment (AjPStr* text);	
+static void grpNoComment (AjPStr* text);	
 static AjPStr grpParseValueRB (AjPStrTok* tokenhandle, char* delim);
-static void splitlist (AjPList groups, AjPStr value, AjBool explode,
+static void grpSplitList (AjPList groups, AjPStr value, AjBool explode,
 		        AjBool colon);
-static void subsplitlist (AjPList groups, AjPList sublist);
-static void addGroupsToList(AjPList alpha, AjPList glist,
+static void grpSubSplitList (AjPList groups, AjPList sublist);
+static void grpAddGroupsToList(AjPList alpha, AjPList glist,
 			AjPList groups, AjPStr appl, AjPStr doc);
 
 
 /* @func embGrpGetProgGroups ************************************************
 ** 
 ** Optionally constructs a path to the directory of normal EMBOSS or
-** embassy ACD files. Calls getACDfiles to construct lists of the
+** embassy ACD files. Calls grpGetAcdFiles to construct lists of the
 ** group, doc and program name information.
 **
 ** @param [w] glist [AjPList] List of groups of programs
@@ -115,7 +115,7 @@ void embGrpGetProgGroups (AjPList glist, AjPList alpha, char **env,
 	}
 
 	/* normal EMBOSS ACD */
-	getACDfiles(glist, alpha, env, acdroot, explode, colon, gui);
+	grpGetAcdFiles(glist, alpha, env, acdroot, explode, colon, gui);
     }
   
     if (embassy && !doneinstall)
@@ -126,7 +126,7 @@ void embGrpGetProgGroups (AjPList glist, AjPList alpha, char **env,
 		     acdrootinst, acdpack);
 	if (ajFileDir(&acdroot))
 	    /* embassadir ACD files */
-	    getACDfiles(glist, alpha, env, acdroot, explode, colon, gui);
+	    grpGetAcdFiles(glist, alpha, env, acdroot, explode, colon, gui);
 	else
 	{   /* look for all source directories */
 	    /*      ajDebug ("acd directory '%S' not opened\n", acdroot); */
@@ -134,7 +134,7 @@ void embGrpGetProgGroups (AjPList glist, AjPList alpha, char **env,
 	    (void) ajFileDirUp (&acdrootdir);
 	    ajFmtPrintS (&acdroot, "%Sembassy/", acdrootdir);
 	    /* embassadir ACD files */
-	    getACDdirs(glist, alpha, env, acdroot, explode, colon, gui);
+	    grpGetAcdDirs(glist, alpha, env, acdroot, explode, colon, gui);
 	}
   	
     }
@@ -153,10 +153,10 @@ void embGrpGetProgGroups (AjPList glist, AjPList alpha, char **env,
     return;
 }
 
-/* @funcstatic getACDdirs ************************************************
+/* @funcstatic grpGetAcdDirs ************************************************
 ** 
 ** Given a directory from EMBASSY sources, it searches for directories
-** of ACD files and passes processing on to getACDfiles
+** of ACD files and passes processing on to grpGetAcdFiles
 **
 ** @param [w] glist [AjPList] List of groups of programs
 ** @param [w] alpha [AjPList] Alphabetic list of programs
@@ -169,7 +169,7 @@ void embGrpGetProgGroups (AjPList glist, AjPList alpha, char **env,
 ** @@
 ******************************************************************************/
 
-static void getACDdirs (AjPList glist, AjPList alpha, char **env,
+static void grpGetAcdDirs (AjPList glist, AjPList alpha, char **env,
 			 AjPStr acddir, AjBool explode, AjBool colon,
 			 AjBool gui) {
 
@@ -193,7 +193,7 @@ static void getACDdirs (AjPList glist, AjPList alpha, char **env,
     (void) ajFmtPrintS(&dirname, "%S%s/emboss_acd/", acddir, dp->d_name);
     if ((dirpa = opendir(ajStrStr(dirname)))) {
 /*      ajDebug ("testing directory '%S'\n", dirname); */
-      getACDfiles (glist, alpha, env, dirname, explode, colon, gui);
+      grpGetAcdFiles (glist, alpha, env, dirname, explode, colon, gui);
       closedir (dirpa);
     }
     else {
@@ -205,7 +205,7 @@ static void getACDdirs (AjPList glist, AjPList alpha, char **env,
   return;
 }
 
-/* @funcstatic getACDfiles ************************************************
+/* @funcstatic grpGetAcdFiles ************************************************
 ** 
 ** Given a directory, it searches for ACD files which describe an 
 ** existing program on the path.
@@ -224,7 +224,7 @@ static void getACDdirs (AjPList glist, AjPList alpha, char **env,
 ** @@
 ******************************************************************************/
 
-static void getACDfiles (AjPList glist, AjPList alpha, char **env,
+static void grpGetAcdFiles (AjPList glist, AjPList alpha, char **env,
 			 AjPStr acddir, AjBool explode, AjBool colon,
 			 AjBool gui) {
 
@@ -257,14 +257,14 @@ static void getACDfiles (AjPList glist, AjPList alpha, char **env,
 /* open the file and parse it */
           if ((file = ajFileNewIn(progpath)) != NULL) {
             groups = ajListstrNew();
-            parse(file, &appl, &doc, groups, explode, colon, &guiresult);
+            grpParse(file, &appl, &doc, groups, explode, colon, &guiresult);
 
 /* see if the appl is the name of a real program */
 	    (void) ajStrAss(&applpath, appl);
             if (ajSysWhichEnv(&applpath, env)) {
 /* see if the appl is OK in GUIs or we don't want just GUI apps */
               if (guiresult || !gui) {
-                addGroupsToList(alpha, glist, groups, appl, doc);
+                grpAddGroupsToList(alpha, glist, groups, appl, doc);
               } else {
               	ajDebug("%S is not a OK in GUIs\n", appl);
               }
@@ -291,7 +291,7 @@ static void getACDfiles (AjPList glist, AjPList alpha, char **env,
   return;
 }
 
-/* @funcstatic parse ***********************************************
+/* @funcstatic grpParse ***********************************************
 **
 ** parse the acd file.
 **
@@ -306,7 +306,7 @@ static void getACDfiles (AjPList glist, AjPList alpha, char **env,
 ** @return [void] 
 ** @@
 **************************************************************************/
-static void parse(AjPFile file, AjPStr *appl, AjPStr *doc, AjPList groups,
+static void grpParse(AjPFile file, AjPStr *appl, AjPStr *doc, AjPList groups,
 	AjBool explode, AjBool colon, AjBool *gui) {
 
   AjPStr line = NULL;
@@ -333,7 +333,7 @@ static void parse(AjPFile file, AjPStr *appl, AjPStr *doc, AjPList groups,
 
 /* read file into one line, stripping out comment lines and blanks */
   while (ajFileReadLine (file, &line)) {
-    groupNoComment(&line);
+    grpNoComment(&line);
     if (ajStrLen(line)) {
       (void) ajStrApp (&text, line);
       (void) ajStrAppC (&text, " ");
@@ -388,7 +388,7 @@ static void parse(AjPFile file, AjPStr *appl, AjPStr *doc, AjPList groups,
           ajStrDel(&tmpvalue);
         } else if (ajStrPrefixC(token, "group")) {
           donegroup = ajTrue;
-          splitlist (groups, value, explode, colon);
+          grpSplitList (groups, value, explode, colon);
         }
       }
       if (done) break;
@@ -416,7 +416,7 @@ static void parse(AjPFile file, AjPStr *appl, AjPStr *doc, AjPList groups,
 }
 
 
-/* @funcstatic groupNoComment *************************************************
+/* @funcstatic grpNoComment *************************************************
 **
 ** Strips comments from a character string (a line from an trn file).
 ** Comments are blank lines or any text following a "#" character.
@@ -427,7 +427,7 @@ static void parse(AjPFile file, AjPStr *appl, AjPStr *doc, AjPList groups,
 ** @@
 ******************************************************************************/
 
-static void groupNoComment (AjPStr* text) {
+static void grpNoComment (AjPStr* text) {
   ajint i;
   char *cp;
 	    
@@ -524,12 +524,12 @@ static AjPStr grpParseValueRB (AjPStrTok* tokenhandle, char* delim) {
   return tmpstrp;
 }
 	                       
-/* @funcstatic splitlist ***********************************************
+/* @funcstatic grpSplitList ***********************************************
 **
 ** Split a string containing group names into a list on the delimiters 
 ** ',' or ';' to form the primary names of the groups.
 ** Any names containing a colon ':' are optionally expanded in a call to 
-** subsplitlist() to form many combinations of group names.
+** grpSubSplitList() to form many combinations of group names.
 **
 ** The group names are returned as a list.
 **
@@ -541,7 +541,7 @@ static AjPStr grpParseValueRB (AjPStrTok* tokenhandle, char* delim) {
 ** @return [void]
 ** @@
 **********************************************************************/
-static void splitlist (AjPList groups, AjPStr value, AjBool explode,
+static void grpSplitList (AjPList groups, AjPStr value, AjBool explode,
 	AjBool colon) {
 	
   AjPStrTok tokenhandle;
@@ -577,7 +577,7 @@ combinations of name */
         ajListstrPushApp (subnames, copystr);
       }
 /* make the combinations of sub-names and add them to the list of group names */
-     subsplitlist(groups, subnames);
+     grpSubSplitList(groups, subnames);
 
 /* tidy up */
       ajStrTokenClear(&colontokenhandle);    
@@ -618,7 +618,7 @@ combinations of name */
 
 }
 
-/* @funcstatic subsplitlist ***********************************************
+/* @funcstatic grpSubSplitList ***********************************************
 **
 ** Takes a list of words and makes several combinations of them to
 ** construct the expanded group constructs made from the ':' operator in
@@ -643,7 +643,7 @@ combinations of name */
 ** @return [void] 
 ** @@
 **********************************************************************/
-static void subsplitlist (AjPList groups, AjPList sublist) {
+static void grpSubSplitList (AjPList groups, AjPList sublist) {
 
   AjPStr *sub;		/* array of sub-names */
   ajint len;		/* length of array of sub-names */
@@ -721,12 +721,12 @@ Must write a routine in ajlist.c to do this better. */
     
 /* recurse */
 /*    ajDebug("[recurse]\n"); */
-    subsplitlist (groups, sublist);
+    grpSubSplitList (groups, sublist);
   }
-/*  ajDebug("[exit subsplitlist]\n"); */
+/*  ajDebug("[exit grpSubSplitList]\n"); */
 }
 
-/* @funcstatic   addGroupsToList ************************************
+/* @funcstatic grpAddGroupsToList ************************************
 **
 ** Add application to applications list and its groups to the full groups list
 ** Results are alpha list and glist.
@@ -744,7 +744,7 @@ Must write a routine in ajlist.c to do this better. */
 ** @@
 **********************************************************************/
 
-static void addGroupsToList(AjPList alpha, AjPList glist, AjPList groups,
+static void grpAddGroupsToList(AjPList alpha, AjPList glist, AjPList groups,
 			    AjPStr appl, AjPStr doc) {
   AjPStr g = NULL;	/* temporary value of member of groups list */
   AjIList aiter;	/* 'alpha' iterator */
