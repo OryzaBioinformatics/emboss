@@ -34,6 +34,7 @@ static void msbar_pointmutn(AjPStr *str, AjBool isnuc, AjPStr *pointlist);
 static void msbar_Insert(AjPStr *str, AjBool isnuc, ajint start, ajint end);
 static void msbar_Move(AjPStr *str, ajint start, ajint end, ajint destination);
 static void msbar_Duplicate(AjPStr *str, ajint start, ajint end);
+static AjBool msbar_Unlike(AjPStr str, AjPSeqall other);
 
 
 
@@ -49,6 +50,7 @@ int main(int argc, char **argv)
 {
 
     AjPSeqall seqall;
+    AjPSeqall other;
     AjPSeqout seqout;
     AjPSeq seq = NULL;
 
@@ -65,6 +67,13 @@ int main(int argc, char **argv)
     ajint max;
     AjBool inframe;
 
+    /* the number of times to try to produce a sequence that is different to
+       the 'other' sequences before we give up and output it anyway */
+    ajint attempts = 01;
+
+    /* count of tries to get a unique sequence */
+    ajint try;
+
     (void) embInit ("msbar", argc, argv);
 
     seqall = ajAcdGetSeqall ("sequence");
@@ -78,28 +87,43 @@ int main(int argc, char **argv)
     inframe = ajAcdGetBool ("inframe");
     min = ajAcdGetInt ("minimum");
     max = ajAcdGetInt ("maximum");
+    other = ajAcdGetSeqall ("other");
+
 
     str = ajStrNew();
 
     while (ajSeqallNext(seqall, &seq))
     {
+        ajSeqTrim(seq);
+        
 	/* is this a protein or nucleic sequence? */
 	isnuc = ajSeqIsNuc(seq);
-
-	/* get a copy of the sequence string */
-	(void) ajStrAss (&str, ajSeqStr(seq));
 
 	/* seed the random number generator */
 	(void) ajRandomSeed();
 
-	/* do the mutation operations */
-	for (i=0; i<count; i++)
-	{
-	    (void) msbar_blockmutn(&str, isnuc, blocklist, min, max, inframe);
-	    (void) msbar_codonmutn(&str, isnuc, codonlist, inframe);
-	    (void) msbar_pointmutn(&str, isnuc, pointlist);
+        /* try mutating until we have a result that is not the same as
+	   the 'other' sequences */
+        for (try=0; try<attempts; try++) {
 
+	    /* get a copy of the sequence string */
+	    (void) ajStrAss (&str, ajSeqStr(seq));
+
+	    /* do the mutation operations */
+	    for (i=0; i<count; i++)
+	    {
+	        (void) msbar_blockmutn(&str, isnuc, blocklist, min, max, inframe);
+	        (void) msbar_codonmutn(&str, isnuc, codonlist, inframe);
+	        (void) msbar_pointmutn(&str, isnuc, pointlist);
+	    }
+
+            /* Is this mutated sequence different to the 'other' sequences?  */
+	    if (msbar_Unlike(str, other))
+	        break;
 	}
+
+	if (try >= attempts)
+	    ajWarn("No unique mutation found after %d attempts", attempts);
 
 	(void) ajSeqReplace(seq, str);
 	(void) ajSeqAllWrite (seqout, seq);
@@ -118,14 +142,14 @@ int main(int argc, char **argv)
 
 /* @funcstatic msbar_blockmutn ************************************************
 **
-** Undocumented.
+** Mutate a random block of sequence
 **
-** @param [?] str [AjPStr*] Undocumented
-** @param [?] isnuc [AjBool] Undocumented
-** @param [?] blocklist [AjPStr*] Undocumented
-** @param [?] min [ajint] Undocumented
-** @param [?] max [ajint] Undocumented
-** @param [?] inframe [AjBool] Undocumented
+** @param [U] str [AjPStr*] sequence to mutate
+** @param [r] isnuc [AjBool] TRUE if sequence is nucleic
+** @param [r] blocklist [AjPStr*] Types of block mutations to perform
+** @param [r] min [ajint] minimum size of block
+** @param [r] max [ajint] maximum size of block
+** @param [r] inframe [AjBool] mutate blocks preserving codon frame if TRUE
 ** @@
 ******************************************************************************/
 
@@ -232,12 +256,12 @@ static void msbar_blockmutn(AjPStr *str, AjBool isnuc, AjPStr *blocklist,
 
 /* @funcstatic msbar_codonmutn ************************************************
 **
-** Undocumented.
+** Mutate codons
 **
-** @param [?] str [AjPStr*] Undocumented
-** @param [?] isnuc [AjBool] Undocumented
-** @param [?] codonlist [AjPStr*] Undocumented
-** @param [?] inframe [AjBool] Undocumented
+** @param [U] str [AjPStr*] Sequence to mutate
+** @param [r] isnuc [AjBool] TRUE if sequence is nucleic
+** @param [r] codonlist [AjPStr*] Types of codon mutations to perform
+** @param [r] inframe [AjBool] mutate blocks preserving codon frame if TRUE
 ** @@
 ******************************************************************************/
 
@@ -333,11 +357,11 @@ static void msbar_codonmutn(AjPStr *str, AjBool isnuc, AjPStr *codonlist,
 
 /* @funcstatic msbar_pointmutn ************************************************
 **
-** Undocumented.
+** Mutate random single points
 **
-** @param [?] str [AjPStr*] Undocumented
-** @param [?] isnuc [AjBool] Undocumented
-** @param [?] pointlist [AjPStr*] Undocumented
+** @param [U] str [AjPStr*] sequence to mutate
+** @param [r] isnuc [AjBool] TRUE if sequence is nucleic
+** @param [r] pointlist [AjPStr*] Types of point mutations to perform
 ** @@
 ******************************************************************************/
 
@@ -416,12 +440,12 @@ static void msbar_pointmutn(AjPStr *str, AjBool isnuc, AjPStr *pointlist)
 
 /* @funcstatic msbar_Insert ***************************************************
 **
-** Undocumented.
+** Insert random sequence at a position in the main sequence
 **
-** @param [?] str [AjPStr*] Undocumented
-** @param [?] isnuc [AjBool] Undocumented
-** @param [?] start [ajint] Undocumented
-** @param [?] end [ajint] Undocumented
+** @param [U] str [AjPStr*] sequence to insert into
+** @param [r] isnuc [AjBool] TRUE if sequence is nucleic
+** @param [r] start [ajint] start position of insert
+** @param [r] end [ajint] end of insert
 ** @@
 ******************************************************************************/
 
@@ -455,12 +479,12 @@ static void msbar_Insert(AjPStr *str, AjBool isnuc, ajint start, ajint end)
 
 /* @funcstatic msbar_Move *****************************************************
 **
-** Undocumented.
+** Move a block of sequence from one position to another
 **
-** @param [?] str [AjPStr*] Undocumented
-** @param [?] start [ajint] Undocumented
-** @param [?] end [ajint] Undocumented
-** @param [?] destination [ajint] Undocumented
+** @param [U] str [AjPStr*] sequence to move within
+** @param [r] start [ajint] start position of block to move
+** @param [r] end [ajint] end position of block to move
+** @param [r] destination [ajint] destination of move
 ** @@
 ******************************************************************************/
 
@@ -478,11 +502,11 @@ static void msbar_Move(AjPStr *str, ajint start, ajint end, ajint destination)
 
 /* @funcstatic msbar_Duplicate ************************************************
 **
-** Undocumented.
+** Duplicate a block of sequence adjacent to the source block of sequence
 **
-** @param [?] str [AjPStr*] Undocumented
-** @param [?] start [ajint] Undocumented
-** @param [?] end [ajint] Undocumented
+** @param [U] str [AjPStr*] sequence to duplicate within
+** @param [r] start [ajint] start position of block to duplicate
+** @param [r] end [ajint] end position of block to duplicate
 ** @@
 ******************************************************************************/
 
@@ -491,4 +515,28 @@ static void msbar_Duplicate(AjPStr *str, ajint start, ajint end)
 
     (void) msbar_Move(str, start, end, start);
     return;
+}
+
+
+/* @funcstatic msbar_Unlike ************************************************
+**
+** Check that the sequence is unlike any other input sequence
+**
+** @param [r] str [AjPStr] sequence to check
+** @param [r] other [AjPSeqall] set of sequences to check against
+** @return [AjBool] True if unlike any other sequence
+** @@
+******************************************************************************/
+
+static AjBool msbar_Unlike(AjPStr str, AjPSeqall other)
+{
+    AjPSeq nextother;
+
+    while (ajSeqallNext(other, &nextother))
+    {
+        if (ajStrMatchCase(str, ajSeqStr(nextother)))
+            return ajFalse;
+    }
+    
+    return ajTrue;
 }
