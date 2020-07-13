@@ -6,7 +6,7 @@ dnl Process this file with autoconf to produce a configure script.
 #CC=cc
 
 AC_INIT(ajax/ajacd.c)
-AM_INIT_AUTOMAKE(EMBOSS, 2.5.0)
+AM_INIT_AUTOMAKE(EMBOSS, 2.5.1)
 
 
 dnl Use libtool to make a shared library.
@@ -127,7 +127,6 @@ CPPFLAGS="-DAJ_IRIXLF $CPPFLAGS"
 fi
 
 
-
 AC_MSG_RESULT(done)
 fi
 
@@ -237,6 +236,11 @@ if test "`uname`" = "HP-UX"; then
 LDFLAGS="$LDFLAGS -lsec"
 fi
 
+
+dnl Add /usr/local/lib to relocation path for Solaris
+if test "`uname`" = "SunOS"; then
+LDFLAGS="$LDFLAGS -R/usr/local/lib"
+fi
 
 dnl check and set compilation flags for Jemboss auth server code
 CHECK_THREADS
