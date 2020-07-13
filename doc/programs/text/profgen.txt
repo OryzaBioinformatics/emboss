@@ -1,0 +1,157 @@
+
+                                  profgen 
+                                      
+   
+   
+Function
+
+   Generates various profiles for each alignment in a directory
+   
+Description
+
+   This is part of Jon Ison's protein structure analysis package.
+   
+   This package is still being developed.
+   
+   Please ignore this program until further details can be documented.
+   
+   All further queries should go to Jon Ison. (Jon Ison)
+   
+Usage
+
+   Here is a sample session with profgen:
+
+% profgen
+
+Command line arguments
+
+   Mandatory qualifiers (* if not always prompted):
+   -infpath            string     Location of sequence alignment files (input)
+   -infextn            string     Extension of sequence alignment files
+   -type               menu       Select type
+*  -threshold          integer    Enter threshold reporting percentage
+*  -datafile           matrixf    Scoring matrix
+*  -open               float      Gap opening penalty
+*  -extension          float      Gap extension penalty
+*  -smpfpath           string     Location of simple profile files (output)
+*  -smpfextn           string     Extention of simple profile files
+*  -gbpfpath           string     Location of Gribskov profile files (output)
+*  -gbpfextn           string     Extension of Gribskov profile files
+*  -hnpfpath           string     Location of Henikoff profile files (output)
+*  -hnpfextn           string     Extention of Henikoff profile files
+
+   Optional qualifiers: (none)
+   Advanced qualifiers: (none)
+   General qualifiers:
+  -help                boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   
+
+   Mandatory qualifiers Allowed values Default
+   -infpath Location of sequence alignment files (input) Any string is
+   accepted ./
+   -infextn Extension of sequence alignment files Any string is accepted
+   .ealign
+   -type Select type
+   F (Frequency)
+   G (Gribskov)
+   H (Henikoff)
+   F
+   -threshold Enter threshold reporting percentage Integer from 1 to 100
+   75
+   -datafile Scoring matrix Comparison matrix file in EMBOSS data path
+   'Epprofile' for Gribskov type, or EBLOSUM62
+   -open Gap opening penalty Any numeric value 3.0
+   -extension Gap extension penalty Any numeric value 0.3
+   -smpfpath Location of simple profile files (output) Any string is
+   accepted ./tmp/
+   -smpfextn Extention of simple profile files Any string is accepted
+   .freq
+   -gbpfpath Location of Gribskov profile files (output) Any string is
+   accepted ./tmp/
+   -gbpfextn Extension of Gribskov profile files Any string is accepted
+   .gribs
+   -hnpfpath Location of Henikoff profile files (output) Any string is
+   accepted ./tmp/
+   -hnpfextn Extention of Henikoff profile files Any string is accepted
+   .henik
+   Optional qualifiers Allowed values Default
+   (none)
+   Advanced qualifiers Allowed values Default
+   (none)
+   
+Input file format
+
+Output file format
+
+Data files
+
+Notes
+
+   None.
+   
+References
+
+   None.
+   
+Warnings
+
+   None.
+   
+Diagnostic Error Messages
+
+   None.
+   
+Exit status
+
+   It always exits with status 0.
+   
+Known bugs
+
+   None.
+   
+See also
+
+   Program name Description
+   contacts Reads coordinate files and writes files of intra-chain
+   residue-residue contact data
+   dichet Parse dictionary of heterogen groups
+   hmmgen Generates a hidden Markov model for each alignment in a
+   directory
+   interface Reads coordinate files and writes files of inter-chain
+   residue-residue contact data
+   psiblasts Runs PSI-BLAST given scopalign alignments
+   scopalign Generate alignments for families in a scop classification
+   file by using STAMP
+   scoprep Reorder scop classificaiton file so that the representative
+   structure of each family is given first
+   scopreso Removes low resolution domains from a scop classification
+   file
+   seqalign Generate extended alignments for families in a scop families
+   file by using CLUSTALW with seed alignments
+   seqsearch Generate files of hits for families in a scop classification
+   file by using PSI-BLAST with seed alignments
+   seqsort Reads multiple files of hits and writes a non-ambiguous file
+   of hits (scop families file) plus a validation file
+   seqwords Generate file of hits for scop families by searching
+   swissprot with keywords
+   siggen Generates a sparse protein signature from an alignment and
+   residue contact data
+   sigscan Scans a signature against swissprot and writes a signature
+   hits files
+   
+Author(s)
+
+   This application was written by Jon Ison (jison@hgmp.mrc.ac.uk)
+   
+History
+
+   Written (date) - author.
+   
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+   
+Comments
