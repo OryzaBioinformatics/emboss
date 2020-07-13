@@ -14,6 +14,12 @@ bool: get  [
   information: "Retrieve sequences"
 ]
 
+bool: showall  [
+  required: "N"
+  default: "N"
+  information: "Show failed attempts"
+]
+
 outfile: outfile  [
   required: "@(!$(get))"
   nullok: "$(get)"
