@@ -1,3 +1,43 @@
+Version 2.6.0
+
+	Added twofeat - Finds neighbouring pairs of features in sequences
+
+	Extractfeat - added option (-featinname) to include the name of
+	the feature as part of the ID name of the sequence that is
+	written out. 
+
+	Added sirna - designs siRNA probes in mRNA
+
+	Sigcleave sorts results highest score first
+
+	Helixturnhelix sorts results highest score first and reports the
+	score position as an integer
+
+	Added pestfind
+
+	Moved the following programs into the "domainatrix" embassy
+	package:
+	 contacts, domainer, fraggle, hetparse, hmmgen, interface,
+	 pdbparse, pdbtosp, profgen, scopalign, scopnr, scopparse,
+	 scoprep, scopreso, scopseqs, seqalign, seqnr, seqsearch,
+	 seqsort, seqwords, siggen, sigplot, sigscan
+	
+	Palindrome no longer reports palindromes that are only composed
+	of N's
+
+	Msbar can now check that the result doesn't match a set of
+	input other sequences.  For example you could specify that it
+	doesn't match the input sequence or a set of previously produced
+	mutation results. 
+
+        Getorf reporting of circular genome positions tidied up - it now
+	reports positions starting in the range 1 to the sequence length
+	and indicates if the ORF goes through the breakpoint.  A clear
+	indication of when ORFs are in the reverse sense has been added.
+
+	Pasteseq now behaves correctly when -sask2, -sbegin2 or -send2
+	are used. 
+
 Version 2.5.1
 
 	Whichdb new option -showall to see which databases are being

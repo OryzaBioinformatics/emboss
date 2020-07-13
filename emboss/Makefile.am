@@ -11,6 +11,7 @@ AM_CFLAGS =
 endif
 endif
 
+
 check_PROGRAMS = ajtest \
 complex corbatest \
 demoalign demofeatures demolist demoreport demosequence demostring demotable \
@@ -18,41 +19,40 @@ entrails histogramtest intconv \
 patmattest \
 prima primers \
 seqinfo seqretall seqretallfeat seqretset seqretsingle \
-sigplot \
 testplot treetypedisplay
 
 bin_PROGRAMS = aaindexextract abiview acdc antigenic \
 backtranseq banana biosed btwisted \
 cai chaos charge checktrans chips cirdna codcmp coderet \
-contacts compseq cons cpgplot cpgreport cusp cutgextract cutseq \
+compseq cons cpgplot cpgreport cusp cutgextract cutseq \
 dan dbiblast dbifasta dbiflat dbigcg \
-degapseq descseq diffseq digest distmat domainer \
+degapseq descseq diffseq digest distmat \
 dotmatcher dotpath dottup dreg \
 einverted embossdata embossversion emma emowse entret \
 eprimer3 equicktandem est2genome etandem extractfeat extractseq \
-findkm fraggle freak funky fuzznuc fuzzpro fuzztran \
-garnier geecee getorf hetparse helixturnhelix hmmgen hmoment \
-iep infoalign infoseq interface isochore jembossctl lindna listor \
+findkm freak fuzznuc fuzzpro fuzztran \
+garnier geecee getorf helixturnhelix hmoment \
+iep infoalign infoseq isochore jembossctl lindna listor \
 marscan maskfeat maskseq matcher megamerger merger msbar \
 mwcontam mwfilter \
 needle newcpgreport newcpgseek newseq \
 noreturn notseq nthseq \
 octanol oddcomp \
 palindrome pasteseq patmatdb patmatmotifs \
-pdbparse pdbtosp pepcoil pepinfo pepnet pepstats \
+pepcoil pepinfo pepnet pepstats \
 pepwheel pepwindow pepwindowall \
-plotcon plotorf polydot preg \
+pestfind plotcon plotorf polydot preg \
 prettyplot prettyseq primersearch printsextract \
-profgen profit prophecy prophet \
+profit prophecy prophet \
 prosextract pscan \
-rebaseextract recoder redata remap restover restrict revseq scopnr scopparse \
-scopseqs scoprep scopreso seealso seqalign seqmatchall seqnr seqret seqretsplit seqsearch seqsort seqwords \
+rebaseextract recoder redata remap restover restrict revseq \
+seealso seqmatchall seqret seqretsplit \
 showalign showdb showfeat showorf showseq \
-shuffleseq sigcleave siggen sigscan silent skipseq \
-splitter scopalign stretcher \
+shuffleseq sigcleave silent sirna sixpack skipseq \
+splitter stretcher \
 stssearch supermatcher syco \
 textsearch tfextract tfm tfscan \
-tmap tranalign transeq trimest trimseq \
+tmap tranalign transeq trimest trimseq twofeat \
 union vectorstrip \
 water whichdb wobble wordcount wordmatch \
 wossname yank
@@ -78,7 +78,6 @@ coderet_SOURCES = coderet.c
 complex_SOURCES = complex.c
 compseq_SOURCES = compseq.c
 cons_SOURCES = cons.c
-contacts_SOURCES = contacts.c
 corbatest_SOURCES = corbatest.c
 cpgplot_SOURCES = cpgplot.c
 cpgreport_SOURCES = cpgreport.c
@@ -95,8 +94,8 @@ descseq_SOURCES = descseq.c
 diffseq_SOURCES = diffseq.c
 digest_SOURCES = digest.c
 distmat_SOURCES = distmat.c
-domainer_SOURCES = domainer.c
 dotmatcher_SOURCES = dotmatcher.c
+dotpath_SOURCES = dotpath.c
 dottup_SOURCES = dottup.c
 dreg_SOURCES = dreg.c
 einverted_SOURCES = einverted.c
@@ -113,9 +112,7 @@ embossversion_SOURCES = embossversion.c
 extractfeat_SOURCES = extractfeat.c
 extractseq_SOURCES = extractseq.c
 findkm_SOURCES = findkm.c
-fraggle_SOURCES = fraggle.c
 freak_SOURCES = freak.c
-funky_SOURCES = funky.c
 fuzznuc_SOURCES = fuzznuc.c
 fuzzpro_SOURCES = fuzzpro.c
 fuzztran_SOURCES = fuzztran.c
@@ -123,19 +120,16 @@ garnier_SOURCES = garnier.c
 geecee_SOURCES = geecee.c
 getorf_SOURCES = getorf.c
 helixturnhelix_SOURCES = helixturnhelix.c
-hetparse_SOURCES = hetparse.c
-hmmgen_SOURCES = hmmgen.c
 hmoment_SOURCES = hmoment.c
 iep_SOURCES = iep.c
 infoalign_SOURCES = infoalign.c
 infoseq_SOURCES = infoseq.c
 intconv_SOURCES = intconv.c
-interface_SOURCES = interface.c
 isochore_SOURCES = isochore.c
 jembossctl_SOURCES = jembossctl.c
-lindna_SOURCE = lindna.c
-listor_SOURCE = listor.c
-marscan_SOURCE = marscan.c
+lindna_SOURCES = lindna.c
+listor_SOURCES = listor.c
+marscan_SOURCES = marscan.c
 maskfeat_SOURCES = maskfeat.c
 maskseq_SOURCES = maskseq.c
 matcher_SOURCES = matcher.c
@@ -157,15 +151,14 @@ palindrome_SOURCES = palindrome.c
 pasteseq_SOURCES = pasteseq.c
 patmatdb_SOURCES = patmatdb.c
 patmatmotifs_SOURCES = patmatmotifs.c
-pdbparse_SOURCES = pdbparse.c
-pdbtosp_SOURCES = pdbtosp.c
 pepcoil_SOURCES = pepcoil.c
-pepinfo_SOURCE = pepinfo.c
+pepinfo_SOURCES = pepinfo.c
 pepnet_SOURCES = pepnet.c
 pepstats_SOURCES = pepstats.c
 pepwheel_SOURCES = pepwheel.c
 pepwindow_SOURCES = pepwindow.c
 pepwindowall_SOURCES = pepwindowall.c
+pestfind_SOURCES = pestfind.c
 plotcon_SOURCES = plotcon.c
 plotorf_SOURCES = plotorf.c
 polydot_SOURCES = polydot.c
@@ -176,7 +169,6 @@ prima_SOURCES = prima.c
 primers_SOURCES = primers.c
 primersearch_SOURCES = primersearch.c
 printsextract_SOURCES = printsextract.c
-profgen_SOURCES = profgen.c
 profit_SOURCES = profit.c
 prophecy_SOURCES = prophecy.c
 prophet_SOURCES = prophet.c
@@ -189,19 +181,9 @@ remap_SOURCES = remap.c
 restover_SOURCES = restover.c
 restrict_SOURCES = restrict.c
 revseq_SOURCES = revseq.c
-scopnr_SOURCES = scopnr.c
-scopparse_SOURCES = scopparse.c
-scopseqs_SOURCES = scopseqs.c
-scoprep_SOURCES = scoprep.c
-scopreso_SOURCES = scopreso.c
 seealso_SOURCES = seealso.c
-seqalign_SOURCES = seqalign.c
 seqmatchall_SOURCES = seqmatchall.c
-seqnr_SOURCES = seqnr.c
 seqret_SOURCES = seqret.c
-seqsearch_SOURCES = seqsearch.c
-seqsort_SOURCES = seqsort.c
-seqwords_SOURCES = seqwords.c
 seqinfo_SOURCES = seqinfo.c
 seqretall_SOURCES = seqretall.c
 seqretallfeat_SOURCES = seqretallfeat.c
@@ -214,10 +196,10 @@ showorf_SOURCES = showorf.c
 showseq_SOURCES = showseq.c
 shuffleseq_SOURCES = shuffleseq.c
 sigcleave_SOURCES = sigcleave.c
-siggen_SOURCES = siggen.c
 silent_SOURCES = silent.c
+sirna_SOURCES = sirna.c
+sixpack_SOURCES = sixpack.c
 splitter_SOURCES = splitter.c
-scopalign_SOURCES = scopalign.c
 stretcher_SOURCES = stretcher.c
 stssearch_SOURCES = stssearch.c
 supermatcher_SOURCES = supermatcher.c
@@ -231,6 +213,7 @@ tranalign_SOURCES = tranalign.c
 transeq_SOURCES = transeq.c
 trimest_SOURCES = trimest.c
 trimseq_SOURCES = trimseq.c
+twofeat_SOURCES = twofeat.c
 union_SOURCES = union.c
 vectorstrip_SOURCES = vectorstrip.c
 water_SOURCES = water.c
@@ -253,8 +236,6 @@ demotable_SOURCES = demotable.c
 histogramtest_SOURCES = histogramtest.c
 patmattest_SOURCES = patmattest.c
 seqretsingle_SOURCES = seqretsingle.c
-sigplot_SOURCES = sigplot.c
-sigscan_SOURCES = sigscan.c
 testplot_SOURCES = testplot.c
 treetypedisplay_SOURCES = treetypedisplay.c
 
@@ -268,3 +249,5 @@ pkgdatadir=$(prefix)/share/$(PACKAGE)
 #else
 #
 #endif
+
+

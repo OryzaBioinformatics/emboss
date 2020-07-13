@@ -1,7 +1,7 @@
 The EMBOSS Frequently Asked Questions list
 ==========================================
 
-Last modified: 3 Oct 2001
+Last modified: 9 Jan 2003
 
 
 SECTION A - Help and Support
@@ -125,15 +125,23 @@ A) If you have  gd-1.7.3, zlib-1.1.3 and libpng-1.0.5 or greater
    /bin subdirectory. You can create this directory
    (e.g. /home/joe/local/bin) if it does not already exist.
 
-   To install, pick up the sources and then:
+   To install, pick up the sources (jpeg is optional) and then:
 
-   gunzip -c zlib-1_1_3_tar.gz   | tar xf -
-   gunzip -c libpng-1_2_1_tar.gz | tar xf -
-   gunzip -c gd-1.8.4.tar.gz     | tar xf -
+   gunzip -c zlib-1.1.4.tar.gz   | tar xf -
+   gunzip -c libpng-1.2.5.tar.gz | tar xf -
+   gunzip -c jpegsrc.v6b.tar.gz | tar xf -
+   gunzip -c gd-2.0.9.tar.gz     | tar xf -
 
-   ln -s zlib-1.1.3   zlib
-   ln -s libpng-1.2.1 libpng
-   ln -s gd-1.8.4     gd
+   ln -s zlib-1.1.4   zlib
+   ln -s jpeg-6b jpeg
+   ln -s libpng-1.2.5 libpng
+   ln -s gd-2.0.9     gd
+
+   If these directories do not exist, "make install" for jpeg will need them:
+
+   mkdir /home/joe/local/bin
+   mkdir /home/joe/local/man
+   mkdir /home/joe/local/man1
 
    cd zlib
    ./configure --prefix=/home/joe/local
@@ -141,8 +149,24 @@ A) If you have  gd-1.7.3, zlib-1.1.3 and libpng-1.0.5 or greater
    make install
    cd ..
 
+   cd jpeg
+   ./configure --prefix=/home/joe/local
+   make
+   make test
+   make install
+   cd ..
+
    cd libpng
-   cp scripts/makefile.linux makefile
+   ./configure --prefix=/home/joe/local
+
+   But this says:
+
+  There is no "configure" script for Libpng-1.2.5.  Instead, please
+  copy the appropriate makefile for your system from the "scripts"
+  directory.  Read the INSTALL file for more details.
+
+  so copy the file, for example  "cp scripts/makefile.linux makefile"
+
    ##
    ## edit makefile, change prefix to be /home/joe/local
    ## and any other places - some files point to ../zlib
@@ -156,19 +180,23 @@ A) If you have  gd-1.7.3, zlib-1.1.3 and libpng-1.0.5 or greater
 
    cd gd
    ##
-   ## edit Makefile, change:
+   ## for 1.x versions, edit Makefile, change:
    ##         INCLUDEDIRS, LIBDIRS, INSTALL_LIB, INSTALL_INCLUDE, INSTALL_BIN
    ##         all          /usr/local
    ##         to           /home/joe/local
    ##
+   ## for 2.x versions, we use ./configure (hurrah!)
+   ./configure --prefix=/home/joe/local --with-png=/home/joe/local \
+               --with-jpeg=/home/joe/local
+
    make
    make install
    cd ..
 
-   If the gd "make install" fails with a warning about the "bin"
-   directory, you need to create it by hand (see above).
+   If the gd or jpeg "make install" fails with a warning about the "bin"
+   "man" or "man/man1" directory, you need to create it by hand (see above).
 
-   To compile with the local version your configure line should now
+   To compile with the local version your EMBOSS ./configure line should now
    read:-
    ./configure --with-pngdriver=/home/joe/local
 
@@ -633,6 +661,7 @@ Q) Where to look for the additional libraries needed for PNG.
 A)
    GD)  http://www.boutell.com/gd/
    Z)   http://www.mirror.ac.uk/sites/ftp.cdrom.com/pub/infozip/zlib/
+   JPEG) http://www.ijg.org/
    PNG) http://www.mirror.ac.uk/sites/ftp.libpng.org/pub/png/libpng.html
 
    These also list the various mirror sites for non UK people.
@@ -641,6 +670,7 @@ A)
 
    GD)  (boutell.com no longer allows FTP, no known mirror sites, use HTTP)
    Z)   ftp://ftp.info-zip.org/pub/infozip/zlib/zlib-1.1.3.tar.gz
+   JPEG) ftp://ftp.uu.net/graphics/jpeg/
    PNG) ftp://swrinde.nde.swri.edu/pub/png/src/libpng.1.2.1.tar.gz
 
 

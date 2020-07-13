@@ -6,7 +6,7 @@ dnl Process this file with autoconf to produce a configure script.
 #CC=cc
 
 AC_INIT(ajax/ajacd.c)
-AM_INIT_AUTOMAKE(EMBOSS, 2.5.1)
+AM_INIT_AUTOMAKE(EMBOSS, 2.6.0)
 
 
 dnl Use libtool to make a shared library.
@@ -127,6 +127,7 @@ CPPFLAGS="-DAJ_IRIXLF $CPPFLAGS"
 fi
 
 
+
 AC_MSG_RESULT(done)
 fi
 
@@ -237,11 +238,6 @@ LDFLAGS="$LDFLAGS -lsec"
 fi
 
 
-dnl Add /usr/local/lib to relocation path for Solaris
-if test "`uname`" = "SunOS"; then
-LDFLAGS="$LDFLAGS -R/usr/local/lib"
-fi
-
 dnl check and set compilation flags for Jemboss auth server code
 CHECK_THREADS
 
@@ -268,7 +264,8 @@ jemboss/api/org/emboss/jemboss/parser/acd/Makefile
 jemboss/api/org/emboss/jemboss/programs/Makefile
 jemboss/api/org/emboss/jemboss/soap/Makefile
 jemboss/images/Makefile
-jemboss/lib/Makefile jemboss/org/Makefile jemboss/org/emboss/Makefile
+jemboss/lib/Makefile jemboss/lib/axis/Makefile
+jemboss/org/Makefile jemboss/org/emboss/Makefile
 jemboss/org/emboss/jemboss/Makefile jemboss/org/emboss/jemboss/gui/Makefile
 jemboss/org/emboss/jemboss/gui/filetree/Makefile
 jemboss/org/emboss/jemboss/gui/form/Makefile
