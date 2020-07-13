@@ -7,32 +7,28 @@
   </TITLE>
 </HEAD>
 <BODY BGCOLOR="#FFFFFF" text="#000000">
-<table align=center bgcolor="#000070" border=0 cellspacing=0 cellpadding=10>
-<tr>
-<td>
-<a href="index.html" onmouseover="self.status='Go to the EMBOSS home page';return true">
-<img border=0 src="emboss_icon.gif" alt="" width=55 height=55>
-</a>
+
+
+
+<table align=center border=0 cellspacing=0 cellpadding=0>
+<tr><td valign=top>
+<A HREF="index.html" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
 </td>
-<td align=middle valign=middle>
-<font face="Arial,Helvetica" size=6 color="#ffffff">
-<H2>
-EMBOSS: abiview
-</H2>
-</font>
-</td>
-</tr>
+<td align=left valign=middle>
+<b><font size="+6">
+
+abiview
+</font></b>
+</td></tr>
 </table>
-</td>
-</tr>
-</table>
-<p><hr><p>
+<br>&nbsp;
+<p>
+
+
+
 
 <!--END OF HEADER-->
 
-<H1>
-Program abiview
-</H1>
 <H2>
     Function
 </H2>
@@ -123,21 +119,26 @@ Graph type [x11]:
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
    Mandatory qualifiers:
-  [-fname]             string     Name of the ABI trace file
+  [-fname]             infile     Name of the ABI trace file
   [-outseq]            seqout     Sequence file
    -graph              xygraph    Graph type
 
    Optional qualifiers:
-   -yticks             bool       Display y-axis ticks
-   -[no]sequence       bool       Display the sequence on the graph
+   -startbase          integer    First base to report or display
+   -endbase            integer    Last sequence base to report or display. If
+                                  the default is set to zero then the value of
+                                  this is taken as the maximum number of
+                                  bases.
+   -yticks             boolean    Display y-axis ticks
+   -[no]sequence       boolean    Display the sequence on the graph
    -window             integer    Sequence display window size
    -bases              string     Base graphs to be displayed
 
    Advanced qualifiers:
-   -separate           bool       Separate the trace graphs for the 4 bases
+   -separate           boolean    Separate the trace graphs for the 4 bases
 
    General qualifiers:
-  -help                bool       report command line options. More
+  -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
 
@@ -155,8 +156,8 @@ Graph type [x11]:
 <tr>
 <td>[-fname]<br>(Parameter 1)</td>
 <td>Name of the ABI trace file</td>
-<td>Any string is accepted</td>
-<td><i>An empty string is accepted</i></td>
+<td>Input file</td>
+<td><b>Required</b></td>
 </tr>
 
 <tr>
@@ -177,6 +178,20 @@ Graph type [x11]:
 <th align="left" colspan=2>Optional qualifiers</th>
 <th align="left">Allowed values</th>
 <th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-startbase</td>
+<td>First base to report or display</td>
+<td>Integer 0 or more</td>
+<td>0</td>
+</tr>
+
+<tr>
+<td>-endbase</td>
+<td>Last sequence base to report or display. If the default is set to zero then the value of this is taken as the maximum number of bases.</td>
+<td>Any integer value</td>
+<td>0</td>
 </tr>
 
 <tr>
@@ -595,9 +610,6 @@ This program is intended to be used by everyone and everything, from naive users
 
 
 
-
-</TD></TR></TABLE>
-</CENTER>
 
 </BODY>
 </HTML>

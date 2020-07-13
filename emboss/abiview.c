@@ -85,11 +85,14 @@ int main(int argc, char **argv)
     ajlong fwo_;
 
     float tmax;
+
+    ajint base_start;
+    ajint base_end;
     ajint nstart;
     ajint nstop;
     ajint window;
-    ajint i;
-    ajint base;
+    ajint iloop;
+    ajint ibase;
     ajint nbases;
     ajlong baseO;
     ajlong numBases;
@@ -104,31 +107,41 @@ int main(int argc, char **argv)
 
     /* BYTE[i] is a byte mask for byte i */
     const ajlong BYTE[] = { 0x000000ff };
-   
 
 
     (void) ajGraphInit ("abiview", argc, argv);
 
-    fname    = ajAcdGetString("fname");
-    graphs   = ajAcdGetGraphxy("graph");
-    seqout   = ajAcdGetSeqout("outseq");
-    separate = ajAcdGetBool("separate");
-    yticks   = ajAcdGetBool("yticks");
-    dseq     = ajAcdGetBool("sequence");
-    window   = ajAcdGetInt("window");
-    baseN    = ajAcdGetString("bases");
+    fp         = ajAcdGetInfile("fname");
+    graphs     = ajAcdGetGraphxy("graph");
+    base_start = ajAcdGetInt("startbase");
+    base_end   = ajAcdGetInt("endbase");
+    seqout     = ajAcdGetSeqout("outseq");
+    separate   = ajAcdGetBool("separate");
+    yticks     = ajAcdGetBool("yticks");
+    dseq       = ajAcdGetBool("sequence");
+    window     = ajAcdGetInt("window");
+    baseN      = ajAcdGetString("bases");
 
-
+    fname = ajStrNewC(ajFileName(fp)); 
+    
     nbases = ajStrLen(baseN);
     overlay = !separate;
 
-    fp = ajFileNewIn(fname);
-    if(!fp) ajFatal("%S not found",fname);
-    if(!ajSeqABITest(fp)) ajFatal("Not an ABI file");
+
+    if(!ajSeqABITest(fp)) 
+        ajFatal("%s not an ABI file",ajFileName(fp));
 
     numBases = ajSeqABIGetNBase(fp);
+
     baseO = ajSeqABIGetBaseOffset(fp);	/* find BASE tag & get offset */
     nseq = ajStrNew();			/* read in sequence */
+
+    if(base_end != 0 && base_end < numBases)      /* define end base */
+        numBases = base_end;
+
+    if(numBases < base_start)
+        ajFatal("-startbase (%d) larger than the number of bases (%d).",
+                 base_start,numBases);
 
     if(graphs->displaytype == 17)
 	window = numBases+1;
@@ -136,12 +149,12 @@ int main(int argc, char **argv)
     trace = ajInt2dNew();
     basePositions = ajShortNew();
 
-    numPoints = ajSeqABIGetNData(fp);	/* find DATA tag & get no. of points */
-    /* get data trace offsets            */
+    numPoints = ajSeqABIGetNData(fp);  /* find DATA tag & get no. of points */
+    /* get data trace offsets           */
     ajSeqABIGetTraceOffset(fp,dataOffset);
-    ajSeqABIGetData(fp,dataOffset,numPoints,trace); /* read in trace data  */
+    ajSeqABIGetData(fp,dataOffset,numPoints,trace); /* read in trace data   */
 
-    fwo_ = ajSeqABIGetFWO(fp);		/* find FWO tag - field order "GATC  */
+    fwo_ = ajSeqABIGetFWO(fp);	       /* find FWO tag - field order GATC   */
 
     res1 = (char)(fwo_>>24&BYTE[0]);
     res2 = (char)(fwo_>>16&BYTE[0]);
@@ -164,17 +177,21 @@ int main(int argc, char **argv)
 
     /* find trace max */
     tmax = 0.;
-    for(i=0;i<numPoints;i++)
+    for(iloop=0;iloop<numPoints;iloop++)
     {
-	for(base=0;base<4;base++)
-	    if(tmax < (float)ajInt2dGet(trace,base,i))
-		tmax = (float)ajInt2dGet(trace,base,i);
+	for(ibase=0;ibase<4;ibase++)
+	    if(tmax < (float)ajInt2dGet(trace,ibase,iloop))
+		tmax = (float)ajInt2dGet(trace,ibase,iloop);
     }
 
 
     /* setup graph parameters */
-    nstart = 0;
-    nstop  = window+1;
+    if(base_start > -1)
+        nstart = base_start;
+    else
+        nstart = 0;
+
+    nstop  = window+1+nstart;
 
     ajGraphxyTitle(graphs,fname);
     ajGraphxyYtitleC(graphs,"Signal");
@@ -193,9 +210,11 @@ int main(int argc, char **argv)
     ntrace = 0;
     strace = 0;
 
+
     /* loop over pages to be displayed */
     while(nstart < numBases-1)  
     { 
+
 	if(nstop > numBases) 
 	    nstop = numBases;
 
@@ -266,6 +285,7 @@ int main(int argc, char **argv)
 
 	nstart = nstop-1;
 	nstop  = nstart+window+1;
+
     }
  
 
@@ -286,6 +306,7 @@ int main(int argc, char **argv)
     seqo = ajSeqNew();
     ajSeqAssName(seqo,fname);
     ajSeqAssSeq(seqo,nseq);
+    ajSeqSetRange(seqo,base_start,ajSeqEnd(seqo));
     ajSeqWrite(seqout,seqo);    
     ajStrDel(&nseq);
     ajSeqDel(&seqo);

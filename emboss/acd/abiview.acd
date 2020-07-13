@@ -4,7 +4,7 @@ appl: abiview [
 ]
 
 section: input [ info: "input Section" type: page ]
-string: fname  [
+infile: fname  [
   parameter: "Y"
   default: ""
   information: "Name of the ABI trace file"
@@ -23,6 +23,22 @@ xygraph: graph  [
   optional: "N"
   gxtitle: "Residue Position"
 ]
+
+integer: startbase [
+  optional: "Y"
+  default:  "0"
+  minimum:  "0"
+  information: "First base to report or display"
+]
+
+integer: endbase [
+  optional: "Y"
+  default:  "0"
+  information: "Last base to report or display"
+  help: "Last sequence base to report or display.
+If the default is set to zero then the value of this 
+is taken as the maximum number of bases."
+] 
 
 bool: separate  [
   required: "N"
