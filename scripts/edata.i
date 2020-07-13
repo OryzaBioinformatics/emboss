@@ -1,7 +1,7 @@
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #    $RCSfile: edata.i,v $
-#    $Revision: 1.1 $
-#    $Date: 2001/07/16 08:42:53 $
+#    $Revision: 1.2 $
+#    $Date: 2002/08/29 10:05:41 $
 #    $Author: rice $
 #
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -28,12 +28,13 @@ $EDATA_FORMAT=$LibFormat:[fileType:$EDATA_FILE syntax:$EDATA_SYNTAX
     $Field:[$DF_Description code:des index:str indexToken:des ]
     $Field:[$DF_Constructor code:new index:str indexToken:new ]
     $Field:[$DF_Destructor code:del index:str indexToken:del ]
-    $Field:[$DF_Assignment code:ass index:str indexToken:assign]
+    $Field:[$DF_Assignment code:assign index:str indexToken:assign]
     $Field:[$DF_Modifier code:mod index:str indexToken:modify]
     $Field:[$DF_Operator code:use index:str indexToken:use]
     $Field:[$DF_Cast code:cast index:str indexToken:cast]
     $Field:[$DF_Use code:use index:str indexToken:use]
     $Field:[$DF_Other code:other index:str indexToken:other]
+    $Field:[$DF_Attribute code:attr index:str indexToken:attr]
     $Field:[$DF_Body code:body index:str indexToken:btext]
   }
 ]
@@ -49,3 +50,11 @@ $DF_Operator=$SrsField:[Operator short:set]
 $DF_Cast=$SrsField:[Cast short:cas]
 $DF_Use=$SrsField:[Example short:use]
 $DF_Alias=$SrsField:[Alias short:ali]
+$DF_Attribute=$SrsField:[Attr short:att]
+
+
+
+
+
+
+

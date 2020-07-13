@@ -1,8 +1,8 @@
 #!/bin/env icarus
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #    $RCSfile: edata.is,v $
-#    $Revision: 1.1 $
-#    $Date: 2001/07/16 08:42:53 $
+#    $Revision: 1.2 $
+#    $Date: 2002/08/29 10:05:41 $
 #    $Author: rice $
 #
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -10,11 +10,12 @@
 $col1 = '"#58081a"'
 
 $fn={
-  ID:id      AC:alt       DE:des
+  ID:id      DE:des
   TY:typ     MO:module    LB:lib
   NN:new     ND:new       NX:new
   DN:del     DD:del       DX:del
-  AN:assign  AD:assign    AX:assign
+  AN:attr    AT:attr      AD:attr      AX:attr
+  EN:assign  ED:assign    EX:assign
   MN:modify  MD:modify    MX:modify
   ON:use     OD:use       OX:use
   CN:cast    CD:cast      CX:cast
@@ -54,20 +55,31 @@ $rules={
 
   id:      ~ {$In:[fields c:id] $Out}
              /../ word {$Wrt $id=$Ct} ~
-  alt:     ~ {$In:[fields c:alt] $Out}
-            /../  word {$Wrt} ~
   des:     ~ {$In:[clFields c:des] $Out}
-             (word {$Uniq} | noword)* ~
+             (word {$Uniq} | noword)*
+~
 
 #  hdes:    ~ {$In:[fields c:des] $Out}
 #             (/../ (/\n/ {$Wrt:[s:"<p>\n"]} | ln {$Wrt}) )* ~
 
+  attrs:  ~ x{$args={}}
+             ('AN' rest {$tmp={} $tmp.name=$Ct} ln
+             'AT' rest {$tmp.type=$Ct} /\n/ {$tmp.comment=""}
+            ('AD' ln {if:$Ct.=="" $StrApp:[$tmp.comment s:"<p>\n"]
+                      else $StrApp:[$tmp.comment s:$Ct]})*
+             'AX' ln {$args.app:$tmp})* ~
+
   alias:     ~ {$In:[fields c:{id alias}] $Out} 
-	       (/ID/ word {$Wrt})*
+	       (/ID/ word {$Wrt} ln)*
 	       ( /.N/  word {$Wrt} ln
 		 (/.D/ ln)*
 		 /.X/ ln)*
                ~
+  attr:     ~ {$In:[fields c:attr] $Out} 
+             ( /.N/  word {$Wrt} ln
+              (/.T/ ln)*
+              (/.D/ ln)*
+               /.X/ ln)* ~
   new:     ~ {$In:[fields c:new] $Out} 
              ( /.N/  word {$Wrt} ln
               (/.D/ ln)*
@@ -102,7 +114,7 @@ $rules={
   btext:      ~ {$In:[fields c:body] $Out pre {$Request:id} }
              (/[a-zA-Z0-9_]+/ {$Uniq} | /./)+ ~
 
-  ref_data:    ~ {$In:[fields c:{proto body}] $Out}
+  ref_data:    ~ {$In:[fields c:body] $Out}
 		 (/[A-Z]+[a-zA-Z0-9_]+/  {if:$Ct != $id {$Uniq}} |
 		   /[a-zA-Z0-9_]+/ | /./)+
 	       ~
@@ -130,13 +142,27 @@ $rules={
                     |</TD></TR>
                   }
            ~
-  h_alt: ~ {$In:[fields c:alt t:html]}
-             lines {$Rep:
-                    |<TR>
-                    |<TD VALIGN=TOP bgcolor=$col1><FONT color="#FFFFFF">
-                    |<B>Alias</B></TD><TD>
-                    |($Foreach:[$s in:$txt s:@"<b>$s</b><br>"])
-                    |</TD></TR>
+  h_attr: ~ {$In:[fields c:attr t:html]}
+             attrs {$Rep:
+                        |<TR>
+                        |<TD VALIGN=TOP bgcolor=$col1><FONT color="#FFFFFF">
+                        |<B>Attributes</B></TD><TD>
+                        |<TABLE BORDER CELLPADDING=4 BGCOLOR="#FFFFF0">
+                        | <TR BGCOLOR="#d3b5b5">
+                        |  <TH><FONT SIZE=-1>Type</TH>
+                        |  <TH><FONT SIZE=-1>Name</TH>
+                        |  <TH><FONT SIZE=-1>Comment</TH>
+              		|($Foreach:[$tmp in:$args s:@
+			     |<TR>
+			     | <TD VALIGN=TOP>($tmp.type)</TD>
+			     | <TD VALIGN=TOP>($tmp.name)</TD>
+		             | <TD VALIGN=TOP>($Alt:[$tmp.comment.trim.==""
+                                               t:'&nbsp;' f:$tmp.comment])</TD>
+			     |</TR>
+			   ])
+                        |</TR>
+                        |</TABLE>
+                        |</TD></TR>
                   }
            ~
   h_des: ~ {$In:[fields c:des t:html]}
@@ -148,8 +174,33 @@ $rules={
                     |</TD></TR>
                   }
            ~
+  h_alias: ~ {$In:[fields c:alias t:html] }
+	   x{$fun={}} fundoc {$efun=$fun
+	            $Rep:
+                        |<TR>
+                        |<TD VALIGN=TOP bgcolor=$col1><FONT color="#FFFFFF">
+                        |<B>Alias(es)</B></TD><TD>
+                        |Aliases are alternate names for an
+                        |<b>($entry.name)</b> object.<p>
+                        |<TABLE BORDER CELLPADDING=4 BGCOLOR="#FFFFF0">
+                        | <TR BGCOLOR="#d3b5b5">
+                        |  <TH><FONT SIZE=-1>Name</TH>
+                        |  <TH><FONT SIZE=-1>Comment</TH>
+              		|($Foreach:[$tmp in:$efun s:@
+			     |<TR>
+			     | <TD VALIGN=TOP>($tmp.name)</TD>
+			     | <TD VALIGN=TOP>($Alt:[$tmp.comment.trim.==""
+                                               t:'&nbsp' f:$tmp.comment])</TD>
+			     |</TR>
+			   ])
+                        |</TR>
+                        |</TABLE>
+                        |</TD></TR>
+                  }
+           ~
   h_new: ~ {$In:[fields c:new t:html] }
-             fundoc {$Rep:
+	   x{$fun={}} fundoc {$nfun=$fun
+	            $Rep:
                         |<TR>
                         |<TD VALIGN=TOP bgcolor=$col1><FONT color="#FFFFFF">
                         |<B>Constructor(s)</B></TD><TD>
@@ -159,10 +210,10 @@ $rules={
                         | <TR BGCOLOR="#d3b5b5">
                         |  <TH><FONT SIZE=-1>Name</TH>
                         |  <TH><FONT SIZE=-1>Comment</TH>
-              		|($Foreach:[$tmp in:$fun s:@
+              		|($Foreach:[$tmp in:$nfun s:@
 			     |<TR>
 			     | <TD VALIGN=TOP>($tmp.name)</TD>
-			     | <TD VALIGN=TOP>($Alt:[$tmp.comment.trim==""
+			     | <TD VALIGN=TOP>($Alt:[$tmp.comment.trim.==""
                                                t:'&nbsp;' f:$tmp.comment])</TD>
 			     |</TR>
 			   ])
@@ -172,7 +223,8 @@ $rules={
                   }
            ~
   h_del: ~ {$In:[fields c:del t:html]}
-             fundoc {$Rep:
+             x{$fun={}} fundoc {$dfun=$fun
+	            $Rep:
                         |<TR>
                         |<TD VALIGN=TOP bgcolor=$col1><FONT color="#FFFFFF">
                         |<B>Destructor(s)</B></TD><TD>
@@ -182,10 +234,10 @@ $rules={
                         | <TR BGCOLOR="#d3b5b5">
                         |  <TH><FONT SIZE=-1>Name</TH>
                         |  <TH><FONT SIZE=-1>Comment</TH>
-              		|($Foreach:[$tmp in:$fun s:@
+              		|($Foreach:[$tmp in:$dfun s:@
 			     |<TR>
 			     | <TD VALIGN=TOP>($tmp.name)</TD>
-			     | <TD VALIGN=TOP>($Alt:[$tmp.comment.trim==""
+			     | <TD VALIGN=TOP>($Alt:[$tmp.comment.trim.==""
                                                t:'&nbsp;' f:$tmp.comment])</TD>
 			     |</TR>
 			   ])
@@ -195,7 +247,8 @@ $rules={
                   }
            ~
   h_ass: ~ {$In:[fields c:assign t:html]}
-             fundoc {$Rep:
+             x{$fun={}} fundoc {$afun=$fun
+                   $Rep:
                         |<TR>
                         |<TD VALIGN=TOP bgcolor=$col1><FONT color="#FFFFFF">
                         |<B>Assignment(s)</B></TD><TD>
@@ -205,10 +258,10 @@ $rules={
                         | <TR BGCOLOR="#d3b5b5">
                         |  <TH><FONT SIZE=-1>Name</TH>
                         |  <TH><FONT SIZE=-1>Comment</TH>
-              		|($Foreach:[$tmp in:$fun s:@
+              		|($Foreach:[$tmp in:$afun s:@
 			     |<TR>
 			     | <TD VALIGN=TOP>($tmp.name)</TD>
-			     | <TD VALIGN=TOP>($Alt:[$tmp.comment.trim==""
+			     | <TD VALIGN=TOP>($Alt:[$tmp.comment.trim.==""
                                                t:'&nbsp;' f:$tmp.comment])</TD>
 			     |</TR>
 			   ])
@@ -218,7 +271,8 @@ $rules={
                   }
            ~
   h_mod: ~ {$In:[fields c:modify t:html]}
-             fundoc {$Rep:
+             x{$fun={}} fundoc {$mfun=$fun
+                   $Rep:
                         |<TR>
                         |<TD VALIGN=TOP bgcolor=$col1><FONT color="#FFFFFF">
                         |<B>Modifier(s)</B></TD><TD>
@@ -228,10 +282,10 @@ $rules={
                         | <TR BGCOLOR="#d3b5b5">
                         |  <TH><FONT SIZE=-1>Name</TH>
                         |  <TH><FONT SIZE=-1>Comment</TH>
-              		|($Foreach:[$tmp in:$fun s:@
+              		|($Foreach:[$tmp in:$mfun s:@
 			     |<TR>
 			     | <TD VALIGN=TOP>($tmp.name)</TD>
-			     | <TD VALIGN=TOP>($Alt:[$tmp.comment.trim==""
+			     | <TD VALIGN=TOP>($Alt:[$tmp.comment.trim.==""
                                                t:'&nbsp;' f:$tmp.comment])</TD>
 			     |</TR>
 			   ])
@@ -241,7 +295,8 @@ $rules={
                   }
            ~
   h_use: ~ {$In:[fields c:use t:html]}
-             fundoc {$Rep:
+             x{$fun={}} fundoc {$ufun=$fun
+                   $Rep:
                         |<TR>
                         |<TD VALIGN=TOP bgcolor=$col1><FONT color="#FFFFFF">
                         |<B>Operator(s)</B></TD><TD>
@@ -251,10 +306,10 @@ $rules={
                         | <TR BGCOLOR="#d3b5b5">
                         |  <TH><FONT SIZE=-1>Name</TH>
                         |  <TH><FONT SIZE=-1>Comment</TH>
-              		|($Foreach:[$tmp in:$fun s:@
+              		|($Foreach:[$tmp in:$ufun s:@
 			     |<TR>
 			     | <TD VALIGN=TOP>($tmp.name)</TD>
-			     | <TD VALIGN=TOP>($Alt:[$tmp.comment.trim==""
+			     | <TD VALIGN=TOP>($Alt:[$tmp.comment.trim.==""
                                                t:'&nbsp;' f:$tmp.comment])</TD>
 			     |</TR>
 			   ])
@@ -264,7 +319,8 @@ $rules={
                   }
            ~
   h_cast: ~ {$In:[fields c:cast t:html]}
-             fundoc {$Rep:
+             x{$fun={}} fundoc {$cfun=$fun
+                   $Rep:
                         |<TR>
                         |<TD VALIGN=TOP bgcolor=$col1><FONT color="#FFFFFF">
                         |<B>Cast(s)</B></TD><TD>
@@ -274,10 +330,10 @@ $rules={
                         | <TR BGCOLOR="#d3b5b5">
                         |  <TH><FONT SIZE=-1>Name</TH>
                         |  <TH><FONT SIZE=-1>Comment</TH>
-              		|($Foreach:[$tmp in:$fun s:@
+              		|($Foreach:[$tmp in:$cfun s:@
 			     |<TR>
 			     | <TD VALIGN=TOP>($tmp.name)</TD>
-			     | <TD VALIGN=TOP>($Alt:[$tmp.comment.trim==""
+			     | <TD VALIGN=TOP>($Alt:[$tmp.comment.trim.==""
                                                t:'&nbsp;' f:$tmp.comment])</TD>
 			     |</TR>
 			   ])
@@ -287,7 +343,8 @@ $rules={
                   }
            ~
   h_other: ~ {$In:[fields c:other t:html]}
-             objdoc {$Rep:
+             x{$ofun={}} fundoc {$ofun.app:$tmp
+                   $Rep:
                         |<TR>
                         |<TD VALIGN=TOP bgcolor=$col1><FONT color="#FFFFFF">
                         |<B>Related Data</B></TD><TD>
@@ -297,10 +354,10 @@ $rules={
                         | <TR BGCOLOR="#d3b5b5">
                         |  <TH><FONT SIZE=-1>Name</TH>
                         |  <TH><FONT SIZE=-1>Comment</TH>
-              		|($Foreach:[$tmp in:$fun s:@
+              		|($Foreach:[$tmp in:$ofun s:@
 			     |<TR>
 			     | <TD VALIGN=TOP>($tmp.name)</TD>
-			     | <TD VALIGN=TOP>($Alt:[$tmp.comment.trim==""
+			     | <TD VALIGN=TOP>($Alt:[$tmp.comment.trim.==""
                                                t:'&nbsp;' f:$tmp.comment])</TD>
 			     |</TR>
 			   ])
@@ -309,27 +366,32 @@ $rules={
                         |</TD></TR>
                   }
            ~
-  fundoc:  ~ x{$fun={}}
+  h_body:  ~ { $In:[fields c:body t:html] 
+               $Rep:
+                    |<TR>
+                    |<TD VALIGN=TOP bgcolor="#58081a"><FONT color="#FFFFFF">
+                    |<B>Body</B></TD><TD>
+                    |<TABLE BORDER=5 BGCOLOR="#FFFFF0"><TR><TD><PRE>
+                    |($Ct.trim:'\n')
+                    |</TD></TR></TABLE>
+                    |</TD></TR>
+             }
+             (/[^<>]+/ | '>' {$Rep:'&gt;'} | '<' {$Rep:'&lt;'})*
+           ~
+  fundoc:  ~
             ( 
-             /.N */ {$tmp={}} sp funname {$tmp.name=$Ct} ln {$tmp.comment=""}
+             /.N */ {$tmp={}} funname {$tmp.name=$Ct} ln {$tmp.comment=""}
             (/.D */ ln {if:$Ct.trim:' \n\t'.==""
                            $StrApp:[$tmp.comment s:"<p>\n"]
                       else $StrApp:[$tmp.comment s:$Ct]})*
-             /.X/ ln {$fun.app:$tmp} )* ~
+             /.X/ ln
+	    {$fun.app:$tmp} )*
+           ~
 
-  funname: ~ /[A-Za-z][A-Za-z0-9_]+/ { $q=$Query:"[efunc-id:$Ct]"
+  funname: ~ rest { $q=$Query:"[efunc-id:$Ct]"
                 if:$q.size>0 {$Rep:$Hlink:[efuncR p:$Ct]}
-                } ~
-
-  objdoc:  ~ x{$fun={}}
-            ( 
-             /.N */ {$tmp={}} sp objname {$tmp.name=$Ct} ln {$tmp.comment=""}
-            (/.D */ ln {if:$Ct=="" $StrApp:[$tmp.comment s:"<p>\n"]
-                      else $StrApp:[$tmp.comment s:$Ct]})*
-             /.X/ ln {$fun.app:$tmp} )* ~
-
-  objname: ~ /[A-Za-z][A-Za-z0-9_]+/ { $q=$Query:"[edata-id:$Ct]"
-                if:$q.size>0 {$Rep:$Hlink:[edataR p:$Ct]}
+                else {$q=$Query:"[edata-alias:$Ct]"
+		 if:$q.size>0 {$Rep:$Hlink:[edataR p:$Ct]}}
                 } ~
 
   writecode: ~ (/[wu][A-Za-z]*/ {$write=$Ct} | word {$write=""} ) ~
@@ -339,15 +401,30 @@ $rules={
   code:    ~ /&[a-z]+;/ ~
   comment: ~ '/*' /([^*]+|\\*[^\/])*/ '*/' ~
 
-  h_desFunc:   ~ { $In:[fields c:{des} t:html]}
+  h_desLink:   ~ { $In:[fields c:{des} t:html]}
              (comment | /[a-zA-Z0-9]*[a-zA-Z_][a-zA-Z0-9_]+/ {
                 $q=$Query:"[efunc-id:$Ct]"
                 if:$q.size>0 {$Rep:$Hlink:[efuncR p:$Ct]}
-                else {$q=$Query:"[edata-id:$Ct]"
+                else {$q=$Query:"[edata-alias:$Ct]"
                 if:$q.size>0 {$Rep:$Hlink:[edataR p:$Ct]}}
-# $q.delete
                 } | /./)+
-           ~
+		   ~
+  h_attrLink:   ~ { $In:[fields c:{attr} t:html]}
+             (/[a-zA-Z0-9]*[a-zA-Z_][a-zA-Z0-9_]+/ {
+                $q=$Query:"[efunc-id:$Ct]"
+                if:$q.size>0 {$Rep:$Hlink:[efuncR p:$Ct]}
+                else {$q=$Query:"[edata-alias:$Ct]"
+                if:$q.size>0 {$Rep:$Hlink:[edataR p:$Ct]}}
+                } | /./)+
+		~
+  h_bodyLink:   ~ { $In:[fields c:{body} t:html]}
+             (/[a-zA-Z0-9]*[a-zA-Z_][a-zA-Z0-9_]+/ {
+                $q=$Query:"[efunc-id:$Ct]"
+                if:$q.size>0 {$Rep:$Hlink:[efuncR p:$Ct]}
+                else {$q=$Query:"[edata-alias:$Ct]"
+                if:$q.size>0 {$Rep:$Hlink:[edataR p:$Ct]}}
+                } | /./)+
+		~
 
   # other stuff
   ln:      ~ /[^\n]*\n/ ~
