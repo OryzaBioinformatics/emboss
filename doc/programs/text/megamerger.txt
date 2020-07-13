@@ -1,9 +1,8 @@
 
-                             EMBOSS: megamerger
-     _________________________________________________________________
+                                megamerger 
+                                      
    
-                              Program megamerger
-                                       
+   
 Function
 
    Merge two large overlapping nucleic acid sequences
@@ -52,10 +51,9 @@ Usage
 
 % megamerger embl:ap000504 embl:af129756
 Merge two large overlapping nucleic acid sequences
-Output sequence [ap000504.merged]:
-Output file [stdout]: report
 Word size [20]:
-
+Output sequence [ap000504.merged]:
+Output file [ap000504.megamerger]:
 
 Command line arguments
 
@@ -64,12 +62,12 @@ Command line arguments
   [-seqb]              sequence   Sequence USA
    -wordsize           integer    Word size
   [-outseq]            seqout     Output sequence USA
-   -report             outfile    Output report
+  [-report]            outfile    Output report
 
    Optional qualifiers: (none)
    Advanced qualifiers: (none)
    General qualifiers:
-  -help                bool       report command line options. More
+  -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    
@@ -82,7 +80,8 @@ Command line arguments
    -wordsize Word size Integer 2 or more 20
    [-outseq]
    (Parameter 3) Output sequence USA Writeable sequence <sequence>.format
-   -report Output report Output file stdout
+   [-report]
+   (Parameter 4) Output report Output file <sequence>.megamerger
    Optional qualifiers Allowed values Default
    (none)
    Advanced qualifiers Allowed values Default

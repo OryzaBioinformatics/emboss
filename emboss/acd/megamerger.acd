@@ -36,8 +36,9 @@ seqout: outseq  [
 ]
 
 outfile: report  [
-  required: "Y"
-  default: "stdout"
+  parameter: "Y"
+  extension: "megamerger"
+#  default: "stdout"
   information: "Output report"
 ]
 
