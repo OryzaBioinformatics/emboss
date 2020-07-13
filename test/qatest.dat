@@ -9,6 +9,18 @@
 #
 ###########################################################################
 
+ID acdc-ex
+AP acdc
+CL antigenic
+IN tsw:act1_fugru
+IN
+IN
+FI act1_fugru.antigenic
+FZ = 0
+FI stderr
+FC = 2
+//
+
 ID acdc-0001
 AP acdc
 CL qatest tembl:paamir tembl:paamir x.x -auto
@@ -145,7 +157,9 @@ ID aaindexextract-keep
 AP aaindexextract
 DL keep
 PP mkdir ./AAINDEX
-PP export EMBOSS_DATA=./
+## split export EMBOSS_DATA=./ into two statements
+PP EMBOSS_DATA=./
+PP export EMBOSS_DATA
 IN ../../data/aaindex1.test
 FI stderr
 FC = 2
@@ -155,18 +169,35 @@ FP 0 /Warning:/
 
 ID abiview-ex
 AP abiview
-CC Example file missing test/data/ba16d2.s1
-CL -graph ps
-IN ../../data/ba16d2.s1
+CL -graph cps
+IN ../../data/abiview.abi
 IN
 FI stderr
 FC = 2
 FI stdout
-FZ = 18
+FZ = 19
 FP /^Created abiview.ps\n/
-FI outfile.fasta
-FZ = 0
+FI abiview.fasta
+FP /^GNNNNNNNNNG/
+FZ = 876
+FI abiview.ps
+FP /^%%Title: PLplot Graph\n/
 //
+
+##ID abiview-old
+##AP abiview
+##CC Example file missing test/data/ba16d2.s1
+##CL -graph ps
+##IN ../../data/ba16d2.s1
+##IN
+##FI stderr
+##FC = 2
+##FI stdout
+##FZ = 18
+##FP /^Created abiview.ps\n/
+##FI outfile.fasta
+##FZ = 0
+##//
 
 ID antigenic-command
 AP antigenic
@@ -197,8 +228,40 @@ FC = 2
 FP 0 /Warning:/
 //
 
+ID antigenic-ex2
+UC By using the '-rformat gff' qualifier, a GFF file of the predicted regions can be produced.
+AP antigenic
+CL -rformat gff
+IN tsw:act1_fugru
+IN
+IN
+FI act1_fugru.antigenic
+FP /^##Type Protein ACT1_FUGRU\n/
+FZ > 100
+FC > 5
+FI stderr
+FC = 2
+FP 0 /Warning:/
+//
+
 ID backtranseq-ex
+UC Note that this is a human protein and so the default human codon frequency file is used ie. is not specified
 AP backtranseq
+IN tsw:opsd_human
+IN
+FI opsd_human.fasta
+FP /^>OPSD_HUMAN/
+FP /CGCCACCGGCGTGGTG\n/
+FZ = 1092
+FI stderr
+FC = 2
+FP 0 /Warning:/
+//
+
+ID backtranseq-ex2
+UC This uses a drosophila sequence and codon table.
+AP backtranseq
+CL -cfile Edrosophila.cut
 IN tsw:ach2_drome
 IN
 FI ach2_drome.fasta
@@ -227,6 +290,7 @@ FP /^Created banana.dat\n/
 //
 
 ID biosed-ex
+UC Replace all 'T's with 'U's to create a RNA sequence
 AP biosed
 CL tembl:hsfau hsfau.rna -target T -replace U
 FI stderr
@@ -237,6 +301,7 @@ FP /^UCUAAUAAAAAAGCCACUUAGUUCAGUCAAAAAAAAAA\n/
 //
 
 ID biosed-ex2
+UC Replace all 'PPP' protein motifs with 'XXPPPXX' 
 AP biosed
 CL tsw:AMIR_PSEAE AMIR_PSEAE.pep -target PPP -replace XXPPPXX
 FI stderr
@@ -272,7 +337,7 @@ FP /0[.]188/
 
 ID chaos-ex
 AP chaos
-CL tembl:eclac -graph ps
+CL tembl:eclac -graph cps
 FI stderr
 FC = 1
 FP 0 /Warning:/
@@ -333,7 +398,7 @@ FP /Nc = 32[.]951/
 
 ID cirdna-ex
 AP cirdna
-CL -graph ps
+CL -graph cps
 IN ../../data/data.cirp
 IN
 IN
@@ -343,7 +408,7 @@ FI stderr
 FC = 2
 FP 0 /Warning:/
 FI cirdna.ps
-FZ = 22787
+FZ = 23067
 FP /^%%Title: PLplot Graph\n/
 FP /^%%Pages: 1\n/
 FI stdout
@@ -352,6 +417,7 @@ FP /^Created cirdna.ps\n/
 //
 
 ID codcmp-ex
+UC This compares the codon usage tables for Escherichia coli and Haemophilus influenzae.
 AP codcmp
 IN Eeco.cut
 IN Ehin.cut
@@ -369,6 +435,7 @@ FP /^Codons not appearing   = 0\n/
 //
 
 ID coderet-ex
+UC To extract all of the CDS, mRNA and the protein translations:
 AP coderet
 IN tembl:X03487
 IN
@@ -382,6 +449,7 @@ FP /ctcctacgtttacctgtccatg\n>x03487_pro_1\nMTTASTSQVRQNY/
 //
 
 ID coderet-ex2
+UC To only extract the mRNA sequence:
 AP coderet
 CL -nocds -notranslation
 IN tembl:X03487
@@ -396,6 +464,7 @@ FP 0 />x03487_pro_1/
 //
 
 ID compseq-ex
+UC To count the frequencies of dinucleotides in a file:
 AP compseq
 CL tembl:hsfau 2 result3.comp
 FI stderr
@@ -408,6 +477,7 @@ FP /^AA\s+45\s+0\.0870406\s+0\.0625000\s+1\.3926499\n/
 //
 
 ID compseq-ex2
+UC To count the frequencies of hexanucleotides, without outputting the results of hexanucleotides that do not occur in the sequence:
 AP compseq
 CL tembl:hsfau 6 result6.comp -nozero
 FI stderr
@@ -420,6 +490,7 @@ FP /^AAAAAA\s+6\s+0\.0116959\s+0\.0002441\s+47\.9064327\n/
 //
 
 ID compseq-ex3
+UC To count the frequencies of trinucleotides in frame 2 of a sequence and use a previously prepared compseq output to show the expected frequencies:
 AP compseq
 CL tembl:hsfau 3 result3.comp -frame 2 -in ../../data/prev.comp
 FI stderr
@@ -451,6 +522,32 @@ CC No example in the documentation
 //
 
 ID cpgplot-ex
+AP cpgplot
+CL tembl:rnu68037 -graph cps
+IN
+IN
+IN
+IN
+IN
+IN
+FI stderr
+FC = 2
+FP 0 /Warning:/
+FI stdout
+FZ = 19
+FP /^Created cpgplot.ps\n/
+FI rnu68037.cpgplot
+FP /RNU68037 from 1 to 1218/
+FP /Observed\/Expected ratio > 0\.60/
+FP /Length 406 \(104\.\.509\)/
+FP /Length 329 \(596\.\.924\)/
+FI rnu68037.out2
+FP /^##Type DNA RNU68037/
+FI cpgplot.ps
+FP /^%%Title: PLplot Graph/
+//
+
+ID cpgplot-old
 AP cpgplot
 CL tembl:rnu68037 -graph data
 IN
@@ -500,6 +597,7 @@ FP /^RNU68037\tcpgreport\tmisc_feature\t96\t1032\t630\.000\t/
 //
 
 ID cusp-ex
+UC This example uses only one input sequence. The normal use would be to use a set of coding sequences as the input.
 AP cusp
 CL -sbeg 135 -send 1292
 IN tembl:paamir
@@ -526,6 +624,7 @@ DI CODONS
 //
 
 ID cutseq-ex
+UC To remove bases 10 to 12 from a database entry and write to the new sequence file 'gatta2.seq':
 AP cutseq
 CL tembl:paamir gatta2.seq -from=10 -to=12
 FI stderr
@@ -537,6 +636,7 @@ FP /^ggtaccgctcgagcatctgctcgatcaccaccagccgggcgacgggaactgcacgatcta\n/
 //
 
 ID cutseq-ex2
+UC To remove the first 20 bases from 'tembl:paamir' and write it to 'jsh.seq': 
 AP cutseq
 CL tembl:paamir -from=1 -to=20 -out=jsh.seq
 FI stderr
@@ -548,6 +648,7 @@ FP /^tgctcgatcaccaccagccgggcgacgggaactgcacgatctacctggcgagcctggagc\n/
 //
 
 ID cutseq-ex3
+UC If the default start and end positions are accepted, then all of the sequence is removed!
 AP cutseq
 CL tembl:paamir starta.seq -sbeg=-1000 -send=1290
 IN
@@ -579,6 +680,29 @@ FC = 2165
 //
 
 ID dan-ex2
+UC An example of producing a plot of Tm:
+AP dan
+CL -plot -graph cps
+IN tembl:paamir
+IN
+IN
+IN
+IN
+IN
+FI stderr
+FC = 2
+FP 0 /Warning:/
+FI stdout
+FZ = 15
+FP /^Created dan.ps\n/
+FI dan.ps
+FP /^%%Title: PLplot Graph/
+FI paamir.dan
+FZ = 0
+//
+
+ID dan-old
+UC An example of producing a plot of Tm:
 AP dan
 CL -plot -graph data
 IN tembl:paamir
@@ -711,6 +835,7 @@ FP /\A.{308}O42493\001/
 //
 
 ID dbiblast-ex-keep
+UC This creates EMBOSS indices for the BLAST database 'swnew'
 DL keep
 AP dbiblast
 IN swnew
@@ -1465,7 +1590,7 @@ IN EMBL
 IN
 IN
 FI stderr
-FC = 5
+FC = 6
 FP 0 /Warning:/
 FI division.lkp
 FZ = 322
@@ -1492,7 +1617,7 @@ IN EMBL
 IN
 IN
 FI stderr
-FC = 5
+FC = 6
 FP 0 /Warning:/
 FI division.lkp
 FZ = 322
@@ -1676,7 +1801,7 @@ IN SWNEW
 IN
 IN
 FI stderr
-FC = 5
+FC = 6
 FP 0 /Warning:/
 FI division.lkp
 FZ = 378
@@ -1703,7 +1828,7 @@ IN SWNEW
 IN
 IN
 FI stderr
-FC = 5
+FC = 6
 FP 0 /Warning:/
 FI division.lkp
 FZ = 378
@@ -1754,7 +1879,7 @@ IN SWNEW
 IN
 IN
 FI stderr
-FC = 5
+FC = 6
 FP 0 /Warning:/
 FI division.lkp
 FZ = 378
@@ -1918,7 +2043,7 @@ IN GENBANK
 IN
 IN
 FI stderr
-FC = 5
+FC = 6
 FP 0 /Warning:/
 FI division.lkp
 FZ = 570
@@ -2109,7 +2234,8 @@ FP 13 />H/
 FP 13 />/
 //
 
-ID dbigcg-exc
+## name changed from dbigcg-exc to stop documentation script finding it
+ID dbigcg-testexc
 AP seqret
 PP EMBOSSRC=../..
 PP export EMBOSSRC
@@ -2120,7 +2246,8 @@ FP 1 /\A>HSFAU /
 FP 1 />/
 //
 
-ID dbigcg-excfail
+## name changed from dbigcg-excfail to stop documentation script finding it
+ID dbigcg-testexcfail
 ER 1
 AP seqret
 PP EMBOSSRC=../..
@@ -3053,6 +3180,7 @@ FP /^ACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGT\n/
 //
 
 ID descseq-ex
+UC Set the name of a sequence to "myclone23" 
 AP descseq
 CL -seq ../../data/dna.text -out clone23.seq -name "myclone23"
 FI stderr
@@ -3064,6 +3192,7 @@ FP /^>myclone23\n/
 //
 
 ID descseq-ex2
+UC Set the description of a sequence to "This is my clone number 244" 
 AP descseq
 CL -seq ../../data/dna.text -out xy24.seq -desc "This is my clone number 244"
 FI stderr
@@ -3075,6 +3204,7 @@ FP /EMBOSS_001 This is my clone number 244\n/
 //
 
 ID descseq-ex3
+UC Append some text to the description of a sequence
 AP descseq
 CL -seq ../../data/dna.text -out est4.seq -desc " (submitted)" -append
 FI stderr
@@ -3160,7 +3290,7 @@ FC = 9999
 
 ID dotmatcher-ex
 AP dotmatcher
-CL tsw:hba_human tsw:hbb_human -graph ps
+CL tsw:hba_human tsw:hbb_human -graph cps
 IN
 FI stderr
 FC = 2
@@ -3194,22 +3324,7 @@ AP dotpath
 ## timeout 60 seconds on original test system
 ##
 TI 400
-CL tembl:AF129756 tembl:AP000504 -word 20 -data -out af.path
-FI af.path
-FP /^##Number 118\n/
-FC = 133
-FI stderr
-FC = 1
-FP 0 /Warning:/
-//
-
-ID dotpath-graph
-AP dotpath
-##
-## timeout 60 seconds on original test system
-##
-TI 400
-CL tembl:AF129756 tembl:AP000504 -word 20 -graph ps
+CL tembl:AF129756 tembl:AP000504 -word 20 -graph cps -overlaps
 FI stderr
 FC = 1
 FP 0 /Warning:/
@@ -3222,9 +3337,24 @@ FP /^%%Title: PLplot Graph\n/
 FP /^%%Pages: 1\n/
 //
 
+ID dotpath-data
+AP dotpath
+##
+## timeout 60 seconds on original test system
+##
+TI 400
+CL tembl:AF129756 tembl:AP000504 -word 20 -data -out af.path
+FI af.path
+FP /^##Number 118\n/
+FC = 133
+FI stderr
+FC = 1
+FP 0 /Warning:/
+//
+
 ID dottup-ex
 AP dottup
-CL tembl:eclac tembl:eclaci -wordsize=6 -gtitle="eclaci vs eclac" -graph ps
+CL tembl:eclac tembl:eclaci -wordsize=6 -gtitle="eclaci vs eclac" -graph cps
 IN
 FI stdout
 FZ = 18
@@ -3288,6 +3418,17 @@ FP /Score 236: 108/130 \( 83%\) matches, 0 gaps/
 //
 
 ID embossdata-ex
+UC Display the directories searched for EMBOSS data files:
+AP embossdata
+FI stderr
+FC = 1
+FP 0 /Warning:/
+FI stdout
+FP /Exists\n/
+//
+
+ID embossdata-ex2
+UC Display the names of data file in all of the possible data directories:
 AP embossdata
 CL -showall
 FI stderr
@@ -3301,6 +3442,7 @@ FP /^\s*Eyeast.cut\s*\n/
 //
 
 ID embossdata-exfile
+UC Display the directories which contain a particular EMBOSS data file:
 AP embossdata
 CL -filename EPAM60
 FI stderr
@@ -3312,6 +3454,7 @@ FP /^File \.embossdata\/EPAM60/
 //
 
 ID embossdata-exfetch
+UC Make a copy of an EMBOSS data file in the current directory:
 AP embossdata
 CL -fetch -filename Epepcoil.dat
 FI stderr
@@ -3414,9 +3557,9 @@ FP 5 /PRODUCT SIZE: +[0-9]+/
 //
 
 ID equicktandem-ex
+UC The input sequence is the human herpesvirus tandem repeat.
 AP equicktandem
 IN tembl:hhtetra
-IN
 IN
 IN
 IN
@@ -3577,6 +3720,7 @@ FP 0 /^Exon/
 //
 
 ID etandem-ex
+UC The input sequence is the human herpesvirus tandem repeat. 
 AP etandem
 IN tembl:hhtetra
 IN 6
@@ -3597,6 +3741,7 @@ FP /^    568     597      24      6      5    100.0 aaccct   \n/
 //
 
 ID extractfeat-ex
+UC To write out the exons of a sequence: 
 AP extractfeat
 CL tembl:hsfau1 -type exon stdout
 FI stderr
@@ -3609,6 +3754,7 @@ FP /^gtaaagtccatggttccctggcccgtgctggaaaagtgagaggtcagactcctaag\n/
 //
 
 ID extractfeat-ex2
+UC To write out the exons with 10 extra bases at the start and end so that you can inspect the splice sites:
 AP extractfeat
 CL tembl:hsfau1 -type exon -before 10 -after 10 stdout
 FI stderr
@@ -3622,6 +3768,7 @@ FP /^cctaaggtgagtgaga\n/
 //
 
 ID extractfeat-ex3
+UC To write out the 10 bases around the start of all 'exon' features in the tembl database: 
 AP extractfeat
 CL tembl:*  -type exon -before 5 -after -5 stdout
 FI stderr
@@ -3636,6 +3783,7 @@ FP /^>HSFAU1_951_1095 \[exon\] H\.sapiens fau 1 gene\n/
 # The example has phosphorylation, we only have features that say
 # PHOSPHORYLATION (BY RK) (BY SIMILARITY).
 ID extractfeat-ex4
+UC To write out the 7 residues around all phosphorylated residues in the tsw database: 
 AP extractfeat
 CL tsw:*  -type mod_res -value phosphorylation* -before 3 -after -4 stdout
 FI stderr
@@ -3652,6 +3800,7 @@ FP /^EHVYSFP\n/
 
 # use database entry in example
 ID extractseq-ex
+UC Extract the region from position 10 to 20:
 AP extractseq
 CL tembl:hsfau result.seq -regions '10-20'
 FI stderr
@@ -3664,6 +3813,7 @@ FP /^ctcgactccat\n/
 
 # use database entry in example
 ID extractseq-ex2
+UC Extract the regions 10 to 20, 30 to 45, 533 to 537:
 AP extractseq
 CL tembl:hsfau1 result2.seq -regions '10-20 30-45 533-537'
 FI stderr
@@ -3676,6 +3826,7 @@ FP /^tccctctcgatacactcgggacaagttagggc\n/
 
 # use database entry in example
 ID extractseq-ex3
+UC Extract the regions 782-856, 951-1095, 1557-1612 and 1787-1912:
 AP extractseq
 CL tembl:hsfau1 -reg "782..856,951..1095,1557..1612,1787..1912" stdout
 FI stderr
@@ -3689,6 +3840,7 @@ FP /^cccacctttggcaagaagaagggccccaatgccaactcttaa\n/
 //
 
 ID extractseq-ex4
+UC Extract the regions 782-856, 951-1095, 1557-1612 and 1787-1912 all to separate output sequences:
 AP extractseq
 CL tembl:hsfau1 -reg "782..856,951..1095,1557..1612,1787..1912" stdout -separate
 FI stderr
@@ -3705,7 +3857,7 @@ FP /^tcttaa\n/
 
 ID findkm-ex
 AP findkm
-CL -graph ps
+CL -graph cps
 IN ../../data/enztest.dat
 IN
 FI stdout
@@ -4030,6 +4182,7 @@ FP /^msf::.*HBA_HORSE\s+HBA_HORSE\s+144\s+147\s+2\s+3\s+48\s+4\s+92\s+66\.666664
 //
 
 ID infoalign-ex2
+UC This example doesn't display the USA of the sequence:
 AP infoalign
 CL ../../data/globins.msf -nousa
 IN
@@ -4042,6 +4195,7 @@ FP /^HBA_HORSE\s+144\s+147\s+2\s+3\s+48\s+4\s+92\s+66\.666664\s+\n/
 //
 
 ID infoalign-ex3
+UC Display only the name and sequence length of a sequence:
 AP infoalign
 CL ../../data/globins.msf -only -name -seqlength
 IN
@@ -4054,6 +4208,7 @@ FP /^HBA_HORSE\s+144\n/
 //
 
 ID infoalign-ex4
+UC Display only the name, number of gap characters and differences to the consensus sequence:
 AP infoalign
 CL ../../data/globins.msf -only -name -gapcount -diffcount
 IN
@@ -4066,6 +4221,7 @@ FP /^HBA_HORSE\s+3\s+92\n/
 //
 
 ID infoalign-ex5
+UC Display the name and number of gaps within a sequence:
 AP infoalign
 CL ../../data/globins.msf -only -name -gaps
 IN
@@ -4078,6 +4234,7 @@ FP /^HBA_HORSE\s+2\n/
 //
 
 ID infoalign-ex6
+UC Display information formatted with HTML:
 AP infoalign
 CL ../../data/globins.msf -html
 IN
@@ -4091,6 +4248,7 @@ FP /^<td>HBA_HORSE<\/td>\n/
 //
 
 ID infoalign-ex7
+UC Use the first sequence as the reference sequence to compare to:
 AP infoalign
 CL ../../data/globins.msf -refseq 1
 IN
@@ -4103,6 +4261,7 @@ FP /^msf::\S+\s+HBA_HORSE\s+144\s+147\s+2\s+3\s+54\s+18\s+72\s+62.500000\s+\n/
 //
 
 ID infoseq-ex
+UC Display information on a sequence:
 AP infoseq
 CL tembl:paamir
 FI stderr
@@ -4114,6 +4273,7 @@ FP /^tembl-id:PAAMIR\s+PAAMIR\s+X13776\s+N\s+2167\s+66\.54\s+Pseudomonas/
 //
 
 ID infoseq-ex2
+UC Don't display the USA of a sequence:
 AP infoseq
 CL tembl:paamir -nousa
 FI stderr
@@ -4125,6 +4285,7 @@ FP /^PAAMIR\s+X13776\s+N\s+2167\s+66\.54\s+Pseudomonas/
 //
 
 ID infoseq-ex3
+UC Display only the name and length of a sequence:
 AP infoseq
 CL tembl:paamir -only -name -length
 FI stderr
@@ -4136,6 +4297,7 @@ FP /^PAAMIR\s+2167\n/
 //
 
 ID infoseq-ex4
+UC Display only the description of a sequence:
 AP infoseq
 CL tembl:paamir -only -desc
 FI stderr
@@ -4147,6 +4309,7 @@ FP /^Pseudomonas aeruginosa .* regulation\n/
 //
 
 ID infoseq-ex5
+UC Display the type of a sequence:
 AP infoseq
 CL tembl:paamir -only -type
 FI stderr
@@ -4158,6 +4321,7 @@ FP /^N\n/
 //
 
 ID infoseq-ex6
+UC Display information formatted with HTML:
 AP infoseq
 CL tembl:paamir -html
 FI stderr
@@ -4174,16 +4338,21 @@ CC No example in the documentation
 //
 
 ID isochore-ex
-CC Reads Genbank entry SCCHRIII from remote server
+##CC Reads Genbank entry SCCHRIII from remote server
+CC Change to reading tembl:AF129756 - much faster
 AP isochore
-CL tgb:scchriii -graph ps
+##CL tgenbank:scchriii -graph cps
+CL tembl:AF129756  -graph cps
 IN
 FI stderr
 FC = 2
 FP 0 /Warning:/
-FI scchriii.iso
-FZ = 39979
-FP /^5000\s+0\.364\n/
+##FI scchriii.iso
+FI af129756.iso
+##FZ = 39979
+FZ = 22819
+##FP /^5000\s+0\.364\n/
+FP /^5000\s+0.476\n/
 FI isochore.ps
 FZ > 100
 FP /^%%Title: PLplot Graph\n/
@@ -4196,7 +4365,7 @@ FP /^Created isochore.ps\n/
 # remove the extra 2 prompts from the example
 ID lindna-ex
 AP lindna
-CL -graph ps
+CL -graph cps
 IN ../../data/data.linp
 IN
 IN
@@ -4207,13 +4376,14 @@ FI stderr
 FC = 2
 FP 0 /Warning:/
 FI lindna.ps
-FZ = 14048
+FZ = 14370
 FP /^%%Title: PLplot Graph\n/
 FP /^%%Pages: 1\n/
 //
 
 ## Example should be file1 file2
 ID listor-ex
+UC Write the logical OR of two lists:
 AP listor
 CL ../../data/file1 ../../data/file2
 IN
@@ -4228,6 +4398,7 @@ FP 1 /file2/
 //
 
 ID listor-ex2
+UC Write the logical AND of two lists:
 AP listor
 CL ../../data/file1 ../../data/file2 -operator and
 IN
@@ -4242,6 +4413,7 @@ FP 0 /file2/
 //
 
 ID listor-ex3
+UC Write the logical XOR of two lists:
 AP listor
 CL ../../data/file1 ../../data/file2 -operator xor
 IN
@@ -4256,6 +4428,7 @@ FP 1 /file2/
 //
 
 ID listor-ex4
+UC Write the logical NOT of two lists:
 AP listor
 CL ../../data/file1 ../../data/file2 -operator not
 IN
@@ -4283,6 +4456,7 @@ FP /\t2242\t2458\t.*start8bp 2451".*end8bp 2458".*start16bp 2242".*end16bp 2257"
 //
 
 ID maskfeat-ex
+UC Mask out a feature whose type is "repeat_region" from position 2331 to 2356:
 AP maskfeat
 CL tembl:ab000360
 IN
@@ -4296,6 +4470,7 @@ FP /^NNNNNNNNNNNNNNNNaaagtcacttctttctacccttttcaatgtgctaatgctctttt\n/
 //
 
 ID maskseq-ex
+UC Mask off bases 10 to 12 from a sequence 'prot.fasta' and write to the new sequence file 'prot2.seq':
 AP maskseq
 CL ../../data/prot.fasta prot2.seq -reg=10-12
 FI stderr
@@ -4307,6 +4482,7 @@ FP /^ACDEFGHIKXXXPQRSTVWYACDEFGHIKLMNPQRSTVWYACDEFGHIKLMNPQRSTVWY\n/
 //
 
 ID maskseq-ex2
+UC Mask off bases 20 to 30 from a sequence 'prot.fasta' using the character 'x' and write to the new sequence file 'prot2.seq': 
 AP maskseq
 CL ../../data/prot.fasta prot2.seq -reg=20-30 -mask=x
 FI stderr
@@ -4318,6 +4494,7 @@ FP /^ACDEFGHIKLMNPQRSTVWxxxxxxxxxxxMNPQRSTVWYACDEFGHIKLMNPQRSTVWY\n/
 //
 
 ID maskseq-ex3
+UC Mask off the regions 20 to 23, 34 to 45 and 88 to 90 in 'prot.fasta':
 AP maskseq
 CL ../../data/prot.fasta prot2.seq -reg=20-23,34-45,88-90
 FI stderr
@@ -4341,6 +4518,21 @@ FP /^# Identity: +63\/145 \(43\.4%\)/
 FP /^# Score: +264\n/
 FP /^HBA_HU -----GSAQVKGHGKKVADALTNAVAHVDDMPNALSALSDLHAHKLRVDP\n/
 FC = 45
+//
+
+ID matcher-ex2
+UC To find the 10 best alignments:
+AP matcher
+CL tsw:hba_human tsw:hbb_human -alt 10
+IN
+FI stderr
+FC = 2
+FP 0 /Warning:/
+FI hba_human.matcher
+FP /^# Identity: +63\/145 \(43\.4%\)/
+FP /^# Score: +264\n/
+FP /^HBA_HU -----GSAQVKGHGKKVADALTNAVAHVDDMPNALSALSDLHAHKLRVDP\n/
+FC = 261
 //
 
 ID megamerger-ex
@@ -4462,6 +4654,7 @@ FP /^agcttccggccagcgccagcccgcccatggtaaccaccggcagagcggtcgac\n/
 //
 
 ID msbar-ex
+UC This asks for 5 mutations, with point mutations as changes (substitutions), and the codon and block mutations ignored.
 AP msbar
 IN tembl:eclac
 IN 5
@@ -4562,6 +4755,7 @@ FP /^  1183   1193    26          2  72\.7   2\.00\n/
 
 # example to use SWISS format (for protein)
 ID newseq-ex
+UC Type in a short sequence to the file 'mycc.pep' in SWISSPROT format:
 AP newseq
 IN swiss::mycc.pep
 IN cytoc
@@ -4592,6 +4786,7 @@ FP /carriage return format\nACDEFGHIKLMNPQRSTVWY\n/
 
 # change example to use globins.fasta
 ID notseq-ex
+UC In this case the excluded sequences (myg_phyca and lgb2_luplu) are not saved to any file:
 AP notseq
 IN ../../data/globins.fasta
 IN myg_phyca,lgb2_luplu
@@ -4611,7 +4806,9 @@ FP 0 /^>LGB2_LUPLU/
 //
 
 ID notseq-ex2
+UC Here is an example where the sequences to be excluded are saved to another file:
 AP notseq
+CL -junkout hb.seq
 IN ../../data/globins.fasta
 IN hb*
 IN mydata.seq
@@ -4627,6 +4824,8 @@ FP 0 /^>HBB_HORSE/
 FP /^>GLB5_PETMA/
 FP /^>MYG_PHYCA/
 FP /^>LGB2_LUPLU/
+FI hb.seq
+FP /^>HBB_HUMAN/
 //
 
 ID nthseq-ex
@@ -4659,17 +4858,19 @@ FP /^%%Pages: 1\n/
 //
 
 ID oddcomp-ex
+UC To search for entries in swissprot with at least 1 SR AND at least 2 RS:
 CC test.comp input file missing
 AP oddcomp
 IN tsw:*
-IN ../../data/test.comp
+IN ../../data/oddcomp.comp
 IN
 IN out.odd
 FI stderr
 FC = 2
 FP 0 /Warning:/
 FI out.odd
-FZ = 0
+FP /CB1B_FUGRU/
+FZ = 175
 //
 
 ID palindrome-ex
@@ -4694,6 +4895,7 @@ FP /^204   ttttttttttttttttctggcggtcccga   176\n/
 
 # change the examples to use these files
 ID pasteseq-ex
+UC To insert the sequence 'tsw:flav_nossm' after position 67 in sequence 'tsw:amir_pseae' and write the results to the file 'amir_pseae.fasta': 
 AP pasteseq
 CL tsw:amir_pseae tsw:flav_nossm -pos=67
 IN
@@ -4706,6 +4908,7 @@ FP /^FQNGHHDSKKIGLFYGTZTGKTESVAEIIDEFGDEVVTLDIDEIAALLAAGTPRTTLVAL\n/
 //
 
 ID pasteseq-ex2
+UC This does the same thing, but the output qualifier is explicitly used:
 AP pasteseq
 CL tsw:amir_pseae tsw:flav_nossm -out=amirplus.seq -pos=67
 FI stderr
@@ -4717,6 +4920,7 @@ FP /^FQNGHHDSKKIGLFYGTZTGKTESVAEIIDEFGDEVVTLDIDEIAALLAAGTPRTTLVAL\n/
 //
 
 ID pasteseq-ex3
+UC To insert the sequence 'tsw:flav_nossm' before the start of sequence 'tsw:amir_pseae' use -pos=0:
 AP pasteseq
 CL tsw:amir_pseae tsw:flav_nossm -out=amirplus.seq -pos=0
 FI stderr
@@ -4747,7 +4951,9 @@ FP /^STPASSTTSSAVDP\n/
 # change the example (was an arabidopsis entry)
 ID patmatmotifs-ex
 AP patmatmotifs
-PP export EMBOSS_DATA=../prosextract-keep/
+## split export EMBOSS_DATA=../prosextract-keep/ into two statements
+PP EMBOSS_DATA=../prosextract-keep/
+PP export EMBOSS_DATA
 CL -full
 IN tsw:opsd_human
 IN
@@ -4789,12 +4995,14 @@ FP /^   Max score: 1\.283 \(probability 0\.21\)\n/
 FP /^Prediction starts at 233\n/
 FP /^Probable coiled-coil from 233 to 281 \(49 residues\)\n/
 FP /^   Max score: 1\.910 \(probability 1\.00\)\n/
+OC The SwissProt annotation marks the true leucine zipper motif as from 253 to 274.
+OC The leucine zipper is a special case of a coiled-coil region.
 //
 
 ID pepinfo-ex
 AP pepinfo
 IN tsw:opsd_human
-IN ps
+IN cps
 IN
 FI stderr
 FC = 2
@@ -4808,7 +5016,7 @@ FP 3 /^\s+4\s+T\s+1\n/
 FP 6 /^\s+4\s+T\s+0\n/
 FP 3 /^\s+4\s+T\s+0\.000\n/
 FI pepinfo.ps
-FZ = 670365
+FZ = 758243
 FP /^%%Title: PLplot Graph\n/
 FP /^%%Pages: 2\n/
 //
@@ -4819,7 +5027,7 @@ CL -sask
 IN tsw:gcn4_yeast
 IN 253
 IN 274
-IN ps
+IN cps
 FI stderr
 FC = 2
 FP 0 /Warning:/
@@ -4827,7 +5035,7 @@ FI stdout
 FZ = 18
 FP /^Created pepnet.ps\n/
 FI pepnet.ps
-FZ = 12009
+FZ = 13045
 FP /^%%Title: PLplot Graph\n/
 FP /^%%Pages: 2\n/
 //
@@ -4852,7 +5060,7 @@ FP /^Tiny\s+\(A\+C\+G\+S\+T\)\s+121\s+33\.611\n/
 ID pepwheel-ex
 AP pepwheel
 CL tsw:hbb_human -send 30
-IN ps
+IN cps
 FI stderr
 FC = 2
 FP 0 /Warning:/
@@ -4860,7 +5068,7 @@ FI stdout
 FZ = 20
 FP /^Created pepwheel.ps\n/
 FI pepwheel.ps
-FZ = 12395
+FZ = 13599
 FP /^%%Title: PLplot Graph\n/
 FP /^%%Pages: 1\n/
 //
@@ -4868,7 +5076,7 @@ FP /^%%Pages: 1\n/
 ID pepwindow-ex
 AP pepwindow
 CL tsw:hba_human
-IN ps
+IN cps
 FI stderr
 FC = 2
 FP 0 /Warning:/
@@ -4876,7 +5084,7 @@ FI stdout
 FZ = 21
 FP /^Created pepwindow.ps\n/
 FI pepwindow.ps
-FZ = 14647
+FZ = 14717
 FP /^%%Title: PLplot Graph\n/
 FP /^%%Pages: 1\n/
 //
@@ -4931,7 +5139,7 @@ FP 0 /Warning:/
 ID pepwindowall-ex
 AP pepwindowall
 CL ../../data/globins.msf -gxtitle="Base Number" -gytitle="hydropathy"
-IN ps
+IN cps
 FI stderr
 FC = 11
 FP 0 /Warning:/
@@ -4939,7 +5147,7 @@ FI stdout
 FZ = 24
 FP /^Created pepwindowall.ps\n/
 FI pepwindowall.ps
-FZ = 13691
+FZ = 13789
 FP /^%%Title: PLplot Graph\n/
 FP /^%%Pages: 1\n/
 //
@@ -4947,7 +5155,7 @@ FP /^%%Pages: 1\n/
 # change example to use globins.msf
 ID plotcon-ex
 AP plotcon
-CL -sformat msf ../../data/globins.msf -graph ps
+CL -sformat msf ../../data/globins.msf -graph cps
 IN
 FI stderr
 FC = 2
@@ -4956,7 +5164,7 @@ FI stdout
 FZ = 19
 FP /^Created plotcon.ps\n/
 FI plotcon.ps
-FZ = 20866
+FZ = 20936
 FP /^%%Title: PLplot Graph\n/
 FP /^%%Pages: 1\n/
 //
@@ -4964,7 +5172,7 @@ FP /^%%Pages: 1\n/
 ID plotorf-ex
 AP plotorf
 IN tembl:paamir
-IN ps
+IN cps
 FI stderr
 FC = 2
 FP 0 /Warning:/
@@ -4972,16 +5180,17 @@ FI stdout
 FZ = 19
 FP /^Created plotorf.ps\n/
 FI plotorf.ps
-FZ = 40719
+FZ = 41629
 FP /^%%Title: PLplot Graph\n/
 FP /^%%Pages: 1\n/
 //
 
 ID plotorf-ex2
+UC An example of specifying your own START and STOP codons with a mitochondrial sequence would be:
 AP plotorf
 CL -start ATT,ATC,ATA,ATG,GTG -stop TAA,TAG,AGA,AGG
 IN ../../data/mito.seq
-IN ps
+IN cps
 FI stderr
 FC = 2
 FP 0 /Warning:/
@@ -4989,7 +5198,7 @@ FI stdout
 FZ = 19
 FP /^Created plotorf.ps\n/
 FI plotorf.ps
-FZ = 140763
+FZ = 177905
 FP /^%%Title: PLplot Graph\n/
 FP /^%%Pages: 1\n/
 //
@@ -4997,7 +5206,7 @@ FP /^%%Pages: 1\n/
 ID polydot-ex
 AP polydot
 CL ../../data/globins.fasta -gtitle="Polydot of globins.fasta"
-CL -graph ps
+CL -graph cps
 IN
 FI stderr
 FC = 2
@@ -5027,7 +5236,7 @@ ID prettyplot-ex
 AP prettyplot
 CL -resbreak=10 -boxcol -consensus -plurality=3
 IN ../../data/globins.msf
-IN ps
+IN cps
 FI stderr
 FC = 2
 FP 0 /Warning:/
@@ -5042,7 +5251,7 @@ FP /^%%Pages: 3\n/
 ID prettyplot-ex2
 AP prettyplot
 CL ../../data/globins.msf -plurality=3 -docolour
-IN ps
+IN cps
 FI stderr
 FC = 2
 FP 0 /Warning:/
@@ -5088,6 +5297,7 @@ FP /^\tAmplimer length: 261 bp\n/
 //
 
 ID primersearch-ex2
+UC Here we run the same example but allowing 20% mismatch between the primers and the sequence:
 AP primersearch
 CL tembl:z52466
 IN ../../data/primers
@@ -5105,24 +5315,27 @@ FP /^\tCACACATGCACATGCAC hits forward strand at 49 with 2 mismatches\n/
 
 ## commit a data/seqs.list file for input
 
-ID primersearch-ex3
-CC Need the seqs.list input list
-AP primersearch
-CL @../../data/seqs.list
-IN ../../data/primers
-IN
-IN
-FI stderr
-FC = 2
-FP 0 /Warning:/
-FI hs214yg7.primersearch
-FZ = 0
-//
+##ID primersearch-ex3
+##UC Here is an example of running with a file containing a list of sequences:
+##CC Need the seqs.list input list
+##AP primersearch
+##CL @../../data/seqs.list
+##IN ../../data/primers
+##IN
+##IN
+##FI stderr
+##FC = 2
+##FP 0 /Warning:/
+##FI hs214yg7.primersearch
+##FZ = 0
+##//
 
 ID printsextract-keep
 DL keep
 PP mkdir ./PRINTS
-PP export EMBOSS_DATA=./
+## split export EMBOSS_DATA=./ into two statements
+PP EMBOSS_DATA=./
+PP export EMBOSS_DATA
 AP printsextract
 IN ../../data/prints.test
 FI stderr
@@ -5141,15 +5354,17 @@ CC No example in documentation
 # Note - failed to find any results
 ID profit-ex
 AP profit
-IN ../../data/globins.prophecy
+## changed to a matrix file which produces some results
+##IN ../../data/globins.prophecy
+IN ../../data/outfile.prophecy
 IN tsw:*
 IN
 FI stderr
 FC = 2
 FP 0 /Warning:/
-FI globins.profit
-FZ = 93
-FP /^#\Z/
+FI outfile.profit
+FZ = 122
+FP /^HBB_HUMAN/
 //
 
 #fix example to match this.
@@ -5214,8 +5429,10 @@ FP /^HBA_HUMAN +1 +VLSPADKTNVKAAWG\.GKVGAHAGEYGAEALERMFLSFPTTKTYF 44 +\n/
 ID prosextract-keep
 AP prosextract
 DL keep
+## split export EMBOSS_DATA=./ into two statements
 PP mkdir ./PROSITE
-PP export EMBOSS_DATA=./
+PP EMBOSS_DATA=./
+PP export EMBOSS_DATA
 IN ../../data/
 FI stderr
 FC = 2
@@ -5225,7 +5442,9 @@ DI PROSITE
 
 ID pscan-ex
 AP pscan
-PP export EMBOSS_DATA=./
+## split export EMBOSS_DATA=./ into two statements
+PP EMBOSS_DATA=../printsextract-keep/
+PP export EMBOSS_DATA
 IN tsw:opsd_human
 IN
 IN
@@ -5234,10 +5453,10 @@ FI stderr
 FC = 2
 FP 0 /Warning:/
 FI opsd_human.pscan 
-FZ = 1501
+FZ = 794
 FP /^Fingerprint GPCRRHODOPSN Elements 7\n    Accession number PR00237\n/
-FP /^  Element 1 Threshold 54% Score 64%\n/
-FP /^             Start position 39 Length 25\n/
+FP /^  Element 2 Threshold 49% Score 75%\n/
+FP /^             Start position 72 Length 22\n/
 //
 
 ID rebaseextract-keep
@@ -5245,7 +5464,9 @@ CC needs local copy of REBASE withrefm file
 AP rebaseextract
 DL keep
 PP mkdir ./REBASE
-PP export EMBOSS_DATA=./
+## split export EMBOSS_DATA=./ into two statements
+PP EMBOSS_DATA=./
+PP export EMBOSS_DATA
 IN ../../data/withrefm
 FI stderr
 FC = 2
@@ -5255,7 +5476,9 @@ DI REBASE
 
 ID recoder-ex
 AP recoder
-PP export EMBOSS_DATA=../rebaseextract-keep/
+## split export EMBOSS_DATA=../rebaseextract-keep/ into two statements
+PP EMBOSS_DATA=../rebaseextract-keep/
+PP export EMBOSS_DATA
 IN tembl:hsfau
 IN EcoRII
 IN
@@ -5270,7 +5493,9 @@ FP 3 /^EcoRII      CCWGG          77        P\.P    78       C->[ACGT]  \n/
 # make bamhi explicit in reply to prompt
 ID redata-ex
 AP redata
-PP export EMBOSS_DATA=../rebaseextract-keep/
+## split export EMBOSS_DATA=../rebaseextract-keep/ into two statements
+PP EMBOSS_DATA=../rebaseextract-keep/
+PP export EMBOSS_DATA
 IN BamHI
 IN
 FI stderr
@@ -5283,8 +5508,11 @@ FP /^  Cut positions 5':1 3':5\n/
 //
 
 ID remap-ex
+UC This example uses only a small region of the input sequence to save space.
 AP remap
-PP export EMBOSS_DATA=../rebaseextract-keep/
+## split export EMBOSS_DATA=../rebaseextract-keep/ into two statements
+PP EMBOSS_DATA=../rebaseextract-keep/
+PP export EMBOSS_DATA
 CL -notran -sbeg 1 -send 60
 IN tembl:eclac
 IN taqi,bsu6i,acii,bsski
@@ -5304,8 +5532,11 @@ FP /^\s+TaqI\s+1\s+\n/
 //
 
 ID remap-ex2
+UC This is an example where all enzymes in the REBASE database are used:
 AP remap
-PP export EMBOSS_DATA=../rebaseextract-keep/
+## split export EMBOSS_DATA=../rebaseextract-keep/ into two statements
+PP EMBOSS_DATA=../rebaseextract-keep/
+PP export EMBOSS_DATA
 CL -notran -sbeg 1 -send 60
 IN tembl:eclac
 IN
@@ -5319,9 +5550,29 @@ FZ = 1663
 FP /^\s+Hin6I\s+2\s+HinP1I,HspAI\n/
 //
 
+ID remap-ex3
+UC This shows the 'flat' format:
+AP remap
+PP EMBOSS_DATA=../rebaseextract-keep/
+PP export EMBOSS_DATA
+CL -notran -sbeg 1 -send 60 -flat
+IN tembl:eclac
+IN
+IN
+IN
+FI stderr
+FC = 2
+FP 0 /Warning:/
+FI eclac.remap
+FZ = 2060
+FP /^\s+Hin6I\s+2\s+HinP1I,HspAI\n/
+//
+
 ID restover-ex
 AP restover
-PP export EMBOSS_DATA=../rebaseextract-keep/
+## split export EMBOSS_DATA=../rebaseextract-keep/ into two statements
+PP EMBOSS_DATA=../rebaseextract-keep/
+PP export EMBOSS_DATA
 IN tembl:hsfau
 IN cg
 IN
@@ -5336,7 +5587,9 @@ FP /^\s+11\s+TaqI\s+TCGA\s+11\s+13\s+\n/
 
 ID restrict-ex
 AP restrict
-PP export EMBOSS_DATA=../rebaseextract-keep/
+## split export EMBOSS_DATA=../rebaseextract-keep/ into two statements
+PP EMBOSS_DATA=../rebaseextract-keep/
+PP export EMBOSS_DATA
 IN tembl:hsfau
 IN
 IN
@@ -5350,6 +5603,7 @@ FP /^\s+125\s+135\s+0\s+Hin4I\s+GAYNNNNNVTC\s+116\s+111\s+148\s+143\n/
 //
 
 ID revseq-ex
+UC To create the reverse complement (reverse sense) of 'tembl:hsfau' in the file 'hsfau.rev':
 AP revseq
 CL tembl:hsfau hsfau.rev
 FI stderr
@@ -5361,6 +5615,7 @@ FP /^gtcccagctaccgcgaagatggagtcgagaaagaggaa\n/
 //
 
 ID revseq-ex2
+UC To create the complement of 'tembl:hsfau' in the file 'hsfau.rev':
 AP revseq
 CL tembl:hsfau hsfau.rev -norev
 FI stderr
@@ -5372,6 +5627,7 @@ FP /^agattattttttcggtgaatcaagtcagtttttttttt\n/
 //
 
 ID revseq-ex3
+UC To create the reverse of 'tembl:hsfau' in the file 'hsfau.rev':
 AP revseq
 CL tembl:hsfau hsfau.rev -nocomp
 FI stderr
@@ -5445,6 +5701,7 @@ CC No documentation
 //
 
 ID seqmatchall-ex
+UC Here is an example using an increased word size to avoid accidental matches:
 AP seqmatchall
 IN tembl:eclac*
 IN 15
@@ -7882,6 +8139,148 @@ FP 0 /Warning:/
 # End of query USA tests
 ####################################################
 
+
+####################################################
+# seqret examples for documentation
+####################################################
+
+ID seqret-ex
+UC Extract an entry from a database and write it to a file: 
+AP seqret
+IN tembl:hsfau
+IN
+FI stderr
+FC = 2
+FI hsfau.fasta
+FP /HSFAU/
+//
+
+ID seqret-ex2
+UC Display the contents of the sequence on the screen:
+AP seqret
+IN tembl:hsfau
+IN stdout
+FI stdout
+FP /HSFAU/
+FI stderr
+FC = 2
+//
+
+ID seqret-ex3
+UC Write the result in GCG format by using the qualifier '-osformat'.
+AP seqret
+CL -osf gcg
+IN tembl:hsfau
+IN
+FI stderr
+FC = 2
+FI hsfau.gcg
+FP /HSFAU/
+//
+
+ID seqret-ex4
+UC Write the result in GCG format by specifying the format in the output USA on the command line.
+AP seqret
+CL -outseq gcg::hsfau.gcg
+IN tembl:hsfau
+FI stderr
+FC = 2
+FI hsfau.gcg
+FP /HSFAU/
+//
+
+ID seqret-ex5
+UC Write the result in GCG format by specifying the format in the output USA at the prompt.
+AP seqret
+IN tembl:hsfau
+IN gcg::hsfau.gcg
+FI stderr
+FC = 2
+FI hsfau.gcg
+FP /HSFAU/
+//
+
+ID seqret-ex6
+UC Write the reverse-complement of a sequence:
+AP seqret
+CL -srev
+IN tembl:hsfau
+IN
+FI stderr
+FC = 2
+FI hsfau.fasta
+FP /HSFAU/
+//
+
+ID seqret-ex7
+UC Extract the bases between the positions starting at 5 and ending at 25:
+AP seqret
+CL -sbegin 5 -send 25
+IN tembl:hsfau
+IN 
+FI stderr
+FC = 2
+FI hsfau.fasta
+FP /HSFAU/
+//
+
+ID seqret-ex8
+UC Extract the bases between the positions starting at 5 and ending at 5 bases before the end of the sequence:
+AP seqret
+CL -sbegin 5 -send -5
+IN tembl:hsfau
+IN 
+FI stderr
+FC = 2
+FI hsfau.fasta
+FP /HSFAU/
+//
+
+ID seqret-ex9
+UC Read all entries in the database 'tembl' that start with 'hs' and write them to a file:
+AP seqret
+IN tembl:hs*
+IN hsall.seq
+FI stderr
+FC = 2
+FI hsall.seq
+FP /HSFAU/
+//
+
+ID seqret-ex10
+UC Read all entries in the database 'tembl' that start with 'hs' and write them to a file.
+UC In this example the specification is all done in the command line and to stop Unix getting confused by the '*' character, it has to have a backslash ('\') before it:
+AP seqret
+CL tembl:hs\*  hsall.seq
+FI stderr
+FC = 1
+FI hsall.seq
+FP /HSFAU/
+//
+
+ID seqret-ex11
+UC seqret does not read in features by default because this results in
+UC slightly faster performance.  If however you wish to read in features
+UC with your sequence and write them out on output, using '-feature' will
+UC change the default behaviour to use any features present in the sequence. 
+UC N.B. use embl format for the output file as the default format 'fasta'
+UC cannot display a feature table.
+AP seqret
+CL -feature
+IN tembl:hsfau
+IN embl::hsfau.embl
+FI stderr
+FC = 2
+FI hsfau.embl
+FP /HSFAU/
+//
+
+
+####################################################
+# end of seqret examples for documentation
+####################################################
+
+
 ID seqretset-ex
 AP infoalign
 CL -auto tembl:eclac* -out test.out
@@ -8123,7 +8522,7 @@ AP seqwords
 CC No example in documentation
 //
 
-# change example to use globins.msf
+
 ID showalign-ex
 AP showalign
 IN ../../data/globins.msf
@@ -8137,7 +8536,156 @@ FP /^HBB_HUMAN  --------VHLTPE\.K\.AVTALWG\.VN-VD\.V\.GEA\.GR-LLVvY\.WTQR\.\.ES\
 FP /^Consensus  xllxvlxxxxxxdftxxvxaSxxkxlxxvaxxlxxkyXxxxxxx\n/
 //
 
+ID showalign-ex2
+UC Show non-identities between the sequences
+AP showalign
+CL -show=n
+IN ../../data/globins.msf
+IN
+FI stderr
+FC = 2
+FP 0 /Warning:/
+FI globins.showalign
+FP /HBB_HUMAN/
+//
+
+ID showalign-ex3
+UC Show all of the sequences
+AP showalign
+CL -show=a
+IN ../../data/globins.msf
+IN
+FI stderr
+FC = 2
+FP 0 /Warning:/
+FI globins.showalign
+FP /HBB_HUMAN/
+//
+
+ID showalign-ex4
+UC Show identities between the sequences
+AP showalign
+CL -show=i
+IN ../../data/globins.msf
+IN
+FI stderr
+FC = 2
+FP 0 /Warning:/
+FI globins.showalign
+FP /HBB_HUMAN/
+//
+
+ID showalign-ex5
+UC Show similarities between the sequences
+AP showalign
+CL -show=s
+IN ../../data/globins.msf
+IN
+FI stderr
+FC = 2
+FP 0 /Warning:/
+FI globins.showalign
+FP /HBB_HUMAN/
+//
+
+ID showalign-ex6
+UC Show dissimilarities between the sequences
+AP showalign
+CL -show=d
+IN ../../data/globins.msf
+IN
+FI stderr
+FC = 2
+FP 0 /Warning:/
+FI globins.showalign
+FP /HBB_HUMAN/
+//
+
+ID showalign-ex7
+UC Use the first sequence as the reference to compare to:
+AP showalign
+CL -ref=1
+IN ../../data/globins.msf
+IN
+FI stderr
+FC = 2
+FP 0 /Warning:/
+FI globins.showalign
+FP /HBB_HUMAN/
+//
+
+ID showalign-ex8
+UC Show a range of sequences in uppercase, everything else in lowercase
+AP showalign
+CL -nocon -ref=1 -sl -upper 9-15 -nosimilarcase
+IN ../../data/globins.msf
+IN
+FI stderr
+FC = 2
+FP 0 /Warning:/
+FI globins.showalign
+FP /HBB_HUMAN/
+//
+
+ID showalign-ex9
+UC Display the sequences in alphabetic order:
+AP showalign
+CL -order=a
+IN ../../data/globins.msf
+IN
+FI stderr
+FC = 2
+FP 0 /Warning:/
+FI globins.showalign
+FP /HBB_HUMAN/
+//
+
+ID showalign-ex10
+UC Display the sequences in order of similarity to the reference sequence
+AP showalign
+CL -order=s
+IN ../../data/globins.msf
+IN
+FI stderr
+FC = 2
+FP 0 /Warning:/
+FI globins.showalign
+FP /HBB_HUMAN/
+//
+
+ID showalign-ex11
+UC Format for HTML and highlight some interesting regions in different colours:
+AP showalign
+CL -html -high '4-13 green 43-43 red 51-56 blue'
+IN ../../data/globins.msf
+IN
+FI stderr
+FC = 2
+FP 0 /Warning:/
+FI globins.showalign
+FP /HBB_HUMAN/
+//
+
+ID showalign-ex12
+UC No consensus line at the bottom
+UC No ruler line
+UC No numbers line
+UC Don't repeat the reference sequence at the bottom of the sequences
+UC Use sequence 1 as the reference sequence
+UC Display residues from position 10 to 30 only 
+AP showalign
+CL -nocon -norule -nonum -nobot -ref=1 -sb=10 -send=30
+IN ../../data/globins.msf
+IN
+FI stderr
+FC = 2
+FP 0 /Warning:/
+FI globins.showalign
+FP /HBB_HUMAN/
+//
+
 ID showdb-ex
+UC Display information on the currently available databases:
 AP showdb
 FI stderr
 FC = 1
@@ -8148,6 +8696,7 @@ FP /^tembl\s+N\s+OK\s+OK\s+OK/
 //
 
 ID showdb-ex2
+UC Write the results to a file:
 AP showdb
 CL -outfile showdb.out
 FI stderr
@@ -8159,6 +8708,7 @@ FP /^tembl\s+N\s+OK\s+OK\s+OK/
 //
 
 ID showdb-ex3
+UC Display information on one explicit database:
 AP showdb
 CL -database tsw
 FI stderr
@@ -8170,6 +8720,7 @@ FP 0 /^tembl/
 //
 
 ID showdb-ex4
+UC Display information on the databases formatted in HTML:
 AP showdb
 CL -html
 FI stderr
@@ -8181,6 +8732,7 @@ FP /^<tr><td>tembl</td><td>N</td><td>OK/
 //
 
 ID showdb-ex5
+UC Display protein databases only:
 AP showdb
 CL -nonucleic
 FI stderr
@@ -8192,6 +8744,7 @@ FP 0 /^[^#]\S*\s+N/
 //
 
 ID showdb-ex6
+UC Display the information with no headings:
 AP showdb
 CL -noheading
 FI stderr
@@ -8203,6 +8756,7 @@ FP 0 /\A#/
 //
 
 ID showdb-ex7
+UC Display just a list of the available database names:
 AP showdb
 CL -noheading -notype -noid -noquery -noall -nocomment -auto
 FI stdout
@@ -8211,6 +8765,7 @@ FP /^tembl\s+\n/
 //
 
 ID showdb-ex8
+UC Display only the names and types:
 AP showdb
 CL -only -type
 FI stderr
@@ -8223,16 +8778,46 @@ FP /^tembl\s+N\s+\n/
 
 ID showfeat-ex
 AP showfeat
-IN tembl:paamir
+IN tembl:hsfau1
 IN
 FI stderr
 FC = 2
 FP 0 /Warning:/
-FI paamir.showfeat 
-FZ = 841
-FP /\|=+\| 2167\n/
-FP 2 /    misc_feature\n/
+FI hsfau1.showfeat 
+FZ = 1429
+FP /\|=+\| 2016\n/
+FP 5 /    mRNA\n/
 FP /-> source\n/
+//
+
+ID showfeat-ex2
+UC Display 'joined' features on one line with positions:
+AP showfeat
+CL -sort join -pos
+IN tembl:hsfau1
+IN
+FI stderr
+FC = 2
+FP 0 /Warning:/
+FI hsfau1.showfeat 
+FZ = 1150
+FP /\|=+\| 2016\n/
+FP /mRNA\n/
+FP /source\n/
+//
+
+ID showfeat-ex3
+UC Display just positions and names of CDS features - this can be used as a regions file in showseq:
+AP showfeat
+CL -matchtype CDS -width 0 -noid -nodesc -noscale -pos 
+IN tembl:hsfau1
+IN
+FI stderr
+FC = 2
+FP 0 /Warning:/
+FI hsfau1.showfeat 
+FZ = 54
+FP /CDS/
 //
 
 ID showorf-ex
@@ -8249,10 +8834,6 @@ FP /^F1 +1 G  T  A  G  R  A  S  A  R  S  P  P  A  G  R  R  E  17\n/
 FP /^R2 +106    Y  R  Q  G  L  M  Q  E  I  V  V  L  R  A  V  P  91\n/
 //
 
-# output needs further work
-# ran to base 120 (should be 100)
-# note="" extra quotes
-
 ID showseq-ex
 AP showseq
 CL tembl:paamir -sbeg 1 -send 100
@@ -8264,6 +8845,121 @@ FP 0 /Warning:/
 FI paamir.showseq 
 FZ = 793
 FP 2 /^\s+\|=+\|\n\s+promoter note="/
+OC Note that although we asked for the sequence display to end at
+OC position '100', it has displayed the sequence up to the end of the line
+OC - position '120'.  This is a feature of this program to make the display
+OC of things like restriction enzyme cutting sites easier. 
+//
+
+ID showseq-ex2
+UC The standard list of output formats are only a small selection of the
+UC possible ways in which a sequence might be displayed.  Precise control
+UC over the output format is acheived by selecting the qualifier '-format 0' 
+UC (Option 0 in the list of things to display).  For example,
+UC by choosing format '0' and then specifying that we want to display the
+UC things: 'b,s,t,c', we will output the sequence in the following way:
+AP showseq
+CL tembl:paamir -sbeg 1 -send 120
+IN 0
+IN b,s,t,c
+IN 
+FI stderr
+FC = 28
+FP 0 /Warning:/
+FI paamir.showseq 
+FZ = 511
+FP /^          ggtacc/
+//
+
+ID showseq-ex3
+UC Display only the sequence:
+AP showseq
+CL tembl:paamir -sbeg 1 -send 100 -noname -nodesc -format 0 -thing S
+IN
+FI stderr
+FC = 2
+FP 0 /Warning:/
+FI paamir.showseq 
+FZ = 143
+FP /^          ggtacc/
+//
+
+ID showseq-ex4
+UC Protein sequence can be displayed in three-letter codes. (The codes are displayed downwards, so the first code is 'Met'): 
+AP showseq
+CL tsw:rs24_fugru -three -format 2
+IN
+FI stderr
+FC = 2
+FP 0 /Warning:/
+FI rs24_fugru.showseq
+FZ = 990
+FP /^          MAATVT/
+//
+
+ID showseq-ex5
+UC Number the sequence lines in the margin: 
+AP showseq
+CL tembl:paamir -sbeg 1 -send 100 -format 1 -number
+IN
+FI stderr
+FC = 2
+FP 0 /Warning:/
+FI paamir.showseq 
+FZ = 232
+FP /^        1 ggtacc/
+//
+
+ID showseq-ex6
+UC Start the numbering at a specified value ('123' in this case):
+AP showseq
+CL tembl:paamir -sbeg 1 -send 100 -format 1 -number -offset 123
+IN
+FI stderr
+FC = 2
+FP 0 /Warning:/
+FI paamir.showseq 
+FZ = 233
+FP /^      123 ggtacc/
+//
+
+ID showseq-ex7
+UC Make selected regions uppercase. (Use '-slower' to force the rest of the sequence to be lowercase). 
+AP showseq
+CL tembl:paamir -sbeg 1 -send 100 -format 1 -slower -upper '25-45,101-203,333-362'
+IN
+FI stderr
+FC = 2
+FP 0 /Warning:/
+FI paamir.showseq 
+FZ = 225
+FP /tgctCGAT/
+//
+
+ID showseq-ex8
+UC Translate selected regions: 
+AP showseq
+CL tembl:paamir -sbeg 1 -send 120 -format 4 -trans 25-49,66-76
+IN
+FI stderr
+FC = 2
+FP 0 /Warning:/
+FI paamir.showseq 
+FZ = 937
+FP /R  S  P  P  A  G  R  R  V/
+//
+
+ID showseq-ex9
+UC Add your own annotation to the display:
+AP showseq
+CL tembl:paamir -sbeg 1 -send 100 -format 2 -send 120 -annotation '13-26 binding site 15-15 SNP'
+IN
+FI stderr
+FC = 2
+FP 0 /Warning:/
+FI paamir.showseq 
+FZ = 919
+FP /binding site/
 //
 
 ID shuffleseq-ex
@@ -8368,10 +9064,10 @@ FI stderr
 FC = 1
 FP 0 /Warning:/
 FI ap000504.split
-FZ = 104917
-FP /\A>AP000504_1-53000/
-FP /^>AP000504_50001-100000/
-FP 2 /^>/
+FZ = 108068
+FP /\A>AP000504_1-50000/
+FP /^>AP000504_47001-97000/
+FP 3 /^>/
 //
 
 # update example
@@ -8923,6 +9619,165 @@ FZ = 137
 FP /^ECLACI\twordmatch\tmisc_feature\t1\t1113\t1\.000\t/
 //
 
+ID wordmatch-pair
+AP wordmatch
+CL tsw:hba_human tsw:hbb_human -aformat pair
+IN
+IN
+FI stderr
+FC = 2
+FP 0 /Warning:/
+FI hba_human.wordmatch
+FZ > 608
+FP 1 /^HBA_HUMAN         58 HGKKV     62\n/
+FP 1 /^                     \|\|\|\|\|\n/
+FP 2 /^                     \|\|\|\|\n/
+FP 1 /^HBB_HUMAN         63 HGKKV     67\n/
+FI HBA_HUMAN.gff
+FZ = 336
+FP /^HBA_HUMAN\twordmatch\tmisc_feature\t58\t62\t1\.000\t/
+FI HBB_HUMAN.gff
+FZ = 336
+FP /^HBB_HUMAN\twordmatch\tmisc_feature\t63\t67\t1\.000\t/
+//
+
+ID wordmatch-srspair
+AP wordmatch
+CL tsw:hba_human tsw:hbb_human -aformat srspair
+IN
+IN
+FI stderr
+FC = 2
+FP 0 /Warning:/
+FI hba_human.wordmatch
+FZ > 608
+FP 1 /^HBA_HUMAN         58 HGKKV     62\n/
+FP 1 /^                     \|\|\|\|\|\n/
+FP 2 /^                     \|\|\|\|\n/
+FP 1 /^HBB_HUMAN         63 HGKKV     67\n/
+FI HBA_HUMAN.gff
+FZ = 336
+FP /^HBA_HUMAN\twordmatch\tmisc_feature\t58\t62\t1\.000\t/
+FI HBB_HUMAN.gff
+FZ = 336
+FP /^HBB_HUMAN\twordmatch\tmisc_feature\t63\t67\t1\.000\t/
+//
+
+ID wordmatch-markx0
+AP wordmatch
+CL tsw:hba_human tsw:hbb_human -aformat markx0
+IN
+IN
+FI stderr
+FC = 2
+FP 0 /Warning:/
+FI hba_human.wordmatch
+FZ > 608
+FP 1 /^HBA_HU HGKKV\n/
+FP 1 /^       :::::\n/
+FP 1 /^HBB_HU HGKKV\n/
+FP 1 /^        60  \n/
+FI HBA_HUMAN.gff
+FZ = 336
+FP /^HBA_HUMAN\twordmatch\tmisc_feature\t58\t62\t1\.000\t/
+FI HBB_HUMAN.gff
+FZ = 336
+FP /^HBB_HUMAN\twordmatch\tmisc_feature\t63\t67\t1\.000\t/
+//
+
+ID wordmatch-markx1
+AP wordmatch
+CL tsw:hba_human tsw:hbb_human -aformat markx1
+IN
+IN
+FI stderr
+FC = 2
+FP 0 /Warning:/
+FI hba_human.wordmatch
+FZ > 608
+FP 1 /^HBA_HU HGKKV\n/
+## found for numbering and for alignment in first hit
+FP 2 /^            \n/
+FP 1 /^HBB_HU HGKKV\n/
+FP 1 /^        60  \n/
+FI HBA_HUMAN.gff
+FZ = 336
+FP /^HBA_HUMAN\twordmatch\tmisc_feature\t58\t62\t1\.000\t/
+FI HBB_HUMAN.gff
+FZ = 336
+FP /^HBB_HUMAN\twordmatch\tmisc_feature\t63\t67\t1\.000\t/
+//
+
+ID wordmatch-markx2
+AP wordmatch
+CL tsw:hba_human tsw:hbb_human -aformat markx2
+IN
+IN
+FI stderr
+FC = 2
+FP 0 /Warning:/
+FI hba_human.wordmatch
+FZ > 608
+FP 1 /^        60  \n/
+FP 1 /^HBA_HU HGKKV\n/
+FP 1 /^HBB_HU \.\.\.\.\.\n/
+FI HBA_HUMAN.gff
+FZ = 336
+FP /^HBA_HUMAN\twordmatch\tmisc_feature\t58\t62\t1\.000\t/
+FI HBB_HUMAN.gff
+FZ = 336
+FP /^HBB_HUMAN\twordmatch\tmisc_feature\t63\t67\t1\.000\t/
+//
+
+ID wordmatch-markx3
+AP wordmatch
+CL tsw:hba_human tsw:hbb_human -aformat markx3
+IN
+IN
+FI stderr
+FC = 2
+FP 0 /Warning:/
+FI hba_human.wordmatch
+FZ > 608
+FP 1 /^>HBA_HUMAN \.\.\nHGKKV\n/
+FP 1 /^>HBB_HUMAN \.\.\nHGKKV\n/
+FI HBA_HUMAN.gff
+FZ = 336
+FP /^HBA_HUMAN\twordmatch\tmisc_feature\t58\t62\t1\.000\t/
+FI HBB_HUMAN.gff
+FZ = 336
+FP /^HBB_HUMAN\twordmatch\tmisc_feature\t63\t67\t1\.000\t/
+//
+
+ID wordmatch-markx10
+AP wordmatch
+CL tsw:hba_human tsw:hbb_human -aformat markx10
+IN
+IN
+FI stderr
+FC = 2
+FP 0 /Warning:/
+FI hba_human.wordmatch
+FZ > 608
+FP 3 /^>HBA_HUMAN \.\.\n/
+FP 3 /^; sq_len: 141\n/
+FP 1 /^; al_start: 58\n/
+FP 1 /^; al_stop: 62\n/
+FP 1 /^; al_display_start: 58\n/
+FP 2 /^HGKKV\n/
+FP 3 /^>HBB_HUMAN \.\.\n/
+FP 3 /^; sq_len: 146\n/
+FP 1 /^; al_start: 63\n/
+FP 1 /^; al_stop: 67\n/
+FP 1 /^; al_display_start: 63\n/
+FI HBA_HUMAN.gff
+FZ = 336
+FP /^HBA_HUMAN\twordmatch\tmisc_feature\t58\t62\t1\.000\t/
+FI HBB_HUMAN.gff
+FZ = 336
+FP /^HBB_HUMAN\twordmatch\tmisc_feature\t63\t67\t1\.000\t/
+//
+
 ID wossname-ex
 AP wossname
 CL restrict
@@ -9154,6 +10009,139 @@ FP 1 /^ AFULL AACCGG\n/
 FP 1 /^ BFULL AACGGG\n/
 FP 1 /^             \n/
 FC = 33
+//
+
+ID align-matcher-pair
+AP matcher
+CL -gappen 5 -gaplen 1 -stdout -sbegin1 5 -send1 15 -sbegin2 2 -send2 -6
+CL -aformat pair
+IN ../../data/aligna.dna
+IN ../../data/alignb.dna
+IN
+FI stderr
+FC = 2
+FP 0 /Warning:/
+FI stdout
+FP /^# Identity: +5\/6 \(83\.3%\)/
+FP /^# Score: +21\n/
+FP 1 /^AFULL +5 AACCGG +10\n/
+FP 1 /^BFULL +2 AACGGG +7\n/
+FC = 31
+//
+
+ID align-matcher-srspair
+AP matcher
+CL -gappen 5 -gaplen 1 -stdout -sbegin1 5 -send1 15 -sbegin2 2 -send2 -6
+CL -aformat srspair
+IN ../../data/aligna.dna
+IN ../../data/alignb.dna
+IN
+FI stderr
+FC = 2
+FP 0 /Warning:/
+FI stdout
+FP /^# Identity: +5\/6 \(83\.3%\)/
+FP /^# Score: +21\n/
+FP 1 /^AFULL +5 AACCGG +10\n/
+FP 1 /^BFULL +2 AACGGG +7\n/
+FC = 31
+//
+
+ID align-matcher-markx0
+AP matcher
+CL -gappen 5 -gaplen 1 -stdout -sbegin1 5 -send1 15 -sbegin2 2 -send2 -6
+CL -aformat markx0
+IN ../../data/aligna.dna
+IN ../../data/alignb.dna
+IN
+FI stderr
+FC = 2
+FP 0 /Warning:/
+FI stdout
+FP /^# Identity: +5\/6 \(83\.3%\)/
+FP /^# Score: +21\n/
+FP 1 /^           10\n/
+FP 1 /^ AFULL AACCGG\n/
+FP 1 /^       ::: ::\n/
+FP 1 /^ BFULL AACGGG\n/
+FP 1 /^             \n/
+FC = 33
+//
+
+ID align-matcher-markx1
+AP matcher
+CL -gappen 5 -gaplen 1 -stdout -sbegin1 5 -send1 15 -sbegin2 2 -send2 -6
+CL -aformat markx1
+IN ../../data/aligna.dna
+IN ../../data/alignb.dna
+IN
+FI stderr
+FC = 2
+FP 0 /Warning:/
+FI stdout
+FP /^# Identity: +5\/6 \(83\.3%\)/
+FP /^# Score: +21\n/
+FP 1 /^           10\n/
+FP 1 /^ AFULL AACCGG\n/
+FP 1 /^          X  \n/
+FP 1 /^ BFULL AACGGG\n/
+FP 1 /^             \n/
+FC = 33
+//
+
+ID align-matcher-markx2
+AP matcher
+CL -gappen 5 -gaplen 1 -stdout -sbegin1 5 -send1 15 -sbegin2 2 -send2 -6
+CL -aformat markx2
+IN ../../data/aligna.dna
+IN ../../data/alignb.dna
+IN
+FI stderr
+FC = 2
+FP 0 /Warning:/
+FI stdout
+FP /^# Identity: +5\/6 \(83\.3%\)/
+FP /^# Score: +21\n/
+FP 1 /^           10\n/
+FP 1 /^ AFULL AACCGG\n/
+FP 1 /^BFULL  \.\.\.G\.\.\n/
+FC = 31
+//
+
+ID align-matcher-markx3
+AP matcher
+CL -gappen 5 -gaplen 1 -stdout -sbegin1 5 -send1 15 -sbegin2 2 -send2 -6
+CL -aformat markx3
+IN ../../data/aligna.dna
+IN ../../data/alignb.dna
+IN
+FI stderr
+FC = 2
+FP 0 /Warning:/
+FI stdout
+FP /^# Identity: +5\/6 \(83\.3%\)/
+FP /^# Score: +21\n/
+FP /^# Identity: +5\/6 \(83\.3%\)/
+FP /^# Score: +21\n/
+FP 1 /^>AFULL \.\.\nAACCGG\n/
+FP 1 /^>BFULL \.\.\nAACGGG\n/
+FC = 31
+//
+
+ID align-matcher-markx10
+AP matcher
+CL -gappen 5 -gaplen 1 -stdout -sbegin1 5 -send1 15 -sbegin2 2 -send2 -6
+CL -aformat markx10
+IN ../../data/aligna.dna
+IN ../../data/alignb.dna
+IN
+FI stderr
+FC = 2
+FP 0 /Warning:/
+FI stdout
+FP 1 /^>AFULL \.\.\n;[^\n]+\n;[^\n]+\n;[^\n]+\n;[^\n]+\nAACCGG\n/
+FP 1 /^>BFULL \.\.\n;[^\n]+\n;[^\n]+\n;[^\n]+\n;[^\n]+\nAACGGG\n/
+FC = 39
 //
 
 ID align-water-full
