@@ -1,9 +1,8 @@
 
-                              EMBOSS: infoseq
-     _________________________________________________________________
+                                  infoseq 
+                                      
    
-                                Program infoseq
-                                       
+   
 Function
 
    Displays some simple information about sequences
@@ -57,10 +56,10 @@ Command line arguments
    -outfile            outfile    If you enter the name of a file here then
                                   this program will write the sequence details
                                   into that file.
-   -html               bool       Format output as an HTML table
+   -html               boolean    Format output as an HTML table
 
    Advanced qualifiers:
-   -only               bool       This is a way of shortening the command line
+   -only               boolean    This is a way of shortening the command line
                                   if you only want a few things to be
                                   displayed. Instead of specifying:
                                   '-nohead -noname -noacc -notype -nopgc
@@ -68,17 +67,19 @@ Command line arguments
                                   to get only the length output, you can
                                   specify
                                   '-only -length'
-   -heading            bool       Display column headings
-   -usa                bool       Display the USA of the sequence
-   -name               bool       Display 'name' column
-   -accession          bool       Display 'accession' column
-   -type               bool       Display 'type' column
-   -length             bool       Display 'length' column
-   -pgc                bool       Display 'percent GC content' column
-   -description        bool       Display 'description' column
+   -heading            boolean    Display column headings
+   -usa                boolean    Display the USA of the sequence
+   -name               boolean    Display 'name' column
+   -accession          boolean    Display 'accession' column
+   -gi                 boolean    Display 'GI' column
+   -version            boolean    Display 'version' column
+   -type               boolean    Display 'type' column
+   -length             boolean    Display 'length' column
+   -pgc                boolean    Display 'percent GC content' column
+   -description        boolean    Display 'description' column
 
    General qualifiers:
-  -help                bool       report command line options. More
+  -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    
@@ -99,6 +100,8 @@ Command line arguments
    -usa Display the USA of the sequence Yes/No @(!$(only))
    -name Display 'name' column Yes/No @(!$(only))
    -accession Display 'accession' column Yes/No @(!$(only))
+   -gi Display 'GI' column Yes/No No
+   -version Display 'version' column Yes/No No
    -type Display 'type' column Yes/No @(!$(only))
    -length Display 'length' column Yes/No @(!$(only))
    -pgc Display 'percent GC content' column Yes/No @(!$(only))

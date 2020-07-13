@@ -50,6 +50,18 @@ bool: accession  [
   information: "Display 'accession' column"
 ]
 
+bool: gi  [
+  required: "N"
+  default: "N"
+  information: "Display 'GI' column"
+]
+
+bool: version [
+  required: "N"
+  default: "N"
+  information: "Display 'version' column"
+]
+
 bool: type  [
   default: "@(!$(only))"
   information: "Display 'type' column"

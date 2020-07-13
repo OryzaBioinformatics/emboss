@@ -41,6 +41,8 @@ int main(int argc, char **argv)
     AjBool dousa;
     AjBool doname;
     AjBool doacc;
+    AjBool dogi;
+    AjBool dosv;
     AjBool dolength;
     AjBool dodesc;
     AjBool dopgc;
@@ -50,10 +52,14 @@ int main(int argc, char **argv)
     AjPStr usa;
     AjPStr name;
     AjPStr acc;
+    AjPStr gi;
+    AjPStr sv;
     AjPStr altusa=ajStrNewC("-");	/* default name when the real name
 					   is not known */
     AjPStr altname=ajStrNewC("-");
     AjPStr altacc=ajStrNewC("-     ");
+    AjPStr altgi=ajStrNewC("-     ");
+    AjPStr altsv=ajStrNewC("-     ");
     ajint length;
     AjBool type=ajTrue;			/* ajTrue if Protein */
     float pgc = 0.0;
@@ -70,6 +76,8 @@ int main(int argc, char **argv)
     dousa = ajAcdGetBool("usa");
     doname = ajAcdGetBool("name");
     doacc = ajAcdGetBool("accession");
+    dogi = ajAcdGetBool("gi");
+    dosv = ajAcdGetBool("version");
     dotype = ajAcdGetBool("type");
     dolength = ajAcdGetBool("length");
     dopgc = ajAcdGetBool("pgc");
@@ -121,6 +129,22 @@ int main(int argc, char **argv)
 			(void) ajFmtPrintF(outfile, "<th>Accession</th>");
 		    else
 			(void) ajFmtPrintF(outfile, "%s", "Accession ");
+		}
+
+		if (dogi)
+		{
+		    if (html)
+			(void) ajFmtPrintF(outfile, "<th>GI</th>");
+		    else
+			(void) ajFmtPrintF(outfile, "%s", "GI        ");
+		}
+
+		if (dosv)
+		{
+		    if (html)
+			(void) ajFmtPrintF(outfile, "<th>Version</th>");
+		    else
+			(void) ajFmtPrintF(outfile, "%s", "Version   ");
 		}
 
 		if (dotype)
@@ -180,6 +204,16 @@ int main(int argc, char **argv)
 	if (ajStrLen(acc) == 0)
 	    acc = altacc;
 
+	/* get the GI number ('-' if unknown) */    
+	gi = ajSeqGetGi(seq);
+	if (ajStrLen(gi) == 0)
+	    gi = altgi;
+
+	/* get the version number ('-' if unknown) */    
+	sv = ajSeqGetSv(seq);
+	if (ajStrLen(sv) == 0)
+	    sv = altsv;
+
 	length = ajSeqLen(seq);
 	if(dopgc && !type)
 	{
@@ -208,7 +242,7 @@ int main(int argc, char **argv)
 		 */
 		if (ajStrLen(usa) < 18)
 		{
-		    if (doname || doacc || dotype || dolength ||
+		    if (doname || doacc || dogi || dosv || dotype || dolength ||
 			(!type && dopgc) || dodesc)
 			(void) ajFmtPrintF(outfile, "%-18.17S", usa);  
 		    else
@@ -217,7 +251,7 @@ int main(int argc, char **argv)
 		else
 		{
 		    (void) ajFmtPrintF(outfile, "%S", usa);  
-		    if (doname || doacc || dotype || dolength ||
+		    if (doname || doacc || dogi || dosv || dotype || dolength ||
 			(!type && dopgc) || dodesc)
 			(void) ajFmtPrintF(outfile, "\t");
 		}
@@ -238,8 +272,8 @@ int main(int argc, char **argv)
 		 */
 		if (ajStrLen(name) < 14)
 		{
-		    if (doacc || dotype || dolength || (!type && dopgc) ||
-			dodesc)
+		    if (doacc || dogi || dosv || dotype || dolength || 
+		        (!type && dopgc) || dodesc)
 			(void) ajFmtPrintF(outfile, "%-14.13S", name);  
 		    else
 			(void) ajFmtPrintF(outfile, "%S", name);  
@@ -247,8 +281,8 @@ int main(int argc, char **argv)
 		else
 		{
 		    (void) ajFmtPrintF(outfile, "%S", name);  
-		    if (doacc || dotype || dolength || (!type && dopgc) ||
-			dodesc)
+		    if (doacc || dogi || dosv || dotype || dolength || 
+		        (!type && dopgc) || dodesc)
 			(void) ajFmtPrintF(outfile, "\t");
 		}
 	    }
@@ -261,7 +295,34 @@ int main(int argc, char **argv)
 	    else
 	    {
 		(void) ajFmtPrintF(outfile, "%S", acc);
-		if (dotype || dolength || (!type && dopgc) || dodesc)
+		if (dogi || dosv || dotype || dolength || 
+		    (!type && dopgc) || dodesc)
+		    (void) ajFmtPrintF(outfile, "\t");
+	    }    	
+	}    
+
+	if (dogi)
+	{
+	    if (html)
+		(void) ajFmtPrintF(outfile, "<td>%S</td>", gi);
+	    else
+	    {
+		(void) ajFmtPrintF(outfile, "%S", gi);
+		if (dosv || dotype || dolength || 
+		    (!type && dopgc) || dodesc)
+		    (void) ajFmtPrintF(outfile, "\t");
+	    }    	
+	}    
+
+	if (dosv)
+	{
+	    if (html)
+		(void) ajFmtPrintF(outfile, "<td>%S</td>", sv);
+	    else
+	    {
+		(void) ajFmtPrintF(outfile, "%S", sv);
+		if (dotype || dolength || 
+		    (!type && dopgc) || dodesc)
 		    (void) ajFmtPrintF(outfile, "\t");
 	    }    	
 	}    
@@ -337,6 +398,8 @@ int main(int argc, char **argv)
     ajStrDel(&altusa);
     ajStrDel(&altname);
     ajStrDel(&altacc);
+    ajStrDel(&altsv);
+    ajStrDel(&altgi);
 
     (void) ajExit();
     return 0;
