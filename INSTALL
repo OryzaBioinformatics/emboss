@@ -1,5 +1,21 @@
-Basic Installation
-==================
+CONTENTS
+========
+
+1. Basic Installation
+   1.1 Compilers and Options
+       1.2.1 Compiling For Multiple Architectures
+   1.2 Installation Names
+   1.3 Optional Features
+   1.4 Specifying the System Type
+   1.5 Sharing Defaults
+   1.6 Operation Controls
+
+2. EMBOSS Customisation
+   2.1 The emboss.defaults file
+       2.1.1 SET variables
+
+1. Basic Installation
+   ==================
 
    These are generic installation instructions.
 
@@ -51,8 +67,8 @@ The simplest way to compile this package is:
      all sorts of other programs in order to regenerate files that came
      with the distribution.
 
-Compilers and Options
-=====================
+1.1 Compilers and Options
+    =====================
 
    The `configure' script will check for the GNU C compiler (gcc), but
 will use your usual (cc) compiler if gcc is not found. You can tell
@@ -75,8 +91,8 @@ this:
 Or on systems that have the `env' program, you can do it like this:
      env CPPFLAGS=-I/usr/local/include LDFLAGS=-s ./configure
 
-Compiling For Multiple Architectures
-====================================
+1.2.1 Compiling For Multiple Architectures
+      ====================================
 
    You can compile the package for more than one kind of computer at the
 same time, by placing the object files for each architecture in their
@@ -92,8 +108,8 @@ in the source code directory.  After you have installed the package for
 one architecture, use `make distclean' before reconfiguring for another
 architecture.
 
-Installation Names
-==================
+1.2 Installation Names
+    ==================
 
    By default, `make install' will install the package's files in
 `/usr/local/bin', `/usr/local/man', etc.  You can specify an
@@ -115,8 +131,8 @@ you can set and what kinds of files go in them.
 with an extra prefix or suffix on their names by giving `configure' the
 option `--program-prefix=PREFIX' or `--program-suffix=SUFFIX'.
 
-Optional Features
-=================
+1.3 Optional Features
+    =================
 
    Some packages pay attention to `--enable-FEATURE' options to
 `configure', where FEATURE indicates an optional part of the package.
@@ -130,8 +146,8 @@ find the X include and library files automatically, but if it doesn't,
 you can use the `configure' options `--x-includes=DIR' and
 `--x-libraries=DIR' to specify their locations.
 
-Specifying the System Type
-==========================
+1.4 Specifying the System Type
+    ==========================
 
    There may be some features `configure' can not figure out
 automatically, but needs to determine by the type of host the package
@@ -150,8 +166,8 @@ use the `--target=TYPE' option to select the type of system they will
 produce code for and the `--build=TYPE' option to select the type of
 system on which you are compiling the package.
 
-Sharing Defaults
-================
+1.5 Sharing Defaults
+    ================
 
    If you want to set default values for `configure' scripts to share,
 you can create a site shell script called `config.site' that gives
@@ -161,8 +177,8 @@ default values for variables like `CC', `cache_file', and `prefix'.
 `CONFIG_SITE' environment variable to the location of the site script.
 A warning: not all `configure' scripts look for a site script.
 
-Operation Controls
-==================
+1.6 Operation Controls
+    ==================
 
    `configure' recognizes the following options to control how it
 operates.
@@ -191,3 +207,79 @@ operates.
      script, and exit.
 
 `configure' also accepts some other, not widely useful, options.
+
+
+2. EMBOSS Customisation
+   ====================
+
+   2.1 The emboss.default file
+       =======================
+
+   EMBOSS programs read two files on startup to define control variables
+   and biological databases. The system-wide file is "emboss.default" which
+   should be in the install directory under share/EMBOSS/emboss.default
+
+   A template version emboss.default.template is installed in the same
+   directory. Site administrators should check new versions of this
+   file for changes in a new release. The original template file is in
+   the distribution under the emboss directory.
+
+   There are 2 types of definition in the emboss.default file.
+
+   2.1.1 SET variables
+         =============
+
+     EMBOSS uses environment variables for various controls. They all
+     are uppercase names, and have the prefix "EMBOSS_". Usually these
+     are defined in the emboss.defaults file, where case is not
+     significant. The syntax is:
+
+     SET <emboss_variable> "<valuestring>"
+
+     The most useful are:
+
+     EMBOSS_LOGFILE A file that will log all EMBOSS usage (program,
+     user, date). You should uncomment this line and cteate the file.
+
+     EMBOSS_TEMPDATA The dirctory where the test subdirectory
+     databases are installed (See TEMBL and other databases below).
+     Only needed if you use the TEMBL (etc.) definitions that use
+     $emboss_tempdata
+
+   2.1.2 DB database definitions
+         =======================
+
+     EMBOSS sequence databases are defined as "DB" structures in the
+     emboss.default file. You can define as many databases as you
+     need.  All databases must have a name, a type, a format and a
+     method. Many of the fields are optional.
+
+     The syntax is:
+
+     DB <name> [ type: <type> format: <format>  method: <method>
+         <attribute>: <attr_value>
+     ]
+
+     The name is the name used in EMBOSS USAs.
+
+     Type is P for protein, or N for nucleotide.
+
+     Method is the access method used to query or read the database
+     (See http://www.uk.embnet.org/Software/EMBOSS/).
+     Some databases can have multiple access methods, though this is
+     less common with later EMBOSS versions. The main use now is with
+     the SRS access method, which uses SRS's getz command but cannot
+     read the whole database. In this case, "methodall" can be used to
+     define an alternative access method to read the original data
+     files. You can also define "methodentry" for a single ID
+     query, and "methodquery" for all other searches.
+
+     Format is the sequence format returned by the acces method. For a
+     list of known input formats, see:
+
+     http://www.uk.embnet.org/Software/EMBOSS/Themes/SequenceFormats.html
+
+     
+
+
+
