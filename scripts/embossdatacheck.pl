@@ -33,7 +33,7 @@ while ($allsrc =~ m"^typedef\s+struct\s+(\S*)\s*[{][^}]+[}]\s*([^;]+);\s*$"gosm)
   }
   $presrc = $presrc[$ip];
 
-  if ($presrc =~ m"[\n][/][*]\s+[@]data\s+(\S+)([^/*][^*]*[*]+)*[/]\s*$"osm) {
+  if ($presrc =~ m"[\n][/][*]\s+[@]data[staic]*\s+(\S+)([^/*][^*]*[*]+)*[/]\s*$"osm) {
     $hnam = $1;
     $ok = 0;
     foreach $nam (@anam) {

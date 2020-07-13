@@ -21,32 +21,44 @@ echo >! ../edata.check
 foreach x ($edir/ajax/*.c)
   embossdoccheck.pl $x >> ../efunc.check
   embossdoc.pl $x >> ../efunc.out
+  embossdatacheck.pl $x >> ../edata.check
+  embossdatadoc.pl $x >> ../edata.out
 end
 cat *.srs >! ../efunc.dat
+cat *.srsdata >! ../edata.dat
 \cp *html $wdir/Ajax/
 
 \rm *html
 \rm *.srs
+\rm *.srsdata
 
 foreach x ($edir/nucleus/*.c)
   embossdoccheck.pl $x >> ../efunc.check
   embossdoc.pl $x >> ../efunc.out
+  embossdatacheck.pl $x >> ../edata.check
+  embossdatadoc.pl $x >> ../edata.out
 end
 cat *.srs >> ../efunc.dat
+cat *.srsdata >> ../edata.dat
 \cp *html $wdir/Nucleus/
 
 \rm *html
 \rm *.srs
+\rm *.srsdata
 
 foreach x ($edir/emboss/*.c)
   embossdoccheck.pl $x >> ../efunc.check
   embossdoc.pl $x >> ../efunc.out
+  embossdatacheck.pl $x >> ../edata.check
+  embossdatadoc.pl $x >> ../edata.out
 end
 cat *.srs >> ../efunc.dat
+cat *.srsdata >> ../edata.dat
 \cp *html $wdir/Appsource/
 
 \rm *html
 \rm *.srs
+\rm *.srsdata
 
 foreach x ($edir/ajax/*.h)
   embossdatacheck.pl $x >> ../edata.check
@@ -56,7 +68,7 @@ foreach x ($edir/nucleus/*.h)
   embossdatacheck.pl $x >> ../edata.check
   embossdatadoc.pl $x >> ../edata.out
 end
-cat *.srsdata >! ../edata.dat
+cat *.srsdata >> ../edata.dat
 \cp *html $wdir/Data/
 
 \rm *html
@@ -66,13 +78,13 @@ cat *.srsdata >! ../edata.dat
 cd ..
 \rm -rf x/
 
-source ~/srs6/etc/prep_srs
+source ~/srsfunc/etc/prep_srs
 
 srsbuild efunc -nn
-srsbuild efunc -rel '2.3.0'
+srsbuild efunc -rel '2.5.0'
 
 srsbuild edata -nn
-srsbuild edata -rel '2.3.0'
+srsbuild edata -rel '2.5.0'
 
 srsbuild -l efunc
 srsbuild -l edata

@@ -37,7 +37,7 @@ print HTMLB  "<html><head><title>$title</title></head><body bgcolor=\"#ffffff\">
 print HTML  "<h1>$pubout</h1>\n";
 print HTMLB  "<h1>$pubout</h1>\n";
 
-foreach $x ("new", "delete", "del", "ass", "mod", "use", "set", "cast", "use", "other", "alias") {
+foreach $x ("new", "delete", "del", "ass", "mod", "use", "set", "cast", "use", "other", "alias", "attr") {
     $tables{$x} = 1;
 }
 
@@ -192,11 +192,11 @@ while ($source =~ m"[/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]"gos) {
       $drest = $prest;
       $drest =~ s/\n\n+$/\n/gos;
       $drest =~ s/\n\n\n+/\n\n/gos;
-      $drest =~ s/\n([^\n])/\nAD $1/gos;
-      $drest =~ s/\n\n/\nAD\n/gos;
-      print SRS "AN $fname\n";
-      print SRS "AD $drest";
-      print SRS "AX\n";
+      $drest =~ s/\n([^\n])/\nED $1/gos;
+      $drest =~ s/\n\n/\nED\n/gos;
+      print SRS "EN $fname\n";
+      print SRS "ED $drest";
+      print SRS "EX\n";
 
       if (!$prest) {print "bad assignment spec '$fname', no description\n"}
       print $OFILE "<tr><td>".srsref($fname)."</td><td>$prest</td></tr>\n";
@@ -292,7 +292,31 @@ while ($source =~ m"[/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]"gos) {
       print $OFILE "<tr><td>".srsdref($fname)."</td><td>$prest</td></tr>\n";
     }
 
-    if ($token eq "@")  {
+     if ($token eq "attr")  {
+      if (!$intable) {
+	print $OFILE "<h3>Attributes</h3>\n";
+	print $OFILE "<p><table border=3>\n";
+	print $OFILE "<tr><th>Name</th><th>Type</th><th>Description</th></tr>\n";
+	$intable = 1;
+      }
+      ($fname,$atype, $prest) = ($data =~ m/\S+\s*(\S*)\s*[\[]([^\]]+[\]]?)[\]]\s*(.*)/gos);
+
+      $drest = $prest;
+      $drest =~ s/\n\n+$/\n/gos;
+      $drest =~ s/\n\n\n+/\n\n/gos;
+      $drest =~ s/\n([^\n])/\nAD $1/gos;
+      $drest =~ s/\n\n/\nAD\n/gos;
+      $drest =~ s/^$/\n/gos;
+      print SRS "AN $fname\n";
+      print SRS "AT $atype\n";
+      print SRS "AD $drest";
+      print SRS "AX\n";
+
+      if (!$prest) {print "bad attribute spec '$fname', no description\n"}
+      print $OFILE "<tr><td>".srsdref($fname)."</td><td>$prest</td></tr>\n";
+    }
+
+   if ($token eq "@")  {
 	break;
     }
 
@@ -302,7 +326,7 @@ while ($source =~ m"[/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]"gos) {
     print "=============================\n";
     print SRS "//\n";
 
-    ($body) = ($rest =~ /(.*?\n\}[^\n]*\n)/gos);
+    ($body) = ($rest =~ /(.*?\n([\s{][^\n]*\n)*\S[^;]*;[^\n]*\n)/gos);
     $body =~ s/^\s+//m;
     print SRS $body;
   }
