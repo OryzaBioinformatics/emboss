@@ -1,4 +1,4 @@
-SUBDIRS = CODONS REBASE PRINTS PROSITE
+SUBDIRS = AAINDEX CODONS REBASE PRINTS PROSITE
 
 pkgdata_DATA = EBLOSUM30 EBLOSUM35 EBLOSUM40 EBLOSUM45 EBLOSUM50 \
                EBLOSUM55 EBLOSUM60 EBLOSUM62 EBLOSUM62-12 EBLOSUM65 \
@@ -26,7 +26,7 @@ pkgdata_DATA = EBLOSUM30 EBLOSUM35 EBLOSUM40 EBLOSUM45 EBLOSUM50 \
                Etags.embl Etags.emboss Etags.gff \
                Etags.pir Etags.protein Etags.swiss \
                Ewhite-wimley.dat \
-               embossre.equ
+               embossre.equ Emwfilter.dat Emass.dat Emassmod.dat
 
 pkgdatadir=$(prefix)/share/$(PACKAGE)/data
 

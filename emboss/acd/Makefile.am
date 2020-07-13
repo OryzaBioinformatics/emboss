@@ -1,6 +1,6 @@
 
 pkgdata_DATA = codes.english \
-	abiview.acd ajbad.acd ajfeatest.acd ajtest.acd alignwrap.acd \
+	aaindexextract.acd abiview.acd ajbad.acd ajfeatest.acd ajtest.acd \
 	antigenic.acd backtranseq.acd banana.acd biosed.acd \
 	btwisted.acd cai.acd chaos.acd charge.acd checktrans.acd chips.acd \
 	cirdna.acd codcmp.acd coderet.acd \
@@ -11,37 +11,41 @@ pkgdata_DATA = codes.english \
 	demoalign.acd demofeatures.acd demolist.acd \
 	demoreport.acd demosequence.acd \
 	demostring.acd demotable.acd \
-	descseq.acd dichet.acd diffseq.acd \
+	descseq.acd diffseq.acd \
 	digest.acd distmat.acd domainer.acd \
 	dotmatcher.acd dotpath.acd dottup.acd \
 	dreg.acd einverted.acd embossdata.acd embossversion.acd emma.acd \
 	emowse.acd entrails.acd entret.acd eprimer3.acd equicktandem.acd \
 	est2genome.acd etandem.acd extractseq.acd extractfeat.acd findkm.acd \
-	freak.acd fuzznuc.acd fuzzpro.acd fuzztran.acd \
-	garnier.acd geecee.acd getorf.acd helixturnhelix.acd hmoment.acd \
+	fraggle.acd freak.acd funky.acd fuzznuc.acd fuzzpro.acd fuzztran.acd \
+	garnier.acd geecee.acd getorf.acd helixturnhelix.acd hetparse.acd hmmgen.acd hmoment.acd \
 	histogramtest.acd iep.acd infoalign.acd infoseq.acd isochore.acd \
 	interface.acd lindna.acd listor.acd \
-        marscan.acd maskfeat.acd maskseq.acd \
-	matcher.acd swissparse.acd
+	marscan.acd maskfeat.acd maskseq.acd \
+	matcher.acd 
 pkgdata2_DATA =	megamerger.acd merger.acd msbar.acd \
-	mwfilter.acd needle.acd \
+	mwcontam.acd mwfilter.acd needle.acd \
 	newcpgreport.acd newcpgseek.acd newseq.acd noreturn.acd \
-	notseq.acd nrscope.acd nthseq.acd octanol.acd oddcomp.acd \
+	notseq.acd nthseq.acd octanol.acd oddcomp.acd \
 	palindrome.acd pasteseq.acd patmatdb.acd patmatmotifs.acd \
-	patmattest.acd pdbtosp.acd pepcoil.acd pepinfo.acd pepnet.acd \
+	patmattest.acd pdbparse.acd pdbtosp.acd pepcoil.acd pepinfo.acd pepnet.acd \
 	pepstats.acd pepwheel.acd pepwindow.acd pepwindowall.acd \
 	plotcon.acd plotorf.acd polydot.acd \
 	preg.acd prettyplot.acd prettyseq.acd prima.acd \
-	primers.acd primersearch.acd printsextract.acd profit.acd \
-	prophecy.acd prophet.acd prosextract.acd pscan.acd psiblasts.acd \
+	primers.acd primersearch.acd printsextract.acd profgen.acd profit.acd \
+	prophecy.acd prophet.acd prosextract.acd pscan.acd  \
+	qatest.acd qatestcalcfeat.acd qatestcalcregexp.acd \
+	qatestcalcseq.acd qatestcalcseqall.acd qatestcalcseqset.acd \
+	qatestcalcstring.acd \
 	rebaseextract.acd recoder.acd redata.acd remap.acd \
 	restover.acd restrict.acd revseq.acd \
-	scopalign.acd scope.acd scopparse.acd seealso.acd \
-	seqinfo.acd seqmatchall.acd seqnr.acd seqret.acd seqretall.acd \
+	scopalign.acd scopseqs.acd scoprep.acd scopreso.acd  scopnr.acd scopparse.acd seealso.acd \
+	seqinfo.acd seqalign.acd seqmatchall.acd seqnr.acd seqret.acd seqretall.acd \
 	seqretallfeat.acd seqretset.acd seqretsingle.acd \
-	seqretsplit.acd seqsort.acd showalign.acd\
+	seqretsplit.acd seqsearch.acd seqsort.acd seqwords.acd showalign.acd \
 	showdb.acd showfeat.acd showorf.acd showseq.acd shuffleseq.acd \
-	sigcleave.acd siggen.acd sigscan.acd silent.acd splitter.acd \
+	sigcleave.acd siggen.acd sigscan.acd sigplot.acd silent.acd \
+	skipseq.acd splitter.acd \
 	stretcher.acd stssearch.acd supermatcher.acd syco.acd \
 	testplot.acd textsearch.acd tfextract.acd tfm.acd \
 	tfscan.acd tmap.acd tranalign.acd transeq.acd treetypedisplay.acd \

@@ -1,3 +1,254 @@
+Version 2.5.0
+	SPLITTER changed to match documentation. Old behaviour is
+	now selectable by using the -addoverlap command line
+	option.
+
+	Configuration modifications. --without-x works. Removed odd
+	but harmless -I definitions. PNG detection improved.
+
+	Corrected EMBLCD index searching for queries that start with a
+	wildcard. For example, tembl-key:?* should search for all entries
+	that have a keyword (key:* is regarded as 'all entries'). Entries
+	with no keyword (in PIR's pir4.ref file for example) will be
+	ignored.
+	
+	Updated source code docs for EFUNC and EDATA. Corrected all bad
+	headers. efunc.out has no errors. efunc.check only reports
+	'missing headers' for duplicated function names (#ifdef code)
+	which is a known 'feature'.
+
+	Updated source code to fix most lines over 80 bytes.
+	
+	Calculated ACD attributes now QA tested. Feature attributes will
+	be correctly set, although none are used in the ACD files at present.
+	
+	purify.pl has a new option -block=n where n is a number from 1
+	upwards.  1 runs the first 10 tests, 2 runs the next 10
+	(blocksize=10 is hardcoded for now).
+	
+	Cleaned up string position code. Inspections showed ajStrPos and
+	related functions gave results from 0 to length of a string. This
+	caused confusion in many other functions and applictaions. These
+	functions are now static strPos functions because only ajstr.c had
+	calls to them (though the ajStrPos versions are still available).
+	All calls were checked for positions out of range. As a result,
+	many calls to ajStrAssSub and AjStrCut were fixed. ajStrInsertC
+	requires a value from 0 to length (start position to insert can be
+	before or after the string, or any position in bwteen). Fixed by
+	passing length+1 to strPosII.
+
+	Added a functions ajUtilCatch for use in debugging with gdb. When
+	a nasty special case occurs, call ajUtilCatch and make it a
+	breakpoint in gdb. The resulting backtrace will give the call stack
+	and all variable values.
+	
+	Cleaned up code for chunk HTML input. Added a new variable
+	EMBOSS_HTTPVERSION which defaults to 1.0 (so HTTP is not chunked)
+	and a DB attribute httpversion. This must be a floating point
+	number, and is included in the HTTP header to specify the HTTP
+	protocol version to be used. There is no check in the code to
+	change behaviour for different versions. This is used in the
+	SRSWWW and URL access methods.
+
+	Added check to qatest.pl to report any EMBOSS (rather than
+	EMBASSY) applications for which there is no defined test. The
+	EMBASSY test uses wossname results, checked against the names of
+	ACD files in the source tree, as qatest always runs in the test/qa
+	directory.
+	
+	Allowed sequences as values for EMBL rpt_unit feature qualifiers
+	because so many entries have them. They are illegal according to
+	the Version 4.0 (current) feature table document.
+
+	Allow ? before from and to feature locations in SwissProt. For
+	now, these are ignored, though we could add something to hold them
+	for accurate output.
+	
+	Added modified Harrison solubility probability to PEPSTATS
+	
+	ACD attributes now have descriptions in the ajacd.c code which are
+	reported by 'entrails'. All ACD attributes have been checked by
+	inspection of the code to note those which are used/unused by ACD.
+	The ACD "type" attribute for files is renamed "standardtype" to
+	reflect its intended use to note standard file types for linking
+	applications. Sequences and alignments still have a "type"
+	attribute for protein or dna sequence types.
+	
+	aaindexextract (new) reads the AAINDEX database and writes each
+	entry to data/AAINDEX directory. New function ajFileDataDirNew to
+	read data files from a named directory. New ACD datafile attribute
+	'directory' passed to ajFileDataDirNew. AAINDEX directory defined
+	for pepwindow and pepwindowall.
+	
+	palindrome can now read in multiple sequences
+
+        palindrome now does not print a '|' in an alignment where there
+        is a mismatched pair of bases.
+
+	Added filelist datatype to ACD
+
+	mwcontam program added. Displays molecular weights that are common
+	across a set of files.
+
+	showfeat - added '-sort join' to display joined features on one line.
+
+	diffseq - don't give summary of SNPs if the sequences are proteins.
+
+	Inclusion of stat64 and readdir64 for offsetbits=64 (ajfile.c
+	and ajsys.c)
+
+	Workaround for broken Solaris readdir64_r (jembossctl)
+	
+        infoseq can now optionally display GI and Sequence Version numbers.
+
+	notseq can now read in a file of sequence names.
+
+	Added '-alternative' qualifier to transeq to allow reverse frame
+	translations to be done using the codons counted from the start
+	of the reversed sequence, rather than, by default, using the
+	codons of the corresponding forward frame. 
+
+	Added the qualifier '-join' to the program extractfeat.
+	If '-join' is set then joined features, such as 'CDS' and 'mRNA'
+	are output as a single concatenated sequence.
+
+	Changed the default output filename from 'stdout' to a file for
+	the following:
+	    infoalign
+	    megamerger
+	    merger
+	    showalign
+	    showfeat
+	    showseq
+	    textsearch
+
+	Lindna/cirdna can now draw filled boxes and the user can change the
+ 	text size on the command-line. They can also read and display
+ 	complete genomic sequences.
+
+        Major new revision of protein structure applications - w/o full
+ 	documentation.
+
+	New applications have been added:  
+	     pdbparse.c / acd
+	     scopseqs.c / acd
+	     scopnr.c / acd
+	     seqsearch.c / acd 
+	     seqwords.c / acd
+	     seqalign.c / acd 
+	     hetparse.c / acd
+	     scopreso.c / acd
+	     scoprep.c / acd
+	     profgen.c / acd
+	     funky.c / acd
+	     hmmgen.c / acd
+	     fraggle.c / acd
+	     
+	Some applications have been deleted: 
+	     scope.c / acd
+	     nrscope.c / acd
+	     psiblasts.c / acd
+	     swissparse.c / acd
+	     alignwrap.c / acd
+	     dichet.c / acd
+
+	The deleted applications have been replaced as follows: 
+	     coordenew  --> pdbparse (coordnew was deleted a while back)
+	     scope --> scopparse
+	     nrscope --> scopnr
+	     psiblasts --> seqsearch
+	     swissparse --> seqwords
+	     alignwrap  --> seqalign
+
+	New versions of code have been committed: 
+	     pdbparse.c / acd
+	     domainer.c / acd
+	     contacts.c / acd
+	     interface.c / acd
+	     pdbtosp.c / acd
+	     scopparse.c / acd
+	     scopreso.c / acd
+	     scopseqs.c / acd
+	     scopnr.c / acd
+	     scoprep.c / acd
+	     scopalign.c / acd
+	     seqsearch.c / acd
+	     seqwords.c / acd
+	     seqsort.c / acd
+	     seqnr.c / acd
+	     seqalign.c / acd
+	     siggen.c / acd
+	     sigscan.c / acd
+	     sigplot.c / acd
+	     hetparse.c / acd
+	     profgen.c / acd
+	     funky.c / acd
+	     hmmgen.c / acd
+	Plus     
+	     ajxyz.c / ajxyz.h
+
+	Short summaries of the applications are as follows:
+	     pdbparse - Parses pdb files and writes cleaned-up protein 
+	                coordinate files.
+	     domainer - Reads protein coordinate files and writes 
+	                domains coordinate files.
+	     contacts - Reads coordinate files and writes files of 
+	                intra-chain residue-residue contact data.
+	     interface- Reads coordinate files and writes files of 
+	                inter-chain residue-residue contact data.
+	     pdbtosp  - Convert raw swissprot:pdb equivalence file to 
+		        embl-like format.
+	     scopparse- Converts raw scop classification files to a 
+	                file in embl-like format.
+	     scopreso - Removes low resolution domains from a scop 
+	                classification file.
+	     scopseqs - Adds pdb and swissprot sequence records to a 
+	                scop classification file.
+	     scopnr   - Removes redundant domains from a scop 
+	                classification file.
+	     scoprep  - Reorder scop classificaiton file so that the 
+	                representative structure of each family is 
+			given first.
+	     scopalign- Generate alignments for families in a scop 
+	                classification file by using STAMP.
+	     seqsearch- Generate files of hits for families in a scop
+	                classification file by using PSI-BLAST with 
+			seed alignments.
+	     seqwords - Generate files of hits for scop families by 
+	                searching swissprot with keywords.
+	     seqsort  - Reads multiple files of hits and writes a 
+	                non-ambiguous file of hits (scop families file) 
+			plus a validation file.
+	     seqnr    - Removes redundant hits from a scop families file.
+	     seqalign - Generate extended alignments for families in 
+	                a scop families file by using CLUSTALW with seed 
+			alignments.
+	     siggen   - Generates a sparse protein signature from an 
+	                alignment and residue contact data.
+	     sigscan  - Scans a signature against swissprot and writes 
+	                a signature hits files.
+	     sigplot  - Reads a signature hits file and validation file 
+	                and generates gnuplot data files of signature 
+			performance.
+	     profgen  - Generates various profiles for each alignment 
+	                in a directory.
+	     hmmgen   - Generates a hidden Markov model for each alignment 
+	                in a directory.
+	     hetparse - Converts raw dictionary of heterogen groups to 
+	                a file in embl-like format.
+	     funky    -	Reads clean coordinate files and writes file 
+	                of protein-heterogen contact data.
+
+	Updated "make check" program entrails. Corrected sequence format
+	reports, added report and alignment formats and database access
+	methods.
+	
+	Added scripts/logreport1.pl to report EMBOSS usage from the
+	logfile. Takes the logfile name on the command line. Reports
+	total use, most active user, and total user count.
+
+	extractseq now only reads one sequence as input. 
+
 Version 2.4.1
 	Fixed error reading multiple databases
 	Fixed MacOSX reading of incomplete sequence files
