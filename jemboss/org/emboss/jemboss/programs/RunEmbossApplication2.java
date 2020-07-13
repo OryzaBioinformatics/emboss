@@ -48,12 +48,12 @@ public class RunEmbossApplication2
     try
     {
       p = embossRun.exec(embossCommand,envp,project);
-      
+
       // 2 threads to read in stdout & stderr buffers 
       // to prevent blocking
-      StdoutHandler stdouth = new StdoutHandler(this);
+//    StdoutHandler stdouth = new StdoutHandler(this);
       StderrHandler stderrh = new StderrHandler(this);
-      stdouth.start();
+//    stdouth.start();
       stderrh.start();
 
     }
@@ -293,5 +293,6 @@ public class RunEmbossApplication2
       rea.readProcessStderr();
     }
   }
+
 }
 

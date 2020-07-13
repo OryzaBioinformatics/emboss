@@ -285,7 +285,7 @@ public class ShowSavedResults
       });
 
       // add a users note for that project
-      JButton addNoteButton = new JButton("Show Notes");
+      JButton addNoteButton = new JButton("Edit Notes");
       addNoteButton.addActionListener(new ActionListener()
       {
         public void actionPerformed(ActionEvent e)
@@ -327,16 +327,40 @@ public class ShowSavedResults
           if(sel != null) 
           {
             String selList= new String("");
+            JTextPane delList = new JTextPane();
+            FontMetrics fm = delList.getFontMetrics(delList.getFont());
+            int maxWidth = 0;
             for(int i=0;i<sel.length;i++)
-              selList=selList.concat(sel[i]+"\n");
+            {
+              if(i==sel.length-1)
+                selList=selList.concat((String)sel[i]);
+              else
+                selList=selList.concat(sel[i]+"\n");
 
+              int width = fm.stringWidth((String)sel[i]);
+              if(width>maxWidth)
+                maxWidth=width;
+            }
             int ok = JOptionPane.OK_OPTION;
             if(sel.length>1)
-              ok = JOptionPane.showConfirmDialog(savedResFrame, 
-                  "Delete the following results:\n"+selList,
-                  "Confirm Deletion", 
+            {
+              JScrollPane scrollDel = new JScrollPane(delList);
+              delList.setText(selList);
+              delList.setEditable(false);
+              delList.setCaretPosition(0);
+
+              Dimension d1 = delList.getPreferredSize();
+              int maxHeight = (int)d1.getHeight()+5;
+              if(maxHeight > 350)
+                maxHeight = 350;
+              Dimension d = new Dimension(maxWidth+30,maxHeight);
+              scrollDel.setPreferredSize(d);
+//            scrollDel.setMaximumSize(d);
+
+              ok = JOptionPane.showConfirmDialog(savedResFrame,
+                         scrollDel,"Confirm Deletion",
                   JOptionPane.YES_NO_OPTION);
-            
+            }
             if(ok == JOptionPane.OK_OPTION)
             {
               try        // ask the server to delete these results
@@ -368,7 +392,7 @@ public class ShowSavedResults
 	  } 
           else 
           {
-            statusField.setText("Nothing selected to be deleted.");
+            statusField.setText("Nothing selected for deletion.");
 	  }
 	}
       });
@@ -487,7 +511,7 @@ public class ShowSavedResults
 	    savedResFrame.setCursor(cbusy);
             String project = convertToOriginal(st.getSelectedValue());
 	    ResultList thisres = new ResultList(mysettings,project, 
-                                     "        show_saved_results");
+                                             "show_saved_results");
 	    savedResFrame.setCursor(cdone);
 	    if (thisres.getStatus().equals("0")) 
               new ShowResultSet(thisres.hash(),project,mysettings);
@@ -660,9 +684,9 @@ public class ShowSavedResults
   public static String convertToPretty(String sorig)
   {
     int index = sorig.indexOf('_');
-    if(index > -1)
-      sorig = sorig.substring(0,index) + "\t" +
-              sorig.substring(index+1);
+//  if(index > -1)
+//    sorig = sorig.substring(0,index) + "\t" +
+//            sorig.substring(index+1);
     return sorig.replace('_',' ');
   }
 

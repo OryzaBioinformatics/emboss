@@ -33,7 +33,6 @@ import javax.swing.border.*;
 import javax.swing.undo.UndoManager;
 import javax.swing.undo.CannotRedoException;
 import javax.swing.text.JTextComponent;
-import org.apache.soap.rpc.Parameter;
 
 import org.emboss.jemboss.soap.PrivateRequest;
 import org.emboss.jemboss.soap.JembossSoapException;
@@ -59,6 +58,12 @@ public class ResultsMenuBar extends JMenuBar
   private JMenuItem redo = new JMenuItem("Redo");
   private UndoManager undoManager = new UndoManager();
 
+  
+  public ResultsMenuBar(final JFrame frame, final JTabbedPane rtb,
+                        final Hashtable hashOut, JembossParams mysettings)
+  {
+    this(frame,rtb,hashOut,null,null,mysettings); 
+  }
 
   public ResultsMenuBar(final JFrame frame, final JTabbedPane rtb,
                         final Hashtable hashOut, final Hashtable hashIn)
@@ -129,16 +134,16 @@ public class ResultsMenuBar extends JMenuBar
 * @param JTextPane text area to add listener to
 *
 */
-  public ResultsMenuBar(final JFrame frame, final FileEditorDisplay fed)
+  public ResultsMenuBar(final JFrame frame, final FileEditorDisplay fed, 
+                        final JembossParams mysettings)
   {
     setResultsMenuBar(frame,false);
-
 
     fileMenuShowres.addActionListener(new ActionListener()
     {
       public void actionPerformed(ActionEvent e)
       {
-        FileSaving fsave = new FileSaving(fed, fed.getPNGContent());
+        FileSaving fsave = new FileSaving(fed, fed.getPNGContent(), mysettings);
 
         if(fsave.writeOK())
         {
@@ -332,7 +337,7 @@ public class ResultsMenuBar extends JMenuBar
                         final String project, final JembossParams mysettings)
   {
     boolean addRemoteSaveMenu = false;
-    if(mysettings != null)
+    if(project != null)
       addRemoteSaveMenu = true;
 
     setResultsMenuBar(frame, addRemoteSaveMenu);
@@ -346,7 +351,7 @@ public class ResultsMenuBar extends JMenuBar
 
         SecurityManager sm = System.getSecurityManager();
         System.setSecurityManager(null);
-        JFileChooser fc = new JFileChooser(AdvancedOptions.cwd);
+        JFileChooser fc = new JFileChooser(mysettings.getUserHome());
         System.setSecurityManager(sm);
 
         fc.addChoosableFileFilter(new SequenceFilter());
@@ -456,13 +461,15 @@ public class ResultsMenuBar extends JMenuBar
           JTextComponent jtc = getJTextComponentAt(rtb,rtb.getSelectedIndex());      
 
           Vector params = new Vector();
-          params.addElement(new Parameter("project", String.class,
-                            project, null));
-          params.addElement(new Parameter("filename", String.class,
-                            rtb.getTitleAt(rtb.getSelectedIndex()), null));
-          params.addElement(new Parameter("filecontent", String.class,
-                            jtc.getText(), null));
-
+//        params.addElement(new Parameter("project", String.class,
+//                          project, null));
+//        params.addElement(new Parameter("filename", String.class,
+//                          rtb.getTitleAt(rtb.getSelectedIndex()), null));
+//        params.addElement(new Parameter("filecontent", String.class,
+//                          jtc.getText(), null));
+          params.addElement(project);
+          params.addElement(rtb.getTitleAt(rtb.getSelectedIndex()));
+          params.addElement(jtc.getText());
           try
           {
             PrivateRequest gReq = new PrivateRequest(mysettings,

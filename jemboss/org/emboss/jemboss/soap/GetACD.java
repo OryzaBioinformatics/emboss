@@ -26,9 +26,6 @@ import java.util.*;
 
 import org.emboss.jemboss.JembossParams;
 
-//for Parameter definition
-import org.apache.soap.rpc.*;
-
 public class GetACD
 {
 
@@ -63,11 +60,17 @@ static
      else
      {
        Vector params = new Vector();
-       params.addElement(new Parameter("option", String.class,
-                                    acdProg, null));
+       params.addElement(acdProg);
+//     params.addElement(new Parameter("option", String.class,
+//                                  acdProg, null));
 
-       PublicRequest hReq = new PublicRequest(mysettings, "show_acd", params);
-       helpText = hReq.getVal("acd");
+       try
+       {
+         PublicRequest hReq = new PublicRequest(mysettings, "show_acd", params);
+         helpText = hReq.getVal("acd");
+       }
+       catch (JembossSoapException jse){}
+
        acdStore.put(acdProg,helpText);
      }
 

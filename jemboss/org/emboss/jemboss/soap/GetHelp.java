@@ -25,7 +25,6 @@ import java.io.*;
 import java.util.*;
 
 import org.emboss.jemboss.JembossParams;
-import org.apache.soap.rpc.*;
 
 public class GetHelp 
 {
@@ -46,12 +45,15 @@ public class GetHelp
 
      Vector params = new Vector();
 
-     params.addElement(new Parameter("option", String.class,
-                                    acdProg, null));
-     PublicRequest hReq = new PublicRequest(mysettings, "show_help", params);
-     helpText = hReq.getVal("helptext");
-     status = hReq.getVal("status");
-     statusmsg = hReq.getVal("msg");
+     params.addElement(acdProg);
+     try
+     {
+       PublicRequest hReq = new PublicRequest(mysettings, "show_help", params);
+       helpText = hReq.getVal("helptext");
+       status = hReq.getVal("status");
+       statusmsg = hReq.getVal("msg");
+     }
+     catch (JembossSoapException jse){}
 
    }
 

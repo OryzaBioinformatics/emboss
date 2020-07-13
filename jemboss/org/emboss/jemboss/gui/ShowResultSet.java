@@ -55,6 +55,12 @@ public class ShowResultSet extends JFrame
     this(reslist,inputFiles,null,null);
   }
 
+  public ShowResultSet(Hashtable reslist, Hashtable inputFiles,
+                       JembossParams mysettings)
+  {
+    this(reslist,inputFiles,null,mysettings);
+  }
+
 /**
 *  
 * @param the result data to display

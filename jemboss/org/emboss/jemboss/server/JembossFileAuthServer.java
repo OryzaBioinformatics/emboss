@@ -40,7 +40,6 @@ public class JembossFileAuthServer
 
   public Vector embreo_roots(String userName, byte[] passwd)
   {
-
     Ajax aj = new Ajax();
     Vector vans = new Vector();
     if(!verifyUser(aj,userName,passwd,vans))

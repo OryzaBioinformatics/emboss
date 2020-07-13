@@ -1,6 +1,47 @@
 #!/bin/sh
 #
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
 #
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+#
+#  @author: Copyright (C) Tim Carver
+#
+#
+# Install EMBOSS & Jemboss
+# last changed: 15/10/02
+#
+#
+
+######################## Functions ########################
+
+getJavaHomePath()
+{
+  JAVA_HOME_TMP=${JAVA_HOME_TMP-`which java 2>/dev/null`}
+#  JAVA_HOME_TMP=`which java`
+
+  if [ ! -f "$JAVA_HOME_TMP" ]; then
+     if [ -d /usr/java/j2sdk1.4.1 ]; then
+       JAVA_HOME_TMP=/usr/java/j2sdk1.4.1
+     elif [ -d /usr/local/java/j2sdk1.4.1 ]; then
+       JAVA_HOME_TMP=/usr/local/java/j2sdk1.4.1
+     else
+       JAVA_HOME_TMP=0
+     fi
+  else
+    JAVA_HOME_TMP=`dirname $JAVA_HOME_TMP`
+    JAVA_HOME_TMP=`dirname $JAVA_HOME_TMP`
+  fi
+}
 
 echo
 echo '*** Run this script from the installed jemboss utils directory.'
@@ -35,7 +76,8 @@ if [ ! -d "jnlp_fm" ]; then
   mkdir jnlp_fm
 fi
 
-JAVA_HOME=0
+getJavaHomePath
+JAVA_HOME=$JAVA_HOME_TMP
 while [ ! -f "$JAVA_HOME/bin/keytool" ]
 do
   echo "Enter java (1.3 or above) location [/usr/java/jdk1.3.1/]: "
@@ -73,9 +115,11 @@ jar cf FileManager.jar images/* org/emboss/jemboss/*class resources/client.jar \
         resources/*html org/emboss/jemboss/*/*class org/emboss/jemboss/*/*/*class 
 mv FileManager.jar jnlp_fm
 cp lib/*jar jnlp_fm
+cp lib/axis/*jar jnlp_fm
 cp images/Jemboss_logo_large.gif jnlp_fm
 cp utils/template.html jnlp_fm/index.html
 cd jnlp_fm
+rm mail.jar activation.jar wsdl4j.jar
 
 echo
 echo
@@ -157,8 +201,10 @@ echo '           <j2se version="1.3+"/>'                >> $JNLP
 echo '             <jar href="'sFileManager.jar'"/>'    >> $JNLP
 for i in s*.jar; do
   if [ $i != "sFileManager.jar" ]; then
-    if [ $i != "soap.jar" ]; then
-      echo '             <jar href="'$i'"/>'                >> $JNLP
+    if [ $i != "saaj.jar" ]; then
+      if [ $i != "servlet.jar" ]; then
+         echo '             <jar href="'$i'"/>'          >> $JNLP
+      fi
     fi
   fi
 done;

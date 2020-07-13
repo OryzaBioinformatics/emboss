@@ -39,33 +39,29 @@ public class JembossAuthServer
   private String tmproot = new String("/tmp/SOAP/emboss/");
   private String logFile = new String(tmproot+"/jemboss.log");
   private String errorLog = new String(tmproot+"/jemboss_error.log");
-  private File tmprootDir = new File(tmproot);
-
 
   private String fs = new String(System.getProperty("file.separator"));
   private String ps = new String(System.getProperty("path.separator"));
-  private String ls = new String(System.getProperty("line.separator"));
 
 //get paths to EMBOSS
   JembossParams jp  = new JembossParams();
   String plplot     = jp.getPlplot();
   String embossData = jp.getEmbossData();
   String embossBin  = jp.getEmbossBin();
-  String embossPath = jp.getEmbossPath();
+  String embossPath = embossBin + ps + jp.getEmbossPath();
   String acdDirToParse     = jp.getAcdDirToParse();
-  String embossEnvironment = jp.getEmbossEnvironment();
+//String embossEnvironment = jp.getEmbossEnvironment();
 
   private String[] env = 
   {
-    "PATH=" + embossPath + ps + embossBin,
+    "PATH=" + embossPath,
     "PLPLOT_LIB=" + plplot,
     "EMBOSS_DATA=" + embossData
 //  ,"LD_LIBRARY_PATH=/usr/local/lib"
 // FIX FOR SOME SUNOS
   };
-  private String[] envp = jp.getEmbossEnvironmentArray(env);
   
-  private String environ = "PATH=" + embossBin+ ps + embossPath +" "+
+  private String environ = "PATH=" + embossPath+ " "+
                            "PLPLOT_LIB=" + plplot +" "+
                            "EMBOSS_DATA=" + embossData +" "+
                            jp.getEmbossEnvironment();
@@ -79,6 +75,7 @@ public class JembossAuthServer
 
   public String version()
   {
+    String[] envp = jp.getEmbossEnvironmentArray(env);
     String embossCommand = new String(embossBin + "embossversion");
     RunEmbossApplication rea = new RunEmbossApplication(embossCommand,
                                                            envp,null);
@@ -89,6 +86,7 @@ public class JembossAuthServer
 
   public String appversion()
   {
+    String[] envp = jp.getEmbossEnvironmentArray(env);
     String embossCommand = new String(embossBin + "embossversion");
     RunEmbossApplication rea = new RunEmbossApplication(embossCommand,
                                                            envp,null);
@@ -180,6 +178,7 @@ public class JembossAuthServer
 */
   public Vector getWossname()
   {
+    String[] envp = jp.getEmbossEnvironmentArray(env);
     Vector wossOut = new Vector();
     String embossCommand = new String(embossBin + 
                    "wossname -colon -gui -auto");
@@ -205,6 +204,7 @@ public class JembossAuthServer
 */
   public Vector show_help(String applName)
   {
+    String[] envp = jp.getEmbossEnvironmentArray(env);
     String command = embossBin.concat("tfm " + applName + " -html -nomore");
     RunEmbossApplication rea = new RunEmbossApplication(command,envp,null);
     String helptext = "";
@@ -247,7 +247,11 @@ public class JembossAuthServer
       int ind = fileContent.lastIndexOf(fs);
       String fdir  = fileContent.substring(0,ind);
       String ffile = fileContent.substring(ind+1).trim(); 
-      aj.listFiles(userName,passwd,environ,fdir);
+      boolean ok = aj.listFiles(userName,passwd,environ,fdir);
+
+      if(!ok)
+        return returnError(aj,"listFiles error in call_ajax");
+
       if(aj.getOutStd().indexOf(ffile+"\n") > -1)
         fexists = true;
     }
@@ -262,6 +266,10 @@ public class JembossAuthServer
         fn = tmproot+fs+userName+fs+".jembosstmp";
         boolean ok = aj.putFile(userName,passwd,environ,
                              fn,fileContent.getBytes());
+
+        if(!ok)
+          return returnError(aj,"putFile error in call_ajax");
+
         afile = true;
       }
       catch (Exception ioe) 
@@ -289,6 +297,10 @@ public class JembossAuthServer
           ok = aj.seqsetAttrib(userName,passwd,environ,fn);
         else
           ok = aj.seqAttrib(userName,passwd,environ,fn);
+
+        if(!ok)
+          return returnError(aj,"seqAttrib or seqsetAttrib error");
+
       }
       catch (Exception e)
       {
@@ -301,7 +313,7 @@ public class JembossAuthServer
     }
 
     if(afile)
-      aj.delFile(userName,passwd,environ,fn);
+      ok = aj.delFile(userName,passwd,environ,fn);
 
     for(int i=0;i<passwd.length;i++)
       passwd[i] = '\0';
@@ -319,12 +331,7 @@ public class JembossAuthServer
       vans.add("0");
     }
     else
-    {
-      appendToLogFile("Error: call_ajax status not ok",
-                         errorLog);
-      vans.add("status");
-      vans.add("1");
-    }
+      return returnError(aj,"Error: call_ajax status not ok");
 
     return vans;
   }
@@ -353,6 +360,7 @@ public class JembossAuthServer
       afile = true;
       try
       {
+        File tmprootDir = new File(tmproot);
         tf = File.createTempFile("tmp",".jembosstmp", tmprootDir);
         PrintWriter out = new PrintWriter(new FileWriter(tf));
         out.println(fileContent);
@@ -434,6 +442,7 @@ public class JembossAuthServer
 */
   public Vector show_db()
   {
+    String[] envp = jp.getEmbossEnvironmentArray(env);
     Vector showdbOut = new Vector();
     String embossCommand = new String(embossBin + "showdb -auto");
     RunEmbossApplication rea = new RunEmbossApplication(embossCommand,
@@ -478,6 +487,23 @@ public class JembossAuthServer
     return showdbOut;
   }
 
+  public synchronized Vector run_prog(String embossCommand, String options,
+                             Vector inFiles,String userName, byte[] passwd)
+  {
+    Hashtable hashInFiles = getHashtable(inFiles);
+    return run_prog(embossCommand,options,hashInFiles,userName,passwd);
+  }
+
+  private Hashtable getHashtable(Vector v)
+  {
+    Hashtable h = new Hashtable();
+    for(Enumeration e = v.elements() ; e.hasMoreElements() ;)
+    {
+      String s = (String)e.nextElement();
+      h.put(s,e.nextElement());
+    }
+    return h;
+  }
 
 /**
 *
@@ -496,9 +522,9 @@ public class JembossAuthServer
 
     tmproot = tmproot.concat(userName+fs);
 
-    tmprootDir = new File(tmproot);
+    File tmprootDir = new File(tmproot);
 
-    String name = Thread.currentThread().getName();
+//  String name = Thread.currentThread().getName();
     Ajax aj = new Ajax();
 
     Vector result = new Vector();
@@ -532,24 +558,26 @@ public class JembossAuthServer
     Enumeration enum = inFiles.keys();
     String appl   = embossCommand.substring(0,embossCommand.indexOf(" "));
     String rest   = embossCommand.substring(embossCommand.indexOf(" "));
-    embossCommand = embossBin.concat(embossCommand);
-    String msg = new String("");
+//  embossCommand = embossBin.concat(embossCommand);
+//  String msg = new String("");
 
     boolean ok=false; 
     boolean lsd = false;
     try
-    {
-     lsd = aj.listDirs(userName,passwd,environ,tmproot);
+    { 
+      aj.setErrStd();
+      lsd = aj.listDirs(userName,passwd,environ,tmproot);
     }
     catch(Exception exp){}
 
 //  appendToLogFile("listDirs "+name+" STDERR "+aj.getErrStd(),errorLog);   //DEBUG
 
 // create the results directory structure for this user if necessary
-    if(!lsd || !aj.getErrStd().equals(""))
+    if(!lsd)
     {
       try
       {
+        aj.setErrStd();
         ok = aj.makeDir(userName,passwd,environ,tmproot);
       }
       catch(Exception exp){}
@@ -581,24 +609,18 @@ public class JembossAuthServer
     File projectDir = new File(project);
     try
     {
+      aj.setErrStd();
       ok = aj.makeDir(userName,passwd,environ,project);
     }
     catch(Exception exp){}
 
 //  appendToLogFile("makeDir "+name+" STDERR "+aj.getErrStd(),errorLog);  //DEBUG
 
-    if(!ok || !aj.getErrStd().equals("")) 
-    {
-      String warnmsg = new String("run_prog failed to create dir "+
-                                project+"\nSTDERR :"+aj.getErrStd());
-      appendToLogFile(warnmsg,errorLog);
-      result.add("msg");
-      result.add(warnmsg);
-      result.add("status");
-      result.add("1");
-      return result;
-    }
+    if(!ok) 
+      return returnError(aj,"run_prog failed to create dir "+
+                          project);
 
+    String ls = new String(System.getProperty("line.separator"));
 //create description file & input files
     String descript = "EMBOSS run details"+ls+ls+
                       "Application: "+appl+ls+rest+ls+
@@ -612,6 +634,7 @@ public class JembossAuthServer
       ok = false;
       try
       {
+        aj.setErrStd();
         ok = aj.putFile(userName,passwd,environ,
                  new String(project+fs+thiskey),
                  (byte[])inFiles.get(thiskey));
@@ -619,12 +642,8 @@ public class JembossAuthServer
       catch(Exception exp){}
 
       if(!ok)
-      {
-        appendToLogFile("Failed to make file "+project+fs+thiskey,errorLog);
-        appendToLogFile("STDERR "+aj.getErrStd(),errorLog);
-        appendToLogFile("STDOUT "+aj.getOutStd(),errorLog);
-        return result;
-      }
+        return returnError(aj,"Failed to make file "+
+                           project+fs+thiskey);
 
 //    appendToLogFile("putFile "+name+" STDERR "+aj.getErrStd(),errorLog);  //DEBUG
     }
@@ -632,6 +651,7 @@ public class JembossAuthServer
     ok = false;
     try
     {
+      aj.setErrStd();
       ok = aj.putFile(userName,passwd,environ,
            new String(project + fs + ".desc"),
            descript.getBytes());
@@ -639,12 +659,8 @@ public class JembossAuthServer
     catch(Exception exp){}
 
     if(!ok)
-    {
-      appendToLogFile("Failed to make file "+project+fs+".desc",errorLog);
-      appendToLogFile("STDERR "+aj.getErrStd(),errorLog);
-      appendToLogFile("STDOUT "+aj.getOutStd(),errorLog);
-      return result;
-    }
+      return returnError(aj,"Failed to make file "+
+                         project+fs+".desc");
 
 //  appendToLogFile("putFile "+name+" STDERR "+aj.getErrStd(),errorLog);  //DEBUG
     appendToLogFile(options+" "+dat+" "+embossCommand,logFile);
@@ -659,29 +675,36 @@ public class JembossAuthServer
       boolean lfork=true;
       try
       {
+        aj.setErrStd();
         lfork = aj.forkEmboss(userName,passwd,environ,
                                embossCommand,project);
       }
       catch(Exception exp){} 
  
-      result.add("msg");
-      if(!lfork || !aj.getErrStd().equals(""))
+      if(!lfork)
       {
-        result.add("stderr");
-        result.add("stderr");
-        result.add("ERROR REPORTED\n"+aj.getErrStd());
-        appendToLogFile("Fork process failed "+embossCommand,errorLog);
+        returnError(aj,"Fork process failed in run_prog "+
+                        embossCommand);
+        result.add("msg");
+        result.add(aj.getErrStd());
       }
       else
+      {
+        result.add("msg");
         result.add("");
+      }
 
       try
       {
-        aj.putFile(userName,passwd,environ,
+        aj.setErrStd();
+        ok = aj.putFile(userName,passwd,environ,
              new String(project+fs+".finished"),
             (new Date()).toString().getBytes());
       }
       catch(Exception exp){}
+
+      if(!ok)
+        return returnError(aj,"putFile error in run_prog");
 
 //    appendToLogFile("putFile "+name+" STDERR "+aj.getErrStd(),errorLog);  //DEBUG
 
@@ -728,7 +751,7 @@ public class JembossAuthServer
   {
     String scriptIt = "#!/bin/sh\n";
     scriptIt = scriptIt.concat(environ.replace(' ','\n'));
-    scriptIt = scriptIt.concat("export PATH\n");
+    scriptIt = scriptIt.concat("\nexport PATH\n");
     scriptIt = scriptIt.concat("export PLPLOT_LIB\n");
     scriptIt = scriptIt.concat("export EMBOSS_DATA\n");
     scriptIt = scriptIt.concat("cd "+project+"\n"+embossCommand+"\n");
@@ -793,8 +816,6 @@ public class JembossAuthServer
     project = tmproot.concat(project);
     File projectDir = new File(project);
 
-//  ssr = loadFilesContent(aj,userName,passwd,
-//                    projectDir,project,ssr,null);
     if(cl.equals(""))
     {
       ssr = loadFilesContent(aj,userName,passwd,
@@ -850,17 +871,13 @@ public class JembossAuthServer
     v.add("0");
     v.add("msg");
 
+    for(int i=0;i<passwd.length;i++)
+      passwd[i] = '\0';
+
     if(ok)
       v.add("OK"); 
     else
-    {
-      appendToLogFile("Failed to save file "+fn,errorLog);
-      appendToLogFile("STDERR "+aj.getErrStd(),errorLog);
-      appendToLogFile("STDOUT "+aj.getOutStd(),errorLog);
-    }
-   
-    for(int i=0;i<passwd.length;i++)
-      passwd[i] = '\0';
+      return returnError(aj,"Failed to save file "+fn);
         
     return v;
   }
@@ -892,11 +909,7 @@ public class JembossAuthServer
       String proj = tmproot.concat(st.nextToken());
       boolean ok = aj.delDir(userName,passwd,environ,proj);
       if(!ok || !aj.getErrStd().equals(""))
-      {
-        appendToLogFile("Failed deletion of directory "+proj,errorLog);
-        appendToLogFile("STDERR "+aj.getErrStd(),errorLog);
-        appendToLogFile("STDOUT "+aj.getOutStd(),errorLog);
-      }
+        return returnError(aj,"Failed deletion of directory "+proj);
     }
 
     dsr.add("status");
@@ -928,21 +941,16 @@ public class JembossAuthServer
 
     tmproot = tmproot.concat(userName+fs);
 
-//  tmprootDir = new File(tmproot);
-   
     lsr.add("status");
     lsr.add("0");
     lsr.add("msg");
     lsr.add("OK");
 
+    aj.setErrStd();
     boolean lsd = aj.listDirs(userName,passwd,environ,tmproot);
     
-    if(!lsd || !aj.getErrStd().equals(""))
-    {
-      appendToLogFile("Failed list_saved_results "+tmproot,errorLog);
-      appendToLogFile("STDERR "+aj.getErrStd(),errorLog);
-      appendToLogFile("STDOUT "+aj.getOutStd(),errorLog);
-    }
+//  if(!lsd || !aj.getErrStd().equals(""))
+//    return returnError(aj,"Failed list_saved_results "+tmproot);
 
     String outStd = aj.getOutStd();
     StringTokenizer stok = new StringTokenizer(outStd,"\n");
@@ -989,7 +997,7 @@ public class JembossAuthServer
       bw.newLine();
       bw.flush();
     } 
-    catch (IOException ioe) 
+    catch (Exception ioe) 
     {
       System.out.println("Error writing to log file "+logFile);
       ioe.printStackTrace();
@@ -1025,7 +1033,7 @@ public class JembossAuthServer
     }
     catch(Exception exp){}
 
-    String name = Thread.currentThread().getName();
+//  String name = Thread.currentThread().getName();
 //  appendToLogFile("listFiles "+name+" STDERR "+aj.getErrStd(),errorLog);  //DEBUG
 
     if(!ls)
@@ -1087,6 +1095,15 @@ public class JembossAuthServer
 * processes.
 *
 */
+
+  public Vector update_result_status(String prog, String opt,
+                        Vector resToQuery,String userName,
+                        byte[] passwd)
+  {
+    return update_result_status(prog,opt,getHashtable(resToQuery),
+                                userName,passwd);
+  }
+
   public Vector update_result_status(String prog, String opt,
                         Hashtable resToQuery,String userName,
                         byte[] passwd)
@@ -1180,6 +1197,26 @@ public class JembossAuthServer
 //  appendToLogFile("userAuth STDERR "+aj.getErrStd(),errorLog);  //DEBUG
        
     return true;
+  }
+
+/**
+*
+* Report the stderr and stdout to error logs
+*
+*/
+  private Vector returnError(Ajax aj, String msg)
+  {
+    appendToLogFile("STDERR "+aj.getErrStd(),errorLog);
+    appendToLogFile("STDOUT "+aj.getOutStd(),errorLog);
+    appendToLogFile("MSG    "+msg,errorLog);
+
+    Vector vans = new Vector();
+    vans.add("msg");
+    vans.add(aj.getErrStd());
+
+    vans.add("status");
+    vans.add("1");
+    return vans;
   }
 
 

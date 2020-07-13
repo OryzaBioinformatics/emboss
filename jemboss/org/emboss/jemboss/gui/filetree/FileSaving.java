@@ -22,14 +22,14 @@
 
 package org.emboss.jemboss.gui.filetree;
 
+import java.awt.event.*;
+import java.io.*;
 import java.awt.*;
 import javax.swing.*;
 import javax.swing.event.*;
 import org.emboss.jemboss.gui.sequenceChooser.*;
 import org.emboss.jemboss.gui.AdvancedOptions;
-
-import java.awt.event.*;
-import java.io.*;
+import org.emboss.jemboss.JembossParams;
 
 /**
 *
@@ -43,7 +43,7 @@ public class FileSaving
   private String fileSelected;
   private String cwd;
 
-  public FileSaving(JTextPane seqText, byte[] pngContent)
+  public FileSaving(JTextPane seqText, byte[] pngContent, JembossParams mysettings)
   {
 
     Cursor cbusy = new Cursor(Cursor.WAIT_CURSOR);
@@ -52,7 +52,7 @@ public class FileSaving
 
     SecurityManager sm = System.getSecurityManager();
     System.setSecurityManager(null);
-    JFileChooser fc = new JFileChooser(AdvancedOptions.cwd);
+    JFileChooser fc = new JFileChooser(mysettings.getUserHome());
     System.setSecurityManager(sm);
 
     fc.addChoosableFileFilter(new SequenceFilter());

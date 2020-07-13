@@ -158,27 +158,32 @@ public class Ajax
     this.protein = protein;
   }
 
-  public synchronized String getOutStd()
+  public String getOutStd()
   {
     return outStd;
   }
  
-  public synchronized String getErrStd()
+  public String getErrStd()
   {
     return errStd;
   }
 
-  public synchronized int getSize()
+  public void setErrStd()
+  {
+    errStd = new String();  
+  }
+
+  public int getSize()
   {
     return size;
   }
 
-  public synchronized int getPrnt()
+  public int getPrnt()
   {
     return prnt;
   }
 
-  public synchronized int getFileok()
+  public int getFileok()
   {
     return fileok;
   }

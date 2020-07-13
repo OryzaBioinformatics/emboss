@@ -25,10 +25,8 @@ package org.emboss.jemboss.soap;
 import java.io.*;
 import java.util.*;
 import javax.swing.DefaultListModel;
-
 import org.emboss.jemboss.JembossParams;
-
-import org.apache.soap.rpc.*;
+//import org.apache.soap.rpc.*;
 
 public class FileList 
 {
@@ -63,10 +61,13 @@ public class FileList
      
      Vector params = new Vector();
      String options= "fileroot=" + fileRoot;
-     params.addElement(new Parameter("options", String.class,
-				     options, null));
-     params.addElement(new Parameter("dirname", String.class,
-				     dir, null));
+//   params.addElement(new Parameter("options", String.class,
+//		     options, null));
+//   params.addElement(new Parameter("dirname", String.class,
+//		     dir, null));
+     params.addElement(options);
+     params.addElement(dir);
+
      PrivateRequest eRun;
      try
      {

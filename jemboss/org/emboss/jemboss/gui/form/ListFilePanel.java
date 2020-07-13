@@ -25,7 +25,7 @@ package org.emboss.jemboss.gui.form;
 import java.awt.*;
 import javax.swing.*;
 import org.emboss.jemboss.gui.sequenceChooser.*;
-
+import org.emboss.jemboss.JembossParams;
 
 public class ListFilePanel extends JPanel
 {
@@ -38,7 +38,7 @@ public class ListFilePanel extends JPanel
 * @param int number of files for the list
 *
 */  
-  public ListFilePanel(int nFiles)
+  public ListFilePanel(int nFiles, JembossParams mysettings)
   {
     super(new BorderLayout());
     this.nFiles = nFiles;
@@ -49,7 +49,7 @@ public class ListFilePanel extends JPanel
     bdown.add(Box.createVerticalStrut(2));
     for(int i=0;i < nFiles;i++)
     {
-      fileChooser[i] = new FileChooser(bdown,""); 
+      fileChooser[i] = new FileChooser(bdown,"",mysettings); 
       bdown.add(Box.createVerticalStrut(2));  
     }
 

@@ -30,7 +30,7 @@ import javax.swing.event.*;
 
 import org.emboss.jemboss.gui.SetUpMenuBar;
 import org.emboss.jemboss.gui.sequenceChooser.*;
-
+import org.emboss.jemboss.JembossParams;
 
 public class SetInFileCard
 {
@@ -59,7 +59,8 @@ public class SetInFileCard
 */
   public SetInFileCard(final JPanel sectionPane, final int h,
                  final String db[], String name, final String appName,
-                 final InputSequenceAttributes inSeqAttr[], boolean fopt)
+                 final InputSequenceAttributes inSeqAttr[], boolean fopt,
+                 final JembossParams mysettings)
   {
 
     this.h = h;
@@ -114,7 +115,7 @@ public class SetInFileCard
       {
         if(listPane==null)  // create the list panel here 
         {
-          listPane = new ListFilePanel(15);
+          listPane = new ListFilePanel(15,mysettings);
           Box bxleft = new Box(BoxLayout.X_AXIS);
           bxleft.add(listPane);
           bxleft.add(Box.createHorizontalGlue());
@@ -157,7 +158,7 @@ public class SetInFileCard
     for(int k=0; k<3; k++)
       bdown[k] =  Box.createVerticalBox();
 
-    fileChoose = new FileChooser(bdown[0],name);
+    fileChoose = new FileChooser(bdown[0],name,mysettings);
 
 //find any default sequence in the user's SequenceList
     String defaultSeq = SetUpMenuBar.seqList.getDefaultSequenceName();

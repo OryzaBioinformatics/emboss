@@ -25,13 +25,13 @@ package org.emboss.jemboss.gui.startup;
 import java.io.*;
 import java.util.*;
 import javax.swing.*;
-import javax.swing.border.*;
+import javax.swing.border.BevelBorder;
 import java.awt.*;
 
 
 /**
 *
-* Used on startup of Jemboss to calculate the alphabetical list
+* Used on startup of Jemboss to retrieve the alphabetical list
 * of programs and uses the programs groups to create the  
 * menu structure based on the program type. This uses the output 
 * of the EMBOSS program wossname.
@@ -61,78 +61,63 @@ public class ProgList
    {
 
      numProgs = 0;
-
+     int numGroups = 0;
+     int numMenuItems = 0;
 // get alphabetic program listing
      String line;
-     String allProgLines[] = null;
-     Vector wossLine = new Vector();
 
 //parse the output of wossname 
      try 
      {
        BufferedReader in;
+       Vector allProgLines = new Vector();
        while (numProgs == 0) 
        {
          in = new BufferedReader(new StringReader(woss));
          while((line = in.readLine()) != null)
          {
+           numGroups++;
            while((line = in.readLine()) != null) 
            {
              line = line.trim();
-             wossLine.add(line);
              if(!line.equals(""))
-               numProgs++;
+             {
+               numMenuItems++;
+               String progN = line.substring(0,line.indexOf(" ")+1);
+               if(!allProgLines.contains(line))
+               {
+                 allProgLines.add(line);
+                 numProgs++;
+               }
+             }
              else
                break;
             }
          }
          in.close();
        }
+//load into string array
+       allProgs = new String[numProgs];
+       Enumeration e = allProgLines.elements();
+       for(int i=0; e.hasMoreElements() ; i++)
+         allProgs[i] =  (String)(e.nextElement());
      }
      catch (IOException e) 
      {
        System.out.println("Cannot read wossname string");
      }
 
-//find unique program names 
-     allProgLines = new String[numProgs];
-     numProgs = 0;
-     Enumeration enumWoss = wossLine.elements();
-     while(enumWoss.hasMoreElements())
-     {
-       line = (String)enumWoss.nextElement();
-       if(!line.equals(""))
-       {
-         line = line.trim();
-         boolean news =true;
-         String progN = new String(line.substring(0,line.indexOf(" ")+1));
-         for(int i=0;i<numProgs;i++)
-         {
-           if(allProgLines[i].startsWith(progN))
-           {
-             news = false;
-             break;
-           }
-         }
-         if(news)
-         {
-           allProgLines[numProgs] = new String(line);
-           numProgs++;
-         }
-       }
-     }
 
 //sort alphabetically
-     java.util.Arrays.sort(allProgLines,0,numProgs);
-     allProgs = new String[numProgs];
+     java.util.Arrays.sort(allProgs,0,numProgs);
      allDescription = new String[numProgs];
 
      for(int i=0;i<numProgs;i++)
      {
-       line = allProgLines[i].trim();
+       line = allProgs[i];
        int split = line.indexOf(" ");
        int len   = line.length();
-       allProgs[i] = new String(line.substring(0,split));
+       allProgs[i] = line.substring(0,split);
        line = line.substring(split+1,len).trim();
        allDescription[i] = new String(line);
      }
@@ -140,27 +125,33 @@ public class ProgList
 
 // get groups 
 
-     HorizontalMenu primaryGroups[] = new HorizontalMenu[numProgs];
-     JMenu secondaryGroups[] = new JMenu[numProgs*2];
-     mItem = new JMenuItem[numProgs*2];
-     String groups;
-     String pg;
-     String sg="";
+     HorizontalMenu primaryGroups[] = new HorizontalMenu[numGroups];
+     JMenu secondaryGroups[] = new JMenu[numGroups];
+     mItem = new JMenuItem[numMenuItems];
+
      npG=0;
-     int nsG=0;
-     boolean exist;
-     boolean sexist;
-     int index;
      nm = 0;
-     int start=0;
 
      try 
      {
+       String groups;
+       String pg;
+       String sg="";
+       boolean exist;
+       boolean sexist;
+       int nsG=0;
+       int index;
+       int start=0;
+
+
        BufferedReader in = new BufferedReader(new StringReader(woss));
 
        while((groups = in.readLine()) != null)
        {
          groups = groups.trim();
+         if(groups.equals(""))
+           continue;
+
          index = groups.indexOf(":");  
          sexist = false;
 
@@ -219,6 +210,12 @@ public class ProgList
            {
              int split = line.indexOf(" ");
              int app=0;
+
+             if(split < 0)
+             {
+               System.out.println("WARNING SKIPPING : " + line);
+               continue;
+             }
              String p = line.substring(0,split);
              for(int i=0;i<numProgs;i++) 
              {
@@ -242,9 +239,9 @@ public class ProgList
          }
          start=nsG;
        }
-
+       in.close();
      }
-     catch (IOException e) 
+     catch (IOException ex) 
      {
        System.out.println("Cannot open EMBOSS acd file ");
      }
@@ -293,9 +290,7 @@ public class ProgList
    public void writeList() 
    {
      for(int i=0;i<allProgs.length;i++)
-     {
-        System.out.println(allProgs[i]);
-     }
+       System.out.println(allProgs[i]);
    }
 
 /**

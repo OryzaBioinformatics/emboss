@@ -26,7 +26,6 @@ import java.util.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import org.apache.soap.rpc.*;
 
 public class PendingResults 
 {
@@ -169,12 +168,16 @@ public class PendingResults
       resToQuery.put(er.getJob(),er.getProject());
     }
 
-    params.addElement(new Parameter("prog", String.class,
-                                    "", null));
-    params.addElement(new Parameter("options", String.class,
-                                    "", null));
-    params.addElement(new Parameter("queries", Hashtable.class,
-                                    resToQuery, null));
+//  params.addElement(new Parameter("prog", String.class,
+//                                  "", null));
+//  params.addElement(new Parameter("options", String.class,
+//                                  "", null));
+//  params.addElement(new Parameter("queries", Hashtable.class,
+//                                  resToQuery, null));
+
+    params.addElement("");
+    params.addElement("");
+    params.addElement(getVector(resToQuery));
     try 
     {
       PrivateRequest eq = new PrivateRequest(mysettings,
@@ -207,6 +210,20 @@ public class PendingResults
     }
 
   }
+
+  private Vector getVector(Hashtable h)
+  {
+    Vector v = new Vector();
+    for(Enumeration e = h.keys() ; e.hasMoreElements() ;)
+    {
+      String s = (String)e.nextElement();
+      v.add(s);
+      v.add(h.get(s));
+    }
+
+    return v;
+  }
+
 
 /**
 *

@@ -28,7 +28,7 @@ import java.util.*;
 import org.emboss.jemboss.soap.*;
 import org.emboss.jemboss.JembossParams;
 
-import org.apache.soap.rpc.*;
+//import org.apache.soap.rpc.*;
 
 public class ResultList 
 {
@@ -73,10 +73,12 @@ public class ResultList
 
      if(dataset != null) 
      {
-       params.addElement(new Parameter("dataset", String.class,
-                                    dataset, null));
-       params.addElement(new Parameter("options", String.class,
-                                    options, null));
+//     params.addElement(new Parameter("dataset", String.class,
+//                                  dataset, null));
+//     params.addElement(new Parameter("options", String.class,
+//                                  options, null));
+       params.addElement(dataset);
+       params.addElement(options);
      }
 
      try 

@@ -21,6 +21,7 @@
 package org.emboss.jemboss.server;
 
 import org.emboss.jemboss.JembossParams;
+import org.emboss.jemboss.programs.RunEmbossApplication;
 import org.emboss.jemboss.programs.RunEmbossApplication2;
 import org.emboss.jemboss.parser.Ajax;
 
@@ -36,9 +37,7 @@ public class JembossServer
 {
 
 
-  private String fs = new String(System.getProperty("file.separator"));
-  private String ps = new String(System.getProperty("path.separator"));
-  private String ls = new String(System.getProperty("line.separator"));
+  private String fs = System.getProperty("file.separator");
 
 //get paths to EMBOSS
   JembossParams jp = new JembossParams();
@@ -48,15 +47,15 @@ public class JembossServer
   String embossPath = jp.getEmbossPath();
   String acdDirToParse = jp.getAcdDirToParse();
 
-  private String homeDirectory = new String(System.getProperty("user.home")
-                                                                     + fs);
-  private String username = new String(System.getProperty("user.name") + fs);
-  private String tmproot = new String("/tmp/SOAP/emboss/" + username );
+  private String homeDirectory = System.getProperty("user.home") + fs;
+  private String username = System.getProperty("user.name") + fs;
+  private String tmproot  = "/tmp/SOAP/emboss/" + username;
   private File tmprootDir = new File(tmproot);
 
   private String[] envp_emboss = 
   {
-    "PATH=" + embossPath + ps + embossBin,
+    "PATH=" + embossPath + System.getProperty("path.separator")
+            + embossBin,
     "PLPLOT_LIB=" + plplot,
     "EMBOSS_DATA=" + embossData,
     "HOME=" + homeDirectory
@@ -79,6 +78,7 @@ public class JembossServer
                                                            envp,null);
     try
     {
+      rea.readProcessStdout();
       Process p = rea.getProcess();
       p.waitFor();
     }
@@ -95,6 +95,7 @@ public class JembossServer
                                                            envp,null);
     try
     {
+      rea.readProcessStdout();
       Process p = rea.getProcess();
       p.waitFor();
     }
@@ -195,15 +196,17 @@ public class JembossServer
     wossOut.add("0");
     try
     {
+      rea.readProcessStdout();
       Process p = rea.getProcess();
       p.waitFor();
     }
     catch(InterruptedException iexp){}
-//  rea.isProcessStdout();
+
     wossOut.add("wossname");
     wossOut.add(rea.getProcessStdout());
 
     return wossOut;
+
   }
 
 
@@ -223,6 +226,7 @@ public class JembossServer
 
     try
     {
+      rea.readProcessStdout();
       Process p = rea.getProcess();
       p.waitFor();
     }
@@ -241,6 +245,10 @@ public class JembossServer
     return vans;
   }
 
+  public Vector call_ajax(String fileContent, String seqtype, String userName)
+  {
+    return call_ajax(fileContent,seqtype);
+  }
 
 /**
 *
@@ -349,6 +357,7 @@ public class JembossServer
 
     try
     {
+      rea.readProcessStdout();
       Process p = rea.getProcess();
       p.waitFor();
     }
@@ -417,6 +426,15 @@ public class JembossServer
     return result;
   }
 
+  public Vector run_prog(String embossCommand, String options,
+                         Vector inFiles, String userName)
+  {
+    Hashtable hashInFiles = getHashtable(inFiles);
+    tmproot = tmproot.concat(userName+fs);
+    return run_prog(embossCommand,options,hashInFiles);
+/*   return run_prog(embossCommand,options,hashInFiles,userName); */
+  }
+
 /**
 *
 * Run an EMBOSS application
@@ -426,8 +444,9 @@ public class JembossServer
 * @return output files from application run
 *
 */
-  public Vector run_prog(String embossCommand, String options, Hashtable inFiles,
-                         String userName)
+/*
+  public Vector run_prog(String embossCommand, String options,
+                         Hashtable inFiles, String userName)
   {
     tmproot = tmproot.concat(userName+fs);
     Vector result = new Vector();
@@ -435,7 +454,7 @@ public class JembossServer
 
     return result;
   }
-
+*/
 
 /**
 *
@@ -503,6 +522,7 @@ public class JembossServer
 //create description file
     File desc = new File(new String(project + fs + ".desc"));
 
+    String ls = System.getProperty("line.separator");
     String descript = "";
     try
     {
@@ -554,6 +574,7 @@ public class JembossServer
     {
       try
       {
+        rea.readProcessStdout();
         rea.getProcess().waitFor();
       }
       catch(InterruptedException iexp){}    
@@ -566,7 +587,7 @@ public class JembossServer
     }
     else      //batch or background
     {
-      JembossThread jt = new JembossThread(rea.getProcess(),project);
+      JembossThread jt = new JembossThread(rea,project);
       jt.start();
 
 //    if(jt.isAlive())
@@ -980,6 +1001,13 @@ public class JembossServer
 *
 */
   public Vector update_result_status(String prog, String opt,
+                        Vector resToQuery,String userName)
+  {
+    return update_result_status(prog,opt,getHashtable(resToQuery),
+                                userName);
+  }
+
+  public Vector update_result_status(String prog, String opt,
                         Hashtable resToQuery,String userName)
   {
     tmproot = tmproot.concat(userName+fs);
@@ -1032,6 +1060,17 @@ public class JembossServer
     }
 
     return vans;
+  }
+
+  private Hashtable getHashtable(Vector v)
+  {
+    Hashtable h = new Hashtable();
+    for(Enumeration e = v.elements() ; e.hasMoreElements() ;)
+    {
+      String s = (String)e.nextElement();
+      h.put(s,e.nextElement());
+    }
+    return h;
   }
 
 

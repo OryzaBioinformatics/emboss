@@ -32,6 +32,7 @@ import java.io.*;
 
 import org.emboss.jemboss.gui.form.*;
 import org.emboss.jemboss.gui.AdvancedOptions;
+import org.emboss.jemboss.JembossParams;
 
 /**
 *
@@ -48,7 +49,7 @@ public class FileChooser
   private String currentDirectory;
   private JLabel lname;
 
-  public FileChooser (Box bdown, String name) 
+  public FileChooser (Box bdown, String name, final JembossParams mysettings) 
   {
 
     SecurityManager sm = System.getSecurityManager();
@@ -81,7 +82,7 @@ public class FileChooser
     openButton.addActionListener(new ActionListener(){
       public void actionPerformed(ActionEvent e)       
       {
-        String dir = AdvancedOptions.cwd;
+        String dir = mysettings.getUserHome();
         File cwd = new File(dir);
         if(cwd.isDirectory() && cwd.canRead())
           fc.setCurrentDirectory(cwd);

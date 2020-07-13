@@ -168,6 +168,12 @@ public class JembossParams
   private String embURL = "http://www.uk.embnet.org/Software/EMBOSS/Apps/";
   private String embossURL = "embossURL";
 
+
+  // user properties
+  private String userHome = System.getProperty("user.home");
+  private String userHomeName = "user.home";
+
+
 /**
 *
 * Loads and holds the properties
@@ -185,6 +191,7 @@ public class JembossParams
     privateServers = new Vector();
 
     // initialize settings from table above
+    defaults.put(userHomeName,userHome);
     defaults.put(embossURL,embURL);
     defaults.put(plplotName,plplot);
     defaults.put(embossDataName,embossData);
@@ -315,6 +322,7 @@ public class JembossParams
     {
       String tmp;
 
+      userHome = jembossSettings.getProperty(userHomeName);
       embURL = jembossSettings.getProperty(embossURL);
       plplot = jembossSettings.getProperty(plplotName);
       embossData = jembossSettings.getProperty(embossDataName);
@@ -629,6 +637,16 @@ public class JembossParams
   public String getPlplot()
   {
     return plplot;
+  }
+
+  public String getUserHome()
+  {
+    return userHome;
+  }
+
+  public void setUserHome(String s)
+  {
+    userHome = s;
   }
 
   public String getembURL()

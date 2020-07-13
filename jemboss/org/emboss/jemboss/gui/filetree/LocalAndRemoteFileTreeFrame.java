@@ -57,8 +57,11 @@ public class LocalAndRemoteFileTreeFrame extends JFrame
       final JPanel remotePanel = new JPanel(new BorderLayout());
       final RemoteFileTreePanel rtree =
                            new RemoteFileTreePanel(mysettings,false);
-      ltree = new DragTree(new File(System.getProperty("user.home")), 
-                                                   this, mysettings);
+   
+      ltree = new DragTree(new File(mysettings.getUserHome()),
+                           this, mysettings);
+//    ltree = new DragTree(new File(System.getProperty("user.home")), 
+//                                                 this, mysettings);
 
       final JPanel localPanel = new JPanel(new BorderLayout());
       JScrollPane localTree = new JScrollPane(ltree);   
@@ -83,8 +86,11 @@ public class LocalAndRemoteFileTreeFrame extends JFrame
           treePane.setOrientation(JSplitPane.VERTICAL_SPLIT);
           treePane.setTopComponent(localPanel);
           treePane.setBottomComponent(remotePanel);
-          rtree.setPreferredSize(panelSize);
-          ltree.setPreferredSize(panelSize);
+//        rtree.setPreferredSize(panelSize);
+//        ltree.setPreferredSize(panelSize);
+          remotePanel.setPreferredSize(panelSize);
+          localPanel.setPreferredSize(panelSize);
+
           pack();
           treePane.setDividerLocation(0.5);
         }
@@ -105,8 +111,11 @@ public class LocalAndRemoteFileTreeFrame extends JFrame
           treePane.setLeftComponent(localPanel);
           treePane.setRightComponent(remotePanel);
   
-          rtree.setPreferredSize(panelSize);
-          ltree.setPreferredSize(panelSize);
+//        rtree.setPreferredSize(panelSize);
+//        ltree.setPreferredSize(panelSize);
+          remotePanel.setPreferredSize(panelSize);
+          localPanel.setPreferredSize(panelSize);
+
           pack();
           treePane.setDividerLocation(0.5);
         }

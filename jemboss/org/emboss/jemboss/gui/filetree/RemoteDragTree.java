@@ -34,7 +34,6 @@ import java.util.*;
 import org.emboss.jemboss.gui.ResultsMenuBar;
 import org.emboss.jemboss.soap.*;
 import org.emboss.jemboss.JembossParams;
-import org.apache.soap.rpc.*;
 
 /**
 *
@@ -56,7 +55,7 @@ public class RemoteDragTree extends JTree implements DragGestureListener,
   final Cursor cdone = new Cursor(Cursor.DEFAULT_CURSOR);
 
 
-  public RemoteDragTree(JembossParams mysettings, FileRoots froots,
+  public RemoteDragTree(final JembossParams mysettings, FileRoots froots,
                         final JPanel viewPane) 
   {
 
@@ -106,7 +105,7 @@ public class RemoteDragTree extends JTree implements DragGestureListener,
           if(node==null)
             return;
           if(node.isLeaf())
-            showFilePane(node.getFullName());
+            showFilePane(node.getFullName(),mysettings);
           setCursor(cdone);
         }
       }
@@ -201,10 +200,13 @@ public class RemoteDragTree extends JTree implements DragGestureListener,
         final RemoteFileNode pnn = pn;
 
         Vector params = new Vector();
-        params.addElement(new Parameter("options", String.class,
-                              "fileroot=" + rootPath, null));
-        params.addElement(new Parameter("filename", String.class,
-                              dropDest, null));
+//      params.addElement(new Parameter("options", String.class,
+//                            "fileroot=" + rootPath, null));
+//      params.addElement(new Parameter("filename", String.class,
+//                            dropDest, null));
+        params.addElement("fileroot=" + rootPath);
+        params.addElement(dropDest);
+
         try
         {
           PrivateRequest gReq = new PrivateRequest(mysettings,
@@ -232,10 +234,13 @@ public class RemoteDragTree extends JTree implements DragGestureListener,
           Vector params = new Vector();
           String dropDest = pn.getFullName();
 
-          params.addElement(new Parameter("options", String.class,
-                              "fileroot=" + rootPath, null));
-          params.addElement(new Parameter("filename", String.class,
-                              dropDest, null));
+//        params.addElement(new Parameter("options", String.class,
+//                            "fileroot=" + rootPath, null));
+//        params.addElement(new Parameter("filename", String.class,
+//                            dropDest, null));
+          params.addElement("fileroot=" + rootPath);
+          params.addElement(dropDest);
+
           try
           {
             PrivateRequest gReq = new PrivateRequest(mysettings,
@@ -267,12 +272,16 @@ public class RemoteDragTree extends JTree implements DragGestureListener,
           String newfile   = parent+"/"+inputValue;
 
           Vector params = new Vector();
-          params.addElement(new Parameter("options", String.class,
-                              "fileroot=" + rootPath, null));
-          params.addElement(new Parameter("filename", String.class,
-                              fn, null));
-          params.addElement(new Parameter("filename", String.class,
-                              newfile, null));
+//        params.addElement(new Parameter("options", String.class,
+//                            "fileroot=" + rootPath, null));
+//        params.addElement(new Parameter("filename", String.class,
+//                            fn, null));
+//        params.addElement(new Parameter("filename", String.class,
+//                            newfile, null));
+          params.addElement("fileroot=" + rootPath);
+          params.addElement(fn);
+          params.addElement(newfile);
+
           try
           {
             PrivateRequest gReq = new PrivateRequest(mysettings,
@@ -400,12 +409,16 @@ public class RemoteDragTree extends JTree implements DragGestureListener,
             Vector params = new Vector();
             byte[] fileData = getLocalFile(lfn);
 
-            params.addElement(new Parameter("options", String.class,
-                              "fileroot=" + dropRoot, null));
-            params.addElement(new Parameter("filename", String.class,
-                              dropDest, null));
-            params.addElement(new Parameter("filedata", fileData.getClass(),
-                              fileData, null));
+//          params.addElement(new Parameter("options", String.class,
+//                            "fileroot=" + dropRoot, null));
+//          params.addElement(new Parameter("filename", String.class,
+//                            dropDest, null));
+//          params.addElement(new Parameter("filedata", fileData.getClass(),
+//                            fileData, null));
+            params.addElement("fileroot=" + dropRoot);
+            params.addElement(dropDest);
+            params.addElement(fileData);
+
             PrivateRequest gReq = new PrivateRequest(mysettings,"EmbreoFile",
                                                            "put_file",params);
 
@@ -587,7 +600,7 @@ public class RemoteDragTree extends JTree implements DragGestureListener,
 * @param the file name
 *
 */
-  public static void showFilePane(String filename)
+  public static void showFilePane(String filename, JembossParams mysettings)
   {
     try
     {
@@ -599,16 +612,19 @@ public class RemoteDragTree extends JTree implements DragGestureListener,
 
       Vector params = new Vector();
       String options= "fileroot=" + froots.getCurrentRoot();
-      params.addElement(new Parameter("options", String.class,
-                                       options, null));
-      params.addElement(new Parameter("filename", String.class,
-                                       filename, null));
+//    params.addElement(new Parameter("options", String.class,
+//                                     options, null));
+//    params.addElement(new Parameter("filename", String.class,
+//                                     filename, null));
+      params.addElement(options);
+      params.addElement(filename);
+
       PrivateRequest gReq = new PrivateRequest(mysettings,"EmbreoFile",
                                                     "get_file",params);
 
       FileEditorDisplay fed = new FileEditorDisplay(ffile,filename,
                                    gReq.getHash().get("contents"));
-      new ResultsMenuBar(ffile,fed);
+      new ResultsMenuBar(ffile,fed,mysettings);
       pfile.add(rscroll, BorderLayout.CENTER);
       JTextPane seqText = fed.getJTextPane();
       pscroll.add(seqText, BorderLayout.CENTER);

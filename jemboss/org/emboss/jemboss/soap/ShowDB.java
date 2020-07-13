@@ -43,8 +43,14 @@ public class ShowDB
 */
   public ShowDB(JembossParams mysettings)
   {
-    
-    PublicRequest dbReq = new PublicRequest(mysettings, "show_db");
+ 
+    PublicRequest dbReq = null;   
+    try
+    {
+      dbReq = new PublicRequest(mysettings, "show_db");
+    }
+    catch (JembossSoapException jse) {}
+
     statusmsg = dbReq.getVal("msg");
     status = dbReq.getVal("status");
     dbText= dbReq.getVal("showdb");

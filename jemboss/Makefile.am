@@ -12,11 +12,11 @@ all-local:
 	  echo "Not compiling Jemboss"; \
 	else \
 	  (if test "${SHELL}" = "/bin/bash" ; then \
-	  declare -x CLASSPATH=":lib/soap.jar:lib/xerces.jar:lib/mail.jar:lib/activation.jar:lib/jakarta-regexp-1.2.jar:lib/jalview.jar:lib/jcert.jar:lib/jnet.jar:lib/jsse.jar:.:"; \
+	  declare -x CLASSPATH=":lib/xerces.jar:lib/mail.jar:lib/activation.jar:lib/jakarta-regexp-1.2.jar:lib/jalview.jar:lib/jcert.jar:lib/jnet.jar:lib/jsse.jar:.:lib/axis/axis-ant.jar:lib/axis/axis.jar:lib/axis/commons-discovery.jar:lib/axis/commons-logging.jar:lib/axis/jaxrpc.jar:lib/axis/log4j-1.2.4.jar:lib/axis/saaj.jar:lib/axis/wsdl4j.jar:lib/axis/servlet.jar"; \
 	  export CLASSPATH; \
 	  javac org/emboss/jemboss/Jemboss.java; \
 	  else \
-	  CLASSPATH=":lib/soap.jar:lib/xerces.jar:lib/mail.jar:lib/activation.jar:lib/jakarta-regexp-1.2.jar:lib/jalview.jar:lib/jcert.jar:lib/jnet.jar:lib/jsse.jar:.:"; \
+	  CLASSPATH=":lib/xerces.jar:lib/mail.jar:lib/activation.jar:lib/jakarta-regexp-1.2.jar:lib/jalview.jar:lib/jcert.jar:lib/jnet.jar:lib/jsse.jar:.:lib/axis/axis-ant.jar:lib/axis/axis.jar:lib/axis/commons-discovery.jar:lib/axis/commons-logging.jar:lib/axis/jaxrpc.jar:lib/axis/log4j-1.2.4.jar:lib/axis/saaj.jar:lib/axis/wsdl4j.jar:lib/axis/servlet.jar"; \
 	  export CLASSPATH; \
 	  javac org/emboss/jemboss/Jemboss.java; \
 	  fi); \

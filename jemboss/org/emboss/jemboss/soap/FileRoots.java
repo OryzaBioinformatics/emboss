@@ -49,7 +49,8 @@ public class FileRoots implements Serializable
     fileRoots = null;
     defaultRootIndex = -1;
     PrivateRequest rReq = new PrivateRequest(mysettings, "EmbreoFile", 
-                                                "embreo_roots", null);
+                                                "embreo_roots");
+
     fileRoots = rReq.getHash();
     if(fileRoots.containsKey("status"))
       fileRoots.remove("status");

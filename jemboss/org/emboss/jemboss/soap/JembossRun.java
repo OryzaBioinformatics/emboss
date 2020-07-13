@@ -28,7 +28,6 @@ import java.io.*;
 import java.util.*;
 
 import org.emboss.jemboss.JembossParams;
-import org.apache.soap.rpc.*;
 
 public class JembossRun
 {
@@ -54,20 +53,16 @@ public class JembossRun
      String fulloptions;
 
      Vector params = new Vector();
-     params.addElement(new Parameter("appl", String.class,
-                                    appl, null));
+     params.addElement(appl);
 
      //construct a full options string
      fulloptions = "mode="+mysettings.getCurrentMode()+" "+options;
 //   if (mysettings.getUseX11()) 
 //     fulloptions = "display="+mysettings.getX11display()+" "+fulloptions;
-     
-     params.addElement(new Parameter("options", String.class,
-				     fulloptions, null));
+     params.addElement(fulloptions);
 
      // just pass the hash
-     params.addElement(new Parameter("filename", Hashtable.class,
-				     filesToMove, null));
+     params.addElement(filesToMove);
 
      PrivateRequest eRun;
      try 

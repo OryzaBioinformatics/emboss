@@ -23,7 +23,6 @@ package org.emboss.jemboss.soap;
 
 import java.io.*;
 import java.util.*;
-import org.apache.soap.rpc.*;
 import org.emboss.jemboss.JembossParams;
 
 public class CallAjax 
@@ -34,7 +33,8 @@ public class CallAjax
   private int length;
   private float weight;
   private boolean protein;
-  private PublicRequest epr;
+  private PrivateRequest epr;
+//private PublicRequest epr;
 
    public CallAjax(String fileContent, String seqtype,
                              JembossParams mysettings) 
@@ -42,21 +42,17 @@ public class CallAjax
    {
 
      Vector params = new Vector();
-     params.addElement(new Parameter("fileContent", String.class,
-                                    fileContent, null));
-     params.addElement(new Parameter("seqtype", String.class,
-                                    seqtype, null));
-
+     params.addElement(fileContent);
+     params.addElement(seqtype);
      // use authenticated call_ajax method
-     if(mysettings.getUseAuth() == true)
-     {    
-       params.addElement(new Parameter("user", String.class,
-                  mysettings.getServiceUserName(), null));
-       params.addElement(new Parameter("p",  byte[].class,
-                mysettings.getServicePasswdByte(), null));
-     }
+//   if(mysettings.getUseAuth() == true)
+//   {    
+//     params.addElement(mysettings.getServiceUserName());
+//     params.addElement(mysettings.getServicePasswdByte());
+//   }
 
-     epr = new PublicRequest(mysettings,"call_ajax",params);
+//   epr = new PublicRequest(mysettings,"call_ajax",params);
+     epr = new PrivateRequest(mysettings,"call_ajax",params);
 
      Hashtable res = epr.getHash();
      Enumeration enumRes = res.keys();
@@ -75,12 +71,12 @@ public class CallAjax
 
   public String getStatus() 
   {
-    return epr.getVal("status");
+    return (String)epr.getVal("status");
   }
   
   public String getStatusMsg() 
   {
-    return epr.getVal("msg");
+    return (String)epr.getVal("msg");
   }
 
   public int getLength()

@@ -14,8 +14,6 @@
 *  along with this program; if not, write to the Free Software
 *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 *
-*  Based on EmbreoResList
-*
 *  @author: Copyright (C) Tim Carver
 *
 ***************************************************************/
@@ -26,18 +24,12 @@ import java.io.*;
 import java.util.*;
 
 import org.emboss.jemboss.JembossParams;
-
-import java.net.*;
-import org.w3c.dom.*;
-import org.xml.sax.*;
-import javax.xml.parsers.*;
-import javax.mail.*;
-import org.apache.soap.util.xml.*;
-import org.apache.soap.*;
-import org.apache.soap.encoding.*;
-import org.apache.soap.encoding.soapenc.*;
-import org.apache.soap.rpc.*;
-import org.apache.soap.transport.http.SOAPHTTPConnection;
+import javax.swing.JOptionPane;
+//AXIS
+import org.apache.axis.client.Call;
+import org.apache.axis.client.Service;
+import javax.xml.namespace.QName;
+import org.apache.axis.encoding.XMLType;
 
 public class PrivateRequest 
 {
@@ -92,197 +84,127 @@ public class PrivateRequest
                          Vector args) throws JembossSoapException 
    {
 
-     if (mysettings.getDebug()) 
+     try
      {
-       System.out.println("PrivateRequest: Invoked, parameters are");
-       System.out.println("  Server:  " + mysettings.getPrivateSoapURL());
-       System.out.println("  Service: " + service);
-       System.out.println("  Method:  " + method);
-     }
+       String  endpoint = mysettings.getPublicSoapURL()+"/"+service;
+       org.apache.axis.client.Service serv =
+                               new org.apache.axis.client.Service();
+       Call    call     = (Call) serv.createCall();
+       QName   qn       = new QName(service, method);
+       call.setTargetEndpointAddress( new java.net.URL(endpoint) );
+       call.setOperationName(new QName(service, method));
+       call.setEncodingStyle(org.apache.axis.Constants.URI_SOAP12_ENC);
 
-     String soapURLName;
-     URL proglisturl;
-     soapURLName = mysettings.getPrivateSoapURL();
-     try 
-     {
-       proglisturl = new URL(soapURLName);
-     }
-     catch (Exception e) 
-     { 
-       System.err.println("PrivateRequest: While Initialising URL Caught Exception (" +
-			  e.getMessage ());
-       return;
-     }
-
-
-     SOAPHTTPConnection proglistconn = new SOAPHTTPConnection();
-
-     // if proxy, set the proxy values
-     if (mysettings.getUseProxy(soapURLName) == true) 
-     {
-       if (mysettings.getDebug()) 
-	 System.out.println("PrivateRequest: Using proxy");
-       
-       if (mysettings.getProxyHost() != null)
+       int nargs = 0;
+       Object params[] = null;
+       if(args != null)
        {
-	 proglistconn.setProxyHost(mysettings.getProxyHost());
-	 proglistconn.setProxyPort(mysettings.getProxyPortNum());
-       }
-     }
+         if(mysettings.getUseAuth())
+           nargs = args.size()+2;
+         else
+           nargs = args.size()+1;
 
-     
-     if(JembossParams.isJembossServer())  //JembossServer.java servers
-     {
+         params = new Object[nargs];
+         Enumeration e = args.elements();
+         for(int i=0;i<args.size();i++)
+         {
+           Object obj = e.nextElement();
+           params[i] = obj;
+           if(obj.getClass().equals(String.class))
+           {
+             call.addParameter("Args"+i, XMLType.XSD_STRING,
+                             javax.xml.rpc.ParameterMode.IN);
+           }
+           else if(obj.getClass().equals(Hashtable.class))
+           {
+             params[i] = getVector((Hashtable)obj);
+
+             call.addParameter("Args"+i, XMLType.SOAP_VECTOR,
+                             javax.xml.rpc.ParameterMode.IN);
+           }
+           else    // byte[]
+           {
+             call.addParameter("ByteArray", XMLType.XSD_BASE64,
+                               javax.xml.rpc.ParameterMode.IN);
+             params[i] = obj;
+           }
+         
+         }
+       }
+
        if(mysettings.getUseAuth() == true)
        {
          if(args == null)
-           args = new Vector();
-         args.addElement(new Parameter("user", String.class,
-                    mysettings.getServiceUserName(), null));
-   
-         args.addElement(new Parameter("p",  byte[].class,
-                         mysettings.getServicePasswdByte(), null));
-
-//       args.addElement(new Parameter("p", String.class,
-//                 mysettings.getServicePasswd(), null));
+         {
+           nargs = 2;
+           params = new Object[nargs];
+         }
+         call.addParameter("Door", XMLType.XSD_STRING,
+                           javax.xml.rpc.ParameterMode.IN);
+         params[nargs-2] = mysettings.getServiceUserName();
+                       
+         call.addParameter("Key", XMLType.XSD_BASE64,
+                           javax.xml.rpc.ParameterMode.IN);
+         params[nargs-1] = mysettings.getServicePasswdByte();
        }
        else       //No authorization reqd, so use user name here
        {          //to create own sand box on server
+         if(nargs == 0)
+         {
+            nargs = 1;
+            params = new Object[nargs];
+         }
 
          if(args == null)
            args = new Vector();
-         String userName = System.getProperty("user.name");
-         args.addElement(new Parameter("USERNAME", String.class,
-                                      userName, null));
+         call.addParameter("Door", XMLType.XSD_STRING,
+                           javax.xml.rpc.ParameterMode.IN);
+         params[nargs-1] = System.getProperty("user.name");
        }
-     }
-     else         //cgi server at HGMP, add authentication headers
-     {
-       proglistconn.setUserName(mysettings.getServiceUserName());
-       proglistconn.setPassword(new String(mysettings.getServicePasswd()));
-     }
 
+       call.setReturnType(org.apache.axis.Constants.SOAP_VECTOR);
+       Vector vans = (Vector)call.invoke( params );
 
-     Call proglistcall = new Call();
-     proglistcall.setSOAPTransport(proglistconn);
-     proglistcall.setTargetObjectURI(service);
-     proglistcall.setMethodName(method);
-     proglistcall.setEncodingStyleURI(Constants.NS_URI_SOAP_ENC);
-
-
-     if(args != null) 
-       proglistcall.setParams(args);
-     
-     Response proglistresp = null;
-     try 
-     {
-       proglistresp = proglistcall.invoke(proglisturl,null);
-       successful = true;
-     }
-     catch(SOAPException e) 
-     {
-       System.err.println("PrivateRequest: Caught SOAPException (" +
-			  e.getFaultCode () + "): " +
-			  e.getMessage ());
-       Hashtable efaulth = proglistconn.getHeaders();
-       
-       if((efaulth != null) && efaulth.containsKey("WWW-Authenticate")) 
+       proganswer = new Hashtable();
+       // assumes it's even sized
+       int n = vans.size();
+       for(int j=0;j<n;j+=2)
        {
-	 if (mysettings.getDebug()) 
-	   System.out.println("PrivateRequest: Auth header found!");
-	 throw new JembossSoapException("Authentication Failed");
-       } 
-       else 
-       {
-	 mysettings.setServerStatus(soapURLName, JembossParams.SERVER_DOWN);
-	 if (mysettings.getPrivateServerFailover()) 
+         String s = (String)vans.get(j);
+         if(s.equals("msg"))
          {
-	   if (mysettings.getDebug()) 
-	     System.out.println("PrivateRequest: trying server failover");
-	   Vector servlist = mysettings.getPrivateServers();
-	   int iserv = servlist.size();
-	 }
+           String msg = (String)vans.get(j+1);
+           if(msg.startsWith("Failed Authorisation"))
+             throw new JembossSoapException("Authentication Failed");
+           else if(msg.startsWith("Error"))
+             JOptionPane.showMessageDialog(null, msg, "alert",
+                                   JOptionPane.ERROR_MESSAGE);
+         }
+         proganswer.put(s,vans.get(j+1));
        }
-     }
-
-     if (authenticationerror) 
+     } 
+     catch (Exception e) 
      {
-       successful = true;
-       throw new JembossSoapException("Authentication Failed");
+        System.out.println("Exception in PrivateRequest "+
+                            e.getMessage ());
+        throw new JembossSoapException("  Fault Code   = " );
      }
-     
-     // must do something more intelligent to aid recovery
-     if (!successful) 
-     {
-       System.err.println("PrivateRequest: Failed.");
-       return;
-     }
-
-
-    if (!proglistresp.generatedFault())   //check response
-    {
-      Parameter progret = proglistresp.getReturnValue();
-      Object progvalue = progret.getValue();
-      result = progvalue.toString();
-
-      Vector progans = proglistresp.getParams();
-      Parameter progansp;
-      String tstr;
-
-      // only if we have more data
-      if (progans != null) 
-      {
-	progansp = (Parameter) progans.get(0);
-	int progians = progans.size();
-	proganswer = new Hashtable(progians);
-
-	tstr = (String)progvalue;
-	proganswer.put((String)progvalue,progansp.getValue());
-	for (int j=1; j<progians;j++)
-        {
-	  Parameter progansk = (Parameter) progans.get(j);
-	  tstr = progansk.getValue().toString();
-	  j++;
-	  Parameter progansv = (Parameter) progans.get(j);
-	  proganswer.put(progansk.getValue().toString(),progansv.getValue());
-	}
-      } 
-      else         // what do we get back - Vector or Hashtable
-      {
-	if(progvalue.getClass().equals(Hashtable.class)) 
-        {
-	  proganswer = (Hashtable)progvalue;
-	}
-        else if(progvalue.getClass().equals(Vector.class)) 
-        {
-	  proganswer = new Hashtable();
-	  Vector vans = (Vector)progvalue;
-
-	  int n = vans.size();
-	  for(int j=0;j<n;j+=2)  //assumes it's even sized
-          {
-            if(vans.get(j).equals("msg"))
-              if(((String)vans.get(j+1)).startsWith("Failed Authorisation"))
-                throw new JembossSoapException("Authentication Failed");
-
-	    proganswer.put(vans.get(j),vans.get(j+1));
-          }
-        }
-      }
-
-    } 
-    else
-    {
-      Fault fault = proglistresp.getFault();
-      System.err.println("Generated fault: ");
-      System.out.println("  Fault Code   = " + fault.getFaultCode());
-      System.out.println("  Fault String = " + fault.getFaultString());
-      throw new JembossSoapException("  Fault Code   = " + fault.getFaultCode());
-    }
-
 
    }
 
+
+  private Vector getVector(Hashtable h)
+  {
+    Vector v = new Vector();
+    for(Enumeration e = h.keys() ; e.hasMoreElements() ;)
+    {
+      String s = (String)e.nextElement();
+      v.add(s);
+      v.add(h.get(s));
+    }
+
+    return v;
+  }
 
 /**
 *

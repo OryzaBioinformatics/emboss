@@ -36,9 +36,18 @@ public class GetWossname
    private PublicRequest epr;
 
    public GetWossname(JembossParams mysettings)
+             throws JembossSoapException
    {
 
-     epr = new PublicRequest(mysettings,"getWossname");
+     try
+     {
+       epr = new PublicRequest(mysettings,"getWossname");
+     }
+     catch (JembossSoapException jse)
+     {
+       throw new JembossSoapException("Connection failed");
+     }
+     
 
    }
 

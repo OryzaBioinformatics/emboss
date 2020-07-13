@@ -27,18 +27,11 @@ import java.util.*;
 
 import org.emboss.jemboss.JembossParams;
 
-//SOAP 
-import java.net.*;
-import org.w3c.dom.*;
-import org.xml.sax.*;
-import javax.xml.parsers.*;
-import javax.mail.*;
-import org.apache.soap.util.xml.*;
-import org.apache.soap.*;
-import org.apache.soap.encoding.*;
-import org.apache.soap.encoding.soapenc.*;
-import org.apache.soap.rpc.*;
-import org.apache.soap.transport.http.SOAPHTTPConnection;
+//AXIS
+import org.apache.axis.client.Call;
+import org.apache.axis.client.Service;
+import javax.xml.namespace.QName;
+import org.apache.axis.encoding.XMLType;
 
 public class PublicRequest
 {
@@ -54,6 +47,7 @@ public class PublicRequest
 * @param method     String defining which method to call
 */
    public PublicRequest(JembossParams mysettings, String method)
+               throws JembossSoapException
    {
      this(mysettings, mysettings.getPublicSoapService(), method);
    }
@@ -66,6 +60,7 @@ public class PublicRequest
 * @param args       Vector of arguments
 */
    public PublicRequest(JembossParams mysettings, String method, Vector args)
+               throws JembossSoapException
    {
      this(mysettings, mysettings.getPublicSoapService(), method, args);
    }
@@ -78,6 +73,7 @@ public class PublicRequest
 * @param method     String defining which method to call
 */
    public PublicRequest(JembossParams mysettings, String service, String method)
+               throws JembossSoapException
    {
      this(mysettings, service, method, (Vector) null);
    }
@@ -90,170 +86,64 @@ public class PublicRequest
 * @param method     String defining which method to call
 * @param args       Vector of arguments
 */
-   public PublicRequest(JembossParams mysettings, String service, String method, Vector args)
+   public PublicRequest(JembossParams mysettings, String service, 
+                        String method, Vector args)
+               throws JembossSoapException
    {
 
-     if (mysettings.getDebug())
-     {
-       System.out.println("PublicRequest: Invoked, parameters are");
-       System.out.println("  Server:  " + mysettings.getPublicSoapURL());
-       System.out.println("  Service: " + service);
-       System.out.println("  Method:  " + method);
-     }
-
-     String soapURLName;
-     URL proglisturl;
-     soapURLName = mysettings.getPublicSoapURL();
      try
      {
-       proglisturl = new URL(soapURLName);
+       String  endpoint = mysettings.getPublicSoapURL();
+       org.apache.axis.client.Service serv = 
+                        new org.apache.axis.client.Service();
+
+       Call    call     = (Call) serv.createCall();
+       call.setTargetEndpointAddress( new java.net.URL(endpoint) );
+       call.setOperationName(new QName(service, method));
+
+       Object params[] = null;
+       if(args != null)
+       {
+         params = new Object[args.size()];
+         Enumeration e = args.elements();
+         for(int i=0;i<args.size();i++)
+         {
+           Object obj = e.nextElement();
+           if(obj.getClass().equals(String.class))
+           {
+             params[i] = (String)obj;
+             call.addParameter("Args", XMLType.XSD_STRING,
+                             javax.xml.rpc.ParameterMode.IN);
+           }
+           else
+           {
+             params[i] = (byte[])obj;
+             call.addParameter("Args", XMLType.XSD_BYTE,
+                             javax.xml.rpc.ParameterMode.IN);   
+           }
+         }
+       }
+       call.setReturnType(org.apache.axis.Constants.SOAP_VECTOR);
+
+       Vector vans;
+       if(args != null)
+         vans = (Vector)call.invoke( params );
+       else
+         vans = (Vector)call.invoke( new Object[] {});
+
+       proganswer = new Hashtable();
+       // assumes it's even sized
+       int n = vans.size();
+       for(int j=0;j<n;j+=2)
+       {
+         String s = (String)vans.get(j);
+         proganswer.put(s,vans.get(j+1));
+       }
      } 
      catch (Exception e) 
-     { 
-       System.err.println("PublicRequest: While Initialising URL Caught Exception (" +
-			  e.getMessage ());
-       return;
-     }
-     int i;
-
-     SOAPHTTPConnection proglistconn = new SOAPHTTPConnection();
-     
-     // if proxy, set the proxy values
-     if (mysettings.getUseProxy(soapURLName) == true)
      {
-       if (mysettings.getDebug())
-	 System.out.println("PublicRequest: Using proxy");
-       
-       if (mysettings.getProxyHost() != null) 
-       {
-	 proglistconn.setProxyHost(mysettings.getProxyHost());
-	 proglistconn.setProxyPort(mysettings.getProxyPortNum());
-       }
+       throw new JembossSoapException("Connection failed");
      }
-     
-
-     Call proglistcall = new Call();
-     proglistcall.setSOAPTransport(proglistconn);
-     proglistcall.setTargetObjectURI(service);
-     proglistcall.setMethodName(method);
-     proglistcall.setEncodingStyleURI(Constants.NS_URI_SOAP_ENC);
-
-     if (args != null) 
-       proglistcall.setParams(args);
-
-     Response proglistresp = null;
-     try
-     {
-       proglistresp = proglistcall.invoke(proglisturl,null);
-       successful = true;
-     } 
-     catch(SOAPException e) 
-     {
-       mysettings.setServerStatus(soapURLName, JembossParams.SERVER_DOWN);
-       System.err.println("PublicRequest: Caught SOAPException (" +
-			  e.getFaultCode () + "): " +
-			  e.getMessage ());
-       if (mysettings.getPublicServerFailover()) 
-       {
-	 if (mysettings.getDebug())
-	   System.out.println("PublicRequest: trying server failover");
-	 
-	 Vector servlist = mysettings.getPublicServers();
-	 int iserv = servlist.size();
-	 for ( int j = 0 ; j < iserv; j++) 
-         {
-	   String newurl = (String)servlist.get(j);
-	   System.out.println("PublicRequest: trying " + newurl);
-	   try 
-           {
-	     proglisturl = new URL(newurl);
-	     try 
-             {
-	       proglistresp = proglistcall.invoke(proglisturl,null);
-	       System.out.println("PublicRequest: success!");
-	       mysettings.setServerStatus(newurl, JembossParams.SERVER_OK);
-	       mysettings.setPublicSoapURL(newurl);
-	       successful = true;
-	       break;
-	     } 
-             catch (SOAPException e2) 
-             {
-	       mysettings.setServerStatus(newurl, JembossParams.SERVER_DOWN);
-	       System.err.println("PublicRequest: Caught SOAPException (" +
-			  e2.getFaultCode () + "): " +
-			  e2.getMessage ());
-	     }
-	   }
-           catch (Exception e3) 
-           {
-	     System.err.println("PublicRequest: While Initialising URL Caught Exception (" +
-			  e3.getMessage ());
-	   }
-	 }
-       }
-     }
-
-     // do something more intelligent to aid recovery
-     if (!successful) 
-     {
-       System.err.println("PublicRequest: Failed.");
-       return;
-     }
-
-    //Check response
-    if (!proglistresp.generatedFault()) 
-    {
-      Parameter progret = proglistresp.getReturnValue();
-      Object progvalue = progret.getValue();
-      result = progvalue.toString();
-
-      Vector progans = proglistresp.getParams();
-      Parameter progansp;
-      String tstr;
-
-      // only iterate if we have more data
-      if (progans != null) 
-      {
-	progansp = (Parameter) progans.get(0);
-	int progians = progans.size();
-	proganswer = new Hashtable(progians);
-
-	tstr = (String)progvalue;
-	proganswer.put((String)progvalue,progansp.getValue().toString());
-	for (int j=1; j<progians;j++) {
-	  Parameter progansk = (Parameter) progans.get(j);
-	  tstr = progansk.getValue().toString();
-	  j++;
-	  Parameter progansv = (Parameter) progans.get(j);
-	  proganswer.put(progansk.getValue().toString(),progansv.getValue().toString());
-	}
-      }
-      else
-      {
-	// what do we get back - Vector or Hashtable
-	if (progvalue.getClass().equals(Hashtable.class)) 
-        {
-	  proganswer = (Hashtable)progvalue;
-	} 
-        else if(progvalue.getClass().equals(Vector.class)) 
-        {
-	  proganswer = new Hashtable();
-	  Vector vans = (Vector)progvalue;
-	  // assumes it's even sized
-	  int n = vans.size();
-	  for(int j=0;j<n;j+=2)
-	    proganswer.put(vans.get(j),vans.get(j+1));
-	}
-      }
-
-    } 
-    else 
-    {
-      Fault fault = proglistresp.getFault();
-      System.err.println("Generated fault: ");
-      System.out.println("  Fault Code   = " + fault.getFaultCode());
-      System.out.println("  Fault String = " + fault.getFaultString());
-    }
 
    }
 

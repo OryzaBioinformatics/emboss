@@ -43,6 +43,8 @@ public class SetUpMenuBar
 
   public static SequenceList seqList;
   public static LocalAndRemoteFileTreeFrame localAndRemoteTree = null;
+  private JMenuItem showLocalRemoteFile;
+  private JMenuItem fileMenuShowres;
   private ServerSetup ss = null;
 
   public SetUpMenuBar(final JembossParams mysettings, final JFrame f,
@@ -63,7 +65,7 @@ public class SetUpMenuBar
 
     if(withSoap)
     {
-      JMenuItem fileMenuShowres = new JMenuItem("Saved Results");
+      fileMenuShowres = new JMenuItem("Saved Results");
       fileMenuShowres.addActionListener(new ActionListener()
       {
         public void actionPerformed(ActionEvent e) 
@@ -75,8 +77,7 @@ public class SetUpMenuBar
       });
       fileMenu.add(fileMenuShowres);
  
-      JMenuItem showLocalRemoteFile = new JMenuItem(
-                                      "Local and Remote Files");
+      showLocalRemoteFile = new JMenuItem("Local and Remote Files");
       showLocalRemoteFile.addActionListener(new ActionListener()
       {
         public void actionPerformed(ActionEvent e)
@@ -117,11 +118,15 @@ public class SetUpMenuBar
       fileMenu.addSeparator();
     }
 
+    final AdvancedOptions ao = new AdvancedOptions(mysettings);
     JMenuItem fileMenuExit = new JMenuItem("Exit");
     fileMenuExit.addActionListener(new ActionListener()
     {
       public void actionPerformed(ActionEvent e) 
       {
+
+        if(ao.isSaveUserHomeSelected())
+          ao.userHomeSave();
 
         if(seqList.isStoreSequenceList())  //create a SequenceList file
           saveSequenceList();
@@ -136,7 +141,6 @@ public class SetUpMenuBar
     JMenu prefsMenu = new JMenu("Preferences");
     prefsMenu.setMnemonic(KeyEvent.VK_P);
 
-    final AdvancedOptions ao = new AdvancedOptions();
     JMenuItem showAdvOpt = new JMenuItem("Advanced Options");
     showAdvOpt.addActionListener(new ActionListener()
     {
@@ -285,6 +289,15 @@ public class SetUpMenuBar
 
    }
 
+   public void setEnableFileManagers(boolean b)
+   {
+     showLocalRemoteFile.setEnabled(b);
+   }
+
+   public void setEnableShowResults(boolean b)
+   {
+     fileMenuShowres.setEnabled(b);
+   }
 
    public static DragTree getLocalDragTree()
    {

@@ -28,7 +28,8 @@ import javax.swing.*;
 import javax.swing.event.*;
 import java.awt.event.*;
 import org.emboss.jemboss.gui.form.Separator;
-
+import org.emboss.jemboss.JembossParams;
+import org.emboss.jemboss.gui.filetree.FileSave;
 
 public class AdvancedOptions extends JPanel
 {
@@ -37,14 +38,17 @@ public class AdvancedOptions extends JPanel
   public static JCheckBox prefShadeGUI;
   public static JComboBox jobMgr;
   public static JTextField mailServer;
-  public static String cwd = System.getProperty("user.home");
-  private static JTextField userHome = new JTextField();
 
+  private JCheckBox saveUserHome;
+  private JTextField userHome = new JTextField();
+  private String cwd;
   private String time[] = new String[6];
 
-  public AdvancedOptions()
+  public AdvancedOptions(final JembossParams mysettings)
   {
     super();
+
+    cwd = mysettings.getUserHome();
     time[0] = "5 s";
     time[1] = "10 s";
     time[2] = "15 s";
@@ -114,10 +118,11 @@ public class AdvancedOptions extends JPanel
     {
       public void actionPerformed(ActionEvent e)
       {
-        File f = new File(userHome.getText());
+        String cwd = userHome.getText();
+        File f = new File(cwd);
         if(f.exists() && f.canRead())
         {
-          cwd = userHome.getText();
+          mysettings.setUserHome(cwd);
           org.emboss.jemboss.Jemboss.tree.newRoot(cwd);
           if(SetUpMenuBar.localAndRemoteTree != null)
             SetUpMenuBar.localAndRemoteTree.getLocalDragTree().newRoot(cwd);
@@ -143,12 +148,21 @@ public class AdvancedOptions extends JPanel
       public void actionPerformed(ActionEvent e)
       {
         cwd = System.getProperty("user.home");
+        mysettings.setUserHome(cwd);
         org.emboss.jemboss.Jemboss.tree.newRoot(cwd);
         if(SetUpMenuBar.localAndRemoteTree != null)
           SetUpMenuBar.localAndRemoteTree.getLocalDragTree().newRoot(cwd);
         userHome.setText(cwd);
       }
     });
+
+//save user work dir checkbox
+    saveUserHome = new JCheckBox("Save between Jemboss sessions");
+    saveUserHome.setSelected(false);
+    bleft =  Box.createHorizontalBox();
+    bleft.add(saveUserHome);
+    bleft.add(Box.createHorizontalGlue());
+    bdown.add(bleft);
 
     bdown.add(Box.createVerticalStrut(5));
     bdown.add(new Separator(new Dimension(400,10)));
@@ -158,10 +172,85 @@ public class AdvancedOptions extends JPanel
   }
 
 
-  public static String getHomeDirectory()
+  public String getHomeDirectory()
   {
     return userHome.getText();
   }
+
+  public boolean isSaveUserHomeSelected()
+  {
+    return saveUserHome.isSelected();
+  }
+
+  public void userHomeSave()
+  {
+    String uhome = System.getProperty("user.home");
+    String fs = System.getProperty("file.separator");
+    String jemProp = uhome+fs+"jemboss.properties";
+    File fjemProp = new File(jemProp);
+ 
+    String uHome = "user.home="+getHomeDirectory();
+    uHome = addEscapeChars(uHome);
+
+    if(fjemProp.exists())       // re-write jemboss.properties
+      rewriteProperties(jemProp,uHome);
+    else                        // write new jemboss.properties
+    {
+      FileSave fsave = new FileSave(fjemProp);
+      fsave.fileSaving(uHome);
+    }
+  }
+
+
+  public void rewriteProperties(String jemProp, String uHome)
+  {
+     File file_txt = new File(jemProp);
+     File file_tmp = new File(jemProp + ".tmp");
+     try 
+     {
+       BufferedReader bufferedreader = new BufferedReader(new FileReader(file_txt));
+       BufferedWriter bufferedwriter = new BufferedWriter(new FileWriter(file_tmp));
+       String line;
+       while ((line = bufferedreader.readLine()) != null) 
+       {
+         if(line.startsWith("user.home"))
+           line = uHome;
+
+         bufferedwriter.write(line);
+         bufferedwriter.newLine();
+       }
+       bufferedreader.close();
+       bufferedwriter.close();
+       file_tmp.renameTo(file_txt);
+     } 
+     catch (FileNotFoundException filenotfoundexception)
+     {
+       System.err.println("jemboss.properties read error");
+     } 
+     catch (IOException e) 
+     {
+       System.err.println("jemboss.properties i/o error");
+     }
+
+  }
+
+/**
+*
+* Add in escape chars for windows
+*
+*/
+  private String addEscapeChars(String l)
+  {
+    int n = l.indexOf("\\");
+
+    while( n > -1) 
+    {
+      l = l.substring(0,n)+"\\"+l.substring(n,l.length());
+      n = l.indexOf("\\",n+2);
+    }
+    return l;
+  }
+
 }
 
 

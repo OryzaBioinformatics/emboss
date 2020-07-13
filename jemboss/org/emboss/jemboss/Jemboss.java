@@ -29,7 +29,6 @@ import java.io.*;
 import java.security.Security; //ssl
 import java.net.*;
 
-import org.emboss.jemboss.gui.startup.*;    // splash window
 import org.emboss.jemboss.gui.filetree.*;   // local files
 import org.emboss.jemboss.gui.*;            // Jemboss graphics
 import org.emboss.jemboss.soap.*;           // results manager
@@ -80,7 +79,6 @@ public class Jemboss implements ActionListener
     fwdArrow = new ImageIcon(cl.getResource("images/Forward_arrow_button.gif"));
     bwdArrow = new ImageIcon(cl.getResource("images/Backward_arrow_button.gif"));
 
-    AuthPopup splashing = null;
     String embossBin = "";
     String acdDirToParse = "";
     String[] envp = new String[4];  /* environment vars */
@@ -148,8 +146,12 @@ public class Jemboss implements ActionListener
 
     f = new JFrame("Jemboss");
 // make the local file manager
-    tree = new DragTree( new File(System.getProperty("user.home")), 
-                                                    f, mysettings);
+//  tree = new DragTree( new File(System.getProperty("user.home")), 
+//                                                  f, mysettings);
+
+    tree = new DragTree(new File(mysettings.getUserHome()),
+                        f, mysettings);
+
     scrollTree = new JScrollPane(tree);
 
     JPanel p1 = new JPanel(new BorderLayout());     // menu panel
@@ -175,13 +177,6 @@ public class Jemboss implements ActionListener
     Dimension d = f.getToolkit().getScreenSize();
     if(withSoap)
     {
-      splashing = new AuthPopup(mysettings,3);
-      if(mysettings.getUseAuth())
-        splashing.setBottomPanel();
-      splashing.setSize(380,200);
-      splashing.pack();
-      splashing.setVisible(true);
-
       resultsManager = new PendingResults(mysettings);
       btmMenu.add(resultsManager.statusPanel(f));
     }
@@ -214,7 +209,8 @@ public class Jemboss implements ActionListener
     }
 
 // setup the top menu bar
-    new SetUpMenuBar(mysettings, f, envp, cwd, withSoap);
+    SetUpMenuBar mainMenu = new SetUpMenuBar(
+                mysettings, f, envp, cwd, withSoap);
 
 // add to Jemboss main frame and locate it center left of screen
     f.getContentPane().add(pmain);
@@ -223,7 +219,7 @@ public class Jemboss implements ActionListener
 
     new BuildProgramMenu(p1,p2,pform,scrollProgForm,embossBin,
                          envp,mysettings,withSoap,cwd,
-                         acdDirToParse,f,splashing);
+                         acdDirToParse,mainMenu,f);
 
     f.addWindowListener(new winExit());
 

@@ -459,7 +459,7 @@ public class BuildJembossForm implements ActionListener
               }
             }
             else
-              new ShowResultSet(thisrun.hash(),filesToMove);
+              new ShowResultSet(thisrun.hash(),filesToMove,mysettings);
           }
           catch (JembossSoapException eae)
           {
@@ -570,7 +570,9 @@ public class BuildJembossForm implements ActionListener
           }
         }
       }
-      new ResultsMenuBar(res,fresults,hashRes,null);
+ 
+      new ResultsMenuBar(res,fresults,hashRes,mysettings);
+//    new ResultsMenuBar(res,fresults,hashRes,null);
       res.setVisible(true);
     }
   }
@@ -601,11 +603,10 @@ public class BuildJembossForm implements ActionListener
       else if (parseAcd.isOutputGraph(j))
         options = options.concat(" -" + val + " png");
 
-      if ( att.startsWith("datafile")|| att.startsWith("featout")||
+      if ( att.startsWith("dirlist")|| att.startsWith("featout")||
            att.startsWith("string")  || att.startsWith("seqout") ||
-           att.startsWith("outfile") || att.startsWith("matrix") ||
-           att.startsWith("regexp") || att.startsWith("codon") ||
-           att.startsWith("dirlist") )
+           att.startsWith("outfile") || att.startsWith("codon") ||
+           att.startsWith("regexp") )
       {
         if(!(textf[h].getText()).equals("") && textf[h].isVisible()
                                             && textf[h].isEnabled()) 
@@ -720,7 +721,8 @@ public class BuildJembossForm implements ActionListener
                          rangeText + " ");
         } 
       }
-      else if ( att.startsWith("infile") )
+      else if ( att.startsWith("infile") || att.startsWith("datafile") ||
+                att.startsWith("matrix") )
       {
         if(!(textf[h].getText()).equals("") && textf[h].isVisible()
                                             && textf[h].isEnabled())

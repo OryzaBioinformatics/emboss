@@ -109,9 +109,9 @@ public class SequenceList extends JFrame
         SequenceData row = (SequenceData)seqModel.modelVector.elementAt(nrow);
 
         if(!(row.s_remote.booleanValue()))
-          DragTree.showFilePane(fileName);        //local file
+          DragTree.showFilePane(fileName,mysettings);        //local file
         else
-          RemoteDragTree.showFilePane(fileName);  //remote file
+          RemoteDragTree.showFilePane(fileName,mysettings);  //remote file
       }
     });
     fileMenu.add(openMenuItem);

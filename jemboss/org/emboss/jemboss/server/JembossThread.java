@@ -22,16 +22,18 @@ package org.emboss.jemboss.server;
 
 import java.io.*;
 import java.util.Date;
+import org.emboss.jemboss.programs.RunEmbossApplication2;
 
 public class JembossThread extends Thread
 {
 
-  Process p;
-  String project;
+  private RunEmbossApplication2 rea;
+  private String project;
 
-  public JembossThread(Process p, String project)
+  public JembossThread(RunEmbossApplication2 rea,
+                       String project)
   {
-    this.p = p;
+    this.rea = rea;
     this.project = project;
   }
  
@@ -39,7 +41,8 @@ public class JembossThread extends Thread
   { 
     try
     {
-      p.waitFor();
+      rea.readProcessStdout();
+      rea.getProcess().waitFor();
       createFinishedFile();
     }
     catch(InterruptedException intr)

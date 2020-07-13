@@ -31,7 +31,6 @@ import javax.swing.tree.*;
 import java.io.*;
 import java.util.Vector;
 import java.util.Enumeration;
-import org.apache.soap.rpc.Parameter;
 
 import org.emboss.jemboss.soap.PrivateRequest;
 import org.emboss.jemboss.gui.ResultsMenuBar;
@@ -49,17 +48,15 @@ public class DragTree extends JTree implements DragGestureListener,
 
   public DefaultTreeModel model;
   private JembossParams mysettings;
-
   private File root;
   private Vector openNode;
   private String fs = new String(System.getProperty("file.separator"));
-
   private JPopupMenu popup;
   final Cursor cbusy = new Cursor(Cursor.WAIT_CURSOR);
   final Cursor cdone = new Cursor(Cursor.DEFAULT_CURSOR);
 
 
-  public DragTree(File rt, final JFrame f, JembossParams mysettings) 
+  public DragTree(File rt, final JFrame f, final JembossParams mysettings) 
   {
     this.mysettings = mysettings;
     this.root = rt;
@@ -119,7 +116,7 @@ public class DragTree extends JTree implements DragGestureListener,
           int sep = selected.indexOf(fs);
           selected = selected.substring(sep+1,selected.length());
           selected = root.toString().concat(fs +selected);
-          showFilePane(selected);
+          showFilePane(selected,mysettings);
           
           f.setCursor(cdone);
         }
@@ -163,11 +160,7 @@ public class DragTree extends JTree implements DragGestureListener,
     JMenuItem source = (JMenuItem)(e.getSource());
     if(source.getText().equals("Refresh")) 
     {
-      String cwd = org.emboss.jemboss.gui.AdvancedOptions.getHomeDirectory();
-      if(cwd.equals(""))
-        cwd = System.getProperty("user.home");
-
-      newRoot(cwd);
+      newRoot(mysettings.getUserHome());
       return;
     }
 
@@ -388,10 +381,8 @@ public class DragTree extends JTree implements DragGestureListener,
             {
 
               Vector params = new Vector();
-              params.addElement(new Parameter("options", String.class,
-                                    "fileroot=" + fn.getRootDir(), null));
-              params.addElement(new Parameter("filename", String.class,
-                                    fn.getFullName(), null));
+              params.addElement("fileroot=" + fn.getRootDir());
+              params.addElement(fn.getFullName());
               PrivateRequest gReq = new PrivateRequest(mysettings,"EmbreoFile",
                                                     "get_file",params);
 
@@ -638,7 +629,7 @@ public class DragTree extends JTree implements DragGestureListener,
 * @param the file name
 *
 */
-  public static void showFilePane(String filename)
+  public static void showFilePane(String filename, JembossParams mysettings)
   {
     JFrame ffile = new JFrame(filename);
     JPanel pfile = (JPanel)ffile.getContentPane();
@@ -647,7 +638,7 @@ public class DragTree extends JTree implements DragGestureListener,
     JScrollPane rscroll = new JScrollPane(pscroll);
 
     FileEditorDisplay fed = new FileEditorDisplay(ffile, filename);
-    new ResultsMenuBar(ffile,fed);
+    new ResultsMenuBar(ffile,fed,mysettings);
     pfile.add(rscroll, BorderLayout.CENTER);
     JTextPane seqText = fed.getJTextPane();
     pscroll.add(seqText, BorderLayout.CENTER);

@@ -197,6 +197,87 @@ public class JembossFileServer
    
     return vans;
   }
+
+/**
+*
+* @param option determines the root directory to put the file
+* @param path to new directory
+*
+*/
+  public Vector mkdir(String options, String dirname,
+                      String userName)
+  {
+    Vector vans = new Vector();
+
+    int split = options.indexOf("=")+1;
+    String fullDirname = getRoot(options.substring(split),userName)+
+                           "/" + dirname;
+
+    File dir = new File(fullDirname);
+    boolean ok = dir.mkdir();
+ 
+    vans.add("msg");
+    if(ok)
+      vans.add("");
+    else
+      vans.add("NOT OK");
+
+    return vans;
+  }
+
+/**
+*
+*
+*
+*/
+  public Vector delFile(String options, String filename,
+                        String userName)
+  {
+    Vector vans = new Vector();
+
+    int split = options.indexOf("=")+1;
+    String fullname = getRoot(options.substring(split),userName)+
+                             "/" + filename;
+
+    File fn = new File(fullname);
+    boolean ok = fn.delete();
+
+    vans.add("msg");
+    if(ok)
+      vans.add("");
+    else
+      vans.add("NOT OK");
+
+    return vans;
+  }
+
+/**
+*
+*
+*
+*/
+  public Vector rename(String options, String oldfile, String newfile,
+                       String userName)
+  {
+    Vector vans = new Vector();
+
+    int split = options.indexOf("=")+1;
+    String oldname = getRoot(options.substring(split),userName)+
+                             "/" + oldfile;
+
+    File fnOld = new File(oldname);
+    File fnNew = new File(newfile);
+
+    boolean ok = fnOld.renameTo(fnNew);
+
+    vans.add("msg");
+    if(ok)
+      vans.add("");
+    else
+      vans.add("NOT OK");
+
+    return vans;
+  }
  
 }
 
