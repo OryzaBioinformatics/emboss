@@ -25,7 +25,8 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#define MAXLABELS 100
+#define MAXGROUPS 20
+#define MAXLABELS 10000
 
 static void cirdna_ReadInput(AjPFile infile, float *Start, float *End);
 static AjPStr cirdna_ReadGroup(AjPFile infile, float *From, float *To,
@@ -67,7 +68,7 @@ static void cirdna_DrawGroup(float xDraw, float yDraw, float posblock,
 			     AjPStr GroupName, float OriginAngle,
 			     ajint *NumNames, AjPStr PosTicks,
 			     AjPStr PosBlocks, ajint *Adjust,
-			     ajint InterColor, ajint *Color);
+			     ajint InterColor, ajint *Color, AjPStr BlockType);
 static float cirdna_TextRuler(float Start, float End, ajint GapSize,
 			      float TextLength, float TextHeight,
 			      AjPStr PosTicks, ajint NumGroups,
@@ -97,7 +98,7 @@ static void cirdna_DrawBlocks(float xDraw, float yDraw, float RealLength,
 			      float To, AjPStr Name2,
 			      float postext, float OriginAngle,
 			      AjPStr PosBlocks, ajint NumNames, ajint Adjust,
-			      ajint Color);
+			      ajint Color, AjPStr BlockType);
 static void cirdna_DrawRanges(float xDraw, float yDraw, float RealLength,
 			      float Radius, float RangeHeight, float From,
 			      float To, char FromSymbol,
@@ -118,6 +119,9 @@ static void cirdna_DrawBracketsOnCurve(float xDraw, float yDraw,
 				       float Length, float Radius,
 				       float Angle, float OriginAngle,
 				       ajint Way);
+static void cirdna_DrawBarsOnCurve(float xDraw, float yDraw,
+				       float Height, float Radius,
+				       float Angle);
 static void cirdna_HorTextPile(float x, float y, float Radius,
 			       float StartAngle, float EndAngle, AjPStr Name2,
 			       float postext, ajint NumNames);
@@ -126,8 +130,8 @@ static float cirdna_HorTextPileLengthMax(AjPStr Name2, ajint NumNames);
 static float cirdna_ComputeAngle(float RealLength, float Length,
 				 float OriginAngle);
 
-static AjPStr Style[MAXLABELS][MAXLABELS];
-static AjPStr Name[MAXLABELS][MAXLABELS];
+static AjPStr Style[MAXGROUPS][MAXLABELS];
+static AjPStr Name[MAXGROUPS][MAXLABELS];
 
 
 /* @prog cirdna ***************************************************************
@@ -142,25 +146,25 @@ int main(int argc, char **argv)
     ajint i;
     ajint j;
     ajint GapSize;
-    ajint NumLabels[MAXLABELS];
-    ajint NumNames[MAXLABELS][MAXLABELS];
+    ajint NumLabels[MAXGROUPS];
+    ajint NumNames[MAXGROUPS][MAXLABELS];
     ajint NumGroups;
     ajint InterColor;
-    ajint Color[MAXLABELS][MAXLABELS];
-    ajint Adjust[MAXLABELS][MAXLABELS];
-    ajint AdjustMax[MAXLABELS];
-    char FromSymbol[MAXLABELS][MAXLABELS];
-    char ToSymbol[MAXLABELS][MAXLABELS];
+    ajint Color[MAXGROUPS][MAXLABELS];
+    ajint Adjust[MAXGROUPS][MAXLABELS];
+    ajint AdjustMax[MAXGROUPS];
+    char FromSymbol[MAXGROUPS][MAXLABELS];
+    char ToSymbol[MAXGROUPS][MAXLABELS];
     float xDraw;
     float yDraw;
     float Radius;
     float RadiusMax;
     float DrawRadius;
     float OriginAngle;
-    float From[MAXLABELS][MAXLABELS];
-    float To[MAXLABELS][MAXLABELS];
+    float From[MAXGROUPS][MAXLABELS];
+    float To[MAXGROUPS][MAXLABELS];
     float TotalHeight;
-    float GroupHeight[MAXLABELS];
+    float GroupHeight[MAXGROUPS];
     float RulerHeight;
     float Width;
     float Height;
@@ -180,11 +184,13 @@ int main(int argc, char **argv)
     float postext;
     AjPFile infile;
     AjPStr line;
-    AjPStr GroupName[MAXLABELS];
+    AjPStr GroupName[MAXGROUPS];
+    AjPStr Ruler;
     AjPStr InterSymbol;
     AjPStr InterTicks;
     AjPStr PosTicks;
     AjPStr TickLines;
+    AjPStr BlockType;
     AjPStr PosBlocks;
     float charsize;
     float minsize;
@@ -192,6 +198,12 @@ int main(int argc, char **argv)
 
     /* read the ACD file for graphical programs */
     ajGraphInit("cirdna", argc, argv);
+
+    /* to draw or not to draw the ruler */
+    Ruler = ajAcdGetString("ruler");
+
+    /* get the type of blocks */
+    BlockType = ajAcdGetString("blocktype");
 
     /* get the angle of the molecule's origin */
     OriginAngle = ajAcdGetFloat("originangle");
@@ -223,10 +235,12 @@ int main(int argc, char **argv)
     infile = ajAcdGetInfile("inputfile");
 
     /* length and height of text */
-    TextHeight = 20;
-    TextLength = TextHeight+50;
+    /*TextHeight = 10;
+    TextLength = TextHeight+25;*/
+    TextHeight = 20*ajAcdGetFloat("textheight");
+    TextLength = 40*ajAcdGetFloat("textlength");
 
-    for(i=0;i<MAXLABELS;++i)
+    for(i=0;i<MAXGROUPS;++i)
 	for(j=0;j<MAXLABELS;++j)
 	    To[i][j] = 0.;
 
@@ -238,9 +252,11 @@ int main(int argc, char **argv)
 
     /* height of a tick, a block, and a range */
     TickHeight = 10*ajAcdGetFloat("tickheight");
-    BlockHeight = 10*ajAcdGetFloat("blockheight");
-    if( !ajStrMatchCaseC(PosBlocks, "Out") )
-      BlockHeight = TextHeight+10;
+    if( ajStrMatchCaseC(PosBlocks, "Out") ) BlockHeight = 10*ajAcdGetFloat("blockheight");
+    else {
+      BlockHeight = (TextHeight+10)*ajAcdGetFloat("blockheight");
+      if( BlockHeight<(TextHeight+10) ) BlockHeight = (TextHeight+10);
+      }
     RangeHeight = 10*ajAcdGetFloat("rangeheight");
 
     /* set the relative positions of elements of a group */
@@ -389,11 +405,12 @@ int main(int argc, char **argv)
 	TotalHeight += (GroupHeight[i]+GapGroup);
     }
 
-
     /* draw the ruler */
-    cirdna_DrawRuler(xDraw, yDraw, Start, End, RealLength, Radius, TickHeight,
+    if( ajStrCmpCaseCC(ajStrStr(Ruler), "Y")==0 ) {
+      cirdna_DrawRuler(xDraw, yDraw, Start, End, RealLength, Radius, TickHeight,
 		     OriginAngle, GapSize, TickLines, TextLength, TextHeight,
 		     postext, NumGroups, NumLabels, &From[0][0], PosTicks, 1);
+      }
 
     /* draw the groups */
     for(i=0; i<NumGroups; i++)
@@ -405,7 +422,7 @@ int main(int argc, char **argv)
 			 Name[i], FromSymbol[i], ToSymbol[i], Style[i],
 			 InterSymbol, InterTicks, NumLabels[i], GroupName[i],
 			 OriginAngle, NumNames[i], PosTicks, PosBlocks,
-			 Adjust[i], InterColor, Color[i]);
+			 Adjust[i], InterColor, Color[i], BlockType);
 	ajStrDel(&GroupName[i]);
     }
 
@@ -817,6 +834,7 @@ static void cirdna_DrawTicks(float xDraw, float yDraw, float RealLength,
 ** @param [?] NumNames [ajint] Undocumented
 ** @param [?] Adjust [ajint] Undocumented
 ** @param [?] Color [ajint] Undocumented
+** @param [?] BlockType [AjPStr] Undocumented
 ** @@
 ******************************************************************************/
 
@@ -824,7 +842,8 @@ static void cirdna_DrawBlocks(float xDraw, float yDraw, float RealLength,
 			      float Radius, ajint BlockHeight, float From,
 			      float To, AjPStr Name2, float postext,
 			      float OriginAngle, AjPStr PosBlocks,
-			      ajint NumNames, ajint Adjust, ajint Color)
+			      ajint NumNames, ajint Adjust, ajint Color, 
+			      AjPStr BlockType)
 {
     float StartAngle;
     float EndAngle;
@@ -833,12 +852,23 @@ static void cirdna_DrawBlocks(float xDraw, float yDraw, float RealLength,
     float r1Blocks = Radius+(1.0*BlockHeight/2);
     float r2Blocks = r1Blocks-BlockHeight;
 
-    ajGraphSetFore(Color);
-
     StartAngle = cirdna_ComputeAngle(RealLength, From, OriginAngle);
     EndAngle = cirdna_ComputeAngle(RealLength, To, OriginAngle);
-    ajGraphRectangleOnCurve(xDraw, yDraw, r2Blocks, BlockHeight,
+
+    ajGraphSetFore(Color);
+    if( ajStrCmpCaseCC(ajStrStr(BlockType), "Open")==0 ) { ajGraphRectangleOnCurve(xDraw, yDraw, r2Blocks, BlockHeight, StartAngle, EndAngle); }
+    else if( ajStrCmpCaseCC(ajStrStr(BlockType), "Filled")==0 ) {
+      ajGraphFillRectangleOnCurve(xDraw, yDraw, r2Blocks, BlockHeight,
 			    StartAngle, EndAngle);
+      }
+    else {
+      ajGraphFillRectangleOnCurve(xDraw, yDraw, r2Blocks, BlockHeight,
+			    StartAngle, EndAngle);
+      ajGraphSetFore(0);
+      ajGraphRectangleOnCurve(xDraw, yDraw, r2Blocks, BlockHeight,
+			    StartAngle, EndAngle);
+      ajGraphSetFore(Color);
+      }
 
     stringLength = cirdna_HorTextPileLengthMax(Name2, NumNames);
     stringHeight = ajGraphTextHeight(0, 0, 1, 1);
@@ -919,6 +949,9 @@ static void cirdna_DrawRanges(float xDraw, float yDraw, float RealLength,
 	cirdna_DrawBracketsOnCurve(xDraw, yDraw, RealLength, RangeHeight,
 				   BoundaryLength, rRanges, StartAngle,
 				   OriginAngle, -1);
+    if( FromSymbol=='|' )
+	cirdna_DrawBarsOnCurve(xDraw, yDraw, RangeHeight,
+				   rRanges, StartAngle);
 
     if( ToSymbol=='<' )
 	cirdna_DrawArrowHeadsOnCurve(xDraw, yDraw, RealLength, RangeHeight,
@@ -936,6 +969,9 @@ static void cirdna_DrawRanges(float xDraw, float yDraw, float RealLength,
 	cirdna_DrawBracketsOnCurve(xDraw, yDraw, RealLength, RangeHeight,
 				   BoundaryLength, rRanges, EndAngle,
 				   OriginAngle, -1);
+    if( ToSymbol=='|' )
+	cirdna_DrawBarsOnCurve(xDraw, yDraw, RangeHeight,
+				   rRanges, EndAngle);
 
     stringLength = cirdna_HorTextPileLengthMax(Name2, NumNames);
     StartAngle = cirdna_ComputeAngle(RealLength, (To+From)/2+stringLength/2,
@@ -1125,6 +1161,36 @@ static void cirdna_DrawBracketsOnCurve(float xDraw, float yDraw,
     return;
 }
 
+/* @funcstatic cirdna_DrawBarsOnCurve ************************************
+**
+** draw bars on a curve
+**
+** @param [?] xDraw [float] Undocumented
+** @param [?] yDraw [float] Undocumented
+** @param [?] Height [float] Undocumented
+** @param [?] Radius [float] Undocumented
+** @param [?] Angle [float] Undocumented
+** @return [void]
+** @@
+******************************************************************************/
+
+static void cirdna_DrawBarsOnCurve(float xDraw, float yDraw,
+				       float Height, float Radius,
+				       float Angle)
+{
+    float *xy1;
+    float *xy2;
+    float middle = 1.0*Height/2;
+
+    xy1 = ajComputeCoord(xDraw, yDraw, Radius+middle, Angle);
+    xy2 = ajComputeCoord(xDraw, yDraw, Radius-middle, Angle);
+    ajGraphDrawLine( xy1[0], xy1[1], xy2[0], xy2[1] );
+    AJFREE(xy1);
+    AJFREE(xy2);
+
+    return;
+}
+
 /* @funcstatic cirdna_HorTextPile *********************************************
 **
 ** write a pile of horizontal text strings
@@ -1261,8 +1327,7 @@ static void cirdna_ReadInput(AjPFile infile, float *Start, float *End)
 
 
 
-
-/* @funcstatic  cirdna_ReadGroup **********************************************
+/* @funcstatic cirdna_ReadGroup ***********************************************
 **
 ** read a group
 **
@@ -1277,8 +1342,8 @@ static void cirdna_ReadInput(AjPFile infile, float *Start, float *End)
 ** @param [?] NumNames [ajint*] Undocumented
 ** @param [?] Color [ajint*] Undocumented
 ** @return [AjPStr] Undocumented
-** @@
 ******************************************************************************/
+
 
 static AjPStr cirdna_ReadGroup(AjPFile infile, float *From, float *To,
 			       AjPStr *Name, char *FromSymbol,
@@ -1309,7 +1374,7 @@ static AjPStr cirdna_ReadGroup(AjPFile infile, float *From, float *To,
 	       ajStrMatchCaseC(GroupName, "endgroup") )
 		ajStrAssC(&GroupName, " ");
 	    if( ajStrLen(GroupName)>20 )
-		ajStrCut( &GroupName, 20, ajStrLen(GroupName) );
+		ajStrCut( &GroupName, 20, ajStrLen(GroupName)-1 );
 	    break;
 	}
     }
@@ -1338,15 +1403,15 @@ static AjPStr cirdna_ReadGroup(AjPFile infile, float *From, float *To,
 			    sscanf( ajStrStr(line), "%s", style );
 			    if( ajStrMatchCaseCC(style, "Tick") )
 				sscanf( ajStrStr(line), "%*s %f %d %*c",
-				       &From[i], &Color[i] );
+ 				       &From[i], &Color[i] );
 			    if( ajStrMatchCaseCC(style, "Block") )
 				sscanf( ajStrStr(line), "%*s %f %f %d %*c",
-				       &To[i], &From[i], &Color[i] );
+ 				       &To[i], &From[i], &Color[i] );
 			    if( ajStrMatchCaseCC(style, "Range") )
-				sscanf( ajStrStr(line), "%*s %f %f %c %c %d"
-				       " %*c", &To[i], &From[i],
-				       &FromSymbol[i], &ToSymbol[i],
-				       &Color[i] );
+			     sscanf( ajStrStr(line), "%*s %f %f %c %c %d %*c",
+				    &To[i], &From[i],
+ 				       &FromSymbol[i], &ToSymbol[i],
+ 				       &Color[i] );
 			    ajStrAssC(&Style2[i], style);
 			    break;
 			}
@@ -1388,7 +1453,7 @@ static AjPStr cirdna_ReadGroup(AjPFile infile, float *From, float *To,
 
 
 
-/* @funcstatic  cirdna_TextGroup **********************************************
+/* @funcstatic cirdna_TextGroup ***********************************************
 **
 **  compute the character size that fits all elements of a group
 **  provided that the height and the length of all strings are at most
@@ -1398,7 +1463,7 @@ static AjPStr cirdna_ReadGroup(AjPFile infile, float *From, float *To,
 ** @param [?] TextLength [float] Undocumented
 ** @param [?] Name [AjPStr*] Undocumented
 ** @param [?] NumLabels [ajint] Undocumented
-** @param [?] NumNames [ajint*] Undocumented
+** @param [?] NumNames [ajint] Undocumented
 ** @param [?] GroupName [AjPStr] Undocumented
 ** @param [?] Style2 [AjPStr*] Undocumented
 ** @param [?] From [float*] Undocumented
@@ -1406,9 +1471,7 @@ static AjPStr cirdna_ReadGroup(AjPFile infile, float *From, float *To,
 ** @param [?] BlockHeight [float] Undocumented
 ** @param [?] PosTicks [AjPStr] Undocumented
 ** @return [float] Undocumented
-** @@
 ******************************************************************************/
-
 static float cirdna_TextGroup(float TextHeight, float TextLength,
 			      AjPStr *Name, ajint NumLabels, ajint *NumNames,
 			      AjPStr GroupName, AjPStr *Style2, float *From,
@@ -1456,10 +1519,10 @@ static float cirdna_TextGroup(float TextHeight, float TextLength,
 
 
 
-/* @funcstatic  cirdna_TextGroupStr *******************************************
+/* @funcstatic cirdna_TextGroupStr ********************************************
 **
-** compute the character size that fits all elements of a group provided that
-** the height and the length of all strings are multiplied by TextCoef
+**  compute the character size that fits all elements of a group provided that
+**  the height and the length of all strings are multiplied by TextCoef
 **
 ** @param [?] Name2 [AjPStr*] Undocumented
 ** @param [?] NumLabels [ajint] Undocumented
@@ -1472,9 +1535,7 @@ static float cirdna_TextGroup(float TextHeight, float TextLength,
 ** @param [?] BlockHeight [float] Undocumented
 ** @param [?] PosTicks [AjPStr] Undocumented
 ** @return [float] Undocumented
-** @@
 ******************************************************************************/
-
 static float cirdna_TextGroupStr(AjPStr *Name2, ajint NumLabels,
 				 ajint *NumNames, AjPStr GroupName,
 				 float TextCoef, AjPStr *Style2,
@@ -1528,9 +1589,7 @@ static float cirdna_TextGroupStr(AjPStr *Name2, ajint NumLabels,
 
 
 
-
-
-/* @funcstatic  cirdna_HeightGroup ********************************************
+/* @funcstatic cirdna_HeightGroup *********************************************
 **
 ** compute the height of a group depending on what's in it
 **
@@ -1548,7 +1607,6 @@ static float cirdna_TextGroupStr(AjPStr *Name2, ajint NumLabels,
 ** @param [?] PosBlocks [AjPStr] Undocumented
 ** @param [?] Adjust [ajint] Undocumented
 ** @return [float] Undocumented
-** @@
 ******************************************************************************/
 
 static float cirdna_HeightGroup(float posblock, float posrange, float postext,
@@ -1613,8 +1671,7 @@ static float cirdna_HeightGroup(float posblock, float posrange, float postext,
 
 
 
-
-/* @funcstatic  cirdna_OverlapTextGroup ***************************************
+/* @funcstatic cirdna_OverlapTextGroup ****************************************
 **
 ** find whether horizontal text strings overlap within a group
 **
@@ -1628,7 +1685,6 @@ static float cirdna_HeightGroup(float posblock, float posrange, float postext,
 ** @param [?] PosTicks [AjPStr] Undocumented
 ** @param [?] Adjust [ajint*] Undocumented
 ** @return [ajint] Undocumented
-** @@
 ******************************************************************************/
 
 static ajint cirdna_OverlapTextGroup(AjPStr *Name2, AjPStr *Style2,
@@ -1766,9 +1822,7 @@ static ajint cirdna_OverlapTextGroup(AjPStr *Name2, AjPStr *Style2,
 
 
 
-
-
-/* @funcstatic  cirdna_OverlapTickRuler ***************************************
+/* @funcstatic cirdna_OverlapTickRuler ****************************************
 **
 ** find whether group ticks and ruler's ticks overlap
 **
@@ -1778,7 +1832,6 @@ static ajint cirdna_OverlapTextGroup(AjPStr *Name2, AjPStr *Style2,
 ** @param [?] PosTicks [AjPStr] Undocumented
 ** @param [?] RulerTick [ajint] Undocumented
 ** @return [AjBool] Undocumented
-** @@
 ******************************************************************************/
 
 static AjBool cirdna_OverlapTickRuler(ajint NumGroups, ajint *NumLabels,
@@ -1809,9 +1862,7 @@ static AjBool cirdna_OverlapTickRuler(ajint NumGroups, ajint *NumLabels,
 
 
 
-
-
-/* @funcstatic  cirdna_DrawGroup **********************************************
+/* @funcstatic cirdna_DrawGroup ***********************************************
 **
 ** draw a group
 **
@@ -1845,7 +1896,8 @@ static AjBool cirdna_OverlapTickRuler(ajint NumGroups, ajint *NumLabels,
 ** @param [?] Adjust [ajint*] Undocumented
 ** @param [?] InterColor [ajint] Undocumented
 ** @param [?] Color [ajint*] Undocumented
-** @@
+** @param [?] BlockType [AjPStr] Undocumented
+** @return [void]
 ******************************************************************************/
 
 static void cirdna_DrawGroup(float xDraw, float yDraw, float posblock,
@@ -1859,7 +1911,7 @@ static void cirdna_DrawGroup(float xDraw, float yDraw, float posblock,
 			     ajint NumLabels, AjPStr GroupName,
 			     float OriginAngle, ajint *NumNames,
 			     AjPStr PosTicks, AjPStr PosBlocks, ajint *Adjust,
-			     ajint InterColor, ajint *Color)
+			     ajint InterColor, ajint *Color, AjPStr BlockType)
 {
     ajint i;
     ajint j;
@@ -1893,7 +1945,7 @@ static void cirdna_DrawGroup(float xDraw, float yDraw, float posblock,
 	    cirdna_DrawBlocks(xDraw, yDraw, RealLength, Radius-posblock,
 			      BlockHeight, From[i], To[i], Name2[i], postext,
 			      OriginAngle, PosBlocks, NumNames[i], Adjust[i],
-			      Color[i]);
+			      Color[i], BlockType);
 	    Inter[j++] = i;
 	}
 

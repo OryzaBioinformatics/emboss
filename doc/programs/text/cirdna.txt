@@ -1,9 +1,8 @@
 
-                               EMBOSS: cirdna
-     _________________________________________________________________
+                                  cirdna 
+                                      
    
-                                Program cirdna
-                                       
+   
 Function
 
    Draws circular maps of DNA constructs
@@ -15,7 +14,9 @@ Description
    It uses the graphical shapes: ticks, ranges, and blocks to represent
    genetic markers (e.g, genes and ESTs) and places them according to
    their position in a DNA fragment. The markers can be organized in
-   different groups.
+   different groups. A group may contain up to 10000 markers, so the
+   program can be used to draw circular representations of genomic
+   sequences.
    
    The program reads in one input file in which the user specifies the
    names and positions of the genetic markers. In this file the user also
@@ -30,27 +31,34 @@ Usage
    Here is a sample session with cirdna.
 
 % cirdna
+Draws circular maps of DNA constructs
 Graph type [x11]:
 Input file [inputfile]: data.cirp
+do you want a ruler (Y or N) [Y]:
+type of blocks (enter Open, Filled, or Outline) [Filled]:
 ticks inside or outside the circle (enter In or Out) [Out]:
 text inside or outside the blocks (enter In or Out) [In]:
 
 Command line arguments
 
    Mandatory qualifiers:
+   -graphout           graph      Graph type
    -inputfile          infile     input file containing mapping data
+   -ruler              string     do you want a ruler (Y or N)
+   -blocktype          string     type of blocks: Open, Filled, or Outline.
+                                  Option 'Outline' draws filled blocks
+                                  surrounded by a black border
    -posticks           string     ticks inside or outside the circle (enter In
                                   or Out)
    -posblocks          string     text inside or outside the blocks (enter In
                                   or Out)
-   -graphout           graph      Graph type
 
    Optional qualifiers:
    -originangle        float      position of the molecule's origin on the
                                   circle (enter a number in the range 0 - 360)
    -intersymbol        string     do you want horizontal junctions between
                                   blocks (Y or N)
-   -intercolor         integer    color for junctions between blocks (enter a
+   -intercolor         integer    color of junctions between blocks (enter a
                                   color number)
    -interticks         string     do you want horizontal junctions between
                                   ticks (Y or N)
@@ -58,58 +66,73 @@ Command line arguments
                                   an integer)
    -ticklines          string     do you want vertical lines at the ruler's
                                   ticks (Y or N)
-   -tickheight         float      height of ticks (enter a number to multiply
-                                  the default height)
-   -blockheight        float      height of blocks (enter a number to multiply
-                                  the default height)
-   -rangeheight        float      height of range ends (enter a number to
-                                  multiply the default height)
-   -gapgroup           float      space between groups (enter a number to
-                                  multiply the default space)
+   -textheight         float      height of text. Enter a number <1 or >1 to
+                                  decrease or increase the size, respectively
+   -textlength         float      length of text. Enter a number <1 or >1 to
+                                  decrease or increase the size, respectively
+   -tickheight         float      height of ticks. Enter a number <1 or >1 to
+                                  decrease or increase the size, respectively
+   -blockheight        float      height of blocks. Enter a number <1 or >1 to
+                                  decrease or increase the size, respectively
+   -rangeheight        float      height of range ends. Enter a number <1 or
+                                  >1 to decrease or increase the size,
+                                  respectively
+   -gapgroup           float      space between groups. Enter a number <1 or
+                                  >1 to decrease or increase the size,
+                                  respectively
    -postext            float      space between text and ticks, blocks, and
-                                  ranges (enter a number to multiply the
-                                  default space)
+                                  ranges. Enter a number <1 or >1 to decrease
+                                  or increase the size, respectively
 
    Advanced qualifiers: (none)
    General qualifiers:
-  -help                bool       report command line options. More
+  -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    
 
    Mandatory qualifiers Allowed values Default
-   -inputfile input file containing mapping data Input file inputfile
-   -posticks ticks inside or outside the circle (enter In or Out) Any
-   string is accepted Out
-   -posblocks text inside or outside the blocks (enter In or Out) Any
-   string is accepted In
    -graphout Graph type EMBOSS has a list of known devices, including
    postscript, ps, hpgl, hp7470, hp7580, meta, colourps, cps, xwindows,
    x11, tektronics, tekt, tek4107t, tek, none, null, text, data, xterm,
    png EMBOSS_GRAPHICS value, or x11
+   -inputfile input file containing mapping data Input file inputfile
+   -ruler do you want a ruler (Y or N) Any string is accepted Y
+   -blocktype type of blocks: Open, Filled, or Outline. Option 'Outline'
+   draws filled blocks surrounded by a black border Any string is
+   accepted Filled
+   -posticks ticks inside or outside the circle (enter In or Out) Any
+   string is accepted Out
+   -posblocks text inside or outside the blocks (enter In or Out) Any
+   string is accepted In
    Optional qualifiers Allowed values Default
    -originangle position of the molecule's origin on the circle (enter a
-   number in the range 0 - 360) Any integer value 90
+   number in the range 0 - 360) Number from 0.000 to 360.000 90
    -intersymbol do you want horizontal junctions between blocks (Y or N)
    Any string is accepted Y
-   -intercolor color for junctions between blocks (enter a color number)
-   Any integer value 1
+   -intercolor color of junctions between blocks (enter a color number)
+   Integer from 0 to 15 1
    -interticks do you want horizontal junctions between ticks (Y or N)
    Any string is accepted N
    -gapsize interval between ticks in the ruler (enter an integer)
-   Integer 1 or more 500
+   Integer 0 or more 500
    -ticklines do you want vertical lines at the ruler's ticks (Y or N)
    Any string is accepted N
-   -tickheight height of ticks (enter a number to multiply the default
-   height) Any integer value 1
-   -blockheight height of blocks (enter a number to multiply the default
-   height) Any integer value 1
-   -rangeheight height of range ends (enter a number to multiply the
-   default height) Any integer value 1
-   -gapgroup space between groups (enter a number to multiply the default
-   space) Any integer value 1
-   -postext space between text and ticks, blocks, and ranges (enter a
-   number to multiply the default space) Any integer value 1
+   -textheight height of text. Enter a number <1 or >1 to decrease or
+   increase the size, respectively Any numeric value 1
+   -textlength length of text. Enter a number <1 or >1 to decrease or
+   increase the size, respectively Any numeric value 1
+   -tickheight height of ticks. Enter a number <1 or >1 to decrease or
+   increase the size, respectively Any numeric value 1
+   -blockheight height of blocks. Enter a number <1 or >1 to decrease or
+   increase the size, respectively Any numeric value 1
+   -rangeheight height of range ends. Enter a number <1 or >1 to decrease
+   or increase the size, respectively Any numeric value 1
+   -gapgroup space between groups. Enter a number <1 or >1 to decrease or
+   increase the size, respectively Any numeric value 1
+   -postext space between text and ticks, blocks, and ranges. Enter a
+   number <1 or >1 to decrease or increase the size, respectively Any
+   numeric value 1
    Advanced qualifiers Allowed values Default
    (none)
    
@@ -167,16 +190,17 @@ endgroup
    to be drawn after the keyword 'Start'. The end position is on the
    second line following the keyword 'End'.
    
-   Then, one or more groups (up to a maximum of 100) of genetic markers
+   Then, one or more groups (up to a maximum of 20) of genetic markers
    are defined. Each group begins with a line consisting of the keyword
    'group' and ends with a line consisting of the keyword 'endgroup'.
    
    If desired, a group name can be given on the very next line but will
    not be displayed (only for compatibilty with lindna).
    
-   Next, the individual markers (up to a maximum of 100) of the group are
-   described. Each marker begins with a line consisting of the keyword
-   'label' and ends with a line consisting of the keyword 'endlabel'.
+   Next, the individual markers (up to a maximum of 1000) of the group
+   are described. Each marker begins with a line consisting of the
+   keyword 'label' and ends with a line consisting of the keyword
+   'endlabel'.
    
    Do not start a new marker (by using a 'label' line) before you have
    closed the previous marker (by using an 'endlabel' line). You must end
@@ -205,14 +229,15 @@ endgroup
    For a range, the descriptive line begins with the keyword 'Range',
    followed by the start and end positions of the range in the DNA
    fragment. Next on the line are the types of boundaries that are to be
-   drawn. The user can choose among '>', '<', '[', and ']' for both start
-   and end boundaries. If none of these types is wanted for a given
+   drawn. The user can choose among '>', '<', '[', ']' and '|' for both
+   start and end boundaries. If none of these types is wanted for a given
    boundary, then a point '.' must be entered. Next is the color number.
    If desired, a name can be written above the range. This name must be
    given on the next line. If more than one name are given (one name per
    line), only the first one will be displayed.
    
-   For any type of markers, try to avoid long names.
+   For any type of markers, names will be written in the same color as
+   the marker. Also, try to avoid long names.
    
    The colors defined in the PLPLOT graphics library are:
    
@@ -224,7 +249,8 @@ endgroup
    
 Output file format
 
-   It produces a graphical image.
+   Output is to the specified graphics device. Click here to see the
+   output of the above example.
    
 Data files
 
@@ -275,11 +301,12 @@ See also
 Author(s)
 
    This application was written by Nicolas Tourasse
-   (nicolas.tourasse@biotek.uio.no) at the Norwegian EMBnet node.
+   (nicolas.tourasse@biotek.uio.no) at the Biotechnology Center of Oslo.
    
 History
 
    Written 1999 - Nicolas Tourasse
+   Updated (2002) - Nicolas Tourasse
    
 Target users
 
