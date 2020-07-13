@@ -4,7 +4,8 @@ appl: extractseq [
 ]
 
 section: input [ info: "input Section" type: page ]
-seqall: sequence  [
+
+sequence: sequence  [
   parameter: "Y"
   type: "any"
 ]
@@ -12,6 +13,7 @@ seqall: sequence  [
 endsection: input
 
 section: required [ info: "required Section" type: page ]
+
 range: regions  [
   required: "Y"
   default: "$(sequence.begin)-$(sequence.end)"
@@ -23,12 +25,14 @@ range: regions  [
 endsection: required
 
 section: advanced [ info: "advanced Section" type: page ]
+
 bool: separate  [
   optional: "Y"
   default: "N"
   information: "Write regions to separate sequences"
   help: "If this is set true then each specified region is written out as a separate sequence. The name of the sequence is created from the name of the original sequence with the start and end positions of the range appended with underscore characters between them, eg: XYZ region 2 to 34 is written as: XYZ_2_34"
 ]
+
 endsection: advanced
 
 section: output [ info: "output Section" type: page ]

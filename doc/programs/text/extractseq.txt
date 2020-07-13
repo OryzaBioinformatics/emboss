@@ -1,9 +1,8 @@
 
-                             EMBOSS: extractseq
-     _________________________________________________________________
+                                extractseq 
+                                      
    
-                              Program extractseq
-                                       
+   
 Function
 
    Extract regions from a sequence
@@ -37,7 +36,7 @@ Usage
 Command line arguments
 
    Mandatory qualifiers:
-  [-sequence]          seqall     Sequence database USA
+  [-sequence]          sequence   Sequence USA
    -regions            range      Regions to extract.
                                   A set of regions is specified by a set of
                                   pairs of positions.
@@ -51,7 +50,7 @@ Command line arguments
   [-outseq]            seqoutall  Output sequence(s) USA
 
    Optional qualifiers:
-   -separate           bool       If this is set true then each specified
+   -separate           boolean    If this is set true then each specified
                                   region is written out as a separate
                                   sequence. The name of the sequence is
                                   created from the name of the original
@@ -62,14 +61,14 @@ Command line arguments
 
    Advanced qualifiers: (none)
    General qualifiers:
-  -help                bool       report command line options. More
+  -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    
 
    Mandatory qualifiers Allowed values Default
    [-sequence]
-   (Parameter 1) Sequence database USA Readable sequence(s) Required
+   (Parameter 1) Sequence USA Readable sequence Required
    -regions Regions to extract. A set of regions is specified by a set of
    pairs of positions. The positions are integers. They are separated by
    any non-digit, non-alpha character. Examples of region specifications
@@ -210,6 +209,7 @@ See also
    revseq       Reverse and complement a sequence
    seqret       Reads and writes (returns) sequences
    seqretsplit  Reads and writes (returns) sequences in individual files
+   skipseq      Reads and writes (returns) sequences, skipping the first few
    splitter     Split a sequence into (overlapping) smaller sequences
    swissparse   Retrieves sequences from swissprot using keyword search
    trimest      Trim poly-A tails off EST sequences

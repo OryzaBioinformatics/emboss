@@ -6,6 +6,7 @@
 ** Fri Apr 16 16:47:32 BST 1999 (ajb)
 ** 7 Sept 1999 - GWW rewrote to use ajRange routines.
 ** 15 March 2000 - GWW added '-separate' option
+** 22 May 2002 - GWW changed to only read one sequence, not a seqall
 ** @@
 **
 ** This program is free software; you can redistribute it and/or
@@ -34,9 +35,8 @@
 
 int main(int argc, char **argv)
 {
-    AjPSeqall seqall;
-    AjPSeqout seqout;
     AjPSeq seq;
+    AjPSeqout seqout;
     AjPRange regions;
     AjPStr newstr=NULL;
     AjBool separate;
@@ -52,78 +52,75 @@ int main(int argc, char **argv)
 
     (void) embInit ("extractseq", argc, argv);
 
-    seqout = ajAcdGetSeqoutall ("outseq");
-    seqall = ajAcdGetSeqall ("sequence");
+    seq = ajAcdGetSeq ("sequence");
     regions = ajAcdGetRange("regions");
     separate = ajAcdGetBool("separate");
+    seqout = ajAcdGetSeqoutall ("outseq");
 
-    /* (void) ajRangeBegin (regions, ajSeqallBegin(seqall)); */
+    /* (void) ajRangeBegin (regions, ajSeqBegin(seq)); */
 
-    while (ajSeqallNext(seqall, &seq))
+    /* are we writing each region out to a separate sequence? */
+    if (separate)
     {
-	/* are we writing each region out to a separate sequence? */
-	if (separate)
+	strlist = ajListstrNew();
+	(void) ajRangeStrExtractList (strlist, regions, ajSeqStr(seq));
+	nr = ajRangeNumber(regions);
+	for(i=0; i<nr; i++)
 	{
-	    strlist = ajListstrNew();
-	    (void) ajRangeStrExtractList (strlist, regions, ajSeqStr(seq));
-	    nr = ajRangeNumber(regions);
-	    for(i=0; i<nr; i++)
-	    {
-		(void) ajRangeValues(regions, i, &st, &en);
-		(void) ajListstrPop (strlist, &str);
+	    (void) ajRangeValues(regions, i, &st, &en);
+	    (void) ajListstrPop (strlist, &str);
 
-		/* new sequence */
-		newseq = ajSeqNew ();
+	    /* new sequence */
+	    newseq = ajSeqNew ();
 
-		/* create a nice name for the new sequence */        
-		(void) ajStrAss(&name, ajSeqGetName(seq));
-		(void) ajStrAppC(&name, "_");
-		(void) ajStrFromInt(&value, st);
-		(void) ajStrApp(&name, value);
-		(void) ajStrAppC(&name, "_");
-		(void) ajStrFromInt(&value, en);
-		(void) ajStrApp(&name, value);
-		ajSeqAssName(newseq, name);
+	    /* create a nice name for the new sequence */        
+	    (void) ajStrAss(&name, ajSeqGetName(seq));
+	    (void) ajStrAppC(&name, "_");
+	    (void) ajStrFromInt(&value, st);
+	    (void) ajStrApp(&name, value);
+	    (void) ajStrAppC(&name, "_");
+	    (void) ajStrFromInt(&value, en);
+	    (void) ajStrApp(&name, value);
+	    ajSeqAssName(newseq, name);
 
-		/* set the sequence description */
-		ajSeqAssDesc(newseq, ajSeqGetDesc(seq));
+	    /* set the sequence description */
+	    ajSeqAssDesc(newseq, ajSeqGetDesc(seq));
 
-		/* set the extracted sequence */
-		ajSeqReplace (newseq, str);
+	    /* set the extracted sequence */
+	    ajSeqReplace (newseq, str);
 
-		/* set the type */
-		if (ajSeqIsNuc(seq))
-		    ajSeqSetNuc (newseq);
-		else
-		    ajSeqSetProt (newseq);
+	    /* set the type */
+	    if (ajSeqIsNuc(seq))
+		ajSeqSetNuc (newseq);
+	    else
+		ajSeqSetProt (newseq);
 
 
-		/* write this region of the sequence */
-		(void) ajSeqAllWrite (seqout, newseq);
+	    /* write this region of the sequence */
+	    (void) ajSeqAllWrite (seqout, newseq);
 
-		/* tidy up */        
-		(void) ajStrDel(&name);
-		(void) ajStrDel(&value);
-		(void) ajStrDel(&str);
-		(void) ajSeqDel(&newseq);
-	    }
-
-	    ajListstrFree(&strlist);
-
+	    /* tidy up */        
+	    (void) ajStrDel(&name);
+	    (void) ajStrDel(&value);
+	    (void) ajStrDel(&str);
+	    (void) ajSeqDel(&newseq);
 	}
-	else
-	{
-	    /*
-	     *  concatenate all regions from the sequence into the same
-	     *  sequence
-	     */
-	    (void) ajRangeStrExtract (&newstr, regions, ajSeqStr(seq));
-	    (void) ajSeqReplace(seq, newstr);
-	    (void) ajStrClear(&newstr);
-	    (void) ajSeqAllWrite (seqout, seq);
-	}
-    	
+
+	ajListstrFree(&strlist);
+
     }
+    else
+    {
+	/*
+	 *  concatenate all regions from the sequence into the same
+	 *  sequence
+	 */
+	(void) ajRangeStrExtract (&newstr, regions, ajSeqStr(seq));
+	(void) ajSeqReplace(seq, newstr);
+	(void) ajStrClear(&newstr);
+	(void) ajSeqAllWrite (seqout, seq);
+    }
+    	
   
     ajSeqWriteClose (seqout);
 
