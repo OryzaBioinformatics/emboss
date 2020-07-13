@@ -145,6 +145,34 @@ DB qangcgall  [ type: N format: embl method: gcg
   fields: "sv des org key"
 ]
 
+DB qapir  [ type: P format: nbrf method: gcg
+  dir: $emboss_qadata/pir
+  indexdir: $emboss_qadata/qa/dbigcg-pir-keep
+  comment: "PIR"
+]
+
+DB qapirexc  [ type: N format: nbrf method: gcg
+  dir: $emboss_qadata/pir
+  exclude: pir1.*
+  indexdir: $emboss_qadata/qa/dbigcg-pir-keep
+  comment: "PIR"
+]
+
+DB qapirinc  [ type: P format: nbrf method: gcg
+  dir: $emboss_qadata/pir
+  file: pir1.*
+  exclude: *
+  indexdir: $emboss_qadata/qa/dbigcg-pir-keep
+  comment: "PIR"
+]
+
+DB qapirall  [ type: P format: nbrf method: gcg
+  dir: $emboss_qadata/pir
+  indexdir: $emboss_qadata/qa/dbigcg-pirall-keep
+  comment: "PIR"
+  fields: "des org key"
+]
+
 #####################
 ### access method SRS
 #####################
