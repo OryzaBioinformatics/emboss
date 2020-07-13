@@ -678,18 +678,20 @@ static void diffseq_diff (AjPList matchlist, AjPSeq seq1, AjPSeq seq2, AjPFile
 	(void) ajFmtPrintF(outfile, "%S overlap ends at %d\n\n", name2,
 			   p->seq2start+p->length);
 
-	/* report the counts of SNP types */
-	(void) ajFmtPrintF(outfile, "\n\n");
-	if (columns)
-	    (void) ajFmtPrintF(outfile, "# ");
-	(void) ajFmtPrintF(outfile, "No. of SNPs = %d\n", snps);
-	if (columns)
-	    (void) ajFmtPrintF(outfile, "# ");
-	(void) ajFmtPrintF(outfile, "No. of transitions = %d\n", transitions);
-	if (columns)
-	    (void) ajFmtPrintF(outfile, "# ");
-	(void) ajFmtPrintF(outfile, "No. of transversions = %d\n",
+        if (ajSeqIsNuc(seq1)) {
+	    /* report the counts of SNP types */
+	    (void) ajFmtPrintF(outfile, "\n\n");
+	    if (columns)
+	        (void) ajFmtPrintF(outfile, "# ");
+	    (void) ajFmtPrintF(outfile, "No. of SNPs = %d\n", snps);
+	    if (columns)
+	        (void) ajFmtPrintF(outfile, "# ");
+	    (void) ajFmtPrintF(outfile, "No. of transitions = %d\n", transitions);
+	    if (columns)
+	        (void) ajFmtPrintF(outfile, "# ");
+	    (void) ajFmtPrintF(outfile, "No. of transversions = %d\n",
 			   transversions);
+	}
     }
     else
     {
@@ -873,10 +875,12 @@ static void diffseq_diffrpt (AjPList matchlist, AjPSeq seq1, AjPSeq seq2,
       ajFmtPrintAppS (&tmp, "Overlap_end: %d in %S\n",
 		   p->seq2start+p->length,
 		   ajReportSeqName(report, seq2));
-      ajFmtPrintAppS (&tmp, "\n");
-      ajFmtPrintAppS (&tmp, "SNP_count: %d\n", snps);
-      ajFmtPrintAppS (&tmp, "Transitions: %d\n", transitions);
-      ajFmtPrintAppS (&tmp, "Transversions: %d\n", transversions);
+      if (ajSeqIsNuc(seq1)) {
+          ajFmtPrintAppS (&tmp, "\n");
+          ajFmtPrintAppS (&tmp, "SNP_count: %d\n", snps);
+          ajFmtPrintAppS (&tmp, "Transitions: %d\n", transitions);
+          ajFmtPrintAppS (&tmp, "Transversions: %d\n", transversions);
+      }
     }
     else
     {	/* no iterations of the match list done - ie no matches */

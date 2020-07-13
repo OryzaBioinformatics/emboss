@@ -1,9 +1,8 @@
 
-                              EMBOSS: diffseq
-     _________________________________________________________________
+                                  diffseq 
+                                      
    
-                                Program diffseq
-                                       
+   
 Function
 
    Find differences (SNPs) between nearly identical sequences
@@ -52,7 +51,7 @@ Command line arguments
                                   tab delimited gff's
    -bfeatout           featout    File for output of second sequence's normal
                                   tab delimited gff's
-   -columns            bool       The default format for the output report
+   -columns            boolean    The default format for the output report
                                   file is to have several lines per difference
                                   giving the sequence positions, sequences
                                   and features.
@@ -62,7 +61,7 @@ Command line arguments
 
    Advanced qualifiers: (none)
    General qualifiers:
-  -help                bool       report command line options. More
+  -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    
