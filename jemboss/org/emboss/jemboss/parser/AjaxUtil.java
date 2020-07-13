@@ -60,7 +60,7 @@ public class AjaxUtil
         if(en.hasMoreElements())
         {
           Object obj = en.nextElement();
-          fname = (String)filesInList.get(obj);
+          fname = new String((byte[])filesInList.get(obj));
           int col = fname.indexOf(":");
           if(col>-1)
           {

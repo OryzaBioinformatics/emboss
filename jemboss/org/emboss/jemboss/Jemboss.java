@@ -23,7 +23,6 @@ package org.emboss.jemboss;
 
 import java.awt.*;
 import javax.swing.*;
-import javax.swing.event.*;
 import java.awt.event.*;
 import java.io.*;
 
@@ -46,12 +45,6 @@ import org.emboss.jemboss.soap.*;           // results manager
 public class Jemboss implements ActionListener
 {
 
-// system properties
-  private String fs = new String(System.getProperty("file.separator")); 
-  private String ps = new String(System.getProperty("path.separator"));
-  private String cwd = new String(
-                       System.getProperty("user.dir") + fs);
-
 // Swing components
   private JFrame f;
   private JSplitPane pmain;
@@ -61,9 +54,6 @@ public class Jemboss implements ActionListener
   private JButton extend;
   private JScrollPane scrollTree;
 
-/** SOAP settings */
-  static JembossParams mysettings;
-
 /** true if in client-server mode (using SOAP) */
   static boolean withSoap;
 
@@ -71,14 +61,20 @@ public class Jemboss implements ActionListener
   public static PendingResults resultsManager;
 
 /** Jemboss window dimension */
-  public static Dimension jdim;
-  public static Dimension jdimExtend;
+  private static Dimension jdim;
+  private static Dimension jdimExtend;
 
   private ImageIcon fwdArrow;
   private ImageIcon bwdArrow;
 
   public Jemboss ()
   {
+
+    String fs = new String(System.getProperty("file.separator"));
+    String cwd = new String(System.getProperty("user.dir") + fs);
+
+    // initialize settings
+    JembossParams mysettings = new JembossParams();
 
     ClassLoader cl = this.getClass().getClassLoader();
     fwdArrow = new ImageIcon(cl.getResource("images/Forward_arrow_button.gif"));
@@ -91,6 +87,7 @@ public class Jemboss implements ActionListener
 
     if(!withSoap)
     {
+      String ps = new String(System.getProperty("path.separator"));
       String plplot = mysettings.getPlplot();
       String embossData = mysettings.getEmbossData();
       embossBin = mysettings.getEmbossBin();
@@ -151,12 +148,13 @@ public class Jemboss implements ActionListener
 
     f = new JFrame("Jemboss");
 // make the local file manager
-    tree = new DragTree( new File(System.getProperty("user.home")), f, mysettings);
+    tree = new DragTree( new File(System.getProperty("user.home")), 
+                                                    f, mysettings);
     scrollTree = new JScrollPane(tree);
 
-    JPanel p1 = new JPanel(new BorderLayout()); // menu panel
-    JPanel p2 = new JPanel(new GridLayout());   // emboss form pain
-    p3 = new JPanel(new BorderLayout());        // filemanager panel
+    JPanel p1 = new JPanel(new BorderLayout());     // menu panel
+    JPanel p2 = new JPanel(new GridLayout());       // emboss form pain
+    p3 = new JPanel(new BorderLayout());            // filemanager panel
 
     JScrollPane scrollProgForm = new JScrollPane(p2);
     JPanel pwork = new JPanel(new BorderLayout());
@@ -178,7 +176,12 @@ public class Jemboss implements ActionListener
     if(withSoap)
     {
       splashing = new AuthPopup(mysettings,3);
-//    splashing = new Splash(mysettings,3);   //splash frame
+      if(mysettings.getUseAuth())
+        splashing.setBottomPanel();
+      splashing.setSize(380,200);
+      splashing.pack();
+      splashing.setVisible(true);
+
       resultsManager = new PendingResults(mysettings);
       btmMenu.add(resultsManager.statusPanel(f));
     }
@@ -218,8 +221,9 @@ public class Jemboss implements ActionListener
     f.pack();
     f.setLocation(0,((int)d.getHeight()-f.getHeight())/2);
 
-    new BuildProgramMenu(p1,p2,pform,scrollProgForm,embossBin,envp,mysettings,
-                         withSoap,cwd,acdDirToParse,f,splashing);
+    new BuildProgramMenu(p1,p2,pform,scrollProgForm,embossBin,
+                         envp,mysettings,withSoap,cwd,
+                         acdDirToParse,f,splashing);
 
     f.addWindowListener(new winExit());
 
@@ -234,9 +238,6 @@ public class Jemboss implements ActionListener
 */
   public void actionPerformed(ActionEvent ae)
   {
-    final Cursor cbusy = new Cursor(Cursor.WAIT_CURSOR);
-    final Cursor cdone = new Cursor(Cursor.DEFAULT_CURSOR);
-
     if( p3.getComponentCount() > 0 )
     {
       p3.remove(0);
@@ -288,6 +289,10 @@ public class Jemboss implements ActionListener
   {
      public void windowClosing(WindowEvent we)
      {
+        String cwd = new String(
+                       System.getProperty("user.dir") + 
+                       System.getProperty("file.separator"));
+
         deleteTmp(new File(cwd), ".jembosstmp");
         System.exit(0);
      }
@@ -302,9 +307,6 @@ public class Jemboss implements ActionListener
   public static void main (String args[])
   {
     
-    // initialize settings
-    mysettings = new JembossParams();
-
     if(args.length > 0)
     {
       if(args[0].equalsIgnoreCase("local"))

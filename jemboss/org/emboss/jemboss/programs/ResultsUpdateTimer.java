@@ -21,7 +21,8 @@
 
 package org.emboss.jemboss.programs;
 
-import org.emboss.jemboss.*;
+import org.emboss.jemboss.Jemboss;
+import org.emboss.jemboss.gui.ShowSavedResults;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.Hashtable;
@@ -68,9 +69,8 @@ public class ResultsUpdateTimer
       Enumeration enum = Jemboss.resultsManager.descriptionHash().keys();
       while (enum.hasMoreElements())
       {
-        String image = (String)enum.nextElement().toString();
+        String image = ShowSavedResults.convertToPretty((String)enum.nextElement());
         datasets.addElement(image);
-//      System.out.println("Current results " + image);
       }
       if(!savedResFrame.isVisible())
         timer.cancel();

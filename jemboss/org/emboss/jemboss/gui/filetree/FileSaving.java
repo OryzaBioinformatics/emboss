@@ -39,13 +39,16 @@ import java.io.*;
 public class FileSaving
 {
 
-  final Cursor cbusy = new Cursor(Cursor.WAIT_CURSOR);
-  final Cursor cdone = new Cursor(Cursor.DEFAULT_CURSOR);
-  private String fs = new String(System.getProperty("file.separator"));
+  private boolean lsaved = false;
+  private String fileSelected;
+  private String cwd;
 
   public FileSaving(JTextPane seqText, byte[] pngContent)
   {
 
+    Cursor cbusy = new Cursor(Cursor.WAIT_CURSOR);
+    Cursor cdone = new Cursor(Cursor.DEFAULT_CURSOR);
+    String fs = new String(System.getProperty("file.separator"));
 
     SecurityManager sm = System.getSecurityManager();
     System.setSecurityManager(null);
@@ -58,8 +61,8 @@ public class FileSaving
     if (returnVal == JFileChooser.APPROVE_OPTION)
     {
       File files = fc.getSelectedFile();
-      String cwd = (fc.getCurrentDirectory()).getAbsolutePath();
-      String fileSelected = files.getName();
+      cwd = (fc.getCurrentDirectory()).getAbsolutePath();
+      fileSelected = files.getName();
 
       seqText.setCursor(cbusy);
       FileSave fsave = new FileSave(new File(cwd + fs + fileSelected));
@@ -69,12 +72,35 @@ public class FileSaving
           fsave.fileSaving(pngContent);
         else
           fsave.fileSaving(seqText.getText());
-      
-        if(!fsave.fileExists())
-          org.emboss.jemboss.Jemboss.tree.addObject(fileSelected,cwd);
+  
+
+        if(fsave.writeOK())
+          lsaved = true;    
+//      if(!fsave.fileExists())
+//      {
+//        org.emboss.jemboss.Jemboss.tree.addObject(fileSelected,cwd,null);
+//        DragTree ltree = org.emboss.jemboss.gui.SetUpMenuBar.getLocalDragTree();
+//        if(ltree!=null)
+//          ltree.addObject(fileSelected,cwd,null);
+//      }
       }
       seqText.setCursor(cdone);
     }
+  }
+
+  public boolean writeOK()
+  {
+    return lsaved;
+  }
+
+  public String getFileName()
+  {
+    return fileSelected;
+  }
+
+  public String getPath()
+  {
+    return cwd;
   }
 
 }

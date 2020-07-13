@@ -75,19 +75,21 @@ public class JembossParams
   private boolean useAuth = true;
   private String useAuthName = "user.auth";
 
-  private String publicSoapURL = "http://pubsoap1.hgmp.mrc.ac.uk/soap/servlet/rpcrouter";
+  private String publicSoapURL = 
+             "https://jemboss.hgmp.mrc.ac.uk:8443/soap/servlet/rpcrouter";
   private String publicSoapURLName = "server.public";
 
-  private String privateSoapURL = "http://privsoap1.hgmp.mrc.ac.uk/cgi-bin/soap.cgi";
+  private String privateSoapURL = 
+             "https://jemboss.hgmp.mrc.ac.uk:8443/soap/servlet/rpcrouter";
   private String privateSoapURLName = "server.private";
 
   private String soapService = "EmbossSoap";
   private String soapServiceName = "service.name";
 
-  private String privateSoapService = "EmbossSoap";
+  private String privateSoapService = "JembossAuthServer";
   private String privateSoapServiceName = "service.private";
 
-  private String publicSoapService = "EmbossSoap";
+  private String publicSoapService = "JembossAuthServer";
   private String publicSoapServiceName = "service.public";
 
   //soap options
@@ -145,10 +147,14 @@ public class JembossParams
   private String embossBinName = "embossBin";
   private String embossPath = "/usr/bin/:/bin";
   private String embossPathName = "embossPath";
+  private String embossEnvironment = "";
+  private String embossEnvironmentName = "embossEnvironment";
   private String acdDirToParse = "/usr/local/share/EMBOSS/acd/";
   private String acdDirToParseName = "acdDirToParse";
 
-
+  //EMBOSS Application pages
+  private String embURL = "http://www.uk.embnet.org/Software/EMBOSS/Apps/";
+  private String embossURL = "embossURL";
 
 /**
 *
@@ -167,10 +173,12 @@ public class JembossParams
     privateServers = new Vector();
 
     // initialize settings from table above
+    defaults.put(embossURL,embURL);
     defaults.put(plplotName,plplot);
     defaults.put(embossDataName,embossData);
     defaults.put(embossBinName,embossBin);
     defaults.put(embossPathName,embossPath);
+    defaults.put(embossEnvironmentName,embossEnvironment);
     defaults.put(acdDirToParseName,acdDirToParse);
 
     defaults.put(useProxyName, new Boolean(useProxy).toString());
@@ -218,11 +226,12 @@ public class JembossParams
 
     // set up for overrides
     javaNoProxyEntries = new Vector();
-    if (System.getProperty("proxyPort") != null) 
+    if(System.getProperty("proxyPort") != null) 
     {
-      if (System.getProperty("proxyHost") != null)
+      if(System.getProperty("proxyHost") != null)
       {
 	useJavaProxy = true;
+        useProxy = useJavaProxy;
 	javaProxyPort = System.getProperty("proxyPort");
 	javaProxyPortNum = Integer.parseInt(javaProxyPort);
 	javaProxyHost = System.getProperty("proxyHost");
@@ -281,10 +290,12 @@ public class JembossParams
     {
       String tmp;
 
+      embURL = jembossSettings.getProperty(embossURL);
       plplot = jembossSettings.getProperty(plplotName);
       embossData = jembossSettings.getProperty(embossDataName);
       embossBin = jembossSettings.getProperty(embossBinName);
       embossPath = jembossSettings.getProperty(embossPathName);
+      embossEnvironment = jembossSettings.getProperty(embossEnvironmentName);
       acdDirToParse = jembossSettings.getProperty(acdDirToParseName);
       tmp = jembossSettings.getProperty(jembossServerName);
       jembossServer = new Boolean(tmp).booleanValue();
@@ -316,7 +327,7 @@ public class JembossParams
       currentMode = jembossSettings.getProperty(currentModeName);
       serverPublicList = jembossSettings.getProperty(serverPublicListName);
       serverPrivateList = jembossSettings.getProperty(serverPrivateListName);
-      serviceUserName = jembossSettings.getProperty(serviceUserNameName);
+//    serviceUserName = jembossSettings.getProperty(serviceUserNameName);
     } 
     catch (Exception e) {  }
   }
@@ -400,8 +411,8 @@ public class JembossParams
 	if (useJavaNoProxy) 
         {
 	  int ip = javaNoProxyEntries.size();
-	  for (int j = 0 ; j<ip ; ++j) 
-	    if (s.indexOf((String)javaNoProxyEntries.get(j).toString()) != -1) 
+	  for(int j = 0 ; j<ip ; ++j) 
+	    if(s.indexOf((String)javaNoProxyEntries.get(j).toString()) != -1) 
 	      jp = false;
 	}
 	return jp;
@@ -488,7 +499,8 @@ public class JembossParams
       if(useProxy)
       {
 	String spnum = new Integer(proxyPortNum).toString();
-	pdesc = "Current Settings:\n" + "Proxy Host: " + proxyHost + "\nProxy Port: " + spnum;
+	pdesc = "Current Settings: " + "Proxy Host: " + proxyHost + 
+                                           " Proxy Port: " + spnum;
       } 
       else 
 	pdesc = "No proxies, connecting direct.";
@@ -497,8 +509,8 @@ public class JembossParams
     {
       if (useJavaProxy) 
       {
-	pdesc = "Settings Imported from Java:\n" + "Proxy Host: " + javaProxyHost
-	        + "\nProxy Port: " + javaProxyPort;
+	pdesc = "Settings Imported from Java: " + "Proxy Host: " + javaProxyHost
+	                                      + " Proxy Port: " + javaProxyPort;
 	if(useJavaNoProxy) 
 	  pdesc = pdesc + "\nNo Proxy On: " + javaNoProxy;
       } 
@@ -507,7 +519,8 @@ public class JembossParams
 	if(useProxy) 
         {
 	  String spnum = new Integer(proxyPortNum).toString();
-	  pdesc = "Current Settings:\n" + "Proxy Host: " + proxyHost + "\nProxy Port: " + spnum;
+	  pdesc = "Current Settings: " + "Proxy Host: " + proxyHost + 
+                                             " Proxy Port: " + spnum;
 	} 
         else 
 	  pdesc = "No proxies, connecting direct.";
@@ -547,6 +560,11 @@ public class JembossParams
     return plplot;
   }
 
+  public String getembURL()
+  {
+    return embURL;
+  }
+
   public String getEmbossData()
   {
     return embossData;
@@ -562,6 +580,46 @@ public class JembossParams
     return embossPath;
   }
 
+  public String getEmbossEnvironment()
+  {
+    embossEnvironment = embossEnvironment.trim();
+    embossEnvironment = embossEnvironment.replace(':',' ');
+    embossEnvironment = embossEnvironment.replace(',',' ');
+    return embossEnvironment;
+  }
+
+  public String[] getEmbossEnvironmentArray(String[] envp)
+  {
+    embossEnvironment = embossEnvironment.trim();
+    embossEnvironment = embossEnvironment.replace(':',' ');
+    embossEnvironment = embossEnvironment.replace(',',' ');
+
+    if(embossEnvironment.equals(""))
+      return envp;
+
+    StringTokenizer st = new StringTokenizer(embossEnvironment," ");
+    int n=0;
+    while(st.hasMoreTokens())
+    {
+      st.nextToken();
+      n++;
+    }
+    
+    int sizeEnvp = envp.length;
+    String environ[] = new String[n+sizeEnvp];
+    st = new StringTokenizer(embossEnvironment," ");
+    for(int i=0;i<sizeEnvp;i++)
+      environ[i] = envp[i];
+
+    n=sizeEnvp;
+    while(st.hasMoreTokens())
+    {
+      environ[n] = new String(st.nextToken()); 
+      n++;
+    }
+
+    return environ;
+  }
 
   public String getAcdDirToParse()
   {

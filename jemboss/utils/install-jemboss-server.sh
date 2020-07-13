@@ -91,6 +91,7 @@ make_jemboss_properties()
   AUTH=$3
   SSL=$4
   PORT=$5
+  EMBOSS_URL=$6
 
   if [ $SSL = "y" ]; then
      URL=https://$URL:$PORT
@@ -131,7 +132,7 @@ make_jemboss_properties()
   echo "embossPath=/usr/bin/:/bin:/packages/clustal/:/packages/primer3/bin:" \
                                                      >> $JEMBOSS_PROPERTIES
   echo "acdDirToParse=$EMBOSS_INSTALL/share/EMBOSS/acd/" >> $JEMBOSS_PROPERTIES
-
+  echo "embossURL=$EMBOSS_URL" >> $JEMBOSS_PROPERTIES
   cp $JEMBOSS_PROPERTIES $JEMBOSS_PROPERTIES.bak
 
   echo
@@ -202,7 +203,8 @@ output_auth_xml()
   echo ' id="EmbreoFile">' >> $XML_FILE1
   echo ' <isd:provider type="java"' >> $XML_FILE1
   echo '  scope="Request"' >> $XML_FILE1
-  echo '  methods="directory_shortls embreo_roots get_file put_file">' >> $XML_FILE1
+  echo '  methods="directory_shortls embreo_roots get_file put_file' >> $XML_FILE1
+  echo '  delFile mkdir rename">' >> $XML_FILE1
   echo '  <isd:java class="'$FIL_CLASS'"' >> $XML_FILE1
   echo '  static="false"/>' >> $XML_FILE1
   echo ' </isd:provider>' >>$XML_FILE1
@@ -378,7 +380,7 @@ fi
 #
 EMBOSS_DOWNLOAD=0
 
-while [ ! -d "$EMBOSS_DOWNLOAD" ]
+while [ ! -d "$EMBOSS_DOWNLOAD/ajax" ]
 do
   echo "Enter EMBOSS download directory (e.g. /usr/emboss/EMBOSS-2.x.x): "
   read EMBOSS_DOWNLOAD
@@ -389,6 +391,13 @@ read EMBOSS_INSTALL
 
 if [ "$EMBOSS_INSTALL" = "" ]; then
   EMBOSS_INSTALL=/usr/local/emboss
+fi
+
+echo "Enter URL for emboss documentation for application "
+echo "[http://www.uk.embnet.org/Software/EMBOSS/Apps/]:"
+read EMBOSS_URL
+if [ "$EMBOSS_URL" = "" ]; then
+  EMBOSS_URL="http://www.uk.embnet.org/Software/EMBOSS/Apps/"
 fi
 
 #
@@ -643,7 +652,7 @@ if [ "$SSL" != "y" ]; then
   read DEPLOYSERVICE
 
   if [ "$DEPLOYSERVICE" = "y" ]; then
-    ./tomstart
+    ./tomstart 
     echo
     echo "Please wait, starting tomcat......."
     sleep 25
@@ -687,7 +696,10 @@ else
       read VAL
     done
 
-    ./tomstart
+    ./tomstart 
+    echo
+    echo "Please wait, starting tomcat......."
+
     sleep 45
     OPT_PROP1="-Djava.protocol.handler.pkgs=com.sun.net.ssl.internal.www.protocol"
     OPT_PROP2="-Djavax.net.ssl.trustStore=$JEMBOSS/resources/client.keystore"
@@ -736,7 +748,7 @@ echo
 echo "--------------------------------------------------------------"
 echo "--------------------------------------------------------------"
 echo
-make_jemboss_properties $EMBOSS_INSTALL $LOCALHOST $AUTH $SSL $PORT
+make_jemboss_properties $EMBOSS_INSTALL $LOCALHOST $AUTH $SSL $PORT $EMBOSS_URL
 
 echo
 if [ "$SSL" = "y" ]; then

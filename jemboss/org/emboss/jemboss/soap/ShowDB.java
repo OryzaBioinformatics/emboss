@@ -32,6 +32,8 @@ public class ShowDB
   private String statusmsg;
   private String status;
   private String dbText;
+  private Vector matrices;
+  private Vector codons;
 
 /**
 *
@@ -46,7 +48,18 @@ public class ShowDB
     statusmsg = dbReq.getVal("msg");
     status = dbReq.getVal("status");
     dbText= dbReq.getVal("showdb");
-    
+    String mat = dbReq.getVal("matrices");
+
+    matrices = new Vector();
+    StringTokenizer stMat = new StringTokenizer(mat,"\n");
+    while (stMat.hasMoreTokens())
+      matrices.add(stMat.nextToken());
+
+    mat = dbReq.getVal("codons");
+    codons = new Vector();
+    stMat = new StringTokenizer(mat,"\n");
+    while (stMat.hasMoreTokens())
+      codons.add(stMat.nextToken());
   }
 
 /**
@@ -83,4 +96,27 @@ public class ShowDB
   {
     return dbText;
   }
+
+/**
+*
+* Retrieves the available matrices 
+* @return  Vector containing matrices names
+*
+*/
+  public Vector getMatrices()
+  {
+    return matrices;
+  }
+ 
+/**
+*
+* Retrieves the codon tables
+* @return  Vector containing codon usage table names
+*
+*/
+  public Vector getCodonUsage()
+  {
+    return codons;
+  }
+
 }

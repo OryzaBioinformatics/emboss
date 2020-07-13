@@ -102,9 +102,34 @@ public class ShowSavedResults
     try
     {
       final ResultList reslist = new ResultList(mysettings);
-
       JMenu resFileMenu = new JMenu("File");
       resMenu.add(resFileMenu);
+
+      final JCheckBoxMenuItem listByProgram = 
+                 new JCheckBoxMenuItem("List by program");
+      listByProgram.addActionListener(new ActionListener()
+      {
+        public void actionPerformed(ActionEvent e)
+        {
+          listByProgramName();
+        }
+      });
+      resFileMenu.add(listByProgram);
+
+      JCheckBoxMenuItem listByDate = 
+                 new JCheckBoxMenuItem("List by date",true);
+      listByDate.addActionListener(new ActionListener()
+      {
+        public void actionPerformed(ActionEvent e)
+        {
+          listByDateRun(reslist,false);
+        }
+      });
+      resFileMenu.add(listByDate);
+
+      ButtonGroup group = new ButtonGroup();
+      group.add(listByProgram);
+      group.add(listByDate);
 
       JButton refresh = new JButton(rfii);
       refresh.setMargin(new Insets(0,1,0,1));
@@ -124,12 +149,16 @@ public class ShowSavedResults
             {
               reslist.updateRes(newlist.hash());
               datasets.removeAllElements();
-              StringTokenizer tok = new StringTokenizer((String)reslist.get("list"), "\n");
-              while (tok.hasMoreTokens()) 
-              {
-                String image = tok.nextToken();
-                datasets.addElement(image);
-              }
+
+              StringTokenizer tok = new StringTokenizer(
+                         (String)reslist.get("list"), "\n");
+              while (tok.hasMoreTokens())
+                datasets.addElement(convertToPretty(tok.nextToken()));
+
+              if(listByProgram.isSelected())
+                listByProgramName();
+              else
+                listByDateRun(reslist,false);
             } 
             else 
             {
@@ -140,12 +169,21 @@ public class ShowSavedResults
           } 
           catch (JembossSoapException eae) 
           {
-            new AuthPopup(mysettings,savedResFrame);
+            AuthPopup ap = new AuthPopup(mysettings,f);
+            ap.setBottomPanel();
+            ap.setSize(380,170);
+            ap.pack();
+            ap.setVisible(true);
           }
         }
       });
 
+
+      resFileMenu.addSeparator();
       JMenuItem resFileMenuExit = new JMenuItem("Close");
+      resFileMenuExit.setAccelerator(KeyStroke.getKeyStroke(
+                    KeyEvent.VK_E, ActionEvent.CTRL_MASK));
+
       resFileMenuExit.addActionListener(new ActionListener()
       {
         public void actionPerformed(ActionEvent e) 
@@ -157,17 +195,11 @@ public class ShowSavedResults
       savedResFrame.setJMenuBar(resMenu);
         
       // this is the list of saved results
-        
-      StringTokenizer tokenizer =
-                 new StringTokenizer((String)reslist.get("list"), "\n");
-
-      while (tokenizer.hasMoreTokens()) 
-      {
-        String image = tokenizer.nextToken();
-        datasets.addElement(image);
-      }
-
+      listByDateRun(reslist,true);
+  
       final JList st = new JList(datasets);
+      st.setCellRenderer(new TabListCellRenderer());
+
       st.addListSelectionListener(new ListSelectionListener()
       {
         public void valueChanged(ListSelectionEvent e) 
@@ -183,12 +215,11 @@ public class ShowSavedResults
           else 
           {
             int index = theList.getSelectedIndex();
-            String thisdata = datasets.elementAt(index).toString();
-            reslist.setCurrent(thisdata);
-	    aboutRes.setText((String)reslist.get(thisdata));
+            String thisdata = convertToOriginal(datasets.elementAt(index));
+            aboutRes.setText((String)reslist.get(thisdata));
             aboutRes.setCaretPosition(0);
-	  }
-	}
+          }
+        }
       });
 
       st.addMouseListener(new MouseAdapter() 
@@ -197,88 +228,114 @@ public class ShowSavedResults
         {
           if (e.getClickCount() == 2) 
           {
-            int index = st.locationToIndex(e.getPoint());
             try
             {
               savedResFrame.setCursor(cbusy);
-              ResultList thisres = new ResultList(mysettings, reslist.getCurrent(),
-                                                      "show_saved_results");
+              ResultList thisres = new ResultList(mysettings,
+                           convertToOriginal(st.getSelectedValue()),
+                                              "show_saved_results");
               new ShowResultSet(thisres.hash());
               savedResFrame.setCursor(cdone);
             } 
             catch (JembossSoapException eae) 
             {  
-              new AuthPopup(mysettings,f);
+              AuthPopup ap = new AuthPopup(mysettings,f);
+              ap.setBottomPanel();
+              ap.setSize(380,170);
+              ap.pack();
+              ap.setVisible(true);
             }
           }
         }
       });
       sp.add(st);
         
-      // action buttons
-      // display retrieves all the files and shows them in a window
+      // display retrieves all files and shows them in a window
       JPanel resButtonPanel = new JPanel();
       JButton showResButton = new JButton("Display");
       showResButton.addActionListener(new ActionListener()
       {
         public void actionPerformed(ActionEvent e) 
 	{
-	  if(reslist.getCurrent() != null)
+          String sel = convertToOriginal(st.getSelectedValue());
+  	  if(sel != null)
           {
 	    try 
 	    {
 	      savedResFrame.setCursor(cbusy);
-	      ResultList thisres = new ResultList(mysettings, reslist.getCurrent(), 
-                                                       "show_saved_results");
+	      ResultList thisres = new ResultList(mysettings,
+                                   sel,"show_saved_results"); 
               new ShowResultSet(thisres.hash());
 	      savedResFrame.setCursor(cdone);
 	    } 
             catch (JembossSoapException eae)
             {
-              new AuthPopup(mysettings,f);
+              AuthPopup ap = new AuthPopup(mysettings,f);
+              ap.setBottomPanel();
+              ap.setSize(380,170);
+              ap.pack();
+              ap.setVisible(true);
 	    }
-	  } 
-	  else 
-	  {
-	    System.out.println("Nothing selected.");
-	  }
+  	  } 
+  	  else 
+  	  {
+            statusField.setText("Nothing selected to be displayed.");
+  	  }
         }
       });
         
-      // delete removes the file on the server
-      // and edits the list
+      // delete removes the file on the server & edits the list
       JButton delResButton = new JButton("Delete");
       delResButton.addActionListener(new ActionListener()
       {
         public void actionPerformed(ActionEvent e) 
         {
-          if(reslist.getCurrent() != null) 
+          Object sel[] = st.getSelectedValues();
+          if(sel != null) 
           {
-            try        // ask the server to delete these results
-	    {
-	      savedResFrame.setCursor(cbusy);
-	      ResultList thisres = new ResultList(mysettings, reslist.getCurrent(), 
-                                                       "delete_saved_results");
-	      savedResFrame.setCursor(cdone);
+            String selList= new String("");
+            for(int i=0;i<sel.length;i++)
+              selList=selList.concat(sel[i]+"\n");
+
+            int ok = JOptionPane.OK_OPTION;
+            if(sel.length>1)
+              ok = JOptionPane.showConfirmDialog(savedResFrame, 
+                  "Delete the following results:\n"+selList,
+                  "Confirm Deletion", 
+                  JOptionPane.YES_NO_OPTION);
+            
+            if(ok == JOptionPane.OK_OPTION)
+            {
+              try        // ask the server to delete these results
+	      {
+	        savedResFrame.setCursor(cbusy); 
+                selList = convertToOriginal(selList);
+	        ResultList thisres = new ResultList(mysettings,selList,
+                                         "delete_saved_results"); 
+	        savedResFrame.setCursor(cdone);
 	       
-              statusField.setText("Deleted " +reslist.getCurrent() + "  results set");
+                // amend the list
+                for(int i=0;i<sel.length;i++)
+                  datasets.removeElement(sel[i]);
+                
+                statusField.setText("Deleted " + sel.length + "  result(s)");
      
-	      // clean up the list so they can't see it any more
-	        
-	      reslist.setCurrent(null);
-	      aboutRes.setText("");
-	      int index = st.getSelectedIndex();
-	      datasets.remove(index);
-	      st.setSelectedIndex(-1);
-	    } 
-	    catch (JembossSoapException eae) 
-	    {
-              new AuthPopup(mysettings,f);
-	    }
+	        aboutRes.setText("");
+	        st.setSelectedIndex(-1);
+	      } 
+	      catch (JembossSoapException eae) 
+	      {
+                AuthPopup ap = new AuthPopup(mysettings,f);
+                ap.setBottomPanel();
+                ap.setSize(380,170);
+                ap.pack();
+                ap.setVisible(true);
+              }
+            }
 	  } 
           else 
           {
-            System.out.println("Nothing selected.");
+            statusField.setText("Nothing selected to be deleted.");
 	  }
 	}
       });
@@ -295,7 +352,11 @@ public class ShowSavedResults
     } 
     catch (JembossSoapException eae) 
     {
-      new AuthPopup(mysettings,f);
+      AuthPopup ap = new AuthPopup(mysettings,f);
+      ap.setBottomPanel();
+      ap.setSize(380,170);
+      ap.pack();
+      ap.setVisible(true);
     }
 
   }
@@ -334,13 +395,16 @@ public class ShowSavedResults
 	Enumeration enum = epr.descriptionHash().keys();
 	while (enum.hasMoreElements()) 
         {
-	  String image = (String)enum.nextElement().toString();
+	  String image = convertToPretty((String)enum.nextElement());
 	  datasets.addElement(image);
 	}
       }
     });
 
-    JMenuItem resFileMenuExit = new JMenuItem("Close",KeyEvent.VK_C);
+    JMenuItem resFileMenuExit = new JMenuItem("Close");
+    resFileMenuExit.setAccelerator(KeyStroke.getKeyStroke(
+                    KeyEvent.VK_E, ActionEvent.CTRL_MASK));
+
     resFileMenuExit.addActionListener(new ActionListener()
     {
       public void actionPerformed(ActionEvent e) 
@@ -354,12 +418,10 @@ public class ShowSavedResults
     // set up the results list in the gui
     Enumeration enum = epr.descriptionHash().keys();
     while (enum.hasMoreElements()) 
-    {
-      String image = (String)enum.nextElement().toString();
-      datasets.addElement(image);
-    }
+      datasets.addElement(convertToPretty((String)enum.nextElement()));
 
     final JList st = new JList(datasets);
+    st.setCellRenderer(new TabListCellRenderer());
     st.addListSelectionListener(new ListSelectionListener()
     {
       public void valueChanged(ListSelectionEvent e) 
@@ -368,16 +430,10 @@ public class ShowSavedResults
 	  return;
 	
 	JList theList = (JList)e.getSource();
-	if (theList.isSelectionEmpty()) 
-        {
-	  if (mysettings.getDebug()) 
-	    System.out.println("ResListView: Empty selection");
-	} 
-        else
+	if (!theList.isSelectionEmpty()) 
         {
 	  int index = theList.getSelectedIndex();
-	  String thisdata = datasets.elementAt(index).toString();
-	  epr.setCurrent(thisdata);
+	  String thisdata = convertToOriginal(datasets.elementAt(index));
 	  aboutRes.setText((String)epr.descriptionHash().get(thisdata));
       	  aboutRes.setCaretPosition(0);
 	  aboutRes.setEditable(false);
@@ -392,12 +448,12 @@ public class ShowSavedResults
       {
 	if (e.getClickCount() == 2) 
         {
-	  int index = st.locationToIndex(e.getPoint());
 	  try
           {
 	    savedResFrame.setCursor(cbusy);
-	    ResultList thisres = new ResultList(mysettings, epr.getCurrent(), 
-                                                     "show_saved_results");
+	    ResultList thisres = new ResultList(mysettings, 
+                  convertToOriginal(st.getSelectedValue()), 
+                                     "show_saved_results");
 	    savedResFrame.setCursor(cdone);
 	    if (thisres.getStatus().equals("0")) 
               new ShowResultSet(thisres.hash());
@@ -409,7 +465,11 @@ public class ShowSavedResults
 	  } 
           catch (JembossSoapException eae) 
           {
-	    new AuthPopup(mysettings,savedResFrame);
+            AuthPopup ap = new AuthPopup(mysettings,savedResFrame);
+            ap.setBottomPanel();
+            ap.setSize(380,170);
+            ap.pack();
+            ap.setVisible(true);
 	  }
 	}
       }
@@ -423,13 +483,14 @@ public class ShowSavedResults
     showResButton.addActionListener(new ActionListener(){
       public void actionPerformed(ActionEvent e) 
       {
-	if(epr.getCurrent() != null) 
+	if(st.getSelectedValue() != null) 
         {
 	  try
           {
 	    savedResFrame.setCursor(cbusy);
-	    ResultList thisres = new ResultList(mysettings, epr.getCurrent(), 
-                                                      "show_saved_results");
+	    ResultList thisres = new ResultList(mysettings, 
+                  convertToOriginal(st.getSelectedValue()), 
+                                     "show_saved_results");
 	    savedResFrame.setCursor(cdone);
 	    if (thisres.getStatus().equals("0")) 
               new ShowResultSet(thisres.hash());
@@ -441,7 +502,11 @@ public class ShowSavedResults
           catch (JembossSoapException eae) 
           {
             savedResFrame.setCursor(cdone);
-	    new AuthPopup(mysettings,savedResFrame);
+            AuthPopup ap = new AuthPopup(mysettings,savedResFrame);
+            ap.setBottomPanel();
+            ap.setSize(380,170);
+            ap.pack();
+            ap.setVisible(true);
 	  }
 	}
       }
@@ -454,34 +519,51 @@ public class ShowSavedResults
     {
       public void actionPerformed(ActionEvent e) 
       {
-	if(epr.getCurrent() != null) 
+        Object sel[] = st.getSelectedValues();
+	if(sel != null) 
         {
-	  try 
-          {
-	    savedResFrame.setCursor(cbusy);
-	    ResultList thisres = new ResultList(mysettings, epr.getCurrent(),
-                                                      "delete_saved_results");
-	    savedResFrame.setCursor(cdone);
+          String selList= new String("");
+          for(int i=0;i<sel.length;i++)
+            selList=selList.concat(sel[i]+"\n");
 
-            JembossProcess jp = epr.getResult(epr.getCurrent());
-            epr.removeResult(jp);
-
-            statusField.setText("Deleted " + epr.getCurrent() + "  results set");
-	    epr.setCurrent(null);
-	    
-	    // clean up the list so they can't see it any more
-	   
-	    aboutRes.setText("");
-	    int index = st.getSelectedIndex();
-            if(index >-1)
-	      datasets.remove(index);
-	    st.setSelectedIndex(-1);
-	  }
-          catch (JembossSoapException eae)
+          int ok = JOptionPane.OK_OPTION;
+          if(sel.length>1)
+            ok = JOptionPane.showConfirmDialog(savedResFrame,
+                "Delete the following results:\n"+selList,
+                "Confirm Deletion",
+                JOptionPane.YES_NO_OPTION);
+           
+          if(ok == JOptionPane.OK_OPTION)
           {
-	    // shouldn't happen
-	    new AuthPopup(mysettings,savedResFrame);
-	  }
+
+	    try 
+            {
+	      savedResFrame.setCursor(cbusy);
+              selList = convertToOriginal(selList);
+	      ResultList thisres = new ResultList(mysettings,selList,
+                                             "delete_saved_results");
+	      savedResFrame.setCursor(cdone);
+
+              for(int i=0;i<sel.length;i++)
+              {
+                JembossProcess jp = epr.getResult(convertToOriginal(sel[i]));
+                epr.removeResult(jp);
+                datasets.removeElement(sel[i]);  // amend the list
+              }
+              statusField.setText("Deleted " + sel.length+ "  result(s)");
+	      aboutRes.setText("");
+	      st.setSelectedIndex(-1);
+	    }
+            catch (JembossSoapException eae)
+            {
+	      // shouldn't happen
+              AuthPopup ap = new AuthPopup(mysettings,savedResFrame);
+              ap.setBottomPanel();
+              ap.setSize(380,170);
+              ap.pack();
+              ap.setVisible(true);
+	    }
+          }
 	}
       }
     });
@@ -507,5 +589,142 @@ public class ShowSavedResults
 
   }
 
+
+  private void listByDateRun(ResultList reslist,boolean ldisp)
+  {
+    StringTokenizer tokenizer =
+         new StringTokenizer((String)reslist.get("list"), "\n");
+
+    Vector vdata = new Vector();
+    while (tokenizer.hasMoreTokens())
+    {
+      String data = convertToPretty(tokenizer.nextToken());
+      if(datasets.contains(data) || ldisp)
+        vdata.add(data);
+    }
+    datasets.removeAllElements();
+
+    Enumeration en = vdata.elements();
+    while(en.hasMoreElements())
+      datasets.addElement(en.nextElement());
+
+  }
+
+
+  private void listByProgramName()
+  { 
+    int nresult = datasets.size();
+    String res[] = new String[nresult];
+    for(int i=0;i<nresult;i++)
+      res[i] = (String)datasets.getElementAt(i);
+    Arrays.sort(res);
+    datasets.removeAllElements();
+    for(int i=0;i<nresult;i++)
+      datasets.addElement(res[i]);
+  }
+
+  public static String convertToPretty(String sorig)
+  {
+    int index = sorig.indexOf('_');
+    if(index > -1)
+      sorig = sorig.substring(0,index) + "\t" +
+              sorig.substring(index+1);
+    return sorig.replace('_',' ');
+  }
+
+  private String convertToOriginal(Object sorig)
+  {
+    String s = ((String)sorig).replace('\t','_');
+    return s.replace(' ','_');
+  }
+
 }
+
+
+/**
+*
+* Adapted from an example at
+* http://www.spindoczine.com/sbe/
+*
+*/
+class TabListCellRenderer extends JLabel implements ListCellRenderer
+{
+  protected static Border m_noFocusBorder;
+  protected FontMetrics m_fm = null;
+  protected Insets m_insets = new Insets(0, 0, 0, 0);
+
+  protected int m_defaultTab = 50;
+  protected int[] m_tabs = null;
+
+  public TabListCellRenderer()
+  {
+    super();
+    m_noFocusBorder = new EmptyBorder(1, 1, 1, 1);
+    setOpaque(true);
+    setBorder(m_noFocusBorder);
+  }
+
+  public Component getListCellRendererComponent(JList list,
+              Object value, int index, boolean isSelected, boolean cellHasFocus)     
+  {         
+    setText(value.toString());
+
+    setBackground(isSelected ? list.getSelectionBackground() : list.getBackground());
+    setForeground(isSelected ? list.getSelectionForeground() : list.getForeground());
+                
+    setFont(list.getFont());
+    setBorder((cellHasFocus) ? UIManager.getBorder("List.focusCellHighlightBorder") : m_noFocusBorder);
+
+    return this;
+  }
+
+  public void setDefaultTab(int defaultTab) { m_defaultTab = defaultTab; }
+  public int getDefaultTab() { return m_defaultTab; }
+  public void setTabs(int[] tabs) { m_tabs = tabs; }
+  public int[] getTabs() { return m_tabs; }
+  public int getTab(int index)
+  {
+    if(m_tabs == null)
+      return m_defaultTab*index;
+            
+    int len = m_tabs.length;
+    if(index >= 0 && index < len)
+      return m_tabs[index];
+
+    return m_tabs[len-1] + m_defaultTab*(index-len+1);
+  }
+
+
+  public void paint(Graphics g)
+  {
+    m_fm = g.getFontMetrics();
+      
+    g.setColor(getBackground());
+    g.fillRect(0, 0, getWidth(), getHeight());
+      getBorder().paintBorder(this, g, 0, 0, getWidth(), getHeight());
+
+    g.setColor(getForeground());
+    g.setFont(getFont());
+    m_insets = getInsets();
+    int x = m_insets.left;
+    int y = m_insets.top + m_fm.getAscent();
+
+    StringTokenizer st = new StringTokenizer(getText(), "\t");
+    while (st.hasMoreTokens()) 
+    {
+      String sNext = st.nextToken();
+      g.drawString(sNext, x, y);
+      x += m_fm.stringWidth(sNext);
+
+      if (!st.hasMoreTokens())
+        break;
+      int index = 0;
+      while (x >= getTab(index))
+      index++;
+      x = getTab(index);
+    }
+  }
+
+}
+
 

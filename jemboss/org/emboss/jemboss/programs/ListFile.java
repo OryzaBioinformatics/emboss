@@ -35,12 +35,14 @@ public class ListFile
 {
 
 /**
+*
 * Parse a list file, reading it in line by line, loading other
 * list files recursively if necessary, and loading any files
 * referred to into the filesToMove hash
 *
 * @param   fn  The name of the list file
 * @param   filesToMove The hash to put the files into
+*
 */
   public static void parse(String fn, Hashtable filesToMove) 
   {
@@ -48,11 +50,12 @@ public class ListFile
     String lfn = trim(fn);
     File inFile = new File(lfn);
 
+
     if((inFile.exists() && inFile.canRead() && inFile.isFile()) 
         || fn.startsWith("internalList::")) 
     {
       MakeFileSafe sf;
-      String sfs = new String("internalList");  //default name1
+      String sfs = new String("internalList");  //default name
       if(inFile.exists())
       {
         sf = new MakeFileSafe(lfn);
@@ -69,66 +72,47 @@ public class ListFile
           in.readLine();
         }
         else
-        in = new BufferedReader(new FileReader(inFile));
+          in = new BufferedReader(new FileReader(inFile));
         
         String listfile = "";
         String line;
         while((line = in.readLine()) != null) 
         {
-          if (line.startsWith("@")||line.startsWith("list::")) 
+          String arrayOfFiles[] = expandWildcards(line);
+          if(arrayOfFiles != null)
           {
-            lfn = trim(line);
+            for(int i=0;i<arrayOfFiles.length;i++)
+              listfile = addFileToList(arrayOfFiles[i],listfile,
+                                                   filesToMove);
+          }
+          else
+          {
+            if (line.startsWith("@")||line.startsWith("list::")) 
+            {
+              lfn = trim(line);
 	      
-            if((new File(lfn)).exists()) 
-            {
-              MakeFileSafe lf = new MakeFileSafe(lfn);
-	      String slf = lf.getSafeFileName();
-
-	      if(!filesToMove.containsKey(slf)) 
-	      ListFile.parse(lfn, filesToMove);
-	      listfile = listfile.concat("@"+slf+"\n");
-	    }
-            else 
-            {
-	      listfile = listfile.concat(line+"\n");  //remote list file
-	    }
-	  } 
-          else               // plain sequence file
-          {
-	    File pFile = new File(line);
-            if(pFile.exists() && pFile.canRead() && pFile.isFile()) 
-            {
-	      MakeFileSafe pf = new MakeFileSafe(line);
-	      String spf = pf.getSafeFileName();
-	      // only read if we haven't already
-	      if(!filesToMove.containsKey(spf)) 
+              if((new File(lfn)).exists()) 
               {
-	        try
-                {
-	          BufferedReader fin = new BufferedReader(new FileReader(pFile));
-	          String ftext = "";
-	          String fline;
-	          while((fline = fin.readLine()) != null) 
-	            ftext = ftext.concat(fline+"\n");
+                MakeFileSafe lf = new MakeFileSafe(lfn);
+	        String slf = lf.getSafeFileName();
 
-	          filesToMove.put(spf,ftext);
-	        } 
-                catch (IOException e) 
-                {
-	          System.out.println("ListFile: Error reading list file " + line);
-	        }
+	        if(!filesToMove.containsKey(slf)) 
+	          ListFile.parse(lfn, filesToMove);
+	        listfile = listfile.concat("@"+slf+"\n");
 	      }
-	      // add the server reference to the listfile
-	      listfile = listfile.concat(spf+"\n");
+              else 
+              {
+	        listfile = listfile.concat(line+"\n");  //remote list file
+	      }
 	    } 
-            else    // presumably remote
+            else               // plain sequence file
             {
-	      listfile = listfile.concat(line+"\n");
+              listfile = addFileToList(line,listfile,filesToMove);    
 	    }
-	  }
+          }
         }
 	
-        filesToMove.put(sfs,listfile);   // add list file itself
+        filesToMove.put(sfs,listfile.getBytes());   // add list file itself
       }
       catch (IOException e) {}
     } 
@@ -136,6 +120,104 @@ public class ListFile
     return;
   }
 
+/**
+*
+*
+*
+*/
+  private static String addFileToList(String line, String listfile,
+                                           Hashtable filesToMove)
+  {
+    File pFile = new File(line);
+    if(pFile.exists() && pFile.canRead() && pFile.isFile())
+    {
+      MakeFileSafe pf = new MakeFileSafe(line);
+      String spf = pf.getSafeFileName();
+
+      if(!filesToMove.containsKey(spf))   // read if we haven't already
+          filesToMove.put(spf,getLocalFile(pFile));
+      
+      // add the server reference to the listfile
+      listfile = listfile.concat(spf+"\n");
+    }
+    else    // presumably remote
+    {
+      listfile = listfile.concat(line+"\n");
+    }
+    return listfile;
+  }
+
+/**
+*
+* Read file in as a byte array.
+*
+*/
+  private static byte[] getLocalFile(File name)
+  {
+    byte[] b = null;
+    try
+    {
+      long s = name.length();
+      b = new byte[(int)s];
+      FileInputStream fi = new FileInputStream(name);
+      fi.read(b);
+      fi.close();
+    }
+    catch (IOException ioe)
+    {
+      System.out.println("Cannot read file: " + name);
+    }
+    return b;
+  }
+
+
+/**
+*
+* Wildcard (*) is allowed in the filelist data types.
+* This function will expand this to find all files with
+* that prefix.
+*
+*/
+  private static String[] expandWildcards(String line)
+  {
+
+    int wildIndex = line.indexOf("*");
+    if(wildIndex > -1)
+    {
+      String fs = System.getProperty("file.separator");
+      int index = line.lastIndexOf(fs);
+      if(index>0)
+      {
+        String path = line.substring(0,index);
+        File pathDir = new File(path);
+
+        if(pathDir.exists())   // are these local files
+        {
+          final String prefix = line.substring(index+1,wildIndex);
+          String suff = "";
+          if(wildIndex+1 < line.length())
+            suff = line.substring(wildIndex+1,line.length());
+          final String suffix = suff;
+
+          String listFiles[] = pathDir.list(new FilenameFilter()
+          {
+            public boolean accept(File cwd, String name)
+            {
+              return (name.startsWith(prefix) &&
+                      name.endsWith(suffix));
+            };
+          });
+ 
+          for(int i=0;i<listFiles.length;i++)
+            listFiles[i] = path.concat(fs+listFiles[i]);
+      
+          if(listFiles.length > 0)
+            return listFiles;
+        }
+      }
+    }
+    return null;
+  }
 
 /**
 *

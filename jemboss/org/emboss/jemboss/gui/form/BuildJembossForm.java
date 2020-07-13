@@ -24,14 +24,12 @@ package org.emboss.jemboss.gui.form;
 
 import java.awt.*;
 import javax.swing.*;
-import javax.swing.event.*;
-import javax.swing.tree.*;
 import java.net.URL;
 
-import java.util.*;
+import java.util.Hashtable;
 import java.awt.event.*;
 import java.io.*;
-import org.emboss.jemboss.parser.*;
+import org.emboss.jemboss.parser.ParseAcd;
 import org.emboss.jemboss.programs.*;
 import org.emboss.jemboss.*;
 import org.emboss.jemboss.gui.*;
@@ -52,12 +50,14 @@ import org.emboss.jemboss.gui.sequenceChooser.*;
 public class BuildJembossForm implements ActionListener 
 {
 
+  private ReportFormat rf;
   private TextFieldSink textf[];
   private TextFieldInt textInt[];
   private TextFieldFloat textFloat[];
   private JTextField rangeField[];
   private JCheckBox  checkBox[];
   private InputSequenceAttributes inSeqAttr[];
+  private ListFilePanel filelist[];
   protected static OutputSequenceAttributes outSeqAttr;
 
   private Box advSectionBox;
@@ -130,7 +130,7 @@ public class BuildJembossForm implements ActionListener
 // get help for current application
     if(!withSoap) 
     {
-      String command = embossBin.concat("tfm " + applName + " -nomore");
+      String command = embossBin.concat("tfm " + applName + " -html -nomore");
       RunEmbossApplication rea = new RunEmbossApplication(command,envp,null);
       rea.isProcessStdout();
       helptext = rea.getProcessStdout(); 
@@ -148,32 +148,41 @@ public class BuildJembossForm implements ActionListener
     {
       public void actionPerformed(ActionEvent e)
       {
-        f.setCursor(cbusy);
-        JFrame fhelp = new JFrame(applName + " Help");
-        JPanel phelp = (JPanel)fhelp.getContentPane();
-        phelp.setLayout(new BorderLayout());
-        JPanel pscroll = new JPanel(new BorderLayout());
-        JScrollPane rscroll = new JScrollPane(pscroll);
-        phelp.add(rscroll, BorderLayout.CENTER);
-    
         String text = "";
+        String url = null;
         if(!withSoap)
-        {
           text = helptext;
+        else
+          url = mysettings.getembURL()+applName+".html";
+
+        JEditorPane htmlPane = null;
+        if(url == null)
+        {
+          try
+          {
+            new Browser(url,applName,true,text);
+          }
+          catch(IOException ioe1){}
         }
         else
-        {
-          GetHelp thishelp = new GetHelp(applName,mysettings);
-          text = thishelp.getHelpText();
+        { 
+          try
+          { 
+            new Browser(url,applName);  
+          }
+          catch(IOException ioe2)
+          {
+            GetHelp thishelp = new GetHelp(applName,mysettings);
+            text = thishelp.getHelpText();
+            
+            try
+            {
+              new Browser(url,applName,true,text);
+            }
+            catch(IOException ioe3){}
+          }
+
         }
-        JTextArea helpText = new JTextArea(text);
-        pscroll.add(helpText, BorderLayout.CENTER);
-        helpText.setFont(new Font("monospaced", Font.PLAIN, 12));
-        helpText.setCaretPosition(0);
-        helpText.setEditable(false);
-        fhelp.setSize(520,395);
-        fhelp.setVisible(true);
-        f.setCursor(cdone);
       }
     });
 
@@ -245,12 +254,14 @@ public class BuildJembossForm implements ActionListener
     int nlist  = parseAcd.getNumList();
     int mlist  = parseAcd.getNumMList();
     int nrange = parseAcd.getNumRange();
+    int nflist = parseAcd.getNumFileList();
 
     textf     = new TextFieldSink[ntextf];
     textInt   = new TextFieldInt[nint];
     textFloat = new TextFieldFloat[nfloat];
     checkBox  = new JCheckBox[nbool];
     inSeqAttr = new InputSequenceAttributes[nseqs];
+    filelist  = new ListFilePanel[nflist];
     fieldOption = new myComboPopup[nlist];
     multiOption = new JList[mlist];
     rangeField  = new JTextField[nrange];
@@ -323,8 +334,11 @@ public class BuildJembossForm implements ActionListener
       {
         SectionPanel sp = new SectionPanel(f,p3,fieldPane,parseAcd,
               nfield,textf,textInt,textFloat,rangeField,checkBox,
-              inSeqAttr,fieldOption,multiOption,inSeq,db,appDescription,
-              lab,numofFields,mysettings,withSoap);
+              inSeqAttr,fieldOption,multiOption,inSeq,filelist,
+              db,appDescription,lab,numofFields,mysettings,withSoap);
+
+        if(sp.isReportFormat())
+          rf = sp.getReportFormat();
 
         if(sp.isAdvancedSection())
         {
@@ -431,11 +445,15 @@ public class BuildJembossForm implements ActionListener
               }
             }
             else
-              new ShowResultSet(thisrun.hash());
+              new ShowResultSet(thisrun.hash(),filesToMove);
           }
           catch (JembossSoapException eae)
           {
-            new AuthPopup(mysettings,f);
+            AuthPopup ap = new AuthPopup(mysettings,f);
+            ap.setBottomPanel();
+            ap.setSize(380,170);
+            ap.pack();
+            ap.setVisible(true);
             f.setCursor(cdone);
           }
         }
@@ -529,7 +547,7 @@ public class BuildJembossForm implements ActionListener
               JLabel picture = new JLabel(icon);
               pscroll.add(picture);
               fresults.add(pngFiles[i],presults);
-              hashRes.put(pngFiles[i],getPNGByte(pngFiles[i]));
+              hashRes.put(pngFiles[i],getLocalFile(new File(pngFiles[i])));
             }
             else
             {
@@ -538,53 +556,13 @@ public class BuildJembossForm implements ActionListener
           }
         }
       }
-      new ResultsMenuBar(res,fresults,hashRes);
+      new ResultsMenuBar(res,fresults,hashRes,null);
       res.setVisible(true);
     }
   }
 
 
-  public byte[] getPNGByte(String pngFiles)
-  {
-    byte data[] = new byte[1];
-    int nby = 0;
-    DataInputStream dis;
-    FileInputStream fis;
-
-    try
-    {
-      fis = new FileInputStream(pngFiles);
-      dis = new DataInputStream(fis);
-      while(true)
-      {
-        dis.readByte();
-        nby++;
-      }
-    }
-    catch (EOFException eof){}
-    catch (IOException ioe){}
-
-    if(nby >0)
-    {
-      try
-      {
-        data = new byte[nby];
-        fis = new FileInputStream(pngFiles);
-        dis = new DataInputStream(fis);
-        nby=0;
-        while(true)
-        {
-          data[nby]=dis.readByte();
-          nby++;
-        }
-      }
-      catch (EOFException eof){}
-      catch (IOException ioe){}
-    }
-    return data;
-  }
-
-  public String checkParameters(ParseAcd parseAcd, int numofFields, 
+  private String checkParameters(ParseAcd parseAcd, int numofFields, 
                                 Hashtable filesToMove)
   {
 
@@ -691,6 +669,10 @@ public class BuildJembossForm implements ActionListener
                        parseAcd.getListLabel(j,index));
         }
       }
+      else if ( att.startsWith("report") )
+      {
+        options = options.concat(rf.getReportFormat());
+      }
       else if ( att.startsWith("bool") && checkBox[h].isVisible()
                                        && checkBox[h].isEnabled())
       {
@@ -731,6 +713,24 @@ public class BuildJembossForm implements ActionListener
             options = options.concat(" -" + val + " " +  textf[h].getText());
         }
 
+      }
+      else if ( att.startsWith("filelist") )
+      {
+        if(withSoap)
+        {
+          String fns = filelist[h].getListFile();
+          String ls = System.getProperty("line.separator");
+          options = filesForSoap("internalList::internalList"+ls+
+                                 fns,options,val,filesToMove);
+        }
+        else
+        {
+          String fl[] = filelist[h].getArrayListFile();
+          String flist = fl[0];
+          for(int i=1;i<fl.length;i++)
+            flist = flist.concat(","+fl[i]);
+          options = options.concat(" -" + val + " " + flist);
+        }
       }
       else if ( att.startsWith("seqset") || att.startsWith("seqall") ||
                 att.startsWith("sequence") )
@@ -793,7 +793,7 @@ public class BuildJembossForm implements ActionListener
           {
             MakeFileSafe sf = new MakeFileSafe(fn);
             sfn = sf.getSafeFileName();
-            filesToMove.put(sfn,cp);
+            filesToMove.put(sfn,cp.getBytes());
             options = options.concat(" -" + val + " " + sfn);
 
           }
@@ -821,7 +821,7 @@ public class BuildJembossForm implements ActionListener
   }
 
 
-  public String filesForSoap(String fn, String options, String val,
+  private String filesForSoap(String fn, String options, String val,
                              Hashtable filesToMove)
   {
 
@@ -863,29 +863,13 @@ public class BuildJembossForm implements ActionListener
     {                                  
       MakeFileSafe sf = new MakeFileSafe(fn);
       sfn = sf.getSafeFileName();
-      if ((new File(fn)).exists())    // read & add to transfer list
+
+      File inFile = new File(fn);
+      if(inFile.exists() && inFile.canRead() 
+                         && inFile.isFile())    // read & add to transfer list
       {
-        File inFile = new File(fn);
-        if (inFile.exists() && inFile.canRead() && inFile.isFile())
-        {
-          try
-          {
-            BufferedReader in = new BufferedReader(new FileReader(inFile));
-            String text = "";
-            String line;
-            while((line = in.readLine()) != null)
-              text = text.concat(line+"\n");
-            in.close();
- 
-            filesToMove.put(sfn,text);
-          } catch (IOException e) {}
-          options = options.concat(" -" + val + " " +  sfn);
-        }
-        else
-        {
-//        System.out.println("Ignoring invalid local file "+fn);
-          options = options.concat(" -" + val + " " +  fn);
-        }
+        filesToMove.put(sfn,getLocalFile(inFile));
+        options = options.concat(" -" + val + " " +  sfn);
       }
       else     //presume remote
       {
@@ -897,6 +881,26 @@ public class BuildJembossForm implements ActionListener
     return options;
   }
 
+
+  private byte[] getLocalFile(File name)
+  {
+    byte[] b = null;
+    try
+    {
+      long s = name.length();
+      b = new byte[(int)s];
+      FileInputStream fi = new FileInputStream(name);
+      fi.read(b);
+      fi.close();
+    }
+    catch (IOException ioe)
+    {
+      System.out.println("Cannot read file: " + name);
+    }
+    return b;
+  }
+
+
 /**
 *
 * Get the command line for the Standalone version.
@@ -904,7 +908,7 @@ public class BuildJembossForm implements ActionListener
 * @return String command line to use
 *
 */
-  public String getCommand()
+  private String getCommand()
   {
 
     String command = embossBin.concat(applName);
@@ -928,7 +932,7 @@ public class BuildJembossForm implements ActionListener
 * @return String command line to use
 *
 */
-  public String getCommand(Hashtable filesToMove)
+  private String getCommand(Hashtable filesToMove)
   {
 
     String command = applName;
@@ -945,12 +949,12 @@ public class BuildJembossForm implements ActionListener
   }
 
 
-  /**
-  *
-  * Ensures garbaged collected when there are
-  * no more pointers to this.
-  * 
-  */
+/**
+*
+* Ensures garbaged collected when there are
+* no more pointers to this.
+* 
+*/
   public void finalize() throws Throwable
   {
     super.finalize();

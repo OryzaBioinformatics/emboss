@@ -1,6 +1,6 @@
 pkgdata_DATA = DragTree.java FileEditorDisplay.java FileNode.java \
 FileSave.java FileSaving.java RemoteDragTree.java \
-RemoteFileNode.java RemoteFileTreePanel.java
+RemoteFileNode.java RemoteFileTreePanel.java LocalAndRemoteFileTreeFrame.java
 pkgdatadir=$(prefix)/share/$(PACKAGE)/jemboss/org/emboss/jemboss/gui/filetree
 
 install-exec-hook:

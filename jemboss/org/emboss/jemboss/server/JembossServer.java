@@ -60,6 +60,9 @@ public class JembossServer
     "PLPLOT_LIB=" + plplot,
     "EMBOSS_DATA=" + embossData,
     "HOME=" + homeDirectory
+//  ,"LD_LIBRARY_PATH=/usr/local/lib"
+// FIX FOR SOME SUNOS
+
   };
  
   private static Hashtable acdStore;
@@ -193,7 +196,7 @@ public class JembossServer
 */
   public Vector show_help(String applName)
   {
-    String command = embossBin.concat("tfm " + applName + " -nomore");
+    String command = embossBin.concat("tfm " + applName + " -html -nomore");
     RunEmbossApplication rea = new RunEmbossApplication(command,envp,null);
     String helptext = "";
     if(rea.isProcessStdout())
@@ -318,6 +321,37 @@ public class JembossServer
     showdbOut.add("showdb");
     showdbOut.add(rea.getProcessStdout());
      
+    // find available matrices
+    String dataFile[] = (new File(embossData)).list(new FilenameFilter()
+    {
+      public boolean accept(File dir, String name)
+      {
+        File fileName = new File(dir, name);
+        return !fileName.isDirectory();
+      };
+    });
+    String matrices ="";
+    for(int i=0;i<dataFile.length;i++)
+      matrices=matrices.concat(dataFile[i]+"\n");
+    showdbOut.add("matrices");
+    showdbOut.add(matrices);
+
+    // find available codon usage tables
+    
+    dataFile = (new File(embossData+fs+"CODONS")).list(new FilenameFilter()
+    {
+      public boolean accept(File dir, String name)
+      {
+        File fileName = new File(dir, name);
+        return !fileName.isDirectory();
+      };
+    });
+    matrices ="";
+    for(int i=0;i<dataFile.length;i++)
+      matrices=matrices.concat(dataFile[i]+"\n");
+    showdbOut.add("codons");
+    showdbOut.add(matrices);
+
     return showdbOut;
   }
 
@@ -335,7 +369,6 @@ public class JembossServer
 */
   public Vector run_prog(String embossCommand, String options, String[] inFiles)
   {
-    System.out.println("Running runProg now with Strings[].... " + tmproot);
     Vector result = new Vector();
 
     Hashtable inF = new Hashtable();
@@ -359,8 +392,6 @@ public class JembossServer
   public Vector run_prog(String embossCommand, String options, Hashtable inFiles,
                          String userName)
   {
-    System.out.println("Running runProg now with Strings[].... " + tmproot + userName);
-
     tmproot = tmproot.concat(userName+fs);
     Vector result = new Vector();
     result = run_prog(embossCommand,options,inFiles);
@@ -385,14 +416,14 @@ public class JembossServer
 //  System.out.println("Running runProg now.... " + tmproot);
     
 
-    //disallow pathnames and multiple command constructions
-    if((embossCommand.indexOf("/") > -1) || (embossCommand.indexOf(";") > -1) ||
-       (embossCommand.indexOf("/") > -1) )
+    //disallow multiple command constructions
+    if(embossCommand.indexOf(";") > -1) 
     {
        result.add("msg");
        result.add("ERROR: Disallowed command syntax "+embossCommand);
        result.add("status");
        result.add("1");
+
        return result;
     }
 
@@ -441,27 +472,28 @@ public class JembossServer
       while (enum.hasMoreElements())
       {
         String thiskey = (String)enum.nextElement().toString();
-        String filec = (String)inFiles.get(thiskey);
         File f = new File(project + fs + thiskey);
         descript = descript.concat(project+fs+thiskey);
         dout.println(project + fs + thiskey);
+
         try
         {
           f.createNewFile();
-          PrintWriter out = new PrintWriter(new FileWriter(f));
-          out.println(filec);
+          FileOutputStream out = new FileOutputStream(f);
+          out.write((byte []) inFiles.get(thiskey));
           out.close();
         }
-        catch (IOException ioe) 
+        catch(IOException ioe)
         {
-          msg = new String("Error making description file");
+          msg = new String("Error making input file");
         }
+
       }
       
       dout.close();
     }
     catch (IOException ioe) {} 
- 
+
     RunEmbossApplication rea = new RunEmbossApplication(embossCommand,
                                                envp,new File(project));
     
@@ -483,13 +515,6 @@ public class JembossServer
     }
     else      //batch or background
     {
-//    try
-//    {
-//      Process p = rea.getProcess();
-//      p.waitFor();
-//      createFinishedFile(project);
-//    }
-//    catch(InterruptedException intr){}
       JembossThread jt = new JembossThread(rea.getProcess(),project);
       jt.start();
 
@@ -504,10 +529,10 @@ public class JembossServer
       result.add(descript+ls+"Application pending"+ls);
     }
 
-    System.out.println("JEMBOSSSERVER running");
+//  System.out.println("JEMBOSSSERVER running");
     
 //get the output files
-    result = loadFilesContent(projectDir,project,result);
+    result = loadFilesContent(projectDir,project,result,inFiles);
     result = loadPNGContent(projectDir,project,result);
 
     return result;
@@ -568,7 +593,7 @@ public class JembossServer
    
     project = tmproot.concat(project);
     File projectDir = new File(project);
-    ssr = loadFilesContent(projectDir,project,ssr);
+    ssr = loadFilesContent(projectDir,project,ssr,null);
     ssr = loadPNGContent(projectDir,project,ssr);
         
     ssr.add("status");
@@ -614,14 +639,18 @@ public class JembossServer
   {
     Vector dsr = new Vector();
 
-    project = tmproot.concat(project);
-    File projectDir = new File(project);
-    File resFiles[] = projectDir.listFiles();
-
-    for(int i=0;i<resFiles.length;i++)
-      resFiles[i].delete();
+    StringTokenizer st = new StringTokenizer(project,"\n");
+    while(st.hasMoreTokens()) 
+    {
+      String proj = tmproot.concat(fs+st.nextToken());
+    
+      File projectDir = new File(proj);
+      File resFiles[] = projectDir.listFiles();
+      for(int i=0;i<resFiles.length;i++)
+        resFiles[i].delete();
       
-    projectDir.delete();
+      projectDir.delete();
+    }
 
     dsr.add("status");
     dsr.add("0");
@@ -709,7 +738,8 @@ public class JembossServer
 * Reads in files from EMBOSS output
 *
 */
-  private Vector loadFilesContent(File projectDir, String project, Vector result)
+  private Vector loadFilesContent(File projectDir, String project, 
+                                  Vector result, Hashtable inFiles)
   {
 
     String outFiles[] = projectDir.list(new FilenameFilter()
@@ -725,13 +755,34 @@ public class JembossServer
       String line = new String("");
       String fc = new String("");
       String key = new String(outFiles[i]);
-      try
+
+
+      if(inFiles != null)
       {
-        BufferedReader in = new BufferedReader(new FileReader(project + fs + outFiles[i]));
-        while((line = in.readLine()) != null)
-          fc = fc.concat(line + "\n");
+        if(!inFiles.containsKey(key))        // leave out input files
+        {
+          try
+          {
+            BufferedReader in = new BufferedReader(new FileReader(project + fs +
+                                                                  outFiles[i]));
+            while((line = in.readLine()) != null)
+              fc = fc.concat(line + "\n");
+          }
+          catch (IOException ioe){}
+        }
       }
-      catch (IOException ioe){}
+      else
+      {
+        try
+        {
+          BufferedReader in = new BufferedReader(new FileReader(project + fs +
+                                                                outFiles[i]));
+          while((line = in.readLine()) != null)
+            fc = fc.concat(line + "\n");
+        }
+        catch (IOException ioe){}
+      }
+
       if(!fc.equals(""))
       {
         result.add(key);
@@ -784,69 +835,24 @@ public class JembossServer
   protected static byte[] readByteFile(String filename)
   {
 
-    DataInputStream dis = null;
-    FileInputStream fis = null;
-    int nby = 0;
-    byte data[] = null;
-
+    File fn = new File(filename);
+    byte[] b = null;
     try
     {
-      fis = new FileInputStream(filename);
-      dis = new DataInputStream(fis);
-      while(true)
-      {
-        dis.readByte();
-        nby++;
-      }
+      long s = fn.length();
+      if(s == 0)
+        return b;
+      b = new byte[(int)s];
+      FileInputStream fi = new FileInputStream(fn);
+      fi.read(b);
+      fi.close();
     }
-    catch (EOFException eof){}
-    catch (IOException ioe){}
-    finally
+    catch (IOException ioe)
     {
-      if(dis!=null)
-        try
-        {
-          dis.close();
-        }
-        catch (IOException ioe2){}
-      if(fis!=null)
-        try
-        {
-          fis.close();
-        }
-        catch (IOException ioe2){}
+      System.out.println("Cannot read file: " + filename);
     }
+    return b;
 
-    if(nby >0)
-    {
-      try
-      {
-        data = new byte[nby];
-        fis = new FileInputStream(filename);
-        dis = new DataInputStream(fis);
-        nby=0;
-        dis.readFully(data);
-      }
-      catch (EOFException eof){}
-      catch (IOException ioe){}
-      finally
-      {
-        if(dis!=null)
-          try
-          {
-            dis.close();
-          }
-          catch (IOException ioe2){}
-        if(fis!=null)
-          try
-          {
-            fis.close();
-          }
-          catch (IOException ioe2){}
-      }
-    }
-
-    return data;
   }
 
 
@@ -911,6 +917,11 @@ public class JembossServer
     return vans;
   }
 
+
+  public final Object clone() throws java.lang.CloneNotSupportedException 
+  {
+    throw new java.lang.CloneNotSupportedException();
+  }
 
 }
 

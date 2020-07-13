@@ -24,14 +24,15 @@ package org.emboss.jemboss.gui.form;
 
 import java.awt.*;
 import javax.swing.*;
-import javax.swing.border.*;
-import javax.swing.event.*;
-
-import java.util.*;
+import javax.swing.border.TitledBorder;
+import javax.swing.border.Border;
+import java.util.Vector;
+import java.util.Enumeration;
 import java.awt.event.*;
 import java.io.*;
 
 import org.emboss.jemboss.gui.AdvancedOptions;
+import org.emboss.jemboss.gui.BuildProgramMenu;
 import org.emboss.jemboss.parser.*;
 import org.emboss.jemboss.programs.ListFile;
 import org.emboss.jemboss.gui.sequenceChooser.*;
@@ -56,6 +57,7 @@ public class SectionPanel
   private JTextField rangeField[];
   private JCheckBox  checkBox[];
   private InputSequenceAttributes inSeqAttr[];
+  private ListFilePanel filelist[];
 
   private myComboPopup fieldOption[];
   private JList multiOption[];
@@ -91,7 +93,7 @@ public class SectionPanel
 
   private final int maxSectionWidth = 498;
   private JFrame f;
-
+  private ReportFormat rf=null;
 
 /**
 *
@@ -114,12 +116,13 @@ public class SectionPanel
 *
 * 
 */
-  public SectionPanel(JFrame f, JPanel p3, Box fieldPane, 
-            ParseAcd parseAcd, int nff, TextFieldSink textf[], 
+  protected SectionPanel(JFrame f, JPanel p3, Box fieldPane, 
+            ParseAcd parseAcd, int nff, final TextFieldSink textf[], 
             TextFieldInt textInt[], TextFieldFloat textFloat[],
             JTextField rangeField[], JCheckBox  checkBox[],
             InputSequenceAttributes inSeqAttr[],
-            myComboPopup fieldOption[], JList multiOption[], SetInFileCard inSeq[],
+            myComboPopup fieldOption[], JList multiOption[], 
+            SetInFileCard inSeq[], ListFilePanel filelist[],
             String db[], String des, Box lab[], int numofFields,
             JembossParams mysettings, boolean withSoap)
   {
@@ -204,7 +207,7 @@ public class SectionPanel
       if(!(att.equals("graph") || att.equals("xygraph")
         || att.equals("var")   || att.equals("variable")) )
       {
-        int h = parseAcd.getGuiHandleNumber(nf);
+        final int h = parseAcd.getGuiHandleNumber(nf);
         Box pan = new Box(BoxLayout.X_AXIS);
         section.add(pan);
 
@@ -230,14 +233,14 @@ public class SectionPanel
           {
             if( !(parseAcd.getDefaultParamValueStr(nf).startsWith("@") ||
                   parseAcd.getDefaultParamValueStr(nf).startsWith("$")) )
-              textInt[h].setValue(Integer.parseInt(parseAcd.getDefaultParamValueStr(nf)));
+              textInt[h].setValue(Integer.parseInt(
+                           parseAcd.getDefaultParamValueStr(nf)));
           }
           else
           {
             Double val = new Double(parseAcd.getDefaultParamValueDbl(nf));
             textInt[h].setValue(val.intValue());
           }
-//        pan.add(Box.createRigidArea(new Dimension(2,30)));
           pan.add(textInt[h]);
           pan.add(lab[nf]);
         } else if(att.startsWith("float")) {
@@ -245,28 +248,93 @@ public class SectionPanel
           {
             if( !(parseAcd.getDefaultParamValueStr(nf).startsWith("@") ||
                   parseAcd.getDefaultParamValueStr(nf).startsWith("$")) )
-              textFloat[h].setValue(Double.parseDouble(parseAcd.getDefaultParamValueStr(nf)));
+              textFloat[h].setValue(Double.parseDouble(
+                           parseAcd.getDefaultParamValueStr(nf)));
           }
           else
           {
             Double val = new Double(parseAcd.getDefaultParamValueDbl(nf) );
             textFloat[h].setValue(val.doubleValue());
           }
-//        pan.add(Box.createRigidArea(new Dimension(2,30)));
           pan.add(textFloat[h]);
           pan.add(lab[nf]);
         }
-        else if(att.startsWith("matrix") || att.startsWith("string") ||
-                att.startsWith("infile") || att.startsWith("regexp") ||
-                att.startsWith("codon")  || att.startsWith("featout") ||
-                att.startsWith("dirlist") )
+        else if(att.startsWith("matrix"))
+        {
+          if(parseAcd.isDefaultParamValueStr(nf))
+            if( !(parseAcd.getDefaultParamValueStr(nf).startsWith("@") ||
+                  parseAcd.getDefaultParamValueStr(nf).startsWith("$")) )
+              textf[h].setText( parseAcd.getDefaultParamValueStr(nf));
+         
+          pan.add(textf[h]);
+          pan.add(lab[nf]);
+  
+          Box pan2 = new Box(BoxLayout.X_AXIS);
+          section.add(pan2);
+          
+          myComboPopup selectMatrix = new myComboPopup(
+                                        BuildProgramMenu.getMatrices());
+          selectMatrix.addActionListener(new ActionListener()
+          {
+            public void actionPerformed(ActionEvent e)
+            {
+              myComboPopup cb = (myComboPopup)e.getSource();
+              String matrix = (String)cb.getSelectedItem();
+              textf[h].setText(matrix);
+            }
+          });
+
+          Dimension d = selectMatrix.getPreferredSize();
+          d = new Dimension(150,(int)d.getHeight());
+
+          selectMatrix.setMaximumSize(d);
+          selectMatrix.setPreferredSize(d);
+
+          pan2.add(selectMatrix);
+          pan2.add(Box.createHorizontalGlue());
+          
+        }
+        else if(att.startsWith("codon"))
+        {   
+          if(parseAcd.isDefaultParamValueStr(nf))
+            if( !(parseAcd.getDefaultParamValueStr(nf).startsWith("@") ||
+                  parseAcd.getDefaultParamValueStr(nf).startsWith("$")) )
+              textf[h].setText( parseAcd.getDefaultParamValueStr(nf));
+          pan.add(textf[h]);
+          pan.add(lab[nf]);
+   
+          Box pan2 = new Box(BoxLayout.X_AXIS);
+          section.add(pan2);
+          myComboPopup selectMatrix = new myComboPopup(
+                                        BuildProgramMenu.getCodonUsage());
+          selectMatrix.addActionListener(new ActionListener()
+          {
+            public void actionPerformed(ActionEvent e)
+            {
+              myComboPopup cb = (myComboPopup)e.getSource();
+              String matrix = (String)cb.getSelectedItem();
+              textf[h].setText(matrix);
+            }
+          });
+
+          Dimension d = selectMatrix.getPreferredSize();
+          d = new Dimension(150,(int)d.getHeight());
+
+          selectMatrix.setMaximumSize(d);
+          selectMatrix.setPreferredSize(d);
+
+          pan2.add(selectMatrix);
+          pan2.add(Box.createHorizontalGlue());
+        }
+        else if(att.startsWith("dirlist") || att.startsWith("string") ||
+                att.startsWith("infile")  || att.startsWith("regexp") ||
+                att.startsWith("featout") )
         {
           if(parseAcd.isDefaultParamValueStr(nf)) 
             if( !(parseAcd.getDefaultParamValueStr(nf).startsWith("@") ||
                   parseAcd.getDefaultParamValueStr(nf).startsWith("$")) )
               textf[h].setText( parseAcd.getDefaultParamValueStr(nf));
 
-//        pan.add(Box.createRigidArea(new Dimension(2,30)));
           pan.add(textf[h]);
           pan.add(lab[nf]);
         }
@@ -287,7 +355,6 @@ public class SectionPanel
             bxlab.setForeground(labelColor);
           }
           lab[nf].add(bxlab);
-//        pan.add(Box.createRigidArea(new Dimension(2,30)));
           pan.add(textf[h]);
           pan.add(lab[nf]);
         }
@@ -296,18 +363,20 @@ public class SectionPanel
           inSeq[h] = new SetInFileCard(sectionPane,h,db,
                               "Multiple Sequence Filename",
                               appName,inSeqAttr,true);
-
           pan.add(inSeq[h].getInCard());
-//        pan.add(section.add(Box.createVerticalStrut(5)));
         }
         else if(att.startsWith("sequence") || att.startsWith("seqall"))
         {
           inSeq[h] = new SetInFileCard(sectionPane,h,db,
                                 "Sequence Filename",
                                 appName,inSeqAttr,true);
-
           pan.add(inSeq[h].getInCard());
-//        pan.add(section.add(Box.createVerticalStrut(5)));
+        }
+        else if(att.startsWith("filelist"))
+        {
+          filelist[h] = new ListFilePanel(15);
+          pan.add(filelist[h]);
+          pan.add(Box.createVerticalStrut(100));
         }
         else if(att.startsWith("range"))
         {
@@ -321,14 +390,41 @@ public class SectionPanel
             if(parseAcd.getDefaultParamValueStr(nf).equalsIgnoreCase("Y") ||
                parseAcd.getDefaultParamValueStr(nf).equalsIgnoreCase("Yes") )
               checkBox[h].setSelected(true);
-
-//        pan.add(Box.createRigidArea(new Dimension(2,30)));
           pan.add(checkBox[h]);
           pan.add(lab[nf]);
         }
+        else if(att.startsWith("report"))
+        {
+          // possible report formats
+          rf = new ReportFormat(parseAcd,nf);
+
+          pan.add(rf.getComboPopup());
+          pan.add(setLabelText(" Report format ("+rf.getDefaultFormat()+")",
+                  ReportFormat.getToolTip()));
+
+          Box pan2 = new Box(BoxLayout.X_AXIS);
+          section.add(pan2);
+          // -raccshow  show accession 
+          pan2.add(rf.getAccCheckBox());
+          pan2.add(setLabelText("Accession number",
+              "Displays the accession number in the report"));
+          pan2.add(Box.createHorizontalStrut(20));
+
+          // -rdesshow  show description
+          pan2.add(rf.getDesCheckBox());
+          pan2.add(setLabelText("Description", 
+              "Displays the sequence description in the report"));
+          pan2.add(Box.createHorizontalStrut(20));
+
+          // -rusashow  show the full USA
+          pan2.add(rf.getUsaDesCheckBox());
+          pan2.add(setLabelText("Full USA", 
+              "Displays the universal sequence address in the report"));
+
+          pan2.add(Box.createHorizontalGlue());
+        }
         else if(att.startsWith("list") || att.startsWith("select"))
         {
-//        pan.add(Box.createRigidArea(new Dimension(2,30)));
           String list[];
           if(att.startsWith("list"))
             list = parseAcd.getList(nf);
@@ -344,6 +440,15 @@ public class SectionPanel
             multiOption[h] = new JList(list);
             multiOption[h].setSelectionMode
                (ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+    
+            Vector def = parseAcd.getListOrSelectDefault();
+
+            int selectedIndeces[] = new int[def.size()];
+            for(int i=0;i<def.size();i++)
+              selectedIndeces[i] = ((Integer)def.get(i)).intValue();
+
+            multiOption[h].setSelectedIndices(selectedIndeces);
+
             JScrollPane scrollPane = new JScrollPane(multiOption[h]);
             Dimension d = new Dimension(150,100);
             scrollPane.setMinimumSize(d);
@@ -354,8 +459,12 @@ public class SectionPanel
           else
           {
             fieldOption[h] = new myComboPopup(list);
-            fieldOption[h].setSelectedIndex(
-                    parseAcd.getListOrSelectDefault());
+
+            Vector def = parseAcd.getListOrSelectDefault();
+
+            for(int i=0;i<def.size();i++)
+              fieldOption[h].setSelectedIndex( ((Integer)def.get(i)).intValue() );
+
             Dimension d = fieldOption[h].getPreferredSize();
             d = new Dimension(150,(int)d.getHeight());
             
@@ -400,35 +509,48 @@ public class SectionPanel
     
   }
 
+  protected ReportFormat getReportFormat()
+  {
+    return rf;
+  }
+ 
+  protected boolean isReportFormat()
+  {
+    if(rf==null)
+      return false;
 
-  public JPanel getSectionPanel()
+    return true;
+  }
+
+
+  protected JPanel getSectionPanel()
   {
     return sectionPane;
   }
 
 
-  public Box getSectionBox()
+  protected Box getSectionBox()
   {
     return sectionBox;
   }
 
 
-  public boolean isInputSection()
+  protected boolean isInputSection()
   {
     return isInp;
   }
 
-  public boolean isOutputSection()
+  protected boolean isOutputSection()
   {
     return isOut;
   }
 
-  public boolean isRequiredSection()
+  protected boolean isRequiredSection()
   {
     return isReq;
   }
 
-  public boolean isAdvancedSection()
+  protected boolean isAdvancedSection()
   {
     return isAdv;
   }
@@ -440,7 +562,7 @@ public class SectionPanel
 * @return Box containing the label wrapped information label
 *
 */
-  public Box setLabelText(String sl, String tt)
+  private Box setLabelText(String sl, String tt)
   {
     int stop;
     int width = 335;
@@ -453,6 +575,9 @@ public class SectionPanel
 
     if(!sl.equals(""))
     {
+      if(!tt.equals(""))
+        tt = tt.replace('\\',' ');
+
       sl = sl.replace('\n',' ');
       String subLabel;
 
@@ -486,7 +611,7 @@ public class SectionPanel
   }
 
 
-  public int getFieldNum()
+  protected int getFieldNum()
   {
     return nf;
   }
@@ -530,7 +655,8 @@ public class SectionPanel
 * @param String of (min: max: default:) if specified
 *
 */
-  private String getMinMaxDefault(String min,String max, String def, int nfield)
+  private String getMinMaxDefault(String min,String max,
+                                 String def, int nfield)
   {
 
     String l = new String("");
@@ -546,34 +672,43 @@ public class SectionPanel
                    && !min.startsWith("@")) 
     {
       l = l.concat("(min:" + min);
-      if(parseAcd.isMaxParamValue(nfield) && !max.startsWith("$") 
-                             && !max.startsWith("@"))
+      if(parseAcd.isMaxParamValue(nfield) 
+                  && !max.startsWith("$") 
+                  && !max.startsWith("@"))
         l = l.concat(" max:" + max);
 
-      if(parseAcd.isDefaultParamValueStr(nfield) && !def.startsWith("$") 
-                             && !def.startsWith("@") && !def.equals(""))
+      if(parseAcd.isDefaultParamValueStr(nfield) 
+                         && !def.startsWith("$") 
+                         && !def.startsWith("@") 
+                         && !def.equals(""))
         l = l.concat(" default:" + def + ") ");
       else
         l = l.concat(") ");
     }
-    else if(parseAcd.isMaxParamValue(nfield) && !max.startsWith("$")
-                             && !max.startsWith("@"))
+    else if(parseAcd.isMaxParamValue(nfield) 
+                     && !max.startsWith("$")
+                     && !max.startsWith("@"))
     {
       l = l.concat("(max:" + max);
-      if(parseAcd.isDefaultParamValueStr(nfield) && !def.startsWith("$")
-                             && !def.startsWith("@") && !def.equals(""))
+      if(parseAcd.isDefaultParamValueStr(nfield)
+                         && !def.startsWith("$")
+                         && !def.startsWith("@") 
+                         && !def.equals(""))
         l = l.concat(" default:" + def + ") ");
       else
         l = l.concat(") ");
     }
-    else if(parseAcd.isDefaultParamValueStr(nfield) && !def.startsWith("$")
-                             && !def.startsWith("@") && !def.equals(""))
+    else if(parseAcd.isDefaultParamValueStr(nfield) 
+                            && !def.startsWith("$")
+                            && !def.startsWith("@")
+                            && !def.equals(""))
     {
       l = l.concat("(default:" + def + ") ");
     }
     else
     {
-      if(parseAcd.isMinParamValue(nfield) || parseAcd.isMaxParamValue(nfield) ||
+      if(parseAcd.isMinParamValue(nfield) || 
+         parseAcd.isMaxParamValue(nfield) ||
          parseAcd.isDefaultParamValueStr(nfield) )
         l = "";
       else
@@ -581,7 +716,6 @@ public class SectionPanel
     }
 
     return l;
-
   }
 
 
@@ -600,7 +734,6 @@ public class SectionPanel
     final String varName = parseAcd.getParamValueStr(nf,0);
     final String valS = parseAcd.getParamValueStr(nf,0).toLowerCase();
     final int nff = nf;
-
 
     if(parseAcd.isDependents(valS,nf,numofFields)) 
     {
@@ -621,8 +754,8 @@ public class SectionPanel
 
         upload.setForeground(Color.red);
         Dimension d = upload.getPreferredSize();
-        upload.setPreferredSize(new Dimension(maxSectionWidth, (int)d.getHeight()));
-
+        upload.setPreferredSize(new Dimension(maxSectionWidth, 
+                                         (int)d.getHeight()));
         left.add(upload);
         left.add(Box.createHorizontalGlue());
         section.add(left);
@@ -645,9 +778,7 @@ public class SectionPanel
               fc = AjaxUtil.getFileOrDatabaseForAjax(fname,db,f,withSoap);
             }
             else                                     // Cut-n-Paste
-            {
               fc = sifc.getCutNPasteText();
-            }    
 
             if(!withSoap && fc!=null)    //Ajax without SOAP
             {
@@ -673,12 +804,10 @@ public class SectionPanel
                 resolveDependents(nod,dep,sifc.getFileChosen(),varName);
               }
               else
-              {
                 JOptionPane.showMessageDialog(sectionPane,
                           "Sequence not found." +
                           "Check the sequence entered.",
                           "Error Message", JOptionPane.ERROR_MESSAGE);
-              }
             }
             else if(fc!=null)    //Ajax with SOAP
             {
@@ -709,7 +838,7 @@ public class SectionPanel
                           "\nCheck the sequence entered.",
                           "Error Message", JOptionPane.ERROR_MESSAGE);
                 }
-//              System.out.println("PROPERTIES::: " + ajaxLength + " " + ajaxWeight );
+//              System.out.println("PROPERTIES::: "+ajaxLength+" "+ajaxWeight);
               }
               catch (JembossSoapException eae)
               {
@@ -840,18 +969,36 @@ public class SectionPanel
               att.startsWith("codon")   || att.startsWith("dirlist") )
       {
 
-        if( (type.startsWith("opt") || type.startsWith("req"))
+        if( (type.startsWith("opt") || type.startsWith("req")) 
                                     && result.equals("false"))
         {
           setShadingAndVisibility(textf[h], false, field);
         }
-        else if ( (type.startsWith("opt") || type.startsWith("req"))
+        else if ( (type.startsWith("opt") || type.startsWith("req")) 
                                            && result.equals("true"))
         {
           setShadingAndVisibility(textf[h], true, field);
         }
+
         if(type.startsWith("def"))
-          textf[h].setText(result);
+        {
+          if(att.startsWith("matrix"))
+          {
+            Vector mat = BuildProgramMenu.getMatrices();
+            Enumeration en = mat.elements();
+            while(en.hasMoreElements())
+            {
+              String m = (String)en.nextElement();
+              if(result.equalsIgnoreCase(m))
+              {
+                textf[h].setText(m);
+                break;
+              }
+            }
+          }
+          else
+            textf[h].setText(result);
+        }
 
       }
       else if(att.startsWith("int"))
@@ -935,7 +1082,8 @@ public class SectionPanel
   }
 
 
-  private void setShadingAndVisibility(Component c, boolean useThis, int field)
+  private void setShadingAndVisibility(Component c, 
+                        boolean useThis, int field)
   {
     if(isShadedGUI)
     {
@@ -963,7 +1111,6 @@ public class SectionPanel
       p.setVisible(true);
     }
   }
-
 
 }
 

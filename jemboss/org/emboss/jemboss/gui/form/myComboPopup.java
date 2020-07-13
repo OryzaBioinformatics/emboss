@@ -22,6 +22,7 @@
 
 package org.emboss.jemboss.gui.form;
 
+import java.util.Vector;
 import javax.swing.*;
 import javax.swing.plaf.basic.*;
 
@@ -36,6 +37,13 @@ public class myComboPopup extends JComboBox
   *
   */
   public myComboPopup(Object[] items)
+  {
+    super(items);
+    setUI(new myComboUI());
+    setBorder(BorderFactory.createEtchedBorder());
+  }
+
+  public myComboPopup(Vector items)
   {
     super(items);
     setUI(new myComboUI());

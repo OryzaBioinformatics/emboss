@@ -49,6 +49,21 @@ public class Ajax
   public native boolean seqType(String usa);
   public native boolean seqsetType(String usa);
 
+/** true if the sequence is protein */
+  public boolean protein_soap;
+/** sequence length */
+  public int     length_soap;
+/** sequence weight */
+  public float   weight_soap;
+
+/** determine sequence attributes as the user */
+  public native boolean seqAttrib(String username,
+               byte[] password, String environment,
+               String usa);
+  public native boolean seqsetAttrib(String username,
+               byte[] password, String environment,
+               String usa);
+
 /** user home dir */
   public String home;
 
@@ -67,6 +82,10 @@ public class Ajax
   public synchronized native boolean delFile(String username,
                byte[] password, String environment,
                String filename);
+  public synchronized native boolean renameFile(String username,
+               byte[] password, String environment,
+               String filename, String filename2);
+
   public synchronized native boolean delDir(String username,
                byte[] password, String environment,
                String directory);

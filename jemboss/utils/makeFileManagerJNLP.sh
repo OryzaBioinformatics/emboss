@@ -6,7 +6,7 @@ echo
 echo '*** Run this script from the installed jemboss utils directory.'
 echo '*** If you are using SSL the script will use the client.keystore'
 echo '*** in the $JEMBOSS/resources directory to create client.jar'
-echo '*** which is wrapped with the Jemboss client in Jemboss.jar.'
+echo '*** which is wrapped with the FileManager client in FileManager.jar.'
 echo '*** Press any key to continue.'
 read KEY
 
@@ -31,23 +31,8 @@ done
 #
 #
 
-if [ ! -f "$CWPWD/resources/acdstore.jar" ]; then
-
-  ACDDIR=0
-  while [ ! -d "$ACDDIR" ]
-  do
-    echo "Enter the directory where the acd files are stored"
-    echo "[$CWPWD2/acd/]:"
-    read ACDDIR
-    if [ "$ACDDIR" = "" ]; then
-      ACDDIR="$CWPWD2/acd/"
-    fi
-    echo
-  done
-fi
-
-if [ ! -d "jnlp" ]; then
-  mkdir jnlp
+if [ ! -d "jnlp_fm" ]; then
+  mkdir jnlp_fm
 fi
 
 JAVA_HOME=0
@@ -61,13 +46,6 @@ do
 done
 
 PATH=$PATH:$JAVA_HOME/bin/ ; export PATH
-
-if [ ! -f "$CWPWD/resources/acdstore.jar" ]; then
-  echo
-  echo "Create acdstore.jar to contain acd files."
-  cd $ACDDIR
-  jar cf acdstore.jar *.acd
-fi
 
 cd $CWPWD
 
@@ -87,22 +65,17 @@ else
   echo "*** client keystore file."
 fi
 
-if [ ! -f "$CWPWD/resources/acdstore.jar" ]; then
-  cp $ACDDIR/acdstore.jar resources/
-fi
-
 #
-# Create Jemboss jar file
+# Create FileManager jar file
 
-jar cf Jemboss.jar images/* org/emboss/jemboss/*class resources/*.jar \
+jar cf FileManager.jar images/* org/emboss/jemboss/*class resources/client.jar \
         resources/version resources/jemboss.properties resources/readme.txt \
-        resources/*html org/emboss/jemboss/*/*class \
-        org/emboss/jemboss/*/*/*class 
-mv Jemboss.jar jnlp
-cp lib/*jar jnlp
-cp images/Jemboss_logo_large.gif jnlp
-cp utils/template.html jnlp/index.html
-cd jnlp
+        resources/*html org/emboss/jemboss/*/*class org/emboss/jemboss/*/*/*class 
+mv FileManager.jar jnlp_fm
+cp lib/*jar jnlp_fm
+cp images/Jemboss_logo_large.gif jnlp_fm
+cp utils/template.html jnlp_fm/index.html
+cd jnlp_fm
 
 echo
 echo
@@ -142,15 +115,17 @@ echo
 echo "Each of the jar files will now be signed...."
 echo
 for i in *.jar; do 
-  echo "Signing $i"
-  jarsigner -keystore jembossstore -storepass $STOREPASS -keypass $KEYPASS \
-           -signedjar s$i $i signFiles 
+  if [ $i != "jalview.jar" ]; then
+    echo "Signing $i"
+    jarsigner -keystore jembossstore -storepass $STOREPASS -keypass $KEYPASS \
+              -signedjar s$i $i signFiles 
+  fi
 done;
 
 #
 # create a jnlp template file
 
-JNLP="Jemboss.jnlp"
+JNLP="FileManager.jnlp"
 if [ -f "$JNLP" ]; then
   echo "$JNLP exists. Enter a new JNLP file name: "
   read JNLP
@@ -162,12 +137,12 @@ echo '        spec="1.0+"'                              >> $JNLP
 echo '        codebase="http://EDIT"'                   >> $JNLP
 echo '        href="'$JNLP'">'                          >> $JNLP 
 echo '         <information>'                           >> $JNLP  
-echo '           <title>Jemboss</title>'                >> $JNLP  
+echo '           <title>Jemboss File manager</title>'   >> $JNLP  
 echo '           <vendor>HGMP-RC</vendor> '             >> $JNLP  
 echo '           <homepage href="http://www.uk.embnet.org/Software/EMBOSS/Jemboss/"/>' \
                                                         >> $JNLP  
 echo '           <description>Jemboss</description>'    >> $JNLP  
-echo '           <description kind="short">A Java user interface to EMBOSS.' \
+echo '           <description kind="short">File Manager.' \
                                                         >> $JNLP  
 echo '           </description>'                        >> $JNLP 
 echo '           <icon href="Jemboss_logo_large.gif"/>' >> $JNLP 
@@ -179,9 +154,9 @@ echo '         </security>'                             >> $JNLP
 echo '         <resources>'                             >> $JNLP 
 echo '           <j2se version="1.3+"/>'                >> $JNLP 
 
-echo '             <jar href="'sJemboss.jar'"/>'        >> $JNLP
+echo '             <jar href="'sFileManager.jar'"/>'    >> $JNLP
 for i in s*.jar; do
-  if [ $i != "sJemboss.jar" ]; then
+  if [ $i != "sFileManager.jar" ]; then
     if [ $i != "soap.jar" ]; then
       echo '             <jar href="'$i'"/>'                >> $JNLP
     fi
@@ -189,7 +164,7 @@ for i in s*.jar; do
 done;
 
 echo '         </resources>'                            >> $JNLP
-echo '         <application-desc main-class="org/emboss/jemboss/Jemboss"/>' \
+echo '         <application-desc main-class="org/emboss/jemboss/FileManager"/>' \
                                                         >> $JNLP
 echo '       </jnlp>'                                   >> $JNLP
  
@@ -199,7 +174,7 @@ echo '       </jnlp>'                                   >> $JNLP
 echo
 echo
 echo "*** The signed jar files, index.html and $JNLP have been"
-echo "*** created in the directory $CWPWD/jnlp."
+echo "*** created in the directory $CWPWD/jnlp_fm."
 echo "*** "
 echo "*** Please edit the 'codebase' line in $JNLP."
 echo "*** Also, edit the 'Click here' line in index.html to point"

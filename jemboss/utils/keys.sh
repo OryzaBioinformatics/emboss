@@ -40,9 +40,18 @@ ssl_import()
 
 }
 
-JEMBOSS_RES=$1
-HOST=$2
-PASSWD=$3
+echo
+echo "Enter where to store the keys and certificates:"
+read JEMBOSS_RES
+
+echo
+echo "Enter your surname:"
+read HOST
+
+echo
+echo "Enter a password to use to create the keys with"
+echo "(at least 6 characters):"
+read PASSWD
 
 #
 # create the keystores & export the certificates

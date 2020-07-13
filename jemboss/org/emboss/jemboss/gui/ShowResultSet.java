@@ -24,82 +24,60 @@ package org.emboss.jemboss.gui;
 
 import java.awt.*;
 import javax.swing.*;
-import javax.swing.border.*;
-import javax.swing.event.*;
-import javax.swing.tree.*;
-
 import org.apache.regexp.*;
-
-import java.awt.event.*;
 import java.io.*;
-import java.util.*;
+import java.util.Hashtable;
+import java.util.Enumeration;
+
+import org.emboss.jemboss.gui.filetree.FileEditorDisplay;
 
 /**
 *
 * Displays JTabbedPane of the contents of the Hashtable
 *
 */
-public class ShowResultSet
+public class ShowResultSet extends JFrame
 {
 
 /**
-*  
-* @param the data to display
+* 
+* @param the result data to display
 *
 */
   public ShowResultSet(Hashtable reslist)
   {
-    JTabbedPane rtp = new JTabbedPane();
-    Enumeration enum = reslist.keys();
-    JFrame resFrame = new JFrame("Saved Results on the Server");
+    this(reslist,null);
+  }
 
-    new ResultsMenuBar(resFrame,rtp,reslist);
-    resFrame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-    String stabs[] = new String[reslist.size()];
+/**
+*  
+* @param the result data to display
+* @param the input data to display
+*
+*/
+  public ShowResultSet(Hashtable reslist, Hashtable inputFiles)
+  {
+    super("Saved Results on the Server");
+    JTabbedPane rtp = new JTabbedPane();
+
+    setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+
     int ntabs = 0;
 
-    while (enum.hasMoreElements()) 
-    {
-      String thiskey = (String)enum.nextElement().toString();
-      JPanel s1 = new JPanel(new BorderLayout());
-      JScrollPane r1 = new JScrollPane(s1);
-      if (thiskey.endsWith("png") || thiskey.endsWith("html")) 
-      {
-        int index = findInt(thiskey);
-        if(index>0)
-        {
-          stabs[index-1] = new String(thiskey);
-          ntabs++;
-        }
-        else
-        {
-          ImageIcon i1 = new ImageIcon((byte [])reslist.get(thiskey));
-          JLabel l1 = new JLabel(i1);
-          int hh = i1.getIconHeight();
-          int ww = i1.getIconWidth();
-          s1.add(l1);
-          rtp.add(thiskey,r1);
-        }
-      } 
-      else 
-      {
-	JTextArea o1 = new JTextArea((String)reslist.get(thiskey));
-        o1.setFont(new Font("monospaced", Font.PLAIN, 12));
-        o1.setCaretPosition(0);
-	s1.add(o1, BorderLayout.CENTER);
-        rtp.add(thiskey,r1);
-      }
-    }
+    JPanel s1;
+    JScrollPane r1;
+
+    String stabs[] = addHashContentsToTab(reslist,rtp);
+    if(inputFiles != null)
+      addHashContentsToTab(inputFiles,rtp);
 
 // now load png files into pane
-    for(int i=0; i<ntabs;i++)
+    for(int i=0; i<stabs.length;i++)
     {
-      JPanel s1 = new JPanel(new BorderLayout());
-      JScrollPane r1 = new JScrollPane(s1);
+      s1 = new JPanel(new BorderLayout());
+      r1 = new JScrollPane(s1);
       ImageIcon i1 = new ImageIcon((byte [])reslist.get(stabs[i]));
       JLabel l1 = new JLabel(i1);
-      int hh = i1.getIconHeight();
-      int ww = i1.getIconWidth();
       s1.add(l1);
       if(stabs[i] != null)
       {
@@ -108,11 +86,77 @@ public class ShowResultSet
       }
     }
 
-    resFrame.setSize(640,480);
-    resFrame.getContentPane().add(rtp,BorderLayout.CENTER);
-    resFrame.setVisible(true);
+    String cmd = "cmd";
+    if(reslist.containsKey(cmd))
+    {
+      s1 = new JPanel(new BorderLayout());
+      r1 = new JScrollPane(s1);
+      FileEditorDisplay fed = new FileEditorDisplay(null,cmd,
+                                         reslist.get(cmd));
+      fed.setCaretPosition(0);
+      s1.add(fed, BorderLayout.CENTER);
+      rtp.add(cmd,r1);
+    }
+
+    new ResultsMenuBar(this,rtp,reslist,inputFiles);
+
+    setSize(640,480);
+    getContentPane().add(rtp,BorderLayout.CENTER);
+    setVisible(true);
   }
 
+  private String[] addHashContentsToTab(Hashtable h,JTabbedPane rtp)
+  {
+
+    JPanel s1;
+    JScrollPane r1;
+
+    String cmd = "cmd";
+    Enumeration enum = h.keys();
+    String stabs[] = new String[h.size()];
+    int ntabs = 0;
+
+    while (enum.hasMoreElements())
+    {
+      String thiskey = (String)enum.nextElement().toString();
+      if(!thiskey.equals(cmd))
+      {
+        s1 = new JPanel(new BorderLayout());
+        r1 = new JScrollPane(s1);
+        if (thiskey.endsWith("png") || thiskey.endsWith("html"))
+        {
+          int index = findInt(thiskey);
+          if(index>0)
+          {
+            stabs[index-1] = new String(thiskey);
+            ntabs++;
+          }
+          else
+          {
+            ImageIcon i1 = new ImageIcon((byte [])h.get(thiskey));
+            JLabel l1 = new JLabel(i1);
+            s1.add(l1);
+            rtp.add(thiskey,r1);
+          }
+        }
+        else
+        {
+          FileEditorDisplay fed = new FileEditorDisplay(null,thiskey,
+                                                     h.get(thiskey));
+          fed.setCaretPosition(0);
+          s1.add(fed, BorderLayout.CENTER);
+          rtp.add(thiskey,r1);
+        }
+      }
+    }
+
+    String pngtabs[] = new String[ntabs];
+    for(int i=0;i<ntabs;i++)
+      pngtabs[i] = new String(stabs[i]);
+    
+
+    return pngtabs;
+  }
 
   private int findInt(String exp)
   {
@@ -120,7 +164,7 @@ public class ShowResultSet
     RECompiler rec = new RECompiler();
     try
     {
-      REProgram  rep = rec.compile("^(.*)([:digit:]+)");
+      REProgram  rep = rec.compile("^(.*?)([:digit:]+)");
       RE regexp = new RE(rep);
       if(regexp.match(exp))
       {

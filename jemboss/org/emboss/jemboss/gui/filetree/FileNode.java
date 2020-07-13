@@ -30,16 +30,13 @@ public class FileNode extends DefaultMutableTreeNode
                  implements Transferable, Serializable
 {
     private boolean explored = false;
-    private String[] childrenNames;
   
     public static DataFlavor FILENODE =
            new DataFlavor(FileNode.class, "Remote file");
     static DataFlavor flavors[] = { FILENODE, DataFlavor.stringFlavor };
 
-    public FileNode(File file, Hashtable openNodeDir)
+    public FileNode(File file)
     { 
-      if(file.isDirectory())
-        openNodeDir.put(file.getAbsolutePath(),this);
       setUserObject(file); 
     }
 
@@ -66,60 +63,31 @@ public class FileNode extends DefaultMutableTreeNode
                                             filename;
     }
 
-    public void explore(Hashtable openNodeDir) 
+    public void explore() 
     {
       if(!isDirectory())
         return;
 
-      if(!isExplored()) {
-        File file = getFile();
-
-      File[] children;
-// filter out dot files
-      children = file.listFiles(new FilenameFilter() 
+      if(!isExplored()) 
       {
-        public boolean accept(File d, String n) 
+        File file = getFile();
+        explored = true;
+        File[] children;
+// filter out dot files
+        children = file.listFiles(new FilenameFilter()
         {
-          return !n.startsWith(".");
-        }
-      });
+          public boolean accept(File d, String n)
+          {
+            return !n.startsWith(".");
+          }
+        });
 
 // sort into alphabetic order
-      java.util.Arrays.sort(children);
-
-      for(int i=0; i < children.length; ++i) 
-        add(new FileNode(children[i],openNodeDir));
-      explored = true;
-
-      childrenNames = new String[children.length];
-      for(int i=0; i < children.length; ++i)
-        childrenNames[i] = children[i].getName();
-     }
-   }
-
-   protected int getAnIndex(String newleaf)
-   {
-     String newChildren[] = new String[childrenNames.length+1];
-
-
-     for(int i=0; i < childrenNames.length; ++i)
-       newChildren[i] = childrenNames[i];
-
-     newChildren[childrenNames.length] = newleaf;
-     java.util.Arrays.sort(newChildren);
-       
-     int index;
-     for(index=0; index < newChildren.length; ++index)
-       if(newChildren[index].equals(newleaf))
-         break;
-
-     childrenNames = new String[newChildren.length];
-     childrenNames[newChildren.length-1] = new String(newleaf);
-     for(int i=0; i < childrenNames.length-1; ++i)
-       childrenNames[i] = newChildren[i];
-
-     return index;
-   }
+        java.util.Arrays.sort(children);
+        for(int i=0; i < children.length; ++i)
+          add(new FileNode(children[i]));
+      }
+    }
 
   
 // Transferable

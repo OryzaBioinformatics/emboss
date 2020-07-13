@@ -92,7 +92,6 @@ public class ListFilePanel extends JPanel
     {
       if(!fileChooser[i].getFileChosen().equals(""))
         nseqs++;
-      System.out.println("HERE " + fileChooser[i].getFileChosen() + nseqs);
     }
 
     String list[] = new String[nseqs];

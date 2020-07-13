@@ -36,17 +36,14 @@ public class RemoteFileNode extends DefaultMutableTreeNode
 {
     private boolean explored = false;
     private boolean isDir = false;
-    private String[] childrenNames;
     private String fullname;
     private String serverPathToFile;
 
-    private Vector children;
     private String rootdir;   
     private transient FileList parentList;        // make transient for
     private transient JembossParams mysettings;    // Transferable to work
     private transient FileRoots froots;
 
-//  private String fs = new String(System.getProperty("file.separator"));
     private String fs = "/";
 
     final public static DataFlavor REMOTEFILENODE = 
@@ -56,25 +53,46 @@ public class RemoteFileNode extends DefaultMutableTreeNode
 
     public RemoteFileNode(JembossParams mysettings, FileRoots froots,
                     String file, FileList parentList, String parent)
+    {
+      this(mysettings, froots, file, parentList, parent, false);
+    }
+
+    public RemoteFileNode(JembossParams mysettings, FileRoots froots,
+                    String file, FileList parentList, String parent,
+                    boolean ldir)
     { 
       this.mysettings = mysettings;
       this.froots = froots;
       this.parentList = parentList;
+      isDir = ldir;
       rootdir = froots.getCurrentRoot();
       serverPathToFile = (String)froots.getRoots().get(rootdir);
 
       if(file.equals(" "))
         isDir = true;
 
+      if(parent != null)
+      {
+        if(parent.endsWith("/."))
+          parent = parent.substring(0,parent.length()-1);
+        else if(parent.endsWith("/"))
+          parent = parent.substring(0,parent.length());
+
+        if(parent.equals("."))
+          fullname = file;
+        else
+        {
+          fullname = parent + fs + file;
+          serverPathToFile = serverPathToFile.concat(fs+parent);
+        }
+      }
+    
       if(parentList != null)
       {
-        fullname = parent + fs + file;
         if(parentList.isDirectory(file))
           isDir = true;
       }
-      else if(parent != null)
-        fullname = "."+fs+file;
-      else
+      else if(parent == null)
         fullname = ".";
 
       setUserObject(file); 
@@ -91,7 +109,9 @@ public class RemoteFileNode extends DefaultMutableTreeNode
     public String getServerName() 
     { 
       String prefix = (String)froots.getRoots().get(froots.getCurrentRoot());
-      return prefix + fs + fullname;
+      if(!prefix.endsWith(fs))
+        prefix = prefix.concat(fs);
+      return prefix + fullname;
     }
 
     public void explore() 
@@ -106,7 +126,7 @@ public class RemoteFileNode extends DefaultMutableTreeNode
 //        System.out.println(froots.getCurrentRoot() + " :: " + fullname);
           FileList efl = new FileList(mysettings,
                                    froots.getCurrentRoot(),fullname);
-          children = efl.fileVector();
+          Vector children = efl.fileVector();
           for(int i=0;i<children.size();i++)
             add(new RemoteFileNode(mysettings,froots,(String)children.get(i),
                                    efl,fullname));

@@ -23,17 +23,19 @@
 package org.emboss.jemboss.gui;
 
 import java.util.Hashtable;
-import java.util.Enumeration;
 import java.awt.*;
 import javax.swing.*;
 import javax.swing.event.*;
-import org.emboss.jemboss.gui.sequenceChooser.*;
+import java.awt.event.*;
+import java.io.File;
+import javax.swing.border.*;
+import javax.swing.undo.UndoManager;
+import javax.swing.undo.CannotRedoException;
+import javax.swing.text.JTextComponent;
+
+import org.emboss.jemboss.gui.sequenceChooser.SequenceFilter;
 import org.emboss.jemboss.gui.filetree.*;
 import org.emboss.jemboss.gui.AdvancedOptions;
-
-import java.awt.event.*;
-import java.io.*;
-
 
 /**
 *
@@ -41,14 +43,15 @@ import java.io.*;
 * 
 *
 */
-public class ResultsMenuBar
+public class ResultsMenuBar extends JMenuBar
 {
 
-  final Cursor cbusy = new Cursor(Cursor.WAIT_CURSOR);
-  final Cursor cdone = new Cursor(Cursor.DEFAULT_CURSOR);
-  private String fs = new String(System.getProperty("file.separator"));
   private JMenuItem fileMenuShowres;
-  private JMenuBar menuPanel;
+  private JFrame frame;
+  private JToolBar toolBar = new JToolBar();
+  private JMenuItem undo = new JMenuItem("Undo");
+  private JMenuItem redo = new JMenuItem("Redo");
+  private UndoManager undoManager = new UndoManager();
 
 /**
 *
@@ -58,16 +61,31 @@ public class ResultsMenuBar
 */
   public ResultsMenuBar(final JFrame frame)
   {
+    this.frame = frame;
+    add(Box.createRigidArea(new Dimension(5,24)));
 
-    menuPanel = new JMenuBar();
-    menuPanel.setLayout(new FlowLayout(FlowLayout.LEFT,10,5));
     JMenu fileMenu = new JMenu("File");
     fileMenu.setMnemonic(KeyEvent.VK_F);
     fileMenuShowres = new JMenuItem("Save...");
-
     fileMenu.add(fileMenuShowres);
+    fileMenu.addSeparator();
 
+    // undo - redo
+    fileMenu.add(undo);
+    undo.setEnabled(false);
+    undo.setAccelerator(KeyStroke.getKeyStroke(
+                KeyEvent.VK_U, ActionEvent.CTRL_MASK));
+    fileMenu.add(redo);
+    redo.setEnabled(false);
+    redo.setAccelerator(KeyStroke.getKeyStroke(
+                KeyEvent.VK_R, ActionEvent.CTRL_MASK));
+    fileMenu.addSeparator();
+
+    // close
     JMenuItem resFileMenuExit = new JMenuItem("Close");
+    resFileMenuExit.setAccelerator(KeyStroke.getKeyStroke(
+                    KeyEvent.VK_E, ActionEvent.CTRL_MASK));
+    
     resFileMenuExit.addActionListener(new ActionListener()
     {
       public void actionPerformed(ActionEvent e)
@@ -76,9 +94,10 @@ public class ResultsMenuBar
       }
     });
     fileMenu.add(resFileMenuExit);
-    menuPanel.add(fileMenu);
-
-    frame.setJMenuBar(menuPanel);
+    add(fileMenu);
+    
+    frame.setJMenuBar(this);
+    frame.getContentPane().add(toolBar, BorderLayout.NORTH);
   }
 
 
@@ -94,17 +113,95 @@ public class ResultsMenuBar
   {
     this(frame);
 
-    final JTextPane seqText = fed.getJTextPane();
 
     fileMenuShowres.addActionListener(new ActionListener()
     {
       public void actionPerformed(ActionEvent e)
       {
-        new FileSaving(seqText, fed.getPNGContent());
+        FileSaving fsave = new FileSaving(fed, fed.getPNGContent());
+
+        if(fsave.writeOK())
+        {
+          String fileSelected = fsave.getFileName();
+          String pathSelected = fsave.getPath();
+          try
+          {
+            org.emboss.jemboss.Jemboss.tree.addObject(fileSelected,pathSelected,null);
+          }
+          catch(NullPointerException npe){}
+          DragTree ltree = LocalAndRemoteFileTreeFrame.getLocalDragTree();
+          if(ltree!=null)
+            ltree.addObject(fileSelected,pathSelected,null);
+
+        }
       }
     });
 
-   
+
+    // undo - redo
+    fed.getDocument().addUndoableEditListener(new UndoableEditListener() 
+    {
+      public void undoableEditHappened(UndoableEditEvent e) 
+      {
+        undoManager.addEdit(e.getEdit());
+        updateMenu();
+      }
+    });
+
+    undo.addActionListener(new ActionListener() 
+    {
+      public void actionPerformed(ActionEvent e) 
+      {
+        try { undoManager.undo(); }
+        catch (CannotRedoException cre) { cre.printStackTrace(); }
+        updateMenu();
+      }
+    });
+
+    redo.addActionListener(new ActionListener() 
+    {
+      public void actionPerformed(ActionEvent e) 
+      {
+        try { undoManager.redo(); }
+        catch (CannotRedoException cre) { cre.printStackTrace(); }
+        updateMenu();
+      }
+    });
+
+    //Colour selection
+    JMenu colourMenu   = new JMenu("Colour");
+    colourMenu.setMnemonic(KeyEvent.VK_L);
+
+    ColorMenu cm = new ColorMenu("Text");
+    cm.setColor(fed.getForeground());
+    cm.setMnemonic('t');
+    ActionListener lst = new ActionListener()
+    {
+      public void actionPerformed(ActionEvent e)
+      {
+        ColorMenu m = (ColorMenu)e.getSource();
+        fed.setForeground(m.getColor());
+      }
+    };
+    cm.addActionListener(lst);
+    colourMenu.add(cm);
+
+    cm = new ColorMenu("Background");
+    cm.setColor(fed.getBackground());
+    cm.setMnemonic('b');
+    lst = new ActionListener()
+    {
+      public void actionPerformed(ActionEvent e)
+      {
+        ColorMenu m = (ColorMenu)e.getSource();
+        fed.setBackground(m.getColor());
+      }
+    };
+    cm.addActionListener(lst);
+    colourMenu.add(cm);
+    add(colourMenu);
+
+    //Text - sequence display option
     ButtonGroup group = new ButtonGroup();
     JMenu optionsMenu   = new JMenu("Options");
     JRadioButtonMenuItem optionsMenuText = new JRadioButtonMenuItem("Text");
@@ -115,7 +212,7 @@ public class ResultsMenuBar
     optionsMenu.add(optionsMenuSeq);
     group.add(optionsMenuSeq);
 
-    menuPanel.add(optionsMenu);
+    add(optionsMenu);
 
     optionsMenuSeq.addActionListener(new ActionListener()
     {
@@ -123,28 +220,79 @@ public class ResultsMenuBar
       {
         if(((JRadioButtonMenuItem)e.getSource()).isSelected())
         {
-          String text = seqText.getText();
-          seqText.setText("");
-          fed.setText(text,"sequence",seqText);
-          seqText.setCaretPosition(0);
+          String text = fed.getText();
+          fed.setText("");
+          fed.setText(text,"sequence");
+          fed.setCaretPosition(0);
         }
       }
     });
 
-   optionsMenuText.addActionListener(new ActionListener()
-   {
-     public void actionPerformed(ActionEvent e)
-     {
-       if(((JRadioButtonMenuItem)e.getSource()).isSelected())
-       {
-         String text = seqText.getText();
-         seqText.setText("");
-         fed.setText(text,"regular",seqText);
-         seqText.setCaretPosition(0);
-       }
-     }
-   });
+    optionsMenuText.addActionListener(new ActionListener()
+    {
+      public void actionPerformed(ActionEvent e)
+      {
+        if(((JRadioButtonMenuItem)e.getSource()).isSelected())
+        {
+          String text = fed.getText();
+          fed.setText("");
+          fed.setText(text,"regular");
+          fed.setCaretPosition(0);
+        }
+      }
+    });
+    add(optionsMenu);
+ 
 
+    //Font size selection
+    String sizes[] = {"10", "12", "14", "16", "18"};
+    final JComboBox fntSize = new JComboBox(sizes);
+    Font fnt = fed.getFont();
+    fntSize.setSelectedItem(Integer.toString(fnt.getSize()));
+    fntSize.setPreferredSize(fntSize.getMinimumSize());
+    fntSize.setMaximumSize(fntSize.getMinimumSize());
+    fntSize.setEditable(true);
+    toolBar.add(fntSize);
+    fntSize.addActionListener(new ActionListener()
+    {
+      public void actionPerformed(ActionEvent e)
+      {
+        Font fnt = fed.getFont();
+        try
+        {
+          String fsize = (String)fntSize.getSelectedItem();
+          if(fsize.indexOf(".") > -1)
+            fsize = fsize.substring(0,fsize.indexOf("."));
+          fnt = new Font(fnt.getFontName(),fnt.getStyle(),
+                         Integer.parseInt(fsize));
+          fed.setFont(fnt);
+        } catch(NumberFormatException nfe){}
+      }
+    });
+
+    //Font style
+    String styles[] = {"Plain","Bold","Italic"};
+    final JComboBox cbFonts = new JComboBox(styles);
+    cbFonts.setMaximumSize(cbFonts.getPreferredSize());
+    cbFonts.setToolTipText("Available styles");
+    cbFonts.addActionListener(new ActionListener()
+    {
+      public void actionPerformed(ActionEvent e)
+      {
+        int index = cbFonts.getSelectedIndex();
+        if (index < 0)
+          return;
+        Font fnt = fed.getFont();
+        if(index == 0)
+          fnt = fnt.deriveFont(Font.PLAIN);
+        else if(index == 1)
+          fnt = fnt.deriveFont(Font.BOLD);
+        else
+          fnt = fnt.deriveFont(Font.ITALIC);
+        fed.setFont(fnt);
+      }
+    });
+    toolBar.add(cbFonts);
 
  }
 
@@ -156,19 +304,19 @@ public class ResultsMenuBar
 * @param JFrame frame containing the results
 * @param JTabbedPane tab pane containing results
 * @param Hashtable containing results
+* @param Hashtable containing input files
 *
 */
   public ResultsMenuBar(final JFrame frame, final JTabbedPane rtb,
-                        final Hashtable hash)
+                        final Hashtable hashOut, final Hashtable hashIn)
   {
 
     this(frame);
-    
+
     fileMenuShowres.addActionListener(new ActionListener()
     {
       public void actionPerformed(ActionEvent e)
       {
-
         String fileSelected = "";
         String cwd = "";
 
@@ -186,35 +334,347 @@ public class ResultsMenuBar
           cwd = (fc.getCurrentDirectory()).getAbsolutePath();
           fileSelected = files.getName();
 
-          frame.setCursor(cbusy);
+          frame.setCursor(new Cursor(Cursor.WAIT_CURSOR));
 //        save results
           String tabTitle = rtb.getTitleAt(rtb.getSelectedIndex());
-          Enumeration enum = hash.keys();
 
-          while(enum.hasMoreElements())
+          if(hashOut.containsKey(tabTitle))
+            fileSave(cwd,fileSelected,tabTitle,hashOut);
+          else if(hashIn != null)
           {
-            String thiskey = (String)enum.nextElement();
-            if(tabTitle.equals(thiskey))
-            {
-              FileSave fsave = new FileSave(new File(cwd + fs + fileSelected));
-              if(fsave.doWrite())
-                fsave.fileSaving(hash.get(thiskey));
-              if(!fsave.fileExists())
-                org.emboss.jemboss.Jemboss.tree.addObject(fileSelected,cwd);
-            }
+            if(hashIn.containsKey(tabTitle))
+              fileSave(cwd,fileSelected,tabTitle,hashIn);
           }
-
-          frame.setCursor(cdone);
+          frame.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
         }
       }
     });
+
+
+// undo - redo
+    for(int i =0; i<rtb.getTabCount(); i++)
+    {
+      JTextComponent jtc = getJTextComponentAt(rtb,i);
+      if(jtc != null)
+        jtc.getDocument().addUndoableEditListener(new UndoableEditListener()
+        {
+          public void undoableEditHappened(UndoableEditEvent e)
+          {
+            undoManager.addEdit(e.getEdit());
+            updateMenu();
+          }
+        });
+    }
+
+    undo.addActionListener(new ActionListener()
+    {
+      public void actionPerformed(ActionEvent e)
+      {
+        try { undoManager.undo(); }
+        catch (CannotRedoException cre) { cre.printStackTrace(); }
+        updateMenu();
+      }
+    });
+
+    redo.addActionListener(new ActionListener()
+    {
+      public void actionPerformed(ActionEvent e)
+      {
+        try { undoManager.redo(); }
+        catch (CannotRedoException cre) { cre.printStackTrace(); }
+        updateMenu();
+      }
+    });
+
+
+    //Colour selection
+    JMenu colourMenu   = new JMenu("Colour");
+    colourMenu.setMnemonic(KeyEvent.VK_L);
+    ColorMenu cm = new ColorMenu("Text");
+    cm.setMnemonic('t');
+    ActionListener lst = new ActionListener()
+    {
+      public void actionPerformed(ActionEvent e)
+      {
+        ColorMenu m = (ColorMenu)e.getSource();
+        JTextPane jtp = getSelectedJTextPane(rtb);
+        if(jtp != null)
+          jtp.setForeground(m.getColor());
+      }
+    };
+    cm.addActionListener(lst);
+    colourMenu.add(cm);
+ 
+    cm = new ColorMenu("Background");
+    cm.setMnemonic('b');
+    lst = new ActionListener()
+    {
+      public void actionPerformed(ActionEvent e)
+      {
+        ColorMenu m = (ColorMenu)e.getSource();
+        JTextPane jtp = getSelectedJTextPane(rtb);
+        if(jtp != null)
+          jtp.setBackground(m.getColor());
+      }
+    };
+    cm.addActionListener(lst);
+    colourMenu.add(cm);
+    add(colourMenu);
+
+
+    //Font size selection
+    String sizes[] = {"10", "12", "14", "16", "18"};
+    final JComboBox fntSize = new JComboBox(sizes);
+    fntSize.setSelectedItem("12");
+    fntSize.setPreferredSize(fntSize.getMinimumSize());
+    fntSize.setMaximumSize(fntSize.getMinimumSize());
+    fntSize.setEditable(true);
+    toolBar.add(fntSize);
+    fntSize.addActionListener(new ActionListener()
+    {
+      public void actionPerformed(ActionEvent e)
+      {
+        JTextPane jtp = getSelectedJTextPane(rtb);
+        if(jtp != null)
+        {
+          Font fnt = jtp.getFont();
+          try
+          {
+            String fsize = (String)fntSize.getSelectedItem();
+            if(fsize.indexOf(".") > -1)
+              fsize = fsize.substring(0,fsize.indexOf("."));
+            fnt = new Font(fnt.getFontName(),fnt.getStyle(),
+                           Integer.parseInt(fsize));
+            jtp.setFont(fnt);
+          } catch(NumberFormatException nfe){}
+        }
+      }
+    });
+
+    //Font style
+    String styles[] = {"Plain","Bold","Italic"};
+    final JComboBox cbFonts = new JComboBox(styles);
+    cbFonts.setMaximumSize(cbFonts.getPreferredSize());
+    cbFonts.setToolTipText("Available styles");
+    cbFonts.addActionListener(new ActionListener()
+    {
+      public void actionPerformed(ActionEvent e)
+      {
+        int index = cbFonts.getSelectedIndex();
+        if (index < 0)
+          return;
+        JTextPane jtp = getSelectedJTextPane(rtb);
+        if(jtp == null)
+          return;
+
+        Font fnt = jtp.getFont();
+        if(index == 0)
+          fnt = fnt.deriveFont(Font.PLAIN);
+        else if(index == 1)
+          fnt = fnt.deriveFont(Font.BOLD);
+        else
+          fnt = fnt.deriveFont(Font.ITALIC);
+        jtp.setFont(fnt);
+      }
+    });
+    toolBar.add(cbFonts);
+
   }
 
 
+/**
+*
+* Update the undo and redo menus and enable or disable
+* dependent on the editing event that proceeded.
+*
+*/
+  private void updateMenu()
+  {
+    undo.setText(undoManager.getUndoPresentationName());
+    redo.setText(undoManager.getRedoPresentationName());
+    undo.setEnabled(undoManager.canUndo());
+    redo.setEnabled(undoManager.canRedo());
+  }
+
+  private void fileSave(String cwd, String fileSelected, 
+                        String tabTitle, Hashtable h)
+  {
+    String fs = new String(System.getProperty("file.separator"));
+    FileSave fsave = new FileSave(new File(cwd + fs + fileSelected));
+    if(fsave.doWrite())
+      fsave.fileSaving(h.get(tabTitle));
+    if(!fsave.fileExists())
+    {
+      org.emboss.jemboss.Jemboss.tree.addObject(fileSelected,cwd,null);
+      DragTree ltree = SetUpMenuBar.getLocalDragTree();
+      if(ltree!=null)
+        ltree.addObject(fileSelected,cwd,null);
+    }
+  }
+
   public JMenuBar getJMenuBar()
   {
-    return menuPanel;
+    return this;
+  }
+
+  private JTextPane getSelectedJTextPane(JTabbedPane rtb)
+  {
+    JScrollPane jsp = (JScrollPane)(rtb.getSelectedComponent());
+    JPanel jp = (JPanel)(jsp.getViewport().getView());
+    try
+    {
+      return (JTextPane)jp.getComponent(0);
+    }
+    catch(ClassCastException cce){}
+    return null;
+  }
+
+  private JTextComponent getJTextComponentAt(JTabbedPane rtb, int index)
+  {
+    JPanel jp;
+    try
+    {
+      JScrollPane jsp = (JScrollPane)(rtb.getComponentAt(index));
+      jp = (JPanel)(jsp.getViewport().getView());
+    }
+    catch(ClassCastException cce)
+    {
+      jp = (JPanel)(rtb.getComponentAt(index));
+    }
+
+    try
+    {
+      return (JTextComponent)jp.getComponent(0);
+    }
+    catch(ClassCastException cce){}
+    return null;
   }
   
 }
 
+class ColorMenu extends JMenu
+{
+  protected Border unselectedBorder;
+  protected Border selectedBorder;
+  protected Border activeBorder;
+
+  protected Hashtable panes;
+  protected ColorPane selected;
+
+  public ColorMenu(String name) 
+  {
+    super(name);
+    unselectedBorder = new CompoundBorder(
+      new MatteBorder(1, 1, 1, 1, getBackground()),
+      new BevelBorder(BevelBorder.LOWERED, 
+      Color.white, Color.gray));
+    selectedBorder = new CompoundBorder(
+      new MatteBorder(2, 2, 2, 2, Color.red),
+      new MatteBorder(1, 1, 1, 1, getBackground()));
+    activeBorder = new CompoundBorder(
+      new MatteBorder(2, 2, 2, 2, Color.blue),
+      new MatteBorder(1, 1, 1, 1, getBackground()));
+        
+    JPanel p = new JPanel();
+    p.setBorder(new EmptyBorder(5, 5, 5, 5));
+    p.setLayout(new GridLayout(8, 8));
+    panes = new Hashtable();
+
+    int[] values = new int[] { 0, 128, 192, 255 };
+    for (int r=0; r<values.length; r++) 
+    {
+      for (int g=0; g<values.length; g++) 
+      {
+        for (int b=0; b<values.length; b++)
+        {
+          Color c = new Color(values[r], values[g], values[b]);
+          ColorPane pn = new ColorPane(c);
+          p.add(pn);
+          panes.put(c, pn);
+        }
+      }
+    }
+    add(p);
+  }
+
+  public void setColor(Color c) 
+  {
+    Object obj = panes.get(c);
+    if (obj == null)
+      return;
+    if (selected != null)
+      selected.setSelected(false);
+    selected = (ColorPane)obj;
+    selected.setSelected(true);
+  }
+
+  public Color getColor() 
+  {
+    if (selected == null)
+      return null;
+    return selected.getColor();
+  }
+
+  public void doSelection() 
+  {
+    fireActionPerformed(new ActionEvent(this, 
+      ActionEvent.ACTION_PERFORMED, getActionCommand()));
+  }
+
+  class ColorPane extends JPanel implements MouseListener
+  {
+    protected Color col;
+    protected boolean selected;
+
+    public ColorPane(Color c) 
+    {
+      col = c;
+      setBackground(c);
+      setBorder(unselectedBorder);
+      String msg = "R "+c.getRed()+", G "+c.getGreen()+
+        ", B "+c.getBlue();
+      setToolTipText(msg);
+      addMouseListener(this);
+    }
+
+    public Color getColor() { return col; }
+
+    public Dimension getPreferredSize() 
+    {
+      return new Dimension(15, 15);
+    }
+    public Dimension getMaximumSize() { return getPreferredSize(); }
+    public Dimension getMinimumSize() { return getPreferredSize(); }
+
+    public void setSelected(boolean select) 
+    {
+      selected = select;
+      if (selected)
+        setBorder(selectedBorder);
+      else
+        setBorder(unselectedBorder);
+    }
+
+    public boolean isSelected() { return selected; }
+    public void mousePressed(MouseEvent e) {}
+    public void mouseClicked(MouseEvent e) {}
+
+    public void mouseReleased(MouseEvent e) 
+    {
+      setColor(col);
+      MenuSelectionManager.defaultManager().clearSelectedPath();
+      doSelection();
+    }
+
+    public void mouseEntered(MouseEvent e) 
+    {
+      setBorder(activeBorder);
+    }
+
+    public void mouseExited(MouseEvent e) 
+    {
+      setBorder(selected ? selectedBorder : 
+        unselectedBorder);
+    }
+  }
+}

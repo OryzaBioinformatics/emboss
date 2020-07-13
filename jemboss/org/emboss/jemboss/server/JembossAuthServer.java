@@ -47,24 +47,30 @@ public class JembossAuthServer
   private String ls = new String(System.getProperty("line.separator"));
 
 //get paths to EMBOSS
-  JembossParams jp = new JembossParams();
-  String plplot = jp.getPlplot();
+  JembossParams jp  = new JembossParams();
+  String plplot     = jp.getPlplot();
   String embossData = jp.getEmbossData();
-  String embossBin = jp.getEmbossBin();
+  String embossBin  = jp.getEmbossBin();
   String embossPath = jp.getEmbossPath();
-  String acdDirToParse = jp.getAcdDirToParse();
+  String acdDirToParse     = jp.getAcdDirToParse();
+  String embossEnvironment = jp.getEmbossEnvironment();
 
-  private String[] envp = 
+  private String[] env = 
   {
     "PATH=" + embossPath + ps + embossBin,
     "PLPLOT_LIB=" + plplot,
     "EMBOSS_DATA=" + embossData
+//  ,"LD_LIBRARY_PATH=/usr/local/lib"
+// FIX FOR SOME SUNOS
   };
+  private String[] envp = jp.getEmbossEnvironmentArray(env);
   
   private String environ = "PATH=" + embossBin+ ps + embossPath +" "+
                            "PLPLOT_LIB=" + plplot +" "+
-                           "EMBOSS_DATA=" + embossData +" ";
-
+                           "EMBOSS_DATA=" + embossData +" "+
+                           jp.getEmbossEnvironment();
+// "LD_LIBRARY_PATH=/usr/local/lib"+" ";
+// FIX FOR SOME SUNOS
 
   public String name()
   {
@@ -177,6 +183,7 @@ public class JembossAuthServer
     Vector wossOut = new Vector();
     String embossCommand = new String(embossBin + 
                    "wossname -colon -gui -auto");
+ 
     RunEmbossApplication rea = new RunEmbossApplication(embossCommand,
                                                            envp,null);
     wossOut.add("status");
@@ -198,7 +205,7 @@ public class JembossAuthServer
 */
   public Vector show_help(String applName)
   {
-    String command = embossBin.concat("tfm " + applName + " -nomore");
+    String command = embossBin.concat("tfm " + applName + " -html -nomore");
     RunEmbossApplication rea = new RunEmbossApplication(command,envp,null);
     String helptext = "";
     if(rea.isProcessStdout())
@@ -221,30 +228,43 @@ public class JembossAuthServer
 * @return sequence length, weight & type (protein/nucleotide)
 *
 */
-  public Vector call_ajax(String fileContent, String seqtype)
+  public Vector call_ajax(String fileContent, String seqtype,
+                          String userName, byte[] passwd)
   {
-    boolean afile = false;
-    String fn = null;
-    File tf = null;
 
     Vector vans = new Vector();
+    Ajax aj = new Ajax();
+    if(!verifyUser(aj,userName,passwd,vans))
+      return vans;
+
+    boolean afile = false;
+    boolean fexists = false;
+    String fn = null;
+
+    // local file exists?
+    if(fileContent.startsWith(fs))
+    {
+      int ind = fileContent.lastIndexOf(fs);
+      String fdir  = fileContent.substring(0,ind);
+      String ffile = fileContent.substring(ind+1).trim(); 
+      aj.listFiles(userName,passwd,environ,fdir);
+      if(aj.getOutStd().indexOf(ffile+"\n") > -1)
+        fexists = true;
+    }
 
     // create temporary file
     if( ((fileContent.indexOf(":") < 0) || 
          (fileContent.indexOf("\n") > 0) ) &&
-       !((new File(fileContent)).exists()) ) 
+         (!fexists) ) 
     {
-      afile = true;
       try
       {
-        tf = File.createTempFile("tmp",".jembosstmp", tmprootDir);
-        PrintWriter out = new PrintWriter(new FileWriter(tf));
-        out.println(fileContent);
-        out.close();
-    
-        fn = new String(tf.getCanonicalPath());
+        fn = tmproot+fs+userName+fs+".jembosstmp";
+        boolean ok = aj.putFile(userName,passwd,environ,
+                             fn,fileContent.getBytes());
+        afile = true;
       }
-      catch (IOException ioe) 
+      catch (Exception ioe) 
       {
         appendToLogFile("IOException: call_ajax creating tmp.jembosstmp",
                          errorLog);
@@ -257,6 +277,103 @@ public class JembossAuthServer
     {
       fn = fileContent;     //looks like db entry or local file name
     }
+
+
+    boolean ok = false;
+    if( fexists  || afile ||    //call ajax if sequence file
+        fn.indexOf(":") > 0 )   //or db
+    {
+      try
+      {
+        if(seqtype.startsWith("seqset"))
+          ok = aj.seqsetAttrib(userName,passwd,environ,fn);
+        else
+          ok = aj.seqAttrib(userName,passwd,environ,fn);
+      }
+      catch (Exception e)
+      {
+        appendToLogFile("Exception: call_ajax status not ok",
+                         errorLog);
+        vans.add("status");
+        vans.add("1");
+        return vans;
+      }
+    }
+
+    if(afile)
+      aj.delFile(userName,passwd,environ,fn);
+
+    for(int i=0;i<passwd.length;i++)
+      passwd[i] = '\0';
+
+    if(ok)
+    {
+//    System.out.println("STATUS OK");
+      vans.add("length");
+      vans.add(new Integer(aj.length_soap));
+      vans.add("protein");
+      vans.add(new Boolean(aj.protein_soap));
+      vans.add("weight");
+      vans.add(new Float(aj.weight_soap));
+      vans.add("status");
+      vans.add("0");
+    }
+    else
+    {
+      appendToLogFile("Error: call_ajax status not ok",
+                         errorLog);
+      vans.add("status");
+      vans.add("1");
+    }
+
+    return vans;
+  }
+
+
+/**
+*
+* Uses JNI to calculate sequence attributes using EMBOSS library call. 
+* @param sequence filename or database entry
+* @return sequence length, weight & type (protein/nucleotide)
+*
+*/
+  public Vector call_ajax(String fileContent, String seqtype)
+  {
+    boolean afile = false;
+    String fn = null;
+    File tf = null;
+
+    Vector vans = new Vector();
+
+    // create temporary file
+    if( ((fileContent.indexOf(":") < 0) ||
+         (fileContent.indexOf("\n") > 0) ) &&
+       !((new File(fileContent)).exists()) )
+    {
+      afile = true;
+      try
+      {
+        tf = File.createTempFile("tmp",".jembosstmp", tmprootDir);
+        PrintWriter out = new PrintWriter(new FileWriter(tf));
+        out.println(fileContent);
+        out.close();
+
+        fn = new String(tf.getCanonicalPath());
+      }
+      catch (IOException ioe)
+      {
+        appendToLogFile("IOException: call_ajax creating tmp.jembosstmp",
+                         errorLog);
+        vans.add("status");
+        vans.add("1");
+        return vans;
+      }
+    }
+    else
+    {
+      fn = fileContent;     //looks like db entry or local file name
+    }
+
 
     boolean ok = false;
     Ajax aj = null;
@@ -327,6 +444,37 @@ public class JembossAuthServer
     showdbOut.add("showdb");
     showdbOut.add(rea.getProcessStdout());
      
+    // find available matrices
+    String dataFile[] = (new File(embossData)).list(new FilenameFilter()
+    {
+      public boolean accept(File dir, String name)
+      {
+        File fileName = new File(dir, name);
+        return !fileName.isDirectory();
+      };
+    });
+    String matrices ="";
+    for(int i=0;i<dataFile.length;i++)
+      matrices=matrices.concat(dataFile[i]+"\n");
+    showdbOut.add("matrices");
+    showdbOut.add(matrices);
+
+    // find available codon usage tables
+    
+    dataFile = (new File(embossData+fs+"CODONS")).list(new FilenameFilter()
+    {
+      public boolean accept(File dir, String name)
+      {
+        File fileName = new File(dir, name);
+        return !fileName.isDirectory();
+      };
+    });
+    matrices ="";
+    for(int i=0;i<dataFile.length;i++)
+      matrices=matrices.concat(dataFile[i]+"\n");
+    showdbOut.add("codons");
+    showdbOut.add(matrices);
+
     return showdbOut;
   }
 
@@ -406,7 +554,9 @@ public class JembossAuthServer
       }
       catch(Exception exp){}
 
-      if(ok && aj.getErrStd().equals(""))
+//    if(ok && aj.getErrStd().equals(""))
+//    Linux fix - ignore stderr here
+      if(ok)
         appendToLogFile("Created directory "+tmproot,errorLog);
       else
       {
@@ -457,7 +607,6 @@ public class JembossAuthServer
     while(enum.hasMoreElements())
     {
       String thiskey = (String)enum.nextElement().toString();
-      String filec = (String)inFiles.get(thiskey);
       descript = descript.concat(project+fs+thiskey+ls);
 
       ok = false;
@@ -465,7 +614,7 @@ public class JembossAuthServer
       {
         ok = aj.putFile(userName,passwd,environ,
                  new String(project+fs+thiskey),
-                 filec.getBytes());
+                 (byte[])inFiles.get(thiskey));
       }
       catch(Exception exp){}
 
@@ -538,7 +687,7 @@ public class JembossAuthServer
 
 //get the output files
       result = loadFilesContent(aj,userName,passwd,
-                      projectDir,project,result);
+                      projectDir,project,result,inFiles);
 
       for(int i=0;i<passwd.length;i++)
         passwd[i] = '\0';
@@ -546,13 +695,13 @@ public class JembossAuthServer
     }
     else      //batch or background
     {
-//    JembossAuthThread jt = new JembossAuthThread(
-//                       userName,passwd,
-//                       embossCommand,environ,project);
-//    jt.start();
 
+// COMMENT THIS LINE TO USE QUEUEING SOFTWARE
       boolean lforkB = aj.forkBatch(userName,passwd,environ,
                                     embossCommand,project);
+
+// UNCOMMENT THIS LINE TO USE QUEUEING SOFTWARE
+//    runAsBatch(aj,userName,passwd,project,embossCommand)
 
       result.add("msg");
       result.add("");
@@ -567,6 +716,57 @@ public class JembossAuthServer
     return result;
   }
 
+
+/**
+*
+* Submit to a batch queue. This method creates a script for
+* submission to a batch queueing system.
+*
+*/
+  private void runAsBatch(Ajax aj, String userName, byte[] passwd,
+                    String project, String embossCommand)
+  {
+    String scriptIt = "#!/bin/sh\n";
+    scriptIt = scriptIt.concat(environ.replace(' ','\n'));
+    scriptIt = scriptIt.concat("export PATH\n");
+    scriptIt = scriptIt.concat("export PLPLOT_LIB\n");
+    scriptIt = scriptIt.concat("export EMBOSS_DATA\n");
+    scriptIt = scriptIt.concat("cd "+project+"\n"+embossCommand+"\n");
+    scriptIt = scriptIt.concat("date > "+project+"/.finished\n");
+    
+    boolean ok = false;
+    try
+    {
+      ok = aj.putFile(userName,passwd,environ,
+               new String(project+fs+".scriptfile"),
+               scriptIt.getBytes());
+    }
+    catch(Exception exp){}
+
+    if(!ok)
+    {
+      appendToLogFile("Failed to make file "+project+fs+".scriptfile",errorLog);
+      appendToLogFile("STDERR "+aj.getErrStd(),errorLog);
+      appendToLogFile("STDOUT "+aj.getOutStd(),errorLog);
+    }
+  
+    boolean lfork=true;
+    try
+    {
+      //EDIT batchCommand 
+      String batchCommand = "/bin/batchQueue.sh " + project +
+                            "/.scriptfile ";
+                         
+      lfork = aj.forkEmboss(userName,passwd,environ,
+                            batchCommand,project);
+    }
+    catch(Exception exp){}
+
+    if(!lfork || !aj.getErrStd().equals(""))
+      appendToLogFile("Fork batch process failed "+embossCommand,errorLog);
+
+    return;
+  }
 
 /**
 *
@@ -592,7 +792,7 @@ public class JembossAuthServer
     project = tmproot.concat(project);
     File projectDir = new File(project);
     ssr = loadFilesContent(aj,userName,passwd,
-                      projectDir,project,ssr);
+                      projectDir,project,ssr,null);
      
     ssr.add("status");
     ssr.add("0");
@@ -628,14 +828,17 @@ public class JembossAuthServer
 
     tmproot = tmproot.concat(userName+fs);
 
-    project = tmproot.concat(project);
-
-    boolean ok = aj.delDir(userName,passwd,environ,project);
-    if(!ok || !aj.getErrStd().equals(""))
+    StringTokenizer st = new StringTokenizer(project,"\n");
+    while(st.hasMoreTokens()) 
     {
-      appendToLogFile("Failed deletion of directory "+project,errorLog);
-      appendToLogFile("STDERR "+aj.getErrStd(),errorLog);
-      appendToLogFile("STDOUT "+aj.getOutStd(),errorLog);
+      String proj = tmproot.concat(st.nextToken());
+      boolean ok = aj.delDir(userName,passwd,environ,proj);
+      if(!ok || !aj.getErrStd().equals(""))
+      {
+        appendToLogFile("Failed deletion of directory "+proj,errorLog);
+        appendToLogFile("STDERR "+aj.getErrStd(),errorLog);
+        appendToLogFile("STDOUT "+aj.getOutStd(),errorLog);
+      }
     }
 
     dsr.add("status");
@@ -752,7 +955,8 @@ public class JembossAuthServer
 *
 */
   private Vector loadFilesContent(Ajax aj, String userName, 
-          byte[] passwd, File projectDir, String project, Vector result)
+            byte[] passwd, File projectDir, String project,
+            Vector result, Hashtable inFiles)
   {
 
     boolean ls = false;
@@ -777,7 +981,16 @@ public class JembossAuthServer
     StringTokenizer stok = new StringTokenizer(outStd,"\n");
     Vector outFiles = new Vector();
     while(stok.hasMoreTokens()) 
-      outFiles.add(stok.nextToken());
+    {
+      String fn = stok.nextToken();
+      if(inFiles != null)
+      {
+        if(!inFiles.containsKey(fn))        // leave out input files
+          outFiles.add(fn);
+      }
+      else
+        outFiles.add(fn);
+    }
 
     Enumeration en = outFiles.elements();
     while(en.hasMoreElements()) 
@@ -909,6 +1122,12 @@ public class JembossAuthServer
 //  appendToLogFile("userAuth STDERR "+aj.getErrStd(),errorLog);  //DEBUG
        
     return true;
+  }
+
+
+  public final Object clone() throws java.lang.CloneNotSupportedException
+  {
+    throw new java.lang.CloneNotSupportedException();
   }
 
 }

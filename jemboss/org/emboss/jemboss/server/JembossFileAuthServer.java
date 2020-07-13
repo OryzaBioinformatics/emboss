@@ -173,6 +173,106 @@ public class JembossFileAuthServer
   } 
 
 
+
+/**
+*
+* @param option determines the root directory to put the file
+* @param path to new directory
+*
+*/
+  public Vector mkdir(String options, String dirname,
+                      String userName, byte[] passwd)
+  {
+    Vector vans = new Vector();
+    Ajax aj = new Ajax();
+
+    int split = options.indexOf("=")+1;
+    String fullDirname = getRoot(options.substring(split),userName,passwd)+
+                           "/" + dirname;
+    boolean ok=true;
+    try
+    {
+      ok = aj.makeDir(userName,passwd,environ,fullDirname);
+    }
+    catch(Exception exp){}
+    vans.add("msg");
+    if(ok)
+      vans.add("");
+    else
+      vans.add("NOT OK");
+
+    for(int i=0;i<passwd.length;i++)
+      passwd[i] = '\0';
+
+    return vans;
+  }
+
+/**
+*
+*
+*
+*/
+  public Vector delFile(String options, String filename,
+                        String userName, byte[] passwd)
+  {
+    Vector vans = new Vector();
+    Ajax aj = new Ajax();
+  
+    int split = options.indexOf("=")+1;
+    String fullname = getRoot(options.substring(split),userName,passwd)+
+                             "/" + filename;
+    boolean ok=true;
+    try
+    {
+      ok = aj.delFile(userName,passwd,environ,fullname);
+    }
+    catch(Exception exp){}
+
+    vans.add("msg");
+    if(ok)
+      vans.add("");
+    else
+      vans.add("NOT OK");
+
+    for(int i=0;i<passwd.length;i++)
+      passwd[i] = '\0';
+
+    return vans;
+  }
+
+/**
+*
+*
+*
+*/
+  public Vector rename(String options, String oldfile, String newfile,
+                       String userName, byte[] passwd)
+  {
+    Vector vans = new Vector();
+    Ajax aj = new Ajax();
+
+    int split = options.indexOf("=")+1;
+    String oldname = getRoot(options.substring(split),userName,passwd)+
+                             "/" + oldfile;
+    boolean ok=true;
+    try
+    {
+      ok = aj.renameFile(userName,passwd,environ,oldname,newfile);
+    }
+    catch(Exception exp){}
+    vans.add("msg");
+    if(ok)
+      vans.add("");
+    else
+      vans.add("NOT OK");
+
+    for(int i=0;i<passwd.length;i++)
+      passwd[i] = '\0';
+
+    return vans;
+  }
+
+
 /**
 *
 * @param option determines the root directory to put the file

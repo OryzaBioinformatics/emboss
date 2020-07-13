@@ -36,7 +36,6 @@ public class ResultList
   private String statusmsg;
   private String status;
   private Hashtable proganswer;
-  private String currentRes = null;
 
 /**
 *
@@ -146,6 +145,7 @@ public class ResultList
     return proganswer.keys();
   }
 
+
 /**
 *
 * @param Object key of the element to return
@@ -159,27 +159,6 @@ public class ResultList
 
 /**
 *
-* @return String of the current dataset being looked at
-*
-*/
-  public String getCurrent() 
-  {
-    return(currentRes);
-  }
-
-/**
-*
-* Save the name of a dataset, marking it as the current dataset
-* @param s  The name of the dataset
-*
-*/
-  public void setCurrent(String s) 
-  {
-    currentRes = s;
-  }
-
-/**
-*
 * Replace the current results hash
 * @param newres  The new results hash
 *
@@ -187,11 +166,6 @@ public class ResultList
   public void updateRes(Hashtable newres)
   {
     proganswer = newres;
-    if (currentRes != null) 
-    {
-      if (!proganswer.containsKey(currentRes)) 
-	currentRes = null;
-    }
   }
 
 }

@@ -26,19 +26,22 @@ import java.awt.*;
 import javax.swing.*;
 import java.awt.event.*;
 import org.emboss.jemboss.JembossParams;
+import org.emboss.jemboss.gui.filetree.LocalAndRemoteFileTreeFrame;
 
-public class AuthPopup 
+public class AuthPopup extends JFrame
 {
 
-  private int iprogress = 0;
-  private int iprogressmax;
-  private JembossParams mysettings;
   private JPanel splashp;
-  private JFrame splashf;
-  JProgressBar progressBar;
-  JLabel progressLabel;
-
+  private int iprogress = 0;
+  private int iprogressmax = 0;
+  private JembossParams mysettings;
+  private JProgressBar progressBar;
+  private JLabel progressLabel;
+  private JButton okButton;
+  private JTextField ufield;
+  private JPasswordField pfield;
   private boolean exitOnDone = false;
+  private JPanel promptPanel;
 
 /**
 *
@@ -79,35 +82,24 @@ public class AuthPopup
                cl.getResource("images/Jemboss_logo_greyback.gif"));
     logoPanel.add(new JLabel(ii),BorderLayout.WEST);
 
-    splashp = new JPanel(new BorderLayout());
+    splashp = (JPanel)getContentPane();
+    splashp.setLayout(new BorderLayout());
     splashp.add(logoPanel, BorderLayout.NORTH);
 
     //if required, a login prompt
     if (mysettings.getUseAuth()) 
     {
-      splashf = new JFrame("Login");
-      JPanel promptPanel = new JPanel(new BorderLayout());
+      setTitle("Login");
+      promptPanel = new JPanel(new BorderLayout());
       JPanel loginPanel = new JPanel();
       loginPanel.setLayout(new GridLayout(2,2));
       
-      final JTextField ufield = new JTextField(16);
+      ufield = new JTextField(16);
       if (mysettings.getServiceUserName() != null) 
 	ufield.setText(mysettings.getServiceUserName());
       
-      final JPasswordField pfield = new JPasswordField(16);
+      pfield = new JPasswordField(16);
       final JTextField xfield = new JTextField(16);
-
-      //close login box on carriage return in passwd field
-      pfield.addActionListener(new ActionListener()
-      {
-        public void actionPerformed(ActionEvent e)
-        {
-          mysettings.setServiceUserName(ufield.getText());
-          mysettings.setServicePasswd(pfield.getPassword());
-          exitOnDone = true;
-          splashf.dispose();
-        }
-      });
 
       JLabel ulab = new JLabel(" Username:", SwingConstants.LEFT);
       JLabel plab = new JLabel(" Password:", SwingConstants.LEFT);
@@ -118,64 +110,18 @@ public class AuthPopup
       loginPanel.add(pfield);
 
       promptPanel.add(loginPanel, BorderLayout.CENTER);
-      // buttons across the bottom
-      JPanel buttonPanel = new JPanel();
-      buttonPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
-      JButton cancelButton = new JButton("Cancel");
-      JButton exitButton = new JButton("Exit");
-      JButton okButton = new JButton("OK");
-      cancelButton.addActionListener(new ActionListener() 
-      {
-	public void actionPerformed(ActionEvent e) 
-        {
-	  splashf.setVisible(false);
-	}
-      });
-
-      exitButton.addActionListener(new ActionListener() 
-      {
-	public void actionPerformed(ActionEvent e) 
-        {
-	  System.exit(0);
-	}
-      });
-
-      okButton.addActionListener(new ActionListener()
-      {
-	public void actionPerformed(ActionEvent e)
-        {
-	  mysettings.setServiceUserName(ufield.getText());
-	  mysettings.setServicePasswd(pfield.getPassword());
-          exitOnDone = true;
-	  splashf.dispose();
-	}
-      });
-      /*
-      * the cancel button isn't currently used; it's the same as
-      * the OK button. But if the OK button actually did login
-      * validation then we should enable this button again.
-      *
-          buttonPanel.add(cancelButton);
-      */
-      buttonPanel.add(exitButton);
-      buttonPanel.add(okButton);
-      promptPanel.add(buttonPanel, BorderLayout.SOUTH);
-      splashp.add(promptPanel);
-      splashf.getContentPane().add(splashp);
-      splashf.setSize(380,170);
-      splashf.pack();
+      setSize(380,170);
 
       // all added, display the frame
-      splashf.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
-      splashf.setVisible(true);
+      setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
     }
     else
     {
-      splashf = new JFrame("Jemboss Launch");
+      setTitle("Jemboss Launch");
       exitOnDone = true;
     }
-    splashf.setLocation(1,5);
-
+    setLocation(1,5);
+    this.mysettings = mysettings;
   }
 
 /**
@@ -188,7 +134,7 @@ public class AuthPopup
      this(mysettings,null);
      this.mysettings = mysettings;
      this.iprogressmax = iprogressmax;
-     
+
      //progress meter at startup
      if (iprogressmax > 0)
      {
@@ -201,17 +147,183 @@ public class AuthPopup
        progressPanel.add(progressLabel);
        splashp.add(progressPanel,BorderLayout.SOUTH);
      }
-    
+
     // add a border to the main pane to make is stand out
     splashp.setBorder(BorderFactory.createMatteBorder(2,2,2,2,Color.black));
 
-    splashf.getContentPane().add(splashp);
-    splashf.setSize(380,200);
+    setSize(380,200);
 
     // all added, display the frame
-    splashf.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
-    splashf.setVisible(true);
+    setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
   }
+
+/**
+*
+* Buttons across the bottom
+*
+*/
+  public void addBottomPanel() 
+  {
+    setTitle("File Manager Login");
+    final JPanel buttonPanel = 
+         new JPanel(new FlowLayout(FlowLayout.RIGHT));
+    JButton exitButton = new JButton("Exit");
+    okButton = new JButton("OK");
+
+    exitButton.addActionListener(new ActionListener()
+    {
+      public void actionPerformed(ActionEvent e)
+      {
+        System.exit(0);
+      }
+    });
+
+    final JFrame fthis = this;
+    okButton.addActionListener(new ActionListener()
+    {
+      public void actionPerformed(ActionEvent e)
+      {
+        mysettings.setServiceUserName(ufield.getText());
+        mysettings.setServicePasswd(pfield.getPassword());
+        exitOnDone = true;
+
+        if (iprogressmax > 0)
+        {
+          remove(promptPanel);
+          pack();
+        }
+        else
+          setVisible(false);
+
+        try
+        {
+          LocalAndRemoteFileTreeFrame treeFrame =
+                  new LocalAndRemoteFileTreeFrame(mysettings);
+          treeFrame.setExit();
+
+          Dimension d = treeFrame.getToolkit().getScreenSize();
+          treeFrame.setLocation(0,((int)d.getHeight()-treeFrame.getHeight())/2);
+          treeFrame.setVisible(true);
+        }
+        catch(JembossSoapException jse)
+        {
+          if (iprogressmax > 0)
+          {
+            promptPanel.add(buttonPanel, BorderLayout.SOUTH);
+            pack();
+          }
+          setVisible(true);
+        }
+      }
+    });
+
+    buttonPanel.add(exitButton);
+    buttonPanel.add(okButton);
+    promptPanel.add(buttonPanel, BorderLayout.SOUTH);
+    splashp.add(promptPanel);
+
+    //close login box on carriage return in passwd field
+    pfield.addActionListener(new ActionListener()
+    {
+      public void actionPerformed(ActionEvent e)
+      {
+        mysettings.setServiceUserName(ufield.getText());
+        mysettings.setServicePasswd(pfield.getPassword());
+        exitOnDone = true;
+        fthis.setVisible(false);
+        try
+        {
+          LocalAndRemoteFileTreeFrame treeFrame =
+                  new LocalAndRemoteFileTreeFrame(mysettings);
+          treeFrame.setExit();
+          Dimension d = treeFrame.getToolkit().getScreenSize();
+          treeFrame.setLocation(0,((int)d.getHeight()-treeFrame.getHeight())/2);
+          treeFrame.setVisible(true);
+        }
+        catch(JembossSoapException jse)
+        {
+          fthis.setVisible(true);
+        }
+      }
+    });
+
+  }
+
+  
+/**
+*
+* Buttons across the bottom
+*
+*/
+  public void setBottomPanel()
+  {
+    JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+    JButton exitButton = new JButton("Exit");
+    JButton okButton = new JButton("OK");
+
+    exitButton.addActionListener(new ActionListener()
+    {
+      public void actionPerformed(ActionEvent e)
+      {
+        System.exit(0);
+      }
+    });
+
+    okButton.addActionListener(new ActionListener()
+    {
+      public void actionPerformed(ActionEvent e)
+      {
+        mysettings.setServiceUserName(ufield.getText());
+        mysettings.setServicePasswd(pfield.getPassword());
+        exitOnDone = true;
+
+        if(iprogressmax > 0 &&
+           iprogress != iprogressmax)
+        {
+          remove(promptPanel);
+          pack();
+        }
+        else
+          dispose();
+      }
+    });
+    buttonPanel.add(exitButton);
+    buttonPanel.add(okButton);
+    promptPanel.add(buttonPanel, BorderLayout.SOUTH);
+    splashp.add(promptPanel);
+
+//close login box on carriage return in passwd field
+    pfield.addActionListener(new ActionListener()
+    {
+      public void actionPerformed(ActionEvent e)
+      {
+        mysettings.setServiceUserName(ufield.getText());
+        mysettings.setServicePasswd(pfield.getPassword());
+        exitOnDone = true;
+        if(iprogressmax > 0 &&
+           iprogress != iprogressmax)
+        {
+          remove(promptPanel);
+          pack();
+        }
+        else
+          dispose();
+      }
+    });
+
+  }
+
+
+/**
+*
+* 
+*
+*/
+  public JButton getOKButton()
+  {
+    return okButton;
+  }
+
 
 /**
 *
@@ -232,7 +344,7 @@ public class AuthPopup
       {
         progressLabel.setText("Startup complete.");
         if (exitOnDone)
-          splashf.setVisible(false);
+          setVisible(false);
       }
     }
   }
@@ -249,14 +361,14 @@ public class AuthPopup
       progressBar.setValue(iprogressmax);
       progressLabel.setText(s);
       if (exitOnDone)
-        splashf.setVisible(false);
+        setVisible(false);
     }
   }
 
 
   public JFrame getSplashFrame()
   {
-    return splashf;
+    return this;
   }
 
 }

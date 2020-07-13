@@ -32,12 +32,19 @@ import org.emboss.jemboss.soap.FileRoots;
 import org.emboss.jemboss.soap.JembossSoapException;
 import org.emboss.jemboss.JembossParams;
 
-public class RemoteFileTreePanel extends JPanel 
+public class RemoteFileTreePanel extends JPanel
 {
 
   final Cursor cbusy = new Cursor(Cursor.WAIT_CURSOR);
   final Cursor cdone = new Cursor(Cursor.DEFAULT_CURSOR);
-  private JPanel jp;
+  private boolean laddCombo;
+  private JComboBox rootSelect;
+
+  public RemoteFileTreePanel(final JembossParams mysettings)
+                                                    throws JembossSoapException
+  {
+    this(mysettings,true);
+  }
 
 /**
 * Creates a panel to contain the directory trees on an embreo server.
@@ -45,10 +52,13 @@ public class RemoteFileTreePanel extends JPanel
 *
 * @param mysettings JembossParams with settings information
 */
-  public RemoteFileTreePanel(final JembossParams mysettings) throws JembossSoapException
+  public RemoteFileTreePanel(final JembossParams mysettings, boolean laddCombo) 
+                                                      throws JembossSoapException
   {
-
-    jp = this;
+   
+    final JPanel jp=this;
+    this.laddCombo = laddCombo;
+    
     setLayout(new BorderLayout());
 
     final Hashtable rootsdone = new Hashtable();                 //record where we are
@@ -57,12 +67,15 @@ public class RemoteFileTreePanel extends JPanel
     final CardLayout fileLayout = new CardLayout();
     filep.setLayout(fileLayout);
 
-    JComboBox rootSelect = new JComboBox(efr.getRootVector());
+    rootSelect = new JComboBox(efr.getRootVector());
     int cstart = efr.getDefaultRootIndex();
     if (cstart != -1) 
       rootSelect.setSelectedIndex(cstart);
-    
-    add(rootSelect, BorderLayout.NORTH);
+    Dimension d = rootSelect.getPreferredSize();
+    rootSelect.setPreferredSize(new Dimension((int)d.getWidth(),(int)d.getHeight()-5));
+   
+    if(laddCombo)
+      add(rootSelect, BorderLayout.NORTH);
     rootSelect.addActionListener(new ActionListener() 
     {
       public void actionPerformed(ActionEvent e) 
@@ -98,6 +111,11 @@ public class RemoteFileTreePanel extends JPanel
     setPreferredSize(new Dimension(180,500));
     add(filep, BorderLayout.CENTER);
 
+  }
+
+  public JComboBox getRootSelect()
+  {
+    return rootSelect;
   }
 
 }

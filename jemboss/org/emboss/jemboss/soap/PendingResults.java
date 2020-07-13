@@ -35,14 +35,10 @@ public class PendingResults
   private int running_jobs = 0;
   private JembossParams mysettings;
   private Vector pendingResults;
-  private String currentRes = null;
   private JButton jobButton = null;
   private JComboBox jobComboBox = null;
   private boolean autoUpdates = false;
 
-  // cursors to show when we're at work
-  final Cursor cbusy = new Cursor(Cursor.WAIT_CURSOR);
-  final Cursor cdone = new Cursor(Cursor.DEFAULT_CURSOR);
 
   public PendingResults(JembossParams mysettings)
   {
@@ -50,15 +46,6 @@ public class PendingResults
     pendingResults = new Vector();
   }
 
-  public int numCompleted() 
-  {
-    return completed_jobs;
-  }
-
-  public int numRunning() 
-  {
-    return running_jobs;
-  }
 
   public void resetCount() 
   {
@@ -75,26 +62,6 @@ public class PendingResults
   public void removeResult(JembossProcess res)
   {
     pendingResults.remove(res);
-  }
-
-/**
-* Gives which of the available datasets is currently
-* being looked at by the gui
-*/
-  public String getCurrent() 
-  {
-    return(currentRes);
-  }
-
-/**
-*
-* Save the name of a dataset, marking it as the current dataset
-* @param s  The name of the dataset
-*
-*/
-  public void setCurrent(String s)
-  {
-    currentRes = s;
   }
 
 /**
@@ -156,6 +123,11 @@ public class PendingResults
     running_jobs = ir;
   }
 
+/**
+*
+* Report the status of completed and running processes.
+*
+*/
   public String jobStatus() 
   {
     String sc =  new Integer(completed_jobs).toString();
@@ -231,7 +203,7 @@ public class PendingResults
     } 
     catch (JembossSoapException e)
     {
-      //throw new EmbreoAuthException();
+      //throw new JembossSoapException();
     }
 
   }
@@ -267,7 +239,6 @@ public class PendingResults
   {
     if (jobComboBox != null) 
       jobComboBox.setSelectedItem(mysettings.getCurrentMode());
-    
   }
 
 /**
@@ -293,16 +264,12 @@ public class PendingResults
 */
   public JPanel statusPanel(final JFrame f) 
   {
-    if (mysettings.getDebug()) 
-      System.out.println("PendingResults: initialized panel with mode " 
-                        + mysettings.getCurrentMode());
-    
     final JPanel jobPanel = new JPanel(new BorderLayout());
-//  JLabel jobLabel = new JLabel("Job Manager: ");
+
     ClassLoader cl = this.getClass().getClassLoader();
     ImageIcon jobIcon = new ImageIcon(cl.getResource("images/Job_manager_button.gif"));
     JLabel jobLabel = new JLabel(jobIcon);
-    jobLabel.setToolTipText("Job Manager");
+    jobLabel.setToolTipText("Batch Job Manager");
 
     jobPanel.add(jobLabel,BorderLayout.WEST);
     jobButton = new JButton("(No Current Jobs)");
@@ -310,9 +277,9 @@ public class PendingResults
     {
       public void actionPerformed(ActionEvent e)
       {
-        jobPanel.setCursor(cbusy);
+        jobPanel.setCursor(new Cursor(Cursor.WAIT_CURSOR));
         showPendingResults(f);
-        jobPanel.setCursor(cdone);
+        jobPanel.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
       }
     });
     jobPanel.add(jobButton,BorderLayout.CENTER);
@@ -326,17 +293,21 @@ public class PendingResults
         JComboBox cb = (JComboBox)e.getSource();
         String modeName = (String)cb.getSelectedItem();
         mysettings.setCurrentMode(modeName);
-        if (mysettings.getDebug()) 
-          System.out.println("PendingResults: set mode to " + modeName);
       }
     });
     jobPanel.add(jobComboBox,BorderLayout.EAST);
+
+    Dimension d = jobPanel.getPreferredSize();
+    d = new Dimension((int)d.getWidth(),
+                      jobIcon.getIconHeight()-2);
+
+    jobPanel.setPreferredSize(d);
     return jobPanel;
   }
 
   public void showPendingResults(JFrame f) 
   {
-    if ((numCompleted() == 0) && (numRunning() == 0)) 
+    if ((completed_jobs == 0) && (running_jobs == 0)) 
     {
       JOptionPane.showMessageDialog(f,"You can only view pending results\n"
 				    + "if any background jobs have been\n"

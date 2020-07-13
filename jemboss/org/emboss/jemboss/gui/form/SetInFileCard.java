@@ -175,7 +175,8 @@ public class SetInFileCard
     bxleft.add(boption);
     bxleft.add(Box.createHorizontalGlue());
     bxleft.add(breset);
-    bxleft.add(Box.createRigidArea(new Dimension(5,0)));
+    bxleft.add(Box.createHorizontalStrut(14));
+//  bxleft.add(Box.createRigidArea(new Dimension(5,0)));
 
     bdown[0].add(Box.createVerticalGlue());
     bdown[0].add(bxleft);
@@ -234,7 +235,7 @@ public class SetInFileCard
         bleft.add(bopt);
         bleft.add(Box.createHorizontalGlue());
         bleft.add(bres);
-        bleft.add(Box.createHorizontalStrut(5));
+        bleft.add(Box.createHorizontalStrut(14));
 
         bdown[1].add(bleft);
 

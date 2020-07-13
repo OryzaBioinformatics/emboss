@@ -26,7 +26,8 @@ import java.util.*;
 import org.apache.soap.rpc.*;
 import org.emboss.jemboss.JembossParams;
 
-public class CallAjax {
+public class CallAjax 
+{
 
   private String statusmsg;
   private String status;
@@ -35,7 +36,8 @@ public class CallAjax {
   private boolean protein;
   private PublicRequest epr;
 
-   public CallAjax(String fileContent, String seqtype, JembossParams mysettings) 
+   public CallAjax(String fileContent, String seqtype,
+                             JembossParams mysettings) 
        throws JembossSoapException 
    {
 
@@ -43,7 +45,16 @@ public class CallAjax {
      params.addElement(new Parameter("fileContent", String.class,
                                     fileContent, null));
      params.addElement(new Parameter("seqtype", String.class,
-                                     seqtype, null));
+                                    seqtype, null));
+
+     // use authenticated call_ajax method
+     if(mysettings.getUseAuth() == true)
+     {    
+       params.addElement(new Parameter("user", String.class,
+                  mysettings.getServiceUserName(), null));
+       params.addElement(new Parameter("p",  byte[].class,
+                mysettings.getServicePasswdByte(), null));
+     }
 
      epr = new PublicRequest(mysettings,"call_ajax",params);
 

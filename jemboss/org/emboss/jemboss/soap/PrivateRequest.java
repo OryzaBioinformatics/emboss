@@ -277,6 +277,7 @@ public class PrivateRequest
       System.err.println("Generated fault: ");
       System.out.println("  Fault Code   = " + fault.getFaultCode());
       System.out.println("  Fault String = " + fault.getFaultString());
+      throw new JembossSoapException("  Fault Code   = " + fault.getFaultCode());
     }
 
 

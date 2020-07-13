@@ -42,6 +42,8 @@ public class SetUpMenuBar
 {
 
   public static SequenceList seqList;
+  public static LocalAndRemoteFileTreeFrame localAndRemoteTree = null;
+  private ServerSetup ss = null;
 
   public SetUpMenuBar(final JembossParams mysettings, final JFrame f,
                       final String envp[], final String cwd,
@@ -58,41 +60,62 @@ public class SetUpMenuBar
 
     JMenu fileMenu = new JMenu("File");
     fileMenu.setMnemonic(KeyEvent.VK_F);
-    JMenuItem fileMenuShowres = new JMenuItem("Show Saved Results");
-    fileMenuShowres.addActionListener(new ActionListener()
-    {
-      public void actionPerformed(ActionEvent e) 
-      {
-	f.setCursor(cbusy);
-        new ShowSavedResults(mysettings,f);
-	f.setCursor(cdone);
-      }
-    });
-    fileMenu.add(fileMenuShowres);
 
-    JMenuItem showRemoteFile = new JMenuItem("Show Remote Files");
-    showRemoteFile.addActionListener(new ActionListener()
+    if(withSoap)
     {
-      public void actionPerformed(ActionEvent e)
+      JMenuItem fileMenuShowres = new JMenuItem("Saved Results");
+      fileMenuShowres.addActionListener(new ActionListener()
       {
-        f.setCursor(cbusy);
-        try
+        public void actionPerformed(ActionEvent e) 
         {
-          JFrame fres = new JFrame();
-          fres.getContentPane().add(new RemoteFileTreePanel(mysettings));
-          fres.pack();
-          fres.setVisible(true);
+	  f.setCursor(cbusy);
+          new ShowSavedResults(mysettings,f);
+	  f.setCursor(cdone);
         }
-        catch (Exception expf) 
+      });
+      fileMenu.add(fileMenuShowres);
+ 
+      JMenuItem showLocalRemoteFile = new JMenuItem(
+                                      "Local and Remote Files");
+      showLocalRemoteFile.addActionListener(new ActionListener()
+      {
+        public void actionPerformed(ActionEvent e)
         {
-          f.setCursor(cdone); 
-          new AuthPopup(mysettings,f);
+          f.setCursor(cbusy);
+     
+          if(localAndRemoteTree == null)
+          {
+            try
+            {
+              localAndRemoteTree = new LocalAndRemoteFileTreeFrame(mysettings);
+              Dimension d = f.getToolkit().getScreenSize();
+              int locY = (int)(d.getHeight()-localAndRemoteTree.getHeight())/2;
+              int wid1 = (int)localAndRemoteTree.getPreferredSize().getWidth();
+              int wid2 = f.getWidth();
+              wid1 = (int)d.getWidth()-wid1;
+              if(wid2 < wid1)
+                wid1 = wid2;     
+              localAndRemoteTree.setLocation(wid1,locY);
+              localAndRemoteTree.setVisible(true);
+            }
+            catch(JembossSoapException jse)
+            {
+              localAndRemoteTree = null;
+              AuthPopup ap = new AuthPopup(mysettings,f); 
+              ap.setBottomPanel();
+              ap.setSize(380,170);
+              ap.pack();
+              ap.setVisible(true);
+            }
+          }
+          else
+            localAndRemoteTree.setVisible(true);
+          f.setCursor(cdone);
         }
-        f.setCursor(cdone);
-      }
-    });
-    fileMenu.add(showRemoteFile);
-    fileMenu.addSeparator();
+      });
+      fileMenu.add(showLocalRemoteFile);
+      fileMenu.addSeparator();
+    }
 
     JMenuItem fileMenuExit = new JMenuItem("Exit");
     fileMenuExit.addActionListener(new ActionListener()
@@ -127,13 +150,14 @@ public class SetUpMenuBar
     prefsMenu.add(showAdvOpt);
     prefsMenu.addSeparator();
 
-    final ServerSetup ss = new ServerSetup(mysettings);
-    JMenuItem serverSettings = new JMenuItem("Server Settings");
+    JMenuItem serverSettings = new JMenuItem("Settings");
     serverSettings.addActionListener(new ActionListener()
     {
       public void actionPerformed(ActionEvent e)
       {
-        int sso = JOptionPane.showConfirmDialog(f,ss,"Server Settings",
+        if(ss == null)
+          ss = new ServerSetup(mysettings);
+        int sso = JOptionPane.showConfirmDialog(f,ss,"Jemboss Settings",
                              JOptionPane.OK_CANCEL_OPTION,
                              JOptionPane.PLAIN_MESSAGE,null);
         if(sso == JOptionPane.OK_OPTION)
@@ -143,25 +167,24 @@ public class SetUpMenuBar
     prefsMenu.add(serverSettings);
 
     
-    JMenuItem showEnvironment = new JMenuItem("Show Environment");
-    showEnvironment.addActionListener(new ActionListener()
-    {
-      public void actionPerformed(ActionEvent e) 
-      {
-        if(withSoap)
-          JOptionPane.showMessageDialog(f,
-           "Public Server: " + mysettings.getPublicSoapURL() +
-           "\nPublic Server Name: " + mysettings.getPublicSoapService() +
-           "\nPrivate Server: " + mysettings.getPrivateSoapURL() +
-           "\nPrivate Server Name: " + mysettings.getPrivateSoapService());
-        else
-          JOptionPane.showMessageDialog(f, 
-              envp[0] + "\n" + envp[1] + "\n" +
-              envp[2] + "\n" + envp[3] + "\n");
-      }
-    });
-    prefsMenu.add(showEnvironment);
-//  menuPanel.add(Box.createHorizontalStrut(5));
+//  JMenuItem showEnvironment = new JMenuItem("Show Environment");
+//  showEnvironment.addActionListener(new ActionListener()
+//  {
+//    public void actionPerformed(ActionEvent e) 
+//    {
+//      if(withSoap)
+//        JOptionPane.showMessageDialog(f,
+//         "Public Server: " + mysettings.getPublicSoapURL() +
+//         "\nPublic Server Name: " + mysettings.getPublicSoapService() +
+//         "\nPrivate Server: " + mysettings.getPrivateSoapURL() +
+//         "\nPrivate Server Name: " + mysettings.getPrivateSoapService());
+//      else
+//        JOptionPane.showMessageDialog(f, 
+//            envp[0] + "\n" + envp[1] + "\n" +
+//            envp[2] + "\n" + envp[3] + "\n");
+//    }
+//  });
+//  prefsMenu.add(showEnvironment);
     menuPanel.add(prefsMenu);
 
 
@@ -260,6 +283,15 @@ public class SetUpMenuBar
 
     f.setJMenuBar(menuPanel);
 
+   }
+
+
+   public static DragTree getLocalDragTree()
+   {
+     if(localAndRemoteTree == null)
+       return null;
+
+     return localAndRemoteTree.getLocalDragTree();
    }
 
 /**

@@ -11,6 +11,6 @@ install-exec-hook:
 	  fi
 
 
-pkgdata_DATA = jemboss.properties readme.txt version
+pkgdata_DATA = jemboss.properties readme.txt version filemgr.html
 
 pkgdatadir=$(prefix)/share/$(PACKAGE)/jemboss/resources
