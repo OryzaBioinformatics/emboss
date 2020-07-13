@@ -385,6 +385,7 @@ static AjBool seqAccessEmblcd (AjPSeqin seqin)
 /*	    if(seqin->Ftquery->Handle)
 		ajFileBuffClear(seqin->Ftquery->Handle,0); */
 	    AJFREE(qry->QryData);
+	    qryd = NULL;
 	}
 
     }
@@ -439,8 +440,11 @@ static AjBool seqCdAll (AjPSeqin seqin)
     ajDebug ("EMBLCD All index directory '%S'\n", qry->IndexDir);
 
     dfp = seqCdFileOpen(qry->IndexDir, "division.lkp", &divfile);
-    if (!dfp)
-	ajFatal("Cannot open division file '%S'", divfile);
+    if (!dfp) {
+	ajWarn("Cannot open division file '%S' for database '%S'",
+		divfile, qry->DbName);
+	return ajFalse;
+    }
 
     nameSize = dfp->RecSize - 2;
     name = ajCharNewL (nameSize+1);
@@ -585,8 +589,9 @@ static size_t seqCdFileRead (void* ptr, size_t element_size,
 
 /* @funcstatic seqCdFileReadName **********************************************
 **
-** Reads a character string from an EMBL CD-ROM index file. The result
-** is truncated at the first space, if any.
+** Reads a character string from an EMBL CD-ROM index file. Trailing spaces
+** (if any) are truncated. EMBLCD indices normally have a trailing NULL
+** character.
 **
 ** @param [w] name [char*] Buffer to read into. Must be at least namesize
 **                         bytes in size.
@@ -604,11 +609,19 @@ static size_t seqCdFileReadName (char* name, size_t namesize,
 
     ret =  ajFileRead (name, namesize, 1, thys->File);
 
-    name[namesize] = '\0';
-    sp = strchr(name, ' ');
-    if (sp)
-	*sp = '\0';
+    ajDebug("seqCdFileReadName was '%s'\n", name);
 
+    name[namesize] = '\0';
+    sp = &name[strlen(name)];
+    while (sp > name)
+    {
+        sp--;
+	if (*sp != ' ')
+	  break;
+	*sp = '\0';
+    }
+
+    ajDebug("seqCdFileReadName now '%s'\n", name);
     return ret;
 }
 
@@ -942,7 +955,7 @@ static ajint seqCdTrgSearch (SeqPCdTrg trgLine, AjPStr entry, SeqPCdFile fp)
     name = seqCdTrgName (ipos, fp);
     icmp = ajStrCmpC(entrystr, name);
 
-    ajDebug ("trg test %d '%s' %2d (+/- %d)\n", ipos, name, icmp, ihi-ilo);
+    ajDebug ("trg testa %d '%s' %2d (+/- %d)\n", ipos, name, icmp, ihi-ilo);
 
     while (icmp)
     {
@@ -960,7 +973,7 @@ static ajint seqCdTrgSearch (SeqPCdTrg trgLine, AjPStr entry, SeqPCdFile fp)
 	ipos = itry;
 	name = seqCdTrgName (ipos, fp);
 	icmp = ajStrCmpC(entrystr, name);
-	ajDebug ("trg test %d '%s' %2d (+/- %d)\n", ipos, name, icmp, ihi-ilo);
+	ajDebug ("trg testb %d '%s' %2d (+/- %d)\n", ipos, name, icmp, ihi-ilo);
     }
 
     seqCdTrgLine (trgLine, ipos, fp);
@@ -1077,6 +1090,9 @@ static char* seqCdTrgName (ajint ipos, SeqPCdFile fil)
     (void) seqCdFileSeek (fil, ipos);
     (void) seqCdFileRead (name, 8, fil);
     (void) seqCdFileReadName (name, nameSize, fil);
+
+    ajDebug("seqCdTrgName maxNameSize:%d nameSize:%d name '%s'\n",
+	    maxNameSize, nameSize, name);
 
     return name;
 }
@@ -1376,6 +1392,7 @@ static AjBool seqAccessSrswww (AjPSeqin seqin)
     static AjPStr get = NULL;
     ajint iport = 80;
     static AjPStr searchdb = NULL;
+    static AjPStr errstr = NULL;
     struct sockaddr_in sin;
     struct hostent *hp;
 
@@ -1387,23 +1404,9 @@ static AjBool seqAccessSrswww (AjPSeqin seqin)
     ajint proxyPort=0;		/* port for proxy axxess */
     AjPStr proxyStr=NULL;
     AjPStr proxy=NULL;		/* proxy from variable or query */
+    AjPStr httpver=NULL;	/* HTTP version for GET */
 
     AjPSeqQuery qry = seqin->Query;
-
-    ajNamGetValueC ("proxy", &proxy);
-    if (ajStrLen(qry->DbProxy))
-      ajStrAssS (&proxy, qry->DbProxy);
-
-    if (ajStrMatchC(proxy, ":"))
-      ajStrAssC (&proxy, "");
-
-    proxexp = ajRegCompC("^([a-z0-9.-]+):([0-9]+)$");
-    if (ajRegExec (proxexp, proxy))
-    {
-	ajRegSubI(proxexp, 1, &proxyName);
-	ajRegSubI(proxexp, 2, &proxyStr);
-	(void) ajStrToInt (proxyStr, &proxyPort);
-    }
 
     if (!ajNamDbGetUrl (qry->DbName, &url))
     {
@@ -1411,10 +1414,10 @@ static AjBool seqAccessSrswww (AjPSeqin seqin)
 	return ajFalse;
     }
 
-   urlexp = ajRegCompC("^http://([a-z0-9.-]+)(:[0-9]+)?(.*)");
+    urlexp = ajRegCompC("^http://([a-z0-9.-]+)(:[0-9]+)?(.*)");
     if (!ajRegExec(urlexp, url))
     {
-	ajErr ("invalid URL '%S' for database %S", url, qry->DbName);
+	ajErr ("invalid URL '%S' for database '%S'", url, qry->DbName);
 	return ajFalse;
     }
   
@@ -1432,6 +1435,23 @@ static AjBool seqAccessSrswww (AjPSeqin seqin)
 	(void) ajStrAssS (&searchdb, qry->DbName);
 
     ajDebug ("seqAccessSrswww %S:%S url: '%S'\n", searchdb, qry->Id, urlget);
+
+    /* check for proxy definition */
+
+    ajNamGetValueC ("proxy", &proxy);
+    if (ajStrLen(qry->DbProxy))
+      ajStrAssS (&proxy, qry->DbProxy);
+
+    if (ajStrMatchC(proxy, ":"))
+      ajStrAssC (&proxy, "");
+
+    proxexp = ajRegCompC("^([a-z0-9.-]+):([0-9]+)$");
+    if (ajRegExec (proxexp, proxy))
+    {
+	ajRegSubI(proxexp, 1, &proxyName);
+	ajRegSubI(proxexp, 2, &proxyStr);
+	(void) ajStrToInt (proxyStr, &proxyPort);
+    }
 
     if (ajStrLen(proxyName))
       (void) ajFmtPrintS(&get, "GET http://%S:%d%S?-e+-ascii",
@@ -1467,9 +1487,28 @@ static AjBool seqAccessSrswww (AjPSeqin seqin)
 	(void) ajFmtPrintAppS(&get, "+%S",
 			   searchdb);
 
+    /* check for HTTP version definition */
+
+    ajNamGetValueC ("httpversion", &httpver);
+    ajDebug ("httpver getValueC '%S'\n", httpver);
+
+    if (ajStrLen(qry->DbHttpVer))
+      ajStrAssS (&httpver, qry->DbHttpVer);
+    ajDebug("httpver after qry '%S'\n", httpver);
+
+    if (!ajStrLen(httpver))
+      ajStrAssC (&httpver, "1.0");
+
+    if (!ajStrIsFloat(httpver)) {
+      ajWarn ("Invalid HTTPVERSION '%S', reset to 1.0", httpver);
+      ajStrAssC(&httpver, "1.0");
+    }
+    ajDebug ("httpver final '%S'\n", httpver);
+
     ajDebug ("searching with SRS url '%S'\n", get);
 
-    (void) ajFmtPrintAppS(&get, " HTTP/1.1\n");
+    (void) ajFmtPrintAppS(&get, " HTTP/%S\n", httpver);
+    ajStrDel(&httpver);
 
     (void) ajStrAssS (&seqin->Db, qry->DbName);
 
@@ -1485,7 +1524,7 @@ static AjBool seqAccessSrswww (AjPSeqin seqin)
     if (!hp)
     {
 	ajDebug ("Unable to get host '%S'\n", host);
-	ajErr ("Unable to get host '%S'", host);
+	ajErr ("Unable to get host '%S' for database '%S'", host, qry->DbName);
 	return ajFalse;
     }
 
@@ -1494,7 +1533,7 @@ static AjBool seqAccessSrswww (AjPSeqin seqin)
     if (sock < 0)
     {
 	ajDebug ("Socket create failed, sock: %d\n", sock);
-	ajErr ("Socket create failed");
+	ajErr ("Socket create failed for database '%S'", qry->DbName);
 	return ajFalse;
     }
 
@@ -1514,8 +1553,10 @@ static AjBool seqAccessSrswww (AjPSeqin seqin)
     if (status < 0)
     {
 	ajDebug ("socket connect failed, status: %d\n", status);
-	ajErr ("socket connect failed");
-	perror("Socket connet failed");
+	ajFmtPrintS(&errstr, "socket connect failed for database '%S'",
+		    qry->DbName);
+	ajErr ("%S", errstr);
+	perror(ajStrStr(errstr));
 	return ajFalse;
     }
 
@@ -1544,14 +1585,14 @@ static AjBool seqAccessSrswww (AjPSeqin seqin)
     if (!fp)
     {
 	ajDebug ("socket open failed sock: %d\n", sock);
-	ajErr ("socket open failed");
+	ajErr ("socket open failed for database '%S'", qry->DbName);
 	return ajFalse;
     }
     seqin->Filebuff = ajFileBuffNewF(fp);
     if (!seqin->Filebuff)
     {
 	ajDebug ("socket buffer attach failed\n");
-	ajErr ("socket buffer attach failed");
+	ajErr ("socket buffer attach failed for database '%S'", qry->DbName);
 	return ajFalse;
     }
     ajFileBuffLoad(seqin->Filebuff);
@@ -1567,7 +1608,12 @@ static AjBool seqAccessSrswww (AjPSeqin seqin)
     ajStrDelReuse (&port);
     ajStrDelReuse (&get);
     ajStrDelReuse (&urlget);
+    ajStrDel(&proxyName);
+    ajStrDel(&proxyStr);
+    ajStrDel(&proxy);
+    ajStrDel(&httpver);
     ajRegFree (&urlexp);
+    ajRegFree (&proxexp);
 
     qry->QryDone = ajTrue;
 
@@ -1576,7 +1622,9 @@ static AjBool seqAccessSrswww (AjPSeqin seqin)
 
 /* @funcstatic seqCdQryReuse **************************************************
 **
-** Tests whether Cd index query data can be reused or whether we are finished
+** Tests whether Cd index query data can be reused or whether we are finished.
+**
+** Clears qryData structure when finished.
 **
 ** @param [r] qry [AjPSeqQuery] Query data
 ** @return [AjBool] ajTrue if we can continue,
@@ -1598,7 +1646,7 @@ static AjBool seqCdQryReuse (AjPSeqQuery qry)
     {
 	ajDebug ("query data all finished\n");
 	AJFREE (qry->QryData);
-	qry->QryData = NULL;
+	qryd = NULL;
 	return ajFalse;
     }
     else
@@ -1656,7 +1704,8 @@ static AjBool seqCdQryOpen (AjPSeqQuery qry)
     qryd->dfp = seqCdFileOpen(qry->IndexDir, "division.lkp", &qryd->divfile);
     if (!qryd->dfp)
     {
-	ajWarn("Cannot open division file '%S'", qryd->divfile);
+	ajWarn("Cannot open division file '%S' for database '%S'",
+	       qryd->divfile, qry->DbName);
 	return ajFalse;
     }
     
@@ -1992,12 +2041,14 @@ static AjBool seqCdQryQuery (AjPSeqQuery qry)
     return ajFalse;
 }
 
-/* @funcstatic seqCdEntryCmp ********************************************
+/* @funcstatic seqCdEntryCmp **************************************************
 **
 ** Compares two SeqPEntry objects
 **
-** @param [r] qry [AjPSeqQuery] Query data
-** @return [AjBool] ajTrue if successful
+** @param [r] pa [const void*] SeqPEntry object
+** @param [r] pb [const void*] SeqPEntry object
+** @return [int] -1 if first entry should sort before second, +1 if the
+**         second entry should sort first. 0 if they are identical
 ** @@
 ******************************************************************************/
 static int seqCdEntryCmp (const void* pa, const void* pb) {
@@ -2015,12 +2066,13 @@ static int seqCdEntryCmp (const void* pa, const void* pb) {
   return (a->annoff - b->annoff);
 }
 
-/* @funcstatic seqCdEntryDel********************************************
+/* @funcstatic seqCdEntryDel***************************************************
 **
 ** Deletes a SeqPCdEntry object
 **
-** @param [r] qry [AjPSeqQuery] Query data
-** @return [AjBool] ajTrue if successful
+** @param [r] pentry [void**] Address of a SeqPCdEntry object
+** @param [r] cl [void*] Standard unused argument, usually NULL.
+** @return [void]
 ** @@
 ******************************************************************************/
 static void seqCdEntryDel (void** pentry, void* cl) {
@@ -3228,63 +3280,6 @@ static AjBool seqCdQryFile (AjPSeqQuery qry)
     return ajTrue;
 }
 
-/* @section NBRF Database Indexing ****************************************
-**
-** These functions manage the NBRF index access methods.
-**
-******************************************************************************/
-
-/* #funcstatic seqAccessNbrf **************************************************
-**
-** Reads sequence(s) using NBRF index files. Returns with the file pointer
-** set to the position in the sequence file.
-**
-** @param [r] seqin [AjPSeqin] Sequence input.
-** @return [AjBool] ajTrue on success.
-** @@
-******************************************************************************/
-
-/*
-//static AjBool seqAccessNbrf (AjPSeqin seqin)
-//{
-//    static AjPStr fullname = NULL;
-//
-//    AjPSeqQuery qry = seqin->Query;
-//
-//    ajDebug ("seqAccessNbrf %S\n", qry->DbName);
-//
-//    if (!ajStrLen(qry->Directory))
-//    {
-//	ajErr ("NBRF access: directory not defined");
-//	return ajFalse;
-//    }
-//
-//    if (!ajStrLen(qry->Filename))
-//    {
-//	ajErr ("NBRF access: filename not defined");
-//	return ajFalse;
-//    }
-//
-//    ajDebug ("Try to open %S%S.seq\n", qry->Directory, qry->Filename);
-//
-//    seqin->Filebuff = ajFileBuffNewDW (qry->Directory, qry->Filename);
-//    if (!seqin->Filebuff)
-//    {
-//	ajErr ("NBRF access: failed to open filename '%S/%S'",
-//	       qry->Directory, qry->Filename);
-//	return ajFalse;
-//    }
-//
-//    (void) ajStrAssS (&seqin->Filename, qry->Filename);
-//    (void) ajStrAssS (&seqin->Entryname, qry->Id);
-//    (void) ajStrAssS (&seqin->Db, qry->DbName);
-//
-//    ajStrDel (&fullname);
-//
-//    return ajTrue;
-//}
-*/
-
 /* @section Remote URL Database Access ****************************************
 **
 ** These functions manage the remote URL database access methods.
@@ -3309,10 +3304,11 @@ static AjBool seqAccessUrl (AjPSeqin seqin)
     ajint status;
     FILE *fp;
 
-    AjPStr proxyName=NULL;	/* host for proxy access.*/
     ajint proxyPort=0;		/* port for proxy axxess */
+    AjPStr proxyName=NULL;	/* host for proxy access.*/
     AjPStr proxyStr=NULL;
     AjPStr proxy=NULL;		/* proxy from variable or query */
+    AjPStr httpver=NULL;	/* HTTP version 1.0, 1.1, ... */
 
     AjPSeqQuery qry = seqin->Query;
 
@@ -3325,6 +3321,7 @@ static AjBool seqAccessUrl (AjPSeqin seqin)
     static AjPStr urlget = NULL;
     static AjPStr get = NULL;
     static AjPStr gethead = NULL;
+    static AjPStr errstr = NULL;
     ajint iport = 80;
     ajint ipos;
 
@@ -3334,6 +3331,22 @@ static AjBool seqAccessUrl (AjPSeqin seqin)
 
     if (ajStrMatchC(proxy, ":"))
       ajStrAssC (&proxy, "");
+
+    ajNamGetValueC ("httpversion", &httpver);
+    ajDebug ("httpver getValueC '%S'\n", httpver);
+
+    if (ajStrLen(qry->DbHttpVer))
+      ajStrAssS (&httpver, qry->DbHttpVer);
+    ajDebug("httpver after qry '%S'\n", httpver);
+
+    if (!ajStrLen(httpver))
+      ajStrAssC (&httpver, "1.0");
+
+    if (!ajStrIsFloat(httpver)) {
+      ajWarn ("Invalid HTTPVERSION '%S', reset to 1.0", httpver);
+      ajStrAssC(&httpver, "1.0");
+    }
+    ajDebug("httpver final: '%S'\n", httpver);
 
     proxexp = ajRegCompC("^([a-z0-9.-]+):([0-9]+)$");
     if (ajRegExec (proxexp, proxy))
@@ -3367,10 +3380,10 @@ static AjBool seqAccessUrl (AjPSeqin seqin)
     ajRegSubI(urlexp, 3, &urlget);
 
     if (ajStrLen(proxyName))
-      (void) ajFmtPrintS(&get, "GET http://%S:%d%S HTTP/1.1\n",
-			 host, iport, urlget);
+      (void) ajFmtPrintS(&get, "GET http://%S:%d%S HTTP/%S\n",
+			 host, iport, urlget, httpver);
     else
-      (void) ajFmtPrintS(&get, "GET %S HTTP/1.1\n", urlget);
+      (void) ajFmtPrintS(&get, "GET %S HTTP/%S\n", urlget, httpver);
 
     ipos = ajStrFindC(get, "%s");
     while (ipos >= 0)
@@ -3390,7 +3403,7 @@ static AjBool seqAccessUrl (AjPSeqin seqin)
 
     if (!hp)
     {
-	ajErr ("Unable to get host '%S'", host);
+	ajErr ("Unable to get host '%S' for database '%S'", host, qry->DbName);
 	return ajFalse;
     }
 
@@ -3398,7 +3411,7 @@ static AjBool seqAccessUrl (AjPSeqin seqin)
     sock = socket(AF_INET, SOCK_STREAM, 0); 
     if (sock < 0)
     {
-	ajErr ("Socket create failed");
+	ajErr ("Socket create failed for database '%S'", qry->DbName);
 	return ajFalse;
     }
 
@@ -3419,8 +3432,10 @@ static AjBool seqAccessUrl (AjPSeqin seqin)
     if (status < 0)
     {
 	ajDebug ("socket connect failed, status: %d\n", status);
-	ajErr ("socket connect failed");
-	perror("Socket connet failed");
+	ajFmtPrintS(&errstr, "socket connect failed for database '%S'",
+		    qry->DbName);
+	ajErr ("%S", errstr);
+	perror(ajStrStr(errstr));
 	return ajFalse;
     }
 
@@ -3452,14 +3467,14 @@ static AjBool seqAccessUrl (AjPSeqin seqin)
     if (!fp)
     {
 	ajDebug ("socket open failed sock: %d\n", sock);
-	ajErr ("socket open failed");
+	ajErr ("socket open failed for database '%S'", qry->DbName);
 	return ajFalse;
     }
     seqin->Filebuff = ajFileBuffNewF(fp);
     if (!seqin->Filebuff)
     {
 	ajDebug ("socket buffer attach failed\n");
-	ajErr ("socket buffer attach failed");
+	ajErr ("socket buffer attach failed for database '%S'", qry->DbName);
 	return ajFalse;
     }
     ajFileBuffLoad(seqin->Filebuff);
@@ -3475,39 +3490,19 @@ static AjBool seqAccessUrl (AjPSeqin seqin)
     ajStrDelReuse (&port);
     ajStrDelReuse (&get);
     ajStrDelReuse (&urlget);
+    ajStrDel(&proxyName);
+    ajStrDel(&proxyStr);
+    ajStrDel(&proxy);
+    ajStrDel(&httpver);
     ajRegFree (&urlexp);
+    ajRegFree (&proxexp);
 
     qry->QryDone = ajTrue;
     
     return ajTrue;
 }
 
-/* @section Command Line Database Access **********************************
-**
-** These functions manage the command line database access methods.
-**
-******************************************************************************/
-
-
-/* #funcstatic seqAccessCmd ***************************************************
-**
-** Reads sequence data using a command. (not yet implemented)
-**
-** @param [r] seqin [AjPSeqin] Sequence input.
-** @return [AjBool] ajTrue on success.
-** @@
-******************************************************************************/
-
-/*
-//static AjBool seqAccessCmd (AjPSeqin seqin)
-//{
-//    ajErr ("seqAccessCmd is not yet implemented");
-//
-//    return ajFalse;
-//}
-*/
-
-/* @section Application Database Access **********************************
+/* @section Application Database Access ***************************************
 **
 ** These functions manage the application database access methods.
 **
@@ -4265,7 +4260,7 @@ static AjBool seqCdTrgQuery (AjPSeqQuery qry)
     AjBool *skip = wild->Skip;
     
     AjPStr fdstr = NULL;
-    AjPStr fdtmp = NULL;
+    AjPStr fdprefix = NULL;
 
     ajint t;
     ajint b;
@@ -4273,13 +4268,14 @@ static AjBool seqCdTrgQuery (AjPSeqQuery qry)
     ajint b2;
     ajint t3;
     ajint pos=0;
-    ajint len;
+    ajint prefixlen;
     ajint start;
     ajint end;
     ajint i;
     ajint j;
     ajint k;
     ajint cmp;
+    AjBool match;
     
     AjBool first;
     char   *name;
@@ -4317,29 +4313,43 @@ static AjBool seqCdTrgQuery (AjPSeqQuery qry)
 	return ajFalse;
     }
 
+    /* fdstr is the original query string, in uppercase */
+
+    /* fdprefix is the fixed (no wildcard) prefix of fdstr */
+
     (void) ajStrAssS (&fdstr,queryName);
     (void) ajStrToUpper(&fdstr);
-    (void) ajStrAssC(&fdtmp,ajStrStr(fdstr));
+    (void) ajStrAssS(&fdprefix,fdstr);
 
-    (void) ajStrWildPrefix(&fdtmp);
+    (void) ajStrWildPrefix(&fdprefix);
 
+    ajDebug("queryName '%S' fdstr '%S' fdprefix '%S'\n",
+	    queryName, fdstr, fdprefix);
     b = b2 = 0;
     t = t2 = t3 = trgfp->NRecords - 1;
 
-    len = ajStrLen(fdtmp);
+    prefixlen = ajStrLen(fdprefix);
     first = ajTrue;
 
-    
-    if(len)
+    if(prefixlen)
     {
+
+      /*
+      ** (1a) we have a prefix (no wildcard at the start)
+      ** look for the prefix fdprefix
+      ** Set range of records that match (will be consecutive of course)
+      ** from first match
+      */
+
 	while(b<=t)
 	{
 	    pos = (t+b)/2;
 	    name = seqCdTrgName(pos,trgfp);
-	    name[len]='\0';
-	    cmp = ajStrCmpC(fdtmp,name);
-/*	    cmp = ajStrMatchWildC(fdstr,name);*/
-	    ajDebug(" trg test %d '%s' %2d (+/- %d)\n",pos,name,cmp,t-b);
+	    name[prefixlen]='\0';	/* truncate to prefix length */
+	    cmp = ajStrCmpC(fdprefix,name);
+/*	    match = ajStrMatchWildC(fdstr,name);*/
+	    ajDebug(" trg testc %d '%s' '%S' %2d (+/- %d)\n",
+		    pos,name,fdprefix,t-b);
 	    if(!cmp)
 	    {
 		ajDebug(" trg hit %d\n",pos);
@@ -4359,23 +4369,28 @@ static AjBool seqCdTrgQuery (AjPSeqQuery qry)
 
 	if(first)
 	{
-	    ajStrDel(&fdtmp);
+	    ajStrDel(&fdprefix);
 	    ajStrDel(&fdstr);
 	    seqCdTrgClose(&trgfp,&hitfp);
 	    return ajFalse;
 	}
-	ajDebug("first pass: pos %d b2 %d t2 %d\n",pos,b2,t2);
+	ajDebug("first pass: pos:%d b2:%d t2:%d\n",pos,b2,t2);
 
+    /*
+    ** (1b) Process below
+    */
+    
 	b = b2-1;
 	t = t2;
 	while(b<=t)
 	{
 	    pos = (t+b)/2;
 	    name = seqCdTrgName(pos,trgfp);
-	    name[len]='\0';
-	    cmp = ajStrCmpC(fdtmp,name);
-/*	    cmp = ajStrMatchWildC(fdstr,name);*/
-	    ajDebug(" trg test %d '%s' %2d (+/- %d)\n",pos,name,cmp,t-b);
+	    name[prefixlen]='\0';
+	    cmp = ajStrCmpC(fdprefix,name);
+	    /* match = ajStrMatchWildC(fdstr,name); */
+	    ajDebug(" trg testd %d '%s' '%S' %B (+/- %d)\n",
+		    pos,name,fdprefix,cmp,t-b);
 	    if(!cmp)
 	    {
 		ajDebug(" trg hit %d\n",pos);
@@ -4387,47 +4402,54 @@ static AjBool seqCdTrgQuery (AjPSeqQuery qry)
 		b = pos+1;
 	}
 
-	ajDebug("second pass: pos %d b2 %d t3 %d\n",pos,b2,t3);
+	ajDebug("second pass: pos:%d b2:%d t3:%d\n",pos,b2,t3);
 	name = seqCdTrgName(b2,trgfp);
 	ajDebug("first %d '%s'\n",b2,name);
 	name = seqCdTrgName(t3,trgfp);
 	ajDebug("last %d '%s'\n",t3,name);
 
+    }
     
 
-	start = b2;
-	end   = t3;
-	for(i=start;i<=end;++i)
+    start = b2;
+    end   = t3;
+    for(i=start;i<=end;++i)
+    {
+	name = seqCdTrgName(i,trgfp);
+	match = ajStrMatchWildCC(name, ajStrStr(fdstr));
+
+	ajDebug("third pass: match:%B i:%d name '%s' queryName '%S'\n",
+		match, i, name, fdstr);
+	if (!match) continue;
+
+	seqCdTrgLine (trgline, i, trgfp);	
+	(void) seqCdFileSeek (hitfp,trgline->FirstHit-1);
+	ajDebug("Query First: %d Count: %d\n",
+		trgline->FirstHit, trgline->NHits);
+	pos = trgline->FirstHit;
+
+	for (j=0;j<trgline->NHits;++j)
 	{
-	    seqCdTrgLine (trgline, i, trgfp);	
-	    (void) seqCdFileSeek (hitfp,trgline->FirstHit-1);
-	    ajDebug("Query First: %d Count: %d\n",
-		    trgline->FirstHit, trgline->NHits);
-	    pos = trgline->FirstHit;
+	    (void) seqCdFileReadInt (&k,hitfp);
+	    --k;
+	    ajDebug("hitlist[%d] entry = %d\n",j,k);
+	    (void) seqCdIdxLine (idxline,k,idxfp);
 
-	    for (j=0;j<trgline->NHits;++j)
+	    if (!skip[idxline->DivCode-1])
 	    {
-		(void) seqCdFileReadInt (&k,hitfp);
-		--k;
-		ajDebug("hitlist[%d] entry = %d\n",j,k);
-		(void) seqCdIdxLine (idxline,k,idxfp);
-
-		if (!skip[idxline->DivCode-1])
-		{
-		    AJNEW0(entry);
-		    entry->div = idxline->DivCode;
-		    entry->annoff = idxline->AnnOffset;
-		    entry->seqoff = idxline->SeqOffset;
-		    ajListPushApp(l,(void*)entry);
-		}
-		else
-		{
-		    ajDebug("SKIP: token '%S' [file %d]\n",
-			    queryName,idxline->DivCode);
-		}
+		AJNEW0(entry);
+		entry->div = idxline->DivCode;
+		entry->annoff = idxline->AnnOffset;
+		entry->seqoff = idxline->SeqOffset;
+		ajListPushApp(l,(void*)entry);
 	    }
-	
+	    else
+	    {
+		ajDebug("SKIP: token '%S' [file %d]\n",
+			queryName,idxline->DivCode);
+	    }
 	}
+
     }
     
     (void) seqCdTrgClose (&trgfp, &hitfp);
@@ -4435,7 +4457,7 @@ static AjBool seqCdTrgQuery (AjPSeqQuery qry)
 
     ajStrDel(&trgline->Target);
     ajStrDel(&fdstr);
-    ajStrDel(&fdtmp);
+    ajStrDel(&fdprefix);
     
     if(ajListLength(l))
 	return ajTrue;
@@ -4443,6 +4465,31 @@ static AjBool seqCdTrgQuery (AjPSeqQuery qry)
     return ajFalse;
 }
 
+/* @func ajSeqPrintAccess ************************************************
+**
+** Reports the internal data structures
+**
+** @param [r] outf [AjPFile] Output file
+** @param [r] full [AjBool] Full report (usually ajFalse)
+** @return [void]
+** @@
+******************************************************************************/
 
+void ajSeqPrintAccess (AjPFile outf, AjBool full)
+{
+    ajint i=0;
 
+    ajFmtPrintF (outf, "\n");
+    ajFmtPrintF (outf, "# sequence access methods\n");
+    ajFmtPrintF (outf, "# Name\n");
+    ajFmtPrintF (outf, "\n");
+    ajFmtPrintF (outf, "method {\n");
+    for (i=0; seqAccess[i].Name; i++)
+    {
+	ajFmtPrintF (outf, "  %-12s\n",
+		     seqAccess[i].Name);
+    }
+    ajFmtPrintF (outf, "}\n\n");
 
+    return;
+}
