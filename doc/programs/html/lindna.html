@@ -7,37 +7,26 @@
 </HEAD>
 <BODY BGCOLOR="#FFFFFF" text="#000000">
 
-<table align=center bgcolor="#000070" border=0 cellspacing=0 cellpadding=10>
-<tr>
-<td>
 
-<a href="index.html" onmouseover="self.status='Go to the EMBOSS home page';return true">
-<img border=0 src="emboss_icon.gif" alt="" width=55 height=55>
-</a>
 
+
+<table align=center border=0 cellspacing=0 cellpadding=0>
+<tr><td valign=top>
+<A HREF="index.html" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
 </td>
+<td align=left valign=middle>
+<b><font size="+6">
 
-<td align=middle valign=middle>
-<font face="Arial,Helvetica" size=6 color="#ffffff">
-<H2>
-EMBOSS: lindna
-</H2>
-
-
-</font>
-</td>
-
-</tr>
+lindna
+</font></b>
+</td></tr>
 </table>
-</td>
+<br>&nbsp;
+<p>
 
-</tr>
-</table>
 
-<p><hr><p>
-<H1>
-Program lindna
-</H1>
+
+
 
 <H2>
     Function
@@ -84,10 +73,12 @@ Here is a sample session with lindna.
 
 <pre>
 
-Graph type [x11]: 
+% lindna
+Draws linear maps of DNA constructs
+Graph type [x11]:
 Input file [inputfile]: data.linp
-ticks inside or outside the circle (enter In or Out) [Out]: 
-text inside or outside the blocks (enter In or Out) [In]: 
+do you want a ruler (Y or N) [Y]:
+type of blocks (enter Open, Filled, or Outline) [Filled]:   
 
 </pre>
 
@@ -107,8 +98,12 @@ IT IS DONE FOR YOU.
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
    Mandatory qualifiers:
-   -inputfile          infile     input file containing mapping data
    -graphout           graph      Graph type
+   -inputfile          infile     input file containing mapping data
+   -ruler              string     do you want a ruler (Y or N)
+   -blocktype          string     type of blocks: Open, Filled, or Outline.
+                                  Option 'Outline' draws filled blocks
+                                  surrounded by a black border
 
    Optional qualifiers:
    -intersymbol        string     type of junctions between blocks (enter
@@ -121,21 +116,32 @@ IT IS DONE FOR YOU.
                                   an integer)
    -ticklines          string     do you want vertical lines at the ruler's
                                   ticks (Y or N)
-   -tickheight         float      height of ticks (enter a number to multiply
-                                  the default height)
-   -blockheight        float      height of blocks (enter a number to multiply
-                                  the default height)
-   -rangeheight        float      height of range ends (enter a number to
-                                  multiply the default height)
-   -gapgroup           float      space between groups (enter a number to
-                                  multiply the default space)
+   -textheight         float      height of text. Enter a number <1 or >1 to
+                                  decrease or increase the size, respectively
+   -textlength         float      length of text. Enter a number <1 or >1 to
+                                  decrease or increase the size, respectively
+   -margin             float      width of left margin. This is the region
+                                  left to the groups where the names of the
+                                  groups are displayed. Enter a number <1 or
+                                  >1 to decrease or increase the size,
+                                  respectively
+   -tickheight         float      height of ticks. Enter a number <1 or >1 to
+                                  decrease or increase the size, respectively
+   -blockheight        float      height of blocks. Enter a number <1 or >1 to
+                                  decrease or increase the size, respectively
+   -rangeheight        float      height of range ends. Enter a number <1 or
+                                  >1 to decrease or increase the size,
+                                  respectively
+   -gapgroup           float      space between groups. Enter a number <1 or
+                                  >1 to decrease or increase the size,
+                                  respectively
    -postext            float      space between text and ticks, blocks, and
-                                  ranges (enter a number to multiply the
-                                  default space)
+                                  ranges. Enter a number <1 or >1 to decrease
+                                  or increase the size, respectively
 
    Advanced qualifiers: (none)
    General qualifiers:
-  -help                bool       report command line options. More
+  -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
 
@@ -152,6 +158,13 @@ IT IS DONE FOR YOU.
 </tr>
 
 <tr>
+<td>-graphout</td>
+<td>Graph type</td>
+<td>EMBOSS has a list of known devices, including postscript, ps, hpgl, hp7470, hp7580, meta, colourps, cps, xwindows, x11, tektronics, tekt, tek4107t, tek, none, null, text, data, xterm, png</td>
+<td><i>EMBOSS_GRAPHICS</i> value, or x11</td>
+</tr>
+
+<tr>
 <td>-inputfile</td>
 <td>input file containing mapping data</td>
 <td>Input file</td>
@@ -159,10 +172,17 @@ IT IS DONE FOR YOU.
 </tr>
 
 <tr>
-<td>-graphout</td>
-<td>Graph type</td>
-<td>EMBOSS has a list of known devices, including postscript, ps, hpgl, hp7470, hp7580, meta, colourps, cps, xwindows, x11, tektronics, tekt, tek4107t, tek, none, null, text, data, xterm, png</td>
-<td><i>EMBOSS_GRAPHICS</i> value, or x11</td>
+<td>-ruler</td>
+<td>do you want a ruler (Y or N)</td>
+<td>Any string is accepted</td>
+<td>Y</td>
+</tr>
+
+<tr>
+<td>-blocktype</td>
+<td>type of blocks: Open, Filled, or Outline. Option 'Outline' draws filled blocks surrounded by a black border</td>
+<td>Any string is accepted</td>
+<td>Filled</td>
 </tr>
 
 <tr bgcolor="#FFFFD0">
@@ -181,7 +201,7 @@ IT IS DONE FOR YOU.
 <tr>
 <td>-intercolor</td>
 <td>color of junctions between blocks (enter a color number)</td>
-<td>Any integer value</td>
+<td>Integer from 0 to 15</td>
 <td>1</td>
 </tr>
 
@@ -195,7 +215,7 @@ IT IS DONE FOR YOU.
 <tr>
 <td>-gapsize</td>
 <td>interval between ticks in the ruler (enter an integer)</td>
-<td>Any integer value</td>
+<td>Integer 0 or more</td>
 <td>500</td>
 </tr>
 
@@ -207,37 +227,58 @@ IT IS DONE FOR YOU.
 </tr>
 
 <tr>
+<td>-textheight</td>
+<td>height of text. Enter a number <1 or >1 to decrease or increase the size, respectively</td>
+<td>Any numeric value</td>
+<td>1</td>
+</tr>
+
+<tr>
+<td>-textlength</td>
+<td>length of text. Enter a number <1 or >1 to decrease or increase the size, respectively</td>
+<td>Any numeric value</td>
+<td>1</td>
+</tr>
+
+<tr>
+<td>-margin</td>
+<td>width of left margin. This is the region left to the groups where the names of the groups are displayed. Enter a number <1 or >1 to decrease or increase the size, respectively</td>
+<td>Number 0.000 or more</td>
+<td>1</td>
+</tr>
+
+<tr>
 <td>-tickheight</td>
-<td>height of ticks (enter a number to multiply the default height)</td>
-<td>Any integer value</td>
+<td>height of ticks. Enter a number <1 or >1 to decrease or increase the size, respectively</td>
+<td>Any numeric value</td>
 <td>1</td>
 </tr>
 
 <tr>
 <td>-blockheight</td>
-<td>height of blocks (enter a number to multiply the default height)</td>
-<td>Any integer value</td>
+<td>height of blocks. Enter a number <1 or >1 to decrease or increase the size, respectively</td>
+<td>Any numeric value</td>
 <td>1</td>
 </tr>
 
 <tr>
 <td>-rangeheight</td>
-<td>height of range ends (enter a number to multiply the default height)</td>
-<td>Any integer value</td>
+<td>height of range ends. Enter a number <1 or >1 to decrease or increase the size, respectively</td>
+<td>Any numeric value</td>
 <td>1</td>
 </tr>
 
 <tr>
 <td>-gapgroup</td>
-<td>space between groups (enter a number to multiply the default space)</td>
-<td>Any integer value</td>
+<td>space between groups. Enter a number <1 or >1 to decrease or increase the size, respectively</td>
+<td>Any numeric value</td>
 <td>1</td>
 </tr>
 
 <tr>
 <td>-postext</td>
-<td>space between text and ticks, blocks, and ranges (enter a number to multiply the default space)</td>
-<td>Any integer value</td>
+<td>space between text and ticks, blocks, and ranges. Enter a number <1 or >1 to decrease or increase the size, respectively</td>
+<td>Any numeric value</td>
 <td>1</td>
 </tr>
 
@@ -318,7 +359,7 @@ be drawn after the keyword 'Start'.  The end position is on the second
 line following the keyword 'End'. 
 
 <p>
-Then, one or more groups (up to a maximum of 100) of genetic markers are
+Then, one or more groups (up to a maximum of 20) of genetic markers are
 defined.  Each group begins with a line consisting of the keyword
 'group' and ends with a line consisting of the keyword 'endgroup'. 
 
@@ -328,7 +369,7 @@ and tabulations are allowed but only the first 20 characters of that name
 (including spaces) will be displayed. 
 
 <p>
-Next, the individual markers (up to a maximum of 100) of the group are
+Next, the individual markers (up to a maximum of 1000) of the group are
 described.  Each marker begins with a line consisting of the keyword
 'label' and ends with a line consisting of the keyword 'endlabel'.
 
@@ -362,21 +403,25 @@ lines.  An optional letter H or V can be added to the end of the
 descriptive line to specify the orientation of the name(s). 
 
 <p>
+
 For a range, the descriptive line begins with the keyword 'Range',
 followed by the start and end positions of the range in the DNA
 fragment.  Next on the line are the types of boundaries that are to be
-drawn.  The user can choose among '&gt;', '&lt;', '[', and ']' for both start
-and end boundaries.  If none of these types is wanted for a given
-boundary, then a point '.' must be entered.  Next is the color number. 
-If desired, one or more names can be written above the range.  Names are
-given on the following lines.  An optional letter H or V can be added to
-the end of the descriptive line to specify the orientation of the
-name(s). 
+drawn.  The user can choose among '&gt;', '&lt;', '[', ']' and '|' for
+both start and end boundaries.  If none of these types is wanted for a
+given boundary, then a point '.' must be entered.  Next is the color
+number.  If desired, one or more names can be written above the range. 
+Names are given on the following lines.  An optional letter H or V can
+be added to the end of the descriptive line to specify the orientation
+of the name(s). 
 
 <p>
-For any type of markers, try to avoid long names.
+
+For any type of markers, names will be written in the same color as the
+marker.  Also, try to avoid long names. 
 
 <p>
+
 The colors defined in the PLPLOT graphics library are:
 
 <p>
@@ -482,8 +527,9 @@ None.
 
 
 This application was written by Nicolas Tourasse <a
-href="mailto:nicolas.tourasse@biotek.uio.no">(nicolas.tourasse@biotek.uio.no)</a>
-at <a href="http://www.no.embnet.org/">the Norwegian EMBnet node.</a>
+href="mailto:nicolas.tourasse@biotek.uio.no">
+(nicolas.tourasse@biotek.uio.no)</a>
+at the Biotechnology Center of Oslo.
 
 
 <H2>
@@ -492,6 +538,8 @@ at <a href="http://www.no.embnet.org/">the Norwegian EMBnet node.</a>
 
 
 Written  (2000) - Nicolas Tourasse
+<br>
+Updated (2002) - Nicolas Tourasse
 
 <H2>
     Target users
@@ -511,9 +559,6 @@ from naive users to embedded scripts.
 
 </pre>
 
-
-</TD></TR></TABLE>
-</CENTER>
 
 </BODY>
 </HTML>
