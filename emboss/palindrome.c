@@ -78,6 +78,8 @@ int main(int argc, char **argv)
   ajint ic;
   ajint ir;
 
+  AjBool alln;	/* TRUE if all of palindrome is N's */
+
   Palindrome pfirstpal;
   Palindrome plastpal = NULL;
   Palindrome ppal = NULL;
@@ -132,6 +134,8 @@ int main(int argc, char **argv)
     begin = beginPos - 1;
     end = endPos - 1;
 
+    ajStrToLower(&seqstr);	/* make comparisons case independent */
+
     /* loop to look for inverted repeats */
     for (current = begin; current < end; current++)
     {
@@ -144,6 +148,7 @@ int main(int argc, char **argv)
         count = 0;
         mismatches = 0;
         mismatchAtEnd = 0;
+        alln = ajTrue;
         ic = current;
         ir = rev;
         if (ajStrChar(seqstr, ic) ==
@@ -155,6 +160,8 @@ int main(int argc, char **argv)
               ajSeqBaseComp(ajStrChar(seqstr, ir--)))
             {
               mismatchAtEnd = 0;
+              if (ajStrChar(seqstr, ic-1) != 'n')
+                  alln = ajFalse;
             }
             else
             {
@@ -168,7 +175,7 @@ int main(int argc, char **argv)
         gap = rev - current - count - count + 1;
 
         /* Find out if we have found reverse repeat long enough*/
-        if (count >= minLen && gap <= maxGap)
+        if (count >= minLen && gap <= maxGap && !alln)
         {
           /* create new palindrome struct to hold new palindrome data */
           ppal = palindrome_New(current,(current+count),rev,(rev-count));
@@ -264,7 +271,7 @@ int main(int argc, char **argv)
 
 /* @funcstatic palindrome_New *************************************************
 **
-** Undocumented.
+** Create new Palindrome object
 **
 ** @param [?] fstart [ajint] Undocumented
 ** @param [?] fend [ajint] Undocumented
@@ -292,7 +299,8 @@ static Palindrome palindrome_New( ajint fstart, ajint fend, ajint rstart,
 
 /* @funcstatic palindrome_AInB ************************************************
 **
-** Undocumented.
+** Test whether Palindrome A is within Palindrome B (is a subset of B)
+** in both halves of the stem
 **
 ** @param [?] a [Palindrome] Undocumented
 ** @param [?] b [Palindrome] Undocumented
@@ -314,7 +322,7 @@ static AjBool palindrome_AInB( Palindrome a, Palindrome b)
 
 /* @funcstatic palindrome_AOverB **********************************************
 **
-** Undocumented.
+** Test whether Palindrome A overlaps Palindrome A on both halves of the stem
 **
 ** @param [?] a [Palindrome] Undocumented
 ** @param [?] b [Palindrome] Undocumented
@@ -343,7 +351,7 @@ static AjBool palindrome_AOverB( Palindrome a, Palindrome b)
 
 /* @funcstatic palindrome_Over ************************************************
 **
-** Undocumented.
+** Test whether two regions overlap each other
 **
 ** @param [?] astart [ajint] Undocumented
 ** @param [?] aend [ajint] Undocumented
@@ -366,7 +374,8 @@ static AjBool palindrome_Over( ajint astart, ajint aend, ajint bstart,
 
 /* @funcstatic palindrome_Longer **********************************************
 **
-** Undocumented.
+** Test whether the stem of Palindrome A is longer than the stem of
+** Palindrome B
 **
 ** @param [?] a [Palindrome] Undocumented
 ** @param [?] b [Palindrome] Undocumented
@@ -385,7 +394,7 @@ static AjBool palindrome_Longer( Palindrome a, Palindrome b )
 
 /* @funcstatic palindrome_Swap ************************************************
 **
-** Undocumented.
+** Set Palindrome B to be the same position as Palindrome A 
 **
 ** @param [?] a [Palindrome] Undocumented
 ** @param [?] b [Palindrome] Undocumented
@@ -405,7 +414,7 @@ static void palindrome_Swap ( Palindrome a, Palindrome b )
 
 /* @funcstatic palindrome_Print ***********************************************
 **
-** Undocumented.
+** Output results to file
 **
 ** @param [?] outfile [AjPFile] Undocumented
 ** @param [?] seq [AjPStr] Undocumented
