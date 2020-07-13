@@ -1,0 +1,126 @@
+
+                                  hmmgen 
+                                      
+   
+   
+Function
+
+   Generates a hidden Markov model for each alignment in a directory
+   
+Description
+
+   This is part of Jon Ison's protein structure analysis package.
+   
+   This package is still being developed.
+   
+   Please ignore this program until further details can be documented.
+   
+   All further queries should go to Jon Ison. (Jon Ison)
+   
+Usage
+
+   Here is a sample session with hmmgen:
+
+% hmmgen
+
+Command line arguments
+
+   Mandatory qualifiers:
+   -infpath            string     Location of sequence alignment files (input)
+   -infextn            string     Extention of sequence alignment files
+   -outfpath           string     Location of HMM files (output)
+   -outfextn           string     Extention of HMM files
+
+   Optional qualifiers: (none)
+   Advanced qualifiers: (none)
+   General qualifiers:
+  -help                boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   
+
+   Mandatory qualifiers Allowed values Default
+   -infpath Location of sequence alignment files (input) Any string is
+   accepted ./
+   -infextn Extention of sequence alignment files Any string is accepted
+   .ealign
+   -outfpath Location of HMM files (output) Any string is accepted ./
+   -outfextn Extention of HMM files Any string is accepted .hmm
+   Optional qualifiers Allowed values Default
+   (none)
+   Advanced qualifiers Allowed values Default
+   (none)
+   
+Input file format
+
+Output file format
+
+Data files
+
+Notes
+
+   None.
+   
+References
+
+   None.
+   
+Warnings
+
+   None.
+   
+Diagnostic Error Messages
+
+   None.
+   
+Exit status
+
+   It always exits with status 0.
+   
+Known bugs
+
+   None.
+   
+See also
+
+   Program name Description
+   contacts Reads coordinate files and writes files of intra-chain
+   residue-residue contact data
+   dichet Parse dictionary of heterogen groups
+   interface Reads coordinate files and writes files of inter-chain
+   residue-residue contact data
+   profgen Generates various profiles for each alignment in a directory
+   psiblasts Runs PSI-BLAST given scopalign alignments
+   scopalign Generate alignments for families in a scop classification
+   file by using STAMP
+   scoprep Reorder scop classificaiton file so that the representative
+   structure of each family is given first
+   scopreso Removes low resolution domains from a scop classification
+   file
+   seqalign Generate extended alignments for families in a scop families
+   file by using CLUSTALW with seed alignments
+   seqsearch Generate files of hits for families in a scop classification
+   file by using PSI-BLAST with seed alignments
+   seqsort Reads multiple files of hits and writes a non-ambiguous file
+   of hits (scop families file) plus a validation file
+   seqwords Generate file of hits for scop families by searching
+   swissprot with keywords
+   siggen Generates a sparse protein signature from an alignment and
+   residue contact data
+   sigscan Scans a signature against swissprot and writes a signature
+   hits files
+   
+Author(s)
+
+   This application was written by Jon Ison (jison@hgmp.mrc.ac.uk)
+   
+History
+
+   Written (date) - author.
+   
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+   
+Comments

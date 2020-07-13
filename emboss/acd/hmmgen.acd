@@ -1,0 +1,44 @@
+appl: hmmgen 
+[
+  documentation: "Generates a hidden Markov model for each alignment in a directory."
+  groups:"Protein:3D Structure"
+  gui: "yes"
+  batch: "yes"
+  cpu: "medium"
+]
+
+
+section: input [ info: "input Section" type: page ]
+string: infpath [
+        req: Y
+        def: "./"
+        help: "Location of sequence alignment files (input)"
+]
+
+string: infextn [
+        req: Y
+        def: ".ealign"
+        help: "Extention of sequence alignment files"
+]
+endsection: input
+
+
+
+
+section: output [ info: "output Section" type: page ]
+string: outfpath [
+        req: Y
+        def: "./"
+        help: "Location of HMM files (output)"
+]
+
+string: outfextn [
+        req: Y
+        def: ".hmm"
+        help: "Extention of HMM files"
+]
+endsection: output
+
+
+
+
