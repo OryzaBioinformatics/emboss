@@ -89,6 +89,13 @@ bool: join  [
   help: "Some features, such as CDS (coding sequence) and mRNA are composed of introns concatenated together.  There may be other forms of 'joined' sequence, depending on the feature table.  If this option is set TRUE, then any group of these features will be output as a single sequence.  If the 'before' and 'after' qualifiers have been set, then only the sequence before the first feature and after the last feature are added."
 ]
 
+bool: featinname  [
+  optional: "Y"
+  default: "N"
+  information: "Append type of feature to output sequence name"
+  help: "To aid you in identifying the type of feature that has been output, the type of feature is added to the start of the description of the output sequence.  Sometimes the description of a sequence is lost in subsequent processing of the sequences file, so it is useful for the type to be a part of the sequence ID name.  If you set this to be TRUE then the name is added to the ID name of the output sequence."
+]
+
 seqout: outseq  [
   parameter: "Y"
 ]

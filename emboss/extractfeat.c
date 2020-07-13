@@ -25,14 +25,16 @@
 
 
 static void extractfeat_FeatSeqExtract (AjPSeq seq, AjPSeqout seqout,
-	AjPFeattable featab, ajint before, ajint after, AjBool join);
+	AjPFeattable featab, ajint before, ajint after, AjBool join, 
+	AjBool featinname);
 
 static void extractfeat_GetFeatseq(AjPSeq seq, AjPFeature gf, AjPStr
 	*gfstr, AjBool sense);
 
 static void extractfeat_WriteOut (AjPSeqout seqout, AjPStr *featstr,
 	AjBool compall, AjBool sense, ajint firstpos, ajint lastpos,
-	ajint before, ajint after, AjPSeq seq, AjBool remote, AjPStr type);
+	ajint before, ajint after, AjPSeq seq, AjBool remote, AjPStr type,
+	AjBool featinname);
 
 static void extractfeat_BeforeAfter (AjPSeq seq, AjPStr * featstr,
 	ajint firstpos, ajint lastpos, ajint before, ajint after,
@@ -70,6 +72,7 @@ int main(int argc, char **argv)
     ajint after;
     AjBool join;
     AjPFeattable featab;
+    AjBool featinname;
 
     /* feature filter criteria */
     AjPStr source = NULL;
@@ -88,6 +91,7 @@ int main(int argc, char **argv)
     before = ajAcdGetInt ("before");
     after = ajAcdGetInt ("after");
     join = ajAcdGetBool ("join");
+    featinname = ajAcdGetBool ("featinname");
 
     /* feature filter criteria */
     source = ajAcdGetString ("source");
@@ -110,7 +114,7 @@ int main(int argc, char **argv)
 
         /* extract the features */
         (void) extractfeat_FeatSeqExtract (seq, seqout, featab, before,
-		after, join);
+		after, join, featinname);
 
         /* tidy up */
         ajFeattableDel(&featab);
@@ -137,13 +141,15 @@ int main(int argc, char **argv)
 ** @param [r] before [ajint] region before feature to add to extraction
 ** @param [r] after [ajint] region after feature to add to extraction
 ** @param [r] join [AjBool] concatenate 'join()' features
+** @param [r] featinname [AjBool] TRUE if want the type to be part of the name
 ** @return [void]
 ** @@
 ******************************************************************************/
 
 
 static void extractfeat_FeatSeqExtract (AjPSeq seq, AjPSeqout seqout,
-	AjPFeattable featab, ajint before, ajint after, AjBool join)
+	AjPFeattable featab, ajint before, ajint after, AjBool join,
+	AjBool featinname)
 {
     AjIList    iter = NULL ;
     AjPFeature gf   = NULL ;
@@ -203,7 +209,8 @@ treated as single */
 /* if single or parent, write out any previous sequence(s) */
             if (single || parent) {
             	extractfeat_WriteOut(seqout, &featseq, compall, sense,
-			firstpos, lastpos, before, after, seq, remote, type);
+			firstpos, lastpos, before, after, seq, remote, type, 
+			featinname);
 
                 /* reset joined feature information */
                 ajStrClear(&featseq);
@@ -273,7 +280,8 @@ a Remote ID */
 /* write out any previous sequence(s)
 - add before + after, complement all */
         extractfeat_WriteOut(seqout, &featseq, compall, sense,
-		firstpos, lastpos, before, after, seq, remote, type);
+		firstpos, lastpos, before, after, seq, remote, type, 
+		featinname);
 
 /* tidy up */
         ajStrDel(&featseq);
@@ -344,13 +352,15 @@ static void extractfeat_GetFeatseq(AjPSeq seq, AjPFeature gf, AjPStr
 ** @param [u] seq [AjPSeq] input sequence
 ** @param [r] remote [AjBool] TRUE if must abort becuase it includes Remote IDs
 ** @param [u] type [AjPStr] type of feature
+** @param [r] featinname [AjBool] TRUE if want the type to be part of the name
 ** @return [void]
 ** @@
 ******************************************************************************/
 
 static void extractfeat_WriteOut (AjPSeqout seqout, AjPStr *featstr,
 	AjBool compall, AjBool sense, ajint firstpos, ajint lastpos,
-	ajint before, ajint after, AjPSeq seq, AjBool remote, AjPStr type)
+	ajint before, ajint after, AjPSeq seq, AjBool remote, AjPStr type,
+	AjBool featinname)
 
 {
 
@@ -398,7 +408,7 @@ static void extractfeat_WriteOut (AjPSeqout seqout, AjPStr *featstr,
 
      /* create a nice name for the new sequence */
     name = ajStrNew();
-    (void) ajStrAss(&name, ajSeqGetName(seq));
+    (void) ajStrApp(&name, ajSeqGetName(seq));
     (void) ajStrAppC(&name, "_");
     value = ajStrNew();
     (void) ajStrFromInt(&value, firstpos+1);
@@ -407,10 +417,17 @@ static void extractfeat_WriteOut (AjPSeqout seqout, AjPStr *featstr,
     (void) ajStrFromInt(&value, lastpos+1);
     (void) ajStrApp(&name, value);
 
+    /* add the type of feature to the name, if required */
+    if (featinname) {
+    	(void) ajStrAppC(&name, "_");
+    	(void) ajStrApp(&name, type);
+    }
+
     ajSeqAssName(newseq, name);
 
     /* set the sequence description with the 'type' added */
-    ajStrAssC(&desc, "[");
+    desc = ajStrNew();
+    ajStrAppC(&desc, "[");
     ajStrApp(&desc, type);
     ajStrAppC(&desc, "] ");
     ajStrApp(&desc, ajSeqGetDesc(seq));

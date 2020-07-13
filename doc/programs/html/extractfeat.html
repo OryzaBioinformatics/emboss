@@ -96,44 +96,383 @@ annotation of features, then some of these will be incorrect.
         Many examples illustrating different behaviours is good.
  -->
 
+<b>Here is a sample session with extractfeat</b>
+<p>
+To write out the exons of a sequence:  
+<p>
 
-Here is a sample session with extractfeat to write out the exons of a sequence:
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-<pre>
+% <b>extractfeat tembl:hsfau1 -type exon stdout </b>
+Extract features from a sequence
 
-% extractfeat embl:hsfau1 -type exon stdout
+>HSFAU1_408_504 [exon] H.sapiens fau 1 gene
+cagtgacgtgacacgcagcccacggtctgtactgacgcgccctcgcttcttcctctttct
+cgactccatcttcgcggtagctgggaccgccgttcag
+>HSFAU1_774_856 [exon] H.sapiens fau 1 gene
+tcgccaatatgcagctctttgtccgcgcccaggagctacacaccttcgaggtgaccggcc
+aggaaacggtcgcccagatcaag
+>HSFAU1_951_1095 [exon] H.sapiens fau 1 gene
+gctcatgtagcctcactggagggcattgccccggaagatcaagtcgtgctcctggcaggc
+gcgcccctggaggatgaggccactctgggccagtgcggggtggaggccctgactaccctg
+gaagtagcaggccgcatgcttggag
+>HSFAU1_1557_1612 [exon] H.sapiens fau 1 gene
+gtaaagtccatggttccctggcccgtgctggaaaagtgagaggtcagactcctaag
+>HSFAU1_1787_1912 [exon] H.sapiens fau 1 gene
+gtggccaaacaggagaagaagaagaagaagacaggtcgggctaagcggcggatgcagtac
+aaccggcgctttgtcaacgttgtgcccacctttggcaagaagaagggccccaatgccaac
+tcttaa
 
-</pre>
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><p>
+<p>
+<b>Example 2</b>
+<p>
+To write out the exons with 10 extra bases at the start and end so that you can inspect the splice sites: 
+<p>
 
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-To write out the exons with 10 extra bases at the start and end so that
-you can inspect the splice sites:
+% <b>extractfeat tembl:hsfau1 -type exon -before 10 -after 10 stdout </b>
+Extract features from a sequence
 
+>HSFAU1_408_504 [exon] H.sapiens fau 1 gene
+ggtcgctcagcagtgacgtgacacgcagcccacggtctgtactgacgcgccctcgcttct
+tcctctttctcgactccatcttcgcggtagctgggaccgccgttcaggtaagaatgg
+>HSFAU1_774_856 [exon] H.sapiens fau 1 gene
+ctttactcagtcgccaatatgcagctctttgtccgcgcccaggagctacacaccttcgag
+gtgaccggccaggaaacggtcgcccagatcaaggtaaggctgc
+>HSFAU1_951_1095 [exon] H.sapiens fau 1 gene
+ttccctgtaggctcatgtagcctcactggagggcattgccccggaagatcaagtcgtgct
+cctggcaggcgcgcccctggaggatgaggccactctgggccagtgcggggtggaggccct
+gactaccctggaagtagcaggccgcatgcttggaggtgagtgaga
+>HSFAU1_1557_1612 [exon] H.sapiens fau 1 gene
+cccactacaggtaaagtccatggttccctggcccgtgctggaaaagtgagaggtcagact
+cctaaggtgagtgaga
+>HSFAU1_1787_1912 [exon] H.sapiens fau 1 gene
+ccttctccaggtggccaaacaggagaagaagaagaagaagacaggtcgggctaagcggcg
+gatgcagtacaaccggcgctttgtcaacgttgtgcccacctttggcaagaagaagggccc
+caatgccaactcttaagtcttttgta
 
-<pre>
+</pre></td></tr></table><p>
+<p>
+<p>
+<p>
+<b>Example 3</b>
+<p>
+To write out the 10 bases around the start of all 'exon' features in the tembl database:  
+<p>
 
-% extractfeat embl:hsfau1 -type exon -before 10 -after 10 stdout 
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-</pre>
+% <b>extractfeat tembl:*  -type exon -before 5 -after -5 stdout </b>
+Extract features from a sequence
 
+>HSFAU1_408_504 [exon] H.sapiens fau 1 gene
+ctcagcagtg
+>HSFAU1_774_856 [exon] H.sapiens fau 1 gene
+ctcagtcgcc
+>HSFAU1_951_1095 [exon] H.sapiens fau 1 gene
+tgtaggctca
+>HSFAU1_1557_1612 [exon] H.sapiens fau 1 gene
+tacaggtaaa
+>HSFAU1_1787_1912 [exon] H.sapiens fau 1 gene
+tccaggtggc
+>HSFOS_889_1029 [exon] Human fos proto-oncogene (c-fos), complete cds.
+ccacgatgat
+>HSFOS_1783_2034 [exon] Human fos proto-oncogene (c-fos), complete cds.
+tctaggactt
+>HSFOS_2466_2573 [exon] Human fos proto-oncogene (c-fos), complete cds.
+tctagttatc
+>HSFOS_2688_3329 [exon] Human fos proto-oncogene (c-fos), complete cds.
+tacaggagac
+>HSTS1_1001_1205 [exon] Homo sapiens gene for thymidylate synthase, exons 1, 2, 3, 4, 5, 6, 7, complete cds.
+gcgccatgcc
+>HSTS1_2895_2968 [exon] Homo sapiens gene for thymidylate synthase, exons 1, 2, 3, 4, 5, 6, 7, complete cds.
+ttcagatgaa
+>HSTS1_5396_5570 [exon] Homo sapiens gene for thymidylate synthase, exons 1, 2, 3, 4, 5, 6, 7, complete cds.
+tccagggatc
+>HSTS1_11843_11944 [exon] Homo sapiens gene for thymidylate synthase, exons 1, 2, 3, 4, 5, 6, 7, complete cds.
+tacagattat
+>HSTS1_13449_13624 [exon] Homo sapiens gene for thymidylate synthase, exons 1, 2, 3, 4, 5, 6, 7, complete cds.
+ctcagatctt
+>HSTS1_14133_14204 [exon] Homo sapiens gene for thymidylate synthase, exons 1, 2, 3, 4, 5, 6, 7, complete cds.
+tatagccagg
+>HSTS1_15613_15750 [exon] Homo sapiens gene for thymidylate synthase, exons 1, 2, 3, 4, 5, 6, 7, complete cds.
+tttagcttca
+>AB009062_75_503 [exon] Homo sapiens HERG gene, exon 6.
+tgcaggtcct
+>HSFERG2_50_196 [exon] Human apoferritin H gene exons 2-4
+ttcagtctta
+>HSFERG2_453_578 [exon] Human apoferritin H gene exons 2-4
+ttcagaaacc
+>HSFERG2_674_999 [exon] Human apoferritin H gene exons 2-4
+tgcagttgtg
+>AP000504_13_134 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region, section 3/20.
+ctcactgtga
+>AP000504_868_930 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region, section 3/20.
+gataccaaaa
+>AP000504_1081_1161 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region, section 3/20.
+cttaccaagc
+>AP000504_2752_2875 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region, section 3/20.
+cccacctctc
+>AP000504_3425_3584 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region, section 3/20.
+gagacctcgg
+>AP000504_3818_4038 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region, section 3/20.
+gttacccttt
+>AP000504_7507_7763 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region, section 3/20.
+ccagcccggg
+>AP000504_9766_9875 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region, section 3/20.
+ttcaggctgg
+>AP000504_10068_10193 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region, section 3/20.
+tccaggcgga
+>AP000504_10357_10463 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region, section 3/20.
+ttcaggtacc
+>AP000504_11631_11812 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region, section 3/20.
+cacagatctg
+>AP000504_13026_13434 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region, section 3/20.
+ctcaggtggt
+>AP000504_14850_15164 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region, section 3/20.
+gagggggagt
+>AP000504_15284_15383 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region, section 3/20.
+ctaaggtcga
+>AP000504_15505_15578 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region, section 3/20.
+ctcaggccgg
+>AP000504_15737_15856 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region, section 3/20.
+cctaggactt
+>AP000504_16337_16486 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region, section 3/20.
+tctaggcaat
+>AP000504_16676_16987 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region, section 3/20.
+tgcaggcact
+>AP000504_18955_19059 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region, section 3/20.
+tcccttcaaa
+>AP000504_19185_19264 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region, section 3/20.
+cttaccggtt
+>AP000504_19402_19442 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region, section 3/20.
+ctcaccaaat
+>AP000504_19797_19887 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region, section 3/20.
+ctcacctgtg
+>AP000504_20043_20390 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region, section 3/20.
+cctaccatgg
+>AP000504_20585_20645 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region, section 3/20.
+cttaccccca
+>AP000504_22296_22401 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region, section 3/20.
+atccttgaaa
+>AP000504_23826_23936 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region, section 3/20.
+cccagctgac
+>AP000504_24719_25381 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region, section 3/20.
+cctaggtaag
+>AP000504_26111_26448 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region, section 3/20.
+gctgtagagt
+>AP000504_28403_28525 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region, section 3/20.
+ctcacggttt
+>AP000504_28617_28671 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region, section 3/20.
+cttacccaag
+>AP000504_30215_30266 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region, section 3/20.
+tggccatggg
+>AP000504_31238_31363 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region, section 3/20.
+aacaggtctc
+>AP000504_31486_31691 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region, section 3/20.
+ctgagtgaaa
+>AP000504_33605_33675 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region, section 3/20.
+gttcctcacc
+>AP000504_33846_34001 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region, section 3/20.
+ctcacctctg
+>AP000504_35893_36156 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region, section 3/20.
+tttacctgcc
+>AP000504_36240_36569 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region, section 3/20.
+ctcacctttg
+>AP000504_37069_37123 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region, section 3/20.
+cttacctgca
+>AP000504_40724_40877 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region, section 3/20.
+ggaagagcag
+>AP000504_41897_41953 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region, section 3/20.
+ggcaggatac
+>AP000504_42687_42753 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region, section 3/20.
+tgcaggcttc
+>AP000504_42999_43085 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region, section 3/20.
+cccaggttac
+>AP000504_46996_47081 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region, section 3/20.
+accaggcatt
+>AP000504_50596_50669 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region, section 3/20.
+tgcagaggca
+>AP000504_50879_51001 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region, section 3/20.
+ctcaggaagg
+>AP000504_52110_52224 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region, section 3/20.
+cacagctacc
+>AP000504_52348_52449 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region, section 3/20.
+ctcagtgtaa
+>AP000504_53426_53489 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region, section 3/20.
+cctaggtgat
+>AP000504_53901_53950 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region, section 3/20.
+tacagctgga
+>AP000504_54324_54447 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region, section 3/20.
+tgcagggggt
+>AP000504_54909_55013 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region, section 3/20.
+accagccacg
+>AP000504_55242_55305 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region, section 3/20.
+tctagggggc
+>AP000504_55723_55779 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region, section 3/20.
+tgaagatacc
+>AP000504_55925_55987 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region, section 3/20.
+cccagggttc
+>AP000504_56128_56204 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region, section 3/20.
+cgtaggtatc
+>AP000504_56288_56386 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region, section 3/20.
+accagcctca
+>AP000504_56484_56530 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region, section 3/20.
+tgcaggggag
+>AP000504_56733_57055 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region, section 3/20.
+ctcaggctcg
+>AP000504_59988_60040 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region, section 3/20.
+cagagatgca
+>AP000504_63714_63775 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region, section 3/20.
+cacagcagcc
+>AP000504_64760_64927 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region, section 3/20.
+tctaggtaag
+>AP000504_66908_67344 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region, section 3/20.
+cccaggcagc
+>AP000504_71741_72164 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region, section 3/20.
+actgtggaat
+>AP000504_72744_73649 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region, section 3/20.
+tttaccataa
+>AP000504_73962_74192 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region, section 3/20.
+ctcatggcct
+>AP000504_74520_74709 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region, section 3/20.
+cctacctggg
+>AP000504_74856_74931 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region, section 3/20.
+ctcaccaatg
+>AP000504_75374_75489 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region, section 3/20.
+ctcaccatct
+>AP000504_76058_76160 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region, section 3/20.
+ctcaccaggc
+>AP000504_77125_77207 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region, section 3/20.
+ctcacttcac
+>AP000504_77820_78148 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region, section 3/20.
+ctcaccggct
+>AP000504_79023_79187 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region, section 3/20.
+tgattagaat
+>AP000504_79451_80175 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region, section 3/20.
+agcaggtctc
+>AP000504_81318_81943 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region, section 3/20.
+tgcaggtctc
+>AP000504_83295_85730 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region, section 3/20.
+ggctccccaa
+>AP000504_85819_85964 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region, section 3/20.
+gagatgagga
+>AP000504_86305_86403 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region, section 3/20.
+cttaccttga
+>AP000504_86550_86648 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region, section 3/20.
+ctcactgtag
+>AP000504_86730_86803 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region, section 3/20.
+ccaaccttca
+>AP000504_87402_87556 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region, section 3/20.
+ctcacatgcg
+>AP000504_87948_88090 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region, section 3/20.
+catacctcct
+>AP000504_91393_91628 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region, section 3/20.
+ccccgggcga
+>AP000504_92264_92384 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region, section 3/20.
+tttagagacc
+>AP000504_94413_94530 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region, section 3/20.
+ttcagatgaa
+>AP000504_94645_94841 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region, section 3/20.
+tgcagatgtt
+>AP000504_95076_95129 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region, section 3/20.
+cccagagtga
+>AP000504_95289_95363 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region, section 3/20.
+tgtagagtga
+>AP000504_96214_96449 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region, section 3/20.
+ttcagtgtcg
+>AP000504_97518_97647 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region, section 3/20.
+cacagccatc
+>AP000504_98437_98634 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region, section 3/20.
+cgcagcacga
+>AP000504_98843_99095 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region, section 3/20.
+ttcagatcaa
+>AP000504_99439_99516 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region, section 3/20.
+cccagattct
+>AP000504_99847_99959 [exon] Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region, section 3/20.
+cacaggacag
+>AB000360_808_2266 [exon] Homo sapiens PIGC gene, complete cds.
+cttttagtaa
+>HSHBB_19289_19632 [exon] Human beta globin region on chromosome 11.
+ggagccaaca
+>HSHBB_19755_19977 [exon] Human beta globin region on chromosome 11.
+catagactcc
+>HSHBB_20833_21080 [exon] Human beta globin region on chromosome 11.
+aacagctcct
+>HSHBB_34478_34622 [exon] Human beta globin region on chromosome 11.
+tccacacact
+>HSHBB_34745_34967 [exon] Human beta globin region on chromosome 11.
+cacaggctcc
+>HSHBB_35854_36069 [exon] Human beta globin region on chromosome 11.
+aacagctcct
+>HSHBB_39414_39558 [exon] Human beta globin region on chromosome 11.
+tccacacact
+>HSHBB_39681_39903 [exon] Human beta globin region on chromosome 11.
+cacaggctcc
+>HSHBB_40770_40985 [exon] Human beta globin region on chromosome 11.
+aacagctcct
+>HSHBB_45710_45800 [exon] Human beta globin region on chromosome 11.
+acactgtagt
+>HSHBB_45922_46145 [exon] Human beta globin region on chromosome 11.
+cacagtctcc
+>HSHBB_46997_47124 [exon] Human beta globin region on chromosome 11.
+cccagctctt
+>HSHBB_54740_54881 [exon] Human beta globin region on chromosome 11.
+tgcttacact
+>HSHBB_55010_55232 [exon] Human beta globin region on chromosome 11.
+ctcagattac
+>HSHBB_56131_56389 [exon] Human beta globin region on chromosome 11.
+cgcagctctt
+>HSHBB_62137_62278 [exon] Human beta globin region on chromosome 11.
+tgcttacatt
+>HSHBB_62187_62278 [exon] Human beta globin region on chromosome 11.
+acaccatggt
+>HSHBB_62390_62408 [exon] Human beta globin region on chromosome 11.
+attggtctat
+>HSHBB_62409_62631 [exon] Human beta globin region on chromosome 11.
+cttaggctgc
+>HSHBB_63482_63742 [exon] Human beta globin region on chromosome 11.
+cacagctcct
+>GMGL01_363_460 [exon] Glycine max leghemoglobin gene or pseudogene (no mRNA detected).
+gaaatatggg
+>GMGL01_555_663 [exon] Glycine max leghemoglobin gene or pseudogene (no mRNA detected).
+aataggatat
+>GMGL01_2182_2286 [exon] Glycine max leghemoglobin gene or pseudogene (no mRNA detected).
+tgtaggtgcg
+>GMGL01_3065_3208 [exon] Glycine max leghemoglobin gene or pseudogene (no mRNA detected).
+cgtaggtggt
 
-To write out the 10 bases around the start of all 'exon' features in the
-embl database:
+</pre></td></tr></table><p>
+<p>
+<p>
+<p>
+<b>Example 4</b>
+<p>
+To write out the 7 residues around all phosphorylated residues in the tsw database:  
+<p>
 
-<pre>
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% extractfeat embl:\*  -type exon -before 5 -after -5 stdout
-    
-</pre>
+% <b>extractfeat tsw:*  -type mod_res -value phosphorylation* -before 3 -after -4 stdout </b>
+Extract features from a sequence
 
+>OPSD_HUMAN_343_343 [mod_res] RHODOPSIN.
+TETSQVA
+>PAXI_HUMAN_118_118 [mod_res] PAXILLIN.
+EHVYSFP
 
-To write out the 7 residues around all phosphorylated residues in swissprot:
+</pre></td></tr></table><p>
+<p>
+<a href="#input.4">Go to the input files for this example</a><br><p>
 
-<pre>
-
-% extractfeat sw:\*  -type mod_res -value phosphorylation -before 3 -after -4 stdout
-    
-</pre>
 
 
 
@@ -268,6 +607,16 @@ To write out the 7 residues around all phosphorylated residues in swissprot:
                                   and 'after' qualifiers have been set, then
                                   only the sequence before the first feature
                                   and after the last feature are added.
+   -featinname         boolean    To aid you in identifying the type of
+                                  feature that has been output, the type of
+                                  feature is added to the start of the
+                                  description of the output sequence.
+                                  Sometimes the description of a sequence is
+                                  lost in subsequent processing of the
+                                  sequences file, so it is useful for the type
+                                  to be a part of the sequence ID name. If
+                                  you set this to be TRUE then the name is
+                                  added to the ID name of the output sequence.
 
    Advanced qualifiers: (none)
    General qualifiers:
@@ -387,7 +736,14 @@ pax* | 10</td>
 <tr>
 <td>-join</td>
 <td>Some features, such as CDS (coding sequence) and mRNA are composed of introns concatenated together. There may be other forms of 'joined' sequence, depending on the feature table. If this option is set TRUE, then any group of these features will be output as a single sequence. If the 'before' and 'after' qualifiers have been set, then only the sequence before the first feature and after the last feature are added.</td>
-<td>Yes/No</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-featinname</td>
+<td>To aid you in identifying the type of feature that has been output, the type of feature is added to the start of the description of the output sequence. Sometimes the description of a sequence is lost in subsequent processing of the sequences file, so it is useful for the type to be a part of the sequence ID name. If you set this to be TRUE then the name is added to the ID name of the output sequence.</td>
+<td>Boolean value Yes/No</td>
 <td>No</td>
 </tr>
 
@@ -427,12 +783,138 @@ IT IS DONE FOR YOU.
         happens in unusual cases - null input, etc. 
    -->
 
-Normal sequence with features.
+<b>extractfeat</b> reads normal sequences with features.
+
 <p>
 
 Feature tables in Swissprot, EMBL, GFF, etc.  format can be added using
 '-ufo featurefile' on the command line. 
 
+
+<p>
+
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+
+'tembl:hsfau1' is a sequence entry in the example nucleic acid database 'tembl'
+<p>
+<p><h3>Database entry: tembl:hsfau1</h3>
+<table width="90%"><tr><td bgcolor="#FFDDFF">
+<pre>
+ID   HSFAU1     standard; DNA; HUM; 2016 BP.
+XX
+AC   X65921; S45242;
+XX
+SV   X65921.1
+XX
+DT   13-MAY-1992 (Rel. 31, Created)
+DT   21-JUL-1993 (Rel. 36, Last updated, Version 5)
+XX
+DE   H.sapiens fau 1 gene
+XX
+KW   fau 1 gene.
+XX
+OS   Homo sapiens (human)
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia;
+OC   Eutheria; Primates; Catarrhini; Hominidae; Homo.
+XX
+RN   [1]
+RP   1-2016
+RA   Kas K.;
+RT   ;
+RL   Submitted (29-APR-1992) to the EMBL/GenBank/DDBJ databases.
+RL   K. Kas, University of Antwerp, Dept of Biochemistry T3.22,
+RL   Universiteitsplein 1, 2610 Wilrijk, BELGIUM
+XX
+RN   [2]
+RP   1-2016
+RX   MEDLINE; 92412144.
+RA   Kas K., Michiels L., Merregaert J.;
+RT   "Genomic structure and expression of the human fau gene: encoding the
+RT   ribosomal protein S30 fused to a ubiquitin-like protein.";
+RL   Biochem. Biophys. Res. Commun. 187:927-933(1992).
+XX
+DR   SWISS-PROT; P35544; UBIM_HUMAN.
+DR   SWISS-PROT; Q05472; RS30_HUMAN.
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..2016
+FT                   /db_xref="taxon:9606"
+FT                   /organism="Homo sapiens"
+FT                   /clone_lib="CML cosmid"
+FT                   /clone="15.1"
+FT   mRNA            join(408..504,774..856,951..1095,1557..1612,1787..&gt;1912)
+FT                   /gene="fau 1"
+FT   exon            408..504
+FT                   /number=1
+FT   intron          505..773
+FT                   /number=1
+FT   exon            774..856
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+FT                   RAKRRMQYNRRFVNVVPTFGKKKGPNANS"
+FT   intron          857..950
+FT                   /number=2
+FT   exon            951..1095
+FT                   /number=3
+FT   intron          1096..1556
+FT                   /number=3
+FT   exon            1557..1612
+FT                   /number=4
+FT   intron          1613..1786
+FT                   /number=4
+FT   exon            1787..&gt;1912
+FT                   /number=5
+FT   polyA_signal    1938..1943
+XX
+SQ   Sequence 2016 BP; 421 A; 562 C; 538 G; 495 T; 0 other;
+     ctaccatttt ccctctcgat tctatatgta cactcgggac aagttctcct gatcgaaaac        60
+     ggcaaaacta aggccccaag taggaatgcc ttagttttcg gggttaacaa tgattaacac       120
+     tgagcctcac acccacgcga tgccctcagc tcctcgctca gcgctctcac caacagccgt       180
+     agcccgcagc cccgctggac accggttctc catccccgca gcgtagcccg gaacatggta       240
+     gctgccatct ttacctgcta cgccagcctt ctgtgcgcgc aactgtctgg tcccgccccg       300
+     tcctgcgcga gctgctgccc aggcaggttc gccggtgcga gcgtaaaggg gcggagctag       360
+     gactgccttg ggcggtacaa atagcaggga accgcgcggt cgctcagcag tgacgtgaca       420
+     cgcagcccac ggtctgtact gacgcgccct cgcttcttcc tctttctcga ctccatcttc       480
+     gcggtagctg ggaccgccgt tcaggtaaga atggggcctt ggctggatcc gaagggcttg       540
+     tagcaggttg gctgcggggt cagaaggcgc ggggggaacc gaagaacggg gcctgctccg       600
+     tggccctgct ccagtcccta tccgaactcc ttgggaggca ctggccttcc gcacgtgagc       660
+     cgccgcgacc accatcccgt cgcgatcgtt tctggaccgc tttccactcc caaatctcct       720
+     ttatcccaga gcatttcttg gcttctctta caagccgtct tttctttact cagtcgccaa       780
+     tatgcagctc tttgtccgcg cccaggagct acacaccttc gaggtgaccg gccaggaaac       840
+     ggtcgcccag atcaaggtaa ggctgcttgg tgcgccctgg gttccatttt cttgtgctct       900
+     tcactctcgc ggcccgaggg aacgcttacg agccttatct ttccctgtag gctcatgtag       960
+     cctcactgga gggcattgcc ccggaagatc aagtcgtgct cctggcaggc gcgcccctgg      1020
+     aggatgaggc cactctgggc cagtgcgggg tggaggccct gactaccctg gaagtagcag      1080
+     gccgcatgct tggaggtgag tgagagagga atgttctttg aagtaccggt aagcgtctag      1140
+     tgagtgtggg gtgcatagtc ctgacagctg agtgtcacac ctatggtaat agagtacttc      1200
+     tcactgtctt cagttcagag tgattcttcc tgtttacatc cctcatgttg aacacagacg      1260
+     tccatgggag actgagccag agtgtagttg tatttcagtc acatcacgag atcctagtct      1320
+     ggttatcagc ttccacacta aaaattaggt cagaccaggc cccaaagtgc tctataaatt      1380
+     agaagctgga agatcctgaa atgaaactta agatttcaag gtcaaatatc tgcaactttg      1440
+     ttctcattac ctattgggcg cagcttctct ttaaaggctt gaattgagaa aagaggggtt      1500
+     ctgctgggtg gcaccttctt gctcttacct gctggtgcct tcctttccca ctacaggtaa      1560
+     agtccatggt tccctggccc gtgctggaaa agtgagaggt cagactccta aggtgagtga      1620
+     gagtattagt ggtcatggtg ttaggacttt ttttcctttc acagctaaac caagtccctg      1680
+     ggctcttact cggtttgcct tctccctccc tggagatgag cctgagggaa gggatgctag      1740
+     gtgtggaaga caggaaccag ggcctgatta accttccctt ctccaggtgg ccaaacagga      1800
+     gaagaagaag aagaagacag gtcgggctaa gcggcggatg cagtacaacc ggcgctttgt      1860
+     caacgttgtg cccacctttg gcaagaagaa gggccccaat gccaactctt aagtcttttg      1920
+     taattctggc tttctctaat aaaaaagcca cttagttcag tcatcgcatt gtttcatctt      1980
+     tacttgcaag gcctcaggga gaggtgtgct tctcgg                                2016
+//
+</pre>
+</td></tr></table><p>
+
+<a name="input.4"></a>
+<h3>Input files for usage example 4</h3>
+
+'tsw:*' is a sequence entry in the example protein database 'tsw'
+<p>
 
 
 
@@ -454,6 +936,132 @@ Feature tables in Swissprot, EMBL, GFF, etc.  format can be added using
         someone will want to parse this file and will want to know what
         happens in unusual cases - null output, errors etc. 
    -->
+
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+
+'tembl:hsfau1' is a sequence entry in the example nucleic acid database 'tembl'
+<p>
+<p><h3>Database entry: tembl:hsfau1</h3>
+<table width="90%"><tr><td bgcolor="#FFDDFF">
+<pre>
+ID   HSFAU1     standard; DNA; HUM; 2016 BP.
+XX
+AC   X65921; S45242;
+XX
+SV   X65921.1
+XX
+DT   13-MAY-1992 (Rel. 31, Created)
+DT   21-JUL-1993 (Rel. 36, Last updated, Version 5)
+XX
+DE   H.sapiens fau 1 gene
+XX
+KW   fau 1 gene.
+XX
+OS   Homo sapiens (human)
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia;
+OC   Eutheria; Primates; Catarrhini; Hominidae; Homo.
+XX
+RN   [1]
+RP   1-2016
+RA   Kas K.;
+RT   ;
+RL   Submitted (29-APR-1992) to the EMBL/GenBank/DDBJ databases.
+RL   K. Kas, University of Antwerp, Dept of Biochemistry T3.22,
+RL   Universiteitsplein 1, 2610 Wilrijk, BELGIUM
+XX
+RN   [2]
+RP   1-2016
+RX   MEDLINE; 92412144.
+RA   Kas K., Michiels L., Merregaert J.;
+RT   "Genomic structure and expression of the human fau gene: encoding the
+RT   ribosomal protein S30 fused to a ubiquitin-like protein.";
+RL   Biochem. Biophys. Res. Commun. 187:927-933(1992).
+XX
+DR   SWISS-PROT; P35544; UBIM_HUMAN.
+DR   SWISS-PROT; Q05472; RS30_HUMAN.
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..2016
+FT                   /db_xref="taxon:9606"
+FT                   /organism="Homo sapiens"
+FT                   /clone_lib="CML cosmid"
+FT                   /clone="15.1"
+FT   mRNA            join(408..504,774..856,951..1095,1557..1612,1787..&gt;1912)
+FT                   /gene="fau 1"
+FT   exon            408..504
+FT                   /number=1
+FT   intron          505..773
+FT                   /number=1
+FT   exon            774..856
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+FT                   RAKRRMQYNRRFVNVVPTFGKKKGPNANS"
+FT   intron          857..950
+FT                   /number=2
+FT   exon            951..1095
+FT                   /number=3
+FT   intron          1096..1556
+FT                   /number=3
+FT   exon            1557..1612
+FT                   /number=4
+FT   intron          1613..1786
+FT                   /number=4
+FT   exon            1787..&gt;1912
+FT                   /number=5
+FT   polyA_signal    1938..1943
+XX
+SQ   Sequence 2016 BP; 421 A; 562 C; 538 G; 495 T; 0 other;
+     ctaccatttt ccctctcgat tctatatgta cactcgggac aagttctcct gatcgaaaac        60
+     ggcaaaacta aggccccaag taggaatgcc ttagttttcg gggttaacaa tgattaacac       120
+     tgagcctcac acccacgcga tgccctcagc tcctcgctca gcgctctcac caacagccgt       180
+     agcccgcagc cccgctggac accggttctc catccccgca gcgtagcccg gaacatggta       240
+     gctgccatct ttacctgcta cgccagcctt ctgtgcgcgc aactgtctgg tcccgccccg       300
+     tcctgcgcga gctgctgccc aggcaggttc gccggtgcga gcgtaaaggg gcggagctag       360
+     gactgccttg ggcggtacaa atagcaggga accgcgcggt cgctcagcag tgacgtgaca       420
+     cgcagcccac ggtctgtact gacgcgccct cgcttcttcc tctttctcga ctccatcttc       480
+     gcggtagctg ggaccgccgt tcaggtaaga atggggcctt ggctggatcc gaagggcttg       540
+     tagcaggttg gctgcggggt cagaaggcgc ggggggaacc gaagaacggg gcctgctccg       600
+     tggccctgct ccagtcccta tccgaactcc ttgggaggca ctggccttcc gcacgtgagc       660
+     cgccgcgacc accatcccgt cgcgatcgtt tctggaccgc tttccactcc caaatctcct       720
+     ttatcccaga gcatttcttg gcttctctta caagccgtct tttctttact cagtcgccaa       780
+     tatgcagctc tttgtccgcg cccaggagct acacaccttc gaggtgaccg gccaggaaac       840
+     ggtcgcccag atcaaggtaa ggctgcttgg tgcgccctgg gttccatttt cttgtgctct       900
+     tcactctcgc ggcccgaggg aacgcttacg agccttatct ttccctgtag gctcatgtag       960
+     cctcactgga gggcattgcc ccggaagatc aagtcgtgct cctggcaggc gcgcccctgg      1020
+     aggatgaggc cactctgggc cagtgcgggg tggaggccct gactaccctg gaagtagcag      1080
+     gccgcatgct tggaggtgag tgagagagga atgttctttg aagtaccggt aagcgtctag      1140
+     tgagtgtggg gtgcatagtc ctgacagctg agtgtcacac ctatggtaat agagtacttc      1200
+     tcactgtctt cagttcagag tgattcttcc tgtttacatc cctcatgttg aacacagacg      1260
+     tccatgggag actgagccag agtgtagttg tatttcagtc acatcacgag atcctagtct      1320
+     ggttatcagc ttccacacta aaaattaggt cagaccaggc cccaaagtgc tctataaatt      1380
+     agaagctgga agatcctgaa atgaaactta agatttcaag gtcaaatatc tgcaactttg      1440
+     ttctcattac ctattgggcg cagcttctct ttaaaggctt gaattgagaa aagaggggtt      1500
+     ctgctgggtg gcaccttctt gctcttacct gctggtgcct tcctttccca ctacaggtaa      1560
+     agtccatggt tccctggccc gtgctggaaa agtgagaggt cagactccta aggtgagtga      1620
+     gagtattagt ggtcatggtg ttaggacttt ttttcctttc acagctaaac caagtccctg      1680
+     ggctcttact cggtttgcct tctccctccc tggagatgag cctgagggaa gggatgctag      1740
+     gtgtggaaga caggaaccag ggcctgatta accttccctt ctccaggtgg ccaaacagga      1800
+     gaagaagaag aagaagacag gtcgggctaa gcggcggatg cagtacaacc ggcgctttgt      1860
+     caacgttgtg cccacctttg gcaagaagaa gggccccaat gccaactctt aagtcttttg      1920
+     taattctggc tttctctaat aaaaaagcca cttagttcag tcatcgcatt gtttcatctt      1980
+     tacttgcaag gcctcaggga gaggtgtgct tctcgg                                2016
+//
+</pre>
+</td></tr></table><p>
+
+<a name="input.4"></a>
+<h3>Input files for usage example 4</h3>
+
+'tsw:*' is a sequence entry in the example protein database 'tsw'
+<p>
+
+
+<p>
 
 The sequences of the specified features are written out.
 
@@ -699,9 +1307,9 @@ None.
 <tr><td><a href="showfeat.html">showfeat</a></td><td>Show features of a sequence</td></tr>
 <tr><td><a href="skipseq.html">skipseq</a></td><td>Reads and writes (returns) sequences, skipping the first few</td></tr>
 <tr><td><a href="splitter.html">splitter</a></td><td>Split a sequence into (overlapping) smaller sequences</td></tr>
-<tr><td><a href="swissparse.html">swissparse</a></td><td>Retrieves sequences from swissprot using keyword search</td></tr>
 <tr><td><a href="trimest.html">trimest</a></td><td>Trim poly-A tails off EST sequences</td></tr>
 <tr><td><a href="trimseq.html">trimseq</a></td><td>Trim ambiguous bits off the ends of sequences</td></tr>
+<tr><td><a href="twofeat.html">twofeat</a></td><td>Finds neighbouring pairs of features in sequences</td></tr>
 <tr><td><a href="union.html">union</a></td><td>Reads sequence fragments and builds one sequence</td></tr>
 <tr><td><a href="vectorstrip.html">vectorstrip</a></td><td>Strips out DNA between a pair of vector sequences</td></tr>
 <tr><td><a href="yank.html">yank</a></td><td>Reads a sequence range, appends the full USA to a list file</td></tr>
