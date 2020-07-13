@@ -748,16 +748,7 @@ AjPFeattable ajFeatRead  ( AjPFeattabIn  ftin )
 ** @param  [rNU]  strand   [char]  Strand of the feature
 ** @param  [rNU]  frame    [ajint]   Frame of the feature
 ** @return [AjPFeature] newly allocated feature object
-** @cre 'table' argument must be a valid ajFeattable
-** @exception 'Mem_Failed' from memory allocation
 ** @@
-** Obsolete option
-** param  [rENU] desc     [AjPStr]      desc of feature feature
-**
-** Not for constructor - rarely used - add later if needed
-** param  [rNU]  Start2   [ajint]  2nd Start position of the feature
-** param  [rNU]  End2     [ajint]  2nd End position of the feature
-** 
 ******************************************************************************/
 
 AjPFeature ajFeatNew (AjPFeattable thys,
@@ -790,16 +781,7 @@ AjPFeature ajFeatNew (AjPFeattable thys,
 ** @param  [rNU]  Start    [ajint]  Start position of the feature
 ** @param  [rNU]  End      [ajint]  End position of the feature
 ** @return [AjPFeature] newly allocated feature object
-** @cre 'table' argument must be a valid ajFeattable
-** @exception 'Mem_Failed' from memory allocation
 ** @@
-** Obsolete option
-** param  [rENU] desc     [AjPStr]      desc of feature feature
-**
-** Not for constructor - rarely used - add later if needed
-** param  [rNU]  Start2   [ajint]  2nd Start position of the feature
-** param  [rNU]  End2     [ajint]  2nd End position of the feature
-** 
 ******************************************************************************/
 
 AjPFeature ajFeatNewII (AjPFeattable thys,
@@ -1012,12 +994,7 @@ static ajint featCompByType(const void *a, const void *b) {
 ** @param  [rENU] label    [AjPStr] Label for location (non-numeric)
 ** @param  [rNU]  flags    [ajint]  flags.
 ** @return [AjPFeature] newly allocated feature object
-** @exception 'Mem_Failed' from memory allocation
-** @cre 'table' argument must be a valid ajFeattable
 ** @@
-** Obsolete:
-** param  [rENU] desc     [AjPStr]      desc of feature feature
-** 
 ******************************************************************************/
 
 static AjPFeature featFeatNew (AjPFeattable thys,
@@ -1077,10 +1054,6 @@ static AjPFeature featFeatNew (AjPFeattable thys,
 
   ret->Flags = flags;
   
-  /*  ajStrAssS (&ret->Desc, desc); */ /*obsolete pmr 2-jul-01 */
-
-
-  /*ret->Comment = NULL ;*/ /*obsolete pmr 2-jul-01 */
   ret->Strand = strand ;
     
   ret->Frame  = frame ;
@@ -1091,6 +1064,10 @@ static AjPFeature featFeatNew (AjPFeattable thys,
 
   if (ajStrLen(entryid))
     ajStrAssS (&ret->Remote, entryid);
+  else {
+    thys->Len = AJMAX (thys->Len, ret->Start);
+    thys->Len = AJMAX (thys->Len, ret->End);
+  }
 
   if (ajStrLen(label))
     ajStrAssS (&ret->Label, label);
@@ -1173,6 +1150,9 @@ static AjPFeature featFeatNewProt (AjPFeattable thys,
   ret->End2 = 0;
 
   ret->Protein = ajTrue;
+
+  thys->Len = AJMAX (thys->Len, ret->Start);
+  thys->Len = AJMAX (thys->Len, ret->End);
 
   ajFeattableAdd(thys,ret) ;
 
@@ -1312,8 +1292,6 @@ static void featClear ( AjPFeature thys ) {
   
   ajStrDel(&thys->Source);
   ajStrDel(&thys->Type);
-  /* ajStrDel(&thys->Comment);*/ /*obsolete pmr 2-jul-01 */
-  /* ajStrDel(&thys->Desc);*/ /*obsolete pmr 2-jul-01 */
   ajStrDel(&thys->Remote);
   ajStrDel(&thys->Label);
 
@@ -1347,7 +1325,7 @@ static void featClear ( AjPFeature thys ) {
 **
 ******************************************************************************/
 
-/* @func ajFeattableAdd *********************************************************
+/* @func ajFeattableAdd *******************************************************
 **
 ** Method to add a new AjPFeature to a AjPFeattable
 **
@@ -1364,6 +1342,8 @@ static void featClear ( AjPFeature thys ) {
 
 void ajFeattableAdd ( AjPFeattable thys, AjPFeature feature )
 {
+  thys->Len = AJMAX (thys->Len, feature->Start);
+  thys->Len = AJMAX (thys->Len, feature->End);
   ajListPushApp ( thys->Features, feature);  ;
 
   if(feature->Type)
@@ -2385,6 +2365,8 @@ static AjPFeature featSwissFromLine ( AjPFeattable thys,
 				      AjPStr* saveto,
 				      AjPStr* saveline)
 {
+  static AjPStr qryfrom  = NULL;
+  static AjPStr qryto    = NULL;
   static AjPStr source   = NULL;
   static AjPStr temp     = NULL;
   static AjPFeature gf   = NULL ;    /* made static so that it's easy
@@ -2416,6 +2398,8 @@ static AjPFeature featSwissFromLine ( AjPFeattable thys,
     ajStrDelReuse(savefrom);
     ajStrDelReuse(saveto);
     ajStrDelReuse(saveline);
+    ajStrDelReuse(&qryfrom);
+    ajStrDelReuse(&qryto);
   }
 
   if (!origline)		/* we are only cleaning up */
@@ -2423,9 +2407,11 @@ static AjPFeature featSwissFromLine ( AjPFeattable thys,
 
   if (newft) {	/* if new feature initialise for it */
     ajRegSubI (SwRegexNew, 2, savefeat);
-    ajRegSubI (SwRegexNew, 3, savefrom);
-    ajRegSubI (SwRegexNew, 4, saveto);
-    ajRegSubI (SwRegexNew, 5, saveline);
+    ajRegSubI (SwRegexNew, 3, &qryfrom);
+    ajRegSubI (SwRegexNew, 4, savefrom);
+    ajRegSubI (SwRegexNew, 5, &qryto);
+    ajRegSubI (SwRegexNew, 6, saveto);
+    ajRegSubI (SwRegexNew, 7, saveline);
     ajStrChomp(savefeat);
     ajDebug (" newft type '%S' from '%S' to '%S' rest '%S'\n",
 	     *savefeat, *savefrom, *saveto, *saveline);
@@ -3225,7 +3211,7 @@ static AjBool featRegInitSwiss (void)
 
   ajDebug ("featRegInitSwiss Compiling regexps\n");
   if (!SwRegexNew)
-    SwRegexNew = ajRegCompC("^FT   (([^ ]+) +([0-9]+) +([0-9]+) *)(.*)$") ;
+    SwRegexNew = ajRegCompC("^FT   (([^ ]+) +([?]?)([0-9]+) +([?]?)([0-9]+) *)(.*)$") ;
   if (!SwRegexNext)
     SwRegexNext = ajRegCompC("^FT    +(.*)$") ;
   if (!SwRegexComment)
@@ -3870,7 +3856,27 @@ static char featStrand (ajint strand) {
   return '-';
 }
 
-/* @func ajFeatIsProt *********************************************************
+/* @func ajFeattableIsNuc *****************************************************
+**
+** Returns ajTrue if a feature table is knucleotide protein
+**
+** @param [r] thys [AjPFeattable] Feature table
+** @return [AjBool] ajTrue for a protein feature table
+** @@
+******************************************************************************/
+
+AjBool ajFeattableIsNuc (AjPFeattable thys) {
+
+    if (ajStrMatchC(thys->Type, "N"))
+	return ajTrue;
+
+    if (ajFeattableIsProt(thys))
+	return ajFalse;
+
+    return ajFalse;
+}
+
+/* @func ajFeattableIsProt ****************************************************
 **
 ** Returns ajTrue if a feature table is protein
 **
@@ -3879,12 +3885,53 @@ static char featStrand (ajint strand) {
 ** @@
 ******************************************************************************/
 
-AjBool ajFeatIsProt (AjPFeattable thys) {
-  ajDebug("ajFeatIsProt NOT IMPLEMENTED YET\n");
-  return ajFalse;
+AjBool ajFeattableIsProt (AjPFeattable thys) {
+
+    if (ajStrMatchC(thys->Type, "P"))
+	return ajTrue;
+
+    if (ajFeattableIsNuc(thys))
+	return ajFalse;
+
+    return ajFalse;
 }
 
-/* @func ajFeatLen ************************************************************
+/* @func ajFeattableBegin *****************************************************
+**
+** Returns the feature table start position, or 1 if no start has been set.
+**
+** @param [P] thys [AjPFeattable] feature table object
+** @return [ajint] Start position.
+** @@
+******************************************************************************/
+
+ajint ajFeattableBegin (AjPFeattable thys)
+{
+    if (!thys->Start)
+	return 1;
+
+    return ajFeattablePos(thys, thys->Start);
+}
+
+/* @func ajFeattableEnd *******************************************************
+**
+** Returns the features table end position, or the feature table length if
+** no end has been set.
+**
+** @param [P] thys [AjPFeattable] feature table object
+** @return [ajint] End position.
+** @@
+******************************************************************************/
+
+ajint ajFeattableEnd (AjPFeattable thys)
+{
+    if (!thys->End)
+	return (ajFeattableLen(thys));
+
+    return ajFeattablePosI(thys, ajFeattableBegin(thys), thys->End);
+}
+
+/* @func ajFeattableLen *******************************************************
 **
 ** Returns the sequence length of a feature table
 **
@@ -3893,12 +3940,12 @@ AjBool ajFeatIsProt (AjPFeattable thys) {
 ** @@
 ******************************************************************************/
 
-ajint ajFeatLen (AjPFeattable thys) {
+ajint ajFeattableLen (AjPFeattable thys) {
   if (!thys) return 0;
-  return (thys->End);
+  return (thys->Len);
 }
 
-/* @func ajFeatSize ***********************************************************
+/* @func ajFeattableSize ******************************************************
 **
 ** Returns the number of features in a feature table
 **
@@ -3907,7 +3954,7 @@ ajint ajFeatLen (AjPFeattable thys) {
 ** @@
 ******************************************************************************/
 
-ajint ajFeatSize (AjPFeattable thys) {
+ajint ajFeattableSize (AjPFeattable thys) {
   if (!thys) return 0;
   return ajListLength (thys->Features);
 }
@@ -4988,67 +5035,6 @@ static AjBool featVocabInitSwiss (void) {
 
 }
 
-/* @func ajObsFeatNew *********************************************************
-**
-** Constructor for a new feature.
-**
-** @param  [rC]   thys     [AjPFeattable] Pointer to the ajFeattable which
-**                         owns the feature
-** @param  [rENU] source     [AjPStr]  Source of feature
-** @param  [rENU] type     [AjPStr]  Feature type
-** @param  [rNU]  start    [ajint]  Start position of the feature
-** @param  [rNU]  end      [ajint]  End position of the feature
-** @param  [rENU] score    [float]      Analysis score for the feature
-** @param  [rNU]  strand   [char]  Strand (+/-/.) of the feature
-** @param  [rNU]  frame    [ajint]   Frame (1,2,3 or 0) of the feature
-** @param  [rENU] desc     [AjPStr] Description of feature (simple text)
-** @return [AjPFeature] Newly allocated feature object
-** @exception 'Mem_Failed' from memory allocation
-** @@
-** 
-******************************************************************************/
-
-AjPFeature ajObsFeatNew (AjPFeattable thys,
-		      AjPStr       source, 
-		      AjPStr       type,
-		      ajint        start,
-		      ajint        end,
-		      float        score,
-		      char         strand,
-		      ajint        frame, 
-		      AjPStr       desc) {
-
-  AjPFeature ret = NULL ;
-
-  if(!ajStrLen(type))
-    return NULL;
-
-  ajDebug ("ajFeatNew '%S' %d .. %d\n", type, start, end);
-
-  /* Allocate the object... and a new Tags list*/
-  ret = featFeatureNew() ;
-
-  ajStrCopy (&ret->Type, type);
-
-  thys->Groups++;
-  ret->Group = thys->Groups;
-  ret->Exon = 0;
-
-  ajStrCopy (&ret->Source, source);
-  ret->Score = score;
-
-  ret->Strand = strand ;
-    
-  ret->Frame  = frame ;
-  ret->Start = start;
-  ret->End = end;
-
-
-  ajListPushApp (thys->Features, ret);
-
-  return ret;
-}
-
 /* @func ajFeatSetDescApp *****************************************************
 **
 ** Sets the description for a feature
@@ -5459,6 +5445,83 @@ void ajFeattableSetProt ( AjPFeattable thys)
   return;
 }
 
+/* @func ajFeattableReverse ***************************************************
+**
+** Reverse the features in a feature table by iterating through and
+** reversing all positions and strands.
+**
+** @param [r] thys [AjPFeattable] Feature table object
+** @return [void]
+******************************************************************************/
+
+void ajFeattableReverse  ( AjPFeattable  thys ) {
+  AjIList    iter = NULL ;
+  AjPFeature gf   = NULL ;
+
+  if (ajFeattableIsProt (thys)) return;
+
+  iter = ajListIter(thys->Features) ;
+
+  while(ajListIterMore(iter)) {
+    gf = ajListIterNext (iter) ;
+    ajFeatReverse(gf) ;
+  }
+
+  ajListIterFree(iter) ;
+
+  return;
+}
+
+/* @func ajFeatReverse ********************************************************
+**
+** Reverse one feature by reversing all positions and strand.
+**
+** @param [r] thys [AjPFeature] Feature object
+** @return [void]
+******************************************************************************/
+
+void ajFeatReverse  ( AjPFeature  thys ) {
+
+  ajint itmp;
+
+  if (thys->Strand == '-')
+    thys->Strand = '+';
+  else
+    thys->Strand = '-';
+
+  itmp = thys->Start;
+  thys->Start = thys->End;
+  thys->End = itmp;
+
+  itmp = thys->Start2;
+  thys->Start2 = thys->End2;
+  thys->End2 = itmp;
+
+  /* thys->Frame is rather hard to guess ... leave alone for now */
+
+  thys->Frame = 0;		/* set to unknown */
+
+  return;
+
+}
+
+/* @func ajFeattableSetRange **************************************************
+**
+** Set the begin and end range for a feature table
+**
+** @param [r] thys [AjPFeattable] Feature table object
+** @param [r] fbegin [ajint] Begin position
+** @param [r] fend   [ajint] End position
+** @return [void]
+******************************************************************************/
+
+void ajFeattableSetRange  ( AjPFeattable thys,
+				     ajint fbegin, ajint fend ) {
+
+  thys->Start = ajFeattablePosI (thys, 1, fbegin);
+  thys->End = ajFeattablePosII (thys->Len, thys->Start, fend);
+}
+
 /* @func ajFeattableNewDna ****************************************************
 **
 ** Constructor for a new DNA feature table
@@ -5683,6 +5746,7 @@ void ajFeattableCopy (AjPFeattable* pthys, AjPFeattable orig) {
   thys->DefFormat = orig->DefFormat;
   thys->Start = orig->Start;
   thys->End = orig->End;
+  thys->Len = orig->Len;
   thys->Groups = orig->Groups;
 
   iter = ajListIter(orig->Features);
@@ -6207,6 +6271,10 @@ static AjBool featTagSpecialAllConssplice (AjPStr* pval) {
 ** Tests a string as a valid internal (EMBL) feature /rpt_unit tag
 **
 ** The format is 123..789
+** Labels are also allowed which should be feature tags in the entry.
+** Genbank (NCBI) appear to be putting the sequence consensus in. Usually
+** this is a valid "label" - except of course that the label does not exist.
+** One horror (July 2002) was: /rpt_unit=TCCTCACGTAG(T/C)
 **
 ** @param  [r] pval [AjPStr*] parameter value
 ** @return [AjBool] ajTrue for a valid value, possibly corrected
@@ -6217,19 +6285,28 @@ static AjBool featTagSpecialAllConssplice (AjPStr* pval) {
 static AjBool featTagSpecialAllRptunit (AjPStr* pval) {
 
   static AjPRegexp exp = NULL;
+  static AjPRegexp labexp = NULL;
 
   static AjPStr begstr = NULL;
   static AjPStr endstr = NULL;
+  static AjPStr labstr = NULL;
   AjBool ret = ajFalse;
 
   if (!exp)
     exp = ajRegCompC("^([0-9]+)[.][.]([0-9]+)$");
+  if (!labexp)
+    labexp = ajRegCompC("^([acgtACGT]+)$");
 
   if (ajRegExec(exp, *pval)) {
     ret = ajTrue;
     ajRegSubI (exp, 1, &begstr);
     ajRegSubI (exp, 2, &endstr);
- }
+  }
+
+  if (ajRegExec(labexp, *pval)) {
+    ajRegSubI (exp, 1, &labstr);
+    ret = ajTrue;
+  }
 
   if (!ret) {
     ajDebug("bad /rpt_unit value '%S'\n", *pval);
@@ -6564,7 +6641,7 @@ static void featLocEmblWrapC (AjPStr *ploc, ajint margin,
     ajDebug("try %d to %d (len %d)\n", i, last, len);
 
     if ((last+1) >= len) { /* no need to split */
-      ajStrAssSub(&tmpstr, *ploc, i, len);
+      ajStrAssSub(&tmpstr, *ploc, i, len-1);
       ajDebug ("last %d >= len %d\n", last, len);
       j = 0;
     }
@@ -6628,7 +6705,7 @@ static void featTagEmblWrapC (AjPStr *pval, ajint margin, char* prefix,
     ajDebug("try %d to %d (len %d)\n", i, last, len);
 
     if ((last+1) >= len) { /* no need to split */
-      ajStrAssSub(&tmpstr, *pval, i, len);
+      ajStrAssSub(&tmpstr, *pval, i, len-1);
       ajDebug ("last %d >= len %d\n", last, len);
       j = 0;
     }
@@ -6705,7 +6782,7 @@ static void featTagSwissWrapC (AjPStr *pval, ajint margin, char* prefix,
     ajDebug("try %d to %d (len %d)\n", i, last, len);
 
     if ((last+1) >= len) { /* no need to split */
-      ajStrAssSub(&tmpstr, valstr, i, len);
+      ajStrAssSub(&tmpstr, valstr, i, len-1);
       ajDebug ("last %d >= len %d\n", last, len);
       j = 0;
     }
@@ -7661,7 +7738,7 @@ AjBool ajFeatIsLocal (AjPFeature gf)
 }
 
 
-/* @func ajFeatIsLocalRange ****************************************************
+/* @func ajFeatIsLocalRange ***************************************************
 ** 
 ** Tests whether the feature is local and in the specified range of the
 ** sequence.
@@ -7687,6 +7764,53 @@ AjBool ajFeatIsLocalRange (AjPFeature gf, ajint start, ajint end)
     return AJTRUE;
 }
 
+/* @func ajFeatIsChild ****************************************************
+**
+** Tests whether the feature is a child member of a join
+** The parent (first) feature of a join gives:
+** ajFeatIsChild == ajFalse && ajFeatIsMultiple == ajTrue
+**
+** @param [r] gf       [AjPFeature]  Feature
+** @return [AjBool] Returns AJTRUE if it is a child,
+**                  AJFALSE if it is not a child
+** @@
+******************************************************************************/
+AjBool ajFeatIsChild (AjPFeature gf) 
+{
+    return (gf->Flags & FEATFLAG_CHILD);
+}
+
+
+/* @func ajFeatIsMultiple ****************************************************
+**
+** Tests whether the feature is a member of a join, group order or one_of
+**
+** @param [r] gf       [AjPFeature]  Feature
+** @return [AjBool] Returns AJTRUE if it is a member
+** @@
+******************************************************************************/
+AjBool ajFeatIsMultiple (AjPFeature gf) 
+{
+    return (gf->Flags & FEATFLAG_MULTIPLE);
+}
+
+
+
+/* @func ajFeatIsCompMult ****************************************************
+**
+** Tests whether the feature is a member of a complement around a
+** multiple (join, etc.)
+**
+** @param [r] gf       [AjPFeature]  Feature
+** @return [AjBool] Returns AJTRUE if it is a complemented multiple
+** @@
+******************************************************************************/
+AjBool ajFeatIsCompMult (AjPFeature gf) 
+{
+    return (gf->Flags & FEATFLAG_COMPLEMENT_MAIN);
+}
+
+
 
 /* @func ajFeattabOutDel ***************************************************
 **
@@ -7711,4 +7835,89 @@ void ajFeattabOutDel (AjPFeattabOut *thys)
     AJFREE(pthis);
     
     return;
+}
+
+/* @func ajFeattablePos *******************************************************
+**
+** Converts a string position into a true position. If ipos is negative,
+** it is counted from the end of the string rather than the beginning.
+**
+** For strings, the result can go off the end to the terminating NULL.
+** For sequences the maximum is the last base.
+**
+** @param [wP] thys [AjPFeattable] Target feature table.
+** @param [r] ipos [ajint] Position.
+** @return [ajint] string position between 1 and length.
+** @@
+******************************************************************************/
+
+ajint ajFeattablePos (AjPFeattable thys, ajint ipos)
+{
+    return ajFeattablePosII (ajFeattableLen(thys), 1, ipos);
+}
+
+/* @func ajFeattablePosI ******************************************************
+**
+** Converts a string position into a true position. If ipos is negative,
+** it is counted from the end of the string rather than the beginning.
+**
+** imin is a minimum relative position, also counted from the end
+** if negative. Usually this is the start position when the end of a range
+** is being tested.
+**
+** @param [wP] thys [AjPFeattable] Target feature table.
+** @param [r] imin [ajint] Start position.
+** @param [r] ipos [ajint] Position.
+** @return [ajint] string position between 1 and length.
+** @@
+******************************************************************************/
+
+ajint ajFeattablePosI (AjPFeattable thys, ajint imin, ajint ipos)
+{
+    return ajFeattablePosII (ajFeattableLen(thys), imin, ipos);
+}
+
+/* @func ajFeattablePosII *****************************************************
+**
+** Converts a position into a true position. If ipos is negative,
+** it is counted from the end of the sequence rather than the beginning.
+**
+** imin is a minimum relative position, also counted from the end
+** if negative. Usually this is the start position when the end of a range
+** is being tested.
+**
+** For strings, the result can go off the end to the terminating NULL.
+** For sequences the maximum is the last base.
+**
+** @param [r] ilen [ajint] maximum length.
+** @param [r] imin [ajint] Start position.
+** @param [r] ipos [ajint] Position.
+** @return [ajint] string position between 1 and length.
+** @@
+******************************************************************************/
+
+ajint ajFeattablePosII (ajint ilen, ajint imin, ajint ipos)
+{
+    ajint jpos;
+
+    if (ipos < 0)
+	jpos = ilen + ipos + 1;
+    else
+    {
+	if (ipos)
+	    jpos = ipos;
+	else
+	    jpos = 1;
+    }
+
+    if (jpos > ilen)
+	jpos = ilen;
+
+    if (jpos < imin)
+	jpos = imin;
+
+    ajDebug("ajFeattablePosII ilen: %d imin: %d ipos: %d) = %d\n",
+	    ilen, imin, ipos, jpos);
+
+    return jpos;
 }
