@@ -1,12 +1,12 @@
 
-                             EMBOSS: scopalign
-     _________________________________________________________________
+                                 scopalign 
+                                      
    
-                               Program scopalign
-                                       
+   
 Function
 
-   Generate alignments for SCOP families
+   Generate alignments for families in a scop classification file by
+   using STAMP
    
 Description
 
@@ -41,25 +41,41 @@ Usage
 Command line arguments
 
    Mandatory qualifiers:
-  [-scopf]             infile     Name of scop file for input (embl-like
-                                  format)
-  [-path]              string     Location of alignment files for output
+  [-scopf]             infile     Name of scop classification file (embl
+                                  format input)
+  [-path]              string     Location of scop structure-based sequence
+                                  alignment files (output)
+  [-extn]              string     Extension of scop structure-based sequence
+                                  alignment files (output)
+  [-pathc]             string     Location of scop structure alignment files
+                                  (output)
+  [-extnc]             string     Extension of scop structure alignment files
+                                  (output)
 
    Optional qualifiers: (none)
    Advanced qualifiers: (none)
    General qualifiers:
-  -help                bool       report command line options. More
+  -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    
 
    Mandatory qualifiers Allowed values Default
    [-scopf]
-   (Parameter 1) Name of scop file for input (embl-like format) Input
-   file Escop.dat
+   (Parameter 1) Name of scop classification file (embl format input)
+   Input file Escop.dat
    [-path]
-   (Parameter 2) Location of alignment files for output Any string is
-   accepted ./
+   (Parameter 2) Location of scop structure-based sequence alignment
+   files (output) Any string is accepted ./
+   [-extn]
+   (Parameter 3) Extension of scop structure-based sequence alignment
+   files (output) Any string is accepted .salign
+   [-pathc]
+   (Parameter 4) Location of scop structure alignment files (output) Any
+   string is accepted ./
+   [-extnc]
+   (Parameter 5) Extension of scop structure alignment files (output) Any
+   string is accepted .palign
    Optional qualifiers Allowed values Default
    (none)
    Advanced qualifiers Allowed values Default
@@ -170,14 +186,31 @@ Known bugs
 See also
 
    Program name Description
-   contacts Reads coordinate files and writes contact files
+   contacts Reads coordinate files and writes files of intra-chain
+   residue-residue contact data
    dichet Parse dictionary of heterogen groups
-   interface Reads coordinate files and writes inter-chain contact files
+   hmmgen Generates a hidden Markov model for each alignment in a
+   directory
+   interface Reads coordinate files and writes files of inter-chain
+   residue-residue contact data
+   profgen Generates various profiles for each alignment in a directory
    psiblasts Runs PSI-BLAST given scopalign alignments
-   seqsort Removes ambiguities from a set of hits resulting from a
-   database search
-   siggen Generates a sparse protein signature
-   sigscan Scans a sparse protein signature against swissprot
+   scoprep Reorder scop classificaiton file so that the representative
+   structure of each family is given first
+   scopreso Removes low resolution domains from a scop classification
+   file
+   seqalign Generate extended alignments for families in a scop families
+   file by using CLUSTALW with seed alignments
+   seqsearch Generate files of hits for families in a scop classification
+   file by using PSI-BLAST with seed alignments
+   seqsort Reads multiple files of hits and writes a non-ambiguous file
+   of hits (scop families file) plus a validation file
+   seqwords Generate file of hits for scop families by searching
+   swissprot with keywords
+   siggen Generates a sparse protein signature from an alignment and
+   residue contact data
+   sigscan Scans a signature against swissprot and writes a signature
+   hits files
    
 Author(s)
 

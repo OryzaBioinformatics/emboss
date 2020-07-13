@@ -7,36 +7,35 @@
   </TITLE>
 </HEAD>
 <BODY BGCOLOR="#FFFFFF" text="#000000">
-<table align=center bgcolor="#000070" border=0 cellspacing=0 cellpadding=10>
-<tr>
-<td>
-<a href="index.html" onmouseover="self.status='Go to the EMBOSS home page';return true">
-<img border=0 src="emboss_icon.gif" alt="" width=55 height=55>
-</a>
+
+
+
+
+
+<table align=center border=0 cellspacing=0 cellpadding=0>
+<tr><td valign=top>
+<A HREF="index.html" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
 </td>
-<td align=middle valign=middle>
-<font face="Arial,Helvetica" size=6 color="#ffffff">
-<H2>
-EMBOSS: scopalign
-</H2>
-</font>
-</td>
-</tr>
+<td align=left valign=middle>
+<b><font size="+6">
+
+scopalign
+</font></b>
+</td></tr>
 </table>
-</td>
-</tr>
-</table>
-<p><hr><p>
+<br>&nbsp;
+<p>
+
+
+
+
 
 <!--END OF HEADER-->
 
-<H1>
-Program scopalign
-</H1>
 <H2>
     Function
 </H2>
-Generate alignments for SCOP families
+Generate alignments for families in a scop classification file by using STAMP
 
 <!--
 DON'T WRITE ANYTHING HERE.
@@ -138,14 +137,21 @@ Here is a sample session with scopalign:
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
    Mandatory qualifiers:
-  [-scopf]             infile     Name of scop file for input (embl-like
-                                  format)
-  [-path]              string     Location of alignment files for output
+  [-scopf]             infile     Name of scop classification file (embl
+                                  format input)
+  [-path]              string     Location of scop structure-based sequence
+                                  alignment files (output)
+  [-extn]              string     Extension of scop structure-based sequence
+                                  alignment files (output)
+  [-pathc]             string     Location of scop structure alignment files
+                                  (output)
+  [-extnc]             string     Extension of scop structure alignment files
+                                  (output)
 
    Optional qualifiers: (none)
    Advanced qualifiers: (none)
    General qualifiers:
-  -help                bool       report command line options. More
+  -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
 
@@ -162,16 +168,37 @@ Here is a sample session with scopalign:
 
 <tr>
 <td>[-scopf]<br>(Parameter 1)</td>
-<td>Name of scop file for input (embl-like format)</td>
+<td>Name of scop classification file (embl format input)</td>
 <td>Input file</td>
 <td>Escop.dat</td>
 </tr>
 
 <tr>
 <td>[-path]<br>(Parameter 2)</td>
-<td>Location of alignment files for output</td>
+<td>Location of scop structure-based sequence alignment files (output)</td>
 <td>Any string is accepted</td>
 <td>./</td>
+</tr>
+
+<tr>
+<td>[-extn]<br>(Parameter 3)</td>
+<td>Extension of scop structure-based sequence alignment files (output)</td>
+<td>Any string is accepted</td>
+<td>.salign</td>
+</tr>
+
+<tr>
+<td>[-pathc]<br>(Parameter 4)</td>
+<td>Location of scop structure alignment files (output)</td>
+<td>Any string is accepted</td>
+<td>./</td>
+</tr>
+
+<tr>
+<td>[-extnc]<br>(Parameter 5)</td>
+<td>Extension of scop structure alignment files (output)</td>
+<td>Any string is accepted</td>
+<td>.palign</td>
 </tr>
 
 <tr bgcolor="#FFFFD0">
@@ -526,13 +553,20 @@ None.
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
-<tr><td><a href="contacts.html">contacts</a></td><td>Reads coordinate files and writes contact files</td></tr>
+<tr><td><a href="contacts.html">contacts</a></td><td>Reads coordinate files and writes files of intra-chain residue-residue contact data</td></tr>
 <tr><td><a href="dichet.html">dichet</a></td><td>Parse dictionary of heterogen groups</td></tr>
-<tr><td><a href="interface.html">interface</a></td><td>Reads coordinate files and writes inter-chain contact files</td></tr>
+<tr><td><a href="hmmgen.html">hmmgen</a></td><td>Generates a hidden Markov model for each alignment in a directory</td></tr>
+<tr><td><a href="interface.html">interface</a></td><td>Reads coordinate files and writes files of inter-chain residue-residue contact data</td></tr>
+<tr><td><a href="profgen.html">profgen</a></td><td>Generates various profiles for each alignment in a directory</td></tr>
 <tr><td><a href="psiblasts.html">psiblasts</a></td><td>Runs PSI-BLAST given scopalign alignments</td></tr>
-<tr><td><a href="seqsort.html">seqsort</a></td><td>Removes ambiguities from a set of hits resulting from a database search</td></tr>
-<tr><td><a href="siggen.html">siggen</a></td><td>Generates a sparse protein signature</td></tr>
-<tr><td><a href="sigscan.html">sigscan</a></td><td>Scans a sparse protein signature against swissprot</td></tr>
+<tr><td><a href="scoprep.html">scoprep</a></td><td>Reorder scop classificaiton file so that the representative structure of each family is given first</td></tr>
+<tr><td><a href="scopreso.html">scopreso</a></td><td>Removes low resolution domains from a scop classification file</td></tr>
+<tr><td><a href="seqalign.html">seqalign</a></td><td>Generate extended alignments for families in a scop families file by using CLUSTALW with seed alignments</td></tr>
+<tr><td><a href="seqsearch.html">seqsearch</a></td><td>Generate files of hits for families in a scop classification file by using PSI-BLAST with seed alignments</td></tr>
+<tr><td><a href="seqsort.html">seqsort</a></td><td>Reads multiple files of hits and writes a non-ambiguous file of hits (scop families file) plus a validation file</td></tr>
+<tr><td><a href="seqwords.html">seqwords</a></td><td>Generate file of hits for scop families by searching swissprot with keywords</td></tr>
+<tr><td><a href="siggen.html">siggen</a></td><td>Generates a sparse protein signature from an alignment and residue contact data</td></tr>
+<tr><td><a href="sigscan.html">sigscan</a></td><td>Scans a signature against swissprot and writes a signature hits files</td></tr>
 </table>
 
 <!-- 
@@ -636,9 +670,6 @@ This program is intended to be used by everyone and everything, from naive users
 
 
 
-
-</TD></TR></TABLE>
-</CENTER>
 
 </BODY>
 </HTML>

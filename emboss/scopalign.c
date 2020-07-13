@@ -1,9 +1,9 @@
 /* @source scopalign application
 **
-** Runs STAMP over SCOP families
+** Generate alignments for families in a scop classification file by using STAMP.
+**
 ** @author: Copyright (C) Ranjeeva Ranasinghe (rranasin@hgmp.mrc.ac.uk)
 ** @author: Copyright (C) Jon Ison (jison@hgmp.mrc.ac.uk)
-** @author: Copyright (C) Alan Bleasby (ableasby@hgmp.mrc.ac.uk)
 ** @@
 **
 ** This program is free software; you can redistribute it and/or
@@ -24,6 +24,18 @@
 ** 
 ** 
 ** 
+******************************************************************************
+**IMPORTANT NOTE      IMPORTANT NOTE      IMPORTANT NOTE        IMPORTANT NOTE     
+******************************************************************************
+**
+** Mon May 20 11:43:39 BST 2002
+**
+** The following documentation is out-of-date and should be disregarded.  It 
+** will be updated shortly. 
+** 
+******************************************************************************
+**IMPORTANT NOTE      IMPORTANT NOTE      IMPORTANT NOTE        IMPORTANT NOTE     
+******************************************************************************
 ** 
 ** 
 ** Operation
@@ -34,6 +46,7 @@
 ** structural alignments for each SCOP family in turn.
 ** 
 ** VERY IMPORTANT NOTE 
+** 1. Adaption of STAMP for domain codes
 ** scopalign will only run with with a version of stamp which has been modified
 ** so that pdb id codes of length greater than 4 characters are acceptable.
 ** This involves a trivial change to the stamp module getdomain.c (around line
@@ -41,6 +54,29 @@
 ** temp=getfile(domain[0].id,dirfile,4,OUTPUT); 
 ** temp=getfile(domain[0].id,dirfile,7,OUTPUT); 
 ** 
+** 2. Adaption of STAMP for larger datasets
+** STAMP was failing to align a large dataset of all the available V set Ig 
+** domains. The ver2hor module generated the following error:
+** Transforming coordinates...
+**  ...done.
+** ver2hor -f ./scopalign-1022069396.11280.76.post > ./scopalign-1022069396.11280.out
+** error: something wrong with STAMP file
+**          STAMP length is 370, Alignment length is 422
+**          STAMP nseq is 155, Alignment nseq is 155
+**
+** This was fixed by changing #define MAXtlen 200 to #define MAXtlen 2000 in 
+** alignfit.h.
+** 
+** At the same time I changed the following as a safety measure:
+** gstamp.c  : #define MAX_SEQ_LEN 10000    (was 2000)
+** pdbseq.c  : #define MAX_SEQ_LEN 10000    (was 3000)
+** defaults.h: #define MAX_SEQ_LEN 10000    (was 8000)
+** defaults.h: #define MAX_NSEQ 10000       (was 1000)
+** defaults.h: #define MAX_BLOC_SEQ 5000    (was 500)
+** dstamp.h  : #define MAX_N_SEQ 10000      (was 1000)
+** ver2hor.h : #define MAX_N_SEQ 10000      (was 1000)
+**
+**
 ** The modified code is kept on the HGMP file system in /packages/stamp/src2
 ** WHEN RUNNING SCOPALIGN AT THE HGMP IT IS ESSENTIAL THAT THE COMMAND 
 ** 'use stamp2' (which runs the script /packages/menu/USE/stamp2) IS GIVEN 
@@ -109,6 +145,8 @@
 **  XX
 **  FA   Globins
 **  XX
+**  SI   1321321
+**  XX
 **  Number               10        20        30        40        50    
 **  d1vrea_              LSAAQRQVVASTWKDIAgsdngAGVGKECFTKFLSAHHDMAAV f gFS
 **  d3sdhb_      svydaaaqLTADVKKDLRDSWKVIG sd kKGNGVALMTTLFADNQETIGYfkrlGN
@@ -131,6 +169,18 @@
 **  Post_similar 111-1111-11111-0-0-1111111111111111100-00-----
 **  
 **
+** Important Notes
+** stamp will ignore (omit from the alignment and *not* replace with '-' or any
+** other symbol) ANY residues or groups in a pdb file that
+** (i) are not structured (i.e. do not appear in the ATOM records) or
+** (ii) lack a CA atom, regardless of whether it is a known amino acid or not.
+** 
+** This means that the position (column) in the alignment cannot reliably be 
+** used as the basis for an index into arrays representing the full length 
+** sequences.
+**
+** stamp will however include in the alignment residues with a single atom
+** only, so long as it is the CA atom.
 */
 
 
@@ -141,7 +191,6 @@
 
 
 static void scopalign_ProcessStampFile(AjPStr in, AjPStr out, AjPScop scop);
-
 
 
 
@@ -157,10 +206,12 @@ int main(int argc, char **argv)
     ajint     ncluster  = 0;	/* Counter for the number of clusters*/    
     ajint     x         = 0;  /* Counter */
     
-    AjPStr    last_fam  = NULL;	/* Last family that was processed */
+/*    ajint     last_fam = NULL; */ /* SCOP Sunid of last family that was processed */
+    AjPStr    last_fam  = NULL; /* Last family that was processed */
     AjPStr    exec      = NULL;	/* The UNIX command line to be executed*/
     AjPStr    out       = NULL;	/* Name of stamp alignment file */
-    AjPStr    align     = NULL;	/* Name of alignment file */
+    AjPStr    align     = NULL;	/* Name of sequence alignment file */
+    AjPStr    alignc    = NULL;	/* Name of structure alignment file */
     AjPStr    log       = NULL;	/* Name of STAMP log file */
     AjPStr    dom       = NULL;	/* Name of file containing single domain*/
     AjPStr    set       = NULL;	/* Name of file containing set of domains*/
@@ -168,8 +219,10 @@ int main(int argc, char **argv)
     AjPStr    sort      = NULL;	/* Name of temp. file used by STAMP*/
     AjPStr    name      = NULL;	/* Base name of STAMP temp files */
     AjPStr    line      = NULL;	/* Holds a line from the log file*/
-    AjPStr    path      = NULL;	/* Path of alignment files for output */
-    AjPStr    extn      = NULL;	/* Extension of alignment files for output */
+    AjPStr    path      = NULL;	/* Path of sequence alignment files for output */
+    AjPStr    extn      = NULL;	/* Extension of sequence alignment files for output */
+    AjPStr    pathc     = NULL;	/* Path of structure alignment files for output */
+    AjPStr    extnc     = NULL;	/* Extension of structure alignment files for output */
     AjPStr    temp      = NULL;	/* A temporary string */
     AjPStr    temp1     = NULL;	/* A temporary string */
 
@@ -186,11 +239,12 @@ int main(int argc, char **argv)
 
 
 
-    /* Initialise strings*/
+    /* Initialise strings etc*/
     last_fam = ajStrNew();
     exec     = ajStrNew();
     out      = ajStrNew();
     align    = ajStrNew();
+    alignc   = ajStrNew();
     log      = ajStrNew();
     dom      = ajStrNew();
     set      = ajStrNew();
@@ -198,27 +252,30 @@ int main(int argc, char **argv)
     sort     = ajStrNew();
     name     = ajStrNew();
     line     = ajStrNew();
-    path     = ajStrNew();
-    extn     = ajStrNew();
     temp     = ajStrNew();
     temp1    = ajStrNew();
 
+    
 
     /* Read data from acd */
     embInit("scopalign",argc,argv);
     scopf     = ajAcdGetInfile("scopf");
     path      = ajAcdGetString("path");
     extn      = ajAcdGetString("extn");
+    pathc     = ajAcdGetString("pathc");
+    extnc     = ajAcdGetString("extnc");
 
     
     /* Check directory is OK*/
     if(!ajFileDir(&path))
 	ajFatal("Could not open directory for output");
+    if(!ajFileDir(&pathc))
+	ajFatal("Could not open directory for output");
 
 
     /* Compile regular expression*/
-    rexp     = ajRegCompC("^(Cluster:)  ([0-9])");
-
+    /*    rexp     = ajRegCompC("^(Cluster:)  ([0-9])"); */
+    rexp     = ajRegCompC("^(Cluster:)");
 
     /* Initialise random number generator for naming of temp. files*/
     ajRandomSeed();
@@ -226,22 +283,24 @@ int main(int argc, char **argv)
 
 
     /* Create names for temp. files*/
-    ajStrAss(&log, name);	
+    ajStrAssS(&log, name);	
     ajStrAppC(&log, ".log");
-    ajStrAss(&dom, name);	
+    ajStrAssS(&dom, name);	
     ajStrAppC(&dom, ".dom");
-    ajStrAss(&set, name);	
+    ajStrAssS(&set, name);	
     ajStrAppC(&set, ".set");
-    ajStrAss(&scan, name);	
+    ajStrAssS(&scan, name);	
     ajStrAppC(&scan, ".scan");
-    ajStrAss(&sort, name);	
+    ajStrAssS(&sort, name);	
     ajStrAppC(&sort, ".sort");
-    ajStrAss(&out, name);	
+    ajStrAssS(&out, name);	
     ajStrAppC(&out, ".out");
 
 
     /* Initialise last_fam with something that is not in SCOP*/
     ajStrAssC(&last_fam,"!!!!!");
+    
+    
 
     
     /* Open domain set file*/
@@ -265,11 +324,66 @@ int main(int argc, char **argv)
 		ajFileClose(&setf);	
 		
 
+
+		/* Create the output file for the alignment - the name will
+		   be the same as the Sunid for the SCOP family */
+
+		ajStrFromInt(&temp, prevscop->Sunid_Family);
+		ajStrAssS(&align, temp);	
+		ajStrInsert(&align, 0, path);	
+		ajStrApp(&align, extn);
+
+		ajStrAssS(&alignc, temp);	
+		ajStrInsert(&alignc, 0, pathc);	
+		ajStrApp(&alignc, extnc);
+
+
+
+		/* Create the output file for the alignment - the name will
+		  be the same as the SCOP family but with ' ' and '&' 
+		  replaced by '_'*/
+		/*
+		ajStrAssS(&align, last_fam);	
+		ajStrSubstituteCC(&align, " ", "_");
+		ajStrSubstituteCC(&align, "&", "_");
+		ajStrInsert(&align, 0, path);	
+		ajStrApp(&align, extn);
+		*/
+		
+		/* If a file of that name exists, then append _1 or _2 etc 
+		   as necessary until a unique name is found */
+		/*
+		ajStrAssS(&temp, align);	
+		for(x=1;
+		    (ajFileStat(&temp, AJ_FILE_R ) ||
+		     ajFileStat(&temp, AJ_FILE_W ) ||
+		     ajFileStat(&temp, AJ_FILE_X ));
+		    x++)
+		{
+		    ajStrAssS(&temp, align);	
+		    ajStrAppC(&temp, "_");
+		    ajFmtPrintS(&temp1, "%d", x);
+		    ajStrApp(&temp, temp1);
+		}
+		ajStrAssS(&align, temp);	
+		*/
+
+
+
+
 		/* Call STAMP */
 		ajFmtPrintS(&exec,"stamp -l %S -s -n 2 -slide 5 -prefix "
 			    "%S -d %S;sorttrans -f %S -s Sc 2.5 > %S;"
+			    "stamp -l %S -prefix %S > %S\ntransform -f %S -g -o %S\n", 
+			    dom, name, set, scan, sort, sort, name, log, sort, alignc); 
+
+
+/*		ajFmtPrintS(&exec,"stamp -l %S -s -n 2 -slide 5 -prefix "
+			    "%S -d %S;sorttrans -f %S -s Sc 2.5 > %S;"
 			    "stamp -l %S -prefix %S > %S\n", 
-			    dom, name, set, scan, sort, sort, name, log);
+			    dom, name, set, scan, sort, sort, name, log);  */
+
+
 		ajFmtPrint("%S\n", exec);
 		system(ajStrStr(exec));  
 		
@@ -284,32 +398,8 @@ int main(int argc, char **argv)
 		ajFileClose(&logf);	
 		
 
-		/* Create the output file for the alignment - the name will
-		  be the same as the SCOP family but with ' ' and '&' replaced by '_'*/
-		ajStrAss(&align, last_fam);	
-		ajStrSubstituteCC(&align, " ", "_");
-		ajStrSubstituteCC(&align, "&", "_");
-		ajStrInsert(&align, 0, path);	
-		ajStrApp(&align, extn);
 
-		
-		/* If a file of that name exists, then append _1 or _2 etc 
-		   as necessary until a unique name is found */
-		ajStrAss(&temp, align);	
-		for(x=1;
-		    (ajFileStat(&temp, AJ_FILE_R ) ||
-		     ajFileStat(&temp, AJ_FILE_W ) ||
-		     ajFileStat(&temp, AJ_FILE_X ));
-		    x++)
-		{
-		    ajStrAss(&temp, align);	
-		    ajStrAppC(&temp, "_");
-		    ajFmtPrintS(&temp1, "%d", x);
-		    ajStrApp(&temp, temp1);
-		}
-		ajStrAss(&align, temp);	
-		
-		
+				
 		/* Call STAMP ... calculate two fields for structural 
 		   equivalence using threshold Pij value of 0.5, see stamp 
 		   manual v4.1 pg 27*/
@@ -344,17 +434,18 @@ int main(int argc, char **argv)
 		ajFmtPrintS(&temp, "rm %S.%d.post", name, ncluster);
 		ajSystem(&temp);
 		
-		
 		/* Open domain set file */
 		if(!(setf=ajFileNewOut(set)))
 		    ajFatal("Could not open domain set file\n");
 	    }
-	    	    
+	    
+	    
+	    	    	    	    
 	    
 	    /* Open, write and close domain file*/
 	    if(!(domf=ajFileNewOut(dom)))
 		ajFatal("Could not open domain file\n");
-	    ajStrAss(&temp, scop->Entry);
+	    ajStrAssS(&temp, scop->Entry);
 	    ajStrToLower(&temp);
 	    ajFmtPrintF(domf, "%S %S { ALL }\n", temp, temp);
 	    ajFileClose(&domf);	
@@ -365,20 +456,28 @@ int main(int argc, char **argv)
 
 
 	    /* Copy current family name to last_fam*/
-	    ajStrAss(&last_fam,scop->Family);
+	    ajStrAssS(&last_fam,scop->Family);
 
-
+	    
 	    /* Copy current scop pointer to prevscop */
-	    prevscop = scop;
+	    ajXyzScopDel(&prevscop);
+	    prevscop=NULL;
+	    ajXyzScopCopy(&prevscop, scop);
+	    /* prevscop = scop; */
 	}
+						
+	
 	/* Write to domain set file*/
-	ajStrAss(&temp, scop->Entry);
+	ajStrAssS(&temp, scop->Entry);
 	ajStrToLower(&temp);
 	ajFmtPrintF(setf, "%S %S { ALL }\n", temp, temp);
+
+	ajXyzScopDel(&scop);
     }
     /* End of main application loop*/
 
-
+    scop=prevscop;
+    
 
 
 
@@ -387,11 +486,59 @@ int main(int argc, char **argv)
     ajFileClose(&setf);	
 		
 
+
+    /* Create the output file for the alignment - the name will
+       be the same as the Sunid for the SCOP family */
+    ajStrFromInt(&temp, scop->Sunid_Family);
+    ajStrAssS(&align, temp);	
+    ajStrInsert(&align, 0, path);	
+    ajStrApp(&align, extn);
+
+    ajStrAssS(&alignc, temp);	
+    ajStrInsert(&alignc, 0, pathc);	
+    ajStrApp(&alignc, extnc);
+    
+
+    /* Create the output file for the alignment*/
+    /*
+    ajStrAssS(&align, scop->Family);	
+    ajStrSubstituteCC(&align, " ", "_");
+    ajStrInsert(&align, 0, path);	
+    ajStrApp(&align, extn);
+    */
+
+    /* If a file of that name exists, then append _1 or _2 etc 
+       as necessary until a unique name is found */
+    /*
+    ajStrAssS(&temp, align);	
+    for(x=1;
+	(ajFileStat(&temp, AJ_FILE_R ) ||
+	 ajFileStat(&temp, AJ_FILE_W ) ||
+	 ajFileStat(&temp, AJ_FILE_X ));
+	x++)
+    {
+	ajStrAssS(&temp, align);	
+	ajStrAppC(&temp, "_");
+	ajFmtPrintS(&temp1, "%d", x);
+	ajStrApp(&temp, temp1);
+    }
+    ajStrAssS(&align, temp);	
+    */
+
+
+
+
     /* Call STAMP */
     ajFmtPrintS(&exec,"stamp -l %S -s -n 2 -slide 5 -prefix %S -d %S;"
 		"sorttrans -f %S -s Sc 2.5 > %S;stamp -l %S "
+		"-prefix %S > %S\ntransform -f %S -g -o %S\n", 
+		dom, name, set, scan, sort, sort, name, log, sort, alignc);  
+
+/*    ajFmtPrintS(&exec,"stamp -l %S -s -n 2 -slide 5 -prefix %S -d %S;"
+		"sorttrans -f %S -s Sc 2.5 > %S;stamp -l %S "
 		"-prefix %S > %S\n", 
-		dom, name, set, scan, sort, sort, name, log);
+		dom, name, set, scan, sort, sort, name, log); */
+
     system(ajStrStr(exec));  
     ajFmtPrint("%S\n", exec);
 
@@ -407,29 +554,6 @@ int main(int argc, char **argv)
     ajFileClose(&logf);	
     		
 
-    /* Create the output file for the alignment*/
-    ajStrAss(&align, scop->Family);	
-    ajStrSubstituteCC(&align, " ", "_");
-    ajStrInsert(&align, 0, path);	
-    ajStrApp(&align, extn);
-
-
-    /* If a file of that name exists, then append _1 or _2 etc 
-       as necessary until a unique name is found */
-    ajStrAss(&temp, align);	
-    for(x=1;
-	(ajFileStat(&temp, AJ_FILE_R ) ||
-	 ajFileStat(&temp, AJ_FILE_W ) ||
-	 ajFileStat(&temp, AJ_FILE_X ));
-	x++)
-    {
-	ajStrAss(&temp, align);	
-	ajStrAppC(&temp, "_");
-	ajFmtPrintS(&temp1, "%d", x);
-	ajStrApp(&temp, temp1);
-    }
-    ajStrAss(&align, temp);	
-    
 
     /* Call STAMP ... calculate two fields for structural equivalence */
     /* using threshold Pij value of 0.5, see stamp manual v4.1 pg 27*/
@@ -464,11 +588,11 @@ int main(int argc, char **argv)
     ajSystem(&temp);
     ajFmtPrintS(&temp, "rm %S", out);
     ajSystem(&temp);
-    ajStrAss(&temp, name);	
+    ajStrAssS(&temp, name);	
     ajStrAppC(&temp, ".mat");
     ajFmtPrintS(&temp1, "rm %S", temp);
     ajSystem(&temp1);
-    
+
     /* Remove all temporary files */
     for(x=1;x<ncluster+1;x++)
     {
@@ -478,8 +602,8 @@ int main(int argc, char **argv)
     ajFmtPrintS(&temp, "rm %S.%d.post", name, ncluster);
     ajSystem(&temp);
     
-    
     /* Tidy up*/
+    ajXyzScopDel(&scop);
     ajFileClose(&scopf);	
     ajRegFree(&rexp);
     ajStrDel(&last_fam);
@@ -492,9 +616,12 @@ int main(int argc, char **argv)
     ajStrDel(&name);
     ajStrDel(&out);
     ajStrDel(&align);
+    ajStrDel(&alignc);
     ajStrDel(&line);
     ajStrDel(&path); 
     ajStrDel(&extn); 
+    ajStrDel(&pathc); 
+    ajStrDel(&extnc); 
     ajStrDel(&temp); 
     ajStrDel(&temp1); 
 
@@ -565,7 +692,7 @@ int main(int argc, char **argv)
 ** 
 ** 
 ** Figure 2
-** 
+**
 ** CL   Alpha and beta proteins (a/b)
 ** XX
 ** FO   alpha/beta-Hydrolases
@@ -573,6 +700,8 @@ int main(int argc, char **argv)
 ** SF   alpha/beta-Hydrolases
 ** XX
 ** FA   Acetylcholinesterase-like
+** XX
+** SI   1321321
 ** XX
 ** Number               10        20        30        40        50    
 **   d1maac_    egrEDPQLLVRVRGGQLRGIRLKAPGGPVSAFLGIPFAEPPVGSRRFMPPEPKRPWS
@@ -589,7 +718,7 @@ int main(int argc, char **argv)
 **   d1maad_    LIWIYGGGFYSGAASLDVYDGRFLAQVEGAVLVSMNYRVGTFGFLALPGSREAPGNV
 ** Post similar 111111111111111111111111111111111111111111111111111111111
 ** 
-** 
+**
 ** @param [r] in  [AjPStr] Name of input file
 ** @param [r] out [AjPStr] Name of output file
 ** @param [r] scop [AjPScop] SCOP structure with SCOP classification records
@@ -631,7 +760,8 @@ static void scopalign_ProcessStampFile(AjPStr in, AjPStr out, AjPScop scop)
     ajFmtPrintSplit(outf,scop->Fold,"\nXX\nFO   ",75," \t\n\r");
     ajFmtPrintSplit(outf,scop->Superfamily,"XX\nSF   ",75," \t\n\r");
     ajFmtPrintSplit(outf,scop->Family,"XX\nFA   ",75," \t\n\r");
-    ajFmtPrintF(outf,"XX");
+    ajFmtPrintF(outf,"XX\n");
+    ajFmtPrintF(outf,"SI   %d\nXX",scop->Sunid_Family);
 
     
     /* Start of code for reading input file */
@@ -716,4 +846,8 @@ static void scopalign_ProcessStampFile(AjPStr in, AjPStr out, AjPScop scop)
     /* All done */
     return;
 }
+
+
+
+
 
