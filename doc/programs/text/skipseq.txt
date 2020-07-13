@@ -1,0 +1,154 @@
+
+                                  skipseq 
+                                      
+   
+   
+Function
+
+   Reads and writes (returns) sequences, skipping the first few
+   
+Description
+
+   skipseq skips the first few sequences in a multiple set of sequences,
+   and writes out the rest of them.
+   
+   skipseq is a variant of the standard program for reading and writing
+   sequences, seqret.
+   
+   seqret has an option to allow it to only read the first sequence from
+   a multiple set of sequences (-firstonly). seqret cannot, however, skip
+   the first few sequences from a multiple set of sequence, writing out
+   the rest; this is what skipseq is for.
+   
+   In all other respects, skipseq is the same as seqret.
+   
+Usage
+
+   Here is a sample session with skipseq:
+
+% skipseq -skip 1
+Reads and writes (returns) sequences, skipping the first few
+Input sequence(s): tembl:eclac*
+Output sequence [eclac.fasta]:
+
+Command line arguments
+
+   Mandatory qualifiers:
+  [-sequence]          seqall     Sequence database USA
+   -skip               integer    Number of sequences to skip at start
+  [-outseq]            seqoutall  Output sequence(s) USA
+
+   Optional qualifiers: (none)
+   Advanced qualifiers:
+   -feature            boolean    Use feature information
+
+   General qualifiers:
+  -help                boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   
+
+   Mandatory qualifiers Allowed values Default
+   [-sequence]
+   (Parameter 1) Sequence database USA Readable sequence(s) Required
+   -skip Number of sequences to skip at start Any integer value 0
+   [-outseq]
+   (Parameter 2) Output sequence(s) USA Writeable sequence(s)
+   <sequence>.format
+   Optional qualifiers Allowed values Default
+   (none)
+   Advanced qualifiers Allowed values Default
+   -feature Use feature information Yes/No No
+   
+Input file format
+
+   skipseq reads one or more sequences files.
+   
+   See the documentation for seqret to see the full range of things that
+   you can do when reading and writing sequences.
+   
+Output file format
+
+   skipseq writes one or more sequences files, having optionally skipped
+   the first few sequences.
+   
+   See the documentation for seqret to see the full range of things that
+   you can do when reading and writing sequences.
+   
+Data files
+
+   None.
+   
+Notes
+
+   None.
+   
+References
+
+   None.
+   
+Warnings
+
+   You may skip all of the input files.
+   If the -skip value is greater than or equal to the number of input
+   sequences, there is no warning: this is legal.
+   
+Diagnostic Error Messages
+
+   None.
+   
+Exit status
+
+   It always exits with status 0.
+   
+Known bugs
+
+   None.
+   
+See also
+
+   Program name                          Description
+   biosed       Replace or delete sequence sections
+   cutseq       Removes a specified section from a sequence
+   degapseq     Removes gap characters from sequences
+   descseq      Alter the name or description of a sequence
+   entret       Reads and writes (returns) flatfile entries
+   extractfeat  Extract features from a sequence
+   extractseq   Extract regions from a sequence
+   listor       Writes a list file of the logical OR of two sets of sequences
+   maskfeat     Mask off features of a sequence
+   maskseq      Mask off regions of a sequence
+   newseq       Type in a short new sequence
+   noreturn     Removes carriage return from ASCII files
+   notseq       Excludes a set of sequences and writes out the remaining ones
+   nthseq       Writes one sequence from a multiple set of sequences
+   pasteseq     Insert one sequence into another
+   revseq       Reverse and complement a sequence
+   seqret       Reads and writes (returns) sequences
+   seqretsplit  Reads and writes (returns) sequences in individual files
+   splitter     Split a sequence into (overlapping) smaller sequences
+   swissparse   Retrieves sequences from swissprot using keyword search
+   trimest      Trim poly-A tails off EST sequences
+   trimseq      Trim ambiguous bits off the ends of sequences
+   union        Reads sequence fragments and builds one sequence
+   vectorstrip  Strips out DNA between a pair of vector sequences
+   yank         Reads a sequence range, appends the full USA to a list file
+   
+   skipseq is a variant of the standard program for reading and writing
+   sequences, seqret.
+   
+Author(s)
+
+   This application was written by Peter Rice
+   (peter.rice@uk.lionbioscience.com)
+   
+History
+
+   Written (25 June 2002) - Peter Rice
+   
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+   
+Comments
