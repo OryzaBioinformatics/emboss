@@ -10,6 +10,8 @@
 # Default prompts: these are used where no prompt for a data type
 # has been provided.
 
+DEFALIGN     "Write output alignment to"
+DEFREPORT    "Write output report to"
 DEFINTEGER   "Enter a number"
 DEFFLOAT     "Enter a number"
 DEFBOOL      "Yes or No"
@@ -29,6 +31,8 @@ DEFRANGE     "Range(s)"
 
 HELPDIRECTORY "Directory name"
 HELPOUTFILE   "Output file name"
+HELPALIGN     "Output alignment file name"
+HELPREPORT    "Output report file name"
 HELPFEATOUT   "Output features UFO"
 HELPSEQOUT    "Output sequence USA"
 HELPSEQOUTSET "Output sequence set USA"
