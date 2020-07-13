@@ -112,8 +112,18 @@ Q) I'm trying to compile EMBOSS with the PNG support
 A) If you have  gd-1.7.3, zlib-1.1.3 and libpng-1.0.5 or greater
    then the normal compile should work! However due to gd no longer
    supporting gif format then you may need to install gd, zlib and
-   libpng locally. Buy default everything (including EMBOSS) installs
+   libpng locally.
+
+   You can unpack the tar.gz files in any directory, and install them in
+   a common area.
+
+   By default everything (including EMBOSS) installs
    in /usr/local but in the examples below we use /home/joe/local
+
+   Note: gd does not use a ./configure script, and will fail at the
+   "make install" stage if the installation directory does not have a
+   /bin subdirectory. You can create this directory
+   (e.g. /home/joe/local/bin) if it does not already exist.
 
    To install, pick up the sources and then:
 
@@ -155,6 +165,8 @@ A) If you have  gd-1.7.3, zlib-1.1.3 and libpng-1.0.5 or greater
    make install
    cd ..
 
+   If the gd "make install" fails with a warning about the "bin"
+   directory, you need to create it by hand (see above).
 
    To compile with the local version your configure line should now
    read:-
