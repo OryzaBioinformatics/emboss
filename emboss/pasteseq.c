@@ -48,6 +48,9 @@ int main(int argc, char **argv)
     pos = ajAcdGetInt ("pos");
     seqout = ajAcdGetSeqout ("outseq");
 
+    /* trim to -sbegin and -send positions */
+    ajSeqTrim(seq);
+    ajSeqTrim(insertseq);
 
     /*
      *  create the new sequence - set the size to the size of the two input
