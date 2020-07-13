@@ -1,0 +1,668 @@
+
+                                  sixpack 
+                                      
+   
+   
+Function
+
+   Display a DNA sequence with 6-frame translation and ORFs
+   
+Description
+
+   sixpack takes a nucleic acid sequence and writes out the forward and
+   reverse senses of the sequence with the 3 forward and three reverse
+   translations in a pretty display format.
+   
+   It also writes a file containing the open reading frames that are
+   larger than the specified minimum size (default 1 base, showing all
+   possible open reading frames). These open reading frames are written
+   as protein sequences in the default output sequence format.
+   
+   An open reading frame is defined in this program as any possible
+   translation between two STOP codons.
+   
+Algorithm
+
+   The nucleic acid sequence is read in.
+   The required genetic code is read in from the ECG* data files.
+   The three forward and three reverse translations are created.
+   The name and description are written to the ouput display file.
+   Any required regions to be changed to upper case are changed.
+   Any required regions to be highlighted in HTML colour tags are
+   changed.
+   The reverse sense sequence is placed below the forward sequence.
+   The forward translations are placed above the sequences.
+   The reverse translation are placed below the sequences.
+   The display is written out, split at the ends of lines.
+   Any ORFs that are longer than the specified minimum size are written
+   to the output sequence file.
+   
+Usage
+
+   Here is a sample session with sixpack
+   
+
+% sixpack 
+Display a DNA sequence with 6-frame translation and ORFs
+Input sequence: tembl:hsfau
+Output file [hsfau.sixpack]: 
+Output sequence [hsfau.fasta]: 
+   
+   Go to the input files for this example
+   Go to the output files for this example
+   
+Command line arguments
+
+   Mandatory qualifiers:
+  [-sequence]          sequence   Sequence USA
+  [-outfile]           outfile    If you enter the name of a file here then
+                                  this program will write the sequence details
+                                  into that file.
+   -outseq             seqoutall  If you enter the name of a file here then
+                                  this program will write the ORFs into that
+                                  file.
+
+   Optional qualifiers:
+   -table              menu       Genetics code used for the translation
+   -[no]firstorf       boolean    Count the beginning of a sequence as a
+                                  possible ORF, even if it's inferior to the
+                                  minimal ORF size.
+   -[no]lastorf        boolean    Count the end of a sequence as a possible
+                                  ORF, even if it's not finishing with a STOP,
+                                  or inferior to the minimal ORF size.
+   -mstart             boolean    Displays only ORFs starting with an M.
+
+   Advanced qualifiers:
+   -[no]reverse        boolean    Display also the translation of the DNA
+                                  sequence in the 3 reverse frames
+   -orfminsize         integer    Minimum size of Open Reading Frames (ORFs)
+                                  to display in the translations.
+   -uppercase          range      Regions to put in uppercase.
+                                  If this is left blank, then the sequence
+                                  case is left alone.
+                                  A set of regions is specified by a set of
+                                  pairs of positions.
+                                  The positions are integers.
+                                  They are separated by any non-digit,
+                                  non-alpha character.
+                                  Examples of region specifications are:
+                                  24-45, 56-78
+                                  1:45, 67=99;765..888
+                                  1,5,8,10,23,45,57,99
+   -highlight          range      Regions to colour if formatting for HTML.
+                                  If this is left blank, then the sequence is
+                                  left alone.
+                                  A set of regions is specified by a set of
+                                  pairs of positions.
+                                  The positions are integers.
+                                  They are followed by any valid HTML font
+                                  colour.
+                                  Examples of region specifications are:
+                                  24-45 blue 56-78 orange
+                                  1-100 green 120-156 red
+                                  A file of ranges to colour (one range per
+                                  line) can be specifed as '@filename'.
+   -[no]number         boolean    Number the sequence at the beginning and the
+                                  end of each line.
+   -width              integer    Number of nucleotides displayed on each line
+   -length             integer    Line length of page (0 for indefinite)
+   -margin             integer    Margin around sequence for numbering.
+   -[no]name           boolean    Set this to be false if you do not wish to
+                                  display the ID name of the sequence.
+   -[no]description    boolean    Set this to be false if you do not wish to
+                                  display the description of the sequence.
+   -offset             integer    Number from which you want the DNA sequence
+                                  to be numbered.
+   -html               boolean    Use HTML formatting
+
+   General qualifiers:
+  -help                boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   
+
+   Mandatory qualifiers Allowed values Default
+   [-sequence]
+   (Parameter 1) Sequence USA Readable sequence Required
+   [-outfile]
+   (Parameter 2) If you enter the name of a file here then this program
+   will write the sequence details into that file. Output file
+   <sequence>.sixpack
+   -outseq If you enter the name of a file here then this program will
+   write the ORFs into that file. Writeable sequence(s) <sequence>.format
+   Optional qualifiers Allowed values Default
+   -table Genetics code used for the translation
+   0 (Standard)
+   1 (Standard (with alternative initiation codons))
+   2 (Vertebrate Mitochondrial)
+   3 (Yeast Mitochondrial)
+   4 (Mold, Protozoan, Coelenterate Mitochondrial and
+   Mycoplasma/Spiroplasma)
+   5 (Invertebrate Mitochondrial)
+   6 (Ciliate Macronuclear and Dasycladacean)
+   9 (Echinoderm Mitochondrial)
+   10 (Euplotid Nuclear)
+   11 (Bacterial)
+   12 (Alternative Yeast Nuclear)
+   13 (Ascidian Mitochondrial)
+   14 (Flatworm Mitochondrial)
+   15 (Blepharisma Macronuclear)
+   16 (Chlorophycean Mitochondrial)
+   21 (Trematode Mitochondrial)
+   22 (Scenedesmus obliquus)
+   23 (Thraustochytrium Mitochondrial)
+   0
+   -[no]firstorf Count the beginning of a sequence as a possible ORF,
+   even if it's inferior to the minimal ORF size. Boolean value Yes/No
+   Yes
+   -[no]lastorf Count the end of a sequence as a possible ORF, even if
+   it's not finishing with a STOP, or inferior to the minimal ORF size.
+   Boolean value Yes/No Yes
+   -mstart Displays only ORFs starting with an M. Boolean value Yes/No No
+   Advanced qualifiers Allowed values Default
+   -[no]reverse Display also the translation of the DNA sequence in the 3
+   reverse frames Boolean value Yes/No Yes
+   -orfminsize Minimum size of Open Reading Frames (ORFs) to display in
+   the translations. Integer 1 or more 1
+   -uppercase Regions to put in uppercase. If this is left blank, then
+   the sequence case is left alone. A set of regions is specified by a
+   set of pairs of positions. The positions are integers. They are
+   separated by any non-digit, non-alpha character. Examples of region
+   specifications are: 24-45, 56-78 1:45, 67=99;765..888
+   1,5,8,10,23,45,57,99 Sequence range If this is left blank, then the
+   sequence case is left alone.
+   -highlight Regions to colour if formatting for HTML. If this is left
+   blank, then the sequence is left alone. A set of regions is specified
+   by a set of pairs of positions. The positions are integers. They are
+   followed by any valid HTML font colour. Examples of region
+   specifications are: 24-45 blue 56-78 orange 1-100 green 120-156 red A
+   file of ranges to colour (one range per line) can be specifed as
+   '@filename'. Sequence range full sequence
+   -[no]number Number the sequence at the beginning and the end of each
+   line. Boolean value Yes/No Yes
+   -width Number of nucleotides displayed on each line Integer 1 or more
+   60
+   -length Line length of page (0 for indefinite) Integer 0 or more 0
+   -margin Margin around sequence for numbering. Integer 0 or more 10
+   -[no]name Set this to be false if you do not wish to display the ID
+   name of the sequence. Boolean value Yes/No Yes
+   -[no]description Set this to be false if you do not wish to display
+   the description of the sequence. Boolean value Yes/No Yes
+   -offset Number from which you want the DNA sequence to be numbered.
+   Any integer value 1
+   -html Use HTML formatting Boolean value Yes/No No
+   
+Input file format
+
+   sixpack reads any normal sequence USAs.
+   
+  Input files for usage example
+  
+   'tembl:hsfau' is a sequence entry in the example nucleic acid database
+   'tembl'
+   
+  Database entry: tembl:hsfau
+  
+ID   HSFAU      standard; RNA; HUM; 518 BP.
+XX
+AC   X65923;
+XX
+SV   X65923.1
+XX
+DT   13-MAY-1992 (Rel. 31, Created)
+DT   23-SEP-1993 (Rel. 37, Last updated, Version 10)
+XX
+DE   H.sapiens fau mRNA
+XX
+KW   fau gene.
+XX
+OS   Homo sapiens (human)
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia
+;
+OC   Eutheria; Primates; Catarrhini; Hominidae; Homo.
+XX
+RN   [1]
+RP   1-518
+RA   Michiels L.M.R.;
+RT   ;
+RL   Submitted (29-APR-1992) to the EMBL/GenBank/DDBJ databases.
+RL   L.M.R. Michiels, University of Antwerp, Dept of Biochemistry,
+RL   Universiteisplein 1, 2610 Wilrijk, BELGIUM
+XX
+RN   [2]
+RP   1-518
+RX   MEDLINE; 93368957.
+RA   Michiels L., Van der Rauwelaert E., Van Hasselt F., Kas K., Merregaert J.;
+RT   " fau cDNA encodes a ubiquitin-like-S30 fusion protein and is expressed as
+RT   an antisense sequences in the Finkel-Biskis-Reilly murine sarcoma virus";
+RL   Oncogene 8:2537-2546(1993).
+XX
+DR   SWISS-PROT; P35544; UBIM_HUMAN.
+DR   SWISS-PROT; Q05472; RS30_HUMAN.
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..518
+FT                   /chromosome="11q"
+FT                   /db_xref="taxon:9606"
+FT                   /organism="Homo sapiens"
+FT                   /tissue_type="placenta"
+FT                   /clone_lib="cDNA"
+FT                   /clone="pUIA 631"
+FT                   /map="13"
+FT   misc_feature    57..278
+FT                   /note="ubiquitin like part"
+FT   CDS             57..458
+FT                   /db_xref="SWISS-PROT:P35544"
+FT                   /db_xref="SWISS-PROT:Q05472"
+FT                   /gene="fau"
+FT                   /protein_id="CAA46716.1"
+FT                   /translation="MQLFVRAQELHTFEVTGQETVAQIKAHVASLEGIAPEDQVVLLA
+G
+FT                   APLEDEATLGQCGVEALTTLEVAGRMLGGKVHGSLARAGKVRGQTPKVAKQEKKKKKT
+G
+FT                   RAKRRMQYNRRFVNVVPTFGKKKGPNANS"
+FT   misc_feature    98..102
+FT                   /note="nucleolar localization signal"
+FT   misc_feature    279..458
+FT                   /note="S30 part"
+FT   polyA_signal    484..489
+FT   polyA_site      509
+XX
+SQ   Sequence 518 BP; 125 A; 139 C; 148 G; 106 T; 0 other;
+     ttcctctttc tcgactccat cttcgcggta gctgggaccg ccgttcagtc gccaatatgc        6
+0
+     agctctttgt ccgcgcccag gagctacaca ccttcgaggt gaccggccag gaaacggtcg       12
+0
+     cccagatcaa ggctcatgta gcctcactgg agggcattgc cccggaagat caagtcgtgc       18
+0
+     tcctggcagg cgcgcccctg gaggatgagg ccactctggg ccagtgcggg gtggaggccc       24
+0
+     tgactaccct ggaagtagca ggccgcatgc ttggaggtaa agttcatggt tccctggccc       30
+0
+     gtgctggaaa agtgagaggt cagactccta aggtggccaa acaggagaag aagaagaaga       36
+0
+     agacaggtcg ggctaagcgg cggatgcagt acaaccggcg ctttgtcaac gttgtgccca       42
+0
+     cctttggcaa gaagaagggc cccaatgcca actcttaagt cttttgtaat tctggctttc       48
+0
+     tctaataaaa aagccactta gttcagtcaa aaaaaaaa                               51
+8
+//
+   
+Output file format
+
+  Output files for usage example
+  
+  File: hsfau.fasta
+  
+>HSFAU_1_ORF1  Translation of HSFAU in frame 1, ORF 1, threshold 1, 33aa
+FLFLDSIFAVAGTAVQSPICSSLSAPRSYTPSR
+>HSFAU_1_ORF2  Translation of HSFAU in frame 1, ORF 2, threshold 1, 12aa
+PARKRSPRSRLM
+>HSFAU_1_ORF3  Translation of HSFAU in frame 1, ORF 3, threshold 1, 33aa
+PHWRALPRKIKSCSWQARPWRMRPLWASAGWRP
+>HSFAU_1_ORF4  Translation of HSFAU in frame 1, ORF 4, threshold 1, 4aa
+LPWK
+>HSFAU_1_ORF5  Translation of HSFAU in frame 1, ORF 5, threshold 1, 18aa
+QAACLEVKFMVPWPVLEK
+>HSFAU_1_ORF6  Translation of HSFAU in frame 1, ORF 6, threshold 1, 61aa
+EVRLLRWPNRRRRRRRQVGLSGGCSTTGALSTLCPPLARRRAPMPTLKSFVILAFSNKKA
+T
+>HSFAU_1_ORF7  Translation of HSFAU in frame 1, ORF 7, threshold 1, 6aa
+FSQKKX
+>HSFAU_2_ORF1  Translation of HSFAU in frame 2, ORF 1, threshold 1, 9aa
+SSFSTPSSR
+>HSFAU_2_ORF2  Translation of HSFAU in frame 2, ORF 2, threshold 1, 58aa
+LGPPFSRQYAALCPRPGATHLRGDRPGNGRPDQGSCSLTGGHCPGRSSRAPGRRAPGG
+>HSFAU_2_ORF3  Translation of HSFAU in frame 2, ORF 3, threshold 1, 23aa
+GHSGPVRGGGPDYPGSSRPHAWR
+>HSFAU_2_ORF4  Translation of HSFAU in frame 2, ORF 4, threshold 1, 16aa
+SSWFPGPCWKSERSDS
+>HSFAU_2_ORF5  Translation of HSFAU in frame 2, ORF 5, threshold 1, 14aa
+GGQTGEEEEEDRSG
+>HSFAU_2_ORF6  Translation of HSFAU in frame 2, ORF 6, threshold 1, 30aa
+AADAVQPALCQRCAHLWQEEGPQCQLLSLL
+>HSFAU_2_ORF7  Translation of HSFAU in frame 2, ORF 7, threshold 1, 17aa
+FWLSLIKKPLSSVKKKX
+>HSFAU_3_ORF1  Translation of HSFAU in frame 3, ORF 1, threshold 1, 151aa
+PLSRLHLRGSWDRRSVANMQLFVRAQELHTFEVTGQETVAQIKAHVASLEGIAPEDQVVL
+LAGAPLEDEATLGQCGVEALTTLEVAGRMLGGKVHGSLARAGKVRGQTPKVAKQEKKKKK
+TGRAKRRMQYNRRFVNVVPTFGKKKGPNANS
+>HSFAU_3_ORF2  Translation of HSFAU in frame 3, ORF 2, threshold 1, 8aa
+VFCNSGFL
+>HSFAU_3_ORF3  Translation of HSFAU in frame 3, ORF 3, threshold 1, 10aa
+KSHLVQSKKK
+>HSFAU_4_ORF1  Translation of HSFAU in frame 4, ORF 1, threshold 1, 36aa
+FFLTELSGFFIRESQNYKRLKSWHWGPSSCQRWAQR
+>HSFAU_4_ORF2  Translation of HSFAU in frame 4, ORF 2, threshold 1, 10aa
+QSAGCTASAA
+>HSFAU_4_ORF3  Translation of HSFAU in frame 4, ORF 3, threshold 1, 14aa
+PDLSSSSSSPVWPP
+>HSFAU_4_ORF4  Translation of HSFAU in frame 4, ORF 4, threshold 1, 27aa
+ESDLSLFQHGPGNHELYLQACGLLLPG
+>HSFAU_4_ORF5  Translation of HSFAU in frame 4, ORF 5, threshold 1, 38aa
+SGPPPRTGPEWPHPPGARLPGARLDLPGQCPPVRLHEP
+>HSFAU_4_ORF6  Translation of HSFAU in frame 4, ORF 6, threshold 1, 42aa
+SGRPFPGRSPRRCVAPGRGQRAAYWRLNGGPSYREDGVEKEE
+>HSFAU_5_ORF1  Translation of HSFAU in frame 5, ORF 1, threshold 1, 4aa
+FFFD
+>HSFAU_5_ORF2  Translation of HSFAU in frame 5, ORF 2, threshold 1, 6aa
+TKWLFY
+>HSFAU_5_ORF3  Translation of HSFAU in frame 5, ORF 3, threshold 1, 8aa
+RKPELQKT
+>HSFAU_5_ORF4  Translation of HSFAU in frame 5, ORF 4, threshold 1, 44aa
+ELALGPFFLPKVGTTLTKRRLYCIRRLARPVFFFFFSCLATLGV
+>HSFAU_5_ORF5  Translation of HSFAU in frame 5, ORF 5, threshold 1, 11aa
+PLTFPARAREP
+>HSFAU_5_ORF6  Translation of HSFAU in frame 5, ORF 6, threshold 1, 37aa
+TLPPSMRPATSRVVRASTPHWPRVASSSRGAPARSTT
+>HSFAU_5_ORF7  Translation of HSFAU in frame 5, ORF 7, threshold 1, 11aa
+SSGAMPSSEAT
+>HSFAU_5_ORF8  Translation of HSFAU in frame 5, ORF 8, threshold 1, 45aa
+ALIWATVSWPVTSKVCSSWARTKSCILATERRSQLPRRWSRERGX
+>HSFAU_6_ORF1  Translation of HSFAU in frame 6, ORF 1, threshold 1, 3aa
+FFF
+>HSFAU_6_ORF2  Translation of HSFAU in frame 6, ORF 2, threshold 1, 2aa
+LN
+>HSFAU_6_ORF3  Translation of HSFAU in frame 6, ORF 3, threshold 1, 117aa
+VAFLLEKARITKDLRVGIGALLLAKGGHNVDKAPVVLHPPLSPTCLLLLLLLFGHLRSLT
+SHFSSTGQGTMNFTSKHAACYFQGSQGLHPALAQSGLILQGRACQEHDLIFRGNALQ
+>HSFAU_6_ORF4  Translation of HSFAU in frame 6, ORF 4, threshold 1, 19aa
+GYMSLDLGDRFLAGHLEGV
+>HSFAU_6_ORF5  Translation of HSFAU in frame 6, ORF 5, threshold 1, 12aa
+LLGADKELHIGD
+>HSFAU_6_ORF6  Translation of HSFAU in frame 6, ORF 6, threshold 1, 15aa
+TAVPATAKMESRKRX
+   
+  File: hsfau.sixpack
+  
+HSFAU
+H.sapiens fau mRNA
+
+
+          F  L  F  L  D  S  I  F  A  V  A  G  T  A  V  Q  S  P  I  C     F1
+           S  S  F  S  T  P  S  S  R  *  L  G  P  P  F  S  R  Q  Y  A    F2
+            P  L  S  R  L  H  L  R  G  S  W  D  R  R  S  V  A  N  M  Q   F3
+        1 ttcctctttctcgactccatcttcgcggtagctgggaccgccgttcagtcgccaatatgc 60
+          ----:----|----:----|----:----|----:----|----:----|----:----|
+        1 aaggagaaagagctgaggtagaagcgccatcgaccctggcggcaagtcagcggttatacg 60
+           X  R  K  R  S  E  M  K  A  T  A  P  V  A  T  *  D  G  I  H    F6
+          X  G  R  E  R  S  W  R  R  P  L  Q  S  R  R  E  T  A  L  I     F5
+            E  E  K  E  V  G  D  E  R  Y  S  P  G  G  N  L  R  W  Y  A   F4
+
+
+          S  S  L  S  A  P  R  S  Y  T  P  S  R  *  P  A  R  K  R  S     F1
+           A  L  C  P  R  P  G  A  T  H  L  R  G  D  R  P  G  N  G  R    F2
+            L  F  V  R  A  Q  E  L  H  T  F  E  V  T  G  Q  E  T  V  A   F3
+       61 agctctttgtccgcgcccaggagctacacaccttcgaggtgaccggccaggaaacggtcg 120
+          ----:----|----:----|----:----|----:----|----:----|----:----|
+       61 tcgagaaacaggcgcgggtcctcgatgtgtggaagctccactggccggtcctttgccagc 120
+           L  E  K  D  A  G  L  L  *  V  G  E  L  H  G  A  L  F  R  D    F6
+          C  S  K  T  R  A  W  S  S  C  V  K  S  T  V  P  W  S  V  T     F5
+            A  R  Q  G  R  G  P  A  V  C  R  R  P  S  R  G  P  F  P  R   F4
+
+
+          P  R  S  R  L  M  *  P  H  W  R  A  L  P  R  K  I  K  S  C     F1
+           P  D  Q  G  S  C  S  L  T  G  G  H  C  P  G  R  S  S  R  A    F2
+            Q  I  K  A  H  V  A  S  L  E  G  I  A  P  E  D  Q  V  V  L   F3
+      121 cccagatcaaggctcatgtagcctcactggagggcattgccccggaagatcaagtcgtgc 180
+          ----:----|----:----|----:----|----:----|----:----|----:----|
+      121 gggtctagttccgagtacatcggagtgacctcccgtaacggggccttctagttcagcacg 180
+           G  L  D  L  S  M  Y  G  *  Q  L  A  N  G  R  F  I  L  D  H    F6
+          A  W  I  L  A  *  T  A  E  S  S  P  M  A  G  S  S  *  T  T     F5
+            G  S  *  P  E  H  L  R  V  P  P  C  Q  G  P  L  D  L  R  A   F4
+
+
+          S  W  Q  A  R  P  W  R  M  R  P  L  W  A  S  A  G  W  R  P     F1
+           P  G  R  R  A  P  G  G  *  G  H  S  G  P  V  R  G  G  G  P    F2
+            L  A  G  A  P  L  E  D  E  A  T  L  G  Q  C  G  V  E  A  L   F3
+      181 tcctggcaggcgcgcccctggaggatgaggccactctgggccagtgcggggtggaggccc 240
+          ----:----|----:----|----:----|----:----|----:----|----:----|
+      181 aggaccgtccgcgcggggacctcctactccggtgagacccggtcacgccccacctccggg 240
+           E  Q  C  A  R  G  Q  L  I  L  G  S  Q  A  L  A  P  H  L  G    F6
+          S  R  A  P  A  G  R  S  S  S  A  V  R  P  W  H  P  T  S  A     F5
+            G  P  L  R  A  G  P  P  H  P  W  E  P  G  T  R  P  P  P  G   F4
+
+
+          *  L  P  W  K  *  Q  A  A  C  L  E  V  K  F  M  V  P  W  P     F1
+           D  Y  P  G  S  S  R  P  H  A  W  R  *  S  S  W  F  P  G  P    F2
+
+
+  [Part of this file has been deleted for brevity]
+
+      301 cacgaccttttcactctccagtctgaggattccaccggtttgtcctcttcttcttcttct 360
+           T  S  S  F  H  S  T  L  S  R  L  H  G  F  L  L  L  L  L  L    F6
+          R  A  P  F  T  L  P  *  V  G  L  T  A  L  C  S  F  F  F  F     F5
+            H  Q  F  L  S  L  D  S  E  *  P  P  W  V  P  S  S  S  S  S   F4
+
+
+          R  Q  V  G  L  S  G  G  C  S  T  T  G  A  L  S  T  L  C  P     F1
+           D  R  S  G  *  A  A  D  A  V  Q  P  A  L  C  Q  R  C  A  H    F2
+            T  G  R  A  K  R  R  M  Q  Y  N  R  R  F  V  N  V  V  P  T   F3
+      361 agacaggtcgggctaagcggcggatgcagtacaaccggcgctttgtcaacgttgtgccca 420
+          ----:----|----:----|----:----|----:----|----:----|----:----|
+      361 tctgtccagcccgattcgccgcctacgtcatgttggccgcgaaacagttgcaacacgggt 420
+           L  C  T  P  S  L  P  P  H  L  V  V  P  A  K  D  V  N  H  G    F6
+          F  V  P  R  A  L  R  R  I  C  Y  L  R  R  K  T  L  T  T  G     F5
+            S  L  D  P  *  A  A  S  A  T  C  G  A  S  Q  *  R  Q  A  W   F4
+
+
+          P  L  A  R  R  R  A  P  M  P  T  L  K  S  F  V  I  L  A  F     F1
+           L  W  Q  E  E  G  P  Q  C  Q  L  L  S  L  L  *  F  W  L  S    F2
+            F  G  K  K  K  G  P  N  A  N  S  *  V  F  C  N  S  G  F  L   F3
+      421 cctttggcaagaagaagggccccaatgccaactcttaagtcttttgtaattctggctttc 480
+          ----:----|----:----|----:----|----:----|----:----|----:----|
+      421 ggaaaccgttcttcttcccggggttacggttgagaattcagaaaacattaagaccgaaag 480
+           G  K  A  L  L  L  A  G  I  G  V  R  L  D  K  T  I  R  A  K    F6
+          V  K  P  L  F  F  P  G  L  A  L  E  *  T  K  Q  L  E  P  K     F5
+            R  Q  C  S  S  P  G  W  H  W  S  K  L  R  K  Y  N  Q  S  E   F4
+
+
+          S  N  K  K  A  T  *  F  S  Q  K  K  X                          F1
+           L  I  K  K  P  L  S  S  V  K  K  K  X                         F2
+            *  *  K  S  H  L  V  Q  S  K  K  K                           F3
+      481 tctaataaaaaagccacttagttcagtcaaaaaaaaaa                       518
+          ----:----|----:----|----:----|----:----|----:----|----:----|
+      481 agattattttttcggtgaatcaagtcagtttttttttt                       518
+           E  L  L  F  A  V  *  N  L  *  F  F  F                         F6
+          R  *  Y  F  L  W  K  T  *  D  F  F  F                          F5
+            R  I  F  F  G  S  L  E  T  L  F  F                           F4
+
+##############################
+Minimum size of ORFs : 1
+
+Total ORFs in frame 1 :     7
+Total ORFs in frame 2 :     7
+Total ORFs in frame 3 :     3
+Total ORFs in frame 4 :     6
+Total ORFs in frame 5 :     8
+Total ORFs in frame 6 :     6
+
+Total ORFs :    37
+##############################
+   
+Data files
+
+   EMBOSS data files are distributed with the application and stored in
+   the standard EMBOSS data directory, which is defined by the EMBOSS
+   environment variable EMBOSS_DATA.
+   
+   To see the available EMBOSS data files, run:
+   
+% embossdata -showall
+
+   To fetch one of the data files (for example 'Exxx.dat') into your
+   current directory for you to inspect or modify, run:
+
+% embossdata -fetch -file Exxx.dat
+
+   Users can provide their own data files in their own directories.
+   Project specific files can be put in the current directory, or for
+   tidier directory listings in a subdirectory called ".embossdata".
+   Files for all EMBOSS runs can be put in the user's home directory, or
+   again in a subdirectory called ".embossdata".
+   
+   The directories are searched in the following order:
+     * . (your current directory)
+     * .embossdata (under your current directory)
+     * ~/ (your home directory)
+     * ~/.embossdata
+       
+   The Genetic Code data files are based on the NCBI genetic code tables.
+   Their names and descriptions are:
+   
+   EGC.0
+          Standard (Differs from GC.1 in that it only has initiation site
+          'AUG')
+          
+   EGC.1
+          Standard
+          
+   EGC.2
+          Vertebrate Mitochodrial
+          
+   EGC.3
+          Yeast Mitochondrial
+          
+   EGC.4
+          Mold, Protozoan, Coelenterate Mitochondrial and
+          Mycoplasma/Spiroplasma
+          
+   EGC.5
+          Invertebrate Mitochondrial
+          
+   EGC.6
+          Ciliate Macronuclear and Dasycladacean
+          
+   EGC.9
+          Echinoderm Mitochondrial
+          
+   EGC.10
+          Euplotid Nuclear
+          
+   EGC.11
+          Bacterial
+          
+   EGC.12
+          Alternative Yeast Nuclear
+          
+   EGC.13
+          Ascidian Mitochondrial
+          
+   EGC.14
+          Flatworm Mitochondrial
+          
+   EGC.15
+          Blepharisma Macronuclear
+          
+   EGC.16
+          Chlorophycean Mitochondrial
+          
+   EGC.21
+          Trematode Mitochondrial
+          
+   EGC.22
+          Scenedesmus obliquus
+          
+   EGC.23
+          Thraustochytrium Mitochondrial
+          
+   The format of these files is very simple.
+   
+   It consists of several lines of optional comments, each starting with
+   a '#' character.
+   
+   These are followed the line: 'Genetic Code [n]', where 'n' is the
+   number of the genetic code file.
+   
+   This is followed by the description of the code and then by four lines
+   giving the IUPAC one-letter code of the translated amino acid, the
+   start codons (indicdated by an 'M') and the three bases of the codon,
+   lined up one on top of the other.
+   
+   For example:
+
+------------------------------------------------------------------------------
+# Genetic Code Table
+#
+# Obtained from: http://www.ncbi.nlm.nih.gov/collab/FT/genetic_codes.html
+# and: http://www3.ncbi.nlm.nih.gov/htbin-post/Taxonomy/wprintgc?mode=c
+#
+# Differs from Genetic Code [1] only in that the initiation sites have been
+# changed to only 'AUG'
+
+Genetic Code [0]
+Standard
+
+AAs  =   FFLLSSSSYY**CC*WLLLLPPPPHHQQRRRRIIIMTTTTNNKKSSRRVVVVAAAADDEEGGGG
+Starts = -----------------------------------M----------------------------
+Base1  = TTTTTTTTTTTTTTTTCCCCCCCCCCCCCCCCAAAAAAAAAAAAAAAAGGGGGGGGGGGGGGGG
+Base2  = TTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGG
+Base3  = TCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAG
+------------------------------------------------------------------------------
+
+Notes
+
+   None.
+   
+References
+
+   None.
+   
+Warnings
+
+   None.
+   
+Diagnostic Error Messages
+
+   None.
+   
+Exit status
+
+   It always exits with status 0.
+   
+Known bugs
+
+   None.
+   
+See also
+
+   Program name Description
+   abiview Reads ABI file and display the trace
+   backtranseq Back translate a protein sequence
+   cirdna Draws circular maps of DNA constructs
+   coderet Extract CDS, mRNA and translations from feature tables
+   getorf Finds and extracts open reading frames (ORFs)
+   lindna Draws linear maps of DNA constructs
+   marscan Finds MAR/SAR sites in nucleic sequences
+   pepnet Displays proteins as a helical net
+   pepwheel Shows protein sequences as helices
+   plotorf Plot potential open reading frames
+   prettyplot Displays aligned sequences, with colouring and boxing
+   prettyseq Output sequence with translated ranges
+   remap Display a sequence with restriction cut sites, translation etc
+   seealso Finds programs sharing group names
+   showalign Displays a multiple sequence alignment
+   showdb Displays information on the currently available databases
+   showfeat Show features of a sequence
+   showorf Pretty output of DNA translations
+   showseq Display a sequence with features, translation etc
+   textsearch Search sequence documentation text. SRS and Entrez are
+   faster!
+   transeq Translate nucleic acid sequences
+   wobble Wobble base plot
+   
+Author(s)
+
+   This application was written by Thomas Laurent
+   (thomas.laurent@uk.lionbioscience.com)
+   
+History
+
+   Written (November 2002) - Thomas Laurent
+   
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
