@@ -51,6 +51,13 @@ bool: trim  [
   help: "This removes all X and * characters from the right end of the translation. The trimming process starts at the end and continues until the next character is not a X or a *"
 ]
 
+bool: alternative  [
+  required: "N"
+  default: "N"
+  prompt: "Define frame '-1' as starting in the last codon"
+  help: "The default definition of frame '-1' is the reverse-complement of the set of codons used in frame 1.  (Frame -2 is the set of codons used by frame 2, similarly frames -3 and 3).  This is a common standard, used by the Staden package and other programs.  If you prefer to define frame '-1' as using the set of codons starting with the last codon of the sequence, then set this to be true."
+]
+
 endsection: advanced
 
 section: output [ info: "output Section" type: page ]

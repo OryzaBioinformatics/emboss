@@ -51,6 +51,7 @@ int main(int argc, char **argv)
     AjBool trim;
     AjBool defr=ajFalse; /* true if the range covers the whole sequence */
     AjBool first=ajTrue; /* true if this is the first sequence done     */
+    AjBool alternate;
 
     int i;
     
@@ -62,6 +63,7 @@ int main(int argc, char **argv)
     tablelist = ajAcdGetList ("table");
     regions = ajAcdGetRange ("regions");
     trim = ajAcdGetBool ("trim");
+    alternate = ajAcdGetBool ("alternative");
 
     /* get the frames to be translated */
     transeq_GetFrames(framelist, frames);
@@ -93,7 +95,10 @@ int main(int argc, char **argv)
                 if (i<3)
 	            pep = ajTrnSeqOrig(trnTable, seq, i+1);
 	        else 
-	            pep = ajTrnSeqOrig(trnTable, seq, 2-i);
+		    if (alternate) /* frame -1 uses codons starting at end */
+	              pep = ajTrnSeqOrig(trnTable, seq, -i-1);
+		    else	/* frame -1 uses frame 1 codons */
+	              pep = ajTrnSeqOrig(trnTable, seq, 2-i);
 	        if (trim)
 	            transeq_Trim(pep);
 	        (void) ajSeqAllWrite (seqout, pep);

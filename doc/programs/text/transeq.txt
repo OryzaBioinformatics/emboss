@@ -1,9 +1,8 @@
 
-                              EMBOSS: transeq
-     _________________________________________________________________
+                                  transeq 
+                                      
    
-                                Program transeq
-                                       
+   
 Function
 
    Translate nucleic acid sequences
@@ -83,14 +82,24 @@ Command line arguments
                                   Note: you should not try to use this option
                                   with any other frame than the default,
                                   -frame=1
-   -trim               bool       This removes all X and * characters from the
+   -trim               boolean    This removes all X and * characters from the
                                   right end of the translation. The trimming
                                   process starts at the end and continues
                                   until the next character is not a X or a *
 
-   Advanced qualifiers: (none)
+   Advanced qualifiers:
+   -alternative        boolean    The default definition of frame '-1' is the
+                                  reverse-complement of the set of codons used
+                                  in frame 1. (Frame -2 is the set of codons
+                                  used by frame 2, similarly frames -3 and 3).
+                                  This is a common standard, used by the
+                                  Staden package and other programs. If you
+                                  prefer to define frame '-1' as using the set
+                                  of codons starting with the last codon of
+                                  the sequence, then set this to be true.
+
    General qualifiers:
-  -help                bool       report command line options. More
+  -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    
@@ -146,7 +155,13 @@ Command line arguments
    translation. The trimming process starts at the end and continues
    until the next character is not a X or a * Yes/No No
    Advanced qualifiers Allowed values Default
-   (none)
+   -alternative The default definition of frame '-1' is the
+   reverse-complement of the set of codons used in frame 1. (Frame -2 is
+   the set of codons used by frame 2, similarly frames -3 and 3). This is
+   a common standard, used by the Staden package and other programs. If
+   you prefer to define frame '-1' as using the set of codons starting
+   with the last codon of the sequence, then set this to be true. Yes/No
+   No
    
 Input file format
 
@@ -261,6 +276,18 @@ Data files
    EGC.15
           Blepharisma Macronuclear
           
+   EGC.16
+          Chlorophycean Mitochondrial
+          
+   EGC.21
+          Trematode Mitochondrial
+          
+   EGC.22
+          Scenedesmus obliquus
+          
+   EGC.23
+          Thraustochytrium Mitochondrial
+          
    The format of these files is very simple.
    
    It consists of several lines of optional comments, each starting with
@@ -298,12 +325,22 @@ Base3  = TCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAG
 Notes
 
    The reverse frame '-1' is defined as the translation you get when you
-   use the reverse-complement of the sequence withthe same codon phase as
-   the codon in frame '1'.
+   use the reverse-complement of the sequence with the same codon phase
+   as the codon in frame '1'.
    
-   Thus the sequence ACTGG in frame -1 is the translation of CCAGT (the
-   reverse complement of ACTGG) using the codon 'AGT' (the first bases
-   'CC' are ignored). The result is the peptide 'S'.
+   Thus the sequence ACTGG in frame 1 is the translation of the codons
+   ACT,GG; the translation of frame -1 uses these same codons, reverse
+   complemented:
+   
+  forward sense          ACT GG
+  reverse sense          TGA CC
+
+  reverse-complement     CC AGT
+  frame -1 translation       S
+
+   Frame -1 is the translation of CCAGT (the reverse complement of ACTGG)
+   using the codon 'AGT' (the first bases 'CC' are ignored). The result
+   is the peptide 'S'.
    
    Similarly frame -2 is the phase used by frame 2, 'CAG T' (the first
    base 'C' is ignored). The last base cannot be successfully translated
@@ -314,17 +351,24 @@ Notes
    will translate to 'V' as it does not matter what the next base is.
    (GTA, GTC, GTG, GTT all code for 'V'). The result is the peptide 'PV'.
    
-   Before version 2.0.0 transeq used the alternate way of generating the
-   reverse translation frames which is that frame -1 is made by taking
-   the frame '1' of the reverse complement.
+   The alternative way of generating the reverse translation frames used
+   by some people is that frame -1 is made by taking the frame '1' of the
+   reverse complement. There is no correspondance betwen the codons used
+   in frame 1 and -1, 2 and -2, 3 and -3; the codons used change with the
+   length modulus 3.
    
    There does not appear to be a convention on which definition to use.
+   The Staden package uses the same convention as this program.
+   The GCG package sneakily avoids the problem by naming the frames using
+   letters (a, b, c, d, e, f)
    
-   The current definition makes it slightly simpler to generate peptides
-   to align under sequences when displaying translation in all 6 frames.
-   It appears to be the definition used by the majority of other sequence
-   analysis packages. The switch to the current definition was therefore
-   made.
+   If you really need to define frame -1 as the frame given when you
+   reverse complement the sequence and then start translating at the
+   first frame in the resulting sequence, then use the '-alternative'
+   qualifier.
+   
+   (Reverse sense translations are a biological nonsense, really, but can
+   be very useful in practice.)
    
 References
 
@@ -382,6 +426,8 @@ History
    Written 4 March 1999 - Gary Williams
    July 2001 - changed definition of reverse frames to use the same codon
    phase as forward frames. - Gary Williams
+   
+   June 2002 - added '-alternative' qualifier - Gary Williams
    
 Target users
 
