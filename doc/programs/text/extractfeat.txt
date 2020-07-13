@@ -1,9 +1,8 @@
 
-                            EMBOSS: extractfeat
-     _________________________________________________________________
+                                extractfeat 
+                                      
    
-                              Program extractfeat
-                                       
+   
 Function
 
    Extract features from a sequence
@@ -24,6 +23,9 @@ Description
    
    If you are interested in extracting the sequence of the region around
    the start or end of the feature, then this can also be specified.
+   
+   'joined' features can either be extracted as individual sequences, or
+   as a single concatenated sequence if the '-join' qualifier is used.
    
    Please remember that the output feature sequence is only as good as
    the annotation. If you rely upon other people's, or other program's
@@ -165,13 +167,23 @@ Command line arguments
                                   The tag value may be wildcarded by using
                                   '*'.
                                   If you wish to show more than one tag value,
-                                  separate their names with the character
-                                  '|', eg:
+                                  separate their names with a space or the
+                                  character '|', eg:
                                   pax* | 10
+   -join               boolean    Some features, such as CDS (coding sequence)
+                                  and mRNA are composed of introns
+                                  concatenated together. There may be other
+                                  forms of 'joined' sequence, depending on the
+                                  feature table. If this option is set TRUE,
+                                  then any group of these features will be
+                                  output as a single sequence. If the 'before'
+                                  and 'after' qualifiers have been set, then
+                                  only the sequence before the first feature
+                                  and after the last feature are added.
 
    Advanced qualifiers: (none)
    General qualifiers:
-  -help                bool       report command line options. More
+  -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
    
@@ -222,9 +234,9 @@ Command line arguments
    - forward sense, -1 - reverse sense Any integer value 0 - any sense, 1
    - forward sense, -1 - reverse sense
    -minscore If this is greater than or equal to the maximum score, then
-   any score is permitted Any integer value 0.0
+   any score is permitted Any numeric value 0.0
    -maxscore If this is less than or equal to the maximum score, then any
-   score is permitted Any integer value 0.0
+   score is permitted Any numeric value 0.0
    -tag Tags are the types of extra values that a feature may have. For
    example in the EMBL feature table, a 'CDS' type of feature may have
    the tags '/codon', '/codon_start', '/db_xref', '/EC_number',
@@ -249,7 +261,15 @@ Command line arguments
    tag value in the feature table is shown. You can set this to match any
    feature tag valueyou wish to show. The tag value may be wildcarded by
    using '*'. If you wish to show more than one tag value, separate their
-   names with the character '|', eg: pax* | 10 Any string is accepted *
+   names with a space or the character '|', eg: pax* | 10 Any string is
+   accepted *
+   -join Some features, such as CDS (coding sequence) and mRNA are
+   composed of introns concatenated together. There may be other forms of
+   'joined' sequence, depending on the feature table. If this option is
+   set TRUE, then any group of these features will be output as a single
+   sequence. If the 'before' and 'after' qualifiers have been set, then
+   only the sequence before the first feature and after the last feature
+   are added. Yes/No No
    Advanced qualifiers Allowed values Default
    (none)
    
@@ -264,7 +284,7 @@ Output file format
 
    The sequences of the specified features are written out.
    
-   The ID name of the sequence is formed from the original sequence anme
+   The ID name of the sequence is formed from the original sequence name
    with the start and end positions of the feature appended to it. So if
    the feature came from a sequence with an ID name of 'XYZ' from
    positions 10 to 22, then the resulting ID name of the feature sequence
@@ -284,7 +304,12 @@ Data files
    
 Notes
 
-   None.
+   If a feature is specified as being a part of a different sequence
+   entry in a database, then this feature is ignored.
+   
+   If you are extracting 'joined' features and one of more of the
+   component features is in a different sequence entry, then the whole
+   joined feature is ignored.
    
 References
 
@@ -331,6 +356,7 @@ See also
    seqret       Reads and writes (returns) sequences
    seqretsplit  Reads and writes (returns) sequences in individual files
    showfeat     Show features of a sequence
+   skipseq      Reads and writes (returns) sequences, skipping the first few
    splitter     Split a sequence into (overlapping) smaller sequences
    swissparse   Retrieves sequences from swissprot using keyword search
    trimest      Trim poly-A tails off EST sequences
@@ -347,6 +373,8 @@ Author(s)
 History
 
    Written (Dec 12 2001) - Gary Williams
+   
+   Added '-join' parameter (June 2002) - Gary Williams
    
 Target users
 

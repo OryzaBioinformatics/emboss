@@ -1,5 +1,3 @@
-<!--START OF HEADER - DON'T ALTER -->
-
 <HTML>
 <HEAD>
   <TITLE>
@@ -7,32 +5,25 @@
   </TITLE>
 </HEAD>
 <BODY BGCOLOR="#FFFFFF" text="#000000">
-<table align=center bgcolor="#000070" border=0 cellspacing=0 cellpadding=10>
-<tr>
-<td>
-<a href="index.html" onmouseover="self.status='Go to the EMBOSS home page';return true">
-<img border=0 src="emboss_icon.gif" alt="" width=55 height=55>
-</a>
-</td>
-<td align=middle valign=middle>
-<font face="Arial,Helvetica" size=6 color="#ffffff">
-<H2>
-EMBOSS: extractfeat
-</H2>
-</font>
-</td>
-</tr>
-</table>
-</td>
-</tr>
-</table>
-<p><hr><p>
 
-<!--END OF HEADER-->
 
-<H1>
-Program extractfeat
-</H1>
+<table align=center border=0 cellspacing=0 cellpadding=0>
+<tr><td valign=top>
+<A HREF="index.html" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+</td>
+<td align=left valign=middle>
+<b><font size="+6">
+
+extractfeat
+</font></b>
+</td></tr>
+</table>
+<br>&nbsp;
+<p>
+
+
+
+
 <H2>
     Function
 </H2>
@@ -82,10 +73,14 @@ the start or end of the feature, then this can also be specified.
 
 <p>
 
+'joined' features can either be extracted as individual sequences, or as
+a single concatenated sequence if the '-join' qualifier is used. 
+
+<p>
+
 Please remember that the output feature sequence is only as good as the
 annotation.  If you rely upon other people's, or other program's
 annotation of features, then some of these will be incorrect. 
-
 
 
 
@@ -260,13 +255,23 @@ To write out the 7 residues around all phosphorylated residues in swissprot:
                                   The tag value may be wildcarded by using
                                   '*'.
                                   If you wish to show more than one tag value,
-                                  separate their names with the character
-                                  '|', eg:
+                                  separate their names with a space or the
+                                  character '|', eg:
                                   pax* | 10
+   -join               boolean    Some features, such as CDS (coding sequence)
+                                  and mRNA are composed of introns
+                                  concatenated together. There may be other
+                                  forms of 'joined' sequence, depending on the
+                                  feature table. If this option is set TRUE,
+                                  then any group of these features will be
+                                  output as a single sequence. If the 'before'
+                                  and 'after' qualifiers have been set, then
+                                  only the sequence before the first feature
+                                  and after the last feature are added.
 
    Advanced qualifiers: (none)
    General qualifiers:
-  -help                bool       report command line options. More
+  -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
 
@@ -347,14 +352,14 @@ If you wish to extract more than one type, separate their names with the charact
 <tr>
 <td>-minscore</td>
 <td>If this is greater than or equal to the maximum score, then any score is permitted</td>
-<td>Any integer value</td>
+<td>Any numeric value</td>
 <td>0.0</td>
 </tr>
 
 <tr>
 <td>-maxscore</td>
 <td>If this is less than or equal to the maximum score, then any score is permitted</td>
-<td>Any integer value</td>
+<td>Any numeric value</td>
 <td>0.0</td>
 </tr>
 
@@ -373,10 +378,17 @@ gene | label</td>
 <td>-value</td>
 <td>Tag values are the values associated with a feature tag. Tags are the types of extra values that a feature may have. For example in the EMBL feature table, a 'CDS' type of feature may have the tags '/codon', '/codon_start', '/db_xref', '/EC_number', '/evidence', '/exception', '/function', '/gene', '/label', '/map', '/note', '/number', '/partial', '/product', '/protein_id', '/pseudo', '/standard_name', '/translation', '/transl_except', '/transl_table', or '/usedin'. Only some of these tags can have values, for example '/gene' can have the value of the gene name. By default any feature tag value in the feature table is shown. You can set this to match any feature tag valueyou wish to show.
 The tag value may be wildcarded by using '*'.
-If you wish to show more than one tag value, separate their names with the character '|', eg:
+If you wish to show more than one tag value, separate their names with a space or the character '|', eg:
 pax* | 10</td>
 <td>Any string is accepted</td>
 <td>*</td>
+</tr>
+
+<tr>
+<td>-join</td>
+<td>Some features, such as CDS (coding sequence) and mRNA are composed of introns concatenated together. There may be other forms of 'joined' sequence, depending on the feature table. If this option is set TRUE, then any group of these features will be output as a single sequence. If the 'before' and 'after' qualifiers have been set, then only the sequence before the first feature and after the last feature are added.</td>
+<td>Yes/No</td>
+<td>No</td>
 </tr>
 
 <tr bgcolor="#FFFFD0">
@@ -447,7 +459,7 @@ The sequences of the specified features are written out.
 
 <p>
 
-The ID name of the sequence is formed from the original sequence anme
+The ID name of the sequence is formed from the original sequence name
 with the start and end positions of the feature appended to it.  So if
 the feature came from a sequence with an ID name of 'XYZ' from positions
 10 to 22, then the resulting ID name of the feature sequence will be
@@ -556,8 +568,14 @@ None.
         Useful things you can do with this program.
    -->
 
-None.
+If a feature is specified as being a part of a different sequence entry in a
+database, then this feature is ignored. 
 
+<p>
+
+If you are extracting 'joined' features and one of more of the component
+features is in a different sequence entry, then the whole joined feature is
+ignored. 
 
 
 
@@ -679,6 +697,7 @@ None.
 <tr><td><a href="seqret.html">seqret</a></td><td>Reads and writes (returns) sequences</td></tr>
 <tr><td><a href="seqretsplit.html">seqretsplit</a></td><td>Reads and writes (returns) sequences in individual files</td></tr>
 <tr><td><a href="showfeat.html">showfeat</a></td><td>Show features of a sequence</td></tr>
+<tr><td><a href="skipseq.html">skipseq</a></td><td>Reads and writes (returns) sequences, skipping the first few</td></tr>
 <tr><td><a href="splitter.html">splitter</a></td><td>Split a sequence into (overlapping) smaller sequences</td></tr>
 <tr><td><a href="swissparse.html">swissparse</a></td><td>Retrieves sequences from swissprot using keyword search</td></tr>
 <tr><td><a href="trimest.html">trimest</a></td><td>Trim poly-A tails off EST sequences</td></tr>
@@ -738,6 +757,9 @@ href="mailto:gwilliam@hgmp.mrc.ac.uk">(gwilliam@hgmp.mrc.ac.uk)</a>
 
 Written (Dec 12 2001) - Gary Williams
 
+<p>
+
+Added '-join' parameter (June 2002) - Gary Williams
 
 
 
@@ -791,9 +813,6 @@ This program is intended to be used by everyone and everything, from naive users
 
 
 
-
-</TD></TR></TABLE>
-</CENTER>
 
 </BODY>
 </HTML>
