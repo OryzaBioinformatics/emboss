@@ -1,7 +1,6 @@
 /* @source scopparse application
 **
-** Reads raw scop classifications file and writes embl-like format scop
-** classification file.
+** Converts raw scop classification files to a file in embl-like format.
 **
 ** @author: Copyright (C) Jon Ison (jison@hgmp.mrc.ac.uk)
 ** @author: Copyright (C) Alan Bleasby (ableasby@hgmp.mrc.ac.uk)
@@ -24,13 +23,25 @@
 ** 
 ** 
 ** 
+******************************************************************************
+**IMPORTANT NOTE      IMPORTANT NOTE      IMPORTANT NOTE        IMPORTANT NOTE     
+******************************************************************************
+**
+** Mon May 20 11:43:39 BST 2002
+**
+** The following documentation is out-of-date and should be disregarded.  It 
+** will be updated shortly. 
+** 
+******************************************************************************
+**IMPORTANT NOTE      IMPORTANT NOTE      IMPORTANT NOTE        IMPORTANT NOTE     
+******************************************************************************
 ** 
 ** 
 ** 
 ** Operation
 ** 
-** scopparse parses the dir.cla.scop.txt and dir.des.scop.txt scop
-** classification files (e.g. available at URL (1).)
+** scopparse parses the dir.cla.scop.txt and dir.des.scop.txt scop classification 
+** files (e.g. available at URL (1).)
 ** (1) http://scop.mrc-lmb.cam.ac.uk/scop/parse/dir.cla.scop.txt_1.57
 **     http://scop.mrc-lmb.cam.ac.uk/scop/parse/dir.des.scop.txt_1.57
 ** The format of these files is explained at URL (2).
@@ -57,32 +68,36 @@
 ** domain only).
 ** (2)  EN - PDB identifier code.  This is the 4-character PDB identifier code
 ** of the PDB entry containing the domain.
-** (3)  OS - Source of the protein.  It is identical to the text given after 
+** (3)  SI - SCOP Sunid's.  The integers preceeding the codes CL, FO, SF, FA, DO, 
+** SO and DD are the SCOP sunids for Class, Fold, SuPerfamily, Family, Domain, 
+** Source and domain data respectively. These numbers uniquely identify the 
+** appropriate node in the SCOP parsable files.
+** (4)  OS - Source of the protein.  It is identical to the text given after 
 ** 'Species' in the scop classification file.
-** (4)  CL - Domain class.  It is identical to the text given after 'Class' in 
+** (5)  CL - Domain class.  It is identical to the text given after 'Class' in 
 ** the scop classification file.
-** (5)  FO - Domain fold.  It is identical to the text given after 'Fold' in 
+** (6)  FO - Domain fold.  It is identical to the text given after 'Fold' in 
 ** the scop classification file.
-** (6)  SF - Domain superfamily.  It is identical to the text given after 
+** (7)  SF - Domain superfamily.  It is identical to the text given after 
 ** 'Superfamily' in the scop classification file.
-** (7)  FA - Domain family. It is identical to the text given after 'Family' in 
+** (8)  FA - Domain family. It is identical to the text given after 'Family' in 
 ** the scop classification file.
-** (8)  DO - Domain name. It is identical to the text given after 'Protein' in 
+** (9)  DO - Domain name. It is identical to the text given after 'Protein' in 
 ** the scop classification file.
-** (9)  NC - Number of chains comprising the domain (usually 1).  If the number
+** (10)  NC - Number of chains comprising the domain (usually 1).  If the number
 ** of chains is greater than 1, then the domain entry will have a section  
 ** containing a CN and a CH record (see below) for each chain.
-** (10) CN - Chain number.  The number given in brackets after this record 
+** (11) CN - Chain number.  The number given in brackets after this record 
 ** indicates the start of the data for the relevent chain.
-** (11) CH - Domain definition.  The character given before CHAIN is the PDB 
+** (12) CH - Domain definition.  The character given before CHAIN is the PDB 
 ** chain identifier (a '.' is given in cases where a chain identifier was not 
 ** specified in the scop classification file), the strings before START and 
 ** END give the start and end positions respectively of the domain in the PDB 
 ** file (a '.' is given in cases where a position was not specified).  Note 
 ** that the start and end positions refer to residue numbering given in the 
 ** original pdb file and therefore must be treated as strings.
-** (12) XX - used for spacing.
-** (13) // - used to delimit records for a domain.
+** (13) XX - used for spacing.
+** (14) // - used to delimit records for a domain.
 **
 ** Figure 1  Excerpt from embl-like format scop classification file
 **
@@ -171,11 +186,11 @@ static ajint scopparse_search(ajint id, AjPScopdes *arr, ajint siz);
 
 
 
-/* @prog scopparse ************************************************************
+/* @prog scopparse **********************************************************
 **
 ** Convert raw scop classification file to embl-like format
 **
-******************************************************************************/
+*****************************************************************************/
 
 int main(int argc, char **argv)
 {
@@ -236,18 +251,34 @@ int main(int argc, char **argv)
     {
 	ajFmtPrintF(outf,"ID   %S\nXX\n",cla->Entry);
 	ajFmtPrintF(outf,"EN   %S\nXX\n",cla->Pdb);
+	ajFmtPrintF(outf,"SI   %d CL; %d FO; %d SF; %d FA; %d DO; %d SO; %d DD;\nXX\n",	
+		    cla->Class,cla->Fold, cla->Superfamily, 
+		    cla->Family,cla->Domain, cla->Source,
+		    cla->Domdat);
+	/*ajFmtPrintF(outf,"SI   %d\nXX\n",cla->Domdat);*/
 	idx = scopparse_search(cla->Class,  desarr, dim);
 	ajFmtPrintF(outf,"CL   %S\n",desarr[idx]->Desc);
+
 	idx = scopparse_search(cla->Fold,  desarr, dim);
-	ajFmtPrintSplit(outf,desarr[idx]->Desc,"XX\nFO   ",75," \t\n\r");
+	ajFmtPrintF(outf,"XX\n");
+	ajFmtPrintSplit(outf,desarr[idx]->Desc,"FO   ",75," \t\n\r");
+
+
 	idx = scopparse_search(cla->Superfamily,  desarr, dim);
-	ajFmtPrintSplit(outf,desarr[idx]->Desc,"XX\nSF   ",75," \t\n\r");
+	ajFmtPrintF(outf,"XX\n");
+	ajFmtPrintSplit(outf,desarr[idx]->Desc,"SF   ",75," \t\n\r");
+
 	idx = scopparse_search(cla->Family,  desarr, dim);
-	ajFmtPrintSplit(outf,desarr[idx]->Desc,"XX\nFA   ",75," \t\n\r");
+	ajFmtPrintF(outf,"XX\n");
+	ajFmtPrintSplit(outf,desarr[idx]->Desc,"FA   ",75," \t\n\r");
+
 	idx = scopparse_search(cla->Domain,  desarr, dim);
-	ajFmtPrintSplit(outf,desarr[idx]->Desc,"XX\nDO   ",75," \t\n\r");
+	ajFmtPrintF(outf,"XX\n");
+	ajFmtPrintSplit(outf,desarr[idx]->Desc,"DO   ",75," \t\n\r");
+
 	idx = scopparse_search(cla->Source,  desarr, dim);
-	ajFmtPrintSplit(outf,desarr[idx]->Desc,"XX\nOS   ",75," \t\n\r");
+	ajFmtPrintF(outf,"XX\n");
+	ajFmtPrintSplit(outf,desarr[idx]->Desc,"OS   ",75," \t\n\r");
 
 	ajFmtPrintF(outf,"XX\nNC   %d\n",cla->N);
 
@@ -260,12 +291,20 @@ int main(int argc, char **argv)
 			cla->End[i]);
 	}
 	ajFmtPrintF(outf,"//\n");
+
+	ajXyzScopclaDel(&cla);
     
     }
 
-
+    while(ajListPop(deslist, (void **)&des))
+	ajXyzScopdesDel(&des);
+    
     /* Tidy up */
     ajFileClose(&outf);
+    AJFREE(desarr);
+    ajListDel(&clalist);
+    ajListDel(&deslist);
+    
 
     ajExit();
     return 0;
@@ -312,11 +351,11 @@ static ajint scopparse_CompSunid(const void *scop1, const void *scop2)
 ** Performs a binary search for a Sunid over an array of Scopdes objects 
 ** structures (which of course must first have been sorted). 
 **
-** @param [r] id  [ajint]      Search value of Sunid
+** @param [r] id  [ajint]       Search value of Sunid
 ** @param [r] arr [AjPScopdes*] Array of AjOScopdes objects
-** @param [r] siz [ajint]      Size of array
+** @param [r] siz [ajint]       Size of array
 **
-** @return [ajint] Index of first AjOScopdes object found with a
+** @return [ajint] Index of first AjOScopdes object found with an
 ** Sunid element matching id, or -1 if id is not found.
 ** @@
 ******************************************************************************/

@@ -7,36 +7,36 @@
   </TITLE>
 </HEAD>
 <BODY BGCOLOR="#FFFFFF" text="#000000">
-<table align=center bgcolor="#000070" border=0 cellspacing=0 cellpadding=10>
-<tr>
-<td>
-<a href="index.html" onmouseover="self.status='Go to the EMBOSS home page';return true">
-<img border=0 src="emboss_icon.gif" alt="" width=55 height=55>
-</a>
+
+
+
+
+
+<table align=center border=0 cellspacing=0 cellpadding=0>
+<tr><td valign=top>
+<A HREF="index.html" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
 </td>
-<td align=middle valign=middle>
-<font face="Arial,Helvetica" size=6 color="#ffffff">
-<H2>
-EMBOSS: scopparse
-</H2>
-</font>
-</td>
-</tr>
+<td align=left valign=middle>
+<b><font size="+6">
+
+scopparse
+</font></b>
+</td></tr>
 </table>
-</td>
-</tr>
-</table>
-<p><hr><p>
+<br>&nbsp;
+<p>
+
+
+
+
+
 
 <!--END OF HEADER-->
 
-<H1>
-Program scopparse
-</H1>
 <H2>
     Function
 </H2>
-Reads raw-, and writes EMBL-like, scop classification files
+Converts raw scop classification files to a file in embl-like format
 
 <!--
 DON'T WRITE ANYTHING HERE.
@@ -129,17 +129,17 @@ Here is a sample session with scopparse:
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
    Mandatory qualifiers:
-  [-infilea]           infile     Name of scop classification file for input
-                                  (raw format dir.cla.scop.txt_X.XX file)
-  [-infileb]           infile     Name of description file for input (raw
-                                  format dir.des.scop.txt_X.XX file)
-  [-outfile]           outfile    Name of scop file for output (embl-like
-                                  format)
+  [-infilea]           infile     Name of scop classification file (raw format
+                                  dir.cla.scop.txt_X.XX for input)
+  [-infileb]           infile     Name of scop description file (raw format
+                                  dir.des.scop.txt_X.XX for input)
+  [-outfile]           outfile    Name of scop classification file (embl
+                                  format output)
 
    Optional qualifiers: (none)
    Advanced qualifiers: (none)
    General qualifiers:
-  -help                bool       report command line options. More
+  -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
 
@@ -156,21 +156,21 @@ Here is a sample session with scopparse:
 
 <tr>
 <td>[-infilea]<br>(Parameter 1)</td>
-<td>Name of scop classification file for input (raw format dir.cla.scop.txt_X.XX file)</td>
+<td>Name of scop classification file (raw format dir.cla.scop.txt_X.XX for input)</td>
 <td>Input file</td>
 <td>dir.cla.scop.txt_1.57</td>
 </tr>
 
 <tr>
 <td>[-infileb]<br>(Parameter 2)</td>
-<td>Name of description file for input (raw format dir.des.scop.txt_X.XX file)</td>
+<td>Name of scop description file (raw format dir.des.scop.txt_X.XX for input)</td>
 <td>Input file</td>
 <td>dir.des.scop.txt_1.57</td>
 </tr>
 
 <tr>
 <td>[-outfile]<br>(Parameter 3)</td>
-<td>Name of scop file for output (embl-like format)</td>
+<td>Name of scop classification file (embl format output)</td>
 <td>Output file</td>
 <td>Escop.dat</td>
 </tr>
@@ -465,15 +465,21 @@ None.
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
+<tr><td><a href="aaindexextract.html">aaindexextract</a></td><td>Extract data from AAINDEX</td></tr>
 <tr><td><a href="cutgextract.html">cutgextract</a></td><td>Extract data from CUTG</td></tr>
-<tr><td><a href="domainer.html">domainer</a></td><td>Build domain coordinate files</td></tr>
+<tr><td><a href="domainer.html">domainer</a></td><td>Reads protein coordinate files and writes domains coordinate files</td></tr>
+<tr><td><a href="funky.html">funky</a></td><td>Reads clean coordinate files and writes file of protein-heterogen contact data</td></tr>
+<tr><td><a href="groups.html">groups</a></td><td>Removes redundant hits from a scop families file</td></tr>
+<tr><td><a href="hetparse.html">hetparse</a></td><td>Converts raw dictionary of heterogen groups to a file in embl-like format</td></tr>
 <tr><td><a href="nrscope.html">nrscope</a></td><td>Converts redundant EMBL-format SCOP file to non-redundant one</td></tr>
+<tr><td><a href="pdbparse.html">pdbparse</a></td><td>Parses pdb files and writes cleaned-up protein coordinate files</td></tr>
 <tr><td><a href="pdbtosp.html">pdbtosp</a></td><td>Convert raw swissprot:pdb equivalence file to embl-like format</td></tr>
 <tr><td><a href="printsextract.html">printsextract</a></td><td>Extract data from PRINTS</td></tr>
 <tr><td><a href="prosextract.html">prosextract</a></td><td>Builds the PROSITE motif database for patmatmotifs to search</td></tr>
 <tr><td><a href="rebaseextract.html">rebaseextract</a></td><td>Extract data from REBASE</td></tr>
 <tr><td><a href="scope.html">scope</a></td><td>Convert raw scop classification file to embl-like format</td></tr>
-<tr><td><a href="seqnr.html">seqnr</a></td><td>Converts redundant database results to a non-redundant set of hits</td></tr>
+<tr><td><a href="scopnr.html">scopnr</a></td><td>Removes redundant domains from a scop classification file</td></tr>
+<tr><td><a href="scopseqs.html">scopseqs</a></td><td>Adds pdb and swissprot sequence records to a scop classification file</td></tr>
 <tr><td><a href="tfextract.html">tfextract</a></td><td>Extract data from TRANSFAC</td></tr>
 </table>
 
@@ -580,9 +586,6 @@ This program is intended to be used by everyone and everything, from naive users
 
 
 
-
-</TD></TR></TABLE>
-</CENTER>
 
 </BODY>
 </HTML>
