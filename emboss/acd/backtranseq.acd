@@ -6,7 +6,7 @@ appl: backtranseq [
 section: input [ info: "input Section" type: page ]
 sequence: sequence  [
   parameter: "Y"
-  type: "PureProtein"
+  type: "GapProtein"
 ]
 
 endsection: input

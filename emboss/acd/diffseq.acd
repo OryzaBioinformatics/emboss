@@ -1,5 +1,5 @@
 appl: diffseq [
-  documentation: "Find differences (SNPs) between nearly identical sequences"
+  documentation: "Find differences between nearly identical sequences"
   groups: "Alignment:Differences"
   gui: yes
   batch: yes

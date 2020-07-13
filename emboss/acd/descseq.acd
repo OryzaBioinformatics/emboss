@@ -25,6 +25,7 @@ string: description  [
 ]
 
 bool: append  [
+  default: "N"
   information: "Append to the existing description"
   help: "This allows you to append the name or description you have given on to the end of the existing name or description of the sequence."
 ]

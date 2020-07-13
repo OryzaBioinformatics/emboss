@@ -13,37 +13,39 @@ infile: inputfile  [
   information: "input file containing mapping data"
 ]
 
-string: ruler  [
+boolean: ruler  [
   required: "Y"
   default: "Y"
-  information: "do you want a ruler (Y or N)"
+  information: "do you want a ruler"
 ]
 
-string: blocktype  [
+select: blocktype  [
   required: "Y"
   default: "Filled"
+  values: "Open;Filled;Outline"
   information: "type of blocks (enter Open, Filled, or Outline)"
   help: "type of blocks: Open, Filled, or Outline. Option 'Outline' draws filled blocks surrounded by a black border"
 ]
 
-string: intersymbol  [
+select: intersymbol  [
   optional: "Y"
   default: "Straight"
-  information: "type of junctions between blocks (enter Straight, Up, Down, or No)"
+  values: "Straight;Up;Down;No"
+  information: "type of junctions between blocks"
 ]
 
-integer: intercolor  [
+integer: intercolour  [
   optional: "Y"
   default: "1"
   minimum: "0"
   maximum: "15"
-  information: "color of junctions between blocks (enter a color number)"
+  information: "colour of junctions between blocks (enter a colour number)"
 ]
 
-string: interticks  [
+boolean: interticks  [
   optional: "Y"
   default: "N"
-  information: "do you want horizontal junctions between ticks (Y or N)"
+  information: "do you want horizontal junctions between ticks"
 ]
 
 integer: gapsize  [
@@ -53,10 +55,10 @@ integer: gapsize  [
   information: "interval between ticks in the ruler (enter an integer)"
 ]
 
-string: ticklines  [
+boolean: ticklines  [
   optional: "Y"
   default: "N"
-  information: "do you want vertical lines at the ruler's ticks (Y or N)"
+  information: "do you want vertical lines at the ruler's ticks"
 ]
 
 float: textheight  [

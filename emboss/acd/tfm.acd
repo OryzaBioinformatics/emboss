@@ -10,6 +10,7 @@ string: program  [
   missing: "N"
   prompt: "Program to search for"
   help: "Enter the name of an EMBOSS program"
+  minlength: 1
 ]
 
 endsection: input

@@ -17,6 +17,12 @@ codon: cfile  [
   information: "Codon usage file"
 ]
 
+bool: sum [
+  optional: "N"
+  default: "Y"
+  information: "Sum codons over all sequences"
+]
+
 endsection: advanced
 
 section: output [ info: "output Section" type: page ]

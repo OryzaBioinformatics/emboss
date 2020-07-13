@@ -1,6 +1,9 @@
 appl: whichdb [
   documentation: "Search all databases for an entry"
   groups: "Information"
+  gui: yes
+  batch: yes
+  cpu: low
 ]
 
 string: entry  [

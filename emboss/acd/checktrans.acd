@@ -3,11 +3,15 @@ appl: checktrans [
         groups: "Protein:Composition"
 ]
 
+  section: input [ info: "input Section" type: page ]
   seqall: sequence [ 
 	param: Y  
 	type: stopprotein 
   ]
 
+  endsection: input
+
+  section: required [ info: "required Section" type: page ]
   int: orfml [
 	req: Y 
 	min:1 
@@ -15,6 +19,9 @@ appl: checktrans [
 	info: "Minimum ORF Length to report"
   ]
 
+  endsection: required
+  
+  section: output [ info: "output Section" type: page ]
   outfile: report [
 	param: Y 
   ]
@@ -30,9 +37,14 @@ appl: checktrans [
         help: "File for output features"
   ]
 
+  endsection: output
+
+  section: advanced [ info: "advanced Section" type: page ]
   bool: addlast [
 	opt: Y
 	def: Y
 	info: "Force the sequence to end with an asterisk"
 	help: "An asterisk in the protein sequence indicates the position of a STOP codon.  Checktrans assumes that all ORFs end in a STOP codon.  Forcing the sequence to end with an asterisk, if there is not one there already, makes checktrans treat the end as a potential ORF. If an asterisk is added, it is not included in the reported count of STOPs."
   ]
+
+  endsection: advanced

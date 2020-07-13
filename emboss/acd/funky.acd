@@ -78,11 +78,12 @@ endsection: required
 
 section: output [ info: "output Section" type: page ]
 outfile: outf  [
+  parameter: "Y"
   prompt: "Name of output file"
   default: "funky.out"
 ]
 
-outfile: logf  [
+outfile: logf  [  
   prompt: "Name of log file"
   default: "funky.log"
 ]
