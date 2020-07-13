@@ -16,6 +16,9 @@ $url = "http://www.uk.embnet.org/Software/EMBOSS/Apps/";
 # where the CVS tree program doc pages are
 $cvsdoc = "/packages/emboss_dev/$ENV{'USER'}/emboss/emboss/doc/programs/";
 
+# where the CVS tree scripts are
+$scripts = "/packages/emboss_dev/$ENV{'USER'}/emboss/emboss/scripts";
+
 # where the web pages live
 $docdir = "/data/www/Software/EMBOSS/Apps";
 
@@ -147,6 +150,8 @@ system "perl -p -i -e 's/SEE ALSO/See also/g;' $docdir/inc/$application.isee";
 chmod 0664, "$docdir/inc/$application.isee";
 print "$application.isee *created*\n";
 
+# create the '.usage', '.input' and '.output' include files
+system "$scripts/makeexample.pl $application";
 
 ###################################################################
 # edit the index.html file
@@ -215,9 +220,9 @@ if ($ans !~ /^y/) {
 }
 
 print "Create make files\n";
-chdir "/packages/emboss_dev/$ENV{'USER'}/emboss/emboss/scripts";
-system("./makeMake.pl");        # no parameter == do text
-system("./makeMake.pl html");
+#chdir "/packages/emboss_dev/$ENV{'USER'}/emboss/emboss/scripts";
+system("$scripts/makeMake.pl");        # no parameter == do text
+system("$scripts/makeMake.pl html");
 
 print "Done.\n";
     
