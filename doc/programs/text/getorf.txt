@@ -28,12 +28,17 @@ Description
    
 Usage
 
-   Here is a sample session with getorf.
+   Here is a sample session with getorf
+   
 
-% getorf -minsize 300
-Input sequence: embl:eclaci
-Output sequence [eclaci.orf]:
-
+% getorf -minsize 300 
+Finds and extracts open reading frames (ORFs)
+Input sequence(s): tembl:eclaci
+Output sequence [eclaci.orf]: 
+   
+   Go to the input files for this example
+   Go to the output files for this example
+   
 Command line arguments
 
    Mandatory qualifiers:
@@ -136,10 +141,10 @@ Command line arguments
    -[no]methionine START codons at the beginning of protein products will
    usually code for Methionine, despite what the codon will code for when
    it is internal to a protein. This qualifier sets all such START codons
-   to code for Methionine by default. Yes/No Yes
-   -circular Is the sequence circular Yes/No No
+   to code for Methionine by default. Boolean value Yes/No Yes
+   -circular Is the sequence circular Boolean value Yes/No No
    -[no]reverse Set this to be false if you do not wish to find ORFs in
-   the reverse complement of the sequence. Yes/No Yes
+   the reverse complement of the sequence. Boolean value Yes/No Yes
    -flanking If you have chosen one of the options of the type of
    sequence to find that gives the flanking sequence around a STOP or
    START codon, this allows you to set the number of nucleotides either
@@ -149,16 +154,118 @@ Command line arguments
    
 Input file format
 
-   Any nucleic acid sequence USA.
+   getorf reads any nucleic acid sequence USA.
+   
+  Input files for usage example
+  
+   'tembl:eclaci' is a sequence entry in the example nucleic acid
+   database 'tembl'
+   
+  Database entry: tembl:eclaci
+  
+ID   ECLACI     standard; DNA; PRO; 1113 BP.
+XX
+AC   V00294;
+XX
+SV   V00294.1
+XX
+DT   09-JUN-1982 (Rel. 01, Created)
+DT   10-FEB-1999 (Rel. 58, Last updated, Version 2)
+XX
+DE   E. coli laci gene (codes for the lac repressor).
+XX
+KW   DNA binding protein; repressor.
+XX
+OS   Escherichia coli
+OC   Bacteria; Proteobacteria; gamma subdivision; Enterobacteriaceae;
+OC   Escherichia.
+XX
+RN   [1]
+RP   1-1113
+RX   MEDLINE; 78246991.
+RA   Farabaugh P.J.;
+RT   "Sequence of the lacI gene";
+RL   Nature 274:765-769(1978).
+XX
+DR   SWISS-PROT; P03023; LACI_ECOLI.
+XX
+CC   KST ECO.LACI
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..1113
+FT                   /db_xref="taxon:562"
+FT                   /organism="Escherichia coli"
+FT   CDS             31..1113
+FT                   /db_xref="SWISS-PROT:P03023"
+FT                   /note="reading frame"
+FT                   /transl_table=11
+FT                   /protein_id="CAA23569.1"
+FT                   /translation="MKPVTLYDVAEYAGVSYQTVSRVVNQASHVSAKTREKVEAAMAE
+L
+FT                   NYIPNRVAQQLAGKQSLLIGVATSSLALHAPSQIVAAIKSRADQLGASVVVSMVERSG
+V
+FT                   EACKAAVHNLLAQRVSGLIINYPLDDQDAIAVEAACTNVPALFLDVSDQTPINSIIFS
+H
+FT                   EDGTRLGVEHLVALGHQQIALLAGPLSSVSARLRLAGWHKYLTRNQIQPIAEREGDWS
+A
+FT                   MSGFQQTMQMLNEGIVPTAMLVANDQMALGAMRAITESGLRVGADISVVGYDDTEDSS
+C
+FT                   YIPPSTTIKQDFRLLGQTSVDRLLQLSQGQAVKGNQLLPVSLVKRKTTLAPNTQTASP
+R
+FT                   ALADSLMQLARQVSRLESGQ"
+XX
+SQ   Sequence 1113 BP; 249 A; 304 C; 322 G; 238 T; 0 other;
+     ccggaagaga gtcaattcag ggtggtgaat gtgaaaccag taacgttata cgatgtcgca        6
+0
+     gagtatgccg gtgtctctta tcagaccgtt tcccgcgtgg tgaaccaggc cagccacgtt       12
+0
+     tctgcgaaaa cgcgggaaaa agtggaagcg gcgatggcgg agctgaatta cattcccaac       18
+0
+     cgcgtggcac aacaactggc gggcaaacag tcgttgctga ttggcgttgc cacctccagt       24
+0
+     ctggccctgc acgcgccgtc gcaaattgtc gcggcgatta aatctcgcgc cgatcaactg       30
+0
+     ggtgccagcg tggtggtgtc gatggtagaa cgaagcggcg tcgaagcctg taaagcggcg       36
+0
+     gtgcacaatc ttctcgcgca acgcgtcagt gggctgatca ttaactatcc gctggatgac       42
+0
+     caggatgcca ttgctgtgga agctgcctgc actaatgttc cggcgttatt tcttgatgtc       48
+0
+     tctgaccaga cacccatcaa cagtattatt ttctcccatg aagacggtac gcgactgggc       54
+0
+     gtggagcatc tggtcgcatt gggtcaccag caaatcgcgc tgttagcggg cccattaagt       60
+0
+     tctgtctcgg cgcgtctgcg tctggctggc tggcataaat atctcactcg caatcaaatt       66
+0
+     cagccgatag cggaacggga aggcgactgg agtgccatgt ccggttttca acaaaccatg       72
+0
+     caaatgctga atgagggcat cgttcccact gcgatgctgg ttgccaacga tcagatggcg       78
+0
+     ctgggcgcaa tgcgcgccat taccgagtcc gggctgcgcg ttggtgcgga tatctcggta       84
+0
+     gtgggatacg acgataccga agacagctca tgttatatcc cgccgtcaac caccatcaaa       90
+0
+     caggattttc gcctgctggg gcaaaccagc gtggaccgct tgctgcaact ctctcagggc       96
+0
+     caggcggtga agggcaatca gctgttgccc gtctcactgg tgaaaagaaa aaccaccctg      102
+0
+     gcgcccaata cgcaaaccgc ctctccccgc gcgttggccg attcattaat gcagctggca      108
+0
+     cgacaggttt cccgactgga aagcgggcag tga                                   111
+3
+//
    
 Output file format
 
    The output is a sequence file containing predicted open reading frames
-   longer than the minimum size, which defaults to 30 bases or 10 amino
-   acids.
+   longer than the minimum size, which defaults to 30 bases (i.e. 10
+   amino acids).
    
-   The results from the example run are:
-   
+  Output files for usage example
+  
+  File: eclaci.orf
+  
 >ECLACI_1 [735 - 1112] E. coli laci gene (codes for the lac repressor).
 GHRSHCDAGCQRSDGAGRNARHYRVRAARWCGYLGSGIRRYRRQLMLYPAVNHHQTGFSP
 AGANQRGPLAATLSGPGGEGQSAVARLTGEKKNHPGAQYANRLSPRVGRFINAAGTTGFP
@@ -171,12 +278,11 @@ VEHLVALGHQQIALLAGPLSSVSARLRLAGWHKYLTRNQIQPIAEREGDWSAMSGFQQTM
 QMLNEGIVPTAMLVANDQMALGAMRAITESGLRVGADISVVGYDDTEDSSCYIPPSTTIK
 QDFRLLGQTSVDRLLQLSQGQAVKGNQLLPVSLVKRKTTLAPNTQTASPRALADSLMQLA
 RQVSRLESGQ*
->ECLACI_3 [465 - 49] E. coli laci gene (codes for the lac repressor).
+>ECLACI_3 [465 - 49] (REVERSE SENSE) E. coli laci gene (codes for the lac repre
+ssor).
 RRNISAGSFHSNGILVIQRIVNDQPTDALREKIVHRRFTGFDAASFYHRHHHAGTQLIGA
 RFNRRDNLRRRVQGQTGGGNANQQRLFARQLLCHAVGNVIQLRHRRFHFFPRFRRNVAGL
 VHHAGNGLIRDTGILCDIV
-
-   All output ORF sequences are written to the specified outut file.
    
    The name of the ORF sequences is constructed from the name of the
    input sequence with an underscore character ('_') and a unique ordinal
@@ -192,7 +298,22 @@ VHHAGNGLIRDTGILCDIV
    position will be smaller than the end position. The numbering uses the
    forward-sense positions, but read in the reverse sense. For example,
    >ECLACI_3 [465 - 49] in the output above is a reverse-sense ORF
-   running from position 465 to 49.
+   running from position 465 to 49. The description will also contain
+   '(REVERSE SENSE)'.
+   
+   If the sequence has been specified as a circular genome (using the
+   command-line switch '-circular'), then ORFs can potentially continue
+   past the 'end' of the input sequence (the breakpoint of the circular
+   genome) and into the 'start' of the sequence again. This is dealt with
+   by appending the sequence to itself three times and reporting long
+   ORFs that are found in this extended sequence. Any ORF that is longer
+   that three times the sequence length (i.e one that continues without
+   hitting a STOP at any point in the genome) will be reported as being a
+   maximum of three times the length of the input sequence. Note that the
+   end position of an ORF in circular genomes can be apparently longer
+   than the input sequence if the ORF crosses the breakpoint. If the ORF
+   crosses the breakpoint, then the text '(ORF crosses the breakpoint)'
+   will be added to the description of the output sequence.
    
 Data files
 
@@ -327,7 +448,9 @@ Base3  = TCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAG
 
 Notes
 
-   None.
+   If you have selected one of the options to report a regions around a
+   START or STOP codon, then note that any such region that crosses the
+   beginning or end of the sequence will not be reported.
    
 References
 
@@ -351,10 +474,11 @@ Known bugs
    
 See also
 
-   Program name               Description
+   Program name                       Description
    marscan      Finds MAR/SAR sites in nucleic sequences
    plotorf      Plot potential open reading frames
    showorf      Pretty output of DNA translations
+   sixpack      Display a DNA sequence with 6-frame translation and ORFs
    wobble       Wobble base plot
    
      * checktrans - Reports STOP codons and ORF statistics of a protein
@@ -368,6 +492,11 @@ Author(s)
 History
 
    2000 - written - Gary Williams
+   
+   November 2002 - added indication of reverse sense ORFs
+   
+   November 2002 - added indication of ORFs that cross the breakpoint at
+   position 1 in circular genomes.
    
 Target users
 

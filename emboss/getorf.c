@@ -493,15 +493,15 @@ static void getorf_WriteORF(AjPSeq seq, ajint len, ajint seqlen, AjBool sense,
     ajint codonpos=0;			/* holds position of start of codon
 					   of interest */
 
-    /* convert numbers in the range 0..seqlen+1 into numbers in the
-       range 1..seqlen for human readability */
+    /* convert numbers in the range 0..len+1 into numbers in the
+       range 1..len for human readability */
     s = start+1;
     e = pos+1;
 
     /* it is possible for an ORF in a circular genome to appear to start
-       past the end of the genome if we have a START at the very end,
-       eg:
-       START (end of genome) ORF ORF ORF ORF STOP
+       past the end of the genome.
+       Move the reported positions back to start in the range 1..len
+       for readability.
        */
     while (s > len)
     {
@@ -565,31 +565,45 @@ static void getorf_WriteORF(AjPSeq seq, ajint len, ajint seqlen, AjBool sense,
 
     /* set the description of the translation */
     (void) ajStrAssC(&name, "[");
-    if (sense)
-    {					/* we want to reverse the reported
-					   positions if this is the reverse
-					   sense */
-	(void) ajStrFromInt(&value, s);
+
+    /* we want to reverse the reported positions if this is the reverse
+       sense */
+    if (!sense) {
+	s = len-s+1;
+	e = len-e+1;
+    
+        /* shift the positions back into the range 1..len as far as possible
+           without going into negative numbers */
+        while (e > len) {
+            s -= len;	
+            e -= len;	
+        }
+        while (e < 0 || s < 0) {
+            s += len;	
+            e += len;	
+        }
     }
-    else
-    {
-	s = seqlen-s+1;
-	(void) ajStrFromInt(&value, s);	/* the base before the stop codon
+    (void) ajStrFromInt(&value, s);	/* the base before the stop codon
 					   (numbering bases from 1) */
-    }
     (void) ajStrApp(&name, value);
     (void) ajStrAppC(&name, " - ");
-    if (sense)
-	(void) ajStrFromInt(&value, e);	/* the base before the stop codon
+    (void) ajStrFromInt(&value, e);	/* the base before the stop codon
 					   (numbering bases from 1) */
-    else
-    {
-	e = seqlen-e+1;
-	(void) ajStrFromInt(&value, e);
-    }
 
     (void) ajStrApp(&name, value);
     (void) ajStrAppC(&name, "] ");
+
+    /* make it clear if this is the reverse sense */
+    if (!sense) {
+        (void) ajStrAppC(&name, "(REVERSE SENSE) ");    
+    }
+    
+    /* make it clear if this is a circular genome and the ORF crosses
+       the breakpoint */
+    if (s> len || e > len) {
+    	(void) ajStrAppC(&name, "(ORF crosses the breakpoint) ");
+    }
+
     if (find == AROUND_INIT_STOP || find == AROUND_START ||
 	find == AROUND_END_STOP)
     {
@@ -612,8 +626,10 @@ static void getorf_WriteORF(AjPSeq seq, ajint len, ajint seqlen, AjBool sense,
     {	/* we want the sequence 50 bases around the codon */
 	(void) ajSeqReplace (new, aroundstr);
     }
+
     /* write out the sequence */
     (void) ajSeqAllWrite (seqout, new);
+
     /* get rid of the old orf sequence */
     (void) ajSeqDel(&new);
     ajStrDel(&value);

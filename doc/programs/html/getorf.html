@@ -70,15 +70,21 @@ investigating.
 </H2>
 
 
-Here is a sample session with getorf.
+<b>Here is a sample session with getorf</b>
+<p>
 
-<pre>
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% getorf -minsize 300
-Input sequence: embl:eclaci
-Output sequence [eclaci.orf]: 
+% <b>getorf -minsize 300 </b>
+Finds and extracts open reading frames (ORFs)
+Input sequence(s): <b>tembl:eclaci</b>
+Output sequence [eclaci.orf]: <b></b>
 
-</pre>
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
+
 
 
 
@@ -205,21 +211,21 @@ IT IS DONE FOR YOU.
 <tr>
 <td>-[no]methionine</td>
 <td>START codons at the beginning of protein products will usually code for Methionine, despite what the codon will code for when it is internal to a protein. This qualifier sets all such START codons to code for Methionine by default.</td>
-<td>Yes/No</td>
+<td>Boolean value Yes/No</td>
 <td>Yes</td>
 </tr>
 
 <tr>
 <td>-circular</td>
 <td>Is the sequence circular</td>
-<td>Yes/No</td>
+<td>Boolean value Yes/No</td>
 <td>No</td>
 </tr>
 
 <tr>
 <td>-[no]reverse</td>
 <td>Set this to be false if you do not wish to find ORFs in the reverse complement of the sequence.</td>
-<td>Yes/No</td>
+<td>Boolean value Yes/No</td>
 <td>Yes</td>
 </tr>
 
@@ -239,7 +245,89 @@ IT IS DONE FOR YOU.
 </H2>
 
 
-Any nucleic acid sequence USA.
+<b>getorf</b> reads any nucleic acid sequence USA.
+
+<p>
+
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+
+'tembl:eclaci' is a sequence entry in the example nucleic acid database 'tembl'
+<p>
+<p><h3>Database entry: tembl:eclaci</h3>
+<table width="90%"><tr><td bgcolor="#FFDDFF">
+<pre>
+ID   ECLACI     standard; DNA; PRO; 1113 BP.
+XX
+AC   V00294;
+XX
+SV   V00294.1
+XX
+DT   09-JUN-1982 (Rel. 01, Created)
+DT   10-FEB-1999 (Rel. 58, Last updated, Version 2)
+XX
+DE   E. coli laci gene (codes for the lac repressor).
+XX
+KW   DNA binding protein; repressor.
+XX
+OS   Escherichia coli
+OC   Bacteria; Proteobacteria; gamma subdivision; Enterobacteriaceae;
+OC   Escherichia.
+XX
+RN   [1]
+RP   1-1113
+RX   MEDLINE; 78246991.
+RA   Farabaugh P.J.;
+RT   "Sequence of the lacI gene";
+RL   Nature 274:765-769(1978).
+XX
+DR   SWISS-PROT; P03023; LACI_ECOLI.
+XX
+CC   KST ECO.LACI
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..1113
+FT                   /db_xref="taxon:562"
+FT                   /organism="Escherichia coli"
+FT   CDS             31..1113
+FT                   /db_xref="SWISS-PROT:P03023"
+FT                   /note="reading frame"
+FT                   /transl_table=11
+FT                   /protein_id="CAA23569.1"
+FT                   /translation="MKPVTLYDVAEYAGVSYQTVSRVVNQASHVSAKTREKVEAAMAEL
+FT                   NYIPNRVAQQLAGKQSLLIGVATSSLALHAPSQIVAAIKSRADQLGASVVVSMVERSGV
+FT                   EACKAAVHNLLAQRVSGLIINYPLDDQDAIAVEAACTNVPALFLDVSDQTPINSIIFSH
+FT                   EDGTRLGVEHLVALGHQQIALLAGPLSSVSARLRLAGWHKYLTRNQIQPIAEREGDWSA
+FT                   MSGFQQTMQMLNEGIVPTAMLVANDQMALGAMRAITESGLRVGADISVVGYDDTEDSSC
+FT                   YIPPSTTIKQDFRLLGQTSVDRLLQLSQGQAVKGNQLLPVSLVKRKTTLAPNTQTASPR
+FT                   ALADSLMQLARQVSRLESGQ"
+XX
+SQ   Sequence 1113 BP; 249 A; 304 C; 322 G; 238 T; 0 other;
+     ccggaagaga gtcaattcag ggtggtgaat gtgaaaccag taacgttata cgatgtcgca        60
+     gagtatgccg gtgtctctta tcagaccgtt tcccgcgtgg tgaaccaggc cagccacgtt       120
+     tctgcgaaaa cgcgggaaaa agtggaagcg gcgatggcgg agctgaatta cattcccaac       180
+     cgcgtggcac aacaactggc gggcaaacag tcgttgctga ttggcgttgc cacctccagt       240
+     ctggccctgc acgcgccgtc gcaaattgtc gcggcgatta aatctcgcgc cgatcaactg       300
+     ggtgccagcg tggtggtgtc gatggtagaa cgaagcggcg tcgaagcctg taaagcggcg       360
+     gtgcacaatc ttctcgcgca acgcgtcagt gggctgatca ttaactatcc gctggatgac       420
+     caggatgcca ttgctgtgga agctgcctgc actaatgttc cggcgttatt tcttgatgtc       480
+     tctgaccaga cacccatcaa cagtattatt ttctcccatg aagacggtac gcgactgggc       540
+     gtggagcatc tggtcgcatt gggtcaccag caaatcgcgc tgttagcggg cccattaagt       600
+     tctgtctcgg cgcgtctgcg tctggctggc tggcataaat atctcactcg caatcaaatt       660
+     cagccgatag cggaacggga aggcgactgg agtgccatgt ccggttttca acaaaccatg       720
+     caaatgctga atgagggcat cgttcccact gcgatgctgg ttgccaacga tcagatggcg       780
+     ctgggcgcaa tgcgcgccat taccgagtcc gggctgcgcg ttggtgcgga tatctcggta       840
+     gtgggatacg acgataccga agacagctca tgttatatcc cgccgtcaac caccatcaaa       900
+     caggattttc gcctgctggg gcaaaccagc gtggaccgct tgctgcaact ctctcagggc       960
+     caggcggtga agggcaatca gctgttgccc gtctcactgg tgaaaagaaa aaccaccctg      1020
+     gcgcccaata cgcaaaccgc ctctccccgc gcgttggccg attcattaat gcagctggca      1080
+     cgacaggttt cccgactgga aagcgggcag tga                                   1113
+//
+</pre>
+</td></tr></table><p>
+
 
 <H2>
     Output file format
@@ -247,12 +335,15 @@ Any nucleic acid sequence USA.
 
 
 The output is a sequence file containing predicted open reading frames
-longer than the minimum size, which defaults to 30 bases or 10 amino acids.
+longer than the minimum size, which defaults to 30 bases (i.e. 10 amino acids).
 
 <p>
-The results from the example run are:
 
-<p>
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: eclaci.orf</h3>
+<table width="90%"><tr><td bgcolor="#DDFFDD">
 <pre>
 &gt;ECLACI_1 [735 - 1112] E. coli laci gene (codes for the lac repressor).
 GHRSHCDAGCQRSDGAGRNARHYRVRAARWCGYLGSGIRRYRRQLMLYPAVNHHQTGFSP
@@ -266,14 +357,13 @@ VEHLVALGHQQIALLAGPLSSVSARLRLAGWHKYLTRNQIQPIAEREGDWSAMSGFQQTM
 QMLNEGIVPTAMLVANDQMALGAMRAITESGLRVGADISVVGYDDTEDSSCYIPPSTTIK
 QDFRLLGQTSVDRLLQLSQGQAVKGNQLLPVSLVKRKTTLAPNTQTASPRALADSLMQLA
 RQVSRLESGQ*
-&gt;ECLACI_3 [465 - 49] E. coli laci gene (codes for the lac repressor).
+&gt;ECLACI_3 [465 - 49] (REVERSE SENSE) E. coli laci gene (codes for the lac repressor).
 RRNISAGSFHSNGILVIQRIVNDQPTDALREKIVHRRFTGFDAASFYHRHHHAGTQLIGA
 RFNRRDNLRRRVQGQTGGGNANQQRLFARQLLCHAVGNVIQLRHRRFHFFPRFRRNVAGL
 VHHAGNGLIRDTGILCDIV
 </pre>
-<p>
+</td></tr></table><p>
 
-All output ORF sequences are written to the specified outut file.
 
 <p> 
 
@@ -294,8 +384,25 @@ indicating any order, positioning or sense-strand of the ORFs.
 If the ORF has been found in the reverse sense, then the start position
 will be smaller than the end position.  The numbering uses the
 forward-sense positions, but read in the reverse sense.  For example,
-<b>&gt;ECLACI_3 [465 - 49]</b> in the output above is a reverse-sense ORF
-running from position 465 to 49. 
+<b>&gt;ECLACI_3 [465 - 49]</b> in the output above is a reverse-sense
+ORF running from position 465 to 49.  The description will also contain
+'(REVERSE SENSE)'. 
+
+<p>
+
+If the sequence has been specified as a circular genome (using the
+command-line switch '-circular'), then ORFs can potentially continue
+past the 'end' of the input sequence (the breakpoint of the circular
+genome) and into the 'start' of the sequence again.  This is dealt with
+by appending the sequence to itself three times and reporting long ORFs
+that are found in this extended sequence.  Any ORF that is longer that
+three times the sequence length (i.e one that continues without hitting
+a STOP at any point in the genome) will be reported as being a maximum
+of three times the length of the input sequence.  Note that the end
+position of an ORF in circular genomes can be apparently longer than the
+input sequence if the ORF crosses the breakpoint.  If the ORF crosses
+the breakpoint, then the text '(ORF crosses the breakpoint)' will be
+added to the description of the output sequence. 
 
 <H2>
     Data files
@@ -456,7 +563,9 @@ Base3  = TCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAG
     Notes
 </H2>
 
-None.
+If you have selected one of the options to report a regions around a
+START or STOP codon, then note that any such region that crosses the
+beginning or end of the sequence will not be reported. 
 
 <H2>
     References
@@ -500,6 +609,7 @@ None.
 <tr><td><a href="marscan.html">marscan</a></td><td>Finds MAR/SAR sites in nucleic sequences</td></tr>
 <tr><td><a href="plotorf.html">plotorf</a></td><td>Plot potential open reading frames</td></tr>
 <tr><td><a href="showorf.html">showorf</a></td><td>Pretty output of DNA translations</td></tr>
+<tr><td><a href="sixpack.html">sixpack</a></td><td>Display a DNA sequence with 6-frame translation and ORFs</td></tr>
 <tr><td><a href="wobble.html">wobble</a></td><td>Wobble base plot</td></tr>
 </table>
 
@@ -529,6 +639,15 @@ href="mailto:gwilliam@hgmp.mrc.ac.uk">(gwilliam@hgmp.mrc.ac.uk)</a>
 </H2>
 
 2000 - written - Gary Williams
+
+<p>
+
+November 2002 - added indication of reverse sense ORFs
+
+<p>
+
+November 2002 - added indication of ORFs that cross the breakpoint at
+position 1 in circular genomes. 
 
 <H2>
     Target users
