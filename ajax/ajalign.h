@@ -6,7 +6,7 @@ extern "C"
 #ifndef ajseqalign_h
 #define ajseqalign_h
 
-/* @data AjPAlign *******************************************************
+/* @data AjPAlign *************************************************************
 **
 ** Ajax Align Output object.
 **
@@ -14,10 +14,13 @@ extern "C"
 **
 ** @new ajAlignNew Default constructor
 ** @delete ajAlignDel Default destructor
-** @set ajAlignClear Resets ready for reuse.
-** @use ajAlignWrite Master sequence output routine
-** @use ajAlignNewOut Opens an output file for sequence writing.
+** @set ajAlignReset Resets ready for reuse.
+** @use ajAlignWrite Master alignment output routine
+** @use ajAlignWriteHeader Master header output routine
+** @use ajAlignWriteTail Master footer output routine
 ** @other AjPSeqout Sequence output
+** @other AjPFeatout Feature output
+** @other AjPReport Report output
 ** @other AjPFile Input and output files
 ** @@
 ******************************************************************************/
@@ -38,7 +41,7 @@ typedef struct AjSAlign {
   AjBool Showusa;		/* Report USA (-ausa) or only seqname */
   AjBool Multi;			/* if true, assume >1 alignment */
   AjBool Global;		/* if true, show full sequence beyond match */
-  AjPList Data;			/* Alignment specific data - see ajalign.c */ 
+  AjPList Data;			/* Alignment specific data - see ajalign.c */
   ajint Nseqs;			/* Number of sequences in all alignments */
   ajint Nmin;			/* Minimum number of sequences e.g. 2 */
   ajint Nmax;			/* Maximum number of sequences e.g. 2 */
@@ -80,7 +83,9 @@ AjBool       ajAlignSetRange (AjPAlign thys,
 void         ajAlignSetScoreI (AjPAlign thys, ajint score);
 void         ajAlignSetScoreR (AjPAlign thys, float score);
 void         ajAlignSetSubHeader (AjPAlign thys, AjPStr subheader);
+void         ajAlignSetSubHeaderApp (AjPAlign thys, AjPStr subheader);
 void         ajAlignSetSubHeaderC (AjPAlign thys, const char* subheader);
+void         ajAlignSetSubHeaderPre (AjPAlign thys, AjPStr subheader);
 void         ajAlignSetStats (AjPAlign thys, ajint iali, ajint len,
 				    ajint ident, ajint sim, ajint gaps,
 				    AjPStr score);
