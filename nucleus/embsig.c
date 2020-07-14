@@ -90,31 +90,65 @@ typedef struct EmbSSigcell
 /* ======================================================================= */
 
 AjPSigdat    embSigdatNew(ajint nres, ajint ngap);
+
 AjPSigpos    embSigposNew(ajint ngap);
 
 void         embSigdatDel(AjPSigdat *pthis);
+
 void         embSigposDel(AjPSigpos *thys);
 
 EmbPHitidx   embHitidxNew(void);
+
 void         embHitidxDel(EmbPHitidx *pthis);
+
 ajint        embHitidxBinSearch(const AjPStr id,
-				EmbPHitidx const *arr, ajint siz);
+				EmbPHitidx const *arr, 
+				ajint siz);
+
 ajint        embHitidxMatchId(const void *hit1, const void *hit2);
 
 
-AjBool       embHitlistReadFam(AjPFile scopf, const AjPStr fam,
+AjBool       embHitlistReadFam(AjPFile scopf, 
+			       const AjPStr fam,
 			       const AjPStr sfam, 
-			       const AjPStr fold, const AjPStr klass,
+			       const AjPStr fold, 
+			       const AjPStr klass,
 			       AjPList* list);
+
 AjBool       embHitlistReadSfam(AjPFile scopf,
-				const AjPStr fam, const AjPStr sfam, 
-				const AjPStr fold, const AjPStr klass,
-				AjPList* list);
-AjBool       embHitlistReadFold(AjPFile scopf,
-				const AjPStr fam, const AjPStr sfam, 
-				const AjPStr fold, const AjPStr klass,
+				const AjPStr fam, 
+				const AjPStr sfam, 
+				const AjPStr fold, 
+				const AjPStr klass,
 				AjPList* list);
 
+AjBool       embHitlistReadFold(AjPFile scopf,
+				const AjPStr fam, 
+				const AjPStr sfam, 
+				const AjPStr fold, 
+				const AjPStr klass,
+				AjPList* list);
+
+AjBool       embHitlistReadFamFasta(AjPFile scopf, 
+				    const AjPStr fam, 
+				    const AjPStr sfam, 
+				    const AjPStr fold, 
+				    const AjPStr klass, 
+				    AjPList* list);
+
+AjBool       embHitlistReadSfamFasta(AjPFile scopf, 
+				     const AjPStr fam, 
+				     const AjPStr sfam, 
+				     const AjPStr fold, 
+				     const AjPStr klass,
+				     AjPList* list);
+
+AjBool       embHitlistReadFoldFasta(AjPFile scopf, 
+				     const AjPStr fam,
+				     const AjPStr sfam, 
+				     const AjPStr fold,
+				     const AjPStr klass,
+				     AjPList* list);
 
 
 
@@ -387,7 +421,7 @@ ajint embHitidxMatchId(const void *hit1, const void *hit2)
 
 /* @func embHitlistReadFam **************************************************
 **
-** Reads a scop families file (see documentation for the EMBASSY 
+** Reads a domain families file (see documentation for the EMBASSY 
 ** DOMAINATRIX package), selects the entries with the specified family, 
 ** and create a list of Hitlist structures.  Only the first familiy in the 
 ** scop families file matching the specified classification is read (the file
@@ -453,7 +487,7 @@ AjBool embHitlistReadFam(AjPFile scopf,
 
 /* @func embHitlistReadSfam *************************************************
 **
-** Reads a scop families file (see documentation for the EMBASSY 
+** Reads a domain families file (see documentation for the EMBASSY 
 ** DOMAINATRIX package), selects the entries with the specified 
 ** superfamily, and create a list of Hitlist structures.
 **
@@ -512,7 +546,7 @@ AjBool embHitlistReadSfam(AjPFile scopf,
 
 /* @func embHitlistReadFold *************************************************
 **
-** Reads a scop families file (see documentation for the EMBASSY 
+** Reads a domain families file (see documentation for the EMBASSY 
 ** DOMAINATRIX package), selects the entries with the specified 
 ** fold, and create a list of Hitlist structures.
 **
@@ -566,6 +600,189 @@ AjBool embHitlistReadFold(AjPFile scopf,
 
 
 
+/* @func embHitlistReadFamFasta **********************************************
+**
+** Reads a domain families file in extended FASTA format (see 
+** documentation for the EMBASSY 
+** DOMAINATRIX package), selects the entries with the specified family, 
+** and create a list of Hitlist structures.  Only the first familiy in the 
+** scop families file matching the specified classification is read (the file
+** should not normally contain duplicate families).
+**
+** @param [u] scopf     [AjPFile]    The scop families file.
+** @param [r] fam       [const AjPStr]     Family
+** @param [r] sfam      [const AjPStr]     Superfamily
+** @param [r] fold      [const AjPStr]     Fold
+** @param [r] klass     [const AjPStr]     Class
+** @param [w] list      [AjPList*]   A list of hitlist structures.
+** 
+** @return [AjBool] True on success (a file has been written)
+** @@
+****************************************************************************/
+
+AjBool embHitlistReadFamFasta(AjPFile scopf,
+			 const AjPStr fam, const AjPStr sfam, const AjPStr fold, 
+			 const AjPStr klass, AjPList* list)
+{
+    AjPHitlist hitlist = NULL; 
+    AjBool done        = ajFalse;
+    const AjPStr class       = NULL;
+
+    class = klass;
+
+    /*
+    ** if family is specified then the other fields also have to be
+    ** specified. check that the other fields are populated
+    */
+    if(!fam || !sfam || !fold || !class)
+    {
+	ajWarn("Bad arguments passed to embHitlistReadFamFasta\n");
+	return ajFalse;
+    }
+    
+
+    while((hitlist=embHitlistReadFasta(scopf)))
+    {
+	if(ajStrMatch(fam,hitlist->Family) &&
+	   ajStrMatch(sfam,hitlist->Superfamily) &&
+	   ajStrMatch(fold,hitlist->Fold) &&
+	   ajStrMatch(class,hitlist->Class))
+	{ 
+	    ajListPushApp(*list,hitlist);
+	    done=ajTrue;
+	    break;
+	}
+	else
+	    embHitlistDel(&hitlist);
+    }
+    
+    if(done)
+	return ajTrue;
+
+    return ajFalse;
+}
+
+
+
+
+
+/* @func embHitlistReadSfamFasta ********************************************
+**
+** Reads a domain families file in extended FASTA format (see documentation 
+** for the EMBASSY 
+** DOMAINATRIX package), selects the entries with the specified 
+** superfamily, and create a list of Hitlist structures.
+**
+** @param [u] scopf     [AjPFile]      The scop families file.
+** @param [r] fam       [const AjPStr]       Family
+** @param [r] sfam      [const AjPStr]       Superfamily
+** @param [r] fold      [const AjPStr]       Fold
+** @param [r] klass     [const AjPStr]       Class
+** @param [w] list      [AjPList*]     A list of hitlist structures.
+** 
+** @return [AjBool] True on success (a file has been written)
+** @@
+****************************************************************************/
+
+AjBool embHitlistReadSfamFasta(AjPFile scopf, const AjPStr fam, const AjPStr sfam,
+			    const AjPStr fold, const AjPStr klass, AjPList* list)
+{
+    AjPHitlist hitlist = NULL; 
+    AjBool done  = ajFalse;
+    const AjPStr class = NULL;
+
+    class = klass;
+    
+    /*
+    ** if family is specified then the other fields also have to be 
+   ** specified.  check that the other fields are populated
+    */
+    if(!sfam || !fold || !class)
+    {
+	ajWarn("Bad arguments passed to embHitlistReadSfamFasta\n");
+	return ajFalse;
+    }
+    
+    
+    while((hitlist=embHitlistReadFasta(scopf)))
+	if(ajStrMatch(fam,hitlist->Superfamily) &&
+	   ajStrMatch(fold,hitlist->Fold) &&
+	   ajStrMatch(class,hitlist->Class))
+	{
+	    ajListPushApp(*list,hitlist);
+	    done=ajTrue;
+	}
+	else
+	    embHitlistDel(&hitlist);
+
+    if(done)
+	return ajTrue;
+
+    return ajFalse;
+}
+
+
+
+
+
+/* @func embHitlistReadFoldFasta ********************************************
+**
+** Reads a domain families file in extended FASTA format (see 
+** documentation for the EMBASSY 
+** DOMAINATRIX package), selects the entries with the specified 
+** fold, and create a list of Hitlist structures.
+**
+** @param [u] scopf     [AjPFile]      The scop families file.
+** @param [r] fam       [const AjPStr]       Family
+** @param [r] sfam      [const AjPStr]       Superfamily
+** @param [r] fold      [const AjPStr]       Fold
+** @param [r] klass     [const AjPStr]       Class
+** @param [w] list      [AjPList*]     A list of hitlist structures.
+** @return [AjBool] ajTrue on success
+** @@
+****************************************************************************/
+
+AjBool embHitlistReadFoldFasta(AjPFile scopf, const AjPStr fam, const AjPStr sfam,
+			  const AjPStr fold, const AjPStr klass, AjPList* list)
+{
+    AjPHitlist hitlist = NULL; 
+    AjBool done  = ajFalse;
+    const AjPStr class = NULL;
+
+    class = klass;
+    
+    /*
+    ** if family is specified then the other fields also have to be
+    ** specified.  check that the other fields are populated
+    */ 
+    if(!fold || !class)
+    {
+	ajWarn("Bad arguments passed to embHitlistReadFoldFasta\n");
+	return ajFalse;
+    }
+    
+    while((hitlist = embHitlistReadFasta(scopf)))
+	if(ajStrMatch(fam,hitlist->Fold) &&
+	   ajStrMatch(class,hitlist->Class))
+	{
+	    ajListPushApp(*list,hitlist);
+	    done=ajTrue;
+	}
+	else
+	    embHitlistDel(&hitlist);
+
+    if(done)
+	return ajTrue;
+
+    return ajFalse;	
+}
+
+
+
+
+
+
+
 
 
 
@@ -601,6 +818,8 @@ AjPHitlist embHitlistNew(ajint n)
 
     AJNEW0(ret);
     ret->Class       = ajStrNew();
+    ret->Architecture = ajStrNew();
+    ret->Topology     = ajStrNew();
     ret->Fold        = ajStrNew();
     ret->Superfamily = ajStrNew();
     ret->Family      = ajStrNew();
@@ -641,6 +860,7 @@ AjPHit embHitNew(void)
     ret->Seq       = ajStrNew();
     ret->Acc       = ajStrNew();
     ret->Spr       = ajStrNew();
+    ret->Dom       = ajStrNew();
     ret->Typeobj   = ajStrNew();
     ret->Typesbj   = ajStrNew();
     ret->Model     = ajStrNew();
@@ -684,6 +904,8 @@ AjPSignature embSignatureNew(ajint n)
 
     AJNEW0(ret);
     ret->Class       = ajStrNew();
+    ret->Architecture = ajStrNew();
+    ret->Topology     = ajStrNew();
     ret->Fold        = ajStrNew();
     ret->Superfamily = ajStrNew();
     ret->Family      = ajStrNew();
@@ -736,6 +958,10 @@ void embHitlistDel(AjPHitlist *ptr)
     
     if((*ptr)->Class)
 	ajStrDel(&(*ptr)->Class);
+    if((*ptr)->Architecture)
+	ajStrDel(&(*ptr)->Architecture);
+    if((*ptr)->Topology)
+	ajStrDel(&(*ptr)->Topology);
     if((*ptr)->Fold)
 	ajStrDel(&(*ptr)->Fold);
     if((*ptr)->Superfamily)
@@ -779,6 +1005,7 @@ void embHitDel(AjPHit *ptr)
     ajStrDel(&(*ptr)->Seq);
     ajStrDel(&(*ptr)->Acc);
     ajStrDel(&(*ptr)->Spr);
+    ajStrDel(&(*ptr)->Dom);
     ajStrDel(&(*ptr)->Typeobj);
     ajStrDel(&(*ptr)->Typesbj);
     ajStrDel(&(*ptr)->Model);
@@ -824,6 +1051,10 @@ void embSignatureDel(AjPSignature *ptr)
 
     if((*ptr)->Class)
 	ajStrDel(&(*ptr)->Class);
+    if((*ptr)->Architecture)
+	ajStrDel(&(*ptr)->Architecture);
+    if((*ptr)->Topology)
+	ajStrDel(&(*ptr)->Topology);
     if((*ptr)->Fold)
 	ajStrDel(&(*ptr)->Fold);
     if((*ptr)->Superfamily)
@@ -865,12 +1096,6 @@ void embSignatureDel(AjPSignature *ptr)
 ** Creates a new Hit object which corresponds to a merging of the two 
 ** sequences from the Hit objects hit1 and hit2. 
 **
-** The Typeobj of the merged hit is set.  The merged hit is classified 
-** as follows :
-** If hit1 or hit2 is a SEED, the merged hit is classified as a SEED.
-** Otherwise, if hit1 or hit2 is HIT, the merged hit is clsasified as a HIT.
-** If hit1 and hit2 are both OTHER, the merged hit remains classified as 
-** OTHER.
 ** 
 ** @param [r] hit1     [const AjPHit]  Hit 1
 ** @param [r] hit2     [const AjPHit]  Hit 2
@@ -906,6 +1131,7 @@ AjPHit embHitMerge(const AjPHit hit1, const AjPHit hit2)
 
     ajStrAssS(&(ret->Acc), hit1->Acc);
     ajStrAssS(&(ret->Spr), hit1->Spr);
+    ajStrAssS(&(ret->Dom), hit1->Dom);
         
 
 
@@ -950,7 +1176,14 @@ AjPHit embHitMerge(const AjPHit hit1, const AjPHit hit2)
     }
 
 
-    /* Classify the merged hit */
+    /* Classify the merged hit 
+       The Typeobj of the merged hit is set.  The merged hit is classified 
+       as follows :
+       If hit1 or hit2 is a SEED, the merged hit is classified as a SEED.
+       Otherwise, if hit1 or hit2 is HIT, the merged hit is clsasified as a HIT.
+       If hit1 and hit2 are both OTHER, the merged hit remains classified as 
+       OTHER. */
+    /*
     if(ajStrMatchC(hit1->Typeobj, "SEED") ||
        ajStrMatchC(hit1->Typeobj, "SEED"))
 	ajStrAssC(&(ret->Typeobj), "SEED");
@@ -959,7 +1192,7 @@ AjPHit embHitMerge(const AjPHit hit1, const AjPHit hit2)
 	ajStrAssC(&(ret->Typeobj), "HIT");
     else
 	ajStrAssC(&(ret->Typeobj), "OTHER");
-
+	*/
 
     if(ajStrMatch(hit1->Model, hit2->Model))
 	ajStrAssS(&ret->Model, hit1->Model);
@@ -1137,17 +1370,18 @@ ajint embMatchinvScore(const void *hit1, const void *hit2)
 
 AjBool embHitsOverlap(const AjPHit hit1, const AjPHit hit2, ajint n)
 {
-    if((MAJSTRLEN(hit1->Seq)<n) || (MAJSTRLEN(hit2->Seq)<n))
-    {
-	ajWarn("Sequence length smaller than overlap limit in "
-	       "embHitsOverlap ... checking for string match instead");
+    if((MAJSTRLEN(hit1->Seq) && (MAJSTRLEN(hit2->Seq))))
+	if((MAJSTRLEN(hit1->Seq)<n) || (MAJSTRLEN(hit2->Seq)<n))
+	{
+	    ajWarn("Sequence length smaller than overlap limit in "
+		   "embHitsOverlap ... checking for string match instead");
 
-	if((ajStrFind(hit1->Seq, hit2->Seq)!=-1) ||
-	   (ajStrFind(hit2->Seq, hit1->Seq)!=-1))
-	    return ajTrue;
-	else
-	    return ajFalse;
-    }
+	    if((ajStrFind(hit1->Seq, hit2->Seq)!=-1) ||
+	       (ajStrFind(hit2->Seq, hit1->Seq)!=-1))
+		return ajTrue;
+	    else
+		return ajFalse;
+	}
 
     if( (((hit1->End - hit2->Start + 1)>=n) && 
 	 (hit2->Start >= hit1->Start)) ||
@@ -1171,6 +1405,149 @@ AjBool embHitsOverlap(const AjPHit hit1, const AjPHit hit2, ajint n)
 **
 ****************************************************************************/
 
+/* @func embHitReadFasta ****************************************************
+**
+** Read a hit object from a file in extended FASTA format 
+** (see documentation for the DOMAINATRIX "seqsearch" application). 
+** 
+** @param [u] inf      [AjPFile] Input file stream
+**
+** @return [AjPHit] Hit object, or NULL if the file was not in extended 
+** FASTA (DHF) format (indicated by a token count of the the lines 
+** beginning with '>').
+** @@
+****************************************************************************/
+
+AjPHit embHitReadFasta(AjPFile inf) 
+{
+    AjPHit    hit       = NULL;    /* Current hit */
+    AjBool    donefirst = ajFalse; /* First '>' line has been read */
+    ajint     ntok      = 0;       /* No. tokens in a line */
+    AjPStr    token     = NULL;
+    AjPStr    line      = NULL;    /* Line of text */
+    AjPStr    subline   = NULL;
+    AjBool    ok        = ajFalse; /* Line was not NULL */
+    
+
+
+    /* Allocate strings */
+    line     = ajStrNew();
+    subline  = ajStrNew();
+
+
+    while((ok = ajFileReadLine(inf,&line)))
+    {
+	if(ajStrPrefixC(line,">"))
+	{
+	    /* Process the last hit */
+	    if(donefirst)
+	    {
+		ajStrCleanWhite(&hit->Seq);
+		ajStrDel(&line);
+		ajStrDel(&subline);
+		return hit;
+	    }	
+	    else
+		hit = embHitNew();
+
+	    /* Check line has correct no. of tokens and allocate Hit */
+	    ajStrAssSub(&subline, line, 1, -1);
+	    if( (ntok=ajStrTokenCount(subline, "^")) != 17)
+	    {
+		ajWarn("Wrong no. (%d) of tokens for a DHF file on line %S\n", ntok, line);
+		ajStrDel(&line);
+		ajStrDel(&subline);
+		embHitDel(&hit);
+		return NULL;
+	    }
+	    else
+	    {
+		hit = embHitNew();
+	    }
+	    	    
+	    /* Acc */
+	    token = ajStrTokC(subline, "^");
+	    ajStrAssS(&hit->Acc, token);
+	    ajStrChomp(&hit->Acc); 
+	    if(ajStrMatchC(hit->Acc, "."))
+		ajStrClear(&hit->Acc);
+
+	    /* Spr */
+	    token = ajStrTokC(NULL, "^");
+	    ajStrAssS(&hit->Spr, token);
+	    if(ajStrMatchC(hit->Spr, "."))
+		ajStrClear(&hit->Spr);
+
+	    /* Start */
+	    token = ajStrTokC(NULL, "^");
+	    ajFmtScanS(token, "%d", &hit->Start);
+
+	    /* End */
+	    token = ajStrTokC(NULL, "^");
+	    ajFmtScanS(token, "%d", &hit->End);
+	    
+	    /* Disregard domain type */
+	    token = ajStrTokC(NULL, "^");
+
+	    /* Dom */
+	    token = ajStrTokC(NULL, "^");
+	    ajStrAssS(&hit->Dom, token);
+	    if(ajStrMatchC(hit->Dom, "."))
+		ajStrClear(&hit->Dom);
+
+	    /* Disregard domain identifier - a change of domain identifier indicates 
+	       a new block of hits in a file with multiple hitlists, but we only 
+	       want a single hit so don't need this. */
+	    token = ajStrTokC(NULL, "^");
+	    token = ajStrTokC(NULL, "^");
+	    token = ajStrTokC(NULL, "^");
+	    token = ajStrTokC(NULL, "^");
+	    token = ajStrTokC(NULL, "^");
+	    token = ajStrTokC(NULL, "^");
+	    token = ajStrTokC(NULL, "^");
+
+	    token = ajStrTokC(NULL, "^");
+	    ajStrAssS(&hit->Model, token);
+	    if(ajStrMatchC(hit->Model, "."))
+		ajStrClear(&hit->Model);
+
+	    token = ajStrTokC(NULL, "^");
+	    ajFmtScanS(token, "%f", &hit->Score);
+	    
+	    token = ajStrTokC(NULL, "^");
+	    ajFmtScanS(token, "%f", &hit->Pval);
+
+	    token = ajStrTokC(NULL, "^");
+	    ajFmtScanS(token, "%f", &hit->Eval);
+
+	    donefirst = ajTrue;
+	}
+	else
+	{
+	    if(hit)
+		ajStrApp(&hit->Seq, line);
+	}
+    }
+
+    /* EOF therefore process last hit */
+    if(donefirst)
+    {
+	ajStrCleanWhite(&hit->Seq);
+	ajStrDel(&line);
+	ajStrDel(&subline);
+	return hit;
+    }
+    
+
+    /* Tidy up */
+    ajStrDel(&line);
+    ajStrDel(&subline);
+    return NULL;
+}
+
+
+
+
 /* @func embHitlistRead *****************************************************
 **
 ** Read a hitlist object from a file in embl-like format (see documentation
@@ -1185,9 +1562,12 @@ AjBool embHitsOverlap(const AjPHit hit1, const AjPHit hit2, ajint n)
 AjPHitlist embHitlistRead(AjPFile inf) 
 {
     AjPHitlist ret = NULL;
-    
+
+    AjPStr    type     = NULL;
     AjPStr line   = NULL;   /* Line of text */
     AjPStr class  = NULL;
+    AjPStr arch   = NULL;
+    AjPStr top    = NULL;
     AjPStr fold   = NULL;
     AjPStr super  = NULL;
     AjPStr family = NULL;
@@ -1200,10 +1580,13 @@ AjPHitlist embHitlistRead(AjPFile inf)
 
     /* Allocate strings */
     class   = ajStrNew();
+    arch    = ajStrNew();
+    top     = ajStrNew();
     fold    = ajStrNew();
     super   = ajStrNew();
     family  = ajStrNew();
     line    = ajStrNew();
+    type    = ajStrNew();
     
 
     
@@ -1220,6 +1603,10 @@ AjPHitlist embHitlistRead(AjPFile inf)
 	    ok = ajFileReadLine(inf,&line);
 	    continue;
 	}
+	else if(ajStrPrefixC(line,"TY"))
+	{
+	    ajFmtScanS(line, "%*s %S", &type);
+	}
 	else if(ajStrPrefixC(line,"SI"))
 	{
 	    ajFmtScanS(line, "%*s %d", &Sunid_Family);
@@ -1228,6 +1615,16 @@ AjPHitlist embHitlistRead(AjPFile inf)
 	{
 	    ajStrAssC(&class,ajStrStr(line)+3);
 	    ajStrClean(&class);
+	}
+	else if(ajStrPrefixC(line,"AR"))
+	{
+	    ajStrAssC(&arch,ajStrStr(line)+3);
+	    ajStrClean(&arch);
+	}
+	else if(ajStrPrefixC(line,"TP"))
+	{
+	    ajStrAssC(&top,ajStrStr(line)+3);
+	    ajStrClean(&top);
 	}
 	else if(ajStrPrefixC(line,"FO"))
 	{
@@ -1271,10 +1668,16 @@ AjPHitlist embHitlistRead(AjPFile inf)
 	    (ret)=embHitlistNew(nset);
 	    (ret)->N=nset;
 	    ajStrAssS(&(ret)->Class, class);
+	    ajStrAssS(&(ret)->Architecture, arch);
+	    ajStrAssS(&(ret)->Topology, top);
 	    ajStrAssS(&(ret)->Fold, fold);
 	    ajStrAssS(&(ret)->Superfamily, super);
 	    ajStrAssS(&(ret)->Family, family);
 	    (ret)->Sunid_Family = Sunid_Family;
+	    if(ajStrMatchC(type, "SCOP"))
+		(ret)->Type = ajSCOP;
+	    else if(ajStrMatchC(type, "CATH"))
+		(ret)->Type = ajCATH;
 	}
 	else if(ajStrPrefixC(line,"NN"))
 	{
@@ -1290,6 +1693,14 @@ AjPHitlist embHitlistRead(AjPFile inf)
 	{
 	    ajFmtScanS(line, "%*s %f", &(ret)->hits[n-1]->Score);
 	}
+	else if(ajStrPrefixC(line,"PV"))
+	{
+	    ajFmtScanS(line, "%*s %f", &(ret)->hits[n-1]->Pval);
+	}
+	else if(ajStrPrefixC(line,"EV"))
+	{
+	    ajFmtScanS(line, "%*s %f", &(ret)->hits[n-1]->Eval);
+	}
 	else if(ajStrPrefixC(line,"AC"))
 	{
 	    ajStrAssC(&(ret)->hits[n-1]->Acc,ajStrStr(line)+3);
@@ -1300,11 +1711,16 @@ AjPHitlist embHitlistRead(AjPFile inf)
 	    ajStrAssC(&(ret)->hits[n-1]->Spr,ajStrStr(line)+3);
 	    ajStrClean(&(ret)->hits[n-1]->Spr);
 	}
-	else if(ajStrPrefixC(line,"TY"))
+	else if(ajStrPrefixC(line,"DO"))
+	{
+	    ajStrAssC(&(ret)->hits[n-1]->Dom,ajStrStr(line)+3);
+	    ajStrClean(&(ret)->hits[n-1]->Dom);
+	}
+/*	else if(ajStrPrefixC(line,"TY"))
 	{
 	    ajStrAssC(&(ret)->hits[n-1]->Typeobj,ajStrStr(line)+3);	
 	    ajStrClean(&(ret)->hits[n-1]->Typeobj);		
-	}
+	}  */
 	else if(ajStrPrefixC(line,"MO"))
 	{
 	    ajStrAssC(&(ret)->hits[n-1]->Model,ajStrStr(line)+3);	
@@ -1329,15 +1745,247 @@ AjPHitlist embHitlistRead(AjPFile inf)
 
     ajStrDel(&line);
     ajStrDel(&class);
+    ajStrDel(&arch);
+    ajStrDel(&top);
     ajStrDel(&fold);
     ajStrDel(&super);
     ajStrDel(&family);
+    ajStrDel(&type);
     
-    if(!ok)
-	return NULL;
-
     return ret;
 }
+
+
+
+
+
+/* @func embHitlistReadFasta ************************************************
+**
+** Read a hitlist object from a file in extended FASTA format 
+** (see documentation for the DOMAINATRIX "seqsearch" application). 
+** 
+** @param [u] inf      [AjPFile] Input file stream
+**
+** @return [AjPHitlist] Hitlist object
+** @@
+****************************************************************************/
+
+AjPHitlist embHitlistReadFasta(AjPFile inf) 
+{
+    AjPHitlist hitlist   = NULL;
+    AjPHit     hit       = NULL;    /* Current hit.                     */
+    AjPList    tmplist   = NULL;    /* Temp. list of hits               */       
+    AjBool     donefirst = ajFalse; /* Read first code line.            */
+    AjBool     doneseq   = ajFalse; /* Read at least one sequence line. */
+    ajint     this_id    = 0;       /* Domain id of last hit.           */
+    ajint     last_id    = 0;       /* Domain id of this hit.           */
+    ajint     ntok       = 0;       /* No. tokens in a line.            */
+    AjPStr    token      = NULL;
+    AjPStr    line       = NULL;    /* Line of text.                    */
+    AjPStr    subline    = NULL;
+    AjBool    ok         = ajFalse;
+    AjBool    parseok    = ajFalse;
+    AjPStr    type       = NULL;
+    
+    ajlong    fpos       = 0;    
+    ajlong    fpos_noseq = 0;    
+
+
+    /* Allocate strings */
+    line     = ajStrNew();
+    subline  = ajStrNew();
+    tmplist  = ajListNew();
+    type     = ajStrNew();
+    
+
+    while((ok = ajFileReadLine(inf,&line)))
+    {
+	if(ajStrPrefixC(line,">"))
+	{
+	    /* This line added so that it can process files with no sequence 
+	       info. correctly */
+	    fpos_noseq = ajFileTell(inf); 
+
+
+	    /* Process the last hit */
+	    if(donefirst)
+	    {
+		if(MAJSTRLEN(hit->Seq))
+		    ajStrCleanWhite(&hit->Seq);
+		ajListPushApp(tmplist, hit);
+	    }
+	    
+	    /* Check line has correct no. of tokens and allocate Hit */
+	    ajStrAssSub(&subline, line, 1, -1);
+	    if( (ntok=ajStrTokenCount(subline, "^")) != 17)
+		ajFatal("Incorrect no. (%d) of tokens on line %S\n", ntok, line);
+	    else
+	    {
+		parseok = ajTrue;
+		hit     = embHitNew();
+	    }
+	    
+	    /* Acc */
+	    token = ajStrTokC(subline, "^");
+	    ajStrAssS(&hit->Acc, token);
+	    ajStrChomp(&hit->Acc); 
+	    if(ajStrMatchC(hit->Acc, "."))
+		ajStrClear(&hit->Acc);
+
+	    /* Spr */
+	    token = ajStrTokC(NULL, "^");
+	    ajStrAssS(&hit->Spr, token);
+	    if(ajStrMatchC(hit->Spr, "."))
+		ajStrClear(&hit->Spr);
+
+	    /* Start */
+	    token = ajStrTokC(NULL, "^");
+	    ajFmtScanS(token, "%d", &hit->Start);
+
+	    /* End */
+	    token = ajStrTokC(NULL, "^");
+	    ajFmtScanS(token, "%d", &hit->End);
+	    
+	    /* Type */
+	    token = ajStrTokC(NULL, "^");
+	    ajStrAssS(&type, token);
+
+	    /* Dom */
+	    token = ajStrTokC(NULL, "^");
+	    ajStrAssS(&hit->Dom, token);
+	    if(ajStrMatchC(hit->Dom, "."))
+		ajStrClear(&hit->Dom);
+
+	    /* Read domain identifier - a change of domain identifier indicates 
+	       a new block of hits in a file with multiple hitlists. */
+	    token = ajStrTokC(NULL, "^");
+	    ajFmtScanS(token, "%d", &this_id);
+
+
+	    /* Domain identifier differs therefore we have come to the end of 
+	       the list */
+	    if((this_id != last_id) && (donefirst))
+	    {
+		/* Delete the hit we've just read in ... which is of the wrong family */
+		embHitDel(&hit);
+		
+		hitlist->N = ajListToArray(tmplist, (void ***)&hitlist->hits);
+		ajStrDel(&line);
+		ajStrDel(&subline);
+		ajStrDel(&type);
+		ajListDel(&tmplist);
+
+		if(doneseq)
+		    ajFileSeek(inf, fpos, 0);
+		else
+		    ajFileSeek(inf, fpos_noseq, 0);
+		return hitlist;
+	    }
+	    else
+	    {
+		if((!donefirst))
+		{
+		    hitlist = embHitlistNew(0);
+		    hitlist->Sunid_Family = this_id;
+		    if(ajStrMatchC(type, "SCOP"))
+			hitlist->Type = ajSCOP;
+		    else if(ajStrMatchC(type, "CATH"))
+			hitlist->Type = ajCATH;
+		}	
+		last_id = this_id;
+	    }	    
+	    if(donefirst)
+	    {
+		token = ajStrTokC(NULL, "^");
+		token = ajStrTokC(NULL, "^");
+		token = ajStrTokC(NULL, "^");
+		token = ajStrTokC(NULL, "^");
+		token = ajStrTokC(NULL, "^");
+		token = ajStrTokC(NULL, "^");
+	    }
+	    else 
+	    {
+		token = ajStrTokC(NULL, "^");
+		ajStrAssS(&hitlist->Class, token);
+		if(ajStrMatchC(hitlist->Class, "."))
+		    ajStrClear(&hitlist->Class);	
+
+		token = ajStrTokC(NULL, "^");
+		ajStrAssS(&hitlist->Architecture, token);
+		if(ajStrMatchC(hitlist->Architecture, "."))
+		    ajStrClear(&hitlist->Architecture);
+
+		token = ajStrTokC(NULL, "^");
+		ajStrAssS(&hitlist->Topology, token);
+		if(ajStrMatchC(hitlist->Topology, "."))
+		    ajStrClear(&hitlist->Topology);
+
+		token = ajStrTokC(NULL, "^");
+		ajStrAssS(&hitlist->Fold, token);
+		if(ajStrMatchC(hitlist->Fold, "."))
+		    ajStrClear(&hitlist->Fold);
+
+		token = ajStrTokC(NULL, "^");
+		ajStrAssS(&hitlist->Superfamily, token);
+		if(ajStrMatchC(hitlist->Superfamily, "."))
+		    ajStrClear(&hitlist->Superfamily);
+
+		token = ajStrTokC(NULL, "^");
+		ajStrAssS(&hitlist->Family, token);
+		if(ajStrMatchC(hitlist->Family, "."))
+		    ajStrClear(&hitlist->Family);
+	    }
+
+	    token = ajStrTokC(NULL, "^");
+	    ajStrAssS(&hit->Model, token);
+	    if(ajStrMatchC(hit->Model, "."))
+		ajStrClear(&hit->Model);
+
+	    token = ajStrTokC(NULL, "^");
+	    ajFmtScanS(token, "%f", &hit->Score);
+	    
+	    token = ajStrTokC(NULL, "^");
+	    ajFmtScanS(token, "%f", &hit->Pval);
+
+	    token = ajStrTokC(NULL, "^");
+	    ajFmtScanS(token, "%f", &hit->Eval);
+
+	    donefirst = ajTrue;
+
+	}
+	else
+	{
+	    ajStrApp(&hit->Seq, line);
+	    doneseq=ajTrue;
+	    fpos = ajFileTell(inf);
+	}
+    }
+
+    /* EOF therefore process last hit */
+    if((!ok) && (parseok))
+    {
+	ajStrCleanWhite(&hit->Seq);
+	ajListPushApp(tmplist, hit);
+	hitlist->N = ajListToArray(tmplist, (void ***)&hitlist->hits);
+	ajStrDel(&subline);
+	ajStrDel(&line);
+	ajStrDel(&type);
+	ajListDel(&tmplist);
+	return hitlist;
+    }
+
+
+    /* Tidy up */
+    ajStrDel(&line);
+    ajStrDel(&subline);
+    ajStrDel(&type);
+    ajListDel(&tmplist);
+    
+    
+    /* File read error */
+    return NULL;
+}
+
 
 
 
@@ -1455,6 +2103,119 @@ AjPList embHitlistReadNode(AjPFile inf,
 
 
 
+/* @func embHitlistReadNodeFasta ********************************************
+**
+** Reads a domain families file (see documentation for the EMBASSY 
+** DOMAINATRIX package) and writes a list of Hitlist objects containing 
+** all domains matching the domain classification provided.
+**
+** @param [u] inf    [AjPFile]   File containing multiple Hitlist objects
+** @param [r] fam    [const AjPStr]    Family.
+** @param [r] sfam   [const AjPStr]    Superfamily.
+** @param [r] fold   [const AjPStr]    Fold.
+** @param [r] klass  [const AjPStr]    Class.
+** 
+** @return [AjPList] List of Hitlist objects or NULL.
+** @@
+****************************************************************************/
+
+AjPList embHitlistReadNodeFasta(AjPFile inf, 
+				const AjPStr fam, 
+				const AjPStr sfam, 
+				const AjPStr fold, 
+				const AjPStr klass)
+{
+    AjPList ret = NULL;
+    const AjPStr class   = NULL;
+
+    class = klass;
+
+    if(!inf)
+	ajFatal("NULL arg passed to embHitlistReadNodeFasta");
+
+    /* Allocate the list if it does not already exist */
+
+    (ret) = ajListNew();
+
+    
+    /*
+    ** if family is specified then the other fields
+    ** also have to be specified.
+    */
+    if(fam)
+    {
+	if(!sfam || !fold || !class)
+	{
+	    ajWarn("Bad arguments passed to embHitlistReadNodeFasta\n");
+		ajListDel(&(ret));
+	    return NULL;
+	}
+	else
+	{
+	    if((embHitlistReadFamFasta(inf,fam,sfam,fold,class,&ret)))
+		return ret;
+	    else
+	    {
+		    ajListDel(&(ret));
+		return NULL;
+	    }
+	}
+    }
+    /*
+    ** if superfamily is specified then the other fields
+    ** also have to be specified.
+    */
+    else if(sfam)
+    {
+	if(!fold || !class)
+	{
+	    ajWarn("Bad arguments passed to embHitlistReadNodeFasta\n");
+		ajListDel(&(ret));
+	    return NULL;
+	}
+	else
+	{
+	    if((embHitlistReadSfamFasta(inf,fam,sfam,fold,class,&ret)))
+		return ret;
+	    else
+	    {
+		    ajListDel(&(ret));
+		return NULL;
+	    }
+	}	   
+    }
+    /*
+    ** if fold is specified then the other fields also have
+    ** to be specified.
+    */
+    else if(fold)
+    {
+	if(!class)
+	{
+	    ajWarn("Bad arguments passed to embHitlistReadNodeFasta\n");
+		ajListDel(&(ret));
+	    return NULL;
+	}
+	else
+	{
+	    if((embHitlistReadFoldFasta(inf,fam,sfam,fold,class,&ret)))
+		return ret;
+	    else
+	    {
+		    ajListDel(&(ret));
+		return NULL;
+	    }
+	}
+    } 
+
+    ajWarn("Bad arguments passed to embHitlistReadNodeFasta\n");
+	ajListDel(&(ret));
+
+    return ret;
+}
+
+
+
 
 /* @func embHitlistWrite ****************************************************
 **
@@ -1477,8 +2238,21 @@ AjBool embHitlistWrite(AjPFile outf, const AjPHitlist obj)
     if(!obj)
 	return ajFalse;
 
+
+    if((obj->Type == ajSCOP))  
+	ajFmtPrintF(outf, "TY   SCOP\nXX\n");
+    else if ((obj->Type == ajCATH))
+	ajFmtPrintF(outf, "TY   CATH\nXX\n");
+
+
     if(MAJSTRLEN(obj->Class))
 	ajFmtPrintF(outf,"CL   %S\n",obj->Class);
+
+    if(MAJSTRLEN(obj->Architecture))
+	ajFmtPrintF(outf,"AR   %S\n",obj->Architecture);
+
+    if(MAJSTRLEN(obj->Topology))
+	ajFmtPrintF(outf,"TP   %S\n",obj->Topology);
 
     if(MAJSTRLEN(obj->Fold))
 	ajFmtPrintSplit(outf,obj->Fold,"XX\nFO   ",75," \t\n\r");
@@ -1488,10 +2262,11 @@ AjBool embHitlistWrite(AjPFile outf, const AjPHitlist obj)
 
     if(MAJSTRLEN(obj->Family))
 	ajFmtPrintSplit(outf,obj->Family,"XX\nFA   ",75," \t\n\r");
-
-    if(MAJSTRLEN(obj->Family) && obj->Sunid_Family)
-	ajFmtPrintF(outf,"XX\nSI   %d\n", obj->Sunid_Family);
     
+    if( (MAJSTRLEN(obj->Class))       || (MAJSTRLEN(obj->Architecture)) || 
+	(MAJSTRLEN(obj->Topology))    || (MAJSTRLEN(obj->Fold))         ||
+	(MAJSTRLEN(obj->Superfamily)) || (MAJSTRLEN(obj->Family)))
+	ajFmtPrintF(outf,"XX\nSI   %d\n", obj->Sunid_Family);
 
     ajFmtPrintF(outf,"XX\nNS   %d\nXX\n",obj->N);
 
@@ -1504,11 +2279,19 @@ AjBool embHitlistWrite(AjPFile outf, const AjPHitlist obj)
 	    ajFmtPrintF(outf, "XX\n");
 	}
 	
-	if(MAJSTRLEN(obj->hits[x]->Typeobj))
+/*	if(MAJSTRLEN(obj->hits[x]->Typeobj))
 	    ajFmtPrintF(outf, "%-5s%S\n", "TY", obj->hits[x]->Typeobj);
-	ajFmtPrintF(outf, "XX\n");
+	ajFmtPrintF(outf, "XX\n"); */
+
 	ajFmtPrintF(outf, "%-5s%.2f\n", "SC", obj->hits[x]->Score);
 	ajFmtPrintF(outf, "XX\n");
+
+	ajFmtPrintF(outf, "%-5s%.3e\n", "PV", obj->hits[x]->Pval);
+	ajFmtPrintF(outf, "XX\n");
+
+	ajFmtPrintF(outf, "%-5s%.3e\n", "EV", obj->hits[x]->Eval);
+	ajFmtPrintF(outf, "XX\n");
+
 	if(MAJSTRLEN(obj->hits[x]->Group))
 	{
 	    ajFmtPrintF(outf, "%-5s%S\n", "GP", obj->hits[x]->Group);
@@ -1517,9 +2300,16 @@ AjBool embHitlistWrite(AjPFile outf, const AjPHitlist obj)
 
 	ajFmtPrintF(outf, "%-5s%S\n", "AC", obj->hits[x]->Acc);
 	ajFmtPrintF(outf, "XX\n");
+
 	if(MAJSTRLEN(obj->hits[x]->Spr))
 	{
 	    ajFmtPrintF(outf, "%-5s%S\n", "SP", obj->hits[x]->Spr);
+	    ajFmtPrintF(outf, "XX\n");
+	}
+	
+	if(MAJSTRLEN(obj->hits[x]->Dom))
+	{
+	    ajFmtPrintF(outf, "%-5s%S\n", "DO", obj->hits[x]->Dom);
 	    ajFmtPrintF(outf, "XX\n");
 	}
 	
@@ -1537,15 +2327,14 @@ AjBool embHitlistWrite(AjPFile outf, const AjPHitlist obj)
 
 
 
-
 /* @func embHitlistWriteSubset **********************************************
 **
 ** Write contents of a Hitlist object to an output file in embl-like format
 ** (see documentation for the DOMAINATRIX "seqsearch" application).
 ** Only those hits are written for which a 1 is given in the corresponding
 ** position in array of integers.
-** Text for Class, Fold, Superfamily and Family is only written if the text
-** is available.
+** Text for Class, Architecture, Topology, Fold, Superfamily and Family is 
+** only written if the text is available.
 ** 
 ** @param [u] outf  [AjPFile]    Output file stream
 ** @param [r] obj   [const AjPHitlist] Hitlist object
@@ -1555,7 +2344,7 @@ AjBool embHitlistWrite(AjPFile outf, const AjPHitlist obj)
 ** @@
 ****************************************************************************/
 
-AjBool embHitlistWriteSubset(AjPFile outf,
+AjBool embHitlistWriteSubset(AjPFile outf, 
 			     const AjPHitlist obj, const AjPInt ok)
 {
     ajint x    = 0;  /* Counter */
@@ -1566,8 +2355,20 @@ AjBool embHitlistWriteSubset(AjPFile outf,
     if(!obj)
 	return ajFalse;
 
+
+    if((obj->Type == ajSCOP))  
+	ajFmtPrintF(outf, "TY   SCOP\nXX\n");
+    else if ((obj->Type == ajCATH))
+	ajFmtPrintF(outf, "TY   CATH\nXX\n");
+
     if(MAJSTRLEN(obj->Class))
 	ajFmtPrintF(outf,"CL   %S\n",obj->Class);
+
+    if(MAJSTRLEN(obj->Architecture))
+	ajFmtPrintF(outf,"AR   %S\n",obj->Architecture);
+
+    if(MAJSTRLEN(obj->Topology))
+	ajFmtPrintF(outf,"TP   %S\n",obj->Topology);
 
     if(MAJSTRLEN(obj->Fold))
 	ajFmtPrintSplit(outf,obj->Fold,"XX\nFO   ",75," \t\n\r");
@@ -1601,11 +2402,19 @@ AjBool embHitlistWriteSubset(AjPFile outf,
 		ajFmtPrintF(outf, "XX\n");
 	    }
 	    
-	    if(MAJSTRLEN(obj->hits[x]->Typeobj))
+/*	    if(MAJSTRLEN(obj->hits[x]->Typeobj))
 		ajFmtPrintF(outf, "%-5s%S\n", "TY", obj->hits[x]->Typeobj);
-	    ajFmtPrintF(outf, "XX\n");
+	    ajFmtPrintF(outf, "XX\n"); */
+
 	    ajFmtPrintF(outf, "%-5s%.2f\n", "SC", obj->hits[x]->Score);
 	    ajFmtPrintF(outf, "XX\n");
+
+	    ajFmtPrintF(outf, "%-5s%.3e\n", "PV", obj->hits[x]->Pval);
+	    ajFmtPrintF(outf, "XX\n");
+
+	    ajFmtPrintF(outf, "%-5s%.3e\n", "EV", obj->hits[x]->Eval);
+	    ajFmtPrintF(outf, "XX\n");
+
 	    if(MAJSTRLEN(obj->hits[x]->Group))
 	    {
 		ajFmtPrintF(outf, "%-5s%S\n", "GP", obj->hits[x]->Group);
@@ -1620,6 +2429,12 @@ AjBool embHitlistWriteSubset(AjPFile outf,
 		ajFmtPrintF(outf, "XX\n");
 	    }
 
+	    if(MAJSTRLEN(obj->hits[x]->Dom))
+	    {
+		ajFmtPrintF(outf, "%-5s%S\n", "DO", obj->hits[x]->Dom);
+		ajFmtPrintF(outf, "XX\n");
+	    }
+
 	    ajFmtPrintF(outf, "%-5s%d START; %d END;\n", "RA",
 			obj->hits[x]->Start, obj->hits[x]->End);
 	    ajFmtPrintF(outf, "XX\n");
@@ -1629,6 +2444,311 @@ AjBool embHitlistWriteSubset(AjPFile outf,
     }
     ajFmtPrintF(outf, "//\n");
 	
+    return ajTrue;
+}
+
+
+
+
+/* @func embHitlistWriteFasta ***********************************************
+**
+** Write contents of a Hitlist object to an output file in embl-like format
+** (see documentation for the DOMAINATRIX "seqsearch" application).
+** Text for Class, Fold, Superfamily and Family is only written if the text
+** is available.
+** 
+** @param [u] outf [AjPFile] Output file stream
+** @param [r] obj [const AjPHitlist] Hitlist object
+**
+** @return [AjBool] True on success
+** @@
+****************************************************************************/
+
+AjBool embHitlistWriteFasta(AjPFile outf, const  AjPHitlist obj)
+{
+    ajint x = 0;  /* Counter */
+    
+    if(!obj)
+	return ajFalse;
+
+    for(x=0;x<obj->N;x++)
+    {
+	ajFmtPrintF(outf, "> ");
+	
+	if(MAJSTRLEN(obj->hits[x]->Acc))
+	    ajFmtPrintF(outf, "%S^", obj->hits[x]->Acc);
+	else
+	    ajFmtPrintF(outf, ".^");
+
+	if(MAJSTRLEN(obj->hits[x]->Spr))
+	    ajFmtPrintF(outf, "%S^", obj->hits[x]->Spr);
+	else
+	    ajFmtPrintF(outf, ".^");
+
+	ajFmtPrintF(outf, "%d^%d^", obj->hits[x]->Start, obj->hits[x]->End);
+
+	if((obj->Type == ajSCOP))  
+	    ajFmtPrintF(outf, "SCOP^");
+	else if ((obj->Type == ajCATH))
+	    ajFmtPrintF(outf, "CATH^");
+	else
+	    ajFmtPrintF(outf, ".^");
+	
+	if(MAJSTRLEN(obj->hits[x]->Dom))
+	    ajFmtPrintF(outf, "%S^", obj->hits[x]->Dom);
+	else
+	    ajFmtPrintF(outf, ".^");
+
+	ajFmtPrintF(outf,"%d^", obj->Sunid_Family);
+
+	if(MAJSTRLEN(obj->Class))
+	    ajFmtPrintF(outf,"%S^",obj->Class);
+	else
+	    ajFmtPrintF(outf, ".^");
+
+	if(MAJSTRLEN(obj->Architecture))
+	    ajFmtPrintF(outf,"%S^",obj->Architecture);
+	else
+	    ajFmtPrintF(outf, ".^");
+
+	if(MAJSTRLEN(obj->Topology))
+	    ajFmtPrintF(outf,"%S^",obj->Topology);
+	else
+	    ajFmtPrintF(outf, ".^");
+
+	if(MAJSTRLEN(obj->Fold))
+	    ajFmtPrintF(outf,"%S^",obj->Fold);
+	else
+	    ajFmtPrintF(outf, ".^");
+
+	if(MAJSTRLEN(obj->Superfamily))
+	    ajFmtPrintF(outf,"%S^",obj->Superfamily);
+	else
+	    ajFmtPrintF(outf, ".^");
+
+	if(MAJSTRLEN(obj->Family))
+	    ajFmtPrintF(outf,"%S^",obj->Family);
+	else
+	    ajFmtPrintF(outf, ".^");
+
+	if(MAJSTRLEN(obj->hits[x]->Model))
+	    ajFmtPrintF(outf, "%S^", obj->hits[x]->Model);
+	else
+	    ajFmtPrintF(outf, ".^");
+
+	ajFmtPrintF(outf, "%.2f^", obj->hits[x]->Score);
+
+	ajFmtPrintF(outf, "%.3e^", obj->hits[x]->Pval);
+
+	ajFmtPrintF(outf, "%.3e", obj->hits[x]->Eval);
+
+	ajFmtPrintF(outf, "\n");
+	ajFmtPrintF(outf, "%S\n", obj->hits[x]->Seq);
+    }
+    
+
+    return ajTrue;
+}
+
+
+
+
+
+/* @func embHitlistWriteSubsetFasta *****************************************
+**
+** Write contents of a Hitlist object to an output file in embl-like format
+** (see documentation for the DOMAINATRIX "seqsearch" application).
+** Only those hits are written for which a 1 is given in the corresponding
+** position in array of integers.
+** Text for Class, Architecture, Topology, Fold, Superfamily and Family is 
+** only written if the text is available.
+** 
+** @param [u] outf  [AjPFile]    Output file stream
+** @param [r] obj   [const AjPHitlist] Hitlist object
+** @param [r] ok    [const AjPInt]     Whether hits are to be printed or not
+**
+** @return [AjBool] True on success
+** @@
+****************************************************************************/
+
+AjBool embHitlistWriteSubsetFasta(AjPFile outf, 
+				  const AjPHitlist obj, const AjPInt ok)
+{
+    ajint x    = 0;  /* Counter */
+
+    if(!obj)
+	return ajFalse;
+
+    for(x=0;x<obj->N;x++)
+    { 
+	if(ajIntGet(ok, x) == 1)
+	{
+	    ajFmtPrintF(outf, "> ");
+	
+	    if(MAJSTRLEN(obj->hits[x]->Acc))
+		ajFmtPrintF(outf, "%S^", obj->hits[x]->Acc);
+	    else
+		ajFmtPrintF(outf, ".^");
+	    if(MAJSTRLEN(obj->hits[x]->Spr))
+		ajFmtPrintF(outf, "%S^", obj->hits[x]->Spr);
+	    else
+		ajFmtPrintF(outf, ".^");
+	    ajFmtPrintF(outf, "%d^%d^", obj->hits[x]->Start, obj->hits[x]->End);
+
+	    if((obj->Type == ajSCOP))  
+		ajFmtPrintF(outf, "SCOP^");
+	    else if ((obj->Type == ajCATH))
+		ajFmtPrintF(outf, "CATH^");
+	    else
+		ajFmtPrintF(outf, ".^");
+
+	    if(MAJSTRLEN(obj->hits[x]->Dom))
+		ajFmtPrintF(outf, "%S^", obj->hits[x]->Dom);
+	    else
+		ajFmtPrintF(outf, ".^");
+
+	    ajFmtPrintF(outf,"%d^", obj->Sunid_Family);
+	    if(MAJSTRLEN(obj->Class))
+		ajFmtPrintF(outf,"%S^",obj->Class);
+	    else
+		ajFmtPrintF(outf, ".^");
+	    if(MAJSTRLEN(obj->Architecture))
+		ajFmtPrintF(outf,"%S^",obj->Architecture);
+	    else
+		ajFmtPrintF(outf, ".^");
+	    if(MAJSTRLEN(obj->Topology))
+		ajFmtPrintF(outf,"%S^",obj->Topology);
+	    else
+		ajFmtPrintF(outf, ".^");
+	    if(MAJSTRLEN(obj->Fold))
+		ajFmtPrintF(outf,"%S^",obj->Fold);
+	    else
+		ajFmtPrintF(outf, ".^");
+	    if(MAJSTRLEN(obj->Superfamily))
+		ajFmtPrintF(outf,"%S^",obj->Superfamily);
+	    else
+		ajFmtPrintF(outf, ".^");
+	    if(MAJSTRLEN(obj->Family))
+		ajFmtPrintF(outf,"%S^",obj->Family);
+	    else
+		ajFmtPrintF(outf, ".^");
+	    if(MAJSTRLEN(obj->Model))
+		ajFmtPrintF(outf, "%S^", obj->Model);
+	    else
+		ajFmtPrintF(outf, ".^");
+	    ajFmtPrintF(outf, "%.2f^", obj->hits[x]->Score);
+	    ajFmtPrintF(outf, "%.3e^", obj->hits[x]->Pval);
+	    ajFmtPrintF(outf, "%.3e", obj->hits[x]->Eval);
+
+	    ajFmtPrintF(outf, "\n");
+	    ajFmtPrintF(outf, "%S\n", obj->hits[x]->Seq);
+	}
+    }
+    
+    return ajTrue;
+}
+
+
+
+
+
+
+/* @func embHitlistWriteHitFasta **********************************************
+**
+** Write contents of one Hitlist object to an output file in embl-like format
+** (see documentation for the DOMAINATRIX "seqsearch" application).
+** Text for Class, Fold, Superfamily and Family is only written if the text
+** is available.
+** 
+** @param [u] outf [AjPFile] Output file stream
+** @param [r] n [ajint] Number of hit
+** @param [r] obj [const AjPHitlist] Hitlist object
+**
+** @return [AjBool] True on success
+** @@
+****************************************************************************/
+
+AjBool        embHitlistWriteHitFasta(AjPFile outf, 
+				      ajint n, 
+				      const AjPHitlist obj)
+{
+    if(!obj)
+	return ajFalse;
+    if(n >= obj->N)
+	return ajFalse;
+    
+    ajFmtPrintF(outf, "> ");
+    
+    if(MAJSTRLEN(obj->hits[n]->Acc))
+	ajFmtPrintF(outf, "%S^", obj->hits[n]->Acc);
+    else
+	ajFmtPrintF(outf, ".^");
+    
+    if(MAJSTRLEN(obj->hits[n]->Spr))
+	ajFmtPrintF(outf, "%S^", obj->hits[n]->Spr);
+    else
+	ajFmtPrintF(outf, ".^");
+    
+    ajFmtPrintF(outf, "%d^%d^", obj->hits[n]->Start, obj->hits[n]->End);
+    
+    if((obj->Type == ajSCOP))  
+	ajFmtPrintF(outf, "SCOP^");
+    else if ((obj->Type == ajCATH))
+	ajFmtPrintF(outf, "CATH^");
+    else
+	ajFmtPrintF(outf, ".^");
+    
+    if(MAJSTRLEN(obj->hits[n]->Dom))
+	ajFmtPrintF(outf, "%S^", obj->hits[n]->Dom);
+    else
+	ajFmtPrintF(outf, ".^");
+    
+    ajFmtPrintF(outf,"%d^", obj->Sunid_Family);
+    
+    if(MAJSTRLEN(obj->Class))
+	ajFmtPrintF(outf,"%S^",obj->Class);
+    else
+	ajFmtPrintF(outf, ".^");
+    
+    if(MAJSTRLEN(obj->Architecture))
+	ajFmtPrintF(outf,"%S^",obj->Architecture);
+    else
+	ajFmtPrintF(outf, ".^");
+    
+    if(MAJSTRLEN(obj->Topology))
+	ajFmtPrintF(outf,"%S^",obj->Topology);
+    else
+	ajFmtPrintF(outf, ".^");
+    
+    if(MAJSTRLEN(obj->Fold))
+	ajFmtPrintF(outf,"%S^",obj->Fold);
+    else
+	ajFmtPrintF(outf, ".^");
+    
+    if(MAJSTRLEN(obj->Superfamily))
+	ajFmtPrintF(outf,"%S^",obj->Superfamily);
+    else
+	ajFmtPrintF(outf, ".^");
+    
+    if(MAJSTRLEN(obj->Family))
+	ajFmtPrintF(outf,"%S^",obj->Family);
+    else
+	ajFmtPrintF(outf, ".^");    
+
+    if(MAJSTRLEN(obj->hits[n]->Model))
+	ajFmtPrintF(outf, "%S^", obj->hits[n]->Model);
+    else
+	ajFmtPrintF(outf, ".^");
+    
+    ajFmtPrintF(outf, "%.2f^", obj->hits[n]->Score);
+    
+    ajFmtPrintF(outf, "%.3e^", obj->hits[n]->Pval);
+    
+    ajFmtPrintF(outf, "%.3e", obj->hits[n]->Eval);
+    
+    ajFmtPrintF(outf, "\n");
+    ajFmtPrintF(outf, "%S\n", obj->hits[n]->Seq);
+
     return ajTrue;
 }
 
@@ -1651,8 +2771,11 @@ AjPSignature embSignatureReadNew(AjPFile inf)
 {
     AjPSignature ret = NULL;
     
+    static AjPStr type   = NULL;
     static AjPStr line   = NULL;
     static AjPStr class  = NULL;
+    static AjPStr arch   = NULL;
+    static AjPStr top    = NULL;
     static AjPStr fold   = NULL;
     static AjPStr super  = NULL;
     static AjPStr family = NULL;
@@ -1679,6 +2802,8 @@ AjPSignature embSignatureReadNew(AjPFile inf)
     if(!line)
     {
 	class   = ajStrNew();
+	arch    = ajStrNew();
+	top     = ajStrNew();
 	fold    = ajStrNew();
 	super   = ajStrNew();
 	family  = ajStrNew();
@@ -1691,7 +2816,11 @@ AjPSignature embSignatureReadNew(AjPFile inf)
 
     while(ok && !ajStrPrefixC(line,"//"))
     {
-	if(ajStrPrefixC(line,"XX"))
+	if(ajStrPrefixC(line,"TY"))
+	{
+	    ajFmtScanS(line, "%*s %S", &type);
+	}
+	else if(ajStrPrefixC(line,"XX"))
 	{
 	    ok = ajFileReadLine(inf,&line);
 	    continue;
@@ -1704,6 +2833,16 @@ AjPSignature embSignatureReadNew(AjPFile inf)
 	{
 	    ajStrAssC(&class,ajStrStr(line)+3);
 	    ajStrClean(&class);
+	}
+	else if(ajStrPrefixC(line,"AR"))
+	{
+	    ajStrAssC(&arch,ajStrStr(line)+3);
+	    ajStrClean(&arch);
+	}
+	else if(ajStrPrefixC(line,"TP"))
+	{
+	    ajStrAssC(&top,ajStrStr(line)+3);
+	    ajStrClean(&top);
 	}
 	else if(ajStrPrefixC(line,"FO"))
 	{
@@ -1744,7 +2883,14 @@ AjPSignature embSignatureReadNew(AjPFile inf)
 
 	    /* Create signature structure */
 	    (ret)=embSignatureNew(npos);
+
+	    if(ajStrMatchC(type, "SCOP"))
+		(ret)->Type = ajSCOP;
+	    else if(ajStrMatchC(type, "CATH"))
+		(ret)->Type = ajCATH;
 	    ajStrAssS(&(ret)->Class, class);
+	    ajStrAssS(&(ret)->Architecture, arch);
+	    ajStrAssS(&(ret)->Topology, top);
 	    ajStrAssS(&(ret)->Fold, fold);
 	    ajStrAssS(&(ret)->Superfamily, super);
 	    ajStrAssS(&(ret)->Family, family);
@@ -1816,7 +2962,6 @@ AjPSignature embSignatureReadNew(AjPFile inf)
 
 
 
-
 /* @func embSignatureWrite **************************************************
 **
 ** Write contents of a Signature object to an output file in embl-like 
@@ -1836,15 +2981,28 @@ AjBool embSignatureWrite(AjPFile outf, const AjPSignature obj)
     if(!outf || !obj)
 	return ajFalse;
 
+    if((obj->Type == ajSCOP))  
+	ajFmtPrintF(outf, "TY   SCOP\nXX\n");
+    else if ((obj->Type == ajCATH))
+	ajFmtPrintF(outf, "TY   CATH\nXX\n");
 
-    ajFmtPrintF(outf,"CL   %S",obj->Class);
-    ajFmtPrintSplit(outf,obj->Fold,"\nXX\nFO   ",75," \t\n\r");
-    ajFmtPrintSplit(outf,obj->Superfamily,"XX\nSF   ",75," \t\n\r");
-    ajFmtPrintSplit(outf,obj->Family,"XX\nFA   ",75," \t\n\r");
-    ajFmtPrintF(outf,"XX\nSI   %d\n", obj->Sunid_Family);
-    ajFmtPrintF(outf,"XX\nNP   %d\n",obj->npos);
+    if(MAJSTRLEN(obj->Class))
+	ajFmtPrintF(outf,"CL   %S",obj->Class);
+    if(MAJSTRLEN(obj->Architecture))
+	ajFmtPrintSplit(outf,obj->Architecture,"\nXX\nAR   ",75," \t\n\r");
+    if(MAJSTRLEN(obj->Topology))
+	ajFmtPrintSplit(outf,obj->Topology,"\nXX\nTP   ",75," \t\n\r");
+    if(MAJSTRLEN(obj->Fold))
+	ajFmtPrintSplit(outf,obj->Fold,"\nXX\nFO   ",75," \t\n\r");
+    if(MAJSTRLEN(obj->Superfamily))
+	ajFmtPrintSplit(outf,obj->Superfamily,"XX\nSF   ",75," \t\n\r");
+    if(MAJSTRLEN(obj->Family))
+	ajFmtPrintSplit(outf,obj->Family,"XX\nFA   ",75," \t\n\r");
+    if(obj->Sunid_Family)
+	ajFmtPrintF(outf,"XX\nSI   %d\nXX\n", obj->Sunid_Family);
 
 
+    ajFmtPrintF(outf,"NP   %d\n",obj->npos);
     for(i=0;i<obj->npos;++i)
     {
 	ajFmtPrintF(outf,"XX\nNN   [%d]\n",i+1);
@@ -1866,6 +3024,8 @@ AjBool embSignatureWrite(AjPFile outf, const AjPSignature obj)
     
     return ajTrue;
 }
+
+
 
 
 
@@ -1894,10 +3054,14 @@ AjPHitlist embSignatureHitsRead(AjPFile inf)
     
 
     AjPStr class  = NULL;
+    AjPStr arch  = NULL;
+    AjPStr top  = NULL;
     AjPStr fold   = NULL;
     AjPStr super  = NULL;
     AjPStr family = NULL;
     AjPStr line   = NULL;
+    AjPStr type   = NULL;
+
     
     if(!inf)
     {
@@ -1908,16 +3072,22 @@ AjPHitlist embSignatureHitsRead(AjPFile inf)
 
     list   = ajListNew();
     class  = ajStrNew();
+    arch   = ajStrNew();
+    top    = ajStrNew();
     fold   = ajStrNew();
     super  = ajStrNew();
     family = ajStrNew();
     line   = ajStrNew();
-
+    type    = ajStrNew();
     
     
     while(ok && ajFileReadLine(inf,&line))
     {
-	if(ajStrPrefixC(line,"SI"))
+	if(ajStrPrefixC(line,"TY"))
+	{
+	    ajFmtScanS(line, "%*s %S", &type);
+	}
+	else if(ajStrPrefixC(line,"SI"))
 	{
 	    ajFmtScanS(line, "%*s %d", &Sunid_Family);
 	}
@@ -1925,6 +3095,16 @@ AjPHitlist embSignatureHitsRead(AjPFile inf)
 	{
 	    ajStrAssC(&class,ajStrStr(line)+3);
 	    ajStrClean(&class);
+	}
+	else if(ajStrPrefixC(line,"AR"))
+	{
+	    ajStrAssC(&arch,ajStrStr(line)+3);
+	    ajStrClean(&arch);
+	}
+	else if(ajStrPrefixC(line,"TP"))
+	{
+	    ajStrAssC(&top,ajStrStr(line)+3);
+	    ajStrClean(&top);
 	}
 	else if(ajStrPrefixC(line,"FO"))
 	{
@@ -1962,6 +3142,7 @@ AjPHitlist embSignatureHitsRead(AjPFile inf)
 	else if(ajStrPrefixC(line,"HI"))
 	{
 	    tmphit=embHitNew();
+
 	    ajFmtScanS(line, "%*s %*d %S %d %d %S %S %S %f %f %f", 
 		       &tmphit->Acc, 
 		       &tmphit->Start, 
@@ -1971,27 +3152,47 @@ AjPHitlist embSignatureHitsRead(AjPFile inf)
 		       &tmphit->Typesbj, 
 		       &tmphit->Score, 
 		       &tmphit->Pval, 
-		       &tmphit->Eval);
+		       &tmphit->Eval); 
+
+/* Without Typeobj 
+	    ajFmtScanS(line, "%*s %*d %S %d %d %S %f %f %f", 
+		       &tmphit->Acc, 
+		       &tmphit->Start, 
+		       &tmphit->End, 
+		       &tmphit->Group, 
+		       &tmphit->Score, 
+		       &tmphit->Pval, 
+		       &tmphit->Eval);  */
+
 	    ajListPush(list, (void *)tmphit);
 	}
     }
 
     ret = embHitlistNew(ajListLength(list));
     ajStrAssS(&ret->Class, class);
+    ajStrAssS(&ret->Architecture, arch);
+    ajStrAssS(&ret->Topology, top);
     ajStrAssS(&ret->Fold, fold);
     ajStrAssS(&ret->Superfamily, super);
     ajStrAssS(&ret->Family, family);
     ret->Sunid_Family = Sunid_Family;
+    if(ajStrMatchC(type, "SCOP"))
+	(ret)->Type = ajSCOP;
+    else if(ajStrMatchC(type, "CATH"))
+	(ret)->Type = ajCATH;
     
     ret->N=ajListToArray(list, (void ***)&(ret->hits));
     
 
     ajListDel(&list);
     ajStrDel(&class);
+    ajStrDel(&arch);
+    ajStrDel(&top);
     ajStrDel(&fold);
     ajStrDel(&super);
     ajStrDel(&family);
     ajStrDel(&line);
+    ajStrDel(&type);
     
     return ret;
 }
@@ -2035,10 +3236,22 @@ AjBool embSignatureHitsWrite(AjPFile outf, const AjPSignature sig,
 
 
     /* Print SCOP classification records of signature */
-    ajFmtPrintF(outf,"CL   %S",sig->Class);
-    ajFmtPrintSplit(outf,sig->Fold,"\nXX\nFO   ",75," \t\n\r");
-    ajFmtPrintSplit(outf,sig->Superfamily,"XX\nSF   ",75," \t\n\r");
-    ajFmtPrintSplit(outf,sig->Family,"XX\nFA   ",75," \t\n\r");
+    if((sig->Type == ajSCOP))  
+	ajFmtPrintF(outf, "TY   SCOP\nXX\n");
+    else if ((sig->Type == ajCATH))
+	ajFmtPrintF(outf, "TY   CATH\nXX\n");
+    if(MAJSTRLEN(sig->Class))
+	ajFmtPrintF(outf,"CL   %S",sig->Class);
+    if(MAJSTRLEN(sig->Architecture))    
+	ajFmtPrintSplit(outf,sig->Architecture,"\nXX\nAR   ",75," \t\n\r");
+    if(MAJSTRLEN(sig->Topology)) 
+	ajFmtPrintSplit(outf,sig->Topology,"\nXX\nTP   ",75," \t\n\r");
+    if(MAJSTRLEN(sig->Fold)) 
+	ajFmtPrintSplit(outf,sig->Fold,"\nXX\nFO   ",75," \t\n\r");
+    if(MAJSTRLEN(sig->Superfamily))
+	ajFmtPrintSplit(outf,sig->Superfamily,"XX\nSF   ",75," \t\n\r");
+    if(MAJSTRLEN(sig->Family)) 
+	ajFmtPrintSplit(outf,sig->Family,"XX\nFA   ",75," \t\n\r");
     ajFmtPrintF(outf,"XX\nSI   %d\n", sig->Sunid_Family);
     ajFmtPrintF(outf,"XX\n");
     
@@ -2047,12 +3260,19 @@ AjBool embSignatureHitsWrite(AjPFile outf, const AjPSignature sig,
     for(x=0;x<hitlist->N; x++)
     {
 	if(ajStrMatchC(hitlist->hits[x]->Typeobj, "FALSE"))
-	    nf++;
+	    nf++; 
 	if(nf>n)
-	    break;
+	    break;  
+
+/* Without Typeobj 
+	if(x>n)
+	    break; */
+	
+
+
 	if(MAJSTRLEN(hitlist->hits[x]->Acc))
-	    ajFmtPrintF(outf, "HI  %-6d%-10S%-5d%-5d%-15S%-10S%-10S%-7.1f"
-			"%-7.3f%-7.3f\n", 
+	    ajFmtPrintF(outf, "HI  %-6d%-10S%-5d%-5d%-15S%-10S%-10S"
+			"%-7.1f%.3e %.3e\n", 
 			x+1, hitlist->hits[x]->Acc, 
 			hitlist->hits[x]->Start+1, hitlist->hits[x]->End+1,
 			hitlist->hits[x]->Group, 
@@ -2061,13 +3281,33 @@ AjBool embSignatureHitsWrite(AjPFile outf, const AjPSignature sig,
 			hitlist->hits[x]->Eval);
 	else
 	    ajFmtPrintF(outf, "HI  %-6d%-10S%-5d%-5d%-15S%-10S%-10S"
-			"%-7.1f%-7.3f%-7.3f\n", 
+			"%-7.1f%.3e %.3e\n", 
 			x+1, hitlist->hits[x]->Spr, 
 			hitlist->hits[x]->Start+1, hitlist->hits[x]->End+1,
 			hitlist->hits[x]->Group, 
 			hitlist->hits[x]->Typeobj, hitlist->hits[x]->Typesbj, 
 			hitlist->hits[x]->Score, hitlist->hits[x]->Pval,
 			hitlist->hits[x]->Eval);
+
+	/* Without Typeobj 
+	if(MAJSTRLEN(hitlist->hits[x]->Acc))
+	    ajFmtPrintF(outf, "HI  %-6d%-10S%-5d%-5d%-15S"
+			"%-7.1f%.3e %.3e\n", 
+			x+1, hitlist->hits[x]->Acc, 
+			hitlist->hits[x]->Start+1, hitlist->hits[x]->End+1,
+			hitlist->hits[x]->Group, 
+			hitlist->hits[x]->Score, hitlist->hits[x]->Pval,
+			hitlist->hits[x]->Eval);
+	else
+	    ajFmtPrintF(outf, "HI  %-6d%-10S%-5d%-5d%-15S"
+			"%-7.1f%.3e %.3e\n", 
+			x+1, hitlist->hits[x]->Spr, 
+			hitlist->hits[x]->Start+1, hitlist->hits[x]->End+1,
+			hitlist->hits[x]->Group, 
+			hitlist->hits[x]->Score, hitlist->hits[x]->Pval,
+			hitlist->hits[x]->Eval);
+			*/
+
     }
     
 
@@ -2075,16 +3315,6 @@ AjBool embSignatureHitsWrite(AjPFile outf, const AjPSignature sig,
 
     return ajTrue;
 }
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -2102,14 +3332,12 @@ AjBool embSignatureHitsWrite(AjPFile outf, const AjPSignature sig,
 **
 ****************************************************************************/
 
+
+
 /* @func embHitlistClassify *************************************************
 **
 ** Classifies a list of signature-sequence hits (held in a Hitlist object) 
 ** according to list of target sequences (a list of Hitlist objects).
-** 
-** Writes the Group, Typeobj (primary classification) & Typesbj (secondary
-** classification) elements depending on how the SCOP classification 
-** records of the Hit object and target sequence in question compare.
 ** 
 **
 ** The following classification of hits is taken from the documentation
@@ -2151,8 +3379,11 @@ AjBool embSignatureHitsWrite(AjPFile outf, const AjPSignature sig,
 ** left as UNKNOWN for the purpose of 
 ** generating signature performance plots with the EMBOSS application sigplot.
 **
+** Writes the Group, Typeobj (primary classification) & Typesbj (secondary
+** classification) elements depending on how the SCOP classification 
+** records of the Hit object and target sequence in question compare.
 **
-** @param [r] hits    [AjPHitlist const *] Pointer to Hitlist object with hits
+** @param [r] hits    [const AjPHitlist*] Pointer to Hitlist object with hits
 ** @param [r] targets [const AjPList]   List of AjOHitlist objects with targets
 ** @param [r] thresh  [ajint]       Minimum length (residues) of overlap 
 ** required for two hits with the same code to be counted as the same hit.
@@ -2161,8 +3392,8 @@ AjBool embSignatureHitsWrite(AjPFile outf, const AjPSignature sig,
 ** @@
 ****************************************************************************/
 
-AjBool embHitlistClassify(AjPHitlist const *hits,
-			  const AjPList targets, ajint thresh)
+AjBool embHitlistClassify(const AjPHitlist *hits, const AjPList targets,
+			  ajint thresh)
 {  
     /*
     ** A list of Hitidx structures is derived from the list of AjOHitlist 
@@ -2211,8 +3442,12 @@ AjBool embHitlistClassify(AjPHitlist const *hits,
 	    ptri->lptr=ptrt;
 	    if(MAJSTRLEN(ptrt->hits[x]->Acc))
 		ajStrAssS(&ptri->Id, ptrt->hits[x]->Acc);
-	    else
+	    else if(MAJSTRLEN(ptrt->hits[x]->Spr))
 		ajStrAssS(&ptri->Id, ptrt->hits[x]->Spr);
+	    else if(MAJSTRLEN(ptrt->hits[x]->Dom))
+		ajStrAssS(&ptri->Id, ptrt->hits[x]->Dom);
+	    else 
+		ajFatal("None of Acc, Spr or Dom are set in embHitlistClassify");
 	    
 	    ajListPush(idxlist,(EmbPHitidx) ptri);
 	}
@@ -2230,8 +3465,13 @@ AjBool embHitlistClassify(AjPHitlist const *hits,
     {
 	if((MAJSTRLEN((*hits)->hits[x]->Acc)))
 	    pos=embHitidxBinSearch((*hits)->hits[x]->Acc, idxarr, idxsiz);
-	else
+	else if((MAJSTRLEN((*hits)->hits[x]->Spr)))
 	    pos=embHitidxBinSearch((*hits)->hits[x]->Spr, idxarr, idxsiz);
+	else if((MAJSTRLEN((*hits)->hits[x]->Dom)))
+	    pos=embHitidxBinSearch((*hits)->hits[x]->Dom, idxarr, idxsiz);
+	else 
+	    ajFatal("None of Acc, Spr or Dom are set in embHitlistClassify");
+
 	if(pos!=-1)
 	{
 	    /*
@@ -2244,8 +3484,12 @@ AjBool embHitlistClassify(AjPHitlist const *hits,
 
 	    if(MAJSTRLEN((*hits)->hits[x]->Acc))
 		ajStrAssS(&tmpstr, (*hits)->hits[x]->Acc);
-	    else
+	    else if(MAJSTRLEN((*hits)->hits[x]->Spr))
 		ajStrAssS(&tmpstr, (*hits)->hits[x]->Spr);
+	    else if(MAJSTRLEN((*hits)->hits[x]->Dom))
+		ajStrAssS(&tmpstr, (*hits)->hits[x]->Dom);
+	    else 
+		ajFatal("None of Acc, Spr or Dom are set in embHitlistClassify");
 
 	    while(ajStrMatchCase(idxarr[tpos]->Id, tmpstr))
 	    {
@@ -2253,20 +3497,28 @@ AjBool embHitlistClassify(AjPHitlist const *hits,
 				    (*hits)->hits[x], thresh))
 		{	
 
-		    if( (idxarr[tpos]->lptr)->Sunid_Family ==
-		       (*hits)->Sunid_Family)
-			/* SCOP family is identical */
-		    {
-			ajStrAssS(&(*hits)->hits[x]->Typeobj, 
-				  (idxarr[tpos]->hptr)->Typeobj);
+/*		    if( (idxarr[tpos]->lptr)->Sunid_Family ==
+		       (*hits)->Sunid_Family) */
 
+		    /* All SCOP nodes are identical */
+		    if((ajStrMatchCase((idxarr[tpos]->lptr)->Family, (*hits)->Family))            &&
+		       (ajStrMatchCase((idxarr[tpos]->lptr)->Superfamily, (*hits)->Superfamily))  &&
+		       (ajStrMatchCase((idxarr[tpos]->lptr)->Fold, (*hits)->Fold))                &&
+		       (ajStrMatchCase((idxarr[tpos]->lptr)->Class, (*hits)->Class)))
+		    {
+
+/*			ajStrAssS(&(*hits)->hits[x]->Typeobj, 
+				  (idxarr[tpos]->hptr)->Typeobj); */
+
+			ajStrAssC(&(*hits)->hits[x]->Typeobj, 
+				  "TRUE");
 			ajStrAssC(&(*hits)->hits[x]->Typesbj, 
 				  "TRUE");
 			ajStrAssS(&(*hits)->hits[x]->Group, 
 				  (idxarr[tpos]->hptr)->Group);
 		    }
 		    else if((ajStrMatchCase((idxarr[tpos]->lptr)->Fold, 
-					   (*hits)->Fold)) &&
+					    (*hits)->Fold)) &&
 			    (ajStrMatchCase((idxarr[tpos]->lptr)->Class, 
 					   (*hits)->Class)))
 			/* SCOP folds are identical */
@@ -2310,8 +3562,12 @@ AjBool embHitlistClassify(AjPHitlist const *hits,
 
 	    if(MAJSTRLEN((*hits)->hits[x]->Acc))
 		ajStrAssS(&tmpstr, (*hits)->hits[x]->Acc);
-	    else
+	    else if(MAJSTRLEN((*hits)->hits[x]->Spr))
 		ajStrAssS(&tmpstr, (*hits)->hits[x]->Spr);
+	    else if(MAJSTRLEN((*hits)->hits[x]->Dom))
+		ajStrAssS(&tmpstr, (*hits)->hits[x]->Dom);
+	    else 
+		ajFatal("None of Acc, Spr or Dom are set in embHitlistClassify");
 
 	    if(tpos<idxsiz) 
 		while(ajStrMatchCase(idxarr[tpos]->Id, tmpstr))
@@ -2320,13 +3576,21 @@ AjBool embHitlistClassify(AjPHitlist const *hits,
 		    if(embHitsOverlap(idxarr[tpos]->hptr, 
 					(*hits)->hits[x], thresh))
 		    {	
-			if( (idxarr[tpos]->lptr)->Sunid_Family ==
-			   (*hits)->Sunid_Family)
+			/*
+			   SCOP family is identical 
+			   if( (idxarr[tpos]->lptr)->Sunid_Family ==
+			   (*hits)->Sunid_Family)  */
 
-			    /* SCOP family is identical */
+			    /* All SCOP nodes are identical */
+			if((ajStrMatchCase((idxarr[tpos]->lptr)->Family, (*hits)->Family))            &&
+			   (ajStrMatchCase((idxarr[tpos]->lptr)->Superfamily, (*hits)->Superfamily))  &&
+			   (ajStrMatchCase((idxarr[tpos]->lptr)->Fold, (*hits)->Fold))                &&
+			   (ajStrMatchCase((idxarr[tpos]->lptr)->Class, (*hits)->Class)))
 			{
-			    ajStrAssS(&(*hits)->hits[x]->Typeobj, 
-				     (idxarr[tpos]->hptr)->Typeobj);
+			    /*			    ajStrAssS(&(*hits)->hits[x]->Typeobj, 
+						    (idxarr[tpos]->hptr)->Typeobj); */
+
+			    ajStrAssC(&(*hits)->hits[x]->Typeobj, "TRUE");
 			    ajStrAssC(&(*hits)->hits[x]->Typesbj, "TRUE");
 			    ajStrAssS(&(*hits)->hits[x]->Group, 
 				      (idxarr[tpos]->hptr)->Group);
@@ -2392,7 +3656,6 @@ AjBool embHitlistClassify(AjPHitlist const *hits,
 
     return ajTrue;
 }
-
 
 
 
@@ -2866,6 +4129,7 @@ AjBool embSignatureAlignSeq(const AjPSignature S, const AjPSeq seq,
     
 
     /* Write hit structure */
+    ajStrAssC(&(*hit)->Model, "SPARSE");    
     ajStrAssC(&(*hit)->Alg, alg);
     ajStrAssS(&(*hit)->Seq, P);
     (*hit)->Start=thisp;
@@ -2928,7 +4192,11 @@ AjBool embSignatureAlignSeqall(const AjPSignature sig, AjPSeqall db,
 
 
     /* Initialise Hitlist object with SCOP records from Signature */
+    (*hitlist)->Type = sig->Type;
+    (*hitlist)->Sunid_Family = sig->Sunid_Family;
     ajStrAssS(&(*hitlist)->Class, sig->Class);
+    ajStrAssS(&(*hitlist)->Architecture, sig->Architecture);
+    ajStrAssS(&(*hitlist)->Topology, sig->Topology);
     ajStrAssS(&(*hitlist)->Fold, sig->Fold);
     ajStrAssS(&(*hitlist)->Superfamily, sig->Superfamily);
     ajStrAssS(&(*hitlist)->Family, sig->Family);

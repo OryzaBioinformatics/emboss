@@ -110,6 +110,7 @@ AjBool embDmxScophitsToHitlist(const AjPList in,
     AjPStr fold     = NULL;
     AjPStr class    = NULL;
     ajint Sunid_Family = 0;
+    ajint type      = 0;
     
     /* Check args and allocate memory */
     if(!in || !iter)
@@ -129,7 +130,7 @@ AjBool embDmxScophitsToHitlist(const AjPList in,
 
     if(!((scoptmp=(AjPScophit)ajListIterNext(*iter))))
     {
-	ajWarn("Empty list in embDmxScophitsToHitlist");
+/*	ajWarn("Empty list in embDmxScophitsToHitlist"); */
 	ajListIterFree(iter);	
 	return ajFalse;
     }
@@ -145,6 +146,7 @@ AjBool embDmxScophitsToHitlist(const AjPList in,
     list = ajListNew();
 
     Sunid_Family=scoptmp->Sunid_Family;
+    type = scoptmp->Type;
     
     
     if(scoptmp->Class)
@@ -221,6 +223,8 @@ AjBool embDmxScophitsToHitlist(const AjPList in,
     ajStrAssS(&(*out)->Superfamily, sfam);
     ajStrAssS(&(*out)->Family, fam);
     (*out)->Sunid_Family = Sunid_Family;
+    (*out)->Type = type;
+    
     
 
     /* Copy temp. list to Hitlist */
@@ -267,6 +271,7 @@ AjBool embDmxScophitToHit(AjPHit *to, const AjPScophit from)
     (*to)->End   = from->End;
     ajStrAssS(&(*to)->Acc, from->Acc);
     ajStrAssS(&(*to)->Spr, from->Spr);
+    ajStrAssS(&(*to)->Dom, from->Dom);
     ajStrAssS(&(*to)->Typeobj, from->Typeobj);
     ajStrAssS(&(*to)->Typesbj, from->Typesbj);
     ajStrAssS(&(*to)->Model, from->Model);
@@ -328,6 +333,7 @@ AjBool embDmxScophitsAccToHitlist(const AjPList in,
     AjPStr fold  = NULL;
     AjPStr class = NULL;
     ajint Sunid_Family = 0;
+    ajint type   =0;
     
     /* Check args and allocate memory */
     if(!in || !iter)
@@ -387,6 +393,7 @@ AjBool embDmxScophitsAccToHitlist(const AjPList in,
 
     
     Sunid_Family=scoptmp->Sunid_Family;
+    type=scoptmp->Type;
     
     
     if(scoptmp->Class)
@@ -460,7 +467,8 @@ AjBool embDmxScophitsAccToHitlist(const AjPList in,
     ajStrAssS(&(*out)->Superfamily, sfam);
     ajStrAssS(&(*out)->Family, fam);
     (*out)->Sunid_Family = Sunid_Family;
-    
+    (*out)->Type = type;
+        
 
     /* Copy temp. list to Hitlist */
     (*out)->N = ajListToArray(list, (void ***) &((*out)->hits));
@@ -494,7 +502,7 @@ AjBool embDmxScophitsAccToHitlist(const AjPList in,
 AjBool embDmxHitsWrite(AjPFile outf, const AjPHitlist hits, ajint maxhits)
 {
     ajint  x  = 0;
-    ajint cnt = 0;
+
     
     AjPList tmplist = NULL;
     AjPList outlist = NULL; /* rank-ordered list of hits for output */
@@ -532,20 +540,35 @@ AjBool embDmxHitsWrite(AjPFile outf, const AjPHitlist hits, ajint maxhits)
     iter=ajListIterRead(outlist);
     while((hit=(AjPScophit) ajListIterNext(iter)))
     {
+/*Fix for Typeobj 
 	if(cnt==maxhits)
+	    break; */
+
+	if(x==maxhits)
 	    break;
 	
 	ajFmtPrintF(outf,"HI  %-6d%-10S%-5d%-5d%-15S%-10S%-10S%-10.2f"
-		    "%-7.4f%-7.4f\n",
+		    "%.3e %.3e\n",
                     x+1, hit->Acc, 
                     hit->Start+1, hit->End+1,
                     hit->Group, 
                     hit->Typeobj, hit->Typesbj, 
-                    hit->Score, hit->Pval, hit->Eval);
+                    hit->Score, hit->Pval, hit->Eval); 
+
+/* Without Typeobj 
+	ajFmtPrintF(outf,"HI  %-6d%-10S%-5d%-5d%-15S%-10.2f"
+		    "%.3e %.3e\n",
+                    x+1, hit->Acc, 
+                    hit->Start+1, hit->End+1,
+                    hit->Group, 
+                    hit->Score, hit->Pval, hit->Eval); */
+
 	ajDmxScophitDel(&hit);
 
-/*CORRECTION*/	if(ajStrMatchC(hit->Typeobj, "FALSE"))
-	    cnt++;
+/*CORRECTION*/	
+/*	if(ajStrMatchC(hit->Typeobj, "FALSE"))
+	    cnt++; */
+
 	x++;
     }
     
@@ -559,7 +582,6 @@ AjBool embDmxHitsWrite(AjPFile outf, const AjPHitlist hits, ajint maxhits)
     /*Clean up and return*/ 
     return ajTrue;
 }
-
 
 
 
@@ -611,6 +633,7 @@ AjBool embDmxScopToScophit(const AjPScop source, AjPScophit* target)
 	ajStrAssS(&(*target)->Acc,source->Acc);
 	ajStrAssS(&(*target)->Spr,source->Spr);
     }
+    ajStrAssS(&(*target)->Dom,source->Entry);
     
     return ajTrue;
 }
@@ -627,7 +650,7 @@ AjBool embDmxScopToScophit(const AjPScop source, AjPScophit* target)
 ** corresponding Scop objects from the scop classification file.
 **
 ** @param [r] align     [const AjPScopalg]  Contains a seed alignment.
-** @param [r] scop_arr  [AjPScop const *]    Array of AjPScop objects
+** @param [r] scop_arr  [const AjPScop *]    Array of AjPScop objects
 ** @param [r] scop_dim  [ajint]       Size of array
 ** @param [w] list      [AjPList*]    List of Scop objects.
 ** 
@@ -636,7 +659,7 @@ AjBool embDmxScopToScophit(const AjPScop source, AjPScophit* target)
 ** @@
 ****************************************************************************/
 
-AjBool embDmxScopalgToScop(const AjPScopalg align, AjPScop const *scop_arr, 
+AjBool embDmxScopalgToScop(const AjPScopalg align, const AjPScop *scop_arr, 
 			   ajint scop_dim, AjPList* list)
 {
     AjPStr entry_up = NULL;  /* Current entry, upper case */
@@ -678,7 +701,7 @@ AjBool embDmxScopalgToScop(const AjPScopalg align, AjPScop const *scop_arr,
 	    ajFmtPrint("Pushing %d (%S)\n", scop_arr[idx]->Sunid_Family, 
 		       scop_arr[idx]->Acc); */
 	    
-            ajListPushApp(*list,scop_arr[idx]);
+            ajListPushApp(*list,(void*)scop_arr[idx]);
 	}
 	
     }
@@ -744,7 +767,7 @@ AjBool embDmxScophitsOverlapAcc(const AjPScophit h1, const AjPScophit h2,
 ** @param [r] n   [ajint]          Threshold number of residues for overlap
 **
 ** @return [AjBool] True if the overlap between the sequences is at least as 
-** long as the threshold. False otherwise.
+**                  long as the threshold. False otherwise.
 ** @@
 ****************************************************************************/
 
@@ -813,12 +836,21 @@ AjPScophit embDmxScophitMerge(const AjPScophit hit1, const AjPScophit hit2)
 	return NULL;
     }
 
+    if((hit1->Type != hit2->Type))
+    {
+	ajWarn("Merge attempted on 2 hits of different domain type");
+	return NULL;
+    }
+
     /* Allocate memory */
     ret = ajDmxScophitNew();
     temp = ajStrNew();
     
     ajStrAssS(&(ret->Acc), hit1->Acc);
     ajStrAssS(&(ret->Spr), hit1->Spr);
+    ajStrAssS(&(ret->Dom), hit1->Dom);
+    ret->Type = hit1->Type;
+    
         
     if(ajStrMatch(hit1->Class, hit2->Class))
     {
@@ -1142,6 +1174,7 @@ AjBool embDmxScophitMergeInsertThisTargetBoth(const AjPList list,
 
 
 
+
 /* @func embDmxSeqNR ********************************************************
 **
 ** Reads a list of AjPSeq's and writes an array describing the redundancy in
@@ -1151,27 +1184,35 @@ AjBool embDmxScophitMergeInsertThisTargetBoth(const AjPList list,
 ** Sequences are classed as redundant (0 in the array, i.e. they are possibly
 ** to be discarded later) if they exceed a threshold (%) level of sequence
 ** similarity to any other in the set (the shortest sequence of the current
-** pair will be discarded).
+** pair will be discarded).  If, however, the CheckGarbage argument
+** is set ON (True) then the the sequence that is *not* garbage is marked 
+** up as redundant. A sequence is "garbage" if the Garbage element of the 
+** data structure is set.  If the CheckGarbage argument is set OFF (False) 
+** the shortest sequence is marked as redundant as normal.
 ** 
 ** The set output will always contain at least 1 sequence.
 ** 
 ** @param [r] input  [const AjPList]    List of ajPSeq's 
 ** @param [w] keep   [AjPInt*]    0: rejected (redundant) sequence, 1: the 
                                   sequence was retained
-** @param [w] nset   [ajint*]     Number of sequences in nr set (no. of 1's 
-**                                in the keep array)
+** @param [w] nset   [ajint*]     Number of non-garbage sequences in nr set 
 ** @param [r] matrix    [const AjPMatrixf] Residue substitution matrix
 ** @param [r] gapopen   [float]      Gap insertion penalty
 ** @param [r] gapextend [float]      Gap extension penalty
 ** @param [r] thresh    [float]      Threshold residue id. for "redundancy"
+** @param [r] CheckGarbage [AjBool]  If True, when two sequences are compared
+** and deemed redundant, then the Sequence that is *not* garbage is marked 
+** up as redundant. A sequence is "garbage" if the Garbage element of the 
+** data structure is set.  If False, the shortest sequence is marked as 
+** redundant as normal.
 **
 ** @return [AjBool] ajTrue on success
 ** @@
 ****************************************************************************/
 
 AjBool embDmxSeqNR(const AjPList input, AjPInt *keep, ajint *nset,
-		   const AjPMatrixf matrix, float gapopen, float gapextend,
-		   float thresh)
+		      const AjPMatrixf matrix, float gapopen, float gapextend,
+		      float thresh, AjBool CheckGarbage)
 {
     ajint start1  = 0;	  /* Start of seq 1, passed as arg but not used */
     ajint start2  = 0;	  /* Start of seq 2, passed as arg but not used */
@@ -1243,16 +1284,16 @@ AjBool embDmxSeqNR(const AjPList input, AjPInt *keep, ajint *nset,
     {
 	for(y=x+1; y<nin; y++)
 	{
-	    /* DIAGNOSTICS
+	    /* DIAGNOSTICS 
 	       ajFmtPrint("x=%d y=%d\nComparing\n%S\nto\n%S\n\n", 
-		       x, y, inseqs[x]->Seq, inseqs[y]->Seq);
-	    */
+		       x, y, inseqs[x]->Seq, inseqs[y]->Seq);*/
+	    
 	    
 
 	    /* Process w/o alignment identical sequences */
 	    if(ajStrMatch(inseqs[x]->Seq, inseqs[y]->Seq))
 	    {
-/* DIAGNOSTICS		printf("Score=%f\n", 100.0); */
+/*  DIAGNOSTICS		printf("Score=%f\n", 100.0);  */
 		
 		ajFloat2dPut(&scores,x,y,(float)100.0);
 		continue;
@@ -1310,7 +1351,7 @@ AjBool embDmxSeqNR(const AjPList input, AjPInt *keep, ajint *nset,
 
 
 	    /* Write array with score*/
-	/* DIAGNOSTICS	    printf("Score=%f\n", sim); */
+	/* DIAGNOSTICS	   printf("Score=%f\n", sim);  */
 		    ajFloat2dPut(&scores,x,y,sim);
 	}
     }
@@ -1341,26 +1382,67 @@ AjBool embDmxSeqNR(const AjPList input, AjPInt *keep, ajint *nset,
 
 	    if(ajFloat2dGet(scores,x,y) >= thresh)
 	    {
-		if(ajIntGet(lens,x) < ajIntGet(lens,y))
-		    ajIntPut(keep,x,0);
-
+		/* If both are garbage, set on length as usual */
+		if(CheckGarbage && inseqs[x]->Garbage && inseqs[y]->Garbage)
+		{
+		    if(ajIntGet(lens,x) < ajIntGet(lens,y))
+			ajIntPut(keep,x,0);
+		    else	
+			ajIntPut(keep,y,0);
+		}
+		/* If just one is garbage, set non-garbage sequence as redundant */
+		else if(CheckGarbage && ((inseqs[x]->Garbage) || (inseqs[y]->Garbage)))
+		{
+		    if(inseqs[x]->Garbage)
+			ajIntPut(keep,y,0);
+		    else
+			ajIntPut(keep,x,0);
+		}
+		/* Otherwise set on length as usual */
 		else
-		    ajIntPut(keep,y,0);
+		{
+		    if(ajIntGet(lens,x) < ajIntGet(lens,y))
+			ajIntPut(keep,x,0);
+		    else
+			ajIntPut(keep,y,0);
+		}
 	    }
 	}
     }
 
     for(x=0; x<nin; x++)
-    	if(ajIntGet(*keep,x))
-	    (*nset)++;
+	if((!inseqs[x]->Garbage))
+	    if(ajIntGet(*keep,x))
+		(*nset)++;
+    
 
     /* Keep first sequence in case all have been processed out */
     if(*nset == 0)
     {
-	ajIntPut(keep,0,1);
-	*nset = 1;
+	for(x=0; x<nin; x++)
+	{
+	    if((!inseqs[x]->Garbage))
+	    {	
+		ajIntPut(keep,x,1);
+		*nset = 1;
+		break;
+	    }
+	}
+	if(*nset == 0)
+	    ajWarn("nset == 0 after processing");
     }
     
+
+    for(x=0; x<nin; x++)
+    {
+	for(y=x+1; y<nin; y++)
+	{
+/*DIAGNOSTICS	    ajFmtPrint("x=%d y=%d\nComparing\n%S\nto\n%S\n\n", 
+		       x, y, inseqs[x]->Seq, inseqs[y]->Seq);        */
+	}
+    }
+    
+
 
     AJFREE(compass);
     AJFREE(path);
@@ -1386,26 +1468,34 @@ AjBool embDmxSeqNR(const AjPList input, AjPInt *keep, ajint *nset,
 ** Sequences are classed as redundant (0 in the array, i.e. they are possibly
 ** to be discarded later) if they lie outside a range of threshold (%) 
 ** sequence similarity to others in the set (the shortest sequence of the 
-** current pair will be discarded).
+** current pair will be discarded).  If, however, the CheckGarbage argument
+** is set ON (True) then the the sequence that is *not* garbage is marked 
+** up as redundant. A sequence is "garbage" if the Garbage element of the 
+** data structure is set.  If the CheckGarbage argument is set OFF (False) 
+** the shortest sequence is marked as redundant as normal.
 **
 ** @param [r] input  [const AjPList]    List of ajPSeq's
 ** @param [w] keep   [AjPInt*]    0: rejected (redundant) sequence, 1: the
                                   sequence was retained
-** @param [w] nset   [ajint*]     Number of sequences in nr set (no. of 1's
-**                                in the keep array)
+** @param [w] nset   [ajint*]     Number of non-garbage sequences in nr set.
 ** @param [r] matrix    [const AjPMatrixf] Residue substitution matrix
 ** @param [r] gapopen   [float]      Gap insertion penalty
 ** @param [r] gapextend [float]      Gap extension penalty
-** @param [r] thresh1    [float]    Threshold lower limit
-** @param [r] thresh2    [float]    Threshold upper limit
+** @param [r] threshlow    [float]    Threshold lower limit
+** @param [r] threshup    [float]    Threshold upper limit
+** @param [r] CheckGarbage [AjBool]  If True, when two sequences are compared
+** and deemed redundant, then the Sequence that is *not* garbage is marked 
+** up as redundant. A sequence is "garbage" if the Garbage element of the 
+** data structure is set.  If False, the shortest sequence is marked as 
+** redundant as normal.
+** 
 **
 ** @return [AjBool] ajTrue on success
 ** @@
 ****************************************************************************/
 AjBool embDmxSeqNRRange(const AjPList input, AjPInt *keep, ajint *nset,
-			const AjPMatrixf matrix,
-			float gapopen, float gapextend,
-			float thresh1, float thresh2)
+		      const AjPMatrixf matrix, float gapopen, float gapextend,
+		      float threshlow, float threshup, AjBool CheckGarbage)
 {
     ajint start1 = 0;	/* Start of seq 1, passed as arg but not used */
     ajint start2 = 0;	/* Start of seq 2, passed as arg but not used */
@@ -1434,10 +1524,7 @@ AjBool embDmxSeqNRRange(const AjPList input, AjPInt *keep, ajint *nset,
     AjPFloat2d  scores = NULL;
     AjPSeqCvt cvt = 0;
     AjBool show = ajFalse;	/* Passed as arg but not used here */
-    AjBool ok   = ajFalse;      /* True if the current sequence has
-					  at least thresh1 % similarity to
-					  at least one other sequence in the
-					  set */
+
 
 
     /* Intitialise some variables */
@@ -1558,19 +1645,43 @@ AjBool embDmxSeqNRRange(const AjPList input, AjPInt *keep, ajint *nset,
 	    if(!ajIntGet(*keep,y))
 		continue;
 
-	    if(ajFloat2dGet(scores,x,y) >= thresh2)
-	    {
-		if(ajIntGet(lens,x) < ajIntGet(lens,y))
-		    ajIntPut(keep,x,0);
+/*	    if(ajFloat2dGet(scores,x,y) >= threshup) */
+	    
+	    if((ajFloat2dGet(scores,x,y) <= threshup) &&
+	       (ajFloat2dGet(scores,x,y) >= threshlow))
 
+	    {
+		/* If both are garbage, set on length as usual */
+		if(CheckGarbage && inseqs[x]->Garbage && inseqs[y]->Garbage)
+		{
+		    if(ajIntGet(lens,x) < ajIntGet(lens,y))
+			ajIntPut(keep,x,0);
+		    else	
+			ajIntPut(keep,y,0);
+		}
+		/* If just one is garbage, set non-garbage sequence as redundant */
+		else if(CheckGarbage && ((inseqs[x]->Garbage) || (inseqs[y]->Garbage)))
+		{
+		    if(inseqs[x]->Garbage)
+			ajIntPut(keep,y,0);
+		    else
+			ajIntPut(keep,x,0);
+		}
+		/* Otherwise set on length as usual */
 		else
-		    ajIntPut(keep,y,0);
+		{
+		    if(ajIntGet(lens,x) < ajIntGet(lens,y))
+			ajIntPut(keep,x,0);
+		    else
+			ajIntPut(keep,y,0);
+		}
 	    }
 	}
     }
 
 
     /* Now check the lower limit */
+    /*
     for(x=0; x<nin; x++)
     {
 	if(!ajIntGet(*keep,x))
@@ -1583,7 +1694,7 @@ AjBool embDmxSeqNRRange(const AjPList input, AjPInt *keep, ajint *nset,
 	    if(!ajIntGet(*keep,y))
 		continue;
 
-	    if(ajFloat2dGet(scores,x,y) >= thresh1)
+	    if(ajFloat2dGet(scores,x,y) >= threshlow)
 	    {
 		ok = ajTrue;
 		break;
@@ -1593,27 +1704,231 @@ AjBool embDmxSeqNRRange(const AjPList input, AjPInt *keep, ajint *nset,
 	if(!ok)
 	    ajIntPut(keep,x,0);
     }
-
+    */
 
     for(x=0; x<nin; x++)
-    	if(ajIntGet(*keep,x))
-	    (*nset)++;
+	if((!inseqs[x]->Garbage))
+	    if(ajIntGet(*keep,x))
+		(*nset)++;
 
 
 
     /* Keep first sequence in case all have been processed out */
     if(*nset == 0)
     {
-	ajIntPut(keep,0,1);
-	*nset = 1;
+	for(x=0; x<nin; x++)
+	{
+	    if((!inseqs[x]->Garbage))
+	    {	
+		ajIntPut(keep,x,1);
+		*nset = 1;
+		break;
+	    }
+	}
+	if(*nset == 0)
+	    ajWarn("nset == 0 after processing");
     }
-
+    
     /* Tidy up */
     AJFREE(compass);
     AJFREE(path);
     ajStrDel(&m);
     ajStrDel(&n);
     ajFloat2dDel(&scores);
+    ajIntDel(&lens);
+    AJFREE(inseqs);
+
+    return ajTrue;
+}
+
+
+
+
+
+/* @func embDmxSeqCompall ***************************************************
+**
+** Reads a list of AjPSeq's and writes an array of sequence similarity values
+** for an all-versus-all comparison of the sequences.  The rows and columns 
+** in the array correspond to the order of the sequences in the list.
+**
+** 
+** @param [r] input  [const AjPList]    List of ajPSeq's 
+** @param [w] scores [AjPFloat2d*] Sequence similarity values
+** @param [r] matrix    [const AjPMatrixf] Residue substitution matrix
+** @param [r] gapopen   [float]      Gap insertion penalty
+** @param [r] gapextend [float]      Gap extension penalty
+**
+** @return [AjBool] ajTrue on success
+** @@
+****************************************************************************/
+
+AjBool embDmxSeqCompall(const AjPList input, AjPFloat2d *scores, 
+		   const AjPMatrixf matrix, float gapopen, float gapextend)
+{
+    ajint start1  = 0;	  /* Start of seq 1, passed as arg but not used */
+    ajint start2  = 0;	  /* Start of seq 2, passed as arg but not used */
+    ajint maxarr  = 300;  /* Initial size for matrix */
+    ajint len;
+    ajint x;		  /* Counter for seq 1 */
+    ajint y;		  /* Counter for seq 2 */
+    ajint nin;		  /* Number of sequences in input list */
+    ajint *compass;
+
+    const char  *p;
+    const char  *q;
+
+    AjFloatArray *sub;
+    float id   = 0.;	  /* Passed as arg but not used here */
+    float sim  = 0.;
+    float idx  = 0.;	  /* Passed as arg but not used here */
+    float simx = 0.;	  /* Passed as arg but not used here */
+    float *path;
+
+    AjPStr m = NULL;	  /* Passed as arg but not used here */
+    AjPStr n = NULL;	  /* Passed as arg but not used here */
+
+    AjPSeq      *inseqs = NULL;	 /* Array containing input sequences */
+    AjPInt      lens    = NULL;	 /* 1: Lengths of sequences* in input list */
+    AjPSeqCvt   cvt     = 0;
+    AjBool      show    = ajFalse; /* Passed as arg but not used here */
+
+
+    /* Intitialise some variables */
+    AJCNEW(path, maxarr);
+    AJCNEW(compass, maxarr);
+    m = ajStrNew();
+    n = ajStrNew();
+    gapopen   = ajRoundF(gapopen,8);
+    gapextend = ajRoundF(gapextend,8);
+    sub = ajMatrixfArray(matrix);
+    cvt = ajMatrixfCvt(matrix);
+
+    /* Convert the AjPList to an array of AjPseq */
+    if(!(nin=ajListToArray(input,(void ***)&inseqs)))
+    {
+	ajWarn("Zero sized list of sequences passed into embDmxSeqCompall");
+	AJFREE(compass);
+	AJFREE(path);
+	ajStrDel(&m);
+	ajStrDel(&n);
+	return ajFalse;
+    }
+
+
+    /* Create an ajint array to hold lengths of sequences */
+    lens = ajIntNewL(nin);
+    for(x=0; x<nin; x++)
+	ajIntPut(&lens,x,ajSeqLen(inseqs[x]));
+
+
+    /* Create a 2d float array to hold the similarity scores */
+    *scores = ajFloat2dNew();
+
+    /* Start of main application loop */
+    for(x=0; x<nin; x++)
+    {
+	for(y=x+1; y<nin; y++)
+	{
+	    /* DIAGNOSTICS 
+	       ajFmtPrint("x=%d y=%d\nComparing\n%S\nto\n%S\n\n", 
+		       x, y, inseqs[x]->Seq, inseqs[y]->Seq);*/
+	    
+	    
+
+	    /* Process w/o alignment identical sequences */
+	    if(ajStrMatch(inseqs[x]->Seq, inseqs[y]->Seq))
+	    {
+/*  DIAGNOSTICS		printf("Score=%f\n", 100.0);  */
+		
+		ajFloat2dPut(scores,x,y,(float)100.0);
+		continue;
+	    }
+
+
+	    /* Intitialise variables for use by alignment functions */
+	    len = ajIntGet(lens,x)*ajIntGet(lens,y);
+
+	    if(len>maxarr)
+	    {
+		AJCRESIZE(path,len);
+		AJCRESIZE(compass,len);
+		maxarr=len;
+	    }
+
+	    p = ajSeqChar(inseqs[x]);
+	    q = ajSeqChar(inseqs[y]);
+
+	    ajStrAssC(&m,"");
+	    ajStrAssC(&n,"");
+
+
+	    /* Check that no sequence length is 0 */
+	    if((ajIntGet(lens,x)==0)||(ajIntGet(lens,y)==0))
+	    {
+		ajWarn("Zero length sequence in embDmxSeqCompall");
+		AJFREE(compass);
+		AJFREE(path);
+		ajStrDel(&m);
+		ajStrDel(&n);
+		ajFloat2dDel(scores);
+		ajIntDel(&lens);
+		AJFREE(inseqs);
+
+		return ajFalse;
+	    }
+
+
+	    /* Call alignment functions */
+	    embAlignPathCalc(p,q,ajIntGet(lens,x),ajIntGet(lens,y), gapopen,
+			     gapextend,path,sub,cvt,compass,show);
+
+	    embAlignScoreNWMatrix(path,inseqs[x],inseqs[y],sub,cvt,
+				  ajIntGet(lens,x), ajIntGet(lens,y),gapopen,
+				  compass,gapextend,&start1,&start2);
+
+	    embAlignWalkNWMatrix(path,inseqs[x],inseqs[y],&m,&n,
+				 ajIntGet(lens,x),ajIntGet(lens,y),
+				 &start1,&start2,gapopen,gapextend,cvt,
+				 compass,sub);
+
+	    embAlignCalcSimilarity(m,n,sub,cvt,ajIntGet(lens,x),
+				   ajIntGet(lens,y),&id,&sim,&idx, &simx);
+
+
+	    /* Write array with score*/
+	/* DIAGNOSTICS	   printf("Score=%f\n", sim);  */
+		    ajFloat2dPut(scores,x,y,sim);
+	}
+    }
+
+
+    /* DIAGNOSTIC 
+    for(x=0; x<nin; x++)
+    {
+	for(y=x+1; y<nin; y++)	
+	{
+	    ajFmtPrint("%d:%d : %f\n", x+1, y+1, ajFloat2dGet(*scores,x,y));
+        }
+    }
+    */
+    
+
+
+    for(x=0; x<nin; x++)
+    {
+	for(y=x+1; y<nin; y++)
+	{
+/*DIAGNOSTICS	    ajFmtPrint("x=%d y=%d\nComparing\n%S\nto\n%S\n\n", 
+		       x, y, inseqs[x]->Seq, inseqs[y]->Seq);        */
+	}
+    }
+    
+
+
+    AJFREE(compass);
+    AJFREE(path);
+    ajStrDel(&m);
+    ajStrDel(&n);
     ajIntDel(&lens);
     AJFREE(inseqs);
 
@@ -1666,6 +1981,7 @@ AjBool embDmxHitlistToScophits(const AjPList in, AjPList *out)
 	    
 
 	    /* Assign scop classification records from hitlist structure */
+	    scophit->Type = hitlist->Type;
 	    ajStrAssS(&scophit->Class, hitlist->Class);
 	    ajStrAssS(&scophit->Fold, hitlist->Fold);
 	    ajStrAssS(&scophit->Superfamily, hitlist->Superfamily);
@@ -1677,6 +1993,7 @@ AjBool embDmxHitlistToScophits(const AjPList in, AjPList *out)
 	    ajStrAssS(&scophit->Seq, hitlist->hits[x]->Seq);
 	    ajStrAssS(&scophit->Acc, hitlist->hits[x]->Acc);
 	    ajStrAssS(&scophit->Spr, hitlist->hits[x]->Spr);
+	    ajStrAssS(&scophit->Dom, hitlist->hits[x]->Dom);
 	    ajStrAssS(&scophit->Typeobj, hitlist->hits[x]->Typeobj);
 	    ajStrAssS(&scophit->Typesbj, hitlist->hits[x]->Typesbj);
 	    ajStrAssS(&scophit->Model, hitlist->hits[x]->Model);

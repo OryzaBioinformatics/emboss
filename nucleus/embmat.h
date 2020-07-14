@@ -65,6 +65,8 @@ typedef struct EmbSMatPrints
 ** @attr cut2 [ajint] Undocumented
 ** @attr cut3 [ajint] Undocumented
 ** @attr cut4 [ajint] Undocumented
+** @attr circ12 [AjBool] Circular for cut1 and/or cut2
+** @attr circ34 [AjBool] Circular for cut3 and/or cut4
 ** @attr iso [AjPStr] Holds names of isoschizomers
 ** @@
 ******************************************************************************/
@@ -76,24 +78,26 @@ typedef struct EmbSMatMatch
     AjPStr acc;
     AjPStr tit;
     AjPStr pat;
-    ajint    n;
-    ajint    len;
-    ajint    thresh;
-    ajint    max;
-    ajint    element;
-    ajint    start;
-    ajint    end;
-    ajint    score;
-    ajint    hpe;
-    ajint    hpm;
+    ajint  n;
+    ajint  len;
+    ajint  thresh;
+    ajint  max;
+    ajint  element;
+    ajint  start;
+    ajint  end;
+    ajint  score;
+    ajint  hpe;
+    ajint  hpm;
     AjBool all;
     AjBool ordered;
     AjBool forward;
-    ajint    mm;
-    ajint    cut1;
-    ajint    cut2;
-    ajint    cut3;
-    ajint    cut4;
+    ajint  mm;
+    ajint  cut1;
+    ajint  cut2;
+    ajint  cut3;
+    ajint  cut4;
+    AjBool circ12;
+    AjBool circ34;
     AjPStr iso;
 } EmbOMatMatch;
 #define EmbPMatMatch EmbOMatMatch*

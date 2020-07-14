@@ -29,7 +29,8 @@
 
 static void   patRestrictPushHit(const EmbPPatRestrict enz,
 				 AjPList l, ajint pos,
-				 ajint begin, ajint len, AjBool forward);
+				 ajint begin, ajint len,
+				 AjBool forward, AjBool plasmid);
 
 static void   patAminoCarboxyl(const AjPStr s,AjPStr *cs,
 			       AjBool *amino, AjBool *carboxyl);
@@ -215,15 +216,15 @@ EmbPPatMatch embPatSeqMatchFindC(const AjPSeq seq, const char *reg)
 ** Find all the regular expression matches of reg in the string string.
 **
 ** @param [r] regexp [const AjPStr] Regular expression string.
-** @param [r] string [const AjPStr] String to be searched.
+** @param [r] strng [const AjPStr] String to be searched.
 **
 ** @return [EmbPPatMatch] Results of the pattern matching.
 **
 ******************************************************************************/
 
-EmbPPatMatch embPatMatchFind(const AjPStr regexp, const AjPStr string)
+EmbPPatMatch embPatMatchFind(const AjPStr regexp, const AjPStr strng)
 {
-    return embPatMatchFindC(regexp, ajStrStr(string));
+    return embPatMatchFindC(regexp, ajStrStr(strng));
 }
 
 
@@ -750,13 +751,15 @@ AjBool embPatRestrictReadEntry(EmbPPatRestrict re, AjPFile inf)
 ** @param [r] begin [ajint] Sequence offset
 ** @param [r] len [ajint] Sequence length
 ** @param [r] forward [AjBool] True if forward strand
+** @param [r] plasmid [AjBool] Allow circular DNA
 **
 ** @return [void]
 ******************************************************************************/
 
 static void patRestrictPushHit(const EmbPPatRestrict enz,
 			       AjPList l, ajint pos,
-			       ajint begin, ajint len, AjBool forward)
+			       ajint begin, ajint len,
+			       AjBool forward, AjBool plasmid)
 {
 
     EmbPMatMatch hit;
@@ -791,11 +794,15 @@ static void patRestrictPushHit(const EmbPPatRestrict enz,
 	    ++hit->cut2;
 
 	if(hit->cut1<1)
+	{
 	    hit->cut1+=len;
-
+	    hit->circ12 = ajTrue;
+	}
 	if(hit->cut2<1)
+	{
 	    hit->cut2+=len;
-
+	    hit->circ12 = ajTrue;
+	}
 
 	if(enz->ncuts == 4)
 	{
@@ -803,10 +810,16 @@ static void patRestrictPushHit(const EmbPPatRestrict enz,
 	    hit->cut4 = pos+begin+enz->cut4-1;
 
 	    if(hit->cut3>len+begin-1)
+	    {
 		hit->cut3-=len;
+		hit->circ34 = ajTrue;
+	    }
 
 	    if(hit->cut4>len+begin-1)
+	    {
 		hit->cut4-=len;
+		hit->circ34 = ajTrue;
+	    }
 	}
 	else hit->cut3 = hit->cut4 = 0;
     }
@@ -823,28 +836,58 @@ static void patRestrictPushHit(const EmbPPatRestrict enz,
 	if(enz->cut2<1)
 	    --hit->cut2;
 
-	if(hit->cut1<1)
-	    hit->cut1+=len;
+	/* cuts beyond start of sequence */
 
+	if(hit->cut1<1)
+	{
+	    hit->cut1+=len;
+	    hit->circ12 = ajTrue;
+	}
 	if(hit->cut2<1)
+	{
 	    hit->cut2+=len;
+	    hit->circ12 = ajTrue;
+	}
+
+	/* cuts beyond end of sequence */
 
 	if(hit->cut1>len+begin-1)
+	{
 	    hit->cut1-=len;
-
+	    hit->circ12 = ajTrue;
+	}
 	if(hit->cut2>len+begin-1)
+	{
 	    hit->cut2-=len;
+	    hit->circ12 = ajTrue;
+	}
 
 	if(enz->ncuts == 4)
 	{
+	    ajDebug("so far, len:%d pos:%d begin:%d\n",
+		    len, pos, begin);
+	    ajDebug("before, cut3:%d 4:%d circ34:%b\n",
+		    hit->cut3, hit->cut4, hit->circ34);
+
 	    hit->cut3 = len+begin-pos-enz->cut3-1;
 	    hit->cut4 = len+begin-pos-enz->cut4-1;
 
+	    ajDebug("middle, cut3:%d 4:%d\n",
+		    hit->cut3, hit->cut4);
+
 	    if(hit->cut3<0)
+	    {
 		hit->cut3+=len;
+		hit->circ34 = ajTrue;
+	    }
 
 	    if(hit->cut4<0)
+	    {
 		hit->cut4+=len;
+		hit->circ34 = ajTrue;
+	    }
+	    ajDebug("after, cut3:%d 4:%d circ34: %b\n",
+		    hit->cut3, hit->cut4, hit->circ34);
 	}
 	else
 	    hit->cut3 = hit->cut4 = 0;
@@ -858,6 +901,9 @@ static void patRestrictPushHit(const EmbPPatRestrict enz,
 	hit->cut4 = v;
     }
 
+    ajDebug("embPatRestrictPushHit forward:%b\n", forward);
+    ajDebug("cut1:%d 2:%d 3:%d 4:%d\n",
+	    hit->cut1, hit->cut2, hit->cut3, hit->cut4);
     ajListPush(l,(void *) hit);
 
     return;
@@ -874,7 +920,7 @@ static void patRestrictPushHit(const EmbPPatRestrict enz,
 ** @param [r] substr [const AjPStr] Sequence as ASCII
 ** @param [r] binstr [const AjPStr] Sequence as binary IUB
 ** @param [r] revstr [const AjPStr] Sequence as ASCII reversed
-** @param [r] binrev [const AjPStr] Sequencd as binary IUB reversed
+** @param [r] binrev [const AjPStr] Sequence as binary IUB reversed
 ** @param [r] len [ajint] Length of sequence
 ** @param [r] ambiguity [AjBool] Allow ambiguity (binary search)
 ** @param [r] plasmid [AjBool] Allow circular DNA
@@ -928,6 +974,11 @@ ajint embPatRestrictScan(const EmbPPatRestrict enz,
 	maxcut=AJMAX(maxcut,enz->cut4);
     }
 
+    ajDebug("embPatRestrictScan '%S' '%S' ncuts:%d blunt:%b\n",
+	    enz->cod, enz->pat, enz->ncuts, enz->blunt);
+    ajDebug("cut1:%d 2:%d 3:%d 4:%d\n",
+	    enz->cut1, enz->cut2, enz->cut3, enz->cut4 );
+
     tx = ajListNew();
     ty = ajListNew();
 
@@ -954,7 +1005,7 @@ ajint embPatRestrictScan(const EmbPPatRestrict enz,
 	    if(j==enz->len && (plasmid || i+mincut+1>0) && i<limit)
 	    {
 		++hits;
-		patRestrictPushHit(enz,tx,i,begin,len,forward);
+		patRestrictPushHit(enz,tx,i,begin,len,forward, plasmid);
 	    }
 
 	}
@@ -977,7 +1028,7 @@ ajint embPatRestrictScan(const EmbPPatRestrict enz,
 	    if(j==enz->len && (plasmid || i+mincut+1>0) && i<limit)
 	    {
 		++hits;
-		patRestrictPushHit(enz,tx,i,begin,len,forward);
+		patRestrictPushHit(enz,tx,i,begin,len,forward, plasmid);
 	    }
 
 	}
@@ -1004,7 +1055,7 @@ ajint embPatRestrictScan(const EmbPPatRestrict enz,
 	    if(j==enz->len && (plasmid || i+mincut+1>0) && i<limit)
 	    {
 		++hits;
-		patRestrictPushHit(enz,tx,i,begin,len,forward);
+		patRestrictPushHit(enz,tx,i,begin,len,forward, plasmid);
 	    }
 
 	}
@@ -1026,7 +1077,7 @@ ajint embPatRestrictScan(const EmbPPatRestrict enz,
 	    if(j==enz->len && (plasmid || i+mincut+1>0) && i<limit)
 	    {
 		++hits;
-		patRestrictPushHit(enz,tx,i,begin,len,forward);
+		patRestrictPushHit(enz,tx,i,begin,len,forward, plasmid);
 	    }
 	}
     }

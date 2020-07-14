@@ -233,6 +233,10 @@ typedef struct EmbSShowComp {
 **
 ** @attr sense [ajint]  1 or -1 = sense to display
 ** @attr flat [AjBool] ajTrue = display in flat format with recognition sites
+** @attr plasmid [AjBool] ajTrue = Circular (plasmid) sequence. Needed so
+**                        that when we display sequences we can decide whether
+**                        to show cuts that go past the origin in either
+**                        direction
 ** @attr matches [AjPList] list of AjPMatmatch matches
 ** @attr hits [ajint]  number of hits in list
 ** @attr sitelist [AjPList] list of EmbSShowREsite
@@ -242,6 +246,7 @@ typedef struct EmbSShowComp {
 typedef struct EmbSShowRE {
   ajint sense;
   AjBool flat;
+  AjBool plasmid;
   AjPList matches;
   ajint hits;
   AjPList sitelist;
@@ -310,7 +315,7 @@ void     embShowAddTran (EmbPShow thys, const AjPTrn trnTable, ajint frame,
 			 ajint orfminsize, AjBool lcinterorf,
 			 AjBool firstorf, AjBool lastorf, AjBool showframe);
 void     embShowAddRE (EmbPShow thys, ajint sense, const AjPList restrictlist,
-		       AjBool flat);
+		       AjBool plasmid, AjBool flat);
 void     embShowAddFT (EmbPShow thys, const AjPFeattable feat);
 void     embShowAddNote (EmbPShow thys, const AjPRange regions);
 void     embShowPrint (AjPFile out, const EmbPShow thys);

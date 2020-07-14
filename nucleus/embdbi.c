@@ -558,7 +558,7 @@ void embDbiSysCmd(const AjPStr cmdstr)
     if(!pid)
     {
 	execvp(pgm, arglist);
-	return;
+	ajExitAbort();			/* just in case */
     }
     while((retval=waitpid(pid,&status,WNOHANG))!=pid)
     {

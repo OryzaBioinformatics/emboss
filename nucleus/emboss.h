@@ -25,6 +25,5 @@
 #include "embsig.h"
 #include "embdmx.h"
 #include "embindex.h"
-#include "embgotoh.h"
 
 #endif

@@ -142,7 +142,7 @@
 
 AjBool embPdbidToSp(const AjPStr pdb, AjPStr *spr, const AjPList list)
 {
-    AjPPdbtosp *arr = NULL;  /* Array derived from list */
+    const AjPPdbtosp *arr = NULL;  /* Array derived from list */
     ajint dim = 0;           /* Size of array */
     ajint idx = 0;           /* Index into array for the Pdb code */
 
@@ -192,7 +192,7 @@ AjBool embPdbidToSp(const AjPStr pdb, AjPStr *spr, const AjPList list)
 
 AjBool embPdbidToAcc(const AjPStr pdb, AjPStr *acc, const AjPList list)
 {
-    AjPPdbtosp *arr = NULL;  /* Array derived from list */
+    const AjPPdbtosp *arr = NULL;  /* Array derived from list */
     ajint dim = 0;           /* Size of array */
     ajint idx = 0;           /* Index into array for the Pdb code */
 
@@ -483,7 +483,7 @@ AjBool embPdbToIdx(ajint *idx, const AjPPdb pdb, const AjPStr res, ajint chn)
 	    continue;
 	
 	/*
-	** JCI hard-coded to work on model 1
+	** Hard-coded to work on model 1
 	** Continue / break if a non-protein atom is found or model no. !=1
 	*/
 	if(atm->Mod!=1)
@@ -706,7 +706,7 @@ AjBool embPdbAtomIndexI(const AjPPdb pdb, ajint chn, AjPInt *idx)
 	if(atm->Chn!=chn)
 	    continue;
 	
-	/* JCI hard-coded to work on model 1 */
+	/* Hard-coded to work on model 1 */
 	/* Continue / break if a non-protein atom is found or 
 	   model no. !=1 */
 	if(atm->Mod!=1)
@@ -824,7 +824,7 @@ AjBool embPdbAtomIndexICA(const AjPPdb pdb,
 	    continue;
 	
 	/*
-	** JCI hard-coded to work on model 1
+	** Hard-coded to work on model 1
 	** Continue / break if a non-protein atom is found or model no. !=1
 	*/
 	if(atm->Mod!=1)

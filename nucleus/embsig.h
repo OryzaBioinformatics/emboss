@@ -62,6 +62,7 @@ extern "C"
 **         		     index so starts at 0. 
 ** @attr  Acc      [AjPStr]  Accession number of sequence entry.  
 ** @attr  Spr      [AjPStr]  Swissprot code of sequence entry. 
+** @attr  Dom      [AjPStr]  SCOP or CATH database identifier code of entry. 
 ** @attr  Rank     [ajint]   Rank order of hit 	
 ** @attr  Score    [float]   Score of hit 
 ** @attr  Eval     [float]   E-value of hit 
@@ -69,7 +70,9 @@ extern "C"
 **  
 ** @attr  Typeobj  [AjPStr]  Primary (objective) classification of hit.
 ** @attr  Typesbj  [AjPStr]  Secondary (subjective) classification of hit 
-** @attr  Model    [AjPStr]  String for model type if used (HMM, Gribskov etc) 
+** @attr  Model    [AjPStr]  String for model type if used, one of 
+**  PSIBLAST, HMMER, SAM, SPARSE, HENIKOFF or GRIBSKOV
+**
 ** @attr  Alg      [AjPStr]  Alignment, e.g. of a signature to the sequence 
 ** @attr  Group    [AjPStr]  Grouping of hit, e.g. 'REDUNDANT' or 
 **                           'NON_REDUNDANT' 
@@ -80,6 +83,9 @@ extern "C"
 **
 ** 
 ** @new    embHitNew Default Hit constructor
+** @new    embHitReadFasta  Construct Hit object from reading the next entry
+**         from a file in extended FASTA format (see documentation for the 
+**         DOMAINATRIX "seqsearch" application). 
 ** @delete embHitDel Default Hit destructor
 ** @assign embHitMerge Create new Hit from merging two Hit objects
 ** @use    embMatchScore Sort Hit objects by Score element.
@@ -97,10 +103,11 @@ typedef struct AjSHit
   ajint   End;        
   AjPStr  Acc;           
   AjPStr  Spr;        
+  AjPStr  Dom;        
   ajint   Rank;       
   float   Score;      
-  float   Eval;       
-  float   Pval;       
+  float  Eval;       
+  float  Pval;       
 
   AjPStr  Typeobj;    
   AjPStr  Typesbj;    
@@ -130,15 +137,19 @@ typedef struct AjSHit
 **
 ** 
 **
+** @attr  Type          [ajint]     Domain type, either ajSCOP (1) or
+**                                  ajCATH (2).
 ** @attr  Class         [AjPStr]    SCOP classification.
-** @attr  Fold         [AjPStr]    SCOP classification.
-** @attr  Superfamily  [AjPStr]    SCOP classification.
-** @attr  Family       [AjPStr]    SCOP classification.
-** @attr  Model        [AjPStr]    SCOP classification.
-** @attr  Sunid_Family [ajint]     SCOP sunid for family. 
-** @attr  Priority     [AjBool]    True if the Hitlist is high priority. 
+** @attr  Architecture  [AjPStr]    CATH classification.
+** @attr  Topology      [AjPStr]    CATH classification.
+** @attr  Fold          [AjPStr]    SCOP classification.
+** @attr  Superfamily   [AjPStr]    SCOP classification.
+** @attr  Family        [AjPStr]    SCOP classification.
+** @attr  Model         [AjPStr]    SCOP classification.
+** @attr  Sunid_Family  [ajint]     SCOP sunid for family. 
+** @attr  Priority      [AjBool]    True if the Hitlist is high priority. 
 ** @attr  N             [ajint]     No. of hits. 
-** @attr  hits         [AjPHit*]  Array of hits. 
+** @attr  hits          [AjPHit*]  Array of hits. 
 **
 ** @new    embHitlistNew Default Hitlist constructor
 ** @delete embHitlistDel Default Hitlist destructor
@@ -146,14 +157,29 @@ typedef struct AjSHit
 ** @input  embHitlistRead Construct Hitlist object from reading the next entry
 **         from a file in embl-like format (see documentation for the 
 **         DOMAINATRIX "seqsearch" application). 
+** @new    embHitlistReadFasta Construct Hitlist object from reading
+**         the next entry
+**         from a file in extended FASTA format (see documentation for the 
+**         DOMAINATRIX "seqsearch" application). 
 ** @input  embHitlistReadNode Construct Hitlist object from reading a specific
 **         entry from a file in embl-like format (see documentation for the 
 **         DOMAINATRIX "seqsearch" application). 
+** @new    embHitlistReadNodeFasta Construct Hitlist object from reading
+**         a specific entry from a file in extended FASTA format
+**         (see documentation for the DOMAINATRIX "seqsearch" application). 
 ** @output embHitlistWrite Write Hitlist to file in embl-like format (see 
 **         documentation for the DOMAINATRIX "seqsearch" application). 
 ** @output embHitlistWriteSubset Write a subset of a Hitlist to file in 
 **         embl-like format (see documentation for the DOMAINATRIX "seqsearch"
 **         application). 
+** @output embHitlistWriteFasta Write Hitlist to file in extended FASTA format 
+**         (see documentation for the DOMAINATRIX "seqsearch" application). 
+** @output embHitlistWriteSubsetFasta Write a subset of a Hitlist to file in 
+**         extended FASTA format (see documentation for the DOMAINATRIX
+**         "seqsearch" application). 
+** @output embHitlistWriteHitFasta Write a single Hit from a Hitlist to file 
+**         in extended FASTA format (see documentation for the DOMAINATRIX 
+**         "seqsearch" application). 
 ** @use    embHitlistClassify Classifies a list of signature-sequence hits 
 **         (held in a Hitlist object) according to list of target sequences 
 **         (a list of Hitlist objects).
@@ -162,7 +188,10 @@ typedef struct AjSHit
 
 typedef struct AjSHitlist
 {
+    ajint    Type;
     AjPStr   Class;
+    AjPStr   Architecture;
+    AjPStr   Topology;
     AjPStr   Fold;
     AjPStr   Superfamily;
     AjPStr   Family;
@@ -266,7 +295,10 @@ typedef struct AJSSigdat
 **
 ** 
 **
+** @attr  Type          [ajint]     Domain type, either ajSCOP (1) or ajCATH (2).
 ** @attr  Class        [AjPStr]      SCOP classification.
+** @attr  Architecture [AjPStr]      CATH classification.
+** @attr  Topology     [AjPStr]      CATH classification.
 ** @attr  Fold         [AjPStr]      SCOP classification.
 ** @attr  Superfamily  [AjPStr]      SCOP classification.
 ** @attr  Family       [AjPStr]      SCOP classification.
@@ -305,7 +337,10 @@ typedef struct AJSSigdat
 ****************************************************************************/
 typedef struct AjSSignature
 {
+    ajint       Type;
     AjPStr      Class;
+    AjPStr      Architecture;
+    AjPStr      Topology;
     AjPStr      Fold;
     AjPStr      Superfamily;
     AjPStr      Family;
@@ -326,13 +361,11 @@ AjPSignature  embSignatureNew(ajint n);
 void          embSignatureDel(AjPSignature *ptr);
 AjPSignature  embSignatureReadNew(AjPFile inf);
 AjBool        embSignatureWrite(AjPFile outf, const AjPSignature obj);
-AjBool        embSignatureCompile(AjPSignature *S, float gapo, float gape,
+AjBool        embSignatureCompile(AjPSignature *S, float gapo, float gape, 	
 				  const AjPMatrixf matrix);
-AjBool        embSignatureAlignSeq(const AjPSignature S, const AjPSeq seq,
-				   AjPHit *hit, 
+AjBool        embSignatureAlignSeq(const AjPSignature S, const AjPSeq seq, AjPHit *hit, 
 				   ajint nterm);
-AjBool        embSignatureAlignSeqall(const AjPSignature sig,
-				      AjPSeqall db, 
+AjBool        embSignatureAlignSeqall(const AjPSignature sig, AjPSeqall db, 
 				      ajint n, AjPHitlist *hitlist, 
 				      ajint nterm);
 AjBool        embSignatureHitsWrite(AjPFile outf, const AjPSignature sig, 
@@ -347,11 +380,23 @@ AjPHitlist    embSignatureHitsRead(AjPFile inf);
 /* ============================= Hit object ============================== */
 /* ======================================================================= */
 AjPHit        embHitNew(void);
+
+AjPHit        embHitReadFasta(AjPFile inf);
+
 void          embHitDel(AjPHit *ptr);
-AjPHit        embHitMerge(const AjPHit hit1, const AjPHit hit2);
-AjBool        embHitsOverlap(const AjPHit hit1, const AjPHit hit2, ajint n);
-ajint         embMatchScore(const void *hit1, const void *hit2);
-ajint         embMatchinvScore(const void *hit1, const void *hit2);
+
+AjPHit        embHitMerge(const AjPHit hit1, 
+			  const AjPHit hit2);
+
+AjBool        embHitsOverlap(const AjPHit hit1, 
+			     const AjPHit hit2, 
+			     ajint n);
+
+ajint         embMatchScore(const void *hit1, 
+			    const void *hit2);
+
+ajint         embMatchinvScore(const void *hit1, 
+			       const void *hit2);
 
 
 
@@ -361,20 +406,49 @@ ajint         embMatchinvScore(const void *hit1, const void *hit2);
 /* =========================== Hitlist object ============================ */
 /* ======================================================================= */
 AjPHitlist    embHitlistNew(ajint n);
+
 void          embHitlistDel(AjPHitlist *ptr);
+
 AjPHitlist    embHitlistRead(AjPFile inf);
-AjBool        embHitlistWrite(AjPFile outf, const AjPHitlist obj);
-AjBool        embHitlistWriteSubset(AjPFile outf, const AjPHitlist obj, 
+
+AjPHitlist    embHitlistReadFasta(AjPFile inf);
+
+AjBool        embHitlistWrite(AjPFile outf, 
+			      const AjPHitlist obj);
+
+AjBool        embHitlistWriteSubset(AjPFile outf, 
+				    const AjPHitlist obj, 
 				    const AjPInt ok);
-AjPList       embHitlistReadNode(AjPFile inf, const AjPStr fam, 
-				 const AjPStr sfam, const AjPStr fold,
+
+AjBool        embHitlistWriteFasta(AjPFile outf, 
+				   const AjPHitlist obj);
+
+AjBool        embHitlistWriteSubsetFasta(AjPFile outf, 
+					 const AjPHitlist obj, 
+					 const AjPInt ok);
+
+AjBool        embHitlistWriteHitFasta(AjPFile outf, 
+				      ajint n, 
+				      const AjPHitlist obj);
+
+AjPList       embHitlistReadNode(AjPFile inf, 
+				 const AjPStr fam, 
+				 const AjPStr sfam, 	
+				 const AjPStr fold, 
 				 const AjPStr klass);
-AjBool        embHitlistClassify(AjPHitlist const *hits,
+
+AjPList       embHitlistReadNodeFasta(AjPFile inf, 
+				      const AjPStr fam, 
+				      const AjPStr sfam, 
+				      const AjPStr fold, 
+				      const AjPStr klass);
+
+AjBool        embHitlistClassify(const AjPHitlist *hits, 
 				 const AjPList targets, 
 				 ajint thresh);
-ajint         embHitlistMatchFold(const void *hit1, const void *hit2);
 
-
+ajint         embHitlistMatchFold(const void *hit1, 
+				  const void *hit2);
 
 
 

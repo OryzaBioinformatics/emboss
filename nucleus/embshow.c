@@ -717,18 +717,19 @@ void embShowAddTran(EmbPShow thys, const AjPTrn trnTable, ajint frame,
 
 /* @func embShowAddRE *********************************************************
 **
-** Adds the Ristriction Enzymes to be displayed to the list of things to show
+** Adds the Restriction Enzymes to be displayed to the list of things to show
 **
 ** @param [u] thys [EmbPShow] Show sequence object
 ** @param [r] sense [ajint] sense to translate (+1 or -1)
 ** @param [r] restrictlist [const AjPList] restriction enzyme cut site list
+** @param [r] plasmid [AjBool] Circular (plasmid) sequence
 ** @param [r] flat [AjBool] show in flat format with recognition sites
 ** @return [void]
 ** @@
 ******************************************************************************/
 
 void embShowAddRE(EmbPShow thys, ajint sense, const AjPList restrictlist,
-		  AjBool flat)
+		  AjBool plasmid, AjBool flat)
 {
     EmbPShowRE info;
     ajDebug("embShowAddRE\n");
@@ -1658,7 +1659,6 @@ static void showFillTran(const EmbPShow thys,
 
     AjPStr line;
     AjPSeq tran   = NULL;
-    AjPStr seqstr = NULL; /* local copy of seq string for translating ranges */
     AjPSeq seq    = NULL; /* local copy of sequence for translating ranges */
     AjPStr temp = NULL;
     AjPStr sajb =NULL;	  /* peptide expanded to 3-let code or by 2 spaces */
@@ -1691,13 +1691,8 @@ static void showFillTran(const EmbPShow thys,
 	if(info->regions && ajRangeNumber(info->regions))
 	{
 	    framepad = 0;
-	    seqstr = ajSeqStrCopy(thys->seq);
-	    temp = ajStrNew();
-	    ajRangeStrExtract(info->regions, seqstr, &temp);
-	    ajStrDel(&seqstr);
-	    seq = ajSeqNew();
-	    ajSeqReplace(seq, temp);
-	    ajStrClear(&temp);
+	    seq = ajSeqNewS(thys->seq);
+	    ajRangeSeqExtract(info->regions, seq);
 	    tran = ajTrnSeqOrig(info->trnTable, seq, 1);
 	    ajSeqDel(&seq);
 
@@ -1719,8 +1714,7 @@ static void showFillTran(const EmbPShow thys,
 	    **  now put in spaces to align the translation to the
 	    **  sequence ranges
 	    */
-	    ajRangeStrStuff(info->regions, ajSeqStr(tran), &temp);
-	    ajSeqReplace(tran, temp);
+	    ajRangeSeqStuff(info->regions, tran);
 	    ajStrClear(&temp);
 	}
 	else
@@ -1777,15 +1771,17 @@ static void showFillTran(const EmbPShow thys,
 		for(i=0; i<ajStrLen(transeq); i++)
 		    if(ajStrChar(transeq,i) == '*')
 		    {
-			if(i-last < info->orfminsize+1) 
+			if(i-last < info->orfminsize+1)
+			{
 			    if(!(info->firstorf && last == -1))
 			    {
 				j = last+1;
 				if(info->lcinterorf)
 				    ajStrToLowerII(&transeq,j,i-1);
 				else
-				    ajStrReplaceK(&transeq,j,i-j,'-');
+				    ajStrReplaceK(&transeq,j,'-',i-j);
 			    }
+			}
 			last = i;
 		    }
 
@@ -1797,7 +1793,7 @@ static void showFillTran(const EmbPShow thys,
 		    if(info->lcinterorf)
 			ajStrToLowerII(&transeq,j,i-1);
 		    else
-			ajStrReplaceK(&transeq,j,i-j,'-');
+			ajStrReplaceK(&transeq,j,'-',i-j);
 		}
 		ajSeqReplace(tran, transeq);
 		ajStrDel(&transeq);
@@ -1815,7 +1811,7 @@ static void showFillTran(const EmbPShow thys,
 				if(info->lcinterorf)
 				    ajStrToLowerII(&transeq,j,i-1);
 				else
-				    ajStrReplaceK(&transeq,j,i-j,'-');
+				    ajStrReplaceK(&transeq,j,'-',i-j);
 			    }
 			last = i;
 		    } 
@@ -1828,7 +1824,7 @@ static void showFillTran(const EmbPShow thys,
 		    if(info->lcinterorf)
 			ajStrToLowerII(&transeq,j,i-1);
 		    else
-			ajStrReplaceK(&transeq,j,i-j,'-');
+			ajStrReplaceK(&transeq,j,'-',i-j);
 		}
 		ajSeqReplace(tran, transeq);
 		ajStrDel(&transeq);
@@ -2221,41 +2217,66 @@ static void showFillREflat(const EmbPShow thys,
 	    cut4++;		/* the display points back '<' at cut pos */
 	base = m->start;
 	start = base;
+
+	ajDebug("showFillRE start:%d sense:%b plasmid:%b circ12:%b 34:%b\n",
+		start, info->sense, info->plasmid, m->circ12, m->circ34);
+	ajDebug("           cut1:%d 2:%d 3:%d 4:%d\n",
+		cut1, cut2, cut3, cut4);
+
 	if(info->sense == 1)
 	{				/* forward sense */
-	    if(cut1 < start)
-		start = cut1;
+	    if(info->plasmid || !m->circ12)
+		if(cut1 < start)
+		    start = cut1;
 
-	    if(cut3 && cut3 < start)
+	    if(info->plasmid || !m->circ34)
+		if(cut3 && cut3 < start)
 		start = cut3;
 	}
 	else
 	{				/* reverse sense */
-	    if(cut2 < start)
-		start = cut2;
+	    if(info->plasmid || !m->circ12)
+		if(cut2 < start)
+		    start = cut2;
 
-	    if(cut4 && cut4 < start)
-		start = cut4;
+	    if(info->plasmid || !m->circ34)
+		if(cut4 && cut4 < start)
+		    start = cut4;
 	}
 
 	end = base + ajStrLen(m->pat)-1;
+	ajDebug("showFillRE end: %d base: %d patlen: %d pat: '%S'\n",
+		end, base, ajStrLen(m->pat), m->pat);
+
 	nameend = base + ajStrLen(m->cod)-1;
 
 	if(info->sense == 1)
 	{				/* forward sense */
-	    if(cut1 > end)
-		end = cut1;
+	    ajDebug("showFillRE fwd end: %d cut1:%d cut3:%d\n",
+		    end, cut1, cut3);
+	    if(info->plasmid || !m->circ12)
+		if(cut1 > end)
+		    end = cut1;
 
-	    if(cut3 && cut3 > end)
-		end = cut3;
+	    if(info->plasmid || !m->circ34)
+		if(cut3 && cut3 > end)
+		    end = cut3;
+	    ajDebug("showFillRE fwd set end: %d\n",
+		    end);
 	}
 	else
 	{				/* reverse sense */
-	    if(cut2 > end)
-		end = cut2;
+	    ajDebug("showFillRE rev end: %d cut2:%d cut4:%d\n",
+		    end, cut2, cut4);
+	    if(info->plasmid || !m->circ12)
+		if(cut2 > end)
+		    end = cut2;
 
-	    if(cut4 && cut4 > end)
-		end = cut4;
+	    if(info->plasmid || !m->circ34)
+		if(cut4 && cut4 > end)
+		    end = cut4;
+	    ajDebug("showFillRE rev set end: %d\n",
+		    end);
 	}
 
 	/* convert human-readable sequence positions to string positions */
@@ -2264,26 +2285,36 @@ static void showFillREflat(const EmbPShow thys,
 	base--;
 	nameend--;
 
+	ajDebug("showFillREFlat start:%d end:%d pos:%d width:%d\n",
+		start, end, pos, thys->width);
 	/* ignore this match if nothing is to be displayed on this line */
 	if(start <= pos+thys->width-1 && end >= pos)
 	{
+	    ajDebug("showFillREFlat site within range\n");
+
 	    /* make a standard name and site string to be chopped up later */
 
 	    /* site string stuff */
 	    /* initial string of '.'s */
 	    sitestr = ajStrNew();
 	    ajStrAppKI(&sitestr, '.', end-start+1 );
+	    ajDebug("showFillREFlat ajStrAppKI '.' %d\n", end-start+1);
 	    /*
 	    **  add on any claim characters required to stake a claim to
 	    **  positions used by the name
 	    */
 	    if(nameend > end)
+	    {
 		ajStrAppKI(&sitestr, *claimchar, nameend-end);
-
+		ajDebug("showFillREFlat ajStrAppKI '%c' %d\n",
+			*claimchar, nameend-end);
+	    }
 
 	    /* cover binding site with '='s */
 	    for(i=base-start; i<base-start+ajStrLen(m->pat); i++)
-		ajStrReplaceK(&sitestr, i, 1, '=');
+		ajStrReplaceK(&sitestr, i, '=', 1);
+	    ajDebug("showFillREFlat ajStrReplaceK '=' %d..%d\n",
+		    base-start, i-1);
 
 	    /*
 	    **  I tried showing the pattern instead of '='s, but it looks
@@ -2296,15 +2327,39 @@ static void showFillREflat(const EmbPShow thys,
 	    /* put in cut sites */
 	    if(info->sense == 1)
 	    {				/* forward sense */
-		ajStrReplaceK(&sitestr, (cut1-start-1), 1, '>');
-		if(cut3)
-		    ajStrReplaceK(&sitestr, (cut3-start-1), 1, '>');
+		if(info->plasmid || !m->circ12)
+		{
+		    ajStrReplaceK(&sitestr, (cut1-start-1), '>', 1);
+		    ajDebug("showFillREFlat ajStrReplaceK1 '>' %d\n",
+			    (cut1-start-1));
+		}
+		if(info->plasmid || !m->circ34)
+		{
+		    if(cut3)
+		    {
+			ajStrReplaceK(&sitestr, (cut3-start-1), '>', 1);
+			ajDebug("showFillREFlat ajStrReplaceK3 '>' %d\n",
+				(cut3-start-1));
+		    }
+		}
 	    }
 	    else
 	    {				/* reverse sense */
-		ajStrReplaceK(&sitestr, (cut2-start-1), 1, '<');
-		if(cut4)
-		    ajStrReplaceK(&sitestr, (cut4-start-1), 1, '<');
+		if(info->plasmid || !m->circ12)
+		{
+		    ajStrReplaceK(&sitestr, (cut2-start-1), '<', 1);
+		    ajDebug("showFillREFlat ajStrReplaceK2 '<' %d\n",
+			    (cut2-start-1));
+		}
+		if(info->plasmid || !m->circ34)
+		{
+		    if(cut4)
+		    {
+			ajStrReplaceK(&sitestr, (cut4-start-1), '<', 1);
+			ajDebug("showFillREFlat ajStrReplaceK4 '<' %d\n",
+				(cut4-start-1));
+		    }
+		}
 	    }
 
 
@@ -2312,8 +2367,14 @@ static void showFillREflat(const EmbPShow thys,
 	    /* initial string of claimchar's */
 	    namestr = ajStrNew();
 	    ajStrAppKI(&namestr, *claimchar, end-start+1 );
+	    ajDebug("showFillREFlat ajStrAppKI name '%c' %d\n",
+		    *claimchar, end-start+1 );
 	    if(nameend > end)
+	    {
 		ajStrAppKI(&namestr, *claimchar, nameend-end);
+		ajDebug("showFillREFlat ajStrAppKI nameend '%c' %d\n",
+			*claimchar, nameend-end );
+	    }
 
 	    /* insert the name in the namestr */
 	    ajStrReplaceS(&namestr, (base-start), m->cod);
@@ -2500,6 +2561,7 @@ static void showFillREflat(const EmbPShow thys,
 		/* fill with spaces */
 		ajStrAppKI(&line2, ' ', thys->width);
 
+		showOverPrint(&line, start-pos, sitestr);
 		showOverPrint(&line2, start-pos, namestr);
 		ajListstrPushApp(linelist, line);
 		ajListstrPushApp(linelist, line2);

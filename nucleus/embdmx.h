@@ -41,52 +41,94 @@ extern "C"
 /*****************************************************************************/
 /* These functions are NOT YET DOCUMENTED in the appropriate data structures */
 /*****************************************************************************/
-AjBool        embDmxHitlistToScophits(const AjPList in, AjPList *out);
-AjBool        embDmxScophitsToHitlist(const AjPList in, AjPHitlist *out, 
+AjBool        embDmxHitlistToScophits(const AjPList in, 
+				      AjPList *out);
+
+AjBool        embDmxScophitsToHitlist(const AjPList in, 
+				      AjPHitlist *out, 
 				      AjIList *iter);
-AjBool        embDmxScophitToHit(AjPHit *to, const AjPScophit from);
-AjBool        embDmxScophitsAccToHitlist(const AjPList in, AjPHitlist *out,   
+
+AjBool        embDmxScophitToHit(AjPHit *to, 
+				 const AjPScophit from);
+
+AjBool        embDmxScophitsAccToHitlist(const AjPList in, 
+					 AjPHitlist *out,   
 					 AjIList *iter);
+
 AjBool        embDmxHitsWrite(AjPFile outf,
-			      const AjPHitlist hits, ajint maxhits);
-AjBool        embDmxScopToScophit(const AjPScop source, AjPScophit* target);
+			      const AjPHitlist hits, 
+			      ajint maxhits);
+
+AjBool        embDmxScopToScophit(const AjPScop source, 
+				  AjPScophit* target);
+
 AjBool        embDmxScopalgToScop(const AjPScopalg align,
-				  AjPScop const *scop_arr, 
-				  ajint dim, AjPList* list);
+				  const AjPScop *scop_arr, 
+				  ajint scop_dim, 
+				  AjPList* list);
+
 AjBool        embDmxScophitsOverlap(const AjPScophit h1,
-				    const AjPScophit h2, ajint n);
+				    const AjPScophit h2, 
+				    ajint n);
+
 AjBool        embDmxScophitsOverlapAcc(const AjPScophit h1,
-				       const AjPScophit h2, ajint n);
-AjPScophit    embDmxScophitMerge(const AjPScophit hit1, const AjPScophit hit2);
+				       const AjPScophit h2, 
+				       ajint n);
+
+AjPScophit    embDmxScophitMerge(const AjPScophit hit1, 
+				 const AjPScophit hit2);
+
 AjBool        embDmxScophitMergeInsertThis(const AjPList list,
 					   AjPScophit hit1, 
 					   AjPScophit hit2,
 					   AjIList iter);
+
 AjBool        embDmxScophitMergeInsertThisTarget(const AjPList list, 
 						 AjPScophit hit1, 
 						 AjPScophit hit2,  
 						 AjIList iter);
+
 AjBool        embDmxScophitMergeInsertThisTargetBoth(const AjPList list, 
 						     AjPScophit hit1, 
 						     AjPScophit hit2,  
 						     AjIList iter);
+
 AjBool        embDmxScophitMergeInsertOther(AjPList list,
 					    AjPScophit hit1, 
 					    AjPScophit hit2);
+
 AjBool        embDmxScophitMergeInsertOtherTargetBoth(AjPList list, 
 						      AjPScophit hit1, 
 						      AjPScophit hit2);
+
 AjBool        embDmxScophitMergeInsertOtherTarget(AjPList list, 
 						  AjPScophit hit1, 
 						  AjPScophit hit2);
-AjBool        embDmxSeqNR(const AjPList input, AjPInt *keep, ajint *nset,
+
+AjBool        embDmxSeqNR(const AjPList input, 
+			  AjPInt *keep, 
+			  ajint *nset,
 			  const AjPMatrixf matrix,
-			  float gapopen, float gapextend,
-			  float thresh);
-AjBool        embDmxSeqNRRange(const AjPList input, AjPInt *keep, ajint *nset,
-			       const AjPMatrixf matrix, float gapopen, 
+			  float gapopen, 
+			  float gapextend,
+			  float thresh, 
+			  AjBool CheckGarbage);
+
+AjBool        embDmxSeqNRRange(const AjPList input, 
+			       AjPInt *keep, 
+			       ajint *nset,
+			       const AjPMatrixf matrix, 
+			       float gapopen, 
 			       float gapextend,
-			       float thresh1, float thresh2);
+			       float thresh1, 
+			       float thresh2, 
+			       AjBool CheckGarbage);
+
+AjBool        embDmxSeqCompall(const AjPList input, 
+			       AjPFloat2d *scores, 
+			       const AjPMatrixf matrix, 
+			       float gapopen, 
+			       float gapextend);
 
 #endif
 

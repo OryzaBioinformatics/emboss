@@ -27,12 +27,15 @@
 
 static void grpGetAcdFiles(AjPList glist, AjPList alpha, char * const env[],
 			   const AjPStr acddir, AjBool explode, AjBool colon,
-			   AjBool gui);
+			   AjBool gui, AjBool embassy,
+			   const AjPStr embassyname);
 static void grpGetAcdDirs(AjPList glist, AjPList alpha, char * const env[],
 			  const AjPStr acddir, AjBool explode, AjBool colon,
-			  AjBool gui);
+			  AjBool gui, AjBool embassy,
+			  const AjPStr embassyname);
 static void grpParse(AjPFile file, AjPStr *appl, AjPStr *doc, AjPList groups,
-		     AjBool explode, AjBool colon, AjBool *gui);
+		     AjBool explode, AjBool colon,
+		     AjBool *gui, AjBool* embassy, AjPStr* hasembassyname);
 static void grpNoComment(AjPStr* text);
 static AjPStr grpParseValueRB(AjPStrTok* tokenhandle, const char* delim);
 static void grpSplitList(AjPList groups, const AjPStr value, AjBool explode,
@@ -57,6 +60,8 @@ static void grpAddGroupsToList(const AjPList alpha, AjPList glist,
 **                                 parameters
 ** @param [r] emboss [AjBool] Read in EMBOSS ACD data
 ** @param [r] embassy [AjBool] Read in EMBASSY ACD data
+** @param [r] embassyname [const AjPStr] Name of embassy package.
+**                                       default is to search for all
 ** @param [r] explode [AjBool] Expand group names around ':'
 ** @param [r] colon [AjBool] Retain ':' in group names
 ** @param [r] gui [AjBool] Only report programs that are OK in GUIs
@@ -65,8 +70,9 @@ static void grpAddGroupsToList(const AjPList alpha, AjPList glist,
 ******************************************************************************/
 
 void embGrpGetProgGroups(AjPList glist, AjPList alpha, char * const env[],
-			 AjBool emboss, AjBool embassy, AjBool explode,
-			 AjBool colon, AjBool gui)
+			 AjBool emboss, AjBool embassy,
+			 const AjPStr embassyname,
+			 AjBool explode, AjBool colon, AjBool gui)
 {
 
     AjPStr acdroot     = NULL;
@@ -116,7 +122,8 @@ void embGrpGetProgGroups(AjPList glist, AjPList alpha, char * const env[],
 	}
 
 	/* normal EMBOSS ACD */
-	grpGetAcdFiles(glist, alpha, env, acdroot, explode, colon, gui);
+	grpGetAcdFiles(glist, alpha, env, acdroot, explode, colon,
+		       gui, embassy, embassyname);
     }
 
     if(embassy && !doneinstall)
@@ -129,7 +136,8 @@ void embGrpGetProgGroups(AjPList glist, AjPList alpha, char * const env[],
 
 	if(ajFileDir(&acdroot))
 	    /* embassadir ACD files */
-	    grpGetAcdFiles(glist, alpha, env, acdroot, explode, colon, gui);
+	    grpGetAcdFiles(glist, alpha, env, acdroot, explode, colon,
+			   gui, embassy, embassyname);
 	else
 	{
 	    /* look for all source directories */
@@ -137,7 +145,8 @@ void embGrpGetProgGroups(AjPList glist, AjPList alpha, char * const env[],
 	    ajFileDirUp(&acdrootdir);
 	    ajFmtPrintS(&acdroot, "%Sembassy/", acdrootdir);
 	    /* embassadir ACD files */
-	    grpGetAcdDirs(glist, alpha, env, acdroot, explode, colon, gui);
+	    grpGetAcdDirs(glist, alpha, env, acdroot, explode, colon,
+			  gui, embassy, embassyname);
 	}
 
     }
@@ -172,13 +181,18 @@ void embGrpGetProgGroups(AjPList glist, AjPList alpha, char * const env[],
 ** @param [r] explode [AjBool] Expand group names around ':'
 ** @param [r] colon [AjBool] Retain ':' in group names
 ** @param [r] gui [AjBool] Report only those applications OK in GUIs
+** @param [r] embassy [AjBool] Report only those applications not in
+**                             an EMBASSY package (embassy attribute in ACD)
+** @param [r] embassyname [const AjPStr] Name of embassy package.
+**                                       default is to search for all
 ** @return [void]
 ** @@
 ******************************************************************************/
 
 static void grpGetAcdDirs(AjPList glist, AjPList alpha, char * const env[],
 			  const AjPStr acddir, AjBool explode, AjBool colon,
-			  AjBool gui)
+			  AjBool gui, AjBool embassy,
+			  const AjPStr embassyname)
 {
     DIR *dirp;
     DIR *dirpa;
@@ -199,7 +213,8 @@ static void grpGetAcdDirs(AjPList glist, AjPList alpha, char * const env[],
 
 	if((dirpa = opendir(ajStrStr(dirname))))
 	{
-	    grpGetAcdFiles(glist, alpha, env, dirname, explode, colon, gui);
+	    grpGetAcdFiles(glist, alpha, env, dirname, explode, colon,
+			   gui, embassy, embassyname);
 	    closedir(dirpa);
 	}
     }
@@ -229,13 +244,18 @@ static void grpGetAcdDirs(AjPList glist, AjPList alpha, char * const env[],
 ** @param [r] explode [AjBool] Expand group names around ':'
 ** @param [r] colon [AjBool] Retain ':' in group names
 ** @param [r] gui [AjBool] Report only those applications OK in GUIs
+** @param [r] embassy [AjBool] Report only those applications not in
+**                             an EMBASSY package (embassy attribute in ACD)
+** @param [r] embassyname [const AjPStr] Name of embassy package.
+**                                       default is to search for all
 ** @return [void]
 ** @@
 ******************************************************************************/
 
 static void grpGetAcdFiles(AjPList glist, AjPList alpha, char * const env[],
 			   const AjPStr acddir, AjBool explode, AjBool colon,
-			   AjBool gui)
+			   AjBool gui, AjBool embassy,
+			   const AjPStr embassyname)
 {
     DIR *dirp;
     struct dirent *dp;
@@ -246,6 +266,8 @@ static void grpGetAcdFiles(AjPList glist, AjPList alpha, char * const env[],
     AjPStr doc      = NULL;
     AjPList groups  = NULL;
     AjBool guiresult;
+    AjBool isembassy;
+    AjPStr hasembassyname = NULL;
 
     /* go through all the files in this directory */
     if((dirp = opendir(ajStrStr(acddir))) == NULL)
@@ -271,7 +293,8 @@ static void grpGetAcdFiles(AjPList glist, AjPList alpha, char * const env[],
 		    {
 			groups = ajListstrNew();
 			grpParse(file, &appl, &doc, groups, explode,
-				 colon, &guiresult);
+				 colon, &guiresult,
+				 &isembassy, &hasembassyname);
 
 			/* see if the appl is the name of a real program */
 			ajStrAssS(&applpath, appl);
@@ -281,17 +304,25 @@ static void grpGetAcdFiles(AjPList glist, AjPList alpha, char * const env[],
 			    ** see if the appl is OK in GUIs or we don't
 			    ** want just GUI apps
 			    */
-			    if(guiresult || !gui)
+			    if(gui && !guiresult)
+				ajDebug("%S is not a OK in GUIs\n", appl);
+			    else if(!embassy && isembassy)
+				ajDebug("%S is in EMBASSY\n", appl);
+			    else if (ajStrLen(embassyname) &&
+				     !ajStrMatchCase(embassyname,
+						     hasembassyname))
+				ajDebug("%S is in not in EMBASSY %S\n",
+					appl, embassyname);
+			    else
 				grpAddGroupsToList(alpha, glist, groups,
 						   appl, doc);
-			    else
-				ajDebug("%S is not a OK in GUIs\n", appl);
 			}
 
 			ajFileClose(&file);
 			ajListstrFree(&groups);
 			ajStrDel(&appl);
 			ajStrDel(&doc);
+			ajStrDel(&hasembassyname);
 		    }
 		}
 	    }
@@ -319,13 +350,18 @@ static void grpGetAcdFiles(AjPList glist, AjPList alpha, char * const env[],
 ** @param [r] explode [AjBool] Expand group names around ':'
 ** @param [r] colon [AjBool] Retain ':' in group names
 ** @param [w] gui [AjBool*] returns ajTrue if application is OK in GUIs
+** @param [w] embassy [AjBool*] returns ajTrue if application has
+**                              an EMBASSY package definition
 **
+** @param [w] hasembassyname [AjPStr*] EMBASSY package name from
+**                                     embassy attribute
 ** @return [void]
 ** @@
 ******************************************************************************/
 
 static void grpParse(AjPFile file, AjPStr *appl, AjPStr *doc, AjPList groups,
-		     AjBool explode, AjBool colon, AjBool *gui)
+		     AjBool explode, AjBool colon,
+		     AjBool *gui, AjBool* embassy, AjPStr* hasembassyname)
 {
 
     AjPStr line = NULL;
@@ -349,6 +385,7 @@ static void grpParse(AjPFile file, AjPStr *appl, AjPStr *doc, AjPList groups,
 
     /* if 'gui' not defined in ACD, default is 'gui: Y' */
     *gui = ajTrue;
+    *embassy = ajFalse;
 
     /* read file into one line, stripping out comment lines and blanks */
     while(ajFileReadLine(file, &line))
@@ -365,7 +402,7 @@ static void grpParse(AjPFile file, AjPStr *appl, AjPStr *doc, AjPList groups,
 
     /* find appl token */
     while(ajStrToken(&tmpstr, &tokenhandle, whiteplus))
-	if(ajStrPrefixC(tmpstr, "appl"))
+	if(ajStrPrefixCaseC(tmpstr, "appl"))
 	    break;
 
     /* next token is the application name */
@@ -393,7 +430,7 @@ static void grpParse(AjPFile file, AjPStr *appl, AjPStr *doc, AjPList groups,
 		    done = !ajStrCmpC(tmpstr, "]");
 		}
 
-		if(ajStrPrefixC(token, "doc"))
+		if(ajStrPrefixCaseC(token, "doc"))
 		{
 		    donedoc = ajTrue;
 		    ajStrAssS(doc, value);
@@ -401,7 +438,7 @@ static void grpParse(AjPFile file, AjPStr *appl, AjPStr *doc, AjPList groups,
 		    ajStrTrimC(doc, ".,");
 
 		}
-		else if(ajStrPrefixC(token, "gui"))
+		else if(ajStrPrefixCaseC(token, "gui"))
 		{
 		    ajStrAssS(&tmpvalue, value);
 		    ajStrChomp(&tmpvalue);
@@ -412,10 +449,15 @@ static void grpParse(AjPFile file, AjPStr *appl, AjPStr *doc, AjPList groups,
 
 		    ajStrDel(&tmpvalue);
 		}
-		else if(ajStrPrefixC(token, "group"))
+		else if(ajStrPrefixCaseC(token, "group"))
 		{
 		    donegroup = ajTrue;
 		    grpSplitList(groups, value, explode, colon);
+		}
+		else if(ajStrPrefixCaseC(token, "embassy"))
+		{
+		    *embassy = ajTrue;
+		    ajStrAssS(hasembassyname, value);
 		}
 	    }
 	    if(done)
@@ -1325,7 +1367,9 @@ void embGrpKeySearchSeeAlso(AjPList newlist, AjPList *appgroups,
 	piter = ajListIterRead(gl->progs);
 	while((pl = ajListIterNext(piter)) != NULL)
 	    if(!ajStrCmpCase(pl->name, key))
+	    {
 		*appgroups = pl->progs;
+	    }
 	ajListIterFree(&piter);
     }
     ajListIterFree(&giter);

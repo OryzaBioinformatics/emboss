@@ -1132,6 +1132,7 @@ void embAlignWalkNWMatrix(const float *path, const AjPSeq a, const AjPSeq b,
 
     ajDebug("embAlignWalkNWMatrix\n");
 
+    ajDebug("seqlen a:%d b:%d\n", ajSeqLen(a), ajSeqLen(b));
     /* Get maximum path axis score and save position */
     pmax = (float) (-1*INT_MAX);
     for(i=0;i<lenb;++i)
@@ -2993,12 +2994,15 @@ void embAlignCalcSimilarity(const AjPStr m, const AjPStr n,
     }
 
     max = (lenm>lenn) ? lenm : lenn;
-
+    
     *idx  = *id / (float)max * 100.;
     *simx = *sim / (float)max * 100.;
     *id   *= (100. / (float)(olen-gaps));
     *sim  *= (100. / (float)(olen-gaps));
 
+
+    ajStrDel(&fm);
+    ajStrDel(&fn);
     return;
 }
 
@@ -3200,7 +3204,6 @@ void embAlignReportGlobal(AjPAlign align,
     ajint end2;
     AjPStr fa = NULL;
     AjPStr fb = NULL;
-    AjPSeqset seqset = NULL;
     ajint maxlen;
     ajint i;
     ajint alen;
@@ -3211,22 +3214,10 @@ void embAlignReportGlobal(AjPAlign align,
     const char* a;
     const char* b;
 
+    maxlen = AJMAX(ajStrLen(m), ajStrLen(n));
     ajDebug("embAlignReportGlobal %d %d\n", start1, start2);
-    ajDebug("  seqa: '%S' \n", ajSeqStr(seqa));
-    ajDebug("  seqb: '%S' \n", ajSeqStr(seqb));
-    ajDebug("  alim: '%S' \n", m);
-    ajDebug("  alin: '%S' \n", n);
-
-    maxlen = AJMAX(ajSeqLen(seqa), ajSeqLen(seqb));
-
-    seqset = ajSeqsetNew();
-    res1   = ajSeqNew();
-    res2   = ajSeqNew();
-
-    ajSeqAssName(res1, ajSeqGetName(seqa));
-    ajSeqAssName(res2, ajSeqGetName(seqb));
-    ajSeqAssUsa(res1, ajSeqGetUsa(seqa));
-    ajSeqAssUsa(res2, ajSeqGetUsa(seqb));
+    ajDebug("  start1:%d start2:%d offset1:%d offset2:%d\n",
+	    start1, start2, offset1, offset2);
 
     a = ajSeqChar(seqa);
     b = ajSeqChar(seqb);
@@ -3247,6 +3238,8 @@ void embAlignReportGlobal(AjPAlign align,
 	for(i=0;i<nc;++i)
 	    ajStrAppK(&fb,' ');
 
+	ajDebug("start1>start2 start a: seqa 1..%d b: %d spaces seqb 1..%d\n",
+		start1, nc, start1-nc);
 	for(++nc;i<start1;++i)
 	    ajStrAppK(&fb,b[i-nc]);
     }
@@ -3259,6 +3252,8 @@ void embAlignReportGlobal(AjPAlign align,
 	for(i=0;i<nc;++i)
 	    ajStrAppK(&fa,' ');
 
+	ajDebug("start1<start2 start a: %d spaces seqb 1..%d b: seqa 1..%d \n",
+		 nc, start1-nc, start1);
 	for(++nc;i<start2;++i)
 	    ajStrAppK(&fa,a[i-nc]);
     }
@@ -3269,10 +3264,16 @@ void embAlignReportGlobal(AjPAlign align,
     ajStrApp(&fa, m);
     ajStrApp(&fb, n);
 
+    ajDebug("append alignment len (ungapped) a: %d (%d) b: %d (%d)\n",
+	    ajStrLen(m), ajStrLen(m) - ajSeqGapCountS(m),
+	    ajStrLen(n), ajStrLen(n) - ajSeqGapCountS(n));
+
     alen=ajSeqLen(seqa) - apos;
     blen=ajSeqLen(seqb) - bpos;
 
     ajDebug("alen: %d blen: %d apos: %d bpos: %d\n", alen, blen, apos, bpos);
+
+    /* adding gaps at the ends */
 
     if(alen>blen)
     {
@@ -3302,12 +3303,24 @@ void embAlignReportGlobal(AjPAlign align,
 
     ajDebug("  res1: %5d '%S' \n", ajStrLen(fa), fa);
     ajDebug("  res2: %5d '%S' \n", ajStrLen(fb), fb);
-    ajSeqAssSeq(res1, fa);
-    ajSeqAssSeq(res2, fb);
+    maxlen = AJMAX(ajSeqLen(seqa), ajSeqLen(seqb));
 
-    ajSeqsetFromPair(seqset, res1, res2);
+    res1   = ajSeqNewRangeCI(ajStrStr(fa), ajStrLen(fa),
+			     ajSeqOffset(seqa), ajSeqOffend(seqa),
+			     ajSeqRev(seqa));
+    ajSeqAssName(res1, ajSeqGetName(seqa));
+    ajSeqAssUsa(res1, ajSeqGetUsa(seqa));
 
-    ajAlignDefine(align, seqset);
+    res2   = ajSeqNewRangeCI(ajStrStr(fb), ajStrLen(fb),
+			     ajSeqOffset(seqb), ajSeqOffend(seqb),
+			     ajSeqRev(seqb));
+    ajSeqAssName(res2, ajSeqGetName(seqb));
+    ajSeqAssUsa(res2, ajSeqGetUsa(seqb));
+
+    ajSeqGapStandard(res1, '-');
+    ajSeqGapStandard(res2, '-');
+
+    ajAlignDefineSS(align, res1, res2);
 
     ajAlignSetGapR(align, gapopen, gapextend);
     ajAlignSetScoreR(align, score);
@@ -3315,11 +3328,19 @@ void embAlignReportGlobal(AjPAlign align,
     end1 = start1 - ajStrCountK(m, '-') + ajStrLen(m);
     end2 = start2 - ajStrCountK(n, '-') + ajStrLen(n);
     /* ajAlignSetRange(align, start1+1, end1+1, start2+1, end2);*/
-    ajAlignSetRange(align, offset1, end1+1, offset2, end2);
-
+    /*
+    ajAlignSetRange(align,
+		    start1, end1-1,
+                    ajSeqOffset(seqa)+ajSeqLen(res1)+ajSeqOffend(seqa)
+                           -ajSeqGapCount(res1),
+                    offset1,
+		    start2, end2-1,
+                    ajSeqOffset(seqb)+ajSeqLen(res1)+ajSeqOffend(seqb)
+                           -ajSeqGapCount(res1),
+                    offset2);
+*/
     ajStrDel(&fa);
     ajStrDel(&fb);
-    ajSeqsetDel(&seqset);
     ajSeqDel(&res1);
     ajSeqDel(&res2);
 
@@ -3364,11 +3385,8 @@ void embAlignReportLocal(AjPAlign align,
     ajint end1;
     ajint end2;
 
-    AjPSeqset seqset = NULL;
-
     ajDebug("embAlignReportLocal %d %d\n", start1, start2);
 
-    seqset = ajSeqsetNew();
     res1   = ajSeqNew();
     res2   = ajSeqNew();
 
@@ -3378,18 +3396,22 @@ void embAlignReportLocal(AjPAlign align,
     ajSeqAssUsa(res2, ajSeqGetUsa(seqb));
     ajSeqAssSeq(res1, m);
     ajSeqAssSeq(res2, n);
-    ajSeqsetFromPair(seqset, res1, res2);
 
-    ajAlignDefine(align, seqset);
+    ajAlignDefineSS(align, res1, res2);
 
     ajAlignSetGapR(align, gapopen, gapextend);
     ajAlignSetScoreR(align, score);
     ajAlignSetMatrixFloat(align, matrix);
     end1 = start1 - ajStrCountK(m, '-') + ajStrLen(m);
     end2 = start2 - ajStrCountK(n, '-') + ajStrLen(n);
-    ajAlignSetRange(align, start1+offset1, end1+1, start2+offset2, end2);
+    ajAlignSetRange(align,
+		    start1, end1+1,
+                    ajSeqLen(seqa)-ajSeqGapCount(seqa),
+                    offset1,
+		    start2, end2+1,
+                    ajSeqLen(seqb)-ajSeqGapCount(seqb),
+                    offset2);
 
-    ajSeqsetDel(&seqset);
     ajSeqDel(&res1);
     ajSeqDel(&res2);
 

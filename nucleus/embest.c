@@ -1109,6 +1109,9 @@ EmbPEstAlign embEstAlignNonRecursive(const AjPSeq est, const AjPSeq genome,
 			estPairFree();
 			AJFREE(ge);
 
+			ajSeqDel(&gdup);
+			ajSeqDel(&edup);
+
 			return NULL;
 		    }
 

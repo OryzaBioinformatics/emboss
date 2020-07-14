@@ -62,13 +62,13 @@ typedef struct EmbSPatRestrict
     AjPStr cod;
     AjPStr pat;
     AjPStr bin;
-    ajint    len;
+    ajint  len;
     AjBool blunt;
-    ajint    ncuts;
-    ajint    cut1;
-    ajint    cut2;
-    ajint    cut3;
-    ajint    cut4;
+    ajint  ncuts;
+    ajint  cut1;
+    ajint  cut2;
+    ajint  cut3;
+    ajint  cut4;
     AjPStr org;
     AjPStr iso;
     AjPStr meth;
@@ -162,7 +162,7 @@ ajint           embPatKMPSearch (const AjPStr str, const AjPStr pat,
 				 const ajint *next, ajint start);
 
 void            embPatMatchDel (EmbPPatMatch* pthis);
-EmbPPatMatch    embPatMatchFind  (const AjPStr regexp, const AjPStr string);
+EmbPPatMatch    embPatMatchFind  (const AjPStr regexp, const AjPStr strng);
 EmbPPatMatch    embPatMatchFindC (const AjPStr regexp, const char *sptr);
 ajint           embPatMatchGetEnd (const EmbPPatMatch data, ajint index);
 ajint           embPatMatchGetLen (const EmbPPatMatch data, ajint index);
