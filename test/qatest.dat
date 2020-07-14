@@ -1,4 +1,4 @@
-s###########################################################################
+###########################################################################
 # Things to do
 #
 # (1) database extract programs to write to a local directory
@@ -8,6 +8,168 @@ s###########################################################################
 # (5) tests for @list and other odd USA types
 #
 ###########################################################################
+
+# This is the qatest.dat file that is used by scripts/qatest.pl
+#
+# The script should be run from the directory test/qa
+#
+# Additional input data is expected to be found in the directory test/data
+#
+# If no argument is given to the script it will run through all of the
+# entries in this file. If an argument is supplied it will search for
+# the entry whose ID name matches the argument and will run that one.
+#
+# To run the script and retain the files created during the test, use
+# ../../scripts/qatest.pl -kk
+# 
+# The results of the QA tests will be stored in the file
+# test/qa/qatest.log
+# 
+# Typical example entry for an EMBOSS package program (AP line)
+# See below for AA/AB (EMBASSY) and AQ (make check) entries
+# 
+# ID programname-ex (the ID name of this test)
+# UC text (not used in the QA test - used in the HTML documentation)
+# AP programname (the name of the application to test)
+# CL (the command-line arguments to use after the application name)
+# IN (a response to a prompt for input using the default)
+# IN text (a response to a prompt using a non-default input)
+# FI filename (an expected output filename)
+# FZ integer (the expected size in bytes of the above filename)
+# FC integer (the expected number of lines in the above file)
+# FP /regexp/ (an expected perl regular expression in the above file)
+# FP integer /regexp/ (a regexp that is expected integer number of times)
+# FI stderr (these are standard checks on the expected error reports)
+# FC = 2
+# FP 0 /Warning: /
+# FP 0 /Error: /
+# FP 0 /Died: /
+# // (marks the end of the entry)
+# 
+# ID identifier
+# 	The identifier is formed from the name of the application being 
+#	tested and a tag to indicate what sort of test is being performed. 
+#	The identifier is used to create a directory test/qa/<identifier>.
+#	Typical tags are:
+#	-ex	= example used to create the HTML documentation
+#	-ex2, -ex3	= further examples used in the documentation
+#               In general, all documentation examples should have tests
+#               to check the documentation is correct.
+# 	-keep If the test has a "DL keep" line the resulting files are kept.
+#             Used for database indexing - later tests will use the results!
+#       -fail Testing a failure condition (ER line)
+# AA Application name for an EMBASSY package application.
+#	This is used for the command line and for reporting statistics.
+#       The application must be built by "make" for the EMBASSY package
+#       defined in the AB line for this test definition.
+#       If the application is not found, qatest can assume this
+#       EMBASSY package was not installed.
+# AB EMBASSY package name
+#       Used to inform the qatest script that a test depends on
+#        installation of an EMBASSY package and may fail to find the binary.
+# AP Application name for EMBOSS application
+#	This is used for the command line and for reporting statistics.
+#       The application must be a standard EMBOSS application, built by make.
+#       The test must succeed.
+# AQ Application name for "make check" application
+#	This is used for the command line and for reporting statistics.
+#       The application must be built by "make check".
+#       The qatest script will look in the build directory as this
+#       application will not be installed.
+#       If the application is not found, qatest can assume "make
+#       check" was not run.
+# CC Comment
+#	Used in commenting on failed tests
+#       This comment will appear in the test output on failure as a guide
+#       to an acceptable failure condition (check the error message too!)
+#       See ## lines for general comments within the definition
+# CL Command line
+#	(Optional)
+#	This is the rest of the command line.
+#       Multiple CL lines are appended with a space in between.
+# DI Directory
+#       Name of a directory created in the results directory
+#       No tests currently for the contents, but a QQ postprocessing
+#       command could be used to list the contents to another file.
+# DL 'success' or 'all' or 'keep'
+#	(Optional)
+#	'success' = delete the test directory on success (the default)
+# 	'all' = delete the test directory always
+#	'keep' = keep the test results directory always
+#                (used if another test reuses the results,
+#                 e.g. database indexing)
+# ER error return code
+#	(Optional)
+# 	Error code expecte.
+#       Used for tests that are test failure conditions.
+#       The test reports an error if the error code is not found
+# FC [<=>] number
+#	= nn Number of lines
+#       > nn More than nn lines
+#       < nn Less than nn lines
+# FI File name 
+#	(Required for all output files created)
+#	stdout and stderr are assumed to exist and be empty unless stated.
+# FP File pattern
+#	(Required for all non stdout and stderr files)
+#	perl /regexp/ to be found in the preceeding 'FI' file.
+#	The /regexp/ may be preceded by an optional count to check exact
+#	number. 
+#       As an extra check, stderr (which often contains the user prompts)
+#       should be checked for absence of warning, error and died messages.
+# FZ [<=>] number 
+#	(Required for all non stdout and stderr files)
+#	File size test on the preceeding 'FI' file.
+#	The file size may be qualified with an optional relation '=', '>' etc.
+#	Implicit test for zero size stdout/stderr unless stated.
+# IC text
+#	(Optional)
+# 	This information is not used in the QA testing.
+# 	It is used by scripts/makeexample.pl when creating the HTML
+#	documentation files to annotate the input.
+# IN Line input
+#	(Required for each prompted input)
+#	If there is nothing on the line, then an empty line is input to the
+#	application. (Obvious really, but needs to be said)
+#       Care is needed if standard options are added/removed from the program.
+# OC text
+#	(Optional)
+# 	This information is not used in the QA testing.
+# 	It is used by scripts/makeexample.pl when creating the HTML
+#	documentation files to annotate the output.
+# PP Preprocessor command
+#	(Optional)
+#       Command executed (by /bin/sh) before the test.
+#       Each PP line is a separate command. Long lines are not concatenated.
+#	e.g. Set an environment variable required by the application.
+#	The variable should always be exported (this is /bin/sh), for example:
+#	PP EMBOSS_ACDROOT=../../acd
+#	PP export EMBOSS_ACDROOT
+# QQ Postprocessor command
+#	(Optional)
+#       Command executed (by /bin/sh) after the test.
+#       Each QQ line is a separate command. Long lines are not concatenated.
+#	Not used at present. Most likely application is to list the
+#       contents of a directory to another file, which can then be
+#       tested for size and patterns.
+# RQ required
+#       Required external programs. For example, srs for tests that
+#       use getz, or clustalw for emma
+# TI seconds
+#       Timeout for test. The default is 60 seconds. Some examples
+#       can take longer on a heavily loaded system.
+# UC text
+#	(Optional)
+# 	This information is not used in the QA testing.
+# 	It is used by scripts/makeexample.pl when creating the HTML
+#	documentation files to annotate the examples of usage.
+# ## Comment 
+#	(Optional)
+#	This is a comment.
+#	Double # is required.
+#       This is only a comment in the entry and is not reported
+#       (use CC lines for comments that appear on failure)
+
 
 ####################
 # Command line tests
@@ -185,7 +347,7 @@ PP EMBOSS_ACDROOT=../../acd
 PP export EMBOSS_ACDROOT
 CL qatest -help -verbose
 FI stderr
-FZ = 3895
+FZ = 3929
 FP 26 /   boolean /
 FP  6 /   integer /
 FP 26 /   string /
@@ -620,18 +782,18 @@ FP 0 /Died: /
 FP /Error: File .*dupassoc.acd line 5: \(sbegin\) Associated qualifier 'sbegin' clashes with 'sbegin' in ACD file\n/
 //
 
-ID acd-dupassoc2
+ID acd-dupassocb
 AP acdc
 ER 1
 PP EMBOSS_ACDROOT=../../acd
 PP export EMBOSS_ACDROOT
-CL dupassoc2
+CL dupassocb
 FI stderr
 FZ > 0
 FP 0 /Warning: /
 FP 1 /Error: /
 FP 0 /Died: /
-FP /Error: File .*dupassoc2.acd line 5: \(mybool\) Associated qualifier 'sbegin' clashes with 'mybool'\/'sbegin' in ACD file\n/
+FP /Error: File .*dupassocb.acd line 5: \(mybool\) Associated qualifier 'sbegin' clashes with 'mybool'\/'sbegin' in ACD file\n/
 //
 
 ID acd-wrongattr
@@ -659,7 +821,7 @@ FZ > 0
 FP 1 /Warning: Ambiguous name/token 'd' \(debug,die\)/
 FP 1 /Error: /
 FP 0 /Died: /
-FP /Error: File .*ambigdefattr.acd line 3: \(ambigdefattr\) Attribute or qualifier 'd' ambiguous\n/
+FP /Error: File .*ambigdefattr.acd line 3: \(ambigdefattr\) Attribute or qualifier 'd' ambiguous \(debug,die\)\n/
 //
 
 ID acd-ambigassoc
@@ -674,7 +836,7 @@ FP 1 /Warning: /
 FP 1 /Error: /
 FP 0 /Died: /
 FP /Warning: Ambiguous name/token 'f' \(fformat,fopenfile\)\n/
-FP /Error: File .*ambigassoc.acd line 8: \(asequence\) Attribute or qualifier 'f' ambiguous\n/
+FP /Error: File .*ambigassoc.acd line 8: \(asequence\) Attribute or qualifier 'f' ambiguous \(fformat,fopenfile\)\n/
 //
 
 ID acd-mixedcase
@@ -1099,9 +1261,38 @@ FZ > 0
 FP 1 /Warning: /
 FP 0 /Error: /
 FP 0 /Died: /
-FP /^Warning: Alignment width \(-awidth=9\) too narrow, reset to 10\n/
+FP /Warning: Alignment width \(-awidth=9\) too narrow, reset to 10\n/
 FI outfile.testalignok
 FZ = 0
+//
+
+ID acdc-funconeof
+AP acdc
+PP EMBOSS_ACDROOT=../../acd
+PP export EMBOSS_ACDROOT
+CL oneof
+IN thr
+IN 2
+FI stderr
+FZ > 0
+FP 0 /Warning: /
+FP 0 /Error: /
+FP 0 /Died: /
+FP / Pick a number /
+//
+
+ID acdc-funconeoffalse
+AP acdc
+PP EMBOSS_ACDROOT=../../acd
+PP export EMBOSS_ACDROOT
+CL oneof
+IN two
+FI stderr
+FZ > 0
+FP 1 /Warning: /
+FP 0 /Error: /
+FP 0 /Died: /
+FP /Warning: integer value out of range 0 less than \(reset to\) 1\n/
 //
 
 ID acdc-nodatafile
@@ -3244,7 +3435,7 @@ FP 0 /Warning: /
 FP 0 /Error: /
 FP 0 /Died: /
 FI division.lkp
-FZ = 366
+FZ = 344
 FP /\A.{300}\001\000wormpep.clone.AB\000/
 FI entrynam.idx
 FZ = 1488
@@ -3568,7 +3759,7 @@ FP 0 /Warning: /
 FP 0 /Error: /
 FP 0 /Died: /
 FI division.lkp
-FZ = 378
+FZ = 366
 FP /\A.{300}\001\000new_seq\.dat\000/
 FI entrynam.idx
 FZ = 400
@@ -3597,7 +3788,7 @@ FP 0 /Warning: /
 FP 0 /Error: /
 FP 0 /Died: /
 FI division.lkp
-FZ = 378
+FZ = 366
 FP /\A.{300}\001\000new_seq\.dat\000/
 FI entrynam.idx
 FZ = 400
@@ -3650,7 +3841,7 @@ FP 0 /Warning: /
 FP 0 /Error: /
 FP 0 /Died: /
 FI division.lkp
-FZ = 378
+FZ = 366
 FP /\A.{300}\001\000new_seq\.dat\000/
 FI entrynam.idx
 FZ = 400
@@ -3818,7 +4009,7 @@ FP 0 /Warning: /
 FP 0 /Error: /
 FP 0 /Died: /
 FI division.lkp
-FZ = 570
+FZ = 520
 ## Pattern needs 's' modifier ... binary data includes a newline
 FP s /\A.{300}\001\000gbbct1.seq\000/
 FI entrynam.idx
@@ -5212,7 +5403,7 @@ FC = 1
 FP /^Created dottup1.dat\n/
 FI dottup1.dat
 FC = 2283
-FP /^Line x1 5250.000000 y1 394.000000 x2 5261.000000 y2 405.000000 colour 0\n/
+FP /^Line x1 5287.000000 y1 624.000000 x2 5298.000000 y2 635.000000 colour 0\n/
 FI stderr
 FC = 1
 FP 0 /Warning: /
@@ -5383,6 +5574,7 @@ FP /1  : 100K_RAT\s+1\.277e\+06 100368\.6   0\.750/
 //
 
 ID emma-ex
+RQ clustalw
 AP emma
 IN ../../data/globins.fasta
 IN
@@ -5914,7 +6106,7 @@ ID entret-inauto-nonewline
 AP entret
 CL -auto ../../data/dna.nonewline test.out
 FI test.out
-FZ = 50
+FZ = 51
 FC = 2
 FP /^>\n/
 FP /^aaaaccccggggttttaaaaccccggggttttaaccggttshshshsh$/
@@ -5956,6 +6148,7 @@ FP /^%%Title: PLplot Graph\n/
 //
 
 ID eprimer3-ex
+RQ primer3
 AP eprimer3
 CL tembl:hsfau1 hsfau.eprimer3 -explain
 FI stderr
@@ -6010,7 +6203,7 @@ FP 0 /Warning: /
 FP 0 /Error: /
 FP 0 /Died: /
 FI hs989235.est2genome
-FZ = 3051
+FZ = 3050
 FP /Note .* forward est and forward genome, .* imply REVERSED GENE/
 FP /^Exon       163  91\.8 25685 25874 HSNFG9           1   193 HS989235/
 //
@@ -6027,7 +6220,7 @@ FP 0 /Warning: /
 FP 0 /Error: /
 FP 0 /Died: /
 FI pax6.est2genome
-FZ = 2104
+FZ = 2103
 FP /Note .* forward est and forward genome, .* imply forward gene/
 FP /^Exon       129  99.2  1380  1510 HSA1280        428   558 pax6/
 //
@@ -6045,7 +6238,7 @@ FP 0 /Warning: /
 FP 0 /Error: /
 FP 0 /Died: /
 FI pax6.est2genome
-FZ = 8087
+FZ = 8086
 FP /Note .* forward est and forward genome, .* imply forward gene/
 FP /^Exon       129  99.2  1380  1510 HSA1280        428   558 pax6/
 FP /^HSA1280   9567 ttgaggccctggagaaaggtgat.....ttcagagtttgagagaacccat  10116\n/
@@ -6066,7 +6259,7 @@ FP 0 /Warning: /
 FP 0 /Error: /
 FP 0 /Died: /
 FI pax6.est2genome
-FZ = 8087
+FZ = 8086
 FP /Note .* forward est and forward genome, .* imply forward gene/
 FP /^Exon       129  99.2  1380  1510 HSA1280        428   558 pax6/
 FP /^HSA1280   9567 ttgaggccctggagaaaggtgat.....ttcagagtttgagagaacccat  10116\n/
@@ -6087,7 +6280,7 @@ FP 0 /Warning: /
 FP 0 /Error: /
 FP 0 /Died: /
 FI pax6.est2genome
-FZ = 8087
+FZ = 8086
 FP /Note .* forward est and forward genome, .* imply forward gene/
 FP /^Exon       129  99.2  1380  1510 HSA1280        428   558 pax6/
 //
@@ -6105,9 +6298,30 @@ FP 0 /Warning: /
 FP 0 /Error: /
 FP 0 /Died: /
 FI pax6.est2genome
-FZ = 2104
+FZ = 2103
 FP /Note .* forward est and forward genome, .* imply forward gene/
 FP /^Exon       129  99.2  1380  1510 HSA1280        428   558 pax6/
+//
+
+ID est2genome-mode-both2
+TI 200
+AP est2genome
+CL -sreverse -mode both
+IN ../../data/pax6_cdna.fasta
+IN ../../data/z83307.seq
+IN
+FI stderr
+FC = 2
+FP 0 /Warning: /
+FP 0 /Error: /
+FP 0 /Died: /
+FI pax6.est2genome
+FZ = 2104
+FP /Note .* forward est and forward genome, .* imply REVERSED GENE/
+FP /^Exon       129  99.2 20744 20874 HSA1280       1141  1271 pax6/
+CC Note the nosplice version of this test does not have "REVERSED GENE"
+CC This is only because with no splice consensus penalty the same score
+CC is found in both directions and the forward gene is the one reported
 //
 
 ID est2genome-mode-forward
@@ -6150,6 +6364,99 @@ ID est2genome-mode-reverse2
 TI 200
 AP est2genome
 CL -mode reverse
+IN ../../data/pax6_cdna.fasta
+IN ../../data/z83307.seq
+IN
+FI stderr
+FC = 2
+FP 0 /Warning: /
+FP 0 /Error: /
+FP 0 /Died: /
+FI pax6.est2genome
+FZ = 47
+FP /Note requested reversed est and forward genome/
+FP 0 /^Exon/
+//
+
+ID est2genome-nosplice-both
+TI 200
+AP est2genome
+CL -nosplice -mode both
+IN ../../data/pax6_cdna.fasta
+IN ../../data/z83307.seq
+IN
+FI stderr
+FC = 2
+FP 0 /Warning: /
+FP 0 /Error: /
+FP 0 /Died: /
+FI pax6.est2genome
+FZ = 2103
+FP /Note .* forward est and forward genome, .* imply forward gene/
+FP /^Exon       124  99.2  1380  1505 HSA1280        428   553 pax6/
+//
+
+ID est2genome-nosplice-both2
+TI 200
+AP est2genome
+CL -sreverse -nosplice -mode both
+IN ../../data/pax6_cdna.fasta
+IN ../../data/z83307.seq
+IN
+FI stderr
+FC = 2
+FP 0 /Warning: /
+FP 0 /Error: /
+FP 0 /Died: /
+FI pax6.est2genome
+FZ = 2103
+FP /Note .* forward est and forward genome, .* imply forward gene/
+FP /^Exon       132  99.3 20741 20874 HSA1280       1138  1271 pax6/
+CC Note the mode version of this test has "imply REVERSED GENE"
+CC This is only because with no splice consensus penalty the same score
+CC is found in both directions and the forward gene is the one reported
+//
+
+ID est2genome-nosplice-forward
+TI 200
+AP est2genome
+CL -nosplice -mode forward
+IN ../../data/pax6_cdna.fasta
+IN ../../data/z83307.seq
+IN
+FI stderr
+FC = 2
+FP 0 /Warning: /
+FP 0 /Error: /
+FP 0 /Died: /
+FI pax6.est2genome
+FZ = 2050
+FP /Note requested forward est and forward genome/
+FP /^Exon       124  99.2  1380  1505 HSA1280        428   553 pax6/
+//
+
+ID est2genome-nosplice-reverse
+TI 200
+AP est2genome
+CL -nosplice -mode reverse -srev1
+IN ../../data/pax6_cdna.fasta
+IN ../../data/z83307.seq
+IN
+FI stderr
+FC = 2
+FP 0 /Warning: /
+FP 0 /Error: /
+FP 0 /Died: /
+FI pax6.est2genome
+FZ = 2051
+FP /Note requested reversed est and forward genome/
+FP /^Exon       124  99.2  1380  1505 HSA1280        428   553 pax6/
+//
+
+ID est2genome-nosplice-reverse2
+TI 200
+AP est2genome
+CL -nosplice -mode reverse
 IN ../../data/pax6_cdna.fasta
 IN ../../data/z83307.seq
 IN
@@ -6667,8 +6974,8 @@ FP 0 /Warning: /
 FP 0 /Error: /
 FP 0 /Died: /
 FI globins.infoalign
-FZ = 691
-FP /^msf::.*HBA_HORSE\s+HBA_HORSE\s+141\s+144\s+2\s+3\s+48\s+4\s+89\s+66\.666664\s+\n/
+FZ = 761
+FP /^msf::.*HBA_HORSE\s+HBA_HORSE\s+141\s+144\s+2\s+3\s+48\s+4\s+89\s+66\.666664\s+0\.190000\s+\n/
 //
 
 ID infoalign-ex2
@@ -6682,8 +6989,8 @@ FP 0 /Warning: /
 FP 0 /Error: /
 FP 0 /Died: /
 FI globins.infoalign
-FZ = 407
-FP /^HBA_HORSE\s+141\s+144\s+2\s+3\s+48\s+4\s+89\s+66\.666664\s+\n/
+FZ = 477
+FP /^HBA_HORSE\s+141\s+144\s+2\s+3\s+48\s+4\s+89\s+66\.666664\s+0\.190000\s+\n/
 //
 
 ID infoalign-ex3
@@ -6742,7 +7049,7 @@ FP 0 /Warning: /
 FP 0 /Error: /
 FP 0 /Died: /
 FI globins.infoalign
-FZ = 1590
+FZ = 1731
 FP /^<tr><td>msf::\.\./\.\./data/globins\.msf:HBA_HORSE<\/td>\n/
 FP /^<td>HBA_HORSE<\/td>\n/
 //
@@ -6758,25 +7065,25 @@ FP 0 /Warning: /
 FP 0 /Error: /
 FP 0 /Died: /
 FI globins.infoalign
-FZ = 691
-FP /^msf::\S+\s+HBA_HORSE\s+141\s+144\s+2\s+3\s+51\s+18\s+72\s+64.583336\s+\n/
+FZ = 761
+FP /^msf::\S+\s+HBA_HORSE\s+141\s+144\s+2\s+3\s+51\s+18\s+72\s+64.583336\s+0\.190000\s+\n/
 //
 
 ID infoalign-ex8
 AP infoalign
 CL -auto tembl:eclac* -out test.out
 FI test.out
-FZ = 712
-FP /tembl-id:ECLAC\s+ECLAC\s+7477\s+7477\s+0\s+0\s+65\s+0\s+7412\s+99[.]130[0-9]+\s+E.*/
-FP /tembl-id:ECLACZ\s+ECLACZ\s+3078\s+3078\s+0\s+0\s+72\s+0\s+3006\s+97[.]660[0-9]+\s+E.*/
+FZ = 764
+FP /tembl-id:ECLAC\s+ECLAC\s+7477\s+7477\s+0\s+0\s+65\s+0\s+7412\s+99[.]130[0-9]+\s+1[.]0+\s+E.*/
+FP /tembl-id:ECLACZ\s+ECLACZ\s+3078\s+3078\s+0\s+0\s+72\s+0\s+3006\s+97[.]660[0-9]+\s+1[.]0+\s+E.*/
 //
 
 ID infoalign-ex9
 AP infoalign
 CL -auto tembl:eclacz -out test.out
 FI test.out
-FZ = 229
-FP /tembl-id:ECLACZ\s+ECLACZ\s+3078\s+3078\s+0\s+0\s+0\s+0\s+3078\s+100[.]0+\s+E.*/
+FZ = 245
+FP /tembl-id:ECLACZ\s+ECLACZ\s+3078\s+3078\s+0\s+0\s+0\s+0\s+3078\s+100[.]0+\s+1[.]0+\s+E.*/
 //
 
 ID infoseq-ex
@@ -7109,7 +7416,7 @@ FI hba_human.matcher
 FP /^# Identity: +63\/145 \(43\.4%\)/
 FP /^# Score: +264\n/
 FP /^HBA_HU -----GSAQVKGHGKKVADALTNAVAHVDDMPNALSALSDLHAHKLRVDP\n/
-FC = 45
+FC = 46
 //
 
 ID matcher-ex2
@@ -7126,7 +7433,7 @@ FI hba_human.matcher
 FP /^# Identity: +63\/145 \(43\.4%\)/
 FP /^# Score: +264\n/
 FP /^HBA_HU -----GSAQVKGHGKKVADALTNAVAHVDDMPNALSALSDLHAHKLRVDP\n/
-FC = 261
+FC = 271
 //
 
 ID megamerger-ex
@@ -7984,6 +8291,27 @@ FP /^Text1 x1 1121.670044 y1 1056.329956 colour 0 size 0.300000 No. Length  Line
 FP /^Text1 x1 1121.670044 y1 1023.659973 colour 0 size 0.300000   1    146     8    248 HBB_HUMAN\n/
 //
 
+ID polydot-feat
+AP polydot
+CL ../../data/globins.fasta -gtitle="Polydot of globins.fasta"
+CL -graph cps -dumpfeat
+IN
+IN
+FI stderr
+FC = 2
+FP 0 /Warning: /
+FP 0 /Error: /
+FP 0 /Died: /
+FI stdout
+FZ = 19
+FP /^Created polydot.ps\n/
+FI polydot.ps
+FP /^%%Title: PLplot Graph\n/
+FP /^%%Pages: 1\n/
+FI globins.gff
+FP /HBB_HUMAN\s+wordmatch\s+misc_feature\s+88\s+111\s+1.000\s+[+]\s+[.]\s+Sequence "HBB_HUMAN.1" ; note "HBB_HORSE"\n/
+//
+
 ID preg-ex
 AP preg
 IN tsw:*_rat
@@ -8190,8 +8518,8 @@ ID prophecy-ex2
 AP prophecy
 IN ../../data/globins.msf
 IN g
-IN globins
 IN
+IN globins
 IN
 IN
 IN
@@ -8261,14 +8589,29 @@ FP 0 /Warning: /
 FP 0 /Error: /
 FP 0 /Died: /
 FI opsd_human.pscan 
-FZ = 794
+FZ = 871
 FP /^Fingerprint GPCRRHODOPSN Elements 7\n    Accession number PR00237\n/
 FP /^  Element 2 Threshold 49% Score 75%\n/
 FP /^             Start position 72 Length 22\n/
+FP /^  Element 1 Threshold 54% Score 64%\n/
+FP /^             Start position 39 Length 25\n/
+//
+
+ID psiphi-ex
+AP psiphi
+CL ../../data/1atn.pxyz -chainnumber=2 -startresiduenumber=4 -finishresiduenumber=65 -outf=1atn.psiphi
+IN ../../data/1atn.pxyz
+FI stderr
+FC = 2
+FP 0 /Warning: /
+FP 0 /Error: /
+FP 0 /Died: /
+FI 1atn.psiphi 
+FZ = 3062
+FP /     24      24     0.0   \-89\.18   \-40\.94\n/
 //
 
 ID rebaseextract-keep
-CC needs local copy of REBASE withrefm and proto file
 AP rebaseextract
 DL keep
 PP mkdir ./REBASE
@@ -8393,7 +8736,7 @@ FP 0 /Warning: /
 FP 0 /Error: /
 FP 0 /Died: /
 FI eclac.remap
-FZ = 1838
+FZ = 1848
 FP /^\s+Hin6I\s+2\s+HinP1I,HspAI\n/
 //
 
@@ -8418,7 +8761,7 @@ FP 0 /Warning: /
 FP 0 /Error: /
 FP 0 /Died: /
 FI eclac.remap
-FZ = 2047
+FZ = 2057
 FP /^\s+TaqI\s+1\s+\n/
 //
 
@@ -8440,7 +8783,7 @@ FP 0 /Warning: /
 FP 0 /Error: /
 FP 0 /Died: /
 FI eclac.remap
-FZ = 1919
+FZ = 1929
 FP /^\s+Hin6I\s+2\s+HinP1I,HspAI\n/
 //
 
@@ -8459,13 +8802,12 @@ FP 0 /Error: /
 FP 0 /Died: /
 FI hsfau.restover
 FZ = 1122
-FP /^# Number of hits with any overlap: 53\n/
+FP /^# Number of hits with any overlap: 54\n/
 FP /^\s+11\s+TaqI\s+TCGA\s+11\s+13\s+\n/
 //
 
 ID restrict-ex
 AP restrict
-## split export EMBOSS_DATA=../rebaseextract-keep/ into two statements
 PP EMBOSS_DATA=../rebaseextract-keep/
 PP export EMBOSS_DATA
 IN tembl:hsfau
@@ -8487,7 +8829,6 @@ UC This gives the lengths of the restriction fragments produced by
 UC cutting with all of the specified enzymes.
 AP restrict
 CL -fragments
-## split export EMBOSS_DATA=../rebaseextract-keep/ into two statements
 PP EMBOSS_DATA=../rebaseextract-keep/
 PP export EMBOSS_DATA
 IN tembl:hsfau
@@ -8510,7 +8851,6 @@ UC This gives the lengths of the restriction fragments created by
 UC cutting with just one of each of the specified enzymes in turn.
 AP restrict
 CL -solofragment
-## split export EMBOSS_DATA=../rebaseextract-keep/ into two statements
 PP EMBOSS_DATA=../rebaseextract-keep/
 PP export EMBOSS_DATA
 IN tembl:hsfau
@@ -8526,6 +8866,26 @@ FI hsfau.restrict
 FP /^\s+11\s+14\s+TaqI\s+TCGA\s+11\s+13\s+[.]\s+[.]\n/
 FP /^\s+125\s+135\s+Hin4I\s+GAYNNNNNVTC\s+116\s+111\s+148\s+143\n/
 FP /^#\s+3\s+13\s+25\s+33\s+37\s+114/
+//
+
+ID restrict-nonpal
+UC Tests non-palindromic sites
+AP restrict
+CL -enzymes BseYI
+PP EMBOSS_DATA=../rebaseextract-keep/
+PP export EMBOSS_DATA
+IN asis:GCTGGGTTTCCCAGC 
+IN
+IN
+IN
+FI stderr
+FC = 2
+FP 0 /Warning: /
+FP 0 /Error: /
+FP 0 /Died: /
+FI asis.restrict
+FP /^\s+6\s+1\s+BseYI\s+CCCAGC\s+1\s+5\s+[.]\s+[.]\n/
+FP /^\s+10\s+15\s+BseYI\s+\CCCAGC\s+10\s+14\s+[.]\s+[.]\n/
 //
 
 ID revseq-ex
@@ -8598,13 +8958,13 @@ FP 0 /Warning: /
 FP 0 /Error: /
 FP 0 /Died: /
 FI eclac.seqmatchall
-FZ = 210
-FP /^1832  5646 7477 ECLAC 1 1832 ECLACA\n/
-FP /^1113  49 1161 ECLAC 1 1113 ECLACI\n/
-FP /^1500  4305 5804 ECLAC 1 1500 ECLACY\n/
-FP /^3078  1287 4364 ECLAC 1 3078 ECLACZ\n/
-FP /^159  1 159 ECLACA 1342 1500 ECLACY\n/
-FP /^60  1 60 ECLACY 3019 3078 ECLACZ\n/
+FZ = 1513
+FP /^  1832 ECLAC +5646..7477     ECLACA +1..1832\n/
+FP /^  1113 ECLAC +49..1161     ECLACI +1..1113\n/
+FP /^  1500 ECLAC +4305..5804     ECLACY +1..1500\n/
+FP /^  3078 ECLAC +1287..4364     ECLACZ +1..3078\n/
+FP /^   159 ECLACA +1..159      ECLACY +1342..1500\n/
+FP /^    60 ECLACY +1..60       ECLACZ +3019..3078\n/
 //
 
 ###########################################################################
@@ -9089,7 +9449,7 @@ ID seqret-inauto-abi
 AP seqret
 CL -auto ../../data/abiview.abi test.out -osf embl
 FI test.out
-FZ = 1241
+FZ = 1246
 FP /^ID   .* 838 BP\.\n/
 FP /^SQ   Sequence 838 BP; 274 A; 140 C; 182 G; 211 T; 31 other;/
 //
@@ -9098,7 +9458,7 @@ ID seqret-inusa-abi
 AP seqret
 CL -auto abi::../../data/abiview.abi test.out -osf embl
 FI test.out
-FZ = 1241
+FZ = 1246
 FP /^ID   .* 838 BP\.\n/
 FP /^SQ   Sequence 838 BP; 274 A; 140 C; 182 G; 211 T; 31 other;/
 //
@@ -9107,7 +9467,7 @@ ID seqret-in-abi
 AP seqret
 CL -auto ../../data/abiview.abi -sf abi test.out -osf embl
 FI test.out
-FZ = 1241
+FZ = 1246
 FP /^ID   .* 838 BP\.\n/
 FP /^SQ   Sequence 838 BP; 274 A; 140 C; 182 G; 211 T; 31 other;/
 //
@@ -10915,6 +11275,7 @@ FP 1 /Died: /
 
 ID seqret-query-srs-id
 CC Requires a local SRS installation
+RQ srs
 AP seqret
 PP EMBOSSRC=../..
 PP export EMBOSSRC
@@ -10927,6 +11288,7 @@ FP 1 /^ID /
 
 ID seqret-query-srs-acc
 CC Requires a local SRS installation
+RQ srs
 AP seqret
 PP EMBOSSRC=../..
 PP export EMBOSSRC
@@ -10939,6 +11301,7 @@ FP 1 /^ID /
 
 ID seqret-query-srs-sv
 CC Requires a local SRS installation
+RQ srs
 AP seqret
 PP EMBOSSRC=../..
 PP export EMBOSSRC
@@ -10951,6 +11314,7 @@ FP 1 /^ID /
 
 ID seqret-query-srs-name
 CC Requires a local SRS installation
+RQ srs
 AP seqret
 PP EMBOSSRC=../..
 PP export EMBOSSRC
@@ -10963,6 +11327,7 @@ FP 1 /^ID /
 
 ID seqret-query-srs-fail
 CC Requires a local SRS installation
+RQ srs
 ER 1
 AP seqret
 PP EMBOSSRC=../..
@@ -10978,54 +11343,59 @@ FP 1 /Died: /
 
 ID seqret-query-srsfasta-id
 CC Requires a local SRS installation
+RQ srs
 AP seqret
 PP EMBOSSRC=../..
 PP export EMBOSSRC
 CL -auto -out test.out -osf embl qasrsfasta-ID:AB000095
 FI test.out
-FZ = 3348
+FZ = 3407
 FP /^ID   AB000095 /
 FP 1 /^ID /
 //
 
 ID seqret-query-srsfasta-acc
 CC Requires a local SRS installation
+RQ srs
 AP seqret
 PP EMBOSSRC=../..
 PP export EMBOSSRC
 CL -auto -out test.out -osf embl qasrsfasta-ACC:AB000095
 FI test.out
-FZ = 3348
+FZ = 3407
 FP /^ID   AB000095 /
 FP 1 /^ID /
 //
 
 ID seqret-query-srsfasta-sv
 CC Requires a local SRS installation
+RQ srs
 AP seqret
 PP EMBOSSRC=../..
 PP export EMBOSSRC
 CL -auto -out test.out -osf embl qasrsfasta-SV:AB000095.1
 FI test.out
-FZ = 3348
+FZ = 3407
 FP /^ID   AB000095 /
 FP 1 /^ID /
 //
 
 ID seqret-query-srsfasta-name
 CC Requires a local SRS installation
+RQ srs
 AP seqret
 PP EMBOSSRC=../..
 PP export EMBOSSRC
 CL -auto -out test.out -osf embl qasrsfasta:AB000095
 FI test.out
-FZ = 3348
+FZ = 3407
 FP /^ID   AB000095 /
 FP 1 /^ID /
 //
 
 ID seqret-query-srsfasta-fail
 CC Requires a local SRS installation
+RQ srs
 ER 1
 AP seqret
 PP EMBOSSRC=../..
@@ -12658,6 +13028,25 @@ FP /^ Sequence: LLVLLLLCETVQA\n/
 FP 9 /^ Sequence: /
 //
 
+ID sigcleave-multi
+AP sigcleave
+IN tsw:a*
+IN
+IN
+FI stderr
+FC = 2
+FP 0 /Warning: /
+FP 0 /Error: /
+FP 0 /Died: /
+FI act1_fugru.sig
+FP /^[(]1[)] Score 13\.739 length 13 at residues 29->41\n/
+FP /^ Sequence: LLVLLLLCETVQA\n/
+FP 25 /^ Sequence: /
+FP 2 /^# No scores over 3.50\n/
+FP 12 /^# Reporting scores over 3.50\n/
+FP 12 /^# Sequence: /
+//
+
 ID silent-ex
 PP EMBOSS_DATA=../rebaseextract-keep/
 PP export EMBOSS_DATA
@@ -13427,6 +13816,22 @@ FP 1 /^>/
 //
 
 
+ID union-feat
+AP union
+CL -feature -source -osf embl
+IN ../../data/union.embl
+IN
+FI stderr
+FC = 2
+FP 0 /Warning: /
+FP 0 /Error: /
+FP 0 /Died: /
+FI entry1.embl
+FZ = 447
+FP 1 /^>/
+//
+
+
 ID vectorstrip-ex
 AP vectorstrip
 CL @../../data/vecseqs.list
@@ -13885,7 +14290,7 @@ FP 1 /^                 10  \n/
 FP 1 /^             20      \n/
 FP 1 /^ AFULL AAACCCGGG--TTT\n/
 FP 1 /^ BFULL AAAC--GGGCCTTT\n/
-FC = 33
+FC = 34
 //
 
 
@@ -13907,7 +14312,7 @@ FP 1 /^ AFULL CCGGTT\n/
 FP 1 /^ APART CCGGTT\n/
 FP 1 /^           10        20        30        40        50    \n/
 FP 1 /^               10        20        30        40        50\n/
-FC = 39
+FC = 40
 //
 
 ID align-matcher-begin
@@ -13928,7 +14333,7 @@ FP 1 /^             20      \n/
 FP 1 /^ AFULL AAACCCGGG--TTT\n/
 FP 1 /^ BFULL AAAC--GGGCCTTT\n/
 FP 1 /^                 10  \n/
-FC = 33
+FC = 34
 //
 
 ID align-matcher-end
@@ -13949,7 +14354,7 @@ FP 1 /^           10    \n/
 FP 1 /^ AFULL AACCGG--TT\n/
 FP 1 /^ BFULL AACGGGCCTT\n/
 FP 1 /^              10 \n/
-FC = 33
+FC = 34
 //
 
 ID align-matcher-begin2
@@ -13970,7 +14375,7 @@ FP 1 /^       20      \n/
 FP 1 /^ AFULL GGG--TTT\n/
 FP 1 /^ BFULL GGGCCTTT\n/
 FP 1 /^           10  \n/
-FC = 33
+FC = 34
 //
 
 ID align-matcher-end2
@@ -13991,7 +14396,7 @@ FP 1 /^               50      \n/
 FP 1 /^ AFULL AAACCCGGGTTTAACC\n/
 FP 1 /^ BFULL AAAC--GGG-----CC\n/
 FP 1 /^                       \n/
-FC = 33
+FC = 34
 //
 
 ID align-matcher-begendall
@@ -14012,7 +14417,7 @@ FP 1 /^           10\n/
 FP 1 /^ AFULL AACCGG\n/
 FP 1 /^ BFULL AACGGG\n/
 FP 1 /^             \n/
-FC = 33
+FC = 34
 //
 
 ID align-matcher-pair
@@ -14032,7 +14437,7 @@ FP /^# Identity: +5\/6 \(83\.3%\)/
 FP /^# Score: +21\n/
 FP 1 /^AFULL +5 AACCGG +10\n/
 FP 1 /^BFULL +2 AACGGG +7\n/
-FC = 31
+FC = 32
 //
 
 ID align-matcher-srspair
@@ -14052,7 +14457,7 @@ FP /^# Identity: +5\/6 \(83\.3%\)/
 FP /^# Score: +21\n/
 FP 1 /^AFULL +5 AACCGG +10\n/
 FP 1 /^BFULL +2 AACGGG +7\n/
-FC = 31
+FC = 32
 //
 
 ID align-matcher-markx0
@@ -14075,7 +14480,7 @@ FP 1 /^ AFULL AACCGG\n/
 FP 1 /^       ::: ::\n/
 FP 1 /^ BFULL AACGGG\n/
 FP 1 /^             \n/
-FC = 33
+FC = 34
 //
 
 ID align-matcher-markx1
@@ -14098,7 +14503,7 @@ FP 1 /^ AFULL AACCGG\n/
 FP 1 /^          X  \n/
 FP 1 /^ BFULL AACGGG\n/
 FP 1 /^             \n/
-FC = 33
+FC = 34
 //
 
 ID align-matcher-markx2
@@ -14119,7 +14524,7 @@ FP /^# Score: +21\n/
 FP 1 /^           10\n/
 FP 1 /^ AFULL AACCGG\n/
 FP 1 /^BFULL  \.\.\.G\.\.\n/
-FC = 31
+FC = 32
 //
 
 ID align-matcher-markx3
@@ -14141,7 +14546,7 @@ FP /^# Identity: +5\/6 \(83\.3%\)/
 FP /^# Score: +21\n/
 FP 1 /^>AFULL \.\.\nAACCGG\n/
 FP 1 /^>BFULL \.\.\nAACGGG\n/
-FC = 31
+FC = 32
 //
 
 ID align-matcher-markx10
@@ -14159,7 +14564,7 @@ FP 0 /Died: /
 FI stdout
 FP 1 /^>AFULL \.\.\n;[^\n]+\n;[^\n]+\n;[^\n]+\n;[^\n]+\nAACCGG\n/
 FP 1 /^>BFULL \.\.\n;[^\n]+\n;[^\n]+\n;[^\n]+\n;[^\n]+\nAACGGG\n/
-FC = 39
+FC = 40
 //
 
 ID align-matcher-fasta
@@ -14252,7 +14657,7 @@ FP /^# Identity: +10\/14 \(71\.4%\)/
 FP /^# Score: +38\.0\n/
 FP 1 /^AFULL             13 aaacccggg--ttt     24\n/
 FP 1 /^BFULL              1 aaa--cgggccttt     12\n/
-FC = 31
+FC = 32
 //
 
 
@@ -14272,7 +14677,7 @@ FP /^# Identity: +56\/56 \(100\.0%\)/
 FP /^# Score: +280\.0\n/
 FP 1 /^AFULL             55 ccggtt     60\n/
 FP 1 /^APART             51 ccggtt     56\n/
-FC = 35
+FC = 36
 //
 
 ID align-water-begin
@@ -14291,7 +14696,7 @@ FP /^# Identity: +10\/14 \(71\.4%\)/
 FP /^# Score: +38\.0\n/
 FP 1 /^AFULL             13 aaacccggg--ttt     24\n/
 FP 1 /^BFULL              1 aaa--cgggccttt     12\n/
-FC = 31
+FC = 32
 //
 
 ID align-water-end
@@ -14310,7 +14715,7 @@ FP /^# Identity: +7\/10 \(70\.0%\)/
 FP /^# Score: +25\.0\n/
 FP 1 /^AFULL              5 aaccgg--tt     12\n/
 FP 1 /^BFULL              2 aacgggcctt     11\n/
-FC = 31
+FC = 32
 //
 
 ID align-water-begin2
@@ -14329,7 +14734,7 @@ FP /^# Identity: +6\/8 \(75\.0%\)/
 FP /^# Score: +24\.0\n/
 FP 1 /^AFULL             19 ggg--ttt     24\n/
 FP 1 /^BFULL              5 gggccttt     12\n/
-FC = 31
+FC = 32
 //
 
 ID align-water-end2
@@ -14348,7 +14753,7 @@ FP /^# Identity: +9\/16 \(56\.2%\)/
 FP /^# Score: +30\.0\n/
 FP 1 /^AFULL             41 aaacccgggtttaacc     56\n/
 FP 1 /^BFULL              1 aaa--cggg-----cc      9\n/
-FC = 31
+FC = 32
 //
 
 ID align-water-begendall
@@ -14367,7 +14772,7 @@ FP /^# Identity: +5\/6 \(83\.3%\)/
 FP /^# Score: +21\.0\n/
 FP 1 /^AFULL              5 aaccgg     10\n/
 FP 1 /^BFULL              2 aacggg      7\n/
-FC = 31
+FC = 32
 //
 
 ID align-stretcher-full
@@ -14388,7 +14793,7 @@ FP 1 /^               10        20        30        40        50\n/
 FP 1 /^ AFULL ACGTAACCGGTTAAACCCGGGTTTAAAACCCCGGGGTTTTAAACCCGGGT\n/
 FP 1 /^ BFULL A------------AAC----------------GGGCCTTT----------\n/
 FP 1 /^                                           10            \n/
-FC = 39
+FC = 40
 //
 
 ID align-stretcher-part
@@ -14409,7 +14814,7 @@ FP 1 /^               60    \n/
 FP 1 /^ AFULL TTAACCGGTTACGT\n/
 FP 1 /^ APART TTAACCGGTT----\n/
 FP 1 /^         50          \n/
-FC = 39
+FC = 40
 //
 
 ID align-stretcher-begin
@@ -14430,7 +14835,7 @@ FP 1 /^           10        20        30        40        50    \n/
 FP 1 /^ AFULL AACCGGTTAAACCCGGGTTTAAAACCCCGGGGTTTTAAACCCGGGTTTAA\n/
 FP 1 /^ BFULL AAACG-------------------------GGCCTT--------------\n/
 FP 1 /^                                        10               \n/
-FC = 39
+FC = 40
 //
 
 ID align-stretcher-end
@@ -14451,7 +14856,7 @@ FP 1 /^               10     \n/
 FP 1 /^ AFULL ACGTAACCGGTTAAA\n/
 FP 1 /^ BFULL A---AACGGGCCTTT\n/
 FP 1 /^                  10  \n/
-FC = 33
+FC = 34
 //
 
 ID align-stretcher-begin2
@@ -14472,7 +14877,7 @@ FP 1 /^               10        20        30        40        50\n/
 FP 1 /^ AFULL ACGTAACCGGTTAAACCCGGGTTTAAAACCCCGGGGTTTTAAACCCGGGT\n/
 FP 1 /^ BFULL --------------------------------GGGCCTTT----------\n/
 FP 1 /^                                           10            \n/
-FC = 39
+FC = 40
 //
 
 ID align-stretcher-end2
@@ -14493,7 +14898,7 @@ FP 1 /^               60    \n/
 FP 1 /^ AFULL TTAACCGGTTACGT\n/
 FP 1 /^ BFULL -----------CCT\n/
 FP 1 /^                   10\n/
-FC = 39
+FC = 40
 //
 
 ID align-stretcher-begendall
@@ -14514,7 +14919,7 @@ FP 1 /^           10     \n/
 FP 1 /^ AFULL AACCGGTTAAA\n/
 FP 1 /^ BFULL AACGGG-----\n/
 FP 1 /^                  \n/
-FC = 33
+FC = 34
 //
 
 ID align-needle-full
@@ -14533,7 +14938,7 @@ FP /^# Identity: +8\/64 \(12\.5%\)/
 FP /^# Score: +24\.0\n/
 FP 1 /^AFULL +1 acgtaaccggttaaacccgggtttaaaaccccggggttttaaacccgggt     50\n/
 FP 1 /^BFULL +1             aaacgggccttt                               12\n/
-FC = 35
+FC = 36
 //
 
 ID align-needle-part
@@ -14552,7 +14957,7 @@ FP /^# Identity: +56\/64 \(87\.5%\)/
 FP /^# Score: +280\.0\n/
 FP 1 /^AFULL             51 ttaaccggttacgt     64\n/
 FP 1 /^APART             47 ttaaccggtt         56\n/
-FC = 35
+FC = 36
 //
 
 ID align-needle-begin
@@ -14571,7 +14976,7 @@ FP /^# Identity: +8\/60 \(13\.3%\)/
 FP /^# Score: +24\.0\n/
 FP 1 /^AFULL +5 aaccggttaaacccgggtttaaaaccccggggttttaaacccgggtttaa     54\n/
 FP 1 /^BFULL +1         aaacgggccttt                                   12\n/
-FC = 35
+FC = 36
 //
 
 ID align-needle-end
@@ -14590,7 +14995,7 @@ FP /^# Identity: +3\/24 \(12\.5%\)/
 FP /^# Score: +15\.0\n/
 FP 1 /^AFULL +1 acgtaaccggttaaa              15\n/
 FP 1 /^BFULL +1             aaacgggccttt     12\n/
-FC = 31
+FC = 32
 //
 
 ID align-needle-begin2
@@ -14609,7 +15014,7 @@ FP /^# Identity: +6\/64 \( 9\.4%\)/
 FP /^# Score: +22\.0\n/
 FP 1 /^AFULL +1 acgtaaccggttaaacccgggtttaaaaccccggggttttaaacccgggt     50\n/
 FP 1 /^BFULL +5                                 gggccttt               12\n/
-FC = 35
+FC = 36
 //
 
 ID align-needle-end2
@@ -14628,7 +15033,7 @@ FP /^# Identity: +6\/64 \( 9\.4%\)/
 FP /^# Score: +14\.0\n/
 FP 1 /^AFULL +1 acgtaaccggttaaacccgggtttaaaaccccggggttttaaacccgggt     50\n/
 FP 1 /^BFULL +1             aaacgggcct                                 10\n/
-FC = 35
+FC = 36
 //
 
 ID align-needle-begendall
@@ -14647,7 +15052,7 @@ FP /^# Identity: +5\/11 \(45\.5%\)/
 FP /^# Score: +21\.0\n/
 FP 1 /^AFULL +5 aaccggttaaa     15\n/
 FP 1 /^BFULL +2 aacggg           7\n/
-FC = 31
+FC = 32
 //
 
 #######################################
@@ -14655,12 +15060,47 @@ FC = 31
 #######################################
 
 ID ajtest-check
-## Hard to test ... could be anything
-## Only -help is 'guaranteed' to work
 AQ ajtest
-CL -help
+IN tembl:paamir
+IN ../../data/globins.msf
+IN stdout
+IN abc.seq
+IN abc.gff
 FI stderr
-FC > 0
+FC = 4
+FP 0 /Warning: /
+FP 0 /Error: /
+FP 0 /Died: /
+FI kim1.out
+FZ = 3390
+FP /^ID   PAAMIR     standard; DNA; UNC; 2167 BP.\n/
+FI abc.seq
+FC = 0
+FI abc.gff
+FC = 0
+//
+
+ID ajtest-all-check
+AQ ajtest
+CL -nostdout -outfile
+CL -outseq outseq
+IN tembl:paamir
+IN ../../data/globins.msf
+IN abc.gff
+FI stderr
+FC = 4
+FP 0 /Warning: /
+FP 0 /Error: /
+FP 0 /Died: /
+FI kim1.out
+FZ = 3390
+FP /^ID   PAAMIR     standard; DNA; UNC; 2167 BP.\n/
+FI outseq
+FC = 0
+FI abc.gff
+FC = 0
+FI paamir.nulloutfile
+FC = 0
 //
 
 ID complex-check
@@ -14712,7 +15152,7 @@ FP 0 /Warning: /
 FP 0 /Error: /
 FP 0 /Died: /
 FI dna.demoalign
-FZ = 1213
+FZ = 1214
 FP 9 /^MSFM[1-3] +/
 //
 
@@ -14847,9 +15287,12 @@ AQ patmattest
 CC No documentation, no example
 IN tembl:paamir
 IN ACA
-FI stderr
-FC = 94
+IN
+FI stdout
+FC = 93
 FP /^ACA\n15 matches found\n/
+FI stderr
+FC = 2
 FP 0 /Warning: /
 FP 0 /Error: /
 FP 0 /Died: /
@@ -14875,6 +15318,7 @@ FP /^3 pairs found\n/
 //
 
 ID primers-check
+RQ primer3
 AQ primers
 CC No documentation, no example
 IN tembl:hsfos
@@ -15162,13 +15606,13 @@ FI stdout
 FC = 3
 FP /^1cs4\n/
 FI 1cs4.con
-FZ = 3542
+FZ = 3660
 FP /^SM   ASP 2 ; ASP 46\n/
 FI 1ii7.con
-FZ = 3332
+FZ = 3469
 FP /^SM   ILE 9 ; LEU 50\n/
 FI 2hhb.con
-FZ = 10475
+FZ = 10932
 FP /^SM   LEU 2 ; ALA 12\n/
 FI contacts.log
 FC = 3
@@ -15180,9 +15624,6 @@ AB domainatrix
 AA domainer
 IN ../../data/structure/all.scop
 IN ../../data/structure
-IN
-IN
-IN
 IN
 IN
 IN log.1
@@ -15204,14 +15645,14 @@ FI d1cs4a_.ent
 FZ = 29889
 FP /^ATOM\s+31\s+CA\s+PHE\s+A   6\s+60.914 -11.143  59.200  1.00 58.07\s+C\s+\n/
 FI d1cs4a_.pxyz
-FZ = 82217
+FZ = 82219
 FP /SQ   SEQUENCE    52 AA;   5817 MW;  47362A43 CRC32;\n/
 FP /CO +1 +1 +[.] +P +3 +397( +[.])+ +I +ILE +CD1( +[-]?[0-9]+[.][0-9]+)+/
 FI d1ii7a_.ent
 FZ = 29727
 FP /ATOM      1  N   ASP A   8       7.977  32.254  19.055  1.00 26.65           N  /
 FI d1ii7a_.pxyz
-FZ = 81546
+FZ = 81548
 FP /SQ   SEQUENCE    65 AA;   7396 MW;  0CFB92A3 CRC32;/
 FP /CO   1    1    .    P    8     8( +[.])+ +D    ASP    OD2( +[-]?[0-9]+[.][0-9]+)+/
 //
@@ -15388,9 +15829,72 @@ FP /^Length\t\t279\n/
 FP /^Max_score\t1572.10\n/
 //
 
+ID rocplot-ex
+AB domainatrix
+AA rocplot
+CC No special requirements.
+IN ../../data/structure/rocplot/
+IN 2
+IN 2
+IN 1
+IN
+IN _rocplot
+IN _summary
+IN _classplot
+FI stderr
+FC = 13
+FP 0 /Warning: /
+FP 0 /Error: /
+FP 0 /Died: /
+FI stdout
+FC = 6
+FP 2 /^Processing /
+FI _rocplot       
+FC > 0
+FP 1 /GNUPLOT/
+FZ > 0
+FI _rocplot_dat0
+FC > 0
+FP 1 /GNUPLOT/
+FZ > 0
+FI _classplot      
+FC > 0
+FP 1 /GNUPLOT/
+FZ > 0
+FI _classplot_dat0 
+FC > 0
+FP 1 /GNUPLOT/
+FZ > 0
+FI _classplot_dat1 
+FC > 0
+FP 1 /GNUPLOT/
+FZ > 0
+FI _classplot_dat2 
+FC > 0
+FP 1 /GNUPLOT/
+FZ > 0
+FI _classplot_dat3 
+FC > 0
+FP 1 /GNUPLOT/
+FZ > 0
+FI _classplot_dat4 
+FC > 0
+FP 1 /GNUPLOT/
+FZ > 0
+FI _summary
+FC > 0
+FP 3 /rocplot/
+FZ > 0
+FI  rocplot.errors
+FC > 0
+FP 1 /MODE/
+FZ > 0
+//
+
 ID scopalign-ex
 AB domainatrix
 AA scopalign
+RQ stamp
 CC requires a modified stamp to be installed
 IN ../../data/structure/all.scop2
 IN
@@ -15519,6 +16023,7 @@ FP 2 /^\/\/\n/
 ID seqalign-ex
 AB domainatrix
 AA seqalign
+RQ clustalw
 CC Apparently requires clustalw 1.83 for long filenames
 CC clustalw 1.82 failed with 'unable to read .aln file'
 CC this was a clustalw error message
@@ -15578,6 +16083,7 @@ FP 140 /^SQ   /
 //
 
 ID seqsearch-ex
+RQ blastpgp
 CC Uses blastpgp to search
 AB domainatrix
 AA seqsearch
@@ -15677,6 +16183,7 @@ FP 32 /^IN   /
 //
 
 ID sigplot-ex
+RQ gnuplot
 CC requires gnuplot
 CC fails - no true hits in input
 CC and the Usage case says so too
@@ -15740,111 +16247,496 @@ FP 1 /^SI   /
 # EMNU
 #######################################
 
-ID emnu-help
+ID emnu-ex
 AB emnu
 AA emnu
-CL -help
+CL -explode
+IN [C
+IN
+IN y
 FI stderr
-FC = 0
+FC = 1
+FP 0 /Warning: /
+FP 0 /Error: /
+FP 0 /Died: /
+FI stdout
+FC > 3
+FP /^emnu version: 1.0.5\n/
+FP /^EMBOSS Simple Menu\n/
+FP /ALPHABETIC LISTING OF ALL PROGRAMS/
+FP /ALIGNMENT GLOBAL/
 //
 
 #######################################
 # ESIM4
 #######################################
 
-ID esim4-help
+ID esim4-ex
 AB esim4
 AA esim4
-CL -help
+## Test example copied from est2genome
+## Similar results - possible longer alignment at 3' end of EST.
+IN tembl:hs989235
+IN tembl:hsnfg9
+IN
 FI stderr
-FC = 111
+FC = 2
 FP 0 /Warning: /
 FP 0 /Error: /
 FP 0 /Died: /
+FI hs989235.esim4
+FC = 7
+FP /^seq1 = HS989235, 495 bp\n/
+FP /^seq2 = HSNFG9 \(HSNFG9\), 33760 bp\n/
+FP /^1-193  \(25686-25874\)   92% <-\n/
+FP /^194-407  \(26279-26492\)   98% <-\n/
+FP /^408-487  \(27391-27469\)   88%\n/
 //
 
 #######################################
 # HMMER
+# demo directory ../../data/hmm
+# has example files from the hmmer 2.1.1 tutorial
 #######################################
 
-ID ehmmcalibrate-help
-AB phylip
-AA ehmmcalibrate
-CL -help
-FI stderr
-FC = 0
-//
-
-ID ehmmconvert-help
-AB phylip
-AA ehmmconvert
-CL -help
-FI stderr
-FC = 0
-//
-
-ID ehmmemit-help
-AB phylip
-AA ehmmemit
-CL -help
-FI stderr
-FC = 0
-//
-
-ID ehmmfetch-help
-AB phylip
-AA ehmmfetch
-CL -help
-FI stderr
-FC = 0
-//
-
-ID ehmmindex-help
-AB phylip
-AA ehmmindex
-CL -help
-FI stderr
-FC = 0
-//
-
-ID ehmmbuild-help
-AB phylip
+ID ehmmbuild-ex-keep
+AB hmmer
 AA ehmmbuild
-CL -help
+DL keep
+CL ../../data/hmm/globins50.msf globin.hmm -auto
 FI stderr
 FC = 0
+FP 0 /Warning: /
+FP 0 /Error: /
+FP 0 /Died: /
+FI stdout
+FC = 32
+FP /^Maximum score:      248.11 bits\n/
+FI globin.hmm
+FC = 456
+FP /^HMMER2.0\n/
+FP /^CKSUM 5854\n/
+FI globins50.out2
+FC = 260
+FP /^#=SQ HBB2_TRICR 0.5133 - - 0..0::0 -\n/
+FI globins50.out3
+FC = 436
+FP /^M 0.00 0.00 0.00 0.00 0.00 3.32 0.00 .* 1.17 0.00 7.14 0.00 0.00 \n/
 //
 
-ID ehmmalign-help
-AB phylip
-AA ehmmalign
-CL -help
+ID ehmmcalibrate-ex-keep
+AB hmmer
+AA ehmmcalibrate
+TI 120
+DL keep
+## copy the input file because it will be updated
+## Provide a seed value to get reproducible output for validation
+PP cp ../ehmmbuild-ex-keep/globin.hmm ./
+CL globin.hmm -seed 1079460101 -auto
 FI stderr
 FC = 0
+FP 0 /Warning: /
+FP 0 /Error: /
+FP 0 /Died: /
+FI globin.ehmmcalibrate
+FC = 13
+FP /Number of samples:        5000\n/
+FI globin.out2
+FC = 35
+FP /% Statistical details of theoretical EVD fit:\n/
+FI globin.hmm
+FC = 458
+FP /^COM   ehmmbuild ../../data/hmm/globins50.msf globin.hmm -auto\n/
+FP /^COM   ehmmcalibrate globin.hmm -seed 1079460101 -auto\n/
+FP 2 /^COM/
 //
 
-ID ehmmpfam-help
-AB phylip
-AA ehmmpfam
-CL -help
-FI stderr
-FC = 0
-//
-
-ID ehmmsearch-help
-AB phylip
+ID ehmmsearch-ex
+AB hmmer
 AA ehmmsearch
-CL -help
+CL ../../data/hmm/Artemia.fa ../ehmmcalibrate-ex-keep/globin.hmm -auto
 FI stderr
 FC = 0
+FP 0 /Warning: /
+FP 0 /Error: /
+FP 0 /Died: /
+FI stdout
+FC = 26
+FP /     Total hits:           1\n/
+FI s13421.ehmmsearch
+FC = 24
+FP /S13421     1/1     303   347 ..     1    45 \[.    12.7    0.089\n/
 //
 
-ID ealistat-help
-AB phylip
-AA ealistat
-CL -help
+ID ehmm-own-keep1
+AB hmmer
+AA ehmmbuild
+DL keep
+CL ../../data/hmm/rrm.slx rrm.hmm
 FI stderr
-FC = 0
+FC = 1
+FP 0 /Warning: /
+FP 0 /Error: /
+FP 0 /Died: /
+FI stdout
+FC = 31
+FP /^Number of sequences:               70\n/
+FI rrm.hmm
+FC = 236
+FP /^LENG  72\n/
+FI rrm.out2
+FC = 216
+FP /^#=SQ CABA_MOUSE\/77-148  0.8349 CABA_MOUSE\/77-148 - 0..0::0 -\n/
+FI rrm.out3
+FC = 214
+FP /^M 2.09 0.84 [0. ]+ 20.78 0.00 30.46 0.83 [0. ]+ 13.00 [0. ]+ \n/
+//
+
+ID ehmm-own-keep2
+AB hmmer
+AA ehmmbuild
+CL ../../data/hmm/fn3.slx fn3.hmm
+QQ cp fn3.hmm ../ehmm-own-keep1/
+FI stderr
+FC = 1
+FP 0 /Warning: /
+FP 0 /Error: /
+FP 0 /Died: /
+FI stdout
+FC = 31
+FP /^Number of sequences:               109\n/
+FI fn3.hmm
+FC = 272
+FP /^LENG  84\n/
+FI fn3.out2
+FC = 444
+FP /^#=SQ 7LES_DROVI/1917-1997 1.1291 7LES_DROVI/1917-1997 - 0..0::0 -\n/
+FI fn3.out3
+FC = 250
+FP /^M 4.96 0.00 18.09 4.46 0.00 9.88 0.00 0.00 .* 0.00 1.13 \n/
+//
+
+ID ehmm-own-keep3
+AB hmmer
+AA ehmmbuild
+CL ../../data/hmm/pkinase.slx pkinase.hmm
+QQ cp pkinase.hmm ../ehmm-own-keep1/
+FI stderr
+FC = 1
+FP 0 /Warning: /
+FP 0 /Error: /
+FP 0 /Died: /
+FI stdout
+FC = 31
+FP /^Number of sequences:               67\n/
+FI pkinase.hmm
+FC = 824
+FP /^LENG  268\n/
+FI pkinase.out2
+FC = 552
+FP /^#=SQ ABL1_CAEEL/296-547   0.9915 ABL1_CAEEL/296-547 - 0..0::0 -\n/
+FI pkinase.out3
+FC = 802
+FP /^M 0.00 1.06 2.00 3.06 5.97 .* 3.91 1.03 4.04 8.98 0.00 0.97 \n/
+//
+
+ID ehmm-own-keep
+AB hmmer
+PP cat ../ehmm-own-keep1/*.hmm > myhmms 
+AA ehmmcalibrate
+DL keep
+TI 300
+CL myhmms -seed 1079460101
+IN
+FI stderr
+FC = 2
+FP 0 /Warning: /
+FP 0 /Error: /
+FP 0 /Died: /
+FI myhmms
+FC = 1338
+FP /^LENG  268\n/
+FI myhmms.ehmmcalibrate
+FC = 23
+FP /^\n/
+FI myhmms.out2
+FC = 110
+FP /^HMM: 7LES_DROME/2209-2481\n/
+FP /^chi-sq statistic =    45.1950\n/
+//
+
+ID ehmm-own2-keep1
+AB hmmer
+AA ehmmbuild
+DL keep
+CL ../../data/hmm/rrm.sto -sf stockholm myhmms
+FI stderr
+FC = 1
+FP 0 /Warning: /
+FP 0 /Error: /
+FP 0 /Died: /
+FI stdout
+FC = 31
+FP /^Number of sequences:               70\n/
+FI myhmms
+FC = 236
+FP /^LENG  72\n/
+FI rrm.out2
+FC = 216
+FP /^#=SQ CABA_MOUSE\/77-148  0.8349 CABA_MOUSE\/77-148 - 0..0::0 -\n/
+FI rrm.out3
+FC = 214
+FP /^M 2.09 0.84 [0. ]+ 20.78 0.00 30.46 0.83 [0. ]+ 13.00 [0. ]+ \n/
+//
+
+ID ehmm-own2-keep2
+AB hmmer
+AA ehmmbuild
+CL -append ../../data/hmm/fn3.slx ../ehmm-own2-keep1/myhmms
+FI stderr
+FC = 1
+FP 0 /Warning: /
+FP 0 /Error: /
+FP 0 /Died: /
+FI stdout
+FC = 31
+FP /^Number of sequences:               109\n/
+FI fn3.out2
+FC = 444
+FP /^#=SQ 7LES_DROVI/1917-1997 1.1291 7LES_DROVI/1917-1997 - 0..0::0 -\n/
+FI fn3.out3
+FC = 250
+FP /^M 4.96 0.00 18.09 4.46 0.00 9.88 0.00 0.00 .* 0.00 1.13 \n/
+//
+
+ID ehmm-own2-keep3
+AB hmmer
+AA ehmmbuild
+CL -append ../../data/hmm/pkinase.slx ../ehmm-own2-keep1/myhmms
+FI stderr
+FC = 1
+FP 0 /Warning: /
+FP 0 /Error: /
+FP 0 /Died: /
+FI stdout
+FC = 31
+FP /^Number of sequences:               67\n/
+FI pkinase.out2
+FC = 552
+FP /^#=SQ ABL1_CAEEL/296-547   0.9915 ABL1_CAEEL/296-547 - 0..0::0 -\n/
+FI pkinase.out3
+FC = 802
+FP /^M 0.00 1.06 2.00 3.06 5.97 .* 3.91 1.03 4.04 8.98 0.00 0.97 \n/
+//
+
+ID ehmm-own2-keep
+AB hmmer
+AA ehmmcalibrate
+DL keep
+TI 300
+PP cp ../ehmm-own2-keep1/myhmms .
+CL myhmms -seed 1079460101
+IN
+FI stderr
+FC = 2
+FP 0 /Warning: /
+FP 0 /Error: /
+FP 0 /Died: /
+FI myhmms
+FC = 826
+FP /^LENG  268\n/
+FI myhmms.ehmmcalibrate
+FC = 13
+FP /^\n/
+FI myhmms.out2
+FC = 34
+FP /^HMM: 7LES_DROME/2209-2481\n/
+FP /^chi-sq statistic =    48.8891\n/
+//
+
+ID ehmmpfam-ex
+AB hmmer
+AA ehmmpfam
+CL ../../data/hmm/7LES_DROME ../ehmm-own-keep/myhmms
+IN
+FI stderr
+FC = 2
+FP 0 /Warning: /
+FP 0 /Error: /
+FP 0 /Died: /
+FI stdout
+FC = 48
+FP /^\n/
+FP /^                CS QDRREWEAHERRLETAGTHRLTGIKPGSGYSLWVQAH   \n/
+FP /^                RF QDRREWEAHERRLETAGTHRLTGIKPGSGYSLWVQAH   \n/
+FP /^                   ttpstsnttttllllllltytvyvvvvvsasssggsg<-\*\n/
+FP /^ +\+\+\+\+ \+ \+\+\+\+l \+ \+\+   \+ \+   \+\+\+s \+  \+    \n/
+FP /^  7LES_DROME  1846 QDRREWEAHERRLETAGTHRLTGIKPGSGYSLWVQAH    1882 \n/
+FI 7les_drome.ehmmpfam
+FC = 18
+FP /^7LES_DROME\/1799-1891: domain 1 of 1, from 1799 to 1882: score 32.1, E = 2.5e-06\n/
+FP /^7LES_DROME\/2209-2481   1\/1    2209  2476 ..     1   268 \[\]   115.9  7.6e-31\n/
+//
+
+ID ehmmalign-keep
+AB hmmer
+AA ehmmalign
+DL keep
+CL ../ehmmbuild-ex-keep/globin.hmm ../../data/hmm/globins630.fa globins630.ali
+FI stderr
+FC = 1
+FP 0 /Warning: /
+FP 0 /Error: /
+FP 0 /Died: /
+FI stdout
+FC = 1
+FP /^Alignment saved in file globins630.ali\n/
+FI globins630.ali
+FC = 6952
+FP /^#=SQ HBB_HUMAN  1.0000 - - 0..0::0 -\n/
+FP 5 /^HBB_HUMAN   [.]+\n/
+FP /^HBB_HUMAN   L.DN...L.KG....TFAT.LS.EL...H.CDKLHVDPE.NFRLL.GNVL\n/
+//
+
+ID ehmmconvert-ex
+AB hmmer
+AA ehmmconvert
+CL ../../data/hmm/rrm.hmm rrm.hmm
+FI stderr
+FC = 1
+FP 0 /Warning: /
+FP 0 /Error: /
+FP 0 /Died: /
+FI stdout
+FC = 3
+FP /^1 HMM\(s\) converted and written to rrm.hmm\n/
+FI rrm.hmm
+FC = 237
+FP /^LENG  72\n/
+//
+
+ID ehmmconvert-exb
+AB hmmer
+AA ehmmconvert
+CL ../../data/hmm/rrm.hmm rrm.hmm -format b
+FI stderr
+FC = 1
+FP 0 /Warning: /
+FP 0 /Error: /
+FP 0 /Died: /
+FI stdout
+FC = 3
+FP /^1 HMM\(s\) converted and written to rrm.hmm\n/
+FI rrm.hmm
+FC = 23
+FP 4 /rrm/
+//
+
+ID ehmmconvert-exg
+AB hmmer
+AA ehmmconvert
+CL ../../data/hmm/rrm.hmm rrm.hmm -format g
+FI stderr
+FC = 1
+FP 0 /Warning: /
+FP 0 /Error: /
+FP 0 /Died: /
+FI stdout
+FC = 3
+FP /^1 HMM\(s\) converted and written to rrm.hmm\n/
+FI rrm.hmm
+FC = 91
+FP /^!!AA_PROFILE 1.0\n/
+FP /^\(Peptide\) HMMCONVERT v2.1.1 Length: 72 rrm\|\|\n/
+FP /^ F   -364  -346  -598  -534   .* -260   110   111\n/
+//
+
+ID ehmmconvert-exx
+AB hmmer
+AA ehmmconvert
+CL ../../data/hmm/rrm.hmm rrm.hmm -format x
+FI stderr
+FC = 1
+FP 0 /Warning: /
+FP 0 /Error: /
+FP 0 /Died: /
+FI stdout
+FC = 3
+FP /^1 HMM\(s\) converted and written to rrm.hmm\n/
+FI rrm.hmm
+FP /^!!AA_PROFILE 1.0\n/
+FP /^\(Peptide\) HMMCONVERT v2.1.1 Length: 72 rrm\|\|\n/
+FP /^ F   -364  -346  -598  -534   .* -260   110   111   116   137\n/
+//
+
+ID ehmmemit-ex
+AB hmmer
+AA ehmmemit
+CL ../../data/hmm/rrm.hmm -seed 1079460101
+IN
+FI stderr
+FC = 2
+FP 0 /Warning: /
+FP 0 /Error: /
+FP 0 /Died: /
+FI rrm.ehmmemit
+FC = 30
+FP 10 /^>seq[0-9]+ +\n/
+FP /^VYITNLPPGVQKQELFDVKDTYFGEHGPVVRFNISRDDDDTQTGEASGFG\n/
+FP /^EDAEAALENLRGIKINNRKLHI\n/
+//
+
+ID ehmmindex-keep
+AB hmmer
+AA ehmmindex
+DL keep
+PP cp ../ehmm-own-keep/myhmms myhmms
+CL myhmms
+FI stderr
+FC = 1
+FP 0 /Warning: /
+FP 0 /Error: /
+FP 0 /Died: /
+FI myhmms
+FC = 1338
+FP /^LENG  268\n/
+FI myhmms.gsi
+FZ = 304
+FP /7LES_DROME/
+//
+
+ID ehmmfetch-ex
+AB hmmer
+AA ehmmfetch
+CL ../ehmmindex-keep/myhmms 7LES_DROME/1799-1891
+IN
+FI stderr
+FC = 2
+FP 0 /Warning: /
+FP 0 /Error: /
+FP 0 /Died: /
+FI outfile.ehmmfetch
+FC = 274
+FP /^NAME  7LES_DROME/1799-1891\n/
+//
+
+ID ealistat-ex
+AB hmmer
+AA ealistat
+CL ../ehmmalign-keep/globins630.ali
+IN
+FI stderr
+FC = 2
+FP 0 /Warning: /
+FP 0 /Error: /
+FP 0 /Died: /
+FI globins630.ealistat
+FC = 14
+FP /^Number of sequences: 630\n/
+FP /^Average length:      145.1\n/
+FP /^Alignment length:    469\n/
+FP /^Average identity:    25%\n/
+FP /^Most distant seq:    6%\n/
 //
 
 #######################################
@@ -16200,7 +17092,7 @@ IN
 IN
 IN
 FI dnacomp.fdnacomp
-FC = 57
+FC = 59
 FP /total number of compatible sites is       11.0\n/
 FP /   4   Epsilon     maybe   GGGATCTCGG CCC\n/
 FP /    0[|]       2   1   3   2   0   2   1   1   1\n/
@@ -16636,11 +17528,24 @@ FP 0 /Died: /
 # TOPO
 #######################################
 
-ID topo-help
+ID topo-ex
 AB topo
 AA topo
-CL -help
+CL tsw:aqp1_human -signa -prol=UM -cys=cg -gly=sr -acid=dr
+CL -basic=db -ohaa=da -araa=dg -graph ps
+IN 18 35 49 67 94 115 136 156 165 184 211 232
+IN n
+IN 74 82 sy 189 189 hm 239 239 sa 157 157 sa 262 262 sa
 FI stderr
-FC = 0
+FC = 2
+FP 0 /Warning: /
+FP 0 /Error: /
+FP 0 /Died: /
+FI stdout
+FC = 1
+FP /^Created topo.ps\n/
+FI topo.ps
+FZ > 950000
+FP /^%%Title: PLplot Graph\n/
 //
 
