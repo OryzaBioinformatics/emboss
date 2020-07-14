@@ -12,15 +12,17 @@ Description
    pepstats outputs a report of simple protein sequence information
    including:
    
-     * molecular weight
-     * number of residues
-     * average residue weight
-     * charge
-     * isoelectric point
-     * for each type of amino acid: number, molar percent, DayhoffStat
-     * for each physico-chemical class of amino acid: number, molar
+     * Molecular weight
+     * Number of residues
+     * Average residue weight
+     * Charge
+     * Isoelectric point
+     * For each type of amino acid: number, molar percent, DayhoffStat
+     * For each physico-chemical class of amino acid: number, molar
        percent
-     * probability of protein expression in E. coli inclusion bodies
+     * Probability of protein expression in E. coli inclusion bodies
+     * Molar extinction coefficient (A280)
+     * Extinction coefficient at 1 mg/ml (A280)
        
    DayhoffStat is the amino acid's Dayhoff statistic divided by the molar
    percent. The Dayhoff statistic is the amino acid's relative occurence
@@ -50,7 +52,7 @@ Usage
 
 % pepstats 
 Protein statistics
-Input sequence: tsw:laci_ecoli
+Input sequence(s): tsw:laci_ecoli
 Output file [laci_ecoli.pepstats]: 
    
    Go to the input files for this example
@@ -58,17 +60,18 @@ Output file [laci_ecoli.pepstats]:
    
 Command line arguments
 
-   Mandatory qualifiers:
-  [-sequencea]         sequence   Sequence USA
+   Standard (Mandatory) qualifiers:
+  [-sequence]          seqall     Sequence database USA
    -outfile            outfile    Output file name
 
-   Optional qualifiers: (none)
-   Advanced qualifiers:
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers:
    -[no]termini        boolean    Include charge at N and C terminus
    -aadata             string     Molecular weight data for amino acids
 
    Associated qualifiers:
-  "-sequencea" related qualifiers
+
+   "-sequence" associated qualifiers
    -sbegin1             integer    First base used
    -send1               integer    Last base used, def=seq length
    -sreverse1           boolean    Reverse (if DNA)
@@ -78,24 +81,21 @@ Command line arguments
    -slower1             boolean    Make lower case
    -supper1             boolean    Make upper case
    -sformat1            string     Input sequence format
-   -sopenfile1          string     Input filename
    -sdbname1            string     Database name
    -sid1                string     Entryname
    -ufo1                string     UFO features
    -fformat1            string     Features format
    -fopenfile1          string     Features file name
-  "-outfile" related qualifiers
+
+   "-outfile" associated qualifiers
    -odirectory          string     Output directory
 
    General qualifiers:
    -auto                boolean    Turn off prompts
    -stdout              boolean    Write standard output
    -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for required and optional values
+   -options             boolean    Prompt for standard and additional values
    -debug               boolean    Write debug output to program.dbg
-   -acdlog              boolean    Write ACD processing log to program.acdlog
-   -acdpretty           boolean    Rewrite ACD file as program.acdpretty
-   -acdtable            boolean    Write HTML table of options
    -verbose             boolean    Report some/full command line options
    -help                boolean    Report command line options. More
                                   information on associated and general
@@ -106,13 +106,13 @@ Command line arguments
    -die                 boolean    Report deaths
    
 
-   Mandatory qualifiers Allowed values Default
-   [-sequencea]
-   (Parameter 1) Sequence USA Readable sequence Required
+   Standard (Mandatory) qualifiers Allowed values Default
+   [-sequence]
+   (Parameter 1) Sequence database USA Readable sequence(s) Required
    -outfile Output file name Output file <sequence>.pepstats
-   Optional qualifiers Allowed values Default
+   Additional (Optional) qualifiers Allowed values Default
    (none)
-   Advanced qualifiers Allowed values Default
+   Advanced (Unprompted) qualifiers Allowed values Default
    -[no]termini Include charge at N and C terminus Boolean value Yes/No
    Yes
    -aadata Molecular weight data for amino acids Any string is accepted
@@ -246,6 +246,8 @@ PEPSTATS of LACI_ECOLI from 1 to 360
 Molecular weight = 38563.97             Residues = 360
 Average Residue Weight  = 107.122       Charge   = 1.5
 Isoelectric Point = 6.8820
+A280 Molar Extinction Coefficient  = 21620
+A280 Extinction Coefficient 1mg/ml = 0.56
 Improbability of expression in inclusion bodies = 0.670
 
 Residue         Number          Mole%           DayhoffStat

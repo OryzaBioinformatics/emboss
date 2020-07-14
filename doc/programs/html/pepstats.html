@@ -50,14 +50,16 @@ Protein statistics
 <p>
 <ul>
 
-<li>molecular weight
-<li>number of residues
-<li>average residue weight
-<li>charge
-<li>isoelectric point
-<li>for each type of amino acid: number, molar percent, DayhoffStat
-<li>for each physico-chemical class of amino acid: number, molar percent
-<li>probability of protein expression in E. coli inclusion bodies
+<li>Molecular weight
+<li>Number of residues
+<li>Average residue weight
+<li>Charge
+<li>Isoelectric point
+<li>For each type of amino acid: number, molar percent, DayhoffStat
+<li>For each physico-chemical class of amino acid: number, molar percent
+<li>Probability of protein expression in E. coli inclusion bodies
+<li>Molar extinction coefficient (A280)
+<li>Extinction coefficient at 1 mg/ml (A280)
 </ul>
 
 <p>
@@ -99,7 +101,7 @@ medium.
 
 % <b>pepstats </b>
 Protein statistics
-Input sequence: <b>tsw:laci_ecoli</b>
+Input sequence(s): <b>tsw:laci_ecoli</b>
 Output file [laci_ecoli.pepstats]: <b></b>
 
 </pre></td></tr></table><p>
@@ -121,17 +123,18 @@ IT IS DONE FOR YOU.
 
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
-   Mandatory qualifiers:
-  [-sequencea]         sequence   Sequence USA
+   Standard (Mandatory) qualifiers:
+  [-sequence]          seqall     Sequence database USA
    -outfile            outfile    Output file name
 
-   Optional qualifiers: (none)
-   Advanced qualifiers:
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers:
    -[no]termini        boolean    Include charge at N and C terminus
    -aadata             string     Molecular weight data for amino acids
 
    Associated qualifiers:
-  "-sequencea" related qualifiers
+
+   "-sequence" associated qualifiers
    -sbegin1             integer    First base used
    -send1               integer    Last base used, def=seq length
    -sreverse1           boolean    Reverse (if DNA)
@@ -141,24 +144,21 @@ IT IS DONE FOR YOU.
    -slower1             boolean    Make lower case
    -supper1             boolean    Make upper case
    -sformat1            string     Input sequence format
-   -sopenfile1          string     Input filename
    -sdbname1            string     Database name
    -sid1                string     Entryname
    -ufo1                string     UFO features
    -fformat1            string     Features format
    -fopenfile1          string     Features file name
-  "-outfile" related qualifiers
+
+   "-outfile" associated qualifiers
    -odirectory          string     Output directory
 
    General qualifiers:
    -auto                boolean    Turn off prompts
    -stdout              boolean    Write standard output
    -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for required and optional values
+   -options             boolean    Prompt for standard and additional values
    -debug               boolean    Write debug output to program.dbg
-   -acdlog              boolean    Write ACD processing log to program.acdlog
-   -acdpretty           boolean    Rewrite ACD file as program.acdpretty
-   -acdtable            boolean    Write HTML table of options
    -verbose             boolean    Report some/full command line options
    -help                boolean    Report command line options. More
                                   information on associated and general
@@ -175,15 +175,15 @@ IT IS DONE FOR YOU.
 
 <table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=2>Mandatory qualifiers</th>
+<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
 <th align="left">Allowed values</th>
 <th align="left">Default</th>
 </tr>
 
 <tr>
-<td>[-sequencea]<br>(Parameter 1)</td>
-<td>Sequence USA</td>
-<td>Readable sequence</td>
+<td>[-sequence]<br>(Parameter 1)</td>
+<td>Sequence database USA</td>
+<td>Readable sequence(s)</td>
 <td><b>Required</b></td>
 </tr>
 
@@ -195,7 +195,7 @@ IT IS DONE FOR YOU.
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=2>Optional qualifiers</th>
+<th align="left" colspan=2>Additional (Optional) qualifiers</th>
 <th align="left">Allowed values</th>
 <th align="left">Default</th>
 </tr>
@@ -205,7 +205,7 @@ IT IS DONE FOR YOU.
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=2>Advanced qualifiers</th>
+<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
 <th align="left">Allowed values</th>
 <th align="left">Default</th>
 </tr>
@@ -370,6 +370,8 @@ PEPSTATS of LACI_ECOLI from 1 to 360
 Molecular weight = 38563.97  		Residues = 360   
 Average Residue Weight  = 107.122 	Charge   = 1.5   
 Isoelectric Point = 6.8820
+A280 Molar Extinction Coefficient  = 21620   
+A280 Extinction Coefficient 1mg/ml = 0.56      
 Improbability of expression in inclusion bodies = 0.670
 
 Residue		Number		Mole%		DayhoffStat
@@ -407,6 +409,7 @@ Polar		(D+E+H+K+N+Q+R+S+T+Z)	161		44.722
 Charged		(B+D+E+H+K+R+Z)		69		19.167
 Basic		(H+K+R)			37		10.278
 Acidic		(B+D+E+Z)		32		 8.889
+
 </pre>
 </td></tr></table><p>
 
