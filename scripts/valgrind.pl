@@ -31,7 +31,7 @@ sub runtest ($) {
 	eval {
 	    $status = 0;
 	    alarm($timeout);
-	    $sysstat = system ("valgrind $valgopts $myvalgpath$tests{$name} 9> valgrind/$name.valgrind" );
+	    $sysstat = system ("EMBOSSRC=.. ;export EMBOSSRC ;EMBOSS_RCHOME=N ;export EMBOSS_RCHOME ;valgrind $valgopts $myvalgpath$tests{$name} 9> valgrind/$name.valgrind" );
 	    alarm(0);
 	    $status = $sysstat >> 8;
 	};
