@@ -152,7 +152,7 @@ int main(int argc, char **argv)
     idformat   = ajAcdGetListI("idformat",1);
     fields     = ajAcdGetList("fields");
     directory  = ajAcdGetDirectoryName("directory");
-    indexdir   = ajAcdGetDirectoryName("indexdirectory");
+    indexdir   = ajAcdGetOutdirName("indexoutdir");
     filename   = ajAcdGetString("filenames");
     exclude    = ajAcdGetString("exclude");
     dbname     = ajAcdGetString("dbname");

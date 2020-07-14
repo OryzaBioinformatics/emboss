@@ -151,7 +151,7 @@ int main(int argc, char **argv)
 	if(reverse)
 	{
 	    sense = ajFalse;
-	    ajSeqReverse(seq);
+	    ajSeqReverseForce(seq);
 	    getorf_FindORFs(seq, len, trnTable, minsize, maxsize, seqout, sense,
 			    circular, find, &orf_no, methionine,
 			    around);

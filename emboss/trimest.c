@@ -29,7 +29,7 @@
 static ajint trimest_get_tail(const AjPSeq seq, ajint direction,
 			      ajint minlength, ajint mismatches);
 
-static void trimest_tolower(AjPStr *string, ajint start, ajint end);
+static void trimest_tolower(AjPStr *strng, ajint start, ajint end);
 
 
 
@@ -110,7 +110,7 @@ int main(int argc, char **argv)
 	/* reverse complement if poly-T found */
 	if(tail5 > tail3 && reverse)
 	{
-	    ajSeqReverse(seq);
+	    ajSeqReverseForce(seq);
 	    ajStrAppC(&desc, " [reverse complement]");
 	}
 
@@ -217,26 +217,26 @@ static ajint trimest_get_tail(const AjPSeq seq, ajint direction,
 **
 ** Change a part of a string to lowercase
 **
-** @param [u] string [AjPStr *] string to change
+** @param [u] strng [AjPStr *] string to change
 ** @param [r] start [ajint] start of region of string to change
 ** @param [r] end   [ajint] end of region of string to change
 ** @return [void] 
 ** @@
 ******************************************************************************/
 
-static void trimest_tolower(AjPStr *string, ajint start, ajint end)
+static void trimest_tolower(AjPStr *strng, ajint start, ajint end)
 {
 
     AjPStr substr;
     substr = ajStrNew();
     
     /* extract the region and lowercase */
-    ajStrAppSub(&substr, *string, start, end);
+    ajStrAppSub(&substr, *strng, start, end);
     ajStrToLower(&substr);
     
     /* remove and replace the lowercased region */
-    ajStrCut(string, start, end);
-    ajStrInsert(string, start, substr);
+    ajStrCut(strng, start, end);
+    ajStrInsert(strng, start, substr);
     ajStrDel(&substr);
 
 }

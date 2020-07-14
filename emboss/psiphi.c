@@ -151,7 +151,7 @@ int main( int argc , char **argv )
     embInit( "psiphi", argc ,argv );
 
     /* get protein structure from ACD */
-    ajpFileCleanProteinStructure = ajAcdGetInfile("sequence" );
+    ajpFileCleanProteinStructure = ajAcdGetInfile("infile" );
     /* get angle output file from ACD */
     ajpReportTorsionAngles = ajAcdGetReport("outfile");
     /* get chain to be scanned from ACD */

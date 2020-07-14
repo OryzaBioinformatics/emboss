@@ -208,16 +208,16 @@ static void etandem_basicReport(AjPFeattable tab, AjPFile outfile,
 
     for(j = (a->phase+1) % n; j < n; ++j)
     {
-	ajDebug("      bestMax[%d] letter[%d] '%c'\n",
-		j, a->bestMax[j], letter[a->bestMax[j]]);
+	/*ajDebug("      bestMax[%d] letter[%d] '%c'\n",
+		j, a->bestMax[j], letter[a->bestMax[j]]);*/
 	ajStrAppK(&constr, letter[a->bestMax[j]]);
     }
 
     if((a->phase+1) % n)
 	for(j = 0; j <= a->phase; ++j)
 	{
-	    ajDebug("more: bestMax[%d] letter[%d] '%c'\n",
-		    j, a->bestMax[j], letter[a->bestMax[j]]);
+	    /*ajDebug("more: bestMax[%d] letter[%d] '%c'\n",
+		    j, a->bestMax[j], letter[a->bestMax[j]]);*/
 	    ajStrAppK(&constr, letter[a->bestMax[j]]);
 	}
 

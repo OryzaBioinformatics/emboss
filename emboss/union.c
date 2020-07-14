@@ -55,9 +55,6 @@ int main(int argc, char **argv)
 	}
 	ajSeqTrim(seq);
 
-	if(ajSeqGetReverse(seq))
-	    ajSeqReverse(seq);
-
 	ajStrApp(&unistr, ajSeqStr(seq));
     }
 

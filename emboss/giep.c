@@ -86,8 +86,8 @@ int main(int argc, char **argv)
 #endif 
 
     all       = ajAcdGetSeqall("sequence");
-    doplot    = ajAcdGetBool("plot");
-    dofile    = ajAcdGetBool("report");
+    doplot    = ajAcdGetToggle("plot");
+    dofile    = ajAcdGetToggle("report");
     step      = ajAcdGetFloat("step");
     termini   = ajAcdGetBool("termini");
     amino     = ajAcdGetInt("amino");

@@ -180,6 +180,8 @@ int main(int argc, char **argv)
 				   plasmid,ambiguity,min,max,blunt,sticky,
 				   commercial,l);
 
+	ajDebug("Restrict found %d hits\n", hits);
+
 	if(hits)
 	{
 	    name = ajStrNewC(ajSeqName(seq));
@@ -311,8 +313,7 @@ static void restrict_printHits(AjPFile outf, AjPList l, const AjPStr name,
     for(i=0;i<hits;++i)
     {
 	ajListPop(l,(void **)&m);
-	if(!plasmid && (m->cut1-m->start>100 ||
-			m->cut2-m->start>100))
+	if(!plasmid && m->circ12)
 	{
 	    embMatMatchDel(&m);
 	    continue;
@@ -334,11 +335,14 @@ static void restrict_printHits(AjPFile outf, AjPList l, const AjPStr name,
 	if(frags)
 	    fa[fn++] = m->cut1;
 
-	if(m->cut3 && m->cut4)
+	if(m->cut3 || m->cut4)
 	{
-	    if(frags)
-		fa[fn++] = m->cut3;
-	    ajFmtPrintF(outf,"%d\t%d",m->cut3,m->cut4);
+	    if(plasmid || !m->circ34)
+	    {
+		if(frags)
+		    fa[fn++] = m->cut3;
+		ajFmtPrintF(outf,"%d\t%d",m->cut3,m->cut4);
+	    }
 	}
 
 	if(nameit)
@@ -508,8 +512,7 @@ static void restrict_reportHits(AjPReport report, const AjPSeq seq,
     {
 	ajListPop(l,(void **)&m);
 	ajListPushApp(l,(void *)m);	/* Might need for ifrag display */
-	if(!plasmid && (m->cut1 - m->start>100 ||
-			m->cut2 - m->start>100))
+	if(!plasmid && m->circ12)
 	    continue;
 
 
@@ -540,14 +543,17 @@ static void restrict_reportHits(AjPReport report, const AjPSeq seq,
 	if(frags)
 	    fa[fn++] = m->cut1;
 
-	if(m->cut3 && m->cut4)
+	if(m->cut3 || m->cut4)
 	{
-	    if(frags)
-		fa[fn++] = m->cut3;
-	    ajFmtPrintS(&tmpStr, "*5primerev %d", m->cut3);
-	    ajFeatTagAdd(gf,  NULL, tmpStr);
-	    ajFmtPrintS(&tmpStr, "*3primerev %d", m->cut4);
-	    ajFeatTagAdd(gf,  NULL, tmpStr);
+	    if(plasmid || !m->circ34)
+	    {
+		if(frags)
+		    fa[fn++] = m->cut3;
+		ajFmtPrintS(&tmpStr, "*5primerev %d", m->cut3);
+		ajFeatTagAdd(gf,  NULL, tmpStr);
+		ajFmtPrintS(&tmpStr, "*3primerev %d", m->cut4);
+		ajFeatTagAdd(gf,  NULL, tmpStr);
+	    }
 	}
     }
 
@@ -609,8 +615,7 @@ static void restrict_reportHits(AjPReport report, const AjPSeq seq,
 	    ajListPop(l,(void **)&m);
 	    ajListPushApp(l,(void *)m);
 
-	    if(!plasmid && (m->cut1 - m->start>100 ||
-			    m->cut2 - m->start>100))
+	    if(!plasmid && m->circ12)
 		continue;
 
 
@@ -632,8 +637,9 @@ static void restrict_reportHits(AjPReport report, const AjPSeq seq,
 
 	    if(ajStrMatch(codStr,m->cod))
 	    {
-		if(m->cut3 && m->cut4)
-		    ajIntPut(&farray,nfrags++,m->cut3);
+		if(m->cut3 || m->cut4)
+		    if (plasmid || !m->circ34)
+			ajIntPut(&farray,nfrags++,m->cut3);
 		ajIntPut(&farray,nfrags++,m->cut1);
 	    }
 	    else
@@ -679,8 +685,9 @@ static void restrict_reportHits(AjPReport report, const AjPSeq seq,
 
 		AJFREE(fa);
 		nfrags = 0;
-		if(m->cut3 && m->cut4)
-		    ajIntPut(&farray,nfrags++,m->cut3);
+		if(m->cut3 || m->cut4)
+		    if(plasmid || !m->circ34)
+			ajIntPut(&farray,nfrags++,m->cut3);
 		ajIntPut(&farray,nfrags++,m->cut1);
 
 	    }

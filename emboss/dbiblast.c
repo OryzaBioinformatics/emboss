@@ -393,7 +393,7 @@ int main(int argc, char **argv)
 
     fields     = ajAcdGetList("fields");
     directory  = ajAcdGetDirectoryName("directory");
-    indexdir   = ajAcdGetDirectoryName("indexdirectory");
+    indexdir   = ajAcdGetOutdirName("indexoutdir");
     filename   = ajAcdGetString("filenames");
     exclude    = ajAcdGetString("exclude");
     dbname     = ajAcdGetString("dbname");

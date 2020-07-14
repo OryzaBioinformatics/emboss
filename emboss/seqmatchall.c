@@ -130,21 +130,24 @@ static void seqmatchall_matchListPrint(void *x,void *cl)
 		(*p).seq1start+1,(*p).seq1start+(*p).length,seq1->Name->Ptr,
 		(*p).seq2start+1,(*p).seq2start+(*p).length,seq2->Name->Ptr);
 */
-    ajStrAssSub(&sub1, ajSeqStr(p->sequence),
-		p->seq1start+1,
-		p->seq1start+p->length);
+    ajStrAssS(&sub1, ajSeqStr(p->sequence));
 
-    ajStrAssSub(&sub2, ajSeqStr(p->sequence),
-		p->seq2start+1,
-		p->seq2start+p->length);
+    ajStrAssS(&sub2, ajSeqStr(p->sequence));
 
+    ajDebug("suba %d..%d %d (%d/%d)\n", 1,
+		p->length, p->seq1start, ajStrLen(sub1),
+	    ajSeqLen(p->sequence));
+    ajDebug("subb %d..%d %d (%d/%d)\n", 1,
+		p->length, p->seq2start, ajStrLen(sub2),
+	    ajSeqLen(p->sequence));
     ajAlignDefineCC(align, ajStrStr(sub1), ajStrStr(sub2),
 		    seq1->Name->Ptr, seq2->Name->Ptr);
     ajAlignSetScoreI(align, p->length);
-    ajAlignSetSubRange(align,
-       p->seq1start, p->seq1start + 1, p->seq1start + p->length,
-       p->seq2start, p->seq2start + 1, p->seq2start + p->length);
-
+    /* ungapped so same length for both sequences */
+    ajAlignSetRange(align,
+		    1, p->length, p->length, p->seq1start,
+		    1, p->length, p->length, p->seq2start);
+    
     ajStrDel(&sub1);
     ajStrDel(&sub2);
 

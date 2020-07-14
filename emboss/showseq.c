@@ -33,7 +33,8 @@ static void showseq_FormatShow(EmbPShow ss,
 			       const AjPRange highlight, AjBool threeletter,
 			       AjBool numberseq, const AjPFeattable feat,
 			       ajint orfminsize, const AjPList restrictlist,
-			       AjBool flat, const AjPRange annotation);
+			       AjBool plasmid, AjBool flat,
+			       const AjPRange annotation);
 
 static void showseq_read_equiv(AjPFile equfile, AjPTable table);
 static void showseq_read_file_of_enzyme_names(AjPStr *enzymes);
@@ -339,7 +340,7 @@ int main(int argc, char **argv)
 	showseq_FormatShow(ss, format, trnTable, translaterange,
 			   uppercase, highlight, threeletter,
 			   numberseq, newfeattab, orfminsize,
-			   restrictlist, flat, annotation);
+			   restrictlist, plasmid, flat, annotation);
 
 	embShowPrint(outfile, ss);
 
@@ -388,6 +389,7 @@ int main(int argc, char **argv)
 **                              (0 for no ORFs)
 ** @param [r] restrictlist [const AjPList] restriction enzyme site list
 **                            (or NULL) NULL after - pointer stored internally
+** @param [r] plasmid [AjBool] Circular (plasmid) sequence
 ** @param [r] flat [AjBool] show restriction sites in flat format
 ** @param [r] annotation [const AjPRange] ranges to annotate
 ** @return [void]
@@ -401,7 +403,8 @@ static void showseq_FormatShow(EmbPShow ss,
 			       const AjPRange highlight,  AjBool threeletter,
 			       AjBool numberseq, const AjPFeattable feat,
 			       ajint orfminsize, const AjPList restrictlist,
-			       AjBool flat, const AjPRange annotation)
+			       AjBool plasmid, AjBool flat,
+			       const AjPRange annotation)
 {
     AjPStrTok tok;
     char white[] = " \t\n\r";
@@ -452,9 +455,9 @@ static void showseq_FormatShow(EmbPShow ss,
 	else if(!ajStrCmpC(code, "F"))
 	    embShowAddFT(ss, feat);
 	else if(!ajStrCmpC(code, "R"))
-	    embShowAddRE(ss, 1, restrictlist, flat);
+	    embShowAddRE(ss, 1, restrictlist, plasmid, flat);
 	else if(!ajStrCmpC(code, "-R"))
-	    embShowAddRE(ss, -1, restrictlist, flat);
+	    embShowAddRE(ss, -1, restrictlist, plasmid, flat);
 	else if(!ajStrCmpC(code, "A"))
 	    embShowAddNote(ss, annotation);
 	else

@@ -294,8 +294,9 @@ static void merger_Merge(AjPAlign align, AjPStr *ms,
     }
 
     /* header */
-    ajFmtPrintS(&tmpstr, "%s position base\t\t%s position base\t"
-		"Using\n", namea, nameb);
+    ajFmtPrintS(&tmpstr, "Conflicts: %15.15s %15.15s\n", namea, nameb);
+    ajFmtPrintAppS(&tmpstr,
+		   "             position base   position base Using\n");
     ajAlignSetTailApp(align, tmpstr);
 
     /* make the merged sequence
@@ -308,24 +309,27 @@ static void merger_Merge(AjPAlign align, AjPStr *ms,
 
     for(i=0; i<olen; i++)
     {
-	if(p[i]=='.' || p[i]==' ' || q[i]=='.' || q[i]==' ')
+	if(p[i]=='.' || p[i]==' ' || p[i]=='-' ||
+	   q[i]=='.' || q[i]==' ' || q[i]=='-')
 	{				/* gap! */
 	    if(merger_bestquality(a, b, apos, bpos))
 	    {
 		p[i] = toupper((ajint)p[i]);
-		if(p[i] != '.' && p[i] != ' ')
+		if(p[i] != '.' && p[i] != ' ' && p[i] != '-')
 		    ajStrAppK(ms, p[i]);
-		ajFmtPrintS(&tmpstr, "\t%d\t'%c'\t\t%d\t'%c'\t\t'%c'\n",
-			    apos+1, p[i],bpos+1, q[i], p[i]);
+		ajFmtPrintS(&tmpstr,
+			    "             %8d  '%c'   %8d  '%c'   '%c'\n",
+			    apos+1, p[i], bpos+1, q[i], p[i]);
 		ajAlignSetTailApp(align, tmpstr);
 	    }
 	    else
 	    {
 		q[i] = toupper((ajint)q[i]);
-		if(q[i] != '.' && q[i] != ' ')
+		if(q[i] != '.' && q[i] != ' ' && q[i] != '-')
 		    ajStrAppK(ms, q[i]);
-		ajFmtPrintS(&tmpstr, "\t%d\t'%c'\t\t%d\t'%c'\t\t'%c'\n",
-			    apos+1, p[i],bpos+1, q[i], q[i]);
+		ajFmtPrintS(&tmpstr,
+			    "             %8d  '%c'   %8d  '%c'   '%c'\n",
+			    apos+1, p[i], bpos+1, q[i], q[i]);
 		ajAlignSetTailApp(align, tmpstr);
 	    }
 
@@ -350,16 +354,18 @@ static void merger_Merge(AjPAlign align, AjPStr *ms,
 	    {
 		p[i] = toupper((ajint)p[i]);
 		ajStrAppK(ms, p[i]);
-		ajFmtPrintS(&tmpstr, "\t%d\t'%c'\t\t%d\t'%c'\t\t'%c'\n",
-			    apos+1, p[i],bpos+1, q[i], p[i]);
+		ajFmtPrintS(&tmpstr,
+			    "             %8d  '%c'   %8d  '%c'   '%c'\n",
+			    apos+1, p[i], bpos+1, q[i], p[i]);
 		ajAlignSetTailApp(align, tmpstr);
 	    }
 	    else
 	    {
 		q[i] = toupper((ajint)q[i]);
 		ajStrAppK(ms, q[i]);
-		ajFmtPrintS(&tmpstr, "\t%d\t'%c'\t\t%d\t'%c'\t\t'%c'\n",
-			    apos+1, p[i],bpos+1, q[i], q[i]);
+		ajFmtPrintS(&tmpstr,
+			    "             %8d  '%c'   %8d  '%c'   '%c'\n",
+			    apos+1, p[i], bpos+1, q[i], q[i]);
 		ajAlignSetTailApp(align, tmpstr);
 	    }
 
@@ -368,8 +374,8 @@ static void merger_Merge(AjPAlign align, AjPStr *ms,
 	    ajStrAppK(ms, p[i]);
 
 	/* update the positions in the unaligned complete sequences */
-	if(p[i] != '.' &&  p[i] != ' ') apos++;
-	if(q[i] != '.' &&  q[i] != ' ') bpos++;
+	if(p[i] != '.' &&  p[i] != ' ' &&  p[i] != '-') apos++;
+	if(q[i] != '.' &&  q[i] != ' ' &&  q[i] != '-') bpos++;
     }
 
     /* output the right hand side */
@@ -467,6 +473,8 @@ static AjBool merger_bestquality(const char * a, const char *b,
 	qa = merger_quality(a, apos, 20);
 	qb = merger_quality(b, bpos, 20);
     }
+
+    ajDebug("merger_bestquality %d..%d = %.3f %.3f\n", apos, bpos, qa, qb);
 
     if(qa >= qb)
 	/*  both have the same quality, use the first sequence */

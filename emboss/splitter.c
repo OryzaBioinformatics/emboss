@@ -27,7 +27,7 @@
 
 
 static void splitter_write(AjPSeqout seqout, AjPSeq subseq, ajint start,
-			   ajint end, AjPSeq seq);
+			   ajint end, const AjPSeq seq);
 
 
 
@@ -122,13 +122,13 @@ int main(int argc, char **argv)
 ** @param [w] subseq [AjPSeq] sequence to write
 ** @param [r] start [ajint] start offset
 ** @param [r] end [ajint] end offset
-** @param [r] seq [AjPSeq] original trimmed sequence
+** @param [r] seq [const AjPSeq] original trimmed sequence
 ** @return [void]
 ** @@
 ******************************************************************************/
 
 static void splitter_write(AjPSeqout seqout, AjPSeq subseq, ajint start,
-			   ajint end, AjPSeq seq)
+			   ajint end, const AjPSeq seq)
 {
     AjPStr name  = NULL;
     AjPStr value = NULL;

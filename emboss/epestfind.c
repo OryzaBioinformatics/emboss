@@ -684,7 +684,7 @@ int main(int argc, char **argv)
     ajFileClose(&outf);			/* Close the output file. */
     
     /* Display graphics. */
-    plot = ajGraphPlpDataNewI(seqlen);
+    plot = ajGraphPlpDataNew();
     ajGraphxySetOverLap(graph, ajFalse);
     ajGraphPlpDataSetTypeC(plot, "2D Plot");
     ajGraphPlpDataSetTitleC(plot, "PEST-find");

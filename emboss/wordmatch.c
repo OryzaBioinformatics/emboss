@@ -66,6 +66,9 @@ int main(int argc, char **argv)
     seq1    = ajAcdGetSeq("asequence");
     seq2    = ajAcdGetSeq("bsequence");
 
+    ajSeqTrim(seq1);
+    ajSeqTrim(seq2);
+
     /* outf = ajAcdGetOutfile("outfile"); */
     align    = ajAcdGetAlign("outfile");
 
@@ -97,9 +100,12 @@ int main(int argc, char **argv)
 	{
 	    ajAlignDefineSS(align, seq1, seq2);
 	    ajAlignSetScoreI(align, len);
+	    /* ungapped alignment so same length for both sequences */
 	    ajAlignSetSubRange(align,
-			       start1, start1 + 1, start1 + len,
-			       start2, start2 + 1, start2 + len);
+			       start1, 1, len,
+			       ajSeqRev(seq1), ajSeqLen(seq1),
+			       start2, 1, len,
+			       ajSeqRev(seq2), ajSeqLen(seq2));
 	}
 	ajListIterFree(&iter) ;
 

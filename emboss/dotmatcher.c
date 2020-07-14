@@ -138,11 +138,6 @@ int main(int argc, char **argv)
     se1 = ajStrNew();
     se2 = ajStrNew();
 
-    tim = time(0);
-
-    ajTimeLocal(tim,&ajtime);
-    ajtime.format = 0;
-    
     ajGraphInit("dotmatcher", argc, argv);
     
     seq        = ajAcdGetSeq("asequence");
@@ -158,6 +153,10 @@ int main(int argc, char **argv)
     cvt = ajMatrixCvt(matrix);
     
     thresh = (float)ithresh;
+    
+    tim = time(0);
+    ajTimeLocal(tim,&ajtime);
+    ajtime.format = 0;
     
     b1 = ajSeqBegin(seq);
     b2 = ajSeqBegin(seq2);

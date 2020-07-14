@@ -389,7 +389,7 @@ int main(int argc, char **argv, char **env)
 
     /*  run clustalw */
 
-    ajFmtError("..%s..\n\n", ajStrStr( cmd));
+/*    ajFmtError("..%s..\n\n", ajStrStr( cmd)); */
     ajDebug("Executing '%S'\n", cmd);
     ajSystemEnv(cmd, env);
 

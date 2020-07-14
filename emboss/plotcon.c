@@ -122,12 +122,6 @@ int main(int argc, char **argv)
     AjPGraphPlpData gdata;
     AjPList list = NULL;
 
-
-    tim = time(0);
-
-    ajTimeLocal(tim,&ajtime);
-    ajtime.format = 0;
-
     ajGraphInit("plotcon", argc, argv);
 
     seqset = ajAcdGetSeqset("sequences");
@@ -140,6 +134,11 @@ int main(int argc, char **argv)
     cmpmatrix = ajAcdGetMatrix("scorefile");
 
     graphs = ajAcdGetGraphxy( "graph");
+
+    tim = time(0);
+
+    ajTimeLocal(tim,&ajtime);
+    ajtime.format = 0;
 
     matrix  = ajMatrixArray(cmpmatrix);
     cvt     = ajMatrixCvt(cmpmatrix);	/* Returns conversion table */

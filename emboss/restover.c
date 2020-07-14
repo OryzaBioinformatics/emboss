@@ -351,7 +351,7 @@ static void restover_printHits(const AjPSeq seq, const AjPStr seqcmp,
 	if(frags)
 	    fa[fn++] = m->cut1;
 
-	if(m->cut3 && m->cut4)
+	if(m->cut3 || m->cut4)
 	{
 	    if(m->cut4 >= m->cut3)
 		ajStrAssSub(&overhead, ajSeqStr( seq), m->cut3, m->cut4-1);
@@ -378,7 +378,7 @@ static void restover_printHits(const AjPSeq seq, const AjPStr seqcmp,
 	}
 
 	/* I am not sure what fragments are doing so I left it in ...*/
-	if(m->cut3 && m->cut4)
+	if(m->cut3 || m->cut4)
 	{
 	    if(frags)
 		fa[fn++] = m->cut3;

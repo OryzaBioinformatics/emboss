@@ -199,11 +199,6 @@ int main(int argc, char **argv)
     ajint newILend = 0;
     ajint newILstart;
 
-    tim = time(0);
-
-    ajTimeLocal(tim,&ajtime);
-    ajtime.format = 0;
-
     ajGraphInit("prettyplot", argc, argv);
 
     seqset   = ajAcdGetSeqset("sequences");
@@ -221,6 +216,10 @@ int main(int argc, char **argv)
     pair              = ajAcdGetString("pair");
     identity          = ajAcdGetInt("identity");
     boxit             = ajAcdGetBool("box");
+
+    tim = time(0);
+    ajTimeLocal(tim,&ajtime);
+    ajtime.format = 0;
 
     if(boxit)
     {

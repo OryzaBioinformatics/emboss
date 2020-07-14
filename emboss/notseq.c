@@ -101,8 +101,8 @@ int main(int argc, char **argv)
 **
 ** Else simlpy copy the exclude list
 **
-** @param [r] exclude [const AjPStr] names to search for or '@file'
-** @param [w] pattern [AjPStr*] names to search for or '@file'
+** @param [r] exclude [const AjPStr] names to search for or 'file'
+** @param [w] pattern [AjPStr*] names to search for or 'file'
 ** @return [void]
 ** @@
 ******************************************************************************/
