@@ -543,7 +543,7 @@ c_plptex(PLFLT x, PLFLT y, PLFLT dx, PLFLT dy, PLFLT just, const char *text)
 \*--------------------------------------------------------------------------*/
 
 void
-plstr(PLINT base, PLFLT *xform, PLINT refx, PLINT refy, const char *string)
+plstr(PLINT base, PLFLT *xform, PLINT refx, PLINT refy, const char *strng)
 {
     short int *symbol;
     signed char *xygrid;
@@ -559,7 +559,7 @@ plstr(PLINT base, PLFLT *xform, PLINT refx, PLINT refy, const char *string)
     style = plsc->nms;
     plsc->nms = 0;
 
-    pldeco(&symbol, &length, string);
+    pldeco(&symbol, &length, strng);
 
     for (i = 0; i < length; i++) {
 	ch = symbol[i];
@@ -668,7 +668,7 @@ plchar(signed char *xygrid, PLFLT *xform, PLINT base, PLINT oline, PLINT uline,
 \*--------------------------------------------------------------------------*/
 
 PLFLT
-plstrl(const char *string)
+plstrl(const char *strng)
 {
     short int *symbol;
     signed char *xygrid;
@@ -678,7 +678,7 @@ plstrl(const char *string)
     plgchr(&def, &ht);
     dscale = 0.05 * ht;
     scale = dscale;
-    pldeco(&symbol, &length, string);
+    pldeco(&symbol, &length, strng);
 
     for (i = 0; i < length; i++) {
 	ch = symbol[i];

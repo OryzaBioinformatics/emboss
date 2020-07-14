@@ -335,7 +335,7 @@ plstik(PLFLT mx, PLFLT my, PLFLT dx, PLFLT dy);
 /* (refx,refy). */
 
 void
-plstr(PLINT base, PLFLT *xform, PLINT refx, PLINT refy, const char *string);
+plstr(PLINT base, PLFLT *xform, PLINT refx, PLINT refy, const char *strng);
 
 /* Draws a tick parallel to x. */
 
@@ -466,7 +466,7 @@ plP_gprec(PLINT *p_setp, PLINT *p_prec);
 /* Computes the length of a string in mm, including escape sequences. */
 
 PLFLT
-plstrl(const char *string);
+plstrl(const char *strng);
 
 /* Similar to strpos, but searches for occurence of string str2. */
 
