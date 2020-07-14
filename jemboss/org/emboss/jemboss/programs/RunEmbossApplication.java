@@ -31,11 +31,22 @@ import java.io.*;
 public class RunEmbossApplication
 {
 
+  /** running process */
   private Process p;
+  /** standard out */
   private String stdout;
+  /** running directory */
   private File project;
+  /** status of the process */
   private String status;
 
+  /**
+  *
+  * @param embossCommand	emboss command to run
+  * @param envp			environment
+  * @param project		running directory
+  *
+  */
   public RunEmbossApplication(String embossCommand, String[] envp, File project)
   {
     this.project = project;

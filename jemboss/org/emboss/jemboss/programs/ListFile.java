@@ -30,20 +30,22 @@ import java.util.Hashtable;
 
 import org.emboss.jemboss.soap.MakeFileSafe;
 
-
-public class ListFile 
-{
-
 /**
 *
-* Parse a list file, reading it in line by line, loading other
+* Parse an EMBOSS list file, reading it in line by line, loading other
 * list files recursively if necessary, and loading any files
 * referred to into the filesToMove hash
 *
-* @param   fn  The name of the list file
-* @param   filesToMove The hash to put the files into
-*
 */
+public class ListFile 
+{
+
+  /**
+  *
+  * @param fn  		name of the list file
+  * @param filesToMove  hash to put the files into
+  *
+  */
   public static void parse(String fn, Hashtable filesToMove) 
   {
 
@@ -120,11 +122,15 @@ public class ListFile
     return;
   }
 
-/**
-*
-*
-*
-*/
+  /**
+  *
+  * Add a file to the list
+  * @param line		file to add
+  * @param listfile	list file
+  * @param filesToMove	files to move to the server
+  * @return		updated list file
+  *
+  */
   private static String addFileToList(String line, String listfile,
                                            Hashtable filesToMove)
   {
@@ -147,11 +153,13 @@ public class ListFile
     return listfile;
   }
 
-/**
-*
-* Read file in as a byte array.
-*
-*/
+  /**
+  *
+  * Read file in as a byte array.
+  * @param name	file to read
+  * @return 	byte array contents of file
+  *
+  */
   private static byte[] getLocalFile(File name)
   {
     byte[] b = null;
@@ -171,13 +179,15 @@ public class ListFile
   }
 
 
-/**
-*
-* Wildcard (*) is allowed in the filelist data types.
-* This function will expand this to find all files with
-* that prefix.
-*
-*/
+  /**
+  *
+  * Wildcard (*) is allowed in the filelist data types.
+  * This function will expand this to find all files with
+  * that prefix.
+  * @param line	line to expand
+  * @return	list file
+  *
+  */
   private static String[] expandWildcards(String line)
   {
 
@@ -219,12 +229,13 @@ public class ListFile
     return null;
   }
 
-/**
-*
-* Given a list file @file or list::file return just the file name
-* @param String file name
-*
-*/
+  /**
+  *
+  * Given a list file @file or list::file return just the file name
+  * @param fn 	file name
+  * @return	trimmed file name
+  *
+  */
   private static String trim(String fn) 
   {
     String lfn;

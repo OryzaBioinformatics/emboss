@@ -29,6 +29,11 @@ import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.Locale;
 
+/**
+*
+* JTextfield for float fields in the EMBOSS form
+*
+*/
 public class TextFieldFloat extends TextFieldSink 
 {
 
@@ -54,7 +59,7 @@ public class TextFieldFloat extends TextFieldSink
       // This should never happen because insertString allows
       // only properly formatted data to get in the field.
       toolkit.beep();
-      System.err.println("getValue: " + retVal);
+      System.err.println("TextFieldFloat getValue: " + retVal);
     }
     return retVal;
   }

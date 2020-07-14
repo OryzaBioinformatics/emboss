@@ -27,22 +27,33 @@ import java.io.*;
 
 import org.emboss.jemboss.JembossParams;
 
-public class FileRoots implements Serializable 
-{
-
-  private Hashtable fileRoots;
-  private String currentRoot;
-  private String currentDir;
-  private Vector rootVector;
-  private String defaultRoot;
-  private int defaultRootIndex;
-
 /**
 *
 * Retrieve the list of available filesystem roots
-* @param mysettings JembossParams defining server parameters
 *
 */
+public class FileRoots implements Serializable 
+{
+
+  /** server directory roots */
+  private Hashtable fileRoots;
+  /** currently selected root */
+  private String currentRoot;
+  /** currently selected directory */
+  private String currentDir;
+  /** file system roots */
+  private Vector rootVector;
+  /** default root */
+  private String defaultRoot;
+  /** default root index */
+  private int defaultRootIndex;
+
+  /**
+  *
+  * @param mysettings 	jemboss properties
+  * @throws JembossSoapException if connection fails
+  *
+  */
   public FileRoots(JembossParams mysettings) throws JembossSoapException
   {
 
@@ -79,83 +90,90 @@ public class FileRoots implements Serializable
     
   }
 
-/**
-*
-* Get the list of filesystem roots
-*
-*/
+  /**
+  *
+  * Get the list of file manager roots
+  * @return	file manager roots
+  *
+  */
   public Hashtable getRoots() 
   {
     return fileRoots;
   }
 
-/**
-*
-* Get the list of filesystem roots
-*
-*/
+  /**
+  *
+  * Get the list of file manager roots
+  * @return	file manager roots
+  * 
+  */
   public Vector getRootVector() 
   {
     return rootVector;
   }
 
-/**
-*
-* Get the default root, if defined, else return null
-*
-*/
+  /**
+  *
+  * Get the default root, if defined, else return null
+  * @return	default root
+  *
+  */
   public String getDefaultRoot() 
   {
     return defaultRoot;
   }
 
-/**
-*
-* Get the index of the default root in the Vector, else return -1
-*
-*/
+  /**
+  *
+  * Get the index of the default root in the Vector, 
+  * else return -1
+  * @return 	default root index
+  *
+  */
   public int getDefaultRootIndex() 
   {
     return defaultRootIndex;
   }
 
-/**
-*
-* Get the currently selected directory
-*
-*/
+  /**
+  *
+  * Get the currently selected directory
+  * @return 	currently selected directory
+  *
+  */
   public String getCurrentDir() 
   {
     return currentDir;
   }
 
-/**
-*
-* Set the current directory
-* @param newRoot The name of the new current directory
-*
-*/
+  /**
+  *
+  * Set the current directory
+  * @param newDir	name of the new current directory
+  *
+  */
   public void setCurrentDir(String newDir) 
   {
     currentDir = newDir;
   }
 
-/**
-*
-* Get the currently selected root
-*
-*/
+  /**
+  *
+  * Get the currently selected root
+  * @return	selected root 
+  *
+  */
   public String getCurrentRoot() 
   {
     return currentRoot;
   }
 
-/**
-*
-* Set the current root
-* @param newRoot The name of the new filesystem root.
-*
-*/
+  /**
+  *
+  * Set the current root
+  * @param newRoot 	name of the new root.
+  *
+  */
   public void setCurrentRoot(String newRoot)
   {
     currentRoot = newRoot;

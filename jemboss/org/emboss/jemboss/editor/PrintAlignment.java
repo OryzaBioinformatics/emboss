@@ -24,12 +24,19 @@ import java.awt.*;
 import java.awt.print.*;
 import javax.swing.*;
 
+/**
+*
+* Class for printing the alignment
+*
+*/
 public class PrintAlignment
 {
 
-  private Cursor cbusy = new Cursor(Cursor.WAIT_CURSOR);
-  private Cursor cdone = new Cursor(Cursor.DEFAULT_CURSOR);
-
+  /**
+  *
+  * @param gsc		sequence panel
+  *
+  */
   public PrintAlignment(GraphicSequenceCollection gsc)
   {
     PrinterJob printerJob = PrinterJob.getPrinterJob();
@@ -57,11 +64,14 @@ public class PrintAlignment
     }
   }
 
-/**
-*
-* Provide some options for the image created
-*
-*/
+  /**
+  *
+  * Provide some options for the image created
+  * @param gsc		sequence panel
+  * @param format	page format
+  * @return		number of residues per line
+  *
+  */
   private int showOptions(GraphicSequenceCollection gsc,
                           PageFormat format)
   {

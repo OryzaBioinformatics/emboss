@@ -19,7 +19,6 @@
 *
 ********************************************************************/
 
-
 package org.emboss.jemboss.gui;
 
 import java.awt.*;
@@ -32,15 +31,13 @@ import javax.swing.border.*;
 import java.awt.event.*;
 import java.net.MalformedURLException;
 import java.net.URL;
-import org.emboss.jemboss.parser.*;
-import org.emboss.jemboss.soap.*;
-
-import org.emboss.jemboss.JembossParams;
-
-import org.emboss.jemboss.gui.filetree.*;
 import java.awt.datatransfer.*;
 import java.awt.dnd.*;
 
+import org.emboss.jemboss.parser.*;
+import org.emboss.jemboss.soap.*;
+import org.emboss.jemboss.JembossParams;
+import org.emboss.jemboss.gui.filetree.*;
 
 /**
 *
@@ -55,14 +52,22 @@ import java.awt.dnd.*;
 public class SequenceList extends JFrame
 {
 
+  /** drag and drop table containing the list of sequences */
   private DragJTable table;
+  /** model for the sequence table */
   private SequenceListTableModel seqModel;
+  /** select to save the sequence list between sessions */
   private JCheckBoxMenuItem storeSeqList;
 
   final Cursor cbusy = new Cursor(Cursor.WAIT_CURSOR);
   final Cursor cdone = new Cursor(Cursor.DEFAULT_CURSOR);
 
-
+  /**
+  *
+  * @param withSoap	true if in client-server mode
+  * @param mysettings	jemboss properties
+  *
+  */
   public SequenceList(final boolean withSoap,final JembossParams mysettings)
   {
     super("Sequence List");
@@ -296,16 +301,14 @@ public class SequenceList extends JFrame
     });
     helpMenu.add(fmh);
     menuPanel.add(helpMenu);
-
-
   }
 
-/**
-*
-* Look for first set to default in the table.
-* @return index to row
-*
-*/
+  /**
+  *
+  * Look for first set to default in the table.
+  * @return 	index to row
+  *
+  */
   private int getDefaultRow()
   {
     int nrow = seqModel.getRowCount();
@@ -319,12 +322,12 @@ public class SequenceList extends JFrame
     return -1;
   }
 
-/**
-*
-* Get the default Sequence name
-* @return default sequence name or null if no default 
-*
-*/
+  /**
+  *
+  * Get the default Sequence name
+  * @return 	default sequence name or null if no default 
+  *
+  */
   public String getDefaultSequenceName()
   {
     int ndef = getDefaultRow();
@@ -340,37 +343,37 @@ public class SequenceList extends JFrame
     return seqName;
   }
 
-/**
-*
-* Return the number of rows in the table
-* @return number of rows in the table
-*
-*/
+  /**
+  *
+  * Return the number of rows in the table
+  * @return 	number of rows in the table
+  *
+  */
   public int getRowCount()
   {
     return seqModel.getRowCount();
   }
 
-/**
-*
-* The <code>SequenceData</code> for a given row
-* number.
-* @param row number
-* @return <code>SequenceData</code> for the row
-*
-*/
+  /**
+  *
+  * The <code>SequenceData</code> for a given row
+  * number.
+  * @param row 	number
+  * @return 	<code>SequenceData</code> for the row
+  *
+  */
   public SequenceData getSequenceData(int nrow)
   {
     return seqModel.getSequenceData(nrow);
   }
 
-/**
-*
-* Determines if a sequence list has been stored
-* ("~/.jembossSeqList")
-* @return true if a sequence list has been stored
-*
-*/
+  /**
+  *
+  * Determines if a sequence list has been stored
+  * ("~/.jembossSeqList")
+  * @return 	true if a sequence list has been stored
+  *
+  */
   public boolean isStoreSequenceList()
   {
     return storeSeqList.isSelected();
@@ -379,13 +382,24 @@ public class SequenceList extends JFrame
 }
 
 
-
+/**
+*
+* Extend JTable to implement a drag and drop table for
+* storing sequence lists (SequenceList)
+*
+*/
 class DragJTable extends JTable implements DragGestureListener,
              DragSourceListener, DropTargetListener
 {
 
+  /** model for the sequence table */
   private SequenceListTableModel seqModel;
 
+  /**
+  *
+  * @param seqModel	model for the sequence table
+  *
+  */
   public DragJTable(SequenceListTableModel seqModel)
   {
     super();
@@ -424,6 +438,13 @@ class DragJTable extends JTable implements DragGestureListener,
                   SequenceListTableModel.COL_NAME);
   }
 
+  /**
+  *
+  * Determine if a row in the table contains a list file
+  * @param row	row in the table
+  * @return 	true if row contains a list file
+  *
+  */
   public Boolean isListFile(int row)
   {
     return (Boolean)seqModel.getValueAt(row,
@@ -494,7 +515,19 @@ class DragJTable extends JTable implements DragGestureListener,
 
   }
 
-
+  /**
+  *
+  * Inser sequence data into the sequence table
+  * @param seqModel 	model for the sequence table 
+  * @param ploc		point location to insert
+  * @param fileName	name of file
+  * @param sbeg		start of sequence
+  * @param send		end of sequence
+  * @param lis		true if a list file
+  * @param def		true if the default sequence
+  * @param bremote	true if a sequence on the server
+  *
+  */
   public void insertData(SequenceListTableModel seqModel, Point ploc,
                          String fileName, String sbeg, String send,
                          Boolean lis, Boolean def, Boolean bremote)
@@ -537,7 +570,11 @@ class ColumnData
   }
 }
 
-
+/**
+*
+* Model for the sequence table 
+*
+*/
 class SequenceListTableModel extends AbstractTableModel
 {
 
@@ -561,6 +598,11 @@ class SequenceListTableModel extends AbstractTableModel
       loadStoredSeqList(fseq);
   }
 
+  /**
+  *
+  * Define the columns as file/start/end/list and default
+  *
+  */
   public static final ColumnData modelColumns[] =
   {
     new ColumnData("File / Database Entry",170,JLabel.LEFT),
@@ -570,28 +612,28 @@ class SequenceListTableModel extends AbstractTableModel
     new ColumnData("Default",15,JLabel.LEFT)
   };
 
-/**
-*
-* DragJTable uses this method to determine the default renderer/
-* editor for each cell.  If we didn't implement this method,
-* then the last column would contain text ("true"/"false"),
-* rather than a check box.
-* @param column index
-* @param class represented in that column
-*
-*/
+  /**
+  *
+  * DragJTable uses this method to determine the default renderer/
+  * editor for each cell.  If we didn't implement this method,
+  * then the last column would contain text ("true"/"false"),
+  * rather than a check box.
+  * @param c	column index
+  * @return 	class represented in that column
+  *
+  */
   public Class getColumnClass(int c) 
   {
     return getValueAt(0, c).getClass();
   }
 
-/**
-*
-* Load from stored file the SequenceList created from
-* a previous session.
-* @param File fseq contains stored sequence list
-*
-*/
+  /**
+  *
+  * Load from stored file the SequenceList created from
+  * a previous session.
+  * @param fseq 	contains stored sequence list
+  *
+  */
   protected void loadStoredSeqList(File fseq)
   {
     try
@@ -641,11 +683,11 @@ class SequenceListTableModel extends AbstractTableModel
 
   }
 
-/**
-*
-* Setup a blank square table 
-*
-*/
+  /**
+  *
+  * Setup a blank square table 
+  *
+  */
   protected void setDefaultData()
   {
     modelVector.removeAllElements();
@@ -656,72 +698,75 @@ class SequenceListTableModel extends AbstractTableModel
   }
   
 
-/**
-*
-* The <code>SequenceData</code> for a given row
-* number.
-* @param row number
-* @return <code>SequenceData</code> for the row
-*
-*/
+  /**
+  *
+  * The <code>SequenceData</code> for a given row
+  * number.
+  * @param row 	number
+  * @return 	<code>SequenceData</code> for the row
+  *
+  */
   protected SequenceData getSequenceData(int nrow)
   {
     return (SequenceData)modelVector.get(nrow);
   }
 
-/**
-*
-* Return the number of rows in the table
-* @return number of rows in the table
-*
-*/
+  /**
+  *
+  * Return the number of rows in the table
+  * @return 	number of rows in the table
+  *
+  */
   public int getRowCount()
   {
     return modelVector==null ? 0 : modelVector.size();
   }
 
-/**
-*
-* Return the number of columns in the table
-* @return number of columns in the table
-*
-*/
+  /**
+  *
+  * Return the number of columns in the table
+  * @return 	number of columns in the table
+  *
+  */
   public int getColumnCount()
   {
     return modelColumns.length;
   }
 
-/**
-*
-* Return the name columns in the table
-* @return name columns in the table
-*
-*/
+  /**
+  *
+  * Return the name columns in the table
+  * @param c	column index
+  * @return 	name columns in the table
+  *
+  */
   public String getColumnName(int c)
   {
     return modelColumns[c].title;
   }
 
-/**
-*
-* Define if a cell is editable by the user
-* @return true if editable
-*
-*/
+  /**
+  *
+  * Define if a cell is editable by the user
+  * @param nRow	row number
+  * @param nCol	column number
+  * @return 	true if editable
+  *
+  */
   public boolean isCellEditable(int nRow, int nCol)
   {
     return true;
   }
 
 
-/**
-*
-* Get the Object in a cell in the table
-* @param row number
-* @param column number
-* @return value of a cell in the table
-*
-*/
+  /**
+  *
+  * Get the Object in a cell in the table
+  * @param nRow	row number
+  * @param nCol	column number
+  * @return 	value of a cell in the table
+  *
+  */
   public Object getValueAt(int nRow, int nCol)
   {
     if(nRow < 0 || nCol>=getRowCount())
@@ -739,14 +784,14 @@ class SequenceListTableModel extends AbstractTableModel
     return ""; 
   }
 
-/**
-*
-* Set the Object in a cell in the table
-* @param value to set
-* @param row number
-* @param column number
-*
-*/
+  /**
+  *
+  * Set the Object in a cell in the table
+  * @param value to set
+  * @param row number
+  * @param column number
+  *
+  */
   public void setValueAt(Object value, int nRow, int nCol)
   {
     if(nRow < 0 || nCol>=getRowCount())
@@ -775,12 +820,12 @@ class SequenceListTableModel extends AbstractTableModel
     }
   }
 
-/**
-*
-* Insert a blank row
-* @param row number to insert at
-*
-*/
+  /**
+  *
+  * Insert a blank row
+  * @param row index to insert at
+  *
+  */
   public void insertRow(int row)
   {
     if(row < 0)
@@ -791,13 +836,13 @@ class SequenceListTableModel extends AbstractTableModel
   }
   
 
-/**
-*
-* Delete a row from the table
-* @param row number to delete
-* @return true if deleted
-*
-*/
+  /**
+  *
+  * Delete a row from the table
+  * @param row 	number to delete
+  * @return 	true if deleted
+  *
+  */
   public boolean deleteRow(int row)
   {
     if(row < 0 || row>=modelVector.size())

@@ -32,12 +32,24 @@ import java.io.*;
 public class RunEmbossApplication2
 {
 
+  /** running process */
   private Process p;
+  /** standard out */
   private String stdout = "";
+  /** standard error */
   private String stderr = "";
+  /** running directory */
   private File project;
+  /** process status */
   private String status;
 
+  /**
+  *
+  * @param embossCommand        emboss command to run
+  * @param envp                 environment
+  * @param project              running directory
+  *
+  */
   public RunEmbossApplication2(String embossCommand, 
                        String[] envp, File project)
   {
@@ -65,11 +77,11 @@ public class RunEmbossApplication2
     }
   }
 
-/**
-*
-* @return true if there is any standard out
-*
-*/
+  /**
+  *
+  * @return true if there is any standard out
+  *
+  */
   public boolean isProcessStdout()
   {
     if(stdout.equals(""))
@@ -77,11 +89,12 @@ public class RunEmbossApplication2
     return true;
   }
 
-/**
-*
-* Read in the process stderr.
-*
-*/
+  /**
+  *
+  * Read in the process stderr.
+  * @return	stderr
+  *
+  */
   public String readProcessStderr()
   {
 
@@ -134,11 +147,12 @@ public class RunEmbossApplication2
     return stderr;
   }
 
-/**
-*
-* Read in the process stdout.
-*
-*/
+  /**
+  *
+  * Read in the process stdout.
+  * @return 	stdout
+  *
+  */
   public String readProcessStdout()
   {
     
@@ -194,14 +208,12 @@ public class RunEmbossApplication2
     return stdout;
   }
 
-/**
-*
-* This method can be called after the process has completed
-* to write the stdout to the project directory.
-* 
-* @param project path to project directory
-*
-*/
+  /**
+  *
+  * This method can be called after the process has completed
+  * to write the stdout to the project directory.
+  *
+  */
   public void writeStdout()
   {
     if(project != null)
@@ -233,11 +245,11 @@ public class RunEmbossApplication2
     }
   }
 
-/**
-*
-* @return standard out
-*
-*/
+  /**
+  *
+  * @return standard out
+  *
+  */
   public String getProcessStdout()
   {
 //  readProcessStdout();

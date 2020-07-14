@@ -28,13 +28,27 @@ package org.emboss.jemboss.editor;
 public class Sequence 
 {
 
-  private String name;   
-  private String seq;
-  private int length;
+  /** sequence name        */
+  private String name; 
+  /** sequence as a string */  
+  protected String seq;
+  /** sequence length      */
+  protected int length;
+  /** sequence weight      */
   private float wt;
+  /** sequence id 	   */
   private String id;
+  /** sequence type	   */
   private boolean protein;
 
+  /**
+  *
+  * @param name		sequence name
+  * @param seq		sequence string
+  * @param length	sequence length
+  * @param weight	sequence weight
+  *
+  */
   public Sequence(String name, String seq, int length,
                   float wt)
   {
@@ -49,56 +63,137 @@ public class Sequence
       id = name;
   }
 
+  /**
+  *
+  * @param name         sequence name
+  * @param seq          sequence string
+  * @param length       sequence length
+  *
+  */
   public Sequence(String name, String seq, int length)
   {
     this(name,seq,length,1.0f);
   }
 
+  /**
+  *
+  * @param name         sequence name
+  * @param seq          sequence string
+  *
+  */
   public Sequence(String name, String seq)
   {
     this(name,seq,seq.length());
   }
 
+  /**
+  *
+  * @param seq          sequence string
+  *
+  */
   public Sequence(String seq)
   {
     this(new String(""),seq);
   }
 
+  /**
+  *
+  * @param seq          sequence string
+  * @param weight       sequence weight
+  *
+  */
   public Sequence(String seq, float wt)
   {
     this(new String(""),seq,seq.length(),wt);
   }
 
+  /**
+  *
+  * Get the sequence name
+  * @return 	sequence name
+  *
+  */
   public String getName()
   {
     return name;
   }
 
+  /**
+  *
+  * Get the sequence id
+  * @return     sequence id
+  *
+  */
   public String getID()
   {
     return id;
   }
 
+  /**
+  *
+  * Get the sequence 
+  * @return     sequence 
+  *
+  */
   public String getSequence()
   {
     return seq;
   }
 
+
+  /**
+  *
+  * Get the residue at a position
+  * @return     sequence
+  *
+  */
+  public String getResidueAt(int p)
+  {
+    return seq.substring(p,p+1);
+  }
+
+
+  /**
+  *
+  * Get the sequence length
+  * @return     sequence length
+  *
+  */
   public int getLength()
   {
     return length;
   }
 
+  /**
+  *
+  * Get the sequence weight
+  * @return     sequence weight
+  *
+  */
   public float getWeight()
   {
     return wt;
   }
 
+  /**
+  *
+  * Get a residue in the sequence at a given position
+  * @param pos	sequence position
+  * @return     residue
+  *
+  */
   public String getResidue(int pos)
   {
     return seq.substring(pos,pos+1);
   }
 
+  /**
+  *
+  * Insert a residue into the sequence
+  * @param s	residue to insert
+  * @param pos	position to insert into sequence
+  *
+  */
   public void insertResidue(String s, int pos)
   {
     seq = seq.substring(0,pos)+s+
@@ -106,6 +201,13 @@ public class Sequence
     length++;
   }
 
+
+  /**
+  *
+  * Delete a residue from the sequence
+  * @param pos  position to delete the residue
+  *
+  */
   public void deleteResidue(int pos)
   {
     seq = seq.substring(0,pos)+
@@ -113,12 +215,38 @@ public class Sequence
     length--;
   }
 
-  public void appentToSequence(String s)
+
+  /**
+  *
+  * Trim a sequence 
+  * @param start	new start position
+  * @param end		new end position
+  *
+  */
+  public void trim(int start, int end)
+  {
+    seq    = seq.substring(start-1,end);
+    length = end-start+1;
+  }
+
+
+  /**
+  *
+  *  Append to a sequence
+  *  @param s	sequence to append 
+  *
+  */
+  public void appendToSequence(String s)
   {
     seq = seq+s;
     length+=s.length();
   }
 
+  /**
+  *
+  *  Reverse the sequence order
+  *
+  */
   public void reverseSequence()
   {
     char tmpChar[] = new char[length];
@@ -128,6 +256,12 @@ public class Sequence
     seq = new String(tmpChar);
   }
 
+
+  /**
+  *
+  *  Reverse and complement the sequence 
+  *
+  */
   public void reverseComplementSequence()
   {
     char tmpChar[] = new char[length];
@@ -137,17 +271,48 @@ public class Sequence
     
     seq = new String(tmpChar);
   }
-  
+ 
+ 
+  /**
+  *
+  * Set the sequence type
+  *
+  */
   public void setType(boolean protein)
   {
     this.protein = protein;
   }
 
+
+  /**
+  *
+  * Set the sequence weight
+  * @param 	sequence weight
+  *
+  */
+  public void setWeight(float wt)
+  {
+    this.wt = wt;
+  }
+
+
+  /**
+  *
+  * Get the sequence type
+  * @param 	true if protein
+  *
+  */
   public boolean isProtein()
   {
     return protein;
   }
 
+
+  /**
+  *
+  * Complement the sequence
+  *
+  */
   public void complementSequence()
   {
     char tmpChar[] = new char[length];
@@ -158,6 +323,14 @@ public class Sequence
     seq = new String(tmpChar);
   }
 
+
+  /**
+  *
+  * Complement a residue 
+  * @param c	residue to complement
+  * @return 	complement residue (or no change if not cagt)
+  *
+  */
   private char complement(char c)
   {
     if(c == 't')

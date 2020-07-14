@@ -41,18 +41,31 @@ import java.awt.event.*;
 public class SetUpMenuBar
 {
 
+  /** sequence store list */
   public static SequenceList seqList;
+  /** local and remote file manager window */
   public static LocalAndRemoteFileTreeFrame localAndRemoteTree = null;
+  /** local and remote file manager menu item */
   private JMenuItem showLocalRemoteFile;
+  /** show saved results menu item */
   private JMenuItem fileMenuShowres;
+  /** server settings */
   private ServerSetup ss = null;
+  /** advanced options */
+  private AdvancedOptions ao;
 
+  /**
+  *
+  * @param mysettings	jemboss properties
+  * @param f		frame
+  * @param withSoap	true if in client-server mode
+  *
+  */
   public SetUpMenuBar(final JembossParams mysettings, final JFrame f,
-                      final String envp[], final String cwd,
                       final boolean withSoap)
   {
 
-    // cursors to show when we're at work
+    // cursors to show when busy
     final Cursor cbusy = new Cursor(Cursor.WAIT_CURSOR);
     final Cursor cdone = new Cursor(Cursor.DEFAULT_CURSOR);
 
@@ -118,21 +131,22 @@ public class SetUpMenuBar
       fileMenu.addSeparator();
     }
 
-    final AdvancedOptions ao = new AdvancedOptions(mysettings);
+//  final AdvancedOptions ao = new AdvancedOptions(mysettings);
+    ao = new AdvancedOptions(mysettings);
     JMenuItem fileMenuExit = new JMenuItem("Exit");
     fileMenuExit.addActionListener(new ActionListener()
     {
       public void actionPerformed(ActionEvent e) 
       {
+        exitJemboss();
+//      if(ao.isSaveUserHomeSelected())
+//        ao.userHomeSave();
 
-        if(ao.isSaveUserHomeSelected())
-          ao.userHomeSave();
+//      if(seqList.isStoreSequenceList())  //create a SequenceList file
+//        saveSequenceList();
 
-        if(seqList.isStoreSequenceList())  //create a SequenceList file
-          saveSequenceList();
-
-        deleteTmp(new File(cwd), ".jembosstmp");
-        System.exit(0);
+//      deleteTmp(new File(cwd), ".jembosstmp");
+//      System.exit(0);
       }
     });
     fileMenu.add(fileMenuExit);
@@ -169,29 +183,8 @@ public class SetUpMenuBar
       }
     });
     prefsMenu.add(serverSettings);
-
-    
-//  JMenuItem showEnvironment = new JMenuItem("Show Environment");
-//  showEnvironment.addActionListener(new ActionListener()
-//  {
-//    public void actionPerformed(ActionEvent e) 
-//    {
-//      if(withSoap)
-//        JOptionPane.showMessageDialog(f,
-//         "Public Server: " + mysettings.getPublicSoapURL() +
-//         "\nPublic Server Name: " + mysettings.getPublicSoapService() +
-//         "\nPrivate Server: " + mysettings.getPrivateSoapURL() +
-//         "\nPrivate Server Name: " + mysettings.getPrivateSoapService());
-//      else
-//        JOptionPane.showMessageDialog(f, 
-//            envp[0] + "\n" + envp[1] + "\n" +
-//            envp[2] + "\n" + envp[3] + "\n");
-//    }
-//  });
-//  prefsMenu.add(showEnvironment);
     menuPanel.add(prefsMenu);
-
-
+    
     JMenu toolMenu = new JMenu("Tools");
     toolMenu.setMnemonic(KeyEvent.VK_T);
 
@@ -210,7 +203,9 @@ public class SetUpMenuBar
     {
       public void actionPerformed(ActionEvent e)
       {
-        new org.emboss.jemboss.editor.AlignJFrame();
+        org.emboss.jemboss.editor.AlignJFrame ajFrame =
+                   new org.emboss.jemboss.editor.AlignJFrame();
+        ajFrame.setVisible(true);
       }
     });
     toolMenu.add(toolAlignJFrame);
@@ -239,28 +234,14 @@ public class SetUpMenuBar
         ClassLoader cl = this.getClass().getClassLoader();
         try
         {
-          URL inURL = cl.getResource("resources/readme.txt");
-                                      
-          JTextPane textURL = new JTextPane();
-
-          ScrollPanel pscroll = new ScrollPanel(new BorderLayout());
-          JScrollPane rscroll = new JScrollPane(pscroll);
-          rscroll.getViewport().setBackground(Color.white);
-          textURL.setPage(inURL);
-          textURL.setEditable(false);
-          pscroll.add(textURL);
-          JOptionPane jop = new JOptionPane();
-          rscroll.setPreferredSize(new Dimension(560,400));
-          rscroll.setMinimumSize(new Dimension(560,400));
-          rscroll.setMaximumSize(new Dimension(560,400));
-
-          jop.showMessageDialog(f,rscroll,"Jemboss Help",
-                              JOptionPane.PLAIN_MESSAGE);
+          URL inURL = cl.getResource("resources/readme.html");
+          new Browser(inURL,"resources/readme.html");
         } 
         catch (Exception ex)
         {
-          System.out.println("Didn't find resources/" +
-                             "readme.txt");
+          JOptionPane.showMessageDialog(null,
+                              "About Jemboss Guide not found!",
+                              "Error", JOptionPane.ERROR_MESSAGE);
         }
       }
     });
@@ -300,16 +281,34 @@ public class SetUpMenuBar
 
    }
 
+   /**
+   *
+   * Enable/disable file manager menu item
+   * @param b	true to enable file manager menu item
+   *
+   */
    public void setEnableFileManagers(boolean b)
    {
      showLocalRemoteFile.setEnabled(b);
    }
 
+   /**
+   *
+   * Enable/disable show results menu item
+   * @param b   true to enable show results menu item
+   *
+   */
    public void setEnableShowResults(boolean b)
    {
      fileMenuShowres.setEnabled(b);
    }
 
+   /**
+   *
+   *  Get local file manager 
+   *  @return 	local file manager
+   *
+   */
    public static DragTree getLocalDragTree()
    {
      if(localAndRemoteTree == null)
@@ -318,14 +317,14 @@ public class SetUpMenuBar
      return localAndRemoteTree.getLocalDragTree();
    }
 
-/**
-*
-*  Delete temporary files
-*
-*/
+  /**
+  *
+  *  Delete temporary files
+  *  @param suffix	suffix of files to delete
+  *
+  */
   public void deleteTmp(File cwd, final String suffix) 
   {
-
     String tmpFiles[] = cwd.list(new FilenameFilter()
     {
       public boolean accept(File cwd, String name)
@@ -341,11 +340,26 @@ public class SetUpMenuBar
     }
   }
 
-/**
-*
-* Save the sequence list for a future session.
-*
-*/
+
+  public void exitJemboss()
+  {
+    String fs = new String(System.getProperty("file.separator"));
+    String cwd = new String(System.getProperty("user.dir") + fs);
+    if(ao.isSaveUserHomeSelected())
+      ao.userHomeSave();
+
+    if(seqList.isStoreSequenceList())  //create a SequenceList file
+      saveSequenceList();
+
+    deleteTmp(new File(cwd),".jembosstmp");
+    System.exit(0);
+  }
+
+  /**
+  *
+  * Save the sequence list for a future session.
+  *
+  */
   public static void saveSequenceList()
   {
     File fseq = new File(System.getProperty("user.home")

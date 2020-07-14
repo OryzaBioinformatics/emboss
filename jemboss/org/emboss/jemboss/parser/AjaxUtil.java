@@ -15,7 +15,7 @@
 *  Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 *  Boston, MA  02111-1307, USA.
 *
-*  @author: Copyright (C) Alan Bleasby 
+*  @author: Copyright (C) Tim Carver
 *
 ********************************************************************/
 
@@ -27,21 +27,26 @@ import javax.swing.*;
 
 import org.emboss.jemboss.programs.ListFile;
 
+/**
+*
+* Utility to get the sequence file contents or the database
+* entry ready to use in Ajax
+*
+*/
 public class AjaxUtil
 {
 
-
-/**
-*
-* Returns the sequence file contents or the database entry
-* ready to use in Ajax.
-* @param fname file or database entry
-* @param db[] array of databases available
-* @param f the JFrame or null
-* @param withSoap true if being run in client-server mode
-* @return String to pass to seqType or seqsetType (if not null)
-*
-*/
+  /**
+  *
+  * Returns the sequence file contents or the database entry
+  * ready to use in Ajax.
+  * @param fname file or database entry
+  * @param db[] array of databases available
+  * @param f the JFrame or null
+  * @param withSoap true if being run in client-server mode
+  * @return String to pass to seqType or seqsetType (if not null)
+  *
+  */
   public static String getFileOrDatabaseForAjax(String fname,
                      String db[], JFrame f, boolean withSoap)
   {
@@ -88,7 +93,7 @@ public class AjaxUtil
         {
           int n = JOptionPane.showConfirmDialog(f,
                  "Do you really want to extract\n"+
-                 "the whole of " + fc + " databese?",
+                 "the whole of " + fc + " database?",
                  "Confirm the sequence entry",
                  JOptionPane.YES_NO_OPTION);
           if(n == JOptionPane.NO_OPTION)

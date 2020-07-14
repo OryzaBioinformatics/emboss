@@ -54,10 +54,18 @@ public class ProgList
    private JMenuItem mItem[];
    /** font used for the menu items */
    private Font menuFont = new Font("SansSerif", Font.BOLD, 11);
+   /** program group */
+   private Hashtable programGroup = new Hashtable();
+
 // private Font menuFont = new Font(null, Font.BOLD, 10);
 
-   public ProgList(String woss, String currentDirectory,
-                   JMenuBar menuBar)
+   /**
+   *
+   * @param woss	output from wossname
+   * @param menuBar	menu bar
+   *
+   */
+   public ProgList(String woss, JMenuBar menuBar)
    {
 
      numProgs = 0;
@@ -221,6 +229,7 @@ public class ProgList
              {
                if(p.equalsIgnoreCase(allProgs[i]))
                {
+                 programGroup.put(allProgs[i],groups);
                  app = i;
                  break;
                }
@@ -248,90 +257,106 @@ public class ProgList
 
    }
 
-/**
-*
-* Returns the number of programs
-* @return number of programs
-*
-*/
+  /**
+  *
+  * Returns the number of programs
+  * @return number of programs
+  *
+  */
    public int getNumProgs() 
    {
      return numProgs;
    }
 
-/**
-*
-* Returns the array of all the program names
-* @return array of all the program names
-*
-*/
+  /**
+  *
+  * Returns the array of all the program names
+  * @return array of all the program names
+  *
+  */
    public String[] getProgsList() 
    {
      return allProgs;
    }
 
-/**
-*
-* Returns the array of the program descriptions
-* @param array of the program descriptions
-*
-*/
+  /**
+  *
+  * Returns the array of the program descriptions
+  * @return array of the program descriptions
+  *
+  */
    public String[] getProgDescription() 
    {
      return allDescription;
    }
 
+  /**
+  *
+  * Returns the groups for the given application
+  * @param app	program name
+  * @return 	program group
+  *
+  */
+  public String getProgramGroup(String app)
+  {
+    if(programGroup.containsKey(app))
+      return (String)programGroup.get(app);
+    else
+      return null;
+  }
 
-/**
-*
-* Writes to screen the program names
-*
-*/
+
+
+  /**
+  *
+  * Writes to screen the program names
+  *
+  */
    public void writeList() 
    {
      for(int i=0;i<allProgs.length;i++)
        System.out.println(allProgs[i]);
    }
 
-/**
-*
-* Returns the program menu items 
-* @return program menu items
-*
-*/
+  /**
+  *
+  * Returns the program menu items 
+  * @return program menu items
+  *
+  */
    public JMenuItem[] getMenuItems() 
    {
      return mItem;
    }
 
-/**
-*
-* Returns the number of program menu items
-* @return number of program menu items
-*
-*/
+  /**
+  *
+  * Returns the number of program menu items
+  * @return number of program menu items
+  *
+  */
    public int getNumberMenuItems() 
    {
      return nm;
    }
 
-/**
-*
-* Returns the number of primary menu groups
-* @return number of primary menu groups
-*
-*/
+  /**
+  *
+  * Returns the number of primary menu groups
+  * @return number of primary menu groups
+  *
+  */
    public int getNumPrimaryGroups() 
    {
      return npG;
    }
   
-/**
-*
-*  HorizontalMenu extends JMenu to produces horizontal 
-*  menus.
-*
-*/
+  /**
+  *
+  *  HorizontalMenu extends JMenu to produces horizontal 
+  *  menus.
+  *
+  */
    class HorizontalMenu extends JMenu 
    {
      HorizontalMenu(String label) 

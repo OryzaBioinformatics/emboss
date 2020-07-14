@@ -26,11 +26,22 @@ import org.emboss.jemboss.parser.*;
 import java.io.*;
 import java.util.*;
 
+/**
+*
+* File manager methods - for a non-authenticating server
+*
+*/
 public class JembossFileServer
 {
 
 
 //SITE SPECIFIC CHANGE USER DIRECTORIES HERE
+  /**
+  *
+  * Retrieves the file manager roots on the server
+  * @param user		username
+  *
+  */
   public Vector embreo_roots(String user)
   {
 
@@ -53,15 +64,15 @@ public class JembossFileServer
   }
 
 
-/**
-*
-* Given the alias a user root alias e.g. "HOME" return
-* the directory this represents
-*
-* @param root alias (e.g "HOME")
-* @return directory path
-*
-*/
+  /**
+  *
+  * Given the alias a user root alias e.g. "HOME" return
+  * the directory this represents
+  * @param s	root alias (e.g "HOME")
+  * @param user	username
+  * @return 	directory path
+  *
+  */
   private String getRoot(String s, String user)
   {
     String rt = null;
@@ -78,7 +89,15 @@ public class JembossFileServer
     return rt;
   }
 
-
+  /**
+  *
+  * Get a directory listing
+  * @param option       root alias
+  * @param dirname      direcory name
+  * @param user     	username
+  * @return             directory listing
+  *
+  */
   public Vector directory_shortls(String options, String dirname, String user)
   {
     Vector vans = new Vector();
@@ -117,6 +136,15 @@ public class JembossFileServer
     return vans;
   }
 
+  /**
+  *
+  * Get the contents of a file
+  * @param option       root alias
+  * @param filename     file name
+  * @param user     	username
+  * @return             file contents
+  *
+  */
   public Vector get_file(String options, String filename, String user)
   {
     Vector vans = new Vector();
@@ -163,13 +191,16 @@ public class JembossFileServer
   } 
 
 
-/**
-*
-* @param option determines the root directory to put the file
-* @param filename name of the file to put
-* @param filedata file contents
-*
-*/
+  /**
+  *
+  * Put a file on the server file system
+  * @param option       root alias
+  * @param filename     name of file to add
+  * @param filedata     file contents
+  * @param user     	username
+  * @return             message
+  *
+  */
   public Vector put_file(String options, String filename, byte[] filedata,
                          String user)
   {
@@ -198,12 +229,16 @@ public class JembossFileServer
     return vans;
   }
 
-/**
-*
-* @param option determines the root directory to put the file
-* @param path to new directory
-*
-*/
+
+  /**
+  *
+  * Make a directory
+  * @param option       root alias
+  * @param dirname      name of new directory
+  * @param userName     username
+  * @return             message
+  *
+  */
   public Vector mkdir(String options, String dirname,
                       String userName)
   {
@@ -225,11 +260,15 @@ public class JembossFileServer
     return vans;
   }
 
-/**
-*
-*
-*
-*/
+  /**
+  *
+  * Delete a file
+  * @param option       root alias
+  * @param filename     file name
+  * @param userName     username
+  * @return             message
+  *
+  */
   public Vector delFile(String options, String filename,
                         String userName)
   {
@@ -249,11 +288,15 @@ public class JembossFileServer
     return vans;
   }
 
-/**
-*
-*
-*
-*/
+  /**
+  *
+  * Delete a directory
+  * @param option       root alias
+  * @param filename     directory name
+  * @param userName     username
+  * @return             message
+  *
+  */
   public Vector delDir(String options, String filename,
                         String userName)
   {
@@ -274,11 +317,16 @@ public class JembossFileServer
   }
 
 
-/**
-*
-*
-*
-*/
+  /**
+  *
+  * Rename a file
+  * @param option       root alias
+  * @param oldfile      old file name
+  * @param newfile      new file name
+  * @param userName     username
+  * @return             message
+  *
+  */
   public Vector rename(String options, String oldfile, String newfile,
                        String userName)
   {

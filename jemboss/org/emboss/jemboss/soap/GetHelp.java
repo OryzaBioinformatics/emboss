@@ -26,6 +26,11 @@ import java.util.*;
 
 import org.emboss.jemboss.JembossParams;
 
+/**
+*
+* Get the help text for an application
+*
+*/
 public class GetHelp 
 {
 
@@ -33,13 +38,12 @@ public class GetHelp
   private String status;
   private String helpText;
 
-/**
-*
-* Get the help text for an application
-* @param acdProg name of the application to get the help text for
-* @param mysettings JembossParams defining server parameters
-*
-*/
+  /**
+  *
+  * @param acdProg 	name of application to get the help text for
+  * @param mysettings 	jemboss properties
+  *
+  */
    public GetHelp(String acdProg, JembossParams mysettings)
    {
 
@@ -57,34 +61,35 @@ public class GetHelp
 
    }
 
-/**
-*
-* The status of the request
-* @return String 0 for success, anything else for failure. 
-*
-*/
+  /**
+  *
+  * The status of the request
+  * @return  	"0" for success, anything else for failure. 
+  *
+  */
   public String getStatus() 
   {
     return status;
   }
 
-/**
-*
-* A status message
-* @return A string containing a status message. In the case of an error,
-* contains a description of the error.
-*
-*/
+  /**
+  *
+  * A status message . In the case of an error, it will
+  * contain a description of the error.
+  * @return 	status message
+  *
+  */
   public String getStatusMsg() 
   {
     return statusmsg;
   }
 
-/**
-*
-* @return String help text 
-*
-*/
+  /**
+  *
+  * Get the help text
+  * @return 	help text 
+  *
+  */
   public String getHelpText() 
   {
     return helpText;

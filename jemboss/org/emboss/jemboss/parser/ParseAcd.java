@@ -26,7 +26,7 @@ import java.io.*;
 import java.util.StringTokenizer;
 import java.util.Hashtable;
 import java.util.Vector;
-
+import java.util.Enumeration;
 
 /**
 *
@@ -48,7 +48,7 @@ public class ParseAcd
   private double nvalue;
  		       /** parameter data type */
   private String attr;
- 		       /** aaray of dependent variables */
+ 		       /** array of dependent variables */
   private Dependent dep[];
  		       /** number of dependent variables */
   private int numOfDependents;
@@ -95,19 +95,20 @@ public class ParseAcd
                       /** secondary group */
   private String secondaryGp;
 
-/**
-*
-* The constructor takes the ACD as a string. 
-* @param acdText String representation of the ACD file
-* @param groups  Boolean determing whether just to retieve the groups 
-*
-*/
+  /**
+  *
+  * The constructor takes the ACD as a string. 
+  * @param acdText 	String representation of 
+  *			the ACD file
+  * @param groups  	boolean determing whether 
+  *			just to retieve the groups 
+  *
+  */
   public ParseAcd(String acdText, boolean groups) 
   {
 
-    ApplicationFields variables[] = new ApplicationFields[20];
+    Vector variables = new Vector();  //for "variable:" fields
     ApplicationFields appF;
-    int nvars = 0;
     int colonPos=0;
     int braketPos=0;
     int ttype;
@@ -147,20 +148,20 @@ public class ParseAcd
         if(line.startsWith("var:") || line.startsWith("variable"))
         {
           param = param.trim();
-          variables[nvars] = new ApplicationFields();
-          variables[nvars].setNumberOfParam(2);
+          ApplicationFields var = new ApplicationFields();
+          var.setNumberOfParam(2);
       
           int ns = param.indexOf(" ");
           if(ns > -1)
           {
             String value = param.substring(0,ns);
             value = value.replace('"',' ').trim();
-            variables[nvars].setParam(0,dataType,value);
+            var.setParam(0,dataType,value);
             value = param.substring(ns);
             value = value.replace('"',' ').trim();
-            variables[nvars].setParam(1, "value", value);
+            var.setParam(1, "value", value);
           }
-          nvars++;
+          variables.add(var);
           in.mark(2500);
           continue;
         }
@@ -215,8 +216,8 @@ public class ParseAcd
           if( ttype != java.io.StreamTokenizer.TT_NUMBER &&
                attr != null) 
           {
-             if(nvars>0)
-               svalue = resolveVariables(variables,nvars,svalue);
+             if(variables.size()>0)
+               svalue = resolveVariables(variables,svalue);
 
              //set variables to lower case as ACD is case insensitive
              if(svalue.indexOf("$") > -1 || svalue.indexOf("@") > -1)
@@ -250,24 +251,24 @@ public class ParseAcd
   }
 
 
-/**
-*
-* Used to replace the "variable:" or "var:" shorthand notation in
-* the ACD to the full expression it represent
-* @param ApplicationFields array of var ACD fields
-* @param int number of var's used
-* @param String value to be resolved if necessary
-*
-*/
-  private String resolveVariables(ApplicationFields variables[],int nvars,
-                                  String svalue)
+  /**
+  *
+  * Used to replace the "variable:" or "var:" shorthand notation in
+  * the ACD to the full expression it represent
+  * @param variables	ApplicationFields of var ACD fields
+  * @param svalue 	value to be resolved if necessary
+  *
+  */
+  private String resolveVariables(Vector variables,String svalue)
   {
     String res=svalue;
 
-    for(int i=0; i<nvars;i++)
+    Enumeration enum = variables.elements();
+    while(enum.hasMoreElements())
     {
-      String vName  = variables[i].getParamValueStr(0);
-      String vValue = variables[i].getParamValueStr(1);
+      ApplicationFields var = (ApplicationFields)enum.nextElement();
+      String vName  = var.getParamValueStr(0);
+      String vValue = var.getParamValueStr(1);
 
       //if we have something that might need resolving
       if((res.indexOf("$") >-1) || (res.indexOf("@") >-1))
@@ -282,29 +283,14 @@ public class ParseAcd
     return res;
   }
 
-/**
-*
-* Gets the application field.
-* @return ApplicationField 
-*
-*/
-//public ApplicationFields[] getApplicationFields() 
-//{
-//  int nfield = vappF.size();
-//  ApplicationFields aF[] = new ApplicationFields[nfield];
-//  for(int i=0;i<nfield; i++)
-//    aF[i] = (ApplicationFields)vappF.get(i);
-//  return aF;
-//}
 
-
-/**
-*
-* Gets the handle for a gui component on the Jemboss form.
-* @param  int field number in the ACD file
-* @return Handle integer.
-*
-*/
+  /**
+  *
+  * Gets the handle for a gui component on the Jemboss form.
+  * @param  field	field number in the ACD file
+  * @return 		handle integer.
+  *
+  */
   public int getGuiHandleNumber(int field) 
   {
     ApplicationFields aF = (ApplicationFields)vappF.get(field);
@@ -312,144 +298,144 @@ public class ParseAcd
   }
 
 
-/**
-*
-* Gets the number of float, string, seqout, outfile,
-* infile, regexp, codon & featout data types in the ACD.
-* These make up the number of JTextAreas in the Jemboss form.
-* @return Number of TextArea's in the Jemboss form.
-*
-*/
+  /**
+  *
+  * Gets the number of float, string, seqout, outfile,
+  * infile, regexp, codon & featout data types in the ACD.
+  * These make up the number of JTextAreas in the Jemboss form.
+  * @return 	number of TextArea's in the Jemboss form.
+  *
+  */
   public int getNumTextf() 
   {
     return ntextf;
   }
 
-/**
-*
-* Gets the number of int data types in the ACD.
-* @return Number of TextFieldInt in the Jemboss form.
-*
-*/
+  /**
+  *
+  * Gets the number of int data types in the ACD.
+  * @return 	number of TextFieldInt in the Jemboss form.
+  *
+  */
   public int getNumNint()
   {
     return nint;
   }
 
-/**
-*
-* Gets the number of float data types in the ACD.
-* @return Number of TextFieldFloat in the Jemboss form.
-*
-*/
+  /**
+  *
+  * Gets the number of float data types in the ACD.
+  * @return 	number of TextFieldFloat in the Jemboss form.
+  *
+  */
   public int getNumNfloat()
   {
     return nfloat;
   }
 
 
-/**
-*
-* Gets the number of boolean data types in the ACD.
-* @return Number of check boxes in the Jemboss form.
-*
-*/
+  /**
+  *
+  * Gets the number of boolean data types in the ACD.
+  * @return 	number of check boxes in the Jemboss form.
+  *
+  */
   public int getNumBool() 
   {
     return nbool;
   }
 
 
-/**
-*
-* Gets the number of seqset, seqall & sequence data types in the ACD
-* @return Number of sequence inputs in the Jemboss form.
-*
-*/
+  /**
+  *
+  * Gets the number of seqset, seqall & sequence data types in the ACD
+  * @return 	number of sequence inputs in the Jemboss form.
+  *
+  */
   public int getNumSeq() 
   {
     return nseqs;
   }
 
-/**
-*
-* Gets the number of filelist data types in the ACD
-* @return Number of file lists in the Jemboss form.
-*
-*/
+  /**
+  *
+  * Gets the number of filelist data types in the ACD
+  * @return 	number of file lists in the Jemboss form.
+  *
+  */
   public int getNumFileList()
   {
     return nflist;
   }
 
-/**
-*
-* Gets the number of list & selection data types in the ACD,
-* using single list selection
-* @return Number of selection lists in the Jemboss form.
-*
-*/
+  /**
+  *
+  * Gets the number of list & selection data types in the ACD,
+  * using single list selection
+  * @return 	number of selection lists in the Jemboss form.
+  *
+  */
   public int getNumList() 
   {
     return nlist;
   }
 
-/**
-*
-* Gets the number of list & selection data types in the ACD,
-* using multiple list selection
-* @return Number of selection lists in the Jemboss form.
-*
-*/
+  /**
+  *
+  * Gets the number of list & selection data types in the ACD,
+  * using multiple list selection
+  * @return 	number of selection lists in the Jemboss form.
+  *
+  */
   public int getNumMList()
   {
     return mlist;
   }
 
 
-/**
-*
-* @return Number of range data types in the Jemboss form.
-*
-*/
+  /**
+  *
+  * @return 	number of range data types in the Jemboss form.
+  *
+  */
   public int getNumRange()
   {
     return nrange;
   }
 
 
-/**
-*
-* Gets the number of sections in the ACD
-* @return Number of sections in the Jemboss form.
-*
-*/
+  /**
+  *
+  * Gets the number of sections in the ACD
+  * @return 	number of sections in the Jemboss form.
+  *
+  */
   public int getNumSection()
   {
     return nsection;
   }
 
 
-/**
-*
-* Gets the number of nested sections in the ACD
-* @return Number of subsections in the Jemboss form.
-*
-*/
+  /**
+  *
+  * Gets the number of nested sections in the ACD
+  * @return 	number of subsections in the Jemboss form.
+  *
+  */
   public int getNumSubsection()
   {
     return nsubsection;
   }
 
 
-/**
-*
-* Get a specified parameter attribute.
-* @param int field number in the ACD file
-* @param int parameter number in that field
-* @return String of the value.
-*
-*/
+  /**
+  *
+  * Get a specified parameter attribute.
+  * @param field	field number in the ACD file
+  * @param param 	parameter number in that field
+  * @return 		string of the value.
+  *
+  */
   public String getParameterAttribute(int field, int param)
   {
     ApplicationFields aF = (ApplicationFields)vappF.get(field);
@@ -457,12 +443,12 @@ public class ParseAcd
   }
 
 
-/**
-*
-* Determine if the value of the parameter is a String.
-* @return True if the value of the parameter is a String.
-*
-*/
+  /**
+  *
+  * Determine if the value of the parameter is a String.
+  * @return 	true if the value of the parameter is a String.
+  *
+  */
   public boolean isParamValueStr(int field, int param) 
   {
     ApplicationFields aF = (ApplicationFields)vappF.get(field);
@@ -470,12 +456,12 @@ public class ParseAcd
   }
 
 
-/**
-*
-* Gets the String value of a parameter.
-* @return String value of the parameter. 
-*
-*/
+  /**
+  *
+  * Gets the String value of a parameter.
+  * @return 	String value of the parameter. 
+  *
+  */
   public String getParamValueStr(int field, int param) 
   {
     ApplicationFields aF = (ApplicationFields)vappF.get(field);
@@ -483,12 +469,13 @@ public class ParseAcd
   }
 
 
-/**
-*
-* Sets the gui handle depending on the data type.
-* @param String data type
-*
-*/
+  /**
+  *
+  * Sets the gui handle depending on the data type.
+  * @param dataType	data type
+  * @param appF		application field
+  *
+  */
   private void setGuiHandleNumber(String dataType, ApplicationFields appF)
   {
 
@@ -554,12 +541,12 @@ public class ParseAcd
   }
 
 
-/**
-*
-* Gets the double value of a parameter.
-* @return Double value of the parameter. 
-*
-*/
+  /**
+  *
+  * Gets the double value of a parameter.
+  * @return 	double value of the parameter. 
+  *
+  */
   public double getParamValueDbl(int field, int param) 
   {
     ApplicationFields aF = (ApplicationFields)vappF.get(field);
@@ -567,13 +554,13 @@ public class ParseAcd
   }
 
 
-/**
-*
-* Determine if there is a default parameter in a field of the ACD.
-* @param  int field number
-* @return True if the default parameter value is a String
-*
-*/
+  /**
+  *
+  * Determine if there is a default parameter in a field of the ACD.
+  * @param  field 	field number
+  * @return 		true if the default parameter value is a String
+  *
+  */
   public boolean isDefaultParamValueStr(int field) 
   {
     int num = getNumofParams(field);
@@ -588,13 +575,13 @@ public class ParseAcd
   }
 
 
-/**
-*
-* Return a double default parameter
-* @param  int field number
-* @return Default parameter value as a double.
-*
-*/
+  /**
+  *
+  * Return a double default parameter
+  * @param  field 	field number
+  * @return 		default parameter value as a double.
+  *
+  */
   public double getDefaultParamValueDbl(int field) 
   {
     int num = getNumofParams(field);
@@ -611,17 +598,17 @@ public class ParseAcd
 
 //  Methods for dealing with dependent variables. 
 
-/**
-*
-* Always start by calling isDependents(), which calculates
-* the number of dependents and construct the Dependent array.
-*
-* @param   String name of the attribute
-* @param   int field number
-* @param   int toatal number of fields  
-* @return  True if there are dependent parameters.
-*
-*/
+  /**
+  *
+  * Always start by calling isDependents(), which calculates
+  * the number of dependents and construct the Dependent array.
+  *
+  * @param attr 	String name of the attribute
+  * @param field 	field number
+  * @param numofFields	total number of fields  
+  * @return  		true if there are dependent parameters.
+  *
+  */
   public boolean isDependents(String attr, int field, int numofFields)
   {
 
@@ -670,38 +657,38 @@ public class ParseAcd
   }
 
 
-/**
-*
-* Gets the dependents associated with the ACD.
-* @return the Dependent array for those fields
-*         with dependents
-*
-*/
+  /**
+  *
+  * Gets the dependents associated with the ACD.
+  * @return 	the Dependent array for those fields
+  *         	with dependents
+  *
+  */
   public Dependent[] getDependents() 
   {
     return dep;
   }
 
 
-/**
-*
-* Gets the number of dependent parameters in the ACD.
-* @return Number of Dependent making up the array
-*
-*/
+  /**
+  *
+  * Gets the number of dependent parameters in the ACD.
+  * @return 	number of Dependent making up the array
+  *
+  */
   public int getNumOfDependents() 
   {
     return numOfDependents;
   }
 
 
-/**
-*
-* Locates the min parameter in a field and returns it as a String.
-* @param   int field number
-* @return  The minimum value defined in a field.
-*
-*/
+  /**
+  *
+  * Locates the min parameter in a field and returns it as a String.
+  * @param field	field number
+  * @return  		minimum value defined in a field.
+  *
+  */
   public String getMinParam(int field) 
   {
     int num = getNumofParams(field);
@@ -730,13 +717,13 @@ public class ParseAcd
   }
 
 
-/**
-*
-* Locates the max parameter in a field and returns it as a String.
-* @param   int field number
-* @return  The maximum value defined in a field.
-*
-*/
+  /**
+  *
+  * Locates the max parameter in a field and returns it as a String.
+  * @param field 	field number
+  * @return  		maximum value defined in a field.
+  *
+  */
   public String getMaxParam(int field) 
   {
     int num = getNumofParams(field);
@@ -764,14 +751,14 @@ public class ParseAcd
   }
 
 
-/**
-*
-* Determine if there is a min parameter in a field of the ACD.
-* @param   int field number
-* @return  True if there is a minimum value specified
-*          in a field.
-*
-*/
+  /**
+  *
+  * Determine if there is a min parameter in a field of the ACD.
+  * @param field 	field number
+  * @return  		true if there is a minimum value specified
+  *          		in a field.
+  *
+  */
   public boolean isMinParamValue(int field) 
   {
     int num = getNumofParams(field);
@@ -791,14 +778,14 @@ public class ParseAcd
   }
 
 
-/**
-*
-* Determine if there is a max parameter in a field of the ACD.
-* @param   int field number
-* @return  True if there is a maximum value specified
-*          in a field.
-*
-*/
+  /**
+  *
+  * Determine if there is a max parameter in a field of the ACD.
+  * @param field 	field number
+  * @return  		true if there is a maximum value specified
+  *          		in a field.
+  *
+  */
   public boolean isMaxParamValue(int field) 
   {
     int num = getNumofParams(field);
@@ -817,16 +804,16 @@ public class ParseAcd
   }
 
 
-/**
-*
-* Finds the prompt, info or help parameter in an ACD field, in that
-* order.
-* @param   int field number
-* @return  Information specified by the prompt parameter, if
-*          present else the information parameter
-*          or the help parameter.
-*
-*/
+  /**
+  *
+  * Finds the prompt, info or help parameter in an ACD field, in that
+  * order.
+  * @param field	field number
+  * @return 		information specified by the prompt parameter, if
+  *          		present else the information parameter
+  *          		or the help parameter.
+  *
+  */
   public String getInfoParamValue(int field) 
   {
     int num = getNumofParams(field);
@@ -854,14 +841,14 @@ public class ParseAcd
   }
 
 
-/**
-*
-* Finds the help parameter in an ACD field.
-* @param   int field number
-* @return  Help parameter defined in a field or a blank
-*          String if not specified.
-*
-*/
+  /**
+  *
+  * Finds the help parameter in an ACD field.
+  * @param field 	field number
+  * @return  		help parameter defined in a field or a blank
+  *          		String if not specified.
+  *
+  */
   public String getHelpParamValue(int field) 
   {
     int num = getNumofParams(field);
@@ -881,14 +868,14 @@ public class ParseAcd
     return "";
   }
 
-/**
-*
-* Finds if the program is identifies as being able to
-* run in a batch queue
-* @return true if the program is suitable for putting
-*         in a batch queue 
-*
-*/
+  /**
+  *
+  * Finds if the program is identifies as being able to
+  * run in a batch queue
+  * @return 	true if the program is suitable for putting
+  *         	in a batch queue 
+  *
+  */
   public boolean isBatchable()
   {
 
@@ -907,12 +894,12 @@ public class ParseAcd
   }
 
 
-/**
-*
-* Finds any expected cpu level indicator (low, medium, high)
-* @return cpu level indicator
-*
-*/
+  /**
+  *
+  * Finds any expected cpu level indicator (low, medium, high)
+  * @return 	cpu level indicator
+  *
+  */
   public String getExpectedCPU()
   {
     String cpu = "";
@@ -927,15 +914,15 @@ public class ParseAcd
     return cpu;
   }
 
-/**
-*
-* Limits the length of the line for the help text used in
-* the tool tips.
-*
-* @param   String help text
-* @return  formated help text.
-*
-*/
+  /**
+  *
+  * Limits the length of the line for the help text used in
+  * the tool tips.
+  *
+  * @param help	help text
+  * @return  	formated help text.
+  *
+  */
   protected String formatHelpText(String help) 
   {
     String helpText = "";
@@ -954,13 +941,13 @@ public class ParseAcd
   }
 
 
-/**
-*
-* Determine if there is a optional parameter in a field of the ACD.
-* @param   int field number
-* @return  True if this is an "optional" field.
-*
-*/
+  /**
+  *
+  * Determine if there is a optional parameter in a field of the ACD.
+  * @param field 	field number
+  * @return  		true if this is an "optional" field.
+  *
+  */
   public boolean isOptionalParamValue(int field) 
   {
     int num = getNumofParams(field);
@@ -974,13 +961,13 @@ public class ParseAcd
   }
 
 
-/**
-*
-* Determine if data type of a field is seqout.
-* @param   int field number
-* @return  True if this is an "seqout" field.
-*
-*/
+  /**
+  *
+  * Determine if data type of a field is seqout.
+  * @param field 	field number
+  * @return  		true if this is an "seqout" field.
+  *
+  */
   public boolean isOutputSequence(int field) 
   {
     int num = getNumofParams(field);
@@ -994,13 +981,13 @@ public class ParseAcd
   }
 
 
-/**
-*
-* Gets the name of the output sequence field (seqout).
-* @param   int field number
-* @return  The parameter name for the seqout data type.
-*
-*/
+  /**
+  *
+  * Gets the name of the output sequence field (seqout).
+  * @param field	field number
+  * @return  		parameter name for the seqout data type.
+  *
+  */
   public String getOutputSequenceFile(int field) 
   {
     int num = getNumofParams(field);
@@ -1012,13 +999,14 @@ public class ParseAcd
   }
 
 
-/**
-*
-* Determine if a field is data type graph or xygraph.
-* @param   int field number
-* @return  True if the field is of "graph" or "xygraph" type.
-*
-*/
+  /**
+  *
+  * Determine if a field is data type graph or xygraph.
+  * @param field	field number
+  * @return 		true if the field is of "graph" or 
+  *			"xygraph" type.
+  *
+  */
   public boolean isOutputGraph(int field) 
   {
     int num = getNumofParams(field);
@@ -1033,13 +1021,13 @@ public class ParseAcd
   }
 
 
-/**
-*
-* Determine if a field is data type outfile.
-* @param   int field number
-* @return  True if the field is of "outfile" type.
-*
-*/
+  /**
+  *
+  * Determine if a field is data type outfile.
+  * @param field	field number
+  * @return  		true if the field is of "outfile" type.
+  *
+  */
   public boolean isOutputFile(int field)   
   {
     int num = getNumofParams(field);
@@ -1053,13 +1041,13 @@ public class ParseAcd
   }
 
 
-/**
-*
-* Gets a String default parameter.
-* @param  int field number
-* @return Default parameter for this field.
-*
-*/
+  /**
+  *
+  * Gets a String default parameter.
+  * @param field	field number
+  * @return 		default parameter for this field.
+  *
+  */
   public String getDefaultParamValueStr(int field) 
   {
     int num = getNumofParams(field);
@@ -1074,13 +1062,13 @@ public class ParseAcd
   }
 
 
-/**
-*
-* Used for a list data type to put the list items in a String array.
-* @param  int field number
-* @return String array representation of the list type.
-*
-*/
+  /**
+  *
+  * Used for a list data type to put the list items in a String array.
+  * @param field	field number
+  * @return		String array representation of the list type.
+  *
+  */
   public String[] getList(int field) 
   {
     int num = getNumofParams(field);
@@ -1165,14 +1153,14 @@ public class ParseAcd
   }
 
 
-/**
-*
-* For a list data type determine the appropriate String entry.
-* @param  int field number
-* @param  int index into the list
-* @return String for that entry.
-*
-*/
+  /**
+  *
+  * For a list data type determine the appropriate String entry.
+  * @param field	field number
+  * @param index	index into the list
+  * @return 		String for that entry.
+  *
+  */
   public String getListLabel(int field, int index) 
   {
     int num = getNumofParams(field);
@@ -1217,13 +1205,13 @@ public class ParseAcd
   }
 
 
-/**
-*
-* Used for a selection type to put the list items in a String array.
-* @param  int field number
-* @return String array representation of the select type.
-*
-*/
+  /**
+  *
+  * Used for a selection type to put the list items in a String array.
+  * @param field	field number
+  * @return 		String array representation of the select type.
+  *
+  */
   public String[] getSelect(int field) 
   {
     int num = getNumofParams(field);
@@ -1296,24 +1284,24 @@ public class ParseAcd
   }
 
 
-/**
-*
-* Use this after getList or getSelect to retrieve default
-* @return int default for list or select data type
-*
-*/
+  /**
+  *
+  * Use this after getList or getSelect to retrieve default
+  * @return 	default for list or select data type
+  *
+  */
   public Vector getListOrSelectDefault()
   {
     return listdefault;
   }
 
 
-/**
-*
-* Determine if there is a optional parameter in any field of the ACD.
-* @param  True if there is an optional parameter in any field.
-*
-*/
+  /**
+  *
+  * Determine if there is a optional parameter in any field of the ACD.
+  * @param 	true if there is an optional parameter in any field.
+  *
+  */
   public boolean isOptionalParam()
   {
     for(int i=0;i<numofFields;i++)
@@ -1322,25 +1310,25 @@ public class ParseAcd
     return false;
   }
 
-/**
-*
-* Gets the number of fields in the ACD file.
-* @return  Total number of fields in an ACD file
-*
-*/
+  /**
+  *
+  * Gets the number of fields in the ACD file.
+  * @return  	total number of fields in an ACD file
+  *
+  */
   public int getNumofFields() 
   {
     return numofFields;
   }
 
 
-/**
-*
-* Gets the number of parameters in a ACD field.
-* @param  int field number
-* @return number of parameters in the field.
-*
-*/ 
+  /**
+  *
+  * Gets the number of parameters in a ACD field.
+  * @param field	field number
+  * @return 		number of parameters in the field.
+  *
+  */ 
   public int getNumofParams(int field) 
   {
     ApplicationFields aF = (ApplicationFields)vappF.get(field);
@@ -1348,15 +1336,14 @@ public class ParseAcd
   }
 
 
-/**
-*
-* Parses a parameter in a ACD field 
-*
-* @param  BufferedReader 
-* @param  StreamTokenizer
-* @return int
-*
-*/
+  /**
+  *
+  * Parses a parameter in a ACD field 
+  * @param in	BufferedReader 
+  * @param st	tokenizer
+  * @return 	string tokenizer type or zero
+  *
+  */
   public int parseParam(BufferedReader in, StreamTokenizer st) throws IOException 
   {
  
@@ -1395,12 +1382,18 @@ public class ParseAcd
     nvalue = st.nval;
  
    // cope with double quotes by forwarding to end quote
+   // and remove unwanted white space
     if( svalue == null &&
         st.ttype != java.io.StreamTokenizer.TT_NUMBER ) 
     {
       svalue = "";
+      char last = ' ';
       while( (c = (char)in.read()) != '\"') 
-        svalue = svalue.concat(java.lang.String.valueOf(c));
+      {
+        if( c != ' ' || last != ' ')
+          svalue = svalue.concat(java.lang.String.valueOf(c));
+        last = c;
+      }
     }
  
     numofParams++;

@@ -30,6 +30,7 @@ import org.emboss.jemboss.JembossParams;
 
 /**
 *
+* Holds the list of stored results.
 * Used by ShowSavedResults to show (show_saved_results),
 * delete (delete_saved_results) & list results (list_saved_results).
 */
@@ -39,33 +40,43 @@ public class ResultList
   private String status;
   private Hashtable proganswer;
 
-/**
-*
-* Holds the list of stored results
-* @param mysettings JembossParams defining server parameters
-* @throws JembossSoapException If authentication fails
-*
-*/
+  /**
+  *
+  * Holds the list of stored results
+  * @param mysettings 	jemboss properties
+  * @throws JembossSoapException if authentication fails
+  *
+  */
   public ResultList(JembossParams mysettings) throws JembossSoapException 
   {
     this(mysettings,null,"list_saved_results");
   }
 
+  /**
+  *
+  * Holds the list of stored results
+  * @param mysettings   jemboss properties
+  * @param dataset	dataset to manipulate
+  * @param methodname	method to invoke on this dataset
+  * @throws JembossSoapException if authentication fails
+  *
+  */
    public ResultList(JembossParams mysettings, String dataset,
                      String methodname) throws JembossSoapException
    {
      this(mysettings,dataset,"",methodname);
    }
 
-/**
-*
-* Manipulate a dataset.
-* @param mysettings JembossParams defining server parameters
-* @param dataset    Which dataset to manipulate
-* @param options    A project file to retrieve
-* @param methodname What method to invoke on this dataset
-*
-*/
+  /**
+  *
+  * Manipulate a dataset.
+  * @param mysettings JembossParams defining server parameters
+  * @param dataset    Which dataset to manipulate
+  * @param options    A project file to retrieve
+  * @param methodname What method to invoke on this dataset
+  * @throws JembossSoapException if authentication fails
+  *
+  */
    public ResultList(JembossParams mysettings, String dataset, 
                      String options, String methodname) throws JembossSoapException 
    {
@@ -95,77 +106,78 @@ public class ResultList
      proganswer.remove("msg");
    }
 
-/**
-*
-* The status of the request
-* @return String 0 for success, anything else for failure
-*
-*/
+  /**
+  *
+  * The status of the request
+  * @return 	0 for success, anything else for failure
+  *
+  */
   public String getStatus() 
   {
     return status;
   }
 
-/**
-*
-* A status message
-* @return A string containing a status message. In the case of an error,
-* contains a description of the error.
-*
-*/
+  /**
+  *
+  * A status message. In the case of an error,
+  * contains a description of the error.
+  * @return 	a status message
+  *
+  */
   public String getStatusMsg() 
   {
     return statusmsg;
   }
   
-/**
-*
-* @return Hashtable of the results
-*
-*/
+  /**
+  *
+  * @return Hashtable of the results
+  *
+  */
   public Hashtable hash() 
   {
     return proganswer;
   }
 
-/**
-*
-* @return Enumeration of the elements of the results Hashtable
-*
-*/
+  /**
+  *
+  * @return Enumeration of the elements of the results Hashtable
+  *
+  */
   public Enumeration elements() 
   {
     return proganswer.elements();
   }
 
-/**
-*
-* @return Enumeration of the keys of the results Hashtable
-*
-*/
+  /**
+  *
+  * @return Enumeration of the keys of the results Hashtable
+  *
+  */
   public Enumeration keys() 
   {
     return proganswer.keys();
   }
 
 
-/**
-*
-* @param Object key of the element to return
-* @returns the element in the result Hashtable defined by the key
-*
-*/
+  /**
+  *
+  * @param key	key of the element in the result
+  *		Hashtable to return
+  * @return 	element in the result Hashtable
+  *
+  */
   public Object get(Object key) 
   {
     return proganswer.get(key);
   }
 
-/**
-*
-* Replace the current results hash
-* @param newres  The new results hash
-*
-*/
+  /**
+  *
+  * Replace the current results hash
+  * @param newres  	new results hash
+  *
+  */
   public void updateRes(Hashtable newres)
   {
     proganswer = newres;

@@ -9,6 +9,9 @@ while($line = <IN>)
  $line =~ /(.*)(\.java)/;
  $java = $java." ";
  $java = $java.$1;
+ $java = $java."  \\\n";
 }
 system("rm -rf x");
+
+
 print $java;

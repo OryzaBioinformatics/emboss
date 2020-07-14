@@ -25,19 +25,31 @@ import javax.swing.*;
 
 /**
 *
-* Draw sequence name
+* Draw sequence name toggle button
 *
 */
 public class SequenceNameJButton extends JToggleButton
 {
+  /** sequence */
   private Sequence seq;
+  /** boundary width */
   private int boundWidth = 6;
-  private int fontSize = 14;
+  /** font size */
+  private int fontSize = 12;
+  /** name label */
   private String nameLabel;
+  /** height pad */
   private int ypad=0;
+  /** font */
   private Font font = new Font("Monospaced",
                       Font.PLAIN, fontSize);
 
+  /**
+  *
+  * @param seq 	sequence object
+  * @param ypad	height padding
+  *
+  */
   public SequenceNameJButton(Sequence seq, int ypad)
   {
     super();
@@ -59,6 +71,12 @@ public class SequenceNameJButton extends JToggleButton
     setBorderPainted(false);
   }
 
+  /**
+  *
+  * Set the font size
+  * @param size	font size
+  *
+  */
   public void setFontSize(int size)
   {
     fontSize = size;
@@ -69,17 +87,35 @@ public class SequenceNameJButton extends JToggleButton
     setFont(font);
   }
 
+  /**
+  *
+  * Get the font
+  * @return 	font
+  *
+  */
   public Font getFont()
   {
     return font;
   }
 
+  /**
+  *
+  * Get the button width
+  * @return	 button width
+  *
+  */
   public int getPanelWidth()
   {
     FontMetrics metrics = getFontMetrics(font);
     return metrics.stringWidth(nameLabel)+boundWidth;
   }
 
+  /**
+  *
+  * Get the button height
+  * @return       button height
+  *
+  */
   public int getPanelHeight()
   {
     FontMetrics metrics = getFontMetrics(font);
@@ -87,6 +123,12 @@ public class SequenceNameJButton extends JToggleButton
     return metrics.stringWidth("A")+boundWidth;
   }
 
+  /**
+  *
+  * Get the preferred size of this component
+  * @param	preferred dimension
+  *
+  */
   public Dimension getPreferredSize()
   {
     return new Dimension(getPanelWidth(),

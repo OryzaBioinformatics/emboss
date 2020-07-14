@@ -23,12 +23,19 @@
 package org.emboss.jemboss.gui;
 
 import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 import javax.swing.*;
+import javax.swing.event.ChangeListener;
+import javax.swing.event.ChangeEvent;
+
 import org.apache.regexp.*;
 import java.io.*;
 import java.util.Hashtable;
 import java.util.Enumeration;
 
+import org.emboss.grout.*;
 import org.emboss.jemboss.gui.filetree.FileEditorDisplay;
 import org.emboss.jemboss.JembossParams;
 
@@ -40,39 +47,74 @@ import org.emboss.jemboss.JembossParams;
 public class ShowResultSet extends JFrame
 {
 
-/**
-* 
-* @param the result data to display
-*
-*/
+  /** menu bar */
+  private ResultsMenuBar menuBar;
+  /** tabbed pane */
+  private JTabbedPane rtp;
+  /** grout panel */
+  private GroutPanel grout = null;
+
+  /**
+  * 
+  * @param reslist 	result list
+  * @param project	the result data to display
+  * @param mysettings	jemboss properties
+  *
+  */
   public ShowResultSet(Hashtable reslist, String project, 
                                 JembossParams mysettings)
   {
     this(reslist,null,project,mysettings);
   }
 
+  /**
+  *
+  * @param reslist      result list
+  * @param inputFiles 	input files
+  *
+  */
   public ShowResultSet(Hashtable reslist, Hashtable inputFiles)
   {
     this(reslist,inputFiles,null,null);
   }
 
+  /**
+  *
+  * @param reslist      result list
+  * @param mysettings   jemboss properties
+  *
+  */
+  public ShowResultSet(Hashtable reslist, JembossParams mysettings)
+  {
+    this(reslist,null,null,mysettings); 
+  }
+
+  /**
+  *
+  * @param reslist      result list
+  * @param inputFiles   input files
+  * @param mysettings   jemboss properties
+  *
+  */
   public ShowResultSet(Hashtable reslist, Hashtable inputFiles,
                        JembossParams mysettings)
   {
     this(reslist,inputFiles,null,mysettings);
   }
 
-/**
-*  
-* @param the result data to display
-* @param the input data to display
-*
-*/
+  /**
+  *  
+  * @param reslist	result list 
+  * @param inputFiles	the input data to display
+  * @param project      the result data to display
+  * @param mysettings   jemboss properties
+  *
+  */
   public ShowResultSet(Hashtable reslist, Hashtable inputFiles, 
                        String project, JembossParams mysettings)
   {
     super("Saved Results on the Server");
-    JTabbedPane rtp = new JTabbedPane();
+    rtp = new JTabbedPane();
 
     setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -86,13 +128,10 @@ public class ShowResultSet extends JFrame
 // now load png files into pane
     for(int i=0; i<stabs.length;i++)
     {
-      s1 = new ScrollPanel(new GridLayout());
-      r1 = new JScrollPane(s1);
-      r1.getViewport().setBackground(Color.white);
-
       ImageIcon i1 = new ImageIcon((byte [])reslist.get(stabs[i]));
-      JLabel l1 = new JLabel(i1);
-      s1.add(l1);
+      ImageIconJPanel iiPanel = new ImageIconJPanel(i1);
+      r1 = new JScrollPane(iiPanel);
+      r1.getViewport().setBackground(Color.white);
       if(stabs[i] != null)
       {
         rtp.add(r1,i);
@@ -103,20 +142,66 @@ public class ShowResultSet extends JFrame
     String cmd = "cmd";
     if(reslist.containsKey(cmd))
     {
-      FileEditorDisplay fed = new FileEditorDisplay(null,cmd,
+      FileEditorDisplay fed = new FileEditorDisplay(cmd,
                                          reslist.get(cmd));
       fed.setCaretPosition(0);
       r1 = new JScrollPane(fed);
       rtp.add(cmd,r1);
     }
 
-    new ResultsMenuBar(this,rtp,reslist,inputFiles,project,mysettings);
+    menuBar = new ResultsMenuBar(this,rtp,reslist,inputFiles,
+                                 project,mysettings);
 
-    setSize(640,480);
+    rtp.addChangeListener(new ChangeListener() 
+    {
+       public void stateChanged(ChangeEvent e) 
+       {
+         setJMenuBar();
+       }
+    });
+                      
+    setJMenuBar();        
+    setSize(640,580);
     getContentPane().add(rtp,BorderLayout.CENTER);
     setVisible(true);
   }
 
+  /**
+  *
+  * Set the menu bar based on the title of the
+  * tabbed pane
+  *
+  */
+  public void setJMenuBar()
+  {
+    int index = rtp.getSelectedIndex();
+    String title = rtp.getTitleAt(index);
+    if(title.endsWith("x3d"))
+    {
+      grout = (GroutPanel)rtp.getSelectedComponent();
+      JMenuBar groutMenuBar = grout.getMenuBar();
+      setJMenuBar(groutMenuBar);
+      remove(menuBar.getToolBar());
+      getContentPane().add(grout.getToolBar(),BorderLayout.NORTH);
+    }
+    else 
+    {
+      setJMenuBar(menuBar);
+      if(grout != null)
+        remove(grout.getToolBar());
+
+      getContentPane().add(menuBar.getToolBar(),BorderLayout.NORTH);
+    }
+  }
+
+  /**
+  *
+  * Add the contents of a hash table to the tabbed pane
+  * @param h	hash table
+  * @param rtp	tabbed pane
+  * @return	array of names of PNG tabs
+  *
+  */
   private String[] addHashContentsToTab(Hashtable h,JTabbedPane rtp)
   {
 
@@ -135,11 +220,8 @@ public class ShowResultSet extends JFrame
       {
         if (thiskey.endsWith("png") || thiskey.endsWith("html"))
         {
-          s1 = new ScrollPanel(new GridLayout());
-          r1 = new JScrollPane(s1);
-          r1.getViewport().setBackground(Color.white);
           int index = findInt(thiskey);
-          if(index>0)
+          if(index>0 && index < stabs.length)
           {
             stabs[index-1] = new String(thiskey);
             ntabs++;
@@ -147,14 +229,44 @@ public class ShowResultSet extends JFrame
           else
           {
             ImageIcon i1 = new ImageIcon((byte [])h.get(thiskey));
-            JLabel l1 = new JLabel(i1);
-            s1.add(l1);
+            ImageIconJPanel iiPanel = new ImageIconJPanel(i1);
+            r1 = new JScrollPane(iiPanel);
+            r1.getViewport().setBackground(Color.white);
             rtp.add(thiskey,r1);
           }
         }
+        else if (thiskey.endsWith("x3d")) // grout
+        {
+          GroutPanel panel = new GroutPanel()
+          {
+            protected void addDisposeOfGroutPanelMenuItem(JMenu menu)
+            {
+              JMenuItem menuItem = new JMenuItem("Close");
+              menuItem.setAccelerator(KeyStroke.getKeyStroke(
+                        KeyEvent.VK_E, ActionEvent.CTRL_MASK));
+
+              menuItem.addActionListener(new ActionListener()
+              {
+                public void actionPerformed(ActionEvent e)
+                {
+                  dispose();
+                }
+              });
+              menu.add(menuItem);                         
+            }
+          };
+
+          if(h.get(thiskey) instanceof String)
+            panel.setX3DFile((String)h.get(thiskey));
+          else
+            panel.setX3DFile(new String((byte[])h.get(thiskey)));
+          rtp.add(thiskey,panel);
+          setJMenuBar(panel.getMenuBar());
+
+        }
         else
         {
-          FileEditorDisplay fed = new FileEditorDisplay(null,thiskey,
+          FileEditorDisplay fed = new FileEditorDisplay(thiskey,
                                                      h.get(thiskey));
           fed.setCaretPosition(0);
           r1 = new JScrollPane(fed);
@@ -167,10 +279,17 @@ public class ShowResultSet extends JFrame
     for(int i=0;i<ntabs;i++)
       pngtabs[i] = new String(stabs[i]);
     
-
     return pngtabs;
   }
 
+  /**
+  *
+  * Find the number in a string expression
+  * @param exp	string expression
+  * @return 	number in a string expression or -1 
+  *		if none found
+  *
+  */
   private int findInt(String exp)
   {
 
@@ -193,4 +312,12 @@ public class ShowResultSet extends JFrame
     return -1;
   }
 
+
+  public class GroutPanelListener implements ActionListener
+  {
+    public void actionPerformed(ActionEvent e)
+    {
+      dispose();
+    }
+  }
 }

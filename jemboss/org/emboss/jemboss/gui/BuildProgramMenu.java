@@ -24,9 +24,6 @@ package org.emboss.jemboss.gui;
 import java.awt.*;
 import javax.swing.*;
 import javax.swing.event.*;
-import javax.swing.tree.*;
-import java.util.zip.*;
-
 import java.awt.event.*;
 import java.io.*;
 import java.util.*;
@@ -37,16 +34,12 @@ import org.emboss.jemboss.programs.*;      // running EMBOSS programs
 import org.emboss.jemboss.gui.startup.*;   // finds progs, groups, docs & db's
 import org.emboss.jemboss.soap.*;
 import org.emboss.jemboss.gui.form.*;      // prog forms constructed from ACD
-import org.emboss.jemboss.soap.GetWossname;
 
 /**
 *
 * BuildProgramMenu class construct the program menus.
 *
-* @author T. J. Carver
-*
 */
-
 public class BuildProgramMenu
 {
   /** database names */
@@ -57,33 +50,36 @@ public class BuildProgramMenu
   private static Vector codons = new Vector();
   /** acd files cache */
   private Hashtable acdStore = new Hashtable();   
+  /** login window */
   private AuthPopup splashing;
+  /** thread for progress monitor on the login window */
   private SplashThread splashThread;
+  /** environment vars */
+  private String[] envp;
 
-/**
-*
-*  @param  JPanel p1 is the menu pane
-*  @param  ScollPanel p2 is the form pane
-*  @param  JScrollPane EMBOSS form scroll pane 
-*  @param  String location of the EMBOSS binaries
-*  @param  String array of environment variables for EMBOSS applications.
-*  @param  JembossParams SOAP parameter settings
-*  @param  boolean true if using SOAP server
-*  @param  String current working directory (local)
-*  @param  String location of the ACD directory
-*  @param  JFrame Jemboss frame
-*  @param  Dimension form pane dimension
-*
-*/
+  
+  /**
+  *
+  *  @param  p1 		menu pane
+  *  @param  p2 		form pane
+  *  @param  pform 		pane containing emboss form and job manager
+  *  @param  scrollProgForm 	EMBOSS form scroll pane 
+  *  @param  mysettings		Jemboss settings
+  *  @param  withSoap 		true if using SOAP server
+  *  @param  mainMenu		Jemboss main menu bar
+  *  @param  f			Jemboss frame
+  *  @param  jform 		form pane dimension
+  *
+  */
   public BuildProgramMenu(final JPanel p1, final ScrollPanel p2, 
            final JPanel pform, final JScrollPane scrollProgForm,
-           final String embossBin, final String envp[],
-           final JembossParams mysettings, final boolean withSoap,
-           final String cwd, final String acdDirToParse,
-           final SetUpMenuBar mainMenu, final JFrame f,
-           final Dimension jform)
+           final JembossParams mysettings,
+           final boolean withSoap, final SetUpMenuBar mainMenu,
+           final JFrame f, final Dimension jform)
   {
   
+    final String fs = new String(System.getProperty("file.separator"));
+    final String cwd = new String(System.getProperty("user.dir") + fs);
     final Cursor cbusy = new Cursor(Cursor.WAIT_CURSOR);
     final Cursor cdone = new Cursor(Cursor.DEFAULT_CURSOR);
   
@@ -99,17 +95,31 @@ public class BuildProgramMenu
       splashThread = new SplashThread(splashing,400-4);
       splashThread.start();
     }
+    else 
+    {
+      envp = new String[4];  /* environment vars */
+      String ps = new String(System.getProperty("path.separator"));
+      String embossBin  = mysettings.getEmbossBin();
+      String embossPath = mysettings.getEmbossPath();
+      embossPath = new String("PATH" + ps +
+                      embossPath + ps + embossBin + ps);
+      envp[0] = "PATH=" + embossPath;
+      envp[1] = "PLPLOT_LIB=" + mysettings.getPlplot();
+      envp[2] = "EMBOSS_DATA=" + mysettings.getEmbossData();
+      envp[3] = "HOME=" + System.getProperty("user.home") + fs;
+    }
+
 
     SwingWorker groupworker = new SwingWorker() 
     {
-
       String woss = "";
 
       public Object construct() 
       {
         if(withSoap) 
         {
-          if(mysettings.getPublicSoapURL().startsWith("https"))
+          if(mysettings.getPublicSoapURL().startsWith("https") &&
+             !mysettings.getUseHTTPSProxy())
           {
             System.setProperty("https.proxyHost", "");
             System.setProperty("http.proxyHost", "");
@@ -185,23 +195,23 @@ public class BuildProgramMenu
               mainMenu.setEnableFileManagers(false);
               mainMenu.setEnableShowResults(false);
 
-              Hashtable hshowdb = (new JembossJarUtil("resources/showdb.jar")).getHash();
-              mainMenu.setEnableFileManagers(false);
-              mainMenu.setEnableShowResults(false);   
+//            Hashtable hshowdb = (new JembossJarUtil("resources/showdb.jar")).getHash();
+//            mainMenu.setEnableFileManagers(false);
+//            mainMenu.setEnableShowResults(false);   
 
-              if(hshowdb.containsKey("showdb.out"))
-              {
-                String showdbOut = new String((byte[])hshowdb.get("showdb.out"));
-                Database d = new Database(showdbOut);
-                db = d.getDB();
-              }
+//            if(hshowdb.containsKey("showdb.out"))
+//            {
+//              String showdbOut = new String((byte[])hshowdb.get("showdb.out"));
+//              Database d = new Database(showdbOut);
+//              db = d.getDB();
+//            }
             }
             catch (Exception ex){ System.out.println("calling the server"); }
 
             if(woss.equals(""))
             {
               GetWossname ewoss = new GetWossname(mysettings);
-              woss = ewoss.getDBText(); 
+              woss = ewoss.getWossnameText(); 
               mainMenu.setEnableFileManagers(true);
               mainMenu.setEnableShowResults(true);
             }
@@ -224,6 +234,7 @@ public class BuildProgramMenu
         } 
         else 
         {
+          String embossBin = mysettings.getEmbossBin();
           String embossCommand = new String(embossBin + "wossname -colon -auto");
           System.out.println(embossCommand);
           RunEmbossApplication rea = new RunEmbossApplication(
@@ -297,7 +308,7 @@ public class BuildProgramMenu
 
 // program menu
         JMenuBar menuBar = new JMenuBar();
-        ProgList progs = new ProgList(woss,cwd,menuBar);
+        ProgList progs = new ProgList(woss,menuBar);
 
         if(withSoap)
           splashing.doneSomething("");
@@ -334,10 +345,10 @@ public class BuildProgramMenu
                 if(p.equalsIgnoreCase(allAcd[k]))
                 {
                   p2.removeAll();
-                  String acdText = getAcdText(allAcd[k],acdDirToParse,
-                                              mysettings,withSoap);
+                  String acdText = getAcdText(allAcd[k],mysettings,
+                                                         withSoap);
                   BuildJembossForm bjf = new BuildJembossForm(allDes[k],
-                                db,allAcd[k],envp,cwd,embossBin,acdText,
+                                db,allAcd[k],envp,cwd,acdText,
                                 withSoap,p2,mysettings,f);
                   scrollProgForm.setViewportView(p2);               
                   JViewport vp = scrollProgForm.getViewport();
@@ -401,10 +412,10 @@ public class BuildProgramMenu
             f.setCursor(cbusy);
             int index = progList.getSelectedIndex();
             p2.removeAll();
-            String acdText = getAcdText(allAcd[index],acdDirToParse,
-                                        mysettings,withSoap);
+            String acdText = getAcdText(allAcd[index],mysettings,
+                                                       withSoap);
             BuildJembossForm bjf = new BuildJembossForm(allDes[index],
-                                  db,allAcd[index],envp,cwd,embossBin,
+                                  db,allAcd[index],envp,cwd,
                                   acdText,withSoap,p2,mysettings,f);
             scrollProgForm.setViewportView(p2);   
             JViewport vp = scrollProgForm.getViewport();
@@ -456,10 +467,10 @@ public class BuildProgramMenu
             source.setSelectionBackground(Color.cyan);
             int index = source.getSelectedIndex();
             p2.removeAll();
-            String acdText = getAcdText(allAcd[index],acdDirToParse,
-                                        mysettings,withSoap);
+            String acdText = getAcdText(allAcd[index],mysettings,
+                                                       withSoap);
             BuildJembossForm bjf = new BuildJembossForm(allDes[index],
-                                  db,allAcd[index],envp,cwd,embossBin,
+                                  db,allAcd[index],envp,cwd,
                                   acdText,withSoap,p2,mysettings,f);
             scrollProgForm.setViewportView(p2);
             JViewport vp = scrollProgForm.getViewport();
@@ -478,40 +489,48 @@ public class BuildProgramMenu
 
   }
 
-/**
-*
-* List of available EMBOSS databases.
-* @return String[] list of databases
-*
-*/
+  /**
+  *
+  * List of available EMBOSS databases
+  * @return 	list of databases
+  *
+  */
   protected static String[] getDatabaseList()
   {
     return db;
   }
 
+  /**
+  *
+  * Contains all scoring matrix files
+  *
+  */
   public static Vector getMatrices()
   {
     return matrices;
   }
 
-
+  /**
+  *
+  * Contains all codon usage tables
+  *
+  */
   public static Vector getCodonUsage()
   {
     return codons;
   }
 
-
-
-
-/**
-*
-* Get the contents of an ACD file in the form of a String.
-* @param String of the ACD file name
-* @param String representation of the ACD
-*
-*/
-  private String getAcdText(String applName, String acdDirToParse,
-                            JembossParams mysettings, boolean withSoap)
+  /**
+  *
+  * Get the contents of an ACD file in the form of a String
+  * @param applName		application name
+  * @param mysettings		jemboss properties
+  * @param withSoap		true if in client-server mode
+  * @return	 		String representation of the ACD
+  *
+  */
+  private String getAcdText(String applName, JembossParams mysettings, 
+                            boolean withSoap)
   {
 
     String acdText = new String("");
@@ -519,6 +538,7 @@ public class BuildProgramMenu
 
     if(!withSoap)
     {
+      String acdDirToParse = mysettings.getAcdDirToParse();
       String acdToParse = acdDirToParse.concat(applName).concat(".acd");
       try
       {

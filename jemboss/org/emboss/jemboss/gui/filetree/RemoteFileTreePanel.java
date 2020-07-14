@@ -32,33 +32,47 @@ import org.emboss.jemboss.soap.FileRoots;
 import org.emboss.jemboss.soap.JembossSoapException;
 import org.emboss.jemboss.JembossParams;
 
+/**
+*
+* Panel for the remote file tree manager
+*
+*/
 public class RemoteFileTreePanel extends JPanel
 {
 
+  /** busy cursor */
   final Cursor cbusy = new Cursor(Cursor.WAIT_CURSOR);
+  /** done cursor */
   final Cursor cdone = new Cursor(Cursor.DEFAULT_CURSOR);
-  private boolean laddCombo;
+  /** combo to select the root directory from */
   private JComboBox rootSelect;
 
+  /**
+  *
+  * @param mysettings	jemboss properties
+  * @throws JembossSoapExceptio	when connection fails
+  *
+  */
   public RemoteFileTreePanel(final JembossParams mysettings)
                                                     throws JembossSoapException
   {
     this(mysettings,true);
   }
 
-/**
-* Creates a panel to contain the directory trees on an embreo server.
-* A combobox allows the user to select which filesystem to view.
-*
-* @param mysettings JembossParams with settings information
-*/
+  /**
+  *
+  * Creates a panel to contain the directory trees on an embreo server.
+  * A combobox allows the user to select which filesystem to view.
+  * @param mysettings   jemboss properties
+  * @param laddCombo	
+  * @throws JembossSoapExceptio when connection fails
+  *
+  */
   public RemoteFileTreePanel(final JembossParams mysettings, boolean laddCombo) 
                                                       throws JembossSoapException
   {
    
     final JPanel jp=this;
-    this.laddCombo = laddCombo;
-    
     setLayout(new BorderLayout());
 
     final Hashtable rootsdone = new Hashtable();                 //record where we are
@@ -91,7 +105,7 @@ public class RemoteFileTreePanel extends JPanel
         else
         {
 	  setCursor(cbusy);
-  	  RemoteDragTree eft2 = new RemoteDragTree(mysettings, efr, jp);
+  	  RemoteDragTree eft2 = new RemoteDragTree(mysettings, efr);
 	  setCursor(cdone);
 	  JScrollPane ss = new JScrollPane(eft2);
 	  filep.add(ss,efr.getCurrentRoot());
@@ -102,7 +116,7 @@ public class RemoteFileTreePanel extends JPanel
     });
 
     setCursor(cbusy);
-    RemoteDragTree eft = new RemoteDragTree(mysettings, efr, this);
+    RemoteDragTree eft = new RemoteDragTree(mysettings, efr);
     setCursor(cdone);
     JScrollPane s = new JScrollPane(eft);
     filep.add(s, efr.getCurrentRoot());
@@ -113,6 +127,12 @@ public class RemoteFileTreePanel extends JPanel
 
   }
 
+  /**
+  *
+  * Get the root selection JComboBox
+  * @return 	combobox
+  *
+  */
   public JComboBox getRootSelect()
   {
     return rootSelect;

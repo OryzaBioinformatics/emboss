@@ -100,9 +100,7 @@ public class TestPrivateServer
     Hashtable filesToMove = new Hashtable();
     String embossCommand = prog + " ";
 
-    String val = "msf";
-    if(!prog.equals("cons"))
-      val = "sequence";
+    String val = "sequence"; 
 
     embossCommand = filesForSoap(filename,embossCommand,val,filesToMove);
     embossCommand = embossCommand.concat(" -auto");
@@ -121,7 +119,11 @@ public class TestPrivateServer
       while (enum.hasMoreElements())
       {
         String thiskey = (String)enum.nextElement().toString();
-        System.out.println(h.get(thiskey));
+        Object res = h.get(thiskey);
+        if(res instanceof String)
+          System.out.println((String)res);
+        else
+          System.out.println(new String((byte[])h.get(thiskey)));
       }
 
 //    new ShowResultSet(h,filesToMove);      

@@ -26,30 +26,25 @@ import java.io.FileOutputStream;
 import java.net.InetAddress;
 
 
+/**
+*
+* Contains all property information about the client
+* and the server.
+*
+*/
 public class JembossParams
 {
 
-// for SOAP requests via http  
-//static public final int PROTOCOL_SOAP = 1;
-// for requests using CORBA  
-//static public final int PROTOCOL_CORBA = 2;
-// for requests using Java RMI 
-//static public final int PROTOCOL_RMI = 3;
-// for requests using RMI over IIOP 
-//static public final int PROTOCOL_RMI_IIOP = 4;
-// for requests using Jini 
-//static public final int PROTOCOL_JINI = 5;
-// for requests using Jxta 
-//static public final int PROTOCOL_JXTA = 6;
-
-// denotes a server is OK 
+/** denotes a server is OK             */
   static public final int SERVER_OK = 0;
-// denotes a server is giving errors  
+/** denotes a server is giving errors  */ 
   static public final int SERVER_ERR = 1;
-// denotes a server is not responding 
+/** denotes a server is not responding */
   static public final int SERVER_DOWN = 2;
 
   // these are the things that could be set
+  private boolean useHTTPSProxy = false;
+  private String useHTTPSProxyName = "useHTTPSProxy";
 
   private boolean useProxy = false;
   private String useProxyName = "proxy.use";
@@ -62,17 +57,25 @@ public class JembossParams
 
 //browser proxy
 
+  /** use a separate proxy for browsing the web                        */
   private boolean useBrowserProxy = false;
+  /** property name for using separate proxy for browsing the web */
   private String useBrowserProxyName = "browserProxy.use";
+  /** browser proxy host                   */
   private String browserProxyHost = "wwwcache";
+  /** property name for browser proxy host  */
   private String browserProxyHostName = "browserProxy.host";
+  /** browser proxy port                   */
   private int browserProxyPort = 8080;
+  /** property name for browser proxy port */
   private String browserProxyPortName = "browserProxy.port";
  
   private boolean useTFM;
   private String useTFMName = "tfm.use";
 
+  /** use proxy authentication                          */
   private boolean useProxyAuth = false;
+  /** property name for using proxy authentication */ 
   private String useProxyAuthName = "proxy.auth";
 
   private String proxyAuthUser = "";
@@ -84,35 +87,53 @@ public class JembossParams
   private boolean proxyOverride = false;
   private String proxyOverrideName = "proxy.override";
 
+  /** use unix authentication to run applications on the server */
   private boolean useAuth = true;
+  /** property name for using unix authentication               */
   private String useAuthName = "user.auth";
 
+  /** public services URL                    */
   private String publicSoapURL = 
-             "https://jemboss.hgmp.mrc.ac.uk:8443/soap/servlet/rpcrouter";
+             "https://jemboss.hgmp.mrc.ac.uk:8443/axis/services";
+  /** property name for public services URL  */
   private String publicSoapURLName = "server.public";
 
+  /** private services URL                   */
   private String privateSoapURL = 
-             "https://jemboss.hgmp.mrc.ac.uk:8443/soap/servlet/rpcrouter";
+             "https://jemboss.hgmp.mrc.ac.uk:8443/axis/services";
+  /** property name for private services URL */
   private String privateSoapURLName = "server.private";
 
+  /** service name */
   private String soapService = "EmbossSoap";
+  /** property name for service name */
   private String soapServiceName = "service.name";
 
+  /** private service name                   */
   private String privateSoapService = "JembossAuthServer";
+  /** property name for private service name */
   private String privateSoapServiceName = "service.private";
 
+  /** public service name                    */
   private String publicSoapService = "JembossAuthServer";
+  /** property name for public service name  */
   private String publicSoapServiceName = "service.public";
 
   //soap options
   private boolean debug = false;
   private String debugName = "jemboss.debug";
 
+  /** batch mode support                   */
   private boolean hasBatchMode = true;
+  /** property name for batch mode support */
   private String hasBatchModeName = "jemboss.hasbatchmode";
+  /** interactive mode support                   */
   private boolean hasInteractiveMode = true;
+  /** property name for interactive mode support */
   private String hasInteractiveModeName = "jemboss.hasinteractivemode";
+  /** current mode for running an application    */
   private String currentMode = "interactive";
+  /** property name for current mode             */
   private String currentModeName = "jemboss.mode";
   
   // server lists for redundancy
@@ -126,6 +147,7 @@ public class JembossParams
   private String serviceUserName = "";
   private String serviceUserNameName = "user.name";
   private char[] servicePasswd = null;
+  /** services password */
   private byte[] servicePasswdByte = null;
 
   Properties jembossSettings;
@@ -146,38 +168,53 @@ public class JembossParams
   private Vector publicServers;
   private Vector privateServers;
 
-  /** Jemboss java server */
+  /** Jemboss java server                   */
   private static boolean jembossServer = false;
+  /** property name for Jemboss java server */
   private String jembossServerName = "jemboss.server";
 
   //EMBOSS directories
+  /** plplot library location                            */
   private String plplot = "/usr/local/share/EMBOSS/";
+  /** property name for plplot library location          */
   private String plplotName = "plplot";
+  /** emboss data location                               */
   private String embossData = "/usr/local/share/EMBOSS/data/";
+  /** property name for emboss data location             */
   private String embossDataName = "embossData";
+  /** emboss binary location                             */
   private String embossBin = "/usr/local/bin/";
+  /** property name for emboss binary location           */
   private String embossBinName = "embossBin";
+  /** emboss path environment variable                   */
   private String embossPath = "/usr/bin/:/bin";
+  /** property name for emboss path environment variable */
   private String embossPathName = "embossPath";
+  /** emboss environment                                 */
   private String embossEnvironment = "";
+  /** property name for emboss environment               */
   private String embossEnvironmentName = "embossEnvironment";
+  /** acd file location                                  */
   private String acdDirToParse = "/usr/local/share/EMBOSS/acd/";
+  /** property name for acd file location                */
   private String acdDirToParseName = "acdDirToParse";
 
   //EMBOSS Application pages
+  /** documentation URL                      */
   private String embURL = "http://www.uk.embnet.org/Software/EMBOSS/Apps/";
+  /** property name for documentation URL    */
   private String embossURL = "embossURL";
 
-
   // user properties
+  /** user home directory                    */
   private String userHome = System.getProperty("user.home");
+  /** property name for user home directory  */
   private String userHomeName = "user.home";
 
 
 /**
 *
 * Loads and holds the properties
-* @param name of the current application
 *
 */
   public JembossParams() 
@@ -207,6 +244,7 @@ public class JembossParams
     defaults.put(useTFMName,new Boolean(useTFM).toString());
 
     defaults.put(useProxyName, new Boolean(useProxy).toString());
+    defaults.put(useHTTPSProxyName, new Boolean(useHTTPSProxy).toString());
     defaults.put(proxyHostName,proxyHost);
     defaults.put(proxyPortNumName, new Integer(proxyPortNum).toString());
     defaults.put(useProxyAuthName, new Boolean(useProxyAuth).toString());
@@ -249,6 +287,10 @@ public class JembossParams
     // update our settings
     updateSettingsFromProperties();
 
+    if(System.getProperty("useHTTPSProxy") != null)
+      if(System.getProperty("useHTTPSProxy").equalsIgnoreCase("true"))
+        useHTTPSProxy=true;
+    
     // set up for overrides
     javaNoProxyEntries = new Vector();
     if(System.getProperty("proxyPort") != null) 
@@ -282,6 +324,12 @@ public class JembossParams
 
   }
 
+  /**
+  *
+  * Load a property from the jemboss.property file.
+  * @param folder 	location of jemboss.property
+  *
+  */
   private void loadIn(String folder)
   {
     FileInputStream in = null;
@@ -315,6 +363,11 @@ public class JembossParams
 
   }
 
+  /**
+  *
+  * Update the property settings for jembossSettings.
+  *
+  */
   protected void updateSettingsFromProperties()
   {
 
@@ -334,6 +387,8 @@ public class JembossParams
       jembossServer = new Boolean(tmp).booleanValue();
  
       
+      tmp = jembossSettings.getProperty(useHTTPSProxyName);
+      useHTTPSProxy = new Boolean(tmp).booleanValue();
       tmp = jembossSettings.getProperty(useProxyName);
       useProxy = new Boolean(tmp).booleanValue();
       proxyHost = jembossSettings.getProperty(proxyHostName);
@@ -435,10 +490,22 @@ public class JembossParams
     return useProxy;
   }
 
+
+/**
+*
+* If using an https proxy server
+*
+*/
+  public boolean getUseHTTPSProxy()
+  {
+    return useHTTPSProxy;
+  }
+
+
 /**
 *
 * If using a proxy server for a given URL
-* @param s The URL we wish to connect to
+* @param s 	the URL we wish to connect to
 *
 */
   public boolean getUseProxy(String s) 
@@ -467,6 +534,7 @@ public class JembossParams
 /**
 *
 * The name of the proxy server
+* @return 	name of the proxy host
 *
 */
   public String getProxyHost() 
@@ -485,6 +553,7 @@ public class JembossParams
 /**
 *
 * The port the proxy server listens on
+* @return 	proxy port number
 *
 */
   public int getProxyPortNum() 
@@ -502,7 +571,8 @@ public class JembossParams
 
 /**
 *
-* True is using a proxy server for the browser
+* Determine if the a proxy server is being used for web browsing
+* @return 	true if using a proxy server for the browser
 *
 */
   public boolean isBrowserProxy()
@@ -512,7 +582,8 @@ public class JembossParams
 
 /**
 *
-* The name of the proxy server for the browser
+* Get the name of the proxy server for the browser
+* @return 	the name of the proxy host
 *
 */
   public String getBrowserProxyHost()
@@ -524,6 +595,7 @@ public class JembossParams
 /**
 *
 * The port number of the proxy server for the browser
+* @return 	proxy port number 
 *
 */
   public int getBrowserProxyPort()
@@ -538,6 +610,7 @@ public class JembossParams
 /**
 *
 * If using authenticate with the proxy 
+* @return	true if unix authentication used
 *
 */
   public boolean getUseProxyAuth() 
@@ -547,7 +620,7 @@ public class JembossParams
 
 /**
 *
-* username needed to use for the proxy server
+* Username needed to use for the proxy server
 *
 */
   public String getProxyAuthUser() 
@@ -557,7 +630,7 @@ public class JembossParams
 
 /**
 *
-* password needed to use for the proxy server
+* Password needed to use for the proxy server
 *
 */
   public String getProxyAuthPasswd() 
@@ -568,6 +641,7 @@ public class JembossParams
 /**
 *
 * A description of the proxy settings
+* @return 	a description of the proxy settings
 *
 */
   public String proxyDescription() 
@@ -611,6 +685,7 @@ public class JembossParams
 /**
 *
 * Whether the main service requires authentication
+* @return 	true if the server is using unix authentication
 *
 */
   public boolean getUseAuth() 
@@ -621,6 +696,7 @@ public class JembossParams
 /**
 *
 * Returns the URL of the public soap server
+* @return 	the public services URL
 *
 */
   public String getPublicSoapURL() 
@@ -628,47 +704,96 @@ public class JembossParams
     return publicSoapURL;
   }
 
-
+/**
+*
+*  @return   	true if using a Jemboss server
+*
+*/
   public static boolean isJembossServer()
   {
     return jembossServer;
   }
 
+/**
+*
+* Get the location of plplot
+* @return 	the location of plplot 
+*
+*/
   public String getPlplot()
   {
     return plplot;
   }
 
+/**
+*
+* Get the user home directory
+* @return	the user home directory
+*
+*/
   public String getUserHome()
   {
     return userHome;
   }
 
+/**
+*
+* Set the user home directory property
+* @param s	the user home directory
+*
+*/
   public void setUserHome(String s)
   {
     userHome = s;
   }
 
+/**
+*
+* @return 	the documentation URL 
+*
+*/
   public String getembURL()
   {
     return embURL;
   }
 
+/**
+*
+* @return	the location of the emboss data
+*
+*/
   public String getEmbossData()
   {
     return embossData;
   }
   
+/**
+*
+* @return	the location of the emboss binaries
+*
+*/
   public String getEmbossBin()
   {
     return embossBin;
   }
 
+/**
+*
+* Get the path for emboss
+* @return	the path for emboss
+*
+*/
   public String getEmbossPath()
   {
     return embossPath;
   }
 
+/**
+*
+* Get the environment for emboss
+* @return	the environment for emboss
+*
+*/
   public String getEmbossEnvironment()
   {
     embossEnvironment = embossEnvironment.trim();
@@ -677,6 +802,12 @@ public class JembossParams
     return embossEnvironment;
   }
 
+/**
+*
+* Get the emboss environment as a String array
+* @return 	the emboss environment as a String array
+*
+*/
   public String[] getEmbossEnvironmentArray(String[] envp)
   {
     embossEnvironment = embossEnvironment.trim();
@@ -710,6 +841,12 @@ public class JembossParams
     return environ;
   }
 
+/**
+*
+* Acd file location
+* @return 	acd file location
+*
+*/
   public String getAcdDirToParse()
   {
     return acdDirToParse;
@@ -718,6 +855,7 @@ public class JembossParams
 /**
 *
 * Set the URL of the public soap server
+* @param s	URL of the public services
 *
 */
   public void setPublicSoapURL(String s) 
@@ -728,6 +866,7 @@ public class JembossParams
 /**
 *
 * Returns the URL of the private soap server
+* @return 	URL of the private services
 *
 */
   public String getPrivateSoapURL() 
@@ -738,6 +877,7 @@ public class JembossParams
 /**
 *
 * Set the URL of the private soap server
+* @param s	URL of the private services
 *
 */
   public void setPrivateSoapURL(String s) 
@@ -798,6 +938,7 @@ public class JembossParams
 /**
 *
 * Return the username needed for the remote service
+* @return 	the username
 *
 */
   public String getServiceUserName() 
@@ -808,7 +949,7 @@ public class JembossParams
 /**
 *
 * Save the username needed for the remote service
-* @param newUserName  The username
+* @param newUserName  	the username
 *
 */
   public void setServiceUserName(String newUserName)
@@ -819,6 +960,7 @@ public class JembossParams
 /**
 *
 * Return the password needed for the remote service
+* @return 	password
 *
 */
   public char[] getServicePasswd() 
@@ -826,7 +968,12 @@ public class JembossParams
     return servicePasswd;
   }
 
-
+/**
+*
+* Return the password needed for the remote service
+* @return	password
+*
+*/
   public byte[] getServicePasswdByte()
   {
     return servicePasswdByte;
@@ -851,7 +998,7 @@ public class JembossParams
 /**
 *
 * Save the password needed for the remote service
-* @param newPasswd  The username
+* @param newPasswd  	the username
 *
 */
   public void setServicePasswd(char[] newPasswd) 
@@ -867,7 +1014,8 @@ public class JembossParams
 
 /**
 *
-* Get the name of the soap service we're using
+* Get the name of the soap service 
+* @return 	soap service name
 *
 */
   public String getSoapService() 
@@ -877,7 +1025,8 @@ public class JembossParams
 
 /**
 *
-* Get the name of the private soap service we're using
+* Get the name of the private soap service 
+* @return 	private service name 
 *
 */
   public String getPrivateSoapService() 
@@ -887,8 +1036,8 @@ public class JembossParams
 
 /**
 *
-* Set the name of the private soap service we're using
-* @param s  The name of the service
+* Set the name of the private soap service
+* @param s  	private service name
 *
 */
   public void setPrivateSoapService(String s) 
@@ -899,6 +1048,7 @@ public class JembossParams
 /**
 *
 * Get the name of the public soap service we're using
+* @return 	public service name
 *
 */
   public String getPublicSoapService() 
@@ -909,7 +1059,7 @@ public class JembossParams
 /**
 *
 * Set the name of the public soap service we're using
-* @param s  The name of the service
+* @param s  	public service name
 *
 */
   public void setPublicSoapService(String s) 
@@ -920,6 +1070,7 @@ public class JembossParams
 /**
 *
 * A description of the server settings
+* @return	description of the services
 *
 */
   public String serverDescription() 
@@ -945,6 +1096,7 @@ public class JembossParams
 /**
 *
 * Whether this service supports batch mode
+* @return	true if batch mode supported
 *
 */
   public boolean getHasBatchMode() 
@@ -955,6 +1107,7 @@ public class JembossParams
 /**
 *
 * Whether this service supports interactive mode
+* @return     	true if interactive mode supported
 *
 */
   public boolean getHasInteractiveMode() 
@@ -965,7 +1118,7 @@ public class JembossParams
 /**
 *
 * The current mode (interactive or batch).
-* @return a String containing the current mode
+* @return 	a String containing the current mode
 *
 */
   public String getCurrentMode() 
@@ -1001,6 +1154,7 @@ public class JembossParams
 *
 * Return the mode list as a vector, suitable for loading into
 * a combobox.
+* @return 	mode list
 *
 */
   public Vector modeVector() 
@@ -1057,7 +1211,6 @@ public class JembossParams
 /**
 *
 * Parse a key=value string to update the properties structure
-*
 * @param entry String containing a key=value message
 *
 */
@@ -1090,7 +1243,6 @@ public class JembossParams
 /**
 *
 * Update properties from a Hashtable
-*
 * @param hash Hashtable containg properties
 *
 */

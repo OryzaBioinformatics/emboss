@@ -26,6 +26,14 @@ import org.emboss.jemboss.JembossJarUtil;
 import java.security.Security; //ssl
 import java.net.*;
 
+/**
+*
+* This can be used to test the public server. It is run from
+* the command line:
+*
+* java org.emboss.jemboss.server.TestPublicServer
+*
+*/
 public class TestPublicServer
 {
     private static JembossParams mysettings;
@@ -78,7 +86,7 @@ public class TestPublicServer
       try
       {
         GetWossname ewoss = new GetWossname(mysettings);
-        System.out.println(ewoss.getDBText());
+        System.out.println(ewoss.getWossnameText());
         System.out.println("\n\nAbove are the wossname results from the server :\n"+
                                    mysettings.getPublicSoapURL());
       }

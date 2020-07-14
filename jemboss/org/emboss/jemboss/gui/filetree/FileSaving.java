@@ -33,16 +33,26 @@ import org.emboss.jemboss.JembossParams;
 
 /**
 *
-* Saves files 
+* Saves to local files from a text pane
 *
 */
 public class FileSaving
 {
 
+  /** true if the file is saved ok */
   private boolean lsaved = false;
+  /** file to save to */
   private String fileSelected;
+  /** path to saved file */
   private String cwd;
 
+  /**
+  *
+  * @param seqText	text pane to save content from
+  * @param pngContent	png content
+  * @param mysettings	jemboss properties
+  *
+  */
   public FileSaving(JTextPane seqText, byte[] pngContent, JembossParams mysettings)
   {
 
@@ -88,16 +98,31 @@ public class FileSaving
     }
   }
 
+  /**
+  *
+  * @return 	true if the file is saved ok
+  *
+  */
   public boolean writeOK()
   {
     return lsaved;
   }
 
+  /**
+  *
+  * @return	saved file name
+  *
+  */
   public String getFileName()
   {
     return fileSelected;
   }
 
+  /**
+  *
+  * @return 	path to saved file
+  *
+  */
   public String getPath()
   {
     return cwd;

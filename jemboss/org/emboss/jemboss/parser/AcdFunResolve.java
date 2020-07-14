@@ -28,24 +28,22 @@ import java.io.*;
 *
 *  This is a rewrite in Java of the expression functions in ajacd.c of the
 *  EMBOSS ajax library, written by Peter Rice.
-* 
-*  Resolves any function reference in a string.
-* 
-*  Then looks for function references and resolves them.
+*  This resolves any function reference in a string.
+*  It will then looks for function references and resolves them.
 * 
 */
 
 public class AcdFunResolve
 {
 
-/** result as a String of the expression used in constructor */
+  /** result as a String of the expression used in constructor */
   public String result;
 
-/**
-*
-* @param exp String with possible expression
-*
-*/
+  /**
+  *
+  * @param exp 	String with possible expression to expand
+  *
+  */
   public AcdFunResolve(String exp)
   {
     RECompiler rec = new RECompiler();
@@ -79,11 +77,12 @@ public class AcdFunResolve
 
   }
 
-/**
-*
-* Returns the value of the result of the expression.
-* @return result
-*/
+  /**
+  *
+  * Returns the value of the result of the expression.
+  * @return result
+  *
+  */
   public String getResult()
   {
     if( result.equalsIgnoreCase("False") ||
@@ -92,13 +91,13 @@ public class AcdFunResolve
     return result;
   }
 
-/**           
-*
-* Looks for and resolves expressions
-*
-* @param exp String with possible expression 
-* @return result
-*/
+  /**           
+  *
+  * Looks for and resolves expressions
+  * @param exp 	String with possible expression 
+  * @return 	result
+  *
+  */
   public String acdFunResolve(String var)
   {
     result = "";
@@ -131,13 +130,13 @@ public class AcdFunResolve
     return result;
   }
 
-/**  
-*
-* Looks for and resolves an expression @( num + num )
-*
-* @param exp String with possible expression
-* @return true if successfully resolved
-*/
+  /**  
+  *
+  * Looks for and resolves an expression <code>@( num + num )</code>
+  * @param exp String with possible expression
+  * @return true if successfully resolved
+  *
+  */
   private boolean acdExpPlus(String exp)
   {
     
@@ -185,13 +184,13 @@ public class AcdFunResolve
   }
 
 
-/** acdExpMinus 
-*
-* Looks for and resolves an expression @( num - num )
-*
-* @param exp String with possible expression
-* @return true if successfully resolved
-*/
+  /** 
+  *
+  * Looks for and resolves an expression <code>@( num - num )</code>
+  * @param exp 	String with possible expression
+  * @return 	true if successfully resolved
+  *
+  */
   private boolean acdExpMinus(String exp)
   {
 
@@ -239,13 +238,12 @@ public class AcdFunResolve
   }
 
 
-/** acdExpStar 
+/** 
 *
-* Looks for and resolves an expression @( num * num )
-*
-* @param exp String with possible expression
-* @return true if successfully resolved
-* @@
+* Looks for and resolves an expression <code>@( num * num )</code>
+* @param exp 	String with possible expression
+* @return 	true if successfully resolved
+* 
 */
   private boolean acdExpStar(String exp)
   {
@@ -294,14 +292,13 @@ public class AcdFunResolve
   }
 
 
-/** acdExpDiv 
-*
-* Looks for and resolves an expression @( num * num )
-*
-* @param exp String with possible expression
-* @return true if successfully resolved
-* @@
-*/
+  /** 
+  *
+  * Looks for and resolves an expression <code>@( num * num )</code>
+  * @param exp 	String with possible expression
+  * @return 	true if successfully resolved
+  * 
+  */
   private boolean acdExpDiv(String exp)
   {
 
@@ -348,16 +345,16 @@ public class AcdFunResolve
     return false;
   }
 
-/** acdExpNot 
-*
-* Looks for and resolves an expression @(! bool ) or @(NOT bool)
-* or @(not bool). An invalid bool value is treated as false,
-* so it will return a true value.
-*
-* @param exp String with possible expression
-* @return true if successfully resolved
-* @@
-*/
+  /** 
+  *
+  * Looks for and resolves an expression <code>@(! bool )</code> 
+  * or <code>@(NOT bool)</code> or <code>@(not bool)</code>.
+  * An invalid bool value is treated as false, so it will
+  * return a true value.
+  * @param exp 	String with possible expression
+  * @return 	true if successfully resolved
+  *
+  */
   private boolean acdExpNot(String exp)
   {
     boolean ba;
@@ -384,13 +381,13 @@ public class AcdFunResolve
     return false;
   }
 
-/** acdExpEqual 
-*
-* Looks for and resolves an expression @( num == num )
-*
-* @param exp String with possible expression
-* @return true if successfully resolved
-*/
+  /** 
+  *
+  * Looks for and resolves an expression <code>@( num == num )</code>
+  * @param exp 	String with possible expression
+  * @return 	true if successfully resolved
+  *
+  */
   private boolean acdExpEqual(String exp)
   {
 
@@ -462,14 +459,13 @@ public class AcdFunResolve
     return false;
   }
 
-/** acdExpNotEqual 
-*
-* Looks for and resolves an expression @( num != num )
-*
-* @param exp String with possible expression
-* @return true if successfully resolved
-*
-*/
+  /** 
+  *
+  * Looks for and resolves an expression <code>@( num != num )</code>
+  * @param exp 	String with possible expression
+  * @return 	true if successfully resolved
+  *
+  */
   private boolean acdExpNotEqual(String exp)
   {
 
@@ -542,13 +538,13 @@ public class AcdFunResolve
   }
 
 
-/** acdExpGreater 
-*
-* Looks for and resolves an expression @( num > num )
-*
-* @param exp String with possible expression
-* @return true if successfully resolved
-*/
+  /** 
+  *
+  * Looks for and resolves an expression <code>@( num > num )</code>
+  * @param exp 	String with possible expression
+  * @return 	true if successfully resolved
+  *
+  */
   private boolean acdExpGreater(String exp)
   {
 
@@ -600,13 +596,13 @@ public class AcdFunResolve
 
 
 
-/** acdExpLesser 
-*
-* Looks for and resolves an expression @( num < num )
-*
-* @param exp String with possible expression
-* @return true if successfully resolved
-*/
+  /** 
+  *
+  * Looks for and resolves an expression <code>@( num < num )</code>
+  * @param exp 	String with possible expression
+  * @return 	true if successfully resolved
+  *
+  */
   private boolean acdExpLesser(String exp)
   {
 
@@ -657,16 +653,13 @@ public class AcdFunResolve
   }
 
 
-  
-
-/** acdExpOr 
-*
-* Looks for and resolves an expression @( num | num )
-*
-* @param exp String with possible expression
-* @return true if successfully resolved
-*
-*/
+  /** 
+  *
+  * Looks for and resolves an expression <code>@( num | num )</code>
+  * @param exp 	String with possible expression
+  * @return 	true if successfully resolved
+  *
+  */
   private boolean acdExpOr(String exp)
   {
 
@@ -697,13 +690,13 @@ public class AcdFunResolve
   }
 
 
-/** acdExpAnd 
-*
-* Looks for and resolves an expression @( num & num )
-*
-* @param exp String with possible expression
-* @return true if successfully resolved
-*/
+  /** 
+  *
+  * Looks for and resolves an expression <code>@( num & num )</code>
+  * @param exp 	String with possible expression
+  * @return 	true if successfully resolved
+  *
+  */
   private boolean acdExpAnd(String exp)
   {
 
@@ -733,14 +726,13 @@ public class AcdFunResolve
   }
   
 
-/** acdExpCond 
-*
-* Looks for and resolves an expression @( bool ? trueval : falseval )
-*
-* @param exp String with possible expression
-* @return true if successfully resolved
-*
-*/
+  /** 
+  *
+  * Looks for and resolves an expression <code>@( bool ? trueval : falseval )</code>
+  * @param exp 	String with possible expression
+  * @return 	true if successfully resolved
+  *
+  */
   private boolean acdExpCond(String exp)
   {
 
@@ -769,14 +761,14 @@ public class AcdFunResolve
   }
 
 
-/**  acdExpCase 
-*
-* Looks for and resolves an expression as a switch/case statement
-* @( var = casea : vala, caseb: valb else: val )
-*
-* @param exp String with possible expression
-* @return true if successfully resolved
-*/
+  /**  
+  *
+  * Looks for and resolves an expression as a switch/case statement
+  * <code>@( var = casea : vala, caseb: valb else: val )</code>
+  * @param exp 	String with possible expression
+  * @return 	true if successfully resolved
+  *
+  */
   private boolean acdExpCase(String exp)
   {
 
@@ -800,7 +792,5 @@ public class AcdFunResolve
     return false;
   }
 
-
 }
-
 

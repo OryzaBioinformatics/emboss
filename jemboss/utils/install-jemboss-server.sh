@@ -18,7 +18,7 @@
 #
 #
 # Install EMBOSS & Jemboss 
-# last changed: 17/01/03
+# last changed: 11/08/03
 #
 #
 
@@ -30,10 +30,10 @@ getJavaHomePath()
   JAVA_HOME_TMP=${JAVA_HOME_TMP-`which java 2>/dev/null`} 
 
   if [ ! -f "$JAVA_HOME_TMP" ]; then
-     if [ -d /usr/java/j2sdk1.4.1 ]; then
-       JAVA_HOME_TMP=/usr/java/j2sdk1.4.1
-     elif [ -d /usr/local/java/j2sdk1.4.1 ]; then
-       JAVA_HOME_TMP=/usr/local/java/j2sdk1.4.1
+     if [ -d /usr/java/j2sdk1.4.2 ]; then
+       JAVA_HOME_TMP=/usr/java/j2sdk1.4.2
+     elif [ -d /usr/local/java/j2sdk1.4.2 ]; then
+       JAVA_HOME_TMP=/usr/local/java/j2sdk1.4.2
      else
        JAVA_HOME_TMP=0
      fi
@@ -43,6 +43,58 @@ getJavaHomePath()
   fi
 }
 
+
+getClustalWPath()
+{
+  CLUSTALW=${CLUSTALW-`which clustalw 2>/dev/null`}
+
+  echo
+  echo "-------------------------- ClustalW --------------------------"
+  echo
+  echo "To use emma (EMBOSS interface to ClustalW) Jemboss needs to"
+  echo "know the path to the clustalw binary."
+  echo
+  if (test "$CLUSTALW" != ""); then
+    CLUSTALW=`dirname $CLUSTALW`
+    echo "Enter the path to the clustalw or press return to use the"
+    echo "default [$CLUSTALW]:"
+    read CLUSTALW_TMP
+    if (test "$CLUSTALW_TMP" != ""); then
+      CLUSTALW="$CLUSTALW_TMP"
+    fi
+  else
+    echo "Enter the path to clustalw or press return to set"
+    echo "this later in jemboss.properties"
+    read CLUSTALW
+  fi
+}
+
+
+getPrimerPath()
+{
+  PRIMER3=${PRIMER3-`which primer3_core 2>/dev/null`}
+                                                                                
+  echo
+  echo "-------------------------- Primer3  --------------------------"
+  echo
+  echo "To use eprimer3 (EMBOSS interface primer3 from the Whitehead"
+  echo "Institute) Jemboss needs to know the path to the primer3_core"
+  echo "binary."
+  echo
+  if (test "$PRIMER3" != ""); then
+    PRIMER3=`dirname $PRIMER3`
+    echo "Enter the path to the primer3_core or press return to use the"
+    echo "default [$PRIMER3]:"
+    read PRIMER3_TMP
+    if (test "$PRIMER3_TMP" != ""); then
+      PRIMER3="$PRIMER3_TMP"
+    fi
+  else
+    echo "Enter the path to primer3_core or press return to set"
+    echo "this later in jemboss.properties"
+    read PRIMER3
+  fi
+}
 
 setDataDirectory()
 {
@@ -97,6 +149,14 @@ embassy_install()
   USER_CONFIG=$5
 
   echo
+  echo "--------------------------------------------------------------"
+  echo
+  echo "EMBASSY packages can optionally be installed along with"
+  echo "the EMBOSS applications, see:"
+  echo "http://www.uk.embnet.org/Software/EMBOSS/EMBASSY/"
+  echo
+  echo "--------------------------------------------------------------"
+  echo
   echo "Install EMBASSY packages (y,n) [y]?"
   read EMBASSY
 
@@ -112,10 +172,11 @@ embassy_install()
       mkdir $EMBOSS_DOWNLOAD/embassy
     fi
     echo
-    echo "Download these from ftp://ftp.uk.embnet.org/pub/EMBOSS/"
-    echo "and unpack (gunzip and untar) them in: "
+    echo "To install EMBASSY Packages:"
+    echo "(1) Download these from ftp://ftp.uk.embnet.org/pub/EMBOSS/"
+    echo "(2) And unpack (gunzip and untar) them in: "
     echo "$EMBOSS_DOWNLOAD/embassy"
-    echo "*before* pressing return to continue!"
+    echo "(3) *before* pressing return to continue!"
     read BLANK
 
     cd $EMBOSS_DOWNLOAD/embassy
@@ -173,20 +234,31 @@ ssl_print_notes()
  KEYSTOREFILE=$1
  TOMCAT_ROOT=$2
  PORT=$3
- 
- echo 
+ NUM=2
+
  echo
  if [ -f $JAVA_HOME/jre/lib/security/java.security ]; then
-   echo "A) EDIT "$JAVA_HOME/jre/lib/security/java.security
+
+   SECURITY=`sed -n  -e 's|^security.provider.\([0-9]\)=com.sun.net.ssl.internal.ssl.Provider|security|p' $JAVA_HOME/jre/lib/security/java.security`
+
+
+   if [ $SECURITY = "security" ]; then 
+     NUM=1 
+   else
+     echo "1) EDIT "$JAVA_HOME/jre/lib/security/java.security
+     echo "   adding/changing the provider line (usually provider 2 or 3):"
+     echo "   security.provider.2=com.sun.net.ssl.internal.ssl.Provider"
+   fi
  else
-   echo "A) EDIT the java.security file "
+   echo "1) EDIT the java.security file "
+   echo "   adding/changing the provider line (usually provider 2 or 3):"
+   echo "   security.provider.2=com.sun.net.ssl.internal.ssl.Provider"
+
  fi
 
- echo "   adding/changing the provider line (usually provider 2 or 3):"
- echo "   security.provider.2=com.sun.net.ssl.internal.ssl.Provider"
- echo
-
- echo "B) COPY & PASTE THE FOLLOWING INTO (changing port number if required) "$TOMCAT_ROOT/conf/server.xml
+ echo "$NUM) COPY & PASTE THE FOLLOWING INTO "
+ echo "   $TOMCAT_ROOT/conf/server.xml"
+ echo 
  echo
 
  if [ -d "$TOMCAT_ROOT/shared/classes" ]; then
@@ -225,10 +297,11 @@ ssl_create_keystore()
   KEYSTORE=$3
   ALIAS=$4
   PASSWD=$5
+  VALID=$6
 
   keytool -genkey -alias $ALIAS -dname "CN=$HOST, \
       OU=Jemboss, O=HGMP-RC, L=CAMBRIDGE, S=CAMBRIDGE, C=UK" -keyalg RSA \
-      -keypass $PASSWD -storepass $PASSWD -keystore $JEMBOSS_RES/$KEYSTORE.keystore  
+      -keypass $PASSWD -storepass $PASSWD -keystore $JEMBOSS_RES/$KEYSTORE.keystore -validity $VALID
 
   keytool -export -alias $ALIAS -storepass $PASSWD -file $JEMBOSS_RES/$KEYSTORE.cer \
       -keystore $JEMBOSS_RES/$KEYSTORE.keystore
@@ -256,7 +329,24 @@ make_jemboss_properties()
   SSL=$4
   PORT=$5
   EMBOSS_URL=$6
+  CLUSTALW=$7
+  PRIMER3=$8
 
+  EMBOSSPATH=/usr/bin/:/bin
+  export EMBOSSPATH
+
+  if (test "$CLUSTALW" != ""); then
+    EMBOSSPATH=${EMBOSSPATH}:$CLUSTALW
+  else
+    EMBOSSPATH=${EMBOSSPATH}:/packages/clustal/
+  fi
+
+  if (test "$PRIMER3" != ""); then
+    EMBOSSPATH=${EMBOSSPATH}:$PRIMER3
+  else
+    EMBOSSPATH=${EMBOSSPATH}:/packages/primer3/bin
+  fi
+ 
   if [ $SSL = "y" ]; then
      URL=https://$URL:$PORT
   else
@@ -291,8 +381,10 @@ make_jemboss_properties()
   echo "plplot=$EMBOSS_INSTALL/share/EMBOSS/" >> $JEMBOSS_PROPERTIES
   echo "embossData=$EMBOSS_INSTALL/share/EMBOSS/data/" >> $JEMBOSS_PROPERTIES
   echo "embossBin=$EMBOSS_INSTALL/bin/" >> $JEMBOSS_PROPERTIES
-  echo "embossPath=/usr/bin/:/bin:/packages/clustal/:/packages/primer3/bin:" \
-                                                     >> $JEMBOSS_PROPERTIES
+  echo "embossPath=$EMBOSSPATH" >> $JEMBOSS_PROPERTIES
+
+# echo "embossPath=/usr/bin/:/bin:$CLUSTALW:$PRIMER3:/packages/clustal/:/packages/primer3/bin:" \
+#                                                    >> $JEMBOSS_PROPERTIES
   echo "acdDirToParse=$EMBOSS_INSTALL/share/EMBOSS/acd/" >> $JEMBOSS_PROPERTIES
   echo "embossURL=$EMBOSS_URL" >> $JEMBOSS_PROPERTIES
   cp $JEMBOSS_PROPERTIES $JEMBOSS_PROPERTIES.bak
@@ -322,9 +414,8 @@ deploy_axis_services()
   OPT_PROP2=$6
 
   echo
-  echo "Deploying $SERVICE "
-  echo "$JAVAHOME/bin/java -classpath $CLASSPATH $OPT_PROP1 $OPT_PROP2 \\ "
-  echo "org.apache.axis.client.AdminClient -l$URL/axis/services JembossServer.wsdd"
+# echo "$JAVAHOME/bin/java -classpath $CLASSPATH $OPT_PROP1 $OPT_PROP2 \\ "
+# echo " org.apache.axis.client.AdminClient -l$URL/axis/services JembossServer.wsdd"
   echo
 
   $JAVAHOME/bin/java -classpath $CLASSPATH $OPT_PROP1 $OPT_PROP2 \
@@ -332,8 +423,7 @@ deploy_axis_services()
         -l$URL/axis/services JembossServer.wsdd
 
   echo "#!/bin/csh " > deploy.csh
-  echo "$JAVAHOME/bin/java -classpath $CLASSPATH $OPT_PROP1 $OPT_PROP2 \\ " >> deploy.csh
-  echo "org.apache.axis.client.AdminClient -l$URL/axis/services JembossServer.wsdd" >> deploy.csh
+  echo "$JAVAHOME/bin/java -classpath $CLASSPATH $OPT_PROP1 $OPT_PROP2 org.apache.axis.client.AdminClient -l$URL/axis/services JembossServer.wsdd" >> deploy.csh
   chmod u+x deploy.csh
 }
 
@@ -390,15 +480,184 @@ output_auth_xml()
 
 }
 
-echo
+#
+# Find the likely location for the png & gd libs
+get_libs()
+{
+  USER_CONFIG=$1
+
+  include_lib_dirs="
+/usr/local
+/opt/freeware
+/usr/freeware"
+
+  if (test -f /usr/include/png.h) && (test -f /usr/include/gd.h); then
+     USER_CONFIG="default"
+  else
+    for lib_dir in `echo  "$include_lib_dirs"` ;
+    do
+      if (test -f $lib_dir/include/png.h) && (test -f $lib_dir/include/gd.h); then
+        USER_CONFIG="--with-pngdriver=$lib_dir"
+      fi  
+    done
+  fi
+}
+
+check_libs()
+{
+  USER_CONFIG=$1
+  PLATFORM=$2
+
+  if [ "$USER_CONFIG" = "" ]; then
+    DIR="/usr"
+  else
+    DIR=`echo $USER_CONFIG | sed -n -e 's|\(.*\)--with-pngdriver=\([^ ]*\)\(.*\)|\2|p'`
+  fi
+
+  lib_dirs="
+$DIR/lib
+$DIR/lib32
+$DIR/lib64"
+
+  echo
+  echo "Inspecting $DIR"
+ 
+# test for libpng
+  WARN="true"
+  if (test ! -f $DIR/include/png.h ); then
+    WARN="true"
+  else
+    for lib_dir in `echo  "$lib_dirs"` ; 
+    do
+      echo "checking $lib_dir"
+      if (test -f $lib_dir/libpng.a) || (test -f $lib_dir/libpng.so); then
+         WARN="false"
+         echo "...found libpng in $lib_dir"
+         break
+      elif (test -f $lib_dir/libpng.dylib); then
+         WARN="false"
+         echo "...found libpng in $lib_dir"
+         break
+      fi                     
+    done
+  fi
+
+  if (test $WARN = "true"); then
+    echo
+    echo "------------------------- WARNING ----------------------------"
+    echo
+    echo "The script has detected that $DIR/include/png.h"
+    echo "does not exist!"
+    echo
+    echo "Download libpng from"
+    echo "      http://www.libpng.org/pub/png/libpng.html"
+    echo "      http://libpng.sourceforge.net/"
+    echo
+    echo "For details see the EMBOSS admin guide:"
+    echo "http://www.uk.embnet.org/Software/EMBOSS/Doc/Admin_guide/adminguide/"
+    echo
+    echo "To exit use Control C or press return to continue."
+    echo
+    echo "--------------------------------------------------------------"
+    read
+  fi
+
+# test for gd
+  WARN="true"
+  if (test ! -f $DIR/include/gd.h ); then
+    WARN="true"
+  else
+    for lib_dir in `echo  "$lib_dirs"` ;
+    do
+      echo "checking $lib_dir"
+      if (test -f $lib_dir/libgd.a) || (test -f $lib_dir/libgd.so); then
+         WARN="false"
+         echo "...found gd in $lib_dir"
+         break
+      elif (test -f $lib_dir/libgd.dylib); then
+         WARN="false"
+         echo "...found libpng in $lib_dir"
+         break
+      fi
+    done
+  fi
+
+  if (test $WARN = "true"); then
+    echo
+    echo "------------------------- WARNING ----------------------------"
+    echo
+    echo "The script has detected that $DIR/include/gd.h"
+    echo "does not exist"
+    echo
+    echo "Download gd from"
+    echo "       http://www.boutell.com/gd/"
+    echo
+    echo "For details see the EMBOSS admin guide:"
+    echo "http://www.uk.embnet.org/Software/EMBOSS/Doc/Admin_guide/adminguide/"
+    echo
+    echo "To exit use Control C or press return to continue."
+    echo
+    echo "--------------------------------------------------------------"
+    read
+  fi 
+
+# test for zlib which can be either in /usr/lib or $DIR/lib
+
+  lib_dirs="
+$DIR/lib
+$DIR/lib32
+$DIR/lib64
+/usr/lib
+/usr/local/lib"
+
+  WARN="true"
+  for lib_dir in `echo  "$lib_dirs"` ;
+  do
+    echo "checking $lib_dir"
+    if (test -f $lib_dir/libz.a) || (test -f $lib_dir/libz.dylib); then
+       WARN="false"
+       echo "...found zlib in $lib_dir"
+       break
+    fi
+  done
+
+  if (test $WARN = "true"); then
+    echo
+    echo "------------------------- WARNING ----------------------------"
+    echo
+    echo "The script has detected that zlib is not installed in /usr"
+    if( (test $PLATFORM = "macos") || (test $PLATFORM = "linux") ); then
+      echo "or /usr/local"
+    fi
+    echo
+    echo "Download zlib from"
+    echo "       http://www.info-zip.org/pub/infozip/zlib/"
+    echo
+    echo "For details see the EMBOSS admin guide:"
+    echo "http://www.uk.embnet.org/Software/EMBOSS/Doc/Admin_guide/adminguide/"
+    echo
+    echo "To exit use Control C or press return to continue."
+    echo
+    echo "--------------------------------------------------------------"
+    read
+  fi
+}
+
+
+clear
 echo
 echo "--------------------------------------------------------------"
-echo " "
-echo "         Type of installation [1] :"
-echo "         (1) CLIENT-SERVER"
-echo "         (2) STANDALONE"
-echo " "
+echo "         EMBOSS and Jemboss Server installation script"
 echo "--------------------------------------------------------------"
+echo " "
+echo "Note: any default values are given in square brackets []. "
+echo " "
+echo "There are two types of installation see details at: "
+echo "http://www.rfcgr.mrc.ac.uk/Software/EMBOSS/Jemboss/install/setup.html"
+echo " "
+echo "(1) CLIENT-SERVER"
+echo "(2) STANDALONE"
+echo "Enter type of installation [1] :"
 read INSTALL_TYPE
 
 if (test "$INSTALL_TYPE" != "1") && (test "$INSTALL_TYPE" != "2"); then
@@ -417,7 +676,8 @@ echo "*** be best done as root or as a tomcat user."
 echo
 echo "Before running this script you should download the latest:"
 echo
-echo "(1) EMBOSS release (contains Jemboss) ftp://ftp.hgmp.mrc.ac.uk/pub/EMBOSS/"
+echo "(1) EMBOSS release (contains Jemboss) ftp://ftp.uk.embnet.org/pub/EMBOSS/"
+
 
 if [ $INSTALL_TYPE = "1" ]; then
   echo "(2) Tomcat release http://jakarta.apache.org/site/binindex.html"
@@ -471,7 +731,8 @@ esac
 
 
 echo 
-echo "Select your platform from 1-6 [$PLATTMP]:"
+echo "Select the platform that your Jemboss server will be"
+echo "run on from 1-6 [$PLATTMP]:"
 echo "(1)  linux"
 echo "(2)  aix"
 echo "(3)  irix"
@@ -487,24 +748,32 @@ fi
 
 echo "$PLAT" >> $RECORD
 
+AUTH_TYPE_TMP=1
 AIX="n"
 MACOSX="n"
 if [ "$PLAT" = "1" ]; then
   PLATFORM="linux"
+  AUTH_TYPE_TMP=1
 elif [ "$PLAT" = "2" ]; then
   PLATFORM="aix"
   AIX="y"
+  AUTH_TYPE_TMP=4
 elif [ "$PLAT" = "3" ]; then
   PLATFORM="irix"
+  AUTH_TYPE_TMP=1
 elif [ "$PLAT" = "4" ]; then
   PLATFORM="hpux"
+  AUTH_TYPE_TMP=5
 elif [ "$PLAT" = "5" ]; then
   PLATFORM="solaris"
+  AUTH_TYPE_TMP=6
 elif [ "$PLAT" = "6" ]; then
   PLATFORM="macos"
   MACOSX="y"
+  AUTH_TYPE_TMP=2
 elif [ "$PLAT" = "7" ]; then
   PLATFORM="osf"
+  AUTH_TYPE_TMP=7
 else
   echo "Platform not selected from 1-6."
   exit 1
@@ -516,6 +785,8 @@ if [ $INSTALL_TYPE = "1" ]; then
 # localhost name
 #
   echo
+  echo "The IP address is needed by Jemboss to access"
+  echo "the Tomcat web server."
   echo "Enter IP of server machine [localhost]:"
   read LOCALHOST
 
@@ -528,8 +799,8 @@ if [ $INSTALL_TYPE = "1" ]; then
 # SSL
 #
   echo
-  echo "Enter if you want the Jemboss (SOAP) server to use"
-  echo "data encryption with Secure Socket Layer (y,n) [y]?"
+  echo "Enter if you want the Jemboss server to use data"
+  echo "encryption (https/SSL) (y,n) [y]?"
   read SSL
 
   echo "$SSL" >> $RECORD
@@ -564,6 +835,7 @@ if [ $INSTALL_TYPE = "1" ]; then
   echo "$PORT" >> $RECORD
 
 fi
+echo
 
 #
 # JAVA_HOME
@@ -584,8 +856,7 @@ do
   echo "Enter java (1.3 or above) location (/usr/java/jdk1.3.1/): "
   read JAVA_HOME
 done
-
-
+echo
 echo "$JAVA_HOME" >> $RECORD
 
 #
@@ -653,7 +924,7 @@ do
   echo "Enter EMBOSS download directory (e.g. /usr/emboss/EMBOSS-2.x.x): "
   read EMBOSS_DOWNLOAD
 done
-
+echo
 echo "$EMBOSS_DOWNLOAD" >> $RECORD
 
 echo "Enter where EMBOSS should be installed [/usr/local/emboss]: "
@@ -663,6 +934,15 @@ if [ "$EMBOSS_INSTALL" = "" ]; then
   EMBOSS_INSTALL=/usr/local/emboss
 fi
 
+if [ -d "$EMBOSS_INSTALL/share/EMBOSS/jemboss" ]; then
+  echo 
+  echo "Jemboss has already be installed to: "
+  echo "$EMBOSS_INSTALL/share/EMBOSS/jemboss "
+  echo "It is recommended this is removed before continuing."
+  echo "To continue press return."
+  read BLANK
+fi
+echo
 echo "$EMBOSS_INSTALL" >> $RECORD
 
 if [ $INSTALL_TYPE = "1" ]; then
@@ -676,6 +956,7 @@ fi
 if [ "$EMBOSS_URL" = "" ]; then
   EMBOSS_URL="http://www.uk.embnet.org/Software/EMBOSS/Apps/"
 fi
+echo
 
 #
 # set JSSE_HOME to the EMBOSS install dir
@@ -685,7 +966,7 @@ JEMBOSS_SERVER_AUTH=""
 AUTH=y
 
 if [ $INSTALL_TYPE = "1" ]; then
-  echo "Enter if you want Jemboss to use unix authorisation (y/n) [y]? "
+  echo "Do you want Jemboss to use unix authorisation (y/n) [y]? "
   read AUTH
 
   echo "$AUTH" >> $RECORD
@@ -696,7 +977,7 @@ fi
 if [ "$AUTH" = "" ]; then
   AUTH="y"
 fi
-
+echo
 
 if [ "$AUTH" = "y" ]; then
 
@@ -729,16 +1010,21 @@ if [ "$AUTH" = "y" ]; then
   CC="$CC -DTOMCAT_UID=$UUID "; export CC
 
   echo
+  echo "Unix Authentication Method, see:"
+  echo "http://www.rfcgr.mrc.ac.uk/Software/EMBOSS/Jemboss/install/authentication.html"
   echo
   echo "(1) shadow      (3) PAM         (5) HP-UX shadow"
   echo "(2) no shadow   (4) AIX shadow  (6) Re-entrant shadow"
   echo "(7) Plain re-entrant"  
   echo 
   echo "Type of unix password method being used "
-  echo "(select 1, 2, 3, 4, 5, 6 or 7 )[1]"
-
+  echo "(select 1, 2, 3, 4, 5, 6 or 7 )[$AUTH_TYPE_TMP]"
   read AUTH_TYPE
   
+  if [ "$AUTH_TYPE" = "" ]; then
+     AUTH_TYPE="$AUTH_TYPE_TMP"
+  fi
+
   echo "$AUTH_TYPE" >> $RECORD
 
   if [ "$AUTH_TYPE" = "1" ]; then
@@ -759,6 +1045,7 @@ if [ "$AUTH" = "y" ]; then
     JEMBOSS_SERVER_AUTH=" --with-auth=shadow"
   fi
 fi
+echo
  
 if [ $INSTALL_TYPE = "1" ]; then
 #
@@ -776,6 +1063,7 @@ if [ $INSTALL_TYPE = "1" ]; then
   else
     setDataDirectory $EMBOSS_DOWNLOAD/jemboss $AUTH /tmp/SOAP/emboss
   fi
+  echo
 
 #
 #
@@ -789,7 +1077,7 @@ if [ $INSTALL_TYPE = "1" ]; then
     read TOMCAT_ROOT
   done
   echo "$TOMCAT_ROOT" >> $RECORD
-
+  echo
 #
 # Apache AXIS (SOAP)
 #
@@ -797,22 +1085,59 @@ if [ $INSTALL_TYPE = "1" ]; then
 
   while [ ! -d "$SOAP_ROOT/webapps/axis" ]
   do
-    echo "Enter Apache AXIS (SOAP) root directory (e.g. /usr/local/xml-axis-xx)"
+    echo "Enter Apache AXIS (SOAP) root directory (e.g. /usr/local/axis-xx)"
     read SOAP_ROOT
   done
-
   echo "$SOAP_ROOT" >> $RECORD
-
+  echo
   cp -R $SOAP_ROOT/webapps/axis $TOMCAT_ROOT/webapps
+  
+  #already have commons-logging.jar in $TOMCAT_ROOT/server/lib/
+  rm -f $TOMCAT_ROOT/webapps/axis/WEB-INF/lib/commons-logging.jar
 fi
+
 #
-#
+# Configuration options
 #
 
 USER_CONFIG=""
-echo "Enter any other configuration options (e.g. --with-pngdriver=pathname"
-echo "or press return to leave blank):"
-read USER_CONFIG
+get_libs $USER_CONFIG
+
+if [ "$USER_CONFIG" = "" ]; then
+  echo
+  echo "--------------------------------------------------------------"
+  echo
+  echo "The libraries for EMBOSS (libpng and gd) do not appear to"
+  echo "be in /usr. It may be necessary to use the configuration"
+  echo "flag --with-pngdriver to specify their location"
+  echo
+  echo "For details see the EMBOSS admin guide:"
+  echo "http://www.uk.embnet.org/Software/EMBOSS/Doc/Admin_guide/adminguide/"
+  echo
+  echo "Enter any other EMBOSS configuration options (e.g. --with-pngdriver=pathname)"
+  echo "or press return to leave blank:"
+  read USER_CONFIG
+elif [ "$USER_CONFIG" = "default" ]; then
+  echo
+  echo "--------------------------------------------------------------"
+  echo
+  echo "The libraries for EMBOSS (libpng and gd) appear to be in /usr,"
+  echo "if these are the correct libraries then there should be no need"
+  echo "to add any configuration options."
+  echo
+  echo "Enter any other EMBOSS configuration options (e.g. --with-pngdriver=pathname)"
+  echo "or press return to leave blank:"
+  read USER_CONFIG
+else
+  echo "Enter any other EMBOSS configuration options or press return to"
+  echo "use default [$USER_CONFIG]:"
+  read USER_CONFIG_TMP
+  if [ "$USER_CONFIG_TMP" != "" ]; then
+    USER_CONFIG="$USER_CONFIG_TMP"
+  fi
+fi
+
+check_libs "$USER_CONFIG" $PLATFORM
 
 echo "$USER_CONFIG" >> $RECORD
 #
@@ -825,17 +1150,15 @@ if [ "$AIX" = "y" ]; then
   fi
 fi
 
-
 echo
 echo "  ******** EMBOSS will be configured with this information  ******** "
 echo 
 echo "./configure --with-java=$JAVA_INCLUDE \\"
 echo "            --with-javaos=$JAVA_INCLUDE_OS \\"
 echo "            --with-thread=$PLATFORM \\"
-echo "            --prefix=$EMBOSS_INSTALL $JEMBOSS_SERVER_AUTH \\"
-echo "            $USER_CONFIG"
+echo "            --prefix=$EMBOSS_INSTALL \\"
+echo "           $JEMBOSS_SERVER_AUTH $USER_CONFIG"
 echo
-sleep 3
 
 WORK_DIR=`pwd`
 cd $EMBOSS_DOWNLOAD
@@ -863,7 +1186,13 @@ embassy_install $EMBOSS_DOWNLOAD $RECORD $PLATFORM $EMBOSS_INSTALL $USER_CONFIG
 
 #
 #
-# Compile server code
+# Get clustalw and primer3_core path
+#
+getClustalWPath
+getPrimerPath
+
+#
+#
 #
 
 #cd $EMBOSS_INSTALL/share/EMBOSS/jemboss
@@ -885,7 +1214,7 @@ $JAVA_HOME/bin/jar cvf $JEMBOSS/resources/resources.jar EPAM* EBLOSUM* ENUC*
 
 
 #
-#
+# Compile server code
 #
 
 if [ $AUTH = "y" ]; then
@@ -913,22 +1242,7 @@ fi
 #
 # Exit if standalone compilation
 
-make_jemboss_properties $EMBOSS_INSTALL $LOCALHOST $AUTH $SSL $PORT $EMBOSS_URL
-if [ $INSTALL_TYPE = "2" ]; then
-  RUNFILE=$JEMBOSS/runJemboss.csh
-  if [ -f "$RUNFILE.bak" ]; then
-    rm -f $RUNFILE.bak
-  fi
-  sed "s|^#java org|java org|" $RUNFILE > $RUNFILE.new
-  sed "s|^java org.emboss.jemboss.Jemboss &|#java org.emboss.jemboss.Jemboss &|" $RUNFILE.new  > $RUNFILE.new1
-  sed "s|^#setenv EMBOSS_INSTALL.*|setenv EMBOSS_INSTALL $EMBOSS_INSTALL/lib|"   $RUNFILE.new1 > $RUNFILE.new2
-  sed "s|^#setenv LD_LIBRARY_PATH|setenv LD_LIBRARY_PATH|"                       $RUNFILE.new2 > $RUNFILE.new3
-  rm -f $RUNFILE.new $RUNFILE.new1 $RUNFILE.new2
-  mv $RUNFILE $RUNFILE.bak
-  mv $RUNFILE.new3 $RUNFILE
-  chmod a+x $RUNFILE
-  exit 0
-fi
+make_jemboss_properties $EMBOSS_INSTALL $LOCALHOST $AUTH $SSL $PORT $EMBOSS_URL $CLUSTALW $PRIMER3
 
 #
 #
@@ -1000,6 +1314,52 @@ echo "$TOMCAT_ROOT/bin/shutdown.sh"  >> tomstop
 chmod u+x tomstart
 chmod u+x tomstop
 
+
+#
+#
+# Run Jemboss script
+#
+#
+
+RUNFILE=$JEMBOSS/runJemboss.sh
+sed "s|^JEMBOSS_HOME=.|JEMBOSS_HOME=$JEMBOSS|" $RUNFILE > $RUNFILE.new
+mv $RUNFILE $RUNFILE.bak
+mv $RUNFILE.new $RUNFILE
+
+if [ $INSTALL_TYPE = "2" ]; then
+  if [ -f "$RUNFILE.bak" ]; then
+    rm -f $RUNFILE.bak
+  fi
+  sed "s|^#java org|$JAVA_HOME/bin/java org|" $RUNFILE > $RUNFILE.new
+  sed "s|^java org.emboss.jemboss.Jemboss &|#java org.emboss.jemboss.Jemboss &|" $RUNFILE.new  > $RUNFILE.new1
+  sed "s|^#EMBOSS_INSTALL=\(.*\)|EMBOSS_INSTALL=$EMBOSS_INSTALL/lib; export EMBOSS_INSTALL|" $RUNFILE.new1 > $RUNFILE.new2
+  sed "s|^#LD_LIBRARY_PATH|LD_LIBRARY_PATH|" $RUNFILE.new2 > $RUNFILE.new3
+  rm -f $RUNFILE.new $RUNFILE.new1 $RUNFILE.new2
+  mv $RUNFILE $RUNFILE.bak1
+  mv $RUNFILE.new3 $RUNFILE
+
+
+  if [ "$AIX" = "y" ]; then
+   sed "s|^#LIBPATH|LIBPATH|" $RUNFILE > $RUNFILE.new1
+   rm -f $RUNFILE
+   mv $RUNFILE.new1 $RUNFILE
+  fi
+
+  chmod a+x $RUNFILE
+
+  echo
+  echo "To run Jemboss:"
+  echo "cd $JEMBOSS"
+  echo "./runJemboss.sh"
+  echo
+
+  exit 0
+else
+  sed "s|^java |$JAVA_HOME/bin/java |" $RUNFILE > $RUNFILE.new
+  rm -f $RUNFILE
+  mv $RUNFILE.new $RUNFILE
+fi
+
 #
 # Add classes to Tomcat path
 #
@@ -1045,14 +1405,16 @@ output_auth_xml JembossServer.wsdd $AUTH
 if [ "$SSL" != "y" ]; then
 
   echo
-  echo "Tomcat XML deployment descriptors have been created for the Jemboss Server."
-  echo "Would you like an automatic deployment of these to be tried (y/n) [y]?"
+  echo "Tomcat XML deployment descriptors have been created for"
+  echo "the Jemboss Server. Would you like an automatic deployment"
+  echo "of the Jemboss web services to be tried (y/n) [y]?"
   read DEPLOYSERVICE
 
   if (test "$DEPLOYSERVICE" = "y") || (test "$DEPLOYSERVICE" = ""); then
-    ./tomstart 
     echo
     echo "Please wait, starting tomcat......."
+    ./tomstart
+
     sleep 25
     deploy_axis_services $JEMBOSS/lib JembossServer.wsdd http://localhost:$PORT/ $JAVA_HOME "" ""
   fi
@@ -1060,9 +1422,17 @@ if [ "$SSL" != "y" ]; then
 else
 
   echo
-  echo "*** Generating client and server certificates. These are then"
-  echo "*** imported into keystores. The keystores act as databases"
-  echo "*** for security certificates."
+  echo "--------------------------------------------------------------"
+  echo
+  echo "Client and server certificates need to be generated for the"
+  echo "secure (https) connection. These are then imported into"
+  echo "keystores. The keystores act as databases for security the"
+  echo "certificates."
+  echo  
+  echo "For details see:"
+  echo "http://www.rfcgr.mrc.ac.uk/Software/EMBOSS/Jemboss/install/ssl.html"
+  echo
+  echo "--------------------------------------------------------------"
   echo 
   PASSWD=""
   while [ "$PASSWD" = "" ]
@@ -1071,12 +1441,28 @@ else
     read PASSWD
   done
 
-  ssl_create_keystore $LOCALHOST $JEMBOSS/resources "server" "tomcat-sv" $PASSWD
-  ssl_create_keystore "Client" $JEMBOSS/resources "client" "tomcat-cl" $PASSWD
+  echo
+  echo "Provide the validity period for these certificates, i.e. the"
+  echo "number of days before they expire and new ones need to be made [90]:"
+  read VALID
+  echo
+
+  if [ "$VALID" = "" ]; then
+    VALID=90
+  fi
+
+  echo "Please wait, creating certificates......."
+  ssl_create_keystore $LOCALHOST $JEMBOSS/resources "server" "tomcat-sv" $PASSWD $VALID
+  ssl_create_keystore "Client" $JEMBOSS/resources "client" "tomcat-cl" $PASSWD $VALID
 
   ssl_import $JEMBOSS/resources/server.cer $JEMBOSS/resources/client.keystore $PASSWD
   ssl_import $JEMBOSS/resources/client.cer $JEMBOSS/resources/server.keystore $PASSWD
 
+  cd $JEMBOSS/resources
+  $JAVA_HOME/bin/jar cvf client.jar client.keystore
+  cd $WORK_DIR
+
+  echo
   echo "Tomcat XML deployment descriptors have been created for the Jemboss Server."
   echo "Would you like an automatic deployment of these to be tried (y/n) [y]?"
   read DEPLOYSERVICE
@@ -1088,14 +1474,14 @@ else
     VAL=0
     while [ $VAL != "y" ] 
     do
-      echo "To continue you must have changed the above files!"
+      echo "To continue you must have changed the above file(s)!"
       echo "Have the above files been edited (y/n)?"
       read VAL
     done
 
-    ./tomstart 
     echo
     echo "Please wait, starting tomcat......."
+    ./tomstart
 
     sleep 45
     OPT_PROP1="-Djava.protocol.handler.pkgs=com.sun.net.ssl.internal.www.protocol"
@@ -1112,23 +1498,30 @@ fi
 #
 
 echo
-echo
 echo "--------------------------------------------------------------"
 echo "--------------------------------------------------------------"
-echo
-
-echo
-echo "A tomstart and tomstop script to start & stop Tomcat have"
-echo "been created. It important to use these to start & stop Tomcat."
 
 if [ "$AUTH" = "y" ]; then
+
+  if [ $SSL = "y" ]; then
+     URL=https://$LOCALHOST:$PORT
+  else
+     URL=http://$LOCALHOST:$PORT
+  fi
+
   echo 
-  echo "You will need to (as root):"
-  echo "   chmod u+s $EMBOSS_INSTALL/bin/jembossctl"
-  echo "   chown root $EMBOSS_INSTALL/bin/jembossctl"                        
+  echo "Tomcat should be running and the Jemboss web services deployed!"
+  echo "(see $URL/axis/)"
   echo
-  echo "Tomcat may still be running! Ensure it is running as the non-priveliged"
-  echo "tomcat user. Use the tomstop & tomstart scripts to stop & start tomcat."
+  echo "It is *very* important to now:"
+  echo "1. As root:"
+  echo "   chmod u+s $EMBOSS_INSTALL/bin/jembossctl"
+  echo "   chown root $EMBOSS_INSTALL/bin/jembossctl"
+  echo "2. Ensure that tomcat is running as the non-priveliged user,"
+  echo "   with the same UID (i.e. $UUID) that was given to this script"
+  echo "   (and NOT as root!)."
+  echo "3. Use the tomstop & tomstart scripts in this directory"
+  echo "   to stop & start tomcat."
   echo 
 else
   echo
@@ -1143,11 +1536,13 @@ if [ ! -d "$DATADIR" ]; then
   echo
 fi
 echo "Try running Jemboss with the script:"
-echo "   cd $JEMBOSS"
-echo "   ./runJemboss.csh"
+echo "   $JEMBOSS/runJemboss.sh"
+echo
+echo "To create a web launch page see:"
+echo "http://www.uk.embnet.org/Software/EMBOSS/Jemboss/install/deploy.html"
 echo
 
-chmod a+x $JEMBOSS/runJemboss.csh
+chmod a+x $JEMBOSS/runJemboss.sh
 chmod u+x $JEMBOSS/utils/*sh
 
 exit 0;

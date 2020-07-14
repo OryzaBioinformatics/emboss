@@ -26,15 +26,22 @@ import java.util.*;
 
 import org.emboss.jemboss.JembossParams;
 
-
+/**
+*
+* Run wossname of a Jemboss server 
+*
+*/
 public class GetWossname 
 {
 
-   private String statusmsg;
-   private String status;
-   private String dbText;
+   /** 	request to Jemboss public server */
    private PublicRequest epr;
 
+   /**
+   *
+   * @param mysettings	jemboss properties
+   *
+   */
    public GetWossname(JembossParams mysettings)
              throws JembossSoapException
    {
@@ -51,22 +58,24 @@ public class GetWossname
 
    }
 
-   public boolean getStatus()
-   {
-     return epr.succeeded();
-   }
-
-// public String getStatus() 
+   /**
+   *
+   * Determine if connection succedded
+   * @return	true if succeded
+   *
+   */
+// public boolean getStatus()
 // {
-//   return status;
+//   return epr.succeeded();
 // }
 
-   public String getStatusMsg() 
-   {
-     return statusmsg;
-   }
-
-   public String getDBText() 
+   /**
+   *
+   * Get wossname output 
+   * @return	wossname output
+   *
+   */
+   public String getWossnameText() 
    {
      return epr.getVal("wossname");
    }

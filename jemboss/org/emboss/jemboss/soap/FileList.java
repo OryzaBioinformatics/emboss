@@ -1,4 +1,4 @@
-/****************************************************************
+/***************************************************************
 *
 *  This program is free software; you can redistribute it and/or
 *  modify it under the terms of the GNU General Public License
@@ -22,36 +22,36 @@
 
 package org.emboss.jemboss.soap;
 
-import java.io.*;
 import java.util.*;
-import javax.swing.DefaultListModel;
 import org.emboss.jemboss.JembossParams;
-//import org.apache.soap.rpc.*;
 
-public class FileList 
-{
-
-  private String statusmsg;
-  //actually status is probably an int:
-  private String status;
-  private Hashtable proganswer;
-  private String currentRes = null;
-  private String flist = null;
-  private String directories = null;
-  private Vector vdir;
 
 /**
-* Retrieves a directory listing from an embreo server.
+*
+* Retrieves a directory listing from an Jemboss server.
 * The directory listing consists of a hash with two entries, a full
 * list of files (including directories) and a list of those files
 * that are directories.
 *
-* @param mysettings JembossParams defining server parameters
-* @param fileRoot the filesystem root being used
-* @param dir directory to list files in, relative to fileRoot
-*
-* @throws JembossSoapException If authentication fails
 */
+public class FileList 
+{
+  
+  /** file list */
+  private String flist = null;
+  /** directory list */
+  private String directories = null;
+  /** vector containing directories */
+  private Vector vdir;
+
+  /**
+  *
+  * @param mysettings 	jemboss properties
+  * @param fileRoot 	file system root being used
+  * @param dir 		directory to list files in, relative to fileRoot
+  * @throws JembossSoapException if authentication fails
+  *
+  */
    public FileList(JembossParams mysettings, String fileRoot, String dir)
                       throws JembossSoapException 
    {
@@ -61,10 +61,6 @@ public class FileList
      
      Vector params = new Vector();
      String options= "fileroot=" + fileRoot;
-//   params.addElement(new Parameter("options", String.class,
-//		     options, null));
-//   params.addElement(new Parameter("dirname", String.class,
-//		     dir, null));
      params.addElement(options);
      params.addElement(dir);
 
@@ -92,11 +88,12 @@ public class FileList
    }
 
 
-/**
-* Gets the list of files as a Vector
-*
-* @return The list of files as a Vector
-*/
+  /**
+  *
+  * Gets the list of files as a Vector
+  * @return 	list of files as a Vector
+  *
+  */
   public Vector fileVector() 
   {
     Vector v = new Vector();
@@ -113,12 +110,12 @@ public class FileList
   }
 
 
-/**
-* Gets whether this name is a directory
-*
-* @return true if it's a directory (in other words, its in the
-* list of directories), else returns false
-*/
+  /**
+  *
+  * Gets whether this name is a directory
+  * @return 	true if it is a directory
+  *
+  */
   public boolean isDirectory(String d) 
   {
     return vdir.contains(d);

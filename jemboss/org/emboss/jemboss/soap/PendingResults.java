@@ -14,6 +14,9 @@
 *  License along with this library; if not, write to the
 *  Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 *  Boston, MA  02111-1307, USA.
+*
+*  @author: Copyright (C) Tim Carver
+*
 ********************************************************************/
 
 package org.emboss.jemboss.soap;
@@ -27,18 +30,34 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
+/**
+*
+* Record the batch job status (pending/completed)
+*
+*/
 public class PendingResults 
 {
 
+  /** number of completed processes */
   private int completed_jobs = 0;
+  /** number of peding processes */
   private int running_jobs = 0;
+  /** jemboss properties */
   private JembossParams mysettings;
+  /** pending results */
   private Vector pendingResults;
+  /** job manager button */
   private JButton jobButton = null;
+  /** job manager interactive/batch selection */
   private JComboBox jobComboBox = null;
+  /** automatic job status updates */
   private boolean autoUpdates = false;
 
-
+  /**
+  *
+  * @param mysettings	jemboss properties
+  *
+  */
   public PendingResults(JembossParams mysettings)
   {
     this.mysettings = mysettings;
@@ -46,6 +65,11 @@ public class PendingResults
   }
 
 
+  /**
+  *
+  * Reset the pending and completed job status
+  * 
+  */
   public void resetCount() 
   {
     completed_jobs = 0;
@@ -53,22 +77,35 @@ public class PendingResults
     pendingResults.removeAllElements();
   }
 
+  /**
+  *
+  * Add a pending process to the list
+  * @param res	jemboss process
+  * 
+  */
   public void addResult(JembossProcess res) 
   {
     pendingResults.add(res);
   }
 
+  /**
+  *
+  * Remove a pending process from the list
+  * @param res  jemboss process
+  * 
+  */
   public void removeResult(JembossProcess res)
   {
     pendingResults.remove(res);
   }
 
-/**
-*
-* @param s  The name of the dataset
-* @return the process object
-*
-*/
+  /**
+  *
+  * Get the processes result
+  * @param s  	name of the dataset
+  * @return 	process object
+  *
+  */
   public JembossProcess getResult(String s)
   {
     for (int i=0 ; i < pendingResults.size(); ++i)
@@ -80,7 +117,12 @@ public class PendingResults
     return null;
   }
 
-
+  /**
+  *
+  * Get the processes description
+  * @return	processes description
+  *
+  */
   public Hashtable descriptionHash() 
   {
     Hashtable h = new Hashtable();
@@ -95,17 +137,23 @@ public class PendingResults
     return h;
   }
 
-  public Hashtable statusHash() 
-  {
-    Hashtable h = new Hashtable();
-    for (int i=0 ; i < pendingResults.size(); ++i)
-    {
-      JembossProcess er = (JembossProcess)pendingResults.get(i);
-      h.put(er.getJob(),new Boolean(er.isCompleted()));
-    }
-    return h;
-  }
+//public Hashtable statusHash() 
+//{
+//  Hashtable h = new Hashtable();
+//  for (int i=0 ; i < pendingResults.size(); ++i)
+//  {
+//    JembossProcess er = (JembossProcess)pendingResults.get(i);
+//    h.put(er.getJob(),new Boolean(er.isCompleted()));
+//  }
+//  return h;
+//}
 
+  /**
+  *
+  * Update the number of completed and pending
+  * processes
+  * 
+  */
   public void updateJobStats() 
   {
     int ic = 0;
@@ -122,18 +170,19 @@ public class PendingResults
     running_jobs = ir;
   }
 
-/**
-*
-* Report the status of completed and running processes.
-*
-*/
+  /**
+  *
+  * Report the status of completed and running processes.
+  * @return	completed / pending numbers
+  *
+  */
   public String jobStatus() 
   {
     String sc =  new Integer(completed_jobs).toString();
     String sr =  new Integer(running_jobs).toString();
     String s;
 
-    if (completed_jobs == 0) 
+    if(completed_jobs == 0) 
     {
       if(running_jobs == 0) 
         s = "Jobs: no pending jobs";
@@ -150,12 +199,12 @@ public class PendingResults
     return s;
   }
 
-/**
-*
-* Connect to the embreo server, and update the status of the jobs
-* in the list. If a statusPanel is active, updates the text on that.
-*
-*/
+  /**
+  *
+  * Connect to the Jemboss server, and update the status of the jobs
+  * in the list. If a statusPanel is active, updates the text on that.
+  *
+  */
   public void updateStatus() 
   {
     Vector params = new Vector();
@@ -211,6 +260,11 @@ public class PendingResults
 
   }
 
+  /**
+  *
+  * Change a hashtable to a vector
+  *
+  */
   private Vector getVector(Hashtable h)
   {
     Vector v = new Vector();
@@ -225,45 +279,48 @@ public class PendingResults
   }
 
 
-/**
-*
-*  @return true if automatically updating status manager 
-*        with BatchUpdateTimer thread
-*
-*/
+  /**
+  *
+  * Automatically updating status manager with
+  * BatchUpdateTimer thread
+  *  @return 	true if automatically updating 
+  *
+  */
   public boolean isAutoUpdate()
   {
     return autoUpdates;
   }
 
-/**
-*
-* @param true if automatically updating status manager 
-*        with BatchUpdateTimer thread
-*
-*/
+  /**
+  *
+  * Automatically updating status manager with
+  * BatchUpdateTimer thread
+  * @param 	true if automatically updating 
+  *
+  */
   public void setAutoUpdate(boolean b)
   {
     autoUpdates = b;
   }
 
-/**
-*
-* Updates the mode on the combo box to reflect the current state
-*
-*/
+  /**
+  *
+  * Updates the mode on the combo box to reflect the current state
+  *
+  */
   public void updateMode() 
   {
     if (jobComboBox != null) 
       jobComboBox.setSelectedItem(mysettings.getCurrentMode());
   }
 
-/**
-*
-* Updates the mode on the combo box to reflect the
-* requested value
-*
-*/
+  /**
+  *
+  * Updates the mode on the combo box to reflect the
+  * requested value
+  * @param s	mode (batch /interactive) to set to
+  *
+  */
   public void updateMode(String s) 
   {
     mysettings.setCurrentMode(s);
@@ -272,13 +329,13 @@ public class PendingResults
   }
 
 
-/**
-*
-* A panel with appropriate gadgets to show the status of any jobs
-* and to view them, and to set the mode.
-* @param f The parent frame, to which dialogs will be attached.
-*
-*/
+  /**
+  *
+  * A panel to show the status of any jobs and to view them,
+  * and to set the mode.
+  * @param f 	parent frame, to which dialogs will be attached.
+  *
+  */
   public JPanel statusPanel(final JFrame f) 
   {
     final JPanel jobPanel = new JPanel(new BorderLayout());
@@ -322,6 +379,12 @@ public class PendingResults
     return jobPanel;
   }
 
+  /**
+  *
+  * Display the list of pending and completed batch results
+  * window
+  *
+  */
   public void showPendingResults(JFrame f) 
   {
     if ((completed_jobs == 0) && (running_jobs == 0)) 
@@ -343,11 +406,11 @@ public class PendingResults
     }
   } 
 
-/**
-*
-* @return job status text
-*
-*/
+  /**
+  *
+  * @return job status text
+  *
+  */
   public String getStatus()
   {
     return jobButton.getText();

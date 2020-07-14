@@ -37,10 +37,17 @@ import java.net.URL;
 public class FileEditorDisplay extends JTextPane
 {
 
+   /** png file content */
    private byte[] pngContent = null;
+   /** file name */
    private String filename;
 
-   public FileEditorDisplay(JFrame ffile, final String filename)
+   /**
+   *
+   * @param filename	file name to display
+   *
+   */
+   public FileEditorDisplay(final String filename)
    {
  
      this.filename = filename;
@@ -78,8 +85,13 @@ public class FileEditorDisplay extends JTextPane
        setText(text,"regular");
    }
 
-
-   public FileEditorDisplay(JFrame ffile, final String filename,
+   /**
+   *
+   * @param filename    file name to display
+   * @param contents	contents of file
+   *
+   */
+   public FileEditorDisplay(final String filename,
                             Object contents)
    {
      
@@ -124,11 +136,12 @@ public class FileEditorDisplay extends JTextPane
 
    }
 
-/**
-*
-* Override to avoid line wrapping.
-*
-*/
+  /**
+  *
+  * Override to avoid line wrapping.
+  * @param d	dimension
+  *
+  */
    public void setSize(Dimension d)
    {
      if (d.width < getParent().getSize().width)
@@ -137,36 +150,29 @@ public class FileEditorDisplay extends JTextPane
      super.setSize(d);
    }
 
-/**
-*
-* Override to avoid line wrapping.
-*
-*/
+  /**
+  *
+  * Override to avoid line wrapping.
+  *
+  */
    public boolean getScrollableTracksViewportWidth()
    {
      return false;
    }
                            
-/**
-*
-* Returns instance of JTextPane.
-* @return JTextPane created
-*
-*/
-   public JTextPane getJTextPane()
-   {
-     return this; 
-   }  
+// public JTextPane getJTextPane()
+// {
+//   return this; 
+// }  
 
 
-/**
-*
-*  Set the text & style in the JTextPane.
-*  @param String text to be put into the JTextPane.
-*  @param String style to use ("regular", "sequence", "png", "html").
-*  @param JTextPane instance of JTextPane to set the style for.
-*
-*/
+  /**
+  *
+  *  Set the text & style in the JTextPane.
+  *  @param text 	text to be put into the JTextPane.
+  *  @param type 	style to use ("regular", "sequence", "png", "html").
+  *
+  */
   public void setText(String text, String type)
   {
 
@@ -224,11 +230,13 @@ public class FileEditorDisplay extends JTextPane
 
   }
 
-/**
-*
-*  Need to read png in, in case it is saved out
-*
-*/
+  /**
+  *
+  *  Need to read png in, in case it is saved out
+  *  @param filename	file name to read
+  *  @return 		contents of file as a byte array
+  *
+  */
   private byte[] loadPNGContent(String filename)
   {
 
@@ -270,24 +278,23 @@ public class FileEditorDisplay extends JTextPane
     return data; 
   }
 
-/**
-*
-*  Returns the content of a png file or null.
-*  @return byte content of a png file
-*
-*/
+  /**
+  *
+  *  Returns the content of a png file or null.
+  *  @return 	byte content of a png file
+  *
+  */
   public byte[] getPNGContent()
   {
     return pngContent;
   }
 
 
-/**
-*
-*  Initialise styles for a JTextPane.
-*  @param JTextPane instance of JTextPane to initialise styles for.
-*
-*/
+  /**
+  *
+  *  Initialise styles for a JTextPane.
+  *
+  */
   protected void initStylesForTextPane() 
   {
      //Initialize some styles.
@@ -344,12 +351,12 @@ public class FileEditorDisplay extends JTextPane
 
   }
 
-/**
-*
-*  Sequence header text.
-*  @param String contents of the file.
-*
-*/
+  /**
+  *
+  *  Sequence header text.
+  *  @param text	contents of the file.
+  *
+  */
   private String findHeader(String text)
   {
     String hdr = "";
@@ -384,7 +391,6 @@ public class FileEditorDisplay extends JTextPane
  
     return hdr;
   }
-
 
 }
 

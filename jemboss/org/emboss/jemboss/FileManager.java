@@ -26,6 +26,11 @@ import java.net.*;
 import org.emboss.jemboss.soap.AuthPopup; 
 import org.emboss.jemboss.soap.JembossSoapException;
 
+/**
+*
+* Display the local and remote file managers
+*
+*/
 public class FileManager
 {
 
@@ -69,6 +74,16 @@ public class FileManager
                             jembossClientKeyStore);
       }
       catch(Exception exp){}
+    }
+
+    if(mysettings.getPublicSoapURL().startsWith("https"))
+    {
+      System.setProperty("https.proxyHost", "");
+      System.setProperty("http.proxyHost", "");
+      System.setProperty("proxyHost", "");
+      String settings[] = new String[1];
+      settings[0] = new String("proxy.override=true");
+      mysettings.updateJembossPropStrings(settings);
     }
 
     AuthPopup fap = new AuthPopup(mysettings,0);

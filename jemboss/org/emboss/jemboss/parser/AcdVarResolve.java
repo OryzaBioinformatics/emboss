@@ -31,18 +31,31 @@ import org.emboss.jemboss.gui.form.*;
 *
 *  Resolves any variable reference in a string.
 *
-*
 */
 
 public class AcdVarResolve
 {
 
+  /** expression */
   private String exp;
 
+  /**
+  *
+  * @param exp 		expression to resolve
+  * @param varName	variable name
+  * @param parseAcd	ACD parser for the application
+  * @param nof		number of fields
+  * @param textf	text fields
+  * @param textInt	int fields
+  * @param textFloat	float fields
+  * @param fieldOption	combo popup fields
+  * @param checkBox	boolean fields
+  *
+  */
   public AcdVarResolve(String exp, String val, String varName, 
                        ParseAcd parseAcd, int nof, 
                        TextFieldSink textf[], TextFieldInt textInt[],
-                       TextFieldFloat textFloat[], myComboPopup fieldOption[],
+                       TextFieldFloat textFloat[], JembossComboPopup fieldOption[],
                        JCheckBox  checkBox[]) 
   {
 
@@ -59,7 +72,7 @@ public class AcdVarResolve
       {
         String var = regvarexp.getParen(2);    // variable name
         String res = "";
-        if(var.endsWith(".protein"))
+        if(var.endsWith("acdprotein"))
           res = (new Boolean(SectionPanel.ajaxProtein)).toString();
         else if (var.endsWith(".length") || var.endsWith(".end"))
           res = (new Integer(SectionPanel.ajaxLength)).toString();
@@ -71,7 +84,7 @@ public class AcdVarResolve
           res = val;
         else
         {
-          res = new String("UnresolvedToken"+var);
+          res = new String("UnresolvedToken"+var); 
           for(int i =0;i<nof;i++)
           {
             if(parseAcd.getParamValueStr(i,0).equals(var))
@@ -135,6 +148,12 @@ public class AcdVarResolve
     this.exp = exp;
   }
 
+  /**
+  *
+  * Get the resolved expression
+  * @return 	result
+  *
+  */
   public String getResult()
   {
     return exp;

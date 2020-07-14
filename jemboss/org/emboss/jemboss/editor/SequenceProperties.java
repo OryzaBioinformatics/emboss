@@ -24,20 +24,33 @@ package org.emboss.jemboss.editor;
 import java.util.*;
 import java.awt.Color;
 
-
+/**
+*
+* General sequence properties
+*
+*/
 public class SequenceProperties 
 {
 
+  /** Taylor colour scheme, W.R.Taylor Protein 
+            Eng vol.10,  7 pp743-746, 1997 */
   public static Hashtable taylorColor = new Hashtable();
 
-// taken from EMBOSS data Ecolour.map
+  /** AQUAMARINE from EMBOSS data Ecolour.map */
   public static Color AQUAMARINE = Color.decode("#99CCFF");
+  /** WHEAT from EMBOSS data Ecolour.map      */
   public static Color WHEAT      = Color.decode("#FFFFCC");
+  /** PINK from EMBOSS data Ecolour.map       */
   public static Color PINK       = Color.decode("#FFCCCC");
+  /** BROWN from EMBOSS data Ecolour.map      */
   public static Color BROWN      = Color.decode("#993300");
+  /** BLUEVIOLET from EMBOSS data Ecolour.map */
   public static Color BLUEVIOLET = Color.decode("#9933FF");
+  /** TURQUOISE from EMBOSS data Ecolour.map  */
   public static Color TURQUOISE  = Color.decode("#33FFCC");
+  /** MAGENTA from EMBOSS data Ecolour.map    */
   public static Color MAGENTA    = Color.decode("#FF00FF");
+  /** SALMON from EMBOSS data Ecolour.map     */
   public static Color SALMON     = Color.decode("#FF9966");
 
 //
@@ -107,6 +120,7 @@ public class SequenceProperties
     residueColor.put(".",Color.white);
   }
 
+  /** rasmol colour scheme */
   public static Hashtable rasmolColor = new Hashtable();
   static
   {
@@ -133,7 +147,7 @@ public class SequenceProperties
     rasmolColor.put("P",WHEAT);
   }
 
-// Acidic/Basic (Red=acidic, Blue=basic)
+  /** Acidic/Basic (Red=acidic, Blue=basic) */
   public static Hashtable acidColor = new Hashtable();
   static
   {
@@ -144,7 +158,7 @@ public class SequenceProperties
     acidColor.put("H",Color.blue);
   }
 
-// Polar (Red=Polar)
+  /** Polar (Red=Polar) */
   public static Hashtable polarColor = new Hashtable();
   static
   {
@@ -161,7 +175,7 @@ public class SequenceProperties
     polarColor.put("Y",Color.red);
   }
 
-// Hydrophobic (Red=Hydrophobic)
+  /** Hydrophobic (Red=Hydrophobic) */
   public static Hashtable hydrophobicColor = new Hashtable();
   static
   {
@@ -180,7 +194,7 @@ public class SequenceProperties
     hydrophobicColor.put("V",Color.red);
   }
 
-// Aromatic/Aliphatic (Red=Aromatic, Blue=Aliphatic)
+  /** Aromatic/Aliphatic (Red=Aromatic, Blue=Aliphatic) */
   public static Hashtable aromaticColor = new Hashtable();
   static
   {
@@ -193,7 +207,7 @@ public class SequenceProperties
     aromaticColor.put("V",Color.blue);
   }
 
-// Surface/Buried (Red=Surface, Blue=Buried)
+  /** Surface/Buried (Red=Surface, Blue=Buried) */
   public static Hashtable surfaceColor = new Hashtable();
   static
   {
@@ -219,7 +233,7 @@ public class SequenceProperties
     surfaceColor.put("V",Color.blue);
   }
 
-// Positive/Negative charge (Red=Positive, Blue=Negative)
+  /** Positive/Negative charge (Red=Positive, Blue=Negative) */
   public static Hashtable chargeColor = new Hashtable();
   static
   {
@@ -230,8 +244,7 @@ public class SequenceProperties
     chargeColor.put("E",Color.blue);
   }
 
-// Tiny/Small/Large (Red=Tiny, Green=Small, Blue=Large)
-
+  /** Tiny/Small/Large (Red=Tiny, Green=Small, Blue=Large) */
   public static Hashtable sizeColor = new Hashtable();
   static
   {
@@ -259,8 +272,8 @@ public class SequenceProperties
     sizeColor.put("Y",Color.blue);
   }
 
+  /** nucletide colour scheme */
   public static Hashtable baseColor = new Hashtable();
-
   static
   {
     baseColor = new Hashtable();

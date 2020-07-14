@@ -14,14 +14,16 @@
 ssl_create_keystore()
 {
 
-  KEYSTORE=$1
-  ALIAS=$2
-  HOST=$3
-  JEMBOSS_RES=$4
+  HOST=$1
+  JEMBOSS_RES=$2
+  KEYSTORE=$3
+  ALIAS=$4
+  PASSWD=$5
+  VALID=$6
 
   keytool -genkey -alias $ALIAS -dname "CN=$HOST, \
       OU=Jemboss, O=HGMP-RC, L=CAMBRIDGE, S=CAMBRIDGE, C=UK" -keyalg RSA \
-      -keypass $PASSWD -storepass $PASSWD -keystore $JEMBOSS_RES/$KEYSTORE.keystore  
+      -keypass $PASSWD -storepass $PASSWD -keystore $JEMBOSS_RES/$KEYSTORE.keystore -validity $VALID
 
   keytool -export -alias $ALIAS -storepass $PASSWD -file $JEMBOSS_RES/$KEYSTORE.cer \
       -keystore $JEMBOSS_RES/$KEYSTORE.keystore
@@ -53,11 +55,21 @@ echo "Enter a password to use to create the keys with"
 echo "(at least 6 characters):"
 read PASSWD
 
+echo
+echo "Provide the validity period for these certificates, i.e. the"
+echo "number of days before they expire and new ones need to be made [90]:"
+read VALID
+echo
+
+if [ "$VALID" = "" ]; then
+  VALID=90
+fi
+
 #
 # create the keystores & export the certificates
 #
-ssl_create_keystore "server" "tomcat-sv" $HOST $JEMBOSS_RES $PASSWD
-ssl_create_keystore "client" "tomcat-cl" $HOST $JEMBOSS_RES $PASSWD
+ssl_create_keystore "server" $JEMBOSS_RES "server" "tomcat-sv" $PASSWD $VALID
+ssl_create_keystore "Client" $JEMBOSS_RES "client" "tomcat-cl" $PASSWD $VALID
 
 #
 # import certificates into keystores - so server trusts client...

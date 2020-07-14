@@ -32,14 +32,23 @@ import javax.swing.JFrame;
 
 /**
 *
-* Simple demo that uses java.util.Timer to schedule a task to execute
-* once 10 seconds have passed.
+* Timer for updating saved results window for
+* batch jobs submitted
 *
 */
 public class ResultsUpdateTimer
 {
+
+  /** timer */
   private static Timer timer;
 
+  /**
+  *
+  * @param seconds      	update frequency
+  * @param datasets		dataset model to update
+  * @param savedResFrame	results window
+  *
+  */
   public ResultsUpdateTimer(int seconds, DefaultListModel datasets, 
                             JFrame savedResFrame)
   {
@@ -48,7 +57,11 @@ public class ResultsUpdateTimer
                    seconds*1000, seconds*1000);
   }
 
-
+  /**
+  *
+  * Timer task to update the results window
+  *
+  */
   class ResultsTask extends TimerTask
   {
     private DefaultListModel datasets=null;  

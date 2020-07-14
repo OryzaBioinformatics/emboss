@@ -27,14 +27,23 @@ import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.border.*;
 
-
+/**
+*
+* Colour menu displayed in a popup menu from the colour
+* display pallette (ColourJFrame).
+*
+*/
 class ColourMenu extends JMenu
 {
+  /** unselected border */
   protected Border unselectedBorder;
+  /** selected border   */
   protected Border selectedBorder;
+  /** active border     */
   protected Border activeBorder;
-
+  /** hashtable of the colour panes */
   protected Hashtable panes;
+  /** selected colour pane */
   protected ColorPane selected;
 
   public ColourMenu(String name)

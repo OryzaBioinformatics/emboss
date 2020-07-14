@@ -111,6 +111,7 @@ fi
 # Create FileManager jar file
 
 jar cf FileManager.jar images/* org/emboss/jemboss/*class resources/client.jar \
+        resources/resources.jar \
         resources/version resources/jemboss.properties resources/readme.txt \
         resources/*html org/emboss/jemboss/*/*class org/emboss/jemboss/*/*/*class 
 mv FileManager.jar jnlp_fm
@@ -119,7 +120,7 @@ cp lib/axis/*jar jnlp_fm
 cp images/Jemboss_logo_large.gif jnlp_fm
 cp utils/template.html jnlp_fm/index.html
 cd jnlp_fm
-rm mail.jar activation.jar wsdl4j.jar
+rm mail.jar activation.jar wsdl4j.jar servlet.jar log4j-1.2.8.jar axis-ant.jar
 
 echo
 echo
@@ -175,7 +176,7 @@ if [ -f "$JNLP" ]; then
   read JNLP
 fi
 
-echo '<!-- JNLP File for SwingSet2 Demo Application -->' > $JNLP
+echo '<?xml version="1.0" encoding="UTF-8"?>'            > $JNLP
 echo '<jnlp'                                            >> $JNLP
 echo '        spec="1.0+"'                              >> $JNLP
 echo '        codebase="http://EDIT"'                   >> $JNLP

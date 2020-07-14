@@ -29,6 +29,11 @@ import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.Locale;
 
+/**
+*
+* JTextfield for int fields in the EMBOSS form
+*
+*/
 public class TextFieldInt extends TextFieldSink 
 {
 

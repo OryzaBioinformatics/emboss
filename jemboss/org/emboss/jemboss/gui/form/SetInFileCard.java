@@ -19,7 +19,6 @@
 *
 ********************************************************************/
 
-
 package org.emboss.jemboss.gui.form;
 
 import java.awt.*;
@@ -32,41 +31,53 @@ import org.emboss.jemboss.gui.SetUpMenuBar;
 import org.emboss.jemboss.gui.sequenceChooser.*;
 import org.emboss.jemboss.JembossParams;
 
-public class SetInFileCard
-{
-
-  private Box boxFile;
-  private boolean isFile = true;
-  private boolean isCut  = false;
-  private boolean isList = false;
-  private FileChooser fileChoose;
-  private CutNPasteTextArea cutnPaste;
-  private ListFilePanel listPane = null;
-  private InputSequenceAttributes inSeqAttr[];
-  private int h;
-
 /**
 *
-* Build the GUI components for an input sequence(s).
-* @param sectionPane acd section panel
-* @param h GUI handle
-* @param db database list
-* @param name for the file card
-* @param appName application name
-* @param inSeqAttr input sequence attributes
-* @param boolean true if list files allowed
+* Input sequence file card
 *
 */
+public class SetInFileCard extends Box
+{
+
+  /** selecting sequence file input (default) */
+  private boolean isFile = true;
+  /** selecting cut and paste sequence input  */
+  private boolean isCut  = false;
+  /** selecting list file input               */
+  private boolean isList = false;
+  /** sequence file choser */
+  private FileChooser fileChoose;
+  /** cut and paste text area */
+  private CutNPasteTextArea cutnPaste;
+  /** list file panel */
+  private ListFilePanel listPane = null;
+  /** input sequence attributes */
+  private InputSequenceAttributes inSeqAttr[];
+  /** gui handle number */
+  private int h;
+
+  /**
+  *
+  * Build the GUI components for an input sequence(s).
+  * @param sectionPane 	acd section panel
+  * @param h 		GUI handle
+  * @param db 		database list
+  * @param name 	for the file card
+  * @param appName	application name
+  * @param inSeqAttr 	input sequence attributes
+  * @param boolean 	true if list files allowed
+  * @param mysettings	jemboss properties
+  *
+  */
   public SetInFileCard(final JPanel sectionPane, final int h,
                  final String db[], String name, final String appName,
                  final InputSequenceAttributes inSeqAttr[], boolean fopt,
                  final JembossParams mysettings)
   {
-
+    super(BoxLayout.Y_AXIS);
     this.h = h;
     this.inSeqAttr = inSeqAttr;
 
-    boxFile = new Box(BoxLayout.Y_AXIS);
     final CardLayout fileCard = new CardLayout();
     final JPanel pfile = new JPanel(fileCard);
     Dimension d = new Dimension(500, 130);
@@ -138,7 +149,7 @@ public class SetInFileCard
     bacross.add(seqLabel);
     bacross.add(Box.createRigidArea(new Dimension(20,0)));
     bacross.add(Box.createHorizontalGlue());
-    boxFile.add(bacross);
+    add(bacross);
 
     bacross = Box.createHorizontalBox();
     bacross.add(rfile);
@@ -152,8 +163,8 @@ public class SetInFileCard
     }
 
     bacross.add(Box.createHorizontalGlue());
-    boxFile.add(bacross);
-    boxFile.add(Box.createVerticalStrut(8));
+    add(bacross);
+    add(Box.createVerticalStrut(8));
 
     for(int k=0; k<3; k++)
       bdown[k] =  Box.createVerticalBox();
@@ -251,96 +262,99 @@ public class SetInFileCard
     bxleft= new Box(BoxLayout.X_AXIS);
     bxleft.add(pfile);
     bxleft.add(Box.createHorizontalGlue());
-    boxFile.add(bxleft);
+    add(bxleft);
 
   }
 
 
-  protected Box getInCard()
-  {
-    return boxFile;
-  }
-
-/**
-*
-* @param isFile true if selected to use a file name
-*
-*/
+  /**
+  *
+  * @return	true if selected to use a file name
+  *
+  */
   public boolean isFileName()
   {
     return isFile;
   }
 
-/**
-*
-* @param isCut true if selected to use cut 'n paste text
-*
-*/
+  /**
+  *
+  * @return 	true if selected to use cut 'n paste text
+  *
+  */
   public boolean isCutNPase()
   {
     return isCut;
   }
 
-/**
-*
-* @param isList true if selected to use list of filenames
-*
-*/
+  /**
+  *
+  * @return	true if selected to use list of filenames
+  *
+  */
   public boolean isListFile()
   {
     return isList;
   }
 
-/**
-*
-* @param String file or database name
-*
-*/
+  /**
+  *
+  * @return	file or database name
+  *
+  */
   public String getFileChosen()
   {
     return fileChoose.getFileChosen();
   }
 
-/**
-*
-* @param String cut 'n pasted text
-*
-*/
+  /**
+  *
+  * @return	cut 'n pasted text
+  *
+  */
   public String getCutNPasteText()
   {
     return cutnPaste.getText();
   }
 
-/**
-*
-* @param String list of sequence filenames
-*
-*/
+  /**
+  *
+  * @return 	list of sequence filenames
+  *
+  */
   public String getListFile()
   {
     return listPane.getListFile();
   }
 
-/**
-*
-* @param String[] list of sequence filenames
-*
-*/
+  /**
+  *
+  * @return	string array of the list of 
+  *		sequence filenames
+  *
+  */
   public String[] getArrayListFile()
   {
     return listPane.getArrayListFile();
   }
 
-/**
-*
-* @param String list of sequence filename
-*
-*/
+  /**
+  *
+  * Return a sequence from a list of sequences
+  * @param n	sequence number in the list
+  * @return	sequence filename
+  *
+  */
   public String getSequence(int n)
   {
     return listPane.getSequence(n);
   }
 
+  /**
+  *
+  * Reset all text areas for sequence entering
+  *
+  */
   public void doReset()
   {
     cutnPaste.setText("");

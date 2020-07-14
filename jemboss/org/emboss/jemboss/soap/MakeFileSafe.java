@@ -24,19 +24,22 @@ package org.emboss.jemboss.soap;
 
 import java.io.*;
 
-public class MakeFileSafe 
-{
-
-  private String safeFileName;
-
 /**
 *
 * Create a sanitised filename. All undesirable characters in the
 * filename are replaced by underscores.
 *
-* @param unSafeFileName unsanitised name of the file
-*
 */
+public class MakeFileSafe 
+{
+
+  private String safeFileName;
+
+  /**
+  *
+  * @param unSafeFileName unsanitised name of the file
+  *
+  */
   public MakeFileSafe(String unSafeFileName) 
   {
     char c;
@@ -67,11 +70,12 @@ public class MakeFileSafe
     safeFileName = dest.toString();
   }
 
-/**
-*
-* @return String sanitised filename
-*
-*/
+  /**
+  *
+  * Get the safe/sanitised file name
+  * @return 	sanitised file name
+  *
+  */
   public String getSafeFileName() 
   {
     return safeFileName;

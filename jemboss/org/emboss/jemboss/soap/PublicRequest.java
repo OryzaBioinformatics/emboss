@@ -33,59 +33,66 @@ import org.apache.axis.client.Service;
 import javax.xml.namespace.QName;
 import org.apache.axis.encoding.XMLType;
 
+/**
+*
+* Make a axis call to a public server, using the default service
+*
+*/
 public class PublicRequest
 {
 
   private Hashtable proganswer;
-  private String result = "";
-  private boolean successful = false;
 
-/**
-* Makes a soap call to a public server, using the default service
-*
-* @param mysettings JembossParams defining server parameters
-* @param method     String defining which method to call
-*/
+  /**
+  *
+  * @param mysettings 	jemboss properties
+  * @param method     	method to call
+  * @throws JembossSoapException if call to web service fails
+  *
+  */
    public PublicRequest(JembossParams mysettings, String method)
                throws JembossSoapException
    {
      this(mysettings, mysettings.getPublicSoapService(), method);
    }
 
-/**
-* Makes a soap call to a public server, using the default service
-*
-* @param mysettings JembossParams defining server parameters
-* @param method     String defining which method to call
-* @param args       Vector of arguments
-*/
+  /**
+  *
+  * @param mysettings 	jemboss properties
+  * @param method     	method to call
+  * @param args       	arguments
+  * @throws JembossSoapException if call to web service fails
+  *
+  */
    public PublicRequest(JembossParams mysettings, String method, Vector args)
                throws JembossSoapException
    {
      this(mysettings, mysettings.getPublicSoapService(), method, args);
    }
 
-/**
-* Makes a soap call to a public server
-*
-* @param mysettings JembossParams defining server parameters
-* @param service    String defining which service to call
-* @param method     String defining which method to call
-*/
+  /**
+  *
+  * @param mysettings 	jemboss properties
+  * @param service    	web service to call
+  * @param method     	method to call
+  * @throws JembossSoapException if call to web service fails
+  *
+  */
    public PublicRequest(JembossParams mysettings, String service, String method)
                throws JembossSoapException
    {
      this(mysettings, service, method, (Vector) null);
    }
 
-/**
-* Makes a soap call to a public server
-*
-* @param mysettings JembossParams defining server parameters
-* @param service    String defining which service to call
-* @param method     String defining which method to call
-* @param args       Vector of arguments
-*/
+  /**
+  *
+  * @param mysettings 	jemboss properties
+  * @param service    	web service to call
+  * @param method     	method to call
+  * @param args       	arguments
+  * @throws JembossSoapException if call to web service fails
+  *
+  */
    public PublicRequest(JembossParams mysettings, String service, 
                         String method, Vector args)
                throws JembossSoapException
@@ -147,22 +154,15 @@ public class PublicRequest
 
    }
 
-/**
-* Whether the call succeeded (eventually) or not
-*/
-  public boolean succeeded() 
-  {
-    return successful;
-  }
 
-/**
-* Gets an element out of the embreo result hash
-*
-* @param val The key to look up
-*
-* @return Either the element, or an empty String if there isn't
-* an element that matches the key
-*/
+  /**
+  *
+  * Gets an element out of the Jemboss result hash
+  * @param val 	key to look up
+  * @return 	element, or an empty String if there isn't
+  * 		an element that matches the key
+  *
+  */
   public String getVal(String val)
   {
     if (proganswer.containsKey(val)) 
@@ -171,19 +171,13 @@ public class PublicRequest
       return "";
   }
 
-/**
-* The result of the embreo call. This is the first element that
-* is returned. Only useful for server methods that return a simple value.
-*/
-  public String getResult() 
-  {
-    return result;
-  }
 
-/**
-* The hash returned by the embreo call. We either return a hash or
-* a simple String.
-*/
+  /**
+  *
+  * The hash returned by the Jemboss call. 
+  * @param 	result
+  *
+  */
   public Hashtable getHash() 
   {
     return proganswer;

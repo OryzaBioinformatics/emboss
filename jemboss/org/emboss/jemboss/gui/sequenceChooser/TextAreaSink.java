@@ -34,8 +34,8 @@ import java.io.*;
 
 /**
 *
-* Extends JTextArea so that is becomes a sink for pasting into.
-* @author T. J. Carver
+* Extends JTextArea so that is becomes a sink for pasting into
+* or drag and dropping to
 *
 */
 public class TextAreaSink extends JTextArea implements DropTargetListener
@@ -59,12 +59,18 @@ public class TextAreaSink extends JTextArea implements DropTargetListener
 
   }
 
+  /**
+  *
+  * Add text from the system clipboard into the text area
+  *
+  */
   public void pasteText() 
   {
     Clipboard c = this.getToolkit().getSystemClipboard();
     
     Transferable t = c.getContents(this);
-    if(t==null) {
+    if(t==null) 
+    {
       this.getToolkit().beep();
       return;
     } 

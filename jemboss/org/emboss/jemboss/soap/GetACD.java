@@ -26,25 +26,31 @@ import java.util.*;
 
 import org.emboss.jemboss.JembossParams;
 
-public class GetACD
-{
-
-static Hashtable acdStore;
-static 
-{
-  acdStore = new Hashtable();
-}
-
-   private String helpText;
 
 /**
 *
 * Retrieve an ACD file using soap
 *
-* @param acdProg    The name of the application described by the ACD
-* @param mysettings JembossParams defining server parameters
-*
 */
+public class GetACD
+{
+
+  /** acd store */
+  static Hashtable acdStore;
+  static 
+  {
+    acdStore = new Hashtable();
+  }
+
+  /** acd text */
+  private String helpText;
+
+  /**
+  *
+  * @param acdProg    name of the application described by the ACD
+  * @param mysettings jemboss properties
+  *
+  */
    public GetACD(String acdProg, JembossParams mysettings)
    {
 
@@ -76,11 +82,12 @@ static
 
    }
 
-/**
-*
-* Return the text of the ACD file
-*
-*/
+  /**
+  *
+  * Return the text of the ACD file
+  * @return 	acd text
+  *
+  */
    public String getAcd() 
    {
      return helpText;

@@ -25,20 +25,29 @@ import java.io.*;
 import java.util.*;
 import javax.swing.*;
 
+/**
+*
+* Saving files locally
+*
+*/
 public class FileSave 
 {
 
+  /** file to save */
   private File f;
+  /** true if the file has been written */
   private boolean fileWritten = false;
+  /** true if the file exists */
   private boolean fExists = false;
+  /** true if it is possible to write to this file */
   private boolean canDo = true;
 
-/**
-*
-* Check if we can/want to save file to disk. 
-* @param  f  the File to save to
-*
-*/
+  /**
+  *
+  * Check if we can/want to save file to disk. 
+  * @param  f  	file to save to
+  *
+  */
   public FileSave(File f) 
   {
 
@@ -71,11 +80,11 @@ public class FileSave
     this.canDo = canDo;
   }
 
-/**
-*
-* @param  file  An Object with the file contents
-*
-*/
+  /**
+  *
+  * @param file  	file contents 
+  *
+  */
   public void fileSaving(Object file)
   {
 
@@ -113,27 +122,32 @@ public class FileSave
     }
   }
 
-/**
-*
-* @return true if we can write and want too
-*
-*/
+  /**
+  *
+  * @return 	true if we can write and want too
+  *
+  */
   public boolean doWrite()
   {
     return canDo;
   }
 
-/**
-*
-* Whether the fileSaving() operation was successful
-* @return true if we wrote the file, otherwise false
-*
-*/
+  /**
+  *
+  * Whether the fileSaving() operation was successful
+  * @return 	true if the file was written
+  *
+  */
   public boolean writeOK() 
   {
     return fileWritten;
   }
 
+  /**
+  *
+  * @return 	true if the file already exists
+  *
+  */
   public boolean fileExists()
   {
     return fExists;

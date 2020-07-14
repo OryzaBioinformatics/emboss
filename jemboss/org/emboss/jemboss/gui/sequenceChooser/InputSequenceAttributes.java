@@ -19,7 +19,6 @@
 *
 ********************************************************************/
 
-
 package org.emboss.jemboss.gui.sequenceChooser;
 
 import java.awt.*;
@@ -34,32 +33,38 @@ import org.emboss.jemboss.gui.form.*;
 /**
 *
 * Creates the input sequence attibutes window 
-* @author T. J. Carver
 *
 */
 public class InputSequenceAttributes 
 {
 
+  /** -sbegin flag */
   private TextFieldInt sbeg = new TextFieldInt();
+  /** -send flag   */
   private TextFieldInt send = new TextFieldInt();
-  private TextFieldSink sopenFile = new TextFieldSink();
-  private JTextField sdbName = new JTextField();
-  private JTextField sID = new JTextField();
+//  private TextFieldSink sopenFile = new TextFieldSink();
+//  private JTextField sdbName = new JTextField();
+//  private JTextField sID = new JTextField();
+  /** uniform feature object */
   private JTextField UFO = new JTextField();
-
+  /** available databases    */
   private JComboBox dbs;
+  /** combobox for file formats */
   private JComboBox fileFormats;
+  /** select to reverse sequence */
   private JRadioButton rev;
+  /** select to specify a nucleotide sequence */
   private JRadioButton nucleotide;
+  /** select to specify a protein sequence    */
   private JRadioButton protein;
+  /** select to specify lower case */
   private JRadioButton lower;
+  /** select to specify upper case */
   private JRadioButton upper;
-
+  /** scroll panel for attibute panel */
   private JScrollPane rscroll;
 
-  private boolean fvis = false;
-
-//input format types
+  /** input format types */
   private String ff[] = {"unspecified", "text", "fasta", "msf", 
                          "gcg", "gcg8", "embl", "swiss", "ncbi",
                          "pearson", "genbank", "nbrf", "pir", 
@@ -71,14 +76,17 @@ public class InputSequenceAttributes
                          "staden", "plain", "gff", "raw", "selex"};
   
 
+  /**
+  *
+  * @param db	available databases
+  * @param fc	file chooser
+  *
+  */
   public InputSequenceAttributes(String[] db, final FileChooser fc)
   {
 
-//  JPanel p = (JPanel)f.getContentPane();
     JPanel pscroll = new JPanel(new BorderLayout());
     rscroll = new JScrollPane(pscroll);
-//  p.setLayout(new BorderLayout());
-//  p.add(rscroll, BorderLayout.CENTER);
 
     Box b = new Box(BoxLayout.Y_AXIS);
     pscroll.add(b,BorderLayout.CENTER);
@@ -292,42 +300,89 @@ public class InputSequenceAttributes
 
   }
 
-
+  /**
+  *
+  * Get the scroll panel
+  * @return	scroll panel
+  *
+  */
   public JScrollPane getJScrollPane()
   {
     return rscroll;
   }
 
+  /**
+  *
+  * Set the -sbegin flag
+  * @param iseq		value for -sbeg
+  *
+  */
   public void setBegSeq(int iseq)
   {
     sbeg.setValue(iseq);
   }
 
+  /**
+  *
+  * Set the -send flag
+  * @param iseq         value for -send
+  *
+  */
   public void setEndSeq(int iseq)
   {
     send.setValue(iseq);
   }
 
+  /**
+  *
+  * Set the -sbegin flag
+  * @param s         	value for -sbeg
+  *
+  */
   public void setBegSeq(String s)
   {
     sbeg.setText(s);
   }
 
+  /**
+  *
+  * Set the -send flag
+  * @param s         	value for -send
+  *
+  */
   public void setEndSeq(String s)
   {
     send.setText(s);
   }
 
+  /**
+  * 
+  * Get the -sbegin flag
+  * @return 	value for -sbeg
+  *
+  */
   public String getBegSeq()
   {
     return sbeg.getText();
   }
 
+  /**
+  * 
+  * Get the -send flag
+  * @return     value for -send
+  *
+  */
   public String getEndSeq()
   {
     return send.getText();
   }
 
+  /**
+  *
+  * Determine if there is a default -sbeg value
+  * @return	true if -sbeg is set
+  *
+  */
   public boolean isBeginSeqDefault()
   {
     if(sbeg.getText() == null ||
@@ -337,6 +392,12 @@ public class InputSequenceAttributes
      return false; 
   }
 
+  /**
+  *
+  * Determine if there is a default -send value
+  * @return     true if -send is set
+  *
+  */
   public boolean isEndSeqDefault()
   {
     if(send.getText() == null ||
@@ -346,31 +407,37 @@ public class InputSequenceAttributes
      return false;
   }
 
-  public boolean isOpenFileDefault()
-  {
-    if(sopenFile.getText() == null || sopenFile.getText().equals(""))
-     return true;
-    else
-     return false;
-  }
+//  public boolean isOpenFileDefault()
+//  {
+//    if(sopenFile.getText() == null || sopenFile.getText().equals(""))
+//     return true;
+//    else
+//     return false;
+//  }
 
 
-  public boolean isDBNameDefault()
-  {
-    if(sdbName.getText() == null || sdbName.getText().equals(""))
-     return true;
-    else
-     return false;
-  }
+//  public boolean isDBNameDefault()
+//  {
+//    if(sdbName.getText() == null || sdbName.getText().equals(""))
+//     return true;
+//    else
+//     return false;
+//  }
 
-  public boolean isSIDDefault()
-  {
-    if(sID.getText() == null || sID.getText().equals(""))
-     return true;
-    else
-     return false;
-  }
+//  public boolean isSIDDefault()
+//  {
+//    if(sID.getText() == null || sID.getText().equals(""))
+//     return true;
+//    else
+//     return false;
+//  }
 
+  /**
+  *
+  * Determine if there is a default -sufo value
+  * @return     true if -sufo is set
+  *
+  */
   public boolean isUFODefault()
   {
     if(UFO.getText() == null || UFO.getText().equals(""))
@@ -379,13 +446,25 @@ public class InputSequenceAttributes
      return false;
   }
 
-
+  /**
+  *
+  * Get the file format selected 
+  * @return	file format
+  *
+  */
   public String getFormatChoosen() 
   {
     return (String)fileFormats.getSelectedItem();
   }
 
-
+  /**
+  *
+  * Get the EMBOSS command line for the values selected
+  * for the input sequence attributes 
+  * @param seq	sequence number
+  * @return	command line input sequence options
+  *
+  */
   public String getInputSeqAttr(int seq) 
   {
     String options = " ";
@@ -417,17 +496,17 @@ public class InputSequenceAttributes
     if(upper.isSelected())
       options = options.concat(" -supper" + seq);
 
-    if(!isOpenFileDefault())
-      options = options.concat(" -sopenfile" + seq + " " +
-                                     sopenFile.getText());
+//    if(!isOpenFileDefault())
+//      options = options.concat(" -sopenfile" + seq + " " +
+//                                     sopenFile.getText());
 
-    if(!isDBNameDefault())
-      options = options.concat(" -sdbname" + seq + " " +
-                                     sdbName.getText());    
+//    if(!isDBNameDefault())
+//      options = options.concat(" -sdbname" + seq + " " +
+//                                     sdbName.getText());    
 
-    if(!isSIDDefault())
-      options = options.concat(" -sid" + seq + " " +
-                                     sID.getText());
+//    if(!isSIDDefault())
+//      options = options.concat(" -sid" + seq + " " +
+//                                     sID.getText());
 
     if(!isUFODefault())
       options = options.concat(" -sufo" + seq + " " +

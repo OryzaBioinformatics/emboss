@@ -37,8 +37,11 @@ import org.emboss.jemboss.gui.sequenceChooser.SequenceFilter;
 public class SequenceReader
 {
 
+  /** sequence file */
   private File seqFile;
+  /** sequence store */
   private Vector seqs;
+  /** true if read ok */
   private boolean reading = false;
 
   public SequenceReader()
@@ -59,6 +62,11 @@ public class SequenceReader
     }
   } 
 
+  /**
+  *
+  * @param seqFile	sequence file
+  *
+  */
   public SequenceReader(File seqFile)
   {
     this.seqFile = seqFile;
@@ -66,21 +74,32 @@ public class SequenceReader
     reading = true;
   }
 
+  /**
+  *
+  * @param seqString	sequence
+  *
+  */
   public SequenceReader(String seqString)
   {
     readSequenceString(seqString);
     reading = true;
   }
 
-/**
-*
-*
-*/
+  /**
+  *
+  *
+  */
   public boolean isReading()
   {
     return reading;
   }
 
+  /**
+  *
+  * Read a sequence file and create a vector of sequences
+  * @return 	vector of Sequence objects
+  *
+  */
   public Vector readSequenceFile()
   {
     BufferedReader in = null;
@@ -103,6 +122,12 @@ public class SequenceReader
       index = line.indexOf("!!NA_MULTIPLE_ALIGNMENT");
       if(index > -1)
         return readMSFFile(new BufferedReader(new FileReader(seqFile)));
+
+// clustal 
+      index = line.indexOf("CLUSTAL");
+      if(index > -1)
+        return readClustalFile(new BufferedReader(new FileReader(seqFile)));
+
     }
     catch (IOException e)
     {
@@ -111,6 +136,13 @@ public class SequenceReader
     return null;
   }
 
+  /**
+  *
+  * Read a formatted sequence string (e.g msf) and create a vector
+  * of sequences
+  * @return     vector of Sequence objects
+  *
+  */
   public Vector readSequenceString(String seqString)
   {
     BufferedReader in = null;
@@ -133,6 +165,11 @@ public class SequenceReader
       index = line.indexOf("!!NA_MULTIPLE_ALIGNMENT");
       if(index > -1)
         return readMSFFile(new BufferedReader(new StringReader(seqString)));
+
+// clustal
+      index = line.indexOf("CLUSTAL");
+      if(index > -1)
+        return readClustalFile(new BufferedReader(new FileReader(seqFile)));
     }
     catch (IOException e)
     {
@@ -141,18 +178,19 @@ public class SequenceReader
     return null;
   }
 
-/**
-*
-* Reads in the FASTA sequence file and creates a Vector 
-* containing the sequence(s).
-*
-*/
+  /**
+  *
+  * Reads in the FASTA sequence file and creates a Vector 
+  * containing the sequence(s).
+  * @param in	buffered reader 
+  *
+  */
   public Vector readFastaFile(BufferedReader in)
   {
     seqs = new Vector();
 //  BufferedReader in = null;
     String seqString = "";
-
+    
     try
     {
 //    in = new BufferedReader(new FileReader(seqFile));
@@ -183,17 +221,17 @@ public class SequenceReader
     }
     catch (IOException e)
     {
-      System.out.println("SequenceReader Error");
+      System.out.println("SequenceReader FASTA Error");
     }
     return seqs;
   }
 
-/**
-*
-* Reads in the MSF sequence file and creates a Vector
-* containing the sequence(s).
-*
-*/
+  /**
+  *
+  * Reads in the MSF sequence file and creates a Vector
+  * containing the sequence(s).
+  * @param in	buffered reader
+  */
   public Vector readMSFFile(BufferedReader in)
   {
     seqs = new Vector();
@@ -204,7 +242,7 @@ public class SequenceReader
     {
 //    in = new BufferedReader(new FileReader(seqFile));
       String line;
-      Sequence seq;
+      Sequence seq = null;
       String type = null;
       String bit;
       StringTokenizer st;
@@ -241,10 +279,10 @@ public class SequenceReader
               seqIndex.put(name,new Integer(num));
               num++;
             }
+            else if(bit.startsWith("Weight:"))
+              seq.setWeight(Float.parseFloat(st.nextToken().trim()));
             else if(bit.startsWith("Type:"))
-            {
               type = st.nextToken(" ").trim();
-            }
           }
         }
         else      // read the MSF sequences
@@ -264,7 +302,7 @@ public class SequenceReader
 
               int seqInd = ((Integer)seqIndex.get(name)).intValue();
               seq = (Sequence)seqs.elementAt(seqInd);
-              seq.appentToSequence(seqString);
+              seq.appendToSequence(seqString);
             }
           }
         }
@@ -274,43 +312,111 @@ public class SequenceReader
     }
     catch (IOException e)
     {
-      System.out.println("SequenceReader Error");
+      System.out.println("SequenceReader MSF Error");
     }
     return seqs;
   }
 
 
-/**
-*
-* Returns the number of sequences.
-*
-*/
+  /**
+  *
+  * Reads in the CLUSTAL sequence file and creates a Vector
+  * containing the sequence(s).
+  * @param in   buffered reader
+  */
+  public Vector readClustalFile(BufferedReader in)
+  {
+    seqs = new Vector();
+    String seqString = "";
+
+    try
+    {
+      String line;
+      Sequence seq;
+      String type = null;
+      StringTokenizer st;
+      Hashtable seqIndex = new Hashtable();
+      int num = 0;
+
+      while((line = in.readLine()) != null )
+      {
+        line = line.trim();
+        if(line.equals(""))
+          continue;
+        if(line.startsWith("CLUSTAL "))
+          continue;
+
+        int index = line.indexOf(" ");
+        if(index > -1)
+        {
+          String name = line.substring(0,index);
+          if(!seqIndex.containsKey(name))
+          {
+            seqIndex.put(name,new Integer(num));
+            seq = new Sequence(name,"");
+            seqs.add(num++,seq);
+          }
+  
+          st = new StringTokenizer(line.substring(index)," ");
+          seqString = new String();
+          while (st.hasMoreTokens())
+            seqString = seqString.concat(st.nextToken(" ").trim());
+
+          int seqInd = ((Integer)seqIndex.get(name)).intValue();
+          seq = (Sequence)seqs.elementAt(seqInd);
+          seq.appendToSequence(seqString);
+        }
+
+      }
+    }
+    catch (IOException e)
+    {
+      System.out.println("SequenceReader Clutal Error");
+    }
+    return seqs;
+
+  }
+
+  /**
+  *
+  * Returns the number of sequences.
+  * @return number of sequences
+  *
+  */
   public int getNumberOfSequences()
   {
     return seqs.size();
   }
 
-/**
-*
-* Returns the sequence at a given position in
-* the Sequence Vector store.
-*
-*/
+  /**
+  *
+  * Returns the sequence at a given position in
+  * the Sequence Vector store.
+  * @return	sequence object
+  *
+  */
   public Sequence getSequence(int index)
   {
     return (Sequence)seqs.get(index);
   }
 
-/**
-*
-* Returns the Sequence Vector store
-*
-*/
+  /**
+  *
+  * Returns the Sequence Vector store
+  * @return	collection of Sequence objects
+  *
+  */
   public Vector getSequenceVector()
   {
     return seqs;
   }
 
+  /**
+  *
+  * Get the sequence file
+  * @return	sequence file
+  *
+  */
   public File getSequenceFile()
   {
     return seqFile;

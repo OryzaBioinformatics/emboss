@@ -23,14 +23,30 @@ package org.emboss.jemboss.gui.form;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+*
+* Panel to display the EMBOSS application name on
+*
+*/
 public class ApplicationNamePanel extends JPanel
 {
-
+  /** x position for displaying name */
   private int x;
+  /** y position for displaying name */
   private int y;
+  /** font size */
   private int fontSize;
+  /** application name */
   private String name;
 
+  /**
+  *
+  * @param name 	application name
+  * @param x		x position for displaying name 
+  * @param y		y position for displaying name
+  * @param fontSize	font size 
+  *
+  */
   public ApplicationNamePanel(String name, int x, int y, 
                                   int fontSize)
   {
@@ -47,6 +63,12 @@ public class ApplicationNamePanel extends JPanel
     setBackground(Color.white);
   } 
 
+  /**
+  *
+  * Override paintComponent
+  * @param g	graphics
+  *
+  */
   public void paintComponent(Graphics g)
   {
     super.paintComponent(g);

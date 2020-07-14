@@ -27,14 +27,20 @@ import java.util.TimerTask;
 
 /**
 *
-* Simple demo that uses java.util.Timer to schedule a task to execute
-* once 10 seconds have passed.
+* Timer for updating the Jemboss job manager for
+* batch jobs submitted
 *
 */
 public class BatchUpdateTimer
 {
+  /** timer */
   private static Timer timer;
 
+  /**
+  *
+  * @param seconds	update frequency
+  *
+  */
   public BatchUpdateTimer(int seconds)
   {
     timer = new Timer();
@@ -42,6 +48,11 @@ public class BatchUpdateTimer
   }
 
 
+  /**
+  *
+  * Timer task to update the Jemboss job manager
+  *
+  */
   class RemindTask extends TimerTask
   {
     public void run()

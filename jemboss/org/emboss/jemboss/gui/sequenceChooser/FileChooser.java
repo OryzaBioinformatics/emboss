@@ -41,14 +41,20 @@ import org.emboss.jemboss.JembossParams;
 */
 public class FileChooser 
 {
-
-  private String fileSelected;
+  /** file chooser */
   private final JFileChooser fc;
+  /** file name text field */
   private TextFieldSink fileName;
-
-  private String currentDirectory;
+  /** label for text field */
   private JLabel lname;
 
+  /**
+  *
+  * @param bdown	container in form to add to
+  * @param name		label name for field
+  * @param mysettings	jemboss properties 	
+  *
+  */
   public FileChooser(Box bdown, String name,
              final JembossParams mysettings)
   {
@@ -90,8 +96,8 @@ public class FileChooser
 
         if (returnVal == JFileChooser.APPROVE_OPTION) 
         {
-          fileSelected = fc.getSelectedFile().getAbsolutePath();
-          currentDirectory = fc.getCurrentDirectory().getPath();
+          String fileSelected = fc.getSelectedFile().getAbsolutePath();
+          String currentDirectory = fc.getCurrentDirectory().getPath();
           fileName.setText(fileSelected);
         }
       }
@@ -100,27 +106,56 @@ public class FileChooser
     file.add(Box.createHorizontalGlue());
   }
 
-  
+  /**
+  *
+  * Get the selected file
+  * @return 	file name
+  *
+  */ 
   public String getFileChosen() 
   {
     return fileName.getText();
   }
 
+  /**
+  *
+  * Get the JFileChooser 
+  * @return	file chooser
+  *
+  */
   public JFileChooser getJFileChooser() 
   {
     return fc;
   }
 
+  /**
+  *
+  * Get the text field
+  * @return	text field
+  *
+  */
   public TextFieldSink getTextFieldSink() 
   {
     return fileName;
   }
 
+  /**
+  *
+  * Set the text field
+  * @param txt	text to set in the text field
+  *
+  */
   public void setText(String txt)
   {
     fileName.setText(txt);
   }
 
+  /**
+  *
+  * Set the size of the text field
+  * @param d	size of text field
+  *
+  */
   public void setSize(Dimension d)
   {
     fileName.setPreferredSize(d);
@@ -128,16 +163,34 @@ public class FileChooser
     fileName.setMaximumSize(d);
   }
 
+  /**
+  *
+  * Set the preferred size of the text field
+  * @param d    size of text field
+  *
+  */
   public void setPreferredSize(Dimension d)
   {
     fileName.setPreferredSize(d);
   }
 
+  /**
+  *
+  * Get the preferred size of the text field
+  * @return    	size of text field
+  *
+  */
   public Dimension getPreferredSize()
   {
     return fileName.getPreferredSize();
   }
 
+  /**
+  * 
+  * Set the label colour
+  * @param c	colour
+  *
+  */
   public void setForeground(Color c)
   {
     lname.setForeground(c);

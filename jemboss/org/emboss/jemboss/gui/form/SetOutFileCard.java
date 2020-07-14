@@ -33,12 +33,19 @@ import org.emboss.jemboss.gui.sequenceChooser.*;
 /**
 *
 * Creates an output file Box
-* @author T.J. Carver
 *
 */
 public class SetOutFileCard
 {
 
+  /**
+  *
+  * @param pan		container for this parameter
+  * @param tfs		field sink for output file name
+  * @param labelColor	label coulour
+  * @param sectionPane	section panel
+  *
+  */
   public SetOutFileCard(Box pan, TextFieldSink tfs, Color labelColor,
                         final JPanel sectionPane)
   {

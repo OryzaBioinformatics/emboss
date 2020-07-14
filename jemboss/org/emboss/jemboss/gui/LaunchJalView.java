@@ -32,6 +32,11 @@ import jalview.AlignFrame;
 //import jalview.MailProperties;
 //import jalview.PIDColourScheme;
 
+/**
+*
+* Launch Jalview (M.Clamp )
+*
+*/
 public class LaunchJalView extends JFrame
 {
 
@@ -167,6 +172,5 @@ public class LaunchJalView extends JFrame
 
     setVisible(true);      
   }
-
 }
 

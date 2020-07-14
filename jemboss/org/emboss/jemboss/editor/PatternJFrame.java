@@ -24,11 +24,19 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
+/**
+*
+* Frame for searching for patterns in the sequences
+*
+*/
 public class PatternJFrame extends JFrame
 {
  
+  /** graphic sequence panel       */
   private GraphicSequenceCollection gsc= null;
+  /** residue position to display  */
   private int viewResiduePosition = -1;
+  /** wrap around search check box */
   private JCheckBox wrapAround;
 
   public PatternJFrame()
@@ -126,6 +134,12 @@ public class PatternJFrame extends JFrame
     pack();
   }
 
+
+  /**
+  *
+  * Set the graphic sequence panel 
+  *
+  */
   protected void setGraphic(GraphicSequenceCollection gsc)
   {
     this.gsc = gsc;

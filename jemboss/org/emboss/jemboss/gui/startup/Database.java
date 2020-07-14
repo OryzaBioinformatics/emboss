@@ -27,15 +27,18 @@ import java.util.*;
 /**
 *
 * Parses the output from showdb to find the available databases
-* @author T. J. Carver
 *
 */
 public class Database 
 {
-
+  /** available databases */
   private String db[];
-  private int numdb;
 
+  /**
+  *
+  * @param showdb	output from showdb
+  *
+  */
   public Database(String showdb) 
   {
 
@@ -43,7 +46,7 @@ public class Database
     String line;
     try
     {
-      numdb =0;
+      int numdb =0;
       in = new BufferedReader(new StringReader(showdb));
       while((line = in.readLine()) != null)
         if(!line.startsWith("#"))
@@ -64,6 +67,12 @@ public class Database
     
   }
 
+  /**
+  * 
+  * Get the available databases
+  * @return	available databases
+  *
+  */
   public String[] getDB() 
   {
     return db;

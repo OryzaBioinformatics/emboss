@@ -26,16 +26,29 @@ import java.awt.event.*;
 import java.util.*;
 import org.emboss.jemboss.gui.ScrollPanel;
 
+/**
+*
+* Colour pallette display and editor.
+*
+*/
 public class ColourJFrame extends JFrame
 {
-  private Cursor cbusy = new Cursor(Cursor.WAIT_CURSOR);
-  private Cursor cdone = new Cursor(Cursor.DEFAULT_CURSOR);
+  /** Popup menu system                        */
   private JPopupMenu popup;
+  /** Container for the all the residue colour */
   private Box YBox = new Box(BoxLayout.Y_AXIS);
+  /** Colour scheme                            */
   private Hashtable colourTable;
+  /** Scroll pane for the colour pallette      */
   private JScrollPane jspColour;
+  /** Associated alignment viewer              */
   private AlignJFrame align;
 
+  /**
+  *
+  * @param align 	alignment viewer
+  *
+  */
   public ColourJFrame(AlignJFrame align)
   {
     super("Colour");
@@ -76,6 +89,13 @@ public class ColourJFrame extends JFrame
     setSize(70,150);
   }
 
+
+  /**
+  *
+  * Set the colour scheme to display
+  * @param colourTable	hashtable containing a colour scheme
+  *
+  */
   public void setCurrentColour(Hashtable colourTable)
   {
     this.colourTable = colourTable;
@@ -93,7 +113,9 @@ public class ColourJFrame extends JFrame
       residueField.setPreferredSize(new Dimension(20,20));
       residueField.setMaximumSize(new Dimension(20,20));
       XBox.add(residueField);
-      ColourPanel colPane = new ColourPanel(res,(Color)colourTable.get(res));
+      ResidueColourPanel colPane = new ResidueColourPanel(
+                             res,
+                             (Color)colourTable.get(res));
       XBox.add(colPane);
       YBox.add(XBox);
     }
@@ -102,36 +124,47 @@ public class ColourJFrame extends JFrame
     jspColour.getViewport().setViewPosition(new Point(0,0));
   }
 
+
+  /**
+  *
+  * Get the colour scheme as a hashtable
+  * @return 	the colour scheme as a hashtable
+  *
+  */
   public Hashtable getCurrentColourScheme()
   {
     return colourTable;
   }
 
-  class ColourPanel extends JPanel
-                        implements ActionListener
+
+
+  /**
+  *
+  * Colour panel for each individual residue in the pallette
+  *
+  */
+  class ResidueColourPanel extends ColourPanel
   {
-    private Color col;
     private String res;
-    private int xsize = 20;
-    private int ysize = 20;
-    private JPopupMenu popup;
-
-    public ColourPanel(String res,Color col)
-    {
-      super();
-      this.col = col;
-      this.res = res;
-      setPreferredSize(new Dimension(xsize,ysize));
-
-      ColourMenu cm = new ColourMenu(res+" Colour");
-      popup = new JPopupMenu();
-      addMouseListener(new PopupListener());
-      cm.addActionListener(this);
-      popup.add(cm);
-    }
 
     /**
+    *
+    * @param res	residue symbol
+    * @param col 	colour of residue
+    *
+    */
+    public ResidueColourPanel(String res,Color col)
+    {
+      super(res+" Colour",col);
+      this.res = res;
+    }
+
+
+    /**
+    *
     * Popup menu actions
+    * @param e	action event
+    *
     */
     public void actionPerformed(ActionEvent e)
     {
@@ -141,36 +174,6 @@ public class ColourJFrame extends JFrame
       colourTable.remove(res);
       colourTable.put(res,col);
       align.repaintSequences(colourTable);
-    }
-
-    public void paintComponent(Graphics g)
-    {
-// let UI delegate paint first (incl. background filling)
-      super.paintComponent(g);
-      g.setColor(col);
-      g.fillRect(0,0,xsize,ysize);
-      g.setColor(Color.black);
-      g.drawRect(0,0,xsize,ysize);
-    }
-
-    class PopupListener extends MouseAdapter
-    {
-      public void mousePressed(MouseEvent e)
-      {
-        maybeShowPopup(e);
-      }
-
-      public void mouseReleased(MouseEvent e)
-      {
-        maybeShowPopup(e);
-      }
-
-      private void maybeShowPopup(MouseEvent e)
-      {
-        if(e.isPopupTrigger())
-          popup.show(e.getComponent(),
-                  e.getX(), e.getY());
-      }
     }
   }
 

@@ -31,30 +31,50 @@ import javax.swing.tree.*;
 import java.io.*;
 import java.util.Vector;
 import java.util.Enumeration;
+import java.util.Hashtable;
 
 import org.emboss.jemboss.soap.PrivateRequest;
 import org.emboss.jemboss.gui.ResultsMenuBar;
+import org.emboss.jemboss.gui.ShowResultSet;
 import org.emboss.jemboss.JembossParams;
 
 /**
 *
-* Creates a local file tree for Jemboss. This acts as a drag 
+* Creates a local file tree manager for Jemboss. This acts as a drag 
 * source and sink for files.
 *
 */
 public class DragTree extends JTree implements DragGestureListener,
-                 DragSourceListener, DropTargetListener, ActionListener 
+                 DragSourceListener, DropTargetListener, ActionListener,
+                 Autoscroll 
 {
 
+  /** jemboss properties */
   private JembossParams mysettings;
+  /** root directory */
   private File root;
+  /** store of directories that are opened */
   private Vector openNode;
+  /** file separator */
   private String fs = new String(System.getProperty("file.separator"));
+  /** popup menu */
   private JPopupMenu popup;
+  /** busy cursor */
   private Cursor cbusy = new Cursor(Cursor.WAIT_CURSOR);
+  /** done cursor */
   private Cursor cdone = new Cursor(Cursor.DEFAULT_CURSOR);
+  /** AutoScroll margin */
+  private static final int AUTOSCROLL_MARGIN = 45;
+  /** used by AutoScroll method */
+  private Insets autoscrollInsets = new Insets( 0, 0, 0, 0 );
 
-
+  /**
+  *
+  * @param rt		root directory
+  * @param f		frame
+  * @param mysettings 	jemboss properties
+  *
+  */
   public DragTree(File rt, final JFrame f, final JembossParams mysettings) 
   {
     this.mysettings = mysettings;
@@ -72,9 +92,8 @@ public class DragTree extends JTree implements DragGestureListener,
     setModel(model);
     createTreeModelListener();
 
-
     this.getSelectionModel().setSelectionMode
-                  (TreeSelectionModel.SINGLE_TREE_SELECTION);
+                  (TreeSelectionModel.DISCONTIGUOUS_TREE_SELECTION);
 
     // Popup menu
     addMouseListener(new PopupListener());
@@ -87,7 +106,7 @@ public class DragTree extends JTree implements DragGestureListener,
 //open menu
     JMenu openMenu = new JMenu("Open With");
     popup.add(openMenu);
-    menuItem = new JMenuItem("Jemboss Aligmnment Editor");
+    menuItem = new JMenuItem("Jemboss Alignment Editor");
     menuItem.addActionListener(this);
     openMenu.add(menuItem);
     menuItem = new JMenuItem("Text Editor");
@@ -103,7 +122,10 @@ public class DragTree extends JTree implements DragGestureListener,
     menuItem = new JMenuItem("Delete...");
     menuItem.addActionListener(this);
     popup.add(menuItem);
-
+    popup.add(new JSeparator());
+    menuItem = new JMenuItem("De-select All");
+    menuItem.addActionListener(this);
+    popup.add(menuItem);
 
     //Listen for when a file is selected
     MouseListener mouseListener = new MouseAdapter() 
@@ -136,10 +158,7 @@ public class DragTree extends JTree implements DragGestureListener,
           if(!node.isExplored()) 
           {  
             f.setCursor(cbusy);
-            DefaultTreeModel model = (DefaultTreeModel)getModel();
-            node.explore();
-            openNode.add(node);
-            model.nodeStructureChanged(node);
+            exploreNode(node);
             f.setCursor(cdone);
           }
         }
@@ -148,9 +167,11 @@ public class DragTree extends JTree implements DragGestureListener,
 
   }
 
+
   /**
   *
   * Popup menu actions
+  * @param e	action event
   * 
   */
   public void actionPerformed(ActionEvent e) 
@@ -158,7 +179,6 @@ public class DragTree extends JTree implements DragGestureListener,
 
     JMenuItem source = (JMenuItem)(e.getSource());
     final FileNode node = getSelectedNode();
-
 
     if(source.getText().equals("Refresh")) 
     {
@@ -181,14 +201,18 @@ public class DragTree extends JTree implements DragGestureListener,
     
     final File f = node.getFile();
 
-    if(source.getText().equals("Jemboss Aligmnment Editor"))
-      new org.emboss.jemboss.editor.AlignJFrame(f);
+    if(source.getText().equals("Jemboss Alignment Editor"))
+    {
+      org.emboss.jemboss.editor.AlignJFrame ajFrame =
+               new org.emboss.jemboss.editor.AlignJFrame(f);
+      ajFrame.setVisible(true);
+    }
     else if(source.getText().equals("Text Editor"))
       showFilePane(f.getAbsolutePath(), mysettings);
     else if(source.getText().equals("New Folder..."))
     {
       String path = null;
-      if(isFileSelection())
+      if(node.isLeaf())
         path = f.getParent();
       else
         path = f.getAbsolutePath();
@@ -218,31 +242,27 @@ public class DragTree extends JTree implements DragGestureListener,
     }
     else if(source.getText().equals("Delete..."))
     {
+      File fn[] = getSelectedFiles();
+      String names = "";
+      for(int i=0; i<fn.length;i++)
+         names = names.concat(fn[i].getAbsolutePath()+"\n");
       int n = JOptionPane.showConfirmDialog(null,
-                                 "Delete "+f.getAbsolutePath()+"?",
-                                 "Delete f.getAbsolutePath()",
+                                 "Delete \n"+names+"?",
+                                 "Delete Files",
                                  JOptionPane.YES_NO_OPTION);
+
+      FileNode nodes[] = getSelectedNodes();
       if(n == JOptionPane.YES_OPTION)
-      {
-        if(f.delete())
-        {
-          Runnable deleteFileFromTree = new Runnable()
-          {
-            public void run () { deleteObject(node); };
-          };
-          SwingUtilities.invokeLater(deleteFileFromTree);
-        }
-        else
-          JOptionPane.showMessageDialog(null,"Cannot delete\n"+
-                             f.getAbsolutePath(),"Warning",
-                             JOptionPane.ERROR_MESSAGE);
-      }
+        for(int i=0; i<nodes.length;i++)
+          deleteFile(nodes[i]);
     }
+    else if(source.getText().equals("De-select All"))
+      clearSelection();
     else if(isFileSelection() && source.getText().equals("Rename..."))
     {
-      final String inputValue = JOptionPane.showInputDialog(null,
+      String inputValue = (String)JOptionPane.showInputDialog(null,
                               "New File Name","Rename "+f.getName(), 
-                              JOptionPane.QUESTION_MESSAGE);
+                              JOptionPane.QUESTION_MESSAGE,null,null,f.getName());
 
       if(inputValue != null && !inputValue.equals("") )
       {
@@ -259,14 +279,39 @@ public class DragTree extends JTree implements DragGestureListener,
     }
   }
 
-/**
-*
-* Method to rename a file and update the filenode's.
-* @param File oldFile file to rename
-* @param FileNode oldNode filenode to be removed
-* @param String newFullName name of the new file
-*
-*/
+
+  /**
+  *
+  * Delete a file from the tree
+  * @param node		node to delete
+  *
+  */
+  public void deleteFile(final FileNode node)
+  {
+    File f = node.getFile();
+    if(f.delete())
+    {
+      Runnable deleteFileFromTree = new Runnable()
+      {
+        public void run () { deleteObject(node); };
+      };
+      SwingUtilities.invokeLater(deleteFileFromTree);
+    }
+    else
+      JOptionPane.showMessageDialog(null,"Cannot delete\n"+
+                         f.getAbsolutePath(),"Warning",
+                         JOptionPane.ERROR_MESSAGE);
+  }
+ 
+ 
+  /**
+  *
+  * Method to rename a file and update the filenode's.
+  * @param oldFile 	file to rename
+  * @param oldNode 	filenode to be removed
+  * @param newFullName 	name of the new file
+  *
+  */
   private void renameFile(final File oldFile, final FileNode oldNode, 
                           String newFullName)
   {
@@ -289,22 +334,22 @@ public class DragTree extends JTree implements DragGestureListener,
         SwingUtilities.invokeLater(renameFileInTree);
       }
       else
-      {
         JOptionPane.showMessageDialog(null, 
                    "Cannot rename \n"+oldFile.getAbsolutePath()+
                    "\nto\n"+fnew.getAbsolutePath(), "Rename Error",
                    JOptionPane.ERROR_MESSAGE);
-      }
     }
     return;
   }
 
-/**
-* 
-* @param String newRoot directory yo use as the root for
-*        the tree.
-*
-*/
+
+  /**
+  * 
+  * Define a directory root for the file tree
+  * @param newRoot 	directory to use as the root for
+  *        		the tree.
+  *
+  */
   public void newRoot(String newRoot)
   {
     root = new File(newRoot);
@@ -313,11 +358,13 @@ public class DragTree extends JTree implements DragGestureListener,
     setModel(model);
   }
 
-/**
-*
-* @param FileNode node to refresh 
-*
-*/
+
+  /**
+  *
+  * Refresh
+  * @param FileNode node to refresh 
+  *
+  */
   public void refresh(FileNode node)
   {
     node.reExplore();
@@ -325,6 +372,308 @@ public class DragTree extends JTree implements DragGestureListener,
     model.nodeStructureChanged(node);
   }
 
+
+  /**
+  *
+  * Get FileNode of selected node
+  * @return     node that is currently selected
+  *
+  */
+  public FileNode getSelectedNode()
+  {
+    TreePath path = getLeadSelectionPath();
+    if(path == null)
+      return null;
+    FileNode node = (FileNode)path.getLastPathComponent();
+    return node;
+  }
+
+
+  /**
+  *
+  * Get FileNodes of selected nodes
+  * @return     node that is currently selected
+  *
+  */
+  public FileNode[] getSelectedNodes()
+  {
+    TreePath path[] = getSelectionPaths();
+    if(path == null)
+      return null;
+
+    int numberSelected = path.length;
+    FileNode nodes[] = new FileNode[numberSelected];
+    for(int i=0;i<numberSelected;i++)
+       nodes[i] = (FileNode)path[i].getLastPathComponent();
+
+    return nodes;
+  }
+
+
+  /**
+  *
+  * Get selected files
+  * @return     node that is currently selected
+  *
+  */
+  public File[] getSelectedFiles()
+  {
+    FileNode[] fn = getSelectedNodes();
+    int numberSelected = fn.length;
+    File files[] = new File[numberSelected];
+    for(int i=0;i<numberSelected;i++)
+       files[i] = fn[i].getFile();
+
+    return files;
+  }
+
+
+  /**
+  *
+  * Return true if selected node is a file
+  * @return true is a file is selected, false if
+  *         a directory is selected
+  *
+  */
+  public boolean isFileSelection()
+  {
+    TreePath path = getLeadSelectionPath();
+    if(path == null)
+      return false;
+
+    FileNode node = (FileNode)path.getLastPathComponent();
+    return node.isLeaf();
+  }
+
+
+  /**
+  *
+  * Make the given directory the root and create a new
+  * DefaultTreeModel.
+  * @param root         root directory
+  * @param              tree model with the root node set
+  *                     to the given directory
+  *
+  */
+  private DefaultTreeModel createTreeModel(File root)
+  {
+    FileNode rootNode = new FileNode(root);
+    rootNode.explore();
+    openNode = new Vector();
+    openNode.add(rootNode);
+    return new DefaultTreeModel(rootNode);
+  }
+
+
+  /**
+  *
+  * Adding a file (or directory) to the file tree manager.
+  * This looks to see if the directory has already been opened
+  * and updates the filetree if it has.
+  * @param child        new child to add in
+  * @param path         path to where child is to be added
+  * @param node         node to add child to
+  *
+  */
+  public DefaultMutableTreeNode addObject(String child,
+                            String path, FileNode node)
+  {
+
+    DefaultTreeModel model = (DefaultTreeModel)getModel();
+    if(node == null)
+    {
+      node = getNode(path);
+      if(node==null)
+        return null;
+    }
+
+    FileNode parentNode = getNode(path);
+    File newleaf = new File(path + fs + child);
+    FileNode childNode = null;
+
+    if(parentNode.isExplored())
+    {
+      childNode = new FileNode(newleaf);
+      int index = getAnIndex(parentNode,child);
+      if(index > -1)
+        model.insertNodeInto(childNode, parentNode, index);
+    }
+    else if(parentNode.isDirectory())
+    {
+      exploreNode(parentNode);
+      childNode = getNode(path + fs + child);
+    }
+
+    // Make sure the user can see the new node.
+    this.scrollPathToVisible(new TreePath(childNode.getPath()));
+    return childNode;
+  }
+
+
+  /**
+  *
+  * Delete a node from the JTree
+  * @param node         node for deletion
+  *
+  */
+  public void deleteObject(FileNode node)
+  {
+    DefaultTreeModel model =(DefaultTreeModel)getModel();
+    FileNode parentNode = getNode(node.getFile().getParent());
+    model.removeNodeFromParent(node);
+  }
+
+
+  /**
+  *
+  * Explore a directory node
+  * @param dirNode      direcory node to display
+  *
+  */
+  public void exploreNode(FileNode dirNode)
+  {
+    DefaultTreeModel model = (DefaultTreeModel)getModel();
+    dirNode.explore();
+    openNode.add(dirNode);
+    model.nodeStructureChanged(dirNode);
+  }
+
+  /**
+  *
+  * Gets the node from the existing explored nodes and their
+  * children.
+  * @param path         path to a file or directory
+  * @return             corresponding node if the directory or
+  *                     file is visible otherwise returns null.
+  *
+  */
+  private FileNode getNode(String path)
+  {
+    Enumeration en = openNode.elements();
+
+    while(en.hasMoreElements())
+    {
+      FileNode node = (FileNode)en.nextElement();
+      String nodeName = node.getFile().getAbsolutePath();
+      if(nodeName.equals(path))
+        return node;
+    }
+
+// check children of explored nodes
+    en = openNode.elements();
+    while(en.hasMoreElements())
+    {
+      FileNode child = getChildNode((FileNode)en.nextElement(),path);
+      if(child != null)
+        return child;
+    }
+
+    return null;
+  }
+
+
+  /**
+  *
+  * Gets the child node of a parent node
+  * @param parent       parent node
+  * @param childName    name of child
+  * @return the child node
+  *
+  */
+  private FileNode getChildNode(FileNode parent, String childName)
+  {
+    for(Enumeration children = parent.children(); children.hasMoreElements() ;)
+    {
+      FileNode childNode = (FileNode)children.nextElement();
+      String nodeName = childNode.getFile().getAbsolutePath();
+      if(childName.equals(nodeName))
+        return childNode;
+    }
+
+    return null;
+  }
+
+  /**
+  *
+  * Finds a new index for adding a new file to the file manager.
+  * @param parentNode   parent directory node
+  * @param child        new child node
+  * @return             index of the child in the directory
+  *
+  */
+  private int getAnIndex(FileNode parentNode, String child)
+  {
+    //find the index for the child
+    int num = parentNode.getChildCount();
+    int childIndex = num;
+    for(int i=0;i<num;i++)
+    {
+      String nodeName =
+            ((FileNode)parentNode.getChildAt(i)).getFile().getName();
+      if(nodeName.compareTo(child) > 0)
+      {
+        childIndex = i;
+        break;
+      }
+      else if (nodeName.compareTo(child) == 0)  //file already exists
+      {
+        childIndex = -1;
+        break;
+      }
+    }
+    return childIndex;
+  }
+
+
+  /**
+  *
+  * Read a file into a byte array.
+  * @param filename     file name
+  * @return             byte[] contents of file
+  *
+  */
+  protected static byte[] readByteFile(String filename)
+  {
+
+    File fn = new File(filename);
+    byte[] b = null;
+    try
+    {
+      long s = fn.length();
+      if(s == 0)
+        return b;
+      b = new byte[(int)s];
+      FileInputStream fi = new FileInputStream(fn);
+      fi.read(b);
+      fi.close();
+    }
+    catch (IOException ioe)
+    {
+      System.out.println("Cannot read file: " + filename);
+    }
+    return b;
+
+  }
+
+  /**
+  *
+  * Opens a JFrame with the file contents displayed.
+  * @param filename     file name to display
+  * @param mysettings   jemboss properties
+  *
+  */
+  public static void showFilePane(String filename, JembossParams mysettings)
+  {
+    Hashtable contents = new Hashtable();
+    contents.put(filename,readByteFile(filename));
+    ShowResultSet srs = new ShowResultSet(contents,mysettings);
+    srs.setTitle("Local File");
+  }
+
+
+////////////////////
+// DRAG AND DROP
+////////////////////
 // drag source
   public void dragGestureRecognized(DragGestureEvent e) 
   {
@@ -333,7 +682,7 @@ public class DragTree extends JTree implements DragGestureListener,
     if(ie instanceof MouseEvent) 
       if(((MouseEvent)ie).isPopupTrigger()) 
         return;
-
+    
     // drag only files 
     if(isFileSelection())
       e.startDrag(DragSource.DefaultCopyDrop,     // cursor
@@ -349,7 +698,8 @@ public class DragTree extends JTree implements DragGestureListener,
 // drop sink
   public void dragEnter(DropTargetDragEvent e)
   {
-    if(e.isDataFlavorSupported(RemoteFileNode.REMOTEFILENODE))
+    if(e.isDataFlavorSupported(RemoteFileNode.REMOTEFILENODE) ||
+       e.isDataFlavorSupported(FileNode.FILENODE) )
       e.acceptDrag(DnDConstants.ACTION_COPY_OR_MOVE);
   }
 
@@ -367,20 +717,22 @@ public class DragTree extends JTree implements DragGestureListener,
     //local drop
     if(t.isDataFlavorSupported(FileNode.FILENODE))
     {
-//     try
-//     {
-//       FileNode fn = (FileNode)t.getTransferData(FileNode.FILENODE);
-//       if (dropNode.isLeaf())
-//       {
-//         e.rejectDrop();
-//         return;
-//       }
-//      
-//       String dropDir = dropNode.getFile().getAbsolutePath();
-//       String newFullName = dropDir+fs+fn.toString();
-//       renameFile(fn.getFile(),fn,newFullName);  
-//     }
-//     catch(Exception ufe){}        
+       try
+       {
+         FileNode fn = (FileNode)t.getTransferData(FileNode.FILENODE);
+         fn = getNode(fn.getFile().getAbsolutePath());
+
+         if (dropNode.isLeaf())
+         {
+           e.rejectDrop();
+           return;
+         }
+        
+         String dropDir = dropNode.getFile().getAbsolutePath();
+         String newFullName = dropDir+fs+fn.toString();
+         renameFile(fn.getFile(),fn,newFullName);  
+       }
+       catch(Exception ufe){}        
     }
     //remote drop
     else if(t.isDataFlavorSupported(RemoteFileNode.REMOTEFILENODE))
@@ -453,13 +805,14 @@ public class DragTree extends JTree implements DragGestureListener,
 
   }
 
-/**
-*
-* When a suitable DataFlavor is offered over a remote file
-* node the node is highlighted/selected and the drag
-* accepted. Otherwise the drag is rejected.
-*
-*/
+
+  /**
+  *
+  * When a suitable DataFlavor is offered over a remote file
+  * node the node is highlighted/selected and the drag
+  * accepted. Otherwise the drag is rejected.
+  *
+  */
   public void dragOver(DropTargetDragEvent e)
   {
     if (e.isDataFlavorSupported(RemoteFileNode.REMOTEFILENODE))
@@ -474,24 +827,24 @@ public class DragTree extends JTree implements DragGestureListener,
         e.acceptDrag(DnDConstants.ACTION_COPY_OR_MOVE);
       }
     }
-//  else if(e.isDataFlavorSupported(FileNode.FILENODE))
-//  {
-//    Point ploc = e.getLocation();
-//    TreePath ePath = getPathForLocation(ploc.x,ploc.y);
-//    if (ePath == null)
-//    {
-//      e.rejectDrag();
-//      return;
-//    }
-//    FileNode node = (FileNode)ePath.getLastPathComponent();
-//    if(!node.isDirectory())
-//      e.rejectDrag();
-//    else 
-//    {
-//      setSelectionPath(ePath);
-//      e.acceptDrag(DnDConstants.ACTION_COPY_OR_MOVE);
-//    }
-//  }
+    else if(e.isDataFlavorSupported(FileNode.FILENODE))
+    {
+      Point ploc = e.getLocation();
+      TreePath ePath = getPathForLocation(ploc.x,ploc.y);
+      if (ePath == null)
+      {
+        e.rejectDrag();
+        return;
+      }
+      FileNode node = (FileNode)ePath.getLastPathComponent();
+      if(!node.isDirectory())
+        e.rejectDrag();
+      else 
+      {
+        setSelectionPath(ePath);
+        e.acceptDrag(DnDConstants.ACTION_COPY_OR_MOVE);
+      }
+    }
     else
       e.rejectDrag();
     
@@ -501,206 +854,59 @@ public class DragTree extends JTree implements DragGestureListener,
   public void dropActionChanged(DropTargetDragEvent e) {}
   public void dragExit(DropTargetEvent e){}
 
-/**
-*
-* @return String path name to file that is currently selected
-*
-*/
-  public String getFilename()
-  {
-    TreePath path = getLeadSelectionPath();
-    FileNode node = (FileNode)path.getLastPathComponent();
-    return ((File)node.getUserObject()).getAbsolutePath();
-  }
 
-/**
-*
-* @return FileNode node that is currently selected
-*
-*/
-  public FileNode getSelectedNode()
+////////////////////
+// AUTO SCROLLING //
+////////////////////
+  /**
+  *
+  * Handles the auto scrolling of the JTree.
+  * @param location The location of the mouse.
+  *
+  */
+  public void autoscroll( Point location )
   {
-    TreePath path = getLeadSelectionPath();
-    if(path == null)
-      return null;
-    FileNode node = (FileNode)path.getLastPathComponent();
-//  System.out.println(node.getFile().getAbsolutePath());
-    return node;
-  }
-
-/**
-*
-* @return boolean true is a file is selected, false if
-*         a directory is selected
-*
-*/
-  public boolean isFileSelection() 
-  {
-    TreePath path = getLeadSelectionPath();
-    if(path == null)
-      return false;
-
-    FileNode node = (FileNode)path.getLastPathComponent();
-    return !node.isDirectory();
-  }
-
-/**
-*
-* Make the given directory the root and create a new
-* DefaultTreeModel.
-* @param File root the root directory
-* @param DefaultTreeModel with the root node set to the
-*        given directory
-*
-*/
-  private DefaultTreeModel createTreeModel(File root) 
-  {
-    FileNode rootNode = new FileNode(root);
-    rootNode.explore();
-    openNode = new Vector();
-    openNode.add(rootNode);
-    return new DefaultTreeModel(rootNode);
+    int top = 0, left = 0, bottom = 0, right = 0;
+    Dimension size = getSize();
+    Rectangle rect = getVisibleRect();
+    int bottomEdge = rect.y + rect.height;
+    int rightEdge = rect.x + rect.width;
+    if( location.y - rect.y < AUTOSCROLL_MARGIN && rect.y > 0 ) 
+      top = AUTOSCROLL_MARGIN;
+    if( location.x - rect.x < AUTOSCROLL_MARGIN && rect.x > 0 )
+      left = AUTOSCROLL_MARGIN;
+    if( bottomEdge - location.y < AUTOSCROLL_MARGIN && bottomEdge < size.height )
+      bottom = AUTOSCROLL_MARGIN;
+    if( rightEdge - location.x < AUTOSCROLL_MARGIN && rightEdge < size.width ) 
+      right = AUTOSCROLL_MARGIN;
+    rect.x += right - left;
+    rect.y += bottom - top;
+    scrollRectToVisible( rect );
   }
 
 
-/**
-*
-* Adding a file (or directory) to the file tree manager.
-* This looks to see if the directory has already been opened
-* and updates the filetree if it has.
-* @param file to add to the tree
-*
-*/
-  public DefaultMutableTreeNode addObject(String child,
-                            String path, FileNode node)
+  /**
+  *
+  * Gets the insets used for the autoscroll.
+  * @return The insets.
+  *
+  */
+  public Insets getAutoscrollInsets()
   {
-
-    DefaultTreeModel model = (DefaultTreeModel)getModel();
-    if(node == null)
-    {
-      node = getNode(path); 
-      if(node==null)
-        return null;
-    }
-
-    FileNode parentNode = getNode(path);
-    File newleaf = new File(path + fs + child);
-    FileNode childNode = new FileNode(newleaf);
-
-    try
-    {
-      if(parentNode.isExplored()) 
-      {
-        int index = getAnIndex(parentNode,child);
-        if(index > -1)     
-          model.insertNodeInto(childNode, parentNode, index);
-      }
-    }
-    catch(NullPointerException npe)
-    {
-      parentNode = node;
-      if(node.isLeaf())
-        parentNode = (FileNode)node.getParent();
-      parentNode.explore();
-      model.nodeChanged(parentNode);
-      model.nodeStructureChanged(parentNode);
-    }
-
-    // Make sure the user can see the new node.
-    this.scrollPathToVisible(new TreePath(childNode.getPath()));
-
-    return childNode;
+    Dimension size = getSize();
+    Rectangle rect = getVisibleRect();
+    autoscrollInsets.top = rect.y + AUTOSCROLL_MARGIN;
+    autoscrollInsets.left = rect.x + AUTOSCROLL_MARGIN;
+    autoscrollInsets.bottom = size.height - (rect.y+rect.height) + AUTOSCROLL_MARGIN;
+    autoscrollInsets.right  = size.width - (rect.x+rect.width) + AUTOSCROLL_MARGIN;
+    return autoscrollInsets;
   }
 
-/**
-*
-* Gets the node from the existing explored nodes.
-* @param String path to a file or directory
-* @return FileNode node the corresponding node if the 
-*         directory or file is visible otherwise returns null.
-*
-*/
-  private FileNode getNode(String path)
-  {
-    Enumeration en = openNode.elements();
-
-    while(en.hasMoreElements()) 
-    {
-      FileNode node = (FileNode)en.nextElement();
-      String nodeName = node.getFile().getAbsolutePath();
-      if(nodeName.equals(path))
-        return node;
-    }
-    return null;
-  }
-
-/**
-*
-* Finds a new index for adding a new file to the file manager.
-* @param FileNode parentNode directory node
-* @param String child
-* @return int childIndex the index of the child in the directory
-*
-*/
-  private int getAnIndex(FileNode parentNode, String child)
-  {
-    //find the index for the child
-    int num = parentNode.getChildCount();
-    int childIndex = num;
-    for(int i=0;i<num;i++)
-    {
-      String nodeName = 
-            ((FileNode)parentNode.getChildAt(i)).getFile().getName();
-      if(nodeName.compareTo(child) > 0)
-      {
-        childIndex = i;
-        break;
-      }
-      else if (nodeName.compareTo(child) == 0)  //file already exists
-      {
-        childIndex = -1;
-        break;
-      }
-    }
-    return childIndex;
-  }
-
-/**
-*
-* Delete a node from the JTree
-* @param FileNode node for deletion
-*
-*/
-  public void deleteObject(FileNode node)
-  {
-    DefaultTreeModel model =(DefaultTreeModel)getModel();
-    FileNode parentNode = getNode(node.getFile().getAbsolutePath());
-    model.removeNodeFromParent(node);
-    model.nodeStructureChanged(parentNode);
-  }
-
-/**
-*
-* Opens a JFrame with the file contents displayed.
-* @param the file name
-*
-*/
-  public static void showFilePane(String filename, JembossParams mysettings)
-  {
-    JFrame ffile = new JFrame(filename);
-    JPanel pfile = (JPanel)ffile.getContentPane();
-    pfile.setLayout(new BorderLayout());
-
-    FileEditorDisplay fed = new FileEditorDisplay(ffile, filename);
-    new ResultsMenuBar(ffile,fed,mysettings);
-
-    JScrollPane rscroll = new JScrollPane(fed);
-    pfile.add(rscroll, BorderLayout.CENTER);
-    fed.setCaretPosition(0);
-    ffile.setSize(450,400);
-    ffile.setVisible(true);
-  }
-
+  /**
+  *
+  * Popup menu listener
+  *
+  */
   class PopupListener extends MouseAdapter
   {
     public void mousePressed(MouseEvent e)

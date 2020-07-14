@@ -29,17 +29,27 @@ import org.emboss.jemboss.gui.ScrollPanel;
 import org.emboss.jemboss.gui.sequenceChooser.*;
 import org.emboss.jemboss.JembossParams;
 
+/**
+*
+* List file panel, enabling the user to generate a list of
+* sequence in the GUI which can be used to generate an EMBOSS
+* list file to be used in the command line.
+*
+*/
 public class ListFilePanel extends JPanel
 {
 
+  /** maximum number of sequences in list */
   private int nFiles;
+  /** container for sequences */
   private FileChooser fileChooser[];
 
-/**
-*
-* @param int number of files for the list
-*
-*/  
+  /**
+  *
+  * @param nFiles	maximum number of files in a list
+  * @param mysettings	jemboss properties
+  *
+  */  
   public ListFilePanel(int nFiles, JembossParams mysettings)
   {
     super(new BorderLayout());
@@ -74,11 +84,11 @@ public class ListFilePanel extends JPanel
     setMaximumSize(new Dimension(350,100));
   }
 
-/**
-*
-* @return list of filenames
-*
-*/
+  /**
+  *
+  * @return 	list of filenames
+  *
+  */
   public String getListFile()
   {
     String list = "";
@@ -92,11 +102,11 @@ public class ListFilePanel extends JPanel
     return list;
   }
 
-/**
-*
-* @return list of filenames
-*
-*/
+  /**
+  *
+  * @return list of filenames
+  *
+  */
   public String[] getArrayListFile()
   {
 
@@ -117,11 +127,14 @@ public class ListFilePanel extends JPanel
     return list;
   }
 
-/**
-*
-* @return the nth sequence file name
-*
-*/
+  /**
+  *
+  * Get a sequence form the list using its number in
+  * the list
+  * @param n	sequence number
+  * @return 	nth sequence file name
+  *
+  */
   public String getSequence(int n)
   {
     String fn="";
@@ -143,11 +156,11 @@ public class ListFilePanel extends JPanel
     return fn;
   }
 
-/**
-*
-* Reset the values of the list files
-*
-*/
+  /**
+  *
+  * Reset the values of the list files
+  *
+  */
   public void doReset()
   {
     for(int i=0;i < nFiles;i++)

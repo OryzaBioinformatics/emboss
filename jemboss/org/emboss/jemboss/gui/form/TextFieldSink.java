@@ -36,7 +36,6 @@ import java.io.*;
 /**
 *
 * Extends JTextField to enable pasting & drag and drop into it.
-* @author T. J. Carver
 *
 */
 public class TextFieldSink extends JTextField implements DropTargetListener

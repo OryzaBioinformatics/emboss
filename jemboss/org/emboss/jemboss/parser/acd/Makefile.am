@@ -1,4 +1,4 @@
-pkgdata_DATA = Application.java ApplicationFields.java ApplicationParam.java
+pkgdata_DATA = ApplicationFields.java ApplicationParam.java
 pkgdatadir=$(prefix)/share/$(PACKAGE)/jemboss/org/emboss/jemboss/parser/acd
 
 install-exec-hook:

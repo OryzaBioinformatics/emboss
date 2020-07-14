@@ -36,27 +36,22 @@ import java.io.*;
 /**
 *
 * Makes a cut-and-paste text area.
-* @author T. J. Carver
 *
 */
 public class CutNPasteTextArea 
 {
 
+  /** sequence paste field     */
   TextAreaSink seqPaste;
-  JScrollPane seqScroll;
-
-  DataFlavor dataFlavor[] = { DataFlavor.stringFlavor };
-
+  /** default border for field */
   protected static Border defaultBorder = new BevelBorder(BevelBorder.LOWERED);
-  protected static Border highlightBorder =
-              new CompoundBorder(defaultBorder, new LineBorder(Color.black,2));
 
-/**
-*
-* @param Box to add the cut and paste text area into
-* @param String label for the cut and paste text area
-*
-*/
+  /**
+  *
+  * @param Box to add the cut and paste text area into
+  * @param String label for the cut and paste text area
+  *
+  */
   public CutNPasteTextArea(Box pasteBox, String name) 
   {
 
@@ -76,10 +71,8 @@ public class CutNPasteTextArea
     bdown.add(seq);
 
     seqPaste = new TextAreaSink();
-    seqScroll = new JScrollPane(seqPaste);
-
-    seqScroll.setPreferredSize(new Dimension(490, 100));
-
+    JScrollPane seqScroll = new JScrollPane(seqPaste);
+    seqScroll.setPreferredSize(new Dimension(470, 100));
     seqPaste.setBorder(defaultBorder);
 
     seq.add(seqScroll);
@@ -87,21 +80,22 @@ public class CutNPasteTextArea
     
   }
 
-/**
-*
-* @return String contents of the text area
-*
-*/
+  /**
+  *
+  * @return 	String contents of the text area
+  *
+  */
   public String getText() 
   {
     return seqPaste.getText();
   }
 
-/**
-*
-* @param String set contents of the text area
-*
-*/
+  /**
+  *
+  * Set contents of the text area
+  * @param s	contents to apply to the text area
+  *
+  */
   public void setText(String s)
   {
     seqPaste.setText(s);

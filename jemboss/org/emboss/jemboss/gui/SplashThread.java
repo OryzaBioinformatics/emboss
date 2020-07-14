@@ -23,11 +23,17 @@ package org.emboss.jemboss.gui;
 import org.emboss.jemboss.soap.*;
 import java.io.*;
 
+/**
+*
+* Extends Thread to update the progress bar
+* in the login window
+*
+*/
 public class SplashThread extends Thread
 {
   private AuthPopup splashing;
   private int nsplash;
-  private int interval = 100;
+  private int interval = 80;
 
   public SplashThread(AuthPopup splashing, int nsplash)
   {

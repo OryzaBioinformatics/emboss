@@ -26,13 +26,29 @@ import java.awt.event.*;
 
 import org.emboss.jemboss.gui.filetree.FileEditorDisplay;
 
+/**
+*
+* Display a matrix and list of available scoring matrix files
+*
+*/
 public class MatrixJFrame extends JFrame
 {
+  /** scroll pane for matrix display */
   private JScrollPane mScroll =  new JScrollPane();
+  /** cursor busy		     */
   private Cursor cbusy = new Cursor(Cursor.WAIT_CURSOR);
+  /** cursor done		     */
   private Cursor cdone = new Cursor(Cursor.DEFAULT_CURSOR);
+  /** scoring matrix */
   private Matrix mat;
 
+  /**
+  *
+  * @param m		matrix object
+  * @param statusField	status field for sequence editor
+  * @param alignFrame	associated alignment editor
+  *
+  */
   public MatrixJFrame(Matrix m, final JTextField statusField, 
                       final AlignJFrame alignFrame)
   {
@@ -69,10 +85,30 @@ public class MatrixJFrame extends JFrame
 //
     final Object matKeys[] = mat.getKeyNames();
     final JList list = new JList(matKeys);
+
+    MouseListener mouseListener = new MouseAdapter()
+    {
+      public void mouseClicked(MouseEvent e)
+      {
+        if(e.getClickCount() < 2)
+          return;
+
+        setCursor(cbusy);
+        String selMat = (String)list.getSelectedValue();
+        mat = new Matrix("resources/resources.jar",
+                         selMat);
+        statusField.setText("Current matrix: "+selMat);
+        setMatrix(mat);
+        alignFrame.setMatrix(mat);
+        setCursor(cdone);
+      }
+    };
+    list.addMouseListener(mouseListener);
     JScrollPane jspList = new JScrollPane(list);
+
     JPanel jp = new JPanel(new BorderLayout());
     jp.add(jspList,BorderLayout.CENTER);
-    JButton matButt= new JButton("Select");
+    JButton matButt= new JButton("Set");
     matButt.addActionListener(new ActionListener()
     {
       public void actionPerformed(ActionEvent e)
@@ -89,17 +125,23 @@ public class MatrixJFrame extends JFrame
     });
     jp.add(matButt,BorderLayout.SOUTH);
     mainPane.add(jp,BorderLayout.EAST);
+
     setSize(500,400);
   }
 
+  /**
+  *
+  * Set the matrix to display 
+  * @param mat	matrix to display
+  *
+  */
   public void setMatrix(Matrix mat)
   {
-    FileEditorDisplay fed = new FileEditorDisplay(this,"Matrix",
+    FileEditorDisplay fed = new FileEditorDisplay("Matrix",
                                    mat.getMatrixTable().trim());
     fed.setCaretPosition(0);
     mScroll.setViewportView(fed);
     setTitle(mat.getCurrentMatrixName());
-//  pack();
   }
 }
 

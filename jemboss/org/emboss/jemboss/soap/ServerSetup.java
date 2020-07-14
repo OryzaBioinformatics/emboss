@@ -30,32 +30,46 @@ import java.awt.event.*;
 import org.emboss.jemboss.gui.MemoryComboBox;
 import org.emboss.jemboss.JembossParams;
 
-
+/**
+*
+* Jemboss properties for the server setup
+*
+*/
 public class ServerSetup extends JTabbedPane 
 {
   
+  /** public server URL   */
   private MemoryComboBox publicURL;
+  /** private server URL  */
   private MemoryComboBox privateURL;
+  /** public server name  */
   private MemoryComboBox publicName;
+  /** private server name */
   private MemoryComboBox privateName;
+  /** proxy name */
   private MemoryComboBox proxyName;
+  /** proxy port */
   private MemoryComboBox proxyPort;
+  /** proxy name for web browser */
   private MemoryComboBox proxyBrowserName;
+  /** proxy port for web browser */
   private MemoryComboBox proxyBrowserPort;
-
+  /** selected if user authetication required */
   private JCheckBox userAuth;
+  /** selected if using proxy server */
   private JCheckBox useProxy;
+  /** selected if using proxy server for web browser */
   private JCheckBox useBrowserProxy;
+  /** selected if tfm help is run on the server */
   private JCheckBox callTFM;
-
+  /** jemboss properties */
   private JembossParams myset; 
 
-/**
-*
-* Setting for public and private settings panel.
-* @param JembossParams SOAP parameters
-*
-*/
+  /**
+  *
+  * @param mysettings	jemboss properties
+  *
+  */
   public ServerSetup(JembossParams mysettings)
   {
 
@@ -274,6 +288,11 @@ public class ServerSetup extends JTabbedPane
     
   }
 
+  /**
+  *
+  * Set the new settings in the server settings window
+  *
+  */
   public JembossParams setNewSettings()
   {
     String settings[] = new String[12];

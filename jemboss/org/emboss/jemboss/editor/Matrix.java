@@ -31,6 +31,11 @@ import javax.swing.JOptionPane;
 import org.apache.regexp.*;
 import org.emboss.jemboss.JembossJarUtil;
 
+/**
+*
+* Reads and hold a sequence scoring matrix 
+*
+*/
 public class Matrix
 {
   private int matrix[][];
@@ -40,18 +45,30 @@ public class Matrix
   private int i=0;
   private int k=0;
 
+  /** hashtable of the residue positions in the table */
   private Hashtable residueMatrixPosition;
   private Object[] keys = null;
   private String cons = "";
   private String matrixString = null;
   private String matrixFileName = null;
 
+  /**
+  *
+  * @param matrixFile	matrix file
+  *
+  */
   public Matrix(File matrixFile)
   {
     this.matrixFileName = matrixFile.getName();
     matrixRead(matrixFile);
   }
 
+  /**
+  *
+  * @param matrixJar		jar file containing scoring matrix
+  * @param matrixFileName	matrix file
+  *
+  */
   public Matrix(String matrixJar, String matrixFileName)
   {
     this.matrixFileName = matrixFileName;
@@ -82,16 +99,35 @@ public class Matrix
     }
   }
 
+  /**
+  *
+  * Get the scoring matrix as a 2 dimensional integer
+  * array
+  * @return	2 dimentional scoring matrix
+  * 
+  */
   public int[][] getMatrix()
   {
     return matrix;
   }
 
+  /**
+  *
+  * Get the scoring matrix as text 
+  * @return     scoring matrix
+  *
+  */
   public String getMatrixTable()
   {
     return matrixString;
   }
 
+  /**
+  *
+  * Get the current scoring matrix name
+  * @return 	name of matrix
+  *
+  */
   public String getCurrentMatrixName()
   {
     int index = matrixFileName.lastIndexOf("/");
@@ -100,11 +136,21 @@ public class Matrix
     return matrixFileName;
   }
 
+  /**
+  *
+  * Scoring matrix filenames in jar file
+  *
+  */
   public Object[] getKeys()
   {
     return keys;
   }
 
+  /**
+  *
+  * Scoring matrix names available
+  *
+  */
   public Object[] getKeyNames()
   {
     try
@@ -113,11 +159,15 @@ public class Matrix
       Object[] kname = new Object[nkeys];
       for(int i=0;i<nkeys;i++)
       {
-        int pos = ((String)keys[i]).indexOf("/")+1;
-        kname[i] = ((String)keys[i]).substring(pos);
+        String k = (String)keys[i];
+        if(k.indexOf("MANIFEST.MF") == -1)
+        {
+          int pos  = k.indexOf("/")+1;
+          kname[i] = k.substring(pos);
+        }
       }
       return kname;
-      }
+    }
     catch(NullPointerException npe)
     {
       JOptionPane.showMessageDialog(null, 
@@ -128,29 +178,100 @@ public class Matrix
     }
   }
 
+
+  /**
+  *
+  * Scoring matrix names available
+  *
+  */
+  public String getKeyNamesString()
+  {
+    try
+    {
+      int nkeys = keys.length;
+      StringBuffer kname = new StringBuffer();
+      for(int i=0;i<nkeys;i++)
+      {
+        String k = (String)keys[i];
+        if(k.indexOf("MANIFEST.MF") == -1)
+        {
+          int pos = k.indexOf("/")+1;
+          kname.append(k.substring(pos)+"\n");
+        }
+      }
+      return kname.toString();
+    }
+    catch(NullPointerException npe)
+    {
+      JOptionPane.showMessageDialog(null,
+                 "No matrix files found!",
+                 "Matrix files missing",
+                  JOptionPane.ERROR_MESSAGE);
+      return null;
+    }
+  }
+
+
+  /**
+  *
+  * Get the hashtable of the residue positions in the scoring table
+  * @return 	hashtable of the residue positions
+  *
+  */
   public Hashtable getResidueMatrixPosition()
   {
     return residueMatrixPosition;
   }
 
+  /**
+  *
+  * Get the residue position in the scoring table
+  * @param s	residue
+  * @return	position in scoring table
+  *
+  */
   public int getMatrixIndex(String s)
   {
     s = s.toUpperCase();
+
+    if(!residueMatrixPosition.containsKey(s))
+      if(s.equals(".") || s.equals("-") 
+                       || s.equals("~"))
+        s = "X";
+
     if(!residueMatrixPosition.containsKey(s))
       return -1;
     return ((Integer)residueMatrixPosition.get(s)).intValue();
   }
 
+  /**
+  *
+  * Get number of rows in the scoring table
+  * @return 	number of rows in the scoring table
+  *
+  */
   public int getIDimension()
   {
     return idimension;
   }
 
+  /**
+  *
+  * Get number of columns in the scoring table
+  * @return	number of columns in the scoring table
+  * 
+  */
   public int getJDimension()
   {
     return jdimension;
   }
 
+  /**
+  *
+  * Get regular expression for values in the scoring table
+  * @return	RE
+  *
+  */
   private RE getRegularExpression()
   {
     RE regexp = null;
@@ -168,6 +289,13 @@ public class Matrix
     return regexp;
   }
 
+  /**
+  *
+  * Count as a matrix row and number of columns
+  * @param line		line from matrix file
+  * @param regexp	regular expression for columns
+  *
+  */
   private void matrixLineCount(String line, RE regexp)
   {
     String delim = " :\t\n";
@@ -186,6 +314,14 @@ public class Matrix
     }
   }
 
+  /**
+  *
+  * Parse a line from a scoring matrix file. Add to the
+  * matrix array the values in the table.
+  * @param line		line from matrix file
+  * @param regexp	regular expression for values
+  *
+  */
   private void matrixLineParse(String line, RE regexp)
   {
     String delim = " :\t\n";
@@ -217,6 +353,13 @@ public class Matrix
     }
   }
 
+  /**
+  *
+  * Read and parse a scoring matrix file 
+  * @param matrixFile	matrix file
+  * @return		matrix 2-d integer array
+  *
+  */
   private int[][] matrixRead(File matrixFile)
   {
     String delim = " :\t\n";
@@ -258,6 +401,13 @@ public class Matrix
     return matrix;
   }
 
+  /**
+  *
+  * Read and parse a scoring matrix 
+  * @param matrixString 	matrix as text
+  * @return             	matrix 2-d integer array
+  *
+  */
   private int[][] matrixReadString(String matrixString)
   {
     String delim = " :\t\n";

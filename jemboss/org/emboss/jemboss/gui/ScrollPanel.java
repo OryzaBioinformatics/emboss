@@ -27,6 +27,12 @@ import java.awt.Rectangle;
 import java.awt.Dimension;
 import java.awt.Color;
 
+/**
+*
+* Extends JPanel to implement Scrollable to speed scroll pane
+* scrolling
+*
+*/
 public class ScrollPanel extends JPanel implements Scrollable
 {
   

@@ -31,6 +31,11 @@ import java.io.*;
 import java.lang.*;
 import java.awt.*;
 
+/**
+*
+* Macros class
+*
+*/
 public class PlafMacros implements SwingConstants 
 {
   // don't make these final, since the value is 
@@ -40,6 +45,13 @@ public class PlafMacros implements SwingConstants
   private static int LINE_SEPARATOR_LEN = 
                   LINE_SEPARATOR.length();
 
+  /**
+  *
+  * Break text into separate lines
+  * @param text		text to break up
+  * @return		multiple lines in string array
+  *
+  */
   public static String[] breakupLines(String text) 
   {
     int len = text.length();
@@ -74,5 +86,15 @@ public class PlafMacros implements SwingConstants
     }
   }
 
+  /**
+  *
+  * Get the line separator string
+  * @return 	line separator
+  *
+  */
+  public static String getLineSeparator()
+  {
+    return LINE_SEPARATOR;
+  }
 }
 

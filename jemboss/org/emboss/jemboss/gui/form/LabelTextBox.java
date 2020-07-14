@@ -25,16 +25,21 @@ package org.emboss.jemboss.gui.form;
 import javax.swing.*;
 import java.awt.FontMetrics;
 
+/**
+*
+* Container for Jemboss form label this will also wrap
+* the text 
+*
+*/
 public class LabelTextBox extends Box
 {
 
-
-/**
-*
-* @param String info text for the Component label
-* @param String help text for the tool tip
-*
-*/
+  /**
+  *
+  * @param String info text for the Component label
+  * @param String help text for the tool tip
+  *
+  */
   public LabelTextBox(String sl, String tt)
   {
     super(BoxLayout.Y_AXIS);
@@ -75,11 +80,15 @@ public class LabelTextBox extends Box
       l.setForeground(SectionPanel.labelColor);
       if(!tt.equals(""))
         l.setToolTipText(tt);
+
+// not supported in java1.3
+//    if(!tt.equals(""))
+//      setToolTipText(tt);
+
       add(l);
     }
 
   }
-
 
 }
 

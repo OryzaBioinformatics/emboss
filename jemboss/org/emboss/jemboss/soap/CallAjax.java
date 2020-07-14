@@ -25,70 +25,106 @@ import java.io.*;
 import java.util.*;
 import org.emboss.jemboss.JembossParams;
 
+/**
+*
+* Calls the EMBOSS ajax library
+*
+*/
 public class CallAjax 
 {
 
-  private String statusmsg;
-  private String status;
+  /** sequence length */
   private int length;
+  /** sequence weight */
   private float weight;
+  /** type of sequence protein or nucleotide */
   private boolean protein;
+  /** request to private server */
   private PrivateRequest epr;
-//private PublicRequest epr;
 
-   public CallAjax(String fileContent, String seqtype,
-                             JembossParams mysettings) 
-       throws JembossSoapException 
-   {
+  /**
+  *
+  * @param fileContent	file content or server file name
+  * @param seqtype	sequence or seqset
+  * @param mysettings	jemboss properties
+  * @throws JembossSoapException if connection fails
+  *
+  */
+  public CallAjax(String fileContent, String seqtype,
+                            JembossParams mysettings) 
+      throws JembossSoapException 
+  {
 
-     Vector params = new Vector();
-     params.addElement(fileContent);
-     params.addElement(seqtype);
-     // use authenticated call_ajax method
-//   if(mysettings.getUseAuth() == true)
-//   {    
-//     params.addElement(mysettings.getServiceUserName());
-//     params.addElement(mysettings.getServicePasswdByte());
-//   }
+    Vector params = new Vector();
+    params.addElement(fileContent);
+    params.addElement(seqtype);
+    // use authenticated call_ajax method
+    epr = new PrivateRequest(mysettings,"call_ajax",params);
 
-//   epr = new PublicRequest(mysettings,"call_ajax",params);
-     epr = new PrivateRequest(mysettings,"call_ajax",params);
+    Hashtable res = epr.getHash();
+    Enumeration enumRes = res.keys();
+    while(enumRes.hasMoreElements()) 
+    {
+      String thiskey = (String)enumRes.nextElement().toString();
+      if(thiskey.equals("length"))
+        length = ((Integer)res.get(thiskey)).intValue();
+      if(thiskey.equals("weight"))
+        weight = ((Float)res.get(thiskey)).floatValue();
+      if(thiskey.equals("protein"))
+        protein = ((Boolean)res.get(thiskey)).booleanValue();
+    }
+  }
 
-     Hashtable res = epr.getHash();
-     Enumeration enumRes = res.keys();
-     while(enumRes.hasMoreElements()) 
-     {
-       String thiskey = (String)enumRes.nextElement().toString();
-       if(thiskey.equals("length"))
-         length = ((Integer)res.get(thiskey)).intValue();
-       if(thiskey.equals("weight"))
-         weight = ((Float)res.get(thiskey)).floatValue();
-       if(thiskey.equals("protein"))
-         protein = ((Boolean)res.get(thiskey)).booleanValue();
-     }
-   }
-
-
+  /**
+  *
+  * Get the status
+  * @return 	status
+  *
+  */
   public String getStatus() 
   {
     return (String)epr.getVal("status");
   }
   
+  /**
+  *
+  * Get the message
+  * @return     message
+  *
+  */
   public String getStatusMsg() 
   {
     return (String)epr.getVal("msg");
   }
 
+  /**
+  *
+  * Get the sequence length
+  * @return 	sequence length
+  *
+  */
   public int getLength()
   {
     return length;
   }
   
+  /**
+  *
+  * Get the sequence weight
+  * @return     sequence weight
+  *
+  */
   public float getWeight()
   {
     return weight;
   }
 
+  /**
+  *
+  * Deternmine the sequence type
+  * @return 	true if a protein
+  *
+  */
   public boolean isProtein()
   {
     return protein;

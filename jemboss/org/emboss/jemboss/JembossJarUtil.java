@@ -33,8 +33,16 @@ import java.io.*;
 public class JembossJarUtil 
 {
 
+  /** Hashtable containing the unpacked contents of the jar file */
   private Hashtable jarStore = new Hashtable();
 
+  /**
+  *
+  * Given the path to a jar file unpack to a hashtable
+  * @param jarFile	path to jar file to unpack
+  * @throws Exception  	if it is not possible to read jar file
+  *
+  */
   public JembossJarUtil(String jarFile) throws Exception
   {
 
@@ -108,16 +116,40 @@ public class JembossJarUtil
 //  }
   }
 
+
+  /**
+  *
+  * Return the hashtable
+  * @return jarStore	the hashtable containing the contents 
+  *  			of the jar
+  *
+  */
   public Hashtable getHash()
   {
     return jarStore;
   }
 
+  /**
+  *
+  * Return an element of the hashtable
+  * @param el	key of an element in the hashtable
+  * @return 	the hashtable containing the contents 
+  *            	of the jar
+  *
+  */
   public Object getElement(String el)
   {
     return jarStore.get(el);
   }
 
+  /**
+  *
+  * Write contents of an element in the hashtable
+  * @param el   key of an element in the hashtable
+  * @param f    path of file to write to
+  * @return     true if written file
+  *
+  */
   public boolean writeByteFile(String el, String f)
   {
     try

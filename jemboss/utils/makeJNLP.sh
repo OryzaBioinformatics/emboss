@@ -136,7 +136,7 @@ fi
 
 cd $CWPWD
 jar cf Jemboss.jar images/* org/emboss/jemboss/*class resources/*.jar \
-        resources/version resources/jemboss.properties resources/readme.txt \
+        resources/version resources/jemboss.properties \
         resources/*html org/emboss/jemboss/*/*class \
         org/emboss/jemboss/*/*/*class 
 mv Jemboss.jar jnlp
@@ -145,7 +145,7 @@ cp lib/axis/*jar jnlp
 cp images/Jemboss_logo_large.gif jnlp
 cp utils/template.html jnlp/index.html
 cd jnlp
-rm mail.jar activation.jar wsdl4j.jar
+rm mail.jar activation.jar wsdl4j.jar servlet.jar log4j-1.2.8.jar axis-ant.jar
 
 echo
 echo
@@ -230,7 +230,7 @@ echo '             <jar href="'sJemboss.jar'"  main="'true'"/>' >> $JNLP
 for i in s*.jar; do
   if (test $i != "sJemboss.jar") && (test $i != "sjaxrpc.jar") && (test $i != "saxis.jar");then
     if (test $i != "scommons-logging.jar") && (test $i != "scommons-discovery.jar");then
-      if (test $i != "saaj.jar") && (test $i != "servlet.jar");then
+      if (test $i != "saaj.jar");then
         echo '             <jar href="'$i'"/>'          >> $JNLP
       fi
     fi

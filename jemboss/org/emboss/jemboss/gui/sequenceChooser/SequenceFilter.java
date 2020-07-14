@@ -19,13 +19,17 @@
 *
 ********************************************************************/
 
-
 package org.emboss.jemboss.gui.sequenceChooser; 
 
 import java.io.File;
 import javax.swing.*;
 import javax.swing.filechooser.*;
 
+/**
+*
+* Sequence format file name suffix filter
+*
+*/
 public class SequenceFilter extends FileFilter 
 {
     
@@ -34,7 +38,6 @@ public class SequenceFilter extends FileFilter
     public final static String gcg   = "gcg";
     public final static String embl  = "embl";
     public final static String swiss = "swiss";
-
 
     /**
     *  Accept all directories and all sequence files
@@ -64,7 +67,7 @@ public class SequenceFilter extends FileFilter
     
     /** 
     *
-    *  @return The description of this filter
+    *  @return 	description of this filter
     *
     */
     public String getDescription() 
@@ -74,8 +77,9 @@ public class SequenceFilter extends FileFilter
 
     /**
     *
-    * @param File
-    * @return Get the extension of a file.
+    * Get the extension of a file
+    * @param f	file 
+    * @return 	extension of the file
     *
     */
     public static String getExtension(File f) 

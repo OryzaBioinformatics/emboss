@@ -29,15 +29,26 @@ import org.emboss.jemboss.gui.form.*;
 
 /**
 *
-*  Resolves variable: references.
+*  Resolves variable references.
 *
 */
 
 public class AcdVariableResolve
 {
 
+  /** expression to resolve */
   private String exp;
 
+  /**
+  *
+  * Given an expression this is searched for occurences of
+  * a variable name for which the value is known. The value
+  * is subsituted into the expression.
+  * @param exp		expression to resolve
+  * @param varName	variable name
+  * @param varValue	variable value
+  *
+  */
   public AcdVariableResolve(String exp, String varName, String varValue) 
   {
 
@@ -70,6 +81,12 @@ public class AcdVariableResolve
     this.exp = exp;
   }
 
+  /**
+  *
+  * Get the resolved expression
+  * @return	result value of the expression
+  *
+  */
   public String getResult()
   {
     return exp;

@@ -26,18 +26,36 @@ import org.emboss.jemboss.parser.Ajax;
 import java.io.*;
 import java.util.*;
 
+/**
+*
+* File manager methods
+*
+*/
 public class JembossFileAuthServer
 {
 
+  /** path separator */
   private String ps = new String(System.getProperty("path.separator"));
 
 //get paths to EMBOSS
+  /** jemboss properties */
   JembossParams jp = new JembossParams();
+  /** emboss binary directory */
   String embossBin = jp.getEmbossBin();
+  /** emboss path */
   String embossPath = jp.getEmbossPath();
+  /** emboss run environment */
   private String environ = "PATH=" + embossBin + ps + embossPath;
 
 
+  /**
+  *
+  * Retrieves the file manager roots on the server
+  * @param userName	username
+  * @param passwd	passwd
+  * @return		file manager roots
+  *
+  */
   public Vector embreo_roots(String userName, byte[] passwd)
   {
     Ajax aj = new Ajax();
@@ -71,15 +89,16 @@ public class JembossFileAuthServer
   }
 
 
-/**
-*
-* Given the alias a user root alias e.g. "HOME" return
-* the directory this represents
-*
-* @param root alias (e.g "HOME")
-* @return directory path
-*
-*/
+  /**
+  *
+  * Given a file manager root alias e.g. "HOME" return
+  * the directory this represents
+  * @param s		root alias (e.g "HOME")
+  * @param userName	username
+  * @param passwd	passwd
+  * @return 		directory path
+  *
+  */
   private String getRoot(String s, String userName, byte[] passwd)
   {
     String rt = null;
@@ -96,6 +115,16 @@ public class JembossFileAuthServer
   }
 
 
+  /**
+  *
+  * Get a directory listing
+  * @param option	root alias
+  * @param dirname	direcory name
+  * @param userName     username
+  * @param passwd       passwd
+  * @return             directory listing
+  *
+  */
   public Vector directory_shortls(String options, String dirname,
                            String userName, byte[] passwd)
   {
@@ -135,6 +164,16 @@ public class JembossFileAuthServer
     return vans;
   }
 
+  /**
+  *
+  * Get the contents of a file
+  * @param option       root alias
+  * @param dirname      file name
+  * @param userName     username
+  * @param passwd       passwd
+  * @return             file contents
+  *
+  */
   public Vector get_file(String options, String filename,
                            String userName, byte[] passwd)
   {
@@ -172,13 +211,16 @@ public class JembossFileAuthServer
   } 
 
 
-
-/**
-*
-* @param option determines the root directory to put the file
-* @param path to new directory
-*
-*/
+  /**
+  *
+  * Make a directory
+  * @param option 	root alias
+  * @param dirname	name of new directory
+  * @param userName     username
+  * @param passwd       passwd
+  * @return         	message
+  *    
+  */
   public Vector mkdir(String options, String dirname,
                       String userName, byte[] passwd)
   {
@@ -206,11 +248,16 @@ public class JembossFileAuthServer
     return vans;
   }
 
-/**
-*
-*
-*
-*/
+  /**
+  *
+  * Delete a file
+  * @param option       root alias
+  * @param filename	file name
+  * @param userName     username
+  * @param passwd       passwd
+  * @return             message
+  *
+  */
   public Vector delFile(String options, String filename,
                         String userName, byte[] passwd)
   {
@@ -239,6 +286,16 @@ public class JembossFileAuthServer
     return vans;
   }
 
+  /**
+  *
+  * Delete a directory
+  * @param option       root alias
+  * @param filename     directory name
+  * @param userName     username
+  * @param passwd       passwd
+  * @return             message
+  *
+  */
   public Vector delDir(String options, String filename,
                        String userName, byte[] passwd)
   {
@@ -268,11 +325,17 @@ public class JembossFileAuthServer
   }
 
 
-/**
-*
-*
-*
-*/
+  /**
+  *
+  * Rename a file
+  * @param option       root alias
+  * @param oldfile	old file name
+  * @param newfile	new file name
+  * @param userName     username
+  * @param passwd       passwd
+  * @return             message
+  *
+  */
   public Vector rename(String options, String oldfile, String newfile,
                        String userName, byte[] passwd)
   {
@@ -301,13 +364,17 @@ public class JembossFileAuthServer
   }
 
 
-/**
-*
-* @param option determines the root directory to put the file
-* @param filename name of the file to put
-* @param filedata file contents
-*
-*/
+  /**
+  *
+  * Put a file on the server file system
+  * @param option 	root alias
+  * @param filename 	name of file to add
+  * @param filedata 	file contents
+  * @param userName     username
+  * @param passwd       passwd
+  * @return             message
+  *
+  */
   public Vector put_file(String options, String filename, byte[] filedata,
                            String userName, byte[] passwd)
   {
@@ -328,6 +395,16 @@ public class JembossFileAuthServer
     return vans;
   }
  
+  /**
+  *
+  * Verify the username/passwd
+  * @param aj           ajax/jni
+  * @param userName     username
+  * @param passwd       password
+  * @param res          results vector
+  * @return             true if authenticated ok
+  *
+  */
   private boolean verifyUser(Ajax aj, String userName,
                              byte[] passwd, Vector res)
   {
@@ -365,7 +442,6 @@ public class JembossFileAuthServer
     }
 
     return true;
-
   }
 
 }

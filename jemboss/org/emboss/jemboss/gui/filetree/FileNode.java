@@ -26,32 +26,52 @@ import javax.swing.tree.*;
 import java.io.*;
 import java.util.*;
 
+/**
+*
+* File node for local file tree manager
+*
+*/
 public class FileNode extends DefaultMutableTreeNode 
                  implements Transferable, Serializable
 {
+    /** true if explored */
     private boolean explored = false;
-  
+    /** data flavour of a file node */
     public static DataFlavor FILENODE =
            new DataFlavor(FileNode.class, "Remote file");
+    /** flavours file node and string */
     static DataFlavor flavors[] = { FILENODE, DataFlavor.stringFlavor };
 
+    /**
+    *
+    * @param file	file node file
+    *
+    */
     public FileNode(File file)
     { 
       setUserObject(file); 
     }
 
+    /** Determine if this is a directory */
     public boolean getAllowsChildren() { return isDirectory(); }
+    /** Determine if this is a file */
     public boolean isLeaf() { return !isDirectory(); }
+    /** Get the File this node represents */
     public File getFile() { return (File)getUserObject(); }
-
+    /** Determine if this node has been explored */
     public boolean isExplored() { return explored; }
-
+    /** Determine if this is a directory */
     public boolean isDirectory() 
     {
       File file = getFile();
       return file.isDirectory();
     }
 
+    /**
+    *
+    * Returns the name of the file 
+    *
+    */
     public String toString() 
     {
       File file = (File)getUserObject();
@@ -63,6 +83,12 @@ public class FileNode extends DefaultMutableTreeNode
                                             filename;
     }
 
+    /**
+    *
+    * Explores a directory adding a FileNode for each
+    * child
+    *
+    */
     public void explore() 
     {
       if(!isDirectory())
@@ -89,7 +115,11 @@ public class FileNode extends DefaultMutableTreeNode
       }
     }
 
- 
+    /**
+    *
+    * Forces the directory to be re-explored
+    *
+    */
     public void reExplore()
     {
       explored = false;

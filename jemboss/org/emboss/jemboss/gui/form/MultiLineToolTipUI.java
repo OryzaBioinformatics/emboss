@@ -21,7 +21,6 @@
 *
 ********************************************************************/
 
-
 package org.emboss.jemboss.gui.form;
 
 
@@ -33,6 +32,11 @@ import javax.swing.*;
 import javax.swing.plaf.ToolTipUI;
 import javax.swing.plaf.ComponentUI;
 
+/**
+*
+* UI for multiple line tooltips
+*
+*/
 public class MultiLineToolTipUI extends ToolTipUI 
 {
   static MultiLineToolTipUI SINGLETON = new MultiLineToolTipUI();
@@ -186,11 +190,11 @@ public class MultiLineToolTipUI extends ToolTipUI
     return controlKeyStr;
   }
 
-/**
-*
-* Use this to getFontMetrics
-*
-*/
+  /**
+  *
+  * Use this to getFontMetrics
+  *
+  */
   private class MyToolTip extends JToolTip
   {
     protected FontMetrics toolTipFontMetrics(Font currentFont)

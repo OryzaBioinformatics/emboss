@@ -31,19 +31,38 @@ import org.emboss.jemboss.gui.form.Separator;
 import org.emboss.jemboss.JembossParams;
 import org.emboss.jemboss.gui.filetree.FileSave;
 
+/**
+*
+* Jemboss advanced options and settings. 
+* <br>Job manager update times.
+* <br>Calculate parameer dependencies.
+* <br>User home root directory.
+* <br>Save user working directory.
+*
+*/
 public class AdvancedOptions extends JPanel
 {
 
+  /** use JNI to calculate parameter dependencies */
   public static JCheckBox prefjni;
+  /** shade or remove unused parameters */
   public static JCheckBox prefShadeGUI;
+  /** job manager update times */
   public static JComboBox jobMgr;
-  public static JTextField mailServer;
-
+  /** save user home directory */
   private JCheckBox saveUserHome;
+  /** user home directory */
   private JTextField userHome = new JTextField();
+  /** current working directory */
   private String cwd;
+  /** times for job manager updates */
   private String time[] = new String[6];
 
+  /**
+  *
+  * @param mysettings	Jemboss settings
+  *
+  */
   public AdvancedOptions(final JembossParams mysettings)
   {
     super();
@@ -171,17 +190,32 @@ public class AdvancedOptions extends JPanel
     this.add(bdown);
   }
 
-
+  /**
+  *
+  * Get the user home/working directory
+  * @return 	user home directory
+  *
+  */
   public String getHomeDirectory()
   {
     return userHome.getText();
   }
 
+  /**
+  *
+  * @return	if true save the user home/working directory
+  *
+  */
   public boolean isSaveUserHomeSelected()
   {
     return saveUserHome.isSelected();
   }
 
+  /**
+  *
+  * Save the user home/working directory to jemboss.properties
+  *
+  */
   public void userHomeSave()
   {
     String uhome = System.getProperty("user.home");
@@ -201,7 +235,14 @@ public class AdvancedOptions extends JPanel
     }
   }
 
-
+  /**
+  *
+  * Re-write jemboss.properties when there is an existing jemboss,properties
+  * and insert/update the user.home property
+  * @param jemProp	jemboss.properties file	
+  * @param uHome	user home directory
+  *
+  */
   public void rewriteProperties(String jemProp, String uHome)
   {
      File file_txt = new File(jemProp);
@@ -235,11 +276,12 @@ public class AdvancedOptions extends JPanel
 
   }
 
-/**
-*
-* Add in escape chars for windows
-*
-*/
+  /**
+  *
+  * Add in escape chars (for windows) to the backslash chars
+  * @param l	string to insert escape characters to
+  *
+  */
   private String addEscapeChars(String l)
   {
     int n = l.indexOf("\\");

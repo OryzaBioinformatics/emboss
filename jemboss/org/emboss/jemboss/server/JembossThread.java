@@ -24,12 +24,26 @@ import java.io.*;
 import java.util.Date;
 import org.emboss.jemboss.programs.RunEmbossApplication2;
 
+/**
+*
+* Use to run an EMBOSS application in batch mode by
+* running the process in a separate thread
+*
+*/
 public class JembossThread extends Thread
 {
 
+  /** runs the emboss process */
   private RunEmbossApplication2 rea;
+  /** project directory */
   private String project;
 
+  /**
+  *
+  * @param rea		runs the emboss process
+  * @param project	project directory
+  *
+  */
   public JembossThread(RunEmbossApplication2 rea,
                        String project)
   {
@@ -51,12 +65,12 @@ public class JembossThread extends Thread
     }
   }
  
-/**
-*
-* Creates a file named "finished" in the project directory,
-* that contains a time stamp.
-*
-*/
+  /**
+  *
+  * Creates a file named "finished" in the project directory,
+  * that contains a time stamp.
+  *
+  */
   private void createFinishedFile()
   {
     String fs = new String(System.getProperty("file.separator"));

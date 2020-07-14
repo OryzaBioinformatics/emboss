@@ -34,20 +34,26 @@ import org.emboss.jemboss.soap.JembossSoapException;
 import org.emboss.jemboss.JembossParams;
 import org.emboss.jemboss.gui.Browser;
 
+/**
+*
+* Local and remote combo file manager
+*
+*/
 public class LocalAndRemoteFileTreeFrame extends JFrame
 {
 
+  /** local file tree */
   private static DragTree ltree;
+  /** close/exit menu item */
   private JMenuItem prefClose;
 
-/**
-*
-* Displays the remote and local file managers in the
-* same frame.
-*
-* @param mysettings JembossParams with settings information
-*
-*/
+  /**
+  *
+  * Displays the remote and local file managers in the
+  * same frame.
+  * @param mysettings 	jemboss properties
+  *
+  */
   public LocalAndRemoteFileTreeFrame(final JembossParams mysettings) 
                                 throws JembossSoapException
   {
@@ -199,6 +205,12 @@ public class LocalAndRemoteFileTreeFrame extends JFrame
     }
   }
 
+  /**
+  *
+  * Set the closing menu item to exit (for standalone
+  * file manager)
+  *
+  */
   public void setExit()
   {
     prefClose.setText("Exit");
@@ -214,6 +226,12 @@ public class LocalAndRemoteFileTreeFrame extends JFrame
 
   }
 
+  /**
+  *
+  * Returns the local file tree
+  * @return 	local file tree
+  *
+  */
   public static DragTree getLocalDragTree()
   {
     return ltree;

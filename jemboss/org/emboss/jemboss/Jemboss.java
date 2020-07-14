@@ -35,42 +35,50 @@ import org.emboss.jemboss.soap.*;           // results manager
 
 /**
 *
-*  Java interface to EMBOSS (http://www.emboss.org/)
-*  (i)  standalone - with a locally installation of EMBOSS.
-*  (ii) client / server mode - download the client from a site,
-*       such as the HGMP, which runs the Jemboss server.
+*  Java interface to EMBOSS (http://www.emboss.org/). This
+*  can be run in two different ways. In a STANDALONE mode 
+*  with a locally installation of EMBOSS, or
+*  CLIENT-SERVER mode download the client from a site,
+*  such as the HGMP, which runs the Jemboss server.
 *
 */
 public class Jemboss implements ActionListener
 {
 
-// Swing components
+/** Jemboss frame      */
   private JFrame f;
-  private JSplitPane pmain;
-
+/** Jemboss split pain */
+  private JSplitPane pmain; 
+/** Local filemanager panel */
   private JPanel p3;
+/** Local filemanager */
   public static DragTree tree;
+/** Button to open local filemanager */
   private JButton extend;
+/** Scroll pane for local filemanager */
   private JScrollPane scrollTree;
-
 /** true if in client-server mode (using SOAP) */
   static boolean withSoap;
-
 /** to manage the pending results */
   public static PendingResults resultsManager;
-
 /** Jemboss window dimension */
   private static Dimension jdim;
+/** Jemboss window dimension with local filemanager displayed */
   private static Dimension jdimExtend;
-
+/** Image for displaying the local filemanager */
   private ImageIcon fwdArrow;
+/** Image for hiding the local filemanager */
   private ImageIcon bwdArrow;
+/** Jemboss main menu */
+  private SetUpMenuBar mainMenu;
 
-  public Jemboss ()
+  /**
+  *
+  * Display the Jemboss GUI.
+  *
+  */
+  public Jemboss()
   {
-
-    String fs = new String(System.getProperty("file.separator"));
-    String cwd = new String(System.getProperty("user.dir") + fs);
 
     // initialize settings
     JembossParams mysettings = new JembossParams();
@@ -79,30 +87,7 @@ public class Jemboss implements ActionListener
     fwdArrow = new ImageIcon(cl.getResource("images/Forward_arrow_button.gif"));
     bwdArrow = new ImageIcon(cl.getResource("images/Backward_arrow_button.gif"));
 
-    String embossBin = "";
-    String acdDirToParse = "";
-    String[] envp = new String[4];  /* environment vars */
-
-    if(!withSoap)
-    {
-      String ps = new String(System.getProperty("path.separator"));
-      String plplot = mysettings.getPlplot();
-      String embossData = mysettings.getEmbossData();
-      embossBin = mysettings.getEmbossBin();
-      String embossPath = mysettings.getEmbossPath();
-      acdDirToParse = mysettings.getAcdDirToParse();
-      embossPath = new String("PATH" + ps +
-                      embossPath + ps + embossBin + ps);
-      envp[0] = "PATH=" + embossPath;        
-      envp[1] = "PLPLOT_LIB=" + plplot;
-      envp[2] = "EMBOSS_DATA=" + embossData;
-
-      String homeDirectory = new String(
-                       System.getProperty("user.home") + fs);
-
-      envp[3] = "HOME=" + homeDirectory;
-    }
-    else if(mysettings.getPublicSoapURL().startsWith("https"))
+    if(withSoap && mysettings.getPublicSoapURL().startsWith("https"))
     {
       //SSL settings
 
@@ -131,7 +116,8 @@ public class Jemboss implements ActionListener
                         "resources/client.keystore");
 
       String jembossClientKeyStore = System.getProperty("user.home") + 
-                       fs + ".jembossClientKeystore";
+                                System.getProperty("file.separator") + 
+                                             ".jembossClientKeystore";
 
       try
       {
@@ -145,7 +131,7 @@ public class Jemboss implements ActionListener
     }
 
     f = new JFrame("Jemboss");
-// make the local file manager
+    // make the local file manager
     tree = new DragTree(new File(mysettings.getUserHome()),
                         f, mysettings);
 
@@ -165,7 +151,7 @@ public class Jemboss implements ActionListener
 
     JMenuBar btmMenu = new JMenuBar();
 
-// button to extend window
+    // button to extend window
     extend = new JButton(fwdArrow);
     extend.setBorder(BorderFactory.createMatteBorder(0,0,0,0, Color.black));
     extend.addActionListener(this);
@@ -191,7 +177,7 @@ public class Jemboss implements ActionListener
 
     int arrowSize = fwdArrow.getIconWidth();
     Dimension jform;
-// set window dimensions, dependent on screen size
+    // set window dimensions, dependent on screen size
     if(d.getWidth()<1024)
     {
       jdim = new Dimension(615,500);
@@ -209,30 +195,30 @@ public class Jemboss implements ActionListener
       jform = new Dimension(660-180+arrowSize,500);
     }
 
-// setup the top menu bar
-    SetUpMenuBar mainMenu = new SetUpMenuBar(
-                mysettings, f, envp, cwd, withSoap);
+    // setup the top menu bar
+    mainMenu = new SetUpMenuBar(mysettings,f,
+                                withSoap);
 
-// add to Jemboss main frame and locate it center left of screen
+    // add to Jemboss main frame and locate it center left of screen
     f.getContentPane().add(pmain);
     f.pack();
     f.setLocation(0,((int)d.getHeight()-f.getHeight())/2);
 
-    new BuildProgramMenu(p1,p2,pform,scrollProgForm,embossBin,
-                         envp,mysettings,withSoap,cwd,
-                         acdDirToParse,mainMenu,f,jform);
+    new BuildProgramMenu(p1,p2,pform,scrollProgForm,
+                         mysettings,withSoap,
+                         mainMenu,f,jform);
 
     f.addWindowListener(new winExit());
 
   }
 
 
-/**
-*
-*  Action event to open the file manager
-*
-*
-*/
+  /**
+  *
+  *  Action event to open the file manager
+  *  @param ae		the action event generated
+  *
+  */
   public void actionPerformed(ActionEvent ae)
   {
     if( p3.getComponentCount() > 0 )
@@ -252,55 +238,27 @@ public class Jemboss implements ActionListener
 
   }
 
-/**
-*
-*  Delete temporary files
-*  @param current working directory (local)
-*
-*/
-  private void deleteTmp(File cwd, final String suffix) 
-  {
 
-    String tmpFiles[] = cwd.list(new FilenameFilter()
-    {
-      public boolean accept(File cwd, String name)
-      {
-        return name.endsWith(suffix);
-      };
-    });
-
-    for(int h =0;h<tmpFiles.length;h++)
-    {
-      File tf = new File(tmpFiles[h]);
-      tf.delete();
-    }
-  }
-
-
-/**
-*
-* Extends WindowAdapter to close window 
-*
-*/
+  /**
+  *
+  * Extends WindowAdapter to close window and
+  * save any session properties and clean up
+  *
+  */
   class winExit extends WindowAdapter
   {
      public void windowClosing(WindowEvent we)
      {
-        String cwd = new String(
-                       System.getProperty("user.dir") + 
-                       System.getProperty("file.separator"));
-
-        deleteTmp(new File(cwd), ".jembosstmp");
-        System.exit(0);
+        mainMenu.exitJemboss();
      }
   }
 
 
-/**
-*
-* Launches Jemboss in standalone or client-server mode.
-*
-*/
+  /**
+  *
+  * Launches Jemboss in standalone or client-server mode.
+  *
+  */
   public static void main (String args[])
   {
     
@@ -321,7 +279,6 @@ public class Jemboss implements ActionListener
       withSoap = true;
 
     new Jemboss();
-
   }
 
 }

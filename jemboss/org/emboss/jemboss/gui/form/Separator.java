@@ -25,13 +25,22 @@ package org.emboss.jemboss.gui.form;
 import javax.swing.JPanel;
 import java.awt.*;
 
-
+/**
+*
+* Panel separator
+*
+*/
 public class Separator extends JPanel
 {
-  private Color light;
-  private Color dark;
+  
+  /** size of separator */
   private Dimension d;
 
+  /**
+  *
+  * @param d	size of separator
+  *
+  */
   public Separator(Dimension d)
   {
     super();
@@ -39,12 +48,16 @@ public class Separator extends JPanel
     setSize(d);
   }
 
+  /**
+  *
+  * Override paint to draw separator
+  *
+  */
   public void paint(Graphics g) 
   {
     Dimension size = getSize();
-    light = getBackground().brighter().brighter();
-//  dark  = getBackground().darker().darker();
-    dark  = getBackground().darker();
+    Color light = getBackground().brighter().brighter();
+    Color dark  = getBackground().darker();
     int length = d.width;
     int xpos = (size.width)/2 - length/2;
     int ypos = (size.height)/2;

@@ -26,21 +26,31 @@ import java.util.*;
 
 import org.emboss.jemboss.JembossParams;
 
+/**
+*
+* Run showdb and find the available scoring matrices
+* and codon usage tables on the Jemboss server
+*
+*/
 public class ShowDB 
 {
 
+  /** status message */
   private String statusmsg;
+  /** status */
   private String status;
+  /** showdb output */
   private String dbText;
+  /** scoring matrices */
   private Vector matrices;
+  /** codon usage tables */
   private Vector codons;
 
-/**
-*
-* Makes a soap call to retrieve the showdb output
-* @param mysettings JembossParams defining server parameters
-*
-*/
+  /**
+  *
+  * @param mysettings 	jemboss properties
+  *
+  */
   public ShowDB(JembossParams mysettings)
   {
  
@@ -68,58 +78,57 @@ public class ShowDB
       codons.add(stMat.nextToken());
   }
 
-/**
-*
-* The status of the request
-* @return String 0 for success, anything else for failure.
-*
-*/
+  /**
+  *
+  * Get the status of the request
+  * @return 	0 for success
+  *
+  */
   public String getStatus()
   {
     return status;
   }
 
-/**
-*
-* A status message
-* @return string containing a status message, contains
-* description of any error.
-*
-*/
+  /**
+  *
+  * Get the status message
+  * @return 	status message or contains a
+  * 		description of any error.
+  *
+  */
   public String getStatusMsg() 
   {
     return statusmsg;
   }
 
-/**
-*
-* The output from showdb
-*
-* @return  output from showdb
-*
-*/
+  /**
+  *
+  * Get the output from showdb
+  * @return  output from showdb
+  *
+  */
   public String getDBText() 
   {
     return dbText;
   }
 
-/**
-*
-* Retrieves the available matrices 
-* @return  Vector containing matrices names
-*
-*/
+  /**
+  *
+  * Get the available matrices 
+  * @return  	matrices names
+  *
+  */
   public Vector getMatrices()
   {
     return matrices;
   }
  
-/**
-*
-* Retrieves the codon tables
-* @return  Vector containing codon usage table names
-*
-*/
+  /**
+  *
+  * Get the codon usage tables
+  * @return  	codon usage table names
+  *
+  */
   public Vector getCodonUsage()
   {
     return codons;

@@ -24,18 +24,36 @@ package org.emboss.jemboss.programs;
 
 import java.util.Hashtable;
 
+/**
+*
+* Monitor for Jemboss batch processes
+*
+*/
 public class JembossProcess
 {
 
+  /** true when process is complete */
   private boolean completed = false;
+  /** true when process is running  */
   private boolean running = true;
-  private boolean hasresults = false;
+ 
+//private boolean hasresults = false;
+  /** project name */
   private String project = "";
+  /** project id   */
   private String jobid = "";
+  /** project description */
   private String description = "";
-  final private String blankstring = "";
-  private Hashtable results;
 
+//private Hashtable results;
+
+  /**
+  *
+  * @param project	project name
+  * @param jobid	project id 
+  * @param description	project description
+  *
+  */
   public JembossProcess(String project, String jobid, String description) 
   {
     this.project = project;
@@ -43,68 +61,120 @@ public class JembossProcess
     this.description = description;
   }
 
+  /**
+  *
+  * @param project      project name
+  * @param jobid        project id 
+  *
+  */
   public JembossProcess(String project, String jobid) 
   {
     this.project = project;
     this.jobid = jobid;
   }
 
+  /**
+  *
+  * @param jobid        project id 
+  *
+  */
   public JembossProcess(String jobid) 
   {
     this.jobid = jobid;
   }
 
+  /**
+  *
+  * Determine if a job has completed
+  * @return	true if the process is complete
+  *
+  */
   public boolean isCompleted() 
   {
     return completed;
   }
 
+  /**
+  *
+  * Determine if a job is running
+  * @return     true if the process is running
+  *
+  */
   public boolean isRunning() 
   {
     return running;
   }
 
-  public boolean hasResults() 
-  {
-    return hasresults;
-  }
+//public boolean hasResults() 
+//{
+//  return hasresults;
+//}
 
+  /**
+  *
+  * Get the project name
+  * @return 	project name
+  *
+  */
   public String getProject() 
   {
     return project;
   }
 
+  /**
+  *
+  * Get the project id
+  * @return     project id
+  *
+  */
   public String getJob() 
   {
     return jobid;
   }
 
+  /**
+  *
+  * Get the project description
+  * @return     project description
+  *
+  */
   public String getDescription() 
   {
     return description;
   }
 
+  /**
+  *
+  * Called when a process has completed
+  *
+  */
   public void complete() 
   {
     completed = true;
     running = false;
   }
 
+  /**
+  *
+  * Set the description of a project
+  * @param s	project description
+  *
+  */
   public void setDescription(String s) 
   {
     description = s;
   }
 
-  public void setResults(Hashtable newres) 
-  {
-    results = new Hashtable();
-    results = newres;
-    hasresults = true;
-  }
+//public void setResults(Hashtable newres) 
+//{
+//  results = new Hashtable();
+//  results = newres;
+//  hasresults = true;
+//}
 
-  public Hashtable getResults() 
-  {
-    return results;
-  }
+//public Hashtable getResults() 
+//{
+//  return results;
+//}
 
 }

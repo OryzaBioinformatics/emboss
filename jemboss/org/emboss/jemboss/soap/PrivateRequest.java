@@ -31,59 +31,56 @@ import org.apache.axis.client.Service;
 import javax.xml.namespace.QName;
 import org.apache.axis.encoding.XMLType;
 
+/**
+*
+* Make a axis call to a private server, using the default service
+*
+*/
 public class PrivateRequest 
 {
 
+  /** results from calling the web service */
   private Hashtable proganswer;
-  private String result = "";
-  private boolean successful = false;
-  private boolean authenticationerror = false;
 
-
-/**
-*
-* Make a soap call to a private server, using the default service
-* @param mysettings JembossParams defining server parameters
-* @param method     String defining which method to call
-* @param args       Vector of arguments
-* @throws JembossSoapException If authentication fails
-*
-*/
+  /**
+  *
+  * @param mysettings jemboss properties
+  * @param method     method to call
+  * @param args       arguments
+  * @throws JembossSoapException if authentication fails
+  *
+  */
    public PrivateRequest(JembossParams mysettings, String method, Vector args) 
                 throws JembossSoapException 
    {
      this(mysettings, mysettings.getPrivateSoapService(), method, args);
    }
 
-/**
-*
-* Make a soap call to a private server
-* @param mysettings JembossParams defining server parameters
-* @param service    String defining which service to call
-* @param method     String defining which method to call
-*
-* @throws JembossSoapException If authentication fails
-*/
+  /**
+  *
+  * @param mysettings jemboss properties
+  * @param service    service to call
+  * @param method     method to call
+  * @throws JembossSoapException If authentication fails
+  *
+  */
    public PrivateRequest(JembossParams mysettings, String service, String method)
                 throws JembossSoapException
    {
      this(mysettings, service, method, (Vector) null);
    }
 
-/**
-*
-* Make a soap call to a private server
-* @param mysettings JembossParams defining server parameters
-* @param service    String defining which service to call
-* @param method     String defining which method to call
-* @param args       Vector of arguments
-*
-* @throws JembossSoapException If authentication fails
-*/
+  /**
+  *
+  * @param mysettings jemboss properties
+  * @param service    service to call
+  * @param method     method to call
+  * @param args       arguments
+  * @throws JembossSoapException if authentication fails
+  */
    public PrivateRequest(JembossParams mysettings, String service, String method,
                          Vector args) throws JembossSoapException 
    {
-
      try
      {
        String  endpoint = mysettings.getPublicSoapURL()+"/"+service;
@@ -192,7 +189,12 @@ public class PrivateRequest
 
    }
 
-
+  /**
+  *
+  * Change the contents of a hashtable to a vector
+  * @return	contents of the hash
+  *
+  */
   private Vector getVector(Hashtable h)
   {
     Vector v = new Vector();
@@ -206,24 +208,15 @@ public class PrivateRequest
     return v;
   }
 
-/**
-*
-* @return true if the call succeeded (eventually) or not
-*
-*/
-  public boolean succeeded() 
-  {
-    return successful;
-  }
 
-/**
-*
-* Gets an element out of the embreo result hash
-* @param val The key to look up
-* @return Either the element, or an empty String if there is no
-* an element that matches the key
-*
-*/
+  /**
+  *
+  * Gets an element out of the embreo result hash
+  * @param val 	key to look up
+  * @return 	the element, or an empty String if there is no
+  * 		element that matches the key
+  *
+  */
   public Object getVal(String val) 
   {
     if (proganswer.containsKey(val)) 
@@ -232,22 +225,12 @@ public class PrivateRequest
       return "";
   }
 
-/**
-*
-* @return The result of the soap server call. This is the first element that
-* is returned. Only useful for server methods that return a simple value.
-*
-*/
-  public String getResult() 
-  {
-    return result;
-  }
-
-/**
-*
-* @return Hahtable of results returned by the server call. 
-*
-*/
+  /**
+  *
+  * Get the results returned by the server call
+  * @return 	results
+  *
+  */
   public Hashtable getHash() 
   {
     return proganswer;

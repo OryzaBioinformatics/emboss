@@ -33,6 +33,12 @@ import org.emboss.jemboss.gui.sequenceChooser.SequenceFilter;
 public class SequenceSaver
 {
 
+  /**
+  *
+  * @param seqs		sequences to save out
+  * @param fsave	selected file to save to
+  * 
+  */
   public SequenceSaver(Vector seqs, File fsave)
   {
     SecurityManager sm = System.getSecurityManager();
@@ -68,11 +74,23 @@ public class SequenceSaver
     }
   }
 
+  /**
+  *
+  * @param seqs         sequences to save out
+  *
+  */
   public SequenceSaver(Vector seqs)
   {
     this(seqs,null);
   }
 
+  /**
+  *
+  * Save the sequences out
+  * @param fsave	file to write to
+  * @param seqs		sequences to save
+  *
+  */
   private void saveFile(File fsave,Vector seqs)
   {
     try

@@ -19,7 +19,6 @@
 *
 ********************************************************************/
 
-
 package org.emboss.jemboss.gui.sequenceChooser;
 
 import java.awt.*;
@@ -32,25 +31,31 @@ import java.io.*;
 /**
 *
 * Creates the output sequence attibutes window
-* @author T. J. Carver
 *
 */
 public class OutputSequenceAttributes
 {
 
-  private JTextField oext = new JTextField();
+  /** ouput file extension to use */
   private JTextField osextension = new JTextField();
+  /** output base name */
   private JTextField osname = new JTextField();
-  private JTextField osdbname = new JTextField();
+ 
+//private JTextField osdbname = new JTextField();
+  /** feature format */
   private JTextField offormat = new JTextField();
+  /** features filename */
   private JTextField ofname = new JTextField();
+  /** uniform feature object */
   private JTextField UFO = new JTextField();
-
-  private JComboBox fileFormats;
+  /** separate file for each entry */
   private JRadioButton ossingle;
+  /** combobox for file formats */
+  private JComboBox fileFormats;
+  /** scroll pane for output attributes */
   private JScrollPane rscroll;
 
-//output format types
+  /** output format types */
   private String ff[] = {"unspecified", "text", "fasta", "msf", "fitch",
                          "gcg", "gcg8", "embl", "swiss", "ncbi",
                          "pearson", "genbank", "nbrf", "pir", 
@@ -65,12 +70,8 @@ public class OutputSequenceAttributes
 
   public OutputSequenceAttributes() 
   {
-//  JPanel p = (JPanel)f.getContentPane();
     JPanel pscroll = new JPanel(new BorderLayout());
     rscroll = new JScrollPane(pscroll);
-//  p.setLayout(new BorderLayout());
-//  p.add(rscroll, BorderLayout.CENTER);
-//  f.setSize(260,320);
 
     Box b = new Box(BoxLayout.Y_AXIS);
     pscroll.add(b,BorderLayout.CENTER);
@@ -109,7 +110,8 @@ public class OutputSequenceAttributes
     bx.add(lab);
     bx.add(Box.createHorizontalGlue());
     
-    osextension = new JTextField(){             //osextension 
+    osextension = new JTextField()
+    {   
       public Dimension getMinimumSize() 
       {
         return getPreferredSize();
@@ -136,7 +138,8 @@ public class OutputSequenceAttributes
     bx.add(Box.createHorizontalGlue());
 
 
-    osname = new JTextField(){             //osname 
+    osname = new JTextField()
+    {       
       public Dimension getMinimumSize() 
       {
         return getPreferredSize();
@@ -173,7 +176,8 @@ public class OutputSequenceAttributes
     bx.add(ossingle);
     bx.add(Box.createHorizontalGlue());
 
-    UFO = new JTextField(){                     //oufo
+    UFO = new JTextField()                      //oufo
+    {
       public Dimension getMinimumSize() 
       {
         return getPreferredSize();
@@ -199,7 +203,8 @@ public class OutputSequenceAttributes
     bx.add(lab);
     bx.add(Box.createHorizontalGlue());
 
-    offormat = new JTextField(){             //osdbname
+    offormat = new JTextField()
+    {
       public Dimension getMinimumSize() 
       {
         return getPreferredSize();
@@ -225,7 +230,8 @@ public class OutputSequenceAttributes
     bx.add(lab);
     bx.add(Box.createHorizontalGlue());
 
-    ofname = new JTextField(){             //ofname
+    ofname = new JTextField()              //ofname
+    {
       public Dimension getMinimumSize() 
       {
         return getPreferredSize();
@@ -253,16 +259,34 @@ public class OutputSequenceAttributes
 
   }
 
+  /**
+  *
+  * Get the scoll panel 
+  * @return	scroll panel
+  *
+  */
   public JScrollPane getJScrollPane()
   {
     return rscroll;
   }
 
+  /**
+  *
+  * Get the format selected
+  * @return 	selected format
+  *
+  */
   public String getFormatChoosen() 
   {
     return (String)fileFormats.getSelectedItem();
   }
 
+  /**
+  *
+  * Determine if UFO has a value
+  * @return 	true if a value has been set
+  *
+  */
   public boolean isUFODefault()
   {
     if(UFO.getText() == null || UFO.getText().equals(""))
@@ -271,6 +295,12 @@ public class OutputSequenceAttributes
      return false;
   }
 
+  /**
+  *
+  * Determine if an extension has been selected
+  * @return     true if a value has been set
+  *
+  */
   public boolean isExtensionDefault()
   {
     if(osextension.getText() == null || osextension.getText().equals(""))
@@ -279,6 +309,12 @@ public class OutputSequenceAttributes
      return false;
   }
 
+  /**
+  *
+  * Determine if a output file name is set
+  * @return     true if a value has been set
+  *
+  */
   public boolean isNameDefault()
   {
     if(osname.getText() == null || osname.getText().equals(""))
@@ -287,14 +323,20 @@ public class OutputSequenceAttributes
      return false;
   }
 
-  public boolean isDBNameDefault()
-  {
-    if(osdbname.getText() == null || osdbname.getText().equals(""))
-     return true;
-    else
-     return false;
-  }
+//public boolean isDBNameDefault()
+//{
+//  if(osdbname.getText() == null || osdbname.getText().equals(""))
+//   return true;
+//  else
+//   return false;
+//}
 
+  /**
+  *
+  * Determine if a feature name is set
+  * @return     true if a value has been set
+  *
+  */
   public boolean isFNameDefault()
   {
     if(ofname.getText() == null || ofname.getText().equals(""))
@@ -303,7 +345,13 @@ public class OutputSequenceAttributes
      return false;
   }
 
-
+  /**
+  *
+  * Get the EMBOSS command line for the output sequence 
+  * attributes
+  * @return	output attibutes command line options
+  *
+  */
   public String getOuputSeqAttr() 
   {
     String options="";
@@ -320,8 +368,8 @@ public class OutputSequenceAttributes
     if(!isNameDefault())
        options = options.concat(" -osname " + osname.getText());
 
-    if(!isDBNameDefault())
-       options = options.concat(" -osdbname " + osdbname.getText());
+//  if(!isDBNameDefault())
+//     options = options.concat(" -osdbname " + osdbname.getText());
 
     if(ossingle.isSelected())
        options = options.concat(" -ossingle ");

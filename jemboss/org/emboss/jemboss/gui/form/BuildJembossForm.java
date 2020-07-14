@@ -68,7 +68,7 @@ public class BuildJembossForm implements ActionListener
   protected static JPanel inpSection;
 
 //private JComboBox fieldOption[];
-  private myComboPopup fieldOption[];
+  private JembossComboPopup fieldOption[];
   private JList multiOption[];
   private SetInFileCard inSeq[];
   private JButton bresults;
@@ -95,7 +95,7 @@ public class BuildJembossForm implements ActionListener
   private JembossParams mysettings;
   
   public BuildJembossForm(String appDescription, String db[],
-        final String applName, String[] envp, String cwd, String embossBin,
+        final String applName, String[] envp, String cwd, 
         String acdText, final boolean withSoap, ScrollPanel p2, 
         final JembossParams mysettings, final JFrame f)
   {
@@ -106,7 +106,8 @@ public class BuildJembossForm implements ActionListener
     this.cwd = cwd;
     this.mysettings = mysettings;
     this.withSoap = withSoap;
-    this.embossBin = embossBin;
+
+    embossBin  = mysettings.getEmbossBin();
     this.envp = envp;
     this.applName = applName;
 
@@ -200,20 +201,14 @@ public class BuildJembossForm implements ActionListener
 // Display results button
     bresults = new JButton("Show results");
     bresults.addActionListener(this);
-    bresults.setMargin(new Insets(0,1,0,1));
 
 // Go button
     
     ImageIcon rfii = new ImageIcon(cl.getResource("images/Go_button.gif"));
     JButton bgo = new JButton(rfii);
     bgo.setActionCommand("GO");
-    bgo.setIcon(rfii);
     bgo.setMargin(new Insets(0,0,0,0));
     bgo.addActionListener(this);
-
-// Advanced options
-    JButton badvanced = new JButton("Advanced Options");
-    badvanced.addActionListener(this);
 
     Box tools;
     tools = Box.createHorizontalBox();
@@ -222,8 +217,11 @@ public class BuildJembossForm implements ActionListener
     tools.add(Box.createRigidArea(new Dimension(4,0)));
     tools.add(bhelp);
       
+// Advanced options
     if(advSectionBox!= null)
     {
+      JButton badvanced = new JButton("Advanced Options");
+      badvanced.addActionListener(this);
       tools.add(Box.createRigidArea(new Dimension(4,0)));
       tools.add(badvanced);
     }
@@ -272,7 +270,7 @@ public class BuildJembossForm implements ActionListener
     checkBox  = new JCheckBox[nbool];
     inSeqAttr = new InputSequenceAttributes[nseqs];
     filelist  = new ListFilePanel[nflist];
-    fieldOption = new myComboPopup[nlist];
+    fieldOption = new JembossComboPopup[nlist];
     multiOption = new JList[mlist];
     rangeField  = new JTextField[nrange];
 
@@ -361,7 +359,7 @@ public class BuildJembossForm implements ActionListener
           advSectionBox = sp.getSectionBox();
           advSection = sp.getSectionPanel();
         }
-        else
+        else if(sp.getSectionBox() != null)
         {
           fieldPane.add(sp.getSectionBox());
           if(sp.isInputSection())
@@ -777,9 +775,10 @@ public class BuildJembossForm implements ActionListener
 
           if(fn.endsWith(":") || fn.endsWith(":*"))
           {
+             String ls = PlafMacros.getLineSeparator();
              int n = JOptionPane.showConfirmDialog(f,
-                       "Do you really want to extract\n"+
-                       "the whole of " + fn + " databese?",
+                       "Do you really want to extract"+ls+
+                       "the whole of " + fn + " database?",
                        "Confirm the sequence entry",
                        JOptionPane.YES_NO_OPTION);
              if(n == JOptionPane.NO_OPTION)

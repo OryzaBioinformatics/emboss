@@ -28,28 +28,44 @@ import java.awt.event.*;
 import org.emboss.jemboss.JembossParams;
 import org.emboss.jemboss.gui.filetree.LocalAndRemoteFileTreeFrame;
 
+/**
+*
+* Display a popup asking the user to enter a username 
+* and password
+*
+*/
 public class AuthPopup extends JFrame
 {
 
+  /** splash panel */
   private JPanel splashp;
+  /** progress monitor */
   private int iprogress = 0;
+  /** max value for the progress monitor */
   private int iprogressmax = 0;
+  /** jemboss properties */
   private JembossParams mysettings;
+  /** progress bar */
   private JProgressBar progressBar;
+  /** progress label */
   private JLabel progressLabel;
+  /** OK button */
   private JButton okButton;
+  /** username field */
   private JTextField ufield;
+  /** passwd field */
   private JPasswordField pfield;
+  /** true if window is to be hidden */
   private boolean exitOnDone = false;
+  /** prompt for login panel */
   private JPanel promptPanel;
 
-/**
-*
-* Display a popup asking the user to enter a username and password
-* @param mysettings JembossParams defining server parameters
-* @param f          Parent frame the popup is associated with
-*
-*/
+  /**
+  *
+  * @param mysettings jemboss properties
+  * @param f          Parent frame the popup is associated with
+  *
+  */
   public AuthPopup(final JembossParams mysettings, JFrame f) 
   {
 
@@ -124,11 +140,13 @@ public class AuthPopup extends JFrame
     this.mysettings = mysettings;
   }
 
-/**
-*
-* Called on startup to display the login and progress bar.
-*
-*/
+  /**
+  *
+  * Called on startup to display the login and progress bar.
+  * @param mysettings	jemboss properties
+  * @param iprogressmax	max value for progress monitor
+  *
+  */
   public AuthPopup(final JembossParams mysettings, int iprogressmax)
   {
      this(mysettings,null);
@@ -157,11 +175,11 @@ public class AuthPopup extends JFrame
     setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
   }
 
-/**
-*
-* Buttons across the bottom
-*
-*/
+  /**
+  *
+  * Buttons across the bottom
+  *
+  */
   public void addBottomPanel() 
   {
     setTitle("File Manager Login");
@@ -250,11 +268,11 @@ public class AuthPopup extends JFrame
   }
 
   
-/**
-*
-* Buttons across the bottom
-*
-*/
+  /**
+  *
+  * Buttons across the bottom
+  *
+  */
   public void setBottomPanel()
   {
     JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
@@ -314,22 +332,18 @@ public class AuthPopup extends JFrame
   }
 
 
-/**
-*
-* 
-*
-*/
-  public JButton getOKButton()
-  {
-    return okButton;
-  }
+//public JButton getOKButton()
+//{
+//  return okButton;
+//}
 
 
-/**
-*
-* Update the progress bar and label
-*
-*/
+  /**
+  *
+  * Update the progress bar and label
+  * @param s	string for progress label
+  *
+  */
   public void doneSomething(String s)
   {
     if (iprogressmax > 0)
@@ -349,11 +363,12 @@ public class AuthPopup extends JFrame
     }
   }
 
-/**
-*
-* Finish the progress bar and label
-*
-*/
+  /**
+  *
+  * Finish the progress bar and label
+  * @param s    string for progress label
+  *
+  */
   public void doneEverything(String s)
   {
     if (iprogressmax > 0)

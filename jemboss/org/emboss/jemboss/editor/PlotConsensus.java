@@ -17,18 +17,6 @@
 *  @author: Copyright (C) Tim Carver
 *
 *
-* Average similarity calculation:
-*
-* Av. Sim. =       sum( Mij*wi + Mji*w2  )
-*            -----------------------------------
-*               (Nseq*Wsize)*((Nseq-1)*Wsize)
-*
-*     sum   - over column*window size
-*     M     - matrix comparison table
-*     i,j   - wrt residue i or j
-*     Nseq  - no. of sequences in the alignment
-*     Wsize - window size
-*
 ***************************************************************/
 
 package org.emboss.jemboss.editor;
@@ -40,16 +28,45 @@ import java.util.Enumeration;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+*
+* Plot the average similarity. This is calculated by:
+*
+* <p> Av. Sim. =    sum( Mij*wi + Mji*w2  ) / 
+*              ( (Nseq*Wsize)*((Nseq-1)*Wsize) )
+*
+* <p>   sum   - over column*window size
+* <br>  M     - matrix comparison table
+* <br>  i,j   - wrt residue i or j
+* <br>  Nseq  - no. of sequences in the alignment
+* <br>  Wsize - window size
+*
+*/
 public class PlotConsensus extends JPanel
 {
 
+  /** sum of scores for each column */
   private float[] sumscore;
+  /** number of graph bins making up the seq length */
   private int numbins;
+  /** residue width   */
   private int interval;
+  /** minimum y value */
   private float ymin = 0.f;
+  /** maximum y value */
   private float ymax = 0.f;
+  /** associated sequence panel */
   private GraphicSequenceCollection viewPane = null;
 
+  /**
+  *
+  * @param matrixFile	scoring matrix file
+  * @param seqs		vector of the Sequence objects
+  * @param winsize	window size
+  * @param interval 	residue width
+  * @param viewPane	graphical sequence view
+  *
+  */
   public PlotConsensus(File matrixFile, Vector seqs, int winsize,
                        int interval, GraphicSequenceCollection viewPane)
   {
@@ -60,6 +77,14 @@ public class PlotConsensus extends JPanel
     createPlot(mat,seqs,winsize);
   }
 
+  /**
+  *
+  * @param matrixFile   scoring matrix file
+  * @param seqs         vector of the Sequence objects
+  * @param winsize      window size
+  * @param interval     residue width
+  * 
+  */
   public PlotConsensus(File matrixFile, Vector seqs, int winsize,
                        int interval)
   {   
@@ -68,6 +93,15 @@ public class PlotConsensus extends JPanel
     createPlot(mat,seqs,winsize);
   }
  
+  /**
+  *
+  * @param matrixJar		jar file containing matrix
+  * @param matrixFilename     	scoring matrix file
+  * @param seqs           	vector of the Sequence objects
+  * @param winsize        	window size
+  * @param interval     	residue width
+  * 
+  */
   public PlotConsensus(String matrixJar, String matrixFileName,
                        Vector seqs, int winsize,
                        int interval)
@@ -76,6 +110,15 @@ public class PlotConsensus extends JPanel
                                  winsize,interval);
   }
 
+  /**
+  *
+  * @param mat     	scoring matrix
+  * @param seqs     	vector of the Sequence objects
+  * @param winsize   	window size
+  * @param interval     residue width
+  * @param viewPane	graphical sequence view
+  * 
+  */
   public PlotConsensus(Matrix mat, Vector seqs, int winsize,
                        int interval, GraphicSequenceCollection viewPane)
   {
@@ -85,6 +128,14 @@ public class PlotConsensus extends JPanel
   }
 
  
+  /**
+  *
+  * @param mat          scoring matrix
+  * @param seqs         vector of the Sequence objects
+  * @param winsize      window size
+  * @param interval     residue width
+  * 
+  */
   public PlotConsensus(Matrix mat,
                        Vector seqs, int winsize,
                        int interval)
@@ -93,12 +144,19 @@ public class PlotConsensus extends JPanel
     createPlot(mat,seqs,winsize);
   }
 
+  /**
+  *
+  * Create the consensus plot
+  * @param mat 		scoring matrix
+  * @param seqs         vector of the Sequence objects
+  * @param winsize      window size
+  *
+  */
   private void createPlot(Matrix mat, Vector seqs, int winsize)
   {
     int matrix[][] = mat.getMatrix();
     int numseq = seqs.size();
 
-//  int lenseq = ((Sequence)seqs.get(0)).getLength();
     int mseq = getMaxSequenceLength(seqs);
     int matsize = mat.getIDimension();
     numbins = mseq;
@@ -162,17 +220,27 @@ public class PlotConsensus extends JPanel
     setPlotSize();
  }
 
+  /**
+  * 
+  * Set the consensus plot preferred size using the
+  * graph dimensions
+  *
+  */
   public void setPlotSize()
   {
     setPreferredSize(new Dimension(numbins*interval,
                       (int)(ymax-ymin+1)*interval));
   }
 
-/**
-*
-* Returns the residue of the sequence i at position k
-*
-*/
+  /**
+  *
+  * Returns the residue of the sequence i at position k
+  * @param seqs		vector of Sequence objects
+  * @param i		sequence index
+  * @param k 		sequence position
+  * @return		residue k from sequence i
+  *
+  */
   public String getResidue(Vector seqs, int i, int k)
   {
     String res = "-";
@@ -184,22 +252,27 @@ public class PlotConsensus extends JPanel
     return res;
   }
 
-/**
-*
-* Returns the weight of sequence i
-*
-*/
+  /**
+  *
+  * Returns the weight of sequence i
+  * @param seqs         vector of Sequence objects
+  * @param i            sequence index
+  * @return 		sequence weight
+  *
+  */
   public float getSequenceWeight(Vector seqs, int i)
   {
     return ((Sequence)seqs.get(i)).getWeight();
   }
 
-/**
-*
-* Check all sequences lengths and return length of
-* the longest sequence
-*
-*/
+  /**
+  *
+  * Check all sequences lengths and return length of
+  * the longest sequence
+  * @param seqs		vector of Sequence objects
+  * @return		length of the longest sequence
+  *
+  */
   public int getMaxSequenceLength(Vector seqs)
   {
     int len = 0;
@@ -214,6 +287,12 @@ public class PlotConsensus extends JPanel
     return len;
   }
 
+  /**
+  *
+  * Override paintComponent to draw consensus plot
+  * @param g	graphics
+  *
+  */
   public void paintComponent(Graphics g)
   {
     super.paintComponent(g);
@@ -252,6 +331,12 @@ public class PlotConsensus extends JPanel
     }
   }
 
+  /**
+  *
+  * Set the interval
+  * @param interval	interval
+  *
+  */
   public void setInterval(int interval)
   {
     this.interval = interval;

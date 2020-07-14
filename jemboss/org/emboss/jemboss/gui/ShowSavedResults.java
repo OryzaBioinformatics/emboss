@@ -23,14 +23,13 @@
 package org.emboss.jemboss.gui;
 
 import java.awt.*;
+import java.awt.event.*;
+import java.io.*;
+import java.util.*;
 import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.event.*;
 import javax.swing.tree.*;
-
-import java.awt.event.*;
-import java.io.*;
-import java.util.*;
 
 import org.emboss.jemboss.programs.*;
 import org.emboss.jemboss.soap.*;
@@ -42,26 +41,42 @@ import org.emboss.jemboss.JembossParams;
 * and displays individual result sets
 *
 */
-public class ShowSavedResults
+public class ShowSavedResults extends JFrame
 {
 
-
-  private Cursor cbusy = new Cursor(Cursor.WAIT_CURSOR);
+  /** busy cursor */
+  private Cursor cbusy = new Cursor(Cursor.WAIT_CURSOR); 
+  /** done cursor */
   private Cursor cdone = new Cursor(Cursor.DEFAULT_CURSOR);
+  /** data list model */
   private DefaultListModel datasets = new DefaultListModel();
-  private JFrame savedResFrame;
+  /** result data list panel */
   private ScrollPanel sp = new ScrollPanel();
+  /** text area for initial description of the saved results
+      window and the run information of the results */
   private JTextArea aboutRes; 
+  /** scrollpane for description of the results */
   private JScrollPane aboutScroll;
+  /** scroll panel for result data */
   private JScrollPane ss;
+  /** result status panel */
   private JPanel resButtonStatus;
+  /** status field */
   private JTextField statusField;
+  /** manu bar for results panel */
   private JMenuBar resMenu = new JMenuBar();
+  /** refresh image */
   private ImageIcon rfii;
 
+
+  /**
+  *
+  * @param frameName	title name for frame
+  *
+  */
   public ShowSavedResults(String frameName)
   {
-    savedResFrame = new JFrame(frameName);
+    super(frameName);
     aboutRes = new JTextArea("Select a result set from"
                               +"\nthose listed and details"
                               +"\nof that analysis will be"
@@ -72,8 +87,8 @@ public class ShowSavedResults
     ss = new JScrollPane(sp);
     ss.getViewport().setBackground(Color.white);
 
-    resMenu.setLayout(new FlowLayout(FlowLayout.LEFT,10,1));
-    ClassLoader cl = this.getClass().getClassLoader();
+//  resMenu.setLayout(new FlowLayout(FlowLayout.LEFT,10,1));
+    ClassLoader cl = getClass().getClassLoader();
     rfii = new ImageIcon(cl.getResource("images/Refresh_button.gif"));
 
 //results status
@@ -87,11 +102,13 @@ public class ShowSavedResults
   }
 
 
-/**
-*
-* Show the saved results on the server.
-*
-*/
+  /**
+  *
+  * Show the saved results on the server.
+  * @param mysettings	jemboss settings
+  * @param frameName    title name for frame
+  *
+  */
   public ShowSavedResults(final JembossParams mysettings, final JFrame f)
   {
 
@@ -99,7 +116,7 @@ public class ShowSavedResults
      
     Dimension d = new Dimension(270,270);
     ss.setPreferredSize(d);
-    ss.setMaximumSize(d);
+//  ss.setMaximumSize(d);
 
     try
     {
@@ -144,9 +161,9 @@ public class ShowSavedResults
         {
           try
           {
-            savedResFrame.setCursor(cbusy);
+            setCursor(cbusy);
             ResultList newlist = new ResultList(mysettings);
-            savedResFrame.setCursor(cdone);
+            setCursor(cdone);
             if (newlist.getStatus().equals("0")) 
             {
               reslist.updateRes(newlist.hash());
@@ -164,7 +181,7 @@ public class ShowSavedResults
             } 
             else 
             {
-              JOptionPane.showMessageDialog(savedResFrame,
+              JOptionPane.showMessageDialog(null,
                      newlist.getStatusMsg(), "Soap Error",
                               JOptionPane.ERROR_MESSAGE);
             }
@@ -190,11 +207,11 @@ public class ShowSavedResults
       {
         public void actionPerformed(ActionEvent e) 
         {
-          savedResFrame.setVisible(false);
+          dispose();
         }
       });
       resFileMenu.add(resFileMenuExit);
-      savedResFrame.setJMenuBar(resMenu);
+      setJMenuBar(resMenu);
         
       // this is the list of saved results
       listByDateRun(reslist,true);
@@ -232,12 +249,12 @@ public class ShowSavedResults
           {
             try
             {
-              savedResFrame.setCursor(cbusy);
+              setCursor(cbusy);
               String project = convertToOriginal(st.getSelectedValue());
               ResultList thisres = new ResultList(mysettings,project,
                                               "show_saved_results");
               new ShowResultSet(thisres.hash(),project,mysettings);
-              savedResFrame.setCursor(cdone);
+              setCursor(cdone);
             } 
             catch (JembossSoapException eae) 
             {  
@@ -264,11 +281,11 @@ public class ShowSavedResults
           {
 	    try 
 	    {
-	      savedResFrame.setCursor(cbusy);
+	      setCursor(cbusy);
 	      ResultList thisres = new ResultList(mysettings,
                                    sel,"show_saved_results"); 
               new ShowResultSet(thisres.hash(),sel,mysettings);
-	      savedResFrame.setCursor(cdone);
+	      setCursor(cdone);
 	    } 
             catch (JembossSoapException eae)
             {
@@ -297,11 +314,11 @@ public class ShowSavedResults
           {
             try
             {
-              savedResFrame.setCursor(cbusy);
+              setCursor(cbusy);
               ResultList thisres = new ResultList(mysettings,
                            sel,"Notes","show_saved_results");
               new ShowResultSet(thisres.hash(),sel,mysettings);
-              savedResFrame.setCursor(cdone);
+              setCursor(cdone);
             }
             catch (JembossSoapException eae)
             {
@@ -355,11 +372,12 @@ public class ShowSavedResults
               int maxHeight = (int)d1.getHeight()+5;
               if(maxHeight > 350)
                 maxHeight = 350;
-              Dimension d = new Dimension(maxWidth+30,maxHeight);
-              scrollDel.setPreferredSize(d);
-//            scrollDel.setMaximumSize(d);
+              else if(maxHeight < 50)
+                maxHeight = 50;
+              
+              scrollDel.setPreferredSize(new Dimension(maxWidth+30,maxHeight));
 
-              ok = JOptionPane.showConfirmDialog(savedResFrame,
+              ok = JOptionPane.showConfirmDialog(null,
                          scrollDel,"Confirm Deletion",
                   JOptionPane.YES_NO_OPTION);
             }
@@ -367,11 +385,11 @@ public class ShowSavedResults
             {
               try        // ask the server to delete these results
 	      {
-	        savedResFrame.setCursor(cbusy); 
+	        setCursor(cbusy); 
                 selList = convertToOriginal(selList);
 	        ResultList thisres = new ResultList(mysettings,selList,
                                          "delete_saved_results"); 
-	        savedResFrame.setCursor(cdone);
+	        setCursor(cdone);
 	       
                 // amend the list
                 for(int i=0;i<sel.length;i++)
@@ -403,12 +421,14 @@ public class ShowSavedResults
       resButtonPanel.add(showResButton);
       resButtonStatus.add(resButtonPanel, BorderLayout.CENTER);
       resButtonStatus.add(statusField, BorderLayout.SOUTH);
-      savedResFrame.getContentPane().add(ss,BorderLayout.WEST);
-      savedResFrame.getContentPane().add(aboutScroll,BorderLayout.CENTER);
-      savedResFrame.getContentPane().add(resButtonStatus,BorderLayout.SOUTH);
-      savedResFrame.pack();
+
+      Container c = getContentPane();
+      c.add(ss,BorderLayout.WEST);
+      c.add(aboutScroll,BorderLayout.CENTER);
+      c.add(resButtonStatus,BorderLayout.SOUTH);
+      pack();
       
-      savedResFrame.setVisible(true);
+      setVisible(true);
     } 
     catch (JembossSoapException eae) 
     {
@@ -422,20 +442,22 @@ public class ShowSavedResults
   }
 
 
-/**
-*
-* Show the results sent to a batch queue.
-*
-*/
+  /**
+  *
+  * Show the results sent to a batch queue.
+  * @param mysettings   jemboss settings
+  * @param epr		pending results
+  * @throws JembossSoapException when server connection fails
+  *
+  */
   public ShowSavedResults(final JembossParams mysettings, final PendingResults epr)
                                            throws JembossSoapException
   {
-
     this("Current Sessions Results");
 
     Dimension d = new Dimension(270,100);
     ss.setPreferredSize(d);
-    ss.setMaximumSize(d);
+//  ss.setMaximumSize(d);
 
     JMenu resFileMenu = new JMenu("File");
     resMenu.add(resFileMenu);
@@ -448,9 +470,9 @@ public class ShowSavedResults
     {
       public void actionPerformed(ActionEvent e) 
       {
-	savedResFrame.setCursor(cbusy);
+	setCursor(cbusy);
 	epr.updateStatus();
-	savedResFrame.setCursor(cdone);
+	setCursor(cdone);
 	datasets.removeAllElements();
 	Enumeration enum = epr.descriptionHash().keys();
 	while (enum.hasMoreElements()) 
@@ -469,11 +491,11 @@ public class ShowSavedResults
     {
       public void actionPerformed(ActionEvent e) 
       {
-	savedResFrame.dispose();
+	dispose();
       }
     });
     resFileMenu.add(resFileMenuExit);
-    savedResFrame.setJMenuBar(resMenu);
+    setJMenuBar(resMenu);
     
     // set up the results list in the gui
     Enumeration enum = epr.descriptionHash().keys();
@@ -510,22 +532,22 @@ public class ShowSavedResults
         {
 	  try
           {
-	    savedResFrame.setCursor(cbusy);
+	    setCursor(cbusy);
             String project = convertToOriginal(st.getSelectedValue());
 	    ResultList thisres = new ResultList(mysettings,project, 
                                              "show_saved_results");
-	    savedResFrame.setCursor(cdone);
+	    setCursor(cdone);
 	    if (thisres.getStatus().equals("0")) 
               new ShowResultSet(thisres.hash(),project,mysettings);
             else 
-              JOptionPane.showMessageDialog(savedResFrame,
+              JOptionPane.showMessageDialog(null,
                      thisres.getStatusMsg(), "Soap Error",
                               JOptionPane.ERROR_MESSAGE);
  
 	  } 
           catch (JembossSoapException eae) 
           {
-            AuthPopup ap = new AuthPopup(mysettings,savedResFrame);
+            AuthPopup ap = new AuthPopup(mysettings,null);
             ap.setBottomPanel();
             ap.setSize(380,170);
             ap.pack();
@@ -547,22 +569,22 @@ public class ShowSavedResults
         {
 	  try
           {
-	    savedResFrame.setCursor(cbusy);
+	    setCursor(cbusy);
             String project = convertToOriginal(st.getSelectedValue());
 	    ResultList thisres = new ResultList(mysettings,project, 
                                              "show_saved_results");
-	    savedResFrame.setCursor(cdone);
+	    setCursor(cdone);
 	    if (thisres.getStatus().equals("0")) 
               new ShowResultSet(thisres.hash(),project,mysettings);
             else 
-              JOptionPane.showMessageDialog(savedResFrame,
+              JOptionPane.showMessageDialog(null,
                      thisres.getStatusMsg(), "Soap Error",
                               JOptionPane.ERROR_MESSAGE);
 	  } 
           catch (JembossSoapException eae) 
           {
-            savedResFrame.setCursor(cdone);
-            AuthPopup ap = new AuthPopup(mysettings,savedResFrame);
+            setCursor(cdone);
+            AuthPopup ap = new AuthPopup(mysettings,null);
             ap.setBottomPanel();
             ap.setSize(380,170);
             ap.pack();
@@ -573,7 +595,6 @@ public class ShowSavedResults
     });
     
     // delete removes the file on the server and edits the list
-   
     JButton delResButton = new JButton("Delete");
     delResButton.addActionListener(new ActionListener()
     {
@@ -588,7 +609,7 @@ public class ShowSavedResults
 
           int ok = JOptionPane.OK_OPTION;
           if(sel.length>1)
-            ok = JOptionPane.showConfirmDialog(savedResFrame,
+            ok = JOptionPane.showConfirmDialog(null,
                 "Delete the following results:\n"+selList,
                 "Confirm Deletion",
                 JOptionPane.YES_NO_OPTION);
@@ -598,11 +619,11 @@ public class ShowSavedResults
 
 	    try 
             {
-	      savedResFrame.setCursor(cbusy);
+	      setCursor(cbusy);
               selList = convertToOriginal(selList);
 	      ResultList thisres = new ResultList(mysettings,selList,
                                              "delete_saved_results");
-	      savedResFrame.setCursor(cdone);
+	      setCursor(cdone);
 
               for(int i=0;i<sel.length;i++)
               {
@@ -617,7 +638,7 @@ public class ShowSavedResults
             catch (JembossSoapException eae)
             {
 	      // shouldn't happen
-              AuthPopup ap = new AuthPopup(mysettings,savedResFrame);
+              AuthPopup ap = new AuthPopup(mysettings,null);
               ap.setBottomPanel();
               ap.setSize(380,170);
               ap.pack();
@@ -632,24 +653,31 @@ public class ShowSavedResults
     resButtonStatus.add(resButtonPanel, BorderLayout.CENTER);
     resButtonStatus.add(statusField, BorderLayout.SOUTH);
 
-    savedResFrame.getContentPane().add(ss,BorderLayout.WEST);
-    savedResFrame.getContentPane().add(aboutScroll,BorderLayout.CENTER);
-    savedResFrame.getContentPane().add(resButtonStatus,BorderLayout.SOUTH);
-    savedResFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+    Container c = getContentPane();
+    c.add(ss,BorderLayout.WEST);
+    c.add(aboutScroll,BorderLayout.CENTER);
+    c.add(resButtonStatus,BorderLayout.SOUTH);
+    setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     
-    savedResFrame.pack();
-    savedResFrame.setVisible(true);
+    pack();
+    setVisible(true);
 
 //add in automatic updates
     String freq = (String)AdvancedOptions.jobMgr.getSelectedItem();
     int ind = freq.indexOf(" ");
     new ResultsUpdateTimer(Integer.parseInt(freq.substring(0,ind)),
-                           datasets, savedResFrame);
+                           datasets, this);
     statusField.setText("Window refresh rate " + freq);
 
   }
 
-
+  /**
+  *
+  * List results by date
+  * @param reslist	result list
+  * @param ldisp	
+  *
+  */
   private void listByDateRun(ResultList reslist,boolean ldisp)
   {
     StringTokenizer tokenizer =
@@ -670,7 +698,11 @@ public class ShowSavedResults
 
   }
 
-
+  /**
+  *
+  * List results by alphabetical name
+  *
+  */
   private void listByProgramName()
   { 
     int nresult = datasets.size();
@@ -683,6 +715,13 @@ public class ShowSavedResults
       datasets.addElement(res[i]);
   }
 
+  /**
+  *
+  * Convert the project names to remove the underscores
+  * ('_') with blank spaces 
+  * @param sorig	original string to convert 
+  *
+  */
   public static String convertToPretty(String sorig)
   {
     int index = sorig.indexOf('_');
@@ -692,6 +731,13 @@ public class ShowSavedResults
     return sorig.replace('_',' ');
   }
 
+  /**
+  *
+  * Convert back to the original project names replace
+  * blank spaces with underscores ('_') 
+  * @param sorig        string to convert 
+  *
+  */
   private String convertToOriginal(Object sorig)
   {
     String s = ((String)sorig).replace('\t','_');

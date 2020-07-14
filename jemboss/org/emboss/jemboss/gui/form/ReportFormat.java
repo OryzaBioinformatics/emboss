@@ -19,7 +19,6 @@
 *
 ********************************************************************/
 
-
 package org.emboss.jemboss.gui.form;
 
 import org.emboss.jemboss.parser.ParseAcd;
@@ -28,6 +27,12 @@ import javax.swing.JCheckBox;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 
+/**
+*
+* EMBOSS Report formats
+* http://www.hgmp.mrc.ac.uk/Software/EMBOSS/Themes/ReportFormats.html
+*
+*/
 public class ReportFormat
 {
 
@@ -40,15 +45,26 @@ public class ReportFormat
              "seqtable", "simple", "srs",
              "table", "tagseq"};
 
-  private myComboPopup cp;
+  /** container for report formats */
+  private JembossComboPopup cp;
+  /** select to show the accession number */
   private JCheckBox raccshow = new JCheckBox();
+  /** select to show the description */
   private JCheckBox rdesshow = new JCheckBox();
+  /** select to show the USA */
   private JCheckBox rusashow = new JCheckBox();
+  /** default report format */
   private String def;
 
+  /**
+  *
+  * @param parseAcd	ACD parser for an emboss application
+  * @param nf		report format field number in the ACD
+  * 
+  */
   public ReportFormat(ParseAcd parseAcd, int nf)
   {
-    cp = new myComboPopup(getReportFormats());
+    cp = new JembossComboPopup(getReportFormats());
 
     int np = parseAcd.getNumofParams(nf);
 
@@ -67,37 +83,80 @@ public class ReportFormat
 
   }
 
-  public myComboPopup getComboPopup()
+  /**
+  *
+  * Get the combo popup box containing the report formats
+  * @return 	combo popup box 
+  *
+  */
+  public JembossComboPopup getComboPopup()
   {
     return cp;
   }
 
+  /**
+  *
+  * Get the default report format
+  * @return 	default report format
+  *
+  */
   public String getDefaultFormat()
   {
     return def;
   }
 
+  /**
+  *
+  * Get the check box for accession number display 
+  * @return	check box
+  *
+  */
   public JCheckBox getAccCheckBox()
   {
     return raccshow;
   }
 
+  /**
+  *
+  * Get the check box for description display 
+  * @return     check box
+  *
+  */
   public JCheckBox getDesCheckBox()
   {
     return rdesshow;
   }
 
+  /**
+  *
+  * Get the check box for USA display 
+  * @return     check box
+  *
+  */
   public JCheckBox getUsaDesCheckBox()
   {
     return rusashow;
   }
 
   
+  /**
+  *
+  * Get the available report formats
+  * @return	string array of report formats
+  *
+  */
   private static String[] getReportFormats()
   {
     return rpt;
   }
 
+  /**
+  *
+  * Return the EMBOSS command line string depending on
+  * what has been selected
+  * @return	EMBOSS command line string
+  *
+  */
   public String getReportFormat()
   {
     String report = " -rformat " + cp.getSelectedItem();
@@ -110,7 +169,13 @@ public class ReportFormat
     return report;
   }
 
-
+  /**
+  *
+  * Get the container box for the report format
+  * display on the Jemboss application form
+  * @return	container box for the report format
+  *
+  */
   protected Box getReportCheckBox()
   {
     Box pan = new Box(BoxLayout.X_AXIS);
@@ -136,35 +201,36 @@ public class ReportFormat
 
   }
 
-/**
-*
-* @return String report of the available report formats
-*
-*/
+  /**
+  *
+  * @return String report of the available report formats
+  *
+  */
   public static String getToolTip()
   {
-    return "embl \t\t\t\t\t\t\t\t- EMBL feature table format.\n"+
-           "genbank \t- Genbank feature table format.\n"+
-           "gff \t\t\t\t\t\t\t\t\t\t\t\t- GFF feature table format.\n"+
-           "pir \t\t\t\t\t\t\t\t\t\t\t\t- PIR feature table format.\n"+
-           "swiss \t\t\t\t\t\t\t- SwissProt feature table format.\n"+
+    String ls = PlafMacros.getLineSeparator();
+    return "embl \t\t\t\t\t\t\t\t- EMBL feature table format."+ls+
+           "genbank \t- Genbank feature table format."+ls+
+           "gff \t\t\t\t\t\t\t\t\t\t\t\t- GFF feature table format."+ls+
+           "pir \t\t\t\t\t\t\t\t\t\t\t\t- PIR feature table format."+ls+
+           "swiss \t\t\t\t\t\t\t- SwissProt feature table format."+ls+
            "listfile \t\t\t\t\t\t- writes out a list file with start and end"+
-           "points of the motifs given\nby '[start:end]' after the"+
-           "sequence's full USA. This can be read by other EMBOSS\n"+
-           "programs using '@' or 'list::' before the filename.\n"+
-           "dbmotif \t\t\t\t- DbMotif format.\n"+
-           "diffseq \t\t\t\t\t- Useful when reporting the results of two sequences\n"+
-           "aligned, as in the program diffseq.\n"+
-           "excel \t\t\t\t\t\t\t\t- TAB-delimited table format for spread-sheets\n"+
-           "feattable \t\t- FeatTable format. It is an EMBL feature table\n"+
-           "table using only the tags in the report definition.\n"+
-           "motif \t\t\t\t\t\t\t\t- Motif format. Based on the original\n"+
-           "output format of antigenic, helixturnhelix and sigcleave.\n"+ 
-           "regions \t\t\t- Regions format.\n"+
-           "seqtable \t\t- Simple table format that includes the feature sequence.\n"+
-           "simple \t\t\t\t\t- SRS simple format.\n"+
-           "srs \t\t\t\t\t\t\t\t\t\t\t- SRS format.\n"+
-           "table \t\t\t\t\t\t\t- Table format.\n"+
+           "points of the motifs given"+ls+"by '[start:end]' after the"+
+           "sequence's full USA. This can be read by other EMBOSS"+ls+
+           "programs using '@' or 'list::' before the filename."+ls+
+           "dbmotif \t\t\t\t- DbMotif format."+ls+
+           "diffseq \t\t\t\t\t- Useful when reporting the results of two sequences"+ls+
+           "aligned, as in the program diffseq."+ls+
+           "excel \t\t\t\t\t\t\t\t- TAB-delimited table format for spread-sheets"+ls+
+           "feattable \t\t- FeatTable format. It is an EMBL feature table"+ls+
+           "table using only the tags in the report definition."+ls+
+           "motif \t\t\t\t\t\t\t\t- Motif format. Based on the original"+ls+
+           "output format of antigenic, helixturnhelix and sigcleave."+ ls+
+           "regions \t\t\t- Regions format."+ls+
+           "seqtable \t\t- Simple table format that includes the feature sequence."+ls+
+           "simple \t\t\t\t\t- SRS simple format."+ls+
+           "srs \t\t\t\t\t\t\t\t\t\t\t- SRS format."+ls+
+           "table \t\t\t\t\t\t\t- Table format."+ls+
            "tagseq \t\t\t\t-  Tagseq format. Features are marked up below the sequence.";
   }
 

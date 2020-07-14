@@ -28,9 +28,11 @@ import java.io.File;
 import javax.swing.border.*;
 import java.net.URL;
 
+import org.emboss.jemboss.gui.form.TextFieldInt;
 import org.emboss.jemboss.gui.sequenceChooser.SequenceFilter;
 import org.emboss.jemboss.gui.filetree.FileEditorDisplay;
 import org.emboss.jemboss.gui.ScrollPanel;
+import org.emboss.jemboss.gui.Browser;
 
 /**
 *  
@@ -41,20 +43,25 @@ import org.emboss.jemboss.gui.ScrollPanel;
 public class AlignJFrame extends JFrame
 {
 
-  private Vector seqs;             // Vector containing Sequence objects
-  private Vector graphicSequence;  // Vector containing graphical seqs
-  private JScrollPane jspSequence; // Sequence scrollpane
-  private GraphicSequenceCollection gsc;
-  private Matrix mat;
-  private JTextField statusField = new JTextField();
+  private Vector graphicSequence;    // Vector containing graphical seqs
+  protected JScrollPane jspSequence; // Sequence scrollpane
+  protected static GraphicSequenceCollection gsc;
+  private static Matrix mat;
+  private PrettyPlotJFrame ppj = null;
+  protected static JTextField statusField = new JTextField();
   private File sequenceFile = null;
   private Cursor cbusy = new Cursor(Cursor.WAIT_CURSOR);
   private Cursor cdone = new Cursor(Cursor.DEFAULT_CURSOR);
-  private JCheckBoxMenuItem residueColor;
-  private Hashtable currentColour;
-  private boolean useExitMenu = false;  // whether to use 'Exit' or 'Close'
-
-  
+  protected JCheckBoxMenuItem residueColor;
+  protected Hashtable currentColour;
+  protected boolean useExitMenu = false;  // whether to use 'Exit' or 'Close'
+  protected JMenuBar menuBar;
+ 
+  /**
+  *
+  * @param vseqs	vector containing Sequence objects
+  *
+  */ 
   public AlignJFrame(Vector vseqs)
   {
     this();
@@ -62,6 +69,12 @@ public class AlignJFrame extends JFrame
       openMethod(vseqs);
   }
 
+
+  /**
+  *
+  * @param seqFile	sequence file
+  *
+  */
   public AlignJFrame(File seqFile)
   {
     this();
@@ -73,6 +86,13 @@ public class AlignJFrame extends JFrame
               sequenceFile.getName());
   }
 
+
+  /**
+  *
+  * @param seqString	formatted sequence string
+  * @param name 	name of sequence set
+  *
+  */
   public AlignJFrame(String seqString, String name)
   {
     this();
@@ -83,11 +103,19 @@ public class AlignJFrame extends JFrame
     setTitle("Jemboss Alignment Viewer    :: "+name);
   }
 
+
   public AlignJFrame()
   {
     this(false);
   }
 
+
+  /**
+  *
+  * @param useExitMenu	true if an exit menu is to be displayed
+  *			otherwise a close menu is used
+  *
+  */
   public AlignJFrame(boolean useExitMenu)
   {
     super("Jemboss Alignment Editor");
@@ -96,29 +124,37 @@ public class AlignJFrame extends JFrame
 
     final Dimension dScreen = getToolkit().getScreenSize();
     int interval = 10;
-    seqs = new Vector();
+//  Vector seqs = new Vector();
     mat = new Matrix("resources/resources.jar",
-                     "EBLOSUM60");
+                     "EBLOSUM62");
     
     jspSequence = new JScrollPane();
     jspSequence.getViewport().setBackground(Color.white);
 
-    final JCheckBox leftbutt = new JCheckBox("Select All");
-    leftbutt.setBackground(Color.white);
+    final JButton leftbutt = new JButton("Lock");
     jspSequence.setCorner(JScrollPane.LOWER_LEFT_CORNER,
                                               leftbutt);
     leftbutt.addActionListener(new ActionListener()
     {
       public void actionPerformed(ActionEvent e)
       {
-        gsc.setSequenceSelection(leftbutt.isSelected());
+        if(leftbutt.getText().equals("Lock"))
+        {
+          gsc.setSequenceLock(true);
+          leftbutt.setText("Unlock");
+        }
+        else
+        {
+          gsc.setSequenceLock(false);
+          leftbutt.setText("Lock");
+        }
       }
     });
 
     final JPanel mainPane = (JPanel)getContentPane();
 
 // set up a menu bar
-    JMenuBar menuBar = new JMenuBar();
+    menuBar = new JMenuBar();
 
 // File menu
     JMenu fileMenu = new JMenu("File");
@@ -140,7 +176,7 @@ public class AlignJFrame extends JFrame
           sequenceFile = sr.getSequenceFile();
           openMethod(sr.getSequenceVector());
           calculateCons.setText("Calculate consensus");
-          calculatePlotCon.setText("Calculate Consensus plot");
+          calculatePlotCon.setText("Calculate consensus plot");
           setTitle("Jemboss Alignment Viewer    :: "+
                     sequenceFile.getName());
         }
@@ -159,6 +195,18 @@ public class AlignJFrame extends JFrame
     });
     fileMenu.add(saveAsMenu);
 
+    JMenuItem saveConsMenu = new JMenuItem("Save Consensus");
+    saveConsMenu.addActionListener(new ActionListener()
+    {
+      public void actionPerformed(ActionEvent e)
+      { 
+        Vector v = new Vector();
+        v.add(gsc.getConsensusSequence());
+        new SequenceSaver(v);
+      }
+    });
+    fileMenu.add(saveConsMenu);
+
   
 // print
     JMenu printMenu = new JMenu("Print");
@@ -175,7 +223,7 @@ public class AlignJFrame extends JFrame
     printMenu.add(print);
 
 //
-    JMenuItem printImage = new JMenuItem("Print png/jpeg Image...");
+    JMenuItem printImage = new JMenuItem("Print Image Files (png/jpeg)...");
     printImage.addActionListener(new ActionListener()
     {
       public void actionPerformed(ActionEvent e)
@@ -185,10 +233,24 @@ public class AlignJFrame extends JFrame
       }
     });
     printMenu.add(printImage);
-    
+ 
+    JMenuItem printOneImage = new JMenuItem("Print to Single Image File...");
+    printOneImage.addActionListener(new ActionListener()
+    {
+      public void actionPerformed(ActionEvent e)
+      {   
+        PrintAlignmentImage pai = new PrintAlignmentImage(gsc);
+        String type = pai.showOptions(true);
+        pai.print(type,0.,0.,0.,0.);
+      }
+    });
+    printMenu.add(printOneImage);
 
 // print preview
-    JMenuItem printPreview = new JMenuItem("Print Preview...");
+    JMenu printPreviewMenu = new JMenu("Print Preview");
+    fileMenu.add(printPreviewMenu);
+
+    JMenuItem printPreview = new JMenuItem("Multiple Pages...");
     printPreview.addActionListener(new ActionListener()
     {
       public void actionPerformed(ActionEvent e)
@@ -197,8 +259,21 @@ public class AlignJFrame extends JFrame
         pai.printPreview();
       }
     });
-    fileMenu.add(printPreview);
+    printPreviewMenu.add(printPreview);
 
+    JMenuItem printSinglePreview = new JMenuItem("Single Page...");
+    printSinglePreview.addActionListener(new ActionListener()
+    {
+      public void actionPerformed(ActionEvent e)
+      {  
+        PrintAlignmentImage pai = new PrintAlignmentImage(gsc);
+        String type = pai.showOptions(false);
+        pai.printSinglePagePreview();
+      }
+    });
+    printPreviewMenu.add(printSinglePreview);
+
+// close
     fileMenu.add(new JSeparator());
     if(!useExitMenu)
     {
@@ -227,9 +302,58 @@ public class AlignJFrame extends JFrame
       });
       fileMenu.add(fileMenuExit);
     }
-
     menuBar.add(fileMenu);
   
+// Edit menu
+    JMenu editMenu = new JMenu("Edit");
+    menuBar.add(editMenu);
+
+    JMenuItem trimMenu = new JMenuItem("Trim Sequences");
+    editMenu.add(trimMenu);
+    trimMenu.addActionListener(new ActionListener()
+    {
+      public void actionPerformed(ActionEvent e)
+      {
+        ScrollPanel pane = new ScrollPanel(new BorderLayout());
+        Box bacross = Box.createHorizontalBox();
+        TextFieldInt start = new TextFieldInt();
+        start.setValue(1);
+        TextFieldInt end   = new TextFieldInt();  
+        end.setValue(gsc.getMaxSeqLength());
+        bacross.add(start);
+        bacross.add(new JLabel(" start "));
+        bacross.add(end);
+        bacross.add(new JLabel(" end"));
+        pane.add(bacross,BorderLayout.CENTER);
+        int selectedValue = JOptionPane.showConfirmDialog(null,
+                          pane, "Select Sequence Range to Use",
+                          JOptionPane.OK_CANCEL_OPTION,      
+                          JOptionPane.QUESTION_MESSAGE);
+        if(selectedValue == JOptionPane.OK_OPTION)
+        {
+          Vector vseq = gsc.getSequenceCollection();
+          Enumeration enum = vseq.elements();
+          while(enum.hasMoreElements())
+          {
+            Sequence s = (Sequence)enum.nextElement();
+            s.trim(start.getValue(),end.getValue());  
+          }
+          gsc.setMaxSeqLength();
+          gsc.repaint();
+        }
+      }
+    });
+
+    JMenuItem unlock = new JMenuItem("Unlock All Sequences");
+    editMenu.add(unlock);
+    unlock.addActionListener(new ActionListener()
+    {
+      public void actionPerformed(ActionEvent e)
+      {
+        gsc.setSequenceLock(false);
+      }
+    });
+
 // View menu
     JMenu viewMenu = new JMenu("View");
     viewMenu.setMnemonic(KeyEvent.VK_V);
@@ -294,8 +418,9 @@ public class AlignJFrame extends JFrame
     colourMenus(viewMenu);
    
 //pretty plot
-    final JCheckBoxMenuItem pretty = new JCheckBoxMenuItem("Pretty Plot");
+    final JMenuItem pretty = new JMenuItem("Colour Identical/Matches");
     viewMenu.add(pretty);
+    viewMenu.add(new JSeparator());
 
 //draw black box
     final JCheckBoxMenuItem drawBoxes = new JCheckBoxMenuItem("Draw boxes",false);
@@ -323,11 +448,12 @@ public class AlignJFrame extends JFrame
     {
       public void actionPerformed(ActionEvent e)
       {
-        gsc.setPrettyPlot(pretty.isSelected());
-        gsc.setDrawBoxes(!pretty.isSelected());
-        drawBoxes.setSelected(!pretty.isSelected());
-        gsc.setDrawColor(!pretty.isSelected());
-        drawColorBox.setSelected(!pretty.isSelected());
+        if(ppj == null)
+          ppj = new PrettyPlotJFrame(gsc);
+        else
+          ppj.setGraphicSequenceCollection(gsc);
+        gsc.setMatrix(mat);
+        ppj.setVisible(true);
       }
     });
     menuBar.add(viewMenu);
@@ -337,20 +463,45 @@ public class AlignJFrame extends JFrame
     menuBar.add(calculateMenu);
 
 // consensus sequence
+    final ConsensusOptions options = new ConsensusOptions(jspSequence);
     calculateCons.addActionListener(new ActionListener()
     {
       public void actionPerformed(ActionEvent e)
       {
         setCursor(cbusy);
         gsc.deleteSequence("Consensus");
-        Consensus conseq = new Consensus(mat,
-                    gsc.getSequenceCollection(),1.f,1.f,1);
+
+        float wgt = getTotalWeight(gsc.getSequenceCollection());
+        float plu = 0.f;
+        try
+        {
+          plu = options.getPlurality();
+        }
+        catch(NumberFormatException nfe)
+        {
+          plu = wgt/2.f;
+        }
+
+        float cas = 0.f;
+        try
+        {
+          cas = options.getCase();
+        }
+        catch(NumberFormatException nfe)
+        {
+          cas = wgt/2.f;
+        }
+
+        Consensus conseq = new Consensus(mat,   
+                    gsc.getSequenceCollection(),
+                    plu,cas,
+                    options.getIdentity());
 
         int fontSize = gsc.getFontSize();
         gsc.addSequence(conseq.getConsensusSequence(),true,5,fontSize);
 
-        if(pretty.isSelected())
-          gsc.setPrettyPlot(pretty.isSelected());
+//      if(pretty.isSelected())
+//        gsc.setPrettyPlot(pretty.isSelected(),ppj);
 
         Dimension dpane = gsc.getPanelSize();
         gsc.setPreferredSize(dpane);
@@ -361,6 +512,41 @@ public class AlignJFrame extends JFrame
       }
     });
     calculateMenu.add(calculateCons);
+
+    JMenuItem consOptions = new JMenuItem("Set consensus options...");
+    consOptions.addActionListener(new ActionListener()
+    {
+      public void actionPerformed(ActionEvent e)
+      {
+        try
+        {
+          Vector vseq = gsc.getSequenceCollection();
+          Enumeration enum = vseq.elements();
+          float wgt = getTotalWeight(gsc.getSequenceCollection());
+          options.setCase(wgt/2.f);
+          options.setPlurality(wgt/2.f);
+          options.setGraphicSequenceCollection(gsc);
+        }
+        catch(NullPointerException npe){}
+        options.setMatrix(mat);
+        options.setVisible(true);
+      }
+    });
+    calculateMenu.add(consOptions);
+    calculateMenu.add(new JSeparator());
+
+// %age identity between pairs
+    JMenuItem calculateId = new JMenuItem("Identity table");
+    calculateId.addActionListener(new ActionListener()
+    {
+      public void actionPerformed(ActionEvent e)
+      {
+        IDTableJFrame idtab = new IDTableJFrame(gsc.getSequenceCollection());
+        idtab.setVisible(true);
+      }
+    });
+    calculateMenu.add(calculateId);
+    calculateMenu.add(new JSeparator());
 
 // consensus plot
     calculatePlotCon.addActionListener(new ActionListener()
@@ -391,7 +577,7 @@ public class AlignJFrame extends JFrame
 // font menu
     String sizes[] = {"10", "12", "14", "16", "18"};
     final JComboBox fntSize = new JComboBox(sizes);
-    fntSize.setSelectedItem("14");
+    fntSize.setSelectedItem("12");
     menuBar.add(fntSize);
     fntSize.setEditable(true);
     Dimension dfont = new Dimension(50,20);
@@ -419,28 +605,17 @@ public class AlignJFrame extends JFrame
     {
       public void actionPerformed(ActionEvent e)
       {
+        ClassLoader cl = this.getClass().getClassLoader();
         try
         {
-          ClassLoader cl = this.getClass().getClassLoader();
-          URL inURL = cl.getResource("resources/readmeAlign.txt");
-          JTextPane textURL = new JTextPane();
-          ScrollPanel pscroll = new ScrollPanel(new BorderLayout());
-          JScrollPane rscroll = new JScrollPane(pscroll);
-          rscroll.getViewport().setBackground(Color.white);
-          textURL.setPage(inURL);
-          textURL.setEditable(false);
-          pscroll.add(textURL);
-          JOptionPane jop = new JOptionPane();
-          Dimension d = new Dimension(450,200);
-          rscroll.setPreferredSize(d);
-          JOptionPane.showMessageDialog(null,rscroll,
-                              "Jemboss Alignment Help",
-                              JOptionPane.PLAIN_MESSAGE);
+          URL inURL = cl.getResource("resources/readmeAlign.html");
+          new Browser(inURL,"resources/readmeAlign.html");
         }
         catch (Exception ex)
         {
-          System.out.println("Didn't find resources/" +
-                             "readmeAlign.txt");
+          JOptionPane.showMessageDialog(null,
+                              "Jemboss Alignment Viewer Guide not found!",
+                              "Error", JOptionPane.ERROR_MESSAGE);
         }
       }
     });
@@ -466,20 +641,54 @@ public class AlignJFrame extends JFrame
     pack();
     setLocation( (int)(dScreen.getWidth()-getWidth())/3,
                  (int)(dScreen.getHeight()-getHeight())/3 );
-    setVisible(true);
   }
 
+
+  public static float getTotalWeight(Vector vseq)
+  {
+    float wgt = 0.f;
+    vseq = gsc.getSequenceCollection();
+    Enumeration enum = vseq.elements();
+    while(enum.hasMoreElements())
+    {
+      Sequence s = (Sequence)enum.nextElement();
+      if(!s.getName().equals("Consensus"))
+        wgt+=s.getWeight();
+    }
+    return wgt;
+  }
+
+
+  /**
+  *
+  * Set the scoring matrix
+  * @param mat 	scoring matrix to use
+  *
+  */
   public void setMatrix(Matrix mat)
   {
     this.mat = mat;
   }
 
+  /**
+  *
+  * Force a re-display of the sequences with a new colour
+  * scheme.
+  * @param hash		hash of the colour scheme
+  *
+  */
   public void repaintSequences(Hashtable hash)
   {
     gsc.setColorScheme(hash);
     gsc.repaint();
   }
 
+  /**
+  *
+  * Given a Vector of Sequence display them in the editor
+  * @param seqVector	vector containing Sequence objects
+  *
+  */
   protected void openMethod(Vector seqVector)
   {
     gsc = new GraphicSequenceCollection(seqVector,
@@ -495,13 +704,14 @@ public class AlignJFrame extends JFrame
   }
 
 
-/**
-*
-* Update the status bar with the selected colour scheme
-* being used.
-*
-*/
-  private void colourScheme(String colScheme)
+  /**
+  *
+  * Update the status bar with the selected colour scheme
+  * being used.
+  * @param colScheme 	name of colour scheme
+  *
+  */
+  protected void colourScheme(String colScheme)
   {
     String status = statusField.getText();
     int ncol = status.indexOf("Colour Scheme: ");
@@ -513,6 +723,11 @@ public class AlignJFrame extends JFrame
                           "Colour Scheme: "+colScheme);
   }
 
+  /**
+  *
+  * Constructs the colour menus
+  *
+  */
   private void colourMenus(JMenu viewMenu)
   {
     ButtonGroup group = new ButtonGroup();
@@ -685,84 +900,357 @@ public class AlignJFrame extends JFrame
     viewMenu.add(new JSeparator());
 
   }
+
+
+  /**
+  *
+  *
+  *  red, blue, cyan, darkGray, gray , green, lightGray,
+  *  magenta , orange, pink, white, yellow, black
+  *
+  */
+  private static Color resolveColor(String[] args,int index)
+  {
+    if(args[index].equalsIgnoreCase("red"))
+      return Color.red;
+    else if(args[index].equalsIgnoreCase("blue"))
+      return Color.blue;
+    else if(args[index].equalsIgnoreCase("black"))
+      return Color.black;
+    else if(args[index].equalsIgnoreCase("cyan"))
+      return Color.cyan;
+    else if(args[index].equalsIgnoreCase("darkGray"))
+      return Color.darkGray;
+    else if(args[index].equalsIgnoreCase("gray"))
+      return Color.gray;
+    else if(args[index].equalsIgnoreCase("green"))
+      return Color.green;
+    else if(args[index].equalsIgnoreCase("lightGray"))
+      return Color.lightGray;
+    else if(args[index].equalsIgnoreCase("magenta"))
+      return Color.magenta;
+    else if(args[index].equalsIgnoreCase("orange"))
+      return Color.orange;
+    else if(args[index].equalsIgnoreCase("pink"))
+      return Color.pink;
+    else if(args[index].equalsIgnoreCase("white"))
+      return Color.white;
+    else if(args[index].equalsIgnoreCase("yellow"))
+      return Color.yellow;
+    else if(args[index].equalsIgnoreCase("black"))
+      return Color.black;
+
+    return null;
+  }
   
-/**
-*
-* Extends WindowAdapter to close window
-*
-*/
+  /**
+  *
+  * Extends WindowAdapter to close window
+  *
+  */
   class winExit extends WindowAdapter
   {
      public void windowClosing(WindowEvent we)
      {
-        System.exit(0);
+        dispose();
      }
   }
 
 
   public static void main(String args[])
   {
-    Vector seqs = new Vector();
-    Sequence s = new Sequence("Seq2","ggcagcttaagccaaacattcccaaatctatgaagcagggcccattgttggtcagttgtt"+
-"atttgcaatgaagcacagttctgatcatgtttaaagtggaggcacgcagggcaggagtgc"+
-"ttgagcccaagcaaaggatggaaaaaaataagcctttgttgggtaaaaaaggactgtctg"+
-"agactttcatttgttctgtgcaacatataagtcaatacagataagtcttcctctgcaaac"+
-"ttcactaaaaagcctgggggttctggcagtctagattaaaatgcttgcacatgcagaaac"+
-"ctctggggacaaagacacacttccactgaattatactctgctttaaaaaaatccccaaaa"+
-"gcaaatgatcagaaatgtagaaattaatggaaggatttaaacatgaccttctcgttcaat"+
-"atctactgttttttagttaaggaattacttgtgaacagataattgagattcattgctccg"+
-"gcatgaaatatactaataattttattccaccagagttgctgcacatttggagacaccttc"+
-"ctaagttgcagtttttgtatgtgtgcatgtagttttgttcagtgtcagcctgcactgcac"+
-"agcagcacatttctgcaggggagtgagcacacatacgcactgttggtacaattgccggtg"+
-"cagacatttctacctcctgacattttgcagcctacattccctgagggctgtgtgctgagg"+
-"gaactgtcagagaagggctatgtgggagtgcatgccacagctgctggctggcttacttct"+
-"tccttctcgctggctgtaatttccaccacggtcaggcagccagttccggcccacggttct"+
-"gttgtgtagacagcagagactttggagacccggatgtcgcacgccaggtgcaagaggtgg"+
-"gaatgggagaaaaggagtgacgtgggagcggagggtctgtatgtgtgcacttgggcacgt"+
-"atatgtgtgctctgaaggtcaggattgccagggcaaagtagcacagtctggtatagtctg"+
-"aagaagcggctgctcagctgcagaagccctctggtccggcaggatgggaacggctgcctt"+
-"gccttctgcccacaccctagggacatgagctgtccttccaaacagagctccaggcactct"+
-"cttggggacagcatggcaggctctgtgtggtagcagtgcctgggagttggccttttactc"+
-"attgttgaaataatttttgtttattatttatttaacgatacatatatttatatatttatc"+
-"aatggggtatctgcagggatgttttgacaccatcttccaggatggagattatttgtgaag"+
-"acttcagtagaatcccaggactaaacgtctaaattttttctccaaacttgactgacttgg"+
-"gaaaaccaggtgaatagaataagagctgaatgttttaagtaataaacgttcaaactgctc"+
-"taagtaaaaaaatgcattttactgcaatgaatttctagaatatttttcccccaaagctat"+
-"gcctcctaacccttaaatggtgaacaactggtttcttgctacagctcactgccatttctt"+
-"cttactatcatcactaggtttcctaagattcactcatacagtattatttgaagattcagc"+
-"tttgttctgtgaatgtcatcttaggattgtgtctatattcttttgcttatttctttttac"+
-"tctgggcctctcatactagtaagattttaaaaagccttttcttctctgtatgtttggctc"+
-"accaaggcgaaatatatattcttctctttttcatttctcaagaataaacctcatctgctt"+
-"ttttgtttttctgtgttttggcttggtactgaatgactcaactgctcggttttaaagttc"+
-"aaagtgtaagtacttagggttagtactgcttatttcaataatgttgacggtgactatctt"+
-"tggaaagcagtaacatgctgtcttagaaatgacattaataatgggcttaaacaaatgaat"+
-"aggggggtccccccactctccttttgtatgcctatgtgtgtctgatttgttaaaagatgg"+
-"acagggaattgattgcagagtgtcgcttccttctaaagtagttttattttgtctactgtt"+
-"agtatttaaagatcctggaggtggacataaggaataaatggaagagaaaagtagatattg"+
-"tatggtggctactaaaaggaaattcaaaaagtcttagaacccgagcacctgagcaaactg"+
-"cagtagtcaaaatatttatctcatgttaaagaaaggcaaatctagtgtaagaaatgagta"+
-"ccatatagggttttgaagttcatatactagaaacacttaaaagatatcatttcagatatt"+
-"acgtttggcattgttcttaagtatttatatctttgagtcaagctgataattaaaaaaaat"+
-"ctgttaatggagtgtatatttcataatgtatcaaaatggtgtctatacctaaggtagcat"+
-"tattgaagagagatatgtttatgtagtaagttattaacataatgagtaacaaataatgtt"+
-"tccagaagaaaggaaaacacattttcagagtgcgtttttatcagaggaagacaaaaatac"+
-"acacccctctccagtagcttatttttacaaagccggcccagtgaattagaaaaacaaagc"+
-"acttggatatgatttttggaaagcccaggtacacttattattcaaaatgcacttttactg");
+    AlignJFrame ajFrame = null;
 
-    Sequence s1 = new Sequence("Seq1a","ACTATACAGAGTAGACTgTATAGAtTATAAGCGACATACGAGAGACGAC");
-    s1.reverseSequence();
-//  seqs.add(s1);
-//  seqs.add(s);
-//  seqs.add(new Sequence("Seq1b","ACTATACAGAGTAGACTgTATAGAtTATAAGCGACATACGAGAGACGAC"));
-//  seqs.add(new Sequence("Seq2a","AAAAAACAGAGTAGACTgTATAGAtTATAAGCGACATACGAGAGACGAC"));
-//  seqs.add(new Sequence("Seq3","ACTATACAGAGTAGACTgTATAGAtTATAAGCGACATACGAGAGACGAC"));
-//  seqs.add(new Sequence("Seq4","AAAAAACAGAGTAGACTgTATAGAtTATAAGCGACATACGAGAGACGAC"));
-//  seqs.add(new Sequence("Seq5","ACTATACAGAGTAGACTgTATAGAtTATAAGCGACATACGAGAGACGAC"));
-//  seqs.add(new Sequence("Seq6","AAAAAACAGAGTAGACTgTATAGAtTATAAGCGACATACGAGAGACGAC"));
-//  seqs.add(new Sequence("Seq111","ACTATACAGAGTAGACTgTATAGAtTATAAGCGACATACGAGAGACGAC"));
+    if( args.length > 0 )
+    {
+      for(int i=0;i<args.length;i++)
+      {
+        if(args[i].indexOf("-help") > -1)
+        {
+          System.out.println(
+              "\n                  Jemboss Alignment Editor\n\n"+
+              "DESCRIPTION\n"+
+              "The Jemboss Alignment Editor can be used interactively to\n"+
+              "edit a sequence alignment (read in fasta or MSF format). It can\n"+
+              "also be used from the command line to produce image files\n"+
+              "of the alignment.\n\nUSAGE\n"+
+              "java org/emboss/jemboss/editor/AlignJFrame file [options]\n\n"+
+              "file       This is the multiple sequence alignment in\n"+
+              "           fasta or MSF format.\n\n"+
+              "OPTIONS\n"+
+              "-calc      Calculate consensus and display under the alignment.\n"+
+              "           The following 3 flags can be used to define values\n"+
+              "           used in the calculations.\n"+
+              "           -plu       (plurality) minimum positive match score\n"+
+              "                      value for there to be a consensus.\n"+
+              "           -numid     minimum number of identities for there to\n"+
+              "                      be a consensus.\n"+
+              "           -case      minimum positive match score for setting\n"+
+              "                      the consensus to upper-case.\n"+
+              "-color     Used to define a colour scheme, below is the list of\n"+
+              "           available colour schemes:\n"+
+              "           taylor\n"+
+              "           residue\n"+
+              "           rasmol\n"+
+              "           acid\n"+
+              "           polar\n"+
+              "           hydrophobic\n"+
+              "           aromatic\n"+
+              "           surface\n"+
+              "           charge\n"+
+              "           size\n"+
+              "           base\n\n"+
+              "       java org.emboss.jemboss.editor.AlignJFrame file -color size\n\n"+
+              "-font      Set the font size.\n"+
+              "-id        Display a percentage ID pair table.\n"+
+              "-noshow    Turns of the alignment display.\n"+
+              "-nres      Number of residues to each line is a print out.\n"+
+              "-pretty    EMBOSS prettyplot colour scheme. The -matrix flag option\n"+
+              "           can be used to define a scoring matrix for identifying\n"+
+              "           positive matches.\n"+
+              "           -noBox         switch off box drawing around identical and\n"+
+              "                          positive matches.\n"+
+              "           -minID         define the minimum number of identities. The\n"+
+              "                          default for this is the number of sequences\n"+
+              "                          in the file.\n"+
+              "           -match         define a threshold value for the number of\n"+
+              "                          positive matches, the default is half the\n"+
+              "                          total wgt.\n"+
+              "           -colID         define a lettering colour for the identities.\n"+
+              "           -colIDBack     define a background colour for identities.\n"+
+              "           -colMatch      define a lettering  colour for positive matches.\n"+  
+              "           -colMatchBack  define a background colour for positive\n"+
+              "                           matches.\n"+
+              "           Available colour options:\n"+  
+              "           red, blue, cyan, darkGray, gray , green, lightGray,\n"+
+              "           magenta , orange, pink, white, yellow, black\n"+     
+              "-print     Print the alignment image. The following 2 flags can be\n"+
+              "           used along with the print flag\n"+
+              "           -prefix    prefix for image output file.\n"+
+              "           -onePage   fit the alignment to one page. This option must be\n"+
+              "                      be used with the -nres flag to define the residues\n"+
+              "                      per line.\n"+
+              "           -type      png or jpeg (default is jpeg).\n"+
+              "           -landscape Print as landscape (the default is portrait).\n"+
+              "           -margin    Define the left, right, top and bottom margin\n"+
+              "                      (in cm).\n"+
+              "       java org.emboss.jemboss.editor.AlignJFrame file -matrix EBLOSUM62 \\\n"+
+              "                -noshow -print -margin 0.5 0.5 0.5 0.5\n\n"+
+              "-matrix    To define a scoring matrix. Used with the -pretty and -calc\n"+
+              "           option.\n"+
+              "-list      List the available scoring matrix files.\n\n"+
+              "EXAMPLE\n"+
+              "java org.emboss.jemboss.editor.AlignJFrame file -matrix EBLOSUM80 \\\n"+
+              "                             -pretty -noshow -id -print -type png\n\n"+
+              "java org.emboss.jemboss.editor.AlignJFrame file -matrix EPAM250 \\\n"+
+              "                -pretty -colIDBack black -colID white -print \\\n"+
+              "                -margin 0.5 0.5 0.5 0.0 -noshow\n");
+          System.exit(0);
+        }
+      }
 
+      File seqFile = new File(args[0]);
+      if(seqFile.canRead())
+      {
+        ajFrame = new AlignJFrame(true);
+        SequenceReader sr = new SequenceReader(seqFile);
+        sr.getSequenceFile();
+        ajFrame.openMethod(sr.getSequenceVector());
+        ajFrame.setTitle("Jemboss Alignment Viewer    :: "+
+                         seqFile.getName());
+        gsc.setMatrix(mat);
+      }
 
-    new AlignJFrame(true);
+      String prefix = "output";
+      String type   = "jpeg";
+      boolean show  = true;
+      boolean print = false;
+      int nresiduesPerLine = 0;
+
+      float wgt = getTotalWeight(gsc.getSequenceCollection());
+      double lmargin = -0.5;  // left margin
+      double rmargin = -0.5;  // right margin
+      double tmargin = -0.5;  // top margin
+      double bmargin = -0.5;  // bottom margin
+      float plu = wgt/2.f;
+      float cas = wgt/2.f;
+      int ident = 0;
+      int minID = gsc.getNumberSequences();
+      float match = wgt/2.f;
+      Color colID        = Color.red;
+      Color colMatch     = Color.blue;
+      Color colIDBack    = Color.white;
+      Color colMatchBack = Color.white;
+      boolean prettyBox  = true;
+      boolean landscape  = false;
+      boolean onePage    = false;
+
+      for(int i=0;i<args.length;i++)
+      {
+        if(args[i].indexOf("-matrix") > -1)
+        {
+          mat = new Matrix("resources/resources.jar",
+                           args[i+1]);
+          gsc.setMatrix(mat);
+          statusField.setText("Current matrix: "+args[i+1]);
+        }
+        else if(args[i].indexOf("-plu") > -1)
+          plu = Float.parseFloat(args[i+1]);
+        else if(args[i].indexOf("-match") > -1)
+          match = Float.parseFloat(args[i+1]);
+        else if(args[i].indexOf("-case") > -1)
+          cas = Float.parseFloat(args[i+1]);
+        else if(args[i].indexOf("-numid") > -1)
+          ident = Integer.parseInt(args[i+1]);
+        else if(args[i].indexOf("-colIDBack") > -1)
+        {
+          Color col = resolveColor(args,i+1);
+          if(col != null)
+            colIDBack = col;
+        }
+        else if(args[i].indexOf("-colMatchBack") > -1)
+        {
+          Color col = resolveColor(args,i+1);
+          if(col != null)
+            colMatchBack = col;
+        }
+        else if(args[i].indexOf("-colMatch") > -1)
+        {
+          Color col = resolveColor(args,i+1);
+          if(col != null)
+            colMatch = col;
+        }
+        else if(args[i].indexOf("-colID") > -1)
+        {
+          Color col = resolveColor(args,i+1);
+          if(col != null)
+            colID = col;
+        }
+        else if(args[i].indexOf("-minID") > -1)
+          minID = Integer.parseInt(args[i+1]);
+        else if(args[i].indexOf("-noBox") > -1)
+          prettyBox = false;
+        else if(args[i].indexOf("-font") > -1)
+          gsc.setFontSizeForCollection(Integer.parseInt(args[i+1]));
+        else if(args[i].indexOf("-landscape") > -1)
+          landscape = true;
+        else if(args[i].indexOf("-margin") > -1)
+        {
+          lmargin = Double.parseDouble(args[i+1]);
+          rmargin = Double.parseDouble(args[i+2]);
+          tmargin = Double.parseDouble(args[i+3]);
+          bmargin = Double.parseDouble(args[i+4]);
+        }
+        else if(args[i].indexOf("-onePage") > -1)
+          onePage = true;
+      }
+
+      for(int i=0;i<args.length;i++)
+      {
+        if(args[i].indexOf("-color") > -1)
+        {
+          i++;
+          if(args[i].startsWith("taylor"))      
+            gsc.setColorScheme(SequenceProperties.taylorColor);
+          else if(args[i].startsWith("residue"))
+            gsc.setColorScheme(SequenceProperties.residueColor);
+          else if(args[i].startsWith("rasmol"))
+            gsc.setColorScheme(SequenceProperties.rasmolColor);
+          else if(args[i].startsWith("acid"))
+            gsc.setColorScheme(SequenceProperties.acidColor);
+          else if(args[i].startsWith("polar"))
+            gsc.setColorScheme(SequenceProperties.polarColor);
+          else if(args[i].startsWith("hydro"))
+            gsc.setColorScheme(SequenceProperties.hydrophobicColor);
+          else if(args[i].startsWith("aromatic"))
+            gsc.setColorScheme(SequenceProperties.aromaticColor);
+          else if(args[i].startsWith("surface"))
+            gsc.setColorScheme(SequenceProperties.surfaceColor);
+          else if(args[i].startsWith("charge"))
+            gsc.setColorScheme(SequenceProperties.chargeColor);
+          else if(args[i].startsWith("size"))
+            gsc.setColorScheme(SequenceProperties.sizeColor);
+          else if(args[i].startsWith("base"))
+            gsc.setColorScheme(SequenceProperties.baseColor);
+        }
+        else if(args[i].indexOf("-calc") > -1)
+        {
+          Consensus conseq = new Consensus(mat,
+                    gsc.getSequenceCollection(),
+                    plu,cas,ident);
+
+          int fontSize = gsc.getFontSize();
+          gsc.addSequence(conseq.getConsensusSequence(),true,5,fontSize);
+
+          Dimension dpane = gsc.getPanelSize();
+          gsc.setPreferredSize(dpane);
+          gsc.setNamePanelWidth(gsc.getNameWidth());
+        }
+        else if(args[i].indexOf("-list") > -1)
+          System.out.println("AVAILABLE DATABASES:\n"+
+                             mat.getKeyNamesString());
+        else if(args[i].indexOf("-id") > -1)
+        {
+          IDTableJFrame idtab = new IDTableJFrame(gsc.getSequenceCollection()); 
+          idtab.printTable();
+        }
+        else if(args[i].indexOf("-noshow") > -1)
+          show = false;
+        else if(args[i].indexOf("-print") > -1)
+          print = true;
+        else if(args[i].indexOf("-nres")  > -1)
+          nresiduesPerLine = Integer.parseInt(args[i+1]);
+        else if(args[i].indexOf("-pretty")  > -1)          
+        {
+          PrettyPlotJFrame pretty = new PrettyPlotJFrame(minID,
+                  match,colID,colMatch,
+                  colIDBack,colMatchBack,prettyBox);
+          gsc.setPrettyPlot(true,pretty);
+          gsc.setDrawBoxes(false);
+          gsc.setDrawColor(false);
+        }  
+        else if(args[i].indexOf("-preview")  > -1)
+        {
+          PrintAlignmentImage pai = new PrintAlignmentImage(gsc);
+          pai.printPreview();
+          show = true;
+        }
+        else if(args[i].indexOf("-type")  > -1)
+        {
+          if( args[i+1].equalsIgnoreCase("png") ||
+              args[i+1].equalsIgnoreCase("jpeg") )
+            type = args[i+1];
+          else
+            System.out.println("UNKOWN PRINT FORMAT: "+args[i+1]+
+                               " reverting to default format "+type);
+        }
+        else if(args[i].indexOf("-prefix")  > -1)
+          prefix = args[i+1];
+      }
+
+      if(print)
+      {
+        if(onePage)
+        {
+          PrintAlignmentImage pai = new PrintAlignmentImage(gsc);
+          pai.print(nresiduesPerLine,type,prefix,                               
+                    lmargin,rmargin,tmargin,bmargin);
+        }
+        else
+        {
+          PrintAlignmentImage pai = new PrintAlignmentImage(gsc);
+          pai.print(nresiduesPerLine,type,prefix,landscape,
+                    lmargin,rmargin,tmargin,bmargin);
+        }
+      }
+      if(!show)
+        System.exit(0);
+    }
+    else
+    {
+      ajFrame = new AlignJFrame(true);
+    }
+    ajFrame.setVisible(true);
   }
 
 

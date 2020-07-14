@@ -30,28 +30,40 @@ import java.util.*;
 
 /**
 *
-* Jemboss Non-authenticating Server for SOAP
+* Jemboss Non-authenticated Server for Apache Axis (SOAP)
+* web services
 *
 */
 public class JembossServer
 {
 
-
+  /** file separator */
   private String fs = System.getProperty("file.separator");
 
 //get paths to EMBOSS
+  /** jemboss properties */
   JembossParams jp = new JembossParams();
+  /** plplot path */
   String plplot = jp.getPlplot();
+  /** emboss data directory */
   String embossData = jp.getEmbossData();
+  /** emboss binary directory */
   String embossBin = jp.getEmbossBin();
+  /** emboss path */
   String embossPath = jp.getEmbossPath();
+  /** acd directory */
   String acdDirToParse = jp.getAcdDirToParse();
 
+  /** user home directory */
   private String homeDirectory = System.getProperty("user.home") + fs;
+  /** user name */
   private String username = System.getProperty("user.name") + fs;
+  /** results directory */
   private String tmproot  = "/tmp/SOAP/emboss/" + username;
+  /** results directory */
   private File tmprootDir = new File(tmproot);
 
+  /** emboss run environment */
   private String[] envp_emboss = 
   {
     "PATH=" + embossPath + System.getProperty("path.separator")
@@ -64,8 +76,10 @@ public class JembossServer
 
   };
 
+  /** emboss run environment */
   private String[] envp = jp.getEmbossEnvironmentArray(envp_emboss);
  
+
   public String name()
   {
     return "The EMBOSS Application Suite";
@@ -139,13 +153,13 @@ public class JembossServer
   }
 
 
-/**
-*
-* Retrieves the ACD file of an application.
-* @param  application name
-* @return Vector of containing the ACD string
-*
-*/
+  /**
+  *
+  * Retrieves the ACD file of an application.
+  * @param appName	application name
+  * @return 		ACD string
+  *
+  */
   public Vector show_acd(String appName)
   {
 
@@ -180,12 +194,12 @@ public class JembossServer
     return acd;
   }
 
-/**
-*
-* Returns the output of the EMBOSS utility wossname
-* @return wossname output
-*
-*/
+  /**
+  *
+  * Returns the output of the EMBOSS utility wossname
+  * @return 	wossname output
+  *
+  */
   public Vector getWossname()
   {
     Vector wossOut = new Vector();
@@ -210,13 +224,13 @@ public class JembossServer
   }
 
 
-/**
-*
-* Returns the help for an application as given by 'tfm'
-* @param String application name
-* @return help 
-*
-*/
+  /**
+  *
+  * Returns the help for an application as given by 'tfm'
+  * @param applName	application name
+  * @return 		help 
+  *
+  */
   public Vector show_help(String applName)
   {
     String command = embossBin.concat("tfm " + applName + 
@@ -245,18 +259,29 @@ public class JembossServer
     return vans;
   }
 
+
+  /**
+  *
+  * Uses JNI to calculate sequence attributes using EMBOSS library call.
+  * @param fileContent  sequence filename or database entry
+  * @param seqtype      sequence type (seqset/sequence)
+  * @param userName     username
+  * @return     	sequence length, weight & type (protein/nucleotide)
+  *
+  */
   public Vector call_ajax(String fileContent, String seqtype, String userName)
   {
     return call_ajax(fileContent,seqtype);
   }
 
-/**
-*
-* Uses JNI to calculate sequence attributes using EMBOSS library call. 
-* @param sequence filename or database entry
-* @return sequence length, weight & type (protein/nucleotide)
-*
-*/
+  /**
+  *
+  * Uses JNI to calculate sequence attributes using EMBOSS library call.
+  * @param fileContent  sequence filename or database entry
+  * @param seqtype      sequence type (seqset/sequence)
+  * @return     	sequence length, weight & type (protein/nucleotide)
+  *
+  */
   public Vector call_ajax(String fileContent, String seqtype)
   {
     boolean afile = false;
@@ -340,12 +365,12 @@ public class JembossServer
   }
 
 
-/**
-*
-* Returns the databases held on the server
-* @return output from 'showdb'
-*
-*/
+  /**
+  *
+  * Returns the databases held on the server
+  * @return 	output from 'showdb'
+  *
+  */
   public Vector show_db()
   {
     Vector showdbOut = new Vector();
@@ -401,17 +426,15 @@ public class JembossServer
   }
 
 
-/**
-*
-* Private Server
-* 
-* Run an EMBOSS application
-* @param command line to run
-* @param unused
-* @param String of input files and names
-* @return output files from application run
-*
-*/
+  /**
+  *
+  * Run an EMBOSS application
+  * @param embossCommand	command line to run
+  * @param options		unused
+  * @param inFiles		input files and names
+  * @return 			output files from application run
+  *
+  */
   public Vector run_prog(String embossCommand, String options, 
                                              String[] inFiles)
   {
@@ -426,6 +449,16 @@ public class JembossServer
     return result;
   }
 
+  /**
+  *
+  * Run an EMBOSS application
+  * @param embossCommand        command line to run
+  * @param options              unused
+  * @param inFiles              input files and names
+  * @param userName		username
+  * @return                     output files from application run
+  *
+  */
   public Vector run_prog(String embossCommand, String options,
                          Vector inFiles, String userName)
   {
@@ -435,15 +468,15 @@ public class JembossServer
 /*   return run_prog(embossCommand,options,hashInFiles,userName); */
   }
 
-/**
-*
-* Run an EMBOSS application
-* @param command line to run
-* @param unused
-* @param Hashtable of input files
-* @return output files from application run
-*
-*/
+  /**
+  *
+  * Run an EMBOSS application
+  * @param command line to run
+  * @param unused
+  * @param Hashtable of input files
+  * @return output files from application run
+  *
+  */
 /*
   public Vector run_prog(String embossCommand, String options,
                          Hashtable inFiles, String userName)
@@ -456,15 +489,15 @@ public class JembossServer
   }
 */
 
-/**
-*
-* Run an EMBOSS application
-* @param command line to run
-* @param unused 
-* @param Hashtable of input files
-* @return output files from application run
-*
-*/
+  /**
+  *
+  * Run an EMBOSS application
+  * @param embossCommand	command line to run
+  * @param options		unused 
+  * @param inFiles		input files
+  * @return 			output files from application run
+  *
+  */
   public Vector run_prog(String embossCommand, String options, 
                                             Hashtable inFiles)
   {
@@ -609,13 +642,13 @@ public class JembossServer
     return result;
   }
 
-/**
-*
-* Creates a file named "finished" in the project directory,
-* that contains a time stamp.
-* @param String project directory name
-*
-*/ 
+  /**
+  *
+  * Creates a file named "finished" in the project directory,
+  * that contains a time stamp.
+  * @param project	project directory name
+  *
+  */ 
   private void createFinishedFile(String project)
   {
     File finished = new File(new String(project + fs + ".finished"));
@@ -629,17 +662,16 @@ public class JembossServer
   }
 
 
-/**
-*
-* Private Server
-*
-* Returns the results for a saved project.
-* @param project/directory name
-* @param unused if showing all results otherwise this
-*        is the name of the file to display
-* @return saved results files
-*
-*/
+  /**
+  *
+  * Returns the results for a saved project.
+  * @param project 	project directory name
+  * @param cl		unused if showing all results otherwise
+  *			this is the name of the file to display
+  * @param userName	username
+  * @return 		saved results files
+  *
+  */
   public Vector show_saved_results(String project, String cl,
                                    String userName)
   {
@@ -649,17 +681,15 @@ public class JembossServer
     return ssr;
   }
 
-/**
-*
-* Private Server
-*
-* Returns the results for a saved project.
-* @param project/directory name
-* @param unused if showing all results otherwise this
-*        is the name of the file to display
-* @return saved results files
-*
-*/
+  /**
+  *
+  * Returns the results for a saved project.
+  * @param project      project directory name
+  * @param cl           unused if showing all results otherwise
+  *                     this is the name of the file to display
+  * @return             saved results files
+  *
+  */
   public Vector show_saved_results(String project, String cl)
   {
     Vector ssr = new Vector();
@@ -704,14 +734,16 @@ public class JembossServer
   }
 
 
-/**
-*
-* Private server
-*
-* Save a file to a project directory on the server.
-* @return message
-*
-*/
+  /**
+  *
+  * Save a file to a project directory on the server.
+  * @param project	project directory to save file in
+  * @param filename	filename
+  * @param notes	text to write to file
+  * @param userName	username
+  * @return 		message
+  *
+  */
   public Vector save_project_file(String project, String filename,
                                   String notes, String userName)
   {
@@ -744,17 +776,15 @@ public class JembossServer
   }
 
 
-
-/**
-*  
-* Private server
-*
-* Deletes a projects saved results.
-* @param project/directory name
-* @param unused
-* @return message
-*
-*/
+  /**
+  *  
+  * Deletes a projects saved results.
+  * @param project	project directory name
+  * @param cl		unused
+  * @param userName     username
+  * @return 		message
+  *
+  */
   public Vector delete_saved_results(String project, String cl,
                                      String userName)
   {
@@ -764,16 +794,14 @@ public class JembossServer
     return dsr;
   }
 
-/**
-*
-* Private server
-*
-* Deletes a projects saved results.
-* @param project/directory name
-* @param unused
-* @return message
-*
-*/
+  /**
+  * 
+  * Deletes a projects saved results.
+  * @param project      project directory name
+  * @param cl           unused
+  * @return             message
+  *
+  */
   public Vector delete_saved_results(String project, String cl)
   {
     Vector dsr = new Vector();
@@ -799,14 +827,13 @@ public class JembossServer
   }
 
 
-/**
-*
-* Private Server
-*
-* List of the saved results on the server.
-* @return list of the saved results.
-*
-*/
+  /**
+  *
+  * List of the saved results on the server.
+  * @param userName	username
+  * @return 		list of the saved results.
+  *
+  */
   public Vector list_saved_results(String userName)
   {
     Vector lsr = new Vector();
@@ -816,14 +843,12 @@ public class JembossServer
     return lsr;
   }
 
-/**
-*
-* Private Server
-*
-* List of the saved results on the server.
-* @return list of the saved results.
-*
-*/
+  /**
+  *
+  * List of the saved results on the server.
+  * @return             list of the saved results.
+  *
+  */
   public Vector list_saved_results()
   {
     Vector lsr = new Vector();
@@ -872,11 +897,17 @@ public class JembossServer
   
   }
 
-/**
-*
-* Reads in files from EMBOSS output
-*
-*/
+
+  /**
+  *
+  * Reads in files from EMBOSS output
+  * @param projectDir   project directory
+  * @param project      project name
+  * @param result       results
+  * @param inFiles      input files
+  * @return             result
+  *
+  */
   private Vector loadFilesContent(File projectDir, String project, 
                                   Vector result, Hashtable inFiles)
   {
@@ -932,11 +963,15 @@ public class JembossServer
 
   }
 
-/**
-*
-* Reads in png files from EMBOSS output
-*
-*/
+  /**
+  *
+  * Reads in png files from EMBOSS output
+  * @param projectDir   project directory
+  * @param project      project name
+  * @param result       results
+  * @return             result
+  *
+  */
   private Vector loadPNGContent(File projectDir, String project, Vector result)
   {
 
@@ -964,13 +999,13 @@ public class JembossServer
     return result;
   }
 
-/**
-*
-* Read a file into a byte array.
-* @param String file name
-* @return byte[] contents of file
-*
-*/
+  /**
+  *
+  * Read a file into a byte array.
+  * @param filename	file name
+  * @return 		byte[] contents of file
+  *
+  */
   protected static byte[] readByteFile(String filename)
   {
 
@@ -995,12 +1030,16 @@ public class JembossServer
   }
 
 
-/**
-*
-* Used to provide information on the batch/background
-* processes.
-*
-*/
+  /**
+  *
+  * Used to provide information on the batch/background
+  * processes.
+  * @param prog         program
+  * @param opt          options
+  * @param resToQuery   results to query
+  * @param userName     username
+  *
+  */
   public Vector update_result_status(String prog, String opt,
                         Vector resToQuery,String userName)
   {
@@ -1008,6 +1047,16 @@ public class JembossServer
                                 userName);
   }
 
+  /**
+  *
+  * Used to provide information on the batch/background
+  * processes.
+  * @param prog         program
+  * @param opt          options
+  * @param resToQuery   results to query
+  * @param userName     username
+  *
+  */
   public Vector update_result_status(String prog, String opt,
                         Hashtable resToQuery,String userName)
   {
@@ -1015,12 +1064,15 @@ public class JembossServer
     return update_result_status(prog, opt, resToQuery);
   }
 
-/**
-*
-* Used to provide information on the batch/background 
-* processes.
-*
-*/
+  /**
+  *
+  * Used to provide information on the batch/background
+  * processes.
+  * @param prog         program
+  * @param opt          options
+  * @param resToQuery   results to query
+  *
+  */
   public Vector update_result_status(String prog, String opt, 
                                      Hashtable resToQuery)
   {
@@ -1063,6 +1115,12 @@ public class JembossServer
     return vans;
   }
 
+  /**
+  *
+  * Convert contents from a Vector to a Hashtable
+  * @param v    Vector
+  *
+  */
   private Hashtable getHashtable(Vector v)
   {
     Hashtable h = new Hashtable();
