@@ -7,11 +7,9 @@
 </HEAD>
 <BODY BGCOLOR="#FFFFFF" text="#000000">
 
-
-
 <table align=center border=0 cellspacing=0 cellpadding=0>
 <tr><td valign=top>
-<A HREF="index.html" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
@@ -25,27 +23,14 @@ dotmatcher
 
 
 
-
-
-
 <H2>
     Function
 </H2>
-
-
-
-<!--
-DON'T WRITE ANYTHING HERE.
-IT IS DONE FOR YOU.
--->
 Displays a thresholded dotplot of two sequences
-
 
 <H2>
     Description
 </H2>
-
-
 A dotplot is a graphical representation of the regions of similarity
 between two sequences. 
 
@@ -81,8 +66,6 @@ plotted on the image over the position of the window.
 <H2>
     Usage
 </H2>
-
-
 <b>Here is a sample session with dotmatcher</b>
 <p>
 
@@ -99,31 +82,9 @@ Created dotmatcher.ps
 <a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
 
 
-<!--
-Here is a sample session with dotmatcher.
-
-<p>
-
-<pre>
-% dotmatcher sw:hba_human sw:hbb_human
-</pre>
-
-<p>
-
-<a href="dotmatcher0.gif">click here for result</a>
--->
-
-
 <H2>
     Command line arguments
 </H2>
-
-
-
-<!--
-DON'T WRITE ANYTHING HERE.
-IT IS DONE FOR YOU.
--->
 
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
@@ -217,7 +178,6 @@ IT IS DONE FOR YOU.
 </pre>
 </td></tr></table>
 <P>
-
 <table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
 <tr bgcolor="#FFFFCC">
 <th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
@@ -242,14 +202,14 @@ IT IS DONE FOR YOU.
 <tr>
 <td>-graph</td>
 <td>Graph type</td>
-<td>EMBOSS has a list of known devices, including postscript, ps, hpgl, hp7470, hp7580, meta, colourps, cps, xwindows, x11, tektronics, tekt, tek4107t, tek, none, null, text, data, xterm, png</td>
+<td>EMBOSS has a list of known devices, including postscript, ps, hpgl, hp7470, hp7580, meta, colourps, cps, xwindows, x11, tektronics, tekt, tek4107t, tek, none, null, text, data, xterm, png, xml</td>
 <td><i>EMBOSS_GRAPHICS</i> value, or x11</td>
 </tr>
 
 <tr>
 <td>-xygraph</td>
 <td>Graph type</td>
-<td>EMBOSS has a list of known devices, including postscript, ps, hpgl, hp7470, hp7580, meta, colourps, cps, xwindows, x11, tektronics, tekt, tek4107t, tek, none, null, text, data, xterm, png</td>
+<td>EMBOSS has a list of known devices, including postscript, ps, hpgl, hp7470, hp7580, meta, colourps, cps, xwindows, x11, tektronics, tekt, tek4107t, tek, none, null, text, data, xterm, png, xml</td>
 <td><i>EMBOSS_GRAPHICS</i> value, or x11</td>
 </tr>
 
@@ -290,22 +250,19 @@ IT IS DONE FOR YOU.
 <td>-stretch</td>
 <td>Display a non-proportional graph</td>
 <td>Toggle value Yes/No</td>
-<td>N</td>
+<td>No</td>
 </tr>
 
 </table>
-
 
 
 <H2>
     Input file format
 </H2>
 
-
 Any 2 sequence USAs of the same type (DNA or protein).
 
 <p>
-
 
 <a name="input.1"></a>
 <h3>Input files for usage example </h3>
@@ -534,6 +491,8 @@ SQ   SEQUENCE   146 AA;  15867 MW;  EC9744C9 CRC32;
 </td></tr></table><p>
 
 
+
+
 <H2>
     Output file format
 </H2>
@@ -542,7 +501,6 @@ SQ   SEQUENCE   146 AA;  15867 MW;  EC9744C9 CRC32;
 An image is output to the requested graphics device.
 
 <p>
-
 
 <a name="output.1"></a>
 <h3>Output files for usage example </h3>
@@ -564,10 +522,27 @@ matrix. For nucleotide sequence, EDNAFULL is used. Others can be
 specified.
 
 <p>
+<p>
 EMBOSS data files are distributed with the application and stored
 in the standard EMBOSS data directory, which is defined
-by EMBOSS environment variable EMBOSS_DATA.
+by the EMBOSS environment variable EMBOSS_DATA.
 
+<p>
+
+To see the available EMBOSS data files, run:
+<p>
+<pre>
+% embossdata -showall
+</pre>
+<p>
+To fetch one of the data files (for example 'Exxx.dat') into your
+current directory for you to inspect or modify, run:
+
+<pre>
+
+% embossdata -fetch -file Exxx.dat
+
+</pre>
 <p>
 
 Users can provide their own data files in their own directories.
@@ -579,13 +554,13 @@ directory, or again in a subdirectory called ".embossdata".
 <p>
 The directories are searched in the following order:
 
-<ul> 
+<ul>
    <li> . (your current directory)
    <li> .embossdata (under your current directory)
    <li> ~/ (your home directory)
    <li> ~/.embossdata
 </ul>
-
+<p>
 
 
 <H2>
@@ -618,7 +593,7 @@ None.
 </H2>
 
 
-0 upon successful completion.
+It always exits with status 0.
 
 <H2>
     Known bugs
@@ -626,11 +601,6 @@ None.
 
 None.
 
-<!--
-<H2>
-    See also
-</H2>
--->
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
@@ -639,12 +609,6 @@ None.
 <tr><td><a href="polydot.html">polydot</a></td><td>Displays all-against-all dotplots of a set of sequences</td></tr>
 </table>
 
-<!--
-        Add any comments about other associated programs (to prepare
-        data files?) that seealso doesn't find.
-   -->
-
-<p>
 
 <a href="dottup.html">dottup,</a> by comparison, has no threshold, using
 a wordmatch-style method.  <b>dottup</b> is less sensitive, but substantially
@@ -661,36 +625,23 @@ Sanger Institute, Wellcome Trust Genome Campus, Hinxton,
 Cambridge, CB10 1SA, UK.                      
 
 
-
 <H2>
     History
 </H2>
 
-<pre>
- Completed 1st June 1999. 
-</pre>
+Completed 1st June 1999. 
 
-<!--
-<p>
-[an error occurred while processing this directive]
--->
 
 <H2>
     Target users
 </H2>
+This program is intended to be used by everyone and everything, from naive users to embedded scripts.
 
-
-This program is intended to be used by everyone and everything,
-from naive users to embedded scripts. 
 
 <H2>
     Comments
 </H2>
-
-
-<pre>
-
-</pre>
+None
 
 
 </BODY>

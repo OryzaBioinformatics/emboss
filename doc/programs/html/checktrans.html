@@ -7,10 +7,9 @@
 </HEAD>
 <BODY BGCOLOR="#FFFFFF" text="#000000">
 
-
 <table align=center border=0 cellspacing=0 cellpadding=0>
 <tr><td valign=top>
-<A HREF="index.html" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
@@ -24,22 +23,10 @@ checktrans
 
 
 
-
-
-
-
 <H2>
     Function
 </H2>
-
-
-
-<!--
-DON'T WRITE ANYTHING HERE.
-IT IS DONE FOR YOU.
--->
 Reports STOP codons and ORF statistics of a protein
-
 
 <H2>
     Description
@@ -66,7 +53,6 @@ for it to be effective at finding all possible ORFs.
 <H2>
     Usage
 </H2>
-
 <b>Here is a sample session with checktrans</b>
 <p>
 
@@ -75,7 +61,7 @@ for it to be effective at finding all possible ORFs.
 
 % <b>checktrans </b>
 Reports STOP codons and ORF statistics of a protein
-Input sequence(s): <b>../../data/paamir.pep</b>
+Input sequence(s): <b>paamir.pep</b>
 Minimum ORF Length to report [100]: <b></b>
 Output file [paamir_1.checktrans]: <b></b>
 Output sequence [paamir_1.fasta]: <b></b>
@@ -86,32 +72,9 @@ Output features [paamir_1.gff]: <b></b>
 <a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
 
 
-<!--
-Here is a sample session with checktrans, using the output from a transeq run.
-
-<p>
-
-<pre>
-% transeq embl:paamir paamir.pep -auto
-% checktrans
-Input sequence: paamir.pep
-Minimum ORF Length to report [100]: 30
-Output file [paamir_1.checktrans]: 
-Output sequence [paamir_1.fasta]: 
-</pre>
--->
-
 <H2>
     Command line arguments
 </H2>
-
-
-
-<!--
-DON'T WRITE ANYTHING HERE.
-IT IS DONE FOR YOU.
--->
-
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
    Standard (Mandatory) qualifiers:
@@ -193,7 +156,6 @@ IT IS DONE FOR YOU.
 </pre>
 </td></tr></table>
 <P>
-
 <table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
 <tr bgcolor="#FFFFCC">
 <th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
@@ -262,20 +224,17 @@ IT IS DONE FOR YOU.
 </table>
 
 
-
 <H2>
     Input file format
 </H2>
-
 
 This program reads the USA of a protein sequence with STOP codons in it.
 
 <p>
 
-
 <a name="input.1"></a>
 <h3>Input files for usage example </h3>
-<p><h3>File: ../../data/paamir.pep</h3>
+<p><h3>File: paamir.pep</h3>
 <table width="90%"><tr><td bgcolor="#FFCCFF">
 <pre>
 &gt;PAAMIR_1 Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase regulation
@@ -306,6 +265,16 @@ This program writes three files: the ORF report file
 feature file (paamir_1.out3) which is in GFF format by default. 
 
 <p>
+
+The ORF report file gives the numeric count of the ORF, the position of
+the terminating STOP codon, the length of the ORF, its start and end
+positions and the name of the sequence it has been written out as. 
+
+<p>
+
+The name of the output sequences is constructed from the name of the
+input sequence followed by an underscore and then the numeric count of
+the ORF (e.g. 'PAAMIR_1_7').
 
 
 <a name="output.1"></a>
@@ -341,75 +310,12 @@ DQPGQGVADAAPWLGRARGAPAPVAGSDEAARADPEDRSGVAGKRAVRLSDPGRPEQ
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 ##gff-version 2.0
-##date 2004-04-06
+##date 2004-07-15
 ##Type Protein PAAMIR_1
 PAAMIR_1	checktrans	misc_feature	278	634	0.000	+	.	Sequence "PAAMIR_1.1"
 </pre>
 </td></tr></table><p>
 
-
-<!--
-<p>
-The ORF report file from the above example run is:
-
-<p>
-
-<hr>
-<pre>
-CHECKTRANS of PAAMIR_1 from 1 to 723
-
-        ORF#    Pos     Len     ORF Range       Sequence name
-
-        1       54      53      1-53    	PAAMIR_1_1
-        3       136     52      84-135  	PAAMIR_1_3
-        4       180     43      137-179 	PAAMIR_1_4
-        6       277     72      205-276 	PAAMIR_1_6
-        7       635     357     278-634 	PAAMIR_1_7
-
-        Total STOPS:     7
-</pre>
-<hr>
--->
-
-<p>
-
-The ORF report file gives the numeric count of the ORF, the position of
-the terminating STOP codon, the length of the ORF, its start and end
-positions and the name of the sequence it has been written out as. 
-
-<p>
-
-The name of the output sequences is constructed from the name of the
-input sequence followed by an underscore and then the numeric count of
-the ORF (e.g. 'PAAMIR_1_7').
-
-<!--
-<p>
-The output sequence file is:
-
-<p>
-
-<hr>
-<pre>
-&gt;PAAMIR_1_1
-GTAGRASARSPPAGRRELHDLPGEPGARAGSLRTALSDSHRRGNGWDRTRSGR
-&gt;PAAMIR_1_3
-TARAASAVARSKRCPRTPAATRTAIGCAPRTSFATGGYGSSWAATCRTRARR
-&gt;PAAMIR_1_4
-CRWSSAPTRCSATRPPTRASSIRRTSSTAVRRRTRTVRRWRRT
-&gt;PAAMIR_1_6
-CATCIASTAARCSRKSTFRCIPPTTTCSAPSSASTRRAPTWSSPPWWAPAPPSCIAPSPV
-ATATAGGRRSPA
-&gt;PAAMIR_1_7
-PPARRRWRRWRVTWQRGRWWSRLTSPASIRPPAGPSSRPAMVSSRRTRPSPPGPRRPTGR
-PCCSAAPRRPQATGGWKTCSGTCTTSTSTRHRGRSGWSARTTTAACLRASRKSMRAACSR
-SAGSRPNRFAPTLMSSCITSTTGPPAWAGDRSHERQLAARQPARVAGAGPQPAGGGQRRP
-GLAADPHRLFGAPVLAAAGSLRRAGGRGLHQHFPEWPPRRDRCAARRRDSAHYPGGAGGV
-RKPRGALADHRAGVPRRDHPAARCPPGAACAGIGAAHQRGNGEAEAEDRAAPGPHRRPGP
-DQPGQGVADAAPWLGRARGAPAPVAGSDEAARADPEDRSGVAGKRAVRLSDPGRPEQ
-</pre>
-<hr>
--->
 
 <H2>
     Data files
@@ -455,11 +361,6 @@ This program always exits with a status of 0.
 
 None.
 
-<!--
-<H2>
-    See also
-</H2>
--->
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
@@ -478,41 +379,18 @@ None.
 <tr><td><a href="pepwindowall.html">pepwindowall</a></td><td>Displays protein hydropathy of a set of sequences</td></tr>
 </table>
 
-<!--
-        Add any comments about other associated programs (to prepare
-        data files?) that seealso doesn't find.
-   -->
-
-
-<ul>
-
-<li>
-<a href="transeq.html">transeq</a> : Translate nucleic acid sequences
-
-<li>
-<a href="getorf.html">getorf</a> : Finds and extracts open reading frames (ORFs)
-
-<li>
-<a href="plotorf.html">plotorf</a> : Plot potential open reading frames
-
-<li>
-<a href="showseq.html">showseq</a> : Display a sequence with features, translation etc..
-
-</ul>
 
 <H2>
     Author(s)
 </H2>
 
-
-This application was written by 
 Rodrigo Lopez (rls&nbsp;&copy;&nbsp;ebi.ac.uk)
 <br>
 European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
 
 
 
-<p>
+and modified by
 Gary Williams (gwilliam&nbsp;&copy;&nbsp;rfcgr.mrc.ac.uk)
 <br>
 MRC Rosalind Franklin Centre for Genomics Research
@@ -520,41 +398,30 @@ Wellcome Trust Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
 
 
 
-<br>
-to output
-the sequence data to a single file in the conventional EMBOSS style. 
+to output the sequence data to a single file in the conventional
+EMBOSS style.
 
 <H2>
     History
 </H2>
 
-
 Completed 24 Feb 2000 - Rodrigo Lopez
 
 <p>
-Rewritten 2 March 2000 - Gary Williams
+Modified 2 March 2000 - Gary Williams
 
-<!--
-<p>
-[an error occurred while processing this directive]
--->
 
 <H2>
     Target users
 </H2>
+This program is intended to be used by everyone and everything, from naive users to embedded scripts.
 
-
-This program is intended to be used by everyone and everything,
-from naive users to embedded scripts. 
 
 <H2>
     Comments
 </H2>
+None
 
-
-<pre>
-
-</pre>
 
 
 </BODY>

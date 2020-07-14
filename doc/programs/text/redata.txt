@@ -1,12 +1,12 @@
 
                                   redata 
-                                      
-   
-   
+
+
+
 Function
 
    Search REBASE for enzyme name, references, suppliers etc
-   
+
 Description
 
    The Restriction Enzyme database (REBASE) is a collection of
@@ -18,27 +18,27 @@ Description
    proteins are also included. Most recently, putative DNA
    methyltransferases and restriction enzymes, as predicted from analysis
    of genomic sequences, are also listed.
-   
+
    The home page of REBASE is: http://rebase.neb.com/
-   
+
    This program searches the REBASE database for information on a
    specified restriction enzyme.
-   
+
    It outputs a report including the cut site, isoschizomers, references
    and commercial suppliers of the enzyme.
-   
+
 Usage
 
    Here is a sample session with redata
-   
+
 
 % redata 
 Search REBASE for enzyme name, references, suppliers etc.
 Restriction enzyme name [BamHI]: BamHI
 Output file [outfile.redata]: 
-   
+
    Go to the output files for this example
-   
+
 Command line arguments
 
    Standard (Mandatory) qualifiers:
@@ -76,7 +76,7 @@ Command line arguments
    -error               boolean    Report errors
    -fatal               boolean    Report fatal errors
    -die                 boolean    Report deaths
-   
+
 
    Standard (Mandatory) qualifiers Allowed values Default
    [-enzyme]
@@ -93,15 +93,15 @@ Command line arguments
    (Isoschizomers) Boolean value Yes/No Yes
    -[no]references Show references Boolean value Yes/No Yes
    -[no]suppliers Show suppliers Boolean value Yes/No Yes
-   
+
 Input file format
 
 Output file format
 
   Output files for usage example
-  
+
   File: outfile.redata
-  
+
 BamHI
 
 Recognition site is GGATCC leaving sticky ends
@@ -168,66 +168,112 @@ Strzelecka, T., Newman, M., Dorner, L.F., Knott, R., Schildkraut, I., Aggarwal,
  A.K., (1994) J. Mol. Biol., vol. 239, pp. 430-432.
 Wilson, G.A., Young, F.E., (1975) J. Mol. Biol., vol. 97, pp. 123-125.
 Xu, S.-Y., Fomenkov, A., (1994) Biotechniques, vol. 17, pp. 57.
-   
+
    This includes the full list of isoschizomers (enzymes with the same
    target sequence), suppliers and references from the REBASE database.
-   
+
 Data files
 
-   This uses the EMBOSS REBASE data files in 'data/REBASE/*' under the
-   EMBOSS installation directory.
-   
+   EMBOSS data files are distributed with the application and stored in
+   the standard EMBOSS data directory, which is defined by the EMBOSS
+   environment variable EMBOSS_DATA.
+
+   To see the available EMBOSS data files, run:
+
+% embossdata -showall
+
+   To fetch one of the data files (for example 'Exxx.dat') into your
+   current directory for you to inspect or modify, run:
+
+% embossdata -fetch -file Exxx.dat
+
+   Users can provide their own data files in their own directories.
+   Project specific files can be put in the current directory, or for
+   tidier directory listings in a subdirectory called ".embossdata".
+   Files for all EMBOSS runs can be put in the user's home directory, or
+   again in a subdirectory called ".embossdata".
+
+   The directories are searched in the following order:
+     * . (your current directory)
+     * .embossdata (under your current directory)
+     * ~/ (your home directory)
+     * ~/.embossdata
+
+   The EMBOSS REBASE restriction enzyme data files are stored iin
+   directory 'data/REBASE/*' under the EMBOSS installation directory.
+
    These files must first be set up using the program 'rebaseextract'.
    Running 'rebaseextract' may be the job of your system manager.
-   
+
+   The data files are stored in the REBASE directory of the standard
+   EMBOSS data directory. The names are:
+     * embossre.enz Cleavage information
+     * embossre.ref Reference/methylation information
+     * embossre.sup Supplier information
+
+   The column information is described at the top of the data files
+
+   The reported enzyme from any one group of isoschizomers (the
+   prototype) is specified in the REBASE database and the information is
+   held in the data file 'embossre.equ'. You may edit this file to set
+   your own preferred prototype, if you wish.
+
+   The format of the file "embossre.equ" is
+   Enzyme-name Prototype-name
+
+   i.e. two columns of enzyme names separated by a space. The first name
+   of the pair of enzymes is the name that is not preferred and the
+   second is the preferred (prototype) name.
+
 Notes
 
    None.
-   
+
 References
 
    None.
-   
+
 Warnings
 
    None.
-   
+
 Diagnostic Error Messages
 
    None.
-   
+
 Exit status
 
    It always exits with a status of 0.
-   
+
 Known bugs
 
    None.
-   
+
 See also
 
    Program name                          Description
-   recite       Find changes to an enzyme site that introduce new enzyme sites
    recoder      Remove restriction sites but maintain the same translation
    remap        Display a sequence with restriction cut sites, translation etc
    restover     Finds restriction enzymes that produce a specific overhang
    restrict     Finds restriction enzyme cleavage sites
    showseq      Display a sequence with features, translation etc
    silent       Silent mutation restriction enzyme scan
-   
+
 Author(s)
 
    Alan Bleasby (ableasby © rfcgr.mrc.ac.uk)
    MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
    Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
-   
+
 History
 
-   Written 1999.
-   
+   Written 1999 - Alan Bleasby
+
 Target users
 
    This program is intended to be used by everyone and everything, from
    naive users to embedded scripts.
-   
+
 Comments
+
+   None

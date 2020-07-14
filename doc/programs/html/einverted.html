@@ -7,11 +7,9 @@
 </HEAD>
 <BODY BGCOLOR="#FFFFFF" text="#000000">
 
-
-
 <table align=center border=0 cellspacing=0 cellpadding=0>
 <tr><td valign=top>
-<A HREF="index.html" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
@@ -25,26 +23,14 @@ einverted
 
 
 
-
-
-
 <H2>
     Function
 </H2>
-
-
-
-<!--
-DON'T WRITE ANYTHING HERE.
-IT IS DONE FOR YOU.
--->
 Finds DNA inverted repeats
-
 
 <H2>
     Description
 </H2>
-
 
 <b>einverted</b> looks for inverted repeats (stem loops) in a nucleotide
 sequence. 
@@ -83,8 +69,6 @@ sequences in this genome.
 <H2>
     Usage
 </H2>
-
-
 <b>Here is a sample session with einverted</b>
 <p>
 
@@ -104,34 +88,10 @@ Output file [hsts1.inv]: <b></b>
 <a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
 
 
-<!--
-Here is a sample session with einverted.
-
-<pre>
-
-% einverted
-Input sequence: embl:hsts1
-Output file [hsts1.inv]: 
-Gap penalty [12]: 
-Minimum score threshold [50]: 
-Match score [3]: 
-Mismatch score [-4]: 
-
-</pre>
--->
-
 
 <H2>
     Command line arguments
 </H2>
-
-
-
-<!--
-DON'T WRITE ANYTHING HERE.
-IT IS DONE FOR YOU.
--->
-
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
    Standard (Mandatory) qualifiers:
@@ -188,7 +148,6 @@ IT IS DONE FOR YOU.
 </pre>
 </td></tr></table>
 <P>
-
 <table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
 <tr bgcolor="#FFFFCC">
 <th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
@@ -264,7 +223,6 @@ IT IS DONE FOR YOU.
 </table>
 
 
-
 <H2>
     Input file format
 </H2>
@@ -273,7 +231,6 @@ IT IS DONE FOR YOU.
 The input for <b>einverted</b> is a nucleotide sequence
 
 <p>
-
 
 <a name="input.1"></a>
 <h3>Input files for usage example </h3>
@@ -397,7 +354,6 @@ FT   repeat_unit     202..477
 </H2>
 
 
-
 <a name="output.1"></a>
 <h3>Output files for usage example </h3>
 <p><h3>File: hsts1.inv</h3>
@@ -461,27 +417,6 @@ Score 130: 74/94 ( 78%) matches, 1 gaps
 </pre>
 </td></tr></table><p>
 
-
-<!--
-Here is the output form the example run. The first two hits are
-removed to avoid the output lines being too wide.
-
-<pre>
-
-......................
-
-Score 80: 44/51 ( 86%) matches, 2 gaps
-   12246 ctcctgcctcag-cctccaagtagctgggattaca-gcatgtgccaccatgcc 12296   
-         |||||| ||||| | |||||   |||||||||||| ||||| |||||||| ||
-   13938 gaggacagagtcagaaggtttcacgaccctaatgtccgtactcggtggtatgg 13886   
-
-Score 99: 53/65 ( 81%) matches, 1 gaps
-   13884 tgggtatggtggctcatgcctgtaatcccagcactttggaagactgagacaggagcaattgcttga 13949   
-         ||||| |||||||   ||||||||||||||||    ||| || ||||| ||| || ||||||||||
-   14692 acccacaccaccgtacacggacattagggtcgatggaccctccgactccgtcttc-ttaacgaact 14628   
-
-</pre>
--->
 
 <H2>
     Data files
@@ -559,25 +494,21 @@ sequences in this genome.
     References
 </H2>
 
-None.
-
-<!--
-Some assorted references on inverted repeats:
+Some useful references on inverted repeats:
 
 <p>
 
 <ol>
 
 <li>
-Pearson CE, Zorbas H, Price GB, Zannis-Hadjopoulos M
-Inverted repeats, stem-loops, and cruciforms: significance for initiation of DNA replication. 
-J Cell Biochem 1996 Oct;63(1):1-22
+Pearson CE, Zorbas H, Price GB, Zannis-Hadjopoulos M Inverted repeats,
+stem-loops, and cruciforms: significance for initiation of DNA
+replication.  J Cell Biochem 1996 Oct;63(1):1-22
 
 <li>
-Waldman AS, Tran H, Goldsmith EC, Resnick MA.	q
-Long inverted repeats are an at-risk motif for recombination in mammalian cells.
-Genetics. 1999 Dec;153(4):1873-83.
-PMID: 10581292; UI: 20050682
+Waldman AS, Tran H, Goldsmith EC, Resnick MA. q Long inverted repeats
+are an at-risk motif for recombination in mammalian cells.
+Genetics. 1999 Dec;153(4):1873-83.  PMID: 10581292; UI: 20050682
 
 <li>
 Jacobsen SE 
@@ -591,12 +522,11 @@ Ann N Y Acad Sci. 1999 May 18;870:45-57.
 PMID: 10415472; UI: 99343961
 
 <li>
-Dai X, Greizerstein MB, Nadas-Chinni K, Rothman-Denes LB 
-Supercoil-induced extrusion of a regulatory DNA hairpin. 
-Proc Natl Acad Sci U S A 1997 Mar 18;94(6):2174-9
+Dai X, Greizerstein MB, Nadas-Chinni K, Rothman-Denes LB
+Supercoil-induced extrusion of a regulatory DNA hairpin.  Proc Natl
+Acad Sci U S A 1997 Mar 18;94(6):2174-9
 
 </ol>
--->
 
 <H2>
     Warnings
@@ -622,11 +552,6 @@ It always exits with a status of 0.
 
 None.
 
-<!--
-<H2>
-    See also
-</H2>
--->
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
@@ -635,12 +560,6 @@ None.
 <tr><td><a href="palindrome.html">palindrome</a></td><td>Looks for inverted repeats in a nucleotide sequence</td></tr>
 </table>
 
-<!--
-        Add any comments about other associated programs (to prepare
-        data files?) that seealso doesn't find.
-   -->
-
-<p>
 
 <b>palindrome</b> also looks for inverted repeats but is much faster
 and less sensitive, as it looks for near-perfect repeats.
@@ -665,34 +584,23 @@ Peter Rice (pmr&nbsp;&copy;&nbsp;ebi.ac.uk)
 Informatics Division, European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
 
 
-
 <H2>
     History
 </H2>
 
 Written (1999) - Peter Rice
 
-<!--
-<p>
-[an error occurred while processing this directive]
--->
 
 <H2>
     Target users
 </H2>
+This program is intended to be used by everyone and everything, from naive users to embedded scripts.
 
-
-This program is intended to be used by everyone and everything,
-from naive users to embedded scripts. 
 
 <H2>
     Comments
 </H2>
-
-
-<pre>
-
-</pre>
+None
 
 
 </BODY>

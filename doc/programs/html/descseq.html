@@ -7,11 +7,9 @@
 </HEAD>
 <BODY BGCOLOR="#FFFFFF" text="#000000">
 
-
-
 <table align=center border=0 cellspacing=0 cellpadding=0>
 <tr><td valign=top>
-<A HREF="index.html" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
@@ -26,22 +24,10 @@ descseq
 
 
 
-
-
-
-
 <H2>
     Function
 </H2>
-
-
-
-<!--
-DON'T WRITE ANYTHING HERE.
-IT IS DONE FOR YOU.
--->
 Alter the name or description of a sequence
-
 
 <H2>
     Description
@@ -71,8 +57,6 @@ have to put in a space yourself if you require one.
 <H2>
     Usage
 </H2>
-
-
 <b>Here is a sample session with descseq</b>
 <p>
 Set the name of a sequence to "myclone23"  
@@ -81,7 +65,7 @@ Set the name of a sequence to "myclone23"
 <p>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% <b>descseq -seq ../../data/dna.text -out clone23.seq -name "myclone23" </b>
+% <b>descseq -seq dna.text -out clone23.seq -name "myclone23" </b>
 Alter the name or description of a sequence.
 
 </pre></td></tr></table><p>
@@ -96,7 +80,7 @@ Set the description of a sequence to "This is my clone number 244"
 <p>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% <b>descseq -seq ../../data/dna.text -out xy24.seq -desc "This is my clone number 244" </b>
+% <b>descseq -seq dna.text -out xy24.seq -desc "This is my clone number 244" </b>
 Alter the name or description of a sequence.
 
 </pre></td></tr></table><p>
@@ -111,7 +95,7 @@ Append some text to the description of a sequence
 <p>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% <b>descseq -seq ../../data/dna.text -out est4.seq -desc " (submitted)" -append </b>
+% <b>descseq -seq dna.text -out est4.seq -desc " (submitted)" -append </b>
 Alter the name or description of a sequence.
 
 </pre></td></tr></table><p>
@@ -119,19 +103,9 @@ Alter the name or description of a sequence.
 <a href="#output.3">Go to the output files for this example</a><p><p>
 
 
-
-
 <H2>
     Command line arguments
 </H2>
-
-
-
-<!--
-DON'T WRITE ANYTHING HERE.
-IT IS DONE FOR YOU.
--->
-
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
    Standard (Mandatory) qualifiers:
@@ -197,7 +171,6 @@ IT IS DONE FOR YOU.
 </pre>
 </td></tr></table>
 <P>
-
 <table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
 <tr bgcolor="#FFFFCC">
 <th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
@@ -255,20 +228,16 @@ IT IS DONE FOR YOU.
 </table>
 
 
-
 <H2>
     Input file format
 </H2>
-
-
 <b>descseq</b> reads a normal sequence USA.
 
 <p>
 
-
 <a name="input.1"></a>
 <h3>Input files for usage example </h3>
-<p><h3>File: ../../data/dna.text</h3>
+<p><h3>File: dna.text</h3>
 <table width="90%"><tr><td bgcolor="#FFCCFF">
 <pre>
 ACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTAC
@@ -285,7 +254,6 @@ GTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGT
 <b>descseq</b> writes the sequence file with a changed name or description.
 
 <p>
-
 
 <a name="output.1"></a>
 <h3>Output files for usage example </h3>
@@ -370,11 +338,6 @@ It always exits with status 0.
 
 None noted.
 
-<!--
-<H2>
-    See also
-</H2>
--->
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
@@ -404,47 +367,29 @@ None noted.
 <tr><td><a href="yank.html">yank</a></td><td>Reads a sequence range, appends the full USA to a list file</td></tr>
 </table>
 
-<!--
-        Add any comments about other associated programs (to prepare
-        data files?) that seealso doesn't find.
-   -->
-
-
 
 <H2>
     Author(s)
 </H2>
 
-
-Gary Williams (gwilliam&nbsp;&copy;&nbsp;rfcgr.mrc.ac.uk)
-<br>
-MRC Rosalind Franklin Centre for Genomics Research
-Wellcome Trust Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
-
-
-
+[an error occurred while processing this directive]
 
 <H2>
     History
 </H2>
 
-<!--
-<p>
-[an error occurred while processing this directive]
--->
+
 
 <H2>
     Target users
 </H2>
+This program is intended to be used by everyone and everything, from naive users to embedded scripts.
 
-
-This program is intended to be used by everyone and everything,
-from naive users to embedded scripts. 
 
 <H2>
     Comments
 </H2>
-
+None
 
 
 </BODY>

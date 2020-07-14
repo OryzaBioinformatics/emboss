@@ -1,5 +1,3 @@
-<!--START OF HEADER - DON'T ALTER -->
-
 <HTML>
 <HEAD>
   <TITLE>
@@ -8,10 +6,9 @@
 </HEAD>
 <BODY BGCOLOR="#FFFFFF" text="#000000">
 
-
 <table align=center border=0 cellspacing=0 cellpadding=0>
 <tr><td valign=top>
-<A HREF="index.html" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
@@ -25,35 +22,14 @@ distmat
 
 
 
-
-
-<!--END OF HEADER-->
-
 <H2>
     Function
 </H2>
 Creates a distance matrix from multiple alignments
 
-<!--
-DON'T WRITE ANYTHING HERE.
-IT IS DONE FOR YOU.
--->
-
-
-
-
 <H2>
     Description
 </H2>
-
-<!-- 
-	This is the main part of the document.
-        This is what the user looks at to find out if this program will do what he wants. 
-        Long description.
-        Why it is useful.
-        When it should/shouldn't be used.
-        Algorithms
-  -->
 
 <b>distmat</b> calculates the evolutionary distances between every pair of
 sequences in a multiple alignment. The sequences need to be aligned
@@ -296,35 +272,16 @@ Camb., 1983.
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
 <H2>
     Usage
 </H2>
-
-<!--  
-	Example usage, as run from the command-line.
-        Many examples illustrating different behaviours is good.
- -->
-
-
 <b>Here is a sample session with distmat</b>
 <p>
 
 <p>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% <b>distmat ../../data/pax.align </b>
+% <b>distmat pax.align </b>
 Creates a distance matrix from multiple alignments
 Multiple substitution correction methods for proteins
          0 : Uncorrected
@@ -338,37 +295,10 @@ Output file [pax.distmat]: <b></b>
 <a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
 
 
-<!--
-Here is a sample session with distmat:
-
-<p>
-
-<pre>
-% distmat pax.align
-Creates a distance matrix from multiple alignments
-Multiple substitution correction methods for proteins
-         0 : Uncorrected
-         1 : Jukes-Cantor
-         2 : Kimura Protein
-Method to use [0]: 2
-Output file [outfile.distmat]: 
-</pre>
-
--->
-
-
-
-
-
-
-
-
-
 
 <H2>
     Command line arguments
 </H2>
-
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
    Standard (Mandatory) qualifiers (* if not always prompted):
@@ -528,28 +458,9 @@ Output file [outfile.distmat]:
 </table>
 
 
-<!--
-DON'T WRITE ANYTHING HERE.
-IT IS DONE FOR YOU.
--->
-
-
-
-
-
-
-
-
 <H2>
     Input file format
 </H2>
-
-<!-- 
-        This includes example input file formats.
-        This should be a detailed description and example - assume
-        someone will want to parse this file and will want to know what
-        happens in unusual cases - null input, etc. 
-   -->
 
 It reads in a normal multiple sequence alignment file.
 
@@ -560,10 +471,9 @@ meaningful information from this analysis.
 
 <p>
 
-
 <a name="input.1"></a>
 <h3>Input files for usage example </h3>
-<p><h3>File: ../../data/pax.align</h3>
+<p><h3>File: pax.align</h3>
 <table width="90%"><tr><td bgcolor="#FFCCFF">
 <pre>
 PileUp
@@ -676,24 +586,9 @@ PX8D_HUMAN      ...
 
 
 
-
-
-
-
-
-
-
-
 <H2>
     Output file format
 </H2>
-
-<!-- 
-        This includes example output file formats.
-        This should be a detailed description and example - assume
-        someone will want to parse this file and will want to know what
-        happens in unusual cases - null output, errors etc. 
-   -->
 
 The output from the program is a file containing a matrix of the
 calculated distances between each of the input aligned sequences.  The
@@ -701,7 +596,6 @@ distances are expressed in terms of the number of substitutions per 100
 bases or amino acids. 
 
 <p>
-
 
 <a name="output.1"></a>
 <h3>Output files for usage example </h3>
@@ -729,249 +623,79 @@ Gap weighting is 0.000000
 </td></tr></table><p>
 
 
-<!--
-The output from the example usage above is:
-
-<p>
-
-<hr>
-<pre>
-Distance Matrix
----------------
-
-Using the Kimura correction method
-Gap weighting is 0.000000
-
-            1       2       3       4       5       6       7       8       9       10
-          0.00   96.10  137.41  128.65  161.04  160.26  157.46  154.14  164.22  152.59          PAX4_HUMAN 1
-                  0.00  111.86  109.96  156.25  149.70  143.75  135.71  150.60  146.87          PAX6_HUMAN 2
-                          0.00   26.21  131.54  143.54  162.95  151.39  163.56  159.78          PAX3_HUMAN 3
-                                  0.00  145.45  138.76  158.79  149.96  167.26  161.82          PAX7_HUMAN 4
-                                          0.00   44.29  120.84  123.00  131.69  130.22          PAX1_HUMAN 5
-                                                  0.00  123.56  130.21  131.64  130.17          PAX9_HUMAN 6
-                                                          0.00   36.43   53.12   64.32          PAX2_HUMAN 7
-                                                                  0.00   60.88   73.82          PAX5_HUMAN 8
-                                                                          0.00   20.37          PX8A_HUMAN 9
-</pre>
-<hr>
--->
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 <H2>
     Data files
 </H2>
 
-<!-- 
-        Any data files used (e.g. translation table file)
-        This includes example data file formats if they are
-        not obvious.
-	If you wish to include the standard description of what data
-	files are and how to use embossdata to inspect and retrieve
-	them, use:
-<p>
-EMBOSS data files are distributed with the application and stored
-in the standard EMBOSS data directory, which is defined
-by the EMBOSS environment variable EMBOSS_DATA.
-
-<p>
-
-To see the available EMBOSS data files, run:
-<p>
-<pre>
-% embossdata -showall
-</pre>
-<p>
-To fetch one of the data files (for example 'Exxx.dat') into your
-current directory for you to inspect or modify, run:
-
-<pre>
-
-% embossdata -fetch -file Exxx.dat
-
-</pre>
-<p>
-
-Users can provide their own data files in their own directories.
-Project specific files can be put in the current directory, or for
-tidier directory listings in a subdirectory called
-".embossdata". Files for all EMBOSS runs can be put in the user's home
-directory, or again in a subdirectory called ".embossdata".
-
-<p>
-The directories are searched in the following order:
-
-<ul>
-   <li> . (your current directory)
-   <li> .embossdata (under your current directory)
-   <li> ~/ (your home directory)
-   <li> ~/.embossdata
-</ul>
-<p>
-
-   -->
-
 None.
-
-
-
 
 <H2>
     Notes
 </H2>
 
-<!-- 
-        Restrictions.
-        Interesting behaviour.
-        Useful things you can do with this program.
-   -->
-
 None.
-
-
-
-
-
-
 
 <H2>
     References
 </H2>
-
-<!-- 
-        Bibliography for methods used.
-   -->
 
 See the following for details of the methods used:
 
 <p>
 
 <ol>
-<li>"Phylogenetic Inference", Swofford, Olsen, Waddell, and Hillis, in Molecular Systematics, 2nd ed., Sinauer Ass., Inc., 1996, Ch. 11.
+
+<li>"Phylogenetic Inference", Swofford, Olsen, Waddell, and Hillis, in
+Molecular Systematics, 2nd ed., Sinauer Ass., Inc., 1996, Ch. 11.
+
 <li>F. Tajima and M. Nei, Mol. Biol. Evol. 1984, 1, 269.
+
 <li>M. Kimura, J. Mol. Evol. 1980, 16, 111.
+
 <li>K. Tamura, Mol. Biol. Evol. 1992, 9, 678.
+
 <li>L. Jin and M. Nei, Mol. Biol. Evol. 1990, 7, 82.
-<li>M. Kimura, The Neutral Theory of Molecular Evolution, Camb. Uni. Press, Camb., 1983.
+
+<li>M. Kimura, The Neutral Theory of Molecular Evolution,
+Camb. Uni. Press, Camb., 1983.
+
 </ol>
-
-
-
-
-
-
 
 <H2>
     Warnings
 </H2>
 
-<!-- 
-        Potentially stupid things the program will let you do.
-   -->
-
 The quality of the alignment is of paramount importance in obtaining
 meaningful information from this analysis. 
-
-
-
-
-
-
 
 <H2>
     Diagnostic Error Messages
 </H2>
 
-<!-- 
-        Error messages specific to this program, eg:
-        "FATAL xxx" - means you have not set up the xxx data using program <b>prog</b>.<p>
-   -->
-
 None.
-
-
-
-
-
-
 
 <H2>
     Exit status
 </H2>
 
-<!-- 
-        Description of the exit status for various error conditions
-   -->
 
 It always exits with status 0.
-
-
-
-
-
-
-
 
 <H2>
     Known bugs
 </H2>
 
-
-<!-- 
-        Bugs noted but not yet fixed.
-   -->
-
 None.
 
-
-
-
-
-
-
-
-<!--
-<H2>
-    See also
-</H2>
--->
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
 </table>
 
-<!-- 
-        Add any comments about other associated programs (to prepare
-        data files?) that seealso doesn't find. 
-   -->
-
-
-
-
-
-
-
-
-
 
 <H2>
     Author(s)
 </H2>
-<!--
-        Who has worked on the program in the past.
-   -->
 
 Tim Carver (tcarver&nbsp;&copy;&nbsp;rfcgr.mrc.ac.uk)
 <br>
@@ -979,70 +703,23 @@ MRC Rosalind Franklin Centre for Genomics Research
 Wellcome Trust Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
 
 
-
-
-
-
 <H2>
     History
 </H2>
 
-<!--
-        What changes have been made.
-   -->
-
 Written (March 2001) - Tim Carver
-
-<!--
-<p>
-[an error occurred while processing this directive]
--->
-
-
-
-
-
-
 
 
 <H2>
     Target users
 </H2>
-
-<!--
-        For general users, requested by one user, for EMBOSS site
-        maintainers, for EMBOSS developers etc.
-        eg:
-        "This program is intended to be used by everyone and everything,
-        from naive users to embedded scripts." 
-	Which is easy to include using:
-   -->
-
 This program is intended to be used by everyone and everything, from naive users to embedded scripts.
-
-
-
-
-
-
-
-
-
-
 
 
 <H2>
     Comments
 </H2>
-
-<!--
-	Any comments, requests etc. that people have about the program
-   -->
-
-
-
-
-
+None
 
 
 

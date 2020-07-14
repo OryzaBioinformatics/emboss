@@ -1,28 +1,28 @@
 
                                  wordmatch 
-                                      
-   
-   
+
+
+
 Function
 
    Finds all exact matches of a given size between 2 sequences
-   
+
 Description
 
    Finds all exact matches of a given minimum size between 2 sequences
    displaying the start points in each sequence and the match length.
-   
+
    This program takes two sequences and finds regions where they are
    identical. These regions are reported in the output file (and
    optionally) in GFF (Gene Feature Format) files.
-   
+
    It will not find identical regions smaller than the specified
    wordsize.
-   
+
 Usage
 
    Here is a sample session with wordmatch
-   
+
 
 % wordmatch tsw:hba_human tsw:hbb_human 
 Finds all exact matches of a given size between 2 sequences
@@ -30,10 +30,10 @@ Word size [4]:
 Output alignment [hba_human.wordmatch]: 
 Output features [HBA_HUMAN.gff]: 
 Second output features [HBB_HUMAN.gff]: 
-   
+
    Go to the input files for this example
    Go to the output files for this example
-   
+
 Command line arguments
 
    Standard (Mandatory) qualifiers:
@@ -121,7 +121,7 @@ Command line arguments
    -error               boolean    Report errors
    -fatal               boolean    Report fatal errors
    -die                 boolean    Report deaths
-   
+
 
    Standard (Mandatory) qualifiers Allowed values Default
    [-asequence]
@@ -139,19 +139,19 @@ Command line arguments
    (none)
    Advanced (Unprompted) qualifiers Allowed values Default
    (none)
-   
+
 Input file format
 
    wordmatch reads any two sequence USAs of the same type (DNA or
    protein).
-   
+
   Input files for usage example
-  
+
    'tsw:hba_human' is a sequence entry in the example protein database
    'tsw'
-   
+
   Database entry: tsw:hba_human
-  
+
 ID   HBA_HUMAN      STANDARD;      PRT;   141 AA.
 AC   P01922;
 DT   21-JUL-1986 (Rel. 01, Created)
@@ -257,9 +257,9 @@ SQ   SEQUENCE   141 AA;  15126 MW;  5EC7DB1E CRC32;
      KVADALTNAV AHVDDMPNAL SALSDLHAHK LRVDPVNFKL LSHCLLVTLA AHLPAEFTPA
      VHASLDKFLA SVSTVLTSKY R
 //
-   
+
   Database entry: tsw:hbb_human
-  
+
 ID   HBB_HUMAN      STANDARD;      PRT;   146 AA.
 AC   P02023;
 DT   21-JUL-1986 (Rel. 01, Created)
@@ -365,60 +365,37 @@ SQ   SEQUENCE   146 AA;  15867 MW;  EC9744C9 CRC32;
      KAHGKKVLGA FSDGLAHLDN LKGTFATLSE LHCDKLHVDP ENFRLLGNVL VCVLAHHFGK
      EFTPPVQAAY QKVVAGVANA LAHKYH
 //
-   
+
 Output file format
 
    The output is a standard EMBOSS alignment file.
-   
+
    The results can be output in one of several styles by using the
    command-line qualifier -aformat xxx, where 'xxx' is replaced by the
    name of the required format. Some of the alignment formats can cope
    with an unlimited number of sequences, while others are only for pairs
    of sequences.
-   
+
    The available multiple alignment format names are: unknown, multiple,
    simple, fasta, msf, trace, srs
-   
+
    The available pairwise alignment format names are: pair, markx0,
    markx1, markx2, markx3, markx10, srspair, score
-   
-   See: http://www.uk.embnet.org/Software/EMBOSS/Themes/AlignFormats.html
-   for further information on alignment formats.
-   
+
+   See: http://emboss.sf.net/docs/themes/AlignFormats.html for further
+   information on alignment formats.
+
   Output files for usage example
-  
-  File: HBA_HUMAN.gff
-  
-##gff-version 2.0
-##date 2004-04-06
-##Type Protein HBA_HUMAN
-HBA_HUMAN       wordmatch       misc_feature    58      62      1.000   +
-.       Sequence "HBA_HUMAN.1" ; note "HBB_HUMAN"
-HBA_HUMAN       wordmatch       misc_feature    14      17      1.000   +
-.       Sequence "HBA_HUMAN.2" ; note "HBB_HUMAN"
-HBA_HUMAN       wordmatch       misc_feature    116     119     1.000   +
-.       Sequence "HBA_HUMAN.3" ; note "HBB_HUMAN"
-   
-  File: HBB_HUMAN.gff
-  
-##gff-version 2.0
-##date 2004-04-06
-##Type Protein HBB_HUMAN
-HBB_HUMAN       wordmatch       misc_feature    63      67      1.000   +
-.       Sequence "HBB_HUMAN.1" ; note "HBA_HUMAN"
-HBB_HUMAN       wordmatch       misc_feature    15      18      1.000   +
-.       Sequence "HBB_HUMAN.2" ; note "HBA_HUMAN"
-HBB_HUMAN       wordmatch       misc_feature    121     124     1.000   +
-.       Sequence "HBB_HUMAN.3" ; note "HBA_HUMAN"
-   
+
   File: hba_human.wordmatch
-  
+
 ########################################
-# Program:  wordmatch
-# Rundate:  Tue Apr 06 14:38:29 2004
+# Program: wordmatch
+# Rundate: Thu Jul 15 2004 12:00:00
 # Align_format: match
 # Report_file: hba_human.wordmatch
 ########################################
+
 #=======================================
 #
 # Aligned_sequences: 2
@@ -426,51 +403,75 @@ HBB_HUMAN       wordmatch       misc_feature    121     124     1.000   +
 # 2: HBB_HUMAN
 #=======================================
 
-     5 HBA_HUMAN             58..62       HBB_HUMAN             63..67
-     4 HBA_HUMAN             14..17       HBB_HUMAN             15..18
-     4 HBA_HUMAN            116..119      HBB_HUMAN            121..124
+     5 HBA_HUMAN       +       58..62       HBB_HUMAN       +       63..67
+     4 HBA_HUMAN       +       14..17       HBB_HUMAN       +       15..18
+     4 HBA_HUMAN       +      116..119      HBB_HUMAN       +      121..124
 
 #---------------------------------------
 #---------------------------------------
-   
+
+  File: HBA_HUMAN.gff
+
+##gff-version 2.0
+##date 2004-07-15
+##Type Protein HBA_HUMAN
+HBA_HUMAN       wordmatch       misc_feature    58      62      1.000   +
+.       Sequence "HBA_HUMAN.1" ; note "HBB_HUMAN"
+HBA_HUMAN       wordmatch       misc_feature    14      17      1.000   +
+.       Sequence "HBA_HUMAN.2" ; note "HBB_HUMAN"
+HBA_HUMAN       wordmatch       misc_feature    116     119     1.000   +
+.       Sequence "HBA_HUMAN.3" ; note "HBB_HUMAN"
+
+  File: HBB_HUMAN.gff
+
+##gff-version 2.0
+##date 2004-07-15
+##Type Protein HBB_HUMAN
+HBB_HUMAN       wordmatch       misc_feature    63      67      1.000   +
+.       Sequence "HBB_HUMAN.1" ; note "HBA_HUMAN"
+HBB_HUMAN       wordmatch       misc_feature    15      18      1.000   +
+.       Sequence "HBB_HUMAN.2" ; note "HBA_HUMAN"
+HBB_HUMAN       wordmatch       misc_feature    121     124     1.000   +
+.       Sequence "HBB_HUMAN.3" ; note "HBA_HUMAN"
+
    The normal 'report' header is output. It contains the details of the
    program run and the input sequences.
-   
+
    The data lines consist of five columns separated by spaces or TAB
    characters. Each line contains the information on one identical
    region. The first column is the length of the match. The second column
    is the name of the first sequence. The third column is the start and
    end position of the match. The next two columns are the name and
    positions of the second sequence.
-   
+
 Data files
 
    None.
-   
+
 Notes
 
    None.
-   
+
 References
 
    None.
-   
+
 Warnings
 
    None.
-   
+
 Diagnostic Error Messages
 
    None.
-   
+
 Exit status
 
    0 if successful.
-   
+
 Known bugs
 
    None.
-   
+
 See also
 
    Program name Description
@@ -479,20 +480,20 @@ See also
    supermatcher Finds a match of a large sequence against one or more
    sequences
    water Smith-Waterman local alignment
-   
+
 Author(s)
 
    Ian Longden (il © sanger.ac.uk)
    Sanger Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge,
    CB10 1SA, UK.
-   
+
 History
 
    Completed 27th November 1998.
-   
+
 Target users
 
    This program is intended to be used by everyone and everything, from
    naive users to embedded scripts.
-   
+
 Comments

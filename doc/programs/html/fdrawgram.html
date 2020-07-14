@@ -1,0 +1,648 @@
+<!--START OF HEADER - DON'T ALTER -->
+
+<HTML>
+<HEAD>
+  <TITLE>
+  EMBOSS: fdrawgram
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+
+
+<table align=center border=0 cellspacing=0 cellpadding=0>
+<tr><td valign=top>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+</td>
+<td align=left valign=middle>
+<b><font size="+6">
+
+fdrawgram
+</font></b>
+</td></tr>
+</table>
+<br>&nbsp;
+<p>
+
+
+
+<!--END OF HEADER-->
+
+
+
+
+
+
+<H2>
+    Function
+</H2>
+Plots a cladogram- or phenogram-like rooted tree diagram
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+
+
+
+
+<H2>
+    Description
+</H2>
+
+Plots rooted phylogenies, cladograms, circular trees and phenograms in
+a wide variety of user-controllable formats. The program is
+interactive and allows previewing of the tree on PC, Macintosh, or X
+Windows screens, or on Tektronix or Digital graphics terminals. Final
+output can be to a file formatted for one of the drawing programs, for
+a ray-tracing or VRML browser, or one at can be sent to a laser
+printer (such as Postscript or PCL-compatible printers), on graphics
+screens or terminals, on pen plotters or on dot matrix printers
+capable of graphics.
+
+<p>
+Similar to DRAWTREE but plots rooted phylogenies. 
+
+<H2>
+    Algorithm
+</H2>
+
+DRAWGRAM interactively plots a cladogram- or phenogram-like rooted
+tree diagram, with many options including orientation of tree and
+branches, style of tree, label sizes and angles, tree depth, margin
+sizes, stem lengths, and placement of nodes in the tree. Particularly
+if you can use your computer to preview the plot, you can very
+effectively adjust the details of the plotting to get just the kind of
+plot you want.
+
+<p>
+To understand the working of DRAWGRAM and DRAWTREE, you should first
+read the Tree Drawing Programs web page in this documentation.
+
+<p>
+As with DRAWTREE, to run DRAWGRAM you need a compiled copy of the
+program, a font file, and a tree file. The tree file has a default
+name of intree. The font file has a default name of "fontfile". If
+there is no file of that name, the program will ask you for the name
+of a font file (we provide ones that have the names font1 through
+font6). Once you decide on a favorite one of these, you could make a
+copy of it and call it fontfile, and it will then be used by
+default. Note that the program will get confused if the input tree
+file has the number of trees on the first line of the file, so that
+numbr may have to be removed.
+
+
+
+<H2>
+    Usage
+</H2>
+
+<!--  
+	Example usage, as run from the command-line.
+        Many examples illustrating different behaviours is good.
+ -->
+
+
+
+
+
+<H2>
+    Command line arguments
+</H2>
+
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+   Standard (Mandatory) qualifiers:
+  [-fontfile]          infile     Fontfile
+  [-intreefile]        tree       (no help text) tree value
+  [-plotfile]          outfile    Output file name
+
+   Additional (Optional) qualifiers (* if not always prompted):
+   -[no]grows          boolean    Tree grows horizontally
+   -style              menu       Tree style output
+   -plotter            menu       Plotter or printer the tree will be drawn on
+   -previewer          menu       Previewing device
+   -lengths            boolean    Use branch lengths from user trees
+*  -labelrotation      float      Angle of labels (0 degrees is horizontal for
+                                  a tree growing vertically)
+   -[no]rescaled       toggle     Automatically rescale branch lengths
+*  -bscale             float      Centimeters per unit branch length
+   -treedepth          float      Depth of tree as fraction of its breadth
+   -stemlength         float      Stem length as fraction of tree depth
+   -nodespace          float      Character height as fraction of tip spacing
+   -nodeposition       menu       Position of interior nodes
+*  -xmargin            float      Horizontal margin (cm)
+*  -ymargin            float      Vertical margin (cm)
+*  -xmarginray         float      Horizontal margin (pixels)
+*  -ymarginray         float      Vertical margin (pixels)
+   -paperx             float      Paper width
+   -papery             float      Paper height
+   -pagesheight        float      Number of trees across height of page
+   -pageswidth         float      Number of trees across width of page
+   -hpmargin           float      Horizontal overlap (cm)
+   -vpmargin           float      Vertical overlap (cm)
+
+   Advanced (Unprompted) qualifiers: (none)
+   Associated qualifiers:
+
+   "-plotfile" associated qualifiers
+   -odirectory3        string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report deaths
+
+
+</pre>
+</td></tr></table>
+<P>
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-fontfile]<br>(Parameter 1)</td>
+<td>Fontfile</td>
+<td>Input file</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>[-intreefile]<br>(Parameter 2)</td>
+<td>(no help text) tree value</td>
+<td>Phylogenetic tree</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr>
+<td>[-plotfile]<br>(Parameter 3)</td>
+<td>Output file name</td>
+<td>Output file</td>
+<td><i>&lt;sequence&gt;</i>.fdrawgram</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Additional (Optional) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-[no]grows</td>
+<td>Tree grows horizontally</td>
+<td>Boolean value Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>-style</td>
+<td>Tree style output</td>
+<td><table><tr><td>c</td> <td><i>(cladogram (v-shaped))</i></td></tr><tr><td>p</td> <td><i>(phenogram (branches are square))</i></td></tr><tr><td>v</td> <td><i>(curvogram (branches are 1/4 out of an ellipse))</i></td></tr><tr><td>e</td> <td><i>(eurogram (branches angle outward, then up))</i></td></tr><tr><td>s</td> <td><i>(swooporam (branches curve outward then reverse))</i></td></tr><tr><td>o</td> <td><i>(circular tree)</i></td></tr></table></td>
+<td>c</td>
+</tr>
+
+<tr>
+<td>-plotter</td>
+<td>Plotter or printer the tree will be drawn on</td>
+<td><table><tr><td>l</td> <td><i>(Postscript printer file format)</i></td></tr><tr><td>m</td> <td><i>(PICT format (for drawing programs))</i></td></tr><tr><td>j</td> <td><i>(HP 75 DPI Laserjet PCL file format)</i></td></tr><tr><td>s</td> <td><i>(HP 150 DPI Laserjet PCL file format)</i></td></tr><tr><td>y</td> <td><i>(HP 300 DPI Laserjet PCL file format)</i></td></tr><tr><td>w</td> <td><i>(MS-Windows Bitmap)</i></td></tr><tr><td>f</td> <td><i>(FIG 2.0 drawing program format)</i></td></tr><tr><td>a</td> <td><i>(Idraw drawing program format)</i></td></tr><tr><td>z</td> <td><i>(VRML Virtual Reality Markup Language file)</i></td></tr><tr><td>n</td> <td><i>(PCX 640x350 file format (for drawing programs))</i></td></tr><tr><td>p</td> <td><i>(PCX 800x600 file format (for drawing programs))</i></td></tr><tr><td>q</td> <td><i>(PCX 1024x768 file format (for drawing programs))</i></td></tr><tr><td>k</td> <td><i>(TeKtronix 4010 graphics terminal)</i></td></tr><tr><td>x</td> <td><i>(X Bitmap format)</i></td></tr><tr><td>v</td> <td><i>(POVRAY 3D rendering program file)</i></td></tr><tr><td>r</td> <td><i>(Rayshade 3D rendering program file)</i></td></tr><tr><td>h</td> <td><i>(Hewlett-Packard pen plotter (HPGL file format))</i></td></tr><tr><td>d</td> <td><i>(DEC ReGIS graphics (VT240 terminal))</i></td></tr><tr><td>e</td> <td><i>(Epson MX-80 dot-matrix printer)</i></td></tr><tr><td>c</td> <td><i>(Prowriter/Imagewriter dot-matrix printer)</i></td></tr><tr><td>t</td> <td><i>(Toshiba 24-pin dot-matrix printer)</i></td></tr><tr><td>o</td> <td><i>(Okidata dot-matrix printer)</i></td></tr><tr><td>b</td> <td><i>(Houston Instruments plotter)</i></td></tr><tr><td>u</td> <td><i>(other (one you have inserted code for))</i></td></tr></table></td>
+<td>l</td>
+</tr>
+
+<tr>
+<td>-previewer</td>
+<td>Previewing device</td>
+<td><table><tr><td>n</td> <td><i>(Will not be previewed)</i></td></tr><tr><td>I i</td> <td><i>(MSDOS graphics screen m:Macintosh screens)</i></td></tr><tr><td>x</td> <td><i>(X Windows display)</i></td></tr><tr><td>w</td> <td><i>(MS Windows display)</i></td></tr><tr><td>k</td> <td><i>(TeKtronix 4010 graphics terminal)</i></td></tr><tr><td>d</td> <td><i>(DEC ReGIS graphics (VT240 terminal))</i></td></tr><tr><td>o</td> <td><i>(Other (one you have inserted code for))</i></td></tr></table></td>
+<td>x</td>
+</tr>
+
+<tr>
+<td>-lengths</td>
+<td>Use branch lengths from user trees</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-labelrotation</td>
+<td>Angle of labels (0 degrees is horizontal for a tree growing vertically)</td>
+<td>Number from 0.000 to 360.000</td>
+<td>90.0</td>
+</tr>
+
+<tr>
+<td>-[no]rescaled</td>
+<td>Automatically rescale branch lengths</td>
+<td>Toggle value Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>-bscale</td>
+<td>Centimeters per unit branch length</td>
+<td>Any numeric value</td>
+<td>1.0</td>
+</tr>
+
+<tr>
+<td>-treedepth</td>
+<td>Depth of tree as fraction of its breadth</td>
+<td>Number from 0.100 to 100.000</td>
+<td>0.53</td>
+</tr>
+
+<tr>
+<td>-stemlength</td>
+<td>Stem length as fraction of tree depth</td>
+<td>Number from 0.100 to 100.000</td>
+<td>0.05</td>
+</tr>
+
+<tr>
+<td>-nodespace</td>
+<td>Character height as fraction of tip spacing</td>
+<td>Number from 0.100 to 100.000</td>
+<td>0.3333</td>
+</tr>
+
+<tr>
+<td>-nodeposition</td>
+<td>Position of interior nodes</td>
+<td><table><tr><td>i</td> <td><i>(Intermediate between their immediate descendants)</i></td></tr><tr><td>w</td> <td><i>(Weighted average of tip positions)</i></td></tr><tr><td>c</td> <td><i>(Centered among their ultimate descendants)</i></td></tr><tr><td>n</td> <td><i>(Innermost of immediate descendants)</i></td></tr><tr><td>v</td> <td><i>(So tree is v shaped)</i></td></tr></table></td>
+<td>c</td>
+</tr>
+
+<tr>
+<td>-xmargin</td>
+<td>Horizontal margin (cm)</td>
+<td>Number 0.100 or more</td>
+<td>1.65</td>
+</tr>
+
+<tr>
+<td>-ymargin</td>
+<td>Vertical margin (cm)</td>
+<td>Number 0.100 or more</td>
+<td>2.16</td>
+</tr>
+
+<tr>
+<td>-xmarginray</td>
+<td>Horizontal margin (pixels)</td>
+<td>Number 0.100 or more</td>
+<td>1.65</td>
+</tr>
+
+<tr>
+<td>-ymarginray</td>
+<td>Vertical margin (pixels)</td>
+<td>Number 0.100 or more</td>
+<td>2.16</td>
+</tr>
+
+<tr>
+<td>-paperx</td>
+<td>Paper width</td>
+<td>Any numeric value</td>
+<td>20.63750</td>
+</tr>
+
+<tr>
+<td>-papery</td>
+<td>Paper height</td>
+<td>Number 0.100 or more</td>
+<td>26.98750</td>
+</tr>
+
+<tr>
+<td>-pagesheight</td>
+<td>Number of trees across height of page</td>
+<td>Number 1.000 or more</td>
+<td>1</td>
+</tr>
+
+<tr>
+<td>-pageswidth</td>
+<td>Number of trees across width of page</td>
+<td>Number 1.000 or more</td>
+<td>1</td>
+</tr>
+
+<tr>
+<td>-hpmargin</td>
+<td>Horizontal overlap (cm)</td>
+<td>Number 0.001 or more</td>
+<td>0.41275</td>
+</tr>
+
+<tr>
+<td>-vpmargin</td>
+<td>Vertical overlap (cm)</td>
+<td>Number 0.001 or more</td>
+<td>0.53975</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+</table>
+
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+
+
+
+
+
+
+
+
+<H2>
+    Input file format
+</H2>
+
+<!-- 
+        This includes example input file formats.
+        This should be a detailed description and example - assume
+        someone will want to parse this file and will want to know what
+        happens in unusual cases - null input, etc. 
+   -->
+
+<b>fdrawgram</b> reads ...
+
+<p>
+
+
+
+
+
+
+
+<H2>
+    Output file format
+</H2>
+
+<!-- 
+        This includes example output file formats.
+        This should be a detailed description and example - assume
+        someone will want to parse this file and will want to know what
+        happens in unusual cases - null output, errors etc. 
+
+        If you wish to include the standard description of the avalable
+	report formats, use:
+[an error occurred while processing this directive]
+   -->
+
+<b>fdrawgram</b> 
+output ...
+
+
+<p>
+
+
+
+
+
+
+
+<H2>
+    Data files
+</H2>
+
+<!-- 
+        Any data files used (e.g. translation table file)
+        This includes example data file formats if they are
+        not obvious.
+
+	If you wish to include the standard description of what data
+	files are and how to use embossdata to inspect and retrieve
+	them, use:
+[an error occurred while processing this directive]
+   -->
+
+
+<p>
+The font file has a default name of "fontfile". If there is no file of
+that name, the program will ask you for the name of a font file (we
+provide ones that have the names font1 through font6). Once you decide
+on a favorite one of these, you could make a copy of it and call it
+fontfile, and it will then be used by default.
+
+
+
+
+
+
+
+
+
+<H2>
+    Notes
+</H2>
+
+<!-- 
+        Restrictions.
+        Interesting behaviour.
+        Useful things you can do with this program.
+   -->
+
+None.
+
+
+
+
+
+
+
+<H2>
+    References
+</H2>
+
+<!-- 
+        Bibliography for methods used.
+   -->
+
+None.
+
+
+
+
+
+
+
+
+<H2>
+    Warnings
+</H2>
+
+<!-- 
+        Potentially stupid things the program will let you do.
+   -->
+
+None.
+
+
+
+
+
+
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+<!-- 
+        Error messages specific to this program, eg:
+        "FATAL xxx" - means you have not set up the xxx data using program <b>prog</b>.<p>
+   -->
+
+None.
+
+
+
+
+
+
+
+<H2>
+    Exit status
+</H2>
+
+<!-- 
+        Description of the exit status for various error conditions
+   -->
+
+It always exits with status 0.
+
+
+
+
+
+
+
+
+<H2>
+    Known bugs
+</H2>
+
+
+<!-- 
+        Bugs noted but not yet fixed.
+   -->
+
+None.
+
+
+
+
+
+
+
+
+<!--
+<H2>
+    See also
+</H2>
+-->
+<h2><a name="See also">See also</a></h2>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th><th>Description</th></tr>
+<tr><td><a href="fdrawtree.html">fdrawtree</a></td><td>Plots an unrooted tree diagram</td></tr>
+<tr><td><a href="fretree.html">fretree</a></td><td>Interactive tree rearrangement</td></tr>
+</table>
+
+<!-- 
+        Add any comments about other associated programs (to prepare
+        data files?) that seealso doesn't find. 
+   -->
+
+
+
+
+
+
+
+
+
+
+<H2>
+    Author(s)
+</H2>
+
+This program is an EMBOSS conversion of a program written by Joe
+Felsenstein as part of his PHYLIP package.
+
+<p>
+Although we take every care to ensure that the results of the EMBOSS
+version are identical to those from the original package, we recommend
+that you check your inputs give the same results in both versions
+before publication.
+
+<p>
+Please report all bugs in the EMBOSS version to the EMBOSS bug team,
+not to the original author.
+
+
+<H2>
+    History
+</H2>
+
+Written (2004) - Joe Felsenstein, University of Washington.
+<p>
+Converted (August 2004) to an EMBASSY program by the EMBOSS team.
+
+
+
+
+<H2>
+    Target users
+</H2>
+
+<!--
+        For general users, requested by one user, for EMBOSS site
+        maintainers, for EMBOSS developers etc.
+        eg:
+        "This program is intended to be used by everyone and everything,
+        from naive users to embedded scripts." 
+	Which is easy to include using:
+   -->
+
+This program is intended to be used by everyone and everything, from naive users to embedded scripts.
+
+
+
+
+
+
+
+
+
+
+
+
+</BODY>
+</HTML>
+

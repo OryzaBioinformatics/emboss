@@ -7,11 +7,9 @@
 </HEAD>
 <BODY BGCOLOR="#FFFFFF" text="#000000">
 
-
-
 <table align=center border=0 cellspacing=0 cellpadding=0>
 <tr><td valign=top>
-<A HREF="index.html" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
@@ -25,25 +23,14 @@ fuzztran
 
 
 
-
-
 <H2>
     Function
 </H2>
-
-
-
-<!--
-DON'T WRITE ANYTHING HERE.
-IT IS DONE FOR YOU.
--->
 Protein pattern search after translation
-
 
 <H2>
     Description
 </H2>
-
 
 fuzztran uses PROSITE style protein patterns to search nucleic acid
 sequences translated in the specified frame(s). 
@@ -61,8 +48,6 @@ depending on the complexity of the search pattern specified.
 <H2>
     Usage
 </H2>
-
-
 <b>Here is a sample session with fuzztran</b>
 <p>
 
@@ -116,14 +101,6 @@ Output report [rnops.fuzztran]: <b></b>
 <H2>
     Command line arguments
 </H2>
-
-
-
-<!--
-DON'T WRITE ANYTHING HERE.
-IT IS DONE FOR YOU.
--->
-
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
    Standard (Mandatory) qualifiers:
@@ -212,7 +189,6 @@ IT IS DONE FOR YOU.
 </pre>
 </td></tr></table>
 <P>
-
 <table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
 <tr bgcolor="#FFFFCC">
 <th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
@@ -289,7 +265,6 @@ For example, [DE](2)HS{P}X(2)PX(2,4)C</td>
 </table>
 
 
-
 <H2>
     Input file format
 </H2>
@@ -297,7 +272,6 @@ For example, [DE](2)HS{P}X(2)PX(2,4)C</td>
 <b>fuzztran</b> reads in normal nucleic acid sequence USAs. 
 
 <p>
-
 
 <a name="input.1"></a>
 <h3>Input files for usage example </h3>
@@ -399,6 +373,7 @@ SQ   Sequence 1493 BP; 309 A; 475 C; 365 G; 344 T; 0 other;
 </td></tr></table><p>
 
 
+
 <h3>Pattern specification</h3>
 
 Patterns for fuzztran are based on the format of pattern used in the PROSITE
@@ -487,20 +462,18 @@ feattable, motif, regions, seqtable, simple, srs, table, tagseq
 <p>
 
 See:
-<A href="http://www.uk.embnet.org/Software/EMBOSS/Themes/ReportFormats.html">
-http://www.uk.embnet.org/Software/EMBOSS/Themes/ReportFormats.html</A>
+<A href="http://emboss.sf.net/docs/themes/ReportFormats.html">
+http://emboss.sf.net/docs/themes/ReportFormats.html</A>
 for further information on report formats.
 
 <p>
-
 
 <p>
 
 By default <b>fuzztran</b> writes a 'table' report file.
 
 <p>
-    
-
+ 
 <a name="output.1"></a>
 <h3>Output files for usage example </h3>
 <p><h3>File: rnops.fuzztran</h3>
@@ -508,7 +481,7 @@ By default <b>fuzztran</b> writes a 'table' report file.
 <pre>
 ########################################
 # Program: fuzztran
-# Rundate: Tue Apr 06 14:29:42 2004
+# Rundate: Thu Jul 15 2004 12:00:00
 # Report_format: table
 # Report_file: rnops.fuzztran
 ########################################
@@ -541,7 +514,7 @@ By default <b>fuzztran</b> writes a 'table' report file.
 </pre>
 </td></tr></table><p>
 
-
+   
 <p>
 
 The columns of data are as follows:
@@ -570,8 +543,24 @@ The columns of data are as follows:
 <p>
 EMBOSS data files are distributed with the application and stored
 in the standard EMBOSS data directory, which is defined
-by EMBOSS environment variable EMBOSS_DATA.
+by the EMBOSS environment variable EMBOSS_DATA.
 
+<p>
+
+To see the available EMBOSS data files, run:
+<p>
+<pre>
+% embossdata -showall
+</pre>
+<p>
+To fetch one of the data files (for example 'Exxx.dat') into your
+current directory for you to inspect or modify, run:
+
+<pre>
+
+% embossdata -fetch -file Exxx.dat
+
+</pre>
 <p>
 
 Users can provide their own data files in their own directories.
@@ -589,63 +578,78 @@ The directories are searched in the following order:
    <li> ~/ (your home directory)
    <li> ~/.embossdata
 </ul>
+<p>
 
 <p>
-The Genetic Code data files are based on the NCBI genetic code tables. 
+The Genetic Code data files are based on the NCBI genetic code tables.
 Their names and descriptions are:
 
 <dl>
 <dt>EGC.0 </dt><dd>
-      Standard (Differs from GC.1 in that it only has initiation site 'AUG') 
+      Standard (Differs from GC.1 in that it only has initiation site 'AUG')
 <dt>EGC.1 </dt><dd>
-      Standard 
+      Standard
 <dt>EGC.2 </dt><dd>
-      Vertebrate Mitochondrial
+      Vertebrate Mitochodrial
 <dt>EGC.3 </dt><dd>
-      Yeast Mitochondrial 
+      Yeast Mitochondrial
 <dt>EGC.4 </dt><dd>
-      Mold, Protozoan, Coelenterate Mitochondrial and Mycoplasma/Spiroplasma 
+      Mold, Protozoan, Coelenterate Mitochondrial and Mycoplasma/Spiroplasma
 <dt>EGC.5 </dt><dd>
-      Invertebrate Mitochondrial 
+      Invertebrate Mitochondrial
 <dt>EGC.6 </dt><dd>
-      Ciliate Macronuclear and Dasycladacean 
+      Ciliate Macronuclear and Dasycladacean
 <dt>EGC.9 </dt><dd>
-      Echinoderm Mitochondrial 
+      Echinoderm Mitochondrial
 <dt>EGC.10 </dt><dd>
-      Euplotid Nuclear 
+      Euplotid Nuclear
 <dt>EGC.11 </dt><dd>
-      Bacterial 
+      Bacterial
 <dt>EGC.12 </dt><dd>
-      Alternative Yeast Nuclear 
+      Alternative Yeast Nuclear
 <dt>EGC.13 </dt><dd>
-      Ascidian Mitochondrial 
+      Ascidian Mitochondrial
 <dt>EGC.14 </dt><dd>
-      Flatworm Mitochondrial 
-<dt>EGC.15</dt><dd> 
-      Blepharisma Macronuclear 
+      Flatworm Mitochondrial
+<dt>EGC.15</dt><dd>
+      Blepharisma Macronuclear
+<dt>EGC.16</dt><dd>
+      Chlorophycean Mitochondrial
+<dt>EGC.21</dt><dd>
+      Trematode Mitochondrial
+<dt>EGC.22</dt><dd>
+      Scenedesmus obliquus
+<dt>EGC.23</dt><dd>
+      Thraustochytrium Mitochondrial
 </dl>
-<p>
-The format of these files is very simple. 
 
 <p>
+
+The format of these files is very simple.
+
+<p>   
+
 It consists of several lines of optional comments, each starting with
 a '#' character.
 
 <p>
+
 These are followed the line: 'Genetic Code [n]', where 'n' is the
 number of the genetic code file.
 
-<p>
+<p> 
+
 This is followed by the description of the code and then by four lines
 giving the IUPAC one-letter code of the translated amino acid, the
 start codons (indicdated by an 'M') and the three bases of the codon,
 lined up one on top of the other.
-
+   
 <p>
-For example: 
+
+For example:
 
 <pre>
-
+   
 ------------------------------------------------------------------------------
 # Genetic Code Table
 #
@@ -657,7 +661,7 @@ For example:
 
 Genetic Code [0]
 Standard
- 
+   
 AAs  =   FFLLSSSSYY**CC*WLLLLPPPPHHQQRRRRIIIMTTTTNNKKSSRRVVVVAAAADDEEGGGG
 Starts = -----------------------------------M----------------------------
 Base1  = TTTTTTTTTTTTTTTTCCCCCCCCCCCCCCCCAAAAAAAAAAAAAAAAGGGGGGGGGGGGGGGG
@@ -708,17 +712,12 @@ It always exits with status 0.
 
 None.
 
-<!--
-<H2>
-    See also
-</H2>
--->
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
 <tr><td><a href="antigenic.html">antigenic</a></td><td>Finds antigenic sites in proteins</td></tr>
 <tr><td><a href="digest.html">digest</a></td><td>Protein proteolytic enzyme or reagent cleavage digest</td></tr>
-<tr><td><a href="dreg.html">dreg</a></td><td>regular expression search of a nucleotide sequence</td></tr>
+<tr><td><a href="dreg.html">dreg</a></td><td>Regular expression search of a nucleotide sequence</td></tr>
 <tr><td><a href="epestfind.html">epestfind</a></td><td>Finds PEST motifs as potential proteolytic cleavage sites</td></tr>
 <tr><td><a href="fuzznuc.html">fuzznuc</a></td><td>Nucleic acid pattern search</td></tr>
 <tr><td><a href="fuzzpro.html">fuzzpro</a></td><td>Protein pattern search</td></tr>
@@ -732,13 +731,6 @@ None.
 <tr><td><a href="pscan.html">pscan</a></td><td>Scans proteins using PRINTS</td></tr>
 <tr><td><a href="sigcleave.html">sigcleave</a></td><td>Reports protein signal cleavage sites</td></tr>
 </table>
-
-<!--
-        Add any comments about other associated programs (to prepare
-        data files?) that seealso doesn't find.
-   -->
-
-
 
 <p>
 Other EMBOSS programs allow you to search for regular expression
@@ -760,13 +752,10 @@ sequence
 <H2>
     Author(s)
 </H2>
-
-
 Alan Bleasby (ableasby&nbsp;&copy;&nbsp;rfcgr.mrc.ac.uk)
 <br>
 MRC Rosalind Franklin Centre for Genomics Research
 Wellcome Trust Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
-
 
 
 
@@ -778,28 +767,17 @@ Written (2000) - Alan Bleasby
 <br>
 '-usa' added (13 March 2001) - Gary Williams
 
-<!--
-<p>
-[an error occurred while processing this directive]
--->
 
 <H2>
     Target users
 </H2>
-
-
-This program is intended to be used by everyone and everything,
-from naive users to embedded scripts. 
+This program is intended to be used by everyone and everything, from naive users to embedded scripts.
 
 
 <H2>
     Comments
 </H2>
-
-
-<pre>
-
-</pre>
+None
 
 
 </BODY>

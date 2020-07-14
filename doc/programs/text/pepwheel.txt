@@ -1,37 +1,36 @@
 
                                  pepwheel 
-                                      
-   
-   
+
+
+
 Function
 
    Shows protein sequences as helices
-   
+
 Description
 
-   pepwheel
-   displays peptide sequences in a helical representation.
-   
+   pepwheel displays peptide sequences in a helical representation.
+
    This gives a view of a helix from a protein sequence looking down the
    axis of the helix.
-   
+
    It is useful for highlighting amphipathicity and other properties of
    residues around a helix.
-   
+
 Usage
 
    Here is a sample session with pepwheel
-   
+
 
 % pepwheel tsw:hbb_human -send 30 
 Shows protein sequences as helices
 Graph type [x11]: cps
 
 Created pepwheel.ps
-   
+
    Go to the input files for this example
    Go to the output files for this example
-   
+
 Command line arguments
 
    Standard (Mandatory) qualifiers:
@@ -100,7 +99,7 @@ Command line arguments
    -error               boolean    Report errors
    -fatal               boolean    Report fatal errors
    -die                 boolean    Report deaths
-   
+
 
    Standard (Mandatory) qualifiers Allowed values Default
    [-sequence]
@@ -108,7 +107,7 @@ Command line arguments
    -graph Graph type EMBOSS has a list of known devices, including
    postscript, ps, hpgl, hp7470, hp7580, meta, colourps, cps, xwindows,
    x11, tektronics, tekt, tek4107t, tek, none, null, text, data, xterm,
-   png EMBOSS_GRAPHICS value, or x11
+   png, xml EMBOSS_GRAPHICS value, or x11
    Additional (Optional) qualifiers Allowed values Default
    -steps The number of residues plotted per turn is this value divided
    by the 'turns' value. Integer from 2 to 100 18
@@ -125,19 +124,19 @@ Command line arguments
    -amphipathic If this is true then the residues ACFGILMVWY are marked
    as squares and all other residues are unmarked. This overrides any
    other markup that you may have specified using the qualifiers
-   '-squares', '-diamonds' and '-octags'. Toggle value Yes/No
-   
+   '-squares', '-diamonds' and '-octags'. Toggle value Yes/No No
+
 Input file format
 
    pepwheel reads any protein sequence USA.
-   
+
   Input files for usage example
-  
+
    'tsw:hbb_human' is a sequence entry in the example protein database
    'tsw'
-   
+
   Database entry: tsw:hbb_human
-  
+
 ID   HBB_HUMAN      STANDARD;      PRT;   146 AA.
 AC   P02023;
 DT   21-JUL-1986 (Rel. 01, Created)
@@ -243,27 +242,27 @@ SQ   SEQUENCE   146 AA;  15867 MW;  EC9744C9 CRC32;
      KAHGKKVLGA FSDGLAHLDN LKGTFATLSE LHCDKLHVDP ENFRLLGNVL VCVLAHHFGK
      EFTPPVQAAY QKVVAGVANA LAHKYH
 //
-   
+
 Output file format
 
    An image is output to the specified graphics device.
-   
+
   Output files for usage example
-  
+
   Graphics File: pepwheel.ps
-  
+
    [pepwheel results]
-   
+
 Data files
 
    None.
-   
+
 Notes
 
    The default settings for turn (5) and steps (18) apply to alpha
    helices. For other possible secondary structures, see the following
    table:
-   
+
 helix       phi   psi  omega  res/turn  transl.  turns  steps
 alpha       -57   -47    180       3.6     1.50      5     18
 3-10        -49   -26    180       3.0     2.00      1      3
@@ -282,7 +281,7 @@ References
     1. Rachamandran and Sasisekharan, Adv. Protein Chem. 23:283-437, 1968
     2. IUPAC-IUB Commission on biochemical nomenclature, Biochemistry
        9:3471-3479, 1970
-       
+
 Warnings
 
    When you specify the number of turns and steps, be aware that you
@@ -290,19 +289,19 @@ Warnings
    you (for some improbable reason) wished to plot a wheel with 8 turns
    in 18 steps (2.25 residues per turn) you should remove the common
    factor (i.e. 2) and specify 4 turns in 9 steps.
-   
+
 Diagnostic Error Messages
 
    None.
-   
+
 Exit status
 
    0 upon successful completion.
-   
+
 Known bugs
 
    None.
-   
+
 See also
 
    Program name Description
@@ -326,20 +325,22 @@ See also
    textsearch Search sequence documentation text. SRS and Entrez are
    faster!
    tmap Displays membrane spanning regions
-   
+
 Author(s)
 
    Alan Bleasby (ableasby © rfcgr.mrc.ac.uk)
    MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
    Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
-   
+
 History
 
    Written (March 1999) - Alan Bleasby
-   
+
 Target users
 
    This program is intended to be used by everyone and everything, from
    naive users to embedded scripts.
-   
+
 Comments
+
+   None

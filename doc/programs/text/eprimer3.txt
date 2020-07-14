@@ -1,47 +1,47 @@
 
                                  eprimer3 
-                                      
-   
-   
+
+
+
 Function
 
    Picks PCR primers and hybridization oligos
-   
+
 Description
 
    eprimer3 is an interface to the 'primer3' program from the Whitehead
    Institute.
-   
+
    The Whitehead program must be set up and on the path in order for
    eprimer3 to find and run it.
-   
+
    Primer3 picks primers for PCR reactions, considering as criteria:
-   
+
      * oligonucleotide melting temperature, size, GC content, and
        primer-dimer possibilities,
      * PCR product size,
      * positional constraints within the source sequence, and
      * miscellaneous other constraints.
-       
+
    All of these criteria are user-specifiable as constraints.
-   
+
    eprimer3 can also pick hybridisation oligos that are internal to the
    product.
-   
+
   ADVICE FOR PICKING PRIMERS
-  
+
    We suggest referring to: Wojciech Rychlik, "Selection of Primers for
    Polymerase Chain Reaction" in BA White, Ed., "Methods in Molecular
    Biology, Vol. 15: PCR Protocols: Current Methods and Applications",
    1993, pp 31-40, Humana Press, Totowa NJ
-   
+
     Cautions
-    
+
    Some of the most important issues in primer picking can be addressed
    only before using eprimer3. These are sequence quality (including
    making sure the sequence is not vector and not chimeric) and avoiding
    repetitive elements.
-   
+
    Techniques for avoiding problems include a thorough understanding of
    possible vector contaminants and cloning artifacts coupled with
    database searches using blast, fasta, or other similarity searching
@@ -51,7 +51,7 @@ Description
    repeat sequences and pointers to the literature. eprimer3 now allows
    you to screen candidate oligos against a Mispriming Library (or a
    Mishyb Library in the case of internal oligos).
-   
+
    Sequence quality can be controlled by manual trace viewing and quality
    clipping or automatic quality clipping programs. Low- quality bases
    should be changed to N's or can be made part of Excluded Regions. The
@@ -61,14 +61,14 @@ Description
    single-pass sequence it is often best to use the INCLUDED_REGION
    parameter to ensure that eprimer3 chooses primers in the high quality
    region of the read.
-   
+
    In addition, eprimer3 takes as input a Sequence Quality list for use
    with those base calling programs
-   
+
    (e.g. Phred, Bass/Grace, Trout) that output this information.
-   
+
     What to do if eprimer3 cannot find a primers?
-    
+
    Try relaxing various parameters, including the self-complementarity
    parameters and max and min oligo melting temperatures. For example,
    for very A-T-rich regions you might have to increase maximum primer
@@ -79,20 +79,20 @@ Description
    the regions in which you wish to pick primers. If necessary you can
    also allow an N in your primer and use an oligo mixture containing all
    four bases at that position.
-   
+
    Try setting the '-explain' option.
-   
+
 Usage
 
    Here is a sample session with eprimer3
-   
-   
+
+
 % eprimer3 tembl:hsfau1 hsfau.eprimer3 -explain 
 Picks PCR primers and hybridization oligos
 
    Go to the input files for this example
    Go to the output files for this example
-   
+
 Command line arguments
 
    Standard (Mandatory) qualifiers:
@@ -101,7 +101,7 @@ Command line arguments
   [-outfile]           outfile    Output file name
 
    Additional (Optional) qualifiers (* if not always prompted):
-   -primer             toggle     Tell EPrimer3 to pick primer(s)
+   -[no]primer         toggle     Tell EPrimer3 to pick primer(s)
 *  -task               menu       Tell EPrimer3 what task to perform. Legal
                                   values are 0: 'Pick PCR primers', 1: 'Pick
                                   PCR primers and hybridization probe', 2:
@@ -638,7 +638,7 @@ t
    -error               boolean    Report errors
    -fatal               boolean    Report fatal errors
    -die                 boolean    Report deaths
-   
+
 
    Standard (Mandatory) qualifiers Allowed values Default
    [-sequence]
@@ -647,7 +647,7 @@ t
    [-outfile]
    (Parameter 2) Output file name Output file <sequence>.eprimer3
    Additional (Optional) qualifiers Allowed values Default
-   -primer Tell EPrimer3 to pick primer(s) Toggle value Yes/No Y
+   -[no]primer Tell EPrimer3 to pick primer(s) Toggle value Yes/No Yes
    -task Tell EPrimer3 what task to perform. Legal values are 0: 'Pick
    PCR primers', 1: 'Pick PCR primers and hybridization probe', 2: 'Pick
    forward primer only', 3: 'Pick reverse primer only', 4: 'Pick
@@ -659,7 +659,7 @@ t
    1
    -hybridprobe An 'internal oligo' is intended to be used as a
    hybridization probe (hyb probe) to detect the PCR product after
-   amplification. Toggle value Yes/No N
+   amplification. Toggle value Yes/No No
    -oligomishyblibraryfile Similar to MISPRIMING-LIBRARY, except that the
    event we seek to avoid is hybridization of the internal oligo to
    sequences in this library rather than priming from them. The file must
@@ -982,18 +982,18 @@ t
    in Molecular Biology, Vol. 15: PCR Protocols: Current Methods and
    Applications', 1993, pp 31-40, Humana Press, Totowa NJ). Number up to
    1000.000 9.0
-   
+
 Input file format
 
    eprimer3 reads a normal nucleic acid sequence USA.
-   
+
   Input files for usage example
-  
+
    'tembl:hsfau1' is a sequence entry in the example nucleic acid
    database 'tembl'
-   
+
   Database entry: tembl:hsfau1
-  
+
 ID   HSFAU1     standard; DNA; HUM; 2016 BP.
 XX
 AC   X65921; S45242;
@@ -1134,13 +1134,13 @@ SQ   Sequence 2016 BP; 421 A; 562 C; 538 G; 495 T; 0 other;
      tacttgcaag gcctcaggga gaggtgtgct tctcgg                                201
 6
 //
-   
+
 Output file format
 
   Output files for usage example
-  
+
   File: hsfau.eprimer3
-  
+
 
 # EPRIMER3 RESULTS FOR HSFAU1
 
@@ -1203,25 +1203,25 @@ Output file format
      FORWARD PRIMER     801   20  59.72  60.00  CCCAGGAGCTACACACCTTC
 
      REVERSE PRIMER     986   20  60.41  55.00  CCAGGAGCACGACTTGATCT
-   
+
 
 
    If the '-explain' flag has been used, as in the example, then
    statistics are output describing the number of primers that were
    considered and rejected for various reasons.
-   
+
    Headers describing the input file name and the names of the output
    columns are displayed.
-   
+
    The best 5 primer pairs are displayed with the product size.
-   
+
    The reverse sequence is displayed as the reverse complement to the
    input forward sense sequence.
-   
+
    The 'Start' positions are given counting from the start of the
    sequence for both the forward and reverse primer (and for the internal
    oligos).
-   
+
    Note that if you compare the results to the output from the public
    Primer3 web site you will see a difference in the reverse primer
    positions - this is because the original Primer3 program reports the
@@ -1229,31 +1229,43 @@ Output file format
    EMBOSS is to report both forward and reverse features as counted from
    the 5' end, so the reverse primer positions are given counted from the
    5' start of the sequence.
-   
+
 Data files
 
    None.
-   
+
 Notes
+
+   The Whitehead Institute's primer3 program is not part of this program,
+   but it must be set up on your system and on your path.
 
    The Whitehead Institute program that is run by this program is
    available from:
    http://www-genome.wi.mit.edu/genome_software/other/primer3.html
    (Then see the link 'Get release 0.9')
-   
+
    The version that is run by this program is 3.0.9 currently available
    from:
    http://www-genome.wi.mit.edu/ftp/distribution/software/primer3_0_9_tes
-   t.tar.gz
-   
+   t.tar.gz The Whitehead Institute's primer3 program is:
+   Copyright (c) 1996,1997,1998
+   Whitehead Institute for Biomedical Research. All rights reserved.
+
+   The Whitehead Institute requests that use of this software be cited in
+   publications as:
+
+   Steve Rozen, Helen J. Skaletsky (1996,1997,1998)
+   Primer3. Code available at
+   http://www-genome.wi.mit.edu/genome_software/other/primer3.html
+
 References
 
    None.
-   
+
 Warnings
 
    None.
-   
+
 Diagnostic Error Messages
 
    The message: "EMBOSS An error in eprimer3.c at line 315: The program
@@ -1261,63 +1273,53 @@ Diagnostic Error Messages
    package, available from the Whitehead Institute. See:
    http://www-genome.wi.mit.edu/" is output if you do not have the
    Whitehead Institute's primer3 program set up and on your path.
-   
+
 Exit status
 
    It always exits with status 0.
-   
+
 Known bugs
 
    None.
-   
+
 See also
 
    Program name Description
    primersearch Searches DNA sequences for matches with primer pairs
    stssearch Searches a DNA database for matches with a set of STS
    primers
-   
+
+History
+
 Author(s)
 
    Gary Williams (gwilliam © rfcgr.mrc.ac.uk)
    MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
    Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
-   
-   The Whitehead Institute's primer3 program is not part of this program,
-   but it must be set up on your system and on your path.
-   
-   The Whitehead Institute's primer3 program is:
-   Copyright (c) 1996,1997,1998
-   Whitehead Institute for Biomedical Research. All rights reserved.
-   
-   The Whitehead Institute requests that use of this software be cited in
-   publications as:
-   
-   Steve Rozen, Helen J. Skaletsky (1996,1997,1998)
-   Primer3. Code available at
-   http://www-genome.wi.mit.edu/genome_software/other/primer3.html
-   
+
 History
 
    Written (Dec 2001) - Gary Williams
-   
+
    Changed name (version 2.3.0) - Gary Williams
-   
+
    When I wrote the EMBOSS wrapper for the Whitehead's primer3 version
    3.0.9 program, I called it 'primer3'. This did not conflict with the
    Whitehead program becuase although the package is called 'primer3' the
    program itself is called primer3_core.
-   
+
    I wasn't aware that the Whitehead's primer3 version 3.0.6 program was
    itself called 'primer3'. This caused a name conflict in those sites
    with version 3.0.6 installed.
-   
+
    To avoid the conflict, the EMBOSS program was renamed 'eprimer3'.
    eprimer3 was released in version 2.3.0 of EMBOSS
-   
+
 Target users
 
    This program is intended to be used by everyone and everything, from
    naive users to embedded scripts.
-   
+
 Comments
+
+   None

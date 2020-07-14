@@ -7,11 +7,9 @@
 </HEAD>
 <BODY BGCOLOR="#FFFFFF" text="#000000">
 
-
-
 <table align=center border=0 cellspacing=0 cellpadding=0>
 <tr><td valign=top>
-<A HREF="index.html" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
@@ -25,27 +23,14 @@ dreg
 
 
 
-
-
-
-
 <H2>
     Function
 </H2>
-
-
-
-<!--
-DON'T WRITE ANYTHING HERE.
-IT IS DONE FOR YOU.
--->
-regular expression search of a nucleotide sequence
-
+Regular expression search of a nucleotide sequence
 
 <H2>
     Description
 </H2>
-
 
 This searches for matches of a regular expression to a nucleic acid sequence.
 
@@ -985,8 +970,6 @@ does two things:
 <H2>
     Usage
 </H2>
-
-
 <b>Here is a sample session with dreg</b>
 <p>
 
@@ -994,7 +977,7 @@ does two things:
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>dreg </b>
-regular expression search of a nucleotide sequence
+Regular expression search of a nucleotide sequence
 Input sequence(s): <b>tembl:paamir</b>
 Regular expression pattern: <b>ggtacc</b>
 Output report [paamir.dreg]: <b></b>
@@ -1004,31 +987,9 @@ Output report [paamir.dreg]: <b></b>
 <a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
 
 
-<!--
-Here is a sample session with dreg.
-
-<pre>
-
-% dreg
-Input sequence: embl:paamir
-Output file [paamir.dreg]: 
-Regular expression pattern: ggtacc
-
-</pre>
--->
-
-
 <H2>
     Command line arguments
 </H2>
-
-
-
-<!--
-DON'T WRITE ANYTHING HERE.
-IT IS DONE FOR YOU.
--->
-
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
    Standard (Mandatory) qualifiers:
@@ -1085,7 +1046,6 @@ IT IS DONE FOR YOU.
 </pre>
 </td></tr></table>
 <P>
-
 <table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
 <tr bgcolor="#FFFFCC">
 <th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
@@ -1137,16 +1097,12 @@ IT IS DONE FOR YOU.
 </table>
 
 
-
 <H2>
     Input file format
 </H2>
-
-
 Any nucleic sequence.
 
 <p>
-
 
 <a name="input.1"></a>
 <h3>Input files for usage example </h3>
@@ -1265,10 +1221,10 @@ SQ   Sequence 2167 BP; 363 A; 712 C; 730 G; 362 T; 0 other;
 </td></tr></table><p>
 
 
+
 <H2>
     Output file format
 </H2>
-
 
 
 <a name="output.1"></a>
@@ -1278,7 +1234,7 @@ SQ   Sequence 2167 BP; 363 A; 712 C; 730 G; 362 T; 0 other;
 <pre>
 ########################################
 # Program: dreg
-# Rundate: Tue Apr 06 14:25:41 2004
+# Rundate: Thu Jul 15 2004 12:00:00
 # Report_format: seqtable
 # Report_file: paamir.dreg
 ########################################
@@ -1301,19 +1257,6 @@ SQ   Sequence 2167 BP; 363 A; 712 C; 730 G; 362 T; 0 other;
 </td></tr></table><p>
 
 
-<!--
-This is the output from the example run. Sequence embl:paamir begins
-at a restriction site with the sequence pattern GGTACC.
-
-<pre>
-
-dreg search of embl:paamir with pattern GGTACC
-Matches in PAAMIR
-         PAAMIR     1 GGTACC
-
-</pre>
--->
-
 <H2>
     Data files
 </H2>
@@ -1335,7 +1278,6 @@ None.
 <H2>
     Warnings
 </H2>
-
 
 Regular expressions are case-sensitive.
 The pattern 'AAAA' will not match the sequence 'aaaa'.
@@ -1362,11 +1304,6 @@ Always returns 0.
 
 None.
 
-<!--
-<H2>
-    See also
-</H2>
--->
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
@@ -1374,11 +1311,6 @@ None.
 <tr><td><a href="fuzztran.html">fuzztran</a></td><td>Protein pattern search after translation</td></tr>
 <tr><td><a href="marscan.html">marscan</a></td><td>Finds MAR/SAR sites in nucleic sequences</td></tr>
 </table>
-
-<!--
-        Add any comments about other associated programs (to prepare
-        data files?) that seealso doesn't find.
-   -->
 
 
 <p>
@@ -1395,11 +1327,9 @@ easier for the user who has never used regular expressions before:
     Author(s)
 </H2>
 
-
 Peter Rice (pmr&nbsp;&copy;&nbsp;ebi.ac.uk)
 <br>
 Informatics Division, European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
-
 
 
 <H2>
@@ -1408,27 +1338,18 @@ Informatics Division, European Bioinformatics Institute, Wellcome Trust Genome C
 
 Written (1999) - Peter Rice.
 
-<!--
-<p>
-[an error occurred while processing this directive]
--->
 
 <H2>
     Target users
 </H2>
+This program is intended to be used by everyone and everything, from naive users to embedded scripts.
 
-
-This program is intended to be used by everyone and everything,
-from naive users to embedded scripts. 
 
 <H2>
     Comments
 </H2>
+None
 
-
-<pre>
-
-</pre>
 
 
 </BODY>

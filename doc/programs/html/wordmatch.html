@@ -15,7 +15,7 @@
 
 <table align=center border=0 cellspacing=0 cellpadding=0>
 <tr><td valign=top>
-<A HREF="index.html" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
@@ -530,8 +530,8 @@ markx2, markx3, markx10, srspair, score
 <p>
 
 See:
-<A href="http://www.uk.embnet.org/Software/EMBOSS/Themes/AlignFormats.html">
-http://www.uk.embnet.org/Software/EMBOSS/Themes/AlignFormats.html</A>
+<A href="http://emboss.sf.net/docs/themes/AlignFormats.html">
+http://emboss.sf.net/docs/themes/AlignFormats.html</A>
 for further information on alignment formats.
 
 <p>
@@ -542,11 +542,36 @@ for further information on alignment formats.
 
 <a name="output.1"></a>
 <h3>Output files for usage example </h3>
+<p><h3>File: hba_human.wordmatch</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+########################################
+# Program: wordmatch
+# Rundate: Thu Jul 15 2004 12:00:00
+# Align_format: match
+# Report_file: hba_human.wordmatch
+########################################
+
+#=======================================
+#
+# Aligned_sequences: 2
+# 1: HBA_HUMAN
+# 2: HBB_HUMAN
+#=======================================
+
+     5 HBA_HUMAN       +       58..62       HBB_HUMAN       +       63..67
+     4 HBA_HUMAN       +       14..17       HBB_HUMAN       +       15..18
+     4 HBA_HUMAN       +      116..119      HBB_HUMAN       +      121..124
+
+#---------------------------------------
+#---------------------------------------
+</pre>
+</td></tr></table><p>
 <p><h3>File: HBA_HUMAN.gff</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 ##gff-version 2.0
-##date 2004-04-06
+##date 2004-07-15
 ##Type Protein HBA_HUMAN
 HBA_HUMAN	wordmatch	misc_feature	58	62	1.000	+	.	Sequence "HBA_HUMAN.1" ; note "HBB_HUMAN"
 HBA_HUMAN	wordmatch	misc_feature	14	17	1.000	+	.	Sequence "HBA_HUMAN.2" ; note "HBB_HUMAN"
@@ -557,35 +582,11 @@ HBA_HUMAN	wordmatch	misc_feature	116	119	1.000	+	.	Sequence "HBA_HUMAN.3" ; note
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 ##gff-version 2.0
-##date 2004-04-06
+##date 2004-07-15
 ##Type Protein HBB_HUMAN
 HBB_HUMAN	wordmatch	misc_feature	63	67	1.000	+	.	Sequence "HBB_HUMAN.1" ; note "HBA_HUMAN"
 HBB_HUMAN	wordmatch	misc_feature	15	18	1.000	+	.	Sequence "HBB_HUMAN.2" ; note "HBA_HUMAN"
 HBB_HUMAN	wordmatch	misc_feature	121	124	1.000	+	.	Sequence "HBB_HUMAN.3" ; note "HBA_HUMAN"
-</pre>
-</td></tr></table><p>
-<p><h3>File: hba_human.wordmatch</h3>
-<table width="90%"><tr><td bgcolor="#CCFFCC">
-<pre>
-########################################
-# Program:  wordmatch
-# Rundate:  Tue Apr 06 14:38:29 2004
-# Align_format: match
-# Report_file: hba_human.wordmatch
-########################################
-#=======================================
-#
-# Aligned_sequences: 2
-# 1: HBA_HUMAN
-# 2: HBB_HUMAN
-#=======================================
-
-     5 HBA_HUMAN             58..62       HBB_HUMAN             63..67
-     4 HBA_HUMAN             14..17       HBB_HUMAN             15..18
-     4 HBA_HUMAN            116..119      HBB_HUMAN            121..124
-
-#---------------------------------------
-#---------------------------------------
 </pre>
 </td></tr></table><p>
 
@@ -692,7 +693,8 @@ Completed 27th November 1998.
 
 <!--
 <p>
-[an error occurred while processing this directive]
+
+
 -->
 
 <H2>
@@ -700,8 +702,9 @@ Completed 27th November 1998.
 </H2>
 
 
-This program is intended to be used by everyone and everything,
-from naive users to embedded scripts. 
+This program is intended to be used by everyone and everything, from naive users to embedded scripts.
+
+
 
 <H2>
     Comments

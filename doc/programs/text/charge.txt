@@ -1,37 +1,37 @@
 
                                   charge 
-                                      
-   
-   
+
+
+
 Function
 
    Protein charge plot
-   
+
 Description
 
    charge reads a protein sequence and writes a file (or plots a graph)
    of the charges of the amino acids within a window of specified length
    as the window is moved along the sequence.
-   
+
 Algorithm
 
    charge uses the column "charge" from the datafile Eamino.dat. It gives
    the residues 'D' and 'E' a charge of -1, 'K' and 'R' a charge of +1,
    and the residue 'H' a charge of +0.5. Then it calculates the mean
    charge across -window (default is 5).
-   
+
 Usage
 
    Here is a sample session with charge
-   
+
 
 % charge tsw:hbb_human 
 Protein charge plot
 Output file [hbb_human.charge]: 
-   
+
    Go to the input files for this example
    Go to the output files for this example
-   
+
 Command line arguments
 
    Standard (Mandatory) qualifiers (* if not always prompted):
@@ -90,7 +90,7 @@ Command line arguments
    -error               boolean    Report errors
    -fatal               boolean    Report fatal errors
    -die                 boolean    Report deaths
-   
+
 
    Standard (Mandatory) qualifiers Allowed values Default
    [-seqall]
@@ -98,25 +98,25 @@ Command line arguments
    -graph Graph type EMBOSS has a list of known devices, including
    postscript, ps, hpgl, hp7470, hp7580, meta, colourps, cps, xwindows,
    x11, tektronics, tekt, tek4107t, tek, none, null, text, data, xterm,
-   png EMBOSS_GRAPHICS value, or x11
+   png, xml EMBOSS_GRAPHICS value, or x11
    -outfile Output file name Output file <sequence>.charge
    Additional (Optional) qualifiers Allowed values Default
    -window Window Integer 1 or more 5
    Advanced (Unprompted) qualifiers Allowed values Default
    -aadata Amino acid property data file name Data file Eamino.dat
-   -plot Produce graphic Toggle value Yes/No N
-   
+   -plot Produce graphic Toggle value Yes/No No
+
 Input file format
 
    charge reads in a protein sequence.
-   
+
   Input files for usage example
-  
+
    'tsw:hbb_human' is a sequence entry in the example protein database
    'tsw'
-   
+
   Database entry: tsw:hbb_human
-  
+
 ID   HBB_HUMAN      STANDARD;      PRT;   146 AA.
 AC   P02023;
 DT   21-JUL-1986 (Rel. 01, Created)
@@ -222,23 +222,23 @@ SQ   SEQUENCE   146 AA;  15867 MW;  EC9744C9 CRC32;
      KAHGKKVLGA FSDGLAHLDN LKGTFATLSE LHCDKLHVDP ENFRLLGNVL VCVLAHHFGK
      EFTPPVQAAY QKVVAGVANA LAHKYH
 //
-   
+
 Output file format
 
    If the option '-plot' is specified then charge displays a graph of the
    charge along the sequence otherwise it writes out a file containing
    the charges within a window starting at each position along the
    sequence.
-   
+
    The output file contains two columns separated by space or TAB
    characters. The first column is the position of the start of the
    window. The second column is the charge of the amino acids within that
    window.
-   
+
   Output files for usage example
-  
+
   File: hbb_human.charge
-  
+
 CHARGE of HBB_HUMAN from 1 to 146: window 5
 
 Position        Charge
@@ -344,18 +344,18 @@ Position        Charge
 140             0.300
 141             0.300
 142             0.400
-   
+
 Data files
 
    charge reads the data file 'Eamino.dat' to find the charge of the
    amino acids in the protein.
-   
+
    EMBOSS data files are distributed with the application and stored in
    the standard EMBOSS data directory, which is defined by the EMBOSS
    environment variable EMBOSS_DATA.
-   
+
    To see the available EMBOSS data files, run:
-   
+
 % embossdata -showall
 
    To fetch one of the data files (for example 'Exxx.dat') into your
@@ -368,37 +368,37 @@ Data files
    tidier directory listings in a subdirectory called ".embossdata".
    Files for all EMBOSS runs can be put in the user's home directory, or
    again in a subdirectory called ".embossdata".
-   
+
    The directories are searched in the following order:
      * . (your current directory)
      * .embossdata (under your current directory)
      * ~/ (your home directory)
      * ~/.embossdata
-       
+
 Notes
 
    None.
-   
+
 References
 
    None.
-   
+
 Warnings
 
    None.
-   
+
 Diagnostic Error Messages
 
    None.
-   
+
 Exit status
 
    It always exits with status 0.
-   
+
 Known bugs
 
    None.
-   
+
 See also
 
    Program name                          Description
@@ -415,20 +415,22 @@ See also
    pepstats     Protein statistics
    pepwindow    Displays protein hydropathy
    pepwindowall Displays protein hydropathy of a set of sequences
-   
+
 Author(s)
 
    Alan Bleasby (ableasby © rfcgr.mrc.ac.uk)
    MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
    Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
-   
+
 History
 
    Written (March 2001) - Alan Bleasby.
-   
+
 Target users
 
    This program is intended to be used by everyone and everything, from
    naive users to embedded scripts.
-   
+
 Comments
+
+   None

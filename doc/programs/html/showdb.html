@@ -7,15 +7,9 @@
 </HEAD>
 <BODY BGCOLOR="#FFFFFF" text="#000000">
 
-
-
-
-
-
-
 <table align=center border=0 cellspacing=0 cellpadding=0>
 <tr><td valign=top>
-<A HREF="index.html" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
@@ -29,19 +23,9 @@ showdb
 
 
 
-
-
-
 <H2>
     Function
 </H2>
-
-
-
-<!--
-DON'T WRITE ANYTHING HERE.
-IT IS DONE FOR YOU.
--->
 Displays information on the currently available databases
 
 
@@ -98,8 +82,6 @@ running this program and having a look.
 <H2>
     Usage
 </H2>
-
-
 <b>Here is a sample session with showdb</b>
 <p>
 Display information on the currently available databases: 
@@ -113,60 +95,41 @@ Displays information on the currently available databases
 
 # Name        Type ID  Qry All Comment
 # ====        ==== ==  === === =======
-enspep        P    OK  OK  OK  ENSEMBL pep
-enspepp       P    OK  OK  OK  ENSEMBL pep predicted
-enspeppredicted P    OK  OK  OK  ENSEMBL pep predicted
-remtrembl     P    OK  OK  OK  REMTREMBL sequences
-sptrembl      P    OK  OK  OK  SPTREMBL sequences
-sw            P    OK  OK  OK  SWISSPROT sequences
-swissprot     P    OK  OK  OK  SWISSPROT sequences
+qapblast      P    OK  OK  OK  BLAST swissnew
+qapblastall   P    OK  OK  OK  BLAST swissnew, all fields indexed
+qapblastsplit P    OK  OK  OK  BLAST swissnew split in 5 files
+qapblastsplitexc P    OK  OK  OK  BLAST swissnew split in 5 files, not file 02
+qapblastsplitinc P    OK  OK  OK  BLAST swissnew split in 5 files, only file 02
+qapfasta      P    OK  OK  OK  FASTA file swissnew entries
+qapflat       P    OK  OK  OK  Swissnew flatfiles
+qapflatall    P    OK  OK  OK  Swissnew flatfiles, all fields indexed
+qapflatexc    P    OK  OK  OK  Swissnew flatfiles, no updated sequence file
+qapflatinc    P    OK  OK  OK  Swissnew flatfiles, only updated sequence file
+qapir         P    OK  OK  OK  PIR
+qapirall      P    OK  OK  OK  PIR
+qapirinc      P    OK  OK  OK  PIR
 tpir          P    OK  OK  OK  PIR using NBRF access for 4 files
-trembl        P    OK  OK  OK  TREMBL sequences
 tsw           P    OK  OK  OK  Swissprot native format with EMBL CD-ROM index
 tswnew        P    OK  OK  OK  Swissnew as 3 files in native format with EMBL CD-ROM index
 twp           P    OK  OK  OK  EMBL new in native format with EMBL CD-ROM index
-em            N    OK  OK  OK  EMBL sequences
-embl          N    OK  OK  OK  EMBL sequences
-emblnew       N    OK  OK  OK  New EMBL sequences
-enscdna       N    OK  OK  OK  ENSEMBL cdna
-ensdna        N    OK  OK  OK  ENSEMBL dna
-ensdnam       N    OK  OK  OK  ENSEMBL dna masked
-ensdnamasked  N    OK  OK  OK  ENSEMBL dna masked
-ensembl       N    OK  OK  OK  ENSEMBL 
-est           N    OK  OK  OK  EMBL EST sequences
-fungal        N    OK  OK  OK  EMBL fungal sequences
-gb            N    OK  OK  OK  Genbank updates
-genbank       N    OK  OK  OK  Genbank
-gss           N    OK  OK  OK  EMBL GSS sequences
-hsunigene     N    OK  -   -   hsunigene 
-htg           N    OK  OK  OK  EMBL HTG sequences
-human         N    OK  OK  OK  EMBL human sequences
-humanest      N    OK  OK  OK  EMBL human EST sequences
-invertebrate  N    OK  OK  OK  EMBL invertebrate sequences
-mammalian     N    OK  OK  OK  EMBL mammalian sequences
-mouseest      N    OK  OK  OK  EMBL mouse EST sequences
-newgb         N    OK  OK  OK  Genbank updates
-newgenbank    N    OK  OK  OK  Genbank updates
-organelle     N    OK  OK  OK  EMBL organelle sequences
-otherest      N    OK  OK  OK  EMBL other EST sequences
-othervertebrate N    OK  OK  OK  EMBL other vertebrate sequences
-patent        N    OK  OK  OK  EMBL patented sequences
-phage         N    OK  OK  OK  EMBL phage sequences
-plant         N    OK  OK  OK  EMBL plant sequences
-prokaryotic   N    OK  OK  OK  EMBL prokaryotic sequences
-refseq        N    OK  OK  OK  REFSEQ sequences with features in /home/br2/data/Chris...
-refseq_srs    N    OK  -   -   REFSEQ-ID sequences from SRS
-rodent        N    OK  OK  OK  EMBL rodent sequences
-sts           N    OK  OK  OK  EMBL STS sequences
-synthetic     N    OK  OK  OK  EMBL synthetic sequences
+qanfasta      N    OK  OK  OK  FASTA file EMBL rodents
+qanfastaall   N    OK  OK  OK  FASTA file EMBL rodents, all fields indexed
+qanflat       N    OK  OK  OK  EMBL flatfiles
+qangcg        N    OK  OK  OK  GCG format EMBL
+qangcgall     N    OK  OK  OK  GCG format EMBL
+qangcgexc     N    OK  OK  OK  GCG format EMBL without prokaryotes
+qangcginc     N    OK  OK  OK  GCG format EMBL only prokaryotes
+qapirexc      N    OK  OK  OK  PIR
+qasrs         N    OK  OK  -   EMBL in local srs installation
+qasrsfasta    N    OK  OK  -   EMBL in local srs installation, fasta format
+qasrswww      N    OK  -   -   Remote SRS web server
+qawfasta      N    OK  OK  OK  FASTA file wormpep entries
 tembl         N    OK  OK  OK  EMBL in native format with EMBL CD-ROM index
+temblall      N    -   -   OK  EMBL in native format with EMBL CD-ROM index
+temblrest     N    -   -   OK  EMBL in native format with EMBL CD-ROM index
+temblvrt      N    -   -   OK  EMBL in native format with EMBL CD-ROM index
 tgb           N    OK  -   -   Genbank IDs
 tgenbank      N    OK  OK  OK  GenBank in native format with EMBL CD-ROM index
-tigregad      N    OK  OK  OK  TIGR EGAD sequences
-tigrmgi       N    OK  OK  OK  TIGR MGI sequences
-unclassified  N    OK  OK  OK  EMBL unclassified sequences
-vertebrate    N    OK  OK  OK  EMBL vertebrate sequences
-viral         N    OK  OK  OK  EMBL viral sequences
 
 </pre></td></tr></table><p>
 <p>
@@ -219,60 +182,41 @@ Displays information on the currently available databases
 
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Name</th><th>Type</th><th>ID</th><th>Qry</th><th>All</th><th>Comment</th></tr>
-<tr><td>enspep</td><td>P</td><td>OK  </td><td>OK  </td><td>OK  </td><td>ENSEMBL pep</td></tr>
-<tr><td>enspepp</td><td>P</td><td>OK  </td><td>OK  </td><td>OK  </td><td>ENSEMBL pep predicted</td></tr>
-<tr><td>enspeppredicted</td><td>P</td><td>OK  </td><td>OK  </td><td>OK  </td><td>ENSEMBL pep predicted</td></tr>
-<tr><td>remtrembl</td><td>P</td><td>OK  </td><td>OK  </td><td>OK  </td><td>REMTREMBL sequences</td></tr>
-<tr><td>sptrembl</td><td>P</td><td>OK  </td><td>OK  </td><td>OK  </td><td>SPTREMBL sequences</td></tr>
-<tr><td>sw</td><td>P</td><td>OK  </td><td>OK  </td><td>OK  </td><td>SWISSPROT sequences</td></tr>
-<tr><td>swissprot</td><td>P</td><td>OK  </td><td>OK  </td><td>OK  </td><td>SWISSPROT sequences</td></tr>
+<tr><td>qapblast</td><td>P</td><td>OK  </td><td>OK  </td><td>OK  </td><td>BLAST swissnew</td></tr>
+<tr><td>qapblastall</td><td>P</td><td>OK  </td><td>OK  </td><td>OK  </td><td>BLAST swissnew, all fields indexed</td></tr>
+<tr><td>qapblastsplit</td><td>P</td><td>OK  </td><td>OK  </td><td>OK  </td><td>BLAST swissnew split in 5 files</td></tr>
+<tr><td>qapblastsplitexc</td><td>P</td><td>OK  </td><td>OK  </td><td>OK  </td><td>BLAST swissnew split in 5 files, not file 02</td></tr>
+<tr><td>qapblastsplitinc</td><td>P</td><td>OK  </td><td>OK  </td><td>OK  </td><td>BLAST swissnew split in 5 files, only file 02</td></tr>
+<tr><td>qapfasta</td><td>P</td><td>OK  </td><td>OK  </td><td>OK  </td><td>FASTA file swissnew entries</td></tr>
+<tr><td>qapflat</td><td>P</td><td>OK  </td><td>OK  </td><td>OK  </td><td>Swissnew flatfiles</td></tr>
+<tr><td>qapflatall</td><td>P</td><td>OK  </td><td>OK  </td><td>OK  </td><td>Swissnew flatfiles, all fields indexed</td></tr>
+<tr><td>qapflatexc</td><td>P</td><td>OK  </td><td>OK  </td><td>OK  </td><td>Swissnew flatfiles, no updated sequence file</td></tr>
+<tr><td>qapflatinc</td><td>P</td><td>OK  </td><td>OK  </td><td>OK  </td><td>Swissnew flatfiles, only updated sequence file</td></tr>
+<tr><td>qapir</td><td>P</td><td>OK  </td><td>OK  </td><td>OK  </td><td>PIR</td></tr>
+<tr><td>qapirall</td><td>P</td><td>OK  </td><td>OK  </td><td>OK  </td><td>PIR</td></tr>
+<tr><td>qapirinc</td><td>P</td><td>OK  </td><td>OK  </td><td>OK  </td><td>PIR</td></tr>
 <tr><td>tpir</td><td>P</td><td>OK  </td><td>OK  </td><td>OK  </td><td>PIR using NBRF access for 4 files</td></tr>
-<tr><td>trembl</td><td>P</td><td>OK  </td><td>OK  </td><td>OK  </td><td>TREMBL sequences</td></tr>
 <tr><td>tsw</td><td>P</td><td>OK  </td><td>OK  </td><td>OK  </td><td>Swissprot native format with EMBL CD-ROM index</td></tr>
 <tr><td>tswnew</td><td>P</td><td>OK  </td><td>OK  </td><td>OK  </td><td>Swissnew as 3 files in native format with EMBL CD-ROM index</td></tr>
 <tr><td>twp</td><td>P</td><td>OK  </td><td>OK  </td><td>OK  </td><td>EMBL new in native format with EMBL CD-ROM index</td></tr>
-<tr><td>em</td><td>N</td><td>OK  </td><td>OK  </td><td>OK  </td><td>EMBL sequences</td></tr>
-<tr><td>embl</td><td>N</td><td>OK  </td><td>OK  </td><td>OK  </td><td>EMBL sequences</td></tr>
-<tr><td>emblnew</td><td>N</td><td>OK  </td><td>OK  </td><td>OK  </td><td>New EMBL sequences</td></tr>
-<tr><td>enscdna</td><td>N</td><td>OK  </td><td>OK  </td><td>OK  </td><td>ENSEMBL cdna</td></tr>
-<tr><td>ensdna</td><td>N</td><td>OK  </td><td>OK  </td><td>OK  </td><td>ENSEMBL dna</td></tr>
-<tr><td>ensdnam</td><td>N</td><td>OK  </td><td>OK  </td><td>OK  </td><td>ENSEMBL dna masked</td></tr>
-<tr><td>ensdnamasked</td><td>N</td><td>OK  </td><td>OK  </td><td>OK  </td><td>ENSEMBL dna masked</td></tr>
-<tr><td>ensembl</td><td>N</td><td>OK  </td><td>OK  </td><td>OK  </td><td>ENSEMBL </td></tr>
-<tr><td>est</td><td>N</td><td>OK  </td><td>OK  </td><td>OK  </td><td>EMBL EST sequences</td></tr>
-<tr><td>fungal</td><td>N</td><td>OK  </td><td>OK  </td><td>OK  </td><td>EMBL fungal sequences</td></tr>
-<tr><td>gb</td><td>N</td><td>OK  </td><td>OK  </td><td>OK  </td><td>Genbank updates</td></tr>
-<tr><td>genbank</td><td>N</td><td>OK  </td><td>OK  </td><td>OK  </td><td>Genbank</td></tr>
-<tr><td>gss</td><td>N</td><td>OK  </td><td>OK  </td><td>OK  </td><td>EMBL GSS sequences</td></tr>
-<tr><td>hsunigene</td><td>N</td><td>OK  </td><td>-   </td><td>-   </td><td>hsunigene </td></tr>
-<tr><td>htg</td><td>N</td><td>OK  </td><td>OK  </td><td>OK  </td><td>EMBL HTG sequences</td></tr>
-<tr><td>human</td><td>N</td><td>OK  </td><td>OK  </td><td>OK  </td><td>EMBL human sequences</td></tr>
-<tr><td>humanest</td><td>N</td><td>OK  </td><td>OK  </td><td>OK  </td><td>EMBL human EST sequences</td></tr>
-<tr><td>invertebrate</td><td>N</td><td>OK  </td><td>OK  </td><td>OK  </td><td>EMBL invertebrate sequences</td></tr>
-<tr><td>mammalian</td><td>N</td><td>OK  </td><td>OK  </td><td>OK  </td><td>EMBL mammalian sequences</td></tr>
-<tr><td>mouseest</td><td>N</td><td>OK  </td><td>OK  </td><td>OK  </td><td>EMBL mouse EST sequences</td></tr>
-<tr><td>newgb</td><td>N</td><td>OK  </td><td>OK  </td><td>OK  </td><td>Genbank updates</td></tr>
-<tr><td>newgenbank</td><td>N</td><td>OK  </td><td>OK  </td><td>OK  </td><td>Genbank updates</td></tr>
-<tr><td>organelle</td><td>N</td><td>OK  </td><td>OK  </td><td>OK  </td><td>EMBL organelle sequences</td></tr>
-<tr><td>otherest</td><td>N</td><td>OK  </td><td>OK  </td><td>OK  </td><td>EMBL other EST sequences</td></tr>
-<tr><td>othervertebrate</td><td>N</td><td>OK  </td><td>OK  </td><td>OK  </td><td>EMBL other vertebrate sequences</td></tr>
-<tr><td>patent</td><td>N</td><td>OK  </td><td>OK  </td><td>OK  </td><td>EMBL patented sequences</td></tr>
-<tr><td>phage</td><td>N</td><td>OK  </td><td>OK  </td><td>OK  </td><td>EMBL phage sequences</td></tr>
-<tr><td>plant</td><td>N</td><td>OK  </td><td>OK  </td><td>OK  </td><td>EMBL plant sequences</td></tr>
-<tr><td>prokaryotic</td><td>N</td><td>OK  </td><td>OK  </td><td>OK  </td><td>EMBL prokaryotic sequences</td></tr>
-<tr><td>refseq</td><td>N</td><td>OK  </td><td>OK  </td><td>OK  </td><td>REFSEQ sequences with features in /home/br2/data/Chris...</td></tr>
-<tr><td>refseq_srs</td><td>N</td><td>OK  </td><td>-   </td><td>-   </td><td>REFSEQ-ID sequences from SRS</td></tr>
-<tr><td>rodent</td><td>N</td><td>OK  </td><td>OK  </td><td>OK  </td><td>EMBL rodent sequences</td></tr>
-<tr><td>sts</td><td>N</td><td>OK  </td><td>OK  </td><td>OK  </td><td>EMBL STS sequences</td></tr>
-<tr><td>synthetic</td><td>N</td><td>OK  </td><td>OK  </td><td>OK  </td><td>EMBL synthetic sequences</td></tr>
+<tr><td>qanfasta</td><td>N</td><td>OK  </td><td>OK  </td><td>OK  </td><td>FASTA file EMBL rodents</td></tr>
+<tr><td>qanfastaall</td><td>N</td><td>OK  </td><td>OK  </td><td>OK  </td><td>FASTA file EMBL rodents, all fields indexed</td></tr>
+<tr><td>qanflat</td><td>N</td><td>OK  </td><td>OK  </td><td>OK  </td><td>EMBL flatfiles</td></tr>
+<tr><td>qangcg</td><td>N</td><td>OK  </td><td>OK  </td><td>OK  </td><td>GCG format EMBL</td></tr>
+<tr><td>qangcgall</td><td>N</td><td>OK  </td><td>OK  </td><td>OK  </td><td>GCG format EMBL</td></tr>
+<tr><td>qangcgexc</td><td>N</td><td>OK  </td><td>OK  </td><td>OK  </td><td>GCG format EMBL without prokaryotes</td></tr>
+<tr><td>qangcginc</td><td>N</td><td>OK  </td><td>OK  </td><td>OK  </td><td>GCG format EMBL only prokaryotes</td></tr>
+<tr><td>qapirexc</td><td>N</td><td>OK  </td><td>OK  </td><td>OK  </td><td>PIR</td></tr>
+<tr><td>qasrs</td><td>N</td><td>OK  </td><td>OK  </td><td>-   </td><td>EMBL in local srs installation</td></tr>
+<tr><td>qasrsfasta</td><td>N</td><td>OK  </td><td>OK  </td><td>-   </td><td>EMBL in local srs installation, fasta format</td></tr>
+<tr><td>qasrswww</td><td>N</td><td>OK  </td><td>-   </td><td>-   </td><td>Remote SRS web server</td></tr>
+<tr><td>qawfasta</td><td>N</td><td>OK  </td><td>OK  </td><td>OK  </td><td>FASTA file wormpep entries</td></tr>
 <tr><td>tembl</td><td>N</td><td>OK  </td><td>OK  </td><td>OK  </td><td>EMBL in native format with EMBL CD-ROM index</td></tr>
+<tr><td>temblall</td><td>N</td><td>-   </td><td>-   </td><td>OK  </td><td>EMBL in native format with EMBL CD-ROM index</td></tr>
+<tr><td>temblrest</td><td>N</td><td>-   </td><td>-   </td><td>OK  </td><td>EMBL in native format with EMBL CD-ROM index</td></tr>
+<tr><td>temblvrt</td><td>N</td><td>-   </td><td>-   </td><td>OK  </td><td>EMBL in native format with EMBL CD-ROM index</td></tr>
 <tr><td>tgb</td><td>N</td><td>OK  </td><td>-   </td><td>-   </td><td>Genbank IDs</td></tr>
 <tr><td>tgenbank</td><td>N</td><td>OK  </td><td>OK  </td><td>OK  </td><td>GenBank in native format with EMBL CD-ROM index</td></tr>
-<tr><td>tigregad</td><td>N</td><td>OK  </td><td>OK  </td><td>OK  </td><td>TIGR EGAD sequences</td></tr>
-<tr><td>tigrmgi</td><td>N</td><td>OK  </td><td>OK  </td><td>OK  </td><td>TIGR MGI sequences</td></tr>
-<tr><td>unclassified</td><td>N</td><td>OK  </td><td>OK  </td><td>OK  </td><td>EMBL unclassified sequences</td></tr>
-<tr><td>vertebrate</td><td>N</td><td>OK  </td><td>OK  </td><td>OK  </td><td>EMBL vertebrate sequences</td></tr>
-<tr><td>viral</td><td>N</td><td>OK  </td><td>OK  </td><td>OK  </td><td>EMBL viral sequences</td></tr>
 </table>
 
 </pre></td></tr></table><p>
@@ -292,15 +236,20 @@ Displays information on the currently available databases
 
 # Name        Type ID  Qry All Comment
 # ====        ==== ==  === === =======
-enspep        P    OK  OK  OK  ENSEMBL pep
-enspepp       P    OK  OK  OK  ENSEMBL pep predicted
-enspeppredicted P    OK  OK  OK  ENSEMBL pep predicted
-remtrembl     P    OK  OK  OK  REMTREMBL sequences
-sptrembl      P    OK  OK  OK  SPTREMBL sequences
-sw            P    OK  OK  OK  SWISSPROT sequences
-swissprot     P    OK  OK  OK  SWISSPROT sequences
+qapblast      P    OK  OK  OK  BLAST swissnew
+qapblastall   P    OK  OK  OK  BLAST swissnew, all fields indexed
+qapblastsplit P    OK  OK  OK  BLAST swissnew split in 5 files
+qapblastsplitexc P    OK  OK  OK  BLAST swissnew split in 5 files, not file 02
+qapblastsplitinc P    OK  OK  OK  BLAST swissnew split in 5 files, only file 02
+qapfasta      P    OK  OK  OK  FASTA file swissnew entries
+qapflat       P    OK  OK  OK  Swissnew flatfiles
+qapflatall    P    OK  OK  OK  Swissnew flatfiles, all fields indexed
+qapflatexc    P    OK  OK  OK  Swissnew flatfiles, no updated sequence file
+qapflatinc    P    OK  OK  OK  Swissnew flatfiles, only updated sequence file
+qapir         P    OK  OK  OK  PIR
+qapirall      P    OK  OK  OK  PIR
+qapirinc      P    OK  OK  OK  PIR
 tpir          P    OK  OK  OK  PIR using NBRF access for 4 files
-trembl        P    OK  OK  OK  TREMBL sequences
 tsw           P    OK  OK  OK  Swissprot native format with EMBL CD-ROM index
 tswnew        P    OK  OK  OK  Swissnew as 3 files in native format with EMBL CD-ROM index
 twp           P    OK  OK  OK  EMBL new in native format with EMBL CD-ROM index
@@ -320,60 +269,41 @@ Display the information with no headings:
 % <b>showdb -noheading </b>
 Displays information on the currently available databases
 
-enspep        P    OK  OK  OK  ENSEMBL pep
-enspepp       P    OK  OK  OK  ENSEMBL pep predicted
-enspeppredicted P    OK  OK  OK  ENSEMBL pep predicted
-remtrembl     P    OK  OK  OK  REMTREMBL sequences
-sptrembl      P    OK  OK  OK  SPTREMBL sequences
-sw            P    OK  OK  OK  SWISSPROT sequences
-swissprot     P    OK  OK  OK  SWISSPROT sequences
+qapblast      P    OK  OK  OK  BLAST swissnew
+qapblastall   P    OK  OK  OK  BLAST swissnew, all fields indexed
+qapblastsplit P    OK  OK  OK  BLAST swissnew split in 5 files
+qapblastsplitexc P    OK  OK  OK  BLAST swissnew split in 5 files, not file 02
+qapblastsplitinc P    OK  OK  OK  BLAST swissnew split in 5 files, only file 02
+qapfasta      P    OK  OK  OK  FASTA file swissnew entries
+qapflat       P    OK  OK  OK  Swissnew flatfiles
+qapflatall    P    OK  OK  OK  Swissnew flatfiles, all fields indexed
+qapflatexc    P    OK  OK  OK  Swissnew flatfiles, no updated sequence file
+qapflatinc    P    OK  OK  OK  Swissnew flatfiles, only updated sequence file
+qapir         P    OK  OK  OK  PIR
+qapirall      P    OK  OK  OK  PIR
+qapirinc      P    OK  OK  OK  PIR
 tpir          P    OK  OK  OK  PIR using NBRF access for 4 files
-trembl        P    OK  OK  OK  TREMBL sequences
 tsw           P    OK  OK  OK  Swissprot native format with EMBL CD-ROM index
 tswnew        P    OK  OK  OK  Swissnew as 3 files in native format with EMBL CD-ROM index
 twp           P    OK  OK  OK  EMBL new in native format with EMBL CD-ROM index
-em            N    OK  OK  OK  EMBL sequences
-embl          N    OK  OK  OK  EMBL sequences
-emblnew       N    OK  OK  OK  New EMBL sequences
-enscdna       N    OK  OK  OK  ENSEMBL cdna
-ensdna        N    OK  OK  OK  ENSEMBL dna
-ensdnam       N    OK  OK  OK  ENSEMBL dna masked
-ensdnamasked  N    OK  OK  OK  ENSEMBL dna masked
-ensembl       N    OK  OK  OK  ENSEMBL 
-est           N    OK  OK  OK  EMBL EST sequences
-fungal        N    OK  OK  OK  EMBL fungal sequences
-gb            N    OK  OK  OK  Genbank updates
-genbank       N    OK  OK  OK  Genbank
-gss           N    OK  OK  OK  EMBL GSS sequences
-hsunigene     N    OK  -   -   hsunigene 
-htg           N    OK  OK  OK  EMBL HTG sequences
-human         N    OK  OK  OK  EMBL human sequences
-humanest      N    OK  OK  OK  EMBL human EST sequences
-invertebrate  N    OK  OK  OK  EMBL invertebrate sequences
-mammalian     N    OK  OK  OK  EMBL mammalian sequences
-mouseest      N    OK  OK  OK  EMBL mouse EST sequences
-newgb         N    OK  OK  OK  Genbank updates
-newgenbank    N    OK  OK  OK  Genbank updates
-organelle     N    OK  OK  OK  EMBL organelle sequences
-otherest      N    OK  OK  OK  EMBL other EST sequences
-othervertebrate N    OK  OK  OK  EMBL other vertebrate sequences
-patent        N    OK  OK  OK  EMBL patented sequences
-phage         N    OK  OK  OK  EMBL phage sequences
-plant         N    OK  OK  OK  EMBL plant sequences
-prokaryotic   N    OK  OK  OK  EMBL prokaryotic sequences
-refseq        N    OK  OK  OK  REFSEQ sequences with features in /home/br2/data/Chris...
-refseq_srs    N    OK  -   -   REFSEQ-ID sequences from SRS
-rodent        N    OK  OK  OK  EMBL rodent sequences
-sts           N    OK  OK  OK  EMBL STS sequences
-synthetic     N    OK  OK  OK  EMBL synthetic sequences
+qanfasta      N    OK  OK  OK  FASTA file EMBL rodents
+qanfastaall   N    OK  OK  OK  FASTA file EMBL rodents, all fields indexed
+qanflat       N    OK  OK  OK  EMBL flatfiles
+qangcg        N    OK  OK  OK  GCG format EMBL
+qangcgall     N    OK  OK  OK  GCG format EMBL
+qangcgexc     N    OK  OK  OK  GCG format EMBL without prokaryotes
+qangcginc     N    OK  OK  OK  GCG format EMBL only prokaryotes
+qapirexc      N    OK  OK  OK  PIR
+qasrs         N    OK  OK  -   EMBL in local srs installation
+qasrsfasta    N    OK  OK  -   EMBL in local srs installation, fasta format
+qasrswww      N    OK  -   -   Remote SRS web server
+qawfasta      N    OK  OK  OK  FASTA file wormpep entries
 tembl         N    OK  OK  OK  EMBL in native format with EMBL CD-ROM index
+temblall      N    -   -   OK  EMBL in native format with EMBL CD-ROM index
+temblrest     N    -   -   OK  EMBL in native format with EMBL CD-ROM index
+temblvrt      N    -   -   OK  EMBL in native format with EMBL CD-ROM index
 tgb           N    OK  -   -   Genbank IDs
 tgenbank      N    OK  OK  OK  GenBank in native format with EMBL CD-ROM index
-tigregad      N    OK  OK  OK  TIGR EGAD sequences
-tigrmgi       N    OK  OK  OK  TIGR MGI sequences
-unclassified  N    OK  OK  OK  EMBL unclassified sequences
-vertebrate    N    OK  OK  OK  EMBL vertebrate sequences
-viral         N    OK  OK  OK  EMBL viral sequences
 
 </pre></td></tr></table><p>
 <p>
@@ -389,60 +319,41 @@ Display just a list of the available database names:
 
 % <b>showdb -noheading -notype -noid -noquery -noall -nocomment -auto </b>
 
-enspep        
-enspepp       
-enspeppredicted 
-remtrembl     
-sptrembl      
-sw            
-swissprot     
+qapblast      
+qapblastall   
+qapblastsplit 
+qapblastsplitexc 
+qapblastsplitinc 
+qapfasta      
+qapflat       
+qapflatall    
+qapflatexc    
+qapflatinc    
+qapir         
+qapirall      
+qapirinc      
 tpir          
-trembl        
 tsw           
 tswnew        
 twp           
-em            
-embl          
-emblnew       
-enscdna       
-ensdna        
-ensdnam       
-ensdnamasked  
-ensembl       
-est           
-fungal        
-gb            
-genbank       
-gss           
-hsunigene     
-htg           
-human         
-humanest      
-invertebrate  
-mammalian     
-mouseest      
-newgb         
-newgenbank    
-organelle     
-otherest      
-othervertebrate 
-patent        
-phage         
-plant         
-prokaryotic   
-refseq        
-refseq_srs    
-rodent        
-sts           
-synthetic     
+qanfasta      
+qanfastaall   
+qanflat       
+qangcg        
+qangcgall     
+qangcgexc     
+qangcginc     
+qapirexc      
+qasrs         
+qasrsfasta    
+qasrswww      
+qawfasta      
 tembl         
+temblall      
+temblrest     
+temblvrt      
 tgb           
 tgenbank      
-tigregad      
-tigrmgi       
-unclassified  
-vertebrate    
-viral         
 
 </pre></td></tr></table><p>
 <p>
@@ -459,60 +370,41 @@ Display only the names and types:
 % <b>showdb -only -type </b>
 Displays information on the currently available databases
 
-enspep        P    
-enspepp       P    
-enspeppredicted P    
-remtrembl     P    
-sptrembl      P    
-sw            P    
-swissprot     P    
+qapblast      P    
+qapblastall   P    
+qapblastsplit P    
+qapblastsplitexc P    
+qapblastsplitinc P    
+qapfasta      P    
+qapflat       P    
+qapflatall    P    
+qapflatexc    P    
+qapflatinc    P    
+qapir         P    
+qapirall      P    
+qapirinc      P    
 tpir          P    
-trembl        P    
 tsw           P    
 tswnew        P    
 twp           P    
-em            N    
-embl          N    
-emblnew       N    
-enscdna       N    
-ensdna        N    
-ensdnam       N    
-ensdnamasked  N    
-ensembl       N    
-est           N    
-fungal        N    
-gb            N    
-genbank       N    
-gss           N    
-hsunigene     N    
-htg           N    
-human         N    
-humanest      N    
-invertebrate  N    
-mammalian     N    
-mouseest      N    
-newgb         N    
-newgenbank    N    
-organelle     N    
-otherest      N    
-othervertebrate N    
-patent        N    
-phage         N    
-plant         N    
-prokaryotic   N    
-refseq        N    
-refseq_srs    N    
-rodent        N    
-sts           N    
-synthetic     N    
+qanfasta      N    
+qanfastaall   N    
+qanflat       N    
+qangcg        N    
+qangcgall     N    
+qangcgexc     N    
+qangcginc     N    
+qapirexc      N    
+qasrs         N    
+qasrsfasta    N    
+qasrswww      N    
+qawfasta      N    
 tembl         N    
+temblall      N    
+temblrest     N    
+temblvrt      N    
 tgb           N    
 tgenbank      N    
-tigregad      N    
-tigrmgi       N    
-unclassified  N    
-vertebrate    N    
-viral         N    
 
 </pre></td></tr></table><p>
 <p>
@@ -523,14 +415,6 @@ viral         N
 <H2>
     Command line arguments
 </H2>
-
-
-
-<!--
-DON'T WRITE ANYTHING HERE.
-IT IS DONE FOR YOU.
--->
-
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
    Standard (Mandatory) qualifiers: (none)
@@ -743,60 +627,41 @@ to get only the comment output, you can specify
 <pre>
 # Name        Type ID  Qry All Comment
 # ====        ==== ==  === === =======
-enspep        P    OK  OK  OK  ENSEMBL pep
-enspepp       P    OK  OK  OK  ENSEMBL pep predicted
-enspeppredicted P    OK  OK  OK  ENSEMBL pep predicted
-remtrembl     P    OK  OK  OK  REMTREMBL sequences
-sptrembl      P    OK  OK  OK  SPTREMBL sequences
-sw            P    OK  OK  OK  SWISSPROT sequences
-swissprot     P    OK  OK  OK  SWISSPROT sequences
+qapblast      P    OK  OK  OK  BLAST swissnew
+qapblastall   P    OK  OK  OK  BLAST swissnew, all fields indexed
+qapblastsplit P    OK  OK  OK  BLAST swissnew split in 5 files
+qapblastsplitexc P    OK  OK  OK  BLAST swissnew split in 5 files, not file 02
+qapblastsplitinc P    OK  OK  OK  BLAST swissnew split in 5 files, only file 02
+qapfasta      P    OK  OK  OK  FASTA file swissnew entries
+qapflat       P    OK  OK  OK  Swissnew flatfiles
+qapflatall    P    OK  OK  OK  Swissnew flatfiles, all fields indexed
+qapflatexc    P    OK  OK  OK  Swissnew flatfiles, no updated sequence file
+qapflatinc    P    OK  OK  OK  Swissnew flatfiles, only updated sequence file
+qapir         P    OK  OK  OK  PIR
+qapirall      P    OK  OK  OK  PIR
+qapirinc      P    OK  OK  OK  PIR
 tpir          P    OK  OK  OK  PIR using NBRF access for 4 files
-trembl        P    OK  OK  OK  TREMBL sequences
 tsw           P    OK  OK  OK  Swissprot native format with EMBL CD-ROM index
 tswnew        P    OK  OK  OK  Swissnew as 3 files in native format with EMBL CD-ROM index
 twp           P    OK  OK  OK  EMBL new in native format with EMBL CD-ROM index
-em            N    OK  OK  OK  EMBL sequences
-embl          N    OK  OK  OK  EMBL sequences
-emblnew       N    OK  OK  OK  New EMBL sequences
-enscdna       N    OK  OK  OK  ENSEMBL cdna
-ensdna        N    OK  OK  OK  ENSEMBL dna
-ensdnam       N    OK  OK  OK  ENSEMBL dna masked
-ensdnamasked  N    OK  OK  OK  ENSEMBL dna masked
-ensembl       N    OK  OK  OK  ENSEMBL 
-est           N    OK  OK  OK  EMBL EST sequences
-fungal        N    OK  OK  OK  EMBL fungal sequences
-gb            N    OK  OK  OK  Genbank updates
-genbank       N    OK  OK  OK  Genbank
-gss           N    OK  OK  OK  EMBL GSS sequences
-hsunigene     N    OK  -   -   hsunigene 
-htg           N    OK  OK  OK  EMBL HTG sequences
-human         N    OK  OK  OK  EMBL human sequences
-humanest      N    OK  OK  OK  EMBL human EST sequences
-invertebrate  N    OK  OK  OK  EMBL invertebrate sequences
-mammalian     N    OK  OK  OK  EMBL mammalian sequences
-mouseest      N    OK  OK  OK  EMBL mouse EST sequences
-newgb         N    OK  OK  OK  Genbank updates
-newgenbank    N    OK  OK  OK  Genbank updates
-organelle     N    OK  OK  OK  EMBL organelle sequences
-otherest      N    OK  OK  OK  EMBL other EST sequences
-othervertebrate N    OK  OK  OK  EMBL other vertebrate sequences
-patent        N    OK  OK  OK  EMBL patented sequences
-phage         N    OK  OK  OK  EMBL phage sequences
-plant         N    OK  OK  OK  EMBL plant sequences
-prokaryotic   N    OK  OK  OK  EMBL prokaryotic sequences
-refseq        N    OK  OK  OK  REFSEQ sequences with features in /home/br2/data/Chris...
-refseq_srs    N    OK  -   -   REFSEQ-ID sequences from SRS
-rodent        N    OK  OK  OK  EMBL rodent sequences
-sts           N    OK  OK  OK  EMBL STS sequences
-synthetic     N    OK  OK  OK  EMBL synthetic sequences
+qanfasta      N    OK  OK  OK  FASTA file EMBL rodents
+qanfastaall   N    OK  OK  OK  FASTA file EMBL rodents, all fields indexed
+qanflat       N    OK  OK  OK  EMBL flatfiles
+qangcg        N    OK  OK  OK  GCG format EMBL
+qangcgall     N    OK  OK  OK  GCG format EMBL
+qangcgexc     N    OK  OK  OK  GCG format EMBL without prokaryotes
+qangcginc     N    OK  OK  OK  GCG format EMBL only prokaryotes
+qapirexc      N    OK  OK  OK  PIR
+qasrs         N    OK  OK  -   EMBL in local srs installation
+qasrsfasta    N    OK  OK  -   EMBL in local srs installation, fasta format
+qasrswww      N    OK  -   -   Remote SRS web server
+qawfasta      N    OK  OK  OK  FASTA file wormpep entries
 tembl         N    OK  OK  OK  EMBL in native format with EMBL CD-ROM index
+temblall      N    -   -   OK  EMBL in native format with EMBL CD-ROM index
+temblrest     N    -   -   OK  EMBL in native format with EMBL CD-ROM index
+temblvrt      N    -   -   OK  EMBL in native format with EMBL CD-ROM index
 tgb           N    OK  -   -   Genbank IDs
 tgenbank      N    OK  OK  OK  GenBank in native format with EMBL CD-ROM index
-tigregad      N    OK  OK  OK  TIGR EGAD sequences
-tigrmgi       N    OK  OK  OK  TIGR MGI sequences
-unclassified  N    OK  OK  OK  EMBL unclassified sequences
-vertebrate    N    OK  OK  OK  EMBL vertebrate sequences
-viral         N    OK  OK  OK  EMBL viral sequences
 </pre>
 </td></tr></table><p>
 
@@ -886,19 +751,19 @@ used in the examples shown in the documentation of the programs.
 
 For details of the database definitions, you should first read David's
 Administration Guide:
-<a href="http://www.uk.embnet.org/Software/EMBOSS/Doc/Admin_guide/adminguide/">
-http://www.uk.embnet.org/Software/EMBOSS/Doc/Admin_guide/adminguide/
+<a href="/docs/adminguide/">
+http://emboss.sourceforge.net/docs/adminguide/
 </a>
 especially:
-<a href="http://www.uk.embnet.org/Software/EMBOSS/Doc/Admin_guide/adminguide/node4.html">
-http://www.uk.embnet.org/Software/EMBOSS/Doc/Admin_guide/adminguide/node4.html
+<a href="/docs/adminguide/node4.html">
+http://emboss.sourceforge.net/docs/adminguide/adminguide/node4.html
 </a>
 
 <p>
 
 See also:
-<a href="http://www.uk.embnet.org/Software/EMBOSS/Usa/databases.html">
-http://www.uk.embnet.org/Software/EMBOSS/Usa/databases.html
+<a href="/docs/themes/Databases.html">
+http://emboss.sourceforge.net/docs/themes/Databases.html
 </a>
 for a lot of detail of the syntax of database definition.
 
@@ -914,14 +779,14 @@ using <b>seqret</b>.
 </H2>
 
 
-	None.
+None.
 
 <H2>
     Warnings
 </H2>
 
 
-	None.
+None.
 
 <H2>
     Diagnostic Error Messages
@@ -945,13 +810,8 @@ displayed.
 </H2>
 
 
-        None noted.
+None noted.
 
-<!--
-<H2>
-    See also
-</H2>
--->
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
@@ -976,17 +836,10 @@ displayed.
 <tr><td><a href="wossname.html">wossname</a></td><td>Finds programs by keywords in their one-line documentation</td></tr>
 </table>
 
-<!--
-        Add any comments about other associated programs (to prepare
-        data files?) that seealso doesn't find.
-   -->
-
 
 <H2>
     Author(s)
 </H2>
-
-
 Gary Williams (gwilliam&nbsp;&copy;&nbsp;rfcgr.mrc.ac.uk)
 <br>
 MRC Rosalind Franklin Centre for Genomics Research
@@ -999,30 +852,19 @@ Wellcome Trust Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
     History
 </H2>
 
-
 Completed 6th August 1999.
 
-<!--
-<p>
-[an error occurred while processing this directive]
--->
 
 <H2>
     Target users
 </H2>
+This program is intended to be used by everyone and everything, from naive users to embedded scripts.
 
-
-This program is intended to be used by everyone and everything,
-from naive users to embedded scripts. 
 
 <H2>
     Comments
 </H2>
-
-
-<pre>
-
-</pre>
+None
 
 
 </BODY>

@@ -7,15 +7,9 @@
 </HEAD>
 <BODY BGCOLOR="#FFFFFF" text="#000000">
 
-
-
-
-
-
-
 <table align=center border=0 cellspacing=0 cellpadding=0>
 <tr><td valign=top>
-<A HREF="index.html" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
@@ -29,20 +23,9 @@ trimseq
 
 
 
-
-
-
-
 <H2>
     Function
 </H2>
-
-
-
-<!--
-DON'T WRITE ANYTHING HERE.
-IT IS DONE FOR YOU.
--->
 Trim ambiguous bits off the ends of sequences
 
 
@@ -91,60 +74,101 @@ trim off any dangling gap characters from the ends .
 <H2>
     Usage
 </H2>
-
-
-Tidy up the sequence ends, stopping at the first wanted code
-<pre>
-% trimseq xyz.seq xyz_clean.seq -window 1 -percent 100
-</pre>
+<b>Here is a sample session with trimseq</b>
+<p>
 
 <p>
-Tidy up the sequence ends, removing poor bits at the ends
-<pre>
-% trimseq xyz.seq xyz_clean.seq -window 5 -percent 40
-</pre>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>trimseq tembl:hsfau hsfau.seq -window 1 -percent 100 </b>
+Trim ambiguous bits off the ends of sequences
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 2</b>
+<p>
 
 <p>
-Tidy up the sequence ends, removing very poor bits at the ends
-<pre>
-% trimseq xyz.seq xyz_clean.seq -window 20 -percent 80
-</pre>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>trimseq tembl:hsfau hsfau.seq -window 5 -percent 40 </b>
+Trim ambiguous bits off the ends of sequences
+
+</pre></td></tr></table><p>
+<p>
+<p>
+<p>
+<b>Example 3</b>
+<p>
 
 <p>
-Tidy up the sequence ends, removing even maginally poor bits at the ends
-<pre>
-% trimseq xyz.seq xyz_clean.seq -window 20 -percent 10
-</pre>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>trimseq tembl:hsfau hsfau.seq -window 20 -percent 80 </b>
+Trim ambiguous bits off the ends of sequences
+
+</pre></td></tr></table><p>
+<p>
+<p>
+<p>
+<b>Example 4</b>
+<p>
 
 <p>
-Tidy up the sequence ends, removing poor bits including ambiguity codes
-<pre>
-% trimseq xyz.seq xyz_clean.seq -window 20 -percent 50 -strict
-</pre>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>trimseq tembl:hsfau hsfau.seq -window 20 -percent 10 </b>
+Trim ambiguous bits off the ends of sequences
+
+</pre></td></tr></table><p>
+<p>
+<p>
+<p>
+<b>Example 5</b>
+<p>
 
 <p>
-Tidy up the sequence ends, removing asterisks from a protein end
-<pre>
-% trimseq xyz.seq xyz_clean.seq -window 1 -percent 100 -star
-</pre>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>trimseq tembl:hsfau hsfau.seq -window 20 -percent 50 -strict </b>
+Trim ambiguous bits off the ends of sequences
+
+</pre></td></tr></table><p>
+<p>
+<p>
+<p>
+<b>Example 6</b>
+<p>
 
 <p>
-Tidy up the sequence ends, removing poor bits at only the left end
-<pre>
-% trimseq xyz.seq xyz_clean.seq -window 20 -percent 50 -noright
-</pre>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>trimseq tembl:hsfau hsfau.seq -window 1 -percent 100 -star </b>
+Trim ambiguous bits off the ends of sequences
+
+</pre></td></tr></table><p>
+<p>
+<p>
+<p>
+<b>Example 7</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>trimseq tembl:hsfau hsfau.seq -window 20 -percent 50 -noright </b>
+Trim ambiguous bits off the ends of sequences
+
+</pre></td></tr></table><p>
+<p>
+<p>
 
 
 <H2>
     Command line arguments
 </H2>
-
-
-
-<!--
-DON'T WRITE ANYTHING HERE.
-IT IS DONE FOR YOU.
--->
 
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
@@ -226,7 +250,6 @@ IT IS DONE FOR YOU.
 </pre>
 </td></tr></table>
 <P>
-
 <table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
 <tr bgcolor="#FFFFCC">
 <th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
@@ -309,9 +332,95 @@ IT IS DONE FOR YOU.
 <H2>
     Input file format
 </H2>
-
-
 Normal sequence.
+
+<p>
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+
+'tembl:hsfau' is a sequence entry in the example nucleic acid database 'tembl'
+<p>
+<p><h3>Database entry: tembl:hsfau</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+ID   HSFAU      standard; RNA; HUM; 518 BP.
+XX
+AC   X65923;
+XX
+SV   X65923.1
+XX
+DT   13-MAY-1992 (Rel. 31, Created)
+DT   23-SEP-1993 (Rel. 37, Last updated, Version 10)
+XX
+DE   H.sapiens fau mRNA
+XX
+KW   fau gene.
+XX
+OS   Homo sapiens (human)
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia;
+OC   Eutheria; Primates; Catarrhini; Hominidae; Homo.
+XX
+RN   [1]
+RP   1-518
+RA   Michiels L.M.R.;
+RT   ;
+RL   Submitted (29-APR-1992) to the EMBL/GenBank/DDBJ databases.
+RL   L.M.R. Michiels, University of Antwerp, Dept of Biochemistry,
+RL   Universiteisplein 1, 2610 Wilrijk, BELGIUM
+XX
+RN   [2]
+RP   1-518
+RX   MEDLINE; 93368957.
+RA   Michiels L., Van der Rauwelaert E., Van Hasselt F., Kas K., Merregaert J.;
+RT   " fau cDNA encodes a ubiquitin-like-S30 fusion protein and is expressed as
+RT   an antisense sequences in the Finkel-Biskis-Reilly murine sarcoma virus";
+RL   Oncogene 8:2537-2546(1993).
+XX
+DR   SWISS-PROT; P35544; UBIM_HUMAN.
+DR   SWISS-PROT; Q05472; RS30_HUMAN.
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..518
+FT                   /chromosome="11q"
+FT                   /db_xref="taxon:9606"
+FT                   /organism="Homo sapiens"
+FT                   /tissue_type="placenta"
+FT                   /clone_lib="cDNA"
+FT                   /clone="pUIA 631"
+FT                   /map="13"
+FT   misc_feature    57..278
+FT                   /note="ubiquitin like part"
+FT   CDS             57..458
+FT                   /db_xref="SWISS-PROT:P35544"
+FT                   /db_xref="SWISS-PROT:Q05472"
+FT                   /gene="fau"
+FT                   /protein_id="CAA46716.1"
+FT                   /translation="MQLFVRAQELHTFEVTGQETVAQIKAHVASLEGIAPEDQVVLLAG
+FT                   APLEDEATLGQCGVEALTTLEVAGRMLGGKVHGSLARAGKVRGQTPKVAKQEKKKKKTG
+FT                   RAKRRMQYNRRFVNVVPTFGKKKGPNANS"
+FT   misc_feature    98..102
+FT                   /note="nucleolar localization signal"
+FT   misc_feature    279..458
+FT                   /note="S30 part"
+FT   polyA_signal    484..489
+FT   polyA_site      509
+XX
+SQ   Sequence 518 BP; 125 A; 139 C; 148 G; 106 T; 0 other;
+     ttcctctttc tcgactccat cttcgcggta gctgggaccg ccgttcagtc gccaatatgc        60
+     agctctttgt ccgcgcccag gagctacaca ccttcgaggt gaccggccag gaaacggtcg       120
+     cccagatcaa ggctcatgta gcctcactgg agggcattgc cccggaagat caagtcgtgc       180
+     tcctggcagg cgcgcccctg gaggatgagg ccactctggg ccagtgcggg gtggaggccc       240
+     tgactaccct ggaagtagca ggccgcatgc ttggaggtaa agttcatggt tccctggccc       300
+     gtgctggaaa agtgagaggt cagactccta aggtggccaa acaggagaag aagaagaaga       360
+     agacaggtcg ggctaagcgg cggatgcagt acaaccggcg ctttgtcaac gttgtgccca       420
+     cctttggcaa gaagaagggc cccaatgcca actcttaagt cttttgtaat tctggctttc       480
+     tctaataaaa aagccactta gttcagtcaa aaaaaaaa                               518
+//
+</pre>
+</td></tr></table><p>
+
 
 <H2>
     Output file format
@@ -319,11 +428,30 @@ Normal sequence.
 
 
 Normal sequence file.
+<p>
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: hsfau.seq</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+&gt;HSFAU X65923.1 H.sapiens fau mRNA
+ttcctctttctcgactccatcttcgcggtagctgggaccgccgttcagtcgccaatatgc
+agctctttgtccgcgcccaggagctacacaccttcgaggtgaccggccaggaaacggtcg
+cccagatcaaggctcatgtagcctcactggagggcattgccccggaagatcaagtcgtgc
+tcctggcaggcgcgcccctggaggatgaggccactctgggccagtgcggggtggaggccc
+tgactaccctggaagtagcaggccgcatgcttggaggtaaagttcatggttccctggccc
+gtgctggaaaagtgagaggtcagactcctaaggtggccaaacaggagaagaagaagaaga
+agacaggtcgggctaagcggcggatgcagtacaaccggcgctttgtcaacgttgtgccca
+cctttggcaagaagaagggccccaatgccaactcttaagtcttttgtaattctggctttc
+tctaataaaaaagccacttagttcagtcaaaaaaaaaa
+</pre>
+</td></tr></table><p>
+
 
 <H2>
     Data files
 </H2>
-
 
 None.
 	
@@ -371,11 +499,6 @@ It always exits with status 0.
 
 None noted.
 
-<!--
-<H2>
-    See also
-</H2>
--->
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
@@ -405,18 +528,10 @@ None noted.
 <tr><td><a href="yank.html">yank</a></td><td>Reads a sequence range, appends the full USA to a list file</td></tr>
 </table>
 
-<!--
-        Add any comments about other associated programs (to prepare
-        data files?) that seealso doesn't find.
-   -->
-
-
 
 <H2>
     Author(s)
 </H2>
-
-
 Gary Williams (gwilliam&nbsp;&copy;&nbsp;rfcgr.mrc.ac.uk)
 <br>
 MRC Rosalind Franklin Centre for Genomics Research
@@ -429,27 +544,19 @@ Wellcome Trust Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
     History
 </H2>
 
-<!--
-<p>
-[an error occurred while processing this directive]
--->
+
 
 <H2>
     Target users
 </H2>
+This program is intended to be used by everyone and everything, from naive users to embedded scripts.
 
 
-This program is intended to be used by everyone and everything,
-from naive users to embedded scripts. 
 
 <H2>
     Comments
 </H2>
-
-
-<pre>
-
-</pre>
+None
 
 
 </BODY>

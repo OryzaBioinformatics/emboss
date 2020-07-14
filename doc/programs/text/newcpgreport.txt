@@ -1,58 +1,58 @@
 
                                newcpgreport 
-                                      
-   
-   
+
+
+
 Function
 
    Report CpG rich areas
-   
+
 Description
 
    This application is used in the production of the CpG Island database
    'CPGISLE'. It produces CPGISLE database entry format reports for a
    potential CpG island.
-   
+
    See the FTP site: ftp://ftp.ebi.ac.uk/pub/databases/cpgisle/ for the
    finished database.
-   
+
    CpG refers to a C nucleotide immediately followed by a G. The 'p' in
    'CpG' refers to the phosphate group linking the two bases.
-   
+
    Detection of regions of genomic sequences that are rich in the CpG
    pattern is important because such regions are resistant to methylation
    and tend to be associated with genes which are frequently switched on.
    Regions rich in the CpG pattern are known as CpG islands.
-   
+
    It has been estimated that about half of all mammalian genes have a
    CpG-rich region around their 5' end. It is said that all mammalian
    house-keeping genes have a CpG island!
-   
+
    Non-mammalian vertebrates have some CpG islands that are associated
    with genes, but the association gets equivocal in the farther
    taxonomic groups.
-   
+
    Finding a CpG island upstream of predicted exons or genes is good
    contributory evidence for that gene's existance.
-   
+
    By default, this program defines a CpG island as a region where, over
    an average of 10 windows, the calculated % composition is over 50% and
    the calculated Obs/Exp ratio is over 0.6 and the conditions hold for a
    minimum of 200 bases. These conditions can be modified by setting the
    values of the appropriate parameters.
-   
+
    The Expected number of CpG patterns in a window is calculated as the
    number of 'C's in the window multiplied by the number of 'G's in the
    window, divided by the window length.
-   
+
    This program reads in one or more sequences and finds regions where
    there is a high absolute frequency of CpG dimers as well as a high
    proportion of CpG compared to GpC.
-   
+
 Usage
 
    Here is a sample session with newcpgreport
-   
+
 
 % newcpgreport 
 Report CpG rich areas
@@ -63,10 +63,10 @@ Minimum Length [200]:
 Minimum observed/expected [0.6]: 
 Minimum percentage [50.]: 
 Output file [rnu68037.newcpgreport]: 
-   
+
    Go to the input files for this example
    Go to the output files for this example
-   
+
 Command line arguments
 
    Standard (Mandatory) qualifiers:
@@ -115,7 +115,7 @@ Command line arguments
    -error               boolean    Report errors
    -fatal               boolean    Report fatal errors
    -die                 boolean    Report deaths
-   
+
 
    Standard (Mandatory) qualifiers Allowed values Default
    [-sequence]
@@ -131,18 +131,18 @@ Command line arguments
    (none)
    Advanced (Unprompted) qualifiers Allowed values Default
    (none)
-   
+
 Input file format
 
    newcpgreport reads one or more nucleic acid sequences.
-   
+
   Input files for usage example
-  
+
    'tembl:rnu68037' is a sequence entry in the example nucleic acid
    database 'tembl'
-   
+
   Database entry: tembl:rnu68037
-  
+
 ID   RNU68037   standard; RNA; ROD; 1218 BP.
 XX
 AC   U68037;
@@ -249,13 +249,13 @@ SQ   Sequence 1218 BP; 162 A; 397 C; 387 G; 272 T; 0 other;
      ggcttcagcc acttgtga                                                    121
 8
 //
-   
+
 Output file format
 
   Output files for usage example
-  
+
   File: rnu68037.newcpgreport
-  
+
 ID   RNU68037  1218 BP.
 XX
 DE   CpG Island report.
@@ -277,36 +277,36 @@ FT                    /Percent CG=67.78
 FT                    /ObsExp=1.01
 FT   numislands       2
 //
-   
+
 Data files
 
    None.
-   
+
 Notes
 
    None.
-   
+
 References
 
     1. Larsen F., Gundersen, G., Lopez L., Prydz H. "CpG island as Gene
        Markers in the Human Genome" Genomics 13:1095-1107 (1992)
-       
+
 Warnings
 
    None.
-   
+
 Diagnostic Error Messages
 
    None.
-   
+
 Exit status
 
    It always exits with a status of 0.
-   
+
 Known bugs
 
    None.
-   
+
 See also
 
    Program name                          Description
@@ -314,11 +314,11 @@ See also
    cpgreport    Reports all CpG rich regions
    geecee       Calculates the fractional GC content of nucleic acid sequences
    newcpgseek   Reports CpG rich regions
-   
+
    As there is no official definition of what is a cpg island is, and
    worst where they begin and end, we have to live with 2 definitions and
    thus two methods. These are:
-   
+
    1. newcpgseek and cpgreport - both declare a putative island if the
    score is higher than a threshold (17 at the moment). They now also
    display the actual CpG count, the % CG and the observed/expected
@@ -326,12 +326,12 @@ See also
    scoring method based on sum/frequencies overpredicts islands but finds
    the smaller ones around primary exons. newcpgseek uses the same method
    as cpgreport but the output is different and more readable.
-   
+
    2. newcpgreport and cpgplot use the method which mentioned in the
    Description section above. The important thing to note in this method
    is that an island, in order to be reported, is defined as a region
    that satisfies the following contraints:
-   
+
    Obs/Exp ratio > 0.6
    % C + % G > 50%
    Length > 200.
@@ -339,24 +339,26 @@ See also
    For all practical purposes you should probably use newcpgreport. It is
    actually used to produce the human cpgisland database you can find on
    the EBI's ftp server as well as on the EBI's SRS server.
-   
+
    geecee measures CG content in the entire input sequence and is not to
    be used to detect CpG islands. It can be useful for detecting
    sequences that MIGHT contain an island.
-   
+
 Author(s)
 
    Rodrigo Lopez (rls © ebi.ac.uk)
    European Bioinformatics Institute, Wellcome Trust Genome Campus,
    Hinxton, Cambridge CB10 1SD, UK
-   
+
 History
 
    Written (1999) - Rodrigo Lopez.
-   
+
 Target users
 
    This program is intended to be used by everyone and everything, from
    naive users to embedded scripts.
-   
+
 Comments
+
+   None

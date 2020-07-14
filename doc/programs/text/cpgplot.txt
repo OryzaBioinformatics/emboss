@@ -1,49 +1,49 @@
 
                                   cpgplot 
-                                      
-   
-   
+
+
+
 Function
 
    Plot CpG rich areas
-   
+
 Description
 
    CpG refers to a C nucleotide immediately followed by a G. The 'p' in
    'CpG' refers to the phosphate group linking the two bases.
-   
+
    Detection of regions of genomic sequences that are rich in the CpG
    pattern is important because such regions are resistant to methylation
    and tend to be associated with genes which are frequently switched on.
    Regions rich in the CpG pattern are known as CpG islands.
-   
+
    It has been estimated that about half of all mammalian genes have a
    CpG-rich region around their 5' end. It is said that all mammalian
    house-keeping genes have a CpG island!
-   
+
    Non-mammalian vertebrates have some CpG islands that are associated
    with genes, but the association gets equivocal in the farther
    taxonomic groups.
-   
+
    Finding a CpG island upstream of predicted exons or genes is good
    contributory evidence.
-   
+
    By default, this program defines a CpG island as a region where, over
    an average of 10 windows, the calculated % composition is over 50% and
    the calculated Obs/Exp (i.e. Observed/Expected) ratio is over 0.6 and
    the conditions hold for a minimum of 200 bases. These conditions can
    be modified by setting the values of the appropriate parameters.
-   
+
    The Observed number of CpG patterns in a window is simply the count of
    the number of times a 'C' is found followed immediately by a 'G'.
-   
+
    The Expected number of CpG patterns is calculated for each window as
    the number of CpG dinucleotides you would expect to see in that window
    based on the frequency of C's and G's in that window. Thus, the
    Expected frequency of CpG's in a window is calculated as the number of
    'C's in the window multiplied by the number of 'G's in the window,
    divided by the window length.
-   
+
         Expected = (number of C's  * number of G's) / window length
 
 
@@ -51,11 +51,11 @@ Description
    ratio, the percentage CpG over a window which is moved along the
    sequence. These calculated values can be plotted, together with the
    regions which match this program's definition of a CpG island.
-   
+
 Usage
 
    Here is a sample session with cpgplot
-   
+
 
 % cpgplot tembl:rnu68037 -graph cps 
 Plot CpG rich areas
@@ -68,10 +68,10 @@ Output file [rnu68037.cpgplot]:
 Output features [rnu68037.gff]: 
 
 Created cpgplot.ps
-   
+
    Go to the input files for this example
    Go to the output files for this example
-   
+
 Command line arguments
 
    Standard (Mandatory) qualifiers:
@@ -167,7 +167,7 @@ Command line arguments
    -error               boolean    Report errors
    -fatal               boolean    Report fatal errors
    -die                 boolean    Report deaths
-   
+
 
    Standard (Mandatory) qualifiers Allowed values Default
    [-sequence]
@@ -195,7 +195,7 @@ Command line arguments
    (Parameter 3) Graph type EMBOSS has a list of known devices, including
    postscript, ps, hpgl, hp7470, hp7580, meta, colourps, cps, xwindows,
    x11, tektronics, tekt, tek4107t, tek, none, null, text, data, xterm,
-   png EMBOSS_GRAPHICS value, or x11
+   png, xml EMBOSS_GRAPHICS value, or x11
    [-outfeat]
    (Parameter 4) File for output features Writeable feature table
    unknown.gff
@@ -210,18 +210,18 @@ Command line arguments
    Yes/No Yes
    -[no]pc If this is set to true then the graph of the percentage C plus
    G within a window is displayed. Boolean value Yes/No Yes
-   
+
 Input file format
 
    Any DNA sequence USA.
-   
+
   Input files for usage example
-  
+
    'tembl:rnu68037' is a sequence entry in the example nucleic acid
    database 'tembl'
-   
+
   Database entry: tembl:rnu68037
-  
+
 ID   RNU68037   standard; RNA; ROD; 1218 BP.
 XX
 AC   U68037;
@@ -328,17 +328,13 @@ SQ   Sequence 1218 BP; 162 A; 397 C; 387 G; 272 T; 0 other;
      ggcttcagcc acttgtga                                                    121
 8
 //
-   
+
 Output file format
 
   Output files for usage example
-  
-  Graphics File: cpgplot.ps
-  
-   [cpgplot results]
-   
+
   File: rnu68037.cpgplot
-  
+
 
 
 CPGPLOT islands of unusual CG composition
@@ -351,48 +347,47 @@ RNU68037 from 1 to 1218
  Length 406 (104..509)
 
  Length 329 (596..924)
-   
+
   File: rnu68037.gff
-  
+
 ##gff-version 2.0
-##date 2004-04-06
+##date 2004-07-15
 ##Type DNA RNU68037
 RNU68037        cpgplot misc_feature    104     509     0.000   +       .
 Sequence "RNU68037.1"
 RNU68037        cpgplot misc_feature    596     924     0.000   +       .
 Sequence "RNU68037.2"
-   
-Data files
 
-   None.
-   
+  Graphics File: cpgplot.ps
+
+   [cpgplot results]
+
 Notes
 
    None.
-   
+
 References
 
    The original program was described in:
-   
-   Larsen F, Gundersen G, Lopez R, Prydz H "CpG islands as gene markers
-   in the human genome." Genomics 1992 Aug;13(4):1095-107
-   
+    1. Larsen F, Gundersen G, Lopez R, Prydz H "CpG islands as gene
+       markers in the human genome." Genomics 1992 Aug;13(4):1095-107
+
 Warnings
 
    None.
-   
+
 Diagnostic Error Messages
 
    None.
-   
+
 Exit status
 
    0 if successful.
-   
+
 Known bugs
 
    None.
-   
+
 See also
 
    Program name                          Description
@@ -400,11 +395,11 @@ See also
    geecee       Calculates the fractional GC content of nucleic acid sequences
    newcpgreport Report CpG rich areas
    newcpgseek   Reports CpG rich regions
-   
+
    As there is no official definition of what is a cpg island is, and
    worst where they begin and end, we have to live with 2 definitions and
    thus two methods. These are:
-   
+
    1. newcpgseek and cpgreport - both declare a putative island if the
    score is higher than a threshold (17 at the moment). They now also
    displaying the actual CpG count, the % CG and the observed/expected
@@ -412,12 +407,12 @@ See also
    scoring method based on sum/frequencies overpredicts islands but finds
    the smaller ones around primary exons. newcpgseek uses the same method
    as cpgreport but the output is different and more readable.
-   
+
    2. newcpgreport and cpgplot use a sliding window within which the
    Obs/Exp ratio of CpG is calculated. The important thing to note in
    this method is that an island, in order to be reported, is defined as
    a region that satisfies the following contraints:
-   
+
    Obs/Exp ratio > 0.6
    % C + % G > 50%
    Length > 200.
@@ -425,24 +420,26 @@ See also
    For all practical purposes you should probably use newcpgreport. It is
    actually used to produce the human cpgisland database you can find on
    the EBI's ftp server as well as on the EBI's SRS server.
-   
+
    geecee measures CG content in the entire input sequence and is not to
    be used to detect CpG islands. It can be usefull for detecting
    sequences that MIGHT contain an island.
-   
+
 Author(s)
 
    Alan Bleasby (ableasby © rfcgr.mrc.ac.uk)
    MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
    Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
-   
+
 History
 
-Completed 23rd March 1999.
+   Completed 23rd March 1999.
 
 Target users
 
    This program is intended to be used by everyone and everything, from
    naive users to embedded scripts.
-   
+
 Comments
+
+   None

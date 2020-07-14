@@ -1,19 +1,18 @@
 
-                                EMBOSS: topo
-     _________________________________________________________________
-   
-                                 Program topo
-                                       
+                                   topo 
+
+
+
 Function
 
    TOPO creates an image of a transmembrane protein.
-   
+
 Description
 
    TOPO creates an image of a transmembrane region but the user must give
    the transmembrane regions for the sequence as it does not calculate
    these.
-   
+
 Usage
 
    Here is a sample session with topo.
@@ -29,7 +28,7 @@ Signatue Sections: 74 82 sy 189 189 hm 239 239 sa 157 157 sa 262 262 sa
 
 
    click here for result
-   
+
 Command line arguments
 
    Mandatory qualifiers (* if not always prompted):
@@ -62,7 +61,7 @@ Command line arguments
    -draft              bool       Is this a draft plot
 
    Advanced qualifiers: (none)
-   
+
    Mandatory qualifiers Allowed values Default
    [-sequence]
    (Parameter 1) Sequence USA Readable sequence Required
@@ -427,11 +426,11 @@ Command line arguments
    -draft Is this a draft plot Yes/No No
    Advanced qualifiers Allowed values Default
    (none)
-   
+
 Input file format
 
    Any sequence.
-   
+
 Output file format
 
 Data files
@@ -441,13 +440,13 @@ Notes
    As you can see the lists above the are alot of options to choose for
    the displays of acidic, basic amino acids etc. This can be explained
    simply as :-
-   
+
    One letter codes are black filled shaped EXCEPT for "N" which means
    NONE (no shape).
-   
+
    For two letter codes the first letter is the shape and the second the
    colour except for "F" which means NO FILL.
-   
+
    For the signatures you need to input sets of start position, end
    position and code. For the example given these are 74 82 sy 189 189 hm
    239 239 sa 157 157 sa 262 262 sa
@@ -470,11 +469,11 @@ Author(s)
 
    The original Fortran program was written by Susan Jean Johns, VADMS
    Center, Biochemistry/Biophysics Department at WSU.
-   
+
    This application was modified for inclusion in EMBOSS by Ian Longden
    (il@sanger.ac.uk) Informatics Division, The Sanger Centre, Wellcome
    Trust Genome Campus, Hinxton, Cambridge, CB10 1SA, UK.
-   
+
 Priority
 
 Target users

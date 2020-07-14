@@ -1,12 +1,12 @@
 
                                  dbiblast 
-                                      
-   
-   
+
+
+
 Function
 
    Index a BLAST database
-   
+
 Description
 
    dbiblast indexes a blast database created by the NCBI indexing
@@ -15,21 +15,21 @@ Description
    CD-ROM distribution and by the Staden package in addition to EMBOSS,
    and appears to be the most generally used and publicly available index
    file format.
-   
+
    The index files of the blast database format are not useful by
    themselves as they do not hold the entrynames or accession numbers,
    but they are used as pointers to the reference and sequence
    information in the database.
-   
+
    Because there are two sequence types (nucleic acid and protein) and
    two index formats (blast1 from pressdb or setdb, and blast2 from
    formatdb) with different index file names, dbiblast will ask about the
    database type. If the answer is "unknown" dbiblast will test each
    possible set of file names until one is found.
-   
+
    Having created the EMBOSS indices for this file, a database can then
    be defined in the file emboss.defaults as something like:
-   
+
 DB swnew [
    type: P
    format: embl
@@ -38,41 +38,41 @@ DB swnew [
 ]
 
   Fields Indexed
-  
+
    By default, dbiblast will index the ID name and the accession number
    (if present).
    If they are present in your database, you may specify that dbiblast
    should index the Sequence Version and GI number and the words in the
    description by using the '-fields' qualifier with the appropriate
    values.
-   
+
   Indexing the Blast database
-  
+
    dbiblast can't use the new style of Blast indices. You must create the
    old style of Blast indices by adding -A F to the formatdb command
    line.
-   
+
    The reason is that NCBI have not documented the new format, so we
    cannot extend dbiblast to read it.
-   
+
    If you have the original (fasta format) file you can build the
    previous blast database format with:
-   
+
    formatdb -A F
-   
+
    This turns off the new "ASN.1" formatting. blastall will still work.
-   
+
 Usage
 
    Here is a sample session with dbiblast
-   
+
    This creates EMBOSS indices for the BLAST database 'swnew'
-   
+
 
 % dbiblast 
 Index a BLAST database
 Database name: swnew
-Database directory [.]: ../../data
+Database directory [.]: data
 Wildcard database filename [swnew]: 
 Release number [0.0]: 
 Index date [00/00/00]: 
@@ -84,9 +84,9 @@ Sequence type [unknown]:
          2 : formatdb
          0 : unknown
 Blast index version [unknown]: 
-   
+
    Go to the output files for this example
-   
+
 Command line arguments
 
    Standard (Mandatory) qualifiers:
@@ -102,7 +102,6 @@ Command line arguments
    Advanced (Unprompted) qualifiers:
    -fields             menu       Index fields
    -exclude            string     Wildcard filename(s) to exclude
-   -indexdirectory     directory  Index directory
    -sortoptions        string     Sort options, typically '-T .' to use
                                   current directory for work files and '-k
                                   1,1' to force GNU sort to use the first
@@ -111,27 +110,29 @@ Command line arguments
    -[no]systemsort     boolean    Use system sort utility
    -[no]cleanup        boolean    Clean up temporary files
    -sourcefile         boolean    Use FASTA source file
+   -indexoutdir        outdir     Index directory
 
    Associated qualifiers: (none)
    General qualifiers:
-   -auto                boolean    Turn off prompts
-   -stdout              boolean    Write standard output
-   -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for standard and additional values
-   -debug               boolean    Write debug output to program.dbg
-   -verbose             boolean    Report some/full command line options
-   -help                boolean    Report command line options. More
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
-   -warning             boolean    Report warnings
-   -error               boolean    Report errors
-   -fatal               boolean    Report fatal errors
-   -die                 boolean    Report deaths
-   
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report deaths
+
 
    Standard (Mandatory) qualifiers Allowed values Default
    [-dbname]
-   (Parameter 1) Database name A string from 1 to 19 characters Required
+   (Parameter 1) Database name A string from 2 to 19 characters, matching
+   regular expression /[A-z][A-z0-9_]+/ Required
    -directory Database directory Directory .
    -filenames Wildcard database filename Any string is accepted Database
    name
@@ -157,7 +158,6 @@ Command line arguments
    acnum
    -exclude Wildcard filename(s) to exclude Any string is accepted An
    empty string is accepted
-   -indexdirectory Index directory Directory .
    -sortoptions Sort options, typically '-T .' to use current directory
    for work files and '-k 1,1' to force GNU sort to use the first field
    Any string is accepted -T . -k 1,1
@@ -165,35 +165,36 @@ Command line arguments
    -[no]systemsort Use system sort utility Boolean value Yes/No Yes
    -[no]cleanup Clean up temporary files Boolean value Yes/No Yes
    -sourcefile Use FASTA source file Boolean value Yes/No No
-   
+   -indexoutdir Index directory Output directory .
+
 Input file format
 
-   AI BLAST1 or BLAST2 database index files.
-   
+   Any BLAST1 or BLAST2 database index files.
+
 Output file format
 
   Output files for usage example
-  
-  File: acnum.hit
-  
-   This file contains non-printing characters and so cannot be displayed
-   here.
-   
-  File: acnum.trg
-  
-   This file contains non-printing characters and so cannot be displayed
-   here.
-   
+
   File: division.lkp
-  
+
    This file contains non-printing characters and so cannot be displayed
    here.
-   
+
   File: entrynam.idx
-  
+
    This file contains non-printing characters and so cannot be displayed
    here.
-   
+
+  File: acnum.hit
+
+   This file contains non-printing characters and so cannot be displayed
+   here.
+
+  File: acnum.trg
+
+   This file contains non-printing characters and so cannot be displayed
+   here.
+
    dbiblast creates four index files. All are binary but with a simple
    format.
      * division.lkp is the master index file, and has a 300 byte header
@@ -218,59 +219,59 @@ Output file format
        accession number search will use acnum.trg to find a start
        position and number of records to read in this file, and will then
        simply read the entryname.idx records for each entry in turn.
-       
+
 Data files
 
    None.
-   
+
 Notes
-
-   None.
-   
-References
-
-   None.
-   
-Warnings
 
    dbiblast can't use the new style of Blast indices. You must create the
    old style of Blast indices by adding -A F to the formatdb command
    line.
-   
+
+References
+
+   None.
+
+Warnings
+
 Diagnostic Error Messages
 
    None.
-   
+
 Exit status
 
    None.
-   
+
 Known bugs
 
    dbiblast can't use the new style of Blast indices. You must create the
    old style of Blast indices by adding -A F to the formatdb command
    line.
-   
+
 See also
 
    Program name          Description
    dbifasta     Index a fasta database
    dbiflat      Index a flat file database
    dbigcg       Index a GCG formatted database
-   
+
 Author(s)
 
-   This application was written by Peter Rice (pmr © ebi.ac.uk)
+   Peter Rice (pmr © ebi.ac.uk)
    Informatics Division, European Bioinformatics Institute, Wellcome
    Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
-   
+
 History
 
    Completed December 1999
-   
+
 Target users
 
    This program is intended to be used by administrators responsible for
    software and database installation and maintenance.
-   
+
 Comments
+
+   None

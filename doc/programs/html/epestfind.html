@@ -1,5 +1,3 @@
-<!--START OF HEADER - DON'T ALTER -->
-
 <HTML>
 <HEAD>
   <TITLE>
@@ -8,11 +6,9 @@
 </HEAD>
 <BODY BGCOLOR="#FFFFFF" text="#000000">
 
-
-
 <table align=center border=0 cellspacing=0 cellpadding=0>
 <tr><td valign=top>
-<A HREF="index.html" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
@@ -25,38 +21,14 @@ epestfind
 <p>
 
 
-
-<!--END OF HEADER-->
-
-
-
-
-
-
 <H2>
     Function
 </H2>
 Finds PEST motifs as potential proteolytic cleavage sites
 
-<!--
-DON'T WRITE ANYTHING HERE.
-IT IS DONE FOR YOU.
--->
-
-
-
-
 <H2>
     Description
 </H2>
-
-<!-- 
-	This is the main part of the document.
-        This is what the user looks at to find out if this program will do what he wants. 
-        Long description.
-        Why it is useful.
-        When it should/shouldn't be used.
-  -->
 
 <b>epestfind</b> allows rapid and objective identification of PEST motifs
 in protein target sequences.  Briefly, the PEST hypothesis was based on
@@ -80,22 +52,9 @@ they target proteins for proteolytic degradation.
 PEST means Black Death in German, so that the name of this programme
 sounds a bit strange, at least in our ears. 
 
-
-
-
-
-
-
-
-
 <H2>
     Algorithm
 </H2>
-
-<!-- 
-        Algorithms
-	  Pseudocode/Vague description/Handwaving/web links to useful pages
-  -->
 
 PEST motifs were defined as hydrophilic stretches of at least 12 amino
 acids length with a high local concentration of critical amino acids. 
@@ -198,20 +157,9 @@ Z=(Q|E)=10 since Q=10 and E=10
 <br>
 X=10*0+45=45
 
-
-
-
-
-
 <H2>
     Usage
 </H2>
-
-<!--  
-	Example usage, as run from the command-line.
-        Many examples illustrating different behaviours is good.
- -->
-
 <b>Here is a sample session with epestfind</b>
 <p>
 
@@ -220,7 +168,7 @@ X=10*0+45=45
 
 % <b>epestfind -graph cps -invalid </b>
 Finds PEST motifs as potential proteolytic cleavage sites
-Input sequence: <b>../../data/exu2_drops.embl</b>
+Input sequence: <b>exu2_drops.embl</b>
 Window length [10]: <b></b>
 Sort order of results
       1 : length
@@ -237,11 +185,9 @@ Created epestfind.ps
 
 
 
-
 <H2>
     Command line arguments
 </H2>
-
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
    Standard (Mandatory) qualifiers:
@@ -364,7 +310,7 @@ Created epestfind.ps
 <tr>
 <td>-graph</td>
 <td>Graph type</td>
-<td>EMBOSS has a list of known devices, including postscript, ps, hpgl, hp7470, hp7580, meta, colourps, cps, xwindows, x11, tektronics, tekt, tek4107t, tek, none, null, text, data, xterm, png</td>
+<td>EMBOSS has a list of known devices, including postscript, ps, hpgl, hp7470, hp7580, meta, colourps, cps, xwindows, x11, tektronics, tekt, tek4107t, tek, none, null, text, data, xterm, png, xml</td>
 <td><i>EMBOSS_GRAPHICS</i> value, or x11</td>
 </tr>
 
@@ -425,37 +371,17 @@ Created epestfind.ps
 </table>
 
 
-<!--
-DON'T WRITE ANYTHING HERE.
-IT IS DONE FOR YOU.
--->
-
-
-
-
-
-
-
-
 <H2>
     Input file format
 </H2>
-
-<!-- 
-        This includes example input file formats.
-        This should be a detailed description and example - assume
-        someone will want to parse this file and will want to know what
-        happens in unusual cases - null input, etc. 
-   -->
 
 <b>epestfind</b> reads any normal protein sequence USA.
 
 <p>
 
-
 <a name="input.1"></a>
 <h3>Input files for usage example </h3>
-<p><h3>File: ../../data/exu2_drops.embl</h3>
+<p><h3>File: exu2_drops.embl</h3>
 <table width="90%"><tr><td bgcolor="#FFCCFF">
 <pre>
 ID   EXU2_DROPS     STANDARD;      PRT;   477 AA.
@@ -509,43 +435,9 @@ SQ   SEQUENCE   477 AA;  53194 MW;  8B5334A77DB9467B CRC64;
 
 
 
-
-
-
 <H2>
     Output file format
 </H2>
-
-<!-- 
-        This includes example output file formats.
-        This should be a detailed description and example - assume
-        someone will want to parse this file and will want to know what
-        happens in unusual cases - null output, errors etc. 
-
-        If you wish to include the standard description of the avalable
-	report formats, use:
-<p>
-
-The output is a standard EMBOSS report file. 
-
-<p>
-
-The results can be output in one of several styles by using the
-command-line qualifier <b>-rformat xxx</b>, where 'xxx' is replaced by
-the name of the required format.  The available format names are: embl,
-genbank, gff, pir, swiss, trace, listfile, dbmotif, diffseq, excel,
-feattable, motif, regions, seqtable, simple, srs, table, tagseq
-
-<p>
-
-See:
-<A href="http://www.uk.embnet.org/Software/EMBOSS/Themes/ReportFormats.html">
-http://www.uk.embnet.org/Software/EMBOSS/Themes/ReportFormats.html</A>
-for further information on report formats.
-
-<p>
-
-   -->
 
 <b>epestfind</b> 
 outputs a graph to the specified graphics device. 
@@ -553,27 +445,8 @@ outputs a graph to the specified graphics device.
 
 <p>
 
-The output from <b>epestfind</b> is a simple text one.  It reports poor
-and potential PEST motifs together with their PEST score, mass percent
-of DEPST and their hydrophobicity index. 
-
-<p>
-
-<p>
-
-'Valid' PEST motifs below the threshold score (5.0) are considered as
-'poor', while PEST scores above the threshold score are of real
-biological interest.  The higher the PEST score, the more likely is
-degradation of proteins mediated via 'potential' PEST motifs in
-eukaryotic cells. 
-
-<p>
-
-
 <a name="output.1"></a>
 <h3>Output files for usage example </h3>
-<p><h3>Graphics File: epestfind.ps</h3>
-<p><img src="epestfind.1.epestfind.gif" alt="[epestfind results]">
 <p><h3>File: exu2_drops.epestfind</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
@@ -670,25 +543,29 @@ Invalid PEST motif with 10 amino acids between position 225 and 236.
 
 </pre>
 </td></tr></table><p>
+<p><h3>Graphics File: epestfind.ps</h3>
+<p><img src="epestfind.1.epestfind.gif" alt="[epestfind results]">
 
+<p>
 
+The output from <b>epestfind</b> is a simple text one.  It reports poor
+and potential PEST motifs together with their PEST score, mass percent
+of DEPST and their hydrophobicity index. 
 
+<p>
 
+'Valid' PEST motifs below the threshold score (5.0) are considered as
+'poor', while PEST scores above the threshold score are of real
+biological interest.  The higher the PEST score, the more likely is
+degradation of proteins mediated via 'potential' PEST motifs in
+eukaryotic cells. 
+
+<p>
 
 
 <H2>
     Data files
 </H2>
-
-<!-- 
-        Any data files used (e.g. translation table file)
-        This includes example data file formats if they are
-        not obvious.
-
-	If you wish to include the standard description of what data
-	files are and how to use embossdata to inspect and retrieve
-	them, use:
-   -->
 
 The physico-chemical properties of the residues are read from the EMBOSS
 data file 'Eamino.dat'.  This file can be copied into your current
@@ -696,7 +573,6 @@ directory and inspected or altered by using the application 'embossdata
 -fetch'.  Another file can be specified using the qualifier '-aadata'. 
 
 <p>
-
 
 <p>
 EMBOSS data files are distributed with the application and stored
@@ -780,134 +656,62 @@ Z       128.6228         0 0 0 0 0 1 -.5 0 1
 </pre>
 
 
-
-
-
-
-
-
 <H2>
     Notes
 </H2>
 
-<!-- 
-        Restrictions.
-        Interesting behaviour.
-        Useful things you can do with this program.
-   -->
-
 None.
-
-
-
-
-
-
 
 <H2>
     References
 </H2>
 
-<!-- 
-        Bibliography for methods used.
-   -->
-
 <ol>
+
 <li>Rogers S.W., Wells R., Rechsteiner M.
       Amino acid sequences common to rapidly degraded proteins:
       The PEST hypothesis
       Science 234, 364-368 (1986)
+
 <li>Rechsteiner M., Rogers S., Rote K.
       Protein structure and intracellular stability
       Trends Biochem. Sci. 12, 390-394 (1987)
+
 <li>Rechsteiner M. and Rogers S.W.
       PEST sequences and regulation by proteolysis
       Trends Biochem. Sci. 21, 267-271 (1996)
+
 <li>J. Kyte and R.F. Dootlittle
       A simple method for displaying the hydropathic character of a protein
       J. Mol. Biol. 157, 105 (1982)
+
 </ol>
-
-
-
-
-
-
-
 
 <H2>
     Warnings
 </H2>
 
-<!-- 
-        Potentially stupid things the program will let you do.
-   -->
-
 None.
-
-
-
-
-
-
 
 <H2>
     Diagnostic Error Messages
 </H2>
 
-<!-- 
-        Error messages specific to this program, eg:
-        "FATAL xxx" - means you have not set up the xxx data using program <b>prog</b>.<p>
-   -->
-
 None.
-
-
-
-
-
-
 
 <H2>
     Exit status
 </H2>
 
-<!-- 
-        Description of the exit status for various error conditions
-   -->
-
 It always exits with status 0.
-
-
-
-
-
-
-
 
 <H2>
     Known bugs
 </H2>
 
-
-<!-- 
-        Bugs noted but not yet fixed.
-   -->
-
 None.
 
 
-
-
-
-
-
-
-<!--
-<H2>
-    See also
-</H2>
--->
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
@@ -925,32 +729,14 @@ None.
 <tr><td><a href="sigcleave.html">sigcleave</a></td><td>Reports protein signal cleavage sites</td></tr>
 </table>
 
-<!-- 
-        Add any comments about other associated programs (to prepare
-        data files?) that seealso doesn't find. 
-   -->
-
-
-
-
-
-
-
-
-
 
 <H2>
     Author(s)
 </H2>
-<!--
-        Who has worked on the program in the past.
-   -->
 
 Michael K. Schuster and Martin Grabner (martin.grabner&nbsp;&copy;&nbsp;univie.ac.at)
 <br>
 from the Austrian National EMBnet node.
-
-
 
 
 <p>
@@ -958,21 +744,10 @@ from the Austrian National EMBnet node.
 Original program 'epestfind' by Scott Rogers and Martin Rechsteiner
 (C)1986. 
 
-
-
-
-
-
-
-
-
 <H2>
     History
 </H2>
 
-<!--
-        What changes have been made.
-   -->
 
 This is based on the algorithm used in the QuickBasic program by Rodgers et al.
 
@@ -980,47 +755,17 @@ This is based on the algorithm used in the QuickBasic program by Rodgers et al.
 
 Written (March 2002).
 
-<!--
-<p>
-[an error occurred while processing this directive]
--->
-
-
-
-
-
-
-
-
-
-
-
 
 <H2>
     Target users
 </H2>
-
-<!--
-        For general users, requested by one user, for EMBOSS site
-        maintainers, for EMBOSS developers etc.
-        eg:
-        "This program is intended to be used by everyone and everything,
-        from naive users to embedded scripts." 
-	Which is easy to include using:
-   -->
-
 This program is intended to be used by everyone and everything, from naive users to embedded scripts.
 
 
-
-
-
-
-
-
-
-
-
+<H2>
+    Comments
+</H2>
+None
 
 </BODY>
 </HTML>

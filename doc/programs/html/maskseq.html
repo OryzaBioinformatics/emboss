@@ -7,12 +7,9 @@
 </HEAD>
 <BODY BGCOLOR="#FFFFFF" text="#000000">
 
-
-
-
 <table align=center border=0 cellspacing=0 cellpadding=0>
 <tr><td valign=top>
-<A HREF="index.html" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
@@ -25,19 +22,9 @@ maskseq
 <p>
 
 
-
-
-
 <H2>
     Function
 </H2>
-
-
-
-<!--
-DON'T WRITE ANYTHING HERE.
-IT IS DONE FOR YOU.
--->
 Mask off regions of a sequence
 
 
@@ -75,8 +62,6 @@ masking character.
 <H2>
     Usage
 </H2>
-
-
 <b>Here is a sample session with maskseq</b>
 <p>
 Mask off bases 10 to 12 from a sequence 'prot.fasta' and write to the new sequence file 'prot2.seq': 
@@ -85,7 +70,7 @@ Mask off bases 10 to 12 from a sequence 'prot.fasta' and write to the new sequen
 <p>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% <b>maskseq ../../data/prot.fasta prot2.seq -reg=10-12 </b>
+% <b>maskseq prot.fasta prot2.seq -reg=10-12 </b>
 Mask off regions of a sequence.
 
 </pre></td></tr></table><p>
@@ -100,7 +85,7 @@ Mask off bases 20 to 30 from a sequence 'prot.fasta' using the character 'x' and
 <p>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% <b>maskseq ../../data/prot.fasta prot2.seq -reg=20-30 -mask=x </b>
+% <b>maskseq prot.fasta prot2.seq -reg=20-30 -mask=x </b>
 Mask off regions of a sequence.
 
 </pre></td></tr></table><p>
@@ -115,7 +100,7 @@ Mask off the regions 20 to 23, 34 to 45 and 88 to 90 in 'prot.fasta':
 <p>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% <b>maskseq ../../data/prot.fasta prot2.seq -reg=20-23,34-45,88-90 </b>
+% <b>maskseq prot.fasta prot2.seq -reg=20-23,34-45,88-90 </b>
 Mask off regions of a sequence.
 
 </pre></td></tr></table><p>
@@ -130,7 +115,7 @@ Change to lower-case the regions 20 to 23, 34 to 45 and 88 to 90 in 'prot.fasta'
 <p>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% <b>maskseq ../../data/prot.fasta prot2.seq -reg=20-23,34-45,88-90 -tolower </b>
+% <b>maskseq prot.fasta prot2.seq -reg=20-23,34-45,88-90 -tolower </b>
 Mask off regions of a sequence.
 
 </pre></td></tr></table><p>
@@ -142,14 +127,6 @@ Mask off regions of a sequence.
 <H2>
     Command line arguments
 </H2>
-
-
-
-<!--
-DON'T WRITE ANYTHING HERE.
-IT IS DONE FOR YOU.
--->
-
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
    Standard (Mandatory) qualifiers:
@@ -281,7 +258,7 @@ Examples of region specifications are:
 <td>-tolower</td>
 <td>The region can be 'masked' by converting the sequence characters to lower-case, some non-EMBOSS programs e.g. fasta can interpret this as a masked region. The sequence is unchanged apart from the case change. You might like to ensure that the whole sequence is in upper-case before masking the specified regions to lower-case by using the '-supper' flag.</td>
 <td>Toggle value Yes/No</td>
-<td>N</td>
+<td>No</td>
 </tr>
 
 <tr>
@@ -289,7 +266,7 @@ Examples of region specifications are:
 <td>Character to use when masking.
 Default is 'X' for protein sequences, 'N' for nucleic sequences.
 If the mask character is set to be the SPACE character or a null character, then the sequence is 'masked' by changing it to lower-case, just as with the '-lowercase' flag.</td>
-<td>Any string is accepted</td>
+<td>A string from 1 to 1 characters</td>
 <td>'X' for protein, 'N' for nucleic</td>
 </tr>
 
@@ -319,7 +296,7 @@ If the mask character is set to be the SPACE character or a null character, then
 
 <a name="input.1"></a>
 <h3>Input files for usage example </h3>
-<p><h3>File: ../../data/prot.fasta</h3>
+<p><h3>File: prot.fasta</h3>
 <table width="90%"><tr><td bgcolor="#FFCCFF">
 <pre>
 &gt;FASTA F00001 FASTA FORMAT PROTEIN SEQUENCE
@@ -478,11 +455,6 @@ Several warning messages about malformed region specifications:
 
 None.
 
-<!--
-<H2>
-    See also
-</H2>
--->
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
@@ -512,17 +484,6 @@ None.
 <tr><td><a href="yank.html">yank</a></td><td>Reads a sequence range, appends the full USA to a list file</td></tr>
 </table>
 
-<!--
-        Add any comments about other associated programs (to prepare
-        data files?) that seealso doesn't find.
-   -->
-
-<p>
-
-<b>maskfeat</b> masks parts of the input sequence that are annotated
-features whose feature-names match the user-specified names.
-
-
 
 <H2>
     Author(s)
@@ -541,30 +502,22 @@ Wellcome Trust Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
     History
 </H2>
 
-
 Completed 3 March 1999
 
-<!--
-<p>
-[an error occurred while processing this directive]
--->
 
 <H2>
     Target users
 </H2>
 
+This program is intended to be used by everyone and everything, from naive users to embedded scripts.
 
-This program is intended to be used by everyone and everything,
-from naive users to embedded scripts. 
+
 
 <H2>
     Comments
 </H2>
+None
 
-
-<pre>
-
-</pre>
 
 
 </BODY>

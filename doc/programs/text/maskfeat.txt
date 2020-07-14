@@ -1,12 +1,12 @@
 
                                  maskfeat 
-                                      
-   
-   
+
+
+
 Function
 
    Mask off features of a sequence
-   
+
 Description
 
    maskfeat reads in a sequence with its associated features. The
@@ -14,7 +14,7 @@ Description
    format such as EMBL or SWISSPROT which includes features in the
    annotation, or they may be supplied explicitly in a GFF file by using
    the command-lin option '-gff filename'.
-   
+
    The feature table is then searched for features whose type matches the
    specified feature type to be masked. By default, the type is 'repeat*'
    (i.e. any type whose name starts with 'repeat'). You can specify the
@@ -23,54 +23,54 @@ Description
    names with spaces or commas. The names of the types of feature to be
    found may be wild-carded with asterisks '*' to find gruops of feature
    types sharing a common part of their names.
-   
+
    If you are unsure of the names of feature types in use, please consult
    http://www3.ebi.ac.uk/Services/WebFeat/ for a list of the EMBL feature
    types and see Appendix A of the Swissprot user manual in
    http://www.expasy.ch/txt/userman.txt for a list of the Swissprot
    feature types.
-   
+
    If any features matching the specified names of feature types are
    found, then those regions of the sequence will be masked out by
    replacing that part of the sequence by masking characters. The default
    masking characters are 'X' for a protein sequence and 'N' for a
    nucleic acid sequence, although you can specify your own masking
    character, if required.
-   
+
    Some non-EMBOSS programs (for example FASTA) are capable of treating
    lower-case regions as if they are masked. maskfeat can mask a region
    to lower-case instead of replacing the sequence with 'N's or 'X's if
    you use the qualifier '-tolower' or use a space character as the
    masking character.
-   
+
 Usage
 
    Here is a sample session with maskfeat
-   
+
    Mask out a feature whose type is "repeat_region" from position 2331 to
    2356:
-   
+
 
 % maskfeat tembl:ab000360 
 Mask off features of a sequence.
 Output sequence [ab000360.fasta]: 
-   
+
    Go to the input files for this example
    Go to the output files for this example
-   
+
    Example 2
-   
+
    Change to lower-case a feature whose type is "repeat_region" from
    position 2331 to 2356. Note that '-supper' is used to make the whole
    sequence upper-case before the lower-case masking:
-   
+
 
 % maskfeat tembl:ab000360 -tolower -supper 
 Mask off features of a sequence.
 Output sequence [ab000360.fasta]: 
-   
+
    Go to the output files for this example
-   
+
 Command line arguments
 
    Standard (Mandatory) qualifiers:
@@ -155,7 +155,7 @@ Command line arguments
    -error               boolean    Report errors
    -fatal               boolean    Report fatal errors
    -die                 boolean    Report deaths
-   
+
 
    Standard (Mandatory) qualifiers Allowed values Default
    [-sequence]
@@ -176,7 +176,7 @@ Command line arguments
    interpret this as a masked region. The sequence is unchanged apart
    from the case change. You might like to ensure that the whole sequence
    is in upper-case before masking the specified regions to lower-case by
-   using the '-supper' flag. Toggle value Yes/No N
+   using the '-supper' flag. Toggle value Yes/No No
    -maskchar Character to use when masking. Default is 'X' for protein
    sequences, 'N' for nucleic sequences. If the mask character is set to
    be the SPACE character or a null character, then the sequence is
@@ -184,19 +184,19 @@ Command line arguments
    flag. A string up to 1 characters 'X' for protein, 'N' for nucleic
    Advanced (Unprompted) qualifiers Allowed values Default
    (none)
-   
+
 Input file format
 
    maskfeat reads in a sequence USA. You can optionally specify a GFF
    feature file to use with the command-line option '-gff filename'.
-   
+
   Input files for usage example
-  
+
    'tembl:ab000360' is a sequence entry in the example nucleic acid
    database 'tembl'
-   
+
   Database entry: tembl:ab000360
-  
+
 ID   AB000360   standard; DNA; HUM; 2582 BP.
 XX
 AC   AB000360;
@@ -348,15 +348,15 @@ SQ   Sequence 2582 BP; 694 A; 494 C; 581 G; 813 T; 0 other;
      tc                                                                     258
 2
 //
-   
+
 Output file format
 
    maskfeat writes out a normal, masked, sequence file.
-   
+
   Output files for usage example
-  
+
   File: ab000360.fasta
-  
+
 >AB000360 AB000360.1 Homo sapiens PIGC gene, complete cds.
 ggatccctgctgcagagggggtaacggtgtctggcttgccaagcaatatttgttgtggtc
 tatcatggaagaaataaagtcgggcaatatgaattttttttttctcaaatttgccggatg
@@ -402,11 +402,11 @@ atttatctagggctcaaatcttagaacacagggtgctatgctcagttttgttgcccaaga
 tcacagaattggttacttaaccttgactcagagtttctaccttgttcttagggaagcata
 tcacaactaattgcaaagcagagtgtgatgtgtcacaataagcagaatgctagggggaat
 tc
-   
+
   Output files for usage example 2
-  
+
   File: ab000360.fasta
-  
+
 >AB000360 AB000360.1 Homo sapiens PIGC gene, complete cds.
 GGATCCCTGCTGCAGAGGGGGTAACGGTGTCTGGCTTGCCAAGCAATATTTGTTGTGGTC
 TATCATGGAAGAAATAAAGTCGGGCAATATGAATTTTTTTTTTCTCAAATTTGCCGGATG
@@ -452,35 +452,35 @@ ATTTATCTAGGGCTCAAATCTTAGAACACAGGGTGCTATGCTCAGTTTTGTTGCCCAAGA
 TCACAGAATTGGTTACTTAACCTTGACTCAGAGTTTCTACCTTGTTCTTAGGGAAGCATA
 TCACAACTAATTGCAAAGCAGAGTGTGATGTGTCACAATAAGCAGAATGCTAGGGGGAAT
 TC
-   
+
 Data files
 
    None.
-   
+
 Notes
 
    None.
-   
+
 References
 
    None.
-   
+
 Warnings
 
    None.
-   
+
 Diagnostic Error Messages
 
    None.
-   
+
 Exit status
 
    It always exits with a status of 0.
-   
+
 Known bugs
 
    None.
-   
+
 See also
 
    Program name                          Description
@@ -511,23 +511,22 @@ See also
    union        Reads sequence fragments and builds one sequence
    vectorstrip  Strips out DNA between a pair of vector sequences
    yank         Reads a sequence range, appends the full USA to a list file
-   
-   maskseq simply masks a user-specified set of regions, without using
-   annotated features.
-   
+
 Author(s)
 
    Gary Williams (gwilliam © rfcgr.mrc.ac.uk)
    MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
    Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
-   
+
 History
 
    Written (2000) - Gary Williams
-   
+
 Target users
 
    This program is intended to be used by everyone and everything, from
    naive users to embedded scripts.
-   
+
 Comments
+
+   None

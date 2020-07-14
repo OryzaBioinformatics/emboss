@@ -1,20 +1,19 @@
 
-                               EMBOSS: efitch
-     _________________________________________________________________
-   
-                                Program efitch
-                                       
+                                  efitch 
+
+
+
 Function
 
    Conversion of PHYLIP's fitch
-   
+
 Description
 
    EFITCH -- Embossified Fitch-Margoliash and Least-Squares Distance
    Methods
-   
+
    Phylip fitch documentation.
-   
+
 Usage
 
    Here is a sample session with efitch using the data:-
@@ -109,7 +108,7 @@ Command line arguments
    -[no]drawtree       bool       Draw tree
 
    Advanced qualifiers: (none)
-   
+
    Mandatory qualifiers Allowed values Default
    [-infile]
    (Parameter 1) data file Input file Required
@@ -140,13 +139,13 @@ Command line arguments
    -[no]drawtree Draw tree Yes/No Yes
    Advanced qualifiers Allowed values Default
    (none)
-   
+
 Data files
 
 Notes
 
    Multiple sequences sets not implemented yet!.
-   
+
 References
 
 Warnings
@@ -165,11 +164,11 @@ Author(s)
    Washington. Written by Joseph Felsenstein. Permission is granted to
    copy this document provided that no fee is charged for it and that
    this copyright notice is not removed.
-   
+
    This application was modified for inclusion in EMBOSS by Ian Longden
    (il@sanger.ac.uk) Informatics Division, The Sanger Centre, Wellcome
    Trust Genome Campus, Hinxton, Cambridge, CB10 1SA, UK.
-   
+
 Priority
 
 Target users

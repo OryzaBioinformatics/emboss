@@ -1,0 +1,159 @@
+
+                               needlerunner 
+
+
+
+Function
+
+   Runs needle alignment program on all sequence pairs in a directory
+
+Description
+
+   **************** EDIT HERE ****************
+
+Algorithm
+
+   **************** EDIT HERE ****************
+
+Usage
+
+   Under development, no final example yet
+
+Command line arguments
+
+   Standard (Mandatory) qualifiers:
+  [-seqpairsdir]       dirlist    Input directory of files containing sequence
+                                  pairs for alignment
+  [-pathtocommand]     directory  Directory where alignment executable lives
+  [-commandname]       string     Name of alignment executable
+  [-scoringmatrixdirname] directory  Directory where scoring matrix lives
+  [-scoringmatrixname] string     Name of alignment scoring matrix
+   -gapopen            float      The gap opening penalty is subtracted from
+                                  the total score every time a gap is inserted
+                                  in the alignment. The default value is
+                                  chosen for the EBLOSUM62 scoring matrix when
+                                  you are aligning protein sequences, and the
+                                  EDNAFULL matrix when you are aligning
+                                  nucleotide sequences. If you sequence
+                                  contains many small errors you should set a
+                                  low gap opening penalty (near zero) to avoid
+                                  over-penalizing those errors.
+   -gapextend          float      The gap extension penalty is the score
+                                  substracted when more spaces are added to an
+                                  existing alignment gap. Often a single
+                                  insertion or deletion affects multiple
+                                  residues/nucleotides; separate opening and
+                                  extension penalties reduce the excessive
+                                  penalty such events would otherwise carry;
+                                  generally the gap extension penalty should
+                                  be significantly lower than the gap opening
+                                  penalty.
+  [-alignedseqsoutdir] outdir     Name of directory containing sequences
+                                  aligned by needle
+  [-outfilesuffix]     string     Appended to end of all output alignment file
+                                  names
+  [-outfileformat]     string     Format of output alignments
+
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers: (none)
+   Associated qualifiers: (none)
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report deaths
+
+
+   Error: File /homes/pmr/local/share/EMBOSS/acd/needlerunner.acd line
+   12: (seqpairsdir) Unknown attribute 'name'
+
+Input file format
+
+   needlerunner reads any normal sequence USAs.
+
+   Under development, no example input file(s) yet
+
+Output file format
+
+   needlerunner outputs a graph to the specified graphics device. outputs
+   a report format file. The default format is ...
+
+   Under development, no example output file(s) yet
+
+Data files
+
+   **************** EDIT HERE ****************
+
+Notes
+
+   None.
+
+References
+
+   None.
+
+Warnings
+
+   None.
+
+Diagnostic Error Messages
+
+   None.
+
+Exit status
+
+   It always exits with status 0.
+
+Known bugs
+
+   None.
+
+See also
+
+   Program name Description
+   alignrunner Runs alignment program on all sequence pairs in a
+   directory
+   contactalign EMBOSS implementation of Damian Counsell's 2.5-D
+   alignment algorithm
+   esim4 Align an mRNA to a genomic DNA sequence
+   est2genome Align EST and genomic DNA sequences
+   nawalign Damian Counsell's implementation for protein sequences of the
+   Needleman and Wunsch alignment algorithm
+   nawalignrunner Runs nawalign alignment program on all sequence pairs
+   in a directory
+   needle Needleman-Wunsch global alignment
+   scorer Scores accuracy of protein-protein sequence alignment against
+   gold standard structure-structure alignment
+   scorerrunner Runs scorer to compare ordered pairs of substituted seqs
+   in two directories and write the scores to a third
+   stretcher Finds the best global alignment between two sequences
+   substitute Substitutes matches from first (query) sequence of two
+   aligned sequences in a trace into second (template sequence)
+   substituterunner Runs substitute on directory of traces and writes
+   substituted sequences to another
+
+Author(s)
+
+   Damian Counsell (d.counsell © rfcgr.mrc.ac.uk)
+   MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
+   Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
+
+History
+
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+
+Comments
+
+   None

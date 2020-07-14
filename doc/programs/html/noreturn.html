@@ -7,12 +7,9 @@
 </HEAD>
 <BODY BGCOLOR="#FFFFFF" text="#000000">
 
-
-
-
 <table align=center border=0 cellspacing=0 cellpadding=0>
 <tr><td valign=top>
-<A HREF="index.html" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
@@ -26,18 +23,9 @@ noreturn
 
 
 
-
-
 <H2>
     Function
 </H2>
-
-
-
-<!--
-DON'T WRITE ANYTHING HERE.
-IT IS DONE FOR YOU.
--->
 Removes carriage return from ASCII files
 
 
@@ -75,15 +63,13 @@ not necessary for you to use this utility all of the time.
 <H2>
     Usage
 </H2>
-
-
 <b>Here is a sample session with noreturn</b>
 <p>
 
 <p>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% <b>noreturn ../../data/abc.dat </b>
+% <b>noreturn abc.dat </b>
 Removes carriage return from ASCII files
 Output file [abc.noreturn]: <b></b>
 
@@ -97,14 +83,6 @@ Output file [abc.noreturn]: <b></b>
 <H2>
     Command line arguments
 </H2>
-
-
-
-<!--
-DON'T WRITE ANYTHING HERE.
-IT IS DONE FOR YOU.
--->
-
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
    Standard (Mandatory) qualifiers:
@@ -112,7 +90,10 @@ IT IS DONE FOR YOU.
   [-outfile]           outfile    Output file name
 
    Additional (Optional) qualifiers: (none)
-   Advanced (Unprompted) qualifiers: (none)
+   Advanced (Unprompted) qualifiers:
+   -system             menu       Target operating system for end-of-line
+                                  format
+
    Associated qualifiers:
 
    "-outfile" associated qualifiers
@@ -176,7 +157,10 @@ IT IS DONE FOR YOU.
 </tr>
 
 <tr>
-<td colspan=4>(none)</td>
+<td>-system</td>
+<td>Target operating system for end-of-line format</td>
+<td><table><tr><td>unix</td> <td><i>(Unix/Linux systems)</i></td></tr><tr><td>pc</td> <td><i>(Windows/DOS)</i></td></tr><tr><td>mac</td> <td><i>(Apple Macintosh)</i></td></tr></table></td>
+<td>unix</td>
 </tr>
 
 </table>
@@ -195,7 +179,7 @@ The input file is a text data file with unwanted trailing carriage returns.
 
 <a name="input.1"></a>
 <h3>Input files for usage example </h3>
-<p><h3>File: ../../data/abc.dat</h3>
+<p><h3>File: abc.dat</h3>
 <table width="90%"><tr><td bgcolor="#FFCCFF">
 <pre>
 &gt;ABC Test sequence with PC carriage return format
@@ -271,11 +255,6 @@ It always exits with a status of 0.
 
 None.
 
-<!--
-<H2>
-    See also
-</H2>
--->
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
@@ -305,11 +284,6 @@ None.
 <tr><td><a href="yank.html">yank</a></td><td>Reads a sequence range, appends the full USA to a list file</td></tr>
 </table>
 
-<!--
-        Add any comments about other associated programs (to prepare
-        data files?) that seealso doesn't find.
-   -->
-
 
 <H2>
     Author(s)
@@ -331,27 +305,18 @@ Wellcome Trust Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
 
 Written (1999) - Alan Bleasby
 
-<!--
-<p>
-[an error occurred while processing this directive]
--->
 
 <H2>
     Target users
 </H2>
+This program is intended to be used by everyone and everything, from naive users to embedded scripts.
 
 
-This program is intended to be used by everyone and everything,
-from naive users to embedded scripts. 
 
 <H2>
     Comments
 </H2>
-
-
-<pre>
-
-</pre>
+None
 
 
 </BODY>

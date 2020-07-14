@@ -1,38 +1,38 @@
 
                                 palindrome 
-                                      
-   
-   
+
+
+
 Function
 
    Looks for inverted repeats in a nucleotide sequence
-   
+
 Description
 
    palindrome looks for inverted repeats (stem loops) in a nucleotide
    sequence.
-   
+
    It will find inverted repeats that include a proportion of mismatches
    and gaps (bulges in the stem loop).
-   
+
    It works by finding all possible inverted matches satisfying the
    specified conditions of minimum and maximum length of palindrome,
    maximum gap between repeated regions and number of mismatches allowed.
-   
+
    Secondary structures like inverted repeats in genomic sequences may be
    implicated in initiation of DNA replication.
-   
+
    Some genomic sequence entries in the databases are composed of
    unfinished, draft sequence with gaps of unknown size between contigs.
    The positions of these gaps are often indicated by runs of 200 N
    characters. To prevent palindrome producing large, uninformative
    outputs, any palindromes found that are composed only of N's will not
    be reported.
-   
+
 Usage
 
    Here is a sample session with palindrome
-   
+
 
 % palindrome 
 Looks for inverted repeats in a nucleotide sequence
@@ -43,10 +43,10 @@ Enter maximum gap between repeated regions [100]:
 Number of mismatches allowed [0]: 
 Output file [hsts1.pal]: 
 Report overlapping matches [Y]: 
-   
+
    Go to the input files for this example
    Go to the output files for this example
-   
+
 Command line arguments
 
    Standard (Mandatory) qualifiers:
@@ -95,7 +95,7 @@ Command line arguments
    -error               boolean    Report errors
    -fatal               boolean    Report fatal errors
    -die                 boolean    Report deaths
-   
+
 
    Standard (Mandatory) qualifiers Allowed values Default
    [-sequence]
@@ -112,18 +112,18 @@ Command line arguments
    (none)
    Advanced (Unprompted) qualifiers Allowed values Default
    (none)
-   
+
 Input file format
 
    palindrome reads normal nucleotide sequence USAs.
-   
+
   Input files for usage example
-  
+
    'tembl:hsts1' is a sequence entry in the example nucleic acid database
    'tembl'
-   
+
   Database entry: tembl:hsts1
-  
+
 ID   HSTS1      standard; DNA; HUM; 18596 BP.
 XX
 AC   D00596;
@@ -280,13 +280,13 @@ FT   repeat_unit     202..477
      atggctgcag cagctgccag gggcttgggg tttttttggc aggtagggtt gggagg         1859
 6
 //
-   
+
 Output file format
 
   Output files for usage example
-  
+
   File: hsts1.pal
-  
+
 Palindromes of:  HSTS1
 Sequence length is: 18596
 Start at position: 1
@@ -350,21 +350,21 @@ Palindromes:
 127   aaaaaaaaaaaaaaaagaccgccagggct   155
       |||||||||||||||||||||||||||||
 204   ttttttttttttttttctggcggtcccga   176
-   
+
 
 
 
 Data files
 
    None.
-   
+
 Notes
 
    Unless the qualifier '-nooverlap' is specified, palindrome makes no
    attempt to exclude subsets of previously found palindromes.
-   
+
    Several examples can be seen in the sample output above.
-   
+
 References
 
    Some references on inverted repeats:
@@ -382,47 +382,49 @@ References
     5. Dai X, Greizerstein MB, Nadas-Chinni K, Rothman-Denes LB
        Supercoil-induced extrusion of a regulatory DNA hairpin. Proc Natl
        Acad Sci U S A 1997 Mar 18;94(6):2174-9
-       
+
 Warnings
 
    None.
-   
+
 Diagnostic Error Messages
 
    None.
-   
+
 Exit status
 
-   It always exists with a status of 0.
-   
+   It always exits with a status of 0.
+
 Known bugs
 
    None.
-   
+
 See also
 
    Program name                    Description
    einverted    Finds DNA inverted repeats
    equicktandem Finds tandem repeats
    etandem      Looks for tandem repeats in a nucleotide sequence
-   
+
    einverted also looks for inverted repeats but is much slower and more
    sensitive, as it finds low-quality (very mismatched) repeats and
    repeats with gaps.
-   
+
 Author(s)
 
    Mark Faller (current e-mail address unknown)
    while he was with:
    HGMP-RC, Genome Campus, Hinxton, Cambridge CB10 1SB, UK
-   
+
 History
 
    Written (1999) - Mark Faller.
-   
+
 Target users
 
    This program is intended to be used by everyone and everything, from
    naive users to embedded scripts.
-   
+
 Comments
+
+   None

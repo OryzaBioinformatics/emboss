@@ -7,11 +7,9 @@
 </HEAD>
 <BODY BGCOLOR="#FFFFFF" text="#000000">
 
-
-
 <table align=center border=0 cellspacing=0 cellpadding=0>
 <tr><td valign=top>
-<A HREF="index.html" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
@@ -25,25 +23,14 @@ dbiblast
 
 
 
-
-
 <H2>
     Function
 </H2>
-
-
-
-<!--
-DON'T WRITE ANYTHING HERE.
-IT IS DONE FOR YOU.
--->
 Index a BLAST database
-
 
 <H2>
     Description
 </H2>
-
 
 <b>dbiblast</b> indexes a blast database created by the NCBI indexing programs
 formatdb, pressdb or setdb, and builds EMBL CD-ROM format index
@@ -123,8 +110,6 @@ This turns off the new "ASN.1" formatting. blastall will still work.
 <H2>
     Usage
 </H2>
-
-
 <b>Here is a sample session with dbiblast</b>
 <p>
 This creates EMBOSS indices for the BLAST database 'swnew' 
@@ -136,7 +121,7 @@ This creates EMBOSS indices for the BLAST database 'swnew'
 % <b>dbiblast </b>
 Index a BLAST database
 Database name: <b>swnew</b>
-Database directory [.]: <b>../../data</b>
+Database directory [.]: <b>data</b>
 Wildcard database filename [swnew]: <b></b>
 Release number [0.0]: <b></b>
 Index date [00/00/00]: <b></b>
@@ -154,46 +139,10 @@ Blast index version [unknown]: <b></b>
 <a href="#output.1">Go to the output files for this example</a><p><p>
 
 
-<!--
-Here is a sample session with <b>dbiblast</b>, using a blast 2 protein database.
-
-<pre>
-
-% dbiblast
-      NCBI : NCBI with | characters
-       GCG : GCG format dbname:entryname
-    SIMPLE : ID and accession
-        ID : entryname
-   UNKNOWN : unknown
-Entry format [unknown]: gcg
-Database name: swnew
-Database directory [.]: /nfs/disk42/pmr/emboss/test/blastp2/
-database base filename [swnew]: 
-Release number [0.0]: 
-Index date [00/00/00]: 04/02/00
-         N : nucleic
-         P : protein
-         ? : unknown
-Sequence type [unknown]: p
-         1 : wublast and setdb/pressdb
-         2 : formatdb
-         0 : unknown
-Blast index version [unknown]: 2
-
-</pre>
--->
-
 
 <H2>
     Command line arguments
 </H2>
-
-
-
-<!--
-DON'T WRITE ANYTHING HERE.
-IT IS DONE FOR YOU.
--->
 
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
@@ -210,7 +159,6 @@ IT IS DONE FOR YOU.
    Advanced (Unprompted) qualifiers:
    -fields             menu       Index fields
    -exclude            string     Wildcard filename(s) to exclude
-   -indexdirectory     directory  Index directory
    -sortoptions        string     Sort options, typically '-T .' to use
                                   current directory for work files and '-k
                                   1,1' to force GNU sort to use the first
@@ -219,28 +167,28 @@ IT IS DONE FOR YOU.
    -[no]systemsort     boolean    Use system sort utility
    -[no]cleanup        boolean    Clean up temporary files
    -sourcefile         boolean    Use FASTA source file
+   -indexoutdir        outdir     Index directory
 
    Associated qualifiers: (none)
    General qualifiers:
-   -auto                boolean    Turn off prompts
-   -stdout              boolean    Write standard output
-   -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for standard and additional values
-   -debug               boolean    Write debug output to program.dbg
-   -verbose             boolean    Report some/full command line options
-   -help                boolean    Report command line options. More
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
-   -warning             boolean    Report warnings
-   -error               boolean    Report errors
-   -fatal               boolean    Report fatal errors
-   -die                 boolean    Report deaths
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report deaths
 
 
 </pre>
 </td></tr></table>
 <P>
-
 <table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
 <tr bgcolor="#FFFFCC">
 <th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
@@ -251,7 +199,7 @@ IT IS DONE FOR YOU.
 <tr>
 <td>[-dbname]<br>(Parameter 1)</td>
 <td>Database name</td>
-<td>A string from 1 to 19 characters</td>
+<td>A string from 2 to 19 characters, matching regular expression /[A-z][A-z0-9_]+/</td>
 <td><b>Required</b></td>
 </tr>
 
@@ -328,13 +276,6 @@ IT IS DONE FOR YOU.
 </tr>
 
 <tr>
-<td>-indexdirectory</td>
-<td>Index directory</td>
-<td>Directory</td>
-<td>.</td>
-</tr>
-
-<tr>
 <td>-sortoptions</td>
 <td>Sort options, typically '-T .' to use current directory for work files and '-k 1,1' to force GNU sort to use the first field</td>
 <td>Any string is accepted</td>
@@ -369,18 +310,23 @@ IT IS DONE FOR YOU.
 <td>No</td>
 </tr>
 
-</table>
+<tr>
+<td>-indexoutdir</td>
+<td>Index directory</td>
+<td>Output directory</td>
+<td>.</td>
+</tr>
 
+</table>
 
 
 <H2>
     Input file format
 </H2>
 
-AI BLAST1 or BLAST2 database index files.
+Any BLAST1 or BLAST2 database index files.
 
 <p>
-
 
 
 <H2>
@@ -388,18 +334,16 @@ AI BLAST1 or BLAST2 database index files.
 </H2>
 
 
-
 <a name="output.1"></a>
 <h3>Output files for usage example </h3>
-<p><h3>File: acnum.hit</h3>
-<p>This file contains non-printing characters and so cannot be displayed here.
-<p><h3>File: acnum.trg</h3>
-<p>This file contains non-printing characters and so cannot be displayed here.
 <p><h3>File: division.lkp</h3>
 <p>This file contains non-printing characters and so cannot be displayed here.
 <p><h3>File: entrynam.idx</h3>
 <p>This file contains non-printing characters and so cannot be displayed here.
-
+<p><h3>File: acnum.hit</h3>
+<p>This file contains non-printing characters and so cannot be displayed here.
+<p><h3>File: acnum.trg</h3>
+<p>This file contains non-printing characters and so cannot be displayed here.
 
 <p>
 
@@ -449,8 +393,9 @@ None.
     Notes
 </H2>
 
-None.
-
+<b>dbiblast</b> can't use the new style of Blast indices.  You must
+create the old style of Blast indices by adding <b>-A F</b> to the
+formatdb command line. 
 
 <H2>
     References
@@ -462,11 +407,6 @@ None.
 <H2>
     Warnings
 </H2>
-
-<b>dbiblast</b> can't use the new style of Blast indices.  You must
-create the old style of Blast indices by adding <b>-A F</b> to the
-formatdb command line. 
-
 
 
 <H2>
@@ -491,13 +431,6 @@ None.
 create the old style of Blast indices by adding <b>-A F</b> to the
 formatdb command line. 
 
-
-
-<!--
-<H2>
-    See also
-</H2>
--->
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
@@ -506,52 +439,35 @@ formatdb command line.
 <tr><td><a href="dbigcg.html">dbigcg</a></td><td>Index a GCG formatted database</td></tr>
 </table>
 
-<!--
-        Add any comments about other associated programs (to prepare
-        data files?) that seealso doesn't find.
-   -->
-
-
 <H2>
     Author(s)
 </H2>
 
-
-This application was written by 
 Peter Rice (pmr&nbsp;&copy;&nbsp;ebi.ac.uk)
 <br>
 Informatics Division, European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
-
 
 
 <H2>
     History
 </H2>
 
-
 Completed December 1999
 
-<!--
-<p>
-[an error occurred while processing this directive]
--->
 
 <H2>
     Target users
 </H2>
-
-
 This program is intended to be used by administrators responsible
 for software and database installation and maintenance. 
+
 
 <H2>
     Comments
 </H2>
+None
 
 
-<pre>
-
-</pre>
 
 
 </BODY>

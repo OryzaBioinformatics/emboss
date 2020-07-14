@@ -1,0 +1,438 @@
+<!--START OF HEADER - DON'T ALTER -->
+
+<HTML>
+<HEAD>
+  <TITLE>
+  EMBOSS: myseq
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+
+
+<table align=center border=0 cellspacing=0 cellpadding=0>
+<tr><td valign=top>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+</td>
+<td align=left valign=middle>
+<b><font size="+6">
+
+myseq
+</font></b>
+</td></tr>
+</table>
+<br>&nbsp;
+<p>
+
+
+
+<!--END OF HEADER-->
+
+
+
+
+
+
+<H2>
+    Function
+</H2>
+Demonstration of sequence reading
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+
+
+
+
+<H2>
+    Description
+</H2>
+
+<!-- 
+	This is the main part of the document.
+        This is what the user looks at to find out if this program will do what he wants. 
+        Long description.
+        Why it is useful.
+        When it should/shouldn't be used.
+  -->
+
+Simple sequence reading application as a template for writing new programs.
+
+
+<H2>
+    Algorithm
+</H2>
+
+<!-- 
+        Algorithms
+	  Pseudocode/Vague description/Handwaving/web links to useful pages
+  -->
+
+None.
+
+
+
+<H2>
+    Usage
+</H2>
+
+<!--  
+	Example usage, as run from the command-line.
+        Many examples illustrating different behaviours is good.
+ -->
+
+
+
+
+
+<H2>
+    Command line arguments
+</H2>
+
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+   Standard (Mandatory) qualifiers:
+  [-sequence]          sequence   Sequence USA
+  [-outfile]           outfile    Output file name
+
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers: (none)
+   Associated qualifiers:
+
+   "-sequence" associated qualifiers
+   -sbegin1            integer    Start of the sequence to be used
+   -send1              integer    End of the sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
+
+   "-outfile" associated qualifiers
+   -odirectory2        string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report deaths
+
+
+</pre>
+</td></tr></table>
+<P>
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-sequence]<br>(Parameter 1)</td>
+<td>Sequence USA</td>
+<td>Readable sequence</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>[-outfile]<br>(Parameter 2)</td>
+<td>Output file name</td>
+<td>Output file</td>
+<td><i>&lt;sequence&gt;</i>.myseq</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Additional (Optional) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+</table>
+
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+
+
+
+
+
+
+
+
+<H2>
+    Input file format
+</H2>
+
+<!-- 
+        This includes example input file formats.
+        This should be a detailed description and example - assume
+        someone will want to parse this file and will want to know what
+        happens in unusual cases - null input, etc. 
+   -->
+
+<b>myseq</b> reads any normal sequence USAs.
+
+<p>
+
+
+
+
+
+
+
+<H2>
+    Output file format
+</H2>
+
+<!-- 
+        This includes example output file formats.
+        This should be a detailed description and example - assume
+        someone will want to parse this file and will want to know what
+        happens in unusual cases - null output, errors etc. 
+
+        If you wish to include the standard description of the avalable
+	report formats, use:
+[an error occurred while processing this directive]
+   -->
+
+<b>myseq</b> 
+outputs a graph to the specified graphics device. 
+outputs a report format file. The default format is ...
+
+
+<p>
+
+
+
+
+
+
+
+<H2>
+    Data files
+</H2>
+
+<!-- 
+        Any data files used (e.g. translation table file)
+        This includes example data file formats if they are
+        not obvious.
+
+	If you wish to include the standard description of what data
+	files are and how to use embossdata to inspect and retrieve
+	them, use:
+[an error occurred while processing this directive]
+   -->
+
+None.
+
+<H2>
+    Notes
+</H2>
+
+<!-- 
+        Restrictions.
+        Interesting behaviour.
+        Useful things you can do with this program.
+   -->
+
+None.
+
+
+
+
+
+
+
+<H2>
+    References
+</H2>
+
+<!-- 
+        Bibliography for methods used.
+   -->
+
+None.
+
+
+
+
+
+
+
+
+<H2>
+    Warnings
+</H2>
+
+<!-- 
+        Potentially stupid things the program will let you do.
+   -->
+
+None.
+
+
+
+
+
+
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+<!-- 
+        Error messages specific to this program, eg:
+        "FATAL xxx" - means you have not set up the xxx data using program <b>prog</b>.<p>
+   -->
+
+None.
+
+
+
+
+
+
+
+<H2>
+    Exit status
+</H2>
+
+<!-- 
+        Description of the exit status for various error conditions
+   -->
+
+It always exits with status 0.
+
+
+
+
+
+
+
+
+<H2>
+    Known bugs
+</H2>
+
+
+<!-- 
+        Bugs noted but not yet fixed.
+   -->
+
+None.
+
+
+
+
+
+
+
+
+<!--
+<H2>
+    See also
+</H2>
+-->
+<h2><a name="See also">See also</a></h2>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th><th>Description</th></tr>
+<tr><td><a href="../appendixd/crystalball.html">crystalball</a></td><td>Answers every drug discovery question you have about this sequence</td></tr>
+</table>
+
+<!-- 
+        Add any comments about other associated programs (to prepare
+        data files?) that seealso doesn't find. 
+   -->
+
+
+
+
+
+
+
+
+
+
+<H2>
+    Author(s)
+</H2>
+
+Peter Rice (pmr&nbsp;&copy;&nbsp;ebi.ac.uk)
+<br>
+Informatics Division, European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
+
+
+<H2>
+    History
+</H2>
+
+
+
+
+
+
+<H2>
+    Target users
+</H2>
+
+<!--
+        For general users, requested by one user, for EMBOSS site
+        maintainers, for EMBOSS developers etc.
+        eg:
+        "This program is intended to be used by everyone and everything,
+        from naive users to embedded scripts." 
+	Which is easy to include using:
+   -->
+
+This program is intended to be used by everyone and everything, from naive users to embedded scripts.
+
+
+
+
+
+
+
+
+
+
+
+
+</BODY>
+</HTML>
+

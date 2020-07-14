@@ -1,5 +1,3 @@
-<!--START OF HEADER - DON'T ALTER -->
-
 <HTML>
 <HEAD>
   <TITLE>
@@ -11,7 +9,7 @@
 
 <table align=center border=0 cellspacing=0 cellpadding=0>
 <tr><td valign=top>
-<A HREF="index.html" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
@@ -25,34 +23,14 @@ cons
 
 
 
-<!--END OF HEADER-->
-
-
 <H2>
     Function
 </H2>
 Creates a consensus from multiple alignments
 
-<!--
-DON'T WRITE ANYTHING HERE.
-IT IS DONE FOR YOU.
--->
-
-
-
-
 <H2>
     Description
 </H2>
-
-<!-- 
-	This is the main part of the document.
-        This is what the user looks at to find out if this program will do what he wants. 
-        Long description.
-        Why it is useful.
-        When it should/shouldn't be used.
-        Algorithms
-  -->
 
 <b>cons</b> calculates a consensus sequence from a multiple sequence
 alignment.  To obtain the consensus, the sequence weights and a scoring
@@ -100,13 +78,6 @@ is in lower-case.
 <H2>
     Usage
 </H2>
-
-<!--  
-	Example usage, as run from the command-line.
-        Many examples illustrating different behaviours is good.
- -->
-
-
 <b>Here is a sample session with cons</b>
 <p>
 
@@ -115,29 +86,12 @@ is in lower-case.
 
 % <b>cons </b>
 Creates a consensus from multiple alignments
-Input sequence set: <b>../../data/dna.msf</b>
+Input sequence set: <b>dna.msf</b>
 Output sequence [dna.fasta]: <b>aligned.cons</b>
 
 </pre></td></tr></table><p>
 <p>
 <a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
-
-
-<!--
-Here is a sample session with cons:
-
-<pre>
-
-% cons
-Creates a consensus from multiple alignments
-Input sequence set: aligned.fasta
-Output file [outfile.cons]: aligned.cons
-
-</pre>
-
--->
-
-
 
 
 
@@ -300,37 +254,18 @@ Output file [outfile.cons]: aligned.cons
 </table>
 
 
-<!--
-DON'T WRITE ANYTHING HERE.
-IT IS DONE FOR YOU.
--->
-
-
-
-
-
-
-
 
 <H2>
     Input file format
 </H2>
 
-<!-- 
-        This includes example input file formats.
-        This should be a detailed description and example - assume
-        someone will want to parse this file and will want to know what
-        happens in unusual cases - null input, etc. 
-   -->
-
 The USA of a set of aligned sequences.
 
 <p>
 
-
 <a name="input.1"></a>
 <h3>Input files for usage example </h3>
-<p><h3>File: ../../data/dna.msf</h3>
+<p><h3>File: dna.msf</h3>
 <table width="90%"><tr><td bgcolor="#FFCCFF">
 <pre>
 !!NA_MULTIPLE_ALIGNMENT
@@ -359,31 +294,12 @@ The USA of a set of aligned sequences.
 </td></tr></table><p>
 
 
-
-
-
-
-
-
-
-
-
-
 <H2>
     Output file format
 </H2>
-
-<!-- 
-        This includes example output file formats.
-        This should be a detailed description and example - assume
-        someone will want to parse this file and will want to know what
-        happens in unusual cases - null output, errors etc. 
-   -->
-
 The output consists of a sequence file holding the consensus sequence. 
 
 <p>
-
 
 <a name="output.1"></a>
 <h3>Output files for usage example </h3>
@@ -397,47 +313,14 @@ nnnnnnnnnnnnnnnnnnnnACGTACGTACGTACGTACGTACGTACGTnnnnACGTACGT
 </td></tr></table><p>
 
 
-<!--
-For example:
-
-<P>
-<HR>
-<pre>
->EMBOSS_001
-tagctgacctgacgggactgatgcgt
-</pre>
-<HR>
--->
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 <H2>
     Data files
 </H2>
 
-<!-- 
-        Any data files used (e.g. translation table file)
-        This includes example data file formats if they are
-        not obvious.
-	If you wish to include the standard description of what data
-	files are and how to use embossdata to inspect and retrieve
-	them, use:
-   -->
-
 It uses the standard set of scoring matrix data files.
 <P>
-
 <p>
 EMBOSS data files are distributed with the application and stored
 in the standard EMBOSS data directory, which is defined
@@ -480,126 +363,43 @@ The directories are searched in the following order:
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
 <H2>
     Notes
 </H2>
 
-<!-- 
-        Restrictions.
-        Interesting behaviour.
-        Useful things you can do with this program.
-   -->
-
 None.
-
-
-
-
-
-
 
 <H2>
     References
 </H2>
 
-<!-- 
-        Bibliography for methods used.
-   -->
-
 None.
-
-
-
-
-
-
-
 
 <H2>
     Warnings
 </H2>
 
-<!-- 
-        Potentially stupid things the program will let you do.
-   -->
-
 None.
-
-
-
-
-
-
 
 <H2>
     Diagnostic Error Messages
 </H2>
 
-<!-- 
-        Error messages specific to this program, eg:
-        "FATAL xxx" - means you have not set up the xxx data using program <b>prog</b>.<p>
-   -->
-
 None.
-
-
-
-
-
-
 
 <H2>
     Exit status
 </H2>
 
-<!-- 
-        Description of the exit status for various error conditions
-   -->
-
 It always exits with status 0.
-
-
-
-
-
-
-
 
 <H2>
     Known bugs
 </H2>
 
-
-<!-- 
-        Bugs noted but not yet fixed.
-   -->
-
 None.
 
 
-
-
-
-
-
-
-<!--
-<H2>
-    See also
-</H2>
--->
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
@@ -607,106 +407,32 @@ None.
 <tr><td><a href="merger.html">merger</a></td><td>Merge two overlapping nucleic acid sequences</td></tr>
 </table>
 
-<!-- 
-        Add any comments about other associated programs (to prepare
-        data files?) that seealso doesn't find. 
-   -->
-
-
-
-
-
-
-
-
-
 
 <H2>
     Author(s)
 </H2>
-<!--
-        Who has worked on the program in the past.
-   -->
-
 Tim Carver (tcarver&nbsp;&copy;&nbsp;rfcgr.mrc.ac.uk)
 <br>
 MRC Rosalind Franklin Centre for Genomics Research
 Wellcome Trust Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
 
 
-
-
-
-
-
-
-
-
-
-
-
 <H2>
     History
 </H2>
-
-<!--
-        What changes have been made.
-   -->
-
-Written (Oct 2000) - Tim Carver
-
-<!--
-<p>
-[an error occurred while processing this directive]
--->
-
-
-
-
-
-
-
 
 
 
 <H2>
     Target users
 </H2>
-
-<!--
-        For general users, requested by one user, for EMBOSS site
-        maintainers, for EMBOSS developers etc.
-        eg:
-        "This program is intended to be used by everyone and everything,
-        from naive users to embedded scripts." 
-	Which is easy to include using:
-   -->
-
 This program is intended to be used by everyone and everything, from naive users to embedded scripts.
-
-
-
-
-
-
-
-
-
-
 
 
 <H2>
     Comments
 </H2>
-
-<!--
-	Any comments, requests etc. that people have about the program
-   -->
-
-
-
-
-
+None
 
 
 

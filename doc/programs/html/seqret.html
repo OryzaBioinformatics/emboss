@@ -7,14 +7,9 @@
 </HEAD>
 <BODY BGCOLOR="#FFFFFF" text="#000000">
 
-
-
-
-
-
 <table align=center border=0 cellspacing=0 cellpadding=0>
 <tr><td valign=top>
-<A HREF="index.html" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
@@ -29,18 +24,9 @@ seqret
 
 
 
-
-
 <H2>
     Function
 </H2>
-
-
-
-<!--
-DON'T WRITE ANYTHING HERE.
-IT IS DONE FOR YOU.
--->
 Reads and writes (returns) sequences
 
 
@@ -119,8 +105,8 @@ external applications.
 
 See the full specification of USA syntax at:
 <br>
-<a href="http://www.uk.embnet.org/Software/EMBOSS/Themes/UniformSequenceAddress.html">
-http://www.uk.embnet.org/Software/EMBOSS/Themes/UniformSequenceAddress.html
+<a href="http://emboss.sourceforge.net/doc/themes/UniformSequenceAddress.html">
+http://emboss.sourceforge.net/doc/themes/UniformSequenceAddress.html
 </a>
 
 <p>
@@ -794,8 +780,6 @@ in case the user wants to save the output to a file.
 <H2>
     Usage
 </H2>
-
-
 <b>Here is a sample session with seqret</b>
 <p>
 Extract an entry from a database and write it to a file:  
@@ -996,14 +980,6 @@ Output sequence [hs989235.fasta]: <b>hsall.seq</b>
 <H2>
     Command line arguments
 </H2>
-
-
-
-<!--
-DON'T WRITE ANYTHING HERE.
-IT IS DONE FOR YOU.
--->
-
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
    Standard (Mandatory) qualifiers:
@@ -1572,11 +1548,6 @@ It always exits with a status of 0.
 None.
 
 
-<!--
-<H2>
-    See also
-</H2>
--->
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
@@ -1606,14 +1577,6 @@ None.
 <tr><td><a href="yank.html">yank</a></td><td>Reads a sequence range, appends the full USA to a list file</td></tr>
 </table>
 
-<!--
-        Add any comments about other associated programs (to prepare
-        data files?) that seealso doesn't find.
-   -->
-
-
-
-
 <p>
 
 Valid names of the databases set up in your local implementation of
@@ -1623,8 +1586,6 @@ EMBOSS can be seen by using the program 'showdb'.
 <H2>
     Author(s)
 </H2>
-
-
 Peter Rice (pmr&nbsp;&copy;&nbsp;ebi.ac.uk)
 <br>
 Informatics Division, European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
@@ -1639,23 +1600,17 @@ Informatics Division, European Bioinformatics Institute, Wellcome Trust Genome C
 <br>
 Feb 2002 - '-feature' qualifier added by Peter Rice
 
-<!--
-<p>
-[an error occurred while processing this directive]
--->
 
 <H2>
     Target users
 </H2>
+This program is intended to be used by everyone and everything, from naive users to embedded scripts.
 
 
-This program is intended to be used by everyone and everything,
-from naive users to embedded scripts. 
 
 <H2>
     Comments
 </H2>
-
 
 <h3>Fasta output format</h3>
 
@@ -1686,6 +1641,8 @@ characters in the IDs).
 Your EMBL format file has IDs that look like accession numbers, so
 EMBOSS fills in the accession number for each sequence, and reports it
 in the FASTA format. 
+
+
 
 
 

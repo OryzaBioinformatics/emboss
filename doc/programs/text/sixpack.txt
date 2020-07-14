@@ -1,30 +1,30 @@
 
                                   sixpack 
-                                      
-   
-   
+
+
+
 Function
 
    Display a DNA sequence with 6-frame translation and ORFs
-   
+
 Description
 
    sixpack takes a nucleic acid sequence and writes out the forward and
    reverse senses of the sequence with the 3 forward and three reverse
    translations in a pretty display format.
-   
+
    It also writes a file containing the open reading frames that are
    larger than the specified minimum size (default 1 base, showing all
    possible open reading frames). These open reading frames are written
    as protein sequences in the default output sequence format.
-   
+
    An open reading frame is defined in this program as any possible
    translation between two STOP codons.
-   
+
 Algorithm
 
    The nucleic acid sequence is read in.
-   The required genetic code is read in from the ECG* data files.
+   The required genetic code is read in from the EGC* data files.
    The three forward and three reverse translations are created.
    The name and description are written to the ouput display file.
    Any required regions to be changed to upper case are changed.
@@ -36,21 +36,21 @@ Algorithm
    The display is written out, split at the ends of lines.
    Any ORFs that are longer than the specified minimum size are written
    to the output sequence file.
-   
+
 Usage
 
    Here is a sample session with sixpack
-   
+
 
 % sixpack 
 Display a DNA sequence with 6-frame translation and ORFs
 Input sequence: tembl:paamir
 Output file [paamir.sixpack]: 
 Output sequence [paamir.fasta]: 
-   
+
    Go to the input files for this example
    Go to the output files for this example
-   
+
 Command line arguments
 
    Standard (Mandatory) qualifiers:
@@ -158,7 +158,7 @@ Command line arguments
    -error               boolean    Report errors
    -fatal               boolean    Report fatal errors
    -die                 boolean    Report deaths
-   
+
 
    Standard (Mandatory) qualifiers Allowed values Default
    [-sequence]
@@ -227,18 +227,18 @@ Command line arguments
    -offset Number from which you want the DNA sequence to be numbered.
    Any integer value 1
    -html Use HTML formatting Boolean value Yes/No No
-   
+
 Input file format
 
    sixpack reads any normal sequence USAs.
-   
+
   Input files for usage example
-  
+
    'tembl:paamir' is a sequence entry in the example nucleic acid
    database 'tembl'
-   
+
   Database entry: tembl:paamir
-  
+
 ID   PAAMIR     standard; DNA; PRO; 2167 BP.
 XX
 AC   X13776; M43175;
@@ -386,13 +386,120 @@ SQ   Sequence 2167 BP; 363 A; 712 C; 730 G; 362 T; 0 other;
      cctcgag                                                                216
 7
 //
-   
+
 Output file format
 
   Output files for usage example
-  
+
+  File: paamir.sixpack
+
+PAAMIR
+Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase
+regulation
+
+
+          G  T  A  G  R  A  S  A  R  S  P  P  A  G  R  R  E  L  H  D     F1
+           V  P  L  A  E  H  L  L  D  H  H  Q  P  G  D  G  N  C  T  I    F2
+            Y  R  W  P  S  I  C  S  I  T  T  S  R  A  T  G  T  A  R  S   F3
+        1 ggtaccgctggccgagcatctgctcgatcaccaccagccgggcgacgggaactgcacgat 60
+          ----:----|----:----|----:----|----:----|----:----|----:----|
+        1 ccatggcgaccggctcgtagacgagctagtggtggtcggcccgctgcccttgacgtgcta 60
+           P  V  A  P  R  A  D  A  R  D  G  G  A  P  R  R  S  S  C  S    F6
+          X  Y  R  Q  G  L  M  Q  E  I  V  V  L  R  A  V  P  V  A  R     F5
+            T  G  S  A  S  C  R  S  S  *  W  W  G  P  S  P  F  Q  V  I   F4
+
+
+          L  P  G  E  P  G  A  R  A  G  S  L  R  T  A  L  S  D  S  H     F1
+           Y  L  A  S  L  E  H  E  R  V  R  F  V  R  R  *  A  T  V  T    F2
+            T  W  R  A  W  S  T  S  G  F  A  S  Y  G  A  E  R  Q  S  Q   F3
+       61 ctacctggcgagcctggagcacgagcgggttcgcttcgtacggcgctgagcgacagtcac 120
+          ----:----|----:----|----:----|----:----|----:----|----:----|
+       61 gatggaccgctcggacctcgtgctcgcccaagcgaagcatgccgcgactcgctgtcagtg 120
+           R  G  P  S  G  P  A  R  A  P  E  S  R  V  A  S  L  S  L  *    F6
+          D  V  Q  R  A  Q  L  V  L  P  N  A  E  Y  P  A  S  R  C  D     F5
+            *  R  A  L  R  S  C  S  R  T  R  K  T  R  R  Q  A  V  T  V   F4
+
+
+          R  R  G  N  G  W  D  R  T  R  S  G  R  *  S  A  C  C  S  P     F1
+           G  E  E  T  D  G  I  A  P  G  A  A  A  D  R  P  A  V  L  R    F2
+            E  R  K  R  M  G  S  H  Q  E  R  P  L  I  G  L  L  F  S  E   F3
+      121 aggagaggaaacggatgggatcgcaccaggagcggccgctgatcggcctgctgttctccg 180
+          ----:----|----:----|----:----|----:----|----:----|----:----|
+      121 tcctctcctttgcctaccctagcgtggtcctcgccggcgactagccggacgacaagaggc 180
+           L  L  P  F  P  H  S  R  V  L  L  P  R  Q  D  A  Q  Q  E  G    F6
+          C  S  L  F  R  I  P  D  C  W  S  R  G  S  I  P  R  S  N  E     F5
+            P  S  S  V  S  P  I  A  G  P  A  A  A  S  R  G  A  T  R  R   F4
+
+
+          K  P  A  S  P  P  I  S  S  A  R  T  R  M  A  H  C  S  R  S     F1
+           N  R  R  H  R  R  Y  R  A  L  A  R  V  W  R  I  A  R  G  R    F2
+            T  G  V  T  A  D  I  E  R  S  H  A  Y  G  A  L  L  A  V  E   F3
+      181 aaaccggcgtcaccgccgatatcgagcgctcgcacgcgtatggcgcattgctcgcggtcg 240
+          ----:----|----:----|----:----|----:----|----:----|----:----|
+      181 tttggccgcagtggcggctatagctcgcgagcgtgcgcataccgcgtaacgagcgccagc 240
+           F  G  A  D  G  G  I  D  L  A  R  V  R  I  A  C  Q  E  R  D    F6
+          S  V  P  T  V  A  S  I  S  R  E  C  A  Y  P  A  N  S  A  T     F5
+            F  R  R  *  R  R  Y  R  A  S  A  R  T  H  R  M  A  R  P  R   F4
+
+
+          S  N  *  T  A  R  A  A  S  A  V  A  R  S  K  R  C  P  R  T     F1
+
+
+  [Part of this file has been deleted for brevity]
+
+     1981 caacgacccgttctagtcgccagccctccaccgccactagttgaaggaccagccgcacga 2040
+           T  A  P  C  S  *  R  D  P  P  P  P  S  *  S  G  P  R  R  A    F6
+          P  Q  Q  A  L  D  A  T  P  L  H  R  H  D  V  E  Q  D  A  H     F5
+            N  S  P  L  I  L  P  R  S  T  A  T  I  L  K  R  T  P  T  S   F4
+
+
+          E  R  L  R  R  V  L  P  D  L  F  R  S  S  R  A  G  L  A  E     F1
+           S  A  C  V  A  F  Y  L  I  F  S  A  A  A  G  Q  G  S  L  K    F2
+            A  P  A  S  R  S  T  *  S  F  P  Q  Q  P  G  R  A  R  *  R   F3
+     2041 gagcgcctgcgtcgcgttctacctgatcttttccgcagcagccgggcagggctcgctgaa 2100
+          ----:----|----:----|----:----|----:----|----:----|----:----|
+     2041 ctcgcggacgcagcgcaagatggactagaaaaggcgtcgtcggcccgtcccgagcgactt 2100
+           S  R  R  R  R  T  R  G  S  R  K  R  L  L  R  A  P  S  A  S    F6
+          Q  A  G  A  D  R  E  V  Q  D  K  G  C  C  G  P  L  A  R  Q     F5
+            L  A  Q  T  A  N  *  R  I  K  E  A  A  A  P  C  P  E  S  F   F4
+
+
+          G  R  S  A  D  P  A  I  R  F  Y  L  S  V  G  G  R  Q  P  V     F1
+           A  G  A  L  T  L  L  F  A  F  T  Y  L  W  V  A  A  N  Q  F    F2
+            P  E  R  *  P  C  Y  S  L  L  P  I  C  G  W  P  P  T  S  S   F3
+     2101 ggccggagcgctgaccctgctattcgcttttacctatctgtgggtggccgccaaccagtt 2160
+          ----:----|----:----|----:----|----:----|----:----|----:----|
+     2101 ccggcctcgcgactgggacgataagcgaaaatggatagacacccaccggcggttggtcaa 2160
+           P  R  L  A  S  G  A  I  R  K  *  R  D  T  P  P  R  W  G  T    F6
+          L  G  S  R  Q  G  Q  *  E  S  K  G  I  Q  P  H  G  G  V  L     F5
+            A  P  A  S  V  R  S  N  A  K  V  *  R  H  T  A  A  L  W  N   F4
+
+
+          P  R  X                                                        F1
+           L  E                                                          F2
+            S                                                            F3
+     2161 cctcgag                                                      2167
+          ----:----|----:----|----:----|----:----|----:----|----:----|
+     2161 ggagctc                                                      2167
+           G  R                                                          F6
+          E  E  L                                                        F5
+            R  S                                                         F4
+
+##############################
+Minimum size of ORFs : 1
+
+Total ORFs in frame 1 :     8
+Total ORFs in frame 2 :     5
+Total ORFs in frame 3 :    13
+Total ORFs in frame 4 :    10
+Total ORFs in frame 5 :    16
+Total ORFs in frame 6 :    15
+
+Total ORFs :    67
+##############################
+
   File: paamir.fasta
-  
+
 >PAAMIR_1_ORF1  Translation of PAAMIR in frame 1, ORF 1, threshold 1, 53aa
 GTAGRASARSPPAGRRELHDLPGEPGARAGSLRTALSDSHRRGNGWDRTRSGR
 >PAAMIR_1_ORF2  Translation of PAAMIR in frame 1, ORF 2, threshold 1, 28aa
@@ -498,122 +605,15 @@ EQRVGALDHRHHRLARVRHVAAHEEPYPPVANEVLGAQPIAVRVAAGVLGQRFDRATADA
 ALAVQLLDREQCAIRVRALDIGGDAGFGEQQADQRPLLVRSHPFPLL
 >PAAMIR_6_ORF15  Translation of PAAMIR in frame 6, ORF 15, threshold 1, 39aa
 LSLSAVRSEPARAPGSPGRSCSSRRPAGGDRADARPAVP
-   
-  File: paamir.sixpack
-  
-PAAMIR
-Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase
-regulation
 
-
-          G  T  A  G  R  A  S  A  R  S  P  P  A  G  R  R  E  L  H  D     F1
-           V  P  L  A  E  H  L  L  D  H  H  Q  P  G  D  G  N  C  T  I    F2
-            Y  R  W  P  S  I  C  S  I  T  T  S  R  A  T  G  T  A  R  S   F3
-        1 ggtaccgctggccgagcatctgctcgatcaccaccagccgggcgacgggaactgcacgat 60
-          ----:----|----:----|----:----|----:----|----:----|----:----|
-        1 ccatggcgaccggctcgtagacgagctagtggtggtcggcccgctgcccttgacgtgcta 60
-           P  V  A  P  R  A  D  A  R  D  G  G  A  P  R  R  S  S  C  S    F6
-          X  Y  R  Q  G  L  M  Q  E  I  V  V  L  R  A  V  P  V  A  R     F5
-            T  G  S  A  S  C  R  S  S  *  W  W  G  P  S  P  F  Q  V  I   F4
-
-
-          L  P  G  E  P  G  A  R  A  G  S  L  R  T  A  L  S  D  S  H     F1
-           Y  L  A  S  L  E  H  E  R  V  R  F  V  R  R  *  A  T  V  T    F2
-            T  W  R  A  W  S  T  S  G  F  A  S  Y  G  A  E  R  Q  S  Q   F3
-       61 ctacctggcgagcctggagcacgagcgggttcgcttcgtacggcgctgagcgacagtcac 120
-          ----:----|----:----|----:----|----:----|----:----|----:----|
-       61 gatggaccgctcggacctcgtgctcgcccaagcgaagcatgccgcgactcgctgtcagtg 120
-           R  G  P  S  G  P  A  R  A  P  E  S  R  V  A  S  L  S  L  *    F6
-          D  V  Q  R  A  Q  L  V  L  P  N  A  E  Y  P  A  S  R  C  D     F5
-            *  R  A  L  R  S  C  S  R  T  R  K  T  R  R  Q  A  V  T  V   F4
-
-
-          R  R  G  N  G  W  D  R  T  R  S  G  R  *  S  A  C  C  S  P     F1
-           G  E  E  T  D  G  I  A  P  G  A  A  A  D  R  P  A  V  L  R    F2
-            E  R  K  R  M  G  S  H  Q  E  R  P  L  I  G  L  L  F  S  E   F3
-      121 aggagaggaaacggatgggatcgcaccaggagcggccgctgatcggcctgctgttctccg 180
-          ----:----|----:----|----:----|----:----|----:----|----:----|
-      121 tcctctcctttgcctaccctagcgtggtcctcgccggcgactagccggacgacaagaggc 180
-           L  L  P  F  P  H  S  R  V  L  L  P  R  Q  D  A  Q  Q  E  G    F6
-          C  S  L  F  R  I  P  D  C  W  S  R  G  S  I  P  R  S  N  E     F5
-            P  S  S  V  S  P  I  A  G  P  A  A  A  S  R  G  A  T  R  R   F4
-
-
-          K  P  A  S  P  P  I  S  S  A  R  T  R  M  A  H  C  S  R  S     F1
-           N  R  R  H  R  R  Y  R  A  L  A  R  V  W  R  I  A  R  G  R    F2
-            T  G  V  T  A  D  I  E  R  S  H  A  Y  G  A  L  L  A  V  E   F3
-      181 aaaccggcgtcaccgccgatatcgagcgctcgcacgcgtatggcgcattgctcgcggtcg 240
-          ----:----|----:----|----:----|----:----|----:----|----:----|
-      181 tttggccgcagtggcggctatagctcgcgagcgtgcgcataccgcgtaacgagcgccagc 240
-           F  G  A  D  G  G  I  D  L  A  R  V  R  I  A  C  Q  E  R  D    F6
-          S  V  P  T  V  A  S  I  S  R  E  C  A  Y  P  A  N  S  A  T     F5
-            F  R  R  *  R  R  Y  R  A  S  A  R  T  H  R  M  A  R  P  R   F4
-
-
-          S  N  *  T  A  R  A  A  S  A  V  A  R  S  K  R  C  P  R  T     F1
-
-
-  [Part of this file has been deleted for brevity]
-
-     1981 caacgacccgttctagtcgccagccctccaccgccactagttgaaggaccagccgcacga 2040
-           T  A  P  C  S  *  R  D  P  P  P  P  S  *  S  G  P  R  R  A    F6
-          P  Q  Q  A  L  D  A  T  P  L  H  R  H  D  V  E  Q  D  A  H     F5
-            N  S  P  L  I  L  P  R  S  T  A  T  I  L  K  R  T  P  T  S   F4
-
-
-          E  R  L  R  R  V  L  P  D  L  F  R  S  S  R  A  G  L  A  E     F1
-           S  A  C  V  A  F  Y  L  I  F  S  A  A  A  G  Q  G  S  L  K    F2
-            A  P  A  S  R  S  T  *  S  F  P  Q  Q  P  G  R  A  R  *  R   F3
-     2041 gagcgcctgcgtcgcgttctacctgatcttttccgcagcagccgggcagggctcgctgaa 2100
-          ----:----|----:----|----:----|----:----|----:----|----:----|
-     2041 ctcgcggacgcagcgcaagatggactagaaaaggcgtcgtcggcccgtcccgagcgactt 2100
-           S  R  R  R  R  T  R  G  S  R  K  R  L  L  R  A  P  S  A  S    F6
-          Q  A  G  A  D  R  E  V  Q  D  K  G  C  C  G  P  L  A  R  Q     F5
-            L  A  Q  T  A  N  *  R  I  K  E  A  A  A  P  C  P  E  S  F   F4
-
-
-          G  R  S  A  D  P  A  I  R  F  Y  L  S  V  G  G  R  Q  P  V     F1
-           A  G  A  L  T  L  L  F  A  F  T  Y  L  W  V  A  A  N  Q  F    F2
-            P  E  R  *  P  C  Y  S  L  L  P  I  C  G  W  P  P  T  S  S   F3
-     2101 ggccggagcgctgaccctgctattcgcttttacctatctgtgggtggccgccaaccagtt 2160
-          ----:----|----:----|----:----|----:----|----:----|----:----|
-     2101 ccggcctcgcgactgggacgataagcgaaaatggatagacacccaccggcggttggtcaa 2160
-           P  R  L  A  S  G  A  I  R  K  *  R  D  T  P  P  R  W  G  T    F6
-          L  G  S  R  Q  G  Q  *  E  S  K  G  I  Q  P  H  G  G  V  L     F5
-            A  P  A  S  V  R  S  N  A  K  V  *  R  H  T  A  A  L  W  N   F4
-
-
-          P  R  X                                                        F1
-           L  E                                                          F2
-            S                                                            F3
-     2161 cctcgag                                                      2167
-          ----:----|----:----|----:----|----:----|----:----|----:----|
-     2161 ggagctc                                                      2167
-           G  R                                                          F6
-          E  E  L                                                        F5
-            R  S                                                         F4
-
-##############################
-Minimum size of ORFs : 1
-
-Total ORFs in frame 1 :     8
-Total ORFs in frame 2 :     5
-Total ORFs in frame 3 :    13
-Total ORFs in frame 4 :    10
-Total ORFs in frame 5 :    16
-Total ORFs in frame 6 :    15
-
-Total ORFs :    67
-##############################
-   
 Data files
 
    EMBOSS data files are distributed with the application and stored in
    the standard EMBOSS data directory, which is defined by the EMBOSS
    environment variable EMBOSS_DATA.
-   
+
    To see the available EMBOSS data files, run:
-   
+
 % embossdata -showall
 
    To fetch one of the data files (for example 'Exxx.dat') into your
@@ -626,85 +626,85 @@ Data files
    tidier directory listings in a subdirectory called ".embossdata".
    Files for all EMBOSS runs can be put in the user's home directory, or
    again in a subdirectory called ".embossdata".
-   
+
    The directories are searched in the following order:
      * . (your current directory)
      * .embossdata (under your current directory)
      * ~/ (your home directory)
      * ~/.embossdata
-       
+
    The Genetic Code data files are based on the NCBI genetic code tables.
    Their names and descriptions are:
-   
+
    EGC.0
           Standard (Differs from GC.1 in that it only has initiation site
           'AUG')
-          
+
    EGC.1
           Standard
-          
+
    EGC.2
           Vertebrate Mitochodrial
-          
+
    EGC.3
           Yeast Mitochondrial
-          
+
    EGC.4
           Mold, Protozoan, Coelenterate Mitochondrial and
           Mycoplasma/Spiroplasma
-          
+
    EGC.5
           Invertebrate Mitochondrial
-          
+
    EGC.6
           Ciliate Macronuclear and Dasycladacean
-          
+
    EGC.9
           Echinoderm Mitochondrial
-          
+
    EGC.10
           Euplotid Nuclear
-          
+
    EGC.11
           Bacterial
-          
+
    EGC.12
           Alternative Yeast Nuclear
-          
+
    EGC.13
           Ascidian Mitochondrial
-          
+
    EGC.14
           Flatworm Mitochondrial
-          
+
    EGC.15
           Blepharisma Macronuclear
-          
+
    EGC.16
           Chlorophycean Mitochondrial
-          
+
    EGC.21
           Trematode Mitochondrial
-          
+
    EGC.22
           Scenedesmus obliquus
-          
+
    EGC.23
           Thraustochytrium Mitochondrial
-          
+
    The format of these files is very simple.
-   
+
    It consists of several lines of optional comments, each starting with
    a '#' character.
-   
+
    These are followed the line: 'Genetic Code [n]', where 'n' is the
    number of the genetic code file.
-   
+
    This is followed by the description of the code and then by four lines
    giving the IUPAC one-letter code of the translated amino acid, the
    start codons (indicdated by an 'M') and the three bases of the codon,
    lined up one on top of the other.
-   
+
    For example:
 
 ------------------------------------------------------------------------------
@@ -729,27 +729,27 @@ Base3  = TCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAG
 Notes
 
    None.
-   
+
 References
 
    None.
-   
+
 Warnings
 
    None.
-   
+
 Diagnostic Error Messages
 
    None.
-   
+
 Exit status
 
    It always exits with status 0.
-   
+
 Known bugs
 
    None.
-   
+
 See also
 
    Program name Description
@@ -778,18 +778,22 @@ See also
    faster!
    transeq Translate nucleic acid sequences
    wobble Wobble base plot
-   
+
 Author(s)
 
    Thomas Laurent (thomas.laurent © uk.lionbioscience.com)
    Lion Bioscience Ltd, Compass House, 80-82 Newmarket Road, Cambridge,
    CB5 8DZ, UK
-   
+
 History
 
    Written (November 2002) - Thomas Laurent
-   
+
 Target users
 
    This program is intended to be used by everyone and everything, from
    naive users to embedded scripts.
+
+Comments
+
+   None

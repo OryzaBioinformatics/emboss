@@ -1,29 +1,29 @@
 
                                  fuzztran 
-                                      
-   
-   
+
+
+
 Function
 
    Protein pattern search after translation
-   
+
 Description
 
    fuzztran uses PROSITE style protein patterns to search nucleic acid
    sequences translated in the specified frame(s).
-   
+
    Patterns are specifications of a (typically short) length of sequence
    to be found. They can specify a search for an exact sequence or they
    can allow various ambiguities, matches to variable lengths of sequence
    and repeated subsections of the sequence.
-   
+
    fuzztran intelligently selects the optimum searching algorithm to use,
    depending on the complexity of the search pattern specified.
-   
+
 Usage
 
    Here is a sample session with fuzztran
-   
+
 
 % fuzztran -opt 
 Protein pattern search after translation
@@ -63,10 +63,10 @@ asma
         23 : Thraustochytrium Mitochondrial
 Code to use [0]: 
 Output report [rnops.fuzztran]: 
-   
+
    Go to the input files for this example
    Go to the output files for this example
-   
+
 Command line arguments
 
    Standard (Mandatory) qualifiers:
@@ -150,7 +150,7 @@ Command line arguments
    -error               boolean    Report errors
    -fatal               boolean    Report fatal errors
    -die                 boolean    Report deaths
-   
+
 
    Standard (Mandatory) qualifiers Allowed values Default
    [-sequence]
@@ -211,18 +211,18 @@ Command line arguments
    0
    Advanced (Unprompted) qualifiers Allowed values Default
    (none)
-   
+
 Input file format
 
    fuzztran reads in normal nucleic acid sequence USAs.
-   
+
   Input files for usage example
-  
+
    'tembl:rnops' is a sequence entry in the example nucleic acid database
    'tembl'
-   
+
   Database entry: tembl:rnops
-  
+
 ID   RNOPS      standard; RNA; ROD; 1493 BP.
 XX
 AC   Z46957;
@@ -344,13 +344,13 @@ SQ   Sequence 1493 BP; 309 A; 475 C; 365 G; 344 T; 0 other;
      gtctaggaca gaatggaaca catagtagct gattaataaa tgctacctgg atg             149
 3
 //
-   
+
   Pattern specification
-  
+
    Patterns for fuzztran are based on the format of pattern used in the
    PROSITE database, with the difference that the terminating dot '.' and
    the hyphens, '-', between the characters are optional.
-   
+
    The PROSITE pattern definition from the PROSITE documentation follows.
      * The standard IUPAC one-letter codes for the amino acids are used.
      * The symbol `x' is used for a position where any amino acid is
@@ -373,7 +373,7 @@ SQ   Sequence 1493 BP; 309 A; 475 C; 365 G; 344 T; 0 other;
        respectively ends with a `>' symbol.
      * A period ends the pattern. (Optional in fuzztran).
      * All other characters, including spaces are not allowed.
-       
+
    For example, you can look for the pattern:
 
 [DE](2)HS{P}X(2)PX(2,4)C
@@ -381,32 +381,31 @@ SQ   Sequence 1493 BP; 309 A; 475 C; 365 G; 344 T; 0 other;
    This means: Two Asps or Glus in any order followed by His, Ser, any
    residue other then Pro, then two of any residue followed by Pro
    followed by two to four of any residue followed by Cys.
-   
+
    The search is case-independent, so 'AAA' matches 'aaa'.
-   
+
 Output file format
 
    The output is a standard EMBOSS report file.
-   
+
    The results can be output in one of several styles by using the
    command-line qualifier -rformat xxx, where 'xxx' is replaced by the
    name of the required format. The available format names are: embl,
    genbank, gff, pir, swiss, trace, listfile, dbmotif, diffseq, excel,
    feattable, motif, regions, seqtable, simple, srs, table, tagseq
-   
-   See:
-   http://www.uk.embnet.org/Software/EMBOSS/Themes/ReportFormats.html for
-   further information on report formats.
-   
+
+   See: http://emboss.sf.net/docs/themes/ReportFormats.html for further
+   information on report formats.
+
    By default fuzztran writes a 'table' report file.
-   
+
   Output files for usage example
-  
+
   File: rnops.fuzztran
-  
+
 ########################################
 # Program: fuzztran
-# Rundate: Tue Apr 06 14:29:42 2004
+# Rundate: Thu Jul 15 2004 12:00:00
 # Report_format: table
 # Report_file: rnops.fuzztran
 ########################################
@@ -436,9 +435,9 @@ Output file format
 
 #---------------------------------------
 #---------------------------------------
-   
+
    The columns of data are as follows:
-   
+
     1. Start - the start position of the pattern in the nucleic acids
        sequence.
     2. End - the end position of the pattern in the nucleic acids
@@ -451,85 +450,106 @@ Output file format
     7. PEnd - the end position of the match in the resulting protein
        sequence.
     8. Translation - the protein sequence that is matched.
-       
+
 Data files
 
    EMBOSS data files are distributed with the application and stored in
-   the standard EMBOSS data directory, which is defined by EMBOSS
+   the standard EMBOSS data directory, which is defined by the EMBOSS
    environment variable EMBOSS_DATA.
-   
+
+   To see the available EMBOSS data files, run:
+
+% embossdata -showall
+
+   To fetch one of the data files (for example 'Exxx.dat') into your
+   current directory for you to inspect or modify, run:
+
+% embossdata -fetch -file Exxx.dat
+
    Users can provide their own data files in their own directories.
    Project specific files can be put in the current directory, or for
    tidier directory listings in a subdirectory called ".embossdata".
    Files for all EMBOSS runs can be put in the user's home directory, or
    again in a subdirectory called ".embossdata".
-   
+
    The directories are searched in the following order:
      * . (your current directory)
      * .embossdata (under your current directory)
      * ~/ (your home directory)
      * ~/.embossdata
-       
+
    The Genetic Code data files are based on the NCBI genetic code tables.
    Their names and descriptions are:
-   
+
    EGC.0
           Standard (Differs from GC.1 in that it only has initiation site
           'AUG')
-          
+
    EGC.1
           Standard
-          
+
    EGC.2
-          Vertebrate Mitochondrial
-          
+          Vertebrate Mitochodrial
+
    EGC.3
           Yeast Mitochondrial
-          
+
    EGC.4
           Mold, Protozoan, Coelenterate Mitochondrial and
           Mycoplasma/Spiroplasma
-          
+
    EGC.5
           Invertebrate Mitochondrial
-          
+
    EGC.6
           Ciliate Macronuclear and Dasycladacean
-          
+
    EGC.9
           Echinoderm Mitochondrial
-          
+
    EGC.10
           Euplotid Nuclear
-          
+
    EGC.11
           Bacterial
-          
+
    EGC.12
           Alternative Yeast Nuclear
-          
+
    EGC.13
           Ascidian Mitochondrial
-          
+
    EGC.14
           Flatworm Mitochondrial
-          
+
    EGC.15
           Blepharisma Macronuclear
-          
+
+   EGC.16
+          Chlorophycean Mitochondrial
+
+   EGC.21
+          Trematode Mitochondrial
+
+   EGC.22
+          Scenedesmus obliquus
+
+   EGC.23
+          Thraustochytrium Mitochondrial
+
    The format of these files is very simple.
-   
+
    It consists of several lines of optional comments, each starting with
    a '#' character.
-   
+
    These are followed the line: 'Genetic Code [n]', where 'n' is the
    number of the genetic code file.
-   
+
    This is followed by the description of the code and then by four lines
    giving the IUPAC one-letter code of the translated amino acid, the
    start codons (indicdated by an 'M') and the three bases of the codon,
    lined up one on top of the other.
-   
+
    For example:
 
 ------------------------------------------------------------------------------
@@ -554,35 +574,35 @@ Base3  = TCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAG
 Notes
 
    None.
-   
+
 References
 
    None.
-   
+
 Warnings
 
    When translating using non-standard genetic code table, always check
    the table carefully for deviations from your particular organism's
    code.
-   
+
 Diagnostic Error Messages
 
    None.
-   
+
 Exit status
 
    It always exits with status 0.
-   
+
 Known bugs
 
    None.
-   
+
 See also
 
     Program name                         Description
    antigenic      Finds antigenic sites in proteins
    digest         Protein proteolytic enzyme or reagent cleavage digest
-   dreg           regular expression search of a nucleotide sequence
+   dreg           Regular expression search of a nucleotide sequence
    epestfind      Finds PEST motifs as potential proteolytic cleavage sites
    fuzznuc        Nucleic acid pattern search
    fuzzpro        Protein pattern search
@@ -595,28 +615,30 @@ See also
    preg           Regular expression search of a protein sequence
    pscan          Scans proteins using PRINTS
    sigcleave      Reports protein signal cleavage sites
-   
+
    Other EMBOSS programs allow you to search for regular expression
    patterns but may be less easy for the user who has never used regular
    expressions before:
-   
+
      * dreg - Regular expression search of a nucleotide sequence
      * preg - Regular expression search of a protein sequence
-       
+
 Author(s)
 
    Alan Bleasby (ableasby © rfcgr.mrc.ac.uk)
    MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
    Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
-   
+
 History
 
    Written (2000) - Alan Bleasby
    '-usa' added (13 March 2001) - Gary Williams
-   
+
 Target users
 
    This program is intended to be used by everyone and everything, from
    naive users to embedded scripts.
-   
+
 Comments
+
+   None

@@ -1,34 +1,34 @@
 
                                printsextract 
-                                      
-   
-   
+
+
+
 Function
 
    Extract data from PRINTS
-   
+
 Description
 
    Preprocesses the PRINTS database for use with the program PSCAN.
-   
+
    This program derives matrix information from the final motif sets of
    the PRINTS data file (prints.dat). It creates files in the EMBOSS data
    subdirectory PRINTS these being a matrix file and files containing
    text information for each fingerprint. Running this program may be the
    job of your system manager.
-   
+
 Usage
 
    Here is a sample session with printsextract
-   
+
 
 % printsextract 
 Extract data from PRINTS
-Full pathname of prints.dat: ../../data/prints.test
-   
+Full pathname of prints.dat: prints.test
+
    Go to the input files for this example
    Go to the output files for this example
-   
+
 Command line arguments
 
    Standard (Mandatory) qualifiers:
@@ -51,22 +51,22 @@ Command line arguments
    -error               boolean    Report errors
    -fatal               boolean    Report fatal errors
    -die                 boolean    Report deaths
-   
 
-   Standard (Mandatory) qualifiers Allowed values Default
+
+                 Standard (Mandatory) qualifiers        Allowed values Default
    [-infile]
    (Parameter 1) Full pathname of prints.dat Input file Required
-   Additional (Optional) qualifiers Allowed values Default
-   (none)
-   Advanced (Unprompted) qualifiers Allowed values Default
-   (none)
-   
+                 Additional (Optional) qualifiers       Allowed values Default
+                 (none)
+                 Advanced (Unprompted) qualifiers       Allowed values Default
+                 (none)
+
 Input file format
 
   Input files for usage example
-  
-  File: ../../data/prints.test
-  
+
+  File: prints.test
+
 gc; ACHEFISH
 gx; PR00879
 gn; COMPOUND(4)
@@ -176,40 +176,42 @@ fd; TIWGSLFAKANAVYNPIVYGISHPKYR      OPSD_APIME    313    12
 fd; SMLPCLACKSVSCLDPWVYATSHPKYR      OPS5_DROME    314    13
 fd; TICGSVFAKANAVCNPIVYGLSHPKYK      OPS6_DROME    309    12
 bb;
-   
+
    The input file must be the "prints.dat" file of a PRINTS distribution.
-   
+
    The PRINTS database is currently available via the anonymous ftp
    servers at:
      * Manchester ftp://bioinf.man.ac.uk/pub/prints/
      * EBI ftp://ftp.ebi.ac.uk/pub/databases/
      * EMBL ftp://ftp.embl-heidelberg.de/
      * NCBI ftp://ncbi.nlm.nih.gov/
-       
+
    It is also distributed on the EMBL CD-ROMs.
-   
+
    The home page for PRINTS is:
    http://www.bioinf.man.ac.uk/dbbrowser/PRINTS/
-   
+
 Output file format
 
   Output files for usage example
-  
-  File: PRINTS
-  
+
+  Directory: PRINTS
+
+   This directory contains output files.
+
    The output files are held in the PRINTS subdirectory of the EMBOSS
    data directory.
      * prints.mat matrices calculated from PRINTS
      * Pxxxxx text information for each fingerprint
-       
+
 Data files
 
    None.
-   
+
 Notes
 
    You may have to ask your system manager to run this program.
-   
+
 References
 
     1. Attwood, T.K., Flower, D.R., Lewis, A.P., Mabey, J.E., Morgan,
@@ -251,23 +253,23 @@ References
    13. Parry-Smith, D.J., Payne, A.W.R, Michie, A.D. and Attwood, T.K.
        (1998) CINEMA - A novel Colour INteractive Editor for Multiple
        Alignments. Gene, 211(2), GC45-56.
-       
+
 Warnings
 
    The program will warn you if the input file is incorrectly formatted.
-   
+
 Diagnostic Error Messages
 
    None.
-   
+
 Exit status
 
    It exits with status 0 unless an error is reported.
-   
+
 Known bugs
 
    None.
-   
+
 See also
 
    Program name Description
@@ -277,20 +279,22 @@ See also
    search
    rebaseextract Extract data from REBASE
    tfextract Extract data from TRANSFAC
-   
+
 Author(s)
 
    Alan Bleasby (ableasby © rfcgr.mrc.ac.uk)
    MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
    Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
-   
+
 History
 
    Completed 8th April 1999
-   
+
 Target users
 
    This program is intended to be used by administrators responsible for
    software and database installation and maintenance.
-   
+
 Comments
+
+   None

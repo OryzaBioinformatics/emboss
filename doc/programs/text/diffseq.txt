@@ -1,28 +1,28 @@
 
                                   diffseq 
-                                      
-   
-   
+
+
+
 Function
 
    Find differences between nearly identical sequences
-   
+
 Description
 
    diffseq takes two overlapping, nearly identical sequences and reports
    the differences between them, together with any features that overlap
    with these regions. GFF files of the differences in each sequence are
    also produced.
-   
+
    diffseq finds the region of overlap of the input sequences and then
    reports differences within this region, like a local alignment.
-   
+
    The start and end positions of the overlap are reported.
-   
+
    diffseq should be of value when looking for SNPs, differences between
    strains of an organism and anything else that requires the differences
    between sequences to be highlighted.
-   
+
    The sequences can be very long. The program does a match of all
    sequence words of size 10 (by default). It then reduces this to the
    minimum set of overlapping matches by sorting the matches in order of
@@ -30,14 +30,14 @@ Description
    smaller matches that overlap. The result is a set of the longest
    ungapped alignments between the two sequences that do not overlap with
    each other. The mismatched regions between these matches are reported.
-   
+
    It should be possible to find differences between sequences that are
    Mega-bases long.
-   
+
 Usage
 
    Here is a sample session with diffseq
-   
+
 
 % diffseq tembl:ap000504 tembl:af129756 
 Find differences between nearly identical sequences
@@ -45,10 +45,10 @@ Word size [10]:
 Output report [ap000504.diffseq]: 
 Output features [AP000504.diffgff]: 
 Second output features [AF129756.diffgff]: 
-   
+
    Go to the input files for this example
    Go to the output files for this example
-   
+
 Command line arguments
 
    Standard (Mandatory) qualifiers:
@@ -72,90 +72,98 @@ Command line arguments
                                   features
 
    Additional (Optional) qualifiers:
-   -columns            boolean    The default format for the output report
-                                  file is to have several lines per difference
-                                  giving the sequence positions, sequences
-                                  and features.
-                                  If this option is set true then the output
-                                  report file's format is changed to a set of
-                                  columns and no feature information is given.
+   -globaldifferences  boolean    Normally this program will find regions of
+                                  identity that are the length of the
+                                  specified word-size or greater and will then
+                                  report the regions of difference between
+                                  these matching regions. This works well and
+                                  is what most people want if they are working
+                                  with long overlapping nucleic acid
+                                  sequences. You are usually not interested in
+                                  the non-overlapping ends of these
+                                  sequences. If you have protein sequences or
+                                  short RNA sequences however, you will be
+                                  interested in differences at the very ends .
+                                  It this option is set to be true then the
+                                  differences at the ends will also be
+                                  reported.
 
    Advanced (Unprompted) qualifiers: (none)
    Associated qualifiers:
 
    "-asequence" associated qualifiers
-   -sbegin1             integer    Start of the sequence to be used
-   -send1               integer    End of the sequence to be used
-   -sreverse1           boolean    Reverse (if DNA)
-   -sask1               boolean    Ask for begin/end/reverse
-   -snucleotide1        boolean    Sequence is nucleotide
-   -sprotein1           boolean    Sequence is protein
-   -slower1             boolean    Make lower case
-   -supper1             boolean    Make upper case
-   -sformat1            string     Input sequence format
-   -sdbname1            string     Database name
-   -sid1                string     Entryname
-   -ufo1                string     UFO features
-   -fformat1            string     Features format
-   -fopenfile1          string     Features file name
+   -sbegin1            integer    Start of the sequence to be used
+   -send1              integer    End of the sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
 
    "-bsequence" associated qualifiers
-   -sbegin2             integer    Start of the sequence to be used
-   -send2               integer    End of the sequence to be used
-   -sreverse2           boolean    Reverse (if DNA)
-   -sask2               boolean    Ask for begin/end/reverse
-   -snucleotide2        boolean    Sequence is nucleotide
-   -sprotein2           boolean    Sequence is protein
-   -slower2             boolean    Make lower case
-   -supper2             boolean    Make upper case
-   -sformat2            string     Input sequence format
-   -sdbname2            string     Database name
-   -sid2                string     Entryname
-   -ufo2                string     UFO features
-   -fformat2            string     Features format
-   -fopenfile2          string     Features file name
+   -sbegin2            integer    Start of the sequence to be used
+   -send2              integer    End of the sequence to be used
+   -sreverse2          boolean    Reverse (if DNA)
+   -sask2              boolean    Ask for begin/end/reverse
+   -snucleotide2       boolean    Sequence is nucleotide
+   -sprotein2          boolean    Sequence is protein
+   -slower2            boolean    Make lower case
+   -supper2            boolean    Make upper case
+   -sformat2           string     Input sequence format
+   -sdbname2           string     Database name
+   -sid2               string     Entryname
+   -ufo2               string     UFO features
+   -fformat2           string     Features format
+   -fopenfile2         string     Features file name
 
    "-outfile" associated qualifiers
-   -rformat3            string     Report format
-   -rname3              string     Base file name
-   -rextension3         string     File name extension
-   -rdirectory3         string     Output directory
-   -raccshow3           boolean    Show accession number in the report
-   -rdesshow3           boolean    Show description in the report
-   -rscoreshow3         boolean    Show the score in the report
-   -rusashow3           boolean    Show the full USA in the report
+   -rformat3           string     Report format
+   -rname3             string     Base file name
+   -rextension3        string     File name extension
+   -rdirectory3        string     Output directory
+   -raccshow3          boolean    Show accession number in the report
+   -rdesshow3          boolean    Show description in the report
+   -rscoreshow3        boolean    Show the score in the report
+   -rusashow3          boolean    Show the full USA in the report
 
    "-aoutfeat" associated qualifiers
-   -offormat4           string     Output feature format
-   -ofopenfile4         string     Features file name
-   -ofextension4        string     File name extension
-   -ofdirectory4        string     Output directory
-   -ofname4             string     Base file name
-   -ofsingle4           boolean    Separate file for each entry
+   -offormat4          string     Output feature format
+   -ofopenfile4        string     Features file name
+   -ofextension4       string     File name extension
+   -ofdirectory4       string     Output directory
+   -ofname4            string     Base file name
+   -ofsingle4          boolean    Separate file for each entry
 
    "-boutfeat" associated qualifiers
-   -offormat5           string     Output feature format
-   -ofopenfile5         string     Features file name
-   -ofextension5        string     File name extension
-   -ofdirectory5        string     Output directory
-   -ofname5             string     Base file name
-   -ofsingle5           boolean    Separate file for each entry
+   -offormat5          string     Output feature format
+   -ofopenfile5        string     Features file name
+   -ofextension5       string     File name extension
+   -ofdirectory5       string     Output directory
+   -ofname5            string     Base file name
+   -ofsingle5          boolean    Separate file for each entry
 
    General qualifiers:
-   -auto                boolean    Turn off prompts
-   -stdout              boolean    Write standard output
-   -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for standard and additional values
-   -debug               boolean    Write debug output to program.dbg
-   -verbose             boolean    Report some/full command line options
-   -help                boolean    Report command line options. More
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
-   -warning             boolean    Report warnings
-   -error               boolean    Report errors
-   -fatal               boolean    Report fatal errors
-   -die                 boolean    Report deaths
-   
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report deaths
+
 
    Standard (Mandatory) qualifiers Allowed values Default
    [-asequence]
@@ -178,26 +186,31 @@ Command line arguments
    (Parameter 5) File for output of second sequence's features Writeable
    feature table $(bsequence.name).diffgff
    Additional (Optional) qualifiers Allowed values Default
-   -columns The default format for the output report file is to have
-   several lines per difference giving the sequence positions, sequences
-   and features. If this option is set true then the output report file's
-   format is changed to a set of columns and no feature information is
-   given. Boolean value Yes/No No
+   -globaldifferences Normally this program will find regions of identity
+   that are the length of the specified word-size or greater and will
+   then report the regions of difference between these matching regions.
+   This works well and is what most people want if they are working with
+   long overlapping nucleic acid sequences. You are usually not
+   interested in the non-overlapping ends of these sequences. If you have
+   protein sequences or short RNA sequences however, you will be
+   interested in differences at the very ends . It this option is set to
+   be true then the differences at the ends will also be reported.
+   Boolean value Yes/No No
    Advanced (Unprompted) qualifiers Allowed values Default
    (none)
-   
+
 Input file format
 
    This program reads in two nucleic acid sequence USAs or two protein
    sequence USAs.
-   
+
   Input files for usage example
-  
+
    'tembl:ap000504' is a sequence entry in the example nucleic acid
    database 'tembl'
-   
+
   Database entry: tembl:ap000504
-  
+
 ID   AP000504   standard; DNA; HUM; 100000 BP.
 XX
 AC   AP000504; BA000025;
@@ -354,9 +367,9 @@ CC   sequence archive Web site (http://www-alis.tokyo.jst.go.jp/HGS/top.
      tgagcaaggg tcggggagtt ctagtgcgta acagtctagg                          10000
 0
 //
-   
+
   Database entry: tembl:af129756
-  
+
 ID   AF129756   standard; DNA; HUM; 184666 BP.
 XX
 AC   AF129756;
@@ -515,32 +528,136 @@ DR   SPTREMBL; O95870; O95870.
      tcctgctcct agaagctaaa ctctccagac ttagtcttct gaattc                   18466
 6
 //
-   
+
 Output file format
 
-   A report of the differences between the two sequences is produced,
-   together with any features that overlap with these differing regions.
-   
    The output is a standard EMBOSS report file.
-   
+
    The results can be output in one of several styles by using the
    command-line qualifier -rformat xxx, where 'xxx' is replaced by the
    name of the required format. The available format names are: embl,
    genbank, gff, pir, swiss, trace, listfile, dbmotif, diffseq, excel,
    feattable, motif, regions, seqtable, simple, srs, table, tagseq
-   
-   See:
-   http://www.uk.embnet.org/Software/EMBOSS/Themes/ReportFormats.html for
-   further information on report formats.
-   
+
+   See: http://emboss.sf.net/docs/themes/ReportFormats.html for further
+   information on report formats.
+
    By default diffseq writes a 'diffseq' report file.
-   
+
   Output files for usage example
-  
+
+  File: ap000504.diffseq
+
+########################################
+# Program: diffseq
+# Rundate: Thu Jul 15 2004 12:00:00
+# Report_format: diffseq
+# Report_file: ap000504.diffseq
+# Additional_files: 2
+# 1: AP000504.diffgff (Feature file for first sequence)
+# 2: AF129756.diffgff (Feature file for second sequence)
+########################################
+
+#=======================================
+#
+# Sequence: AP000504     from: 1   to: 100000
+# HitCount: 119
+#
+# Compare: AF129756     from: 1   to: 184666
+#
+# AP000504 overlap starts at 1
+# AF129756 overlap starts at 6036
+#
+# (AP000504) start end length sequence
+# (AF129756) start end length sequence
+#
+#
+#=======================================
+
+
+AP000504 847-847 Length: 1
+Sequence: a
+Sequence: t
+AF129756 6882-6882 Length: 1
+
+AP000504 1795-1795 Length: 1
+Sequence: g
+Sequence: a
+AF129756 7830-7830 Length: 1
+
+AP000504 2273-2273 Length: 1
+Sequence: t
+Sequence:
+Feature: repeat_region 7920-8351 rpt_family='MSTB'
+AF129756 8307 Length: 0
+
+AP000504 2466-2466 Length: 1
+Sequence: g
+Sequence: a
+Feature: repeat_region 8391-8686 rpt_family='AluSg'
+AF129756 8500-8500 Length: 1
+
+AP000504 2655-2658 Length: 4
+
+
+  [Part of this file has been deleted for brevity]
+
+Sequence: t
+Sequence: c
+AF129756 99280-99280 Length: 1
+
+AP000504 93696-93696 Length: 1
+Sequence: t
+Sequence: g
+AF129756 99726-99726 Length: 1
+
+AP000504 93860-93860 Length: 1
+Sequence: t
+Sequence: g
+AF129756 99890-99890 Length: 1
+
+AP000504 95451-95451 Length: 1
+Sequence: c
+Sequence: t
+AF129756 101481-101481 Length: 1
+
+AP000504 96650-96650 Length: 1
+Sequence: c
+Sequence: t
+AF129756 102680-102680 Length: 1
+
+AP000504 97273-97274 Length: 2
+Sequence: aa
+Sequence:
+Feature: repeat_region 103299-103402 rpt_family='AluSq'
+AF129756 103302 Length: 0
+
+AP000504 97716-97716 Length: 1
+Sequence: a
+Sequence: g
+AF129756 103744-103744 Length: 1
+
+AP000504 97827-97827 Length: 1
+Sequence: c
+Sequence: t
+Feature: repeat_region 103784-104083 rpt_family='AluSx'
+AF129756 103855-103855 Length: 1
+
+#---------------------------------------
+#
+# Overlap_end: 100000 in AP000504
+# Overlap_end: 106028 in AF129756
+#
+# SNP_count: 86
+# Transitions: 58
+# Transversions: 28
+#
+#---------------------------------------
+
   File: AF129756.diffgff
-  
+
 ##gff-version 2.0
-##date 2004-04-06
+##date 2004-07-15
 ##Type DNA AF129756
 AF129756        diffseq conflict        6882    6882    1.000   +       .
 Sequence "AF129756.1" ; note "SNP in AP000504" ; replace "a"
@@ -742,11 +859,11 @@ AF129756        diffseq conflict        103744  103744  1.000   +       .
 Sequence "AF129756.104" ; note "SNP in AP000504" ; replace "a"
 AF129756        diffseq conflict        103855  103855  1.000   +       .
 Sequence "AF129756.105" ; note "SNP in AP000504" ; replace "c"
-   
+
   File: AP000504.diffgff
-  
+
 ##gff-version 2.0
-##date 2004-04-06
+##date 2004-07-15
 ##Type DNA AP000504
 AP000504        diffseq conflict        847     847     1.000   +       .
 Sequence "AP000504.1" ; note "SNP in AF129756" ; replace "t"
@@ -948,120 +1065,12 @@ AP000504        diffseq conflict        97716   97716   1.000   +       .
 Sequence "AP000504.104" ; note "SNP in AF129756" ; replace "g"
 AP000504        diffseq conflict        97827   97827   1.000   +       .
 Sequence "AP000504.105" ; note "SNP in AF129756" ; replace "t"
-   
-  File: ap000504.diffseq
-  
-########################################
-# Program: diffseq
-# Rundate: Tue Apr 06 14:25:28 2004
-# Report_format: diffseq
-# Report_file: ap000504.diffseq
-# Additional_files: 2
-# 1: AP000504.diffgff (Feature file for first sequence)
-# 2: AF129756.diffgff (Feature file for second sequence)
-########################################
 
-#=======================================
-#
-# Sequence: AP000504     from: 1   to: 100000
-# HitCount: 119
-#
-# Compare: AF129756     from: 1   to: 184666
-#
-# AP000504 overlap starts at 1
-# AF129756 overlap starts at 6036
-#
-# (AP000504) start end length sequence
-# (AF129756) start end length sequence
-#
-#
-#=======================================
-
-
-AP000504 847-847 Length: 1
-Sequence: a
-Sequence: t
-AF129756 6882-6882 Length: 1
-
-AP000504 1795-1795 Length: 1
-Sequence: g
-Sequence: a
-AF129756 7830-7830 Length: 1
-
-AP000504 2273-2273 Length: 1
-Sequence: t
-Sequence:
-Feature: repeat_region 7920-8351 rpt_family='MSTB'
-AF129756 8307 Length: 0
-
-AP000504 2466-2466 Length: 1
-Sequence: g
-Sequence: a
-Feature: repeat_region 8391-8686 rpt_family='AluSg'
-AF129756 8500-8500 Length: 1
-
-AP000504 2655-2658 Length: 4
-
-
-  [Part of this file has been deleted for brevity]
-
-Sequence: t
-Sequence: c
-AF129756 99280-99280 Length: 1
-
-AP000504 93696-93696 Length: 1
-Sequence: t
-Sequence: g
-AF129756 99726-99726 Length: 1
-
-AP000504 93860-93860 Length: 1
-Sequence: t
-Sequence: g
-AF129756 99890-99890 Length: 1
-
-AP000504 95451-95451 Length: 1
-Sequence: c
-Sequence: t
-AF129756 101481-101481 Length: 1
-
-AP000504 96650-96650 Length: 1
-Sequence: c
-Sequence: t
-AF129756 102680-102680 Length: 1
-
-AP000504 97273-97274 Length: 2
-Sequence: aa
-Sequence:
-Feature: repeat_region 103299-103402 rpt_family='AluSq'
-AF129756 103302 Length: 0
-
-AP000504 97716-97716 Length: 1
-Sequence: a
-Sequence: g
-AF129756 103744-103744 Length: 1
-
-AP000504 97827-97827 Length: 1
-Sequence: c
-Sequence: t
-Feature: repeat_region 103784-104083 rpt_family='AluSx'
-AF129756 103855-103855 Length: 1
-
-#---------------------------------------
-#
-# Overlap_end: 100000 in AP000504
-# Overlap_end: 106028 in AF129756
-#
-# SNP_count: 86
-# Transitions: 58
-# Transversions: 28
-#
-#---------------------------------------
-   
    The first line is the title giving the names of the sequences used.
-   
+
    The next two non-blank lines state the positions in each sequence
    where the detected overlap between them starts.
-   
+
    There then follows a set of reports of the mismatches between the
    sequences.
    Each report consists of 4 or more lines.
@@ -1075,171 +1084,99 @@ AF129756 103855-103855 Length: 1
        with the type, position and tag field of the feature.
      * Next is a line starting "Sequence:" giving the sequence of the
        mismatch in the first sequence.
-       
+
    This is followed by the equivalent information for the second
    sequence, but in the reverse order, namely 'Sequence:' line,
    'Feature:' lines and line giving the position of the mismatch in the
    second sequence.
-   
+
    At the end of the report are two non-blank lines giving the positions
    in each sequence where the detected overlap between them ends.
-   
+
    The last three lines of the report gives the counts of SNPs (defined
    as a change of one nucleotide to one other nucleotide, no deletions or
    insertions are counted, no multi-base changes are counted).
-   
+
    If the input sequences are nucleic acid, The counts of transitions
    (Pyrimide to Pyrimidine or Purine to Purine) and transversions
    (Pyrimidine to Purine) are also given.
-   
+
    It should be noted that not all features are reported.
-   
+
    The 'source' feature found in all EMBL/Genbank feature table entries
    is not reported as this covers all of the sequence and so overlaps
    with any difference found in that sequence and so is uninformative and
    irritating. It has therefore been removed from the output report.
-   
+
    The translation information of CDS features is often extremely long
    and does not add useful information to the report. It has therefore
    been removed from the output report.
-   
-   If no regions of alignment are found, the following output is given:
-  __________________________________________________________________________
-
-########################################
-# Program: diffseq
-# Rundate: Mon Feb 11 13:21:20 2002
-# Report_file: ap000504.diffseq
-# Additional_files: 2
-# 1: AP000504.diffgff (Feature file for first sequence)
-# 2: fred.diffgff (Feature file for second sequence)
-########################################
-
-#=======================================
-#
-# Sequence: AP000504     from: 1   to: 100000
-# HitCount: 0
-#=======================================
-
-
-#---------------------------------------
-#
-# No regions of alignment found.
-#
-#
-#---------------------------------------
-  __________________________________________________________________________
-
-   If the -rformat table qualifier is given then the output is given in a
-   columnar format.
-   
-   The columns are separated by one or more spaces or TAB characters in
-   the order:
-   
-     * sequence 1 name
-     * sequence 1 start
-     * sequence 1 end
-     * score (always 0.000)
-     * sequence 2 start
-     * sequence 2 end
-     * sequence 2 name
-     * sequence difference length
-     * sequence
-     * first feature
-     * second feature
-       
-   If no regions of alignment are found, the following output is given:
-  __________________________________________________________________________
-
-########################################
-# Program: diffseq
-# Rundate: Mon Feb 11 13:34:34 2002
-# Report_file: ap000504.diffseq
-# Additional_files: 2
-# 1: AP000504.diffgff (Feature file for first sequence)
-# 2: fred.diffgff (Feature file for second sequence)
-########################################
-
-#=======================================
-#
-# Sequence: AP000504     from: 1   to: 100000
-# HitCount: 0
-#=======================================
-
-USA               Start     End   Score start  end    length name   sequence fi
-rst_feature second_feature
-
-#---------------------------------------
-#
-# No regions of alignment found.
-#
-#
-#---------------------------------------
-  __________________________________________________________________________
 
 Data files
+
+   None
 
 Notes
 
    It should be noted that not all features are reported.
-   
+
    The 'source' feature found in all EMBL/Genbank feature table entries
    is not reported as this covers all of the sequence and so overlaps
    with any difference found in that sequence and so is uninformative and
    irritating. It has therefore been removed from the output report.
-   
+
    The translation information of CDS features is often extremely long
    and does not add useful information to the report. It has therefore
    been removed from the output report.
-   
+
    If you run out of memory, use a larger word size.
-   
+
    Using a larger word size increases the length between mismatches that
    will be reported as one event. Thus a word size of 50 will report two
    single-base differences that are with 50 bases of each other as one
    mismatch.
-   
+
 References
 
    None.
-   
+
 Warnings
 
    None.
-   
+
 Diagnostic Error Messages
 
    None.
-   
+
 Exit status
 
    It always exits with status 0.
-   
+
 Known bugs
 
    None.
-   
+
 See also
 
    Program name Description
-   
-   A graphical dotplot of the matches used in this program can be
-   displayed using the program dotpath.
-   
+
 Author(s)
 
    Gary Williams (gwilliam © rfcgr.mrc.ac.uk)
    MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
    Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
-   
+
 History
 
    Written 15th Aug 2000 - Gary Williams.
+
    18th Aug 2000 - Added writing out GFF files of the mismatched regions
-   
+
 Target users
 
    This program is intended to be used by everyone and everything, from
    naive users to embedded scripts.
-   
+
 Comments
+
+   None

@@ -7,11 +7,9 @@
 </HEAD>
 <BODY BGCOLOR="#FFFFFF" text="#000000">
 
-
-
 <table align=center border=0 cellspacing=0 cellpadding=0>
 <tr><td valign=top>
-<A HREF="index.html" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
@@ -26,49 +24,14 @@ dotpath
 
 
 
-
-<!--END OF HEADER-->
-
-
-
-
-
 <H2>
     Function
 </H2>
-
-<!--
-DON'T WRITE ANYTHING HERE.
-IT IS DONE FOR YOU.
--->
 Displays a non-overlapping wordmatch dotplot of two sequences
-
 
 <H2>
     Description
 </H2>
-
-<!-- 
-	This is the main part of the document.
-
-        This is what the user looks at to find out if this program will
-        do what he wants. 
-
-        Long description.
-
-        Why it is useful.
-
-        When it should/shouldn't be used.
-
-        Algorithms
-
-        Expanded description.
-
-        eg: Reverse engineers Wheedle's 'talpsgob' program. This does a 
-        splurge of the 5' end of the sequence followed by a durm.
-        The net effect is a 5' end splurt.
-        etc. for as long as is required (several pages is not unreasonable)
-  -->
 
 A dotplot is a graphical representation of the regions of similarity
 between two sequences. 
@@ -112,12 +75,6 @@ shown in black, as normal.
 <H2>
     Usage
 </H2>
-
-<!--  
-	Example usage, as run from the command-line.
-        Many examples illustrating different behaviours is good.
- -->
-
 <b>Here is a sample session with dotpath</b>
 <p>
 
@@ -134,26 +91,9 @@ Created dotpath.ps
 <a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
 
 
-<!--
-Here is a sample session with dotpath:
-
-<pre>
-
-% dotpath embl:AF129756 embl:AP000504 -word 20
-Displays a non-overlapping wordmatch dotplot of two sequences
-Graph type [x11]: 
-
-</pre>
--->
-
 <H2>
     Command line arguments
 </H2>
-
-<!--
-DON'T WRITE ANYTHING HERE.
-IT IS DONE FOR YOU.
--->
 
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
@@ -232,7 +172,6 @@ IT IS DONE FOR YOU.
 </pre>
 </td></tr></table>
 <P>
-
 <table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
 <tr bgcolor="#FFFFCC">
 <th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
@@ -264,7 +203,7 @@ IT IS DONE FOR YOU.
 <tr>
 <td>-graph</td>
 <td>Graph type</td>
-<td>EMBOSS has a list of known devices, including postscript, ps, hpgl, hp7470, hp7580, meta, colourps, cps, xwindows, x11, tektronics, tekt, tek4107t, tek, none, null, text, data, xterm, png</td>
+<td>EMBOSS has a list of known devices, including postscript, ps, hpgl, hp7470, hp7580, meta, colourps, cps, xwindows, x11, tektronics, tekt, tek4107t, tek, none, null, text, data, xterm, png, xml</td>
 <td><i>EMBOSS_GRAPHICS</i> value, or x11</td>
 </tr>
 
@@ -301,19 +240,9 @@ IT IS DONE FOR YOU.
 </table>
 
 
-
 <H2>
     Input file format
 </H2>
-
-<!-- 
-        This includes example input file formats.
-        Except for sequences which can be described by 'sequence USA',
-        this should be a detailed description and example - assume
-        someone will want to parse this file and will want to know what
-        happens in unusual cases - null input, etc. 
-   -->
-
 
 <a name="input.1"></a>
 <h3>Input files for usage example </h3>
@@ -542,17 +471,10 @@ CC   sequence archive Web site (http://www-alis.tokyo.jst.go.jp/HGS/top.
 </td></tr></table><p>
 
 
+
 <H2>
     Output file format
 </H2>
-
-<!-- 
-        This includes example output file formats 
-        Except for sequences which can be described by 'sequence USA',
-        this should be a detailed description and example - assume
-        someone will want to parse this file and will want to know what
-        happens in unusual cases - null output, errors etc. 
-   -->
 
 In normal operation, a dotplot image is displayed.
 <p>
@@ -562,7 +484,6 @@ matches in the minimal non-overlapping set of matches is output.
 
 <p>
 
-
 <a name="output.1"></a>
 <h3>Output files for usage example </h3>
 <p><h3>Graphics File: dotpath.ps</h3>
@@ -570,66 +491,21 @@ matches in the minimal non-overlapping set of matches is output.
 
 
 
-
-<H2>
-    Data files
-</H2>
-
-<!-- 
-        Any data files used (e.g. translation table file)
-        This includes example data file formats if they are
-        not obvious.
-
-        eg:
-        data file format:
-
-	blank lines and comment lines are ignored.
-        comment lines start with '#'
-        There are three columns separated by one or more space or TAB
-	characters for X and Y values of durm, followed by energy
-        all coefficients are given as floating point values
-        An example is:
-
-        # Durm coefficient enery file
-        # X     Y       Energy
-        0.1     0.2     0.331
-        0.2     0.4     0.332
-        0.3     0.6     0.333
-        0.3     0.8     0.334
-
-   -->
-
-
-
 <H2>
     Notes
 </H2>
 
-<!-- 
-        Restrictions.
-        Interesting behaviour.
-        Useful things you can do with this program.
-   -->
-
+None
 
 <H2>
     References
 </H2>
 
-<!-- 
-        Bibliography for methods used.
-   -->
-
+None
 
 <H2>
     Warnings
 </H2>
-
-<!-- 
-        Potentially stupid things the program will let you do.
-        eg:
-        It doesn't check to see if the sequence is a protein sequence or not.
-   -->
 
 If you give a small word size with a very large sequence you will run
 out of memory.  If this happens, try again with a larger word size. 
@@ -638,44 +514,20 @@ out of memory.  If this happens, try again with a larger word size.
     Diagnostic Error Messages
 </H2>
 
-<!-- 
-        Error messages specific to this program.
-        eg:
-
-        "Threshold value greater than 1." - means that the threshold has
-        been set to be greater than 1 but a burgle exception has
-        occurred making this invalid - you should reduce the wobble
-        parameter and try again. 
-
-   -->
-
+None
 
 <H2>
     Exit status
 </H2>
 
-<!-- 
-        Description of the exit status for various error conditions
-        eg:
-        "It always exits with status 0"
-   -->
+It always exits with status 0.
 
 <H2>
     Known bugs
 </H2>
 
+None
 
-<!-- 
-        Bugs noted but not yet fixed.
-   -->
-
-
-
-<!--
-<H2>
-    See also
-</H2>
--->
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
@@ -684,10 +536,6 @@ out of memory.  If this happens, try again with a larger word size.
 <tr><td><a href="polydot.html">polydot</a></td><td>Displays all-against-all dotplots of a set of sequences</td></tr>
 </table>
 
-<!-- 
-        Add any comments about other associated programs (to prepare
-        data files?) that seealso doesn't find. 
-   -->
 
 <P>
 This program is closely based on <b>dottup</b> with the addition of
@@ -703,10 +551,6 @@ nearly identical sequences.
 <H2>
     Author(s)
 </H2>
-<!--
-        Who has worked on the program in the past.
-   -->
-
 Gary Williams (gwilliam&nbsp;&copy;&nbsp;rfcgr.mrc.ac.uk)
 <br>
 MRC Rosalind Franklin Centre for Genomics Research
@@ -714,46 +558,23 @@ Wellcome Trust Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
 
 
 
-
-
 <H2>
     History
 </H2>
 
-<!--
-        What changes have been made.
-   -->
 Written 14 Aug 2000.
 
-<!--
-<p>
-[an error occurred while processing this directive]
--->
 
 <H2>
     Target users
 </H2>
-
-<!--
-        For general users, requested by one user, for EMBOSS site
-        maintainers, for EMBOSS developers etc.
-        eg:
-        "This program is intended to be used by everyone and everything,
-        from naive users to embedded scripts." 
-	Which is easy to include using:
-
-   -->
 This program is intended to be used by everyone and everything, from naive users to embedded scripts.
-
 
 
 <H2>
     Comments
 </H2>
-
-<!--
-	Any comments, requests etc. that people have about the program
-   -->
+None
 
 
 

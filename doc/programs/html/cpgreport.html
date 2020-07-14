@@ -7,11 +7,9 @@
 </HEAD>
 <BODY BGCOLOR="#FFFFFF" text="#000000">
 
-
-
 <table align=center border=0 cellspacing=0 cellpadding=0>
 <tr><td valign=top>
-<A HREF="index.html" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
@@ -25,28 +23,16 @@ cpgreport
 
 
 
-
-
-
 <H2>
     Function
 </H2>
-
-
-
-<!--
-DON'T WRITE ANYTHING HERE.
-IT IS DONE FOR YOU.
--->
 Reports all CpG rich regions
-
 
 <H2>
     Description
 </H2>
 
-
-cpgreport scans a nucleotide sequence for regions with higher than
+<b>cpgreport</b> scans a nucleotide sequence for regions with higher than
 expected frequencies of the dinucleotide CG. 
 
 <p>
@@ -78,8 +64,6 @@ primary exons.
 <H2>
     Usage
 </H2>
-
-
 <b>Here is a sample session with cpgreport</b>
 <p>
 
@@ -97,30 +81,9 @@ Output features [rnu68037.gff]: <b></b>
 <a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
 
 
-<!--
-Here is a sample session with cpgreport.
-
-<pre>
-
-% cpgreport embl:rnu68037
-Reports CpG rich regions
-CpG score [17]: 
-Output file [rnu68037.cpgreport]: 
-
-</pre>
--->
-
-
 <H2>
     Command line arguments
 </H2>
-
-
-
-<!--
-DON'T WRITE ANYTHING HERE.
-IT IS DONE FOR YOU.
--->
 
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
@@ -182,7 +145,6 @@ IT IS DONE FOR YOU.
 </pre>
 </td></tr></table>
 <P>
-
 <table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
 <tr bgcolor="#FFFFCC">
 <th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
@@ -241,7 +203,6 @@ IT IS DONE FOR YOU.
 </table>
 
 
-
 <H2>
     Input file format
 </H2>
@@ -249,7 +210,6 @@ IT IS DONE FOR YOU.
 Any DNA sequence USA.
 
 <p>
-
 
 <a name="input.1"></a>
 <h3>Input files for usage example </h3>
@@ -345,7 +305,6 @@ SQ   Sequence 1218 BP; 162 A; 397 C; 387 G; 272 T; 0 other;
 </H2>
 
 
-
 <a name="output.1"></a>
 <h3>Output files for usage example </h3>
 <p><h3>File: rnu68037.cpgreport</h3>
@@ -368,7 +327,7 @@ RNU68037               1183   1193    26          2  72.7   2.00
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 ##gff-version 2.0
-##date 2004-04-06
+##date 2004-07-15
 ##Type DNA RNU68037
 RNU68037	cpgreport	misc_feature	12	13	17.000	+	.	Sequence "RNU68037.1"
 RNU68037	cpgreport	misc_feature	47	48	17.000	+	.	Sequence "RNU68037.2"
@@ -378,25 +337,6 @@ RNU68037	cpgreport	misc_feature	1139	1140	17.000	+	.	Sequence "RNU68037.5"
 RNU68037	cpgreport	misc_feature	1183	1193	26.000	+	.	Sequence "RNU68037.6"
 </pre>
 </td></tr></table><p>
-
-
-<!--
-The output file from the above example (rnu68037.cpgreport) follows: 
-
-<pre>
-
-CPGREPORT of RNU68037 from 1 to 1218
-
-Sequence              Begin    End Score        CpG   %CG  CG/GC
-RNU68037                 12     13    17          1 100.0    -
-RNU68037                 47     48    17          1 100.0    -
-RNU68037                 96   1032   630         87  66.1   0.65
-RNU68037               1072   1100    26          3  62.1   0.00
-RNU68037               1139   1140    17          1 100.0    -
-RNU68037               1183   1193    26          2  72.7   2.00
-
-</pre>
--->
 
 <p>
 
@@ -471,11 +411,6 @@ None.
 
 None.
 
-<!--
-<H2>
-    See also
-</H2>
--->
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
@@ -485,14 +420,6 @@ None.
 <tr><td><a href="newcpgseek.html">newcpgseek</a></td><td>Reports CpG rich regions</td></tr>
 </table>
 
-<!--
-        Add any comments about other associated programs (to prepare
-        data files?) that seealso doesn't find.
-   -->
-
-<p>
-
-<p>
 
 As there is no official definition of what is a cpg island is, and worst
 where they begin and end, we have to live with 2 definitions and thus
@@ -543,16 +470,18 @@ sequences that MIGHT contain an island.
 
 
 This program was originally written by 
+
 Gos Micklem (gos&nbsp;&copy;&nbsp;ebi.ac.uk)
 <br>
 Informatics Division, European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
 
 
 <p>
-It was modified for inclusion in EGCG under the name 'CPGSPANS' by
+The algorithm was modified for inclusion in EGCG under the name 'CPGSPANS' by
 Rodrigo Lopez (rls&nbsp;&copy;&nbsp;ebi.ac.uk)
 <br>
 European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
+
 
 
 <p>
@@ -572,27 +501,17 @@ Wellcome Trust Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
 
 Completed 22nd March 1999.
 
-<!--
-<p>
-[an error occurred while processing this directive]
--->
 
 <H2>
     Target users
 </H2>
+This program is intended to be used by everyone and everything, from naive users to embedded scripts.
 
-
-This program is intended to be used by everyone and everything,
-from naive users to embedded scripts. 
 
 <H2>
     Comments
 </H2>
-
-
-<pre>
-
-</pre>
+None
 
 
 </BODY>

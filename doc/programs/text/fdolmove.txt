@@ -1,0 +1,355 @@
+
+                                 fdolmove 
+
+
+
+Function
+
+   Interactive Dollo or Polymorphism Parsimony
+
+Description
+
+   Interactive construction of phylogenies from discrete character data
+   with two states (0 and 1) using the Dollo or polymorphism parsimony
+   criteria. Evaluates parsimony and compatibility criteria for those
+   phylogenies and displays reconstructed states throughout the tree.
+   This can be used to find parsimony or compatibility estimates by hand.
+
+Algorithm
+
+   DOLMOVE is an interactive parsimony program which uses the Dollo and
+   Polymorphism parsimony criteria. It is inspired on Wayne Maddison and
+   David Maddison's marvellous program MacClade, which is written for
+   Apple MacIntosh computers. DOLMOVE reads in a data set which is
+   prepared in almost the same format as one for the Dollo and
+   polymorhism parsimony program DOLLOP. It allows the user to choose an
+   initial tree, and displays this tree on the screen. The user can look
+   at different characters and the way their states are distributed on
+   that tree, given the most parsimonious reconstruction of state changes
+   for that particular tree. The user then can specify how the tree is to
+   be rearraranged, rerooted or written out to a file. By looking at
+   different rearrangements of the tree the user can manually search for
+   the most parsimonious tree, and can get a feel for how different
+   characters are affected by changes in the tree topology.
+
+   This program is compatible with fewer computer systems than the other
+   programs in PHYLIP. It can be adapted to PCDOS systems or to any
+   system whose screen or terminals emulate DEC VT100 terminals (such as
+   Telnet programs for logging in to remote computers over a TCP/IP
+   network, VT100-compatible windows in the X windowing system, and any
+   terminal compatible with ANSI standard terminals). For any other
+   screen types, there is a generic option which does not make use of
+   screen graphics characters to display the character states. This will
+   be less effective, as the states will be less easy to see when
+   displayed.
+
+Usage
+
+   Here is a sample session with fdolmove
+
+
+% fdolmove 
+Interactive Dollo or Polymorphism Parsimony
+Input file: dolmove.dat
+Input tree file: 
+
+
+Interactive Dollo or polymorphism parsimony, version 3.6b
+
+ 5 species,   6 characters
+
+
+Computing steps needed for compatibility in sites ...
+
+
+(unrooted)                           5.0 Steps             4 chars compatible
+Dollo
+  ,-----------5:Epsilon
+--9
+  !  ,--------4:Delta
+  `--8
+     !  ,-----3:Gamma
+     `--7
+        !  ,--2:Beta
+        `--6
+           `--1:Alpha
+
+NEXT? (Options: R # + - S . T U W O F H J K L C ? X Q) (? for Help) NEXT? (Opti
+ons: R # + - S . T U W O F H J K L C ? X Q) (? for Help) Do you want to write o
+ut the tree to a file? (Y or N)
+Tree written to file "dolmove.treefile"
+
+
+   Go to the input files for this example
+   Go to the output files for this example
+
+Command line arguments
+
+   Standard (Mandatory) qualifiers:
+  [-infile]            discretestates File containing data set
+  [-intreefile]        tree       (no help text) tree value
+
+   Additional (Optional) qualifiers (* if not always prompted):
+   -weights            properties Weights file
+   -ancfile            properties Ancestral states file
+   -factorfile         properties Factors file
+   -method             menu       Parsimony method
+   -thresh             toggle     Use threshold parsimony
+*  -threshold          float      Threshold value
+   -initialtree        menu       Initial tree
+   -screenwidth        integer    Width of terminal screen in characters
+   -screenlines        integer    Number of lines on screen
+   -outtreefile        outfile    Output file name
+
+   Advanced (Unprompted) qualifiers: (none)
+   Associated qualifiers:
+
+   "-outtreefile" associated qualifiers
+   -odirectory         string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report deaths
+
+
+   Standard (Mandatory) qualifiers Allowed values Default
+   [-infile]
+   (Parameter 1) File containing data set Discrete states file
+   [-intreefile]
+   (Parameter 2) (no help text) tree value Phylogenetic tree
+   Additional (Optional) qualifiers Allowed values Default
+   -weights Weights file Property value(s)
+   -ancfile Ancestral states file Property value(s)
+   -factorfile Factors file Property value(s)
+   -method Parsimony method
+   d (Dollo)
+   p (Polymorphism)
+   d
+   -thresh Use threshold parsimony Toggle value Yes/No No
+   -threshold Threshold value Number 0.000 or more 1
+   -initialtree Initial tree
+   a (Arbitary)
+   u (User)
+   s (Specify)
+   Arbitary
+   -screenwidth Width of terminal screen in characters Any integer value
+   80
+   -screenlines Number of lines on screen Any integer value 24
+   -outtreefile Output file name Output file <sequence>.fdolmove
+   Advanced (Unprompted) qualifiers Allowed values Default
+   (none)
+
+Input file format
+
+   fdolmove reads discrete character data with "?", "P", "B" states
+   allowed. .
+
+  (0,1) Discrete character data
+
+   These programs are intended for the use of morphological systematists
+   who are dealing with discrete characters, or by molecular
+   evolutionists dealing with presence-absence data on restriction sites.
+   One of the programs (PARS) allows multistate characters, with up to 8
+   states, plus the unknown state symbol "?". For the others, the
+   characters are assumed to be coded into a series of (0,1) two-state
+   characters. For most of the programs there are two other states
+   possible, "P", which stands for the state of Polymorphism for both
+   states (0 and 1), and "?", which stands for the state of ignorance: it
+   is the state "unknown", or "does not apply". The state "P" can also be
+   denoted by "B", for "both".
+
+   There is a method invented by Sokal and Sneath (1963) for linear
+   sequences of character states, and fully developed for branching
+   sequences of character states by Kluge and Farris (1969) for recoding
+   a multistate character into a series of two-state (0,1) characters.
+   Suppose we had a character with four states whose character-state tree
+   had the rooted form:
+
+               1 ---> 0 ---> 2
+                      |
+                      |
+                      V
+                      3
+
+   so that 1 is the ancestral state and 0, 2 and 3 derived states. We can
+   represent this as three two-state characters:
+
+                Old State           New States
+                --- -----           --- ------
+                    0                  001
+                    1                  000
+                    2                  011
+                    3                  101
+
+   The three new states correspond to the three arrows in the above
+   character state tree. Possession of one of the new states corresponds
+   to whether or not the old state had that arrow in its ancestry. Thus
+   the first new state corresponds to the bottommost arrow, which only
+   state 3 has in its ancestry, the second state to the rightmost of the
+   top arrows, and the third state to the leftmost top arrow. This coding
+   will guarantee that the number of times that states arise on the tree
+   (in programs MIX, MOVE, PENNY and BOOT) or the number of polymorphic
+   states in a tree segment (in the Polymorphism option of DOLLOP,
+   DOLMOVE, DOLPENNY and DOLBOOT) will correctly correspond to what would
+   have been the case had our programs been able to take multistate
+   characters into account. Although I have shown the above character
+   state tree as rooted, the recoding method works equally well on
+   unrooted multistate characters as long as the connections between the
+   states are known and contain no loops.
+
+   However, in the default option of programs DOLLOP, DOLMOVE, DOLPENNY
+   and DOLBOOT the multistate recoding does not necessarily work
+   properly, as it may lead the program to reconstruct nonexistent state
+   combinations such as 010. An example of this problem is given in my
+   paper on alternative phylogenetic methods (1979).
+
+   If you have multistate character data where the states are connected
+   in a branching "character state tree" you may want to do the binary
+   recoding yourself. Thanks to Christopher Meacham, the package contains
+   a program, FACTOR, which will do the recoding itself. For details see
+   the documentation file for FACTOR.
+
+   We now also have the program PARS, which can do parsimony for
+   unordered character states.
+
+  Input files for usage example
+
+  File: dolmove.dat
+
+     5    6
+Alpha     110110
+Beta      110000
+Gamma     100110
+Delta     001001
+Epsilon   001110
+
+Output file format
+
+   fdolmove output:
+
+   If the A option is used, then the program will infer, for any
+   character whose ancestral state is unknown ("?") whether the ancestral
+   state 0 or 1 will give the fewest changes (according to the criterion
+   in use). If these are tied, then it may not be possible for the
+   program to infer the state in the internal nodes, and many of these
+   will be shown as "?". If the A option is not used, then the program
+   will assume 0 as the ancestral state.
+
+   When reconstructing the placement of forward changes and reversions
+   under the Dollo method, keep in mind that each polymorphic state in
+   the input data will require one "last minute" reversion. This is
+   included in the counts. Thus if we have both states 0 and 1 at a tip
+   of the tree the program will assume that the lineage had state 1 up to
+   the last minute, and then state 0 arose in that population by
+   reversion, without loss of state 1.
+
+   When DOLMOVE calculates the number of characters compatible with the
+   tree, it will take the F option into account and count the multistate
+   characters as units, counting a character as compatible with the tree
+   only when all of the binary characters corresponding to it are
+   compatible with the tree.
+
+  Output files for usage example
+
+  File: dolmove.treefile
+
+   (Epsilon,(Delta,(Gamma,(Beta,Alpha))));
+
+Data files
+
+   None
+
+Notes
+
+   None.
+
+References
+
+   None.
+
+Warnings
+
+   None.
+
+Diagnostic Error Messages
+
+   None.
+
+Exit status
+
+   It always exits with status 0.
+
+Known bugs
+
+   None.
+
+See also
+
+   Program name Description
+   ednacomp DNA compatibility algorithm
+   ednadist Nucleic acid sequence Distance Matrix program
+   ednainvar Nucleic acid sequence Invariants method
+   ednaml Estimates phylogenies from nucleic acid sequence Maximum
+   Likelihood
+   ednamlk Estimates phylogenies from nucleic acid sequence Maximum
+   Likelihood with molecular clock
+   ednapars DNA parsimony algorithm
+   ednapenny Penny algorithm for DNA
+   eprotdist Protein distance algorithm
+   eprotpars Protein parsimony algorithm
+   erestml Restriction site Maximum Likelihood method
+   eseqboot Bootstrapped sequences algorithm
+   fdiscboot Bootstrapped discrete sites algorithm
+   fdnacomp DNA compatibility algorithm
+   fdnadist Nucleic acid sequence Distance Matrix program
+   fdnainvar Nucleic acid sequence Invariants method
+   fdnaml Estimates nucleotide phylogeny by maximum likelihood
+   fdnamlk Estimates nucleotide phylogeny by maximum likelihood
+   fdnamove Interactive DNA parsimony
+   fdnapars DNA parsimony algorithm
+   fdnapenny Penny algorithm for DNA
+   ffreqboot Bootstrapped genetic frequencies algorithm
+   fproml Protein phylogeny by maximum likelihood
+   fpromlk Protein phylogeny by maximum likelihood
+   fprotdist Protein distance algorithm
+   fprotpars Protein pasimony algorithm
+   frestboot Bootstrapped restriction sites algorithm
+   frestdist Computes distance matrix from restriction sites or fragments
+   frestml Restriction site maximum Likelihood method
+   fseqboot Bootstrapped sequences algorithm
+   fseqbootall Bootstrapped sequences algorithm
+
+Author(s)
+
+   This program is an EMBOSS conversion of a program written by Joe
+   Felsenstein as part of his PHYLIP package.
+
+   Although we take every care to ensure that the results of the EMBOSS
+   version are identical to those from the original package, we recommend
+   that you check your inputs give the same results in both versions
+   before publication.
+
+   Please report all bugs in the EMBOSS version to the EMBOSS bug team,
+   not to the original author.
+
+History
+
+   Written (2004) - Joe Felsenstein, University of Washington.
+
+   Converted (August 2004) to an EMBASSY program by the EMBOSS team.
+
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.

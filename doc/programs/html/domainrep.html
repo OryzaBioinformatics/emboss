@@ -1,0 +1,318 @@
+<!-- START OF HEADER -->
+<HTML><HEAD>
+<TITLE> EMBOSS: DOMAINREP documentation. </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+<table align=center border=0 cellspacing=0 cellpadding=0>
+<tr><td valign=top>
+<A HREF="../index.html" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="../../emboss_icon.jpg" alt="" width=150 height=48></a>
+</td>
+<td align=left valign=middle>
+<b><font size="+6">
+
+<H2> DOMAINREP documentation </H2>
+</font></b>
+</td></tr>
+</table>
+<br>&nbsp;
+<p>
+
+
+
+
+
+
+
+
+<!-- CONTENTS
+     This always includes the sections below.
+     Other subsections can be added for individual applications.
+-->
+<br><H2>CONTENTS </H2>
+<b> <a href="#1.0">1.0     SUMMARY                   </a></b><br>
+<b> <a href="#2.0">2.0     INPUTS & OUTPUTS          </a></b><br>
+<b> <a href="#3.0">3.0     INPUT FILE FORMAT         </a></b><br>
+<b> <a href="#4.0">4.0     OUTPUT FILE FORMAT        </a></b><br>
+<b> <a href="#5.0">5.0     DATA FILES                </a></b><br>
+<b> <a href="#6.0">6.0     USAGE                     </a></b><br>    
+<b> <a href="#7.0">7.0     KNOWN BUGS & WARNINGS     </a></b><br>    
+<b> <a href="#8.0">8.0     NOTES                     </a></b><br>
+<b> <a href="#9.0">9.0     DESCRIPTION               </a></b><br>
+<b> <a href="#10.0">10.0   ALGORITHM                 </a></b><br>
+<b> <a href="#11.0">11.0   RELATED APPLICATIONS      </a></b><br>
+<b> <a href="#12.0">12.0   DIAGNOSTIC ERROR MESSAGES </a></b><br>
+<b> <a href="#13.0">13.0   AUTHORS                   </a></b><br>
+<b> <a href="#14.0">14.0   REFERENCES                </a></b><br>
+
+<!-- SUMMARY
+     Succint description of the application, particularly its inputs, outputs
+     and what it does.  The same text is given at the top of the source (.c)
+     file and in the <documentation> attribute of the <application definition>
+     of the ACD file.
+-->
+<a name="1.0"></a>
+<br><br><br><H2> 1.0   SUMMARY  </H2>
+
+Reorder DCF file (domain classification file) so that the representative structure of each user-specified node is given first
+
+
+<!-- INPUTS & OUTPUTS
+     Short summary of the application inputs and outputs in its different 
+     modes of usage (if appropriate). More detail than the summary.
+-->
+<a name="2.0"></a>
+<br><br><br><H2> 2.0   INPUTS & OUTPUTS          </H2>
+
+DOMAINREP reads a DCF file (domain classification file) and writes a
+DCF file containing the same data except that the order of domains
+within each user-specified node (e.g. family) in the hierarchy may be
+changed so that the representative structure of each node is given
+first.  The representative structure is found by using stamp and this
+application must be installed on the system that is running DOMAINREP
+and correctly configured (see 'Notes' below).  A 'domain PDB file' for
+each domain in the DCF file must exist in a directory specified in the
+stamp "pdb.directories" file (see 'Notes' below).  The domain PDB file
+contains coordinate data for a single domain from SCOP or CATH, in PDB
+format.  The input and output files are specified by the user.
+
+
+
+
+
+
+<!-- INPUT FILE FORMAT 
+     Description and example(s) of input file formats.  Should provide enough
+     information to write and parse the file.  Should describe the format in 
+     unusual cases - null input, etc.
+
+     Cannot use the test data files because they might be empty or need 
+     hand-editing 
+
+     Use "<b>DOMAINREP</b> reads any normal sequence USAs." if
+     appropriate.
+-->
+<a name="3.0"></a>
+<br><br><br><H2> 3.0   INPUT FILE FORMAT         </H2>
+The format of the DCF file is described in the <a href="scopparse.html">SCOPPARSE documentation.</a>
+
+
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+<p><h3>File: all.scop</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+ID   D1CS4A_
+XX
+EN   1CS4
+XX
+TY   SCOP
+XX
+SI   53931 CL; 54861 FO; 55073 SF; 55074 FA; 55077 DO; 55078 SO; 39418 DD;
+XX
+CL   Alpha and beta proteins (a+b)
+XX
+FO   Ferredoxin-like
+XX
+SF   Adenylyl and guanylyl cyclase catalytic domain
+XX
+FA   Adenylyl and guanylyl cyclase catalytic domain
+XX
+DO   Adenylyl cyclase VC1, domain C1a
+XX
+OS   Dog (Canis familiaris)
+XX
+NC   1
+XX
+CN   [1]
+XX
+CH   A CHAIN; . START; . END;
+//
+ID   D1II7A_
+XX
+EN   1II7
+XX
+TY   SCOP
+XX
+SI   53931 CL; 56299 FO; 56300 SF; 64427 FA; 64428 DO; 64429 SO; 62415 DD;
+XX
+CL   Alpha and beta proteins (a+b)
+XX
+FO   Metallo-dependent phosphatases
+XX
+SF   Metallo-dependent phosphatases
+XX
+FA   DNA double-strand break repair nuclease
+XX
+DO   Mre11
+XX
+OS   Archaeon Pyrococcus furiosus
+XX
+NC   1
+XX
+CN   [1]
+XX
+CH   A CHAIN; . START; . END;
+//
+</pre>
+</td></tr></table><p>
+
+
+
+<!-- OUTPUT FILE FORMAT 
+     Description and example(s) of output file formats.  Should provide enough
+     information to write and parse the file.  Should describe the format in 
+     unusual cases - null input, etc.  
+     If the standard description of the avalable report formats is required, 
+     use:   #include file="inc/reportformats.ihtml"
+     Use "Outputs a graph to the specified graphics device."
+     or  "outputs a report format file. The default format is ..."
+     if appropriate.
+-->
+<a name="4.0"></a>
+<br><br><br><H2> 4.0   OUTPUT FILE FORMAT         </H2>
+The format of the DCF file is described in the <a href="scopparse.html">SCOPPARSE documentation.</a>
+
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: all_rep1st.scop</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+ID   D1CS4A_
+XX
+EN   1CS4
+XX
+TY   SCOP
+XX
+SI   53931 CL; 54861 FO; 55073 SF; 55074 FA; 55077 DO; 55078 SO; 39418 DD;
+XX
+CL   Alpha and beta proteins (a+b)
+XX
+FO   Ferredoxin-like
+XX
+SF   Adenylyl and guanylyl cyclase catalytic domain
+XX
+FA   Adenylyl and guanylyl cyclase catalytic domain
+XX
+DO   Adenylyl cyclase VC1, domain C1a
+XX
+OS   Dog (Canis familiaris)
+XX
+NC   1
+XX
+CN   [1]
+XX
+CH   A CHAIN; . START; . END;
+//
+ID   D1II7A_
+XX
+EN   1II7
+XX
+TY   SCOP
+XX
+SI   53931 CL; 56299 FO; 56300 SF; 64427 FA; 64428 DO; 64429 SO; 62415 DD;
+XX
+CL   Alpha and beta proteins (a+b)
+XX
+FO   Metallo-dependent phosphatases
+XX
+SF   Metallo-dependent phosphatases
+XX
+FA   DNA double-strand break repair nuclease
+XX
+DO   Mre11
+XX
+OS   Archaeon Pyrococcus furiosus
+XX
+NC   1
+XX
+CN   [1]
+XX
+CH   A CHAIN; . START; . END;
+//
+</pre>
+</td></tr></table><p>
+
+
+
+<!-- DATA FILES         
+     Any data files used (e.g. translation table file, substitution matrix 
+     etc.  This includes example data file formats if they are not obvious.
+     For a standard description of what data files are and how embossdata can
+     be used to inspect and retrieve them, use:
+     #include file="inc/localfiles.ihtml" 
+-->
+
+<a name="5.0"></a>
+<br><br><br><H2> 5.0   DATA FILES                </H2>
+DOMAINREP does not use any data files but does make use of the stamp 
+"pdb.directories" file (see 'Notes').
+
+
+
+
+
+
+<!-- USAGE
+     Example usage, as run from the command-line.
+     Many examples illustrating different behaviours is good.
+-->
+<a name="6.0"></a>
+<br><br><br><H2> 6.0   USAGE                     </H2>
+<H3> 6.1   COMMAND LINE ARGUMENTS </H3>
+ 
+<pre>
+   Standard (Mandatory) qualifiers:
+  [-dcfinfile]         infile     This option specifies the name of DCF file
+                                  (domain classification file) (input). A
+                                  'domain classification file' contains
+                                  classification and other data for domains
+                                  from SCOP or CATH, in DCF format
+                                  (EMBL-like). The files are generated by
+                                  using SCOPPARSE and CATHPARSE. Domain
+                                  sequence information can be added to the
+                                  file by using DOMAINSEQS.
+   -node               menu       This option specifies the node fore
+                                  reordering the file. Reordering can be done
+                                  for any specified node in the SCOP or CATH
+                                  hierarchies. For example by selecting
+                                  'Class' entries belonging to the same Class
+                                  will be reordered in turn.
+  [-dcfoutfile]        outfile    This option specifies the name of DCF file
+                                  (domain classification file) (output). A
+                                  'domain classification file' contains
+                                  classification and other data for domains
+                                  from SCOP or CATH, in DCF format
+                                  (EMBL-like). The files are generated by
+                                  using SCOPPARSE and CATHPARSE. Domain
+                                  sequence information can be added to the
+                                  file by using DOMAINSEQS.
+
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers: (none)
+   Associated qualifiers:
+
+   "-dcfoutfile" associated qualifiers
+   -odirectory2        string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report deaths
+
+
+</pre>
+</td></tr></table>
+<P>
+[an error occurred while processing this directive]

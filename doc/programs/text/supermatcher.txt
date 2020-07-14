@@ -1,12 +1,12 @@
 
                                supermatcher 
-                                      
-   
-   
+
+
+
 Function
 
    Finds a match of a large sequence against one or more sequences
-   
+
 Description
 
    This is a rough and ready local alignment program for large sequences.
@@ -17,21 +17,21 @@ Description
    given by the user. So a narrow diagonal Smith-Waterman is calculated
    hence the results will be rough but due to the space saving much
    larger sequences can be aligned.
-   
+
 Usage
 
    Here is a sample session with supermatcher
-   
+
 
 % supermatcher tembl:ec* tembl:eclac -word 50  
 Finds a match of a large sequence against one or more sequences
 Gap opening penalty [10.0]: 
 Gap extension penalty [0.5]: 3.0
 Output alignment [eclac.supermatcher]: 
-   
+
    Go to the input files for this example
    Go to the output files for this example
-   
+
 Command line arguments
 
    Standard (Mandatory) qualifiers:
@@ -115,7 +115,7 @@ Command line arguments
    -error               boolean    Report errors
    -fatal               boolean    Report fatal errors
    -die                 boolean    Report deaths
-   
+
 
    Standard (Mandatory) qualifiers Allowed values Default
    [-asequence]
@@ -140,19 +140,19 @@ Command line arguments
    -errorfile Error file to be written to Output file supermatcher.error
    Advanced (Unprompted) qualifiers Allowed values Default
    (none)
-   
+
 Input file format
 
    supermatcher reads two sequence USAs of the same type. They must both
    be protein or both be nucleic acid sequences.
-   
+
   Input files for usage example
-  
+
    'tembl:ec*' is a sequence entry in the example nucleic acid database
    'tembl'
-   
+
   Database entry: tembl:eclac
-  
+
 ID   ECLAC      standard; DNA; PRO; 7477 BP.
 XX
 AC   J01636; J01637; K01483; K01793;
@@ -308,38 +308,41 @@ RP   1146-1282
      cagcccgccc atggtaacca ccggcagagc ggtcgac                               747
 7
 //
-   
+
 Output file format
 
    The output is a standard EMBOSS alignment file.
-   
+
    The results can be output in one of several styles by using the
    command-line qualifier -aformat xxx, where 'xxx' is replaced by the
    name of the required format. Some of the alignment formats can cope
    with an unlimited number of sequences, while others are only for pairs
    of sequences.
-   
+
    The available multiple alignment format names are: unknown, multiple,
    simple, fasta, msf, trace, srs
-   
+
    The available pairwise alignment format names are: pair, markx0,
    markx1, markx2, markx3, markx10, srspair, score
-   
-   See: http://www.uk.embnet.org/Software/EMBOSS/Themes/AlignFormats.html
-   for further information on alignment formats.
-   
+
+   See: http://emboss.sf.net/docs/themes/AlignFormats.html for further
+   information on alignment formats.
+
    The output alignment is in simple format by default.
-   
+
   Output files for usage example
-  
+
+  File: supermatcher.error
+
   File: eclac.supermatcher
-  
+
 ########################################
-# Program:  supermatcher
-# Rundate:  Tue Apr 06 14:34:25 2004
+# Program: supermatcher
+# Rundate: Thu Jul 15 2004 12:00:00
 # Align_format: simple
 # Report_file: eclac.supermatcher
 ########################################
+
 #=======================================
 #
 # Aligned_sequences: 2
@@ -383,7 +386,6 @@ ECLAC            251 gcaaacagtcgttgctgattggcgttgccacctccagtctggccctgcac    300
 ECLAC            251 gcaaacagtcgttgctgattggcgttgccacctccagtctggccctgcac    300
 
 ECLAC            301 gcgccgtcgcaaattgtcgcggcgattaaatctcgcgccgatcaactggg    350
-                     ||||||||||||||||||||||||||||||||||||||||||||||||||
 
 
   [Part of this file has been deleted for brevity]
@@ -439,19 +441,42 @@ ECLAC           4337 gttggtctggtgtcaaaaataataataa   4364
 
 #---------------------------------------
 #---------------------------------------
-   
-  File: supermatcher.error
-  
+
    The file 'supermatcher.error' will contain any errors that occured
    during the program. This may be that wordmatch could not find any
    matches hence no suitable start point is found for the smith-waterman
    calculation.
-   
+
 Data files
 
    For protein sequences EBLOSUM62 is used for the substitution matrix.
    For nucleotide sequence, EDNAMAT is used. Others can be specified.
-   
+
+   EMBOSS data files are distributed with the application and stored in
+   the standard EMBOSS data directory, which is defined by the EMBOSS
+   environment variable EMBOSS_DATA.
+
+   To see the available EMBOSS data files, run:
+
+% embossdata -showall
+
+   To fetch one of the data files (for example 'Exxx.dat') into your
+   current directory for you to inspect or modify, run:
+
+% embossdata -fetch -file Exxx.dat
+
+   Users can provide their own data files in their own directories.
+   Project specific files can be put in the current directory, or for
+   tidier directory listings in a subdirectory called ".embossdata".
+   Files for all EMBOSS runs can be put in the user's home directory, or
+   again in a subdirectory called ".embossdata".
+
+   The directories are searched in the following order:
+     * . (your current directory)
+     * .embossdata (under your current directory)
+     * ~/ (your home directory)
+     * ~/.embossdata
+
 Notes
 
    The time this program takes to do an alignment depends very much on
@@ -459,47 +484,47 @@ Notes
    it take a very long time. Large word sizes (e.g. 30) for sequences
    that are very similar give a very quick result. The default of 16
    should give reasonable fast alignments.
-   
+
    Because it does a Smith & Waterman alignment (albeit in a narrow
    region around the diagonal shown to be the 'best' by a word match),
    this program can use huge amounts of memory if the sequences are
    large.
-   
+
    Because the alignment is made within a narrow area each side of the
    'best' diagonal, if there are sufficient indels between the two
    sequences, then the path of the Smith & Waterman alignment can wander
    outside of this area. Making the width larger can avoid this problem,
    but you then use more memory.
-   
+
    The longer the sequences and the wider the specified alignment width,
    the more memory will be used.
-   
+
    If the program terminates due to lack of memory you can try the
    following:
-   
+
    Run the UNIX command 'limit' to see if your stack or memory usage have
    been limited and if so, run 'unlimit', (e.g.: '% unlimit stacksize').
-   
+
 References
 
    None.
-   
+
 Warnings
 
    None.
-   
+
 Diagnostic Error Messages
 
    None.
-   
+
 Exit status
 
    It always exits with a status of 0.
-   
+
 Known bugs
 
    None.
-   
+
 See also
 
    Program name                         Description
@@ -507,18 +532,20 @@ See also
    seqmatchall  Does an all-against-all comparison of a set of sequences
    water        Smith-Waterman local alignment
    wordmatch    Finds all exact matches of a given size between 2 sequences
-   
+
 Author(s)
 
    Ian Longden (il © sanger.ac.uk)
    Sanger Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge,
    CB10 1SA, UK.
-   
+
 History
 
 Target users
 
    This program is intended to be used by everyone and everything, from
    naive users to embedded scripts.
-   
+
 Comments
+
+   None

@@ -1,0 +1,712 @@
+<!-- START OF HEADER -->
+<HTML><HEAD>
+<TITLE> EMBOSS: CATHPARSE documentation. </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+<!-- #include file="header1.inc" -->
+<H2> CATHPARSE documentation </H2>
+<!-- #include file="header2.inc" -->
+<!-- END OF HEADER -->
+
+
+
+
+
+<!-- CONTENTS
+     This always includes the sections below.
+     Other subsections can be added for individual applications.
+-->
+<H2>CONTENTS </H2>
+<b> <a href="#1.0">1.0     SUMMARY                   </a></b><br>
+<b> <a href="#2.0">2.0     INPUTS & OUTPUTS          </a></b><br>
+<b> <a href="#3.0">3.0     INPUT FILE FORMAT         </a></b><br>
+<b> <a href="#4.0">4.0     OUTPUT FILE FORMAT        </a></b><br>
+<b> <a href="#5.0">5.0     DATA FILES                </a></b><br>
+<b> <a href="#6.0">6.0     USAGE                     </a></b><br>    
+<b> <a href="#7.0">7.0     KNOWN BUGS & WARNINGS     </a></b><br>    
+<b> <a href="#8.0">8.0     NOTES                     </a></b><br>
+<b> <a href="#9.0">9.0     DESCRIPTION               </a></b><br>
+<b> <a href="#10.0">10.0   ALGORITHM                 </a></b><br>
+<b> <a href="#11.0">11.0   RELATED APPLICATIONS      </a></b><br>
+<b> <a href="#12.0">12.0   DIAGNOSTIC ERROR MESSAGES </a></b><br>
+<b> <a href="#13.0">13.0   AUTHORS                   </a></b><br>
+<b> <a href="#14.0">14.0   REFERENCES                </a></b><br>
+
+<!-- SUMMARY
+     Succint description of the application, particularly its inputs, outputs
+     and what it does.  The same text is given at the top of the source (.c)
+     file and in the <documentation> attribute of the <application definition>
+     of the ACD file.
+-->
+<a name="1.0"></a>
+<H2> 1.0   SUMMARY  </H2>
+
+Reads raw CATH classification files and writes DCF file (domain classification file)
+
+<!-- INPUTS & OUTPUTS
+     Short summary of the application inputs and outputs in its different 
+     modes of usage (if appropriate). More detail than the summary.
+-->
+<a name="2.0"></a>
+<H2> 2.0   INPUTS & OUTPUTS          </H2>
+CATHPARSE parses the CATH classification files, e.g. caths.list.v2.4, domlist.v2.4 and CAT.names.all.v2.4. 
+These files are available by anonymous ftp from ftp.biochem.ucl.ac.uk (e.g. /pub/cathdata/v2.4)
+The format of these files is explained in the README file available there.
+CATHPARSE writes the CATH classification to a DCF file (EMBL-like format).  
+No changes are made to the data other than changing the 
+format in which it is held.  The input and output files are specified by the user.
+
+
+
+
+
+<!-- INPUT FILE FORMAT 
+     Description and example(s) of input file formats.  Should provide enough
+     information to write and parse the file.  Should describe the format in 
+     unusual cases - null input, etc.
+     Use "<b>CATHPARSE</b> reads any normal sequence USAs." if
+     appropriate.
+-->
+<a name="3.0"></a>
+<H2> 3.0   INPUT FILE FORMAT         </H2>
+An excerpt from the raw CATH classification files, of the type caths.list.vX.X (Figure 1), 
+domlist.vX.X (Figure 2) and CAT.names.all.vX.X (Figure 3) is shown below.  The format of 
+these files is explained in the CATH README file available by anonymous ftp from 
+ftp.biochem.ucl.ac.uk (e.g. /pub/cathdata/v2.4).
+
+
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+<p><h3>File: caths.list.small</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+1cuk03    1  10   8  10   1   1   1  48 1.900
+1hjp03    1  10   8  10   1   1   2  44 2.500
+</pre>
+</td></tr></table><p>
+<p><h3>File: domlist.small</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+1cuk00  D03   F00    1  0   1 - 0  66 -    1  0  67 - 0 142 -    1  0 156 - 0 203 - 
+1hjp00 D03 F01  1  0    1 - 0   66 -  1  0   67 - 0  158 -  1  0  159 - 0  202 -  0  203 - 0  203 - (1) 
+</pre>
+</td></tr></table><p>
+<p><h3>File: CAT.names.all.small</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+1.10.8           1cuk03            :Helicase, Ruva Protein, domain 3	
+1.10.8.10         1cuk03    :DNA helicase RuvA subunit, C-terminal domain 
+0001             2ccyA0        :Mainly Alpha
+0001.0010        1eca00          :Orthogonal Bundle
+</pre>
+</td></tr></table><p>
+
+
+<!--
+
+<br><br><b>Figure 1 Excerpt from raw CATH classification file, caths.list.vX.X (input) </b>
+<table><td bgcolor="#CFCCFF">
+<pre>
+1cuk03    1  10   8  10   1   1   1  48 1.900
+1hjp03    1  10   8  10   1   1   2  44 2.500
+1a5t02    1  10   8  10   2   1   1  40 2.200
+1bvsA3    1  10   8  10   3   1   1  44 3.000
+1bvsB3    1  10   8  10   3   1   1  44 3.000
+1bvsC3    1  10   8  10   3   1   1  44 3.000
+1bvsD3    1  10   8  10   3   1   1  44 3.000
+1bvsE3    1  10   8  10   3   1   1  44 3.000
+1bvsG3    1  10   8  10   3   1   1  44 3.000
+1bvsH3    1  10   8  10   3   1   1  44 3.000
+1bvsF3    1  10   8  10   3   1   2  45 3.000
+1dv0A0    1  10   8  10   4   1   1  45 999.000
+1ubaA0    1  10   8  10   4   1   1  45 1000.000
+1f4iA0    1  10   8  10   5   1   1  45 999.000
+1aua02    1  10   8  20   1   1   1  83 2.500
+1aipC3    1  10   8  30   1   1   1  53 3.000
+1aipD3    1  10   8  30   1   1   1  53 3.000
+1aipG3    1  10   8  30   1   1   1  53 3.000
+1aipH3    1  10   8  30   1   1   2  52 3.000
+1efuB1    1  10   8  30   1   2   1  54 2.500
+1efuD1    1  10   8  30   1   2   1  54 2.500
+1gab00    1  10   8  40   1   1   1  53 999.000
+1prb00    1  10   8  40   1   1   1  53 999.000
+1gjsA0    1  10   8  40   1   2   1  65 999.000
+1gjtA0    1  10   8  40   1   2   1  65 999.000
+1fjgM1    1  10   8  50   1   1   1  71 3.000
+1d2nA2    1  10   8  60   1   1   1  67 1.750
+1nsf02    1  10   8  60   1   1   1  67 1.900
+1fnnA1    1  10   8  60   2   1   1 101 2.000
+1fnnB1    1  10   8  60   2   1   1 101 2.000
+</pre>
+</table>
+
+<br>
+<br><br><b>Figure 2 Excerpt from raw CATH classification file,  domlist.vX.X (input) </b>
+<table><td bgcolor="#CFCCFF">
+<pre>
+10gsA0 D02 F01  2  A    2 - A   78 -  A  187 - A  208 -  1  A   79 - A  186 -  A  209 - A  209 - (1) 
+10gsB0 D02 F01  2  B    2 - B   78 -  B  187 - B  208 -  1  B   79 - B  186 -  B  209 - B  209 - (1) 
+10mhA0 D02 F00  2  A    1 - A  186 -  A  285 - A  327 -  1  A  187 - A  284 - 
+11gsA0 D02 F01  2  A    2 - A   78 -  A  187 - A  208 -  1  A   79 - A  186 -  A  209 - A  209 - (1) 
+11gsB0 D02 F01  2  B    2 - B   78 -  B  187 - B  208 -  1  B   79 - B  186 -  B  209 - B  209 - (1) 
+12e8H0 D02 F01  1  H    1 - H  113 -  1  H  114 - H  212 -  H  213 - H  214 - (2) 
+12e8L0 D02 F01  1  L    1 - L  107 -  1  L  108 - L  211 -  L  212 - L  214 - (3) 
+12e8M0 D02 F01  1  M    1 - M  107 -  1  M  108 - M  211 -  M  212 - M  214 - (3) 
+12e8P0 D02 F01  1  P    1 - P  113 -  1  P  114 - P  212 -  P  213 - P  214 - (2) 
+12gsA0 D02 F01  2  A    2 - A   78 -  A  187 - A  208 -  1  A   79 - A  186 -  A  209 - A  209 - (1) 
+12gsB0 D02 F01  2  B    2 - B   78 -  B  187 - B  208 -  1  B   79 - B  186 -  B  209 - B  209 - (1) 
+13gsA0 D02 F02  2  A    2 - A   78 -  A  187 - A  208 -  1  A   79 - A  186 -  A    0 - A    1 - (2)  A  209 - A  209 - (1) 
+13gsB0 D02 F01  2  B    2 - B   78 -  B  187 - B  208 -  1  B   79 - B  186 -  B  209 - B  209 - (1) 
+13pkA0 D02 F02  1  A    5 - A  192 -  1  A  199 - A  406 -  A  193 - A  198 - (6)  A  407 - A  419 - (13) 
+13pkB0 D02 F02  1  B    5 - B  192 -  1  B  199 - B  406 -  B  193 - B  198 - (6)  B  407 - B  419 - (13) 
+</pre>
+</table>
+
+<br>
+<br><br><b>Figure 3 Excerpt from raw CATH classification file, CAT.names.all.vX.X (input) </b>
+<table><td bgcolor="#CFCCFF">
+<pre>
+0001             2ccyA0        :Mainly Alpha
+0001.0010        1eca00          :Orthogonal Bundle
+0001.0020        2ccyA0          :Up-down Bundle
+0001.0025        1lrv00          :Horshoe
+0001.0040        1pprM1          :Alpha solenoid 
+0001.0050        1cem00          :Alpha/alpha barrel
+0002             2hlaB0        :Mainly Beta
+0002.0010        1tpm00          :Ribbon
+0002.0020        1rkd01          :Single Sheet
+0002.0030        1pht00          :Roll
+0002.0040        2por00          :Barrel
+0002.0050        4bcl00          :Clam
+0002.0060        2hlaB0          :Sandwich
+0002.0070        1cdq00          :Distorted Sandwich
+0002.0080        1afcA0          :Trefoil
+0002.0090        1msaA0          :Orthogonal Prism
+0002.0100        1vmoA0          :Aligned Prism
+</pre>
+</table>
+
+-->
+
+
+
+<!-- OUTPUT FILE FORMAT 
+     Description and example(s) of output file formats.  Should provide enough
+     information to write and parse the file.  Should describe the format in 
+     unusual cases - null input, etc.  
+     If the standard description of the avalable report formats is required, 
+     use:   #include file="inc/reportformats.ihtml"
+     Use "Outputs a graph to the specified graphics device."
+     or  "outputs a report format file. The default format is ..."
+     if appropriate.
+-->
+<a name="4.0"></a>
+<H2> 4.0   OUTPUT FILE FORMAT         </H2>
+An example of the DCF output file is shown in Figure 4.
+The records used to describe an entry are as follows.  Records (5) to (8) 
+are used to describe the position of the domain in the CATH hierarchy.
+<br>
+<UL>
+<LI>(1)  ID - Domain identifier code.  This is a 6-character code that uniquely
+identifies the domain in CATH. The first four characters are the PDB identifier code, 
+the fifth character is the PDB chain identifier to which the domain belongs and the 
+final character is the number of the domain in the chain (for chains comprising more 
+than one domain). This character is '0' if the chain comprises a single 
+domain only.
+<LI>(2)  EN - PDB identifier code.  This is the 4-character PDB identifier code
+of the PDB entry containing the domain.
+<LI>(3) TY - domain type.  "CATH" or "SCOP" is given ("CATH" for DCF files 
+generated by using CATHPARSE).
+<LI>(4)  CI - CATH Classification Numbers. The integers preceeding the codes CL, AR, TP, SF,
+FA, NI, IF are the CATH classification numbers for CLass, ARchitecture, ToPology,  
+Homologous SuPerfamily, FAmily, Near Identical family and Identical Family respectively.    
+These numbers uniquely identify the appropriate node in the CATH parsable files.
+<LI>(5)  CL - Class.  It is the identical text taken from CAT.names.all.vX.X.
+<LI>(6)  AR - Architecture. It is the identical text taken from CAT.names.all.vX.X.
+<LI>(7)  TP - Topology. It is the identical text taken from CAT.names.all.vX.X.
+<LI>(8)  SF - Homologous Superfamily. It is the identical text taken from CAT.names.all.vX.X. 
+<LI>(9) DS - Sequence of the domain according to the PDB file.  This sequence
+is taken from the domain CCF file (clean coordinate file) generated by DOMAINER.  The DS    
+record will only be present if the DCF file has been processed using DOMAINSEQS.
+<LI>(10)  NR - Number of residues in domain
+<LI>(11) NC - Number of segments comprising the domain. All domains in CATH are from single chains.
+If the number of segments is greater than 1, then the domain entry will have a 
+section  containing a CN and a CH record (see below) for each segment.
+<LI>(12) CN - Segment number.  The number given in brackets after this record 
+indicates the start of the data for the relevent segment.
+<LI>(13) CH - Domain definition.  The character given before CHAIN is the PDB 
+chain identifier, the strings before START and END give the start and end positions 
+respectively of the domain in the PDB file (a '.' is given in cases where a position 
+was not specified).  Note that the start and end positions refer to residue numbering 
+given in the original pdb file and therefore must be treated as strings.
+(14) XX - used for spacing.
+(15) // - used to delimit records for a domain.
+</UL>
+
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: Ecath.dat</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+ID   1CUK03
+XX
+EN   1CUK
+XX
+TY   CATH
+XX
+CI   1 CL; 10 AR; 8 TP; 10 SF; 1 FA; 1 NI;1 IF;
+XX
+CL   Mainly Alpha
+XX
+AR   Orthogonal Bundle
+XX
+TP   Helicase, Ruva Protein, domain 3
+XX
+SF   DNA helicase RuvA subunit, C-terminal domain
+XX
+NR   48
+XX
+NC   1
+XX
+CN   [1]
+XX
+CH   0 CHAIN; 156 START; 203 END;
+//
+ID   1HJP03
+XX
+EN   1HJP
+XX
+TY   CATH
+XX
+CI   1 CL; 10 AR; 8 TP; 10 SF; 1 FA; 1 NI;2 IF;
+XX
+CL   Mainly Alpha
+XX
+AR   Orthogonal Bundle
+XX
+TP   Helicase, Ruva Protein, domain 3
+XX
+SF   DNA helicase RuvA subunit, C-terminal domain
+XX
+NR   44
+XX
+NC   1
+XX
+CN   [1]
+XX
+CH   0 CHAIN; 159 START; 202 END;
+//
+</pre>
+</td></tr></table><p>
+<p><h3>File: CATHPARSE.log</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+1.10.8.10
+1.10.8
+0001.0010
+0001
+1.10.8.10
+1.10.8
+0001.0010
+0001
+</pre>
+</td></tr></table><p>
+
+
+<!--
+<br>
+<br><b>Figure 4 Excerpt from domain classification file</b>
+<table><td bgcolor="#CFCCFF">
+<pre>
+ID   1CUK03
+XX
+EN   1CUK
+XX
+TY   CATH
+XX
+CI   1 CL; 10 AR; 8 TP; 10 SF; 1 FA; 1 NI;1 IF;
+XX
+CL   Mainly Alpha
+XX
+AR   Orthogonal Bundle
+XX
+TP   Helicase, Ruva Protein, domain 3
+XX
+SF   DNA helicase RuvA subunit, C-terminal domain
+XX
+NR   48
+XX
+NC   1
+XX
+CN   [1]
+XX
+CH   0 CHAIN; 156 START; 203 END;
+//
+ID   1HJP03
+XX
+EN   1HJP
+XX
+TY   CATH
+XX
+CI   1 CL; 10 AR; 8 TP; 10 SF; 1 FA; 1 NI;2 IF;
+XX
+CL   Mainly Alpha
+XX
+AR   Orthogonal Bundle
+XX
+TP   Helicase, Ruva Protein, domain 3
+XX
+SF   DNA helicase RuvA subunit, C-terminal domain
+XX
+NR   44
+XX
+NC   1
+XX
+CN   [1]
+XX
+CH   0 CHAIN; 159 START; 202 END;
+//
+
+</pre>
+</table>
+
+
+-->
+
+<!-- DATA FILES         
+     Any data files used (e.g. translation table file, substitution matrix 
+     etc.  This includes example data file formats if they are not obvious.
+     For a standard description of what data files are and how embossdata can
+     be used to inspect and retrieve them, use:
+     #include file="inc/localfiles.ihtml" 
+-->
+
+<a name="5.0"></a>
+<H2> 5.0   DATA FILES                </H2>
+None.
+
+
+<!-- USAGE
+     Example usage, as run from the command-line.
+     Many examples illustrating different behaviours is good.
+-->
+<a name="6.0"></a>
+<H2> 6.0   USAGE                     </H2>
+<H3> 6.1   COMMAND LINE ARGUMENTS </H3>
+ 
+ 
+<pre>
+   Standard (Mandatory) qualifiers:
+  [-listfile]          infile     This option specifies the name of raw CATH
+                                  classification file (caths.list.vX.X)
+                                  (input). The raw CATH parsable files
+                                  (classification and description files)
+                                  available from ftp.biochem.ucl.ac.uk
+                                  (/pub/cathdata/v2.4").
+  [-domfile]           infile     This option specifies the name of raw CATH
+                                  classification file (domlist.vX.X) (input).
+                                  The raw CATH parsable files (classification
+                                  and description files) available from
+                                  ftp.biochem.ucl.ac.uk (/pub/cathdata/v2.4").
+  [-namesfile]         infile     This option specifies the name of raw CATH
+                                  classification file (CAT.names.all.vX.X)
+                                  (input). The raw CATH parsable files
+                                  (classification and description files)
+                                  available from ftp.biochem.ucl.ac.uk
+                                  (/pub/cathdata/v2.4").
+  [-outfile]           outfile    This option specifies the name of CATH DCF
+                                  file (domain classification file) (output).
+                                  A 'domain classification file' contains
+                                  classification and other data for domains
+                                  from SCOP or CATH, in DCF format
+                                  (EMBL-like). The files are generated by
+                                  using SCOPPARSE and CATHPARSE. Domain
+                                  sequence information can be added to the
+                                  file by using DOMAINSEQS.
+   -logfile            outfile    This option specifies the name of the
+                                  CATHPARSE log file.
+
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers: (none)
+   Associated qualifiers:
+
+   "-outfile" associated qualifiers
+   -odirectory4        string     Output directory
+
+   "-logfile" associated qualifiers
+   -odirectory         string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report deaths
+
+
+</pre>
+</td></tr></table>
+<P>
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-listfile]<br>(Parameter 1)</td>
+<td>This option specifies the name of raw CATH classification file (caths.list.vX.X) (input). The raw CATH parsable files (classification and description files) available from ftp.biochem.ucl.ac.uk (/pub/cathdata/v2.4").</td>
+<td>Input file</td>
+<td>caths.list.v2.4</td>
+</tr>
+
+<tr>
+<td>[-domfile]<br>(Parameter 2)</td>
+<td>This option specifies the name of raw CATH classification file (domlist.vX.X) (input). The raw CATH parsable files (classification and description files) available from ftp.biochem.ucl.ac.uk (/pub/cathdata/v2.4").</td>
+<td>Input file</td>
+<td>domlist.v2.4</td>
+</tr>
+
+<tr>
+<td>[-namesfile]<br>(Parameter 3)</td>
+<td>This option specifies the name of raw CATH classification file (CAT.names.all.vX.X) (input). The raw CATH parsable files (classification and description files) available from ftp.biochem.ucl.ac.uk (/pub/cathdata/v2.4").</td>
+<td>Input file</td>
+<td>CAT.names.all.v2.4</td>
+</tr>
+
+<tr>
+<td>[-outfile]<br>(Parameter 4)</td>
+<td>This option specifies the name of CATH DCF file (domain classification file) (output). A 'domain classification file' contains classification and other data for domains from SCOP or CATH, in DCF format (EMBL-like). The files are generated by using SCOPPARSE and CATHPARSE. Domain sequence information can be added to the file by using DOMAINSEQS.</td>
+<td>Output file</td>
+<td>Ecath.dat</td>
+</tr>
+
+<tr>
+<td>-logfile</td>
+<td>This option specifies the name of the CATHPARSE log file.</td>
+<td>Output file</td>
+<td>CATHPARSE.log</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Additional (Optional) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+</table>
+
+
+
+<H3> 6.2 EXAMPLE SESSION </H3>
+
+<br>An example of interactive use of CATHPARSE is shown below.
+
+<b>Here is a sample session with cathparse</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>cathparse </b>
+Reads raw CATH classification files and writes DCF file (domain
+classification file).
+Name of raw CATH classification file (caths.list.vX.X) (input). [caths.list.v2.4]: <b>caths.list.small</b>
+Name of raw CATH classification file (domlist.vX.X) (input). [domlist.v2.4]: <b>domlist.small</b>
+Name of raw CATH classification file (CAT.names.all.vX.X) (input). [CAT.names.all.v2.4]: <b>CAT.names.all.small</b>
+Name of CATH DCF file (domain classification file) (output). [Ecath.dat]: <b></b>
+Name of CATHPARSE log file [CATHPARSE.log]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
+
+
+<br>The raw CATH classification files caths.list.small, domlist.small
+and CAT.names.all.small were read from test_data/ directory and and a
+domain classification file in DCF format called
+/test_data/cathparse/all.scop was written.  The log file
+test_data/cathparse/CATHPARSE.log was written.
+
+
+
+<!-- KNOWN BUGS & WARNINGS
+     Bugs that have not yet been fixed, easily missued features, problems
+     and caveats etc. Potentially stupid things the program will let you do.
+-->
+<a name="7.0"></a>
+<H2> 7.0   KNOWN BUGS & WARNINGS     </H2>
+
+
+
+
+
+<!-- NOTES
+     Important general remarks, including:
+       Restrictions.
+       Interesting behaviour.
+       Useful things you can do with this program.
+       Future plans.
+       etc.
+-->
+<a name="8.0"></a>
+<H2> 8.0   NOTES                     </H2>
+A future implementation will give the option of omitting from the output file 
+domains that consist of more than one segment.
+<br><br>
+CATH includes several minor classes which are not appropriate for some
+anaylses.  A future implementation will give the option to omit domains from 
+minor classes. 
+
+
+<H3> 8.1   GLOSSARY OF FILE TYPES    </H2>
+<table BORDER CELLSPACING=5 CELLPADDING=5 BGCOLOR="#f5f5ff" >
+<tr>
+<td><b>FILE TYPE</b></td>
+<td><b>FORMAT</b></td>
+<td><b>DESCRIPTION</b></td>
+<td><b>CREATED BY <b></td>
+<td><b>SEE ALSO</b></td>
+</tr>
+<tr>
+<td><b>SCOP parsable files</b></td>
+<td> CATH format. </td>
+<td> Raw CATH classification data.  </td>
+<td> Available from ftp.biochem.ucl.ac.uk (e.g. /pub/cathdata/v2.4)</a> </td>
+<td> N.A.  </td>
+</tr>
+<tr>
+<td><b> Domain classification file (for CATH)</b></td>
+<td> DCF format (EMBL-like). </td>
+<td> Classification and other data for domains from CATH.  </td>
+<td> <a href="cathparse.html">CATHPARSE</a> </td>
+<td> Domain sequence information can be added to the file by using DOMAINSEQS.  </td>
+</tr>
+</table>
+
+
+<!-- DESCRIPTION
+     A complete, non-technical, user-level description of the application.
+-->
+<a name="9.0"></a>
+<H2> 9.0   DESCRIPTION               </H2>
+The raw CATH classification files are inconvenient for some uses because 
+the text describing the domain classification is given in a different file
+to the classification itself, the file formats are not easily extended and
+differ from other related classifications such as SCOP.
+CATHPARSE reads the raw CATH classification files and writes a single file
+in DCF (EMBL-like) format, which is an easier format to work with, is more 
+human-readable and is more extensible than the native CATH database format.
+
+
+
+<!-- ALGORITHM
+     A technical description of algorithmic aspects, describing exactly how
+     the key aspects of the application work.
+-->
+<a name="10.0"></a>
+<H2> 10.0  ALGORITHM                 </H2>
+None.
+
+
+
+
+
+<!-- RELATED APPLICATIONS
+     Other applications that either generate the input, use the output or 
+     are in some other way related to the application are described here. 
+-->
+<a name="11.0"></a>
+<H2> 11.0  RELATED APPLICATIONS      </H2>
+
+<h2><a name="See also">See also</a></h2>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th><th>Description</th></tr>
+<tr><td><a href="../../apps/aaindexextract.html">aaindexextract</a></td><td>Extract data from AAINDEX</td></tr>
+<tr><td><a href="allversusall.html">allversusall</a></td><td>Does an all-versus-all global alignment for each set of sequences in an input directory and writes files of sequence similarity values</td></tr>
+<tr><td><a href="../../apps/cutgextract.html">cutgextract</a></td><td>Extract data from CUTG</td></tr>
+<tr><td><a href="domainer.html">domainer</a></td><td>Reads CCF files (clean coordinate files) for proteins and writes CCF files for domains, taken from a DCF file (domain classification file)</td></tr>
+<tr><td><a href="domainnr.html">domainnr</a></td><td>Removes redundant domains from a DCF file (domain classification file). The file must contain domain sequence information, which can be added by using DOMAINSEQS</td></tr>
+<tr><td><a href="domainseqs.html">domainseqs</a></td><td>Adds sequence records to a DCF file (domain classification file)</td></tr>
+<tr><td><a href="domainsse.html">domainsse</a></td><td>Adds secondary structure records to a DCF file (domain classification file)</td></tr>
+<tr><td><a href="hetparse.html">hetparse</a></td><td>Converts raw dictionary of heterogen groups to a file in EMBL-like format</td></tr>
+<tr><td><a href="pdbparse.html">pdbparse</a></td><td>Parses PDB files and writes CCF files (clean coordinate files) for proteins</td></tr>
+<tr><td><a href="pdbplus.html">pdbplus</a></td><td>Add residue solvent accessibility and secondary structure data to a CCF file (clean coordinate file) for a protein or domain</td></tr>
+<tr><td><a href="pdbtosp.html">pdbtosp</a></td><td>Convert raw swissprot:PDB equivalence file to EMBL-like format</td></tr>
+<tr><td><a href="../../apps/printsextract.html">printsextract</a></td><td>Extract data from PRINTS</td></tr>
+<tr><td><a href="../../apps/prosextract.html">prosextract</a></td><td>Builds the PROSITE motif database for patmatmotifs to search</td></tr>
+<tr><td><a href="../../apps/rebaseextract.html">rebaseextract</a></td><td>Extract data from REBASE</td></tr>
+<tr><td><a href="scopparse.html">scopparse</a></td><td>Reads raw SCOP classification files and writes a DCF file (domain classification file)</td></tr>
+<tr><td><a href="seqnr.html">seqnr</a></td><td>Removes redundancy from DHF files (domain hits files) or other files of sequences</td></tr>
+<tr><td><a href="sites.html">sites</a></td><td>Reads CCF files (clean coordinate files) and writes CON files (contact files) of residue-ligand contact data for domains in a DCF file (domain classification file)</td></tr>
+<tr><td><a href="ssematch.html">ssematch</a></td><td>Searches a DCF file (domain classification file) for secondary structure matches</td></tr>
+<tr><td><a href="../../apps/tfextract.html">tfextract</a></td><td>Extract data from TRANSFAC</td></tr>
+</table>
+
+
+
+<!-- DIAGNOSTIC ERROR MESSAGES
+     Description of error messages or log file, if one is written.
+-->
+<a name="12.0"></a>
+<H2> 12.0  DIAGNOSTIC ERROR MESSAGES </H2>
+None.
+
+
+
+<!-- AUTHORS
+     The main author first then all others. 
+-->
+<a name="13.0"></a>
+<H2> 13.0  AUTHORS                   </H2>
+<!-- #include file="inc/jison.address" -->
+
+Mike Hurley <a href="mailto:mhurley@rfcgr.mrc.ac.uk">(mhurley@rfcgr.mrc.ac.uk)</a>
+
+<br>Jon Ison <a href="mailto:jison@rfcgr.mrc.ac.uk">(jison@rfcgr.mrc.ac.uk)</a>
+<br>
+MRC Rosalind Franklin Centre for Genomics Research
+Wellcome Trust Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
+
+
+
+<!-- REFERENCES
+     Quote the paper where the application was first published, described, used etc. 
+-->
+<a name="14.0"></a>
+<H2> 14.0  REFERENCES                </H2>
+Please cite the authors and EMBOSS.
+<br><br>
+<i>Rice P, Bleasby A.J.  2000.  EMBOSS - The European Molecular Biology Open Software Suite.  Trends in Genetics, 15:276-278.  See also http://www.uk.embnet.org/Software/EMBOSS</i>
+
+<H3>14.1 Other useful references  </H3>
+1. Conte, L.L., Ailey, B., Hubbard, T.J. Brenner, S.E., Murzin, A.G. and Chothia, C. (2000) SCOP: a structural classification of proteins database. Nucleic Acids Res. 28, 257-259.
+
+
+</BODY>
+</HTML>

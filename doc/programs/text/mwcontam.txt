@@ -1,37 +1,36 @@
 
                                  mwcontam 
-                                      
-   
-   
+
+
+
 Function
 
    Shows molwts that match across a set of files
-   
+
 Description
 
    mwcontam finds molecular weights that are common between a set of mass
    spectrometry result files. Such molecular weights are usually a form
    of contamination resulting from autolysis of a protease, degradation
    of the matrix or presence of keratin from the sample preparer.
-   
+
    The output of mwcontam, with minimal editing, can be added to the data
    file for the mwfilter program ('Emwfilter.dat').
-   
+
 Usage
 
    Here is a sample session with mwcontam
-   
+
 
 % mwcontam 
 Shows molwts that match across a set of files
-Comma separated file list: ../../data/mw1.dat,../../data/mw2.dat,../../data/mw3
-.dat
+Comma separated file list: ../data/mw2.dat,mw3.dat
 Ppm tolerance [50.0]: 
 Output file [outfile.mwcontam]: 
-   
+
    Go to the input files for this example
    Go to the output files for this example
-   
+
 Command line arguments
 
    Standard (Mandatory) qualifiers:
@@ -60,7 +59,7 @@ Command line arguments
    -error               boolean    Report errors
    -fatal               boolean    Report fatal errors
    -die                 boolean    Report deaths
-   
+
 
    Standard (Mandatory) qualifiers Allowed values Default
    [-files]
@@ -73,31 +72,31 @@ Command line arguments
    (none)
    Advanced (Unprompted) qualifiers Allowed values Default
    (none)
-   
+
 Input file format
 
   Input files for usage example
-  
-  File: ../../data/mw1.dat
-  
+
+  File: mw1.dat
+
 20.0
 33.0
 67.0
 128.0
 415.0
 999.0
-   
-  File: ../../data/mw2.dat
-  
+
+  File: mw2.dat
+
 13.0
 41.0
 67.0
 415.0
 846.0
 781.0
-   
-  File: ../../data/mw3.dat
-  
+
+  File: mw3.dat
+
 3.0
 18.0
 67.0
@@ -107,67 +106,66 @@ Input file format
 415.0
 587.0
 632.0
-   
+
    The input is a comma-separated list of files containing simple list of
    experimental molecular weights.
-   
+
    There should be one weight per line.
-   
+
    Comments in the data file start with a '#' character in the first
    column.
-   
+
    Blank lines are ignored.
-   
+
 Output file format
 
    The output is a list of the molecular weights common to all files.
-   
+
   Output files for usage example
-  
+
   File: outfile.mwcontam
-  
+
 67.000
 415.000
-   
+
 Data files
 
    mwcontam uses no data files.
-   
+
    The output of mwcontam, with minimal editing, can be added to the data
    file for the mwfilter program ('Emwfilter.dat'). For example you might
    like to fetch 'Emwfilter.dat' using embossdata (as described in the
    mwfilter documentation) and edit it to include the lines:
      _________________________________________________________________
-   
+
 # data produced from the program mwcontam
 mwcontam        67.000
 mwcontam        415.000
-     _________________________________________________________________
-   
+
 Notes
 
    None.
-   
+
 References
 
    None.
-   
+
 Warnings
 
    None.
-   
+
 Diagnostic Error Messages
 
    None.
-   
+
 Exit status
 
    It always exits with status 0.
-   
+
 Known bugs
 
    None.
-   
+
 See also
 
    Program name                          Description
@@ -184,20 +182,22 @@ See also
    pepstats     Protein statistics
    pepwindow    Displays protein hydropathy
    pepwindowall Displays protein hydropathy of a set of sequences
-   
+
 Author(s)
 
    Alan Bleasby (ableasby © rfcgr.mrc.ac.uk)
    MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
    Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
-   
+
 History
 
    Written (July 2002) - Alan Bleasby.
-   
+
 Target users
 
    This program is intended to be used by everyone and everything, from
    naive users to embedded scripts.
-   
+
 Comments
+
+   None

@@ -1,17 +1,17 @@
 
                                    union 
-                                      
-   
-   
+
+
+
 Function
 
    Reads sequence fragments and builds one sequence
-   
+
 Description
 
    union reads in several sequences, concatenates them and writes them
    out as a single sequence.
-   
+
    It is most useful when the input sequences are specified in a List
    file. The List file (file of sequence names) can be any set of
    sequences in files or database entries specified in the normal EMBOSS
@@ -19,23 +19,23 @@ Description
    sequence, eg. 'em:hsfau[20,55]'). Specifying several such subregions
    in a sequence or sequences allows you to enter disjoint sequences to
    be joined.
-   
+
 Usage
 
    Here is a sample session with union
-   
+
    the file 'cds.list' contains a list of the regions making up the
    coding sequence of 'embl:hsfau':
-   
+
 
 % union 
 Reads sequence fragments and builds one sequence
-Input sequence(s): @../../data/cds.list
+Input sequence(s): @cds.list
 Output sequence [hsfau1.fasta]: 
-   
+
    Go to the input files for this example
    Go to the output files for this example
-   
+
 Command line arguments
 
    Standard (Mandatory) qualifiers:
@@ -88,7 +88,7 @@ Command line arguments
    -error               boolean    Report errors
    -fatal               boolean    Report fatal errors
    -die                 boolean    Report deaths
-   
+
 
    Standard (Mandatory) qualifiers Allowed values Default
    [-sequence]
@@ -99,30 +99,30 @@ Command line arguments
    (none)
    Advanced (Unprompted) qualifiers Allowed values Default
    (none)
-   
+
 Input file format
 
    The input can be any set of sequences in a file of multiple sequence
    entries or in a List file. The sequences are concatenated in the order
    in which they appear in the file.
-   
+
   Input files for usage example
-  
-  File: ../../data/cds.list
-  
+
+  File: cds.list
+
 tembl-id:HSFAU1[782:856]
 tembl-id:HSFAU1[951:1095]
 tembl-id:HSFAU1[1557:1612]
 tembl-id:HSFAU1[1787:1912]
-   
+
    You may find the program yank useful for creating List files.
-   
+
 Output file format
 
   Output files for usage example
-  
+
   File: hsfau1.fasta
-  
+
 >HSFAU1 X65921.1 H.sapiens fau 1 gene
 atgcagctctttgtccgcgcccaggagctacacaccttcgaggtgaccggccaggaaacg
 gtcgcccagatcaaggctcatgtagcctcactggagggcattgccccggaagatcaagtc
@@ -131,38 +131,38 @@ gccctgactaccctggaagtagcaggccgcatgcttggaggtaaagtccatggttccctg
 gcccgtgctggaaaagtgagaggtcagactcctaaggtggccaaacaggagaagaagaag
 aagaagacaggtcgggctaagcggcggatgcagtacaaccggcgctttgtcaacgttgtg
 cccacctttggcaagaagaagggccccaatgccaactcttaa
-   
+
    The result is a normal sequence file containing a single sequence
    resulting from the concatenation of the input sequences.
-   
+
 Data files
 
    None.
-   
+
 Notes
 
    None.
-   
+
 References
 
    None.
-   
+
 Warnings
 
    None.
-   
+
 Diagnostic Error Messages
 
    None.
-   
+
 Exit status
 
    It always exits with status 0.
-   
+
 Known bugs
 
    None.
-   
+
 See also
 
    Program name                          Description
@@ -190,22 +190,24 @@ See also
    trimseq      Trim ambiguous bits off the ends of sequences
    vectorstrip  Strips out DNA between a pair of vector sequences
    yank         Reads a sequence range, appends the full USA to a list file
-   
+
    You may find the program yank useful for creating List files.
-   
+
 Author(s)
 
    Peter Rice (pmr © ebi.ac.uk)
    Informatics Division, European Bioinformatics Institute, Wellcome
    Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
-   
+
 History
 
    Written (March 2002) - Peter Rice.
-   
+
 Target users
 
    This program is intended to be used by everyone and everything, from
    naive users to embedded scripts.
-   
+
 Comments
+
+   None

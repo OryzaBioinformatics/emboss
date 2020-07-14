@@ -7,12 +7,9 @@
 </HEAD>
 <BODY BGCOLOR="#FFFFFF" text="#000000">
 
-
-
-
 <table align=center border=0 cellspacing=0 cellpadding=0>
 <tr><td valign=top>
-<A HREF="index.html" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
@@ -26,18 +23,9 @@ newseq
 
 
 
-
-
 <H2>
     Function
 </H2>
-
-
-
-<!--
-DON'T WRITE ANYTHING HERE.
-IT IS DONE FOR YOU.
--->
 Type in a short new sequence
 
 
@@ -88,8 +76,8 @@ Type of sequence
          N : Nucleic
          P : Protein
 Type of sequence [N]: <b>p</b>
-Output sequence [outfile.fasta]: <b>swiss::mycc.pep</b>
 Enter the sequence: <b>KKKEERADLIAY</b>
+Output sequence [outfile.fasta]: <b>swiss::mycc.pep</b>
 
 </pre></td></tr></table><p>
 <p>
@@ -100,14 +88,6 @@ Enter the sequence: <b>KKKEERADLIAY</b>
 <H2>
     Command line arguments
 </H2>
-
-
-
-<!--
-DON'T WRITE ANYTHING HERE.
-IT IS DONE FOR YOU.
--->
-
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
    Standard (Mandatory) qualifiers:
@@ -118,7 +98,6 @@ IT IS DONE FOR YOU.
   [-description]       string     Enter any description of the sequence that
                                   you require.
   [-type]              menu       Type of sequence
-  [-outseq]            seqout     Output sequence USA
   [-sequence]          string     The sequence itself.
                                   Because of the limitation of the operating
                                   system, you will only be able to type in a
@@ -128,22 +107,23 @@ IT IS DONE FOR YOU.
                                   reached this limit and you will not be able
                                   to press the RETURN/ENTER key until you have
                                   deleted a few characters.
+  [-outseq]            seqout     Output sequence USA
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers: (none)
    Associated qualifiers:
 
    "-outseq" associated qualifiers
-   -osformat4           string     Output seq format
-   -osextension4        string     File name extension
-   -osname4             string     Base file name
-   -osdirectory4        string     Output directory
-   -osdbname4           string     Database name to add
-   -ossingle4           boolean    Separate file for each entry
-   -oufo4               string     UFO features
-   -offormat4           string     Features format
-   -ofname4             string     Features file name
-   -ofdirectory4        string     Output directory
+   -osformat5           string     Output seq format
+   -osextension5        string     File name extension
+   -osname5             string     Base file name
+   -osdirectory5        string     Output directory
+   -osdbname5           string     Database name to add
+   -ossingle5           boolean    Separate file for each entry
+   -oufo5               string     UFO features
+   -offormat5           string     Features format
+   -ofname5             string     Features file name
+   -ofdirectory5        string     Output directory
 
    General qualifiers:
    -auto                boolean    Turn off prompts
@@ -194,19 +174,19 @@ IT IS DONE FOR YOU.
 </tr>
 
 <tr>
-<td>[-outseq]<br>(Parameter 4)</td>
-<td>Output sequence USA</td>
-<td>Writeable sequence</td>
-<td><i>&lt;sequence&gt;</i>.<i>format</i></td>
-</tr>
-
-<tr>
-<td>[-sequence]<br>(Parameter 5)</td>
+<td>[-sequence]<br>(Parameter 4)</td>
 <td>The sequence itself.
 Because of the limitation of the operating system, you will only be able to type in a short sequence of (typically) 250 characters, or so.
 The keyboard will beep at you when you have reached this limit and you will not be able to press the RETURN/ENTER key until you have deleted a few characters.</td>
 <td>Any string is accepted</td>
 <td><i>An empty string is accepted</i></td>
+</tr>
+
+<tr>
+<td>[-outseq]<br>(Parameter 5)</td>
+<td>Output sequence USA</td>
+<td>Writeable sequence</td>
+<td><i>&lt;sequence&gt;</i>.<i>format</i></td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
@@ -257,7 +237,7 @@ The keyboard will beep at you when you have reached this limit and you will not 
 <pre>
 ID   cytoc          STANDARD;      PRT;    12 AA.
 DE   fragment of cytochrome c
-SQ   SEQUENCE    12 AA;   1464 MW;  0000000000000000 CRC64;
+SQ   SEQUENCE    12 AA;   1464 MW;  6F142FA88DADC40B CRC64;
      KKKEERADLI AY
 //
 </pre>
@@ -316,11 +296,6 @@ It always exits with status 0.
 
 None.
 
-<!--
-<H2>
-    See also
-</H2>
--->
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
@@ -350,13 +325,6 @@ None.
 <tr><td><a href="yank.html">yank</a></td><td>Reads a sequence range, appends the full USA to a list file</td></tr>
 </table>
 
-<!--
-        Add any comments about other associated programs (to prepare
-        data files?) that seealso doesn't find.
-   -->
-
-
-
 
 
 <H2>
@@ -376,30 +344,20 @@ Wellcome Trust Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
     History
 </H2>
 
-
 Written (1999) - Gary Williams
 
-<!--
-<p>
-[an error occurred while processing this directive]
--->
 
 <H2>
     Target users
 </H2>
+This program is intended to be used by everyone and everything, from naive users to embedded scripts.
 
 
-This program is intended to be used by everyone and everything,
-from naive users to embedded scripts. 
 
 <H2>
     Comments
 </H2>
-
-
-<pre>
-
-</pre>
+None
 
 
 </BODY>

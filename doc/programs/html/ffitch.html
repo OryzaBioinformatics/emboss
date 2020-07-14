@@ -1,0 +1,797 @@
+<!--START OF HEADER - DON'T ALTER -->
+
+<HTML>
+<HEAD>
+  <TITLE>
+  EMBOSS: ffitch
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+
+
+<table align=center border=0 cellspacing=0 cellpadding=0>
+<tr><td valign=top>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+</td>
+<td align=left valign=middle>
+<b><font size="+6">
+
+ffitch
+</font></b>
+</td></tr>
+</table>
+<br>&nbsp;
+<p>
+
+
+
+<!--END OF HEADER-->
+
+
+
+
+
+
+<H2>
+    Function
+</H2>
+Fitch-Margoliash and Least-Squares Distance Methods
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+
+
+
+
+<H2>
+    Description
+</H2>
+
+
+Estimates phylogenies from distance matrix data under the "additive
+tree model" according to which the distances are expected to equal the
+sums of branch lengths between the species. Uses the Fitch-Margoliash
+criterion and some related least squares criteria, or the Minimum
+Evolution distance matrix method. Does not assume an evolutionary
+clock. This program will be useful with distances computed from
+molecular sequences, restriction sites or fragments distances, with
+DNA hybridization measurements, and with genetic distances computed
+from gene frequencies.
+
+
+<H2>
+    Algorithm
+</H2>
+
+
+The programs FITCH, KITSCH, and NEIGHBOR are for dealing with data
+which comes in the form of a matrix of pairwise distances between all
+pairs of taxa, such as distances based on molecular sequence data,
+gene frequency genetic distances, amounts of DNA hybridization, or
+immunological distances. In analyzing these data, distance matrix
+programs implicitly assume that:
+
+<ul>
+
+<li>
+Each distance is measured independently from the others: no item of
+data contributes to more than one distance.
+
+<li>
+The distance between each pair of taxa is drawn from a distribution
+with an expectation which is the sum of values (in effect amounts of
+evolution) along the tree from one tip to the other. The variance of
+the distribution is proportional to a power p of the expectation.
+
+</ul>
+
+<p>
+These assumptions can be traced in the least squares methods of
+programs FITCH and KITSCH but it is not quite so easy to see them in
+operation in the Neighbor-Joining method of NEIGHBOR, where the
+independence assumptions is less obvious.
+
+<p>
+THESE TWO ASSUMPTIONS ARE DUBIOUS IN MOST CASES: independence will not
+be expected to be true in most kinds of data, such as genetic
+distances from gene frequency data. For genetic distance data in which
+pure genetic drift without mutation can be assumed to be the mechanism
+of change CONTML may be more appropriate. However, FITCH, KITSCH, and
+NEIGHBOR will not give positively misleading results (they will not
+make a statistically inconsistent estimate) provided that additivity
+holds, which it will if the distance is computed from the original
+data by a method which corrects for reversals and parallelisms in
+evolution. If additivity is not expected to hold, problems are more
+severe. A short discussion of these matters will be found in a review
+article of mine (1984a). For detailed, if sometimes irrelevant,
+controversy see the papers by Farris (1981, 1985, 1986) and myself
+(1986, 1988b).
+
+<p>
+For genetic distances from gene frequencies, FITCH, KITSCH, and
+NEIGHBOR may be appropriate if a neutral mutation model can be assumed
+and Nei's genetic distance is used, or if pure drift can be assumed
+and either Cavalli-Sforza's chord measure or Reynolds, Weir, and
+Cockerham's (1983) genetic distance is used. However, in the latter
+case (pure drift) CONTML should be better.
+
+<p>
+Restriction site and restriction fragment data can be treated by
+distance matrix methods if a distance such as that of Nei and Li
+(1979) is used. Distances of this sort can be computed in PHYLIp by
+the program RESTDIST.
+
+<p>
+For nucleic acid sequences, the distances computed in DNADIST allow
+correction for multiple hits (in different ways) and should allow one
+to analyse the data under the presumption of additivity. In all of
+these cases independence will not be expected to hold. DNA
+hybridization and immunological distances may be additive and
+independent if transformed properly and if (and only if) the standards
+against which each value is measured are independent. (This is rarely
+exactly true).
+
+<p>
+FITCH and the Neighbor-Joining option of NEIGHBOR fit a tree which has
+the branch lengths unconstrained. KITSCH and the UPGMA option of
+NEIGHBOR, by contrast, assume that an "evolutionary clock" is valid,
+according to which the true branch lengths from the root of the tree
+to each tip are the same: the expected amount of evolution in any
+lineage is proportional to elapsed time.
+
+<H2>
+    Usage
+</H2>
+
+<!--  
+	Example usage, as run from the command-line.
+        Many examples illustrating different behaviours is good.
+ -->
+
+<b>Here is a sample session with ffitch</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>ffitch </b>
+Fitch-Margoliash and Least-Squares Distance Methods
+Input file: <b>fitch.dat</b>
+Input tree file: <b></b>
+Output file [fitch.ffitch]: <b></b>
+
+
+ inseed: 0
+ global: false
+ jumble: false
+ njumble: 1
+ lengths: false
+ lower: false
+ negallowed: false
+ outgrno: 1
+ outgropt: false
+ power: 2.000000
+ replicates: false
+ trout: true
+ upper: false
+ usertree: false
+ printdata: false
+ progress: true
+ treeprint: true
+ mulsets: false
+ datasets: 1Adding species:
+   1. Bovine    
+   2. Mouse     
+   3. Gibbon    
+   4. Orang     
+   5. Gorilla   
+   6. Chimp     
+   7. Human     
+coordinates lengthsum: 0.000000
+Calling coordinates q->v 0.769855
+coordinates lengthsum: 0.769855
+Calling coordinates q->v 0.419826
+coordinates lengthsum: 0.419826
+Calling coordinates q->v 0.049859
+coordinates lengthsum: 0.469685
+Calling coordinates q->v 0.021213
+coordinates lengthsum: 0.490898
+Calling coordinates q->v 0.036955
+coordinates lengthsum: 0.527853
+Calling coordinates q->v 0.114487
+coordinates lengthsum: 0.642340
+Calling coordinates q->v 0.154713
+coordinates lengthsum: 0.682566
+Calling coordinates q->v 0.156803
+coordinates lengthsum: 0.647701
+Calling coordinates q->v 0.292085
+coordinates lengthsum: 0.761771
+Calling coordinates q->v 0.355371
+coordinates lengthsum: 0.775198
+Calling coordinates q->v 0.916745
+coordinates lengthsum: 0.916745
+
+Output written to file "fitch.ffitch"
+
+Tree also written onto file "fitch.treefile"
+
+Done.
+
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
+
+
+
+
+<H2>
+    Command line arguments
+</H2>
+
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+   Standard (Mandatory) qualifiers:
+  [-datafile]          distances  File containing one or more distance
+                                  matrices
+  [-intreefile]        tree       (no help text) tree value
+  [-outfile]           outfile    Output file name
+
+   Additional (Optional) qualifiers (* if not always prompted):
+   -matrixtype         menu       Type of input data matrix
+   -minev              boolean    Minimum evolution
+*  -njumble            integer    Number of times to randomise
+*  -seed               integer    Random number seed between 1 and 32767 (must
+                                  be odd)
+   -outgrno            integer    Species number to use as outgroup
+   -power              float      Power
+*  -lengths            boolean    Use branch lengths from user trees
+*  -negallowed         boolean    Negative branch lengths allowed
+*  -global             boolean    Global rearrangements
+   -replicates         boolean    Subreplicates
+   -[no]trout          toggle     Write out trees to tree file
+*  -outtreefile        outfile    Tree file name
+   -printdata          boolean    Print data at start of run
+   -[no]progress       boolean    Print indications of progress of run
+   -[no]treeprint      boolean    Print out tree
+
+   Advanced (Unprompted) qualifiers: (none)
+   Associated qualifiers:
+
+   "-outfile" associated qualifiers
+   -odirectory3        string     Output directory
+
+   "-outtreefile" associated qualifiers
+   -odirectory         string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report deaths
+
+
+</pre>
+</td></tr></table>
+<P>
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-datafile]<br>(Parameter 1)</td>
+<td>File containing one or more distance matrices</td>
+<td>Distance matrix</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr>
+<td>[-intreefile]<br>(Parameter 2)</td>
+<td>(no help text) tree value</td>
+<td>Phylogenetic tree</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr>
+<td>[-outfile]<br>(Parameter 3)</td>
+<td>Output file name</td>
+<td>Output file</td>
+<td><i>&lt;sequence&gt;</i>.ffitch</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Additional (Optional) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-matrixtype</td>
+<td>Type of input data matrix</td>
+<td><table><tr><td>s</td> <td><i>(Square)</i></td></tr><tr><td>u</td> <td><i>(Upper triangular)</i></td></tr><tr><td>l</td> <td><i>(Lower triangular)</i></td></tr></table></td>
+<td>s</td>
+</tr>
+
+<tr>
+<td>-minev</td>
+<td>Minimum evolution</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-njumble</td>
+<td>Number of times to randomise</td>
+<td>Integer 0 or more</td>
+<td>0</td>
+</tr>
+
+<tr>
+<td>-seed</td>
+<td>Random number seed between 1 and 32767 (must be odd)</td>
+<td>Integer from 1 to 32767</td>
+<td>1</td>
+</tr>
+
+<tr>
+<td>-outgrno</td>
+<td>Species number to use as outgroup</td>
+<td>Integer 0 or more</td>
+<td>0</td>
+</tr>
+
+<tr>
+<td>-power</td>
+<td>Power</td>
+<td>Any numeric value</td>
+<td>2.0</td>
+</tr>
+
+<tr>
+<td>-lengths</td>
+<td>Use branch lengths from user trees</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-negallowed</td>
+<td>Negative branch lengths allowed</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-global</td>
+<td>Global rearrangements</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-replicates</td>
+<td>Subreplicates</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-[no]trout</td>
+<td>Write out trees to tree file</td>
+<td>Toggle value Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>-outtreefile</td>
+<td>Tree file name</td>
+<td>Output file</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr>
+<td>-printdata</td>
+<td>Print data at start of run</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-[no]progress</td>
+<td>Print indications of progress of run</td>
+<td>Boolean value Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>-[no]treeprint</td>
+<td>Print out tree</td>
+<td>Boolean value Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+</table>
+
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+
+
+
+
+
+
+
+
+<H2>
+    Input file format
+</H2>
+
+<!-- 
+        This includes example input file formats.
+        This should be a detailed description and example - assume
+        someone will want to parse this file and will want to know what
+        happens in unusual cases - null input, etc. 
+   -->
+
+<b>ffitch</b> reads any normal sequence USAs.
+
+<p>
+
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+<p><h3>File: fitch.dat</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+    7
+Bovine      0.0000  1.6866  1.7198  1.6606  1.5243  1.6043  1.5905
+Mouse       1.6866  0.0000  1.5232  1.4841  1.4465  1.4389  1.4629
+Gibbon      1.7198  1.5232  0.0000  0.7115  0.5958  0.6179  0.5583
+Orang       1.6606  1.4841  0.7115  0.0000  0.4631  0.5061  0.4710
+Gorilla     1.5243  1.4465  0.5958  0.4631  0.0000  0.3484  0.3083
+Chimp       1.6043  1.4389  0.6179  0.5061  0.3484  0.0000  0.2692
+Human       1.5905  1.4629  0.5583  0.4710  0.3083  0.2692  0.0000
+</pre>
+</td></tr></table><p>
+
+
+
+
+
+
+<H2>
+    Output file format
+</H2>
+
+<!-- 
+        This includes example output file formats.
+        This should be a detailed description and example - assume
+        someone will want to parse this file and will want to know what
+        happens in unusual cases - null output, errors etc. 
+
+        If you wish to include the standard description of the avalable
+	report formats, use:
+[an error occurred while processing this directive]
+   -->
+
+<b>ffitch</b> output consists of an unrooted tree and the lengths of
+the interior segments. The sum of squares is printed out, and if P =
+2.0 Fitch and Margoliash's "average percent standard deviation" is
+also computed and printed out. This is the sum of squares, divided by
+N-2, and then square-rooted and then multiplied by 100 (n is the
+number of species on the tree):
+
+<p>
+<pre>
+     APSD = ( SSQ / (N-2) )1/2 x 100. 
+</pre>
+<p>
+where N is the total number of off-diagonal distance measurements that
+are in the (square) distance matrix. If the S (subreplication) option
+is in force it is instead the sum of the numbers of replicates in all
+the non-diagonal cells of the distance matrix. But if the L or R
+option is also in effect, so that the distance matrix read in is
+lower- or upper-triangular, then the sum of replicates is only over
+those cells actually read in. If S is not in force, the number of
+replicates in each cell is assumed to be 1, so that N is n(n-1), where
+n is the number of species. The APSD gives an indication of the
+average percentage error. The number of trees examined is also printed
+out.
+
+
+
+<p>
+
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: fitch.ffitch</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+
+   7 Populations
+
+Fitch-Margoliash method version 3.6b
+
+                  __ __             2
+                  \  \   (Obs - Exp)
+Sum of squares =  /_ /_  ------------
+                                2
+                   i  j      Obs
+
+Negative branch lengths not allowed
+
+
+  +---------------------------------------------Mouse     
+  ! 
+  !                                +------Human     
+  !                             +--5 
+  !                           +-4  +--------Chimp     
+  !                           ! ! 
+  !                        +--3 +---------Gorilla   
+  !                        !  ! 
+  1------------------------2  +-----------------Orang     
+  !                        ! 
+  !                        +---------------------Gibbon    
+  ! 
+  +------------------------------------------------------Bovine    
+
+
+remember: this is an unrooted tree!
+
+Sum of squares =     0.01375
+
+Average percent standard deviation =     1.85418
+
+Between        And            Length
+-------        ---            ------
+   1          Mouse             0.76985
+   1             2              0.41983
+   2             3              0.04986
+   3             4              0.02121
+   4             5              0.03695
+   5          Human             0.11449
+   5          Chimp             0.15471
+   4          Gorilla           0.15680
+   3          Orang             0.29209
+   2          Gibbon            0.35537
+   1          Bovine            0.91675
+
+
+</pre>
+</td></tr></table><p>
+<p><h3>File: fitch.treefile</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+(Mouse:0.76985,((((Human:0.11449,Chimp:0.15471):0.03695,
+Gorilla:0.15680):0.02121,Orang:0.29209):0.04986,Gibbon:0.35537):0.41983,Bovine:0.91675);
+</pre>
+</td></tr></table><p>
+
+
+
+
+
+
+<H2>
+    Data files
+</H2>
+
+None
+
+<H2>
+    Notes
+</H2>
+
+<!-- 
+        Restrictions.
+        Interesting behaviour.
+        Useful things you can do with this program.
+   -->
+
+None.
+
+
+
+
+
+
+
+<H2>
+    References
+</H2>
+
+<!-- 
+        Bibliography for methods used.
+   -->
+
+None.
+
+
+
+
+
+
+
+
+<H2>
+    Warnings
+</H2>
+
+<!-- 
+        Potentially stupid things the program will let you do.
+   -->
+
+None.
+
+
+
+
+
+
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+<!-- 
+        Error messages specific to this program, eg:
+        "FATAL xxx" - means you have not set up the xxx data using program <b>prog</b>.<p>
+   -->
+
+None.
+
+
+
+
+
+
+
+<H2>
+    Exit status
+</H2>
+
+<!-- 
+        Description of the exit status for various error conditions
+   -->
+
+It always exits with status 0.
+
+
+
+
+
+
+
+
+<H2>
+    Known bugs
+</H2>
+
+
+<!-- 
+        Bugs noted but not yet fixed.
+   -->
+
+None.
+
+
+
+
+
+
+
+
+<!--
+<H2>
+    See also
+</H2>
+-->
+<h2><a name="See also">See also</a></h2>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th><th>Description</th></tr>
+<tr><td><a href="../../apps/distmat.html">distmat</a></td><td>Creates a distance matrix from multiple alignments</td></tr>
+<tr><td><a href="../phylip/efitch.html">efitch</a></td><td>Fitch-Margoliash and Least-Squares Distance Methods</td></tr>
+<tr><td><a href="../phylip/ekitsch.html">ekitsch</a></td><td>Fitch-Margoliash method with contemporary tips</td></tr>
+<tr><td><a href="../phylip/eneighbor.html">eneighbor</a></td><td>Phylogenies from distance matrix by N-J or UPGMA method</td></tr>
+<tr><td><a href="fkitsch.html">fkitsch</a></td><td>Fitch-Margoliash method with contemporary tips</td></tr>
+<tr><td><a href="fneighbor.html">fneighbor</a></td><td>Phylogenies from distance matrix by N-J or UPGMA method</td></tr>
+</table>
+
+<!-- 
+        Add any comments about other associated programs (to prepare
+        data files?) that seealso doesn't find. 
+   -->
+
+
+
+
+
+
+
+
+
+
+<H2>
+    Author(s)
+</H2>
+
+This program is an EMBOSS conversion of a program written by Joe
+Felsenstein as part of his PHYLIP package.
+
+<p>
+Although we take every care to ensure that the results of the EMBOSS
+version are identical to those from the original package, we recommend
+that you check your inputs give the same results in both versions
+before publication.
+
+<p>
+Please report all bugs in the EMBOSS version to the EMBOSS bug team,
+not to the original author.
+
+
+<H2>
+    History
+</H2>
+
+[an error occurred while processing this directive]
+
+
+
+<H2>
+    Target users
+</H2>
+
+<!--
+        For general users, requested by one user, for EMBOSS site
+        maintainers, for EMBOSS developers etc.
+        eg:
+        "This program is intended to be used by everyone and everything,
+        from naive users to embedded scripts." 
+	Which is easy to include using:
+   -->
+
+This program is intended to be used by everyone and everything, from naive users to embedded scripts.
+
+
+
+
+
+
+
+
+
+
+
+
+</BODY>
+</HTML>
+

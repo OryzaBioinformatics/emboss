@@ -1,0 +1,809 @@
+
+                          SEQFRAGGLE documentation
+                                      
+   
+
+CONTENTS
+
+   1.0 SUMMARY 
+   2.0 INPUTS & OUTPUTS 
+   3.0 INPUT FILE FORMAT 
+   4.0 OUTPUT FILE FORMAT 
+   5.0 DATA FILES 
+   6.0 USAGE 
+   7.0 KNOWN BUGS & WARNINGS 
+   8.0 NOTES 
+   9.0 DESCRIPTION 
+   10.0 ALGORITHM 
+   11.0 RELATED APPLICATIONS 
+   12.0 DIAGNOSTIC ERROR MESSAGES 
+   13.0 AUTHORS 
+   14.0 REFERENCES 
+
+1.0 SUMMARY
+
+   Removes fragments from DHF files (domain hits files) or other files of
+   sequences
+
+2.0 INPUTS & OUTPUTS
+
+   SEQFRAGGLE reads a directory of domain hits files and for each
+   individual file writes a new domain hits file in which sequence hits
+   deemed to be fragments are removed. Alternatively, SEQFRAGGLE will
+   read and write any supported sequence set format, e.g. the common
+   alignment formats. The base names of the output files are the same as
+   the input files. The paths and file extensions for the output files
+   (input and output) are specified by the user.
+
+3.0 INPUT FILE FORMAT
+
+   The format of the domain hits file is explained in the SEQSEARCH
+   documentation.
+
+4.0 OUTPUT FILE FORMAT
+
+   The format of the domain hits file is explained in the SEQSEARCH
+   documentation.
+
+  Output files for usage example
+
+  File: 54894.dhf
+
+> Q9YBD5^.^11^105^SCOP^.^54894^Alpha and beta proteins (a+b)^.^.^Ferredoxin-lik
+e^Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^Aspartate
+ carbamoyltransferase, Regulatory-chain, N-terminal domain^.^61.50^0.000e+00^4.
+000e-10
+VRKIRSGVVIDHIPPGRAFTMLKALGLLPPRGYRWRIAVVINAESSKLGRKDILKIEGYKPRQRDLEVLGIIAPGATFN
+VIEDYKVVEKVKLKLP
+> Q9UX07^.^12^104^SCOP^.^54894^Alpha and beta proteins (a+b)^.^.^Ferredoxin-lik
+e^Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^Aspartate
+ carbamoyltransferase, Regulatory-chain, N-terminal domain^.^65.80^0.000e+00^2.
+000e-11
+VSKIRNGTVIDHIPAGRALAVLRILGIRGSEGYRVALVMNVESKKIGRKDIVKIEDRVIDEKEASLITLIAPSATINII
+RDYVVTEKRHLEVP
+> Q9KP65^.^9^100^SCOP^.^54894^Alpha and beta proteins (a+b)^.^.^Ferredoxin-like
+^Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^Aspartate
+carbamoyltransferase, Regulatory-chain, N-terminal domain^.^128.00^0.000e+00^3.
+000e-30
+VEAIKNGTVIDHIPAKVGIKVLKLFDMHNSAQRVTIGLNLPSSALGSKDLLKIENVFISEAQANKLALYAPHATVNQIE
+NYEVVKKLALQLP
+> Q9K1K9^.^8^99^SCOP^.^54894^Alpha and beta proteins (a+b)^.^.^Ferredoxin-like^
+Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^Aspartate c
+arbamoyltransferase, Regulatory-chain, N-terminal domain^.^101.00^0.000e+00^5.0
+00e-22
+VEAIEKGTVIDHIPAGRGLTILRQFKLLHYGNAVTVGFNLPSKTQGSKDIIKIKGVCLDDKAADRLALFAPEAVVNTID
+NFKVVQKRHLNLP
+> Q9JWY6^.^8^99^SCOP^.^54894^Alpha and beta proteins (a+b)^.^.^Ferredoxin-like^
+Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^Aspartate c
+arbamoyltransferase, Regulatory-chain, N-terminal domain^.^98.90^0.000e+00^2.00
+0e-21
+VEAIEKGTVIDHIPAGRGLTILRQFKLLHYGNAVTVGFNLPSKTQGSKDIIKIKGVCLDDKAADRLALFAPEAVVNTID
+HFKVVQKRHLNLP
+> Q9HKM3^.^7^99^SCOP^.^54894^Alpha and beta proteins (a+b)^.^.^Ferredoxin-like^
+Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^Aspartate c
+arbamoyltransferase, Regulatory-chain, N-terminal domain^.^79.60^0.000e+00^2.00
+0e-15
+ISKIRDGTVIDHVPSGKGIRVIGVLGVHEDVNYTVSLAIHVPSNKMGFKDVIKIENRFLDRNELDMISLIAPNATISII
+KNYEISEKFQVELP
+> Q9HHN3^.^9^101^SCOP^.^54894^Alpha and beta proteins (a+b)^.^.^Ferredoxin-like
+^Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^Aspartate
+carbamoyltransferase, Regulatory-chain, N-terminal domain^.^78.50^0.000e+00^4.0
+00e-15
+VSKIQAGTVIDHIPAGQALQVLQILGTNGASDDQITVGMNVTSERHHRKDIVKIEGRELSQDEVDVLSLIAPDATINIV
+RDYEVDEKRRVDRP
+> Q97FS4^.^4^93^SCOP^.^54894^Alpha and beta proteins (a+b)^.^.^Ferredoxin-like^
+Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^Aspartate c
+arbamoyltransferase, Regulatory-chain, N-terminal domain^.^49.20^0.000e+00^2.00
+0e-06
+INSIKNGIVIDHIKAGHGIKIYNYLKLGEAEFPTALIMNAISKKNKAKDIIKIENVMDLDLAVLGFLDPNITVNIIEDE
+KIRQKIQLKLP
+> Q97B28^.^8^100^SCOP^.^54894^Alpha and beta proteins (a+b)^.^.^Ferredoxin-like
+^Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^Aspartate
+carbamoyltransferase, Regulatory-chain, N-terminal domain^.^79.20^0.000e+00^2.0
+00e-15
+ISKIKDGTVIDHIPSGKALRVLSILGIRDDVDYTVSVGMHVPSSKMEYKDVIKIENRSLDKNELDMISLTAPNATISII
+KNYEISEKFKVELP
+> Q970X3^.^11^101^SCOP^.^54894^Alpha and beta proteins (a+b)^.^.^Ferredoxin-lik
+e^Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^Aspartate
+ carbamoyltransferase, Regulatory-chain, N-terminal domain^.^78.50^0.000e+00^3.
+000e-15
+VSKIKNGTVIDHIPAGRALAVLRILKIAEGYRIALVMNVESKKMGKKDIVKIENKEVDEKEANLITLIAPTATINIIRD
+YEVVEKKKLKIP
+> Q8ZTG2^.^7^99^SCOP^.^54894^Alpha and beta proteins (a+b)^.^.^Ferredoxin-like^
+Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^Aspartate c
+arbamoyltransferase, Regulatory-chain, N-terminal domain^.^66.10^0.000e+00^2.00
+0e-11
+VSKIENGTVIDHIPAGRALTVLRILGISGKEGLRVALVMNVESKKLGKKDIVKIEGRELTPEEVNIISAVAPTATINII
+RNFAVVKKFKVTPP
+> Q8ZB38^.^9^100^SCOP^.^54894^Alpha and beta proteins (a+b)^.^.^Ferredoxin-like
+^Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^Aspartate
+carbamoyltransferase, Regulatory-chain, N-terminal domain^.^156.00^0.000e+00^0.
+000e+00
+VEAIKCGTVIDHIPAQIGFKLLSLFKLTATDQRITIGLNLPSKRSGRKDLIKIENTFLTEQQANQLAMYAPDATVNRID
+NYEVVKKLTLSLP
+> Q8Z130^.^8^99^SCOP^.^54894^Alpha and beta proteins (a+b)^.^.^Ferredoxin-like^
+Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^Aspartate c
+arbamoyltransferase, Regulatory-chain, N-terminal domain^.^181.00^0.000e+00^0.0
+00e+00
+VEAIKCGTVIDHIPAQVGFKLLSLFKLTETDQRITIGLNLPSGEMGRKDLIKIENTFLTDEQVNQLALYAPQATVNRID
+NYDVVGKSRPSLP
+> Q8U374^.^6^99^SCOP^.^54894^Alpha and beta proteins (a+b)^.^.^Ferredoxin-like^
+Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^Aspartate c
+arbamoyltransferase, Regulatory-chain, N-terminal domain^.^92.00^0.000e+00^3.00
+0e-19
+VSAIKEGTVIDHIPAGKGLKVIQILGLGELKNGGAVLLAMNVPSKKLGRKDIVKVEGKFLSEEEVNKIALVAPTATVNI
+IREYKVVEKFKVEIP
+> Q8TVB1^.^7^98^SCOP^.^54894^Alpha and beta proteins (a+b)^.^.^Ferredoxin-like^
+Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^Aspartate c
+arbamoyltransferase, Regulatory-chain, N-terminal domain^.^72.70^0.000e+00^2.00
+0e-13
+VKRIEMGTVLDHLPPGTAPQIMRILDIDPTETTLLVAINVESSKMGRKDILKIEGKILSEEEANKVALVAPNATVNIVR
+DYSVAEKFQVKPP
+> Q8THL3^.^9^100^SCOP^.^54894^Alpha and beta proteins (a+b)^.^.^Ferredoxin-like
+^Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^Aspartate
+carbamoyltransferase, Regulatory-chain, N-terminal domain^.^69.20^0.000e+00^2.0
+00e-12
+IQAIENGTVIDHITAGQALNVLRILRISSAFRATVSFVMNAPGARGKKDVVKIEGKELSVEELNRIALISPKATINIIR
+DFEVVQKNKVVLP
+> Q8PXK6^.^9^100^SCOP^.^54894^Alpha and beta proteins (a+b)^.^.^Ferredoxin-like
+^Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^Aspartate
+carbamoyltransferase, Regulatory-chain, N-terminal domain^.^62.70^0.000e+00^2.0
+00e-10
+VQAIESGTVIDHIKSGQALNVLRILGISSAFRATISFVMNAPGAGGKKDVVKIEGKELSVEELNRIALISPKATINIIR
+DFVVVQKNNVVLP
+> Q8K9H8^.^8^99^SCOP^.^54894^Alpha and beta proteins (a+b)^.^.^Ferredoxin-like^
+Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^Aspartate c
+arbamoyltransferase, Regulatory-chain, N-terminal domain^.^146.00^0.000e+00^1.0
+00e-35
+VEAIKSGSVIDHIPAHIGFKLLSLFRFTETEKRITIGLNLPSQKLDKKDIIKIENTFLSDDQINQLAIYAPCATVNYIE
+KYNLVGKIFPSLP
+> Q8DCF7^.^9^100^SCOP^.^54894^Alpha and beta proteins (a+b)^.^.^Ferredoxin-like
+^Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^Aspartate
+carbamoyltransferase, Regulatory-chain, N-terminal domain^.^127.00^0.000e+00^9.
+000e-30
+VEAIKNGTVIDHIPAQVGIKVLKLFDMHNSSQRVTIGLNLPSSALGNKDLLKIENVFINEEQASKLALYAPHATVNQIE
+DYQVVKKLALELP
+> Q8D1W6^.^9^100^SCOP^.^54894^Alpha and beta proteins (a+b)^.^.^Ferredoxin-like
+^Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^Aspartate
+carbamoyltransferase, Regulatory-chain, N-terminal domain^.^123.00^0.000e+00^1.
+000e-28
+VEAIFGGTVIDHIPAQVGLKLLSLFKWLHTKERITMGLNLPSNQQKKKDLIKLENVLLNEDQANQLSIYAPLATVNQIK
+NYIVIKKQKLKLP
+> Q8A9S4^.^10^101^SCOP^.^54894^Alpha and beta proteins (a+b)^.^.^Ferredoxin-lik
+e^Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^Aspartate
+ carbamoyltransferase, Regulatory-chain, N-terminal domain^.^63.80^0.000e+00^9.
+000e-11
+VAALKNGTVIDHIPSEKLFTVVQLLGVEQMKCNITIGFNLDSKKLGKKGIIKIADKFFCDEEINRISVVAPYVKLNIIR
+DYEVVEKKEVRMP
+> Q891I9^.^4^94^SCOP^.^54894^Alpha and beta proteins (a+b)^.^.^Ferredoxin-like^
+Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^Aspartate c
+arbamoyltransferase, Regulatory-chain, N-terminal domain^.^52.30^0.000e+00^2.00
+0e-07
+ITSIKDGIVIDHIKSGYGIKIFNYLNLKNVEYSVALIMNVFSSKLGKKDIIKIANKEIDIDFTVLGLIDPTITINIIED
+EKIKEKLNLELP
+> Q87LF7^.^9^100^SCOP^.^54894^Alpha and beta proteins (a+b)^.^.^Ferredoxin-like
+^Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^Aspartate
+carbamoyltransferase, Regulatory-chain, N-terminal domain^.^130.00^0.000e+00^7.
+000e-31
+VEAIKNGTVIDHIPAQIGIKVLKLFDMHNSSQRVTIGLNLPSSALGHKDLLKIENVFINEEQASKLALYAPHATVNQIE
+NYEVVKKLALELP
+> Q83IL8^.^8^99^SCOP^.^54894^Alpha and beta proteins (a+b)^.^.^Ferredoxin-like^
+Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^Aspartate c
+arbamoyltransferase, Regulatory-chain, N-terminal domain^.^189.00^0.000e+00^0.0
+00e+00
+VEAIKRGTVIDHIPAQIGFKLLSLFKLTETDQRITIGLNLPSGEMGRKDLIKIENTFLSEEQVDQLALYAPQATVNRID
+NYEVVGKSRPSLP
+> Q7P144^.^7^98^SCOP^.^54894^Alpha and beta proteins (a+b)^.^.^Ferredoxin-like^
+Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^Aspartate c
+arbamoyltransferase, Regulatory-chain, N-terminal domain^.^128.00^0.000e+00^3.0
+00e-30
+VEALKQGTVIDHIPAGEGVKILRLFKLTETGERVTVGLNLVSRHMGSKDLIKVENVALTEEQANELALFAPKATVNVID
+NFEVVKKHKLTLP
+> Q7MZ14^.^9^100^SCOP^.^54894^Alpha and beta proteins (a+b)^.^.^Ferredoxin-like
+^Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^Aspartate
+carbamoyltransferase, Regulatory-chain, N-terminal domain^.^150.00^0.000e+00^6.
+000e-37
+VEAIRCGTVIDHIPAQVGFKLLSLFKLTETDQRITIGLNLPSNRLGKKDLIKIENTFLTEQQANQLAMYAPNATVNCIE
+NYEVVKKLPINLP
+> Q7MX57^.^8^99^SCOP^.^54894^Alpha and beta proteins (a+b)^.^.^Ferredoxin-like^
+Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^Aspartate c
+arbamoyltransferase, Regulatory-chain, N-terminal domain^.^80.80^0.000e+00^7.00
+0e-16
+VAAIRNGIVIDHIPPTKLFKVATLLQLDDLDKRITIGNNLRSRSHGSKGVIKIEDKTFEEEELNRIALIAPNVRLNIIR
+DYEVVEKRQVEVP
+> Q7MHF0^.^9^100^SCOP^.^54894^Alpha and beta proteins (a+b)^.^.^Ferredoxin-like
+^Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^Aspartate
+carbamoyltransferase, Regulatory-chain, N-terminal domain^.^127.00^0.000e+00^8.
+000e-30
+VEAIKNGTVIDHIPAQVGIKVLKLFDMHNSSQRVTIGLNLPSSALGNKDLLKIENVFINEEQASKLALYAPHATVNQIE
+DYQVVKKLALELP
+> Q58801^.^9^99^SCOP^.^54894^Alpha and beta proteins (a+b)^.^.^Ferredoxin-like^
+Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^Aspartate c
+arbamoyltransferase, Regulatory-chain, N-terminal domain^.^61.50^0.000e+00^5.00
+0e-10
+VKKITNGTVIDHIDAGKALMVFKVLNVPKETSVMIAINVPSKKKGKKDILKIEGIELKKEDVDKISLISPDVTINIIRN
+GKVVEKLKPQIP
+> P96175^.^8^99^SCOP^.^54894^Alpha and beta proteins (a+b)^.^.^Ferredoxin-like^
+Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^Aspartate c
+arbamoyltransferase, Regulatory-chain, N-terminal domain^.^107.00^0.000e+00^7.0
+00e-24
+VEAICNGYVIDHIPSGQGVKILRLFSLTDTKQRVTVGFNLPSHDGTTKDLIKVENTEITKSQANQLALLAPNATVNIIE
+NFKVTDKHSLALP
+> P96111^.^375^472^SCOP^.^54894^Alpha and beta proteins (a+b)^.^.^Ferredoxin-li
+ke^Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^Aspartat
+e carbamoyltransferase, Regulatory-chain, N-terminal domain^.^47.30^0.000e+00^9
+.000e-06
+GIKPIENGTVIDHIAKGKTPEEIYSTILKIRKILRLYDVDSADGIFRSSDGSFKGYISLPDRYLSKKEIKKLSAISPNT
+TVNIIKNSTVVEKYRIKLP
+> P77919^.^6^99^SCOP^.^54894^Alpha and beta proteins (a+b)^.^.^Ferredoxin-like^
+Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^Aspartate c
+arbamoyltransferase, Regulatory-chain, N-terminal domain^.^93.50^0.000e+00^1.00
+0e-19
+VSAIKEGTVIDHIPAGKGLKVIEILKLGKLTNGGAVLLAMNVPSKKLGRKDIVKVEGRFLSEEEVNKIALVAPNATVNI
+IRDYKVVEKFKVEVP
+> P74766^.^12^104^SCOP^.^54894^Alpha and beta proteins (a+b)^.^.^Ferredoxin-lik
+e^Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^Aspartate
+ carbamoyltransferase, Regulatory-chain, N-terminal domain^.^74.20^0.000e+00^7.
+000e-14
+VSKIKNGTVIDHIPAGRAFAVLNVLGIKGHEGFRIALVINVDSKKMGKKDIVKIEDKEISDTEANLITLIAPTATINIV
+REYEVVKKTKLEVP
+> P57451^.^8^99^SCOP^.^54894^Alpha and beta proteins (a+b)^.^.^Ferredoxin-like^
+Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^Aspartate c
+arbamoyltransferase, Regulatory-chain, N-terminal domain^.^143.00^0.000e+00^1.0
+00e-34
+VEAIKSGSVIDHIPEYIGFKLLSLFRFTETEKRITIGLNLPSKKLGRKDIIKIENTFLSDEQINQLAIYAPHATVNYIN
+EYNLVRKVFPTLP
+> P19936^.^8^99^SCOP^.^54894^Alpha and beta proteins (a+b)^.^.^Ferredoxin-like^
+Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^Aspartate c
+arbamoyltransferase, Regulatory-chain, N-terminal domain^.^159.00^0.000e+00^0.0
+00e+00
+VEAIKCGTVIDHIPAQIGFKLLTLFKLTATDQRITIGLNLPSNELGRKDLIKIENTFLTEQQANQLAMYAPKATVNRID
+NYEVVRKLTLSLP
+> P08421^.^8^99^SCOP^.^54894^Alpha and beta proteins (a+b)^.^.^Ferredoxin-like^
+Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^Aspartate c
+arbamoyltransferase, Regulatory-chain, N-terminal domain^.^183.00^0.000e+00^0.0
+00e+00
+VEAIKCGTVIDHIPAQVGFKLLSLFKLTETDQRITIGLNLPSGEMGRKDLIKIENTFLTEEQVNQLALYAPQATVNRID
+NYDVVGKSRPSLP
+> P00478^.^8^99^SCOP^.^54894^Alpha and beta proteins (a+b)^.^.^Ferredoxin-like^
+Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^Aspartate c
+arbamoyltransferase, Regulatory-chain, N-terminal domain^.^191.00^0.000e+00^0.0
+00e+00
+VEAIKRGTVIDHIPAQIGFKLLSLFKLTETDQRITIGLNLPSGEMGRKDLIKIENTFLSEDQVDQLALYAPQATVNRID
+NYEVVGKSRPSLP
+> O58452^.^6^99^SCOP^.^54894^Alpha and beta proteins (a+b)^.^.^Ferredoxin-like^
+Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^Aspartate c
+arbamoyltransferase, Regulatory-chain, N-terminal domain^.^94.30^0.000e+00^6.00
+0e-20
+VSAIKEGTVIDHIPAGKGLKVIEILGLSKLSNGGSVLLAMNVPSKKLGRKDIVKVEGKFLSEEEVNKIALVAPTATVNI
+IRNYKVVEKFKVEVP
+> O30129^.^6^98^SCOP^.^54894^Alpha and beta proteins (a+b)^.^.^Ferredoxin-like^
+Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^Aspartate c
+arbamoyltransferase, Regulatory-chain, N-terminal domain^.^79.60^0.000e+00^2.00
+0e-15
+VSKIKEGTVIDHINAGKALLVLKILKIQPGTDLTVSMAMNVPSSKMGKKDIVKVEGMFIRDEELNKIALISPNATINLI
+RDYEIERKFKVSPP
+> O26938^.^11^101^SCOP^.^54894^Alpha and beta proteins (a+b)^.^.^Ferredoxin-lik
+e^Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain^Aspartate
+ carbamoyltransferase, Regulatory-chain, N-terminal domain^.^81.90^0.000e+00^3.
+000e-16
+VKPIKNGTVIDHITANRSLNVLNILGLPDGRSKVTVAMNMDSSQLGSKDIVKIENRELKPSEVDQIALIAPRATINIVR
+DYKIVEKAKVRL
+
+  File: 55074.dhf
+
+> Q9WVI4^.^513^667^SCOP^.^55074^Alpha and beta proteins (a+b)^.^.^Ferredoxin-li
+ke^Adenylyl and guanylyl cyclase catalytic domain^Adenylyl and guanylyl cyclase
+ catalytic domain^.^113.00^0.000e+00^2.000e-25
+RKFDDVTMLFSDIVGFTAICAQCTPMQVISMLNELYTRFDHQCGFLDIYKVETIGDAYCVASGLHRKSLCHAKPIALMA
+LKMMELSEEVLTPDGRPIQMRIGIHSGSVLAGVVGVRMPRYCLFGNNVTLASKFESGSHPRRINISPTTYQLLKRE
+> Q9ERL9^.^475^626^SCOP^.^55074^Alpha and beta proteins (a+b)^.^.^Ferredoxin-li
+ke^Adenylyl and guanylyl cyclase catalytic domain^Adenylyl and guanylyl cyclase
+ catalytic domain^.^101.00^0.000e+00^9.000e-22
+KKFSEVTMLFSDIVGFTAICSQCSPLQVITMLNALYTRFDQQCGELDVYKVETIGDAYCVAGGLHRESDTHAVQIALMA
+LKMMELSNEVMSPHGEPIKMRIGLHSGSVFAGVVGVKMPRYCLFGNNVTLANKFESCSVPRKINVSPTTYRLL
+> Q9DGG6^.^1032^1200^SCOP^.^55074^Alpha and beta proteins (a+b)^.^.^Ferredoxin-
+like^Adenylyl and guanylyl cyclase catalytic domain^Adenylyl and guanylyl cycla
+se catalytic domain^.^72.70^0.000e+00^4.000e-13
+YSKNHDSGGVIFASIVNFSEFYEENYEGGKECYRVLNELIGDFDELLSKPHYSSIEKIKTIGATYMAASGLNTSQCQDS
+NHPHGHLQTLFEFAKEMMRVVDDFNNNMLWFNFKLRIGFNHGPLTAGVIGTTKLLYDIWGDTVNIASRMDTIGVECRIQ
+VSEETYRILSK
+> Q9DGG6^.^369^560^SCOP^.^55074^Alpha and beta proteins (a+b)^.^.^Ferredoxin-li
+ke^Adenylyl and guanylyl cyclase catalytic domain^Adenylyl and guanylyl cyclase
+ catalytic domain^.^172.00^0.000e+00^0.000e+00
+IIFRPFKMQQIEQVSILFADIVGFTKMSANKSAHALVGLLNDLFGRFDRLCEDTKCEKISTLGDCYYCVAGCPEPRADH
+AYCCIEMGLGMIKAIEQFCQEKKEMVNMRVGVHTGTVLCGILGMRRFKFDVWSNDVNLANLMEQLGVAGKVHISEATAK
+YLDDRYEMEDGKVTERVGQSAVADQLKGLKTYLI
+> Q99396^.^250^473^SCOP^.^55074^Alpha and beta proteins (a+b)^.^.^Ferredoxin-li
+ke^Adenylyl and guanylyl cyclase catalytic domain^Adenylyl and guanylyl cyclase
+ catalytic domain^.^182.00^0.000e+00^0.000e+00
+IMRNKRDNDNAPKELADPVTLIFTDIESSTAQWATQPELMPDAVATHHSMVRSLIENYDCYEVKTVGDSFMIACKSPFA
+AVQLAQELQLRFLRLDWGTTVFDEFYREFEERHAEEGDGKYKPPTARLDPEVYRQLWNGLRVRVGIHTGLCDIRYDEVT
+KGYDYYGQTANTAARTESVGNGGQVLMTCETYHSLSTAERSQFDVTPLGGVPLRGVSEPVEVYQLN
+> Q99280^.^877^1092^SCOP^.^55074^Alpha and beta proteins (a+b)^.^.^Ferredoxin-l
+ike^Adenylyl and guanylyl cyclase catalytic domain^Adenylyl and guanylyl cyclas
+e catalytic domain^.^204.00^0.000e+00^0.000e+00
+NDSAPKEPTGPVTLIFTDIESSTALWAAHPDLMPDAVATHHRLIRSLITRYECYEVKTVGDSFMIASKSPFAAVQLAQE
+LQLRFLRLDWETNALDESYREFEEQRAEGECEYTPPTAHMDPEVYSRLWNGLRVRVGIHTGLCDIRYDEVTKGYDYYGR
+TSNMAARTESVANGGQVLMTHAAYMSLSGEDRNQLDVTTLGATVLRGVPEPVRMYQLN
+> Q99279^.^888^1105^SCOP^.^55074^Alpha and beta proteins (a+b)^.^.^Ferredoxin-l
+ike^Adenylyl and guanylyl cyclase catalytic domain^Adenylyl and guanylyl cyclas
+e catalytic domain^.^242.00^0.000e+00^0.000e+00
+NNNRAPKEPTDPVTLIFTDIESSTALWAAHPDLMPDAVAAHHRMVRSLIGRYKCYEVKTVGDSFMIASKSPFAAVQLAQ
+ELQLCFLHHDWGTNALDDSYREFEEQRAEGECEYTPPTAHMDPEVYSRLWNGLRVRVGIHTGLCDIIRHDEVTKGYDYY
+GRTPNMAARTESVANGGQVLMTHAAYMSLSAEDRKQIDVTALGDVALRGVSDPVKMYQLN
+> Q91WF3^.^863^1038^SCOP^.^55074^Alpha and beta proteins (a+b)^.^.^Ferredoxin-l
+ike^Adenylyl and guanylyl cyclase catalytic domain^Adenylyl and guanylyl cyclas
+e catalytic domain^.^81.20^0.000e+00^1.000e-15
+NEDLYHQSYECVCVLFASVPDFKEFYSESNINHEGLECLRLLNEIIADFDELLSKPKFSGVEKIKTIGSTYMAATGLNA
+TSGQDTQQDSERSCSHLGTMVEFAVALGSKLGVINKHSFNNFRLRVGLNHGPVVAGVIGAQKPQYDIWGNTVNVASRME
+STGVLGKIQVTEETARAL
+> Q91WF3^.^261^446^SCOP^.^55074^Alpha and beta proteins (a+b)^.^.^Ferredoxin-li
+ke^Adenylyl and guanylyl cyclase catalytic domain^Adenylyl and guanylyl cyclase
+ catalytic domain^.^210.00^0.000e+00^0.000e+00
+FHSLYVKRHQGVSVLYADIVGFTRLASECSPKELVLMLNELFGKFDQIAKEHECMRIKILGDCYYCVSGLPLSLPDHAI
+NCVRMGLDMCRAIRKLRVATGVDINMRVGVHSGSVLCGVIGLQKWQYDVWSHDVTLANHMEAGGVPGRVHITGATLALL
+AGAYAVERADTEHRDPYLRELGEPTYLV
+> Q8VHH7^.^914^1090^SCOP^.^55074^Alpha and beta proteins (a+b)^.^.^Ferredoxin-l
+ike^Adenylyl and guanylyl cyclase catalytic domain^Adenylyl and guanylyl cyclas
+e catalytic domain^.^67.30^0.000e+00^2.000e-11
+ELYSQSYDEIGVMFASLPNFADFYTEESINNGGIECLRFLNEIISDFDSLLDNPKFRVITKIKTIGSTYMAASGVTPDV
+NTNGFTSSSKEEKSDKERWQHLADLADFALAMKDTLTNINNQSFNNFMLRIGMNKGGVLAGVIGARKPHYDIWGNTVNV
+ASRMESTGVMGNIQVVEET
+> Q8VHH7^.^307^492^SCOP^.^55074^Alpha and beta proteins (a+b)^.^.^Ferredoxin-li
+ke^Adenylyl and guanylyl cyclase catalytic domain^Adenylyl and guanylyl cyclase
+ catalytic domain^.^228.00^0.000e+00^0.000e+00
+FNTMYMYRHENVSILFADIVGFTQLSSACSAQELVKLLNELFARFDKLAAKYHQLRIKILGDCYYCICGLPDYREDHAV
+CSILMGLAMVEAISYVREKTKTGVDMRVGVHTGTVLGGVLGQKRWQYDVWSTDVTVANKMEAGGIPGRVHISQSTMDCL
+KGEFDVEPGDGGSRCDYLDEKGIETYLI
+> Q8NFM4^.^861^1032^SCOP^.^55074^Alpha and beta proteins (a+b)^.^.^Ferredoxin-l
+ike^Adenylyl and guanylyl cyclase catalytic domain^Adenylyl and guanylyl cyclas
+e catalytic domain^.^81.20^0.000e+00^1.000e-15
+NEDLYHQSYECVCVLFASVPDFKEFYSESNINHEGLECLRLLNEIIADFDELLSKPKFSGVEKIKTIGSTYMAATGLNA
+TSGQDAQQDAERSCSHLGTMVEFAVALGSKLDVINKHSFNNFRLRVGLNHGPVVAGVIGAQKPQYDIWGNTVNVASRME
+STGVLGKIQVTEET
+> Q8NFM4^.^261^446^SCOP^.^55074^Alpha and beta proteins (a+b)^.^.^Ferredoxin-li
+ke^Adenylyl and guanylyl cyclase catalytic domain^Adenylyl and guanylyl cyclase
+ catalytic domain^.^210.00^0.000e+00^0.000e+00
+FHSLYVKRHQGVSVLYADIVGFTRLASECSPKELVLMLNELFGKFDQIAKEHECMRIKILGDCYYCVSGLPLSLPDHAI
+NCVRMGLDMCRAIRKLRAATGVDINMRVGVHSGSVLCGVIGLQKWQYDVWSHDVTLANHMEAGGVPGRVHITGATLALL
+AGAYAVEDAGMEHRDPYLRELGEPTYLV
+> Q29450^.^864^1041^SCOP^.^55074^Alpha and beta proteins (a+b)^.^.^Ferredoxin-l
+ike^Adenylyl and guanylyl cyclase catalytic domain^Adenylyl and guanylyl cyclas
+e catalytic domain^.^84.30^0.000e+00^1.000e-16
+LNEDWYHQSYDCVCVMFASVPDFKVFYTECDVNKEGLECLRLLNEIIADFDELLLKPKFSGVEKIKTIGSTYMAAAGLS
+VPSGPENQDLERQHAHIGIMVEFSTALMSKLDGINRHSFNSFRLRVGINHGPVIAGVIGARKPQYDIWGNTVNVASRME
+STGELGKIQVTEETCTILQG
+> Q29450^.^267^452^SCOP^.^55074^Alpha and beta proteins (a+b)^.^.^Ferredoxin-li
+ke^Adenylyl and guanylyl cyclase catalytic domain^Adenylyl and guanylyl cyclase
+ catalytic domain^.^230.00^0.000e+00^0.000e+00
+FHNLYVKRHQNVSILYADIVGFTRLASDCSPKELVVVLNELFGKFDQIAKANECMRIKILGDCYYCVSGLPVSLPNHAR
+NCVKMGLDMCEAIKQVREATGVDISMRVGIHSGNVLCGVIGLRKWQYDVWSHDVSLANRMEAAGVPGRVHITEATLKHL
+DKAYEVEDGHGQQRDPYLKEMNIRTYLV
+> Q27675^.^920^1136^SCOP^.^55074^Alpha and beta proteins (a+b)^.^.^Ferredoxin-l
+ike^Adenylyl and guanylyl cyclase catalytic domain^Adenylyl and guanylyl cyclas
+e catalytic domain^.^154.00^0.000e+00^1.000e-37
+NNDAAPKDGDEPVTLLFTDIESSTALWAALPQLMSDAIAAHHRVIRQLVKKYGCYEVKTIGDSFMIACRSAHSAVSLAC
+EIQTKLLKHDWGTEALDRAYREFELARVDTLDDYEPPTARLSEEEYAALWCGLRVRVGIHTGLTDIRYDEVTKGYDYYG
+DTSNMAARTEAVANGGQVVATEAAWWALSNDERAGIAHTAMGPQGLRGVPFAVEMFQLN
+> Q26896^.^381^587^SCOP^.^55074^Alpha and beta proteins (a+b)^.^.^Ferredoxin-li
+ke^Adenylyl and guanylyl cyclase catalytic domain^Adenylyl and guanylyl cyclase
+ catalytic domain^.^177.00^0.000e+00^0.000e+00
+DPVTLIFTDIESSTALWAAHPGMMADAVATHHRLIRSLIALYGAYEVKTVGDSFMIACRSAFAAVELARDLQLTLVHHD
+WGTVAIDESYRKFEEERAVEDSDYAPPTARLDSAVYCKLWNGLRVRAGIHTGLCDIAHDEVTKGYDYYGRTPNLAARTE
+SAANGGQVLVTGATYYSLSVAERARLDATPIGPVPLRGVPEPVEMYQLN
+> Q26721^.^898^1103^SCOP^.^55074^Alpha and beta proteins (a+b)^.^.^Ferredoxin-l
+ike^Adenylyl and guanylyl cyclase catalytic domain^Adenylyl and guanylyl cyclas
+e catalytic domain^.^206.00^0.000e+00^0.000e+00
+PVTLIFTDIESSTALWAAHPEVMPDAVATHHRLIRTLISKYECYEVKTVGDSFMIASKSPFAAVQLAQELQLCFLHHDW
+GTNAIDESYQQFEQQRAEDDSDYTPPTARLDPKVYSRLWNGLRVRVGIHTGLCDIRRDEVTKGYDYYGRTSNMAARTES
+VANGGQVLMTHAAYMSLSAEERQQIDVTALGDVPLRGVPKPVEMYRLN
+> Q25263^.^927^1143^SCOP^.^55074^Alpha and beta proteins (a+b)^.^.^Ferredoxin-l
+ike^Adenylyl and guanylyl cyclase catalytic domain^Adenylyl and guanylyl cyclas
+e catalytic domain^.^153.00^0.000e+00^2.000e-37
+NNDAAPKDGDEPVTLLFTDIESSTALWAALPQLMSDAIAAHHRVIRQLVKKYGCYEVKTIGDSFMIACRSAHSAVSLAC
+EIQTKLLKHDWGTEALDRAYREFELARVDTLDDYEPPTARLSEEEYAALWCGLRVRVGIHTGLTDIRYDEVTRGYDYYG
+DTSNMAARTEAVANGGQVVATEAAWWALSNDERAGIAHTAMGPQGLRGVPFAVEMFQLN
+> Q11055^.^203^335^SCOP^.^55074^Alpha and beta proteins (a+b)^.^.^Ferredoxin-li
+ke^Adenylyl and guanylyl cyclase catalytic domain^Adenylyl and guanylyl cyclase
+ catalytic domain^.^49.20^0.000e+00^6.000e-06
+ERAAGKPLPGARQVTVAFADLVGFTQLGEVVSAEELGHLAGRLAGLARDLTAPPVWFIKTIGDAVMLVCPDPAPLLDTV
+LKLVEVVDTDNNFPRLRAGVASGMAVSRAGDWFGSPVNVASRVTGVARPGAVLV
+> Q10551^.^91^213^SCOP^.^55074^Alpha and beta proteins (a+b)^.^.^Ferredoxin-lik
+e^Adenylyl and guanylyl cyclase catalytic domain^Adenylyl and guanylyl cyclase
+catalytic domain^.^53.40^0.000e+00^3.000e-07
+VTLLLADVEESTHLWQMCPEDMATAIAHLDHTVSEAITNHGGVQPVKRYEGDSFVAAFTRASDAAACALDLQRTSLAPI
+RLRIGLHTGEVQLRDELYVGPTINRTARLRDLAHGGQVVLSAAT
+> Q09435^.^891^1050^SCOP^.^55074^Alpha and beta proteins (a+b)^.^.^Ferredoxin-l
+ike^Adenylyl and guanylyl cyclase catalytic domain^Adenylyl and guanylyl cyclas
+e catalytic domain^.^101.00^0.000e+00^9.000e-22
+PEGFDSVTVFFSDVVKFTILASKCSPFQTVNLLNDLYSNFDTIIEQHGVYKVESIGDGYLCVSGLPTRNGYAHIKQIVD
+MSLKFMEYCKSFNIPHLPRENVELRIGVNSGPCVAGVVGLSMPRYCLFGDTVNTASRMESNGKPSLIHLTNDAHSLLTT
+HY
+> Q08828^.^576^750^SCOP^.^55074^Alpha and beta proteins (a+b)^.^.^Ferredoxin-li
+ke^Adenylyl and guanylyl cyclase catalytic domain^Adenylyl and guanylyl cyclase
+ catalytic domain^.^76.20^0.000e+00^4.000e-14
+NMDLYYQSYSQVGVMFASIPNFNDFYIELDGNNMGVECLRLLNEIIADFDELMEKDFYKDIEKIKTIGSTYMAAVGLAP
+TSGTKAKKSISSHLSTLADFAIEMFDVLDEINYQSYNDFVLRVGINVGPVVAGVIGARRPQYDIWGNTVNVASRMDSTG
+VQGRIQVTEEVHRLLRR
+> Q08828^.^10^196^SCOP^.^55074^Alpha and beta proteins (a+b)^.^.^Ferredoxin-lik
+e^Adenylyl and guanylyl cyclase catalytic domain^Adenylyl and guanylyl cyclase
+catalytic domain^.^266.00^0.000e+00^0.000e+00
+IFHKIYIQRHDNVSILFADIVGFTGLASQCTAQELVKLLNELFGKFDELATENHCRRIKILGDCYYCVSGLTQPKTDHA
+HCCVEMGLDMIDTITSVAEATEVDLNMRVGLHTGRVLCGVLGLRKWQYDVWSNDVTLANVMEAAGLPGKVHITKTTLAC
+LNGDYEVEPGYGHERNSFLKTHNIETFFI
+> Q08462^.^873^1077^SCOP^.^55074^Alpha and beta proteins (a+b)^.^.^Ferredoxin-l
+ike^Adenylyl and guanylyl cyclase catalytic domain^Adenylyl and guanylyl cyclas
+e catalytic domain^.^79.60^0.000e+00^4.000e-15
+LKNEELYHQSYDCVCVMFASIPDFKEFYTESDVNKEGLECLRLLNEIIADFDDLLSKPKFSGVEKIKTIGSTYMAATGL
+SAVPSQEHSQEPERQYMHIGTMVEFAFALVGKLDAINKHSFNDFKLRVGINHGPVIAGVIGAQKPQYDIWGNTVNVASR
+MDSTGVLDKIQVTEETSLVLQTLGYTCTCRGIINVKGKGDLKTYFVN
+
+
+  [Part of this file has been deleted for brevity]
+
+DSVTIYFSDIVGFTALSAESTPMQVVTLLNDLYTCFDAIIDNFDVYKVETIGDAYMVVSGLPGRNGQRHAPEIARMALA
+LLDAVSSFRIRHRPHDQLRLRIGVHTGPVCAGVVGLKMPRYCLFGDTVNTASRMESNGQALKIHVSSTTKDALDELGCF
+QLELRGDVE
+> P19754^.^859^1033^SCOP^.^55074^Alpha and beta proteins (a+b)^.^.^Ferredoxin-l
+ike^Adenylyl and guanylyl cyclase catalytic domain^Adenylyl and guanylyl cyclas
+e catalytic domain^.^78.50^0.000e+00^8.000e-15
+NMDLYYQSYSQVGVMFASIPNFNDFYIELDGNNMGVECLRLLNEIIADFDELMDKDFYKDLEKIKTIGSTYMAAVGLAP
+TAGTKAKKCISSHLSTLADFAIEMFDVLDEINYQSYNDFVLRVGINVGPVVAGVIGARRPQYDIWGNTVNVASRMDSTG
+VQGRIQVTEEVHRLLRR
+> P19754^.^292^478^SCOP^.^55074^Alpha and beta proteins (a+b)^.^.^Ferredoxin-li
+ke^Adenylyl and guanylyl cyclase catalytic domain^Adenylyl and guanylyl cyclase
+ catalytic domain^.^266.00^0.000e+00^0.000e+00
+IFHKIYIQRHDNVSILFADIVGFTGLASQCTAQELVKLLNELFGKFDELATENHCRRIKILGDCYYCVSGLTQPKTDHA
+HCCVEMGLDMIDTITSVAEATEVDLNMRVGLHTGRVLCGVLGLRKWQYDVWSNDVTLANVMEAAGLPGKVHITKTTLAC
+LNGDYEVEPGHGHERNSFLKTHNIETFFI
+> P19687^.^471^627^SCOP^.^55074^Alpha and beta proteins (a+b)^.^.^Ferredoxin-li
+ke^Adenylyl and guanylyl cyclase catalytic domain^Adenylyl and guanylyl cyclase
+ catalytic domain^.^102.00^0.000e+00^4.000e-22
+HAVQAKRFGNVTMLFSDIVGFTAICSQCSPLQVITMLNALYTRFDRQCGELDVYKVETIGDAYCVAGGLHKESDTHAVQ
+IALMALKMMELSHEVVSPHGEPIKMRIGLHSGSVFAGVVGVKMPRYCLFGNNVTLANKFESCSVPRKINVSPTTYRLL
+> P19686^.^474^625^SCOP^.^55074^Alpha and beta proteins (a+b)^.^.^Ferredoxin-li
+ke^Adenylyl and guanylyl cyclase catalytic domain^Adenylyl and guanylyl cyclase
+ catalytic domain^.^102.00^0.000e+00^6.000e-22
+KKFNEVTMLFSDIVGFTAICSQCSPLQVITMLNALYTRFDQQCGELDVYKVETIGDAYCVAGGLHRESDTHAVQIALMA
+LKMMELSNEVMSPHGEPIKMRIGLHSGSVFAGVVGVKMPRYCLFGNNVTLANKFESCSVPRKINVSPTTYRLL
+> P19485^.^470^607^SCOP^.^55074^Alpha and beta proteins (a+b)^.^.^Ferredoxin-li
+ke^Adenylyl and guanylyl cyclase catalytic domain^Adenylyl and guanylyl cyclase
+ catalytic domain^.^61.10^0.000e+00^1.000e-09
+VTAMFTDIYDFTTISEGRSPEEVVAMLSEYFDLFSEVVAAHDGTIIQFHGDSVFAMWNAPVADTRHAEHACRCALAVEE
+RLEAFNSAQRASGLPEFRTRFGIHTGTAVVGSVGAKERLQYTAMGDTVNVASRLEGMNK
+> P18910^.^869^1048^SCOP^.^55074^Alpha and beta proteins (a+b)^.^.^Ferredoxin-l
+ike^Adenylyl and guanylyl cyclase catalytic domain^Adenylyl and guanylyl cyclas
+e catalytic domain^.^107.00^0.000e+00^1.000e-23
+DSVTIYFSDIVGFTALSAESTPMQVVTLLNDLYTCFDAVIDNFDVYKVETIGDAYMVVSGLPVRNGQLHAREVARMALA
+LLDAVRSFRIRHRPQEQLRLRIGIHTGPVCAGVVGLKMPRYCLFGDTVNTASRMESNGEALKIHLSSETKAVLEEFDGF
+ELELRGDVEMKGKGKVRTYWLL
+> P18293^.^869^1048^SCOP^.^55074^Alpha and beta proteins (a+b)^.^.^Ferredoxin-l
+ike^Adenylyl and guanylyl cyclase catalytic domain^Adenylyl and guanylyl cyclas
+e catalytic domain^.^108.00^0.000e+00^6.000e-24
+DSVTIYFSDIVGFTALSAESTPMQVVTLLNDLYTCFDAVIDNFDVYKVETIGDAYMVVSGLPVRNGQLHAREVARMALA
+LLDAVRSFRIRHRPQEQLRLRIGIHTGPVCAGVVGLKMPRYCLFGDTVNTASRMESNGEALRIHLSSETKAVLEEFDGF
+ELELRGDVEMKGKGKVRTYWLL
+> P16068^.^406^572^SCOP^.^55074^Alpha and beta proteins (a+b)^.^.^Ferredoxin-li
+ke^Adenylyl and guanylyl cyclase catalytic domain^Adenylyl and guanylyl cyclase
+ catalytic domain^.^100.00^0.000e+00^1.000e-21
+LRHKRPVPAKRYDNVTILFSGIVGFNAFCSKHASGEGAMKIVNLLNDLYTRFDTLTDSRKNPFVYKVETVGDKYMTVSG
+LPEPCIHHARSICHLALDMMEIAGQVQVDGESVQITIGIHTGEVVTGVIGQRMPRYCLFGNTVNLTSRTETTGEKGKIN
+VSEYTYRCL
+> P16067^.^858^1024^SCOP^.^55074^Alpha and beta proteins (a+b)^.^.^Ferredoxin-l
+ike^Adenylyl and guanylyl cyclase catalytic domain^Adenylyl and guanylyl cyclas
+e catalytic domain^.^107.00^0.000e+00^2.000e-23
+DSVTIYFSDIVGFTALSAESTPMQVVTLLNDLYTCFDAIIDNFDVYKVETIGDAYMVVSGLPGRNGQRHAPEIARMALA
+LLDAVSSFRIRHRPHDQLRLRIGVHTGPVCAGVVGLKMPRYCLFGDTVNTASRMESNGQALKIHVSSTTKDALDELGCF
+QLELRGDVE
+> P16066^.^873^1052^SCOP^.^55074^Alpha and beta proteins (a+b)^.^.^Ferredoxin-l
+ike^Adenylyl and guanylyl cyclase catalytic domain^Adenylyl and guanylyl cyclas
+e catalytic domain^.^107.00^0.000e+00^2.000e-23
+DSVTIYFSDIVGFTALSAESTPMQVVTLLNDLYTCFDAVIDNFDVYKVETIGDAYMVVSGLPVRNGRLHACEVARMALA
+LLDAVRSFRIRHRPQEQLRLRIGIHTGPVCAGVVGLKMPRYCLFGDTVNTASRMESNGEALKIHLSSETKAVLEEFGGF
+ELELRGDVEMKGKGKVRTYWLL
+> P16065^.^907^1055^SCOP^.^55074^Alpha and beta proteins (a+b)^.^.^Ferredoxin-l
+ike^Adenylyl and guanylyl cyclase catalytic domain^Adenylyl and guanylyl cyclas
+e catalytic domain^.^105.00^0.000e+00^6.000e-23
+PETFEMVSIFFSDIVGFTALSAASTPIQVVNLLNDLYTLFDAIISNYDVYKVETIGDAYMLVSGLPLRNGDRHAGQIAS
+TAHHLLESVKGFIVPHKPEVFLKLRIGIHSGSCVAGVVGLTMPRYCLFGDTVNTASRMESNGLALRIHVS
+> P14605^.^1320^1501^SCOP^.^55074^Alpha and beta proteins (a+b)^.^.^Ferredoxin-
+like^Adenylyl and guanylyl cyclase catalytic domain^Adenylyl and guanylyl cycla
+se catalytic domain^.^69.60^0.000e+00^4.000e-12
+MNREVSPPKGCIAMVFTDIKNSTLLWERHPIAMRSAIKTHNTIMRRQLRATGGYEVKTEGDAFMVCFQTVPAALLWCFS
+VQLQLLSADWPNEIVESVQGRLVLGSKNEVLYRGLSVRIGVNYGVTVSELDPITRRMDYYGPVVNRTSRVVSVADGGQI
+AVSAEVVSVLNQLDSETMSSEKTN
+> P08678^.^1666^1825^SCOP^.^55074^Alpha and beta proteins (a+b)^.^.^Ferredoxin-
+like^Adenylyl and guanylyl cyclase catalytic domain^Adenylyl and guanylyl cycla
+se catalytic domain^.^75.40^0.000e+00^8.000e-14
+NLAMVFTDIKSSTFLWELFPNAMRTAIKTHNDIMRRQLRIYGGYEVKTEGDAFMVAFPTPTSGLTWCLSVQLKLLDAQW
+PEEITSVQDGCQVTDRNGNIIYQGLSVRMGIHWGCPVPELDLVTQRMDYLGPMVNKAARVQGVADGGQIAMSSDFYSEF
+NK
+> O95622^.^692^861^SCOP^.^55074^Alpha and beta proteins (a+b)^.^.^Ferredoxin-li
+ke^Adenylyl and guanylyl cyclase catalytic domain^Adenylyl and guanylyl cyclase
+ catalytic domain^.^86.20^0.000e+00^4.000e-17
+NDELYYQSCECVAVMFASIANFSEFYVELEANNEGVECLRLLNEIIADFDEIISEDRFRQLEKIKTIGSTYMAASGLND
+STYDKVGKTHIKALADFAMKLMDQMKYINEHSFNNFQMKIGLNIGPVVAGVIGARKPQYDIWGNTVNVASRMDSTGVPD
+RIQVTTDMYQVL
+> O95622^.^88^276^SCOP^.^55074^Alpha and beta proteins (a+b)^.^.^Ferredoxin-lik
+e^Adenylyl and guanylyl cyclase catalytic domain^Adenylyl and guanylyl cyclase
+catalytic domain^.^350.00^0.000e+00^0.000e+00
+MMFHKIYIQKHDNVSILFADIEGFTSLASQCTAQELVMTLNELFARFDKLAAENHCLRIKILGDCYYCVSGLPEARADH
+AHCCVEMGMDMIEAISLVREVTGVNVNMRVGIHSGRVHCGVLGLRKWQFDVWSNDVTLANHMEAGGKAGRIHITKATLN
+YLNGDYEVEPGCGGERNAYLKEHSIETFLIL
+> O75343^.^381^540^SCOP^.^55074^Alpha and beta proteins (a+b)^.^.^Ferredoxin-li
+ke^Adenylyl and guanylyl cyclase catalytic domain^Adenylyl and guanylyl cyclase
+ catalytic domain^.^97.70^0.000e+00^1.000e-20
+KVAAGEFKSCTILFSDVVTFTNICTACEPIQIVNVLNSMYSKFDRLTSVHAVYKVETIGDAYMVVGGVPVPIGNHAQRV
+ANFALGMRISAKEVTNPVTGEPIQLRVGIHTGPVLADVVGDKMPRYCLFGDTVNTASRMESHGLPNKVHLSPTAYRALK
+NQ
+> O60503^.^1050^1218^SCOP^.^55074^Alpha and beta proteins (a+b)^.^.^Ferredoxin-
+like^Adenylyl and guanylyl cyclase catalytic domain^Adenylyl and guanylyl cycla
+se catalytic domain^.^70.00^0.000e+00^3.000e-12
+YSKNHDSGGVIFASIVNFSEFYEENYEGGKECYRVLNELIGDFDELLSKPDYSSIEKIKTIGATYMAASGLNTAQAQDG
+SHPQEHLQILFEFAKEMMRVVDDFNNNMLWFNFKLRVGFNHGPLTAGVIGTTKLLYDIWGDTVNIASRMDTTGVECRIQ
+VSEESYRVLSK
+> O60503^.^388^571^SCOP^.^55074^Alpha and beta proteins (a+b)^.^.^Ferredoxin-li
+ke^Adenylyl and guanylyl cyclase catalytic domain^Adenylyl and guanylyl cyclase
+ catalytic domain^.^172.00^0.000e+00^0.000e+00
+QQIEEVSILFADIVGFTKMSANKSAHALVGLLNDLFGRFDRLCEETKCEKISTLGDCYYCVAGCPEPRADHAYCCIEMG
+LGMIKAIEQFCQEKKEMVNMRVGVHTGTVLCGILGMRRFKFDVWSNDVNLANLMEQLGVAGKVHISEATAKYLDDRYEM
+EDGKVIERLGQSVVADQLKGLKTYLI
+> O60266^.^913^1089^SCOP^.^55074^Alpha and beta proteins (a+b)^.^.^Ferredoxin-l
+ike^Adenylyl and guanylyl cyclase catalytic domain^Adenylyl and guanylyl cyclas
+e catalytic domain^.^68.10^0.000e+00^1.000e-11
+ELYSQTYDEIGVMFASLPNFADFYTEESINNGGIECLRFLNEIISDFDSLLDNPKFRVITKIKTIGSTYMAASGVTPDV
+NTNGFASSNKEDKSERERWQHLADLADFALAMKDTLTNINNQSFNNFMLRIGMNKGGVLAGVIGARKPHYDIWGNTVNV
+ASRMESTGVMGNIQVVEET
+> O60266^.^307^492^SCOP^.^55074^Alpha and beta proteins (a+b)^.^.^Ferredoxin-li
+ke^Adenylyl and guanylyl cyclase catalytic domain^Adenylyl and guanylyl cyclase
+ catalytic domain^.^228.00^0.000e+00^0.000e+00
+FNTMYMYRHENVSILFADIVGFTQLSSACSAQELVKLLNELFARFDKLAAKYHQLRIKILGDCYYCICGLPDYREDHAV
+CSILMGLAMVEAISYVREKTKTGVDMRVGVHTGTVLGGVLGQKRWQYDVWSTDVTVANKMEAGGIPGRVHISQSTMDCL
+KGEFDVEPGDGGSRCDYLEEKGIETYLI
+> O43306^.^967^1136^SCOP^.^55074^Alpha and beta proteins (a+b)^.^.^Ferredoxin-l
+ike^Adenylyl and guanylyl cyclase catalytic domain^Adenylyl and guanylyl cyclas
+e catalytic domain^.^87.30^0.000e+00^2.000e-17
+NDELYYQSCECVAVMFASIANFSEFYVELEANNEGVECLRLLNEIIADFDEIISEERFRQLEKIKTIGSTYMAASGLNA
+STYDQVGRSHITALADYAMRLMEQMKHINEHSFNNFQMKIGLNMGPVVAGVIGARKPQYDIWGNTVNVSSRMDSTGVPD
+RIQVTTDLYQVL
+> O43306^.^365^553^SCOP^.^55074^Alpha and beta proteins (a+b)^.^.^Ferredoxin-li
+ke^Adenylyl and guanylyl cyclase catalytic domain^Adenylyl and guanylyl cyclase
+ catalytic domain^.^338.00^0.000e+00^0.000e+00
+MMFHKIYIQKHDNVSILFADIEGFTSLASQCTAQELVMTLNELFARFDKLAAENHCLRIKILGDCYYCVSGLPEARADH
+AHCCVEMGVDMIEAISLVREVTGVNVNMRVGIHSGRVHCGVLGLRKWQFDVWSNDVTLANHMEAGGRAGRIHITRATLQ
+YLNGDYEVEPGRGGERNAYLKEQHIETFLIL
+> O30820^.^241^400^SCOP^.^55074^Alpha and beta proteins (a+b)^.^.^Ferredoxin-li
+ke^Adenylyl and guanylyl cyclase catalytic domain^Adenylyl and guanylyl cyclase
+ catalytic domain^.^115.00^0.000e+00^6.000e-26
+NIIADKYDEASVLFADIVGFTERASSTAPADLVRFLDRLYSAFDELVDQHGLEKIKVSGDSYMVVSGVPRPRPDHTQAL
+ADFALDMTNVAAQLKDPRGNPVPLRVGLATGPVVAGVVGSRRFFYDVWGDAVNVASRMESTDSVGQIQVPDEVYERLKD
+DF
+> O19179^.^871^1032^SCOP^.^55074^Alpha and beta proteins (a+b)^.^.^Ferredoxin-l
+ike^Adenylyl and guanylyl cyclase catalytic domain^Adenylyl and guanylyl cyclas
+e catalytic domain^.^109.00^0.000e+00^3.000e-24
+MGTPVEPEYFEEVTLYFSDIVGFTTISAMSEPIEVVDLLNDLYTLFDAIIGSHDVYKVETIGDAYMVASGLPQRNGQRH
+AAEIANMALDILSAVGSFRMRHMPEVPVRIRIGLHSGPCVAGVVGLTMPRYCLFGDTVNTASRMESTGLPYRIHVNMST
+VRIL
+> O02740^.^877^1042^SCOP^.^55074^Alpha and beta proteins (a+b)^.^.^Ferredoxin-l
+ike^Adenylyl and guanylyl cyclase catalytic domain^Adenylyl and guanylyl cyclas
+e catalytic domain^.^112.00^0.000e+00^4.000e-25
+PEGFDLVTLYFSDIVGFTTISAMSEPIEVVDLLNDLYTLFDAIIGSHDVYKVETIGDAYMVASGLPKRNGMRHAAEIAN
+MSLDILSSVGTFKMRHMPEVPVRIRIGLHSGPVVAGVVGLTMPRYCLFGDTVNTASRMESTGLPYRIHVSHSTVTILRT
+LGEGYEVE
+
+5.0 DATA FILES
+
+   None.
+
+6.0 USAGE
+
+  6.1 COMMAND LINE ARGUMENTS
+
+   Standard (Mandatory) qualifiers:
+  [-dhfinpath]         dirlist    This option specifies the location of DHF
+                                  files (domain hits files) or other sequence
+                                  files (input). A 'domain hits file' contains
+                                  database hits (sequences) with domain
+                                  classification information, in FASTA or EMBL
+                                  formats. The hits are relatives to a SCOP
+                                  or CATH family and are found from a search
+                                  of a sequence database. Files containing
+                                  hits retrieved by PSIBLAST are generated by
+                                  using SEQSEARCH. Alternatively, SEQFRAGGLE
+                                  will accept sequence or sequence sets in any
+                                  of the common formats.
+   -thresh             integer    This option specifies the percentage of
+                                  median length for definition of fragments.
+                                  SEQFRAGGLE first determines the median
+                                  length of all the sequences in the input
+                                  file, then discards any hit sequences which
+                                  are not within a threshold percentage of the
+                                  median length. The remaining sequences are
+                                  written to the output file.
+  [-dhfoutdir]         outdir     This option specifies the location of DHF
+                                  files (domain hits files) (output). A
+                                  'domain hits file' contains database hits
+                                  (sequences) with domain classification
+                                  information, in FASTA or EMBL formats. The
+                                  hits are relatives to a SCOP or CATH family
+                                  and are found from a search of a sequence
+                                  database. Files containing hits retrieved by
+                                  PSIBLAST are generated by using SEQSEARCH.
+                                  Alternatively, SEQFRAGGLE will write output
+                                  files in any of the common formats.
+
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers: (none)
+   Associated qualifiers: (none)
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report deaths
+
+
+   Standard (Mandatory) qualifiers Allowed values Default
+   [-dhfinpath]
+   (Parameter 1) This option specifies the location of DHF files (domain
+   hits files) or other sequence files (input). A 'domain hits file'
+   contains database hits (sequences) with domain classification
+   information, in FASTA or EMBL formats. The hits are relatives to a
+   SCOP or CATH family and are found from a search of a sequence
+   database. Files containing hits retrieved by PSIBLAST are generated by
+   using SEQSEARCH. Alternatively, SEQFRAGGLE will accept sequence or
+   sequence sets in any of the common formats. Directory with files ./
+   -thresh This option specifies the percentage of median length for
+   definition of fragments. SEQFRAGGLE first determines the median length
+   of all the sequences in the input file, then discards any hit
+   sequences which are not within a threshold percentage of the median
+   length. The remaining sequences are written to the output file. Any
+   integer value 50
+   [-dhfoutdir]
+   (Parameter 2) This option specifies the location of DHF files (domain
+   hits files) (output). A 'domain hits file' contains database hits
+   (sequences) with domain classification information, in FASTA or EMBL
+   formats. The hits are relatives to a SCOP or CATH family and are found
+   from a search of a sequence database. Files containing hits retrieved
+   by PSIBLAST are generated by using SEQSEARCH. Alternatively,
+   SEQFRAGGLE will write output files in any of the common formats.
+   Output directory ./
+   Additional (Optional) qualifiers Allowed values Default
+   (none)
+   Advanced (Unprompted) qualifiers Allowed values Default
+   (none)
+
+  6.2 EXAMPLE SESSION
+
+   An example of interactive use of SEQFRAGGLE is shown below. Here is a
+   sample session with seqfraggle
+
+
+% seqfraggle 
+Removes fragments from DHF files (domain hits files) or other files of
+sequences.
+Location of DHF files (domain hits files) or other sequence files (input). [./]
+: structure
+Percentage of median length for definition of fragments. [50]: 50
+Location of DHF files (domain hits files) (output). [./]: 
+
+Processing /ebi/services/idata/pmr/hgmp/test/data/structure/54894.dhf
+Processing /ebi/services/idata/pmr/hgmp/test/data/structure/55074.dhf
+
+   Go to the output files for this example
+
+   All the domain hits files with the file extension .dhf (specified in
+   the ACD file) in the directory /test_data were read. In this case two
+   files called 55074.dhf and 54894.dhf were read. Two domain hits files
+   (with the extension .dhf specified in ACD) with fragment sequences
+   removed were written to /test_data/seqfraggle.
+
+7.0 KNOWN BUGS & WARNINGS
+
+   None.
+
+8.0 NOTES
+
+   None.
+
+  8.1 GLOSSARY OF FILE TYPES
+
+   FILE TYPE FORMAT DESCRIPTION CREATED BY SEE ALSO
+   Domain hits file DHF format (FASTA-like format with domain
+   classification information). Database hits (sequences) with domain
+   classification information. The hits are relatives to a SCOP or CATH
+   family and are found from a search of a sequence database. SEQSEARCH
+   (hits retrieved by PSIBLAST) N.A.
+
+   Written (2003) - Jon Ison None
+
+9.0 DESCRIPTION
+
+   Fragmentary protein sequences occur in the sequence databases but are
+   not necessarily biologically significant. Certain analyses will be
+   distorted if fragmentary sequences are not filtered from the dataset.
+   SEQFRAGGLE reads domain hits files (or a set of sequences in another
+   format) and writes new domain hits file in which sequences deemed to
+   be fragments are ommitted.
+
+10.0 ALGORITHM
+
+   SEQFRAGGLE first determines the median length of all the sequences in
+   the input file, then discards any hit sequences which are not within a
+   threshold percentage (user defined) of the median length. The
+   remaining sequences are written to the output file.
+
+11.0 RELATED APPLICATIONS
+
+See also
+
+   Program name Description
+   contactcount Counts specific versus non-specific contacts in a
+   directory of cleaned protein chain contact files
+   contacts Reads CCF files (clean coordinate files) and writes CON files
+   (contact files) of intra-chain residue-residue contact data
+   domainalign Generates DAF files (domain alignment files) of
+   structure-based sequence alignments for nodes in a DCF file (domain
+   classification file)
+   domainrep Reorder DCF file (domain classification file) so that the
+   representative structure of each user-specified node is given first
+   domainreso Removes low resolution domains from a DCF file (domain
+   classification file)
+   interface Reads CCF files (clean coordinate files) and writes CON
+   files (contact files) of inter-chain residue-residue contact data
+   libgen Generates various types of discriminating elements for each
+   alignment in a directory
+   psiphi Calculates phi and psi torsion angles from cleaned EMBOSS-style
+   protein co-ordinate file
+   rocon Reads a DHF file (domain hits file) of hits (sequences of
+   unknown structural classification) and a DHF file of validation
+   sequences (known classification) and writes a 'hits file' for the
+   hits, which are classified and rank-ordered on the basis of score
+   rocplot Provides interpretation and graphical display of the
+   performance of discriminating elements (e.g. profiles for protein
+   families). rocplot reads file(s) of hits from discriminator-database
+   search(es), performs ROC analysis on the hits, and writes graphs
+   illustrating the diagnostic performance of the discriminating elements
+   seqalign Reads a DAF file (domain alignment file) and a DHF file
+   (domain hits file) and writes a DAF file extended with the hits
+   seqsearch Generate database hits (sequences) for nodes in a DCF file
+   (domain classification file) by using PSI-BLAST
+   seqsort Reads DHF files (domain hits files) of database hits
+   (sequences) and removes hits of ambiguous classification
+   seqwords Generates DHF files (domain hits files) of database hits
+   (sequences) for nodes in a DCF file (domain classification file) by
+   keyword search of UniProt
+   siggen Generates a sparse protein signature from an alignment and
+   residue contact data
+   sigscan Generates a DHF file (domain hits file) of hits (sequences)
+   from scanning a signature against a sequence database
+
+12.0 DIAGNOSTIC ERROR MESSAGES
+
+   None.
+
+13.0 AUTHORS
+
+   Matt Blades (mathew_blades@yahoo.co.uk)
+   Jon Ison (jison@rfcgr.mrc.ac.uk)
+   MRC Rosalind Franklin Centre for Genomics Research, Wellcome Trust
+   Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
+
+14.0 REFERENCES
+
+   Please cite the authors and EMBOSS.
+   Rice P, Longden I and Bleasby A (2000) "EMBOSS - The European
+   Molecular Biology Open Software Suite" Trends in Genetics, 15:276-278.
+   
+   See also http://emboss.sourceforge.net/
+
+  14.1 Other useful references

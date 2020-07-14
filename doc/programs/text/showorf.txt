@@ -1,26 +1,26 @@
 
                                   showorf 
-                                      
-   
-   
+
+
+
 Function
 
    Pretty output of DNA translations
-   
+
 Description
 
    Showorf displays a nucleic acid sequence with its protein translation
    in a style suitable for publication. The translation can be done in
    any frame or combination of frames.
-   
+
    It uses codon frequency files to do the translation. You can specify
    the codon frequency file that you use with the '-cfile' option. The
    default table is 'Ehum.cut'.
-   
+
 Usage
 
    Here is a sample session with showorf
-   
+
 
 % showorf 
 Pretty output of DNA translations
@@ -35,10 +35,10 @@ Select Frames To Translate
          6 : R3
 Select one or more values [1,2,3,4,5,6]: 
 Output file [paamir.showorf]: 
-   
+
    Go to the input files for this example
    Go to the output files for this example
-   
+
 Command line arguments
 
    Standard (Mandatory) qualifiers:
@@ -90,7 +90,7 @@ Command line arguments
    -error               boolean    Report errors
    -fatal               boolean    Report fatal errors
    -die                 boolean    Report deaths
-   
+
 
    Standard (Mandatory) qualifiers Allowed values Default
    [-sequence]
@@ -114,18 +114,18 @@ Command line arguments
    -cfile Codon usage table name Codon usage file in EMBOSS data path
    Ehum.cut
    -width Width of screen Integer 10 or more 50
-   
+
 Input file format
 
    showorf reads a normal nucleic acid sequence USA.
-   
+
   Input files for usage example
-  
+
    'tembl:paamir' is a sequence entry in the example nucleic acid
    database 'tembl'
-   
+
   Database entry: tembl:paamir
-  
+
 ID   PAAMIR     standard; DNA; PRO; 2167 BP.
 XX
 AC   X13776; M43175;
@@ -273,19 +273,19 @@ SQ   Sequence 2167 BP; 363 A; 712 C; 730 G; 362 T; 0 other;
      cctcgag                                                                216
 7
 //
-   
+
 Output file format
 
    As a sequence with high GC content (from Pseudmonas aeruginosa) PAAMIR
    has several overlapping open reading frames.
-   
+
    The true ORFs are 1..109 (amiB partial) 135..1292 (amiC) 1289..1879
    (amiR) 1925..end (amiS partial)
-   
+
   Output files for usage example
-  
+
   File: paamir.showorf
-  
+
 SHOWORF of PAAMIR from 1 to 2167
 
            ---------|---------|---------|---------|---------|
@@ -390,18 +390,18 @@ F3      13 P  T  S  S  S     17
 R1       6 A  L  W  N  R  S  1
 R2       6  G  V  L  E  E  L 1
 R3       5   W  G  T  G  R   1
-   
+
 Data files
 
    Showorf uses the codon frequency files to translate the sequence.
-   
+
    The codon usage table is read by default from "Ehum.cut" in the
    'data/CODONS' directory of the EMBOSS distribution. If the name of a
    codon usage file is specified on the command line with the '-cfile'
    option, then this file will first be searched for in the current
    directory and then in the 'data/CODONS' directory of the EMBOSS
    distribution.
-   
+
    To see the available EMBOSS codon usage files, run:
 
 % embossdata -showall
@@ -414,27 +414,27 @@ Data files
 Notes
 
    None.
-   
+
 References
 
    None.
-   
+
 Warnings
 
    None.
-   
+
 Diagnostic Error Messages
 
    None.
-   
+
 Exit status
 
    It exits with a status of 0. It always exits with status 0.
-   
+
 Known bugs
 
    None.
-   
+
 See also
 
    Program name                          Description
@@ -451,20 +451,22 @@ See also
    tcode        Fickett TESTCODE statistic to identify protein-coding DNA
    transeq      Translate nucleic acid sequences
    wobble       Wobble base plot
-   
+
 Author(s)
 
    Alan Bleasby (ableasby © rfcgr.mrc.ac.uk)
    MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
    Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
-   
+
 History
 
-   1999 - written.
-   
+   1999 - written - Alan Bleasby
+
 Target users
 
    This program is intended to be used by everyone and everything, from
    naive users to embedded scripts.
-   
+
 Comments
+
+   None

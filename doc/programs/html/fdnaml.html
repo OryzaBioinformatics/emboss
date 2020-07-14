@@ -1,0 +1,1287 @@
+<!--START OF HEADER - DON'T ALTER -->
+
+<HTML>
+<HEAD>
+  <TITLE>
+  EMBOSS: fdnaml
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+
+
+<table align=center border=0 cellspacing=0 cellpadding=0>
+<tr><td valign=top>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+</td>
+<td align=left valign=middle>
+<b><font size="+6">
+
+fdnaml
+</font></b>
+</td></tr>
+</table>
+<br>&nbsp;
+<p>
+
+
+
+<!--END OF HEADER-->
+
+
+
+
+
+
+<H2>
+    Function
+</H2>
+Estimates nucleotide phylogeny by maximum likelihood
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+
+
+
+
+<H2>
+    Description
+</H2>
+
+Estimates phylogenies from nucleotide sequences by maximum
+likelihood. The model employed allows for unequal expected frequencies
+of the four nucleotides, for unequal rates of transitions and
+transversions, and for different (prespecified) rates of change in
+different categories of sites, and also use of a Hidden Markov model
+of rates, with the program inferring which sites have which
+rates. This also allows gamma-distribution and gamma-plus-invariant
+sites distributions of rates across sites.
+
+<H2>
+    Algorithm
+</H2>
+
+
+This program implements the maximum likelihood method for DNA
+sequences. The present version is faster than earlier versions of
+DNAML. Details of the algorithm are published in the paper by
+Felsenstein and Churchill (1996). The model of base substitution
+allows the expected frequencies of the four bases to be unequal,
+allows the expected frequencies of transitions and transversions to be
+unequal, and has several ways of allowing different rates of evolution
+at different sites.
+
+<p>
+The assumptions of the present model are: 
+
+<ol>
+
+<li>
+Each site in the sequence evolves independently. 
+
+<li>
+Different lineages evolve independently. 
+
+<li>
+Each site undergoes substitution at an expected rate which is chosen
+from a series of rates (each with a probability of occurrence) which
+we specify.
+
+<li>
+All relevant sites are included in the sequence, not just those that
+have changed or those that are "phylogenetically informative".
+
+<li>
+A substitution consists of one of two sorts of events:
+
+<ol>
+
+<li> The first kind of event consists of the replacement of the
+existing base by a base drawn from a pool of purines or a pool of
+pyrimidines (depending on whether the base being replaced was a purine
+or a pyrimidine). It can lead either to no change or to a transition.
+
+<li> The second kind of event consists of the replacement of the
+existing base by a base drawn at random from a pool of bases at known
+frequencies, independently of the identity of the base which is being
+replaced. This could lead either to a no change, to a transition or to
+a transversion.
+
+<p>
+The ratio of the two purines in the purine replacement pool is the
+same as their ratio in the overall pool, and similarly for the
+pyrimidines.
+
+<p>
+The ratios of transitions to transversions can be set by the user. The
+substitution process can be diagrammed as follows: Suppose that you
+specified A, C, G, and T base frequencies of 0.24, 0.28, 0.27, and
+0.21.
+
+
+<ul>
+
+<li>
+First kind of event: 
+
+<p>
+Determine whether the existing base is a purine or a pyrimidine. 
+Draw from the proper pool: 
+
+<p>
+<pre>
+
+      Purine pool:                Pyrimidine pool:
+
+     |               |            |               |
+     |   0.4706 A    |            |   0.5714 C    |
+     |   0.5294 G    |            |   0.4286 T    |
+     | (ratio is     |            | (ratio is     |
+     |  0.24 : 0.27) |            |  0.28 : 0.21) |
+     |_______________|            |_______________|
+
+</pre>
+
+<li>
+Second kind of event:
+
+<p>
+
+Draw from the overall pool: 
+
+<p>
+<pre>
+
+              |                  |
+              |      0.24 A      |
+              |      0.28 C      |
+              |      0.27 G      |
+              |      0.21 T      |
+              |__________________|
+
+</pre>
+
+</ul>
+
+</ol>
+
+</ol>
+
+<p>
+Note that if the existing base is, say, an A, the first kind of event
+has a 0.4706 probability of "replacing" it by another A. The second
+kind of event has a 0.24 chance of replacing it by another A. This
+rather disconcerting model is used because it has nice mathematical
+properties that make likelihood calculations far easier. A closely
+similar, but not precisely identical model having different rates of
+transitions and transversions has been used by Hasegawa
+et. al. (1985b). The transition probability formulas for the current
+model were given (with my permission) by Kishino and Hasegawa
+(1989). Another explanation is available in the paper by Felsenstein
+and Churchill (1996).
+
+<p>
+Note the assumption that we are looking at all sites, including those
+that have not changed at all. It is important not to restrict
+attention to some sites based on whether or not they have changed;
+doing that would bias branch lengths by making them too long, and that
+in turn would cause the method to misinterpret the meaning of those
+sites that had changed.
+
+<p>
+This program uses a Hidden Markov Model (HMM) method of inferring
+different rates of evolution at different sites. This was described in
+a paper by me and Gary Churchill (1996). It allows us to specify to
+the program that there will be a number of different possible
+evolutionary rates, what the prior probabilities of occurrence of each
+is, and what the average length of a patch of sites all having the
+same rate. The rates can also be chosen by the program to approximate
+a Gamma distribution of rates, or a Gamma distribution plus a class of
+invariant sites. The program computes the the likelihood by summing it
+over all possible assignments of rates to sites, weighting each by its
+prior probability of occurrence.
+
+<p>
+For example, if we have used the C and A options (described below) to
+specify that there are three possible rates of evolution, 1.0, 2.4,
+and 0.0, that the prior probabilities of a site having these rates are
+0.4, 0.3, and 0.3, and that the average patch length (number of
+consecutive sites with the same rate) is 2.0, the program will sum the
+likelihood over all possibilities, but giving less weight to those
+that (say) assign all sites to rate 2.4, or that fail to have
+consecutive sites that have the same rate.
+
+<p>
+The Hidden Markov Model framework for rate variation among sites was
+independently developed by Yang (1993, 1994, 1995). We have
+implemented a general scheme for a Hidden Markov Model of rates; we
+allow the rates and their prior probabilities to be specified
+arbitrarily by the user, or by a discrete approximation to a Gamma
+distribution of rates (Yang, 1995), or by a mixture of a Gamma
+distribution and a class of invariant sites.
+
+<p>
+This feature effectively removes the artificial assumption that all
+sites have the same rate, and also means that we need not know in
+advance the identities of the sites that have a particular rate of
+evolution.
+
+<p>
+Another layer of rate variation also is available. The user can assign
+categories of rates to each site (for example, we might want first,
+second, and third codon positions in a protein coding sequence to be
+three different categories. This is done with the categories input
+file and the C option. We then specify (using the menu) the relative
+rates of evolution of sites in the different categories. For example,
+we might specify that first, second, and third positions evolve at
+relative rates of 1.0, 0.8, and 2.7.
+
+<p>
+If both user-assigned rate categories and Hidden Markov Model rates
+are allowed, the program assumes that the actual rate at a site is the
+product of the user-assigned category rate and the Hidden Markov Model
+regional rate. (This may not always make perfect biological sense: it
+would be more natural to assume some upper bound to the rate, as we
+have discussed in the Felsenstein and Churchill paper). Nevertheless
+you may want to use both types of rate variation.
+
+
+
+<H2>
+    Usage
+</H2>
+
+<!--  
+	Example usage, as run from the command-line.
+        Many examples illustrating different behaviours is good.
+ -->
+
+<b>Here is a sample session with fdnaml</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>fdnaml -printdata  -ncategories 2 -categories "1111112222222" -rate "1.0 2.0" -gamma h -nhmmcategories 5 -hmmrates "0.264 1.413 3.596 7.086 12.641" -hmmprobabilities "0.522 0.399 0.076 0.0036 0.000023" -lambda 1.5 -weight "0111111111110" </b>
+Estimates nucleotide phylogeny by maximum likelihood
+Input sequence: <b>dnaml.dat</b>
+Input tree file: <b></b>
+Output file [dnaml.fdnaml]: <b></b>
+
+
+ mulsets: false
+ datasets : 1
+ rctgry : true
+ gama : false
+ invar : false
+ numwts : 1
+ numseqs : 1
+
+ ctgry: true
+ categs : 2
+ rcategs : 5
+ auto_: false
+ freqsfrom : true
+ global : false
+ hypstate : false
+ improve : false
+ invar : false
+ jumble : false
+ njumble : 1
+ lngths : false
+ lambda : 1.000000
+ cv : 1.000000
+ freqa : 0.000000
+ freqc : 0.000000
+ freqg : 0.000000
+ freqt : 0.000000
+ outgrno : 1
+ outgropt: false
+ trout : true
+ ttratio : 2.000000
+ ttr : false
+ usertree : false
+ weights: true
+ printdata : true
+ progress : true
+ treeprint: true
+ interleaved : false 
+
+
+Adding species:
+   1. Alpha     
+   2. Beta      
+   3. Gamma     
+   4. Delta     
+   5. Epsilon   
+
+
+Output written to file "dnaml.fdnaml"
+
+Tree also written onto file "dnaml.treefile"
+
+Done.
+
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
+
+
+
+
+<H2>
+    Command line arguments
+</H2>
+
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+   Standard (Mandatory) qualifiers:
+  [-sequence]          seqsetall  File containing one or more sequence
+                                  alignments
+  [-intreefile]        tree       (no help text) tree value
+  [-outfile]           outfile    Output file name
+
+   Additional (Optional) qualifiers (* if not always prompted):
+   -ncategories        integer    Number of substitution rate categories
+*  -rate               array      Rate for each category
+*  -categories         properties File of substitution rate categories
+   -weights            properties Weights file
+*  -lengths            boolean    Use branch lengths from user trees
+   -ttratio            float      Transition/transversion ratio
+   -[no]freqsfrom      toggle     Use empirical base frequencies from seqeunce
+                                  input
+*  -basefreq           array      Base frequencies for A C G T/U (use blanks
+                                  to separate)
+   -gamma              menu       Rate variation among sites
+*  -gammacoefficient   float      Coefficient of variation of substitution
+                                  rate among sites
+*  -ngammacat          integer    Number of categories (1-9)
+*  -invarcoefficient   float      Coefficient of variation of substitution
+                                  rate among sites
+*  -ninvarcat          integer    Number of categories (1-9) including one for
+                                  invariant sites
+*  -invarfrac          float      Fraction of invariant sites
+*  -nhmmcategories     integer    Number of HMM rate categories
+*  -hmmrates           array      HMM category rates
+*  -hmmprobabilities   array      Probability for each HMM category
+*  -adjsite            boolean    Rates at adjacent sites correlated
+*  -lambda             float      Mean block length of sites having the same
+                                  rate
+*  -njumble            integer    Number of times to randomise
+*  -seed               integer    Random number seed between 1 and 32767 (must
+                                  be odd)
+*  -global             boolean    Global rearrangements
+   -outgrno            integer    Species number to use as outgroup
+   -[no]rough          boolean    Speedier but rougher analysis
+   -[no]trout          toggle     Write out trees to tree file
+*  -outtreefile        outfile    Tree file name
+   -printdata          boolean    Print data at start of run
+   -[no]progress       boolean    Print indications of progress of run
+   -[no]treeprint      boolean    Print out tree
+   -hypstate           boolean    Reconstruct hypothetical sequence
+
+   Advanced (Unprompted) qualifiers: (none)
+   Associated qualifiers:
+
+   "-sequence" associated qualifiers
+   -sbegin1            integer    Start of each sequence to be used
+   -send1              integer    End of each sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
+
+   "-outfile" associated qualifiers
+   -odirectory3        string     Output directory
+
+   "-outtreefile" associated qualifiers
+   -odirectory         string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report deaths
+
+
+</pre>
+</td></tr></table>
+<P>
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-sequence]<br>(Parameter 1)</td>
+<td>File containing one or more sequence alignments</td>
+<td>Readable sets of sequences</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr>
+<td>[-intreefile]<br>(Parameter 2)</td>
+<td>(no help text) tree value</td>
+<td>Phylogenetic tree</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr>
+<td>[-outfile]<br>(Parameter 3)</td>
+<td>Output file name</td>
+<td>Output file</td>
+<td><i>&lt;sequence&gt;</i>.fdnaml</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Additional (Optional) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-ncategories</td>
+<td>Number of substitution rate categories</td>
+<td>Integer from 1 to 9</td>
+<td>1</td>
+</tr>
+
+<tr>
+<td>-rate</td>
+<td>Rate for each category</td>
+<td>List of floating point numbers</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr>
+<td>-categories</td>
+<td>File of substitution rate categories</td>
+<td>Property value(s)</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr>
+<td>-weights</td>
+<td>Weights file</td>
+<td>Property value(s)</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr>
+<td>-lengths</td>
+<td>Use branch lengths from user trees</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-ttratio</td>
+<td>Transition/transversion ratio</td>
+<td>Number 0.001 or more</td>
+<td>2.0</td>
+</tr>
+
+<tr>
+<td>-[no]freqsfrom</td>
+<td>Use empirical base frequencies from seqeunce input</td>
+<td>Toggle value Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>-basefreq</td>
+<td>Base frequencies for A C G T/U (use blanks to separate)</td>
+<td>List of floating point numbers</td>
+<td>0.25 0.25 0.25 0.25</td>
+</tr>
+
+<tr>
+<td>-gamma</td>
+<td>Rate variation among sites</td>
+<td><table><tr><td>g</td> <td><i>(Gamma distributed rates)</i></td></tr><tr><td>i</td> <td><i>(Gamma+invariant sites)</i></td></tr><tr><td>h</td> <td><i>(User defined HMM of rates)</i></td></tr><tr><td>n</td> <td><i>(Constant rate)</i></td></tr></table></td>
+<td>Constant rate</td>
+</tr>
+
+<tr>
+<td>-gammacoefficient</td>
+<td>Coefficient of variation of substitution rate among sites</td>
+<td>Number 0.001 or more</td>
+<td>1</td>
+</tr>
+
+<tr>
+<td>-ngammacat</td>
+<td>Number of categories (1-9)</td>
+<td>Integer from 1 to 9</td>
+<td>1</td>
+</tr>
+
+<tr>
+<td>-invarcoefficient</td>
+<td>Coefficient of variation of substitution rate among sites</td>
+<td>Number 0.001 or more</td>
+<td>1</td>
+</tr>
+
+<tr>
+<td>-ninvarcat</td>
+<td>Number of categories (1-9) including one for invariant sites</td>
+<td>Integer from 1 to 9</td>
+<td>1</td>
+</tr>
+
+<tr>
+<td>-invarfrac</td>
+<td>Fraction of invariant sites</td>
+<td>Number from 0.000 to 1.000</td>
+<td>0.0</td>
+</tr>
+
+<tr>
+<td>-nhmmcategories</td>
+<td>Number of HMM rate categories</td>
+<td>Integer from 1 to 9</td>
+<td>1</td>
+</tr>
+
+<tr>
+<td>-hmmrates</td>
+<td>HMM category rates</td>
+<td>List of floating point numbers</td>
+<td>1.0</td>
+</tr>
+
+<tr>
+<td>-hmmprobabilities</td>
+<td>Probability for each HMM category</td>
+<td>List of floating point numbers</td>
+<td>1.0</td>
+</tr>
+
+<tr>
+<td>-adjsite</td>
+<td>Rates at adjacent sites correlated</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-lambda</td>
+<td>Mean block length of sites having the same rate</td>
+<td>Number 1.000 or more</td>
+<td>1.0</td>
+</tr>
+
+<tr>
+<td>-njumble</td>
+<td>Number of times to randomise</td>
+<td>Integer 0 or more</td>
+<td>0</td>
+</tr>
+
+<tr>
+<td>-seed</td>
+<td>Random number seed between 1 and 32767 (must be odd)</td>
+<td>Integer from 1 to 32767</td>
+<td>1</td>
+</tr>
+
+<tr>
+<td>-global</td>
+<td>Global rearrangements</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-outgrno</td>
+<td>Species number to use as outgroup</td>
+<td>Integer 0 or more</td>
+<td>0</td>
+</tr>
+
+<tr>
+<td>-[no]rough</td>
+<td>Speedier but rougher analysis</td>
+<td>Boolean value Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>-[no]trout</td>
+<td>Write out trees to tree file</td>
+<td>Toggle value Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>-outtreefile</td>
+<td>Tree file name</td>
+<td>Output file</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr>
+<td>-printdata</td>
+<td>Print data at start of run</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-[no]progress</td>
+<td>Print indications of progress of run</td>
+<td>Boolean value Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>-[no]treeprint</td>
+<td>Print out tree</td>
+<td>Boolean value Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>-hypstate</td>
+<td>Reconstruct hypothetical sequence</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+</table>
+
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+
+
+
+
+
+
+
+
+<H2>
+    Input file format
+</H2>
+
+<!-- 
+        This includes example input file formats.
+        This should be a detailed description and example - assume
+        someone will want to parse this file and will want to know what
+        happens in unusual cases - null input, etc. 
+   -->
+
+<b>fdnaml</b> reads any normal sequence USAs.
+
+<p>
+
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+<p><h3>File: dnaml.dat</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+   5   13
+Alpha     AACGTGGCCAAAT
+Beta      AAGGTCGCCAAAC
+Gamma     CATTTCGTCACAA
+Delta     GGTATTTCGGCCT
+Epsilon   GGGATCTCGGCCC
+</pre>
+</td></tr></table><p>
+
+
+
+
+
+
+<H2>
+    Output file format
+</H2>
+
+
+<b>fdnaml</b> output starts by giving the number of species, the
+number of sites, and the base frequencies for A, C, G, and T that have
+been specified. It then prints out the transition/transversion ratio
+that was specified or used by default. It also uses the base
+frequencies to compute the actual transition/transversion ratio
+implied by the parameter.
+
+<p>
+If the R (HMM rates) option is used a table of the relative rates of
+expected substitution at each category of sites is printed, as well as
+the probabilities of each of those rates.
+
+<p>
+There then follow the data sequences, if the user has selected the
+menu option to print them out, with the base sequences printed in
+groups of ten bases along the lines of the Genbank and EMBL
+formats. The trees found are printed as an unrooted tree topology
+(possibly rooted by outgroup if so requested). The internal nodes are
+numbered arbitrarily for the sake of identification. The number of
+trees evaluated so far and the log likelihood of the tree are also
+given. Note that the trees printed out have a trifurcation at the
+base. The branch lengths in the diagram are roughly proportional to
+the estimated branch lengths, except that very short branches are
+printed out at least three characters in length so that the
+connections can be seen.
+
+<p>
+A table is printed showing the length of each tree segment (in units
+of expected nucleotide substitutions per site), as well as (very)
+rough confidence limits on their lengths. If a confidence limit is
+negative, this indicates that rearrangement of the tree in that region
+is not excluded, while if both limits are positive, rearrangement is
+still not necessarily excluded because the variance calculation on
+which the confidence limits are based results in an underestimate,
+which makes the confidence limits too narrow.
+
+<p>
+In addition to the confidence limits, the program performs a crude
+Likelihood Ratio Test (LRT) for each branch of the tree. The program
+computes the ratio of likelihoods with and without this branch length
+forced to zero length. This done by comparing the likelihoods changing
+only that branch length. A truly correct LRT would force that branch
+length to zero and also allow the other branch lengths to adjust to
+that. The result would be a likelihood ratio closer to 1. Therefore
+the present LRT will err on the side of being too significant. YOU ARE
+WARNED AGAINST TAKING IT TOO SERIOUSLY. If you want to get a better
+likelihood curve for a branch length you can do multiple runs with
+different prespecified lengths for that branch, as discussed above in
+the discussion of the L option.
+
+<p>
+One should also realize that if you are looking not at a
+previously-chosen branch but at all branches, that you are seeing the
+results of multiple tests. With 20 tests, one is expected to reach
+significance at the P = .05 level purely by chance. You should
+therefore use a much more conservative significance level, such as .05
+divided by the number of tests. The significance of these tests is
+shown by printing asterisks next to the confidence interval on each
+branch length. It is important to keep in mind that both the
+confidence limits and the tests are very rough and approximate, and
+probably indicate more significance than they should. Nevertheless,
+maximum likelihood is one of the few methods that can give you any
+indication of its own error; most other methods simply fail to warn
+the user that there is any error! (In fact, whole philosophical
+schools of taxonomists exist whose main point seems to be that there
+isn't any error, that the "most parsimonious" tree is the best tree by
+definition and that's that).
+
+<p>
+The log likelihood printed out with the final tree can be used to
+perform various likelihood ratio tests. One can, for example, compare
+runs with different values of the expected transition/transversion
+ratio to determine which value is the maximum likelihood estimate, and
+what is the allowable range of values (using a likelihood ratio test,
+which you will find described in mathematical statistics books). One
+could also estimate the base frequencies in the same way. Both of
+these, particularly the latter, require multiple runs of the program
+to evaluate different possible values, and this might get expensive.
+
+<p>
+If the U (User Tree) option is used and more than one tree is
+supplied, and the program is not told to assume autocorrelation
+between the rates at different sites, the program also performs a
+statistical test of each of these trees against the one with highest
+likelihood. If there are two user trees, the test done is one which is
+due to Kishino and Hasegawa (1989), a version of a test originally
+introduced by Templeton (1983). In this implementation it uses the
+mean and variance of log-likelihood differences between trees, taken
+across sites. If the two trees' means are more than 1.96 standard
+deviations different then the trees are declared significantly
+different. This use of the empirical variance of log-likelihood
+differences is more robust and nonparametric than the classical
+likelihood ratio test, and may to some extent compensate for the any
+lack of realism in the model underlying this program.
+
+<p>
+If there are more than two trees, the test done is an extension of the
+KHT test, due to Shimodaira and Hasegawa (1999). They pointed out that
+a correction for the number of trees was necessary, and they
+introduced a resampling method to make this correction. In the version
+used here the variances and covariances of the sum of log likelihoods
+across sites are computed for all pairs of trees. To test whether the
+difference between each tree and the best one is larger than could
+have been expected if they all had the same expected log-likelihood,
+log-likelihoods for all trees are sampled with these covariances and
+equal means (Shimodaira and Hasegawa's "least favorable hypothesis"),
+and a P value is computed from the fraction of times the difference
+between the tree's value and the highest log-likelihood exceeds that
+actually observed. Note that this sampling needs random numbers, and
+so the program will prompt the user for a random number seed if one
+has not already been supplied. With the two-tree KHT test no random
+numbers are used.
+
+<p>
+In either the KHT or the SH test the program prints out a table of the
+log-likelihoods of each tree, the differences of each from the highest
+one, the variance of that quantity as determined by the log-likelihood
+differences at individual sites, and a conclusion as to whether that
+tree is or is not significantly worse than the best one. However the
+test is not available if we assume that there is autocorrelation of
+rates at neighboring sites (option A) and is not done in those cases.
+
+<p>
+The branch lengths printed out are scaled in terms of expected numbers
+of substitutions, counting both transitions and transversions but not
+replacements of a base by itself, and scaled so that the average rate
+of change, averaged over all sites analyzed, is set to 1.0 if there
+are multiple categories of sites. This means that whether or not there
+are multiple categories of sites, the expected fraction of change for
+very small branches is equal to the branch length. Of course, when a
+branch is twice as long this does not mean that there will be twice as
+much net change expected along it, since some of the changes occur in
+the same site and overlie or even reverse each other. The branch
+length estimates here are in terms of the expected underlying numbers
+of changes. That means that a branch of length 0.26 is 26 times as
+long as one which would show a 1% difference between the nucleotide
+sequences at the beginning and end of the branch. But we would not
+expect the sequences at the beginning and end of the branch to be 26%
+different, as there would be some overlaying of changes.
+
+<p>
+Confidence limits on the branch lengths are also given. Of course a
+negative value of the branch length is meaningless, and a confidence
+limit overlapping zero simply means that the branch length is not
+necessarily significantly different from zero. Because of limitations
+of the numerical algorithm, branch length estimates of zero will often
+print out as small numbers such as 0.00001. If you see a branch length
+that small, it is really estimated to be of zero length. Note that
+versions 2.7 and earlier of this program printed out the branch
+lengths in terms of expected probability of change, so that they were
+scaled differently.
+
+<p>
+Another possible source of confusion is the existence of negative
+values for the log likelihood. This is not really a problem; the log
+likelihood is not a probability but the logarithm of a
+probability. When it is negative it simply means that the
+corresponding probability is less than one (since we are seeing its
+logarithm). The log likelihood is maximized by being made more
+positive: -30.23 is worse than -29.14.
+
+<p>
+At the end of the output, if the R option is in effect with multiple
+HMM rates, the program will print a list of what site categories
+contributed the most to the final likelihood. This combination of HMM
+rate categories need not have contributed a majority of the
+likelihood, just a plurality. Still, it will be helpful as a view of
+where the program infers that the higher and lower rates are. Note
+that the use in this calculations of the prior probabilities of
+different rates, and the average patch length, gives this inference a
+"smoothed" appearance: some other combination of rates might make a
+greater contribution to the likelihood, but be discounted because it
+conflicts with this prior information. See the example output below to
+see what this printout of rate categories looks like. A second list
+will also be printed out, showing for each site which rate accounted
+for the highest fraction of the likelihood. If the fraction of the
+likelihood accounted for is less than 95%, a dot is printed instead.
+
+<p>
+Option 3 in the menu controls whether the tree is printed out into the
+output file. This is on by default, and usually you will want to leave
+it this way. However for runs with multiple data sets such as
+bootstrapping runs, you will primarily be interested in the trees
+which are written onto the output tree file, rather than the trees
+printed on the output file. To keep the output file from becoming too
+large, it may be wisest to use option 3 to prevent trees being printed
+onto the output file.
+
+<p>
+Option 4 in the menu controls whether the tree estimated by the
+program is written onto a tree file. The default name of this output
+tree file is "outtree". If the U option is in effect, all the
+user-defined trees are written to the output tree file.
+
+<p>
+Option 5 in the menu controls whether ancestral states are estimated
+at each node in the tree. If it is in effect, a table of ancestral
+sequences is printed out (including the sequences in the tip species
+which are the input sequences). In that table, if a site has a base
+which accounts for more than 95% of the likelihood, it is printed in
+capital letters (A rather than a). If the best nucleotide accounts for
+less than 50% of the likelihood, the program prints out an ambiguity
+code (such as M for "A or C") for the set of nucleotides which, taken
+together, account for more half of the likelihood. The ambiguity codes
+are listed in the sequence programs documentation file. One limitation
+of the current version of the program is that when there are multiple
+HMM rates (option R) the reconstructed nucleotides are based on only
+the single assignment of rates to sites which accounts for the largest
+amount of the likelihood. Thus the assessment of 95% of the
+likelihood, in tabulating the ancestral states, refers to 95% of the
+likelihood that is accounted for by that particular combination of
+rates.
+
+
+<p>
+
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: dnaml.fdnaml</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+
+Nucleic acid sequence Maximum Likelihood method, version 3.6b
+
+ 5 species,  13  sites
+
+    Site categories are:
+
+             1111112222 222
+
+
+    Sites are weighted as follows:
+
+             01111 11111 110
+
+
+Name            Sequences
+----            ---------
+
+Alpha        AACGTGGCCA AAT
+Beta         AAGGTCGCCA AAC
+Gamma        CATTTCGTCA CAA
+Delta        GGTATTTCGG CCT
+Epsilon      GGGATCTCGG CCC
+
+
+
+Empirical Base Frequencies:
+
+   A       0.23636
+   C       0.29091
+   G       0.25455
+  T(U)     0.21818
+
+Transition/transversion ratio =   2.000000
+
+
+State in HMM    Rate of change    Probability
+
+        1           0.264            0.522
+        2           1.413            0.399
+        3           3.596            0.076
+        4           7.086            0.0036
+        5          12.641            0.000023
+
+
+
+Site category   Rate of change
+
+        1           1.000
+        2           2.000
+
+
+
+                                                             +Epsilon   
+  +----------------------------------------------------------3  
+  |                                                          +Delta     
+  |  
+  |  +------Gamma     
+  2--1  
+  |  +Beta      
+  |  
+  +-Alpha     
+
+
+remember: this is an unrooted tree!
+
+Ln Likelihood =   -57.89164
+
+ Between        And            Length      Approx. Confidence Limits
+ -------        ---            ------      ------- ---------- ------
+
+     2          Alpha             0.26902     (     zero,     0.80593) *
+     2             3              7.83947     (     zero,    22.44277) **
+     3          Epsilon           0.13647     (     zero,     0.59801)
+     3          Delta             0.13781     (     zero,     0.59867)
+     2             1              0.00006     (     zero,     0.54477)
+     1          Gamma             0.95525     (     zero,     2.45593) **
+     1          Beta              0.04509     (     zero,     0.48078)
+
+     *  = significantly positive, P &lt; 0.05
+     ** = significantly positive, P &lt; 0.01
+
+Combination of categories that contributes the most to the likelihood:
+
+             1132121111 211
+
+Most probable category at each site if &gt; 0.95 probability ("." otherwise)
+
+             .......... ...
+
+</pre>
+</td></tr></table><p>
+<p><h3>File: dnaml.treefile</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+((Epsilon:0.13647,Delta:0.13781):7.83947,(Gamma:0.95525,
+Beta:0.04509):0.00006,Alpha:0.26902);
+</pre>
+</td></tr></table><p>
+
+
+
+
+
+
+<H2>
+    Data files
+</H2>
+
+None
+
+
+<H2>
+    Notes
+</H2>
+
+<!-- 
+        Restrictions.
+        Interesting behaviour.
+        Useful things you can do with this program.
+   -->
+
+None.
+
+
+
+
+
+
+
+<H2>
+    References
+</H2>
+
+<!-- 
+        Bibliography for methods used.
+   -->
+
+None.
+
+
+
+
+
+
+
+
+<H2>
+    Warnings
+</H2>
+
+<!-- 
+        Potentially stupid things the program will let you do.
+   -->
+
+None.
+
+
+
+
+
+
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+<!-- 
+        Error messages specific to this program, eg:
+        "FATAL xxx" - means you have not set up the xxx data using program <b>prog</b>.<p>
+   -->
+
+None.
+
+
+
+
+
+
+
+<H2>
+    Exit status
+</H2>
+
+<!-- 
+        Description of the exit status for various error conditions
+   -->
+
+It always exits with status 0.
+
+
+
+
+
+
+
+
+<H2>
+    Known bugs
+</H2>
+
+
+<!-- 
+        Bugs noted but not yet fixed.
+   -->
+
+None.
+
+
+
+
+
+
+
+
+<!--
+<H2>
+    See also
+</H2>
+-->
+<h2><a name="See also">See also</a></h2>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th><th>Description</th></tr>
+<tr><td><a href="../phylip/ednacomp.html">ednacomp</a></td><td>DNA compatibility algorithm</td></tr>
+<tr><td><a href="../phylip/ednadist.html">ednadist</a></td><td>Nucleic acid sequence Distance Matrix program</td></tr>
+<tr><td><a href="../phylip/ednainvar.html">ednainvar</a></td><td>Nucleic acid sequence Invariants method</td></tr>
+<tr><td><a href="../phylip/ednaml.html">ednaml</a></td><td>Estimates phylogenies from nucleic acid sequence Maximum Likelihood</td></tr>
+<tr><td><a href="../phylip/ednamlk.html">ednamlk</a></td><td>Estimates phylogenies from nucleic acid sequence Maximum Likelihood with molecular clock</td></tr>
+<tr><td><a href="../phylip/ednapars.html">ednapars</a></td><td>DNA parsimony algorithm</td></tr>
+<tr><td><a href="../phylip/ednapenny.html">ednapenny</a></td><td>Penny algorithm for DNA</td></tr>
+<tr><td><a href="../phylip/eprotdist.html">eprotdist</a></td><td>Protein distance algorithm</td></tr>
+<tr><td><a href="../phylip/eprotpars.html">eprotpars</a></td><td>Protein parsimony algorithm</td></tr>
+<tr><td><a href="../phylip/erestml.html">erestml</a></td><td>Restriction site Maximum Likelihood method</td></tr>
+<tr><td><a href="../phylip/eseqboot.html">eseqboot</a></td><td>Bootstrapped sequences algorithm</td></tr>
+<tr><td><a href="fdiscboot.html">fdiscboot</a></td><td>Bootstrapped discrete sites algorithm</td></tr>
+<tr><td><a href="fdnacomp.html">fdnacomp</a></td><td>DNA compatibility algorithm</td></tr>
+<tr><td><a href="fdnadist.html">fdnadist</a></td><td>Nucleic acid sequence Distance Matrix program</td></tr>
+<tr><td><a href="fdnainvar.html">fdnainvar</a></td><td>Nucleic acid sequence Invariants method</td></tr>
+<tr><td><a href="fdnamlk.html">fdnamlk</a></td><td>Estimates nucleotide phylogeny by maximum likelihood</td></tr>
+<tr><td><a href="fdnamove.html">fdnamove</a></td><td>Interactive DNA parsimony</td></tr>
+<tr><td><a href="fdnapars.html">fdnapars</a></td><td>DNA parsimony algorithm</td></tr>
+<tr><td><a href="fdnapenny.html">fdnapenny</a></td><td>Penny algorithm for DNA</td></tr>
+<tr><td><a href="fdolmove.html">fdolmove</a></td><td>Interactive Dollo or Polymorphism Parsimony</td></tr>
+<tr><td><a href="ffreqboot.html">ffreqboot</a></td><td>Bootstrapped genetic frequencies algorithm</td></tr>
+<tr><td><a href="fproml.html">fproml</a></td><td>Protein phylogeny by maximum likelihood</td></tr>
+<tr><td><a href="fpromlk.html">fpromlk</a></td><td>Protein phylogeny by maximum likelihood</td></tr>
+<tr><td><a href="fprotdist.html">fprotdist</a></td><td>Protein distance algorithm</td></tr>
+<tr><td><a href="fprotpars.html">fprotpars</a></td><td>Protein pasimony algorithm</td></tr>
+<tr><td><a href="frestboot.html">frestboot</a></td><td>Bootstrapped restriction sites algorithm</td></tr>
+<tr><td><a href="frestdist.html">frestdist</a></td><td>Computes distance matrix from restriction sites or fragments</td></tr>
+<tr><td><a href="frestml.html">frestml</a></td><td>Restriction site maximum Likelihood method</td></tr>
+<tr><td><a href="fseqboot.html">fseqboot</a></td><td>Bootstrapped sequences algorithm</td></tr>
+<tr><td><a href="fseqbootall.html">fseqbootall</a></td><td>Bootstrapped sequences algorithm</td></tr>
+</table>
+
+<!-- 
+        Add any comments about other associated programs (to prepare
+        data files?) that seealso doesn't find. 
+   -->
+
+
+
+
+
+
+
+
+
+
+<H2>
+    Author(s)
+</H2>
+
+This program is an EMBOSS conversion of a program written by Joe
+Felsenstein as part of his PHYLIP package.
+
+<p>
+Although we take every care to ensure that the results of the EMBOSS
+version are identical to those from the original package, we recommend
+that you check your inputs give the same results in both versions
+before publication.
+
+<p>
+Please report all bugs in the EMBOSS version to the EMBOSS bug team,
+not to the original author.
+
+
+<H2>
+    History
+</H2>
+
+Written (2004) - Joe Felsenstein, University of Washington.
+<p>
+Converted (August 2004) to an EMBASSY program by the EMBOSS team.
+
+
+
+
+<H2>
+    Target users
+</H2>
+
+<!--
+        For general users, requested by one user, for EMBOSS site
+        maintainers, for EMBOSS developers etc.
+        eg:
+        "This program is intended to be used by everyone and everything,
+        from naive users to embedded scripts." 
+	Which is easy to include using:
+   -->
+
+This program is intended to be used by everyone and everything, from naive users to embedded scripts.
+
+
+
+
+
+
+
+
+
+
+
+
+</BODY>
+</HTML>
+

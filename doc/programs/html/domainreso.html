@@ -1,0 +1,572 @@
+<!-- START OF HEADER -->
+<HTML><HEAD>
+<TITLE> EMBOSS: DOMAINRESO documentation. </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+<table align=center border=0 cellspacing=0 cellpadding=0>
+<tr><td valign=top>
+<A HREF="../index.html" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="../../emboss_icon.jpg" alt="" width=150 height=48></a>
+</td>
+<td align=left valign=middle>
+<b><font size="+6">
+
+<H2> DOMAINRESO documentation </H2>
+</font></b>
+</td></tr>
+</table>
+<br>&nbsp;
+<p>
+
+
+
+
+
+
+<!-- CONTENTS
+     This always includes the sections below.
+     Other subsections can be added for individual applications.
+-->
+<br><H2>CONTENTS </H2>
+<b> <a href="#1.0">1.0     SUMMARY                   </a></b><br>
+<b> <a href="#2.0">2.0     INPUTS & OUTPUTS          </a></b><br>
+<b> <a href="#3.0">3.0     INPUT FILE FORMAT         </a></b><br>
+<b> <a href="#4.0">4.0     OUTPUT FILE FORMAT        </a></b><br>
+<b> <a href="#5.0">5.0     DATA FILES                </a></b><br>
+<b> <a href="#6.0">6.0     USAGE                     </a></b><br>    
+<b> <a href="#7.0">7.0     KNOWN BUGS & WARNINGS     </a></b><br>    
+<b> <a href="#8.0">8.0     NOTES                     </a></b><br>
+<b> <a href="#9.0">9.0     DESCRIPTION               </a></b><br>
+<b> <a href="#10.0">10.0   ALGORITHM                 </a></b><br>
+<b> <a href="#11.0">11.0   RELATED APPLICATIONS      </a></b><br>
+<b> <a href="#12.0">12.0   DIAGNOSTIC ERROR MESSAGES </a></b><br>
+<b> <a href="#13.0">13.0   AUTHORS                   </a></b><br>
+<b> <a href="#14.0">14.0   REFERENCES                </a></b><br>
+
+<!-- SUMMARY
+     Succint description of the application, particularly its inputs, outputs
+     and what it does.  The same text is given at the top of the source (.c)
+     file and in the <documentation> attribute of the <application definition>
+     of the ACD file.
+-->
+<a name="1.0"></a>
+<br><br><br><H2> 1.0   SUMMARY  </H2>
+
+
+Removes low resolution domains from a DCF file (domain classification file)
+
+
+
+
+<!-- INPUTS & OUTPUTS
+     Short summary of the application inputs and outputs in its different 
+     modes of usage (if appropriate). More detail than the summary.
+-->
+<a name="2.0"></a>
+<br><br><br><H2> 2.0   INPUTS & OUTPUTS          </H2>
+DOMAINRESO reads a DCF file and writes a DCF file
+containing the same domains excluding those whose resolution (Angstrom)
+ of structure determination exceeds a user-defined threshold.  The resolution
+ data are taken from CCF (clean coordinate files) whose path and file extension
+(via the ACD file) are specified by the user.  The names of the input and output 
+files are also specified by the user. 
+
+
+
+<!-- INPUT FILE FORMAT 
+     Description and example(s) of input file formats.  Should provide enough
+     information to write and parse the file.  Should describe the format in 
+     unusual cases - null input, etc.
+
+     Cannot use the test data files because they might be empty or need 
+     hand-editing 
+
+     Use "<b>DOMAINRESO</b> reads any normal sequence USAs." if
+     appropriate.
+-->
+<a name="3.0"></a>
+<br><br><br><H2> 3.0   INPUT FILE FORMAT         </H2>
+The format of the DCF file is described in the <a href="scopparse.html">SCOPPARSE documentation.</a>
+
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+<p><h3>File: all.scop</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+ID   D1CS4A_
+XX
+EN   1CS4
+XX
+TY   SCOP
+XX
+SI   53931 CL; 54861 FO; 55073 SF; 55074 FA; 55077 DO; 55078 SO; 39418 DD;
+XX
+CL   Alpha and beta proteins (a+b)
+XX
+FO   Ferredoxin-like
+XX
+SF   Adenylyl and guanylyl cyclase catalytic domain
+XX
+FA   Adenylyl and guanylyl cyclase catalytic domain
+XX
+DO   Adenylyl cyclase VC1, domain C1a
+XX
+OS   Dog (Canis familiaris)
+XX
+NC   1
+XX
+CN   [1]
+XX
+CH   A CHAIN; . START; . END;
+//
+ID   D1II7A_
+XX
+EN   1II7
+XX
+TY   SCOP
+XX
+SI   53931 CL; 56299 FO; 56300 SF; 64427 FA; 64428 DO; 64429 SO; 62415 DD;
+XX
+CL   Alpha and beta proteins (a+b)
+XX
+FO   Metallo-dependent phosphatases
+XX
+SF   Metallo-dependent phosphatases
+XX
+FA   DNA double-strand break repair nuclease
+XX
+DO   Mre11
+XX
+OS   Archaeon Pyrococcus furiosus
+XX
+NC   1
+XX
+CN   [1]
+XX
+CH   A CHAIN; . START; . END;
+//
+</pre>
+</td></tr></table><p>
+
+
+<!-- OUTPUT FILE FORMAT 
+     Description and example(s) of output file formats.  Should provide enough
+     information to write and parse the file.  Should describe the format in 
+     unusual cases - null input, etc.  
+     If the standard description of the avalable report formats is required, 
+     use:   #include file="inc/reportformats.ihtml"
+     Use "Outputs a graph to the specified graphics device."
+     or  "outputs a report format file. The default format is ..."
+     if appropriate.
+-->
+<a name="4.0"></a>
+<br><br><br><H2> 4.0   OUTPUT FILE FORMAT         </H2>
+The format of the DCF file is described in the <a href="scopparse.html">SCOPPARSE documentation.</a>
+
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: all_2.3.scop</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+ID   D1II7A_
+XX
+EN   1II7
+XX
+TY   SCOP
+XX
+SI   53931 CL; 56299 FO; 56300 SF; 64427 FA; 64428 DO; 64429 SO; 62415 DD;
+XX
+CL   Alpha and beta proteins (a+b)
+XX
+FO   Metallo-dependent phosphatases
+XX
+SF   Metallo-dependent phosphatases
+XX
+FA   DNA double-strand break repair nuclease
+XX
+DO   Mre11
+XX
+OS   Archaeon Pyrococcus furiosus
+XX
+NC   1
+XX
+CN   [1]
+XX
+CH   A CHAIN; . START; . END;
+//
+</pre>
+</td></tr></table><p>
+
+
+
+
+<!-- DATA FILES         
+     Any data files used (e.g. translation table file, substitution matrix 
+     etc.  This includes example data file formats if they are not obvious.
+     For a standard description of what data files are and how embossdata can
+     be used to inspect and retrieve them, use:
+     #include file="inc/localfiles.ihtml" 
+-->
+
+<a name="5.0"></a>
+<br><br><br><H2> 5.0   DATA FILES                </H2>
+DOMAINRESO does not use any data files.
+
+
+
+
+
+
+
+<!-- USAGE
+     Example usage, as run from the command-line.
+     Many examples illustrating different behaviours is good.
+-->
+<a name="6.0"></a>
+<br><br><br><H2> 6.0   USAGE                     </H2>
+<H3> 6.1   COMMAND LINE ARGUMENTS </H3>
+ 
+<pre>
+   Standard (Mandatory) qualifiers:
+  [-cpdbpath]          dirlist    This option specifies the location of domain
+                                  CCF file (clean coordinate files) (input).
+                                  A 'clean cordinate file' contains coordinate
+                                  and other data for a single PDB file or a
+                                  single domain from SCOP or CATH, in CCF
+                                  format (EMBL-like). The files, generated by
+                                  using PDBPARSE (pdb files) or DOMAINER
+                                  (domains), contain 'cleaned-up' data that is
+                                  self-consistent and error-corrected.
+                                  Records for residue solvent accessibility
+                                  and secondary structure are added to the
+                                  file by using PDBPLUS.
+  [-dcfinfile]         infile     This option specifies the name of DCF file
+                                  (domain classification file) (input). A
+                                  'domain classification file' contains
+                                  classification and other data for domains
+                                  from SCOP or CATH, in DCF format
+                                  (EMBL-like). The files are generated by
+                                  using SCOPPARSE and CATHPARSE. Domain
+                                  sequence information can be added to the
+                                  file by using DOMAINSEQS.
+   -threshold          float      This option specifies the threshold for
+                                  inclusion (Angstroms). Domains exceeding the
+                                  threshold for inclusion (Angstroms) will
+                                  not be given in the output file.
+  [-dcfoutfile]        outfile    This option specifies the name of DCF file
+                                  (domain classification file) (output). A
+                                  'domain classification file' contains
+                                  classification and other data for domains
+                                  from SCOP or CATH, in DCF format
+                                  (EMBL-like). The files are generated by
+                                  using SCOPPARSE and CATHPARSE. Domain
+                                  sequence information can be added to the
+                                  file by using DOMAINSEQS.
+
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers: (none)
+   Associated qualifiers:
+
+   "-dcfoutfile" associated qualifiers
+   -odirectory3        string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report deaths
+
+
+</pre>
+</td></tr></table>
+<P>
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-cpdbpath]<br>(Parameter 1)</td>
+<td>This option specifies the location of domain CCF file (clean coordinate files) (input). A 'clean cordinate file' contains coordinate and other data for a single PDB file or a single domain from SCOP or CATH, in CCF format (EMBL-like). The files, generated by using PDBPARSE (pdb files) or DOMAINER (domains), contain 'cleaned-up' data that is self-consistent and error-corrected. Records for residue solvent accessibility and secondary structure are added to the file by using PDBPLUS.</td>
+<td>Directory with files</td>
+<td>./</td>
+</tr>
+
+<tr>
+<td>[-dcfinfile]<br>(Parameter 2)</td>
+<td>This option specifies the name of DCF file (domain classification file) (input). A 'domain classification file' contains classification and other data for domains from SCOP or CATH, in DCF format (EMBL-like). The files are generated by using SCOPPARSE and CATHPARSE. Domain sequence information can be added to the file by using DOMAINSEQS.</td>
+<td>Input file</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>-threshold</td>
+<td>This option specifies the threshold for inclusion (Angstroms). Domains exceeding the threshold for inclusion (Angstroms) will not be given in the output file.</td>
+<td>Any numeric value</td>
+<td>2.8</td>
+</tr>
+
+<tr>
+<td>[-dcfoutfile]<br>(Parameter 3)</td>
+<td>This option specifies the name of DCF file (domain classification file) (output). A 'domain classification file' contains classification and other data for domains from SCOP or CATH, in DCF format (EMBL-like). The files are generated by using SCOPPARSE and CATHPARSE. Domain sequence information can be added to the file by using DOMAINSEQS.</td>
+<td>Output file</td>
+<td>test.scop</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Additional (Optional) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+</table>
+
+
+
+
+<H3> 6.2 EXAMPLE SESSION </H3>
+An example of interactive use of DOMAINRESO is shown below.
+
+The DCF file /test_data/all.scop was read and a DCF
+file called /test_data/domainreso/all_2.3.scop was written containing
+only those domains of 2.3 Angstrom resolution or better.  Resolution data
+were taken from domain coordinte files in the directory /test_data.
+
+<b>Here is a sample session with domainreso</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>domainreso </b>
+Removes low resolution domains from a DCF file (domain classification
+file).
+Location of domain CCF file (clean coordinate files) (input). [./]: <b>structure</b>
+Name of DCF file (domain classification file) (input).: <b>all.scop</b>
+Threshold for inclusion (Angstroms). [2.8]: <b>2.3</b>
+Name of DCF file (domain classification file) (output). [test.scop]: <b>all_2.3.scop</b>
+
+/ebi/services/idata/pmr/hgmp/test/data/structure/1cs4.ccf
+/ebi/services/idata/pmr/hgmp/test/data/structure/1ii7.ccf
+/ebi/services/idata/pmr/hgmp/test/data/structure/d1cs4a_.ccf
+/ebi/services/idata/pmr/hgmp/test/data/structure/d1ii7a_.ccf
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
+
+
+
+<br> 
+<br>The following command line would achieve the same result.
+<br>
+<table><td bgcolor="#FFCCFF">
+<pre> 
+domainreso /test_data /test_data/all.scop /test_data/domainreso/all_2.3.scop -threshold 2.3<br>
+</pre> 
+</table>
+
+<!-- KNOWN BUGS & WARNINGS
+     Bugs that have not yet been fixed, easily missued features, problems
+     and caveats etc. Potentially stupid things the program will let you do.
+-->
+<a name="7.0"></a>
+<br><br><br><H2> 7.0   KNOWN BUGS & WARNINGS     </H2>
+No known bugs.
+
+
+
+
+
+<!-- NOTES
+     Important general remarks, including:
+       Restrictions.
+       Interesting behaviour.
+       Useful things you can do with this program.
+       Future plans.
+       etc.
+-->
+<a name="8.0"></a>
+<br><br><br><H2> 8.0   NOTES                     </H2>
+Domains that lack a value for resolution in the CCF file 
+(e.g. theoretical models and NMR structures) are included in the output
+file.
+
+
+
+<H3> 8.1   GLOSSARY OF FILE TYPES    </H3>
+<table BORDER CELLSPACING=5 CELLPADDING=5 BGCOLOR="#f5f5ff" >
+<tr>
+<td><b>FILE TYPE</b></td>
+<td><b>FORMAT</b></td>
+<td><b>DESCRIPTION</b></td>
+<td><b>CREATED BY <b></td>
+<td><b>SEE ALSO</b></td>
+</tr>
+<tr>
+<td><b> Domain classification file (for SCOP)</b></td>
+<td> DCF format (EMBL-like format for domain classification data). </td>
+<td> Classification and other data for domains from SCOP. </td>
+<td> <a href="scopparse.html">SCOPPARSE</a> </td>
+<td> Domain sequence information can be added to the file by using DOMAINSEQS.  </td>
+</tr>
+<tr>
+<td><b> Domain classification file (for CATH)</b></td>
+<td> DCF format (EMBL-like format for domain classification data). </td>
+<td> Classification and other data for domains from CATH. </td>
+<td> <a href="cathparse.html">CATHPARSE</a> </td>
+<td> Domain sequence information can be added to the file by using DOMAINSEQS.  </td>
+</tr>
+<tr>
+<td><b> Clean coordinate file (for domain)</b></td>
+<td> CCF format (EMBL-like format for protein coordinate and derived data).</td>
+<td> Coordinate and other data for a single domain from SCOP or CATH. The data are 'cleaned-up': self-consistent and error-corrected. </td>
+<td> <a href="domainer.html">DOMAINER</a></td>
+<td> Records for residue solvent accessibility and secondary structure are added to the file by using PDBPLUS.</td>
+</tr>
+</table>
+
+
+
+
+
+None
+
+
+
+<!-- DESCRIPTION
+     A complete, non-technical, user-level description of the application.
+-->
+<a name="9.0"></a>
+<br><br><br><H2> 9.0   DESCRIPTION               </H2>
+It is desirable to omit poor resolution protein structures when performing
+certain analyses of protein domains.  DOMAINRESO reads a DCF file (domain classification
+file) and writes one containing the same domains excluding those whose 
+resolution (Angstrom) of structure determination exceeds a user-defined 
+threshold.
+
+
+
+
+
+<!-- ALGORITHM
+     A technical description of algorithmic aspects, describing exactly how
+     the key aspects of the application work.
+-->
+<a name="10.0"></a>
+<br><br><br><H2> 10.0  ALGORITHM                 </H2>
+
+None.
+
+
+
+
+
+<!-- RELATED APPLICATIONS
+     Other applications that either generate the input, use the output or 
+     are in some other way related to the application are described here. 
+     (Take this from "Sister applications" in the old documentation)
+-->
+<a name="11.0"></a>
+<br><br><br><H2> 11.0  RELATED APPLICATIONS      </H2>
+
+
+<h2><a name="See also">See also</a></h2>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th><th>Description</th></tr>
+<tr><td><a href="../construct/contactcount.html">contactcount</a></td><td>Counts specific versus non-specific contacts in a directory of cleaned protein chain contact files</td></tr>
+<tr><td><a href="contacts.html">contacts</a></td><td>Reads CCF files (clean coordinate files) and writes CON files (contact files) of intra-chain residue-residue contact data</td></tr>
+<tr><td><a href="domainalign.html">domainalign</a></td><td>Generates DAF files (domain alignment files) of structure-based sequence alignments for nodes in a DCF file (domain classification file)</td></tr>
+<tr><td><a href="domainrep.html">domainrep</a></td><td>Reorder DCF file (domain classification file) so that the representative structure of each user-specified node is given first</td></tr>
+<tr><td><a href="interface.html">interface</a></td><td>Reads CCF files (clean coordinate files) and writes CON files (contact files) of inter-chain residue-residue contact data</td></tr>
+<tr><td><a href="libgen.html">libgen</a></td><td>Generates various types of discriminating elements for each alignment in a directory</td></tr>
+<tr><td><a href="../../apps/psiphi.html">psiphi</a></td><td>Calculates phi and psi torsion angles from cleaned EMBOSS-style protein co-ordinate file</td></tr>
+<tr><td><a href="rocon.html">rocon</a></td><td>Reads a DHF file (domain hits file) of hits (sequences of unknown structural classification) and a DHF file of validation sequences (known classification) and writes a 'hits file' for the hits, which are classified and rank-ordered on the basis of score</td></tr>
+<tr><td><a href="rocplot.html">rocplot</a></td><td>Provides interpretation and graphical display of the performance of discriminating elements (e.g. profiles for protein families). rocplot reads file(s) of hits from discriminator-database search(es), performs ROC analysis on the hits, and writes graphs illustrating the diagnostic performance of the discriminating elements</td></tr>
+<tr><td><a href="seqalign.html">seqalign</a></td><td>Reads a DAF file (domain alignment file) and a DHF file (domain hits file) and writes a DAF file extended with the hits</td></tr>
+<tr><td><a href="seqfraggle.html">seqfraggle</a></td><td>Removes fragments from DHF files (domain hits files) or other files of sequences</td></tr>
+<tr><td><a href="seqsearch.html">seqsearch</a></td><td>Generate database hits (sequences) for nodes in a DCF file (domain classification file) by using PSI-BLAST</td></tr>
+<tr><td><a href="seqsort.html">seqsort</a></td><td>Reads DHF files (domain hits files) of database hits (sequences) and removes hits of ambiguous classification</td></tr>
+<tr><td><a href="seqwords.html">seqwords</a></td><td>Generates DHF files (domain hits files) of database hits (sequences) for nodes in a DCF file (domain classification file) by keyword search of UniProt</td></tr>
+<tr><td><a href="siggen.html">siggen</a></td><td>Generates a sparse protein signature from an alignment and residue contact data</td></tr>
+<tr><td><a href="sigscan.html">sigscan</a></td><td>Generates a DHF file (domain hits file) of hits (sequences) from scanning a signature against a sequence database</td></tr>
+</table>
+
+
+
+
+
+
+<!-- DIAGNOSTIC ERROR MESSAGES
+     Description of error messages or log file, if one is written.
+-->
+<a name="12.0"></a>
+<br><br><br><H2> 12.0  DIAGNOSTIC ERROR MESSAGES </H2>
+None.
+
+
+
+
+
+
+<!-- AUTHORS -->
+<a name="13.0"><br><br><br><H2> 13.0  AUTHORS                   </H2></a>
+Mat Blades <a href="mailto:Matthew.Blades@astrazeneca.com">(Matthew.Blades@astrazeneca.com)</a>
+<br><br>
+Jon Ison <a href="mailto:jison@rfcgr.mrc.ac.uk">(jison@rfcgr.mrc.ac.uk)</a>
+<br>
+MRC Rosalind Franklin Centre for Genomics Research
+Wellcome Trust Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
+
+
+
+
+<!-- REFERENCES
+     Quote the paper where the application was first published, described, used etc. 
+-->
+<a name="14.0"></a>
+<br><br><br><H2> 14.0  REFERENCES                </H2>
+
+Please cite the authors and EMBOSS.
+<br><br>
+<i>Rice P, Longden I and Bleasby A (2000) "EMBOSS - The European
+Molecular Biology Open Software Suite"  Trends in Genetics,
+15:276-278.
+
+<p>
+See also <a href="http://emboss.sourceforge.net/">http://emboss.sourceforge.net/</a></i>
+
+
+
+<H3>14.1 Other useful references  </H3>
+
+<br>
+
+</BODY>
+</HTML>

@@ -1,24 +1,24 @@
 
                                   twofeat 
-                                      
-   
-   
+
+
+
 Function
 
    Finds neighbouring pairs of features in sequences
-   
+
 Description
 
    twofeat reads in the feature tables of sequences and reports
    occurances of pairs of specified features.
-   
+
    This is intended for use as a simple data-mining tool to enable you to
    look for instances of pairs of features that occur near to each other
    in the same sequence entry.
-   
+
    For each of the pair of features, you can specify its type name, its
    sense, its score and any tag/value pairs, amongst other things.
-   
+
    You can then specify the type of relationship that the two features
    should have. You can specify the minimum and maximum distance between
    them. You can specify the type of overlap allowed: Any type of overlap
@@ -31,13 +31,13 @@ Description
    You can specify that the features should be in any sense, in the same
    sense or in opposite senses. You can specify that the features should
    be in any order, Feature A then feature B, Feature B then feature A.
-   
+
    By default the resulting pairs of features found are then written to a
    report file as a single feature from the first postion of the
    left-most feature to the last position of the right-most feature. You
    can modify the output to report the pairs of features with no changes
    made to them.
-   
+
 Algorithm
 
 For each sequence:
@@ -49,10 +49,10 @@ For each sequence:
 Usage
 
    Here is a sample session with twofeat
-   
+
    Without the -twoout option the output report contains just one feature
    for every pair of features found.
-   
+
 
 % twofeat tembl:hsfau 
 Finds neighbouring pairs of features in sequences
@@ -61,16 +61,16 @@ Type of second feature [*]: polyA_site
 The minimum distance between the features [0]: 10
 The maximum distance between the features [0]: 50
 Output report [hsfau.twofeat]: 
-   
+
    Go to the input files for this example
    Go to the output files for this example
-   
+
    Example 2
-   
+
    The -twoout option makes the output report give the pairs of features
    found. The ouput report format type has been changed to display the
    full original pairs of faetures in GFF format.
-   
+
 
 % twofeat -twoout -rformat gff tembl:hsfau 
 Finds neighbouring pairs of features in sequences
@@ -79,9 +79,9 @@ Type of second feature [*]: polyA_site
 The minimum distance between the features [0]: 10
 The maximum distance between the features [0]: 50
 Output report [hsfau.twofeat]: 
-   
+
    Go to the output files for this example
-   
+
 Command line arguments
 
    Standard (Mandatory) qualifiers:
@@ -325,7 +325,7 @@ Command line arguments
    -error               boolean    Report errors
    -fatal               boolean    Report fatal errors
    -die                 boolean    Report deaths
-   
+
 
    Standard (Mandatory) qualifiers Allowed values Default
    [-sequence]
@@ -475,7 +475,7 @@ Command line arguments
    -twoout If you set this to be true, then the two features themselves
    will be written out. If it is left as false, then a single feature
    will be written out covering the two features you found. Toggle value
-   Yes/No N
+   Yes/No No
    -typeout If you have specified that the pairs of features that are
    found should be reported as one feature in the ouput, then you can
    specify the 'type' name of the new feature here. By default every
@@ -488,18 +488,18 @@ Command line arguments
    misc_feature
    Advanced (Unprompted) qualifiers Allowed values Default
    (none)
-   
+
 Input file format
 
    twofeat reads any normal sequence USAs.
-   
+
   Input files for usage example
-  
+
    'tembl:hsfau' is a sequence entry in the example nucleic acid database
    'tembl'
-   
+
   Database entry: tembl:hsfau
-  
+
 ID   HSFAU      standard; RNA; HUM; 518 BP.
 XX
 AC   X65923;
@@ -586,30 +586,29 @@ SQ   Sequence 518 BP; 125 A; 139 C; 148 G; 106 T; 0 other;
      tctaataaaa aagccactta gttcagtcaa aaaaaaaa                               51
 8
 //
-   
+
 Output file format
 
    The output is a standard EMBOSS report file.
-   
+
    The results can be output in one of several styles by using the
    command-line qualifier -rformat xxx, where 'xxx' is replaced by the
    name of the required format. The available format names are: embl,
    genbank, gff, pir, swiss, trace, listfile, dbmotif, diffseq, excel,
    feattable, motif, regions, seqtable, simple, srs, table, tagseq
-   
-   See:
-   http://www.uk.embnet.org/Software/EMBOSS/Themes/ReportFormats.html for
-   further information on report formats.
-   
+
+   See: http://emboss.sf.net/docs/themes/ReportFormats.html for further
+   information on report formats.
+
    twofeat outputs a report format file. The default format is table
-   
+
   Output files for usage example
-  
+
   File: hsfau.twofeat
-  
+
 ########################################
 # Program: twofeat
-# Rundate: Tue Apr 06 14:34:36 2004
+# Rundate: Thu Jul 15 2004 12:00:00
 # Report_format: table
 # Report_file: hsfau.twofeat
 ########################################
@@ -625,50 +624,50 @@ Output file format
 
 #---------------------------------------
 #---------------------------------------
-   
+
   Output files for usage example 2
-  
+
   File: hsfau.twofeat
-  
+
 ##gff-version 2.0
-##date 2004-04-06
+##date 2004-07-15
 ##Type DNA HSFAU
 HSFAU   EMBL    polyA_signal    484     489     0.000   +       .       Sequenc
 e "HSFAU.6"
 HSFAU   EMBL    polyA_site      509     509     0.000   +       .       Sequenc
 e "HSFAU.7" ; FeatFlags "0x40"
-   
+
 Data files
 
    None.
-   
+
 Notes
 
    It can't find features that are not in the input sequences. It has no
    way of checking whether the input features are correct or not.
    Remember this when you are searching public databases.
-   
+
 References
 
    None.
-   
+
 Warnings
 
    None.
-   
+
 Diagnostic Error Messages
 
    None.
-   
+
 Exit status
 
    It always exits with status 0.
-   
+
 Known bugs
 
    There is a slight memory leak that must be fixed at some time. This
    does no affect the results.
-   
+
 See also
 
    Program name                      Description
@@ -676,18 +675,22 @@ See also
    extractfeat  Extract features from a sequence
    maskfeat     Mask off features of a sequence
    showfeat     Show features of a sequence
-   
+
 Author(s)
 
    Gary Williams (gwilliam © rfcgr.mrc.ac.uk)
    MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
    Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
-   
+
 History
 
    Written (2002) - Gary Williams
-   
+
 Target users
 
    This program is intended to be used by everyone and everything, from
    naive users to embedded scripts.
+
+Comments
+
+   None

@@ -1,54 +1,54 @@
 
                                  pasteseq 
-                                      
-   
-   
+
+
+
 Function
 
    Insert one sequence into another
-   
+
 Description
 
    This simple editing program allows you to insert one sequence into
    another sequence after a specified position and to then write out the
    results to a sequence file.
-   
+
 Usage
 
    Here is a sample session with pasteseq
-   
+
    To insert the sequence 'tsw:flav_nossm' after position 67 in sequence
    'tsw:amir_pseae' and write the results to the file 'amir_pseae.fasta':
-   
+
 
 % pasteseq tsw:amir_pseae tsw:flav_nossm -pos=67 
 Insert one sequence into another
 Output sequence [amir_pseae.fasta]: 
-   
+
    Go to the input files for this example
    Go to the output files for this example
-   
+
    Example 2
-   
+
    This does the same thing, but the output qualifier is explicitly used:
-   
-   
+
+
 % pasteseq tsw:amir_pseae tsw:flav_nossm -out=amirplus.seq -pos=67 
 Insert one sequence into another
 
    Go to the output files for this example
-   
+
    Example 3
-   
+
    To insert the sequence 'tsw:flav_nossm' before the start of sequence
    'tsw:amir_pseae' use -pos=0:
-   
-   
+
+
 % pasteseq tsw:amir_pseae tsw:flav_nossm -out=amirplus.seq -pos=0 
 Insert one sequence into another
 
    Go to the output files for this example
-   
+
 Command line arguments
 
    Standard (Mandatory) qualifiers:
@@ -122,7 +122,7 @@ Command line arguments
    -error               boolean    Report errors
    -fatal               boolean    Report fatal errors
    -die                 boolean    Report deaths
-   
+
 
    Standard (Mandatory) qualifiers Allowed values Default
    [-asequence]
@@ -138,18 +138,18 @@ Command line arguments
    (none)
    Advanced (Unprompted) qualifiers Allowed values Default
    (none)
-   
+
 Input file format
 
    pasteseq reads 2 normal sequence USAs.
-   
+
   Input files for usage example
-  
+
    'tsw:amir_pseae' is a sequence entry in the example protein database
    'tsw'
-   
+
   Database entry: tsw:amir_pseae
-  
+
 ID   AMIR_PSEAE     STANDARD;      PRT;   196 AA.
 AC   P10932;
 DT   01-JUL-1989 (Rel. 11, Created)
@@ -198,9 +198,9 @@ SQ   SEQUENCE   196 AA;  21776 MW;  560A8AE3 CRC32;
      SARRISEEMA KLKQKTEQLQ DRIAGQARIN QAKVLLMQRH GWDEREAHQH LSREAMKRRE
      PILKIAQELL GNEPSA
 //
-   
+
   Database entry: tsw:flav_nossm
-  
+
 ID   FLAV_NOSSM     STANDARD;      PRT;    35 AA.
 AC   P35707;
 DT   01-JUN-1994 (Rel. 29, Created)
@@ -229,69 +229,69 @@ FT   NON_TER      35     35
 SQ   SEQUENCE   35 AA;  3820 MW;  B6EEB5CA7A45DDA6 CRC64;
      SKKIGLFYGT ZTGKTESVAE IIDEFGDEVV TLDID
 //
-   
+
 Output file format
 
    pasteseq writes a normal sequence file.
-   
+
   Output files for usage example
-  
+
   File: amir_pseae.fasta
-  
+
 >AMIR_PSEAE ALIPHATIC AMIDASE REGULATOR.
 MSANSLLGSLRELQVLVLNPPGEVSDALVLQLIRIGCSVRQCWPPPEAFDVPVDVVFTSI
 FQNGHHDSKKIGLFYGTZTGKTESVAEIIDEFGDEVVTLDIDEIAALLAAGTPRTTLVAL
 VEYESPAVLSQIIELECHGVITQPLDAHRVLPVLVSARRISEEMAKLKQKTEQLQDRIAG
 QARINQAKVLLMQRHGWDEREAHQHLSREAMKRREPILKIAQELLGNEPSA
-   
+
   Output files for usage example 2
-  
+
   File: amirplus.seq
-  
+
 >AMIR_PSEAE ALIPHATIC AMIDASE REGULATOR.
 MSANSLLGSLRELQVLVLNPPGEVSDALVLQLIRIGCSVRQCWPPPEAFDVPVDVVFTSI
 FQNGHHDSKKIGLFYGTZTGKTESVAEIIDEFGDEVVTLDIDEIAALLAAGTPRTTLVAL
 VEYESPAVLSQIIELECHGVITQPLDAHRVLPVLVSARRISEEMAKLKQKTEQLQDRIAG
 QARINQAKVLLMQRHGWDEREAHQHLSREAMKRREPILKIAQELLGNEPSA
-   
+
   Output files for usage example 3
-  
+
   File: amirplus.seq
-  
+
 >AMIR_PSEAE ALIPHATIC AMIDASE REGULATOR.
 SKKIGLFYGTZTGKTESVAEIIDEFGDEVVTLDIDMSANSLLGSLRELQVLVLNPPGEVS
 DALVLQLIRIGCSVRQCWPPPEAFDVPVDVVFTSIFQNGHHDEIAALLAAGTPRTTLVAL
 VEYESPAVLSQIIELECHGVITQPLDAHRVLPVLVSARRISEEMAKLKQKTEQLQDRIAG
 QARINQAKVLLMQRHGWDEREAHQHLSREAMKRREPILKIAQELLGNEPSA
-   
+
 Data files
 
    None.
-   
+
 Notes
 
    This can be used as a simple sequence editor.
-   
+
 References
 
    None.
-   
+
 Warnings
 
    None.
-   
+
 Diagnostic Error Messages
 
    None.
-   
+
 Exit status
 
    It always exits with status 0.
-   
+
 Known bugs
 
    None.
-   
+
 See also
 
    Program name                          Description
@@ -319,20 +319,22 @@ See also
    union        Reads sequence fragments and builds one sequence
    vectorstrip  Strips out DNA between a pair of vector sequences
    yank         Reads a sequence range, appends the full USA to a list file
-   
+
 Author(s)
 
    Gary Williams (gwilliam © rfcgr.mrc.ac.uk)
    MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
    Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
-   
+
 History
 
    Completed 26 Jan 1999
-   
+
 Target users
 
    This program is intended to be used by everyone and everything, from
    naive users to embedded scripts.
-   
+
 Comments
+
+   None

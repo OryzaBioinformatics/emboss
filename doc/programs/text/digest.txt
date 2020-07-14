@@ -1,49 +1,49 @@
 
                                   digest 
-                                      
-   
-   
+
+
+
 Function
 
    Protein proteolytic enzyme or reagent cleavage digest
-   
+
 Description
 
    digest finds the positions where a specified proteolytic enzyme or
    reagent might cut a peptide sequence.
-   
+
    This programs allows you to input a protein sequence and to specify
    one proteolytic agent from a list. It will then output a file
    containing the positions where the agent cuts, together with the
    peptides produced.
-   
+
    Trypsin will not normally cut after a K if it is followed by (e.g.)
    another K or a P. Specifying the qualifier -unfavoured shows those
    cuts. as well as the favoured ones.
-   
+
    If you wish to emulate a partial digestion, then using the -overlap
    qualifier will display the results from a digest in which all cut
    sites are used and in which one site at a time is not cut. Thus the
    resulting peptide fragments from the cut sites numbered 1, 2, 3, 4
    etc. are shown, plus the fragments produced by cutting at the sites
    1..3, 2..4, etc.
-   
+
    i.e. fragments containing one potential cut site are also shown.
-   
+
    If you wish to emulate a very partial digestion (!) then using the
    -allpartials qualifier will do what -overlap did, but also show all
    possible fragments from using all possible combinations of cut sites.
    For example, fragments from the cut sites numbered 1, 2, 3, 4, 5 and
    from the fragments produced by cutting between sites 1..3, 1..4, 1..5,
    2..4, 2..5, 3..5, etc.
-   
+
    i.e. fragments containing one or more potential cut site are also
    shown.
-   
+
 Usage
 
    Here is a sample session with digest
-   
+
 
 % digest 
 Protein proteolytic enzyme or reagent cleavage digest
@@ -59,10 +59,10 @@ Enzymes and Reagents
          8 : CNBr
 Select number [1]: 
 Output report [opsd_human.digest]: 
-   
+
    Go to the input files for this example
    Go to the output files for this example
-   
+
 Command line arguments
 
    Standard (Mandatory) qualifiers:
@@ -127,7 +127,7 @@ Command line arguments
    -error               boolean    Report errors
    -fatal               boolean    Report fatal errors
    -die                 boolean    Report deaths
-   
+
 
    Standard (Mandatory) qualifiers Allowed values Default
    [-sequence]
@@ -157,18 +157,18 @@ Command line arguments
    Boolean value Yes/No No
    -allpartials As for overlap but fragments containing more than one
    potential cut site are included. Boolean value Yes/No No
-   
+
 Input file format
 
    Any protein sequence.
-   
+
   Input files for usage example
-  
+
    'tsw:opsd_human' is a sequence entry in the example protein database
    'tsw'
-   
+
   Database entry: tsw:opsd_human
-  
+
 ID   OPSD_HUMAN     STANDARD;      PRT;   348 AA.
 AC   P08100; Q16414;
 DT   01-AUG-1988 (Rel. 08, Created)
@@ -274,30 +274,29 @@ SQ   SEQUENCE   348 AA;  38892 MW;  07443BEA CRC32;
      ATTQKAEKEV TRMVIIMVIA FLICWVPYAS VAFYIFTHQG SNFGPIFMTI PAFFAKSAAI
      YNPVIYIMMN KQFRNCMLTT ICCGKNPLGD DEASATVSKT ETSQVAPA
 //
-   
+
 Output file format
 
    The output is a standard EMBOSS report file.
-   
+
    The results can be output in one of several styles by using the
    command-line qualifier -rformat xxx, where 'xxx' is replaced by the
    name of the required format. The available format names are: embl,
    genbank, gff, pir, swiss, trace, listfile, dbmotif, diffseq, excel,
    feattable, motif, regions, seqtable, simple, srs, table, tagseq
-   
-   See:
-   http://www.uk.embnet.org/Software/EMBOSS/Themes/ReportFormats.html for
-   further information on report formats.
-   
+
+   See: http://emboss.sf.net/docs/themes/ReportFormats.html for further
+   information on report formats.
+
    By default digest writes a 'seqtable' report file.
-   
+
   Output files for usage example
-  
+
   File: opsd_human.digest
-  
+
 ########################################
 # Program: digest
-# Rundate: Tue Apr 06 14:25:29 2004
+# Rundate: Thu Jul 15 2004 12:00:00
 # Report_format: seqtable
 # Report_file: opsd_human.digest
 ########################################
@@ -334,12 +333,12 @@ GWSR
 
 #---------------------------------------
 #---------------------------------------
-   
+
    The header information contains the program name, date of run, name of
    the reagent used to digest the protein and the number of fragments
    reported. The header will report if complete or partial digestion was
    chosen.
-   
+
    The rest of the file consists of columns holding the following data:
      * The start position of the fragment
      * The end position of the fragment
@@ -347,35 +346,35 @@ GWSR
      * The residue before the cut site ('.' if start of sequence)
      * The residue after the second cut site ('.' if end of sequence)
      * The sequence of the fragment.
-       
+
 Data files
 
    None.
-   
+
 Notes
 
    None.
-   
+
 References
 
    None.
-   
+
 Warnings
 
    None.
-   
+
 Diagnostic Error Messages
 
    None.
-   
+
 Exit status
 
-   ALways exist with a status of 0.
-   
+   It always exits with a status of 0.
+
 Known bugs
 
    None.
-   
+
 See also
 
     Program name                         Description
@@ -391,20 +390,22 @@ See also
    preg           Regular expression search of a protein sequence
    pscan          Scans proteins using PRINTS
    sigcleave      Reports protein signal cleavage sites
-   
+
 Author(s)
 
    Alan Bleasby (ableasby © rfcgr.mrc.ac.uk)
    MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
    Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
-   
+
 History
 
    Written (1999) - Alan Bleasby
-   
+
 Target users
 
    This program is intended to be used by everyone and everything, from
    naive users to embedded scripts.
-   
+
 Comments
+
+   None

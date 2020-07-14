@@ -1,0 +1,648 @@
+<!--START OF HEADER - DON'T ALTER -->
+
+<HTML>
+<HEAD>
+  <TITLE>
+  EMBOSS: crystalball
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+
+
+<table align=center border=0 cellspacing=0 cellpadding=0>
+<tr><td valign=top>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+</td>
+<td align=left valign=middle>
+<b><font size="+6">
+
+crystalball
+</font></b>
+</td></tr>
+</table>
+<br>&nbsp;
+<p>
+
+
+
+<!--END OF HEADER-->
+
+
+
+
+
+
+<H2>
+    Function
+</H2>
+Answers every drug discovery question you have about this sequence
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+
+
+
+
+<H2>
+    Description
+</H2>
+
+Crystalball is an application invented by Scott Markel and Darryl Leon
+in their book "Sequence Analysis in a Nutshell". They put the
+description into Appendix D with the comment:
+
+<p>
+<i>Here's a program we're working on. When it's finished we plan to
+donate it to the EMBOSS package. It may take us a while, so be
+patient</i>
+
+<p>
+It took just 30 minutes from seeing a draft of Appendix D to sending
+Scott the ACD file and then the C source code.
+
+<p>
+Like Scott and Darryl, we put the program into an EMBASSY package
+called "appendixd" in the hope that nobody takes it too seriously,
+although we suspect the results are more accurate than one would
+reasonably be entitled to expect.
+
+
+
+<H2>
+    Algorithm
+</H2>
+
+Scott and Darryl defined the ACD interface in the book, together with
+3 of the responses.
+
+<p>
+We added the others in the same spirit.
+
+<p>
+No attempt is made to change the output when the input sequence changes.
+
+<H2>
+    Usage
+</H2>
+
+<!--  
+	Example usage, as run from the command-line.
+        Many examples illustrating different behaviours is good.
+ -->
+
+<b>Here is a sample session with crystalball</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>crystalball -competition -rdtime -rdcost -animalstudies -clinicaltrials -fdaproblems -fdatime -profit -everythingelse </b>
+Answers every drug discovery question you have about this sequence.
+Input sequence: <b>tembl:hsfau</b>
+Output file [hsfau.crystalball]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
+
+
+
+
+<H2>
+    Command line arguments
+</H2>
+
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+   Standard (Mandatory) qualifiers:
+  [-sequence]          sequence   Sequence USA
+  [-outfile]           outfile    Output file name
+
+   Additional (Optional) qualifiers:
+   -competition        boolean    Who else is working with this target?
+   -rdtime             boolean    Total research and development time to bring
+                                  a drug for this target to market.
+   -rdcost             boolean    Total cost of our research and development
+                                  effort.
+   -animalstudies      boolean    What will we learn from the animal studies?
+   -clinicaltrials     boolean    Detail all of the surprises we'll get from
+                                  the clinical trials.
+   -fdaproblems        boolean    List all of the issues the FDA will raise
+                                  with our paperwork.
+   -fdatime            boolean    How long will the FDA take to render a
+                                  decision?
+   -profit             boolean    How much will we make after the drug gets to
+                                  market?
+
+   Advanced (Unprompted) qualifiers:
+   -everythingelse     boolean    Tell us everything else we'd really like to
+                                  know now rather than later
+
+   Associated qualifiers:
+
+   "-sequence" associated qualifiers
+   -sbegin1            integer    Start of the sequence to be used
+   -send1              integer    End of the sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
+
+   "-outfile" associated qualifiers
+   -odirectory2        string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report deaths
+
+
+</pre>
+</td></tr></table>
+<P>
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-sequence]<br>(Parameter 1)</td>
+<td>Sequence USA</td>
+<td>Readable sequence</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>[-outfile]<br>(Parameter 2)</td>
+<td>Output file name</td>
+<td>Output file</td>
+<td><i>&lt;sequence&gt;</i>.crystalball</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Additional (Optional) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-competition</td>
+<td>Who else is working with this target?</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-rdtime</td>
+<td>Total research and development time to bring a drug for this target to market.</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-rdcost</td>
+<td>Total cost of our research and development effort.</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-animalstudies</td>
+<td>What will we learn from the animal studies?</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-clinicaltrials</td>
+<td>Detail all of the surprises we'll get from the clinical trials.</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-fdaproblems</td>
+<td>List all of the issues the FDA will raise with our paperwork.</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-fdatime</td>
+<td>How long will the FDA take to render a decision?</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-profit</td>
+<td>How much will we make after the drug gets to market?</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-everythingelse</td>
+<td>Tell us everything else we'd really like to know now rather than later</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+</table>
+
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+
+
+
+
+
+
+
+
+<H2>
+    Input file format
+</H2>
+
+<!-- 
+        This includes example input file formats.
+        This should be a detailed description and example - assume
+        someone will want to parse this file and will want to know what
+        happens in unusual cases - null input, etc. 
+   -->
+
+<b>crystalball</b> reads any normal sequence USAs.
+
+<p>
+
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+
+'tembl:hsfau' is a sequence entry in the example nucleic acid database 'tembl'
+<p>
+<p><h3>Database entry: tembl:hsfau</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+ID   HSFAU      standard; RNA; HUM; 518 BP.
+XX
+AC   X65923;
+XX
+SV   X65923.1
+XX
+DT   13-MAY-1992 (Rel. 31, Created)
+DT   23-SEP-1993 (Rel. 37, Last updated, Version 10)
+XX
+DE   H.sapiens fau mRNA
+XX
+KW   fau gene.
+XX
+OS   Homo sapiens (human)
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia;
+OC   Eutheria; Primates; Catarrhini; Hominidae; Homo.
+XX
+RN   [1]
+RP   1-518
+RA   Michiels L.M.R.;
+RT   ;
+RL   Submitted (29-APR-1992) to the EMBL/GenBank/DDBJ databases.
+RL   L.M.R. Michiels, University of Antwerp, Dept of Biochemistry,
+RL   Universiteisplein 1, 2610 Wilrijk, BELGIUM
+XX
+RN   [2]
+RP   1-518
+RX   MEDLINE; 93368957.
+RA   Michiels L., Van der Rauwelaert E., Van Hasselt F., Kas K., Merregaert J.;
+RT   " fau cDNA encodes a ubiquitin-like-S30 fusion protein and is expressed as
+RT   an antisense sequences in the Finkel-Biskis-Reilly murine sarcoma virus";
+RL   Oncogene 8:2537-2546(1993).
+XX
+DR   SWISS-PROT; P35544; UBIM_HUMAN.
+DR   SWISS-PROT; Q05472; RS30_HUMAN.
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..518
+FT                   /chromosome="11q"
+FT                   /db_xref="taxon:9606"
+FT                   /organism="Homo sapiens"
+FT                   /tissue_type="placenta"
+FT                   /clone_lib="cDNA"
+FT                   /clone="pUIA 631"
+FT                   /map="13"
+FT   misc_feature    57..278
+FT                   /note="ubiquitin like part"
+FT   CDS             57..458
+FT                   /db_xref="SWISS-PROT:P35544"
+FT                   /db_xref="SWISS-PROT:Q05472"
+FT                   /gene="fau"
+FT                   /protein_id="CAA46716.1"
+FT                   /translation="MQLFVRAQELHTFEVTGQETVAQIKAHVASLEGIAPEDQVVLLAG
+FT                   APLEDEATLGQCGVEALTTLEVAGRMLGGKVHGSLARAGKVRGQTPKVAKQEKKKKKTG
+FT                   RAKRRMQYNRRFVNVVPTFGKKKGPNANS"
+FT   misc_feature    98..102
+FT                   /note="nucleolar localization signal"
+FT   misc_feature    279..458
+FT                   /note="S30 part"
+FT   polyA_signal    484..489
+FT   polyA_site      509
+XX
+SQ   Sequence 518 BP; 125 A; 139 C; 148 G; 106 T; 0 other;
+     ttcctctttc tcgactccat cttcgcggta gctgggaccg ccgttcagtc gccaatatgc        60
+     agctctttgt ccgcgcccag gagctacaca ccttcgaggt gaccggccag gaaacggtcg       120
+     cccagatcaa ggctcatgta gcctcactgg agggcattgc cccggaagat caagtcgtgc       180
+     tcctggcagg cgcgcccctg gaggatgagg ccactctggg ccagtgcggg gtggaggccc       240
+     tgactaccct ggaagtagca ggccgcatgc ttggaggtaa agttcatggt tccctggccc       300
+     gtgctggaaa agtgagaggt cagactccta aggtggccaa acaggagaag aagaagaaga       360
+     agacaggtcg ggctaagcgg cggatgcagt acaaccggcg ctttgtcaac gttgtgccca       420
+     cctttggcaa gaagaagggc cccaatgcca actcttaagt cttttgtaat tctggctttc       480
+     tctaataaaa aagccactta gttcagtcaa aaaaaaaa                               518
+//
+</pre>
+</td></tr></table><p>
+
+
+
+
+
+
+<H2>
+    Output file format
+</H2>
+
+
+<b>crystalball</b> 
+outputs a plain text file with a one-line response to each of the
+input options.
+
+
+<p>
+
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: hsfau.crystalball</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+Drug discovery development time: 10-15 years
+Drug discovery development cost: $800 million
+Animal studies results: 'Animals are not like humans'
+Clinical trials surprises: Unfortunately, not another Viagra
+FDA issues: List not yet complete
+FDA time to decision: Waiting .........
+Profit: Not nearly as much as you'd like!
+The competition: Every EMBOSS user now knows as much as you!
+Everything else: Trust me, you really don't want to know just now!
+</pre>
+</td></tr></table><p>
+
+
+
+
+
+
+<H2>
+    Data files
+</H2>
+
+
+
+
+<H2>
+    Notes
+</H2>
+
+<!-- 
+        Restrictions.
+        Interesting behaviour.
+        Useful things you can do with this program.
+   -->
+
+None.
+
+
+
+
+
+
+
+<H2>
+    References
+</H2>
+
+<!-- 
+        Bibliography for methods used.
+   -->
+
+Markel S and Leon D (2003) "Sequence Analysis in a Nutshell"
+O'Reilly and Associates Inc. See "Appendix D"
+
+
+
+
+
+
+
+
+<H2>
+    Warnings
+</H2>
+
+<!-- 
+        Potentially stupid things the program will let you do.
+   -->
+
+None.
+
+
+
+
+
+
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+<!-- 
+        Error messages specific to this program, eg:
+        "FATAL xxx" - means you have not set up the xxx data using program <b>prog</b>.<p>
+   -->
+
+None.
+
+
+
+
+
+
+
+<H2>
+    Exit status
+</H2>
+
+<!-- 
+        Description of the exit status for various error conditions
+   -->
+
+It always exits with status 0.
+
+
+
+
+
+
+
+
+<H2>
+    Known bugs
+</H2>
+
+
+<!-- 
+        Bugs noted but not yet fixed.
+   -->
+
+None.
+
+
+
+
+
+
+
+
+<!--
+<H2>
+    See also
+</H2>
+-->
+<h2><a name="See also">See also</a></h2>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th><th>Description</th></tr>
+<tr><td><a href="../myemboss/myseq.html">myseq</a></td><td>Demonstration of sequence reading</td></tr>
+</table>
+
+<!-- 
+        Add any comments about other associated programs (to prepare
+        data files?) that seealso doesn't find. 
+   -->
+
+
+
+
+
+
+
+
+
+
+<H2>
+    Author(s)
+</H2>
+<!--
+        Who has worked on the program in the past.
+e.g. one of:
+
+   -->
+
+Peter Rice (pmr&nbsp;&copy;&nbsp;ebi.ac.uk)
+<br>
+Informatics Division, European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
+
+
+
+
+
+
+
+
+
+
+<H2>
+    History
+</H2>
+
+<!--
+        What changes have been made.
+   -->
+
+Written (Feb 2003) - Peter Rice.
+
+<!--
+<p>
+[an error occurred while processing this directive]
+-->
+
+
+
+
+
+
+
+
+
+
+
+
+<H2>
+    Target users
+</H2>
+
+<!--
+        For general users, requested by one user, for EMBOSS site
+        maintainers, for EMBOSS developers etc.
+        eg:
+        "This program is intended to be used by everyone and everything,
+        from naive users to embedded scripts." 
+	Which is easy to include using:
+   -->
+
+This program is intended to be used by everyone and everything, from naive users to embedded scripts.
+
+
+
+
+
+
+
+
+
+
+
+
+</BODY>
+</HTML>
+

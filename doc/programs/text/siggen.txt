@@ -1,0 +1,892 @@
+
+                            SIGGEN documentation
+                                      
+   
+
+CONTENTS
+
+   1.0 SUMMARY 
+   2.0 INPUTS & OUTPUTS 
+   3.0 INPUT FILE FORMAT 
+   4.0 OUTPUT FILE FORMAT 
+   5.0 DATA FILES 
+   6.0 USAGE 
+   7.0 KNOWN BUGS & WARNINGS 
+   8.0 NOTES 
+   9.0 DESCRIPTION 
+   10.0 ALGORITHM 
+   11.0 RELATED APPLICATIONS 
+   12.0 DIAGNOSTIC ERROR MESSAGES 
+   13.0 AUTHORS 
+   14.0 REFERENCES 
+
+1.0 SUMMARY
+
+   Generates a sparse protein signature from an alignment and residue
+   contact data
+
+2.0 INPUTS & OUTPUTS
+
+   SIGGEN reads a directory of DAF files (domain alignment files) and,
+   optionally, a directory of CON files (contacts file) containing a CON
+   file for each aligned domain. It generates a sparse protein signature
+   of a specified sparsity for each alignment. The base name of a
+   signature file is the unique identifier (an integer) if one is
+   specified in the DAF file, otherwise, the base name of the input DAF
+   file is used. The paths of the input and output files are specified by
+   the user and the file extensions are specified in the ACD file.
+
+3.0 INPUT FILE FORMAT
+
+   The format of the domain alignment file is described in DOMAINALIGN
+   documentation.
+
+4.0 OUTPUT FILE FORMAT
+
+   The output file (Figure 1) uses the following records. Domain
+   classification records for the node in SCOP or CATH from which the
+   input alignment and therefore signature were derived are given. In
+   this example, the four records taken from the DAF (input) file are CL,
+   FO, SF and FA.
+   (1) CL - Domain class.
+   (2) FO - Domain fold.
+   (3) SF - Domain superfamily.
+   (4) FA - Domain family.
+   (5) SI - Unique identifier of the node in question, e.g. SCOP Sunid of
+   a domain family.
+   (6) NP - Number of signature positions.
+   (7) NN - Signature position number. The number given in brackets
+   indicates the start of the data for the relevent signature position.
+   (8) IN - Informative line about signature position. The number of
+   different observed amino acid residues is given after 'NRES', the
+   number of different sizes of gap follows 'NGAP', and the window size
+   after 'WSIZ'. When a signature is aligned to a protein sequence, the
+   permissible gaps between two signature positions is determined by the
+   empirical gaps and the window size for the C-terminal position.
+   Two rows of data for the emprical residues and gaps are then given:
+   (9) AA - The identifier of a residue seen in this position and the
+   frequency of its occurence are delimited by ';'.
+   (10) GA - The size of a gap seen in this position and the frequency of
+   its occurence are delimited by ';'.
+   (11) // - used to delimit data for each signature. The last line of a
+   file always contains '//' only.
+
+  Output files for usage example
+
+  File: 54894.sig
+
+TY   SCOP
+XX
+CL   Alpha and beta proteins (a+b)
+XX
+FO   Ferredoxin-like
+XX
+SF   Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain
+XX
+FA   Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain
+XX
+SI   54894
+XX
+NP   14
+XX
+NN   [1]
+XX
+IN   NRES 1 ; NGAP 2 ; WSIZ 0
+XX
+AA   G ; 5
+XX
+GA   6 ; 3
+GA   7 ; 2
+XX
+NN   [2]
+XX
+IN   NRES 1 ; NGAP 1 ; WSIZ 0
+XX
+AA   D ; 5
+XX
+GA   3 ; 5
+XX
+NN   [3]
+XX
+IN   NRES 1 ; NGAP 1 ; WSIZ 0
+XX
+AA   H ; 5
+XX
+GA   0 ; 5
+XX
+NN   [4]
+XX
+IN   NRES 1 ; NGAP 1 ; WSIZ 0
+XX
+AA   P ; 5
+XX
+GA   1 ; 5
+XX
+NN   [5]
+XX
+IN   NRES 1 ; NGAP 3 ; WSIZ 0
+
+
+  [Part of this file has been deleted for brevity]
+
+XX
+GA   4 ; 5
+XX
+NN   [9]
+XX
+IN   NRES 1 ; NGAP 1 ; WSIZ 0
+XX
+AA   P ; 5
+XX
+GA   16 ; 5
+XX
+NN   [10]
+XX
+IN   NRES 1 ; NGAP 1 ; WSIZ 0
+XX
+AA   T ; 5
+XX
+GA   2 ; 5
+XX
+NN   [11]
+XX
+IN   NRES 1 ; NGAP 1 ; WSIZ 0
+XX
+AA   N ; 5
+XX
+GA   1 ; 5
+XX
+NN   [12]
+XX
+IN   NRES 1 ; NGAP 1 ; WSIZ 0
+XX
+AA   Y ; 5
+XX
+GA   4 ; 5
+XX
+NN   [13]
+XX
+IN   NRES 1 ; NGAP 1 ; WSIZ 0
+XX
+AA   K ; 5
+XX
+GA   4 ; 5
+XX
+NN   [14]
+XX
+IN   NRES 1 ; NGAP 1 ; WSIZ 0
+XX
+AA   P ; 5
+XX
+GA   5 ; 5
+//
+
+  File: 55074.sig
+
+TY   SCOP
+XX
+CL   Alpha and beta proteins (a+b)
+XX
+FO   Ferredoxin-like
+XX
+SF   Adenylyl and guanylyl cyclase catalytic domain
+XX
+FA   Adenylyl and guanylyl cyclase catalytic domain
+XX
+SI   55074
+XX
+NP   30
+XX
+NN   [1]
+XX
+IN   NRES 1 ; NGAP 4 ; WSIZ 0
+XX
+AA   F ; 6
+XX
+GA   9 ; 2
+GA   11 ; 1
+GA   17 ; 1
+GA   19 ; 2
+XX
+NN   [2]
+XX
+IN   NRES 2 ; NGAP 1 ; WSIZ 0
+XX
+AA   D ; 5
+AA   S ; 1
+XX
+GA   1 ; 6
+XX
+NN   [3]
+XX
+IN   NRES 1 ; NGAP 1 ; WSIZ 0
+XX
+AA   I ; 6
+XX
+GA   0 ; 6
+XX
+NN   [4]
+XX
+IN   NRES 2 ; NGAP 1 ; WSIZ 0
+XX
+AA   F ; 5
+AA   S ; 1
+XX
+GA   2 ; 6
+
+
+  [Part of this file has been deleted for brevity]
+
+IN   NRES 3 ; NGAP 1 ; WSIZ 0
+XX
+AA   W ; 3
+AA   Y ; 1
+AA   F ; 2
+XX
+GA   2 ; 6
+XX
+NN   [26]
+XX
+IN   NRES 1 ; NGAP 1 ; WSIZ 0
+XX
+AA   A ; 6
+XX
+GA   6 ; 6
+XX
+NN   [27]
+XX
+IN   NRES 2 ; NGAP 1 ; WSIZ 0
+XX
+AA   E ; 5
+AA   D ; 1
+XX
+GA   3 ; 6
+XX
+NN   [28]
+XX
+IN   NRES 2 ; NGAP 1 ; WSIZ 0
+XX
+AA   I ; 4
+AA   V ; 2
+XX
+GA   7 ; 6
+XX
+NN   [29]
+XX
+IN   NRES 2 ; NGAP 1 ; WSIZ 0
+XX
+AA   T ; 5
+AA   A ; 1
+XX
+GA   5 ; 6
+XX
+NN   [30]
+XX
+IN   NRES 1 ; NGAP 1 ; WSIZ 0
+XX
+AA   L ; 6
+XX
+GA   3 ; 6
+//
+
+5.0 DATA FILES
+
+   SIGGEN requires a residue substitution matrix.
+
+6.0 USAGE
+
+  6.1 COMMAND LINE ARGUMENTS
+
+   Standard (Mandatory) qualifiers (* if not always prompted):
+  [-algpath]           dirlist    This option specifies the location of DAF
+                                  files (domain alignment files) (input). A
+                                  'domain alignment file' contains a sequence
+                                  alignment of domains belonging to the same
+                                  SCOP or CATH family (or other node in the
+                                  structural hierarchies). The file is in DAF
+                                  format (CLUSTAL-like) and is annotated with
+                                  domain family classification information.
+                                  The files generated by using SCOPALIGN will
+                                  contain a structure-based sequence alignment
+                                  of domains of known structure only. Such
+                                  alignments can be extended with sequence
+                                  relatives (of unknown structure) by using
+                                  SEQALIGN.
+   -mode               menu       This option specifies the mode of signature
+                                  generation. There are 3 modes for signatures
+                                  generatation: (1) Use positions specified
+                                  in alignment file. The alignment file must
+                                  contain a line beginning with the text
+                                  'Positions' for each line of the alignment.
+                                  A '1' in the 'Positions' line indicates that
+                                  the signature should include data from the
+                                  corresponding alignment site. The signature
+                                  will only include the positions that are
+                                  marked with a '1'. (2) Use a scoring method.
+                                  The alignment is scored (see 'Algorithm')
+                                  and the signature of a specified sparsity is
+                                  sampled from high scoring positions. (3):
+                                  Generate a randomised signature. A signature
+                                  of a specified sparsity is sampled at
+                                  random from the alignment.
+*  -conoption          menu       This option specifies the structure-based
+                                  scoring scheme. SIGGEN provides 2
+                                  structure-based scoring schemes (plus a
+                                  combination method) that are used to score
+                                  the input alignment.
+*  -conpath            directory  This option specifies the location of CON
+                                  files (contact files) (input). A 'contact
+                                  file' contains contact data for a protein or
+                                  a domain from SCOP or CATH, in the CON
+                                  format (EMBL-like). The contacts may be
+                                  intra-chain residue-residue, inter-chain
+                                  residue-residue or residue-ligand. The files
+                                  are generated by using CONTACTS, INTERFACE
+                                  and FUNKY.
+*  -cpdbpath           directory  This option specifies the location of domain
+                                  CCF files (clean coordinate files) (input).
+                                  A 'clean cordinate file' contains protein
+                                  coordinate and derived data for a single PDB
+                                  file ('protein clean coordinate file') or a
+                                  single domain from SCOP or CATH ('domain
+                                  clean coordinate file'), in CCF format
+                                  (EMBL-like). The files, generated by using
+                                  PDBPARSE (PDB files) or DOMAINER (domains),
+                                  contain 'cleaned-up' data that is
+                                  self-consistent and error-corrected. Records
+                                  for residue solvent accessibility and
+                                  secondary structure are added to the file by
+                                  using PDBPLUS.
+*  -datafile           matrixf    This option specifies the the substitution
+                                  matrix. The substitution matrix is used by
+                                  the sequence-based scoring schemes.
+*  -sparsity           integer    This option specifies the % sparsity of
+                                  signature. The signature sparsity is a
+                                  user-defined parameter that determines how
+                                  many residues the final signature will
+                                  contain, for example, if the average
+                                  sequence length of the proteins in the
+                                  alignment is 250 residues, then a signature
+                                  of sparsity 10% (default value) will contain
+                                  25 key residues or signature positions,
+                                  that correspond to the top 25% highest
+                                  scoring alignment positions.
+   -wsiz               integer    This option specifies the window size. When
+                                  a signature is aligned to a protein
+                                  sequence, the permissible gaps between two
+                                  signature positions is determined by the
+                                  empirical gaps and the window size. The user
+                                  is prompted for a window size that is used
+                                  for every position in the signature. Likely
+                                  this is not optimal. A future implementation
+                                  will provide a range of methods for
+                                  generating values of window size depending
+                                  upon the alignment (window size is
+                                  identified by the WSIZ record in the
+                                  signature output file).
+*  -seqoption          menu       This option specifies the sequence-based
+                                  scoring scheme. SIGGEN provides 2
+                                  sequence-based scoring schemes that are used
+                                  to score the input alignment.
+*  -filtercon          toggle     This option specifies whether to disregard
+                                  positions forming few contacts only during
+                                  the selection of signature positions.
+*  -conthresh          integer    This option specifies the threshold contact
+                                  number. This controls the selection of key
+                                  positions for the structure-based scoring
+                                  scheme (number of contacts).
+*  -[no]filterpsim     boolean    This option specifies whether to disregard
+                                  alignment sites that were not aligned
+                                  satisfactorily (STAMP alignments only).
+  [-sigoutdir]         outdir     This option specifies the location of
+                                  signature files (output). A 'signature file'
+                                  contains a sparse sequence signature
+                                  suitable for use with the SIGSCAN program.
+                                  The files are generated by using SIGGEN.
+
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers: (none)
+   Associated qualifiers: (none)
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report deaths
+
+
+   Standard (Mandatory) qualifiers Allowed values Default
+   [-algpath]
+   (Parameter 1) This option specifies the location of DAF files (domain
+   alignment files) (input). A 'domain alignment file' contains a
+   sequence alignment of domains belonging to the same SCOP or CATH
+   family (or other node in the structural hierarchies). The file is in
+   DAF format (CLUSTAL-like) and is annotated with domain family
+   classification information. The files generated by using SCOPALIGN
+   will contain a structure-based sequence alignment of domains of known
+   structure only. Such alignments can be extended with sequence
+   relatives (of unknown structure) by using SEQALIGN. Directory with
+   files ./
+   -mode This option specifies the mode of signature generation. There
+   are 3 modes for signatures generatation: (1) Use positions specified
+   in alignment file. The alignment file must contain a line beginning
+   with the text 'Positions' for each line of the alignment. A '1' in the
+   'Positions' line indicates that the signature should include data from
+   the corresponding alignment site. The signature will only include the
+   positions that are marked with a '1'. (2) Use a scoring method. The
+   alignment is scored (see 'Algorithm') and the signature of a specified
+   sparsity is sampled from high scoring positions. (3): Generate a
+   randomised signature. A signature of a specified sparsity is sampled
+   at random from the alignment.
+   1 (Use positions specified in alignment file)
+   2 (Use a scoring method)
+   3 (Generate a randomised signature)
+   1
+   -conoption This option specifies the structure-based scoring scheme.
+   SIGGEN provides 2 structure-based scoring schemes (plus a combination
+   method) that are used to score the input alignment.
+   1 (Number)
+   2 (Conservation)
+   3 (Number and conservation)
+   4 (None (structural data available))
+   5 (None (no structural data available))
+   5
+   -conpath This option specifies the location of CON files (contact
+   files) (input). A 'contact file' contains contact data for a protein
+   or a domain from SCOP or CATH, in the CON format (EMBL-like). The
+   contacts may be intra-chain residue-residue, inter-chain
+   residue-residue or residue-ligand. The files are generated by using
+   CONTACTS, INTERFACE and FUNKY. Directory ./
+   -cpdbpath This option specifies the location of domain CCF files
+   (clean coordinate files) (input). A 'clean cordinate file' contains
+   protein coordinate and derived data for a single PDB file ('protein
+   clean coordinate file') or a single domain from SCOP or CATH ('domain
+   clean coordinate file'), in CCF format (EMBL-like). The files,
+   generated by using PDBPARSE (PDB files) or DOMAINER (domains), contain
+   'cleaned-up' data that is self-consistent and error-corrected. Records
+   for residue solvent accessibility and secondary structure are added to
+   the file by using PDBPLUS. Directory ./
+   -datafile This option specifies the the substitution matrix. The
+   substitution matrix is used by the sequence-based scoring schemes.
+   Comparison matrix file in EMBOSS data path EBLOSUM62
+   -sparsity This option specifies the % sparsity of signature. The
+   signature sparsity is a user-defined parameter that determines how
+   many residues the final signature will contain, for example, if the
+   average sequence length of the proteins in the alignment is 250
+   residues, then a signature of sparsity 10% (default value) will
+   contain 25 key residues or signature positions, that correspond to the
+   top 25% highest scoring alignment positions. Any integer value 10
+   -wsiz This option specifies the window size. When a signature is
+   aligned to a protein sequence, the permissible gaps between two
+   signature positions is determined by the empirical gaps and the window
+   size. The user is prompted for a window size that is used for every
+   position in the signature. Likely this is not optimal. A future
+   implementation will provide a range of methods for generating values
+   of window size depending upon the alignment (window size is identified
+   by the WSIZ record in the signature output file). Any integer value 0
+   -seqoption This option specifies the sequence-based scoring scheme.
+   SIGGEN provides 2 sequence-based scoring schemes that are used to
+   score the input alignment.
+   1 (Substitution matrix)
+   2 (Residue class)
+   3 (None)
+   3
+   -filtercon This option specifies whether to disregard positions
+   forming few contacts only during the selection of signature positions.
+   Toggle value Yes/No No
+   -conthresh This option specifies the threshold contact number. This
+   controls the selection of key positions for the structure-based
+   scoring scheme (number of contacts). Any integer value 10
+   -[no]filterpsim This option specifies whether to disregard alignment
+   sites that were not aligned satisfactorily (STAMP alignments only).
+   Boolean value Yes/No Yes
+   [-sigoutdir]
+   (Parameter 2) This option specifies the location of signature files
+   (output). A 'signature file' contains a sparse sequence signature
+   suitable for use with the SIGSCAN program. The files are generated by
+   using SIGGEN. Output directory ./
+   Additional (Optional) qualifiers Allowed values Default
+   (none)
+   Advanced (Unprompted) qualifiers Allowed values Default
+   (none)
+
+  6.2 EXAMPLE SESSION
+
+   An example of interactive use of SIGGEN is shown below. Here is a
+   sample session with siggen
+
+
+% siggen 
+Generates a sparse protein signature from an alignment and residue contact
+data.
+Location of DAF files (domain alignment files) (input) [./]: 
+Specify mode of signature generation
+         1 : Use positions specified in alignment file
+         2 : Use a scoring method
+         3 : Generate a randomised signature
+Select number [1]: 2
+The % sparsity of signature [10]: 15
+Window size [0]: 0
+Sequence variability scoring method
+         1 : Substitution matrix
+         2 : Residue class
+         3 : None
+Select number [3]: 1
+Substitution matrix to be used [EBLOSUM62]: EBLOSUM62
+Residue contacts scoring method
+         1 : Number
+         2 : Conservation
+         3 : Number and conservation
+         4 : None (structural data available)
+         5 : None (no structural data available)
+Select number [5]: 5
+Ignore alignment postitions with post_similar value of 0 [Y]: Y
+Location of signature files (output) [./]: 
+
+   Go to the output files for this example
+
+   A sparse protein signature was generated for each DAF file (with file
+   extension of '.daf' specified in the ACD file) in the directory
+   test_data/. The signatures included high scoring positions from the
+   alignments, scored on the basis of residue variability calculated by
+   using the EBLOSUM62 residue substitution matrix (mode 2). Signatures
+   of 15% sparsity were generated, and the default window size (0) was
+   used. Alignment postitions with a post_similar value of 0 were
+   ignored, i.e. not sampled in the signature. No structural data were
+   available for the domains in the alignments and this was specified as
+   option 5 in the "Residue contacts scoring method". Signature files
+   (with file extenion of '.sig' specified in the ACD file) were written
+   to test_data/siggen/.
+
+7.0 KNOWN BUGS & WARNINGS
+
+   Handling of missing residues in domain alignment files
+   The alignment in the DAF file (domain alignment file) may be generated
+   by using stamp via DOMAINALIGN. stamp will omit from an alignment any
+   residues that either completely lacks electron density and so does not
+   appear in the ATOM records of the pdb file, or which lacks a CA atom.
+   Such residues will of course not be present in the DAF file. This
+   means that acurate gap distances (distance, in residues, between any
+   two residues) for residues from two different alignment positions
+   cannot reliably be found by simply counting residues.
+   To overcome this problem, data from the domain CCF files (clean
+   coordinate files) are used. These data should be used where available,
+   i.e. the conoption acd option should be set to a value 1, 2, 3 or 4 if
+   possible.
+   The function embPdbAtomIndexICA is used to create an array which gives
+   the index into the full-length protein sequence for structured
+   residues, i.e. residues for which electron density was determined,
+   EXCLUDING those residues for which CA atoms are missing. The array
+   length is of course equal to the number of structured residues. This
+   array is used for calculating the correct gap distances between
+   residues in the alignment. The domain CCF files MUST be derived from
+   protein CCF files in which residues with a single atom only are
+   ommitted. Such files can be generated by using PDBPARSE with the
+   atommask option set to True. This requirement will not be necessary
+   when a new version of embPdbAtomIndexICA which also excludes residues
+   with a single atom only becomes available.
+   Manually generated signatures
+   In the case a signature file is generated by hand, it is essential
+   that the gap data given is listed in order of increasing gap size.
+   Window size
+   The user is prompted for a window size that is used for every position
+   in the signature. Likely this is not optimal. A future implementation
+   will provide a range of methods for generating values of window size
+   depending upon the alignment (window size is identified by the WSIZ
+   record in the signature output file).
+
+8.0 NOTES
+
+  8.1 GLOSSARY OF FILE TYPES
+
+   FILE TYPE FORMAT DESCRIPTION CREATED BY SEE ALSO
+   Clean coordinate file (for domain) CCF format (EMBL-like). Protein
+   coordinate and derived data for a single domain from SCOP or CATH. The
+   data are 'cleaned-up': self-consistent and error-corrected. DOMAINER
+   Records for residue solvent accessibility and secondary structure are
+   added to the file by using PDBPLUS.
+   Contact file (intra-chain residue-residue contacts) CON format
+   (EMBL-like.) Intra-chain residue-residue contact data for a protein or
+   a domain from SCOP or CATH. CONTACTS N.A.
+   Domain alignment file DAF format (CLUSTAL-like). Sequence alignment of
+   domains belonging to the same SCOP or CATH family (or other node in
+   the structural hierarchies). The file is annotated with domain family
+   classification information. DOMAINALIGN (structure-based sequence
+   alignment of domains of known structure). DOMAINALIGN alignments can
+   be extended with sequence relatives (of unknown structure) to the
+   family in question by using SEQALIGN.
+   Signature file SIG format Contains a sparse sequence signature
+   suitable for use with the SIGSCAN program. Contains a sparse sequence
+   signature. SIGGEN, LIBGEN The files are generated by using SIGGEN.
+
+   None
+
+9.0 DESCRIPTION
+
+   Protein signatures are useful for characterising protein families and
+   have been generated manually in the past (Ison et al, 2000). siggen
+   provides various methods to generate automatically protein signatures.
+   There are 3 modes for signature generatation:
+   (1) Use positions specified in alignment file. The alignment file must
+   contain a line beginning with the text 'Positions' for each line of
+   the alignment. A '1' in the 'Positions' line indicates that the
+   signature should include data from the corresponding alignment site.
+   The signature will only include the positions that are marked with a
+   '1'.
+   (2) Use a scoring method. The alignment is scored (see 'Algorithm')
+   and the signature of a specified sparsity is sampled from high scoring
+   positions.
+   (3): Generate a randomised signature. A signature of a specified
+   sparsity is sampled at random from the alignment.
+
+10.0 ALGORITHM
+
+   Algorithm
+   signature generation proceeds in three stages as follows: (i) Read
+   data and write residue-residue contact maps. (ii) Apply selected
+   scoring methods to potential signature positions. (iii) Select
+   residues to form the signature and write residue identity and residue
+   gap data into signature output file.
+   Data Parsing
+   SIGGEN reads DAF files (domain alignment files) and, optionally,
+   domain CCF files ( clean coordinate files) and CON files (contact
+   files) corresponding to domains in the alignments. If specified, a
+   contact map for each domain in an input alignment is required. A
+   contact map is an N by N matrix (where N is the length of the
+   sequence), a '1' at any element of the matrix indicates contact
+   between the two residues at the corresponding positions, a '0'
+   indicates no contact (see CONTACTS for more information). The data
+   from the DAF files are parsed, including the Post_Similar line (if
+   available, e.g. for DAF files generated by using STAMP via DOMAINALIGN
+   ). The use of the data from the Post_Similar line are fundamental: the
+   user specifies whether only alignment positions with a post_similar
+   value of '1' are considered to be potential signature positions or
+   whether all positions are potential candidates. If the Post_Similar
+   line is not available then all positions are potential candidates.
+   Alignment positions where the Post_Similar value is represented by a
+   '-' are not considered because one or more of the proteins in the
+   alignment were assigned a gap by the stamp program that was used to
+   generate the alignment.
+   Residue Scoring Schemes
+   The algorithm provides four scoring schemes that can be applied to
+   aligned positions (i.e. positions with Post_Similar values that is not
+   '-' or, optionally, '0' either), to enable key residues to be selected
+   for the final signature. The schemes are split into two groups:
+   sequence based and structure based. Each position in the alignment is
+   scored on the basis of a single or combination of 2 scoring schemes,
+   one each from the different groups, thus providing a method of
+   refining/improving the generation of signatures. Every aligned
+   position is allocated a normalised score based on one or more of the
+   following schemes.
+   Sequence Based Scoring - Residue Identity (ResId)
+   This scoring function simply takes every residue at a particular
+   aligned position and calculates a score for the substitution of each
+   residue pair using a residue substitution matrix. The average residue
+   substitution score for the position is then normalised and the score
+   assigned to the score array for that alignment position.
+   eSequence Based Scoring - Residue Variability (ResVar)
+   This scoring scheme implements the residue variability function of
+   (Mirny & Shakhnovich, 2001).
+   s(l) = - sum for i=1 to i=6 ( pi(l) x log pi(l) )
+   Where s(l) is the variability at position l, and pi(l) is the
+   frequency of residues from class i at position l. Six classes of
+   residue are defined which reflect their physical-chemical properties
+   and natural pattern of substitution as follows: (i) Aliphatic (A, V,
+   L, I, M, C); (ii) Aromatic (F, W, Y, H); (iii) Polar (S, T, N, Q);
+   (iv) Basic (K, R); (v) Acidic (D, E); (vi) Special (G, P). The special
+   class represents the special conformational properties of glycine and
+   proline. As a result of this classification mutations within a class
+   are ignored e.g. L to V, whereas mutations that change the residue
+   class are taken into account. Thus each aligned position is given a
+   normalised score that reflects the variability of all the residues in
+   that particular position.
+   Structure Based Scoring - Number of Residue-Residue Contacts (N-Con)
+   The contact scoring scheme provides a score based purely on structural
+   information, i.e. the identity and nature of the residues are not
+   considered. The structural information used is the number of
+   residue-residue contacts and the contact maps generated in the first
+   phase of the algorithm are used to derive the number of contacts made
+   by residues at aligned positions. Each residue from an aligned
+   position is noted, and the position that residue occupies in its
+   original protein sequence is determined. The column of the contact map
+   that corresponds to the position of the residue in its original
+   sequence is identified, the occurrence of a '1' anywhere in that
+   column of the matrix is recorded, and the total number of '1's
+   indicates the total number of contacts that residue makes. The number
+   of contacts for each residue at a particular aligned position are
+   determined, the average number of contacts is calculated and the
+   resulting value normalised. This procedure is then repeated for every
+   aligned position.
+   Structure Based Scoring - Conservation of Residue Contacts (C-Con)
+   This scoring scheme extends the concept of the number of contacts
+   residues at aligned positions make, by also determining which residues
+   are contacted and their position in the alignment, thus providing a
+   score representing how conserved the contacts made by residues at an
+   aligned position are. The initial stage of the process is identical to
+   that for determining the number of contacts, except every time a
+   contact is found in the contact map, the position of the contacted
+   residue is recorded and its position in the alignment determined. Each
+   residue in an aligned position therefore has associated with it a list
+   of positions in the alignment with which it makes contact. For example
+   if all the residues at position 25 of the alignment make contact with
+   the residues at position 79 of the alignment, a conserved contact is
+   defined and a maximum score is allocated to the residues at position
+   25. This procedure is repeated for all the contacts made by the
+   residues at position 25 and an average normalised conservation of
+   contact score calculated.
+   Selection of Signature Positions
+   The final phase of the algorithm involves selecting the residues that
+   will make up the signature. Following the scoring phase SIGGEN will
+   have created an array of scores for each scoring scheme employed, i.e.
+   a score will have been allocated for every position in the alignment
+   with a Post_Similar value of '1' and optionally '0' also (depending on
+   the Post_Similar option selected, see below). If more than one scoring
+   scheme was used then the scores for each alignment position from the
+   different scoring methods are added together, to give a final array
+   (total score array) of the total scores for each position. It is these
+   final scores that determine which positions will make up the
+   signature.
+   Signature Sparsity
+   The signature sparsity is a user-defined parameter that determines how
+   many residues the final signature will contain, for example, if the
+   average sequence length of the proteins in the alignment is 250
+   residues, then a signature of sparsity 10% (default value) will
+   contain 25 key residues or signature positions, that correspond to the
+   top 25% highest scoring alignment positions.
+   Key Residue Selection
+   Assuming that a signature of 10% sparsity is desired and the average
+   sequence length of the proteins is 250 residues, the total score array
+   is re-arranged into ascending order of score. The top (highest
+   scoring) 25 alignment positions (equal to 10% sparsity) are then
+   selected, it is these 25 positions which will make up the final
+   signature. These 25 highest scoring alignment positions are then
+   traced back to the original protein sequences, the residue identities
+   determined and gap data (number of residues between signature
+   positions) calculated. The signature output file is then written, this
+   specifies for each of the 25 signature positions the residues that are
+   observed at that position in the alignment, and the gap (in residues)
+   between that position and the next. In the case of the first signature
+   position the gap data corresponds to the number of residues between
+   the beginning of the sequence and the first position.
+   Signature Generating Parameters
+   The SIGGEN algorithm incorporates several options that can be selected
+   when generating a signature. The first is the signature sparsity,
+   which has been introduced above and affects the amount of information
+   encoded in the signature. In addition to the four scoring schemes
+   described above, there are two further option to be considered when
+   generating a signature.
+   Post_Similar Option
+   This option determines which alignment positions should be considered
+   as putative signature positions. As mentioned above, the Post_Similar
+   line represents aligned positions by either a '1' a '0' or a '-'.
+   SIGGEN gives the option of considering both positions with values of
+   '1' and '0' or ignoring positions represented by '0', which STAMP
+   considers to be less structurally equivalent, and therefore use just
+   positions with a Post_Similar value of '1'.
+   Contact Filtering Option
+   This option also determines which aligned positions should be
+   considered as putative key residues for inclusion in the signature.
+   However, the criterion in this case is whether or not the average
+   number of contacts that the residues at that position make is above a
+   defined threshold (the contact threshold). The default value is 10
+   contacts, i.e. only aligned positions that make on average 10 or more
+   residue-residue contacts will be considered as potential key residues.
+   As with all the SIGGEN parameters, they can be used in combination.
+   For example, selecting the following parameters: contact threshold =
+   10; residue identity and conservation of contact scoring schemes;
+   Post_Similar option set to ignore positions with values of '0';
+   signature sparsity set to 15%, the SIGGEN algorithm would proceed in
+   the following manner: (i) Determine positions with Post_Similar value
+   of '1'; (ii) Determine which of those positions make greater than 10
+   residue contacts; (iii) Apply the residue id and conservation of
+   contact scoring schemes to the positions resulting from the previous
+   two filtering steps; (iv) Select the top scoring 15% positions to make
+   up the signature. (v) Write signature file.
+
+11.0 RELATED APPLICATIONS
+
+See also
+
+   Program name Description
+   contactcount Counts specific versus non-specific contacts in a
+   directory of cleaned protein chain contact files
+   contacts Reads CCF files (clean coordinate files) and writes CON files
+   (contact files) of intra-chain residue-residue contact data
+   domainalign Generates DAF files (domain alignment files) of
+   structure-based sequence alignments for nodes in a DCF file (domain
+   classification file)
+   domainrep Reorder DCF file (domain classification file) so that the
+   representative structure of each user-specified node is given first
+   domainreso Removes low resolution domains from a DCF file (domain
+   classification file)
+   interface Reads CCF files (clean coordinate files) and writes CON
+   files (contact files) of inter-chain residue-residue contact data
+   libgen Generates various types of discriminating elements for each
+   alignment in a directory
+   psiphi Calculates phi and psi torsion angles from cleaned EMBOSS-style
+   protein co-ordinate file
+   rocon Reads a DHF file (domain hits file) of hits (sequences of
+   unknown structural classification) and a DHF file of validation
+   sequences (known classification) and writes a 'hits file' for the
+   hits, which are classified and rank-ordered on the basis of score
+   rocplot Provides interpretation and graphical display of the
+   performance of discriminating elements (e.g. profiles for protein
+   families). rocplot reads file(s) of hits from discriminator-database
+   search(es), performs ROC analysis on the hits, and writes graphs
+   illustrating the diagnostic performance of the discriminating elements
+   seqalign Reads a DAF file (domain alignment file) and a DHF file
+   (domain hits file) and writes a DAF file extended with the hits
+   seqfraggle Removes fragments from DHF files (domain hits files) or
+   other files of sequences
+   seqsearch Generate database hits (sequences) for nodes in a DCF file
+   (domain classification file) by using PSI-BLAST
+   seqsort Reads DHF files (domain hits files) of database hits
+   (sequences) and removes hits of ambiguous classification
+   seqwords Generates DHF files (domain hits files) of database hits
+   (sequences) for nodes in a DCF file (domain classification file) by
+   keyword search of UniProt
+   sigscan Generates a DHF file (domain hits file) of hits (sequences)
+   from scanning a signature against a sequence database
+
+12.0 DIAGNOSTIC ERROR MESSAGES
+
+   None.
+
+13.0 AUTHORS
+
+   Matt Blades (mblades@rfcgr.mrc.ac.uk)
+   Jon Ison (jison@rfcgr.mrc.ac.uk)
+   MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
+   Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
+
+14.0 REFERENCES
+
+   Please cite the authors and EMBOSS.
+   Rice P, Longden I and Bleasby A (2000) "EMBOSS - The European
+   Molecular Biology Open Software Suite" Trends in Genetics, 15:276-278.
+   
+   See also http://emboss.sourceforge.net/
+   Automatic generation and evaluation of sparse protein signatures for
+   families of protein structural domains. MJ Blades, JC Ison, R
+   Ranasinghe, and JBC Findlay. Protein Science. 2005 (accepted)
+   A key residues approach to the definition of protein families and
+   analysis of sparse family signatures. JC Ison, AJ Bleasby, MJ Blades,
+   SC Daniel, JH Parish, JBC Findlay. PROTEINS: Structure, Function &
+   Genetics. 2000, 40:330-341
+   Alignment of a sparse protein signature with protein sequences:
+   application to fold prediction for three small globulins. SC Daniel,
+   JH Parish, JC Ison, MJ Blades & JBC Findlay. FEBS Letters. 1999,
+   459:349-352.
+
+  14.1 Other useful references
+
+   LA Mirny EI Shakhnovich. Evolutionary conservation of the folding
+   nucleus. Journal of Molecular Biology (2001) 308:123-129

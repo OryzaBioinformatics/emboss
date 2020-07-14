@@ -1,0 +1,489 @@
+
+                                  libscan 
+
+
+
+Function
+
+   Scans a database with a set of models that represents a family
+
+Description
+
+   Scans each signature, profile or HMM in a directory against a sequence
+   database and writes a signature hits file for each one. Or scans
+   sequences against such a library of discriminating elements and writes
+   a library scan file for each one.
+
+   This program is part of a suite of EMBOSS applications that directly
+   or indirectly make use of the protein structure databases pdb and
+   scop. This program is part of an experimental analysis pipeline
+   described in an accompanying document. We provide the software in the
+   hope that it will be useful. The applications were designed for
+   specific research purposes and may not be useful or reliable in
+   contexts other than the described pipeline. The development of the
+   suite was coordinated by Jon Ison to whom enquiries and bug reports
+   should be sent (email jison@hgmp.mrc.ac.uk).
+
+   The advantage of screening a relatively small library of
+   discriminating elements with a sequence is that it is sufficient for
+   the sequence to detect its true family (discriminator) in the first
+   rank for an effective prediction. This is in contrast to searching a
+   larger sequence database to identify homology, where biologically
+   significant hits may achieve statistically insignificant scores and
+   therefore be missed. A library might help the detection of such
+   proteins because they may still score their true discriminator higher
+   than the others in the library regardless of statistical estimates.
+   Further improvements to predictions are gained when multiple sources
+   of evidence, in this case the different types of discriminating
+   element, are considered.
+
+   The libscan application allows a protein sequence or sequences to be
+   screened against the library of discriminating elements. The results
+   of a screen are returned to the user in a library scan file containing
+   a list of top-scoring SCOP domains rank-ordered by p-value for each
+   individual type of discriminator, and also for all of the
+   discriminator types in combination (combined prediction). For the
+   combined prediction, the p-value is derived from an empirically
+   derived distribution of the product of the p-values of the individual
+   methods.
+
+   libscan runs in one of two modes either (i) database search mode or
+   (ii) library screen mode. In database search mode libscan reads one or
+   more directories each containing a single type of discriminating
+   element, the permitted types are sparse sequence signature, Gribskov
+   profile, Henikoff profile or hidden Markov model. Each directory must
+   contain a discriminating element for each of one or more scop
+   families; files for indivdual families should have the same name
+   (possibly with different file extensions) in the different
+   directories, e.g. the scop family with the identifier 46445 might be
+   represented by files 46445.hmm, 46445.sig, 46445.gribs and 46445.henik
+   in their respective directories. libscan scans each discriminating
+   element against a sequence set that must also be provided by the user
+   and generates a signature hits file (of scored hits to sequences in
+   the set) for each individual discriminating element. In mode (i), the
+   user must also provide a scop validation file so that a classification
+   of hits can be given in the signature hits files. The user specifies a
+   maximum number of false hits that are written to the signature hits
+   files.
+
+   In library screen mode, libscan reads a sequence set, screens each
+   sequence against the library (directories of discriminating elements)
+   and writes a library scan file (of top-scoring families) for each
+   sequence. In either mode, a scop classification file is required as a
+   source of family classification data. The paths and extensions of the
+   sequence set and scop classification files (input) different types of
+   discriminating elements (input), and paths and extension of signature
+   hits files or library scan file (output) are specified by the user.
+
+Algorithm
+
+   The approach for calculating p-values for individual
+   discriminator-sequence matches is the same irrespective of which mode
+   libscan is run in and is summarised as follows: (i) Each
+   discriminating element is scanned (scored) against each sequence. (ii)
+   The ditribution of scores is generated for each different type of
+   element. (iii) Using these distributions, a p-value is calculated for
+   each discriminator-sequence match. The approach for calculating the
+   'combined p-value' for each individual sequence is as follows: (i)
+   p-values of the matches for the different types of discriminator
+   versus a sequence are multiplied to yield the 'product of p-values'.
+   (ii) A distribution of 'product of p-values' is generated for each
+   individual sequence. (iii) Using these distributions, a so-called
+   'combined p-value', reflecting the overall significance of the matches
+   of the sequence to the different types of discriminators, is
+   generated. Importantly, two (or more) p-values are only ever
+   multiplied together if corresponding hit is to the same region of the
+   protein. 'Same' is defined as two hits overlapping by a user-defined
+   number of residues.
+
+Usage
+
+Command line arguments
+
+   Standard (Mandatory) qualifiers (* if not always prompted):
+   -mode               menu       Libscan runs in one of two modes either (i)
+                                  database search mode or (ii) library screen
+                                  mode. In database search mode libscan reads
+                                  one or more directories each containing a
+                                  single type of discriminating element, the
+                                  permitted types are sparse sequence
+                                  signature, Gribskov profile, Henikoff
+                                  profile or hidden Markov model. In library
+                                  screen mode, libscan reads a sequence set,
+                                  screens each sequence against the library
+                                  (directories of discriminating elements) and
+                                  writes a library scan file (of top-scoring
+                                  families) for each one.
+   -db                 seqset     In database search mode libscan scans each
+                                  discriminating element against a sequence
+                                  set. In library screen mode, libscan reads a
+                                  sequence set and screens each sequence
+                                  against the library (directories of
+                                  disciminating elements)
+   -[no]grib           boolean    Use Gribskov profile
+   -[no]henik          boolean    Use Henikoff profile
+   -[no]hmm            boolean    Use HMM profile
+   -[no]sig            boolean    Use signature
+*  -hmmpath            string     Location of HMM profile files (input)
+*  -hmmextn            string     Extension of HMM profile files (input)
+*  -hmmoutpath         string     Location of signature hits/library scan
+                                  files for hmm searches (output)
+*  -hmmoutextn         string     Extension of signature hits/library scan
+                                  files for hmm searches (output)
+*  -gbvpath            string     Location of Gribskov profile files (input)
+*  -gbvextn            string     Extension of Gribskov profile files (input)
+*  -gbvgapo            float      Gap insertion penalty
+*  -gbvgape            float      Gap extension penalty
+*  -gbvoutpath         string     Location of signature hits/library scan
+                                  files for Gribskov profile searches (output)
+*  -gbvoutextn         string     Extension of signature hits/library scan
+                                  files for Gribskov profile searches (output)
+*  -hnfpath            string     Location of Hennikoff profile files (input)
+*  -hnfextn            string     Extension of Hennikoff profile files (input)
+*  -hnfgapo            float      Gap insertion penalty
+*  -hnfgape            float      Gap extension penalty
+*  -hnfoutpath         string     Location of signature hits/library scan
+                                  files for Henikoff profile searches (output)
+*  -hnfoutextn         string     Extension of signature hits/library scan
+                                  files for Henikoff profile searches (output)
+*  -sigpath            string     Location of signature files (input)
+*  -sigextn            string     Extension of signature files (input)
+*  -nterm              menu       Select number
+*  -sub                matrixf    Residue substitution matrix
+*  -siggapo            float      Gap insertion penalty
+*  -siggape            float      Gap extension penalty
+*  -sigoutpath         string     Location of signature hits/library scan
+                                  files for signature searches (output)
+*  -sigoutextn         string     Extension for signature hits/library scan
+                                  files for signature searches (output)
+   -scopf              infile     In either mode, a 'scop classification file'
+                                  is required as a source of family
+                                  classification data. A scop classification
+                                  file contains classification and other data
+                                  for domains from the scop database. The file
+                                  is in embl-like format and is generated by
+                                  scopparse. Domain sequence information can
+                                  be added to the file by using scopseqs.
+*  -targetf            infile     A 'scop validation file' contains sequence
+                                  relatives (hits) for each of a number of
+                                  different scop families, superfamilies and
+                                  folds. The file contains the collated
+                                  results from psiblast searches of a sequence
+                                  database for the indvidual scop families;
+                                  hits of unambiguous family assignment are
+                                  listed under their respective family,
+                                  otherwise a hit is assigned as relatives to
+                                  a scop superfamily or fold instead. The scop
+                                  validation file is generated by seqnr and
+                                  is in embl-like format.
+*  -maxhits            integer    The maximum number of hits to be written to
+                                  the signature hits file.
+*  -overlap            integer    When estimating the statistical significance
+                                  of scored matches of different types of
+                                  discriminating element to a sequence, two
+                                  (or more) p-values are only ever multiplied
+                                  together if corresponding hit is to the same
+                                  region of the protein. 'Same' is defined as
+                                  two hits overlapping by a user-defined
+                                  number of residues.
+   -mrgoutpath         string     Location of signature hits / library scan
+                                  files for merged results (output)
+   -mrgoutextn         string     Extension for signature hits / library scan
+                                  files for merged results (output)
+
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers: (none)
+   Associated qualifiers:
+
+   "-db" associated qualifiers
+   -sbegin              integer    Start of each sequence to be used
+   -send                integer    End of each sequence to be used
+   -sreverse            boolean    Reverse (if DNA)
+   -sask                boolean    Ask for begin/end/reverse
+   -snucleotide         boolean    Sequence is nucleotide
+   -sprotein            boolean    Sequence is protein
+   -slower              boolean    Make lower case
+   -supper              boolean    Make upper case
+   -sformat             string     Input sequence format
+   -sdbname             string     Database name
+   -sid                 string     Entryname
+   -ufo                 string     UFO features
+   -fformat             string     Features format
+   -fopenfile           string     Features file name
+
+   General qualifiers:
+   -auto                boolean    Turn off prompts
+   -stdout              boolean    Write standard output
+   -filter              boolean    Read standard input, write standard output
+   -options             boolean    Prompt for standard and additional values
+   -debug               boolean    Write debug output to program.dbg
+   -verbose             boolean    Report some/full command line options
+   -help                boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning             boolean    Report warnings
+   -error               boolean    Report errors
+   -fatal               boolean    Report fatal errors
+   -die                 boolean    Report deaths
+
+
+   Standard (Mandatory) qualifiers Allowed values Default
+   -mode Libscan runs in one of two modes either (i) database search mode
+   or (ii) library screen mode. In database search mode libscan reads one
+   or more directories each containing a single type of discriminating
+   element, the permitted types are sparse sequence signature, Gribskov
+   profile, Henikoff profile or hidden Markov model. In library screen
+   mode, libscan reads a sequence set, screens each sequence against the
+   library (directories of discriminating elements) and writes a library
+   scan file (of top-scoring families) for each one.
+   1 (Database search mode)
+   2 (Library screen mode)
+   1
+   -db In database search mode libscan scans each discriminating element
+   against a sequence set. In library screen mode, libscan reads a
+   sequence set and screens each sequence against the library
+   (directories of disciminating elements) Readable set of sequences
+   Required
+   -[no]grib Use Gribskov profile Boolean value Yes/No Yes
+   -[no]henik Use Henikoff profile Boolean value Yes/No Yes
+   -[no]hmm Use HMM profile Boolean value Yes/No Yes
+   -[no]sig Use signature Boolean value Yes/No Yes
+   -hmmpath Location of HMM profile files (input) Any string is accepted
+   ./
+   -hmmextn Extension of HMM profile files (input) Any string is accepted
+   .hmm
+   -hmmoutpath Location of signature hits/library scan files for hmm
+   searches (output) Any string is accepted ./
+   -hmmoutextn Extension of signature hits/library scan files for hmm
+   searches (output) Any string is accepted .hmmout
+   -gbvpath Location of Gribskov profile files (input) Any string is
+   accepted ./
+   -gbvextn Extension of Gribskov profile files (input) Any string is
+   accepted .gribs
+   -gbvgapo Gap insertion penalty Any numeric value 1.0
+   -gbvgape Gap extension penalty Any numeric value 1.0
+   -gbvoutpath Location of signature hits/library scan files for Gribskov
+   profile searches (output) Any string is accepted ./
+   -gbvoutextn Extension of signature hits/library scan files for
+   Gribskov profile searches (output) Any string is accepted .gribout
+   -hnfpath Location of Hennikoff profile files (input) Any string is
+   accepted ./
+   -hnfextn Extension of Hennikoff profile files (input) Any string is
+   accepted .henik
+   -hnfgapo Gap insertion penalty Any numeric value 1.0
+   -hnfgape Gap extension penalty Any numeric value 1.0
+   -hnfoutpath Location of signature hits/library scan files for Henikoff
+   profile searches (output) Any string is accepted ./
+   -hnfoutextn Extension of signature hits/library scan files for
+   Henikoff profile searches (output) Any string is accepted .henikout
+   -sigpath Location of signature files (input) Any string is accepted ./
+   -sigextn Extension of signature files (input) Any string is accepted
+   .sig
+   -nterm Select number
+   1 (Align anywhere and allow only complete signature-sequence fit)
+   2 (Align anywhere and allow partial signature-sequence fit)
+   3 (Use empirical gaps only)
+   1
+   -sub Residue substitution matrix Comparison matrix file in EMBOSS data
+   path EBLOSUM62
+   -siggapo Gap insertion penalty Any numeric value 10.0
+   -siggape Gap extension penalty Any numeric value 0.5
+   -sigoutpath Location of signature hits/library scan files for
+   signature searches (output) Any string is accepted ./
+   -sigoutextn Extension for signature hits/library scan files for
+   signature searches (output) Any string is accepted .sigout
+   -scopf In either mode, a 'scop classification file' is required as a
+   source of family classification data. A scop classification file
+   contains classification and other data for domains from the scop
+   database. The file is in embl-like format and is generated by
+   scopparse. Domain sequence information can be added to the file by
+   using scopseqs. Input file Required
+   -targetf A 'scop validation file' contains sequence relatives (hits)
+   for each of a number of different scop families, superfamilies and
+   folds. The file contains the collated results from psiblast searches
+   of a sequence database for the indvidual scop families; hits of
+   unambiguous family assignment are listed under their respective
+   family, otherwise a hit is assigned as relatives to a scop superfamily
+   or fold instead. The scop validation file is generated by seqnr and is
+   in embl-like format. Input file Required
+   -maxhits The maximum number of hits to be written to the signature
+   hits file. Any integer value 50
+   -overlap When estimating the statistical significance of scored
+   matches of different types of discriminating element to a sequence,
+   two (or more) p-values are only ever multiplied together if
+   corresponding hit is to the same region of the protein. 'Same' is
+   defined as two hits overlapping by a user-defined number of residues.
+   Any integer value 10
+   -mrgoutpath Location of signature hits / library scan files for merged
+   results (output) Any string is accepted ./
+   -mrgoutextn Extension for signature hits / library scan files for
+   merged results (output) Any string is accepted .mrgout
+   Additional (Optional) qualifiers Allowed values Default
+   (none)
+   Advanced (Unprompted) qualifiers Allowed values Default
+   (none)
+
+Input file format
+
+   libscan reads any normal sequence USAs.
+
+   The format of the scop classification file is described in scopparse
+
+   The format of the signature files is explained in siggen
+
+   The format of the profile and hmm files is explained in documentation
+   for the propechy application and the hmmer package respectively.
+
+Output file format
+
+   The format of the signature hits file is described in sigscan
+
+Data files
+
+   EMBOSS data files are distributed with the application and stored in
+   the standard EMBOSS data directory, which is defined by the EMBOSS
+   environment variable EMBOSS_DATA.
+
+   To see the available EMBOSS data files, run:
+
+% embossdata -showall
+
+   To fetch one of the data files (for example 'Exxx.dat') into your
+   current directory for you to inspect or modify, run:
+
+% embossdata -fetch -file Exxx.dat
+
+   Users can provide their own data files in their own directories.
+   Project specific files can be put in the current directory, or for
+   tidier directory listings in a subdirectory called ".embossdata".
+   Files for all EMBOSS runs can be put in the user's home directory, or
+   again in a subdirectory called ".embossdata".
+
+   The directories are searched in the following order:
+     * . (your current directory)
+     * .embossdata (under your current directory)
+     * ~/ (your home directory)
+     * ~/.embossdata
+
+   libscan requires a residue substitution matrix.
+
+Notes
+
+   None.
+
+References
+
+   None.
+
+Warnings
+
+   The score distributions and therefore p-values are calculated only
+   from the data that libscan is provided. Therefore, meaningful p-values
+   are only guaranteed if the sequence set (database search mode) or
+   number of families (library screeen mode) is sufficiently large.
+
+Diagnostic Error Messages
+
+   None.
+
+Exit status
+
+   It always exits with status 0.
+
+Known bugs
+
+   None.
+
+See also
+
+   Program name Description
+   contacts Reads coordinate files and writes files of intra-chain
+   residue-residue contact data
+   fraggle Removes fragment sequences from files of hits for scop
+   families
+   hmmgen Generates a hidden Markov model for each alignment in a
+   directory by using the HMMER package
+   interface Reads coordinate files and writes files of inter-chain
+   residue-residue contact data
+   profgen Generates various profiles for each alignment in a directory
+   rocplot Provides interpretation and graphical display of the
+   performance of discriminating elements (e.g. profiles for protein
+   families). rocplot reads file(s) of hits from discriminator-database
+   search(es), performs ROC analysis on the hits, and writes graphs
+   illustrating the diagnostic performance of the discriminating elements
+   scopalign Generate alignments for families in a scop classification
+   file by using STAMP
+   scoprep Reorder scop classificaiton file so that the representative
+   structure of each family is given first
+   scopreso Removes low resolution domains from a scop classification
+   file
+   seqalign Generate extended alignments for families in a scop families
+   file by using CLUSTALW with seed alignments
+   seqsearch Generate files of hits for families in a scop classification
+   file by using PSI-BLAST with seed alignments
+   seqsort Reads multiple files of hits and writes (i) a scop families
+   file and (ii) a scop ambiguities file
+   seqwords Generate file of hits for scop families by searching
+   swissprot with keywords
+   siggen Generates a sparse protein signature from an alignment and
+   residue contact data
+   sigplot Generates data files of signature performance
+   sigscan Scans a signature against swissprot and writes a signature
+   hits file
+
+   Hidden Markov models can be generated for scop families by using
+   hmmgen which uses the HMMER package.
+
+   Simple frequency matrices, Gribskov profiles and Hennikoff profiles
+   can be generated for scop families by using profgen.
+
+   A 'signature file' contains a sparse sequence signature. The files are
+   generated by siggen.
+
+   A 'signature hits file' contains the results of a search of a
+   discriminating element (one of protein signature, hidden Markov model,
+   simple frequency matrix, Gribskov profile or Hennikoff profile)
+   against a sequence database. The files are generated by sigscan and
+   modelscan.
+
+   A 'library scan file' holds the results of a search of a sequence
+   against a library of discriminating elements for scop families (one
+   directory for each type of element, e.g. sparse sequence signatures,
+   profiles or HMMs).
+
+   The library scan file contains, for each invividual type of
+   discriminating element and for the combination of the elements,
+   classification and other data for each of a user-defined number of
+   top-scoring families (discriminators) from the scop database.
+
+   A 'scop classification file' contains classification and other data
+   for domains from the scop database. The file is in embl-like format
+   and is generated by scopparse. Domain sequence information can be
+   added to the file by using scopseqs.
+
+   A 'scop validation file' contains sequence relatives (hits) for each
+   of a number of different scop families, superfamilies and folds. The
+   file contains the collated results from psiblast searches of a
+   sequence database for the indvidual scop families; hits of unambiguous
+   family assignment are listed under their respective family, otherwise
+   a hit is assigned as relatives to a scop superfamily or fold instead.
+   The scop validation file is generated by seqnr and is in embl-like
+   format.
+
+Author(s)
+
+   Jon Ison (jison © rfcgr.mrc.ac.uk)
+   MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
+   Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
+
+   Ranjeeva Ranasinghe (rranasin © hgmp.mrc.ac.uk)
+   HGMP-RC, Genome Campus, Hinxton, Cambridge CB10 1SB, UK
+
+History
+
+   Written (2003) - Jon Ison & Ranjeeva Ranasinghe
+
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.

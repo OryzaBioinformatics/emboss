@@ -6,15 +6,9 @@
   </TITLE>
 </HEAD>
 <BODY BGCOLOR="#FFFFFF" text="#000000">
-
-
-
-
-
-
 <table align=center border=0 cellspacing=0 cellpadding=0>
 <tr><td valign=top>
-<A HREF="index.html" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
@@ -28,19 +22,9 @@ restrict
 
 
 
-
-
-
 <H2>
     Function
 </H2>
-
-
-
-<!--
-DON'T WRITE ANYTHING HERE.
-IT IS DONE FOR YOU.
--->
 Finds restriction enzyme cleavage sites
 
 
@@ -57,18 +41,17 @@ force the reporting of single cleavage sites.
 
 <p>
 
-By default, only one of any group of isoschizomers (enzymes that have the
-same recognition site and cut positions) is reported (this behaviour can
-be turned off by setting the qualifier '-limit' to be false.) The reported
-enzyme from any one group of isoschizomers (the prototype) is specified in
-the REBASE database and the information is held in the data file 'embossre.equ'.
-You may edit this file to set your own preferred prototype,if you wish.
+By default, only one of any group of isoschizomers (enzymes that have
+the same recognition site and cut positions) is reported (this
+behaviour can be turned off by setting the qualifier '-limit' to be
+false.) The reported enzyme from any one group of isoschizomers (the
+prototype) is specified in the REBASE database and the information is
+held in the data file 'embossre.equ'.  You may edit this file to set
+your own preferred prototype,if you wish.
 
 <H2>
     Usage
 </H2>
-
-
 <b>Here is a sample session with restrict</b>
 <p>
 
@@ -129,14 +112,6 @@ Output report [hsfau.restrict]: <b></b>
 <H2>
     Command line arguments
 </H2>
-
-
-
-<!--
-DON'T WRITE ANYTHING HERE.
-IT IS DONE FOR YOU.
--->
-
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
    Standard (Mandatory) qualifiers:
@@ -171,6 +146,7 @@ IT IS DONE FOR YOU.
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers:
+   -datafile           datafile   Alternative RE data file
    -min                integer    This sets the minimum number of cuts for any
                                   restriction enzyme that will be considered.
                                   Any enzymes that cut fewer times than this
@@ -181,9 +157,9 @@ IT IS DONE FOR YOU.
                                   will be ignored.
    -solofragment       boolean    This gives the fragment lengths of the
                                   forward sense strand produced by complete
-                                  restriction by each restriction enzyme on it
-                                  own. Results are added to the tail section
-                                  of the report.
+                                  restriction by each restriction enzyme on
+                                  its own. Results are added to the tail
+                                  section of the report.
    -single             boolean    If this is set then this forces the values
                                   of the mincuts and maxcuts qualifiers to
                                   both be 1. Any other value you may have set
@@ -214,7 +190,6 @@ IT IS DONE FOR YOU.
                                   names that you have asked to be searched
                                   for, and which cut, will be reported whether
                                   or not they have a commercial supplier.
-   -datafile           datafile   Alternative RE data file
    -[no]limit          boolean    This limits the reporting of enzymes to just
                                   one enzyme from each group of
                                   isoschizomers. The enzyme chosen to
@@ -241,45 +216,45 @@ IT IS DONE FOR YOU.
    Associated qualifiers:
 
    "-sequence" associated qualifiers
-   -sbegin1             integer    Start of each sequence to be used
-   -send1               integer    End of each sequence to be used
-   -sreverse1           boolean    Reverse (if DNA)
-   -sask1               boolean    Ask for begin/end/reverse
-   -snucleotide1        boolean    Sequence is nucleotide
-   -sprotein1           boolean    Sequence is protein
-   -slower1             boolean    Make lower case
-   -supper1             boolean    Make upper case
-   -sformat1            string     Input sequence format
-   -sdbname1            string     Database name
-   -sid1                string     Entryname
-   -ufo1                string     UFO features
-   -fformat1            string     Features format
-   -fopenfile1          string     Features file name
+   -sbegin1            integer    Start of each sequence to be used
+   -send1              integer    End of each sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
 
    "-outfile" associated qualifiers
-   -rformat2            string     Report format
-   -rname2              string     Base file name
-   -rextension2         string     File name extension
-   -rdirectory2         string     Output directory
-   -raccshow2           boolean    Show accession number in the report
-   -rdesshow2           boolean    Show description in the report
-   -rscoreshow2         boolean    Show the score in the report
-   -rusashow2           boolean    Show the full USA in the report
+   -rformat2           string     Report format
+   -rname2             string     Base file name
+   -rextension2        string     File name extension
+   -rdirectory2        string     Output directory
+   -raccshow2          boolean    Show accession number in the report
+   -rdesshow2          boolean    Show description in the report
+   -rscoreshow2        boolean    Show the score in the report
+   -rusashow2          boolean    Show the full USA in the report
 
    General qualifiers:
-   -auto                boolean    Turn off prompts
-   -stdout              boolean    Write standard output
-   -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for standard and additional values
-   -debug               boolean    Write debug output to program.dbg
-   -verbose             boolean    Report some/full command line options
-   -help                boolean    Report command line options. More
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
-   -warning             boolean    Report warnings
-   -error               boolean    Report errors
-   -fatal               boolean    Report fatal errors
-   -die                 boolean    Report deaths
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report deaths
 
 
 </pre>
@@ -347,6 +322,13 @@ PpiI</td>
 </tr>
 
 <tr>
+<td>-datafile</td>
+<td>Alternative RE data file</td>
+<td>Data file</td>
+<td><i>File in the data file path</i></td>
+</tr>
+
+<tr>
 <td>-min</td>
 <td>This sets the minimum number of cuts for any restriction enzyme that will be considered. Any enzymes that cut fewer times than this will be ignored.</td>
 <td>Integer from 1 to 1000</td>
@@ -362,7 +344,7 @@ PpiI</td>
 
 <tr>
 <td>-solofragment</td>
-<td>This gives the fragment lengths of the forward sense strand produced by complete restriction by each restriction enzyme on it own. Results are added to the tail section of the report.</td>
+<td>This gives the fragment lengths of the forward sense strand produced by complete restriction by each restriction enzyme on its own. Results are added to the tail section of the report.</td>
 <td>Boolean value Yes/No</td>
 <td>No</td>
 </tr>
@@ -407,13 +389,6 @@ PpiI</td>
 <td>If this is set, then only those enzymes with a commercial supplier will be searched for. This qualifier is ignored if you have specified an explicit list of enzymes to search for, rather than searching through 'all' the enzymes in the REBASE database. It is assumed that, if you are asking for an explicit enzyme, then you probably know where to get it from and so all enzymes names that you have asked to be searched for, and which cut, will be reported whether or not they have a commercial supplier.</td>
 <td>Boolean value Yes/No</td>
 <td>Yes</td>
-</tr>
-
-<tr>
-<td>-datafile</td>
-<td>Alternative RE data file</td>
-<td>Data file</td>
-<td><i>File in the data file path</i></td>
 </tr>
 
 <tr>
@@ -564,8 +539,8 @@ feattable, motif, regions, seqtable, simple, srs, table, tagseq
 <p>
 
 See:
-<A href="http://www.uk.embnet.org/Software/EMBOSS/Themes/ReportFormats.html">
-http://www.uk.embnet.org/Software/EMBOSS/Themes/ReportFormats.html</A>
+<A href="http://emboss.sf.net/docs/themes/ReportFormats.html">
+http://emboss.sf.net/docs/themes/ReportFormats.html</A>
 for further information on report formats.
 
 <p>
@@ -585,7 +560,7 @@ By default <b>restrict</b> writes a 'table' report file.
 <pre>
 ########################################
 # Program: restrict
-# Rundate: Tue Apr 06 14:32:55 2004
+# Rundate: Thu Jul 15 2004 12:00:00
 # Report_format: table
 # Report_file: hsfau.restrict
 ########################################
@@ -593,7 +568,7 @@ By default <b>restrict</b> writes a 'table' report file.
 #=======================================
 #
 # Sequence: HSFAU     from: 1   to: 518
-# HitCount: 53
+# HitCount: 54
 #
 # Minimum cuts per enzyme: 1
 # Maximum cuts per enzyme: 2000000000
@@ -607,21 +582,22 @@ By default <b>restrict</b> writes a 'table' report file.
 
   Start     End Enzyme_name Restriction_site 5prime 3prime 5primerev 3primerev
      11      14 TaqI        TCGA                 11     13         .         .
-     28      31 AciI        CCGC                 25     27         .         .
+     28      25 AciI        CCGC                 25     27         .         .
+     36      31 BseYI       CCCAGC               31     35         .         .
      38      41 AciI        CCGC                 38     40         .         .
-     44      48 BceAI       ACGGC                25     27         .         .
+     44      40 BceAI       ACGGC                25     27         .         .
      71      74 AciI        CCGC                 71     73         .         .
      71      81 BsiYI       CCNNNNNNNGG          77     74         .         .
-     73      76 Hin6I       GCGC                 73     75         .         .
      73      76 HhaI        GCGC                 75     73         .         .
+     73      76 Hin6I       GCGC                 73     75         .         .
      77      81 BssKI       CCNGG                76     81         .         .
      77      81 EcoRII      CCWGG                76     81         .         .
      94      97 TaqI        TCGA                 94     96         .         .
     103     106 HpaII       CCGG                103    105         .         .
     105     108 HaeIII      GGCC                106    106         .         .
-    107     111 EcoRII      CCWGG               106    111         .         .
     107     117 BsiYI       CCNNNNNNNGG         113    110         .         .
     107     111 BssKI       CCNGG               106    111         .         .
+    107     111 EcoRII      CCWGG               106    111         .         .
     122     132 BsiYI       CCNNNNNNNGG         128    125         .         .
     125     135 Hin4I       GAYNNNNNVTC         116    111       148       143
     146     150 BsrI        ACTGG               151    149         .         .
@@ -631,26 +607,26 @@ By default <b>restrict</b> writes a 'table' report file.
     182     186 EcoRII      CCWGG               181    186         .         .
     190     193 HhaI        GCGC                192    190         .         .
     190     193 Hin6I       GCGC                190    192         .         .
-    192     195 HhaI        GCGC                194    192         .         .
     192     195 Hin6I       GCGC                192    194         .         .
+    192     195 HhaI        GCGC                194    192         .         .
     197     201 BssKI       CCNGG               196    201         .         .
     197     201 EcoRII      CCWGG               196    201         .         .
     209     212 HaeIII      GGCC                210    210         .         .
     219     222 HaeIII      GGCC                220    220         .         .
     221     231 BsiYI       CCNNNNNNNGG         227    224         .         .
-    225     229 BsrI        ACTGG               221    219         .         .
-    229     232 AciI        CCGC                226    228         .         .
+    225     221 BsrI        ACTGG               221    219         .         .
+    229     226 AciI        CCGC                226    228         .         .
     236     239 HaeIII      GGCC                237    237         .         .
     248     252 BssKI       CCNGG               247    252         .         .
     248     252 EcoRII      CCWGG               247    252         .         .
     261     264 HaeIII      GGCC                262    262         .         .
     263     266 AciI        CCGC                263    265         .         .
-    293     297 EcoRII      CCWGG               292    297         .         .
     293     297 BssKI       CCNGG               292    297         .         .
+    293     297 EcoRII      CCWGG               292    297         .         .
     296     299 HaeIII      GGCC                297    297         .         .
     335     338 HaeIII      GGCC                336    336         .         .
-    380     383 AciI        CCGC                377    379         .         .
-    383     386 AciI        CCGC                380    382         .         .
+    380     377 AciI        CCGC                377    379         .         .
+    383     380 AciI        CCGC                380    382         .         .
     395     398 HpaII       CCGG                395    397         .         .
     398     401 HhaI        GCGC                400    398         .         .
     398     401 Hin6I       GCGC                398    400         .         .
@@ -672,7 +648,7 @@ By default <b>restrict</b> writes a 'table' report file.
 <pre>
 ########################################
 # Program: restrict
-# Rundate: Tue Apr 06 14:32:56 2004
+# Rundate: Thu Jul 15 2004 12:00:00
 # Report_format: table
 # Report_file: hsfau.restrict
 ########################################
@@ -680,7 +656,7 @@ By default <b>restrict</b> writes a 'table' report file.
 #=======================================
 #
 # Sequence: HSFAU     from: 1   to: 518
-# HitCount: 53
+# HitCount: 54
 #
 # Minimum cuts per enzyme: 1
 # Maximum cuts per enzyme: 2000000000
@@ -694,21 +670,22 @@ By default <b>restrict</b> writes a 'table' report file.
 
   Start     End Enzyme_name Restriction_site 5prime 3prime 5primerev 3primerev
      11      14 TaqI        TCGA                 11     13         .         .
-     28      31 AciI        CCGC                 25     27         .         .
+     28      25 AciI        CCGC                 25     27         .         .
+     36      31 BseYI       CCCAGC               31     35         .         .
      38      41 AciI        CCGC                 38     40         .         .
-     44      48 BceAI       ACGGC                25     27         .         .
+     44      40 BceAI       ACGGC                25     27         .         .
      71      74 AciI        CCGC                 71     73         .         .
      71      81 BsiYI       CCNNNNNNNGG          77     74         .         .
-     73      76 Hin6I       GCGC                 73     75         .         .
      73      76 HhaI        GCGC                 75     73         .         .
+     73      76 Hin6I       GCGC                 73     75         .         .
      77      81 BssKI       CCNGG                76     81         .         .
      77      81 EcoRII      CCWGG                76     81         .         .
      94      97 TaqI        TCGA                 94     96         .         .
     103     106 HpaII       CCGG                103    105         .         .
     105     108 HaeIII      GGCC                106    106         .         .
-    107     111 EcoRII      CCWGG               106    111         .         .
     107     117 BsiYI       CCNNNNNNNGG         113    110         .         .
     107     111 BssKI       CCNGG               106    111         .         .
+    107     111 EcoRII      CCWGG               106    111         .         .
     122     132 BsiYI       CCNNNNNNNGG         128    125         .         .
     125     135 Hin4I       GAYNNNNNVTC         116    111       148       143
     146     150 BsrI        ACTGG               151    149         .         .
@@ -718,12 +695,10 @@ By default <b>restrict</b> writes a 'table' report file.
     182     186 EcoRII      CCWGG               181    186         .         .
     190     193 HhaI        GCGC                192    190         .         .
     190     193 Hin6I       GCGC                190    192         .         .
-    192     195 HhaI        GCGC                194    192         .         .
     192     195 Hin6I       GCGC                192    194         .         .
 
 
 <font color=red>  [Part of this file has been deleted for brevity]</font>
-
 
 #---------------------------------------
 #
@@ -742,7 +717,6 @@ By default <b>restrict</b> writes a 'table' report file.
 #     14
 #     14
 #     14
-#     13
 #     12
 #     11
 #     10
@@ -753,6 +727,8 @@ By default <b>restrict</b> writes a 'table' report file.
 #     9
 #     7
 #     7
+#     7
+#     6
 #     5
 #     5
 #     3
@@ -785,7 +761,7 @@ By default <b>restrict</b> writes a 'table' report file.
 <pre>
 ########################################
 # Program: restrict
-# Rundate: Tue Apr 06 14:32:56 2004
+# Rundate: Thu Jul 15 2004 12:00:00
 # Report_format: table
 # Report_file: hsfau.restrict
 ########################################
@@ -793,7 +769,7 @@ By default <b>restrict</b> writes a 'table' report file.
 #=======================================
 #
 # Sequence: HSFAU     from: 1   to: 518
-# HitCount: 53
+# HitCount: 54
 #
 # Minimum cuts per enzyme: 1
 # Maximum cuts per enzyme: 2000000000
@@ -807,21 +783,22 @@ By default <b>restrict</b> writes a 'table' report file.
 
   Start     End Enzyme_name Restriction_site 5prime 3prime 5primerev 3primerev
      11      14 TaqI        TCGA                 11     13         .         .
-     28      31 AciI        CCGC                 25     27         .         .
+     28      25 AciI        CCGC                 25     27         .         .
+     36      31 BseYI       CCCAGC               31     35         .         .
      38      41 AciI        CCGC                 38     40         .         .
-     44      48 BceAI       ACGGC                25     27         .         .
+     44      40 BceAI       ACGGC                25     27         .         .
      71      74 AciI        CCGC                 71     73         .         .
      71      81 BsiYI       CCNNNNNNNGG          77     74         .         .
-     73      76 Hin6I       GCGC                 73     75         .         .
      73      76 HhaI        GCGC                 75     73         .         .
+     73      76 Hin6I       GCGC                 73     75         .         .
      77      81 BssKI       CCNGG                76     81         .         .
      77      81 EcoRII      CCWGG                76     81         .         .
      94      97 TaqI        TCGA                 94     96         .         .
     103     106 HpaII       CCGG                103    105         .         .
     105     108 HaeIII      GGCC                106    106         .         .
-    107     111 EcoRII      CCWGG               106    111         .         .
     107     117 BsiYI       CCNNNNNNNGG         113    110         .         .
     107     111 BssKI       CCNGG               106    111         .         .
+    107     111 EcoRII      CCWGG               106    111         .         .
     122     132 BsiYI       CCNNNNNNNGG         128    125         .         .
     125     135 Hin4I       GAYNNNNNVTC         116    111       148       143
     146     150 BsrI        ACTGG               151    149         .         .
@@ -831,7 +808,6 @@ By default <b>restrict</b> writes a 'table' report file.
     182     186 EcoRII      CCWGG               181    186         .         .
     190     193 HhaI        GCGC                192    190         .         .
     190     193 Hin6I       GCGC                190    192         .         .
-    192     195 HhaI        GCGC                194    192         .         .
     192     195 Hin6I       GCGC                192    194         .         .
 
 
@@ -918,14 +894,6 @@ at the end of the report file.
     Data files
 </H2>
 
-This uses the EMBOSS REBASE data files in 'data/REBASE/*' under the
-EMBOSS installation directory.
-
-<p>
-These files must first be set up using the program <a
-href="rebaseextract.html">'rebaseextract'.</a> Running
-'rebaseextract' may be the job of your system manager.  
-
 <p>
 EMBOSS data files are distributed with the application and stored
 in the standard EMBOSS data directory, which is defined
@@ -966,37 +934,51 @@ The directories are searched in the following order:
 </ul>
 <p>
 
+<p>
+The EMBOSS REBASE restriction enzyme data files are stored iin
+directory 'data/REBASE/*' under the EMBOSS installation directory.
 
+<p>
 
+These files must first be set up using the program <a
+href="rebaseextract.html">'<b>rebaseextract</b>'</a>.  Running
+'rebaseextract' may be the job of your system manager.
+
+<p>
+      
 The data files are stored in the REBASE directory of the standard EMBOSS
 data directory. The names are:
 
 <ul>
-   <li> embossre.enz     Cleavage information
-   <li> embossre.ref     Reference/methylation information
-   <li> embossre.sup     Supplier information
+<li> embossre.enz     Cleavage information
+<li> embossre.ref     Reference/methylation information
+<li> embossre.sup     Supplier information
 </ul>
-
+	 
 The column information is described at the top of the data files
-
+	 
 <p>
-
-The reported
-enzyme from any one group of isoschizomers (the prototype) is specified in
-the REBASE database and the information is held in the data file 'embossre.equ'.
-You may edit this file to set your own preferred prototype, if you wish.
-
+	 
+The reported enzyme from any one group of isoschizomers (the prototype)
+is specified in the REBASE database and the information is held in the
+data file 'embossre.equ'.  You may edit this file to set your own
+preferred prototype, if you wish. 
+	 
 <p>
-
-The format of the file "embossre.equ" is 
+	 
+The format of the file "embossre.equ" is
 <br>
 Enzyme-name Prototype-name
-
+	 
 <p>
+	 
+i.e.  two columns of enzyme names separated by a space.  The first name
+of the pair of enzymes is the name that is not preferred and the second
+is the preferred (prototype) name. 
+	 
+	          
 
-i.e. two columns of enzyme names separated by a space. The first name of the
-pair of enzymes is the name that is not preferred and the second is the
-preferred, prototype name.
+
 
 
 <H2>
@@ -1011,9 +993,10 @@ The size of the output can sometimes be reduced by specifying
 the -noambiguity switch.
 <p>
 
-The data files must have been created before running this program. This is
-done by running the <b>rebaseextract</b> program with the "withrefm" and "prot" 
-files from an REBASE release. You may have to ask your system manager to do this.
+The data files must have been created before running this
+program. This is done by running the <b>rebaseextract</b> program with
+the "withrefm" and "prot" files from an REBASE release. You may have
+to ask your system manager to do this.
 
 <H2>
     References
@@ -1055,15 +1038,9 @@ It exits with status 0 unless an error is reported.
 
 None.
 
-<!--
-<H2>
-    See also
-</H2>
--->
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
-<tr><td><a href="recite.html">recite</a></td><td>Find changes to an enzyme site that introduce new enzyme sites</td></tr>
 <tr><td><a href="recoder.html">recoder</a></td><td>Remove restriction sites but maintain the same translation</td></tr>
 <tr><td><a href="redata.html">redata</a></td><td>Search REBASE for enzyme name, references, suppliers etc</td></tr>
 <tr><td><a href="remap.html">remap</a></td><td>Display a sequence with restriction cut sites, translation etc</td></tr>
@@ -1071,12 +1048,6 @@ None.
 <tr><td><a href="showseq.html">showseq</a></td><td>Display a sequence with features, translation etc</td></tr>
 <tr><td><a href="silent.html">silent</a></td><td>Silent mutation restriction enzyme scan</td></tr>
 </table>
-
-<!--
-        Add any comments about other associated programs (to prepare
-        data files?) that seealso doesn't find.
-   -->
-
 
 
 
@@ -1096,25 +1067,21 @@ Wellcome Trust Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
     History
 </H2>
 
-
 Completed 16th April 1999
 
-<!--
-<p>
-[an error occurred while processing this directive]
--->
 
 <H2>
     Target users
 </H2>
+This program is intended to be used by everyone and everything, from naive users to embedded scripts.
 
 
-This program is intended to be used by everyone and everything,
-from naive users to embedded scripts. 
 
 <H2>
     Comments
 </H2>
+None
+
 
 
 

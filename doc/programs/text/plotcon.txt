@@ -1,29 +1,29 @@
 
                                   plotcon 
-                                      
-   
-   
+
+
+
 Function
 
    Plots the quality of conservation of a sequence alignment
-   
+
 Description
 
    Displays a graphical representation of the similarity along a set of
    aligned sequences.
-   
+
    The similarity is calculated by moving a window of a specified length
    along the aligned sequences. Within the window, the similarity of any
    one position is taken to be the average of all the possible pairwise
    scores of the bases or residues at that position. The pairwise scores
    are taken from the specified similarity matrix. The average of the
    position similarities within the window is plotted.
-   
+
    The program is useful for determining where the quality of alignments
    is good or bad.
-   
+
    The average similarity is calculated by:
-   
+
 Av. Sim. =       sum( Mij*wi + Mji*wj  )
                       -------------------
                   (Nseq*Wsize)*((Nseq-1)*Wsize)
@@ -34,10 +34,10 @@ Av. Sim. =       sum( Mij*wi + Mji*wj  )
    i,j - with respect to residue i or j
    Nseq - number of sequences in the alignment
    Wsize - window size
-   
+
    This program is useful for gaining a qualitative insight into where
    there are regions of conservation in a group of aligned sequences.
-   
+
    Note that you should only compare the results of two runs of plotcon
    if you use the same window size in each. This is because the
    'similarity score' units that are output are very sensitive to the
@@ -45,21 +45,21 @@ Av. Sim. =       sum( Mij*wi + Mji*wj  )
    curve, and very low 'similarity score' units, whereas a small window
    (e.g. 4) gives a very spikey, noisy plot with 'similarity score' units
    of a round 1.00
-   
+
 Usage
 
    Here is a sample session with plotcon
-   
 
-% plotcon -sformat msf ../../data/globins.msf -graph cps 
+
+% plotcon -sformat msf globins.msf -graph cps 
 Plots the quality of conservation of a sequence alignment
 Window size [4]: 
 
 Created plotcon.ps
-   
+
    Go to the input files for this example
    Go to the output files for this example
-   
+
 Command line arguments
 
    Standard (Mandatory) qualifiers:
@@ -119,7 +119,7 @@ Command line arguments
    -error               boolean    Report errors
    -fatal               boolean    Report fatal errors
    -die                 boolean    Report deaths
-   
+
 
    Standard (Mandatory) qualifiers Allowed values Default
    [-sequences]
@@ -131,7 +131,7 @@ Command line arguments
    -graph Graph type EMBOSS has a list of known devices, including
    postscript, ps, hpgl, hp7470, hp7580, meta, colourps, cps, xwindows,
    x11, tektronics, tekt, tek4107t, tek, none, null, text, data, xterm,
-   png EMBOSS_GRAPHICS value, or x11
+   png, xml EMBOSS_GRAPHICS value, or x11
    Additional (Optional) qualifiers Allowed values Default
    -scorefile This is the scoring matrix file used when comparing
    sequences. By default it is the file 'EBLOSUM62' (for proteins) or the
@@ -141,15 +141,15 @@ Command line arguments
    EDNAFULL for DNA
    Advanced (Unprompted) qualifiers Allowed values Default
    (none)
-   
+
 Input file format
 
    plotcon reads a set of gapped, aligned sequences.
-   
+
   Input files for usage example
-  
-  File: ../../data/globins.msf
-  
+
+  File: globins.msf
+
 !!AA_MULTIPLE_ALIGNMENT 1.0
 
   ../data/globins.msf MSF:  164 Type: P 25/06/01 CompCheck: 4278 ..
@@ -199,28 +199,28 @@ HBA_HORSE  TVLTSKYR~~~~~~
 MYG_PHYCA  KDIAAKYKELGYQG
 GLB5_PETMA Y~~~~~~~~~~~~~
 LGB2_LUPLU IVIKKEMNDAA~~~
-   
+
 Output file format
 
    A graph of the quality of the alignment is dispalyed on the specifed
    graphics device.
-   
+
   Output files for usage example
-  
+
   Graphics File: plotcon.ps
-  
+
    [plotcon results]
-   
+
 Data files
 
    It reads in the specified similarity matrix.
-   
+
    EMBOSS data files are distributed with the application and stored in
    the standard EMBOSS data directory, which is defined by the EMBOSS
    environment variable EMBOSS_DATA.
-   
+
    To see the available EMBOSS data files, run:
-   
+
 % embossdata -showall
 
    To fetch one of the data files (for example 'Exxx.dat') into your
@@ -233,38 +233,38 @@ Data files
    tidier directory listings in a subdirectory called ".embossdata".
    Files for all EMBOSS runs can be put in the user's home directory, or
    again in a subdirectory called ".embossdata".
-   
+
    The directories are searched in the following order:
      * . (your current directory)
      * .embossdata (under your current directory)
      * ~/ (your home directory)
      * ~/.embossdata
-       
+
 Notes
 
    None.
-   
+
 References
 
    None.
-   
+
 Warnings
 
    If you give it a set of unaligned sequences, it will plot the (poor!)
    quality of these as if they were aligned.
-   
+
 Diagnostic Error Messages
 
    None.
-   
+
 Exit status
 
    It always exits with status 0.
-   
+
 Known bugs
 
    None.
-   
+
 See also
 
    Program name                        Description
@@ -273,20 +273,22 @@ See also
    prettyplot   Displays aligned sequences, with colouring and boxing
    showalign    Displays a multiple sequence alignment
    tranalign    Align nucleic coding regions given the aligned proteins
-   
+
 Author(s)
 
    Tim Carver (tcarver © rfcgr.mrc.ac.uk)
    MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
    Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
-   
+
 History
 
    Written (Sept 2000) - Tim Carver.
-   
+
 Target users
 
    This program is intended to be used by everyone and everything, from
    naive users to embedded scripts.
-   
+
 Comments
+
+   None

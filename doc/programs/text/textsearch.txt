@@ -1,55 +1,55 @@
 
                                 textsearch 
-                                      
-   
-   
+
+
+
 Function
 
    Search sequence documentation text. SRS and Entrez are faster!
-   
+
 Description
 
    This is a small utility search for words in the description text of a
    sequence and for each match list the sequence's name and/or
    description. NB. It only searches the description line of the
    annotation, not the full annotation.
-   
+
 Usage
 
    Here is a sample session with textsearch
-   
+
    Search for 'lactose':
-   
+
 
 % textsearch tsw:* 'lactose' 
 Search sequence documentation text. SRS and Entrez are faster!
 Output file [100k_rat.textsearch]: 
-   
+
    Go to the input files for this example
    Go to the output files for this example
-   
+
    Example 2
-   
+
    Search for 'lactose' or 'permease' in E.coli proteins:
-   
+
 
 % textsearch tsw:*_ecoli 'lactose | permease' 
 Search sequence documentation text. SRS and Entrez are faster!
 Output file [laci_ecoli.textsearch]: 
-   
+
    Go to the output files for this example
-   
+
    Example 3
-   
+
    Output a search for 'lacz' formatted with HTML to a file:
-   
-   
+
+
 % textsearch tembl:* 'lacz' -html -outfile embl.lacz.html 
 Search sequence documentation text. SRS and Entrez are faster!
 
    Go to the input files for this example
    Go to the output files for this example
-   
+
 Command line arguments
 
    Standard (Mandatory) qualifiers:
@@ -114,7 +114,7 @@ Command line arguments
    -error               boolean    Report errors
    -fatal               boolean    Report fatal errors
    -die                 boolean    Report deaths
-   
+
 
    Standard (Mandatory) qualifiers Allowed values Default
    [-sequence]
@@ -140,95 +140,95 @@ Command line arguments
    -name Display 'name' column Boolean value Yes/No @(!$(only))
    -description Display 'description' column Boolean value Yes/No
    @(!$(only))
-   
+
 Input file format
 
    textsearch reads one or more normal sequence USAs.
-   
+
   Input files for usage example
-  
+
    'tsw:*' is a sequence entry in the example protein database 'tsw'
-   
+
   Input files for usage example 3
-  
+
    'tembl:*' is a sequence entry in the example nucleic acid database
    'tembl'
-   
+
 Output file format
 
   Output files for usage example
-  
+
   File: 100k_rat.textsearch
-  
+
 # Search for: lactose
 tsw-id:LACI_ECOLI LACI_ECOLI    P03023  LACTOSE OPERON REPRESSOR.
 tsw-id:LACY_ECOLI LACY_ECOLI    P02920  LACTOSE PERMEASE (LACTOSE-PROTON SYMPOR
 T).
-   
+
   Output files for usage example 2
-  
+
   File: laci_ecoli.textsearch
-  
+
 # Search for: lactose | permease
 tsw-id:LACI_ECOLI LACI_ECOLI    P03023  LACTOSE OPERON REPRESSOR.
 tsw-id:LACY_ECOLI LACY_ECOLI    P02920  LACTOSE PERMEASE (LACTOSE-PROTON SYMPOR
 T).
-   
+
   Output files for usage example 3
-  
+
   File: embl.lacz.html
-  
+
    Search for: lacz
    tembl-id:ECLAC ECLAC J01636 E.coli lactose operon with lacI, lacZ,
    lacY and lacA genes.
    tembl-id:ECLACZ ECLACZ V00296 E. coli gene lacZ coding for
    beta-galactosidase (EC 3.2.1.23).
-   
+
    The first column in the name or ID of each sequence. The remaining
    text is the description line of the sequence.
-   
+
    When the -html qualifier is specified, then the output will be wrapped
    in HTML tags, ready for inclusion in a Web page. Note that tags such
    as <HTML>, <BODY>, </BODY> and </HTML> are not output by this program
    as the table of databases is expected to form only part of the
    contents of a web page - the rest of the web page must be supplier by
    the user.
-   
+
    The lines of out information are guaranteed not to have trailing
    white-space at the end. So if '-nodesc' is used, there will not be any
    whitespace after the ID name.
-   
+
 Data files
 
    None.
-   
+
 Notes
 
    This is a rather slow way to search for text in databases. If you are
    searching for text in public databases, you should consider using
    either Entrez (http://www.ncbi.nlm.nih.gov/Entrez/) or SRS
    (http://srs.rfcgr.mrc.ac.uk/ or http://www.sanger.ac.uk/srs6/ etc.)
-   
+
 References
 
    None.
-   
+
 Warnings
 
    None.
-   
+
 Diagnostic Error Messages
 
    None.
-   
+
 Exit status
 
    It always exits with status 0
-   
+
 Known bugs
 
-   None noted.
-   
+   None.
+
 See also
 
    Program name                          Description
@@ -251,18 +251,20 @@ See also
    tfm          Displays a program's help documentation manual
    whichdb      Search all databases for an entry
    wossname     Finds programs by keywords in their one-line documentation
-   
+
 Author(s)
 
    Gary Williams (gwilliam © rfcgr.mrc.ac.uk)
    MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
    Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
-   
+
 History
 
 Target users
 
    This program is intended to be used by everyone and everything, from
    naive users to embedded scripts.
-   
+
 Comments
+
+   None

@@ -1,12 +1,12 @@
 
                                  epestfind 
-                                      
-   
-   
+
+
+
 Function
 
    Finds PEST motifs as potential proteolytic cleavage sites
-   
+
 Description
 
    epestfind allows rapid and objective identification of PEST motifs in
@@ -25,10 +25,10 @@ Description
    it was concluded that PEST motifs reduce the half-lives of proteins
    dramatically and hence, that they target proteins for proteolytic
    degradation.
-   
+
    PEST means Black Death in German, so that the name of this programme
    sounds a bit strange, at least in our ears.
-   
+
 Algorithm
 
    PEST motifs were defined as hydrophilic stretches of at least 12 amino
@@ -36,7 +36,7 @@ Algorithm
    Remarkably, negatively charged amino acids are clustered within these
    motifs while positively charged amino acids, arginine (R), histidine
    (H) and lysine (K) are generally forbidden.
-   
+
    The epestfind algorithm defines the last criterion even more
    stringently in that PEST motifs are required to be flanked by
    positively charged amino acids. Though this implication greatly
@@ -58,7 +58,7 @@ Algorithm
    one serine (S) or threonine(T). Sequences that do not meet the above
    criteria are classified as 'invalid' PEST motifs and excluded from
    further analysis.
-   
+
    The quality of 'valid' PEST motifs is refined by means of a scoring
    parameter based on the local enrichment of critical amino acids as
    well as the motif's hydrophobicity. Enrichment of D, E, P, S and T is
@@ -70,16 +70,16 @@ Algorithm
    converted to positive integers. This was achieved by the following
    linear transformation, which yielded values from 0 for arginine to 90
    for isoleucine.
-   
+
         Hydropathy index = 10 * Kyte-Doolittle hydropathy index + 45
-                                      
+
    The motif's hydrophobicity is calculated as the sum over the products
    of mole percent and hydrophobicity index for each amino acid species.
    The desired PEST score is obtained as combination of local enrichment
    term and hydrophobicity term as expressed by the following equation:
-   
+
           PEST score = 0.55 * DEPST - 0.5 * hydrophobicity index.
-                                      
+
    Although, the formula above differs from the publication [1], it is in
    fact the correct one, which was also implemented in the original BASIC
    programme (personal communication). In addition, the programme
@@ -91,31 +91,31 @@ Algorithm
    PEST scores above the threshold score are of real biological interest.
    The higher the PEST score, the more likely is degradation of proteins
    mediated via 'potential' PEST motifs in eukaryotic cells.
-   
+
    Presently, all modified Kyte-Doolittle hydropathy indices are
    hard-coded into the programme, which might change in future.
-   
+
    The array of linear transformed Kyte-Doolittle hydropathy indices
    (ltkdhi) is listed in alphabetical order below. (A-M and N-Z as well
    as N-terminus and C-terminus)
-   
+
    63, 10, 70, 10, 10, 72, 41, 13, 90, 0, 6, 82, 64, 10, 0, 29, 10, 0,
    36, 38, 0, 87, 36, 45, 58, 10, 0, 0
-   
+
    The linear transformation was ltkdhi = 10 * kdhi + 45
    All values range from Argine R = 0 to Isoleucine I = 90
    B=(N|D)=10 since N=10 and D=10
    Z=(Q|E)=10 since Q=10 and E=10
    X=10*0+45=45
-   
+
 Usage
 
    Here is a sample session with epestfind
-   
+
 
 % epestfind -graph cps -invalid 
 Finds PEST motifs as potential proteolytic cleavage sites
-Input sequence: ../../data/exu2_drops.embl
+Input sequence: exu2_drops.embl
 Window length [10]: 
 Sort order of results
       1 : length
@@ -125,10 +125,10 @@ Sort order of results [score]:
 Output file [exu2_drops.epestfind]: 
 
 Created epestfind.ps
-   
+
    Go to the input files for this example
    Go to the output files for this example
-   
+
 Command line arguments
 
    Standard (Mandatory) qualifiers:
@@ -208,7 +208,7 @@ Command line arguments
    -error               boolean    Report errors
    -fatal               boolean    Report fatal errors
    -die                 boolean    Report deaths
-   
+
 
    Standard (Mandatory) qualifiers Allowed values Default
    [-sequence]
@@ -225,7 +225,7 @@ Command line arguments
    -graph Graph type EMBOSS has a list of known devices, including
    postscript, ps, hpgl, hp7470, hp7580, meta, colourps, cps, xwindows,
    x11, tektronics, tekt, tek4107t, tek, none, null, text, data, xterm,
-   png EMBOSS_GRAPHICS value, or x11
+   png, xml EMBOSS_GRAPHICS value, or x11
    Additional (Optional) qualifiers Allowed values Default
    -aadata File of amino acid properties and molecular masses. Data file
    Eamino.dat
@@ -244,15 +244,15 @@ Command line arguments
    value Yes/No No
    -[no]map Decide whether PEST motifs should be mapped to sequence.
    Boolean value Yes/No Yes
-   
+
 Input file format
 
    epestfind reads any normal protein sequence USA.
-   
+
   Input files for usage example
-  
-  File: ../../data/exu2_drops.embl
-  
+
+  File: exu2_drops.embl
+
 ID   EXU2_DROPS     STANDARD;      PRT;   477 AA.
 AC   Q24617;
 DT   01-NOV-1997 (Rel. 35, Created)
@@ -299,29 +299,15 @@ SQ   SEQUENCE   477 AA;  53194 MW;  8B5334A77DB9467B CRC64;
      SLKTEETAEL LDLLDSYYDP SKTTIKPRCK RSGNGTRRRN RAKGAASSKN GAIGAGGDNS
      VPDSATKPGG RPRRKRNNIR NNILGPQNTE KGSPKAEMKT STPKSMSIKP PSEFADI
 //
-   
+
 Output file format
 
    epestfind outputs a graph to the specified graphics device.
-   
-   The output from epestfind is a simple text one. It reports poor and
-   potential PEST motifs together with their PEST score, mass percent of
-   DEPST and their hydrophobicity index.
-   
-   'Valid' PEST motifs below the threshold score (5.0) are considered as
-   'poor', while PEST scores above the threshold score are of real
-   biological interest. The higher the PEST score, the more likely is
-   degradation of proteins mediated via 'potential' PEST motifs in
-   eukaryotic cells.
-   
+
   Output files for usage example
-  
-  Graphics File: epestfind.ps
-  
-   [epestfind results]
-   
+
   File: exu2_drops.epestfind
-  
+
 PEST-find: Finds PEST motifs as potential proteolytic cleavage sites.
 
     14 PEST motifs were identified in EXU2_DROPS
@@ -412,7 +398,21 @@ Invalid PEST motif with 10 amino acids between position 225 and 236.
        +++++++   potential
        OOOOOOO   poor
        -------   invalid
-   
+
+  Graphics File: epestfind.ps
+
+   [epestfind results]
+
+   The output from epestfind is a simple text one. It reports poor and
+   potential PEST motifs together with their PEST score, mass percent of
+   DEPST and their hydrophobicity index.
+
+   'Valid' PEST motifs below the threshold score (5.0) are considered as
+   'poor', while PEST scores above the threshold score are of real
+   biological interest. The higher the PEST score, the more likely is
+   degradation of proteins mediated via 'potential' PEST motifs in
+   eukaryotic cells.
+
 Data files
 
    The physico-chemical properties of the residues are read from the
@@ -420,13 +420,13 @@ Data files
    current directory and inspected or altered by using the application
    'embossdata -fetch'. Another file can be specified using the qualifier
    '-aadata'.
-   
+
    EMBOSS data files are distributed with the application and stored in
    the standard EMBOSS data directory, which is defined by the EMBOSS
    environment variable EMBOSS_DATA.
-   
+
    To see the available EMBOSS data files, run:
-   
+
 % embossdata -showall
 
    To fetch one of the data files (for example 'Exxx.dat') into your
@@ -439,15 +439,15 @@ Data files
    tidier directory listings in a subdirectory called ".embossdata".
    Files for all EMBOSS runs can be put in the user's home directory, or
    again in a subdirectory called ".embossdata".
-   
+
    The directories are searched in the following order:
      * . (your current directory)
      * .embossdata (under your current directory)
      * ~/ (your home directory)
      * ~/.embossdata
-       
+
    Here is the default Eamino.dat file:
-   
+
 # Molecular weights of amino acids
 # Also classified as:
 #  Tiny, Small, Aliphatic, Aromatic, Non-polar, Polar, Charge, +ve, -ve
@@ -483,7 +483,7 @@ Z       128.6228         0 0 0 0 0 1 -.5 0 1
 Notes
 
    None.
-   
+
 References
 
     1. Rogers S.W., Wells R., Rechsteiner M. Amino acid sequences common
@@ -495,23 +495,23 @@ References
        proteolysis Trends Biochem. Sci. 21, 267-271 (1996)
     4. J. Kyte and R.F. Dootlittle A simple method for displaying the
        hydropathic character of a protein J. Mol. Biol. 157, 105 (1982)
-       
+
 Warnings
 
    None.
-   
+
 Diagnostic Error Messages
 
    None.
-   
+
 Exit status
 
    It always exits with status 0.
-   
+
 Known bugs
 
    None.
-   
+
 See also
 
     Program name                        Description
@@ -527,23 +527,27 @@ See also
    preg           Regular expression search of a protein sequence
    pscan          Scans proteins using PRINTS
    sigcleave      Reports protein signal cleavage sites
-   
+
 Author(s)
 
    Michael K. Schuster and Martin Grabner (martin.grabner © univie.ac.at)
    from the Austrian National EMBnet node.
-   
+
    Original program 'epestfind' by Scott Rogers and Martin Rechsteiner
    (C)1986.
-   
+
 History
 
    This is based on the algorithm used in the QuickBasic program by
    Rodgers et al.
-   
+
    Written (March 2002).
-   
+
 Target users
 
    This program is intended to be used by everyone and everything, from
    naive users to embedded scripts.
+
+Comments
+
+   None

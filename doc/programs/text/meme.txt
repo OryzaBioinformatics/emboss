@@ -1,0 +1,247 @@
+
+                                   meme 
+
+
+
+Function
+
+   Motif detection
+
+Description
+
+   **************** EDIT HERE ****************
+
+Algorithm
+
+   **************** EDIT HERE ****************
+
+Usage
+
+Command line arguments
+
+   Standard (Mandatory) qualifiers:
+  [-sequence]          seqall     Sequence database USA
+   -model              menu       Model to use
+   -nmotifs            integer    Maximum number of motifs to find
+  [-outfile]           outfile    Output file name
+
+   Additional (Optional) qualifiers:
+   -ntype              menu       Method to use
+   -protein            boolean    Assume sequences are proteins
+   -nucleic            boolean    Assume sequences are DNA
+   -palindromes        boolean    Allow palindromes
+   -ponly              boolean    Force palindromes
+   -[no]shorten        boolean    Allow motifs shorter than MINW
+   -nsites             float      Expected number of sites for each motif
+   -minsites           float      Minimum number of sites for each motif
+   -maxsites           float      Maximum number of sites for each motif
+   -w                  integer    Starting motif width to try
+   -minw               integer    Minimum starting motif width to try
+   -maxw               integer    Maximum starting motif width to try
+   -prior              menu       Prior to use
+   -[no]brief          boolean    Don't print documemtation
+   -b                  float      Strength of the prior
+   -spmap              menu       Mapping start
+   -spfuzz             float      Fuzziness of sequence to theta mapping
+   -maxiter            integer    Maximum EM iterations to run
+   -distance           float      EM convergence criterion
+   -cons               string     Consensus sequence to start EM from
+   -chi                float      Cutoff for p-value
+   -adj                menu       Type
+   -maxsize            integer    Maximum dataset size in characters
+   -page               integer    Width of page
+   -status             boolean    Print progress reports
+   -v                  boolean    Verbose mode
+   -cfive              boolean    Use 5' to 3' complementary strand as well
+   -cthree             boolean    Use 3' to 5' complementary strand as well
+   -wthree             boolean    Use 3' to 5' main strand as well
+   -prob               float      Starting point confidence level
+   -seed               integer    Seed for random numbers in sampling
+   -seqfrac            float      Fraction of sequences to use
+   -[no]align          boolean    Print aligned motif occurrences
+   -trace              boolean    Trace starting points
+   -allprint           boolean    Print all debugging information
+   -wprint             boolean    Print erasure matrix
+   -zprint             boolean    Print missing information matrix
+   -llprint            boolean    Print log likelihood during EM
+   -startsprint        boolean    Print starting points
+   -fastaprint         boolean    Print sites in FASTA format
+   -timer              integer    Timer type
+
+   Advanced (Unprompted) qualifiers: (none)
+   Associated qualifiers:
+
+   "-sequence" associated qualifiers
+   -sbegin1            integer    Start of each sequence to be used
+   -send1              integer    End of each sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
+
+   "-outfile" associated qualifiers
+   -odirectory2        string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report deaths
+
+
+   Standard (Mandatory) qualifiers Allowed values Default
+   [-sequence]
+   (Parameter 1) Sequence database USA Readable sequence(s) Required
+   -model Model to use
+   oops  (Oops Distribution)
+   zoops (Zoops Distribution)
+   tcm   (TCM Distribution)
+   zoops
+   -nmotifs Maximum number of motifs to find Any integer value 1
+   [-outfile]
+   (Parameter 2) Output file name Output file <sequence>.meme
+   Additional (Optional) qualifiers Allowed values Default
+   -ntype Method to use
+   pair  (Pairwise method)
+   blend (Blending method)
+   pair
+   -protein Assume sequences are proteins Boolean value Yes/No No
+   -nucleic Assume sequences are DNA Boolean value Yes/No No
+   -palindromes Allow palindromes Boolean value Yes/No No
+   -ponly Force palindromes Boolean value Yes/No No
+   -[no]shorten Allow motifs shorter than MINW Boolean value Yes/No Yes
+   -nsites Expected number of sites for each motif Any numeric value 0.
+   -minsites Minimum number of sites for each motif Any numeric value 0.
+   -maxsites Maximum number of sites for each motif Any numeric value 0.
+   -w Starting motif width to try Any integer value 0
+   -minw Minimum starting motif width to try Any integer value 8
+   -maxw Maximum starting motif width to try Any integer value 57
+   -prior Prior to use
+   dirichlet (Dirichlet prior)
+   dmix      (dmix prior)
+   mega      (mega prior)
+   megap     (megap prior)
+   addone    (addone prior)
+   dirichlet
+   -[no]brief Don't print documemtation Boolean value Yes/No Yes
+   -b Strength of the prior Any numeric value -1.0
+   -spmap Mapping start
+   uni (uni map type)
+   pam (pam map type)
+   uni
+   -spfuzz Fuzziness of sequence to theta mapping Any numeric value -1.0
+   -maxiter Maximum EM iterations to run Any integer value 50
+   -distance EM convergence criterion Any numeric value 1e-3
+   -cons Consensus sequence to start EM from Any string is accepted An
+   empty string is accepted
+   -chi Cutoff for p-value Any numeric value 1.0
+   -adj Type
+   none (no LRT)
+   bon  (bon LRT)
+   root (root LRT)
+   root
+   -maxsize Maximum dataset size in characters Any integer value 100000
+   -page Width of page Any integer value 80
+   -status Print progress reports Boolean value Yes/No No
+   -v Verbose mode Boolean value Yes/No No
+   -cfive Use 5' to 3' complementary strand as well Boolean value Yes/No
+   No
+   -cthree Use 3' to 5' complementary strand as well Boolean value Yes/No
+   No
+   -wthree Use 3' to 5' main strand as well Boolean value Yes/No No
+   -prob Starting point confidence level Any numeric value 1.0
+   -seed Seed for random numbers in sampling Any integer value 0
+   -seqfrac Fraction of sequences to use Any numeric value 1.0
+   -[no]align Print aligned motif occurrences Boolean value Yes/No Yes
+   -trace Trace starting points Boolean value Yes/No No
+   -allprint Print all debugging information Boolean value Yes/No No
+   -wprint Print erasure matrix Boolean value Yes/No No
+   -zprint Print missing information matrix Boolean value Yes/No No
+   -llprint Print log likelihood during EM Boolean value Yes/No No
+   -startsprint Print starting points Boolean value Yes/No No
+   -fastaprint Print sites in FASTA format Boolean value Yes/No No
+   -timer Timer type Any integer value 0
+   Advanced (Unprompted) qualifiers Allowed values Default
+   (none)
+
+Input file format
+
+   meme reads any normal sequence USAs.
+
+Output file format
+
+   meme outputs a graph to the specified graphics device. outputs a
+   report format file. The default format is ...
+
+Data files
+
+   **************** EDIT HERE ****************
+
+Notes
+
+   None.
+
+References
+
+   None.
+
+Warnings
+
+   None.
+
+Diagnostic Error Messages
+
+   None.
+
+Exit status
+
+   It always exits with status 0.
+
+Known bugs
+
+   None.
+
+See also
+
+    Program name                         Description
+   antigenic      Finds antigenic sites in proteins
+   digest         Protein proteolytic enzyme or reagent cleavage digest
+   epestfind      Finds PEST motifs as potential proteolytic cleavage sites
+   fuzzpro        Protein pattern search
+   fuzztran       Protein pattern search after translation
+   helixturnhelix Report nucleic acid binding motifs
+   oddcomp        Finds protein sequence regions with a biased composition
+   patmatdb       Search a protein sequence with a motif
+   patmatmotifs   Search a PROSITE motif database with a protein sequence
+   pepcoil        Predicts coiled coil regions
+   preg           Regular expression search of a protein sequence
+   pscan          Scans proteins using PRINTS
+   sigcleave      Reports protein signal cleavage sites
+
+Author(s)
+
+   [an error occurred while processing this directive]
+
+History
+
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.

@@ -1,5 +1,3 @@
-<!--START OF HEADER - DON'T ALTER -->
-
 <HTML>
 <HEAD>
   <TITLE>
@@ -7,12 +5,9 @@
   </TITLE>
 </HEAD>
 <BODY BGCOLOR="#FFFFFF" text="#000000">
-
-
-
 <table align=center border=0 cellspacing=0 cellpadding=0>
 <tr><td valign=top>
-<A HREF="index.html" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
@@ -26,37 +21,14 @@ tcode
 
 
 
-<!--END OF HEADER-->
-
-
-
-
-
-
 <H2>
     Function
 </H2>
 Fickett TESTCODE statistic to identify protein-coding DNA
 
-<!--
-DON'T WRITE ANYTHING HERE.
-IT IS DONE FOR YOU.
--->
-
-
-
-
 <H2>
     Description
 </H2>
-
-<!-- 
-	This is the main part of the document.
-        This is what the user looks at to find out if this program will do what he wants. 
-        Long description.
-        Why it is useful.
-        When it should/shouldn't be used.
-  -->
 
 <b>tcode</b> tests DNA sequences for protein coding regions using an
 algorithm which looks for simple and universal differences between
@@ -92,18 +64,9 @@ repeated with a periodicity of three.
 This application can assist in determining the probability of a region of
 nucleic sequence encoding a functional protein.
 
-
-
-
-
 <H2>
     Algorithm
 </H2>
-
-<!-- 
-        Algorithms
-	  Pseudocode/Vague description/Handwaving/web links to useful pages
-  -->
 
 The Fickett (1982) algorithm is used (1).
 
@@ -176,12 +139,6 @@ Anything in between these two values is uncertain.
 <H2>
     Usage
 </H2>
-
-<!--  
-	Example usage, as run from the command-line.
-        Many examples illustrating different behaviours is good.
- -->
-
 <b>Here is a sample session with tcode</b>
 <p>
 
@@ -341,7 +298,7 @@ Created tcode.ps
 <tr>
 <td>-graph</td>
 <td>Graph type</td>
-<td>EMBOSS has a list of known devices, including postscript, ps, hpgl, hp7470, hp7580, meta, colourps, cps, xwindows, x11, tektronics, tekt, tek4107t, tek, none, null, text, data, xterm, png</td>
+<td>EMBOSS has a list of known devices, including postscript, ps, hpgl, hp7470, hp7580, meta, colourps, cps, xwindows, x11, tektronics, tekt, tek4107t, tek, none, null, text, data, xterm, png, xml</td>
 <td><i>EMBOSS_GRAPHICS</i> value, or x11</td>
 </tr>
 
@@ -379,34 +336,15 @@ Created tcode.ps
 <td>-plot</td>
 <td>On selection a graph of the sequence (X axis) plotted against the coding score (Y axis) will be displayed. Sequence above the green line is coding, that below the red line is non-coding.</td>
 <td>Toggle value Yes/No</td>
-<td>N</td>
+<td>No</td>
 </tr>
 
 </table>
 
 
-<!--
-DON'T WRITE ANYTHING HERE.
-IT IS DONE FOR YOU.
--->
-
-
-
-
-
-
-
-
 <H2>
     Input file format
 </H2>
-
-<!-- 
-        This includes example input file formats.
-        This should be a detailed description and example - assume
-        someone will want to parse this file and will want to know what
-        happens in unusual cases - null input, etc. 
-   -->
 
 <b>tcode</b> reads any normal sequence USAs.
 
@@ -536,23 +474,9 @@ SQ   Sequence 2016 BP; 421 A; 562 C; 538 G; 495 T; 0 other;
 </td></tr></table><p>
 
 
-
-
-
-
 <H2>
     Output file format
 </H2>
-
-<!-- 
-        This includes example output file formats.
-        This should be a detailed description and example - assume
-        someone will want to parse this file and will want to know what
-        happens in unusual cases - null output, errors etc. 
-
-        If you wish to include the standard description of the avalable
-	report formats, use:
-   -->
 
 <p>
 
@@ -569,8 +493,8 @@ feattable, motif, regions, seqtable, simple, srs, table, tagseq
 <p>
 
 See:
-<A href="http://www.uk.embnet.org/Software/EMBOSS/Themes/ReportFormats.html">
-http://www.uk.embnet.org/Software/EMBOSS/Themes/ReportFormats.html</A>
+<A href="http://emboss.sf.net/docs/themes/ReportFormats.html">
+http://emboss.sf.net/docs/themes/ReportFormats.html</A>
 for further information on report formats.
 
 <p>
@@ -612,7 +536,7 @@ red horizontal line.
 <pre>
 ########################################
 # Program: tcode
-# Rundate: Tue Apr 06 14:34:27 2004
+# Rundate: Thu Jul 15 2004 12:00:00
 # Report_format: table
 # Report_file: hsfau1.tcode
 ########################################
@@ -720,32 +644,19 @@ red horizontal line.
 
 <a name="output.2"></a>
 <h3>Output files for usage example 2</h3>
+<p><h3>Graphics File: tcode.ps</h3>
+<p><img src="tcode.2.tcode.gif" alt="[tcode results]">
 <p><h3>File: hsfau1.tcode</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 </pre>
 </td></tr></table><p>
-<p><h3>Graphics File: tcode.ps</h3>
-<p><img src="tcode.2.tcode.gif" alt="[tcode results]">
-
-
-
 
 
 
 <H2>
     Data files
 </H2>
-
-<!-- 
-        Any data files used (e.g. translation table file)
-        This includes example data file formats if they are
-        not obvious.
-
-	If you wish to include the standard description of what data
-	files are and how to use embossdata to inspect and retrieve
-	them, use:
-   -->
 
 <p>
 EMBOSS data files are distributed with the application and stored
@@ -790,8 +701,8 @@ The directories are searched in the following order:
 
 <p>
 
-The default data file (look-up table) is Etcode.dat which contains the data from the
-original paper (1)
+The default data file (look-up table) is Etcode.dat which contains the
+data from the original paper (1)
 
 <p>
 
@@ -891,21 +802,9 @@ alternative values may be user defined.
 
 
 
-
-
-
-
-
-
 <H2>
     Notes
 </H2>
-
-<!-- 
-        Restrictions.
-        Interesting behaviour.
-        Useful things you can do with this program.
-   -->
 
 In the GCG package, the current (version 10.3) TESTCODE application's apparent
 interpretation of the algorithm is:
@@ -930,25 +829,17 @@ thus any plot using the GCG TESTCODE aplication will be slightly higher
 than the <b>tcode</b> equivalent. 
 
 
-
-
-
-
-
-
-
 <H2>
     References
 </H2>
 
-<!-- 
-        Bibliography for methods used.
-   -->
+<ol>
 
-1. Fickett, J.W. (1982) Nucleic Acids Research 10(17) pp.5303-5318
+<li>
+Fickett, J.W. (1982) Nucleic Acids Research 10(17) pp.5303-5318
 "Recognition of protein coding regions in DNA sequences" 
 
-
+</ol>
 
 
 
@@ -957,58 +848,21 @@ than the <b>tcode</b> equivalent.
     Warnings
 </H2>
 
-<!-- 
-        Potentially stupid things the program will let you do.
-   -->
-
 None.
-
-
-
-
-
-
 
 <H2>
     Diagnostic Error Messages
 </H2>
 
-<!-- 
-        Error messages specific to this program, eg:
-        "FATAL xxx" - means you have not set up the xxx data using program <b>prog</b>.<p>
-   -->
-
 Standard error messages are given for incorrect sequence input.
-
-
-
-
-
-
-
 
 <H2>
     Exit status
 </H2>
 
-<!-- 
-        Description of the exit status for various error conditions
-   -->
-
 It always exits with status 0.
 
 
-
-
-
-
-
-
-<!--
-<H2>
-    See also
-</H2>
--->
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
@@ -1021,10 +875,6 @@ It always exits with status 0.
 <tr><td><a href="wobble.html">wobble</a></td><td>Wobble base plot</td></tr>
 </table>
 
-<!-- 
-        Add any comments about other associated programs (to prepare
-        data files?) that seealso doesn't find. 
-   -->
 
 
 <h3>
@@ -1040,20 +890,9 @@ SPIN - "Uneven positional base preferences" Staden software.
 Free to academics, versions for both X and Windows platforms.
 
 
-
-
-
-
-
-
-
 <H2>
     Author(s)
 </H2>
-<!--
-        Who has worked on the program in the past.
-   -->
-
 Alan Bleasby (ableasby&nbsp;&copy;&nbsp;rfcgr.mrc.ac.uk)
 <br>
 MRC Rosalind Franklin Centre for Genomics Research
@@ -1067,22 +906,19 @@ Wellcome Trust Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
     History
 </H2>
 
-<!--
-        What changes have been made.
-   -->
-
-
 Date of original completion: 2nd March 2003
 
 
+<H2>
+    Target users
+</H2>
+This program is intended to be used by everyone and everything, from naive users to embedded scripts.
 
 
-
-
-
-
-
-
+<H2>
+    Comments
+</H2>
+None
 
 
 </BODY>

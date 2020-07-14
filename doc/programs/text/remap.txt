@@ -1,12 +1,12 @@
 
                                    remap 
-                                      
-   
-   
+
+
+
 Function
 
    Display a sequence with restriction cut sites, translation etc
-   
+
 Description
 
    The Restriction Enzyme database (REBASE) is a collection of
@@ -18,22 +18,22 @@ Description
    proteins are also included. Most recently, putative DNA
    methyltransferases and restriction enzymes, as predicted from analysis
    of genomic sequences, are also listed.
-   
+
    The home page of REBASE is: http://rebase.neb.com/
-   
+
    This program uses REBASE data to find the recognition sites and/or cut
    sites of restriction enzymes in a nucleic acid sequence.
-   
+
    This program displays the cut sites on both strands by default. It
    will optionally also display the translation of the sequence.
-   
+
    There are many options to change the style of display to aid in making
    clear presentations.
-   
+
    One potentially very useful option is '-flatreformat' that displays
    not only the cut sites which many other restriction cut-site programs
    will show, but also shows the recognition site.
-   
+
    By default, only one of any group of isoschizomers (enzymes that have
    the same recognition site and cut positions) is reported (this
    behaviour can be turned off by setting the qualifier '-limit' to be
@@ -41,10 +41,10 @@ Description
    prototype) is specified in the REBASE database and the information is
    held in the data file 'embossre.equ'. You may edit this file to set
    your own preferred prototype,if you wish.
-   
+
    As well as the display of where enzymes cut in the sequence, remap
    displays:
-   
+
      * The list of enzymes that cut the sequence and match the required
        criteria.
      * The list of enzymes that cut the sequence and fail the MINCUTS
@@ -55,15 +55,15 @@ Description
        all the required criteria.
      * The number of enzymes that cut the sequence and fail the SITELEN,
        BLUNT, STICKY, COMMERCIAL, AMBIGUOUS criteria.
-       
+
 Usage
 
    Here is a sample session with remap
-   
+
    This example uses only a small region of the input sequence to save
    space. This is run with a small test version of the restriction enzyme
    database and so you will probably see more enzymes when you run this.
-   
+
 
 % remap -notran -sbeg 1 -send 60 
 Display a sequence with restriction cut sites, translation etc..
@@ -71,18 +71,18 @@ Input sequence(s): tembl:eclac
 Comma separated enzyme list [all]: taqi,bsu6i,acii,bsski
 Minimum recognition site length [4]: 
 Output file [eclac.remap]: 
-   
+
    Go to the input files for this example
    Go to the output files for this example
-   
+
    Example 2
-   
+
    This is an example where all enzymes in the REBASE database are used,
    (but only the prototypes of the isoschizomers are reported by
    default). This is run with a small test version of the restriction
    enzyme database and so you will probably see more enzymes when you run
    this.
-   
+
 
 % remap -notran -sbeg 1 -send 60 
 Display a sequence with restriction cut sites, translation etc..
@@ -90,17 +90,17 @@ Input sequence(s): tembl:eclac
 Comma separated enzyme list [all]: 
 Minimum recognition site length [4]: 
 Output file [eclac.remap]: 
-   
+
    Go to the output files for this example
-   
+
    Example 3
-   
+
    This is an example where all enzymes in the REBASE database are used
    but the -limit qualifier is not set so that all of the enzymes are
    displayed and not just only the prototypes of the isoschizomers. This
    is run with a small test version of the restriction enzyme database
    and so you will probably see more enzymes when you run this.
-   
+
 
 % remap -notran -sbeg 1 -send 60 -nolimit 
 Display a sequence with restriction cut sites, translation etc..
@@ -108,15 +108,15 @@ Input sequence(s): tembl:eclac
 Comma separated enzyme list [all]: 
 Minimum recognition site length [4]: 
 Output file [eclac.remap]: 
-   
+
    Go to the output files for this example
-   
+
    Example 4
-   
+
    This shows the 'flat' format: This is run with a small test version of
    the restriction enzyme database and so you will probably see more
    enzymes when you run this.
-   
+
 
 % remap -notran -sbeg 1 -send 60 -flat 
 Display a sequence with restriction cut sites, translation etc..
@@ -124,9 +124,9 @@ Input sequence(s): tembl:eclac
 Comma separated enzyme list [all]: 
 Minimum recognition site length [4]: 
 Output file [eclac.remap]: 
-   
+
    Go to the output files for this example
-   
+
 Command line arguments
 
    Standard (Mandatory) qualifiers:
@@ -316,7 +316,7 @@ Command line arguments
    -error               boolean    Report errors
    -fatal               boolean    Report fatal errors
    -die                 boolean    Report deaths
-   
+
 
    Standard (Mandatory) qualifiers Allowed values Default
    [-sequence]
@@ -456,16 +456,16 @@ Command line arguments
    -offset Offset to start numbering the sequence from Any integer value
    1
    -html Use HTML formatting Boolean value Yes/No No
-   
+
 Input file format
 
   Input files for usage example
-  
+
    'tembl:eclac' is a sequence entry in the example nucleic acid database
    'tembl'
-   
+
   Database entry: tembl:eclac
-  
+
 ID   ECLAC      standard; DNA; PRO; 7477 BP.
 XX
 AC   J01636; J01637; K01483; K01793;
@@ -621,13 +621,13 @@ RP   1146-1282
      cagcccgccc atggtaacca ccggcagagc ggtcgac                               747
 7
 //
-   
+
    You can specifiy a file of ranges to display in uppercase by giving
    the '-uppercase' qualifier the value '@' followed by the name of the
    file containing the ranges. (eg: '-upper @myfile').
-   
+
    The format of the range file is:
-   
+
      * Comment lines start with '#' in the first column.
      * Comment lines and blank lines are ignored.
      * The line may start with white-space.
@@ -637,7 +637,7 @@ RP   1146-1282
      * There can be optional text after the two numbers to annotate the
        line.
      * White-space before or after the text is removed.
-       
+
    An example range file is:
 
 # this is my set of ranges
@@ -649,43 +649,43 @@ RP   1146-1282
    when outputting in HTML format (using the '-html' qualifier) by giving
    the '-highlight' qualifier the value '@' followed by the name of the
    file containing the ranges. (eg: '-highlight @myfile').
-   
+
    The format of this file is very similar to the format of the above
    uppercase range file, except that the text after the start and end
    positions is used as the HTML colour name. This colour name is used
    'as is' when specifying the colour in HTML in a '<FONT COLOR=xxx>'
    construct, (where 'xxx' is the name of the colour).
-   
+
    The standard names of HTML font colours are given in:
    http://http://www.w3.org/TR/REC-html40/types.html and
    http://www.ausmall.com.au/freegraf/ncolour2.htm and
    http://mindprod.com/htmlcolours.html (amongst other places).
-   
+
    An example highlight range file is:
      _________________________________________________________________
-   
+
 # this is my set of ranges
 12   23         red
  4   5          darkturquoise
 67   10348      #FFE4E1
      _________________________________________________________________
-   
+
 Output file format
 
   Output files for usage example
-  
+
   File: eclac.remap
-  
+
 ECLAC
 E.coli lactose operon with lacI, lacZ, lacY and lacA genes.
 
                                                         BssKI
                  TaqI                 AciI              Ksp632I
                  \                    \                 \
-          GACACCATCGAATGGCGCAAAACCTTTCGCGGTATGGCATGATAGCGCCCGGAAGAGAGT
+          gacaccatcgaatggcgcaaaacctttcgcggtatggcatgatagcgcccggaagagagt
                    10        20        30        40        50        60
           ----:----|----:----|----:----|----:----|----:----|----:----|
-          CTGTGGTAGCTTACCGCGTTTTGGAAAGCGCCATACCGTACTATCGCGGGCCTTCTCTCA
+          ctgtggtagcttaccgcgttttggaaagcgccataccgtactatcgcgggccttctctca
                    /                    /                  / /
                    TaqI                 AciI               | BssKI
                                                            Ksp632I
@@ -718,11 +718,11 @@ E.coli lactose operon with lacI, lacZ, lacY and lacA genes.
 # SITELEN, BLUNT, STICKY, COMMERCIAL, AMBIGUOUS citeria
 
 0
-   
+
   Output files for usage example 2
-  
+
   File: eclac.remap
-  
+
 ECLAC
 E.coli lactose operon with lacI, lacZ, lacY and lacA genes.
 
@@ -732,10 +732,10 @@ E.coli lactose operon with lacI, lacZ, lacY and lacA genes.
                  |  |   Hin6I                         | Ksp632I
                  |  |   | HhaI        AciI            | | HpaII
                  \  \   \ \           \               \ \ \
-          GACACCATCGAATGGCGCAAAACCTTTCGCGGTATGGCATGATAGCGCCCGGAAGAGAGT
+          gacaccatcgaatggcgcaaaacctttcgcggtatggcatgatagcgcccggaagagagt
                    10        20        30        40        50        60
           ----:----|----:----|----:----|----:----|----:----|----:----|
-          CTGTGGTAGCTTACCGCGTTTTGGAAAGCGCCATACCGTACTATCGCGGGCCTTCTCTCA
+          ctgtggtagcttaccgcgttttggaaagcgccataccgtactatcgcgggccttctctca
                  / /    / /             /             / /  ///
                  | TaqI | Hin6I         AciI          | |  ||BssKI
                  BsiYI  HhaI                          | |  |HpaII
@@ -768,42 +768,42 @@ E.coli lactose operon with lacI, lacZ, lacY and lacA genes.
 
 # Enzymes that do not cut
 
-AclI      BamHI     BceAI     BsrI      ClaI      EcoRI     EcoRII    HaeIII
+AclI      BamHI     BceAI     BseYI     BsrI      ClaI      EcoRI     EcoRII
 
-Hin4I     HindII    HindIII   KpnI      MaeII     NotI
+HaeIII    Hin4I     HindII    HindIII   KpnI      MaeII     NotI
 
 
 # No. of cutting enzymes which do not match the
 # SITELEN, BLUNT, STICKY, COMMERCIAL, AMBIGUOUS citeria
 
 0
-   
+
   Output files for usage example 3
-  
+
   File: eclac.remap
-  
+
 ECLAC
 E.coli lactose operon with lacI, lacZ, lacY and lacA genes.
 
-                                                      HspAI
-                 TaqI                                 Hin6I
+                                                      Hin6I
+                 TaqI                                 HspAI
                  |  Bsc4I                             HinP1I
                  |  |   HspAI                         | HhaI
                  |  |   Hin6I                         | BssKI
                  |  |   HinP1I                        | Bsu6I
                  |  |   | HhaI        AciI            | | BsiSI
                  \  \   \ \           \               \ \ \
-          GACACCATCGAATGGCGCAAAACCTTTCGCGGTATGGCATGATAGCGCCCGGAAGAGAGT
+          gacaccatcgaatggcgcaaaacctttcgcggtatggcatgatagcgcccggaagagagt
                    10        20        30        40        50        60
           ----:----|----:----|----:----|----:----|----:----|----:----|
-          CTGTGGTAGCTTACCGCGTTTTGGAAAGCGCCATACCGTACTATCGCGGGCCTTCTCTCA
+          ctgtggtagcttaccgcgttttggaaagcgccataccgtactatcgcgggccttctctca
                  / /    / /             /             / /  ///
                  | TaqI | HinP1I        AciI          | |  ||BssKI
-                 Bsc4I  | Hin6I                       | |  |BsiSI
-                        | HspAI                       | |  Bsu6I
+                 Bsc4I  | HspAI                       | |  |BsiSI
+                        | Hin6I                       | |  Bsu6I
                         HhaI                          | HinP1I
-                                                      | HspAI
                                                       | Hin6I
+                                                      | HspAI
                                                       HhaI
 
 
@@ -833,41 +833,45 @@ E.coli lactose operon with lacI, lacZ, lacY and lacA genes.
 
 # Enzymes that do not cut
 
-AclI      BamHI     BceAI     Bse1I     BshI      ClaI      EcoRI     EcoRII
+AclI      BamHI     BceAI     Bse1I     BseYI     BshI      ClaI      EcoRI
 
-Hin4I     HindII    HindIII   HpyCH4IV  KpnI      NotI
+EcoRII    Hin4I     HindII    HindIII   HpyCH4IV  KpnI      NotI
 
 
 # No. of cutting enzymes which do not match the
 # SITELEN, BLUNT, STICKY, COMMERCIAL, AMBIGUOUS citeria
 
 0
-   
+
   Output files for usage example 4
-  
+
   File: eclac.remap
-  
+
 ECLAC
 E.coli lactose operon with lacI, lacZ, lacY and lacA genes.
 
                                                                   Ksp632I
-
-                                                         BHpaII
+                                                        >.........====
+                                                          HpaII
                                                           >===
-                        HhaI                          HhaI
-                                                      ==>=
-              BsiTaqI   Hin6I            AciI         Hin6I
-                 >===   >===          >..====         >===
-          GACACCATCGAATGGCGCAAAACCTTTCGCGGTATGGCATGATAGCGCCCGGAAGAGAGT
+                        Hin6I                            BssKI
+                        >===                            >=====
+                 TaqI   HhaI                          Hin6I
+                 >===   ==>=                          >===
+              BsiYI                      AciI         HhaI
+              ======>====             >..====         ==>=
+          gacaccatcgaatggcgcaaaacctttcgcggtatggcatgatagcgcccggaagagagt
                    10        20        30        40        50        60
           ----:----|----:----|----:----|----:----|----:----|----:----|
-          CTGTGGTAGCTTACCGCGTTTTGGAAAGCGCCATACCGTACTATCGCGGGCCTTCTCTCA
-                 ===<   ===<             <===         ===<
-              BsiTaqI   Hin6I            AciI         Hin6I
-                                                      =<==  <.....====
-                        HhaI                          HhaI        Ksp632I
+          ctgtggtagcttaccgcgttttggaaagcgccataccgtactatcgcgggccttctctca
+              ====<======                <===         =<==  <.....====
+              BsiYI                      AciI         HhaI        Ksp632I
+                 ===<   =<==                          ===<
+                 TaqI   HhaI                          Hin6I
+                        ===<                             =====<
+                        Hin6I                            BssKI
                                                           ===<
-                                                         BHpaII
+                                                          HpaII
 
 
 # Enzymes that cut  Frequency   Isoschizomers
@@ -894,74 +898,68 @@ E.coli lactose operon with lacI, lacZ, lacY and lacA genes.
 
 # Enzymes that do not cut
 
-AclI      BamHI     BceAI     BsrI      ClaI      EcoRI     EcoRII    HaeIII
+AclI      BamHI     BceAI     BseYI     BsrI      ClaI      EcoRI     EcoRII
 
-Hin4I     HindII    HindIII   KpnI      MaeII     NotI
+HaeIII    Hin4I     HindII    HindIII   KpnI      MaeII     NotI
 
 
 # No. of cutting enzymes which do not match the
 # SITELEN, BLUNT, STICKY, COMMERCIAL, AMBIGUOUS citeria
 
 0
-   
+
    The name of the sequence is displayed, followed by the description of
    the sequence.
-   
+
    The formatted display of cut sites on the sequence follows, with the
    six-frame translation below it. The cut sites are indicated by a slash
    character '\' that points to the poition between the nucleotides where
    the cuts occur. Cuts by many enzymes at the same position are
    indicated by stacking the enzyme names on top of each other.
-   
+
    At the end the section header 'Enzymes that cut' is displayed followed
    by a list of the enzymes that cut the specified sequence and the
    number of times that they cut. For each enzyme that cuts, a list of
    isoschizomers of that enzyme (sharing the same recognition site
    pattern and cut sites) is given.
-   
+
    This is followed by lists of the enzymes that do cut, but which cut
    less often than the '-mincut' qualifier or more often than the
    '-maxcut' qualifier.
-   
+
    Any of the isoschizomers that are excluded from cutting, (either
    through restrictions such as the permitted number of cuts, blunt
    cutters only, single cutters only etc. or because their name has not
    been given in the input list of enzymes), will not be listed.
-   
+
    Then a list is displayed of the enzymes whose names were input and
    which match the other criteria ('-sitelen', '-blunt', '-sticky',
    '-ambiguity' or '-commercial') but which do not cut.
-   
+
    Finally the number of enzymes that were rejected from consideration
    because they do not match the '-sitelen', '-blunt', '-sticky',
    '-ambiguity' or '-commercial' criteria is displayed.
-   
+
    The '-flatreformat' qualifier changes the display to emphasise the
    recognition site of the restriction enzyme, which is indicated by a
    row of '=' characters. The cut site if pointed to by a '>' or '<'
    character and if the cut site is not within or imemdiately adjacent to
    the recognition site, they are linked by a row of '.' characters.
-   
+
    The name of the enzyme is displayed above (or below when the reverse
    sense site if displayed) the recognition site. The name of the enzyme
    is also displayed above the cut site if this occurs on a different
    display line to the recognition site (i.e. if it wraps onto the next
    line of sequence).
-   
+
 Data files
 
-   This uses the EMBOSS REBASE data files in 'data/REBASE/*' under the
-   EMBOSS installation directory.
-   
-   These files must first be set up using the program 'rebaseextract'.
-   Running 'rebaseextract' may be the job of your system manager.
-   
    EMBOSS data files are distributed with the application and stored in
    the standard EMBOSS data directory, which is defined by the EMBOSS
    environment variable EMBOSS_DATA.
-   
+
    To see the available EMBOSS data files, run:
-   
+
 % embossdata -showall
 
    To fetch one of the data files (for example 'Exxx.dat') into your
@@ -974,57 +972,63 @@ Data files
    tidier directory listings in a subdirectory called ".embossdata".
    Files for all EMBOSS runs can be put in the user's home directory, or
    again in a subdirectory called ".embossdata".
-   
+
    The directories are searched in the following order:
      * . (your current directory)
      * .embossdata (under your current directory)
      * ~/ (your home directory)
      * ~/.embossdata
-       
+
+   The EMBOSS REBASE restriction enzyme data files are stored iin
+   directory 'data/REBASE/*' under the EMBOSS installation directory.
+
+   These files must first be set up using the program 'rebaseextract'.
+   Running 'rebaseextract' may be the job of your system manager.
+
    The data files are stored in the REBASE directory of the standard
    EMBOSS data directory. The names are:
      * embossre.enz Cleavage information
      * embossre.ref Reference/methylation information
      * embossre.sup Supplier information
-       
+
    The column information is described at the top of the data files
-   
+
    The reported enzyme from any one group of isoschizomers (the
    prototype) is specified in the REBASE database and the information is
    held in the data file 'embossre.equ'. You may edit this file to set
-   your own preferred prototype,if you wish.
-   
+   your own preferred prototype, if you wish.
+
    The format of the file "embossre.equ" is
    Enzyme-name Prototype-name
-   
+
    i.e. two columns of enzyme names separated by a space. The first name
    of the pair of enzymes is the name that is not preferred and the
-   second is the preferred, prototype name.
-   
+   second is the preferred (prototype) name.
+
 Notes
 
    None.
-   
+
 References
 
    None.
-   
+
 Warnings
 
    None.
-   
+
 Diagnostic Error Messages
 
    None.
-   
+
 Exit status
 
    It always exits with status 0.
-   
+
 Known bugs
 
    None.
-   
+
 See also
 
    Program name Description
@@ -1038,7 +1042,6 @@ See also
    plotorf Plot potential open reading frames
    prettyplot Displays aligned sequences, with colouring and boxing
    prettyseq Output sequence with translated ranges
-   recite Find changes to an enzyme site that introduce new enzyme sites
    recoder Remove restriction sites but maintain the same translation
    redata Search REBASE for enzyme name, references, suppliers etc
    restover Finds restriction enzymes that produce a specific overhang
@@ -1054,22 +1057,24 @@ See also
    textsearch Search sequence documentation text. SRS and Entrez are
    faster!
    transeq Translate nucleic acid sequences
-   
+
 Author(s)
 
    Gary Williams (gwilliam © rfcgr.mrc.ac.uk)
    MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
    Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
-   
+
 History
 
    Written Spring 2000
-   
+
    Changed 7 Dec 2000 - GWW - to declare isoschizomers that cut
-   
+
 Target users
 
    This program is intended to be used by everyone and everything, from
    naive users to embedded scripts.
-   
+
 Comments
+
+   None

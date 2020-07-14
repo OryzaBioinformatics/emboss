@@ -1,55 +1,55 @@
 
                                   biosed 
-                                      
-   
-   
+
+
+
 Function
 
    Replace or delete sequence sections
-   
+
 Description
 
    biosed is a simple sequence editing utility that searches for a target
    subsequence in one or more input sequences and replaces it with a
    specified second subsequence (or optionally just deletes the found
    target subsequence).
-   
+
    biosed was inspired by the useful UNIX utility sed which searches for
    a pattern in text and can replace or delete the found pattern.
-   
+
    If the target subsequence occurs more than once, then each instance of
    the target is replaced.
-   
+
    The target subsequence is not any sort of an ambiguity pattern, it is
    just a short sequence. A simple string match is done and if it exactly
    matches then the replacement is done. The matching is independent of
    the case of the sequence or the target - both uppercase and lowercase
    will match.
-   
+
 Usage
 
    Here is a sample session with biosed
-   
+
    Replace all 'T's with 'U's to create an RNA sequence
-   
-   
+
+
 % biosed tembl:hsfau hsfau.rna -target T -replace U 
 Replace or delete sequence sections
 
    Go to the input files for this example
    Go to the output files for this example
-   
+
    Example 2
-   
+
    Replace all 'PPP' protein motifs with 'XXPPPXX'
-   
-   
+
+
 % biosed tsw:AMIR_PSEAE AMIR_PSEAE.pep -target PPP -replace XXPPPXX 
 Replace or delete sequence sections
 
    Go to the input files for this example
    Go to the output files for this example
-   
+
 Command line arguments
 
    Standard (Mandatory) qualifiers (* if not always prompted):
@@ -106,7 +106,7 @@ Command line arguments
    -error               boolean    Report errors
    -fatal               boolean    Report fatal errors
    -die                 boolean    Report deaths
-   
+
 
    Standard (Mandatory) qualifiers Allowed values Default
    [-sequence]
@@ -118,19 +118,19 @@ Command line arguments
    Additional (Optional) qualifiers Allowed values Default
    (none)
    Advanced (Unprompted) qualifiers Allowed values Default
-   -delete Delete the target sequence sections Toggle value Yes/No N
-   
+   -delete Delete the target sequence sections Toggle value Yes/No No
+
 Input file format
 
    It reads the USA of one or more nucleic acid or protein sequences.
-   
+
   Input files for usage example
-  
+
    'tembl:hsfau' is a sequence entry in the example nucleic acid database
    'tembl'
-   
+
   Database entry: tembl:hsfau
-  
+
 ID   HSFAU      standard; RNA; HUM; 518 BP.
 XX
 AC   X65923;
@@ -217,14 +217,14 @@ SQ   Sequence 518 BP; 125 A; 139 C; 148 G; 106 T; 0 other;
      tctaataaaa aagccactta gttcagtcaa aaaaaaaa                               51
 8
 //
-   
+
   Input files for usage example 2
-  
+
    'tsw:AMIR_PSEAE' is a sequence entry in the example protein database
    'tsw'
-   
+
   Database entry: tsw:AMIR_PSEAE
-  
+
 ID   AMIR_PSEAE     STANDARD;      PRT;   196 AA.
 AC   P10932;
 DT   01-JUL-1989 (Rel. 11, Created)
@@ -273,17 +273,17 @@ SQ   SEQUENCE   196 AA;  21776 MW;  560A8AE3 CRC32;
      SARRISEEMA KLKQKTEQLQ DRIAGQARIN QAKVLLMQRH GWDEREAHQH LSREAMKRRE
      PILKIAQELL GNEPSA
 //
-   
+
 Output file format
 
    The edited sequence is output.
-   
+
    The sequence will be in uppercase.
-   
+
   Output files for usage example
-  
+
   File: hsfau.rna
-  
+
 >HSFAU X65923.1 H.sapiens fau mRNA
 UUCCUCUUUCUCGACUCCAUCUUCGCGGUAGCUGGGACCGCCGUUCAGUCGCCAAUAUGC
 AGCUCUUUGUCCGCGCCCAGGAGCUACACACCUUCGAGGUGACCGGCCAGGAAACGGUCG
@@ -294,89 +294,38 @@ GUGCUGGAAAAGUGAGAGGUCAGACUCCUAAGGUGGCCAAACAGGAGAAGAAGAAGAAGA
 AGACAGGUCGGGCUAAGCGGCGGAUGCAGUACAACCGGCGCUUUGUCAACGUUGUGCCCA
 CCUUUGGCAAGAAGAAGGGCCCCAAUGCCAACUCUUAAGUCUUUUGUAAUUCUGGCUUUC
 UCUAAUAAAAAAGCCACUUAGUUCAGUCAAAAAAAAAA
-   
+
   Output files for usage example 2
-  
+
   File: AMIR_PSEAE.pep
-  
+
 >AMIR_PSEAE P10932 ALIPHATIC AMIDASE REGULATOR.
 MSANSLLGSLRELQVLVLNPPGEVSDALVLQLIRIGCSVRQCWXXPPPXXEAFDVPVDVV
 FTSIFQNGHHDEIAALLAAGTPRTTLVALVEYESPAVLSQIIELECHGVITQPLDAHRVL
 PVLVSARRISEEMAKLKQKTEQLQDRIAGQARINQAKVLLMQRHGWDEREAHQHLSREAM
 KRREPILKIAQELLGNEPSA
-   
+
 Data files
 
    None.
-   
+
 Notes
 
    The edited sequence will be output in uppercase.
-   
+
 References
 
    None.
-   
+
 Warnings
 
    No check is made on the replacement subsequence.
    Any text can be used as the replacement, including characters only
    used in proteins (e.g. D, E, F, etc.), characters not used in proteins
    (e.g. J, O, etc), digits and punctuation characters.
-   
+
 Diagnostic Error Messages
 
    None.
-   
+
 Exit status
-
-   It always exits with status 0.
-   
-Known bugs
-
-   None.
-   
-See also
-
-   Program name                          Description
-   cutseq       Removes a specified section from a sequence
-   degapseq     Removes gap characters from sequences
-   descseq      Alter the name or description of a sequence
-   entret       Reads and writes (returns) flatfile entries
-   extractfeat  Extract features from a sequence
-   extractseq   Extract regions from a sequence
-   listor       Writes a list file of the logical OR of two sets of sequences
-   maskfeat     Mask off features of a sequence
-   maskseq      Mask off regions of a sequence
-   newseq       Type in a short new sequence
-   noreturn     Removes carriage return from ASCII files
-   notseq       Excludes a set of sequences and writes out the remaining ones
-   nthseq       Writes one sequence from a multiple set of sequences
-   pasteseq     Insert one sequence into another
-   revseq       Reverse and complement a sequence
-   seqret       Reads and writes (returns) sequences
-   seqretsplit  Reads and writes (returns) sequences in individual files
-   skipseq      Reads and writes (returns) sequences, skipping the first few
-   splitter     Split a sequence into (overlapping) smaller sequences
-   trimest      Trim poly-A tails off EST sequences
-   trimseq      Trim ambiguous bits off the ends of sequences
-   union        Reads sequence fragments and builds one sequence
-   vectorstrip  Strips out DNA between a pair of vector sequences
-   yank         Reads a sequence range, appends the full USA to a list file
-   
-Author(s)
-
-   Alan Bleasby (ableasby © rfcgr.mrc.ac.uk)
-   MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
-   Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
-   
-History
-
-   Written (Jan 2002) - Alan Bleasby
-   
-Target users
-
-   This program is intended to be used by everyone and everything, from
-   naive users to embedded scripts.
-   
-Comments

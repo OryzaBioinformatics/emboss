@@ -1,14 +1,12 @@
 
                                 vectorstrip 
-                                      
-   
-   
-                              Program vectorstrip
-                                       
+
+
+
 Function
 
    Strips out DNA between a pair of vector sequences
-   
+
 Description
 
    vectorstrip is intended to be useful for stripping vector sequence
@@ -17,17 +15,17 @@ Description
    vector data eg from the cloning polylinker at the 5' and 3' ends of
    the sequence. vectorstrip will remove these contaminating regions and
    output trimmed sequence ready for input into another application.
-   
+
    vectorstrip is suitable for use with low quality sequence data as it
    can allow for mismatches between the sequence and the vector patterns
    provided. You can specify the maximum level of mismatch expected.
-   
+
    Vector data can either be provided in a file or interactively. If
    presented in a file, vectorstrip will search all input sequences with
    all vectors listed in that file. The intention is that the user can
    maintain a single file for use with vectorstrip, containing all the
    linker sequences commonly used in the laboratory.
-   
+
    The two patterns for each vector are searched separately against the
    sequence. Once the search is completed, each of the hits of the 5'
    sequence is paired with each of the hits of the 3' sequence and the
@@ -37,7 +35,7 @@ Description
    be output: from 61-149, and from 101-149. The lower the quality of the
    sequence, the more likely multiple hits become if nonzero mismatches
    are accepted.
-   
+
    Default behaviour is to report only the best matches between the
    vector patterns and the sequence. This means that if you specify a
    maximum mismatch level of 10%, but the vector patterns match the
@@ -48,29 +46,29 @@ Description
    maximum specified mismatch level is exceeded. You can tell vectorstrip
    to show all possible matches up to your specified maximum level, as
    illustrated in the examples below.
-   
+
 Usage
 
    Here is a sample session with vectorstrip
-   
 
-% vectorstrip @../../data/vecseqs.list 
+
+% vectorstrip @vecseqs.list 
 Strips out DNA between a pair of vector sequences
 Are your vector sequences in a file? [Y]: 
-Name of vectorfile: ../../data/vectors
+Name of vectorfile: vectors
 Max allowed % mismatch [10]: 
 Show only the best hits (minimise mismatches)? [Y]: 
 Output file [pbluescript.vectorstrip]: vector.strip
 Output sequence [pbluescript.fasta]: vector.fasta
-   
+
    Go to the input files for this example
    Go to the output files for this example
-   
+
 Command line arguments
 
    Standard (Mandatory) qualifiers (* if not always prompted):
   [-sequence]          seqall     Sequence database USA
-  [-vectorfile]        toggle     Are your vector sequences in a file?
+  [-[no]vectorfile]    toggle     Are your vector sequences in a file?
 *  -vectorsfile        infile     Name of vectorfile
    -mismatch           integer    Max allowed % mismatch
    -[no]besthits       boolean    Show only the best hits (minimise
@@ -129,14 +127,14 @@ Command line arguments
    -error               boolean    Report errors
    -fatal               boolean    Report fatal errors
    -die                 boolean    Report deaths
-   
+
 
    Standard (Mandatory) qualifiers Allowed values Default
    [-sequence]
    (Parameter 1) Sequence database USA Readable sequence(s) Required
-   [-vectorfile]
+   [-[no]vectorfile]
    (Parameter 2) Are your vector sequences in a file? Toggle value Yes/No
-   Y
+   Yes
    -vectorsfile Name of vectorfile Input file Required
    -mismatch Max allowed % mismatch Any integer value 10
    -[no]besthits Show only the best hits (minimise mismatches)? Boolean
@@ -154,19 +152,19 @@ Command line arguments
    (none)
    Advanced (Unprompted) qualifiers Allowed values Default
    (none)
-   
+
 Input file format
 
   Input files for usage example
-  
-  File: ../../data/vecseqs.list
-  
+
+  File: vecseqs.list
+
 ../../data/bluescript.seq
 ../../data/litmus.seq
 ../../data/pTYB1.seq
-   
-  File: ../../data/vectors
-  
+
+  File: vectors
+
 # Example vector file for use by vectorstrip
 
 # Vector        5'                      3'
@@ -174,12 +172,12 @@ Input file format
 pTYB1   GACGGCGGCCGCGAATTCC     TCGAGGGCTCTTCCTGC
 pBS_KS+ GGGTACCGGGCCCCCCC       TCGAGGTCGACGGTA
 pLITMUS GATATCCTGCAGGAATTCC     TCGAGACCGTACGTGCG
-   
+
    The same fragment has been cloned into the XhoI site of the polylinker
    of each vector. The cloned fragment is represented in lower case and
    the vector sequence in upper case so the sequence trimming can be
    readily seen.
-   
+
    Each line of the vector file should contain the name of the vector,
    the 5' pattern and the 3' pattern.
    Lines beginning with # are treated as comments and ignored.
@@ -187,28 +185,13 @@ pLITMUS GATATCCTGCAGGAATTCC     TCGAGACCGTACGTGCG
    this is the 5' pattern.
    If a vector name is given but no pattern data, the vector will not be
    used.
-   
+
 Output file format
 
   Output files for usage example
-  
-  File: vector.fasta
-  
->pBlueScript_from_84_to_204 KS+
-tcgagagccgtattgcgatatagcgcacatgcgttggacacagatgagcacacagtgaca
-tgagagacacagatatagagacagatagacgatagacagacagcatatatagacagatag
-c
->litmus.seq_from_62_to_182
-tcgagagccgtattgcgatatagcgcacatgcgttggacacagatgagcacacagtgaca
-tgagagacacagatatagagacagatagacgatagacagacagcatatatagacagatag
-c
->pTYB1.seq_from_59_to_179
-tcgagagccgtattgcgatatagcgcacatgcgttggacacagatgagcacacagtgaca
-tgagagacacagatatagagacagatagacgatagacagacagcatatatagacagatag
-c
-   
+
   File: vector.strip
-  
+
 
 Sequence: pBlueScript    Vector: pTYB1  No match
 
@@ -276,29 +259,44 @@ Sequences output to file:
 Sequence: pTYB1.seq      Vector: pBS_KS+        No match
 
 Sequence: pTYB1.seq      Vector: pLITMUS        No match
-   
+
+  File: vector.fasta
+
+>pBlueScript_from_84_to_204 KS+
+tcgagagccgtattgcgatatagcgcacatgcgttggacacagatgagcacacagtgaca
+tgagagacacagatatagagacagatagacgatagacagacagcatatatagacagatag
+c
+>litmus.seq_from_62_to_182
+tcgagagccgtattgcgatatagcgcacatgcgttggacacagatgagcacacagtgaca
+tgagagacacagatatagagacagatagacgatagacagacagcatatatagacagatag
+c
+>pTYB1.seq_from_59_to_179
+tcgagagccgtattgcgatatagcgcacatgcgttggacacagatgagcacacagtgaca
+tgagagacacagatatagagacagatagacgatagacagacagcatatatagacagatag
+c
+
    Two types of output file are produced:
     1. The sequence file(s) - contain the trimmed subsequence(s) produced
        by vectorstrip either all in one file, or in separate files if the
        command line flag -ossingle is used.
     2. Results summary file
-       
+
 Data files
 
    None.
-   
+
 Notes
 
    None.
-   
+
 References
 
    None.
-   
+
 Warnings
 
    None.
-   
+
 Diagnostic Error Messages
 
     1.
@@ -315,15 +313,15 @@ Illegal pattern
        that they only match the sequence once. Thus the program cannot
        determine which part of the sequence is vector and which is
        insert.
-       
+
 Exit status
 
    It always exits with status 0.
-   
+
 Known bugs
 
    None.
-   
+
 See also
 
    Program name                          Description
@@ -351,20 +349,5 @@ See also
    trimseq      Trim ambiguous bits off the ends of sequences
    union        Reads sequence fragments and builds one sequence
    yank         Reads a sequence range, appends the full USA to a list file
-   
+
 Author(s)
-
-   Val Curwen (vac © sanger.ac.uk)
-   Sanger Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge,
-   CB10 1SA, UK.
-   
-History
-
-   16 August 2000 - Val Curwen - Written.
-   
-Target users
-
-   This program is intended to be used by everyone and everything, from
-   naive users to embedded scripts.
-   
-Comments

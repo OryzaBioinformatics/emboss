@@ -1,17 +1,17 @@
 
                                   newseq 
-                                      
-   
-   
+
+
+
 Function
 
    Type in a short new sequence
-   
+
 Description
 
    This allows you to type a sequence into a file in a quick and easy
    manner.
-   
+
    The length of the sequence you can type in is restricted to a fairly
    short length (typically less than 255 characters). This length
    restriction is not a property of the EMBOSS package, but of the
@@ -20,19 +20,19 @@ Description
    computer operating system before being handed over to the program.
    There is often a limit of less than 255 characters on the length of a
    response that a computer system will allow you to give.
-   
+
    Despite this restriction, it is expected that this program will be a
    useful and easy way of constructing new sequence files.
-   
+
    (You wouldn't want to type a long sequence in by hand, anyway, would
    you?)
-   
+
 Usage
 
    Here is a sample session with newseq
-   
+
    Type in a short sequence to the file 'mycc.pep' in SWISSPROT format:
-   
+
 
 % newseq 
 Type in a short new sequence.
@@ -42,11 +42,11 @@ Type of sequence
          N : Nucleic
          P : Protein
 Type of sequence [N]: p
-Output sequence [outfile.fasta]: swiss::mycc.pep
 Enter the sequence: KKKEERADLIAY
-   
+Output sequence [outfile.fasta]: swiss::mycc.pep
+
    Go to the output files for this example
-   
+
 Command line arguments
 
    Standard (Mandatory) qualifiers:
@@ -57,7 +57,6 @@ Command line arguments
   [-description]       string     Enter any description of the sequence that
                                   you require.
   [-type]              menu       Type of sequence
-  [-outseq]            seqout     Output sequence USA
   [-sequence]          string     The sequence itself.
                                   Because of the limitation of the operating
                                   system, you will only be able to type in a
@@ -67,22 +66,23 @@ Command line arguments
                                   reached this limit and you will not be able
                                   to press the RETURN/ENTER key until you have
                                   deleted a few characters.
+  [-outseq]            seqout     Output sequence USA
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers: (none)
    Associated qualifiers:
 
    "-outseq" associated qualifiers
-   -osformat4           string     Output seq format
-   -osextension4        string     File name extension
-   -osname4             string     Base file name
-   -osdirectory4        string     Output directory
-   -osdbname4           string     Database name to add
-   -ossingle4           boolean    Separate file for each entry
-   -oufo4               string     UFO features
-   -offormat4           string     Features format
-   -ofname4             string     Features file name
-   -ofdirectory4        string     Output directory
+   -osformat5           string     Output seq format
+   -osextension5        string     File name extension
+   -osname5             string     Base file name
+   -osdirectory5        string     Output directory
+   -osdbname5           string     Database name to add
+   -ossingle5           boolean    Separate file for each entry
+   -oufo5               string     UFO features
+   -offormat5           string     Features format
+   -ofname5             string     Features file name
+   -ofdirectory5        string     Output directory
 
    General qualifiers:
    -auto                boolean    Turn off prompts
@@ -98,7 +98,7 @@ Command line arguments
    -error               boolean    Report errors
    -fatal               boolean    Report fatal errors
    -die                 boolean    Report deaths
-   
+
 
    Standard (Mandatory) qualifiers Allowed values Default
    [-name]
@@ -114,67 +114,67 @@ Command line arguments
    N (Nucleic)
    P (Protein)
    N
-   [-outseq]
-   (Parameter 4) Output sequence USA Writeable sequence <sequence>.format
    [-sequence]
-   (Parameter 5) The sequence itself. Because of the limitation of the
+   (Parameter 4) The sequence itself. Because of the limitation of the
    operating system, you will only be able to type in a short sequence of
    (typically) 250 characters, or so. The keyboard will beep at you when
    you have reached this limit and you will not be able to press the
    RETURN/ENTER key until you have deleted a few characters. Any string
    is accepted An empty string is accepted
+   [-outseq]
+   (Parameter 5) Output sequence USA Writeable sequence <sequence>.format
    Additional (Optional) qualifiers Allowed values Default
    (none)
    Advanced (Unprompted) qualifiers Allowed values Default
    (none)
-   
+
 Input file format
 
 Output file format
 
    newseq writes a normal sequence file.
-   
+
   Output files for usage example
-  
+
   File: mycc.pep
-  
+
 ID   cytoc          STANDARD;      PRT;    12 AA.
 DE   fragment of cytochrome c
-SQ   SEQUENCE    12 AA;   1464 MW;  0000000000000000 CRC64;
+SQ   SEQUENCE    12 AA;   1464 MW;  6F142FA88DADC40B CRC64;
      KKKEERADLI AY
 //
-   
+
 Data files
 
    None.
-   
+
 Notes
 
    The length of the sequence you can type in is restricted to a fairly
    short length (typically less than 255 characters). If your computer
    beeps at you, you will typically have to delete the last character you
    typed and press the RETURN key.
-   
+
 References
 
    None.
-   
+
 Warnings
 
    None.
-   
+
 Diagnostic Error Messages
 
    None.
-   
+
 Exit status
 
    It always exits with status 0.
-   
+
 Known bugs
 
    None.
-   
+
 See also
 
    Program name                          Description
@@ -202,20 +202,22 @@ See also
    union        Reads sequence fragments and builds one sequence
    vectorstrip  Strips out DNA between a pair of vector sequences
    yank         Reads a sequence range, appends the full USA to a list file
-   
+
 Author(s)
 
    Gary Williams (gwilliam © rfcgr.mrc.ac.uk)
    MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
    Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
-   
+
 History
 
    Written (1999) - Gary Williams
-   
+
 Target users
 
    This program is intended to be used by everyone and everything, from
    naive users to embedded scripts.
-   
+
 Comments
+
+   None

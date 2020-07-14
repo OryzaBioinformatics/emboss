@@ -1,60 +1,60 @@
 
                                  sigcleave 
-                                      
-   
-   
+
+
+
 Function
 
    Reports protein signal cleavage sites
-   
+
 Description
 
    Signal peptides mediate translocation across the ER membrane in
    eukaryotes. In prokaryotes signal peptides mediate translocation
    across the inner and outer membranes.
-   
+
    sigcleave predicts the site of cleavage between a signal sequence and
    the mature exported protein. The predictive accuracy is estimated to
    be around 75-80% for both prokaryotic and eukaryotic proteins.
-   
+
    sigcleave uses the method of von Heijne as modified by von Heijne in
    his later book where treatment of positions -1 and -3 in the matrix is
    slightly altered (see references).
-   
+
   Why isn't there a cutoff to eliminate internal sites?
-  
+
    The program predicts cleavage sites inside the whole protein. Apart
    from the N-terminal sites, the other sites are not biologically
    relevant. Why isn't there a cutoff to eliminate internal sites?
-   
+
    The answer is partly because these sites can be relevant in some
    biological cases (additional pre-processing for example), but mostly
    because ...
-   
+
    There is one thing in bioinformatics you can not be certain of ... the
    start of a protein sequence. The end is easy to predict. The start
    depends on promoters, transcriptional controls, splicing, etc.
-   
+
    Most importantly, sigcleave is not perfect - you should check the
    results and decide whether you like the prediction.
-   
+
    Also, remember you can put -send 50 on the command line to make sure
    it only checks the first 50 residues.
-   
+
 Usage
 
    Here is a sample session with sigcleave
-   
+
 
 % sigcleave 
 Reports protein signal cleavage sites
 Input sequence(s): tsw:ach2_drome
 Minimum weight [3.5]: 
 Output report [ach2_drome.sig]: 
-   
+
    Go to the input files for this example
    Go to the output files for this example
-   
+
 Command line arguments
 
    Standard (Mandatory) qualifiers:
@@ -110,7 +110,7 @@ Command line arguments
    -error               boolean    Report errors
    -fatal               boolean    Report fatal errors
    -die                 boolean    Report deaths
-   
+
 
    Standard (Mandatory) qualifiers Allowed values Default
    [-sequence]
@@ -124,18 +124,18 @@ Command line arguments
    default scoring data file name Boolean value Yes/No No
    Advanced (Unprompted) qualifiers Allowed values Default
    (none)
-   
+
 Input file format
 
    sigcleave reads one or more protein sequence USAs.
-   
+
   Input files for usage example
-  
+
    'tsw:ach2_drome' is a sequence entry in the example protein database
    'tsw'
-   
+
   Database entry: tsw:ach2_drome
-  
+
 ID   ACH2_DROME     STANDARD;      PRT;   576 AA.
 AC   P17644;
 DT   01-AUG-1990 (REL. 15, CREATED)
@@ -222,30 +222,29 @@ SQ   SEQUENCE   576 AA;  65506 MW;  7B795689 CRC32;
      AARKKYPFEL EKAIHNVMFI QHHMQRQDEF NAEDQDWGFV AMVMDRLFLW LFMIASLVGT
      FVILGEAPSL YDDTKAIDVQ LSDVAKQIYN LTEKKN
 //
-   
+
 Output file format
 
    The output is a standard EMBOSS report file.
-   
+
    The results can be output in one of several styles by using the
    command-line qualifier -rformat xxx, where 'xxx' is replaced by the
    name of the required format. The available format names are: embl,
    genbank, gff, pir, swiss, trace, listfile, dbmotif, diffseq, excel,
    feattable, motif, regions, seqtable, simple, srs, table, tagseq
-   
-   See:
-   http://www.uk.embnet.org/Software/EMBOSS/Themes/ReportFormats.html for
-   further information on report formats.
-   
+
+   See: http://emboss.sf.net/docs/themes/ReportFormats.html for further
+   information on report formats.
+
    By default sigcleave writes a 'motif' report file.
-   
+
   Output files for usage example
-  
+
   File: ach2_drome.sig
-  
+
 ########################################
 # Program: sigcleave
-# Rundate: Tue Apr 06 14:34:18 2004
+# Rundate: Thu Jul 15 2004 12:00:00
 # Report_format: motif
 # Report_file: ach2_drome.sig
 ########################################
@@ -316,31 +315,36 @@ Output file format
 
 #---------------------------------------
 #---------------------------------------
-   
+
 Data files
 
    EMBOSS data files are distributed with the application and stored in
-   the standard EMBOSS data directory, which is defined by EMBOSS
+   the standard EMBOSS data directory, which is defined by the EMBOSS
    environment variable EMBOSS_DATA.
-   
+
+   To see the available EMBOSS data files, run:
+
+% embossdata -showall
+
+   To fetch one of the data files (for example 'Exxx.dat') into your
+   current directory for you to inspect or modify, run:
+
+% embossdata -fetch -file Exxx.dat
+
    Users can provide their own data files in their own directories.
    Project specific files can be put in the current directory, or for
    tidier directory listings in a subdirectory called ".embossdata".
    Files for all EMBOSS runs can be put in the user's home directory, or
    again in a subdirectory called ".embossdata".
-   
+
    The directories are searched in the following order:
      * . (your current directory)
      * .embossdata (under your current directory)
      * ~/ (your home directory)
      * ~/.embossdata
-       
-   The data file names are:
-     * Esig.euk Eukaryotic signal data
-     * Esig.pro Prokaryotic signal data
-       
+
    Here is the default file for eukaryotic signals:
-   
+
 # Amino acid counts for 161 Eukaryotic Signal Peptides,
 # from von Heijne (1986), Nucl. Acids. Res. 14:4683-4690
 #
@@ -377,33 +381,33 @@ Notes
    method should correctly identify 95% of signal peptides, and reject
    95% of non-signal peptides. The cleavage site should be correctly
    predicted in 75-80% of cases.
-   
+
    If you use matrix tables with a different number of residues before or
    after the cleavage site, you must also set the advanced parameters
    nval and pval.
-   
+
 References
 
     1. von Heijne, G. "A new method for predicting signal sequence
        cleavage sites" Nucleic Acids Res.: 14:4683 (1986)
     2. von Heijne, G. "Sequence Analysis in Molecular Biology: Treasure
        Trove or Trivial Pursuit" (Acad. Press, (1987), 113-117)
-       
+
 Warnings
 
    The program will warn you if a nucleic acid sequence is given or if
    the data file is not mathematically accurate.
-   
+
 Diagnostic Error Messages
 
 Exit status
 
    It exits with status 0 unless an error is reported.
-   
+
 Known bugs
 
    None.
-   
+
 See also
 
     Program name                         Description
@@ -419,25 +423,27 @@ See also
    pepcoil        Predicts coiled coil regions
    preg           Regular expression search of a protein sequence
    pscan          Scans proteins using PRINTS
-   
+
 Author(s)
 
    Alan Bleasby (ableasby © rfcgr.mrc.ac.uk)
    MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
    Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
-   
+
    Original program "SIGCLEAVE" (EGCG 1989) by Peter Rice
    (pmr © ebi.ac.uk)
    Informatics Division, European Bioinformatics Institute, Wellcome
    Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
-   
+
 History
 
    Completed 10th March 1999
-   
+
 Target users
 
    This program is intended to be used by everyone and everything, from
    naive users to embedded scripts.
-   
+
 Comments
+
+   None

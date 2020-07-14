@@ -1,35 +1,35 @@
 
                                   notseq 
-                                      
-   
-   
+
+
+
 Function
 
    Excludes a set of sequences and writes out the remaining ones
-   
+
 Description
 
    When you have a set of sequences (a file of multiple sequences?) and
    you wish to remove one or more of them from the set, then use notseq.
-   
+
    This program was written for the case where a file containing several
    sequences is being used as a small database, but some of the sequences
    are no longer required and must be deleted from the file.
-   
+
    notseq splits the input sequences into those that you wish to keep and
    those you wish to exclude.
-   
+
    notseq takes a set of sequences as input together with a list of
    sequence names or accession numbers. It also takes the name of a new
    file to write the files that you want to keep into, and optionally the
    name of a file that will contain the files that you want excluded from
    the set.
-   
+
    notseq then reads in the input sequences. It outputs the ones that
    match one of the sequence names or acession numbers to the file of
    excluded sequences, and those that don't match are output to the file
    of sequences to be kept.
-   
+
    Note that the names of the sequences to be excluded are not standard
    EMBOSS USAs. Only the name or accession number shoudl be specified,
    not the database or file that these entries may occur in. These
@@ -37,38 +37,38 @@ Description
    sequences to see if there is a match. Wildcarded names may be
    specified by using '*'s. Any specified names of sequences to be
    excluded that are not found are simply ignored.
-   
+
 Usage
 
    Here is a sample session with notseq
-   
+
    In this case the excluded sequences (myg_phyca and lgb2_luplu) are not
    saved to any file:
-   
+
 
 % notseq 
 Excludes a set of sequences and writes out the remaining ones
-Input sequence(s): ../../data/globins.fasta
+Input sequence(s): globins.fasta
 Sequence names to exclude: myg_phyca,lgb2_luplu
 Output sequence [hbb_human.fasta]: mydata.seq
-   
+
    Go to the input files for this example
    Go to the output files for this example
-   
+
    Example 2
-   
+
    Here is an example where the sequences to be excluded are saved to
    another file:
-   
+
 
 % notseq -junkout hb.seq 
 Excludes a set of sequences and writes out the remaining ones
-Input sequence(s): ../../data/globins.fasta
+Input sequence(s): globins.fasta
 Sequence names to exclude: hb*
 Output sequence [hbb_human.fasta]: mydata.seq
-   
+
    Go to the output files for this example
-   
+
 Command line arguments
 
    Standard (Mandatory) qualifiers:
@@ -154,7 +154,7 @@ Command line arguments
    -error               boolean    Report errors
    -fatal               boolean    Report fatal errors
    -die                 boolean    Report deaths
-   
+
 
    Standard (Mandatory) qualifiers Allowed values Default
    [-sequence]
@@ -180,15 +180,15 @@ Command line arguments
    /dev/null
    Advanced (Unprompted) qualifiers Allowed values Default
    (none)
-   
+
 Input file format
 
    notseq reads normal sequence USAs.
-   
+
   Input files for usage example
-  
-  File: ../../data/globins.fasta
-  
+
+  File: globins.fasta
+
 >HBB_HUMAN Sw:Hbb_Human => HBB_HUMAN
 VHLTPEEKSAVTALWGKVNVDEVGGEALGRLLVVYPWTQRFFESFGDLSTPDAVMGNPKV
 KAHGKKVLGAFSDGLAHLDNLKGTFATLSELHCDKLHVDPENFRLLGNVLVCVLAHHFGK
@@ -217,25 +217,25 @@ AVIADTVAAGDAGFEKLMSMICILLRSAY
 GALTESQAALVKSSWEEFNANIPKHTHRFFILVLEIAPAAKDLFSFLKGTSEVPQNNPEL
 QAHAGKVFKLVYEAAIQLQVTGVVVTDATLKNLGSVHVSKGVADAHFPVVKEAILKTIKE
 VVGAKWSEELNSAWTIAYDELAIVIKKEMNDAA
-   
+
    The names (or accession numbers) of the sequences to be excluded can
    be entered as a file of such names by specifying an '@' followed by
    the name of the file containing the sequence names. For example:
    '@names.dat'.
-   
+
    The names or accession numbers of the sequences to be excluded are not
    standard EMBOSS USAs. Only the ID name or accession number can be
    specified, you cannot specify the sequences as 'database:ID',
    'file:accession', 'format::file', etc.
-   
+
 Output file format
 
    notseq writes normal a sequence file.
-   
+
   Output files for usage example
-  
+
   File: mydata.seq
-  
+
 >HBB_HUMAN Sw:Hbb_Human => HBB_HUMAN
 VHLTPEEKSAVTALWGKVNVDEVGGEALGRLLVVYPWTQRFFESFGDLSTPDAVMGNPKV
 KAHGKKVLGAFSDGLAHLDNLKGTFATLSELHCDKLHVDPENFRLLGNVLVCVLAHHFGK
@@ -256,30 +256,11 @@ VHASLDKFLSSVSTVLTSKYR
 PIVDTGSVAPLSAAEKTKIRSAWAPVYSTYETSGVDILVKFFTSTPAAQEFFPKFKGLTT
 ADQLKKSADVRWHAERIINAVNDAVASMDDTEKMSMKLRDLSGKHAKSFQVDPQYFKVLA
 AVIADTVAAGDAGFEKLMSMICILLRSAY
-   
+
   Output files for usage example 2
-  
-  File: hb.seq
-  
->HBB_HUMAN Sw:Hbb_Human => HBB_HUMAN
-VHLTPEEKSAVTALWGKVNVDEVGGEALGRLLVVYPWTQRFFESFGDLSTPDAVMGNPKV
-KAHGKKVLGAFSDGLAHLDNLKGTFATLSELHCDKLHVDPENFRLLGNVLVCVLAHHFGK
-EFTPPVQAAYQKVVAGVANALAHKYH
->HBB_HORSE Sw:Hbb_Horse => HBB_HORSE
-VQLSGEEKAAVLALWDKVNEEEVGGEALGRLLVVYPWTQRFFDSFGDLSNPGAVMGNPKV
-KAHGKKVLHSFGEGVHHLDNLKGTFAALSELHCDKLHVDPENFRLLGNVLVVVLARHFGK
-DFTPELQASYQKVVAGVANALAHKYH
->HBA_HUMAN Sw:Hba_Human => HBA_HUMAN
-VLSPADKTNVKAAWGKVGAHAGEYGAEALERMFLSFPTTKTYFPHFDLSHGSAQVKGHGK
-KVADALTNAVAHVDDMPNALSALSDLHAHKLRVDPVNFKLLSHCLLVTLAAHLPAEFTPA
-VHASLDKFLASVSTVLTSKYR
->HBA_HORSE Sw:Hba_Horse => HBA_HORSE
-VLSAADKTNVKAAWSKVGGHAGEYGAEALERMFLGFPTTKTYFPHFDLSHGSAQVKAHGK
-KVGDALTLAVGHLDDLPGALSNLSDLHAHKLRVDPVNFKLLSHCLLSTLAVHLPNDFTPA
-VHASLDKFLSSVSTVLTSKYR
-   
+
   File: mydata.seq
-  
+
 >MYG_PHYCA Sw:Myg_Phyca => MYG_PHYCA
 VLSEGEWQLVLHVWAKVEADVAGHGQDILIRLFKSHPETLEKFDRFKHLKTEAEMKASED
 LKKHGVTVLTALGAILKKKGHHEAELKPLAQSHATKHKIPIKYLEFISEAIIHVLHSRHP
@@ -292,40 +273,59 @@ AVIADTVAAGDAGFEKLMSMICILLRSAY
 GALTESQAALVKSSWEEFNANIPKHTHRFFILVLEIAPAAKDLFSFLKGTSEVPQNNPEL
 QAHAGKVFKLVYEAAIQLQVTGVVVTDATLKNLGSVHVSKGVADAHFPVVKEAILKTIKE
 VVGAKWSEELNSAWTIAYDELAIVIKKEMNDAA
-   
+
+  File: hb.seq
+
+>HBB_HUMAN Sw:Hbb_Human => HBB_HUMAN
+VHLTPEEKSAVTALWGKVNVDEVGGEALGRLLVVYPWTQRFFESFGDLSTPDAVMGNPKV
+KAHGKKVLGAFSDGLAHLDNLKGTFATLSELHCDKLHVDPENFRLLGNVLVCVLAHHFGK
+EFTPPVQAAYQKVVAGVANALAHKYH
+>HBB_HORSE Sw:Hbb_Horse => HBB_HORSE
+VQLSGEEKAAVLALWDKVNEEEVGGEALGRLLVVYPWTQRFFDSFGDLSNPGAVMGNPKV
+KAHGKKVLHSFGEGVHHLDNLKGTFAALSELHCDKLHVDPENFRLLGNVLVVVLARHFGK
+DFTPELQASYQKVVAGVANALAHKYH
+>HBA_HUMAN Sw:Hba_Human => HBA_HUMAN
+VLSPADKTNVKAAWGKVGAHAGEYGAEALERMFLSFPTTKTYFPHFDLSHGSAQVKGHGK
+KVADALTNAVAHVDDMPNALSALSDLHAHKLRVDPVNFKLLSHCLLVTLAAHLPAEFTPA
+VHASLDKFLASVSTVLTSKYR
+>HBA_HORSE Sw:Hba_Horse => HBA_HORSE
+VLSAADKTNVKAAWSKVGGHAGEYGAEALERMFLGFPTTKTYFPHFDLSHGSAQVKAHGK
+KVGDALTLAVGHLDDLPGALSNLSDLHAHKLRVDPVNFKLLSHCLLSTLAVHLPNDFTPA
+VHASLDKFLSSVSTVLTSKYR
+
 Data files
 
    None.
-   
+
 Notes
 
    Note that the names or accession numbers of the sequences to be
    excluded are not standard EMBOSS USAs. Only the ID name or accession
    number can be specified, you cannot specify the sequences as
    'database:ID', 'file:accession', 'format::file', etc.
-   
+
 References
 
    None.
-   
+
 Warnings
 
    None.
-   
+
 Diagnostic Error Messages
 
    If no matches are found to any of the specified sequence names, the
    message "This is a warning: No matches found." is displayed.
-   
+
 Exit status
 
    It exits with a status of 0 unless no matches are found to any of the
    input sequences name, in which case it exits with a status of -1.
-   
+
 Known bugs
 
    None.
-   
+
 See also
 
    Program name                          Description
@@ -353,23 +353,25 @@ See also
    union        Reads sequence fragments and builds one sequence
    vectorstrip  Strips out DNA between a pair of vector sequences
    yank         Reads a sequence range, appends the full USA to a list file
-   
+
 Author(s)
 
    Gary Williams (gwilliam © rfcgr.mrc.ac.uk)
    MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
    Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
-   
+
 History
 
    Written (9 Jan 2001) - Gary Williams
-   
+
    Added ability to specify names to exclude as a list file (June 2002) -
    Gary Williams
-   
+
 Target users
 
    This program is intended to be used by everyone and everything, from
    naive users to embedded scripts.
-   
+
 Comments
+
+   None

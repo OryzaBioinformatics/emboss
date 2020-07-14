@@ -1,83 +1,83 @@
 
                                   compseq 
-                                      
-   
-   
+
+
+
 Function
 
    Counts the composition of dimer/trimer/etc words in a sequence
-   
+
 Description
 
    This takes a specified length of sequence and counts the number of
    distinct subsequences of that length that there are in the input
    sequence(s).
-   
+
    It can read in the result of a previous compseq analysis and use this
    to set the expected frequencies of the subsequences.
-   
+
    Unless you tell 'compseq' otherwise, it expects each word to be
    equally likely. The 'Expected' frequency therefore of any dimer is
    1/16 - this is simply the inverse of the number of possible dimers
    (AA, AC, AG, AT, CA, CC, CG, CT, GA, GC, GG, GT, TA, TC, TG, TT).
-   
+
    Similarly, the 'Expected' frequency of any trimer is 1/64, etc.
-   
+
    Obviously this is not the case in real sequences - there will be bias
    in favour of some words.
-   
+
    Compseq cannot otherwise guess what the 'Expected' frequency is. You
    can, however, tell it what the Expected frequencies are by giving
    compseq the output of the analysis of another set of sequences,
    produced by a previous compseq run.
-   
+
    So you take a set of sequences that are representative of the type of
    sequence you expect and you run compseq on it to get your expected
    sequence frequencies.
-   
+
    You then take the sequences you wish to investigate, run compseq on
    them giving compseq the expected frequencies that you have
    established, above. You tell compseq what the file of expected
    frequencies is by specifying it with '-infile filename' on the
    command-line.
-   
+
 Usage
 
    Here is a sample session with compseq
-   
+
    To count the frequencies of dinucleotides in a file:
-   
-   
+
+
 % compseq tembl:hsfau 2 result3.comp 
 Counts the composition of dimer/trimer/etc words in a sequence
 
    Go to the input files for this example
    Go to the output files for this example
-   
+
    Example 2
-   
+
    To count the frequencies of hexanucleotides, without outputting the
    results of hexanucleotides that do not occur in the sequence:
-   
-   
+
+
 % compseq tembl:hsfau 6 result6.comp -nozero 
 Counts the composition of dimer/trimer/etc words in a sequence
 
    Go to the output files for this example
-   
+
    Example 3
-   
+
    To count the frequencies of trinucleotides in frame 2 of a sequence
    and use a previously prepared compseq output to show the expected
    frequencies:
-   
-   
-% compseq tembl:hsfau 3 result3.comp -frame 2 -in ../../data/prev.comp 
+
+
+% compseq tembl:hsfau 3 result3.comp -frame 2 -in prev.comp 
 Counts the composition of dimer/trimer/etc words in a sequence
 
    Go to the input files for this example
    Go to the output files for this example
-   
+
 Command line arguments
 
    Standard (Mandatory) qualifiers:
@@ -183,7 +183,7 @@ Command line arguments
    -error               boolean    Report errors
    -fatal               boolean    Report fatal errors
    -die                 boolean    Report deaths
-   
+
 
    Standard (Mandatory) qualifiers Allowed values Default
    [-sequence]
@@ -234,18 +234,18 @@ Command line arguments
    Yes
    Advanced (Unprompted) qualifiers Allowed values Default
    (none)
-   
+
 Input file format
 
    Normal sequence(s) USA.
-   
+
   Input files for usage example
-  
+
    'tembl:hsfau' is a sequence entry in the example nucleic acid database
    'tembl'
-   
+
   Database entry: tembl:hsfau
-  
+
 ID   HSFAU      standard; RNA; HUM; 518 BP.
 XX
 AC   X65923;
@@ -332,11 +332,11 @@ SQ   Sequence 518 BP; 125 A; 139 C; 148 G; 106 T; 0 other;
      tctaataaaa aagccactta gttcagtcaa aaaaaaaa                               51
 8
 //
-   
+
   Input files for usage example 3
-  
-  File: ../../data/prev.comp
-  
+
+  File: prev.comp
+
 #
 # Output from 'compseq'
 #
@@ -419,32 +419,32 @@ TTG     7               0.0135659       0.0156250       0.8682171
 TTT     7               0.0135659       0.0156250       0.8682171
 
 Other   0               0.0000000       0.0000000       10000000000.0000000
-   
+
 Output file format
 
    The output format consists of:
-   
+
    Header information and comments are preceeded by a '#' character at
    the start of the line.
-   
+
    The Word size and the Total count are then given on separate lines,
-   
+
    The headers of the columns of results are preceeded by a '#'
-   
+
    The results columns are: the sub-sequence word, the observed
    frequency, the expected frequency (which will be read from the input
    file if one is given, else it is a simple inverse of the number of
    words of the size specified that can be constructed), the ratio of the
    observed to expected frequency.
-   
+
    After a blank line at the end, the results of 'Other' words is given -
    this is the number of words with a sequence which has IUPAC ambiguity
    codes or other unusual characters in.
-   
+
   Output files for usage example
-  
+
   File: result3.comp
-  
+
 #
 # Output from 'compseq'
 #
@@ -479,11 +479,11 @@ TG      32              0.0618956       0.0625000       0.9903288
 TT      26              0.0502901       0.0625000       0.8046422
 
 Other   0               0.0000000       0.0000000       10000000000.0000000
-   
+
   Output files for usage example 2
-  
+
   File: result6.comp
-  
+
 #
 # Output from 'compseq'
 #
@@ -589,11 +589,11 @@ TTTGTC  2               0.0038986       0.0002441       15.9688109
 TTTTGT  1               0.0019493       0.0002441       7.9844055
 
 Other   0               0.0000000       0.0000000       10000000000.0000000
-   
+
   Output files for usage example 3
-  
+
   File: result3.comp
-  
+
 #
 # Output from 'compseq'
 #
@@ -676,73 +676,73 @@ TTG     0               0.0000000       0.0135659       0.0000000
 TTT     5               0.0290698       0.0135659       2.1428558
 
 Other   0               0.0000000       0.0000000       10000000000.0000000
-   
+
 Data files
 
    The input data file is not required.
-   
+
    The input data file format is exactly the same as the output file
    format.
-   
+
    It expects to read in a previous output file of this program. An error
    is produced if the word size of the current compseq job and that of
    the output file being read in are different.
-   
+
 Notes
 
    The results are held in an array in memory before being written to a
    file. For large values of wordsize, you may run out of memory.
-   
+
    You can produce very large output files if you choose large values of
    wordsize.
-   
+
 References
 
    None.
-   
+
 Warnings
 
    If you use large word-sizes (over about 7 for nucleic, 5 for protein)
    you will use huge amounts of memory.
-   
+
 Diagnostic Error Messages
 
    "The word size is too large for the data structure available."
           You chose a word size that cannot be stored by the program.
-          
+
    "Insufficient memory - aborting."
           You do not have enough memory - use a machine with more memory.
-          
+
    "The word size you are counting (n) is different to the word size in
           the file of expected frequencies (n)."
           You chose different word sizes in the run of compseq that
           produced your results file used to display the expected word
           frequencies to the word size used in this run of compseq.
-          
+
    "The 'Word size' line was not found, instead found:"
           You appear to be trying to read a corrupted compseq results
           file
-          
+
 Exit status
 
    It always exits with status 0 unless one of the above error conditions
    is found
-   
+
 Known bugs
 
    This program can use a large amount of memory is you specify a large
    word size (7 or above). This may impact the behaviour of other
    programs on your machine.
-   
+
    If you run out of memory, you may see the program crash with a generic
    error message that will be specific to your machine's operating
    system, but will probably be a warning about writing to memory that
    the program does not own (eg "Segmentation fault" on a Solaris
    machine)
-   
+
    This is not a bug, it is a feature of the way this program grabs large
    amounts of memory.
-   
+
 See also
 
    Program name                      Description
@@ -766,13 +766,13 @@ See also
    pepwindowall Displays protein hydropathy of a set of sequences
    sirna        Finds siRNA duplexes in mRNA
    wordcount    Counts words of a specified size in a DNA sequence
-   
+
 Author(s)
 
    Gary Williams (gwilliam © rfcgr.mrc.ac.uk)
    MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
    Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
-   
+
 History
 
    Completed 2 March 2000
@@ -781,10 +781,12 @@ History
    default for nucleic sequences. Too many people were getting confused
    by the counts being done on both senses, so this is now done on only
    the forward sense by default.
-   
+
 Target users
 
    This program is intended to be used by everyone and everything, from
    naive users to embedded scripts.
-   
+
 Comments
+
+   None

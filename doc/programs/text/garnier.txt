@@ -1,47 +1,47 @@
 
                                   garnier 
-                                      
-   
-   
+
+
+
 Function
 
    Predicts protein secondary structure
-   
+
 Description
 
    This is an implementation of the original Garnier Osguthorpe Robson
    algorithm (GOR I) for predicting protein secondary structure.
-   
+
    Secondary structure prediction is notoriously difficult to do
    accurately. The GOR I alogorithm is one of the first semi-successful
    methods.
-   
+
    The Garnier method is not regarded as the most accurate prediction,
    but is simple to calculate on most workstations.
-   
+
    The accuracy of any secondary structure prediction program is not much
    better than 70% to 80% at best. This is an early algorithm and will
    probably not predict with much better than about 65% accuracy.
-   
+
    The Web servers for PHD, DSC, and others are generally preferred.
-   
+
    Do not rely on this (or any other) program alone to make your
    predictions with. Use several programs and take a consensus of the
    results.
-   
+
 Usage
 
    Here is a sample session with garnier
-   
+
 
 % garnier 
 Predicts protein secondary structure
 Input sequence(s): tsw:amic_pseae
 Output report [amic_pseae.garnier]: 
-   
+
    Go to the input files for this example
    Go to the output files for this example
-   
+
 Command line arguments
 
    Standard (Mandatory) qualifiers:
@@ -105,7 +105,7 @@ Command line arguments
    -error               boolean    Report errors
    -fatal               boolean    Report fatal errors
    -die                 boolean    Report deaths
-   
+
 
    Standard (Mandatory) qualifiers Allowed values Default
    [-sequence]
@@ -123,10 +123,10 @@ Command line arguments
    sheet (extend) terms. So, idc=0 says don't use the decision constant
    offsets, and idc=1 to 6 indicates that various combinations of dch,dcs
    offsets should be used. Integer from 0 to 6 0
-   
+
    The meaning and use of the parameter 'idc' is currently being
    investigated. The original author, Bill Pearson writes:
-   
+
    "In their paper, GOR mention that if you know something about the
    secondary structure content of the protein you are analyzing, you can
    do better in prediction. "idc" is an index into a set of arrays,
@@ -136,18 +136,18 @@ Command line arguments
    offsets, and idc=1 to 6 indicates that various combinations of dch,dcs
    offsets should be used. I don't remember what they are, but I must
    have gotten the values from their paper."
-   
+
 Input file format
 
    garnier read any protein sequence USA.
-   
+
   Input files for usage example
-  
+
    'tsw:amic_pseae' is a sequence entry in the example protein database
    'tsw'
-   
+
   Database entry: tsw:amic_pseae
-  
+
 ID   AMIC_PSEAE     STANDARD;      PRT;   384 AA.
 AC   P27017;
 DT   01-AUG-1992 (Rel. 23, Created)
@@ -211,30 +211,29 @@ SQ   SEQUENCE   384 AA;  42704 MW;  68FF861F CRC32;
      AAGNWRVEDV QRHLYDIDID APQGPVRVER QNNHSRLSSR IAEIDARGVF QVRWQSPEPI
      RPDPYVVVHN LDDWSASMGG GPLP
 //
-   
+
 Output file format
 
    The output is a standard EMBOSS report file.
-   
+
    The results can be output in one of several styles by using the
    command-line qualifier -rformat xxx, where 'xxx' is replaced by the
    name of the required format. The available format names are: embl,
    genbank, gff, pir, swiss, trace, listfile, dbmotif, diffseq, excel,
    feattable, motif, regions, seqtable, simple, srs, table, tagseq
-   
-   See:
-   http://www.uk.embnet.org/Software/EMBOSS/Themes/ReportFormats.html for
-   further information on report formats.
-   
+
+   See: http://emboss.sf.net/docs/themes/ReportFormats.html for further
+   information on report formats.
+
    By default garnier writes a 'tagseq' report file.
-   
+
   Output files for usage example
-  
+
   File: amic_pseae.garnier
-  
+
 ########################################
 # Program: garnier
-# Rundate: Tue Apr 06 14:29:46 2004
+# Rundate: Thu Jul 15 2004 12:00:00
 # Report_format: tagseq
 # Report_file: amic_pseae.garnier
 ########################################
@@ -307,26 +306,26 @@ turns   TT    TT           TTT  TTT
 #         percent: H: 30.2 E: 26.6 T: 22.0 C: 25.5
 #
 #---------------------------------------
-   
+
 Data files
 
    None.
-   
+
 Notes
 
    The Garnier method is not regarded as the most accurate prediction,
    but is simple to calculate on most workstations.
-   
+
    The Web servers for PHD, DSC, and others are generally preferred.
-   
+
    Do not rely on this (or any other) program alone to make your
    predictions with. Use several programs and take a consensus of the
    results.
-   
+
    The 3D structure for the example sequence is known, although the 2D
    structure elements were not in the SwissProt feature table for release
    38 when the test data was extracted.
-   
+
    DSSP shows:
  From     To   Structure
     9     13   E beta sheet
@@ -359,31 +358,32 @@ Notes
 
 References
 
-   Garnier J, Osguthorpe DJ, Robson B Analysis of the accuracy and
-   implications of simple methods for predicting the secondary structure
-   of globular proteins. J Mol Biol 1978 Mar 25;120(1):97-120
-   
+    1. Garnier J, Osguthorpe DJ, Robson B Analysis of the accuracy and
+       implications of simple methods for predicting the secondary
+       structure of globular proteins. J Mol Biol 1978 Mar
+       25;120(1):97-120
+
 Warnings
 
    The accuracy of any secondary structure prediction program is not much
    better than 70% to 80% at best. This is an early algorithm and will
    probably not predict with much better than about 65% accuracy.
-   
+
    You are advised to use several of the latest Web-based prediction
    sites and combine them to make a consensus prediction.
-   
+
 Diagnostic Error Messages
 
    None.
-   
+
 Exit status
 
-   It always exist with a status of 0.
-   
+   It always exits with a status of 0.
+
 Known bugs
 
    None.
-   
+
 See also
 
     Program name             Description
@@ -393,22 +393,24 @@ See also
    pepnet         Displays proteins as a helical net
    pepwheel       Shows protein sequences as helices
    tmap           Displays membrane spanning regions
-   
+
 Author(s)
 
    This program ('GARNIER') was originally written by William Pearson
    (wrp@virginia.edu) and released as part of his FASTA package.
-   
+
    This application was modified for inclusion in EMBOSS by Rodrigo Lopez
    (rls © ebi.ac.uk)
    European Bioinformatics Institute, Wellcome Trust Genome Campus,
    Hinxton, Cambridge CB10 1SD, UK
-   
+
 History
 
 Target users
 
    This program is intended to be used by everyone and everything, from
    naive users to embedded scripts.
-   
+
 Comments
+
+   None

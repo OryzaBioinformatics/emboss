@@ -7,12 +7,9 @@
 </HEAD>
 <BODY BGCOLOR="#FFFFFF" text="#000000">
 
-
-
-
 <table align=center border=0 cellspacing=0 cellpadding=0>
 <tr><td valign=top>
-<A HREF="index.html" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
@@ -26,21 +23,10 @@ cirdna
 
 
 
-
-
-
 <H2>
     Function
 </H2>
-
-
-
-<!--
-DON'T WRITE ANYTHING HERE.
-IT IS DONE FOR YOU.
--->
 Draws circular maps of DNA constructs
-
 
 <H2>
     Description
@@ -70,8 +56,6 @@ the desired parameters.
 <H2>
     Usage
 </H2>
-
-
 <b>Here is a sample session with cirdna</b>
 <p>
 
@@ -80,7 +64,7 @@ the desired parameters.
 
 % <b>cirdna -graph cps </b>
 Draws circular maps of DNA constructs
-Input file containing mapping data [inputfile]: <b>../../data/data.cirp</b>
+Input file containing mapping data [inputfile]: <b>data.cirp</b>
 Draw a ruler [Y]: <b></b>
       Open : Open blocks
     Filled : Filled blocks
@@ -100,34 +84,9 @@ Created cirdna.ps
 <a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
 
 
-<!--
-Here is a sample session with cirdna.
-
-<pre>
-
-% cirdna
-Draws circular maps of DNA constructs
-Graph type [x11]:
-Input file [inputfile]: data.cirp
-do you want a ruler (Y or N) [Y]:
-type of blocks (enter Open, Filled, or Outline) [Filled]:
-ticks inside or outside the circle (enter In or Out) [Out]:
-text inside or outside the blocks (enter In or Out) [In]:  
-
-</pre>
--->
-
-
 <H2>
     Command line arguments
 </H2>
-
-
-
-<!--
-DON'T WRITE ANYTHING HERE.
-IT IS DONE FOR YOU.
--->
 
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
@@ -203,7 +162,6 @@ IT IS DONE FOR YOU.
 </pre>
 </td></tr></table>
 <P>
-
 <table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
 <tr bgcolor="#FFFFCC">
 <th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
@@ -249,7 +207,7 @@ IT IS DONE FOR YOU.
 <tr>
 <td>-graphout</td>
 <td>Graph type</td>
-<td>EMBOSS has a list of known devices, including postscript, ps, hpgl, hp7470, hp7580, meta, colourps, cps, xwindows, x11, tektronics, tekt, tek4107t, tek, none, null, text, data, xterm, png</td>
+<td>EMBOSS has a list of known devices, including postscript, ps, hpgl, hp7470, hp7580, meta, colourps, cps, xwindows, x11, tektronics, tekt, tek4107t, tek, none, null, text, data, xterm, png, xml</td>
 <td><i>EMBOSS_GRAPHICS</i> value, or x11</td>
 </tr>
 
@@ -377,107 +335,9 @@ IT IS DONE FOR YOU.
 </table>
 
 
-
 <H2>
     Input file format
 </H2>
-
-
-<a name="input.1"></a>
-<h3>Input files for usage example </h3>
-<p><h3>File: ../../data/data.cirp</h3>
-<table width="90%"><tr><td bgcolor="#FFCCFF">
-<pre>
-Start   1001
-End     4270
-
-
-group
-label
-Block    1011   1362    3
-ex1
-endlabel
-label
-Tick     1610   8
-EcoR1
-endlabel
-label
-Block    1647   1815    1
-endlabel
-label
-Tick     2459   8
-BamH1
-endlabel
-label
-Block    4139   4258    3
-ex2
-endlabel
-endgroup
-
-
-group
-label
-Range    2541    2812    [       ]       5
-Alu
-endlabel
-label
-Range    3322    3497    &gt;       &lt;       5
-MER13
-endlabel
-endgroup
-</pre>
-</td></tr></table><p>
-
-
-<!--
-Here is the input file data.cirp for the example run: 
-
-<p>
-<pre>
-
-----------------------------------------------------------------------
-Start   1001
-End     4270
-
-
-group
-label
-Block    1011   1362    3
-ex1
-endlabel
-label
-Tick     1610   8
-EcoR1
-endlabel
-label
-Block    1647   1815    1
-endlabel
-label
-Tick     2459   8
-BamH1
-endlabel
-label
-Block    4139   4258    3
-ex2
-endlabel
-endgroup
-
-
-group
-label
-Range    2541    2812    [       ]       5
-Alu
-endlabel
-label
-Range    3322    3497    &gt;       &lt;       5
-MER13
-endlabel
-endgroup
--------------------------------------------------------------------------
-
-</pre>
--->
-
 
 <p>
 
@@ -574,14 +434,60 @@ The colors defined in the PLPLOT graphics library are:
 This format can also be used for the program <a
 href="lindna.html">"lindna".</a>
 
+<p>
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+<p><h3>File: data.cirp</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+Start   1001
+End     4270
+
+
+group
+label
+Block    1011   1362    3
+ex1
+endlabel
+label
+Tick     1610   8
+EcoR1
+endlabel
+label
+Block    1647   1815    1
+endlabel
+label
+Tick     2459   8
+BamH1
+endlabel
+label
+Block    4139   4258    3
+ex2
+endlabel
+endgroup
+
+
+group
+label
+Range    2541    2812    [       ]       5
+Alu
+endlabel
+label
+Range    3322    3497    &gt;       &lt;       5
+MER13
+endlabel
+endgroup
+</pre>
+</td></tr></table><p>
+
+
+
+
 
 <H2>
     Output file format
 </H2>
-
-Output is to the specified graphics device.
-   
-<p>
 
 
 <a name="output.1"></a>
@@ -589,8 +495,7 @@ Output is to the specified graphics device.
 <p><h3>Graphics File: cirdna.ps</h3>
 <p><img src="cirdna.1.cirdna.gif" alt="[cirdna results]">
 
-
-
+Output is to the specified graphics device.
 <H2>
     Data files
 </H2>
@@ -637,11 +542,6 @@ It always exits with a status of 0.
 None.
 
 
-<!--
-<H2>
-    See also
-</H2>
--->
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
@@ -661,16 +561,10 @@ None.
 <tr><td><a href="textsearch.html">textsearch</a></td><td>Search sequence documentation text. SRS and Entrez are faster!</td></tr>
 </table>
 
-<!--
-        Add any comments about other associated programs (to prepare
-        data files?) that seealso doesn't find.
-   -->
-
 
 <H2>
     Author(s)
 </H2>
-
 Nicolas Tourasse (nicolas.tourasse&nbsp;&copy;&nbsp;biotek.uio.no)
 <br>
 Biotechnology Center of Oslo
@@ -685,28 +579,18 @@ Written 1999 - Nicolas Tourasse
 <br>
 Updated (2002) - Nicolas Tourasse
 
-<!--
-<p>
-[an error occurred while processing this directive]
--->
 
 <H2>
     Target users
 </H2>
-
-
-This program is intended to be used by everyone and everything,
-from naive users to embedded scripts. 
+This program is intended to be used by everyone and everything, from naive users to embedded scripts.
 
 
 <H2>
     Comments
 </H2>
+None
 
-
-<pre>
-
-</pre>
 
 
 </BODY>

@@ -7,12 +7,9 @@
 </HEAD>
 <BODY BGCOLOR="#FFFFFF" text="#000000">
 
-
-
-
 <table align=center border=0 cellspacing=0 cellpadding=0>
 <tr><td valign=top>
-<A HREF="index.html" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
@@ -25,19 +22,9 @@ needle
 <p>
 
 
-
-
-
 <H2>
     Function
 </H2>
-
-
-
-<!--
-DON'T WRITE ANYTHING HERE.
-IT IS DONE FOR YOU.
--->
 Needleman-Wunsch global alignment
 
 
@@ -127,8 +114,6 @@ missing bases.
 <H2>
     Usage
 </H2>
-
-
 <b>Here is a sample session with needle</b>
 <p>
 
@@ -149,14 +134,6 @@ Output alignment [hba_human.needle]: <b></b>
 <H2>
     Command line arguments
 </H2>
-
-
-
-<!--
-DON'T WRITE ANYTHING HERE.
-IT IS DONE FOR YOU.
--->
-
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
    Standard (Mandatory) qualifiers:
@@ -598,8 +575,8 @@ markx2, markx3, markx10, srspair, score
 <p>
 
 See:
-<A href="http://www.uk.embnet.org/Software/EMBOSS/Themes/AlignFormats.html">
-http://www.uk.embnet.org/Software/EMBOSS/Themes/AlignFormats.html</A>
+<A href="http://emboss.sf.net/docs/themes/AlignFormats.html">
+http://emboss.sf.net/docs/themes/AlignFormats.html</A>
 for further information on alignment formats.
 
 <p>
@@ -611,15 +588,16 @@ for further information on alignment formats.
 
 <a name="output.1"></a>
 <h3>Output files for usage example </h3>
-<p><h3>File: hba_human.needle</h3>
+<p><h3>File: hba_human.needle </h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 ########################################
-# Program:  needle
-# Rundate:  Tue Apr 06 14:30:14 2004
+# Program: needle
+# Rundate: Thu Jul 15 2004 12:00:00
 # Align_format: srspair
 # Report_file: hba_human.needle
 ########################################
+
 #=======================================
 #
 # Aligned_sequences: 2
@@ -638,7 +616,7 @@ for further information on alignment formats.
 #
 #=======================================
 
-HBA_HUMAN          1  VLSPADKTNVKAAWGKVGAHAGEYGAEALERMFLSFPTTKTYFPHF-DL     48
+HBA_HUMAN          1 -VLSPADKTNVKAAWGKVGAHAGEYGAEALERMFLSFPTTKTYFPHF-DL     48
                       .|:|.:|:.|.|.||||  :..|.|.|||.|:.:.:|.|:.:|..| ||
 HBB_HUMAN          1 VHLTPEEKSAVTALWGKV--NVDEVGGEALGRLLVVYPWTQRFFESFGDL     48
 
@@ -679,10 +657,27 @@ matrix. For nucleotide sequence, EDNAFULL is used. Others can be
 specified.
 
 <p>
+<p>
 EMBOSS data files are distributed with the application and stored
 in the standard EMBOSS data directory, which is defined
-by EMBOSS environment variable EMBOSS_DATA.
+by the EMBOSS environment variable EMBOSS_DATA.
 
+<p>
+
+To see the available EMBOSS data files, run:
+<p>
+<pre>
+% embossdata -showall
+</pre>
+<p>
+To fetch one of the data files (for example 'Exxx.dat') into your
+current directory for you to inspect or modify, run:
+
+<pre>
+
+% embossdata -fetch -file Exxx.dat
+
+</pre>
 <p>
 
 Users can provide their own data files in their own directories.
@@ -700,15 +695,17 @@ The directories are searched in the following order:
    <li> ~/ (your home directory)
    <li> ~/.embossdata
 </ul>
+<p>
+
 
 <H2>
     Notes
 </H2>
 
-<b>needle</b> is a true implementation of the Needleman-Wunsch algorithm 
-and so produces a full path
-matrix. It therefore cannot be used with genome sized
-sequences unless you've a lot of memory and a lot of time.
+<b>needle</b> is a true implementation of the Needleman-Wunsch
+algorithm and so produces a full path matrix. It therefore cannot be
+used with genome sized sequences unless you've a lot of memory and a
+lot of time.
 
 <H2>
     References
@@ -733,7 +730,7 @@ Wesley.
 </H2>
 
 
-needle is for aligning two sequences over their entire length.  This
+<b>needle</b> is for aligning two sequences over their entire length.  This
 works best with closely related sequences.  If you use needle to align
 very distantly-related sequences, it will produce a result but much of
 the alignment may have little or no biological significance. 
@@ -781,11 +778,6 @@ Probably means you have run out of memory. Try using
 
 None.
 
-<!--
-<H2>
-    See also
-</H2>
--->
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
@@ -793,10 +785,6 @@ None.
 <tr><td><a href="stretcher.html">stretcher</a></td><td>Finds the best global alignment between two sequences</td></tr>
 </table>
 
-<!--
-        Add any comments about other associated programs (to prepare
-        data files?) that seealso doesn't find.
-   -->
 
 <P>
 When you want an alignment that covers the whole length of both
@@ -814,8 +802,6 @@ find global alignments of very long sequences.
 <H2>
     Author(s)
 </H2>
-
-
 Alan Bleasby (ableasby&nbsp;&copy;&nbsp;rfcgr.mrc.ac.uk)
 <br>
 MRC Rosalind Franklin Centre for Genomics Research
@@ -828,33 +814,24 @@ Wellcome Trust Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
     History
 </H2>
 
-<pre>
 Completed 8th July 1999.
-Modified 26th July 1999 - scoring tweaked.
-Modified 22 Oct 2000 - %ID and %Similarity scores added.
-</pre>
-
-<!--
 <p>
-[an error occurred while processing this directive]
--->
+Modified 26th July 1999 - scoring tweaked.
+<p>
+Modified 22 Oct 2000 - %ID and %Similarity scores added.
+
 
 <H2>
     Target users
 </H2>
+This program is intended to be used by everyone and everything, from naive users to embedded scripts.
 
 
-This program is intended to be used by everyone and everything,
-from naive users to embedded scripts. 
 
 <H2>
     Comments
 </H2>
-
-
-<pre>
-
-</pre>
+None
 
 
 </BODY>

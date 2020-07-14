@@ -1,0 +1,581 @@
+
+                          SEQSEARCH documentation
+                                      
+   
+
+CONTENTS
+
+   1.0 SUMMARY 
+   2.0 INPUTS & OUTPUTS 
+   3.0 INPUT FILE FORMAT 
+   4.0 OUTPUT FILE FORMAT 
+   5.0 DATA FILES 
+   6.0 USAGE 
+   7.0 KNOWN BUGS & WARNINGS 
+   8.0 NOTES 
+   9.0 DESCRIPTION 
+   10.0 ALGORITHM 
+   11.0 RELATED APPLICATIONS 
+   12.0 DIAGNOSTIC ERROR MESSAGES 
+   13.0 AUTHORS 
+   14.0 REFERENCES 
+
+1.0 SUMMARY
+
+   Generate database hits (sequences) for nodes in a DCF file (domain
+   classification file) by using PSI-BLAST
+
+2.0 INPUTS & OUTPUTS
+
+   SEQSEARCH reads a directory of i. single protein sequences or ii. set
+   of protein sequences (aligned or unaligned) and generates a DHF file
+   ('domain hits file') of sequence relatives (hits) for each file in the
+   input directory. The hits are sequence relatives to the input
+   sequences and are found by using PSIBLAST. Only unique hits are
+   generated; only one of a set of identical hits returned by PSIBLAST is
+   retained.
+   Typically, aligned sequences within a DAF file ('domain alignment
+   file') are input and the DHF file output is annotated with domain
+   classification data.
+   PSIBLAST must be installed on the system that is running SEQSEARCH
+   (see 'Notes' below). The base name of an input file is used as the
+   base name for the corresponding output file. The paths and extensions
+   for the sequence files (input) and domain hits files (output) are
+   specified by the user. The name of the BLAST-indexed database to
+   search are also user-specified. A log file is also written.
+
+3.0 INPUT FILE FORMAT
+
+   The format of the domain alignment file is described in DOMAINALIGN
+   documentation.
+   If other sequences or sequence sets (aligned or unaligned) are used as
+   input, all of the common file formats are supported.
+
+  Input files for usage example
+
+  File: all.scop
+
+ID   D1CS4A_
+XX
+EN   1CS4
+XX
+SI   53931 CL; 54861 FO; 55073 SF; 55074 FA; 55077 DO; 55078 SO; 39418 DD;
+XX
+CL   Alpha and beta proteins (a+b)
+XX
+FO   Ferredoxin-like
+XX
+SF   Adenylyl and guanylyl cyclase catalytic domain
+XX
+FA   Adenylyl and guanylyl cyclase catalytic domain
+XX
+DO   Adenylyl cyclase VC1, domain C1a
+XX
+OS   Dog (Canis familiaris)
+XX
+NC   1
+XX
+CN   [1]
+XX
+CH   A CHAIN; . START; . END;
+//
+ID   D1II7A_
+XX
+EN   1II7
+XX
+SI   53931 CL; 56299 FO; 56300 SF; 64427 FA; 64428 DO; 64429 SO; 62415 DD;
+XX
+CL   Alpha and beta proteins (a+b)
+XX
+FO   Metallo-dependent phosphatases
+XX
+SF   Metallo-dependent phosphatases
+XX
+FA   DNA double-strand break repair nuclease
+XX
+DO   Mre11
+XX
+OS   Archaeon Pyrococcus furiosus
+XX
+NC   1
+XX
+CN   [1]
+XX
+CH   A CHAIN; . START; . END;
+//
+
+  File: swnew
+
+>ODO2_FUGRU Q90512 DIHYDROLIPOAMIDE SUCCINYLTRANSFERASE COMPONENT OF 2-OXOGLUTA
+RATE DEHYDROGENASE COMPLEX PRECURSOR (EC 2.3.1.61) (E2) (E2K) (FRAGMENT).
+SSVCRRLIFRTSRPGERASSQNSFHVRYFRTSVVHRDDLVTVKTPAFAESVTEGDVRWEK
+AVGDSVTEDEVVCEIETDKTSVQVPSPAAGVIEELLVPDGGKVEGGTPLFKLRKGAAAEA
+APSSVTEPVTAAPPPPPPPVSAPTAMPSVPPVPTQALQAKPVPAPTLPEPSTLGGRGESR
+VKMSRMRLRIAQRLKEAQNTCAMLTTFNEVDMSNIQEMRTLHKDAFLKKHSIKLGFMSAF
+VKAAAHALTDQPAVNAVIDGATNEIVYRDYVDISVAVATPKGLVVPVIRNVETMNFADIE
+RTINALGEKARNNELAVEDMDGGTFTISNGGVFGSLFGTPIINPPQSAILGMHGIFQRPV
+AVDGKAEIRPMMYVALTYDHRLVDGREAVTFLRKIKAAVEDPRALLLDM
+>TM21_FUGRU Q90515 TRANSMEMBRANE PROTEIN TMP21 PRECURSOR (S31III125).
+MARLTALLFLPVLIESAFSISFFLPVNTRKCLREEIHKDVLVTGEYEISEQVVTVHTSST
+VVGDGSIFKITDSSSHTLYSKEDATKGKFAFTTEDYDMFEVCFESKCTGRVPDQLVNLDM
+KHGVEAKNYEEIAKVEKLKPLEVELRRLEDLSESIVNDFAYMKKREEEMRDTNESTNTRV
+LYFSIFSMFCLIGLATWQVFYLRRFFKAKKLIE
+>CO9_FUGRU P79755 COMPLEMENT COMPONENT C9 PRECURSOR.
+MRTEAALQLGFCALCVMLALLGEGMGRELPDPPAVNCVWSRWAPWSSCDPCTNTRRRSRG
+VEVFGQFAGIACQGSVGDREYCITNAKCNLPPPRECSDSEFQCESGSCIKLRLKCNGDYD
+CEDGSDEDCEPLRKTCPPTVLDTNEQGRTAGYGINILGADPRMNPFNNDFFNGRCDKVRN
+PNTLQLDRLPWNIGVLNYQTLVEETASREIYEDSYSLLREMLKEMSIKVDAGLSFKFKST
+EPSMSNNSLKLDASLEYEKKTMIKDVSELTNIKNKSFMRVKGRLQLSTYRMRSHQLQVAD
+EFVAHVKSLPLEYEKGIYYAFLEDYGTHYTKNGKSGGEYELVYVLNQDTIKAKNLTERKI
+QECLKIGIEAEFATTSVQDGKAHAKLNKCDDVTTKSQGDVEGKAVVDNVMTSVKGGSLES
+AVTMRAKLNKEGVMDIATYQNWARTIASAPALINSEPEPIYMLIPTDIPGANSRIANLKQ
+ATADYVAEYNVCKCRPCHNGGTLALLDGKCICMCSNLFEGLGCQNFKGDKARVPAARPAV
+TQEGNWSCWSSWSNCQGQKRSRTRYCNTEGVLGAECRGEIRSEEYC
+>E2BB_FUGRU Q90511 TRANSLATION INITIATION FACTOR EIF-2B BETA SUBUNIT (EIF-2B GD
+P-GTP EXCHANGE FACTOR) (S20I15).
+MPGADKEVDLTERIEAFLSDLKRGGSGTGPLRGSSETARETTALLRRITAQARWSSAGDL
+MEIIRKEGRRLIAAQPSETTVGNMIRRVLKIIREEYARSRGSSEEADQQESLHKLLTSGG
+LSEENFRQHFAALRANVIEAINELLTELEGTTDNIAMQALEHIHSNEVIMTVGRSRTVEA
+FLKDAARKRKFHVIVAECAPFCQGHKMATSLSTAGIETTVIADAAIFAVMSRVNKVIIGT
+QTVLANGGLRAVNGTHTLALAAKHHSTPLIVCAPMFKLSPQFPNEEDTFHKFVSPHEVLP
+FTEGEILSKVNVHCPVFDYVPPELITLFISNIGGHAPSYIYRLMSELYHPEDHEL
+>FOS_FUGRU P53450 P55-C-FOS PROTO-ONCOGENE PROTEIN.
+MMFTSFNAECDSSSRCSASPVGDNLYYPSPAGSYSSMGSPQSQDFTDLTASSASFIPTVT
+AISTSPDLQWMVQPLISSVAPSHRAHPYSPSPSYKRTVMRSAASKAHGKRSRVEQTTPEE
+EEKKRIRRERNKQAAAKCRNRRRELTDTLQAETDQLEDEKSSLQNDIANLLKEKERLEFI
+LAAHQPICKIPSQMDTDFSVVSMSPVHACLSTTVSTQLQTSIPEATTVTSSHSTFTSTSN
+SIFSGSSDSLLSTATVSNSVVKMTDLDSSVLEESLDLLAKTEAETARSVPDVNLSNSLFA
+AQDWEPLHATISSSDFEPLCTPVVTCTPACTTLTSSFVFTFPEAETFPTCGVAHRRRSNS
+NDQSSDSLSSPTLLAL
+>FABP_FUGRU O42494 FATTY ACID BINDING PROTEIN.
+MSFSGKYQQVSQENFEPFMKAIGLPDEVIQQVKELKSTSEIEQNGNDFKITITTGPKVTV
+NKFTIGKETEMDTITGEKIKTVFHLDGNKLKVSLKGIESVTELADPNTITMTLGDVVYKT
+TSKRM
+>KPB2_FUGRU Q9W6R1 PHOSPHORYLASE B KINASE ALPHA REGULATORY CHAIN, LIVER ISOFORM
+ (PHOSPHORYLASE KINASE ALPHA L SUBUNIT).
+MRSRSNSGVRLDGYARLVHETILGFQNPVTGLLPASVQKKDAWVRDNVYSILAVWGLGMA
+YRKNADRDEDKAKAYELEQSVVKLMQGLLHCMMRQVAKVEKFKHTQSTTDCLHAKYDTST
+CATVVGDDQWGHLQVDATSIYLLMLAQMTASGLRIISNLDEVAFVQNLVFYIEAAYKVAD
+YGMWERGDKTNQGLPELNGSSVGMAKAALEAIDELDLFGAHGGPKSVIHVLPDEVEHCQS
+ILCSMLPRASPSKEIDAGLLSVISFPAFAVEDADLVTITKSEIINKLQGRYGCCRFIRDG
+YHCPKEDPTRLHYDPAELKLFENIECEWPVFWTYLILDGIFAEDQVQVQEYREALEGVLI
+RGKNGIKLLPELYTVPFDKVEEEYRNPHSVDREATGQLPHMWEQSLYILGCLLAEGFLAP
+GEIDPLNRRFSTSFKPDVVVQVCVLAESQEIKALLSEQGMVVQTVAEVLPIRVMSARVLS
+QIYVRLGNCKKLSLSGRPYRHIGVLGTSKFYEIRNHTYTFTPQFLDQHHFYLALDNQMIV
+EMLRTELAYLSSCWRMTGRPTLTFPVTRSMLVEDGDAVDPCILSTLRKLQDGYFAGARVQ
+MSDLSTFQTTSFHTRLSFLDEEHDDSLLEDDEEQEEEEEDKFEDDYNNYGPSGNNQVCYV
+SKDKFDQYLTQLLHSTTQKCHLPPIQRGQHHVFSAEHTTRDILSFMAQVQGLNVPKSSMY
+LPVTPLKSKHRRSLNLLDVPHPQHGPHLKQNKVGTFNSVLAADLHLPRDPQGKTDFATLV
+KQLKECPTLQDQADILYILNTSKGADWLVELSGPGQGGVSVHTLLEELYIQAGACKEWGL
+IRYISGILRKRVEVLAEACTDLISHHKQLTVGLPPEPRERVITVPLPPEELNTLIYEASG
+QDISVAVLTQEIMVYLAMYIRSQPALFGDMLRLRIGLIMQVMATELARSLHCSGEEASES
+LMSLSPFDMKNLLHHILSGKEFGVERSMRPIQSTATSPAISIHEIGHTGATKTERTGIRK
+LKSEIKQRCSSPSTPSGILSPVGPGPADGQLHWVERQGQWLRRRRLDGAINRVPVGFYQK
+VWKILQKCHGLSIDGYVLPSSTTREMTAGEIKFAVQVESVLNHVPQPEYRQLLVESVMVL
+GLVADVDVESIGSIIYVDRILHLANDLFLTDQKSYSAGDYFLEKDPETGICNFFYDSAPS
+GIYGTMTYLSKAAVTYIQDFLPSSSCIMQ
+>NEUI_FUGRU O42493 ISOTICIN-NEUROPHYSIN IT 1 PRECURSOR [CONTAINS: ISOTOCIN (IT)
+; NEUROPHYSIN IT 1].
+MTGTAISVCLLFLLSVCSACYISNCPIGGKRSIMDAPQRKCMSCGPGDRGRCFGPGICCG
+ESFGCLMGSPESARCAEENYLLTPCQAGGRPCGSEGGLCASSGLCCDAESCTMDQSCLSE
+EEGDERGSLFDGSDSGDVILKLLRLAGLTSPHQTH
+>NEUV_FUGRU O42499 VASOTOCIN-NEUROPHYSIN VT 1 PRECURSOR [CONTAINS: VASOTOCIN (V
+T); NEUROPHYSIN VT 1].
+MPQCALLLSLLGLLALSSACYIQNCPRGGKRALPETGIRQCMSCGPRDRGRCFGPNICCG
+EALGCLMGSPETARCAGENYLLTPCQAGGRPCGSEGGRCAVSGLCCNSESCAVDSDCLGE
+TESLEPGDSSADSSPTELLLRLLHMSSRGQSEY
+
+4.0 OUTPUT FILE FORMAT
+
+   SEQSEARCH generates a domain hits file in FASTA-like format.
+   DHF file (FASTA-like format)
+   The file (Figure 1) contains two lines per hit. The first contains a
+   description of the hit in 15 text tokens delimited by '^'. The tokens
+   are as follows (a '.' is given where a token does not have a value):
+   (i) Accession number of the hit.
+   (ii) Database code from Uniprot.
+   (iii - iv) Start and end positions of the hit relative to the full
+   length sequence in the uniprot database (files of these type may also
+   be generated by using SEQWORDS in which case a '.' will be given for
+   these records - see SEQWORDS documentation ).
+   (v) SCOP or CATH domain identifier code. This is a 7-character code
+   that uniquely identifies the domain in SCOP or CATH.
+   (vi) Domain identifier of the node. For example, if the domain
+   alignment file was for a SCOP family, the SCOP Sunid for the family
+   would be given. This number uniquely identifies the node (i.e. family
+   in this case) in the raw SCOP or CATH parsable files.
+   (vii) Domain class. Textual description of the 'Class' (SCOP and CATH
+   domains).
+   (viii) Domain architecture. Textual description of the 'Architecture'
+   (CATH only).
+   (ix) Domain topology. Textual description of the 'Topology' (CATH
+   only).
+   (x) Domain fold. Textual description of the 'Fold' (SCOP domains
+   only).
+   (xi) Domain superfamily. Textual description of the 'Superfamily'
+   (SCOP and CATH domains).
+   (xii) Domain family. Textual description of the 'Fold' (SCOP only).
+   (xiii) Model type. The type of model that was used to generate the
+   hit. May have a value of "PSIBLAST" (from PSIBLAST), "HMMER" (hidden
+   Markov model from the HMMER package), "SAM" (hidden Markov model from
+   the SAM package), SPARSE (sparse protein signature), HENIKOFF
+   (Henikoff profile) or GRIBSKOV (Gribskov profile). A value of
+   "PSIBLAST" is written by SEQSEARCH.
+   (xiv) SC - Score of hit. A floating point value that is the score from
+   psiblast (or other search algorithm).
+   (xv) P-value of hit from search algorithm.
+   (xvi) E-value of hit from search algorithm. The second line contains
+   the protein sequence.
+
+  Output files for usage example
+
+  File: 54894.hits
+
+CL   Alpha and beta proteins (a+b)
+XX
+FO   Ferredoxin-like
+XX
+SF   Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain
+XX
+FA   Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain
+XX
+SI   54894
+XX
+NS   0
+XX
+
+  File: 55074.hits
+
+CL   Alpha and beta proteins (a+b)
+XX
+FO   Ferredoxin-like
+XX
+SF   Adenylyl and guanylyl cyclase catalytic domain
+XX
+FA   Adenylyl and guanylyl cyclase catalytic domain
+XX
+SI   55074
+XX
+NS   0
+XX
+
+  File: seqsearch.log
+
+//
+/ebi/services/idata/pmr/hgmp/test/data/structure/54894.salign
+//
+/ebi/services/idata/pmr/hgmp/test/data/structure/55074.salign
+
+5.0 DATA FILES
+
+   SEQSEARCH does not requires any data files.
+
+6.0 USAGE
+
+  6.1 COMMAND LINE ARGUMENTS
+
+   Standard (Mandatory) qualifiers:
+   -mode               menu       This option specifies the mode of SEQSEARCH
+                                  operation. SEQSEARCH takes as input a
+                                  directory of either i. single sequences, ii.
+                                  set of sequences (unaligned or aligned, but
+                                  typically aligned sequences within a domain
+                                  alignment file)). The user has to specify
+                                  which.
+  [-inseqspath]        dirlist    This option specifies the location of
+                                  sequences, e.g. DAF files (domain alignment
+                                  files) (input). SEQSEARCH takes as input a
+                                  database of either i. single sequences, ii.
+                                  sets of unaligned sequences or iii. sets of
+                                  aligned sequences, e.g. a domain alignment
+                                  file. A 'domain alignment file' contains a
+                                  sequence alignment of domains belonging to
+                                  the same SCOP or CATH family. The file is in
+                                  clustal format annotated with domain family
+                                  classification information. The files
+                                  generated by using SCOPALIGN will contain a
+                                  structure-based sequence alignment of
+                                  domains of known structure only. Such
+                                  alignments can be extended with sequence
+                                  relatives (of unknown structure) by using
+                                  SEQALIGN.
+  [-database]          string     Name of BLAST-indexed database to search.
+   -niter              integer    This option specifies the number of PSIBLAST
+                                  iterations. This option specifies the
+                                  number of PSIBLAST iterations that are
+                                  performed in a search.
+   -evalue             float      This option specifies the threshold E-value
+                                  for inclusion in family. This option
+                                  specifies the threshold E-value for a
+                                  PSIBLAST hit to be retained.
+   -maxhits            integer    This option specifies the maximum number of
+                                  hits. This option specifies the maximum
+                                  number of PSIBLAST hit that are retained. It
+                                  should normally be set high so that nothing
+                                  is discarded.
+  [-dhfoutdir]         outdir     This option specifies the location of DHF
+                                  files (domain hits files) (output). A
+                                  'domain hits file' contains database hits
+                                  (sequences) with domain classification
+                                  information, in FASTA format. The hits are
+                                  relatives to a SCOP or CATH family and are
+                                  found from a search of a sequence database.
+                                  Files containing hits retrieved by PSIBLAST
+                                  are generated by using SEQSEARCH.
+   -logfile            outfile    This option specifies the name of log file
+                                  for the build. The log file contains
+                                  messages about any errors arising while
+                                  SEQSEARCH ran.
+
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers: (none)
+   Associated qualifiers:
+
+   "-logfile" associated qualifiers
+   -odirectory         string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report deaths
+
+
+   Standard (Mandatory) qualifiers Allowed values Default
+   -mode This option specifies the mode of SEQSEARCH operation. SEQSEARCH
+   takes as input a directory of either i. single sequences, ii. set of
+   sequences (unaligned or aligned, but typically aligned sequences
+   within a domain alignment file)). The user has to specify which.
+   1 (Single sequences)
+   2 (Multiple sequences (e.g. sequence set or alignment))
+   1
+   [-inseqspath]
+   (Parameter 1) This option specifies the location of sequences, e.g.
+   DAF files (domain alignment files) (input). SEQSEARCH takes as input a
+   database of either i. single sequences, ii. sets of unaligned
+   sequences or iii. sets of aligned sequences, e.g. a domain alignment
+   file. A 'domain alignment file' contains a sequence alignment of
+   domains belonging to the same SCOP or CATH family. The file is in
+   clustal format annotated with domain family classification
+   information. The files generated by using SCOPALIGN will contain a
+   structure-based sequence alignment of domains of known structure only.
+   Such alignments can be extended with sequence relatives (of unknown
+   structure) by using SEQALIGN. Directory with files ./
+   [-database]
+   (Parameter 2) Name of BLAST-indexed database to search. Any string is
+   accepted swissprot
+   -niter This option specifies the number of PSIBLAST iterations. This
+   option specifies the number of PSIBLAST iterations that are performed
+   in a search. Any integer value 1
+   -evalue This option specifies the threshold E-value for inclusion in
+   family. This option specifies the threshold E-value for a PSIBLAST hit
+   to be retained. Any numeric value 0.001
+   -maxhits This option specifies the maximum number of hits. This option
+   specifies the maximum number of PSIBLAST hit that are retained. It
+   should normally be set high so that nothing is discarded. Any integer
+   value 1000
+   [-dhfoutdir]
+   (Parameter 3) This option specifies the location of DHF files (domain
+   hits files) (output). A 'domain hits file' contains database hits
+   (sequences) with domain classification information, in FASTA format.
+   The hits are relatives to a SCOP or CATH family and are found from a
+   search of a sequence database. Files containing hits retrieved by
+   PSIBLAST are generated by using SEQSEARCH. Output directory ./
+   -logfile This option specifies the name of log file for the build. The
+   log file contains messages about any errors arising while SEQSEARCH
+   ran. Output file seqsearch.log
+   Additional (Optional) qualifiers Allowed values Default
+   (none)
+   Advanced (Unprompted) qualifiers Allowed values Default
+   (none)
+
+  6.2 EXAMPLE SESSION
+
+   An example of interactive use of SEQSEARCH is shown below. Here is a
+   sample session with seqsearch
+
+
+% seqsearch 
+Generate files of hits for families in a scop classification file by using
+PSI-BLAST with seed alignments.
+Name of scop classification file (embl format input): all.scop
+Location of scop alignment files (input) [./]: structure
+Extension of scop alignment files (input) [.salign]: 
+Name of BLAST-indexed database to search [swissprot]: swnew
+Number of PSIBLAST iterations [1]: 1
+Threshold E-value for inclusion in family [0.001]: 0.001
+Maximum number of hits [1000]: 100
+Location of scop hits files (output) [./]: 
+Extension of scop hits files (output) [.hits]: 
+Name of log file for the build [seqsearch.log]: 
+[blastpgp] WARNING: posFindAlignmentDimensions: Attempting to recover data from
+ multiple alignment file
+
+[blastpgp] WARNING: posProcessAlignment: Alignment recovered successfully
+
+[blastpgp] WARNING: posFindAlignmentDimensions: Attempting to recover data from
+ multiple alignment file
+
+[blastpgp] WARNING: posProcessAlignment: Alignment recovered successfully
+
+
+PROCESSING /ebi/services/idata/pmr/hgmp/test/data/structure/54894.salign
+blastpgp -i ./seqsearch-1095239004.25358.seqin -B ./seqsearch-1095239004.25358.
+seqsin -j 1 -e 0.001000 -b 100 -v 100 -d ../../data/swnew > ./seqsearch-1095239
+004.25358.psiout
+
+PROCESSING /ebi/services/idata/pmr/hgmp/test/data/structure/55074.salign
+blastpgp -i ./seqsearch-1095239004.6149.seqin -B ./seqsearch-1095239004.6149.se
+qsin -j 1 -e 0.001000 -b 100 -v 100 -d ../../data/swnew > ./seqsearch-109523900
+4.6149.psiout
+
+
+   Go to the input files for this example
+   Go to the output files for this example
+
+   All domain alignment files (with the file extension of .daf specified
+   in the ACD file) were read from the directory /test_data; in this case
+   two domain alignment files 54894.salign and 55074.salign were read.
+   Sets of sequences extracted from these files were used to search the
+   sequence database swissprot by using psiblast. psiblast was configured
+   to perform 1 iteration with a threshold E-value for acceptance of a
+   hit of 0.0001 and no more than 100 hits were generated from each
+   iteration. Domain hits files were written to /test_data/seqsearch (
+   the file extension .dhf was specified in the ACD file); in this case
+   two files /test_data/54894.dhf and /test_data/55074.dhf were written.
+   A log file called /test_data/seqsearch/seqsearch.log was also written.
+
+7.0 KNOWN BUGS & WARNINGS
+
+   None.
+
+8.0 NOTES
+
+   1. Use of psiblast
+   psiblast must be installed on the system that is running SEQSEARCH.
+   When running SEQSEARCH at the HGMP it is essential that the command
+   'use blast_v2' (which runs the script /packages/menu/USE/blast_v2) is
+   given before it is run.
+   SEQSEARCH requires a blast-indexed database to be present, i.e. both
+   the sequence and index file must be present on the system. The name of
+   the database to search specified in the acd file is that which is
+   given as the -d parameter to blastpgp (e.g. blastpgp -d swissprot).
+
+  8.1 GLOSSARY OF FILE TYPES
+
+   FILE TYPE FORMAT DESCRIPTION CREATED BY SEE ALSO
+   Domain hits file DHF format (FASTA-like format with domain
+   classification information). Database hits (sequences) with domain
+   classification information. The hits are relatives to a SCOP or CATH
+   family and are found from a search of a sequence database. SEQSEARCH
+   (hits retrieved by PSIBLAST) N.A.
+   Domain alignment file DAF format (CLUSTAL-like format with domain
+   classification information). Contains a sequence alignment of domains
+   belonging to the same SCOP or CATH family. The file is annotated with
+   domain family classification information. DOMAINALIGN (structure-based
+   sequence alignment of domains of known structure). DOMAINALIGN
+   alignments can be extended with sequence relatives (of unknown
+   structure) to the family in question by using SEQALIGN.
+
+   None
+
+9.0 DESCRIPTION
+
+   By using homology search tools such as blast it is possible to find
+   relatives to a group of related proteins (family, superfamily etc),
+   given one or more sequences belonging to the group of interest. For
+   example, when using psiblast it is possible to use a sequence
+   alignment as the seed with which to search a sequence database.
+   Performing such searches for large datasets such as all families
+   within SCOP or CATH potentially requires a lot of time for preparation
+   of datasets, running jobs and so on, in addition to the compute time
+   required for the searches themselves. SEQSEARCH automatically performs
+   a psiblast search of a sequence database for each file in a directory
+   of sequences or sets of sequences. These sequences are used for the
+   searches. Typically, the directory contains DAF files (domain
+   alignment files) and the alignments are for a certain node (e.g.
+   family, superfamily etc) from SCOP or CATH.
+
+10.0 ALGORITHM
+
+   None.
+
+11.0 RELATED APPLICATIONS
+
+See also
+
+   Program name Description
+   contactcount Counts specific versus non-specific contacts in a
+   directory of cleaned protein chain contact files
+   contacts Reads CCF files (clean coordinate files) and writes CON files
+   (contact files) of intra-chain residue-residue contact data
+   domainalign Generates DAF files (domain alignment files) of
+   structure-based sequence alignments for nodes in a DCF file (domain
+   classification file)
+   domainrep Reorder DCF file (domain classification file) so that the
+   representative structure of each user-specified node is given first
+   domainreso Removes low resolution domains from a DCF file (domain
+   classification file)
+   interface Reads CCF files (clean coordinate files) and writes CON
+   files (contact files) of inter-chain residue-residue contact data
+   libgen Generates various types of discriminating elements for each
+   alignment in a directory
+   psiphi Calculates phi and psi torsion angles from cleaned EMBOSS-style
+   protein co-ordinate file
+   rocon Reads a DHF file (domain hits file) of hits (sequences of
+   unknown structural classification) and a DHF file of validation
+   sequences (known classification) and writes a 'hits file' for the
+   hits, which are classified and rank-ordered on the basis of score
+   rocplot Provides interpretation and graphical display of the
+   performance of discriminating elements (e.g. profiles for protein
+   families). rocplot reads file(s) of hits from discriminator-database
+   search(es), performs ROC analysis on the hits, and writes graphs
+   illustrating the diagnostic performance of the discriminating elements
+   seqalign Reads a DAF file (domain alignment file) and a DHF file
+   (domain hits file) and writes a DAF file extended with the hits
+   seqfraggle Removes fragments from DHF files (domain hits files) or
+   other files of sequences
+   seqsort Reads DHF files (domain hits files) of database hits
+   (sequences) and removes hits of ambiguous classification
+   seqwords Generates DHF files (domain hits files) of database hits
+   (sequences) for nodes in a DCF file (domain classification file) by
+   keyword search of UniProt
+   siggen Generates a sparse protein signature from an alignment and
+   residue contact data
+   sigscan Generates a DHF file (domain hits file) of hits (sequences)
+   from scanning a signature against a sequence database
+
+12.0 DIAGNOSTIC ERROR MESSAGES
+
+   The following 3 types of message might appear in the log file:
+   WARN Could not open for reading my.file
+   WARN No PSIBLAST hits therefore no output file my.file
+   WARN Could not open for writing my.file
+
+13.0 AUTHORS
+
+   Ranjeeva Ranasinghe (rranasin@rfcgr.mrc.ac.uk)
+   Jon Ison (jison@rfcgr.mrc.ac.uk)
+   MRC Rosalind Franklin Centre for Genomics Research, Wellcome Trust
+   Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
+
+14.0 REFERENCES
+
+   Please cite the authors and EMBOSS.
+   Rice P, Longden I and Bleasby A (2000) "EMBOSS - The European
+   Molecular Biology Open Software Suite" Trends in Genetics, 15:276-278.
+   
+   See also http://emboss.sourceforge.net/
+
+  14.1 Other useful references
+
+   Altschul et al, Nuc. Acids. Res. 25:3389-3402, 1997

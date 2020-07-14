@@ -1,34 +1,34 @@
 
                                   coderet 
-                                      
-   
-   
+
+
+
 Function
 
    Extract CDS, mRNA and translations from feature tables
-   
+
 Description
 
    The feature table of sequence database entries often have sections
    like this:
-   
+
    This specifies that the coding sequence for the gene is constructed by
    joining several sections of code, many of which are in other entries
    in this database.
      _________________________________________________________________
-   
+
 FT   CDS             join(U21925.1:818..987,U21926.1:258..420,
 FT                   U21927.1:428..520,U21928.1:196..336,U21929.1:279..415,
 FT                   U21930.1:895..1014,516..708)
      _________________________________________________________________
-   
+
    or:
-   
+
    This specifies that the messenger RNA sequence for the gene is
    constructed by joining several sections of code, many of which are in
    other entries in this database.
      _________________________________________________________________
-   
+
 FT   mRNA            join(M88628.1:1006..1318,M88629.1:221..342,
 FT                   M88630.1:101..223,M88631.1:46..258,M88632.1:104..172,
 FT                   M88633.1:387..503,M88634.1:51..272,M88635.1:303..564,
@@ -40,13 +40,13 @@ FT                   M88642.1:4627..4698,M88643.1:39..124,M88644.1:42..197,
 FT                   M88645.1:542..686,M88646.1:75..223,M88647.1:109..285,
 FT                   253..2211)
      _________________________________________________________________
-   
+
    or:
-   
+
    This specifies that the translation of the coding region is as
    follows.
      _________________________________________________________________
-   
+
 FT                   /translation="MAQDSVDLSCDYQFWMQKLSVWDQASTLETQQDTCLHVAQFQEF
 L
 FT                   RKMYEALKEMDSNTVIERFPTIGQLLAKACWNPFILAYDESQKILIWCLCCLINKEPQ
@@ -67,50 +67,50 @@ FT                   SSLSAQDLQTVAGQGTDTDLRAPAQQLIRHLLLNFLLWAPGGHTIAWDVITLMAHTAE
 I
 FT                   THEIIGFLDQTLYRWNRLGIESPRSEKLARELLKELRTQV"
      _________________________________________________________________
-   
+
    It is often a tedious and error-prone job to extract the several
    sections of these sequences from the database entries and to join them
    together to construct the indicated finished sequence.
-   
+
    coderet does this job for you.
-   
+
    You specify the sequence containing the feature table and it extracts
    the required CDS, mRNA and/or protein sequences specified by this
    feature table. If any sequences are in other entries of that database,
    they are automatically fetched and incorporated correctly into the
    final sequence.
-   
+
    The translations are not made from the coding sequence, they are
    extracted directly from the translation sequence held in the feature
    table.
-   
+
 Usage
 
    Here is a sample session with coderet
-   
+
    To extract all of the CDS, mRNA and the protein translations:
-   
+
 
 % coderet 
 Extract CDS, mRNA and translations from feature tables
 Input sequence(s): tembl:X03487
 Output sequence [hsferg1.fasta]: 
-   
+
    Go to the input files for this example
    Go to the output files for this example
-   
+
    Example 2
-   
+
    To only extract the mRNA sequence:
-   
+
 
 % coderet -nocds -notranslation 
 Extract CDS, mRNA and translations from feature tables
 Input sequence(s): tembl:X03487
 Output sequence [hsferg1.fasta]: 
-   
+
    Go to the output files for this example
-   
+
 Command line arguments
 
    Standard (Mandatory) qualifiers:
@@ -167,7 +167,7 @@ Command line arguments
    -error               boolean    Report errors
    -fatal               boolean    Report fatal errors
    -die                 boolean    Report deaths
-   
+
 
    Standard (Mandatory) qualifiers Allowed values Default
    [-seqall]
@@ -180,19 +180,19 @@ Command line arguments
    -[no]cds Extract CDS sequences Boolean value Yes/No Yes
    -[no]mrna Extract mrna sequences Boolean value Yes/No Yes
    -[no]translation Extract translated sequences Boolean value Yes/No Yes
-   
+
 Input file format
 
    coderet reads one or more nucleic sequence USAs having CDS, mRNA or
    translation headings in their feature tables.
-   
+
   Input files for usage example
-  
+
    'tembl:X03487' is a sequence entry in the example nucleic acid
    database 'tembl'
-   
+
   Database entry: tembl:X03487
-  
+
 ID   HSFERG1    standard; DNA; HUM; 512 BP.
 XX
 AC   X03487;
@@ -273,38 +273,31 @@ SQ   Sequence 512 BP; 80 A; 212 C; 152 G; 64 T; 4 other;
      cctacgttta cctgtccatg gtgagcgcgg gc                                     51
 2
 //
-   
-   This means that the mRNA sequence is from position 179 to 500 in this
-   sequence.
-   The coding sequence is formed by joining the region from 387 to 500 in
-   this sequence together with regions from two other entries in this
-   database: X03488 and X03488.
-   The translation of the coding sequence is also given.
-   
+
 Output file format
 
    The output is a sequence file containing any CDS, mRNA and protein
    translation sequences as specified by the feature table of the
    sequence(s).
-   
+
    One or more of CDS, mRNA, translation can be excluded from the output
    by using the appropriate qualifiers to the program (i.e. -nocds, etc.)
-   
+
    The ID names of the output sequences are constructed from the name of
    the input sequence, the type of feature being output (i.e. cds, mrna,
    pro) and a unique ordinal number for this type to distinguish it from
    others in this sequence. The name, type and number of separated by
    underscore characters. Thus the second CDS feature in the sequence
    'HSXYZ' would be named 'HSXYZ_cds_2'.
-   
+
    The translations are not made from the coding sequence, they are
    extracted directly from the translation sequence held in the feature
    table.
-   
+
   Output files for usage example
-  
+
   File: hsferg1.fasta
-  
+
 >x03487_cds_1
 atgacgaccgcgtccacctcgcaggtgcgccagaactaccaccaggactcagaggccgcc
 atcaaccgccagatcaacctggagctctacgcctcctacgtttacctgtccatgtcttac
@@ -328,11 +321,11 @@ MTTASTSQVRQNYHQDSEAAINRQINLELYASYVYLSMSYYFDRDDVALKNFAKYFLHQS
 HEEREHAEKLMKLQNQRGGRIFLQDIKKPDCDDWESGLNAMECALHLEKNVNQSLLELHK
 LATDKNDPHLCDFIETHYLNEQVKAIKELGDHVTNLRKMGAPESGLAEYLFDKHTLGDSD
 NES
-   
+
   Output files for usage example 2
-  
+
   File: hsferg1.fasta
-  
+
 >x03487_mrna_1
 cagacgttcttcgccgagagtcgtcggggtttcctgcttcaacagtgcttggacggaacc
 cggcgctcgttccccaccccggccggccgcccatagccagccctccgtcgacctcttcac
@@ -340,37 +333,37 @@ cgcaccctcggactgccccaaggcccccgccgccgctccagcgccgcgcagccaccgccg
 ccgccgccgcctctccttagtcgccgccatgacgaccgcgtccacctcgcaggtgcgcca
 gaactaccaccaggactcagaggccgccatcaaccgccagatcaacctggagctctacgc
 ctcctacgtttacctgtccatg
-   
+
 Data files
 
    None.
-   
+
 Notes
 
    The translations are not made from the coding sequence, they are
    extracted directly from the translation sequence held in the feature
    table.
-   
+
 References
 
    None.
-   
+
 Warnings
 
    None.
-   
+
 Diagnostic Error Messages
 
    None.
-   
+
 Exit status
 
    It always exits with status 0.
-   
+
 Known bugs
 
    None.
-   
+
 See also
 
    Program name                          Description
@@ -386,20 +379,22 @@ See also
    sixpack      Display a DNA sequence with 6-frame translation and ORFs
    transeq      Translate nucleic acid sequences
    twofeat      Finds neighbouring pairs of features in sequences
-   
+
 Author(s)
 
    Alan Bleasby (ableasby © rfcgr.mrc.ac.uk)
    MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
    Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
-   
+
 History
 
    Written (Nov 2000) - Alan Bleasby.
-   
+
 Target users
 
    This program is intended to be used by everyone and everything, from
    naive users to embedded scripts.
-   
+
 Comments
+
+   None

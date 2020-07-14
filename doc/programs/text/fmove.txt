@@ -1,0 +1,285 @@
+
+                                   fmove 
+
+
+
+Function
+
+   Interactive mixed method parsimony
+
+Description
+
+   Interactive construction of phylogenies from discrete character data
+   with two states (0 and 1). Evaluates parsimony and compatibility
+   criteria for those phylogenies and displays reconstructed states
+   throughout the tree. This can be used to find parsimony or
+   compatibility estimates by hand.
+
+Algorithm
+
+   MOVE is an interactive parsimony program, inspired by Wayne Maddison
+   and David Maddison's marvellous program MacClade, which is written for
+   Apple Macintosh computers. MOVE reads in a data set which is prepared
+   in almost the same format as one for the mixed method parsimony
+   program MIX. It allows the user to choose an initial tree, and
+   displays this tree on the screen. The user can look at different
+   characters and the way their states are distributed on that tree,
+   given the most parsimonious reconstruction of state changes for that
+   particular tree. The user then can specify how the tree is to be
+   rearraranged, rerooted or written out to a file. By looking at
+   different rearrangements of the tree the user can manually search for
+   the most parsimonious tree, and can get a feel for how different
+   characters are affected by changes in the tree topology.
+
+   This program is compatible with fewer computer systems than the other
+   programs in PHYLIP. It can be adapted to MSDOS systems or to any
+   system whose screen or terminals emulate DEC VT100 terminals (such as
+   Telnet programs for logging in to remote computers over a TCP/IP
+   network, VT100-compatible windows in the X windowing system, and any
+   terminal compatible with ANSI standard terminals). For any other
+   screen types, there is a generic option which does not make use of
+   screen graphics characters to display the character states. This will
+   be less effective, as the states will be less easy to see when
+   displayed.
+
+   MOVE uses as its numerical criterion the Wagner and Camin-Sokal
+   parsimony methods in mixture, where each character can have its method
+   specified separately. The program defaults to carrying out Wagner
+   parsimony.
+
+   The Camin-Sokal parsimony method explains the data by assuming that
+   changes 0 --> 1 are allowed but not changes 1 --> 0. Wagner parsimony
+   allows both kinds of changes. (This under the assumption that 0 is the
+   ancestral state, though the program allows reassignment of the
+   ancestral state, in which case we must reverse the state numbers 0 and
+   1 throughout this discussion). The criterion is to find the tree which
+   requires the minimum number of changes. The Camin- Sokal method is due
+   to Camin and Sokal (1965) and the Wagner method to Eck and Dayhoff
+   (1966) and to Kluge and Farris (1969).
+
+   Here are the assumptions of these two methods:
+    1. Ancestral states are known (Camin-Sokal) or unknown (Wagner).
+    2. Different characters evolve independently.
+    3. Different lineages evolve independently.
+    4. Changes 0 --> 1 are much more probable than changes 1 --> 0
+       (Camin-Sokal) or equally probable (Wagner).
+    5. Both of these kinds of changes are a priori improbable over the
+       evolutionary time spans involved in the differentiation of the
+       group in question.
+    6. Other kinds of evolutionary event such as retention of
+       polymorphism are far less probable than 0 --> 1 changes.
+    7. Rates of evolution in different lineages are sufficiently low that
+       two changes in a long segment of the tree are far less probable
+       than one change in a short segment.
+
+   That these are the assumptions of parsimony methods has been
+   documented in a series of papers of mine: (1973a, 1978b, 1979, 1981b,
+   1983b, 1988b). For an opposing view arguing that the parsimony methods
+   make no substantive assumptions such as these, see the papers by
+   Farris (1983) and Sober (1983a, 1983b), but also read the exchange
+   between Felsenstein and Sober (1986).
+
+Usage
+
+   Here is a sample session with fmove
+
+
+% fmove 
+Interactive mixed method parsimony
+Input file: move.dat
+Input tree file: 
+
+ 5 species,   6 characters
+
+Wagner parsimony method
+
+
+Computing steps needed for compatibility in characters...
+
+
+(unrooted)                    8.0 Steps             4 chars compatible
+
+  ,-----------5:Epsilon
+--9
+  !  ,--------4:Delta
+  `--8
+     !  ,-----3:Gamma
+     `--7
+        !  ,--2:Beta
+        `--6
+           `--1:Alpha
+
+
+NEXT? (Options: R # + - S . T U W O F H J K L C ? X Q) (? for Help) Do you want
+ to write out the tree to a file? (Y or N)
+Tree written to file "move.treefile"
+
+
+   Go to the input files for this example
+   Go to the output files for this example
+
+Command line arguments
+
+   Standard (Mandatory) qualifiers:
+  [-infile]            discretestates File containing data set
+  [-intreefile]        tree       (no help text) tree value
+
+   Additional (Optional) qualifiers:
+   -weights            properties Weights file
+   -ancfile            properties Ancestral states file
+   -factorfile         properties Factors file
+   -method             menu       Choose the method to use
+   -outgrno            integer    Species number to use as outgroup
+   -threshold          float      Threshold value
+   -initialtree        menu       Initial tree
+   -screenwidth        integer    Width of terminal screen in characters
+   -screenlines        integer    Number of lines on screen
+   -outtreefile        outfile    Output file name
+
+   Advanced (Unprompted) qualifiers: (none)
+   Associated qualifiers:
+
+   "-outtreefile" associated qualifiers
+   -odirectory         string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report deaths
+
+
+   Standard (Mandatory) qualifiers Allowed values Default
+   [-infile]
+   (Parameter 1) File containing data set Discrete states file
+   [-intreefile]
+   (Parameter 2) (no help text) tree value Phylogenetic tree
+   Additional (Optional) qualifiers Allowed values Default
+   -weights Weights file Property value(s)
+   -ancfile Ancestral states file Property value(s)
+   -factorfile Factors file Property value(s)
+   -method Choose the method to use
+   w (Wagner)
+   c (Camin-Sokal)
+   m (Mixed)
+   Wagner
+   -outgrno Species number to use as outgroup Integer 0 or more 0
+   -threshold Threshold value Number 0.000 or more $(infile.discretesize)
+   -initialtree Initial tree
+   a (Arbitary)
+   u (User)
+   s (Specify)
+   Arbitary
+   -screenwidth Width of terminal screen in characters Any integer value
+   80
+   -screenlines Number of lines on screen Any integer value 24
+   -outtreefile Output file name Output file <sequence>.fmove
+   Advanced (Unprompted) qualifiers Allowed values Default
+   (none)
+
+Input file format
+
+   The fmove input data file is set up almost identically to the data
+   files for MIX.
+
+  Input files for usage example
+
+  File: move.dat
+
+     5    6
+Alpha     110110
+Beta      110000
+Gamma     100110
+Delta     001001
+Epsilon   001110
+
+Output file format
+
+   fmove outputs a graph to the specified graphics device. outputs a
+   report format file. The default format is ...
+
+  Output files for usage example
+
+  File: move.treefile
+
+   (Epsilon,(Delta,(Gamma,(Beta,Alpha))));
+
+Data files
+
+   None
+
+Notes
+
+   None.
+
+References
+
+   None.
+
+Warnings
+
+   None.
+
+Diagnostic Error Messages
+
+   None.
+
+Exit status
+
+   It always exits with status 0.
+
+Known bugs
+
+   None.
+
+See also
+
+   Program name Description
+   eclique Largest clique program
+   edollop Dollo and polymorphism parsimony algorithm
+   edolpenny Penny algorithm Dollo or polymorphism
+   efactor Multistate to binary recoding program
+   emix Mixed parsimony algorithm
+   epenny Penny algorithm, branch-and-bound to find all most parsimonious
+   trees
+   fclique Largest clique program
+   fdollop Dollo and polymorphism parsimony algorithm
+   fdolpenny Penny algorithm Dollo or polymorphism
+   ffactor Multistate to binary recoding program
+   fmix Mixed parsimony algorithm
+   fpars Discrete character parsimony
+   fpenny Penny algorithm, branch-and-bound to find all most parsimonious
+   trees
+
+Author(s)
+
+   This program is an EMBOSS conversion of a program written by Joe
+   Felsenstein as part of his PHYLIP package.
+
+   Although we take every care to ensure that the results of the EMBOSS
+   version are identical to those from the original package, we recommend
+   that you check your inputs give the same results in both versions
+   before publication.
+
+   Please report all bugs in the EMBOSS version to the EMBOSS bug team,
+   not to the original author.
+
+History
+
+   Written (2004) - Joe Felsenstein, University of Washington.
+
+   Converted (August 2004) to an EMBASSY program by the EMBOSS team.
+
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.

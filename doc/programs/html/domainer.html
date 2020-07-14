@@ -1,22 +1,16 @@
-<!--START OF HEADER - DON'T ALTER -->
-
-<HTML>
-<HEAD>
-  <TITLE>
-  EMBOSS: domainer
-  </TITLE>
+<!-- START OF HEADER -->
+<HTML><HEAD>
+<TITLE> EMBOSS: DOMAINER documentation. </TITLE>
 </HEAD>
 <BODY BGCOLOR="#FFFFFF" text="#000000">
-
-
 <table align=center border=0 cellspacing=0 cellpadding=0>
 <tr><td valign=top>
-<A HREF="index.html" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+<A HREF="../index.html" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="../../emboss_icon.jpg" alt="" width=150 height=48></a>
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
 
-domainer
+<H2> DOMAINER documentation </H2>
 </font></b>
 </td></tr>
 </table>
@@ -27,424 +21,1106 @@ domainer
 
 
 
-<!--END OF HEADER-->
 
-<H2>
-    Function
-</H2>
-Reads protein coordinate files and writes domain coordinate files
+
+<!-- CONTENTS
+     This always includes the sections below.
+     Other subsections can be added for individual applications.
+-->
+<H2>CONTENTS </H2>
+<b> <a href="#1.0">1.0     SUMMARY                   </a></b><br>
+<b> <a href="#2.0">2.0     INPUTS & OUTPUTS          </a></b><br>
+<b> <a href="#3.0">3.0     INPUT FILE FORMAT         </a></b><br>
+<b> <a href="#4.0">4.0     OUTPUT FILE FORMAT        </a></b><br>
+<b> <a href="#5.0">5.0     DATA FILES                </a></b><br>
+<b> <a href="#6.0">6.0     USAGE                     </a></b><br>    
+<b> <a href="#7.0">7.0     KNOWN BUGS & WARNINGS     </a></b><br>    
+<b> <a href="#8.0">8.0     NOTES                     </a></b><br>
+<b> <a href="#9.0">9.0     DESCRIPTION               </a></b><br>
+<b> <a href="#10.0">10.0   ALGORITHM                 </a></b><br>
+<b> <a href="#11.0">11.0   RELATED APPLICATIONS      </a></b><br>
+<b> <a href="#12.0">12.0   DIAGNOSTIC ERROR MESSAGES </a></b><br>
+<b> <a href="#13.0">13.0   AUTHORS                   </a></b><br>
+<b> <a href="#14.0">14.0   REFERENCES                </a></b><br>
+
+<!-- SUMMARY
+     Succint description of the application, particularly its inputs, outputs
+     and what it does.  The same text is given at the top of the source (.c)
+     file and in the <documentation> attribute of the <application definition>
+     of the ACD file.
+-->
+<a name="1.0"></a>
+<H2> 1.0   SUMMARY  </H2>
+
+Reads CCF files (clean coordinate files) for proteins and writes CCF files for domains, taken from a DCF file (domain classification file)
+
+
+
+<!-- INPUTS & OUTPUTS
+     Short summary of the application inputs and outputs in its different 
+     modes of usage (if appropriate). More detail than the summary.
+-->
+<a name="2.0"></a>
+<H2> 2.0   INPUTS & OUTPUTS          </H2>
+
+DOMAINER reads a DCF file (domain classification file) and a directory of protein 
+CCF files (clean coordinate files) and writes, for each domain in the DCF 
+file, a domain CCF file and domain PDB file.  Each domain CCF 
+file contains coordinates for a single SCOP domain.  The paths 
+and extensions for the protein (input) and domain (output) coordinate 
+files are specified by the user (path) and in the ACD file (extension).  The SCOP domain 
+identifier codes are used to name the output files.  A log file for each 
+of the DCF and PDB format builds is written.
+
+
+
+<!-- INPUT FILE FORMAT 
+     Description and example(s) of input file formats.  Should provide enough
+     information to write and parse the file.  Should describe the format in 
+     unusual cases - null input, etc.
+     Use "<b>DOMAINER</b> reads any normal sequence USAs." if
+     appropriate.
+-->
+<a name="3.0"></a>
+<H2> 3.0   INPUT FILE FORMAT         </H2>
+The format of the protein CCF file is described in the  <a href="pdbparse.html">PDBPARSE documentation.</a>
+
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+<p><h3>File: all.scop</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+ID   D1CS4A_
+XX
+EN   1CS4
+XX
+TY   SCOP
+XX
+SI   53931 CL; 54861 FO; 55073 SF; 55074 FA; 55077 DO; 55078 SO; 39418 DD;
+XX
+CL   Alpha and beta proteins (a+b)
+XX
+FO   Ferredoxin-like
+XX
+SF   Adenylyl and guanylyl cyclase catalytic domain
+XX
+FA   Adenylyl and guanylyl cyclase catalytic domain
+XX
+DO   Adenylyl cyclase VC1, domain C1a
+XX
+OS   Dog (Canis familiaris)
+XX
+NC   1
+XX
+CN   [1]
+XX
+CH   A CHAIN; . START; . END;
+//
+ID   D1II7A_
+XX
+EN   1II7
+XX
+TY   SCOP
+XX
+SI   53931 CL; 56299 FO; 56300 SF; 64427 FA; 64428 DO; 64429 SO; 62415 DD;
+XX
+CL   Alpha and beta proteins (a+b)
+XX
+FO   Metallo-dependent phosphatases
+XX
+SF   Metallo-dependent phosphatases
+XX
+FA   DNA double-strand break repair nuclease
+XX
+DO   Mre11
+XX
+OS   Archaeon Pyrococcus furiosus
+XX
+NC   1
+XX
+CN   [1]
+XX
+CH   A CHAIN; . START; . END;
+//
+</pre>
+</td></tr></table><p>
+
+
+
+
+<!-- OUTPUT FILE FORMAT 
+     Description and example(s) of output file formats.  Should provide enough
+     information to write and parse the file.  Should describe the format in 
+     unusual cases - null input, etc.  
+     If the standard description of the avalable report formats is required, 
+     use:   #include file="inc/reportformats.ihtml"
+     Use "Outputs a graph to the specified graphics device."
+     or  "outputs a report format file. The default format is ..."
+     if appropriate.
+-->
+<a name="4.0"></a>
+<H2> 4.0   OUTPUT FILE FORMAT         </H2>
+The format used for domain CCF files is exactly the same 
+as that used for protein CCF files and is described the  <a href="pdbparse.html">PDBPARSE documentation.</a>
+<br>
+
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: domainer_embl.log</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+</pre>
+</td></tr></table><p>
+<p><h3>File: domainer_pdb.log</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+</pre>
+</td></tr></table><p>
+<p><h3>File: d1cs4a_.ent</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+HEADER     CLEANED-UP PDB FILE FOR SCOP DOMAIN D1CS4A_                          
+TITLE      THIS FILE IS MISSING MOST RECORDS FROM THE ORIGINAL PDB FILE         
+COMPND     MOL_ID: 1; MOLECULE: TYPE V ADENYLATE CYCLASE;                       
+SOURCE     MOL_ID: 1; ORGANISM_SCIENTIFIC: CANIS FAMILIARIS;                    
+REMARK                                                                          
+REMARK     RESOLUTION. 2.50  ANGSTROMS.                                         
+REMARK                                                                          
+SEQRES   1 A   52  ALA ASP ILE GLU GLY PHE THR SER LEU ALA SER GLN CYS          
+SEQRES   2 A   52  THR ALA GLN GLU LEU VAL MET THR LEU ASN GLU LEU PHE          
+SEQRES   3 A   52  ALA ARG PHE ASP LYS LEU ALA ALA GLU ASN HIS CYS LEU          
+SEQRES   4 A   52  ARG ILE LYS ILE LEU GLY ASP CYS TYR TYR CYS VAL SER          
+ATOM      1  N   ASP A 396      51.711 -11.782  62.798  1.00 51.17           N  
+ATOM      2  CA  ASP A 396      52.810 -11.644  61.848  1.00 54.45           C  
+ATOM      3  C   ASP A 396      54.137 -11.314  62.530  1.00 55.11           C  
+ATOM      4  O   ASP A 396      54.175 -10.524  63.469  1.00 55.34           O  
+ATOM      5  CB  ASP A 396      52.437 -10.555  60.831  1.00 57.50           C  
+ATOM      6  CG  ASP A 396      53.460 -10.391  59.729  1.00 61.38           C  
+ATOM      7  OD1 ASP A 396      54.316  -9.485  59.841  1.00 65.55           O  
+ATOM      8  OD2 ASP A 396      53.390 -11.146  58.736  1.00 63.68           O  
+ATOM      9  N   ILE A 397      55.216 -11.941  62.066  1.00 57.14           N  
+ATOM     10  CA  ILE A 397      56.546 -11.705  62.624  1.00 59.46           C  
+ATOM     11  C   ILE A 397      57.020 -10.305  62.230  1.00 60.12           C  
+ATOM     12  O   ILE A 397      56.963  -9.927  61.060  1.00 59.12           O  
+ATOM     13  CB  ILE A 397      57.583 -12.722  62.094  1.00 60.84           C  
+ATOM     14  CG1 ILE A 397      57.184 -14.163  62.447  1.00 63.12           C  
+ATOM     15  CG2 ILE A 397      58.975 -12.384  62.632  1.00 61.24           C  
+ATOM     16  CD1 ILE A 397      57.408 -14.554  63.895  1.00 63.92           C  
+ATOM     17  N   GLU A 398      57.492  -9.548  63.212  1.00 60.23           N  
+ATOM     18  CA  GLU A 398      57.975  -8.198  62.971  1.00 62.14           C  
+ATOM     19  C   GLU A 398      59.401  -8.277  62.424  1.00 60.59           C  
+ATOM     20  O   GLU A 398      60.244  -8.972  62.987  1.00 61.84           O  
+ATOM     21  CB  GLU A 398      57.917  -7.386  64.272  1.00 65.47           C  
+ATOM     22  CG  GLU A 398      58.037  -5.874  64.091  1.00 70.25           C  
+ATOM     23  CD  GLU A 398      57.588  -5.089  65.324  1.00 72.94           C  
+ATOM     24  OE1 GLU A 398      58.262  -5.175  66.377  1.00 70.76           O  
+ATOM     25  OE2 GLU A 398      56.555  -4.380  65.232  1.00 74.36           O  
+ATOM     26  N   GLY A 399      59.642  -7.608  61.298  1.00 57.58           N  
+ATOM     27  CA  GLY A 399      60.956  -7.615  60.681  1.00 56.14           C  
+ATOM     28  C   GLY A 399      61.452  -8.993  60.265  1.00 58.03           C  
+ATOM     29  O   GLY A 399      62.620  -9.322  60.480  1.00 57.47           O  
+ATOM     30  N   PHE A 400      60.576  -9.789  59.649  1.00 58.00           N  
+ATOM     31  CA  PHE A 400      60.914 -11.143  59.200  1.00 58.07           C  
+ATOM     32  C   PHE A 400      61.995 -11.219  58.117  1.00 58.57           C  
+ATOM     33  O   PHE A 400      62.862 -12.091  58.161  1.00 59.44           O  
+ATOM     34  CB  PHE A 400      59.657 -11.881  58.734  1.00 59.18           C  
+ATOM     35  CG  PHE A 400      59.900 -13.316  58.322  1.00 58.53           C  
+ATOM     36  CD1 PHE A 400      60.377 -14.251  59.237  1.00 57.59           C  
+ATOM     37  CD2 PHE A 400      59.613 -13.736  57.024  1.00 57.95           C  
+ATOM     38  CE1 PHE A 400      60.557 -15.583  58.864  1.00 59.98           C  
+ATOM     39  CE2 PHE A 400      59.790 -15.063  56.643  1.00 58.52           C  
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+ATOM    308  C   ILE A 435      45.128 -21.768  57.354  1.00 49.27           C  
+ATOM    309  O   ILE A 435      45.316 -22.911  56.925  1.00 50.94           O  
+ATOM    310  CB  ILE A 435      43.255 -20.038  57.551  1.00 47.15           C  
+ATOM    311  CG1 ILE A 435      41.973 -19.706  58.315  1.00 45.98           C  
+ATOM    312  CG2 ILE A 435      42.947 -20.058  56.062  1.00 48.42           C  
+ATOM    313  CD1 ILE A 435      40.863 -20.738  58.156  1.00 43.91           C  
+ATOM    314  N   LYS A 436      46.066 -20.824  57.308  1.00 48.78           N  
+ATOM    315  CA  LYS A 436      47.382 -21.114  56.741  1.00 45.74           C  
+ATOM    316  C   LYS A 436      48.551 -20.279  57.227  1.00 44.92           C  
+ATOM    317  O   LYS A 436      48.382 -19.355  58.023  1.00 45.05           O  
+ATOM    318  CB  LYS A 436      47.364 -21.306  55.217  1.00 47.03           C  
+ATOM    319  CG  LYS A 436      46.733 -20.214  54.377  1.00 45.37           C  
+ATOM    320  CD  LYS A 436      46.225 -20.811  53.058  1.00 40.72           C  
+ATOM    321  CE  LYS A 436      46.260 -19.807  51.913  1.00 44.25           C  
+ATOM    322  NZ  LYS A 436      45.622 -20.326  50.664  1.00 45.35           N  
+ATOM    323  N   ILE A 437      49.751 -20.706  56.849  1.00 44.66           N  
+ATOM    324  CA  ILE A 437      50.969 -20.017  57.239  1.00 45.23           C  
+ATOM    325  C   ILE A 437      51.637 -19.439  55.998  1.00 46.08           C  
+ATOM    326  O   ILE A 437      52.033 -20.177  55.093  1.00 48.18           O  
+ATOM    327  CB  ILE A 437      51.950 -20.971  57.958  1.00 45.87           C  
+ATOM    328  CG1 ILE A 437      51.241 -21.704  59.099  1.00 46.15           C  
+ATOM    329  CG2 ILE A 437      53.147 -20.193  58.503  1.00 43.43           C  
+ATOM    330  CD1 ILE A 437      52.124 -22.722  59.814  1.00 46.81           C  
+ATOM    331  N   LEU A 438      51.729 -18.114  55.951  1.00 46.84           N  
+ATOM    332  CA  LEU A 438      52.348 -17.415  54.830  1.00 44.42           C  
+ATOM    333  C   LEU A 438      53.758 -16.989  55.211  1.00 44.90           C  
+ATOM    334  O   LEU A 438      54.061 -15.795  55.283  1.00 42.12           O  
+ATOM    335  CB  LEU A 438      51.507 -16.200  54.427  1.00 41.59           C  
+ATOM    336  CG  LEU A 438      50.063 -16.485  54.001  1.00 42.78           C  
+ATOM    337  CD1 LEU A 438      49.345 -15.182  53.690  1.00 41.92           C  
+ATOM    338  CD2 LEU A 438      49.993 -17.430  52.810  1.00 39.08           C  
+ATOM    339  N   GLY A 439      54.619 -17.980  55.437  1.00 46.64           N  
+ATOM    340  CA  GLY A 439      55.996 -17.717  55.814  1.00 48.31           C  
+ATOM    341  C   GLY A 439      56.099 -17.326  57.273  1.00 49.55           C  
+ATOM    342  O   GLY A 439      56.500 -18.130  58.108  1.00 50.85           O  
+ATOM    343  N   ASP A 440      55.690 -16.096  57.569  1.00 51.02           N  
+ATOM    344  CA  ASP A 440      55.712 -15.540  58.917  1.00 50.96           C  
+ATOM    345  C   ASP A 440      54.334 -15.024  59.352  1.00 50.15           C  
+ATOM    346  O   ASP A 440      54.193 -14.464  60.438  1.00 51.63           O  
+ATOM    347  CB  ASP A 440      56.724 -14.394  58.985  1.00 51.43           C  
+ATOM    348  CG  ASP A 440      56.280 -13.162  58.196  1.00 55.29           C  
+ATOM    349  OD1 ASP A 440      56.528 -12.030  58.669  1.00 57.12           O  
+ATOM    350  OD2 ASP A 440      55.685 -13.319  57.108  1.00 52.55           O  
+ATOM    351  N   CYS A 441      53.333 -15.191  58.493  1.00 49.26           N  
+ATOM    352  CA  CYS A 441      51.971 -14.737  58.775  1.00 49.62           C  
+ATOM    353  C   CYS A 441      51.077 -15.923  59.132  1.00 48.96           C  
+ATOM    354  O   CYS A 441      50.803 -16.789  58.301  1.00 50.50           O  
+ATOM    355  CB  CYS A 441      51.409 -13.972  57.565  1.00 51.82           C  
+ATOM    356  SG  CYS A 441      49.727 -13.277  57.723  1.00 54.53           S  
+TER     357      CYS A  47                                                      
+END                                                                             
+</pre>
+</td></tr></table><p>
+<p><h3>File: d1cs4a_.ccf</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+ID   D1CS4A_
+XX
+DE   Co-ordinates for SCOP domain D1CS4A_
+XX
+OS   See Escop.dat for domain classification
+XX
+EX   METHOD xray; RESO 2.50; NMOD 1; NCHN 1; NGRP 0;
+XX
+CN   [1]
+XX
+IN   ID A; NRES 52; NL 0; NH 0; NE 0;
+XX
+SQ   SEQUENCE    52 AA;   5817 MW;  47362A43 CRC32;
+     ADIEGFTSLA SQCTAQELVM TLNELFARFD KLAAENHCLR IKILGDCYYC VS
+XX
+CO   1    1    .    P    2     396   .    .    .    .    .    .    D    ASP    N     51.711  -11.782   62.798    1.00   51.17    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    2     396   .    .    .    .    .    .    D    ASP    CA    52.810  -11.644   61.848    1.00   54.45    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    2     396   .    .    .    .    .    .    D    ASP    C     54.137  -11.314   62.530    1.00   55.11    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    2     396   .    .    .    .    .    .    D    ASP    O     54.175  -10.524   63.469    1.00   55.34    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    2     396   .    .    .    .    .    .    D    ASP    CB    52.437  -10.555   60.831    1.00   57.50    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    2     396   .    .    .    .    .    .    D    ASP    CG    53.460  -10.391   59.729    1.00   61.38    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    2     396   .    .    .    .    .    .    D    ASP    OD1   54.316   -9.485   59.841    1.00   65.55    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    2     396   .    .    .    .    .    .    D    ASP    OD2   53.390  -11.146   58.736    1.00   63.68    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    3     397   .    .    .    .    .    .    I    ILE    N     55.216  -11.941   62.066    1.00   57.14    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    3     397   .    .    .    .    .    .    I    ILE    CA    56.546  -11.705   62.624    1.00   59.46    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    3     397   .    .    .    .    .    .    I    ILE    C     57.020  -10.305   62.230    1.00   60.12    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    3     397   .    .    .    .    .    .    I    ILE    O     56.963   -9.927   61.060    1.00   59.12    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    3     397   .    .    .    .    .    .    I    ILE    CB    57.583  -12.722   62.094    1.00   60.84    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    3     397   .    .    .    .    .    .    I    ILE    CG1   57.184  -14.163   62.447    1.00   63.12    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    3     397   .    .    .    .    .    .    I    ILE    CG2   58.975  -12.384   62.632    1.00   61.24    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    3     397   .    .    .    .    .    .    I    ILE    CD1   57.408  -14.554   63.895    1.00   63.92    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    4     398   .    .    .    .    .    .    E    GLU    N     57.492   -9.548   63.212    1.00   60.23    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    4     398   .    .    .    .    .    .    E    GLU    CA    57.975   -8.198   62.971    1.00   62.14    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    4     398   .    .    .    .    .    .    E    GLU    C     59.401   -8.277   62.424    1.00   60.59    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    4     398   .    .    .    .    .    .    E    GLU    O     60.244   -8.972   62.987    1.00   61.84    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    4     398   .    .    .    .    .    .    E    GLU    CB    57.917   -7.386   64.272    1.00   65.47    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    4     398   .    .    .    .    .    .    E    GLU    CG    58.037   -5.874   64.091    1.00   70.25    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    4     398   .    .    .    .    .    .    E    GLU    CD    57.588   -5.089   65.324    1.00   72.94    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    4     398   .    .    .    .    .    .    E    GLU    OE1   58.262   -5.175   66.377    1.00   70.76    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    4     398   .    .    .    .    .    .    E    GLU    OE2   56.555   -4.380   65.232    1.00   74.36    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    5     399   H    1    1    1    .    .    G    GLY    N     59.642   -7.608   61.298    1.00   57.58    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    5     399   H    1    1    1    .    .    G    GLY    CA    60.956   -7.615   60.681    1.00   56.14    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    5     399   H    1    1    1    .    .    G    GLY    C     61.452   -8.993   60.265    1.00   58.03    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    5     399   H    1    1    1    .    .    G    GLY    O     62.620   -9.322   60.480    1.00   57.47    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    6     400   H    1    1    1    .    .    F    PHE    N     60.576   -9.789   59.649    1.00   58.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    6     400   H    1    1    1    .    .    F    PHE    CA    60.914  -11.143   59.200    1.00   58.07    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    6     400   H    1    1    1    .    .    F    PHE    C     61.995  -11.219   58.117    1.00   58.57    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    6     400   H    1    1    1    .    .    F    PHE    O     62.862  -12.091   58.161    1.00   59.44    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    6     400   H    1    1    1    .    .    F    PHE    CB    59.657  -11.881   58.734    1.00   59.18    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    6     400   H    1    1    1    .    .    F    PHE    CG    59.900  -13.316   58.322    1.00   58.53    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+CO   1    1    .    P    41    435   E    1    A1   .    .    .    I    ILE    CA    43.791  -21.405   58.007    1.00   47.94    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    41    435   E    1    A1   .    .    .    I    ILE    C     45.128  -21.768   57.354    1.00   49.27    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    41    435   E    1    A1   .    .    .    I    ILE    O     45.316  -22.911   56.925    1.00   50.94    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    41    435   E    1    A1   .    .    .    I    ILE    CB    43.255  -20.038   57.551    1.00   47.15    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    41    435   E    1    A1   .    .    .    I    ILE    CG1   41.973  -19.706   58.315    1.00   45.98    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    41    435   E    1    A1   .    .    .    I    ILE    CG2   42.947  -20.058   56.062    1.00   48.42    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    41    435   E    1    A1   .    .    .    I    ILE    CD1   40.863  -20.738   58.156    1.00   43.91    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    42    436   E    1    A1   .    .    .    K    LYS    N     46.066  -20.824   57.308    1.00   48.78    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    42    436   E    1    A1   .    .    .    K    LYS    CA    47.382  -21.114   56.741    1.00   45.74    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    42    436   E    1    A1   .    .    .    K    LYS    C     48.551  -20.279   57.227    1.00   44.92    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    42    436   E    1    A1   .    .    .    K    LYS    O     48.382  -19.355   58.023    1.00   45.05    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    42    436   E    1    A1   .    .    .    K    LYS    CB    47.364  -21.306   55.217    1.00   47.03    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    42    436   E    1    A1   .    .    .    K    LYS    CG    46.733  -20.214   54.377    1.00   45.37    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    42    436   E    1    A1   .    .    .    K    LYS    CD    46.225  -20.811   53.058    1.00   40.72    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    42    436   E    1    A1   .    .    .    K    LYS    CE    46.260  -19.807   51.913    1.00   44.25    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    42    436   E    1    A1   .    .    .    K    LYS    NZ    45.622  -20.326   50.664    1.00   45.35    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    43    437   E    1    A1   .    .    .    I    ILE    N     49.751  -20.706   56.849    1.00   44.66    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    43    437   E    1    A1   .    .    .    I    ILE    CA    50.969  -20.017   57.239    1.00   45.23    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    43    437   E    1    A1   .    .    .    I    ILE    C     51.637  -19.439   55.998    1.00   46.08    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    43    437   E    1    A1   .    .    .    I    ILE    O     52.033  -20.177   55.093    1.00   48.18    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    43    437   E    1    A1   .    .    .    I    ILE    CB    51.950  -20.971   57.958    1.00   45.87    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    43    437   E    1    A1   .    .    .    I    ILE    CG1   51.241  -21.704   59.099    1.00   46.15    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    43    437   E    1    A1   .    .    .    I    ILE    CG2   53.147  -20.193   58.503    1.00   43.43    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    43    437   E    1    A1   .    .    .    I    ILE    CD1   52.124  -22.722   59.814    1.00   46.81    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    44    438   E    1    A1   .    .    .    L    LEU    N     51.729  -18.114   55.951    1.00   46.84    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    44    438   E    1    A1   .    .    .    L    LEU    CA    52.348  -17.415   54.830    1.00   44.42    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    44    438   E    1    A1   .    .    .    L    LEU    C     53.758  -16.989   55.211    1.00   44.90    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    44    438   E    1    A1   .    .    .    L    LEU    O     54.061  -15.795   55.283    1.00   42.12    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    44    438   E    1    A1   .    .    .    L    LEU    CB    51.507  -16.200   54.427    1.00   41.59    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    44    438   E    1    A1   .    .    .    L    LEU    CG    50.063  -16.485   54.001    1.00   42.78    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    44    438   E    1    A1   .    .    .    L    LEU    CD1   49.345  -15.182   53.690    1.00   41.92    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    44    438   E    1    A1   .    .    .    L    LEU    CD2   49.993  -17.430   52.810    1.00   39.08    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    45    439   .    .    .    .    .    .    G    GLY    N     54.619  -17.980   55.437    1.00   46.64    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    45    439   .    .    .    .    .    .    G    GLY    CA    55.996  -17.717   55.814    1.00   48.31    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    45    439   .    .    .    .    .    .    G    GLY    C     56.099  -17.326   57.273    1.00   49.55    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    45    439   .    .    .    .    .    .    G    GLY    O     56.500  -18.130   58.108    1.00   50.85    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    46    440   .    .    .    .    .    .    D    ASP    N     55.690  -16.096   57.569    1.00   51.02    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    46    440   .    .    .    .    .    .    D    ASP    CA    55.712  -15.540   58.917    1.00   50.96    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    46    440   .    .    .    .    .    .    D    ASP    C     54.334  -15.024   59.352    1.00   50.15    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    46    440   .    .    .    .    .    .    D    ASP    O     54.193  -14.464   60.438    1.00   51.63    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    46    440   .    .    .    .    .    .    D    ASP    CB    56.724  -14.394   58.985    1.00   51.43    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    46    440   .    .    .    .    .    .    D    ASP    CG    56.280  -13.162   58.196    1.00   55.29    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    46    440   .    .    .    .    .    .    D    ASP    OD1   56.528  -12.030   58.669    1.00   57.12    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    46    440   .    .    .    .    .    .    D    ASP    OD2   55.685  -13.319   57.108    1.00   52.55    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    47    441   .    .    .    .    .    .    C    CYS    N     53.333  -15.191   58.493    1.00   49.26    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    47    441   .    .    .    .    .    .    C    CYS    CA    51.971  -14.737   58.775    1.00   49.62    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    47    441   .    .    .    .    .    .    C    CYS    C     51.077  -15.923   59.132    1.00   48.96    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    47    441   .    .    .    .    .    .    C    CYS    O     50.803  -16.789   58.301    1.00   50.50    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    47    441   .    .    .    .    .    .    C    CYS    CB    51.409  -13.972   57.565    1.00   51.82    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    47    441   .    .    .    .    .    .    C    CYS    SG    49.727  -13.277   57.723    1.00   54.53    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+//
+</pre>
+</td></tr></table><p>
+<p><h3>File: d1ii7a_.ent</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+HEADER     CLEANED-UP PDB FILE FOR SCOP DOMAIN D1II7A_                          
+TITLE      THIS FILE IS MISSING MOST RECORDS FROM THE ORIGINAL PDB FILE         
+COMPND     MOL_ID: 1; MOLECULE: MRE11 NUCLEASE;                                 
+SOURCE     MOL_ID: 1; ORGANISM_SCIENTIFIC: PYROCOCCUS FURIOSUS;                 
+REMARK                                                                          
+REMARK     RESOLUTION. 2.20  ANGSTROMS.                                         
+REMARK                                                                          
+SEQRES   1 A   65  MET LYS PHE ALA HIS LEU ALA ASP ILE HIS LEU GLY TYR          
+SEQRES   2 A   65  GLU GLN PHE HIS LYS PRO GLN ARG GLU GLU GLU PHE ALA          
+SEQRES   3 A   65  GLU ALA PHE LYS ASN ALA LEU GLU ILE ALA VAL GLN GLU          
+SEQRES   4 A   65  ASN VAL ASP PHE ILE LEU ILE ALA GLY ASP LEU PHE HIS          
+SEQRES   5 A   65  SER SER ARG PRO SER PRO GLY THR LEU LYS LYS ALA ILE          
+ATOM      1  N   ASP A   8       7.977  32.254  19.055  1.00 26.65           N  
+ATOM      2  CA  ASP A   8       8.882  31.149  19.290  1.00 28.34           C  
+ATOM      3  C   ASP A   8      10.273  31.305  18.659  1.00 27.71           C  
+ATOM      4  O   ASP A   8      10.740  30.453  17.907  1.00 29.27           O  
+ATOM      5  CB  ASP A   8       8.186  29.886  18.777  1.00 30.25           C  
+ATOM      6  CG  ASP A   8       6.918  29.584  19.554  1.00 34.25           C  
+ATOM      7  OD1 ASP A   8       7.041  29.177  20.724  1.00 33.37           O  
+ATOM      8  OD2 ASP A   8       5.801  29.770  19.010  1.00 35.77           O  
+ATOM      9  N   ILE A   9      10.913  32.423  18.967  1.00 26.84           N  
+ATOM     10  CA  ILE A   9      12.236  32.739  18.477  1.00 26.52           C  
+ATOM     11  C   ILE A   9      13.285  31.864  19.173  1.00 28.22           C  
+ATOM     12  O   ILE A   9      14.257  31.426  18.550  1.00 28.01           O  
+ATOM     13  CB  ILE A   9      12.520  34.214  18.759  1.00 27.25           C  
+ATOM     14  CG1 ILE A   9      11.338  35.051  18.249  1.00 26.35           C  
+ATOM     15  CG2 ILE A   9      13.823  34.640  18.094  1.00 26.40           C  
+ATOM     16  CD1 ILE A   9      11.011  34.845  16.725  1.00 25.85           C  
+ATOM     17  N   HIS A  10      13.072  31.599  20.462  1.00 26.69           N  
+ATOM     18  CA  HIS A  10      14.009  30.787  21.254  1.00 28.02           C  
+ATOM     19  C   HIS A  10      15.483  31.203  21.181  1.00 27.57           C  
+ATOM     20  O   HIS A  10      16.357  30.359  21.019  1.00 23.99           O  
+ATOM     21  CB  HIS A  10      13.867  29.284  20.899  1.00 27.15           C  
+ATOM     22  CG  HIS A  10      12.599  28.681  21.415  1.00 28.59           C  
+ATOM     23  ND1 HIS A  10      12.536  27.980  22.603  1.00 30.06           N  
+ATOM     24  CD2 HIS A  10      11.319  28.794  20.978  1.00 26.35           C  
+ATOM     25  CE1 HIS A  10      11.276  27.691  22.875  1.00 27.36           C  
+ATOM     26  NE2 HIS A  10      10.519  28.180  21.909  1.00 28.44           N  
+ATOM     27  N   LEU A  11      15.758  32.503  21.303  1.00 26.85           N  
+ATOM     28  CA  LEU A  11      17.152  32.972  21.286  1.00 27.57           C  
+ATOM     29  C   LEU A  11      17.879  32.257  22.409  1.00 28.11           C  
+ATOM     30  O   LEU A  11      17.323  32.093  23.505  1.00 29.47           O  
+ATOM     31  CB  LEU A  11      17.225  34.494  21.530  1.00 25.89           C  
+ATOM     32  CG  LEU A  11      16.526  35.348  20.465  1.00 23.73           C  
+ATOM     33  CD1 LEU A  11      16.604  36.805  20.823  1.00 24.72           C  
+ATOM     34  CD2 LEU A  11      17.179  35.102  19.081  1.00 22.96           C  
+ATOM     35  N   GLY A  12      19.113  31.830  22.152  1.00 28.05           N  
+ATOM     36  CA  GLY A  12      19.871  31.143  23.179  1.00 29.54           C  
+ATOM     37  C   GLY A  12      19.713  29.623  23.181  1.00 31.92           C  
+ATOM     38  O   GLY A  12      20.382  28.937  23.948  1.00 32.60           O  
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+ATOM    305  N   ILE A  44       5.655  45.232  15.043  1.00 33.36           N  
+ATOM    306  CA  ILE A  44       6.014  43.831  15.094  1.00 31.77           C  
+ATOM    307  C   ILE A  44       5.453  43.198  16.344  1.00 30.94           C  
+ATOM    308  O   ILE A  44       5.512  43.792  17.415  1.00 33.03           O  
+ATOM    309  CB  ILE A  44       7.565  43.721  15.081  1.00 32.37           C  
+ATOM    310  CG1 ILE A  44       8.089  44.316  13.772  1.00 30.80           C  
+ATOM    311  CG2 ILE A  44       8.025  42.282  15.324  1.00 28.46           C  
+ATOM    312  CD1 ILE A  44       9.598  44.467  13.698  1.00 31.28           C  
+ATOM    313  N   LEU A  45       4.884  42.008  16.199  1.00 28.70           N  
+ATOM    314  CA  LEU A  45       4.353  41.265  17.326  1.00 26.34           C  
+ATOM    315  C   LEU A  45       5.192  40.020  17.558  1.00 30.16           C  
+ATOM    316  O   LEU A  45       5.498  39.290  16.600  1.00 29.17           O  
+ATOM    317  CB  LEU A  45       2.947  40.775  17.043  1.00 26.78           C  
+ATOM    318  CG  LEU A  45       1.836  41.790  16.769  1.00 29.15           C  
+ATOM    319  CD1 LEU A  45       0.527  41.024  16.428  1.00 25.64           C  
+ATOM    320  CD2 LEU A  45       1.662  42.668  18.008  1.00 25.27           C  
+ATOM    321  N   ILE A  46       5.543  39.761  18.814  1.00 28.08           N  
+ATOM    322  CA  ILE A  46       6.290  38.558  19.155  1.00 28.84           C  
+ATOM    323  C   ILE A  46       5.452  37.904  20.240  1.00 29.18           C  
+ATOM    324  O   ILE A  46       5.461  38.305  21.416  1.00 27.33           O  
+ATOM    325  CB  ILE A  46       7.727  38.853  19.664  1.00 29.60           C  
+ATOM    326  CG1 ILE A  46       8.493  39.680  18.626  1.00 27.78           C  
+ATOM    327  CG2 ILE A  46       8.457  37.542  19.893  1.00 27.75           C  
+ATOM    328  CD1 ILE A  46       9.988  39.865  18.927  1.00 28.95           C  
+ATOM    329  N   ALA A  47       4.700  36.902  19.798  1.00 29.10           N  
+ATOM    330  CA  ALA A  47       3.770  36.163  20.619  1.00 26.51           C  
+ATOM    331  C   ALA A  47       4.372  35.106  21.553  1.00 27.03           C  
+ATOM    332  O   ALA A  47       3.939  33.951  21.580  1.00 27.39           O  
+ATOM    333  CB  ALA A  47       2.691  35.541  19.702  1.00 26.11           C  
+ATOM    334  N   GLY A  48       5.381  35.500  22.316  1.00 26.07           N  
+ATOM    335  CA  GLY A  48       5.935  34.587  23.293  1.00 27.20           C  
+ATOM    336  C   GLY A  48       7.112  33.736  22.884  1.00 29.30           C  
+ATOM    337  O   GLY A  48       7.283  33.381  21.709  1.00 29.25           O  
+ATOM    338  N   ASP A  49       7.899  33.373  23.889  1.00 28.57           N  
+ATOM    339  CA  ASP A  49       9.091  32.554  23.699  1.00 28.10           C  
+ATOM    340  C   ASP A  49      10.100  33.250  22.827  1.00 27.16           C  
+ATOM    341  O   ASP A  49      10.601  32.676  21.869  1.00 29.08           O  
+ATOM    342  CB  ASP A  49       8.735  31.200  23.093  1.00 27.86           C  
+ATOM    343  CG  ASP A  49       8.155  30.221  24.124  1.00 32.19           C  
+ATOM    344  OD1 ASP A  49       7.861  29.073  23.740  1.00 29.67           O  
+ATOM    345  OD2 ASP A  49       7.992  30.586  25.313  1.00 31.41           O  
+ATOM    346  N   LEU A  50      10.375  34.509  23.128  1.00 27.16           N  
+ATOM    347  CA  LEU A  50      11.393  35.247  22.386  1.00 27.68           C  
+ATOM    348  C   LEU A  50      12.754  34.607  22.792  1.00 27.01           C  
+ATOM    349  O   LEU A  50      13.642  34.421  21.963  1.00 27.43           O  
+ATOM    350  CB  LEU A  50      11.351  36.724  22.771  1.00 28.02           C  
+ATOM    351  CG  LEU A  50      12.576  37.551  22.355  1.00 30.11           C  
+ATOM    352  CD1 LEU A  50      12.751  37.437  20.827  1.00 28.61           C  
+ATOM    353  CD2 LEU A  50      12.425  39.035  22.798  1.00 23.77           C  
+TER     354      LEU A  50                                                      
+END                                                                             
+</pre>
+</td></tr></table><p>
+<p><h3>File: d1ii7a_.ccf</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+ID   D1II7A_
+XX
+DE   Co-ordinates for SCOP domain D1II7A_
+XX
+OS   See Escop.dat for domain classification
+XX
+EX   METHOD xray; RESO 2.20; NMOD 1; NCHN 1; NGRP 0;
+XX
+CN   [1]
+XX
+IN   ID A; NRES 65; NL 0; NH 0; NE 0;
+XX
+SQ   SEQUENCE    65 AA;   7396 MW;  0CFB92A3 CRC32;
+     MKFAHLADIH LGYEQFHKPQ REEEFAEAFK NALEIAVQEN VDFILIAGDL FHSSRPSPGT
+     LKKAI
+XX
+CO   1    1    .    P    8     8     .    .    .    .    .    .    D    ASP    N      7.977   32.254   19.055    1.00   26.65    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    8     8     .    .    .    .    .    .    D    ASP    CA     8.882   31.149   19.290    1.00   28.34    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    8     8     .    .    .    .    .    .    D    ASP    C     10.273   31.305   18.659    1.00   27.71    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    8     8     .    .    .    .    .    .    D    ASP    O     10.740   30.453   17.907    1.00   29.27    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    8     8     .    .    .    .    .    .    D    ASP    CB     8.186   29.886   18.777    1.00   30.25    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    8     8     .    .    .    .    .    .    D    ASP    CG     6.918   29.584   19.554    1.00   34.25    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    8     8     .    .    .    .    .    .    D    ASP    OD1    7.041   29.177   20.724    1.00   33.37    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    8     8     .    .    .    .    .    .    D    ASP    OD2    5.801   29.770   19.010    1.00   35.77    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    9     9     .    .    .    .    .    .    I    ILE    N     10.913   32.423   18.967    1.00   26.84    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    9     9     .    .    .    .    .    .    I    ILE    CA    12.236   32.739   18.477    1.00   26.52    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    9     9     .    .    .    .    .    .    I    ILE    C     13.285   31.864   19.173    1.00   28.22    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    9     9     .    .    .    .    .    .    I    ILE    O     14.257   31.426   18.550    1.00   28.01    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    9     9     .    .    .    .    .    .    I    ILE    CB    12.520   34.214   18.759    1.00   27.25    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    9     9     .    .    .    .    .    .    I    ILE    CG1   11.338   35.051   18.249    1.00   26.35    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    9     9     .    .    .    .    .    .    I    ILE    CG2   13.823   34.640   18.094    1.00   26.40    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    9     9     .    .    .    .    .    .    I    ILE    CD1   11.011   34.845   16.725    1.00   25.85    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    10    10    .    .    .    .    .    .    H    HIS    N     13.072   31.599   20.462    1.00   26.69    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    10    10    .    .    .    .    .    .    H    HIS    CA    14.009   30.787   21.254    1.00   28.02    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    10    10    .    .    .    .    .    .    H    HIS    C     15.483   31.203   21.181    1.00   27.57    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    10    10    .    .    .    .    .    .    H    HIS    O     16.357   30.359   21.019    1.00   23.99    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    10    10    .    .    .    .    .    .    H    HIS    CB    13.867   29.284   20.899    1.00   27.15    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    10    10    .    .    .    .    .    .    H    HIS    CG    12.599   28.681   21.415    1.00   28.59    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    10    10    .    .    .    .    .    .    H    HIS    ND1   12.536   27.980   22.603    1.00   30.06    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    10    10    .    .    .    .    .    .    H    HIS    CD2   11.319   28.794   20.978    1.00   26.35    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    10    10    .    .    .    .    .    .    H    HIS    CE1   11.276   27.691   22.875    1.00   27.36    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    10    10    .    .    .    .    .    .    H    HIS    NE2   10.519   28.180   21.909    1.00   28.44    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    11    11    .    .    .    .    .    .    L    LEU    N     15.758   32.503   21.303    1.00   26.85    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    11    11    .    .    .    .    .    .    L    LEU    CA    17.152   32.972   21.286    1.00   27.57    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    11    11    .    .    .    .    .    .    L    LEU    C     17.879   32.257   22.409    1.00   28.11    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    11    11    .    .    .    .    .    .    L    LEU    O     17.323   32.093   23.505    1.00   29.47    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    11    11    .    .    .    .    .    .    L    LEU    CB    17.225   34.494   21.530    1.00   25.89    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    11    11    .    .    .    .    .    .    L    LEU    CG    16.526   35.348   20.465    1.00   23.73    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    11    11    .    .    .    .    .    .    L    LEU    CD1   16.604   36.805   20.823    1.00   24.72    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    11    11    .    .    .    .    .    .    L    LEU    CD2   17.179   35.102   19.081    1.00   22.96    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+CO   1    1    .    P    43    43    E    4    A    .    .    .    F    PHE    CZ    -0.112   46.150   14.681    1.00   26.24    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    44    44    E    4    A    .    .    .    I    ILE    N      5.655   45.232   15.043    1.00   33.36    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    44    44    E    4    A    .    .    .    I    ILE    CA     6.014   43.831   15.094    1.00   31.77    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    44    44    E    4    A    .    .    .    I    ILE    C      5.453   43.198   16.344    1.00   30.94    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    44    44    E    4    A    .    .    .    I    ILE    O      5.512   43.792   17.415    1.00   33.03    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    44    44    E    4    A    .    .    .    I    ILE    CB     7.565   43.721   15.081    1.00   32.37    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    44    44    E    4    A    .    .    .    I    ILE    CG1    8.089   44.316   13.772    1.00   30.80    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    44    44    E    4    A    .    .    .    I    ILE    CG2    8.025   42.282   15.324    1.00   28.46    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    44    44    E    4    A    .    .    .    I    ILE    CD1    9.598   44.467   13.698    1.00   31.28    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    45    45    E    4    A    .    .    .    L    LEU    N      4.884   42.008   16.199    1.00   28.70    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    45    45    E    4    A    .    .    .    L    LEU    CA     4.353   41.265   17.326    1.00   26.34    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    45    45    E    4    A    .    .    .    L    LEU    C      5.192   40.020   17.558    1.00   30.16    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    45    45    E    4    A    .    .    .    L    LEU    O      5.498   39.290   16.600    1.00   29.17    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    45    45    E    4    A    .    .    .    L    LEU    CB     2.947   40.775   17.043    1.00   26.78    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    45    45    E    4    A    .    .    .    L    LEU    CG     1.836   41.790   16.769    1.00   29.15    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    45    45    E    4    A    .    .    .    L    LEU    CD1    0.527   41.024   16.428    1.00   25.64    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    45    45    E    4    A    .    .    .    L    LEU    CD2    1.662   42.668   18.008    1.00   25.27    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    46    46    E    4    A    .    .    .    I    ILE    N      5.543   39.761   18.814    1.00   28.08    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    46    46    E    4    A    .    .    .    I    ILE    CA     6.290   38.558   19.155    1.00   28.84    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    46    46    E    4    A    .    .    .    I    ILE    C      5.452   37.904   20.240    1.00   29.18    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    46    46    E    4    A    .    .    .    I    ILE    O      5.461   38.305   21.416    1.00   27.33    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    46    46    E    4    A    .    .    .    I    ILE    CB     7.727   38.853   19.664    1.00   29.60    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    46    46    E    4    A    .    .    .    I    ILE    CG1    8.493   39.680   18.626    1.00   27.78    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    46    46    E    4    A    .    .    .    I    ILE    CG2    8.457   37.542   19.893    1.00   27.75    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    46    46    E    4    A    .    .    .    I    ILE    CD1    9.988   39.865   18.927    1.00   28.95    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    47    47    E    4    A    .    .    .    A    ALA    N      4.700   36.902   19.798    1.00   29.10    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    47    47    E    4    A    .    .    .    A    ALA    CA     3.770   36.163   20.619    1.00   26.51    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    47    47    E    4    A    .    .    .    A    ALA    C      4.372   35.106   21.553    1.00   27.03    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    47    47    E    4    A    .    .    .    A    ALA    O      3.939   33.951   21.580    1.00   27.39    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    47    47    E    4    A    .    .    .    A    ALA    CB     2.691   35.541   19.702    1.00   26.11    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    48    48    .    .    .    .    .    .    G    GLY    N      5.381   35.500   22.316    1.00   26.07    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    48    48    .    .    .    .    .    .    G    GLY    CA     5.935   34.587   23.293    1.00   27.20    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    48    48    .    .    .    .    .    .    G    GLY    C      7.112   33.736   22.884    1.00   29.30    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    48    48    .    .    .    .    .    .    G    GLY    O      7.283   33.381   21.709    1.00   29.25    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    49    49    .    .    .    .    .    .    D    ASP    N      7.899   33.373   23.889    1.00   28.57    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    49    49    .    .    .    .    .    .    D    ASP    CA     9.091   32.554   23.699    1.00   28.10    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    49    49    .    .    .    .    .    .    D    ASP    C     10.100   33.250   22.827    1.00   27.16    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    49    49    .    .    .    .    .    .    D    ASP    O     10.601   32.676   21.869    1.00   29.08    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    49    49    .    .    .    .    .    .    D    ASP    CB     8.735   31.200   23.093    1.00   27.86    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    49    49    .    .    .    .    .    .    D    ASP    CG     8.155   30.221   24.124    1.00   32.19    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    49    49    .    .    .    .    .    .    D    ASP    OD1    7.861   29.073   23.740    1.00   29.67    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    49    49    .    .    .    .    .    .    D    ASP    OD2    7.992   30.586   25.313    1.00   31.41    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    50    50    .    .    .    .    .    .    L    LEU    N     10.375   34.509   23.128    1.00   27.16    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    50    50    .    .    .    .    .    .    L    LEU    CA    11.393   35.247   22.386    1.00   27.68    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    50    50    .    .    .    .    .    .    L    LEU    C     12.754   34.607   22.792    1.00   27.01    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    50    50    .    .    .    .    .    .    L    LEU    O     13.642   34.421   21.963    1.00   27.43    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    50    50    .    .    .    .    .    .    L    LEU    CB    11.351   36.724   22.771    1.00   28.02    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    50    50    .    .    .    .    .    .    L    LEU    CG    12.576   37.551   22.355    1.00   30.11    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    50    50    .    .    .    .    .    .    L    LEU    CD1   12.751   37.437   20.827    1.00   28.61    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    50    50    .    .    .    .    .    .    L    LEU    CD2   12.425   39.035   22.798    1.00   23.77    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+//
+</pre>
+</td></tr></table><p>
+
 
 <!--
-DON'T WRITE ANYTHING HERE.
-IT IS DONE FOR YOU.
+<br>An excerpt of the PDB format used for domain CCF files is shown 
+below.  PDB format is explained on the PDB website:
+<br>http://www.rcsb.org/pdb/docs/format/pdbguide2.2/guide2.2_frame.html
+<br>
+<br>
+DOMAINER writes the following records in PDB format (Figure 1):
+<br>(1)  HEADER - bibliographic information.  The text 'CLEANED-UP PDB FILE FOR 
+SCOP DOMAIN XXXXXXX' is always given (where XXXXXXX is a 7-character domain 
+identifier code).
+<br>(2)  TITLE - bibliographic information. The text ' THIS FILE IS MISSING 
+MOST RECORDS FROM THE ORIGINAL PDB FILE' is always given.
+<br>(3)  COMPND - compound information.  The COMPND records from the original  
+PDB file are given.
+<br>(4)  SOURCE - protein source information.  The SOURCE records from the 
+original PDB file are given.
+<br>(5)  REMARK - remark records. Remark records are used for spacing. One 
+REMARK line containing the protein resolution is always given.
+<br>(6)  SEQRES - protein sequence.  
+<br>(7)  ATOM - atomic coordinates.
+<br>(8)  TER - indicates the end of a chain.
+<br>
+<br> 
+<b>Figure 1  Excerpt of a domain clean coordinate file in PDB format</b>
+<table><td bgcolor="#CFCCFF">
+<pre>  
+HEADER     CLEANED-UP PDB FILE FOR SCOP DOMAIN D1CS4A_                          
+TITLE      THIS FILE IS MISSING MOST RECORDS FROM THE ORIGINAL PDB FILE         
+COMPND     MOL_ID: 1; MOLECULE: TYPE V ADENYLATE CYCLASE;                       
+SOURCE     MOL_ID: 1; ORGANISM_SCIENTIFIC: CANIS FAMILIARIS;                    
+REMARK                                                                          
+REMARK     RESOLUTION. 2.50  ANGSTROMS.                                         
+REMARK                                                                          
+SEQRES   1 A   52  ALA ASP ILE GLU GLY PHE THR SER LEU ALA SER GLN CYS          
+SEQRES   2 A   52  THR ALA GLN GLU LEU VAL MET THR LEU ASN GLU LEU PHE          
+SEQRES   3 A   52  ALA ARG PHE ASP LYS LEU ALA ALA GLU ASN HIS CYS LEU          
+SEQRES   4 A   52  ARG ILE LYS ILE LEU GLY ASP CYS TYR TYR CYS VAL SER          
+ATOM      1  N   ASP A   2      51.711 -11.782  62.798  1.00 51.17           N  
+ATOM      2  CA  ASP A   2      52.810 -11.644  61.848  1.00 54.45           C  
+ATOM      3  C   ASP A   2      54.137 -11.314  62.530  1.00 55.11           C  
+ATOM      4  O   ASP A   2      54.175 -10.524  63.469  1.00 55.34           O  
+ATOM      5  CB  ASP A   2      52.437 -10.555  60.831  1.00 57.50           C  
+ATOM      6  CG  ASP A   2      53.460 -10.391  59.729  1.00 61.38           C  
+ATOM      7  OD1 ASP A   2      54.316  -9.485  59.841  1.00 65.55           O  
+ATOM      8  OD2 ASP A   2      53.390 -11.146  58.736  1.00 63.68           O  
+ATOM      9  N   ILE A   3      55.216 -11.941  62.066  1.00 57.14           N  
+ATOM     10  CA  ILE A   3      56.546 -11.705  62.624  1.00 59.46           C  
+ATOM     11  C   ILE A   3      57.020 -10.305  62.230  1.00 60.12           C  
+ATOM     12  O   ILE A   3      56.963  -9.927  61.060  1.00 59.12           O  
+ATOM     13  CB  ILE A   3      57.583 -12.722  62.094  1.00 60.84           C  
+ATOM     14  CG1 ILE A   3      57.184 -14.163  62.447  1.00 63.12           C  
+ATOM     15  CG2 ILE A   3      58.975 -12.384  62.632  1.00 61.24           C  
+ATOM     16  CD1 ILE A   3      57.408 -14.554  63.895  1.00 63.92           C  
+ATOM     17  N   GLU A   4      57.492  -9.548  63.212  1.00 60.23           N  
+ATOM     18  CA  GLU A   4      57.975  -8.198  62.971  1.00 62.14           C  
+ATOM     19  C   GLU A   4      59.401  -8.277  62.424  1.00 60.59           C  
+ATOM     20  O   GLU A   4      60.244  -8.972  62.987  1.00 61.84           O  
+ATOM     21  CB  GLU A   4      57.917  -7.386  64.272  1.00 65.47           C  
+ATOM     22  CG  GLU A   4      58.037  -5.874  64.091  1.00 70.25           C  
+ATOM     23  CD  GLU A   4      57.588  -5.089  65.324  1.00 72.94           C  
+ATOM     24  OE1 GLU A   4      58.262  -5.175  66.377  1.00 70.76           O  
+ATOM     25  OE2 GLU A   4      56.555  -4.380  65.232  1.00 74.36           O  
+ATOM     26  N   GLY A   5      59.642  -7.608  61.298  1.00 57.58           N  
+ATOM     27  CA  GLY A   5      60.956  -7.615  60.681  1.00 56.14           C  
+ATOM     28  C   GLY A   5      61.452  -8.993  60.265  1.00 58.03           C  
+ATOM     29  O   GLY A   5      62.620  -9.322  60.480  1.00 57.47           O  
+ATOM     30  N   PHE A   6      60.576  -9.789  59.649  1.00 58.00           N  
+
+< data ommitted for clarity >
+
+ATOM    354  O   CYS A  47      50.803 -16.789  58.301  1.00 50.50           O  
+ATOM    355  CB  CYS A  47      51.409 -13.972  57.565  1.00 51.82           C  
+ATOM    356  SG  CYS A  47      49.727 -13.277  57.723  1.00 54.53           S  
+TER     357      CYS A  47                                                      
+END                  
+</pre>      
+</table>
+
 -->
 
 
+<!-- DATA FILES         
+     Any data files used (e.g. translation table file, substitution matrix 
+     etc.  This includes example data file formats if they are not obvious.
+     For a standard description of what data files are and how embossdata can
+     be used to inspect and retrieve them, use:
+     #include file="inc/localfiles.ihtml" 
+-->
 
-
-<H2>
-    Description
-</H2>
-
-<!-- 
-	This is the main part of the document.
-        This is what the user looks at to find out if this program will do what he wants. 
-        Long description.
-        Why it is useful.
-        When it should/shouldn't be used.
-        Algorithms
-  -->
-
-Nearly all proteins have structural similarities with other proteins
-and, in some of these cases, share a common evolutionary origin.  A
-knowledge of these relationships is crucial to our understanding of the
-evolution of proteins and of development.  It will also play an
-important role in the analysis of the sequence data that is being
-produced by worldwide genome projects. 
-
-<p>
-
-The 
-<A HREF="http://scop.mrc-lmb.cam.ac.uk/scop/">SCOP</A> 
-database aims to provide a detailed and comprehensive
-description of the structural and evolutionary relationships between all
-proteins whose structure is known, including all entries in the Protein
-Data Bank 
-(<A HREF="http://pdb-browsers.ebi.ac.uk//">PDB</A>).  
-
-<p>
-
-<b>domainer</b> reads in an EMBL-like format SCOP classification file
-generated by the EMBOSS applications 
-<a href="scope.html"><b>scope</b></a>
-or 
-<a href="nrscope.html"><b>nrscope</b></a>, 
-and EMBL-like format clean protein coordinate files generated by the
-<a href="coorde.html"><b>coorde</b></a> application. 
-
-(not currently in EMBOSS, email Jon Ison 
-<a href="mailto:jison@hgmp.mrc.ac.uk">jison@hgmp.mrc.ac.uk</a>) 
-
-For each domain in the scop classification file <b>domainer</b> writes clean
-domain coordinate files in EMBL-like and PDB formats.  
-Each of these output files contains coordinates for a single SCOP domain.  In
-cases where multiple models were determined, the data in the domain
-files correspond to the first model.  
-In the rare cases where a domain
-is comprised of more than one chain, the data will be presented as
-belonging to a single chain (i.e.  a single sequence, chain identifier
-etc will be given). 
+<a name="5.0"></a>
+<H2> 5.0   DATA FILES                </H2>
+None.
 
 
 
+<!-- USAGE
+     Example usage, as run from the command-line.
+     Many examples illustrating different behaviours is good.
+-->
+<a name="6.0"></a>
+<H2> 6.0   USAGE                     </H2>
 
-
-
-
-
-
-
-
-
-
-<H2>
-    Usage
-</H2>
-
-<!--  
-	Example usage, as run from the command-line.
-        Many examples illustrating different behaviours is good.
- -->
-
-
-Here is a sample session with domainer:
-<p>
+ 
+<H3> 6.1   COMMAND LINE ARGUMENTS </H3>
 
 <pre>
+   Standard (Mandatory) qualifiers:
+   -scopfile           infile     This option specifies the DCF file (domain
+                                  classification file) (input). A 'domain
+                                  classification file' contains classification
+                                  and other data for domains from SCOP or
+                                  CATH, in DCF format (EMBL-like). The files
+                                  are generated by using SCOPPARSE and
+                                  CATHPARSE. Domain sequence information can
+                                  be added to the file by using DOMAINSEQS.
+  [-ccfpdir]           directory  This option specifies the location of
+                                  protein CCF file (clean coordinate files)
+                                  (input). A 'clean cordinate file' contains
+                                  protein coordinate and derived data for a
+                                  single PDB file ('protein clean coordinate
+                                  file') or a single domain from SCOP or CATH
+                                  ('domain clean coordinate file'), in CCF
+                                  format (EMBL-like). The files, generated by
+                                  using PDBPARSE (PDB files) or DOMAINER
+                                  (domains), contain 'cleaned-up' data that is
+                                  self-consistent and error-corrected.
+                                  Records for residue solvent accessibility
+                                  and secondary structure are added to the
+                                  file by using PDBPLUS. default: "./
+  [-ccfoutdir]         outdir     This option specifies the location of domain
+                                  CCF files (clean coordinate files)
+                                  (output). A 'domain coordinate file'
+                                  contains coordinate and other data for a
+                                  single scop domain. The files are generated
+                                  by DOMAINER and are in embl-like and pdb
+                                  formats.
+  [-pdboutdir]         outdir     This option specifies the location of domain
+                                  PDB files (output). A 'domain coordinate
+                                  file' contains coordinate and other data for
+                                  a single scop domain. The files are
+                                  generated by DOMAINER and are in embl-like
+                                  and pdb formats.
+   -mode               menu       This option specifies the operational mode
+                                  of DOMAINER. This determines which sort of
+                                  residue number is written to the PDB file.
+   -cpdberrfile        outfile    This option specifies the log file, which
+                                  contains messages about any errors arising
+                                  while DOMAINER generated CCF format files
+   -pdberrfile         outfile    This option specifies the the log file,
+                                  which contains messages about any errors
+                                  arising while DOMAINER generated PDB format
+                                  files
 
-% domainer
-Build domain coordinate files
-Name of scop file for input (embl-like format) [Escop.dat]: /data/scop/Escop.dat
-Location of coordinate files for input (embl-like format) [./]: /data/cpdb/
-Location of coordinate files for output (embl-like format) [./]:
-Extension of coordinate files (embl-like format) [.pxyz]:
-Location of coordinate files for output (pdb format) [./]:
-Extension of coordinate files (pdb format) [.ent]:
-Name of log file for the embl-like format build [domainer.log1]: log.1
-Name of log file for the pdb format build [domainer.log2]: log.2
-D3SDHA_
-D3SDHB_
-D3HBIA_
-D3HBIB_
-D4SDHA_
-D4SDHB_
-D4HBIA_
-D4HBIB_
-D5HBIA_
-D5HBIB_
-D7HBIA_
-D7HBIB_
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers: (none)
+   Associated qualifiers:
 
-</pre>
+   "-cpdberrfile" associated qualifiers
+   -odirectory         string     Output directory
 
+   "-pdberrfile" associated qualifiers
+   -odirectory         string     Output directory
 
-
-
-
-
-
-
-
-
-
-
-<H2>
-    Command line arguments
-</H2>
-
-<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
-<pre>
-
-   EMBOSS An error in ajacd.c at line 1531:
-acdfile '/packages/emboss_dev/gwilliam/emboss/emboss/emboss/acd/domainer.acd' not opened
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report deaths
 
 
 </pre>
 </td></tr></table>
 <P>
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
 
-   EMBOSS An error in ajacd.c at line 1531:
-acdfile '/packages/emboss_dev/gwilliam/emboss/emboss/emboss/acd/domainer.acd' not opened
+<tr>
+<td>-scopfile</td>
+<td>This option specifies the DCF file (domain classification file) (input). A 'domain classification file' contains classification and other data for domains from SCOP or CATH, in DCF format (EMBL-like). The files are generated by using SCOPPARSE and CATHPARSE. Domain sequence information can be added to the file by using DOMAINSEQS.</td>
+<td>Input file</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>[-ccfpdir]<br>(Parameter 1)</td>
+<td>This option specifies the location of protein CCF file (clean coordinate files) (input). A 'clean cordinate file' contains protein coordinate and derived data for a single PDB file ('protein clean coordinate file') or a single domain from SCOP or CATH ('domain clean coordinate file'), in CCF format (EMBL-like). The files, generated by using PDBPARSE (PDB files) or DOMAINER (domains), contain 'cleaned-up' data that is self-consistent and error-corrected. Records for residue solvent accessibility and secondary structure are added to the file by using PDBPLUS. default: "./</td>
+<td>Directory</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr>
+<td>[-ccfoutdir]<br>(Parameter 2)</td>
+<td>This option specifies the location of domain CCF files (clean coordinate files) (output). A 'domain coordinate file' contains coordinate and other data for a single scop domain. The files are generated by DOMAINER and are in embl-like and pdb formats.</td>
+<td>Output directory</td>
+<td>./</td>
+</tr>
+
+<tr>
+<td>[-pdboutdir]<br>(Parameter 3)</td>
+<td>This option specifies the location of domain PDB files (output). A 'domain coordinate file' contains coordinate and other data for a single scop domain. The files are generated by DOMAINER and are in embl-like and pdb formats.</td>
+<td>Output directory</td>
+<td>./</td>
+</tr>
+
+<tr>
+<td>-mode</td>
+<td>This option specifies the operational mode of DOMAINER. This determines which sort of residue number is written to the PDB file.</td>
+<td><table><tr><td>1</td> <td><i>(Use original PDB residue number)</i></td></tr><tr><td>2</td> <td><i>(Use corrected residue number (index into SEQRES sequence))</i></td></tr></table></td>
+<td>1</td>
+</tr>
+
+<tr>
+<td>-cpdberrfile</td>
+<td>This option specifies the log file, which contains messages about any errors arising while DOMAINER generated CCF format files</td>
+<td>Output file</td>
+<td>domainer_embl.log</td>
+</tr>
+
+<tr>
+<td>-pdberrfile</td>
+<td>This option specifies the the log file, which contains messages about any errors arising while DOMAINER generated PDB format files</td>
+<td>Output file</td>
+<td>domainer_pdb.log</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Additional (Optional) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+</table>
+
+
+<H3> 6.2 EXAMPLE SESSION </H3>
+
+An example of interactive use of DOMAINER is shown below.
+
+<b>Here is a sample session with domainer</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>domainer </b>
+Reads CCF files (clean coordinate files) for proteins and writes CCF files
+for domains, taken from a DCF file (domain classification file).
+DCF file (domain classification file) (input): <b>all.scop</b>
+Location of protein CCF files (clean coordinate files) (input). [.]: <b></b>
+Location of domain CCF files (clean coordinate files) (output). [./]: <b></b>
+Location of domain PDB files (output). [./]: <b></b>
+Residue number mode
+         1 : Use original PDB residue number
+         2 : Use corrected residue number (index into SEQRES sequence)
+Select mode of operation [1]: <b>1</b>
+Output file [domainer_embl.log]: <b>domainer_embl.log</b>
+Second output file [domainer_pdb.log]: <b>domainer_pdb.log</b>
+
+D1CS4A_
+D1II7A_
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
 
 
 
-<!--
-DON'T WRITE ANYTHING HERE.
-IT IS DONE FOR YOU.
+<br>Protein clean coordinate files were read from test_data/. 
+<br>Domain definitions were taken from 
+test_data/all.scop and domain clean coordinate files 
+and domain PDB files were written.  
+<br>Three file extensions for protein coordinate input files (e.g. 1cs4.ccf and 1ii7.ccf),  
+domain coordinate files in 
+CCF format (e.g. d1cs4a_.ccf and d1ii7a_.ccf) and PDB formats (e.g. d1cs4a_.ent and d1ii7a_.ent) 
+will have been set in the ACD file.
+<br>Log files called 
+domainer_embl.log and domainer_pdb.log were written.
+<br><br>
+The following command line would achieve the same result.
+<pre>domainer test_data/ test_data/domainer test_data/domainer -scop 
+test_data/all.scop -cpdberrf test_data/domainer/domainer_embl.log -pdberrf 
+test_data/domainer/domainer_pdb.log -mode 1
+</pre>
+
+
+
+
+
+
+
+<!-- KNOWN BUGS & WARNINGS
+     Bugs that have not yet been fixed, easily missued features, problems
+     and caveats etc. Potentially stupid things the program will let you do.
 -->
+<a name="7.0"></a>
+<H2> 7.0   KNOWN BUGS & WARNINGS     </H2>
+<b>Wildcard matching of SCOP domain start and end points</b>
+<br>SCOP treats PDB residue numbers as integers and this is a potential source
+of error in the domain ranges. It means that DOMAINER (via library calls)
+must use wild card strings when matching a SCOP start / end point to the
+PDB residue number strings.
 
 
 
 
-
-
-
-
-<H2>
-    Input file format
-</H2>
-
-<!-- 
-        This includes example input file formats.
-        This should be a detailed description and example - assume
-        someone will want to parse this file and will want to know what
-        happens in unusual cases - null input, etc. 
-   -->
-
-
-The EMBL-like format used for the input clean protein data (and the output
-domain format) uses the following records:
-
-<p>
-
-(1)  ID - Either the 4-character PDB identifier code (for clean protein 
-coordinate files) or the 7-character domain identifier code taken from scop
-(for domain coordinate files; see documentation for the EMBOSS application 
-<a href="scope.html"><b>scope</b></a> 
-for further info.)
-<p>
-
-(2)  DE - compound information.  Text from the COMPND records from the 
-original pdb file are given.
-<p>
-
-(3)  OS - protein source information.  Text from the SOURCE records from the 
-original pdb file are given.
-<p>
-
-(4)  EX - experimental information. The text 'nmr_or_model' (for nuclear  
-magnetic resonance and model structures) or 'xray' (for structures 
-determined by X-ray crystallography) appears as appropriate after the text
-'METHOD'.  The resolution of X-ray structures, or '0' for structures of type
-'nmr_or_model', is given after 'RESO'.  The number of models and number of 
-polypeptide chains are given after 'NMOD' and 'NCHA' respectively. For 
-domain coordinate files a 1 is always given. Following the EX record, the 
-file will have a section containing a CN, IN and SQ records (see below) for
-each chain.
-<p>
-
-(5)  CN - chain number.  The number given in brackets after this record 
-indicates the start of a section of chain-specific data.
-<p>
-
-(6)  IN - chain specific data. The character given after ID is the PDB chain 
-identifier (a '.' is given in cases where a chain identifier was not 
-specified in the pdb file or, for domain coordinate files, the domain is 
-comprised of more than one domain).  The number of amino acid residues 
-comprising the chain (or the chains from which a domain is comprised) is 
-given after NR. The number of atoms in heterogens and water molecules are 
-given after NH and NW respectively. Domain coordinate files do not include
-coordinates for these groups so a value of 0 is always given.
-<p>
-
-(7)  SQ - protein sequence. The number of residues is given before AA on the
-first line. The protein sequence is given on subsequent lines. 
-<p>
-
-(8)  CO - coordinate data.  The columns of the records are as follows.
-<OL>
-<LI>CO is always given.
-<LI>Model number (always 1 for domain coordinate files).
-<LI>Chain number (always 1 for domain coordinate files).
-<LI>Either P (a protein atom), H (a heterogen atom) or W (an atom in a water molecule).
-<LI>Position of the residue in the protein sequence given in the SQ record (for protein atoms) or a sequential count of the atoms (for heterogens and water).
-<LI>Residue number according to the original pdb file, or or a sequential count of the atoms (for heterogens and water).
-<LI>Single character amino acid code or a '.' (for heterogens and water).
-<LI>3-character residue identifier code.
-<LI>Atom type.
-<LI>The x orthogonal coordinate.
-<LI>The y orthogonal coordinate.
-<LI>The z orthogonal coordinate.
-<LI>Occupancy.
-<LI>Temperature factor.
-</OL>
-<p>
-
-(9)  XX - Used for spacing.
-<p>
-
-(10) // - Given on the last line of the file only.
-<p>
-
-
-
-
-
-
-
-
-<H2>
-    Output file format
-</H2>
-
-<!-- 
-        This includes example output file formats.
-        This should be a detailed description and example - assume
-        someone will want to parse this file and will want to know what
-        happens in unusual cases - null output, errors etc. 
-   -->
-
-The PDB format is explained at:
+<!-- NOTES
+     Important general remarks, including:
+       Restrictions.
+       Interesting behaviour.
+       Useful things you can do with this program.
+       Future plans.
+       etc.
+-->
+<a name="8.0"></a>
+<H2> 8.0   NOTES                     </H2>
+Where coordinates for multiple models are given in a protein coordinate 
+file, the domain CCF file will contain coordinates for the first 
+model.  
 <br>
-<A HREF="http://www.rcsb.org/pdb/docs/format/pdbguide2.2/guide2.2_frame.html">
-http://www.rcsb.org/pdb/docs/format/pdbguide2.2/guide2.2_frame.html</A>
+<br>In the rare cases where a domain is comprised of segments from more than 
+one chain, the data in the domain CCF file will be presented as 
+belonging to a single chain with a chain identifier of '.'.  A single 
+sequence will be given.
 <br>
+<br>The start and end positions of domains in SCOP coincide in several cases 
+to residues which either lack a CA atom or for which coordinates for a 
+single atom only are given in the PDB file.  To ensure these domains are
+processed during a DOMAINER run, it is important to use protein CCF
+files which have NOT been masked to remove such residues.
+Otherwise errors of the following type may occur in the log file:
+<br>
+<br><pre>
+//
+D1QFUL1
+ERROR Domain end not found in ajXyzCpdbWriteDomain 
 
-<b>domainer</b> writes the following records in PDB format:
-<p>
-
-(1)  HEADER - bibliographic information.  The text 'CLEANED-UP PDB FILE FOR 
-SCOP DOMAIN XXXXXXX' is always given (where XXXXXXX is a 7-character domain 
-identifier code).
-<p>
-
-(2)  TITLE - bibliographic information. The text ' THIS FILE IS MISSING 
-MOST RECORDS FROM THE ORIGINAL PDB FILE' is always given.
-<p>
-
-(3)  COMPND - compound information.  The COMPND records from the original  
-pdb file are given.
-<p>
-
-(4)  SOURCE - protein source information.  The SOURCE records from the 
-original PDB file are given.
-<p>
-
-(5)  REMARK - remark records. Remark records are used for spacing. One 
-REMARK line containing the protein resolution is always given.
-<p>
-
-(6)  SEQRES - protein sequence.  
-<p>
-
-(7)  ATOM - atomic coordinates.
-<p>
-
-(8)  TER - indicates the end of a chain.
-
-<p>
-
-The following is an example of an excerpt from an output clean domain
-coordinate file (PDB format):
-
-<p>
-
-<hr>
-<pre>
-HEADER     CLEANED-UP PDB FILE FOR SCOP DOMAIN D1HBBA_
-TITLE      THIS FILE IS MISSING MOST RECORDS FROM THE ORIGINAL PDB FILE
-COMPND     HEMOGLOBIN A (DEOXY, LOW SALT, 100MM CL)
-SOURCE     HUMAN (HOMO SAPIENS)
-REMARK
-REMARK     RESOLUTION. 1.90  ANGSTROMS.
-REMARK
-SEQRES   1 A  141  VAL LEU SER PRO ALA ASP LYS THR ASN VAL LYS ALA ALA
-SEQRES   2 A  141  TRP GLY LYS VAL GLY ALA HIS ALA GLY GLU TYR GLY ALA
-SEQRES   3 A  141  GLU ALA LEU GLU ARG MET PHE LEU SER PHE PRO THR THR
-SEQRES   4 A  141  LYS THR TYR PHE PRO HIS PHE ASP LEU SER HIS GLY SER
-SEQRES   5 A  141  ALA GLN VAL LYS GLY HIS GLY LYS LYS VAL ALA ASP ALA
-SEQRES   6 A  141  LEU THR ASN ALA VAL ALA HIS VAL ASP ASP MET PRO ASN
-SEQRES   7 A  141  ALA LEU SER ALA LEU SER ASP LEU HIS ALA HIS LYS LEU
-SEQRES   8 A  141  ARG VAL ASP PRO VAL ASN PHE LYS LEU LEU SER HIS CYS
-SEQRES   9 A  141  LEU LEU VAL THR LEU ALA ALA HIS LEU PRO ALA GLU PHE
-SEQRES  10 A  141  THR PRO ALA VAL HIS ALA SER LEU ASP LYS PHE LEU ALA
-SEQRES  11 A  141  SER VAL SER THR VAL LEU THR SER LYS TYR ARG
-ATOM      1  N   VAL A   1       7.155  17.725   4.424  1.00 37.82           N
-ATOM      2  CA  VAL A   1       7.854  18.800   3.718  1.00 35.10           C
-ATOM      3  C   VAL A   1       9.366  18.565   3.754  1.00 31.92           C
-ATOM      4  O   VAL A   1       9.861  17.961   4.721  1.00 35.01           O
-ATOM      5  CB  VAL A   1       7.529  20.168   4.360  1.00 47.63           C
-ATOM      6  CG1 VAL A   1       7.806  21.300   3.369  1.00 62.84           C
-ATOM      7  CG2 VAL A   1       6.136  20.244   4.936  1.00 54.85           C
-ATOM      8  N   LEU A   2      10.032  19.062   2.731  1.00 27.38           N
-ATOM      9  CA  LEU A   2      11.496  18.967   2.657  1.00 23.24           C
-ATOM     10  C   LEU A   2      12.077  20.110   3.496  1.00 22.99           C
-ATOM     11  O   LEU A   2      11.672  21.259   3.289  1.00 25.22           O
-ATOM     12  CB  LEU A   2      11.924  19.005   1.204  1.00 18.04           C
-ATOM     13  CG  LEU A   2      11.563  17.855   0.286  1.00 17.80           C
-ATOM     14  CD1 LEU A   2      12.166  18.109  -1.097  1.00 20.08           C
-ATOM     15  CD2 LEU A   2      12.116  16.542   0.839  1.00 13.84           C
-ATOM     16  N   SER A   3      12.979  19.784   4.391  1.00 22.22           N
-ATOM     17  CA  SER A   3      13.652  20.792   5.257  1.00 20.53           C
-ATOM     18  C   SER A   3      14.871  21.318   4.505  1.00 18.31           C
-ATOM     19  O   SER A   3      15.273  20.709   3.496  1.00 17.73           O
-ATOM     20  CB  SER A   3      14.084  20.042   6.534  1.00 17.61           C
+//
+D1QFUL1
+ERROR Domain start not found in ajXyzCpdbWriteDomain 
 </pre>
-<hr>
 
-<p>
 
-<b>domainer</b> also writes out the clean domain coordinate files in
-EMBL-like format.  The format for this EMBL-like data is described in
-the <b>Input File format</b> section of this document as it used the
-same format for the input clean protein EMBL-like data and the output
-clean domain EMBL-like data. 
 
-<p>
+None
 
-The following is an example of an excerpt from an output clean domain
-coordinate file (EMBL-like format):
 
-<p>
+<H3> 8.1   DATA FILES    </H2>
+<table BORDER CELLSPACING=5 CELLPADDING=5 BGCOLOR="#f5f5ff" >
+<tr>
+<td><b>FILE TYPE</b></td>
+<td><b>FORMAT</b></td>
+<td><b>DESCRIPTION</b></td>
+<td><b>CREATED BY <b></td>
+<td><b>SEE ALSO</b></td>
+</tr>
+<tr>
+<td><b> Domain classification file (for SCOP)</b></td>
+<td> DCF format (EMBL-like). </td>
+<td> Classification and other data for domains from SCOP.  </td>
+<td> <a href="scopparse.html">SCOPPARSE</a> </td>
+<td> Domain sequence information can be added to the file by using DOMAINSEQS.  </td>
+</tr>
+<tr>
+<td><b> Domain classification file (for CATH)</b></td>
+<td> DCF format (EMBL-like). </td>
+<td> Classification and other data for domains from CATH.  </td>
+<td> <a href="cathparse.html">CATHPARSE</a> </td>
+<td> Domain sequence information can be added to the file by using DOMAINSEQS.  </td>
+</tr>
+<tr>
+<td><b> Clean coordinate file (for protein) </b></td>
+<td> CCF format (EMBL-like).</td>
+<td> Protein coordinate and derived data for a single PDB file.  The data are 'cleaned-up': self-consistent and error-corrected.  </td>
+<td> <a href="pdbparse.html">PDBPARSE</a> </td>
+<td> Records for residue solvent accessibility and secondary structure are added to the file by using PDBPLUS. </td>
+</tr>
+<tr>
+<td><b> Clean coordinate file (for domain)</b></td>
+<td> CCF format (EMBL-like).</td>
+<td> Protein coordinate and derived data for a single domain from SCOP or CATH. The data are 'cleaned-up': self-consistent and error-corrected. </td>
+<td> <a href="domainer.html">DOMAINER</a></td>
+<td> Records for residue solvent accessibility and secondary structure are added to the file by using PDBPLUS.</td>
+</tr>
+<tr>
+<td><b>Domain PDB file </b></td>
+<td> PDB format. </td>
+<td> Protein coordinate data for a single domain from SCOP or CATH. </td>
+<td> <a href="domainer.html">DOMAINER</a> </td>
+<td> N.A. </td>
+</tr>
+</table>
 
-<hr>
-<pre>
-ID   D1HBBA_
-XX
-DE   Co-ordinates for SCOP domain D1HBBA_
-XX
-OS   See Escop.dat for domain classification
-XX
-EX   METHOD xray; RESO 1.90; NMOD 1; NCHA 1;
-XX
-CN   [1]
-XX
-IN   ID A; NR 141; NH 0; NW 0;
-XX
-SQ   SEQUENCE   141 AA;  15127 MW;  5EC7DB1E CRC32;
-     VLSPADKTNV KAAWGKVGAH AGEYGAEALE RMFLSFPTTK TYFPHFDLSH GSAQVKGHGK
-     KVADALTNAV AHVDDMPNAL SALSDLHAHK LRVDPVNFKL LSHCLLVTLA AHLPAEFTPA
-     VHASLDKFLA SVSTVLTSKY R
-XX
-CO   1    1    P    1     1     V    VAL    N      7.155   17.725 4.424     1.00    37.82
-CO   1    1    P    1     1     V    VAL    CA     7.854   18.800 3.718     1.00    35.10
-CO   1    1    P    1     1     V    VAL    C      9.366   18.565 3.754     1.00    31.92
-CO   1    1    P    1     1     V    VAL    O      9.861   17.961 4.721     1.00    35.01
-CO   1    1    P    1     1     V    VAL    CB     7.529   20.168 4.360     1.00    47.63
-CO   1    1    P    1     1     V    VAL    CG1    7.806   21.300 3.369     1.00    62.84
-CO   1    1    P    1     1     V    VAL    CG2    6.136   20.244 4.936     1.00    54.85
-CO   1    1    P    2     2     L    LEU    N     10.032   19.062 2.731     1.00    27.38
-CO   1    1    P    2     2     L    LEU    CA    11.496   18.967 2.657     1.00    23.24
-CO   1    1    P    2     2     L    LEU    C     12.077   20.110 3.496     1.00    22.99
-CO   1    1    P    2     2     L    LEU    O     11.672   21.259 3.289     1.00    25.22
-</pre>
-<hr>
 
-<p>
 
-<b>domainer</b> generates a log file, an excerpt of which is shown below. 
-If there is a problem in processing a domain, three lines containing the
-record '//', the domain identifier code and an error message
-respectively are written.  The text 'WARN filename not found' is given
-in cases where a clean coordinate file could not be found.  'ERROR
-filename file read error' or 'ERROR filename file write error' will be
-reported when an error was encountered during a file read or write
-respectively.  Various other error messages may also be given (in case
-of difficulty email Jon Ison, 
-<a href="mailto:jison@hgmp.mrc.ac.uk">jison@hgmp.mrc.ac.uk</a>). 
 
-<p>
-<hr>
+
+<!-- DESCRIPTION
+     A complete, non-technical, user-level description of the application.
+-->
+<a name="9.0"></a>
+<H2> 9.0   DESCRIPTION               </H2>
+  
+ DOMAINER fills the need for a convenient source of protein coordinate data which 
+ includes protein strucutral domain definitions and is therefore appropriate 
+ for domain-centred approaches.  DOMAINER reads protein CCF files and
+ writes files of coordinate data for individual SCOP domains in clean 
+ and PDB formats. Domain definitions are taken from  a DCF file (domain classification file).  For example, SCOPPARSE parses the raw SCOP classification files (dir.cla.scop.txt and dir.des.scop.txt) available at URL (http://scop.mrc-lmb.cam.ac.uk/scop/parse/) and generate a DCF output file suitable for use with DOMAINER.
+
+
+
+
+
+
+
+<!-- ALGORITHM
+     A technical description of algorithmic aspects, describing exactly how
+     the key aspects of the application work.
+-->
+<a name="10.0"></a>
+<H2> 10.0  ALGORITHM                 </H2>
+We wrote the DOMAINER application to read protein CCF files and generate files of coordinates for single SCOP domains in the "clean" format (domain CCF files, Figure 1) and the PDB format.  DOMAINER reads a file of domain classification data (e.g. prepared by using the application SCOPPARSE or CATHPARSE), and generates a domain CCF and domain PDB file for each domain listed.  Where coordinates for multiple models were determined, data in the output files are given for the first model only.  In cases where a domain consists of sections from more than one polypeptide chain, the data are presented as belonging to a single chain only (a single sequence with a chain identifier of is given).  
+
+
+
+
+
+<!-- RELATED APPLICATIONS
+     Other applications that either generate the input, use the output or 
+     are in some other way related to the application are described here. 
+-->
+<a name="11.0"></a>
+<H2> 11.0  RELATED APPLICATIONS      </H2>
+
+<h2><a name="See also">See also</a></h2>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th><th>Description</th></tr>
+<tr><td><a href="../../apps/aaindexextract.html">aaindexextract</a></td><td>Extract data from AAINDEX</td></tr>
+<tr><td><a href="allversusall.html">allversusall</a></td><td>Does an all-versus-all global alignment for each set of sequences in an input directory and writes files of sequence similarity values</td></tr>
+<tr><td><a href="cathparse.html">cathparse</a></td><td>Reads raw CATH classification files and writes DCF file (domain classification file)</td></tr>
+<tr><td><a href="../../apps/cutgextract.html">cutgextract</a></td><td>Extract data from CUTG</td></tr>
+<tr><td><a href="domainnr.html">domainnr</a></td><td>Removes redundant domains from a DCF file (domain classification file). The file must contain domain sequence information, which can be added by using DOMAINSEQS</td></tr>
+<tr><td><a href="domainseqs.html">domainseqs</a></td><td>Adds sequence records to a DCF file (domain classification file)</td></tr>
+<tr><td><a href="domainsse.html">domainsse</a></td><td>Adds secondary structure records to a DCF file (domain classification file)</td></tr>
+<tr><td><a href="hetparse.html">hetparse</a></td><td>Converts raw dictionary of heterogen groups to a file in EMBL-like format</td></tr>
+<tr><td><a href="pdbparse.html">pdbparse</a></td><td>Parses PDB files and writes CCF files (clean coordinate files) for proteins</td></tr>
+<tr><td><a href="pdbplus.html">pdbplus</a></td><td>Add residue solvent accessibility and secondary structure data to a CCF file (clean coordinate file) for a protein or domain</td></tr>
+<tr><td><a href="pdbtosp.html">pdbtosp</a></td><td>Convert raw swissprot:PDB equivalence file to EMBL-like format</td></tr>
+<tr><td><a href="../../apps/printsextract.html">printsextract</a></td><td>Extract data from PRINTS</td></tr>
+<tr><td><a href="../../apps/prosextract.html">prosextract</a></td><td>Builds the PROSITE motif database for patmatmotifs to search</td></tr>
+<tr><td><a href="../../apps/rebaseextract.html">rebaseextract</a></td><td>Extract data from REBASE</td></tr>
+<tr><td><a href="scopparse.html">scopparse</a></td><td>Reads raw SCOP classification files and writes a DCF file (domain classification file)</td></tr>
+<tr><td><a href="seqnr.html">seqnr</a></td><td>Removes redundancy from DHF files (domain hits files) or other files of sequences</td></tr>
+<tr><td><a href="sites.html">sites</a></td><td>Reads CCF files (clean coordinate files) and writes CON files (contact files) of residue-ligand contact data for domains in a DCF file (domain classification file)</td></tr>
+<tr><td><a href="ssematch.html">ssematch</a></td><td>Searches a DCF file (domain classification file) for secondary structure matches</td></tr>
+<tr><td><a href="../../apps/tfextract.html">tfextract</a></td><td>Extract data from TRANSFAC</td></tr>
+</table>
+
+
+
+<!-- DIAGNOSTIC ERROR MESSAGES
+     Description of error messages or log file, if one is written.
+-->
+<a name="12.0"></a>
+<H2> 12.0  DIAGNOSTIC ERROR MESSAGES </H2>
+DOMAINER generates a log file an excerpt of which is shown (Figure 2). If there is a problem in processing a domain, three lines containing the record '//', the domain identifier code and an error message respectively are written. The following messages may then be given.
+
+<br><br><i>WARN  filename not found</i> (A CCF file could not be found).
+<br><br><i>ERROR filename file read error</i> (An error was encountered during a file read or write respectively.)
+<br><br><i>ERROR filename file write error</i> (An error was encountered during a file read or write respectively.)  
+<br><br><i>ERROR Domain start found by wildcard match only</i> (Wildcard matching was needed to find the start (or end) of a domain in a PDB file: see below).
+<br><br>
+Various other error messages may also be given (in case of difficulty email Jon Ison, jison@hgmp.mrc.ac.uk).
+<br>
+<br><b>Figure 2  Excerpt of log file</b>
 <pre>
 //
 DS002__
@@ -453,331 +1129,63 @@ WARN  Could not open for reading cpdb file s002.pxyz
 DS003__
 WARN  Could not open for reading cpdb file s003.pxyz
 </pre>
-<hr>
-<p>
-
-
-
-
-
-
-
-
-<H2>
-    Data files
-</H2>
-
-<!-- 
-        Any data files used (e.g. translation table file)
-        This includes example data file formats if they are
-        not obvious.
-	If you wish to include the standard description of what data
-	files are and how to use embossdata to inspect and retrieve
-	them, use:
-<p>
-EMBOSS data files are distributed with the application and stored
-in the standard EMBOSS data directory, which is defined
-by the EMBOSS environment variable EMBOSS_DATA.
-
-<p>
-
-To see the available EMBOSS data files, run:
-<p>
-<pre>
-% embossdata -showall
-</pre>
-<p>
-To fetch one of the data files (for example 'Exxx.dat') into your
-current directory for you to inspect or modify, run:
-
-<pre>
-
-% embossdata -fetch -file Exxx.dat
-
-</pre>
-<p>
-
-Users can provide their own data files in their own directories.
-Project specific files can be put in the current directory, or for
-tidier directory listings in a subdirectory called
-".embossdata". Files for all EMBOSS runs can be put in the user's home
-directory, or again in a subdirectory called ".embossdata".
-
-<p>
-The directories are searched in the following order:
-
-<ul>
-   <li> . (your current directory)
-   <li> .embossdata (under your current directory)
-   <li> ~/ (your home directory)
-   <li> ~/.embossdata
-</ul>
-<p>
-
-   -->
-
-The ready-made input and output data for <b>domainer</b> may be
-downloaded from the HGMP:
-
-<p>
-
-<a href="ftp://ftp.hgmp.mrc.ac.uk/pub/databases/cpdb/">EMBL-like format clean protein coordinate files</a>
+<br>Messages of the type below can appear in the log file if 
+(i)  The domain is of a PDB file which is in holding, but has not made it into the main PDB release yet.
+(ii) The domain is of a PDB file that is now obsolete - having been replaced by a more recent entry.
+There may be other cases too.
 <br>
-<a href="ftp://ftp.hgmp.mrc.ac.uk/pub/databases/cpdbscop/">EMBL-like format clean domain coordinate files</a>
+<pre>
+//
+D0LPC_1
+WARN  0lpc.pxyz not found
+</pre> 
 <br>
-<a href="ftp://ftp.hgmp.mrc.ac.uk/pub/databases/pdbscop/">PDB-format clean domain coordinate files</a>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<H2>
-    Notes
-</H2>
-
-<!-- 
-        Restrictions.
-        Interesting behaviour.
-        Useful things you can do with this program.
-   -->
-
-None.
-
-
-
-
-
-
-
-<H2>
-    References
-</H2>
-
-<!-- 
-        Bibliography for methods used.
-   -->
-
-None.
-
-
-
-
-
-
-
-
-<H2>
-    Warnings
-</H2>
-
-<!-- 
-        Potentially stupid things the program will let you do.
-   -->
-
-None.
-
-
-
-
-
-
-
-<H2>
-    Diagnostic Error Messages
-</H2>
-
-<!-- 
-        Error messages specific to this program, eg:
-        "FATAL xxx" - means you have not set up the xxx data using program <b>prog</b>.<p>
-   -->
-
-None.
-
-
-
-
-
-
-
-<H2>
-    Exit status
-</H2>
-
-<!-- 
-        Description of the exit status for various error conditions
-   -->
-
-It always exits with status 0.
-
-
-
-
-
-
-
-
-<H2>
-    Known bugs
-</H2>
-
-
-<!-- 
-        Bugs noted but not yet fixed.
-   -->
-
-None.
-
-
-
-
-
-
-
-
-<!--
-<H2>
-    See also
-</H2>
+Messages of the type below indicate that residues for the start or end of a domain are missing from 
+the protein CCF file (see 'Notes' above).
+<pre>
+//
+D1QFUL1
+ERROR Domain start not found in ajXyzCpdbWriteDomain 
+//
+D1QFUL1
+ERROR Domain end not found in ajXyzCpdbWriteDomain 
+</pre>
+
+
+
+<!-- AUTHORS
+     The main author first then all others. 
 -->
-<h2><a name="See also">See also</a></h2>
-<table border cellpadding=4 bgcolor="#FFFFF0">
-<tr><th>Program name</th><th>Description</th></tr>
-<tr><td><a href="aaindexextract.html">aaindexextract</a></td><td>Extract data from AAINDEX</td></tr>
-<tr><td><a href="cutgextract.html">cutgextract</a></td><td>Extract data from CUTG</td></tr>
-<tr><td><a href="funky.html">funky</a></td><td>Reads clean coordinate files and writes file of protein-heterogen contact data</td></tr>
-<tr><td><a href="hetparse.html">hetparse</a></td><td>Converts raw dictionary of heterogen groups to a file in embl-like format</td></tr>
-<tr><td><a href="nrscope.html">nrscope</a></td><td>Converts redundant EMBL-format SCOP file to non-redundant one</td></tr>
-<tr><td><a href="pdbparse.html">pdbparse</a></td><td>Parses pdb files and writes cleaned-up protein coordinate files</td></tr>
-<tr><td><a href="pdbtosp.html">pdbtosp</a></td><td>Convert raw swissprot:pdb equivalence file to embl-like format</td></tr>
-<tr><td><a href="printsextract.html">printsextract</a></td><td>Extract data from PRINTS</td></tr>
-<tr><td><a href="prosextract.html">prosextract</a></td><td>Builds the PROSITE motif database for patmatmotifs to search</td></tr>
-<tr><td><a href="rebaseextract.html">rebaseextract</a></td><td>Extract data from REBASE</td></tr>
-<tr><td><a href="scope.html">scope</a></td><td>Convert raw scop classification file to embl-like format</td></tr>
-<tr><td><a href="scopnr.html">scopnr</a></td><td>Removes redundant domains from a scop classification file</td></tr>
-<tr><td><a href="scopparse.html">scopparse</a></td><td>Converts raw scop classification files to a file in embl-like format</td></tr>
-<tr><td><a href="scopseqs.html">scopseqs</a></td><td>Adds pdb and swissprot sequence records to a scop classification file</td></tr>
-<tr><td><a href="seqnr.html">seqnr</a></td><td>Reads a scop families file and a scop ambiguities file and writes (i) a non-redundant scop families file and (ii) a scop validation file</td></tr>
-<tr><td><a href="tfextract.html">tfextract</a></td><td>Extract data from TRANSFAC</td></tr>
-</table>
+<a name="13.0"></a>
+<H2> 13.0  AUTHORS                   </H2>
+Jon Ison <a href="mailto:jison@rfcgr.mrc.ac.uk">(jison@rfcgr.mrc.ac.uk)</a>
+<br>
+MRC Rosalind Franklin Centre for Genomics Research
+Wellcome Trust Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
 
-<!-- 
-        Add any comments about other associated programs (to prepare
-        data files?) that seealso doesn't find. 
-   -->
 
 
 
+<!-- REFERENCES
+     Quote the paper where the application was first published, described, used etc. 
+-->
+<a name="14.0"></a>
+<H2> 14.0  REFERENCES                </H2>
 
+Please cite the authors and EMBOSS.
+<br><br>
+<i>Rice P, Longden I and Bleasby A (2000) "EMBOSS - The European
+Molecular Biology Open Software Suite"  Trends in Genetics,
+15:276-278.
 
+<p>
+See also <a href="http://emboss.sourceforge.net/">http://emboss.sourceforge.net/</a></i>
 
 
 
-
-
-<H2>
-    Author(s)
-</H2>
-<!--
-        Who has worked on the program in the past.
-   -->
-
-This application was written by Jon Ison <a
-href="mailto:jison@hgmp.mrc.ac.uk">(jison@hgmp.mrc.ac.uk)</a>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<H2>
-    History
-</H2>
-
-<!--
-        What changes have been made.
-   -->
-
-Written (Jan 2001) - Jon Ison.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<H2>
-    Target users
-</H2>
-
-<!--
-        For general users, requested by one user, for EMBOSS site
-        maintainers, for EMBOSS developers etc.
-        eg:
-        "This program is intended to be used by everyone and everything,
-        from naive users to embedded scripts." 
-	Which is easy to include using:
-This program is intended to be used by everyone and everything, from naive users to embedded scripts.
-
-   -->
-
-This program is intended to be run by EMBOSS site maintainers or those
-responsible for setting up and maintaining protein 3D structural data
-for use by others.
-
-
-
-
-
-
-
-
-
-
-
-<H2>
-    Comments
-</H2>
-
-<!--
-	Any comments, requests etc. that people have about the program
-   -->
-
-
-
-
-
-
-
+<H3>14.1 Other useful references  </H3>
+<pre>
+</pre>
 
 </BODY>
 </HTML>
-

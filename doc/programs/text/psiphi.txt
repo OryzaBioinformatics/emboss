@@ -1,0 +1,479 @@
+
+                                  psiphi 
+
+
+
+Function
+
+   Calculates phi and psi torsion angles from cleaned EMBOSS-style
+   protein co-ordinate file
+
+Description
+
+   Calculates the psi and phi torsion angles around the alpha carbons
+   (CA) in (a specified stretch of) a specified chain of a protein
+   structure from the co-ordinates of the mainchain atoms in the two
+   planes around it
+
+Algorithm
+
+   **************** EDIT HERE ****************
+
+Usage
+
+   Here is a sample session with psiphi
+
+
+% psiphi 1atn.pxyz -chainnumber=2 -startresiduenumber=4 -finishresiduenumber=65
+ -outf=1atn.psiphi 
+Calculates phi and psi torsion angles from cleaned EMBOSS-style protein
+co-ordinate file
+
+   Go to the input files for this example
+   Go to the output files for this example
+
+Command line arguments
+
+   Standard (Mandatory) qualifiers:
+  [-infile]            infile     Clean coordinate file
+   -chainnumber        integer    Number of the chain for which torsion angles
+                                  should be calculated
+   -startresiduenumber integer    First residue in chain for which torsion
+                                  angles should be calculated
+   -finishresiduenumber integer    Last residue in chain for which torsion
+                                  angles should be calculated (1 = last
+                                  residue)
+  [-outfile]           report     Output report file name
+
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers: (none)
+   Associated qualifiers:
+
+   "-outfile" associated qualifiers
+   -rformat2           string     Report format
+   -rname2             string     Base file name
+   -rextension2        string     File name extension
+   -rdirectory2        string     Output directory
+   -raccshow2          boolean    Show accession number in the report
+   -rdesshow2          boolean    Show description in the report
+   -rscoreshow2        boolean    Show the score in the report
+   -rusashow2          boolean    Show the full USA in the report
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report deaths
+
+
+   Standard (Mandatory) qualifiers Allowed values Default
+   [-infile]
+   (Parameter 1) Clean coordinate file Input file Required
+   -chainnumber Number of the chain for which torsion angles should be
+   calculated Integer 1 or more 1
+   -startresiduenumber First residue in chain for which torsion angles
+   should be calculated Integer 1 or more 1
+   -finishresiduenumber Last residue in chain for which torsion angles
+   should be calculated (1 = last residue) Any integer value 1
+   [-outfile]
+   (Parameter 2) Output report file name Report output file
+   Additional (Optional) qualifiers Allowed values Default
+   (none)
+   Advanced (Unprompted) qualifiers Allowed values Default
+   (none)
+
+Input file format
+
+   psiphi reads ...
+
+  Input files for usage example
+
+  File: 1atn.pxyz
+
+ID   1atn
+XX
+DE   DEOXYRIBONUCLEASE I COMPLEX WITH ACTIN
+XX
+OS   ACTIN FROM RABBIT (ORYCTOLAGUS $CUNICULUS) MUSCLE, DEOXYRIBONUCLEASE I FRO
+M
+OS   BOVINE (BOS $TAURUS) PANCREAS
+XX
+EX   METHOD xray; RESO 2.80; NMOD 1; NCHA 2; NGRP 0;
+XX
+CN   [1]
+XX
+IN   ID A; NR 373; NL 1; NH 0; NE 0;
+XX
+SQ   SEQUENCE   373 AA;  41549 MW;  DC8866DE CRC32;
+     XDEDETTALV CDNGSGLVKA GFAGDDAPRA VFPSIVGRPR HQGVMVGMGQ KDSYVGDEAQ
+     SKRGILTLKY PIEHGIITNW DDMEKIWHHT FYNELRVAPE EHPTLLTEAP LNPKANREKM
+     TQIMFETFNV PAMYVAIQAV LSLYASGRTT GIVLDSGDGV THNVPIYEGY ALPHAIMRLD
+     LAGRDLTDYL MKILTERGYS FVTTAEREIV RDIKEKLCYV ALDFENEMAT AASSSSLEKS
+     YELPDGQVIT IGNERFRCPE TLFQPSFIGM ESAGIHETTY NSIMKCDIDI RKDLYANNVM
+     SGGTTMYPGI ADRMQKEITA LAPSTMKIKI IAPPERKYSV WIGGSILASL STFQQMWITK
+     QEYDEAGPSI VHR
+XX
+CN   [2]
+XX
+IN   ID D; NR 260; NL 4; NH 0; NE 0;
+XX
+SQ   SEQUENCE   260 AA;  29021 MW;  CF3AF818 CRC32;
+     LKIAAFNIRT FGETKMSNAT LASYIVRIVR RYDIVLIQEV RDSHLVAVGK LLDYLNQDDP
+     NTYHYVVSEP LGRNSYKERY LFLFRPNKVS VLDTYQYDDG CGNCGNDSFS REPAVVKFSS
+     HSTKVKEFAI VALHSAPSDA VAEINSLYDV YLDVQQKWHL NDVMLMGDFN ADCSYVTSSQ
+     WSSIRLRTSS TFQWLIPDSA DTTATSTNCA YDRIVVAGSL LQSSVVPGSA APFDFQAAYG
+     LSNEMALAIS DHYPVEVTLT
+XX
+CO   1    1    .    P    1     0     .    .    .    .    .    .    X    ACE
+CA   105.046   51.546   40.626    1.00   72.72    0.00    0.00    0.00    0.00
+   0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    1     0     .    .    .    .    .    .    X    ACE
+C    105.314   50.822   41.951    1.00   72.72    0.00    0.00    0.00    0.00
+   0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    1     0     .    .    .    .    .    .    X    ACE
+O    105.220   51.451   43.013    1.00   72.56    0.00    0.00    0.00    0.00
+   0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    2     1     .    .    .    .    .    .    D    ASP
+N    105.665   49.507   41.867    1.00   71.64    0.00    0.00    0.00    0.00
+   0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    2     1     .    .    .    .    .    .    D    ASP
+CA   105.992   48.589   42.982    1.00   70.20    0.00    0.00    0.00    0.00
+   0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    2     1     .    .    .    .    .    .    D    ASP
+C    107.024   49.191   43.936    1.00   69.70    0.00    0.00    0.00    0.00
+   0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    2     1     .    .    .    .    .    .    D    ASP
+O    106.927   49.088   45.163    1.00   69.14    0.00    0.00    0.00    0.00
+   0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    2     1     .    .    .    .    .    .    D    ASP
+CB   106.533   47.248   42.410    1.00   70.66    0.00    0.00    0.00    0.00
+   0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    2     1     .    .    .    .    .    .    D    ASP
+CG   106.801   46.077   43.383    1.00   71.73    0.00    0.00    0.00    0.00
+   0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    2     1     .    .    .    .    .    .    D    ASP
+OD1  107.722   46.143   44.215    1.00   71.57    0.00    0.00    0.00    0.00
+   0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    2     1     .    .    .    .    .    .    D    ASP
+OD2  106.092   45.066   43.291    1.00   71.25    0.00    0.00    0.00    0.00
+   0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    3     2     .    .    .    .    .    .    E    GLU
+N    107.976   49.873   43.293    1.00   69.24    0.00    0.00    0.00    0.00
+   0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    3     2     .    .    .    .    .    .    E    GLU
+CA   109.054   50.658   43.886    1.00   69.94    0.00    0.00    0.00    0.00
+   0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    3     2     .    .    .    .    .    .    E    GLU
+C    108.707   51.166   45.277    1.00   69.71    0.00    0.00    0.00    0.00
+   0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    3     2     .    .    .    .    .    .    E    GLU
+O    109.454   51.029   46.250    1.00   69.74    0.00    0.00    0.00    0.00
+   0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    3     2     .    .    .    .    .    .    E    GLU
+CB   109.372   51.861   42.969    1.00   69.58    0.00    0.00    0.00    0.00
+   0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    1    .    P    3     2     .    .    .    .    .    .    E    GLU
+CG   110.164   51.624   41.669    1.00   68.60    0.00    0.00    0.00    0.00
+   0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+
+
+  [Part of this file has been deleted for brevity]
+
+CO   1    2    1    H    .     19    .    .    .    .    .    .    .    NAG
+O4    98.227   34.053  113.446    1.00   64.85    0.00    0.00    0.00    0.00
+   0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    2    1    H    .     19    .    .    .    .    .    .    .    NAG
+O5   100.413   31.985  111.201    1.00   54.20    0.00    0.00    0.00    0.00
+   0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    2    1    H    .     19    .    .    .    .    .    .    .    NAG
+O6    97.994   32.836  109.744    1.00   59.46    0.00    0.00    0.00    0.00
+   0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    2    1    H    .     19    .    .    .    .    .    .    .    NAG
+O7   103.385   35.944  112.239    1.00   55.99    0.00    0.00    0.00    0.00
+   0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    2    2    H    .     20    .    .    .    .    .    .    .    MAN
+C1    96.772   33.881  113.379    1.00   68.38    0.00    0.00    0.00    0.00
+   0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    2    2    H    .     20    .    .    .    .    .    .    .    MAN
+C2    96.423   32.389  113.835    1.00   70.26    0.00    0.00    0.00    0.00
+   0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    2    2    H    .     20    .    .    .    .    .    .    .    MAN
+C3    94.879   32.118  113.838    1.00   70.54    0.00    0.00    0.00    0.00
+   0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    2    2    H    .     20    .    .    .    .    .    .    .    MAN
+C4    94.053   33.398  114.389    1.00   69.85    0.00    0.00    0.00    0.00
+   0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    2    2    H    .     20    .    .    .    .    .    .    .    MAN
+C5    94.592   34.841  113.979    1.00   68.53    0.00    0.00    0.00    0.00
+   0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    2    2    H    .     20    .    .    .    .    .    .    .    MAN
+C6    94.002   35.946  114.874    1.00   68.79    0.00    0.00    0.00    0.00
+   0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    2    2    H    .     20    .    .    .    .    .    .    .    MAN
+O2    96.914   32.017  115.162    1.00   72.48    0.00    0.00    0.00    0.00
+   0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    2    2    H    .     20    .    .    .    .    .    .    .    MAN
+O3    94.659   30.955  114.705    1.00   70.24    0.00    0.00    0.00    0.00
+   0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    2    2    H    .     20    .    .    .    .    .    .    .    MAN
+O4    92.653   33.295  113.978    1.00   67.74    0.00    0.00    0.00    0.00
+   0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    2    2    H    .     20    .    .    .    .    .    .    .    MAN
+O5    96.045   34.932  114.115    1.00   68.39    0.00    0.00    0.00    0.00
+   0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    2    2    H    .     20    .    .    .    .    .    .    .    MAN
+O6    93.433   35.451  116.094    1.00   66.54    0.00    0.00    0.00    0.00
+   0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    2    3    H    .     1     .    .    .    .    .    .    .    ATP
+PG    94.786   57.032   71.655    1.00   17.67    0.00    0.00    0.00    0.00
+   0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    2    3    H    .     1     .    .    .    .    .    .    .    ATP
+O1G   93.888   57.203   72.813    1.00   17.23    0.00    0.00    0.00    0.00
+   0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    2    3    H    .     1     .    .    .    .    .    .    .    ATP
+O2G   94.087   56.937   70.331    1.00   18.23    0.00    0.00    0.00    0.00
+   0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    2    3    H    .     1     .    .    .    .    .    .    .    ATP
+O3G   95.936   57.949   71.667    1.00   13.03    0.00    0.00    0.00    0.00
+   0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    2    3    H    .     1     .    .    .    .    .    .    .    ATP
+PB    95.420   54.238   70.875    1.00   17.65    0.00    0.00    0.00    0.00
+   0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    2    3    H    .     1     .    .    .    .    .    .    .    ATP
+O1B   95.408   54.672   69.455    1.00   17.84    0.00    0.00    0.00    0.00
+   0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    2    3    H    .     1     .    .    .    .    .    .    .    ATP
+O2B   96.550   53.385   71.257    1.00   16.43    0.00    0.00    0.00    0.00
+   0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    2    3    H    .     1     .    .    .    .    .    .    .    ATP
+O3B   95.434   55.566   71.804    1.00   17.15    0.00    0.00    0.00    0.00
+   0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    2    3    H    .     1     .    .    .    .    .    .    .    ATP
+PA    93.252   52.426   70.371    1.00   14.57    0.00    0.00    0.00    0.00
+   0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    2    3    H    .     1     .    .    .    .    .    .    .    ATP
+O1A   92.117   53.068   69.684    1.00   17.79    0.00    0.00    0.00    0.00
+   0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    2    3    H    .     1     .    .    .    .    .    .    .    ATP
+O2A   94.234   51.707   69.559    1.00   15.67    0.00    0.00    0.00    0.00
+   0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    2    3    H    .     1     .    .    .    .    .    .    .    ATP
+O3A   94.040   53.512   71.217    1.00   14.88    0.00    0.00    0.00    0.00
+   0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    2    3    H    .     1     .    .    .    .    .    .    .    ATP
+O5*   92.578   51.370   71.396    1.00   16.54    0.00    0.00    0.00    0.00
+   0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    2    3    H    .     1     .    .    .    .    .    .    .    ATP
+C5*   93.252   50.711   72.492    1.00   18.27    0.00    0.00    0.00    0.00
+   0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    2    3    H    .     1     .    .    .    .    .    .    .    ATP
+C4*   92.460   50.926   73.755    1.00   19.17    0.00    0.00    0.00    0.00
+   0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    2    3    H    .     1     .    .    .    .    .    .    .    ATP
+O4*   91.144   50.564   73.360    1.00   20.56    0.00    0.00    0.00    0.00
+   0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    2    3    H    .     1     .    .    .    .    .    .    .    ATP
+C3*   92.722   50.104   75.040    1.00   20.09    0.00    0.00    0.00    0.00
+   0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    2    3    H    .     1     .    .    .    .    .    .    .    ATP
+O3*   92.087   50.587   76.224    1.00   17.92    0.00    0.00    0.00    0.00
+   0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    2    3    H    .     1     .    .    .    .    .    .    .    ATP
+C2*   91.959   48.850   74.668    1.00   20.89    0.00    0.00    0.00    0.00
+   0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    2    3    H    .     1     .    .    .    .    .    .    .    ATP
+O2*   91.527   48.031   75.744    1.00   21.55    0.00    0.00    0.00    0.00
+   0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    2    3    H    .     1     .    .    .    .    .    .    .    ATP
+C1*   90.679   49.466   74.154    1.00   21.41    0.00    0.00    0.00    0.00
+   0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    2    3    H    .     1     .    .    .    .    .    .    .    ATP
+N9    89.918   48.445   73.348    1.00   21.59    0.00    0.00    0.00    0.00
+   0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    2    3    H    .     1     .    .    .    .    .    .    .    ATP
+C8    90.398   47.620   72.338    1.00   21.06    0.00    0.00    0.00    0.00
+   0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    2    3    H    .     1     .    .    .    .    .    .    .    ATP
+N7    89.510   46.748   71.915    1.00   20.71    0.00    0.00    0.00    0.00
+   0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    2    3    H    .     1     .    .    .    .    .    .    .    ATP
+C5    88.413   46.916   72.781    1.00   16.60    0.00    0.00    0.00    0.00
+   0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    2    3    H    .     1     .    .    .    .    .    .    .    ATP
+C6    87.170   46.213   72.863    1.00   14.07    0.00    0.00    0.00    0.00
+   0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    2    3    H    .     1     .    .    .    .    .    .    .    ATP
+N6    86.856   45.101   72.189    1.00    9.78    0.00    0.00    0.00    0.00
+   0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    2    3    H    .     1     .    .    .    .    .    .    .    ATP
+N1    86.253   46.764   73.722    1.00   13.84    0.00    0.00    0.00    0.00
+   0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    2    3    H    .     1     .    .    .    .    .    .    .    ATP
+C2    86.612   47.919   74.399    1.00   15.25    0.00    0.00    0.00    0.00
+   0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    2    3    H    .     1     .    .    .    .    .    .    .    ATP
+N3    87.800   48.496   74.561    1.00   15.64    0.00    0.00    0.00    0.00
+   0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    2    3    H    .     1     .    .    .    .    .    .    .    ATP
+C4    88.626   48.004   73.609    1.00   17.21    0.00    0.00    0.00    0.00
+   0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    2    4    H    .     2     .    .    .    .    .    .    .     CA
+CA    94.454   56.550   67.891    1.00   32.57    0.00    0.00    0.00    0.00
+   0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    2    4    H    .     3     .    .    .    .    .    .    .     CA
+CA   114.215   17.675  107.885    1.00    7.01    0.00    0.00    0.00    0.00
+   0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    2    4    H    .     4     .    .    .    .    .    .    .     CA
+CA   112.657   20.573   78.226    1.00   19.23    0.00    0.00    0.00    0.00
+   0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+CO   1    2    4    H    .     5     .    .    .    .    .    .    .     CA
+CA   119.545   10.433  103.688    1.00   46.63    0.00    0.00    0.00    0.00
+   0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00
+//
+
+Output file format
+
+   psiphi outputs ...
+
+  Output files for usage example
+
+  File: 1atn.psiphi
+
+########################################
+# Program: psiphi
+# Rundate: Thu Jul 15 2004 12:00:00
+# Report_format: table
+# Report_file: 1atn.psiphi
+########################################
+
+#=======================================
+#
+# Sequence:      from: 1   to: 260
+# HitCount: 62
+#
+# Chain: 2
+#
+#=======================================
+
+  Start     End   Score    phi    psi
+      4       4     0.0  -152.91   162.88
+      5       5     0.0  -129.90   132.52
+      6       6     0.0  -142.63   113.29
+      7       7     0.0   -91.20   109.22
+      8       8     0.0   -99.20   117.89
+      9       9     0.0   -56.16   115.60
+     10      10     0.0    57.98    45.32
+     11      11     0.0   -59.93   122.46
+     12      12     0.0  -160.93  -176.93
+     13      13     0.0   -55.71   -39.72
+     14      14     0.0   -67.65   -49.61
+     15      15     0.0   -63.01   -41.04
+     16      16     0.0   -71.25   -23.04
+     17      17     0.0   -69.32   -27.48
+     18      18     0.0   -71.35   139.52
+     19      19     0.0   -80.91   -39.47
+     20      20     0.0   -66.20   -52.09
+     21      21     0.0   -58.24   -49.39
+     22      22     0.0   -55.11   -37.72
+     23      23     0.0   -69.44   -26.56
+     24      24     0.0   -89.18   -40.94
+     25      25     0.0   -58.18   -50.57
+     26      26     0.0   -55.42   -35.34
+     27      27     0.0   -75.89   -29.61
+     28      28     0.0   -73.06   -47.91
+     29      29     0.0   -58.27   -39.38
+     30      30     0.0   -74.40     7.40
+     31      31     0.0   -88.83   -12.94
+     32      32     0.0  -112.19   143.00
+     33      33     0.0   -83.95   -22.06
+     34      34     0.0  -139.78   125.86
+     35      35     0.0  -130.67   137.57
+     36      36     0.0  -111.45   130.80
+     37      37     0.0  -122.64   128.08
+     38      38     0.0  -107.31   161.06
+     39      39     0.0    69.88    33.76
+     40      40     0.0   -78.38    95.67
+     41      41     0.0  -100.44    80.73
+     42      42     0.0  -131.78   103.94
+     43      43     0.0   -71.07   -45.38
+     44      44     0.0   -98.79    -4.45
+     45      45     0.0    75.81    20.16
+     46      46     0.0   -65.57   -34.72
+     47      47     0.0   -76.51   -33.90
+     48      48     0.0   -69.12   -40.81
+     49      49     0.0   -52.66   -49.63
+     50      50     0.0   -66.30   -36.64
+     51      51     0.0   -67.41   -40.85
+     52      52     0.0   -74.64   -31.01
+     53      53     0.0   -55.01   -50.20
+     54      54     0.0   -54.59   -54.81
+     55      55     0.0   -67.07   -26.37
+     56      56     0.0  -114.18    26.44
+     57      57     0.0   -71.15   -21.29
+     58      58     0.0  -116.13   -27.89
+     59      59     0.0  -120.69   134.74
+     60      60     0.0   -67.87   -18.39
+     61      61     0.0  -121.37    38.83
+     62      62     0.0   -64.44   -32.21
+     63      63     0.0  -145.31   135.69
+     64      64     0.0  -115.03   154.92
+     65      65     0.0  -120.22   167.29
+
+#---------------------------------------
+#---------------------------------------
+
+Data files
+
+Notes
+
+   None.
+
+References
+
+   None.
+
+Warnings
+
+   None.
+
+Diagnostic Error Messages
+
+   None.
+
+Exit status
+
+   It always exits with status 0.
+
+Known bugs
+
+   None.
+
+See also
+
+   Program name Description
+
+Author(s)
+
+   Damian Counsell (d.counsell © rfcgr.mrc.ac.uk)
+   MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
+   Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
+
+History
+
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+
+Comments
+
+   None

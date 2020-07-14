@@ -1,5 +1,3 @@
-<!--START OF HEADER - DON'T ALTER -->
-
 <HTML>
 <HEAD>
   <TITLE>
@@ -8,13 +6,9 @@
 </HEAD>
 <BODY BGCOLOR="#FFFFFF" text="#000000">
 
-
-
-
-
 <table align=center border=0 cellspacing=0 cellpadding=0>
 <tr><td valign=top>
-<A HREF="index.html" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
@@ -28,36 +22,14 @@ restover
 
 
 
-
-
-
-<!--END OF HEADER-->
-
 <H2>
     Function
 </H2>
 Finds restriction enzymes that produce a specific overhang
 
-<!--
-DON'T WRITE ANYTHING HERE.
-IT IS DONE FOR YOU.
--->
-
-
-
-
 <H2>
     Description
 </H2>
-
-<!-- 
-	This is the main part of the document.
-        This is what the user looks at to find out if this program will do what he wants. 
-        Long description.
-        Why it is useful.
-        When it should/shouldn't be used.
-        Algorithms
-  -->
 
 The Restriction Enzyme database (REBASE) is a collection of information
 about restriction enzymes and related proteins.  It contains published
@@ -82,26 +54,9 @@ that create the desired overhang sequence when they cut the
 input sequence. 
 
 
-
-
-
-
-
-
-
-
-
-
 <H2>
     Usage
 </H2>
-
-<!--  
-	Example usage, as run from the command-line.
-        Many examples illustrating different behaviours is good.
- -->
-
-
 <b>Here is a sample session with restover</b>
 <p>
 
@@ -124,7 +79,6 @@ Output file [hsfau.restover]: <b></b>
 <H2>
     Command line arguments
 </H2>
-
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
    Standard (Mandatory) qualifiers:
@@ -134,6 +88,7 @@ Output file [hsfau.restover]: <b></b>
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers:
+   -datafile           datafile   Alternative RE data file
    -min                integer    Minimum cuts per RE
    -max                integer    Maximum cuts per RE
    -single             boolean    Force single site only cuts
@@ -144,7 +99,6 @@ Output file [hsfau.restover]: <b></b>
    -[no]ambiguity      boolean    Allow ambiguous matches
    -plasmid            boolean    Allow circular DNA
    -[no]commercial     boolean    Only enzymes with suppliers
-   -datafile           datafile   Alternative RE data file
    -html               boolean    Create HTML output
    -[no]limit          boolean    Limits reports to one isoschizomer
    -alphabetic         boolean    Sort output alphabetically
@@ -236,6 +190,13 @@ Output file [hsfau.restover]: <b></b>
 </tr>
 
 <tr>
+<td>-datafile</td>
+<td>Alternative RE data file</td>
+<td>Data file</td>
+<td><i>File in the data file path</i></td>
+</tr>
+
+<tr>
 <td>-min</td>
 <td>Minimum cuts per RE</td>
 <td>Integer from 1 to 1000</td>
@@ -299,13 +260,6 @@ Output file [hsfau.restover]: <b></b>
 </tr>
 
 <tr>
-<td>-datafile</td>
-<td>Alternative RE data file</td>
-<td>Data file</td>
-<td><i>File in the data file path</i></td>
-</tr>
-
-<tr>
 <td>-html</td>
 <td>Create HTML output</td>
 <td>Boolean value Yes/No</td>
@@ -343,31 +297,11 @@ Output file [hsfau.restover]: <b></b>
 </table>
 
 
-<!--
-DON'T WRITE ANYTHING HERE.
-IT IS DONE FOR YOU.
--->
-
-
-
-
-
-
-
-
 <H2>
     Input file format
 </H2>
 
-<!-- 
-        This includes example input file formats.
-        This should be a detailed description and example - assume
-        someone will want to parse this file and will want to know what
-        happens in unusual cases - null input, etc. 
-   -->
-
-
-<p>restover</b> reads in a normal nucleic acid sequence USA.
+<b>restover</b> reads in a normal nucleic acid sequence USA.
 
 <p>
 
@@ -463,13 +397,6 @@ SQ   Sequence 518 BP; 125 A; 139 C; 148 G; 106 T; 0 other;
     Output file format
 </H2>
 
-<!-- 
-        This includes example output file formats.
-        This should be a detailed description and example - assume
-        someone will want to parse this file and will want to know what
-        happens in unusual cases - null output, errors etc. 
-   -->
-
 
 <a name="output.1"></a>
 <h3>Output files for usage example </h3>
@@ -481,7 +408,7 @@ SQ   Sequence 518 BP; 125 A; 139 C; 148 G; 106 T; 0 other;
 # Minimum cuts per enzyme: 1
 # Maximum cuts per enzyme: 2000000000
 # Minimum length of recognition site: 2
-# Number of hits with any overlap: 53
+# Number of hits with any overlap: 54
 # Base Number	Enzyme		Site		5'	3'	[5'	3']
 	11	TaqI            TCGA            11	13	
 	28	AciI            CCGC            25	27	
@@ -522,13 +449,6 @@ program reports enzymes that cut at two or four sites.
     Data files
 </H2>
 
-<!-- 
-        Any data files used (e.g. translation table file)
-        This includes example data file formats if they are
-        not obvious.
-	If you wish to include the standard description of what data
-	files are and how to use embossdata to inspect and retrieve
-	them, use:
 <p>
 EMBOSS data files are distributed with the application and stored
 in the standard EMBOSS data directory, which is defined
@@ -569,146 +489,93 @@ The directories are searched in the following order:
 </ul>
 <p>
 
-   -->
 
+<p>
+
+The EMBOSS REBASE restriction enzyme data files are stored iin
+directory 'data/REBASE/*' under the EMBOSS installation directory.
+
+<p>
+
+These files must first be set up using the program <a
+href="rebaseextract.html">'<b>rebaseextract</b>'</a>.  Running
+'rebaseextract' may be the job of your system manager.
+
+<p>
+      
 The data files are stored in the REBASE directory of the standard EMBOSS
-data directory.  The names are:
+data directory. The names are:
 
-<p>
 <ul>
-<li>      embossre.enz Cleavage information 
-<li>      embossre.ref Reference/methylation information 
-<li>      embossre.sup Supplier information 
+<li> embossre.enz     Cleavage information
+<li> embossre.ref     Reference/methylation information
+<li> embossre.sup     Supplier information
 </ul>
+	 
+The column information is described at the top of the data files
+	 
 <p>
-The column information is described at the top of the data files 
-
-
-
-
-
-
-
-
-
-
-
+	 
+The reported enzyme from any one group of isoschizomers (the prototype)
+is specified in the REBASE database and the information is held in the
+data file 'embossre.equ'.  You may edit this file to set your own
+preferred prototype, if you wish. 
+	 
+<p>
+	 
+The format of the file "embossre.equ" is
+<br>
+Enzyme-name Prototype-name
+	 
+<p>
+	 
+i.e.  two columns of enzyme names separated by a space.  The first name
+of the pair of enzymes is the name that is not preferred and the second
+is the preferred (prototype) name. 
+	 
+	          
 
 
 <H2>
     Notes
 </H2>
 
-<!-- 
-        Restrictions.
-        Interesting behaviour.
-        Useful things you can do with this program.
-   -->
-
 The data files must have been created before running this program.  This
 is done by running the <b>rebaseextract</b> program with the "withrefm" file
 from an REBASE release.  You may have to ask your system manager to do
 this. 
 
-
-
-
-
-
-
-
 <H2>
     References
 </H2>
-
-<!-- 
-        Bibliography for methods used.
-   -->
-
 None.
-
-
-
-
-
-
 <H2>
     Warnings
 </H2>
 
-<!-- 
-        Potentially stupid things the program will let you do.
-   -->
-
 None.
-
-
-
-
-
-
 
 <H2>
     Diagnostic Error Messages
 </H2>
 
-<!-- 
-        Error messages specific to this program, eg:
-        "FATAL xxx" - means you have not set up the xxx data using program <b>prog</b>.<p>
-   -->
-
 None.
-
-
-
-
-
-
 
 <H2>
     Exit status
 </H2>
 
-<!-- 
-        Description of the exit status for various error conditions
-   -->
-
 It always exits with status 0.
-
-
-
-
-
-
-
 
 <H2>
     Known bugs
 </H2>
 
-
-<!-- 
-        Bugs noted but not yet fixed.
-   -->
-
 None.
 
-
-
-
-
-
-
-
-<!--
-<H2>
-    See also
-</H2>
--->
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
-<tr><td><a href="recite.html">recite</a></td><td>Find changes to an enzyme site that introduce new enzyme sites</td></tr>
 <tr><td><a href="recoder.html">recoder</a></td><td>Remove restriction sites but maintain the same translation</td></tr>
 <tr><td><a href="redata.html">redata</a></td><td>Search REBASE for enzyme name, references, suppliers etc</td></tr>
 <tr><td><a href="remap.html">remap</a></td><td>Display a sequence with restriction cut sites, translation etc</td></tr>
@@ -717,27 +584,10 @@ None.
 <tr><td><a href="silent.html">silent</a></td><td>Silent mutation restriction enzyme scan</td></tr>
 </table>
 
-<!-- 
-        Add any comments about other associated programs (to prepare
-        data files?) that seealso doesn't find. 
-   -->
-
-
-
-
-
-
-
-
-
 
 <H2>
     Author(s)
 </H2>
-<!--
-        Who has worked on the program in the past.
-   -->
-
 Bernd Jagla (bernd&nbsp;&copy;&nbsp;golgi.ski.mskcc.org)
 <br>
 Cellular Biochemistry and Biophysics Program, Rockefeller
@@ -745,77 +595,24 @@ Research Laboratories, Memorial Sloan-Kettering Cancer Center, 1275 York
 Avenue, Box 251,New York, NY 10021.
 
 
-
-
-
-
-
-
-
-
-
 <H2>
     History
 </H2>
 
-<!--
-        What changes have been made.
-   -->
-
 Written (Jan 2001) - Bernd Jagla
-
-<!--
-<p>
-[an error occurred while processing this directive]
--->
-
-
-
-
-
-
-
 
 
 
 <H2>
     Target users
 </H2>
-
-<!--
-        For general users, requested by one user, for EMBOSS site
-        maintainers, for EMBOSS developers etc.
-        eg:
-        "This program is intended to be used by everyone and everything,
-        from naive users to embedded scripts." 
-	Which is easy to include using:
-   -->
-
 This program is intended to be used by everyone and everything, from naive users to embedded scripts.
-
-
-
-
-
-
-
-
-
-
 
 
 <H2>
     Comments
 </H2>
-
-<!--
-	Any comments, requests etc. that people have about the program
-   -->
-
-
-
-
-
+None
 
 
 

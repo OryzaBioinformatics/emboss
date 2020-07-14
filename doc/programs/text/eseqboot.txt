@@ -1,25 +1,24 @@
 
-                              EMBOSS: eseqboot
-     _________________________________________________________________
-   
-                               Program eseqboot
-                                       
+                                 eseqboot 
+
+
+
 Function
 
    Conversion of PHYLIP's seqboot
-   
+
 Description
 
    ESEQBOOT -- Bootstrap, Jackknife, or Permutation Resampling of
    Molecular Sequence, Restriction Site, Gene Frequency or Character Data
-   
+
    Phylip seqboot documentation.
-   
+
 Usage
 
    Here is a sample session with eseqboot using the data below and
    replicates are set to 10 and seed to 4331
-   
+
     5    6
 Alpha     AACAAC
 Beta      AACCCC
@@ -124,7 +123,7 @@ Command line arguments
    -progress           bool       Print indications of progress of run
 
    Advanced qualifiers: (none)
-   
+
    Mandatory qualifiers Allowed values Default
    [-datafile]
    (Parameter 1) Input file Input file Required
@@ -151,7 +150,7 @@ Command line arguments
    -progress Print indications of progress of run Yes/No No
    Advanced qualifiers Allowed values Default
    (none)
-   
+
 Data files
 
 Notes
@@ -174,11 +173,11 @@ Author(s)
    Felsenstein. Written by Joseph Felsenstein. Permission is granted to
    copy this document provided that no fee is charged for it and that
    this copyright notice is not removed.
-   
+
    This application was modified for inclusion in EMBOSS by Ian Longden
    (il@sanger.ac.uk) Informatics Division, The Sanger Centre, Wellcome
    Trust Genome Campus, Hinxton, Cambridge, CB10 1SA, UK.
-   
+
 Priority
 
 Target users

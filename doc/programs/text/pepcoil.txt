@@ -1,12 +1,12 @@
 
                                   pepcoil 
-                                      
-   
-   
+
+
+
 Function
 
    Predicts coiled coil regions
-   
+
 Description
 
    Coiled coils are formed by two or three alpha helices in parallel and
@@ -15,28 +15,28 @@ Description
    hydrophobic residues that is repeated every seven residues. The seven
    positions of the heptad repeat are designated a through g, a and d
    being generally hydrophobic, while the others are hydrophilic.
-   
+
    The parallel two-stranded alpha-helical coiled coil is the most
    frequently encountered subunit-oligomerization motif in proteins.
-   
+
    pepcoil calculates the probability of a coiled-coil structure for
    windows of 28 residues through a protein sequence using the method of
    Lupas A, van Dyke M & Stock J (1991); Science 252:1162-4
-   
+
 Usage
 
    Here is a sample session with pepcoil
-   
+
 
 % pepcoil 
 Predicts coiled coil regions
 Input sequence(s): tsw:gcn4_yeast
 Window size [28]: 
 Output file [gcn4_yeast.pepcoil]: 
-   
+
    Go to the input files for this example
    Go to the output files for this example
-   
+
 Command line arguments
 
    Standard (Mandatory) qualifiers:
@@ -85,7 +85,7 @@ Command line arguments
    -error               boolean    Report errors
    -fatal               boolean    Report fatal errors
    -die                 boolean    Report deaths
-   
+
 
    Standard (Mandatory) qualifiers Allowed values Default
    [-sequence]
@@ -99,18 +99,18 @@ Command line arguments
    -[no]coil Report coiled coil regions Boolean value Yes/No Yes
    -frame Show coil frameshifts Boolean value Yes/No Yes if -coil is true
    -[no]other Report non coiled coil regions Boolean value Yes/No Yes
-   
+
 Input file format
 
    pepcoil reads in a protein sequence USA.
-   
+
   Input files for usage example
-  
+
    'tsw:gcn4_yeast' is a sequence entry in the example protein database
    'tsw'
-   
+
   Database entry: tsw:gcn4_yeast
-  
+
 ID   GCN4_YEAST     STANDARD;      PRT;   281 AA.
 AC   P03069; P03068;
 DT   21-JUL-1986 (Rel. 01, Created)
@@ -216,17 +216,17 @@ SQ   SEQUENCE   281 AA;  31310 MW;  A2155238 CRC32;
      KPNSVVKKSH HVGKDDESRL DHLGVVAYNR KQRSIPLSPI VPESSDPAAL KRARNTEAAR
      RSRARKLQRM KQLEDKVEEL LSKNYHLENE VARLKKLVGE R
 //
-   
+
 Output file format
 
   Output files for usage example
-  
+
    The SwissProt annotation marks the true leucine zipper motif as from
    253 to 274. The leucine zipper is a special case of a coiled-coil
    region.
-   
+
   File: gcn4_yeast.pepcoil
-  
+
 PEPCOIL of GCN4_YEAST
    using a window of 28 residues
 
@@ -237,36 +237,36 @@ Other structures from 1 to 232 (232 residues)
 Prediction starts at 233
 Probable coiled-coil from 233 to 281 (49 residues)
    Max score: 1.910 (probability 1.00)
-   
+
 Data files
 
    None.
-   
+
 Notes
 
    None.
-   
+
 References
 
     1. Lupas A, van Dyke M & Stock J; Predicting Coiled Coils from
        Protein Sequences. Science 252:1162-4 (1991)
-       
+
 Warnings
 
    None.
-   
+
 Diagnostic Error Messages
 
    None.
-   
+
 Exit status
 
    It always exits with a status of 0.
-   
+
 Known bugs
 
    None.
-   
+
 See also
 
     Program name                         Description
@@ -287,22 +287,24 @@ See also
    pscan          Scans proteins using PRINTS
    sigcleave      Reports protein signal cleavage sites
    tmap           Displays membrane spanning regions
-   
+
 Author(s)
 
    Alan Bleasby (ableasby © rfcgr.mrc.ac.uk)
    MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
    Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
-   
+
    Original program "PEPCOIL" by Peter Rice (EGCG 1991)
-   
+
 History
 
    Written (1999) - Alan Bleasby
-   
+
 Target users
 
    This program is intended to be used by everyone and everything, from
    naive users to embedded scripts.
-   
+
 Comments
+
+   None

@@ -7,11 +7,9 @@
 </HEAD>
 <BODY BGCOLOR="#FFFFFF" text="#000000">
 
-
-
 <table align=center border=0 cellspacing=0 cellpadding=0>
 <tr><td valign=top>
-<A HREF="index.html" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
@@ -26,24 +24,14 @@ embossdata
 
 
 
-
 <H2>
     Function
 </H2>
-
-
-
-<!--
-DON'T WRITE ANYTHING HERE.
-IT IS DONE FOR YOU.
--->
 Finds or fetches the data files read in by the EMBOSS programs
-
 
 <H2>
     Description
 </H2>
-
 
 This is a utility to indicate which directories can hold EMBOSS
 data files and what the names of these files are. 
@@ -89,8 +77,6 @@ order for you to modify them.
 <H2>
     Usage
 </H2>
-
-
 <b>Here is a sample session with embossdata</b>
 <p>
 Display the directories searched for EMBOSS data files: 
@@ -109,9 +95,9 @@ Finds or fetches the data files read in by the EMBOSS programs
 
 .                                                            Exists
 .embossdata                                                  Does not exist
-/people/gwilliam                                             Exists
-/people/gwilliam/.embossdata                                 Does not exist
-/packages/emboss_dev/gwilliam/emboss/emboss/emboss/data      Exists
+/homes/pmr                                                   Exists
+/homes/pmr/.embossdata                                       Does not exist
+/homes/pmr/local/share/EMBOSS/data/                          Exists
 
 </pre></td></tr></table><p>
 <p>
@@ -130,9 +116,8 @@ Finds or fetches the data files read in by the EMBOSS programs
 
 
 
-DIRECTORY: /packages/emboss_dev/gwilliam/emboss/emboss/emboss/data
+DIRECTORY: /homes/pmr/local/share/EMBOSS/data/
 
-  EBLOSUM62-12
   EBLOSUM30
   EBLOSUM35
   EBLOSUM40
@@ -141,7 +126,7 @@ DIRECTORY: /packages/emboss_dev/gwilliam/emboss/emboss/emboss/data
   EBLOSUM55
   EBLOSUM60
   EBLOSUM62
-  ENUC.4.2
+  EBLOSUM62-12
   EBLOSUM65
   EBLOSUM70
   EBLOSUM75
@@ -159,12 +144,17 @@ DIRECTORY: /packages/emboss_dev/gwilliam/emboss/emboss/emboss/data
   EGC.13
   EGC.14
   EGC.15
+  EGC.16
   EGC.2
+  EGC.21
+  EGC.22
+  EGC.23
   EGC.3
   EGC.4
   EGC.5
   EGC.6
   EGC.9
+  ENUC.4.2
   ENUC.4.4
   EPAM10
   EPAM100
@@ -187,7 +177,6 @@ DIRECTORY: /packages/emboss_dev/gwilliam/emboss/emboss/emboss/data
   EPAM260
   EPAM270
   EPAM280
-  Eaa_acc_surface.dat
   EPAM290
   EPAM30
   EPAM300
@@ -217,252 +206,56 @@ DIRECTORY: /packages/emboss_dev/gwilliam/emboss/emboss/emboss/data
   EPAM70
   EPAM80
   EPAM90
-  Eangles.dat
-  Eamino.dat
+  Eaa_acc_surface.dat
   Eaa_hydropathy.dat
   Eaa_properties.dat
+  Eamino.dat
+  Eangles.dat
   Eangles_tri.dat
   Eantigenic.dat
   Ebases.iub
   Edayhoff.freq
   Edna.melt
+  Eembl.ior
   Eenergy.dat
   Efeatures.embl
+  Efeatures.emboss
   Efeatures.gff
+  Efeatures.pir
+  Efeatures.protein
+  Efeatures.swiss
   Efreqs.dat
   Ehth.dat
   Ehth87.dat
+  Ememe.dat
   Enakai.dat
   Epepcoil.dat
   Epk.dat
   Epprofile
+  Eprior1.plib
+  Eprior30.plib
   Erna.melt
   Esig.euk
   Esig.pro
   Etags.embl
-  Etags.gff
-  Ewhite-wimley.dat
-  Makefile.am
-  embossre.equ
-  Makefile.in
-  Makefile
-  Eprior1.plib
-  Ememe.dat
-  EGC.16
-  jjj
-  Eprior30.plib
-  Eembl.ior
-  tfinsect
-  tfvertebrate
-  tfplant
-  tfother
-  EGC.21
-  EGC.22
-  EGC.23
-  Ecolour.map
-  Evdw.dat
-  Efeatures.emboss
-  Efeatures.swiss
-  Etags.swiss
   Etags.emboss
-  Efeatures.pir
-  Efeatures.protein
+  Etags.gff
   Etags.pir
   Etags.protein
+  Etags.swiss
+  Ewhite-wimley.dat
+  embossre.equ
   Emwfilter.dat
-  Emassmod.dat
   Emass.dat
+  Emassmod.dat
   Etcode.dat
+  Evdw.dat
+  Ehet.dat
 
 
-DIRECTORY: /packages/emboss_dev/gwilliam/emboss/emboss/emboss/data/CODONS
+DIRECTORY: /homes/pmr/local/share/EMBOSS/data/AAINDEX
 
-  Eaidlav.cut
-  Eacc.cut
-  Makefile.in
-  Eadenovirus5.cut
-  Eadenovirus7.cut
-  Eanasp.cut
-  Eani.cut
-  Eani_h.cut
-  Eanidmit.cut
-  Easn.cut
-  Eath.cut
-  Eatu.cut
-  Eavi.cut
-  Ebja.cut
-  Ebly.cut
-  Ebme.cut
-  Ebmo.cut
-  Ebna.cut
-  Ebov.cut
-  Ebovsp.cut
-  Ebst.cut
-  Ebsu.cut
-  Ef1.cut
-  Ebsu_h.cut
-  Ecac.cut
-  Ecal.cut
-  Eccr.cut
-  Ecel.cut
-  Echi.cut
-  Echicken.cut
-  Echisp.cut
-  Echk.cut
-  Echmp.cut
-  Echnt.cut
-  Echos.cut
-  Echzm.cut
-  Echzmrubp.cut
-  Ecpx.cut
-  Ecre.cut
-  Ecrisp.cut
-  Ectr.cut
-  Edayhoff.cut
-  Eddi.cut
-  Eddi_h.cut
-  Edog.cut
-  Edro.cut
-  Edro_h.cut
-  Eeca.cut
-  Edrosophila.cut
-  Eeco.cut
-  Eeco_h.cut
-  Eecoli.cut
-  Efish.cut
-  Efmdvpolyp.cut
-  Eham.cut
-  Ehha.cut
-  Ehin.cut
-  Ehma.cut
-  Ehum.cut
-  Ehuman.cut
-  Ekla.cut
-  Ekpn.cut
-  Ella.cut
-  Emac.cut
-  Emaize.cut
-  Emam_h.cut
-  Emixlg.cut
-  Emouse.cut
-  Emsa.cut
-  Emse.cut
-  Emta.cut
-  Emtu.cut
-  Emus.cut
-  Emussp.cut
-  Emva.cut
-  Emze.cut
-  Emzecp.cut
-  Encr.cut
-  Eneu.cut
-  Engo.cut
-  Eoncsp.cut
-  Epae.cut
-  Epea.cut
-  Epet.cut
-  Epfa.cut
-  Ephix174.cut
-  Ephv.cut
-  Ephy.cut
-  Epig.cut
-  Epolyomaa2.cut
-  Epombe.cut
-  Epombecai.cut
-  Epot.cut
-  Eppu.cut
-  Epse.cut
-  Epsy.cut
-  Epvu.cut
-  Erab.cut
-  Erabbit.cut
-  Erabsp.cut
-  Erat.cut
-  Eratsp.cut
-  Erca.cut
-  Erhm.cut
-  Eric.cut
-  Erle.cut
-  Erme.cut
-  Ersp.cut
-  Esalsp.cut
-  Esau.cut
-  Esco.cut
-  Esgi.cut
-  Eshp.cut
-  Eshpsp.cut
-  Esli.cut
-  Eslm.cut
-  Esma.cut
-  Esmi.cut
-  Esmu.cut
-  Esoy.cut
-  Espi.cut
-  Espn.cut
-  Espo.cut
-  Espo_h.cut
-  Espu.cut
-  Esta.cut
-  Esty.cut
-  Esus.cut
-  Esv40.cut
-  Esyhsp.cut
-  Esynsp.cut
-  Etbr.cut
-  Etcr.cut
-  Eter.cut
-  Etetsp.cut
-  Etob.cut
-  Etobcp.cut
-  Etom.cut
-  Etrb.cut
-  Evco.cut
-  Ewht.cut
-  Exel.cut
-  Exenopus.cut
-  Eyeast.cut
-  Eyeastcai.cut
-  Eyen.cut
-  Eysc.cut
-  Eysc_h.cut
-  Eyscmt.cut
-  Eysp.cut
-  Ezebrafish.cut
-  Ezma.cut
-  Makefile.am
-  Makefile
-  EAedes_atropalpus.cut
-  EDictyostelium_discoideum.cut
-  EAndroctonus_australis.cut
-  EAmblyomma_americanum.cut
-  EAedes_albopictus.cut
-  EAphrodite_aculeata.cut
-  EAsellus_aquaticus.cut
-  EAcanthocheilonema_viteae.cut
-  EAstacus_astacus.cut
-  EAedes_aegypti.cut
-  EAgelenopsis_aperta.cut
-  EAcrolepiopsis_assectella.cut
-  EAnadara_trapezia.cut
-
-
-DIRECTORY: /packages/emboss_dev/gwilliam/emboss/emboss/emboss/data/REBASE
-
-  Makefile.in
-  Makefile.am
   dummyfile
-  Makefile
-  embossre.enz
-  embossre.ref
-  embossre.sup
-
-
-DIRECTORY: /packages/emboss_dev/gwilliam/emboss/emboss/emboss/data/AAINDEX
-
-  Makefile.in
-  Makefile.am
-  dummyfile
-  Makefile
   andn920101
   argp820101
   argp820102
@@ -900,6 +693,239 @@ DIRECTORY: /packages/emboss_dev/gwilliam/emboss/emboss/emboss/data/AAINDEX
   kimc930101
   monm990101
   blam930101
+  pars000101
+  pars000102
+  kums000101
+  kums000102
+  kums000103
+  kums000104
+  takk010101
+  fodm020101
+  nadh010101
+  nadh010102
+  nadh010103
+  nadh010104
+  nadh010105
+  nadh010106
+  nadh010107
+  monm990201
+  koep990101
+  koep990102
+  cedj970101
+  cedj970102
+  cedj970103
+  cedj970104
+  cedj970105
+  fuks010101
+  fuks010102
+  fuks010103
+  fuks010104
+  fuks010105
+  fuks010106
+  fuks010107
+  fuks010108
+  fuks010109
+  fuks010110
+  fuks010111
+  fuks010112
+  avbf000101
+  avbf000102
+  avbf000103
+  avbf000104
+  avbf000105
+  avbf000106
+  avbf000107
+  avbf000108
+  avbf000109
+  yanj020101
+  mits020101
+  tsaj990101
+  tsaj990102
+  cosi940101
+  ponp930101
+  wilm950101
+  wilm950102
+  wilm950103
+  wilm950104
+  kuhl950101
+  guod860101
+  jurd980101
+
+
+DIRECTORY: /homes/pmr/local/share/EMBOSS/data/CODONS
+
+  Eacc.cut
+  Eadenovirus5.cut
+  Eadenovirus7.cut
+  Eaidlav.cut
+  Eanasp.cut
+  Eani.cut
+  Eani_h.cut
+  Eanidmit.cut
+  Easn.cut
+  Eath.cut
+  Eatu.cut
+  Eavi.cut
+  Ebja.cut
+  Ebly.cut
+  Ebme.cut
+  Ebmo.cut
+  Ebna.cut
+  Ebov.cut
+  Ebovsp.cut
+  Ebst.cut
+  Ebsu.cut
+  Ebsu_h.cut
+  Ecac.cut
+  Ecal.cut
+  Eccr.cut
+  Ecel.cut
+  Echi.cut
+  Echicken.cut
+  Echisp.cut
+  Echk.cut
+  Echmp.cut
+  Echnt.cut
+  Echos.cut
+  Echzm.cut
+  Echzmrubp.cut
+  Ecpx.cut
+  Ecre.cut
+  Ecrisp.cut
+  Ectr.cut
+  Edayhoff.cut
+  Eddi.cut
+  Eddi_h.cut
+  Edog.cut
+  Edro.cut
+  Edro_h.cut
+  Edrosophila.cut
+  Eeca.cut
+  Eeco.cut
+  Eeco_h.cut
+  Eecoli.cut
+  Ef1.cut
+  Efish.cut
+  Efmdvpolyp.cut
+  Eham.cut
+  Ehha.cut
+  Ehin.cut
+  Ehma.cut
+  Ehum.cut
+  Ehuman.cut
+  Ekla.cut
+  Ekpn.cut
+  Ella.cut
+  Emac.cut
+  Emaize.cut
+  Emam_h.cut
+  Emixlg.cut
+  Emouse.cut
+  Emsa.cut
+  Emse.cut
+  Emta.cut
+  Emtu.cut
+  Emus.cut
+  Emussp.cut
+  Emva.cut
+  Emze.cut
+  Emzecp.cut
+  Encr.cut
+  Eneu.cut
+  Engo.cut
+  Eoncsp.cut
+  Epae.cut
+  Epea.cut
+  Epet.cut
+  Epfa.cut
+  Ephix174.cut
+  Ephv.cut
+  Ephy.cut
+  Epig.cut
+  Epolyomaa2.cut
+  Epombe.cut
+  Epombecai.cut
+  Epot.cut
+  Eppu.cut
+  Epse.cut
+  Epsy.cut
+  Epvu.cut
+  Erab.cut
+  Erabbit.cut
+  Erabsp.cut
+  Erat.cut
+  Eratsp.cut
+  Erca.cut
+  Erhm.cut
+  Eric.cut
+  Erle.cut
+  Erme.cut
+  Ersp.cut
+  Esalsp.cut
+  Esau.cut
+  Esco.cut
+  Esgi.cut
+  Eshp.cut
+  Eshpsp.cut
+  Esli.cut
+  Eslm.cut
+  Esma.cut
+  Esmi.cut
+  Esmu.cut
+  Esoy.cut
+  Espi.cut
+  Espn.cut
+  Espo.cut
+  Espo_h.cut
+  Espu.cut
+  Esta.cut
+  Esty.cut
+  Esus.cut
+  Esv40.cut
+  Esyhsp.cut
+  Esynsp.cut
+  Etbr.cut
+  Etcr.cut
+  Eter.cut
+  Etetsp.cut
+  Etob.cut
+  Etobcp.cut
+  Etom.cut
+  Etrb.cut
+  Evco.cut
+  Ewht.cut
+  Exel.cut
+  Exenopus.cut
+  Eyeast.cut
+  Eyeastcai.cut
+  Eyen.cut
+  Eysc.cut
+  Eysc_h.cut
+  Eyscmt.cut
+  Eysp.cut
+  Ezebrafish.cut
+  Ezma.cut
+  EAedes_atropalpus.cut
+  EDictyostelium_discoideum.cut
+  EAndroctonus_australis.cut
+  EAmblyomma_americanum.cut
+  EAedes_albopictus.cut
+  EAedes_aegypti.cut
+  EAphrodite_aculeata.cut
+  EAsellus_aquaticus.cut
+  EAcanthocheilonema_viteae.cut
+  EAstacus_astacus.cut
+  EAgelenopsis_aperta.cut
+  EAcrolepiopsis_assectella.cut
+  EAnadara_trapezia.cut
+
+
+DIRECTORY: /homes/pmr/local/share/EMBOSS/data/REBASE
+
+  dummyfile
+  embossre.enz
+  embossre.ref
+  embossre.sup
 
 </pre></td></tr></table><p>
 <p>
@@ -916,7 +942,7 @@ Make a copy of an EMBOSS data file in the current directory:
 % <b>embossdata -fetch -filename Epepcoil.dat </b>
 Finds or fetches the data files read in by the EMBOSS programs
 
-File '/packages/emboss_dev/gwilliam/emboss/emboss/emboss/data/Epepcoil.dat' has been copied successfully.
+File '/homes/pmr/local/share/EMBOSS/data/Epepcoil.dat' has been copied successfully.
 
 </pre></td></tr></table><p>
 <p>
@@ -940,51 +966,19 @@ Finds or fetches the data files read in by the EMBOSS programs
 
 File ./EPAM60                                                     Does not exist
 File .embossdata/EPAM60                                           Does not exist
-File /people/gwilliam/EPAM60                                      Does not exist
-File /people/gwilliam/.embossdata/EPAM60                          Does not exist
-File /packages/emboss_dev/gwilliam/emboss/emboss/emboss/data/EPAM Exists
+File /homes/pmr/EPAM60                                            Does not exist
+File /homes/pmr/.embossdata/EPAM60                                Does not exist
+File /homes/pmr/local/share/EMBOSS/data/EPAM60                    Exists
 
 </pre></td></tr></table><p>
 <p>
 <p>
 
 
-<!--
-Display the directories searched for EMBOSS data files:
-<pre>
-% embossdata
-</pre>
-
-<p>
-Display the names of data file in all of the possible data directories:
-<pre>
-% embossdata -showall
-</pre>
-
-<p>
-Display the directories which contain a particular EMBOSS data file:
-<pre>
-% embossdata -filename EPAM60
-</pre>
-
-<p>
-Make a copy of an EMBOSS data file in the current directory:
-<pre>
-% embossdata -fetch -filename Epepcoil.dat
-</pre>
--->
 
 <H2>
     Command line arguments
 </H2>
-
-
-
-<!--
-DON'T WRITE ANYTHING HERE.
-IT IS DONE FOR YOU.
--->
-
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
    Standard (Mandatory) qualifiers (* if not always prompted):
@@ -1034,7 +1028,6 @@ IT IS DONE FOR YOU.
 </pre>
 </td></tr></table>
 <P>
-
 <table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
 <tr bgcolor="#FFFFCC">
 <th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
@@ -1059,7 +1052,7 @@ IT IS DONE FOR YOU.
 <td>-showall</td>
 <td>Show all potential EMBOSS data files</td>
 <td>Toggle value Yes/No</td>
-<td>&nbsp;</td>
+<td>No</td>
 </tr>
 
 <tr>
@@ -1092,7 +1085,6 @@ IT IS DONE FOR YOU.
 </table>
 
 
-
 <H2>
     Input file format
 </H2>
@@ -1103,16 +1095,14 @@ None.
 <p>
 
 
-
 <H2>
     Output file format
 </H2>
 
 
-All output is to stdout.
+All output is to stdout by default.
 
 <p>
-
 
 <a name="output.3"></a>
 <h3>Output files for usage example 3</h3>
@@ -1146,7 +1136,6 @@ All output is to stdout.
   P  5.28     0.0    0.008  0.0    0.013  0.0    0.0    0.0
 </pre>
 </td></tr></table><p>
-
 
 
 <H2>
@@ -1203,29 +1192,16 @@ It always exits with status 0
 
 None noted.
 
-<!--
-<H2>
-    See also
-</H2>
--->
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
 <tr><td><a href="embossversion.html">embossversion</a></td><td>Writes the current EMBOSS version number</td></tr>
 </table>
 
-<!--
-        Add any comments about other associated programs (to prepare
-        data files?) that seealso doesn't find.
-   -->
-
-
-
 
 <H2>
     Author(s)
 </H2>
-
 
 Gary Williams (gwilliam&nbsp;&copy;&nbsp;rfcgr.mrc.ac.uk)
 <br>
@@ -1234,34 +1210,22 @@ Wellcome Trust Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
 
 
 
-
 <H2>
     History
 </H2>
 
-<!--
-<p>
-[an error occurred while processing this directive]
--->
+
 
 <H2>
     Target users
 </H2>
+This program is intended to be used by everyone and everything, from naive users to embedded scripts.
 
-
-This program is intended to be used by everyone and everything,
-from naive users to embedded scripts. 
 
 <H2>
     Comments
 </H2>
-
-
-<pre>
-
 It should be possible to format the output for html.
-
-</pre>
 
 
 </BODY>

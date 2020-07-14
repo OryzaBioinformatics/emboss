@@ -1,42 +1,42 @@
 
                                 checktrans 
-                                      
-   
-   
+
+
+
 Function
 
    Reports STOP codons and ORF statistics of a protein
-   
+
 Description
 
    Reads in a protein sequence containing stops, and writes a report of
    any open reading frames (continuous protein sequence with no stops)
    that are greater than a minimum size. The default minimum ORF size is
    100 residues. It writes out any ORF sequences.
-   
+
    The input sequence might typically have been produced by transeq.
-   
+
    Note that if you have only translated a nucleic sequence in one frame,
    checktrans will miss possible ORFs in other frames. You have to give
    checktrans translations in all three (six?) frames in order for it to
    be effective at finding all possible ORFs.
-   
+
 Usage
 
    Here is a sample session with checktrans
-   
+
 
 % checktrans 
 Reports STOP codons and ORF statistics of a protein
-Input sequence(s): ../../data/paamir.pep
+Input sequence(s): paamir.pep
 Minimum ORF Length to report [100]: 
 Output file [paamir_1.checktrans]: 
 Output sequence [paamir_1.fasta]: 
 Output features [paamir_1.gff]: 
-   
+
    Go to the input files for this example
    Go to the output files for this example
-   
+
 Command line arguments
 
    Standard (Mandatory) qualifiers:
@@ -113,7 +113,7 @@ Command line arguments
    -error               boolean    Report errors
    -fatal               boolean    Report fatal errors
    -die                 boolean    Report deaths
-   
+
 
    Standard (Mandatory) qualifiers Allowed values Default
    [-sequence]
@@ -136,16 +136,16 @@ Command line arguments
    of STOPs. Boolean value Yes/No Yes
    Advanced (Unprompted) qualifiers Allowed values Default
    (none)
-   
+
 Input file format
 
    This program reads the USA of a protein sequence with STOP codons in
    it.
-   
+
   Input files for usage example
-  
-  File: ../../data/paamir.pep
-  
+
+  File: paamir.pep
+
 >PAAMIR_1 Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase regul
 ation
 GTAGRASARSPPAGRRELHDLPGEPGARAGSLRTALSDSHRRGNGWDRTRSGR*SACCSP
@@ -161,17 +161,25 @@ CPPGAACAGIGAAHQRGNGEAEAEDRAAPGPHRRPGPDQPGQGVADAAPWLGRARGAPAP
 VAGSDEAARADPEDRSGVAGKRAVRLSDPGRPEQ*QEGYRHHAGTGSAVRWRGAVSQCRL
 VAGQDQRSGGGGDQLPGRRAERLRRVLPDLFRSSRAGLAEGRSADPAIRFYLSVGGRQPV
 PRX
-   
+
 Output file format
 
    This program writes three files: the ORF report file
    (paamir_1.checktrans), the output sequence file (paamir_1.fasta) and
    the feature file (paamir_1.out3) which is in GFF format by default.
-   
+
+   The ORF report file gives the numeric count of the ORF, the position
+   of the terminating STOP codon, the length of the ORF, its start and
+   end positions and the name of the sequence it has been written out as.
+
+   The name of the output sequences is constructed from the name of the
+   input sequence followed by an underscore and then the numeric count of
+   the ORF (e.g. 'PAAMIR_1_7').
+
   Output files for usage example
-  
+
   File: paamir_1.checktrans
-  
+
 
 
 CHECKTRANS of PAAMIR_1 from 1 to 724
@@ -181,10 +189,10 @@ CHECKTRANS of PAAMIR_1 from 1 to 724
         7       635     357     278-634 PAAMIR_1_7
 
         Total STOPS:     7
-   
+
 
   File: paamir_1.fasta
-  
+
 >PAAMIR_1_7
 PPARRRWRRWRVTWQRGRWWSRLTSPASIRPPAGPSSRPAMVSSRRTRPSPPGPRRPTGR
 PCCSAAPRRPQATGGWKTCSGTCTTSTSTRHRGRSGWSARTTTAACLRASRKSMRAACSR
@@ -192,51 +200,43 @@ SAGSRPNRFAPTLMSSCITSTTGPPAWAGDRSHERQLAARQPARVAGAGPQPAGGGQRRP
 GLAADPHRLFGAPVLAAAGSLRRAGGRGLHQHFPEWPPRRDRCAARRRDSAHYPGGAGGV
 RKPRGALADHRAGVPRRDHPAARCPPGAACAGIGAAHQRGNGEAEAEDRAAPGPHRRPGP
 DQPGQGVADAAPWLGRARGAPAPVAGSDEAARADPEDRSGVAGKRAVRLSDPGRPEQ
-   
+
   File: paamir_1.gff
-  
+
 ##gff-version 2.0
-##date 2004-04-06
+##date 2004-07-15
 ##Type Protein PAAMIR_1
 PAAMIR_1        checktrans      misc_feature    278     634     0.000   +
 .       Sequence "PAAMIR_1.1"
-   
-   The ORF report file gives the numeric count of the ORF, the position
-   of the terminating STOP codon, the length of the ORF, its start and
-   end positions and the name of the sequence it has been written out as.
-   
-   The name of the output sequences is constructed from the name of the
-   input sequence followed by an underscore and then the numeric count of
-   the ORF (e.g. 'PAAMIR_1_7').
-   
+
 Data files
 
    None.
-   
+
 Notes
 
    None.
-   
+
 References
 
    None.
-   
+
 Warnings
 
    None.
-   
+
 Diagnostic Error Messages
 
    None.
-   
+
 Exit status
 
    This program always exits with a status of 0.
-   
+
 Known bugs
 
    None.
-   
+
 See also
 
    Program name                          Description
@@ -253,33 +253,28 @@ See also
    pepstats     Protein statistics
    pepwindow    Displays protein hydropathy
    pepwindowall Displays protein hydropathy of a set of sequences
-   
-     * transeq : Translate nucleic acid sequences
-     * getorf : Finds and extracts open reading frames (ORFs)
-     * plotorf : Plot potential open reading frames
-     * showseq : Display a sequence with features, translation etc..
-       
+
 Author(s)
 
-   This application was written by Rodrigo Lopez (rls © ebi.ac.uk)
+   Rodrigo Lopez (rls © ebi.ac.uk)
    European Bioinformatics Institute, Wellcome Trust Genome Campus,
-   Hinxton, Cambridge CB10 1SD, UK
-   
-   Gary Williams (gwilliam © rfcgr.mrc.ac.uk)
+   Hinxton, Cambridge CB10 1SD, UK and modified by Gary Williams
+   (gwilliam © rfcgr.mrc.ac.uk)
    MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
-   Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
-   to output the sequence data to a single file in the conventional
-   EMBOSS style.
-   
+   Genome Campus, Hinxton, Cambridge, CB10 1SB, UK to output the sequence
+   data to a single file in the conventional EMBOSS style.
+
 History
 
    Completed 24 Feb 2000 - Rodrigo Lopez
-   
-   Rewritten 2 March 2000 - Gary Williams
-   
+
+   Modified 2 March 2000 - Gary Williams
+
 Target users
 
    This program is intended to be used by everyone and everything, from
    naive users to embedded scripts.
-   
+
 Comments
+
+   None

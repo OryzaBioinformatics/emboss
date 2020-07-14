@@ -1,12 +1,12 @@
 
                                  restrict 
-                                      
-   
-   
+
+
+
 Function
 
    Finds restriction enzyme cleavage sites
-   
+
 Description
 
    Restrict uses the REBASE database of restriction enzymes to predict
@@ -14,7 +14,7 @@ Description
    of cuts, whether the DNA is circular, whether IUB ambiguity codes are
    used, whether blunt or sticky ends or both are reported. You may also
    force the reporting of single cleavage sites.
-   
+
    By default, only one of any group of isoschizomers (enzymes that have
    the same recognition site and cut positions) is reported (this
    behaviour can be turned off by setting the qualifier '-limit' to be
@@ -22,11 +22,11 @@ Description
    prototype) is specified in the REBASE database and the information is
    held in the data file 'embossre.equ'. You may edit this file to set
    your own preferred prototype,if you wish.
-   
+
 Usage
 
    Here is a sample session with restrict
-   
+
 
 % restrict 
 Finds restriction enzyme cleavage sites
@@ -34,15 +34,15 @@ Input sequence(s): tembl:hsfau
 Minimum recognition site length [4]: 
 Comma separated enzyme list [all]: 
 Output report [hsfau.restrict]: 
-   
+
    Go to the input files for this example
    Go to the output files for this example
-   
+
    Example 2
-   
+
    This gives the lengths of the restriction fragments produced by
    cutting with all of the specified enzymes.
-   
+
 
 % restrict -fragments 
 Finds restriction enzyme cleavage sites
@@ -50,14 +50,14 @@ Input sequence(s): tembl:hsfau
 Minimum recognition site length [4]: 
 Comma separated enzyme list [all]: 
 Output report [hsfau.restrict]: 
-   
+
    Go to the output files for this example
-   
+
    Example 3
-   
+
    This gives the lengths of the restriction fragments created by cutting
    with just one of each of the specified enzymes in turn.
-   
+
 
 % restrict -solofragment 
 Finds restriction enzyme cleavage sites
@@ -65,9 +65,9 @@ Input sequence(s): tembl:hsfau
 Minimum recognition site length [4]: 
 Comma separated enzyme list [all]: 
 Output report [hsfau.restrict]: 
-   
+
    Go to the output files for this example
-   
+
 Command line arguments
 
    Standard (Mandatory) qualifiers:
@@ -102,6 +102,7 @@ Command line arguments
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers:
+   -datafile           datafile   Alternative RE data file
    -min                integer    This sets the minimum number of cuts for any
                                   restriction enzyme that will be considered.
                                   Any enzymes that cut fewer times than this
@@ -112,9 +113,9 @@ Command line arguments
                                   will be ignored.
    -solofragment       boolean    This gives the fragment lengths of the
                                   forward sense strand produced by complete
-                                  restriction by each restriction enzyme on it
-                                  own. Results are added to the tail section
-                                  of the report.
+                                  restriction by each restriction enzyme on
+                                  its own. Results are added to the tail
+                                  section of the report.
    -single             boolean    If this is set then this forces the values
                                   of the mincuts and maxcuts qualifiers to
                                   both be 1. Any other value you may have set
@@ -145,7 +146,6 @@ Command line arguments
                                   names that you have asked to be searched
                                   for, and which cut, will be reported whether
                                   or not they have a commercial supplier.
-   -datafile           datafile   Alternative RE data file
    -[no]limit          boolean    This limits the reporting of enzymes to just
                                   one enzyme from each group of
                                   isoschizomers. The enzyme chosen to
@@ -172,46 +172,46 @@ Command line arguments
    Associated qualifiers:
 
    "-sequence" associated qualifiers
-   -sbegin1             integer    Start of each sequence to be used
-   -send1               integer    End of each sequence to be used
-   -sreverse1           boolean    Reverse (if DNA)
-   -sask1               boolean    Ask for begin/end/reverse
-   -snucleotide1        boolean    Sequence is nucleotide
-   -sprotein1           boolean    Sequence is protein
-   -slower1             boolean    Make lower case
-   -supper1             boolean    Make upper case
-   -sformat1            string     Input sequence format
-   -sdbname1            string     Database name
-   -sid1                string     Entryname
-   -ufo1                string     UFO features
-   -fformat1            string     Features format
-   -fopenfile1          string     Features file name
+   -sbegin1            integer    Start of each sequence to be used
+   -send1              integer    End of each sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
 
    "-outfile" associated qualifiers
-   -rformat2            string     Report format
-   -rname2              string     Base file name
-   -rextension2         string     File name extension
-   -rdirectory2         string     Output directory
-   -raccshow2           boolean    Show accession number in the report
-   -rdesshow2           boolean    Show description in the report
-   -rscoreshow2         boolean    Show the score in the report
-   -rusashow2           boolean    Show the full USA in the report
+   -rformat2           string     Report format
+   -rname2             string     Base file name
+   -rextension2        string     File name extension
+   -rdirectory2        string     Output directory
+   -raccshow2          boolean    Show accession number in the report
+   -rdesshow2          boolean    Show description in the report
+   -rscoreshow2        boolean    Show the score in the report
+   -rusashow2          boolean    Show the full USA in the report
 
    General qualifiers:
-   -auto                boolean    Turn off prompts
-   -stdout              boolean    Write standard output
-   -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for standard and additional values
-   -debug               boolean    Write debug output to program.dbg
-   -verbose             boolean    Report some/full command line options
-   -help                boolean    Report command line options. More
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
-   -warning             boolean    Report warnings
-   -error               boolean    Report errors
-   -fatal               boolean    Report fatal errors
-   -die                 boolean    Report deaths
-   
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report deaths
+
 
    Standard (Mandatory) qualifiers Allowed values Default
    [-sequence]
@@ -235,6 +235,8 @@ Command line arguments
    Additional (Optional) qualifiers Allowed values Default
    (none)
    Advanced (Unprompted) qualifiers Allowed values Default
+   -datafile Alternative RE data file Data file File in the data file
+   path
    -min This sets the minimum number of cuts for any restriction enzyme
    that will be considered. Any enzymes that cut fewer times than this
    will be ignored. Integer from 1 to 1000 1
@@ -243,7 +245,7 @@ Command line arguments
    will be ignored. Integer up to 2000000000 2000000000
    -solofragment This gives the fragment lengths of the forward sense
    strand produced by complete restriction by each restriction enzyme on
-   it own. Results are added to the tail section of the report. Boolean
+   its own. Results are added to the tail section of the report. Boolean
    value Yes/No No
    -single If this is set then this forces the values of the mincuts and
    maxcuts qualifiers to both be 1. Any other value you may have set them
@@ -268,8 +270,6 @@ Command line arguments
    probably know where to get it from and so all enzymes names that you
    have asked to be searched for, and which cut, will be reported whether
    or not they have a commercial supplier. Boolean value Yes/No Yes
-   -datafile Alternative RE data file Data file File in the data file
-   path
    -[no]limit This limits the reporting of enzymes to just one enzyme
    from each group of isoschizomers. The enzyme chosen to represent an
    isoschizomer group is the prototype indicated in the data file
@@ -285,18 +285,18 @@ Command line arguments
    together. Results are added to the tail section of the report. Boolean
    value Yes/No No
    -name Show sequence name Boolean value Yes/No No
-   
+
 Input file format
 
    restrict reads one or more DNA sequence USAs.
-   
+
   Input files for usage example
-  
+
    'tembl:hsfau' is a sequence entry in the example nucleic acid database
    'tembl'
-   
+
   Database entry: tembl:hsfau
-  
+
 ID   HSFAU      standard; RNA; HUM; 518 BP.
 XX
 AC   X65923;
@@ -383,30 +383,29 @@ SQ   Sequence 518 BP; 125 A; 139 C; 148 G; 106 T; 0 other;
      tctaataaaa aagccactta gttcagtcaa aaaaaaaa                               51
 8
 //
-   
+
 Output file format
 
    The output is a standard EMBOSS report file.
-   
+
    The results can be output in one of several styles by using the
    command-line qualifier -rformat xxx, where 'xxx' is replaced by the
    name of the required format. The available format names are: embl,
    genbank, gff, pir, swiss, trace, listfile, dbmotif, diffseq, excel,
    feattable, motif, regions, seqtable, simple, srs, table, tagseq
-   
-   See:
-   http://www.uk.embnet.org/Software/EMBOSS/Themes/ReportFormats.html for
-   further information on report formats.
-   
+
+   See: http://emboss.sf.net/docs/themes/ReportFormats.html for further
+   information on report formats.
+
    By default restrict writes a 'table' report file.
-   
+
   Output files for usage example
-  
+
   File: hsfau.restrict
-  
+
 ########################################
 # Program: restrict
-# Rundate: Tue Apr 06 14:32:55 2004
+# Rundate: Thu Jul 15 2004 12:00:00
 # Report_format: table
 # Report_file: hsfau.restrict
 ########################################
@@ -414,7 +413,7 @@ Output file format
 #=======================================
 #
 # Sequence: HSFAU     from: 1   to: 518
-# HitCount: 53
+# HitCount: 54
 #
 # Minimum cuts per enzyme: 1
 # Maximum cuts per enzyme: 2000000000
@@ -428,21 +427,22 @@ Output file format
 
   Start     End Enzyme_name Restriction_site 5prime 3prime 5primerev 3primerev
      11      14 TaqI        TCGA                 11     13         .         .
-     28      31 AciI        CCGC                 25     27         .         .
+     28      25 AciI        CCGC                 25     27         .         .
+     36      31 BseYI       CCCAGC               31     35         .         .
      38      41 AciI        CCGC                 38     40         .         .
-     44      48 BceAI       ACGGC                25     27         .         .
+     44      40 BceAI       ACGGC                25     27         .         .
      71      74 AciI        CCGC                 71     73         .         .
      71      81 BsiYI       CCNNNNNNNGG          77     74         .         .
-     73      76 Hin6I       GCGC                 73     75         .         .
      73      76 HhaI        GCGC                 75     73         .         .
+     73      76 Hin6I       GCGC                 73     75         .         .
      77      81 BssKI       CCNGG                76     81         .         .
      77      81 EcoRII      CCWGG                76     81         .         .
      94      97 TaqI        TCGA                 94     96         .         .
     103     106 HpaII       CCGG                103    105         .         .
     105     108 HaeIII      GGCC                106    106         .         .
-    107     111 EcoRII      CCWGG               106    111         .         .
     107     117 BsiYI       CCNNNNNNNGG         113    110         .         .
     107     111 BssKI       CCNGG               106    111         .         .
+    107     111 EcoRII      CCWGG               106    111         .         .
     122     132 BsiYI       CCNNNNNNNGG         128    125         .         .
     125     135 Hin4I       GAYNNNNNVTC         116    111       148       143
     146     150 BsrI        ACTGG               151    149         .         .
@@ -452,26 +452,26 @@ Output file format
     182     186 EcoRII      CCWGG               181    186         .         .
     190     193 HhaI        GCGC                192    190         .         .
     190     193 Hin6I       GCGC                190    192         .         .
-    192     195 HhaI        GCGC                194    192         .         .
     192     195 Hin6I       GCGC                192    194         .         .
+    192     195 HhaI        GCGC                194    192         .         .
     197     201 BssKI       CCNGG               196    201         .         .
     197     201 EcoRII      CCWGG               196    201         .         .
     209     212 HaeIII      GGCC                210    210         .         .
     219     222 HaeIII      GGCC                220    220         .         .
     221     231 BsiYI       CCNNNNNNNGG         227    224         .         .
-    225     229 BsrI        ACTGG               221    219         .         .
-    229     232 AciI        CCGC                226    228         .         .
+    225     221 BsrI        ACTGG               221    219         .         .
+    229     226 AciI        CCGC                226    228         .         .
     236     239 HaeIII      GGCC                237    237         .         .
     248     252 BssKI       CCNGG               247    252         .         .
     248     252 EcoRII      CCWGG               247    252         .         .
     261     264 HaeIII      GGCC                262    262         .         .
     263     266 AciI        CCGC                263    265         .         .
-    293     297 EcoRII      CCWGG               292    297         .         .
     293     297 BssKI       CCNGG               292    297         .         .
+    293     297 EcoRII      CCWGG               292    297         .         .
     296     299 HaeIII      GGCC                297    297         .         .
     335     338 HaeIII      GGCC                336    336         .         .
-    380     383 AciI        CCGC                377    379         .         .
-    383     386 AciI        CCGC                380    382         .         .
+    380     377 AciI        CCGC                377    379         .         .
+    383     380 AciI        CCGC                380    382         .         .
     395     398 HpaII       CCGG                395    397         .         .
     398     401 HhaI        GCGC                400    398         .         .
     398     401 Hin6I       GCGC                398    400         .         .
@@ -483,14 +483,14 @@ Output file format
 
 #---------------------------------------
 #---------------------------------------
-   
+
   Output files for usage example 2
-  
+
   File: hsfau.restrict
-  
+
 ########################################
 # Program: restrict
-# Rundate: Tue Apr 06 14:32:56 2004
+# Rundate: Thu Jul 15 2004 12:00:00
 # Report_format: table
 # Report_file: hsfau.restrict
 ########################################
@@ -498,7 +498,7 @@ Output file format
 #=======================================
 #
 # Sequence: HSFAU     from: 1   to: 518
-# HitCount: 53
+# HitCount: 54
 #
 # Minimum cuts per enzyme: 1
 # Maximum cuts per enzyme: 2000000000
@@ -512,21 +512,22 @@ Output file format
 
   Start     End Enzyme_name Restriction_site 5prime 3prime 5primerev 3primerev
      11      14 TaqI        TCGA                 11     13         .         .
-     28      31 AciI        CCGC                 25     27         .         .
+     28      25 AciI        CCGC                 25     27         .         .
+     36      31 BseYI       CCCAGC               31     35         .         .
      38      41 AciI        CCGC                 38     40         .         .
-     44      48 BceAI       ACGGC                25     27         .         .
+     44      40 BceAI       ACGGC                25     27         .         .
      71      74 AciI        CCGC                 71     73         .         .
      71      81 BsiYI       CCNNNNNNNGG          77     74         .         .
-     73      76 Hin6I       GCGC                 73     75         .         .
      73      76 HhaI        GCGC                 75     73         .         .
+     73      76 Hin6I       GCGC                 73     75         .         .
      77      81 BssKI       CCNGG                76     81         .         .
      77      81 EcoRII      CCWGG                76     81         .         .
      94      97 TaqI        TCGA                 94     96         .         .
     103     106 HpaII       CCGG                103    105         .         .
     105     108 HaeIII      GGCC                106    106         .         .
-    107     111 EcoRII      CCWGG               106    111         .         .
     107     117 BsiYI       CCNNNNNNNGG         113    110         .         .
     107     111 BssKI       CCNGG               106    111         .         .
+    107     111 EcoRII      CCWGG               106    111         .         .
     122     132 BsiYI       CCNNNNNNNGG         128    125         .         .
     125     135 Hin4I       GAYNNNNNVTC         116    111       148       143
     146     150 BsrI        ACTGG               151    149         .         .
@@ -536,12 +537,10 @@ Output file format
     182     186 EcoRII      CCWGG               181    186         .         .
     190     193 HhaI        GCGC                192    190         .         .
     190     193 Hin6I       GCGC                190    192         .         .
-    192     195 HhaI        GCGC                194    192         .         .
     192     195 Hin6I       GCGC                192    194         .         .
 
 
   [Part of this file has been deleted for brevity]
-
 
 #---------------------------------------
 #
@@ -560,7 +559,6 @@ Output file format
 #     14
 #     14
 #     14
-#     13
 #     12
 #     11
 #     10
@@ -571,6 +569,8 @@ Output file format
 #     9
 #     7
 #     7
+#     7
+#     6
 #     5
 #     5
 #     3
@@ -593,14 +593,14 @@ Output file format
 #     1
 #
 #---------------------------------------
-   
+
   Output files for usage example 3
-  
+
   File: hsfau.restrict
-  
+
 ########################################
 # Program: restrict
-# Rundate: Tue Apr 06 14:32:56 2004
+# Rundate: Thu Jul 15 2004 12:00:00
 # Report_format: table
 # Report_file: hsfau.restrict
 ########################################
@@ -608,7 +608,7 @@ Output file format
 #=======================================
 #
 # Sequence: HSFAU     from: 1   to: 518
-# HitCount: 53
+# HitCount: 54
 #
 # Minimum cuts per enzyme: 1
 # Maximum cuts per enzyme: 2000000000
@@ -622,21 +622,22 @@ Output file format
 
   Start     End Enzyme_name Restriction_site 5prime 3prime 5primerev 3primerev
      11      14 TaqI        TCGA                 11     13         .         .
-     28      31 AciI        CCGC                 25     27         .         .
+     28      25 AciI        CCGC                 25     27         .         .
+     36      31 BseYI       CCCAGC               31     35         .         .
      38      41 AciI        CCGC                 38     40         .         .
-     44      48 BceAI       ACGGC                25     27         .         .
+     44      40 BceAI       ACGGC                25     27         .         .
      71      74 AciI        CCGC                 71     73         .         .
      71      81 BsiYI       CCNNNNNNNGG          77     74         .         .
-     73      76 Hin6I       GCGC                 73     75         .         .
      73      76 HhaI        GCGC                 75     73         .         .
+     73      76 Hin6I       GCGC                 73     75         .         .
      77      81 BssKI       CCNGG                76     81         .         .
      77      81 EcoRII      CCWGG                76     81         .         .
      94      97 TaqI        TCGA                 94     96         .         .
     103     106 HpaII       CCGG                103    105         .         .
     105     108 HaeIII      GGCC                106    106         .         .
-    107     111 EcoRII      CCWGG               106    111         .         .
     107     117 BsiYI       CCNNNNNNNGG         113    110         .         .
     107     111 BssKI       CCNGG               106    111         .         .
+    107     111 EcoRII      CCWGG               106    111         .         .
     122     132 BsiYI       CCNNNNNNNGG         128    125         .         .
     125     135 Hin4I       GAYNNNNNVTC         116    111       148       143
     146     150 BsrI        ACTGG               151    149         .         .
@@ -646,7 +647,6 @@ Output file format
     182     186 EcoRII      CCWGG               181    186         .         .
     190     193 HhaI        GCGC                192    190         .         .
     190     193 Hin6I       GCGC                190    192         .         .
-    192     195 HhaI        GCGC                194    192         .         .
     192     195 Hin6I       GCGC                192    194         .         .
 
 
@@ -703,35 +703,29 @@ Output file format
 #       11      83      424
 #
 #---------------------------------------
-   
+
    The output from restrict is a simple text one. The base number,
    restriction enzyme name, recognition site and cut positions are shown.
    Note that cuts are always to the right of the residue shown and that
    5' cuts are referred to by their associated 3' number sequence.
-   
+
    The program reports enzymes that cut at two or four sites. The program
    also reports isoschizomers and enzymes having the same recognition
    sequence but different cut sites.
-   
+
    When the "-fragments" or "-solofragments" qualifiers are given then
    the sizes of the fragments produced by either all of the specified
    enzymes cutting, or by each enzyme cutting individually, are given in
    the 'tail' section at the end of the report file.
-   
+
 Data files
 
-   This uses the EMBOSS REBASE data files in 'data/REBASE/*' under the
-   EMBOSS installation directory.
-   
-   These files must first be set up using the program 'rebaseextract'.
-   Running 'rebaseextract' may be the job of your system manager.
-   
    EMBOSS data files are distributed with the application and stored in
    the standard EMBOSS data directory, which is defined by the EMBOSS
    environment variable EMBOSS_DATA.
-   
+
    To see the available EMBOSS data files, run:
-   
+
 % embossdata -showall
 
    To fetch one of the data files (for example 'Exxx.dat') into your
@@ -744,33 +738,39 @@ Data files
    tidier directory listings in a subdirectory called ".embossdata".
    Files for all EMBOSS runs can be put in the user's home directory, or
    again in a subdirectory called ".embossdata".
-   
+
    The directories are searched in the following order:
      * . (your current directory)
      * .embossdata (under your current directory)
      * ~/ (your home directory)
      * ~/.embossdata
-       
+
+   The EMBOSS REBASE restriction enzyme data files are stored iin
+   directory 'data/REBASE/*' under the EMBOSS installation directory.
+
+   These files must first be set up using the program 'rebaseextract'.
+   Running 'rebaseextract' may be the job of your system manager.
+
    The data files are stored in the REBASE directory of the standard
    EMBOSS data directory. The names are:
      * embossre.enz Cleavage information
      * embossre.ref Reference/methylation information
      * embossre.sup Supplier information
-       
+
    The column information is described at the top of the data files
-   
+
    The reported enzyme from any one group of isoschizomers (the
    prototype) is specified in the REBASE database and the information is
    held in the data file 'embossre.equ'. You may edit this file to set
    your own preferred prototype, if you wish.
-   
+
    The format of the file "embossre.equ" is
    Enzyme-name Prototype-name
-   
+
    i.e. two columns of enzyme names separated by a space. The first name
    of the pair of enzymes is the name that is not preferred and the
-   second is the preferred, prototype name.
-   
+   second is the preferred (prototype) name.
+
 Notes
 
    Output file size is related to the size of the recognition site and
@@ -778,56 +778,57 @@ Notes
    length to six and restricting the cuts to two is a common choice of
    parameters. The size of the output can sometimes be reduced by
    specifying the -noambiguity switch.
-   
+
    The data files must have been created before running this program.
    This is done by running the rebaseextract program with the "withrefm"
    and "prot" files from an REBASE release. You may have to ask your
    system manager to do this.
-   
+
 References
 
     1. Nucleic Acids Research 27: 312-313 (1999).
-       
+
 Warnings
 
    The program will warn you if a protein sequence is given.
-   
+
 Diagnostic Error Messages
 
    None.
-   
+
 Exit status
 
    It exits with status 0 unless an error is reported.
-   
+
 Known bugs
 
    None.
-   
+
 See also
 
    Program name                          Description
-   recite       Find changes to an enzyme site that introduce new enzyme sites
    recoder      Remove restriction sites but maintain the same translation
    redata       Search REBASE for enzyme name, references, suppliers etc
    remap        Display a sequence with restriction cut sites, translation etc
    restover     Finds restriction enzymes that produce a specific overhang
    showseq      Display a sequence with features, translation etc
    silent       Silent mutation restriction enzyme scan
-   
+
 Author(s)
 
    Alan Bleasby (ableasby © rfcgr.mrc.ac.uk)
    MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
    Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
-   
+
 History
 
    Completed 16th April 1999
-   
+
 Target users
 
    This program is intended to be used by everyone and everything, from
    naive users to embedded scripts.
-   
+
 Comments
+
+   None

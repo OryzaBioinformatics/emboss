@@ -1,33 +1,33 @@
 
                                  showalign 
-                                      
-   
-   
+
+
+
 Function
 
    Displays a multiple sequence alignment
-   
+
 Description
 
    showalign displays an aligned set of protein or a nucleic acid
    sequences in a style suitable for publication.
-   
+
    The output is sent to the screen by default for the user to view, but
    it can write the results to a file.
-   
+
    The output highlights various differences or similarities between each
    of the sequences and a reference sequence by setting selected types of
    matches to a reference sequence to be '.' characters.
-   
+
    The reference sequence can be either the calculated consensus sequence
    (the default) or it can be one of the set of aligned sequences,
    specified by either the ordinal number of that sequence in the input
    file, or by its name.
-   
+
    The output sequences can be displayed in either the input order (the
    default) or they can be sorted in order of their similarity to the
    reference sequence or sorted alphabetically by their names.
-   
+
    By using the '-show' option, the displayed sequences can either be
    shown as:
      * complete (-show=All),
@@ -42,7 +42,7 @@ Description
        (-show=Similarities)
      * dissimilar matches, with identical or similar matches being
        replaced by '.' characters (-show=Dissimilarities)
-       
+
    A small table of the way these alignments are displayed illustrates
    this.
    If we have a reference protein sequence of "III" and a sequence
@@ -50,7 +50,7 @@ Description
    then a similar one, then a dissimilar one.
    The different methods of display would give the following:
      _________________________________________________________________
-   
+
 Reference       III
 
 All             ILw
@@ -59,32 +59,32 @@ Non-id          .lW
 Similar         Il.
 Dissimilar      ..W
      _________________________________________________________________
-   
+
    Changing the similar matches to lowercase can optionally be disable by
    using the option -nosimilarcase.
-   
+
    The displayed sequence can be numbered by placing a ruler with ticks
    above the sequence.
-   
+
    The width of a line can be set. The width of a margin to the left of
    the sequences that shows the sequence names can be set.
-   
+
    Specified regions of the sequence can be displayed in uppercase to
    highlight them.
-   
+
    The output can be formatted for HTML.
-   
+
    If the output is being formatted for HTML, then specified regions of
    the sequence can be displayed in any valid HTML colours.
-   
+
   The consensus line
-  
+
    The consensus line can be displayed in a mixture of uppercase and
    lowercase symbols.
-   
+
    The uppercase consensus symbol is indicates that the consensus is
    strong and lowercase indicates that it is weak.
-   
+
    The cutoff for setting the case of the consensus is set by the
    qualifier '-setcase'. If the number of residues at that position that
    match the consensus value is greater than this, then the symbol is in
@@ -92,157 +92,157 @@ Dissimilar      ..W
    of setcase is set so that if there are more than 50% of residues
    identical to the consunsus at that position, then the consensus is in
    uppercase.
-   
+
    To put all of the consensus symbols into uppercase or lowercase, make
    -setcase zero or very large (try 100000 ?).
-   
+
 Usage
 
    Here is a sample session with showalign
-   
+
 
 % showalign 
 Displays a multiple sequence alignment
-Input sequence set: ../../data/globins.msf
+Input sequence set: globins.msf
 Output file [globins.showalign]: 
-   
+
    Go to the input files for this example
    Go to the output files for this example
-   
+
    Example 2
-   
+
    Display the sequences in order of similarity to the reference sequence
-   
+
 
 % showalign -order=s 
 Displays a multiple sequence alignment
-Input sequence set: ../../data/globins.msf
+Input sequence set: globins.msf
 Output file [globins.showalign]: 
-   
+
    Go to the output files for this example
-   
+
    Example 3
-   
+
    Format for HTML and highlight some interesting regions in different
    colours:
-   
+
 
 % showalign -html -high '4-13 green 43-43 red 51-56 blue' 
 Displays a multiple sequence alignment
-Input sequence set: ../../data/globins.msf
+Input sequence set: globins.msf
 Output file [globins.showalign]: 
-   
+
    Go to the output files for this example
-   
+
    Example 4
-   
+
    No consensus line at the bottom No ruler line No numbers line Don't
    repeat the reference sequence at the bottom of the sequences Use
    sequence 1 as the reference sequence Display residues from position 10
    to 30 only
-   
+
 
 % showalign -nocon -norule -nonum -nobot -ref=1 -sb=10 -send=30 
 Displays a multiple sequence alignment
-Input sequence set: ../../data/globins.msf
+Input sequence set: globins.msf
 Output file [globins.showalign]: 
-   
+
    Go to the output files for this example
-   
+
    Example 5
-   
+
    Show non-identities between the sequences
-   
+
 
 % showalign -show=n 
 Displays a multiple sequence alignment
-Input sequence set: ../../data/globins.msf
+Input sequence set: globins.msf
 Output file [globins.showalign]: 
-   
+
    Example 6
-   
+
    Show all of the sequences
-   
+
 
 % showalign -show=a 
 Displays a multiple sequence alignment
-Input sequence set: ../../data/globins.msf
+Input sequence set: globins.msf
 Output file [globins.showalign]: 
-   
+
    Go to the output files for this example
-   
+
    Example 7
-   
+
    Show identities between the sequences
-   
+
 
 % showalign -show=i 
 Displays a multiple sequence alignment
-Input sequence set: ../../data/globins.msf
+Input sequence set: globins.msf
 Output file [globins.showalign]: 
-   
+
    Go to the output files for this example
-   
+
    Example 8
-   
+
    Show similarities between the sequences
-   
+
 
 % showalign -show=s 
 Displays a multiple sequence alignment
-Input sequence set: ../../data/globins.msf
+Input sequence set: globins.msf
 Output file [globins.showalign]: 
-   
+
    Go to the output files for this example
-   
+
    Example 9
-   
+
    Show dissimilarities between the sequences
-   
+
 
 % showalign -show=d 
 Displays a multiple sequence alignment
-Input sequence set: ../../data/globins.msf
+Input sequence set: globins.msf
 Output file [globins.showalign]: 
-   
+
    Go to the output files for this example
-   
+
    Example 10
-   
+
    Use the first sequence as the reference to compare to:
-   
+
 
 % showalign -ref=1 
 Displays a multiple sequence alignment
-Input sequence set: ../../data/globins.msf
+Input sequence set: globins.msf
 Output file [globins.showalign]: 
-   
+
    Go to the output files for this example
-   
+
    Example 11
-   
+
    Show a range of sequences in uppercase, everything else in lowercase
-   
+
 
 % showalign -nocon -ref=1 -sl -upper 9-15 -nosimilarcase 
 Displays a multiple sequence alignment
-Input sequence set: ../../data/globins.msf
+Input sequence set: globins.msf
 Output file [globins.showalign]: 
-   
+
    Go to the output files for this example
-   
+
    Example 12
-   
+
    Display the sequences in alphabetic order:
-   
+
 
 % showalign -order=a 
 Displays a multiple sequence alignment
-Input sequence set: ../../data/globins.msf
+Input sequence set: globins.msf
 Output file [globins.showalign]: 
-   
+
    Go to the output files for this example
-   
+
 Command line arguments
 
    Standard (Mandatory) qualifiers:
@@ -381,7 +381,7 @@ Command line arguments
    -error               boolean    Report errors
    -fatal               boolean    Report fatal errors
    -die                 boolean    Report deaths
-   
+
 
    Standard (Mandatory) qualifiers Allowed values Default
    [-sequence]
@@ -471,15 +471,15 @@ Command line arguments
    identities at a position for it to give a consensus. Therefore, if
    this is set to 100% only columns of identities contribute to the
    consensus. Number from 0.000 to 100.000 0.0
-   
+
 Input file format
 
    showalign reads in a set of aligned protein or nucleic sequences.
-   
+
   Input files for usage example
-  
-  File: ../../data/globins.msf
-  
+
+  File: globins.msf
+
 !!AA_MULTIPLE_ALIGNMENT 1.0
 
   ../data/globins.msf MSF:  164 Type: P 25/06/01 CompCheck: 4278 ..
@@ -529,13 +529,13 @@ HBA_HORSE  TVLTSKYR~~~~~~
 MYG_PHYCA  KDIAAKYKELGYQG
 GLB5_PETMA Y~~~~~~~~~~~~~
 LGB2_LUPLU IVIKKEMNDAA~~~
-   
+
    You can specifiy a file of ranges to display in uppercase by giving
    the '-uppercase' qualifier the value '@' followed by the name of the
    file containing the ranges. (eg: '-upper @myfile').
-   
+
    The format of the range file is:
-   
+
      * Comment lines start with '#' in the first column.
      * Comment lines and blank lines are ignored.
      * The line may start with white-space.
@@ -546,9 +546,9 @@ LGB2_LUPLU IVIKKEMNDAA~~~
      * There can be optional text after the two numbers to annotate the
        line.
      * White-space before or after the text is removed.
-       
+
    An example range file is:
-   
+
 
 # this is my set of ranges
 12   23
@@ -559,20 +559,20 @@ LGB2_LUPLU IVIKKEMNDAA~~~
    when outputting in HTML format (using the '-html' qualifier) by giving
    the '-highlight' qualifier the value '@' followed by the name of the
    file containing the ranges. (eg: '-highlight @myfile').
-   
+
    The format of this file is very similar to the format of the above
    uppercase range file, except that the text after the start and end
    positions is used as the HTML colour name. This colour name is used
    'as is' when specifying the colour in HTML in a '' construct, (where
    'xxx' is the name of the colour).
-   
+
    The standard names of HTML font colours are given in:
    http://http://www.w3.org/TR/REC-html40/types.html and
    http://www.ausmall.com.au/freegraf/ncolour2.htm and
    http://mindprod.com/htmlcolours.html (amongst other places).
-   
+
    An example highlight range file is:
-   
+
 
 # this is my set of ranges
 12   23         red
@@ -582,11 +582,11 @@ LGB2_LUPLU IVIKKEMNDAA~~~
 Output file format
 
    showalign writes out a text file, optionally formatted for HTML.
-   
+
   Output files for usage example
-  
+
   File: globins.showalign
-  
+
                    10        20        30        40        50        60
            ----:----|----:----|----:----|----:----|----:----|----:----|
 Consensus  xxxxxxxxxxxxxxExSxxxxxxxKxxxxxExGxxxLxxxxxxIxPxxxxFFxxFxxLxx
@@ -622,11 +622,11 @@ MYG_PHYCA  AiiH..HSRHPG..GADAQGaMN.A.ELFRKDiAA..KELGYQG
 GLB5_PETMA LAAViADTVAAG.AGFEKLM.MICI.LRS.Y-------------
 LGB2_LUPLU Ai.KTiKEVVGAKwsEElNsaWTIAYDEl.IViKKeMNDAA---
 Consensus  xLLxVLxxxxxxDFTxxVxASxxKxLxxVAxxLxxKYxxxxxxx
-   
+
   Output files for usage example 2
-  
+
   File: globins.showalign
-  
+
                    10        20        30        40        50        60
            ----:----|----:----|----:----|----:----|----:----|----:----|
 Consensus  xxxxxxxxxxxxxxExSxxxxxxxKxxxxxExGxxxLxxxxxxIxPxxxxFFxxFxxLxx
@@ -662,11 +662,11 @@ MYG_PHYCA  AiiH..HSRHPG..GADAQGaMN.A.ELFRKDiAA..KELGYQG
 GLB5_PETMA LAAViADTVAAG.AGFEKLM.MICI.LRS.Y-------------
 LGB2_LUPLU Ai.KTiKEVVGAKwsEElNsaWTIAYDEl.IViKKeMNDAA---
 Consensus  xLLxVLxxxxxxDFTxxVxASxxKxLxxVAxxLxxKYxxxxxxx
-   
+
   Output files for usage example 3
-  
+
   File: globins.showalign
-  
+
 <pre>
                    10        20        30        40        50        60
            ----:----|----:----|----:----|----:----|----:----|----:----|
@@ -714,11 +714,11 @@ LGB2_LUPLU Ai.KTiKEVVGAKwsEElNsaWTIAYDEl.IViKKeMNDAA---
 Consensus  xLLxVLxxxxxxDFTxxVxASxxKxLxxVAxxLxxKYxxxxxxx
 
 </pre>
-   
+
   Output files for usage example 4
-  
+
   File: globins.showalign
-  
+
 HBB_HUMAN  HLTPEEKSAVTALWGKVN-VD
 HBB_HORSE  Q.sG...a..L...D...-Ee
 HBA_HUMAN  -----VL.PADKTNV.AA-WG
@@ -726,11 +726,11 @@ HBA_HORSE  -----VL..ADKTNV.AA-WS
 MYG_PHYCA  SEGEWqLVLHVWAKVeAd-.A
 GLB5_PETMA P.sAA..tKiRsA.AP.YSTY
 LGB2_LUPLU A..ESqAaL.KsS.EeF.ANI
-   
+
   Output files for usage example 6
-  
+
   File: globins.showalign
-  
+
                    10        20        30        40        50        60
            ----:----|----:----|----:----|----:----|----:----|----:----|
 Consensus  xxxxxxxxxxxxxxExSxxxxxxxKxxxxxExGxxxLxxxxxxIxPxxxxFFxxFxxLxx
@@ -766,11 +766,11 @@ MYG_PHYCA  aIIhVLhsrhpgDFgadaqgAmnKaLelfrkdIaaKYkelgyqg
 GLB5_PETMA laavIadtvaagDagfeklmSmiciLlrsAy-------------
 LGB2_LUPLU aILktIkevvgakWSeeLnSAwtiaydeLAivIkkEmndaa---
 Consensus  xLLxVLxxxxxxDFTxxVxASxxKxLxxVAxxLxxKYxxxxxxx
-   
+
   Output files for usage example 7
-  
+
   File: globins.showalign
-  
+
                    10        20        30        40        50        60
            ----:----|----:----|----:----|----:----|----:----|----:----|
 Consensus  xxxxxxxxxxxxxxExSxxxxxxxKxxxxxExGxxxLxxxxxxIxPxxxxFFxxFxxLxx
@@ -806,11 +806,11 @@ MYG_PHYCA  ....VL......DF.........K.L.........KY.......
 GLB5_PETMA ............D.......S....L...A.-------------
 LGB2_LUPLU ..L..........................A...........---
 Consensus  xLLxVLxxxxxxDFTxxVxASxxKxLxxVAxxLxxKYxxxxxxx
-   
+
   Output files for usage example 8
-  
+
   File: globins.showalign
-  
+
                    10        20        30        40        50        60
            ----:----|----:----|----:----|----:----|----:----|----:----|
 Consensus  xxxxxxxxxxxxxxExSxxxxxxxKxxxxxExGxxxLxxxxxxIxPxxxxFFxxFxxLxx
@@ -846,11 +846,11 @@ MYG_PHYCA  .ii.VL......DF......a..K.L......i..KY.......
 GLB5_PETMA ....i.......D.......S....L...A.-------------
 LGB2_LUPLU .iL..i.......ws..l.sa.......lA..i..e.....---
 Consensus  xLLxVLxxxxxxDFTxxVxASxxKxLxxVAxxLxxKYxxxxxxx
-   
+
   Output files for usage example 9
-  
+
   File: globins.showalign
-  
+
                    10        20        30        40        50        60
            ----:----|----:----|----:----|----:----|----:----|----:----|
 Consensus  xxxxxxxxxxxxxxExSxxxxxxxKxxxxxExGxxxLxxxxxxIxPxxxxFFxxFxxLxx
@@ -886,11 +886,11 @@ MYG_PHYCA  A..H..HSRHPG..GADAQG.MN.A.ELFRKD.AA..KELGYQG
 GLB5_PETMA LAAV.ADTVAAG.AGFEKLM.MICI.LRS.Y-------------
 LGB2_LUPLU A..KT.KEVVGAK..EE.N..WTIAYDE..IV.KK.MNDAA---
 Consensus  xLLxVLxxxxxxDFTxxVxASxxKxLxxVAxxLxxKYxxxxxxx
-   
+
   Output files for usage example 10
-  
+
   File: globins.showalign
-  
+
                    10        20        30        40        50        60
            ----:----|----:----|----:----|----:----|----:----|----:----|
 HBB_HUMAN  --------VHLTPEEKSAVTALWGKVN-VDEVGGEALGR-LLVVYPWTQRFFESFGDLST
@@ -926,11 +926,11 @@ GLB5_PETMA lAAViADTVAAGdAGFEKLMsMICilLRS.Y-------------
 LGB2_LUPLU AilKTiKEVV.AkwsEElNs.wTIAYDEl.IViKKeMnDAA---
 HBB_HUMAN  VLVCVLAHHFGKEFTPPVQAAYQKVVAGVANALAHKYH------
 Consensus  xLLxVLxxxxxxDFTxxVxASxxKxLxxVAxxLxxKYxxxxxxx
-   
+
   Output files for usage example 11
-  
+
   File: globins.showalign
-  
+
                    10        20        30        40        50        60
            ----:----|----:----|----:----|----:----|----:----|----:----|
 HBB_HUMAN  --------VHLTPEEksavtalwgkvn-vdevggealgr-llvvypwtqrffesfgdlst
@@ -963,11 +963,11 @@ MYG_PHYCA  aiih..hsrhpgd.gada.g.mn.alelfrkdi.a..kelgyqg
 GLB5_PETMA laaviadtvaagdagfeklmsmicillrs.y-------------
 LGB2_LUPLU ailktikevv.akwseelns.wtiaydel.ivikkemndaa---
 HBB_HUMAN  vlvcvlahhfgkeftppvqaayqkvvagvanalahkyh------
-   
+
   Output files for usage example 12
-  
+
   File: globins.showalign
-  
+
                    10        20        30        40        50        60
            ----:----|----:----|----:----|----:----|----:----|----:----|
 Consensus  xxxxxxxxxxxxxxExSxxxxxxxKxxxxxExGxxxLxxxxxxIxPxxxxFFxxFxxLxx
@@ -1003,18 +1003,18 @@ HBB_HUMAN  V.vC..AHHFGKe..PP.Q.aYQ.VvAG..NA.AH..H------
 LGB2_LUPLU Ai.KTiKEVVGAKwsEElNsaWTIAYDEl.IViKKeMNDAA---
 MYG_PHYCA  AiiH..HSRHPG..GADAQGaMN.A.ELFRKDiAA..KELGYQG
 Consensus  xLLxVLxxxxxxDFTxxVxASxxKxLxxVAxxLxxKYxxxxxxx
-   
+
 Data files
 
    showalign reads in scoring matrices to determine the consesnus
    sequence and to determine which matches are similar or not.
-   
+
    EMBOSS data files are distributed with the application and stored in
    the standard EMBOSS data directory, which is defined by the EMBOSS
    environment variable EMBOSS_DATA.
-   
+
    To see the available EMBOSS data files, run:
-   
+
 % embossdata -showall
 
    To fetch one of the data files (for example 'Exxx.dat') into your
@@ -1027,73 +1027,33 @@ Data files
    tidier directory listings in a subdirectory called ".embossdata".
    Files for all EMBOSS runs can be put in the user's home directory, or
    again in a subdirectory called ".embossdata".
-   
+
    The directories are searched in the following order:
      * . (your current directory)
      * .embossdata (under your current directory)
      * ~/ (your home directory)
      * ~/.embossdata
-       
+
 Notes
 
    None.
-   
+
 References
 
    None.
-   
+
 Warnings
 
    None.
-   
+
 Diagnostic Error Messages
 
    None.
-   
+
 Exit status
 
    It always exits with status 0.
-   
+
 Known bugs
 
    None.
-   
-See also
-
-   Program name Description
-   abiview Reads ABI file and display the trace
-   cirdna Draws circular maps of DNA constructs
-   emma Multiple alignment program - interface to ClustalW program
-   infoalign Information on a multiple sequence alignment
-   lindna Draws linear maps of DNA constructs
-   pepnet Displays proteins as a helical net
-   pepwheel Shows protein sequences as helices
-   plotcon Plots the quality of conservation of a sequence alignment
-   prettyplot Displays aligned sequences, with colouring and boxing
-   prettyseq Output sequence with translated ranges
-   remap Display a sequence with restriction cut sites, translation etc
-   seealso Finds programs sharing group names
-   showdb Displays information on the currently available databases
-   showfeat Show features of a sequence
-   showseq Display a sequence with features, translation etc
-   sixpack Display a DNA sequence with 6-frame translation and ORFs
-   textsearch Search sequence documentation text. SRS and Entrez are
-   faster!
-   tranalign Align nucleic coding regions given the aligned proteins
-   
-Author(s)
-
-   Gary Williams (gwilliam © rfcgr.mrc.ac.uk)
-   MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
-   Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
-   
-History
-
-   Written (23 May 2001) - Gary Williams
-   
-Target users
-
-   This program is intended to be used by everyone and everything, from
-   naive users to embedded scripts.
-   
-Comments

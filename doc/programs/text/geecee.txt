@@ -1,33 +1,33 @@
 
                                   geecee 
-                                      
-   
-   
+
+
+
 Function
 
    Calculates the fractional GC content of nucleic acid sequences
-   
+
 Description
 
    This calculates the fraction of G+C bases of the input nucleic acid
    sequence(s).
-   
+
    It reads in nucleic acid sequences, sums the number of 'G' and 'C'
    bases and writes out the result as the fraction (in the interval 0.0
    to 1.0) of the length of the whole sequence.
-   
+
 Usage
 
    Here is a sample session with geecee
-   
+
 
 % geecee tembl:hhtetra 
 Calculates the fractional GC content of nucleic acid sequences
 Output file [hhtetra.geecee]: 
-   
+
    Go to the input files for this example
    Go to the output files for this example
-   
+
 Command line arguments
 
    Standard (Mandatory) qualifiers:
@@ -71,7 +71,7 @@ Command line arguments
    -error               boolean    Report errors
    -fatal               boolean    Report fatal errors
    -die                 boolean    Report deaths
-   
+
 
    Standard (Mandatory) qualifiers Allowed values Default
    [-sequence]
@@ -82,18 +82,18 @@ Command line arguments
    (none)
    Advanced (Unprompted) qualifiers Allowed values Default
    (none)
-   
+
 Input file format
 
    geecee reads any nucleic acid sequence USAs.
-   
+
   Input files for usage example
-  
+
    'tembl:hhtetra' is a sequence entry in the example nucleic acid
    database 'tembl'
-   
+
   Database entry: tembl:hhtetra
-  
+
 ID   HHTETRA    standard; DNA; VRL; 1272 BP.
 XX
 AC   L46634; L46689;
@@ -181,49 +181,49 @@ SQ   Sequence 1272 BP; 346 A; 455 C; 222 G; 249 T; 0 other;
      gttttcaagc tt                                                          127
 2
 //
-   
+
 Output file format
 
   Output files for usage example
-  
+
   File: hhtetra.geecee
-  
+
 #Sequence   GC content
 HHTETRA       0.53
-   
+
    The first non-blank line is the title line. Subsequent lines consist
    of two columns of data.
      * The first column is the name of the sequence.
      * The second column is the percentage G+C content of the sequence.
-       
+
 Data files
 
    None.
-   
+
 Notes
 
    None.
-   
+
 References
 
    None.
-   
+
 Warnings
 
    None.
-   
+
 Diagnostic Error Messages
 
    None.
-   
+
 Exit status
 
    0 on successful completion.
-   
+
 Known bugs
 
    None.
-   
+
 See also
 
    Program name         Description
@@ -231,21 +231,23 @@ See also
    cpgreport    Reports all CpG rich regions
    newcpgreport Report CpG rich areas
    newcpgseek   Reports CpG rich regions
-   
+
 Author(s)
 
-   Richard Bruskiewich (current e-mail address unknown)
+   Richard Bruskiewich (r.bruskiewich@cgiar.org)
    while he was at:
    Sanger Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge,
    CB10 1SA, UK.
-   
+
 History
 
-Completed 18th June 1999.
+   Completed 18th June 1999.
 
 Target users
 
    This program is intended to be used by everyone and everything, from
    naive users to embedded scripts.
-   
+
 Comments
+
+   None /BODY>

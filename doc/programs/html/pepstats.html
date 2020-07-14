@@ -7,12 +7,9 @@
 </HEAD>
 <BODY BGCOLOR="#FFFFFF" text="#000000">
 
-
-
-
 <table align=center border=0 cellspacing=0 cellpadding=0>
 <tr><td valign=top>
-<A HREF="index.html" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
@@ -30,13 +27,6 @@ pepstats
 <H2>
     Function
 </H2>
-
-
-
-<!--
-DON'T WRITE ANYTHING HERE.
-IT IS DONE FOR YOU.
--->
 Protein statistics
 
 
@@ -45,7 +35,8 @@ Protein statistics
 </H2>
 
 
-<b>pepstats</b> outputs a report of simple protein sequence information including:
+<b>pepstats</b> outputs a report of simple protein sequence
+information including:
 
 <p>
 <ul>
@@ -64,8 +55,8 @@ Protein statistics
 
 <p>
 
-DayhoffStat is the amino acid's Dayhoff statistic divided by the molar
-percent.  The Dayhoff statistic is the amino acid's relative occurence
+DayhoffStat is the amino acid's molar percentage divided by the Dayhoff
+statistic.  The Dayhoff statistic is the amino acid's relative occurence
 per 1000 aa normalised to 100 by rls@ebi.ac.uk (original work from 1993)
 
 <p>
@@ -91,8 +82,6 @@ medium.
 <H2>
     Usage
 </H2>
-
-
 <b>Here is a sample session with pepstats</b>
 <p>
 
@@ -113,14 +102,6 @@ Output file [laci_ecoli.pepstats]: <b></b>
 <H2>
     Command line arguments
 </H2>
-
-
-
-<!--
-DON'T WRITE ANYTHING HERE.
-IT IS DONE FOR YOU.
--->
-
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
    Standard (Mandatory) qualifiers:
@@ -129,8 +110,8 @@ IT IS DONE FOR YOU.
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers:
-   -[no]termini        boolean    Include charge at N and C terminus
    -aadata             datafile   Molecular weight data for amino acids
+   -[no]termini        boolean    Include charge at N and C terminus
 
    Associated qualifiers:
 
@@ -211,17 +192,17 @@ IT IS DONE FOR YOU.
 </tr>
 
 <tr>
-<td>-[no]termini</td>
-<td>Include charge at N and C terminus</td>
-<td>Boolean value Yes/No</td>
-<td>Yes</td>
-</tr>
-
-<tr>
 <td>-aadata</td>
 <td>Molecular weight data for amino acids</td>
 <td>Data file</td>
 <td>Eamino.dat</td>
+</tr>
+
+<tr>
+<td>-[no]termini</td>
+<td>Include charge at N and C terminus</td>
+<td>Boolean value Yes/No</td>
+<td>Yes</td>
 </tr>
 
 </table>
@@ -425,10 +406,27 @@ You can inspect and modify this file by copying it into your current
 directory with the command: 'embossdata -fetch'. 
 
 <p>
+<p>
 EMBOSS data files are distributed with the application and stored
 in the standard EMBOSS data directory, which is defined
-by EMBOSS environment variable EMBOSS_DATA.
+by the EMBOSS environment variable EMBOSS_DATA.
 
+<p>
+
+To see the available EMBOSS data files, run:
+<p>
+<pre>
+% embossdata -showall
+</pre>
+<p>
+To fetch one of the data files (for example 'Exxx.dat') into your
+current directory for you to inspect or modify, run:
+
+<pre>
+
+% embossdata -fetch -file Exxx.dat
+
+</pre>
 <p>
 
 Users can provide their own data files in their own directories.
@@ -446,6 +444,8 @@ The directories are searched in the following order:
    <li> ~/ (your home directory)
    <li> ~/.embossdata
 </ul>
+<p>
+
 
 <H2>
     Notes
@@ -458,7 +458,8 @@ None.
 </H2>
 
 <ol>
-<li>Roger G. Harrison "Expression of soluble heterologous proteins via fusion with NusA protein" in inNovations 11, June 2000, p 4 - 7.
+<li>Roger G. Harrison "Expression of soluble heterologous proteins via
+fusion with NusA protein" in inNovations 11, June 2000, p 4 - 7.
 </ol>
 
 <H2>
@@ -485,11 +486,6 @@ It always exits with a status of 0.
 
 None.
 
-<!--
-<H2>
-    See also
-</H2>
--->
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
@@ -507,13 +503,6 @@ None.
 <tr><td><a href="pepwindow.html">pepwindow</a></td><td>Displays protein hydropathy</td></tr>
 <tr><td><a href="pepwindowall.html">pepwindowall</a></td><td>Displays protein hydropathy of a set of sequences</td></tr>
 </table>
-
-<!--
-        Add any comments about other associated programs (to prepare
-        data files?) that seealso doesn't find.
-   -->
-
-
 
 
 
@@ -533,29 +522,21 @@ Wellcome Trust Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
     History
 </H2>
 
+
 Written (1999) - Alan Bleasby
 
-<!--
-<p>
-[an error occurred while processing this directive]
--->
 
 <H2>
     Target users
 </H2>
+This program is intended to be used by everyone and everything, from naive users to embedded scripts.
 
 
-This program is intended to be used by everyone and everything,
-from naive users to embedded scripts. 
 
 <H2>
     Comments
 </H2>
-
-
-<pre>
-
-</pre>
+None
 
 
 </BODY>

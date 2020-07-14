@@ -1,0 +1,641 @@
+
+                                 fprotpars 
+
+
+
+Function
+
+   Protein pasimony algorithm
+
+Description
+
+   Estimates phylogenies from protein sequences (input using the standard
+   one-letter code for amino acids) using the parsimony method, in a
+   variant which counts only those nucleotide changes that change the
+   amino acid, on the assumption that silent changes are more easily
+   accomplished.
+
+Algorithm
+
+   This program infers an unrooted phylogeny from protein sequences,
+   using a new method intermediate between the approaches of Eck and
+   Dayhoff (1966) and Fitch (1971). Eck and Dayhoff (1966) allowed any
+   amino acid to change to any other, and counted the number of such
+   changes needed to evolve the protein sequences on each given
+   phylogeny. This has the problem that it allows replacements which are
+   not consistent with the genetic code, counting them equally with
+   replacements that are consistent. Fitch, on the other hand, counted
+   the minimum number of nucleotide substitutions that would be needed to
+   achieve the given protein sequences. This counts silent changes
+   equally with those that change the amino acid.
+
+   The present method insists that any changes of amino acid be
+   consistent with the genetic code so that, for example, lysine is
+   allowed to change to methionine but not to proline. However, changes
+   between two amino acids via a third are allowed and counted as two
+   changes if each of the two replacements is individually allowed. This
+   sometimes allows changes that at first sight you would think should be
+   outlawed. Thus we can change from phenylalanine to glutamine via
+   leucine in two steps total. Consulting the genetic code, you will find
+   that there is a leucine codon one step away from a phenylalanine
+   codon, and a leucine codon one step away from glutamine. But they are
+   not the same leucine codon. It actually takes three base substitutions
+   to get from either of the phenylalanine codons TTT and TTC to either
+   of the glutamine codons CAA or CAG. Why then does this program count
+   only two? The answer is that recent DNA sequence comparisons seem to
+   show that synonymous changes are considerably faster and easier than
+   ones that change the amino acid. We are assuming that, in effect,
+   synonymous changes occur so much more readily that they need not be
+   counted. Thus, in the chain of changes TTT (Phe) --> CTT (Leu) --> CTA
+   (Leu) --> CAA (Glu), the middle one is not counted because it does not
+   change the amino acid (leucine).
+
+   To maintain consistency with the genetic code, it is necessary for the
+   program internally to treat serine as two separate states (ser1 and
+   ser2) since the two groups of serine codons are not adjacent in the
+   code. Changes to the state "deletion" are counted as three steps to
+   prevent the algorithm from assuming unnecessary deletions. The state
+   "unknown" is simply taken to mean that the amino acid, which has not
+   been determined, will in each part of a tree that is evaluated be
+   assumed be whichever one causes the fewest steps.
+
+   The assumptions of this method (which has not been described in the
+   literature), are thus something like this:
+
+   Change in different sites is independent. Change in different lineages
+   is independent. The probability of a base substitution that changes
+   the amino acid sequence is small over the lengths of time involved in
+   a branch of the phylogeny. The expected amounts of change in different
+   branches of the phylogeny do not vary by so much that two changes in a
+   high-rate branch are more probable than one change in a low-rate
+   branch. The expected amounts of change do not vary enough among sites
+   that two changes in one site are more probable than one change in
+   another. The probability of a base change that is synonymous is much
+   higher than the probability of a change that is not synonymous. That
+   these are the assumptions of parsimony methods has been documented in
+   a series of papers of mine: (1973a, 1978b, 1979, 1981b, 1983b, 1988b).
+   For an opposing view arguing that the parsimony methods make no
+   substantive assumptions such as these, see the works by Farris (1983)
+   and Sober (1983a, 1983b, 1988), but also read the exchange between
+   Felsenstein and Sober (1986).
+
+   The input for the program is fairly standard. The first line contains
+   the number of species and the number of amino acid positions (counting
+   any stop codons that you want to include).
+
+   Next come the species data. Each sequence starts on a new line, has a
+   ten-character species name that must be blank-filled to be of that
+   length, followed immediately by the species data in the one-letter
+   code. The sequences must either be in the "interleaved" or
+   "sequential" formats described in the Molecular Sequence Programs
+   document. The I option selects between them. The sequences can have
+   internal blanks in the sequence but there must be no extra blanks at
+   the end of the terminated line. Note that a blank is not a valid
+   symbol for a deletion.
+
+   The protein sequences are given by the one-letter code used by
+   described in the Molecular Sequence Programs documentation file. Note
+   that if two polypeptide chains are being used that are of different
+   length owing to one terminating before the other, they should be coded
+   as (say)
+
+             HIINMA*????
+             HIPNMGVWABT
+
+   since after the stop codon we do not definitely know that there has
+   been a deletion, and do not know what amino acid would have been
+   there. If DNA studies tell us that there is DNA sequence in that
+   region, then we could use "X" rather than "?". Note that "X" means an
+   unknown amino acid, but definitely an amino acid, while "?" could mean
+   either that or a deletion. The distinction is often significant in
+   regions where there are deletions: one may want to encode a six-base
+   deletion as "-?????" since that way the program will only count one
+   deletion, not six deletion events, when the deletion arises. However,
+   if there are overlapping deletions it may not be so easy to know what
+   coding is correct.
+
+   One will usually want to use "?" after a stop codon, if one does not
+   know what amino acid is there. If the DNA sequence has been observed
+   there, one probably ought to resist putting in the amino acids that
+   this DNA would code for, and one should use "X" instead, because under
+   the assumptions implicit in this parsimony method, changes to any
+   noncoding sequence are much easier than changes in a coding region
+   that change the amino acid, so that they shouldn't be counted anyway!
+
+   The form of this information is the standard one described in the main
+   documentation file. For the U option the tree provided must be a
+   rooted bifurcating tree, with the root placed anywhere you want, since
+   that root placement does not affect anything.
+
+Usage
+
+   Here is a sample session with fprotpars
+
+
+% fprotpars 
+Protein pasimony algorithm
+Input sequence: protpars.dat
+Input tree file: 
+Output file [protpars.fprotpars]: 
+
+
+Adding species:
+   1. Alpha
+   2. Beta
+   3. Gamma
+   4. Delta
+   5. Epsilon
+
+Doing global rearrangements
+  !---------!
+   .........
+
+Output written to file "protpars.fprotpars"
+
+Trees also written onto file "protpars.treefile"
+
+
+   Go to the input files for this example
+   Go to the output files for this example
+
+   Example 2
+
+
+% fprotpars -njumble 3 -seed 3 -printdata -ancseq -whichcode m -stepbox -outgrn
+o 2  -thresh -threshold 3 
+Protein pasimony algorithm
+Input sequence: protpars.dat
+Input tree file: 
+Output file [protpars.fprotpars]: 
+
+
+Adding species:
+   1. Delta
+   2. Epsilon
+   3. Alpha
+   4. Beta
+   5. Gamma
+
+Doing global rearrangements
+  !---------!
+   .........
+
+
+Adding species:
+   1. Beta
+   2. Epsilon
+   3. Delta
+   4. Alpha
+   5. Gamma
+
+Doing global rearrangements
+  !---------!
+   .........
+
+
+Adding species:
+   1. Epsilon
+   2. Alpha
+   3. Gamma
+   4. Delta
+   5. Beta
+
+Doing global rearrangements
+  !---------!
+   .........
+
+Output written to file "protpars.fprotpars"
+
+Trees also written onto file "protpars.treefile"
+
+
+   Go to the output files for this example
+
+Command line arguments
+
+   Standard (Mandatory) qualifiers:
+  [-sequence]          seqsetall  File containing one or more sequence
+                                  alignments
+  [-intreefile]        tree       (no help text) tree value
+  [-outfile]           outfile    Output file name
+
+   Additional (Optional) qualifiers (* if not always prompted):
+   -weights            properties Weights file
+*  -njumble            integer    Number of times to randomise
+*  -seed               integer    Random number seed between 1 and 32767 (must
+                                  be odd)
+   -outgrno            integer    Species number to use as outgroup
+   -thresh             toggle     Use threshold parsimony
+*  -threshold          float      Threshold value
+   -whichcode          menu       Use which genetic code
+   -[no]trout          toggle     Write out trees to tree file
+*  -outtreefile        outfile    Tree file name
+   -printdata          boolean    Print data at start of run
+   -[no]progress       boolean    Print indications of progress of run
+   -[no]treeprint      boolean    Print out tree
+   -stepbox            boolean    Print steps at each site
+   -ancseq             boolean    Print sequences at all nodes of tree
+*  -[no]dotdiff        boolean    Use dot differencing to display results
+
+   Advanced (Unprompted) qualifiers: (none)
+   Associated qualifiers:
+
+   "-sequence" associated qualifiers
+   -sbegin1            integer    Start of each sequence to be used
+   -send1              integer    End of each sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
+
+   "-outfile" associated qualifiers
+   -odirectory3        string     Output directory
+
+   "-outtreefile" associated qualifiers
+   -odirectory         string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report deaths
+
+
+   Standard (Mandatory) qualifiers Allowed values Default
+   [-sequence]
+   (Parameter 1) File containing one or more sequence alignments Readable
+   sets of sequences
+   [-intreefile]
+   (Parameter 2) (no help text) tree value Phylogenetic tree
+   [-outfile]
+   (Parameter 3) Output file name Output file <sequence>.fprotpars
+   Additional (Optional) qualifiers Allowed values Default
+   -weights Weights file Property value(s)
+   -njumble Number of times to randomise Integer 0 or more 0
+   -seed Random number seed between 1 and 32767 (must be odd) Integer
+   from 1 to 32767 1
+   -outgrno Species number to use as outgroup Integer 0 or more 0
+   -thresh Use threshold parsimony Toggle value Yes/No No
+   -threshold Threshold value Number 1.000 or more 1
+   -whichcode Use which genetic code
+   U (Universal)
+   M (Mitochondrial)
+   V (Vertebrate mitochondrial)
+   F (Fly mitochondrial)
+   Y (Yeast mitochondrial)
+   Universal
+   -[no]trout Write out trees to tree file Toggle value Yes/No Yes
+   -outtreefile Tree file name Output file
+   -printdata Print data at start of run Boolean value Yes/No No
+   -[no]progress Print indications of progress of run Boolean value
+   Yes/No Yes
+   -[no]treeprint Print out tree Boolean value Yes/No Yes
+   -stepbox Print steps at each site Boolean value Yes/No No
+   -ancseq Print sequences at all nodes of tree Boolean value Yes/No No
+   -[no]dotdiff Use dot differencing to display results Boolean value
+   Yes/No Yes
+   Advanced (Unprompted) qualifiers Allowed values Default
+   (none)
+
+Input file format
+
+   fprotpars reads any normal sequence USAs.
+
+  Input files for usage example
+
+  File: protpars.dat
+
+     5    10
+Alpha     ABCDEFGHIK
+Beta      AB--EFGHIK
+Gamma     ?BCDSFG*??
+Delta     CIKDEFGHIK
+Epsilon   DIKDEFGHIK
+
+Output file format
+
+   fprotpars output is standard: if option 1 is toggled on, the data is
+   printed out, with the convention that "." means "the same as in the
+   first species". Then comes a list of equally parsimonious trees, and
+   (if option 2 is toggled on) a table of the number of changes of state
+   required in each position. If option 5 is toggled on, a table is
+   printed out after each tree, showing for each branch whether there are
+   known to be changes in the branch, and what the states are inferred to
+   have been at the top end of the branch. This is a reconstruction of
+   the ancestral sequences in the tree. If you choose option 5, a menu
+   item "." appears which gives you the opportunity to turn off
+   dot-differencing so that complete ancestral sequences are shown. If
+   the inferred state is a "?" there will be multiple
+   equally-parsimonious assignments of states; the user must work these
+   out for themselves by hand. If option 6 is left in its default state
+   the trees found will be written to a tree file, so that they are
+   available to be used in other programs. If the program finds multiple
+   trees tied for best, all of these are written out onto the output tree
+   file. Each is followed by a numerical weight in square brackets (such
+   as [0.25000]). This is needed when we use the trees to make a
+   consensus tree of the results of bootstrapping or jackknifing, to
+   avoid overrepresenting replicates that find many tied trees. If the U
+   (User Tree) option is used and more than one tree is supplied, the
+   program also performs a statistical test of each of these trees
+   against the best tree. This test, which is a version of the test
+   proposed by Alan Templeton (1983) and evaluated in a test case by me
+   (1985a). It is closely parallel to a test using log likelihood
+   differences due to Kishino and Hasegawa (1989), and uses the mean and
+   variance of step differences between trees, taken across positions. If
+   the mean is more than 1.96 standard deviations different then the
+   trees are declared significantly different. The program prints out a
+   table of the steps for each tree, the differences of each from the
+   best one, the variance of that quantity as determined by the step
+   differences at individual positions, and a conclusion as to whether
+   that tree is or is not significantly worse than the best one.
+
+  Output files for usage example
+
+  File: protpars.fprotpars
+
+
+Protein parsimony algorithm, version 3.6b
+
+
+
+     3 trees in all found
+
+
+
+
+     +--------Gamma
+     !
+  +--2     +--Epsilon
+  !  !  +--4
+  !  +--3  +--Delta
+  1     !
+  !     +-----Beta
+  !
+  +-----------Alpha
+
+  remember: this is an unrooted tree!
+
+
+requires a total of     16.000
+
+
+
+
+           +--Epsilon
+        +--4
+     +--3  +--Delta
+     !  !
+  +--2  +-----Gamma
+  !  !
+  1  +--------Beta
+  !
+  +-----------Alpha
+
+  remember: this is an unrooted tree!
+
+
+requires a total of     16.000
+
+
+
+
+           +--Epsilon
+     +-----4
+     !     +--Delta
+  +--3
+  !  !     +--Gamma
+  1  +-----2
+  !        +--Beta
+  !
+  +-----------Alpha
+
+  remember: this is an unrooted tree!
+
+
+requires a total of     16.000
+
+  File: protpars.treefile
+
+((Gamma,((Epsilon,Delta),Beta)),Alpha)[0.3333];
+((((Epsilon,Delta),Gamma),Beta),Alpha)[0.3333];
+(((Epsilon,Delta),(Gamma,Beta)),Alpha)[0.3333];
+
+  Output files for usage example 2
+
+  File: protpars.fprotpars
+
+
+Protein parsimony algorithm, version 3.6b
+
+ 5 species,  10  sites
+
+
+Name          Sequences
+----          ---------
+
+Alpha        ABCDEFGHIK
+Beta         ..--......
+Gamma        ?...S..*??
+Delta        CIK.......
+Epsilon      DIK.......
+
+
+
+
+     3 trees in all found
+
+
+
+
+  +-----------Beta
+  !
+  1  +--------Gamma
+  !  !
+  +--2     +--Epsilon
+     !  +--4
+     +--3  +--Delta
+        !
+        +-----Alpha
+
+  remember: (although rooted by outgroup) this is an unrooted tree!
+
+
+requires a total of     14.000
+
+steps in each position:
+         0   1   2   3   4   5   6   7   8   9
+     *-----------------------------------------
+    0!       3   1   5   3   2   0   0   2   0
+   10!   0
+
+From    To     Any Steps?    State at upper node
+                             ( . means same as in the node below it on tree)
+
+
+root     1                AN??EFGHIK
+  1   Beta        maybe   .B--......
+
+
+  [Part of this file has been deleted for brevity]
+
+
+root     1                AN??EFGHIK
+  1   Beta        maybe   .B--......
+  1      2        maybe   ..CD......
+  2      3        maybe   ?.........
+  3      4         yes    .IK.......
+  4   Epsilon     maybe   D.........
+  4   Delta        yes    C.........
+  3   Gamma        yes    ?B..S..*??
+  2   Alpha       maybe   .B........
+
+
+
+
+
+  +-----------Beta
+  !
+  1        +--Epsilon
+  !  +-----4
+  !  !     +--Delta
+  +--3
+     !     +--Gamma
+     +-----2
+           +--Alpha
+
+  remember: (although rooted by outgroup) this is an unrooted tree!
+
+
+requires a total of     14.000
+
+steps in each position:
+         0   1   2   3   4   5   6   7   8   9
+     *-----------------------------------------
+    0!       3   1   5   3   2   0   0   2   0
+   10!   0
+
+From    To     Any Steps?    State at upper node
+                             ( . means same as in the node below it on tree)
+
+
+root     1                AN??EFGHIK
+  1   Beta        maybe   .B--......
+  1      3         yes    ..?D......
+  3      4         yes    ?IK.......
+  4   Epsilon     maybe   D.........
+  4   Delta        yes    C.........
+  3      2         yes    ..C.......
+  2   Gamma        yes    ?B..S..*??
+  2   Alpha       maybe   .B........
+
+
+  File: protpars.treefile
+
+(Beta,(Gamma,((Epsilon,Delta),Alpha)))[0.3333];
+(Beta,(((Epsilon,Delta),Gamma),Alpha))[0.3333];
+(Beta,((Epsilon,Delta),(Gamma,Alpha)))[0.3333];
+
+Data files
+
+   None
+
+Notes
+
+   None.
+
+References
+
+   None.
+
+Warnings
+
+   None.
+
+Diagnostic Error Messages
+
+   None.
+
+Exit status
+
+   It always exits with status 0.
+
+Known bugs
+
+   None.
+
+See also
+
+   Program name Description
+   ednacomp DNA compatibility algorithm
+   ednadist Nucleic acid sequence Distance Matrix program
+   ednainvar Nucleic acid sequence Invariants method
+   ednaml Estimates phylogenies from nucleic acid sequence Maximum
+   Likelihood
+   ednamlk Estimates phylogenies from nucleic acid sequence Maximum
+   Likelihood with molecular clock
+   ednapars DNA parsimony algorithm
+   ednapenny Penny algorithm for DNA
+   eprotdist Protein distance algorithm
+   eprotpars Protein parsimony algorithm
+   erestml Restriction site Maximum Likelihood method
+   eseqboot Bootstrapped sequences algorithm
+   fdiscboot Bootstrapped discrete sites algorithm
+   fdnacomp DNA compatibility algorithm
+   fdnadist Nucleic acid sequence Distance Matrix program
+   fdnainvar Nucleic acid sequence Invariants method
+   fdnaml Estimates nucleotide phylogeny by maximum likelihood
+   fdnamlk Estimates nucleotide phylogeny by maximum likelihood
+   fdnamove Interactive DNA parsimony
+   fdnapars DNA parsimony algorithm
+   fdnapenny Penny algorithm for DNA
+   fdolmove Interactive Dollo or Polymorphism Parsimony
+   ffreqboot Bootstrapped genetic frequencies algorithm
+   fproml Protein phylogeny by maximum likelihood
+   fpromlk Protein phylogeny by maximum likelihood
+   fprotdist Protein distance algorithm
+   frestboot Bootstrapped restriction sites algorithm
+   frestdist Computes distance matrix from restriction sites or fragments
+   frestml Restriction site maximum Likelihood method
+   fseqboot Bootstrapped sequences algorithm
+   fseqbootall Bootstrapped sequences algorithm
+
+Author(s)
+
+   This program is an EMBOSS conversion of a program written by Joe
+   Felsenstein as part of his PHYLIP package.
+
+   Although we take every care to ensure that the results of the EMBOSS
+   version are identical to those from the original package, we recommend
+   that you check your inputs give the same results in both versions
+   before publication.
+
+   Please report all bugs in the EMBOSS version to the EMBOSS bug team,
+   not to the original author.
+
+History
+
+   Written (2004) - Joe Felsenstein, University of Washington.
+
+   Converted (August 2004) to an EMBASSY program by the EMBOSS team.
+
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.

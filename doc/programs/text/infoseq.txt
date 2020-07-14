@@ -1,32 +1,32 @@
 
                                   infoseq 
-                                      
-   
-   
+
+
+
 Function
 
    Displays some simple information about sequences
-   
+
 Description
 
    This is a small utility to list the sequences' USA, name, accession
    number, type (nucleic or protein), length, percentage C+G, and/or
    description.
-   
+
    Any combination of these types of information can be easily selected
    or unselected.
-   
+
    By default, the output file starts each line with the USA of the
    sequence being described, so the output file is a list file that can
    be manually edited and read in by any other EMBOSS program that can
    read in one or more sequence to be analysed.
-   
+
 Usage
 
    Here is a sample session with infoseq
-   
+
    Display information on a sequence:
-   
+
 
 % infoseq tembl:paamir 
 Displays some simple information about sequences
@@ -34,13 +34,13 @@ Displays some simple information about sequences
 # USA             Name        Accession Type Length      %GC   Description
 tembl-id:PAAMIR   PAAMIR        X13776  N    2167        66.54 Pseudomonas aeru
 ginosa amiC and amiR gene for aliphatic amidase regulation
-   
+
    Go to the input files for this example
-   
+
    Example 2
-   
+
    Don't display the USA of a sequence:
-   
+
 
 % infoseq tembl:paamir -nousa 
 Displays some simple information about sequences
@@ -48,41 +48,41 @@ Displays some simple information about sequences
 # Name        Accession Type Length      %GC   Description
 PAAMIR        X13776    N    2167        66.54 Pseudomonas aeruginosa amiC and
 amiR gene for aliphatic amidase regulation
-   
+
    Example 3
-   
+
    Display only the name and length of a sequence:
-   
+
 
 % infoseq tembl:paamir -only -name -length 
 Displays some simple information about sequences
 
 PAAMIR        2167
-   
+
    Example 4
-   
+
    Display only the description of a sequence:
-   
+
 
 % infoseq tembl:paamir -only -desc 
 Displays some simple information about sequences
 
 Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase regulation
-   
+
    Example 5
-   
+
    Display the type of a sequence:
-   
+
 
 % infoseq tembl:paamir -only -type 
 Displays some simple information about sequences
 
 N
-   
+
    Example 6
-   
+
    Display information formatted with HTML:
-   
+
 
 % infoseq tembl:paamir -html 
 Displays some simple information about sequences
@@ -161,7 +161,7 @@ Command line arguments
    -error               boolean    Report errors
    -fatal               boolean    Report fatal errors
    -die                 boolean    Report deaths
-   
+
 
    Standard (Mandatory) qualifiers Allowed values Default
    [-sequence]
@@ -187,18 +187,18 @@ Command line arguments
    @(!$(only))
    -description Display 'description' column Boolean value Yes/No
    @(!$(only))
-   
+
 Input file format
 
    infoseq reads any sequence USAs.
-   
+
   Input files for usage example
-  
+
    'tembl:paamir' is a sequence entry in the example nucleic acid
    database 'tembl'
-   
+
   Database entry: tembl:paamir
-  
+
 ID   PAAMIR     standard; DNA; PRO; 2167 BP.
 XX
 AC   X13776; M43175;
@@ -346,11 +346,11 @@ SQ   Sequence 2167 BP; 363 A; 712 C; 730 G; 362 T; 0 other;
      cctcgag                                                                216
 7
 //
-   
+
 Output file format
 
    The output is displayed on the screen (stdout) by default.
-   
+
    The first non-blank line is the heading. This is followed by one line
    per sequence containing the following columns of data separated by one
    of more space or TAB characters:
@@ -362,25 +362,25 @@ Output file format
      * The type ('N' is nucleic, 'P' is protein).
      * The sequence length.
      * The description line of the sequence. This may be blank.
-       
+
    If qualifiers to inhibit various columns of information are used, then
    the remaining columns of information are output in the same order as
    shown above, so if '-nolength' is used, the order of output is: usa,
    name, accession, type, description.
-   
+
    When the -html qualifier is specified, then the output will be wrapped
    in HTML tags, ready for inclusion in a Web page. Note that tags such
    as <HTML> and <BODY> are not output by this program as the table of
    databases is expected to form only part of the contents of a web page
    - the rest of the web page must be supplier by the user.
-   
+
    The lines of out information are guaranteed not to have trailing
    white-space at the end.
-   
+
 Data files
 
    None.
-   
+
 Notes
 
    This program was written to make it easier to get some specific bits
@@ -390,32 +390,32 @@ $type = `$PATH_TO_EMBOSS/infoseq $sequence -auto -only -type`;
 chomp $type;
 
    You may find other uses for it, of course.
-   
+
    By default, the output file starts each line with the USA of the
    sequence being described, so the output file is a list file that can
    be manually edited and read in by other EMBOSS programs using the
    list-file specification of '@filename'.
-   
+
 References
 
    None.
-   
+
 Warnings
 
    None.
-   
+
 Diagnostic Error Messages
 
    None.
-   
+
 Exit status
 
    It always exits with status 0
-   
+
 Known bugs
 
    None noted.
-   
+
 See also
 
    Program name Description
@@ -427,21 +427,23 @@ See also
    tfm Displays a program's help documentation manual
    whichdb Search all databases for an entry
    wossname Finds programs by keywords in their one-line documentation
-   
+
      * geecee - Calculates the fractional GC content of a nucleic acid
        sequence
-       
+
 Author(s)
 
    Gary Williams (gwilliam © rfcgr.mrc.ac.uk)
    MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
    Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
-   
+
 History
 
 Target users
 
    This program is intended to be used by everyone and everything, from
    naive users to embedded scripts.
-   
+
 Comments
+
+   None

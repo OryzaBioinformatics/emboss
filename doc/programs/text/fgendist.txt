@@ -1,0 +1,451 @@
+
+                                 fgendist 
+
+
+
+Function
+
+   Compute genetic distances from gene frequencies
+
+Description
+
+   Computes one of three different genetic distance formulas from gene
+   frequency data. The formulas are Nei's genetic distance, the
+   Cavalli-Sforza chord measure, and the genetic distance of Reynolds et.
+   al. The former is appropriate for data in which new mutations occur in
+   an infinite isoalleles neutral mutation model, the latter two for a
+   model without mutation and with pure genetic drift. The distances are
+   written to a file in a format appropriate for input to the distance
+   matrix programs.
+
+Algorithm
+
+   This program computes any one of three measures of genetic distance
+   from a set of gene frequencies in different populations (or species).
+   The three are Nei's genetic distance (Nei, 1972), Cavalli-Sforza's
+   chord measure (Cavalli- Sforza and Edwards, 1967) and Reynolds, Weir,
+   and Cockerham's (1983) genetic distance. These are written to an
+   output file in a format that can be read by the distance matrix
+   phylogeny programs FITCH and KITSCH.
+
+   The three measures have somewhat different assumptions. All assume
+   that all differences between populations arise from genetic drift.
+   Nei's distance is formulated for an infinite isoalleles model of
+   mutation, in which there is a rate of neutral mutation and each mutant
+   is to a completely new alleles. It is assumed that all loci have the
+   same rate of neutral mutation, and that the genetic variability
+   initially in the population is at equilibrium between mutation and
+   genetic drift, with the effective population size of each population
+   remaining constant.
+
+   Nei's distance is:
+
+
+                                      \   \
+                                      /_  /_  p1mi   p2mi
+                                       m   i
+           D  =  - ln  ( ------------------------------------- ).
+
+                           \   \                \   \
+                         [ /_  /_  p1mi2]1/2   [ /_  /_  p2mi2]1/2
+                            m   i                m   i
+
+   where m is summed over loci, i over alleles at the m-th locus, and
+   where
+
+     p1mi
+
+   is the frequency of the i-th allele at the m-th locus in population 1.
+   Subject to the above assumptions, Nei's genetic distance is expected,
+   for a sample of sufficiently many equivalent loci, to rise linearly
+   with time.
+
+   The other two genetic distances assume that there is no mutation, and
+   that all gene frequency changes are by genetic drift alone. However
+   they do not assume that population sizes have remained constant and
+   equal in all populations. They cope with changing population size by
+   having expectations that rise linearly not with time, but with the sum
+   over time of 1/N, where N is the effective population size. Thus if
+   population size doubles, genetic drift will be taking place more
+   slowly, and the genetic distance will be expected to be rising only
+   half as fast with respect to time. Both genetic distances are
+   different estimators of the same quantity under the same model.
+
+   Cavalli-Sforza's chord distance is given by
+
+
+                   \               \                        \
+     D2    =    4  /_  [  1   -    /_   p1mi1/2 p 2mi1/2]  /  /_  (am  - 1)
+                    m               i                        m
+
+   where m indexes the loci, where i is summed over the alleles at the
+   m-th locus, and where a is the number of alleles at the m-th locus. It
+   can be shown that this distance always satisfies the triangle
+   inequality. Note that as given here it is divided by the number of
+   degrees of freedom, the sum of the numbers of alleles minus one. The
+   quantity which is expected to rise linearly with amount of genetic
+   drift (sum of 1/N over time) is D squared, the quantity computed
+   above, and that is what is written out into the distance matrix.
+
+   Reynolds, Weir, and Cockerham's (1983) genetic distance is
+
+
+                       \    \
+                       /_   /_  [ p1mi     -  p2mi]2
+                        m    i
+       D2     =      --------------------------------------
+
+                         \               \
+                      2  /_   [  1   -   /_  p1mi    p2mi ]
+                          m               i
+
+   where the notation is as before and D2 is the quantity that is
+   expected to rise linearly with cumulated genetic drift.
+
+   Having computed one of these genetic distances, one which you feel is
+   appropriate to the biology of the situation, you can use it as the
+   input to the programs FITCH, KITSCH or NEIGHBOR. Keep in mind that the
+   statistical model in those programs implicitly assumes that the
+   distances in the input table have independent errors. For any measure
+   of genetic distance this will not be true, as bursts of random genetic
+   drift, or sampling events in drawing the sample of individuals from
+   each population, cause fluctuations of gene frequency that affect many
+   distances simultaneously. While this is not expected to bias the
+   estimate of the phylogeny, it does mean that the weighing of evidence
+   from all the different distances in the table will not be done with
+   maximal efficiency. One issue is which value of the P (Power)
+   parameter should be used. This depends on how the variance of a
+   distance rises with its expectation. For Cavalli-Sforza's chord
+   distance, and for the Reynolds et. al. distance it can be shown that
+   the variance of the distance will be proportional to the square of its
+   expectation; this suggests a value of 2 for P, which the default value
+   for FITCH and KITSCH (there is no P option in NEIGHBOR).
+
+   If you think that the pure genetic drift model is appropriate, and are
+   thus tempted to use the Cavalli-Sforza or Reynolds et. al. distances,
+   you might consider using the maximum likelihood program CONTML
+   instead. It will correctly weigh the evidence in that case. Like those
+   genetic distances, it uses approximations that break down as loci
+   start to drift all the way to fixation. Although Nei's distance will
+   not break down in that case, it makes other assumptions about equality
+   of substitution rates at all loci and constancy of population sizes.
+
+   qThe most important thing to remember is that genetic distance is not
+   an abstract, idealized measure of "differentness". It is an estimate
+   of a parameter (time or cumulated inverse effective population size)
+   of the model which is thought to have generated the differences we
+   see. As an estimate, it has statistical properties that can be
+   assessed, and we should never have to choose between genetic distances
+   based on their aesthetic properties, or on the personal prestige of
+   their originators. Considering them as estimates focuses us on the
+   questions which genetic distances are intended to answer, for if there
+   are none there is no reason to compute them. For further perspective
+   on genetic distances, I recommend my own paper evaluating Reynolds,
+   Weir, and Cockerham (1983), and the material in Nei's book (Nei,
+   1987).
+
+Usage
+
+   Here is a sample session with fgendist
+
+
+% fgendist 
+Compute genetic distances from gene frequencies
+Input file: gendist.dat
+Output file [gendist.fgendist]: 
+
+Distances calculated for species
+    European     .
+    African      ..
+    Chinese      ...
+    American     ....
+    Australian   .....
+
+Distances written to file "gendist.fgendist"
+
+Done.
+
+
+   Go to the input files for this example
+   Go to the output files for this example
+
+Command line arguments
+
+   Standard (Mandatory) qualifiers:
+  [-infile]            frequencies File containing one or more sets of data
+  [-outfile]           outfile    Output file name
+
+   Additional (Optional) qualifiers:
+   -method             menu       Which method to use
+   -[no]progress       boolean    Print indications of progress of run
+   -lower              boolean    Lower triangular distance matrix
+
+   Advanced (Unprompted) qualifiers: (none)
+   Associated qualifiers:
+
+   "-outfile" associated qualifiers
+   -odirectory2        string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report deaths
+
+
+   Standard (Mandatory) qualifiers Allowed values Default
+   [-infile]
+   (Parameter 1) File containing one or more sets of data Frequency
+   value(s)
+   [-outfile]
+   (Parameter 2) Output file name Output file <sequence>.fgendist
+   Additional (Optional) qualifiers Allowed values Default
+   -method Which method to use
+   n (Nei genetic distance)
+   c (Cavalli-Sforza chord measure)
+   r (Reynolds genetic distance)
+   n
+   -[no]progress Print indications of progress of run Boolean value
+   Yes/No Yes
+   -lower Lower triangular distance matrix Boolean value Yes/No No
+   Advanced (Unprompted) qualifiers Allowed values Default
+   (none)
+
+Input file format
+
+   fgendist reads continuous character data
+
+  Continuous character data
+
+   The programs in this group use gene frequencies and quantitative
+   character values. One (CONTML) constructs maximum likelihood estimates
+   of the phylogeny, another (GENDIST) computes genetic distances for use
+   in the distance matrix programs, and the third (CONTRAST) examines
+   correlation of traits as they evolve along a given phylogeny.
+
+   When the gene frequencies data are used in CONTML or GENDIST, this
+   involves the following assumptions:
+    1. Different lineages evolve independently.
+    2. After two lineages split, their characters change independently.
+    3. Each gene frequency changes by genetic drift, with or without
+       mutation (this varies from method to method).
+    4. Different loci or characters drift independently.
+
+   How these assumptions affect the methods will be seen in my papers on
+   inference of phylogenies from gene frequency and continuous character
+   data (Felsenstein, 1973b, 1981c, 1985c).
+
+   The input formats are fairly similar to the discrete-character
+   programs, but with one difference. When CONTML is used in the
+   gene-frequency mode (its usual, default mode), or when GENDIST is
+   used, the first line contains the number of species (or populations)
+   and the number of loci and the options information. There then follows
+   a line which gives the numbers of alleles at each locus, in order.
+   This must be the full number of alleles, not the number of alleles
+   which will be input: i. e. for a two-allele locus the number should be
+   2, not 1. There then follow the species (population) data, each
+   species beginning on a new line. The first 10 characters are taken as
+   the name, and thereafter the values of the individual characters are
+   read free-format, preceded and separated by blanks. They can go to a
+   new line if desired, though of course not in the middle of a number.
+   Missing data is not allowed - an important limitation. In the default
+   configuration, for each locus, the numbers should be the frequencies
+   of all but one allele. The menu option A (All) signals that the
+   frequencies of all alleles are provided in the input data -- the
+   program will then automatically ignore the last of them. So without
+   the A option, for a three-allele locus there should be two numbers,
+   the frequencies of two of the alleles (and of course it must always be
+   the same two!). Here is a typical data set without the A option:
+
+     5    3
+2 3 2
+Alpha      0.90 0.80 0.10 0.56
+Beta       0.72 0.54 0.30 0.20
+Gamma      0.38 0.10 0.05  0.98
+Delta      0.42 0.40 0.43 0.97
+Epsilon    0.10 0.30 0.70 0.62
+
+   whereas here is what it would have to look like if the A option were
+   invoked:
+
+     5    3
+2 3 2
+Alpha      0.90 0.10 0.80 0.10 0.10 0.56 0.44
+Beta       0.72 0.28 0.54 0.30 0.16 0.20 0.80
+Gamma      0.38 0.62 0.10 0.05 0.85  0.98 0.02
+Delta      0.42 0.58 0.40 0.43 0.17 0.97 0.03
+Epsilon    0.10 0.90 0.30 0.70 0.00 0.62 0.38
+
+   The first line has the number of species (or populations) and the
+   number of loci. The second line has the number of alleles for each of
+   the 3 loci. The species lines have names (filled out to 10 characters
+   with blanks) followed by the gene frequencies of the 2 alleles for the
+   first locus, the 3 alleles for the second locus, and the 2 alleles for
+   the third locus. You can start a new line after any of these allele
+   frequencies, and continue to give the frequencies on that line
+   (without repeating the species name).
+
+   If all alleles of a locus are given, it is important to have them add
+   up to 1. Roundoff of the frequencies may cause the program to conclude
+   that the numbers do not sum to 1, and stop with an error message.
+
+   While many compilers may be more tolerant, it is probably wise to make
+   sure that each number, including the first, is preceded by a blank,
+   and that there are digits both preceding and following any decimal
+   points.
+
+   CONTML and CONTRAST also treat quantitative characters (the
+   continuous-characters mode in CONTML, which is option C). It is
+   assumed that each character is evolving according to a Brownian motion
+   model, at the same rate, and independently. In reality it is almost
+   always impossible to guarantee this. The issue is discussed at length
+   in my review article in Annual Review of Ecology and Systematics
+   (Felsenstein, 1988a), where I point out the difficulty of transforming
+   the characters so that they are not only genetically independent but
+   have independent selection acting on them. If you are going to use
+   CONTML to model evolution of continuous characters, then you should at
+   least make some attempt to remove genetic correlations between the
+   characters (usually all one can do is remove phenotypic correlations
+   by transforming the characters so that there is no within-population
+   covariance and so that the within-population variances of the
+   characters are equal -- this is equivalent to using Canonical
+   Variates). However, this will only guarantee that one has removed
+   phenotypic covariances between characters. Genetic covariances could
+   only be removed by knowing the coheritabilities of the characters,
+   which would require genetic experiments, and selective covariances
+   (covariances due to covariation of selection pressures) would require
+   knowledge of the sources and extent of selection pressure in all
+   variables.
+
+   CONTRAST is a program designed to infer, for a given phylogeny that is
+   provided to the program, the covariation between characters in a data
+   set. Thus we have a program in this set that allow us to take
+   information about the covariation and rates of evolution of characters
+   and make an estimate of the phylogeny (CONTML), and a program that
+   takes an estimate of the phylogeny and infers the variances and
+   covariances of the character changes. But we have no program that
+   infers both the phylogenies and the character covariation from the
+   same data set.
+
+   In the quantitative characters mode, a typical small data set would
+   be:
+
+     5   6
+Alpha      0.345 0.467 1.213  2.2  -1.2 1.0
+Beta       0.457 0.444 1.1    1.987 -0.2 2.678
+Gamma      0.6 0.12 0.97 2.3  -0.11 1.54
+Delta      0.68  0.203 0.888 2.0  1.67
+Epsilon    0.297  0.22 0.90 1.9 1.74
+
+   Note that in the latter case, there is no line giving the numbers of
+   alleles at each locus. In this latter case no square-root
+   transformation of the coordinates is done: each is assumed to give
+   directly the position on the Brownian motion scale.
+
+   For further discussion of options and modifiable constants in CONTML,
+   GENDIST, and CONTRAST see the documentation files for those programs.
+
+  Input files for usage example
+
+  File: gendist.dat
+
+    5    10
+2 2 2 2 2 2 2 2 2 2
+European   0.2868 0.5684 0.4422 0.4286 0.3828 0.7285 0.6386 0.0205
+0.8055 0.5043
+African    0.1356 0.4840 0.0602 0.0397 0.5977 0.9675 0.9511 0.0600
+0.7582 0.6207
+Chinese    0.1628 0.5958 0.7298 1.0000 0.3811 0.7986 0.7782 0.0726
+0.7482 0.7334
+American   0.0144 0.6990 0.3280 0.7421 0.6606 0.8603 0.7924 0.0000
+0.8086 0.8636
+Australian 0.1211 0.2274 0.5821 1.0000 0.2018 0.9000 0.9837 0.0396
+0.9097 0.2976
+
+Output file format
+
+   fgendist output simply contains on its first line the number of
+   species (or populations). Each species (or population) starts a new
+   line, with its name printed out first, and then and there are up to
+   nine genetic distances printed on each line, in the standard format
+   used as input by the distance matrix programs. The output, in its
+   default form, is ready to be used in the distance matrix programs.
+
+  Output files for usage example
+
+  File: gendist.fgendist
+
+    5
+European    0.000000  0.078002  0.080749  0.066805  0.103014
+African     0.078002  0.000000  0.234698  0.104975  0.227281
+Chinese     0.080749  0.234698  0.000000  0.053879  0.063275
+American    0.066805  0.104975  0.053879  0.000000  0.134756
+Australian  0.103014  0.227281  0.063275  0.134756  0.000000
+
+Data files
+
+   None
+
+Notes
+
+   None.
+
+References
+
+   None.
+
+Warnings
+
+   None.
+
+Diagnostic Error Messages
+
+   None.
+
+Exit status
+
+   It always exits with status 0.
+
+Known bugs
+
+   None.
+
+See also
+
+   Program name Description
+   egendist Genetic Distance Matrix program
+   fcontml Gene frequency and continuous character Maximum Likelihood
+   method
+
+Author(s)
+
+   This program is an EMBOSS conversion of a program written by Joe
+   Felsenstein as part of his PHYLIP package.
+
+   Although we take every care to ensure that the results of the EMBOSS
+   version are identical to those from the original package, we recommend
+   that you check your inputs give the same results in both versions
+   before publication.
+
+   Please report all bugs in the EMBOSS version to the EMBOSS bug team,
+   not to the original author.
+
+History
+
+   Written (2004) - Joe Felsenstein, University of Washington.
+
+   Converted (August 2004) to an EMBASSY program by the EMBOSS team.
+
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.

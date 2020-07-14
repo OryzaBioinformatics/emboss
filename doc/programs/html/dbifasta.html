@@ -7,11 +7,9 @@
 </HEAD>
 <BODY BGCOLOR="#FFFFFF" text="#000000">
 
-
-
 <table align=center border=0 cellspacing=0 cellpadding=0>
 <tr><td valign=top>
-<A HREF="index.html" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
@@ -25,51 +23,15 @@ dbifasta
 
 
 
-
-
-<!--END OF HEADER-->
-
-
-
-
-
 <H2>
     Function
 </H2>
-
-<!--
-DON'T WRITE ANYTHING HERE.
-IT IS DONE FOR YOU.
--->
 Index a fasta database
-
 
 <H2>
     Description
 </H2>
 
-<!-- 
-	This is the main part of the document.
-
-        This is what the user looks at to find out if this program will
-        do what he wants. 
-
-        Long description.
-
-        Why it is useful.
-
-        When it should/shouldn't be used.
-
-        Algorithms
-
-        Expanded description.
-
-        eg: Reverse engineers Wheedle's 'talpsgob' program. This does a 
-        splurge of the 5' end of the sequence followed by a durm.
-        The net effect is a 5' end splurt.
-        etc. for as long as is required (several pages is not unreasonable)
-  -->
-  
 <b>dbifasta</b> indexes a flat file database of one or more files, and builds
 EMBL CD-ROM format index files. This format is used by the software on
 the EMBL database CD-ROM distribution and by the Staden package in
@@ -107,7 +69,6 @@ appropriate values.
 <H2>
     Usage
 </H2>
-
 <b>Here is a sample session with dbifasta</b>
 <p>
 
@@ -116,6 +77,7 @@ appropriate values.
 
 % <b>dbifasta </b>
 Index a fasta database
+Database name: <b>EMROD</b>
     simple : >ID
      idacc : >ID ACC
      gcgid : >db:ID
@@ -123,9 +85,8 @@ Index a fasta database
       dbid : >db ID
       ncbi : | formats
 ID line format [idacc]: <b>idacc</b>
-Database directory [.]: <b>../../data</b>
+Database directory [.]: <b>data</b>
 Wildcard database filename [*.dat]: <b>emrod</b>
-Database name: <b>EMROD</b>
 Release number [0.0]: <b></b>
 Index date [00/00/00]: <b></b>
 
@@ -134,46 +95,17 @@ Index date [00/00/00]: <b></b>
 <a href="#output.1">Go to the output files for this example</a><p><p>
 
 
-<!--
-Here is a sample session with dbifasta, using the data in the test/wormpep
-directory of the distribution which is normally indexed as "wormpep"
-
-
-<pre>
-
-% dbifasta
-Index a fasta database
-    simple : >ID
-     idacc : >ID ACC
-     gcgid : >db:ID
-  gcgidacc : >db:ID ACC
-      ncbi : >blah|...[|ACC]|ID
-ID line format [idacc]: idacc
-Database name: wormpep
-Database directory [.]: /data/worm/
-Wildcard database filename [*.dat]: wormpep 
-Release number [0.0]: 1.0
-Index date [00/00/00]: 04/02/00
-
-</pre>
--->
-
 <H2>
     Command line arguments
 </H2>
 
-<!--
-DON'T WRITE ANYTHING HERE.
-IT IS DONE FOR YOU.
--->
-
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
    Standard (Mandatory) qualifiers:
+  [-dbname]            string     Database name
    -idformat           menu       ID line format
    -directory          directory  Database directory
    -filenames          string     Wildcard database filename
-  [-dbname]            string     Database name
    -release            string     Release number
    -date               string     Index date
 
@@ -181,7 +113,6 @@ IT IS DONE FOR YOU.
    Advanced (Unprompted) qualifiers:
    -fields             menu       Index fields
    -exclude            string     Wildcard filename(s) to exclude
-   -indexdirectory     directory  Index directory
    -maxindex           integer    Maximum index length
    -sortoptions        string     Sort options, typically '-T .' to use
                                   current directory for work files and '-k
@@ -189,33 +120,40 @@ IT IS DONE FOR YOU.
                                   field
    -[no]systemsort     boolean    Use system sort utility
    -[no]cleanup        boolean    Clean up temporary files
+   -indexoutdir        outdir     Index directory
 
    Associated qualifiers: (none)
    General qualifiers:
-   -auto                boolean    Turn off prompts
-   -stdout              boolean    Write standard output
-   -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for standard and additional values
-   -debug               boolean    Write debug output to program.dbg
-   -verbose             boolean    Report some/full command line options
-   -help                boolean    Report command line options. More
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
-   -warning             boolean    Report warnings
-   -error               boolean    Report errors
-   -fatal               boolean    Report fatal errors
-   -die                 boolean    Report deaths
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report deaths
 
 
 </pre>
 </td></tr></table>
 <P>
-
 <table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
 <tr bgcolor="#FFFFCC">
 <th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
 <th align="left">Allowed values</th>
 <th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-dbname]<br>(Parameter 1)</td>
+<td>Database name</td>
+<td>A string from 2 to 19 characters, matching regular expression /[A-z][A-z0-9_]+/</td>
+<td><b>Required</b></td>
 </tr>
 
 <tr>
@@ -237,13 +175,6 @@ IT IS DONE FOR YOU.
 <td>Wildcard database filename</td>
 <td>Any string is accepted</td>
 <td>*.dat</td>
-</tr>
-
-<tr>
-<td>[-dbname]<br>(Parameter 1)</td>
-<td>Database name</td>
-<td>A string from 1 to 19 characters</td>
-<td><b>Required</b></td>
 </tr>
 
 <tr>
@@ -291,13 +222,6 @@ IT IS DONE FOR YOU.
 </tr>
 
 <tr>
-<td>-indexdirectory</td>
-<td>Index directory</td>
-<td>Directory</td>
-<td>.</td>
-</tr>
-
-<tr>
 <td>-maxindex</td>
 <td>Maximum index length</td>
 <td>Integer 0 or more</td>
@@ -325,49 +249,36 @@ IT IS DONE FOR YOU.
 <td>Yes</td>
 </tr>
 
-</table>
+<tr>
+<td>-indexoutdir</td>
+<td>Index directory</td>
+<td>Output directory</td>
+<td>.</td>
+</tr>
 
+</table>
 
 
 <H2>
     Input file format
 </H2>
 
-<!-- 
-        This includes example input file formats.
-        Except for sequences which can be described by 'sequence USA',
-        this should be a detailed description and example - assume
-        someone will want to parse this file and will want to know what
-        happens in unusual cases - null input, etc. 
-   -->
-
-
-
 
 <H2>
     Output file format
 </H2>
 
-<!-- 
-        This includes example output file formats 
-        Except for sequences which can be described by 'sequence USA',
-        this should be a detailed description and example - assume
-        someone will want to parse this file and will want to know what
-        happens in unusual cases - null output, errors etc. 
-   -->
-
 
 <a name="output.1"></a>
 <h3>Output files for usage example </h3>
-<p><h3>File: acnum.hit</h3>
-<p>This file contains non-printing characters and so cannot be displayed here.
-<p><h3>File: acnum.trg</h3>
-<p>This file contains non-printing characters and so cannot be displayed here.
 <p><h3>File: division.lkp</h3>
 <p>This file contains non-printing characters and so cannot be displayed here.
 <p><h3>File: entrynam.idx</h3>
 <p>This file contains non-printing characters and so cannot be displayed here.
-
+<p><h3>File: acnum.hit</h3>
+<p>This file contains non-printing characters and so cannot be displayed here.
+<p><h3>File: acnum.trg</h3>
+<p>This file contains non-printing characters and so cannot be displayed here.
 
 <p>
 
@@ -406,35 +317,9 @@ read the entryname.idx records for each entry in turn.
 
 </ul>
 
-
-
 <H2>
     Data files
 </H2>
-
-<!-- 
-        Any data files used (e.g. translation table file)
-        This includes example data file formats if they are
-        not obvious.
-
-        eg:
-        data file format:
-
-	blank lines and comment lines are ignored.
-        comment lines start with '#'
-        There are three columns separated by one or more space or TAB
-	characters for X and Y values of durm, followed by energy
-        all coefficients are given as floating point values
-        An example is:
-
-        # Durm coefficient enery file
-        # X     Y       Energy
-        0.1     0.2     0.331
-        0.2     0.4     0.332
-        0.3     0.6     0.333
-        0.3     0.8     0.334
-
-   -->
 
 None.
 
@@ -442,25 +327,13 @@ None.
     Notes
 </H2>
 
-<!-- 
-        Restrictions.
-        Interesting behaviour.
-        Useful things you can do with this program.
-   -->
-
 The indexing method depends on each entry having a unique entry name.
 No allowance is made for two entries with the same name so it is
 not possible to index EMBL and EMBLNEW together.
 
-
-
 <H2>
     References
 </H2>
-
-<!-- 
-        Bibliography for methods used.
-   -->
 
 None.
 
@@ -468,59 +341,26 @@ None.
     Warnings
 </H2>
 
-<!-- 
-        Potentially stupid things the program will let you do.
-        eg:
-        It doesn't check to see if the sequence is a protein sequence or not.
-   -->
-
 None.
 
 <H2>
     Diagnostic Error Messages
 </H2>
 
-<!-- 
-        Error messages specific to this program.
-        eg:
-
-        "Threshold value greater than 1." - means that the threshold has
-        been set to be greater than 1 but a burgle exception has
-        occurred making this invalid - you should reduce the wobble
-        parameter and try again. 
-
-   -->
-
-None.
+<None.
 
 <H2>
     Exit status
 </H2>
 
-<!-- 
-        Description of the exit status for various error conditions
-        eg:
-        "It always exits with status 0"
-   -->
-   
 It always exits with status 0.
 
 <H2>
     Known bugs
 </H2>
 
-
-<!-- 
-        Bugs noted but not yet fixed.
-   -->
-
 None.
 
-<!--
-<H2>
-    See also
-</H2>
--->
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
@@ -529,20 +369,10 @@ None.
 <tr><td><a href="dbigcg.html">dbigcg</a></td><td>Index a GCG formatted database</td></tr>
 </table>
 
-<!-- 
-        Add any comments about other associated programs (to prepare
-        data files?) that seealso doesn't find. 
-   -->
-
-
-
 
 <H2>
     Author(s)
 </H2>
-<!--
-        Who has worked on the program in the past.
-   -->
 
 Alan Bleasby (ableasby&nbsp;&copy;&nbsp;rfcgr.mrc.ac.uk)
 <br>
@@ -551,48 +381,24 @@ Wellcome Trust Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
 
 
 
-
-
-
 <H2>
     History
 </H2>
 
-<!--
-        What changes have been made.
-   -->
-
 Completed August 2000
 
-<!--
-<p>
-[an error occurred while processing this directive]
--->
 
 <H2>
     Target users
 </H2>
-
-<!--
-        For general users, requested by one user, for EMBOSS site
-        maintainers, for EMBOSS developers etc.
-        eg:
-        "This program is intended to be used by everyone and everything,
-        from naive users to embedded scripts." 
-	Which is easy to include using:
-
-   -->
-This program is intended to be used by everyone and everything, from naive users to embedded scripts.
-
+This program is intended to be used by administrators responsible
+for software and database installation and maintenance. 
 
 
 <H2>
     Comments
 </H2>
-
-<!--
-	Any comments, requests etc. that people have about the program
-   -->
+None
 
 
 

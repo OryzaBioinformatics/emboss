@@ -1,37 +1,37 @@
 
                                   prophet 
-                                      
-   
-   
+
+
+
 Function
 
    Gapped alignment for profiles
-   
+
 Description
 
    prophet finds matches between a GRIBSKOV or HENIKOFF profile produced
    by prophecy and one or more sequences.
-   
+
    Note: prophet does NOT use the 'simple frequency matrices' produced by
    prophecy. If you have a 'simple frequency matrix'you should use the
    program profit to scan sequences.
-   
+
 Usage
 
    Here is a sample session with prophet
-   
+
 
 % prophet 
 Gapped alignment for profiles
 Input sequence(s): tsw:h*
-Profile or matrix file: ../../data/globins.gribskov
+Profile or matrix file: globins.gribskov
 Gap opening coefficient [1.0]: 
 Gap extension coefficient [1.0]: 
 Output file [hd_fugru.prophet]: 
-   
+
    Go to the input files for this example
    Go to the output files for this example
-   
+
 Command line arguments
 
    Standard (Mandatory) qualifiers:
@@ -78,7 +78,7 @@ Command line arguments
    -error               boolean    Report errors
    -fatal               boolean    Report fatal errors
    -die                 boolean    Report deaths
-   
+
 
    Standard (Mandatory) qualifiers Allowed values Default
    [-sequence]
@@ -93,18 +93,18 @@ Command line arguments
    (none)
    Advanced (Unprompted) qualifiers Allowed values Default
    (none)
-   
+
 Input file format
 
    prophet reads a GRIBSKOV or a HENIKOFF profile produced by prophecy
    and searches one or more sequence USAs.
-   
+
   Input files for usage example
-  
+
    'tsw:h*' is a sequence entry in the example protein database 'tsw'
-   
-  File: ../../data/globins.gribskov
-  
+
+  File: globins.gribskov
+
 # Gribskov Protein Profile
 # Columns are amino acids A->Z
 # Last column is indel penalty
@@ -300,13 +300,13 @@ DKFLASVATVLASKYRELGYQG
 0.10 0.49 0.13 -0.03 -0.03 0.00 -0.07 -0.16 0.00 -0.20 0.00 0.92 0.92
 0.20 0.00 0.07 0.20 0.16 -0.20 0.49 -0.07 -0.10 0.00 -0.03 -0.16 -0.10 0.13 0.0
 0 0.10 0.07 -0.10 0.20 0.13 0.00 0.07 -0.33 0.00 -0.20 0.00 0.92 0.92
-   
+
 Output file format
 
   Output files for usage example
-  
+
   File: hd_fugru.prophet
-  
+
 Local: Consensus vs HD_FUGRU
 Score: 74.34
 
@@ -379,74 +379,76 @@ HBB_HUMAN       89       TLSELHCDKLHVD..DPENFRLLGNVLVCVLAHHFGKEFTPPVQA 131
 Consensus       141      SMDKFLASVATVLASKYR                            158
                          :::|::|:||::||:||:
 HBB_HUMAN       132      AYQKVVAGVANALAHKYH                            149
-   
+
 Data files
 
    None.
-   
+
 Notes
 
    None.
-   
+
 References
 
    None.
-   
+
 Warnings
 
    prophet does NOT use the 'simple frequency matrices' produced by
    prophecy. If you have a 'simple frequency matrix'you should use the
    program profit to scan sequences.
-   
+
 Diagnostic Error Messages
 
    If you see something like:
-   
+
    EMBOSS An error in prophet.c at line 110:
 Unrecognised profile/matrix file format
 
    then you have probably given prophet a 'simple frequency matrix' and
    not a a GRIBSKOV or HENIKOFF profile produced by prophecy.
-   
+
    If you see something like:
-   
+
 Uncaught exception
 Allocation Failed
 raised at prophet.c:147
 
    then you have run out of memory. This will occur if your sequence
    and/or your profile are large.
-   
+
    prophet allocates space based on the length of the sequence and the
    size of the profile (8 x seqlen x profilelen)
-   
+
 Exit status
 
-   It exists with a status of 0.
-   
+   It exits with a status of 0.
+
 Known bugs
 
    None.
-   
+
 See also
 
    Program name                     Description
    profit       Scan a sequence or database with a matrix or profile
    prophecy     Creates matrices/profiles from multiple alignments
-   
+
 Author(s)
 
    Alan Bleasby (ableasby © rfcgr.mrc.ac.uk)
    MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
    Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
-   
+
 History
 
-   Written (1999) - author - Alan Bleasby
-   
+   Written (1999) - Alan Bleasby
+
 Target users
 
    This program is intended to be used by everyone and everything, from
    naive users to embedded scripts.
-   
+
 Comments
+
+   None

@@ -1,42 +1,42 @@
 
                                 extractfeat 
-                                      
-   
-   
+
+
+
 Function
 
    Extract features from a sequence
-   
+
 Description
 
    extractfeat is a simple utility for extracting parts of a sequence
    that have been annotated as being a specific type of feature. These
    sub-sequences are writen to the output sequence file.
-   
+
    If the feature is annotated as being in the reverse sense of a nucleic
    acid sequence, then that feature's sub-sequence is
    reverse-complemented before being written out.
-   
+
    It is often useful to have some information on the context of the
    feature. extractfeat allows you to specify a number of bases or
    residues before and/or after the feature to write out.
-   
+
    If you are interested in extracting the sequence of the region around
    the start or end of the feature, then this can also be specified.
-   
+
    'joined' features can either be extracted as individual sequences, or
    as a single concatenated sequence if the '-join' qualifier is used.
-   
+
    Please remember that the output feature sequence is only as good as
    the annotation. If you rely upon other people's, or other program's
    annotation of features, then some of these will be incorrect.
-   
+
 Usage
 
    Here is a sample session with extractfeat
-   
+
    To write out the exons of a sequence:
-   
+
 
 % extractfeat tembl:hsfau1 -type exon stdout 
 Extract features from a sequence
@@ -57,14 +57,14 @@ gtaaagtccatggttccctggcccgtgctggaaaagtgagaggtcagactcctaag
 gtggccaaacaggagaagaagaagaagaagacaggtcgggctaagcggcggatgcagtac
 aaccggcgctttgtcaacgttgtgcccacctttggcaagaagaagggccccaatgccaac
 tcttaa
-   
+
    Go to the input files for this example
-   
+
    Example 2
-   
+
    To write out the exons with 10 extra bases at the start and end so
    that you can inspect the splice sites:
-   
+
 
 % extractfeat tembl:hsfau1 -type exon -before 10 -after 10 stdout 
 Extract features from a sequence
@@ -86,12 +86,12 @@ cctaaggtgagtgaga
 ccttctccaggtggccaaacaggagaagaagaagaagaagacaggtcgggctaagcggcg
 gatgcagtacaaccggcgctttgtcaacgttgtgcccacctttggcaagaagaagggccc
 caatgccaactcttaagtcttttgta
-   
+
    Example 3
-   
+
    To write out the 10 bases around the start of all 'exon' features in
    the tembl database:
-   
+
 
 % extractfeat tembl:*  -type exon -before 5 -after -5 stdout 
 Extract features from a sequence
@@ -476,11 +476,11 @@ tgtaggtgcg
 >GMGL01_3065_3208 [exon] Glycine max leghemoglobin gene or pseudogene (no mRNA
 detected).
 cgtaggtggt
-   
+
    Example 4
-   
+
    To extract the CDS region with the exons joined into one sequence:
-   
+
 
 % extractfeat tembl:hsfau1 -type CDS -join stdout 
 Extract features from a sequence
@@ -493,12 +493,12 @@ gccctgactaccctggaagtagcaggccgcatgcttggaggtaaagtccatggttccctg
 gcccgtgctggaaaagtgagaggtcagactcctaaggtggccaaacaggagaagaagaag
 aagaagacaggtcgggctaagcggcggatgcagtacaaccggcgctttgtcaacgttgtg
 cccacctttggcaagaagaagggccccaatgccaactcttaa
-   
+
    Example 5
-   
+
    To write out the 7 residues around all phosphorylated residues in the
    tsw database:
-   
+
 
 % extractfeat tsw:*  -type mod_res -value phosphorylation* -before 3 -after -4
 stdout 
@@ -508,9 +508,9 @@ Extract features from a sequence
 TETSQVA
 >PAXI_HUMAN_118_118 [mod_res] PAXILLIN.
 EHVYSFP
-   
+
    Go to the input files for this example
-   
+
 Command line arguments
 
    Standard (Mandatory) qualifiers:
@@ -724,7 +724,7 @@ Command line arguments
    -error               boolean    Report errors
    -fatal               boolean    Report fatal errors
    -die                 boolean    Report deaths
-   
+
 
    Standard (Mandatory) qualifiers Allowed values Default
    [-sequence]
@@ -836,21 +836,21 @@ Command line arguments
    An empty string is accepted
    Advanced (Unprompted) qualifiers Allowed values Default
    (none)
-   
+
 Input file format
 
    extractfeat reads normal sequences with features.
-   
+
    Feature tables in Swissprot, EMBL, GFF, etc. format can be added using
    '-ufo featurefile' on the command line.
-   
+
   Input files for usage example
-  
+
    'tembl:hsfau1' is a sequence entry in the example nucleic acid
    database 'tembl'
-   
+
   Database entry: tembl:hsfau1
-  
+
 ID   HSFAU1     standard; DNA; HUM; 2016 BP.
 XX
 AC   X65921; S45242;
@@ -991,217 +991,65 @@ SQ   Sequence 2016 BP; 421 A; 562 C; 538 G; 495 T; 0 other;
      tacttgcaag gcctcaggga gaggtgtgct tctcgg                                201
 6
 //
-   
+
   Input files for usage example 5
-  
+
    'tsw:*' is a sequence entry in the example protein database 'tsw'
-   
+
 Output file format
 
-  Input files for usage example
-  
-   'tembl:hsfau1' is a sequence entry in the example nucleic acid
-   database 'tembl'
-   
-  Database entry: tembl:hsfau1
-  
-ID   HSFAU1     standard; DNA; HUM; 2016 BP.
-XX
-AC   X65921; S45242;
-XX
-SV   X65921.1
-XX
-DT   13-MAY-1992 (Rel. 31, Created)
-DT   21-JUL-1993 (Rel. 36, Last updated, Version 5)
-XX
-DE   H.sapiens fau 1 gene
-XX
-KW   fau 1 gene.
-XX
-OS   Homo sapiens (human)
-OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia
-;
-OC   Eutheria; Primates; Catarrhini; Hominidae; Homo.
-XX
-RN   [1]
-RP   1-2016
-RA   Kas K.;
-RT   ;
-RL   Submitted (29-APR-1992) to the EMBL/GenBank/DDBJ databases.
-RL   K. Kas, University of Antwerp, Dept of Biochemistry T3.22,
-RL   Universiteitsplein 1, 2610 Wilrijk, BELGIUM
-XX
-RN   [2]
-RP   1-2016
-RX   MEDLINE; 92412144.
-RA   Kas K., Michiels L., Merregaert J.;
-RT   "Genomic structure and expression of the human fau gene: encoding the
-RT   ribosomal protein S30 fused to a ubiquitin-like protein.";
-RL   Biochem. Biophys. Res. Commun. 187:927-933(1992).
-XX
-DR   SWISS-PROT; P35544; UBIM_HUMAN.
-DR   SWISS-PROT; Q05472; RS30_HUMAN.
-XX
-FH   Key             Location/Qualifiers
-FH
-FT   source          1..2016
-FT                   /db_xref="taxon:9606"
-FT                   /organism="Homo sapiens"
-FT                   /clone_lib="CML cosmid"
-FT                   /clone="15.1"
-FT   mRNA            join(408..504,774..856,951..1095,1557..1612,1787..>1912)
-FT                   /gene="fau 1"
-FT   exon            408..504
-FT                   /number=1
-FT   intron          505..773
-FT                   /number=1
-FT   exon            774..856
-
-
-  [Part of this file has been deleted for brevity]
-
-FT                   RAKRRMQYNRRFVNVVPTFGKKKGPNANS"
-FT   intron          857..950
-FT                   /number=2
-FT   exon            951..1095
-FT                   /number=3
-FT   intron          1096..1556
-FT                   /number=3
-FT   exon            1557..1612
-FT                   /number=4
-FT   intron          1613..1786
-FT                   /number=4
-FT   exon            1787..>1912
-FT                   /number=5
-FT   polyA_signal    1938..1943
-XX
-SQ   Sequence 2016 BP; 421 A; 562 C; 538 G; 495 T; 0 other;
-     ctaccatttt ccctctcgat tctatatgta cactcgggac aagttctcct gatcgaaaac        6
-0
-     ggcaaaacta aggccccaag taggaatgcc ttagttttcg gggttaacaa tgattaacac       12
-0
-     tgagcctcac acccacgcga tgccctcagc tcctcgctca gcgctctcac caacagccgt       18
-0
-     agcccgcagc cccgctggac accggttctc catccccgca gcgtagcccg gaacatggta       24
-0
-     gctgccatct ttacctgcta cgccagcctt ctgtgcgcgc aactgtctgg tcccgccccg       30
-0
-     tcctgcgcga gctgctgccc aggcaggttc gccggtgcga gcgtaaaggg gcggagctag       36
-0
-     gactgccttg ggcggtacaa atagcaggga accgcgcggt cgctcagcag tgacgtgaca       42
-0
-     cgcagcccac ggtctgtact gacgcgccct cgcttcttcc tctttctcga ctccatcttc       48
-0
-     gcggtagctg ggaccgccgt tcaggtaaga atggggcctt ggctggatcc gaagggcttg       54
-0
-     tagcaggttg gctgcggggt cagaaggcgc ggggggaacc gaagaacggg gcctgctccg       60
-0
-     tggccctgct ccagtcccta tccgaactcc ttgggaggca ctggccttcc gcacgtgagc       66
-0
-     cgccgcgacc accatcccgt cgcgatcgtt tctggaccgc tttccactcc caaatctcct       72
-0
-     ttatcccaga gcatttcttg gcttctctta caagccgtct tttctttact cagtcgccaa       78
-0
-     tatgcagctc tttgtccgcg cccaggagct acacaccttc gaggtgaccg gccaggaaac       84
-0
-     ggtcgcccag atcaaggtaa ggctgcttgg tgcgccctgg gttccatttt cttgtgctct       90
-0
-     tcactctcgc ggcccgaggg aacgcttacg agccttatct ttccctgtag gctcatgtag       96
-0
-     cctcactgga gggcattgcc ccggaagatc aagtcgtgct cctggcaggc gcgcccctgg      102
-0
-     aggatgaggc cactctgggc cagtgcgggg tggaggccct gactaccctg gaagtagcag      108
-0
-     gccgcatgct tggaggtgag tgagagagga atgttctttg aagtaccggt aagcgtctag      114
-0
-     tgagtgtggg gtgcatagtc ctgacagctg agtgtcacac ctatggtaat agagtacttc      120
-0
-     tcactgtctt cagttcagag tgattcttcc tgtttacatc cctcatgttg aacacagacg      126
-0
-     tccatgggag actgagccag agtgtagttg tatttcagtc acatcacgag atcctagtct      132
-0
-     ggttatcagc ttccacacta aaaattaggt cagaccaggc cccaaagtgc tctataaatt      138
-0
-     agaagctgga agatcctgaa atgaaactta agatttcaag gtcaaatatc tgcaactttg      144
-0
-     ttctcattac ctattgggcg cagcttctct ttaaaggctt gaattgagaa aagaggggtt      150
-0
-     ctgctgggtg gcaccttctt gctcttacct gctggtgcct tcctttccca ctacaggtaa      156
-0
-     agtccatggt tccctggccc gtgctggaaa agtgagaggt cagactccta aggtgagtga      162
-0
-     gagtattagt ggtcatggtg ttaggacttt ttttcctttc acagctaaac caagtccctg      168
-0
-     ggctcttact cggtttgcct tctccctccc tggagatgag cctgagggaa gggatgctag      174
-0
-     gtgtggaaga caggaaccag ggcctgatta accttccctt ctccaggtgg ccaaacagga      180
-0
-     gaagaagaag aagaagacag gtcgggctaa gcggcggatg cagtacaacc ggcgctttgt      186
-0
-     caacgttgtg cccacctttg gcaagaagaa gggccccaat gccaactctt aagtcttttg      192
-0
-     taattctggc tttctctaat aaaaaagcca cttagttcag tcatcgcatt gtttcatctt      198
-0
-     tacttgcaag gcctcaggga gaggtgtgct tctcgg                                201
-6
-//
-   
-  Input files for usage example 5
-  
-   'tsw:*' is a sequence entry in the example protein database 'tsw'
-   
    The sequences of the specified features are written out.
-   
+
    The ID name of the sequence is formed from the original sequence name
    with the start and end positions of the feature appended to it. So if
    the feature came from a sequence with an ID name of 'XYZ' from
    positions 10 to 22, then the resulting ID name of the feature sequence
    will be 'XYZ_10_22'
-   
+
    The name of the type of feature is added to the start of the
    description of the sequence in brackets, e.g.: '[exon]'.
-   
+
    The sequence is written out as a normal sequence.
-   
+
    If the feature is in the reverse sense of a nucleic acid sequence,
    then it is reverse-complemented before being written.
-   
+
 Data files
 
    None.
-   
+
 Notes
 
    If a feature is specified as being a part of a different sequence
    entry in a database, then this feature is ignored.
-   
+
    If you are extracting 'joined' features and one of more of the
    component features is in a different sequence entry, then the whole
    joined feature is ignored.
-   
+
 References
 
    None.
-   
+
 Warnings
 
    None.
-   
+
 Diagnostic Error Messages
 
    If the end position of the sequence to be written is less than the
    start position, then the warning message "Extraction region end less
    than start for feature type [start-end] in ID name" is written and no
    sequence is output.
-   
+
 Exit status
 
    It always exits with status 0.
-   
+
 Known bugs
 
    None.
-   
+
 See also
 
    Program name                          Description
@@ -1232,22 +1080,24 @@ See also
    union        Reads sequence fragments and builds one sequence
    vectorstrip  Strips out DNA between a pair of vector sequences
    yank         Reads a sequence range, appends the full USA to a list file
-   
+
 Author(s)
 
    Gary Williams (gwilliam © rfcgr.mrc.ac.uk)
    MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
    Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
-   
+
 History
 
    Written (Dec 12 2001) - Gary Williams
-   
+
    Added '-join' parameter (June 2002) - Gary Williams
-   
+
 Target users
 
    This program is intended to be used by everyone and everything, from
    naive users to embedded scripts.
-   
+
 Comments
+
+   None

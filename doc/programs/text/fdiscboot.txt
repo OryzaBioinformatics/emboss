@@ -1,0 +1,374 @@
+
+                                 fdiscboot 
+
+
+
+Function
+
+   Bootstrapped discrete sites algorithm
+
+Description
+
+   Reads in a data set, and produces multiple data sets from it by
+   bootstrap resampling. Since most programs in the current version of
+   the package allow processing of multiple data sets, this can be used
+   together with the consensus tree program CONSENSE to do bootstrap (or
+   delete-half-jackknife) analyses with most of the methods in this
+   package. This program also allows the Archie/Faith technique of
+   permutation of species within characters. It can also rewrite a data
+   set to convert it from between the PHYLIP Interleaved and Sequential
+   forms, and into a preliminary version of a new XML sequence alignment
+   format which is under development
+
+Algorithm
+
+   SEQBOOT is a general bootstrapping and data set translation tool. It
+   is intended to allow you to generate multiple data sets that are
+   resampled versions of the input data set. Since almost all programs in
+   the package can analyze these multiple data sets, this allows almost
+   anything in this package to be bootstrapped, jackknifed, or permuted.
+   SEQBOOT can handle molecular sequences, binary characters, restriction
+   sites, or gene frequencies. It can also convert data sets between
+   Sequential and Interleaved format, and into the NEXUS format or into a
+   new XML sequence alignment format.
+
+   To carry out a bootstrap (or jackknife, or permutation test) with some
+   method in the package, you may need to use three programs. First, you
+   need to run SEQBOOT to take the original data set and produce a large
+   number of bootstrapped or jackknifed data sets (somewhere between 100
+   and 1000 is usually adequate). Then you need to find the phylogeny
+   estimate for each of these, using the particular method of interest.
+   For example, if you were using DNAPARS you would first run SEQBOOT and
+   make a file with 100 bootstrapped data sets. Then you would give this
+   file the proper name to have it be the input file for DNAPARS. Running
+   DNAPARS with the M (Multiple Data Sets) menu choice and informing it
+   to expect 100 data sets, you would generate a big output file as well
+   as a treefile with the trees from the 100 data sets. This treefile
+   could be renamed so that it would serve as the input for CONSENSE.
+   When CONSENSE is run the majority rule consensus tree will result,
+   showing the outcome of the analysis.
+
+   This may sound tedious, but the run of CONSENSE is fast, and that of
+   SEQBOOT is fairly fast, so that it will not actually take any longer
+   than a run of a single bootstrap program with the same original data
+   and the same number of replicates. This is not very hard and allows
+   bootstrapping or jackknifing on many of the methods in this package.
+   The same steps are necessary with all of them. Doing things this way
+   some of the intermediate files (the tree file from the DNAPARS run,
+   for example) can be used to summarize the results of the bootstrap in
+   other ways than the majority rule consensus method does.
+
+   If you are using the Distance Matrix programs, you will have to add
+   one extra step to this, calculating distance matrices from each of the
+   replicate data sets, using DNADIST or GENDIST. So (for example) you
+   would run SEQBOOT, then run DNADIST using the output of SEQBOOT as its
+   input, then run (say) NEIGHBOR using the output of DNADIST as its
+   input, and then run CONSENSE using the tree file from NEIGHBOR as its
+   input.
+
+   The resampling methods available are:
+     * The bootstrap. Bootstrapping was invented by Bradley Efron in
+       1979, and its use in phylogeny estimation was introduced by me
+       (Felsenstein, 1985b; see also Penny and Hendy, 1985). It involves
+       creating a new data set by sampling N characters randomly with
+       replacement, so that the resulting data set has the same size as
+       the original, but some characters have been left out and others
+       are duplicated. The random variation of the results from analyzing
+       these bootstrapped data sets can be shown statistically to be
+       typical of the variation that you would get from collecting new
+       data sets. The method assumes that the characters evolve
+       independently, an assumption that may not be realistic for many
+       kinds of data.
+     * The partial bootstrap.. This is the bootstrap where fewer than the
+       full number of characters are sampled. The user is asked for the
+       fraction of characters to be sampled. It is primarily useful in
+       carrying out Zharkikh and Li's (1995) Complete And Partial
+       Bootstrap method, and Shimodaira's (2002) AU method, both of which
+       correct the bias of bootstrap P values.
+     * Block-bootstrapping. One pattern of departure from indeopendence
+       of character evolution is correlation of evolution in adjacent
+       characters. When this is thought to have occurred, we can correct
+       for it by samopling, not individual characters, but blocks of
+       adjacent characters. This is called a block bootstrap and was
+       introduced by Künsch (1989). If the correlations are believed to
+       extend over some number of characters, you choose a block size, B,
+       that is larger than this, and choose N/B blocks of size B. In its
+       implementation here the block bootstrap "wraps around" at the end
+       of the characters (so that if a block starts in the last B-1
+       characters, it continues by wrapping around to the first character
+       after it reaches the last character). Note also that if you have a
+       DNA sequence data set of an exon of a coding region, you can
+       ensure that equal numbers of first, second, and third coding
+       positions are sampled by using the block bootstrap with B = 3.
+     * Partial block-bootstrapping. Similar to partial bootstrapping
+       except sampling blocks rather than single characters.
+     * Delete-half-jackknifing.. This alternative to the bootstrap
+       involves sampling a random half of the characters, and including
+       them in the data but dropping the others. The resulting data sets
+       are half the size of the original, and no characters are
+       duplicated. The random variation from doing this should be very
+       similar to that obtained from the bootstrap. The method is
+       advocated by Wu (1986). It was mentioned by me in my bootstrapping
+       paper (Felsenstein, 1985b), and has been available for many years
+       in this program as an option. Note that, for the present,
+       block-jackknifing is not available, because I cannot figure out
+       how to do it straightforwardly when the block size is not a
+       divisor of the number of characters.
+     * Delete-fraction jackknifing. Jackknifing is advocated by Farris
+       et. al. (1996) but as deleting a fraction 1/e (1/2.71828). This
+       retains too many characters and will lead to overconfidence in the
+       resulting groups when there are conflicting characters. However it
+       is made available here as an option, with the user asked to supply
+       the fraction of characters that are to be retained.
+     * Permuting species within characters. This method of resampling
+       (well, OK, it may not be best to call it resampling) was
+       introduced by Archie (1989) and Faith (1990; see also Faith and
+       Cranston, 1991). It involves permuting the columns of the data
+       matrix separately. This produces data matrices that have the same
+       number and kinds of characters but no taxonomic structure. It is
+       used for different purposes than the bootstrap, as it tests not
+       the variation around an estimated tree but the hypothesis that
+       there is no taxonomic structure in the data: if a statistic such
+       as number of steps is significantly smaller in the actual data
+       than it is in replicates that are permuted, then we can argue that
+       there is some taxonomic structure in the data (though perhaps it
+       might be just the presence of aa pair of sibling species).
+     * Permuting characters. This simply permutes the order of the
+       characters, the same reordering being applied to all species. For
+       many methods of tree inference this will make no difference to the
+       outcome (unless one has rates of evolution correlated among
+       adjacent sites). It is included as a possible step in carrying out
+       a permutation test of homogeneity of characters (such as the
+       Incongruence Length Difference test).
+     * Permuting characters separately for each species. This is a method
+       introduced by Steel, Lockhart, and Penny (1993) to permute data so
+       as to destroy all phylogenetic structure, while keeping the base
+       composition of each species the same as before. It shuffles the
+       character order separately for each species.
+     * Rewriting. This is not a resampling or permutation method: it
+       simply rewrites the data set into a different format. That format
+       can be the PHYLIP format. For molecular sequences and discrete
+       morphological character it can also be the NEXUS format. For
+       molecular sequences one other format is available, a new (and
+       nonstandard) XML format of our own devising. When the PHYLIP
+       format is chosen the data set is coverted between Interleaved and
+       Sequential format. If it was read in as Interleaved sequences, it
+       will be written out as Sequential format, and vice versa. The
+       NEXUS format for molecular sequences is always written as
+       interleaved sequences. The XML format is different from (though
+       similar to) a number of other XML sequence alignment formats. An
+       example will be found below. Here is a table to links to those
+       other XML alignment formats:
+
+   Andrew Rambaut's BEAST XML format
+   http://evolve.zoo.ox.ac.uk/beast/introXML.html and
+   http://evolve.zoo.ox.ac.uk/beast/reference/index.html A format for
+   alignments. There is also a format for phylogenies described there.
+   MSAML M http://xml.coverpages.org/msaml-desc-dec.html Defined by Paul
+   Gordon of University of Calgary. See his big list of molecular biology
+   XML projects.
+   BSML http://www.bsml.org/resources/default.asp Bioinformatic Sequence
+   Markup Language includes a multiple sequence alignment XML format
+
+Usage
+
+Command line arguments
+
+   Standard (Mandatory) qualifiers:
+  [-infile]            discretestates (no help text) discretestates value
+  [-outfile]           outfile    Output file name
+  [-outancfile]        outfile    Out ancestor file name
+  [-outmixfile]        outfile    Out mix file name
+  [-outfactfile]       outfile    Out fact file name
+
+   Additional (Optional) qualifiers (* if not always prompted):
+   -mixfile            properties File of mixtures
+   -ancfile            properties File of ancestors
+   -weights            properties Weights file
+   -factorfile         properties Factors file
+   -test               menu       Choose test
+*  -regular            toggle     Altered sampling fraction
+*  -fracsample         float      Samples as percentage of sites
+*  -morphseqtype       menu       Output format
+*  -blocksize          integer    Block size for bootstraping
+*  -reps               integer    How many replicates
+*  -justweights        menu       Write out datasets or just weights
+*  -seed               integer    Random number seed between 1 and 32767 (must
+                                  be odd)
+   -printdata          boolean    Print out the data at start of run
+*  -[no]dotdiff        boolean    Use dot-differencing
+   -[no]progress       boolean    Print indications of progress of run
+
+   Advanced (Unprompted) qualifiers: (none)
+   Associated qualifiers:
+
+   "-outfile" associated qualifiers
+   -odirectory2        string     Output directory
+
+   "-outancfile" associated qualifiers
+   -odirectory3        string     Output directory
+
+   "-outmixfile" associated qualifiers
+   -odirectory4        string     Output directory
+
+   "-outfactfile" associated qualifiers
+   -odirectory5        string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report deaths
+
+
+   Standard (Mandatory) qualifiers Allowed values Default
+   [-infile]
+   (Parameter 1) (no help text) discretestates value Discrete states file
+
+   [-outfile]
+   (Parameter 2) Output file name Output file <sequence>.fdiscboot
+   [-outancfile]
+   (Parameter 3) Out ancestor file name Output file
+   [-outmixfile]
+   (Parameter 4) Out mix file name Output file
+   [-outfactfile]
+   (Parameter 5) Out fact file name Output file
+   Additional (Optional) qualifiers Allowed values Default
+   -mixfile File of mixtures Property value(s)
+   -ancfile File of ancestors Property value(s)
+   -weights Weights file Property value(s)
+   -factorfile Factors file Property value(s)
+   -test Choose test
+   b (Bootstrap)
+   j (Jackknife)
+   c (Permute species for each character)
+   o (Permute character order)
+   s (Permute within species)
+   r (Rewrite data)
+   b
+   -regular Altered sampling fraction Toggle value Yes/No No
+   -fracsample Samples as percentage of sites Number from 0.100 to
+   100.000 100.0
+   -morphseqtype Output format
+   p (PHYLIP)
+   n (NEXUS)
+   p
+   -blocksize Block size for bootstraping Integer 1 or more 1
+   -reps How many replicates Integer 1 or more 100
+   -justweights Write out datasets or just weights
+   d (Datasets)
+   w (Weights)
+   d
+   -seed Random number seed between 1 and 32767 (must be odd) Integer
+   from 1 to 32767 1
+   -printdata Print out the data at start of run Boolean value Yes/No No
+   -[no]dotdiff Use dot-differencing Boolean value Yes/No Yes
+   -[no]progress Print indications of progress of run Boolean value
+   Yes/No Yes
+   Advanced (Unprompted) qualifiers Allowed values Default
+   (none)
+
+Input file format
+
+   fdiscboot reads discrete character data
+
+Output file format
+
+   fdiscboot writes a bootstrap multiple set of discrete character data
+
+Data files
+
+   None
+
+Notes
+
+   None.
+
+References
+
+   None.
+
+Warnings
+
+   None.
+
+Diagnostic Error Messages
+
+   None.
+
+Exit status
+
+   It always exits with status 0.
+
+Known bugs
+
+   None.
+
+See also
+
+   Program name Description
+   ednacomp DNA compatibility algorithm
+   ednadist Nucleic acid sequence Distance Matrix program
+   ednainvar Nucleic acid sequence Invariants method
+   ednaml Estimates phylogenies from nucleic acid sequence Maximum
+   Likelihood
+   ednamlk Estimates phylogenies from nucleic acid sequence Maximum
+   Likelihood with molecular clock
+   ednapars DNA parsimony algorithm
+   ednapenny Penny algorithm for DNA
+   eprotdist Protein distance algorithm
+   eprotpars Protein parsimony algorithm
+   erestml Restriction site Maximum Likelihood method
+   eseqboot Bootstrapped sequences algorithm
+   fdnacomp DNA compatibility algorithm
+   fdnadist Nucleic acid sequence Distance Matrix program
+   fdnainvar Nucleic acid sequence Invariants method
+   fdnaml Estimates nucleotide phylogeny by maximum likelihood
+   fdnamlk Estimates nucleotide phylogeny by maximum likelihood
+   fdnamove Interactive DNA parsimony
+   fdnapars DNA parsimony algorithm
+   fdnapenny Penny algorithm for DNA
+   fdolmove Interactive Dollo or Polymorphism Parsimony
+   ffreqboot Bootstrapped genetic frequencies algorithm
+   fproml Protein phylogeny by maximum likelihood
+   fpromlk Protein phylogeny by maximum likelihood
+   fprotdist Protein distance algorithm
+   fprotpars Protein pasimony algorithm
+   frestboot Bootstrapped restriction sites algorithm
+   frestdist Computes distance matrix from restriction sites or fragments
+   frestml Restriction site maximum Likelihood method
+   fseqboot Bootstrapped sequences algorithm
+   fseqbootall Bootstrapped sequences algorithm
+
+Author(s)
+
+   This program is an EMBOSS conversion of a program written by Joe
+   Felsenstein as part of his PHYLIP package.
+
+   Although we take every care to ensure that the results of the EMBOSS
+   version are identical to those from the original package, we recommend
+   that you check your inputs give the same results in both versions
+   before publication.
+
+   Please report all bugs in the EMBOSS version to the EMBOSS bug team,
+   not to the original author.
+
+History
+
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+
+Comments
+
+   None

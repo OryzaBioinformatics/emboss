@@ -1,29 +1,29 @@
 
                                  wordcount 
-                                      
-   
-   
+
+
+
 Function
 
    Counts words of a specified size in a DNA sequence
-   
+
 Description
 
-Displays all the words of the specified length with the number of
-times it occurs.
+   Displays all the words of the specified length with the number of
+   times it occurs.
 
 Usage
 
    Here is a sample session with wordcount
-   
+
 
 % wordcount tembl:rnu68037 -wordsize=3 
 Counts words of a specified size in a DNA sequence
 Output file [rnu68037.wordcount]: 
-   
+
    Go to the input files for this example
    Go to the output files for this example
-   
+
 Command line arguments
 
    Standard (Mandatory) qualifiers:
@@ -68,7 +68,7 @@ Command line arguments
    -error               boolean    Report errors
    -fatal               boolean    Report fatal errors
    -die                 boolean    Report deaths
-   
+
 
    Standard (Mandatory) qualifiers Allowed values Default
    [-sequence]
@@ -79,18 +79,18 @@ Command line arguments
    (none)
    Advanced (Unprompted) qualifiers Allowed values Default
    (none)
-   
+
 Input file format
 
    wordcount reads any sequence USA.
-   
+
   Input files for usage example
-  
+
    'tembl:rnu68037' is a sequence entry in the example nucleic acid
    database 'tembl'
-   
+
   Database entry: tembl:rnu68037
-  
+
 ID   RNU68037   standard; RNA; ROD; 1218 BP.
 XX
 AC   U68037;
@@ -197,47 +197,47 @@ SQ   Sequence 1218 BP; 162 A; 397 C; 387 G; 272 T; 0 other;
      ggcttcagcc acttgtga                                                    121
 8
 //
-   
+
 Output file format
 
   Output files for usage example
-  
+
   File: rnu68037.wordcount
-  
+
 ctg     54
 tgg     53
 gcc     53
 ggc     51
-gct     47
 cgc     47
+gct     47
 gtg     40
 tgc     39
 cct     38
 gcg     36
 cca     29
 ggg     26
-tcc     25
 cag     25
 ctt     25
+tcc     25
 ggt     24
 ccc     24
-tgt     23
 ctc     23
+tgt     23
 cgt     22
-gca     22
 cac     22
 ccg     22
+gca     22
 agc     21
 ttg     19
 cgg     19
 acg     19
 tcg     18
-ttc     17
-cat     17
 agg     17
-gtc     16
-act     16
+cat     17
+ttc     17
 gag     16
+act     16
+gtc     16
 aac     15
 atc     14
 gga     14
@@ -245,65 +245,65 @@ tct     14
 tca     13
 cta     13
 atg     12
-gta     11
 acc     11
+gta     11
 gtt     11
-tac     10
 caa     10
 tga     10
+tac     10
 aca     10
-agt     9
 tag     9
 gac     9
+agt     9
 ttt     8
 cga     7
 gat     6
 taa     6
-tat     5
 aga     5
+tat     5
 gaa     4
 ata     3
-att     3
 tta     3
+att     3
 aat     3
 aag     2
 aaa     1
-   
+
    The file simply consists of two columns, separated by spaces or TAB
    characters.
-   
+
    The first column consists of all the possible words of size wordsize.
    The second column consists of the count of those words in the input
    sequence.
-   
+
 Data files
 
    None.
-   
+
 Notes
 
    None.
-   
+
 References
 
    None.
-   
+
 Warnings
 
    None.
-   
+
 Diagnostic Error Messages
 
    None.
-   
+
 Exit status
 
    0 if successful.
-   
+
 Known bugs
 
    None.
-   
+
 See also
 
    Program name                          Description
@@ -315,20 +315,22 @@ See also
    freak        Residue/base frequency table or plot
    isochore     Plots isochores in large DNA sequences
    sirna        Finds siRNA duplexes in mRNA
-   
+
 Author(s)
 
    Ian Longden (il © sanger.ac.uk)
    Sanger Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge,
    CB10 1SA, UK.
-   
+
 History
 
    Completed 27th November 1998.
-   
+
 Target users
 
    This program is intended to be used by everyone and everything, from
    naive users to embedded scripts.
-   
+
 Comments
+
+   None

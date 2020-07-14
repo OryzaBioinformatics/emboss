@@ -1,32 +1,32 @@
 
                                   dotpath 
-                                      
-   
-   
+
+
+
 Function
 
    Displays a non-overlapping wordmatch dotplot of two sequences
-   
+
 Description
 
    A dotplot is a graphical representation of the regions of similarity
    between two sequences.
-   
+
    The two sequences are placed on the axes of a rectangular image and
    wherever there is a similarity between the sequences a dot is placed
    on the image.
-   
+
    Where the two sequences have substantial regions of similarity, many
    dots align to form diagonal lines. It is therefore possible to see at
    a glance where there are local regions of similarity.
-   
+
    dotpath is very similar to the program dottup which looks for places
    where words (tuples) of a specified length have an exact match in both
    sequences and draws a diagonal line over the position of these words.
-   
+
    Using a longer word size thus displays less random noise, runs
    extremely quickly, but is less sensitive.
-   
+
    dotpath finds all matches of size -wordsize or greater between two
    sequences. It then reduces the matches found to the minimal set of
    long matches that do not overlap. This is a way of finding the
@@ -34,25 +34,25 @@ Description
    optimal path as produced by the algorithms used in water or needle,
    but for very closely related sequences it will produce the same result
    and will work well with very long sequences.
-   
+
    If you wish to compare the path found by dotpath to the set of all
    matches found then the qualifier -overlaps will show all matches in
    red except for the matches in the minimal path which are shown in
    black, as normal.
-   
+
 Usage
 
    Here is a sample session with dotpath
-   
+
 
 % dotpath tembl:AF129756 tembl:AP000504 -word 20 -graph cps -overlaps 
 Displays a non-overlapping wordmatch dotplot of two sequences
 
 Created dotpath.ps
-   
+
    Go to the input files for this example
    Go to the output files for this example
-   
+
 Command line arguments
 
    Standard (Mandatory) qualifiers:
@@ -125,7 +125,7 @@ Command line arguments
    -error               boolean    Report errors
    -fatal               boolean    Report fatal errors
    -die                 boolean    Report deaths
-   
+
 
    Standard (Mandatory) qualifiers Allowed values Default
    [-asequence]
@@ -136,23 +136,23 @@ Command line arguments
    -graph Graph type EMBOSS has a list of known devices, including
    postscript, ps, hpgl, hp7470, hp7580, meta, colourps, cps, xwindows,
    x11, tektronics, tekt, tek4107t, tek, none, null, text, data, xterm,
-   png EMBOSS_GRAPHICS value, or x11
+   png, xml EMBOSS_GRAPHICS value, or x11
    Additional (Optional) qualifiers Allowed values Default
    -overlaps Displays the overlapping matches (in red) as well as the
    minimal set of non-overlapping matches Boolean value Yes/No No
    -[no]boxit Draw a box around dotplot Boolean value Yes/No Yes
    Advanced (Unprompted) qualifiers Allowed values Default
    (none)
-   
+
 Input file format
 
   Input files for usage example
-  
+
    'tembl:AF129756' is a sequence entry in the example nucleic acid
    database 'tembl'
-   
+
   Database entry: tembl:AF129756
-  
+
 ID   AF129756   standard; DNA; HUM; 184666 BP.
 XX
 AC   AF129756;
@@ -311,9 +311,9 @@ DR   SPTREMBL; O95870; O95870.
      tcctgctcct agaagctaaa ctctccagac ttagtcttct gaattc                   18466
 6
 //
-   
+
   Database entry: tembl:AP000504
-  
+
 ID   AP000504   standard; DNA; HUM; 100000 BP.
 XX
 AC   AP000504; BA000025;
@@ -470,36 +470,44 @@ CC   sequence archive Web site (http://www-alis.tokyo.jst.go.jp/HGS/top.
      tgagcaaggg tcggggagtt ctagtgcgta acagtctagg                          10000
 0
 //
-   
+
 Output file format
 
    In normal operation, a dotplot image is displayed.
-   
+
    With the -data qualifier a file of the positions of the matches in the
    minimal non-overlapping set of matches is output.
-   
+
   Output files for usage example
-  
+
   Graphics File: dotpath.ps
-  
+
    [dotpath results]
-   
-Data files
 
 Notes
 
+   None
+
 References
+
+   None
 
 Warnings
 
    If you give a small word size with a very large sequence you will run
    out of memory. If this happens, try again with a larger word size.
-   
+
 Diagnostic Error Messages
+
+   None
 
 Exit status
 
+   It always exits with status 0.
+
 Known bugs
+
+   None
 
 See also
 
@@ -507,28 +515,30 @@ See also
    dotmatcher   Displays a thresholded dotplot of two sequences
    dottup       Displays a wordmatch dotplot of two sequences
    polydot      Displays all-against-all dotplots of a set of sequences
-   
+
    This program is closely based on dottup with the addition of by
    default displaying only the minimal set of non-overlapping matches.
-   
+
    This program uses the same algorithm as diffseq for finding a minimal
    set of very good matches between two sequences. diffseq may be more
    convenient if you are looking at the differences between two nearly
    identical sequences.
-   
+
 Author(s)
 
    Gary Williams (gwilliam © rfcgr.mrc.ac.uk)
    MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
    Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
-   
+
 History
 
    Written 14 Aug 2000.
-   
+
 Target users
 
    This program is intended to be used by everyone and everything, from
    naive users to embedded scripts.
-   
+
 Comments
+
+   None

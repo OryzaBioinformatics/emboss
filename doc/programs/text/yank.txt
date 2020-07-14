@@ -1,40 +1,40 @@
 
                                    yank 
-                                      
-   
-   
+
+
+
 Function
 
    Reads a sequence range, appends the full USA to a list file
-   
+
 Description
 
    yank is a simple utility to add a specified sequence name to a list
    file.
-   
+
    In fact, it writes out not just the name of the sequence, but also the
    start and end position of a region within that sequence and, if the
    sequence is nucleic, if can specify whether the sequence is the
    reverse complement.
-   
+
    Without the program yank you would need to use a text editor such as
    pico to create the appropriate list files. yank makes this process
    easy.
-   
+
   List Files
-  
+
    Many EMBOSS programs can read in a set of sequences. (Some examples
    are emma and union) There are many ways of specifying these sequences,
    including wildcarded sequence file names, wildcarded database entry
    names and list files. List files (files of file names) are the most
    flexible. yank is a utility to add sequences to a list file.
-   
+
    Instead of containing the sequences themselves, a List file contains
    "references" to sequences - so, for example, you might include
    database entries, the names of files containing sequences, or even the
    names of other list files. For example, here's a valid list file,
    called seq.list:
-   
+
 unix % more seq.list
 
 opsd_abyko.fasta
@@ -44,7 +44,7 @@ sw:opsd_c*
 
    This looks a bit odd, but it's really very straightforward; the file
    contains:
-   
+
      * opsd_abyko.fasta - this is the name of a sequence file. The file
        is read in from the current directory.
      * sw:opsd_xenla - this is a reference to a specific sequence in the
@@ -52,17 +52,17 @@ sw:opsd_c*
      * sw:opsd_c* - this represents all the sequences in SwissProt whose
        identifiers start with ``opsd_c''
      * another_list - this is the name of a second list file
-       
+
    Notice the @ in front of the last entry. This is the way you tell
    EMBOSS that this file is a list file, not a regular sequence file.
-   
+
 Usage
 
    Here is a sample session with yank
-   
+
    This is an example of adding an entry for the part of tembl:hsfau1
    between positions 1913 and 1915 to the existing list file 'cds.list':
-   
+
 
 % yank 
 Reads a sequence range, appends the full USA to a list file
@@ -71,10 +71,10 @@ Input sequence: tembl:hsfau1
        End at position [end]: 1915
         Reverse strand [N]: 
 Output file [hsfau1.yank]: cds.list
-   
+
    Go to the input files for this example
    Go to the output files for this example
-   
+
 Command line arguments
 
    Standard (Mandatory) qualifiers:
@@ -120,7 +120,7 @@ Command line arguments
    -error               boolean    Report errors
    -fatal               boolean    Report fatal errors
    -die                 boolean    Report deaths
-   
+
 
    Standard (Mandatory) qualifiers Allowed values Default
    [-sequence]
@@ -131,23 +131,23 @@ Command line arguments
    (none)
    Advanced (Unprompted) qualifiers Allowed values Default
    -newfile Overwrite existing output file Boolean value Yes/No No
-   
+
 Input file format
 
    yank reads any valid sequence USA.
-   
+
    You will be prompted for the start and end positions you wish to use.
-   
+
    If the sequence is nucleic, you will be prompted whether you wish to
    use the reverse complement of the sequence.
-   
+
   Input files for usage example
-  
+
    'tembl:hsfau1' is a sequence entry in the example nucleic acid
    database 'tembl'
-   
+
   Database entry: tembl:hsfau1
-  
+
 ID   HSFAU1     standard; DNA; HUM; 2016 BP.
 XX
 AC   X65921; S45242;
@@ -288,50 +288,50 @@ SQ   Sequence 2016 BP; 421 A; 562 C; 538 G; 495 T; 0 other;
      tacttgcaag gcctcaggga gaggtgtgct tctcgg                                201
 6
 //
-   
+
 Output file format
 
   Output files for usage example
-  
+
   File: cds.list
-  
+
 tembl-id:HSFAU1[782:856]
 tembl-id:HSFAU1[951:1095]
 tembl-id:HSFAU1[1557:1612]
 tembl-id:HSFAU1[1787:1912]
 tembl-id:HSFAU1[1913:1915]
-   
+
    The output list file can now be read in by a program such as union by
    specifying the list file as '@cds.list' when union prompts for input.
-   
+
 Data files
 
    None.
-   
+
 Notes
 
    None.
-   
+
 References
 
    None.
-   
+
 Warnings
 
    None.
-   
+
 Diagnostic Error Messages
 
    None.
-   
+
 Exit status
 
    It always exits with status 0.
-   
+
 Known bugs
 
    None.
-   
+
 See also
 
    Program name                          Description
@@ -359,23 +359,25 @@ See also
    trimseq      Trim ambiguous bits off the ends of sequences
    union        Reads sequence fragments and builds one sequence
    vectorstrip  Strips out DNA between a pair of vector sequences
-   
+
    The program extract does not make list files, but creates a sequence
    from sub-regions of a single other sequence.
-   
+
 Author(s)
 
    Peter Rice (pmr © ebi.ac.uk)
    Informatics Division, European Bioinformatics Institute, Wellcome
    Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
-   
+
 History
 
    Written (March 2002) - Peter Rice.
-   
+
 Target users
 
    This program is intended to be used by everyone and everything, from
    naive users to embedded scripts.
-   
+
 Comments
+
+   None

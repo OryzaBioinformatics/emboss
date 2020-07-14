@@ -7,14 +7,9 @@
 </HEAD>
 <BODY BGCOLOR="#FFFFFF" text="#000000">
 
-
-
-
-
-
 <table align=center border=0 cellspacing=0 cellpadding=0>
 <tr><td valign=top>
-<A HREF="index.html" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
@@ -28,20 +23,9 @@ seealso
 
 
 
-
-
-
-
 <H2>
     Function
 </H2>
-
-
-
-<!--
-DON'T WRITE ANYTHING HERE.
-IT IS DONE FOR YOU.
--->
 Finds programs sharing group names
 
 
@@ -82,8 +66,6 @@ The groups that the program belongs to can be output by using the
 <H2>
     Usage
 </H2>
-
-
 <b>Here is a sample session with seealso</b>
 <p>
 
@@ -110,14 +92,6 @@ wordmatch        Finds all exact matches of a given size between 2 sequences
 <H2>
     Command line arguments
 </H2>
-
-
-
-<!--
-DON'T WRITE ANYTHING HERE.
-IT IS DONE FOR YOU.
--->
-
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
    Standard (Mandatory) qualifiers:
@@ -152,19 +126,19 @@ IT IS DONE FOR YOU.
                                   half of the URL.
                                   For example, if you wish the program name to
                                   be a hyperlink to the URL:
-                                  http://www.uk.embnet.org/Software/EMBOSS/Apps/
+                                  http://emboss.sourceforge.net/apps/
                                   programname.html
                                   then if you enter
-                                  http://www.uk.embnet.org/Software/EMBOSS/Apps/
-                                  here, then the first half of the URL before
-                                  the program name will be set.
+                                  http://emboss.sourceforge.net/apps/ here,
+                                  then the first half of the URL before the
+                                  program name will be set.
 *  -postlink           string     If you are outputting to a file in HTML
                                   format, you can make the program names into
                                   hyper-links by setting this to be the second
                                   half of the URL.
                                   For example, if you wish the program name to
                                   be a hyperlink to the URL:
-                                  http://www.uk.embnet.org/Software/EMBOSS/Apps/
+                                  http://emboss.sourceforge.net/apps/
                                   programname.html
                                   then if you enter '.html' here, the second
                                   half of the URL after the program name will
@@ -182,8 +156,7 @@ IT IS DONE FOR YOU.
                                   same code libraries and share the same look
                                   and feel, but are generally developed by
                                   people who wish the programs to be outside
-                                  of the GNU Public Licence scheme, ie. they
-                                  may wish to charge money for them.
+                                  of the GNU Public Licence scheme
    -[no]embassy        boolean    If you use this option then EMBASSY program
                                   documentation will be searched. If this
                                   option is set to be false, then only the
@@ -193,8 +166,15 @@ IT IS DONE FOR YOU.
                                   same code libraries and share the same look
                                   and feel, but are generally developed by
                                   people who wish the programs to be outside
-                                  of the GNU Public Licence scheme, ie. they
-                                  may wish to charge money for them.
+                                  of the GNU Public Licence scheme
+   -showembassy        string     If you use this option then this EMBASSY
+                                  package program documentation will be
+                                  searched. EMBASSY programs are not strictly
+                                  part of EMBOSS, but use the same code
+                                  libraries and share the same look and feel,
+                                  but are generally developed by people who
+                                  wish the programs to be outside of the GNU
+                                  Public Licence scheme
    -colon              boolean    The groups that EMBOSS applications belong
                                   to have up to two levels, for example the
                                   primary group 'ALIGNMENT' has several
@@ -209,22 +189,22 @@ IT IS DONE FOR YOU.
    Associated qualifiers:
 
    "-outfile" associated qualifiers
-   -odirectory          string     Output directory
+   -odirectory         string     Output directory
 
    General qualifiers:
-   -auto                boolean    Turn off prompts
-   -stdout              boolean    Write standard output
-   -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for standard and additional values
-   -debug               boolean    Write debug output to program.dbg
-   -verbose             boolean    Report some/full command line options
-   -help                boolean    Report command line options. More
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
-   -warning             boolean    Report warnings
-   -error               boolean    Report errors
-   -fatal               boolean    Report fatal errors
-   -die                 boolean    Report deaths
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report deaths
 
 
 </pre>
@@ -270,17 +250,17 @@ Using expanded group names will find many more programs which share at least som
 <td>-html</td>
 <td>If you are sending the output to a file, this will format it for displaying as a table in a WWW document.</td>
 <td>Toggle value Yes/No</td>
-<td>N</td>
+<td>No</td>
 </tr>
 
 <tr>
 <td>-prelink</td>
 <td>If you are outputting to a file in HTML format, you can make the program names into hyper-links by setting this to be the first half of the URL.
 For example, if you wish the program name to be a hyperlink to the URL:
-http://www.uk.embnet.org/Software/EMBOSS/Apps/
+http://emboss.sourceforge.net/apps/
 programname.html
 then if you enter
-http://www.uk.embnet.org/Software/EMBOSS/Apps/ here, then the first half of the URL before the program name will be set.</td>
+http://emboss.sourceforge.net/apps/ here, then the first half of the URL before the program name will be set.</td>
 <td>Any string is accepted</td>
 <td><i>An empty string is accepted</i></td>
 </tr>
@@ -289,7 +269,7 @@ http://www.uk.embnet.org/Software/EMBOSS/Apps/ here, then the first half of the 
 <td>-postlink</td>
 <td>If you are outputting to a file in HTML format, you can make the program names into hyper-links by setting this to be the second half of the URL.
 For example, if you wish the program name to be a hyperlink to the URL:
-http://www.uk.embnet.org/Software/EMBOSS/Apps/
+http://emboss.sourceforge.net/apps/
 programname.html
 then if you enter '.html' here, the second half of the URL after the program name will be set.</td>
 <td>Any string is accepted</td>
@@ -311,16 +291,23 @@ then if you enter '.html' here, the second half of the URL after the program nam
 
 <tr>
 <td>-[no]emboss</td>
-<td>If you use this option then EMBOSS program documentation will be searched. If this option is set to be false, then only the EMBASSY programs will be searched (if the -embassy option is true). EMBASSY programs are not strictly part of EMBOSS, but use the same code libraries and share the same look and feel, but are generally developed by people who wish the programs to be outside of the GNU Public Licence scheme, ie. they may wish to charge money for them.</td>
+<td>If you use this option then EMBOSS program documentation will be searched. If this option is set to be false, then only the EMBASSY programs will be searched (if the -embassy option is true). EMBASSY programs are not strictly part of EMBOSS, but use the same code libraries and share the same look and feel, but are generally developed by people who wish the programs to be outside of the GNU Public Licence scheme</td>
 <td>Boolean value Yes/No</td>
 <td>Yes</td>
 </tr>
 
 <tr>
 <td>-[no]embassy</td>
-<td>If you use this option then EMBASSY program documentation will be searched. If this option is set to be false, then only the EMBOSS programs will be searched (if the -emboss option is true). EMBASSY programs are not strictly part of EMBOSS, but use the same code libraries and share the same look and feel, but are generally developed by people who wish the programs to be outside of the GNU Public Licence scheme, ie. they may wish to charge money for them.</td>
+<td>If you use this option then EMBASSY program documentation will be searched. If this option is set to be false, then only the EMBOSS programs will be searched (if the -emboss option is true). EMBASSY programs are not strictly part of EMBOSS, but use the same code libraries and share the same look and feel, but are generally developed by people who wish the programs to be outside of the GNU Public Licence scheme</td>
 <td>Boolean value Yes/No</td>
 <td>Yes</td>
+</tr>
+
+<tr>
+<td>-showembassy</td>
+<td>If you use this option then this EMBASSY package program documentation will be searched. EMBASSY programs are not strictly part of EMBOSS, but use the same code libraries and share the same look and feel, but are generally developed by people who wish the programs to be outside of the GNU Public Licence scheme</td>
+<td>Any string is accepted</td>
+<td><i>An empty string is accepted</i></td>
 </tr>
 
 <tr>
@@ -418,11 +405,6 @@ is specified, when the exit status is '1'.
 
 None.
 
-<!--
-<H2>
-    See also
-</H2>
--->
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
@@ -447,12 +429,6 @@ None.
 <tr><td><a href="wossname.html">wossname</a></td><td>Finds programs by keywords in their one-line documentation</td></tr>
 </table>
 
-<!--
-        Add any comments about other associated programs (to prepare
-        data files?) that seealso doesn't find.
-   -->
-
-
 
 
 <H2>
@@ -472,27 +448,22 @@ Wellcome Trust Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
     History
 </H2>
 
-
 Written 16 June 2000 in response to a need to improve the automatic
 construction of EMBOSS documentation web pages. 
-
-<!--
-<p>
-[an error occurred while processing this directive]
--->
 
 <H2>
     Target users
 </H2>
+This program is intended to be used by everyone and everything, from naive users to embedded scripts.
 
 
-This program is intended to be used by everyone and everything,
-from naive users to embedded scripts. 
 
 
 <H2>
     Comments
 </H2>
+None
+
 
 
 

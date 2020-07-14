@@ -1,0 +1,649 @@
+<!--START OF HEADER - DON'T ALTER -->
+
+<HTML>
+<HEAD>
+  <TITLE>
+  EMBOSS: fmove
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+
+
+<table align=center border=0 cellspacing=0 cellpadding=0>
+<tr><td valign=top>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+</td>
+<td align=left valign=middle>
+<b><font size="+6">
+
+fmove
+</font></b>
+</td></tr>
+</table>
+<br>&nbsp;
+<p>
+
+
+
+<!--END OF HEADER-->
+
+
+
+
+
+
+<H2>
+    Function
+</H2>
+Interactive mixed method parsimony
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+
+
+
+
+<H2>
+    Description
+</H2>
+
+Interactive construction of phylogenies from discrete character data
+with two states (0 and 1). Evaluates parsimony and compatibility
+criteria for those phylogenies and displays reconstructed states
+throughout the tree. This can be used to find parsimony or
+compatibility estimates by hand.
+
+<H2>
+    Algorithm
+</H2>
+
+MOVE is an interactive parsimony program, inspired by Wayne Maddison
+and David Maddison's marvellous program MacClade, which is written for
+Apple Macintosh computers. MOVE reads in a data set which is prepared
+in almost the same format as one for the mixed method parsimony
+program MIX. It allows the user to choose an initial tree, and
+displays this tree on the screen. The user can look at different
+characters and the way their states are distributed on that tree,
+given the most parsimonious reconstruction of state changes for that
+particular tree. The user then can specify how the tree is to be
+rearraranged, rerooted or written out to a file. By looking at
+different rearrangements of the tree the user can manually search for
+the most parsimonious tree, and can get a feel for how different
+characters are affected by changes in the tree topology.
+
+<p>
+This program is compatible with fewer computer systems than the other
+programs in PHYLIP. It can be adapted to MSDOS systems or to any
+system whose screen or terminals emulate DEC VT100 terminals (such as
+Telnet programs for logging in to remote computers over a TCP/IP
+network, VT100-compatible windows in the X windowing system, and any
+terminal compatible with ANSI standard terminals). For any other
+screen types, there is a generic option which does not make use of
+screen graphics characters to display the character states. This will
+be less effective, as the states will be less easy to see when
+displayed.
+
+<p>
+MOVE uses as its numerical criterion the Wagner and Camin-Sokal
+parsimony methods in mixture, where each character can have its method
+specified separately. The program defaults to carrying out Wagner
+parsimony.
+
+<p>
+The Camin-Sokal parsimony method explains the data by assuming that
+changes 0 --&gt; 1 are allowed but not changes 1 --&gt; 0. Wagner parsimony
+allows both kinds of changes. (This under the assumption that 0 is the
+ancestral state, though the program allows reassignment of the
+ancestral state, in which case we must reverse the state numbers 0 and
+1 throughout this discussion). The criterion is to find the tree which
+requires the minimum number of changes. The Camin- Sokal method is due
+to Camin and Sokal (1965) and the Wagner method to Eck and Dayhoff
+(1966) and to Kluge and Farris (1969).
+
+<p>
+Here are the assumptions of these two methods: 
+
+<ol>
+
+<li>
+Ancestral states are known (Camin-Sokal) or unknown (Wagner). 
+
+<li>
+Different characters evolve independently. 
+
+<li>
+Different lineages evolve independently. 
+
+<li>
+Changes 0 --&gt; 1 are much more probable than changes 1 --&gt; 0
+(Camin-Sokal) or equally probable (Wagner).
+
+<li>
+Both of these kinds of changes are a priori improbable over the
+evolutionary time spans involved in the differentiation of the group
+in question.
+
+<li>
+Other kinds of evolutionary event such as retention of polymorphism
+are far less probable than 0 --&gt; 1 changes.
+
+<li>
+Rates of evolution in different lineages are sufficiently low that two
+changes in a long segment of the tree are far less probable than one
+change in a short segment.
+
+</ol>
+
+<p>
+That these are the assumptions of parsimony methods has been
+documented in a series of papers of mine: (1973a, 1978b, 1979, 1981b,
+1983b, 1988b). For an opposing view arguing that the parsimony methods
+make no substantive assumptions such as these, see the papers by
+Farris (1983) and Sober (1983a, 1983b), but also read the exchange
+between Felsenstein and Sober (1986).
+
+
+
+<H2>
+    Usage
+</H2>
+
+<!--  
+	Example usage, as run from the command-line.
+        Many examples illustrating different behaviours is good.
+ -->
+
+<b>Here is a sample session with fmove</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>fmove </b>
+Interactive mixed method parsimony
+Input file: <b>move.dat</b>
+Input tree file: <b></b>
+
+ 5 species,   6 characters
+
+Wagner parsimony method
+
+
+Computing steps needed for compatibility in characters...
+
+
+(unrooted)                    8.0 Steps             4 chars compatible
+                            
+  ,-----------5:Epsilon   
+--9  
+  !  ,--------4:Delta     
+  `--8  
+     !  ,-----3:Gamma     
+     `--7  
+        !  ,--2:Beta      
+        `--6  
+           `--1:Alpha     
+
+
+NEXT? (Options: R # + - S . T U W O F H J K L C ? X Q) (? for Help) Do you want to write out the tree to a file? (Y or N) 
+Tree written to file "move.treefile"
+
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
+
+
+
+
+<H2>
+    Command line arguments
+</H2>
+
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+   Standard (Mandatory) qualifiers:
+  [-infile]            discretestates File containing data set
+  [-intreefile]        tree       (no help text) tree value
+
+   Additional (Optional) qualifiers:
+   -weights            properties Weights file
+   -ancfile            properties Ancestral states file
+   -factorfile         properties Factors file
+   -method             menu       Choose the method to use
+   -outgrno            integer    Species number to use as outgroup
+   -threshold          float      Threshold value
+   -initialtree        menu       Initial tree
+   -screenwidth        integer    Width of terminal screen in characters
+   -screenlines        integer    Number of lines on screen
+   -outtreefile        outfile    Output file name
+
+   Advanced (Unprompted) qualifiers: (none)
+   Associated qualifiers:
+
+   "-outtreefile" associated qualifiers
+   -odirectory         string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report deaths
+
+
+</pre>
+</td></tr></table>
+<P>
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-infile]<br>(Parameter 1)</td>
+<td>File containing data set</td>
+<td>Discrete states file</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr>
+<td>[-intreefile]<br>(Parameter 2)</td>
+<td>(no help text) tree value</td>
+<td>Phylogenetic tree</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Additional (Optional) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-weights</td>
+<td>Weights file</td>
+<td>Property value(s)</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr>
+<td>-ancfile</td>
+<td>Ancestral states file</td>
+<td>Property value(s)</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr>
+<td>-factorfile</td>
+<td>Factors file</td>
+<td>Property value(s)</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr>
+<td>-method</td>
+<td>Choose the method to use</td>
+<td><table><tr><td>w</td> <td><i>(Wagner)</i></td></tr><tr><td>c</td> <td><i>(Camin-Sokal)</i></td></tr><tr><td>m</td> <td><i>(Mixed)</i></td></tr></table></td>
+<td>Wagner</td>
+</tr>
+
+<tr>
+<td>-outgrno</td>
+<td>Species number to use as outgroup</td>
+<td>Integer 0 or more</td>
+<td>0</td>
+</tr>
+
+<tr>
+<td>-threshold</td>
+<td>Threshold value</td>
+<td>Number 0.000 or more</td>
+<td>$(infile.discretesize)</td>
+</tr>
+
+<tr>
+<td>-initialtree</td>
+<td>Initial tree</td>
+<td><table><tr><td>a</td> <td><i>(Arbitary)</i></td></tr><tr><td>u</td> <td><i>(User)</i></td></tr><tr><td>s</td> <td><i>(Specify)</i></td></tr></table></td>
+<td>Arbitary</td>
+</tr>
+
+<tr>
+<td>-screenwidth</td>
+<td>Width of terminal screen in characters</td>
+<td>Any integer value</td>
+<td>80</td>
+</tr>
+
+<tr>
+<td>-screenlines</td>
+<td>Number of lines on screen</td>
+<td>Any integer value</td>
+<td>24</td>
+</tr>
+
+<tr>
+<td>-outtreefile</td>
+<td>Output file name</td>
+<td>Output file</td>
+<td><i>&lt;sequence&gt;</i>.fmove</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+</table>
+
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+
+
+
+
+
+
+
+
+<H2>
+    Input file format
+</H2>
+
+<!-- 
+        This includes example input file formats.
+        This should be a detailed description and example - assume
+        someone will want to parse this file and will want to know what
+        happens in unusual cases - null input, etc. 
+   -->
+
+The <b>fmove</b> input data file is set up almost identically to the
+data files for MIX.
+
+
+<p>
+
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+<p><h3>File: move.dat</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+     5    6
+Alpha     110110
+Beta      110000
+Gamma     100110
+Delta     001001
+Epsilon   001110
+</pre>
+</td></tr></table><p>
+
+
+
+
+
+
+<H2>
+    Output file format
+</H2>
+
+<!-- 
+        This includes example output file formats.
+        This should be a detailed description and example - assume
+        someone will want to parse this file and will want to know what
+        happens in unusual cases - null output, errors etc. 
+
+        If you wish to include the standard description of the avalable
+	report formats, use:
+[an error occurred while processing this directive]
+   -->
+
+<b>fmove</b> 
+outputs a graph to the specified graphics device. 
+outputs a report format file. The default format is ...
+
+
+<p>
+
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: move.treefile</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+(Epsilon,(Delta,(Gamma,(Beta,Alpha))));
+</pre>
+</td></tr></table><p>
+
+
+
+
+
+
+<H2>
+    Data files
+</H2>
+
+None
+
+
+<H2>
+    Notes
+</H2>
+
+<!-- 
+        Restrictions.
+        Interesting behaviour.
+        Useful things you can do with this program.
+   -->
+
+None.
+
+
+
+
+
+
+
+<H2>
+    References
+</H2>
+
+<!-- 
+        Bibliography for methods used.
+   -->
+
+None.
+
+
+
+
+
+
+
+
+<H2>
+    Warnings
+</H2>
+
+<!-- 
+        Potentially stupid things the program will let you do.
+   -->
+
+None.
+
+
+
+
+
+
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+<!-- 
+        Error messages specific to this program, eg:
+        "FATAL xxx" - means you have not set up the xxx data using program <b>prog</b>.<p>
+   -->
+
+None.
+
+
+
+
+
+
+
+<H2>
+    Exit status
+</H2>
+
+<!-- 
+        Description of the exit status for various error conditions
+   -->
+
+It always exits with status 0.
+
+
+
+
+
+
+
+
+<H2>
+    Known bugs
+</H2>
+
+
+<!-- 
+        Bugs noted but not yet fixed.
+   -->
+
+None.
+
+
+
+
+
+
+
+
+<!--
+<H2>
+    See also
+</H2>
+-->
+<h2><a name="See also">See also</a></h2>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th><th>Description</th></tr>
+<tr><td><a href="../phylip/eclique.html">eclique</a></td><td>Largest clique program</td></tr>
+<tr><td><a href="../phylip/edollop.html">edollop</a></td><td>Dollo and polymorphism parsimony algorithm</td></tr>
+<tr><td><a href="../phylip/edolpenny.html">edolpenny</a></td><td>Penny algorithm Dollo or polymorphism</td></tr>
+<tr><td><a href="../phylip/efactor.html">efactor</a></td><td>Multistate to binary recoding program</td></tr>
+<tr><td><a href="../phylip/emix.html">emix</a></td><td>Mixed parsimony algorithm</td></tr>
+<tr><td><a href="../phylip/epenny.html">epenny</a></td><td>Penny algorithm, branch-and-bound to find all most parsimonious trees</td></tr>
+<tr><td><a href="fclique.html">fclique</a></td><td>Largest clique program</td></tr>
+<tr><td><a href="fdollop.html">fdollop</a></td><td>Dollo and polymorphism parsimony algorithm</td></tr>
+<tr><td><a href="fdolpenny.html">fdolpenny</a></td><td>Penny algorithm Dollo or polymorphism</td></tr>
+<tr><td><a href="ffactor.html">ffactor</a></td><td>Multistate to binary recoding program</td></tr>
+<tr><td><a href="fmix.html">fmix</a></td><td>Mixed parsimony algorithm</td></tr>
+<tr><td><a href="fpars.html">fpars</a></td><td>Discrete character parsimony</td></tr>
+<tr><td><a href="fpenny.html">fpenny</a></td><td>Penny algorithm, branch-and-bound to find all most parsimonious trees</td></tr>
+</table>
+
+<!-- 
+        Add any comments about other associated programs (to prepare
+        data files?) that seealso doesn't find. 
+   -->
+
+
+
+
+
+
+
+
+
+
+<H2>
+    Author(s)
+</H2>
+
+This program is an EMBOSS conversion of a program written by Joe
+Felsenstein as part of his PHYLIP package.
+
+<p>
+Although we take every care to ensure that the results of the EMBOSS
+version are identical to those from the original package, we recommend
+that you check your inputs give the same results in both versions
+before publication.
+
+<p>
+Please report all bugs in the EMBOSS version to the EMBOSS bug team,
+not to the original author.
+
+
+<H2>
+    History
+</H2>
+
+Written (2004) - Joe Felsenstein, University of Washington.
+<p>
+Converted (August 2004) to an EMBASSY program by the EMBOSS team.
+
+
+
+
+<H2>
+    Target users
+</H2>
+
+<!--
+        For general users, requested by one user, for EMBOSS site
+        maintainers, for EMBOSS developers etc.
+        eg:
+        "This program is intended to be used by everyone and everything,
+        from naive users to embedded scripts." 
+	Which is easy to include using:
+   -->
+
+This program is intended to be used by everyone and everything, from naive users to embedded scripts.
+
+
+
+
+
+
+
+
+
+
+
+
+</BODY>
+</HTML>
+

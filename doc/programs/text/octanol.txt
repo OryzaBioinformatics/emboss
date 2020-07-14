@@ -1,50 +1,50 @@
 
                                   octanol 
-                                      
-   
-   
+
+
+
 Function
 
    Displays protein hydropathy
-   
+
 Description
 
    Protein sequences that form transmembrane regions are assumed to have
    a thermodynamic preference for a hydrophobic environment (inside the
    membrane lipid bilayer), rather than an aqueous environment in water.
-   
+
    The free energy change for each amino acid residue between a lipid and
    a water environment can be measured experimentally, and the values for
    peptides can be shown to be additive (White and Wimley 1999).
-   
+
    The octanol program calculates two free energy differences.
-   
+
    The first is the free energy difference between solution in water and
    association with the interface (glycerol group) of a POPC
    (palmitoyloleoylphosphocholine) bilayer.
-   
+
    The second is the free energy difference between water and octanol,
    equivalent to the environment inside a lipid bilayer.
-   
+
    Residues which can be buried inside a lipid bilayer must be in a
    region of the peptide where most residues show a free energy
    difference in favour of being in an octanol environment or at least
    being in the lipid/water interface region.
-   
+
    White and Wimley (1999) showed that a sliding window of either free
    energy difference will indicate the location of probably transmembrane
    regions, but that the best indicator is the difference between the two
    values, which is the free energy difference between the interface and
    octanol environments.
-   
+
    The free energies are calculated over a sliding window of 19 residues,
    about the size of a membrane spanning alphahelix. The energy values
    for each residue are added over the window.
-   
+
 Usage
 
    Here is a sample session with octanol
-   
+
 
 % octanol 
 Displays protein hydropathy
@@ -52,10 +52,10 @@ Input sequence: tsw:opsd_human
 Graph type [x11]: ps
 
 Created octanol.ps
-   
+
    Go to the input files for this example
    Go to the output files for this example
-   
+
 Command line arguments
 
    Standard (Mandatory) qualifiers:
@@ -111,7 +111,7 @@ Command line arguments
    -error               boolean    Report errors
    -fatal               boolean    Report fatal errors
    -die                 boolean    Report deaths
-   
+
 
    Standard (Mandatory) qualifiers Allowed values Default
    [-sequence]
@@ -120,7 +120,7 @@ Command line arguments
    (Parameter 2) Graph type EMBOSS has a list of known devices, including
    postscript, ps, hpgl, hp7470, hp7580, meta, colourps, cps, xwindows,
    x11, tektronics, tekt, tek4107t, tek, none, null, text, data, xterm,
-   png EMBOSS_GRAPHICS value, or x11
+   png, xml EMBOSS_GRAPHICS value, or x11
    Additional (Optional) qualifiers Allowed values Default
    -datafile White-Wimley data file Data file Ewhite-wimley.dat
    -width Window size Integer from 1 to 200 19
@@ -130,18 +130,18 @@ Command line arguments
    Yes
    Advanced (Unprompted) qualifiers Allowed values Default
    (none)
-   
+
 Input file format
 
    octanol reads any protein sequence USA.
-   
+
   Input files for usage example
-  
+
    'tsw:opsd_human' is a sequence entry in the example protein database
    'tsw'
-   
+
   Database entry: tsw:opsd_human
-  
+
 ID   OPSD_HUMAN     STANDARD;      PRT;   348 AA.
 AC   P08100; Q16414;
 DT   01-AUG-1988 (Rel. 08, Created)
@@ -247,30 +247,30 @@ SQ   SEQUENCE   348 AA;  38892 MW;  07443BEA CRC32;
      ATTQKAEKEV TRMVIIMVIA FLICWVPYAS VAFYIFTHQG SNFGPIFMTI PAFFAKSAAI
      YNPVIYIMMN KQFRNCMLTT ICCGKNPLGD DEASATVSKT ETSQVAPA
 //
-   
+
 Output file format
 
    octanol draws a graph showing the free energy calcuated over a sliding
    window.
-   
+
   Output files for usage example
-  
+
   Graphics File: octanol.ps
-  
+
    [octanol results]
-   
+
    The line on the default plot is the difference between the interface
    and octanol free energy calculations. Command line options allow the
    display of the interface and octanol values, or hiding the difference
    values.
-   
+
    In the example, the human opsin protein has 7 transmembrane regions:
    37-61, 74-98, 114-133, 153-176, 203-230, 253-276 and 285-309. Each is
    about 20 residues in length, which is also the gap between tick marks
    on the sequence axis. All have energetic preferences for being in the
    lipid (octanol) enviroment - shown as being above the zero line - or
    have at least no clear preference.
-   
+
    Running octanol with all three plots:
 
 % octanol -interface -octanol
@@ -278,22 +278,22 @@ Input sequence: tsw:opsd_human
    Graph type [x11]:
 
    gives a graph with the water-interface and water-octanol plots.
-   
+
    For those regions where the diference plot is close to zero, both the
    other two plots are above the line, showing a preference for either
    the octanol or the interface membrane environments rather than water.
-   
+
 Data files
 
    File Ewhite-wimley.dat contains the experimental free energy values
    for the water-interface and water-octanol transitions.
-   
+
    EMBOSS data files are distributed with the application and stored in
    the standard EMBOSS data directory, which is defined by the EMBOSS
    environment variable EMBOSS_DATA.
-   
+
    To see the available EMBOSS data files, run:
-   
+
 % embossdata -showall
 
    To fetch one of the data files (for example 'Exxx.dat') into your
@@ -306,39 +306,39 @@ Data files
    tidier directory listings in a subdirectory called ".embossdata".
    Files for all EMBOSS runs can be put in the user's home directory, or
    again in a subdirectory called ".embossdata".
-   
+
    The directories are searched in the following order:
      * . (your current directory)
      * .embossdata (under your current directory)
      * ~/ (your home directory)
      * ~/.embossdata
-       
+
 Notes
 
    None.
-   
+
 References
 
     1. White S.H. and Wimley W.C. (1999) "Membrane protein folding and
        stability: physical principles" Ann. Rev.Biophys. Biomol. Struct.
        28:319-365.
-       
+
 Warnings
 
    None.
-   
+
 Diagnostic Error Messages
 
    None.
-   
+
 Exit status
 
    It always exits with status 0.
-   
+
 Known bugs
 
    None.
-   
+
 See also
 
    Program name                          Description
@@ -355,18 +355,20 @@ See also
    pepstats     Protein statistics
    pepwindow    Displays protein hydropathy
    pepwindowall Displays protein hydropathy of a set of sequences
-   
+
 Author(s)
 
    Ian Longden (il © sanger.ac.uk)
    Sanger Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge,
    CB10 1SA, UK.
-   
+
 History
 
 Target users
 
    This program is intended to be used by everyone and everything, from
    naive users to embedded scripts.
-   
+
 Comments
+
+   None

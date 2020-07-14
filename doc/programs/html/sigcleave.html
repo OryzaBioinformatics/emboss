@@ -7,15 +7,9 @@
 </HEAD>
 <BODY BGCOLOR="#FFFFFF" text="#000000">
 
-
-
-
-
-
-
 <table align=center border=0 cellspacing=0 cellpadding=0>
 <tr><td valign=top>
-<A HREF="index.html" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
@@ -29,20 +23,9 @@ sigcleave
 
 
 
-
-
-
-
 <H2>
     Function
 </H2>
-
-
-
-<!--
-DON'T WRITE ANYTHING HERE.
-IT IS DONE FOR YOU.
--->
 Reports protein signal cleavage sites
 
 
@@ -98,13 +81,9 @@ Also, remember you can put <b>-send 50</b> on the command line to make
 sure it only checks the first 50 residues. 
 
 
-
-
 <H2>
     Usage
 </H2>
-
-
 <b>Here is a sample session with sigcleave</b>
 <p>
 
@@ -126,14 +105,6 @@ Output report [ach2_drome.sig]: <b></b>
 <H2>
     Command line arguments
 </H2>
-
-
-
-<!--
-DON'T WRITE ANYTHING HERE.
-IT IS DONE FOR YOU.
--->
-
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
    Standard (Mandatory) qualifiers:
@@ -193,8 +164,6 @@ IT IS DONE FOR YOU.
 
 </pre>
 </td></tr></table>
-<P>
-
 <table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
 <tr bgcolor="#FFFFCC">
 <th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
@@ -378,8 +347,8 @@ feattable, motif, regions, seqtable, simple, srs, table, tagseq
 <p>
 
 See:
-<A href="http://www.uk.embnet.org/Software/EMBOSS/Themes/ReportFormats.html">
-http://www.uk.embnet.org/Software/EMBOSS/Themes/ReportFormats.html</A>
+<A href="http://emboss.sf.net/docs/themes/ReportFormats.html">
+http://emboss.sf.net/docs/themes/ReportFormats.html</A>
 for further information on report formats.
 
 <p>
@@ -399,7 +368,7 @@ By default <b>sigcleave</b> writes a 'motif' report file.
 <pre>
 ########################################
 # Program: sigcleave
-# Rundate: Tue Apr 06 14:34:18 2004
+# Rundate: Thu Jul 15 2004 12:00:00
 # Report_format: motif
 # Report_file: ach2_drome.sig
 ########################################
@@ -482,8 +451,24 @@ By default <b>sigcleave</b> writes a 'motif' report file.
 <p>
 EMBOSS data files are distributed with the application and stored
 in the standard EMBOSS data directory, which is defined
-by EMBOSS environment variable EMBOSS_DATA.
+by the EMBOSS environment variable EMBOSS_DATA.
 
+<p>
+
+To see the available EMBOSS data files, run:
+<p>
+<pre>
+% embossdata -showall
+</pre>
+<p>
+To fetch one of the data files (for example 'Exxx.dat') into your
+current directory for you to inspect or modify, run:
+
+<pre>
+
+% embossdata -fetch -file Exxx.dat
+
+</pre>
 <p>
 
 Users can provide their own data files in their own directories.
@@ -501,14 +486,10 @@ The directories are searched in the following order:
    <li> ~/ (your home directory)
    <li> ~/.embossdata
 </ul>
+<p>
 
-The data file names are:
 
-<ul>
-   <li> Esig.euk          Eukaryotic signal data
-   <li> Esig.pro          Prokaryotic signal data
-</ul>
-
+<p>
 Here is the default file for eukaryotic signals:
 
 <p>
@@ -604,11 +585,6 @@ It exits with status 0 unless an error is reported.
 
 None.
 
-<!--
-<H2>
-    See also
-</H2>
--->
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
@@ -626,10 +602,6 @@ None.
 <tr><td><a href="pscan.html">pscan</a></td><td>Scans proteins using PRINTS</td></tr>
 </table>
 
-<!--
-        Add any comments about other associated programs (to prepare
-        data files?) that seealso doesn't find.
-   -->
 
 
 <H2>
@@ -657,30 +629,19 @@ Informatics Division, European Bioinformatics Institute, Wellcome Trust Genome C
     History
 </H2>
 
-
 Completed 10th March 1999
 
-<!--
-<p>
-[an error occurred while processing this directive]
--->
 
 <H2>
     Target users
 </H2>
+This program is intended to be used by everyone and everything, from naive users to embedded scripts.
 
-
-This program is intended to be used by everyone and everything,
-from naive users to embedded scripts. 
 
 <H2>
     Comments
 </H2>
-
-
-<pre>
-
-</pre>
+None
 
 
 </BODY>

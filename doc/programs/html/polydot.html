@@ -7,13 +7,9 @@
 </HEAD>
 <BODY BGCOLOR="#FFFFFF" text="#000000">
 
-
-
-
-
 <table align=center border=0 cellspacing=0 cellpadding=0>
 <tr><td valign=top>
-<A HREF="index.html" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
@@ -27,19 +23,9 @@ polydot
 
 
 
-
-
-
 <H2>
     Function
 </H2>
-
-
-
-<!--
-DON'T WRITE ANYTHING HERE.
-IT IS DONE FOR YOU.
--->
 Displays all-against-all dotplots of a set of sequences
 
 
@@ -70,15 +56,13 @@ reports all identical matches to feature files.
 <H2>
     Usage
 </H2>
-
-
 <b>Here is a sample session with polydot</b>
 <p>
 
 <p>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% <b>polydot ../../data/globins.fasta -gtitle="Polydot of globins.fasta" -graph cps </b>
+% <b>polydot globins.fasta -gtitle="Polydot of globins.fasta" -graph cps </b>
 Displays all-against-all dotplots of a set of sequences
 Word size [6]: <b></b>
 
@@ -93,14 +77,6 @@ Created polydot.ps
 <H2>
     Command line arguments
 </H2>
-
-
-
-<!--
-DON'T WRITE ANYTHING HERE.
-IT IS DONE FOR YOU.
--->
-
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
    Standard (Mandatory) qualifiers (* if not always prompted):
@@ -205,7 +181,7 @@ IT IS DONE FOR YOU.
 <tr>
 <td>-graph</td>
 <td>Graph type</td>
-<td>EMBOSS has a list of known devices, including postscript, ps, hpgl, hp7470, hp7580, meta, colourps, cps, xwindows, x11, tektronics, tekt, tek4107t, tek, none, null, text, data, xterm, png</td>
+<td>EMBOSS has a list of known devices, including postscript, ps, hpgl, hp7470, hp7580, meta, colourps, cps, xwindows, x11, tektronics, tekt, tek4107t, tek, none, null, text, data, xterm, png, xml</td>
 <td><i>EMBOSS_GRAPHICS</i> value, or x11</td>
 </tr>
 
@@ -226,7 +202,7 @@ IT IS DONE FOR YOU.
 <td>-dumpfeat</td>
 <td>Dump all matches as feature files</td>
 <td>Toggle value Yes/No</td>
-<td>N</td>
+<td>No</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
@@ -250,13 +226,6 @@ IT IS DONE FOR YOU.
     Input file format
 </H2>
 
-<!-- 
-        This includes example input file formats.
-        This should be a detailed description and example - assume
-        someone will want to parse this file and will want to know what
-        happens in unusual cases - null input, etc. 
-   -->
-
 <b>polydot</b> reads in a set of nucleic or protein sequences.
 
 <p>
@@ -268,7 +237,7 @@ The sequences may or may not be aligned.
 
 <a name="input.1"></a>
 <h3>Input files for usage example </h3>
-<p><h3>File: ../../data/globins.fasta</h3>
+<p><h3>File: globins.fasta</h3>
 <table width="90%"><tr><td bgcolor="#FFCCFF">
 <pre>
 &gt;HBB_HUMAN Sw:Hbb_Human =&gt; HBB_HUMAN
@@ -306,13 +275,6 @@ VVGAKWSEELNSAWTIAYDELAIVIKKEMNDAA
 <H2>
     Output file format
 </H2>
-
-<!-- 
-        This includes example output file formats.
-        This should be a detailed description and example - assume
-        someone will want to parse this file and will want to know what
-        happens in unusual cases - null output, errors etc. 
-   -->
 
 A graphical image is displayed on the specified graphics device.
 
@@ -368,11 +330,6 @@ None.
 
 None.
 
-<!--
-<H2>
-    See also
-</H2>
--->
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
@@ -380,11 +337,6 @@ None.
 <tr><td><a href="dotpath.html">dotpath</a></td><td>Displays a non-overlapping wordmatch dotplot of two sequences</td></tr>
 <tr><td><a href="dottup.html">dottup</a></td><td>Displays a wordmatch dotplot of two sequences</td></tr>
 </table>
-
-<!--
-        Add any comments about other associated programs (to prepare
-        data files?) that seealso doesn't find.
-   -->
 
 
 <H2>
@@ -403,31 +355,20 @@ Cambridge, CB10 1SA, UK.
     History
 </H2>
 
-<pre>
 Completed 2nd June 1999.
-</pre>
 
-<!--
-<p>
-[an error occurred while processing this directive]
--->
 
 <H2>
     Target users
 </H2>
+This program is intended to be used by everyone and everything, from naive users to embedded scripts.
 
 
-This program is intended to be used by everyone and everything,
-from naive users to embedded scripts. 
 
 <H2>
     Comments
 </H2>
-
-
-<pre>
-
-</pre>
+None
 
 
 </BODY>

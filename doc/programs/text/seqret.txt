@@ -1,22 +1,22 @@
 
                                   seqret 
-                                      
-   
-   
+
+
+
 Function
 
    Reads and writes (returns) sequences
-   
+
 Description
 
    The simplicity of the above description of this program greatly
    understates the rich functionality of this program.
-   
+
    Because EMBOSS programs can take a wide range of qualifiers that
    slightly change the behaviour of the program when reading or writing a
    sequence, this program can do many more things than simply "read and
    write a sequence".
-   
+
    seqret can read a sequence or many sequences from databases, files,
    files of sequence names, the command-line or the output of other
    programs and then can write them to files, the screen or pass them to
@@ -24,42 +24,41 @@ Description
    write it to a file, seqret is a program for extracting sequences from
    databases. Because it can write the sequence to the screen, seqret is
    a program for displaying sequences.
-   
+
    seqret can read sequences in any of a wide range of standard sequence
    formats. You can specify the input and output formats being used. If
    you don't specify the input format, seqret will try a set of possible
    formats until it reads it in successfully. Because you can specify the
    output sequence format, seqret is a program to reformat a sequence.
-   
+
    seqret can read in the reverse complement of a nucleic acid sequence.
    It therefore is a program for producing the reverse complement of a
    sequence.
-   
+
    seqret can read in a sequence whose begin and end positions you have
    specified and write out that fragment. It is therefore a utility for
    doing simple extraction of a region of a sequence.
-   
+
    seqret can change the case of the sequence being read in to upper or
    to lower case. It is therefore a simple sequence beautification
    utility.
-   
+
    seqret can do any combination of the above functions.
-   
+
    The sequence input and output specification of this (and many other
    EMBOSS programs) is described as being a Uniform Sequence Address.
-   
+
    The Uniform Sequence Address, or USA, is a somewhat tongue-in-cheek
    reference to a URL-style sequence naming used by all EMBOSS
    applications.
-   
+
    The USA is a very flexible way of specifying one or more sequences
    from a variety of sources and includes sequence files, database
    queries and external applications.
-   
+
    See the full specification of USA syntax at:
-   http://www.uk.embnet.org/Software/EMBOSS/Themes/UniformSequenceAddress
-   .html 
-   
+   http://emboss.sourceforge.net/doc/themes/UniformSequenceAddress.html 
+
    The basic USA syntax is one of:
      * "file"
      * "file:entry"
@@ -68,34 +67,34 @@ Description
      * "database:entry"
      * "database"
      * "@file"
-       
+
    Note that ':' separates the name of a file containing many possible
    entries from the specific name of a sequence entry in that file. It
    also separates the name of a database from an entry in that database
-   
+
    Note also that '::' separates the specified format of a file from the
    name of the file. Normally the format can be omitted, in which case
    the program will attempt to identify the correct format when reading
    the sequence in and will default to using FASTA format when writing
    the sequence out.
-   
+
    Valid names of the databases set up in your local implementation of
    EMBOSS can be seen by using the program 'showdb'.
-   
+
    Database queries, and individual entries in files that have more than
    one sequence entry, use wildcards of "?" for any character and "*" for
    any string of characters. There are some problems with the Unix shell
    catching these characters so they do need to be hidden in quotes or
    preceded by a backslash on the Unix command line, (for example
    "embl:hs\*")
-   
+
    The output USA name 'stdout' is special. It makes the output go to the
    device 'standard output'. This is the screen, by default.
-   
+
   Example USAs
-  
+
    The following are valid USAs for sequences:
-   
+
    USA Description
    xxx.seq A sequence file "xxx.seq" in any format
    fasta::xxx.seq A sequence file "xxx.seq" in fasta format
@@ -129,14 +128,14 @@ Description
    'asis' format the name is the sequence so no file needs to be opened.
    This is a special case. It was intended as a joke, but could be quite
    useful for generating command lines.
-   
+
   Input sequence formats
-  
+
    To date, the following sequence formats are accepted as input.
-   
+
    By default, (i.e. if no format is explicitly specified) EMBOSS tries
    each format in turn until one succeeds.
-   
+
    Input Format Comments
    gcg GCG 9.x and 10.x format with the format and sequence type
    identified on the first line of the file
@@ -207,31 +206,31 @@ Description
    In 'asis' format the name is the sequence so no file needs to be
    opened. This is a special case. It was intended as a joke, but could
    be quite useful for generating command lines.
-   
+
   Output sequence formats
-  
+
    To date, the following sequence formats are available as output.
-   
+
    Some sequence formats can hold multiple sequences in one file, these
    are marked as multiple in the following table. The details of how many
    sequences are held in one file differs between formats, but they
    either allow many sequences to be concatenated one after the other, or
    they hold the sequences together in some sort of aligned set of
    sequences.
-   
+
    Other formats, such as GCG, plain and staden formats can only hold one
    sequence per file, these are marked as single. An attempt to
    concatenate several sequences in one file leaves the results as a mess
    that makes it impossible to decide where the sequences start and end
    or what is annotation and what is sequence.
-   
+
    These single formats therefore cause problems when there are multiple
    sequences to write out because a single file containing multiple
    sequences in that format is invalid. When these formats are specified
    for output, an EMBOSS program will allow you to write many sequences
    to one file, but EMBOSS programs will not be able to reliably read in
    the resulting mess.
-   
+
    N.B This behaviour changed in EMBOSS version 1.7.0. (31 Oct 2000)
    Previously, EMBOSS programs that were asked to write multiple
    sequences in a single format whould ignore the requested output file
@@ -242,7 +241,7 @@ Description
    people who could live with the consequences of their actions and who
    could learn not to write out multiple sequences to a file in formats
    that could not cope with multiple sequences.
-   
+
    It you really wish to write multiple sequences out in formats that can
    not cope with multiple sequences, you are advised to add the global
    qualifier -ossingle on the command line. This will force the EMBOSS
@@ -250,10 +249,10 @@ Description
    file names. One sequence will be written to each such file. These file
    names are made from the sequence ID name, with the name of the format
    as the extension (e.g. hsfau.gcg).
-   
+
    This is not ideal. Preferably, you should stay away from formats that
    can't cope with multiple sequences in a file.
-   
+
    Output Format Single/
    Multiple Comments
    gcg single Wisconsin Package GCG 9.x and 10.x format with the sequence
@@ -319,22 +318,22 @@ Description
    debug multiple EMBOSS sequence object report for debugging showing all
    available fields. Not all fields will contain data - this depends very
    much on the input format used.
-   
+
   Future directions
-  
+
    More formats, both for input and for output, can be easily added, so
    suggestions are always welcome.
-   
+
   Associated qualifiers
-  
+
    As noted previously there are many 'associated' qualifiers that alter
    the behaviour of seqret when it reads in or writes out a sequence. As
    these are used in all EMBOSS programs that read in or write out
    sequences, they are not reported by the '-help' qualifier. They are
    however reported by the pair of qualifiers: '-help -verbose':
-   
+
    Some of the more useful associated qualifiers are:
-   
+
    Qualifier                        Description
    -sbegin   The first position to be used in the sequence
    -send     The last position to be used in the sequence
@@ -350,23 +349,23 @@ Description
    -filter   Read input from another program, write to the screen
    -options  Prompt for optional qualifiers
    -help     Display a table of the command-line options
-   
+
    The set of associated qualifiers for sequences behave in different
    ways depending on where they appear.
-   
+
    If these qualifiers immediately follow a parameter they apply only to
    that parameter and not to all cases. If they occur before any
    parameters, they apply to all following sequence parameters.
-   
+
    If there are no two parameters of equal type, the order of parameters
    and their qualifiers is irrelevant.
-   
+
    Where a qualifier is defined more than once, for example "-sformat"
    for 2 input sequences to be aligned, the qualifier name can have a
    number to indicate which sequence is meant. "-sbegin2=25" will apply
    only to the second sequence, no matter where it appears on the command
    line.
-   
+
    The -sbegin and -send qualifiers take an integer number specifying the
    position to begin or end reading a sequence. If the number is
    positive, the number is the position counting from the first base or
@@ -374,13 +373,13 @@ Description
    counted from the end of the sequence, so position -1 is the last base
    or residue of the sequence. (If -sbegin 0 is used, it is assumed to be
    the same as -sbegin 1 and -send 0 is the same as -send -1.)
-   
+
    The filter qualifier makes the program behave like a filter, reading
    its (first) input 'file' from the standard input, and writing its
    (first) output 'file' to the standard output. The -filter qualifier
    will also invoke the -auto qualifier, so the user is never prompted
    for any missing values.
-   
+
    Example:
 
 % cat sequence.seq | seqret -filter | lpr
@@ -389,67 +388,67 @@ Description
    qualifier. The input file is 'piped' into the program using the unix
    command cat and the output is 'piped' directly to the unix program
    lpr, which will print it on the printer.
-   
+
    When the -options qualifier is used and not all the parameters are
    given on the command line, it will query the user for those
    parameters. It will not only query the user for the required
    parameters as it would do without the -options qualifier, but it will
    also query the user for the optional parameters.
-   
+
    When the -stdout qualifier is used, the user will still be prompted
    for all the info that is required, but will write to standard output
    by default. The user will also still be prompted for an output
    filename, in case the user wants to save the output to a file.
-   
+
 Usage
 
    Here is a sample session with seqret
-   
+
    Extract an entry from a database and write it to a file:
-   
+
 
 % seqret 
 Reads and writes (returns) sequences
 Input sequence(s): tembl:hsfau
 Output sequence [hsfau.fasta]: 
-   
+
    Go to the input files for this example
    Go to the output files for this example
-   
+
    Example 2
-   
+
    Read all entries in the database 'tembl' that start with 'hs' and
    write them to a file. In this example the specification is all done in
    the command line and to stop Unix getting confused by the '*'
    character, it has to have a backslash ('\') before it:
-   
-   
+
+
 % seqret tembl:hs\*  hsall.seq 
 Reads and writes (returns) sequences
 
    Go to the output files for this example
-   
+
    Example 3
-   
+
    seqret does not read in features by default because this results in
    slightly faster performance. If however you wish to read in features
    with your sequence and write them out on output, using '-feature' will
    change the default behaviour to use any features present in the
    sequence. N.B. use embl format for the output file as the default
    format 'fasta' reports the features in gff (file "<seqname>.gff")
-   
+
 
 % seqret -feature 
 Reads and writes (returns) sequences
 Input sequence(s): tembl:hsfau
 Output sequence [hsfau.fasta]: embl::hsfau.embl
-   
+
    Go to the output files for this example
-   
+
    Example 4
-   
+
    Display the contents of the sequence on the screen:
-   
+
 
 % seqret 
 Reads and writes (returns) sequences
@@ -466,89 +465,89 @@ gtgctggaaaagtgagaggtcagactcctaaggtggccaaacaggagaagaagaagaaga
 agacaggtcgggctaagcggcggatgcagtacaaccggcgctttgtcaacgttgtgccca
 cctttggcaagaagaagggccccaatgccaactcttaagtcttttgtaattctggctttc
 tctaataaaaaagccacttagttcagtcaaaaaaaaaa
-   
+
    Example 5
-   
+
    Write the result in GCG format by using the qualifier '-osformat'.
-   
+
 
 % seqret -osf gcg 
 Reads and writes (returns) sequences
 Input sequence(s): tembl:hsfau
 Output sequence [hsfau.gcg]: 
-   
+
    Go to the output files for this example
-   
+
    Example 6
-   
+
    Write the result in GCG format by specifying the format in the output
    USA on the command line.
-   
+
 
 % seqret -outseq gcg::hsfau.gcg 
 Reads and writes (returns) sequences
 Input sequence(s): tembl:hsfau
-   
+
    Example 7
-   
+
    Write the result in GCG format by specifying the format in the output
    USA at the prompt.
-   
+
 
 % seqret 
 Reads and writes (returns) sequences
 Input sequence(s): tembl:hsfau
 Output sequence [hsfau.fasta]: gcg::hsfau.gcg
-   
+
    Example 8
-   
+
    Write the reverse-complement of a sequence:
-   
+
 
 % seqret -srev 
 Reads and writes (returns) sequences
 Input sequence(s): tembl:hsfau
 Output sequence [hsfau.fasta]: 
-   
+
    Go to the output files for this example
-   
+
    Example 9
-   
+
    Extract the bases between the positions starting at 5 and ending at
    25:
-   
+
 
 % seqret -sbegin 5 -send 25 
 Reads and writes (returns) sequences
 Input sequence(s): tembl:hsfau
 Output sequence [hsfau.fasta]: 
-   
+
    Go to the output files for this example
-   
+
    Example 10
-   
+
    Extract the bases between the positions starting at 5 and ending at 5
    bases before the end of the sequence:
-   
+
 
 % seqret -sbegin 5 -send -5 
 Reads and writes (returns) sequences
 Input sequence(s): tembl:hsfau
 Output sequence [hsfau.fasta]: 
-   
+
    Go to the output files for this example
-   
+
    Example 11
-   
+
    Read all entries in the database 'tembl' that start with 'hs' and
    write them to a file:
-   
+
 
 % seqret 
 Reads and writes (returns) sequences
 Input sequence(s): tembl:hs*
 Output sequence [hs989235.fasta]: hsall.seq
-   
+
 Command line arguments
 
    Standard (Mandatory) qualifiers:
@@ -604,7 +603,7 @@ Command line arguments
    -error               boolean    Report errors
    -fatal               boolean    Report fatal errors
    -die                 boolean    Report deaths
-   
+
 
    Standard (Mandatory) qualifiers Allowed values Default
    [-sequence]
@@ -617,18 +616,18 @@ Command line arguments
    Advanced (Unprompted) qualifiers Allowed values Default
    -feature Use feature information Boolean value Yes/No No
    -firstonly Read one sequence and stop Boolean value Yes/No No
-   
+
 Input file format
 
    seqret reads one or more sequence USAs.
-   
+
   Input files for usage example
-  
+
    'tembl:hsfau' is a sequence entry in the example nucleic acid database
    'tembl'
-   
+
   Database entry: tembl:hsfau
-  
+
 ID   HSFAU      standard; RNA; HUM; 518 BP.
 XX
 AC   X65923;
@@ -715,26 +714,26 @@ SQ   Sequence 518 BP; 125 A; 139 C; 148 G; 106 T; 0 other;
      tctaataaaa aagccactta gttcagtcaa aaaaaaaa                               51
 8
 //
-   
+
 Output file format
 
    The output from seqret is one or more sequences, and by default will
    be written in FASTA format.
-   
+
    If the '-firstonly' qualifier is used then only the first sequence of
    the input USA specification will be written out.
-   
+
    In some cases the output filename will be the same as the input
    filename, but as seqret reads only the first sequence before opening
    the output file it may try to overwrite the input. Note that this is
    not true of seqretset which reads all sequences into memory at
    startup, but which can need a large amount of memory for many
    sequences.
-   
+
   Output files for usage example
-  
+
   File: hsfau.fasta
-  
+
 >HSFAU X65923.1 H.sapiens fau mRNA
 ttcctctttctcgactccatcttcgcggtagctgggaccgccgttcagtcgccaatatgc
 agctctttgtccgcgcccaggagctacacaccttcgaggtgaccggccaggaaacggtcg
@@ -745,11 +744,11 @@ gtgctggaaaagtgagaggtcagactcctaaggtggccaaacaggagaagaagaagaaga
 agacaggtcgggctaagcggcggatgcagtacaaccggcgctttgtcaacgttgtgccca
 cctttggcaagaagaagggccccaatgccaactcttaagtcttttgtaattctggctttc
 tctaataaaaaagccacttagttcagtcaaaaaaaaaa
-   
+
   Output files for usage example 2
-  
+
   File: hsall.seq
-  
+
 >HS989235 H45989.1 yo13c02.s1 Soares adult brain N2b5HB55Y Homo sapiens cDNA cl
 one IMAGE:177794 3', mRNA sequence.
 ccggnaagctcancttggaccaccgactctcgantgnntcgccgcgggagccggntggan
@@ -857,11 +856,11 @@ acgaaacacaggcccacgnttncatgcacacaggtatgggcacacataccatgcacacat
 aangacaaataccaggccagacatgatttgcccctgctggtgtcactgttaagtgtgaca
 gacaagcagaggacacacacccacctgggacgcggggcttcaggagagaggcagacctaa
 tagggcccggattcggggctggggaggct
-   
+
   Output files for usage example 3
-  
+
   File: hsfau.embl
-  
+
 ID   HSFAU      standard; DNA; UNC; 518 BP.
 AC   X65923;
 SV   X65923.1
@@ -918,11 +917,11 @@ SQ   Sequence 518 BP; 125 A; 139 C; 148 G; 106 T; 0 other;
      tctaataaaa aagccactta gttcagtcaa aaaaaaaa                               51
 8
 //
-   
+
   Output files for usage example 5
-  
+
   File: hsfau.gcg
-  
+
 !!NA_SEQUENCE 1.0
 
 H.sapiens fau mRNA
@@ -950,11 +949,11 @@ HSFAU  Length: 518  Type: N  Check: 2981 ..
  451 actcttaagt cttttgtaat tctggctttc tctaataaaa aagccactta
 
  501 gttcagtcaa aaaaaaaa
-   
+
   Output files for usage example 8
-  
+
   File: hsfau.fasta
-  
+
 >HSFAU X65923.1 H.sapiens fau mRNA
 ttttttttttgactgaactaagtggcttttttattagagaaagccagaattacaaaagac
 ttaagagttggcattggggcccttcttcttgccaaaggtgggcacaacgttgacaaagcg
@@ -965,18 +964,18 @@ cagagtggcctcatcctccaggggcgcgcctgccaggagcacgacttgatcttccggggc
 aatgccctccagtgaggctacatgagccttgatctgggcgaccgtttcctggccggtcac
 ctcgaaggtgtgtagctcctgggcgcggacaaagagctgcatattggcgactgaacggcg
 gtcccagctaccgcgaagatggagtcgagaaagaggaa
-   
+
   Output files for usage example 9
-  
+
   File: hsfau.fasta
-  
+
 >HSFAU X65923.1 H.sapiens fau mRNA
 tctttctcgactccatcttcg
-   
+
   Output files for usage example 10
-  
+
   File: hsfau.fasta
-  
+
 >HSFAU X65923.1 H.sapiens fau mRNA
 tctttctcgactccatcttcgcggtagctgggaccgccgttcagtcgccaatatgcagct
 ctttgtccgcgcccaggagctacacaccttcgaggtgaccggccaggaaacggtcgccca
@@ -987,49 +986,49 @@ tggaaaagtgagaggtcagactcctaaggtggccaaacaggagaagaagaagaagaagac
 aggtcgggctaagcggcggatgcagtacaaccggcgctttgtcaacgttgtgcccacctt
 tggcaagaagaagggccccaatgccaactcttaagtcttttgtaattctggctttctcta
 ataaaaaagccacttagttcagtcaaaaaa
-   
+
 Data files
 
    None.
-   
+
 Notes
 
    This description of what you can do when reading or writing files is
    not specific to the program seqret. All EMBOSS programs that read or
    write sequences can do the same.
-   
+
    seqret is often one of the first programs taught in EMBOSS training
    courses. This is because it is versatile, it is extremely powerful for
    its size (17 lines of code) it illustrates many aspects of EMBOSS
    programs and it was one of the first EMBOSS programs to be written, so
    it has a special place in the hearts of EMBOSS developers.
-   
+
    The name 'seqret' derives both from its function ("sequence return")
    and from the fact that immense amounts of functionality can come from
    so few lines of source code - most of the work is done by the EMBOSS
    libraries which the program calls and whose complexity is hidden, or
    "secret".
-   
+
 References
 
    None.
-   
+
 Warnings
 
    None.
-   
+
 Diagnostic Error Messages
 
    None.
-   
+
 Exit status
 
    It always exits with a status of 0.
-   
+
 Known bugs
 
    None.
-   
+
 See also
 
    Program name                          Description
@@ -1057,47 +1056,47 @@ See also
    union        Reads sequence fragments and builds one sequence
    vectorstrip  Strips out DNA between a pair of vector sequences
    yank         Reads a sequence range, appends the full USA to a list file
-   
+
    Valid names of the databases set up in your local implementation of
    EMBOSS can be seen by using the program 'showdb'.
-   
+
 Author(s)
 
    Peter Rice (pmr © ebi.ac.uk)
    Informatics Division, European Bioinformatics Institute, Wellcome
    Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
-   
+
 History
 
    1999 - Written by Peter Rice
    Feb 2002 - '-feature' qualifier added by Peter Rice
-   
+
 Target users
 
    This program is intended to be used by everyone and everything, from
    naive users to embedded scripts.
-   
+
 Comments
 
   Fasta output format
-  
+
     Question
-    
+
    When i tried to convert the EMBL format file into fasta format using
    the program "seqret", I found that the Access.no appears twice...
-   
+
 >AF102796 AF102796 Homo sapiens alphaE-catenin (CTNNA1) gene, exon 11.
 
     Answer
-    
+
    "It is not a bug ... it is a feature"
-   
+
    There are many "FASTA formats". EMBOSS uses the format that ACEDB and
    the EBI genome projects use. The first field after the ID is the
    accession number, so that accession numbers can be kept when sequences
    are converted to FASTA format, without using the NCBI format (with '|'
    characters in the IDs).
-   
+
    Your EMBL format file has IDs that look like accession numbers, so
    EMBOSS fills in the accession number for each sequence, and reports it
    in the FASTA format.

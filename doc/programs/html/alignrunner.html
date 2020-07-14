@@ -1,0 +1,459 @@
+<HTML>
+<HEAD>
+  <TITLE>
+  EMBASSY: CONSTRUCT: alignrunner
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+<table align=center border=0 cellspacing=0 cellpadding=0>
+<tr><td valign=top>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+</td>
+<td align=left valign=middle>
+<b><font size="+6">
+
+alignrunner
+</font></b>
+</td></tr>
+</table>
+<br>&nbsp;
+<p>
+
+
+
+
+<H2>
+    Function
+</H2>
+Runs alignment program on all sequence pairs in a directory
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+
+
+
+
+<H2>
+    Description
+</H2>
+
+<!-- 
+	This is the main part of the document.
+        This is what the user looks at to find out if this program will do what he wants. 
+        Long description.
+        Why it is useful.
+        When it should/shouldn't be used.
+  -->
+
+**************** 
+EDIT HERE
+**************** 
+
+
+
+
+
+
+
+
+
+
+
+
+
+<H2>
+    Algorithm
+</H2>
+
+<!-- 
+        Algorithms
+	  Pseudocode/Vague description/Handwaving/web links to useful pages
+  -->
+
+**************** 
+EDIT HERE
+**************** 
+
+
+
+
+
+
+
+
+
+
+
+
+
+<H2>
+    Usage
+</H2>
+
+<!--  
+	Example usage, as run from the command-line.
+        Many examples illustrating different behaviours is good.
+ -->
+
+<i>Under development, no final example yet</i>
+
+
+
+
+<H2>
+    Command line arguments
+</H2>
+
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+   Standard (Mandatory) qualifiers:
+  [-seqpairsdir]       dirlist    Input directory of files containing sequence
+                                  pairs for alignment
+  [-pathtocommands]    directory  Directory where alignment executables live
+  [-firstcommandname]  string     Name of first alignment executable
+  [-secondcommandname] string     Name of second alignment executable
+  [-scoringmatrixdirname] directory  Directory where scoring matrix lives
+  [-scoringmatrixname] string     Name of scoring matrix
+   -gapopen            float      The gap opening penalty is subtracted from
+                                  the total score every time a gap is inserted
+                                  in the alignment. The default value is
+                                  chosen for the EBLOSUM62 scoring matrix when
+                                  you are aligning protein sequences, and the
+                                  EDNAFULL matrix when you are aligning
+                                  nucleotide sequences. If you sequence
+                                  contains many small errors you should set a
+                                  low gap opening penalty (near zero) to avoid
+                                  over-penalizing those errors.
+   -gapextend          float      The gap extension penalty is the score
+                                  substracted when more spaces are added to an
+                                  existing alignment gap. Often a single
+                                  insertion or deletion affects multiple
+                                  residues/nucleotides; separate opening and
+                                  extension penalties reduce the excessive
+                                  penalty such events would otherwise carry;
+                                  generally the gap extension penalty should
+                                  be significantly lower than the gap opening
+                                  penalty.
+   -[no]zeroend        boolean    If this option is true then no penalty is
+                                  added for gaps at either ends of a trace.
+  [-firstalignedseqsoutdir] outdir     Name of directory containing sequences
+                                  aligned by first method
+  [-secondalignedseqsoutdir] outdir     Name of directory containing sequences
+                                  aligned by second method
+  [-firstoutfilesuffix] string     Appended to end of all output file names of
+                                  sequences aligned by first alignment method
+  [-secondoutfilesuffix] string     Appended to end of all output file names of
+                                  sequences aligned by second alignment method
+  [-outfileformat]     string     Format of output alignments for both methods
+
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers: (none)
+   Associated qualifiers: (none)
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report deaths
+
+
+</pre>
+</td></tr></table>
+<P>
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+Error: File /homes/pmr/local/share/EMBOSS/acd/alignrunner.acd line 12: (seqpairsdir) Unknown attribute 'name'
+
+
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+
+
+
+
+
+
+
+
+<H2>
+    Input file format
+</H2>
+
+<!-- 
+        This includes example input file formats.
+        This should be a detailed description and example - assume
+        someone will want to parse this file and will want to know what
+        happens in unusual cases - null input, etc. 
+   -->
+
+<b>alignrunner</b> reads any normal sequence USAs.
+
+<p>
+
+<i>Under development, no example input file(s) yet</i>
+
+
+
+
+
+
+<H2>
+    Output file format
+</H2>
+
+<!-- 
+        This includes example output file formats.
+        This should be a detailed description and example - assume
+        someone will want to parse this file and will want to know what
+        happens in unusual cases - null output, errors etc. 
+
+        If you wish to include the standard description of the avalable
+	report formats, use:
+[an error occurred while processing this directive]
+   -->
+
+<b>alignrunner</b> 
+outputs a graph to the specified graphics device. 
+outputs a report format file. The default format is ...
+
+
+<p>
+
+<i>Under development, no example output file(s) yet</i>
+
+
+
+
+
+
+<H2>
+    Data files
+</H2>
+
+<!-- 
+        Any data files used (e.g. translation table file)
+        This includes example data file formats if they are
+        not obvious.
+
+	If you wish to include the standard description of what data
+	files are and how to use embossdata to inspect and retrieve
+	them, use:
+[an error occurred while processing this directive]
+   -->
+
+**************** 
+EDIT HERE
+**************** 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<H2>
+    Notes
+</H2>
+
+<!-- 
+        Restrictions.
+        Interesting behaviour.
+        Useful things you can do with this program.
+   -->
+
+None.
+
+
+
+
+
+
+
+<H2>
+    References
+</H2>
+
+<!-- 
+        Bibliography for methods used.
+   -->
+
+None.
+
+
+
+
+
+
+
+
+<H2>
+    Warnings
+</H2>
+
+<!-- 
+        Potentially stupid things the program will let you do.
+   -->
+
+None.
+
+
+
+
+
+
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+<!-- 
+        Error messages specific to this program, eg:
+        "FATAL xxx" - means you have not set up the xxx data using program <b>prog</b>.<p>
+   -->
+
+None.
+
+
+
+
+
+
+
+<H2>
+    Exit status
+</H2>
+
+<!-- 
+        Description of the exit status for various error conditions
+   -->
+
+It always exits with status 0.
+
+
+
+
+
+
+
+
+<H2>
+    Known bugs
+</H2>
+
+
+<!-- 
+        Bugs noted but not yet fixed.
+   -->
+
+None.
+
+
+
+
+
+
+
+
+<!--
+<H2>
+    See also
+</H2>
+-->
+<h2><a name="See also">See also</a></h2>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th><th>Description</th></tr>
+<tr><td><a href="contactalign.html">contactalign</a></td><td>EMBOSS implementation of Damian Counsell's 2.5-D alignment algorithm</td></tr>
+<tr><td><a href="../esim4/esim4.html">esim4</a></td><td>Align an mRNA to a genomic DNA sequence</td></tr>
+<tr><td><a href="../../apps/est2genome.html">est2genome</a></td><td>Align EST and genomic DNA sequences</td></tr>
+<tr><td><a href="nawalign.html">nawalign</a></td><td>Damian Counsell's implementation for protein sequences of the Needleman and Wunsch alignment algorithm</td></tr>
+<tr><td><a href="nawalignrunner.html">nawalignrunner</a></td><td>Runs nawalign alignment program on all sequence pairs in a directory</td></tr>
+<tr><td><a href="../../apps/needle.html">needle</a></td><td>Needleman-Wunsch global alignment</td></tr>
+<tr><td><a href="needlerunner.html">needlerunner</a></td><td>Runs needle alignment program on all sequence pairs in a directory</td></tr>
+<tr><td><a href="scorer.html">scorer</a></td><td>Scores accuracy of protein-protein sequence alignment against gold standard structure-structure alignment</td></tr>
+<tr><td><a href="scorerrunner.html">scorerrunner</a></td><td>Runs scorer to compare ordered pairs of substituted seqs in two directories and write the scores to a third</td></tr>
+<tr><td><a href="../../apps/stretcher.html">stretcher</a></td><td>Finds the best global alignment between two sequences</td></tr>
+<tr><td><a href="substitute.html">substitute</a></td><td>Substitutes matches from first (query) sequence of two aligned sequences in a trace into second (template sequence)</td></tr>
+<tr><td><a href="substituterunner.html">substituterunner</a></td><td>Runs substitute on directory of traces and writes substituted sequences to another</td></tr>
+</table>
+
+<!-- 
+        Add any comments about other associated programs (to prepare
+        data files?) that seealso doesn't find. 
+   -->
+
+
+
+
+
+
+
+
+
+
+<H2>
+    Author(s)
+</H2>
+
+Damian Counsell (d.counsell&nbsp;&copy;&nbsp;rfcgr.mrc.ac.uk)
+<br>
+MRC Rosalind Franklin Centre for Genomics Research
+Wellcome Trust Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
+
+
+
+<H2>
+    History
+</H2>
+
+
+
+
+
+
+<H2>
+    Target users
+</H2>
+
+<!--
+        For general users, requested by one user, for EMBOSS site
+        maintainers, for EMBOSS developers etc.
+        eg:
+        "This program is intended to be used by everyone and everything,
+        from naive users to embedded scripts." 
+	Which is easy to include using:
+   -->
+
+This program is intended to be used by everyone and everything, from naive users to embedded scripts.
+
+
+
+<H2>
+    Comments
+</H2>
+
+None
+
+
+</BODY>
+</HTML>
+

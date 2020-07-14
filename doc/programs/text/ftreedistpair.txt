@@ -1,0 +1,347 @@
+
+                               ftreedistpair 
+
+
+
+Function
+
+   Distances between two sets of trees
+
+Description
+
+   Computes the Branch Score distance between trees, which allows for
+   differences in tree topology and which also makes use of branch
+   lengths. Also computes the Robinson-Foulds symmetric difference
+   distance between trees, which allows for differences in tree topology
+   but does not use branch lengths.
+
+Algorithm
+
+   This program computes distances between trees. Two distances are
+   computed, the Branch Score Distance of Kuhner and Felsenstein (1994),
+   and the more widely known Symmetric Difference of Robinson and Foulds
+   (1981). The Branch Score Distance uses branch lengths, and can only be
+   calculated when the trees have lengths on all branches. The Symmetric
+   Difference does not use branch length information, only the tree
+   topologies. It must also be borne in mind that neither distance has
+   any immediate statistical interpretation -- we cannot say whether a
+   larger distance is significantly larger than a smaller one.
+
+   These distances are computed by considering all possible branches that
+   could exist on the the two trees. Each branch divides the set of
+   species into two groups -- the ones connected to one end of the branch
+   and the ones connected to the other. This makes a partition of the
+   full set of species. (in Newick notation)
+
+  ((A,C),(D,(B,E)))
+
+   has two internal branches. One induces the partition {A, C | B, D, E}
+   and the other induces the partition {A, C, D | B, E}. A different tree
+   with the same set of species,
+
+  (((A,D),C),(B,E))
+
+   has internal branches that correspond to the two partitions {A, C, D |
+   B, E} and {A, D | B, C, E}. Note that the other branches, all of which
+   are external branches, induce partitions that separate one species
+   from all the others. Thus there are 5 partitions like this: {C | A, B,
+   D, E} on each of these trees. These are always present on all trees,
+   provided that each tree has each species at the end of its own branch.
+
+   In the case of the Branch Score distance, each partition that does
+   exist on a tree also has a branch length associated with it. Thus if
+   the tree is
+
+  (((A:0.1,D:0.25):0.05,C:0.01):0.2,(B:0.3,E:0.8):0.2)
+
+   The list of partitions and their branch lengths is:
+
+{A  |  B, C, D, E}     0.1
+{D  |  A, B, C, E}     0.25
+{A, D  |  B, C, E}     0.05
+{C  |  A, B, D, E}     0.01
+{A, D, C  |  B, E}     0.4
+{B  |  A, C, D, E}     0.3
+{E  |  A, B, C, D}     0.8
+
+   Note that the tree is being treated as unrooted here, so that the
+   branch lengths on either side of the rootmost node are summed up to
+   get a branch length of 0.4.
+
+   The Branch Score Distance imagines us as having made a list of all
+   possible partitions, the ones shown above and also all 7 other
+   possible partitions, which correspond to branches that are not found
+   in this tree. These are assigned branch lengths of 0. For two trees,
+   we imagine constructing these lists, and then summing the squared
+   differences between the branch lengths. Thus if both trees have
+   branches {A, D | B, C, E}, the sum contains the square of the
+   difference between the branch lengths. If one tree has the branch and
+   the other doesn't, it contains the square of the difference between
+   the branch length and zero (in other words, the square of that branch
+   length). If both trees do not have a particular branch, nothing is
+   added to the sum because the difference is then between 0 and 0.
+
+   The Branch Score Distance takes this sum of squared differences and
+   computes its square root. Note that it has some desirable properties.
+   When small branches differ in tree topology, it is not very big. When
+   branches are both present but differ in length, it is affected.
+
+   The Symmetric Difference is simply a count of how many partitions
+   there are, among the two trees, that are on one tree and not on the
+   other. In the example above there are two partitions, {A, C | B, D, E}
+   and {A, D | B, C, E}, each of which is present on only one of the two
+   trees. The Symmetric Difference between the two trees is therefore 2.
+   When the two trees are fully resolved bifurcating trees, their
+   symmetric distance must be an even number; it can range from 0 to
+   twice the number of internal branches, which for n species is 4n-6.
+
+   Note the relationship between the two distances. If all trees have all
+   their branches have length 1.0, the Branch Score Distance is the
+   square of the Symmetric Difference, as each branch that is present in
+   one but not in the other results in 1.0 being added to the sum of
+   squared differences.
+
+   We have assumed that nothing is lost if the trees are treated as
+   unrooted trees. It is easy to define a counterpart to the Branch Score
+   Distance and one to the Symmetric Difference for these rooted trees.
+   Each branch then defines a set of species, namely the clade defined by
+   that branch. Thus if the first of the two trees above were considered
+   as a rooted tree it would define the three clades {A, C}, {B, D, E},
+   and {B, E}. The Branch Score Distance is computed from the branch
+   lengths for all possible sets of species, with 0 put for each set that
+   does not occur on that tree. The table above will be nearly the same,
+   but with two entries instead of one for the sets on either side of the
+   root, {A C D} and {B E}. The Symmetric Difference between two rooted
+   trees is simply the count of the number of clades that are defined by
+   one but not by the other. For the second tree the clades would be {A,
+   D}, {B, C, E}, and {B, E}. The Symmetric Difference between thee two
+   rooted trees would then be 4.
+
+   Although the examples we have discussed have involved fully
+   bifurcating trees, the input trees can have multifurcations. This does
+   not cause any complication for the Branch Score Distance. For the
+   Symmetric Difference, it can lead to distances that are odd numbers.
+
+   However, note one strong restriction. The trees should all have the
+   same list of species. If you use one set of species in the first two
+   trees, and another in the second two, and choose distances for
+   adjacent pairs, the distances will be incorrect and will depend on the
+   order of these pairs in the input tree file, in odd ways.
+
+Usage
+
+   No qa tests were found for ftreedistpair
+
+Command line arguments
+
+   Standard (Mandatory) qualifiers:
+  [-intreefile]        infile     Tree file
+  [-bintreefile]       infile     Second input tree file
+   -pairing            menu       Tree pairing method
+   -style              menu       Distances output option
+  [-outfile]           outfile    Output file name
+
+   Additional (Optional) qualifiers:
+   -progress           boolean    Print indications of progress of run
+
+   Advanced (Unprompted) qualifiers: (none)
+   Associated qualifiers:
+
+   "-outfile" associated qualifiers
+   -odirectory3        string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report deaths
+
+
+   Standard (Mandatory) qualifiers Allowed values Default
+   [-intreefile]
+   (Parameter 1) Tree file Input file Required
+   [-bintreefile]
+   (Parameter 2) Second input tree file Input file Required
+   -pairing Tree pairing method
+   Adjacent (Distances between adjacent pairs in tree file)
+   Pairs (Distances between all possible pairs in tree file)
+   Correspond (Distances between corresponding pairs in one tree file and
+   another)
+   ListAll (Distances between all pairs in one tree file and another)
+   Adjacent
+   -style Distances output option
+   Full    (Full_matrix)
+   Verbose (One pair per line)
+   Sparse  (One pair per line)
+   Verbose
+   [-outfile]
+   (Parameter 3) Output file name Output file <sequence>.ftreedistpair
+   Additional (Optional) qualifiers Allowed values Default
+   -progress Print indications of progress of run Boolean value Yes/No No
+   Advanced (Unprompted) qualifiers Allowed values Default
+   (none)
+
+Input file format
+
+   ftreedistpair reads two input tree files. The tree files may either
+   have the number of trees on their first line, or not. If the number of
+   trees is given, it is actually ignored and all trees in the tree file
+   are considered, even if there are more trees than indicated by the
+   number. There is no maximum number of trees that can be processed but,
+   if you feed in too many, there may be an error message about running
+   out of memory. The problem is particularly acute if you choose the
+   option to examine all possible pairs of trees one from each of two
+   input tree files. Thus if there are 1,000 trees in the input tree
+   file, keep in mind that all possible pairs means 1,000,000 pairs to be
+   examined!
+
+   No qa tests were found for ftreedistpair
+
+Output file format
+
+   If any of the four types of analysis are selected, the user must
+   specify how they want the results presented.
+
+   The Full matrix (choice F) is a table showing all distances. It is
+   written onto the output file. The table is presented as groups of 10
+   columns. Here is the Full matrix for the 12 trees in the input tree
+   file which is given as an example at the end of this page.
+
+Tree distance program, version 3.6
+
+Symmetric differences between all pairs of trees in tree file:
+
+
+
+          1     2     3     4     5     6     7     8     9    10
+      \------------------------------------------------------------
+    1 |   0     4     2    10    10    10    10    10    10    10
+    2 |   4     0     2    10     8    10     8    10     8    10
+    3 |   2     2     0    10    10    10    10    10    10    10
+    4 |  10    10    10     0     2     2     4     2     4     0
+    5 |  10     8    10     2     0     4     2     4     2     2
+    6 |  10    10    10     2     4     0     2     2     4     2
+    7 |  10     8    10     4     2     2     0     4     2     4
+    8 |  10    10    10     2     4     2     4     0     2     2
+    9 |  10     8    10     4     2     4     2     2     0     4
+   10 |  10    10    10     0     2     2     4     2     4     0
+   11 |   2     2     0    10    10    10    10    10    10    10
+   12 |  10    10    10     2     4     2     4     0     2     2
+
+         11    12
+      \------------
+    1 |   2    10
+    2 |   2    10
+    3 |   0    10
+    4 |  10     2
+    5 |  10     4
+    6 |  10     2
+    7 |  10     4
+    8 |  10     0
+    9 |  10     2
+   10 |  10     2
+   11 |   0    10
+   12 |  10     0
+
+   The Full matrix is only available for analyses P and L (not for A or
+   C).
+
+   Option V (Verbose) writes one distance per line. The Verbose output is
+   the default. Here it is for the example data set given below:
+
+Tree distance program, version 3.6
+
+Symmetric differences between adjacent pairs of trees:
+
+Trees 1 and 2:    4
+Trees 3 and 4:    10
+Trees 5 and 6:    4
+Trees 7 and 8:    4
+Trees 9 and 10:    4
+Trees 11 and 12:    10
+
+   Option S (Sparse or terse) is similar except that all that is given on
+   each line are the numbers of the two trees and the distance, separated
+   by blanks. This may be a convenient format if you want to write a
+   program to read these numbers in, and you want to spare yourself the
+   effort of having the program wade through the words on each line in
+   the Verbose output. The first four lines of the Sparse output are
+   titles that your program would want to skip past. Here is the Sparse
+   output for the example trees.
+
+1 2 4
+3 4 10
+5 6 4
+7 8 4
+9 10 4
+11 12 10
+
+   No qa tests were found for ftreedistpair
+
+Data files
+
+   None
+
+Notes
+
+   None.
+
+References
+
+   None.
+
+Warnings
+
+   None.
+
+Diagnostic Error Messages
+
+   None.
+
+Exit status
+
+   It always exits with status 0.
+
+Known bugs
+
+   None.
+
+See also
+
+   Program name               Description
+   econsense    Majority-rule and strict consensus tree
+   fconsense    Majority-rule and strict consensus tree
+   ftreedist    Distances between trees
+
+Author(s)
+
+   This program is an EMBOSS conversion of a program written by Joe
+   Felsenstein as part of his PHYLIP package.
+
+   Although we take every care to ensure that the results of the EMBOSS
+   version are identical to those from the original package, we recommend
+   that you check your inputs give the same results in both versions
+   before publication.
+
+   Please report all bugs in the EMBOSS version to the EMBOSS bug team,
+   not to the original author.
+
+History
+
+   Written (2004) - Joe Felsenstein, University of Washington.
+
+   Converted (August 2004) to an EMBASSY program by the EMBOSS team.
+
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.

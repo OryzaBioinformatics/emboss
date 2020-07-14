@@ -1,17 +1,17 @@
 
                                  antigenic 
-                                      
-   
-   
+
+
+
 Function
 
    Finds antigenic sites in proteins
-   
+
 Description
 
    Antigenic predicts potentially antigenic regions of a protein
    sequence, using the method of Kolaskar and Tongaonkar.
-   
+
    Analysis of data from experimentally determined antigenic sites on
    proteins has revealed that the hydrophobic residues Cys, Leu and Val,
    if they occur on the surface of a protein, are more likely to be a
@@ -24,35 +24,35 @@ Description
    determinants with about 75% accuracy which is better than most of the
    known methods. This method is based on a single parameter and thus
    very simple to use.
-   
+
 Usage
 
    Here is a sample session with antigenic
-   
+
 
 % antigenic 
 Finds antigenic sites in proteins
 Input sequence(s): tsw:act1_fugru
 Minimum length [6]: 
 Output report [act1_fugru.antigenic]: 
-   
+
    Go to the input files for this example
    Go to the output files for this example
-   
+
    Example 2
-   
+
    By using the '-rformat gff' qualifier, a GFF file of the predicted
    regions can be produced.
-   
+
 
 % antigenic -rformat gff 
 Finds antigenic sites in proteins
 Input sequence(s): tsw:act1_fugru
 Minimum length [6]: 
 Output report [act1_fugru.antigenic]: 
-   
+
    Go to the output files for this example
-   
+
 Command line arguments
 
    Standard (Mandatory) qualifiers:
@@ -104,7 +104,7 @@ Command line arguments
    -error               boolean    Report errors
    -fatal               boolean    Report fatal errors
    -die                 boolean    Report deaths
-   
+
 
    Standard (Mandatory) qualifiers Allowed values Default
    [-sequence]
@@ -116,18 +116,18 @@ Command line arguments
    (none)
    Advanced (Unprompted) qualifiers Allowed values Default
    (none)
-   
+
 Input file format
 
    The input sequence can be one or more protein sequences.
-   
+
   Input files for usage example
-  
+
    'tsw:act1_fugru' is a sequence entry in the example protein database
    'tsw'
-   
+
   Database entry: tsw:act1_fugru
-  
+
 ID   ACT1_FUGRU     STANDARD;      PRT;   375 AA.
 AC   P53484;
 DT   01-OCT-1996 (REL. 34, CREATED)
@@ -179,30 +179,29 @@ SQ   SEQUENCE   375 AA;  41766 MW;  3A0543DF CRC32;
      GGTTMYPGIA DRMQKEITAL APSTMKIKII APPERKYSVW IGGSILASLS TFQQMWISKQ
      EYDESGPSIV HRKCF
 //
-   
+
 Output file format
 
    The output is a standard EMBOSS report file.
-   
+
    The results can be output in one of several styles by using the
    command-line qualifier -rformat xxx, where 'xxx' is replaced by the
    name of the required format. The available format names are: embl,
    genbank, gff, pir, swiss, trace, listfile, dbmotif, diffseq, excel,
    feattable, motif, regions, seqtable, simple, srs, table, tagseq
-   
-   See:
-   http://www.uk.embnet.org/Software/EMBOSS/Themes/ReportFormats.html for
-   further information on report formats.
-   
+
+   See: http://emboss.sf.net/docs/themes/ReportFormats.html for further
+   information on report formats.
+
    By default antigenic writes a 'motif' report file.
-   
+
   Output files for usage example
-  
+
   File: act1_fugru.antigenic
-  
+
 ########################################
 # Program: antigenic
-# Rundate: Tue Apr 06 14:23:25 2004
+# Rundate: Thu Jul 15 2004 12:00:00
 # Report_format: motif
 # Report_file: act1_fugru.antigenic
 ########################################
@@ -305,13 +304,13 @@ Max_score_pos at "*"
 
 #---------------------------------------
 #---------------------------------------
-   
+
   Output files for usage example 2
-  
+
   File: act1_fugru.antigenic
-  
+
 ##gff-version 2.0
-##date 2004-04-06
+##date 2004-07-15
 ##Type Protein ACT1_FUGRU
 ACT1_FUGRU      antigenic       site    214     222     1.207   +       .
 Sequence "ACT1_FUGRU.1" ; note "*pos 218"
@@ -349,27 +348,36 @@ ACT1_FUGRU      antigenic       site    269     275     1.045   +       .
 Sequence "ACT1_FUGRU.17" ; note "*pos 269"
 ACT1_FUGRU      antigenic       site    51      57      1.034   +       .
 Sequence "ACT1_FUGRU.18" ; note "*pos 52"
-   
+
 Data files
 
    Antigenic uses a data file called Eantigenic.dat.
-   
+
    EMBOSS data files are distributed with the application and stored in
-   the standard EMBOSS data directory, which is defined by EMBOSS
+   the standard EMBOSS data directory, which is defined by the EMBOSS
    environment variable EMBOSS_DATA.
-   
+
+   To see the available EMBOSS data files, run:
+
+% embossdata -showall
+
+   To fetch one of the data files (for example 'Exxx.dat') into your
+   current directory for you to inspect or modify, run:
+
+% embossdata -fetch -file Exxx.dat
+
    Users can provide their own data files in their own directories.
    Project specific files can be put in the current directory, or for
    tidier directory listings in a subdirectory called ".embossdata".
    Files for all EMBOSS runs can be put in the user's home directory, or
    again in a subdirectory called ".embossdata".
-   
+
    The directories are searched in the following order:
      * . (your current directory)
      * .embossdata (under your current directory)
      * ~/ (your home directory)
      * ~/.embossdata
-       
+
    Here is the default Eantigenic.dat file:
 
 #                                               Antigenic  Surface  Antigenic
@@ -406,22 +414,22 @@ References
        Letters 276: 172-174.
     2. Parker,JMR, Guo,D and Hodges,RS (1986). Biochemistry 25:
        5425-5432.
-       
+
 Warnings
 
    The program will warn you if the sequence is not a protein or has
    ambiguity codes.
-   
+
 Diagnostic Error Messages
 
 Exit status
 
    It exits with status 0, unless a region is badly constructed.
-   
+
 Known bugs
 
    None.
-   
+
 See also
 
     Program name                         Description
@@ -437,22 +445,27 @@ See also
    preg           Regular expression search of a protein sequence
    pscan          Scans proteins using PRINTS
    sigcleave      Reports protein signal cleavage sites
-   
+
 Author(s)
 
    Alan Bleasby (ableasby © rfcgr.mrc.ac.uk)
    MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
    Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
-   
-   Original program "ANTIGENIC" by Peter Rice (EGCG 1991)
-   
+
+   Original program "ANTIGENIC" by Peter Rice (EGCG 1991) Peter Rice
+   (pmr © ebi.ac.uk)
+   Informatics Division, European Bioinformatics Institute, Wellcome
+   Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
+
 History
 
    Completed 9th March 1999
-   
+
 Target users
 
    This program is intended to be used by everyone and everything, from
    naive users to embedded scripts.
-   
+
 Comments
+
+   None

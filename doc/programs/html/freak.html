@@ -7,11 +7,9 @@
 </HEAD>
 <BODY BGCOLOR="#FFFFFF" text="#000000">
 
-
-
 <table align=center border=0 cellspacing=0 cellpadding=0>
 <tr><td valign=top>
-<A HREF="index.html" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
@@ -24,50 +22,14 @@ freak
 <p>
 
 
-
-
-
-<!--END OF HEADER-->
-
-
-
-
 <H2>
     Function
 </H2>
-
-<!--
-DON'T WRITE ANYTHING HERE.
-IT IS DONE FOR YOU.
--->
 Residue/base frequency table or plot
-
 
 <H2>
     Description
 </H2>
-
-<!-- 
-	This is the main part of the document.
-
-        This is what the user looks at to find out if this program will
-        do what he wants. 
-
-        Long description.
-
-        Why it is useful.
-
-        When it should/shouldn't be used.
-
-        Algorithms
-
-        Expanded description.
-
-        eg: Reverse engineers Wheedle's 'talpsgob' program. This does a 
-        splurge of the 5' end of the sequence followed by a durm.
-        The net effect is a 5' end splurt.
-        etc. for as long as is required (several pages is not unreasonable)
-  -->
 
 <b>freak</b> takes one or more sequences as input and a set of bases or
 residues to search for. It then calculates the frequency of these
@@ -81,13 +43,6 @@ The default set of bases is 'cg' which will calculate the frequency of
 <H2>
     Usage
 </H2>
-
-<!--  
-	Example usage, as run from the command-line.
-        Many examples illustrating different behaviours is good.
- -->
-
-
 <b>Here is a sample session with freak</b>
 <p>
 
@@ -104,17 +59,9 @@ Output file [hsfau.freak]: <b></b>
 <a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
 
 
-
-
 <H2>
     Command line arguments
 </H2>
-
-<!--
-DON'T WRITE ANYTHING HERE.
-IT IS DONE FOR YOU.
--->
-
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
    Standard (Mandatory) qualifiers (* if not always prompted):
@@ -179,7 +126,6 @@ IT IS DONE FOR YOU.
 </pre>
 </td></tr></table>
 <P>
-
 <table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
 <tr bgcolor="#FFFFCC">
 <th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
@@ -204,7 +150,7 @@ IT IS DONE FOR YOU.
 <tr>
 <td>-graph</td>
 <td>Graph type</td>
-<td>EMBOSS has a list of known devices, including postscript, ps, hpgl, hp7470, hp7580, meta, colourps, cps, xwindows, x11, tektronics, tekt, tek4107t, tek, none, null, text, data, xterm, png</td>
+<td>EMBOSS has a list of known devices, including postscript, ps, hpgl, hp7470, hp7580, meta, colourps, cps, xwindows, x11, tektronics, tekt, tek4107t, tek, none, null, text, data, xterm, png, xml</td>
 <td><i>EMBOSS_GRAPHICS</i> value, or x11</td>
 </tr>
 
@@ -245,7 +191,7 @@ IT IS DONE FOR YOU.
 <td>-plot</td>
 <td>Produce graphic</td>
 <td>Toggle value Yes/No</td>
-<td>N</td>
+<td>No</td>
 </tr>
 
 </table>
@@ -256,18 +202,9 @@ IT IS DONE FOR YOU.
     Input file format
 </H2>
 
-<!-- 
-        This includes example input file formats.
-        Except for sequences which can be described by 'sequence USA',
-        this should be a detailed description and example - assume
-        someone will want to parse this file and will want to know what
-        happens in unusual cases - null input, etc. 
-   -->
-
 <b>freak</b> reads normal sequence USAs.
 
 <p>
-
 
 <a name="input.1"></a>
 <h3>Input files for usage example </h3>
@@ -358,14 +295,6 @@ SQ   Sequence 518 BP; 125 A; 139 C; 148 G; 106 T; 0 other;
 <H2>
     Output file format
 </H2>
-
-<!-- 
-        This includes example output file formats 
-        Except for sequences which can be described by 'sequence USA',
-        this should be a detailed description and example - assume
-        someone will want to parse this file and will want to know what
-        happens in unusual cases - null output, errors etc. 
-   -->
 
 
 <a name="output.1"></a>
@@ -481,7 +410,6 @@ FREAK of HSFAU from 1 to 518 Window 30 Step 1
 </pre>
 </td></tr></table><p>
 
-
 <p>
 
 The ouput consists of a title line and then two columns containing the
@@ -492,41 +420,11 @@ window of the bases or residues being searched for.
     Data files
 </H2>
 
-<!-- 
-        Any data files used (e.g. translation table file)
-        This includes example data file formats if they are
-        not obvious.
-
-        eg:
-        data file format:
-
-	blank lines and comment lines are ignored.
-        comment lines start with '#'
-        There are three columns separated by one or more space or TAB
-	characters for X and Y values of durm, followed by energy
-        all coefficients are given as floating point values
-        An example is:
-
-        # Durm coefficient enery file
-        # X     Y       Energy
-        0.1     0.2     0.331
-        0.2     0.4     0.332
-        0.3     0.6     0.333
-        0.3     0.8     0.334
-
-   -->
-
 None.
 
 <H2>
     Notes
 </H2>
-
-<!-- 
-        Restrictions.
-        Interesting behaviour.
-        Useful things you can do with this program.
-   -->
 
 None.
 
@@ -535,10 +433,6 @@ None.
     References
 </H2>
 
-<!-- 
-        Bibliography for methods used.
-   -->
-
 None.
 
 
@@ -546,28 +440,11 @@ None.
     Warnings
 </H2>
 
-<!-- 
-        Potentially stupid things the program will let you do.
-        eg:
-        It doesn't check to see if the sequence is a protein sequence or not.
-   -->
-
 None.
 
 <H2>
     Diagnostic Error Messages
 </H2>
-
-<!-- 
-        Error messages specific to this program.
-        eg:
-
-        "Threshold value greater than 1." - means that the threshold has
-        been set to be greater than 1 but a burgle exception has
-        occurred making this invalid - you should reduce the wobble
-        parameter and try again. 
-
-   -->
 
 None.
 
@@ -576,32 +453,14 @@ None.
     Exit status
 </H2>
 
-<!-- 
-        Description of the exit status for various error conditions
-        eg:
-        "It always exits with status 0"
-   -->
-
 It always exits with status 0.
 
 <H2>
     Known bugs
 </H2>
 
-
-<!-- 
-        Bugs noted but not yet fixed.
-   -->
-
 None.
 
-
-
-<!--
-<H2>
-    See also
-</H2>
--->
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
@@ -627,20 +486,10 @@ None.
 <tr><td><a href="wordcount.html">wordcount</a></td><td>Counts words of a specified size in a DNA sequence</td></tr>
 </table>
 
-<!-- 
-        Add any comments about other associated programs (to prepare
-        data files?) that seealso doesn't find. 
-   -->
-
-
-
 
 <H2>
     Author(s)
 </H2>
-<!--
-        Who has worked on the program in the past.
-   -->
 
 Alan Bleasby (ableasby&nbsp;&copy;&nbsp;rfcgr.mrc.ac.uk)
 <br>
@@ -649,46 +498,23 @@ Wellcome Trust Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
 
 
 
-
 <H2>
     History
 </H2>
 
-<!--
-        What changes have been made.
-   -->
-
 Written (Aug 2000) Alan Bleasby
 
-<!--
-<p>
-[an error occurred while processing this directive]
--->
 
 <H2>
     Target users
 </H2>
-
-<!--
-        For general users, requested by one user, for EMBOSS site
-        maintainers, for EMBOSS developers etc.
-        eg:
-        "This program is intended to be used by everyone and everything,
-        from naive users to embedded scripts." 
-	Which is easy to include using:
-
-   -->
 This program is intended to be used by everyone and everything, from naive users to embedded scripts.
-
 
 
 <H2>
     Comments
 </H2>
-
-<!--
-	Any comments, requests etc. that people have about the program
-   -->
+None
 
 
 

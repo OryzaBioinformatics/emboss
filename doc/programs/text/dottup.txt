@@ -1,21 +1,21 @@
 
                                   dottup 
-                                      
-   
-   
+
+
+
 Function
 
    Displays a wordmatch dotplot of two sequences
-   
+
 Description
 
    A dotplot is a graphical representation of the regions of similarity
    between two sequences.
-   
+
    The two sequences are placed on the axes of a rectangular image and
    (in the simplest forms of dotplot) wherever there is a similarity
    between the sequences a dot is placed on the image.
-   
+
    Where the two sequences have substantial regions of similarity, many
    dots align to form diagonal lines. It is therefore possible to see at
    a glance where there are local regions of similarity as these will
@@ -23,32 +23,32 @@ Description
    as repeats (which form parallel diagonal lines), and insertions or
    deletions (which form breaks or discontinuities in the diagonal
    lines).
-   
+
    dottup looks for places where words (tuples) of a specified length
    have an exact match in both sequences and draws a diagonal line over
    the position of these words. This is a fast, but not especially
    sensitive way of creating dotplots. It is an acceptable method for
    displaying regions of substantial similarity between two sequences.
-   
+
    Using a longer word (tuple) size displays less random noise, runs
    extremely quickly, but is less sensitive. Shorter word sizes are more
    sensitive to shorter or fragmentary regions of similarity, but also
    display more random points of similarity (noise) and runs slower.
-   
+
 Usage
 
    Here is a sample session with dottup
-   
+
 
 % dottup tembl:eclac tembl:eclaci -wordsize=6 -gtitle="eclaci vs eclac" -graph
 cps 
 Displays a wordmatch dotplot of two sequences
 
 Created dottup.ps
-   
+
    Go to the input files for this example
    Go to the output files for this example
-   
+
 Command line arguments
 
    Standard (Mandatory) qualifiers (* if not always prompted):
@@ -130,7 +130,7 @@ Command line arguments
    -error               boolean    Report errors
    -fatal               boolean    Report fatal errors
    -die                 boolean    Report deaths
-   
+
 
    Standard (Mandatory) qualifiers Allowed values Default
    [-asequence]
@@ -141,27 +141,27 @@ Command line arguments
    -graph Graph type EMBOSS has a list of known devices, including
    postscript, ps, hpgl, hp7470, hp7580, meta, colourps, cps, xwindows,
    x11, tektronics, tekt, tek4107t, tek, none, null, text, data, xterm,
-   png EMBOSS_GRAPHICS value, or x11
+   png, xml EMBOSS_GRAPHICS value, or x11
    -xygraph Graph type EMBOSS has a list of known devices, including
    postscript, ps, hpgl, hp7470, hp7580, meta, colourps, cps, xwindows,
    x11, tektronics, tekt, tek4107t, tek, none, null, text, data, xterm,
-   png EMBOSS_GRAPHICS value, or x11
+   png, xml EMBOSS_GRAPHICS value, or x11
    Additional (Optional) qualifiers Allowed values Default
    -[no]boxit Draw a box around dotplot Boolean value Yes/No Yes
    Advanced (Unprompted) qualifiers Allowed values Default
-   -stretch Use non-proportional axes Toggle value Yes/No N
-   
+   -stretch Use non-proportional axes Toggle value Yes/No No
+
 Input file format
 
    Any two sequence USAs of the same type (DNA or protein).
-   
+
   Input files for usage example
-  
+
    'tembl:eclac' is a sequence entry in the example nucleic acid database
    'tembl'
-   
+
   Database entry: tembl:eclac
-  
+
 ID   ECLAC      standard; DNA; PRO; 7477 BP.
 XX
 AC   J01636; J01637; K01483; K01793;
@@ -317,9 +317,9 @@ RP   1146-1282
      cagcccgccc atggtaacca ccggcagagc ggtcgac                               747
 7
 //
-   
+
   Database entry: tembl:eclaci
-  
+
 ID   ECLACI     standard; DNA; PRO; 1113 BP.
 XX
 AC   V00294;
@@ -412,70 +412,72 @@ SQ   Sequence 1113 BP; 249 A; 304 C; 322 G; 238 T; 0 other;
      cgacaggttt cccgactgga aagcgggcag tga                                   111
 3
 //
-   
+
 Output file format
 
-   An image is output to the resquested output device.
-   
+   An image is output to the requested output device.
+
   Output files for usage example
-  
+
   Graphics File: dottup.ps
-  
+
    [dottup results]
-   
+
 Data files
 
    None.
-   
+
 Notes
 
    None.
-   
+
 References
 
    None.
-   
+
 Warnings
 
    None.
-   
+
 Diagnostic Error Messages
 
    None.
-   
+
 Exit status
 
    0 upon successful completion.
-   
+
 Known bugs
 
    None.
-   
+
 See also
 
    Program name                          Description
    dotmatcher   Displays a thresholded dotplot of two sequences
    dotpath      Displays a non-overlapping wordmatch dotplot of two sequences
    polydot      Displays all-against-all dotplots of a set of sequences
-   
+
    dotmatcher, by comparison, moves a window of specified length up each
    diagonal and displays a line over the window if the sum of the
    comparisons (using a substitution matrix) exceeds a threshold. It is
    slower but much more sensitive.
-   
+
 Author(s)
 
    Ian Longden (il © sanger.ac.uk)
    Sanger Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge,
    CB10 1SA, UK.
-   
+
 History
 
    Completed 24th March 1999.
-   
+
 Target users
 
    This program is intended to be used by everyone and everything, from
    naive users to embedded scripts.
-   
+
 Comments
+
+   None

@@ -1,0 +1,1078 @@
+<!--START OF HEADER - DON'T ALTER -->
+
+<HTML>
+<HEAD>
+  <TITLE>
+  EMBOSS: fpenny
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+
+
+<table align=center border=0 cellspacing=0 cellpadding=0>
+<tr><td valign=top>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+</td>
+<td align=left valign=middle>
+<b><font size="+6">
+
+fpenny
+</font></b>
+</td></tr>
+</table>
+<br>&nbsp;
+<p>
+
+
+
+<!--END OF HEADER-->
+
+
+
+
+
+
+<H2>
+    Function
+</H2>
+Penny algorithm, branch-and-bound to find all most parsimonious trees
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+
+
+
+
+<H2>
+    Description
+</H2>
+
+Finds all most parsimonious phylogenies for discrete-character data
+with two states, for the Wagner, Camin-Sokal, and mixed parsimony
+criteria using the branch-and-bound method of exact search. May be
+impractical (depending on the data) for more than 10-11 species.
+
+
+
+
+<H2>
+    Algorithm
+</H2>
+
+
+PENNY is a program that will find all of the most parsimonious trees
+implied by your data. It does so not by examining all possible trees,
+but by using the more sophisticated "branch and bound" algorithm, a
+standard computer science search strategy first applied to
+phylogenetic inference by Hendy and Penny (1982). (J. S. Farris
+[personal communication, 1975] had also suggested that this strategy,
+which is well-known in computer science, might be applied to
+phylogenies, but he did not publish this suggestion).
+
+<p>
+There is, however, a price to be paid for the certainty that one has
+found all members of the set of most parsimonious trees. The problem
+of finding these has been shown (Graham and Foulds, 1982; Day, 1983)
+to be NP-complete, which is equivalent to saying that there is no fast
+algorithm that is guaranteed to solve the problem in all cases (for a
+discussion of NP-completeness, see the Scientific American article by
+Lewis and Papadimitriou, 1978). The result is that this program,
+despite its algorithmic sophistication, is VERY SLOW.
+
+<p>
+The program should be slower than the other tree-building programs in
+the package, but useable up to about ten species. Above this it will
+bog down rapidly, but exactly when depends on the data and on how much
+computer time you have (it may be more effective in the hands of
+someone who can let a microcomputer grind all night than for someone
+who has the "benefit" of paying for time on the campus mainframe
+computer). IT IS VERY IMPORTANT FOR YOU TO GET A FEEL FOR HOW LONG THE
+PROGRAM WILL TAKE ON YOUR DATA. This can be done by running it on
+subsets of the species, increasing the number of species in the run
+until you either are able to treat the full data set or know that the
+program will take unacceptably long on it. (Making a plot of the
+logarithm of run time against species number may help to project run
+times).
+
+
+<h3>The Algorithm</h3>
+
+<p>
+The search strategy used by PENNY starts by making a tree consisting
+of the first two species (the first three if the tree is to be
+unrooted). Then it tries to add the next species in all possible
+places (there are three of these). For each of the resulting trees it
+evaluates the number of steps. It adds the next species to each of
+these, again in all possible spaces. If this process would continue it
+would simply generate all possible trees, of which there are a very
+large number even when the number of species is moderate (34,459,425
+with 10 species). Actually it does not do this, because the trees are
+generated in a particular order and some of them are never generated.
+
+<p>
+Actually the order in which trees are generated is not quite as
+implied above, but is a "depth-first search". This means that first
+one adds the third species in the first possible place, then the
+fourth species in its first possible place, then the fifth and so on
+until the first possible tree has been produced. Its number of steps
+is evaluated. Then one "backtracks" by trying the alternative
+placements of the last species. When these are exhausted one tries the
+next placement of the next-to-last species. The order of placement in
+a depth-first search is like this for a four-species case (parentheses
+enclose monophyletic groups): 
+
+<p>
+<pre>
+     Make tree of first two species     (A,B)
+          Add C in first place     ((A,B),C)
+               Add D in first place     (((A,D),B),C)
+               Add D in second place     ((A,(B,D)),C)
+               Add D in third place     (((A,B),D),C)
+               Add D in fourth place     ((A,B),(C,D))
+               Add D in fifth place     (((A,B),C),D)
+          Add C in second place: ((A,C),B)
+               Add D in first place     (((A,D),C),B)
+               Add D in second place     ((A,(C,D)),B)
+               Add D in third place     (((A,C),D),B)
+               Add D in fourth place     ((A,C),(B,D))
+               Add D in fifth place     (((A,C),B),D)
+          Add C in third place     (A,(B,C))
+               Add D in first place     ((A,D),(B,C))
+               Add D in second place     (A,((B,D),C))
+               Add D in third place     (A,(B,(C,D)))
+               Add D in fourth place     (A,((B,C),D))
+               Add D in fifth place     ((A,(B,C)),D)
+</pre>
+
+<p>
+Among these fifteen trees you will find all of the four-species rooted
+bifurcating trees, each exactly once (the parentheses each enclose a
+monophyletic group). As displayed above, the backtracking depth-first
+search algorithm is just another way of producing all possible trees
+one at a time. The branch and bound algorithm consists of this with
+one change. As each tree is constructed, including the partial trees
+such as (A,(B,C)), its number of steps is evaluated. In addition a
+prediction is made as to how many steps will be added, at a minimum,
+as further species are added.
+
+<p>
+This is done by counting how many binary characters which are
+invariant in the data up the species most recently added will
+ultimately show variation when further species are added. Thus if 20
+characters vary among species A, B, and C and their root, and if tree
+((A,C),B) requires 24 steps, then if there are 8 more characters which
+will be seen to vary when species D is added, we can immediately say
+that no matter how we add D, the resulting tree can have no less than
+24 + 8 = 32 steps. The point of all this is that if a previously-found
+tree such as ((A,B),(C,D)) required only 30 steps, then we know that
+there is no point in even trying to add D to ((A,C),B). We have
+computed the bound that enables us to cut off a whole line of inquiry
+(in this case five trees) and avoid going down that particular branch
+any farther.
+
+<p>
+The branch-and-bound algorithm thus allows us to find all most
+parsimonious trees without generating all possible trees. How much of
+a saving this is depends strongly on the data. For very clean (nearly
+"Hennigian") data, it saves much time, but on very messy data it will
+still take a very long time.
+
+<p>
+The algorithm in the program differs from the one outlined here in
+some essential details: it investigates possibilities in the order of
+their apparent promise. This applies to the order of addition of
+species, and to the places where they are added to the tree. After the
+first two-species tree is constructed, the program tries adding each
+of the remaining species in turn, each in the best possible place it
+can find. Whichever of those species adds (at a minimum) the most
+additional steps is taken to be the one to be added next to the
+tree. When it is added, it is added in turn to places which cause the
+fewest additional steps to be added. This sounds a bit complex, but it
+is done with the intention of eliminating regions of the search of all
+possible trees as soon as possible, and lowering the bound on tree
+length as quickly as possible.
+
+<p>
+The program keeps a list of all the most parsimonious trees found so
+far. Whenever it finds one that has fewer steps than these, it clears
+out the list and restarts the list with that tree. In the process the
+bound tightens and fewer possibilities need be investigated. At the
+end the list contains all the shortest trees. These are then printed
+out. It should be mentioned that the program CLIQUE for finding all
+largest cliques also works by branch-and-bound. Both problems are
+NP-complete but for some reason CLIQUE runs far faster. Although their
+worst-case behavior is bad for both programs, those worst cases occur
+far more frequently in parsimony problems than in compatibility
+problems.
+
+
+<h3>Controlling Run Times</h3>
+
+<p>
+Among the quantities available to be set at the beginning of a run of
+PENNY, two (howoften and howmany) are of particular importance. As
+PENNY goes along it will keep count of how many trees it has
+examined. Suppose that howoften is 100 and howmany is 1000, the
+default settings. Every time 100 trees have been examined, PENNY will
+print out a line saying how many multiples of 100 trees have now been
+examined, how many steps the most parsimonious tree found so far has,
+how many trees of with that number of steps have been found, and a
+very rough estimate of what fraction of all trees have been looked at
+so far.
+
+<p>
+When the number of these multiples printed out reaches the number
+howmany (say 1000), the whole algorithm aborts and prints out that it
+has not found all most parsimonious trees, but prints out what is has
+got so far anyway. These trees need not be any of the most
+parsimonious trees: they are simply the most parsimonious ones found
+so far. By setting the product (howoften times howmany) large you can
+make the algorithm less likely to abort, but then you risk getting
+bogged down in a gigantic computation. You should adjust these
+constants so that the program cannot go beyond examining the number of
+trees you are reasonably willing to wait for. In their initial setting
+the program will abort after looking at 100,000 trees. Obviously you
+may want to adjust howoften in order to get more or fewer lines of
+intermediate notice of how many trees have been looked at so far. Of
+course, in small cases you may never even reach the first multiple of
+howoften and nothing will be printed out except some headings and then
+the final trees.
+
+<p>
+The indication of the approximate percentage of trees searched so far
+will be helpful in judging how much farther you would have to go to
+get the full search. Actually, since that fraction is the fraction of
+the set of all possible trees searched or ruled out so far, and since
+the search becomes progressively more efficient, the approximate
+fraction printed out will usually be an underestimate of how far along
+the program is, sometimes a serious underestimate.
+
+<p>
+A constant that affects the result is "maxtrees", which controls the
+maximum number of trees that can be stored. Thus if "maxtrees" is 25,
+and 32 most parsimonious trees are found, only the first 25 of these
+are stored and printed out. If "maxtrees" is increased, the program
+does not run any slower but requires a little more intermediate
+storage space. I recommend that "maxtrees" be kept as large as you
+can, provided you are willing to look at an output with that many
+trees on it! Initially, "maxtrees" is set to 100 in the distribution
+copy.
+
+
+<h3>Methods and Options</h3>
+
+<p>
+The counting of the length of trees is done by an algorithm nearly
+identical to the corresponding algorithms in MIX, and thus the
+remainder of this document will be nearly identical to the MIX
+document. MIX is a general parsimony program which carries out the
+Wagner and Camin-Sokal parsimony methods in mixture, where each
+character can have its method specified. The program defaults to
+carrying out Wagner parsimony.
+
+<p>
+The Camin-Sokal parsimony method explains the data by assuming that
+changes 0 --&gt; 1 are allowed but not changes 1 --&gt; 0. Wagner parsimony
+allows both kinds of changes. (This under the assumption that 0 is the
+ancestral state, though the program allows reassignment of the
+ancestral state, in which case we must reverse the state numbers 0 and
+1 throughout this discussion). The criterion is to find the tree which
+requires the minimum number of changes. The Camin-Sokal method is due
+to Camin and Sokal (1965) and the Wagner method to Eck and Dayhoff
+(1966) and to Kluge and Farris (1969).
+
+<p>
+Here are the assumptions of these two methods: 
+
+<ol>
+
+<li>
+Ancestral states are known (Camin-Sokal) or unknown (Wagner). 
+
+<li>
+Different characters evolve independently. 
+
+<li>
+Different lineages evolve independently. 
+
+<li>
+Changes 0 --&gt; 1 are much more probable than changes 1 --&gt; 0
+(Camin-Sokal) or equally probable (Wagner).
+
+<li>
+Both of these kinds of changes are a priori improbable over the
+evolutionary time spans involved in the differentiation of the group
+in question.
+
+<li>
+Other kinds of evolutionary event such as retention of polymorphism
+are far less probable than 0 --&gt; 1 changes.
+
+<li>
+Rates of evolution in different lineages are sufficiently low that two
+changes in a long segment of the tree are far less probable than one
+change in a short segment.
+
+</ol>
+
+<p>
+That these are the assumptions of parsimony methods has been
+documented in a series of papers of mine: (1973a, 1978b, 1979, 1981b,
+1983b, 1988b). For an opposing view arguing that the parsimony methods
+make no substantive assumptions such as these, see the papers by
+Farris (1983) and Sober (1983a, 1983b), but also read the exchange
+between Felsenstein and Sober (1986).
+
+<H2>
+    Usage
+</H2>
+
+<!--  
+	Example usage, as run from the command-line.
+        Many examples illustrating different behaviours is good.
+ -->
+
+<b>Here is a sample session with fpenny</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>fpenny </b>
+Penny algorithm, branch-and-bound to find all most parsimonious trees
+Input file: <b>penny.dat</b>
+Output file [penny.fpenny]: <b></b>
+
+
+How many
+trees looked                                       Approximate
+at so far      Length of        How many           percentage
+(multiples     shortest tree    trees this long    searched
+of  100):      found so far     found so far       so far
+----------     ------------     ------------       ------------
+     1           8.00000                1                6.67
+     2           8.00000                3               20.00
+     3           8.00000                3               53.33
+     4           8.00000                3               93.33
+
+Output written to file "penny.fpenny"
+
+Trees also written onto file "penny.treefile"
+
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
+
+
+
+
+<H2>
+    Command line arguments
+</H2>
+
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+   Standard (Mandatory) qualifiers:
+  [-infile]            discretestates File containing one or more data sets
+  [-outfile]           outfile    Output file name
+
+   Additional (Optional) qualifiers (* if not always prompted):
+   -weights            properties Weights file
+   -ancfile            properties Ancestral states file
+   -mixfile            properties Mixture file
+   -method             menu       Choose the method to use
+   -outgrno            integer    Species number to use as outgroup
+   -howmany            integer    How many groups of trees
+   -howoften           integer    How often to report, in trees
+   -simple             boolean    Branch and bound is simple
+   -threshold          float      Threshold value
+   -[no]trout          toggle     Write out trees to tree file
+*  -outtreefile        outfile    Tree file name
+   -printdata          boolean    Print data at start of run
+   -[no]progress       boolean    Print indications of progress of run
+   -[no]treeprint      boolean    Print out tree
+   -stepbox            boolean    Print out steps in each site
+   -ancseq             boolean    Print states at all nodes of tree
+
+   Advanced (Unprompted) qualifiers: (none)
+   Associated qualifiers:
+
+   "-outfile" associated qualifiers
+   -odirectory2        string     Output directory
+
+   "-outtreefile" associated qualifiers
+   -odirectory         string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report deaths
+
+
+</pre>
+</td></tr></table>
+<P>
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-infile]<br>(Parameter 1)</td>
+<td>File containing one or more data sets</td>
+<td>Discrete states file</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr>
+<td>[-outfile]<br>(Parameter 2)</td>
+<td>Output file name</td>
+<td>Output file</td>
+<td><i>&lt;sequence&gt;</i>.fpenny</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Additional (Optional) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-weights</td>
+<td>Weights file</td>
+<td>Property value(s)</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr>
+<td>-ancfile</td>
+<td>Ancestral states file</td>
+<td>Property value(s)</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr>
+<td>-mixfile</td>
+<td>Mixture file</td>
+<td>Property value(s)</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr>
+<td>-method</td>
+<td>Choose the method to use</td>
+<td><table><tr><td>Wag</td> <td><i>(Wagner)</i></td></tr><tr><td>Cam</td> <td><i>(Camin-Sokal)</i></td></tr><tr><td>Mix</td> <td><i>(Mixed)</i></td></tr></table></td>
+<td>Wagner</td>
+</tr>
+
+<tr>
+<td>-outgrno</td>
+<td>Species number to use as outgroup</td>
+<td>Integer 0 or more</td>
+<td>0</td>
+</tr>
+
+<tr>
+<td>-howmany</td>
+<td>How many groups of trees</td>
+<td>Any integer value</td>
+<td>1000</td>
+</tr>
+
+<tr>
+<td>-howoften</td>
+<td>How often to report, in trees</td>
+<td>Any integer value</td>
+<td>100</td>
+</tr>
+
+<tr>
+<td>-simple</td>
+<td>Branch and bound is simple</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-threshold</td>
+<td>Threshold value</td>
+<td>Number 1.000 or more</td>
+<td>$(infile.discretesize)</td>
+</tr>
+
+<tr>
+<td>-[no]trout</td>
+<td>Write out trees to tree file</td>
+<td>Toggle value Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>-outtreefile</td>
+<td>Tree file name</td>
+<td>Output file</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr>
+<td>-printdata</td>
+<td>Print data at start of run</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-[no]progress</td>
+<td>Print indications of progress of run</td>
+<td>Boolean value Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>-[no]treeprint</td>
+<td>Print out tree</td>
+<td>Boolean value Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>-stepbox</td>
+<td>Print out steps in each site</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-ancseq</td>
+<td>Print states at all nodes of tree</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+</table>
+
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+
+
+
+
+
+
+
+
+<H2>
+    Input file format
+</H2>
+
+<!-- 
+        This includes example input file formats.
+        This should be a detailed description and example - assume
+        someone will want to parse this file and will want to know what
+        happens in unusual cases - null input, etc. 
+   -->
+
+<b>fpenny</b> reads discrste character data.
+
+<h3>(0,1) Discrete character data</h3>
+
+<p>
+These programs are intended for the use of morphological
+systematists who are dealing with discrete characters, or by molecular
+evolutionists dealing with presence-absence data on restriction
+sites. One of the programs (PARS) allows multistate characters, with
+up to 8 states, plus the unknown state symbol "?". For the others, the
+characters are assumed to be coded into a series of (0,1) two-state
+characters. For most of the programs there are two other states
+possible, "P", which stands for the state of Polymorphism for both
+states (0 and 1), and "?", which stands for the state of ignorance: it
+is the state "unknown", or "does not apply". The state "P" can also be
+denoted by "B", for "both".
+
+<p> There is a method invented by Sokal and Sneath (1963) for linear
+sequences of character states, and fully developed for branching
+sequences of character states by Kluge and Farris (1969) for recoding
+a multistate character into a series of two-state (0,1)
+characters. Suppose we had a character with four states whose
+character-state tree had the rooted form:
+
+<p>
+<pre>
+               1 ---> 0 ---> 2
+                      |
+                      |
+                      V
+                      3
+
+</pre>
+
+<p>
+so that 1 is the ancestral state and 0, 2 and 3 derived states. We
+can represent this as three two-state characters:
+
+
+<p>
+<pre>
+                Old State           New States
+                --- -----           --- ------
+                    0                  001
+                    1                  000
+                    2                  011
+                    3                  101
+
+</pre>
+
+<p>
+The three new states correspond to the three arrows in the above
+character state tree. Possession of one of the new states corresponds
+to whether or not the old state had that arrow in its ancestry. Thus
+the first new state corresponds to the bottommost arrow, which only
+state 3 has in its ancestry, the second state to the rightmost of the
+top arrows, and the third state to the leftmost top arrow. This coding
+will guarantee that the number of times that states arise on the tree
+(in programs MIX, MOVE, PENNY and BOOT) or the number of polymorphic
+states in a tree segment (in the Polymorphism option of DOLLOP,
+DOLMOVE, DOLPENNY and DOLBOOT) will correctly correspond to what would
+have been the case had our programs been able to take multistate
+characters into account. Although I have shown the above character
+state tree as rooted, the recoding method works equally well on
+unrooted multistate characters as long as the connections between the
+states are known and contain no loops.
+
+<p>
+However, in the default option of programs DOLLOP, DOLMOVE,
+DOLPENNY and DOLBOOT the multistate recoding does not necessarily work
+properly, as it may lead the program to reconstruct nonexistent state
+combinations such as 010. An example of this problem is given in my
+paper on alternative phylogenetic methods (1979).
+
+<p>
+If you have multistate character data where the states are connected
+in a branching "character state tree" you may want to do the binary
+recoding yourself. Thanks to Christopher Meacham, the package contains
+a program, FACTOR, which will do the recoding itself. For details see
+the documentation file for FACTOR.
+
+<p>
+We now also have the program PARS, which can do parsimony for
+unordered character states.
+
+
+
+
+<p>
+
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+<p><h3>File: penny.dat</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+    7    6
+Alpha1    110110
+Alpha2    110110
+Beta1     110000
+Beta2     110000
+Gamma1    100110
+Delta     001001
+Epsilon   001110
+</pre>
+</td></tr></table><p>
+
+
+
+
+
+
+<H2>
+    Output file format
+</H2>
+
+<!-- 
+        This includes example output file formats.
+        This should be a detailed description and example - assume
+        someone will want to parse this file and will want to know what
+        happens in unusual cases - null output, errors etc. 
+
+        If you wish to include the standard description of the avalable
+	report formats, use:
+[an error occurred while processing this directive]
+   -->
+
+<b>fpenny</b> output is standard: a set of trees, which will be
+printed as rooted or unrooted depending on which is appropriate, and
+if the user elects to see them, tables of the number of changes of
+state required in each character. If the Wagner option is in force for
+a character, it may not be possible to unambiguously locate the places
+on the tree where the changes occur, as there may be multiple
+possibilities. A table is available to be printed out after each tree,
+showing for each branch whether there are known to be changes in the
+branch, and what the states are inferred to have been at the top end
+of the branch. If the inferred state is a "?" there will be multiple
+equally-parsimonious assignments of states; the user must work these
+out for themselves by hand.
+
+<p>
+If the Camin-Sokal parsimony method (option C or S) is invoked and the
+A option is also used, then the program will infer, for any character
+whose ancestral state is unknown ("?") whether the ancestral state 0
+or 1 will give the fewest state changes. If these are tied, then it
+may not be possible for the program to infer the state in the internal
+nodes, and these will all be printed as ".". If this has happened and
+you want to know more about the states at the internal nodes, you will
+find helpful to use MOVE to display the tree and examine its interior
+states, as the algorithm in MOVE shows all that can be known in this
+case about the interior states, including where there is and is not
+amibiguity. The algorithm in PENNY gives up more easily on displaying
+these states.
+
+<p>
+If the A option is not used, then the program will assume 0 as the
+ancestral state for those characters following the Camin-Sokal method,
+and will assume that the ancestral state is unknown for those
+characters following Wagner parsimony. If any characters have unknown
+ancestral states, and if the resulting tree is rooted (even by
+outgroup), a table will be printed out showing the best guesses of
+which are the ancestral states in each character. You will find it
+useful to understand the difference between the Camin-Sokal parsimony
+criterion with unknown ancestral state and the Wagner parsimony
+criterion.
+
+<p>
+If option 6 is left in its default state the trees found will be
+written to a tree file, so that they are available to be used in other
+programs. If the program finds multiple trees tied for best, all of
+these are written out onto the output tree file. Each is followed by a
+numerical weight in square brackets (such as [0.25000]). This is
+needed when we use the trees to make a consensus tree of the results
+of bootstrapping or jackknifing, to avoid overrepresenting replicates
+that find many tied trees.
+
+
+<p>
+
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: penny.fpenny</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+
+Penny algorithm, version 3.6b
+ branch-and-bound to find all most parsimonious trees
+
+Wagner parsimony method
+
+                     
+
+
+requires a total of              8.000
+
+    3 trees in all found
+
+
+
+
+  +-----------------Alpha1    
+  !  
+  !        +--------Alpha2    
+--1        !  
+  !  +-----4     +--Epsilon   
+  !  !     !  +--6  
+  !  !     +--5  +--Delta     
+  +--2        !  
+     !        +-----Gamma1    
+     !  
+     !           +--Beta2     
+     +-----------3  
+                 +--Beta1     
+
+  remember: this is an unrooted tree!
+
+
+
+
+  +-----------------Alpha1    
+  !  
+--1  +--------------Alpha2    
+  !  !  
+  !  !           +--Epsilon   
+  +--2        +--6  
+     !  +-----5  +--Delta     
+     !  !     !  
+     +--4     +-----Gamma1    
+        !  
+        !        +--Beta2     
+        +--------3  
+                 +--Beta1     
+
+  remember: this is an unrooted tree!
+
+
+
+
+  +-----------------Alpha1    
+  !  
+  !           +-----Alpha2    
+--1  +--------2  
+  !  !        !  +--Beta2     
+  !  !        +--3  
+  +--4           +--Beta1     
+     !  
+     !           +--Epsilon   
+     !        +--6  
+     +--------5  +--Delta     
+              !  
+              +-----Gamma1    
+
+  remember: this is an unrooted tree!
+
+</pre>
+</td></tr></table><p>
+<p><h3>File: penny.treefile</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+(Alpha1,((Alpha2,((Epsilon,Delta),Gamma1)),(Beta2,Beta1)))[0.3333];
+(Alpha1,(Alpha2,(((Epsilon,Delta),Gamma1),(Beta2,Beta1))))[0.3333];
+(Alpha1,((Alpha2,(Beta2,Beta1)),((Epsilon,Delta),Gamma1)))[0.3333];
+</pre>
+</td></tr></table><p>
+
+
+
+
+
+
+<H2>
+    Data files
+</H2>
+
+None
+
+<H2>
+    Notes
+</H2>
+
+<!-- 
+        Restrictions.
+        Interesting behaviour.
+        Useful things you can do with this program.
+   -->
+
+None.
+
+
+
+
+
+
+
+<H2>
+    References
+</H2>
+
+<!-- 
+        Bibliography for methods used.
+   -->
+
+None.
+
+
+
+
+
+
+
+
+<H2>
+    Warnings
+</H2>
+
+<!-- 
+        Potentially stupid things the program will let you do.
+   -->
+
+None.
+
+
+
+
+
+
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+<!-- 
+        Error messages specific to this program, eg:
+        "FATAL xxx" - means you have not set up the xxx data using program <b>prog</b>.<p>
+   -->
+
+None.
+
+
+
+
+
+
+
+<H2>
+    Exit status
+</H2>
+
+<!-- 
+        Description of the exit status for various error conditions
+   -->
+
+It always exits with status 0.
+
+
+
+
+
+
+
+
+<H2>
+    Known bugs
+</H2>
+
+
+<!-- 
+        Bugs noted but not yet fixed.
+   -->
+
+None.
+
+
+
+
+
+
+
+
+<!--
+<H2>
+    See also
+</H2>
+-->
+<h2><a name="See also">See also</a></h2>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th><th>Description</th></tr>
+<tr><td><a href="../phylip/eclique.html">eclique</a></td><td>Largest clique program</td></tr>
+<tr><td><a href="../phylip/edollop.html">edollop</a></td><td>Dollo and polymorphism parsimony algorithm</td></tr>
+<tr><td><a href="../phylip/edolpenny.html">edolpenny</a></td><td>Penny algorithm Dollo or polymorphism</td></tr>
+<tr><td><a href="../phylip/efactor.html">efactor</a></td><td>Multistate to binary recoding program</td></tr>
+<tr><td><a href="../phylip/emix.html">emix</a></td><td>Mixed parsimony algorithm</td></tr>
+<tr><td><a href="../phylip/epenny.html">epenny</a></td><td>Penny algorithm, branch-and-bound to find all most parsimonious trees</td></tr>
+<tr><td><a href="fclique.html">fclique</a></td><td>Largest clique program</td></tr>
+<tr><td><a href="fdollop.html">fdollop</a></td><td>Dollo and polymorphism parsimony algorithm</td></tr>
+<tr><td><a href="fdolpenny.html">fdolpenny</a></td><td>Penny algorithm Dollo or polymorphism</td></tr>
+<tr><td><a href="ffactor.html">ffactor</a></td><td>Multistate to binary recoding program</td></tr>
+<tr><td><a href="fmix.html">fmix</a></td><td>Mixed parsimony algorithm</td></tr>
+<tr><td><a href="fmove.html">fmove</a></td><td>Interactive mixed method parsimony</td></tr>
+<tr><td><a href="fpars.html">fpars</a></td><td>Discrete character parsimony</td></tr>
+</table>
+
+<!-- 
+        Add any comments about other associated programs (to prepare
+        data files?) that seealso doesn't find. 
+   -->
+
+
+
+
+
+
+
+
+
+
+<H2>
+    Author(s)
+</H2>
+
+This program is an EMBOSS conversion of a program written by Joe
+Felsenstein as part of his PHYLIP package.
+
+<p>
+Although we take every care to ensure that the results of the EMBOSS
+version are identical to those from the original package, we recommend
+that you check your inputs give the same results in both versions
+before publication.
+
+<p>
+Please report all bugs in the EMBOSS version to the EMBOSS bug team,
+not to the original author.
+
+
+<H2>
+    History
+</H2>
+
+Written (2004) - Joe Felsenstein, University of Washington.
+<p>
+Converted (August 2004) to an EMBASSY program by the EMBOSS team.
+
+
+
+
+<H2>
+    Target users
+</H2>
+
+<!--
+        For general users, requested by one user, for EMBOSS site
+        maintainers, for EMBOSS developers etc.
+        eg:
+        "This program is intended to be used by everyone and everything,
+        from naive users to embedded scripts." 
+	Which is easy to include using:
+   -->
+
+This program is intended to be used by everyone and everything, from naive users to embedded scripts.
+
+
+
+
+
+
+
+
+
+
+
+
+</BODY>
+</HTML>
+

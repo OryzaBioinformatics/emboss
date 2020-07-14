@@ -1,70 +1,69 @@
 
                                   oddcomp 
-                                      
-   
-   
+
+
+
 Function
 
    Finds protein sequence regions with a biased composition
-   
+
 Description
 
    oddcomp searches a series of protein files, reporting the identifier
    for those that exceed a certain amino acid composition threshold in a
    portion of the sequence.
-   
+
    oddcomp was written to answer the question 'which proteins contain at
    least n X and m Y in p residues'.
-   
+
    One could search for serine rich or polyglutamine rich, collagen
    helix, or similar proteins using this program.
-   
+
    oddcomp takes as input an amino acid composition data file in the same
    format as the output from compseq. It can tolerate any word length
    within reason for the memory capacity of the machine in question. Only
    the first two fields in the composition data file are used: the word
    and the number of occurrences. Any word not mentioned is initialised
    to a threshold of zero.
-   
+
    oddcomp measures the amino acid composition (this can be dimers etc as
    well as monomers) in a sliding window. If and when composition meets
    or exceeds all the specified thresholds, the sequence is reported and
    oddcomp moves to the next sequence. It does not report where in the
    sequence it found the matching region, merely the sequence ID.
-   
+
    oddcomp was originally written to identify SR/RS containing proteins.
    eg. specifying a window of forty amino acids containing at least 3 SR
    and 4 RS words.
-   
+
    To search for a specific set of words in a sequence, edit the input
    composition data file to delete any words from the input file in which
    you are not interested. The search is a boolean AND so there must be
    (from the short example above) at least 3 SR AND at least 4 RS for the
    sequence to be reported. If your total words specified exceeds
    window-wordlength+1 you will never get any hits.
-   
+
    Only one word size can be used and is specified at the top of the file
    in compseq-style output.
-   
+
 Usage
 
    Here is a sample session with oddcomp
-   
+
    To search for entries in swissprot with at least 1 SR AND at least 2
    RS:
-   
+
 
 % oddcomp 
 Finds protein sequence regions with a biased composition
 Input sequence(s): tsw:*
-Compseq output file to use for expected word frequencies: ../../data/oddcomp.co
-mp
+Compseq output file to use for expected word frequencies: oddcomp.comp
 Window size to consider (e.g. 30 aa) [30]: 
 Output file [100k_rat.oddcomp]: out.odd
-   
+
    Go to the input files for this example
    Go to the output files for this example
-   
+
 Command line arguments
 
    Standard (Mandatory) qualifiers:
@@ -124,7 +123,7 @@ Command line arguments
    -error               boolean    Report errors
    -fatal               boolean    Report fatal errors
    -die                 boolean    Report deaths
-   
+
 
    Standard (Mandatory) qualifiers Allowed values Default
    [-sequence]
@@ -147,15 +146,15 @@ Command line arguments
    not commonly used codes and you may wish not to count words containing
    them, just noting them in the count of 'Other' words. Boolean value
    Yes/No Yes
-   
+
 Input file format
 
   Input files for usage example
-  
+
    'tsw:*' is a sequence entry in the example protein database 'tsw'
-   
-  File: ../../data/oddcomp.comp
-  
+
+  File: oddcomp.comp
+
 # Example input file for oddcomp
 Word size       2
 Total count     0
@@ -167,45 +166,45 @@ RS      2               0               0               0
 SR      1               0               0               0
 
 Other   0               0               0               0
-   
+
    The columns "Obs Frequency", "Exp Frequency" and "Obs/Exp Frequency"
    are not required - they were simply included in this example to show
    the similarity between this input file format and the output of the
    program compseq. A compseq output file can be used as the input to
    oddcomp - the extra columns are ignored by oddcomp.
-   
+
    A minimal composition input data file would look like this:
      _________________________________________________________________
-   
+
 Word size       2
 Total count     0
 RS      2
 SR      1
      _________________________________________________________________
-   
+
    Blank lines and lines starting with '#' are ignored.
-   
+
    The first non-comment line should start with 'Word size' and will
    specify the word size to use.
-   
+
    A line starting with the word 'Total' is required.
-   
+
    Anything after the line starting with the word 'Total' will be read as
    word count data.
-   
+
    Word count data consists of a word to search for and the count of that
    word to search for within the sliding window. The columns are
    separated by one or more spaces or TAB characters. Anything after
    these two columns will be ignored.
-   
+
 Output file format
 
    oddcomp writes a list of sequence name identifiers.
-   
+
   Output files for usage example
-  
+
   File: out.odd
-  
+
 #
 # Output from 'oddcomp'
 #
@@ -218,35 +217,35 @@ Output file format
         RS7_FUGRU
 
 #       END     #
-   
+
 Data files
 
    None.
-   
+
 Notes
 
    None.
-   
+
 References
 
    None.
-   
+
 Warnings
 
    None.
-   
+
 Diagnostic Error Messages
 
    None.
-   
+
 Exit status
 
    It always exits with a status of 0.
-   
+
 Known bugs
 
    None.
-   
+
 See also
 
     Program name                         Description
@@ -262,18 +261,20 @@ See also
    preg           Regular expression search of a protein sequence
    pscan          Scans proteins using PRINTS
    sigcleave      Reports protein signal cleavage sites
-   
+
 Author(s)
 
    David Martin (dmartin © rfcgr.mrc.ac.uk)
-   
+
 History
 
    Written (1999) - David Martin
-   
+
 Target users
 
    This program is intended to be used by everyone and everything, from
    naive users to embedded scripts.
-   
+
 Comments
+
+   None

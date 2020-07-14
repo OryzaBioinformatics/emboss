@@ -11,7 +11,7 @@
 
 <table align=center border=0 cellspacing=0 cellpadding=0>
 <tr><td valign=top>
-<A HREF="index.html" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
@@ -31,21 +31,129 @@ PROTEIN 3D STRUCTURE
 
 
 
+Protein tertiary structure
+<p>
+
 <table border cellpadding=4 bgcolor="#FFFFF0">
 
 <tr><th>Program name</th><th>Description</th></tr>
 
 <tr>
-<td><a href="contactcount.html">contactcount</a></td>
+<td><a href="psiphi.html">psiphi</a></td>
 <td>
-counts specific versus non-specific contacts in a directory of cleaned protein chain contact files
+Calculates phi and psi torsion angles from cleaned EMBOSS-style protein co-ordinate file
 </td>
 </tr>
 
 <tr>
-<td><a href="psiphi.html">psiphi</a></td>
+<td><a href="../embassy/construct/contactcount.html">contactcount</a></td>
 <td>
-calculates phi and psi torsion angles from cleaned EMBOSS-style protein co-ordinate file
+Counts specific versus non-specific contacts in a directory of cleaned protein chain contact files
+</td>
+</tr>
+
+<tr>
+<td><a href="../embassy/domainatrix/contacts.html">contacts</a></td>
+<td>
+Reads CCF files (clean coordinate files) and writes CON files (contact files) of intra-chain residue-residue contact data
+</td>
+</tr>
+
+<tr>
+<td><a href="../embassy/domainatrix/domainalign.html">domainalign</a></td>
+<td>
+Generates DAF files (domain alignment files) of structure-based sequence alignments for nodes in a DCF file (domain classification file)
+</td>
+</tr>
+
+<tr>
+<td><a href="../embassy/domainatrix/domainrep.html">domainrep</a></td>
+<td>
+Reorder DCF file (domain classification file) so that the representative structure of each user-specified node is given first
+</td>
+</tr>
+
+<tr>
+<td><a href="../embassy/domainatrix/domainreso.html">domainreso</a></td>
+<td>
+Removes low resolution domains from a DCF file (domain classification file)
+</td>
+</tr>
+
+<tr>
+<td><a href="../embassy/domainatrix/interface.html">interface</a></td>
+<td>
+Reads CCF files (clean coordinate files) and writes CON files (contact files) of inter-chain residue-residue contact data
+</td>
+</tr>
+
+<tr>
+<td><a href="../embassy/domainatrix/libgen.html">libgen</a></td>
+<td>
+Generates various types of discriminating elements for each alignment in a directory
+</td>
+</tr>
+
+<tr>
+<td><a href="../embassy/domainatrix/rocon.html">rocon</a></td>
+<td>
+Reads a DHF file (domain hits file) of hits (sequences of unknown structural classification) and a DHF file of validation sequences (known classification) and writes a 'hits file' for the hits, which are classified and rank-ordered on the basis of score
+</td>
+</tr>
+
+<tr>
+<td><a href="../embassy/domainatrix/rocplot.html">rocplot</a></td>
+<td>
+Provides interpretation and graphical display of the performance of discriminating elements (e.g. profiles for protein families). rocplot reads file(s) of hits from discriminator-database search(es), performs ROC analysis on the hits, and writes graphs illustrating the diagnostic performance of the discriminating elements
+</td>
+</tr>
+
+<tr>
+<td><a href="../embassy/domainatrix/seqalign.html">seqalign</a></td>
+<td>
+Reads a DAF file (domain alignment file) and a DHF file (domain hits file) and writes a DAF file extended with the hits
+</td>
+</tr>
+
+<tr>
+<td><a href="../embassy/domainatrix/seqfraggle.html">seqfraggle</a></td>
+<td>
+Removes fragments from DHF files (domain hits files) or other files of sequences
+</td>
+</tr>
+
+<tr>
+<td><a href="../embassy/domainatrix/seqsearch.html">seqsearch</a></td>
+<td>
+Generate database hits (sequences) for nodes in a DCF file (domain classification file) by using PSI-BLAST
+</td>
+</tr>
+
+<tr>
+<td><a href="../embassy/domainatrix/seqsort.html">seqsort</a></td>
+<td>
+Reads DHF files (domain hits files) of database hits (sequences) and removes hits of ambiguous classification
+</td>
+</tr>
+
+<tr>
+<td><a href="../embassy/domainatrix/seqwords.html">seqwords</a></td>
+<td>
+Generates DHF files (domain hits files) of database hits (sequences) for nodes in a DCF file (domain classification file) by keyword search of UniProt
+</td>
+</tr>
+
+<tr>
+<td><a href="../embassy/domainatrix/siggen.html">siggen</a></td>
+<td>
+Generates a sparse protein signature from an alignment and residue contact data
+</td>
+</tr>
+
+<tr>
+<td><a href="../embassy/domainatrix/sigscan.html">sigscan</a></td>
+<td>
+Generates a DHF file (domain hits file) of hits (sequences) from scanning a signature against a sequence database
 </td>
 </tr>
 

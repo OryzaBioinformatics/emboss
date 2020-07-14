@@ -1,31 +1,31 @@
 
                                  pepwindow 
-                                      
-   
-   
+
+
+
 Function
 
-   Displays protein hydropathy
-   
+   --> Displays protein hydropathy
+
 Description
 
    pepwindow reads in a protein sequence and displays a graph of the
    classic Kyte & Doolittle hydropathy plot of that protein.
-   
+
 Usage
 
    Here is a sample session with pepwindow
-   
+
 
 % pepwindow tsw:hba_human 
 Displays protein hydropathy
 Graph type [x11]: cps
 
 Created pepwindow.ps
-   
+
    Go to the input files for this example
    Go to the output files for this example
-   
+
 Command line arguments
 
    Standard (Mandatory) qualifiers:
@@ -78,7 +78,7 @@ Command line arguments
    -error               boolean    Report errors
    -fatal               boolean    Report fatal errors
    -die                 boolean    Report deaths
-   
+
 
    Standard (Mandatory) qualifiers Allowed values Default
    [-sequence]
@@ -86,24 +86,24 @@ Command line arguments
    -graph Graph type EMBOSS has a list of known devices, including
    postscript, ps, hpgl, hp7470, hp7580, meta, colourps, cps, xwindows,
    x11, tektronics, tekt, tek4107t, tek, none, null, text, data, xterm,
-   png EMBOSS_GRAPHICS value, or x11
+   png, xml EMBOSS_GRAPHICS value, or x11
    Additional (Optional) qualifiers Allowed values Default
    -datafile Aaindex database file Data file Enakai.dat
    -length Window size Integer from 1 to 200 7
    Advanced (Unprompted) qualifiers Allowed values Default
    (none)
-   
+
 Input file format
 
    pepwindow reads any protein sequence USA.
-   
+
   Input files for usage example
-  
+
    'tsw:hba_human' is a sequence entry in the example protein database
    'tsw'
-   
+
   Database entry: tsw:hba_human
-  
+
 ID   HBA_HUMAN      STANDARD;      PRT;   141 AA.
 AC   P01922;
 DT   21-JUL-1986 (Rel. 01, Created)
@@ -209,25 +209,25 @@ SQ   SEQUENCE   141 AA;  15126 MW;  5EC7DB1E CRC32;
      KVADALTNAV AHVDDMPNAL SALSDLHAHK LRVDPVNFKL LSHCLLVTLA AHLPAEFTPA
      VHASLDKFLA SVSTVLTSKY R
 //
-   
+
 Output file format
 
    An image is displayed on the specified graphics device.
-   
+
   Output files for usage example
-  
+
   Graphics File: pepwindow.ps
-  
+
    [pepwindow results]
-   
+
 Data files
 
    EMBOSS data files are distributed with the application and stored in
    the standard EMBOSS data directory, which is defined by the EMBOSS
    environment variable EMBOSS_DATA.
-   
+
    To see the available EMBOSS data files, run:
-   
+
 % embossdata -showall
 
    To fetch one of the data files (for example 'Exxx.dat') into your
@@ -240,18 +240,18 @@ Data files
    tidier directory listings in a subdirectory called ".embossdata".
    Files for all EMBOSS runs can be put in the user's home directory, or
    again in a subdirectory called ".embossdata".
-   
+
    The directories are searched in the following order:
      * . (your current directory)
      * .embossdata (under your current directory)
      * ~/ (your home directory)
      * ~/.embossdata
-       
+
    pepwindow reads the Kyte-Doolittle hydropathy data from the file
    'Enakai.dat'
-   
+
    The EMBOSS data file 'Enakai.dat' contains :-
-   
+
 D Hydropathy index (Kyte-Doolittle, 1982)
 R 0807099
 A Kyte, J. and Doolittle, R.F.
@@ -282,21 +282,21 @@ I   A/L    R/K    N/M    D/F    C/P    Q/S    E/T    G/W    H/Y    I/V
    parameters - these used to be in a database called "NAKAI" but are now
    in one called "AAINDEX". EMBOSS has a program aaindexextract that
    takes data from this database and makes it available for pepwindow.
-   
+
    1. FTP the AAINDEX database from Japan:
    ftp://ftp.genome.ad.jp/pub/db/genomenet/aaindex/aaindex1
-   
+
    2. Run aaindexextract with the aaindex1 file as input (or ask whoever
    installs EMBOSS to run it)
-   
+
    3. Run pepwindow with -datafile specifying the name of whatever
    "AAINDEX" datafile you wish to use. (Use embossdata -showall to see
    your available "AAINDEX" data file names.)
-   
+
 Notes
 
    None.
-   
+
 References
 
 Kyte, J. and Doolittle, R.F.
@@ -306,19 +306,19 @@ J. Mol. Biol. 157, 105-132 (1982)
 Warnings
 
    None.
-   
+
 Diagnostic Error Messages
 
    None.
-   
+
 Exit status
 
    0 upon successful completion.
-   
+
 Known bugs
 
    None.
-   
+
 See also
 
    Program name                          Description
@@ -335,27 +335,29 @@ See also
    pepinfo      Plots simple amino acid properties in parallel
    pepstats     Protein statistics
    pepwindowall Displays protein hydropathy of a set of sequences
-   
+
    pepwindow can use any of the "Nakai et al." database of amino acid
    parameters - these are in a database called "AAINDEX". The program
    aaindexextract takes data from this database and makes it available
    for pepwindow.
-   
+
 Author(s)
 
    Ian Longden (il © sanger.ac.uk)
    Sanger Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge,
    CB10 1SA, UK.
-   
+
    Based on the original program by Jack Kyte and Russell F. Doolittle.
-   
+
 History
 
-Completed 27th May 1999.
+   Completed 27th May 1999.
 
 Target users
 
    This program is intended to be used by everyone and everything, from
    naive users to embedded scripts.
-   
+
 Comments
+
+   None

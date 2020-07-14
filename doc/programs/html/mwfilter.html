@@ -1,5 +1,3 @@
-<!--START OF HEADER - DON'T ALTER -->
-
 <HTML>
 <HEAD>
   <TITLE>
@@ -8,11 +6,9 @@
 </HEAD>
 <BODY BGCOLOR="#FFFFFF" text="#000000">
 
-
-
 <table align=center border=0 cellspacing=0 cellpadding=0>
 <tr><td valign=top>
-<A HREF="index.html" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
@@ -26,34 +22,14 @@ mwfilter
 
 
 
-
-<!--END OF HEADER-->
-
 <H2>
     Function
 </H2>
 Filter noisy molwts from mass spec output
 
-<!--
-DON'T WRITE ANYTHING HERE.
-IT IS DONE FOR YOU.
--->
-
-
-
-
 <H2>
     Description
 </H2>
-
-<!-- 
-	This is the main part of the document.
-        This is what the user looks at to find out if this program will do what he wants. 
-        Long description.
-        Why it is useful.
-        When it should/shouldn't be used.
-        Algorithms
-  -->
 
 <b>mwfilter</b> is designed to remove unwanted (noisy) data from mass
 spectrometry output in proteomics. Given a list of molecular weights
@@ -71,27 +47,9 @@ The last two operations can be done as most peaks are reported in
 both modified and unmodified forms. Removal of modified peaks
 aids in database searching for protein identification.
 
-
-
-
-
-
-
-
-
-
-
-
 <H2>
     Usage
 </H2>
-
-<!--  
-	Example usage, as run from the command-line.
-        Many examples illustrating different behaviours is good.
- -->
-
-
 <b>Here is a sample session with mwfilter</b>
 <p>
 
@@ -100,7 +58,7 @@ aids in database searching for protein identification.
 
 % <b>mwfilter </b>
 Filter noisy molwts from mass spec output
-Molecular weight file input: <b>../../data/molwts.dat</b>
+Molecular weight file input: <b>molwts.dat</b>
 Ppm tolerance [50.0]: <b></b>
 Output file [molwts.mwfilter]: <b></b>
 
@@ -109,12 +67,9 @@ Output file [molwts.mwfilter]: <b></b>
 <a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
 
 
-
-
 <H2>
     Command line arguments
 </H2>
-
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
    Standard (Mandatory) qualifiers:
@@ -209,33 +164,14 @@ Output file [molwts.mwfilter]: <b></b>
 </table>
 
 
-<!--
-DON'T WRITE ANYTHING HERE.
-IT IS DONE FOR YOU.
--->
-
-
-
-
-
-
-
-
 <H2>
     Input file format
 </H2>
 
-<!-- 
-        This includes example input file formats.
-        This should be a detailed description and example - assume
-        someone will want to parse this file and will want to know what
-        happens in unusual cases - null input, etc. 
-   -->
-
 
 <a name="input.1"></a>
 <h3>Input files for usage example </h3>
-<p><h3>File: ../../data/molwts.dat</h3>
+<p><h3>File: molwts.dat</h3>
 <table width="90%"><tr><td bgcolor="#FFCCFF">
 <pre>
 874.364756
@@ -273,18 +209,9 @@ Comments in the data file start with a '#' character in the first column.
 Blank lines are ignored.
 
 
-
-
 <H2>
     Output file format
 </H2>
-
-<!-- 
-        This includes example output file formats.
-        This should be a detailed description and example - assume
-        someone will want to parse this file and will want to know what
-        happens in unusual cases - null output, errors etc. 
-   -->
 
 The output is a list of the molecular weights with the unwanted (noisy)
 data removed. 
@@ -317,22 +244,9 @@ data removed.
 </td></tr></table><p>
 
 
-
-
-
 <H2>
     Data files
 </H2>
-
-<!-- 
-        Any data files used (e.g. translation table file)
-        This includes example data file formats if they are
-        not obvious.
-	If you wish to include the standard description of what data
-	files are and how to use embossdata to inspect and retrieve
-	them, use:
-   -->
-
 
 The program reads the data file <b>Emwfilter.dat</b> for the molecular
 weights of items to be deleted from the experimental data. 
@@ -380,128 +294,43 @@ The directories are searched in the following order:
 <p>
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 <H2>
     Notes
 </H2>
 
-<!-- 
-        Restrictions.
-        Interesting behaviour.
-        Useful things you can do with this program.
-   -->
-
 None.
-
-
-
-
-
-
 
 <H2>
     References
 </H2>
 
-<!-- 
-        Bibliography for methods used.
-   -->
-
 None.
-
-
-
-
-
-
-
 
 <H2>
     Warnings
 </H2>
 
-<!-- 
-        Potentially stupid things the program will let you do.
-   -->
-
 None.
-
-
-
-
-
-
 
 <H2>
     Diagnostic Error Messages
 </H2>
 
-<!-- 
-        Error messages specific to this program, eg:
-        "FATAL xxx" - means you have not set up the xxx data using program <b>prog</b>.<p>
-   -->
-
 None.
-
-
-
-
-
-
 
 <H2>
     Exit status
 </H2>
 
-<!-- 
-        Description of the exit status for various error conditions
-   -->
-
 It always exits with status 0.
-
-
-
-
-
-
 
 
 <H2>
     Known bugs
 </H2>
 
-
-<!-- 
-        Bugs noted but not yet fixed.
-   -->
-
 None.
 
-
-
-
-
-
-
-
-<!--
-<H2>
-    See also
-</H2>
--->
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
@@ -520,26 +349,10 @@ None.
 <tr><td><a href="pepwindowall.html">pepwindowall</a></td><td>Displays protein hydropathy of a set of sequences</td></tr>
 </table>
 
-<!-- 
-        Add any comments about other associated programs (to prepare
-        data files?) that seealso doesn't find. 
-   -->
-
-
-
-
-
-
-
-
-
 
 <H2>
     Author(s)
 </H2>
-<!--
-        Who has worked on the program in the past.
-   -->
 
 Alan Bleasby (ableasby&nbsp;&copy;&nbsp;rfcgr.mrc.ac.uk)
 <br>
@@ -548,76 +361,23 @@ Wellcome Trust Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
 
 
 
-
-
-
-
-
-
-
 <H2>
     History
 </H2>
 
-<!--
-        What changes have been made.
-   -->
-
 Written (Jan 2002) - Alan Bleasby.
-
-<!--
-<p>
-[an error occurred while processing this directive]
--->
-
-
-
-
-
-
-
-
-
 
 
 <H2>
     Target users
 </H2>
-
-<!--
-        For general users, requested by one user, for EMBOSS site
-        maintainers, for EMBOSS developers etc.
-        eg:
-        "This program is intended to be used by everyone and everything,
-        from naive users to embedded scripts." 
-	Which is easy to include using:
-   -->
-
 This program is intended to be used by everyone and everything, from naive users to embedded scripts.
-
-
-
-
-
-
-
-
-
-
 
 
 <H2>
     Comments
 </H2>
-
-<!--
-	Any comments, requests etc. that people have about the program
-   -->
-
-
-
-
-
+None
 
 
 

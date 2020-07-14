@@ -1,17 +1,17 @@
 
                                   merger 
-                                      
-   
-   
+
+
+
 Function
 
    Merge two overlapping nucleic acid sequences
-   
+
 Description
 
    This joins two overlapping nucleic acid sequences into one merged
    sequence.
-   
+
    It uses a global alignment algorithm (Needleman & Wunsch) to optimally
    align the sequences and then it creates the merged sequence from the
    alignment. When there is a mismatch in the alignment between the two
@@ -19,16 +19,16 @@ Description
    chosen by using the base from the sequence which has the best local
    sequence quality score. The following heuristic is used to find the
    sequence quality score:
-   
+
    If one of the bases is a 'N', then the other sequence's base is used,
    else:
-   
+
    A window size around the disputed base is used to find the local
    quality score. This window size is increased from 5, to 10 to 20 bases
    or until there is a clear decision on the best choice. If there is no
    best choice after using a window of 20, then the base in the first
    sequence is used.
-   
+
    To calculate the quality of a window of a sequence around a base:
      * quality = sequence value/length under window either side of the
        base
@@ -37,45 +37,45 @@ Description
      * ambiguous bases (MRWSYKVHDB) score 1 point
      * Ns score 0 points
      * off end of the sequence scores 0 points
-       
+
    N.B. This heavily discriminates against the iffy bits at the end of
    sequence reads.
-   
+
    This program was originally written to aid in the reconstruction of
    mRNA sequences which had been sequenced from both ends as a 5' and 3'
    EST (cDNA). eg. joining two reads produced by primer walking
    sequencing.
-   
+
    Care should be taken to reverse one of the sequences (e.g. using the
    qualifier '-sreverse2') if this is required to get them both in the
    correct orientation.
-   
+
    Because it uses a Needleman & Wunsch alignment the required memory may
    be greater than the available memory when attempting to merge large
    (cosmid-sized or greater) sequences.
-   
+
    The gap open and gap extension penalties have been set at a higher
    level than is usual (50 and 5). This was experimentally determined to
    give the best results with a set of poor quality EST test sequences.
-   
+
 Usage
 
    Here is a sample session with merger
-   
+
 
 % merger 
 Merge two overlapping nucleic acid sequences
 Input sequence: tembl:eclacy
 Second sequence: tembl:eclaca
+Output alignment [eclacy.merger]: 
 Output sequence [eclacy.fasta]: 
-Output alignment [eclacy.out2]: 
-   
+
    Go to the input files for this example
    Go to the output files for this example
-   
+
    Typically, one of the sequences will need to be reverse-complemented
    to put it into the correct orientation to make it join. For example:
-   
+
 % merger file1.seq file2.seq -sreverse2 -outseq merged.seq
 
 Command line arguments
@@ -83,8 +83,8 @@ Command line arguments
    Standard (Mandatory) qualifiers:
   [-asequence]         sequence   Sequence USA
   [-bsequence]         sequence   Sequence USA
-  [-outseq]            seqout     Output sequence USA
   [-outfile]           align      Output alignment file name
+  [-outseq]            seqout     Output sequence USA
 
    Additional (Optional) qualifiers:
    -datafile           matrixf    This is the scoring matrix file used when
@@ -100,85 +100,85 @@ Command line arguments
    Associated qualifiers:
 
    "-asequence" associated qualifiers
-   -sbegin1             integer    Start of the sequence to be used
-   -send1               integer    End of the sequence to be used
-   -sreverse1           boolean    Reverse (if DNA)
-   -sask1               boolean    Ask for begin/end/reverse
-   -snucleotide1        boolean    Sequence is nucleotide
-   -sprotein1           boolean    Sequence is protein
-   -slower1             boolean    Make lower case
-   -supper1             boolean    Make upper case
-   -sformat1            string     Input sequence format
-   -sdbname1            string     Database name
-   -sid1                string     Entryname
-   -ufo1                string     UFO features
-   -fformat1            string     Features format
-   -fopenfile1          string     Features file name
+   -sbegin1            integer    Start of the sequence to be used
+   -send1              integer    End of the sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
 
    "-bsequence" associated qualifiers
-   -sbegin2             integer    Start of the sequence to be used
-   -send2               integer    End of the sequence to be used
-   -sreverse2           boolean    Reverse (if DNA)
-   -sask2               boolean    Ask for begin/end/reverse
-   -snucleotide2        boolean    Sequence is nucleotide
-   -sprotein2           boolean    Sequence is protein
-   -slower2             boolean    Make lower case
-   -supper2             boolean    Make upper case
-   -sformat2            string     Input sequence format
-   -sdbname2            string     Database name
-   -sid2                string     Entryname
-   -ufo2                string     UFO features
-   -fformat2            string     Features format
-   -fopenfile2          string     Features file name
-
-   "-outseq" associated qualifiers
-   -osformat3           string     Output seq format
-   -osextension3        string     File name extension
-   -osname3             string     Base file name
-   -osdirectory3        string     Output directory
-   -osdbname3           string     Database name to add
-   -ossingle3           boolean    Separate file for each entry
-   -oufo3               string     UFO features
-   -offormat3           string     Features format
-   -ofname3             string     Features file name
-   -ofdirectory3        string     Output directory
+   -sbegin2            integer    Start of the sequence to be used
+   -send2              integer    End of the sequence to be used
+   -sreverse2          boolean    Reverse (if DNA)
+   -sask2              boolean    Ask for begin/end/reverse
+   -snucleotide2       boolean    Sequence is nucleotide
+   -sprotein2          boolean    Sequence is protein
+   -slower2            boolean    Make lower case
+   -supper2            boolean    Make upper case
+   -sformat2           string     Input sequence format
+   -sdbname2           string     Database name
+   -sid2               string     Entryname
+   -ufo2               string     UFO features
+   -fformat2           string     Features format
+   -fopenfile2         string     Features file name
 
    "-outfile" associated qualifiers
-   -aformat4            string     Alignment format
-   -aextension4         string     File name extension
-   -adirectory4         string     Output directory
-   -aname4              string     Base file name
-   -awidth4             integer    Alignment width
-   -aaccshow4           boolean    Show accession number in the header
-   -adesshow4           boolean    Show description in the header
-   -ausashow4           boolean    Show the full USA in the alignment
-   -aglobal4            boolean    Show the full sequence in alignment
+   -aformat3           string     Alignment format
+   -aextension3        string     File name extension
+   -adirectory3        string     Output directory
+   -aname3             string     Base file name
+   -awidth3            integer    Alignment width
+   -aaccshow3          boolean    Show accession number in the header
+   -adesshow3          boolean    Show description in the header
+   -ausashow3          boolean    Show the full USA in the alignment
+   -aglobal3           boolean    Show the full sequence in alignment
+
+   "-outseq" associated qualifiers
+   -osformat4          string     Output seq format
+   -osextension4       string     File name extension
+   -osname4            string     Base file name
+   -osdirectory4       string     Output directory
+   -osdbname4          string     Database name to add
+   -ossingle4          boolean    Separate file for each entry
+   -oufo4              string     UFO features
+   -offormat4          string     Features format
+   -ofname4            string     Features file name
+   -ofdirectory4       string     Output directory
 
    General qualifiers:
-   -auto                boolean    Turn off prompts
-   -stdout              boolean    Write standard output
-   -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for standard and additional values
-   -debug               boolean    Write debug output to program.dbg
-   -verbose             boolean    Report some/full command line options
-   -help                boolean    Report command line options. More
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
-   -warning             boolean    Report warnings
-   -error               boolean    Report errors
-   -fatal               boolean    Report fatal errors
-   -die                 boolean    Report deaths
-   
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report deaths
+
 
    Standard (Mandatory) qualifiers Allowed values Default
    [-asequence]
    (Parameter 1) Sequence USA Readable sequence Required
    [-bsequence]
    (Parameter 2) Sequence USA Readable sequence Required
-   [-outseq]
-   (Parameter 3) Output sequence USA Writeable sequence <sequence>.format
    [-outfile]
-   (Parameter 4) Output alignment file name Alignment output file
+   (Parameter 3) Output alignment file name Alignment output file
+   [-outseq]
+   (Parameter 4) Output sequence USA Writeable sequence <sequence>.format
    Additional (Optional) qualifiers Allowed values Default
    -datafile This is the scoring matrix file used when comparing
    sequences. By default it is the file 'EBLOSUM62' (for proteins) or the
@@ -190,19 +190,19 @@ Command line arguments
    -gapextend Gap extension penalty Number from 0.100 to 10.000 5
    Advanced (Unprompted) qualifiers Allowed values Default
    (none)
-   
+
 Input file format
 
    merger reads any two sequence USAs of the same type (protein or
    nucleic acid.)
-   
+
   Input files for usage example
-  
+
    'tembl:eclacy' is a sequence entry in the example nucleic acid
    database 'tembl'
-   
+
   Database entry: tembl:eclacy
-  
+
 ID   ECLACY     standard; DNA; PRO; 1500 BP.
 XX
 AC   V00295;
@@ -325,9 +325,9 @@ SQ   Sequence 1500 BP; 315 A; 342 C; 357 G; 486 T; 0 other;
      gaaagaataa gagcaggcaa gctatttacc gatatgtgcg aaggcttacc ggaaaaaaga      150
 0
 //
-   
+
   Database entry: tembl:eclaca
-  
+
 ID   ECLACA     standard; DNA; PRO; 1832 BP.
 XX
 AC   X51872;
@@ -447,39 +447,147 @@ SQ   Sequence 1832 BP; 519 A; 510 C; 450 G; 353 T; 0 other;
      cgcccatggt aaccaccggc agagcggtcg ac                                    183
 2
 //
-   
+
 Output file format
 
    The output sequence file contains the joined sequence, by default in
    FASTA format. Where there is a mismatch in the alignment, the chosen
    base is written to the output sequence in uppercase.
-   
+
    The output is a standard EMBOSS alignment file.
-   
+
    The results can be output in one of several styles by using the
    command-line qualifier -aformat xxx, where 'xxx' is replaced by the
    name of the required format. Some of the alignment formats can cope
    with an unlimited number of sequences, while others are only for pairs
    of sequences.
-   
+
    The available multiple alignment format names are: unknown, multiple,
    simple, fasta, msf, trace, srs
-   
+
    The available pairwise alignment format names are: pair, markx0,
    markx1, markx2, markx3, markx10, srspair, score
-   
-   See: http://www.uk.embnet.org/Software/EMBOSS/Themes/AlignFormats.html
-   for further information on alignment formats.
-   
+
+   See: http://emboss.sf.net/docs/themes/AlignFormats.html for further
+   information on alignment formats.
+
    The output report file contains descriptions of the positions where
    there is a mismatch in the alignment and shows the alignment. Where
    there is a mismatch in the alignment, the chosen base is written in
    uppercase.
-   
+
   Output files for usage example
-  
+
+  File: eclacy.merger
+
+########################################
+# Program: merger
+# Rundate: Thu Jul 15 2004 12:00:00
+# Align_format: simple
+# Report_file: eclacy.merger
+########################################
+
+#=======================================
+#
+# Aligned_sequences: 2
+# 1: ECLACY
+# 2: ECLACA
+# Matrix: EDNAFULL
+# Gap_penalty: 50.0
+# Extend_penalty: 5.0
+#
+# Length: 3173
+# Identity:     159/3173 ( 5.0%)
+# Similarity:   159/3173 ( 5.0%)
+# Gaps:        3014/3173 (95.0%)
+# Score: 795.0
+#
+#
+#=======================================
+
+ECLACY             1 ttccagctgagcgccggtcgctaccattaccagttggtctggtgtcaaaa     50
+
+ECLACA             1 --------------------------------------------------      0
+
+ECLACY            51 ataataataaccgggcaggccatgtctgcccgtatttcgcgtaaggaaat    100
+
+ECLACA             1 --------------------------------------------------      0
+
+ECLACY           101 ccattatgtactatttaaaaaacacaaacttttggatgttcggtttattc    150
+
+ECLACA             1 --------------------------------------------------      0
+
+ECLACY           151 tttttcttttacttttttatcatgggagcctacttcccgtttttcccgat    200
+
+ECLACA             1 --------------------------------------------------      0
+
+ECLACY           201 ttggctacatgacatcaaccatatcagcaaaagtgatacgggtattattt    250
+
+ECLACA             1 --------------------------------------------------      0
+
+ECLACY           251 ttgccgctatttctctgttctcgctattattccaaccgctgtttggtctg    300
+
+ECLACA             1 --------------------------------------------------      0
+
+ECLACY           301 ctttctgacaaactcgggctgcgcaaatacctgctgtggattattaccgg    350
+
+
+  [Part of this file has been deleted for brevity]
+
+
+ECLACA          1310 ctggcgtaaccgccgttaatcagaccgaagtaaacacccagcgtccacgc   1359
+
+ECLACY          1501 --------------------------------------------------   1500
+
+ECLACA          1360 gcggggagtgaataccacgcgaaccggagtggttgttgtcttgtgggaag   1409
+
+ECLACY          1501 --------------------------------------------------   1500
+
+ECLACA          1410 aggcgacctcgcgggcgctttgccaccaccaggcaaagagcgcaacaacg   1459
+
+ECLACY          1501 --------------------------------------------------   1500
+
+ECLACA          1460 gcaggcagcgccaccaggcgagtgtttgataccaggtttcgctatgttga   1509
+
+ECLACY          1501 --------------------------------------------------   1500
+
+ECLACA          1510 actaaccagggcgttatggcggcaccaagcccaccgccgcccatcagagc   1559
+
+ECLACY          1501 --------------------------------------------------   1500
+
+ECLACA          1560 cgcggaccacagccccatcaccagtggcgtgcgctgctgaaaccgccgtt   1609
+
+ECLACY          1501 --------------------------------------------------   1500
+
+ECLACA          1610 taatcaccgaagcatcaccgcctgaatgatgccgatccccaccccaccaa   1659
+
+ECLACY          1501 --------------------------------------------------   1500
+
+ECLACA          1660 gcagtgcgctgctaagcagcagcgcactttgcgggtaaagctcacgcatc   1709
+
+ECLACY          1501 --------------------------------------------------   1500
+
+ECLACA          1710 aatgcaccgacggcaatcagcaacagactgatggcgacactgcgacgttc   1759
+
+ECLACY          1501 --------------------------------------------------   1500
+
+ECLACA          1760 gctgacatgctgatgaagccagcttccggccagcgccagcccgcccatgg   1809
+
+ECLACY          1501 -----------------------   1500
+
+ECLACA          1810 taaccaccggcagagcggtcgac   1832
+
+
+#---------------------------------------
+#
+# Conflicts:          ECLACY          ECLACA
+#              position base   position base Using
+#
+#
+#---------------------------------------
+
   File: eclacy.fasta
-  
+
 >ECLACY V00295.1 E. coli lacY gene (codes for lactose permease).
 ttccagctgagcgccggtcgctaccattaccagttggtctggtgtcaaaaataataataa
 ccgggcaggccatgtctgcccgtatttcgcgtaaggaaatccattatgtactatttaaaa
@@ -534,164 +642,58 @@ aaccgccgtttaatcaccgaagcatcaccgcctgaatgatgccgatccccaccccaccaa
 gcagtgcgctgctaagcagcagcgcactttgcgggtaaagctcacgcatcaatgcaccga
 cggcaatcagcaacagactgatggcgacactgcgacgttcgctgacatgctgatgaagcc
 agcttccggccagcgccagcccgcccatggtaaccaccggcagagcggtcgac
-   
-  File: eclacy.out2
-  
-########################################
-# Program:  merger
-# Rundate:  Tue Apr 06 14:30:05 2004
-# Align_format: simple
-# Report_file: eclacy.out2
-########################################
-#=======================================
-#
-# Aligned_sequences: 2
-# 1: ECLACY
-# 2: ECLACA
-# Matrix: EDNAFULL
-# Gap_penalty: 50.0
-# Extend_penalty: 5.0
-#
-# Length: 3173
-# Identity:     159/3173 ( 5.0%)
-# Similarity:   159/3173 ( 5.0%)
-# Gaps:        3014/3173 (95.0%)
-# Score: 795.0
-#
-#
-#=======================================
 
-ECLACY             1 ttccagctgagcgccggtcgctaccattaccagttggtctggtgtcaaaa     50
-
-ECLACA             1                                                         0
-
-ECLACY            51 ataataataaccgggcaggccatgtctgcccgtatttcgcgtaaggaaat    100
-
-ECLACA             1                                                         0
-
-ECLACY           101 ccattatgtactatttaaaaaacacaaacttttggatgttcggtttattc    150
-
-ECLACA             1                                                         0
-
-ECLACY           151 tttttcttttacttttttatcatgggagcctacttcccgtttttcccgat    200
-
-ECLACA             1                                                         0
-
-ECLACY           201 ttggctacatgacatcaaccatatcagcaaaagtgatacgggtattattt    250
-
-ECLACA             1                                                         0
-
-ECLACY           251 ttgccgctatttctctgttctcgctattattccaaccgctgtttggtctg    300
-
-ECLACA             1                                                         0
-
-ECLACY           301 ctttctgacaaactcgggctgcgcaaatacctgctgtggattattaccgg    350
-
-
-
-  [Part of this file has been deleted for brevity]
-
-ECLACY          1501                                                      1500
-
-ECLACA          1310 ctggcgtaaccgccgttaatcagaccgaagtaaacacccagcgtccacgc   1359
-
-ECLACY          1501                                                      1500
-
-ECLACA          1360 gcggggagtgaataccacgcgaaccggagtggttgttgtcttgtgggaag   1409
-
-ECLACY          1501                                                      1500
-
-ECLACA          1410 aggcgacctcgcgggcgctttgccaccaccaggcaaagagcgcaacaacg   1459
-
-ECLACY          1501                                                      1500
-
-ECLACA          1460 gcaggcagcgccaccaggcgagtgtttgataccaggtttcgctatgttga   1509
-
-ECLACY          1501                                                      1500
-
-ECLACA          1510 actaaccagggcgttatggcggcaccaagcccaccgccgcccatcagagc   1559
-
-ECLACY          1501                                                      1500
-
-ECLACA          1560 cgcggaccacagccccatcaccagtggcgtgcgctgctgaaaccgccgtt   1609
-
-ECLACY          1501                                                      1500
-
-ECLACA          1610 taatcaccgaagcatcaccgcctgaatgatgccgatccccaccccaccaa   1659
-
-ECLACY          1501                                                      1500
-
-ECLACA          1660 gcagtgcgctgctaagcagcagcgcactttgcgggtaaagctcacgcatc   1709
-
-ECLACY          1501                                                      1500
-
-ECLACA          1710 aatgcaccgacggcaatcagcaacagactgatggcgacactgcgacgttc   1759
-
-ECLACY          1501                                                      1500
-
-ECLACA          1760 gctgacatgctgatgaagccagcttccggccagcgccagcccgcccatgg   1809
-
-ECLACY          1501                           1500
-
-ECLACA          1810 taaccaccggcagagcggtcgac   1832
-
-
-#---------------------------------------
-#
-# ECLACY position base          ECLACA position base    Using
-#
-#
-#---------------------------------------
-   
 Data files
 
    It reads the scoring matrix for the alignment from the standard EMBOSS
    'data' directory. By default it is the file 'EBLOSUM62' (for proteins)
    or the file 'EDNAFULL' (for nucleic sequences).
-   
+
 Notes
 
    None.
-   
+
 References
 
    None.
-   
+
 Warnings
 
    None.
-   
+
 Diagnostic Error Messages
 
    None.
-   
+
 Exit status
 
    It exits with a status of 0
-   
+
 Known bugs
 
    None.
-   
+
 See also
 
    Program name                    Description
    cons         Creates a consensus from multiple alignments
    megamerger   Merge two large overlapping nucleic acid sequences
-   
+
 Author(s)
 
    Gary Williams (gwilliam © rfcgr.mrc.ac.uk)
    MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
    Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
-   
+
 History
 
    Written (Gary Williams) 1999
-   
+
 Target users
 
    This program is intended to be used by everyone and everything, from
    naive users to embedded scripts.
-   
+
 Comments
+
+   None

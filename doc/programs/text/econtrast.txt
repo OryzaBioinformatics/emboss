@@ -1,19 +1,16 @@
 
-                             EMBOSS: econtrast
-     _________________________________________________________________
-   
-                               Program econtrast
-                                       
-   Conversion of PHYLIP's contrast
-   
+                                 econtrast 
+
+
+
 Function
 
    ECONTRAST -- Computes contrasts for comparative method
-   
+
 Description
 
    Phylip contrast documentation.
-   
+
 Usage
 
    Here is a sample session with econtrast for the data:-
@@ -75,7 +72,7 @@ Command line arguments
    -progress           bool       Print indications of progress of run
 
    Advanced qualifiers: (none)
-   
+
    Mandatory qualifiers Allowed values Default
    [-infile]
    (Parameter 1) input file Input file Required
@@ -91,7 +88,7 @@ Command line arguments
    -progress Print indications of progress of run Yes/No No
    Advanced qualifiers Allowed values Default
    (none)
-   
+
 Input file format
 
 Output file format
@@ -118,11 +115,11 @@ Author(s)
    Washington. Written by Joseph Felsenstein. Permission is granted to
    copy this document provided that no fee is charged for it and that
    this copyright notice is not removed.
-   
+
    This application was modified for inclusion in EMBOSS by Ian Longden
    (il@sanger.ac.uk) Informatics Division, The Sanger Centre, Wellcome
    Trust Genome Campus, Hinxton, Cambridge, CB10 1SA, UK.
-   
+
 Priority
 
 Target users

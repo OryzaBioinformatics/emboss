@@ -7,11 +7,9 @@
 </HEAD>
 <BODY BGCOLOR="#FFFFFF" text="#000000">
 
-
-
 <table align=center border=0 cellspacing=0 cellpadding=0>
 <tr><td valign=top>
-<A HREF="index.html" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
@@ -25,24 +23,14 @@ cutseq
 
 
 
-
 <H2>
     Function
 </H2>
-
-
-
-<!--
-DON'T WRITE ANYTHING HERE.
-IT IS DONE FOR YOU.
--->
 Removes a specified section from a sequence
-
 
 <H2>
     Description
 </H2>
-
 
 This simple editing program allows you to cut out a region from
 your sequence by specifying the begin and end positions of the sequence
@@ -56,7 +44,6 @@ It removes the sequence from the specified start to the end positions
 <H2>
     Usage
 </H2>
-
 <b>Here is a sample session with cutseq</b>
 <p>
 To remove bases 10 to 12 from a database entry and write to the new sequence file 'gatta2.seq': 
@@ -105,34 +92,10 @@ End of region to delete [1290]: <b></b>
 <a href="#output.3">Go to the output files for this example</a><p><p>
 
 
-<!--
-To remove bases 10 to 12 from a sequence 'gatta.seq' and write
-to the new sequence file 'gatta2.seq':
-
-<pre>
-% cutseq gatta.seq gatta2.seq -from=10 -to=12
-</pre>
-
-<p>
-To remove the first 20 bases from 'hatta.seq' and write it to 'jsh.seq':
-
-<pre>
-% cutseq -seq=hatta.seq -from=1 -to=20 -out=jsh.seq
-</pre>
--->
-
-
 
 <H2>
     Command line arguments
 </H2>
-
-
-
-<!--
-DON'T WRITE ANYTHING HERE.
-IT IS DONE FOR YOU.
--->
 
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
@@ -197,7 +160,6 @@ IT IS DONE FOR YOU.
 </pre>
 </td></tr></table>
 <P>
-
 <table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
 <tr bgcolor="#FFFFCC">
 <th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
@@ -256,16 +218,13 @@ IT IS DONE FOR YOU.
 </table>
 
 
-
 <H2>
     Input file format
 </H2>
 
-
 <b>cutseq</b> reads a single sequence USA.
 
 <p>
-
 
 <a name="input.1"></a>
 <h3>Input files for usage example </h3>
@@ -392,7 +351,6 @@ SQ   Sequence 2167 BP; 363 A; 712 C; 730 G; 362 T; 0 other;
 
 <p>
 
-
 <a name="output.1"></a>
 <h3>Output files for usage example </h3>
 <p><h3>File: gatta2.seq</h3>
@@ -499,13 +457,11 @@ tattcgcttttacctatctgtgggtggccgccaaccagttcctcgag
     Data files
 </H2>
 
-
 None.
 
 <H2>
     Notes
 </H2>
-
 
 This can be used as a simple sequence editor.
 
@@ -515,11 +471,9 @@ This can be used as a simple sequence editor.
 
 None.
 
-
 <H2>
     Warnings
 </H2>
-
 
 You can delete a complete sequence and write out an empty
 sequence file. 
@@ -530,11 +484,9 @@ sequence file.
 
 None.
 
-
 <H2>
     Exit status
 </H2>
-
 
 It always exits with status 0
 
@@ -542,14 +494,8 @@ It always exits with status 0
     Known bugs
 </H2>
 
-
 None.
 
-<!--
-<H2>
-    See also
-</H2>
--->
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
@@ -579,17 +525,10 @@ None.
 <tr><td><a href="yank.html">yank</a></td><td>Reads a sequence range, appends the full USA to a list file</td></tr>
 </table>
 
-<!--
-        Add any comments about other associated programs (to prepare
-        data files?) that seealso doesn't find.
-   -->
-
-
 
 <H2>
     Author(s)
 </H2>
-
 
 Gary Williams (gwilliam&nbsp;&copy;&nbsp;rfcgr.mrc.ac.uk)
 <br>
@@ -602,31 +541,19 @@ Wellcome Trust Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
     History
 </H2>
 
-
 Completed 26 Jan 1999
 
-<!--
-<p>
-[an error occurred while processing this directive]
--->
 
 <H2>
     Target users
 </H2>
+This program is intended to be used by everyone and everything, from naive users to embedded scripts.
 
-
-This program is intended to be used by everyone and everything,
-from naive users to embedded scripts. 
 
 <H2>
     Comments
 </H2>
-
-
-<pre>
-
-</pre>
-
+None
 
 </BODY>
 </HTML>

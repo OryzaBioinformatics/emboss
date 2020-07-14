@@ -1,7 +1,3 @@
-<!--
-Edit this file to replace 'primersearch' with the name of the program.
--->
-
 <HTML>
 
 <HEAD>
@@ -11,13 +7,9 @@ Edit this file to replace 'primersearch' with the name of the program.
 </HEAD>
 <BODY BGCOLOR="#FFFFFF" text="#000000">
 
-
-
-
-
 <table align=center border=0 cellspacing=0 cellpadding=0>
 <tr><td valign=top>
-<A HREF="index.html" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
@@ -31,25 +23,9 @@ primersearch
 
 
 
-
-
-<!--END OF HEADER-->
-
-
-
-
-
-<H1>
-Program primersearch
-</H1>
 <H2>
     Function
 </H2>
-
-<!--
-DON'T WRITE ANYTHING HERE.
-IT IS DONE FOR YOU.
--->
 Searches DNA sequences for matches with primer pairs
 
 
@@ -57,29 +33,7 @@ Searches DNA sequences for matches with primer pairs
     Description
 </H2>
 
-<!-- 
-	This is the main part of the document.
-
-        This is what the user looks at to find out if this program will
-        do what he wants. 
-
-        Long description.
-
-        Why it is useful.
-
-        When it should/shouldn't be used.
-
-        Algorithms
-
-        Expanded description.
-
-        eg: Reverse engineers Wheedle's 'talpsgob' program. This does a 
-        splurge of the 5' end of the sequence followed by a durm.
-        The net effect is a 5' end splurt.
-        etc. for as long as is required (several pages is not unreasonable)
-  -->
-
-primersearch reads in primer pairs from an input file and searches
+<b>primersearch</b> reads in primer pairs from an input file and searches
 them against sequence(s) specified by the user. Each of the primers in
 a pair is searched against the sequence and potential amplimers are
 reported.
@@ -97,13 +51,6 @@ opposite orientations.
 <H2>
     Usage
 </H2>
-
-<!--  
-	Example usage, as run from the command-line.
-        Many examples illustrating different behaviours is good.
- -->
-
-
 <b>Here is a sample session with primersearch</b>
 <p>
 
@@ -112,7 +59,7 @@ opposite orientations.
 
 % <b>primersearch tembl:z52466 </b>
 Searches DNA sequences for matches with primer pairs
-Primer file: <b>../../data/primers</b>
+Primer file: <b>primers</b>
 Allowed percent mismatch [0]: <b></b>
 Output file [hsa203yc1.primersearch]: <b></b>
 
@@ -130,7 +77,7 @@ Here we run the same example but allowing 20% mismatch between the primers and t
 
 % <b>primersearch tembl:z52466 </b>
 Searches DNA sequences for matches with primer pairs
-Primer file: <b>../../data/primers</b>
+Primer file: <b>primers</b>
 Allowed percent mismatch [0]: <b>20</b>
 Output file [hsa203yc1.primersearch]: <b></b>
 
@@ -143,12 +90,6 @@ Output file [hsa203yc1.primersearch]: <b></b>
 <H2>
     Command line arguments
 </H2>
-
-<!--
-DON'T WRITE ANYTHING HERE.
-IT IS DONE FOR YOU.
--->
-
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
    Standard (Mandatory) qualifiers:
@@ -263,14 +204,6 @@ IT IS DONE FOR YOU.
     Input file format
 </H2>
 
-<!-- 
-        This includes example input file formats.
-        Except for sequences which can be described by 'sequence USA',
-        this should be a detailed description and example - assume
-        someone will want to parse this file and will want to know what
-        happens in unusual cases - null input, etc. 
-   -->
-
 <b>primersearch</b> reads in any nucleic acid sequence USAs.
 
 <p>
@@ -281,7 +214,7 @@ IT IS DONE FOR YOU.
 
 'tembl:z52466' is a sequence entry in the example nucleic acid database 'tembl'
 <p>
-<p><h3>File: ../../data/primers</h3>
+<p><h3>File: primers</h3>
 <table width="90%"><tr><td bgcolor="#FFCCFF">
 <pre>
 # This is my primer file
@@ -383,14 +316,6 @@ been found, and to exit.
     Output file format
 </H2>
 
-<!-- 
-        This includes example output file formats 
-        Except for sequences which can be described by 'sequence USA',
-        this should be a detailed description and example - assume
-        someone will want to parse this file and will want to know what
-        happens in unusual cases - null output, errors etc. 
-   -->
-
 
 <a name="output.1"></a>
 <h3>Output files for usage example </h3>
@@ -455,41 +380,11 @@ Amplimer 2
     Data files
 </H2>
 
-<!-- 
-        Any data files used (e.g. translation table file)
-        This includes example data file formats if they are
-        not obvious.
-
-        eg:
-        data file format:
-
-	blank lines and comment lines are ignored.
-        comment lines start with '#'
-        There are three columns separated by one or more space or TAB
-	characters for X and Y values of durm, followed by energy
-        all coefficients are given as floating point values
-        An example is:
-
-        # Durm coefficient enery file
-        # X     Y       Energy
-        0.1     0.2     0.331
-        0.2     0.4     0.332
-        0.3     0.6     0.333
-        0.3     0.8     0.334
-
-   -->
-
 None.
 
 <H2>
     Notes
 </H2>
-
-<!-- 
-        Restrictions.
-        Interesting behaviour.
-        Useful things you can do with this program.
-   -->
 
 Every potential amplimer will be reported; if one primer matches the
 forward strand twice and the other matches the reverse strand only
@@ -508,29 +403,24 @@ possible amplimers are reported.
     References
 </H2>
 
-<!-- 
-        Bibliography for methods used.
-   -->
-
 None.
 
 <H2>
     Warnings
 </H2>
 
-<!-- 
-        Potentially stupid things the program will let you do.
-        eg:
-        It doesn't check to see if the sequence is a protein sequence or not.
-   -->
-
 This program is slow.
+
 <br>
 Don't try searching all of EMBL!
+
 <br>
-It might not be sensible to search all of the human section of EMBL - in 2000, this would take a day to do with one primer pair.
+It might not be sensible to search all of the human section of EMBL -
+in 2000, this would take a day to do with one primer pair.
+
 <br>
 It will take longer with more primer pairs.
+
 <br>
 It will take longer if you allow mismatches.
 
@@ -538,17 +428,6 @@ It will take longer if you allow mismatches.
 <H2>
     Diagnostic Error Messages
 </H2>
-
-<!-- 
-        Error messages specific to this program.
-        eg:
-
-        "Threshold value greater than 1." - means that the threshold has
-        been set to be greater than 1 but a burgle exception has
-        occurred making this invalid - you should reduce the wobble
-        parameter and try again. 
-
-   --> 
 
 "No suitable primers found - exiting" means that either the primers
 file was empty or there were no compilable primer pairs contained in it.
@@ -558,29 +437,14 @@ file was empty or there were no compilable primer pairs contained in it.
     Exit status
 </H2>
 
-<!-- 
-        Description of the exit status for various error conditions
-        eg:
-        "It always exits with status 0"
-   -->
 It always exits with status 0
 
 <H2>
     Known bugs
 </H2>
 
-
-<!-- 
-        Bugs noted but not yet fixed.
-   -->
-
 None.
 
-<!--
-<H2>
-    See also
-</H2>
--->
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
@@ -588,11 +452,8 @@ None.
 <tr><td><a href="stssearch.html">stssearch</a></td><td>Searches a DNA database for matches with a set of STS primers</td></tr>
 </table>
 
-<!-- 
-        Add any comments about other associated programs (to prepare
-        data files?) that seealso doesn't find. 
-   -->
 
+<p>
 
 <a href="stssearch.html">stssearch</a> does something similar, but doesn't
 allow you to find mismatches and will report any match in any
@@ -602,9 +463,6 @@ orientation and doesn't require you to have both primers matching.
 <H2>
     Author(s)
 </H2>
-<!--
-        Who has worked on the program in the past.
-   -->
 
 Val Curwen (vac&nbsp;&copy;&nbsp;sanger.ac.uk)
 <br>
@@ -617,30 +475,12 @@ Cambridge, CB10 1SA, UK.
     History
 </H2>
 
-<!--
-        What changes have been made.
-   -->
-
 Written Aug 2000 - Val Curwen
 
-<!--
-<p>
-[an error occurred while processing this directive]
--->
 
 <H2>
     Target users
 </H2>
-
-<!--
-        For general users, requested by one user, for EMBOSS site
-        maintainers, for EMBOSS developers etc.
-        eg:
-        "This program is intended to be used by everyone and everything,
-        from naive users to embedded scripts." 
-	Which is easy to include using:
-
-   -->
 This program is intended to be used by everyone and everything, from naive users to embedded scripts.
 
 
@@ -648,11 +488,7 @@ This program is intended to be used by everyone and everything, from naive users
 <H2>
     Comments
 </H2>
-
-<!--
-	Any comments, requests etc. that people have about the program
-   -->
-
+None
 
 
 </BODY>

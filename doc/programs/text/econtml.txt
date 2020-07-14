@@ -1,20 +1,19 @@
 
-                              EMBOSS: econtml
-     _________________________________________________________________
-   
-                                Program econtml
-                                       
+                                  econtml 
+
+
+
 Function
 
    Conversion of PHYLIP's contml
-   
+
 Description
 
    ECONTML - Gene Frequencies and Continuous Characters Maximum
    Likelihood method
-   
+
    Phylip contml documentation.
-   
+
 Usage
 
    Here is a sample session with econtml using the data:-
@@ -105,7 +104,7 @@ Command line arguments
    -[no]drawtree       bool       Draw tree
 
    Advanced qualifiers: (none)
-   
+
    Mandatory qualifiers Allowed values Default
    [-infile]
    (Parameter 1) input file Input file Required
@@ -131,7 +130,7 @@ Command line arguments
    -[no]drawtree Draw tree Yes/No Yes
    Advanced qualifiers Allowed values Default
    (none)
-   
+
 Input file format
 
 Output file format
@@ -158,11 +157,11 @@ Author(s)
    Washington. Written by Joseph Felsenstein. Permission is granted to
    copy this document provided that no fee is charged for it and that
    this copyright notice is not removed.
-   
+
    This application was modified for inclusion in EMBOSS by Ian Longden
    (il@sanger.ac.uk) Informatics Division, The Sanger Centre, Wellcome
    Trust Genome Campus, Hinxton, Cambridge, CB10 1SA, UK.
-   
+
 Priority
 
 Target users

@@ -1,48 +1,48 @@
 
                                 seqmatchall 
-                                      
-   
-   
+
+
+
 Function
 
    Does an all-against-all comparison of a set of sequences
-   
+
 Description
 
    This takes a set of sequences and does an all-against-all pairwise
    comparison of words (fragments of the sequences of a specified fixed
    size) in the sequences, finding regions of identity between any two
    sequences.
-   
+
    The larger the specified word size, the faster the comparison will
    proceed. Regions whose stretches of identity are shorter than the word
    size will be missed. You should therefore choose a word size that is
    small enough to find those regions of similarity you are interested in
    within a reasonable time-frame.
-   
+
 Usage
 
    Here is a sample session with seqmatchall
-   
+
    Here is an example using an increased word size to avoid accidental
    matches:
-   
+
 
 % seqmatchall 
 Does an all-against-all comparison of a set of sequences
 Input sequence set: tembl:eclac*
 Word size [4]: 15
-Output file [eclac.seqmatchall]: 
-   
+Output alignment [eclac.seqmatchall]: 
+
    Go to the input files for this example
    Go to the output files for this example
-   
+
 Command line arguments
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqset     Sequence set USA
    -wordsize           integer    Word size
-  [-outfile]           outfile    Output file name
+  [-outfile]           align      Output alignment file name
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers: (none)
@@ -65,7 +65,15 @@ Command line arguments
    -fopenfile1          string     Features file name
 
    "-outfile" associated qualifiers
-   -odirectory2         string     Output directory
+   -aformat2            string     Alignment format
+   -aextension2         string     File name extension
+   -adirectory2         string     Output directory
+   -aname2              string     Base file name
+   -awidth2             integer    Alignment width
+   -aaccshow2           boolean    Show accession number in the header
+   -adesshow2           boolean    Show description in the header
+   -ausashow2           boolean    Show the full USA in the alignment
+   -aglobal2            boolean    Show the full sequence in alignment
 
    General qualifiers:
    -auto                boolean    Turn off prompts
@@ -81,53 +89,110 @@ Command line arguments
    -error               boolean    Report errors
    -fatal               boolean    Report fatal errors
    -die                 boolean    Report deaths
-   
+
 
    Standard (Mandatory) qualifiers Allowed values Default
    [-sequence]
    (Parameter 1) Sequence set USA Readable set of sequences Required
    -wordsize Word size Integer 2 or more 4
    [-outfile]
-   (Parameter 2) Output file name Output file <sequence>.seqmatchall
+   (Parameter 2) Output alignment file name Alignment output file
    Additional (Optional) qualifiers Allowed values Default
    (none)
    Advanced (Unprompted) qualifiers Allowed values Default
    (none)
-   
+
 Input file format
 
    seqmatchall reads a set of sequence USAs.
-   
+
    The sequences must be either all protein or all nucleic acid.
-   
+
   Input files for usage example
-  
+
    'tembl:eclac*' is a sequence entry in the example nucleic acid
    database 'tembl'
-   
+
 Output file format
 
   Output files for usage example
-  
+
   File: eclac.seqmatchall
-  
-1832  5646 7477 ECLAC 1 1832 ECLACA
-1113  49 1161 ECLAC 1 1113 ECLACI
-1500  4305 5804 ECLAC 1 1500 ECLACY
-3078  1287 4364 ECLAC 1 3078 ECLACZ
-159  1 159 ECLACA 1342 1500 ECLACY
-60  1 60 ECLACY 3019 3078 ECLACZ
-   
+
+########################################
+# Program: seqmatchall
+# Rundate: Thu Jul 15 2004 12:00:00
+# Align_format: match
+# Report_file: eclac.seqmatchall
+########################################
+
+#=======================================
+#
+# Aligned_sequences: 2
+# 1: ECLAC
+# 2: ECLACA
+#=======================================
+
+  1832 ECLAC           +     5646..7477     ECLACA          +        1..1832
+
+#=======================================
+#
+# Aligned_sequences: 2
+# 1: ECLAC
+# 2: ECLACI
+#=======================================
+
+  1113 ECLAC           +       49..1161     ECLACI          +        1..1113
+
+#=======================================
+#
+# Aligned_sequences: 2
+# 1: ECLAC
+# 2: ECLACY
+#=======================================
+
+  1500 ECLAC           +     4305..5804     ECLACY          +        1..1500
+
+#=======================================
+#
+# Aligned_sequences: 2
+# 1: ECLAC
+# 2: ECLACZ
+#=======================================
+
+  3078 ECLAC           +     1287..4364     ECLACZ          +        1..3078
+
+#=======================================
+#
+# Aligned_sequences: 2
+# 1: ECLACA
+# 2: ECLACY
+#=======================================
+
+   159 ECLACA          +        1..159      ECLACY          +     1342..1500
+
+#=======================================
+#
+# Aligned_sequences: 2
+# 1: ECLACY
+# 2: ECLACZ
+#=======================================
+
+    60 ECLACY          +        1..60       ECLACZ          +     3019..3078
+
+#---------------------------------------
+#---------------------------------------
+
    ECLAC (the complete E.coli lac operon) matches ECLACI ECLACZ ECLACY
    and ECLACA (the individual genes), and there is a short overlap
    between ECLACY and the flanking genes ECLACZ and ECLACA
-   
+
    The output is a list of regions of identity in pairs of sequences,
    each consisting of one line with 7 columns of data separated by TABs
    or space characters.
-   
+
    The columns of data consist of:
-   
+
      * The length of the region of identity.
      * The start position in sequence 1.
      * The end position in sequence 1.
@@ -135,36 +200,36 @@ Output file format
      * The start position in sequence 2.
      * The end position in sequence 2.
      * The name of sequence 2.
-       
+
 Data files
 
    None.
-   
+
 Notes
 
    The larger the word size, the faster the comparisons will proceed, but
    regions of identitly smaller than the word size will not be reported.
-   
+
 References
 
    None.
-   
+
 Warnings
 
    None.
-   
+
 Diagnostic Error Messages
 
    None.
-   
+
 Exit status
 
    It exits with a status of 0.
-   
+
 Known bugs
 
    None.
-   
+
 See also
 
    Program name Description
@@ -173,22 +238,24 @@ See also
    sequences
    water Smith-Waterman local alignment
    wordmatch Finds all exact matches of a given size between 2 sequences
-   
+
    polydot will give a graphical view of the same matches.
-   
+
 Author(s)
 
    Ian Longden (il © sanger.ac.uk)
    Sanger Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge,
    CB10 1SA, UK.
-   
+
 History
 
-   1999 - written.
-   
+   1999 - written - Ian Longden
+
 Target users
 
    This program is intended to be used by everyone and everything, from
    naive users to embedded scripts.
-   
+
 Comments
+
+   None

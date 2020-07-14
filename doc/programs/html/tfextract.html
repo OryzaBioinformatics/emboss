@@ -7,15 +7,9 @@
 </HEAD>
 <BODY BGCOLOR="#FFFFFF" text="#000000">
 
-
-
-
-
-
-
 <table align=center border=0 cellspacing=0 cellpadding=0>
 <tr><td valign=top>
-<A HREF="index.html" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
@@ -29,19 +23,10 @@ tfextract
 
 
 
-
-
-
 <H2>
     Function
 </H2>
 
-
-
-<!--
-DON'T WRITE ANYTHING HERE.
-IT IS DONE FOR YOU.
--->
 Extract data from TRANSFAC
 
 
@@ -130,8 +115,6 @@ Files</b> below.
 <H2>
     Usage
 </H2>
-
-
 <b>Here is a sample session with tfextract</b>
 <p>
 
@@ -140,7 +123,7 @@ Files</b> below.
 
 % <b>tfextract </b>
 Extract data from TRANSFAC
-Full pathname of transfac SITE.DAT: <b>../../data/site.dat</b>
+Full pathname of transfac SITE.DAT: <b>site.dat</b>
 
 </pre></td></tr></table><p>
 <p>
@@ -151,14 +134,6 @@ Full pathname of transfac SITE.DAT: <b>../../data/site.dat</b>
 <H2>
     Command line arguments
 </H2>
-
-
-
-<!--
-DON'T WRITE ANYTHING HERE.
-IT IS DONE FOR YOU.
--->
-
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
    Standard (Mandatory) qualifiers:
@@ -186,7 +161,6 @@ IT IS DONE FOR YOU.
 </pre>
 </td></tr></table>
 <P>
-
 <table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
 <tr bgcolor="#FFFFCC">
 <th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
@@ -249,7 +223,7 @@ ftp://ftp.ebi.ac.uk/pub/databases/transfac/
 
 <a name="input.1"></a>
 <h3>Input files for usage example </h3>
-<p><h3>File: ../../data/site.dat</h3>
+<p><h3>File: site.dat</h3>
 <table width="90%"><tr><td bgcolor="#FFCCFF">
 <pre>
 AC  R00077
@@ -381,16 +355,6 @@ Y$ADH1_02            ACAATATGGACTTCCTCTTTTCTGG R04140 T00322; GCR1;Quality: 2; S
 <pre>
 </pre>
 </td></tr></table><p>
-<p><h3>File: tfother</h3>
-<table width="90%"><tr><td bgcolor="#CCFFCC">
-<pre>
-</pre>
-</td></tr></table><p>
-<p><h3>File: tfplant</h3>
-<table width="90%"><tr><td bgcolor="#CCFFCC">
-<pre>
-</pre>
-</td></tr></table><p>
 <p><h3>File: tfvertebrate</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
@@ -401,6 +365,16 @@ HS$ALBU_04           TTAATAAT R00080 T00015; AFP1;Quality: 6; Species: human, Ho
 HS$ALBU_05           TCTAGTTAATAATCTACAAT R00081 T00369; HNF-1;Quality: 4; Species: rat, Rattus norvegicus.
 MOUSE$FCGR3A_01      GTCTGCTGACC R04412 T00874; USF;Quality: 2; Species: human, Homo sapiens.
 MOUSE$FCGR3A_02      TTCCTC R04413 T00702; PU.1;Quality: 3; Species: mouse, Mus musculus.
+</pre>
+</td></tr></table><p>
+<p><h3>File: tfplant</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+</pre>
+</td></tr></table><p>
+<p><h3>File: tfother</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
 </pre>
 </td></tr></table><p>
 
@@ -421,14 +395,6 @@ sequences.
     Data files
 </H2>
 
-<!--
-        Any data files used (e.g. translation table file)
-        This includes example data file formats if they are
-        not obvious.
-        If you wish to include the standard description of what data
-        files are and how to use embossdata to inspect and retrieve
-        them, use:
-   -->
 <p>
 EMBOSS data files are distributed with the application and stored
 in the standard EMBOSS data directory, which is defined
@@ -483,11 +449,14 @@ None.
 </H2>
 
 <ul>
+
 <li>Nucleic Acids Res. 16: 1879-1902, 1988
 
-<li>BioTechForum - Advances in Molecular Genetics (J.  Collins,A.J.  Driesel, eds.) 4:95-108, 1991
+<li>BioTechForum - Advances in Molecular Genetics (J.  Collins,A.J.
+Driesel, eds.) 4:95-108, 1991
 
 <li>Nucleic Acids Res. 20:3-26, 1992
+
 </ul>
 
 <H2>
@@ -518,11 +487,6 @@ It always exits with a status of 0.
 
 None.
 
-<!--
-<H2>
-    See also
-</H2>
--->
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
@@ -533,17 +497,10 @@ None.
 <tr><td><a href="rebaseextract.html">rebaseextract</a></td><td>Extract data from REBASE</td></tr>
 </table>
 
-<!--
-        Add any comments about other associated programs (to prepare
-        data files?) that seealso doesn't find.
-   -->
-
 
 <H2>
     Author(s)
 </H2>
-
-
 Alan Bleasby (ableasby&nbsp;&copy;&nbsp;rfcgr.mrc.ac.uk)
 <br>
 MRC Rosalind Franklin Centre for Genomics Research
@@ -555,30 +512,21 @@ Wellcome Trust Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
     History
 </H2>
 
-
 Written Summer 2000 - Alan Bleasby.
 
-<!--
-<p>
-[an error occurred while processing this directive]
--->
 
 <H2>
     Target users
 </H2>
-
-
 This program is intended to be used by administrators responsible
 for software and database installation and maintenance. 
+
 
 <H2>
     Comments
 </H2>
+None
 
-
-<pre>
-
-</pre>
 
 
 </BODY>

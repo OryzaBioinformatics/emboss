@@ -1,54 +1,54 @@
 
                                   revseq 
-                                      
-   
-   
+
+
+
 Function
 
    Reverse and complement a sequence
-   
+
 Description
 
    This takes a sequence and outputs the reverse complement (also known
    as the anti-sense or reverse sense) sequence.
-   
+
    It can also output just the reversed sequence or just the complement
    of the sequence.
-   
+
 Usage
 
    Here is a sample session with revseq
-   
+
    To create the reverse complement (reverse sense) of 'tembl:hsfau' in
    the file 'hsfau.rev':
-   
-   
+
+
 % revseq tembl:hsfau hsfau.rev 
 Reverse and complement a sequence
 
    Go to the input files for this example
    Go to the output files for this example
-   
+
    Example 2
-   
+
    To create the complement of 'tembl:hsfau' in the file 'hsfau.rev':
-   
-   
+
+
 % revseq tembl:hsfau hsfau.rev -norev 
 Reverse and complement a sequence
 
    Go to the output files for this example
-   
+
    Example 3
-   
+
    To create the reverse of 'tembl:hsfau' in the file 'hsfau.rev':
-   
-   
+
+
 % revseq tembl:hsfau hsfau.rev -nocomp 
 Reverse and complement a sequence
 
    Go to the output files for this example
-   
+
 Command line arguments
 
    Standard (Mandatory) qualifiers:
@@ -106,7 +106,7 @@ Command line arguments
    -error               boolean    Report errors
    -fatal               boolean    Report fatal errors
    -die                 boolean    Report deaths
-   
+
 
    Standard (Mandatory) qualifiers Allowed values Default
    [-sequence]
@@ -121,18 +121,18 @@ Command line arguments
    output sequence Boolean value Yes/No Yes
    -[no]complement Set this to be false if you do not wish to complement
    the output sequence Boolean value Yes/No Yes
-   
+
 Input file format
 
    revseq reads one or more nucleic acid sequence USAs.
-   
+
   Input files for usage example
-  
+
    'tembl:hsfau' is a sequence entry in the example nucleic acid database
    'tembl'
-   
+
   Database entry: tembl:hsfau
-  
+
 ID   HSFAU      standard; RNA; HUM; 518 BP.
 XX
 AC   X65923;
@@ -219,15 +219,15 @@ SQ   Sequence 518 BP; 125 A; 139 C; 148 G; 106 T; 0 other;
      tctaataaaa aagccactta gttcagtcaa aaaaaaaa                               51
 8
 //
-   
+
 Output file format
 
    One or more sequences are written out.
-   
+
   Output files for usage example
-  
+
   File: hsfau.rev
-  
+
 >HSFAU X65923.1 H.sapiens fau mRNA
 ttttttttttgactgaactaagtggcttttttattagagaaagccagaattacaaaagac
 ttaagagttggcattggggcccttcttcttgccaaaggtgggcacaacgttgacaaagcg
@@ -238,11 +238,11 @@ cagagtggcctcatcctccaggggcgcgcctgccaggagcacgacttgatcttccggggc
 aatgccctccagtgaggctacatgagccttgatctgggcgaccgtttcctggccggtcac
 ctcgaaggtgtgtagctcctgggcgcggacaaagagctgcatattggcgactgaacggcg
 gtcccagctaccgcgaagatggagtcgagaaagaggaa
-   
+
   Output files for usage example 2
-  
+
   File: hsfau.rev
-  
+
 >HSFAU X65923.1 H.sapiens fau mRNA
 aaggagaaagagctgaggtagaagcgccatcgaccctggcggcaagtcagcggttatacg
 tcgagaaacaggcgcgggtcctcgatgtgtggaagctccactggccggtcctttgccagc
@@ -253,11 +253,11 @@ cacgaccttttcactctccagtctgaggattccaccggtttgtcctcttcttcttcttct
 tctgtccagcccgattcgccgcctacgtcatgttggccgcgaaacagttgcaacacgggt
 ggaaaccgttcttcttcccggggttacggttgagaattcagaaaacattaagaccgaaag
 agattattttttcggtgaatcaagtcagtttttttttt
-   
+
   Output files for usage example 3
-  
+
   File: hsfau.rev
-  
+
 >HSFAU X65923.1 H.sapiens fau mRNA
 aaaaaaaaaactgacttgattcaccgaaaaaataatctctttcggtcttaatgttttctg
 aattctcaaccgtaaccccgggaagaagaacggtttccacccgtgttgcaactgtttcgc
@@ -268,37 +268,37 @@ gtctcaccggagtaggaggtccccgcgcggacggtcctcgtgctgaactagaaggccccg
 ttacgggaggtcactccgatgtactcggaactagacccgctggcaaaggaccggccagtg
 gagcttccacacatcgaggacccgcgcctgtttctcgacgtataaccgctgacttgccgc
 cagggtcgatggcgcttctacctcagctctttctcctt
-   
+
 Data files
 
    None.
-   
+
 Notes
 
    None.
-   
+
 References
 
    None.
-   
+
 Warnings
 
    None.
-   
+
 Diagnostic Error Messages
 
    None.
-   
+
 Exit status
 
    It always exits with status 0.
-   
+
 Known bugs
 
    Bugs noted but not yet fixed.
-   
+
    None.
-   
+
 See also
 
    Program name                          Description
@@ -326,20 +326,22 @@ See also
    union        Reads sequence fragments and builds one sequence
    vectorstrip  Strips out DNA between a pair of vector sequences
    yank         Reads a sequence range, appends the full USA to a list file
-   
+
 Author(s)
 
    Gary Williams (gwilliam © rfcgr.mrc.ac.uk)
    MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
    Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
-   
+
 History
 
    Completed 26 Jan 1999
-   
+
 Target users
 
    This program is intended to be used by everyone and everything, from
    naive users to embedded scripts.
-   
+
 Comments
+
+   None

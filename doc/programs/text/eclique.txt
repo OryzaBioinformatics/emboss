@@ -1,19 +1,20 @@
 
-                              EMBOSS: eclique
-     _________________________________________________________________
-   
+                                  eclique 
+
+
+
                                 Program eclique
-                                       
+
 Function
 
    Conversion of PHYLIP's clique
-   
+
 Description
 
    ECLIQUE -- Embossified Compatibility Program
-   
+
    Phylip clique documentation.
-   
+
 Usage
 
    Here is a sample session with eclique using the data:-
@@ -86,7 +87,7 @@ Command line arguments
 
    Advanced qualifiers:
    -treefile           outfile    tree file name
-   
+
    Mandatory qualifiers Allowed values Default
    [-infile]
    (Parameter 1) file to read in Input file Required
@@ -106,7 +107,7 @@ Command line arguments
    -matrixout Print out compatibility matrix Yes/No No
    Advanced qualifiers Allowed values Default
    -treefile tree file name Output file eclique.treefile
-   
+
 Input file format
 
 Output file format
@@ -133,11 +134,11 @@ Author(s)
    Washington. Written by Joseph Felsenstein. Permission is granted to
    copy this document provided that no fee is charged for it and that
    this copyright notice is not removed.
-   
+
    This application was modified for inclusion in EMBOSS by Ian Longden
    (il@sanger.ac.uk) Informatics Division, The Sanger Centre, Wellcome
    Trust Genome Campus, Hinxton, Cambridge, CB10 1SA, UK.
-   
+
 Priority
 
 Target users

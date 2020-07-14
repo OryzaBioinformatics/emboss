@@ -1,20 +1,19 @@
 
-                             EMBOSS: ednapenny
-     _________________________________________________________________
-   
-                               Program ednapenny
-                                       
+                                 ednapenny 
+
+
+
 Function
 
    Conversion of PHYLIP's dnapenny
-   
+
 Description
 
    EDNAPENNY - Branch and bound to find all most parsimonious trees for
    nucleic acid sequence parsimony criteria
-   
+
    Phylip dnapenny documentation.
-   
+
 Usage
 
    Here is a sample session with ednapenny using the data:-
@@ -279,7 +278,7 @@ Command line arguments
 
    Advanced qualifiers:
    -thresh             bool       Use Threshold parsimony
-   
+
    Mandatory qualifiers Allowed values Default
    [-msf]
    (Parameter 1) File containing a sequence Readable sequences Required
@@ -302,7 +301,7 @@ Command line arguments
    -[no]drawtree Draw tree Yes/No Yes
    Advanced qualifiers Allowed values Default
    -thresh Use Threshold parsimony Yes/No No
-   
+
 Input file format
 
 Output file format
@@ -329,11 +328,11 @@ Author(s)
    Washington. Written by Joseph Felsenstein. Permission is granted to
    copy this document provided that no fee is charged for it and that
    this copyright notice is not removed.
-   
+
    This application was modified for inclusion in EMBOSS by Ian Longden
    (il@sanger.ac.uk) Informatics Division, The Sanger Centre, Wellcome
    Trust Genome Campus, Hinxton, Cambridge, CB10 1SA, UK.
-   
+
 Priority
 
 Target users

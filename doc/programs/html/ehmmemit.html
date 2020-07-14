@@ -1,0 +1,672 @@
+<!--START OF HEADER - DON'T ALTER -->
+
+<HTML>
+<HEAD>
+  <TITLE>
+  EMBOSS: ehmmemit
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+
+
+<table align=center border=0 cellspacing=0 cellpadding=0>
+<tr><td valign=top>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+</td>
+<td align=left valign=middle>
+<b><font size="+6">
+
+ehmmemit
+</font></b>
+</td></tr>
+</table>
+<br>&nbsp;
+<p>
+
+
+
+<!--END OF HEADER-->
+
+
+
+
+
+
+<H2>
+    Function
+</H2>
+Extract HMM sequences
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+
+
+
+
+<H2>
+    Description
+</H2>
+
+<!-- 
+	This is the main part of the document.
+        This is what the user looks at to find out if this program will do what he wants. 
+        Long description.
+        Why it is useful.
+        When it should/shouldn't be used.
+  -->
+
+**************** 
+EDIT HERE
+**************** 
+
+
+
+
+
+
+
+
+
+
+
+
+
+<H2>
+    Algorithm
+</H2>
+
+<!-- 
+        Algorithms
+	  Pseudocode/Vague description/Handwaving/web links to useful pages
+  -->
+
+**************** 
+EDIT HERE
+**************** 
+
+
+
+
+
+
+
+
+
+
+
+
+
+<H2>
+    Usage
+</H2>
+
+<!--  
+	Example usage, as run from the command-line.
+        Many examples illustrating different behaviours is good.
+ -->
+
+<b>Here is a sample session with ehmmemit</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>ehmmemit rrm.hmm -seed 1079460101 </b>
+Extract HMM sequences
+Output file [rrm.ehmmemit]: <b></b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
+
+
+
+
+<H2>
+    Command line arguments
+</H2>
+
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+   Standard (Mandatory) qualifiers:
+  [-infile]            infile     HMM file
+  [-outfile]           outfile    Output file name
+
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers:
+   -seed               integer    Random seed
+   -selex              boolean    Output in selex format
+   -consensus          boolean    Output consensus sequence
+   -number             integer    Number of sequences to produce
+
+   Associated qualifiers:
+
+   "-outfile" associated qualifiers
+   -odirectory2        string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report deaths
+
+
+</pre>
+</td></tr></table>
+<P>
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-infile]<br>(Parameter 1)</td>
+<td>HMM file</td>
+<td>Input file</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>[-outfile]<br>(Parameter 2)</td>
+<td>Output file name</td>
+<td>Output file</td>
+<td><i>&lt;sequence&gt;</i>.ehmmemit</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Additional (Optional) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-seed</td>
+<td>Random seed</td>
+<td>Integer 0 or more</td>
+<td>0</td>
+</tr>
+
+<tr>
+<td>-selex</td>
+<td>Output in selex format</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-consensus</td>
+<td>Output consensus sequence</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-number</td>
+<td>Number of sequences to produce</td>
+<td>Any integer value</td>
+<td>10</td>
+</tr>
+
+</table>
+
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+
+
+
+
+
+
+
+
+<H2>
+    Input file format
+</H2>
+
+<!-- 
+        This includes example input file formats.
+        This should be a detailed description and example - assume
+        someone will want to parse this file and will want to know what
+        happens in unusual cases - null input, etc. 
+   -->
+
+<b>ehmmemit</b> reads any normal sequence USAs.
+
+<p>
+
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+<p><h3>File: rrm.hmm</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+HMMER2.0
+NAME  rrm
+DESC  
+LENG  72
+ALPH  Amino
+RF    no
+CS    no
+MAP   yes
+COM   ../src/hmmbuild -F rrm.hmm rrm.slx
+COM   ../src/hmmcalibrate rrm.hmm
+NSEQ  70
+DATE  Wed Jul  8 08:13:25 1998
+CKSUM 2768
+XT      -8455     -4  -1000  -1000  -8455     -4  -8455     -4 
+NULT      -4  -8455
+NULE     595  -1558     85    338   -294    453  -1158    197    249    902  -1085   -142    -21   -313     45    531    201    384  -1998   -644 
+EVD   -53.840649   0.214434
+HMM        A      C      D      E      F      G      H      I      K      L      M      N      P      Q      R      S      T      V      W      Y    
+         m-&gt;m   m-&gt;i   m-&gt;d   i-&gt;m   i-&gt;i   d-&gt;m   d-&gt;d   b-&gt;m   m-&gt;e
+          -21      *  -6129
+     1  -1234   -371  -8214  -7849  -5304  -8003  -7706   2384  -7769   2261   -681  -7660  -7694  -7521  -7816  -7346  -5543   1527  -6974  -6639     1
+     -   -149   -500    233     43   -381    399    106   -626    210   -466   -720    275    394     45     96    359    117   -369   -294   -249 
+     -    -11 -11284 -12326   -894  -1115   -701  -1378    -21      * 
+     2  -3634  -3460  -5973  -5340   3521  -2129  -4036   -831  -2054  -1257  -2663  -4822  -5229  -4557  -4735  -1979  -1569  -1476  -3893   3439     2
+     -   -149   -500    233     43   -381    399    106   -626    210   -466   -720    275    394     45     96    359    117   -369   -294   -249 
+     -    -11 -11284 -12326   -894  -1115   -701  -1378      *      * 
+     3  -5570    838  -8268  -7958  -5637  -8152  -8243   2427  -7947   -461   -539  -7805  -7843  -7878  -8124  -7550  -5559   3130  -7481  -7000     3
+     -   -149   -500    233     43   -381    399    106   -626    210   -466   -720    275    394     45     96    359    117   -369   -294   -249 
+     -    -11 -11284 -12326   -894  -1115   -701  -1378      *      * 
+     4  -1146  -4797  -1564  -2630  -1480   2769  -2963  -1850    992  -4812  -3887    737  -4397   -120    793   -205  -1019  -4418  -4981  -1059     4
+     -   -149   -500    233     43   -381    399    106   -626    210   -466   -720    275    394     45     96    359    117   -369   -294   -249 
+     -    -11 -11284 -12326   -894  -1115   -701  -1378      *      * 
+     5  -5242  -7035    445  -3538  -7284   1773  -4583  -7166  -4676  -7046  -6312   3633  -1651  -1262   -849  -1278  -5287  -6650  -7228   -291     5
+     -   -149   -500    233     43   -381    399    106   -626    210   -466   -720    275    394     45     96    359    117   -369   -294   -249 
+     -    -11 -11284 -12326   -894  -1115   -701  -1378      *      * 
+     6  -6898  -6238  -9292  -8703   -410  -9176  -7772    820  -8535   3071   -753  -8917  -8033  -7171  -7955  -8614  -6722      5  -6136  -6414     6
+     -   -149   -500    233     43   -381    399    106   -626    210   -466   -720    278    394     45     96    359    117   -369   -294   -249 
+     -    -33  -6025 -12326   -153  -3315   -701  -1378      *      * 
+     7     -5  -5297    178  -2982  -5685  -2278   -528  -5452  -1615  -5394  -4488   1396   3136  -3022  -3659    780    976  -4981  -5565  -4854     8
+     -   -149   -500    233     43   -381    399    106   -626    210   -466   -720    275    394     45     96    359    117   -369   -294   -249 
+     -    -11 -11284 -12327   -894  -1115   -701  -1378      *      * 
+     8  -3329  -4799   -805    543    789  -4303    572  -4868    140  -1087  -3888   -603   1691    530    183   -162    293  -2124   2317   2037     9
+     -   -149   -500    233     43   -381    399    106   -626    210   -466   -720    275    394     45     96    359    117   -369   -294   -249 
+     -    -12 -11284 -12327   -894  -1115   -701  -1378      *      * 
+     9   -373  -4801   2182   1353  -1426     44   -407  -1928   -366  -4817  -3891   1263  -4395  -1080   -666    295     50  -1947  -4985    397    10
+     -   -149   -500    233     43   -381    399    106   -626    210   -466   -720    275    394     45     96    359    117   -369   -294   -249 
+     -    -12 -11285 -12327   -894  -1115   -701  -1378      *      * 
+    10    450   1883  -5953  -5317  -1256  -1301  -4027   1322  -1847   -283   1542  -4802  -5206  -1502  -4713  -4241   2143   1615  -3893  -3551    11
+     -   -149   -500    233     43   -381    399    106   -626    210   -466   -720    275    394     45     96    359    117   -369   -294   -249 
+     -    -12 -11285 -12327   -894  -1115   -701  -1378      *      * 
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+     -   -149   -500    233     43   -381    399    106   -626    210   -466   -720    275    394     45     96    359    117   -369   -294   -249 
+     -    -17 -11290 -12332   -894  -1115   -701  -1378      *      * 
+    57  -2038  -3436  -5943  -5308  -1145  -5154  -4025   2255    423   1498   1203  -4797  -1707   -478  -1267  -2117  -3548   1450  -3893   -931    75
+     -   -149   -500    233     43   -381    399    106   -626    210   -466   -720    275    394     45     96    359    117   -369   -294   -249 
+     -    -18 -11291 -12333   -894  -1115   -701  -1378      *      * 
+    58    622  -4802   1764   1486  -5123  -4302  -2961  -1060    334  -4818  -3891   -420  -4396   1293   1148    487  -3268  -1087  -4985   -429    76
+     -   -149   -500    233     43   -381    399    106   -626    210   -466   -720    275    394     45     96    359    117   -369   -294   -249 
+     -   -102 -11291  -4156   -894  -1115   -701  -1378      *      * 
+    59   1265   -231  -1498   1351  -5045   -262   -355  -4796    922  -1073  -3813    778  -4318    877    -34     53    386  -2030    289  -4225    77
+     -   -149   -500    233     43   -381    399    106   -626    210   -466   -720    275    394     45     96    359    117   -369   -294   -249 
+     -    -18 -11207 -12249   -894  -1115   -160  -3250      *      * 
+    60   -684    813  -5723   -473    532  -2124  -3981  -2958   -121   2114   2840  -1421  -5174  -4409   -926  -4196  -1685   -376  -3915    497    78
+     -   -149   -500    233     43   -381    399    106   -626    210   -466   -720    275    394     45     96    359    117   -369   -294   -249 
+     -    -18 -11291 -12333   -894  -1115   -701  -1378      *      * 
+    61  -1812  -4803   1626   -749   -515  -1133   -415  -4875  -1294  -4819  -3892   3181   -793   1470  -1377   -246  -3268  -4425  -4986   -193    79
+     -   -149   -500    233     43   -381    399    106   -626    210   -466   -720    275    394     45     96    359    117   -369   -294   -249 
+     -    -18 -11291 -12333   -894  -1115   -701  -1378      *      * 
+    62  -1812  -4808  -1465     33  -1509   2998   1583  -4879    122  -4823  -3897    972  -4400  -1078  -3055  -1613   -682  -4429  -4991  -1114    80
+     -   -149   -500    232     43   -378    398    105   -627    212   -466   -721    275    393     45     98    359    117   -367   -295   -250 
+     -    -98  -4229 -12334    -49  -4901   -701  -1378      *      * 
+    63   -676  -4701   -742  -1422    825   -589   -545    255   1702  -2571    812  -2986  -4424    796    418   -221   1302  -1179  -4912   1028    82
+     -   -149   -500    233     43   -381    399    106   -626    210   -466   -720    275    394     45     96    359    117   -369   -294   -249 
+     -    -19 -11292 -12334   -894  -1115   -701  -1378      *      * 
+    64  -3341  -4695    350   1378  -1551  -1973  -2998    477   1265     78    273  -1163     21    504  -1507  -1108    282    114    -19    473    83
+     -   -149   -500    233     43   -381    399    106   -626    210   -466   -720    275    394     45     96    359    117   -369   -294   -249 
+     -    -19 -11292 -12334   -894  -1115   -701  -1378      *      * 
+    65  -3605  -3444   -949  -2090   2356  -1177  -4010   1410  -1703   1341   -404  -1673   -747  -4487  -4679  -2139  -1048   1197  -3900    411    84
+     -   -149   -500    233     43   -381    399    106   -626    210   -466   -720    275    394     45     96    359    117   -369   -294   -249 
+     -    -19 -11292 -12334   -894  -1115   -701  -1378      *      * 
+    66   -655   -539   1179    279  -1324   1202  -2962  -1895    147   -682   1298   1427  -2056    608    756  -1119  -1893  -4419  -4982    140    85
+     -   -149   -500    233     43   -381    399    106   -626    210   -466   -720    275    394     45     96    359    117   -369   -294   -249 
+     -    -19 -11292 -12335   -894  -1115   -701  -1378      *      * 
+    67  -1814  -4814    166  -2636  -5135   2921   -568  -4885  -1333  -2415  -3903   1495  -4406   -312   -619    602  -1672  -4436  -4997  -4314    86
+     -   -149   -500    233     43   -381    399    106   -626    210   -466   -720    275    394     45     96    359    117   -369   -294   -249 
+     -    -20 -11293 -12335   -894  -1115   -701  -1378      *      * 
+    68  -3329   1217   -624   -797  -1594  -4303   1580  -4872   2069  -2414  -3890    617  -4396    283   2449   -560   -267  -2067  -4984  -1334    87
+     -   -149   -500    233     43   -381    399    106   -626    210   -466   -720    275    394     45     96    359    117   -369   -294   -249 
+     -    -20 -11293 -12335   -894  -1115   -701  -1378      *      * 
+    69    108    566  -1460    747  -1608  -4306  -2965    -30   1407  -2607  -3878    346   1033   -336    863  -1038    745    617  -4975  -4296    88
+     -   -149   -500    233     43   -381    399    106   -626    210   -466   -720    275    394     45     96    359    117   -369   -294   -249 
+     -    -20 -11293 -12335   -894  -1115   -701  -1378      *      * 
+    70  -1318  -3465   -283   -172  -3423  -2053  -3974   1957  -4721   1761   1425  -4678  -1762  -4391  -1578  -1974  -1561   1341  -3918  -3570    89
+     -   -149   -500    233     43   -381    399    106   -626    210   -466   -720    275    394     45     96    359    117   -369   -294   -249 
+     -    -20 -11293 -12336   -894  -1115   -701  -1378      *      * 
+    71  -1165  -4790   -240   -275  -5105  -4306   1035  -2009   1665   -395    707  -1334   -218   -188   1891  -1077   -383    404    110    348    90
+     -   -149   -500    233     43   -381    398    106   -626    210   -464   -720    275    394     45     96    359    117   -369   -294   -249 
+     -    -43  -6001 -12336   -150  -3342   -701  -1378      *      * 
+    72  -1929   1218  -1535  -1647  -3990  -4677  -3410   1725    207  -1481  -3117  -3608   -810  -1118   -743  -1942    428   2687  -4325  -3869    92
+     -      *      *      *      *      *      *      *      *      *      *      *      *      *      *      *      *      *      *      *      * 
+     -      *      *      *      *      *      *      *      *      0 
+//
+</pre>
+</td></tr></table><p>
+
+
+
+
+
+
+<H2>
+    Output file format
+</H2>
+
+<!-- 
+        This includes example output file formats.
+        This should be a detailed description and example - assume
+        someone will want to parse this file and will want to know what
+        happens in unusual cases - null output, errors etc. 
+
+        If you wish to include the standard description of the avalable
+	report formats, use:
+[an error occurred while processing this directive]
+   -->
+
+<b>ehmmemit</b> 
+outputs a graph to the specified graphics device. 
+outputs a report format file. The default format is ...
+
+
+<p>
+
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: rrm.ehmmemit</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+&gt;seq1  
+LFIKYLTTSCTETHLKDKFANYGEVVNIDIVLDADDGQLNGFGFIIFTSH
+IEEQDAKKLDGKKYKGKVVES
+&gt;seq2  
+LFVGNLHPIGRPEQLKDLFVNAYQVTQIKLLTTTTARARGYGFIEFPSHL
+SVTKAVAKKSGQGLSGNPVKI
+&gt;seq3  
+IYVNGLDDDVTEDELERLLREFGLFLAFQLCKQSGKFSGMAFIEYDNSDY
+TQSIIRWLPGKVVMQRAITC
+&gt;seq4  
+VYITNLPPGVQKQELFDVKDTYFGEHGPVVRFNISRDDDDTQTGEASGFG
+FITFEQLEDDNMAINEEAFGKLIGGKKAKV
+&gt;seq5  
+IFVGSVTHETTESLLKLTFSKQGGVKNINNPRDDETERSRNYATVEFTTE
+EDAEAALENLRGIKINNRKLHI
+&gt;seq6  
+GYVERLPEYASQKSFKNVFQKRGSIKLSKLPTIAQNRGQGFVTFSKHEQA
+AAALSEMNGDELEGKKISV
+&gt;seq7  
+LYVKNLPYGVDEDKIKDAFKSEGPITVKVVLIDAASLRIHGFGFIEFPSV
+ADMAKAIKALEGFETFNVKIHI
+&gt;seq8  
+LFVGGLTYFAKEEALYDLLSKFAQSEQISLANDPETGMSKGYAYVRYETE
+EDVDKAVENLDNIIFNGRTLRR
+&gt;seq9  
+IFVGNIDRKITRKEFENLFAPFGPSTVFPIIRGKNTGYAFVRYDDVQNAA
+HLLESLDGTSDGAEVEKI
+&gt;seq10  
+MYIGNLASDITLDDLADIFSPNVRVVSAVLLKATGHSRGFAFVEFEKEEA
+ATSCIANYENTEGNGHVVPV
+</pre>
+</td></tr></table><p>
+
+
+
+
+
+
+<H2>
+    Data files
+</H2>
+
+<!-- 
+        Any data files used (e.g. translation table file)
+        This includes example data file formats if they are
+        not obvious.
+
+	If you wish to include the standard description of what data
+	files are and how to use embossdata to inspect and retrieve
+	them, use:
+[an error occurred while processing this directive]
+   -->
+
+**************** 
+EDIT HERE
+**************** 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<H2>
+    Notes
+</H2>
+
+<!-- 
+        Restrictions.
+        Interesting behaviour.
+        Useful things you can do with this program.
+   -->
+
+None.
+
+
+
+
+
+
+
+<H2>
+    References
+</H2>
+
+<!-- 
+        Bibliography for methods used.
+   -->
+
+None.
+
+
+
+
+
+
+
+
+<H2>
+    Warnings
+</H2>
+
+<!-- 
+        Potentially stupid things the program will let you do.
+   -->
+
+None.
+
+
+
+
+
+
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+<!-- 
+        Error messages specific to this program, eg:
+        "FATAL xxx" - means you have not set up the xxx data using program <b>prog</b>.<p>
+   -->
+
+None.
+
+
+
+
+
+
+
+<H2>
+    Exit status
+</H2>
+
+<!-- 
+        Description of the exit status for various error conditions
+   -->
+
+It always exits with status 0.
+
+
+
+
+
+
+
+
+<H2>
+    Known bugs
+</H2>
+
+
+<!-- 
+        Bugs noted but not yet fixed.
+   -->
+
+None.
+
+
+
+
+
+
+
+
+<!--
+<H2>
+    See also
+</H2>
+-->
+<h2><a name="See also">See also</a></h2>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th><th>Description</th></tr>
+<tr><td><a href="ealistat.html">ealistat</a></td><td>Statistics for multiple alignment files</td></tr>
+<tr><td><a href="ehmmalign.html">ehmmalign</a></td><td>Align sequences with an HMM</td></tr>
+<tr><td><a href="ehmmbuild.html">ehmmbuild</a></td><td>Build HMM</td></tr>
+<tr><td><a href="ehmmcalibrate.html">ehmmcalibrate</a></td><td>Calibrate a hidden Markov model</td></tr>
+<tr><td><a href="ehmmconvert.html">ehmmconvert</a></td><td>Convert between HMM formats</td></tr>
+<tr><td><a href="ehmmfetch.html">ehmmfetch</a></td><td>Extract HMM from a database</td></tr>
+<tr><td><a href="ehmmindex.html">ehmmindex</a></td><td>Index an HMM database</td></tr>
+<tr><td><a href="ehmmpfam.html">ehmmpfam</a></td><td>Align single sequence with an HMM</td></tr>
+<tr><td><a href="ehmmsearch.html">ehmmsearch</a></td><td>Search sequence database with an HMM</td></tr>
+</table>
+
+<!-- 
+        Add any comments about other associated programs (to prepare
+        data files?) that seealso doesn't find. 
+   -->
+
+
+
+
+
+
+
+
+
+
+<H2>
+    Author(s)
+</H2>
+
+This program is an EMBOSS conversion of a program written by Sean Eddy
+as part of his HMMER package.
+
+<p>
+Although we take every care to ensure that the results of the EMBOSS
+version are identical to those from the original package, we recommend
+that you check your inputs give the same results in both versions
+before publication.
+
+<p>
+Please report all bugs in the EMBOSS version to the EMBOSS bug team,
+not to the original author.
+
+
+<H2>
+    History
+</H2>
+
+
+
+
+
+
+<H2>
+    Target users
+</H2>
+
+<!--
+        For general users, requested by one user, for EMBOSS site
+        maintainers, for EMBOSS developers etc.
+        eg:
+        "This program is intended to be used by everyone and everything,
+        from naive users to embedded scripts." 
+	Which is easy to include using:
+   -->
+
+This program is intended to be used by everyone and everything, from naive users to embedded scripts.
+
+
+
+
+
+
+
+
+
+
+
+
+</BODY>
+</HTML>
+

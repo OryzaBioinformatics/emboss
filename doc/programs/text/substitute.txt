@@ -1,0 +1,169 @@
+
+                                substitute 
+
+
+
+Function
+
+   Substitutes matches from first (query) sequence of two aligned
+   sequences in a trace into second (template sequence)
+
+Description
+
+   **************** EDIT HERE ****************
+
+Algorithm
+
+   **************** EDIT HERE ****************
+
+Usage
+
+   Under development, no final example yet
+
+Command line arguments
+
+   Standard (Mandatory) qualifiers:
+  [-alignedpairsequence] seqset     Pair of polypeptide sequences to be
+                                  substituted
+  [-substitutedoutseq] seqout     Output sequence USA
+
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers: (none)
+   Associated qualifiers:
+
+   "-alignedpairsequence" associated qualifiers
+   -sbegin1            integer    Start of each sequence to be used
+   -send1              integer    End of each sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
+
+   "-substitutedoutseq" associated qualifiers
+   -osformat2          string     Output seq format
+   -osextension2       string     File name extension
+   -osname2            string     Base file name
+   -osdirectory2       string     Output directory
+   -osdbname2          string     Database name to add
+   -ossingle2          boolean    Separate file for each entry
+   -oufo2              string     UFO features
+   -offormat2          string     Features format
+   -ofname2            string     Features file name
+   -ofdirectory2       string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report deaths
+
+
+   Standard (Mandatory) qualifiers Allowed values Default
+   [-alignedpairsequence]
+   (Parameter 1) Pair of polypeptide sequences to be substituted Readable
+   set of sequences Required
+   [-substitutedoutseq]
+   (Parameter 2) Output sequence USA Writeable sequence <sequence>.format
+   Additional (Optional) qualifiers Allowed values Default
+   (none)
+   Advanced (Unprompted) qualifiers Allowed values Default
+   (none)
+
+Input file format
+
+   substitute reads any normal sequence USAs.
+
+   Under development, no example input file(s) yet
+
+Output file format
+
+   substitute outputs a graph to the specified graphics device. outputs a
+   report format file. The default format is ...
+
+   Under development, no example output file(s) yet
+
+Data files
+
+   **************** EDIT HERE ****************
+
+Notes
+
+   None.
+
+References
+
+   None.
+
+Warnings
+
+   None.
+
+Diagnostic Error Messages
+
+   None.
+
+Exit status
+
+   It always exits with status 0.
+
+Known bugs
+
+   None.
+
+See also
+
+   Program name Description
+   alignrunner Runs alignment program on all sequence pairs in a
+   directory
+   contactalign EMBOSS implementation of Damian Counsell's 2.5-D
+   alignment algorithm
+   esim4 Align an mRNA to a genomic DNA sequence
+   est2genome Align EST and genomic DNA sequences
+   nawalign Damian Counsell's implementation for protein sequences of the
+   Needleman and Wunsch alignment algorithm
+   nawalignrunner Runs nawalign alignment program on all sequence pairs
+   in a directory
+   needle Needleman-Wunsch global alignment
+   needlerunner Runs needle alignment program on all sequence pairs in a
+   directory
+   scorer Scores accuracy of protein-protein sequence alignment against
+   gold standard structure-structure alignment
+   scorerrunner Runs scorer to compare ordered pairs of substituted seqs
+   in two directories and write the scores to a third
+   stretcher Finds the best global alignment between two sequences
+   substituterunner Runs substitute on directory of traces and writes
+   substituted sequences to another
+
+Author(s)
+
+   Damian Counsell (d.counsell © rfcgr.mrc.ac.uk)
+   MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
+   Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
+
+History
+
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+
+Comments
+
+   None

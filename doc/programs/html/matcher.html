@@ -7,12 +7,9 @@
 </HEAD>
 <BODY BGCOLOR="#FFFFFF" text="#000000">
 
-
-
-
 <table align=center border=0 cellspacing=0 cellpadding=0>
 <tr><td valign=top>
-<A HREF="index.html" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
@@ -26,17 +23,9 @@ matcher
 
 
 
-
 <H2>
     Function
 </H2>
-
-
-
-<!--
-DON'T WRITE ANYTHING HERE.
-IT IS DONE FOR YOU.
--->
 Finds the best local alignments between two sequences
 
 
@@ -117,14 +106,6 @@ Output alignment [hba_human.matcher]: <b></b>
 <H2>
     Command line arguments
 </H2>
-
-
-
-<!--
-DON'T WRITE ANYTHING HERE.
-IT IS DONE FOR YOU.
--->
-
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
    Standard (Mandatory) qualifiers:
@@ -577,8 +558,8 @@ markx2, markx3, markx10, srspair, score
 <p>
 
 See:
-<A href="http://www.uk.embnet.org/Software/EMBOSS/Themes/AlignFormats.html">
-http://www.uk.embnet.org/Software/EMBOSS/Themes/AlignFormats.html</A>
+<A href="http://emboss.sf.net/docs/themes/AlignFormats.html">
+http://emboss.sf.net/docs/themes/AlignFormats.html</A>
 for further information on alignment formats.
 
 <p>
@@ -594,11 +575,12 @@ for further information on alignment formats.
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 ########################################
-# Program:  matcher
-# Rundate:  Tue Apr 06 14:29:59 2004
+# Program: matcher
+# Rundate: Thu Jul 15 2004 12:00:00
 # Align_format: markx0
 # Report_file: hba_human.matcher
 ########################################
+
 #=======================================
 #
 # Aligned_sequences: 2
@@ -617,24 +599,24 @@ for further information on alignment formats.
 #
 #=======================================
 
-
               10        20        30        40         50
 HBA_HU LSPADKTNVKAAWGKVGAHAGEYGAEALERMFLSFPTTKTYFPHF-DLSH
-       :.: .:. : : ::::  .. : :.::: :... .: :. .:  : ::: 
+       :.: .:. : : ::::  .  : : ::: :. . .: :. .:  : ::: 
 HBB_HU LTPEEKSAVTALWGKV--NVDEVGGEALGRLLVVYPWTQRFFESFGDLST
              10          20        30        40        50
 
                     60        70        80        90     
 HBA_HU -----GSAQVKGHGKKVADALTNAVAHVDDMPNALSALSDLHAHKLRVDP
-            :. .::.:::::  :.....::.:.. .....::.::. ::.:::
+            :. .:: :::::  : .. .::.:..    . ::.::  :: :::
 HBB_HU PDAVMGNPKVKAHGKKVLGAFSDGLAHLDNLKGTFATLSELHCDKLHVDP
                60        70        80        90       100
 
          100       110       120       130       140
 HBA_HU VNFKLLSHCLLVTLAAHLPAEFTPAVHASLDKFLASVSTVLTSKY
-        ::.::.. :. .:: :.  :::: :.:. .: .:.:...:. ::
+        ::.:: . :.  :: :   :::: : :.  : .: :.  :  ::
 HBB_HU ENFRLLGNVLVCVLAHHFGKEFTPPVQAAYQKVVAGVANALAHKY
               110       120       130       140     
+
 
 #---------------------------------------
 #---------------------------------------
@@ -647,11 +629,12 @@ HBB_HU ENFRLLGNVLVCVLAHHFGKEFTPPVQAAYQKVVAGVANALAHKY
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 ########################################
-# Program:  matcher
-# Rundate:  Tue Apr 06 14:29:59 2004
+# Program: matcher
+# Rundate: Thu Jul 15 2004 12:00:00
 # Align_format: markx0
 # Report_file: hba_human.matcher
 ########################################
+
 #=======================================
 #
 # Aligned_sequences: 2
@@ -670,37 +653,35 @@ HBB_HU ENFRLLGNVLVCVLAHHFGKEFTPPVQAAYQKVVAGVANALAHKY
 #
 #=======================================
 
-
               10        20        30        40         50
 HBA_HU LSPADKTNVKAAWGKVGAHAGEYGAEALERMFLSFPTTKTYFPHF-DLSH
-       :.: .:. : : ::::  .. : :.::: :... .: :. .:  : ::: 
+       :.: .:. : : ::::  .  : : ::: :. . .: :. .:  : ::: 
 HBB_HU LTPEEKSAVTALWGKV--NVDEVGGEALGRLLVVYPWTQRFFESFGDLST
              10          20        30        40        50
 
                     60        70        80        90     
 HBA_HU -----GSAQVKGHGKKVADALTNAVAHVDDMPNALSALSDLHAHKLRVDP
-            :. .::.:::::  :.....::.:.. .....::.::. ::.:::
+            :. .:: :::::  : .. .::.:..    . ::.::  :: :::
 HBB_HU PDAVMGNPKVKAHGKKVLGAFSDGLAHLDNLKGTFATLSELHCDKLHVDP
                60        70        80        90       100
 
          100       110       120       130       140
 HBA_HU VNFKLLSHCLLVTLAAHLPAEFTPAVHASLDKFLASVSTVLTSKY
-        ::.::.. :. .:: :.  :::: :.:. .: .:.:...:. ::
+        ::.:: . :.  :: :   :::: : :.  : .: :.  :  ::
 HBB_HU ENFRLLGNVLVCVLAHHFGKEFTPPVQAAYQKVVAGVANALAHKY
               110       120       130       140     
+
+
 #=======================================
 #
 # Aligned_sequences: 2
 # 1: HBA_HUMAN
 # 2: HBB_HUMAN
 # Matrix: EBLOSUM62
-# Gap_penalty: 14
-# Extend_penalty: 4
 
 
 <font color=red>  [Part of this file has been deleted for brevity]</font>
 
-#=======================================
 #
 # Aligned_sequences: 2
 # 1: HBA_HUMAN
@@ -718,12 +699,13 @@ HBB_HU ENFRLLGNVLVCVLAHHFGKEFTPPVQAAYQKVVAGVANALAHKY
 #
 #=======================================
 
-
              120   
 HBA_HU HLPAEFTPAVHA
        ::  :   :: :
 HBB_HU HLTPEEKSAVTA
               10   
+
+
 #=======================================
 #
 # Aligned_sequences: 2
@@ -742,12 +724,12 @@ HBB_HU HLTPEEKSAVTA
 #
 #=======================================
 
-
             10        20    
 HBA_HU PADKTNVKAAWGKVGAHAGEY
-       :.. .  :.. : ..: : .:
+       :      :   :   : : .:
 HBB_HU PVQAAYQKVVAGVANALAHKY
           130       140     
+
 
 #---------------------------------------
 #---------------------------------------
@@ -830,11 +812,6 @@ None.
 
 None.
 
-<!--
-<H2>
-    See also
-</H2>
--->
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
@@ -844,10 +821,6 @@ None.
 <tr><td><a href="wordmatch.html">wordmatch</a></td><td>Finds all exact matches of a given size between 2 sequences</td></tr>
 </table>
 
-<!--
-        Add any comments about other associated programs (to prepare
-        data files?) that seealso doesn't find.
-   -->
 
 <p>
 
@@ -877,31 +850,21 @@ Cambridge, CB10 1SA, UK.
     History
 </H2>
 
-<pre>
  Completed 11th May 1999.
-</pre>
 
-<!--
-<p>
-[an error occurred while processing this directive]
--->
 
 <H2>
     Target users
 </H2>
 
+This program is intended to be used by everyone and everything, from naive users to embedded scripts.
 
-This program is intended to be used by everyone and everything,
-from naive users to embedded scripts. 
+
 
 <H2>
     Comments
 </H2>
-
-
-<pre>
-
-</pre>
+None
 
 
 </BODY>

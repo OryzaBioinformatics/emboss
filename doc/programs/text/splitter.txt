@@ -1,57 +1,57 @@
 
                                  splitter 
-                                      
-   
-   
+
+
+
 Function
 
    Split a sequence into (overlapping) smaller sequences
-   
+
 Description
 
    This simple editing program allows you to split a long sequence into
    smaller, optionally overlapping, subsequences.
-   
+
    There should be little requirement to split sequences into smaller
    sub-sequences in EMBOSS, but there may be circumstances where memory
    usage becomes restrictive when dealing with truly large sequences. In
    this case, memory usage may be reduced by repeating the analysis
    several times on split sub-sequences.
-   
+
    If you need to split a large sequence into smaller subsequences so
    that a non-EMBOSS program can analyse the smaller sequence, it may
    also be useful to write the sub-sequences into separate files instead
    of the default EMBOSS behaviour of concatenating them together into
    one file.
-   
+
    To write the output sequences to separate files, use the command-line
    switch '-ossingle'.
-   
+
 Usage
 
    Here is a sample session with splitter
-   
+
    Split a sequence into sub-sequences of 10,000 bases (the default size)
    with no overlap between the sub-sequences:
-   
-   
+
+
 % splitter tembl:AP000504 ap000504.split 
 Split a sequence into (overlapping) smaller sequences
 
    Go to the input files for this example
    Go to the output files for this example
-   
+
    Example 2
-   
+
    Split a sequence into sub-sequences of 50,000 bases with an overlap of
    3,000 bases on each sub-sequence:
-   
-   
+
+
 % splitter tembl:AP000504 ap000504.split -size=50000 -over=3000 
 Split a sequence into (overlapping) smaller sequences
 
    Go to the output files for this example
-   
+
 Command line arguments
 
    Standard (Mandatory) qualifiers:
@@ -109,7 +109,7 @@ Command line arguments
    -error               boolean    Report errors
    -fatal               boolean    Report fatal errors
    -die                 boolean    Report deaths
-   
+
 
    Standard (Mandatory) qualifiers Allowed values Default
    [-sequence]
@@ -122,18 +122,18 @@ Command line arguments
    -overlap Overlap between split sequences Integer 0 or more 0
    Advanced (Unprompted) qualifiers Allowed values Default
    -addoverlap Add overlap to size Boolean value Yes/No No
-   
+
 Input File Format
 
    splitter reads one or more sequence USAs.
-   
+
   Input files for usage example
-  
+
    'tembl:AP000504' is a sequence entry in the example nucleic acid
    database 'tembl'
-   
+
   Database entry: tembl:AP000504
-  
+
 ID   AP000504   standard; DNA; HUM; 100000 BP.
 XX
 AC   AP000504; BA000025;
@@ -290,13 +290,13 @@ CC   sequence archive Web site (http://www-alis.tokyo.jst.go.jp/HGS/top.
      tgagcaaggg tcggggagtt ctagtgcgta acagtctagg                          10000
 0
 //
-   
+
 Output File Format
 
   Output files for usage example
-  
+
   File: ap000504.split
-  
+
 >AP000504_1-10000 Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I regi
 on, section 3/20.
 gaccaatctcactgtgaggaggcagtcaaagggaataatggaagagaggaagaggatttt
@@ -403,11 +403,11 @@ gtggcagctggctggcaagggcctggccctcagccctcttcggtctgtctcttctgccac
 ccacaggacagcaggtgccaggcttcccaacagctccaacccgggtggtgattgcccggc
 ccactcctccacaggctcggccttcccatcctggagggcccccagtctctgggacactgg
 tgagcaagggtcggggagttctagtgcgtaacagtctagg
-   
+
   Output files for usage example 2
-  
+
   File: ap000504.split
-  
+
 >AP000504_1-50000 Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I regi
 on, section 3/20.
 gaccaatctcactgtgaggaggcagtcaaagggaataatggaagagaggaagaggatttt
@@ -514,43 +514,43 @@ gaggtagggcacagtccatggtggcagctggctggcaagggcctggccctcagccctctt
 cggtctgtctcttctgccacccacaggacagcaggtgccaggcttcccaacagctccaac
 ccgggtggtgattgcccggcccactcctccacaggctcggccttcccatcctggagggcc
 cccagtctctgggacactggtgagcaagggtcggggagttctagtgcgtaacagtctagg
-   
+
    The names of the sequences are the same as the original sequence, with
    '_start-end' appended, where 'start', and 'end' are the start and end
    positions of the sub-sequence. eg: The name HSHBB would be changed in
    the sub-sequences to: HSHBB_1-50000 and HSHBB_50001-73308 if they were
    split at the size of 50000 with no overlap.
-   
+
 Data files
 
    None.
-   
+
 Notes
 
    There should be little requirement to split sequences into smaller
    sub-sequences in EMBOSS, but there may be circumstances where memory
    usage becomes restrictive when dealing with truly large sequences.
-   
+
 References
 
    None
-   
+
 Warnings
 
    None.
-   
+
 Diagnostic Error Messages
 
    None.
-   
+
 Exit status
 
    It always exits with status 0
-   
+
 Known bugs
 
-   Bugs noted but not yet fixed. None.
-   
+   None.
+
 See also
 
    Program name                          Description
@@ -578,20 +578,20 @@ See also
    union        Reads sequence fragments and builds one sequence
    vectorstrip  Strips out DNA between a pair of vector sequences
    yank         Reads a sequence range, appends the full USA to a list file
-   
+
 Author(s)
 
    Gary Williams (gwilliam © rfcgr.mrc.ac.uk)
    MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
    Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
-   
+
 History
 
    Completed 22 March 1999
-   
-Target users
 
-   This program is intended to be used by everyone and everything, from
-   naive users to embedded scripts.
-   
+Target users This program is intended to be used by everyone and everything,
+from naive users to embedded scripts.
+
 Comments
+
+   None

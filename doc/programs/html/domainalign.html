@@ -1,0 +1,897 @@
+<!-- START OF HEADER -->
+<HTML><HEAD>
+<TITLE> EMBOSS: DOMAINALIGN documentation. </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+<table align=center border=0 cellspacing=0 cellpadding=0>
+<tr><td valign=top>
+<A HREF="../index.html" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="../../emboss_icon.jpg" alt="" width=150 height=48></a>
+</td>
+<td align=left valign=middle>
+<b><font size="+6">
+
+<H2> DOMAINALIGN documentation </H2>
+</font></b>
+</td></tr>
+</table>
+<br>&nbsp;
+<p>
+
+
+
+
+
+
+
+<!-- CONTENTS
+     This always includes the sections below.
+     Other subsections can be added for individual applications.
+-->
+<br><H2>CONTENTS </H2>
+<b> <a href="#1.0">1.0     SUMMARY                   </a></b><br>
+<b> <a href="#2.0">2.0     INPUTS & OUTPUTS          </a></b><br>
+<b> <a href="#3.0">3.0     INPUT FILE FORMAT         </a></b><br>
+<b> <a href="#4.0">4.0     OUTPUT FILE FORMAT        </a></b><br>
+<b> <a href="#5.0">5.0     DATA FILES                </a></b><br>
+<b> <a href="#6.0">6.0     USAGE                     </a></b><br>    
+<b> <a href="#7.0">7.0     KNOWN BUGS & WARNINGS     </a></b><br>    
+<b> <a href="#8.0">8.0     NOTES                     </a></b><br>
+<b> <a href="#9.0">9.0     DESCRIPTION               </a></b><br>
+<b> <a href="#10.0">10.0   ALGORITHM                 </a></b><br>
+<b> <a href="#11.0">11.0   RELATED APPLICATIONS      </a></b><br>
+<b> <a href="#12.0">12.0   DIAGNOSTIC ERROR MESSAGES </a></b><br>
+<b> <a href="#13.0">13.0   AUTHORS                   </a></b><br>
+<b> <a href="#14.0">14.0   REFERENCES                </a></b><br>
+
+<!-- SUMMARY
+     Succint description of the application, particularly its inputs, outputs
+     and what it does.  The same text is given at the top of the source (.c)
+     file and in the <documentation> attribute of the <application definition>
+     of the ACD file.
+-->
+<a name="1.0"></a>
+<br><br><br><H2> 1.0   SUMMARY  </H2>
+
+Generates DAF files (domain alignment files) of structure-based sequence alignments for nodes in a DCF file (domain classification file)
+
+
+
+
+<!-- INPUTS & OUTPUTS
+     Short summary of the application inputs and outputs in its different 
+     modes of usage (if appropriate). More detail than the summary.
+-->
+<a name="2.0"></a>
+<br><br><br><H2> 2.0   INPUTS & OUTPUTS          </H2>
+
+DOMAINALIGN reads a DCF file (domain classification file) and generates a structure-based sequence alignment annotated with domain classification data ('domain alignment file') for each user-defined node (e.g. family or superfamily) in the DCF file in turn.  If the STAMP algorithm is used, structural superimpositions are also generated and saved to file (PDB format). The alignments are calculated by using stamp or TCOFFEE and these applications must be installed on the system that is running DOMAINALIGN (see 'Notes' below).  
+
+<br>Clearly no alignment can be generated for nodes with a single entry (domain) only: sequences for such domains are (optionally) written to file (fasta format).  
+<br>DOMAINALIGN requires a directory of <a href ="domainalign.html#ref1"> domain PDB files</a>; the path and extension of these must be set by the user (via the ACD file) and also specified in the stamp "pdb.directories" file (see 'Notes' below)
+
+<br>A log file of diagnostic messages is written. The identifier (e.g SCOP Sunid) of the nodes from the DCF file are used to name the output files. The user also specifies the input file, paths for the two types of alignment files (output), path of singlet sequence files (if output) and name of log file.
+
+
+
+
+
+<!-- INPUT FILE FORMAT 
+     Description and example(s) of input file formats.  Should provide enough
+     information to write and parse the file.  Should describe the format in 
+     unusual cases - null input, etc.
+
+     Cannot use the test data files because they might be empty or need 
+     hand-editing 
+
+     Use "<b>DOMAINALIGN</b> reads any normal sequence USAs." if
+     appropriate.
+-->
+<a name="3.0"></a>
+<br><br><br><H2> 3.0   INPUT FILE FORMAT         </H2>
+ The format of the domain classification file is described in scopparse.c
+
+
+
+
+<!-- OUTPUT FILE FORMAT 
+     Description and example(s) of output file formats.  Should provide enough
+     information to write and parse the file.  Should describe the format in 
+     unusual cases - null input, etc.  
+     If the standard description of the avalable report formats is required, 
+     use:   #include file="inc/reportformats.ihtml"
+     Use "Outputs a graph to the specified graphics device."
+     or  "outputs a report format file. The default format is ..."
+     if appropriate.
+-->
+<a name="4.0"></a>
+<br><br><br><H2> 4.0   OUTPUT FILE FORMAT         </h2>
+<b> Structure-based sequence alignment </b><br>
+This file (Figure 1) is in EMBOSS "simple" multiple sequence alignment format.
+This is similar to the output file generated by stamp when issued with the following three types of command:
+<table><td bgcolor="#FFCCFF">
+<pre>
+ (1) stamp -l ./stamps_file.dom -s -n 2 -slide 5 -prefix ./stamps_file -d 
+ ./stamps_file.set;sorttrans -f ./stamps_file.scan -s Sc 2.5 > 
+ ./stamps_file.sort;stamp -l ./stamps_file.sort -prefix ./stamps_file > 
+ ./stamps_file.log
+
+ (2) poststamp -f ./stamps_file.3 -min 0.5
+
+ (3) ver2hor -f ./stamps_file.3.post > ./stamps_file.out
+</pre>
+</td></table>
+<br>
+
+The DOMAINALIGN output file (Figure 1) displays the sequence names,
+positions and sequences. The names are the 7 character domain
+identifier codes taken from the domain classification file.  The
+positions are the start and end residue positions of the appropriate
+section of sequence. The sequence uses '-' as a gap character.  The
+domain classification records for the appopriate node from the DCF
+file are given above the alignment. The STAMP 'Post similar' line is
+given as a markup line underneath the sequence but no dssp assignments
+are written.  All lines other than sequence lines begin with '#' to
+denote a comment.
+
+
+
+<!--
+
+
+<br><br><b>Figure 1    Example of DOMAINALIGN output file (structure-based sequence alignment) </b>
+<table><td bgcolor="#CFCCFF">
+<pre>
+# TY   SCOP
+# XX
+# CL   Alpha and beta proteins (a+b)
+# XX
+# FO   Ferredoxin-like
+# XX
+# SF   Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain
+# XX
+# FA   Aspartate carbamoyltransferase, Regulatory-chain, N-terminal domain
+# XX
+# SI   54894
+# XX
+#         Number               10        20        30        40        50
+d4at1b1              0 GVEAIKRGTVIDHIPAQIGFKLLSLFKLTETDQRITIGLNLP-SGEMGRKDLIKIEN      0
+d4at1d1              0 GVEAIKRGTVIDHIPAQIGFKLLSLFKLTETDQRITIGLNLPSG-EMGRKDLIKIEN      0
+# Post_similar         111111111111111111111111111111111111111111-0-111111111111
+ 
+#         Number        60        70        80        90
+d4at1b1              0 TFLSEDQVDQLALYAPQATVNRIDNYEVVGKSRPSLP      0
+d4at1d1              0 TFLSEDQVDQLALYAPQATVNRIDNYEVVGKSRPSLP      0
+# Post_similar         1111111111111111111111111111111111111
+</pre>
+</td></table>
+
+
+
+<br><br>
+<b> Structural superimposition </b><br>
+ A structural superimposition is generated if the STAMP algorithm is selected.
+ PDB format is used for the DOMAINALIGN structure alignment (superposition) output file 
+ (Figure 2).  This is unmodified stamp output.  A detailed 
+ explanation of the PDB file format is available on the PDB web site:
+<a href="http://www.rcsb.org/pdb/info.html#File_Formats_and_Standards">http://www.rcsb.org/pdb/info.html#File_Formats_and_Standards</a>
+ 
+ 
+<br><br><b>Figure 2 Excerpt of DOMAINALIGN output file (structure alignment) </b>
+<table><td bgcolor="#CFCCFF">
+<pre>
+ 
+ REMARK Output from transform
+ REMARK  STAMP Package (Russell and Barton Proteins, 14, 309-323, 1992)
+ REMARK Domains were read from the file ./domainalign-1031313039.24319.sort
+ REMARK Chains are labelled sequentially starting with 'A' and
+ REMARK  after the order given in the file ./domainalign-1031313039.24319.sort
+ REMARK The domains in this file are:
+ REMARK       d1cs4a_  chain A 
+ REMARK       d1fx2a__1  chain B 
+ REMARK Does not include heteroatoms
+ REMARK  Does not include DNA/RNA 
+ REMARK Does not include waters
+ ATOM      1  N   MET A  22      28.568 -27.770  32.255  1.00 73.77           N  
+ ATOM      2  CA  MET A  22      28.292 -26.443  32.794  1.00 72.28           C  
+ ATOM      3  C   MET A  22      29.325 -25.377  32.396  1.00 69.48           C  
+ ATOM      4  O   MET A  22      30.485 -25.687  32.098  1.00 67.04           O  
+ ATOM      5  CB  MET A  22      28.075 -26.504  34.312  1.00 74.79           C  
+ ATOM      6  CG  MET A  22      29.171 -27.205  35.092  1.00 78.73           C  
+ ATOM      7  SD  MET A  22      28.708 -27.446  36.824  1.00 83.74           S  
+ ATOM      8  CE  MET A  22      28.745 -25.745  37.440  1.00 81.94           C  
+ ATOM      9  N   MET A  23      28.883 -24.120  32.395  1.00 66.44           N  
+ ATOM     10  CA  MET A  23      29.698 -22.969  32.011  1.00 62.94           C  
+ ATOM     11  C   MET A  23      30.928 -22.727  32.886  1.00 59.70           C  
+ ATOM     12  O   MET A  23      32.059 -22.739  32.400  1.00 57.00           O  
+ ATOM     13  CB  MET A  23      28.824 -21.715  31.966  1.00 64.01           C  
+ ATOM     14  CG  MET A  23      27.551 -21.872  31.137  1.00 64.35           C  
+
+ <font color=red> < data ommitted for clarity > </font>
+ 
+ ATOM   1853  CA  ASP B 235      47.656 -10.920  50.374  1.00 73.64           C  
+ ATOM   1854  C   ASP B 235      46.520 -10.365  49.515  1.00 74.17           C  
+ ATOM   1855  O   ASP B 235      46.464 -10.761  48.332  1.00 75.01           O  
+ ATOM   1856  CB  ASP B 235      47.790 -12.446  50.171  1.00 73.22           C  
+ </pre>
+</td></table>
+
+-->
+
+<!-- DATA FILES         
+     Any data files used (e.g. translation table file, substitution matrix 
+     etc.  This includes example data file formats if they are not obvious.
+     For a standard description of what data files are and how embossdata can
+     be used to inspect and retrieve them, use:
+     #include file="inc/localfiles.ihtml" 
+-->
+
+<a name="5.0"></a>
+<br><br><br><H2> 5.0   DATA FILES                </H2>
+ DOMAINALIGN does not use any data files but uses the stamp 
+ "pdb.directories" file which specifies the permissible prefix, extension and path of
+PDB files used by STAMP.  On the RFCGR system, this file is
+ /packages/stamp/defs/pdb.directories and should look like :
+
+<table><td bgcolor="#FFCCFF">
+<pre>
+ test_data/ - .dent
+ /data/pdb - -
+ /data/pdb _ .ent
+ /data/pdb _ .pdb
+ /data/pdb pdb .ent
+ /data/pdbscop _ _
+ /data/pdbscop _ .ent
+ /data/pdbscop _ .pdb
+ /data/pdbscop pdb .ent
+ ./ _ _
+ ./ _ .ent
+ ./ _ .ent.z
+ ./ _ .ent.gz
+ ./ _ .pdb
+ ./ _ .pdb.Z
+ ./ _ .pdb.gz
+ ./ pdb .ent
+ ./ pdb .ent.Z
+ ./ pdb .ent.gz
+ /data/CASS1/pdb/coords/ _ .pdb
+ /data/CASS1/pdb/coords/ _ .pdb.Z
+ /data/CASS1/pdb/coords/ _ .pdb.gz
+
+</pre>
+</table>
+
+
+
+<!-- USAGE
+     Example usage, as run from the command-line.
+     Many examples illustrating different behaviours is good.
+-->
+<a name="6.0"></a>
+<br><br><br><H2> 6.0   USAGE                     </H2>
+<H3> 6.1   COMMAND LINE ARGUMENTS </H3>
+ 
+<pre>
+   Standard (Mandatory) qualifiers (* if not always prompted):
+  [-dcfinfile]         infile     This option specifies the name of DCF file
+                                  (domain classification file) (input). A
+                                  'domain classification file' contains
+                                  classification and other data for domains
+                                  from SCOP or CATH, in DCF format
+                                  (EMBL-like). The files are generated by
+                                  using SCOPPARSE and CATHPARSE. Domain
+                                  sequence information can be added to the
+                                  file by using DOMAINSEQS.
+  [-pdbdir]            directory  This option specifies the location of domain
+                                  PDB files (input). A 'domain PDB file'
+                                  contains coordinate data for a single domain
+                                  from SCOP or CATH, in PDB format. The files
+                                  are generated by using DOMAINER.
+   -node               menu       This option specifies the node for
+                                  redundancy removal. Redundancy can be
+                                  removed at any specified node in the SCOP or
+                                  CATH hierarchies. For example by selecting
+                                  'Class' entries belonging to the same Class
+                                  will be non-redundant.
+   -mode               menu       This option specifies the alignment
+                                  algorithm to use.
+   -[no]keepsinglets   toggle     This option specifies whether to write
+                                  sequences of singlet families to file. If
+                                  you specify this option, the sequence for
+                                  each singlet family are written to file
+                                  (output).
+*  -singletsoutdir     outdir     This option specifies the location of DHF
+                                  files (domain hits files) for singlet
+                                  sequences (output). The singlets are written
+                                  out as a 'domain hits file' - which
+                                  contains database hits (sequences) with
+                                  domain classification information, in FASTA
+                                  format.
+  [-dafoutdir]         outdir     This option specifies the location of DAF
+                                  files (domain alignment files) (output). A
+                                  'domain alignment file' contains a sequence
+                                  alignment of domains belonging to the same
+                                  SCOP or CATH family. The files are in
+                                  clustal format and are annotated with domain
+                                  family classification information. The
+                                  files generated by using SCOPALIGN will
+                                  contain a structure-based sequence alignment
+                                  of domains of known structure only. Such
+                                  alignments can be extended with sequence
+                                  relatives (of unknown structure) by using
+                                  SEQALIGN.
+*  -superoutdir        outdir     This option specifies the location of
+                                  structural superimposition files (output). A
+                                  file in PDB format of the structural
+                                  superimposition is generated for each family
+                                  if the STAMP algorithm is used.
+   -logfile            outfile    This option specifies the name of log file
+                                  (output). The log file contains messages
+                                  about any errors arising while domainalign
+                                  ran.
+
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers: (none)
+   Associated qualifiers:
+
+   "-logfile" associated qualifiers
+   -odirectory         string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report deaths
+
+
+</pre>
+</td></tr></table>
+<P>
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-dcfinfile]<br>(Parameter 1)</td>
+<td>This option specifies the name of DCF file (domain classification file) (input). A 'domain classification file' contains classification and other data for domains from SCOP or CATH, in DCF format (EMBL-like). The files are generated by using SCOPPARSE and CATHPARSE. Domain sequence information can be added to the file by using DOMAINSEQS.</td>
+<td>Input file</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>[-pdbdir]<br>(Parameter 2)</td>
+<td>This option specifies the location of domain PDB files (input). A 'domain PDB file' contains coordinate data for a single domain from SCOP or CATH, in PDB format. The files are generated by using DOMAINER.</td>
+<td>Directory</td>
+<td>./</td>
+</tr>
+
+<tr>
+<td>-node</td>
+<td>This option specifies the node for redundancy removal. Redundancy can be removed at any specified node in the SCOP or CATH hierarchies. For example by selecting 'Class' entries belonging to the same Class will be non-redundant.</td>
+<td><table><tr><td>1</td> <td><i>(Class (SCOP))</i></td></tr><tr><td>2</td> <td><i>(Fold (SCOP))</i></td></tr><tr><td>3</td> <td><i>(Superfamily (SCOP))</i></td></tr><tr><td>4</td> <td><i>(Family (SCOP))</i></td></tr><tr><td>5</td> <td><i>(Class (CATH))</i></td></tr><tr><td>6</td> <td><i>(Architecture (CATH))</i></td></tr><tr><td>7</td> <td><i>(Topology (CATH))</i></td></tr><tr><td>8</td> <td><i>(Homologous Superfamily (CATH))</i></td></tr><tr><td>9</td> <td><i>(Family (CATH))</i></td></tr></table></td>
+<td>1</td>
+</tr>
+
+<tr>
+<td>-mode</td>
+<td>This option specifies the alignment algorithm to use.</td>
+<td><table><tr><td>1</td> <td><i>(STAMP)</i></td></tr><tr><td>2</td> <td><i>(TCOFFEE)</i></td></tr></table></td>
+<td>1</td>
+</tr>
+
+<tr>
+<td>-[no]keepsinglets</td>
+<td>This option specifies whether to write sequences of singlet families to file. If you specify this option, the sequence for each singlet family are written to file (output).</td>
+<td>Toggle value Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>-singletsoutdir</td>
+<td>This option specifies the location of DHF files (domain hits files) for singlet sequences (output). The singlets are written out as a 'domain hits file' - which contains database hits (sequences) with domain classification information, in FASTA format.</td>
+<td>Output directory</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr>
+<td>[-dafoutdir]<br>(Parameter 3)</td>
+<td>This option specifies the location of DAF files (domain alignment files) (output). A 'domain alignment file' contains a sequence alignment of domains belonging to the same SCOP or CATH family. The files are in clustal format and are annotated with domain family classification information. The files generated by using SCOPALIGN will contain a structure-based sequence alignment of domains of known structure only. Such alignments can be extended with sequence relatives (of unknown structure) by using SEQALIGN.</td>
+<td>Output directory</td>
+<td>./</td>
+</tr>
+
+<tr>
+<td>-superoutdir</td>
+<td>This option specifies the location of structural superimposition files (output). A file in PDB format of the structural superimposition is generated for each family if the STAMP algorithm is used.</td>
+<td>Output directory</td>
+<td>./</td>
+</tr>
+
+<tr>
+<td>-logfile</td>
+<td>This option specifies the name of log file (output). The log file contains messages about any errors arising while domainalign ran.</td>
+<td>Output file</td>
+<td>domainalign.log</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Additional (Optional) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+</table>
+
+
+<H3> 6.2 EXAMPLE SESSION </H3>
+An example of interactive use of DOMAINALIGN is shown below.
+
+
+
+<!--
+<table><td bgcolor="#FFCCFF">
+<pre>
+
+Unix % domainalign
+Generates structure-based sequence alignments for nodes in a DCF file
+(domain classification file).
+Name of DCF file (domain classification file) for input (DCF format): /test_data/all.scop2
+Location of domain PDB files (PDB format input) [./]: /test_data/
+Node at which to remove redundancy
+         1 : Class (SCOP)
+         2 : Fold (SCOP)
+         3 : Superfamily (SCOP)
+         4 : Family (SCOP)
+         5 : Class (CATH)
+         6 : Architecture (CATH)
+         7 : Topology (CATH)
+         8 : Homologous Superfamily (CATH)
+         9 : Family (CATH)
+Select number [1]: 4
+Alignment algorithm option
+         1 : STAMP
+         2 : TCOFFEE
+Select number [1]: 1
+Write sequences of singlet families to output file (FASTA-format) [Y]:
+Location of files for singlet sequences (FASTA output) [.]: /test_data/
+Location of domain alignment files (output) [./]: /test_data/domainalign
+Location of structure alignment files for output (PDB format) [./]: /test_data/
+Name of log file (output) [domainalign.logf]: /test_data/domainalign
+ 
+
+Processing node 55074
+ 
+stamp -l ./domainalign-1093353541.12819.dom -s -n 2 -slide 5 -prefix ./domainalign-1093353541.12819 -d ./domainalign-1093353541.12819.set
+ 
+ 
+STAMP Structural Alignment of Multiple Proteins
+ by Robert B. Russell & Geoffrey J. Barton
+ Please cite PROTEINS, v14, 309-323, 1992
+ 
+Results of scan will be written to file ./domainalign-1093353541.12819.scan
+Fits  = no. of fits performed, Sc = STAMP score, RMS = RMS deviation
+Align = alignment length, Nfit = residues fitted, Eq. = equivalent residues
+Secs  = no. equiv. secondary structures, %I = seq. identity, %S = sec. str. identity
+P(m)  = P value (p=1/10) calculated after Murzin (1993), JMB, 230, 689-694
+ 
+     Domain1         Domain2          Fits  Sc      RMS   Len1 Len2 Align Fit   Eq. Secs    %I    %S     P(m)
+Scan d1cs4a_         d1cs4a_            1   9.799   0.001  189  189  189  189  188    0 100.00 100.00 0.00e+00
+Scan d1cs4a_         d1fx2a_            1   6.522   1.343  189  235  225  135  133    0  20.30 100.00 0.00017
+See the file ./domainalign-1093353541.12819.scan
+ 
+sorttrans -f ./domainalign-1093353541.12819.scan -s Sc 2.5 > ./domainalign-1093353541.12819.sort
+ 
+ 
+stamp -l ./domainalign-1093353541.12819.sort -prefix ./domainalign-1093353541.12819 > ./domainalign-1093353541.12819.log
+ 
+ 
+transform -f ./domainalign-1093353541.12819.sort -g  -o test_data/55074.palign
+ 
+TRANSFORM R.B. Russell, 1995
+ Using PDB files
+ Files will not include heteroatoms
+ Files will not include DNA/RNA
+ Files will not include waters
+ All coordinates will be in file test_data/55074.palign
+ Domain   1, d1cs4a_ => to test_data/55074.palign (chain A)
+ Domain   2, d1fx2a__1 => to test_data/55074.palign (chain B)
+poststamp -f ./domainalign-1093353541.12819.1 -min 0.5
+ 
+POSTSTAMP, R.B. Russell 1995
+ New output will be in file ./domainalign-1093353541.12819.1
+ E1 =   3.800, E2 =   3.800
+ Minimum Pij set to 0.500
+ Reading domain descriptors/transformations from the file ./domainalign-1093353541.12819.1
+ Reading alignment...
+  Reading coordinates...
+ Domain   1 /data/pdbscop/d1cs4a_.ent d1cs4a_
+        all residues 189 CAs =>  189 CAs in total
+ Transforming coordinates...
+ Domain   2 /data/pdbscop/d1fx2a_.ent d1fx2a__1
+        all residues 235 CAs =>  235 CAs in total
+ Transforming coordinates...
+ ...done.
+ver2hor -f ./domainalign-1093353541.12819.1.post > ./domainalign-1093353541.12819.out
+ 
+ 
+Processing node 54894
+ 
+stamp -l ./domainalign-1093353541.12819.dom -s -n 2 -slide 5 -prefix ./domainalign-1093353541.12819 -d ./domainalign-1093353541.12819.set
+ 
+ 
+STAMP Structural Alignment of Multiple Proteins
+ by Robert B. Russell & Geoffrey J. Barton
+ Please cite PROTEINS, v14, 309-323, 1992
+ 
+Results of scan will be written to file ./domainalign-1093353541.12819.scan
+Fits  = no. of fits performed, Sc = STAMP score, RMS = RMS deviation
+Align = alignment length, Nfit = residues fitted, Eq. = equivalent residues
+Secs  = no. equiv. secondary structures, %I = seq. identity, %S = sec. str. identity
+P(m)  = P value (p=1/10) calculated after Murzin (1993), JMB, 230, 689-694
+ 
+     Domain1         Domain2          Fits  Sc      RMS   Len1 Len2 Align Fit   Eq. Secs    %I    %S     P(m)
+Scan d4at1b1         d4at1b1            1   9.799   0.001   93   93   93   93   92    0 100.00 100.00 1.00e-92
+Scan d4at1b1         d4at1d1            1   9.251   0.588   93   93   94   89   88    0 100.00 100.00 1.00e-88
+See the file ./domainalign-1093353541.12819.scan
+ 
+sorttrans -f ./domainalign-1093353541.12819.scan -s Sc 2.5 > ./domainalign-1093353541.12819.sort
+ 
+ 
+stamp -l ./domainalign-1093353541.12819.sort -prefix ./domainalign-1093353541.12819 > ./domainalign-1093353541.12819.log
+ 
+ 
+transform -f ./domainalign-1093353541.12819.sort -g  -o test_data/54894.palign
+ 
+TRANSFORM R.B. Russell, 1995
+ Using PDB files
+ Files will not include heteroatoms
+ Files will not include DNA/RNA
+ Files will not include waters
+ All coordinates will be in file test_data/54894.palign
+ Domain   1, d4at1b1 => to test_data/54894.palign (chain A)
+ Domain   2, d4at1d1_1 => to test_data/54894.palign (chain B)
+poststamp -f ./domainalign-1093353541.12819.1 -min 0.5
+ 
+POSTSTAMP, R.B. Russell 1995
+ New output will be in file ./domainalign-1093353541.12819.1
+ E1 =   3.800, E2 =   3.800
+ Minimum Pij set to 0.500
+ Reading domain descriptors/transformations from the file ./domainalign-1093353541.12819.1
+ Reading alignment...
+  Reading coordinates...
+ Domain   1 /data/pdbscop/d4at1b1.ent d4at1b1
+        all residues  93 CAs =>   93 CAs in total
+ Transforming coordinates...
+ Domain   2 /data/pdbscop/d4at1d1.ent d4at1d1_1
+        all residues  93 CAs =>   93 CAs in total
+ Transforming coordinates...
+ ...done.
+ver2hor -f ./domainalign-1093353541.12819.1.post > ./domainalign-1093353541.12819.out
+Unix % 
+</pre>
+</table>
+
+ 
+Two alignments each of two domains were performed (by using STAMP).  
+Structure-based sequence alignments (/test_data/55074.daf and /test_data/54894.daf) 
+and structure alignments (55074.ent and 54894.ent) were written. The file extensions were 
+specified by the user in the ACD file. The base name of these files (55074 and 54894) is the same 
+as the Sunid for the node (family in this case) taken from the domain classification file 
+/test_data/all.scop2. Any sequences of singlet families were written to /test_data/domainalign.  
+A log file called domainalign.logf was written to /test_data/domainalign.
+
+
+<br> 
+<br>The following command line would achieve the same result.
+<br>
+<table><td bgcolor="#FFCCFF">
+<pre> 
+ domainalign /test_data/all.scop2 /test_data/ /test_data/ /test_data/domainalign -keepsinglets Y 
+-singlets /test_data/domainalign -node 4 -mode 1
+</pre> 
+</table>
+
+-->
+
+<!-- KNOWN BUGS & WARNINGS
+     Bugs that have not yet been fixed, easily missued features, problems
+     and caveats etc. Potentially stupid things the program will let you do.
+-->
+<a name="7.0"></a>
+<br><br><br><H2> 7.0   KNOWN BUGS & WARNINGS     </H2>
+<b>  1. Use of stamp</b><br>
+DOMAINALIGN requires a modified version of stamp (see <a href="#8.0">Notes</a> below). 
+The modified stamp application must be installed on the system that is running DOMAINALIGN.
+
+<br><br>When running DOMAINALIGN at the RFCGR, to ensure the modified version of stamp is used, 
+type <b>'use stamp2'</b> (which runs the script /packages/menu/USE/stamp2) before DOMAINALIGN is run.   
+
+
+<br><br><b>  2. Strange stamp behaviour</b><br>
+ stamp will ignore (omit from the alignment and *not* replace with '-' or 
+ any other symbol) ANY residues or groups in a PDB file that
+<br>
+<br> (i) are not structured (i.e. do not appear in the ATOM records) or
+<br> (ii) lack a CA atom, regardless of whether it is a known amino acid or not.
+<br>
+<br>
+ This means that the position (column) in the alignment cannot reliably be 
+ used as the basis for an index into arrays representing the full length 
+ sequences.
+
+ stamp will however include in the alignment residues with a single atom
+ only, so long as it is the CA atom.
+
+
+<br><br><b> 3. Handling of singlet nodes</b>
+<br>
+No sequence alignment or structural superimposition files are generated for nodes that contain a single domain only.  Sequences for such domains can be saved to file (see <a href="#2.0">2.0     INPUTS & OUTPUTS</a>).
+
+<br><br><b> 4. Alignment numbering</b>
+<br>Residue number positions in alignment are not implemented (zero's are given).
+
+
+<!-- NOTES
+     Important general remarks, including:
+       Restrictions.
+       Interesting behaviour.
+       Useful things you can do with this program.
+       Future plans.
+       etc.
+-->
+<a name="8.0"></a>
+<br><br><br><H2> 8.0   NOTES                     </H2>
+<b> 1. Adaption of STAMP for domain codes</b>
+<br> DOMAINALIGN will only run with with a version of stamp which has been modified
+ so that PDB id codes of length greater than 4 characters are acceptable.
+ This involves a trivial change to the stamp module getdomain.c (around line
+ number 155), a 4 must be changed to a 7 as follows:
+
+<table><td bgcolor="#FFCCFF">
+<pre>
+ temp=getfile(domain[0].id,dirfile,4,OUTPUT); 
+ temp=getfile(domain[0].id,dirfile,7,OUTPUT); 
+</pre>
+</td></table>
+ 
+<br><b>  2. Adaption of STAMP for larger datasets</b>
+<br> STAMP fails to align a large dataset of all the available V set Ig 
+ domains. The ver2hor module generates the following error:
+
+<table><td bgcolor="#FFCCFF">
+<pre>
+ Transforming coordinates...
+  ...done.
+ ver2hor -f ./domainalign-1022069396.11280.76.post > ./domainalign-1022069396.11280.out
+ error: something wrong with STAMP file
+          STAMP length is 370, Alignment length is 422
+          STAMP nseq is 155, Alignment nseq is 155
+</pre>
+</td></table>
+
+<br>
+ This is fixed by the following change in  alignfit.h.
+
+<table><td bgcolor="#FFCCFF">
+<pre>
+#define MAXtlen 200 
+#define MAXtlen 2000
+</pre>
+</td></table>
+
+<br>
+ At the same time the following may be changed as a safety measure:
+<table><td bgcolor="#FFCCFF">
+<pre>
+ gstamp.c  : #define MAX_SEQ_LEN 10000    (was 2000)
+ pdbseq.c  : #define MAX_SEQ_LEN 10000    (was 3000)
+ defaults.h: #define MAX_SEQ_LEN 10000    (was 8000)
+ defaults.h: #define MAX_NSEQ 10000       (was 1000)
+ defaults.h: #define MAX_BLOC_SEQ 5000    (was 500)
+ dstamp.h  : #define MAX_N_SEQ 10000      (was 1000)
+ ver2hor.h : #define MAX_N_SEQ 10000      (was 1000)
+</pre>
+</td></table>
+
+<br> The modified code (for 2. and 3. above) is kept on the HGMP file system in /packages/stamp/src2
+<br><br> <i>WHEN RUNNING DOMAINALIGN AT THE HGMP IT IS ESSENTIAL THAT THE COMMAND 
+ <b>'use stamp2'</b> (which runs the script /packages/menu/USE/stamp2) IS GIVEN 
+ BEFORE DOMAINALIGN IS RUN. </i>  
+
+<br>This will ensure that the modified version of  stamp is used.
+ 
+<br><br><b>  3. pdb.directories file</b><br>
+stamp (and therefore DOMAINALIGN) uses a "pdb.directories" file: see <a href="#5.0">5.0     DATA FILES                </a>
+
+<br><br><b>  4. Choice of alignment algorithm</b><br>
+Future versions of DOMAINALIGN will implement a larger choice of alignment algorithms.
+
+<br><br><b>  5. Getting the best alignment</b><br>
+DOMAINALIGN will produce better alignments if the DCF file is reordered so that the representative structure of each node (e.g. family) is given first.  This is achieved by using DOMAINREP.
+
+<br><br><b>  6. Whitespace in alignment</b><br>
+STAMP can insert non-sensical whitespaces into its alignments, e.g. instead of a residue character where that residue was missing electron density in the PDB file.  DOMAINALIGN replaces each whitespace within a STAMP alignment with an "X".
+
+<br><H3> 8.1   GLOSSARY OF FILE TYPES    </H3>
+
+<a name="ref1"></a>
+<table BORDER CELLSPACING=5 CELLPADDING=5 BGCOLOR="#f5f5ff" >
+<tr>
+<td><b>FILE TYPE</b></td>
+<td><b>FORMAT</b></td>
+<td><b>DESCRIPTION</b></td>
+<td><b>CREATED BY <b></td>
+<td><b>SEE ALSO</b></td>
+</tr>
+<tr>
+<td><b> Domain classification file (for SCOP)</b></td>
+<td> DCF format (EMBL-like format for domain classification data). </td>
+<td> Classification and other data for domains from SCOP.  </td>
+<td> <a href="scopparse.html">SCOPPARSE</a> </td>
+<td> Domain sequence information can be added to the file by using DOMAINSEQS.  </td>
+</tr>
+<tr>
+<td><b> Domain classification file (for CATH)</b></td>
+<td> DCF format (EMBL-like format for domain classification data). </td>
+<td> Classification and other data for domains from CATH.  </td>
+<td> <a href="cathparse.html">CATHPARSE</a> </td>
+<td> Domain sequence information can be added to the file by using DOMAINSEQS.  </td>
+</tr>
+<tr>
+<td><b>Domain PDB file </b></td>
+<td> PDB format for domain coordinate data. </td>
+<td> Coordinate data for a single domain from SCOP or CATH. </td>
+<td> <a href="domainer.html">DOMAINER</a> </td>
+<td> N.A. </td>
+</tr>
+<tr>
+<td><b>Domain alignment file </b></td>
+<td> DAF format (clustal format with domain classification information).  </td>
+<td> Contains a sequence alignment of domains belonging to the same SCOP or CATH family.  The file is annotated with domain family classification information.</td>
+<td> <a href="domainalign.html">DOMAINALIGN</a> (structure-based sequence alignment of domains of known structure). </td>
+<td> DOMAINALIGN alignments can be extended with sequence relatives (of unknown structure) to the family in question by using SEQALIGN. </td>
+</tr>
+</table>
+
+
+
+
+None
+
+
+
+
+<!-- DESCRIPTION
+     A complete, non-technical, user-level description of the application.
+-->
+<a name="9.0"></a>
+<br><br><br><H2> 9.0   DESCRIPTION               </H2>
+
+ The generation of alignments for large datasets such as SCOP and CATH potentially requires a lot of time for preparation of datasets, writing of scripts, running individual jobs and so on, in addition to the compute time required for the alignments themselves.  DOMAINALIGN automates this process: it reads a domain classification file and generates alignments for each user-specified node in turn.
+
+
+
+
+<!-- ALGORITHM
+     A technical description of algorithmic aspects, describing exactly how
+     the key aspects of the application work.
+-->
+<a name="10.0"></a>
+<br><br><br><H2> 10.0  ALGORITHM                 </H2>
+ More information on stamp can be found at
+<a href ="http://www.compbio.dundee.ac.uk/manuals/stamp.4.2/">http://www.compbio.dundee.ac.uk/manuals/stamp.4.2</a>
+
+<br> More information on TCOFFEE can be found at <a href="http://www.ch.embnet.org/software/TCoffee.html">http://www.ch.embnet.org/software/TCoffee.html</a>
+
+
+
+<!-- RELATED APPLICATIONS
+     Other applications that either generate the input, use the output or 
+     are in some other way related to the application are described here. 
+     (Take this from "Sister applications" in the old documentation)
+-->
+
+
+<a name="11.0"></a>
+<br><br><br><H2> 11.0  RELATED APPLICATIONS      </H2>
+
+<h2><a name="See also">See also</a></h2>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th><th>Description</th></tr>
+<tr><td><a href="../construct/contactcount.html">contactcount</a></td><td>Counts specific versus non-specific contacts in a directory of cleaned protein chain contact files</td></tr>
+<tr><td><a href="contacts.html">contacts</a></td><td>Reads CCF files (clean coordinate files) and writes CON files (contact files) of intra-chain residue-residue contact data</td></tr>
+<tr><td><a href="domainrep.html">domainrep</a></td><td>Reorder DCF file (domain classification file) so that the representative structure of each user-specified node is given first</td></tr>
+<tr><td><a href="domainreso.html">domainreso</a></td><td>Removes low resolution domains from a DCF file (domain classification file)</td></tr>
+<tr><td><a href="interface.html">interface</a></td><td>Reads CCF files (clean coordinate files) and writes CON files (contact files) of inter-chain residue-residue contact data</td></tr>
+<tr><td><a href="libgen.html">libgen</a></td><td>Generates various types of discriminating elements for each alignment in a directory</td></tr>
+<tr><td><a href="../../apps/psiphi.html">psiphi</a></td><td>Calculates phi and psi torsion angles from cleaned EMBOSS-style protein co-ordinate file</td></tr>
+<tr><td><a href="rocon.html">rocon</a></td><td>Reads a DHF file (domain hits file) of hits (sequences of unknown structural classification) and a DHF file of validation sequences (known classification) and writes a 'hits file' for the hits, which are classified and rank-ordered on the basis of score</td></tr>
+<tr><td><a href="rocplot.html">rocplot</a></td><td>Provides interpretation and graphical display of the performance of discriminating elements (e.g. profiles for protein families). rocplot reads file(s) of hits from discriminator-database search(es), performs ROC analysis on the hits, and writes graphs illustrating the diagnostic performance of the discriminating elements</td></tr>
+<tr><td><a href="seqalign.html">seqalign</a></td><td>Reads a DAF file (domain alignment file) and a DHF file (domain hits file) and writes a DAF file extended with the hits</td></tr>
+<tr><td><a href="seqfraggle.html">seqfraggle</a></td><td>Removes fragments from DHF files (domain hits files) or other files of sequences</td></tr>
+<tr><td><a href="seqsearch.html">seqsearch</a></td><td>Generate database hits (sequences) for nodes in a DCF file (domain classification file) by using PSI-BLAST</td></tr>
+<tr><td><a href="seqsort.html">seqsort</a></td><td>Reads DHF files (domain hits files) of database hits (sequences) and removes hits of ambiguous classification</td></tr>
+<tr><td><a href="seqwords.html">seqwords</a></td><td>Generates DHF files (domain hits files) of database hits (sequences) for nodes in a DCF file (domain classification file) by keyword search of UniProt</td></tr>
+<tr><td><a href="siggen.html">siggen</a></td><td>Generates a sparse protein signature from an alignment and residue contact data</td></tr>
+<tr><td><a href="sigscan.html">sigscan</a></td><td>Generates a DHF file (domain hits file) of hits (sequences) from scanning a signature against a sequence database</td></tr>
+</table>
+
+
+
+
+<!-- DIAGNOSTIC ERROR MESSAGES
+     Description of error messages or log file, if one is written.
+-->
+<a name="12.0"></a>
+<br><br><br><H2> 12.0  DIAGNOSTIC ERROR MESSAGES </H2>
+The following message may appear in the log file.
+<br><br><i>Replaced ' ' in STAMP alignment with 'X'</i> (STAMP can insert non-sensical whitespaces into its alignments, e.g. instead of a residue character where that residue was missing electron density in the PDB file.  DOMAINALIGN replaces each whitespace within a STAMP alignment with an "X").
+
+
+<!-- AUTHORS -->
+<a name="13.0"><br><br><br><H2> 13.0  AUTHORS                   </H2></a>
+Ranjeeva Ranasinghe <a href="mailto:rranasin@rfcgr.mrc.ac.uk">(rranasin@rfcgr.mrc.ac.uk)</a>
+<br><br>
+Jon Ison <a href="mailto:jison@rfcgr.mrc.ac.uk">(jison@rfcgr.mrc.ac.uk)</a>
+<br>
+MRC Rosalind Franklin Centre for Genomics Research
+Wellcome Trust Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
+
+
+
+
+
+<!-- REFERENCES
+     Quote the paper where the application was first published, described, used etc. 
+-->
+<a name="14.0"></a>
+<br><br><br><H2> 14.0  REFERENCES                </H2>
+
+Please cite the authors and EMBOSS.
+<br><br>
+<i>Rice P, Longden I and Bleasby A (2000) "EMBOSS - The European
+Molecular Biology Open Software Suite"  Trends in Genetics,
+15:276-278.
+
+<p>
+See also <a href="http://emboss.sourceforge.net/">http://emboss.sourceforge.net/</a></i>
+
+
+
+<H3>14.1 Other useful references  </H3>
+<br>Russell, R. B. & Barton, G. J. (1992), Multiple Sequence Alignment from Tertiary Structure Comparison: Assignment of Global and Residue Confidence Levels,  PROTEINS: Struct. Funct. Genet., 14, 309-323.
+
+<br>C. Notredame, D. Higgins, J. Heringa.  T-Coffee: A novel method for multiple sequence alignments. Journal of Molecular Biology, 302, 205-217, (2000) </i>
+
+<br><br> More information on stamp can be found at <a href="http://www.compbio.dundee.ac.uk/manuals/stamp.4.2/">http://www.compbio.dundee.ac.uk/manuals/stamp.4.2/</a>
+<br> More information on TCOFFEE can be found at <a href="http://www.ch.embnet.org/software/TCoffee.html">http://www.ch.embnet.org/software/TCoffee.html</a>
+
+<br>
+
+</BODY>
+</HTML>

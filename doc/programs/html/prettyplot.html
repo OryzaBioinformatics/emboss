@@ -7,13 +7,9 @@
 </HEAD>
 <BODY BGCOLOR="#FFFFFF" text="#000000">
 
-
-
-
-
 <table align=center border=0 cellspacing=0 cellpadding=0>
 <tr><td valign=top>
-<A HREF="index.html" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
@@ -27,20 +23,9 @@ prettyplot
 
 
 
-
-
-
-
 <H2>
     Function
 </H2>
-
-
-
-<!--
-DON'T WRITE ANYTHING HERE.
-IT IS DONE FOR YOU.
--->
 Displays aligned sequences, with colouring and boxing
 
 
@@ -56,8 +41,6 @@ various ways.
 <H2>
     Usage
 </H2>
-
-
 <b>Here is a sample session with prettyplot</b>
 <p>
 
@@ -66,7 +49,7 @@ various ways.
 
 % <b>prettyplot -resbreak=10 -boxcol -consensus -plurality=3 </b>
 Displays aligned sequences, with colouring and boxing
-Input sequence set: <b>../../data/globins.msf</b>
+Input sequence set: <b>globins.msf</b>
 Graph type [x11]: <b>cps</b>
 
 Created prettyplot.ps
@@ -81,7 +64,7 @@ Created prettyplot.ps
 <p>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% <b>prettyplot ../../data/globins.msf -plurality=3 -docolour </b>
+% <b>prettyplot globins.msf -plurality=3 -docolour </b>
 Displays aligned sequences, with colouring and boxing
 Graph type [x11]: <b>cps</b>
 
@@ -96,14 +79,6 @@ Created prettyplot.ps
 <H2>
     Command line arguments
 </H2>
-
-
-
-<!--
-DON'T WRITE ANYTHING HERE.
-IT IS DONE FOR YOU.
--->
-
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
    Standard (Mandatory) qualifiers:
@@ -230,7 +205,7 @@ IT IS DONE FOR YOU.
 <tr>
 <td>-graph</td>
 <td>Graph type</td>
-<td>EMBOSS has a list of known devices, including postscript, ps, hpgl, hp7470, hp7580, meta, colourps, cps, xwindows, x11, tektronics, tekt, tek4107t, tek, none, null, text, data, xterm, png</td>
+<td>EMBOSS has a list of known devices, including postscript, ps, hpgl, hp7470, hp7580, meta, colourps, cps, xwindows, x11, tektronics, tekt, tek4107t, tek, none, null, text, data, xterm, png, xml</td>
 <td><i>EMBOSS_GRAPHICS</i> value, or x11</td>
 </tr>
 
@@ -451,7 +426,7 @@ The only four letters allowed are BPLW, in any order.</td>
 
 <a name="input.1"></a>
 <h3>Input files for usage example </h3>
-<p><h3>File: ../../data/globins.msf</h3>
+<p><h3>File: globins.msf</h3>
 <table width="90%"><tr><td bgcolor="#FFCCFF">
 <pre>
 !!AA_MULTIPLE_ALIGNMENT 1.0
@@ -543,8 +518,24 @@ For nucleotide sequence, EDNAFULL is used.
 <p>
 EMBOSS data files are distributed with the application and stored
 in the standard EMBOSS data directory, which is defined
-by EMBOSS environment variable EMBOSS_DATA.
+by the EMBOSS environment variable EMBOSS_DATA.
 
+<p>
+
+To see the available EMBOSS data files, run:
+<p>
+<pre>
+% embossdata -showall
+</pre>
+<p>
+To fetch one of the data files (for example 'Exxx.dat') into your
+current directory for you to inspect or modify, run:
+
+<pre>
+
+% embossdata -fetch -file Exxx.dat
+
+</pre>
 <p>
 
 Users can provide their own data files in their own directories.
@@ -562,6 +553,7 @@ The directories are searched in the following order:
    <li> ~/ (your home directory)
    <li> ~/.embossdata
 </ul>
+<p>
 
 
 <H2>
@@ -602,11 +594,6 @@ It exits with status 0 unless an error is reported.
 Portrait mode does not cover the whole page! This is a "feature" in
 plplot.
 
-<!--
-<H2>
-    See also
-</H2>
--->
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
@@ -630,17 +617,10 @@ plplot.
 <tr><td><a href="tranalign.html">tranalign</a></td><td>Align nucleic coding regions given the aligned proteins</td></tr>
 </table>
 
-<!--
-        Add any comments about other associated programs (to prepare
-        data files?) that seealso doesn't find.
-   -->
-
 
 <H2>
     Author(s)
 </H2>
-
-
 Ian Longden (il&nbsp;&copy;&nbsp;sanger.ac.uk)
 <br>
 Sanger Institute, Wellcome Trust Genome Campus, Hinxton,
@@ -667,30 +647,19 @@ marking. Rita Grandori suggested the -NOCOLLISION option.
     History
 </H2>
 
-
 Completed 5th May 1999.
 
-<!--
-<p>
-[an error occurred while processing this directive]
--->
 
 <H2>
     Target users
 </H2>
+This program is intended to be used by everyone and everything, from naive users to embedded scripts.
 
-
-This program is intended to be used by everyone and everything,
-from naive users to embedded scripts. 
 
 <H2>
     Comments
 </H2>
-
-
-<pre>
-
-</pre>
+None
 
 
 </BODY>

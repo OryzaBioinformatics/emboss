@@ -7,13 +7,9 @@
 </HEAD>
 <BODY BGCOLOR="#FFFFFF" text="#000000">
 
-
-
-
-
 <table align=center border=0 cellspacing=0 cellpadding=0>
 <tr><td valign=top>
-<A HREF="index.html" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
@@ -27,18 +23,9 @@ plotorf
 
 
 
-
-
 <H2>
     Function
 </H2>
-
-
-
-<!--
-DON'T WRITE ANYTHING HERE.
-IT IS DONE FOR YOU.
--->
 Plot potential open reading frames
 
 
@@ -110,7 +97,7 @@ An example of specifying your own START and STOP codons with a mitochondrial seq
 
 % <b>plotorf -start ATT,ATC,ATA,ATG,GTG -stop TAA,TAG,AGA,AGG </b>
 Plot potential open reading frames
-Input sequence: <b>../../data/mito.seq</b>
+Input sequence: <b>mito.seq</b>
 Graph type [x11]: <b>cps</b>
 
 Created plotorf.ps
@@ -120,48 +107,9 @@ Created plotorf.ps
 <a href="#input.2">Go to the input files for this example</a><br><a href="#output.2">Go to the output files for this example</a><p><p>
 
 
-<!--
-Here is a sample session with plotorf.
-
-<p>
-
-<pre>
-% plotorf
-Plot potential open reading frames
-Input sequence: embl:paamir
-Graph type [x11]: 
-</pre>
-
-<p>
-
-<a href="plotorf0.gif">Click here to see the graph</a>
-
-<p>
-
-An example of specifying your own START and STOP codons with a
-mitochondrial sequence would be:
-
-<p>
-
-<pre>
-% plotorf -start ATT,ATC,ATA,ATG,GTG -stop TAA,TAG,AGA,AGG 
-Plot potential open reading frames
-Input sequence: mito.seq
-Graph type [x11]: 
-</pre>
--->
-
 <H2>
     Command line arguments
 </H2>
-
-
-
-<!--
-DON'T WRITE ANYTHING HERE.
-IT IS DONE FOR YOU.
--->
-
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
    Standard (Mandatory) qualifiers:
@@ -237,7 +185,7 @@ IT IS DONE FOR YOU.
 <tr>
 <td>-graph</td>
 <td>Graph type</td>
-<td>EMBOSS has a list of known devices, including postscript, ps, hpgl, hp7470, hp7580, meta, colourps, cps, xwindows, x11, tektronics, tekt, tek4107t, tek, none, null, text, data, xterm, png</td>
+<td>EMBOSS has a list of known devices, including postscript, ps, hpgl, hp7470, hp7580, meta, colourps, cps, xwindows, x11, tektronics, tekt, tek4107t, tek, none, null, text, data, xterm, png, xml</td>
 <td><i>EMBOSS_GRAPHICS</i> value, or x11</td>
 </tr>
 
@@ -400,7 +348,7 @@ SQ   Sequence 2167 BP; 363 A; 712 C; 730 G; 362 T; 0 other;
 
 <a name="input.2"></a>
 <h3>Input files for usage example 2</h3>
-<p><h3>File: ../../data/mito.seq</h3>
+<p><h3>File: mito.seq</h3>
 <table width="90%"><tr><td bgcolor="#FFCCFF">
 <pre>
 &gt;gi|5819095|ref|NC_001321.1| Balaenoptera physalus mitochondrion, complete genome
@@ -517,9 +465,6 @@ AGACATCTGGTTCTTACTTCAGGACCATATTAACTTAAAATCGCCCACTCGTTCCCCTTAAATAAGACATCTCGATGG
     Output file format
 </H2>
 
-<!--
-Graphical output.
--->
 
 <a name="output.1"></a>
 <h3>Output files for usage example </h3>
@@ -583,11 +528,6 @@ It always exits with a status of 0.
 
 None.
 
-<!--
-<H2>
-    See also
-</H2>
--->
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
@@ -606,10 +546,6 @@ None.
 <tr><td><a href="wobble.html">wobble</a></td><td>Wobble base plot</td></tr>
 </table>
 
-<!--
-        Add any comments about other associated programs (to prepare
-        data files?) that seealso doesn't find.
-   -->
 
 
 <H2>
@@ -631,27 +567,17 @@ Wellcome Trust Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
 
 Written (1999) - Alan Bleasby
 
-<!--
-<p>
-[an error occurred while processing this directive]
--->
 
 <H2>
     Target users
 </H2>
+This program is intended to be used by everyone and everything, from naive users to embedded scripts.
 
-
-This program is intended to be used by everyone and everything,
-from naive users to embedded scripts. 
 
 <H2>
     Comments
 </H2>
-
-
-<pre>
-
-</pre>
+None
 
 
 </BODY>

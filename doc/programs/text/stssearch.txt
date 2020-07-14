@@ -1,38 +1,38 @@
 
                                  stssearch 
-                                      
-   
-   
+
+
+
 Function
 
    Searches a DNA database for matches with a set of STS primers
-   
+
 Description
 
    stssearch searches a DNA sequence database with a set of STS primers
    and reports expected matches.
-   
+
    stssearchs reads in one or more sequences to be searched. For each
    pair of primers, it looks for matches between a the primers and the
    query sequence in either orientation.
-   
+
    Any matches found will be reported. Only one primer need match for it
    to be reported..
-   
+
 Usage
 
    Here is a sample session with stssearch
-   
+
 
 % stssearch 
 Searches a DNA database for matches with a set of STS primers
 Input sequence(s): tembl:eclac*
-Primer file: ../../data/lac.primers
+Primer file: lac.primers
 Output file [eclac.stssearch]: 
-   
+
    Go to the input files for this example
    Go to the output files for this example
-   
+
 Command line arguments
 
    Standard (Mandatory) qualifiers:
@@ -77,7 +77,7 @@ Command line arguments
    -error               boolean    Report errors
    -fatal               boolean    Report fatal errors
    -die                 boolean    Report deaths
-   
+
 
    Standard (Mandatory) qualifiers Allowed values Default
    [-seqall]
@@ -90,35 +90,35 @@ Command line arguments
    (none)
    Advanced (Unprompted) qualifiers Allowed values Default
    (none)
-   
+
 Input file format
 
   Input files for usage example
-  
+
    'tembl:eclac*' is a sequence entry in the example nucleic acid
    database 'tembl'
-   
-  File: ../../data/lac.primers
-  
+
+  File: lac.primers
+
 PrimA ACCAGACACCCATCAACAG    TATTTATGCCAGCCAGCCAG
 PrimB CGAAAGAATAAGAGCAGGCAAG GTAAGAGAAATAGACAGGCGG
 PrimC CGTCAGTATCCCCGTTTACAG  TATCGCCAAAATCACCGCC
 PrimD AATACGCAAACCGCCTCTCC   TTATCCGCTCACAATTCCACAC
 PrimE AATACGCAAACCGCCTCTCC   CACAACCCGCTCACAATTCCA
-   
+
    The primers file consists of three columns separated by tabs or
    spaces.
-   
+
    The first column is the name of the primer pair.
    The second column is the sequence of the first primer.
    The third column is the sequence of the second primer.
-   
+
 Output file format
 
   Output files for usage example
-  
+
   File: eclac.stssearch
-  
+
 ECLAC: PrimA PrimerA matched at 532
 ECLAC: (rev) PrimA PrimerB matched at 689
 ECLAC: PrimB PrimerA matched at 5743
@@ -137,64 +137,66 @@ ECLACI: PrimE PrimerA matched at 1026
 ECLACY: PrimB PrimerA matched at 1439
 ECLACZ: PrimC PrimerA matched at 1668
 ECLACZ: (rev) PrimC PrimerB matched at 1783
-   
+
    The output file consists of one line per match. This consists of:
-   
+
      * The name of the sequence that the match is found in, followed by a
        ':'.
      * If the match is in the reverse sense, it has a '(rev)'.
      * The name of the primer pair.
      * 'PrimerA' or 'PrimerB'.
      * 'matched at' the start of the match position.
-       
+
 Data files
 
    None.
-   
+
 Notes
 
    None.
-   
+
 References
 
    None.
-   
+
 Warnings
 
    None.
-   
+
 Diagnostic Error Messages
 
    None.
-   
+
 Exit status
 
    None.
-   
+
 Known bugs
 
    None.
-   
+
 See also
 
    Program name                     Description
    eprimer3     Picks PCR primers and hybridization oligos
    primersearch Searches DNA sequences for matches with primer pairs
-   
+
    If you want something that only reports matches of both primer pairs
    and can find mismatches, use primersearch.
-   
+
 Author(s)
 
    Peter Rice (pmr © ebi.ac.uk)
    Informatics Division, European Bioinformatics Institute, Wellcome
    Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
-   
+
 History
 
 Target users
 
    This program is intended to be used by everyone and everything, from
    naive users to embedded scripts.
-   
+
 Comments
+
+   None

@@ -1,20 +1,19 @@
 
-                              EMBOSS: ednadist
-     _________________________________________________________________
-   
-                               Program ednadist
-                                       
+                                 ednahist 
+
+
+
 Function
 
    Conversion of PHYLIP's dnadist
-   
+
 Description
 
    EDNADIST -- Embossified program to compute distance matrix from
    nucleotide sequences
-   
+
    Phylip dnadist documentation.
-   
+
 Usage
 
    Here is a sample session with ednadist.
@@ -70,7 +69,7 @@ Command line arguments
 *  -freqt              float      Frequency for T/U
 
    Advanced qualifiers: (none)
-   
+
    Mandatory qualifiers Allowed values Default
    [-msf]
    (Parameter 1) File containing a sequence allignment Readable sequences
@@ -99,13 +98,13 @@ Command line arguments
    -freqt Frequency for T/U Number from 0.000 to 1.000 0.25
    Advanced qualifiers Allowed values Default
    (none)
-   
+
 Data files
 
 Notes
 
    Multiple sequences sets not implemented yet!.
-   
+
 References
 
 Warnings
@@ -124,11 +123,11 @@ Author(s)
    Washington. Written by Joseph Felsenstein. Permission is granted to
    copy this document provided that no fee is charged for it and that
    this copyright notice is not removed.
-   
+
    This application was modified for inclusion in EMBOSS by Ian Longden
    (il@sanger.ac.uk) Informatics Division, The Sanger Centre, Wellcome
    Trust Genome Campus, Hinxton, Cambridge, CB10 1SA, UK.
-   
+
 Priority
 
 Target users

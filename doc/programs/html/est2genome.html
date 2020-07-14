@@ -7,11 +7,9 @@
 </HEAD>
 <BODY BGCOLOR="#FFFFFF" text="#000000">
 
-
-
 <table align=center border=0 cellspacing=0 cellpadding=0>
 <tr><td valign=top>
-<A HREF="index.html" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
@@ -24,26 +22,14 @@ est2genome
 <p>
 
 
-
-
-
 <H2>
     Function
 </H2>
-
-
-
-<!--
-DON'T WRITE ANYTHING HERE.
-IT IS DONE FOR YOU.
--->
 Align EST and genomic DNA sequences
-
 
 <H2>
     Description
 </H2>
-
 
 <b>est2genome</b> is a software tool to aid the prediction of genes by
 sequence homology. The program will align a set of spliced nucleotide
@@ -69,20 +55,10 @@ indicates, based on the splice site information, the gene's predicted
 direction of transcription. Optionally the full sequence alignment is
 printed as well (see the example).
 
-
-
-
-
-<H2>
+H2>
     Algorithm
 </H2>
     
-<!--
- Algorithms
- Pseudocode/Vague description/Handwaving/web links to useful pages
--->   
-
-
 The program uses a linear-space divide-and-conquer strategy (Myers and 
 Miller, 1988; Huang, 1994) to limit memory use:
 
@@ -123,16 +99,9 @@ direction (i.e. GT/AG consensus).
 5. Then the best-scoring orientation is realigned assuming reverse 
 splicing (CT/AC consensus). The overall best alignment is reported.
 
-
-
-
-
-
 <H2>
     Usage
 </H2>
-
-
 <b>Here is a sample session with est2genome</b>
 <p>
 
@@ -150,20 +119,9 @@ Output file [hs989235.est2genome]: <b></b>
 <a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
 
 
-
-
-
 <H2>
     Command line arguments
 </H2>
-
-
-
-<!--
-DON'T WRITE ANYTHING HERE.
-IT IS DONE FOR YOU.
--->
-
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
    Standard (Mandatory) qualifiers:
@@ -272,9 +230,9 @@ IT IS DONE FOR YOU.
 
 
 </pre>
+</pre>
 </td></tr></table>
 <P>
-
 <table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
 <tr bgcolor="#FFFFCC">
 <th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
@@ -424,7 +382,6 @@ If you have a machine with plenty of memory you can raise this parameter (but do
 </table>
 
 
-
 <H2>
     Input file format
 </H2>
@@ -435,7 +392,6 @@ sequence (a single read or a finished cDNA). The second is a genomic
 finished sequence.
 
 <p>
-
 
 <a name="input.1"></a>
 <h3>Input files for usage example </h3>
@@ -651,13 +607,12 @@ FT                   /clone_lib="CV007K"
 </H2>
 
 
-
 <a name="output.1"></a>
 <h3>Output files for usage example </h3>
 <p><h3>File: hs989235.est2genome</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
-Note Best alignment is between forward est and forward genome, but splice  sites imply REVERSED GENE
+Note Best alignment is between forward est and forward genome, but splice sites imply REVERSED GENE
 Exon       163  91.8 25685 25874 HSNFG9           1   193 HS989235      yo13c02.s1 Soares adult brain N2b5HB55Y Homo sapiens cDNA clone IMAGE:177794 3', mRNA sequence.
 -Intron    -20   0.0 25875 26278 HSNFG9      
 Exon       207  98.1 26279 26492 HSNFG9         194   407 HS989235      yo13c02.s1 Soares adult brain N2b5HB55Y Homo sapiens cDNA clone IMAGE:177794 3', mRNA sequence.
@@ -681,7 +636,6 @@ Segment     19  95.2 27419 27439 HSNFG9         438   458 HS989235      yo13c02.
 Segment     24  80.6 27441 27476 HSNFG9         459   494 HS989235      yo13c02.s1 Soares adult brain N2b5HB55Y Homo sapiens cDNA clone IMAGE:177794 3', mRNA sequence.
 </pre>
 </td></tr></table><p>
-
 
 <p>
 
@@ -784,6 +738,8 @@ In this example there are two reverse introns, of lengths 404 and 898 bp.
 </H2>
 
 
+None
+
 <H2>
     Notes
 </H2>
@@ -881,26 +837,21 @@ length so the program runs only about 1.5 times slower.
     References
 </H2>
 
+<ol>
 
-1. Mott R. (1997) EST_GENOME: a program to align spliced DNA sequences to 
+<li>Mott R. (1997) EST_GENOME: a program to align spliced DNA sequences to 
 unspliced genomic DNA.  Comput. Applic. 13:477-478
 
-<p>
-
-2. Huang X (1994) On global sequence alignment. Comput. Applic. Biosci. 
+<li>Huang X (1994) On global sequence alignment. Comput. Applic. Biosci. 
 10:227-235.
 
-<p>
-
-3. Myers, EW and Miller, W (1988) Optimal alignments in linear space. 
+<li>Myers, EW and Miller, W (1988) Optimal alignments in linear space. 
 Comput. Applic. Biosci. 4:11-17
 
-<p>
-
-4. Smith, TE and Waterman, MS (1981) Identification of common molecular 
+<li>Smith, TE and Waterman, MS (1981) Identification of common molecular 
 subseqeunces. J. Mol. Biol. 147:195-197
 
-
+</ol>
 
 <H2>
     Warnings
@@ -926,22 +877,12 @@ It return 0 unless an error occurs.
 
 None.
 
-<!--
-<H2>
-    See also
-</H2>
--->
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
 <tr><td><a href="needle.html">needle</a></td><td>Needleman-Wunsch global alignment</td></tr>
 <tr><td><a href="stretcher.html">stretcher</a></td><td>Finds the best global alignment between two sequences</td></tr>
 </table>
-
-<!--
-        Add any comments about other associated programs (to prepare
-        data files?) that seealso doesn't find.
-   -->
 
 
 <H2>
@@ -966,18 +907,13 @@ ftp://ftp.sanger.ac.uk/pub/pmr/est_genome.4.tar.Z</a>
     History
 </H2>
 
-<!--
-<p>
-[an error occurred while processing this directive]
--->
+
 
 <H2>
     Target users
 </H2>
+This program is intended to be used by everyone and everything, from naive users to embedded scripts.
 
-
-This program is intended to be used by everyone and everything,
-from naive users to embedded scripts. 
 
 <H2>
     Comments
@@ -1006,6 +942,7 @@ GenProfile AG, Max-Delbrueck-Center, Erwin-Negelein-Haus
 Robert-Roessle-Str. 10, D-13125 Berlin, Germany
 bauer@genprofile.com, Tel:49-30-94892165, FAX:49-30-94892151
 </pre>
+
 
 
 

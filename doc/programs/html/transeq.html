@@ -7,15 +7,9 @@
 </HEAD>
 <BODY BGCOLOR="#FFFFFF" text="#000000">
 
-
-
-
-
-
-
 <table align=center border=0 cellspacing=0 cellpadding=0>
 <tr><td valign=top>
-<A HREF="index.html" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
@@ -29,20 +23,9 @@ transeq
 
 
 
-
-
-
-
 <H2>
     Function
 </H2>
-
-
-
-<!--
-DON'T WRITE ANYTHING HERE.
-IT IS DONE FOR YOU.
--->
 Translate nucleic acid sequences
 
 
@@ -50,28 +33,27 @@ Translate nucleic acid sequences
     Description
 </H2>
 
-
-	This translate nucleic acid sequences to the corresponding
-	peptide sequence.  
+<b>Transeq</b> ranslates nucleic acid sequences to the corresponding
+peptide sequence.
 <p>
-	It can translate in any of the 3 forward or three reverse sense frames,
-	or in all three forward or reverse frames, or in all six frames. 
+It can translate in any of the 3 forward or three reverse sense
+frames, or in all three forward or reverse frames, or in all six
+frames.
 <p>
-	It can translate specified regions corresponding to the coding
-	regions of your sequences. 
+It can translate specified regions corresponding to the coding
+regions of your sequences. 
 <p>
-	It can translate using the standard ('Universal') genetic code
-	and also with a selection of non-standard codes. 
+It can translate using the standard ('Universal') genetic code
+and also with a selection of non-standard codes. 
 <p>
-	Termination (STOP) codons are translated as the character '*'.
+Termination (STOP) codons are translated as the character '*'.
 <p>
-	The output peptide sequence is always in the standard one-letter
-	IUPAC code. 
+The output peptide sequence is always in the standard one-letter
+IUPAC code. 
 
 <H2>
     Usage
 </H2>
-
 <b>Here is a sample session with transeq</b>
 <p>
 To translate a sequence in the first frame (starting at the first base and proceeding to the end): 
@@ -185,7 +167,7 @@ To translate a mitochondrial sequence using the mammalian mitochondrion genetic 
 <p>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% <b>transeq ../../data/mito.seq mito.pep -table 2 </b>
+% <b>transeq mito.seq mito.pep -table 2 </b>
 Translate nucleic acid sequences
 
 </pre></td></tr></table><p>
@@ -193,18 +175,9 @@ Translate nucleic acid sequences
 <a href="#input.8">Go to the input files for this example</a><br><a href="#output.8">Go to the output files for this example</a><p><p>
 
 
-
 <H2>
     Command line arguments
 </H2>
-
-
-
-<!--
-DON'T WRITE ANYTHING HERE.
-IT IS DONE FOR YOU.
--->
-
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
    Standard (Mandatory) qualifiers:
@@ -300,7 +273,6 @@ IT IS DONE FOR YOU.
 </pre>
 </td></tr></table>
 <P>
-
 <table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
 <tr bgcolor="#FFFFCC">
 <th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
@@ -392,8 +364,6 @@ Note: you should not try to use this option with any other frame than the defaul
 <H2>
     Input file format
 </H2>
-
-
 <b>transeq</b> reads one or more nucleic acid sequence USAs.
 
 <p>
@@ -517,7 +487,7 @@ SQ   Sequence 2167 BP; 363 A; 712 C; 730 G; 362 T; 0 other;
 
 <a name="input.8"></a>
 <h3>Input files for usage example 8</h3>
-<p><h3>File: ../../data/mito.seq</h3>
+<p><h3>File: mito.seq</h3>
 <table width="90%"><tr><td bgcolor="#FFCCFF">
 <pre>
 &gt;gi|5819095|ref|NC_001321.1| Balaenoptera physalus mitochondrion, complete genome
@@ -1035,8 +1005,24 @@ so the output name would be 'XYZ_1'.
 <p>
 EMBOSS data files are distributed with the application and stored
 in the standard EMBOSS data directory, which is defined
-by EMBOSS environment variable EMBOSS_DATA.
+by the EMBOSS environment variable EMBOSS_DATA.
 
+<p>
+
+To see the available EMBOSS data files, run:
+<p>
+<pre>
+% embossdata -showall
+</pre>
+<p>
+To fetch one of the data files (for example 'Exxx.dat') into your
+current directory for you to inspect or modify, run:
+
+<pre>
+
+% embossdata -fetch -file Exxx.dat
+
+</pre>
 <p>
 
 Users can provide their own data files in their own directories.
@@ -1055,89 +1041,52 @@ The directories are searched in the following order:
    <li> ~/.embossdata
 </ul>
 <p>
-The Genetic Code data files are based on the NCBI genetic code tables. 
-Their names and descriptions are:
-
-<dl>
-<dt>EGC.0 </dt><dd>
-      Standard (Differs from GC.1 in that it only has initiation site 'AUG') 
-<dt>EGC.1 </dt><dd>
-      Standard 
-<dt>EGC.2 </dt><dd>
-      Vertebrate Mitochodrial
-<dt>EGC.3 </dt><dd>
-      Yeast Mitochondrial 
-<dt>EGC.4 </dt><dd>
-      Mold, Protozoan, Coelenterate Mitochondrial and Mycoplasma/Spiroplasma 
-<dt>EGC.5 </dt><dd>
-      Invertebrate Mitochondrial 
-<dt>EGC.6 </dt><dd>
-      Ciliate Macronuclear and Dasycladacean 
-<dt>EGC.9 </dt><dd>
-      Echinoderm Mitochondrial 
-<dt>EGC.10 </dt><dd>
-      Euplotid Nuclear 
-<dt>EGC.11 </dt><dd>
-      Bacterial 
-<dt>EGC.12 </dt><dd>
-      Alternative Yeast Nuclear 
-<dt>EGC.13 </dt><dd>
-      Ascidian Mitochondrial 
-<dt>EGC.14 </dt><dd>
-      Flatworm Mitochondrial 
-<dt>EGC.15</dt><dd> 
-      Blepharisma Macronuclear 
-<dt>EGC.16</dt><dd> 
-      Chlorophycean Mitochondrial
-<dt>EGC.21</dt><dd> 
-      Trematode Mitochondrial
-<dt>EGC.22</dt><dd> 
-      Scenedesmus obliquus
-<dt>EGC.23</dt><dd> 
-      Thraustochytrium Mitochondrial
-</dl>
-<p>
-The format of these files is very simple. 
 
 <p>
-It consists of several lines of optional comments, each starting with
-a '#' character.
+The EMBOSS REBASE restriction enzyme data files are stored iin
+directory 'data/REBASE/*' under the EMBOSS installation directory.
 
 <p>
-These are followed the line: 'Genetic Code [n]', where 'n' is the
-number of the genetic code file.
+
+These files must first be set up using the program <a
+href="rebaseextract.html">'<b>rebaseextract</b>'</a>.  Running
+'rebaseextract' may be the job of your system manager.
 
 <p>
-This is followed by the description of the code and then by four lines
-giving the IUPAC one-letter code of the translated amino acid, the
-start codons (indicdated by an 'M') and the three bases of the codon,
-lined up one on top of the other.
+      
+The data files are stored in the REBASE directory of the standard EMBOSS
+data directory. The names are:
 
+<ul>
+<li> embossre.enz     Cleavage information
+<li> embossre.ref     Reference/methylation information
+<li> embossre.sup     Supplier information
+</ul>
+	 
+The column information is described at the top of the data files
+	 
 <p>
-For example: 
+	 
+The reported enzyme from any one group of isoschizomers (the prototype)
+is specified in the REBASE database and the information is held in the
+data file 'embossre.equ'.  You may edit this file to set your own
+preferred prototype, if you wish. 
+	 
+<p>
+	 
+The format of the file "embossre.equ" is
+<br>
+Enzyme-name Prototype-name
+	 
+<p>
+	 
+i.e.  two columns of enzyme names separated by a space.  The first name
+of the pair of enzymes is the name that is not preferred and the second
+is the preferred (prototype) name. 
+	 
+	          
 
-<pre>
 
-------------------------------------------------------------------------------
-# Genetic Code Table
-#
-# Obtained from: http://www.ncbi.nlm.nih.gov/collab/FT/genetic_codes.html
-# and: http://www3.ncbi.nlm.nih.gov/htbin-post/Taxonomy/wprintgc?mode=c
-#
-# Differs from Genetic Code [1] only in that the initiation sites have been
-# changed to only 'AUG'
-
-Genetic Code [0]
-Standard
- 
-AAs  =   FFLLSSSSYY**CC*WLLLLPPPPHHQQRRRRIIIMTTTTNNKKSSRRVVVVAAAADDEEGGGG
-Starts = -----------------------------------M----------------------------
-Base1  = TTTTTTTTTTTTTTTTCCCCCCCCCCCCCCCCAAAAAAAAAAAAAAAAGGGGGGGGGGGGGGGG
-Base2  = TTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGG
-Base3  = TCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAG
-------------------------------------------------------------------------------
-
-</pre>
 
 
 <H2>
@@ -1265,11 +1214,6 @@ specifying a region to translate, then the regions will be offset by 1
 or 2 bases, which is not what you want. 
 
 
-<!--
-<H2>
-    See also
-</H2>
--->
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
@@ -1282,11 +1226,6 @@ or 2 bases, which is not what you want.
 <tr><td><a href="showseq.html">showseq</a></td><td>Display a sequence with features, translation etc</td></tr>
 <tr><td><a href="sixpack.html">sixpack</a></td><td>Display a DNA sequence with 6-frame translation and ORFs</td></tr>
 </table>
-
-<!--
-        Add any comments about other associated programs (to prepare
-        data files?) that seealso doesn't find.
-   -->
 
 
 <H2>
@@ -1305,7 +1244,6 @@ Wellcome Trust Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
     History
 </H2>
 
-
 Written 4 March 1999 - Gary Williams
 <br>
 
@@ -1316,27 +1254,20 @@ phase as forward frames.  - Gary Williams
 
 June 2002 - added '-alternative' qualifier - Gary Williams
 
-<!--
-<p>
-[an error occurred while processing this directive]
--->
 
 <H2>
     Target users
 </H2>
 
 
-This program is intended to be used by everyone and everything,
-from naive users to embedded scripts. 
+This program is intended to be used by everyone and everything, from naive users to embedded scripts.
+
+
 
 <H2>
     Comments
 </H2>
-
-
-<pre>
-
-</pre>
+None
 
 
 </BODY>

@@ -1,3 +1,5 @@
+<!--START OF HEADER - DON'T ALTER -->
+
 <HTML>
 <HEAD>
   <TITLE>
@@ -7,9 +9,10 @@
 <BODY BGCOLOR="#FFFFFF" text="#000000">
 
 
+
 <table align=center border=0 cellspacing=0 cellpadding=0>
 <tr><td valign=top>
-<A HREF="index.html" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
@@ -23,13 +26,17 @@ hetparse
 
 
 
-
 <!--END OF HEADER-->
+
+
+
+
+
 
 <H2>
     Function
 </H2>
-Converts raw dictionary of heterogen groups to a file in embl-like format
+Converts raw dictionary of heterogen groups to a file in EMBL-like format
 
 <!--
 DON'T WRITE ANYTHING HERE.
@@ -49,26 +56,60 @@ IT IS DONE FOR YOU.
         Long description.
         Why it is useful.
         When it should/shouldn't be used.
-        Algorithms
   -->
 
-
-
-
-This is part of Jon Ison's protein structure analysis package.
-
-<p>
-
-This package is still being developed.
-
-<p>
-
-Please ignore this program until further details can be documented.
+This program is part of a suite of EMBOSS applications that directly or
+indirectly make use of the protein structure databases pdb and scop.
+This program is part of an experimental analysis pipeline described in an
+accompanying document.  We provide the software in the hope that it will
+be useful.  The applications were designed for specific research purposes
+and may not be useful or reliable in contexts other than the described
+pipeline.  The development of the suite was coordinated by Jon Ison to
+whom enquiries and bug reports should be sent (email jison@hgmp.mrc.ac.uk).
 
 <p>
 
-All further queries should go to Jon Ison.  (<A
-HREF="mailto:jison@hgmp.mrc.ac.uk">Jon Ison</A>)
+Some research applications require knowledge of the types of heterogen
+(non-protein groups) that are represented in pdb files.  A dictionary
+of heterogen groups containing various data for all of the heterogens
+found in pdb is available, but is not in a format that is consistent
+with flat file formats used for protein structural data in emboss.
+hetparse parses the dictionary in its raw format and converts it to an
+embl-like format.   
+
+<p>
+
+hetparse parse the dictionary of heterogen groups available at
+http://pdb.rutgers.edu/het_dictionary.txt and writes a file containing the
+group names, synonyms and 3-letter codes in embl-like format.
+Optionally, hetparse will search a directory of pdb files and will count
+the number of files that each heterogen appears in.  The path and extension
+for the pdb files and the names of the input and output files are user-
+specified.  
+
+
+
+
+
+
+
+
+
+
+
+
+
+<H2>
+    Algorithm
+</H2>
+
+<!-- 
+        Algorithms
+	  Pseudocode/Vague description/Handwaving/web links to useful pages
+  -->
+
+Contact the author
+
 
 
 
@@ -89,24 +130,22 @@ HREF="mailto:jison@hgmp.mrc.ac.uk">Jon Ison</A>)
         Many examples illustrating different behaviours is good.
  -->
 
+<b>Here is a sample session with hetparse</b>
+<p>
 
-Here is a sample session with hetparse:
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-<pre>
+% <b>hetparse </b>
+Converts raw dictionary of heterogen groups to a file in EMBL-like format.
+Name of input file (raw dictionary of heterogen groups): <b>het.txt</b>
+Search a directory of PDB files with keywords? [N]: <b>Y</b>
+Directory to search with keywords [./]: <b></b>
+Name of EMBL-like format dictionary of heterogen groups. [Ehet.dat]: <b>Ehet.dat</b>
 
-% hetparse
-
-</pre>
-
-
-
-
-
-
-
-
-
-
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
 
 
 
@@ -117,18 +156,104 @@ Here is a sample session with hetparse:
 
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
+   Standard (Mandatory) qualifiers (* if not always prompted):
+  [-infile]            infile     This option specifies the name of input file
+                                  (raw dictionary of heterogen groups) to
+                                  parse, which should be of the format
+                                  specified at
+                                  http://pdb.rutgers.edu/het_dictionary.txt
+   -dogrep             toggle     This option specifies whether to search a
+                                  directory of files (typically PDB files)
+                                  with keywords. If set, HETPARSE will search
+                                  the directory and will count the number of
+                                  files that each heterogen appears in.
+*  -dirlistpath        dirlist    This option specifies the directory to
+                                  search with keywords.
+  [-outfile]           outfile    This option specifies the name of EMBL-like
+                                  format dictionary of heterogen groups.
 
-   EMBOSS An error in ajacd.c at line 1531:
-acdfile '/packages/emboss_dev/gwilliam/emboss/emboss/emboss/acd/hetparse.acd' not opened
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers: (none)
+   Associated qualifiers:
+
+   "-outfile" associated qualifiers
+   -odirectory2        string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report deaths
 
 
 </pre>
 </td></tr></table>
 <P>
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
 
-   EMBOSS An error in ajacd.c at line 1531:
-acdfile '/packages/emboss_dev/gwilliam/emboss/emboss/emboss/acd/hetparse.acd' not opened
+<tr>
+<td>[-infile]<br>(Parameter 1)</td>
+<td>This option specifies the name of input file (raw dictionary of heterogen groups) to parse, which should be of the format specified at http://pdb.rutgers.edu/het_dictionary.txt</td>
+<td>Input file</td>
+<td><b>Required</b></td>
+</tr>
 
+<tr>
+<td>-dogrep</td>
+<td>This option specifies whether to search a directory of files (typically PDB files) with keywords. If set, HETPARSE will search the directory and will count the number of files that each heterogen appears in.</td>
+<td>Toggle value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-dirlistpath</td>
+<td>This option specifies the directory to search with keywords.</td>
+<td>Directory with files</td>
+<td>./</td>
+</tr>
+
+<tr>
+<td>[-outfile]<br>(Parameter 2)</td>
+<td>This option specifies the name of EMBL-like format dictionary of heterogen groups.</td>
+<td>Output file</td>
+<td>Ehet.dat</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Additional (Optional) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+</table>
 
 
 <!--
@@ -154,16 +279,179 @@ IT IS DONE FOR YOU.
         happens in unusual cases - null input, etc. 
    -->
 
+<b>hetparse</b> reads any normal sequence USAs.
+
+<p>
+
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+<p><h3>File: het.txt</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+RESIDUE   061     58
+CONECT      N1     2 N2   C5  
+CONECT      N2     2 N1   N3  
+CONECT      N3     2 N2   N4  
+CONECT      N4     3 N3   C5   HN4 
+CONECT      C5     3 N1   N4   C6  
+CONECT      C6     3 C5   C7   C11 
+CONECT      C7     3 C6   C8   C12 
+CONECT      C8     3 C7   C9   H8  
+CONECT      C9     3 C8   C10  H9  
+CONECT      C10    3 C9   C11  H10 
+CONECT      C11    3 C6   C10  H11 
+CONECT      C12    3 C7   C13  C17 
+CONECT      C13    3 C12  C14  H13 
+CONECT      C14    3 C13  C15  H14 
+CONECT      C15    3 C14  C16  C18 
+CONECT      C16    3 C15  C17  H16 
+CONECT      C17    3 C12  C16  H17 
+CONECT      C18    4 C15  N19 1H18 2H18 
+CONECT      N19    3 C18  C20  C33 
+CONECT      C20    3 N19  C21  N25 
+CONECT      C21    4 C20  C22 1H21 2H21 
+CONECT      C22    4 C21  C23 1H22 2H22 
+CONECT      C23    4 C22  C24 1H23 2H23 
+CONECT      C24    4 C23 1H24 2H24 3H24 
+CONECT      N25    2 C20  C26 
+CONECT      C26    3 N25  C27  C32 
+CONECT      C27    3 C26  C28  H27 
+CONECT      C28    3 C27  C29  H28 
+CONECT      C29    3 C28  O30  C31 
+CONECT      O30    2 C29  HOU 
+CONECT      C31    3 C29  C32  H31 
+CONECT      C32    3 C26  C31  C33 
+CONECT      C33    3 N19  C32  O34 
+CONECT      O34    1 C33 
+CONECT      HN4    1 N4  
+CONECT      H8     1 C8  
+CONECT      H9     1 C9  
+CONECT      H10    1 C10 
+CONECT      H11    1 C11 
+CONECT      H13    1 C13 
+CONECT      H14    1 C14 
+CONECT      H16    1 C16 
+CONECT      H17    1 C17 
+CONECT     1H18    1 C18 
+CONECT     2H18    1 C18 
+CONECT     1H21    1 C21 
+CONECT     2H21    1 C21 
+CONECT     1H22    1 C22 
+CONECT     2H22    1 C22 
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+CONECT     2H6     1 C6  
+CONECT     1H8     1 C8  
+CONECT     2H8     1 C8  
+CONECT     1H9     1 C9  
+CONECT     2H9     1 C9  
+END
+HET    104             28
+HETSYN     104 TRIENTINE
+HETNAM     104 N,N'-BIS(2-AMINOETHYL)-1,2-ETHANEDIAMINE
+FORMUL      104    C6 H18 N4
+
+RESIDUE   105     32
+CONECT      B      3 O1   O2   C3  
+CONECT      O1     2 B    H1  
+CONECT      O2     2 B    H2  
+CONECT      C3     4 B    N4  1H3  2H3  
+CONECT      N4     3 C3   C5   H4  
+CONECT      C5     3 N4   O6   C7  
+CONECT      O6     1 C5  
+CONECT      C7     3 C5   C8   C12 
+CONECT      N11    2 O10  C12 
+CONECT      O10    2 N11  C8  
+CONECT      C8     3 C7   O10  C9  
+CONECT      C12    3 C7   N11  C13 
+CONECT      C9     4 C8  1H9  2H9  3H9  
+CONECT      C13    3 C12  C14  C18 
+CONECT      C14    3 C13  C15 CL1  
+CONECT     CL1     1 C14 
+CONECT      C15    3 C14  C16  H15 
+CONECT      C16    3 C15  C17  H16 
+CONECT      C17    3 C16  C18  H17 
+CONECT      C18    3 C13  C17  H18 
+CONECT      H1     1 O1  
+CONECT      H2     1 O2  
+CONECT     1H3     1 C3  
+CONECT     2H3     1 C3  
+CONECT      H4     1 N4  
+CONECT     1H9     1 C9  
+CONECT     2H9     1 C9  
+CONECT     3H9     1 C9  
+CONECT      H15    1 C15 
+CONECT      H16    1 C16 
+CONECT      H17    1 C17 
+CONECT      H18    1 C18 
+END
+HET    105             32
+HETSYN     105 CLOXACILLIN DERIVATIVE
+HETNAM     105 N-[5-METHYL-3-O-TOLYL-ISOXAZOLE-4-CARBOXYLIC ACID
+HETNAM   2 105 AMIDE] BORONIC ACID
+FORMUL      105    C12 H12 N2 O4 B1 CL1
+
+</pre>
+</td></tr></table><p>
 
 
 
+<p>
 
+Excerpt from heterogen dictionary file (input)
 
+<p>
 
-
-
-
-
+<pre>
+RESIDUE   061     58
+CONECT      N1     2 N2   C5
+CONECT      N2     2 N1   N3
+CONECT      N3     2 N2   N4
+CONECT      N4     3 N3   C5   HN4
+CONECT      C5     3 N1   N4   C6
+CONECT      C6     3 C5   C7   C11
+< data ommitted for clarity >
+END
+HET    061             58
+HETSYN     061 L-159,061
+HETNAM     061 2-BUTYL-6-HYDROXY-3-[2'-(1H-TETRAZOL-5-YL)-BIPHENYL-4-
+HETNAM   2 061 YLMETHYL]-3H-QUINAZOLIN-4-ONE
+FORMUL      061    C26 H24 N6 O2
+**
+RESIDUE   072     90
+CONECT      S1B    2 C1B  C2A
+CONECT      C1A    3 C1B  O1A  N3A
+CONECT      C1B    4 S1B  C1A  C1C  H1B
+CONECT      O1A    1 C1A
+CONECT      C1C    4 C1B  C1D 1H1C 2H1C
+< data ommitted for clarity >
+END
+HET    072             90
+HETSYN     072 THIAZOLIDINONE; GW0072
+HETNAM     072 (+/-)(2S,5S)-3-(4-(4-CARBOXYPHENYL)BUTYL)-2-HEPTYL-4-
+HETNAM   2 072 OXO-5-THIAZOLIDINE
+FORMUL      072    C37 H46 N2 O4 S1
+**
+RESIDUE   074     58
+CONECT      C1     4 C2  1H1  2H1  3H1
+CONECT      C2     4 C1   C3  1H2  2H2
+CONECT      C3     4 C2   N1  1H3  2H3
+CONECT      N1     3 C3   C4  1HN1
+CONECT      C4     3 N1   O1   C5
+CONECT      O1     1 C4
+< data ommitted for clarity >
+END
+HET    074             58
+HETSYN     074 CA-074; [N-(L-3-TRANS-PROPYLCARBAMOYL-OXIRANE-2-
+HETSYN   2 074 CARBONYL)-L-ISOLEUCYL-L-PROLINE]
+HETNAM     074 [PROPYLAMINO-3-HYDROXY-BUTAN-1,4-DIONYL]-ISOLEUCYL-
+HETNAM   2 074 PROLINE
+FORMUL      074    C18 H31 N3 O6
+< data ommitted for clarity > 
+</pre>
 
 
 <H2>
@@ -178,43 +466,108 @@ IT IS DONE FOR YOU.
 
         If you wish to include the standard description of the avalable
 	report formats, use:
-<p>
-
-The output is a standard EMBOSS report file. 
-
-<p>
-
-The results can be output in one of several styles by using the
-command-line qualifier <b>-rformat xxx</b>, where 'xxx' is replaced by
-the name of the required format.  The available format names are: embl,
-genbank, gff, pir, swiss, trace, listfile, dbmotif, diffseq, excel,
-feattable, motif, regions, seqtable, simple, srs, table, tagseq
-
-<p>
-
-See:
-<A href="http://www.uk.embnet.org/Software/EMBOSS/Themes/ReportFormats.html">
-http://www.uk.embnet.org/Software/EMBOSS/Themes/ReportFormats.html</A>
-for further information on report formats.
-
-<p>
 
    -->
 
 
+<p>
 
 
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: Ehet.dat</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+ID   105
+DE   N-[5-METHYL-3-O-TOLYL-ISOXAZOLE-4-CARBOXYLIC ACIDAMIDE] BORONIC ACID
+SY   CLOXACILLIN DERIVATIVE
+NN   0
+//
+ID   104
+DE   N,N'-BIS(2-AMINOETHYL)-1,2-ETHANEDIAMINE
+SY   TRIENTINE
+NN   0
+//
+ID   103
+DE   2',5'-DIDEOXY-ADENOSINE 3'-MONOPHOSPHATE
+SY   .
+NN   0
+//
+ID   102
+DE   GAMMA-DEOXY-GAMMA-SULFO-GUANOSINE-5'-TRIPHOSPHATE
+SY   .
+NN   0
+//
+ID   101
+DE   2'-DEOXY-ADENOSINE 3'-MONOPHOSPHATE
+SY   .
+NN   0
+//
+ID   100
+DE   1-(5-CHLOROINDOL-3-YL)-3-HYDROXY-3-(2H-TETRAZOL-5-YL)-PROPENONE
+SY   .
+NN   0
+//
+ID   074
+DE   [PROPYLAMINO-3-HYDROXY-BUTAN-1,4-DIONYL]-ISOLEUCYL-PROLINE
+SY   CA-074;
+SY   [N-(L-3-TRANS-PROPYLCARBAMOYL-OXIRANE-2-CARBONYL)-L-ISOLEUCYL-L-PROLINE]
+NN   0
+//
+ID   072
+DE   
+DE   (+/-)(2S,5S)-3-(4-(4-CARBOXYPHENYL)BUTYL)-2-HEPTYL-4-OXO-5-THIAZOLIDINE
+SY   THIAZOLIDINONE; GW0072
+NN   0
+//
+ID   061
+DE   
+DE   2-BUTYL-6-HYDROXY-3-[2'-(1H-TETRAZOL-5-YL)-BIPHENYL-4-YLMETHYL]-3H-QUINAZOLIN-4-ONE
+SY   L-159,061
+NN   0
+//
+</pre>
+</td></tr></table><p>
 
 
+<p>
 
+The records used in the output file (below) are as follows:
 
+<p>
 
+<pre>
+(1) ID - 3-character abbreviation of heterogen
+(2) DE - full description
+(3) SY - synonym
+(4) NN - no. of files which this heterogen appears in
+</pre>
 
+<p>
 
+Example of hetparse output file
 
+<p>
 
-
-
+<pre>
+ID  061
+DE  2-BUTYL-6-HYDROXY-3-[2'-(1H-TETRAZOL-5-YL)-BIPHENYL-4-YLMETHYL]-3H-QUINAZ
+DE  OLIN-4-ONE
+SY  L-159,061
+NN  2
+//
+ID  072
+DE  (+/-)(2S,5S)-3-(4-(4-CARBOXYPHENYL)BUTYL)-2-HEPTYL-4-OXO-5-THIAZOLIDINE
+SY  THIAZOLIDINONE; GW0072
+NN  10
+//
+ID  074
+DE  [PROPYLAMINO-3-HYDROXY-BUTAN-1,4-DIONYL]-ISOLEUCYL-PROLINE
+SY  CA-074; [N-(L-3-TRANS-PROPYLCARBAMOYL-OXIRANE-2-CARBONYL)-L-ISOLEUCYL-L-P
+SY  ROLINE]
+NN  1
+//      
+</pre>
 
 
 
@@ -230,49 +583,10 @@ for further information on report formats.
 	If you wish to include the standard description of what data
 	files are and how to use embossdata to inspect and retrieve
 	them, use:
-<p>
-EMBOSS data files are distributed with the application and stored
-in the standard EMBOSS data directory, which is defined
-by the EMBOSS environment variable EMBOSS_DATA.
-
-<p>
-
-To see the available EMBOSS data files, run:
-<p>
-<pre>
-% embossdata -showall
-</pre>
-<p>
-To fetch one of the data files (for example 'Exxx.dat') into your
-current directory for you to inspect or modify, run:
-
-<pre>
-
-% embossdata -fetch -file Exxx.dat
-
-</pre>
-<p>
-
-Users can provide their own data files in their own directories.
-Project specific files can be put in the current directory, or for
-tidier directory listings in a subdirectory called
-".embossdata". Files for all EMBOSS runs can be put in the user's home
-directory, or again in a subdirectory called ".embossdata".
-
-<p>
-The directories are searched in the following order:
-
-<ul>
-   <li> . (your current directory)
-   <li> .embossdata (under your current directory)
-   <li> ~/ (your home directory)
-   <li> ~/.embossdata
-</ul>
-<p>
 
    -->
 
-
+None.
 
 
 
@@ -397,22 +711,25 @@ None.
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
-<tr><td><a href="aaindexextract.html">aaindexextract</a></td><td>Extract data from AAINDEX</td></tr>
-<tr><td><a href="cutgextract.html">cutgextract</a></td><td>Extract data from CUTG</td></tr>
-<tr><td><a href="domainer.html">domainer</a></td><td>Reads protein coordinate files and writes domain coordinate files</td></tr>
-<tr><td><a href="funky.html">funky</a></td><td>Reads clean coordinate files and writes file of protein-heterogen contact data</td></tr>
-<tr><td><a href="nrscope.html">nrscope</a></td><td>Converts redundant EMBL-format SCOP file to non-redundant one</td></tr>
-<tr><td><a href="pdbparse.html">pdbparse</a></td><td>Parses pdb files and writes cleaned-up protein coordinate files</td></tr>
-<tr><td><a href="pdbtosp.html">pdbtosp</a></td><td>Convert raw swissprot:pdb equivalence file to embl-like format</td></tr>
-<tr><td><a href="printsextract.html">printsextract</a></td><td>Extract data from PRINTS</td></tr>
-<tr><td><a href="prosextract.html">prosextract</a></td><td>Builds the PROSITE motif database for patmatmotifs to search</td></tr>
-<tr><td><a href="rebaseextract.html">rebaseextract</a></td><td>Extract data from REBASE</td></tr>
-<tr><td><a href="scope.html">scope</a></td><td>Convert raw scop classification file to embl-like format</td></tr>
-<tr><td><a href="scopnr.html">scopnr</a></td><td>Removes redundant domains from a scop classification file</td></tr>
-<tr><td><a href="scopparse.html">scopparse</a></td><td>Converts raw scop classification files to a file in embl-like format</td></tr>
-<tr><td><a href="scopseqs.html">scopseqs</a></td><td>Adds pdb and swissprot sequence records to a scop classification file</td></tr>
-<tr><td><a href="seqnr.html">seqnr</a></td><td>Reads a scop families file and a scop ambiguities file and writes (i) a non-redundant scop families file and (ii) a scop validation file</td></tr>
-<tr><td><a href="tfextract.html">tfextract</a></td><td>Extract data from TRANSFAC</td></tr>
+<tr><td><a href="../../apps/aaindexextract.html">aaindexextract</a></td><td>Extract data from AAINDEX</td></tr>
+<tr><td><a href="allversusall.html">allversusall</a></td><td>Does an all-versus-all global alignment for each set of sequences in an input directory and writes files of sequence similarity values</td></tr>
+<tr><td><a href="cathparse.html">cathparse</a></td><td>Reads raw CATH classification files and writes DCF file (domain classification file)</td></tr>
+<tr><td><a href="../../apps/cutgextract.html">cutgextract</a></td><td>Extract data from CUTG</td></tr>
+<tr><td><a href="domainer.html">domainer</a></td><td>Reads CCF files (clean coordinate files) for proteins and writes CCF files for domains, taken from a DCF file (domain classification file)</td></tr>
+<tr><td><a href="domainnr.html">domainnr</a></td><td>Removes redundant domains from a DCF file (domain classification file). The file must contain domain sequence information, which can be added by using DOMAINSEQS</td></tr>
+<tr><td><a href="domainseqs.html">domainseqs</a></td><td>Adds sequence records to a DCF file (domain classification file)</td></tr>
+<tr><td><a href="domainsse.html">domainsse</a></td><td>Adds secondary structure records to a DCF file (domain classification file)</td></tr>
+<tr><td><a href="pdbparse.html">pdbparse</a></td><td>Parses PDB files and writes CCF files (clean coordinate files) for proteins</td></tr>
+<tr><td><a href="pdbplus.html">pdbplus</a></td><td>Add residue solvent accessibility and secondary structure data to a CCF file (clean coordinate file) for a protein or domain</td></tr>
+<tr><td><a href="pdbtosp.html">pdbtosp</a></td><td>Convert raw swissprot:PDB equivalence file to EMBL-like format</td></tr>
+<tr><td><a href="../../apps/printsextract.html">printsextract</a></td><td>Extract data from PRINTS</td></tr>
+<tr><td><a href="../../apps/prosextract.html">prosextract</a></td><td>Builds the PROSITE motif database for patmatmotifs to search</td></tr>
+<tr><td><a href="../../apps/rebaseextract.html">rebaseextract</a></td><td>Extract data from REBASE</td></tr>
+<tr><td><a href="scopparse.html">scopparse</a></td><td>Reads raw SCOP classification files and writes a DCF file (domain classification file)</td></tr>
+<tr><td><a href="seqnr.html">seqnr</a></td><td>Removes redundancy from DHF files (domain hits files) or other files of sequences</td></tr>
+<tr><td><a href="sites.html">sites</a></td><td>Reads CCF files (clean coordinate files) and writes CON files (contact files) of residue-ligand contact data for domains in a DCF file (domain classification file)</td></tr>
+<tr><td><a href="ssematch.html">ssematch</a></td><td>Searches a DCF file (domain classification file) for secondary structure matches</td></tr>
+<tr><td><a href="../../apps/tfextract.html">tfextract</a></td><td>Extract data from TRANSFAC</td></tr>
 </table>
 
 <!-- 
@@ -420,6 +737,9 @@ None.
         data files?) that seealso doesn't find. 
    -->
 
+<p>
+
+funky uses the hetparse output file as input.
 
 
 
@@ -434,19 +754,41 @@ None.
 </H2>
 <!--
         Who has worked on the program in the past.
+e.g. one of:
+[an error occurred while processing this directive]
+[an error occurred while processing this directive]
+[an error occurred while processing this directive]
+[an error occurred while processing this directive]
+[an error occurred while processing this directive]
+[an error occurred while processing this directive]
+[an error occurred while processing this directive]
+[an error occurred while processing this directive]
+[an error occurred while processing this directive]
+[an error occurred while processing this directive]
+[an error occurred while processing this directive]
+[an error occurred while processing this directive]
+[an error occurred while processing this directive]
+[an error occurred while processing this directive]
+[an error occurred while processing this directive]
+[an error occurred while processing this directive]
+[an error occurred while processing this directive]
+[an error occurred while processing this directive]
+
    -->
 
-This application was written by Jon Ison <a
-href="mailto:jison@hgmp.mrc.ac.uk">(jison@hgmp.mrc.ac.uk)</a>
+
+Jon Ison (jison&nbsp;&copy;&nbsp;rfcgr.mrc.ac.uk)
+<br>
+MRC Rosalind Franklin Centre for Genomics Research
+Wellcome Trust Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
 
 
 
+<p>
 
-
-
-
-
-
+Waqas Awan (wawan&nbsp;&copy;&nbsp;hgmp.mrc.ac.uk)
+<br>
+HGMP-RC, Genome Campus, Hinxton, Cambridge CB10 1SB, UK
 
 
 
@@ -463,9 +805,13 @@ href="mailto:jison@hgmp.mrc.ac.uk">(jison@hgmp.mrc.ac.uk)</a>
         What changes have been made.
    -->
 
-Written (date) - author.
+Written (2003) - Jon Ison & Waqas Awan
+
+<!--
+<p>
 
 
+-->
 
 
 
@@ -496,21 +842,6 @@ This program is intended to be used by everyone and everything, from naive users
 
 
 
-
-
-
-
-
-
-
-
-<H2>
-    Comments
-</H2>
-
-<!--
-	Any comments, requests etc. that people have about the program
-   -->
 
 
 

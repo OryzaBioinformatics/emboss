@@ -1,5 +1,3 @@
-<!--START OF HEADER - DON'T ALTER -->
-
 <HTML>
 <HEAD>
   <TITLE>
@@ -12,7 +10,7 @@
 
 <table align=center border=0 cellspacing=0 cellpadding=0>
 <tr><td valign=top>
-<A HREF="index.html" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
@@ -23,13 +21,6 @@ sixpack
 </table>
 <br>&nbsp;
 <p>
-
-
-
-<!--END OF HEADER-->
-
-
-
 
 
 
@@ -74,28 +65,13 @@ sequences in the default output sequence format.
 An open reading frame is defined in this program as any possible
 translation between two STOP codons. 
 
-
-
-
-
-
-
-
-
-
-
 <H2>
     Algorithm
 </H2>
 
-<!-- 
-        Algorithms
-	  Pseudocode/Vague description/Handwaving/web links to useful pages
-  -->
-
 The nucleic acid sequence is read in.
 <br>
-The required genetic code is read in from the ECG* data files.
+The required genetic code is read in from the EGC* data files.
 <br>
 The three forward and three reverse translations are created.
 <br>
@@ -116,23 +92,9 @@ The display is written out, split at the ends of lines.
 Any ORFs that are longer than the specified minimum size are written to
 the output sequence file. 
 
-
-
-
-
-
-
-
-
 <H2>
     Usage
 </H2>
-
-<!--  
-	Example usage, as run from the command-line.
-        Many examples illustrating different behaviours is good.
- -->
-
 <b>Here is a sample session with sixpack</b>
 <p>
 
@@ -439,28 +401,9 @@ A file of ranges to colour (one range per line) can be specifed as '@filename'.<
 </table>
 
 
-<!--
-DON'T WRITE ANYTHING HERE.
-IT IS DONE FOR YOU.
--->
-
-
-
-
-
-
-
-
 <H2>
     Input file format
 </H2>
-
-<!-- 
-        This includes example input file formats.
-        This should be a detailed description and example - assume
-        someone will want to parse this file and will want to know what
-        happens in unusual cases - null input, etc. 
-   -->
 
 <b>sixpack</b> reads any normal sequence USAs.
 
@@ -584,161 +527,13 @@ SQ   Sequence 2167 BP; 363 A; 712 C; 730 G; 362 T; 0 other;
 </td></tr></table><p>
 
 
-
-
-
-
 <H2>
     Output file format
 </H2>
 
-<!-- 
-        This includes example output file formats.
-        This should be a detailed description and example - assume
-        someone will want to parse this file and will want to know what
-        happens in unusual cases - null output, errors etc. 
-
-        If you wish to include the standard description of the avalable
-	report formats, use:
-<p>
-
-The output is a standard EMBOSS report file. 
-
-<p>
-
-The results can be output in one of several styles by using the
-command-line qualifier <b>-rformat xxx</b>, where 'xxx' is replaced by
-the name of the required format.  The available format names are: embl,
-genbank, gff, pir, swiss, trace, listfile, dbmotif, diffseq, excel,
-feattable, motif, regions, seqtable, simple, srs, table, tagseq
-
-<p>
-
-See:
-<A href="http://www.uk.embnet.org/Software/EMBOSS/Themes/ReportFormats.html">
-http://www.uk.embnet.org/Software/EMBOSS/Themes/ReportFormats.html</A>
-for further information on report formats.
-
-<p>
-
-   -->
-
-
-<p>
-
 
 <a name="output.1"></a>
 <h3>Output files for usage example </h3>
-<p><h3>File: paamir.fasta</h3>
-<table width="90%"><tr><td bgcolor="#CCFFCC">
-<pre>
-&gt;PAAMIR_1_ORF1  Translation of PAAMIR in frame 1, ORF 1, threshold 1, 53aa
-GTAGRASARSPPAGRRELHDLPGEPGARAGSLRTALSDSHRRGNGWDRTRSGR
-&gt;PAAMIR_1_ORF2  Translation of PAAMIR in frame 1, ORF 2, threshold 1, 28aa
-SACCSPKPASPPISSARTRMAHCSRSSN
-&gt;PAAMIR_1_ORF3  Translation of PAAMIR in frame 1, ORF 3, threshold 1, 52aa
-TARAASAVARSKRCPRTPAATRTAIGCAPRTSFATGGYGSSWAATCRTRARR
-&gt;PAAMIR_1_ORF4  Translation of PAAMIR in frame 1, ORF 4, threshold 1, 43aa
-CRWSSAPTRCSATRPPTRASSIRRTSSTAVRRRTRTVRRWRRT
-&gt;PAAMIR_1_ORF5  Translation of PAAMIR in frame 1, ORF 5, threshold 1, 23aa
-FATTASGWCSSARTTSIRGKATM
-&gt;PAAMIR_1_ORF6  Translation of PAAMIR in frame 1, ORF 6, threshold 1, 72aa
-CATCIASTAARCSRKSTFRCIPPTTTCSAPSSASTRRAPTWSSPPWWAPAPPSCIAPSPV
-ATATAGGRRSPA
-&gt;PAAMIR_1_ORF7  Translation of PAAMIR in frame 1, ORF 7, threshold 1, 357aa
-PPARRRWRRWRVTWQRGRWWSRLTSPASIRPPAGPSSRPAMVSSRRTRPSPPGPRRPTGR
-PCCSAAPRRPQATGGWKTCSGTCTTSTSTRHRGRSGWSARTTTAACLRASRKSMRAACSR
-SAGSRPNRFAPTLMSSCITSTTGPPAWAGDRSHERQLAARQPARVAGAGPQPAGGGQRRP
-GLAADPHRLFGAPVLAAAGSLRRAGGRGLHQHFPEWPPRRDRCAARRRDSAHYPGGAGGV
-RKPRGALADHRAGVPRRDHPAARCPPGAACAGIGAAHQRGNGEAEAEDRAAPGPHRRPGP
-DQPGQGVADAAPWLGRARGAPAPVAGSDEAARADPEDRSGVAGKRAVRLSDPGRPEQ
-&gt;PAAMIR_1_ORF8  Translation of PAAMIR in frame 1, ORF 8, threshold 1, 88aa
-QEGYRHHAGTGSAVRWRGAVSQCRLVAGQDQRSGGGGDQLPGRRAERLRRVLPDLFRSSR
-AGLAEGRSADPAIRFYLSVGGRQPVPRX
-&gt;PAAMIR_2_ORF1  Translation of PAAMIR in frame 2, ORF 1, threshold 1, 35aa
-VPLAEHLLDHHQPGDGNCTIYLASLEHERVRFVRR
-&gt;PAAMIR_2_ORF2  Translation of PAAMIR in frame 2, ORF 2, threshold 1, 252aa
-ATVTGEETDGIAPGAAADRPAVLRNRRHRRYRALARVWRIARGRATEPRGRRRRSPDRNA
-VPGPRRRPGPLSAVRRGLHSQPGGTVPRGLLHVAHAQGGDAGGRARRRAALLPDPLRGLR
-VFAEHRLRRSGAEPEQCAAGGVPDSPLRRAGGVHRLGLHLSAGKQPCDAPPVSPARRHGA
-RGNLHSAVSLRRRLAARRRAHLPGARRRGLLHRGGHRHRRAVSRHRPSLRRRQAAADRQP
-DHQRGGGGEDGE
-&gt;PAAMIR_2_ORF3  Translation of PAAMIR in frame 2, ORF 3, threshold 1, 125aa
-RGRGAGGGRALLLQHRYARQPGLRPGLPWFLPGERDHHRLGRGGLLADLVARPRRAGRRQ
-LAGGRRAAAPVRHRHRRATGAGPGGAPEQPQPPVFAHRGNRCARRVPGPLAVARTDSPRP
-LCRRA
-&gt;PAAMIR_2_ORF4  Translation of PAAMIR in frame 2, ORF 4, threshold 1, 210aa
-PRRLVRQHGRGTAPMSANSLLGSLRELQVLVLNPPGEVSDALVLQLIRIGCSVRQCWPPP
-EAFDVPVDVVFTSIFQNGHHDEIAALLAAGTPRTTLVALVEYESPAVLSQIIELECHGVI
-TQPLDAHRVLPVLVSARRISEEMAKLKQKTEQLQDRIAGQARINQAKVLLMQRHGWDERE
-AHQHLSREAMKRREPILKIAQELLGNEPSA
-&gt;PAAMIR_2_ORF5  Translation of PAAMIR in frame 2, ORF 5, threshold 1, 96aa
-AIRADQNNNKRGIVIMLGLVLLYVGAVLFLNAVWLLGKISGREVAVINFLVGVLSACVAF
-YLIFSAAAGQGSLKAGALTLLFAFTYLWVAANQFLE
-&gt;PAAMIR_3_ORF1  Translation of PAAMIR in frame 3, ORF 1, threshold 1, 429aa
-YRWPSICSITTSRATGTARSTWRAWSTSGFASYGAERQSQERKRMGSHQERPLIGLLFSE
-TGVTADIERSHAYGALLAVEQLNREGGVGGRPIETLSQDPGGDPDRYRLCAEDFIRNRGV
-RFLVGCYMSHTRKAVMPVVERADALLCYPTPYEGFEYSPNIVYGGPAPNQNSAPLAAYLI
-RHYGERVVFIGSDYIYPRESNHVMRHLYRQHGGTVLEEIYIPLYPSDDDLQRAVERIYQA
-RADVVFSTVVGTGTAELYRAIARRYGDGRRPPIASLTTSEAEVAKMESDVAEGQVVVAPY
-FSSIDTPASRAFVQACHGFFPENATITAWAEAAYWQTLLLGRAAQAAGNWRVEDVQRHLY
-
-
-<font color=red>  [Part of this file has been deleted for brevity]</font>
-
-SEPMNTTRSP
-&gt;PAAMIR_5_ORF11  Translation of PAAMIR in frame 5, ORF 11, threshold 1, 19aa
-WRIRYAASGALFWFGAGPP
-&gt;PAAMIR_5_ORF12  Translation of PAAMIR in frame 5, ORF 12, threshold 1, 10aa
-TMFGEYSKPS
-&gt;PAAMIR_5_ORF13  Translation of PAAMIR in frame 5, ORF 13, threshold 1, 3aa
-GVG
-&gt;PAAMIR_5_ORF14  Translation of PAAMIR in frame 5, ORF 14, threshold 1, 20aa
-QSSASARSTTGITALRVCDM
-&gt;PAAMIR_5_ORF15  Translation of PAAMIR in frame 5, ORF 15, threshold 1, 19aa
-QPTRNRTPRLRMKSSAHSR
-&gt;PAAMIR_5_ORF16  Translation of PAAMIR in frame 5, ORF 16, threshold 1, 107aa
-RSGSPPGSWDSVSIGRPPTPPSRFSCSTASNAPYACERSISAVTPVSENSRPISGRSWCD
-PIRFLSCDCRSAPYEANPLVLQARQVDRAVPVARLVVIEQMLGQRYX
-&gt;PAAMIR_6_ORF1  Translation of PAAMIR in frame 6, ORF 1, threshold 1, 11aa
-RGTGWRPPTDR
-&gt;PAAMIR_6_ORF2  Translation of PAAMIR in frame 6, ORF 2, threshold 1, 36aa
-KRIAGSALRPSASPARLLRKRSGRTRRRRSARRPGS
-&gt;PAAMIR_6_ORF3  Translation of PAAMIR in frame 6, ORF 3, threshold 1, 7aa
-SPPPPDR
-&gt;PAAMIR_6_ORF4  Translation of PAAMIR in frame 6, ORF 4, threshold 1, 8aa
-SCPATRRH
-&gt;PAAMIR_6_ORF5  Translation of PAAMIR in frame 6, ORF 5, threshold 1, 14aa
-ETAPRQRTAEPVPA
-&gt;PAAMIR_6_ORF6  Translation of PAAMIR in frame 6, ORF 6, threshold 1, 61aa
-RYPSCYCSGRPGSLRRTARFPATPERSSGSARAASSLPATGAGAPRARPSHGAASATPWP
-G
-&gt;PAAMIR_6_ORF7  Translation of PAAMIR in frame 6, ORF 7, threshold 1, 23aa
-SGPGRRCGPGAARSSASASPFPR
-&gt;PAAMIR_6_ORF8  Translation of PAAMIR in frame 6, ORF 8, threshold 1, 18aa
-CAAPIPAQAAPGGHRAAG
-&gt;PAAMIR_6_ORF9  Translation of PAAMIR in frame 6, ORF 9, threshold 1, 8aa
-SRRGTPAR
-&gt;PAAMIR_6_ORF10  Translation of PAAMIR in frame 6, ORF 10, threshold 1, 16aa
-SARAPRGFRTPPAPPG
-&gt;PAAMIR_6_ORF11  Translation of PAAMIR in frame 6, ORF 11, threshold 1, 22aa
-CAESRRRAAQRSRRGGHSGKCW
-&gt;PAAMIR_6_ORF12  Translation of PAAMIR in frame 6, ORF 12, threshold 1, 32aa
-RPRPPARRRLPAAASTGAPNNRCGSAARPGRR
-&gt;PAAMIR_6_ORF13  Translation of PAAMIR in frame 6, ORF 13, threshold 1, 5aa
-PPPAG
-&gt;PAAMIR_6_ORF14  Translation of PAAMIR in frame 6, ORF 14, threshold 1, 407aa
-GPAPATRAGCRAASWRSWERSPAHAGGPVVEVMHDDIRVGANRFGRLPADLEHAARIDFR
-DARRQAAVVVLALHPDRPLWRVDVDVVQVPLHVFHPPVACGLRGAAEQQGLPVGRLGPGG
-DGRVLREETMAGLDEGPAGGRIDAGEVRRDHHLPLCHVTLHLRHLRLAGGQAGDRRPPAV
-AVATGDGAIQLGGAGAHHGGEDHVGARLVDALDGALQVVVGGIQRNVDFLEHRAAVLAIQ
-VAHHMVAFPRIDVVRADEHHPLAVVANQVRRQRRTVLVRRRTAVDDVRRILEALVGGRVA
-EQRVGALDHRHHRLARVRHVAAHEEPYPPVANEVLGAQPIAVRVAAGVLGQRFDRATADA
-ALAVQLLDREQCAIRVRALDIGGDAGFGEQQADQRPLLVRSHPFPLL
-&gt;PAAMIR_6_ORF15  Translation of PAAMIR in frame 6, ORF 15, threshold 1, 39aa
-LSLSAVRSEPARAPGSPGRSCSSRRPAGGDRADARPAVP
-</pre>
-</td></tr></table><p>
 <p><h3>File: paamir.sixpack</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
@@ -849,25 +644,121 @@ Total ORFs :    67
 
 </pre>
 </td></tr></table><p>
+<p><h3>File: paamir.fasta</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+&gt;PAAMIR_1_ORF1  Translation of PAAMIR in frame 1, ORF 1, threshold 1, 53aa
+GTAGRASARSPPAGRRELHDLPGEPGARAGSLRTALSDSHRRGNGWDRTRSGR
+&gt;PAAMIR_1_ORF2  Translation of PAAMIR in frame 1, ORF 2, threshold 1, 28aa
+SACCSPKPASPPISSARTRMAHCSRSSN
+&gt;PAAMIR_1_ORF3  Translation of PAAMIR in frame 1, ORF 3, threshold 1, 52aa
+TARAASAVARSKRCPRTPAATRTAIGCAPRTSFATGGYGSSWAATCRTRARR
+&gt;PAAMIR_1_ORF4  Translation of PAAMIR in frame 1, ORF 4, threshold 1, 43aa
+CRWSSAPTRCSATRPPTRASSIRRTSSTAVRRRTRTVRRWRRT
+&gt;PAAMIR_1_ORF5  Translation of PAAMIR in frame 1, ORF 5, threshold 1, 23aa
+FATTASGWCSSARTTSIRGKATM
+&gt;PAAMIR_1_ORF6  Translation of PAAMIR in frame 1, ORF 6, threshold 1, 72aa
+CATCIASTAARCSRKSTFRCIPPTTTCSAPSSASTRRAPTWSSPPWWAPAPPSCIAPSPV
+ATATAGGRRSPA
+&gt;PAAMIR_1_ORF7  Translation of PAAMIR in frame 1, ORF 7, threshold 1, 357aa
+PPARRRWRRWRVTWQRGRWWSRLTSPASIRPPAGPSSRPAMVSSRRTRPSPPGPRRPTGR
+PCCSAAPRRPQATGGWKTCSGTCTTSTSTRHRGRSGWSARTTTAACLRASRKSMRAACSR
+SAGSRPNRFAPTLMSSCITSTTGPPAWAGDRSHERQLAARQPARVAGAGPQPAGGGQRRP
+GLAADPHRLFGAPVLAAAGSLRRAGGRGLHQHFPEWPPRRDRCAARRRDSAHYPGGAGGV
+RKPRGALADHRAGVPRRDHPAARCPPGAACAGIGAAHQRGNGEAEAEDRAAPGPHRRPGP
+DQPGQGVADAAPWLGRARGAPAPVAGSDEAARADPEDRSGVAGKRAVRLSDPGRPEQ
+&gt;PAAMIR_1_ORF8  Translation of PAAMIR in frame 1, ORF 8, threshold 1, 88aa
+QEGYRHHAGTGSAVRWRGAVSQCRLVAGQDQRSGGGGDQLPGRRAERLRRVLPDLFRSSR
+AGLAEGRSADPAIRFYLSVGGRQPVPRX
+&gt;PAAMIR_2_ORF1  Translation of PAAMIR in frame 2, ORF 1, threshold 1, 35aa
+VPLAEHLLDHHQPGDGNCTIYLASLEHERVRFVRR
+&gt;PAAMIR_2_ORF2  Translation of PAAMIR in frame 2, ORF 2, threshold 1, 252aa
+ATVTGEETDGIAPGAAADRPAVLRNRRHRRYRALARVWRIARGRATEPRGRRRRSPDRNA
+VPGPRRRPGPLSAVRRGLHSQPGGTVPRGLLHVAHAQGGDAGGRARRRAALLPDPLRGLR
+VFAEHRLRRSGAEPEQCAAGGVPDSPLRRAGGVHRLGLHLSAGKQPCDAPPVSPARRHGA
+RGNLHSAVSLRRRLAARRRAHLPGARRRGLLHRGGHRHRRAVSRHRPSLRRRQAAADRQP
+DHQRGGGGEDGE
+&gt;PAAMIR_2_ORF3  Translation of PAAMIR in frame 2, ORF 3, threshold 1, 125aa
+RGRGAGGGRALLLQHRYARQPGLRPGLPWFLPGERDHHRLGRGGLLADLVARPRRAGRRQ
+LAGGRRAAAPVRHRHRRATGAGPGGAPEQPQPPVFAHRGNRCARRVPGPLAVARTDSPRP
+LCRRA
+&gt;PAAMIR_2_ORF4  Translation of PAAMIR in frame 2, ORF 4, threshold 1, 210aa
+PRRLVRQHGRGTAPMSANSLLGSLRELQVLVLNPPGEVSDALVLQLIRIGCSVRQCWPPP
+EAFDVPVDVVFTSIFQNGHHDEIAALLAAGTPRTTLVALVEYESPAVLSQIIELECHGVI
+TQPLDAHRVLPVLVSARRISEEMAKLKQKTEQLQDRIAGQARINQAKVLLMQRHGWDERE
+AHQHLSREAMKRREPILKIAQELLGNEPSA
+&gt;PAAMIR_2_ORF5  Translation of PAAMIR in frame 2, ORF 5, threshold 1, 96aa
+AIRADQNNNKRGIVIMLGLVLLYVGAVLFLNAVWLLGKISGREVAVINFLVGVLSACVAF
+YLIFSAAAGQGSLKAGALTLLFAFTYLWVAANQFLE
+&gt;PAAMIR_3_ORF1  Translation of PAAMIR in frame 3, ORF 1, threshold 1, 429aa
+YRWPSICSITTSRATGTARSTWRAWSTSGFASYGAERQSQERKRMGSHQERPLIGLLFSE
+TGVTADIERSHAYGALLAVEQLNREGGVGGRPIETLSQDPGGDPDRYRLCAEDFIRNRGV
+RFLVGCYMSHTRKAVMPVVERADALLCYPTPYEGFEYSPNIVYGGPAPNQNSAPLAAYLI
+RHYGERVVFIGSDYIYPRESNHVMRHLYRQHGGTVLEEIYIPLYPSDDDLQRAVERIYQA
+RADVVFSTVVGTGTAELYRAIARRYGDGRRPPIASLTTSEAEVAKMESDVAEGQVVVAPY
+FSSIDTPASRAFVQACHGFFPENATITAWAEAAYWQTLLLGRAAQAAGNWRVEDVQRHLY
 
 
+<font color=red>  [Part of this file has been deleted for brevity]</font>
 
-
+SEPMNTTRSP
+&gt;PAAMIR_5_ORF11  Translation of PAAMIR in frame 5, ORF 11, threshold 1, 19aa
+WRIRYAASGALFWFGAGPP
+&gt;PAAMIR_5_ORF12  Translation of PAAMIR in frame 5, ORF 12, threshold 1, 10aa
+TMFGEYSKPS
+&gt;PAAMIR_5_ORF13  Translation of PAAMIR in frame 5, ORF 13, threshold 1, 3aa
+GVG
+&gt;PAAMIR_5_ORF14  Translation of PAAMIR in frame 5, ORF 14, threshold 1, 20aa
+QSSASARSTTGITALRVCDM
+&gt;PAAMIR_5_ORF15  Translation of PAAMIR in frame 5, ORF 15, threshold 1, 19aa
+QPTRNRTPRLRMKSSAHSR
+&gt;PAAMIR_5_ORF16  Translation of PAAMIR in frame 5, ORF 16, threshold 1, 107aa
+RSGSPPGSWDSVSIGRPPTPPSRFSCSTASNAPYACERSISAVTPVSENSRPISGRSWCD
+PIRFLSCDCRSAPYEANPLVLQARQVDRAVPVARLVVIEQMLGQRYX
+&gt;PAAMIR_6_ORF1  Translation of PAAMIR in frame 6, ORF 1, threshold 1, 11aa
+RGTGWRPPTDR
+&gt;PAAMIR_6_ORF2  Translation of PAAMIR in frame 6, ORF 2, threshold 1, 36aa
+KRIAGSALRPSASPARLLRKRSGRTRRRRSARRPGS
+&gt;PAAMIR_6_ORF3  Translation of PAAMIR in frame 6, ORF 3, threshold 1, 7aa
+SPPPPDR
+&gt;PAAMIR_6_ORF4  Translation of PAAMIR in frame 6, ORF 4, threshold 1, 8aa
+SCPATRRH
+&gt;PAAMIR_6_ORF5  Translation of PAAMIR in frame 6, ORF 5, threshold 1, 14aa
+ETAPRQRTAEPVPA
+&gt;PAAMIR_6_ORF6  Translation of PAAMIR in frame 6, ORF 6, threshold 1, 61aa
+RYPSCYCSGRPGSLRRTARFPATPERSSGSARAASSLPATGAGAPRARPSHGAASATPWP
+G
+&gt;PAAMIR_6_ORF7  Translation of PAAMIR in frame 6, ORF 7, threshold 1, 23aa
+SGPGRRCGPGAARSSASASPFPR
+&gt;PAAMIR_6_ORF8  Translation of PAAMIR in frame 6, ORF 8, threshold 1, 18aa
+CAAPIPAQAAPGGHRAAG
+&gt;PAAMIR_6_ORF9  Translation of PAAMIR in frame 6, ORF 9, threshold 1, 8aa
+SRRGTPAR
+&gt;PAAMIR_6_ORF10  Translation of PAAMIR in frame 6, ORF 10, threshold 1, 16aa
+SARAPRGFRTPPAPPG
+&gt;PAAMIR_6_ORF11  Translation of PAAMIR in frame 6, ORF 11, threshold 1, 22aa
+CAESRRRAAQRSRRGGHSGKCW
+&gt;PAAMIR_6_ORF12  Translation of PAAMIR in frame 6, ORF 12, threshold 1, 32aa
+RPRPPARRRLPAAASTGAPNNRCGSAARPGRR
+&gt;PAAMIR_6_ORF13  Translation of PAAMIR in frame 6, ORF 13, threshold 1, 5aa
+PPPAG
+&gt;PAAMIR_6_ORF14  Translation of PAAMIR in frame 6, ORF 14, threshold 1, 407aa
+GPAPATRAGCRAASWRSWERSPAHAGGPVVEVMHDDIRVGANRFGRLPADLEHAARIDFR
+DARRQAAVVVLALHPDRPLWRVDVDVVQVPLHVFHPPVACGLRGAAEQQGLPVGRLGPGG
+DGRVLREETMAGLDEGPAGGRIDAGEVRRDHHLPLCHVTLHLRHLRLAGGQAGDRRPPAV
+AVATGDGAIQLGGAGAHHGGEDHVGARLVDALDGALQVVVGGIQRNVDFLEHRAAVLAIQ
+VAHHMVAFPRIDVVRADEHHPLAVVANQVRRQRRTVLVRRRTAVDDVRRILEALVGGRVA
+EQRVGALDHRHHRLARVRHVAAHEEPYPPVANEVLGAQPIAVRVAAGVLGQRFDRATADA
+ALAVQLLDREQCAIRVRALDIGGDAGFGEQQADQRPLLVRSHPFPLL
+&gt;PAAMIR_6_ORF15  Translation of PAAMIR in frame 6, ORF 15, threshold 1, 39aa
+LSLSAVRSEPARAPGSPGRSCSSRRPAGGDRADARPAVP
+</pre>
+</td></tr></table><p>
 
 
 <H2>
     Data files
 </H2>
-
-<!-- 
-        Any data files used (e.g. translation table file)
-        This includes example data file formats if they are
-        not obvious.
-
-	If you wish to include the standard description of what data
-	files are and how to use embossdata to inspect and retrieve
-	them, use:
-   -->
 
 <p>
 EMBOSS data files are distributed with the application and stored
@@ -925,7 +816,7 @@ Their names and descriptions are:
       Yeast Mitochondrial
 <dt>EGC.4 </dt><dd>
       Mold, Protozoan, Coelenterate Mitochondrial and Mycoplasma/Spiroplasma
-<dt>EGC.5 </dt><dd>      
+<dt>EGC.5 </dt><dd>
       Invertebrate Mitochondrial
 <dt>EGC.6 </dt><dd>
       Ciliate Macronuclear and Dasycladacean
@@ -945,35 +836,41 @@ Their names and descriptions are:
       Blepharisma Macronuclear
 <dt>EGC.16</dt><dd>
       Chlorophycean Mitochondrial
-<dt>EGC.21</dt><dd>  
+<dt>EGC.21</dt><dd>
       Trematode Mitochondrial
 <dt>EGC.22</dt><dd>
       Scenedesmus obliquus
 <dt>EGC.23</dt><dd>
       Thraustochytrium Mitochondrial
 </dl>
-<p>
-The format of these files is very simple.
 
 <p>
+
+The format of these files is very simple.
+
+<p>   
+
 It consists of several lines of optional comments, each starting with
 a '#' character.
 
 <p>
+
 These are followed the line: 'Genetic Code [n]', where 'n' is the
 number of the genetic code file.
 
-<p>
+<p> 
+
 This is followed by the description of the code and then by four lines
-giving the IUPAC one-letter code of the translated amino acid, the  
+giving the IUPAC one-letter code of the translated amino acid, the
 start codons (indicdated by an 'M') and the three bases of the codon,
 lined up one on top of the other.
-
+   
 <p>
+
 For example:
 
 <pre>
-
+   
 ------------------------------------------------------------------------------
 # Genetic Code Table
 #
@@ -985,7 +882,7 @@ For example:
 
 Genetic Code [0]
 Standard
-
+   
 AAs  =   FFLLSSSSYY**CC*WLLLLPPPPHHQQRRRRIIIMTTTTNNKKSSRRVVVVAAAADDEEGGGG
 Starts = -----------------------------------M----------------------------
 Base1  = TTTTTTTTTTTTTTTTCCCCCCCCCCCCCCCCAAAAAAAAAAAAAAAAGGGGGGGGGGGGGGGG
@@ -994,17 +891,6 @@ Base3  = TCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAG
 ------------------------------------------------------------------------------
 
 </pre>
-                     
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -1012,110 +898,38 @@ Base3  = TCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAG
     Notes
 </H2>
 
-<!-- 
-        Restrictions.
-        Interesting behaviour.
-        Useful things you can do with this program.
-   -->
-
 None.
-
-
-
-
-
-
 
 <H2>
     References
 </H2>
 
-<!-- 
-        Bibliography for methods used.
-   -->
-
 None.
-
-
-
-
-
-
-
 
 <H2>
     Warnings
 </H2>
 
-<!-- 
-        Potentially stupid things the program will let you do.
-   -->
-
 None.
-
-
-
-
-
-
 
 <H2>
     Diagnostic Error Messages
 </H2>
 
-<!-- 
-        Error messages specific to this program, eg:
-        "FATAL xxx" - means you have not set up the xxx data using program <b>prog</b>.<p>
-   -->
-
 None.
-
-
-
-
-
-
 
 <H2>
     Exit status
 </H2>
 
-<!-- 
-        Description of the exit status for various error conditions
-   -->
-
 It always exits with status 0.
-
-
-
-
-
-
-
 
 <H2>
     Known bugs
 </H2>
 
-
-<!-- 
-        Bugs noted but not yet fixed.
-   -->
-
 None.
 
-
-
-
-
-
-
-
-<!--
-<H2>
-    See also
-</H2>
--->
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
@@ -1145,26 +959,10 @@ None.
 <tr><td><a href="wobble.html">wobble</a></td><td>Wobble base plot</td></tr>
 </table>
 
-<!-- 
-        Add any comments about other associated programs (to prepare
-        data files?) that seealso doesn't find. 
-   -->
-
-
-
-
-
-
-
-
-
 
 <H2>
     Author(s)
 </H2>
-<!--
-        Who has worked on the program in the past.
-   -->
 
 Thomas Laurent (thomas.laurent&nbsp;&copy;&nbsp;uk.lionbioscience.com)
 <br>
@@ -1176,58 +974,26 @@ Lion Bioscience Ltd,
      UK
 
 
-
-
-
-
 <H2>
     History
 </H2>
 
-<!--
-        What changes have been made.
-   -->
 
 Written (November 2002) - Thomas Laurent
-
-<!--
-<p>
-[an error occurred while processing this directive]
--->
-
-
-
-
-
-
-
 
 
 
 <H2>
     Target users
 </H2>
-
-<!--
-        For general users, requested by one user, for EMBOSS site
-        maintainers, for EMBOSS developers etc.
-        eg:
-        "This program is intended to be used by everyone and everything,
-        from naive users to embedded scripts." 
-	Which is easy to include using:
-   -->
-
 This program is intended to be used by everyone and everything, from naive users to embedded scripts.
 
 
 
-
-
-
-
-
-
-
+<H2>
+    Comments
+</H2>
+None
 
 
 </BODY>

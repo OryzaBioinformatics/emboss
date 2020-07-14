@@ -1,17 +1,17 @@
 
                                   entret 
-                                      
-   
-   
+
+
+
 Function
 
    Reads and writes (returns) flatfile entries
-   
+
 Description
 
    entret reads a sequence from a database or a file and writes the
    complete sequence entry to a text file.
-   
+
    The difference between entret and such programs as seqret which also
    read entries from databases or files and write them to files, is that
    entret reads and writes the complete sequence entry together with the
@@ -21,34 +21,34 @@ Description
    the description line and which is the feature table and will then
    write the sequence, description and features out in the way prescribed
    by the sequence format which has been requested for output.
-   
+
    entret therefore is very useful for looking at the annotation of
    sequences from databases, which seqret does not provide.
-   
+
    The other main difference is that when it writes out the sequence
    entry to a file, the information is treated as text, not sequence, and
    so options that you would normally use to change the aspects of the
    sequence to be written will either not be recognised and will cause an
    error message to be written (e.g. '-osformat') or will be quietly
    ignored (e.g. '-sbegin', '-send').
-   
+
    In previous versions of EMBOSS, entret didn't return the sequence from
    entries held in GCG indexed databases. This has now been fixed. entret
    will now return the complete sequence entries with the annotation of
    GCG indexed databases.
-   
+
 Usage
 
    Here is a sample session with entret
-   
+
 
 % entret tembl:hsfau 
 Reads and writes (returns) flatfile entries
 Output file [hsfau.entret]: 
-   
+
    Go to the input files for this example
    Go to the output files for this example
-   
+
 Command line arguments
 
    Standard (Mandatory) qualifiers:
@@ -94,7 +94,7 @@ Command line arguments
    -error               boolean    Report errors
    -fatal               boolean    Report fatal errors
    -die                 boolean    Report deaths
-   
+
 
    Standard (Mandatory) qualifiers Allowed values Default
    [-sequence]
@@ -105,18 +105,18 @@ Command line arguments
    (none)
    Advanced (Unprompted) qualifiers Allowed values Default
    -firstonly Read one sequence and stop Boolean value Yes/No No
-   
+
 Input file format
 
    entret reads a normal sequence USA.
-   
+
   Input files for usage example
-  
+
    'tembl:hsfau' is a sequence entry in the example nucleic acid database
    'tembl'
-   
+
   Database entry: tembl:hsfau
-  
+
 ID   HSFAU      standard; RNA; HUM; 518 BP.
 XX
 AC   X65923;
@@ -203,13 +203,13 @@ SQ   Sequence 518 BP; 125 A; 139 C; 148 G; 106 T; 0 other;
      tctaataaaa aagccactta gttcagtcaa aaaaaaaa                               51
 8
 //
-   
+
 Output file format
 
   Output files for usage example
-  
+
   File: hsfau.entret
-  
+
 ID   HSFAU      standard; RNA; HUM; 518 BP.
 XX
 AC   X65923;
@@ -296,35 +296,35 @@ SQ   Sequence 518 BP; 125 A; 139 C; 148 G; 106 T; 0 other;
      tctaataaaa aagccactta gttcagtcaa aaaaaaaa                               51
 8
 //
-   
+
 Data files
 
    None.
-   
+
 Notes
 
    None.
-   
+
 References
 
    None.
-   
+
 Warnings
 
    None.
-   
+
 Diagnostic Error Messages
 
    None.
-   
+
 Exit status
 
    It always exits with status 0.
-   
+
 Known bugs
 
    None.
-   
+
 See also
 
    Program name                          Description
@@ -352,20 +352,22 @@ See also
    union        Reads sequence fragments and builds one sequence
    vectorstrip  Strips out DNA between a pair of vector sequences
    yank         Reads a sequence range, appends the full USA to a list file
-   
+
 Author(s)
 
    Alan Bleasby (ableasby © rfcgr.mrc.ac.uk)
    MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
    Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
-   
+
 History
 
    Written (Oct 2000) - Alan Bleasby.
-   
+
 Target users
 
    This program is intended to be used by everyone and everything, from
    naive users to embedded scripts.
-   
+
 Comments
+
+   None

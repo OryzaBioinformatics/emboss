@@ -1,34 +1,34 @@
 
                               helixturnhelix 
-                                      
-   
-   
+
+
+
 Function
 
    Report nucleic acid binding motifs
-   
+
 Description
 
    helixturnhelix uses the method of Dodd and Egan and finds
    helix-turn-helix nucleic acid binding motifs in proteins.
-   
+
    The helix-turn-helix motif was originally identified as the
    DNA-binding domain of phage repressors. One alpha-helix lies in the
    wide groove of DNA; the other lies at an angle across DNA.
-   
+
 Usage
 
    Here is a sample session with helixturnhelix
-   
+
 
 % helixturnhelix 
 Report nucleic acid binding motifs
 Input sequence(s): tsw:laci_ecoli
 Output report [laci_ecoli.hth]: 
-   
+
    Go to the input files for this example
    Go to the output files for this example
-   
+
 Command line arguments
 
    Standard (Mandatory) qualifiers:
@@ -84,7 +84,7 @@ Command line arguments
    -error               boolean    Report errors
    -fatal               boolean    Report fatal errors
    -die                 boolean    Report deaths
-   
+
 
    Standard (Mandatory) qualifiers Allowed values Default
    [-sequence]
@@ -98,18 +98,18 @@ Command line arguments
    -eightyseven Use the old (1987) weight data Boolean value Yes/No No
    Advanced (Unprompted) qualifiers Allowed values Default
    (none)
-   
+
 Input file format
 
    helixturnhelix reads one or more protein sequence USAs.
-   
+
   Input files for usage example
-  
+
    'tsw:laci_ecoli' is a sequence entry in the example protein database
    'tsw'
-   
+
   Database entry: tsw:laci_ecoli
-  
+
 ID   LACI_ECOLI     STANDARD;      PRT;   360 AA.
 AC   P03023; P71309; Q47338; O09196;
 DT   21-JUL-1986 (Rel. 01, Created)
@@ -215,30 +215,29 @@ SQ   SEQUENCE   360 AA;  38564 MW;  4CA5A1D6 CRC32;
      AMLVANDQMA LGAMRAITES GLRVGADISV VGYDDTEDSS CYIPPSTTIK QDFRLLGQTS
      VDRLLQLSQG QAVKGNQLLP VSLVKRKTTL APNTQTASPR ALADSLMQLA RQVSRLESGQ
 //
-   
+
 Output file format
 
    The output is a standard EMBOSS report file.
-   
+
    The results can be output in one of several styles by using the
    command-line qualifier -rformat xxx, where 'xxx' is replaced by the
    name of the required format. The available format names are: embl,
    genbank, gff, pir, swiss, trace, listfile, dbmotif, diffseq, excel,
    feattable, motif, regions, seqtable, simple, srs, table, tagseq
-   
-   See:
-   http://www.uk.embnet.org/Software/EMBOSS/Themes/ReportFormats.html for
-   further information on report formats.
-   
+
+   See: http://emboss.sf.net/docs/themes/ReportFormats.html for further
+   information on report formats.
+
    By default helixturnhelix writes a 'motif' report file.
-   
+
   Output files for usage example
-  
+
   File: laci_ecoli.hth
-  
+
 ########################################
 # Program: helixturnhelix
-# Rundate: Tue Apr 06 14:29:48 2004
+# Rundate: Thu Jul 15 2004 12:00:00
 # Report_format: motif
 # Report_file: laci_ecoli.hth
 ########################################
@@ -264,18 +263,43 @@ Maximum_score_at at "*"
 
 #---------------------------------------
 #---------------------------------------
-   
+
 Data files
+
+   EMBOSS data files are distributed with the application and stored in
+   the standard EMBOSS data directory, which is defined by the EMBOSS
+   environment variable EMBOSS_DATA.
+
+   To see the available EMBOSS data files, run:
+
+% embossdata -showall
+
+   To fetch one of the data files (for example 'Exxx.dat') into your
+   current directory for you to inspect or modify, run:
+
+% embossdata -fetch -file Exxx.dat
+
+   Users can provide their own data files in their own directories.
+   Project specific files can be put in the current directory, or for
+   tidier directory listings in a subdirectory called ".embossdata".
+   Files for all EMBOSS runs can be put in the user's home directory, or
+   again in a subdirectory called ".embossdata".
+
+   The directories are searched in the following order:
+     * . (your current directory)
+     * .embossdata (under your current directory)
+     * ~/ (your home directory)
+     * ~/.embossdata
 
    The data files are stored in the standard EMBOSS data directory. The
    names are:
-   
+
      * Ehth.dat matrix file
      * Ehth87.dat 1987 shorter matrix file
-       
+
    The old (1987) data has a motif length of 20 residues, whilst the
    default data (Ehth.dat) has a motif length of 22 residues.
-   
+
    With care these can be replaced to suit your data sets. If the files
    are placed in the following directories they will be used in
    preference to the files in the EMBOSS distribution data directory:
@@ -283,7 +307,7 @@ Data files
      * .embossdata
      * ~/ (your home directory)
      * ~/.embossdata
-       
+
    Here is the default file:
 
 # Amino acid counts for 91 Helix-turn-helix (presumed) protein motifs
@@ -317,7 +341,7 @@ Sample: 91 aligned sequences
 Notes
 
    None.
-   
+
 References
 
     1. Dodd I.B., Egan J.B. (1987) "Systematic method for the detection
@@ -326,24 +350,24 @@ References
     2. Dodd I.B., Egan J.B. (1990) "Improved detection of
        helix-turn-helix DNA-binding motifs in protein sequences." Nucleic
        Acids Res. 18: 5019-5026.
-       
+
 Warnings
 
    The program will warn you if the data file is not mathematically
    accurate.
-   
+
 Diagnostic Error Messages
 
    None.
-   
+
 Exit status
 
    It exits with status 0 unless an error is reported.
-   
+
 Known bugs
 
    None.
-   
+
 See also
 
    Program name                        Description
@@ -364,25 +388,27 @@ See also
    pscan        Scans proteins using PRINTS
    sigcleave    Reports protein signal cleavage sites
    tmap         Displays membrane spanning regions
-   
+
 Author(s)
 
    Alan Bleasby (ableasby © rfcgr.mrc.ac.uk)
    MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
    Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
-   
+
    Original program "HELIXTURNHELIX" (EGCG 1990) by Peter Rice
    (pmr © ebi.ac.uk)
    Informatics Division, European Bioinformatics Institute, Wellcome
    Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
-   
+
 History
 
    Completed 11th March 1999
-   
+
 Target users
 
    This program is intended to be used by everyone and everything, from
    naive users to embedded scripts.
-   
+
 Comments
+
+   None

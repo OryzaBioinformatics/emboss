@@ -1,19 +1,18 @@
 
-                              EMBOSS: erestml
-     _________________________________________________________________
-   
-                                Program erestml
-                                       
+                                  erestml 
+
+
+
 Function
 
    Conversion of PHYLIP's restml
-   
+
 Description
 
    ERESTML -- Embossified restriction sites Maximum Likelihood program
-   
+
    Phylip restml documentation.
-   
+
 Usage
 
    Here is a sample session with erestml uisng the data :-
@@ -108,7 +107,7 @@ Command line arguments
    -[no]drawtree       bool       Draw tree
 
    Advanced qualifiers: (none)
-   
+
    Mandatory qualifiers Allowed values Default
    [-datafile]
    (Parameter 1) Input file Input file Required
@@ -136,7 +135,7 @@ Command line arguments
    -[no]drawtree Draw tree Yes/No Yes
    Advanced qualifiers Allowed values Default
    (none)
-   
+
 Input file format
 
 Output file format
@@ -163,11 +162,11 @@ Author(s)
    Washington. Written by Joseph Felsenstein. Permission is granted to
    copy this document provided that no fee is charged for it and that
    this copyright notice is not removed.
-   
+
    This application was modified for inclusion in EMBOSS by Ian Longden
    (il@sanger.ac.uk) Informatics Division, The Sanger Centre, Wellcome
    Trust Genome Campus, Hinxton, Cambridge, CB10 1SA, UK.
-   
+
 Priority
 
 Target users

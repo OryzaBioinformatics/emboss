@@ -1,24 +1,24 @@
 
                                    chaos 
-                                      
-   
-   
+
+
+
 Function
 
    Create a chaos game representation plot for a sequence
-   
+
 Description
 
    A box is drawn and an AGCT is drawn at each corner.
-   
+
    Starting from the middle, move half way to the corner of the box
    representing the first base in the sequence and draw a dot.
-   
+
    Then for each subsequent base move half way to the corresponding box
    corner and draw a dot.
-   
+
    Finally display the number and percentage values of AGCT bases.
-   
+
    The result is an image of a square sprinkled with dots. Areas which
    are devoid of dots (or heavily covered with dots) indicate short
    sequence motifs that are unusually infrequent (or frequent). The
@@ -28,24 +28,24 @@ Description
    and the appropriate base letters are assigned to the corners of the
    quarter - the eigth part that the region is in gives the second base
    of the motif.
-   
+
    The process continues until you have identified the 1/16th or 1/32nd,
    etc. of the original square containing the unusual region and you now
    have the sequence of the motif.
-   
+
 Usage
 
    Here is a sample session with chaos
-   
+
 
 % chaos tembl:eclac -graph cps 
 Create a chaos game representation plot for a sequence
 
 Created chaos.ps
-   
+
    Go to the input files for this example
    Go to the output files for this example
-   
+
 Command line arguments
 
    Standard (Mandatory) qualifiers:
@@ -95,7 +95,7 @@ Command line arguments
    -error               boolean    Report errors
    -fatal               boolean    Report fatal errors
    -die                 boolean    Report deaths
-   
+
 
    Standard (Mandatory) qualifiers Allowed values Default
    [-sequence]
@@ -103,23 +103,23 @@ Command line arguments
    -graph Graph type EMBOSS has a list of known devices, including
    postscript, ps, hpgl, hp7470, hp7580, meta, colourps, cps, xwindows,
    x11, tektronics, tekt, tek4107t, tek, none, null, text, data, xterm,
-   png EMBOSS_GRAPHICS value, or x11
+   png, xml EMBOSS_GRAPHICS value, or x11
    Additional (Optional) qualifiers Allowed values Default
    (none)
    Advanced (Unprompted) qualifiers Allowed values Default
    (none)
-   
+
 Input file format
 
    Any DNA sequence USA.
-   
+
   Input files for usage example
-  
+
    'tembl:eclac' is a sequence entry in the example nucleic acid database
    'tembl'
-   
+
   Database entry: tembl:eclac
-  
+
 ID   ECLAC      standard; DNA; PRO; 7477 BP.
 XX
 AC   J01636; J01637; K01483; K01793;
@@ -275,45 +275,43 @@ RP   1146-1282
      cagcccgccc atggtaacca ccggcagagc ggtcgac                               747
 7
 //
-   
+
 Output file format
 
-   A graphics image is produced.
-   
   Output files for usage example
-  
+
   Graphics File: chaos.ps
-  
-   [chaos results]
-   
+
+   [chaos results] A graphics image is produced.
+
 Data files
 
    None.
-   
+
 Notes
 
    None.
-   
+
 References
 
    None.
-   
+
 Warnings
 
    None.
-   
+
 Diagnostic Error Messages
 
    None.
-   
+
 Exit status
 
    0 upon successful completion.
-   
+
 Known bugs
 
    None.
-   
+
 See also
 
    Program name                          Description
@@ -325,20 +323,22 @@ See also
    isochore     Plots isochores in large DNA sequences
    sirna        Finds siRNA duplexes in mRNA
    wordcount    Counts words of a specified size in a DNA sequence
-   
+
 Author(s)
 
    Ian Longden (il © sanger.ac.uk)
    Sanger Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge,
    CB10 1SA, UK.
-   
+
 History
 
- Completed 22nd March 1999.
+   Completed 22nd March 1999.
 
 Target users
 
    This program is intended to be used by everyone and everything, from
    naive users to embedded scripts.
-   
+
 Comments
+
+   None

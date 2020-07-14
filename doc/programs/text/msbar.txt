@@ -1,27 +1,27 @@
 
                                    msbar 
-                                      
-   
-   
+
+
+
 Function
 
    Mutate sequence beyond all recognition
-   
+
 Description
 
    This program changes a sequence a lot or a little, attempting to
    emulate various forms of mutation. You can set the number and types of
    mutations.
-   
+
    It can act on the following sizes of sequence:
      * Point (single base or residue change)
      * Codon (not applicable in proteins)
      * Block of sequence (of a specified minimum and maximum random size)
-       
+
    If the sequence is nucleic, the codon and block-sized operations can
    optionally be done in-frame. This causes the minimum block size to be
    set to 3 and the randomly chosen positions to be multiples of 3.
-   
+
    For each of the above size of sequence it can produce the effects of
    any of the following types of mutation at a randomly chosen position:
      * Insertion of a randomly generated sequence
@@ -33,29 +33,29 @@ Description
        original)
      * Any of the above, chosen at random.
      * None of the above
-       
+
    The input and output sequences may not differ if only a few changes
    are chosen as (for example) one in four nucleic acid point
    substitutions will not change the sequence.
-   
+
    N.B. There is no selection of the types of mutation to produce viable
    sequence as there would be in a real organism. In particular, there is
    no attempt to bias mutations of nucleic acid sequences to conform to
    the C+G ratio in the sequence or to bias the codons in the direction
    of the frequencies used in the organism. This program emulates
    mutation, not selection.
-   
+
    This program was named from the acronym of "Mutate Sequence Beyond All
    Recognition", by analogy with the acronym "fubar" commonly used in the
    US and UK armed forces.
-   
+
 Usage
 
    Here is a sample session with msbar
-   
+
    This asks for 5 mutations, with point mutations as changes
    (substitutions), and the codon and block mutations ignored.
-   
+
 
 % msbar 
 Mutate sequence beyond all recognition
@@ -89,10 +89,10 @@ Codon mutation operations
          6 : Moves
 Types of codon mutations to perform [0]: 
 Output sequence [eclac.fasta]: 
-   
+
    Go to the input files for this example
    Go to the output files for this example
-   
+
 Command line arguments
 
    Standard (Mandatory) qualifiers (* if not always prompted):
@@ -190,7 +190,7 @@ Command line arguments
    -error               boolean    Report errors
    -fatal               boolean    Report fatal errors
    -die                 boolean    Report deaths
-   
+
 
    Standard (Mandatory) qualifiers Allowed values Default
    [-sequence]
@@ -246,18 +246,18 @@ Command line arguments
    warning message. Readable sequence(s) asis:N
    -minimum Minimum size for a block mutation Integer 0 or more 1
    -maximum Maximum size for a block mutation Any integer value 10
-   
+
 Input file format
 
    msbar reads any sequence USA.
-   
+
   Input files for usage example
-  
+
    'tembl:eclac' is a sequence entry in the example nucleic acid database
    'tembl'
-   
+
   Database entry: tembl:eclac
-  
+
 ID   ECLAC      standard; DNA; PRO; 7477 BP.
 XX
 AC   J01636; J01637; K01483; K01793;
@@ -413,19 +413,19 @@ RP   1146-1282
      cagcccgccc atggtaacca ccggcagagc ggtcgac                               747
 7
 //
-   
+
 Output file format
 
   Output files for usage example
-  
+
   File: eclac.fasta
-  
+
 >ECLAC J01636.1 E.coli lactose operon with lacI, lacZ, lacY and lacA genes.
 gacaccatcgaatggcgcaaaacctttcgcggtatggcatgatagcgcccggaagagagt
 caattcagggtggtgaatgtgaaaccagtaacgttatacgatgtcgcagagtatgccggt
 gtctcttatcagaccgtttcccgcgtggtgaaccaggccagccacgtttctgcgaaaacg
 cgggaaaaagtggaagcggcgatggcggagctgaattacattcccaaccgcgtggcacaa
-caactggcgggcaaacagtcgttgctgattggcgttgccacctccagtctAgccctgcac
+caactggcgggcaaacagtcgttgctgattggcgttgccacctccagtctggccctgcac
 gcgccgtcgcaaattgtcgcggcgattaaatctcgcgccgatcaactgggtgccagcgtg
 gtggtgtcgatggtagaacgaagcggcgtcgaagcctgtaaagcggcggtgcacaatctt
 ctcgcgcaacgcgtcagtgggctgatcattaactatccgctggatgaccaggatgccatt
@@ -435,12 +435,12 @@ gtcgcattgggtcaccagcaaatcgcgctgttagcgggcccattaagttctgtctcggcg
 cgtctgcgtctggctggctggcataaatatctcactcgcaatcaaattcagccgatagcg
 gaacgggaaggcgactggagtgccatgtccggttttcaacaaaccatgcaaatgctgaat
 gagggcatcgttcccactgcgatgctggttgccaacgatcagatggcgctgggcgcaatg
-cgcgccattaccgagtccgggctgcgcgttggtgcggatatctcggtagtggAatacgac
+cgcgccattaccgagtccgggctgcgcgttggtgcggatatctcggtagtgggatacgac
 gataccgaagacagctcatgttatatcccgccgtcaaccaccatcaaacaggattttcgc
 ctgctggggcaaaccagcgtggaccgcttgctgcaactctctcagggccaggcggtgaag
 ggcaatcagctgttgcccgtctcactggtgaaaagaaaaaccaccctggcgcccaatacg
 caaaccgcctctccccgcgcgttggccgattcattaatgcagctggcacgacaggtttcc
-cgactggaaagcgggcagtgagcgcaacgcaattaatgtgagttagctcactcattaggc
+cgactggaaagcgggcagtgagcgcaacgcaattaatgtgaAttagctcactcattaggc
 accccaggctttacactttatgcttccggctcgtatgttgtgtggaattgtgagcggata
 acaatttcacacaggaaacagctatgaccatgattacggattcactggccgtcgttttac
 aacgtcgtgactgggaaaaccctggcgttacccaacttaatcgccttgcagcacatcccc
@@ -450,7 +450,7 @@ gctggctggagtgcgatcttcctgaggccgatactgtcgtcgtcccctcaaactggcaga
 tgcacggttacgatgcgcccatctacaccaacgtaacctatcccattacggtcaatccgc
 cgtttgttcccacggagaatccgacgggttgttactcgctcacatttaatgttgatgaaa
 gctggctacaggaaggccagacgcgaattatttttgatggcgttaactcggcgtttcatc
-tgtggtgcaacgggcgctgggtcggttacggccaggacagtcgGttgccgtctgaatttg
+tgtggtgcaacgggcgctgggtcggttacggccaggacagtcgtttgccgtctgaatttg
 acctgagcgcatttttacgcgccggagaaaaccgcctcgcggtgatggtgctgcgttgga
 gtgacggcagttatctggaagatcaggatatgtggcggatgagcggcattttccgtgacg
 tctcgttgctgcataaaccgactacacaaatcagcgatttccatgttgccactcgcttta
@@ -464,7 +464,7 @@ gaggcgttaaccgtcacgagcatcatcctctgcatggtcaggtcatggatgagcagacga
 tggtgcaggatatcctgctgatgaagcagaacaactttaacgccgtgcgctgttcgcatt
 atccgaaccatccgctgtggtacacgctgtgcgaccgctacggcctgtatgtggtggatg
 aagccaatattgaaacccacggcatggtgccaatgaatcgtctgaccgatgatccgcgct
-ggctaccggcgatgagcgaacgcgtaacgcgaatggtgcagcgcgatcgtaatcacccga
+ggctaccggcgatgagcgaacgcgtaacgcgaatggtgcagcgcgatcgtaatcacccgG
 gtgtgatcatctggtcgctggggaatgaatcaggccacggcgctaatcacgacgcgctgt
 atcgctggatcaaatctgtcgatccttcccgcccggtgcagtatgaaggcggcggagccg
 acaccacggccaccgatattatttgcccgatgtacgcgcgcgtggatgaagaccagccct
@@ -496,7 +496,7 @@ atatgtatgaaagcatcggtttccagggcgcttatctggtgctgggtctggtggcgctgg
 gcttcaccttaatttccgtgttcacgcttagcggccccggcccgctttccctgctgcgtc
 gtcaggtgaatgaagtcgcttaagcaatcaatgtcggatgcggcgcgacgcttatccgac
 caacatatcataacggagtgatcgcattgaacatgccaatgaccgaaagaataagagcag
-gcaagctatttaccgatatgtgcgaaggcttaccggaaaaaagacttcgtgggaaaacgt
+gcaagctatttaccgatatgtgcgaaggcttaccggaaaaaAgacttcgtgggaaaacgt
 taatgtatgagtttaatcactcgcatccatcagaagttgaaaaaagagaaagcctgatta
 aagaaatgtttgccacggtaggggaaaacgcctgggtagaaccgcctgtctatttctctt
 acggttccaacatccatataggccgcaatttttatgcaaatttcaatttaaccattgtcg
@@ -504,7 +504,7 @@ atgactacacggtaacaatcggtgataacgtactgattgcacccaacgttactctttccg
 ttacgggacaccctgtacaccatgaattgagaaaaaacggcgagatgtactcttttccga
 taacgattggcaataacgtctggatcggaagtcatgtggttattaatccaggcgtcacca
 tcggggataattctgttattggcgcgggtagtatcgtcacaaaagacattccaccaaacg
-tcgtggcggctggcgttccttgtcgggttattcgcgaaataaacgaccgggataagcact
+tcgtggcggctggcgttccttgtcgggttattcgcgaaataaacgaccgggataagCact
 attatttcaaagattataaagttgaatcgtcagtttaaattataaaaattgcctgatacg
 ctgcgcttatcaggcctacaagttcagcgatctacattagccgcatccggcatgaacaaa
 gcgcaggaacaagcgtcgcatcatgcctctttgacccacagctgcggaaaacgtactggt
@@ -520,61 +520,63 @@ taaccgccgttaatcagaccgaagtaaacacccagcgtccacgcgcggggagtgaatacc
 acgcgaaccggagtggttgttgtcttgtgggaagaggcgacctcgcgggcgctttgccac
 caccaggcaaagagcgcaacaacggcaggcagcgccaccaggcgagtgtttgataccagg
 tttcgctatgttgaactaaccagggcgttatggcggcaccaagcccaccgccgcccatca
-gagccgcggaccacagccccatcaccagtggcgtgcgctgctgaaaccgccgtttaatca
+gagccgcggaccacagccccatcaccagtCgcgtgcgctgctgaaaccgccgtttaatca
 ccgaagcatcaccgcctgaatgatgccgatccccaccccaccaagcagtgcgctgctaag
 cagcagcgcactttgcgggtaaagctcacgcatcaatgcaccgacggcaatcagcaacag
 actgatggcgacactgcgacgttcgctgacatgctgatgaagccagcttccggccagcgc
-cagcccgcccatgTtaaccaccggcagagcggtcgac
-   
+cagcccgcccatggtaaccaccggcagagcggtcgac
+
    The output is a sequence file with 5 substitutions relative to the
    original sequence.
-   
+
 Data files
 
    None.
-   
+
 Notes
 
    None.
-   
+
 References
 
    None.
-   
+
 Warnings
 
    None.
-   
+
 Diagnostic Error Messages
 
    None.
-   
+
 Exit status
 
    It always exits with a status of 0.
-   
+
 Known bugs
 
    None.
-   
+
 See also
 
    Program name                     Description
    shuffleseq   Shuffles a set of sequences maintaining composition
-   
+
 Author(s)
 
    Gary Williams (gwilliam © rfcgr.mrc.ac.uk)
    MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
    Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
-   
+
 History
 
    Written (1999) - Gary Williams
-   
+
 Target users
 
    This program is intended to be used by everyone and everything, from
    naive users to embedded scripts.
-   
+
 Comments
+
+   None

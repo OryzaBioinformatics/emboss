@@ -1,28 +1,28 @@
 
                                   pepnet 
-                                      
-   
-   
+
+
+
 Function
 
    Displays proteins as a helical net
-   
+
 Description
 
    This is a method of displaying the residues of a protein in a simple
    3,4,3,4 repeating pattern that emulates at a simple level the
    arrangement of residues around an alpha helix.
-   
+
    It is therefore easy to see patterns of amphipathicity that you may
    wish to investigate in more detail by using displays such as pepwheel.
-   
+
    You can specify which residues to mark up in squares, diamonds and
    octagons.
-   
+
 Usage
 
    Here is a sample session with pepnet
-   
+
 
 % pepnet -sask 
 Displays proteins as a helical net
@@ -32,10 +32,10 @@ Input sequence: tsw:gcn4_yeast
 Graph type [x11]: cps
 
 Created pepnet.ps
-   
+
    Go to the input files for this example
    Go to the output files for this example
-   
+
 Command line arguments
 
    Standard (Mandatory) qualifiers:
@@ -99,7 +99,7 @@ Command line arguments
    -error               boolean    Report errors
    -fatal               boolean    Report fatal errors
    -die                 boolean    Report deaths
-   
+
 
    Standard (Mandatory) qualifiers Allowed values Default
    [-sequence]
@@ -107,7 +107,7 @@ Command line arguments
    -graph Graph type EMBOSS has a list of known devices, including
    postscript, ps, hpgl, hp7470, hp7580, meta, colourps, cps, xwindows,
    x11, tektronics, tekt, tek4107t, tek, none, null, text, data, xterm,
-   png EMBOSS_GRAPHICS value, or x11
+   png, xml EMBOSS_GRAPHICS value, or x11
    Additional (Optional) qualifiers Allowed values Default
    -squares By default the aliphatic residues ILVM are marked with
    squares. Any string is accepted ILVM
@@ -119,19 +119,19 @@ Command line arguments
    -amphipathic If this is true then the residues ACFGILMVWY are marked
    as squares and all other residues are unmarked. This overrides any
    other markup that you may have specified using the qualifiers
-   '-squares', '-diamonds' and '-octags'. Toggle value Yes/No
-   
+   '-squares', '-diamonds' and '-octags'. Toggle value Yes/No No
+
 Input file format
 
    pepnet reads any protein sequence USA.
-   
+
   Input files for usage example
-  
+
    'tsw:gcn4_yeast' is a sequence entry in the example protein database
    'tsw'
-   
+
   Database entry: tsw:gcn4_yeast
-  
+
 ID   GCN4_YEAST     STANDARD;      PRT;   281 AA.
 AC   P03069; P03068;
 DT   21-JUL-1986 (Rel. 01, Created)
@@ -237,43 +237,43 @@ SQ   SEQUENCE   281 AA;  31310 MW;  A2155238 CRC32;
      KPNSVVKKSH HVGKDDESRL DHLGVVAYNR KQRSIPLSPI VPESSDPAAL KRARNTEAAR
      RSRARKLQRM KQLEDKVEEL LSKNYHLENE VARLKKLVGE R
 //
-   
+
 Output file format
 
   Output files for usage example
-  
+
   Graphics File: pepnet.ps
-  
+
    [pepnet results]
-   
+
 Data files
 
    None.
-   
+
 Notes
 
    None.
-   
+
 References
 
    None.
-   
+
 Warnings
 
    None.
-   
+
 Diagnostic Error Messages
 
    None.
-   
+
 Exit status
 
    It exits with a status of 0.
-   
+
 Known bugs
 
    None.
-   
+
 See also
 
    Program name Description
@@ -297,20 +297,22 @@ See also
    textsearch Search sequence documentation text. SRS and Entrez are
    faster!
    tmap Displays membrane spanning regions
-   
+
 Author(s)
 
    Alan Bleasby (ableasby © rfcgr.mrc.ac.uk)
    MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
    Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
-   
+
 History
 
    Written (2000) - Alan Bleasby
-   
+
 Target users
 
    This program is intended to be used by everyone and everything, from
    naive users to embedded scripts.
-   
+
 Comments
+
+   None

@@ -1,12 +1,12 @@
 
                                   distmat 
-                                      
-   
-   
+
+
+
 Function
 
    Creates a distance matrix from multiple alignments
-   
+
 Description
 
    distmat calculates the evolutionary distances between every pair of
@@ -16,25 +16,25 @@ Description
    analysis. This application calculates a distance matrix for the set of
    sequences in the alignment. The distances are expressed in terms of
    the number of substitutions per 100 bases or amino acids.
-   
+
    As sequence diverge so does the probability of there being multiple
    substitutions at any one site in the alignment increase. The distance
    will then be an underestimate of the true evolutionary distance
    between the sequences. Therefore, there are a number of methods for
    correcting the observed substitution rate for the occurence of
    multiple substutions.
-   
+
    For nucleotides, the "-position" flag allows the user to choose base
    positions to analyse in each codon, i.e. 123 (all bases), 12 (the
    first two bases), 1, 2, or 3 individual bases.
-   
+
   Uncorrected distances
-  
+
    This method does not make any corrections for multiple substitutions.
    Therefore, the score will be an underestimate of the distance between
    the sequences. This will not be less significant for highly similar
    sets of sequences.
-   
+
 S = m/(npos + gaps*gap_penalty)                                  (1)
 
 m           - score of matches (1 for an exact match, a fraction for partial
@@ -53,13 +53,13 @@ D = uncorrected distance = p-distance = 1-S          (2)
    gaps and internal gaps will be weighted by the same amount. So it is
    recommended that this be used with "-sbegin"and "-send" to specify the
    start and end of the region to calculate the distance from.
-   
+
 Multiple Substitution correction algorithms
 
   Jukes-Cantor
-  
+
    This can be used for nucleotide and protein sequences.
-   
+
 distance = -b ln (1-D/b)
 
 D - uncorrected distance
@@ -68,18 +68,18 @@ b - constant. b= 3/4 for nucleotides and 19/20 for proteins.
    Partial matches and gap positions can be taken into account in the
    calculation of D, by setting the "-ambiguous" and "-gapweight" flags
    (see "uncorrected distance" method).
-   
+
    Reference:
    "Phylogenetic Inference", Swofford, Olsen, Waddell, and Hillis, in
    Molecular Systematics, 2nd ed., Sinauer Ass., Inc., 1996, Ch. 11.
-   
+
   Tajima-Nei
-  
+
    This method is only for nucleotide sequences. It uses the same
    equation as Jukes-Cantor, but the b-parameter is not constant. Also,
    only exact matches are considered in the calculation of the match
    score and gap positions are ignored.
-   
+
 A = 1, T = 2, C = 3, G = 4
 
 b = 0.5(1.- Sum(i=A,G)(fraction[i]^2  + D^2/h)
@@ -95,9 +95,9 @@ fraction[i]           - average content of the base i in both sequences
 
    Reference:
    F. Tajima and M. Nei, Mol. Biol. Evol. 1984, 1, 269.
-   
+
   Kimura Two-Parameter distance
-  
+
    This method is only for nucleotide sequences. This uses the principle
    that transition substitutions (purine-purine and pyrimidine-purine)
    are more likely than transversion substitutions (purine-pyprimidine).
@@ -105,7 +105,7 @@ fraction[i]           - average content of the base i in both sequences
    being the nucleic acid derivative of the bases C, T and U. Gaps are
    ignored and abiguous symbols other than R (purine) and Y (pyrimidine)
    are ingnored.
-   
+
 P = transitions/npos
 Q = transversions/npos
 
@@ -115,14 +115,14 @@ distance = -0.5 ln[ (1-2P-Q)*sqrt(1-2Q)]
 
    Reference:
    M. kimura, J. Mol. Evol. 1980, 16, 111.
-   
+
   Tamura
-  
+
    This method is only for nucleotide sequences. This method uses
    transition and transversion rates and takes into account the deviation
    of GC content from the expected value of 50 %. Gap and ambiguous
    positions are ignored.
-   
+
 P = transitions/npos
 Q = transversions/npos
 
@@ -136,15 +136,15 @@ distance = -C ln(1-P/C-Q) - 0.5(1-C) ln(1-2Q)
 
    Reference:
    K. Tamura, Mol. Biol. Evol. 1992, 9, 678.
-   
+
   Jin-Nei Gamma distance
-  
+
    This method applies to nucleotides only. This again uses transition
    and transversion rates. As with the Kimura two parameter method, gaps
    and ambiguous symbols other than R and Y are not oncluded in the
    score. The shape parameter, i.e. "a", is the square of the inverse of
    the coefficient of variation of the average substitution,
-   
+
 L = average substituition = transition_rate + 2 * transversion_rate
 a = (average L)^2/(variance of L)
 
@@ -159,15 +159,15 @@ distance = 0.5 * a ((1-2P-Q)^(-1/a) + 0.5 (1-2Q)^(-1/a) -3/2)
    calculated with an a-value of 1. However, the user can specify their
    own value, using the "-parametera" option, or calculate for each pair
    of sequence, using "-calculatea".
-   
+
    Reference:
    L. Jin and M. Nei, Mol. Biol. Evol. 1990, 7, 82.
-   
+
   Kimura Protein distance
-  
+
    This method is used for proteins only. Gaps are ignored and only exact
    matches and ambiguity codes contribute to the match score.
-   
+
 S = m/npos
 
 m  - exact match
@@ -179,13 +179,13 @@ distance = -ln(1 - D - 0.2D^2)
    Reference:
    M. Kimura, The Neutral Theory of Molecular Evolution, Camb. Uni.
    Press, Camb., 1983.
-   
+
 Usage
 
    Here is a sample session with distmat
-   
 
-% distmat ../../data/pax.align 
+
+% distmat pax.align 
 Creates a distance matrix from multiple alignments
 Multiple substitution correction methods for proteins
          0 : Uncorrected
@@ -193,10 +193,10 @@ Multiple substitution correction methods for proteins
          2 : Kimura Protein
 Method to use [0]: 2
 Output file [pax.distmat]: 
-   
+
    Go to the input files for this example
    Go to the output files for this example
-   
+
 Command line arguments
 
    Standard (Mandatory) qualifiers (* if not always prompted):
@@ -262,7 +262,7 @@ Command line arguments
    -error               boolean    Report errors
    -fatal               boolean    Report fatal errors
    -die                 boolean    Report deaths
-   
+
 
    Standard (Mandatory) qualifiers Allowed values Default
    [-sequence]
@@ -300,18 +300,18 @@ Command line arguments
    al.) and this is the default. Any numeric value 1.0
    Advanced (Unprompted) qualifiers Allowed values Default
    (none)
-   
+
 Input file format
 
    It reads in a normal multiple sequence alignment file.
-   
+
    The quality of the alignment is of paramount importance in obtaining
    meaningful information from this analysis.
-   
+
   Input files for usage example
-  
-  File: ../../data/pax.align
-  
+
+  File: pax.align
+
 PileUp
 
 
@@ -416,18 +416,18 @@ PAX2_HUMAN      ...
 PAX5_HUMAN      ...
 PX8A_HUMAN      ...
 PX8D_HUMAN      ...
-   
+
 Output file format
 
    The output from the program is a file containing a matrix of the
    calculated distances between each of the input aligned sequences. The
    distances are expressed in terms of the number of substitutions per
    100 bases or amino acids.
-   
+
   Output files for usage example
-  
+
   File: pax.distmat
-  
+
 Distance Matrix
 ---------------
 
@@ -454,21 +454,21 @@ Gap weighting is 0.000000
  73.82          PAX5_HUMAN 8
                                                                           0.00
  20.37          PX8A_HUMAN 9
-                                                                        
+
   0.00          PX8D_HUMAN 10
-   
+
 Data files
 
    None.
-   
+
 Notes
 
    None.
-   
+
 References
 
    See the following for details of the methods used:
-   
+
     1. "Phylogenetic Inference", Swofford, Olsen, Waddell, and Hillis, in
        Molecular Systematics, 2nd ed., Sinauer Ass., Inc., 1996, Ch. 11.
     2. F. Tajima and M. Nei, Mol. Biol. Evol. 1984, 1, 269.
@@ -477,41 +477,43 @@ References
     5. L. Jin and M. Nei, Mol. Biol. Evol. 1990, 7, 82.
     6. M. Kimura, The Neutral Theory of Molecular Evolution, Camb. Uni.
        Press, Camb., 1983.
-       
+
 Warnings
 
    The quality of the alignment is of paramount importance in obtaining
    meaningful information from this analysis.
-   
+
 Diagnostic Error Messages
 
    None.
-   
+
 Exit status
 
    It always exits with status 0.
-   
+
 Known bugs
 
    None.
-   
+
 See also
 
    Program name Description
-   
+
 Author(s)
 
    Tim Carver (tcarver © rfcgr.mrc.ac.uk)
    MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
    Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
-   
+
 History
 
    Written (March 2001) - Tim Carver
-   
+
 Target users
 
    This program is intended to be used by everyone and everything, from
    naive users to embedded scripts.
-   
+
 Comments
+
+   None

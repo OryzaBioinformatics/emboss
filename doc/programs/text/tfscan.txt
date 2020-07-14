@@ -1,45 +1,45 @@
 
                                   tfscan 
-                                      
-   
-   
+
+
+
 Function
 
    Scans DNA sequences for transcription factors
-   
+
 Description
 
    The TRANSFAC Database is a commercial database of eukaryotic
    cis-acting regulatory DNA elements and trans-acting factors. It covers
    the whole range from yeast to human.
-   
+
    An old public domain version is available at:
    ftp://ftp.ebi.ac.uk/pub/databases/transfac/transfac32.tar.Z
-   
+
    The 'site.dat' data file from TRANSFAC contains information on
    individual (putatively) regulatory protein binding sites. It has been
    divided into the following taxonomic groups.
-   
+
      * Fungi
      * Insects
      * Plants
      * Vertebrates
      * Other
-       
+
    The program tfscan takes a sequence and the name of one of these
    taxonomic groups and does a fast match of the TRANSFAC sequences
    against the input sequence (optionally allowing mismatches).
-   
+
    The results is a list of the positions which match the binding sites
    in the TRANSFAC SITE database.
-   
+
    Because the binding sites are so small, there will be many spurious
    (false positive) matches.
-   
+
 Usage
 
    Here is a sample session with tfscan
-   
+
 
 % tfscan 
 Scans DNA sequences for transcription factors
@@ -54,10 +54,10 @@ Transcription Factor Class
 Select class [V]: v
 Number of mismatches [0]: 
 Output file [hsfos.tfscan]: 
-   
+
    Go to the input files for this example
    Go to the output files for this example
-   
+
 Command line arguments
 
    Standard (Mandatory) qualifiers (* if not always prompted):
@@ -107,7 +107,7 @@ Command line arguments
    -error               boolean    Report errors
    -fatal               boolean    Report fatal errors
    -die                 boolean    Report deaths
-   
+
 
    Standard (Mandatory) qualifiers Allowed values Default
    [-sequence]
@@ -129,18 +129,18 @@ Command line arguments
    more 1
    Advanced (Unprompted) qualifiers Allowed values Default
    (none)
-   
+
 Input file format
 
    tfscan reads normal nucleic acid sequence USAs.
-   
+
   Input files for usage example
-  
+
    'tembl:hsfos' is a sequence entry in the example nucleic acid database
    'tembl'
-   
+
   Database entry: tembl:hsfos
-  
+
 ID   HSFOS      standard; DNA; HUM; 6210 BP.
 XX
 AC   K00650; M16287;
@@ -298,13 +298,13 @@ DR   TRANSFAC; R00466; HS$CFOS_09.
      agatgaagaa gggcagctgg accttcggac                                       621
 0
 //
-   
+
 Output file format
 
   Output files for usage example
-  
+
   File: hsfos.tfscan
-  
+
 TFSCAN of HSFOS from 1 to 6210
 
 MOUSE$FCGR3A_02      R04413   3287  3292  ttcctc
@@ -319,43 +319,43 @@ HS$ALBU_03           R00079   1356  1360  tggca
                      T00599; NF-1/L;Quality: 6; Species: rat, Rattus norvegicus
 .
 HS$ALBU_02           R00078   2009  2014  ttggca
-   
+
    The output consists of a title line then 5 columns separated by
    whitespace.
-   
+
    The first column is the identifier of the entry.
-   
+
    The second column is the Accession Number of the entry.
-   
+
    The third and fourth columns are the start and end positions of the
    match in your input sequence.
-   
+
    The fifth column is the sequence of the region where a match has been
    found.
-   
+
    Binding factor information, where available, is given at the end of
    the matches for each matching entry.
-   
+
 Data files
 
    tfscan reads the TRANSFAC SITE data held in the EMBOSS data files:
-   
+
      * tffungi
      * tfinsect
      * tfplant
      * tfvertebrate
      * tfother
-       
+
    Your EMBOSS administrator will have to run the EMBOSS program
    tfextract in order to set these files up from the TRANSFAC
    distribution files.
-   
+
    EMBOSS data files are distributed with the application and stored in
    the standard EMBOSS data directory, which is defined by the EMBOSS
    environment variable EMBOSS_DATA.
-   
+
    To see the available EMBOSS data files, run:
-   
+
 % embossdata -showall
 
    To fetch one of the data files (for example 'Exxx.dat') into your
@@ -368,68 +368,70 @@ Data files
    tidier directory listings in a subdirectory called ".embossdata".
    Files for all EMBOSS runs can be put in the user's home directory, or
    again in a subdirectory called ".embossdata".
-   
+
    The directories are searched in the following order:
      * . (your current directory)
      * .embossdata (under your current directory)
      * ~/ (your home directory)
      * ~/.embossdata
-       
+
 Notes
 
    None.
-   
+
 References
 
      * Nucleic Acids Res. 16: 1879-1902, 1988
      * BioTechForum - Advances in Molecular Genetics (J. Collins,A.J.
        Driesel, eds.) 4:95-108, 1991
      * Nucleic Acids Res. 20:3-26, 1992
-       
+
 Warnings
 
    Your EMBOSS administrator will have to run the EMBOSS program
    tfextract in order to set up the data files from the TRANSFAC
    distribution files.
-   
+
 Diagnostic Error Messages
 
    "EMBOSS An error in tfscan.c at line 82:
    Either EMBOSS_DATA undefined or TFEXTRACT needs running"
-   
+
    This means that you should contact your EMBOSS administrator and ask
    them to run the tfextract program to set up the TRANSFAC data for
    EMBOSS.
-   
+
 Exit status
 
    It always exits with a status of 0.
-   
+
 Known bugs
 
    None.
-   
+
 See also
 
    Program name Description
-   
+
    Your EMBOSS administrator will have to run the EMBOSS program
    tfextract in order to set up the data files from the TRANSFAC
    distribution files.
-   
+
 Author(s)
 
    Alan Bleasby (ableasby © rfcgr.mrc.ac.uk)
    MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
    Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
-   
+
 History
 
    Written Summer 2000 - Alan Bleasby
-   
+
 Target users
 
    This program is intended to be used by everyone and everything, from
    naive users to embedded scripts.
-   
+
 Comments
+
+   None

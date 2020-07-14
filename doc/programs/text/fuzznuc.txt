@@ -1,28 +1,28 @@
 
                                   fuzznuc 
-                                      
-   
-   
+
+
+
 Function
 
    Nucleic acid pattern search
-   
+
 Description
 
    fuzznuc uses PROSITE style patterns to search nucleotide sequences.
-   
+
    Patterns are specifications of a (typically short) length of sequence
    to be found. They can specify a search for an exact sequence or they
    can allow various ambiguities, matches to variable lengths of sequence
    and repeated subsections of the sequence.
-   
+
    fuzznuc intelligently selects the optimum searching algorithm to use,
    depending on the complexity of the search pattern specified.
-   
+
 Usage
 
    Here is a sample session with fuzznuc
-   
+
 
 % fuzznuc 
 Nucleic acid pattern search
@@ -30,10 +30,10 @@ Input sequence(s): tembl:hhtetra
 Search pattern: AAGCTT
 Number of mismatches [0]: 
 Output report [hhtetra.fuzznuc]: 
-   
+
    Go to the input files for this example
    Go to the output files for this example
-   
+
 Command line arguments
 
    Standard (Mandatory) qualifiers:
@@ -116,7 +116,7 @@ Command line arguments
    -error               boolean    Report errors
    -fatal               boolean    Report fatal errors
    -die                 boolean    Report deaths
-   
+
 
    Standard (Mandatory) qualifiers Allowed values Default
    [-sequence]
@@ -145,18 +145,18 @@ Command line arguments
    (none)
    Advanced (Unprompted) qualifiers Allowed values Default
    -complement Search complementary strand Boolean value Yes/No No
-   
+
 Input file format
 
    fuzznuc reads in normal nucleic acid sequence USAs.
-   
+
   Input files for usage example
-  
+
    'tembl:hhtetra' is a sequence entry in the example nucleic acid
    database 'tembl'
-   
+
   Database entry: tembl:hhtetra
-  
+
 ID   HHTETRA    standard; DNA; VRL; 1272 BP.
 XX
 AC   L46634; L46689;
@@ -244,13 +244,13 @@ SQ   Sequence 1272 BP; 346 A; 455 C; 222 G; 249 T; 0 other;
      gttttcaagc tt                                                          127
 2
 //
-   
+
   Pattern specification
-  
+
    Patterns for fuzznuc are based on the format of pattern used in the
    PROSITE database, with the difference that the terminating dot '.' and
    the hyphens, '-', between the characters are optional.
-   
+
    The PROSITE pattern definition from the PROSITE documentation (amended
    to refer to nucleic acid sequences, not proteins) follows.
      * The standard IUPAC one-letter codes for the nucleotides are used.
@@ -274,47 +274,46 @@ SQ   Sequence 1272 BP; 346 A; 455 C; 222 G; 249 T; 0 other;
        respectively ends with a `>' symbol.
      * A period ends the pattern. (Optional in fuzznuc).
      * All other characters, including spaces are not allowed.
-       
+
    For example, in the EMBL entry ECLAC you can look for the pattern:
 
 [CG](5)TG{A}N(1,5)C
 
    This searches for "C or G" 5 times, followed by T and G, then anything
    except A, then any base (1 to 5 times) before a C.
-   
+
    You can use ambiguity codes for nucleic acid searches but not within
    [] or {} as they expand to bracketed counterparts. For example, "s" is
    expanded to "[GC]" therefore [S] would be expanded to [[GC]] which is
    illegal.
-   
+
    Note the use of X is reserved for proteins. You must use N for nucleic
    acids to refer to any base.
-   
+
    The search is case-independent, so 'AAA' matches 'aaa'.
-   
+
 Output file format
 
    The output is a standard EMBOSS report file.
-   
+
    The results can be output in one of several styles by using the
    command-line qualifier -rformat xxx, where 'xxx' is replaced by the
    name of the required format. The available format names are: embl,
    genbank, gff, pir, swiss, trace, listfile, dbmotif, diffseq, excel,
    feattable, motif, regions, seqtable, simple, srs, table, tagseq
-   
-   See:
-   http://www.uk.embnet.org/Software/EMBOSS/Themes/ReportFormats.html for
-   further information on report formats.
-   
+
+   See: http://emboss.sf.net/docs/themes/ReportFormats.html for further
+   information on report formats.
+
    By default fuzznuc writes a 'seqtable' report file.
-   
+
   Output files for usage example
-  
+
   File: hhtetra.fuzznuc
-  
+
 ########################################
 # Program: fuzznuc
-# Rundate: Tue Apr 06 14:29:41 2004
+# Rundate: Thu Jul 15 2004 12:00:00
 # Report_format: seqtable
 # Report_file: hhtetra.fuzznuc
 ########################################
@@ -336,63 +335,65 @@ Output file format
 
 #---------------------------------------
 #---------------------------------------
-   
+
 Data files
 
    None.
-   
+
 Notes
 
    None.
-   
+
 References
 
    None.
-   
+
 Warnings
 
    None.
-   
+
 Diagnostic Error Messages
 
    None.
-   
+
 Exit status
 
    It always exits with a status of 0.
-   
+
 Known bugs
 
    None.
-   
+
 See also
 
    Program name                    Description
-   dreg         regular expression search of a nucleotide sequence
+   dreg         Regular expression search of a nucleotide sequence
    fuzztran     Protein pattern search after translation
    marscan      Finds MAR/SAR sites in nucleic sequences
-   
+
    Other EMBOSS programs allow you to search for regular expression
    patterns but may be less easy for the user who has never used regular
    expressions before:
-   
+
      * dreg - Regular expression search of a nucleotide sequence
      * preg - Regular expression search of a protein sequence
-       
+
 Author(s)
 
    Alan Bleasby (ableasby © rfcgr.mrc.ac.uk)
    MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
    Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
-   
+
 History
 
    Written (2000) - Alan Bleasby
    '-usa' added (13 March 2001) - Gary Williams
-   
+
 Target users
 
    This program is intended to be used by everyone and everything, from
    naive users to embedded scripts.
-   
+
 Comments
+
+   None

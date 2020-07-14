@@ -1,12 +1,12 @@
 
                                   emowse 
-                                      
-   
-   
+
+
+
 Function
 
    Protein identification by mass spectrometry
-   
+
 Description
 
    Peptide mass information can provide a 'fingerprint' signature
@@ -17,14 +17,14 @@ Description
    using as few as 3-4 experimentally determined peptide masses when
    screened against a fragment database derived from over 50,000
    proteins.
-   
+
    Given a one-per-line file of molecular weights cut by
    enzymes/reagents, emowse will search a protein database for matches
    with the mass spectrometry data.
-   
+
    One of eight cutting enzymes/reagents can be specified and an optional
    whole sequence molecular weight.
-   
+
    Determination of molecular weight has always been an important aspect
    of the characterization of biological molecules. Protein molecular
    weight data, historically obtained by SDS gel electrophoresis or gel
@@ -43,7 +43,7 @@ Description
    bonus to the protein chemist, sample handling requirements are minimal
    and the amounts required for MS analysis are in the same range, or
    less, than existing analytical methods.
-   
+
    As well as providing accurate mass information for intact proteins,
    such techniques have been routinely used to produce accurate peptide
    molecular weight 'fingerprint' maps following digestion of known
@@ -51,13 +51,13 @@ Description
    protein sequences (allowing the detection of errors of translation,
    mutation or insertion), characterise post-translational modifications
    or processing events and assign disulphide bonds [5,6].
-   
+
    Less well appreciated, however, is the extent to which such peptide
    mass information can provide a 'fingerprint' signature sufficiently
    discriminating to allow for the unique and rapid identification of
    unknown sample proteins, independent of other analytical methods such
    as protein sequence analysis.
-   
+
    Practical experience has shown that sample proteins can be uniquely
    identified using as few as 3- 4 experimentally determined peptide
    masses when screened against a fragment database derived from over
@@ -74,7 +74,7 @@ Description
    provide structural information, at the protein level, fully
    complementary to large-scale DNA sequencing or mapping projects
    [7,8,9].
-   
+
    For each entry in the specified set of sequences to search, emowse
    derives both whole sequence molecular weight and calculated peptide
    molecular weights for complete digests using the range of cleavage
@@ -87,7 +87,7 @@ Description
    To allow for N-terminal hydrogen and C-terminal hydroxyl the final
    calculated molecular weight of a peptide of N residues is given by the
    equation:
-   
+
         N
         __
         \
@@ -102,9 +102,9 @@ Description
    relating to post- translational modification (phosphorylation,
    glycosylation etc.) is not incorporated into calculation of peptide
    masses.
-   
+
   Table 1: Cleavage reagents modelled by emowse.
-  
+
 Reagent no.     Reagent                 Cleavage rule
 
         1       Trypsin                 C-term to K/R
@@ -120,9 +120,9 @@ Reagent no.     Reagent                 Cleavage rule
    resulting from incomplete or partial cleavages. At present, this is
    achieved by computing all nearest-neighbour pairs for each enzyme or
    reagent detailed in table 1.
-   
+
   Tolerance
-  
+
    The supplied number specifies the error allowed for mass accuracy of
    experimental mass determination. If no figure is specified, a default
    tolerance of 2 Daltons will be assumed. If you wish to specify a
@@ -137,9 +137,9 @@ Reagent no.     Reagent                 Cleavage rule
    determination, specify '0' (zero) to limit matches to the nearest
    integer value (effectively +/- 0.5 Daltons). Discrimination is
    significantly improved by the selection of a small error tolerance.
-   
+
   Whole sequence molecular weight
-  
+
    This option allows you to give the molwt of the whole protein (if
    known). This allows you to limit the search to proteins of this molwt
    plus/minus a 'limit' (see below). If unspecified, a whole protein
@@ -147,9 +147,9 @@ Reagent no.     Reagent                 Cleavage rule
    database". This will include all proteins up to the maximum size of
    just under 700,000 Daltons. You can specify any molwt in Daltons with
    this command e.g. '-weight 90000'.
-   
+
   Allowed whole sequence weight variability
-  
+
    This option is used in conjunction with the '-weight' option and is
    meaningless without it. It specifies a percentage. Only proteins of
    the given Sequence molecular weight +/- this percentage will be
@@ -163,9 +163,9 @@ Reagent no.     Reagent                 Cleavage rule
    no matches are found. Discrimination is best when the filter
    percentage is narrow, but some Mw estimates (particularly from SDS
    gels) should be given considerable allowance for error.
-   
+
   Partials factor
-  
+
    This specifies the weighting given to partially-cleaved peptide
    fragments, with a range from 0.1 to 1.0. If not specified, the default
    value is 0.4. The factor effectively down-weights the score awarded to
@@ -173,7 +173,7 @@ Reagent no.     Reagent                 Cleavage rule
    of 0.25 will reduce the score of partial fragments to 25% (one
    quarter) of the score of a complete ('perfect') peptide cleavage
    fragment of equal mass.
-   
+
    Computing all possible nearest-neighbour partial fragments adds
    significantly to the number of peptides entered in the database (by a
    factor of two). The major effect of this is to increase the background
@@ -182,7 +182,7 @@ Reagent no.     Reagent                 Cleavage rule
    factor (eg 0.1 - 0.3) is a useful way of limiting this effect -
    partial peptide matches will add a little to the cumulative frequency
    score, but without compromising discrimination.
-   
+
    More experienced users can utilise the '-partials' factor to optimize
    searches where the peptide Mw data contain a significant proportion of
    partial cleavage fragments (eg > 30%). In such cases, setting the
@@ -190,9 +190,9 @@ Reagent no.     Reagent                 Cleavage rule
    discrimination. Conversely, if the digestion is perfect, with no
    partial fragments present, the lowest '-partials' factor of 0.1 will
    give maximum discrimination.
-   
+
   Program requirements
-  
+
    The emowse search program accepts a single text file containing a list
    of experimentally-determined masses, generally selected from the range
    700-4,000 Daltons to reduce the influence of partial cleavage
@@ -202,26 +202,26 @@ Reagent no.     Reagent                 Cleavage rule
    hit versus miss tallies. User-selectable search parameters include an
    error tolerance (default +/- 2 Daltons), selection of the enzyme or
    reagent used and an intact protein Mw (optional, if known).
-   
+
    For each peptide Mw entry in the data file, emowse matches individual
    fragment molecular weights (FMWs) with database entry molecular
    weights (DBMWs). A 'hit' is scored when the following criterion is
    met:
-   
+
         DBMW-tolerance-1 < FMW < DBMW+tolerance+1
 
    If an intact protein Mw is specified (SMW) then the program prompts
    for a molecular weight filter percentage (MWFP). emowse then restricts
    the search to those entries which match the following criteria:
-   
+
         R = SMW x MWFP / 100
         0 < SMW-R < emowse entry Mol.wt. < SMW+R
 
    Default search parameters are a tolerance of +/- 2 Daltons, intact Mw
    specified and the MWFP set to 25.
-   
+
   emowse Scoring scheme
-  
+
    The final scoring scheme is based on the frequency of a fragment
    molecular weight being found in a protein of a given range of
    molecular weight. OWL database sequence entries were initially grouped
@@ -235,7 +235,7 @@ Reagent no.     Reagent                 Cleavage rule
    Cell frequency values for each 10 kDalton interval were then
    normalised to the largest cell value (Fmax), with all the cell values
    recalculated as:
-   
+
         Cell value = Old value / Fmax
 
    to yield floating point numbers between 0 and 1. These distribution
@@ -251,19 +251,19 @@ Reagent no.     Reagent                 Cleavage rule
    protein Mw of 50 kDaltons to reduce the influence of random score
    accumulation in large proteins (>200 kDaltons). The final score is
    thus calculated as:
-   
+
 Score = 50/(Pn x H)
 
    Where Pn is the product of n distribution scores and H the 'hit'
    protein molecular weight in kD.
-   
+
    Important consequences of this type of scoring scheme are that matches
    with peptides of higher Mw carry more scoring weight, and that the
    non-random distribution of fragment molecular weights in proteins of
    different sizes is compensated for.
-   
+
   Simulation studies
-  
+
    In a simulation of scoring properties, 100 test proteins with masses
    between 10 kD and 100 kD were randomly selected from the OWL sequence
    database. The sets of all possible tryptic peptide masses for each
@@ -276,7 +276,7 @@ Score = 50/(Pn x H)
    in the test sample generated more than 100 possible tryptic fragments.
    All 100 test examples were identified using 30% or less of the maximum
    number of available peptides.
-   
+
    This distribution was somewhat dependent on protein size, as smaller
    proteins generally yield fewer peptide fragments. Thus, all proteins
    of 30 kD and over were identified using 13% or less of possible
@@ -297,22 +297,22 @@ Score = 50/(Pn x H)
    performance. The simulation thus clearly demonstrated the high degree
    of discrimination afforded by relatively few peptide masses, even with
    generous allowance for error.
-   
+
 Usage
 
    Here is a sample session with emowse
-   
+
 
 % emowse 
 Protein identification by mass spectrometry
 Input sequence(s): tsw:*
-Name of molecular weight data file: ../../data/test.mowse
+Name of molecular weight data file: test.mowse
 Whole sequence molwt [0]: 
 Output file [100k_rat.emowse]: 
-   
+
    Go to the input files for this example
    Go to the output files for this example
-   
+
 Command line arguments
 
    Standard (Mandatory) qualifiers:
@@ -323,10 +323,10 @@ Command line arguments
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers:
-   -enzyme             menu       Enzyme or reagent
    -aadata             datafile   Molecular weight data for amino acids
-   -pcrange            integer    Allowed whole sequence weight variability
    -frequencies        datafile   Frequencies file
+   -enzyme             menu       Enzyme or reagent
+   -pcrange            integer    Allowed whole sequence weight variability
    -tolerance          float      Tolerance
    -partials           float      Partials factor
 
@@ -365,7 +365,7 @@ Command line arguments
    -error               boolean    Report errors
    -fatal               boolean    Report fatal errors
    -die                 boolean    Report deaths
-   
+
 
    Standard (Mandatory) qualifiers Allowed values Default
    [-sequence]
@@ -378,6 +378,8 @@ Command line arguments
    Additional (Optional) qualifiers Allowed values Default
    (none)
    Advanced (Unprompted) qualifiers Allowed values Default
+   -aadata Molecular weight data for amino acids Data file Eamino.dat
+   -frequencies Frequencies file Data file Efreqs.dat
    -enzyme Enzyme or reagent
    1 (Trypsin)
    2 (Lys-C)
@@ -388,21 +390,19 @@ Command line arguments
    7 (Chymotrypsin)
    8 (CNBr)
    1
-   -aadata Molecular weight data for amino acids Data file Eamino.dat
    -pcrange Allowed whole sequence weight variability Integer from 0 to
    75 25
-   -frequencies Frequencies file Data file Efreqs.dat
    -tolerance Tolerance Number from 0.100 to 1.000 0.1
    -partials Partials factor Number from 0.100 to 1.000 0.4
-   
+
 Input file format
 
   Input files for usage example
-  
+
    'tsw:*' is a sequence entry in the example protein database 'tsw'
-   
-  File: ../../data/test.mowse
-  
+
+  File: test.mowse
+
 6082.8
 5423.0
 3086.3
@@ -411,38 +411,38 @@ Input file format
 2030.2
 1399.6
 1086.2
-   
+
    The input file is a list of molecular weights of the peptide
    fragments. One weight is allowed per line. The example file above is a
    Trypsin digest of the protein sw:100K_rat (produced by using the
    program digest).
-   
+
    Each molecular weight must be on a line of its own. Masses (M not
    M[H+]) are accepted in any order (ascending,descending or mixed).
    Peptide masses can be entered as integers or floating-point values,
    the latter being rounded to the nearest integer value for the search.
-   
+
    It is suggested that peptide masses should be selected from the range
    700-4000 Daltons. This range balances the fact that very small
    peptides give little discrimination and minimizes the frequency of
    partially-cleaved peptides.
-   
+
    As a general rule, users are advised to identify and remove peptide
    masses resulting from autodigestion of the cleavage enzyme (e.g
    tryptic fragments of trypsin), best obtained by MS analysis of control
    digests containing only the enzyme.
-   
+
    Further information on the partial sequence and/or composition of the
    peptides can be given after the weight with a 'seq()' or 'comp()'
    specification. This should be formatted like:
-   
+
 mw seq(...) comp(...)
 
    where mw is the molecular mass of the fragment, seq(...) is sequence
    information and comp(...) is composition information. A line may
    contain more than one sequence information qualifiers. For example:
      _________________________________________________________________
-   
+
 7176 seq(b-t[pqt]ln)
 1744
 1490
@@ -500,20 +500,20 @@ sequence ACDEFGHI might look like:
 12345 seq(n-AC[DE]) seq(c-HI)
 
   Composition Information
-  
+
    Composition should consist of a number, followed by the corresponding
    amino acid between square brackets. For example
 comp(2[H]0[M]3[DE]*[K])
 
    indicates a peptide which contains 2 histidines, no methionines, 3
    acidic residues (glutamic or aspartic acid) and at least 1 lysine.
-   
+
 Output file format
 
   Output files for usage example
-  
+
   File: 100k_rat.emowse
-  
+
 
 Using data fragments of:
           1086.2
@@ -620,26 +620,26 @@ Using data fragments of:
         *2031.3 645    663    LLSASFLLTGQKNGLTPDR
         *3085.6 1573   1597   LVQYHQVLEMFILVLQQCHKENEDK
          No Match      1086.2 2424.7 2930.3 5423.0 6082.8
-   
+
    The emowse search program outputs a listing file containing the
    following information.
-   
+
   Specified search parameters
-  
+
    Includes all specified parameters such as digest reagent, specified
    error tolerance, specified intact protein Mw and Mw filter percentage.
    All supplied peptide Mws are listed in descending order, followed by
    the total number of entries scanned during the search.
-   
+
   Short 'hit' listing
-  
+
    The top 50 scoring proteins are then listed in descending order,
    details include the sequence ID name and brief text identifiers.
    Details are limited to the top 50 scores as a deliberate compromise to
    keep the result listings as short as possible.
-   
+
   Detailed 'hit' listing
-  
+
    The top 50 entries are then listed in more detail.The first line
    includes the sequence ID name, the emowse search score (typically a
    few powers of 10), the 'hit' protein Mw and finally an 'accuracy'
@@ -651,79 +651,102 @@ Using data fragments of:
    corresponding sequences of correct peptide matches. 'miss' peptides
    are indicated by 'No match' at the start of the last line for that
    protein.
-   
+
    Matching peptides marked with a '*' denote partially-cleaved
    fragments.
-   
+
 Data files
 
    emowse reads in the pre-computed "Frequencies" data file 'Efreqs.dat',
    (See the section "emowse Scoring scheme", above for a description of
    the frequency scores.)
-   
+
+   EMBOSS data files are distributed with the application and stored in
+   the standard EMBOSS data directory, which is defined by the EMBOSS
+   environment variable EMBOSS_DATA.
+
+   To see the available EMBOSS data files, run:
+
+% embossdata -showall
+
+   To fetch one of the data files (for example 'Exxx.dat') into your
+   current directory for you to inspect or modify, run:
+
+% embossdata -fetch -file Exxx.dat
+
+   Users can provide their own data files in their own directories.
+   Project specific files can be put in the current directory, or for
+   tidier directory listings in a subdirectory called ".embossdata".
+   Files for all EMBOSS runs can be put in the user's home directory, or
+   again in a subdirectory called ".embossdata".
+
+   The directories are searched in the following order:
+     * . (your current directory)
+     * .embossdata (under your current directory)
+     * ~/ (your home directory)
+     * ~/.embossdata
+
 Notes
 
    None.
-   
+
 References
 
    The paper describing the original 'MOWSE' program is:
-   D.J.C. Pappin, P. Hojrup and A.J. Bleasby 'Rapid Identification of
-   Proteins by Peptide-Mass Fingerprinting'. Current Biology (1993), vol
-   3, 327-332.
-   
-  General references
-  
-    1. Barber M, Bordoli RS, Sedgwick RD, Tyler AN: Fast atom bombardment
+    1. D.J.C. Pappin, P. Hojrup and A.J. Bleasby 'Rapid Identification of
+       Proteins by Peptide-Mass Fingerprinting'. Current Biology (1993),
+       vol 3, 327-332.
+       Other references:
+    2. Barber M, Bordoli RS, Sedgwick RD, Tyler AN: Fast atom bombardment
        of solids: a new ion source for mass spectrometry. J Chem Soc Chem
        Commun 1981, 7: 325-327.
-    2. Dole M, Mack LL, Hines RL, Mobley RC, Ferguson LD, Alice MB:
+    3. Dole M, Mack LL, Hines RL, Mobley RC, Ferguson LD, Alice MB:
        Molecular beams of macroions. J Chem Phys 1968, 49:2240-2249.
-    3. Meng CK, Mann M, Fenn JB: Of protons or proteins. Z Phys D 1988,
+    4. Meng CK, Mann M, Fenn JB: Of protons or proteins. Z Phys D 1988,
        10: 361-368.
-    4. Karas M, Hillenkamp F: Laser desorption ionisation of proteins
+    5. Karas M, Hillenkamp F: Laser desorption ionisation of proteins
        with molecular masses exceeding 10,000 Daltons. Analytical
        Chemistry 1988, 60:2299-2301.
-    5. Morris H, Panico M, Taylor GW: FAB-mapping of recombinant-DNA
+    6. Morris H, Panico M, Taylor GW: FAB-mapping of recombinant-DNA
        protein products. Biochem Biophys Res Commun 1983, 117:299-305.
-    6. Morris H, Greer FM: Mass spectrometry of natural and recombinant
+    7. Morris H, Greer FM: Mass spectrometry of natural and recombinant
        proteins and glycoproteins. Trends in Biotechnology 1988,
        6:140-147.
-    7. Weissenbach J, Gyapay G, Dib C, Vignal J, Morissette J, Millasseau
+    8. Weissenbach J, Gyapay G, Dib C, Vignal J, Morissette J, Millasseau
        P, Vaysseix G, Lathrop M: A second generation linkage map of the
        human genome. Nature 1992, 359:794-801.
-    8. Adams MD, Kelley JM, Gocayne JD, Dubnick M, Polymeropoulos MH,
+    9. Adams MD, Kelley JM, Gocayne JD, Dubnick M, Polymeropoulos MH,
        Xiao H, Merril CR, Wu A, Olde B, Moreno RF, Kerlavage AR, McCombie
        WR, Venter JC: Complementary DNA sequencing: expressed sequence
        tags and human genome project. Science 1991, 252:1651-1656.
-    9. Lehrach H, Drmanac R, Hoheisel J, Larin Z, Lennon G, Monaco AP,
+   10. Lehrach H, Drmanac R, Hoheisel J, Larin Z, Lennon G, Monaco AP,
        Nizetic D, Zehetner G, Poustka A: Hybridization fingerprinting in
        genome mapping and sequencing. In Genome Analysis Volume 1:
        Genetic and Physical Mapping. Cold Spring Harbor Laboratory Press;
        1990:39-81 .
-   10. Akrigg D, Bleasby AJ, Dix NIM, Findlay JBC, North ACT, Parry-
+   11. Akrigg D, Bleasby AJ, Dix NIM, Findlay JBC, North ACT, Parry-
        Smith D, Wootton JC, Blundell TI, Gardner SP, Hayes F, Sternberg
        MJE, Thornton JM, Tickle IJ, Murray-Rust P: A protein
        sequence/structure database. Nature 1988, 335:745-746.
-   11. Bleasby AJ, Wootton JC: Construction of validated, non- redundant
+   12. Bleasby AJ, Wootton JC: Construction of validated, non- redundant
        composite protein databases. Protein Engineering 1990, 3:153-159.
-       
+
 Warnings
 
    None.
-   
+
 Diagnostic Error Messages
 
    None.
-   
+
 Exit status
 
    It always exits with status 0.
-   
+
 Known bugs
 
    None.
-   
+
 See also
 
    Program name                          Description
@@ -740,20 +763,22 @@ See also
    pepstats     Protein statistics
    pepwindow    Displays protein hydropathy
    pepwindowall Displays protein hydropathy of a set of sequences
-   
+
 Author(s)
 
    Alan Bleasby (ableasby © rfcgr.mrc.ac.uk)
    MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
    Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
-   
+
 History
 
-   Written (Sept 2000) - author.
-   
+   Written (Sept 2000) - Alan Bleasby.
+
 Target users
 
    This program is intended to be used by everyone and everything, from
    naive users to embedded scripts.
-   
+
 Comments
+
+   None

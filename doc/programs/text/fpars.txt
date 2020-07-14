@@ -1,0 +1,469 @@
+
+                                   fpars 
+
+
+
+Function
+
+   Discrete character parsimony
+
+Description
+
+   Multistate discrete-characters parsimony method. Up to 8 states (as
+   well as "?") are allowed. Cannot do Camin-Sokal or Dollo Parsimony.
+   Can cope with multifurcations, reconstruct ancestral states, use
+   character weights, and infer branch lengths.
+
+Algorithm
+
+   PARS is a general parsimony program which carries out the Wagner
+   parsimony method with multiple states. Wagner parsimony allows changes
+   among all states. The criterion is to find the tree which requires the
+   minimum number of changes. The Wagner method was originated by Eck and
+   Dayhoff (1966) and by Kluge and Farris (1969). Here are its
+   assumptions:
+    1. Ancestral states are unknown unknown.
+    2. Different characters evolve independently.
+    3. Different lineages evolve independently.
+    4. Changes to all other states are equally probable (Wagner).
+    5. These changes are a priori improbable over the evolutionary time
+       spans involved in the differentiation of the group in question.
+    6. Other kinds of evolutionary event such as retention of
+       polymorphism are far less probable than these state changes.
+    7. Rates of evolution in different lineages are sufficiently low that
+       two changes in a long segment of the tree are far less probable
+       than one change in a short segment.
+
+   That these are the assumptions of parsimony methods has been
+   documented in a series of papers of mine: (1973a, 1978b, 1979, 1981b,
+   1983b, 1988b). For an opposing view arguing that the parsimony methods
+   make no substantive assumptions such as these, see the papers by
+   Farris (1983) and Sober (1983a, 1983b), but also read the exchange
+   between Felsenstein and Sober (1986).
+
+Usage
+
+   Here is a sample session with fpars
+
+
+% fpars 
+Discrete character parsimony
+Input file: pars.dat
+Input tree file: 
+Output file [pars.fpars]: 
+
+Adding species:
+   1. Alpha
+   2. Beta
+   3. Gamma
+   4. Delta
+   5. Epsilon
+
+Doing global rearrangements on the first of the trees tied for best
+  !---------!
+   .........
+   .........
+
+Collapsing best trees
+   .
+
+Output written to file "pars.fpars"
+
+Tree also written onto file "pars.treefile"
+
+Done.
+
+
+   Go to the input files for this example
+   Go to the output files for this example
+
+Command line arguments
+
+   Standard (Mandatory) qualifiers:
+  [-infile]            discretestates File containing one or more data sets
+  [-intreefile]        tree       (no help text) tree value
+  [-outfile]           outfile    Output file name
+
+   Additional (Optional) qualifiers (* if not always prompted):
+   -weights            properties Weights file
+   -method             menu       Choose the parsimony method to use
+   -maxtrees           integer    Number of trees to save
+*  -[no]thorough       toggle     More thorough search
+*  -[no]rearrange      boolean    Rearrange on just one best tree
+*  -njumble            integer    Number of times to randomise
+*  -seed               integer    Random number seed between 1 and 32767 (must
+                                  be odd)
+   -outgrno            integer    Species number to use as outgroup
+   -thresh             toggle     Use threshold parsimony
+*  -threshold          float      Threshold value
+   -[no]trout          toggle     Write out trees to tree file
+*  -outtreefile        outfile    Tree file name
+   -printdata          boolean    Print data at start of run
+   -[no]progress       boolean    Print indications of progress of run
+   -[no]treeprint      boolean    Print out tree
+   -stepbox            boolean    Print steps at each site
+   -ancseq             boolean    Print states at all nodes of tree
+*  -[no]dotdiff        boolean    Use dot differencing to display results
+
+   Advanced (Unprompted) qualifiers: (none)
+   Associated qualifiers:
+
+   "-outfile" associated qualifiers
+   -odirectory3        string     Output directory
+
+   "-outtreefile" associated qualifiers
+   -odirectory         string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report deaths
+
+
+   Standard (Mandatory) qualifiers Allowed values Default
+   [-infile]
+   (Parameter 1) File containing one or more data sets Discrete states
+   file
+   [-intreefile]
+   (Parameter 2) (no help text) tree value Phylogenetic tree
+   [-outfile]
+   (Parameter 3) Output file name Output file <sequence>.fpars
+   Additional (Optional) qualifiers Allowed values Default
+   -weights Weights file Property value(s)
+   -method Choose the parsimony method to use
+   w (Wagner)
+   c (Camin-Sokal)
+   Wagner
+   -maxtrees Number of trees to save Integer from 1 to 1000000 100
+   -[no]thorough More thorough search Toggle value Yes/No Yes
+   -[no]rearrange Rearrange on just one best tree Boolean value Yes/No
+   Yes
+   -njumble Number of times to randomise Integer 0 or more 0
+   -seed Random number seed between 1 and 32767 (must be odd) Integer
+   from 1 to 32767 1
+   -outgrno Species number to use as outgroup Integer 0 or more 0
+   -thresh Use threshold parsimony Toggle value Yes/No No
+   -threshold Threshold value Number 1.000 or more 1
+   -[no]trout Write out trees to tree file Toggle value Yes/No Yes
+   -outtreefile Tree file name Output file
+   -printdata Print data at start of run Boolean value Yes/No No
+   -[no]progress Print indications of progress of run Boolean value
+   Yes/No Yes
+   -[no]treeprint Print out tree Boolean value Yes/No Yes
+   -stepbox Print steps at each site Boolean value Yes/No No
+   -ancseq Print states at all nodes of tree Boolean value Yes/No No
+   -[no]dotdiff Use dot differencing to display results Boolean value
+   Yes/No Yes
+   Advanced (Unprompted) qualifiers Allowed values Default
+   (none)
+
+Input file format
+
+   fpars reads discrete characters input, except that multiple states (up
+   to 9 of them) are allowed. Any characters other than "?" are allowed
+   as states, up to a maximum of 9 states. In fact, one can use different
+   symbols in different columns of the data matrix, although it is rather
+   unlikely that you would want to do that. The symbols you can use are:
+     * The digits 0-9,
+     * The letters A-Z and a-z,
+     * The symbols "!\"#$%&'()*+,-./:;<=>?@\[\\]^_`\{|}~
+       (of these, probably only + and - will be of interest to most
+       users).
+
+   But note that these do not include blank (" "). Blanks in the input
+   data are simply skipped by the program, so that they can be used to
+   make characters into groups for ease of viewing. The "?" (question
+   mark) symbol has special meaning. It is allowed in the input but is
+   not available as the symbol of a state. Rather, it means that the
+   state is unknown.
+
+   PARS can handle both bifurcating and multifurcating trees. In doing
+   its search for most parsimonious trees, it adds species not only by
+   creating new forks in the middle of existing branches, but it also
+   tries putting them at the end of new branches which are added to
+   existing forks. Thus it searches among both bifurcating and
+   multifurcating trees. If a branch in a tree does not have any
+   characters which might change in that branch in the most parsimonious
+   tree, it does not save that tree. Thus in any tree that results, a
+   branch exists only if some character has a most parsimonious
+   reconstruction that would involve change in that branch.
+
+   It also saves a number of trees tied for best (you can alter the
+   number it saves using the V option in the menu). When rearranging
+   trees, it tries rearrangements of all of the saved trees. This makes
+   the algorithm slower than earlier programs such as MIX.
+
+  (0,1) Discrete character data
+
+   These programs are intended for the use of morphological systematists
+   who are dealing with discrete characters, or by molecular
+   evolutionists dealing with presence-absence data on restriction sites.
+   One of the programs (PARS) allows multistate characters, with up to 8
+   states, plus the unknown state symbol "?". For the others, the
+   characters are assumed to be coded into a series of (0,1) two-state
+   characters. For most of the programs there are two other states
+   possible, "P", which stands for the state of Polymorphism for both
+   states (0 and 1), and "?", which stands for the state of ignorance: it
+   is the state "unknown", or "does not apply". The state "P" can also be
+   denoted by "B", for "both".
+
+   There is a method invented by Sokal and Sneath (1963) for linear
+   sequences of character states, and fully developed for branching
+   sequences of character states by Kluge and Farris (1969) for recoding
+   a multistate character into a series of two-state (0,1) characters.
+   Suppose we had a character with four states whose character-state tree
+   had the rooted form:
+
+               1 ---> 0 ---> 2
+                      |
+                      |
+                      V
+                      3
+
+   so that 1 is the ancestral state and 0, 2 and 3 derived states. We can
+   represent this as three two-state characters:
+
+                Old State           New States
+                --- -----           --- ------
+                    0                  001
+                    1                  000
+                    2                  011
+                    3                  101
+
+   The three new states correspond to the three arrows in the above
+   character state tree. Possession of one of the new states corresponds
+   to whether or not the old state had that arrow in its ancestry. Thus
+   the first new state corresponds to the bottommost arrow, which only
+   state 3 has in its ancestry, the second state to the rightmost of the
+   top arrows, and the third state to the leftmost top arrow. This coding
+   will guarantee that the number of times that states arise on the tree
+   (in programs MIX, MOVE, PENNY and BOOT) or the number of polymorphic
+   states in a tree segment (in the Polymorphism option of DOLLOP,
+   DOLMOVE, DOLPENNY and DOLBOOT) will correctly correspond to what would
+   have been the case had our programs been able to take multistate
+   characters into account. Although I have shown the above character
+   state tree as rooted, the recoding method works equally well on
+   unrooted multistate characters as long as the connections between the
+   states are known and contain no loops.
+
+   However, in the default option of programs DOLLOP, DOLMOVE, DOLPENNY
+   and DOLBOOT the multistate recoding does not necessarily work
+   properly, as it may lead the program to reconstruct nonexistent state
+   combinations such as 010. An example of this problem is given in my
+   paper on alternative phylogenetic methods (1979).
+
+   If you have multistate character data where the states are connected
+   in a branching "character state tree" you may want to do the binary
+   recoding yourself. Thanks to Christopher Meacham, the package contains
+   a program, FACTOR, which will do the recoding itself. For details see
+   the documentation file for FACTOR.
+
+   We now also have the program PARS, which can do parsimony for
+   unordered character states.
+
+  Input files for usage example
+
+  File: pars.dat
+
+     5    6
+Alpha     110110
+Beta      110000
+Gamma     100110
+Delta     001001
+Epsilon   001110
+
+Output file format
+
+   fpars output is standard: if option 1 is toggled on, the data is
+   printed out, with the convention that "." means "the same as in the
+   first species". Then comes a list of equally parsimonious trees. Each
+   tree has branch lengths. These are computed using an algorithm
+   published by Hochbaum and Pathria (1997) which I first heard of from
+   Wayne Maddison who invented it independently of them. This algorithm
+   averages the number of reconstructed changes of state over all sites a
+   over all possible most parsimonious placements of the changes of state
+   among branches. Note that it does not correct in any way for multiple
+   changes that overlay each other.
+
+   If option 2 is toggled on a table of the number of changes of state
+   required in each character is also printed. If option 5 is toggled on,
+   a table is printed out after each tree, showing for each branch
+   whether there are known to be changes in the branch, and what the
+   states are inferred to have been at the top end of the branch. This is
+   a reconstruction of the ancestral sequences in the tree. If you choose
+   option 5, a menu item D appears which gives you the opportunity to
+   turn off dot-differencing so that complete ancestral sequences are
+   shown. If the inferred state is a "?", there will be multiple
+   equally-parsimonious assignments of states; the user must work these
+   out for themselves by hand. If option 6 is left in its default state
+   the trees found will be written to a tree file, so that they are
+   available to be used in other programs. If the program finds multiple
+   trees tied for best, all of these are written out onto the output tree
+   file. Each is followed by a numerical weight in square brackets (such
+   as [0.25000]). This is needed when we use the trees to make a
+   consensus tree of the results of bootstrapping or jackknifing, to
+   avoid overrepresenting replicates that find many tied trees.
+
+   If the U (User Tree) option is used and more than one tree is
+   supplied, the program also performs a statistical test of each of
+   these trees against the best tree. This test, which is a version of
+   the test proposed by Alan Templeton (1983) and evaluated in a test
+   case by me (1985a). It is closely parallel to a test using log
+   likelihood differences due to Kishino and Hasegawa (1989), and uses
+   the mean and variance of step differences between trees, taken across
+   sites. If the mean is more than 1.96 standard deviations different
+   then the trees are declared significantly different. The program
+   prints out a table of the steps for each tree, the differences of each
+   from the best one, the variance of that quantity as determined by the
+   step differences at individual sites, and a conclusion as to whether
+   that tree is or is not significantly worse than the best one. It is
+   important to understand that the test assumes that all the discrete
+   characters are evolving independently, which is unlikely to be true
+   for
+
+   If there are more than two trees, the test done is an extension of the
+   KHT test, due to Shimodaira and Hasegawa (1999). They pointed out that
+   a correction for the number of trees was necessary, and they
+   introduced a resampling method to make this correction. In the version
+   used here the variances and covariances of the sums of steps across
+   characters are computed for all pairs of trees. To test whether the
+   difference between each tree and the best one is larger than could
+   have been expected if they all had the same expected number of steps,
+   numbers of steps for all trees are sampled with these covariances and
+   equal means (Shimodaira and Hasegawa's "least favorable hypothesis"),
+   and a P value is computed from the fraction of times the difference
+   between the tree's value and the lowest number of steps exceeds that
+   actually observed. Note that this sampling needs random numbers, and
+   so the program will prompt the user for a random number seed if one
+   has not already been supplied. With the two-tree KHT test no random
+   numbers are used.
+
+   In either the KHT or the SH test the program prints out a table of the
+   number of steps for each tree, the differences of each from the lowest
+   one, the variance of that quantity as determined by the differences of
+   the numbers of steps at individual characters, and a conclusion as to
+   whether that tree is or is not significantly worse than the best one.
+
+   Option 6 in the menu controls whether the tree estimated by the
+   program is written onto a tree file. The default name of this output
+   tree file is "outtree". If the U option is in effect, all the
+   user-defined trees are written to the output tree file.
+
+  Output files for usage example
+
+  File: pars.fpars
+
+
+Discrete character parsimony algorithm, version 3.6b
+
+
+One most parsimonious tree found:
+
+
+                            +Epsilon
+           +----------------3
+  +--------2                +-------------------------Delta
+  |        |
+  |        +Gamma
+  |
+  1----------------Beta
+  |
+  +Alpha
+
+
+requires a total of      8.000
+
+  between      and       length
+  -------      ---       ------
+     1           2         1.00
+     2           3         2.00
+     3      Epsilon        0.00
+     3      Delta          3.00
+     2      Gamma          0.00
+     1      Beta           2.00
+     1      Alpha          0.00
+
+  File: pars.treefile
+
+   (((Epsilon:0.00,Delta:3.00):2.00,Gamma:0.00):1.00,Beta:2.00,Alpha:0.00);
+
+Data files
+
+   None
+
+Notes
+
+   None.
+
+References
+
+   None.
+
+Warnings
+
+   None.
+
+Diagnostic Error Messages
+
+   None.
+
+Exit status
+
+   It always exits with status 0.
+
+Known bugs
+
+   None.
+
+See also
+
+   Program name Description
+   eclique Largest clique program
+   edollop Dollo and polymorphism parsimony algorithm
+   edolpenny Penny algorithm Dollo or polymorphism
+   efactor Multistate to binary recoding program
+   emix Mixed parsimony algorithm
+   epenny Penny algorithm, branch-and-bound to find all most parsimonious
+   trees
+   fclique Largest clique program
+   fdollop Dollo and polymorphism parsimony algorithm
+   fdolpenny Penny algorithm Dollo or polymorphism
+   ffactor Multistate to binary recoding program
+   fmix Mixed parsimony algorithm
+   fmove Interactive mixed method parsimony
+   fpenny Penny algorithm, branch-and-bound to find all most parsimonious
+   trees
+
+Author(s)
+
+   This program is an EMBOSS conversion of a program written by Joe
+   Felsenstein as part of his PHYLIP package.
+
+   Although we take every care to ensure that the results of the EMBOSS
+   version are identical to those from the original package, we recommend
+   that you check your inputs give the same results in both versions
+   before publication.
+
+   Please report all bugs in the EMBOSS version to the EMBOSS bug team,
+   not to the original author.
+
+History
+
+   Written (2004) - Joe Felsenstein, University of Washington.
+
+   Converted (August 2004) to an EMBASSY program by the EMBOSS team.
+
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.

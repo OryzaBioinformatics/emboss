@@ -1,18 +1,18 @@
 
                                  prophecy 
-                                      
-   
-   
+
+
+
 Function
 
    Creates matrices/profiles from multiple alignments
-   
+
 Description
 
    prophecy produces a simple frequency matrix for use by profit or a
    position specific weighted profile using either the Gribskov (1) or
    Henikoff (2) method for use by prophet.
-   
+
    Profile analysis is a method for detecting distantly related proteins
    by sequence comparison. The basis for comparison is not only the
    customary Dayhoff mutational-distance matrix but also the results of
@@ -30,23 +30,23 @@ Description
    methods. (ii) The profile includes the penalties for insertion or
    deletion at each position, which allow one to include the probe
    secondary structure in the testing scheme.
-   
+
   Algorithm
-  
+
    For Gribskov the scoring scheme is based on a notion of distance
    between a sequence and an ancestral or generalized sequence.
-   
+
    For Henikoff it is based on weights of the diversity observed at each
    position in the alignment, rather than on a sequence distance measure.
-   
+
 Usage
 
    Here is a sample session with prophecy
-   
+
 
 % prophecy 
 Creates matrices/profiles from multiple alignments
-Input sequence set: ../../data/globins.msf
+Input sequence set: globins.msf
 Profile type
          F : Frequency
          G : Gribskov
@@ -55,16 +55,16 @@ Select type [F]:
 Enter a name for the profile [mymatrix]: globins
 Enter threshold reporting percentage [75]: 
 Output file [globins.prophecy]: 
-   
+
    Go to the input files for this example
    Go to the output files for this example
-   
+
    Example 2
-   
+
 
 % prophecy 
 Creates matrices/profiles from multiple alignments
-Input sequence set: ../../data/globins.msf
+Input sequence set: globins.msf
 Profile type
          F : Frequency
          G : Gribskov
@@ -75,9 +75,9 @@ Enter a name for the profile [mymatrix]: globins
 Gap opening penalty [3.0]: 
 Gap extension penalty [0.3]: 
 Output file [globins.prophecy]: 
-   
+
    Go to the output files for this example
-   
+
 Command line arguments
 
    Standard (Mandatory) qualifiers (* if not always prompted):
@@ -127,7 +127,7 @@ Command line arguments
    -error               boolean    Report errors
    -fatal               boolean    Report fatal errors
    -die                 boolean    Report deaths
-   
+
 
    Standard (Mandatory) qualifiers Allowed values Default
    [-sequence]
@@ -150,15 +150,15 @@ Command line arguments
    (none)
    Advanced (Unprompted) qualifiers Allowed values Default
    (none)
-   
+
 Input file format
 
    prophecy reads a protein or a nucleic sequence alignment USA.
-   
+
   Input files for usage example
-  
-  File: ../../data/globins.msf
-  
+
+  File: globins.msf
+
 !!AA_MULTIPLE_ALIGNMENT 1.0
 
   ../data/globins.msf MSF:  164 Type: P 25/06/01 CompCheck: 4278 ..
@@ -208,15 +208,15 @@ HBA_HORSE  TVLTSKYR~~~~~~
 MYG_PHYCA  KDIAAKYKELGYQG
 GLB5_PETMA Y~~~~~~~~~~~~~
 LGB2_LUPLU IVIKKEMNDAA~~~
-   
+
 Output file format
 
    The output is a profile file.
-   
+
   Output files for usage example
-  
+
   File: globins.prophecy
-  
+
 # Pure Frequency Matrix
 # Columns are amino acid counts A->Z
 # Rows are alignment positions 1->n
@@ -415,11 +415,11 @@ DKALAGVANVLAHKYHDAAYQG
 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0  0  0  0  0  0
 
 0  0  0  0  0  0  1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
-   
+
   Output files for usage example 2
-  
+
   File: globins.prophecy
-  
+
 # Gribskov Protein Profile
 # Columns are amino acids A->Z
 # Last column is indel penalty
@@ -615,18 +615,18 @@ DKFLASVATVLASKYRELGYQG
 0.10 0.49 0.13 -0.03 -0.03 0.00 -0.07 -0.16 0.00 -0.20 0.00 0.92 0.92
 0.20 0.00 0.07 0.20 0.16 -0.20 0.49 -0.07 -0.10 0.00 -0.03 -0.16 -0.10 0.13 0.0
 0 0.10 0.07 -0.10 0.20 0.13 0.00 0.07 -0.33 0.00 -0.20 0.00 0.92 0.92
-   
+
   Simple frequency matrix
-  
+
    The columns represent amino acid counts for the amino acid residues
    from A to Z. The rows represent the alignment positions from 1->n. The
    file is a "Simple" frequency matrix of "Length" 20 amino acids. The
    maximum score this matrix can give is 496. The "Threshold" value is an
    instruction to the profit application to only report matches above the
    given score.
-   
+
   Gribskov profile
-  
+
    The columns represent the amino acids from A to Z, the rows denote the
    alignment position from 1 to n. The last column is the indel penalty.
    The "Name" is the name used by prophet to refer to the profile, the
@@ -636,61 +636,88 @@ DKFLASVATVLASKYRELGYQG
    threshold is an instruction to prophet to only report hits equal to or
    above the given value. The gap opening and extension values are used
    by prophet in the dynamic alignment (Smith Waterman equivalent).
-   
+
 Data files
 
    The two profile methods require a residue substitution scoring matrix.
-   
+
    The Gribskov marices use the data file 'Epprofile' by default. This is
    derived from a PAM250 scoring matrix.
-   
+
    The Henikoff matrices use the data file 'EBLOSUM62' by default.
-   
+
+   EMBOSS data files are distributed with the application and stored in
+   the standard EMBOSS data directory, which is defined by the EMBOSS
+   environment variable EMBOSS_DATA.
+
+   To see the available EMBOSS data files, run:
+
+% embossdata -showall
+
+   To fetch one of the data files (for example 'Exxx.dat') into your
+   current directory for you to inspect or modify, run:
+
+% embossdata -fetch -file Exxx.dat
+
+   Users can provide their own data files in their own directories.
+   Project specific files can be put in the current directory, or for
+   tidier directory listings in a subdirectory called ".embossdata".
+   Files for all EMBOSS runs can be put in the user's home directory, or
+   again in a subdirectory called ".embossdata".
+
+   The directories are searched in the following order:
+     * . (your current directory)
+     * .embossdata (under your current directory)
+     * ~/ (your home directory)
+     * ~/.embossdata
+
 Notes
 
    None.
-   
+
 References
 
     1. Gribskov M, McLachlan AD, Eisenberg D. Proc Natl Acad Sci U S A.
        1987 Jul; 84(13): 4355-8.
     2. Henikoff S, Henikoff JG. J Mol Biol. 1994 Nov 4; 243(4): 574-8.
-       
+
 Warnings
 
    None.
-   
+
 Diagnostic Error Messages
 
    None.
-   
+
 Exit status
 
    It always exits with status 0.
-   
+
 Known bugs
 
    None.
-   
+
 See also
 
    Program name                     Description
    profit       Scan a sequence or database with a matrix or profile
    prophet      Gapped alignment for profiles
-   
+
 Author(s)
 
    Alan Bleasby (ableasby © rfcgr.mrc.ac.uk)
    MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
    Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
-   
+
 History
 
    1999 - Written Alan Bleasby.
-   
+
 Target users
 
    This program is intended to be used by everyone and everything, from
    naive users to embedded scripts.
-   
+
 Comments
+
+   None

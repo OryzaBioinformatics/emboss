@@ -1,0 +1,828 @@
+<!--START OF HEADER - DON'T ALTER -->
+
+<HTML>
+<HEAD>
+  <TITLE>
+  EMBOSS: meme
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+
+
+<table align=center border=0 cellspacing=0 cellpadding=0>
+<tr><td valign=top>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+</td>
+<td align=left valign=middle>
+<b><font size="+6">
+
+meme
+</font></b>
+</td></tr>
+</table>
+<br>&nbsp;
+<p>
+
+
+
+<!--END OF HEADER-->
+
+
+
+
+
+
+<H2>
+    Function
+</H2>
+Motif detection
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+
+
+
+
+<H2>
+    Description
+</H2>
+
+<!-- 
+	This is the main part of the document.
+        This is what the user looks at to find out if this program will do what he wants. 
+        Long description.
+        Why it is useful.
+        When it should/shouldn't be used.
+  -->
+
+**************** 
+EDIT HERE
+**************** 
+
+
+
+
+
+
+
+
+
+
+
+
+
+<H2>
+    Algorithm
+</H2>
+
+<!-- 
+        Algorithms
+	  Pseudocode/Vague description/Handwaving/web links to useful pages
+  -->
+
+**************** 
+EDIT HERE
+**************** 
+
+
+
+
+
+
+
+
+
+
+
+
+
+<H2>
+    Usage
+</H2>
+
+<!--  
+	Example usage, as run from the command-line.
+        Many examples illustrating different behaviours is good.
+ -->
+
+
+
+
+
+<H2>
+    Command line arguments
+</H2>
+
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+   Standard (Mandatory) qualifiers:
+  [-sequence]          seqall     Sequence database USA
+   -model              menu       Model to use
+   -nmotifs            integer    Maximum number of motifs to find
+  [-outfile]           outfile    Output file name
+
+   Additional (Optional) qualifiers:
+   -ntype              menu       Method to use
+   -protein            boolean    Assume sequences are proteins
+   -nucleic            boolean    Assume sequences are DNA
+   -palindromes        boolean    Allow palindromes
+   -ponly              boolean    Force palindromes
+   -[no]shorten        boolean    Allow motifs shorter than MINW
+   -nsites             float      Expected number of sites for each motif
+   -minsites           float      Minimum number of sites for each motif
+   -maxsites           float      Maximum number of sites for each motif
+   -w                  integer    Starting motif width to try
+   -minw               integer    Minimum starting motif width to try
+   -maxw               integer    Maximum starting motif width to try
+   -prior              menu       Prior to use
+   -[no]brief          boolean    Don't print documemtation
+   -b                  float      Strength of the prior
+   -spmap              menu       Mapping start
+   -spfuzz             float      Fuzziness of sequence to theta mapping
+   -maxiter            integer    Maximum EM iterations to run
+   -distance           float      EM convergence criterion
+   -cons               string     Consensus sequence to start EM from
+   -chi                float      Cutoff for p-value
+   -adj                menu       Type
+   -maxsize            integer    Maximum dataset size in characters
+   -page               integer    Width of page
+   -status             boolean    Print progress reports
+   -v                  boolean    Verbose mode
+   -cfive              boolean    Use 5' to 3' complementary strand as well
+   -cthree             boolean    Use 3' to 5' complementary strand as well
+   -wthree             boolean    Use 3' to 5' main strand as well
+   -prob               float      Starting point confidence level
+   -seed               integer    Seed for random numbers in sampling
+   -seqfrac            float      Fraction of sequences to use
+   -[no]align          boolean    Print aligned motif occurrences
+   -trace              boolean    Trace starting points
+   -allprint           boolean    Print all debugging information
+   -wprint             boolean    Print erasure matrix
+   -zprint             boolean    Print missing information matrix
+   -llprint            boolean    Print log likelihood during EM
+   -startsprint        boolean    Print starting points
+   -fastaprint         boolean    Print sites in FASTA format
+   -timer              integer    Timer type
+
+   Advanced (Unprompted) qualifiers: (none)
+   Associated qualifiers:
+
+   "-sequence" associated qualifiers
+   -sbegin1            integer    Start of each sequence to be used
+   -send1              integer    End of each sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
+
+   "-outfile" associated qualifiers
+   -odirectory2        string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report deaths
+
+
+</pre>
+</td></tr></table>
+<P>
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-sequence]<br>(Parameter 1)</td>
+<td>Sequence database USA</td>
+<td>Readable sequence(s)</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>-model</td>
+<td>Model to use</td>
+<td><table><tr><td>oops</td> <td><i>(Oops Distribution)</i></td></tr><tr><td>zoops</td> <td><i>(Zoops Distribution)</i></td></tr><tr><td>tcm</td> <td><i>(TCM Distribution)</i></td></tr></table></td>
+<td>zoops</td>
+</tr>
+
+<tr>
+<td>-nmotifs</td>
+<td>Maximum number of motifs to find</td>
+<td>Any integer value</td>
+<td>1</td>
+</tr>
+
+<tr>
+<td>[-outfile]<br>(Parameter 2)</td>
+<td>Output file name</td>
+<td>Output file</td>
+<td><i>&lt;sequence&gt;</i>.meme</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Additional (Optional) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-ntype</td>
+<td>Method to use</td>
+<td><table><tr><td>pair</td> <td><i>(Pairwise method)</i></td></tr><tr><td>blend</td> <td><i>(Blending method)</i></td></tr></table></td>
+<td>pair</td>
+</tr>
+
+<tr>
+<td>-protein</td>
+<td>Assume sequences are proteins</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-nucleic</td>
+<td>Assume sequences are DNA</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-palindromes</td>
+<td>Allow palindromes</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-ponly</td>
+<td>Force palindromes</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-[no]shorten</td>
+<td>Allow motifs shorter than MINW</td>
+<td>Boolean value Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>-nsites</td>
+<td>Expected number of sites for each motif</td>
+<td>Any numeric value</td>
+<td>0.</td>
+</tr>
+
+<tr>
+<td>-minsites</td>
+<td>Minimum number of sites for each motif</td>
+<td>Any numeric value</td>
+<td>0.</td>
+</tr>
+
+<tr>
+<td>-maxsites</td>
+<td>Maximum number of sites for each motif</td>
+<td>Any numeric value</td>
+<td>0.</td>
+</tr>
+
+<tr>
+<td>-w</td>
+<td>Starting motif width to try</td>
+<td>Any integer value</td>
+<td>0</td>
+</tr>
+
+<tr>
+<td>-minw</td>
+<td>Minimum starting motif width to try</td>
+<td>Any integer value</td>
+<td>8</td>
+</tr>
+
+<tr>
+<td>-maxw</td>
+<td>Maximum starting motif width to try</td>
+<td>Any integer value</td>
+<td>57</td>
+</tr>
+
+<tr>
+<td>-prior</td>
+<td>Prior to use</td>
+<td><table><tr><td>dirichlet</td> <td><i>(Dirichlet prior)</i></td></tr><tr><td>dmix</td> <td><i>(dmix prior)</i></td></tr><tr><td>mega</td> <td><i>(mega prior)</i></td></tr><tr><td>megap</td> <td><i>(megap prior)</i></td></tr><tr><td>addone</td> <td><i>(addone prior)</i></td></tr></table></td>
+<td>dirichlet</td>
+</tr>
+
+<tr>
+<td>-[no]brief</td>
+<td>Don't print documemtation</td>
+<td>Boolean value Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>-b</td>
+<td>Strength of the prior</td>
+<td>Any numeric value</td>
+<td>-1.0</td>
+</tr>
+
+<tr>
+<td>-spmap</td>
+<td>Mapping start</td>
+<td><table><tr><td>uni</td> <td><i>(uni map type)</i></td></tr><tr><td>pam</td> <td><i>(pam map type)</i></td></tr></table></td>
+<td>uni</td>
+</tr>
+
+<tr>
+<td>-spfuzz</td>
+<td>Fuzziness of sequence to theta mapping</td>
+<td>Any numeric value</td>
+<td>-1.0</td>
+</tr>
+
+<tr>
+<td>-maxiter</td>
+<td>Maximum EM iterations to run</td>
+<td>Any integer value</td>
+<td>50</td>
+</tr>
+
+<tr>
+<td>-distance</td>
+<td>EM convergence criterion</td>
+<td>Any numeric value</td>
+<td>1e-3</td>
+</tr>
+
+<tr>
+<td>-cons</td>
+<td>Consensus sequence to start EM from</td>
+<td>Any string is accepted</td>
+<td><i>An empty string is accepted</i></td>
+</tr>
+
+<tr>
+<td>-chi</td>
+<td>Cutoff for p-value</td>
+<td>Any numeric value</td>
+<td>1.0</td>
+</tr>
+
+<tr>
+<td>-adj</td>
+<td>Type</td>
+<td><table><tr><td>none</td> <td><i>(no LRT)</i></td></tr><tr><td>bon</td> <td><i>(bon LRT)</i></td></tr><tr><td>root</td> <td><i>(root LRT)</i></td></tr></table></td>
+<td>root</td>
+</tr>
+
+<tr>
+<td>-maxsize</td>
+<td>Maximum dataset size in characters</td>
+<td>Any integer value</td>
+<td>100000</td>
+</tr>
+
+<tr>
+<td>-page</td>
+<td>Width of page</td>
+<td>Any integer value</td>
+<td>80</td>
+</tr>
+
+<tr>
+<td>-status</td>
+<td>Print progress reports</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-v</td>
+<td>Verbose mode</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-cfive</td>
+<td>Use 5' to 3' complementary strand as well</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-cthree</td>
+<td>Use 3' to 5' complementary strand as well</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-wthree</td>
+<td>Use 3' to 5' main strand as well</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-prob</td>
+<td>Starting point confidence level</td>
+<td>Any numeric value</td>
+<td>1.0</td>
+</tr>
+
+<tr>
+<td>-seed</td>
+<td>Seed for random numbers in sampling</td>
+<td>Any integer value</td>
+<td>0</td>
+</tr>
+
+<tr>
+<td>-seqfrac</td>
+<td>Fraction of sequences to use</td>
+<td>Any numeric value</td>
+<td>1.0</td>
+</tr>
+
+<tr>
+<td>-[no]align</td>
+<td>Print aligned motif occurrences</td>
+<td>Boolean value Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>-trace</td>
+<td>Trace starting points</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-allprint</td>
+<td>Print all debugging information</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-wprint</td>
+<td>Print erasure matrix</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-zprint</td>
+<td>Print missing information matrix</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-llprint</td>
+<td>Print log likelihood during EM</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-startsprint</td>
+<td>Print starting points</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-fastaprint</td>
+<td>Print sites in FASTA format</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-timer</td>
+<td>Timer type</td>
+<td>Any integer value</td>
+<td>0</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+</table>
+
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+
+
+
+
+
+
+
+
+<H2>
+    Input file format
+</H2>
+
+<!-- 
+        This includes example input file formats.
+        This should be a detailed description and example - assume
+        someone will want to parse this file and will want to know what
+        happens in unusual cases - null input, etc. 
+   -->
+
+<b>meme</b> reads any normal sequence USAs.
+
+<p>
+
+
+
+
+
+
+
+<H2>
+    Output file format
+</H2>
+
+<!-- 
+        This includes example output file formats.
+        This should be a detailed description and example - assume
+        someone will want to parse this file and will want to know what
+        happens in unusual cases - null output, errors etc. 
+
+        If you wish to include the standard description of the avalable
+	report formats, use:
+[an error occurred while processing this directive]
+   -->
+
+<b>meme</b> 
+outputs a graph to the specified graphics device. 
+outputs a report format file. The default format is ...
+
+
+<p>
+
+
+
+
+
+
+
+<H2>
+    Data files
+</H2>
+
+<!-- 
+        Any data files used (e.g. translation table file)
+        This includes example data file formats if they are
+        not obvious.
+
+	If you wish to include the standard description of what data
+	files are and how to use embossdata to inspect and retrieve
+	them, use:
+[an error occurred while processing this directive]
+   -->
+
+**************** 
+EDIT HERE
+**************** 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<H2>
+    Notes
+</H2>
+
+<!-- 
+        Restrictions.
+        Interesting behaviour.
+        Useful things you can do with this program.
+   -->
+
+None.
+
+
+
+
+
+
+
+<H2>
+    References
+</H2>
+
+<!-- 
+        Bibliography for methods used.
+   -->
+
+None.
+
+
+
+
+
+
+
+
+<H2>
+    Warnings
+</H2>
+
+<!-- 
+        Potentially stupid things the program will let you do.
+   -->
+
+None.
+
+
+
+
+
+
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+<!-- 
+        Error messages specific to this program, eg:
+        "FATAL xxx" - means you have not set up the xxx data using program <b>prog</b>.<p>
+   -->
+
+None.
+
+
+
+
+
+
+
+<H2>
+    Exit status
+</H2>
+
+<!-- 
+        Description of the exit status for various error conditions
+   -->
+
+It always exits with status 0.
+
+
+
+
+
+
+
+
+<H2>
+    Known bugs
+</H2>
+
+
+<!-- 
+        Bugs noted but not yet fixed.
+   -->
+
+None.
+
+
+
+
+
+
+
+
+<!--
+<H2>
+    See also
+</H2>
+-->
+<h2><a name="See also">See also</a></h2>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th><th>Description</th></tr>
+<tr><td><a href="../../apps/antigenic.html">antigenic</a></td><td>Finds antigenic sites in proteins</td></tr>
+<tr><td><a href="../../apps/digest.html">digest</a></td><td>Protein proteolytic enzyme or reagent cleavage digest</td></tr>
+<tr><td><a href="../../apps/epestfind.html">epestfind</a></td><td>Finds PEST motifs as potential proteolytic cleavage sites</td></tr>
+<tr><td><a href="../../apps/fuzzpro.html">fuzzpro</a></td><td>Protein pattern search</td></tr>
+<tr><td><a href="../../apps/fuzztran.html">fuzztran</a></td><td>Protein pattern search after translation</td></tr>
+<tr><td><a href="../../apps/helixturnhelix.html">helixturnhelix</a></td><td>Report nucleic acid binding motifs</td></tr>
+<tr><td><a href="../../apps/oddcomp.html">oddcomp</a></td><td>Finds protein sequence regions with a biased composition</td></tr>
+<tr><td><a href="../../apps/patmatdb.html">patmatdb</a></td><td>Search a protein sequence with a motif</td></tr>
+<tr><td><a href="../../apps/patmatmotifs.html">patmatmotifs</a></td><td>Search a PROSITE motif database with a protein sequence</td></tr>
+<tr><td><a href="../../apps/pepcoil.html">pepcoil</a></td><td>Predicts coiled coil regions</td></tr>
+<tr><td><a href="../../apps/preg.html">preg</a></td><td>Regular expression search of a protein sequence</td></tr>
+<tr><td><a href="../../apps/pscan.html">pscan</a></td><td>Scans proteins using PRINTS</td></tr>
+<tr><td><a href="../../apps/sigcleave.html">sigcleave</a></td><td>Reports protein signal cleavage sites</td></tr>
+</table>
+
+<!-- 
+        Add any comments about other associated programs (to prepare
+        data files?) that seealso doesn't find. 
+   -->
+
+
+
+
+
+
+
+
+
+
+<H2>
+    Author(s)
+</H2>
+
+[an error occurred while processing this directive]
+
+<H2>
+    History
+</H2>
+
+
+
+
+
+
+<H2>
+    Target users
+</H2>
+
+<!--
+        For general users, requested by one user, for EMBOSS site
+        maintainers, for EMBOSS developers etc.
+        eg:
+        "This program is intended to be used by everyone and everything,
+        from naive users to embedded scripts." 
+	Which is easy to include using:
+   -->
+
+This program is intended to be used by everyone and everything, from naive users to embedded scripts.
+
+
+
+
+
+
+
+
+
+
+
+
+</BODY>
+</HTML>
+

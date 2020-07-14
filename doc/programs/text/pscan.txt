@@ -1,54 +1,54 @@
 
                                    pscan 
-                                      
-   
-   
+
+
+
 Function
 
    Scans proteins using PRINTS
-   
+
 Description
 
    PRINTS is a database of diagnostic protein signatures, or
    fingerprints.
-   
+
    Fingerprints are groups of conserved motifs or elements that together
    form a diagnostic signature for particular protein families.
-   
+
    An uncharacterised sequence matching all motifs or elements can then
    be readily diagnosed as a true match to a particular family
    fingerprint.
-   
+
    They can be used to diagnose family relationships in newly-determined
    sequences (especially from genome projects).
-   
+
    Usually the motifs or elements do not overlap, but are separated along
    a sequence, though they may be contiguous in 3D-space. Fingerprints
    can encode protein folds and functionalities more flexibly and
    powerfully than can single motifs, full diagnostic potency deriving
    from the mutual context provided by motif neighbours.
-   
+
    Diagnostically, this is more powerful than using single motifs by
    virtue of the biological context afforded by matching motif
    neighbours.
-   
+
    pscan finds matches between a query protein sequence and the motifs or
    elements in the PRINTS database. It reports various classes of
    matches:
-   
+
      * Matches where all elements of a motif exist in the correct order
      * Matches where all elements exist but some are in the incorrect
        order
      * Matches where some elements match and are in the correct order
      * Miscellaneous matches.
-       
+
    The home web page of the PRINTS database is:
    http://www.bioinf.man.ac.uk/dbbrowser/PRINTS/
-   
+
 Usage
 
    Here is a sample session with pscan
-   
+
 
 % pscan 
 Scans proteins using PRINTS
@@ -56,10 +56,10 @@ Input sequence(s): tsw:opsd_human
 Minimum number of elements per fingerprint [2]: 
 Maximum number of elements per fingerprint [20]: 
 Output file [opsd_human.pscan]: 
-   
+
    Go to the input files for this example
    Go to the output files for this example
-   
+
 Command line arguments
 
    Standard (Mandatory) qualifiers:
@@ -105,7 +105,7 @@ Command line arguments
    -error               boolean    Report errors
    -fatal               boolean    Report fatal errors
    -die                 boolean    Report deaths
-   
+
 
    Standard (Mandatory) qualifiers Allowed values Default
    [-sequence]
@@ -119,18 +119,18 @@ Command line arguments
    (none)
    Advanced (Unprompted) qualifiers Allowed values Default
    (none)
-   
+
 Input file format
 
    pscan reads one or more protein sequence USAs.
-   
+
   Input files for usage example
-  
+
    'tsw:opsd_human' is a sequence entry in the example protein database
    'tsw'
-   
+
   Database entry: tsw:opsd_human
-  
+
 ID   OPSD_HUMAN     STANDARD;      PRT;   348 AA.
 AC   P08100; Q16414;
 DT   01-AUG-1988 (Rel. 08, Created)
@@ -236,13 +236,13 @@ SQ   SEQUENCE   348 AA;  38892 MW;  07443BEA CRC32;
      ATTQKAEKEV TRMVIIMVIA FLICWVPYAS VAFYIFTHQG SNFGPIFMTI PAFFAKSAAI
      YNPVIYIMMN KQFRNCMLTT ICCGKNPLGD DEASATVSKT ETSQVAPA
 //
-   
+
 Output file format
 
   Output files for usage example
-  
+
   File: opsd_human.pscan
-  
+
 
 
 CLASS 1
@@ -279,32 +279,32 @@ Not all elements match but those that do are in order
 
 CLASS 4
 Remaining partial matches
-   
+
    The program reports hits in four classes.
-   
+
    Class1:
           Matches where all elements of a motif exist in the correct
           order
-          
+
    Class2:
           Matches where all elements exist but some are in the incorrect
           order
-          
+
    Class3:
           Matches where some elements match and are in the correct order
-          
+
    Class4:
           Miscellaneous matches
-          
+
 Data files
 
    The data file is stored in the PRINTS directory of the standard EMBOSS
    data directory.
      * prints.mat Matrices derived from PRINTS
      * Pxxxxx Information for each fingerprint
-       
+
    The column information is described at the top of the matrix data file
-   
+
 Notes
 
    The matrix information used to scan a sequence is derived from the
@@ -315,12 +315,12 @@ Notes
    match to the sequence window is obtained if it has a score equal to or
    greater than the percentage of the maximum score of the lowest scoring
    sequence in the final motif set.
-   
+
    The data files must have been created before running this program.
    This is done by running the printsextract program with the
    "prints.dat" file from a PRINTS release. You may have to ask your
    system manager to do this.
-   
+
 References
 
     1. Attwood, T.K., Flower, D.R., Lewis, A.P., Mabey, J.E., Morgan,
@@ -362,11 +362,11 @@ References
    13. Parry-Smith, D.J., Payne, A.W.R, Michie, A.D. and Attwood, T.K.
        (1998) CINEMA - A novel Colour INteractive Editor for Multiple
        Alignments. Gene, 211(2), GC45-56.
-       
+
 Warnings
 
    The program will warn you if a DNA sequence is given.
-   
+
 Diagnostic Error Messages
 
    If you get the following EMBOSS FATAL ERROR message:
@@ -375,11 +375,11 @@ Diagnostic Error Messages
 
    then your local PRINTS data has not been set up correctly in your
    EMBOSS DATA directory. Use 'printsextract' to do this.
-   
+
 Exit status
 
    It exits with status 0 unless an error is reported.
-   
+
 Known bugs
 
 See also
@@ -397,22 +397,24 @@ See also
    pepcoil        Predicts coiled coil regions
    preg           Regular expression search of a protein sequence
    sigcleave      Reports protein signal cleavage sites
-   
+
      * printsextract - Extract data from PRINTS. pscan uses the PRINTS
        data. Until printsextract has been run to set up the PRINTS data,
        pscan will not run correctly.
-       
+
 Author(s)
 
    Alan Bleasby (ableasby © rfcgr.mrc.ac.uk)
    MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
    Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
-   
+
 History
 
 Target users
 
    This program is intended to be used by everyone and everything, from
    naive users to embedded scripts.
-   
+
 Comments
+
+   None

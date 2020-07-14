@@ -7,15 +7,9 @@
 </HEAD>
 <BODY BGCOLOR="#FFFFFF" text="#000000">
 
-
-
-
-
-
-
 <table align=center border=0 cellspacing=0 cellpadding=0>
 <tr><td valign=top>
-<A HREF="index.html" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
@@ -29,20 +23,9 @@ splitter
 
 
 
-
-
-
-
 <H2>
     Function
 </H2>
-
-
-
-<!--
-DON'T WRITE ANYTHING HERE.
-IT IS DONE FOR YOU.
--->
 Split a sequence into (overlapping) smaller sequences
 
 
@@ -79,8 +62,6 @@ switch '-ossingle'.
 <H2>
     Usage
 </H2>
-
-
 <b>Here is a sample session with splitter</b>
 <p>
 Split a sequence into sub-sequences of 10,000 bases (the default size) with no overlap between the sub-sequences: 
@@ -116,14 +97,6 @@ Split a sequence into (overlapping) smaller sequences
 <H2>
     Command line arguments
 </H2>
-
-
-
-<!--
-DON'T WRITE ANYTHING HERE.
-IT IS DONE FOR YOU.
--->
-
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
    Standard (Mandatory) qualifiers:
@@ -186,7 +159,6 @@ IT IS DONE FOR YOU.
 </pre>
 </td></tr></table>
 <P>
-
 <table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
 <tr bgcolor="#FFFFCC">
 <th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
@@ -606,71 +578,63 @@ cccagtctctgggacactggtgagcaagggtcggggagttctagtgcgtaacagtctagg
 
 
 <p>
-	The names of the sequences are the same as the original
-	sequence, with '_start-end' appended, where 'start', and 'end' are the
-	start and end positions of the sub-sequence. eg:
-	The name HSHBB would be changed in the sub-sequences to:
-	HSHBB_1-50000 and HSHBB_50001-73308 if they were split at the
-	size of 50000 with no overlap. 
+The names of the sequences are the same as the original sequence, with
+'_start-end' appended, where 'start', and 'end' are the start and end
+positions of the sub-sequence. eg: The name HSHBB would be changed in
+the sub-sequences to: HSHBB_1-50000 and HSHBB_50001-73308 if they were
+split at the size of 50000 with no overlap.
 
 <H2>
     Data files
 </H2>
 
 
-	None.	
+None.	
 
 <H2>
     Notes
 </H2>
 
 
-	There should be little requirement to split sequences into
-	smaller sub-sequences in EMBOSS, but there may be circumstances where
-	memory usage becomes restrictive when dealing with truly large
-	sequences. 
+There should be little requirement to split sequences into smaller
+sub-sequences in EMBOSS, but there may be circumstances where memory
+usage becomes restrictive when dealing with truly large sequences.
 
 <H2>
     References
 </H2>
 
 
-	None
+None
 
 <H2>
     Warnings
 </H2>
 
 
-	None.
+None.
 
 <H2>
     Diagnostic Error Messages
 </H2>
 
 
-	None.
+None.
 
 <H2>
     Exit status
 </H2>
 
 
-	It always exits with status 0
+It always exits with status 0
 
 <H2>
     Known bugs
 </H2>
 
 
-        Bugs noted but not yet fixed.
-	None.
+None.
 
-<!--
-<H2>
-    See also
-</H2>
--->
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
@@ -700,17 +664,10 @@ cccagtctctgggacactggtgagcaagggtcggggagttctagtgcgtaacagtctagg
 <tr><td><a href="yank.html">yank</a></td><td>Reads a sequence range, appends the full USA to a list file</td></tr>
 </table>
 
-<!--
-        Add any comments about other associated programs (to prepare
-        data files?) that seealso doesn't find.
-   -->
-
 
 <H2>
     Author(s)
 </H2>
-
-
 Gary Williams (gwilliam&nbsp;&copy;&nbsp;rfcgr.mrc.ac.uk)
 <br>
 MRC Rosalind Franklin Centre for Genomics Research
@@ -723,30 +680,19 @@ Wellcome Trust Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
     History
 </H2>
 
+Completed 22 March 1999
 
-	Completed 22 March 1999
-
-<!--
-<p>
-[an error occurred while processing this directive]
--->
 
 <H2>
     Target users
-</H2>
+This program is intended to be used by everyone and everything, from naive users to embedded scripts.
 
 
-This program is intended to be used by everyone and everything,
-from naive users to embedded scripts. 
 
 <H2>
     Comments
 </H2>
-
-
-<pre>
-
-</pre>
+None
 
 
 </BODY>

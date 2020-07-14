@@ -1,53 +1,53 @@
 
                                    tmap 
-                                      
-   
-   
+
+
+
 Function
 
    Displays membrane spanning regions
-   
+
 Description
 
    This program predicts transmembrane segments in proteins, utilising
    the algorithm described in: "Persson, B. & Argos, P. (1994) Prediction
    of transmembrane segments in proteins utilising multiple sequence
    alignments J. Mol. Biol. 237, 182-192."
-   
+
    tmap reads in one or more aligned protein sequences.
-   
+
    Two sets of propensity values are then used for the calculations: one
    for the middle, hydrophobic portion and one for the terminal regions
    of the transmembrane sequence spans. Average propensity values are
    calculated for each position along the alignment, with the
    contribution from each sequence weighted according to its
    dissimilarity relative to the other aligned sequences.
-   
+
    Eight-residue segments are considered as potential cores of
    transmembrane segments and elongated if thier middle propensity values
    are above a threshold. End propensity values are also considered as
    stop signals. Only helices with a length of 15 to 29 residues are
    allowed and corrections for strictly conserved charged residues are
    made.
-   
+
    The method is more successful than predictions based upon single
    sequences alone.
-   
+
    The results are plotted on a graph and written to a text file.
-   
+
 Usage
 
    Here is a sample session with tmap
-   
+
 
 % tmap tsw:opsd_human -out tmap.res -graph cps 
 Displays membrane spanning regions
 
 Created tmap.ps
-   
+
    Go to the input files for this example
    Go to the output files for this example
-   
+
 Command line arguments
 
    Standard (Mandatory) qualifiers:
@@ -109,7 +109,7 @@ Command line arguments
    -error               boolean    Report errors
    -fatal               boolean    Report fatal errors
    -die                 boolean    Report deaths
-   
+
 
    Standard (Mandatory) qualifiers Allowed values Default
    [-sequences]
@@ -118,23 +118,23 @@ Command line arguments
    -graph Graph type EMBOSS has a list of known devices, including
    postscript, ps, hpgl, hp7470, hp7580, meta, colourps, cps, xwindows,
    x11, tektronics, tekt, tek4107t, tek, none, null, text, data, xterm,
-   png EMBOSS_GRAPHICS value, or x11
+   png, xml EMBOSS_GRAPHICS value, or x11
    Additional (Optional) qualifiers Allowed values Default
    -outfile Output report file name Report output file
    Advanced (Unprompted) qualifiers Allowed values Default
    (none)
-   
+
 Input file format
 
    tmap reads a protein sequence USA for one or more aligned sequences.
-   
+
   Input files for usage example
-  
+
    'tsw:opsd_human' is a sequence entry in the example protein database
    'tsw'
-   
+
   Database entry: tsw:opsd_human
-  
+
 ID   OPSD_HUMAN     STANDARD;      PRT;   348 AA.
 AC   P08100; Q16414;
 DT   01-AUG-1988 (Rel. 08, Created)
@@ -240,20 +240,16 @@ SQ   SEQUENCE   348 AA;  38892 MW;  07443BEA CRC32;
      ATTQKAEKEV TRMVIIMVIA FLICWVPYAS VAFYIFTHQG SNFGPIFMTI PAFFAKSAAI
      YNPVIYIMMN KQFRNCMLTT ICCGKNPLGD DEASATVSKT ETSQVAPA
 //
-   
+
 Output file format
 
   Output files for usage example
-  
-  Graphics File: tmap.ps
-  
-   [tmap results]
-   
+
   File: tmap.res
-  
+
 ########################################
 # Program: tmap
-# Rundate: Tue Apr 06 14:34:31 2004
+# Rundate: Thu Jul 15 2004 12:00:00
 # Report_format: seqtable
 # Report_file: tmap.res
 ########################################
@@ -292,50 +288,54 @@ Output file format
 
 #---------------------------------------
 #---------------------------------------
-   
+
+  Graphics File: tmap.ps
+
+   [tmap results]
+
    A plot of the propensities to form the middle and the end of
    transmembrane regions is output.
-   
+
    Bars are displayed in the plot above the regions predicted as being
    most likely to form transmembrane regions.
-   
+
    The text file (specified by the -outfile option) gives a summary of
    these regions.
-   
+
    The transmembrane regions for the complete alignment are given first,
    followed by the predictions for each individual sequence in the
    alignment. (There is only one sequence in the example alignment.)
-   
+
 Data files
 
    None.
-   
+
 Notes
 
    None.
-   
+
 References
 
-   "Persson, B. & Argos, P. (1994) Prediction of transmembrane segments
-   in proteins utilsing multiple sequence alignments J. Mol. Biol. 237,
-   182-192."
-   
+    1. "Persson, B. & Argos, P. (1994) Prediction of transmembrane
+       segments in proteins utilsing multiple sequence alignments J. Mol.
+       Biol. 237, 182-192."
+
 Warnings
 
    None.
-   
+
 Diagnostic Error Messages
 
    None.
-   
+
 Exit status
 
    0 if successful.
-   
+
 Known bugs
 
    None.
-   
+
 See also
 
     Program name              Description
@@ -345,23 +345,26 @@ See also
    pepcoil        Predicts coiled coil regions
    pepnet         Displays proteins as a helical net
    pepwheel       Shows protein sequences as helices
-   
+
 Author(s)
 
    Original program by Bengt Persson and Patrick Argos.
-   
+
    This application was modified for inclusion in EMBOSS by Ian Longden
    (il © sanger.ac.uk)
    Sanger Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge,
    CB10 1SA, UK.
-   
+
 History
 
    Completed 17th June 1999.
-   
+
 Target users
 
    This program is intended to be used by everyone and everything, from
    naive users to embedded scripts.
-   
+
 Comments
+
+   The graph y axis is not labelled. It is some kind of score, but we aer
+   not sure exactly how to describe it.

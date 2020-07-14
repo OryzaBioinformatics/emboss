@@ -7,11 +7,9 @@
 </HEAD>
 <BODY BGCOLOR="#FFFFFF" text="#000000">
 
-
-
 <table align=center border=0 cellspacing=0 cellpadding=0>
 <tr><td valign=top>
-<A HREF="index.html" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
@@ -24,26 +22,14 @@ helixturnhelix
 <p>
 
 
-
-
-
 <H2>
     Function
 </H2>
-
-
-
-<!--
-DON'T WRITE ANYTHING HERE.
-IT IS DONE FOR YOU.
--->
 Report nucleic acid binding motifs
-
 
 <H2>
     Description
 </H2>
-
 
 <b>helixturnhelix</b> uses the method of Dodd and Egan and finds
 helix-turn-helix nucleic acid binding motifs in proteins. 
@@ -56,13 +42,9 @@ DNA; the other lies at an angle across DNA.
 
 <p>
 
-
-
 <H2>
     Usage
 </H2>
-
-
 <b>Here is a sample session with helixturnhelix</b>
 <p>
 
@@ -83,14 +65,6 @@ Output report [laci_ecoli.hth]: <b></b>
 <H2>
     Command line arguments
 </H2>
-
-
-
-<!--
-DON'T WRITE ANYTHING HERE.
-IT IS DONE FOR YOU.
--->
-
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
    Standard (Mandatory) qualifiers:
@@ -151,7 +125,6 @@ IT IS DONE FOR YOU.
 </pre>
 </td></tr></table>
 <P>
-
 <table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
 <tr bgcolor="#FFFFCC">
 <th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
@@ -229,7 +202,6 @@ IT IS DONE FOR YOU.
 <b>helixturnhelix</b> reads one or more protein sequence USAs.
 
 <p>
-
 
 <a name="input.1"></a>
 <h3>Input files for usage example </h3>
@@ -352,7 +324,6 @@ SQ   SEQUENCE   360 AA;  38564 MW;  4CA5A1D6 CRC32;
     Output file format
 </H2>
 
-
 <p>
 
 The output is a standard EMBOSS report file. 
@@ -368,19 +339,17 @@ feattable, motif, regions, seqtable, simple, srs, table, tagseq
 <p>
 
 See:
-<A href="http://www.uk.embnet.org/Software/EMBOSS/Themes/ReportFormats.html">
-http://www.uk.embnet.org/Software/EMBOSS/Themes/ReportFormats.html</A>
+<A href="http://emboss.sf.net/docs/themes/ReportFormats.html">
+http://emboss.sf.net/docs/themes/ReportFormats.html</A>
 for further information on report formats.
 
 <p>
-
 
 <p>
 
 By default <b>helixturnhelix</b> writes a 'motif' report file.
 
 <p>
-
 
 <a name="output.1"></a>
 <h3>Output files for usage example </h3>
@@ -389,7 +358,7 @@ By default <b>helixturnhelix</b> writes a 'motif' report file.
 <pre>
 ########################################
 # Program: helixturnhelix
-# Rundate: Tue Apr 06 14:29:48 2004
+# Rundate: Thu Jul 15 2004 12:00:00
 # Report_format: motif
 # Report_file: laci_ecoli.hth
 ########################################
@@ -423,7 +392,47 @@ Maximum_score_at at "*"
     Data files
 </H2>
 
+<p>
+EMBOSS data files are distributed with the application and stored
+in the standard EMBOSS data directory, which is defined
+by the EMBOSS environment variable EMBOSS_DATA.
 
+<p>
+
+To see the available EMBOSS data files, run:
+<p>
+<pre>
+% embossdata -showall
+</pre>
+<p>
+To fetch one of the data files (for example 'Exxx.dat') into your
+current directory for you to inspect or modify, run:
+
+<pre>
+
+% embossdata -fetch -file Exxx.dat
+
+</pre>
+<p>
+
+Users can provide their own data files in their own directories.
+Project specific files can be put in the current directory, or for
+tidier directory listings in a subdirectory called
+".embossdata". Files for all EMBOSS runs can be put in the user's home
+directory, or again in a subdirectory called ".embossdata".
+
+<p>
+The directories are searched in the following order:
+
+<ul>
+   <li> . (your current directory)
+   <li> .embossdata (under your current directory)
+   <li> ~/ (your home directory)
+   <li> ~/.embossdata
+</ul>
+<p>
+
+<p>
 The data files are stored in the standard EMBOSS data directory. The
 names are:
 
@@ -540,11 +549,6 @@ It exits with status 0 unless an error is reported.
 
 None.
 
-<!--
-<H2>
-    See also
-</H2>
--->
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
@@ -567,12 +571,6 @@ None.
 <tr><td><a href="tmap.html">tmap</a></td><td>Displays membrane spanning regions</td></tr>
 </table>
 
-<!--
-        Add any comments about other associated programs (to prepare
-        data files?) that seealso doesn't find.
-   -->
-
-
 <H2>
     Author(s)
 </H2>
@@ -584,8 +582,6 @@ MRC Rosalind Franklin Centre for Genomics Research
 Wellcome Trust Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
 
 
-
-
 <p>
 
 Original program "HELIXTURNHELIX" (EGCG 1990) by
@@ -595,35 +591,23 @@ Informatics Division, European Bioinformatics Institute, Wellcome Trust Genome C
 
 
 
-
 <H2>
     History
 </H2>
 
-
 Completed 11th March 1999
 
-<!--
-<p>
-[an error occurred while processing this directive]
--->
 
 <H2>
     Target users
 </H2>
+This program is intended to be used by everyone and everything, from naive users to embedded scripts.
 
-
-This program is intended to be used by everyone and everything,
-from naive users to embedded scripts. 
 
 <H2>
     Comments
 </H2>
-
-
-<pre>
-
-</pre>
+None
 
 
 </BODY>

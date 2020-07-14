@@ -1,36 +1,36 @@
 
                                 shuffleseq 
-                                      
-   
-   
+
+
+
 Function
 
    Shuffles a set of sequences maintaining composition
-   
+
 Description
 
    This takes a sequence as input and outputs one or more sequences whose
    order has been randomly shuffled. No bases or residues are changed,
    only their order.
-   
+
    The number of shuffled sequences output can be set by the '-shuffle'
    qualifier.
-   
+
 Usage
 
    Here is a sample session with shuffleseq
-   
+
    This makes two randomised copies of the input sequence:
-   
+
 
 % shuffleseq -shuffle 2 
 Shuffles a set of sequences maintaining composition
 Input sequence(s): tembl:mmam
 Output sequence [mmam.fasta]: 
-   
+
    Go to the input files for this example
    Go to the output files for this example
-   
+
 Command line arguments
 
    Standard (Mandatory) qualifiers:
@@ -85,7 +85,7 @@ Command line arguments
    -error               boolean    Report errors
    -fatal               boolean    Report fatal errors
    -die                 boolean    Report deaths
-   
+
 
    Standard (Mandatory) qualifiers Allowed values Default
    [-sequence]
@@ -97,18 +97,18 @@ Command line arguments
    (none)
    Advanced (Unprompted) qualifiers Allowed values Default
    -shuffle Number of shuffles Any integer value 1
-   
+
 Input file format
 
    shuffleseq reads one or more sequence USAs.
-   
+
   Input files for usage example
-  
+
    'tembl:mmam' is a sequence entry in the example nucleic acid database
    'tembl'
-   
+
   Database entry: tembl:mmam
-  
+
 ID   MMAM       standard; RNA; MUS; 366 BP.
 XX
 AC   L48662;
@@ -163,81 +163,83 @@ SQ   Sequence 366 BP; 100 A; 90 C; 85 G; 89 T; 2 other;
      tcctca                                                                  36
 6
 //
-   
+
 Output file format
 
   Output files for usage example
-  
+
   File: mmam.fasta
-  
+
 >MMAM L48662.1 Mus musculus (cell line C3H/F2-11) chromosome 12 anti-DNA antibo
 dy heavy chain mRNA.
-cagagtctcacccaagaaacggtcaaatctacgttaacccccatgctgncgtaacctgga
-gatagctagccttcagggccatcctcgttccaaacgatgtcaaattatcgcgtgaggact
-ggcattagtgctcgttcttatctnatgctttccatctcgggcttgcttgtaaaataattg
-atagggtgtaggacaccgaacgaggataccgctgcttaaaacaatagctctgctgctggt
-agggctctagggactaagtaccttctttaaggccctcgcacctgataaatcggtaaaagg
-attcgaggctgaaaaaacgattcatctaactagcgacagctccgagtgcgaaagcgatat
-gcgacc
+cgctactcatcggtgcctctgggtagcacctgggacctaggtgtgagagttcttgatgat
+ccaccccagacggggtgtaattctctgtccccagacaccagcatagcggtgcctgcgtgc
+accaattacgtttgacaaaccctaatattggcgagccgagcaantcaatcaaatgagcgg
+gcgaacgagtcaaggaccgaacctccccaagatttattccaacgaattactattctcctt
+tgtacgtatatatcttatatgcatcggtctatttgcgtcggatagcgtagtacaggcagt
+cgaacctaccggcagtagtatgcaggagtnacaatgtcacatatcgagtattaagaacaa
+agaata
 >MMAM L48662.1 Mus musculus (cell line C3H/F2-11) chromosome 12 anti-DNA antibo
 dy heavy chain mRNA.
-tctttagcggggtgctcggccctgtcgttagngaggcacgcaccggcatactgtttaccc
-aaaccgatccagagtagcaaagcgataaattacttatttagcaaatgccatggaatgact
-tgtaaccggctaaggcgaacagccttcacgcggtccatagactacttgttctcagttcca
-atacaccctcaagaaaagtgataaattaagctatgggcggaccgaaagggttccgtttta
-caatctgctaactccacggttcggaactatacccacttgatagtcgttcttgngagacgt
-tccaacaccaaacaatttacggacacgctggtaagacaattagcgagtcgctgggatgcc
-ttggtg
-   
+gaatttcaattctagatgaatccccaccgcccacaaaccgaccatcatcgacaaaacccc
+gtctagtaggcttgtcagaggtaactttgcccaaacgcagcagaatgtgcgtgctgtaaa
+gcacttattgccaccttngcccgcaaaaacccactcacaaaattccacgcggggtactca
+ctagaatgtagtaggaagtcgatggttacgcgcgcacaacggccggtacagagattcggt
+gggatctctaagtcagttgcgatttataacccggtaatttcaggatatagtcgttacggt
+ggtgggtgaggcgcgttaagtttacccaagtnatcacgcgtttatagacgcttgcttaat
+atgtta
+
    Each run will produce a different sequence.
-   
+
    Note that these two sequences have the same name.
-   
+
 Data files
 
    None.
-   
+
 Notes
 
    This program may be useful for producing sets of sequences which can
    be used to check the statistics of sequence similarity finding
    software.
-   
+
 References
 
    None.
-   
+
 Warnings
 
    None.
-   
+
 Diagnostic Error Messages
 
    None.
-   
+
 Exit status
 
    It always exits with status 0.
-   
+
 Known bugs
 
    None.
-   
+
 See also
 
    Program name              Description
    msbar        Mutate sequence beyond all recognition
-   
+
 Author(s)
 
    Michael Schmitz (mschmitz © lbl.gov)
    Lawrence Berkeley Labs, USA
-   
+
 History
 
 Target users
 
    This program is intended to be used by everyone and everything, from
    naive users to embedded scripts.
-   
+
 Comments
+
+   None

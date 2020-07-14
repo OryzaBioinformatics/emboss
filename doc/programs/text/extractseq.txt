@@ -1,22 +1,22 @@
 
                                 extractseq 
-                                      
-   
-   
+
+
+
 Function
 
    Extract regions from a sequence
-   
+
 Description
 
    extractseq allows you to specify one or more regions of a sequence to
    extract sub-sequences from to build up a contiguous resulting
    sequence.
-   
+
    This is modelled on the cell's process of splicing out exons from
    mRNA, but the program is generally applicable to any cutting and
    splicing or editing operation on a single sequence.
-   
+
    extractseq reads in a sequence and a set of regions of that sequence
    as specified by pairs of start and end positions (either on the
    command-line or contained in a file) and writes out the specified
@@ -24,35 +24,35 @@ Description
    specified. Thus, if the sequence "AAAGGGTTT" has been input and the
    regions: "7-9, 3-4" have been specified, then the output sequence will
    be: "TTTAG".
-   
+
 Usage
 
    Here is a sample session with extractseq
-   
+
    Extract the region from position 10 to 20:
-   
-   
+
+
 % extractseq tembl:hsfau result.seq -regions '10-20' 
 Extract regions from a sequence
 
    Go to the input files for this example
    Go to the output files for this example
-   
+
    Example 2
-   
+
    Extract the regions 10 to 20, 30 to 45, 533 to 537:
-   
-   
+
+
 % extractseq tembl:hsfau1 result2.seq -regions '10-20 30-45 533-537' 
 Extract regions from a sequence
 
    Go to the input files for this example
    Go to the output files for this example
-   
+
    Example 3
-   
+
    Extract the regions 782-856, 951-1095, 1557-1612 and 1787-1912:
-   
+
 
 % extractseq tembl:hsfau1 -reg "782..856,951..1095,1557..1612,1787..1912" stdou
 t 
@@ -66,12 +66,12 @@ gccctgactaccctggaagtagcaggccgcatgcttggaggtaaagtccatggttccctg
 gcccgtgctggaaaagtgagaggtcagactcctaaggtggccaaacaggagaagaagaag
 aagaagacaggtcgggctaagcggcggatgcagtacaaccggcgctttgtcaacgttgtg
 cccacctttggcaagaagaagggccccaatgccaactcttaa
-   
+
    Example 4
-   
+
    Extract the regions 782-856, 951-1095, 1557-1612 and 1787-1912 all to
    separate output sequences:
-   
+
 
 % extractseq tembl:hsfau1 -reg "782..856,951..1095,1557..1612,1787..1912" stdou
 t -separate 
@@ -90,7 +90,7 @@ gtaaagtccatggttccctggcccgtgctggaaaagtgagaggtcagactcctaag
 gtggccaaacaggagaagaagaagaagaagacaggtcgggctaagcggcggatgcagtac
 aaccggcgctttgtcaacgttgtgcccacctttggcaagaagaagggccccaatgccaac
 tcttaa
-   
+
 Command line arguments
 
    Standard (Mandatory) qualifiers:
@@ -162,7 +162,7 @@ Command line arguments
    -error               boolean    Report errors
    -fatal               boolean    Report fatal errors
    -die                 boolean    Report deaths
-   
+
 
    Standard (Mandatory) qualifiers Allowed values Default
    [-sequence]
@@ -183,18 +183,18 @@ Command line arguments
    region 2 to 34 is written as: XYZ_2_34 Boolean value Yes/No No
    Advanced (Unprompted) qualifiers Allowed values Default
    (none)
-   
+
 Input file format
 
    extractseq reads a normal sequence USA.
-   
+
   Input files for usage example
-  
+
    'tembl:hsfau' is a sequence entry in the example nucleic acid database
    'tembl'
-   
+
   Database entry: tembl:hsfau
-  
+
 ID   HSFAU      standard; RNA; HUM; 518 BP.
 XX
 AC   X65923;
@@ -281,11 +281,11 @@ SQ   Sequence 518 BP; 125 A; 139 C; 148 G; 106 T; 0 other;
      tctaataaaa aagccactta gttcagtcaa aaaaaaaa                               51
 8
 //
-   
+
   Input files for usage example 2
-  
+
   Database entry: tembl:hsfau1
-  
+
 ID   HSFAU1     standard; DNA; HUM; 2016 BP.
 XX
 AC   X65921; S45242;
@@ -426,11 +426,11 @@ SQ   Sequence 2016 BP; 421 A; 562 C; 538 G; 495 T; 0 other;
      tacttgcaag gcctcaggga gaggtgtgct tctcgg                                201
 6
 //
-   
+
    You can specifiy a file of ranges to extract by giving the '-regions'
    qualifier the value '@' followed by the name of the file containing
    the ranges. (eg: '-regions @myfile').
-   
+
    The format of the range file is:
      * Comment lines start with '#' in the first column.
      * Comment lines and blank lines are ignored.
@@ -441,7 +441,7 @@ SQ   Sequence 2016 BP; 421 A; 562 C; 538 G; 495 T; 0 other;
      * There can be optional text after the two numbers to annotate the
        line.
      * White-space before or after the text is removed.
-       
+
    An example range file is:
 
 # this is my set of ranges
@@ -451,46 +451,46 @@ SQ   Sequence 2016 BP; 421 A; 562 C; 538 G; 495 T; 0 other;
 
 Output file format
 
+   The output is a normal sequence file.
+
   Output files for usage example
-  
+
   File: result.seq
-  
+
 >HSFAU X65923.1 H.sapiens fau mRNA
 ctcgactccat
-   
+
   Output files for usage example 2
-  
+
   File: result2.seq
-  
+
 >HSFAU1 X65921.1 H.sapiens fau 1 gene
 tccctctcgatacactcgggacaagttagggc
-   
-   The output is a normal sequence file.
-   
+
    If the option '-separate' is used then each specified region is
    written to the output file as a separate sequence. The name of the
    sequence is created from the name of the original sequence with the
    start and end positions of the range appended with underscore
    characters between them,
-   
+
    For example: "XYZ region 2 to 34" is written as: "XYZ_2_34"
-   
+
 Data files
 
    None.
-   
+
 Notes
 
    None.
-   
+
 References
 
    None.
-   
+
 Warnings
 
    None.
-   
+
 Diagnostic Error Messages
 
    Several warning messages about malformed region specifications:
@@ -499,15 +499,17 @@ Diagnostic Error Messages
      * Non-digit found in region ...
      * The start of a pair of region positions must be smaller than the
        end in ...
-       
+
 Exit status
 
    It exits with status 0, unless a region is badly constructed.
-   
+
 Known bugs
 
    None noted.
-   
+
+Comments
+
 See also
 
    Program name                          Description
@@ -535,20 +537,22 @@ See also
    union        Reads sequence fragments and builds one sequence
    vectorstrip  Strips out DNA between a pair of vector sequences
    yank         Reads a sequence range, appends the full USA to a list file
-   
+
 Author(s)
 
    Gary Williams (gwilliam © rfcgr.mrc.ac.uk)
    MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
    Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
-   
+
 History
 
    Written (2000) - Gary Williams
-   
+
 Target users
 
    This program is intended to be used by everyone and everything, from
    naive users to embedded scripts.
-   
+
 Comments
+
+   extractseq None

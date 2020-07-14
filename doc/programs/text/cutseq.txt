@@ -1,59 +1,59 @@
 
                                   cutseq 
-                                      
-   
-   
+
+
+
 Function
 
    Removes a specified section from a sequence
-   
+
 Description
 
    This simple editing program allows you to cut out a region from your
    sequence by specifying the begin and end positions of the sequence to
    remove.
-   
+
    It removes the sequence from the specified start to the end positions
    (inclusive) and returns the rest of the sequence in the output file.
-   
+
 Usage
 
    Here is a sample session with cutseq
-   
+
    To remove bases 10 to 12 from a database entry and write to the new
    sequence file 'gatta2.seq':
-   
-   
+
+
 % cutseq tembl:paamir gatta2.seq -from=10 -to=12 
 Removes a specified section from a sequence.
 
    Go to the input files for this example
    Go to the output files for this example
-   
+
    Example 2
-   
+
    To remove the first 20 bases from 'tembl:paamir' and write it to
    'jsh.seq':
-   
-   
+
+
 % cutseq tembl:paamir -from=1 -to=20 -out=jsh.seq 
 Removes a specified section from a sequence.
 
    Go to the output files for this example
-   
+
    Example 3
-   
+
    If the default start and end positions are accepted, then all of the
    sequence is removed!
-   
+
 
 % cutseq tembl:paamir starta.seq -sbeg=-1000 -send=1290 
 Removes a specified section from a sequence.
 Start of region to delete [1168]: 
 End of region to delete [1290]: 
-   
+
    Go to the output files for this example
-   
+
 Command line arguments
 
    Standard (Mandatory) qualifiers:
@@ -112,7 +112,7 @@ Command line arguments
    -error               boolean    Report errors
    -fatal               boolean    Report fatal errors
    -die                 boolean    Report deaths
-   
+
 
    Standard (Mandatory) qualifiers Allowed values Default
    [-sequence]
@@ -129,18 +129,18 @@ Command line arguments
    (none)
    Advanced (Unprompted) qualifiers Allowed values Default
    (none)
-   
+
 Input file format
 
    cutseq reads a single sequence USA.
-   
+
   Input files for usage example
-  
+
    'tembl:paamir' is a sequence entry in the example nucleic acid
    database 'tembl'
-   
+
   Database entry: tembl:paamir
-  
+
 ID   PAAMIR     standard; DNA; PRO; 2167 BP.
 XX
 AC   X13776; M43175;
@@ -288,15 +288,15 @@ SQ   Sequence 2167 BP; 363 A; 712 C; 730 G; 362 T; 0 other;
      cctcgag                                                                216
 7
 //
-   
+
 Output file format
 
    cutseq writes a single sequence file.
-   
+
   Output files for usage example
-  
+
   File: gatta2.seq
-  
+
 >PAAMIR X13776.1 Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidas
 e regulation
 ggtaccgctcgagcatctgctcgatcaccaccagccgggcgacgggaactgcacgatcta
@@ -336,11 +336,11 @@ gctgggcaagatcagcggtcgggaggtggcggtgatcaacttcctggtcggcgtgctgag
 cgcctgcgtcgcgttctacctgatcttttccgcagcagccgggcagggctcgctgaaggc
 cggagcgctgaccctgctattcgcttttacctatctgtgggtggccgccaaccagttcct
 cgag
-   
+
   Output files for usage example 2
-  
+
   File: jsh.seq
-  
+
 >PAAMIR X13776.1 Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidas
 e regulation
 tgctcgatcaccaccagccgggcgacgggaactgcacgatctacctggcgagcctggagc
@@ -379,43 +379,43 @@ tgctgtacgttggcgcggtgctgtttctcaatgccgtctggttgctgggcaagatcagcg
 gtcgggaggtggcggtgatcaacttcctggtcggcgtgctgagcgcctgcgtcgcgttct
 acctgatcttttccgcagcagccgggcagggctcgctgaaggccggagcgctgaccctgc
 tattcgcttttacctatctgtgggtggccgccaaccagttcctcgag
-   
+
   Output files for usage example 3
-  
+
   File: starta.seq
-  
+
 >PAAMIR X13776.1 Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidas
 e regulation
-   
+
 Data files
 
    None.
-   
+
 Notes
 
    This can be used as a simple sequence editor.
-   
+
 References
 
    None.
-   
+
 Warnings
 
    You can delete a complete sequence and write out an empty sequence
    file.
-   
+
 Diagnostic Error Messages
 
    None.
-   
+
 Exit status
 
    It always exits with status 0
-   
+
 Known bugs
 
    None.
-   
+
 See also
 
    Program name                          Description
@@ -443,20 +443,22 @@ See also
    union        Reads sequence fragments and builds one sequence
    vectorstrip  Strips out DNA between a pair of vector sequences
    yank         Reads a sequence range, appends the full USA to a list file
-   
+
 Author(s)
 
    Gary Williams (gwilliam © rfcgr.mrc.ac.uk)
    MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
    Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
-   
+
 History
 
    Completed 26 Jan 1999
-   
+
 Target users
 
    This program is intended to be used by everyone and everything, from
    naive users to embedded scripts.
-   
+
 Comments
+
+   None

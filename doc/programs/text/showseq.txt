@@ -1,27 +1,27 @@
 
                                   showseq 
-                                      
-   
-   
+
+
+
 Function
 
    Display a sequence with features, translation etc
-   
+
 Description
 
    showseq displays a protein or a nucleic acid sequence in a style
    suitable for publication.
-   
+
    The output is sent to the screen by default for the user to view, but
    it can write the results to a file.
-   
+
    The display style of the output is very flexible. The user can select
    a style from the pre-set choice of formats, or can design a style to
    suit their purposes and aesthetic tastes.
-   
+
    If designing a new format, you can choose the order in which things
    are printed around the sequence. The things that you can display are:
-   
+
 s       Sequence
 b       Blank line
 1       Frame 1 translation
@@ -40,10 +40,10 @@ a       User Annotation
 
    The letters for these things can be in upper or lower case.
    They can be displayed in any order.
-   
+
    You do not have to make your own format; there is a selection of
    pre-defined standard formats for you to choose from.
-   
+
    The default standard format displays the following: for every new line
    that the sequence starts to write, the output display will contain
    first a blank line ('b'), then the position numbers of the ticks ('n')
@@ -51,9 +51,9 @@ a       User Annotation
    ('s') then any user-supplied annotation ('a') then the features from
    the feature table ('f'). Subsequent lines of the sequence output will
    repeat this format.
-   
+
    The 'thing' codes used in the list of standard formats are:
-   
+
 Sequence only:                  S A
 Default sequence:               B N T S A F
 Pretty sequence:                B N T S A
@@ -66,26 +66,26 @@ Baroque:                        B 1 2 3 N T R S T C -R T -3 -2 -1 A F
    The displayed sequence can be numbered either by numbering the start
    and ending positions, or by placing a ruler with ticks above or below
    the sequence.
-   
+
    The width of a line can be set. The width of a margin around the
    sequence reserved for numbering can be set. The initial position to
    start numbering from can be set.
-   
+
    The sequence can be translated, using the selectable genetic code
    tables. The translation can be done in one, three or six frames. The
    translation can be displayed in one-letter or three-letter amino acid
    codes. The translation can optionally be displayed only when it is in
    open reading frames (ORFs) of a specified minimum size. One or more
    specified regions of the sequence can be individually translated.
-   
+
    Specified regions of the sequence can be displayed in uppercase to
    highlight them.
-   
+
    The output can be formatted for HTML.
-   
+
    If the output is being formatted for HTML, then specified regions of
    the sequence can be displayed in any valid HTML colours.
-   
+
    The Restriction Enzyme database (REBASE) is a collection of
    information about restriction enzymes and related proteins. It
    contains published and unpublished references, recognition and
@@ -95,27 +95,27 @@ Baroque:                        B 1 2 3 N T R S T C -R T -3 -2 -1 A F
    proteins are also included. Most recently, putative DNA
    methyltransferases and restriction enzymes, as predicted from analysis
    of genomic sequences, are also listed.
-   
+
    The home page of REBASE is: http://rebase.neb.com/
-   
+
    This program can use REBASE data to find the recognition sites and/or
    cut sites of restriction enzymes in a nucleic acid sequence.
-   
+
    This program can display the cut sites on both strands.
-   
+
    One potentially very useful option is '-flatreformat' that displays
    not only the cut sites which many other restriction cut-site programs
    will show, but also shows the recognition site.
-   
+
    If the sequence is in EMBL, Genbank or SwissProt format, the feature
    table of the sequence can be dispalyed with the sequence. GFF file
    features can also be displayed if they are included on the command
    line with the -ufo=file qualifier.
-   
+
 Usage
 
    Here is a sample session with showseq
-   
+
 
 % showseq tembl:paamir -sbeg 1 -send 100 
 Display a sequence with features, translation etc..
@@ -131,19 +131,19 @@ Things to display
          8 : Baroque
 Display format [2]: 
 Output file [paamir.showseq]: 
-   
+
    Go to the input files for this example
    Go to the output files for this example
-   
+
    Example 2
-   
+
    The standard list of output formats are only a small selection of the
    possible ways in which a sequence might be displayed. Precise control
    over the output format is acheived by selecting the qualifier '-format
    0' (Option 0 in the list of things to display). For example, by
    choosing format '0' and then specifying that we want to display the
    things: 'b,s,t,c', we will output the sequence in the following way:
-   
+
 
 % showseq tembl:paamir -sbeg 1 -send 120 
 Display a sequence with features, translation etc..
@@ -176,91 +176,91 @@ Specify your own things to display
          A : Annotation
 Enter a list of things to display [B,N,T,S,A,F]: b,s,t,c
 Output file [paamir.showseq]: 
-   
+
    Go to the output files for this example
-   
+
    Example 3
-   
+
    Display only the sequence:
-   
+
 
 % showseq tembl:paamir -sbeg 1 -send 100 -noname -nodesc -format 0 -thing S 
 Display a sequence with features, translation etc..
 Output file [paamir.showseq]: 
-   
+
    Go to the output files for this example
-   
+
    Example 4
-   
+
    Protein sequence can be displayed in three-letter codes. (The codes
    are displayed downwards, so the first code is 'Met'):
-   
+
 
 % showseq tsw:rs24_fugru -three -format 2 
 Display a sequence with features, translation etc..
 Output file [rs24_fugru.showseq]: 
-   
+
    Go to the input files for this example
    Go to the output files for this example
-   
+
    Example 5
-   
+
    Number the sequence lines in the margin:
-   
+
 
 % showseq tembl:paamir -sbeg 1 -send 100 -format 1 -number 
 Display a sequence with features, translation etc..
 Output file [paamir.showseq]: 
-   
+
    Go to the output files for this example
-   
+
    Example 6
-   
+
    Start the numbering at a specified value ('123' in this case):
-   
+
 
 % showseq tembl:paamir -sbeg 1 -send 100 -format 1 -number -offset 123 
 Display a sequence with features, translation etc..
 Output file [paamir.showseq]: 
-   
+
    Go to the output files for this example
-   
+
    Example 7
-   
+
    Make selected regions uppercase. (Use '-slower' to force the rest of
    the sequence to be lowercase).
-   
+
 
 % showseq tembl:paamir -sbeg 1 -send 100 -format 1 -slower -upper '25-45,101-20
 3,333-362' 
 Display a sequence with features, translation etc..
 Output file [paamir.showseq]: 
-   
+
    Go to the output files for this example
-   
+
    Example 8
-   
+
    Translate selected regions:
-   
+
 
 % showseq tembl:paamir -sbeg 1 -send 120 -format 4 -trans 25-49,66-76 
 Display a sequence with features, translation etc..
 Output file [paamir.showseq]: 
-   
+
    Go to the output files for this example
-   
+
    Example 9
-   
+
    Add your own annotation to the display:
-   
+
 
 % showseq tembl:paamir -sbeg 1 -send 100 -format 2 -send 120 -annotation '13-26
  binding site 15-15 SNP' 
 Display a sequence with features, translation etc..
 Output file [paamir.showseq]: 
-   
+
    Go to the output files for this example
-   
+
 Command line arguments
 
    Standard (Mandatory) qualifiers (* if not always prompted):
@@ -553,7 +553,7 @@ Command line arguments
    -error               boolean    Report errors
    -fatal               boolean    Report fatal errors
    -die                 boolean    Report deaths
-   
+
 
    Standard (Mandatory) qualifiers Allowed values Default
    [-sequence]
@@ -770,18 +770,18 @@ Command line arguments
    -offset Offset to start numbering the sequence from Any integer value
    1
    -html Use HTML formatting Boolean value Yes/No No
-   
+
 Input file format
 
    showseq reads normal sequence USAs.
-   
+
   Input files for usage example
-  
+
    'tembl:paamir' is a sequence entry in the example nucleic acid
    database 'tembl'
-   
+
   Database entry: tembl:paamir
-  
+
 ID   PAAMIR     standard; DNA; PRO; 2167 BP.
 XX
 AC   X13776; M43175;
@@ -929,14 +929,14 @@ SQ   Sequence 2167 BP; 363 A; 712 C; 730 G; 362 T; 0 other;
      cctcgag                                                                216
 7
 //
-   
+
   Input files for usage example 4
-  
+
    'tsw:rs24_fugru' is a sequence entry in the example protein database
    'tsw'
-   
+
   Database entry: tsw:rs24_fugru
-  
+
 ID   RS24_FUGRU     STANDARD;      PRT;   132 AA.
 AC   O42387;
 DT   15-JUL-1998 (REL. 36, CREATED)
@@ -960,13 +960,13 @@ SQ   SEQUENCE   132 AA;  15305 MW;  BCF9EB31 CRC32;
      RTQFGGGKTT GFAMVYDSLD YAKKNEPKHR LARHGLFEKK KTSRKQRKER KNRMKKVRGT
      KKASVGASKK KD
 //
-   
+
    You can specifiy a file of ranges to display in uppercase by giving
    the '-uppercase' qualifier the value '@' followed by the name of the
    file containing the ranges. (eg: '-upper @myfile').
-   
+
    The format of the range file is:
-   
+
      * Comment lines start with '#' in the first column.
      * Comment lines and blank lines are ignored.
      * The line may start with white-space.
@@ -977,9 +977,9 @@ SQ   SEQUENCE   132 AA;  15305 MW;  BCF9EB31 CRC32;
      * There can be optional text after the two numbers to annotate the
        line.
      * White-space before or after the text is removed.
-       
+
    An example range file is:
-   
+
 
 # this is my set of ranges
 12   23
@@ -990,20 +990,20 @@ SQ   SEQUENCE   132 AA;  15305 MW;  BCF9EB31 CRC32;
    when outputting in HTML format (using the '-html' qualifier) by giving
    the '-highlight' qualifier the value '@' followed by the name of the
    file containing the ranges. (eg: '-highlight @myfile').
-   
+
    The format of this file is very similar to the format of the above
    uppercase range file, except that the text after the start and end
    positions is used as the HTML colour name. This colour name is used
    'as is' when specifying the colour in HTML in a '' construct, (where
    'xxx' is the name of the colour).
-   
+
    The standard names of HTML font colours are given in:
    http://http://www.w3.org/TR/REC-html40/types.html and
    http://www.ausmall.com.au/freegraf/ncolour2.htm and
    http://mindprod.com/htmlcolours.html (amongst other places).
-   
+
    An example highlight range file is:
-   
+
 
 # this is my set of ranges
 12   23         red
@@ -1013,13 +1013,13 @@ SQ   SEQUENCE   132 AA;  15305 MW;  BCF9EB31 CRC32;
    You can specifiy a file of ranges to annotate by giving the
    '-annotate' qualifier the value '@' followed by the name of the file
    containing the ranges. (eg: '-annotate @myfile').
-   
+
    The format of this file is very similar to the format of the above
    highlight range file, except that the text after the start and end
    positions is used as the displayed text of the annotated region.
-   
+
    An example annotation range file is:
-   
+
 # this is my set of ranges
 12   23         exon 1
  4   5          CAP site
@@ -1028,13 +1028,13 @@ SQ   SEQUENCE   132 AA;  15305 MW;  BCF9EB31 CRC32;
    You can specify a file of enzyme names to read in by giving the
    '-enzymes' qualifier the name of the file holding the enzyme names
    with a '@' character in front of it, for example, '@enz.list'.
-   
+
    Blank lines and lines starting with a '#' or '!' character are ignored
    and all other lines are concatenated together with a comma character
    ',' and then treated as the list of enzymes to search for.
-   
+
    An example of a file of enzyme names is:
-   
+
 
 # my enzymes
 HincII, ppiI
@@ -1045,14 +1045,14 @@ HinfI
 Output file format
 
   Output files for usage example
-  
+
    Note that although we asked for the sequence display to end at
    position '100', it has displayed the sequence up to the end of the
    line - position '120'. This is a feature of this program to make the
    display of things like restriction enzyme cutting sites easier.
-   
+
   File: paamir.showseq
-  
+
 PAAMIR
 Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase
 regulation
@@ -1070,11 +1070,11 @@ regulation
           ctacctggcgagcctggagcacgagcgggttcgcttcgtacggcgctgagcgacagtcac
               |===============|
               promoter note="proposed rpoN-dependent promoter"
-   
+
   Output files for usage example 2
-  
+
   File: paamir.showseq
-  
+
 PAAMIR
 Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase
 regulation
@@ -1086,18 +1086,18 @@ regulation
           ctacctggcgagcctggagcacgagcgggttcgcttcgtacggcgctgagcgacagtcac
           ----:----|----:----|----:----|----:----|----:----|----:----|
           gatggaccgctcggacctcgtgctcgcccaagcgaagcatgccgcgactcgctgtcagtg
-   
+
   Output files for usage example 3
-  
+
   File: paamir.showseq
-  
+
           ggtaccgctggccgagcatctgctcgatcaccaccagccgggcgacgggaactgcacgat
           ctacctggcgagcctggagcacgagcgggttcgcttcgtacggcgctgagcgacagtcac
-   
+
   Output files for usage example 4
-  
+
   File: rs24_fugru.showseq
-  
+
 RS24_FUGRU
 40S RIBOSOMAL PROTEIN S24.
 
@@ -1118,41 +1118,41 @@ RS24_FUGRU
           LLASVGASLLLA
           yylealleyyys
           ssarlyarsssp
-   
+
   Output files for usage example 5
-  
+
   File: paamir.showseq
-  
+
 PAAMIR
 Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase
 regulation
         1 ggtaccgctggccgagcatctgctcgatcaccaccagccgggcgacgggaactgcacgat 60
        61 ctacctggcgagcctggagcacgagcgggttcgcttcgtacggcgctgagcgacagtcac 120
-   
+
   Output files for usage example 6
-  
+
   File: paamir.showseq
-  
+
 PAAMIR
 Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase
 regulation
       123 ggtaccgctggccgagcatctgctcgatcaccaccagccgggcgacgggaactgcacgat 182
       183 ctacctggcgagcctggagcacgagcgggttcgcttcgtacggcgctgagcgacagtcac 242
-   
+
   Output files for usage example 7
-  
+
   File: paamir.showseq
-  
+
 PAAMIR
 Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase
 regulation
           ggtaccgctggccgagcatctgctCGATCACCACCAGCCGGGCGAcgggaactgcacgat
           ctacctggcgagcctggagcacgagcgggttcgcttcgtaCGGCGCTGAGCGACAGTCAC
-   
+
   Output files for usage example 8
-  
+
   File: paamir.showseq
-  
+
 PAAMIR
 Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase
 regulation
@@ -1174,11 +1174,11 @@ regulation
                  A  S  L
               |===============|
               promoter note="proposed rpoN-dependent promoter"
-   
+
   Output files for usage example 9
-  
+
   File: paamir.showseq
-  
+
 PAAMIR
 Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase
 regulation
@@ -1200,68 +1200,68 @@ regulation
           ctacctggcgagcctggagcacgagcgggttcgcttcgtacggcgctgagcgacagtcac
               |===============|
               promoter note="proposed rpoN-dependent promoter"
-   
+
    Most of the variants of the output format have already been described
    in the 'Description' and 'Usage' sections, but here is some more just
    to fill out this section ;-)
-   
+
    The output format is extremely variable and under the control of the
    qualifiers used.
-   
+
    The sequence can be formatted for HTML display by using the '-html'
    qualifier. The top and tail html tags <HEAD>, <BODY> etc. are not
    included as it is expected that the output of this program will be
    included in a more extensive HTML page and so these parts are left to
    the user to provide.
-   
+
    The name of the sequence is displayed, followed by the description of
    the sequence. These can be turned off with the '-noname' and
    '-nodescription' qualifiers.
-   
+
    Then the sequence is output, one line at a time. Any associated
    information to be displayed is also output above and below the
    sequence line, as specified by the '-format' and or '-things'
    qualifiers. (See the 'Description' section for detals).
-   
+
    The margins around the sequence are specified by the use of the
    '-margin' qaulifier and any numbering of the sequence and its
    translations are placed in the margin.
-   
+
    A display of the restriction enzyme cut sites can be selected via
    '-format 6' option or the '-format 0 -thing b,r,s,-r' style of
    options.
-   
+
    The option '-format 7' will produce a formatted display of cut sites
    on the sequence, with the six-frame translation below it. The cut
    sites are indicated by a slash character '\' that points to the
    poition between the nucleotides where the cuts occur. Cuts by many
    enzymes at the same position are indicated by stacking the enzyme
    names on top of each other.
-   
+
    At the end the section header 'Enzymes that cut' is displayed followed
    by a list of the enzymes that cut the specified sequence and the
    number of times that they cut.
-   
+
    The '-flatreformat' qualifier changes the display to emphasise the
    recognition site of the restriction enzyme, which is indicated by a
    row of '=' characters. The cut site if pointed to by a '>' or '<'
    character and if the cut site is not within or imemdiately adjacent to
    the recognition site, they are linked by a row or '.' characters.
-   
+
    The name of the enzyme is displayed above (or below when the reverse
    sense site if displayed) the recognition site. The name of the enzyme
    is also displayed above the cut site if this occurs on a different
    display line to the recognition site (i.e. if it wraps onto the next
    line of sequence).
-   
+
 Data files
 
    EMBOSS data files are distributed with the application and stored in
    the standard EMBOSS data directory, which is defined by the EMBOSS
    environment variable EMBOSS_DATA.
-   
+
    To see the available EMBOSS data files, run:
-   
+
 % embossdata -showall
 
    To fetch one of the data files (for example 'Exxx.dat') into your
@@ -1274,53 +1274,88 @@ Data files
    tidier directory listings in a subdirectory called ".embossdata".
    Files for all EMBOSS runs can be put in the user's home directory, or
    again in a subdirectory called ".embossdata".
-   
+
    The directories are searched in the following order:
      * . (your current directory)
      * .embossdata (under your current directory)
      * ~/ (your home directory)
      * ~/.embossdata
-       
+
    The Genetic Code data files are based on the NCBI genetic code tables.
    Their names and descriptions are:
-   
 
-EGC.0      Standard (Differs from GC.1 in that it only has initiation site 'AUG
-')
-EGC.1      Standard
-EGC.2      Vertebrate Mitochondrial
-EGC.3      Yeast Mitochondrial
-EGC.4      Mold, Protozoan, Coelenterate Mitochondrial and Mycoplasma/Spiroplas
-ma
-EGC.5      Invertebrate Mitochondrial
-EGC.6      Ciliate Macronuclear and Dasycladacean
-EGC.9      Echinoderm Mitochondrial
-EGC.10     Euplotid Nuclear
-EGC.11     Bacterial
-EGC.12     Alternative Yeast Nuclear
-EGC.13     Ascidian Mitochondrial
-EGC.14     Flatworm Mitochondrial
-EGC.15     Blepharisma Macronuclear
-EGC.16     Chlorophycean Mitochondrial
-EGC.21     Trematode Mitochondrial
-EGC.22     Scenedesmus obliquus
-EGC.23     Thraustochytrium Mitochondrial
+   EGC.0
+          Standard (Differs from GC.1 in that it only has initiation site
+          'AUG')
+
+   EGC.1
+          Standard
+
+   EGC.2
+          Vertebrate Mitochodrial
+
+   EGC.3
+          Yeast Mitochondrial
+
+   EGC.4
+          Mold, Protozoan, Coelenterate Mitochondrial and
+          Mycoplasma/Spiroplasma
+
+   EGC.5
+          Invertebrate Mitochondrial
+
+   EGC.6
+          Ciliate Macronuclear and Dasycladacean
+
+   EGC.9
+          Echinoderm Mitochondrial
+
+   EGC.10
+          Euplotid Nuclear
+
+   EGC.11
+          Bacterial
+
+   EGC.12
+          Alternative Yeast Nuclear
+
+   EGC.13
+          Ascidian Mitochondrial
+
+   EGC.14
+          Flatworm Mitochondrial
+
+   EGC.15
+          Blepharisma Macronuclear
+
+   EGC.16
+          Chlorophycean Mitochondrial
+
+   EGC.21
+          Trematode Mitochondrial
+
+   EGC.22
+          Scenedesmus obliquus
+
+   EGC.23
+          Thraustochytrium Mitochondrial
 
    The format of these files is very simple.
-   
+
    It consists of several lines of optional comments, each starting with
    a '#' character.
-   
+
    These are followed the line: 'Genetic Code [n]', where 'n' is the
    number of the genetic code file.
-   
+
    This is followed by the description of the code and then by four lines
    giving the IUPAC one-letter code of the translated amino acid, the
    start codons (indicdated by an 'M') and the three bases of the codon,
    lined up one on top of the other.
-   
+
    For example:
-   
+
+------------------------------------------------------------------------------
 # Genetic Code Table
 #
 # Obtained from: http://www.ncbi.nlm.nih.gov/collab/FT/genetic_codes.html
@@ -1337,64 +1372,65 @@ Starts = -----------------------------------M----------------------------
 Base1  = TTTTTTTTTTTTTTTTCCCCCCCCCCCCCCCCAAAAAAAAAAAAAAAAGGGGGGGGGGGGGGGG
 Base2  = TTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGG
 Base3  = TCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAG
+------------------------------------------------------------------------------
 
-   showseq uses the EMBOSS REBASE data files in 'data/REBASE/*' under the
-   EMBOSS installation directory.
-   
+   The EMBOSS REBASE restriction enzyme data files are stored iin
+   directory 'data/REBASE/*' under the EMBOSS installation directory.
+
    These files must first be set up using the program 'rebaseextract'.
    Running 'rebaseextract' may be the job of your system manager.
-   
+
    The data files are stored in the REBASE directory of the standard
    EMBOSS data directory. The names are:
      * embossre.enz Cleavage information
      * embossre.ref Reference/methylation information
      * embossre.sup Supplier information
-       
+
    The column information is described at the top of the data files
-   
+
    The reported enzyme from any one group of isoschizomers (the
    prototype) is specified in the REBASE database and the information is
    held in the data file 'embossre.equ'. You may edit this file to set
    your own preferred prototype, if you wish.
-   
+
    The format of the file "embossre.equ" is
    Enzyme-name Prototype-name
-   
+
    i.e. two columns of enzyme names separated by a space. The first name
    of the pair of enzymes is the name that is not preferred and the
    second is the preferred (prototype) name.
-   
+
 Notes
 
    None.
-   
+
 References
 
    None.
-   
+
 Warnings
 
    None.
-   
+
 Diagnostic Error Messages
 
    None.
-   
+
 Exit status
 
    It always exits with status 0.
-   
+
 Known bugs
 
    None known.
-   
+
    If you ask for the sequence display to end at position '100', with the
    qualifier '-send 100', it will display the sequence up to the end of
    the line - position '120'. This is a feature of this program to make
    the display of things like restriction enzyme cutting sites easier.
-   
+
    It is not a bug. Please don't report it.
-   
+
 See also
 
    Program name Description
@@ -1408,7 +1444,6 @@ See also
    plotorf Plot potential open reading frames
    prettyplot Displays aligned sequences, with colouring and boxing
    prettyseq Output sequence with translated ranges
-   recite Find changes to an enzyme site that introduce new enzyme sites
    recoder Remove restriction sites but maintain the same translation
    redata Search REBASE for enzyme name, references, suppliers etc
    remap Display a sequence with restriction cut sites, translation etc
@@ -1424,22 +1459,24 @@ See also
    textsearch Search sequence documentation text. SRS and Entrez are
    faster!
    transeq Translate nucleic acid sequences
-   
+
 Author(s)
 
    Gary Williams (gwilliam © rfcgr.mrc.ac.uk)
    MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
    Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
-   
+
 History
 
    Written 1999 - GWW
    23 Aug 2000 - features display added - GWW
    20 Nov 2001 - feature matches and annotation display added - GWW
-   
+
 Target users
 
    This program is intended to be used by everyone and everything, from
    naive users to embedded scripts.
-   
+
 Comments
+
+   None

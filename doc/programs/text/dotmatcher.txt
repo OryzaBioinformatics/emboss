@@ -1,21 +1,21 @@
 
                                 dotmatcher 
-                                      
-   
-   
+
+
+
 Function
 
    Displays a thresholded dotplot of two sequences
-   
+
 Description
 
    A dotplot is a graphical representation of the regions of similarity
    between two sequences.
-   
+
    The two sequences are placed on the axes of a rectangular image and
    (subject to threshold conditions) wherever there is a similarity
    between the sequences a dot is placed on the image.
-   
+
    Where the two sequences have substantial regions of similarity, many
    dots align to form diagonal lines. It is therefore possible to see at
    a glance where there are local regions of similarity as these will
@@ -23,7 +23,7 @@ Description
    as repeats (which form parallel diagonal lines), and insertions or
    deletions (which form breaks or discontinuities in the diagonal
    lines).
-   
+
    dotmatcher uses a threshold to define whether a match is plotted
    (calculated from the substitution matrix). A window of specified
    length is moved up all possible diagonals and a score is calculated
@@ -32,20 +32,20 @@ Description
    similarity matrix along the window. If the score is above the
    threshold, then a line is plotted on the image over the position of
    the window.
-   
+
 Usage
 
    Here is a sample session with dotmatcher
-   
+
 
 % dotmatcher tsw:hba_human tsw:hbb_human -graph cps 
 Displays a thresholded dotplot of two sequences
 
 Created dotmatcher.ps
-   
+
    Go to the input files for this example
    Go to the output files for this example
-   
+
 Command line arguments
 
    Standard (Mandatory) qualifiers (* if not always prompted):
@@ -133,7 +133,7 @@ Command line arguments
    -error               boolean    Report errors
    -fatal               boolean    Report fatal errors
    -die                 boolean    Report deaths
-   
+
 
    Standard (Mandatory) qualifiers Allowed values Default
    [-asequence]
@@ -143,11 +143,11 @@ Command line arguments
    -graph Graph type EMBOSS has a list of known devices, including
    postscript, ps, hpgl, hp7470, hp7580, meta, colourps, cps, xwindows,
    x11, tektronics, tekt, tek4107t, tek, none, null, text, data, xterm,
-   png EMBOSS_GRAPHICS value, or x11
+   png, xml EMBOSS_GRAPHICS value, or x11
    -xygraph Graph type EMBOSS has a list of known devices, including
    postscript, ps, hpgl, hp7470, hp7580, meta, colourps, cps, xwindows,
    x11, tektronics, tekt, tek4107t, tek, none, null, text, data, xterm,
-   png EMBOSS_GRAPHICS value, or x11
+   png, xml EMBOSS_GRAPHICS value, or x11
    Additional (Optional) qualifiers Allowed values Default
    -matrixfile This is the scoring matrix file used when comparing
    sequences. By default it is the file 'EBLOSUM62' (for proteins) or the
@@ -159,19 +159,19 @@ Command line arguments
    more 10
    -threshold Threshold Integer 0 or more 23
    Advanced (Unprompted) qualifiers Allowed values Default
-   -stretch Display a non-proportional graph Toggle value Yes/No N
-   
+   -stretch Display a non-proportional graph Toggle value Yes/No No
+
 Input file format
 
    Any 2 sequence USAs of the same type (DNA or protein).
-   
+
   Input files for usage example
-  
+
    'tsw:hba_human' is a sequence entry in the example protein database
    'tsw'
-   
+
   Database entry: tsw:hba_human
-  
+
 ID   HBA_HUMAN      STANDARD;      PRT;   141 AA.
 AC   P01922;
 DT   21-JUL-1986 (Rel. 01, Created)
@@ -277,9 +277,9 @@ SQ   SEQUENCE   141 AA;  15126 MW;  5EC7DB1E CRC32;
      KVADALTNAV AHVDDMPNAL SALSDLHAHK LRVDPVNFKL LSHCLLVTLA AHLPAEFTPA
      VHASLDKFLA SVSTVLTSKY R
 //
-   
+
   Database entry: tsw:hbb_human
-  
+
 ID   HBB_HUMAN      STANDARD;      PRT;   146 AA.
 AC   P02023;
 DT   21-JUL-1986 (Rel. 01, Created)
@@ -385,89 +385,100 @@ SQ   SEQUENCE   146 AA;  15867 MW;  EC9744C9 CRC32;
      KAHGKKVLGA FSDGLAHLDN LKGTFATLSE LHCDKLHVDP ENFRLLGNVL VCVLAHHFGK
      EFTPPVQAAY QKVVAGVANA LAHKYH
 //
-   
+
 Output file format
 
    An image is output to the requested graphics device.
-   
+
   Output files for usage example
-  
+
   Graphics File: dotmatcher.ps
-  
+
    [dotmatcher results]
-   
+
 Data files
 
    It uses the specified matrix substitution file to compare the two
    sequences.
-   
+
    For protein sequences EBLOSUM62 is used for the substitution matrix.
    For nucleotide sequence, EDNAFULL is used. Others can be specified.
-   
+
    EMBOSS data files are distributed with the application and stored in
-   the standard EMBOSS data directory, which is defined by EMBOSS
+   the standard EMBOSS data directory, which is defined by the EMBOSS
    environment variable EMBOSS_DATA.
-   
+
+   To see the available EMBOSS data files, run:
+
+% embossdata -showall
+
+   To fetch one of the data files (for example 'Exxx.dat') into your
+   current directory for you to inspect or modify, run:
+
+% embossdata -fetch -file Exxx.dat
+
    Users can provide their own data files in their own directories.
    Project specific files can be put in the current directory, or for
    tidier directory listings in a subdirectory called ".embossdata".
    Files for all EMBOSS runs can be put in the user's home directory, or
    again in a subdirectory called ".embossdata".
-   
+
    The directories are searched in the following order:
      * . (your current directory)
      * .embossdata (under your current directory)
      * ~/ (your home directory)
      * ~/.embossdata
-       
+
 Notes
 
    None.
-   
+
 References
 
    None.
-   
+
 Warnings
 
    None.
-   
+
 Diagnostic Error Messages
 
    None.
-   
+
 Exit status
 
-   0 upon successful completion.
-   
+   It always exits with status 0.
+
 Known bugs
 
    None.
-   
+
 See also
 
    Program name                          Description
    dotpath      Displays a non-overlapping wordmatch dotplot of two sequences
    dottup       Displays a wordmatch dotplot of two sequences
    polydot      Displays all-against-all dotplots of a set of sequences
-   
+
    dottup, by comparison, has no threshold, using a wordmatch-style
    method. dottup is less sensitive, but substantially faster than
    dotmatcher.
-   
+
 Author(s)
 
    Ian Longden (il © sanger.ac.uk)
    Sanger Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge,
    CB10 1SA, UK.
-   
+
 History
 
- Completed 1st June 1999.
+   Completed 1st June 1999.
 
 Target users
 
    This program is intended to be used by everyone and everything, from
    naive users to embedded scripts.
-   
+
 Comments
+
+   None

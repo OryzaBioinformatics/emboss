@@ -1,5 +1,6 @@
-<HTML>
+<!--START OF HEADER - DON'T ALTER -->
 
+<HTML>
 <HEAD>
   <TITLE>
   EMBOSS: mse
@@ -7,158 +8,108 @@
 </HEAD>
 <BODY BGCOLOR="#FFFFFF" text="#000000">
 
-<table align=center bgcolor="#000070" border=0 cellspacing=0 cellpadding=10>
-<tr>
-<td>
-<a href="index.html" onmouseover="self.status='Go to the EMBOSS home page';return true">
-<img border=0 src="emboss_icon.gif" alt="" width=55 height=55>
-</a>
 
+
+<table align=center border=0 cellspacing=0 cellpadding=0>
+<tr><td valign=top>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
 </td>
+<td align=left valign=middle>
+<b><font size="+6">
 
-<td align=middle valign=middle>
-<font face="Arial,Helvetica" size=6 color="#ffffff">
-<H2>
-EMBOSS: mse
-</H2>
-</font>
-</td>
-
-</tr>
+mse
+</font></b>
+</td></tr>
 </table>
-</td>
+<br>&nbsp;
+<p>
 
-</tr>
-</table>
 
-<p><hr><p>
 
-<H1>
-Program mse
-</H1>
+<!--END OF HEADER-->
+
+
+
+
+
+
 <H2>
     Function
 </H2>
+Multiple Sequence Editor
 
-Conversion of William A. Gilbert's ( Whitehead Insitutute ) MSE.
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+
+
+
 
 <H2>
     Description
 </H2>
 
- A Multiple Sequence Screen Editor for Biological Sequences.
+<!-- 
+	This is the main part of the document.
+        This is what the user looks at to find out if this program will do what he wants. 
+        Long description.
+        Why it is useful.
+        When it should/shouldn't be used.
+  -->
+
+**************** 
+EDIT HERE
+**************** 
+
+
+
+
+
+
+
+
+
+
+
+
+
+<H2>
+    Algorithm
+</H2>
+
+<!-- 
+        Algorithms
+	  Pseudocode/Vague description/Handwaving/web links to useful pages
+  -->
+
+**************** 
+EDIT HERE
+**************** 
+
+
+
+
+
+
+
+
+
+
+
 
 
 <H2>
     Usage
 </H2>
 
-    This is an interactive program and 
-it is similar to many other multiple sequence editors, in that you
-run it, using a file of existing sequences, as:
-<p>
-
-% mse file.seq
-<p>
-
-...you will then see a screen looking like this:
-<p>
-
-<hr>
-<pre>
-MSE V3.0                                                                    WIBR
+<!--  
+	Example usage, as run from the command-line.
+        Many examples illustrating different behaviours is good.
+ -->
 
 
 
-     
-
-     tgactgatcgttgctgattgatgctgactg
-     tgactgatcgt-gctgactgatgctgactg
-     tgactgatcgtagctgactgatgctgactg
-....|.........|.........|.........|.........|.........|.........|.........|....
-    0        10        20        30        40        50        60        70
-
-
-
-
-
-
-
-      |......|......|......|......|......|......|......|......|......|......|
-      0     10     20     30     40     50     60     70     80     90     100
-
-003  M +-----#------------>
-002    +------------------>
-001    +------------------>
-Press "?" for help
-</pre>
-<hr>
-<p>
-
-Pressing the cursor keys will move the cursor around, left and right, up
-and down. Moving the cursor in the sequences will also move the '#' character
-in the "bird's eye view" in the lower screen - this is an overview of where
-you currently are in the full-length set of sequences.
-<p>
-
-If you press a key that is a valid nucleotide or residue code, then the
-appropriate sequence in the "bird's eye view" will be marked with a 'M'
-indicating that it has been modified.
-<p>
-
-Pressing '?' at any time will display the help:
-<p>
-
-<hr>
-<pre>
-                          Screen Mode Commands,
-             ([n] is an optional numeric (keyboard) parameter)
-
-[n]s            - Inserts symbol "s" [n] times
-[n]&lt;delete&gt;     - Delete [n] sequence character(s)
-[n]&lt;space bar&gt;  - Move the sequence(s) to the right [n] spaces
-[n]&lt;backspace&gt;  - Move the sequence(s) to the left [n] spaces, VT200's
-                   use F12 key or Control-H
-
-[n]&lt;arrow&gt;      - Go forward, backward, up or down [n] positions or lines
-[n]&lt;return&gt;     - Go to position [n], also use keypad ENTER key
-   *            - Go to end of current sequence (Also Control-E)
-[n]&lt;            - Go [n]x50 back, VT200's also use PREV SCREEN key
-[n]&gt;            - Go [n]x50 ahead, VT200's also use NEXT SCREEN key
-
-   /string&lt;rtn&gt; - Find "string", VT200's also use FIND key
-[n]?            - Display help starting at page [n], VT200's also use HELP key
-   !            - Display status of current sequence, same as "SEQ" command
-   Control-W    - Redraw the screen (also Control-R)
-   Control-Z    - Switch to Command Mode
-
-
-
-     [Help page 1 of 10.  Press RETURN for more help. SPACE to quit.] 
-</pre>
-<hr>
-<p>
-
-See below for the full display of these commands.
-<p>
-
-As you can see in the help-screen above, you type in <b>Control-Z</b>
-to switch from moving around the sequences and editing the sequences to
-the mode in which you can type in text commands.
-<p>
-
-When you have typed <b>Control-Z</b>, the prompt <b>Command:</b> appears
-at the bottom of the screen waiting for you to either type in a text
-command, or to simply press the RETURN key to return to editing the
-sequences. 
-<p>
-
-To get help when in command-mode, type <b>help</b> and press RETURN.
-<p>
-
-
-To exit from the editor and write out your changed sequences to file,
-give the text command <b>exit</b>.
 
 
 <H2>
@@ -167,33 +118,66 @@ give the text command <b>exit</b>.
 
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
-   Mandatory qualifiers:
-  [-msf]               seqset     File containing a sequence alignment
+   Standard (Mandatory) qualifiers:
+  [-sequence]          seqset     File containing a sequence alignment
 
-   Optional qualifiers: (none)
-   Advanced qualifiers:
-   -tmpdir             string     temp directory
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers:
+   -tmpdir             outdir     Temp directory
+
+   Associated qualifiers:
+
+   "-sequence" associated qualifiers
+   -sbegin1            integer    Start of each sequence to be used
+   -send1              integer    End of each sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report deaths
+
 
 </pre>
 </td></tr></table>
-
-<p>
-<table border cellspacing=0 cellpadding=3 bgcolor="#f5f5ff">
-<tr bgcolor="#FFFFD0">
-<th align="left" colspan=2>Mandatory qualifiers</th>
+<P>
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
 <th align="left">Allowed values</th>
 <th align="left">Default</th>
 </tr>
 
 <tr>
-<td>[-msf]<br>(Parameter 1)</td>
+<td>[-sequence]<br>(Parameter 1)</td>
 <td>File containing a sequence alignment</td>
-<td>Readable sequences</td>
+<td>Readable set of sequences</td>
 <td><b>Required</b></td>
 </tr>
 
-<tr bgcolor="#FFFFD0">
-<th align="left" colspan=2>Optional qualifiers</th>
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Additional (Optional) qualifiers</th>
 <th align="left">Allowed values</th>
 <th align="left">Default</th>
 </tr>
@@ -202,227 +186,290 @@ give the text command <b>exit</b>.
 <td colspan=4>(none)</td>
 </tr>
 
-<tr bgcolor="#FFFFD0">
-<th align="left" colspan=2>Advanced qualifiers</th>
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
 <th align="left">Allowed values</th>
 <th align="left">Default</th>
 </tr>
 
 <tr>
 <td>-tmpdir</td>
-<td>temp directory</td>
-<td>Any string is accepted</td>
+<td>Temp directory</td>
+<td>Output directory</td>
 <td>/tmp</td>
 </tr>
 
 </table>
 
 
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+
+
+
+
+
+
+
+
 <H2>
-    Commands
-</H2><pre>
-                          Screen Mode Commands
-             ([n] is an optional numeric (keyboard) parameter)
+    Input file format
+</H2>
 
-   Control-Z    - Switch to Command Mode
+<!-- 
+        This includes example input file formats.
+        This should be a detailed description and example - assume
+        someone will want to parse this file and will want to know what
+        happens in unusual cases - null input, etc. 
+   -->
 
+<b>mse</b> reads any normal sequence USAs.
 
-[n]s            - Inserts symbol "s" [n] times
-[n]&lt;delete&gt;     - Delete [n] sequence character(s)
-[n]&lt;space bar&gt;  - Move the sequence(s) to the right [n] spaces
-[n]&lt;backspace&gt;  - Move the sequence(s) to the left [n] spaces, VT200's
-                   use F12 key or Control-H
-
-[n]&lt;arrow&gt;      - Go forward, backward, up or down [n] positions or lines
-[n]&lt;return&gt;     - Go to position [n], also use keypad ENTER key
-   *            - Go to end of current sequence (Also Control-E)
-[n]&lt;            - Go [n]x50 back, VT200's also use PREV SCREEN key
-[n]&gt;            - Go [n]x50 ahead, VT200's also use NEXT SCREEN key
-
-   /string&lt;rtn&gt; - Find "string", VT200's also use FIND key
-[n]?            - Display help starting at page [n], VT200's also use HELP key
-   !            - Display status of current sequence, same as "SEQ" command
-   Control-W    - Redraw the screen (also Control-R)
-
-
-Commands end with &lt;ret&gt;, [ ] indicates an optional parameter.
-"s" and "f" are line numbers for to and from or start and finish.
-Only the capitalized part of the command is necessary
-
-
-      EDIt [SeqSpec(s)] - edit another sequence(s) or indirect FOSS file
-
-      FInd string       - find the next occurrence of "string"
-
-      [s,f] DELete      - delete a range of symbols or answer prompts
-                          for a range, default will be: current to *
-
-      [n]               - go to position [n], same as raw mode [n]
-
-      [s] HELp          - display help starting at page [s]
-
-      REDraw            - redraw the screen
-
-      MATches [attr]    - Display matches with plurality sequence
-
-      DIFferences [attr]- Display differences with plurality sequence
-
-      NEIther           - Turn off plurality sequence calculation
-                           Saves CPU time!!
-
-      ALNED [filename]  - Read in an alignment file from the NBRF/PIR program
-                           ALNED (A multiple sequence alignment program).
-
-      [s,f] MOVe        - Move from line [s] to line [f].
-                           Default is from current to next available line.
-
-      [s,f] ELIminate   - Delete lines [s] to [f]. Default is current line.
-
-      [s,f] ANChor      - Force lines [s] to [f] to move as one unit.
-                           Default is to add the current strand to the anchored
-                           group. PF4 key toggles anchoring.
-
-      NOAnchor          - Turn off anchoring. Default is the current strand.
-                           PF4 toggles anchoring
-
-      [s,f] SORt [dir]  - Sort lines [s] to [f] according to their "Offsets".
-                           Default is from current to highest numbered line.
-                           If "dir" is DEScending, the sort is reversed.
-
-      [s,f] DEGap       - Remove gaps from lines [s] to [f].
+<p>
 
 
 
 
-      Open              - Open up a new line by moving all the line above the current
-                           line up by one
-
-      [s,f] Lock        - Lock lines "s" to "f" such that you cannot add or delete
-                           sequence symbols. You may still shift and/or reverse lines.
-                           You may also add/delete gap characters "-".  Default is the
-                           current line.
-
-      [s,f] Unlock      - Unlocks locked lines.
-
-      [s] Offset        - Set the Offset of the current line to position [s].
-                           Default is set the Offset of the current line to the
-                           current line position. Also works with anchored groups.
-
-      [s] REVerse       - Reverse/complement line "s".  The current line is the defualt
-                           If the reversed line is part of an anchored group then the
-                           entire group is reversed.
 
 
 
-      SEQ               - Show current position. Same as "!" in raw mode.
+<H2>
+    Output file format
+</H2>
 
-   NAMe [code=filename] - Change the code and/or filename.
+<!-- 
+        This includes example output file formats.
+        This should be a detailed description and example - assume
+        someone will want to parse this file and will want to know what
+        happens in unusual cases - null output, errors etc. 
 
-   TItle [New Title]    - Change the sequence title.
-   TYpe [type]          - Change the sequence type, values for TYPE:
+        If you wish to include the standard description of the avalable
+	report formats, use:
+[an error occurred while processing this directive]
+   -->
 
-                             DNA     PROTEIN     RNA
-                            rRNA    tRNA        uRNA        mRNA
-
-   FORmat [New format]  - Change the sequence format, for FORMAT:
-
-                          GCG PIR FASTA SWISS NCBI etc..
-
+<b>mse</b> 
+outputs a graph to the specified graphics device. 
+outputs a report format file. The default format is ...
 
 
-   [s,f] SELect         - Mark a range [s] to [f] to be selected, or start
-                           selection at current cursor position.
-                           VT200's also use SELECT key.
-
-    REMove              - Remove a selected, (Reverse video), region. Does not
-                           include current cursor position.
-                           VT200's also use REMOVE key.
-
-    [s] INSert          - Insert cut region at [s] or current cursor position.
-                           VT200's also use INSERT HERE key.
-
-      CANcel            - Cancel SELECT function. Clears PASTE buffer.
+<p>
 
 
 
 
-      GelAlign          - Will take all of the strands currently loaded into MSE
-                           and produce the best alignment based on exact matches.
-                           GelAlign does not add gaps but it will get the strands
-                           started for you
-
-   [s,f] Meld [seqname] - Merges strands "s" to "f" to create a new entry
-                           named "seqname".  If the current strand is part of an
-                           anchored group then that group will be melded.  You
-                           will be prompted to continue if undetermined postitions
-                           are found in the melded sequence.
-
-[s,f] HARdcopy [filename] - write [a part of] aligned sequences to a file.
-
-[s,f] WRIte [seqname]     - write [a part of] the sequence to a file. You
-                             may rename it to "seqname" in the process
-
-      EXIt  [FOSSname]    - write any modified sequences, a new FOSS file,
-                             and then quit.
-
-      QUIt                - quit the editor, do not write sequences.
 
 
-
-
-</pre>
 
 <H2>
     Data files
 </H2>
+
+<!-- 
+        Any data files used (e.g. translation table file)
+        This includes example data file formats if they are
+        not obvious.
+
+	If you wish to include the standard description of what data
+	files are and how to use embossdata to inspect and retrieve
+	them, use:
+[an error occurred while processing this directive]
+   -->
+
+**************** 
+EDIT HERE
+**************** 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <H2>
     Notes
-</H2>Multiple sequences sets not implemented yet!.
+</H2>
+
+<!-- 
+        Restrictions.
+        Interesting behaviour.
+        Useful things you can do with this program.
+   -->
+
+None.
+
+
+
+
+
+
 
 <H2>
     References
 </H2>
+
+<!-- 
+        Bibliography for methods used.
+   -->
+
+None.
+
+
+
+
+
+
+
+
 <H2>
     Warnings
 </H2>
+
+<!-- 
+        Potentially stupid things the program will let you do.
+   -->
+
+None.
+
+
+
+
+
+
+
 <H2>
-    Diagnostics
+    Diagnostic Error Messages
 </H2>
+
+<!-- 
+        Error messages specific to this program, eg:
+        "FATAL xxx" - means you have not set up the xxx data using program <b>prog</b>.<p>
+   -->
+
+None.
+
+
+
+
+
+
+
 <H2>
     Exit status
 </H2>
+
+<!-- 
+        Description of the exit status for various error conditions
+   -->
+
+It always exits with status 0.
+
+
+
+
+
+
+
+
 <H2>
     Known bugs
 </H2>
+
+
+<!-- 
+        Bugs noted but not yet fixed.
+   -->
+
+None.
+
+
+
+
+
+
+
+
+<!--
 <H2>
     See also
 </H2>
+-->
+<h2><a name="See also">See also</a></h2>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th><th>Description</th></tr>
+<tr><td><a href="../../apps/emma.html">emma</a></td><td>Multiple alignment program - interface to ClustalW program</td></tr>
+<tr><td><a href="../../apps/infoalign.html">infoalign</a></td><td>Information on a multiple sequence alignment</td></tr>
+<tr><td><a href="../../apps/plotcon.html">plotcon</a></td><td>Plots the quality of conservation of a sequence alignment</td></tr>
+<tr><td><a href="../../apps/prettyplot.html">prettyplot</a></td><td>Displays aligned sequences, with colouring and boxing</td></tr>
+<tr><td><a href="../../apps/showalign.html">showalign</a></td><td>Displays a multiple sequence alignment</td></tr>
+<tr><td><a href="../../apps/tranalign.html">tranalign</a></td><td>Align nucleic coding regions given the aligned proteins</td></tr>
+</table>
+
+<!-- 
+        Add any comments about other associated programs (to prepare
+        data files?) that seealso doesn't find. 
+   -->
+
+
+
+
+
+
+
+
+
+
 <H2>
     Author(s)
 </H2>
- William A. Gilbert, Whitehead Insitutute.<p>
-This application was modified for inclusion in EMBOSS by Ian Longden <a
-href="mailto:il@sanger.ac.uk">(il@sanger.ac.uk)</a> Informatics
-Division, The Sanger Centre, Wellcome Trust Genome Campus, Hinxton,
-Cambridge, CB10 1SA, UK.
+
+This program is an EMBOSS conversion of a program written by Will Gilbert
+as part of his MSE package.
 
 
 <H2>
-    Priority
+    History
 </H2>
+
+
+
+
+
+
 <H2>
     Target users
 </H2>
-<H2>
-    Comments
-</H2>
-<pre>
 
-</pre>
+<!--
+        For general users, requested by one user, for EMBOSS site
+        maintainers, for EMBOSS developers etc.
+        eg:
+        "This program is intended to be used by everyone and everything,
+        from naive users to embedded scripts." 
+	Which is easy to include using:
+   -->
+
+This program is intended to be used by everyone and everything, from naive users to embedded scripts.
 
 
-</TD></TR></TABLE>
-</CENTER>
+
+
+
+
+
+
+
+
+
 
 </BODY>
 </HTML>

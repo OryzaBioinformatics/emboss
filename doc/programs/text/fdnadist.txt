@@ -1,0 +1,521 @@
+
+                                 fdnadist 
+
+
+
+Function
+
+   Nucleic acid sequence Distance Matrix program
+
+Description
+
+   Computes four different distances between species from nucleic acid
+   sequences. The distances can then be used in the distance matrix
+   programs. The distances are the Jukes-Cantor formula, one based on
+   Kimura's 2- parameter method, the F84 model used in DNAML, and the
+   LogDet distance. The distances can also be corrected for
+   gamma-distributed and gamma-plus-invariant-sites-distributed rates of
+   change in different sites. Rates of evolution can vary among sites in
+   a prespecified way, and also according to a Hidden Markov model. The
+   program can also make a table of percentage similarity among
+   sequences.
+
+Algorithm
+
+   This program uses nucleotide sequences to compute a distance matrix,
+   under four different models of nucleotide substitution. It can also
+   compute a table of similarity between the nucleotide sequences. The
+   distance for each pair of species estimates the total branch length
+   between the two species, and can be used in the distance matrix
+   programs FITCH, KITSCH or NEIGHBOR. This is an alternative to use of
+   the sequence data itself in the maximum likelihood program DNAML or
+   the parsimony program DNAPARS.
+
+   The program reads in nucleotide sequences and writes an output file
+   containing the distance matrix, or else a table of similarity between
+   sequences. The four models of nucleotide substitution are those of
+   Jukes and Cantor (1969), Kimura (1980), the F84 model (Kishino and
+   Hasegawa, 1989; Felsenstein and Churchill, 1996), and the model
+   underlying the LogDet distance (Barry and Hartigan, 1987; Lake, 1994;
+   Steel, 1994; Lockhart et. al., 1994). All except the LogDet distance
+   can be made to allow for for unequal rates of substitution at
+   different sites, as Jin and Nei (1990) did for the Jukes-Cantor model.
+   The program correctly takes into account a variety of sequence
+   ambiguities, although in cases where they exist it can be slow.
+
+   Jukes and Cantor's (1969) model assumes that there is independent
+   change at all sites, with equal probability. Whether a base changes is
+   independent of its identity, and when it changes there is an equal
+   probability of ending up with each of the other three bases. Thus the
+   transition probability matrix (this is a technical term from
+   probability theory and has nothing to do with transitions as opposed
+   to transversions) for a short period of time dt is:
+
+              To:    A        G        C        T
+                   ---------------------------------
+               A  | 1-3a      a         a       a
+       From:   G  |  a       1-3a       a       a
+               C  |  a        a        1-3a     a
+               T  |  a        a         a      1-3a
+
+   where a is u dt, the product of the rate of substitution per unit time
+   (u) and the length dt of the time interval. For longer periods of time
+   this implies that the probability that two sequences will differ at a
+   given site is:
+
+      p = 3/4 ( 1 - e- 4/3 u t)
+
+   and hence that if we observe p, we can compute an estimate of the
+   branch length ut by inverting this to get
+
+     ut = - 3/4 loge ( 1 - 4/3 p )
+
+   The Kimura "2-parameter" model is almost as symmetric as this, but
+   allows for a difference between transition and transversion rates. Its
+   transition probability matrix for a short interval of time is:
+
+
+              To:     A        G        C        T
+                   ---------------------------------
+               A  | 1-a-2b     a         b       b
+       From:   G  |   a      1-a-2b      b       b
+               C  |   b        b       1-a-2b    a
+               T  |   b        b         a     1-a-2b
+
+   where a is u dt, the product of the rate of transitions per unit time
+   and dt is the length dt of the time interval, and b is v dt, the
+   product of half the rate of transversions (i.e., the rate of a
+   specific transversion) and the length dt of the time interval.
+
+   The F84 model incorporates different rates of transition and
+   transversion, but also allowing for different frequencies of the four
+   nucleotides. It is the model which is used in DNAML, the maximum
+   likelihood nucelotide sequence phylogenies program in this package.
+   You will find the model described in the document for that program.
+   The transition probabilities for this model are given by Kishino and
+   Hasegawa (1989), and further explained in a paper by me and Gary
+   Churchill (1996).
+
+   The LogDet distance allows a fairly general model of substitution. It
+   computes the distance from the determinant of the empirically observed
+   matrix of joint probabilities of nucleotides in the two species. An
+   explanation of it is available in the chapter by Swofford et, al.
+   (1996).
+
+   The first three models are closely related. The DNAML model reduces to
+   Kimura's two-parameter model if we assume that the equilibrium
+   frequencies of the four bases are equal. The Jukes-Cantor model in
+   turn is a special case of the Kimura 2-parameter model where a = b.
+   Thus each model is a special case of the ones that follow it,
+   Jukes-Cantor being a special case of both of the others.
+
+   The Jin and Nei (1990) correction for variation in rate of evolution
+   from site to site can be adapted to all of the first three models. It
+   assumes that the rate of substitution varies from site to site
+   according to a gamma distribution, with a coefficient of variation
+   that is specified by the user. The user is asked for it when choosing
+   this option in the menu.
+
+   Each distance that is calculated is an estimate, from that particular
+   pair of species, of the divergence time between those two species. For
+   the Jukes- Cantor model, the estimate is computed using the formula
+   for ut given above, as long as the nucleotide symbols in the two
+   sequences are all either A, C, G, T, U, N, X, ?, or - (the latter four
+   indicate a deletion or an unknown nucleotide. This estimate is a
+   maximum likelihood estimate for that model. For the Kimura 2-parameter
+   model, with only these nucleotide symbols, formulas special to that
+   estimate are also computed. These are also, in effect, computing the
+   maximum likelihood estimate for that model. In the Kimura case it
+   depends on the observed sequences only through the sequence length and
+   the observed number of transition and transversion differences between
+   those two sequences. The calculation in that case is a maximum
+   likelihood estimate and will differ somewhat from the estimate
+   obtained from the formulas in Kimura's original paper. That formula
+   was also a maximum likelihood estimate, but with the
+   transition/transversion ratio estimated empirically, separately for
+   each pair of sequences. In the present case, one overall preset
+   transition/transversion ratio is used which makes the computations
+   harder but achieves greater consistency between different comparisons.
+
+   For the F84 model, or for any of the models where one or both
+   sequences contain at least one of the other ambiguity codons such as
+   Y, R, etc., a maximum likelihood calculation is also done using code
+   which was originally written for DNAML. Its disadvantage is that it is
+   slow. The resulting distance is in effect a maximum likelihood
+   estimate of the divergence time (total branch length between) the two
+   sequences. However the present program will be much faster than
+   versions earlier than 3.5, because I have speeded up the iterations.
+
+   The LogDet model computes the distance from the determinant of the
+   matrix of co-occurrence of nucleotides in the two species, according
+   to the formula
+
+   D  = - 1/4(loge(|F|) - 1/2loge(fA1fC1fG1fT1fA2fC2fG2fT2))
+
+   Where F is a matrix whose (i,j) element is the fraction of sites at
+   which base i occurs in one species and base j occurs in the other. fji
+   is the fraction of sites at which species i has base j. The LogDet
+   distance cannot cope with ambiguity codes. It must have completely
+   defined sequences. One limitation of the LogDet distance is that it
+   may be infinite sometimes, if there are too many changes between
+   certain pairs of nucleotides. This can be particularly noticeable with
+   distances computed from bootstrapped sequences. Note that there is an
+   assumption that we are looking at all sites, including those that have
+   not changed at all. It is important not to restrict attention to some
+   sites based on whether or not they have changed; doing that would bias
+   the distances by making them too large, and that in turn would cause
+   the distances to misinterpret the meaning of those sites that had
+   changed.
+
+   For all of these distance methods, the program allows us to specify
+   that "third position" bases have a different rate of substitution than
+   first and second positions, that introns have a different rate than
+   exons, and so on. The Categories option which does this allows us to
+   make up to 9 categories of sites and specify different rates of change
+   for them.
+
+   In addition to the four distance calculations, the program can also
+   compute a table of similarities between nucleotide sequences. These
+   values are the fractions of sites identical between the sequences. The
+   diagonal values are 1.0000. No attempt is made to count similarity of
+   nonidentical nucleotides, so that no credit is given for having (for
+   example) different purines at corresponding sites in the two
+   sequences. This option has been requested by many users, who need it
+   for descriptive purposes. It is not intended that the table be used
+   for inferring the tree.
+
+Usage
+
+   Here is a sample session with fdnadist
+
+
+% fdnadist 
+Nucleic acid sequence Distance Matrix program
+Input sequence: dnadist.dat
+Distance methods
+         f : F84 distance model
+         k : Kimura 2-parameter distance
+         j : Jukes-Cantor distance
+         l : LogDet distance
+         s : Similarity table
+Choose the method to use [F84 distance model]: 
+Output file [dnadist.fdnadist]: 
+
+Distances calculated for species
+    Alpha        ....
+    Beta         ...
+    Gamma        ..
+    Delta        .
+    Epsilon
+
+Distances written to file "dnadist.fdnadist"
+
+Done.
+
+
+   Go to the input files for this example
+   Go to the output files for this example
+
+Command line arguments
+
+   Standard (Mandatory) qualifiers:
+  [-sequence]          seqsetall  File containing one or more sequence
+                                  alignments
+   -method             menu       Choose the method to use
+  [-outfile]           outfile    Output file name
+
+   Additional (Optional) qualifiers (* if not always prompted):
+*  -gamma              menu       Gamma distribution
+*  -ncategories        integer    Number of substitution rate categories
+*  -rate               array      Category rates
+*  -categories         properties File of substitution rate categories
+   -weights            properties Weights file
+*  -gammacoefficient   float      Coefficient of variation of substitution
+                                  rate among sites
+*  -invarfrac          float      Fraction of invariant sites
+*  -ttratio            float      Transition/transversion ratio
+*  -[no]freqsfrom      toggle     Use empirical base frequencies from seqeunce
+                                  input
+*  -basefreq           array      Base frequencies for A C G T/U (use blanks
+                                  to separate)
+   -lower              boolean    Lower triangular distance matrix
+   -printdata          boolean    Print data at start of run
+   -[no]progress       boolean    Print indications of progress of run
+
+   Advanced (Unprompted) qualifiers: (none)
+   Associated qualifiers:
+
+   "-sequence" associated qualifiers
+   -sbegin1            integer    Start of each sequence to be used
+   -send1              integer    End of each sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
+
+   "-outfile" associated qualifiers
+   -odirectory2        string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report deaths
+
+
+   Standard (Mandatory) qualifiers Allowed values Default
+   [-sequence]
+   (Parameter 1) File containing one or more sequence alignments Readable
+   sets of sequences
+   -method Choose the method to use
+   f (F84 distance model)
+   k (Kimura 2-parameter distance)
+   j (Jukes-Cantor distance)
+   l (LogDet distance)
+   s (Similarity table)
+   F84 distance model
+   [-outfile]
+   (Parameter 2) Output file name Output file <sequence>.fdnadist
+   Additional (Optional) qualifiers Allowed values Default
+   -gamma Gamma distribution
+   g (Gamma distributed rates)
+   i (Gamma+invariant sites)
+   n (No distribution parameteres used)
+   No distribution parameteres used
+   -ncategories Number of substitution rate categories Integer from 1 to
+   9 1
+   -rate Category rates List of floating point numbers 1.0
+   -categories File of substitution rate categories Property value(s)
+   -weights Weights file Property value(s)
+   -gammacoefficient Coefficient of variation of substitution rate among
+   sites Number 0.001 or more 1
+   -invarfrac Fraction of invariant sites Number from 0.000 to 1.000 0.0
+   -ttratio Transition/transversion ratio Number 0.001 or more 2.0
+   -[no]freqsfrom Use empirical base frequencies from seqeunce input
+   Toggle value Yes/No Yes
+   -basefreq Base frequencies for A C G T/U (use blanks to separate) List
+   of floating point numbers 0.25 0.25 0.25 0.25
+   -lower Lower triangular distance matrix Boolean value Yes/No No
+   -printdata Print data at start of run Boolean value Yes/No No
+   -[no]progress Print indications of progress of run Boolean value
+   Yes/No Yes
+   Advanced (Unprompted) qualifiers Allowed values Default
+   (none)
+
+Input file format
+
+   fdnadist reads any normal sequence USAs.
+
+  Input files for usage example
+
+  File: dnadist.dat
+
+   5   13
+Alpha     AACGTGGCCACAT
+Beta      AAGGTCGCCACAC
+Gamma     CAGTTCGCCACAA
+Delta     GAGATTTCCGCCT
+Epsilon   GAGATCTCCGCCC
+
+Output file format
+
+   fdnadist output contains on its first line the number of species. The
+   distance matrix is then printed in standard form, with each species
+   starting on a new line with the species name, followed by the
+   distances to the species in order. These continue onto a new line
+   after every nine distances. If the L option is used, the matrix or
+   distances is in lower triangular form, so that only the distances to
+   the other species that precede each species are printed. Otherwise the
+   distance matrix is square with zero distances on the diagonal. In
+   general the format of the distance matrix is such that it can serve as
+   input to any of the distance matrix programs.
+
+   If the option to print out the data is selected, the output file will
+   precede the data by more complete information on the input and the
+   menu selections. The output file begins by giving the number of
+   species and the number of characters, and the identity of the distance
+   measure that is being used.
+
+   If the C (Categories) option is used a table of the relative rates of
+   expected substitution at each category of sites is printed, and a
+   listing of the categories each site is in.
+
+   There will then follow the equilibrium frequencies of the four bases.
+   If the Jukes-Cantor or Kimura distances are used, these will
+   necessarily be 0.25 : 0.25 : 0.25 : 0.25. The output then shows the
+   transition/transversion ratio that was specified or used by default.
+   In the case of the Jukes-Cantor distance this will always be 0.5. The
+   transition-transversion parameter (as opposed to the ratio) is also
+   printed out: this is used within the program and can be ignored. There
+   then follow the data sequences, with the base sequences printed in
+   groups of ten bases along the lines of the Genbank and EMBL formats.
+
+   The distances printed out are scaled in terms of expected numbers of
+   substitutions, counting both transitions and transversions but not
+   replacements of a base by itself, and scaled so that the average rate
+   of change, averaged over all sites analyzed, is set to 1.0 if there
+   are multiple categories of sites. This means that whether or not there
+   are multiple categories of sites, the expected fraction of change for
+   very small branches is equal to the branch length. Of course, when a
+   branch is twice as long this does not mean that there will be twice as
+   much net change expected along it, since some of the changes may occur
+   in the same site and overlie or even reverse each other. The branch
+   lengths estimates here are in terms of the expected underlying numbers
+   of changes. That means that a branch of length 0.26 is 26 times as
+   long as one which would show a 1% difference between the nucleotide
+   sequences at the beginning and end of the branch. But we would not
+   expect the sequences at the beginning and end of the branch to be 26%
+   different, as there would be some overlaying of changes.
+
+   One problem that can arise is that two or more of the species can be
+   so dissimilar that the distance between them would have to be
+   infinite, as the likelihood rises indefinitely as the estimated
+   divergence time increases. For example, with the Jukes-Cantor model,
+   if the two sequences differ in 75% or more of their positions then the
+   estimate of dovergence time would be infinite. Since there is no way
+   to represent an infinite distance in the output file, the program
+   regards this as an error, issues an error message indicating which
+   pair of species are causing the problem, and stops. It might be that,
+   had it continued running, it would have also run into the same problem
+   with other pairs of species. If the Kimura distance is being used
+   there may be no error message; the program may simply give a large
+   distance value (it is iterating towards infinity and the value is just
+   where the iteration stopped). Likewise some maximum likelihood
+   estimates may also become large for the same reason (the sequences
+   showing more divergence than is expected even with infinite branch
+   length). I hope in the future to add more warning messages that would
+   alert the user the this.
+
+   If the similarity table is selected, the table that is produced is not
+   in a format that can be used as input to the distance matrix programs.
+   it has a heading, and the species names are also put at the tops of
+   the columns of the table (or rather, the first 8 characters of each
+   species name is there, the other two characters omitted to save
+   space). There is not an option to put the table into a format that can
+   be read by the distance matrix programs, nor is there one to make it
+   into a table of fractions of difference by subtracting the similarity
+   values from 1. This is done deliberately to make it more difficult for
+   the use to use these values to construct trees. The similarity values
+   are not corrected for multiple changes, and their use to construct
+   trees (even after converting them to fractions of difference) would be
+   wrong, as it would lead to severe conflict between the distant pairs
+   of sequences and the close pairs of sequences.
+
+  Output files for usage example
+
+  File: dnadist.fdnadist
+
+
+Nucleic acid sequence Distance Matrix program, version 3.6b
+
+    5
+Alpha       0.000000  0.303893  0.857546  1.158921  1.542897
+Beta        0.303893  0.000000  0.339731  0.913519  0.619666
+Gamma       0.857546  0.339731  0.000000  1.631729  1.293707
+Delta       1.158921  0.913519  1.631729  0.000000  0.165882
+Epsilon     1.542897  0.619666  1.293707  0.165882  0.000000
+
+Data files
+
+   None
+
+Notes
+
+   None.
+
+References
+
+   None.
+
+Warnings
+
+   None.
+
+Diagnostic Error Messages
+
+   None.
+
+Exit status
+
+   It always exits with status 0.
+
+Known bugs
+
+   None.
+
+See also
+
+   Program name Description
+   ednacomp DNA compatibility algorithm
+   ednadist Nucleic acid sequence Distance Matrix program
+   ednainvar Nucleic acid sequence Invariants method
+   ednaml Estimates phylogenies from nucleic acid sequence Maximum
+   Likelihood
+   ednamlk Estimates phylogenies from nucleic acid sequence Maximum
+   Likelihood with molecular clock
+   ednapars DNA parsimony algorithm
+   ednapenny Penny algorithm for DNA
+   eprotdist Protein distance algorithm
+   eprotpars Protein parsimony algorithm
+   erestml Restriction site Maximum Likelihood method
+   eseqboot Bootstrapped sequences algorithm
+   fdiscboot Bootstrapped discrete sites algorithm
+   fdnacomp DNA compatibility algorithm
+   fdnainvar Nucleic acid sequence Invariants method
+   fdnaml Estimates nucleotide phylogeny by maximum likelihood
+   fdnamlk Estimates nucleotide phylogeny by maximum likelihood
+   fdnamove Interactive DNA parsimony
+   fdnapars DNA parsimony algorithm
+   fdnapenny Penny algorithm for DNA
+   fdolmove Interactive Dollo or Polymorphism Parsimony
+   ffreqboot Bootstrapped genetic frequencies algorithm
+   fproml Protein phylogeny by maximum likelihood
+   fpromlk Protein phylogeny by maximum likelihood
+   fprotdist Protein distance algorithm
+   fprotpars Protein pasimony algorithm
+   frestboot Bootstrapped restriction sites algorithm
+   frestdist Computes distance matrix from restriction sites or fragments
+   frestml Restriction site maximum Likelihood method
+   fseqboot Bootstrapped sequences algorithm
+   fseqbootall Bootstrapped sequences algorithm
+
+Author(s)
+
+   This program is an EMBOSS conversion of a program written by Joe
+   Felsenstein as part of his PHYLIP package.
+
+   Although we take every care to ensure that the results of the EMBOSS
+   version are identical to those from the original package, we recommend
+   that you check your inputs give the same results in both versions
+   before publication.
+
+   Please report all bugs in the EMBOSS version to the EMBOSS bug team,
+   not to the original author.
+
+History
+
+   Written (2004) - Joe Felsenstein, University of Washington.
+
+   Converted (August 2004) to an EMBASSY program by the EMBOSS team.
+
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.

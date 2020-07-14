@@ -1,45 +1,44 @@
 
                                   polydot 
-                                      
-   
-   
+
+
+
 Function
 
    Displays all-against-all dotplots of a set of sequences
-   
+
 Description
 
    A dotplot is a graphical representation of the regions of similarity
    between two sequences.
-   
+
    The two sequences are placed on the axes of a rectangular image and
    (subject to threshold conditions) wherever there is a similarity
    between the sequences a dot is placed on the image.
-   
+
    Where the two sequences have substantial regions of similarity, many
    dots align to form diagonal lines. It is therefore possible to see at
    a glance where there are local regions of similarity.
-   
+
    polydot compares all sequences in a set of sequences, draws a dotplot
    for each pair of sequences by marking where words (tuples) of a
    specified length have an exact match in both sequences and optionally
    reports all identical matches to feature files.
-   
+
 Usage
 
    Here is a sample session with polydot
-   
 
-% polydot ../../data/globins.fasta -gtitle="Polydot of globins.fasta" -graph cp
-s 
+
+% polydot globins.fasta -gtitle="Polydot of globins.fasta" -graph cps 
 Displays all-against-all dotplots of a set of sequences
 Word size [6]: 
 
 Created polydot.ps
-   
+
    Go to the input files for this example
    Go to the output files for this example
-   
+
 Command line arguments
 
    Standard (Mandatory) qualifiers (* if not always prompted):
@@ -107,7 +106,7 @@ Command line arguments
    -error               boolean    Report errors
    -fatal               boolean    Report fatal errors
    -die                 boolean    Report deaths
-   
+
 
    Standard (Mandatory) qualifiers Allowed values Default
    [-sequences]
@@ -118,25 +117,25 @@ Command line arguments
    -graph Graph type EMBOSS has a list of known devices, including
    postscript, ps, hpgl, hp7470, hp7580, meta, colourps, cps, xwindows,
    x11, tektronics, tekt, tek4107t, tek, none, null, text, data, xterm,
-   png EMBOSS_GRAPHICS value, or x11
+   png, xml EMBOSS_GRAPHICS value, or x11
    Additional (Optional) qualifiers Allowed values Default
    -[no]boxit Draw a box around each dotplot Boolean value Yes/No Yes
-   -dumpfeat Dump all matches as feature files Toggle value Yes/No N
+   -dumpfeat Dump all matches as feature files Toggle value Yes/No No
    Advanced (Unprompted) qualifiers Allowed values Default
    -gap This specifies the size of the gap that is used to separate the
    individual dotplots in the display. The size is measured in residues,
    as displayed in the output. Integer 0 or more 10
-   
+
 Input file format
 
    polydot reads in a set of nucleic or protein sequences.
-   
+
    The sequences may or may not be aligned.
-   
+
   Input files for usage example
-  
-  File: ../../data/globins.fasta
-  
+
+  File: globins.fasta
+
 >HBB_HUMAN Sw:Hbb_Human => HBB_HUMAN
 VHLTPEEKSAVTALWGKVNVDEVGGEALGRLLVVYPWTQRFFESFGDLSTPDAVMGNPKV
 KAHGKKVLGAFSDGLAHLDNLKGTFATLSELHCDKLHVDPENFRLLGNVLVCVLAHHFGK
@@ -165,65 +164,67 @@ AVIADTVAAGDAGFEKLMSMICILLRSAY
 GALTESQAALVKSSWEEFNANIPKHTHRFFILVLEIAPAAKDLFSFLKGTSEVPQNNPEL
 QAHAGKVFKLVYEAAIQLQVTGVVVTDATLKNLGSVHVSKGVADAHFPVVKEAILKTIKE
 VVGAKWSEELNSAWTIAYDELAIVIKKEMNDAA
-   
+
 Output file format
 
    A graphical image is displayed on the specified graphics device.
-   
+
   Output files for usage example
-  
+
   Graphics File: polydot.ps
-  
+
    [polydot results]
-   
+
 Data files
 
    None.
-   
+
 Notes
 
    None.
-   
+
 References
 
    None.
-   
+
 Warnings
 
    None.
-   
+
 Diagnostic Error Messages
 
    None.
-   
+
 Exit status
 
    0 if successful.
-   
+
 Known bugs
 
    None.
-   
+
 See also
 
    Program name                          Description
    dotmatcher   Displays a thresholded dotplot of two sequences
    dotpath      Displays a non-overlapping wordmatch dotplot of two sequences
    dottup       Displays a wordmatch dotplot of two sequences
-   
+
 Author(s)
 
    Ian Longden (il © sanger.ac.uk)
    Sanger Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge,
    CB10 1SA, UK.
-   
+
 History
 
-Completed 2nd June 1999.
+   Completed 2nd June 1999.
 
 Target users
 
    This program is intended to be used by everyone and everything, from
    naive users to embedded scripts.
-   
+
 Comments
+
+   None

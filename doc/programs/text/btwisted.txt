@@ -1,28 +1,28 @@
 
                                  btwisted 
-                                      
-   
-   
+
+
+
 Function
 
    Calculates the twisting in a B-DNA sequence
-   
+
 Description
 
    btwisted takes a region of a pure DNA sequence and calculates by
    simple arithmetic the probable overall twist of the sequence and the
    stacking energy.
-   
+
 Usage
 
    Here is a sample session with btwisted
-   
-   
+
+
 % btwisted -auto tembl:ab000095 -sbegin 100 -send 120 
 
    Go to the input files for this example
    Go to the output files for this example
-   
+
 Command line arguments
 
    Standard (Mandatory) qualifiers:
@@ -69,7 +69,7 @@ Command line arguments
    -error               boolean    Report errors
    -fatal               boolean    Report fatal errors
    -die                 boolean    Report deaths
-   
+
 
    Standard (Mandatory) qualifiers Allowed values Default
    [-sequence]
@@ -83,18 +83,18 @@ Command line arguments
    Eangles.dat
    -energydata File containing base pair stacking energies Data file
    Eenergy.dat
-   
+
 Input file format
 
    Nucleic acid sequence USA.
-   
+
   Input files for usage example
-  
+
    'tembl:ab000095' is a sequence entry in the example nucleic acid
    database 'tembl'
-   
+
   Database entry: tembl:ab000095
-  
+
 ID   AB000095   standard; RNA; HUM; 2399 BP.
 XX
 AC   AB000095;
@@ -244,13 +244,13 @@ SQ   Sequence 2399 BP; 490 A; 777 C; 684 G; 448 T; 0 other;
      aggttctcca acatcacagc ccagcccacc cactgggtaa taaaagtggt ttgtggaaa       239
 9
 //
-   
+
 Output file format
 
   Output files for usage example
-  
+
   File: ab000095.btwisted
-  
+
 # Output from BTWISTED
 # Twisting calculated from 100 to 120 of AB000095
 Total twist (degrees): 681.1
@@ -258,19 +258,19 @@ Total turns : 1.89
 Average bases per turn: 11.10
 Total stacking energy : -179.34
 Average stacking energy per dinucleotide: -8.97
-   
+
 Data files
 
    The program reads in two data files.
-   
+
    The first is prompted for by:
-   
+
    "File containing base pair twist angles"
-   
+
    This is the data file 'Eangles.dat' by default.
-   
+
    This consists of the data:
-   
+
 aa      35.6    0.1
 ac      34.4    1.3
 ag      27.7    1.5
@@ -289,12 +289,12 @@ tg      34.5    0.9
 tt      35.6    0.1
 
    The second is prompted for by:
-   
+
    "File containing base pair stacking energies"
    This is the data file 'Eenergy.dat' by default.
-   
+
    This consists of the data:
-   
+
 #base pair stacking energy for B-DNA
 aa      -5.37
 ac      -10.51
@@ -317,13 +317,13 @@ tt      -5.37
    and twist. Attempting to run btwisted with an incomplete data file
    will result a fatal error if the sequence contains a dinucleotide not
    in the data files.
-   
+
    EMBOSS data files are distributed with the application and stored in
    the standard EMBOSS data directory, which is defined by the EMBOSS
    environment variable EMBOSS_DATA.
-   
+
    To see the available EMBOSS data files, run:
-   
+
 % embossdata -showall
 
    To fetch one of the data files (for example 'Exxx.dat') into your
@@ -336,45 +336,45 @@ tt      -5.37
    tidier directory listings in a subdirectory called ".embossdata".
    Files for all EMBOSS runs can be put in the user's home directory, or
    again in a subdirectory called ".embossdata".
-   
+
    The directories are searched in the following order:
      * . (your current directory)
      * .embossdata (under your current directory)
      * ~/ (your home directory)
      * ~/.embossdata
-       
+
 Notes
 
    None.
-   
+
 References
 
    None.
-   
+
 Warnings
 
    No check is made that all dinucleotides have been read for the energy
    and twist. Attempting to run btwisted with an incomplete data file
    will result a fatal error if the sequence contains a dinucleotide not
    in the data files.
-   
+
 Diagnostic Error Messages
 
    "Incomplete table"
    You have supplied data files for either the angles or energies that do
    not contain the fulll required set of possible dinucleotides.
-   
+
 Exit status
 
    It always exits with status 0.
-   
+
 Known bugs
 
    No check is made that all dinucleotides have been read for the energy
    and twist. Attempting to run btwisted with an incomplete data file
    will result a fatal error if the sequence contains a dinucleotide not
    in the data files.
-   
+
 See also
 
    Program name                          Description
@@ -386,23 +386,26 @@ See also
    isochore     Plots isochores in large DNA sequences
    sirna        Finds siRNA duplexes in mRNA
    wordcount    Counts words of a specified size in a DNA sequence
-   
+
 Author(s)
 
-   This application was written by David Martin
-   (dmartin © rfcgr.mrc.ac.uk)
+   David Martin (dmartin © rfcgr.mrc.ac.uk)
    and Alan Bleasby (ableasby © rfcgr.mrc.ac.uk)
    MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
    Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
-   during the first Scandinavian EMBOSS Workshop.
-   
+
+   This application was written during the first Scandinavian EMBOSS
+   Workshop.
+
 History
 
    Written (Sept 2000) - David Martin & Alan Bleasby.
-   
+
 Target users
 
    This program is intended to be used by everyone and everything, from
    naive users to embedded scripts.
-   
+
 Comments
+
+   None

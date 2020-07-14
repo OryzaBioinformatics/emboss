@@ -1,19 +1,18 @@
 
-                             EMBOSS: econsense
-     _________________________________________________________________
-   
-                               Program econsense
-                                       
+                                 econsense 
+
+
+
 Function
 
    Conversion of PHYLIP's consense
-   
+
 Description
 
    ECONSENSE -- Embossified consensus tree program
-   
+
    Phylip consense documentation.
-   
+
 Usage
 
    Here is a sample session with econsense using the test data :-
@@ -132,7 +131,7 @@ Command line arguments
    -[no]printsets      bool       Print out the sets of species
 
    Advanced qualifiers: (none)
-   
+
    Mandatory qualifiers Allowed values Default
    [-infile]
    (Parameter 1) file to read in (New Hampshire standard form) Input file
@@ -152,17 +151,17 @@ Command line arguments
    -[no]printsets Print out the sets of species Yes/No Yes
    Advanced qualifiers Allowed values Default
    (none)
-   
+
 Input file
 
    Must be in New Hampshire standard form.
-   
+
 Data files
 
 Notes
 
    Multiple sequences sets not implemented yet!.
-   
+
 References
 
 Warnings
@@ -181,11 +180,11 @@ Author(s)
    Washington. Written by Joseph Felsenstein. Permission is granted to
    copy this document provided that no fee is charged for it and that
    this copyright notice is not removed.
-   
+
    This application was modified for inclusion in EMBOSS by Ian Longden
    (il@sanger.ac.uk) Informatics Division, The Sanger Centre, Wellcome
    Trust Genome Campus, Hinxton, Cambridge, CB10 1SA, UK.
-   
+
 Priority
 
 Target users

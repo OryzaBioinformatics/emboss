@@ -1,12 +1,12 @@
 
                                  isochore 
-                                      
-   
-   
+
+
+
 Function
 
    Plots isochores in large DNA sequences
-   
+
 Description
 
    The nuclear genomes of vertebrates are mosaics of isochores, very long
@@ -16,26 +16,26 @@ Description
    cover a range of GC levels (GC is the molar ratio of guanine+cytosine
    in DNA), which is narrow in cold-blooded vertebrates, but broad in
    warm-blooded vertebrates.
-   
+
    This application plots GC content over a sequence. It is intended for
    large sequences such as complete chromosomes or large genomic contigs,
    although interesting results can also be obtained from shorter
    sequences.
-   
+
 Usage
 
    Here is a sample session with isochore
-   
+
 
 % isochore tembl:AF129756  -graph cps 
 Plots isochores in large DNA sequences
 Output file [af129756.iso]: 
 
 Created isochore.ps
-   
+
    Go to the input files for this example
    Go to the output files for this example
-   
+
 Command line arguments
 
    Standard (Mandatory) qualifiers:
@@ -92,7 +92,7 @@ Command line arguments
    -error               boolean    Report errors
    -fatal               boolean    Report fatal errors
    -die                 boolean    Report deaths
-   
+
 
    Standard (Mandatory) qualifiers Allowed values Default
    [-sequence]
@@ -102,24 +102,24 @@ Command line arguments
    -graph Graph type EMBOSS has a list of known devices, including
    postscript, ps, hpgl, hp7470, hp7580, meta, colourps, cps, xwindows,
    x11, tektronics, tekt, tek4107t, tek, none, null, text, data, xterm,
-   png EMBOSS_GRAPHICS value, or x11
+   png, xml EMBOSS_GRAPHICS value, or x11
    Additional (Optional) qualifiers Allowed values Default
    -window Window size Integer 1 or more 1000
    -shift Shift increment Integer 1 or more 100
    Advanced (Unprompted) qualifiers Allowed values Default
    (none)
-   
+
 Input file format
 
    isochore reads a normal nucleic acid USA.
-   
+
   Input files for usage example
-  
+
    'tembl:AF129756' is a sequence entry in the example nucleic acid
    database 'tembl'
-   
+
   Database entry: tembl:AF129756
-  
+
 ID   AF129756   standard; DNA; HUM; 184666 BP.
 XX
 AC   AF129756;
@@ -278,13 +278,13 @@ DR   SPTREMBL; O95870; O95870.
      tcctgctcct agaagctaaa ctctccagac ttagtcttct gaattc                   18466
 6
 //
-   
+
 Output file format
 
   Output files for usage example
-  
+
   File: af129756.iso
-  
+
 Position        Percent G+C 1 .. 184666
 500     0.471
 600     0.485
@@ -390,19 +390,19 @@ Position        Percent G+C 1 .. 184666
 183900  0.500
 184000  0.492
 184100  0.493
-   
+
   Graphics File: isochore.ps
-  
+
    [isochore results]
-   
+
 Data files
 
    None.
-   
+
 Notes
 
    None.
-   
+
 References
 
     1. Bernardi G Isochores and the evolutionary genomics of vertebrates.
@@ -412,23 +412,23 @@ References
        24;464(1-2):60-2
     3. Bernardi G The human genome: organization and evolutionary
        history. Annu Rev Genet 1995;29:445-76
-       
+
 Warnings
 
    None.
-   
+
 Diagnostic Error Messages
 
    None.
-   
+
 Exit status
 
    It always exits with a status of 0.
-   
+
 Known bugs
 
    None.
-   
+
 See also
 
    Program name                          Description
@@ -440,18 +440,20 @@ See also
    freak        Residue/base frequency table or plot
    sirna        Finds siRNA duplexes in mRNA
    wordcount    Counts words of a specified size in a DNA sequence
-   
+
 Author(s)
 
    Peter Rice (pmr © ebi.ac.uk)
    Informatics Division, European Bioinformatics Institute, Wellcome
    Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
-   
+
 History
 
 Target users
 
    This program is intended to be used by everyone and everything, from
    naive users to embedded scripts.
-   
+
 Comments
+
+   None

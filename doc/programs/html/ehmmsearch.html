@@ -1,0 +1,824 @@
+<!--START OF HEADER - DON'T ALTER -->
+
+<HTML>
+<HEAD>
+  <TITLE>
+  EMBOSS: ehmmsearch
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+
+
+<table align=center border=0 cellspacing=0 cellpadding=0>
+<tr><td valign=top>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+</td>
+<td align=left valign=middle>
+<b><font size="+6">
+
+ehmmsearch
+</font></b>
+</td></tr>
+</table>
+<br>&nbsp;
+<p>
+
+
+
+<!--END OF HEADER-->
+
+
+
+
+
+
+<H2>
+    Function
+</H2>
+Search sequence database with an HMM
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+
+
+
+
+<H2>
+    Description
+</H2>
+
+<!-- 
+	This is the main part of the document.
+        This is what the user looks at to find out if this program will do what he wants. 
+        Long description.
+        Why it is useful.
+        When it should/shouldn't be used.
+  -->
+
+**************** 
+EDIT HERE
+**************** 
+
+
+
+
+
+
+
+
+
+
+
+
+
+<H2>
+    Algorithm
+</H2>
+
+<!-- 
+        Algorithms
+	  Pseudocode/Vague description/Handwaving/web links to useful pages
+  -->
+
+**************** 
+EDIT HERE
+**************** 
+
+
+
+
+
+
+
+
+
+
+
+
+
+<H2>
+    Usage
+</H2>
+
+<!--  
+	Example usage, as run from the command-line.
+        Many examples illustrating different behaviours is good.
+ -->
+
+<b>Here is a sample session with ehmmsearch</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>ehmmsearch Artemia.fa ../ehmmcalibrate-ex-keep/globin.hmm -auto </b>
+
+                   *->vlstaeeklvkaswgkkvnvaeeggeellrrlfvsppttktffsh<-
+                      +ls  e+ ++++ wgk+ ++ +e+g + +  lf  +p+   +f +  
+      S13421   303    GLSGLEKNAILSTWGKVRGNLQEVGKATFGKLFTAHPEYQQMFRF   347  
+
+                   *
+                    
+      S13421     -   -    
+
+score    obs    exp  (one = represents 1 sequences)
+-----    ---    ---
+   12      1      0|=                                                          
+
+
+% Statistical details of theoretical EVD fit:
+              mu =    -7.9790
+          lambda =     0.6465
+chi-sq statistic =     0.0000
+  P(chi-square)  =          0
+tophits_s report:
+     Total hits:           1
+     Satisfying E cutoff:  1
+     Total memory:         19K
+tophits_s report:
+     Total hits:           1
+     Satisfying E cutoff:  1
+     Total memory:         19K
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
+
+
+
+
+<H2>
+    Command line arguments
+</H2>
+
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+   Standard (Mandatory) qualifiers:
+  [-seqall]            seqall     Sequence database USA
+  [-hmmfile]           infile     HMM file
+  [-outfile]           outfile    Output file name
+
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers:
+   -nalign             integer    Number of alignments
+   -evalue             float      E-value cutoff
+   -hitcut             float      Hit score cutoff
+   -dbsize             integer    Calc E-value for DB size n
+   -cpu                integer    Number of CPUs
+   -dome               float      E-value domain cutoff
+   -domt               float      Hit score domain cutoff
+   -forward            boolean    Use forward algorithm
+   -nulltwo            boolean    Turn off second null model
+   -pvm                boolean    Use parallel virtual machine
+   -xnu                boolean    Use XNU filtering
+
+   Associated qualifiers:
+
+   "-seqall" associated qualifiers
+   -sbegin1            integer    Start of each sequence to be used
+   -send1              integer    End of each sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
+
+   "-outfile" associated qualifiers
+   -odirectory3        string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report deaths
+
+
+</pre>
+</td></tr></table>
+<P>
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-seqall]<br>(Parameter 1)</td>
+<td>Sequence database USA</td>
+<td>Readable sequence(s)</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>[-hmmfile]<br>(Parameter 2)</td>
+<td>HMM file</td>
+<td>Input file</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>[-outfile]<br>(Parameter 3)</td>
+<td>Output file name</td>
+<td>Output file</td>
+<td><i>&lt;sequence&gt;</i>.ehmmsearch</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Additional (Optional) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-nalign</td>
+<td>Number of alignments</td>
+<td>Any integer value</td>
+<td>100</td>
+</tr>
+
+<tr>
+<td>-evalue</td>
+<td>E-value cutoff</td>
+<td>Any numeric value</td>
+<td>10.</td>
+</tr>
+
+<tr>
+<td>-hitcut</td>
+<td>Hit score cutoff</td>
+<td>Any numeric value</td>
+<td>-1000000.</td>
+</tr>
+
+<tr>
+<td>-dbsize</td>
+<td>Calc E-value for DB size n</td>
+<td>Any integer value</td>
+<td>59021</td>
+</tr>
+
+<tr>
+<td>-cpu</td>
+<td>Number of CPUs</td>
+<td>Any integer value</td>
+<td>0</td>
+</tr>
+
+<tr>
+<td>-dome</td>
+<td>E-value domain cutoff</td>
+<td>Any numeric value</td>
+<td>1000000.</td>
+</tr>
+
+<tr>
+<td>-domt</td>
+<td>Hit score domain cutoff</td>
+<td>Any numeric value</td>
+<td>-1000000.</td>
+</tr>
+
+<tr>
+<td>-forward</td>
+<td>Use forward algorithm</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-nulltwo</td>
+<td>Turn off second null model</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-pvm</td>
+<td>Use parallel virtual machine</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-xnu</td>
+<td>Use XNU filtering</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+</table>
+
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+
+
+
+
+
+
+
+
+<H2>
+    Input file format
+</H2>
+
+<!-- 
+        This includes example input file formats.
+        This should be a detailed description and example - assume
+        someone will want to parse this file and will want to know what
+        happens in unusual cases - null input, etc. 
+   -->
+
+<b>ehmmsearch</b> reads any normal sequence USAs.
+
+<p>
+
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+<p><h3>File: Artemia.fa</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+&gt;S13421 S13421 GLOBIN - BRINE SHRIMP
+DKATIKRTWATVTDLPSFGRNVFLSVFAAK
+PEYKNLFVEFRNIPASELASSERLLYHGGR
+VLSSIDEAIAGIDTPDRAVKTLLALGERHI
+SRGTVRRHFEAFSYAFIDELKQRGVESADL
+AAWRRGWDNIVNVLEAGLLRRQIDLEVTGL
+SCVDVANIQESWSKVSGDLKTTGSVVFQRM
+INGHPEYQQLFRQFRDVDLDKLGESNSFVA
+HVFRVVAAFDGIIHELDNNQFIVSTLKKLG
+EQHIARGTDISHFQNFRVTLLEYLKENGMN
+GAQKASWNKAFDAFEKYISMGLSSLKRVDP
+ITGLSGLEKNAILSTWGKVRGNLQEVGKAT
+FGKLFTAHPEYQQMFRFSQGMPLASLVESP
+KFAAHTQRVVSALDQTLLALNRPSDFVYMI
+KELGLDHINRGTDRSHFENYQVVFIEYLKE
+TLGDSLDEFTVKSFNHVFEVIISFLNEGLR
+QADIVDPVTHLTGRQKEMIKASWSKARTDL
+RSLGQELFMRMFKAHPEYQTLFVNKGFADV
+PLVSLREDERFISHMANVLGGFDTLLQNLD
+ESSYFIYSLRNLGDAHIQRKAGTQHFRSFE
+AILIPILQESQGLDAASVEAWKKFFDVSIG
+VIAQGLKVATSEEADPVTGLYGKEIVALRQ
+AFAAVTPRNVEIGKRVFAKLFAAHPEYKNL
+FKKFEQYSVEELPSTDAFHYHISLVMNRFS
+SIGKVIDDNVSFVYLLKKLGREHIKRGLSR
+KQFDQFVELYIAEISSELSDTGRNGLEKVL
+TFATGVIEQGLFQLGQVDSNTLTALEKQSI
+QDIWSNLRSTGLQDLAVKIFTRLFSAHPEY
+KLLFTGRFGNVDNINENAPFKAHLHRVLSA
+FDIVISTLDDSEHLIRQLKDLGLFHTRLGM
+TRSHFDNFATAFLSVAQDIAPNQLTVLGRE
+SLNKGFKLMHGVIEEGLLQLERINPITGLS
+AREVAVVKQTWNLVKPDLMGVGMRIFKSLF
+EAFPAYQAVFPKFSDVPLDKLEDTPAVGKH
+SISVTTKLDELIQTLDEPANLALLARQLGE
+DHIVLRVNKPMFKSFGKVLVRLLENDLGQR
+FSSFASRSWHKAYDVIVEYIEEGLQQSYKQ
+DPVTGITDAEKALVQESWDLLKPDLLGLGR
+KIFTKVFTKHPDYQILFTRTGFGDTPLTKL
+DDNPAFGTHIIKVMRAFDHVIQILGKPKTL
+MAYLRSVGADHIATNVERRHFQAFSNALIP
+VMQHDLKAQLRPDAVAAWRKGLDRIIGIID
+QGLIGLKEVNPQNAFSAYDIQAVQRTWALA
+KPDLMGKGAMVFKQLFTDHGYQPLFSNLAQ
+YEITGLEGSPELNTHARNVMAQLDTLVGSL
+QNSIELGQSLAQLGKDHVPRKVNRVHFKDF
+AEHFIPLMKADLGDEFTPLAESAWKRAFDV
+MIATIEQGQEGSSHALSSFLTNPVA
+</pre>
+</td></tr></table><p>
+<p><h3>File: ../ehmmcalibrate-ex-keep/globin.hmm</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+HMMER2.0
+NAME  globins50
+LENG  146
+ALPH  Amino
+RF    no
+CS    no
+MAP   yes
+COM   ehmmbuild ../../data/hmm/globins50.msf globin.hmm -auto
+COM   ehmmcalibrate globin.hmm -seed 1079460101 -auto
+NSEQ  50
+DATE  Fri Feb 18 10:17:03 2005
+CKSUM 5854
+XT      -8455     -4      0      *  -8455     -4      0      * 
+NULT      -4  -8455
+NULE     595  -1558     85    338   -294    453  -1158    197    249    902  -1085   -142    -21   -313     45    531    201    384  -1998   -644 
+EVD    -7.978981   0.646464
+HMM        A      C      D      E      F      G      H      I      K      L      M      N      P      Q      R      S      T      V      W      Y    
+         m-&gt;m   m-&gt;i   m-&gt;d   i-&gt;m   i-&gt;i   d-&gt;m   d-&gt;d   b-&gt;m   m-&gt;e
+          -93      *  -4000
+     1  -1967  -2271  -4498  -4217  -3055   1639  -3307  -2518  -3920  -2945   2068  -3352    193  -3569  -3796    257  -2222   2801  -3514  -3205     1
+     -   -149   -500    233     43   -381    399    106   -626    210   -466   -720    275    394     45     96    359    117   -369   -294   -249 
+     -     -9  -9065 -10107   -894  -1115   -701  -1378  -1093  -8180 
+     2  -1670  -1776    -76  -2279   1025  -3037   3194    232    -52   1914   -955  -2245  -3102  -1004  -2223  -2065  -1610  -1207  -2178  -1775     2
+     -   -149   -500    233     43   -381    399    106   -626    210   -466   -720    275    394     45     96    359    117   -369   -294   -249 
+     -     -9  -9065 -10107   -894  -1115   -701  -1378  -8273  -8175 
+     3  -1713  -1550  -3992  -3365    801  -3249  -2111  -1027  -2974    762   -736  -2876  -3301  -2606  -2796   1725   1747    269   3309  -1618     3
+     -   -149   -500    233     43   -381    399    106   -626    210   -466   -720    275    394     45     96    359    117   -369   -294   -249 
+     -     -9  -9065 -10107   -894  -1115   -701  -1378  -8273  -8170 
+     4   1140  -2941   1606    792  -3253  -2463  -1127   -278    -63  -2954  -2034  -1102   -473   -671  -1220    572   1661  -2558  -3131  -2454     4
+     -   -149   -500    233     43   -381    399    106   -626    210   -466   -720    275    394     45     96    359    117   -369   -294   -249 
+     -     -9  -9065 -10107   -894  -1115   -701  -1378  -8273  -8165 
+     5   1794  -2944    -65   -235  -3261    829  -1114   -284   1649  -2958  -2034   -134  -1104   -656  -1204     60   -589  -2564  -3130  -2449     5
+     -   -149   -500    233     43   -381    399    106   -626    210   -466   -720    275    394     45     96    359    117   -369   -294   -249 
+     -     -9  -9065 -10107   -894  -1115   -701  -1378  -8273  -8160 
+     6  -1748  -3220   1958   2253  -3519    172  -1355  -3271   -993   -829  -2323  -1243  -2761   1731  -1518  -1165  -1696   -335  -3410  -2713     6
+     -   -149   -500    233     43   -381    399    106   -626    210   -466   -720    275    394     45     96    359    117   -369   -294   -249 
+     -     -9  -9065 -10107   -894  -1115   -701  -1378  -8273  -8155 
+     7   -173  -2945   -205   2098  -3264  -2452  -1111   -302   1817  -2960  -2035    433  -2545   -652   -261    -62  -1417  -2566   2430  -2449     7
+     -   -149   -500    233     43   -381    399    106   -626    210   -466   -720    275    394     45     96    359    117   -369   -294   -249 
+     -     -9  -9065 -10107   -894  -1115   -701  -1378  -8273  -8150 
+     8    933  -2910  -1344   -795  -3214  -1181  -1120  -2952   2227   -837  -2004   -157  -2553   1184   -129    241    381   -316  -3104  -2432     8
+     -   -149   -500    233     43   -381    399    106   -626    210   -466   -720    275    394     45     96    359    117   -369   -294   -249 
+     -     -9  -9065 -10107   -894  -1115   -701  -1378  -8273  -8145 
+     9   1054   1483  -2717  -2142  -1752  -2967  -1753   -661   -506    965    533   1919  -3033    494  -2159    300   -763    120  -2182  -1788     9
+     -   -149   -500    233     43   -381    399    106   -626    210   -466   -720    275    394     45     96    359    117   -369   -294   -249 
+     -     -9  -9065 -10107   -894  -1115   -701  -1378  -8273  -8140 
+    10    475   -184  -3984   -927  -1458  -3217  -2087    964  -2953    185   -705  -2852     14  -2583  -2766  -2300   -535   2595   1896  -1619    10
+     -   -149   -500    233     43   -381    399    106   -626    210   -466   -720    275    394     45     96    359    117   -369   -294   -249 
+     -     -9  -9065 -10107   -894  -1115   -701  -1378  -8273  -8134 
+    11   -171  -2034  -2133  -1572  -2075  -2788  -1524   1191   1414    546  -1206    859  -2865    894  -1789    -14   -603   1034  -2415  -1962    11
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+     -   -149   -500    233     43   -381    399    106   -626    210   -466   -720    275    394     45     96    359    117   -369   -294   -249 
+     -    -13  -9069 -10111   -894  -1115   -701  -1378  -8273  -7331 
+   131   1046  -2920    936    659  -3228  -2456  -1116  -1039    363  -2931   1609   -673  -2549   2249  -1206   -311   -848    236  -3111  -2436   131
+     -   -149   -500    233     43   -381    399    106   -626    210   -466   -720    275    394     45     96    359    117   -369   -294   -249 
+     -    -13  -9069 -10111   -894  -1115   -701  -1378  -8273  -7322 
+   132   1525  -2380  -1743  -1189  -2505  -2643  -1343    -80   2077  -2311  -1534   -729  -2731    501  -1500   -603   -889   1459  -2705  -2176   132
+     -   -149   -500    233     43   -381    399    106   -626    210   -466   -720    275    394     45     96    359    117   -369   -294   -249 
+     -    -13  -9069 -10111   -894  -1115   -701  -1378  -8273  -7313 
+   133    738  -1513  -3848  -3222   -198    361  -2054    325    428   1007   -714  -2784  -3243  -2505  -2708    324  -1602   1238  -1968   1351   133
+     -   -149   -500    233     43   -381    399    106   -626    210   -466   -720    275    394     45     96    359    117   -369   -294   -249 
+     -    -13  -9069 -10111   -894  -1115   -701  -1378  -8273  -7304 
+   134    987   1437    598    -22    375   -425  -1546   -562  -1482  -1887    629    128  -2881  -1372  -1826   -262    958   1290  -2386  -1941   134
+     -   -149   -500    233     43   -381    399    106   -626    210   -466   -720    275    394     45     96    359    117   -369   -294   -249 
+     -    -13  -9069 -10111   -894  -1115   -701  -1378  -8273  -7295 
+   135   1231  -2587  -1541    216  -2769    193  -1233  -2428    -54    355  -1715   -467  -2642   -839   -418    386  -1448   1716  -2861  -2275   135
+     -   -149   -500    233     43   -381    399    106   -626    210   -466   -720    275    394     45     96    359    117   -369   -294   -249 
+     -    -13  -9069 -10111   -894  -1115   -701  -1378  -8273  -7285 
+   136    606  -2680    165    660  -2889    865  -1213  -2564    326   1588  -1802  -1227  -2627   -803  -1338  -1459   -507     11  -2936  -2329   136
+     -   -149   -500    233     43   -381    399    106   -626    210   -466   -720    275    394     45     96    359    117   -369   -294   -249 
+     -    -13  -9069 -10111   -894  -1115   -701  -1378  -8273  -7276 
+   137    804  -1523  -4031  -3398  -1482  -3248  -2124    348  -2998   1327   -725  -2891  -3297  -2625  -2804  -1588   1321   1922   1901  -1649   137
+     -   -149   -500    233     43   -381    399    106   -626    210   -466   -720    275    394     45     96    359    117   -369   -294   -249 
+     -    -13  -9069 -10111   -894  -1115   -701  -1378  -8273  -7267 
+   138   1808  -1941  -2321    901    973   -408  -1613  -1543  -1607  -1831   1197  -1869  -2928  -1483  -1921    869    632     -3  -2347  -1916   138
+     -   -149   -500    233     43   -381    399    106   -626    210   -466   -720    275    394     45     96    359    117   -369   -294   -249 
+     -    -13  -9069 -10111   -894  -1115   -701  -1378  -8273  -7257 
+   139   1340  -2950   -394    203  -3271  -2451   1896  -1633   1977  -2966  -2040   1016  -2545   -650    779    -62  -1417  -2572  -3134  -2451   139
+     -   -149   -500    233     43   -381    399    106   -626    210   -466   -720    275    394     45     96    359    117   -369   -294   -249 
+     -    -13  -9069 -10111   -894  -1115   -701  -1378  -8273  -7248 
+   140   1476  -2348  -1739    120  -2460  -2637  -1336    497    345  -2272   1946    710  -2722  -1006  -1512   -916    102  -1854  -2672   2397   140
+     -   -149   -500    233     43   -381    399    106   -626    210   -466   -720    275    394     45     96    359    117   -369   -294   -249 
+     -    -14  -9069 -10111   -894  -1115   -701  -1378  -8273  -7238 
+   141  -1642  -1910    588  -1926    393  -2933  -1677    165   1129   1319  -1086  -1997  -3002  -1605   1807  -1932  -1580  -1356  -2286   1485   141
+     -   -149   -500    233     43   -381    399    106   -626    210   -466   -720    275    394     45     96    359    117   -369   -294   -249 
+     -    -15  -8608  -9650   -894  -1115   -701  -1378  -8273  -7229 
+   142   1542   1691    488   -582  -2626   -279   -862    506   1171  -2375   -136   -872  -2282   -440    468    312  -1114  -1970  -2642  -2022   142
+     -   -149   -500    233     43   -381    399    106   -626    210   -466   -720    275    394     45     96    359    117   -369   -294   -249 
+     -    -16  -8505  -9547   -894  -1115   -701  -1378  -8273  -7219 
+   143   2278  -2091  -2495  -1900  -2272  -2771   3583    522  -1069  -2122  -1438  -1912  -2941  -1387    524  -1886  -1664  -1689  -2531  -2110   143
+     -   -149   -500    233     43   -381    399    106   -626    210   -466   -720    275    394     45     96    359    117   -369   -294   -249 
+     -    -16  -8405  -9447   -894  -1115   -701  -1378  -8273  -7209 
+   144   1313  -1624  -1590  -1030    784    176  -1023  -1263   1746    -28   1368  -1204  -2374   -799   -322   -323  -1039  -1096  -1996  -1532   144
+     -   -149   -500    233     43   -381    399    106   -626    210   -466   -720    275    394     45     96    359    117   -369   -294   -249 
+     -    -16  -8405  -9447   -894  -1115   -701  -1378  -8273  -7200 
+   145  -2395  -2460  -3209  -2720   1335  -3543  -1417  -2096   1716     53  -1668    854  -3574  -2202  -2474  -2599  -2321  -2018  -1148   3600   145
+     -   -149   -500    233     43   -381    399    106   -626    210   -466   -720    275    394     45     96    359    117   -369   -294   -249 
+     -    -17  -8323  -9365   -894  -1115   -701  -1378  -8273  -7190 
+   146  -1328  -1570  -2202  -1667   1530    183   3522  -1184  -1501  -1451   -788  -1688  -2680  -1341  -1757    347    444  -1057  -1556   1992   146
+     -      *      *      *      *      *      *      *      *      *      *      *      *      *      *      *      *      *      *      *      * 
+     -      *      *      *      *      *      *      *  -8273      0 
+//
+</pre>
+</td></tr></table><p>
+
+
+
+
+
+
+<H2>
+    Output file format
+</H2>
+
+<!-- 
+        This includes example output file formats.
+        This should be a detailed description and example - assume
+        someone will want to parse this file and will want to know what
+        happens in unusual cases - null output, errors etc. 
+
+        If you wish to include the standard description of the avalable
+	report formats, use:
+[an error occurred while processing this directive]
+   -->
+
+<b>ehmmsearch</b> 
+outputs a graph to the specified graphics device. 
+outputs a report format file. The default format is ...
+
+
+<p>
+
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: s13421.ehmmsearch</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+
+Query HMM: globins50||
+  [HMM has been calibrated; E-values are empirical estimates]
+
+Scores for complete sequences (score includes all domains):
+Sequence Description                                    Score    E-value  N 
+-------- -----------                                    -----    ------- ---
+S13421   GLOBIN - BRINE SHRIMP                           12.7      0.089   1
+
+Parsed for domains:
+Sequence Domain  seq-f seq-t    hmm-f hmm-t      score  E-value
+-------- ------- ----- -----    ----- -----      -----  -------
+S13421     1/1     303   347 ..     1    45 [.    12.7    0.089
+
+Alignments of top-scoring domains:
+S13421: domain 1 of 1, from 303 to 347: score 12.7, E = 0.089
+
+Histogram of all scores:
+
+Total sequences searched: 1
+
+Whole sequence top hits:
+
+Domain top hits:
+</pre>
+</td></tr></table><p>
+
+
+
+
+
+
+<H2>
+    Data files
+</H2>
+
+<!-- 
+        Any data files used (e.g. translation table file)
+        This includes example data file formats if they are
+        not obvious.
+
+	If you wish to include the standard description of what data
+	files are and how to use embossdata to inspect and retrieve
+	them, use:
+[an error occurred while processing this directive]
+   -->
+
+**************** 
+EDIT HERE
+**************** 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<H2>
+    Notes
+</H2>
+
+<!-- 
+        Restrictions.
+        Interesting behaviour.
+        Useful things you can do with this program.
+   -->
+
+None.
+
+
+
+
+
+
+
+<H2>
+    References
+</H2>
+
+<!-- 
+        Bibliography for methods used.
+   -->
+
+None.
+
+
+
+
+
+
+
+
+<H2>
+    Warnings
+</H2>
+
+<!-- 
+        Potentially stupid things the program will let you do.
+   -->
+
+None.
+
+
+
+
+
+
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+<!-- 
+        Error messages specific to this program, eg:
+        "FATAL xxx" - means you have not set up the xxx data using program <b>prog</b>.<p>
+   -->
+
+None.
+
+
+
+
+
+
+
+<H2>
+    Exit status
+</H2>
+
+<!-- 
+        Description of the exit status for various error conditions
+   -->
+
+It always exits with status 0.
+
+
+
+
+
+
+
+
+<H2>
+    Known bugs
+</H2>
+
+
+<!-- 
+        Bugs noted but not yet fixed.
+   -->
+
+None.
+
+
+
+
+
+
+
+
+<!--
+<H2>
+    See also
+</H2>
+-->
+<h2><a name="See also">See also</a></h2>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th><th>Description</th></tr>
+<tr><td><a href="ealistat.html">ealistat</a></td><td>Statistics for multiple alignment files</td></tr>
+<tr><td><a href="ehmmalign.html">ehmmalign</a></td><td>Align sequences with an HMM</td></tr>
+<tr><td><a href="ehmmbuild.html">ehmmbuild</a></td><td>Build HMM</td></tr>
+<tr><td><a href="ehmmcalibrate.html">ehmmcalibrate</a></td><td>Calibrate a hidden Markov model</td></tr>
+<tr><td><a href="ehmmconvert.html">ehmmconvert</a></td><td>Convert between HMM formats</td></tr>
+<tr><td><a href="ehmmemit.html">ehmmemit</a></td><td>Extract HMM sequences</td></tr>
+<tr><td><a href="ehmmfetch.html">ehmmfetch</a></td><td>Extract HMM from a database</td></tr>
+<tr><td><a href="ehmmindex.html">ehmmindex</a></td><td>Index an HMM database</td></tr>
+<tr><td><a href="ehmmpfam.html">ehmmpfam</a></td><td>Align single sequence with an HMM</td></tr>
+</table>
+
+<!-- 
+        Add any comments about other associated programs (to prepare
+        data files?) that seealso doesn't find. 
+   -->
+
+
+
+
+
+
+
+
+
+
+<H2>
+    Author(s)
+</H2>
+
+This program is an EMBOSS conversion of a program written by Sean Eddy
+as part of his HMMER package.
+
+<p>
+Although we take every care to ensure that the results of the EMBOSS
+version are identical to those from the original package, we recommend
+that you check your inputs give the same results in both versions
+before publication.
+
+<p>
+Please report all bugs in the EMBOSS version to the EMBOSS bug team,
+not to the original author.
+
+
+<H2>
+    History
+</H2>
+
+
+
+
+
+
+<H2>
+    Target users
+</H2>
+
+<!--
+        For general users, requested by one user, for EMBOSS site
+        maintainers, for EMBOSS developers etc.
+        eg:
+        "This program is intended to be used by everyone and everything,
+        from naive users to embedded scripts." 
+	Which is easy to include using:
+   -->
+
+This program is intended to be used by everyone and everything, from naive users to embedded scripts.
+
+
+
+
+
+
+
+
+
+
+
+
+</BODY>
+</HTML>
+

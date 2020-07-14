@@ -1,5 +1,3 @@
-<!--START OF HEADER - DON'T ALTER -->
-
 <HTML>
 <HEAD>
   <TITLE>
@@ -8,14 +6,9 @@
 </HEAD>
 <BODY BGCOLOR="#FFFFFF" text="#000000">
 
-
-
-
-
-
 <table align=center border=0 cellspacing=0 cellpadding=0>
 <tr><td valign=top>
-<A HREF="index.html" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
@@ -29,36 +22,14 @@ silent
 
 
 
-
-
-
-<!--END OF HEADER-->
-
 <H2>
     Function
 </H2>
 Silent mutation restriction enzyme scan
 
-<!--
-DON'T WRITE ANYTHING HERE.
-IT IS DONE FOR YOU.
--->
-
-
-
-
 <H2>
     Description
 </H2>
-
-<!-- 
-	This is the main part of the document.
-        This is what the user looks at to find out if this program will do what he wants. 
-        Long description.
-        Why it is useful.
-        When it should/shouldn't be used.
-        Algorithms
-  -->
 
 <b>silent</b> does a scan of a nucleic acid sequence for silent mutation
 restriction enzyme sites.
@@ -73,19 +44,9 @@ without changing the translation.
 
 Several restriction enzyme can be specified.
 
-
-
-
 <H2>
     Usage
 </H2>
-
-<!--  
-	Example usage, as run from the command-line.
-        Many examples illustrating different behaviours is good.
- -->
-
-
 <b>Here is a sample session with silent</b>
 <p>
 
@@ -101,8 +62,6 @@ Output report [hsfau.silent]: <b></b>
 </pre></td></tr></table><p>
 <p>
 <a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
-
-
 
 
 <H2>
@@ -237,28 +196,10 @@ Output report [hsfau.silent]: <b></b>
 </table>
 
 
-<!--
-DON'T WRITE ANYTHING HERE.
-IT IS DONE FOR YOU.
--->
-
-
-
-
-
-
-
 
 <H2>
     Input file format
 </H2>
-
-<!-- 
-        This includes example input file formats.
-        This should be a detailed description and example - assume
-        someone will want to parse this file and will want to know what
-        happens in unusual cases - null input, etc. 
-   -->
 
 <b>silent</b> reads a nucleic acid sequence USA.
 
@@ -352,35 +293,19 @@ SQ   Sequence 518 BP; 125 A; 139 C; 148 G; 106 T; 0 other;
 
 
 
-
-
-
-
-
-
-
-
 <H2>
     Output file format
 </H2>
 
-<!-- 
-        This includes example output file formats.
-        This should be a detailed description and example - assume
-        someone will want to parse this file and will want to know what
-        happens in unusual cases - null output, errors etc. 
-   -->
-
-
 
 <a name="output.1"></a>
 <h3>Output files for usage example </h3>
-<p><h3>File: hsfau.silent</h3>
+<p><h3>File: hsfau.silent </h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 ########################################
 # Program: silent
-# Rundate: Tue Apr 06 14:34:19 2004
+# Rundate: Thu Jul 15 2004 12:00:00
 # Report_format: table
 # Report_file: hsfau.silent
 ########################################
@@ -412,23 +337,10 @@ SQ   Sequence 518 BP; 125 A; 139 C; 148 G; 106 T; 0 other;
 
 
 
-
-
-
-
-
-
 <H2>
     Data files
 </H2>
 
-<!-- 
-        Any data files used (e.g. translation table file)
-        This includes example data file formats if they are
-        not obvious.
-	If you wish to include the standard description of what data
-	files are and how to use embossdata to inspect and retrieve
-	them, use:
 <p>
 EMBOSS data files are distributed with the application and stored
 in the standard EMBOSS data directory, which is defined
@@ -469,17 +381,49 @@ The directories are searched in the following order:
 </ul>
 <p>
 
-   -->
-None.
+<p>
+The EMBOSS REBASE restriction enzyme data files are stored iin
+directory 'data/REBASE/*' under the EMBOSS installation directory.
 
+<p>
 
+These files must first be set up using the program <a
+href="rebaseextract.html">'<b>rebaseextract</b>'</a>.  Running
+'rebaseextract' may be the job of your system manager.
 
+<p>
+      
+The data files are stored in the REBASE directory of the standard EMBOSS
+data directory. The names are:
 
-
-
-
-
-
+<ul>
+<li> embossre.enz     Cleavage information
+<li> embossre.ref     Reference/methylation information
+<li> embossre.sup     Supplier information
+</ul>
+	 
+The column information is described at the top of the data files
+	 
+<p>
+	 
+The reported enzyme from any one group of isoschizomers (the prototype)
+is specified in the REBASE database and the information is held in the
+data file 'embossre.equ'.  You may edit this file to set your own
+preferred prototype, if you wish. 
+	 
+<p>
+	 
+The format of the file "embossre.equ" is
+<br>
+Enzyme-name Prototype-name
+	 
+<p>
+	 
+i.e.  two columns of enzyme names separated by a space.  The first name
+of the pair of enzymes is the name that is not preferred and the second
+is the preferred (prototype) name. 
+	 
+	          
 
 
 
@@ -487,114 +431,41 @@ None.
     Notes
 </H2>
 
-<!-- 
-        Restrictions.
-        Interesting behaviour.
-        Useful things you can do with this program.
-   -->
-
 None.
-
-
-
-
-
-
 
 <H2>
     References
 </H2>
 
-<!-- 
-        Bibliography for methods used.
-   -->
-
 None.
-
-
-
-
-
-
-
 
 <H2>
     Warnings
 </H2>
 
-<!-- 
-        Potentially stupid things the program will let you do.
-   -->
-
 None.
-
-
-
-
-
-
 
 <H2>
     Diagnostic Error Messages
 </H2>
 
-<!-- 
-        Error messages specific to this program, eg:
-        "FATAL xxx" - means you have not set up the xxx data using program <b>prog</b>.<p>
-   -->
-
 None.
-
-
-
-
-
-
 
 <H2>
     Exit status
 </H2>
 
-<!-- 
-        Description of the exit status for various error conditions
-   -->
-
 It always exits with status 0.
-
-
-
-
-
-
-
 
 <H2>
     Known bugs
 </H2>
 
-
-<!-- 
-        Bugs noted but not yet fixed.
-   -->
-
 None.
 
-
-
-
-
-
-
-
-<!--
-<H2>
-    See also
-</H2>
--->
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
-<tr><td><a href="recite.html">recite</a></td><td>Find changes to an enzyme site that introduce new enzyme sites</td></tr>
 <tr><td><a href="recoder.html">recoder</a></td><td>Remove restriction sites but maintain the same translation</td></tr>
 <tr><td><a href="redata.html">redata</a></td><td>Search REBASE for enzyme name, references, suppliers etc</td></tr>
 <tr><td><a href="remap.html">remap</a></td><td>Display a sequence with restriction cut sites, translation etc</td></tr>
@@ -602,11 +473,6 @@ None.
 <tr><td><a href="restrict.html">restrict</a></td><td>Finds restriction enzyme cleavage sites</td></tr>
 <tr><td><a href="showseq.html">showseq</a></td><td>Display a sequence with features, translation etc</td></tr>
 </table>
-
-<!-- 
-        Add any comments about other associated programs (to prepare
-        data files?) that seealso doesn't find. 
-   -->
 
 <p>
 
@@ -616,22 +482,9 @@ the translation in frame 1 of the sequence.  <b>recode</b> finds sites
 where a restriction enzyme site can be removed without changing the
 translation in frame 1 of the sequence.
 
-
-
-
-
-
-
-
-
-
 <H2>
     Author(s)
 </H2>
-<!--
-        Who has worked on the program in the past.
-   -->
-
 Alan Bleasby (ableasby&nbsp;&copy;&nbsp;rfcgr.mrc.ac.uk)
 <br>
 MRC Rosalind Franklin Centre for Genomics Research
@@ -640,71 +493,23 @@ Wellcome Trust Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
 
 
 
-
-
-
-
 <H2>
     History
 </H2>
 
-<!--
-        What changes have been made.
-   -->
-
 Written (Aug 2000) - Alan Bleasby.
-
-<!--
-<p>
-[an error occurred while processing this directive]
--->
-
-
-
-
-
-
-
 
 
 <H2>
     Target users
 </H2>
-
-<!--
-        For general users, requested by one user, for EMBOSS site
-        maintainers, for EMBOSS developers etc.
-        eg:
-        "This program is intended to be used by everyone and everything,
-        from naive users to embedded scripts." 
-	Which is easy to include using:
-   -->
-
 This program is intended to be used by everyone and everything, from naive users to embedded scripts.
-
-
-
-
-
-
-
-
-
-
 
 
 <H2>
     Comments
 </H2>
-
-<!--
-	Any comments, requests etc. that people have about the program
-   -->
-
-
-
-
-
+None
 
 
 

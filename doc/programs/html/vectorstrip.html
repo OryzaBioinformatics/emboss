@@ -7,15 +7,9 @@
 </HEAD>
 <BODY BGCOLOR="#FFFFFF" text="#000000">
 
-
-
-
-
-
-
 <table align=center border=0 cellspacing=0 cellpadding=0>
 <tr><td valign=top>
-<A HREF="index.html" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
@@ -29,55 +23,15 @@ vectorstrip
 
 
 
-
-
-
-
-<!--END OF HEADER-->
-
-
-
-
-
-<H1>
-Program vectorstrip
-</H1>
 <H2>
     Function
 </H2>
-
-<!--
-DON'T WRITE ANYTHING HERE.
-IT IS DONE FOR YOU.
--->
 Strips out DNA between a pair of vector sequences
 
 
 <H2>
     Description
 </H2>
-
-<!-- 
-	This is the main part of the document.
-
-        This is what the user looks at to find out if this program will
-        do what he wants. 
-
-        Long description.
-
-        Why it is useful.
-
-        When it should/shouldn't be used.
-
-        Algorithms
-
-        Expanded description.
-
-        eg: Reverse engineers Wheedle's 'talpsgob' program. This does a 
-        splurge of the 5' end of the sequence followed by a durm.
-        The net effect is a 5' end splurt.
-        etc. for as long as is required (several pages is not unreasonable)
-  -->
 
 <b>vectorstrip</b> is intended to be useful for stripping vector sequence
 from the ends of sequences of interest. For example, if a fragment has
@@ -125,22 +79,16 @@ illustrated in the examples below.
 <H2>
     Usage
 </H2>
-
-<!--  
-	Example usage, as run from the command-line.
-        Many examples illustrating different behaviours is good.
- -->
-
 <b>Here is a sample session with vectorstrip</b>
 <p>
 
 <p>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% <b>vectorstrip @../../data/vecseqs.list </b>
+% <b>vectorstrip @vecseqs.list </b>
 Strips out DNA between a pair of vector sequences
 Are your vector sequences in a file? [Y]: <b></b>
-Name of vectorfile: <b>../../data/vectors</b>
+Name of vectorfile: <b>vectors</b>
 Max allowed % mismatch [10]: <b></b>
 Show only the best hits (minimise mismatches)? [Y]: <b></b>
 Output file [pbluescript.vectorstrip]: <b>vector.strip</b>
@@ -155,17 +103,11 @@ Output sequence [pbluescript.fasta]: <b>vector.fasta</b>
 <H2>
     Command line arguments
 </H2>
-
-<!--
-DON'T WRITE ANYTHING HERE.
-IT IS DONE FOR YOU.
--->
-
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
    Standard (Mandatory) qualifiers (* if not always prompted):
   [-sequence]          seqall     Sequence database USA
-  [-vectorfile]        toggle     Are your vector sequences in a file?
+  [-[no]vectorfile]    toggle     Are your vector sequences in a file?
 *  -vectorsfile        infile     Name of vectorfile
    -mismatch           integer    Max allowed % mismatch
    -[no]besthits       boolean    Show only the best hits (minimise
@@ -229,7 +171,6 @@ IT IS DONE FOR YOU.
 </pre>
 </td></tr></table>
 <P>
-
 <table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
 <tr bgcolor="#FFFFCC">
 <th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
@@ -245,10 +186,10 @@ IT IS DONE FOR YOU.
 </tr>
 
 <tr>
-<td>[-vectorfile]<br>(Parameter 2)</td>
+<td>[-[no]vectorfile]<br>(Parameter 2)</td>
 <td>Are your vector sequences in a file?</td>
 <td>Toggle value Yes/No</td>
-<td>Y</td>
+<td>Yes</td>
 </tr>
 
 <tr>
@@ -327,19 +268,10 @@ IT IS DONE FOR YOU.
 <H2>
     Input file format
 </H2>
-<a name="input">
-<!-- 
-        This includes example input file formats.
-        Except for sequences which can be described by 'sequence USA',
-        this should be a detailed description and example - assume
-        someone will want to parse this file and will want to know what
-        happens in unusual cases - null input, etc. 
-   -->
-
 
 <a name="input.1"></a>
 <h3>Input files for usage example </h3>
-<p><h3>File: ../../data/vecseqs.list</h3>
+<p><h3>File: vecseqs.list</h3>
 <table width="90%"><tr><td bgcolor="#FFCCFF">
 <pre>
 ../../data/bluescript.seq
@@ -347,7 +279,7 @@ IT IS DONE FOR YOU.
 ../../data/pTYB1.seq
 </pre>
 </td></tr></table><p>
-<p><h3>File: ../../data/vectors</h3>
+<p><h3>File: vectors</h3>
 <table width="90%"><tr><td bgcolor="#FFCCFF">
 <pre>
 # Example vector file for use by vectorstrip
@@ -394,34 +326,8 @@ be used.
     Output file format
 </H2>
 
-<!-- 
-        This includes example output file formats 
-        Except for sequences which can be described by 'sequence USA',
-        this should be a detailed description and example - assume
-        someone will want to parse this file and will want to know what
-        happens in unusual cases - null output, errors etc. 
-   -->
-
-
 <a name="output.1"></a>
 <h3>Output files for usage example </h3>
-<p><h3>File: vector.fasta</h3>
-<table width="90%"><tr><td bgcolor="#CCFFCC">
-<pre>
-&gt;pBlueScript_from_84_to_204 KS+
-tcgagagccgtattgcgatatagcgcacatgcgttggacacagatgagcacacagtgaca
-tgagagacacagatatagagacagatagacgatagacagacagcatatatagacagatag
-c
-&gt;litmus.seq_from_62_to_182
-tcgagagccgtattgcgatatagcgcacatgcgttggacacagatgagcacacagtgaca
-tgagagacacagatatagagacagatagacgatagacagacagcatatatagacagatag
-c
-&gt;pTYB1.seq_from_59_to_179
-tcgagagccgtattgcgatatagcgcacatgcgttggacacagatgagcacacagtgaca
-tgagagacacagatatagagacagatagacgatagacagacagcatatatagacagatag
-c
-</pre>
-</td></tr></table><p>
 <p><h3>File: vector.strip</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
@@ -494,6 +400,23 @@ Sequence: pTYB1.seq 	 Vector: pBS_KS+	No match
 Sequence: pTYB1.seq 	 Vector: pLITMUS	No match
 </pre>
 </td></tr></table><p>
+<p><h3>File: vector.fasta</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+&gt;pBlueScript_from_84_to_204 KS+
+tcgagagccgtattgcgatatagcgcacatgcgttggacacagatgagcacacagtgaca
+tgagagacacagatatagagacagatagacgatagacagacagcatatatagacagatag
+c
+&gt;litmus.seq_from_62_to_182
+tcgagagccgtattgcgatatagcgcacatgcgttggacacagatgagcacacagtgaca
+tgagagacacagatatagagacagatagacgatagacagacagcatatatagacagatag
+c
+&gt;pTYB1.seq_from_59_to_179
+tcgagagccgtattgcgatatagcgcacatgcgttggacacagatgagcacacagtgaca
+tgagagacacagatatagagacagatagacgatagacagacagcatatatagacagatag
+c
+</pre>
+</td></tr></table><p>
 
 
 <p>
@@ -512,97 +435,17 @@ the command line flag <b>-ossingle</b> is used.
     Data files
 </H2>
 
-<!-- 
-        Any data files used (e.g. translation table file)
-        This includes example data file formats if they are
-        not obvious.
-
-        eg:
-        data file format:
-
-	blank lines and comment lines are ignored.
-        comment lines start with '#'
-        There are three columns separated by one or more space or TAB
-	characters for X and Y values of durm, followed by energy
-        all coefficients are given as floating point values
-        An example is:
-
-        # Durm coefficient enery file
-        # X     Y       Energy
-        0.1     0.2     0.331
-        0.2     0.4     0.332
-        0.3     0.6     0.333
-        0.3     0.8     0.334
-
-
-
-If you wish to include the standard description of what data files
-are and how to use embossdata to inspect and retrieve them, use:
-
-<p>
-EMBOSS data files are distributed with the application and stored
-in the standard EMBOSS data directory, which is defined
-by the EMBOSS environment variable EMBOSS_DATA.
-
-<p>
-
-To see the available EMBOSS data files, run:
-<p>
-<pre>
-% embossdata -showall
-</pre>
-<p>
-To fetch one of the data files (for example 'Exxx.dat') into your
-current directory for you to inspect or modify, run:
-
-<pre>
-
-% embossdata -fetch -file Exxx.dat
-
-</pre>
-<p>
-
-Users can provide their own data files in their own directories.
-Project specific files can be put in the current directory, or for
-tidier directory listings in a subdirectory called
-".embossdata". Files for all EMBOSS runs can be put in the user's home
-directory, or again in a subdirectory called ".embossdata".
-
-<p>
-The directories are searched in the following order:
-
-<ul>
-   <li> . (your current directory)
-   <li> .embossdata (under your current directory)
-   <li> ~/ (your home directory)
-   <li> ~/.embossdata
-</ul>
-<p>
-
-
-   -->
-
 None.
 
 <H2>
     Notes
 </H2>
 
-<!-- 
-        Restrictions.
-        Interesting behaviour.
-        Useful things you can do with this program.
-   -->
-
 None.
 
 <H2>
     References
 </H2>
-
-<!-- 
-        Bibliography for methods used.
-   -->
 
 None.
 
@@ -611,11 +454,6 @@ None.
     Warnings
 </H2>
 
-<!-- 
-        Potentially stupid things the program will let you do.
-        eg:
-        It doesn't check to see if the sequence is a protein sequence or not.
-   -->
 None.
 
 
@@ -623,50 +461,35 @@ None.
     Diagnostic Error Messages
 </H2>
 
-<!-- 
-        Error messages specific to this program.
-        eg:
-
-        "Threshold value greater than 1." - means that the threshold has
-        been set to be greater than 1 but a burgle exception has
-        occurred making this invalid - you should reduce the wobble
-        parameter and try again. 
-
-   -->
 <ol>
-<li><pre>No suitable vectors found - exiting</pre> indicates that the 5' and 3' patterns for the vectors were blank - usually this is as a result of an empty vectorfile.
-<li><pre>Illegal pattern</pre> indicates that one of the vector patterns could not be compiled and therefore cannot be searched.
-<li><pre>5' and 3' sequence matches are identical; inconclusive</pre> indicates that the 5' and 3' patterns provided were identical, and that they only match the sequence once. Thus the program cannot determine which part of the sequence is vector and which is insert.
+
+<li><pre>No suitable vectors found - exiting</pre> indicates that the
+5' and 3' patterns for the vectors were blank - usually this is as a
+result of an empty vectorfile.
+
+<li><pre>Illegal pattern</pre> indicates that one of the vector
+patterns could not be compiled and therefore cannot be searched.
+
+<li><pre>5' and 3' sequence matches are identical; inconclusive</pre>
+indicates that the 5' and 3' patterns provided were identical, and
+that they only match the sequence once. Thus the program cannot
+determine which part of the sequence is vector and which is insert.
+
 </ol>
 
 <H2>
     Exit status
 </H2>
 
-<!-- 
-        Description of the exit status for various error conditions
-        eg:
-        "It always exits with status 0"
-   -->
 It always exits with status 0.
+
 <H2>
     Known bugs
 </H2>
 
 
-<!-- 
-        Bugs noted but not yet fixed.
-   -->
-
 None.
 
-
-
-<!--
-<H2>
-    See also
-</H2>
--->
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
@@ -696,21 +519,11 @@ None.
 <tr><td><a href="yank.html">yank</a></td><td>Reads a sequence range, appends the full USA to a list file</td></tr>
 </table>
 
-<!-- 
-        Add any comments about other associated programs (to prepare
-        data files?) that seealso doesn't find. 
-   -->
-
-
-
 
 <H2>
     Author(s)
 </H2>
 <!--
-        Who has worked on the program in the past.
-   -->
-
 Val Curwen (vac&nbsp;&copy;&nbsp;sanger.ac.uk)
 <br>
 Sanger Institute, Wellcome Trust Genome Campus, Hinxton,
@@ -725,24 +538,10 @@ Cambridge, CB10 1SA, UK.
 
 16 August 2000 - Val Curwen - Written.
 
-<!--
-<p>
-[an error occurred while processing this directive]
--->
 
 <H2>
     Target users
 </H2>
-
-<!--
-        For general users, requested by one user, for EMBOSS site
-        maintainers, for EMBOSS developers etc.
-        eg:
-        "This program is intended to be used by everyone and everything,
-        from naive users to embedded scripts." 
-	Which is easy to include using:
-
-   -->
 This program is intended to be used by everyone and everything, from naive users to embedded scripts.
 
 
@@ -750,10 +549,7 @@ This program is intended to be used by everyone and everything, from naive users
 <H2>
     Comments
 </H2>
-
-<!--
-	Any comments, requests etc. that people have about the program
-   -->
+None
 
 
 

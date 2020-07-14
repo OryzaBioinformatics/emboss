@@ -1,78 +1,78 @@
 
                                   maskseq 
-                                      
-   
-   
+
+
+
 Function
 
    Mask off regions of a sequence
-   
+
 Description
 
    This simple editing program allows you to mask off regions of a
    sequence with a specified letter.
-   
+
    Why would you wish to do this? It is common for database searches to
    mask out low-complexity or biased composition regions of a sequence so
    that spurious matches do not occur. It is just possible that you have
    a program that has reported such biased regions but which has not
    masked the sequence itself. In that case, you can use this program to
    do the masking.
-   
+
    You may find other uses for it.
-   
+
    Some non-EMBOSS programs (for example FASTA) are capable of treating
    lower-case regions as if they are masked. maskseq can mask a region to
    lower-case instead of replacing the sequence with 'N's or 'X's if you
    use the qualifier '-tolower' or use a space character as the masking
    character.
-   
+
 Usage
 
    Here is a sample session with maskseq
-   
+
    Mask off bases 10 to 12 from a sequence 'prot.fasta' and write to the
    new sequence file 'prot2.seq':
-   
-   
-% maskseq ../../data/prot.fasta prot2.seq -reg=10-12 
+
+
+% maskseq prot.fasta prot2.seq -reg=10-12 
 Mask off regions of a sequence.
 
    Go to the input files for this example
    Go to the output files for this example
-   
+
    Example 2
-   
+
    Mask off bases 20 to 30 from a sequence 'prot.fasta' using the
    character 'x' and write to the new sequence file 'prot2.seq':
-   
-   
-% maskseq ../../data/prot.fasta prot2.seq -reg=20-30 -mask=x 
+
+
+% maskseq prot.fasta prot2.seq -reg=20-30 -mask=x 
 Mask off regions of a sequence.
 
    Go to the output files for this example
-   
+
    Example 3
-   
+
    Mask off the regions 20 to 23, 34 to 45 and 88 to 90 in 'prot.fasta':
-   
-   
-% maskseq ../../data/prot.fasta prot2.seq -reg=20-23,34-45,88-90 
+
+
+% maskseq prot.fasta prot2.seq -reg=20-23,34-45,88-90 
 Mask off regions of a sequence.
 
    Go to the output files for this example
-   
+
    Example 4
-   
+
    Change to lower-case the regions 20 to 23, 34 to 45 and 88 to 90 in
    'prot.fasta':
-   
-   
-% maskseq ../../data/prot.fasta prot2.seq -reg=20-23,34-45,88-90 -tolower 
+
+
+% maskseq prot.fasta prot2.seq -reg=20-23,34-45,88-90 -tolower 
 Mask off regions of a sequence.
 
    Go to the output files for this example
-   
+
 Command line arguments
 
    Standard (Mandatory) qualifiers:
@@ -153,7 +153,7 @@ Command line arguments
    -error               boolean    Report errors
    -fatal               boolean    Report fatal errors
    -die                 boolean    Report deaths
-   
+
 
    Standard (Mandatory) qualifiers Allowed values Default
    [-sequence]
@@ -171,34 +171,34 @@ Command line arguments
    interpret this as a masked region. The sequence is unchanged apart
    from the case change. You might like to ensure that the whole sequence
    is in upper-case before masking the specified regions to lower-case by
-   using the '-supper' flag. Toggle value Yes/No N
+   using the '-supper' flag. Toggle value Yes/No No
    -maskchar Character to use when masking. Default is 'X' for protein
    sequences, 'N' for nucleic sequences. If the mask character is set to
    be the SPACE character or a null character, then the sequence is
    'masked' by changing it to lower-case, just as with the '-lowercase'
-   flag. Any string is accepted 'X' for protein, 'N' for nucleic
+   flag. A string from 1 to 1 characters 'X' for protein, 'N' for nucleic
    Advanced (Unprompted) qualifiers Allowed values Default
    (none)
-   
+
 Input file format
 
    maskseq reads in a single sequence USA.
-   
+
   Input files for usage example
-  
-  File: ../../data/prot.fasta
-  
+
+  File: prot.fasta
+
 >FASTA F00001 FASTA FORMAT PROTEIN SEQUENCE
 ACDEFGHIKLMNPQRSTVWY
 ACDEFGHIKLMNPQRSTVWY
 ACDEFGHIKLMNPQRSTVWY
 ACDEFGHIKLMNPQRSTVWY
 ACDEFGHIKLMNPQRSTVWY
-   
+
    You can specify a file of ranges to mask out by giving the '-regions'
    qualifier the value '@' followed by the name of the file containing
    the ranges. (eg: '-regions @myfile').
-   
+
    The format of the range file is:
      * Comment lines start with '#' in the first column.
      * Comment lines and blank lines are ignored.
@@ -209,86 +209,86 @@ ACDEFGHIKLMNPQRSTVWY
      * There can be optional text after the two numbers to annotate the
        line.
      * White-space before or after the text is removed.
-       
+
    An example range file is:
      _________________________________________________________________
-   
+
 # this is my set of ranges
 12   23
  4   5       this is like 12-23, but smaller
 67   10348   interesting region
      _________________________________________________________________
-   
+
 Output file format
 
    maskseq writes s single masked sequence file.
-   
+
   Output files for usage example
-  
+
   File: prot2.seq
-  
+
 >FASTA F00001 FASTA FORMAT PROTEIN SEQUENCE
 ACDEFGHIKXXXPQRSTVWYACDEFGHIKLMNPQRSTVWYACDEFGHIKLMNPQRSTVWY
 ACDEFGHIKLMNPQRSTVWYACDEFGHIKLMNPQRSTVWY
-   
+
   Output files for usage example 2
-  
+
   File: prot2.seq
-  
+
 >FASTA F00001 FASTA FORMAT PROTEIN SEQUENCE
 ACDEFGHIKLMNPQRSTVWxxxxxxxxxxxMNPQRSTVWYACDEFGHIKLMNPQRSTVWY
 ACDEFGHIKLMNPQRSTVWYACDEFGHIKLMNPQRSTVWY
-   
+
   Output files for usage example 3
-  
+
   File: prot2.seq
-  
+
 >FASTA F00001 FASTA FORMAT PROTEIN SEQUENCE
 ACDEFGHIKLMNPQRSTVWXXXXEFGHIKLMNPXXXXXXXXXXXXGHIKLMNPQRSTVWY
 ACDEFGHIKLMNPQRSTVWYACDEFGHXXXMNPQRSTVWY
-   
+
   Output files for usage example 4
-  
+
   File: prot2.seq
-  
+
 >FASTA F00001 FASTA FORMAT PROTEIN SEQUENCE
 ACDEFGHIKLMNPQRSTVWyacdEFGHIKLMNPqrstvwyacdefGHIKLMNPQRSTVWY
 ACDEFGHIKLMNPQRSTVWYACDEFGHiklMNPQRSTVWY
-   
+
 Data files
 
    None.
-   
+
 Notes
 
    None.
-   
+
 References
 
    None.
-   
+
 Warnings
 
    You can mask out a complete sequence.
-   
+
 Diagnostic Error Messages
 
    Several warning messages about malformed region specifications:
-   
+
      * Non-digit found in region ...
      * Unpaired start of a region found in ...
      * Non-digit found in region ...
      * The start of a pair of region positions must be smaller than the
        end in ...
-       
+
 Exit status
 
    It exits with status 0, unless a region is badly constructed.
-   
+
 Known bugs
 
    None.
-   
+
 See also
 
    Program name                          Description
@@ -316,23 +316,22 @@ See also
    union        Reads sequence fragments and builds one sequence
    vectorstrip  Strips out DNA between a pair of vector sequences
    yank         Reads a sequence range, appends the full USA to a list file
-   
-   maskfeat masks parts of the input sequence that are annotated features
-   whose feature-names match the user-specified names.
-   
+
 Author(s)
 
    Gary Williams (gwilliam © rfcgr.mrc.ac.uk)
    MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
    Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
-   
+
 History
 
    Completed 3 March 1999
-   
+
 Target users
 
    This program is intended to be used by everyone and everything, from
    naive users to embedded scripts.
-   
+
 Comments
+
+   None

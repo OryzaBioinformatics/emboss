@@ -1,17 +1,16 @@
 
-                             EMBOSS: eprotpars
-     _________________________________________________________________
-   
-                               Program eprotpars
-                                       
+                                 eprotpars 
+
+
+
 Function
 
    Conversion of PHYLIP's protpars
-   
+
 Description
 
    EPROTPARS -- Embossified Protein Sequence Parsimony Method
-   
+
    This program infers an unrooted phylogeny from protein sequences,
    using a new method intermediate between the approaches of Eck and
    Dayhoff (1966) and Fitch (1971). Eck and Dayhoff (1966) allowed any
@@ -23,7 +22,7 @@ Description
    the minimum number of nucleotide substitutions that would be needed to
    achieve the given protein sequences. This counts silent changes
    equally with those that change the amino acid.
-   
+
    The present method insists that any changes of amino acid be
    consistent with the genetic code so that, for example, lysine is
    allowed to change to methionine but not to proline. However, changes
@@ -44,7 +43,7 @@ Description
    counted. Thus, in the chain of changes UUU (Phe) --> CUU (Leu) --> CUA
    (Leu) --> CAA (Glu), the middle one is not counted because it does not
    change the amino acid (leucine).
-   
+
    To maintain consistency with the genetic code, it is necessary for the
    program internally to treat serine as two separate states (ser1 and
    ser2) since the two groups of serine codons are not adjacent in the
@@ -53,10 +52,10 @@ Description
    "unknown" is simply taken to mean that the amino acid, which has not
    been determined, will in each tree that is evaluated be assumed be
    whichever one causes the fewest steps.
-   
+
    The assumptions of this method (which has not been described in the
    literature), are thus something like this:
-   
+
        1.  Change in different sites is independent.
 
        2.  Change in different lineages is independent.
@@ -81,13 +80,13 @@ Description
    make no substantive assumptions such as these, see the works by Farris
    (1983) and Sober (1983a, 1983b, 1988), but also read the exchange
    between Felsenstein and Sober (1986).
-   
+
    The protein sequences are given by the one-letter code used by
    described in the Molecular Sequence Programs documentation file. Note
    that if two polypeptide chains are being used that are of different
    length owing to one terminating before the other, they should be coded
    as (say)
-   
+
              HIINMA*????
              HIPNMGVWABT
 
@@ -102,7 +101,7 @@ Description
    deletion, not six deletion events, when the deletion arises. However,
    if there are overlapping deletions it may not be so easy to know what
    coding is correct.
-   
+
    One will usually want to use "?" after a stop codon, if one does not
    know what amino acid is there. If the DNA sequence has been observed
    there, one probably ought to resist putting in the amino acids that
@@ -110,7 +109,7 @@ Description
    the assumptions implicit in this parsimony method, changes to any
    noncoding sequence are much easier than changes in a coding region
    that change the amino acid, so that they shouldn't be counted anyway!
-   
+
 Usage
 
    Here is a sample session with eprotpars using the data:-
@@ -133,7 +132,7 @@ Data files
 Notes
 
    Multiple sequences sets not implemented yet!.
-   
+
 References
 
 Warnings
@@ -152,11 +151,11 @@ Author(s)
    Washington. Written by Joseph Felsenstein. Permission is granted to
    copy this document provided that no fee is charged for it and that
    this copyright notice is not removed.
-   
+
    This application was modified for inclusion in EMBOSS by Ian Longden
    (il@sanger.ac.uk) Informatics Division, The Sanger Centre, Wellcome
    Trust Genome Campus, Hinxton, Cambridge, CB10 1SA, UK.
-   
+
 Priority
 
 Target users

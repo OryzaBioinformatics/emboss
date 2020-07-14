@@ -1,0 +1,464 @@
+<!-- START OF HEADER -->
+<HTML><HEAD>
+<TITLE> EMBOSS: ALLVERSUSALL documentation. </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+<H2> ALLVERSUSALL documentation </H2>
+<!-- END OF HEADER -->
+
+
+
+
+
+<!-- CONTENTS
+     This always includes the sections below.
+     Other subsections can be added for individual applications.
+-->
+<br><H2>CONTENTS </H2>
+<b> <a href="#1.0">1.0     SUMMARY                   </a></b><br>
+<b> <a href="#2.0">2.0     INPUTS & OUTPUTS          </a></b><br>
+<b> <a href="#3.0">3.0     INPUT FILE FORMAT         </a></b><br>
+<b> <a href="#4.0">4.0     OUTPUT FILE FORMAT        </a></b><br>
+<b> <a href="#5.0">5.0     DATA FILES                </a></b><br>
+<b> <a href="#6.0">6.0     USAGE                     </a></b><br>    
+<b> <a href="#7.0">7.0     KNOWN BUGS & WARNINGS     </a></b><br>    
+<b> <a href="#8.0">8.0     NOTES                     </a></b><br>
+<b> <a href="#9.0">9.0     DESCRIPTION               </a></b><br>
+<b> <a href="#10.0">10.0   ALGORITHM                 </a></b><br>
+<b> <a href="#11.0">11.0   RELATED APPLICATIONS      </a></b><br>
+<b> <a href="#12.0">12.0   DIAGNOSTIC ERROR MESSAGES </a></b><br>
+<b> <a href="#13.0">13.0   AUTHORS                   </a></b><br>
+<b> <a href="#14.0">14.0   REFERENCES                </a></b><br>
+
+<!-- SUMMARY
+     Succint description of the application, particularly its inputs, outputs
+     and what it does.  The same text is given at the top of the source (.c)
+     file and in the <documentation> attribute of the <application definition>
+     of the ACD file.
+-->
+<a name="1.0"></a>
+<br><br><br><H2> 1.0   SUMMARY  </H2>
+
+Does an all-versus-all global alignment for each set of sequences in an input directory and writes files of sequence similarity values
+
+
+
+
+<!-- INPUTS & OUTPUTS
+     Short summary of the application inputs and outputs in its different 
+     modes of usage (if appropriate). More detail than the summary.
+-->
+<a name="2.0"></a>
+<br><br><br><H2> 2.0   INPUTS & OUTPUTS          </H2>
+ALLVERSUSALL reads a directory of files each containing a set of 2 or more sequences, 
+performs an all-versus-all global alignment on each set and writes a file of sequence 
+similarity values for each input file.  The output files have the same base name as the input files. The path and
+extension of the input and output files are specified by the user in the ACD file.
+
+
+
+
+
+<!-- INPUT FILE FORMAT 
+     Description and example(s) of input file formats.  Should provide enough
+     information to write and parse the file.  Should describe the format in 
+     unusual cases - null input, etc.
+
+     Cannot use the test data files because they might be empty or need 
+     hand-editing 
+
+     Use "<b>ALLVERSUSALL</b> reads any normal sequence USAs." if
+     appropriate.
+-->
+<a name="3.0"></a>
+<br><br><br><H2> 3.0   INPUT FILE FORMAT         </H2>
+All common sequence format are supported.
+
+
+
+<!-- OUTPUT FILE FORMAT 
+     Description and example(s) of output file formats.  Should provide enough
+     information to write and parse the file.  Should describe the format in 
+     unusual cases - null input, etc.  
+     If the standard description of the avalable report formats is required, 
+     use:   #include file="inc/reportformats.ihtml"
+     Use "Outputs a graph to the specified graphics device."
+     or  "outputs a report format file. The default format is ..."
+     if appropriate.
+-->
+<a name="4.0"></a>
+<br><br><br><H2> 4.0   OUTPUT FILE FORMAT         </H2>
+The output file contains 7 columns as follows: 
+<UL>
+<LI>(1) Sequence number (sequential order in input file) of first sequence of a pair.
+<LI>(2) Accesion number of first sequence of a pair. 
+<LI>(3) A ':' is always given.  
+<LI>(4) Sequence number of second sequence.
+<LI>(5) Accesion number of second sequence.
+<LI>(6) A ':' is always given.  
+<LI>(7) Sequence similarity value (2dp).
+</UL>
+
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: swtiny1.out</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+1 Q9WVI4 : 2 Q9ERL9 : 90.48
+1 Q9WVI4 : 3 Q9DGG6 : 55.70
+1 Q9WVI4 : 4 Q99396 : 54.74
+1 Q9WVI4 : 5 Q99280 : 57.66
+2 Q9ERL9 : 3 Q9DGG6 : 58.28
+2 Q9ERL9 : 4 Q99396 : 56.39
+2 Q9ERL9 : 5 Q99280 : 62.31
+3 Q9DGG6 : 4 Q99396 : 52.26
+3 Q9DGG6 : 5 Q99280 : 53.99
+4 Q99396 : 5 Q99280 : 83.41
+</pre>
+</td></tr></table><p>
+<p><h3>File: swtiny2.out</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+1 O58452 : 2 O30129 : 82.42
+1 O58452 : 3 O26938 : 75.56
+2 O30129 : 3 O26938 : 71.43
+</pre>
+</td></tr></table><p>
+<p><h3>File: ALLVERSUSALL.log</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+//
+/ebi/services/idata/pmr/hgmp/test/data/structure/allversusall/swtiny1.fasta
+//
+/ebi/services/idata/pmr/hgmp/test/data/structure/allversusall/swtiny2.fasta
+</pre>
+</td></tr></table><p>
+
+
+
+
+
+
+<!-- DATA FILES         
+     Any data files used (e.g. translation table file, substitution matrix 
+     etc.  This includes example data file formats if they are not obvious.
+     For a standard description of what data files are and how embossdata can
+     be used to inspect and retrieve them, use:
+     #include file="inc/localfiles.ihtml" 
+-->
+
+<a name="5.0"></a>
+<br><br><br><H2> 5.0   DATA FILES                </H2>
+ALLVERSUSALL uses a residue substitution matrix.
+
+
+
+
+<!-- USAGE
+     Example usage, as run from the command-line.
+     Many examples illustrating different behaviours is good.
+-->
+<a name="6.0"></a>
+<br><br><br><H2> 6.0   USAGE                     </H2>
+<H3> 6.1   COMMAND LINE ARGUMENTS </H3>
+
+<pre>
+   Standard (Mandatory) qualifiers:
+  [-seqinpath]         dirlist    This option specifies the location of
+                                  sequence files (input)
+  [-datoutdir]         outdir     This option specifies the location of
+                                  sequence similarity data files (output).
+   -logfile            outfile    This option specifies the name of
+                                  ALLVERSUSALL log file (output). The log file
+                                  contains messages about any errors arising
+                                  while ALLVERSUSALL ran.
+
+   Additional (Optional) qualifiers:
+   -matrix             matrixf    This option specifies the residue
+                                  substitution matrix that is used for
+                                  sequence comparison.
+   -gapopen            float      This option specifies the gap insertion
+                                  penalty. The gap insertion penalty is the
+                                  score taken away when a gap is created. The
+                                  best value depends on the choice of
+                                  comparison matrix. The default value assumes
+                                  you are using the EBLOSUM62 matrix for
+                                  protein sequences, and the EDNAFULL matrix
+                                  for nucleotide sequences.
+   -gapextend          float      This option specifies the gap extension
+                                  penalty. The gap extension, penalty is added
+                                  to the standard gap penalty for each base
+                                  or residue in the gap. This is how long gaps
+                                  are penalized. Usually you will expect a
+                                  few long gaps rather than many short gaps,
+                                  so the gap extension penalty should be lower
+                                  than the gap penalty. An exception is where
+                                  one or both sequences are single reads with
+                                  possible sequencing errors in which case
+                                  you would expect many single base gaps. You
+                                  can get this result by setting the gap open
+                                  penalty to zero (or very low) and using the
+                                  gap extension penalty to control gap
+                                  scoring.
+
+   Advanced (Unprompted) qualifiers: (none)
+   Associated qualifiers:
+
+   "-logfile" associated qualifiers
+   -odirectory         string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report deaths
+
+
+</pre>
+</td></tr></table>
+<P>
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-seqinpath]<br>(Parameter 1)</td>
+<td>This option specifies the location of sequence files (input)</td>
+<td>Directory with files</td>
+<td>./</td>
+</tr>
+
+<tr>
+<td>[-datoutdir]<br>(Parameter 2)</td>
+<td>This option specifies the location of sequence similarity data files (output).</td>
+<td>Output directory</td>
+<td>./</td>
+</tr>
+
+<tr>
+<td>-logfile</td>
+<td>This option specifies the name of ALLVERSUSALL log file (output). The log file contains messages about any errors arising while ALLVERSUSALL ran.</td>
+<td>Output file</td>
+<td>ALLVERSUSALL.log</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Additional (Optional) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-matrix</td>
+<td>This option specifies the residue substitution matrix that is used for sequence comparison.</td>
+<td>Comparison matrix file in EMBOSS data path</td>
+<td>EBLOSUM62</td>
+</tr>
+
+<tr>
+<td>-gapopen</td>
+<td>This option specifies the gap insertion penalty. The gap insertion penalty is the score taken away when a gap is created. The best value depends on the choice of comparison matrix. The default value assumes you are using the EBLOSUM62 matrix for protein sequences, and the EDNAFULL matrix for nucleotide sequences.</td>
+<td>Floating point number from 1.0 to 100.0</td>
+<td>10.0 for any sequence</td>
+</tr>
+
+<tr>
+<td>-gapextend</td>
+<td>This option specifies the gap extension penalty. The gap extension, penalty is added to the standard gap penalty for each base or residue in the gap. This is how long gaps are penalized. Usually you will expect a few long gaps rather than many short gaps, so the gap extension penalty should be lower than the gap penalty. An exception is where one or both sequences are single reads with possible sequencing errors in which case you would expect many single base gaps. You can get this result by setting the gap open penalty to zero (or very low) and using the gap extension penalty to control gap scoring.</td>
+<td>Floating point number from 0.0 to 10.0</td>
+<td>0.5 for any sequence</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+</table>
+
+
+<H3> 6.2 EXAMPLE SESSION </H3>
+An example of interactive use of ALLVERSUSALL is shown below.
+
+<b>Here is a sample session with allversusall</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>allversusall </b>
+Does an all-versus-all global alignment for each set of sequences in an
+input directory and writes files of sequence similarity values
+Location of sequence files (input [./]: <b>allversusall/</b>
+Location of sequence similarity data files (output) [./]: <b></b>
+Name allversusall log file (output) [ALLVERSUSALL.log]: <b></b>
+
+Processing /ebi/services/idata/pmr/hgmp/test/data/structure/allversusall/swtiny1.fasta
+Processing /ebi/services/idata/pmr/hgmp/test/data/structure/allversusall/swtiny2.fasta
+
+</pre></td></tr></table><p>
+<p>
+<a href="#output.1">Go to the output files for this example</a><p><p>
+
+
+<p>
+Files of sequence sets were read from test_data/allversusall/in and files of sequence similarity values were written to test_data/allversusall/.  The log file test_data/allversusall/ALLVERSUSALL.log was written.  The file path and extension of the input and output files was specified in the ACD file. The default gap insertion, extension and residue substitution matrix were used. 
+
+
+<!-- KNOWN BUGS & WARNINGS
+     Bugs that have not yet been fixed, easily missued features, problems
+     and caveats etc. Potentially stupid things the program will let you do.
+-->
+<a name="7.0"></a>
+<br><br><br><H2> 7.0   KNOWN BUGS & WARNINGS     </H2>
+None.
+
+
+
+
+
+<!-- NOTES
+     Important general remarks, including:
+       Restrictions.
+       Interesting behaviour.
+       Useful things you can do with this program.
+       Future plans.
+       etc.
+-->
+<a name="8.0"></a>
+<br><br><br><H2> 8.0   NOTES                     </H2>
+
+
+
+
+
+
+<H3> 8.1   GLOSSARY OF FILE TYPES    </H3>
+<table BORDER CELLSPACING=5 CELLPADDING=5 BGCOLOR="#f5f5ff" >
+<tr>
+<td><b>FILE TYPE</b></td>
+<td><b>FORMAT</b></td>
+<td><b>DESCRIPTION</b></td>
+<td><b>CREATED BY <b></td>
+<td><b>SEE ALSO</b></td>
+</tr>
+<tr>
+<td><b>Domain hits file </b></td>
+<td> DHF format (FASTA-like). </td>
+<td> Database hits (sequences) with domain classification information.  The hits are relatives to a SCOP or CATH family (or other node in the structural hierarchies) and are found from a search of a discriminating element (e.g. a protein signature, hidden Markov model, simple frequency matrix, Gribskov profile or Hennikoff profile) against a sequence database. </td>
+<td> <a href="seqsearch.html">SEQSEARCH</a> (hits retrieved by PSIBLAST). <a href="sigscan.html">SIGSCAN</a> (hits retrieved by sparse protein signature). <a href="libscan.html">LIBSCAN</a> (hits retrieved by various types of HMM and profile). </td>
+<td> N.A. </td>
+</tr>
+</table>
+
+
+
+
+
+<!-- DESCRIPTION
+     A complete, non-technical, user-level description of the application.
+-->
+<a name="9.0"></a>
+<br><br><br><H2> 9.0   DESCRIPTION               </H2>
+All-versus-all sequence comparisons are commonly required.  ALLVERSUSALL performs a full global pair-wise alignment for every permutation of pair of sequence in each input set of sequences.  It writes a file of sequence similarity values for each input set of sequences. 
+
+
+
+
+<!-- ALGORITHM
+     A technical description of algorithmic aspects, describing exactly how
+     the key aspects of the application work.
+-->
+<a name="10.0"></a>
+<br><br><br><H2> 10.0  ALGORITHM                 </H2>
+Standard N&W type alignment.
+
+
+<!-- RELATED APPLICATIONS
+     Other applications that either generate the input, use the output or 
+     are in some other way related to the application are described here. 
+-->
+<a name="11.0"></a>
+<br><br><br><H2> 11.0  RELATED APPLICATIONS      </H2>
+
+
+<h2><a name="See also">See also</a></h2>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th><th>Description</th></tr>
+<tr><td><a href="../../apps/aaindexextract.html">aaindexextract</a></td><td>Extract data from AAINDEX</td></tr>
+<tr><td><a href="cathparse.html">cathparse</a></td><td>Reads raw CATH classification files and writes DCF file (domain classification file)</td></tr>
+<tr><td><a href="../../apps/cutgextract.html">cutgextract</a></td><td>Extract data from CUTG</td></tr>
+<tr><td><a href="domainer.html">domainer</a></td><td>Reads CCF files (clean coordinate files) for proteins and writes CCF files for domains, taken from a DCF file (domain classification file)</td></tr>
+<tr><td><a href="domainnr.html">domainnr</a></td><td>Removes redundant domains from a DCF file (domain classification file). The file must contain domain sequence information, which can be added by using DOMAINSEQS</td></tr>
+<tr><td><a href="domainseqs.html">domainseqs</a></td><td>Adds sequence records to a DCF file (domain classification file)</td></tr>
+<tr><td><a href="domainsse.html">domainsse</a></td><td>Adds secondary structure records to a DCF file (domain classification file)</td></tr>
+<tr><td><a href="hetparse.html">hetparse</a></td><td>Converts raw dictionary of heterogen groups to a file in EMBL-like format</td></tr>
+<tr><td><a href="pdbparse.html">pdbparse</a></td><td>Parses PDB files and writes CCF files (clean coordinate files) for proteins</td></tr>
+<tr><td><a href="pdbplus.html">pdbplus</a></td><td>Add residue solvent accessibility and secondary structure data to a CCF file (clean coordinate file) for a protein or domain</td></tr>
+<tr><td><a href="pdbtosp.html">pdbtosp</a></td><td>Convert raw swissprot:PDB equivalence file to EMBL-like format</td></tr>
+<tr><td><a href="../../apps/printsextract.html">printsextract</a></td><td>Extract data from PRINTS</td></tr>
+<tr><td><a href="../../apps/prosextract.html">prosextract</a></td><td>Builds the PROSITE motif database for patmatmotifs to search</td></tr>
+<tr><td><a href="../../apps/rebaseextract.html">rebaseextract</a></td><td>Extract data from REBASE</td></tr>
+<tr><td><a href="scopparse.html">scopparse</a></td><td>Reads raw SCOP classification files and writes a DCF file (domain classification file)</td></tr>
+<tr><td><a href="seqnr.html">seqnr</a></td><td>Removes redundancy from DHF files (domain hits files) or other files of sequences</td></tr>
+<tr><td><a href="sites.html">sites</a></td><td>Reads CCF files (clean coordinate files) and writes CON files (contact files) of residue-ligand contact data for domains in a DCF file (domain classification file)</td></tr>
+<tr><td><a href="ssematch.html">ssematch</a></td><td>Searches a DCF file (domain classification file) for secondary structure matches</td></tr>
+<tr><td><a href="../../apps/tfextract.html">tfextract</a></td><td>Extract data from TRANSFAC</td></tr>
+</table>
+
+
+<!-- DIAGNOSTIC ERROR MESSAGES
+     Description of error messages or log file, if one is written.
+-->
+<a name="12.0"></a>
+<br><br><br><H2> 12.0  DIAGNOSTIC ERROR MESSAGES </H2>
+None.
+
+
+
+
+
+
+<!-- AUTHORS -->
+<a name="13.0"><br><br><br><H2> 13.0  AUTHORS                   </H2></a>
+Jon Ison <a href="mailto:jison@rfcgr.mrc.ac.uk">(jison@rfcgr.mrc.ac.uk)</a>
+<br>
+MRC Rosalind Franklin Centre for Genomics Research
+Wellcome Trust Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
+
+
+
+
+<!-- REFERENCES
+     Quote the paper where the application was first published, described, used etc. 
+-->
+<a name="14.0"></a>
+<br><br><br><H2> 14.0  REFERENCES                </H2>
+Please cite the authors and EMBOSS.
+<br><br>
+<i>Rice P, Bleasby A.J.  2000.  EMBOSS - The European Molecular Biology Open Software Suite.  Trends in Genetics, 15:276-278.  See also http://www.uk.embnet.org/Software/EMBOSS</i>
+
+<H3>14.1 Other useful references  </H3>
+
+<br>
+
+</BODY>
+</HTML>

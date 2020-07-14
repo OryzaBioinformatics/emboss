@@ -1,44 +1,44 @@
 
                                   getorf 
-                                      
-   
-   
+
+
+
 Function
 
    Finds and extracts open reading frames (ORFs)
-   
+
 Description
 
    This program finds and outputs the sequences of open reading frames
    (ORFs).
-   
+
    The ORFs can be defined as regions of a specified minimum size between
    STOP codons or between START and STOP codons.
-   
+
    The ORFs can be output as the nucleotide sequence or as the
    translation.
-   
+
    The program can also output the region around the START or the initial
    STOP codon or the ending STOP codons of an ORF for those doing
    analysis of the properties of these regions.
-   
+
    The START and STOP codons are defined in the Genetic Code tables. A
    suitable Genetic Code table can be selected for the organism you are
    investigating.
-   
+
 Usage
 
    Here is a sample session with getorf
-   
+
 
 % getorf -minsize 300 
 Finds and extracts open reading frames (ORFs)
 Input sequence(s): tembl:eclaci
 Output sequence [eclaci.orf]: 
-   
+
    Go to the input files for this example
    Go to the output files for this example
-   
+
 Command line arguments
 
    Standard (Mandatory) qualifiers:
@@ -129,7 +129,7 @@ Command line arguments
    -error               boolean    Report errors
    -fatal               boolean    Report fatal errors
    -die                 boolean    Report deaths
-   
+
 
    Standard (Mandatory) qualifiers Allowed values Default
    [-sequence]
@@ -194,18 +194,18 @@ Command line arguments
    side of that codon to output. If the region of flanking nucleotides
    crosses the start or end of the sequence, no output is given for this
    codon. Any integer value 100
-   
+
 Input file format
 
    getorf reads any nucleic acid sequence USA.
-   
+
   Input files for usage example
-  
+
    'tembl:eclaci' is a sequence entry in the example nucleic acid
    database 'tembl'
-   
+
   Database entry: tembl:eclaci
-  
+
 ID   ECLACI     standard; DNA; PRO; 1113 BP.
 XX
 AC   V00294;
@@ -298,17 +298,17 @@ SQ   Sequence 1113 BP; 249 A; 304 C; 322 G; 238 T; 0 other;
      cgacaggttt cccgactgga aagcgggcag tga                                   111
 3
 //
-   
+
 Output file format
 
    The output is a sequence file containing predicted open reading frames
    longer than the minimum size, which defaults to 30 bases (i.e. 10
    amino acids).
-   
+
   Output files for usage example
-  
+
   File: eclaci.orf
-  
+
 >ECLACI_1 [735 - 1112] E. coli laci gene (codes for the lac repressor).
 GHRSHCDAGCQRSDGAGRNARHYRVRAARWCGYLGSGIRRYRRQLMLYPAVNHHQTGFSP
 AGANQRGPLAATLSGPGGEGQSAVARLTGEKKNHPGAQYANRLSPRVGRFINAAGTTGFP
@@ -326,24 +326,24 @@ ssor).
 RRNISAGSFHSNGILVIQRIVNDQPTDALREKIVHRRFTGFDAASFYHRHHHAGTQLIGA
 RFNRRDNLRRRVQGQTGGGNANQQRLFARQLLCHAVGNVIQLRHRRFHFFPRFRRNVAGL
 VHHAGNGLIRDTGILCDIV
-   
+
    The name of the ORF sequences is constructed from the name of the
    input sequence with an underscore character ('_') and a unique ordinal
    number of the ORF found appended. The description of the output ORF
    sequence is constructed from the description of the input sequence
    with the start and end positions of the ORF prepended.
-   
+
    The unique number appended to the name is simply used to create new
    unique sequence names, it does not imply any further information
    indicating any order, positioning or sense-strand of the ORFs.
-   
+
    If the ORF has been found in the reverse sense, then the start
    position will be smaller than the end position. The numbering uses the
    forward-sense positions, but read in the reverse sense. For example,
    >ECLACI_3 [465 - 49] in the output above is a reverse-sense ORF
    running from position 465 to 49. The description will also contain
    '(REVERSE SENSE)'.
-   
+
    If the sequence has been specified as a circular genome (using the
    command-line switch '-circular'), then ORFs can potentially continue
    past the 'end' of the input sequence (the breakpoint of the circular
@@ -357,26 +357,26 @@ VHHAGNGLIRDTGILCDIV
    than the input sequence if the ORF crosses the breakpoint. If the ORF
    crosses the breakpoint, then the text '(ORF crosses the breakpoint)'
    will be added to the description of the output sequence.
-   
+
 Data files
 
    The START and STOP codons used by getorf are defined in the Genetic
    Code data files. By default, Genetic Code file EGC.0 is used.
-   
+
    The default file EGC.0 is the 'Standard Code' with the rarely used
    alternate START codons omitted, it only has the normal 'AUG' START
    codon. The 'Standard Code' with the rarely used alternate START codons
    included is Genetic Code file EGC.1.
-   
+
    It is expected that user will sometimes wish to customise a Genetic
    Code file. To do this, use the program embossdata.
-   
+
    EMBOSS data files are distributed with the application and stored in
    the standard EMBOSS data directory, which is defined by the EMBOSS
    environment variable EMBOSS_DATA.
-   
+
    To see the available EMBOSS data files, run:
-   
+
 % embossdata -showall
 
    To fetch one of the data files (for example 'Exxx.dat') into your
@@ -389,85 +389,85 @@ Data files
    tidier directory listings in a subdirectory called ".embossdata".
    Files for all EMBOSS runs can be put in the user's home directory, or
    again in a subdirectory called ".embossdata".
-   
+
    The directories are searched in the following order:
      * . (your current directory)
      * .embossdata (under your current directory)
      * ~/ (your home directory)
      * ~/.embossdata
-       
+
    The Genetic Code data files are based on the NCBI genetic code tables.
    Their names and descriptions are:
-   
+
    EGC.0
           Standard (Differs from GC.1 in that it only has initiation site
           'AUG')
-          
+
    EGC.1
           Standard
-          
+
    EGC.2
           Vertebrate Mitochodrial
-          
+
    EGC.3
           Yeast Mitochondrial
-          
+
    EGC.4
           Mold, Protozoan, Coelenterate Mitochondrial and
           Mycoplasma/Spiroplasma
-          
+
    EGC.5
           Invertebrate Mitochondrial
-          
+
    EGC.6
           Ciliate Macronuclear and Dasycladacean
-          
+
    EGC.9
           Echinoderm Mitochondrial
-          
+
    EGC.10
           Euplotid Nuclear
-          
+
    EGC.11
           Bacterial
-          
+
    EGC.12
           Alternative Yeast Nuclear
-          
+
    EGC.13
           Ascidian Mitochondrial
-          
+
    EGC.14
           Flatworm Mitochondrial
-          
+
    EGC.15
           Blepharisma Macronuclear
-          
+
    EGC.16
           Chlorophycean Mitochondrial
-          
+
    EGC.21
           Trematode Mitochondrial
-          
+
    EGC.22
           Scenedesmus obliquus
-          
+
    EGC.23
           Thraustochytrium Mitochondrial
-          
+
    The format of these files is very simple.
-   
+
    It consists of several lines of optional comments, each starting with
    a '#' character.
-   
+
    These are followed the line: 'Genetic Code [n]', where 'n' is the
    number of the genetic code file.
-   
+
    This is followed by the description of the code and then by four lines
    giving the IUPAC one-letter code of the translated amino acid, the
    start codons (indicdated by an 'M') and the three bases of the codon,
    lined up one on top of the other.
-   
+
    For example:
 
 ------------------------------------------------------------------------------
@@ -494,27 +494,27 @@ Notes
    If you have selected one of the options to report a regions around a
    START or STOP codon, then note that any such region that crosses the
    beginning or end of the sequence will not be reported.
-   
+
 References
 
    None.
-   
+
 Warnings
 
    None.
-   
+
 Diagnostic Error Messages
 
    None.
-   
+
 Exit status
 
    It always exits with status 0.
-   
+
 Known bugs
 
    '-sbegin' and -send' do not work with this program.
-   
+
 See also
 
    Program name                        Description
@@ -525,28 +525,30 @@ See also
    syco         Synonymous codon usage Gribskov statistic plot
    tcode        Fickett TESTCODE statistic to identify protein-coding DNA
    wobble       Wobble base plot
-   
+
      * checktrans - Reports STOP codons and ORF statistics of a protein
        sequence
-       
+
 Author(s)
 
    Gary Williams (gwilliam © rfcgr.mrc.ac.uk)
    MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
    Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
-   
+
 History
 
    2000 - written - Gary Williams
-   
+
    November 2002 - added indication of reverse sense ORFs
-   
+
    November 2002 - added indication of ORFs that cross the breakpoint at
    position 1 in circular genomes.
-   
+
 Target users
 
    This program is intended to be used by everyone and everything, from
    naive users to embedded scripts.
-   
+
 Comments
+
+   None

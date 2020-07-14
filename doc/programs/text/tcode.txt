@@ -1,12 +1,12 @@
 
                                    tcode 
-                                      
-   
-   
+
+
+
 Function
 
    Fickett TESTCODE statistic to identify protein-coding DNA
-   
+
 Description
 
    tcode tests DNA sequences for protein coding regions using an
@@ -15,7 +15,7 @@ Description
    test had been thoroughly proven on 400,000 bases of sequence data: it
    misclassifies 5% of the regions tested and gives an answer of "No
    Opinion" one fifth of the time.
-   
+
    The program slides a window of user-selectable size over the DNA
    sequence. For each window the TESTCODE statistic is applied. The
    results can be output as a text report or displayed graphically. The
@@ -26,32 +26,32 @@ Description
    horizontal line are determined to be coding regions. Those below a red
    line are determined to be noncoding. Points between the red and green
    lines are "no opinion" ones.
-   
+
 Biological Relevance
 
    The statistic reflects the fact that codons are used with unequal
    frequency and that oligonucleotides and nucleotides tend to be
    repeated with a periodicity of three.
-   
+
    This application can assist in determining the probability of a region
    of nucleic sequence encoding a functional protein.
-   
+
 Algorithm
 
    The Fickett (1982) algorithm is used (1).
-   
+
    A window of at least 200 bases is moved over the sequence in steps of
    3 bases
-   
+
    Let:
-   
+
   A1 = Number of A's in positions 1,4,7 ...
   A2 = Number of A's in positions 2,5,8 ...
   A3 = Number of A's in positions 3,6,9 ...
 
    A position value is determined that reflects the degree to which each
    base is favoured in one codon position over another, i.e.
-   
+
   Apos = MAX(A1,A2,A3) / MIN(A1,A2,A3)+1
 
    This is done for all 4 bases. The percentage composition of each base
@@ -60,39 +60,39 @@ Algorithm
    to probabilities (p) of coding using a look-up table provided as the
    data file for the program. The values in this look-up table have been
    determined experimentally using known coding and noncoding sequences.
-   
+
    Each of the probabilities is multiplied by a weight (w) value (again
    from the look-up table) for the respective base. The weight value
    reflects the percentage of the time that each parameter alone
    successfully predicted coding or noncoding function for the sequences
    of known function.
-   
+
    The TESTCODE statistic is then:
-   
+
   p1w1 + p2w2 + p3w3 + p4w4 + p5w5 + p6w6 + p7w7 + p8w8
 
    A result of less than 0.74 is probably a non-coding region.
    A result equal or greater than 0.95 is probably a coding region.
    Anything in between these two values is uncertain.
-   
+
 Usage
 
    Here is a sample session with tcode
-   
+
 
 % tcode 
 Fickett TESTCODE statistic to identify protein-coding DNA
 Input sequence(s): tembl:hsfau1
 Length of sliding window [200]: 
 Output report [hsfau1.tcode]: 
-   
+
    Go to the input files for this example
    Go to the output files for this example
-   
+
    Example 2
-   
+
    Produce a graphical plot
-   
+
 
 % tcode -plot -graph cps 
 Fickett TESTCODE statistic to identify protein-coding DNA
@@ -100,9 +100,9 @@ Input sequence(s): tembl:hsfau1
 Length of sliding window [200]: 
 
 Created tcode.ps
-   
+
    Go to the output files for this example
-   
+
 Command line arguments
 
    Standard (Mandatory) qualifiers (* if not always prompted):
@@ -184,7 +184,7 @@ Command line arguments
    -error               boolean    Report errors
    -fatal               boolean    Report fatal errors
    -die                 boolean    Report deaths
-   
+
 
    Standard (Mandatory) qualifiers Allowed values Default
    [-sequence]
@@ -197,7 +197,7 @@ Command line arguments
    -graph Graph type EMBOSS has a list of known devices, including
    postscript, ps, hpgl, hp7470, hp7580, meta, colourps, cps, xwindows,
    x11, tektronics, tekt, tek4107t, tek, none, null, text, data, xterm,
-   png EMBOSS_GRAPHICS value, or x11
+   png, xml EMBOSS_GRAPHICS value, or x11
    Additional (Optional) qualifiers Allowed values Default
    (none)
    Advanced (Unprompted) qualifiers Allowed values Default
@@ -211,23 +211,23 @@ Command line arguments
    -plot On selection a graph of the sequence (X axis) plotted against
    the coding score (Y axis) will be displayed. Sequence above the green
    line is coding, that below the red line is non-coding. Toggle value
-   Yes/No N
-   
+   Yes/No No
+
 Input file format
 
    tcode reads any normal sequence USAs.
-   
+
    The program will ignore ambiguity codes in the nucleic acid sequence
    and just accept the four common bases. This is a function of the
    algorithm, and the data tables.
-   
+
   Input files for usage example
-  
+
    'tembl:hsfau1' is a sequence entry in the example nucleic acid
    database 'tembl'
-   
+
   Database entry: tembl:hsfau1
-  
+
 ID   HSFAU1     standard; DNA; HUM; 2016 BP.
 XX
 AC   X65921; S45242;
@@ -368,44 +368,43 @@ SQ   Sequence 2016 BP; 421 A; 562 C; 538 G; 495 T; 0 other;
      tacttgcaag gcctcaggga gaggtgtgct tctcgg                                201
 6
 //
-   
+
 Output file format
 
    The output is a standard EMBOSS report file.
-   
+
    The results can be output in one of several styles by using the
    command-line qualifier -rformat xxx, where 'xxx' is replaced by the
    name of the required format. The available format names are: embl,
    genbank, gff, pir, swiss, trace, listfile, dbmotif, diffseq, excel,
    feattable, motif, regions, seqtable, simple, srs, table, tagseq
-   
-   See:
-   http://www.uk.embnet.org/Software/EMBOSS/Themes/ReportFormats.html for
-   further information on report formats.
-   
+
+   See: http://emboss.sf.net/docs/themes/ReportFormats.html for further
+   information on report formats.
+
    tcode outputs a report format file. The default format is 'table'.
-   
+
    The resulting report file will be given a name relating to the
    analysed sequence together with the .tcode suffix by default. Should
    there be no sequence description, the default reverts to
    outfile.tcode.
-   
+
    tcode optionally outputs a graph to the specified graphics device.
-   
+
    The graphical display is output with the default file name tcode.1.
    and then the name of the selected graphical display (e.g. png; ps).
-   
+
    The graph indicates the threshold for probably being coding with a
    green horizontal line and the threshold for probably not being coding
    with a red horizontal line.
-   
+
   Output files for usage example
-  
+
   File: hsfau1.tcode
-  
+
 ########################################
 # Program: tcode
-# Rundate: Tue Apr 06 14:34:27 2004
+# Rundate: Thu Jul 15 2004 12:00:00
 # Report_format: table
 # Report_file: hsfau1.tcode
 ########################################
@@ -508,23 +507,23 @@ Output file format
 
 #---------------------------------------
 #---------------------------------------
-   
+
   Output files for usage example 2
-  
-  File: hsfau1.tcode
-  
+
   Graphics File: tcode.ps
-  
+
    [tcode results]
-   
+
+  File: hsfau1.tcode
+
 Data files
 
    EMBOSS data files are distributed with the application and stored in
    the standard EMBOSS data directory, which is defined by the EMBOSS
    environment variable EMBOSS_DATA.
-   
+
    To see the available EMBOSS data files, run:
-   
+
 % embossdata -showall
 
    To fetch one of the data files (for example 'Exxx.dat') into your
@@ -537,16 +536,16 @@ Data files
    tidier directory listings in a subdirectory called ".embossdata".
    Files for all EMBOSS runs can be put in the user's home directory, or
    again in a subdirectory called ".embossdata".
-   
+
    The directories are searched in the following order:
      * . (your current directory)
      * .embossdata (under your current directory)
      * ~/ (your home directory)
      * ~/.embossdata
-       
+
    The default data file (look-up table) is Etcode.dat which contains the
    data from the original paper (1)
-   
+
 # Fickett TESTCODE data
 # Nuc. Acids Res. 10(17) 5303-5318
 #
@@ -615,50 +614,50 @@ Data files
 0.14
 
    This file is retrievable using EMBOSSDATA.
-   
+
    Window size is set by default to 200. The algorithm requires
    sufficient sequence to perform the statistic on. The original paper
    suggests a minimum window size of 200.
-   
+
    Window stepping increment is set by default to 3. This will ensure the
    resulting information remains in frame.
-   
+
   Alternative Data Files
-  
+
    There are no alternative data files currently in the EMBOSS Data
    directory, but alternative values may be user defined.
-   
+
 Notes
 
    In the GCG package, the current (version 10.3) TESTCODE application's
    apparent interpretation of the algorithm is:
-   
+
         MAX(A1,A2,A3) / MIN(A1,A2,A3)
 
    The EMBOSS tcode program uses the correct Fickett algorithm equation:
-   
+
         MAX(A1,A2,A3) / MIN(A1,A2,A3) + 1
 
    thus any plot using the GCG TESTCODE aplication will be slightly
    higher than the tcode equivalent.
-   
+
 References
 
-   1. Fickett, J.W. (1982) Nucleic Acids Research 10(17) pp.5303-5318
-   "Recognition of protein coding regions in DNA sequences"
-   
+    1. Fickett, J.W. (1982) Nucleic Acids Research 10(17) pp.5303-5318
+       "Recognition of protein coding regions in DNA sequences"
+
 Warnings
 
    None.
-   
+
 Diagnostic Error Messages
 
    Standard error messages are given for incorrect sequence input.
-   
+
 Exit status
 
    It always exits with status 0.
-   
+
 See also
 
    Program name                       Description
@@ -669,21 +668,30 @@ See also
    sixpack      Display a DNA sequence with 6-frame translation and ORFs
    syco         Synonymous codon usage Gribskov statistic plot
    wobble       Wobble base plot
-   
+
   See Elsewhere
-  
+
    TESTCODE - GCG package, Accelrys Inc. Uses a different interpretation
    of the same algorithm. Source code unavailable.
-   
+
    SPIN - "Uneven positional base preferences" Staden software. Free to
    academics, versions for both X and Windows platforms.
-   
+
 Author(s)
 
    Alan Bleasby (ableasby © rfcgr.mrc.ac.uk)
    MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
    Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
-   
+
 History
 
    Date of original completion: 2nd March 2003
+
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+
+Comments
+
+   None

@@ -9,7 +9,7 @@
 
 <table align=center border=0 cellspacing=0 cellpadding=0>
 <tr><td valign=top>
-<A HREF="index.html" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
@@ -23,24 +23,14 @@ compseq
 
 
 
-
 <H2>
     Function
 </H2>
-
-
-
-<!--
-DON'T WRITE ANYTHING HERE.
-IT IS DONE FOR YOU.
--->
 Counts the composition of dimer/trimer/etc words in a sequence
-
 
 <H2>
     Description
 </H2>
-
 
 This takes a specified length of sequence and counts the number of
 distinct subsequences of that length that there are in the input
@@ -90,13 +80,9 @@ giving compseq the expected frequencies that you have established,
 above.  You tell compseq what the file of expected frequencies is by
 specifying it with '-infile filename' on the command-line. 
 
-
-
-
 <H2>
     Usage
 </H2>
-
 <b>Here is a sample session with compseq</b>
 <p>
 To count the frequencies of dinucleotides in a file: 
@@ -135,7 +121,7 @@ To count the frequencies of trinucleotides in frame 2 of a sequence and use a pr
 <p>
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-% <b>compseq tembl:hsfau 3 result3.comp -frame 2 -in ../../data/prev.comp </b>
+% <b>compseq tembl:hsfau 3 result3.comp -frame 2 -in prev.comp </b>
 Counts the composition of dimer/trimer/etc words in a sequence
 
 </pre></td></tr></table><p>
@@ -143,40 +129,9 @@ Counts the composition of dimer/trimer/etc words in a sequence
 <a href="#input.3">Go to the input files for this example</a><br><a href="#output.3">Go to the output files for this example</a><p><p>
 
 
-<!--
-Here is a sample session with compseq.
-
-<pre>
-
-To count the frequencies of dinucleotides in a file:
-
-% compseq  embl:hsfau  2  result3.comp 
-
-To count the frequencies of hexanucleotides, without outputting
-the results of hexanucleotides that do not occur in the sequence:
-
-% compseq  embl:hsfau  6  result6.comp  -nozero
-
-To count the frequencies of trinucleotides in frame 2 of a sequence
-and use a previously prepared compseq output to show the expected
-frequencies:
-
-% compseq  embl:hsfau  3  result3.comp  -frame 2  -in prev.comp
-
-</pre>
--->
-
-
 <H2>
     Command line arguments
 </H2>
-
-
-
-<!--
-DON'T WRITE ANYTHING HERE.
-IT IS DONE FOR YOU.
--->
 
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
@@ -288,7 +243,6 @@ IT IS DONE FOR YOU.
 </pre>
 </td></tr></table>
 <P>
-
 <table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
 <tr bgcolor="#FFFFCC">
 <th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
@@ -386,16 +340,13 @@ Calculating the expected frequencies like this will give an approximation of the
 </table>
 
 
-
 <H2>
     Input file format
 </H2>
 
-
 Normal sequence(s) USA.
 
 <p>
-
 
 <a name="input.1"></a>
 <h3>Input files for usage example </h3>
@@ -484,7 +435,7 @@ SQ   Sequence 518 BP; 125 A; 139 C; 148 G; 106 T; 0 other;
 
 <a name="input.3"></a>
 <h3>Input files for usage example 3</h3>
-<p><h3>File: ../../data/prev.comp</h3>
+<p><h3>File: prev.comp</h3>
 <table width="90%"><tr><td bgcolor="#FFCCFF">
 <pre>
 #
@@ -573,10 +524,10 @@ Other	0		0.0000000	0.0000000	10000000000.0000000
 </td></tr></table><p>
 
 
+
 <H2>
     Output file format
 </H2>
-
 
 The output format consists of:
 <p>
@@ -598,7 +549,6 @@ given - this is the number of words with a sequence which has
 IUPAC ambiguity codes or other unusual characters in. 
 
 <p>
-
 
 <a name="output.1"></a>
 <h3>Output files for usage example </h3>
@@ -846,45 +796,6 @@ Other	0		0.0000000	0.0000000	10000000000.0000000
 </td></tr></table><p>
 
 
-<!--
-Example:	
-<pre>
-#
-# Output from 'compseq'
-#
-# The Expected frequencies are taken from the file: jjj.composition
-#
-# The input sequences are:
-#       jjj
-
-
-Word size       2
-Total count     196
-
-#
-# Word  Obs Count       Obs Frequency   Exp Frequency   Obs/Exp Frequency
-#
-AA      0               0.0000000       0.0000000       10000000000.0000000
-AC      18              0.0918367       0.0918367       1.0000004
-AG      8               0.0408163       0.0408163       1.0000007
-AT      12              0.0612245       0.0612245       0.9999998
-CA      3               0.0153061       0.0153061       1.0000015
-CC      1               0.0051020       0.0051020       1.0000080
-CG      16              0.0816327       0.0816327       0.9999994
-CT      15              0.0765306       0.0765306       1.0000002
-GA      16              0.0816327       0.0816327       0.9999994
-GC      13              0.0663265       0.0663265       1.0000005
-GG      5               0.0255102       0.0255102       1.0000002
-GT      18              0.0918367       0.0918367       1.0000004
-TA      19              0.0969388       0.0969388       0.9999997
-TC      4               0.0204082       0.0204082       0.9999982
-TG      22              0.1122449       0.1122449       1.0000000
-TT      5               0.0255102       0.0255102       1.0000002
-
-Other   21              0.0255102       0.1071429       0.2380951
-
-</pre>
--->
 
 
 <H2>
@@ -974,11 +885,6 @@ does not own (eg "Segmentation fault" on a Solaris machine)
 This is not a bug, it is a feature of the way this program grabs large
 amounts of memory. 
 
-<!--
-<H2>
-    See also
-</H2>
--->
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
@@ -1004,22 +910,16 @@ amounts of memory.
 <tr><td><a href="wordcount.html">wordcount</a></td><td>Counts words of a specified size in a DNA sequence</td></tr>
 </table>
 
-<!--
-        Add any comments about other associated programs (to prepare
-        data files?) that seealso doesn't find.
-   -->
-
-
 
 <H2>
     Author(s)
 </H2>
 
-
 Gary Williams (gwilliam&nbsp;&copy;&nbsp;rfcgr.mrc.ac.uk)
 <br>
 MRC Rosalind Franklin Centre for Genomics Research
 Wellcome Trust Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
+
 
 
 
@@ -1038,27 +938,18 @@ default for nucleic sequences.  Too many people were getting confused by
 the counts being done on both senses, so this is now done on only the
 forward sense by default. 
 
-<!--
-<p>
-[an error occurred while processing this directive]
--->
 
 <H2>
     Target users
 </H2>
+This program is intended to be used by everyone and everything, from naive users to embedded scripts.
 
-
-This program is intended to be used by everyone and everything,
-from naive users to embedded scripts. 
 
 <H2>
     Comments
 </H2>
+None
 
-
-<pre>
-
-</pre>
 
 
 </BODY>

@@ -1,0 +1,375 @@
+
+                                 fconsense 
+
+
+
+Function
+
+   Majority-rule and strict consensus tree
+
+Description
+
+   Computes consensus trees by the majority-rule consensus tree method,
+   which also allows one to easily find the strict consensus tree. Is not
+   able to compute the Adams consensus tree. Trees are input in a tree
+   file in standard nested-parenthesis notation, which is produced by
+   many of the tree estimation programs in the package. This program can
+   be used as the final step in doing bootstrap analyses for many of the
+   methods in the package.
+
+Algorithm
+
+   fconsense reads a file of computer-readable trees and prints out (and
+   may also write out onto a file) a consensus tree. At the moment it
+   carries out a family of consensus tree methods called the Ml methods
+   (Margush and McMorris, 1981). These include strict consensus and
+   majority rule consensus. Basically the consensus tree consists of
+   monophyletic groups that occur as often as possible in the data. If a
+   group occurs in more than a fraction l of all the input trees it will
+   definitely appear in the consensus tree.
+
+   The tree printed out has at each fork a number indicating how many
+   times the group which consists of the species to the right of
+   (descended from) the fork occurred. Thus if we read in 15 trees and
+   find that a fork has the number 15, that group occurred in all of the
+   trees. The strict consensus tree consists of all groups that occurred
+   100% of the time, the rest of the resolution being ignored. The tree
+   printed out here includes groups down to 50%, and below it until the
+   tree is fully resolved.
+
+   The majority rule consensus tree consists of all groups that occur
+   more than 50% of the time. Any other percentage level between 50% and
+   100% can also be used, and that is why the program in effect carries
+   out a family of methods. You have to decide on the percentage level,
+   figure out for yourself what number of occurrences that would be (e.g.
+   15 in the above case for 100%), and resolutely ignore any group below
+   that number. Do not use numbers at or below 50%, because some groups
+   occurring (say) 35% of the time will not be shown on the tree. The
+   collection of all groups that occur 35% or more of the time may
+   include two groups that are mutually self contradictory and cannot
+   appear in the same tree. In this program, as the default method I have
+   included groups that occur less than 50% of the time, working
+   downwards in their frequency of occurrence, as long as they continue
+   to resolve the tree and do not contradict more frequent groups. In
+   this respect the method is similar to the Nelson consensus method
+   (Nelson, 1979) as explicated by Page (1989) although it is not
+   identical to it.
+
+   The program can also carry out Strict consensus, Majority Rule
+   consensus without the extension which adds groups until the tree is
+   fully resolved, and other members of the Ml family, where the user
+   supplied the fraction of times the group must appear in the input
+   trees to be included in the consensus tree. For the moment the program
+   cannot carry out any other consensus tree method, such as Adams
+   consensus (Adams, 1972, 1986) or methods based on quadruples of
+   species (Estabrook, McMorris, and Meacham, 1985).
+
+Usage
+
+   Here is a sample session with fconsense
+
+
+% fconsense 
+Majority-rule and strict consensus tree
+Input tree file: consense.dat
+Output file [consense.fconsense]: 
+
+
+Consensus tree written to file "consense.treefile"
+
+Output written to file "consense.fconsense"
+
+Done.
+
+
+   Go to the input files for this example
+   Go to the output files for this example
+
+Command line arguments
+
+   Standard (Mandatory) qualifiers:
+  [-intreefile]        tree       (no help text) tree value
+  [-outfile]           outfile    Output file name
+
+   Additional (Optional) qualifiers (* if not always prompted):
+   -method             menu       Consensus method
+*  -mlfrac             float      Fraction (l) of times a branch must appear
+   -root               toggle     Trees to be treated as Rooted
+   -outgrno            integer    Species number to use as outgroup
+   -[no]trout          toggle     Write out trees to tree file
+*  -outtreefile        outfile    Tree file name
+   -[no]progress       boolean    Print indications of progress of run
+   -[no]treeprint      boolean    Print out tree
+   -[no]prntsets       boolean    Print out the sets of species
+
+   Advanced (Unprompted) qualifiers: (none)
+   Associated qualifiers:
+
+   "-outfile" associated qualifiers
+   -odirectory2        string     Output directory
+
+   "-outtreefile" associated qualifiers
+   -odirectory         string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report deaths
+
+
+   Standard (Mandatory) qualifiers Allowed values Default
+   [-intreefile]
+   (Parameter 1) (no help text) tree value Phylogenetic tree
+   [-outfile]
+   (Parameter 2) Output file name Output file <sequence>.fconsense
+   Additional (Optional) qualifiers Allowed values Default
+   -method Consensus method
+   s   (strict consensus tree)
+   mr  (Majority Rule)
+   mre (Majority Rule (extended))
+   ml  (Minimum fraction (0.5 to 1.0))
+   mre
+   -mlfrac Fraction (l) of times a branch must appear Number from 0.500
+   to 1.000 0.5
+   -root Trees to be treated as Rooted Toggle value Yes/No No
+   -outgrno Species number to use as outgroup Integer 0 or more 0
+   -[no]trout Write out trees to tree file Toggle value Yes/No Yes
+   -outtreefile Tree file name Output file
+   -[no]progress Print indications of progress of run Boolean value
+   Yes/No Yes
+   -[no]treeprint Print out tree Boolean value Yes/No Yes
+   -[no]prntsets Print out the sets of species Boolean value Yes/No Yes
+   Advanced (Unprompted) qualifiers Allowed values Default
+   (none)
+
+Input file format
+
+   fconsense reads any normal sequence USAs.
+
+  Input files for usage example
+
+  File: consense.dat
+
+(A,(B,(H,(D,(J,(((G,E),(F,I)),C))))));
+(A,(B,(D,((J,H),(((G,E),(F,I)),C)))));
+(A,(B,(D,(H,(J,(((G,E),(F,I)),C))))));
+(A,(B,(E,(G,((F,I),((J,(H,D)),C))))));
+(A,(B,(E,(G,((F,I),(((J,H),D),C))))));
+(A,(B,(E,((F,I),(G,((J,(H,D)),C))))));
+(A,(B,(E,((F,I),(G,(((J,H),D),C))))));
+(A,(B,(E,((G,(F,I)),((J,(H,D)),C)))));
+(A,(B,(E,((G,(F,I)),(((J,H),D),C)))));
+
+Output file format
+
+   fconsense output is a list of the species (in the order in which they
+   appear in the first tree, which is the numerical order used in the
+   program), a list of the subsets that appear in the consensus tree, a
+   list of those that appeared in one or another of the individual trees
+   but did not occur frequently enough to get into the consensus tree,
+   followed by a diagram showing the consensus tree. The lists of subsets
+   consists of a row of symbols, each either "." or "*". The species that
+   are in the set are marked by "*". Every ten species there is a blank,
+   to help you keep track of the alignment of columns. The order of
+   symbols corresponds to the order of species in the species list. Thus
+   a set that consisted of the second, seventh, and eighth out of 13
+   species would be represented by:
+
+          .*....**.. ...
+
+   Note that if the trees are unrooted the final tree will have one
+   group, consisting of every species except the Outgroup (which by
+   default is the first species encountered on the first tree), which
+   always appears. It will not be listed in either of the lists of sets,
+   but it will be shown in the final tree as occurring all of the time.
+   This is hardly surprising: in telling the program that this species is
+   the outgroup we have specified that the set consisting of all of the
+   others is always a monophyletic set. So this is not to be taken as
+   interesting information, despite its dramatic appearance.
+
+  Output files for usage example
+
+  File: consense.fconsense
+
+
+Consensus tree program, version 3.6b
+
+Species in order:
+
+  1. A
+  2. B
+  3. H
+  4. D
+  5. J
+  6. G
+  7. E
+  8. F
+  9. I
+  10. C
+
+
+
+Sets included in the consensus tree
+
+Set (species in order)     How many times out of    9.00
+
+.......**.                   9.00
+..********                   9.00
+..****.***                   6.00
+..***.....                   6.00
+..***....*                   6.00
+..*.*.....                   4.00
+..***..***                   2.00
+
+
+Sets NOT included in consensus tree:
+
+Set (species in order)     How many times out of    9.00
+
+.....**...                   3.00
+.....*****                   3.00
+..**......                   3.00
+.....****.                   3.00
+..****...*                   2.00
+.....*.**.                   2.00
+..*.******                   2.00
+....******                   2.00
+...*******                   1.00
+
+
+Extended majority rule consensus tree
+
+CONSENSUS TREE:
+the numbers on the branches indicate the number
+of times the partition of the species into the two sets
+which are separated by that branch occurred
+among the trees, out of   9.00 trees
+
+                                     +--------------------C
+                                     |
+                              +--6.0-|             +------H
+                              |      |      +--4.0-|
+                              |      +--6.0-|      +------J
+                       +--2.0-|             |
+                       |      |             +-------------D
+                       |      |
+                +--6.0-|      |                    +------F
+                |      |      +----------------9.0-|
+                |      |                           +------I
+         +--9.0-|      |
+         |      |      +----------------------------------G
+  +------|      |
+  |      |      +-----------------------------------------E
+  |      |
+  |      +------------------------------------------------B
+  |
+  +-------------------------------------------------------A
+
+
+  remember: this is an unrooted tree!
+
+  File: consense.treefile
+
+((((((C:9.0,((H:9.0,J:9.0):4.0,D:9.0):6.0):6.0,(F:9.0,I:9.0):9.0):2.0,G:9.0):6.
+0,E:9.0):9.0,
+B:9.0):9.0,A:9.0);
+
+  Branch Lengths on the Consensus Tree?
+
+   Note that the lengths on the tree on the output tree file are not
+   branch lengths but the number of times that each group appeared in the
+   input trees. This number is the sum of the weights of the trees in
+   which it appeared, so that if there are 11 trees, ten of them having
+   weight 0.1 and one weight 1.0, a group that appeared in the last tree
+   and in 6 others would be shown as appearing 1.6 times and its branch
+   length will be 1.6. This means that if you take the consensus tree
+   from the output tree file and try to draw it, the branch lengths will
+   be strange. I am often asked how to put the correct branch lengths on
+   these (this is one of our Frequently Asked Questions). There is no
+   simple answer to this. It depends on what "correct" means. For
+   example, if you have a group of species that shows up in 80% of the
+   trees, and the branch leading to that group has average length 0.1
+   among that 80%, is the "correct" length 0.1? Or is it (0.80 x 0.1)?
+   There is no simple answer. However, if you want to take the consensus
+   tree as an estimate of the true tree (rather than as an indicator of
+   the conflicts among trees) you may be able to use the User Tree
+   (option U) mode of the phylogeny program that you used, and use it to
+   put branch lengths on that tree. Thus, if you used DNAML, you can take
+   the consensus tree, make sure it is an unrooted tree, and feed that to
+   DNAML using the original data set (before bootstrapping) and DNAML's
+   option U. As DNAML wants an unrooted tree, you may have to use RETREE
+   to make the tree unrooted (using the W option of RETREE and choosing
+   the unrooted option within it). Of course you will also want to change
+   the tree file name from "outree" to "intree". If you used a phylogeny
+   program that does not infer branch lengths, you might want to use a
+   different one (such as FITCH or DNAML) to infer the branch lengths,
+   again making sure the tree is unrooted, if the program needs that.
+
+Data files
+
+   None
+
+Notes
+
+   None.
+
+References
+
+   None.
+
+Warnings
+
+   None.
+
+Diagnostic Error Messages
+
+   None.
+
+Exit status
+
+   It always exits with status 0.
+
+Known bugs
+
+   None.
+
+See also
+
+   Program name                Description
+   econsense     Majority-rule and strict consensus tree
+   ftreedist     Distances between trees
+   ftreedistpair Distances between two sets of trees
+
+Author(s)
+
+   This program is an EMBOSS conversion of a program written by Joe
+   Felsenstein as part of his PHYLIP package.
+
+   Although we take every care to ensure that the results of the EMBOSS
+   version are identical to those from the original package, we recommend
+   that you check your inputs give the same results in both versions
+   before publication.
+
+   Please report all bugs in the EMBOSS version to the EMBOSS bug team,
+   not to the original author.
+
+History
+
+   Written (2004) - Joe Felsenstein, University of Washington.
+
+   Converted (August 2004) to an EMBASSY program by the EMBOSS team.
+
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.

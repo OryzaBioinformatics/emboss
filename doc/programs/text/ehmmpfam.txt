@@ -1,0 +1,526 @@
+
+                                 ehmmpfam 
+
+
+
+Function
+
+   Align single sequence with an HMM
+
+Description
+
+   **************** EDIT HERE ****************
+
+Algorithm
+
+   **************** EDIT HERE ****************
+
+Usage
+
+   Here is a sample session with ehmmpfam
+
+
+% ehmmpfam 7LES_DROME ../ehmm-own-keep/myhmms 
+Align single sequence with an HMM
+Output file [7les_drome.ehmmpfam]: 
+
+                CS    PSPPRNFSVRVLSPRELEVSWLPPEQLRSESVYYTLHWQQELDGENV
+                RF    PSPPRNFSVRVLSPRELEVSWLPPEQLRSESVYYTLHWQQELDGENV
+                   *->PsaPpnlsvtevtstsillsWwppdpggggyivyyvysegggdeeee
+                      Ps+P+n sv   ++  + +sW pp+   ++ ++y +++++++d e++
+  7LES_DROME  1799    PSPPRNFSVRVLSPRELEVSWLPPEQLRSESVYYTLHWQQELDGENV 1845
+
+                CS QDRREWEAHERRLETAGTHRLTGIKPGSGYSLWVQAH
+                RF QDRREWEAHERRLETAGTHRLTGIKPGSGYSLWVQAH
+                   ttpstsnttttllllllltytvyvvvvvsasssggsg<-*
+                    ++++ + ++++l + ++   + +   +++s +  +
+  7LES_DROME  1846 QDRREWEAHERRLETAGTHRLTGIKPGSGYSLWVQAH    1882
+
+                CS    LKLLRFLGSGAFGEVYEGQLKTEDSEEPQRVAIKSLRKGASEFAELL
+                RF    LKLLRFLGSGAFGEVYEGQLKTEDSEEPQRVAIKSLRKGASEFAELL
+                   *->yelgekLGeGafGkVykakhkdtgkavaiKvikkekekekeeeteer
+                      ++l++ LG+GafG+Vy++++k ++ +  + v++k+ +k   e +e +
+  7LES_DROME  2209    LKLLRFLGSGAFGEVYEGQLKTEDSEEPQRVAIKSLRKGASEFAELL 2255
+
+                CS QEAQLMSNFKHENIVRLVGICFDTESISLIMEHMEAGDLLSYLRAARATS
+                RF QEAQLMSNFKHENIVRLVGICFDTESISLIMEHMEAGDLLSYLRAARATS
+                   elrllknllhlniiilsehieytldlllllmellellllllllklrlvls
+                   ++++l+++ ++++i++++ i ++++++ l+me +e ++ll++l++ +++s
+  7LES_DROME  2256 QEAQLMSNFKHENIVRLVGICFDTESISLIMEHMEAGDLLSYLRAARATS 2305
+
+                CS TQEPQPTAGLSLSELLAMCIDVANGCSYLEDMHFVHRDLACRNCLVTEST
+                RF TQEPQPTAGLSLSELLAMCIDVANGCSYLEDMHFVHRDLACRNCLVTEST
+                   elviaatliallliylllhhhlhidrkdlldlllldnlllikdidladlv
+                    ++   t    l + l +++ +   +  l+d+++++++l++ + +++ +
+  7LES_DROME  2306 TQEPQPTAGLSLSELLAMCIDVANGCSYLEDMHFVHRDLACRNCLVTEST 2355
+
+                CS GSTDRRRTVKIGDFGLARDIYKSDYYRKEGEGLLPVRWMSPESLVDGLFT
+                RF GSTDRRRTVKIGDFGLARDIYKSDYYRKEGEGLLPVRWMSPESLVDGLFT
+                   llgsstltkkttstgtyrapevlageyssssslsssevlslevllilllg
+                   +++++ +t k++++g  r +++ +++ +++++l +++++s+e+l + l++
+  7LES_DROME  2356 GSTDRRRTVKIGDFGLARDIYKSDYYRKEGEGLLPVRWMSPESLVDGLFT 2405
+
+                CS TQSDVWAFGVLCWEILTLGQQPYAARNNFEVLAHVKEGGRLQQPPMCTEK
+                RF TQSDVWAFGVLCWEILTLGQQPYAARNNFEVLAHVKEGGRLQQPPMCTEK
+                   tplgslldekllliildlifdpprpspleelsedlskllplplklrkpll
+                   t  ++++++ l ++il+l+++p+  +++ e+  +++  ++l+++++++++
+  7LES_DROME  2406 TQSDVWAFGVLCWEILTLGQQPYAARNNFEVLAHVKEGGRLQQPPMCTEK 2455
+
+                CS LYSLLLLCWRTDPWERPSFRR
+                RF LYSLLLLCWRTDPWERPSFRR
+                   lllplrlnplskllallsplk<-*
+                   l   l l ++++++ ++s+++
+  7LES_DROME  2456 LYSLLLLCWRTDPWERPSFRR    2476
+
+
+   Go to the input files for this example
+   Go to the output files for this example
+
+Command line arguments
+
+   Standard (Mandatory) qualifiers:
+  [-seqall]            seqall     Sequence database USA
+  [-hmmfile]           infile     HMM file
+  [-outfile]           outfile    Output file name
+
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers:
+   -nucleic            boolean    Force nucleic comparison
+   -nalign             integer    Number of alignments
+   -evalue             float      E-value cutoff
+   -hitcut             float      Hit score cutoff
+   -dbsize             integer    Calc E-value for DB size n
+   -cpu                integer    Number of CPUs
+   -dome               float      E-value domain cutoff
+   -domt               float      Hit score domain cutoff
+   -forward            boolean    Use forward algorithm
+   -nulltwo            boolean    Turn off second null model
+   -pvm                boolean    Use parallel virtual machine
+   -xnu                boolean    Use XNU filtering
+
+   Associated qualifiers:
+
+   "-seqall" associated qualifiers
+   -sbegin1            integer    Start of each sequence to be used
+   -send1              integer    End of each sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
+
+   "-outfile" associated qualifiers
+   -odirectory3        string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report deaths
+
+
+   Standard (Mandatory) qualifiers Allowed values Default
+   [-seqall]
+   (Parameter 1) Sequence database USA Readable sequence(s) Required
+   [-hmmfile]
+   (Parameter 2) HMM file Input file Required
+   [-outfile]
+   (Parameter 3) Output file name Output file <sequence>.ehmmpfam
+   Additional (Optional) qualifiers Allowed values Default
+   (none)
+   Advanced (Unprompted) qualifiers Allowed values Default
+   -nucleic Force nucleic comparison Boolean value Yes/No No
+   -nalign Number of alignments Any integer value 100
+   -evalue E-value cutoff Any numeric value 10.
+   -hitcut Hit score cutoff Any numeric value -1000000.
+   -dbsize Calc E-value for DB size n Any integer value 59021
+   -cpu Number of CPUs Any integer value 0
+   -dome E-value domain cutoff Any numeric value 1000000.
+   -domt Hit score domain cutoff Any numeric value -1000000.
+   -forward Use forward algorithm Boolean value Yes/No No
+   -nulltwo Turn off second null model Boolean value Yes/No No
+   -pvm Use parallel virtual machine Boolean value Yes/No No
+   -xnu Use XNU filtering Boolean value Yes/No No
+
+Input file format
+
+   ehmmpfam reads any normal sequence USAs.
+
+  Input files for usage example
+
+  File: 7LES_DROME
+
+ID   7LES_DROME     STANDARD;      PRT;  2554 AA.
+AC   P13368;
+DT   01-JAN-1990 (REL. 13, CREATED)
+DT   01-JAN-1990 (REL. 13, LAST SEQUENCE UPDATE)
+DT   01-NOV-1995 (REL. 32, LAST ANNOTATION UPDATE)
+DE   SEVENLESS PROTEIN (EC 2.7.1.112).
+GN   SEV.
+OS   DROSOPHILA MELANOGASTER (FRUIT FLY).
+OC   EUKARYOTA; METAZOA; ARTHROPODA; INSECTA; DIPTERA.
+RN   [1]
+RP   SEQUENCE FROM N.A.
+RC   STRAIN=CANTON-S;
+RX   MEDLINE; 88282538.
+RA   BASLER K., HAFEN E.;
+RL   CELL 54:299-311(1988).
+RN   [2]
+RP   SEQUENCE FROM N.A.
+RC   STRAIN=OREGON-R;
+RX   MEDLINE; 88329706.
+RA   BOWTELL D.L.L., SIMON M.A., RUBIN G.M.;
+RL   GENES DEV. 2:620-634(1988).
+RN   [3]
+RP   IDENTIFICATION OF FN-III REPEATS.
+RX   MEDLINE; 90199889.
+RA   NORTON P.A., HYNES R.O., RESS D.J.G.;
+RL   CELL 61:15-16(1990).
+CC   -!- FUNCTION: RECEPTOR FOR AN EXTRACELLULAR SIGNAL REQUIRED TO
+CC       INSTRUCT A CELL TO DIFFERENTIATE INTO A R7 PHOTORECEPTOR. THE
+CC       LIGAND FOR SEV IS THE BOSS (BRIDE OF SEVENLESS) PROTEIN ON THE
+CC       SURFACE OF THE NEIGHBORING R8 CELL.
+CC   -!- CATALYTIC ACTIVITY: ATP + A PROTEIN TYROSINE = ADP +
+CC       PROTEIN TYROSINE PHOSPHATE.
+CC   -!- SUBUNIT: MAY FORM A COMPLEX WITH DRK AND SOS.
+CC   -!- SIMILARITY: BELONGS TO THE INSULIN RECEPTOR FAMILY OF TYROSINE-
+CC       PROTEIN KINASES.
+CC   -!- SIMILARITY: CONTAINS SEVEN FIBRONECTIN TYPE III-LIKE DOMAINS.
+CC   -!- CAUTION: UNCLEAR WHETHER THE POTENTIAL MEMBRANE SPANNING REGION
+CC       NEAR THE N-TERMINUS IS PRESENT AS A TRANSMEMBRANE DOMAIN IN THE
+CC       NATIVE PROTEIN OR SERVES AS A CLEAVED SIGNAL SEQUENCE.
+DR   EMBL; X13666; G8579; ALT_INIT.
+DR   EMBL; J03158; G158419; -.
+DR   PIR; A28912; TVFF7L.
+DR   FLYBASE; FBGN0003366; SEV.
+DR   PROSITE; PS00107; PROTEIN_KINASE_ATP.
+DR   PROSITE; PS00109; PROTEIN_KINASE_TYR.
+DR   PROSITE; PS00239; RECEPTOR_TYR_KIN_II.
+DR   PROSITE; PS50011; PROTEIN_KINASE_DOM.
+KW   TRANSFERASE; TYROSINE-PROTEIN KINASE; TRANSMEMBRANE; ATP-BINDING;
+KW   PHOSPHORYLATION; RECEPTOR; VISION; REPEAT.
+FT   DOMAIN        1   2123       EXTRACELLULAR (POTENTIAL).
+
+
+  [Part of this file has been deleted for brevity]
+
+FT   VARIANT    1703   1703       N -> H.
+FT   VARIANT    1730   1730       R -> K.
+FT   VARIANT    1731   1731       G -> E.
+FT   VARIANT    1741   1741       V -> M.
+FT   VARIANT    2271   2271       R -> C.
+FT   CONFLICT   1823   1823       E -> Q (IN REF. 2).
+SQ   SEQUENCE   2554 AA;  287107 MW;  1143D891 CRC32;
+     MTMFWQQNVD HQSDEQDKQA KGAAPTKRLN ISFNVKIAVN VNTKMTTTHI NQQAPGTSSS
+     SSNSQNASPS KIVVRQQSSS FDLRQQLARL GRQLASGQDG HGGISTILII NLLLLILLSI
+     CCDVCRSHNY TVHQSPEPVS KDQMRLLRPK LDSDVVEKVA IWHKHAAAAP PSIVEGIAIS
+     SRPQSTMAHH PDDRDRDRDP SEEQHGVDER MVLERVTRDC VQRCIVEEDL FLDEFGIQCE
+     KADNGEKCYK TRCTKGCAQW YRALKELESC QEACLSLQFY PYDMPCIGAC EMAQRDYWHL
+     QRLAISHLVE RTQPQLERAP RADGQSTPLT IRWAMHFPEH YLASRPFNIQ YQFVDHHGEE
+     LDLEQEDQDA SGETGSSAWF NLADYDCDEY YMCEILEALI PYTQYRFRFE LPFGENRDEV
+     LYSPATPAYQ TPPEGAPISA PVIEHLMGLD DSHLAVHWHP GRFTNGPIEG YRLRLSSSEG
+     NATSEQLVPA GRGSYIFSQL QAGTNYTLAL SMINKQGEGP VAKGFVQTHS ARNEKPAKDL
+     TESVLLVGRR AVMWQSLEPA GENSMIYQSQ EELADIAWSK REQQLWLLNV HGELRSLKFE
+     SGQMVSPAQQ LKLDLGNISS GRWVPRRLSF DWLHHRLYFA MESPERNQSS FQIISTDLLG
+     ESAQKVGESF DLPVEQLEVD ALNGWIFWRN EESLWRQDLH GRMIHRLLRI RQPGWFLVQP
+     QHFIIHLMLP QEGKFLEISY DGGFKHPLPL PPPSNGAGNG PASSHWQSFA LLGRSLLLPD
+     SGQLILVEQQ GQAASPSASW PLKNLPDCWA VILLVPESQP LTSAGGKPHS LKALLGAQAA
+     KISWKEPERN PYQSADAARS WSYELEVLDV ASQSAFSIRN IRGPIFGLQR LQPDNLYQLR
+     VRAINVDGEP GEWTEPLAAR TWPLGPHRLR WASRQGSVIH TNELGEGLEV QQEQLERLPG
+     PMTMVNESVG YYVTGDGLLH CINLVHSQWG CPISEPLQHV GSVTYDWRGG RVYWTDLARN
+     CVVRMDPWSG SRELLPVFEA NFLALDPRQG HLYYATSSQL SRHGSTPDEA VTYYRVNGLE
+     GSIASFVLDT QQDQLFWLVK GSGALRLYRA PLTAGGDSLQ MIQQIKGVFQ AVPDSLQLLR
+     PLGALLWLER SGRRARLVRL AAPLDVMELP TPDQASPASA LQLLDPQPLP PRDEGVIPMT
+     VLPDSVRLDD GHWDDFHVRW QPSTSGGNHS VSYRLLLEFG QRLQTLDLST PFARLTQLPQ
+     AQLQLKISIT PRTAWRSGDT TRVQLTTPPV APSQPRRLRV FVERLATALQ EANVSAVLRW
+     DAPEQGQEAP MQALEYHISC WVGSELHEEL RLNQSALEAR VEHLQPDQTY HFQVEARVAA
+     TGAAAGAASH ALHVAPEVQA VPRVLYANAE FIGELDLDTR NRRRLVHTAS PVEHLVGIEG
+     EQRLLWVNEH VELLTHVPGS APAKLARMRA EVLALAVDWI QRIVYWAELD ATAPQAAIIY
+     RLDLCNFEGK ILQGERVWST PRGRLLKDLV ALPQAQSLIW LEYEQGSPRN GSLRGRNLTD
+     GSELEWATVQ PLIRLHAGSL EPGSETLNLV DNQGKLCVYD VARQLCTASA LRAQLNLLGE
+     DSIAGQLAQD SGYLYAVKNW SIRAYGRRRQ QLEYTVELEP EEVRLLQAHN YQAYPPKNCL
+     LLPSSGGSLL KATDCEEQRC LLNLPMITAS EDCPLPIPGV RYQLNLTLAR GPGSEEHDHG
+     VEPLGQWLLG AGESLNLTDL LPFTRYRVSG ILSSFYQKKL ALPTLVLAPL ELLTASATPS
+     PPRNFSVRVL SPRELEVSWL PPEQLRSESV YYTLHWQQEL DGENVQDRRE WEAHERRLET
+     AGTHRLTGIK PGSGYSLWVQ AHATPTKSNS SERLHVRSFA ELPELQLLEL GPYSLSLTWA
+     GTPDPLGSLQ LECRSSAEQL RRNVAGNHTK MVVEPLQPRT RYQCRLLLGY AATPGAPLYH
+     GTAEVYETLG DAPSQPGKPQ LEHIAEEVFR VTWTAARGNG APIALYNLEA LQARSDIRRR
+     RRRRRRNSGG SLEQLPWAEE PVVVEDQWLD FCNTTELSCI VKSLHSSRLL LFRVRARSLE
+     HGWGPYSEES ERVAEPFVSP EKRGSLVLAI IAPAAIVSSC VLALVLVRKV QKRRLRAKKL
+     LQQSRPSIWS NLSTLQTQQQ LMAVRNRAFS TTLSDADIAL LPQINWSQLK LLRFLGSGAF
+     GEVYEGQLKT EDSEEPQRVA IKSLRKGASE FAELLQEAQL MSNFKHENIV RLVGICFDTE
+     SISLIMEHME AGDLLSYLRA ARATSTQEPQ PTAGLSLSEL LAMCIDVANG CSYLEDMHFV
+     HRDLACRNCL VTESTGSTDR RRTVKIGDFG LARDIYKSDY YRKEGEGLLP VRWMSPESLV
+     DGLFTTQSDV WAFGVLCWEI LTLGQQPYAA RNNFEVLAHV KEGGRLQQPP MCTEKLYSLL
+     LLCWRTDPWE RPSFRRCYNT LHAISTDLRR TQMASATADT VVSCSRPEFK VRFDGQPLEE
+     HREHNERPED ENLTLREVPL KDKQLYANEG VSRL
+//
+
+  File: ../ehmm-own-keep/myhmms
+
+HMMER2.0
+NAME  7LES_DROME/1799-1891
+ACC
+DESC
+LENG  84
+ALPH  Amino
+RF    yes
+CS    yes
+MAP   yes
+COM   ehmmbuild ../../data/hmm/fn3.slx fn3.hmm
+COM   ehmmcalibrate myhmms -seed 1079460101
+NSEQ  109
+DATE  Fri Feb 18 09:57:19 2005
+CKSUM 4633
+XT      -8455     -4      0      *  -8455     -4      0      *
+NULT      -4  -8455
+NULE     595  -1558     85    338   -294    453  -1158    197    249    902  -1
+085   -142    -21   -313     45    531    201    384  -1998   -644
+EVD    -7.797886   0.598186
+HMM        A      C      D      E      F      G      H      I      K      L
+  M      N      P      Q      R      S      T      V      W      Y
+         m->m   m->i   m->d   i->m   i->i   d->m   d->d   b->m   m->e
+          -13      *  -6794
+     1  -1696  -4266  -5468   -857  -4249  -2813  -1464   -707  -2361    323  -
+3458  -4826   3646  -1897  -4829  -1261  -1335   -180  -4697  -1445     1
+     P   -149   -500    233     43   -381    399    106   -626    210   -466
+-720    275    394     45     96    359    117   -369   -294   -249
+     P     -9 -11957 -12999   -894  -1115   -701  -1378  -1013  -7375
+     2   -661  -5430   1594   -484  -5749    356  -3594  -5499  -1902   -454  -
+4519   -541   1746  -1534  -3682   1881   -218  -1175  -5614  -1565     2
+     S   -149   -500    233     43   -381    399    106   -626    210   -466
+-720    275    394     45     96    359    117   -369   -294   -249
+     S     -9 -11957 -12999   -894  -1115   -701  -1378  -7388  -7366
+     3   1863  -5433  -1246     26  -5754   -787  -3592  -5505    174  -2261  -
+4522   -578   2069    517    -53    117   -885   -568  -5616  -1862     3
+     P   -149   -500    233     43   -381    399    106   -626    210   -466
+-720    275    394     45     96    359    117   -369   -294   -249
+     P     -9 -11957 -12999   -894  -1115   -701  -1378  -7388  -7358
+     4   -933  -4330  -2306  -2375  -4321  -5548  -4342   -197  -4555  -1694  -
+3520  -1961   3679  -1767  -2193  -4571  -2165   1336  -4755  -4362     4
+     P   -149   -500    233     43   -381    399    106   -626    210   -466
+-720    275    394     45     96    359    117   -369   -294   -249
+     P     -9 -11957 -12999   -894  -1115   -701  -1378  -7388  -7349
+     5  -1820  -5403  -2308    327   -457    168   -395  -1516   -104   -520
+-384  -3583   1306   1270   1192    730    882  -1087  -5594  -1860     5
+     R   -149   -500    233     43   -381    399    106   -626    210   -466
+-720    275    394     45     96    359    117   -369   -294   -249
+     R     -9 -11957 -12999   -894  -1115   -701  -1378  -7388  -7340
+     6   -982   -749   1190  -1011  -1118   1264   -288   -624   -762  -1316  -
+4520   2373  -1293    508    144  -1253    226  -5052   -320  -1913     6
+     N   -149   -500    233     43   -381    399    106   -626    210   -466
+-720    275    394     45     96    359    117   -369   -294   -249
+     N     -9 -11957 -12999   -894  -1115   -701  -1378  -7388  -7331
+     7   -970  -4169   -164   -707    -29  -1178  -4516    340  -5043   1932
+ 627    101    392   -968  -2232  -4736  -2233   1416  -4614  -4253     7
+     F   -149   -500    233     43   -381    399    106   -626    210   -466
+-720    275    394     45     96    359    117   -369   -294   -249
+     F    -10 -11957 -12999   -894  -1115   -701  -1378  -7388  -7322
+     8  -1777  -5430  -1395   -133   -485  -1202   1638   -150    523   -314  -
+4519  -1070   -385    709   1029    806    906    500  -5614  -4932     8
+     S   -149   -500    233     43   -381    399    106   -626    210   -466
+-720    275    394     45     96    359    117   -369   -294   -249
+     S    -10 -11957 -12999   -894  -1115   -701  -1378  -7388  -7313
+     9   1184    673  -6214  -5601   1588  -1269   -129    561   -975  -1205  -
+1064  -2147  -1311    219   -852   -479     57   1890  -4575  -4223     9
+     V   -149   -500    233     43   -381    399    106   -626    210   -466
+-720    275    394     45     96    359    117   -369   -294   -249
+     V    -10 -11957 -12999   -894  -1115   -701  -1378  -7388  -7304
+    10   -618  -1044   -126    168  -1034  -1670  -1237   -302    -47   -169
+ 624   -828  -5103   -865   -727   1021   1874    314    666  -1660    10
+     R   -149   -500    233     43   -381    399    106   -626    210   -466
+-720    275    394     45     96    359    117   -369   -294   -249
+
+
+  [Part of this file has been deleted for brevity]
+
+     V   -149   -500    233     43   -381    399    106   -626    210   -466
+-720    275    394     45     96    359    117   -369   -294   -249
+     V    -17 -11290 -12332   -894  -1115   -701  -1378  -7171  -6443
+    57    415   -235    151  -1692    196   -943  -3424   1368   -281    543
+1497  -1265  -4765   1123   -714  -1118   -698    331  -4311    -27    57
+     L   -149   -500    233     43   -381    399    106   -626    210   -466
+-720    275    394     45     96    359    117   -369   -294   -249
+     L    -18 -11291 -12333   -894  -1115   -701  -1378  -7171  -6426
+    58   -392  -4801   1422    154    257   -976   -325   -348   1136   -182
+-518   -449   -582     84   1071    -42   -259  -4422  -4984  -1114    58
+     D   -149   -500    233     43   -381    399    106   -626    210   -466
+-720    275    394     45     96    359    117   -369   -294   -249
+     D    -18 -11291 -12333   -894  -1115   -701  -1378  -7171  -6409
+    59   1019   -244   -720    268   -486   -304   -511   -857   -597    384  -
+3883   1880  -1432     25   -266   -599    544  -1258  -4979  -4298    59
+     Q   -149   -500    233     43   -381    399    106   -626    210   -466
+-720    275    394     45     96    359    117   -369   -294   -249
+     Q    -18 -11291 -12333   -894  -1115   -701  -1378  -7171  -6392
+    60   -648   -361  -1645    149  -1712    -98  -2976    195    284    942
+2156   1642  -1798    637   -685   -614  -1393  -4368  -4953   -253    60
+     K   -149   -500    233     43   -381    399    106   -626    210   -466
+-720    275    394     45     96    359    117   -369   -294   -249
+     K    -18 -11291 -12333   -894  -1115   -701  -1378  -7171  -6375
+    61   -495   -127    596    257      1    687   -344  -4870    388  -1674
+ 888   2158   -252    554   -557  -1192   -645   -925  -4984  -1289    61
+     E   -149   -500    233     43   -381    399    106   -626    210   -466
+-720    275    394     45     96    359    117   -369   -294   -249
+     E    -18 -11291 -12333   -894  -1115   -701  -1378  -7171  -6358
+    62  -1174  -4786   -513    345   -470   1975   1744  -1919    674   -976
+ 236    503  -2145    935  -1306  -3214  -1546   -956  -4974    781    62
+     H   -149   -500    233     43   -381    399    106   -626    210   -466
+-720    275    394     45     96    359    117   -369   -294   -249
+     H    -19 -11292 -12334   -894  -1115   -701  -1378  -7171  -6340
+    63   -666   -120    197    263    443    569  -3004    492    662   -346
+-777    690  -4431    450   -205   -417   -479    105  -4895    226    63
+     R   -149   -500    233     43   -381    399    106   -626    210   -466
+-720    275    394     45     96    359    117   -369   -294   -249
+     R    -19 -11292 -12334   -894  -1115   -701  -1378  -7171  -6322
+    64  -1695  -4564     90    808    321   -207   -958    170    606   -195
+1319  -1668  -4468     42    233  -1958   -348    952   -101   1161    64
+     L   -149   -500    233     43   -381    399    106   -626    210   -466
+-720    275    394     45     96    359    117   -369   -294   -249
+     L    -19 -11248 -12290   -894  -1115   -701  -1378  -7171  -6304
+    65   -103  -4195    176   -803   -407    598  -3169    618   -250    684
+-592    616   -392  -2836  -1348   -575    500    786  -4517   -956    65
+     D   -149   -500    233     43   -381    399    106   -626    210   -466
+-720    275    394     45     96    359    117   -369   -294   -249
+     D    -19 -11169 -12211   -894  -1115   -701  -1378  -7171  -6285
+    66  -3216    -41    863    117     14   1749   -370  -4753    -18   -877
+1184    927  -1393   -238    899  -1126   -134  -1669  -4869  -1116    66
+     G   -149   -500    233     43   -381    399    106   -626    210   -466
+-720    275    394     45     96    359    117   -369   -294   -249
+     G    -20 -11119 -12161   -894  -1115   -701  -1378  -7171  -6267
+    67   -883    -66  -1410   -539  -4946   1730   1102  -1518   1448  -2272
+-346   1076  -4239   -706    -71    146   -220   -811    543   -284    67
+     R   -149   -500    233     43   -381    399    106   -626    210   -466
+-720    275    394     45     96    359    117   -369   -294   -249
+     R    -20 -11076 -12119   -894  -1115   -701  -1378  -7171  -6248
+    68  -3135  -4561  -1467   -537   -307   -479  -2777    700   1697   -450  -
+3655    168  -4209   -801   2141   -780    -67    349  -4756  -4085    68
+     V   -149   -500    233     43   -381    399    106   -626    210   -466
+-720    275    394     45     96    359    117   -369   -294   -249
+     V    -20 -11004 -12046   -894  -1115   -701  -1378  -7171  -6229
+    69   -554   1467  -1099    262  -1323  -4214  -2905   -212    965    313
+-172  -1196    916   -979    443   -902    161   1207    401  -3800    69
+     I   -149   -500    233     43   -381    399    106   -626    210   -466
+-720    275    394     45     96    359    117   -369   -294   -249
+     I    -20 -10946 -11988   -894  -1115   -701  -1378  -7171  -6209
+    70   -286  -3937   -130    157   -851  -1526  -2879   1413    133   1121  -
+3083  -2959    -59    -13    194  -3121  -1149    916  -4255    122    70
+     D   -149   -500    233     43   -381    399    106   -626    210   -466
+-720    275    394     45     96    359    117   -369   -294   -249
+     D    -21 -10829 -11871   -894  -1115   -701  -1378  -7171  -6190
+    71  -1515  -4363   -145   -970  -4677  -1647   -167    764   1490  -1304
+ 418   -973     10   -592   1727   -649   -596   1115  -4551   -717    71
+     P   -149   -500    233     43   -381    399    106   -626    210   -466
+-720    275    394     45     96    359    117   -369   -294   -249
+     P    -21 -10478 -11520   -894  -1115   -701  -1378  -7171  -6170
+    72  -1247   1262    534  -2707  -3242  -1113  -2669    654    698   -335  -
+2371  -2868   -791   -448    781  -2905   -104   2274  -3578  -3123    72
+     K      *      *      *      *      *      *      *      *      *      *
+   *      *      *      *      *      *      *      *      *      *
+     K      *      *      *      *      *      *      *  -7171      0
+//
+
+Output file format
+
+   ehmmpfam outputs a graph to the specified graphics device. outputs a
+   report format file. The default format is ...
+
+  Output files for usage example
+
+  File: 7les_drome.ehmmpfam
+
+Query:  7LES_DROME  SEVENLESS PROTEIN (EC 2.7.1.112).
+
+Scores for sequence family classification (score includes all domains):
+Model                Description                        Score    E-value  N
+--------             -----------                        -----    ------- ---
+7LES_DROME/2209-2481                                    115.9    7.6e-31   1
+7LES_DROME/1799-1891                                     32.1    2.5e-06   1
+
+Parsed for domains:
+Model                Domain  seq-f seq-t    hmm-f hmm-t      score  E-value
+--------             ------- ----- -----    ----- -----      -----  -------
+7LES_DROME/1799-1891   1/1    1799  1882 ..     1    84 []    32.1  2.5e-06
+7LES_DROME/2209-2481   1/1    2209  2476 ..     1   268 []   115.9  7.6e-31
+
+Alignments of top-scoring domains:
+7LES_DROME/1799-1891: domain 1 of 1, from 1799 to 1882: score 32.1, E = 2.5e-06
+7LES_DROME/2209-2481: domain 1 of 1, from 2209 to 2476: score 115.9, E = 7.6e-3
+1
+//
+
+Data files
+
+   **************** EDIT HERE ****************
+
+Notes
+
+   None.
+
+References
+
+   None.
+
+Warnings
+
+   None.
+
+Diagnostic Error Messages
+
+   None.
+
+Exit status
+
+   It always exits with status 0.
+
+Known bugs
+
+   None.
+
+See also
+
+   Program name                Description
+   ealistat      Statistics for multiple alignment files
+   ehmmalign     Align sequences with an HMM
+   ehmmbuild     Build HMM
+   ehmmcalibrate Calibrate a hidden Markov model
+   ehmmconvert   Convert between HMM formats
+   ehmmemit      Extract HMM sequences
+   ehmmfetch     Extract HMM from a database
+   ehmmindex     Index an HMM database
+   ehmmsearch    Search sequence database with an HMM
+
+Author(s)
+
+   This program is an EMBOSS conversion of a program written by Sean Eddy
+   as part of his HMMER package.
+
+   Although we take every care to ensure that the results of the EMBOSS
+   version are identical to those from the original package, we recommend
+   that you check your inputs give the same results in both versions
+   before publication.
+
+   Please report all bugs in the EMBOSS version to the EMBOSS bug team,
+   not to the original author.
+
+History
+
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.

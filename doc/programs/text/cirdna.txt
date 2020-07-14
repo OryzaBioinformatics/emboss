@@ -1,39 +1,39 @@
 
                                   cirdna 
-                                      
-   
-   
+
+
+
 Function
 
    Draws circular maps of DNA constructs
-   
+
 Description
 
    The program 'cirdna' draws circular maps of DNA constructs.
-   
+
    It uses the graphical shapes: ticks, ranges, and blocks to represent
    genetic markers (e.g, genes and ESTs) and places them according to
    their position in a DNA fragment. The markers can be organized in
    different groups. A group may contain up to 10000 markers, so the
    program can be used to draw circular representations of genomic
    sequences.
-   
+
    The program reads in one input file in which the user specifies the
    names and positions of the genetic markers. In this file the user also
    enters data for controlling the appearance of the markers.
-   
+
    A refined customization of the drawing can be achieved by running the
    program with '-options' on the command line and changing the values of
    the desired parameters.
-   
+
 Usage
 
    Here is a sample session with cirdna
-   
+
 
 % cirdna -graph cps 
 Draws circular maps of DNA constructs
-Input file containing mapping data [inputfile]: ../../data/data.cirp
+Input file containing mapping data [inputfile]: data.cirp
 Draw a ruler [Y]: 
       Open : Open blocks
     Filled : Filled blocks
@@ -47,10 +47,10 @@ Ticks inside or outside the circle [Out]:
 Text inside or outside the blocks [In]: 
 
 Created cirdna.ps
-   
+
    Go to the input files for this example
    Go to the output files for this example
-   
+
 Command line arguments
 
    Standard (Mandatory) qualifiers:
@@ -120,7 +120,7 @@ Command line arguments
    -error               boolean    Report errors
    -fatal               boolean    Report fatal errors
    -die                 boolean    Report deaths
-   
+
 
    Standard (Mandatory) qualifiers Allowed values Default
    [-infile]
@@ -138,7 +138,7 @@ Command line arguments
    -graphout Graph type EMBOSS has a list of known devices, including
    postscript, ps, hpgl, hp7470, hp7580, meta, colourps, cps, xwindows,
    x11, tektronics, tekt, tek4107t, tek, none, null, text, data, xterm,
-   png EMBOSS_GRAPHICS value, or x11
+   png, xml EMBOSS_GRAPHICS value, or x11
    Additional (Optional) qualifiers Allowed values Default
    -maxgroups Maximum number of groups Integer 1 or more 20
    -maxlabels Maximum number of labels Integer 1 or more 10000
@@ -168,13 +168,79 @@ Command line arguments
    Number 0.000 or more 1.0
    Advanced (Unprompted) qualifiers Allowed values Default
    (none)
-   
+
 Input file format
 
+   Blank lines in the input file are ignored.
+
+   The file is organized in several fields separated by one or more space
+   or TAB characters.
+
+   The first non-blank line gives the start position of the DNA fragment
+   to be drawn after the keyword 'Start'. The end position is on the
+   second line following the keyword 'End'.
+
+   Then, one or more groups (up to a maximum of 20) of genetic markers
+   are defined. Each group begins with a line consisting of the keyword
+   'group' and ends with a line consisting of the keyword 'endgroup'.
+
+   If desired, a group name can be given on the very next line but will
+   not be displayed (only for compatibilty with lindna).
+
+   Next, the individual markers (up to a maximum of 1000) of the group
+   are described. Each marker begins with a line consisting of the
+   keyword 'label' and ends with a line consisting of the keyword
+   'endlabel'.
+
+   Do not start a new marker (by using a 'label' line) before you have
+   closed the previous marker (by using an 'endlabel' line). You must end
+   a previous marker specification before starting a new one. i.e. do not
+   overlap marker specifications in the input file.
+
+   For each marker, the line following the 'label' line describes the
+   marker. Three types of markers can be drawn: ticks, blocks, and
+   ranges.
+
+   For a tick, the descriptive line begins with the keyword 'Tick',
+   followed by the position of the tick in the DNA fragment, and a number
+   from 0 to 15 specifying the color in which the tick will be drawn (a
+   list of available colors is given below). If desired, a name can be
+   written above the tick. This name must be given on the next line. If
+   more than one name are given (one name per line), only the first one
+   will be displayed.
+
+   For a block, the descriptive line begins with the keyword 'Block',
+   followed by the start and end positions of the block in the DNA
+   fragment, and the number of the block's color. If desired, a name can
+   be written above or inside the block. This name must be given on the
+   next line. If more than one name are given (one name per line), only
+   the first one will be displayed.
+
+   For a range, the descriptive line begins with the keyword 'Range',
+   followed by the start and end positions of the range in the DNA
+   fragment. Next on the line are the types of boundaries that are to be
+   drawn. The user can choose among '>', '<', '[', ']' and '|' for both
+   start and end boundaries. If none of these types is wanted for a given
+   boundary, then a point '.' must be entered. Next is the color number.
+   If desired, a name can be written above the range. This name must be
+   given on the next line. If more than one name are given (one name per
+   line), only the first one will be displayed.
+
+   For any type of markers, names will be written in the same color as
+   the marker. Also, try to avoid long names.
+
+   The colors defined in the PLPLOT graphics library are:
+
+   0 "BLACK", 1 "RED", 2 "YELLOW", 3 "GREEN", 4 "AQUAMARINE", 5 "PINK", 6
+   "WHEAT", 7 "GREY", 8 "BROWN", 9 "BLUE", 10 "BLUEVIOLET", 11 "CYAN", 12
+   "TURQUOISE", 13 "MAGENTA", 14 "SALMON", and 15 "WHITE".
+
+   This format can also be used for the program "lindna".
+
   Input files for usage example
-  
-  File: ../../data/data.cirp
-  
+
+  File: data.cirp
+
 Start   1001
 End     4270
 
@@ -212,111 +278,43 @@ Range    3322    3497    >       <       5
 MER13
 endlabel
 endgroup
-   
-   Blank lines in the input file are ignored.
-   
-   The file is organized in several fields separated by one or more space
-   or TAB characters.
-   
-   The first non-blank line gives the start position of the DNA fragment
-   to be drawn after the keyword 'Start'. The end position is on the
-   second line following the keyword 'End'.
-   
-   Then, one or more groups (up to a maximum of 20) of genetic markers
-   are defined. Each group begins with a line consisting of the keyword
-   'group' and ends with a line consisting of the keyword 'endgroup'.
-   
-   If desired, a group name can be given on the very next line but will
-   not be displayed (only for compatibilty with lindna).
-   
-   Next, the individual markers (up to a maximum of 1000) of the group
-   are described. Each marker begins with a line consisting of the
-   keyword 'label' and ends with a line consisting of the keyword
-   'endlabel'.
-   
-   Do not start a new marker (by using a 'label' line) before you have
-   closed the previous marker (by using an 'endlabel' line). You must end
-   a previous marker specification before starting a new one. i.e. do not
-   overlap marker specifications in the input file.
-   
-   For each marker, the line following the 'label' line describes the
-   marker. Three types of markers can be drawn: ticks, blocks, and
-   ranges.
-   
-   For a tick, the descriptive line begins with the keyword 'Tick',
-   followed by the position of the tick in the DNA fragment, and a number
-   from 0 to 15 specifying the color in which the tick will be drawn (a
-   list of available colors is given below). If desired, a name can be
-   written above the tick. This name must be given on the next line. If
-   more than one name are given (one name per line), only the first one
-   will be displayed.
-   
-   For a block, the descriptive line begins with the keyword 'Block',
-   followed by the start and end positions of the block in the DNA
-   fragment, and the number of the block's color. If desired, a name can
-   be written above or inside the block. This name must be given on the
-   next line. If more than one name are given (one name per line), only
-   the first one will be displayed.
-   
-   For a range, the descriptive line begins with the keyword 'Range',
-   followed by the start and end positions of the range in the DNA
-   fragment. Next on the line are the types of boundaries that are to be
-   drawn. The user can choose among '>', '<', '[', ']' and '|' for both
-   start and end boundaries. If none of these types is wanted for a given
-   boundary, then a point '.' must be entered. Next is the color number.
-   If desired, a name can be written above the range. This name must be
-   given on the next line. If more than one name are given (one name per
-   line), only the first one will be displayed.
-   
-   For any type of markers, names will be written in the same color as
-   the marker. Also, try to avoid long names.
-   
-   The colors defined in the PLPLOT graphics library are:
-   
-   0 "BLACK", 1 "RED", 2 "YELLOW", 3 "GREEN", 4 "AQUAMARINE", 5 "PINK", 6
-   "WHEAT", 7 "GREY", 8 "BROWN", 9 "BLUE", 10 "BLUEVIOLET", 11 "CYAN", 12
-   "TURQUOISE", 13 "MAGENTA", 14 "SALMON", and 15 "WHITE".
-   
-   This format can also be used for the program "lindna".
-   
+
 Output file format
 
-   Output is to the specified graphics device.
-   
   Output files for usage example
-  
+
   Graphics File: cirdna.ps
-  
-   [cirdna results]
-   
+
+   [cirdna results] Output is to the specified graphics device.
+
 Data files
 
    None.
-   
+
 Notes
 
    None.
-   
+
 References
 
    None.
-   
+
 Warnings
 
    None.
-   
+
 Diagnostic Error Messages
 
    None.
-   
+
 Exit status
 
    It always exits with a status of 0.
-   
+
 Known bugs
 
    None.
-   
+
 See also
 
    Program name Description
@@ -335,20 +333,22 @@ See also
    sixpack Display a DNA sequence with 6-frame translation and ORFs
    textsearch Search sequence documentation text. SRS and Entrez are
    faster!
-   
+
 Author(s)
 
    Nicolas Tourasse (nicolas.tourasse © biotek.uio.no)
    Biotechnology Center of Oslo
-   
+
 History
 
    Written 1999 - Nicolas Tourasse
    Updated (2002) - Nicolas Tourasse
-   
+
 Target users
 
    This program is intended to be used by everyone and everything, from
    naive users to embedded scripts.
-   
+
 Comments
+
+   None

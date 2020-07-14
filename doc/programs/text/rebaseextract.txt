@@ -1,12 +1,12 @@
 
                                rebaseextract 
-                                      
-   
-   
+
+
+
 Function
 
    Extract data from REBASE
-   
+
 Description
 
    The Restriction Enzyme database (REBASE) is a collection of
@@ -18,39 +18,39 @@ Description
    proteins are also included. Most recently, putative DNA
    methyltransferases and restriction enzymes, as predicted from analysis
    of genomic sequences, are also listed.
-   
+
    The home page of REBASE is: http://rebase.neb.com/
-   
+
    This program derives recognition site and cleavage information from
    the "withrefm" file of an REBASE distribution. It creates three files
    in the EMBOSS data subdirectory REBASE. A pattern file, a reference
    file and a supplier file.
-   
+
    It will also (by default) produce an 'embossre.equ' file. This can be
    turned off by setting the -equivalences option to be false. This
    option calculates an 'embossre.equ' file using restriction enzyme
    prototypes in the "withrefm" file. The 'embossre.equ' file is a file
    of preferred isoschizomers. You may edit it to contain your available
    restriction enzymes.
-   
+
    The EMBOSS programs that find restriction cutting sites use the data
    files produced by this program and will not work without them.
-   
+
    Running this program may be the job of your system manager.
-   
+
 Usage
 
    Here is a sample session with rebaseextract
-   
+
 
 % rebaseextract 
 Extract data from REBASE
-Full pathname of WITHREFM file: ../../data/withrefm
-Full pathname of PROTO file: ../../data/proto
-   
+Full pathname of WITHREFM file: withrefm
+Full pathname of PROTO file: proto
+
    Go to the input files for this example
    Go to the output files for this example
-   
+
 Command line arguments
 
    Standard (Mandatory) qualifiers:
@@ -78,7 +78,7 @@ Command line arguments
    -error               boolean    Report errors
    -fatal               boolean    Report fatal errors
    -die                 boolean    Report deaths
-   
+
 
    Standard (Mandatory) qualifiers Allowed values Default
    [-infile]
@@ -91,18 +91,18 @@ Command line arguments
    Yes/No Yes
    Advanced (Unprompted) qualifiers Allowed values Default
    (none)
-   
+
 Input file format
 
    The input file must be the "withrefm" file of a REBASE distribution.
-   
+
    For example, the withrefm file for REBASE version 005 is at:
    ftp://ftp.neb.com/pub/rebase/withrefm.005
-   
+
   Input files for usage example
-  
-  File: ../../data/withrefm
-  
+
+  File: withrefm
+
 
 REBASE version 106                                              withrefm.106
 
@@ -221,9 +221,9 @@ McClelland, M., (1981) Nucleic Acids Res., vol. 9, pp. 6795-6804.
 Sato, S., Hutchison, C.A. III, Harris, J.I., (1977) Proc. Natl. Acad. Sci. U. S
 . A., vol. 74, pp. 542-546.
 Zebala, J.A., (1993) Diss. Abstr., vol. 54, pp. 1394-1398.
-   
-  File: ../../data/proto
-  
+
+  File: proto
+
 
 REBASE version 305                                              proto.305
 
@@ -240,6 +240,7 @@ Rich Roberts                                                    Apr 30 2003
             TYPE II ENZYMES
             ---------------
 
+BseYI                          CCCAGC (-5/-1)
 BsiYI                          CCNNNNN^NNGG
 BsrI                           ACTGG (1/-1)
 HaeIII                         GG^CC
@@ -270,28 +271,30 @@ EcoPI                          AGACC
 EcoP15I                        CAGCAG (25/27)
 HinfIII                        CGAAT
 StyLTI                         CAGAG
-   
+
 Output file format
 
   Output files for usage example
-  
-  File: REBASE
-  
+
   File: embossre.equ
-  
+
 Bsc4I BsiYI
 Bse1I BsrI
 BshI HaeIII
 BsiSI HpaII
 Bsu6I Ksp632I
 HpyCH4IV MaeII
-   
+
+  Directory: REBASE
+
+   This directory contains output files.
+
    The output files are held in the REBASE subdirectory of the EMBOSS
    data directory. There are three:
      * embossre.enz Enzyme pattern file
      * embossre.ref Enzyme references
      * embossre.sup Enzyme suppliers
-       
+
    rebaseextract will also (by default) produce an 'embossre.equ' file in
    the EMBOSS data directory. This can be turned off by setting the
    -equivalences option to be false. This option calculates an
@@ -299,36 +302,36 @@ HpyCH4IV MaeII
    "withrefm" file. The 'embossre.equ' file is a file of preferred
    isoschizomers. You may edit it to contain your available restriction
    enzymes.
-   
+
 Data files
 
    The "withrefm" file of an REBASE distribution is the input file for
    this program.
-   
+
 Notes
 
    The home page of REBASE is: http://rebase.neb.com/
-   
+
    Running this program may be the job of your system manager.
-   
+
    The ready-made files produced by this program may already be available
    at the REBASE web site: http://rebase.neb.com/rebase/rebase.files.html
    or http://rebase.neb.com/rebase/rebase.f37.html
-   
+
 References
 
     1. Nucleic Acids Research 27: 312-313 (1999).
-       
+
 Warnings
 
    The program will warn you if the input file is incorrectly formatted.
-   
+
 Diagnostic Error Messages
 
 Exit status
 
    It exits with status 0 unless an error is reported.
-   
+
 Known bugs
 
 See also
@@ -340,20 +343,22 @@ See also
    prosextract Builds the PROSITE motif database for patmatmotifs to
    search
    tfextract Extract data from TRANSFAC
-   
+
 Author(s)
 
    Alan Bleasby (ableasby © rfcgr.mrc.ac.uk)
    MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
    Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
-   
+
 History
 
    Completed 12th April 1999
-   
+
 Target users
 
    This program is intended to be used by administrators responsible for
    software and database installation and maintenance.
-   
+
 Comments
+
+   None

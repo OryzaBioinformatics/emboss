@@ -8,10 +8,9 @@
 <BODY BGCOLOR="#FFFFFF" text="#000000">
 
 
-
 <table align=center border=0 cellspacing=0 cellpadding=0>
 <tr><td valign=top>
-<A HREF="index.html" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
@@ -26,18 +25,9 @@ iep
 
 
 
-
-
 <H2>
     Function
 </H2>
-
-
-
-<!--
-DON'T WRITE ANYTHING HERE.
-IT IS DONE FOR YOU.
--->
 Calculates the isoelectric point of a protein
 
 
@@ -68,7 +58,6 @@ pH and can write an output file of the data.
     Usage
 </H2>
 
-
 <b>Here is a sample session with iep</b>
 <p>
 
@@ -85,17 +74,10 @@ Output file [laci_ecoli.iep]: <b></b>
 
 
 
+
 <H2>
     Command line arguments
 </H2>
-
-
-
-<!--
-DON'T WRITE ANYTHING HERE.
-IT IS DONE FOR YOU.
--->
-
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
    Standard (Mandatory) qualifiers (* if not always prompted):
@@ -109,7 +91,7 @@ IT IS DONE FOR YOU.
    -amino              integer    Number of N-termini
    -[no]termini        boolean    Include charge at N and C terminus
    -plot               toggle     Plot charge vs pH
-   -report             toggle     Write results to a file
+   -[no]report         toggle     Write results to a file
 
    Associated qualifiers:
 
@@ -160,7 +142,6 @@ IT IS DONE FOR YOU.
 </pre>
 </td></tr></table>
 <P>
-
 <table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
 <tr bgcolor="#FFFFCC">
 <th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
@@ -178,7 +159,7 @@ IT IS DONE FOR YOU.
 <tr>
 <td>-graph</td>
 <td>Graph type</td>
-<td>EMBOSS has a list of known devices, including postscript, ps, hpgl, hp7470, hp7580, meta, colourps, cps, xwindows, x11, tektronics, tekt, tek4107t, tek, none, null, text, data, xterm, png</td>
+<td>EMBOSS has a list of known devices, including postscript, ps, hpgl, hp7470, hp7580, meta, colourps, cps, xwindows, x11, tektronics, tekt, tek4107t, tek, none, null, text, data, xterm, png, xml</td>
 <td><i>EMBOSS_GRAPHICS</i> value, or x11</td>
 </tr>
 
@@ -230,17 +211,19 @@ IT IS DONE FOR YOU.
 <td>-plot</td>
 <td>Plot charge vs pH</td>
 <td>Toggle value Yes/No</td>
-<td>N</td>
+<td>No</td>
 </tr>
 
 <tr>
-<td>-report</td>
+<td>-[no]report</td>
 <td>Write results to a file</td>
 <td>Toggle value Yes/No</td>
-<td>Y</td>
+<td>Yes</td>
 </tr>
 
 </table>
+
+
 
 
 
@@ -370,9 +353,12 @@ SQ   SEQUENCE   360 AA;  38564 MW;  4CA5A1D6 CRC32;
 </td></tr></table><p>
 
 
+
+
 <H2>
     Output file format
 </H2>
+
 
 
 
@@ -415,7 +401,6 @@ Isoelectric Point = 6.8820
 </pre>
 </td></tr></table><p>
 
-
 <p>
 
 For each pH point it gives the number of bound electrons and the charge.
@@ -425,7 +410,72 @@ For each pH point it gives the number of bound electrons and the charge.
     Data files
 </H2>
 
-None.
+<b>iep</b> reads in local data file <em>Epk.dat</em> which contains amino acid
+pK values used to calculate the isoelectric point of the whole protein
+
+<p>
+
+<p>
+EMBOSS data files are distributed with the application and stored
+in the standard EMBOSS data directory, which is defined
+by the EMBOSS environment variable EMBOSS_DATA.
+
+<p>
+
+To see the available EMBOSS data files, run:
+<p>
+<pre>
+% embossdata -showall
+</pre>
+<p>
+To fetch one of the data files (for example 'Exxx.dat') into your
+current directory for you to inspect or modify, run:
+
+<pre>
+
+% embossdata -fetch -file Exxx.dat
+
+</pre>
+<p>
+
+Users can provide their own data files in their own directories.
+Project specific files can be put in the current directory, or for
+tidier directory listings in a subdirectory called
+".embossdata". Files for all EMBOSS runs can be put in the user's home
+directory, or again in a subdirectory called ".embossdata".
+
+<p>
+The directories are searched in the following order:
+
+<ul>
+   <li> . (your current directory)
+   <li> .embossdata (under your current directory)
+   <li> ~/ (your home directory)
+   <li> ~/.embossdata
+</ul>
+<p>
+
+
+<p>
+Here is the default <em>Epk.dat</em> file:
+
+<pre>
+# pK values for amino acids
+# O=Ornithine J=Hydroxyproline
+#
+# Amino acid	pK
+Amino		8.6
+Carboxyl	3.6
+
+C		8.5
+D		3.9
+E		4.1
+H		6.5
+K		10.8
+R		12.5
+Y		10.1
+</pre>
+
 
 <H2>
     Notes
@@ -463,11 +513,6 @@ None.
 
 None.
 
-<!--
-<H2>
-    See also
-</H2>
--->
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
@@ -486,17 +531,11 @@ None.
 <tr><td><a href="pepwindowall.html">pepwindowall</a></td><td>Displays protein hydropathy of a set of sequences</td></tr>
 </table>
 
-<!--
-        Add any comments about other associated programs (to prepare
-        data files?) that seealso doesn't find.
-   -->
 
 
 <H2>
     Author(s)
 </H2>
-
-
 Alan Bleasby (ableasby&nbsp;&copy;&nbsp;rfcgr.mrc.ac.uk)
 <br>
 MRC Rosalind Franklin Centre for Genomics Research
@@ -504,34 +543,27 @@ Wellcome Trust Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
 
 
 
-
 <H2>
     History
 </H2>
 
+
+
 Completed 1st August 1999.
 
-<!--
-<p>
-[an error occurred while processing this directive]
--->
 
 <H2>
     Target users
 </H2>
 
 
-This program is intended to be used by everyone and everything,
-from naive users to embedded scripts. 
+This program is intended to be used by everyone and everything, from naive users to embedded scripts.
+
 
 <H2>
     Comments
 </H2>
-
-
-<pre>
-
-</pre>
+None
 
 
 </BODY>

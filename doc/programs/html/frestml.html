@@ -1,0 +1,760 @@
+<!--START OF HEADER - DON'T ALTER -->
+
+<HTML>
+<HEAD>
+  <TITLE>
+  EMBOSS: frestml
+  </TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" text="#000000">
+
+
+
+<table align=center border=0 cellspacing=0 cellpadding=0>
+<tr><td valign=top>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+</td>
+<td align=left valign=middle>
+<b><font size="+6">
+
+frestml
+</font></b>
+</td></tr>
+</table>
+<br>&nbsp;
+<p>
+
+
+
+<!--END OF HEADER-->
+
+
+
+
+
+
+<H2>
+    Function
+</H2>
+Restriction site maximum Likelihood method
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+
+
+
+
+<H2>
+    Description
+</H2>
+
+Estimation of phylogenies by maximum likelihood using restriction
+sites data (not restriction fragments but presence/absence of
+individual sites). It employs the Jukes-Cantor symmetrical model of
+nucleotide change, which does not allow for differences of rate
+between transitions and transversions. This program is very slow.
+
+<H2>
+    Algorithm
+</H2>
+
+
+This program implements a maximum likelihood method for restriction
+sites data (not restriction fragment data). This program is one of the
+slowest programs in this package, and can be very tedious to run. It
+is possible to have the program search for the maximum likelihood
+tree. It will be more practical for some users (those that do not have
+fast machines) to use the U (User Tree) option, which takes less run
+time, optimizing branch lengths and computing likelihoods for
+particular tree topologies suggested by the user. The model used here
+is essentially identical to that used by Smouse and Li (1987) who give
+explicit expressions for computing the likelihood for three-species
+trees. It does not place prior probabilities on trees as they do. The
+present program extends their approach to multiple species by a
+technique which, while it does not give explicit expressions for
+likelihoods, does enable their computation and the iterative
+improvement of branch lengths. It also allows for multiple restriction
+enzymes. The algorithm has been described in a paper (Felsenstein,
+1992). Another relevant paper is that of DeBry and Slade (1985).
+
+<p>
+The assumptions of the present model are: 
+
+<ol>
+
+<li>
+Each restriction site evolves independently. 
+
+<li>
+Different lineages evolve independently. 
+
+<li>
+Each site undergoes substitution at an expected rate which we specify. 
+
+<li>
+Substitutions consist of replacement of a nucleotide by one of the
+other three nucleotides, chosen at random.
+
+</ol>
+
+<p>
+Note that if the existing base is, say, an A, the chance of it being
+replaced by a G is 1/3, and so is the chance that it is replaced by a
+T. This means that there can be no difference in the (expected) rate
+of transitions and transversions. Users who are upset at this might
+ponder the fact that a version allowing different rates of transitions
+and transversions would run an estimated 16 times slower. If it also
+allowed for unequal frequencies of the four bases, it would run about
+300,000 times slower! For the moment, until a better method is
+available, I guess I'll stick with this one!
+
+<p>
+Subject to these assumptions, the program is an approximately correct
+maximum likelihood method. 
+
+<H2>
+    Usage
+</H2>
+
+<!--  
+	Example usage, as run from the command-line.
+        Many examples illustrating different behaviours is good.
+ -->
+
+<b>Here is a sample session with frestml</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>frestml </b>
+Restriction site maximum Likelihood method
+Input file: <b>restml.dat</b>
+Input tree file: <b></b>
+Output file [restml.frestml]: <b></b>
+
+numseqs: 1
+
+Adding species:
+   1. Alpha     
+   2. Beta      
+   3. Gamma     
+   4. Delta     
+   5. Epsilon   
+
+Output written to file "restml.frestml"
+
+Tree also written onto file "restml.treefile"
+
+Done.
+
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
+
+
+
+
+<H2>
+    Command line arguments
+</H2>
+
+<table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
+<pre>
+   Standard (Mandatory) qualifiers:
+  [-data]              discretestates File containing one or more sets of
+                                  restriction data
+  [-intreefile]        tree       (no help text) tree value
+  [-outfile]           outfile    Output file name
+
+   Additional (Optional) qualifiers (* if not always prompted):
+   -weights            properties Weights file
+   -njumble            integer    Number of times to randomise
+*  -seed               integer    Random number seed between 1 and 32767 (must
+                                  be odd)
+   -outgrno            integer    Species number to use as outgroup
+   -[no]allsites       boolean    All sites detected
+*  -lengths            boolean    Use lengths from user trees
+   -sitelength         integer    Site length
+*  -global             boolean    Global rearrangements
+*  -[no]rough          boolean    Speedier but rougher analysis
+   -printdata          boolean    Print data at start of run
+   -[no]progress       boolean    Print indications of progress of run
+   -[no]treeprint      boolean    Print out tree
+   -[no]trout          boolean    Write out trees to tree file
+
+   Advanced (Unprompted) qualifiers:
+   -outtreefile        outfile    Tree file name
+
+   Associated qualifiers:
+
+   "-outfile" associated qualifiers
+   -odirectory3        string     Output directory
+
+   "-outtreefile" associated qualifiers
+   -odirectory         string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report deaths
+
+
+</pre>
+</td></tr></table>
+<P>
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-data]<br>(Parameter 1)</td>
+<td>File containing one or more sets of restriction data</td>
+<td>Discrete states file</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr>
+<td>[-intreefile]<br>(Parameter 2)</td>
+<td>(no help text) tree value</td>
+<td>Phylogenetic tree</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr>
+<td>[-outfile]<br>(Parameter 3)</td>
+<td>Output file name</td>
+<td>Output file</td>
+<td><i>&lt;sequence&gt;</i>.frestml</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Additional (Optional) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-weights</td>
+<td>Weights file</td>
+<td>Property value(s)</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr>
+<td>-njumble</td>
+<td>Number of times to randomise</td>
+<td>Integer 0 or more</td>
+<td>0</td>
+</tr>
+
+<tr>
+<td>-seed</td>
+<td>Random number seed between 1 and 32767 (must be odd)</td>
+<td>Integer from 1 to 32767</td>
+<td>1</td>
+</tr>
+
+<tr>
+<td>-outgrno</td>
+<td>Species number to use as outgroup</td>
+<td>Integer 0 or more</td>
+<td>0</td>
+</tr>
+
+<tr>
+<td>-[no]allsites</td>
+<td>All sites detected</td>
+<td>Boolean value Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>-lengths</td>
+<td>Use lengths from user trees</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-sitelength</td>
+<td>Site length</td>
+<td>Integer from 1 to 8</td>
+<td>6</td>
+</tr>
+
+<tr>
+<td>-global</td>
+<td>Global rearrangements</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-[no]rough</td>
+<td>Speedier but rougher analysis</td>
+<td>Boolean value Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>-printdata</td>
+<td>Print data at start of run</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-[no]progress</td>
+<td>Print indications of progress of run</td>
+<td>Boolean value Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>-[no]treeprint</td>
+<td>Print out tree</td>
+<td>Boolean value Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>-[no]trout</td>
+<td>Write out trees to tree file</td>
+<td>Boolean value Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-outtreefile</td>
+<td>Tree file name</td>
+<td>Output file</td>
+<td>&nbsp;</td>
+</tr>
+
+</table>
+
+
+<!--
+DON'T WRITE ANYTHING HERE.
+IT IS DONE FOR YOU.
+-->
+
+
+
+
+
+
+
+
+<H2>
+    Input file format
+</H2>
+
+<!-- 
+        This includes example input file formats.
+        This should be a detailed description and example - assume
+        someone will want to parse this file and will want to know what
+        happens in unusual cases - null input, etc. 
+   -->
+
+<b>frestml</b> input is fairly standard, with one addition. As usual
+the first line of the file gives the number of species and the number
+of sites, but there is also a third number, which is the number of
+different restriction enzymes that were used to detect the restriction
+sites. Thus a data set with 10 species and 35 different sites,
+representing digestion with 4 different enzymes, would have the first
+line of the data file look like this:
+
+<p>
+<pre>
+
+   10   35    4
+
+</pre>
+
+<p>
+The first line of the data file will also contain a letter W following
+these numbers (and separated from them by a space) if the Weights
+option is being used. As with all programs using the weights option, a
+line or lines must then follow, before the data, with the weights for
+each site.
+
+<p>
+The site data are in standard form. Each species starts with a species
+name whose maximum length is given by the constant "nmlngth" (whose
+value in the program as distributed is 10 characters). The name
+should, as usual, be padded out to that length with blanks if
+necessary. The sites data then follows, one character per site (any
+blanks will be skipped and ignored). Like the DNA and protein sequence
+data, the restriction sites data may be either in the "interleaved"
+form or the "sequential" form. Note that if you are analyzing
+restriction sites data with the programs DOLLOP or MIX or other
+discrete character programs, at the moment those programs do not use
+the "aligned" or "interleaved" data format. Therefore you may want to
+avoid that format when you have restriction sites data that you will
+want to feed into those programs.
+
+<p>
+The presence of a site is indicated by a "+" and the absence by a
+"-". I have also allowed the use of "1" and "0" as synonyms for "+"
+and "-", for compatibility with MIX and DOLLOP which do not allow "+"
+and "-". If the presence of the site is unknown (for example, if the
+DNA containing it has been deleted so that one does not know whether
+it would have contained the site) then the state "?" can be used to
+indicate that the state of this site is unknown.
+
+<p>
+User-defined trees may follow the data in the usual way. The trees
+must be unrooted, which means that at their base they must have a
+trifurcation.
+
+
+
+<p>
+
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+<p><h3>File: restml.dat</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+   5   13   2
+Alpha     ++-+-++--+++-
+Beta      ++++--+--+++-
+Gamma     -+--+-++-+-++
+Delta     ++-+----++---
+Epsilon   ++++----++---
+</pre>
+</td></tr></table><p>
+
+
+
+
+
+
+<H2>
+    Output file format
+</H2>
+
+<!-- 
+        This includes example output file formats.
+        This should be a detailed description and example - assume
+        someone will want to parse this file and will want to know what
+        happens in unusual cases - null output, errors etc. 
+
+        If you wish to include the standard description of the avalable
+	report formats, use:
+[an error occurred while processing this directive]
+   -->
+
+<b>frestml</b> 
+outputs a graph to the specified graphics device. 
+outputs a report format file. The default format is ...
+
+
+<p>
+
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: restml.frestml</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+
+Restriction site Maximum Likelihood method, version 3.6b
+
+
+  Recognition sequences all 6 bases long
+
+Sites absent from all species are assumed to have been omitted
+
+
+
+
+  +----Gamma     
+  |  
+  |     +Epsilon   
+  |  +--3  
+  1--2  +Delta     
+  |  |  
+  |  +Beta      
+  |  
+  +Alpha     
+
+
+remember: this is an unrooted tree!
+
+Ln Likelihood =   -40.34358
+
+ 
+ Between        And            Length      Approx. Confidence Limits
+ -------        ---            ------      ------- ---------- ------
+   1          Gamma           0.10813     (  0.01154,     0.21901) **
+   1             2            0.01156     (     zero,     0.04578)
+   2             3            0.05885     (     zero,     0.12697) **
+   3          Epsilon         0.00100     (     zero,     0.00617)
+   3          Delta           0.01460     (     zero,     0.05036)
+   2          Beta            0.00100     (     zero,    infinity)
+   1          Alpha           0.01310     (     zero,     0.04806)
+
+     *  = significantly positive, P &lt; 0.05
+     ** = significantly positive, P &lt; 0.01
+
+
+</pre>
+</td></tr></table><p>
+<p><h3>File: restml.treefile</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+(Gamma:0.10813,((Epsilon:0.00100,Delta:0.01460):0.05885,
+Beta:0.00100):0.01156,Alpha:0.01310);
+</pre>
+</td></tr></table><p>
+
+
+
+
+
+
+<H2>
+    Data files
+</H2>
+
+None
+
+<H2>
+    Notes
+</H2>
+
+<!-- 
+        Restrictions.
+        Interesting behaviour.
+        Useful things you can do with this program.
+   -->
+
+None.
+
+
+
+
+
+<H2>
+    References
+</H2>
+
+<!-- 
+        Bibliography for methods used.
+   -->
+
+None.
+
+
+
+
+
+
+
+
+<H2>
+    Warnings
+</H2>
+
+<!-- 
+        Potentially stupid things the program will let you do.
+   -->
+
+None.
+
+
+
+
+
+
+
+<H2>
+    Diagnostic Error Messages
+</H2>
+
+<!-- 
+        Error messages specific to this program, eg:
+        "FATAL xxx" - means you have not set up the xxx data using program <b>prog</b>.<p>
+   -->
+
+None.
+
+
+
+
+
+
+
+<H2>
+    Exit status
+</H2>
+
+<!-- 
+        Description of the exit status for various error conditions
+   -->
+
+It always exits with status 0.
+
+
+
+
+
+
+
+
+<H2>
+    Known bugs
+</H2>
+
+
+<!-- 
+        Bugs noted but not yet fixed.
+   -->
+
+None.
+
+
+
+
+
+
+
+
+<!--
+<H2>
+    See also
+</H2>
+-->
+<h2><a name="See also">See also</a></h2>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th><th>Description</th></tr>
+<tr><td><a href="../phylip/ednacomp.html">ednacomp</a></td><td>DNA compatibility algorithm</td></tr>
+<tr><td><a href="../phylip/ednadist.html">ednadist</a></td><td>Nucleic acid sequence Distance Matrix program</td></tr>
+<tr><td><a href="../phylip/ednainvar.html">ednainvar</a></td><td>Nucleic acid sequence Invariants method</td></tr>
+<tr><td><a href="../phylip/ednaml.html">ednaml</a></td><td>Estimates phylogenies from nucleic acid sequence Maximum Likelihood</td></tr>
+<tr><td><a href="../phylip/ednamlk.html">ednamlk</a></td><td>Estimates phylogenies from nucleic acid sequence Maximum Likelihood with molecular clock</td></tr>
+<tr><td><a href="../phylip/ednapars.html">ednapars</a></td><td>DNA parsimony algorithm</td></tr>
+<tr><td><a href="../phylip/ednapenny.html">ednapenny</a></td><td>Penny algorithm for DNA</td></tr>
+<tr><td><a href="../phylip/eprotdist.html">eprotdist</a></td><td>Protein distance algorithm</td></tr>
+<tr><td><a href="../phylip/eprotpars.html">eprotpars</a></td><td>Protein parsimony algorithm</td></tr>
+<tr><td><a href="../phylip/erestml.html">erestml</a></td><td>Restriction site Maximum Likelihood method</td></tr>
+<tr><td><a href="../phylip/eseqboot.html">eseqboot</a></td><td>Bootstrapped sequences algorithm</td></tr>
+<tr><td><a href="fdiscboot.html">fdiscboot</a></td><td>Bootstrapped discrete sites algorithm</td></tr>
+<tr><td><a href="fdnacomp.html">fdnacomp</a></td><td>DNA compatibility algorithm</td></tr>
+<tr><td><a href="fdnadist.html">fdnadist</a></td><td>Nucleic acid sequence Distance Matrix program</td></tr>
+<tr><td><a href="fdnainvar.html">fdnainvar</a></td><td>Nucleic acid sequence Invariants method</td></tr>
+<tr><td><a href="fdnaml.html">fdnaml</a></td><td>Estimates nucleotide phylogeny by maximum likelihood</td></tr>
+<tr><td><a href="fdnamlk.html">fdnamlk</a></td><td>Estimates nucleotide phylogeny by maximum likelihood</td></tr>
+<tr><td><a href="fdnamove.html">fdnamove</a></td><td>Interactive DNA parsimony</td></tr>
+<tr><td><a href="fdnapars.html">fdnapars</a></td><td>DNA parsimony algorithm</td></tr>
+<tr><td><a href="fdnapenny.html">fdnapenny</a></td><td>Penny algorithm for DNA</td></tr>
+<tr><td><a href="fdolmove.html">fdolmove</a></td><td>Interactive Dollo or Polymorphism Parsimony</td></tr>
+<tr><td><a href="ffreqboot.html">ffreqboot</a></td><td>Bootstrapped genetic frequencies algorithm</td></tr>
+<tr><td><a href="fproml.html">fproml</a></td><td>Protein phylogeny by maximum likelihood</td></tr>
+<tr><td><a href="fpromlk.html">fpromlk</a></td><td>Protein phylogeny by maximum likelihood</td></tr>
+<tr><td><a href="fprotdist.html">fprotdist</a></td><td>Protein distance algorithm</td></tr>
+<tr><td><a href="fprotpars.html">fprotpars</a></td><td>Protein pasimony algorithm</td></tr>
+<tr><td><a href="frestboot.html">frestboot</a></td><td>Bootstrapped restriction sites algorithm</td></tr>
+<tr><td><a href="frestdist.html">frestdist</a></td><td>Computes distance matrix from restriction sites or fragments</td></tr>
+<tr><td><a href="fseqboot.html">fseqboot</a></td><td>Bootstrapped sequences algorithm</td></tr>
+<tr><td><a href="fseqbootall.html">fseqbootall</a></td><td>Bootstrapped sequences algorithm</td></tr>
+</table>
+
+<!-- 
+        Add any comments about other associated programs (to prepare
+        data files?) that seealso doesn't find. 
+   -->
+
+
+
+
+
+
+
+
+
+
+<H2>
+    Author(s)
+</H2>
+
+This program is an EMBOSS conversion of a program written by Joe
+Felsenstein as part of his PHYLIP package.
+
+<p>
+Although we take every care to ensure that the results of the EMBOSS
+version are identical to those from the original package, we recommend
+that you check your inputs give the same results in both versions
+before publication.
+
+<p>
+Please report all bugs in the EMBOSS version to the EMBOSS bug team,
+not to the original author.
+
+
+<H2>
+    History
+</H2>
+
+Written (2004) - Joe Felsenstein, University of Washington.
+<p>
+Converted (August 2004) to an EMBASSY program by the EMBOSS team.
+
+
+
+
+<H2>
+    Target users
+</H2>
+
+<!--
+        For general users, requested by one user, for EMBOSS site
+        maintainers, for EMBOSS developers etc.
+        eg:
+        "This program is intended to be used by everyone and everything,
+        from naive users to embedded scripts." 
+	Which is easy to include using:
+   -->
+
+This program is intended to be used by everyone and everything, from naive users to embedded scripts.
+
+
+
+
+
+
+
+
+
+
+
+
+</BODY>
+</HTML>
+

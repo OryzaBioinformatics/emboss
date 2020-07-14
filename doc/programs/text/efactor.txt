@@ -1,19 +1,18 @@
 
-                              EMBOSS: efactor
-     _________________________________________________________________
-   
-                                Program efactor
-                                       
+                                  efactor 
+
+
+
 Function
 
    Conversion of PHYLIP's factor
-   
+
 Description
 
    EFACTOR - Embossified program to factor multistate characters
-   
+
    Phylip factor documentation.
-   
+
 Usage
 
    Here is a sample session with efactor using the data:-
@@ -56,7 +55,7 @@ Command line arguments
    -[no]progress       bool       show progress
 
    Advanced qualifiers: (none)
-   
+
    Mandatory qualifiers Allowed values Default
    [-datafile]
    (Parameter 1) data file Input file Required
@@ -68,7 +67,7 @@ Command line arguments
    -[no]progress show progress Yes/No Yes
    Advanced qualifiers Allowed values Default
    (none)
-   
+
 Input file format
 
 Output file format
@@ -95,11 +94,11 @@ Author(s)
    Washington. Written by Joseph Felsenstein. Permission is granted to
    copy this document provided that no fee is charged for it and that
    this copyright notice is not removed.
-   
+
    This application was modified for inclusion in EMBOSS by Ian Longden
    (il@sanger.ac.uk) Informatics Division, The Sanger Centre, Wellcome
    Trust Genome Campus, Hinxton, Cambridge, CB10 1SA, UK.
-   
+
 Priority
 
 Target users

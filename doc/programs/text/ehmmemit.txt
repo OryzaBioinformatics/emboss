@@ -1,0 +1,345 @@
+
+                                 ehmmemit 
+
+
+
+Function
+
+   Extract HMM sequences
+
+Description
+
+   **************** EDIT HERE ****************
+
+Algorithm
+
+   **************** EDIT HERE ****************
+
+Usage
+
+   Here is a sample session with ehmmemit
+
+
+% ehmmemit rrm.hmm -seed 1079460101 
+Extract HMM sequences
+Output file [rrm.ehmmemit]: 
+
+   Go to the input files for this example
+   Go to the output files for this example
+
+Command line arguments
+
+   Standard (Mandatory) qualifiers:
+  [-infile]            infile     HMM file
+  [-outfile]           outfile    Output file name
+
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers:
+   -seed               integer    Random seed
+   -selex              boolean    Output in selex format
+   -consensus          boolean    Output consensus sequence
+   -number             integer    Number of sequences to produce
+
+   Associated qualifiers:
+
+   "-outfile" associated qualifiers
+   -odirectory2        string     Output directory
+
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report deaths
+
+
+   Standard (Mandatory) qualifiers Allowed values Default
+   [-infile]
+   (Parameter 1) HMM file Input file Required
+   [-outfile]
+   (Parameter 2) Output file name Output file <sequence>.ehmmemit
+   Additional (Optional) qualifiers Allowed values Default
+   (none)
+   Advanced (Unprompted) qualifiers Allowed values Default
+   -seed Random seed Integer 0 or more 0
+   -selex Output in selex format Boolean value Yes/No No
+   -consensus Output consensus sequence Boolean value Yes/No No
+   -number Number of sequences to produce Any integer value 10
+
+Input file format
+
+   ehmmemit reads any normal sequence USAs.
+
+  Input files for usage example
+
+  File: rrm.hmm
+
+HMMER2.0
+NAME  rrm
+DESC
+LENG  72
+ALPH  Amino
+RF    no
+CS    no
+MAP   yes
+COM   ../src/hmmbuild -F rrm.hmm rrm.slx
+COM   ../src/hmmcalibrate rrm.hmm
+NSEQ  70
+DATE  Wed Jul  8 08:13:25 1998
+CKSUM 2768
+XT      -8455     -4  -1000  -1000  -8455     -4  -8455     -4
+NULT      -4  -8455
+NULE     595  -1558     85    338   -294    453  -1158    197    249    902  -1
+085   -142    -21   -313     45    531    201    384  -1998   -644
+EVD   -53.840649   0.214434
+HMM        A      C      D      E      F      G      H      I      K      L
+  M      N      P      Q      R      S      T      V      W      Y
+         m->m   m->i   m->d   i->m   i->i   d->m   d->d   b->m   m->e
+          -21      *  -6129
+     1  -1234   -371  -8214  -7849  -5304  -8003  -7706   2384  -7769   2261
+-681  -7660  -7694  -7521  -7816  -7346  -5543   1527  -6974  -6639     1
+     -   -149   -500    233     43   -381    399    106   -626    210   -466
+-720    275    394     45     96    359    117   -369   -294   -249
+     -    -11 -11284 -12326   -894  -1115   -701  -1378    -21      *
+     2  -3634  -3460  -5973  -5340   3521  -2129  -4036   -831  -2054  -1257  -
+2663  -4822  -5229  -4557  -4735  -1979  -1569  -1476  -3893   3439     2
+     -   -149   -500    233     43   -381    399    106   -626    210   -466
+-720    275    394     45     96    359    117   -369   -294   -249
+     -    -11 -11284 -12326   -894  -1115   -701  -1378      *      *
+     3  -5570    838  -8268  -7958  -5637  -8152  -8243   2427  -7947   -461
+-539  -7805  -7843  -7878  -8124  -7550  -5559   3130  -7481  -7000     3
+     -   -149   -500    233     43   -381    399    106   -626    210   -466
+-720    275    394     45     96    359    117   -369   -294   -249
+     -    -11 -11284 -12326   -894  -1115   -701  -1378      *      *
+     4  -1146  -4797  -1564  -2630  -1480   2769  -2963  -1850    992  -4812  -
+3887    737  -4397   -120    793   -205  -1019  -4418  -4981  -1059     4
+     -   -149   -500    233     43   -381    399    106   -626    210   -466
+-720    275    394     45     96    359    117   -369   -294   -249
+     -    -11 -11284 -12326   -894  -1115   -701  -1378      *      *
+     5  -5242  -7035    445  -3538  -7284   1773  -4583  -7166  -4676  -7046  -
+6312   3633  -1651  -1262   -849  -1278  -5287  -6650  -7228   -291     5
+     -   -149   -500    233     43   -381    399    106   -626    210   -466
+-720    275    394     45     96    359    117   -369   -294   -249
+     -    -11 -11284 -12326   -894  -1115   -701  -1378      *      *
+     6  -6898  -6238  -9292  -8703   -410  -9176  -7772    820  -8535   3071
+-753  -8917  -8033  -7171  -7955  -8614  -6722      5  -6136  -6414     6
+     -   -149   -500    233     43   -381    399    106   -626    210   -466
+-720    278    394     45     96    359    117   -369   -294   -249
+     -    -33  -6025 -12326   -153  -3315   -701  -1378      *      *
+     7     -5  -5297    178  -2982  -5685  -2278   -528  -5452  -1615  -5394  -
+4488   1396   3136  -3022  -3659    780    976  -4981  -5565  -4854     8
+     -   -149   -500    233     43   -381    399    106   -626    210   -466
+-720    275    394     45     96    359    117   -369   -294   -249
+     -    -11 -11284 -12327   -894  -1115   -701  -1378      *      *
+     8  -3329  -4799   -805    543    789  -4303    572  -4868    140  -1087  -
+3888   -603   1691    530    183   -162    293  -2124   2317   2037     9
+     -   -149   -500    233     43   -381    399    106   -626    210   -466
+-720    275    394     45     96    359    117   -369   -294   -249
+     -    -12 -11284 -12327   -894  -1115   -701  -1378      *      *
+     9   -373  -4801   2182   1353  -1426     44   -407  -1928   -366  -4817  -
+3891   1263  -4395  -1080   -666    295     50  -1947  -4985    397    10
+     -   -149   -500    233     43   -381    399    106   -626    210   -466
+-720    275    394     45     96    359    117   -369   -294   -249
+     -    -12 -11285 -12327   -894  -1115   -701  -1378      *      *
+    10    450   1883  -5953  -5317  -1256  -1301  -4027   1322  -1847   -283
+1542  -4802  -5206  -1502  -4713  -4241   2143   1615  -3893  -3551    11
+     -   -149   -500    233     43   -381    399    106   -626    210   -466
+-720    275    394     45     96    359    117   -369   -294   -249
+     -    -12 -11285 -12327   -894  -1115   -701  -1378      *      *
+
+
+  [Part of this file has been deleted for brevity]
+
+     -   -149   -500    233     43   -381    399    106   -626    210   -466
+-720    275    394     45     96    359    117   -369   -294   -249
+     -    -17 -11290 -12332   -894  -1115   -701  -1378      *      *
+    57  -2038  -3436  -5943  -5308  -1145  -5154  -4025   2255    423   1498
+1203  -4797  -1707   -478  -1267  -2117  -3548   1450  -3893   -931    75
+     -   -149   -500    233     43   -381    399    106   -626    210   -466
+-720    275    394     45     96    359    117   -369   -294   -249
+     -    -18 -11291 -12333   -894  -1115   -701  -1378      *      *
+    58    622  -4802   1764   1486  -5123  -4302  -2961  -1060    334  -4818  -
+3891   -420  -4396   1293   1148    487  -3268  -1087  -4985   -429    76
+     -   -149   -500    233     43   -381    399    106   -626    210   -466
+-720    275    394     45     96    359    117   -369   -294   -249
+     -   -102 -11291  -4156   -894  -1115   -701  -1378      *      *
+    59   1265   -231  -1498   1351  -5045   -262   -355  -4796    922  -1073  -
+3813    778  -4318    877    -34     53    386  -2030    289  -4225    77
+     -   -149   -500    233     43   -381    399    106   -626    210   -466
+-720    275    394     45     96    359    117   -369   -294   -249
+     -    -18 -11207 -12249   -894  -1115   -160  -3250      *      *
+    60   -684    813  -5723   -473    532  -2124  -3981  -2958   -121   2114
+2840  -1421  -5174  -4409   -926  -4196  -1685   -376  -3915    497    78
+     -   -149   -500    233     43   -381    399    106   -626    210   -466
+-720    275    394     45     96    359    117   -369   -294   -249
+     -    -18 -11291 -12333   -894  -1115   -701  -1378      *      *
+    61  -1812  -4803   1626   -749   -515  -1133   -415  -4875  -1294  -4819  -
+3892   3181   -793   1470  -1377   -246  -3268  -4425  -4986   -193    79
+     -   -149   -500    233     43   -381    399    106   -626    210   -466
+-720    275    394     45     96    359    117   -369   -294   -249
+     -    -18 -11291 -12333   -894  -1115   -701  -1378      *      *
+    62  -1812  -4808  -1465     33  -1509   2998   1583  -4879    122  -4823  -
+3897    972  -4400  -1078  -3055  -1613   -682  -4429  -4991  -1114    80
+     -   -149   -500    232     43   -378    398    105   -627    212   -466
+-721    275    393     45     98    359    117   -367   -295   -250
+     -    -98  -4229 -12334    -49  -4901   -701  -1378      *      *
+    63   -676  -4701   -742  -1422    825   -589   -545    255   1702  -2571
+ 812  -2986  -4424    796    418   -221   1302  -1179  -4912   1028    82
+     -   -149   -500    233     43   -381    399    106   -626    210   -466
+-720    275    394     45     96    359    117   -369   -294   -249
+     -    -19 -11292 -12334   -894  -1115   -701  -1378      *      *
+    64  -3341  -4695    350   1378  -1551  -1973  -2998    477   1265     78
+ 273  -1163     21    504  -1507  -1108    282    114    -19    473    83
+     -   -149   -500    233     43   -381    399    106   -626    210   -466
+-720    275    394     45     96    359    117   -369   -294   -249
+     -    -19 -11292 -12334   -894  -1115   -701  -1378      *      *
+    65  -3605  -3444   -949  -2090   2356  -1177  -4010   1410  -1703   1341
+-404  -1673   -747  -4487  -4679  -2139  -1048   1197  -3900    411    84
+     -   -149   -500    233     43   -381    399    106   -626    210   -466
+-720    275    394     45     96    359    117   -369   -294   -249
+     -    -19 -11292 -12334   -894  -1115   -701  -1378      *      *
+    66   -655   -539   1179    279  -1324   1202  -2962  -1895    147   -682
+1298   1427  -2056    608    756  -1119  -1893  -4419  -4982    140    85
+     -   -149   -500    233     43   -381    399    106   -626    210   -466
+-720    275    394     45     96    359    117   -369   -294   -249
+     -    -19 -11292 -12335   -894  -1115   -701  -1378      *      *
+    67  -1814  -4814    166  -2636  -5135   2921   -568  -4885  -1333  -2415  -
+3903   1495  -4406   -312   -619    602  -1672  -4436  -4997  -4314    86
+     -   -149   -500    233     43   -381    399    106   -626    210   -466
+-720    275    394     45     96    359    117   -369   -294   -249
+     -    -20 -11293 -12335   -894  -1115   -701  -1378      *      *
+    68  -3329   1217   -624   -797  -1594  -4303   1580  -4872   2069  -2414  -
+3890    617  -4396    283   2449   -560   -267  -2067  -4984  -1334    87
+     -   -149   -500    233     43   -381    399    106   -626    210   -466
+-720    275    394     45     96    359    117   -369   -294   -249
+     -    -20 -11293 -12335   -894  -1115   -701  -1378      *      *
+    69    108    566  -1460    747  -1608  -4306  -2965    -30   1407  -2607  -
+3878    346   1033   -336    863  -1038    745    617  -4975  -4296    88
+     -   -149   -500    233     43   -381    399    106   -626    210   -466
+-720    275    394     45     96    359    117   -369   -294   -249
+     -    -20 -11293 -12335   -894  -1115   -701  -1378      *      *
+    70  -1318  -3465   -283   -172  -3423  -2053  -3974   1957  -4721   1761
+1425  -4678  -1762  -4391  -1578  -1974  -1561   1341  -3918  -3570    89
+     -   -149   -500    233     43   -381    399    106   -626    210   -466
+-720    275    394     45     96    359    117   -369   -294   -249
+     -    -20 -11293 -12336   -894  -1115   -701  -1378      *      *
+    71  -1165  -4790   -240   -275  -5105  -4306   1035  -2009   1665   -395
+ 707  -1334   -218   -188   1891  -1077   -383    404    110    348    90
+     -   -149   -500    233     43   -381    398    106   -626    210   -464
+-720    275    394     45     96    359    117   -369   -294   -249
+     -    -43  -6001 -12336   -150  -3342   -701  -1378      *      *
+    72  -1929   1218  -1535  -1647  -3990  -4677  -3410   1725    207  -1481  -
+3117  -3608   -810  -1118   -743  -1942    428   2687  -4325  -3869    92
+     -      *      *      *      *      *      *      *      *      *      *
+   *      *      *      *      *      *      *      *      *      *
+     -      *      *      *      *      *      *      *      *      0
+//
+
+Output file format
+
+   ehmmemit outputs a graph to the specified graphics device. outputs a
+   report format file. The default format is ...
+
+  Output files for usage example
+
+  File: rrm.ehmmemit
+
+>seq1
+LFIKYLTTSCTETHLKDKFANYGEVVNIDIVLDADDGQLNGFGFIIFTSH
+IEEQDAKKLDGKKYKGKVVES
+>seq2
+LFVGNLHPIGRPEQLKDLFVNAYQVTQIKLLTTTTARARGYGFIEFPSHL
+SVTKAVAKKSGQGLSGNPVKI
+>seq3
+IYVNGLDDDVTEDELERLLREFGLFLAFQLCKQSGKFSGMAFIEYDNSDY
+TQSIIRWLPGKVVMQRAITC
+>seq4
+VYITNLPPGVQKQELFDVKDTYFGEHGPVVRFNISRDDDDTQTGEASGFG
+FITFEQLEDDNMAINEEAFGKLIGGKKAKV
+>seq5
+IFVGSVTHETTESLLKLTFSKQGGVKNINNPRDDETERSRNYATVEFTTE
+EDAEAALENLRGIKINNRKLHI
+>seq6
+GYVERLPEYASQKSFKNVFQKRGSIKLSKLPTIAQNRGQGFVTFSKHEQA
+AAALSEMNGDELEGKKISV
+>seq7
+LYVKNLPYGVDEDKIKDAFKSEGPITVKVVLIDAASLRIHGFGFIEFPSV
+ADMAKAIKALEGFETFNVKIHI
+>seq8
+LFVGGLTYFAKEEALYDLLSKFAQSEQISLANDPETGMSKGYAYVRYETE
+EDVDKAVENLDNIIFNGRTLRR
+>seq9
+IFVGNIDRKITRKEFENLFAPFGPSTVFPIIRGKNTGYAFVRYDDVQNAA
+HLLESLDGTSDGAEVEKI
+>seq10
+MYIGNLASDITLDDLADIFSPNVRVVSAVLLKATGHSRGFAFVEFEKEEA
+ATSCIANYENTEGNGHVVPV
+
+Data files
+
+   **************** EDIT HERE ****************
+
+Notes
+
+   None.
+
+References
+
+   None.
+
+Warnings
+
+   None.
+
+Diagnostic Error Messages
+
+   None.
+
+Exit status
+
+   It always exits with status 0.
+
+Known bugs
+
+   None.
+
+See also
+
+   Program name                Description
+   ealistat      Statistics for multiple alignment files
+   ehmmalign     Align sequences with an HMM
+   ehmmbuild     Build HMM
+   ehmmcalibrate Calibrate a hidden Markov model
+   ehmmconvert   Convert between HMM formats
+   ehmmfetch     Extract HMM from a database
+   ehmmindex     Index an HMM database
+   ehmmpfam      Align single sequence with an HMM
+   ehmmsearch    Search sequence database with an HMM
+
+Author(s)
+
+   This program is an EMBOSS conversion of a program written by Sean Eddy
+   as part of his HMMER package.
+
+   Although we take every care to ensure that the results of the EMBOSS
+   version are identical to those from the original package, we recommend
+   that you check your inputs give the same results in both versions
+   before publication.
+
+   Please report all bugs in the EMBOSS version to the EMBOSS bug team,
+   not to the original author.
+
+History
+
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.

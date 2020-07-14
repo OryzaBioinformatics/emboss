@@ -1,37 +1,37 @@
 
                                   plotorf 
-                                      
-   
-   
+
+
+
 Function
 
    Plot potential open reading frames
-   
+
 Description
 
    Plot potential open reading frames.
-   
+
    A graphical representation of where the open reading frames are in all
    6 reading frames is shown. The ORFs are displayed as blue boxes.
-   
+
    ORFs in this program are defined as being regions between START and
    STOP codons.
-   
+
    Note that this definition of an ORF would miss those exons in
    eukaryotic genomic sequences which do not contain a START codon.
    plotorf is only really useful when dealing with prokaryotic or mRNA
    eukaryotic sequences.
-   
+
    The default START codon is: "ATG".
    The default STOP codons are: "TAA,TAG,TGA".
-   
+
    You can specify your own set of start and stop codons using the -start
    and -stop qualifiers.
-   
+
 Usage
 
    Here is a sample session with plotorf
-   
+
 
 % plotorf 
 Plot potential open reading frames
@@ -39,26 +39,26 @@ Input sequence: tembl:paamir
 Graph type [x11]: cps
 
 Created plotorf.ps
-   
+
    Go to the input files for this example
    Go to the output files for this example
-   
+
    Example 2
-   
+
    An example of specifying your own START and STOP codons with a
    mitochondrial sequence would be:
-   
+
 
 % plotorf -start ATT,ATC,ATA,ATG,GTG -stop TAA,TAG,AGA,AGG 
 Plot potential open reading frames
-Input sequence: ../../data/mito.seq
+Input sequence: mito.seq
 Graph type [x11]: cps
 
 Created plotorf.ps
-   
+
    Go to the input files for this example
    Go to the output files for this example
-   
+
 Command line arguments
 
    Standard (Mandatory) qualifiers:
@@ -111,7 +111,7 @@ Command line arguments
    -error               boolean    Report errors
    -fatal               boolean    Report fatal errors
    -die                 boolean    Report deaths
-   
+
 
    Standard (Mandatory) qualifiers Allowed values Default
    [-sequence]
@@ -119,24 +119,24 @@ Command line arguments
    -graph Graph type EMBOSS has a list of known devices, including
    postscript, ps, hpgl, hp7470, hp7580, meta, colourps, cps, xwindows,
    x11, tektronics, tekt, tek4107t, tek, none, null, text, data, xterm,
-   png EMBOSS_GRAPHICS value, or x11
+   png, xml EMBOSS_GRAPHICS value, or x11
    Additional (Optional) qualifiers Allowed values Default
    (none)
    Advanced (Unprompted) qualifiers Allowed values Default
    -start Start codons Any string is accepted ATG
    -stop Stop codons Any string is accepted TAA,TAG,TGA
-   
+
 Input file format
 
    Any nucleic acid sequence.
-   
+
   Input files for usage example
-  
+
    'tembl:paamir' is a sequence entry in the example nucleic acid
    database 'tembl'
-   
+
   Database entry: tembl:paamir
-  
+
 ID   PAAMIR     standard; DNA; PRO; 2167 BP.
 XX
 AC   X13776; M43175;
@@ -284,11 +284,11 @@ SQ   Sequence 2167 BP; 363 A; 712 C; 730 G; 362 T; 0 other;
      cctcgag                                                                216
 7
 //
-   
+
   Input files for usage example 2
-  
-  File: ../../data/mito.seq
-  
+
+  File: mito.seq
+
 >gi|5819095|ref|NC_001321.1| Balaenoptera physalus mitochondrion, complete geno
 me
 GTTAATTACTAATCAGCCCATGATCATAACATAACTGAGGTTTCATACATTTGGTATTTTTTTATTTTTTTTGGGGGGC
@@ -494,55 +494,55 @@ A
 CCAGCAACCCGCTTGGCAGGGATCCCTCTTCTCGCACCGGGCCCATCACTCGTGGGGGTAGCTATTTAATGATCTTTAT
 A
 AGACATCTGGTTCTTACTTCAGGACCATATTAACTTAAAATCGCCCACTCGTTCCCCTTAAATAAGACATCTCGATGG
-   
+
 Output file format
 
   Output files for usage example
-  
+
   Graphics File: plotorf.ps
-  
+
    [plotorf results]
-   
+
   Output files for usage example 2
-  
+
   Graphics File: plotorf.ps
-  
+
    [plotorf results]
-   
+
 Data files
 
    None.
-   
+
 Notes
 
    ORFs in this program are defined as being regions between START and
    STOP codons.
-   
+
    Note that this definition of an ORF would miss those exons in
    eukaryotic genomic sequences which do not contain a START codon.
    plotorf is only really useful when dealing with prokaryotic or mRNA
    eukaryotic sequences.
-   
+
 References
 
    None.
-   
+
 Warnings
 
    See the Notes section.
-   
+
 Diagnostic Error Messages
 
    None.
-   
+
 Exit status
 
    It always exits with a status of 0.
-   
+
 Known bugs
 
    None.
-   
+
 See also
 
    Program name                          Description
@@ -559,20 +559,22 @@ See also
    tcode        Fickett TESTCODE statistic to identify protein-coding DNA
    transeq      Translate nucleic acid sequences
    wobble       Wobble base plot
-   
+
 Author(s)
 
    Alan Bleasby (ableasby © rfcgr.mrc.ac.uk)
    MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
    Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
-   
+
 History
 
    Written (1999) - Alan Bleasby
-   
+
 Target users
 
    This program is intended to be used by everyone and everything, from
    naive users to embedded scripts.
-   
+
 Comments
+
+   None

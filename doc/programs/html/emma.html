@@ -7,11 +7,9 @@
 </HEAD>
 <BODY BGCOLOR="#FFFFFF" text="#000000">
 
-
-
 <table align=center border=0 cellspacing=0 cellpadding=0>
 <tr><td valign=top>
-<A HREF="index.html" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
+<A HREF="/" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="emboss_icon.jpg" alt="" width=150 height=48></a>
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
@@ -24,25 +22,14 @@ emma
 <p>
 
 
-
-
 <H2>
     Function
 </H2>
-
-
-
-<!--
-DON'T WRITE ANYTHING HERE.
-IT IS DONE FOR YOU.
--->
 Multiple alignment program - interface to ClustalW program
-
 
 <H2>
     Description
 </H2>
-
 
 EMMA calculates the multiple alignment of nucleic acid or protein
 sequences according to the method of Thompson, J.D., Higgins, D.G.
@@ -579,7 +566,6 @@ of your sequences between each bootstrap sample.
 <H2>
     Usage
 </H2>
-
 <b>Here is a sample session with emma</b>
 <p>
 
@@ -588,11 +574,9 @@ of your sequences between each bootstrap sample.
 
 % <b>emma </b>
 Multiple alignment program - interface to ClustalW program
-Input sequence(s): <b>../../data/globins.fasta</b>
+Input sequence(s): <b>globins.fasta</b>
 Output sequence [hbb_human.aln]: <b></b>
 Dendogram output filename [hbb_human.dnd]: <b></b>
-..clustalw -infile=00022843A -outfile=00022843B -align -type=protein -output=gcg -pwmatrix=blosum -pwgapopen=10.000 -pwgapext=0.100 -newtree=00022843C -matrix=blosum -gapopen=10.000 -gapext=5.000 -gapdist=8 -hgapresidues=GPSNDQEKR -maxdiv=30..
-
 
 
 
@@ -633,7 +617,7 @@ Sequences (4:7) Aligned. Score:  12
 Sequences (5:6) Aligned. Score:  21
 Sequences (5:7) Aligned. Score:  7
 Sequences (6:7) Aligned. Score:  11
-Guide tree        file created:   [00022843C]
+Guide tree        file created:   [12345678A]
 Start of Multiple Alignment
 There are 6 groups
 Aligning...
@@ -647,92 +631,17 @@ Sequence:5     Score:865
 Sequence:6     Score:797
 Sequence:7     Score:1044
 Alignment Score 4164
-GCG-Alignment file created      [00022843B]
+GCG-Alignment file created      [12345678A]
 
 </pre></td></tr></table><p>
 <p>
 <a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
 
 
-<!--
-Here is an example session with emma.
-<pre>
-
-% emma
-Input sequence: globins.fasta
-Output sequence [hbahum.aln]: 
-Output file [hbahum.dnd]: 
-..clustalw17 -infile=5345A -outfile=5345B -align -type=protein ...
-
-
-
-
- CLUSTAL W (1.74) Multiple Sequence Alignments
-
-
-
-Sequence type explicitly set to Protein
-Sequence format is Pearson
-Sequence 1: hbahum          141 aa
-Sequence 2: hbbhum          146 aa
-Sequence 3: hbghum          146 aa
-Sequence 4: hbhagf          148 aa
-Sequence 5: hbrlam          149 aa
-Sequence 6: mycrhi          151 aa
-Sequence 7: myohum          153 aa
-Start of Pairwise alignments
-Aligning...
-Sequences (1:2) Aligned. Score:  41
-Sequences (1:3) Aligned. Score:  39
-Sequences (1:4) Aligned. Score:  21
-Sequences (1:5) Aligned. Score:  27
-Sequences (1:6) Aligned. Score:  13
-Sequences (1:7) Aligned. Score:  26
-Sequences (2:3) Aligned. Score:  73
-Sequences (2:4) Aligned. Score:  19
-Sequences (2:5) Aligned. Score:  19
-Sequences (2:6) Aligned. Score:  15
-Sequences (2:7) Aligned. Score:  24
-Sequences (3:4) Aligned. Score:  21
-Sequences (3:5) Aligned. Score:  21
-Sequences (3:6) Aligned. Score:  15
-Sequences (3:7) Aligned. Score:  23
-Sequences (4:5) Aligned. Score:  41
-Sequences (4:6) Aligned. Score:  12
-Sequences (4:7) Aligned. Score:  16
-Sequences (5:6) Aligned. Score:  17
-Sequences (5:7) Aligned. Score:  18
-Sequences (6:7) Aligned. Score:  11
-Guide tree        file created:   [5345C]
-Start of Multiple Alignment
-There are 6 groups
-Aligning...
-Group 1: Sequences:   2      Score:883
-Group 2: Sequences:   2      Score:2344
-Group 3: Sequences:   3      Score:934
-Group 4:                     Delayed
-Group 5: Sequences:   5      Score:950
-Group 6:                     Delayed
-Sequence:7     Score:1046
-Sequence:6     Score:986
-Alignment Score 1746
-GCG-Alignment file created      [5345B]
-
-</pre>
--->
-
 
 <H2>
     Command line arguments
 </H2>
-
-
-
-<!--
-DON'T WRITE ANYTHING HERE.
-IT IS DONE FOR YOU.
--->
-
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
    Standard (Mandatory) qualifiers:
@@ -744,23 +653,6 @@ IT IS DONE FOR YOU.
    -onlydend           toggle     Only produce dendrogram file
 *  -dend               toggle     Do alignment using an old dendrogram
 *  -dendfile           infile     Name of old dendrogram file
-   -slow               toggle     A distance is calculated between every pair
-                                  of sequences and these are used to construct
-                                  the dendrogram which guides the final
-                                  multiple alignment. The scores are
-                                  calculated from separate pairwise
-                                  alignments. These can be calculated using 2
-                                  methods: dynamic programming (slow but
-                                  accurate) or by the method of Wilbur and
-                                  Lipman (extremely fast but approximate).
-                                  The slow-accurate method is fine for short
-                                  sequences but will be VERY SLOW for many
-                                  (e.g. >100) long (e.g. >1000 residue)
-                                  sequences.
-*  -pwgapc             float      The penalty for opening a gap in the
-                                  pairwise alignments.
-*  -pwgapv             float      The penalty for extending a gap by 1 residue
-                                  in the pairwise alignments.
 *  -pwmatrix           menu       The scoring table which describes the
                                   similarity of each amino acid to each other.
                                   There are three 'in-built' series of weight
@@ -802,28 +694,6 @@ IT IS DONE FOR YOU.
                                   assigned to matches and mismatches
                                   (including IUB ambiguity codes).
 *  -pairwisedata       infile     Filename of user pairwise matrix
-*  -ktup               integer    This is the size of exactly matching
-                                  fragment that is used. INCREASE for speed
-                                  (max= 2 for proteins; 4 for DNA), DECREASE
-                                  for sensitivity. For longer sequences (e.g.
-                                  >1000 residues) you may need to increase the
-                                  default.
-*  -gapw               integer    This is a penalty for each gap in the fast
-                                  alignments. It has little affect on the
-                                  speed or sensitivity except for extreme
-                                  values.
-*  -topdiags           integer    The number of k-tuple matches on each
-                                  diagonal (in an imaginary dot-matrix plot)
-                                  is calculated. Only the best ones (with most
-                                  matches) are used in the alignment. This
-                                  parameter specifies how many. Decrease for
-                                  speed; increase for sensitivity.
-*  -window             integer    This is the number of diagonals around each
-                                  of the 'best' diagonals that will be used.
-                                  Decrease for speed; increase for
-                                  sensitivity.
-*  -nopercent          boolean    Fast pairwise alignment: similarity scores:
-                                  suppresses percentage score
 *  -matrix             menu       This gives a menu where you are offered a
                                   choice of weight matrices. The default for
                                   proteins is the PAM series derived by Gonnet
@@ -873,6 +743,45 @@ IT IS DONE FOR YOU.
                                   amenu where a single matrix (not a series)
                                   can be selected.
 *  -mamatrix           infile     Filename of user multiple alignment matrix
+   -[no]slow           toggle     A distance is calculated between every pair
+                                  of sequences and these are used to construct
+                                  the dendrogram which guides the final
+                                  multiple alignment. The scores are
+                                  calculated from separate pairwise
+                                  alignments. These can be calculated using 2
+                                  methods: dynamic programming (slow but
+                                  accurate) or by the method of Wilbur and
+                                  Lipman (extremely fast but approximate).
+                                  The slow-accurate method is fine for short
+                                  sequences but will be VERY SLOW for many
+                                  (e.g. >100) long (e.g. >1000 residue)
+                                  sequences.
+*  -pwgapc             float      The penalty for opening a gap in the
+                                  pairwise alignments.
+*  -pwgapv             float      The penalty for extending a gap by 1 residue
+                                  in the pairwise alignments.
+*  -ktup               integer    This is the size of exactly matching
+                                  fragment that is used. INCREASE for speed
+                                  (max= 2 for proteins; 4 for DNA), DECREASE
+                                  for sensitivity. For longer sequences (e.g.
+                                  >1000 residues) you may need to increase the
+                                  default.
+*  -gapw               integer    This is a penalty for each gap in the fast
+                                  alignments. It has little affect on the
+                                  speed or sensitivity except for extreme
+                                  values.
+*  -topdiags           integer    The number of k-tuple matches on each
+                                  diagonal (in an imaginary dot-matrix plot)
+                                  is calculated. Only the best ones (with most
+                                  matches) are used in the alignment. This
+                                  parameter specifies how many. Decrease for
+                                  speed; increase for sensitivity.
+*  -window             integer    This is the number of diagonals around each
+                                  of the 'best' diagonals that will be used.
+                                  Decrease for speed; increase for
+                                  sensitivity.
+*  -nopercent          boolean    Fast pairwise alignment: similarity scores:
+                                  suppresses percentage score
    -gapc               float      The penalty for opening a gap in the
                                   alignment. Increasing the gap opening
                                   penalty will make gaps less frequent.
@@ -925,56 +834,55 @@ IT IS DONE FOR YOU.
    Associated qualifiers:
 
    "-sequence" associated qualifiers
-   -sbegin1             integer    Start of each sequence to be used
-   -send1               integer    End of each sequence to be used
-   -sreverse1           boolean    Reverse (if DNA)
-   -sask1               boolean    Ask for begin/end/reverse
-   -snucleotide1        boolean    Sequence is nucleotide
-   -sprotein1           boolean    Sequence is protein
-   -slower1             boolean    Make lower case
-   -supper1             boolean    Make upper case
-   -sformat1            string     Input sequence format
-   -sdbname1            string     Database name
-   -sid1                string     Entryname
-   -ufo1                string     UFO features
-   -fformat1            string     Features format
-   -fopenfile1          string     Features file name
+   -sbegin1            integer    Start of each sequence to be used
+   -send1              integer    End of each sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
 
    "-outseq" associated qualifiers
-   -osformat2           string     Output seq format
-   -osextension2        string     File name extension
-   -osname2             string     Base file name
-   -osdirectory2        string     Output directory
-   -osdbname2           string     Database name to add
-   -ossingle2           boolean    Separate file for each entry
-   -oufo2               string     UFO features
-   -offormat2           string     Features format
-   -ofname2             string     Features file name
-   -ofdirectory2        string     Output directory
+   -osformat2          string     Output seq format
+   -osextension2       string     File name extension
+   -osname2            string     Base file name
+   -osdirectory2       string     Output directory
+   -osdbname2          string     Database name to add
+   -ossingle2          boolean    Separate file for each entry
+   -oufo2              string     UFO features
+   -offormat2          string     Features format
+   -ofname2            string     Features file name
+   -ofdirectory2       string     Output directory
 
    "-dendoutfile" associated qualifiers
-   -odirectory3         string     Output directory
+   -odirectory3        string     Output directory
 
    General qualifiers:
-   -auto                boolean    Turn off prompts
-   -stdout              boolean    Write standard output
-   -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for standard and additional values
-   -debug               boolean    Write debug output to program.dbg
-   -verbose             boolean    Report some/full command line options
-   -help                boolean    Report command line options. More
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
-   -warning             boolean    Report warnings
-   -error               boolean    Report errors
-   -fatal               boolean    Report fatal errors
-   -die                 boolean    Report deaths
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report deaths
 
 
 </pre>
 </td></tr></table>
 <P>
-
 <table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
 <tr bgcolor="#FFFFCC">
 <th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
@@ -1013,14 +921,14 @@ IT IS DONE FOR YOU.
 <td>-onlydend</td>
 <td>Only produce dendrogram file</td>
 <td>Toggle value Yes/No</td>
-<td>N</td>
+<td>No</td>
 </tr>
 
 <tr>
 <td>-dend</td>
 <td>Do alignment using an old dendrogram</td>
 <td>Toggle value Yes/No</td>
-<td>N</td>
+<td>No</td>
 </tr>
 
 <tr>
@@ -1028,28 +936,6 @@ IT IS DONE FOR YOU.
 <td>Name of old dendrogram file</td>
 <td>Input file</td>
 <td><b>Required</b></td>
-</tr>
-
-<tr>
-<td>-slow</td>
-<td>A distance is calculated between every pair of sequences and these are used to construct the dendrogram which guides the final multiple alignment. The scores are calculated from separate pairwise alignments. These can be calculated using 2 methods: dynamic programming (slow but accurate) or by the method of Wilbur and Lipman (extremely fast but approximate).
-The slow-accurate method is fine for short sequences but will be VERY SLOW for many (e.g. >100) long (e.g. >1000 residue) sequences.</td>
-<td>Toggle value Yes/No</td>
-<td>Y</td>
-</tr>
-
-<tr>
-<td>-pwgapc</td>
-<td>The penalty for opening a gap in the pairwise alignments.</td>
-<td>Number 0.000 or more</td>
-<td>10.0</td>
-</tr>
-
-<tr>
-<td>-pwgapv</td>
-<td>The penalty for extending a gap by 1 residue in the pairwise alignments.</td>
-<td>Number 0.000 or more</td>
-<td>0.1</td>
 </tr>
 
 <tr>
@@ -1076,6 +962,54 @@ We also supply an identity matrix which gives a score of 1.0 to two identical am
 <td>Filename of user pairwise matrix</td>
 <td>Input file</td>
 <td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>-matrix</td>
+<td>This gives a menu where you are offered a choice of weight matrices. The default for proteins is the PAM series derived by Gonnet and colleagues. Note, a series is used! The actual matrix that is used depends on how similar the sequences to be aligned at this alignment step are. Different matrices work differently at each evolutionary distance.
+There are three 'in-built' series of weight matrices offered. Each consists of several matrices which work differently at different evolutionary distances. To see the exact details, read the documentation. Crudely, we store several matrices in memory, spanning the full range of amino acid distance (from almost identical sequences to highly divergent ones). For very similar sequences, it is best to use a strict weight matrix which only gives a high score to identities and the most favoured conservative substitutions. For more divergent sequences, it is appropriate to use 'softer' matrices which give a high score to many other frequent substitutions.
+1) BLOSUM (Henikoff). These matrices appear to be the best available for carrying out data base similarity (homology searches). The matrices used are: Blosum80, 62, 45 and 30.
+2) PAM (Dayhoff). These have been extremely widely used since the late '70s. We use the PAM 120, 160, 250 and 350 matrices.
+3) GONNET . These matrices were derived using almost the same procedure as the Dayhoff one (above) but are much more up to date and are based on a far larger data set. They appear to be more sensitive than the Dayhoff series. We use the GONNET 40, 80, 120, 160, 250 and 350 matrices.
+We also supply an identity matrix which gives a score of 1.0 to two identical amino acids and a score of zero otherwise. This matrix is not very useful. Alternatively, you can read in your own (just one matrix, not a series).</td>
+<td><table><tr><td>b</td> <td><i>(blosum)</i></td></tr><tr><td>p</td> <td><i>(pam)</i></td></tr><tr><td>g</td> <td><i>(gonnet)</i></td></tr><tr><td>i</td> <td><i>(id)</i></td></tr><tr><td>o</td> <td><i>(own)</i></td></tr></table></td>
+<td>b</td>
+</tr>
+
+<tr>
+<td>-dnamatrix</td>
+<td>This gives a menu where you are offered amenu where a single matrix (not a series) can be selected.</td>
+<td><table><tr><td>i</td> <td><i>(iub)</i></td></tr><tr><td>c</td> <td><i>(clustalw)</i></td></tr><tr><td>o</td> <td><i>(own)</i></td></tr></table></td>
+<td>i</td>
+</tr>
+
+<tr>
+<td>-mamatrix</td>
+<td>Filename of user multiple alignment matrix</td>
+<td>Input file</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>-[no]slow</td>
+<td>A distance is calculated between every pair of sequences and these are used to construct the dendrogram which guides the final multiple alignment. The scores are calculated from separate pairwise alignments. These can be calculated using 2 methods: dynamic programming (slow but accurate) or by the method of Wilbur and Lipman (extremely fast but approximate).
+The slow-accurate method is fine for short sequences but will be VERY SLOW for many (e.g. >100) long (e.g. >1000 residue) sequences.</td>
+<td>Toggle value Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>-pwgapc</td>
+<td>The penalty for opening a gap in the pairwise alignments.</td>
+<td>Number 0.000 or more</td>
+<td>10.0</td>
+</tr>
+
+<tr>
+<td>-pwgapv</td>
+<td>The penalty for extending a gap by 1 residue in the pairwise alignments.</td>
+<td>Number 0.000 or more</td>
+<td>0.1</td>
 </tr>
 
 <tr>
@@ -1111,32 +1045,6 @@ We also supply an identity matrix which gives a score of 1.0 to two identical am
 <td>Fast pairwise alignment: similarity scores: suppresses percentage score</td>
 <td>Boolean value Yes/No</td>
 <td>No</td>
-</tr>
-
-<tr>
-<td>-matrix</td>
-<td>This gives a menu where you are offered a choice of weight matrices. The default for proteins is the PAM series derived by Gonnet and colleagues. Note, a series is used! The actual matrix that is used depends on how similar the sequences to be aligned at this alignment step are. Different matrices work differently at each evolutionary distance.
-There are three 'in-built' series of weight matrices offered. Each consists of several matrices which work differently at different evolutionary distances. To see the exact details, read the documentation. Crudely, we store several matrices in memory, spanning the full range of amino acid distance (from almost identical sequences to highly divergent ones). For very similar sequences, it is best to use a strict weight matrix which only gives a high score to identities and the most favoured conservative substitutions. For more divergent sequences, it is appropriate to use 'softer' matrices which give a high score to many other frequent substitutions.
-1) BLOSUM (Henikoff). These matrices appear to be the best available for carrying out data base similarity (homology searches). The matrices used are: Blosum80, 62, 45 and 30.
-2) PAM (Dayhoff). These have been extremely widely used since the late '70s. We use the PAM 120, 160, 250 and 350 matrices.
-3) GONNET . These matrices were derived using almost the same procedure as the Dayhoff one (above) but are much more up to date and are based on a far larger data set. They appear to be more sensitive than the Dayhoff series. We use the GONNET 40, 80, 120, 160, 250 and 350 matrices.
-We also supply an identity matrix which gives a score of 1.0 to two identical amino acids and a score of zero otherwise. This matrix is not very useful. Alternatively, you can read in your own (just one matrix, not a series).</td>
-<td><table><tr><td>b</td> <td><i>(blosum)</i></td></tr><tr><td>p</td> <td><i>(pam)</i></td></tr><tr><td>g</td> <td><i>(gonnet)</i></td></tr><tr><td>i</td> <td><i>(id)</i></td></tr><tr><td>o</td> <td><i>(own)</i></td></tr></table></td>
-<td>b</td>
-</tr>
-
-<tr>
-<td>-dnamatrix</td>
-<td>This gives a menu where you are offered amenu where a single matrix (not a series) can be selected.</td>
-<td><table><tr><td>i</td> <td><i>(iub)</i></td></tr><tr><td>c</td> <td><i>(clustalw)</i></td></tr><tr><td>o</td> <td><i>(own)</i></td></tr></table></td>
-<td>i</td>
-</tr>
-
-<tr>
-<td>-mamatrix</td>
-<td>Filename of user multiple alignment matrix</td>
-<td>Input file</td>
-<td><b>Required</b></td>
 </tr>
 
 <tr>
@@ -1208,20 +1116,17 @@ We also supply an identity matrix which gives a score of 1.0 to two identical am
 </table>
 
 
-
 <H2>
     Input file format
 </H2>
-
 
 The input is two or more sequences.
 
 <p>
 
-
 <a name="input.1"></a>
 <h3>Input files for usage example </h3>
-<p><h3>File: ../../data/globins.fasta</h3>
+<p><h3>File: globins.fasta</h3>
 <table width="90%"><tr><td bgcolor="#FFCCFF">
 <pre>
 &gt;HBB_HUMAN Sw:Hbb_Human =&gt; HBB_HUMAN
@@ -1254,7 +1159,6 @@ QAHAGKVFKLVYEAAIQLQVTGVVVTDATLKNLGSVHVSKGVADAHFPVVKEAILKTIKE
 VVGAKWSEELNSAWTIAYDELAIVIKKEMNDAA
 </pre>
 </td></tr></table><p>
-
 
 <p>
 
@@ -1302,10 +1206,19 @@ This List files contains:
 
 <p>
 <ul>
-<li>opsd_abyko.fasta - this is the name of a sequence file. The file is read in from the current directory. 
-<li>sw:opsd_xenla - this is a reference to a specific sequence in the SwissProt database 
-<li>sw:opsd_c* - this represents all the sequences in SwissProt whose identifiers start with ``opsd_c'' 
-<li>another_list - this is the name of a second list file. List files can be nested!
+
+<li>opsd_abyko.fasta - this is the name of a sequence file. The file
+is read in from the current directory.
+
+<li>sw:opsd_xenla - this is a reference to a specific sequence in the
+SwissProt database
+
+<li>sw:opsd_c* - this represents all the sequences in SwissProt whose
+identifiers start with ``opsd_c''
+
+<li>another_list - this is the name of a second list file. List files
+can be nested!
+
 </ul>
 <p>
 
@@ -1337,7 +1250,7 @@ To make a list of all the files in the current directory that end in
 
 ls *.pep &gt; listfile
 
-<H3>Several sequences in one files</H3>
+<H3>Several sequences in one file</H3>
 
 EMBOSS can read in a single file which contains many sequences.
 
@@ -1441,7 +1354,6 @@ files name in a web browser of GUI (such as Jemboss or SPIN) field
 </H2>
 
 
-
 <a name="output.1"></a>
 <h3>Output files for usage example </h3>
 <p><h3>File: hbb_human.aln</h3>
@@ -1499,7 +1411,7 @@ LGB2_LUPLU:0.50324);
 </pre>
 </td></tr></table><p>
 
-
+<p>
 
 <h3>Sequences</h3>
 
@@ -1541,92 +1453,159 @@ this.  WE DO NOT PROVIDE ANY DIRECT MEANS FOR VIEWING TREES GRAPHICALLY.
 </H2>
 
 
-The comparison matrices available for clustalw in carrying out a
-protein sequence alignment are:
+The comparison matrices available for clustalw are not EMBOSS matrix
+files, as they are defined in the clustalw code. The matrices
+available for carrying out a protein sequence alignment are:
 
 <ul>
+
 <li>blosum
+
 <li>pam
+
 <li>gonnet
+
 <li>id
+
 <li>user defined
+
 </ul>
 
-The comparison matrices available for clustalw in carrying out a
+The comparison matrices available in clustalw for carrying out a
 nucleotide sequence alignment are:
 
 <ul>
+
 <li>iub
+
 <li>clustalw
+
 <li>user defined
+
 </ul>
+
 
 <H2>
     Notes
 </H2>
 
+None
+
 <H2>
     References
 </H2>
 
-The main reference for ClustalW is:
+The main reference for ClustalW is Thmopsion et al below.
 
-<p>
+<ol>
 
-Thompson, J.D., Higgins, D.G. and Gibson, T.J. (1994)
+<li>Thompson, J.D., Higgins, D.G. and Gibson, T.J. (1994)
 "CLUSTAL W: improving the sensitivity of progressive multiple sequence
 alignment through sequence weighting, positions-specific gap penalties
 and weight matrix choice."
 Nucleic Acids Research, 22:4673-4680.
 
-<p>
-
-Other refernces for methods, etc. are:
-
-<p>
-
-<ol>
-
 <li>Feng, D.-F. and Doolittle, R.F. (1987). J. Mol. Evol. 25, 351-360.
+
 <li>Needleman, S.B. and Wunsch, C.D. (1970). J. Mol. Biol. 48, 443-453.
-<li>Dayhoff, M.O., Schwartz, R.M. and Orcutt, B.C. (1978)  in Atlas of Protein Sequence and Structure, vol. 5, suppl. 3 (Dayhoff, M.O., ed.), pp 345-352, NBRF, Washington.
-<li>Henikoff, S. and Henikoff, J.G. (1992). Proc. Natl. Acad. Sci. USA 89, 10915-10919.
-<li>Lipman, D.J., Altschul, S.F. and Kececioglu, J.D. (1989). Proc. Natl. Acad. Sci. USA 86, 4412-4415.
+
+<li>Dayhoff, M.O., Schwartz, R.M. and Orcutt, B.C. (1978) in Atlas of
+Protein Sequence and Structure, vol. 5, suppl. 3 (Dayhoff, M.O., ed.),
+pp 345-352, NBRF, Washington.
+
+<li>Henikoff, S. and Henikoff, J.G. (1992). Proc. Natl. Acad. Sci. USA
+89, 10915-10919.
+
+<li>Lipman, D.J., Altschul, S.F. and Kececioglu,
+J.D. (1989). Proc. Natl. Acad. Sci. USA 86, 4412-4415.
+
 <li>Barton, G.J. and Sternberg, M.J.E. (1987). J. Mol. Biol. 198, 327-337.
+
 <li>Gotoh, O. (1993). CABIOS 9, 361-370.
+
 <li>Altschul, S.F. (1989). J. Theor. Biol. 138, 297-309.
-<li>Lukashin, A.V., Engelbrecht, J. and Brunak, S. (1992). Nucl. Acids Res. 20, 2511-2516.
-<li>Lawrence, C.E., Altschul, S.F., Boguski, M.S., Liu, J.S., Neuwald, A.F. and Wooton, J.C. (1993). Science, 262, 208-214.
+
+<li>Lukashin, A.V., Engelbrecht, J. and Brunak, S. (1992). Nucl. Acids
+Res. 20, 2511-2516.
+
+<li>Lawrence, C.E., Altschul, S.F., Boguski, M.S., Liu, J.S., Neuwald,
+A.F. and Wooton, J.C. (1993). Science, 262, 208-214.
+
 <li>Vingron, M. and Waterman, M.S. (1993). J. Mol. Biol. 234, 1-12.
+
 <li>Pascarella, S. and Argos, P. (1992). J. Mol. Biol. 224, 461-471.
-<li>Collins, J.F. and Coulson, A.F.W. (1987). In Nucleic acid and protein sequence analysis a practical approach, Bishop, M.J. and Rawlings, C.J. ed., chapter 13, pp. 323-358.
-<li>Vingron, M. and Sibbald, P.R. (1993). Proc. Natl. Acad. Sci. USA, 90, 8777-8781.
+
+<li>Collins, J.F. and Coulson, A.F.W. (1987). In Nucleic acid and
+protein sequence analysis a practical approach, Bishop, M.J. and
+Rawlings, C.J. ed., chapter 13, pp. 323-358.
+
+<li>Vingron, M. and Sibbald, P.R. (1993). Proc. Natl. Acad. Sci. USA,
+90, 8777-8781.
+
 <li>Thompson, J.D., Higgins, D.G. and Gibson, T.J. (1994). CABIOS, 10, 19-29.
+
 <li>Lthy, R., Xenarios, I. and Bucher, P. (1994). Protein Science, 3, 139-146.
+
 <li>Higgins, D.G. and Sharp, P.M. (1988). Gene, 73, 237-244.
+
 <li>Higgins, D.G. and Sharp, P.M. (1989). CABIOS, 5, 151-153.
+
 <li>Higgins, D.G., Bleasby, A.J. and Fuchs, R. (1992). CABIOS, 8, 189-191.
-<li>Sneath, P.H.A. and Sokal, R.R. (1973). Numerical Taxonomy, W.H. Freeman, San Francisco.
+
+<li>Sneath, P.H.A. and Sokal, R.R. (1973). Numerical Taxonomy,
+W.H. Freeman, San Francisco.
+
 <li>Saitou, N. and Nei, M. (1987). Mol. Biol. Evol. 4, 406-425.
-<li>Wilbur, W.J. and Lipman, D.J. (1983). Proc. Natl. Acad. Sci. USA, 80, 726-730.
-<li>Musacchio, A., Gibson, T., Lehto, V.-P. and Saraste, M. (1992). FEBS Lett. 307, 55-61.
-<li>Musacchio, A., Noble, M., Pauptit, R., Wierenga, R. and Saraste, M. (1992). Nature, 359, 851-855.
-<li>Bashford, D., Chothia, C. and Lesk, A.M. (1987). J. Mol. Biol. 196, 199-216.
+
+<li>Wilbur, W.J. and Lipman, D.J. (1983). Proc. Natl. Acad. Sci. USA,
+80, 726-730.
+
+<li>Musacchio, A., Gibson, T., Lehto, V.-P. and Saraste,
+M. (1992). FEBS Lett. 307, 55-61.
+
+<li>Musacchio, A., Noble, M., Pauptit, R., Wierenga, R. and Saraste,
+M. (1992). Nature, 359, 851-855.
+
+<li>Bashford, D., Chothia, C. and Lesk,
+A.M. (1987). J. Mol. Biol. 196, 199-216.
+
 <li>Myers, E.W. and Miller, W. (1988). CABIOS, 4, 11-17.
+
 <li>Thompson, J.D. (1994). CABIOS, (Submitted).
-<li>Smith, T.F., Waterman, M.S. and Fitch, W.M. (1981). J. Mol. Evol. 18, 38-46.
-<li>Pearson, W.R. and Lipman, D.J. (1988). Proc. Natl. Acad. Sci. USA. 85, 2444-2448.
-<li>Devereux, J., Haeberli, P. and Smithies, O. (1984). Nucleic Acids Res. 12, 387-395.
+
+<li>Smith, T.F., Waterman, M.S. and Fitch,
+W.M. (1981). J. Mol. Evol. 18, 38-46.
+
+<li>Pearson, W.R. and Lipman,
+D.J. (1988). Proc. Natl. Acad. Sci. USA. 85, 2444-2448.
+
+<li>Devereux, J., Haeberli, P. and Smithies, O. (1984). Nucleic Acids
+Res. 12, 387-395.
+
 <li>Felsenstein, J. (1989). Cladistics 5, 164-166.
+
 <li>Kimura, M. (1980). J. Mol. Evol. 16, 111-120.
-<li>Kimura, M. (1983). The Neutral Theory of Molecular Evolution.  Cambridge University Press, Cambridge.
+
+<li>Kimura, M. (1983). The Neutral Theory of Molecular Evolution.
+Cambridge University Press, Cambridge.
+
 <li>Felsenstein, J. (1985). Evolution 39, 783-791.
+
 <li>Smith, R.F. and Smith, T.F. (1992) Protein Engineering 5, 35-41.
-<li>Krogh, A., Brown, M., Mian, S., Sjlander, K. and Haussler, D. (1994) J. Mol. Biol. 235-1501-1531.
-<li>Jones, D.T., Taylor, W.R. and Thornton, J.M.  (1994). FEBS Lett. 339, 269-275.
+
+<li>Krogh, A., Brown, M., Mian, S., Sjlander, K. and Haussler,
+D. (1994) J. Mol. Biol. 235-1501-1531.
+
+<li>Jones, D.T., Taylor, W.R. and Thornton, J.M.  (1994). FEBS
+Lett. 339, 269-275.
+
 <li>Bairoch, A. and Bckmann, B. (1992) Nucleic Acids Res., 20, 2019-2022.
-<li>Noble, M.E.M., Musacchio, A., Saraste, M., Courtneidge, S.A. and Wierenga, R.K. (1993) EMBO J. 12, 2617-2624.
+
+<li>Noble, M.E.M., Musacchio, A., Saraste, M., Courtneidge, S.A. and
+Wierenga, R.K. (1993) EMBO J. 12, 2617-2624.
+
 <li>Kabsch, W. and Sander, C. (1983) Biopolymers, 22, 2577-2637.
+
 </ol>
 
 <H2>
@@ -1655,11 +1634,7 @@ Exits with a staus of 0 unless an error occurs.
 
 None. 
 
-<!--
-<H2>
-    See also
-</H2>
--->
+
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
@@ -1670,10 +1645,6 @@ None.
 <tr><td><a href="tranalign.html">tranalign</a></td><td>Align nucleic coding regions given the aligned proteins</td></tr>
 </table>
 
-<!--
-        Add any comments about other associated programs (to prepare
-        data files?) that seealso doesn't find.
-   -->
 
 <H2>
     Author(s)
@@ -1695,28 +1666,17 @@ HGMP-RC, Genome Campus, Hinxton, Cambridge CB10 1SB, UK
 
 Completed  18 February 1999
 
-<!--
-<p>
-[an error occurred while processing this directive]
--->
 
 <H2>
     Target users
 </H2>
+This program is intended to be used by everyone and everything, from naive users to embedded scripts.
 
-
-This program is intended to be used by everyone and everything,
-from naive users to embedded scripts. 
 
 <H2>
     Comments
 </H2>
-
-
-<pre>
-
-</pre>
-
+None
 
 </BODY>
 </HTML>

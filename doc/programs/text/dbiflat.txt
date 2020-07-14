@@ -1,12 +1,12 @@
 
                                   dbiflat 
-                                      
-   
-   
+
+
+
 Function
 
    Index a flat file database
-   
+
 Description
 
    dbiflat indexes a flat file database of one or more files, and builds
@@ -14,16 +14,16 @@ Description
    the EMBL database CD-ROM distribution and by the Staden package in
    addition to EMBOSS, and appears to be the most generally used and
    publicly available index file format for these databases.
-   
+
    A flat file database is a database in one of the native formats: EMBL,
    Swiss-Prot or GenBank, as distributed by the EBI, NCBI, or DDBJ. (It
    is called a 'flat' file to distinguish it from the complex relational
    database formats that this data is held in before being written to
    files and distributed.)
-   
+
    Having created the EMBOSS indices for this file, a database can then
    be defined in the file emboss.defaults as something like:
-   
+
 DB emrod [
    type: N
    format: embl
@@ -32,40 +32,40 @@ DB emrod [
 ]
 
   Fields Indexed
-  
+
    By default, dbiflat will index the ID name and the accession number.
    If they are present in your database, you may also specify that
    dbiflat should index the Sequence Version and GI number, the Keywords
    and Taxonomy names and the words in the description by using the
    '-fields' qualifier with the appropriate values.
-   
+
 Usage
 
    Here is a sample session with dbiflat
-   
+
 
 % dbiflat 
 Index a flat file database
+Database name: EMBL
       EMBL : EMBL
      SWISS : Swiss-Prot, SpTrEMBL, TrEMBLnew
         GB : Genbank, DDBJ
     REFSEQ : Refseq
 Entry format [SWISS]: EMBL
-Database directory [.]: ../../embl
+Database directory [.]: embl
 Wildcard database filename [*.dat]: rod.dat
-Database name: EMBL
 Release number [0.0]: 
 Index date [00/00/00]: 
-   
+
    Go to the output files for this example
-   
+
 Command line arguments
 
    Standard (Mandatory) qualifiers:
+  [-dbname]            string     Database name
    -idformat           menu       Entry format
    -directory          directory  Database directory
    -filenames          string     Wildcard database filename
-  [-dbname]            string     Database name
    -release            string     Release number
    -date               string     Index date
 
@@ -73,7 +73,6 @@ Command line arguments
    Advanced (Unprompted) qualifiers:
    -fields             menu       Index fields
    -exclude            string     Wildcard filename(s) to exclude
-   -indexdirectory     directory  Index directory
    -maxindex           integer    Maximum index length
    -sortoptions        string     Sort options, typically '-T .' to use
                                   current directory for work files and '-k
@@ -81,25 +80,29 @@ Command line arguments
                                   field
    -[no]systemsort     boolean    Use system sort utility
    -[no]cleanup        boolean    Clean up temporary files
+   -indexoutdir        outdir     Index directory
 
    Associated qualifiers: (none)
    General qualifiers:
-   -auto                boolean    Turn off prompts
-   -stdout              boolean    Write standard output
-   -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for standard and additional values
-   -debug               boolean    Write debug output to program.dbg
-   -verbose             boolean    Report some/full command line options
-   -help                boolean    Report command line options. More
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
-   -warning             boolean    Report warnings
-   -error               boolean    Report errors
-   -fatal               boolean    Report fatal errors
-   -die                 boolean    Report deaths
-   
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report deaths
+
 
    Standard (Mandatory) qualifiers Allowed values Default
+   [-dbname]
+   (Parameter 1) Database name A string from 2 to 19 characters, matching
+   regular expression /[A-z][A-z0-9_]+/ Required
    -idformat Entry format
    EMBL   (EMBL)
    SWISS  (Swiss-Prot, SpTrEMBL, TrEMBLnew)
@@ -108,8 +111,6 @@ Command line arguments
    SWISS
    -directory Database directory Directory .
    -filenames Wildcard database filename Any string is accepted *.dat
-   [-dbname]
-   (Parameter 1) Database name A string from 1 to 19 characters Required
    -release Release number A string up to 9 characters 0.0
    -date Index date Date string dd/mm/yy 00/00/00
    Additional (Optional) qualifiers Allowed values Default
@@ -124,43 +125,43 @@ Command line arguments
    acnum
    -exclude Wildcard filename(s) to exclude Any string is accepted An
    empty string is accepted
-   -indexdirectory Index directory Directory .
    -maxindex Maximum index length Integer 0 or more 0
    -sortoptions Sort options, typically '-T .' to use current directory
    for work files and '-k 1,1' to force GNU sort to use the first field
    Any string is accepted -T . -k 1,1
    -[no]systemsort Use system sort utility Boolean value Yes/No Yes
    -[no]cleanup Clean up temporary files Boolean value Yes/No Yes
-   
+   -indexoutdir Index directory Output directory .
+
 Input file format
 
    'flat' files (native distribution format) of a protein or nucleic
    sequence database.
-   
+
 Output file format
 
   Output files for usage example
-  
-  File: acnum.hit
-  
-   This file contains non-printing characters and so cannot be displayed
-   here.
-   
-  File: acnum.trg
-  
-   This file contains non-printing characters and so cannot be displayed
-   here.
-   
+
   File: division.lkp
-  
+
    This file contains non-printing characters and so cannot be displayed
    here.
-   
+
   File: entrynam.idx
-  
+
    This file contains non-printing characters and so cannot be displayed
    here.
-   
+
+  File: acnum.hit
+
+   This file contains non-printing characters and so cannot be displayed
+   here.
+
+  File: acnum.trg
+
+   This file contains non-printing characters and so cannot be displayed
+   here.
+
    dbiflat creates four index files. All are binary but with a simple
    format.
      * division.lkp is the master index file, and has a 300 byte header
@@ -185,57 +186,57 @@ Output file format
        accession number search will use acnum.trg to find a start
        position and number of records to read in this file, and will then
        simply read the entryname.idx records for each entry in turn.
-       
+
 Data files
 
    None.
-   
+
 Notes
 
    The indexing method depends on each entry having a unique entry name.
    No allowance is made for two entries with the same name so it is not
    possible to index EMBL and EMBLNEW together.
-   
+
 References
 
    None.
-   
+
 Warnings
 
    None.
-   
+
 Diagnostic Error Messages
 
    None.
-   
+
 Exit status
 
    It exits with a status of 0 if no problems.
-   
+
 Known bugs
 
    None.
-   
+
 See also
 
    Program name          Description
    dbiblast     Index a BLAST database
    dbifasta     Index a fasta database
    dbigcg       Index a GCG formatted database
-   
+
 Author(s)
 
-   Peter Rice (pmr © ebi.ac.uk)
-   Informatics Division, European Bioinformatics Institute, Wellcome
-   Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
-   
+   [an error occurred while processing this directive]
+
 History
 
    Completed December 1999
-   
+
 Target users
 
    This program is intended to be used by administrators responsible for
    software and database installation and maintenance.
-   
+
 Comments
+
+   None

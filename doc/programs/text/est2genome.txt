@@ -1,12 +1,12 @@
 
                                 est2genome 
-                                      
-   
-   
+
+
+
 Function
 
    Align EST and genomic DNA sequences
-   
+
 Description
 
    est2genome is a software tool to aid the prediction of genes by
@@ -15,65 +15,62 @@ Description
    inserting introns of arbitrary length when needed. In addition, where
    feasible introns start and stop at the splice consensus dinucleotides
    GT and AG.
-   
+
    Unless instructed otherwise, the program makes three alignments: First
    it compares both stands of the spliced sequence against the forward
    strand of the genomic, assuming the splice consensus GT/AG (ie in the
    forward gene direction). The maximum-scoring orientation is then
    realigned assuming the splice consensus CT/AC (ie in the reversed gene
    direction). Only the overall maximum-scoring alignment is reported.
-   
+
    The program outputs a list of the exons and introns it has found. The
    format is like that of MSPcrunch, ie a list of matching segments. This
    format is easy to parse into other software. The program also
    indicates, based on the splice site information, the gene's predicted
    direction of transcription. Optionally the full sequence alignment is
-   printed as well (see the example).
-   
-Algorithm
-
+   printed as well (see the example). H2> Algorithm
    The program uses a linear-space divide-and-conquer strategy (Myers and
    Miller, 1988; Huang, 1994) to limit memory use:
-   
+
    1. A first pass Smith-Waterman local alignment scan is done to find
    the start and end of the maximally scoring segments.
-   
+
    2. Subsequences corresponding to these segments are extracted
-   
+
    3a. If the product of the subsequences' lengths is less than a
    user-defined threshold (i.e. they will fit in memory) the segments are
    realigned using the Needleman-Wunsch global alignment algorithm, which
    will give the same result as the Smith-Waterman since the subsequences
    are guaranteed to align end-to-end.
-   
+
    3b. If the product of the lengths exceeds the threshold (a full
    alignment will not fit in memory) the alignment is made recursively by
    splitting the spliced (EST) sequence in half and finding the genome
    sequence position which aligns with the mid-point. The process is
    repeated until the product of gthe lengths is less than the threshold.
    The divided sequences are aligned separately and then merged.
-   
+
    4. The genome sequence is searched against the forward and reverse
    strands of the spliced (EST) sequence, assuming a forward gene
    splicing direction (i.e. GT/AG consensus).
-   
+
    5. Then the best-scoring orientation is realigned assuming reverse
    splicing (CT/AC consensus). The overall best alignment is reported.
-   
+
 Usage
 
    Here is a sample session with est2genome
-   
+
 
 % est2genome 
 Align EST and genomic DNA sequences
 EST sequence(s): tembl:hs989235
 Genomic sequence: tembl:hsnfg9
 Output file [hs989235.est2genome]: 
-   
+
    Go to the input files for this example
    Go to the output files for this example
-   
+
 Command line arguments
 
    Standard (Mandatory) qualifiers:
@@ -179,7 +176,7 @@ Command line arguments
    -error               boolean    Report errors
    -fatal               boolean    Report fatal errors
    -die                 boolean    Report deaths
-   
+
 
    Standard (Mandatory) qualifiers Allowed values Default
    [-estsequence]
@@ -230,20 +227,20 @@ Command line arguments
    splicing is indicated by angle brackets (forward or reverse) or ????
    (unknown). Boolean value Yes/No No
    -width Alignment width Any integer value 50
-   
+
 Input file format
 
    est2genome reads two nucleotide sequences. The first is an EST
    sequence (a single read or a finished cDNA). The second is a genomic
    finished sequence.
-   
+
   Input files for usage example
-  
+
    'tembl:hs989235' is a sequence entry in the example nucleic acid
    database 'tembl'
-   
+
   Database entry: tembl:hs989235
-  
+
 ID   HS989235   standard; RNA; EST; 495 BP.
 XX
 AC   H45989;
@@ -344,9 +341,9 @@ SQ   Sequence 495 BP; 73 A; 135 C; 169 G; 104 T; 14 other;
      atttgggttt tttcn                                                        49
 5
 //
-   
+
   Database entry: tembl:hsnfg9
-  
+
 ID   HSNFG9     standard; DNA; HUM; 33760 BP.
 XX
 AC   Z69719;
@@ -505,15 +502,15 @@ FT                   /clone_lib="CV007K"
      actgggggtg ccctgggcag ggactgtagc tgggaagatc                           3376
 0
 //
-   
+
 Output file format
 
   Output files for usage example
-  
+
   File: hs989235.est2genome
-  
-Note Best alignment is between forward est and forward genome, but splice  site
-s imply REVERSED GENE
+
+Note Best alignment is between forward est and forward genome, but splice sites
+ imply REVERSED GENE
 Exon       163  91.8 25685 25874 HSNFG9           1   193 HS989235      yo13c02
 .s1 Soares adult brain N2b5HB55Y Homo sapiens cDNA clone IMAGE:177794 3', mRNA
 sequence.
@@ -569,34 +566,36 @@ sequence.
 Segment     24  80.6 27441 27476 HSNFG9         459   494 HS989235      yo13c02
 .s1 Soares adult brain N2b5HB55Y Homo sapiens cDNA clone IMAGE:177794 3', mRNA
 sequence.
-   
+
   MSP type segments
-  
+
    There are four types of segment,
     1. each gapped Exon
     2. each Intron (marked with a ? if it does not start GT and end AG)
     3. the complete alignment Span
     4. individual ungapped matching Segments.
-       
+
    The score for Exon segments is the alignment score excluding flanking
    intron penalties. The Span score is the total including the intron
    costs.
-   
+
    The coordinates of the genomic sequence always refer to the positive
    strand, but are swapped if the est has been reversed. The splice
    direction of Introns are indicated as +Intron (forward, splice sites
    GT/AG) or -Intron (reverse, splice sites CT/AC), or ?Intron (unknown
    direction). Segment entries give the alignment as a series of ungapped
    matching segments.
-   
+
   Full alignment
-  
+
    You get the alignment if the -align switch is set. The alignment
    includes the first and last 5 bases of each intron, together with the
    intron width. The direction of splicing is indicated by >>>> (forward)
    or <<<< (reverse) or ???? (unknown)
-   
+
 Data files
+
+   None
 
 Notes
 
@@ -651,7 +650,7 @@ G
    costs the alignment will respect the proper boundaries. If the
    alignment still prefers boundaries which don't start and end with the
    splice consensus then this may indicate errors in the sequences.
-   
+
    The default parameters work well, except for very short exons (length
    less than the splice_penalty, approx) which may be skipped. The intron
    penalties should not be set to less that the maximum expected random
@@ -672,75 +671,72 @@ G
        mid-point. The problem then reduces to aligning the left-hand and
        right-hand portions of the sequences separately and merging the
        result.
-       
+
    The worst-case run-time for the algorithm is about 3 times as long as
    would be taken to align using a quadratic-space program. In practice
    the maximal-scoring segment is often much shorter than the full genome
    length so the program runs only about 1.5 times slower.
-   
+
 References
 
-   1. Mott R. (1997) EST_GENOME: a program to align spliced DNA sequences
-   to unspliced genomic DNA. Comput. Applic. 13:477-478
-   
-   2. Huang X (1994) On global sequence alignment. Comput. Applic.
-   Biosci. 10:227-235.
-   
-   3. Myers, EW and Miller, W (1988) Optimal alignments in linear space.
-   Comput. Applic. Biosci. 4:11-17
-   
-   4. Smith, TE and Waterman, MS (1981) Identification of common
-   molecular subseqeunces. J. Mol. Biol. 147:195-197
-   
+    1. Mott R. (1997) EST_GENOME: a program to align spliced DNA
+       sequences to unspliced genomic DNA. Comput. Applic. 13:477-478
+    2. Huang X (1994) On global sequence alignment. Comput. Applic.
+       Biosci. 10:227-235.
+    3. Myers, EW and Miller, W (1988) Optimal alignments in linear space.
+       Comput. Applic. Biosci. 4:11-17
+    4. Smith, TE and Waterman, MS (1981) Identification of common
+       molecular subseqeunces. J. Mol. Biol. 147:195-197
+
 Warnings
 
    None.
-   
+
 Diagnostic Error Messages
 
    None.
-   
+
 Exit status
 
    It return 0 unless an error occurs.
-   
+
 Known bugs
 
    None.
-   
+
 See also
 
    Program name                      Description
    needle       Needleman-Wunsch global alignment
    stretcher    Finds the best global alignment between two sequences
-   
+
 Author(s)
 
    This application was modified for inclusion in EMBOSS by Peter Rice
    (pmr © ebi.ac.uk)
    Informatics Division, European Bioinformatics Institute, Wellcome
    Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
-   
+
    The original program was est_genome, written by Richard Mott at the
    Sanger Centre. The original version is available from
    ftp://ftp.sanger.ac.uk/pub/pmr/est_genome.4.tar.Z
-   
+
 History
 
 Target users
 
    This program is intended to be used by everyone and everything, from
    naive users to embedded scripts.
-   
+
 Comments
 
   Thu, 29 Mar 2001
-  
+
    I found est2genome having problems finding very short exons with the
    default parameters.
-   
+
    With the folowing changes it detects also a 14bp exon correctly:
-   
+
 mismatch 1 -> 3
 intronpenalty 40 -> 20
 splicepenalty 20 -> 10
