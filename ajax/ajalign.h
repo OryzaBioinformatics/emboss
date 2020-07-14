@@ -24,12 +24,9 @@ extern "C"
 ** @other AjPReport Report output
 ** @other AjPFile Input and output files
 **
-** @attr Name [AjPStr] As "Source" for features, usually empty
-** @attr Usa [AjPStr] Name built from input USA, usually empty
 ** @attr Type [AjPStr] "P" Protein or "N" Nucleotide
 ** @attr Formatstr [AjPStr] Report format (-aformat qualifier)
 ** @attr Format [AjEnum] Report format (index number)
-** @attr Extension [AjPStr] Output file extension
 ** @attr File [AjPFile] Output file object
 ** @attr Header [AjPStr] Text to add to header with newlines
 ** @attr SubHeader [AjPStr] Text to add to align subheader with newlines
@@ -58,12 +55,9 @@ extern "C"
 ******************************************************************************/
 
 typedef struct AjSAlign {
-  AjPStr Name;
-  AjPStr Usa;
   AjPStr Type;
   AjPStr Formatstr;
   AjEnum Format;
-  AjPStr Extension;
   AjPFile File;
   AjPStr Header;
   AjPStr SubHeader;
@@ -121,7 +115,9 @@ void         ajAlignSetMatrixInt (AjPAlign thys, const AjPMatrix matrix);
 void         ajAlignSetMatrixFloat (AjPAlign thys, const AjPMatrixf matrix);
 AjBool       ajAlignSetRange (AjPAlign thys,
 			      ajint start1, ajint end1,
-			      ajint start2, ajint end2);
+			      ajint len1, ajint off1,
+			      ajint start2, ajint end2,
+			      ajint len2, ajint off2);
 void         ajAlignSetScoreI (AjPAlign thys, ajint score);
 void         ajAlignSetScoreR (AjPAlign thys, float score);
 void         ajAlignSetSubHeader (AjPAlign thys, const AjPStr subheader);
@@ -131,15 +127,18 @@ void         ajAlignSetSubHeaderPre (AjPAlign thys, const AjPStr subheader);
 void         ajAlignSetStats (AjPAlign thys, ajint iali, ajint len,
 				    ajint ident, ajint sim, ajint gaps,
 				    const AjPStr score);
-AjBool       ajAlignSetSubRange (AjPAlign thys, ajint substart1, ajint start1,
-				 ajint end1, ajint substart2, ajint start2,
-				 ajint end2);
+AjBool       ajAlignSetSubRange (AjPAlign thys,
+				 ajint substart1, ajint start1,
+				 ajint end1, AjBool rev1, ajint len1,
+				 ajint substart2, ajint start2,
+				 ajint end2, AjBool rev2, ajint len2);
 void         ajAlignSetSubStandard (AjPAlign thys, ajint iali);
 void         ajAlignSetTail (AjPAlign thys, const AjPStr tail);
 void         ajAlignSetTailApp (AjPAlign thys, const AjPStr tail);
 void         ajAlignSetTailC (AjPAlign thys, const char* tail);
 void         ajAlignSetType (AjPAlign thys);
 void         ajAlignTrace (const AjPAlign thys);
+void         ajAlignTraceT (const AjPAlign thys, const char* title);
 AjBool       ajAlignValid (AjPAlign thys);
 void         ajAlignWrite (AjPAlign thys);
 void         ajAlignWriteClose (AjPAlign thys);
