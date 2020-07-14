@@ -1,4 +1,4 @@
-application: pestfind [
+application: epestfind [
   documentation: "Finds PEST motifs as potential proteolytic
                   cleavage sites"
   groups: "Protein:Motifs"
@@ -10,11 +10,9 @@ section: input [
 ]
 
   sequence: sequence  [
-    help: "Protein sequence USA to be analysed."
-    information: "Input sequence"
     parameter: "Y"
-    prompt: "Enter input sequence"
     type: "protein"
+    help: "Protein sequence USA to be analysed."
   ]
 
 endsection: input
@@ -30,8 +28,7 @@ section: required [
     information: "Window length"
     maximum: "$(sequence.length)"
     minimum: "2"
-    prompt: "Enter window length"
-    required: "Y"
+    standard: "Y"
   ]
 
   selection: order  [
@@ -45,8 +42,7 @@ section: required [
     information: "Sort order of results"
     maximum: "1"
     minimum: "1"
-    prompt: "Select sort order of results"
-    required: "Y"
+    standard: "Y"
     values: "length, position, score"
   ]
 
@@ -54,28 +50,24 @@ section: required [
     default: "Y"
     help: "Decide whether potential PEST motifs should be printed."
     information: "Display potential PEST motifs"
-    prompt: "Display potential PEST motifs"
   ]
 
   boolean: poor  [
     default: "Y"
     help: "Decide whether poor PEST motifs should be printed."
     information: "Display poor PEST motifs"
-    prompt: "Display poor PEST motifs"
   ]
 
   boolean: invalid  [
     default: "N"
     help: "Decide whether invalid PEST motifs should be printed."
     information: "Display invalid PEST motifs"
-    prompt: "Display invalid PEST motifs"
   ]
 
   boolean: map  [
     default: "Y"
     help: "Decide whether PEST motifs should be mapped to sequence."
     information: "Display PEST motifs map"
-    prompt: "Display PEST motifs map"
   ]
 
 endsection: required
@@ -86,15 +78,13 @@ section: output [
 ]
 
   outfile: outfile  [
-    extension: "pestfind"
+    parameter: "Y"
     help: "Name of file to which results will be written."
-    information: "Output filename"
-    prompt: "Enter output filename"
-    required: "Y"
+    knowntype: "pestfind output"
   ]
 
   xygraph: graph  [
-    required: "Y"
+    standard: "Y"
     multiple: "1"
   ]
 
@@ -116,17 +106,15 @@ section: advanced [
     information: "Threshold score"
     maximum: "+55.0"
     minimum: "-55.0"
-    optional: "Y"
+    additional: "Y"
     precision: "2"
-    prompt: "Enter threshold score"
   ]
 
   string: aadata  [
     default: "Eamino.dat"
     help: "File of amino acid properties and molecular masses."
     information: "Amino acid data file"
-    optional: "Y"
-    prompt: "Enter amino acid data filename"
+    additional: "Y"
   ]
 
 endsection: advanced

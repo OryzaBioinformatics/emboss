@@ -1,5 +1,5 @@
 
-                                 pestfind 
+                                 epestfind 
                                       
    
    
@@ -9,7 +9,7 @@ Function
    
 Description
 
-   pestfind allows rapid and objective identification of PEST motifs in
+   epestfind allows rapid and objective identification of PEST motifs in
    protein target sequences. Briefly, the PEST hypothesis was based on a
    literature survey that combined both information on protein stability
    as well as protein primary sequence information. Initially, the study
@@ -37,7 +37,7 @@ Algorithm
    motifs while positively charged amino acids, arginine (R), histidine
    (H) and lysine (K) are generally forbidden.
    
-   The pestfind algorithm defines the last criterion even more
+   The epestfind algorithm defines the last criterion even more
    stringently in that PEST motifs are required to be flanked by
    positively charged amino acids. Though this implication greatly
    facilitates computer scanning, a few PEST sequences might be missed.
@@ -80,13 +80,11 @@ Algorithm
    
           PEST score = 0.55 * DEPST - 0.5 * hydrophobicity index.
                                       
-   Although the formula above differs from the publication [1], it is in
-   fact the correct one, which was also implemented in the original
-   BASICA(R) programme (personal communication). Nevertheless, a (minor)
-   deviation from the original programme is still present, as hydropathy
-   indices of three amino acids were one unit off the Kyte-Doolittle
-   hydropathy scale. A correction of these indices results in calculation
-   of slightly lower PEST scores in comparison to the original programme.
+   Although, the formula above differs from the publication [1], it is in
+   fact the correct one, which was also implemented in the original BASIC
+   programme (personal communication). In addition, the programme
+   includes a correction for the hydropathy index of tyrosine, introduced
+   by Robert H. Stellwagen from the University of Southern California.
    However, PEST scores can range from -45 for poly-isoleucine to about
    +50 for poly-aspartate plus one proline and one serine. 'Valid' PEST
    motifs below the threshold score (5.0) are considered as 'poor', while
@@ -112,10 +110,10 @@ Algorithm
    
 Usage
 
-   Here is a sample session with pestfind
+   Here is a sample session with epestfind
    
 
-% pestfind -graph cps -invalid 
+% epestfind -graph cps -invalid 
 Finds PEST motifs as potential proteolytic cleavage sites
 Input sequence: ../../data/exu2_drops.embl
 Window length [10]: 
@@ -124,9 +122,9 @@ Sort order of results
       2 : position
       3 : score
 Sort order of results [score]: 
-Output file [exu2_drops.pestfind]: 
+Output file [exu2_drops.epestfind]: 
 
-Created pestfind.ps
+Created epestfind.ps
    
    Go to the input files for this example
    Go to the output files for this example
@@ -178,7 +176,6 @@ Command line arguments
    -slower1             boolean    Make lower case
    -supper1             boolean    Make upper case
    -sformat1            string     Input sequence format
-   -sopenfile1          string     Input filename
    -sdbname1            string     Database name
    -sid1                string     Entryname
    -ufo1                string     UFO features
@@ -224,7 +221,7 @@ Command line arguments
    from selection list of values score
    [-outfile]
    (Parameter 2) Name of file to which results will be written. Output
-   file <sequence>.pestfind
+   file <sequence>.epestfind
    -graph Graph type EMBOSS has a list of known devices, including
    postscript, ps, hpgl, hp7470, hp7580, meta, colourps, cps, xwindows,
    x11, tektronics, tekt, tek4107t, tek, none, null, text, data, xterm,
@@ -250,7 +247,7 @@ Command line arguments
    
 Input file format
 
-   pestfind reads any normal protein sequence USA.
+   epestfind reads any normal protein sequence USA.
    
   Input files for usage example
   
@@ -305,9 +302,9 @@ SQ   SEQUENCE   477 AA;  53194 MW;  8B5334A77DB9467B CRC64;
    
 Output file format
 
-   pestfind outputs a graph to the specified graphics device.
+   epestfind outputs a graph to the specified graphics device.
    
-   The output from pestfind is a simple text one. It reports poor and
+   The output from epestfind is a simple text one. It reports poor and
    potential PEST motifs together with their PEST score, mass percent of
    DEPST and their hydrophobicity index.
    
@@ -319,7 +316,11 @@ Output file format
    
   Output files for usage example
   
-  File: exu2_drops.pestfind
+  Graphics File: epestfind.ps
+  
+   [epestfind results]
+   
+  File: exu2_drops.epestfind
   
 PEST-find: Finds PEST motifs as potential proteolytic cleavage sites.
 
@@ -328,39 +329,39 @@ PEST-find: Finds PEST motifs as potential proteolytic cleavage sites.
 
 Potential PEST motif with 34 amino acids between position 238 and 273.
    238 KMVYEMALQLIESESTESPESFESPESSESSEAEVK 273
-       DEPST: 54.20 % (w/w)
-       Hydrophobicity index: 38.12
-       PEST score: 10.75
+       DEPST: 54.46 % (w/w)
+       Hydrophobicity index: 38.31
+       PEST score: 10.80
 
 Potential PEST motif with 14 amino acids between position 206 and 221.
    206 HENPEGNSSITDNSGH 221
-       DEPST: 35.59 % (w/w)
-       Hydrophobicity index: 26.81
-       PEST score: 6.17
+       DEPST: 36.04 % (w/w)
+       Hydrophobicity index: 27.16
+       PEST score: 6.25
 
 Poor PEST motif with 18 amino acids between position 363 and 382.
    363 KTEETAELLDLLDSYYDPSK 382
-       PEST score: 2.90
+       PEST score: 2.93
 
 Poor PEST motif with 17 amino acids between position 409 and 427.
    409 KNGAIGAGGDNSVPDSATK 427
-       PEST score: -9.60
+       PEST score: -9.71
 
 Poor PEST motif with 19 amino acids between position 22 and 42.
     22 KEELPAGNYILVAVEIDTTGR 42
-       PEST score: -10.92
+       PEST score: -11.01
 
 Poor PEST motif with 10 amino acids between position 440 and 451.
    440 RNNILGPQNTEK 451
-       PEST score: -15.67
+       PEST score: -15.94
 
 Poor PEST motif with 13 amino acids between position 279 and 293.
    279 RPFSQLLSSTILELK 293
-       PEST score: -16.51
+       PEST score: -16.72
 
 Poor PEST motif with 13 amino acids between position 349 and 363.
    349 KPGLELVLTAIDSLK 363
-       PEST score: -19.67
+       PEST score: -19.94
 
 Invalid PEST motif with 20 amino acids between position 1 and 22.
      1 MVSAISEDSASATASGQCEVVK 22
@@ -411,10 +412,6 @@ Invalid PEST motif with 10 amino acids between position 225 and 236.
        +++++++   potential
        OOOOOOO   poor
        -------   invalid
-   
-  Graphics File: pestfind.ps
-  
-   [pestfind results]
    
 Data files
 
@@ -536,7 +533,7 @@ Author(s)
    Michael K. Schuster and Martin Grabner (martin.grabner © univie.ac.at)
    from the Austrian National EMBnet node.
    
-   Original program 'pestfind' by Scott Rogers and Martin Rechsteiner
+   Original program 'epestfind' by Scott Rogers and Martin Rechsteiner
    (C)1986.
    
 History
