@@ -49,9 +49,10 @@ $MaxLines = 100;
 );
 
 # colours for backgrounds of usage examples, input and output files
+# these colours should work on all PCs/Macs/UNIX web browsers
 $usagecolour = "#CCFFFF"; # light cyan
-$inputcolour = "#FFDDFF"; # light violet
-$outputcolour = "#DDFFDD"; # light green
+$inputcolour = "#FFCCFF"; # light violet
+$outputcolour = "#CCFFCC"; # light green
 
 
 
