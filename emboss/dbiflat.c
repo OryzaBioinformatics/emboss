@@ -91,7 +91,8 @@ typedef struct DbiflatSParser
     AjBool (*Parser) (AjPFile libr, AjPFile* alistfile,
 		      AjBool systemsort, AjPStr* fields, ajint* maxFieldLen,
 		      ajint *dpos, AjPStr* id, AjPList* acl);
-} DbiflatOParser, *DbiflatPParser;
+} DbiflatOParser;
+#define DbiflatPParser DbiflatOParser*
 
 
 
@@ -108,7 +109,8 @@ static DbiflatOParser parser[] =
 
 
 static EmbPEntry dbiflat_NextFlatEntry(AjPFile libr, ajint ifile,
-				       AjPStr idformat, AjBool systemsort,
+				       const AjPStr idformat,
+				       AjBool systemsort,
 				       AjPStr* fields, ajint* maxFieldLen,
 				       ajint* maxidlen,
 				       AjPFile elistfile, AjPFile* alistfile);
@@ -187,8 +189,8 @@ int main(int argc, char **argv)
 
     idformat   = ajAcdGetListI("idformat",1);
     fields     = ajAcdGetList("fields");
-    directory  = ajAcdGetString("directory");
-    indexdir   = ajAcdGetString("indexdirectory");
+    directory  = ajAcdGetDirectoryName("directory");
+    indexdir   = ajAcdGetDirectoryName("indexdirectory");
     filename   = ajAcdGetString("filenames");
     exclude    = ajAcdGetString("exclude");
     dbname     = ajAcdGetString("dbname");
@@ -238,13 +240,13 @@ int main(int argc, char **argv)
     {
 	curfilename = (AjPStr) inputFiles[ifile];
 	embDbiFlatOpenlib(curfilename, &libr);
+	ajFileNameTrim(&curfilename);
 	if(ajStrLen(curfilename) >= maxfilelen)
 	    maxfilelen = ajStrLen(curfilename) + 1;
 
 	ajDebug("processing filename '%S' ...\n", curfilename);
 	ajDebug("processing file '%F' ...\n", libr);
 	ajStrAssS(&divfiles[ifile], curfilename);
-	ajFileNameTrim(&divfiles[ifile]);
 
 	if(systemsort)	 /* elistfile for entries, alist for fields */
 	    elistfile = embDbiSortOpen(alistfile, ifile,
@@ -325,21 +327,22 @@ int main(int argc, char **argv)
 **
 ** Returns next database entry as an EmbPEntry object
 **
-** @param [r] libr [AjPFile] Database file
+** @param [u] libr [AjPFile] Database file
 ** @param [r] ifile [ajint] File number.
-** @param [r] idformat [AjPStr] Format to be used
+** @param [r] idformat [const AjPStr] Format to be used
 ** @param [r] systemsort [AjBool] If ajTrue use system sort, else internal sort
-** @param [r] fields [AjPStr*] Fields to be indexed
+** @param [u] fields [AjPStr*] Fields to be indexed
 ** @param [w] maxFieldLen [ajint*] Maximum token length for each field
 ** @param [w] maxidlen [ajint*] Maximum entry ID length
-** @param [r] elistfile [AjPFile] entry file
-** @param [r] alistfile [AjPFile*] field data files array
+** @param [u] elistfile [AjPFile] entry file
+** @param [u] alistfile [AjPFile*] field data files array
 ** @return [EmbPEntry] Entry data object.
 ** @@
 ******************************************************************************/
 
 static EmbPEntry dbiflat_NextFlatEntry(AjPFile libr, ajint ifile,
-				       AjPStr idformat, AjBool systemsort,
+				       const AjPStr idformat,
+				       AjBool systemsort,
 				       AjPStr* fields, ajint* maxFieldLen,
 				       ajint* maxidlen,
 				       AjPFile elistfile, AjPFile* alistfile)
@@ -430,8 +433,8 @@ static EmbPEntry dbiflat_NextFlatEntry(AjPFile libr, ajint ifile,
 **
 ** Reads to the end of the entry and then returns.
 **
-** @param [r] libr [AjPFile] Input database file
-** @param [r] alistfile [AjPFile*] field data files array
+** @param [u] libr [AjPFile] Input database file
+** @param [u] alistfile [AjPFile*] field data files array
 ** @param [r] systemsort [AjBool] If ajTrue use system sort, else internal sort
 ** @param [w] fields [AjPStr*] Fields required
 ** @param [w] maxFieldLen [ajint*] Maximum token length for each field
@@ -703,8 +706,8 @@ static AjBool dbiflat_ParseEmbl(AjPFile libr, AjPFile* alistfile,
 **
 ** Parse the ID, accession from a Genbank entry
 **
-** @param [r] libr [AjPFile] Input database file
-** @param [r] alistfile [AjPFile*] field data files array
+** @param [u] libr [AjPFile] Input database file
+** @param [u] alistfile [AjPFile*] field data files array
 ** @param [r] systemsort [AjBool] If ajTrue use system sort, else internal sort
 ** @param [w] fields [AjPStr*] Fields required
 ** @param [w] maxFieldLen [ajint*] Maximum token length for each field
@@ -1001,8 +1004,8 @@ static AjBool dbiflat_ParseGenbank(AjPFile libr, AjPFile* alistfile,
 **
 ** Parse the ID, accession from an NCBI REFSEQ entry
 **
-** @param [r] libr [AjPFile] Input database file
-** @param [r] alistfile [AjPFile*] field data files array
+** @param [u] libr [AjPFile] Input database file
+** @param [u] alistfile [AjPFile*] field data files array
 ** @param [r] systemsort [AjBool] If ajTrue use system sort, else internal sort
 ** @param [w] fields [AjPStr*] Fields required
 ** @param [w] maxFieldLen [ajint*] Maximum token length for each field

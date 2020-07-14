@@ -16,12 +16,14 @@ section: input [
     maxlength: "19"
     minlength: "1"
     information: "Database name"
+    knowntype: "emboss database name"
   ]
 
-  string: directory  [
+  directory: directory  [
     standard: "Y"
     default: "."
     information: "Database directory"
+    knowntype: "emboss database directory"
   ]
 
   string: filenames  [
@@ -29,6 +31,7 @@ section: input [
     information: "Wildcard database filename"
     default: "$(dbname)"
     expected: "Database name"
+    knowntype: "emboss database wildcard filename"
   ]
 
 endsection: input
@@ -43,6 +46,7 @@ section: required [
     default: "0.0"
     maxlength: "9"
     information: "Release number"
+    knowntype: "emboss database release"
   ]
 
   string: date  [
@@ -51,6 +55,7 @@ section: required [
     valid: "Date string dd/mm/yy"
     information: "Index date"
     pattern: "^([0-9]+.[0-9]+.[0-9]+)?$"
+    knowntype: "date"
   ]
 
   list: seqtype  [
@@ -88,12 +93,14 @@ section: advanced [
   ]
 
   string: exclude  [
-    information: "wildcard filename(s) to exclude"
+    information: "Wildcard filename(s) to exclude"
+    knowntype: "filename wildcard"
   ]
 
-  string: indexdirectory  [
+  directory: indexdirectory  [
     default: "."
     information: "Index directory"
+    knowntype: "output directory"
   ]
 
   string: sortoptions  [
@@ -101,6 +108,7 @@ section: advanced [
     information: "Sort option(s)"
     help: "Sort options, typically '-T .' to use current directory for
            work files and '-k 1,1' to force GNU sort to use the first field"
+    knowntype: "sort utility options"
   ]
 
   integer: maxindex  [

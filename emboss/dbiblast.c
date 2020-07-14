@@ -141,32 +141,32 @@ typedef struct SMemFile
 
 typedef struct SBlastDb
 {
-  ajint DbType;			/* database type indicator */
-  ajint DbFormat;		/* database format (version) indicator */
-  ajint IsProtein;		/* 1 for protein */
-  ajint IsBlast2;		/* 1 for blast2, 0 for blast1 */
-  ajint TitleLen;		/* length of database title */
-  ajint DateLen;		/* length of database date string */
-  ajint LineLen;		/* length of database lines */
-  ajint HeaderLen;		/* bytes before tables start */
-  ajint Size;			/* number of database entries */
-  ajint CompLen;		/* length of compressed seq file */
-  ajint MaxSeqLen;		/* max. entry length */
-  ajint TotLen;			/* number of bases or residues in database */
-  ajint CleanCount;		/* count of cleaned 8mers */
-  ajint TopCmp;			/* bytes before compressed table starts */
-  ajint TopSrc;			/* bytes before source table starts */
-  ajint TopHdr;			/* bytes before headers table starts */
-  ajint TopAmb;			/* bytes before ambiguity table starts */
-  ajint IdType;			/* ID type */
-  ajint IdPrefix;		/* ID prefix type */
-  PMemFile TFile;		/* table of offsets, also DB info */
-  PMemFile HFile;		/* description lines */
-  PMemFile SFile;		/* binary sequence data */
-  PMemFile FFile;		/* source sequence data */
-  AjPStr Title;			/* database title */
-  AjPStr Date;			/* database date */
-  AjPStr Name;			/* database base file name */
+  ajint DbType;
+  ajint DbFormat;
+  ajint IsProtein;
+  ajint IsBlast2;
+  ajint TitleLen;
+  ajint DateLen;
+  ajint LineLen;
+  ajint HeaderLen;
+  ajint Size;
+  ajint CompLen;
+  ajint MaxSeqLen;
+  ajint TotLen;
+  ajint CleanCount;
+  ajint TopCmp;
+  ajint TopSrc;
+  ajint TopHdr;
+  ajint TopAmb;
+  ajint IdType;
+  ajint IdPrefix;
+  PMemFile TFile;
+  PMemFile HFile;
+  PMemFile SFile;
+  PMemFile FFile;
+  AjPStr Title;
+  AjPStr Date;
+  AjPStr Name;
 } OBlastDb;
 
 #define PBlastDb OBlastDb*
@@ -215,24 +215,26 @@ static OBlastType blasttypes[] =
 
 
 
-static AjBool dbiblast_parseNcbi(AjPStr line, AjPFile* alistfile,
-				 AjBool systemsort, AjPStr* fields,
+static AjBool dbiblast_parseNcbi(const AjPStr line, AjPFile * alistfile,
+				 AjBool systemsort, AjPStr const * fields,
 				 PBlastDb db, ajint* maxFieldLen,
 				 AjPStr* id, AjPList* fdl);
-static AjBool dbiblast_parseGcg(AjPStr line, AjPFile* alistfile,
-				AjBool systemsort, AjPStr* fields,
+static AjBool dbiblast_parseGcg(const AjPStr line, AjPFile * alistfile,
+				AjBool systemsort, AjPStr const * fields,
 				PBlastDb db, ajint* maxFieldLen,
 				AjPStr* id, AjPList* fdl);
-static AjBool dbiblast_parseSimple(AjPStr line, AjPFile* alistfile,
-				   AjBool systemsort, AjPStr* fields,
+static AjBool dbiblast_parseSimple(const AjPStr line,
+				   AjPFile * alistfile,
+				   AjBool systemsort, AjPStr const * fields,
 				   PBlastDb db, ajint* maxFieldLen,
 				   AjPStr* id, AjPList* fdl);
-static AjBool dbiblast_parseId(AjPStr line, AjPFile* alistfile,
-			       AjBool systemsort, AjPStr* fields,
+static AjBool dbiblast_parseId(const AjPStr line, AjPFile * alistfile,
+			       AjBool systemsort, AjPStr const * fields,
 			       PBlastDb db, ajint* maxFieldLen,
 			       AjPStr* id, AjPList* fdl);
-static AjBool dbiblast_parseUnknown(AjPStr line, AjPFile* alistfile,
-				    AjBool systemsort, AjPStr* fields,
+static AjBool dbiblast_parseUnknown(const AjPStr line,
+				    AjPFile * alistfile,
+				    AjBool systemsort, AjPStr const * fields,
 				    PBlastDb db, ajint* maxFieldLen,
 				    AjPStr* id, AjPList* fdl);
 
@@ -254,8 +256,8 @@ static AjBool dbiblast_parseUnknown(AjPStr line, AjPFile* alistfile,
 typedef struct SParser
 {
   char* Name;
-  AjBool (*Parser) (AjPStr line, AjPFile* alistfile,
-		    AjBool systemsort, AjPStr* fields,
+  AjBool (*Parser) (const AjPStr line, AjPFile * alistfile,
+		    AjBool systemsort, AjPStr const * fields,
 		    PBlastDb db, ajint* maxFieldLen,
 		    AjPStr* id, AjPList* fdl);
 } OParser;
@@ -271,35 +273,39 @@ static OParser parser[] =
 };
 
 static EmbPEntry dbiblast_nextblastentry(PBlastDb db, ajint ifile,
-					 AjPStr idformat, AjBool systemsort,
-					 AjPStr* fields,
-					 ajint* maxFieldLen, ajint* maxidlen,
+					 const AjPStr idformat,
+					 AjBool systemsort,
+					 AjPStr const * fields,
+					 ajint* maxFieldLen,
+					 ajint* maxidlen,
 					 AjPFile elistfile,
-					 AjPFile* alistfile);
-static AjBool dbiblast_blastopenlib(AjPStr lname, AjBool usesrc,
+					 AjPFile * alistfile);
+static AjBool dbiblast_blastopenlib(const AjPStr lname, AjBool usesrc,
 				    ajint blastv, char dbtype,
 				    PBlastDb* pdb);
 
 static void dbiblast_dbfree(PBlastDb* pdb);
 
-static void dbiblast_dbname(AjPStr* dbname, AjPStr oname, char *suff);
-static void dbiblast_newname(AjPStr* nname, AjPStr oname, char *suff);
+static void dbiblast_dbname(AjPStr* dbname,
+			    const AjPStr oname, const char *suff);
+static void dbiblast_newname(AjPStr* nname,
+			     const AjPStr oname, const char *suff);
 
 static void dbiblast_memreadUInt4(PMemFile fd, ajuint *val);
 
-static PMemFile dbiblast_memfopenfile(AjPStr name);
+static PMemFile dbiblast_memfopenfile(const AjPStr name);
 static void dbiblast_memfclosefile(PMemFile* pfd);
 static size_t dbiblast_memfseek(PMemFile mf, ajlong offset, ajint whence);
 static size_t dbiblast_memfread(void* dest, size_t size, size_t num_items,
 				PMemFile mf);
-static size_t dbiblast_memfreadS(AjPStr dest, size_t size, size_t num_items,
+static size_t dbiblast_memfreadS(AjPStr* dest, size_t size, size_t num_items,
 				 PMemFile mf);
 
 static ajint dbiblast_loadtable(ajuint* table, ajint isize, PBlastDb db,
 				ajint top, ajint pos);
 static ajint dbiblast_ncblreadhdr(AjPStr* hline, PBlastDb db,
 				  ajint start, ajint end);
-static AjBool dbiblast_wrongtype(AjPStr oname, char *suff);
+static AjBool dbiblast_wrongtype(const AjPStr oname, const char *suff);
 
 static AjBool readReverse = AJFALSE;
 
@@ -386,8 +392,8 @@ int main(int argc, char **argv)
     idformat = ajStrNewC("NCBI");
 
     fields     = ajAcdGetList("fields");
-    directory  = ajAcdGetString("directory");
-    indexdir   = ajAcdGetString("indexdirectory");
+    directory  = ajAcdGetDirectoryName("directory");
+    indexdir   = ajAcdGetDirectoryName("indexdirectory");
     filename   = ajAcdGetString("filenames");
     exclude    = ajAcdGetString("exclude");
     dbname     = ajAcdGetString("dbname");
@@ -559,26 +565,27 @@ int main(int argc, char **argv)
 **
 ** Returns next  database entry as an EmbPEntry object
 **
-** @param [r] db [PBlastDb] Blast database object
+** @param [u] db [PBlastDb] Blast database object
 ** @param [r] ifile [ajint] File number.
-** @param [r] idformat [AjPStr] Id format in FASTA file
+** @param [r] idformat [const AjPStr] Id format in FASTA file
 ** @param [r] systemsort [AjBool] If ajTrue use system sort, else internal sort
-** @param [r] fields [AjPStr*] Field names to be indexed
+** @param [r] fields [AjPStr const *] Field names to be indexed
 ** @param [w] maxFieldLen [ajint*] Maximum token length for each field
 ** @param [w] maxidlen [ajint*] Maximum entry ID length
-** @param [r] elistfile [AjPFile] entry file
-** @param [r] alistfile [AjPFile*] field data files array
+** @param [u] elistfile [AjPFile] entry file
+** @param [u] alistfile [AjPFile *] field data files array
 ** @return [EmbPEntry] Entry data object.
 ** @@
 ******************************************************************************/
 
 static EmbPEntry dbiblast_nextblastentry(PBlastDb db, ajint ifile,
-					 AjPStr idformat, AjBool systemsort,
-					 AjPStr* fields,
-					 ajint* maxFieldLen,
+					 const AjPStr idformat,
+					 AjBool systemsort,
+					 AjPStr const * fields,
+					 ajint * maxFieldLen,
 					 ajint* maxidlen,
 					 AjPFile elistfile,
-					 AjPFile* alistfile)
+					 AjPFile * alistfile)
 {
     static EmbPEntry ret = NULL;
     ajint i;
@@ -752,8 +759,8 @@ static void dbiblast_dbfree( PBlastDb* pdb)
 **
 ** Open BLAST library
 **
-** @param [r] name [AjPStr] Source file name
-** @param [u] usesrc [AjBool] If ajTrue, use the source (fasta) file
+** @param [r] name [const AjPStr] Source file name
+** @param [r] usesrc [AjBool] If ajTrue, use the source (fasta) file
 ** @param [r] blastv [ajint] Blast version number (1 or 2)
 ** @param [r] dbtype [char] Blast database type (p)rotein or (n)ucleotide
 ** @param [u] pdb [PBlastDb*] Blast dababase structure.
@@ -761,7 +768,7 @@ static void dbiblast_dbfree( PBlastDb* pdb)
 ** @@
 ******************************************************************************/
 
-static AjBool dbiblast_blastopenlib(AjPStr name, AjBool usesrc,
+static AjBool dbiblast_blastopenlib(const AjPStr name, AjBool usesrc,
 				    ajint blastv, char dbtype,
 				    PBlastDb* pdb)
 {
@@ -864,12 +871,12 @@ static AjBool dbiblast_blastopenlib(AjPStr name, AjBool usesrc,
     ajDebug("IsBlast2: %B title_len: %d rdtmp: %d title_str: '%S'\n",
 	    ret->IsBlast2, ret->TitleLen, rdtmp, ret->Title);
     ajStrTrace(ret->Title);
-    dbiblast_memfreadS(ret->Title,(size_t)1,(size_t)rdtmp,ret->TFile);
+    dbiblast_memfreadS(&ret->Title,(size_t)1,(size_t)rdtmp,ret->TFile);
 
     if(ret->IsBlast2)
-	ajStrFixI(ret->Title, ret->TitleLen);
+	ajStrFixI(&ret->Title, ret->TitleLen);
     else
-	ajStrFixI(ret->Title, ret->TitleLen-1);
+	ajStrFixI(&ret->Title, ret->TitleLen-1);
 
     ajDebug("title_len: %d rdtmp: %d title_str: '%S'\n",
 	    ret->TitleLen, rdtmp, ret->Title);
@@ -882,7 +889,7 @@ static AjBool dbiblast_blastopenlib(AjPStr name, AjBool usesrc,
 	dbiblast_memreadUInt4(ret->TFile,(ajuint*)&ret->DateLen);
 	rdtmp2 = ret->DateLen;
 	ajStrAssCL(&ret->Date, "", rdtmp2+1);
-	dbiblast_memfreadS(ret->Date,(size_t)1,(size_t)rdtmp2,ret->TFile);
+	dbiblast_memfreadS(&ret->Date,(size_t)1,(size_t)rdtmp2,ret->TFile);
 	ajDebug("datelen: %d rdtmp: %d date_str: '%S'\n",
 		ret->DateLen, rdtmp2, ret->Date);
 	ret->HeaderLen += 4 + rdtmp2;
@@ -964,21 +971,22 @@ static AjBool dbiblast_blastopenlib(AjPStr name, AjBool usesrc,
 **
 ** Parses an NCBI style header from the BLAST header table.
 **
-** @param [r] line [AjPStr] Input line
-** @param [w] alistfile [AjPFile*] List of field temporary files
+** @param [r] line [const AjPStr] Input line
+** @param [u] alistfile [AjPFile *] List of field temporary files
 ** @param [r] systemsort [AjBool] If ajTrue, use the system sort utility,
 **                                else sort in memory
-** @param [w] fields [AjPStr*] Field names
-** @param [r] db [PBlastDb] Database object
-** @param [r] maxFieldLen [ajint*] Maximum token lengths for each field
+** @param [r] fields [AjPStr const*] Field names
+** @param [u] db [PBlastDb] Database object
+** @param [w] maxFieldLen [ajint*] Maximum token lengths for each field
 ** @param [w] id [AjPStr*] ID
-** @param [w] fdlist [AjPList*] Field token lists (one list for each field)
+** @param [w] fdlist [AjPList *] Field token lists
+**                                  (one list for each field)
 ** @return [AjBool] ajTrue on success
 ** @@
 ******************************************************************************/
 
-static AjBool dbiblast_parseNcbi(AjPStr line, AjPFile* alistfile,
-				 AjBool systemsort, AjPStr* fields,
+static AjBool dbiblast_parseNcbi(const AjPStr line, AjPFile * alistfile,
+				 AjBool systemsort, AjPStr const * fields,
 				 PBlastDb db, ajint* maxFieldLen,
 				 AjPStr* id,
 				 AjPList* fdlist)
@@ -1124,20 +1132,20 @@ static AjBool dbiblast_parseNcbi(AjPStr line, AjPFile* alistfile,
 **
 ** Parses a GCG style header from the BLAST header table.
 **
-** @param [r] line [AjPStr] Input line
-** @param [r] alistfile [AjPFile*] field data files array
+** @param [r] line [const AjPStr] Input line
+** @param [u] alistfile [AjPFile *] field data files array
 ** @param [r] systemsort [AjBool] If ajTrue use system sort, else internal sort
-** @param [r] fields [AjPStr*] Field names to be indexed
-** @param [r] db [PBlastDb] Database object
+** @param [r] fields [AjPStr const *] Field names to be indexed
+** @param [u] db [PBlastDb] Database object
 ** @param [w] maxFieldLen [ajint*] Maximum token length for each field
 ** @param [w] id [AjPStr*] ID
-** @param [w] fdl [AjPList*] Accession number list
+** @param [w] fdl [AjPList *] Accession number list
 ** @return [AjBool] ajTrue on success
 ** @@
 ******************************************************************************/
 
-static AjBool dbiblast_parseGcg(AjPStr line, AjPFile* alistfile,
-				AjBool systemsort, AjPStr* fields,
+static AjBool dbiblast_parseGcg(const AjPStr line, AjPFile * alistfile,
+				AjBool systemsort, AjPStr const * fields,
 				PBlastDb db, ajint* maxFieldLen,
 				AjPStr* id, AjPList* fdl)
 {
@@ -1214,11 +1222,11 @@ static AjBool dbiblast_parseGcg(AjPStr line, AjPFile* alistfile,
 **
 ** Parses a plain header from the BLAST header table.
 **
-** @param [r] line [AjPStr] Input line
-** @param [r] alistfile [AjPFile*] field data files array
+** @param [r] line [const AjPStr] Input line
+** @param [u] alistfile [AjPFile *] field data files array
 ** @param [r] systemsort [AjBool] If ajTrue use system sort, else internal sort
-** @param [r] fields [AjPStr*] Field names to be indexed
-** @param [r] db [PBlastDb] Database object
+** @param [r] fields [AjPStr const *] Field names to be indexed
+** @param [u] db [PBlastDb] Database object
 ** @param [w] maxFieldLen [ajint*] Maximum token length for each field
 ** @param [w] id [AjPStr*] ID
 ** @param [w] fdl [AjPList*] Accession number list
@@ -1226,8 +1234,9 @@ static AjBool dbiblast_parseGcg(AjPStr line, AjPFile* alistfile,
 ** @@
 ******************************************************************************/
 
-static AjBool dbiblast_parseSimple(AjPStr line, AjPFile* alistfile,
-				   AjBool systemsort, AjPStr* fields,
+static AjBool dbiblast_parseSimple(const AjPStr line,
+				   AjPFile * alistfile,
+				   AjBool systemsort, AjPStr const * fields,
 				   PBlastDb db, ajint* maxFieldLen,
 				   AjPStr* id,
 				   AjPList* fdl)
@@ -1303,11 +1312,11 @@ static AjBool dbiblast_parseSimple(AjPStr line, AjPFile* alistfile,
 **
 ** Parses a simple FASTA ID from the BLAST header table.
 **
-** @param [r] line [AjPStr] Input line
-** @param [r] alistfile [AjPFile*] field data files array
+** @param [r] line [const AjPStr] Input line
+** @param [u] alistfile [AjPFile *] field data files array
 ** @param [r] systemsort [AjBool] If ajTrue use system sort, else internal sort
-** @param [r] fields [AjPStr*] Field names to be indexed
-** @param [r] db [PBlastDb] Database object
+** @param [r] fields [AjPStr const *] Field names to be indexed
+** @param [u] db [PBlastDb] Database object
 ** @param [w] maxFieldLen [ajint*] Maximum token length for each field
 ** @param [w] id [AjPStr*] ID
 ** @param [w] fdl [AjPList*] Accession number list
@@ -1315,11 +1324,11 @@ static AjBool dbiblast_parseSimple(AjPStr line, AjPFile* alistfile,
 ** @@
 ******************************************************************************/
 
-static AjBool dbiblast_parseId(AjPStr line, AjPFile* alistfile,
-			       AjBool systemsort, AjPStr* fields,
+static AjBool dbiblast_parseId(const AjPStr line, AjPFile * alistfile,
+			       AjBool systemsort, AjPStr const * fields,
 			       PBlastDb db, ajint* maxFieldLen,
 			       AjPStr* id,
-			       AjPList* fdl)
+			       AjPList * fdl)
 {
     static AjPRegexp idexp = NULL;
     static ajint numFields;
@@ -1377,11 +1386,11 @@ static AjBool dbiblast_parseId(AjPStr line, AjPFile* alistfile,
 **
 ** Parses an unknown type ID from the BLAST header table.
 **
-** @param [r] line [AjPStr] Input line
-** @param [r] alistfile [AjPFile*] field data files array
+** @param [r] line [const AjPStr] Input line
+** @param [u] alistfile [AjPFile *] field data files array
 ** @param [r] systemsort [AjBool] If ajTrue use system sort, else internal sort
-** @param [r] fields [AjPStr*] Field names to be indexed
-** @param [r] db [PBlastDb] Database object
+** @param [r] fields [AjPStr const *] Field names to be indexed
+** @param [u] db [PBlastDb] Database object
 ** @param [w] maxFieldLen [ajint*] Maximum token length for each field
 ** @param [w] id [AjPStr*] ID
 ** @param [w] fdl [AjPList*] Accession number list
@@ -1389,8 +1398,9 @@ static AjBool dbiblast_parseId(AjPStr line, AjPFile* alistfile,
 ** @@
 ******************************************************************************/
 
-static AjBool dbiblast_parseUnknown(AjPStr line, AjPFile* alistfile,
-				    AjBool systemsort, AjPStr* fields,
+static AjBool dbiblast_parseUnknown(const AjPStr line,
+				    AjPFile * alistfile,
+				    AjBool systemsort, AjPStr const * fields,
 				    PBlastDb db, ajint* maxFieldLen,
 				    AjPStr* id,
 				    AjPList* fdl)
@@ -1444,8 +1454,8 @@ static AjBool dbiblast_parseUnknown(AjPStr line, AjPFile* alistfile,
 ** Reads a 4 byte unsigned integer from a (possibly memory mapped)
 ** binary file, with the correct byte orientation
 **
-** @param [r] fd [PMemFile] Input file
-** @param [r] val [ajuint *] Unsigned integer
+** @param [u] fd [PMemFile] Input file
+** @param [w] val [ajuint *] Unsigned integer
 ** @return [void]
 ** @@
 ******************************************************************************/
@@ -1468,19 +1478,19 @@ static void dbiblast_memreadUInt4(PMemFile fd, ajuint *val)
 ** Reads a string from a (possibly memory mapped)
 ** binary file, with the correct byte orientation
 **
-** @param [w] dest [AjPStr] Output string, must be already the right size
+** @param [w] dest [AjPStr*] Output string, must be already the right size
 ** @param [r] size [size_t] Size of string (1)
 ** @param [r] num_items [size_t] Number of bytes
-** @param [r] mf [PMemFile] Input file
+** @param [u] mf [PMemFile] Input file
 ** @return [size_t] fread return code
 ** @@
 ******************************************************************************/
 
-static size_t dbiblast_memfreadS(AjPStr dest, size_t size, size_t num_items,
+static size_t dbiblast_memfreadS(AjPStr* dest, size_t size, size_t num_items,
 				 PMemFile mf)
 {
 
-    return dbiblast_memfread(ajStrStr(dest), size, num_items, mf);
+    return dbiblast_memfread(ajStrStrMod(dest), size, num_items, mf);
 }
 
 
@@ -1490,7 +1500,7 @@ static size_t dbiblast_memfreadS(AjPStr dest, size_t size, size_t num_items,
 **
 ** fseek in a (possibly memory mapped) binary file
 **
-** @param [r] mf [PMemFile] Input file
+** @param [u] mf [PMemFile] Input file
 ** @param [r] offset [ajlong] Offset in file
 ** @param [r] whence [ajint] Start of offset, as defined for 'fseek'
 ** @return [size_t] Result of 'fseek'
@@ -1537,7 +1547,7 @@ static size_t dbiblast_memfseek(PMemFile mf, ajlong offset, ajint whence)
 ** @param [w] dest [void*] Output text string
 ** @param [r] size [size_t] Size of string (1)
 ** @param [r] num_items [size_t] Number of bytes
-** @param [r] mf [PMemFile] Input file
+** @param [u] mf [PMemFile] Input file
 ** @return [size_t] Result of 'fread'
 ** @@
 ******************************************************************************/
@@ -1566,13 +1576,14 @@ static size_t dbiblast_memfread(void* dest, size_t size, size_t num_items,
 ** Generate a new filename with a different suffix.
 **
 ** @param [w] nname [AjPStr*] New filename
-** @param [r] oname [AjPStr] Original file name
-** @param [r] suff [char*] New suffix
+** @param [r] oname [const AjPStr] Original file name
+** @param [r] suff [const char*] New suffix
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-static void dbiblast_newname(AjPStr* nname, AjPStr oname, char *suff)
+static void dbiblast_newname(AjPStr* nname, const AjPStr oname,
+			     const char *suff)
 {
 
     ajStrAssS(nname, oname);
@@ -1593,13 +1604,14 @@ static void dbiblast_newname(AjPStr* nname, AjPStr oname, char *suff)
 ** by stripping off the suffix
 **
 ** @param [w] dbname [AjPStr*] Database filename
-** @param [r] oname [AjPStr] Original file name
-** @param [r] suff [char*] New suffix
+** @param [r] oname [const AjPStr] Original file name
+** @param [r] suff [const char*] New suffix
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-static void dbiblast_dbname(AjPStr* dbname, AjPStr oname, char *suff)
+static void dbiblast_dbname(AjPStr* dbname,
+			    const AjPStr oname, const char *suff)
 {
     AjPStr suffix = NULL;
 
@@ -1629,15 +1641,15 @@ static void dbiblast_dbname(AjPStr* dbname, AjPStr oname, char *suff)
 /* @funcstatic dbiblast_wrongtype *********************************************
 **
 ** Tests for the other database filenames in case the user asked
-** for "*.*". Used to test we have the *.suff fiel before opening all files.
+** for "*.*". Used to test we have the *.suff file before opening all files.
 **
-** @param [r] oname [AjPStr] Original file name
-** @param [r] suff [char*] Required suffix
+** @param [r] oname [const AjPStr] Original file name
+** @param [r] suff [const char*] Required suffix
 ** @return [AjBool] ajTrue if any other filename suffix is recognized
 ** @@
 ******************************************************************************/
 
-static AjBool dbiblast_wrongtype(AjPStr oname, char *suff)
+static AjBool dbiblast_wrongtype(const AjPStr oname, const char *suff)
 {
     ajint itype;
 
@@ -1697,12 +1709,12 @@ static void dbiblast_memfclosefile(PMemFile* pfd)
 **
 ** Open a (possibly memory mapped) binary file
 **
-** @param [r] name [AjPStr] File name
+** @param [r] name [const AjPStr] File name
 ** @return [PMemFile] Memory mapped file object created
 ** @@
 ******************************************************************************/
 
-static PMemFile dbiblast_memfopenfile(AjPStr name)
+static PMemFile dbiblast_memfopenfile(const AjPStr name)
 {
     PMemFile ret;
     AjPFile fp;
@@ -1733,7 +1745,7 @@ static PMemFile dbiblast_memfopenfile(AjPStr name)
 **
 ** @param [w] table [ajuint*] table array to be read
 ** @param [r] isize [ajint] Number of elements to read
-** @param [r] db [PBlastDb] Blast database structure
+** @param [u] db [PBlastDb] Blast database structure
 ** @param [r] top [ajint] Byte offset for start of table
 ** @param [r] pos [ajint] Current element number in table.
 ** @return [ajint] Number of elements read.
@@ -1775,7 +1787,7 @@ static ajint dbiblast_loadtable(ajuint* table, ajint isize, PBlastDb db,
 ** Read the FASTA header line for one entry
 **
 ** @param [w] hline [AjPStr*] Header line
-** @param [r] db [PBlastDb] Blast database structure
+** @param [u] db [PBlastDb] Blast database structure
 ** @param [r] start [ajint] Byte offset for start of header
 ** @param [r] end [ajint] Byte offset for end of header
 ** @return [ajint] Number of bytes read.
@@ -1810,15 +1822,15 @@ static ajint dbiblast_ncblreadhdr(AjPStr* hline, PBlastDb db, ajint start,
     if(db->IsBlast2)
     {
 	dbiblast_memfseek(hfp,start,0);
-	dbiblast_memfreadS(*hline,(size_t)1,(size_t)(llen-1),hfp);
+	dbiblast_memfreadS(hline,(size_t)1,(size_t)(llen-1),hfp);
     }
     else
     {
 	dbiblast_memfseek(hfp,start+1,0); /* skip the '>' character */
-	dbiblast_memfreadS(*hline,(size_t)1,(size_t)(llen-1),hfp);
+	dbiblast_memfreadS(hline,(size_t)1,(size_t)(llen-1),hfp);
     }
 
-    ajStrFixI(*hline, (llen-1));
+    ajStrFixI(hline, (llen-1));
 
     return llen;
 }

@@ -51,7 +51,7 @@
 #define FASTATYPE_SIMPLE    1
 #define FASTATYPE_IDACC     2
 #define FASTATYPE_GCGID     3
-#define FASTATYPE_GCGIDACC  4
+#define FASTATYPE_GCGIDACC 4
 #define FASTATYPE_NCBI      5
 #define FASTATYPE_DBID      6
 #define FASTATYPE_ACCID     7
@@ -65,17 +65,18 @@ static AjBool dbifasta_ParseFasta(AjPFile libr, ajint *dpos,
 				  ajint* maxFieldLen,
 				  AjPRegexp exp,
 				  ajint type, AjPFile* alistfile,
-				  AjBool systemsort, AjPStr* fields);
+				  AjBool systemsort, AjPStr const * fields);
 
 static EmbPEntry dbifasta_NextFlatEntry(AjPFile libr, ajint ifile,
-					AjPStr idformat, AjPRegexp exp,
+					const AjPStr idformat, AjPRegexp exp,
 					ajint type, AjBool systemsort,
-					AjPStr* fields, ajint* maxFieldLen,
+					AjPStr const * fields,
+					ajint* maxFieldLen,
 					ajint* maxidlen,
 					AjPFile elistfile,
 					AjPFile* alistfile);
 
-static AjPRegexp dbifasta_getExpr(AjPStr idformat, ajint *type);
+static AjPRegexp dbifasta_getExpr(const AjPStr idformat, ajint *type);
 
 
 
@@ -150,8 +151,8 @@ int main(int argc, char **argv)
 
     idformat   = ajAcdGetListI("idformat",1);
     fields     = ajAcdGetList("fields");
-    directory  = ajAcdGetString("directory");
-    indexdir   = ajAcdGetString("indexdirectory");
+    directory  = ajAcdGetDirectoryName("directory");
+    indexdir   = ajAcdGetDirectoryName("indexdirectory");
     filename   = ajAcdGetString("filenames");
     exclude    = ajAcdGetString("exclude");
     dbname     = ajAcdGetString("dbname");
@@ -206,13 +207,13 @@ int main(int argc, char **argv)
     {
 	curfilename =(AjPStr) inputFiles[ifile];
 	embDbiFlatOpenlib(curfilename, &libr);
+	ajFileNameTrim(&curfilename);
 	if(ajStrLen(curfilename) >= maxfilelen)
 	    maxfilelen = ajStrLen(curfilename) + 1;
 
 	ajDebug("processing filename '%S' ...\n", curfilename);
 	ajDebug("processing file '%F' ...\n", libr);
 	ajStrAssS(&divfiles[ifile], curfilename);
-	ajFileNameTrim(&divfiles[ifile]);
 
 	if(systemsort)	 /* elistfile for entries, alist for fields */
 	    elistfile = embDbiSortOpen(alistfile, ifile,
@@ -281,6 +282,8 @@ int main(int argc, char **argv)
 
     ajListDel(&listInputFiles);
 
+    ajRegFree(&exp);
+
     ajExit();
 
     return 0;
@@ -293,25 +296,26 @@ int main(int argc, char **argv)
 **
 ** Returns next database entry as an EmbPEntry object
 **
-** @param [r] libr [AjPFile] Database file
+** @param [u] libr [AjPFile] Database file
 ** @param [r] ifile [ajint] File number.
-** @param [r] idformat [AjPStr] type of id line
-** @param [r] exp [AjPRegexp] Regular expression for id parsing
+** @param [r] idformat [const AjPStr] type of id line
+** @param [u] exp [AjPRegexp] Regular expression for id parsing
 ** @param [r] type [ajint] type of fasta id.
 ** @param [r] systemsort [AjBool] If ajTrue use system sort, else internal sort
-** @param [r] fields [AjPStr*] Field names to be indexed
+** @param [r] fields [AjPStr const *] Field names to be indexed
 ** @param [w] maxFieldLen [ajint*] Maximum field token length
 ** @param [w] maxidlen [ajint*] Maximum entry ID length
-** @param [r] elistfile [AjPFile] entry file
-** @param [r] alistfile [AjPFile*] field data files array
+** @param [u] elistfile [AjPFile] entry file
+** @param [u] alistfile [AjPFile*] field data files array
 ** @return [EmbPEntry] Entry data object.
 ** @@
 ******************************************************************************/
 
 static EmbPEntry dbifasta_NextFlatEntry(AjPFile libr, ajint ifile,
-					AjPStr idformat, AjPRegexp exp,
+					const AjPStr idformat, AjPRegexp exp,
 					ajint type, AjBool systemsort,
-					AjPStr* fields, ajint* maxFieldLen,
+					AjPStr const * fields,
+					ajint* maxFieldLen,
 					ajint* maxidlen,
 					AjPFile elistfile, AjPFile* alistfile)
 {
@@ -387,13 +391,13 @@ static EmbPEntry dbifasta_NextFlatEntry(AjPFile libr, ajint ifile,
 **
 ** Compile regular expression
 **
-** @param [r] idformat [AjPStr] type of ID line
+** @param [r] idformat [const AjPStr] type of ID line
 ** @param [w] type [ajint *] numeric type
 ** @return [AjPRegexp] ajTrue on success.
 ** @@
 ******************************************************************************/
 
-static AjPRegexp dbifasta_getExpr(AjPStr idformat, ajint *type)
+static AjPRegexp dbifasta_getExpr(const AjPStr idformat, ajint *type)
 {
     AjPRegexp exp = NULL;
 
@@ -405,29 +409,29 @@ static AjPRegexp dbifasta_getExpr(AjPStr idformat, ajint *type)
     else if(ajStrMatchC(idformat,"idacc"))
     {
 	*type = FASTATYPE_IDACC;
-	exp   = ajRegCompC("^>([.A-Za-z0-9_-]+)+[ \t]+([A-Za-z0-9-]+)");
+	exp   = ajRegCompC("^>([.A-Za-z0-9_-]+)+[ \t]+([A-Za-z0-9_-]+)");
     }
     else if(ajStrMatchC(idformat,"accid"))
     {
 	*type = FASTATYPE_ACCID;
-	exp   = ajRegCompC("^>([A-Za-z0-9_-]+)+[ \t]+([A-Za-z0-9-]+)");
+	exp   = ajRegCompC("^>([A-Za-z0-9_-]+)+[ \t]+([A-Za-z0-9_-]+)");
     }
     else if(ajStrMatchC(idformat,"gcgid"))
     {
 	*type = FASTATYPE_GCGID;
-	exp   = ajRegCompC("^>[A-Za-z0-9_-]+:([A-Za-z0-9-]+)");
+	exp   = ajRegCompC("^>[A-Za-z0-9_-]+:([A-Za-z0-9_-]+)");
     }
     else if(ajStrMatchC(idformat,"gcgidacc"))
     {
 	*type = FASTATYPE_GCGIDACC;
 	exp   = ajRegCompC(
-		     "^>[A-Za-z0-9_-]+:([A-Za-z0-9-]+)[ \t]+([A-Za-z0-9-]+)");
+		     "^>[A-Za-z0-9_-]+:([A-Za-z0-9_-]+)[ \t]+([A-Za-z0-9-]+)");
     }
     else if(ajStrMatchC(idformat,"gcgaccid"))
     {
 	*type = FASTATYPE_GCGACCID;
 	exp   = ajRegCompC(
-		     "^>[A-Za-z0-9_-]+:([A-Za-z0-9-]+)[ \t]+([A-Za-z0-9-]+)");
+		     "^>[A-Za-z0-9_-]+:([A-Za-z0-9_-]+)[ \t]+([A-Za-z0-9-]+)");
     }
     else if(ajStrMatchC(idformat,"ncbi"))
     {
@@ -452,16 +456,16 @@ static AjPRegexp dbifasta_getExpr(AjPStr idformat, ajint *type)
 **
 ** Parse the ID, accession from a FASTA format sequence
 **
-** @param [r] libr [AjPFile] Input database file
+** @param [u] libr [AjPFile] Input database file
 ** @param [w] dpos [ajint*] Byte offset
 ** @param [w] id [AjPStr*] ID
 ** @param [w] fdlist [AjPList*] Lists of field tokens
 ** @param [w] maxFieldLen [ajint*] Maximum field token length
-** @param [r] exp [AjPRegexp] regular expression
+** @param [u] exp [AjPRegexp] regular expression
 ** @param [r] type [ajint] type of id line
-** @param [r] alistfile [AjPFile*] field data files array
+** @param [u] alistfile [AjPFile*] field data files array
 ** @param [r] systemsort [AjBool] If ajTrue use system sort, else internal sort
-** @param [r] fields [AjPStr*] Field names to be indexed
+** @param [r] fields [AjPStr const *] Field names to be indexed
 ** @return [AjBool] ajTrue on success.
 ** @@
 ******************************************************************************/
@@ -470,7 +474,7 @@ static AjBool dbifasta_ParseFasta(AjPFile libr, ajint* dpos,
 				  AjPStr* id, AjPList* fdlist,
 				  ajint* maxFieldLen, AjPRegexp exp,
 				  ajint type, AjPFile* alistfile,
-				  AjBool systemsort, AjPStr* fields)
+				  AjBool systemsort, AjPStr const * fields)
 {
     static AjPRegexp wrdexp = NULL;
     static AjPStr tmpac  = NULL;
@@ -546,17 +550,17 @@ static AjBool dbifasta_ParseFasta(AjPFile libr, ajint* dpos,
     {
     case FASTATYPE_SIMPLE:
 	ajRegSubI(exp,1,id);
-	ajStrAss(&tmpac,*id);
+	ajStrAssS(&tmpac,*id);
 	ajRegPost(exp, &tmpdes);
 	break;
     case FASTATYPE_DBID:
 	ajRegSubI(exp,1,id);
-	ajStrAss(&tmpac,*id);
+	ajStrAssS(&tmpac,*id);
 	ajRegPost(exp, &tmpdes);
 	break;
     case FASTATYPE_GCGID:
 	ajRegSubI(exp,1,id);
-	ajStrAss(&tmpac,*id);
+	ajStrAssS(&tmpac,*id);
 	ajRegPost(exp, &tmpdes);
 	break;
     case FASTATYPE_NCBI:

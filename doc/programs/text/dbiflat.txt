@@ -63,7 +63,7 @@ Command line arguments
 
    Standard (Mandatory) qualifiers:
    -idformat           menu       Entry format
-   -directory          string     Database directory
+   -directory          directory  Database directory
    -filenames          string     Wildcard database filename
   [-dbname]            string     Database name
    -release            string     Release number
@@ -72,8 +72,8 @@ Command line arguments
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers:
    -fields             menu       Index fields
-   -exclude            string     wildcard filename(s) to exclude
-   -indexdirectory     string     Index directory
+   -exclude            string     Wildcard filename(s) to exclude
+   -indexdirectory     directory  Index directory
    -maxindex           integer    Maximum index length
    -sortoptions        string     Sort options, typically '-T .' to use
                                   current directory for work files and '-k
@@ -106,7 +106,7 @@ Command line arguments
    GB     (Genbank, DDBJ)
    REFSEQ (Refseq)
    SWISS
-   -directory Database directory Any string is accepted .
+   -directory Database directory Directory .
    -filenames Wildcard database filename Any string is accepted *.dat
    [-dbname]
    (Parameter 1) Database name A string from 1 to 19 characters Required
@@ -122,9 +122,9 @@ Command line arguments
    keyword (Keywords)
    taxon   (Taxonomy)
    acnum
-   -exclude wildcard filename(s) to exclude Any string is accepted An
+   -exclude Wildcard filename(s) to exclude Any string is accepted An
    empty string is accepted
-   -indexdirectory Index directory Any string is accepted .
+   -indexdirectory Index directory Directory .
    -maxindex Maximum index length Integer 0 or more 0
    -sortoptions Sort options, typically '-T .' to use current directory
    for work files and '-k 1,1' to force GNU sort to use the first field
