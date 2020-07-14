@@ -133,6 +133,7 @@ AjPFile ajFileNewInPipe(const AjPStr name)
     char** arglist        = NULL;
     char* pgm;
     int status;
+    int ret;
     
     AJNEW0(thys);
     ajStrAssS(&tmpname, name);
@@ -186,8 +187,16 @@ AjPFile ajFileNewInPipe(const AjPStr name)
     if(fileOpenCnt > fileOpenMax)
 	fileOpenMax = fileOpenCnt;
     
-    while(wait(&status) != pid);
-    
+/*
+    ret = -1;
+    while(ret != pid)
+    {
+        ret = wait(&status);
+	if(ret == -1)
+	    if(ret != EINTR)
+		ret = pid;
+    }
+*/
     return thys;
 }
 
