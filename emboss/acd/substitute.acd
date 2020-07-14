@@ -1,0 +1,52 @@
+application: substitute [
+  documentation: "substitutes matches from first (query) sequence of two aligned sequences in a trace into second (template sequence)"
+  groups: "protein: global alignment"
+]
+
+section: input [
+  information: "input section"
+  type: "page"
+]
+
+  dirlist: alignedpairsdir [
+    parameter: "Y"
+    default: "/users/damian/EMBOSS/emboss/emboss/emboss/contacttest/test_alignments"
+    information: "directory containing paired traces of alignments"
+  ]
+
+  dirlist: substituteddir [
+    parameter: "Y"
+    default: "/users/damian/EMBOSS/emboss/emboss/emboss/contacttest/substituted_sequences"
+    information: "directory containing template sequences substituted with matches from query sequences"
+  ]
+
+endsection: input
+
+section: required [
+  information: "required section"
+  type: "page"
+]
+
+endsection: required
+
+
+section: advanced [
+  information: "advanced section"
+  type: "page"
+]
+
+endsection: advanced
+
+section: output [
+  information: "output Section"
+  type: "page"
+]
+
+seqout: substituted
+  [
+    param: "Y"
+    type: "protein"
+    default: "./contacttest/substituted_sequences/12Jul04.fasta"
+  ]
+
+endsection: output

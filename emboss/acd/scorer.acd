@@ -1,0 +1,68 @@
+application: scorer [
+  documentation: "scores accuracy of protein-protein sequence
+	alignment algorithm against gold standard structure-structure alignment"
+  groups: "protein: 3D structure"
+]
+
+section: input [
+  information: "input section"
+  type: "page"
+]
+
+  dirlist: goldalignmentsdir [
+    parameter: "Y"
+    default: "/data/structure/people/mhurley/Database/HOMSTRAD/class/all_alpha/glob"
+    information: "directory containing gold standard alignment files"
+  ]
+
+  dirlist: scoredalignmentsdir [
+    parameter: "Y"
+    default: "/data/structure/people/mhurley/Database/HOMSTRAD/class/all_alpha/glob"
+    information: "directory containing alignment files for scoring"
+  ]
+
+  outfile: dummyfile [
+    parameter: "Y"
+    default: "/users/damian/EMBOSS/emboss/emboss/emboss/contacttest/test_scoring_files/dummy_score_report.dat"
+    information: "dummy file of output scores"
+  ]
+endsection: input
+
+section: required [
+  information: "required section"
+  type: "page"
+]
+
+endsection: required
+
+
+section: advanced [
+  information: "advanced section"
+  type: "page"
+]
+
+endsection: advanced
+
+section: output [
+  information: "output Section"
+  type: "page"
+]
+
+  report: outfile [
+    parameter: "Y"
+    rformat: "table"
+    multiple: "N"
+    precision: "1"
+    prompt: "scoresfile for output"
+    taglist: "int:score1 float:score2"
+    default: "/users/damian/EMBOSS/emboss/emboss/emboss/contacttest/test_scoring_files/scores.txt"
+  ]
+
+seqout: aligned
+  [
+    param: "Y"
+    type: "gapprotein"
+    default: "/users/damian/EMBOSS/emboss/emboss/emboss/contacttest/test_scoring_files/13Jul04.fasta"
+  ]
+
+endsection: output

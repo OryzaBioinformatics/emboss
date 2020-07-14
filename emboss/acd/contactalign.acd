@@ -1,0 +1,101 @@
+application: contactalign [
+    documentation: "EMBOSS implementation of Damian Counsell's 2.5-D alignment algorithm"
+    groups: "alignment: global"
+]
+
+section: input [
+  information: "input section"
+  type: "page"
+]
+
+  sequence: down [
+    param: "Y"
+    type: "protein"
+    information: "first (query) polypeptide sequence to be aligned"
+  ]
+
+  sequence: across [
+    param: "Y"
+    type: protein
+    information: "second (template) polypeptide sequence to be aligned"
+  ]
+
+  matrixf: substitutionscoringfile [
+    optional: "Y"	
+    info: "matrix of scores for specific amino acid residue type substitution within
+    one-dimensional sequence strings"
+    protein: $(down.protein)
+    default: "/users/damian/EMBOSS/emboss/emboss/emboss/data/EBLOSUM62"	
+  ]
+
+  matrixf: contactscoringfile [
+    optional: "Y"	
+    info: "matrix of scores for frequency of contacts between specific
+    amino acid residue types"
+    protein: $(down.protein)
+    default: "/users/damian/EMBOSS/emboss/emboss/emboss/contacttest/contactscore.dat"	
+  ]
+
+endsection: input
+
+section: required [
+  information: "required section"
+  type: "page"
+]
+
+  float: gapopen  [
+    standard: "Y"
+    information: "Gap opening penalty"
+    minimum: "1."
+    maximum: "100."
+    default: "@($(acdprotein)? 10.0 : 10.0 )"
+    valid: "Floating point number from 1.0 to 100.0"
+    expected: "10.0 for any sequence"
+    help: "The gap opening penalty is subtracted from the total score 
+           every time a gap is inserted in the alignment. The default 
+           value is chosen for the EBLOSUM62 scoring matrix when you
+           are aligning protein sequences, and the EDNAFULL matrix when 
+           you are aligning nucleotide sequences. If you sequence 
+           contains many small errors you should set a low gap opening 
+           penalty (near zero) to avoid over-penalizing those errors."
+  ]
+
+  float: gapextend  [
+    standard: "Y"
+    information: "Gap extension penalty"
+    minimum: "0.0"
+    maximum: "10."
+    default: "@($(acdprotein)? 0.5 : 0.5 )"
+    valid: "Floating point number from 0.0 to 10.0"
+    expected: "0.5 for any sequence"
+    help: "The gap extension penalty is the score substracted when more
+           spaces are added to an existing alignment gap.  Often a single 
+           insertion or deletion affects multiple residues/nucleotides; 
+           separate opening and extension penalties reduce the excessive 
+           penalty such events would otherwise carry; generally the
+           gap extension penalty should be significantly lower than
+           the gap opening penalty."
+  ]
+
+endsection: required
+
+
+section: advanced [
+  information: "advanced section"
+  type: "page"
+]
+
+endsection: advanced
+
+section: output [
+  information: "output Section"
+  type: "page"
+]
+
+seqout: aligned
+  [
+    param: "Y"
+    type: "gapprotein"
+  ]
+
+endsection: output

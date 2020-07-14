@@ -1,0 +1,38 @@
+application: alignrunner [
+  documentation: "runs alignment program on all sequence pairs in a directory"
+  groups: "protein: 3D structure"
+]
+
+section: input [
+  information: "input section"
+  type: "page"
+]
+
+  dirlist: seqpairsdir [
+    parameter: "Y"
+    default: "/data/structure/people/mhurley/Database/HOMSTRAD/class/all_alpha/glob"
+    information: "input directory of files containing sequence pairs for alignment"
+  ]
+endsection: input
+
+section: required [
+  information: "required section"
+  type: "page"
+]
+
+endsection: required
+
+
+section: advanced [
+  information: "advanced section"
+  type: "page"
+]
+
+endsection: advanced
+
+section: output [
+  information: "output Section"
+  type: "page"
+]
+
+endsection: output
