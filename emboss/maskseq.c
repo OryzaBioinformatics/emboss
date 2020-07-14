@@ -36,6 +36,7 @@ int main(int argc, char **argv)
     AjPSeqout seqout;
     AjPRange regions;
     AjPStr maskchar;
+    AjBool tolower;
     AjPStr str=NULL;
     ajint beg;
     ajint end;
@@ -46,17 +47,30 @@ int main(int argc, char **argv)
     seqout = ajAcdGetSeqout ("outseq");
     regions = ajAcdGetRange("regions");
     maskchar = ajAcdGetString ("maskchar");
+    tolower = ajAcdGetBool ("tolower");
 
     beg = ajSeqBegin(seq)-1;
     end = ajSeqEnd(seq)-1;
 
 
-    /* mask the regions */
+    /* get the copy of the sequence and the regions */
     (void) ajStrAssSub (&str, ajSeqStr(seq), beg, end);
     (void) ajRangeBegin (regions, beg+1);
-    (void) ajRangeStrMask (&str, regions, maskchar);
-    (void) ajSeqReplace(seq, str);
 
+    /* if the mask character is null or space or 'tower' is True, then
+    ** ToLower the regions, else replace with maskseq
+    */
+    if (tolower || ajStrLen(maskchar) == 0 || ajStrMatchC(maskchar, " ")) {
+
+    	(void) ajRangeStrToLower (&str, regions);
+
+    } else {
+
+        (void) ajRangeStrMask (&str, regions, maskchar);
+
+    }
+    
+    (void) ajSeqReplace(seq, str);
     (void) ajSeqWrite (seqout, seq);
     (void) ajSeqWriteClose (seqout);
 

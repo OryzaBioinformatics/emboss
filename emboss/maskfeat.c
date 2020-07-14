@@ -24,8 +24,10 @@
 #include "emboss.h"
 
 
-static void maskfeat_FeatSeqMask (AjPSeq seq, AjPStr type, AjPStr maskchar);
+static void maskfeat_FeatSeqMask (AjPSeq seq, AjPStr type, 
+				  AjPStr maskchar, AjBool tolower);
 
+static void maskfeat_StrToLower (AjPStr *str, ajint begin, ajint end);
 
 /* @prog maskfeat *************************************************************
 **
@@ -41,7 +43,7 @@ int main(int argc, char **argv)
   AjPSeqout seqout;
   AjPStr type;
   AjPStr maskchar;
-
+  AjBool tolower;
 
   (void) embInit ("maskfeat", argc, argv);
 
@@ -49,11 +51,12 @@ int main(int argc, char **argv)
   seqout = ajAcdGetSeqout ("outseq");
   type = ajAcdGetString ("type");
   maskchar = ajAcdGetString ("maskchar");
+  tolower = ajAcdGetBool ("tolower");
 
   while (ajSeqallNext(seqall, &seq))
   {
 /* mask the regions */
-    (void) maskfeat_FeatSeqMask (seq, type, maskchar);
+    (void) maskfeat_FeatSeqMask (seq, type, maskchar, tolower);
 
     (void) ajSeqAllWrite (seqout, seq);
   }
@@ -74,12 +77,14 @@ int main(int argc, char **argv)
 ** @param [u] seq [AjPSeq] sequence
 ** @param [r] type [AjPStr] types of features to mask as wildcarded string
 ** @param [r] maskchar [AjPStr] character to mask with
+** @param [r] tolower [AjBool] if True then 'mask' by changing to lower-case
 ** @return [void]
 ** @@
 ******************************************************************************/
 
 
-static void maskfeat_FeatSeqMask (AjPSeq seq, AjPStr type, AjPStr maskchar)
+static void maskfeat_FeatSeqMask (AjPSeq seq, AjPStr type, 
+				  AjPStr maskchar, AjBool tolower)
 {
     AjIList    iter = NULL ;
     AjPFeature gf   = NULL ;
@@ -88,6 +93,8 @@ static void maskfeat_FeatSeqMask (AjPSeq seq, AjPStr type, AjPStr maskchar)
     char whiteSpace[] = " \t\n\r,;";	/* skip whitespace and , ; */
     AjPStrTok tokens;
     AjPStr key=NULL;
+    /* want lower-case if 'tolower' or 'maskchar' is null or it is the SPACE character */
+    AjBool lower = (tolower || ajStrLen(maskchar) == 0 || ajStrMatchC(maskchar, " "));
 
     /* get the feature table of the sequence */
     feat = ajSeqGetFeat(seq);
@@ -103,11 +110,16 @@ static void maskfeat_FeatSeqMask (AjPSeq seq, AjPStr type, AjPStr maskchar)
 	{
 	    gf = ajListIterNext (iter) ;
 	    tokens = ajStrTokenInit(type, whiteSpace);
-	    while (ajStrToken( &key, &tokens, NULL))
-		if (ajStrMatchWild(gf->Type, key))
-		    (void) ajStrMask (&str, gf->Start-1, gf->End-1,
+	    while (ajStrToken( &key, &tokens, NULL)) {
+		if (ajStrMatchWild(gf->Type, key)) {
+		    if (lower) {
+			(void) maskfeat_StrToLower(&str, gf->Start-1, gf->End-1);
+		    } else {
+		        (void) ajStrMask (&str, gf->Start-1, gf->End-1,
 				      *ajStrStr(maskchar));
-
+		    }
+		}
+	    }
 	    (void) ajStrTokenClear( &tokens);
 	    (void) ajStrDel(&key);
 	}
@@ -123,6 +135,28 @@ static void maskfeat_FeatSeqMask (AjPSeq seq, AjPStr type, AjPStr maskchar)
     return;
 }
 
+/* @funcstatic maskfeat_StrToLower *******************************************
+**
+** Lower-case a part of a sequence string
+**
+** @param [u] str [AjPStr *] sequence string
+** @param [r] begin [ajint] start position to be masked
+** @param [r] end [ajint] end position to be masked
+** @return [void]
+** @@
+******************************************************************************/
 
-
-
+static void maskfeat_StrToLower (AjPStr *str, ajint begin, ajint end) 
+{
+	
+    AjPStr substr = ajStrNew();
+    
+    /* extract the region and lowercase */
+    (void) ajStrAppSub(&substr, *str, begin, end);
+    (void) ajStrToLower(&substr);
+    /* remove and replace the lowercased region */
+    (void) ajStrCut (str, begin, end);
+    (void) ajStrInsert(str, begin, substr);
+                                                         
+    (void) ajStrDel(&substr);
+}

@@ -37,6 +37,12 @@ Description
    nucleic acid sequence, although you can specify your own masking
    character, if required.
    
+   Some non-EMBOSS programs (for example FASTA) are capable of treating
+   lower-case regions as if they are masked. maskfeat can mask a region
+   to lower-case instead of replacing the sequence with 'N's or 'X's if
+   you use the qualifier '-tolower' or use a space character as the
+   masking character.
+   
 Usage
 
    Here is a sample session with maskfeat
@@ -52,13 +58,26 @@ Output sequence [ab000360.fasta]:
    Go to the input files for this example
    Go to the output files for this example
    
+   Example 2
+   
+   Change to lower-case a feature whose type is "repeat_region" from
+   position 2331 to 2356. Note that '-supper' is used to make the whole
+   sequence upper-case before the lower-case masking:
+   
+
+% maskfeat tembl:ab000360 -tolower -supper 
+Mask off features of a sequence.
+Output sequence [ab000360.fasta]: 
+   
+   Go to the output files for this example
+   
 Command line arguments
 
    Mandatory qualifiers:
   [-sequence]          seqall     Sequence database USA
   [-outseq]            seqout     Output sequence USA
 
-   Optional qualifiers:
+   Optional qualifiers (* if not always prompted):
    -type               string     By default any feature in the feature table
                                   with a type starting 'repeat' is masked. You
                                   can set this to be any feature type you
@@ -73,15 +92,71 @@ Command line arguments
                                   separate their names with spaces or commas,
                                   eg:
                                   *UTR repeat*
-   -maskchar           string     Character to use when masking.
+   -tolower            boolean    The region can be 'masked' by converting the
+                                  sequence characters to lower-case, some
+                                  non-EMBOSS programs e.g. fasta can interpret
+                                  this as a masked region. The sequence is
+                                  unchanged apart from the case change. You
+                                  might like to ensure that the whole sequence
+                                  is in upper-case before masking the
+                                  specified regions to lower-case by using the
+                                  '-supper' flag.
+*  -maskchar           string     Character to use when masking.
                                   Default is 'X' for protein sequences, 'N'
                                   for nucleic sequences.
+                                  If the mask character is set to be the SPACE
+                                  character or a null character, then the
+                                  sequence is 'masked' by changing it to
+                                  lower-case, just as with the '-lowercase'
+                                  flag.
 
    Advanced qualifiers: (none)
+   Associated qualifiers:
+  "-sequence" related qualifiers
+   -sbegin1             integer    First base used
+   -send1               integer    Last base used, def=seq length
+   -sreverse1           boolean    Reverse (if DNA)
+   -sask1               boolean    Ask for begin/end/reverse
+   -snucleotide1        boolean    Sequence is nucleotide
+   -sprotein1           boolean    Sequence is protein
+   -slower1             boolean    Make lower case
+   -supper1             boolean    Make upper case
+   -sformat1            string     Input sequence format
+   -sopenfile1          string     Input filename
+   -sdbname1            string     Database name
+   -sid1                string     Entryname
+   -ufo1                string     UFO features
+   -fformat1            string     Features format
+   -fopenfile1          string     Features file name
+  "-outseq" related qualifiers
+   -osformat2           string     Output seq format
+   -osextension2        string     File name extension
+   -osname2             string     Base file name
+   -osdirectory2        string     Output directory
+   -osdbname2           string     Database name to add
+   -ossingle2           boolean    Separate file for each entry
+   -oufo2               string     UFO features
+   -offormat2           string     Features format
+   -ofname2             string     Features file name
+   -ofdirectory2        string     Output directory
+
    General qualifiers:
-  -help                boolean    Report command line options. More
+   -auto                boolean    Turn off prompts
+   -stdout              boolean    Write standard output
+   -filter              boolean    Read standard input, write standard output
+   -options             boolean    Prompt for required and optional values
+   -debug               boolean    Write debug output to program.dbg
+   -acdlog              boolean    Write ACD processing log to program.acdlog
+   -acdpretty           boolean    Rewrite ACD file as program.acdpretty
+   -acdtable            boolean    Write HTML table of options
+   -verbose             boolean    Report some/full command line options
+   -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
+   -warning             boolean    Report warnings
+   -error               boolean    Report errors
+   -fatal               boolean    Report fatal errors
+   -die                 boolean    Report deaths
    
 
    Mandatory qualifiers Allowed values Default
@@ -98,9 +173,17 @@ Command line arguments
    feature types. The type may be wildcarded by using '*'. If you wish to
    mask more than one type, separate their names with spaces or commas,
    eg: *UTR repeat* Any string is accepted repeat*
+   -tolower The region can be 'masked' by converting the sequence
+   characters to lower-case, some non-EMBOSS programs e.g. fasta can
+   interpret this as a masked region. The sequence is unchanged apart
+   from the case change. You might like to ensure that the whole sequence
+   is in upper-case before masking the specified regions to lower-case by
+   using the '-supper' flag. Boolean value Yes/No No
    -maskchar Character to use when masking. Default is 'X' for protein
-   sequences, 'N' for nucleic sequences. Any string is accepted 'X' for
-   protein, 'N' for nucleic
+   sequences, 'N' for nucleic sequences. If the mask character is set to
+   be the SPACE character or a null character, then the sequence is
+   'masked' by changing it to lower-case, just as with the '-lowercase'
+   flag. Any string is accepted 'X' for protein, 'N' for nucleic
    Advanced qualifiers Allowed values Default
    (none)
    
@@ -322,6 +405,56 @@ tcacagaattggttacttaaccttgactcagagtttctaccttgttcttagggaagcata
 tcacaactaattgcaaagcagagtgtgatgtgtcacaataagcagaatgctagggggaat
 tc
    
+  Output files for usage example 2
+  
+  File: ab000360.fasta
+  
+>AB000360 AB000360.1 Homo sapiens PIGC gene, complete cds.
+GGATCCCTGCTGCAGAGGGGGTAACGGTGTCTGGCTTGCCAAGCAATATTTGTTGTGGTC
+TATCATGGAAGAAATAAAGTCGGGCAATATGAATTTTTTTTTTCTCAAATTTGCCGGATG
+GCTGTGGTGTTTCTGACTCTTAGTTTTCTCATTGTGAAAAAGGAATGATTATCTTCTTCG
+ATCCTCTCAAGAGTTTCCTTGTTTTGAGTAGATTGATAGCTCTTTAAAGGATGCTAAGCT
+CAGCTAATGGAAGAAGAGTCTAGTTTCTTTGAGGCTTTGATTTTGGTTAAACTATAGAGC
+TCATACCTTTCTGTATGGTGCAGCTTACTATTGTCTTTGGATTGGTAACTTAAAAAATAC
+AAATAACATGCCTTTGAGAACCAATAAAAACTATGGATATTATCCCTATAAATTTACACA
+AATCCAGATATAAGCATGCAATGTGATATACCTAAGGGATATGTGAACCACTGAGTTAAG
+AACTGCTTTAGAGGGAGATACAATGTGAGACACAGGCTTTGGGATAAGACTTTGGTTTGA
+ATCCTGGCTCTGCTCTGTTACCTTAGGGCAAAGTTACTTAAGCATCTTGAATCTCAGCTT
+TTTTACCAAAGCAGGACTAATACTAACTTACAAGGTGGTGAGGATTAAGTGAAAGAAGAT
+ACATAAGGCACTTAGCACATAGTAGGTACTCAATAAGCGATAGCTAACAGATGTCTATTA
+TTATTCAAGGAATTATAATTTTCAAATCTGAAATGCAGTTTTAATGTCCCATAAGGTGAC
+TACCACATACATTTTTCTCAGACTTTTAGTAAACTGAGTTGATTTGACTTTATCTCAGTA
+CTACTCTTGACCTTTCACAACTTTCGTAGGTTCACAGTCTCTCTTTTTCTAGGAACTTGG
+CTGTGTTGTCCTGCCTCAGAGACAAATTCATCTATTGTAGGCCTAGCCCCTGCCTTTGAA
+AACAAGGAAAGGTTGGTAGAACATCAACACAGCATGGAATTTCCAGGGAGGTCTCATTTC
+AAAACTTCATAAAGAACAAGAACCACCTGGACTTCTGTGAGGGCGATGATTAAACTGGCC
+TGAGTTTGAATGAAAGGATAATGTATGCTCAACCTGTGACTAACACCAAGGAGGTCAAGT
+GGCAGAAGGTCTTGTATGAGCGACAGCCCTTTCCTGATAACTATGTGGACCGGCGATTCC
+TGGAAGAGCTCCGGAAAAACATCCATGCTCGGAAATACCAATATTGGGCTGTGGTATTTG
+AGTCCAGTGTGGTGATCCAGCAGCTGTGCAGTGTTTGTGTTTTTGTGGTTATCTGGTGGT
+ATATGGATGAGGGTCTTCTGGCCCCCCATTGGCTTTTAGGGACTGGCCTGGCTTCTTCAC
+TGATTGGGTATGTTTTGTTTGATCTCATTGATGGAGGTGAAGGGCGGAAGAAGAGTGGGC
+AGACCCGGTGGGCTGACCTGAAGAGTGCCCTAGTCTTCATTACTTTCACTTATGGGTTTT
+CACCAGTGCTGAAGACCCTTACAGAGTCTGTCAGCACTGACACCATCTATGCCATGTCAG
+TCTTCATGCTGTTAGGCCATCTCATCTTTTTTGACTATGGTGCCAATGCTGCCATTGTAT
+CCAGCACACTATCCTTGAACATGGCCATCTTTGCTTCTGTATGCTTGGCATCACGTCTTC
+CCCGGTCCCTGCATGCCTTCATCATGGTGACATTTGCCATTCAGATTTTTGCCCTGTGGC
+CCATGTTGCAGAAGAAACTAAAGGCATGTACTCCCCGGAGCTATGTGGGGGTCACACTGC
+TTTTTGCATTTTCAGCCGTGGGAGGCCTACTGTCCATTAGTGCTGTGGGAGCCGTACTCT
+TTGCCCTTCTGCTGATGTCTATCTCATGTCTGTGTTCATTCTACCTCATTCGCTTGCAGC
+TTTTTAAAGAAAACATTCATGGGCCTTGGGATGAAGCTGAAATCAAGGAAGACTTGTCCA
+GGTTCCTCAGTTAAATTAGGACATCCATTACATTATTAAAGCAAGCTGATAGATTAGCCT
+CCTAACTAGTATAGAACTTAAAGACAGAGTTCCATTCTGGAAGCAGCATGTCATTGTGGT
+AAGAGAATAGAGATCAAAACCAAAAAAAATGAACCAAAGGCTTGGGTGGTGAGGGTGCTT
+ATCCTTTCTGTTATTTTGTAGATGAAAAAACTTTCTGGGGACCTCTTGAATTACATGCTG
+TAACATATGAAGTGATGTGGTTTCTATTAAAAAAATAACACATCCATCAAGTTGTCTCAT
+GATTTTTCCATAAACAGGAGGCAGACAGAGGGGCATGAAGAGTGAAGTAAgtgtgtgtgt
+gtgtgtgtgtgtgtgtAAAGTCACTTCTTTCTACCCTTTTCAATGTGCTAATGCTCTTTT
+ATTTATCTAGGGCTCAAATCTTAGAACACAGGGTGCTATGCTCAGTTTTGTTGCCCAAGA
+TCACAGAATTGGTTACTTAACCTTGACTCAGAGTTTCTACCTTGTTCTTAGGGAAGCATA
+TCACAACTAATTGCAAAGCAGAGTGTGATGTGTCACAATAAGCAGAATGCTAGGGGGAAT
+TC
+   
 Data files
 
    None.
@@ -386,8 +519,8 @@ See also
    
 Author(s)
 
-   This application was written by Gary Williams
-   (gwilliam@hgmp.mrc.ac.uk)
+   Gary Williams (gwilliam © hgmp.mrc.ac.uk)
+   HGMP-RC, Genome Campus, Hinxton, Cambridge CB10 1SB, UK
    
 History
 
