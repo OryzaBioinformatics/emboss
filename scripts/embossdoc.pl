@@ -1,5 +1,7 @@
 #!/usr/local/bin/perl
 
+use English;
+
 $pubout = "public";
 $locout = "local";
 $infile = "";
@@ -17,7 +19,8 @@ if ($ARGV[1]) {$lib = $ARGV[1];}
 $source = "";
 
 if ($infile) {
-    ($dummy, $dir, $pubout) = ($infile =~ /(([^\/.]+)\/)?([^\/.]+)(\.\S+)?$/);
+    ($dummy, $dir, $pubout) = ($infile =~ /^(([^\/.]*)\/)*([^\/.]+)(\.\S+)?$/);
+##    ($dummy, $dir, $pubout) = ($infile =~ /(([^\/.]+)\/)?([^\/.]+)(\.\S+)?$/);
     $local = $pubout;
     if ($dir) {$lib = $dir}
     print "set pubout '$pubout' lib '$lib'\n";
@@ -51,7 +54,7 @@ $sect = $lastfsect = $laststatfsect = "";
 
 while ($source =~ m"[/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]"gos) {
   $ccfull = $&;
-  $rest = $';
+  $rest = $POSTMATCH;
 
   ($cc) = ($ccfull =~ /^..\s*(.*\S)*\s*..$/gos);
   $cc =~ s/[* ]*\n[* ]*/\n/gos;
@@ -312,6 +315,10 @@ while ($source =~ m"[/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]"gos) {
       $cast =~ s/ \*/\*/gos;         # no space before run of *
       $cast =~ s/\{/\[/gos;	# brackets fixed
       $cast =~ s/\}/\]/gos;	# brackets fixed
+
+      if ($code !~ /^[rwufdpv?][CENOPSU]*$/) {
+          print "bad code <$code> var: <$var>\n";
+      }
       $curarg = @largs[$acnt];
       ($tcast,$tname) = ($curarg =~ /(\S.*\S)\s+(\S+)/);
       if (!$tname) {

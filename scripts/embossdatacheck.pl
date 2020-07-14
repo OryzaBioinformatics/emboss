@@ -24,27 +24,31 @@ print "============================\n";
 $ip = 0;
 $dalias="";
 
-while ($allsrc =~ m"^typedef\s+struct\s+(\S*)\s*[{][^}]+[}]\s*([^;]+);\s*$"gosm) {
+while ($allsrc =~ m"^typedef\s+struct\s+(\S*)\s*[{][^}]+[}]\s*([^;]+);\s*(#define\s+(\S+)\s+\S+[*])?$"gosm) {
   $dnam = $1;
   $dalias = $2;
+  $ddefine = $4;
   @anam = (split(/[ \t,*]+/, $dalias));
+  if (defined($ddefine)) {
+    push @anam, $ddefine;
+  }
   if (!defined($dnam) || $dnam eq "") {
     $dnam = $anam[$#anam];
   }
   $presrc = $presrc[$ip];
 
-  if ($presrc =~ m"[\n][/][*]\s+[@]data[staic]*\s+(\S+)([^/*][^*]*[*]+)*[/]\s*$"osm) {
+  if ($presrc =~ m"[\n][\/][*]\s+[@]data[static]*\s+(\S+)([^\/*][^*]*[*]+)*[\/]\s*$"osm) {
     $hnam = $1;
     $ok = 0;
     foreach $nam (@anam) {
       if ($hnam eq $nam) {$ok = 1}
     }
     if (!$ok && $dnam ne $hnam) {
-      print "Bad docheader for $hnam precedes $dnam\n";
+      print "bad docheader for $hnam precedes $dnam\n";
     }
   }
   else {
-    print "Bad or missing docheader for $dnam\n";
+    print "bad or missing docheader for $dnam\n";
   }
   $ip++;
 }

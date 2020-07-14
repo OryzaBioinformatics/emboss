@@ -1,5 +1,6 @@
 #!/usr/local/bin/perl
 
+use English;
 $pubout = "public";
 $locout = "local";
 $infile = "";
@@ -13,7 +14,7 @@ $lasttoken = "";
 
 if ($infile) {
     ($file) = ($infile =~ /([^\/]+)$/);
-    ($dummy, $dir, $pubout) = ($infile =~ /(([^\/.]+)\/)?([^\/.]+)(\.\S+)?$/);
+    ($dummy, $dir, $pubout) = ($infile =~ /^(([^\/.]*)\/)*([^\/.]+)(\.\S+)?$/);
     $local = $pubout;
     if ($dir) {$lib = $dir}
     print "use pubout '$pubout' lib '$lib'\n";
@@ -41,9 +42,9 @@ foreach $x ("new", "delete", "del", "ass", "mod", "use", "set", "cast", "use", "
     $tables{$x} = 1;
 }
 
-while ($source =~ m"[/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]"gos) {
+while ($source =~ m"[\/][*][^*]*[*]+([^\/*][^*]*[*]+)*[\/]"gos) {
   $ccfull = $&;
-  $rest = $';
+  $rest = $POSTMATCH;
 
   ($cc) = ($ccfull =~ /^..\s*(.*\S)*\s*..$/gos);
   $cc =~ s/[* ]*\n[* ]*/\n/gos;
@@ -299,7 +300,7 @@ while ($source =~ m"[/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]"gos) {
 	print $OFILE "<tr><th>Name</th><th>Type</th><th>Description</th></tr>\n";
 	$intable = 1;
       }
-      ($fname,$atype, $prest) = ($data =~ m/\S+\s*(\S*)\s*[\[]([^\]]+[\]]?)[\]]\s*(.*)/gos);
+      ($fname,$atype, $prest) = ($data =~ m/\S+\s*(\S*)\s*[\[]([^\]]*[\]]?)[\]]\s*(.*)/gos);
 
       $drest = $prest;
       $drest =~ s/\n\n+$/\n/gos;
@@ -312,6 +313,7 @@ while ($source =~ m"[/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]"gos) {
       print SRS "AD $drest";
       print SRS "AX\n";
 
+      if (!$atype) {print "bad attribute spec '$fname', no type\n"}
       if (!$prest) {print "bad attribute spec '$fname', no description\n"}
       print $OFILE "<tr><td>".srsdref($fname)."</td><td>$prest</td></tr>\n";
     }
@@ -326,9 +328,12 @@ while ($source =~ m"[/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]"gos) {
     print "=============================\n";
     print SRS "//\n";
 
-    ($body) = ($rest =~ /(.*?\n([\s{][^\n]*\n)*\S[^;]*;[^\n]*\n)/gos);
+    ($body,$a,$apart,$c) = ($rest =~ /((.*?\n([\s{][^\n]*\n)*\S[^;]*;[^\n]*\n)([\s\n]*[#]define\s+\S+\s+\S+[*]\s*?\n)?)/gos);
     $body =~ s/^\s+//m;
-    print SRS $body;
+##    print "SRS:\n$body\n";
+##    print "a: $a\n";
+##    print "c: $c\n";
+										       print SRS $body;
   }
 
 }
@@ -339,8 +344,8 @@ close HTML;
 close HTMLB;
 
 sub srsref {
-    return "<a href=\"/srs5bin/cgi-bin/wgetz?-e+[EFUNC-ID:$_[0]]\">$_[0]</a>";
+    return "<a href=\"/srs6bin/cgi-bin/wgetz?-e+[EFUNC-ID:$_[0]]\">$_[0]</a>";
 }
 sub srsdref {
-    return "<a href=\"/srs5bin/cgi-bin/wgetz?-e+[EDATA-ID:$_[0]]\">$_[0]</a>";
+    return "<a href=\"/srs6bin/cgi-bin/wgetz?-e+[EDATA-ID:$_[0]]\">$_[0]</a>";
 }

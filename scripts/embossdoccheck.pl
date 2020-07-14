@@ -42,7 +42,7 @@ while ($allsrc =~ m"^([A-Za-z][^/\{\[;=]+[\)]\s*[\{])\s*$"gosm) {
 ###  print "============================\n";
 ###  print "$presrc\n";
   if ($presrc !~ m"[\n][/][*]\s+([@]\S+)\s+(\S+)([^/*][^*]*[*]+)*[/]\s*$"osm) {
-    print "Bad or missing docheader for $pnam\n";
+    print "bad or missing docheader for $pnam\n$proto\n";
   }
   $ip++;
 }
