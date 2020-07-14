@@ -767,7 +767,7 @@ static ajint emowse_seq_comp(ajint bidx, ajint thys, AjPSeq seq,
     ajStrAssSub(&substr,str,beg,end);
     ajStrToUpper(&substr);
 
-    token = ajStrTokenInit(substr," \r\t\n");
+    token = ajStrTokenInit(data[thys]->sdata," \r\t\n");
     while(ajStrToken(&result,&token," \r\t\n"))
     {
 	len = ajStrLen(result);
