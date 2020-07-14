@@ -262,17 +262,38 @@ ssl_print_notes()
  echo
 
  if [ -d "$TOMCAT_ROOT/shared/classes" ]; then
+
+   TCVERSION=`sed -n -e 's|\(.*\)Running The Tomcat 4\(.*\)|4|p' $TOMCAT_ROOT/RUNNING.txt`
+
+   if [ "$TCVERSION" != "4" ]; then 
+#tomcat 5.x
+     echo
+     echo '    <!-- Define a SSL Coyote HTTP/1.1 Connector on port '$PORT' -->'
+     echo '    <Connector className="org.apache.coyote.tomcat5.CoyoteConnector"'
+     echo '               port="'$PORT'" minProcessors="5" maxProcessors="75"'
+     echo '               enableLookups="false"'
+     echo '               acceptCount="10" debug="0" scheme="https" secure="true"'
+     echo '               useURIValidationHack="false">'
+     echo '      <Factory className="org.apache.coyote.tomcat5.CoyoteServerSocketFactory"'
+     echo '           keystoreFile="'$KEYSTOREFILE'" keystorePass="'$PASSWD'"'
+     echo '           clientAuth="false" protocol="TLS"/>'
+     echo '    </Connector>'
+     echo
+   else
 #tomcat 4.1.x
-   echo '    <!-- Define a SSL Coyote HTTP/1.1 Connector on port '$PORT' -->'
-   echo '    <Connector className="org.apache.coyote.tomcat4.CoyoteConnector"'
-   echo '               port="'$PORT'" minProcessors="5" maxProcessors="75"'
-   echo '               enableLookups="false"'
-   echo '               acceptCount="10" debug="0" scheme="https" secure="true"'
-   echo '               useURIValidationHack="false">'
-   echo '      <Factory className="org.apache.coyote.tomcat4.CoyoteServerSocketFactory"'
-   echo '           keystoreFile="'$KEYSTOREFILE'" keystorePass="'$PASSWD'"'
-   echo '           clientAuth="false" protocol="TLS"/>'
-   echo '    </Connector>'
+     echo
+     echo '    <!-- Define a SSL Coyote HTTP/1.1 Connector on port '$PORT' -->'
+     echo '    <Connector className="org.apache.coyote.tomcat4.CoyoteConnector"'
+     echo '               port="'$PORT'" minProcessors="5" maxProcessors="75"'
+     echo '               enableLookups="false"'
+     echo '               acceptCount="10" debug="0" scheme="https" secure="true"'
+     echo '               useURIValidationHack="false">'
+     echo '      <Factory className="org.apache.coyote.tomcat4.CoyoteServerSocketFactory"'
+     echo '           keystoreFile="'$KEYSTOREFILE'" keystorePass="'$PASSWD'"'
+     echo '           clientAuth="false" protocol="TLS"/>'
+     echo '    </Connector>'
+     echo
+   fi
  else
 #tomcat 4.0.x
    echo '   <!-- Define an SSL HTTP/1.1 Connector on port '$PORT' -->'
@@ -724,6 +745,9 @@ case $PLATTMP in
   OSF1)
     PLATTMP="7"
     ;;
+  FreeBSD)
+    PLATTMP="8"
+    ;;
   *)
     PLATTMP="1"
     ;;
@@ -732,7 +756,7 @@ esac
 
 echo 
 echo "Select the platform that your Jemboss server will be"
-echo "run on from 1-6 [$PLATTMP]:"
+echo "run on from 1-8 [$PLATTMP]:"
 echo "(1)  linux"
 echo "(2)  aix"
 echo "(3)  irix"
@@ -740,6 +764,7 @@ echo "(4)  hp-ux"
 echo "(5)  solaris"
 echo "(6)  macosX"
 echo "(7)  OSF"
+echo "(8)  FreeBSD"
 read PLAT
 
 if [ "$PLAT" = "" ]; then
@@ -774,8 +799,11 @@ elif [ "$PLAT" = "6" ]; then
 elif [ "$PLAT" = "7" ]; then
   PLATFORM="osf"
   AUTH_TYPE_TMP=7
+elif [ "$PLAT" = "8" ]; then
+  PLATFORM="freebsd"
+  AUTH_TYPE_TMP=7
 else
-  echo "Platform not selected from 1-6."
+  echo "Platform not selected from 1-8."
   exit 1
 fi
 
@@ -882,6 +910,8 @@ elif [ -d $JAVA_INCLUDE/hp-ux ]; then
   JAVA_INCLUDE_OS=${JAVA_INCLUDE}/hp-ux
 elif [ -d $JAVA_INCLUDE/alpha ]; then
   JAVA_INCLUDE_OS=${JAVA_INCLUDE}/alpha
+elif [ -d $JAVA_INCLUDE/freebsd ]; then
+  JAVA_INCLUDE_OS=${JAVA_INCLUDE}/freebsd
 elif [ -d $JAVA_INCLUDE ]; then
   JAVA_INCLUDE_OS=${JAVA_INCLUDE}
 else
@@ -1015,7 +1045,7 @@ if [ "$AUTH" = "y" ]; then
   echo
   echo "(1) shadow      (3) PAM         (5) HP-UX shadow"
   echo "(2) no shadow   (4) AIX shadow  (6) Re-entrant shadow"
-  echo "(7) Plain re-entrant"  
+  echo "(7) Re-entrant no shadow"  
   echo 
   echo "Type of unix password method being used "
   echo "(select 1, 2, 3, 4, 5, 6 or 7 )[$AUTH_TYPE_TMP]"
