@@ -4,8 +4,6 @@
 0 0 0 1 5 4 4 2 4 1 5 3 1 2 0 3 1 3 1 1 0 2 2 0 0 0 3 3 2 6 7 0 1 3 5 2 0 6 4 3 6 3 2 0 1 3 7 2 6 4 2 1 0 1 3 5 1 2 4 7 2 0 0 1 
 >AAAJ3190\AJ003190\83..1504\1422\CAA05969.1\Astacus astacus\Astacus astacus mRNA for astacin./gene="AEA"/function="potential hatching enzyme"/codon_start=1/product="astacus egg astacin"/protein_id="CAA05969.1"/db_xref="GI:2661464"/db_xref="SPTREMBL:O44072"
 7 5 5 5 0 0 1 0 0 1 16 20 14 1 4 11 0 2 10 0 4 11 4 8 6 6 8 9 4 8 11 9 4 14 13 5 6 7 9 9 7 16 7 7 1 6 17 14 6 19 11 14 7 5 11 5 17 16 7 14 9 0 0 1 
->AAALTOX\X76135\join(703..748,1174..1379)\252\CAA53740.1\Androctonus australis\A.australis gene for alpha toxin AaH I'./codon_start=1/product="alpha toxin AaH I' precursor"/protein_id="CAA53740.1"/db_xref="GI:852072"/db_xref="SWISS-PROT:P01479"
-0 1 1 1 0 0 0 2 0 2 2 3 2 1 0 2 0 3 1 1 0 0 3 2 1 0 1 1 0 0 1 1 0 5 3 1 1 1 5 1 3 2 0 0 0 1 0 1 2 3 1 3 4 4 0 1 1 0 4 3 1 0 0 1 
 >AAASTACIN\X95684\join(336..347,616..937,1832..2011,2118..2270,2329..2417)\756\CAA64981.1\Astacus astacus\A.astacus astacin gene./codon_start=1/product="astacin"/protein_id="CAA64981.1"/db_xref="GI:1200203"/db_xref="SWISS-PROT:P07584"
 2 3 1 2 0 3 2 5 6 1 0 4 4 4 3 0 3 4 3 6 1 4 1 3 0 4 6 4 5 3 9 3 2 8 4 3 6 4 2 2 8 3 6 7 3 5 4 9 8 7 12 7 2 3 4 3 4 9 6 8 3 0 1 0 
 >AADHR\X60192 M59934\join(317..396,453..933)\561\CAA42748.1\Aedes albopictus\A.albopictus gene for dihydrofolate reductase./EC_number="1.5.1.3"/codon_start=1/product="dihydrofolate  reductase"/protein_id="CAA42748.1"/db_xref="GI:5556"/db_xref="SWISS-PROT:P28019"
@@ -14,22 +12,12 @@
 3 2 0 0 2 0 2 3 6 3 1 4 1 1 2 1 2 2 0 2 0 1 1 1 0 0 0 5 2 3 2 3 1 2 3 0 3 1 9 12 9 5 1 3 1 0 3 2 4 6 3 1 3 5 3 1 0 3 2 2 5 1 0 0 
 >AAE400338\AJ400338\412..3018\2607\CAB88873.1\Aedes aegypti\Aedes aegypti mRNA for GATA transcription factor (gatar gene)./gene="gatar"/function="repressor factor interacting with dCtBP"/codon_start=1/evidence=experimental/product="GATA transcription factor"/protein_id="CAB88873.1"/db_xref="GI:7649393"/db_xref="SPTREMBL:Q9NFF4"
 7 8 6 3 6 2 4 7 12 1 4 18 20 13 24 10 39 40 7 9 16 12 16 7 14 10 18 15 29 11 16 14 5 16 8 12 15 10 7 17 33 34 18 31 30 37 24 17 10 26 17 12 8 5 9 2 5 14 8 14 6 1 0 0 
->AAH4\X91508\1..312\312\CAA62808.1\Acrolepiopsis assectella\A.assectella mRNA for histone H4./codon_start=1/product="histone H4"/protein_id="CAA62808.1"/db_xref="GI:1882999"
-0 2 2 8 1 1 0 2 3 1 0 2 0 0 1 0 0 0 0 4 2 2 0 1 0 0 1 1 0 5 9 2 1 5 1 2 1 5 4 7 2 0 2 0 1 1 2 2 1 2 2 2 0 0 0 2 1 3 2 2 0 1 0 0 
 >AAHCHITA\L42010\16..1590\1575\AAB68959.1\Acanthocheilonema viteae\Acanthocheilonema viteae chitinase mRNA, complete cds./codon_start=1/product="chitinase"/protein_id="AAB68959.1"/db_xref="GI:804649"
 1 2 2 3 3 1 1 1 7 12 6 4 10 3 7 1 1 9 22 7 8 14 10 3 11 1 18 6 7 9 12 12 4 14 6 2 4 11 29 7 8 15 6 3 6 5 38 17 6 22 7 14 6 5 9 11 7 5 15 16 12 0 0 1 
 >AAHNECY\L43053\23..496\474\AAA87228.1\Acanthocheilonema viteae\Acanthocheilonema viteae (clone Av17) nematode cystatin mRNA,complete cds./codon_start=1/function="cysteine protease inhibitor"/evidence=experimental/product="cystatin"/protein_id="AAA87228.1"/db_xref="GI:867675"
 0 2 0 0 2 0 2 1 5 1 4 11 8 0 1 2 0 1 2 0 2 0 2 2 2 0 2 0 1 2 4 1 0 2 4 1 6 5 12 3 1 6 4 5 1 1 13 7 1 2 2 0 1 2 1 1 3 2 3 5 3 0 0 1 
 >AAOEH2\U96112\join(U96111.1:644..712,1960..2337)\-9231\AAD00823.1\Aedes aegypti\Aedes aegypti ovarian ecdysteroidogenic hormone I (OEH-I) gene,exon 2 and complete cds./gene="OEH-I"/codon_start=1/product="ovarian ecdysteroidogenic hormone I"/protein_id="AAD00823.1"/db_xref="GI:4100311"
 1 1 1 1 1 0 0 5 4 1 0 4 2 1 2 0 2 3 0 4 0 2 0 0 6 3 0 3 2 0 8 6 3 1 1 4 3 0 2 6 6 0 4 4 3 1 0 6 2 3 4 1 10 2 5 2 1 3 3 5 0 0 1 0 
->AAQ238321#1\AJ238321\complement(854..1225)\372\CAB64683.1\Asellus aquaticus\Asellus aquaticus 5S rRNA gene, histone H2B, histone H2A, histoneH3 and histone H4./gene="H2B"/codon_start=1/product="putative H2B histone"/protein_id="CAB64683.1"/db_xref="GI:6686553"/IGNORED_CODON=1
-0 2 0 0 2 4 0 3 0 1 0 2 2 2 2 4 1 1 2 5 0 1 2 1 0 0 3 6 0 5 4 0 0 2 0 3 1 2 6 14 2 1 3 0 3 0 6 0 2 1 4 1 0 0 2 2 0 7 2 3 0 1 0 0 
->AAQ238321#2\AJ238321\1447..1818\372\CAB64684.1\Asellus aquaticus\Asellus aquaticus 5S rRNA gene, histone H2B, histone H2A, histoneH3 and histone H4./gene="H2A"/codon_start=1/product="putative H2A histone"/protein_id="CAB64684.1"/db_xref="GI:6686554"
-0 1 0 4 4 2 3 5 1 2 3 1 2 1 0 1 1 0 1 2 0 1 2 3 0 0 4 4 0 6 6 3 0 5 1 3 1 4 5 8 5 1 2 2 1 1 4 3 1 1 2 1 0 0 1 0 0 3 3 2 0 1 0 0 
->AAQ238321#3\AJ238321\complement(2582..2992)\411\CAB64685.1\Asellus aquaticus\Asellus aquaticus 5S rRNA gene, histone H2B, histone H2A, histoneH3 and histone H4./gene="H3"/codon_start=1/product="putative H3 histone"/protein_id="CAB64685.1"/db_xref="GI:6686555"
-3 1 1 3 6 3 0 3 0 4 1 5 2 1 0 2 1 1 1 5 0 3 1 1 0 3 4 5 0 10 6 0 0 2 2 3 0 0 4 10 1 0 4 4 2 1 5 2 1 2 3 2 1 0 4 0 0 3 2 2 0 1 0 0 
->AAQ238321#4\AJ238321\3245..3556\312\CAB64686.1\Asellus aquaticus\Asellus aquaticus 5S rRNA gene, histone H2B, histone H2A, histoneH3 and histone H4./gene="H4"/codon_start=1/product="putative H4 histone"/protein_id="CAB64686.1"/db_xref="GI:6686556"
-1 3 0 5 4 1 0 1 1 3 1 2 0 0 0 1 0 0 0 4 1 3 1 0 0 0 2 2 1 2 6 6 0 5 0 5 1 3 7 4 1 1 1 1 1 1 4 0 1 2 3 1 0 0 1 1 0 4 2 2 0 1 0 0 
 >AAS242595\AJ242595\1..756\756\CAB43519.1\Astacus astacus\Astacus astacus mRNA for zinc proteinase (astacin gene)./gene="astacin"/EC_number="3.4.24.21"/function="proteolytic"/codon_start=1/product="zinc proteinase"/protein_id="CAB43519.1"/db_xref="GI:4902487"/IGNORED_CODON=1
 2 3 1 2 0 3 2 5 6 1 0 4 4 4 3 0 3 4 2 7 1 4 1 3 0 4 6 4 5 3 9 3 2 8 3 3 6 4 2 2 8 3 6 7 3 5 4 9 8 7 12 7 2 3 4 3 4 9 6 8 3 0 1 0 
 >AATRAMY\U01209\22..1497\1476\AAA03322.1\Aedes atropalpus\Aedes atropalpus alpha-amylase mRNA, complete cds./codon_start=1/function="digestive enzyme"/product="alpha-amylase"/protein_id="AAA03322.1"/db_xref="GI:397985"
@@ -46,8 +34,6 @@
 2 7 2 6 2 0 0 2 9 0 0 1 0 1 1 1 5 0 0 6 1 1 3 2 3 0 1 4 0 0 1 4 0 2 0 7 4 1 2 17 2 0 1 6 0 1 1 3 0 1 3 0 4 1 2 0 0 5 0 2 0 1 0 0 
 >AAU07708\U07708\1..1233\1233\AAC79094.1\Amblyomma americanum\Amblyomma americanum calreticulin (crt-1) mRNA, complete cds./gene="crt-1"/codon_start=1/product="calreticulin"/protein_id="AAC79094.1"/db_xref="GI:3924593"
 0 3 3 0 0 2 0 6 14 1 1 2 0 7 0 2 5 0 0 10 7 0 0 20 8 0 2 11 5 1 2 16 2 4 1 6 11 1 3 47 14 0 0 8 10 0 8 45 47 3 14 0 6 0 16 1 0 16 4 4 11 0 0 1 
->AAU15925\U15925\64..315\252\AAA57116.1\Agelenopsis aperta\Agelenopsis aperta omega agatoxin IVB/C mRNA, complete cds./codon_start=1/product="omega agatoxin IVB/C precursor"/protein_id="AAA57116.1"/db_xref="GI:601785"
-0 2 1 0 2 0 0 0 2 0 1 2 2 0 0 0 1 1 5 0 1 2 2 0 0 0 3 1 1 1 3 1 1 1 1 1 2 1 2 1 0 3 0 1 0 0 10 0 0 2 1 0 5 4 1 2 2 0 3 4 1 0 0 1 
 >AAU20287\U20287\1..1131\1131\AAA62350.1\Aedes aegypti\Aedes aegypti actin (Aaeact-1) mRNA, complete cds./gene="Aaeact-1"/codon_start=1/product="actin"/protein_id="AAA62350.1"/db_xref="GI:677901"
 1 6 0 12 1 0 2 3 17 2 0 3 1 15 2 9 2 0 1 16 0 6 11 3 1 3 0 13 2 13 3 5 1 19 0 13 1 11 2 18 8 3 1 9 7 3 13 12 10 13 13 3 6 0 9 1 0 21 7 15 4 1 0 0 
 >AAU27581\U27581\92..1555\1464\AAC31639.1\Aedes aegypti\Aedes aegypti dopa decarboxylase mRNA, complete cds./codon_start=1/product="dopa decarboxylase"/protein_id="AAC31639.1"/db_xref="GI:3417234"
