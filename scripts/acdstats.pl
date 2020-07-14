@@ -14,7 +14,7 @@ $installdir = "/usr/local";
 	    "parameter" => "",
 	    "standard" => "",
 	    "additional" => "",
-	    "missing" => "Y",
+	    "missing" => "",
 	    "valid" => "",
 	    "expected" => "",
 	    "needed" => "Y",
@@ -52,7 +52,7 @@ sub acdparse ($$) {
 	$acdcount{$acdtype}++;
 
 #	print "$acdtype: $acdname\n";
-	while ($attr =~ /(\S+): (\"[^\"]*(\"\S[^\"]*)*\"|\S+)/gs) {
+	while ($attr =~ /([a-z]+): (\"[^\"]*(\"\S[^\"]*)*\"|\S+)/gs) {
 #	    print "attr=$1\n";
 	    $aname = $1;
 	    $acdtypes{$acdtype}{$aname}++;
