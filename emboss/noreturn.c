@@ -39,34 +39,70 @@ int main(int argc, char **argv)
     ajint   len;
     ajint i;
     char    *p;
+    ajint iline=0;
+
+    AjPStr system = NULL;
+    AjBool pcoutput = ajFalse;
+    AjBool macoutput = ajFalse;
 
     embInit("noreturn", argc, argv);
 
     inf  = ajAcdGetInfile("infile");
     outf = ajAcdGetOutfile("outfile");
+    system = ajAcdGetListI("system",1);
+    if(ajStrMatchC(system, "pc"))
+	pcoutput = ajTrue;
+    if(ajStrMatchC(system, "mac"))
+	macoutput = ajTrue;
 
     line = ajStrNew();
 
+    ajDebug("Characters \\n %%%02x \\r %%%02x\n", '\n', '\r');
     while(ajFileReadLine(inf,&line))
     {
+	iline++;
 	p   = MAJSTRSTR(line);
 	len = ajStrLen(line);
 	if(len)
 	{
-	    if(p[len-1] == 0x0d)
+	    ajDebug("line %d: Length %d\n", iline, len);
+	    if(p[len-1] == 0x0a)
+	    {
+		ajDebug("line %d: newline at end removed\n", iline);
 		p[len-1] = 0x00;
+		len--;
+		if(len && p[len-1] == 0x0d)
+		{
+		    ajDebug("line %d: return at end removed\n", iline);
+		    p[len-1] = 0x00;
+		}
+	    }
 
-	    /* for files with 0d but no newline,
+	    /* for files with 0d but no newline, (e.g. from Macintosh sources)
 	    ** there's everything in one line
 	    ** so replace the rest directly
 	    */
 
-	    for(i=0;i<len;i++)
-		if(p[i] ==  0x0d)
-		    p[i] = 0x0a;
+	    if(!macoutput)
+	    {
+		for(i=0;i<len;i++)
+		{
+		    if(p[i] ==  0x0d)
+		    {
+			p[i] = 0x0a;
+			ajDebug("line %d: return inserted at position %d\n",
+				iline, i);
+		    }
+		}
+	    }
 	}
 	
-	ajFmtPrintF(outf,"%s\n",p);
+	if (pcoutput)
+	    ajFmtPrintF(outf,"%s\r\n",p);
+	else if (macoutput)
+	    ajFmtPrintF(outf,"%s\r",p);
+	else
+	    ajFmtPrintF(outf,"%s\n",p);
     }
     
     ajStrDel(&line);

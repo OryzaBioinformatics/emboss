@@ -16,6 +16,19 @@ section: input [
 
 endsection: input
 
+section: advanced [
+  information: "Advanced section"
+  type: "page"
+]
+
+list: system [
+  information: "Target operating system for end-of-line format"
+  values: "unix:Unix/Linux systems;pc:Windows/DOS;mac:Apple Macintosh"
+  default: "unix"
+]
+
+endsection: advanced
+
 section: output [
   information: "Output section"
   type: "page"
