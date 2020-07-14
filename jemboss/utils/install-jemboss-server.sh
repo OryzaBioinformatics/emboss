@@ -267,18 +267,34 @@ ssl_print_notes()
 
    if [ "$TCVERSION" != "4" ]; then 
 #tomcat 5.x
-     echo
-     echo '    <!-- Define a SSL Coyote HTTP/1.1 Connector on port '$PORT' -->'
-     echo '    <Connector className="org.apache.coyote.tomcat5.CoyoteConnector"'
-     echo '               port="'$PORT'" minProcessors="5" maxProcessors="75"'
-     echo '               enableLookups="false"'
-     echo '               acceptCount="10" debug="0" scheme="https" secure="true"'
-     echo '               useURIValidationHack="false">'
-     echo '      <Factory className="org.apache.coyote.tomcat5.CoyoteServerSocketFactory"'
-     echo '           keystoreFile="'$KEYSTOREFILE'" keystorePass="'$PASSWD'"'
-     echo '           clientAuth="false" protocol="TLS"/>'
-     echo '    </Connector>'
-     echo
+
+     TCVERSION=`sed -n -e 's|\(.*\)Running The Tomcat 5.5\(.*\)|5|p' $TOMCAT_ROOT/RUNNING.txt`
+    
+     if [ "$TCVERSION" != "5" ]; then
+       echo
+       echo '    <!-- Define a SSL Coyote HTTP/1.1 Connector on port '$PORT' -->'
+       echo '    <Connector className="org.apache.coyote.tomcat5.CoyoteConnector"'
+       echo '               port="'$PORT'" minProcessors="5" maxProcessors="75"'
+       echo '               enableLookups="false"'
+       echo '               acceptCount="10" debug="0" scheme="https" secure="true"'
+       echo '               useURIValidationHack="false">'
+       echo '      <Factory className="org.apache.coyote.tomcat5.CoyoteServerSocketFactory"'
+       echo '           keystoreFile="'$KEYSTOREFILE'" keystorePass="'$PASSWD'"'
+       echo '           clientAuth="false" protocol="TLS"/>'
+       echo '    </Connector>'
+       echo
+     else
+#tomcat 5.5
+       echo
+       echo '    <!-- Define a SSL Coyote HTTP/1.1 Connector on port '$PORT' -->'
+       echo '    <Connector port="'$PORT'" minProcessors="5" maxProcessors="75"'
+       echo '               enableLookups="false"'
+       echo '               acceptCount="10" debug="0" scheme="https" secure="true"'
+       echo '               useURIValidationHack="false"'
+       echo '               keystoreFile="'$KEYSTOREFILE'" keystorePass="'$PASSWD'"'
+       echo '               clientAuth="false" sslProtocol="TLS"/>'
+       echo
+     fi
    else
 #tomcat 4.1.x
      echo
@@ -800,7 +816,7 @@ elif [ "$PLAT" = "5" ]; then
 elif [ "$PLAT" = "6" ]; then
   PLATFORM="macos"
   MACOSX="y"
-  AUTH_TYPE_TMP=2
+  AUTH_TYPE_TMP=3
 elif [ "$PLAT" = "7" ]; then
   PLATFORM="osf"
   AUTH_TYPE_TMP=7

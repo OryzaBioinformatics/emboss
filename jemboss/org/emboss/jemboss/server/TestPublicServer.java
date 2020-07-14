@@ -41,6 +41,17 @@ public class TestPublicServer
     public TestPublicServer()
     {
 
+      if(mysettings.getPublicSoapURL().startsWith("https") &&
+         !mysettings.getUseHTTPSProxy())
+      {
+        System.setProperty("https.proxyHost", "");
+        System.setProperty("http.proxyHost", "");
+        System.setProperty("proxyHost", "");  
+        String settings[] = new String[1];
+        settings[0] = new String("proxy.override=true");
+        mysettings.updateJembossPropStrings(settings);
+      }
+
       if(mysettings.getPublicSoapURL().startsWith("https"))
       {
       //SSL settings
@@ -94,6 +105,7 @@ public class TestPublicServer
       {
         System.out.println("\nFailed to connect to :\n"+
                          mysettings.getPublicSoapURL());
+        e.printStackTrace();
         System.exit(0);
       }
 

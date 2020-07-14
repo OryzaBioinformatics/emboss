@@ -250,7 +250,7 @@ public class BuildProgramMenu
         else 
         {
           String embossBin = mysettings.getEmbossBin();
-          String embossCommand = new String(embossBin + "wossname -colon -auto");
+          String embossCommand = new String(embossBin + "wossname -colon -gui -auto");
           RunEmbossApplication2 rea = new RunEmbossApplication2(
                                       embossCommand,envp,null);
           rea.waitFor();
