@@ -2,6 +2,11 @@
 #
 # Obtained from: http://www3.ncbi.nlm.nih.gov/Taxonomy/Utils/wprintgc.cgi
 #
+#  Version 3.7
+#     Added code 23 Thraustochytrium mitochondrial code
+#        formerly OGMP code 93
+#        submitted by Gertraude Berger, Ph.D.
+#
 # This code has been created for the mitochondrial genome of the labyrinthulid
 # Thraustochytrium aureum sequenced by the The Organelle Genome Megasequencing
 # Program (OGMP).

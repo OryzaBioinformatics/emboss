@@ -2,6 +2,12 @@
 #
 # Obtained from: http://www3.ncbi.nlm.nih.gov/Taxonomy/Utils/wprintgc.cgi
 #
+#  Version 3.1 - 1995
+#     Addition of Eubacterial by J.Ostell at NCBI
+#  Version 3.2 - 6/24/95
+#     Eubacterial renamed to Bacterial as most alternate starts
+#                 have been found in Archaea
+#
 # Differences from the Standard Code: 
 # 
 # None 
@@ -37,6 +43,5 @@ AAs  =   FFLLSSSSYY**CC*WLLLLPPPPHHQQRRRRIIIMTTTTNNKKSSRRVVVVAAAADDEEGGGG
 Starts = ---M---------------M------------MMMM---------------M------------
 Base1  = TTTTTTTTTTTTTTTTCCCCCCCCCCCCCCCCAAAAAAAAAAAAAAAAGGGGGGGGGGGGGGGG
 Base2  = TTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGG
-Base3  = TCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAG
-
-
+Base3  =
+TCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAG
