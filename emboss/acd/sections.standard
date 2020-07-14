@@ -23,15 +23,15 @@ gapoptions additional Gap options
 gapsection required Gap options
 htmlsection output Html section
 markupsection output Markup section
-matrixsection additional Matrix options
+matrixsection input Matrix options
 oligosinput additional Internal oligo input
 oligosection additional Internal oligo options
 profiletypesection required Profile type specific options
-primersection advanced Primer options
+primersection additional Primer options
 primerweights advanced Primer penalty weights
 programsection additional Program options
 productsection additional Product options
-protalignsection additional Protein align options
+protalignsection input Protein align options
 remapsection advanced Restriction map options
 seqinsection input Sequence input options
 seqoptsection additional Sequence options

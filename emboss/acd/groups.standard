@@ -1,6 +1,7 @@
 #
 # Application groups
 #
+Acd ACD file utilities
 Alignment:Consensus Merging sequences to make a consensus
 Alignment:Differences Finding differences between sequences
 Alignment:Dot_plots Dot plot sequence comparisons
