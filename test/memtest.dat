@@ -14,7 +14,7 @@ charge = charge tsw:opsd_human -auto
 checktrans = checktrans ../data/paamir.pep -auto
 chips = chips tembl:hsfau -auto
 cirdna = cirdna -infile ../data/data.cirp -graph ps -auto
-codcmp = codcmp -auto
+codcmp = codcmp -first Eecoli.cut -second Ehaein.cut -auto
 coderet = coderet tembl:hsfau -auto
 compseq = compseq tsw:opsd_human -auto
 cons = cons ../data/globins.msf -auto
@@ -24,6 +24,48 @@ cusp = cusp tembl:hsfau -auto
 cutgextract = cutgextract ../data -auto
 cutseq = cutseq tembl:hsfau -from 20 -to 500 -auto
 dan = dan tembl:hsfau -auto
+#
+dbblast-entry = seqret qapblast:CO9_FUGRU -out x.x -auto
+dbblast-acc = seqret qapblast-acc:Q90515 -out x.x -auto
+dbblast-query = seqret qapblast:n* -out x.x -auto
+dbblast-all = seqret qapblast:* -out x.x -auto
+dbfasta-entry = seqret qanfasta:rnops -out x.x -auto
+dbfasta-acc = seqret qanfasta-acc:Z46957 -out x.x -auto
+dbfasta-query = seqret qanfasta:r* -out x.x -auto
+dbfasta-all = seqret qanfasta:* -out x.x -auto
+dbflat-entry = seqret qanflat:rnops -out x.x -auto
+dbflat-acc = seqret qanflat-acc:Z46957 -out x.x -auto
+dbflat-acc2 = seqret tembl-acc:V00451 -out x.x -auto
+dbflat-query = seqret qanflat:r* -out x.x -auto
+dbflat-key = seqret tembl-key:a* -out x.x -auto
+dbflat-all = seqret qanflat:* -out x.x -auto
+dbgcg-entry = seqret qangcg:rnops -out x.x -auto
+dbgcg-acc = seqret qangcg-acc:Z46957 -out x.x -auto
+dbgcgpir-des = seqret qapirall-des:cytochrome -out x.x -auto
+dbgcg-query = seqret qangcg:r* -out x.x -auto
+dbgcg-all = seqret qangcg:* -out x.x -auto
+dbgcgpir-des = seqret qapirall-des:cytochrome -out x.x -auto
+#
+#xdbblast-entry = seqret qapblast:CO9_FUGRU -out x.x -auto
+#xdbblast-acc = seqret qapblast-acc:Q90515 -out x.x -auto
+#xdbblast-query = seqret qapblast:n* -out x.x -auto
+#xdbblast-all = seqret qapblast:* -out x.x -auto
+xdbfasta-entry = seqret qanxfasta:rnops -out x.x -auto
+xdbfasta-acc = seqret qanxfasta-acc:Z46957 -out x.x -auto
+xdbfasta-query = seqret qanxfasta:r* -out x.x -auto
+xdbfasta-all = seqret qanxfasta:* -out x.x -auto
+xdbflat-entry = seqret qanxflat:rnops -out x.x -auto
+xdbflat-acc = seqret qanxflat-acc:Z46957 -out x.x -auto
+xdbflat-query = seqret qanxflat:r* -out x.x -auto
+xdbflat-key = seqret qanxflatall-key:a* -out x.x -auto
+xdbflat-all = seqret qanxflat:* -out x.x -auto
+xdbgcg-entry = seqret qanxgcg:rnops -out x.x -auto
+xdbgcg-acc = seqret qanxgcg-acc:Z46957 -out x.x -auto
+xdbgcgpir-des = seqret qaxpirall-des:cytochrome -out x.x -auto
+xdbgcg-query = seqret qanxgcg:r* -out x.x -auto
+xdbgcg-all = seqret qanxgcg:* -out x.x -auto
+xdbgcgpir-des = seqret qaxpirall-des:cytochrome -out x.x -auto
+#
 dbiblast = dbiblast -dir ../wormpep -file wormpep -index . -db worm -auto
 dbiblastlist = dbiblast -dir ../data -file 'swsplit.00.pin,swsplit.01.pin,swsplit.02.pin,swsplit.03.pin,swsplit.04.pin' -index . -db swsplit -auto
 dbiblastwild = dbiblast -dir ../data -file swsplit.*.pin -index . -db swsplit -auto
@@ -32,12 +74,21 @@ dbifasta = dbifasta -dir ../wormpep -file wormpep -index . -id idacc -db worm -a
 dbiflat = dbiflat -dir ../swiss -file seq.dat -index . -id swiss -db swiss -auto
 dbigcg = dbigcg -dir ../embl -file '*.seq' -index . -id embl -db embl -auto
 dbigcg2 = dbigcg -dir ../pir -file '*.seq' -index . -id pir -db pir -auto
+#dbxblast =test= dbxblast -dir ../wormpep -file wormpep -index .  -id idacc -dbres worm -db worm -auto
+#dbxblastlist =test= dbxblast -dir ../data -file 'swsplit.00.pin,swsplit.01.pin,swsplit.02.pin,swsplit.03.pin,swsplit.04.pin' -index . -dbres swnew -dbname swsplit -auto
+#dbxblastwild =test= dbxblast -dir ../data -file swsplit.*.pin -index . -dbres swnew -dbname swsplit -auto
+#dbxblastwildstar =test= dbxblast -dir ../data -file swsplit.*.* -index . -dbres swnew -dbname swsplit -auto
+dbxfasta =test= dbxfasta -dir ../wormpep -file wormpep -index . -id idacc -dbres swnew -dbname worm -auto
+dbxflat =test= dbxflat -dir ../swiss -file seq.dat -index . -id swiss -dbres swnew -dbname swiss -auto
+dbxgcg =test= dbxgcg -dir ../embl -file '*.seq' -index . -id embl -dbres embl -dbname embl -auto
+dbxgcg2 =test= dbxgcg -dir ../pir -file '*.seq' -index . -id pir -dbres pir -dbname pir -auto
+dbxgcg3 =test= dbxgcg -dir ../pir -file '*.seq' -index . -id pir -dbres pir -dbname pir -fields "id,acc,des,key,org" -auto
 degapseq = degapseq ../data/globins.msf -auto
 descseq = descseq -desc 'Test' tsw:opsd_human -auto
 diffseq = diffseq tembl:hsfau tembl:hsfau1 -auto
 digest = digest tsw:opsd_human -auto
 distmat = distmat ../data/globins.msf -auto
-domainer = domainer -scop ../data/structure/all.scop -ccfp ../data/structure/ -ccfd ./  -pdb ./  -cpdberrf domainer.log1 -pdberrf domainer.log2 -auto
+domainer = domainer -scop ../data/structure/all.scop -ccfp ../data/structure/ -ccfoutdir ./  -pdboutdir ./  -cpdberrf domainer.log1 -pdberrf domainer.log2 -auto
 dotmatcher = dotmatcher tembl:hsfau tembl:hsfau1 -graph ps -auto
 dotpath = dotpath tembl:hsfau tembl:hsfau1 -graph ps -auto
 dottup = dottup tembl:hsfau tembl:hsfau1 -graph ps -auto
@@ -88,7 +139,7 @@ noreturn = noreturn ../data/oddcomp.comp -auto
 notseq = notseq 'tsw:*' -exclude='ops*' -auto
 nthseq = nthseq ../swiss/seq.dat -num 5 -auto
 octanol = octanol tsw:opsd_human -graph ps -auto
-oddcomp = oddcomp 'tsw:*' -comp ../data/oddcomp.comp -auto
+oddcomp = oddcomp 'tsw:*' -infile ../data/oddcomp.comp -auto
 palindrome = palindrome tembl:hsfau1 -min 4 -auto
 pasteseq = pasteseq tembl:hsfau tembl:hsfau1 -pos 200 -auto
 patmatdb = patmatdb 'tsw:*' -motif kat -auto
