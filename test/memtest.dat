@@ -1,4 +1,4 @@
-#abiview = abiview ../data/abiview.abi -auto
+abiview = abiview ../data/abiview.abi -graph cps -auto
 #contacts = contacts -cpdb ../data -cpdbextn .pxyz -con ../data -conextn .con -thresh 1.0 -vdwf Evdw.dat -conerrf contacts.log
 #swissparse = swissparse -keyfile ../data/test.terms -spfile ../data/test.seq -auto
 acdc = acdc embossversion -auto
@@ -13,7 +13,7 @@ chaos = chaos tembl:hsfau -graph ps -auto
 charge = charge tsw:opsd_human -auto
 checktrans = checktrans ../data/paamir.pep -auto
 chips = chips tembl:hsfau -auto
-cirdna = cirdna -inp ../data/data.cirp -graph ps -auto
+cirdna = cirdna -infile ../data/data.cirp -graph ps -auto
 codcmp = codcmp -auto
 coderet = coderet tembl:hsfau -auto
 compseq = compseq tsw:opsd_human -auto
@@ -37,16 +37,16 @@ descseq = descseq -desc 'Test' tsw:opsd_human -auto
 diffseq = diffseq tembl:hsfau tembl:hsfau1 -auto
 digest = digest tsw:opsd_human -auto
 distmat = distmat ../data/globins.msf -auto
-domainer = domainer -scop ../data/test.scopembl -cpdb ../data/ -cpdbscop ../data/ -cpdbextn .pxyz -pdbscop ../data/ -pdbextn .ent -cpdberrf domainer.log1 -pdberrf domainer.log2
+domainer = domainer -scop ../data/structure/all.scop -cpdb ../data/structure/ -cpdbscop ./ -cpdbextn .pxyz -pdbscop ./ -pdbextn .ent -cpdberrf domainer.log1 -pdberrf domainer.log2 -auto
 dotmatcher = dotmatcher tembl:hsfau tembl:hsfau1 -graph ps -auto
 dotpath = dotpath tembl:hsfau tembl:hsfau1 -graph ps -auto
 dottup = dottup tembl:hsfau tembl:hsfau1 -graph ps -auto
 dreg = dreg tembl:hsfau -pattern ggcaggcgcgc -auto
-einverted = einverted tembl:hsfau -auto
+einverted = einverted tembl:hsfau -send 400 -auto
 embl1 = seqret -auto tembl:hsfau
 emblmany = seqret -auto 'tembl:hsf*'
-embossdata = embossdata -fetch -file Eamino.dat
-embossversion = embossversion
+embossdata = embossdata -fetch -file Eamino.dat -auto
+embossversion = embossversion -auto
 emowse = emowse 'tsw:*fugru' ../data/test.mowse -auto
 entrails =test= entrails -auto
 entret = entret tembl:hsfau -auto
@@ -72,7 +72,7 @@ infoalign = infoalign ../data/globins.msf -auto
 infoseq = infoseq tsw:opsd_human
 intconv =test= intconv ../data/data.linp -auto
 isochore = isochore tembl:paamir -graph ps -graph ps -auto
-lindna = lindna -inp ../data/data.linp -graph ps -auto
+lindna = lindna -infile ../data/data.linp -graph ps -auto
 marscan = marscan tembl:hsfau -auto
 maskfeat = maskfeat tembl:hsfau -auto
 maskseq = maskseq tembl:hsfau -regions '20-50' -auto
@@ -85,8 +85,7 @@ newcpgreport = newcpgreport tembl:xl23808 -auto
 newcpgseek = newcpgseek tembl:xl23808 -auto
 newseq = newseq -name fred -desc test -type p -seq acdefg -auto
 noreturn = noreturn ../data/oddcomp.comp -auto
-notseq = notseq 'tsw:*' -exclude 'ops*' -auto
-nrscope =test= nrscope -scopin ../data/test.scopembl -scopout ../data/test.scopnr -dpdb ../data -extn .pxyz -thresh 95.0 -datafile EBLOSUM62 -gapopen 10 -gapextend 0.5 -errf nrscope.log
+notseq = notseq 'tsw:*' -exclude='ops*' -auto
 nthseq = nthseq ../swiss/seq.dat -num 5 -auto
 octanol = octanol tsw:opsd_human -graph ps -auto
 oddcomp = oddcomp 'tsw:*' -comp ../data/oddcomp.comp -auto
@@ -94,7 +93,7 @@ palindrome = palindrome tembl:hsfau1 -min 4 -auto
 pasteseq = pasteseq tembl:hsfau tembl:hsfau1 -pos 200 -auto
 patmatdb = patmatdb 'tsw:*' -motif kat -auto
 patmatmotifs = patmatmotifs tsw:opsd_human -auto
-patmattest =test= patmattest tsw:opsd_human -expr kat -auto
+#patmattest =test= patmattest tsw:opsd_human -expr kat -auto
 pepcoil = pepcoil tsw:opsd_human -auto
 pepnet = pepnet tsw:opsd_human -graph ps -auto
 pepstats = pepstats tsw:opsd_human -auto
@@ -118,18 +117,17 @@ remaptran = remap -sbeg 1 -send 60 tembl:eclac -enzymes 'taqi,bsu6i,acii,bsski' 
 restover = restover tembl:hsfau -seqcomp acgt -auto
 restrict = restrict tembl:hsfau -auto
 revseq = revseq tembl:hsfau -auto
-scopalign = scopalign -scopf ../data/test.scopnr -path ../data
-scope =test= scope -inf ../data/test.scopraw -auto
+# requires a modified stamp package installed to run scopalign
+#scopalign = scopalign -scopf ../data/structure/all.scop2 -path ../data
 seealso = seealso fuzznuc
 seqinfo =test= seqinfo tsw:opsd_human -auto
 seqmatchall = seqmatchall 'tembl:hsfau*' -auto
 seqret = seqret tsw:opsd_human -auto
 seqretall =test= seqretall 'tembl:hsfau*' -auto
 seqretallfeat =test= seqretallfeat 'tembl:hsfau*' -auto
-seqretfeat =test= seqretfeat tembl:hsfau -auto
+seqretfeat = seqret -feat tembl:hsfau -auto
 seqretset =test= seqretset ../data/globins.msf -auto
 seqretsplit = seqretsplit 'tembl:hsfau*' -auto
-seqtofeat =test= seqtofeat tsw:opsd_human -pattern VIA -auto
 set1 =test= seqretset -auto tsw:opsd_human
 setmany =test= seqretset -auto 'tsw:opsd_*'
 showalign = showalign ../data/globins.msf -auto
@@ -139,7 +137,8 @@ showorf = showorf tembl:hsfau -auto
 showseq = showseq tembl:hsfau -auto
 shuffleseq = shuffleseq tembl:hsfau -auto
 sigcleave = sigcleave tsw:opsd_human -auto
-siggen = siggen -algpath ../data -algextn .align -conpath ../data -conextn .con -sparsity 10 -randomize N -datafile EBLOSUM62 -scoreseq Y -scorencon Y -scoreccon Y -scoreboth N -postsim Y -auto
+# broken. ACD changed. How to specify now? Wait for qatest example
+###siggen = siggen -algpath ../data -algextn .align -conpath ../data -conextn .con -sparsity 10 -randomize N -datafile EBLOSUM62 -scoreseq Y -scorencon Y -scoreccon Y -scoreboth N -postsim Y -auto
 silent = silent tembl:hsfau -sbeg 31 -send 50 -auto
 sixpack = sixpack -sbeg 1 -send 60 tembl:eclac  -auto
 splitter = splitter -size 500 tembl:hsfau -auto
