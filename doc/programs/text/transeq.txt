@@ -139,10 +139,16 @@ Command line arguments
                                   Note: you should not try to use this option
                                   with any other frame than the default,
                                   -frame=1
-   -trim               boolean    This removes all X and * characters from the
-                                  right end of the translation. The trimming
-                                  process starts at the end and continues
-                                  until the next character is not a X or a *
+   -trim               boolean    This removes all 'X' and '*' characters from
+                                  the right end of the translation. The
+                                  trimming process starts at the end and
+                                  continues until the next character is not a
+                                  'X' or a '*'
+   -clean              boolean    This changes all STOP codon positions from
+                                  the '*' character to 'X' (an unknown
+                                  residue). This is useful because some
+                                  programs will not accept protein sequences
+                                  with '*' characters in them.
 
    Advanced qualifiers:
    -alternative        boolean    The default definition of frame '-1' is the
@@ -155,10 +161,52 @@ Command line arguments
                                   of codons starting with the last codon of
                                   the sequence, then set this to be true.
 
+   Associated qualifiers:
+  "-sequence" related qualifiers
+   -sbegin1             integer    First base used
+   -send1               integer    Last base used, def=seq length
+   -sreverse1           boolean    Reverse (if DNA)
+   -sask1               boolean    Ask for begin/end/reverse
+   -snucleotide1        boolean    Sequence is nucleotide
+   -sprotein1           boolean    Sequence is protein
+   -slower1             boolean    Make lower case
+   -supper1             boolean    Make upper case
+   -sformat1            string     Input sequence format
+   -sopenfile1          string     Input filename
+   -sdbname1            string     Database name
+   -sid1                string     Entryname
+   -ufo1                string     UFO features
+   -fformat1            string     Features format
+   -fopenfile1          string     Features file name
+  "-outseq" related qualifiers
+   -osformat2           string     Output seq format
+   -osextension2        string     File name extension
+   -osname2             string     Base file name
+   -osdirectory2        string     Output directory
+   -osdbname2           string     Database name to add
+   -ossingle2           boolean    Separate file for each entry
+   -oufo2               string     UFO features
+   -offormat2           string     Features format
+   -ofname2             string     Features file name
+   -ofdirectory2        string     Output directory
+
    General qualifiers:
-  -help                boolean    Report command line options. More
+   -auto                boolean    Turn off prompts
+   -stdout              boolean    Write standard output
+   -filter              boolean    Read standard input, write standard output
+   -options             boolean    Prompt for required and optional values
+   -debug               boolean    Write debug output to program.dbg
+   -acdlog              boolean    Write ACD processing log to program.acdlog
+   -acdpretty           boolean    Rewrite ACD file as program.acdpretty
+   -acdtable            boolean    Write HTML table of options
+   -verbose             boolean    Report some/full command line options
+   -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
+   -warning             boolean    Report warnings
+   -error               boolean    Report errors
+   -fatal               boolean    Report fatal errors
+   -die                 boolean    Report deaths
    
 
    Mandatory qualifiers Allowed values Default
@@ -208,9 +256,13 @@ Command line arguments
    1,5,8,10,23,45,57,99 Note: you should not try to use this option with
    any other frame than the default, -frame=1 Sequence range Whole
    sequence
-   -trim This removes all X and * characters from the right end of the
-   translation. The trimming process starts at the end and continues
-   until the next character is not a X or a * Boolean value Yes/No No
+   -trim This removes all 'X' and '*' characters from the right end of
+   the translation. The trimming process starts at the end and continues
+   until the next character is not a 'X' or a '*' Boolean value Yes/No No
+   -clean This changes all STOP codon positions from the '*' character to
+   'X' (an unknown residue). This is useful because some programs will
+   not accept protein sequences with '*' characters in them. Boolean
+   value Yes/No No
    Advanced qualifiers Allowed values Default
    -alternative The default definition of frame '-1' is the
    reverse-complement of the set of codons used in frame 1. (Frame -2 is
@@ -1173,8 +1225,8 @@ See also
    
 Author(s)
 
-   This application was written by Gary Williams
-   (gwilliam@hgmp.mrc.ac.uk)
+   Gary Williams (gwilliam © hgmp.mrc.ac.uk)
+   HGMP-RC, Genome Campus, Hinxton, Cambridge CB10 1SB, UK
    
 History
 

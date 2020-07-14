@@ -28,6 +28,7 @@
 static void transeq_GetRegions(AjPRange regions, AjPSeq seq);
 static void transeq_Trim (AjPSeq seq);
 static void transeq_GetFrames (AjPStr *framelist, AjBool *frames);
+static void transeq_Clean (AjPSeq seq);
 
 
 /* @prog transeq **************************************************************
@@ -49,6 +50,7 @@ int main(int argc, char **argv)
     ajint table;
     AjPRange regions;
     AjBool trim;
+    AjBool clean;
     AjBool defr=ajFalse; /* true if the range covers the whole sequence */
     AjBool first=ajTrue; /* true if this is the first sequence done     */
     AjBool alternate;
@@ -63,6 +65,7 @@ int main(int argc, char **argv)
     tablelist = ajAcdGetList ("table");
     regions = ajAcdGetRange ("regions");
     trim = ajAcdGetBool ("trim");
+    clean = ajAcdGetBool ("clean");
     alternate = ajAcdGetBool ("alternative");
 
     /* get the frames to be translated */
@@ -101,6 +104,8 @@ int main(int argc, char **argv)
 	              pep = ajTrnSeqOrig(trnTable, seq, 2-i);
 	        if (trim)
 	            transeq_Trim(pep);
+                if (clean)
+                    transeq_Clean(pep); /* clean after the trim */
 	        (void) ajSeqAllWrite (seqout, pep);
 	        (void) ajSeqDel (&pep);
 	    }
@@ -177,6 +182,28 @@ static void transeq_Trim (AjPSeq seq)
 
     if (i < len)
 	ajStrTruncate(&s, i+1);
+
+    return;
+}
+
+
+
+/* @funcstatic transeq_Clean ***************************************************
+**
+** Converts * characters to X's in the translation
+**
+**
+** @param [u] seq [AjPSeq] sequence to clean
+** @return [void]
+** @@
+******************************************************************************/
+
+static void transeq_Clean (AjPSeq seq)
+{
+    AjPStr str = ajSeqStrCopy(seq);
+
+    ajStrConvertCC(&str, "*", "X");
+    ajSeqReplace(seq, str);
 
     return;
 }

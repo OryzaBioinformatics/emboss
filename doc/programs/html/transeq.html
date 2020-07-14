@@ -229,10 +229,16 @@ IT IS DONE FOR YOU.
                                   Note: you should not try to use this option
                                   with any other frame than the default,
                                   -frame=1
-   -trim               boolean    This removes all X and * characters from the
-                                  right end of the translation. The trimming
-                                  process starts at the end and continues
-                                  until the next character is not a X or a *
+   -trim               boolean    This removes all 'X' and '*' characters from
+                                  the right end of the translation. The
+                                  trimming process starts at the end and
+                                  continues until the next character is not a
+                                  'X' or a '*'
+   -clean              boolean    This changes all STOP codon positions from
+                                  the '*' character to 'X' (an unknown
+                                  residue). This is useful because some
+                                  programs will not accept protein sequences
+                                  with '*' characters in them.
 
    Advanced qualifiers:
    -alternative        boolean    The default definition of frame '-1' is the
@@ -245,18 +251,60 @@ IT IS DONE FOR YOU.
                                   of codons starting with the last codon of
                                   the sequence, then set this to be true.
 
+   Associated qualifiers:
+  "-sequence" related qualifiers
+   -sbegin1             integer    First base used
+   -send1               integer    Last base used, def=seq length
+   -sreverse1           boolean    Reverse (if DNA)
+   -sask1               boolean    Ask for begin/end/reverse
+   -snucleotide1        boolean    Sequence is nucleotide
+   -sprotein1           boolean    Sequence is protein
+   -slower1             boolean    Make lower case
+   -supper1             boolean    Make upper case
+   -sformat1            string     Input sequence format
+   -sopenfile1          string     Input filename
+   -sdbname1            string     Database name
+   -sid1                string     Entryname
+   -ufo1                string     UFO features
+   -fformat1            string     Features format
+   -fopenfile1          string     Features file name
+  "-outseq" related qualifiers
+   -osformat2           string     Output seq format
+   -osextension2        string     File name extension
+   -osname2             string     Base file name
+   -osdirectory2        string     Output directory
+   -osdbname2           string     Database name to add
+   -ossingle2           boolean    Separate file for each entry
+   -oufo2               string     UFO features
+   -offormat2           string     Features format
+   -ofname2             string     Features file name
+   -ofdirectory2        string     Output directory
+
    General qualifiers:
-  -help                boolean    Report command line options. More
+   -auto                boolean    Turn off prompts
+   -stdout              boolean    Write standard output
+   -filter              boolean    Read standard input, write standard output
+   -options             boolean    Prompt for required and optional values
+   -debug               boolean    Write debug output to program.dbg
+   -acdlog              boolean    Write ACD processing log to program.acdlog
+   -acdpretty           boolean    Rewrite ACD file as program.acdpretty
+   -acdtable            boolean    Write HTML table of options
+   -verbose             boolean    Report some/full command line options
+   -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
+   -warning             boolean    Report warnings
+   -error               boolean    Report errors
+   -fatal               boolean    Report fatal errors
+   -die                 boolean    Report deaths
 
 
 </pre>
 </td></tr></table>
 <P>
 
-<table border cellspacing=0 cellpadding=3 bgcolor="#f5f5ff">
-<tr bgcolor="#FFFFD0">
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
 <th align="left" colspan=2>Mandatory qualifiers</th>
 <th align="left">Allowed values</th>
 <th align="left">Default</th>
@@ -276,7 +324,7 @@ IT IS DONE FOR YOU.
 <td><i>&lt;sequence&gt;</i>.<i>format</i></td>
 </tr>
 
-<tr bgcolor="#FFFFD0">
+<tr bgcolor="#FFFFCC">
 <th align="left" colspan=2>Optional qualifiers</th>
 <th align="left">Allowed values</th>
 <th align="left">Default</th>
@@ -314,12 +362,19 @@ Note: you should not try to use this option with any other frame than the defaul
 
 <tr>
 <td>-trim</td>
-<td>This removes all X and * characters from the right end of the translation. The trimming process starts at the end and continues until the next character is not a X or a *</td>
+<td>This removes all 'X' and '*' characters from the right end of the translation. The trimming process starts at the end and continues until the next character is not a 'X' or a '*'</td>
 <td>Boolean value Yes/No</td>
 <td>No</td>
 </tr>
 
-<tr bgcolor="#FFFFD0">
+<tr>
+<td>-clean</td>
+<td>This changes all STOP codon positions from the '*' character to 'X' (an unknown residue). This is useful because some programs will not accept protein sequences with '*' characters in them.</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
 <th align="left" colspan=2>Advanced qualifiers</th>
 <th align="left">Allowed values</th>
 <th align="left">Default</th>
@@ -352,7 +407,7 @@ Note: you should not try to use this option with any other frame than the defaul
 'tembl:paamir' is a sequence entry in the example nucleic acid database 'tembl'
 <p>
 <p><h3>Database entry: tembl:paamir</h3>
-<table width="90%"><tr><td bgcolor="#FFDDFF">
+<table width="90%"><tr><td bgcolor="#FFCCFF">
 <pre>
 ID   PAAMIR     standard; DNA; PRO; 2167 BP.
 XX
@@ -465,7 +520,7 @@ SQ   Sequence 2167 BP; 363 A; 712 C; 730 G; 362 T; 0 other;
 <a name="input.8"></a>
 <h3>Input files for usage example 8</h3>
 <p><h3>File: ../../data/mito.seq</h3>
-<table width="90%"><tr><td bgcolor="#FFDDFF">
+<table width="90%"><tr><td bgcolor="#FFCCFF">
 <pre>
 &gt;gi|5819095|ref|NC_001321.1| Balaenoptera physalus mitochondrion, complete genome
 GTTAATTACTAATCAGCCCATGATCATAACATAACTGAGGTTTCATACATTTGGTATTTTTTTATTTTTTTTGGGGGGCT
@@ -585,7 +640,7 @@ AGACATCTGGTTCTTACTTCAGGACCATATTAACTTAAAATCGCCCACTCGTTCCCCTTAAATAAGACATCTCGATGG
 <a name="output.1"></a>
 <h3>Output files for usage example </h3>
 <p><h3>File: amir.pep</h3>
-<table width="90%"><tr><td bgcolor="#DDFFDD">
+<table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 &gt;PAAMIR_1 Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase regulation
 GTAGRASARSPPAGRRELHDLPGEPGARAGSLRTALSDSHRRGNGWDRTRSGR*SACCSP
@@ -607,7 +662,7 @@ PRX
 <a name="output.2"></a>
 <h3>Output files for usage example 2</h3>
 <p><h3>File: amir.pep</h3>
-<table width="90%"><tr><td bgcolor="#DDFFDD">
+<table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 &gt;PAAMIR_2 Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase regulation
 VPLAEHLLDHHQPGDGNCTIYLASLEHERVRFVRR*ATVTGEETDGIAPGAAADRPAVLR
@@ -629,7 +684,7 @@ LE
 <a name="output.3"></a>
 <h3>Output files for usage example 3</h3>
 <p><h3>File: amir.pep</h3>
-<table width="90%"><tr><td bgcolor="#DDFFDD">
+<table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 &gt;PAAMIR_4 Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase regulation
 SRNWLAATHR*VKANSRVSAPAFSEPCPAAAEKIR*NATQALSTPTRKLITATSRPLILP
@@ -651,7 +706,7 @@ GT
 <a name="output.4"></a>
 <h3>Output files for usage example 4</h3>
 <p><h3>File: amir.pep</h3>
-<table width="90%"><tr><td bgcolor="#DDFFDD">
+<table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 &gt;PAAMIR_1 Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase regulation
 GTAGRASARSPPAGRRELHDLPGEPGARAGSLRTALSDSHRRGNGWDRTRSGR*SACCSP
@@ -701,7 +756,7 @@ S
 <a name="output.5"></a>
 <h3>Output files for usage example 5</h3>
 <p><h3>File: amir.pep</h3>
-<table width="90%"><tr><td bgcolor="#DDFFDD">
+<table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 &gt;PAAMIR_4 Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase regulation
 SRNWLAATHR*VKANSRVSAPAFSEPCPAAAEKIR*NATQALSTPTRKLITATSRPLILP
@@ -751,7 +806,7 @@ VP
 <a name="output.6"></a>
 <h3>Output files for usage example 6</h3>
 <p><h3>File: amir.pep</h3>
-<table width="90%"><tr><td bgcolor="#DDFFDD">
+<table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 &gt;PAAMIR_1 Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase regulation
 GTAGRASARSPPAGRRELHDLPGEPGARAGSLRTALSDSHRRGNGWDRTRSGR*SACCSP
@@ -843,7 +898,7 @@ VP
 <a name="output.7"></a>
 <h3>Output files for usage example 7</h3>
 <p><h3>File: amir.pep</h3>
-<table width="90%"><tr><td bgcolor="#DDFFDD">
+<table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 &gt;PAAMIR_1 Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase regulation
 VPLAEHLLDHHQPGEASLEHERVRFVRR*ATVTGEETDGIAPGAAADRPAVLRNRRHRRY
@@ -855,7 +910,7 @@ X
 <a name="output.8"></a>
 <h3>Output files for usage example 8</h3>
 <p><h3>File: mito.pep</h3>
-<table width="90%"><tr><td bgcolor="#DDFFDD">
+<table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 &gt;NC_001321.1_1 Balaenoptera physalus mitochondrion, complete genome
 VNY*SAHDHNMTEVSYIWYFFIFFGGLARTPLWP**VSSQSDKL*LGLDVFVIWLAQPTC
@@ -1241,8 +1296,10 @@ or 2 bases, which is not what you want.
 </H2>
 
 
-This application was written by Gary Williams <a
-href="mailto:gwilliam@hgmp.mrc.ac.uk">(gwilliam@hgmp.mrc.ac.uk)</a>
+Gary Williams (gwilliam&nbsp;&copy;&nbsp;hgmp.mrc.ac.uk)
+<br>
+HGMP-RC, Genome Campus, Hinxton, Cambridge CB10 1SB, UK
+
 
 <H2>
     History
@@ -1258,6 +1315,11 @@ phase as forward frames.  - Gary Williams
 <p>
 
 June 2002 - added '-alternative' qualifier - Gary Williams
+
+<!--
+<p>
+[an error occurred while processing this directive]
+-->
 
 <H2>
     Target users
