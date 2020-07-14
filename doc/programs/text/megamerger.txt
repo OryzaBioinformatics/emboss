@@ -79,7 +79,7 @@ Command line arguments
                                   sequence using the sequence where the
                                   mismatch is closest to that sequence's
                                   centre. If this option is used, then the
-                                  fist sequence (seqa) will always be used in
+                                  first sequence (seqa) will always be used in
                                   preference to the other sequence when there
                                   is a mismatch.
 
@@ -87,8 +87,8 @@ Command line arguments
    Associated qualifiers:
 
    "-asequence" associated qualifiers
-   -sbegin1             integer    First base used
-   -send1               integer    Last base used, def=seq length
+   -sbegin1             integer    Start of the sequence to be used
+   -send1               integer    End of the sequence to be used
    -sreverse1           boolean    Reverse (if DNA)
    -sask1               boolean    Ask for begin/end/reverse
    -snucleotide1        boolean    Sequence is nucleotide
@@ -103,8 +103,8 @@ Command line arguments
    -fopenfile1          string     Features file name
 
    "-bsequence" associated qualifiers
-   -sbegin2             integer    First base used
-   -send2               integer    Last base used, def=seq length
+   -sbegin2             integer    Start of the sequence to be used
+   -send2               integer    End of the sequence to be used
    -sreverse2           boolean    Reverse (if DNA)
    -sask2               boolean    Ask for begin/end/reverse
    -snucleotide2        boolean    Sequence is nucleotide
@@ -164,7 +164,7 @@ Command line arguments
    other of the two sequences must be used to create the merged sequence
    over this mismatch region. The default action is to create the merged
    sequence using the sequence where the mismatch is closest to that
-   sequence's centre. If this option is used, then the fist sequence
+   sequence's centre. If this option is used, then the first sequence
    (seqa) will always be used in preference to the other sequence when
    there is a mismatch. Boolean value Yes/No No
    Advanced (Unprompted) qualifiers Allowed values Default
@@ -783,8 +783,9 @@ See also
    
 Author(s)
 
-   Gary Williams (gwilliam © hgmp.mrc.ac.uk)
-   HGMP-RC, Genome Campus, Hinxton, Cambridge CB10 1SB, UK
+   Gary Williams (gwilliam © rfcgr.mrc.ac.uk)
+   MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
+   Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
    
 History
 

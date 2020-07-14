@@ -26,7 +26,7 @@ Usage
 Shows molwts that match across a set of files
 Comma separated file list: ../../data/mw1.dat,../../data/mw2.dat,../../data/mw3
 .dat
-ppm tolerance [50.0]: 
+Ppm tolerance [50.0]: 
 Output file [outfile.mwcontam]: 
    
    Go to the input files for this example
@@ -36,7 +36,7 @@ Command line arguments
 
    Standard (Mandatory) qualifiers:
   [-files]             filelist   Comma separated file list
-   -tolerance          float      ppm tolerance
+   -tolerance          float      Ppm tolerance
   [-outfile]           outfile    Output file name
 
    Additional (Optional) qualifiers: (none)
@@ -66,7 +66,7 @@ Command line arguments
    [-files]
    (Parameter 1) Comma separated file list Comma-separated file list
    comma-separated file list
-   -tolerance ppm tolerance Any numeric value 50.0
+   -tolerance Ppm tolerance Any numeric value 50.0
    [-outfile]
    (Parameter 2) Output file name Output file <sequence>.mwcontam
    Additional (Optional) qualifiers Allowed values Default
@@ -187,8 +187,9 @@ See also
    
 Author(s)
 
-   Alan Bleasby (ableasby © hgmp.mrc.ac.uk)
-   HGMP-RC, Genome Campus, Hinxton, Cambridge CB10 1SB, UK
+   Alan Bleasby (ableasby © rfcgr.mrc.ac.uk)
+   MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
+   Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
    
 History
 

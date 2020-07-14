@@ -27,7 +27,7 @@ Usage
 % embossversion 
 Writes the current EMBOSS version number
 
-2.8.0
+2.9.0
    
 Command line arguments
 
@@ -124,8 +124,9 @@ See also
    
 Author(s)
 
-   Gary Williams (gwilliam © hgmp.mrc.ac.uk)
-   HGMP-RC, Genome Campus, Hinxton, Cambridge CB10 1SB, UK
+   Gary Williams (gwilliam © rfcgr.mrc.ac.uk)
+   MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
+   Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
    
 History
 

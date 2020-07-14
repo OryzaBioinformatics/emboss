@@ -263,7 +263,7 @@ Command line arguments
                                   measured from the start positions of the
                                   features. This criterion is always applied
                                   despite the specified overlap type required.
-   -twoout             boolean    If you set this to be true, then the two
+   -twoout             toggle     If you set this to be true, then the two
                                   features themselves will be written out. If
                                   it is left as false, then a single feature
                                   will be written out covering the two
@@ -286,8 +286,8 @@ Command line arguments
    Associated qualifiers:
 
    "-sequence" associated qualifiers
-   -sbegin1             integer    First base used
-   -send1               integer    Last base used, def=seq length
+   -sbegin1             integer    Start of each sequence to be used
+   -send1               integer    End of each sequence to be used
    -sreverse1           boolean    Reverse (if DNA)
    -sask1               boolean    Ask for begin/end/reverse
    -snucleotide1        boolean    Sequence is nucleotide
@@ -474,8 +474,8 @@ Command line arguments
    A
    -twoout If you set this to be true, then the two features themselves
    will be written out. If it is left as false, then a single feature
-   will be written out covering the two features you found. Boolean value
-   Yes/No No
+   will be written out covering the two features you found. Toggle value
+   Yes/No N
    -typeout If you have specified that the pairs of features that are
    found should be reported as one feature in the ouput, then you can
    specify the 'type' name of the new feature here. By default every
@@ -609,7 +609,7 @@ Output file format
   
 ########################################
 # Program: twofeat
-# Rundate: Thu Nov 27 15:25:59 2003
+# Rundate: Tue Apr 06 14:34:36 2004
 # Report_format: table
 # Report_file: hsfau.twofeat
 ########################################
@@ -631,7 +631,7 @@ Output file format
   File: hsfau.twofeat
   
 ##gff-version 2.0
-##date 2003-11-27
+##date 2004-04-06
 ##Type DNA HSFAU
 HSFAU   EMBL    polyA_signal    484     489     0.000   +       .       Sequenc
 e "HSFAU.6"
@@ -679,8 +679,9 @@ See also
    
 Author(s)
 
-   Gary Williams (gwilliam © hgmp.mrc.ac.uk)
-   HGMP-RC, Genome Campus, Hinxton, Cambridge CB10 1SB, UK
+   Gary Williams (gwilliam © rfcgr.mrc.ac.uk)
+   MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
+   Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
    
 History
 

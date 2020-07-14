@@ -53,15 +53,15 @@ Command line arguments
                                   found. A value of 17 is more sensitive, but
                                   28 has also been used with some success.
   [-outfile]           outfile    Output file name
-  [-featout]           featout    File for output features
+  [-outfeat]           featout    File for output features
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers: (none)
    Associated qualifiers:
 
    "-sequence" associated qualifiers
-   -sbegin1             integer    First base used
-   -send1               integer    Last base used, def=seq length
+   -sbegin1             integer    Start of each sequence to be used
+   -send1               integer    End of each sequence to be used
    -sreverse1           boolean    Reverse (if DNA)
    -sask1               boolean    Ask for begin/end/reverse
    -snucleotide1        boolean    Sequence is nucleotide
@@ -78,7 +78,7 @@ Command line arguments
    "-outfile" associated qualifiers
    -odirectory2         string     Output directory
 
-   "-featout" associated qualifiers
+   "-outfeat" associated qualifiers
    -offormat3           string     Output feature format
    -ofopenfile3         string     Features file name
    -ofextension3        string     File name extension
@@ -110,7 +110,7 @@ Command line arguments
    Integer from 1 to 200 17
    [-outfile]
    (Parameter 2) Output file name Output file <sequence>.cpgreport
-   [-featout]
+   [-outfeat]
    (Parameter 3) File for output features Writeable feature table
    unknown.gff
    Additional (Optional) qualifiers Allowed values Default
@@ -257,7 +257,7 @@ RNU68037               1183   1193    26          2  72.7   2.00
   File: rnu68037.gff
   
 ##gff-version 2.0
-##date 2003-11-27
+##date 2004-04-06
 ##Type DNA RNU68037
 RNU68037        cpgreport       misc_feature    12      13      17.000  +
 .       Sequence "RNU68037.1"
@@ -368,8 +368,9 @@ Author(s)
    Hinxton, Cambridge CB10 1SD, UK
    
    This application was modified for inclusion in EMBOSS by Alan Bleasby
-   (ableasby © hgmp.mrc.ac.uk)
-   HGMP-RC, Genome Campus, Hinxton, Cambridge CB10 1SB, UK
+   (ableasby © rfcgr.mrc.ac.uk)
+   MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
+   Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
    
 History
 

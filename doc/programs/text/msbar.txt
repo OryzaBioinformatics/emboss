@@ -109,8 +109,6 @@ Command line arguments
 *  -inframe            boolean    Do 'codon' and 'block' operations in frame
 
    Advanced (Unprompted) qualifiers:
-   -minimum            integer    Minimum size for a block mutation
-   -maximum            integer    Maximum size for a block mutation
    -othersequence      seqall     If you require that the resulting mutated
                                   sequence should not match a set of other
                                   sequences, then you can specify that set of
@@ -129,12 +127,14 @@ Command line arguments
                                   is still a match to the set of sequence
                                   given here, then the matching mutated
                                   sequence is written with a warning message.
+   -minimum            integer    Minimum size for a block mutation
+   -maximum            integer    Maximum size for a block mutation
 
    Associated qualifiers:
 
    "-sequence" associated qualifiers
-   -sbegin1             integer    First base used
-   -send1               integer    Last base used, def=seq length
+   -sbegin1             integer    Start of each sequence to be used
+   -send1               integer    End of each sequence to be used
    -sreverse1           boolean    Reverse (if DNA)
    -sask1               boolean    Ask for begin/end/reverse
    -snucleotide1        boolean    Sequence is nucleotide
@@ -149,8 +149,8 @@ Command line arguments
    -fopenfile1          string     Features file name
 
    "-othersequence" associated qualifiers
-   -sbegin              integer    First base used
-   -send                integer    Last base used, def=seq length
+   -sbegin              integer    Start of each sequence to be used
+   -send                integer    End of each sequence to be used
    -sreverse            boolean    Reverse (if DNA)
    -sask                boolean    Ask for begin/end/reverse
    -snucleotide         boolean    Sequence is nucleotide
@@ -232,8 +232,6 @@ Command line arguments
    -inframe Do 'codon' and 'block' operations in frame Boolean value
    Yes/No No
    Advanced (Unprompted) qualifiers Allowed values Default
-   -minimum Minimum size for a block mutation Integer 0 or more 1
-   -maximum Maximum size for a block mutation Any integer value 10
    -othersequence If you require that the resulting mutated sequence
    should not match a set of other sequences, then you can specify that
    set of sequences here. For example, if you require that the mutated
@@ -246,6 +244,8 @@ Command line arguments
    after 10 such retries, there is still a match to the set of sequence
    given here, then the matching mutated sequence is written with a
    warning message. Readable sequence(s) asis:N
+   -minimum Minimum size for a block mutation Integer 0 or more 1
+   -maximum Maximum size for a block mutation Any integer value 10
    
 Input file format
 
@@ -425,17 +425,17 @@ gacaccatcgaatggcgcaaaacctttcgcggtatggcatgatagcgcccggaagagagt
 caattcagggtggtgaatgtgaaaccagtaacgttatacgatgtcgcagagtatgccggt
 gtctcttatcagaccgtttcccgcgtggtgaaccaggccagccacgtttctgcgaaaacg
 cgggaaaaagtggaagcggcgatggcggagctgaattacattcccaaccgcgtggcacaa
-caactggcgggcaaacagtcgttgctgattggcgttgccacctccagtctggccctgcac
+caactggcgggcaaacagtcgttgctgattggcgttgccacctccagtctAgccctgcac
 gcgccgtcgcaaattgtcgcggcgattaaatctcgcgccgatcaactgggtgccagcgtg
 gtggtgtcgatggtagaacgaagcggcgtcgaagcctgtaaagcggcggtgcacaatctt
 ctcgcgcaacgcgtcagtgggctgatcattaactatccgctggatgaccaggatgccatt
 gctgtggaagctgcctgcactaatgttccggcgttatttcttgatgtctctgaccagaca
-cccatcaacagAattattttctcccatgaagacggtacgcgactgggcgtggagcatctg
+cccatcaacagtattattttctcccatgaagacggtacgcgactgggcgtggagcatctg
 gtcgcattgggtcaccagcaaatcgcgctgttagcgggcccattaagttctgtctcggcg
 cgtctgcgtctggctggctggcataaatatctcactcgcaatcaaattcagccgatagcg
 gaacgggaaggcgactggagtgccatgtccggttttcaacaaaccatgcaaatgctgaat
 gagggcatcgttcccactgcgatgctggttgccaacgatcagatggcgctgggcgcaatg
-cgcgccattaccgagtccgggctgcgcgttggtgcggatatctcggtagtgggatacgac
+cgcgccattaccgagtccgggctgcgcgttggtgcggatatctcggtagtggAatacgac
 gataccgaagacagctcatgttatatcccgccgtcaaccaccatcaaacaggattttcgc
 ctgctggggcaaaccagcgtggaccgcttgctgcaactctctcagggccaggcggtgaag
 ggcaatcagctgttgcccgtctcactggtgaaaagaaaaaccaccctggcgcccaatacg
@@ -450,7 +450,7 @@ gctggctggagtgcgatcttcctgaggccgatactgtcgtcgtcccctcaaactggcaga
 tgcacggttacgatgcgcccatctacaccaacgtaacctatcccattacggtcaatccgc
 cgtttgttcccacggagaatccgacgggttgttactcgctcacatttaatgttgatgaaa
 gctggctacaggaaggccagacgcgaattatttttgatggcgttaactcggcgtttcatc
-tgtggtgcaacgggcgctgggtcggttacggccaggacagtcgtttgccgtctgaatttg
+tgtggtgcaacgggcgctgggtcggttacggccaggacagtcgGttgccgtctgaatttg
 acctgagcgcatttttacgcgccggagaaaaccgcctcgcggtgatggtgctgcgttgga
 gtgacggcagttatctggaagatcaggatatgtggcggatgagcggcattttccgtgacg
 tctcgttgctgcataaaccgactacacaaatcagcgatttccatgttgccactcgcttta
@@ -478,12 +478,12 @@ tgttcggtttattctttttcttttacttttttatcatgggagcctacttcccgtttttcc
 cgatttggctacatgacatcaaccatatcagcaaaagtgatacgggtattatttttgccg
 ctatttctctgttctcgctattattccaaccgctgtttggtctgctttctgacaaactcg
 ggctgcgcaaatacctgctgtggattattaccggcatgttagtgatgtttgcgccgttct
-ttatttttatcttcgggccactgttacaatacaacattttagtaggatcgattgttgCtg
+ttatttttatcttcgggccactgttacaatacaacattttagtaggatcgattgttggtg
 gtatttatctaggcttttgttttaacgccggtgcgccagcagtagaggcatttattgaga
-aagtcagccgtcgcagtaGtttcgaatttggtcgcgcgcggatgtttggctgtgttggct
+aagtcagccgtcgcagtaatttcgaatttggtcgcgcgcggatgtttggctgtgttggct
 gggcgctgtgtgcctcgattgtcggcatcatgttcaccatcaataatcagtttgttttct
 ggctgggctctggctgtgcactcatcctcgccgttttactctttttcgccaaaacggatg
-cgccctcttctgccacggttgccaatgcggtaggtgccaaccGttcggcatttagcctta
+cgccctcttctgccacggttgccaatgcggtaggtgccaaccattcggcatttagcctta
 agctggcactggaactgttcagacagccaaaactgtggtttttgtcactgtatgttattg
 gcgtttcctgcacctacgatgtttttgaccaacagtttgctaatttctttacttcgttct
 ttgctaccggtgaacagggtacgcgggtatttggctacgtaacgacaatgggcgaattac
@@ -524,7 +524,7 @@ gagccgcggaccacagccccatcaccagtggcgtgcgctgctgaaaccgccgtttaatca
 ccgaagcatcaccgcctgaatgatgccgatccccaccccaccaagcagtgcgctgctaag
 cagcagcgcactttgcgggtaaagctcacgcatcaatgcaccgacggcaatcagcaacag
 actgatggcgacactgcgacgttcgctgacatgctgatgaagccagcttccggccagcgc
-cagcccgcccatggtaaccaccggcagagcggtcgac
+cagcccgcccatgTtaaccaccggcagagcggtcgac
    
    The output is a sequence file with 5 substitutions relative to the
    original sequence.
@@ -564,8 +564,9 @@ See also
    
 Author(s)
 
-   Gary Williams (gwilliam © hgmp.mrc.ac.uk)
-   HGMP-RC, Genome Campus, Hinxton, Cambridge CB10 1SB, UK
+   Gary Williams (gwilliam © rfcgr.mrc.ac.uk)
+   MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
+   Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
    
 History
 

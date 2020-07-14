@@ -55,8 +55,8 @@ Command line arguments
    Associated qualifiers:
 
    "-sequence" associated qualifiers
-   -sbegin1             integer    First base used
-   -send1               integer    Last base used, def=seq length
+   -sbegin1             integer    Start of the sequence to be used
+   -send1               integer    End of the sequence to be used
    -sreverse1           boolean    Reverse (if DNA)
    -sask1               boolean    Ask for begin/end/reverse
    -snucleotide1        boolean    Sequence is nucleotide
@@ -232,7 +232,7 @@ Output file format
   
 ########################################
 # Program: equicktandem
-# Rundate: Thu Nov 27 15:20:44 2003
+# Rundate: Tue Apr 06 14:26:36 2004
 # Report_format: table
 # Report_file: hhtetra.qtan
 ########################################

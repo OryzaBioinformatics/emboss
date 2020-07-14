@@ -70,13 +70,13 @@ Command line arguments
 
    Standard (Mandatory) qualifiers (* if not always prompted):
   [-sequence]          seqall     Sequence database USA
-  [-[no]vectorfile]    boolean    Are your vector sequences in a file?
+  [-vectorfile]        toggle     Are your vector sequences in a file?
 *  -vectorsfile        infile     Name of vectorfile
    -mismatch           integer    Max allowed % mismatch
    -[no]besthits       boolean    Show only the best hits (minimise
                                   mismatches)?
-*  -linkera            string     5' sequence
-*  -linkerb            string     3' sequence
+*  -linkera            string     The 5' sequence
+*  -linkerb            string     The 3' sequence
   [-outfile]           outfile    Output file name
   [-outseq]            seqoutall  Output sequence(s) USA
 
@@ -85,8 +85,8 @@ Command line arguments
    Associated qualifiers:
 
    "-sequence" associated qualifiers
-   -sbegin1             integer    First base used
-   -send1               integer    Last base used, def=seq length
+   -sbegin1             integer    Start of each sequence to be used
+   -send1               integer    End of each sequence to be used
    -sreverse1           boolean    Reverse (if DNA)
    -sask1               boolean    Ask for begin/end/reverse
    -snucleotide1        boolean    Sequence is nucleotide
@@ -134,16 +134,16 @@ Command line arguments
    Standard (Mandatory) qualifiers Allowed values Default
    [-sequence]
    (Parameter 1) Sequence database USA Readable sequence(s) Required
-   [-[no]vectorfile]
-   (Parameter 2) Are your vector sequences in a file? Boolean value
-   Yes/No Yes
+   [-vectorfile]
+   (Parameter 2) Are your vector sequences in a file? Toggle value Yes/No
+   Y
    -vectorsfile Name of vectorfile Input file Required
    -mismatch Max allowed % mismatch Any integer value 10
    -[no]besthits Show only the best hits (minimise mismatches)? Boolean
    value Yes/No Yes
-   -linkera 5' sequence Any string is accepted An empty string is
+   -linkera The 5' sequence Any string is accepted An empty string is
    accepted
-   -linkerb 3' sequence Any string is accepted An empty string is
+   -linkerb The 3' sequence Any string is accepted An empty string is
    accepted
    [-outfile]
    (Parameter 3) Output file name Output file <sequence>.vectorstrip

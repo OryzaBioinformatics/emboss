@@ -143,6 +143,8 @@ Command line arguments
    -graph              xygraph    Graph type
 
    Additional (Optional) qualifiers:
+   -aadata             datafile   File of amino acid properties and molecular
+                                  masses.
    -threshold          float      Threshold value to discriminate weak from
                                   potential PEST motifs. Valid PEST motifs are
                                   discriminated into 'poor' and 'potential'
@@ -151,8 +153,6 @@ Command line arguments
                                   based on experimental data. Alterations are
                                   not recommended since significance is a
                                   matter of biology, not mathematics.
-   -aadata             string     File of amino acid properties and molecular
-                                  masses.
 
    Advanced (Unprompted) qualifiers:
    -[no]potential      boolean    Decide whether potential PEST motifs should
@@ -167,8 +167,8 @@ Command line arguments
    Associated qualifiers:
 
    "-sequence" associated qualifiers
-   -sbegin1             integer    First base used
-   -send1               integer    Last base used, def=seq length
+   -sbegin1             integer    Start of the sequence to be used
+   -send1               integer    End of the sequence to be used
    -sreverse1           boolean    Reverse (if DNA)
    -sask1               boolean    Ask for begin/end/reverse
    -snucleotide1        boolean    Sequence is nucleotide
@@ -227,14 +227,14 @@ Command line arguments
    x11, tektronics, tekt, tek4107t, tek, none, null, text, data, xterm,
    png EMBOSS_GRAPHICS value, or x11
    Additional (Optional) qualifiers Allowed values Default
+   -aadata File of amino acid properties and molecular masses. Data file
+   Eamino.dat
    -threshold Threshold value to discriminate weak from potential PEST
    motifs. Valid PEST motifs are discriminated into 'poor' and
    'potential' motifs depending on this threshold score. By default, the
    default value is set to +5.0 based on experimental data. Alterations
    are not recommended since significance is a matter of biology, not
    mathematics. Number from -55.00 to 55.00 +5.0
-   -aadata File of amino acid properties and molecular masses. Any string
-   is accepted Eamino.dat
    Advanced (Unprompted) qualifiers Allowed values Default
    -[no]potential Decide whether potential PEST motifs should be printed.
    Boolean value Yes/No Yes

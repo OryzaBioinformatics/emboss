@@ -111,6 +111,12 @@ IT IS DONE FOR YOU.
    -graph              graph      Graph type
 
    Additional (Optional) qualifiers:
+   -matrixfile         matrix     This is the scoring matrix file used when
+                                  comparing sequences. By default it is the
+                                  file 'EBLOSUM62' (for proteins) or the file
+                                  'EDNAFULL' (for nucleic sequences). These
+                                  files are found in the 'data' directory of
+                                  the EMBOSS installation.
    -residuesperline    integer    The number of residues to be displayed on
                                   each line
    -resbreak           integer    Residues before a space
@@ -156,12 +162,6 @@ IT IS DONE FOR YOU.
                                   consensus.If any of these give a top score
                                   for matching or identical scores then a
                                   collision has occured.
-   -matrixfile         matrix     This is the scoring matrix file used when
-                                  comparing sequences. By default it is the
-                                  file 'EBLOSUM62' (for proteins) or the file
-                                  'EDNAFULL' (for nucleic sequences). These
-                                  files are found in the 'data' directory of
-                                  the EMBOSS installation.
    -showscore          integer    Print residue scores
    -portrait           boolean    Set page to Portrait
 
@@ -169,8 +169,8 @@ IT IS DONE FOR YOU.
    Associated qualifiers:
 
    "-sequences" associated qualifiers
-   -sbegin1             integer    First base used
-   -send1               integer    Last base used, def=seq length
+   -sbegin1             integer    Start of each sequence to be used
+   -send1               integer    End of each sequence to be used
    -sreverse1           boolean    Reverse (if DNA)
    -sask1               boolean    Ask for begin/end/reverse
    -snucleotide1        boolean    Sequence is nucleotide
@@ -241,6 +241,13 @@ IT IS DONE FOR YOU.
 </tr>
 
 <tr>
+<td>-matrixfile</td>
+<td>This is the scoring matrix file used when comparing sequences. By default it is the file 'EBLOSUM62' (for proteins) or the file 'EDNAFULL' (for nucleic sequences). These files are found in the 'data' directory of the EMBOSS installation.</td>
+<td>Comparison matrix file in EMBOSS data path</td>
+<td>EBLOSUM62 for protein<br>EDNAFULL for DNA</td>
+</tr>
+
+<tr>
 <td>-residuesperline</td>
 <td>The number of residues to be displayed on each line</td>
 <td>Any integer value</td>
@@ -306,7 +313,7 @@ Residues score Colour
 0.5 to 1.0 ....... WHEAT (L)
 under 0.5 ....... WHITE (W)
 The only four letters allowed are BPLW, in any order.</td>
-<td>Any string is accepted</td>
+<td>A string up to 4 characters, matching regular expression /^([BPLW]{4})?$/</td>
 <td><i>An empty string is accepted</i></td>
 </tr>
 
@@ -403,13 +410,6 @@ The only four letters allowed are BPLW, in any order.</td>
 3) Checks all those not in the current consensus.If any of these give a top score for matching or identical scores then a collision has occured.</td>
 <td>Integer from 0 to 3</td>
 <td>0</td>
-</tr>
-
-<tr>
-<td>-matrixfile</td>
-<td>This is the scoring matrix file used when comparing sequences. By default it is the file 'EBLOSUM62' (for proteins) or the file 'EDNAFULL' (for nucleic sequences). These files are found in the 'data' directory of the EMBOSS installation.</td>
-<td>Comparison matrix file in EMBOSS data path</td>
-<td>EBLOSUM62 for protein<br>EDNAFULL for DNA</td>
 </tr>
 
 <tr>

@@ -31,14 +31,14 @@ Command line arguments
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers:
-   -angledata          string     File containing base pair twist angles
-   -energydata         string     File containing base pair stacking energies
+   -angledata          datafile   File containing base pair twist angles
+   -energydata         datafile   File containing base pair stacking energies
 
    Associated qualifiers:
 
    "-sequence" associated qualifiers
-   -sbegin1             integer    First base used
-   -send1               integer    Last base used, def=seq length
+   -sbegin1             integer    Start of the sequence to be used
+   -send1               integer    End of the sequence to be used
    -sreverse1           boolean    Reverse (if DNA)
    -sask1               boolean    Ask for begin/end/reverse
    -snucleotide1        boolean    Sequence is nucleotide
@@ -79,10 +79,10 @@ Command line arguments
    Additional (Optional) qualifiers Allowed values Default
    (none)
    Advanced (Unprompted) qualifiers Allowed values Default
-   -angledata File containing base pair twist angles Any string is
-   accepted Eangles.dat
-   -energydata File containing base pair stacking energies Any string is
-   accepted Eenergy.dat
+   -angledata File containing base pair twist angles Data file
+   Eangles.dat
+   -energydata File containing base pair stacking energies Data file
+   Eenergy.dat
    
 Input file format
 
@@ -390,9 +390,10 @@ See also
 Author(s)
 
    This application was written by David Martin
-   (dmartin © hgmp.mrc.ac.uk)
-   and Alan Bleasby (ableasby © hgmp.mrc.ac.uk)
-   HGMP-RC, Genome Campus, Hinxton, Cambridge CB10 1SB, UK
+   (dmartin © rfcgr.mrc.ac.uk)
+   and Alan Bleasby (ableasby © rfcgr.mrc.ac.uk)
+   MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
+   Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
    during the first Scandinavian EMBOSS Workshop.
    
 History

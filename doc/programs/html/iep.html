@@ -105,17 +105,17 @@ IT IS DONE FOR YOU.
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers:
-   -step               float      pH step value
+   -step               float      Step value for pH
    -amino              integer    Number of N-termini
    -[no]termini        boolean    Include charge at N and C terminus
-   -plot               boolean    Plot charge vs pH
-   -[no]report         boolean    Write results to a file
+   -plot               toggle     Plot charge vs pH
+   -report             toggle     Write results to a file
 
    Associated qualifiers:
 
    "-sequence" associated qualifiers
-   -sbegin1             integer    First base used
-   -send1               integer    Last base used, def=seq length
+   -sbegin1             integer    Start of each sequence to be used
+   -send1               integer    End of each sequence to be used
    -sreverse1           boolean    Reverse (if DNA)
    -sask1               boolean    Ask for begin/end/reverse
    -snucleotide1        boolean    Sequence is nucleotide
@@ -207,7 +207,7 @@ IT IS DONE FOR YOU.
 
 <tr>
 <td>-step</td>
-<td>pH step value</td>
+<td>Step value for pH</td>
 <td>Number from 0.010 to 1.000</td>
 <td>.5</td>
 </tr>
@@ -229,15 +229,15 @@ IT IS DONE FOR YOU.
 <tr>
 <td>-plot</td>
 <td>Plot charge vs pH</td>
-<td>Boolean value Yes/No</td>
-<td>No</td>
+<td>Toggle value Yes/No</td>
+<td>N</td>
 </tr>
 
 <tr>
-<td>-[no]report</td>
+<td>-report</td>
 <td>Write results to a file</td>
-<td>Boolean value Yes/No</td>
-<td>Yes</td>
+<td>Toggle value Yes/No</td>
+<td>Y</td>
 </tr>
 
 </table>
@@ -497,9 +497,11 @@ None.
 </H2>
 
 
-Alan Bleasby (ableasby&nbsp;&copy;&nbsp;hgmp.mrc.ac.uk)
+Alan Bleasby (ableasby&nbsp;&copy;&nbsp;rfcgr.mrc.ac.uk)
 <br>
-HGMP-RC, Genome Campus, Hinxton, Cambridge CB10 1SB, UK
+MRC Rosalind Franklin Centre for Genomics Research
+Wellcome Trust Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
+
 
 
 

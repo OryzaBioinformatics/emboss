@@ -167,8 +167,8 @@ IT IS DONE FOR YOU.
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
    Standard (Mandatory) qualifiers:
-  [-est]               seqall     EST sequence(s)
-  [-genome]            sequence   Genomic sequence
+  [-estsequence]       seqall     EST sequence(s)
+  [-genomesequence]    sequence   Genomic sequence
   [-outfile]           outfile    Output file name
 
    Additional (Optional) qualifiers:
@@ -187,7 +187,7 @@ IT IS DONE FOR YOU.
    -[no]splice         boolean    Use donor and acceptor splice sites. If you
                                   want to ignore donor-acceptor sites then set
                                   this to be false.
-   -mode               string     This determines the comparion mode. The
+   -mode               menu       This determines the comparion mode. The
                                   default value is 'both', in which case both
                                   strands of the est are compared assuming a
                                   forward gene direction (ie GT/AG splice
@@ -200,7 +200,7 @@ IT IS DONE FOR YOU.
    -[no]best           boolean    You can print out all comparisons instead of
                                   just the best one by setting this to be
                                   false.
-   -space              float      for linear-space recursion. If product of
+   -space              float      For linear-space recursion. If product of
                                   sequence lengths divided by 4 exceeds this
                                   then a divide-and-conquer strategy is used
                                   to control the memory requirements. In this
@@ -220,9 +220,9 @@ IT IS DONE FOR YOU.
 
    Associated qualifiers:
 
-   "-est" associated qualifiers
-   -sbegin1             integer    First base used
-   -send1               integer    Last base used, def=seq length
+   "-estsequence" associated qualifiers
+   -sbegin1             integer    Start of each sequence to be used
+   -send1               integer    End of each sequence to be used
    -sreverse1           boolean    Reverse (if DNA)
    -sask1               boolean    Ask for begin/end/reverse
    -snucleotide1        boolean    Sequence is nucleotide
@@ -236,9 +236,9 @@ IT IS DONE FOR YOU.
    -fformat1            string     Features format
    -fopenfile1          string     Features file name
 
-   "-genome" associated qualifiers
-   -sbegin2             integer    First base used
-   -send2               integer    Last base used, def=seq length
+   "-genomesequence" associated qualifiers
+   -sbegin2             integer    Start of the sequence to be used
+   -send2               integer    End of the sequence to be used
    -sreverse2           boolean    Reverse (if DNA)
    -sask2               boolean    Ask for begin/end/reverse
    -snucleotide2        boolean    Sequence is nucleotide
@@ -283,14 +283,14 @@ IT IS DONE FOR YOU.
 </tr>
 
 <tr>
-<td>[-est]<br>(Parameter 1)</td>
+<td>[-estsequence]<br>(Parameter 1)</td>
 <td>EST sequence(s)</td>
 <td>Readable sequence(s)</td>
 <td><b>Required</b></td>
 </tr>
 
 <tr>
-<td>[-genome]<br>(Parameter 2)</td>
+<td>[-genomesequence]<br>(Parameter 2)</td>
 <td>Genomic sequence</td>
 <td>Readable sequence</td>
 <td><b>Required</b></td>
@@ -374,7 +374,7 @@ IT IS DONE FOR YOU.
 <tr>
 <td>-mode</td>
 <td>This determines the comparion mode. The default value is 'both', in which case both strands of the est are compared assuming a forward gene direction (ie GT/AG splice sites), and the best comparsion redone assuming a reversed (CT/AC) gene splicing direction. The other allowed modes are 'forward', when just the forward strand is searched, and 'reverse', ditto for the reverse strand.</td>
-<td>Any string is accepted</td>
+<td><table><tr><td>both</td> <td><i>(Both strands)</i></td></tr><tr><td>forward</td> <td><i>(Forward strand only)</i></td></tr><tr><td>reverse</td> <td><i>(Reverse strand only)</i></td></tr></table></td>
 <td>both</td>
 </tr>
 
@@ -387,7 +387,7 @@ IT IS DONE FOR YOU.
 
 <tr>
 <td>-space</td>
-<td>for linear-space recursion. If product of sequence lengths divided by 4 exceeds this then a divide-and-conquer strategy is used to control the memory requirements. In this way very long sequences can be aligned.
+<td>For linear-space recursion. If product of sequence lengths divided by 4 exceeds this then a divide-and-conquer strategy is used to control the memory requirements. In this way very long sequences can be aligned.
 If you have a machine with plenty of memory you can raise this parameter (but do not exceed the machine's physical RAM)</td>
 <td>Any numeric value</td>
 <td>10.0</td>

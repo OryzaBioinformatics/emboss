@@ -45,8 +45,8 @@ Command line arguments
    Associated qualifiers:
 
    "-sequence" associated qualifiers
-   -sbegin1             integer    First base used
-   -send1               integer    Last base used, def=seq length
+   -sbegin1             integer    Start of each sequence to be used
+   -send1               integer    End of each sequence to be used
    -sreverse1           boolean    Reverse (if DNA)
    -sask1               boolean    Ask for begin/end/reverse
    -snucleotide1        boolean    Sequence is nucleotide
@@ -238,7 +238,7 @@ Output file format
   
 ########################################
 # Program: helixturnhelix
-# Rundate: Thu Nov 27 15:22:12 2003
+# Rundate: Tue Apr 06 14:29:48 2004
 # Report_format: motif
 # Report_file: laci_ecoli.hth
 ########################################
@@ -367,8 +367,9 @@ See also
    
 Author(s)
 
-   Alan Bleasby (ableasby © hgmp.mrc.ac.uk)
-   HGMP-RC, Genome Campus, Hinxton, Cambridge CB10 1SB, UK
+   Alan Bleasby (ableasby © rfcgr.mrc.ac.uk)
+   MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
+   Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
    
    Original program "HELIXTURNHELIX" (EGCG 1990) by Peter Rice
    (pmr © ebi.ac.uk)

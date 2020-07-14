@@ -101,7 +101,7 @@ IT IS DONE FOR YOU.
   [-bsequence]         seqset     Sequence set USA
    -gapopen            float      Gap opening penalty
    -gapextend          float      Gap extension penalty
-   -outfile            align      Output alignment file name
+  [-outfile]           align      Output alignment file name
 
    Additional (Optional) qualifiers:
    -datafile           matrixf    This is the scoring matrix file used when
@@ -111,15 +111,15 @@ IT IS DONE FOR YOU.
                                   files are found in the 'data' directory of
                                   the EMBOSS installation.
    -width              integer    Alignment width
-   -wordlen            integer    word length for initial matching
+   -wordlen            integer    Word length for initial matching
    -errorfile          outfile    Error file to be written to
 
    Advanced (Unprompted) qualifiers: (none)
    Associated qualifiers:
 
    "-asequence" associated qualifiers
-   -sbegin1             integer    First base used
-   -send1               integer    Last base used, def=seq length
+   -sbegin1             integer    Start of each sequence to be used
+   -send1               integer    End of each sequence to be used
    -sreverse1           boolean    Reverse (if DNA)
    -sask1               boolean    Ask for begin/end/reverse
    -snucleotide1        boolean    Sequence is nucleotide
@@ -134,8 +134,8 @@ IT IS DONE FOR YOU.
    -fopenfile1          string     Features file name
 
    "-bsequence" associated qualifiers
-   -sbegin2             integer    First base used
-   -send2               integer    Last base used, def=seq length
+   -sbegin2             integer    Start of each sequence to be used
+   -send2               integer    End of each sequence to be used
    -sreverse2           boolean    Reverse (if DNA)
    -sask2               boolean    Ask for begin/end/reverse
    -snucleotide2        boolean    Sequence is nucleotide
@@ -150,15 +150,15 @@ IT IS DONE FOR YOU.
    -fopenfile2          string     Features file name
 
    "-outfile" associated qualifiers
-   -aformat             string     Alignment format
-   -aextension          string     File name extension
-   -adirectory          string     Output directory
-   -aname               string     Base file name
-   -awidth              integer    Alignment width
-   -aaccshow            boolean    Show accession number in the header
-   -adesshow            boolean    Show description in the header
-   -ausashow            boolean    Show the full USA in the alignment
-   -aglobal             boolean    Show the full sequence in alignment
+   -aformat3            string     Alignment format
+   -aextension3         string     File name extension
+   -adirectory3         string     Output directory
+   -aname3              string     Base file name
+   -awidth3             integer    Alignment width
+   -aaccshow3           boolean    Show accession number in the header
+   -adesshow3           boolean    Show description in the header
+   -ausashow3           boolean    Show the full USA in the alignment
+   -aglobal3            boolean    Show the full sequence in alignment
 
    "-errorfile" associated qualifiers
    -odirectory          string     Output directory
@@ -219,7 +219,7 @@ IT IS DONE FOR YOU.
 </tr>
 
 <tr>
-<td>-outfile</td>
+<td>[-outfile]<br>(Parameter 3)</td>
 <td>Output alignment file name</td>
 <td>Alignment output file</td>
 <td>&nbsp;</td>
@@ -247,7 +247,7 @@ IT IS DONE FOR YOU.
 
 <tr>
 <td>-wordlen</td>
-<td>word length for initial matching</td>
+<td>Word length for initial matching</td>
 <td>Integer 3 or more</td>
 <td>6</td>
 </tr>
@@ -450,7 +450,7 @@ The output alignment is in <b>simple</b> format by default.
 <pre>
 ########################################
 # Program:  supermatcher
-# Rundate:  Thu Nov 27 15:25:47 2003
+# Rundate:  Tue Apr 06 14:34:25 2004
 # Align_format: simple
 # Report_file: eclac.supermatcher
 ########################################

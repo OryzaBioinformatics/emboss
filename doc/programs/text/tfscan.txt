@@ -9,13 +9,16 @@ Function
    
 Description
 
-   The TRANSFAC Database is a database of eukaryotic cis-acting
-   regulatory DNA elements and trans-acting factors. It covers the whole
-   range from yeast to human.
+   The TRANSFAC Database is a commercial database of eukaryotic
+   cis-acting regulatory DNA elements and trans-acting factors. It covers
+   the whole range from yeast to human.
    
-   The SITE data from TRANSFAC contains information on individual
-   (putatively) regulatory protein binding sites. It has been divided
-   into the following taxonomic groups.
+   An old public domain version is available at:
+   ftp://ftp.ebi.ac.uk/pub/databases/transfac/transfac32.tar.Z
+   
+   The 'site.dat' data file from TRANSFAC contains information on
+   individual (putatively) regulatory protein binding sites. It has been
+   divided into the following taxonomic groups.
    
      * Fungi
      * Insects
@@ -60,7 +63,7 @@ Command line arguments
    Standard (Mandatory) qualifiers (* if not always prompted):
   [-sequence]          seqall     Sequence database USA
    -menu               menu       Select class
-*  -custom             string     Name of data file
+*  -custom             datafile   Name of data file
    -mismatch           integer    Number of mismatches
   [-outfile]           outfile    Output file name
 
@@ -72,8 +75,8 @@ Command line arguments
    Associated qualifiers:
 
    "-sequence" associated qualifiers
-   -sbegin1             integer    First base used
-   -send1               integer    Last base used, def=seq length
+   -sbegin1             integer    Start of each sequence to be used
+   -send1               integer    End of each sequence to be used
    -sreverse1           boolean    Reverse (if DNA)
    -sask1               boolean    Ask for begin/end/reverse
    -snucleotide1        boolean    Sequence is nucleotide
@@ -117,8 +120,7 @@ Command line arguments
    O (other)
    C (Custom)
    V
-   -custom Name of data file Any string is accepted An empty string is
-   accepted
+   -custom Name of data file Data file File in the data file path
    -mismatch Number of mismatches Integer 0 or more 0
    [-outfile]
    (Parameter 2) Output file name Output file <sequence>.tfscan
@@ -417,8 +419,9 @@ See also
    
 Author(s)
 
-   Alan Bleasby (ableasby © hgmp.mrc.ac.uk)
-   HGMP-RC, Genome Campus, Hinxton, Cambridge CB10 1SB, UK
+   Alan Bleasby (ableasby © rfcgr.mrc.ac.uk)
+   MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
+   Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
    
 History
 

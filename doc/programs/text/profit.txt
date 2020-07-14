@@ -85,8 +85,8 @@ Command line arguments
    Associated qualifiers:
 
    "-sequence" associated qualifiers
-   -sbegin2             integer    First base used
-   -send2               integer    Last base used, def=seq length
+   -sbegin2             integer    Start of each sequence to be used
+   -send2               integer    End of each sequence to be used
    -sreverse2           boolean    Reverse (if DNA)
    -sask2               boolean    Ask for begin/end/reverse
    -snucleotide2        boolean    Sequence is nucleotide
@@ -249,8 +249,9 @@ See also
    
 Author(s)
 
-   Alan Bleasby (ableasby © hgmp.mrc.ac.uk)
-   HGMP-RC, Genome Campus, Hinxton, Cambridge CB10 1SB, UK
+   Alan Bleasby (ableasby © rfcgr.mrc.ac.uk)
+   MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
+   Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
    
 History
 

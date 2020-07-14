@@ -173,7 +173,7 @@ Description
    strider DNA strider format
    clustal
    aln ClustalW ALN (multiple alignment) format.
-   phylip PHYLIP non-interleaved multiple alignment format.
+   phylip PHYLIP interleaved multiple alignment format.
    acedb ACeDB format
    msf Wisconsin Package GCG's MSF multiple sequence format.
    hennig86 Hennig86 format
@@ -301,8 +301,8 @@ Description
    msf multiple Wisconsin Package GCG's MSF multiple sequence format.
    clustal
    aln multiple Clustal multiple sequence format.
-   phylip multiple PHYLIP non-interleaved format.
-   phylip3 multiple PHYLIP interleaved format.
+   phylip multiple PHYLIP interleaved format.
+   phylip3 multiple PHYLIP non-interleaved format.
    asn1 multiple A subset of ASN.1 containing entry name, accession
    number, description and sequence, similar to the current ASN.1 output
    of readseq
@@ -563,8 +563,8 @@ Command line arguments
    Associated qualifiers:
 
    "-sequence" associated qualifiers
-   -sbegin1             integer    First base used
-   -send1               integer    Last base used, def=seq length
+   -sbegin1             integer    Start of each sequence to be used
+   -send1               integer    End of each sequence to be used
    -sreverse1           boolean    Reverse (if DNA)
    -sask1               boolean    Ask for begin/end/reverse
    -snucleotide1        boolean    Sequence is nucleotide

@@ -52,15 +52,7 @@ Smith-Waterman local alignment
 
 <b>water</b> uses the Smith-Waterman algorithm (modified for speed
 enhancments) to calculate the local alignment.
-<P>
 
-The Smith-Waterman algorithm is a member of the class of algorithms
-that can calculate the best score and local alignment in the order of mn
-steps, (where 'n' and 'm' are the lengths of the two sequences).  These
-dynamic programming algorithms were first developed for protein sequence
-comparison by Smith and Waterman, though similar methods were
-independently devised during the late 1960's and early 1970's for use in
-the fields of speech processing and computer science. 
 <P>
 
 A local alignment searches for regions of local similarity between two
@@ -70,6 +62,20 @@ circumsatnces when you wish to find matches between small regions of
 sequences, for example between protein domains. 
 <P>
 
+<H3>
+    Algorithm
+</H3>
+
+The Smith-Waterman algorithm is a member of the class of algorithms
+that can calculate the best score and local alignment in the order of mn
+steps, (where 'n' and 'm' are the lengths of the two sequences).  These
+dynamic programming algorithms were first developed for protein sequence
+comparison by Smith and Waterman, though similar methods were
+independently devised during the late 1960's and early 1970's for use in
+the fields of speech processing and computer science. 
+
+<P>
+
 Dynamic programming methods ensure
 the optimal local alignment by exploring all possible alignments and
 choosing the best.  It does this by reading in a scoring matrix that
@@ -77,6 +83,7 @@ contains values for every possible residue or nucleotide match.  <b>water</b>
 finds an alignment with the maximum possible score where the score of an
 alignment is equal to the sum of the matches taken from the scoring
 matrix. 
+
 <P>
 
 An important problem is the treatment of gaps, i.e., spaces inserted to
@@ -84,15 +91,36 @@ optimise the alignment score.  A penalty is subtracted from the score
 for each gap opened (the 'gap open' penalty) and a penalty is subtracted
 from the score for the total number of gap spaces multiplied by a cost
 (the 'gap extension' penalty). 
+
 <P>
 
 Typically, the cost of extending a gap is set to be 5-10 times lower
 than the cost for opening a gap. 
-<P>
 
-<H2>
-    Algorithm
-</H2>
+<p>
+
+There are two ways to compute a penalty for a gap of n positions :
+
+<p>
+
+<pre>
+gap opening penalty + (n - 1) * gap extension penalty
+gap penalty + n * gap length penalty
+</pre>
+
+<p>
+
+The first way is used by EMBOSS and WU-BLAST
+<br>
+The second way is used by NCBI-BLAST, GCG, Staden and CLUSTAL.
+Fasta used it for a long time the first way, but Prof. Pearson decided
+recently to shift to the second.
+ 
+<p>
+
+The two methods are basically equivalent.
+
+<p>      
 
 The Smith-Waterman algorithm contains no negative scores in the path
 matrix it creates. The algorithm starts the alignment at the highest
@@ -178,8 +206,8 @@ IT IS DONE FOR YOU.
    Associated qualifiers:
 
    "-asequence" associated qualifiers
-   -sbegin1             integer    First base used
-   -send1               integer    Last base used, def=seq length
+   -sbegin1             integer    Start of the sequence to be used
+   -send1               integer    End of the sequence to be used
    -sreverse1           boolean    Reverse (if DNA)
    -sask1               boolean    Ask for begin/end/reverse
    -snucleotide1        boolean    Sequence is nucleotide
@@ -194,8 +222,8 @@ IT IS DONE FOR YOU.
    -fopenfile1          string     Features file name
 
    "-bsequence" associated qualifiers
-   -sbegin2             integer    First base used
-   -send2               integer    Last base used, def=seq length
+   -sbegin2             integer    Start of each sequence to be used
+   -send2               integer    End of each sequence to be used
    -sreverse2           boolean    Reverse (if DNA)
    -sask2               boolean    Ask for begin/end/reverse
    -snucleotide2        boolean    Sequence is nucleotide
@@ -595,7 +623,7 @@ for further information on alignment formats.
 <pre>
 ########################################
 # Program:  water
-# Rundate:  Thu Nov 27 15:26:01 2003
+# Rundate:  Tue Apr 06 14:34:38 2004
 # Align_format: srspair
 # Report_file: hba_human.water
 ########################################
@@ -802,9 +830,11 @@ amounts of insertion or deletion in the alignment.
 </H2>
 
 
-Alan Bleasby (ableasby&nbsp;&copy;&nbsp;hgmp.mrc.ac.uk)
+Alan Bleasby (ableasby&nbsp;&copy;&nbsp;rfcgr.mrc.ac.uk)
 <br>
-HGMP-RC, Genome Campus, Hinxton, Cambridge CB10 1SB, UK
+MRC Rosalind Franklin Centre for Genomics Research
+Wellcome Trust Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
+
 
 
 

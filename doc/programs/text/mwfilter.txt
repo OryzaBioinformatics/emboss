@@ -29,7 +29,7 @@ Usage
 % mwfilter 
 Filter noisy molwts from mass spec output
 Molecular weight file input: ../../data/molwts.dat
-ppm tolerance [50.0]: 
+Ppm tolerance [50.0]: 
 Output file [molwts.mwfilter]: 
    
    Go to the input files for this example
@@ -39,7 +39,7 @@ Command line arguments
 
    Standard (Mandatory) qualifiers:
   [-infile]            infile     Molecular weight file input
-   -tolerance          float      ppm tolerance
+   -tolerance          float      Ppm tolerance
   [-outfile]           outfile    Output file name
 
    Additional (Optional) qualifiers:
@@ -72,7 +72,7 @@ Command line arguments
    Standard (Mandatory) qualifiers Allowed values Default
    [-infile]
    (Parameter 1) Molecular weight file input Input file Required
-   -tolerance ppm tolerance Any numeric value 50.0
+   -tolerance Ppm tolerance Any numeric value 50.0
    [-outfile]
    (Parameter 2) Output file name Output file <sequence>.mwfilter
    Additional (Optional) qualifiers Allowed values Default
@@ -211,8 +211,9 @@ See also
    
 Author(s)
 
-   Alan Bleasby (ableasby © hgmp.mrc.ac.uk)
-   HGMP-RC, Genome Campus, Hinxton, Cambridge CB10 1SB, UK
+   Alan Bleasby (ableasby © rfcgr.mrc.ac.uk)
+   MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
+   Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
    
 History
 

@@ -107,7 +107,7 @@ To search for entries in swissprot with at least 1 SR AND at least 2 RS:
 % <b>oddcomp </b>
 Finds protein sequence regions with a biased composition
 Input sequence(s): <b>tsw:*</b>
-'compseq' file to use for expected word frequencies: <b>../../data/oddcomp.comp</b>
+Compseq output file to use for expected word frequencies: <b>../../data/oddcomp.comp</b>
 Window size to consider (e.g. 30 aa) [30]: <b></b>
 Output file [100k_rat.oddcomp]: <b>out.odd</b>
 
@@ -155,8 +155,8 @@ IT IS DONE FOR YOU.
    Associated qualifiers:
 
    "-sequence" associated qualifiers
-   -sbegin1             integer    First base used
-   -send1               integer    Last base used, def=seq length
+   -sbegin1             integer    Start of each sequence to be used
+   -send1               integer    End of each sequence to be used
    -sreverse1           boolean    Reverse (if DNA)
    -sask1               boolean    Ask for begin/end/reverse
    -snucleotide1        boolean    Sequence is nucleotide
@@ -439,7 +439,7 @@ None.
 </H2>
 
 
-David Martin (dmartin&nbsp;&copy;&nbsp;hgmp.mrc.ac.uk)
+David Martin (dmartin&nbsp;&copy;&nbsp;rfcgr.mrc.ac.uk)
 <br>
 
 

@@ -50,13 +50,24 @@ Command line arguments
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers:
-   -idc                integer    idc param
+   -idc                integer    In their paper, GOR mention that if you know
+                                  something about the secondary structure
+                                  content of the protein you are analyzing,
+                                  you can do better in prediction. 'idc' is an
+                                  index into a set of arrays, dharr[] and
+                                  dsarr[], which provide 'decision constants'
+                                  (dch, dcs), which are offsets that are
+                                  applied to the weights for the helix and
+                                  sheet (extend) terms. So, idc=0 says don't
+                                  use the decision constant offsets, and idc=1
+                                  to 6 indicates that various combinations of
+                                  dch,dcs offsets should be used.
 
    Associated qualifiers:
 
    "-sequence" associated qualifiers
-   -sbegin1             integer    First base used
-   -send1               integer    Last base used, def=seq length
+   -sbegin1             integer    Start of each sequence to be used
+   -send1               integer    End of each sequence to be used
    -sreverse1           boolean    Reverse (if DNA)
    -sask1               boolean    Ask for begin/end/reverse
    -snucleotide1        boolean    Sequence is nucleotide
@@ -104,7 +115,14 @@ Command line arguments
    Additional (Optional) qualifiers Allowed values Default
    (none)
    Advanced (Unprompted) qualifiers Allowed values Default
-   -idc idc param Integer from 0 to 6 0
+   -idc In their paper, GOR mention that if you know something about the
+   secondary structure content of the protein you are analyzing, you can
+   do better in prediction. 'idc' is an index into a set of arrays,
+   dharr[] and dsarr[], which provide 'decision constants' (dch, dcs),
+   which are offsets that are applied to the weights for the helix and
+   sheet (extend) terms. So, idc=0 says don't use the decision constant
+   offsets, and idc=1 to 6 indicates that various combinations of dch,dcs
+   offsets should be used. Integer from 0 to 6 0
    
    The meaning and use of the parameter 'idc' is currently being
    investigated. The original author, Bill Pearson writes:
@@ -216,7 +234,7 @@ Output file format
   
 ########################################
 # Program: garnier
-# Rundate: Thu Nov 27 15:22:11 2003
+# Rundate: Tue Apr 06 14:29:46 2004
 # Report_format: tagseq
 # Report_file: amic_pseae.garnier
 ########################################

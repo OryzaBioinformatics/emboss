@@ -437,11 +437,6 @@ Command line arguments
                                   value will be displayed.
 
    Advanced (Unprompted) qualifiers:
-   -orfminsize         integer    This sets the minimum size of Open Reading
-                                  Frames (ORFs) to display in the
-                                  translations. All other translation regions
-                                  are masked by changing the amino acids to
-                                  '-' characters.
    -flatreformat       boolean    This changes the output format to one where
                                   the recognition site is indicated by a row
                                   of '===' characters and the cut site is
@@ -505,6 +500,11 @@ Command line arguments
                                   false if you are supplying an explicit set
                                   of enzymes rather than searching 'all' of
                                   them.
+   -orfminsize         integer    This sets the minimum size of Open Reading
+                                  Frames (ORFs) to display in the
+                                  translations. All other translation regions
+                                  are masked by changing the amino acids to
+                                  '-' characters.
    -threeletter        boolean    Display protein sequences in three-letter
                                   code
    -number             boolean    Number the sequences
@@ -521,8 +521,8 @@ Command line arguments
    Associated qualifiers:
 
    "-sequence" associated qualifiers
-   -sbegin1             integer    First base used
-   -send1               integer    Last base used, def=seq length
+   -sbegin1             integer    Start of each sequence to be used
+   -send1               integer    End of each sequence to be used
    -sreverse1           boolean    Reverse (if DNA)
    -sask1               boolean    Ask for begin/end/reverse
    -snucleotide1        boolean    Sequence is nucleotide
@@ -708,10 +708,6 @@ Command line arguments
    tag/value pairs in a feature that match the specified tag and value
    will be displayed. Boolean value Yes/No No
    Advanced (Unprompted) qualifiers Allowed values Default
-   -orfminsize This sets the minimum size of Open Reading Frames (ORFs)
-   to display in the translations. All other translation regions are
-   masked by changing the amino acids to '-' characters. Integer 0 or
-   more 0
    -flatreformat This changes the output format to one where the
    recognition site is indicated by a row of '===' characters and the cut
    site is pointed to by a '>' character in the forward sense, or a '<'
@@ -757,6 +753,10 @@ Command line arguments
    to be false then all of the input enzymes will be reported. You might
    like to set this to false if you are supplying an explicit set of
    enzymes rather than searching 'all' of them. Boolean value Yes/No Yes
+   -orfminsize This sets the minimum size of Open Reading Frames (ORFs)
+   to display in the translations. All other translation regions are
+   masked by changing the amino acids to '-' characters. Integer 0 or
+   more 0
    -threeletter Display protein sequences in three-letter code Boolean
    value Yes/No No
    -number Number the sequences Boolean value Yes/No No
@@ -1408,6 +1408,7 @@ See also
    plotorf Plot potential open reading frames
    prettyplot Displays aligned sequences, with colouring and boxing
    prettyseq Output sequence with translated ranges
+   recite Find changes to an enzyme site that introduce new enzyme sites
    recoder Remove restriction sites but maintain the same translation
    redata Search REBASE for enzyme name, references, suppliers etc
    remap Display a sequence with restriction cut sites, translation etc
@@ -1426,8 +1427,9 @@ See also
    
 Author(s)
 
-   Gary Williams (gwilliam © hgmp.mrc.ac.uk)
-   HGMP-RC, Genome Campus, Hinxton, Cambridge CB10 1SB, UK
+   Gary Williams (gwilliam © rfcgr.mrc.ac.uk)
+   MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
+   Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
    
 History
 

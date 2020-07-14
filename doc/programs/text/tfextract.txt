@@ -9,17 +9,20 @@ Function
    
 Description
 
-   The TRANSFAC Database is a database of eukaryotic cis-acting
-   regulatory DNA elements and trans-acting factors. It covers the whole
-   range from yeast to human.
+   The TRANSFAC Database is a commercial database of eukaryotic
+   cis-acting regulatory DNA elements and trans-acting factors. It covers
+   the whole range from yeast to human.
    
-   TRANSFAC started 1988 with a printed compilation (Nucleic Acids Res.
-   16: 1879-1902, 1988) and was transferred into computer-readable format
-   in 1990 (BioTechForum - Advances in Molecular Genetics (J. Collins,
-   A.J. Driesel, eds.) 4:95-108, 1991). The basic structures of Table 1
-   and 2 of the compilation were taken as the core of the emergent
-   database. The aim of the early compilation as well as of the TRANSFAC
-   database is
+   An old public domain version is available at:
+   ftp://ftp.ebi.ac.uk/pub/databases/transfac/transfac32.tar.Z
+   
+   TRANSFAC started in 1988 with a printed compilation (Nucleic Acids
+   Res. 16: 1879-1902, 1988) and was transferred into computer-readable
+   format in 1990 (BioTechForum - Advances in Molecular Genetics (J.
+   Collins, A.J. Driesel, eds.) 4:95-108, 1991). The basic structures of
+   Table 1 and 2 of the compilation were taken as the core of the
+   emergent database. The aim of the early compilation as well as of the
+   TRANSFAC database is:
    
     1. to guide through a meanwhile overwhelming amount of data in a
        field which is connected to nearly all areas of modern molecular
@@ -108,10 +111,9 @@ Command line arguments
    
 Input file format
 
-   It reads in the TRANSFAC file site.dat distributed from the TRANSFAC
-   site:
+   It reads in the TRANSFAC file site.dat available from:
    
-   ftp://transfac.gbf.de/pub/transfac/ascii/old/tf_3.2/transfac32.tar.Z 
+   ftp://ftp.ebi.ac.uk/pub/databases/transfac/ 
    
   Input files for usage example
   
@@ -327,8 +329,9 @@ See also
    
 Author(s)
 
-   Alan Bleasby (ableasby © hgmp.mrc.ac.uk)
-   HGMP-RC, Genome Campus, Hinxton, Cambridge CB10 1SB, UK
+   Alan Bleasby (ableasby © rfcgr.mrc.ac.uk)
+   MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
+   Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
    
 History
 

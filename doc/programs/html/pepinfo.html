@@ -110,19 +110,19 @@ IT IS DONE FOR YOU.
   [-outfile]           outfile    Output file name
 
    Additional (Optional) qualifiers:
+   -aaproperties       datafile   Amino acid properties filename
+   -aahydropathy       datafile   Hydropathy data filename
    -hwindow            integer    Window size for hydropathy averaging
-   -aaproperties       string     User defined amino acid properties filename
-   -aahydropathy       string     User defined hydropathy data filename
 
    Advanced (Unprompted) qualifiers:
-   -[no]generalplot    boolean    plot histogram of general properties
-   -[no]hydropathyplot boolean    plot graphs of hydropathy
+   -[no]generalplot    boolean    Plot histogram of general properties
+   -[no]hydropathyplot boolean    Plot graphs of hydropathy
 
    Associated qualifiers:
 
    "-sequence" associated qualifiers
-   -sbegin1             integer    First base used
-   -send1               integer    Last base used, def=seq length
+   -sbegin1             integer    Start of the sequence to be used
+   -send1               integer    End of the sequence to be used
    -sreverse1           boolean    Reverse (if DNA)
    -sask1               boolean    Ask for begin/end/reverse
    -snucleotide1        boolean    Sequence is nucleotide
@@ -203,24 +203,24 @@ IT IS DONE FOR YOU.
 </tr>
 
 <tr>
-<td>-hwindow</td>
-<td>Window size for hydropathy averaging</td>
-<td>Integer 1 or more</td>
-<td>9</td>
-</tr>
-
-<tr>
 <td>-aaproperties</td>
-<td>User defined amino acid properties filename</td>
-<td>Any string is accepted</td>
+<td>Amino acid properties filename</td>
+<td>Data file</td>
 <td>Eaa_properties.dat</td>
 </tr>
 
 <tr>
 <td>-aahydropathy</td>
-<td>User defined hydropathy data filename</td>
-<td>Any string is accepted</td>
+<td>Hydropathy data filename</td>
+<td>Data file</td>
 <td>Eaa_hydropathy.dat</td>
+</tr>
+
+<tr>
+<td>-hwindow</td>
+<td>Window size for hydropathy averaging</td>
+<td>Integer 1 or more</td>
+<td>9</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
@@ -231,14 +231,14 @@ IT IS DONE FOR YOU.
 
 <tr>
 <td>-[no]generalplot</td>
-<td>plot histogram of general properties</td>
+<td>Plot histogram of general properties</td>
 <td>Boolean value Yes/No</td>
 <td>Yes</td>
 </tr>
 
 <tr>
 <td>-[no]hydropathyplot</td>
-<td>plot graphs of hydropathy</td>
+<td>Plot graphs of hydropathy</td>
 <td>Boolean value Yes/No</td>
 <td>Yes</td>
 </tr>

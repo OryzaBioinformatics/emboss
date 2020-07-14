@@ -256,6 +256,8 @@ Created epestfind.ps
    -graph              xygraph    Graph type
 
    Additional (Optional) qualifiers:
+   -aadata             datafile   File of amino acid properties and molecular
+                                  masses.
    -threshold          float      Threshold value to discriminate weak from
                                   potential PEST motifs. Valid PEST motifs are
                                   discriminated into 'poor' and 'potential'
@@ -264,8 +266,6 @@ Created epestfind.ps
                                   based on experimental data. Alterations are
                                   not recommended since significance is a
                                   matter of biology, not mathematics.
-   -aadata             string     File of amino acid properties and molecular
-                                  masses.
 
    Advanced (Unprompted) qualifiers:
    -[no]potential      boolean    Decide whether potential PEST motifs should
@@ -280,8 +280,8 @@ Created epestfind.ps
    Associated qualifiers:
 
    "-sequence" associated qualifiers
-   -sbegin1             integer    First base used
-   -send1               integer    Last base used, def=seq length
+   -sbegin1             integer    Start of the sequence to be used
+   -send1               integer    End of the sequence to be used
    -sreverse1           boolean    Reverse (if DNA)
    -sask1               boolean    Ask for begin/end/reverse
    -snucleotide1        boolean    Sequence is nucleotide
@@ -375,17 +375,17 @@ Created epestfind.ps
 </tr>
 
 <tr>
+<td>-aadata</td>
+<td>File of amino acid properties and molecular masses.</td>
+<td>Data file</td>
+<td>Eamino.dat</td>
+</tr>
+
+<tr>
 <td>-threshold</td>
 <td>Threshold value to discriminate weak from potential PEST motifs. Valid PEST motifs are discriminated into 'poor' and 'potential' motifs depending on this threshold score. By default, the default value is set to +5.0 based on experimental data. Alterations are not recommended since significance is a matter of biology, not mathematics.</td>
 <td>Number from -55.00 to 55.00</td>
 <td>+5.0</td>
-</tr>
-
-<tr>
-<td>-aadata</td>
-<td>File of amino acid properties and molecular masses.</td>
-<td>Any string is accepted</td>
-<td>Eamino.dat</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">

@@ -92,7 +92,7 @@ Command line arguments
                                   separate their names with spaces or commas,
                                   eg:
                                   *UTR repeat*
-   -tolower            boolean    The region can be 'masked' by converting the
+   -tolower            toggle     The region can be 'masked' by converting the
                                   sequence characters to lower-case, some
                                   non-EMBOSS programs e.g. fasta can interpret
                                   this as a masked region. The sequence is
@@ -114,8 +114,8 @@ Command line arguments
    Associated qualifiers:
 
    "-sequence" associated qualifiers
-   -sbegin1             integer    First base used
-   -send1               integer    Last base used, def=seq length
+   -sbegin1             integer    Start of each sequence to be used
+   -send1               integer    End of each sequence to be used
    -sreverse1           boolean    Reverse (if DNA)
    -sask1               boolean    Ask for begin/end/reverse
    -snucleotide1        boolean    Sequence is nucleotide
@@ -176,12 +176,12 @@ Command line arguments
    interpret this as a masked region. The sequence is unchanged apart
    from the case change. You might like to ensure that the whole sequence
    is in upper-case before masking the specified regions to lower-case by
-   using the '-supper' flag. Boolean value Yes/No No
+   using the '-supper' flag. Toggle value Yes/No N
    -maskchar Character to use when masking. Default is 'X' for protein
    sequences, 'N' for nucleic sequences. If the mask character is set to
    be the SPACE character or a null character, then the sequence is
    'masked' by changing it to lower-case, just as with the '-lowercase'
-   flag. Any string is accepted 'X' for protein, 'N' for nucleic
+   flag. A string up to 1 characters 'X' for protein, 'N' for nucleic
    Advanced (Unprompted) qualifiers Allowed values Default
    (none)
    
@@ -517,8 +517,9 @@ See also
    
 Author(s)
 
-   Gary Williams (gwilliam © hgmp.mrc.ac.uk)
-   HGMP-RC, Genome Campus, Hinxton, Cambridge CB10 1SB, UK
+   Gary Williams (gwilliam © rfcgr.mrc.ac.uk)
+   MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
+   Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
    
 History
 

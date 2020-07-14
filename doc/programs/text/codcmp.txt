@@ -200,11 +200,12 @@ See also
 Author(s)
 
    This application was written by Alan Bleasby
-   (ableasby © hgmp.mrc.ac.uk)
-   HGMP-RC, Genome Campus, Hinxton, Cambridge CB10 1SB, UK
+   (ableasby © rfcgr.mrc.ac.uk)
+   MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
+   Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
    
    Some more statistics were added by David Martin
-   (dmartin © hgmp.mrc.ac.uk)
+   (dmartin © rfcgr.mrc.ac.uk)
    
 History
 

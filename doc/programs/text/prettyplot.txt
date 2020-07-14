@@ -46,6 +46,12 @@ Command line arguments
    -graph              graph      Graph type
 
    Additional (Optional) qualifiers:
+   -matrixfile         matrix     This is the scoring matrix file used when
+                                  comparing sequences. By default it is the
+                                  file 'EBLOSUM62' (for proteins) or the file
+                                  'EDNAFULL' (for nucleic sequences). These
+                                  files are found in the 'data' directory of
+                                  the EMBOSS installation.
    -residuesperline    integer    The number of residues to be displayed on
                                   each line
    -resbreak           integer    Residues before a space
@@ -91,12 +97,6 @@ Command line arguments
                                   consensus.If any of these give a top score
                                   for matching or identical scores then a
                                   collision has occured.
-   -matrixfile         matrix     This is the scoring matrix file used when
-                                  comparing sequences. By default it is the
-                                  file 'EBLOSUM62' (for proteins) or the file
-                                  'EDNAFULL' (for nucleic sequences). These
-                                  files are found in the 'data' directory of
-                                  the EMBOSS installation.
    -showscore          integer    Print residue scores
    -portrait           boolean    Set page to Portrait
 
@@ -104,8 +104,8 @@ Command line arguments
    Associated qualifiers:
 
    "-sequences" associated qualifiers
-   -sbegin1             integer    First base used
-   -send1               integer    Last base used, def=seq length
+   -sbegin1             integer    Start of each sequence to be used
+   -send1               integer    End of each sequence to be used
    -sreverse1           boolean    Reverse (if DNA)
    -sask1               boolean    Ask for begin/end/reverse
    -snucleotide1        boolean    Sequence is nucleotide
@@ -153,6 +153,12 @@ Command line arguments
    x11, tektronics, tekt, tek4107t, tek, none, null, text, data, xterm,
    png EMBOSS_GRAPHICS value, or x11
    Additional (Optional) qualifiers Allowed values Default
+   -matrixfile This is the scoring matrix file used when comparing
+   sequences. By default it is the file 'EBLOSUM62' (for proteins) or the
+   file 'EDNAFULL' (for nucleic sequences). These files are found in the
+   'data' directory of the EMBOSS installation. Comparison matrix file in
+   EMBOSS data path EBLOSUM62 for protein
+   EDNAFULL for DNA
    -residuesperline The number of residues to be displayed on each line
    Any integer value 50
    -resbreak Residues before a space Integer 1 or more Same as
@@ -171,8 +177,9 @@ Command line arguments
    -shade Set to BPLW for normal shading so for pair = 1.5,1.0,0.5 and
    shade = BPLW Residues score Colour 1.5 or over....... BLACK (B) 1.0 to
    1.5 ....... BROWN (P) 0.5 to 1.0 ....... WHEAT (L) under 0.5 .......
-   WHITE (W) The only four letters allowed are BPLW, in any order. Any
-   string is accepted An empty string is accepted
+   WHITE (W) The only four letters allowed are BPLW, in any order. A
+   string up to 4 characters, matching regular expression
+   /^([BPLW]{4})?$/ An empty string is accepted
    -pair Values to represent identical similar related Any string is
    accepted 1.5,1.0,0.5
    -identity Only match those which are identical in all sequences.
@@ -199,12 +206,6 @@ Command line arguments
    3) Checks all those not in the current consensus.If any of these give
    a top score for matching or identical scores then a collision has
    occured. Integer from 0 to 3 0
-   -matrixfile This is the scoring matrix file used when comparing
-   sequences. By default it is the file 'EBLOSUM62' (for proteins) or the
-   file 'EDNAFULL' (for nucleic sequences). These files are found in the
-   'data' directory of the EMBOSS installation. Comparison matrix file in
-   EMBOSS data path EBLOSUM62 for protein
-   EDNAFULL for DNA
    -showscore Print residue scores Any integer value -1
    -portrait Set page to Portrait Boolean value Yes/No No
    Advanced (Unprompted) qualifiers Allowed values Default

@@ -110,7 +110,8 @@ Command line arguments
    -[no]sequence Display the sequence on the graph Boolean value Yes/No
    Yes
    -window Sequence display window size Any integer value 40
-   -bases Base graphs to be displayed Any string is accepted GATC
+   -bases Base graphs to be displayed Any string is accepted, matching
+   regular expression /[GATC]+/ GATC
    Advanced (Unprompted) qualifiers Allowed values Default
    -separate Separate the trace graphs for the 4 bases Boolean value
    Yes/No No
@@ -215,8 +216,9 @@ See also
    
 Author(s)
 
-   Tim Carver (tcarver © hgmp.mrc.ac.uk)
-   HGMP-RC, Genome Campus, Hinxton, Cambridge CB10 1SB, UK
+   Tim Carver (tcarver © rfcgr.mrc.ac.uk)
+   MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
+   Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
    
 History
 

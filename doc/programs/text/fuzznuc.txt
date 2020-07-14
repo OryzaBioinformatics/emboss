@@ -77,8 +77,8 @@ Command line arguments
    Associated qualifiers:
 
    "-sequence" associated qualifiers
-   -sbegin1             integer    First base used
-   -send1               integer    Last base used, def=seq length
+   -sbegin1             integer    Start of each sequence to be used
+   -send1               integer    End of each sequence to be used
    -sreverse1           boolean    Reverse (if DNA)
    -sask1               boolean    Ask for begin/end/reverse
    -snucleotide1        boolean    Sequence is nucleotide
@@ -273,6 +273,7 @@ SQ   Sequence 1272 BP; 346 A; 455 C; 222 G; 249 T; 0 other;
        sequence, that pattern either starts with a `<' symbol or
        respectively ends with a `>' symbol.
      * A period ends the pattern. (Optional in fuzznuc).
+     * All other characters, including spaces are not allowed.
        
    For example, in the EMBL entry ECLAC you can look for the pattern:
 
@@ -313,7 +314,7 @@ Output file format
   
 ########################################
 # Program: fuzznuc
-# Rundate: Thu Nov 27 15:22:04 2003
+# Rundate: Tue Apr 06 14:29:41 2004
 # Report_format: seqtable
 # Report_file: hhtetra.fuzznuc
 ########################################
@@ -380,8 +381,9 @@ See also
        
 Author(s)
 
-   Alan Bleasby (ableasby © hgmp.mrc.ac.uk)
-   HGMP-RC, Genome Campus, Hinxton, Cambridge CB10 1SB, UK
+   Alan Bleasby (ableasby © rfcgr.mrc.ac.uk)
+   MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
+   Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
    
 History
 

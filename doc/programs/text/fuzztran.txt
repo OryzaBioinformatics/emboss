@@ -111,8 +111,8 @@ Command line arguments
    Associated qualifiers:
 
    "-sequence" associated qualifiers
-   -sbegin1             integer    First base used
-   -send1               integer    Last base used, def=seq length
+   -sbegin1             integer    Start of each sequence to be used
+   -send1               integer    End of each sequence to be used
    -sreverse1           boolean    Reverse (if DNA)
    -sask1               boolean    Ask for begin/end/reverse
    -snucleotide1        boolean    Sequence is nucleotide
@@ -372,6 +372,7 @@ SQ   Sequence 1493 BP; 309 A; 475 C; 365 G; 344 T; 0 other;
        sequence, that pattern either starts with a `<' symbol or
        respectively ends with a `>' symbol.
      * A period ends the pattern. (Optional in fuzztran).
+     * All other characters, including spaces are not allowed.
        
    For example, you can look for the pattern:
 
@@ -405,7 +406,7 @@ Output file format
   
 ########################################
 # Program: fuzztran
-# Rundate: Thu Nov 27 15:22:05 2003
+# Rundate: Tue Apr 06 14:29:42 2004
 # Report_format: table
 # Report_file: rnops.fuzztran
 ########################################
@@ -604,8 +605,9 @@ See also
        
 Author(s)
 
-   Alan Bleasby (ableasby © hgmp.mrc.ac.uk)
-   HGMP-RC, Genome Campus, Hinxton, Cambridge CB10 1SB, UK
+   Alan Bleasby (ableasby © rfcgr.mrc.ac.uk)
+   MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
+   Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
    
 History
 

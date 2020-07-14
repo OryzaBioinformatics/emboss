@@ -73,11 +73,24 @@ Find differences between nearly identical sequences
    <b>diffseq</b> takes two overlapping, nearly identical sequences and reports the
    differences between them, together with any features that overlap with these
    regions. GFF files of the differences in each sequence are also produced.
+
 <p>
+
+   <b>diffseq</b> finds the region of overlap of the input sequences and then
+   reports differences within this region, like a local alignment. 
+
+<p>
+
+   The start and end positions of the overlap are reported.
+
+<p>
+
    <b>diffseq</b> should be of value when looking for SNPs, differences between
    strains of an organism and anything else that requires the differences between
    sequences to be highlighted.
+
 <p>  
+
    The sequences can be very long. The program does a match of all
    sequence words of size 10 (by default). It then reduces this to the
    minimum set of overlapping matches by sorting the matches in order of
@@ -85,9 +98,12 @@ Find differences between nearly identical sequences
    smaller matches that overlap. The result is a set of the longest
    ungapped alignments between the two sequences that do not overlap with
    each other. The mismatched regions between these matches are reported.
+
 <p>   
-   It should be possible to find differences between sequences that are Mega bytes
+
+   It should be possible to find differences between sequences that are Mega-bases
    long.
+
 <p>
      
 
@@ -161,8 +177,8 @@ IT IS DONE FOR YOU.
                                   differences, but the program will go much
                                   slower.
   [-outfile]           report     Output report file name
-  [-afeatout]          featout    File for output of first sequence's features
-  [-bfeatout]          featout    File for output of second sequence's
+  [-aoutfeat]          featout    File for output of first sequence's features
+  [-boutfeat]          featout    File for output of second sequence's
                                   features
 
    Additional (Optional) qualifiers:
@@ -178,8 +194,8 @@ IT IS DONE FOR YOU.
    Associated qualifiers:
 
    "-asequence" associated qualifiers
-   -sbegin1             integer    First base used
-   -send1               integer    Last base used, def=seq length
+   -sbegin1             integer    Start of the sequence to be used
+   -send1               integer    End of the sequence to be used
    -sreverse1           boolean    Reverse (if DNA)
    -sask1               boolean    Ask for begin/end/reverse
    -snucleotide1        boolean    Sequence is nucleotide
@@ -194,8 +210,8 @@ IT IS DONE FOR YOU.
    -fopenfile1          string     Features file name
 
    "-bsequence" associated qualifiers
-   -sbegin2             integer    First base used
-   -send2               integer    Last base used, def=seq length
+   -sbegin2             integer    Start of the sequence to be used
+   -send2               integer    End of the sequence to be used
    -sreverse2           boolean    Reverse (if DNA)
    -sask2               boolean    Ask for begin/end/reverse
    -snucleotide2        boolean    Sequence is nucleotide
@@ -219,7 +235,7 @@ IT IS DONE FOR YOU.
    -rscoreshow3         boolean    Show the score in the report
    -rusashow3           boolean    Show the full USA in the report
 
-   "-afeatout" associated qualifiers
+   "-aoutfeat" associated qualifiers
    -offormat4           string     Output feature format
    -ofopenfile4         string     Features file name
    -ofextension4        string     File name extension
@@ -227,7 +243,7 @@ IT IS DONE FOR YOU.
    -ofname4             string     Base file name
    -ofsingle4           boolean    Separate file for each entry
 
-   "-bfeatout" associated qualifiers
+   "-boutfeat" associated qualifiers
    -offormat5           string     Output feature format
    -ofopenfile5         string     Features file name
    -ofextension5        string     File name extension
@@ -291,14 +307,14 @@ IT IS DONE FOR YOU.
 </tr>
 
 <tr>
-<td>[-afeatout]<br>(Parameter 4)</td>
+<td>[-aoutfeat]<br>(Parameter 4)</td>
 <td>File for output of first sequence's features</td>
 <td>Writeable feature table</td>
 <td>$(asequence.name).diffgff</td>
 </tr>
 
 <tr>
-<td>[-bfeatout]<br>(Parameter 5)</td>
+<td>[-boutfeat]<br>(Parameter 5)</td>
 <td>File for output of second sequence's features</td>
 <td>Writeable feature table</td>
 <td>$(bsequence.name).diffgff</td>
@@ -629,7 +645,7 @@ By default <b>diffseq</b> writes a 'diffseq' report file.
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 ##gff-version 2.0
-##date 2003-11-27
+##date 2004-04-06
 ##Type DNA AF129756
 AF129756	diffseq	conflict	6882	6882	1.000	+	.	Sequence "AF129756.1" ; note "SNP in AP000504" ; replace "a"
 AF129756	diffseq	conflict	7830	7830	1.000	+	.	Sequence "AF129756.2" ; note "SNP in AP000504" ; replace "g"
@@ -739,7 +755,7 @@ AF129756	diffseq	conflict	103855	103855	1.000	+	.	Sequence "AF129756.105" ; note
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 ##gff-version 2.0
-##date 2003-11-27
+##date 2004-04-06
 ##Type DNA AP000504
 AP000504	diffseq	conflict	847	847	1.000	+	.	Sequence "AP000504.1" ; note "SNP in AF129756" ; replace "t"
 AP000504	diffseq	conflict	1795	1795	1.000	+	.	Sequence "AP000504.2" ; note "SNP in AF129756" ; replace "a"
@@ -850,7 +866,7 @@ AP000504	diffseq	conflict	97827	97827	1.000	+	.	Sequence "AP000504.105" ; note "
 <pre>
 ########################################
 # Program: diffseq
-# Rundate: Thu Nov 27 15:19:43 2003
+# Rundate: Tue Apr 06 14:25:28 2004
 # Report_format: diffseq
 # Report_file: ap000504.diffseq
 # Additional_files: 2
@@ -1313,9 +1329,11 @@ None.
         Who has worked on the program in the past.
    -->
 
-Gary Williams (gwilliam&nbsp;&copy;&nbsp;hgmp.mrc.ac.uk)
+Gary Williams (gwilliam&nbsp;&copy;&nbsp;rfcgr.mrc.ac.uk)
 <br>
-HGMP-RC, Genome Campus, Hinxton, Cambridge CB10 1SB, UK
+MRC Rosalind Franklin Centre for Genomics Research
+Wellcome Trust Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
+
 
 
 <H2>

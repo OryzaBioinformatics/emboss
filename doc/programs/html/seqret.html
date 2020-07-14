@@ -371,7 +371,7 @@ ClustalW ALN (multiple alignment) format.
 </td></tr>
 
 <tr><td>phylip</td><td>
-PHYLIP non-interleaved multiple alignment format.
+PHYLIP interleaved multiple alignment format.
 </td></tr>
 
 <tr><td>acedb</td><td>
@@ -620,11 +620,11 @@ Clustal multiple sequence format.
 </td></tr>
 
 <tr><td>phylip</td><td>multiple</td><td>
-PHYLIP non-interleaved format.
+PHYLIP interleaved format.
 </td></tr>
 
 <tr><td>phylip3</td><td>multiple</td><td>
-PHYLIP interleaved format.
+PHYLIP non-interleaved format.
 </td></tr>
 
 <tr><td>asn1</td><td>multiple</td><td>
@@ -1018,8 +1018,8 @@ IT IS DONE FOR YOU.
    Associated qualifiers:
 
    "-sequence" associated qualifiers
-   -sbegin1             integer    First base used
-   -send1               integer    Last base used, def=seq length
+   -sbegin1             integer    Start of each sequence to be used
+   -send1               integer    End of each sequence to be used
    -sreverse1           boolean    Reverse (if DNA)
    -sask1               boolean    Ask for begin/end/reverse
    -snucleotide1        boolean    Sequence is nucleotide

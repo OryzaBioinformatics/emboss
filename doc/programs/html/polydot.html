@@ -103,16 +103,15 @@ IT IS DONE FOR YOU.
 
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
-   Standard (Mandatory) qualifiers:
+   Standard (Mandatory) qualifiers (* if not always prompted):
   [-sequences]         seqset     File containing a sequence alignment
    -wordsize           integer    Word size
+*  -outfeat            featout    Output features UFO
    -graph              graph      Graph type
 
    Additional (Optional) qualifiers:
    -[no]boxit          boolean    Draw a box around each dotplot
-   -dumpfeat           boolean    Dump all matches as feature files
-   -format             string     format to Dump out as
-   -ext                string     Extension for feature file
+   -dumpfeat           toggle     Dump all matches as feature files
 
    Advanced (Unprompted) qualifiers:
    -gap                integer    This specifies the size of the gap that is
@@ -123,8 +122,8 @@ IT IS DONE FOR YOU.
    Associated qualifiers:
 
    "-sequences" associated qualifiers
-   -sbegin1             integer    First base used
-   -send1               integer    Last base used, def=seq length
+   -sbegin1             integer    Start of each sequence to be used
+   -send1               integer    End of each sequence to be used
    -sreverse1           boolean    Reverse (if DNA)
    -sask1               boolean    Ask for begin/end/reverse
    -snucleotide1        boolean    Sequence is nucleotide
@@ -137,6 +136,14 @@ IT IS DONE FOR YOU.
    -ufo1                string     UFO features
    -fformat1            string     Features format
    -fopenfile1          string     Features file name
+
+   "-outfeat" associated qualifiers
+   -offormat            string     Output feature format
+   -ofopenfile          string     Features file name
+   -ofextension         string     File name extension
+   -ofdirectory         string     Output directory
+   -ofname              string     Base file name
+   -ofsingle            boolean    Separate file for each entry
 
    "-graph" associated qualifiers
    -gprompt             boolean    Graph prompting
@@ -189,6 +196,13 @@ IT IS DONE FOR YOU.
 </tr>
 
 <tr>
+<td>-outfeat</td>
+<td>Output features UFO</td>
+<td>Writeable feature table</td>
+<td><i>unknown.gff</i></td>
+</tr>
+
+<tr>
 <td>-graph</td>
 <td>Graph type</td>
 <td>EMBOSS has a list of known devices, including postscript, ps, hpgl, hp7470, hp7580, meta, colourps, cps, xwindows, x11, tektronics, tekt, tek4107t, tek, none, null, text, data, xterm, png</td>
@@ -211,22 +225,8 @@ IT IS DONE FOR YOU.
 <tr>
 <td>-dumpfeat</td>
 <td>Dump all matches as feature files</td>
-<td>Boolean value Yes/No</td>
-<td>No</td>
-</tr>
-
-<tr>
-<td>-format</td>
-<td>format to Dump out as</td>
-<td>Any string is accepted</td>
-<td>gff</td>
-</tr>
-
-<tr>
-<td>-ext</td>
-<td>Extension for feature file</td>
-<td>Any string is accepted</td>
-<td>gff</td>
+<td>Toggle value Yes/No</td>
+<td>N</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">

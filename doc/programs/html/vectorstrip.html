@@ -165,13 +165,13 @@ IT IS DONE FOR YOU.
 <pre>
    Standard (Mandatory) qualifiers (* if not always prompted):
   [-sequence]          seqall     Sequence database USA
-  [-[no]vectorfile]    boolean    Are your vector sequences in a file?
+  [-vectorfile]        toggle     Are your vector sequences in a file?
 *  -vectorsfile        infile     Name of vectorfile
    -mismatch           integer    Max allowed % mismatch
    -[no]besthits       boolean    Show only the best hits (minimise
                                   mismatches)?
-*  -linkera            string     5' sequence
-*  -linkerb            string     3' sequence
+*  -linkera            string     The 5' sequence
+*  -linkerb            string     The 3' sequence
   [-outfile]           outfile    Output file name
   [-outseq]            seqoutall  Output sequence(s) USA
 
@@ -180,8 +180,8 @@ IT IS DONE FOR YOU.
    Associated qualifiers:
 
    "-sequence" associated qualifiers
-   -sbegin1             integer    First base used
-   -send1               integer    Last base used, def=seq length
+   -sbegin1             integer    Start of each sequence to be used
+   -send1               integer    End of each sequence to be used
    -sreverse1           boolean    Reverse (if DNA)
    -sask1               boolean    Ask for begin/end/reverse
    -snucleotide1        boolean    Sequence is nucleotide
@@ -245,10 +245,10 @@ IT IS DONE FOR YOU.
 </tr>
 
 <tr>
-<td>[-[no]vectorfile]<br>(Parameter 2)</td>
+<td>[-vectorfile]<br>(Parameter 2)</td>
 <td>Are your vector sequences in a file?</td>
-<td>Boolean value Yes/No</td>
-<td>Yes</td>
+<td>Toggle value Yes/No</td>
+<td>Y</td>
 </tr>
 
 <tr>
@@ -274,14 +274,14 @@ IT IS DONE FOR YOU.
 
 <tr>
 <td>-linkera</td>
-<td>5' sequence</td>
+<td>The 5' sequence</td>
 <td>Any string is accepted</td>
 <td><i>An empty string is accepted</i></td>
 </tr>
 
 <tr>
 <td>-linkerb</td>
-<td>3' sequence</td>
+<td>The 3' sequence</td>
 <td>Any string is accepted</td>
 <td><i>An empty string is accepted</i></td>
 </tr>

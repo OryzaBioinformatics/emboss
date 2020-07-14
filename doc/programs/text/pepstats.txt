@@ -62,18 +62,18 @@ Command line arguments
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Sequence database USA
-   -outfile            outfile    Output file name
+  [-outfile]           outfile    Output file name
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers:
    -[no]termini        boolean    Include charge at N and C terminus
-   -aadata             string     Molecular weight data for amino acids
+   -aadata             datafile   Molecular weight data for amino acids
 
    Associated qualifiers:
 
    "-sequence" associated qualifiers
-   -sbegin1             integer    First base used
-   -send1               integer    Last base used, def=seq length
+   -sbegin1             integer    Start of each sequence to be used
+   -send1               integer    End of each sequence to be used
    -sreverse1           boolean    Reverse (if DNA)
    -sask1               boolean    Ask for begin/end/reverse
    -snucleotide1        boolean    Sequence is nucleotide
@@ -88,7 +88,7 @@ Command line arguments
    -fopenfile1          string     Features file name
 
    "-outfile" associated qualifiers
-   -odirectory          string     Output directory
+   -odirectory2         string     Output directory
 
    General qualifiers:
    -auto                boolean    Turn off prompts
@@ -109,14 +109,14 @@ Command line arguments
    Standard (Mandatory) qualifiers Allowed values Default
    [-sequence]
    (Parameter 1) Sequence database USA Readable sequence(s) Required
-   -outfile Output file name Output file <sequence>.pepstats
+   [-outfile]
+   (Parameter 2) Output file name Output file <sequence>.pepstats
    Additional (Optional) qualifiers Allowed values Default
    (none)
    Advanced (Unprompted) qualifiers Allowed values Default
    -[no]termini Include charge at N and C terminus Boolean value Yes/No
    Yes
-   -aadata Molecular weight data for amino acids Any string is accepted
-   Eamino.dat
+   -aadata Molecular weight data for amino acids Data file Eamino.dat
    
 Input file format
 
@@ -352,8 +352,9 @@ See also
    
 Author(s)
 
-   Alan Bleasby (ableasby © hgmp.mrc.ac.uk)
-   HGMP-RC, Genome Campus, Hinxton, Cambridge CB10 1SB, UK
+   Alan Bleasby (ableasby © rfcgr.mrc.ac.uk)
+   MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
+   Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
    
 History
 

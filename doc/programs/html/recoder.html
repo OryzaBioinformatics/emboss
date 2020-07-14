@@ -126,8 +126,8 @@ Output report [hsfau.recoder]: <b></b>
    Associated qualifiers:
 
    "-sequence" associated qualifiers
-   -sbegin1             integer    First base used
-   -send1               integer    Last base used, def=seq length
+   -sbegin1             integer    Start of the sequence to be used
+   -send1               integer    End of the sequence to be used
    -sreverse1           boolean    Reverse (if DNA)
    -sask1               boolean    Ask for begin/end/reverse
    -snucleotide1        boolean    Sequence is nucleotide
@@ -368,7 +368,7 @@ SQ   Sequence 518 BP; 125 A; 139 C; 148 G; 106 T; 0 other;
 <pre>
 ########################################
 # Program: recoder
-# Rundate: Thu Nov 27 15:23:38 2003
+# Rundate: Tue Apr 06 14:32:52 2004
 # Report_format: table
 # Report_file: hsfau.recoder
 ########################################
@@ -612,6 +612,7 @@ None.
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
+<tr><td><a href="recite.html">recite</a></td><td>Find changes to an enzyme site that introduce new enzyme sites</td></tr>
 <tr><td><a href="redata.html">redata</a></td><td>Search REBASE for enzyme name, references, suppliers etc</td></tr>
 <tr><td><a href="remap.html">remap</a></td><td>Display a sequence with restriction cut sites, translation etc</td></tr>
 <tr><td><a href="restover.html">restover</a></td><td>Finds restriction enzymes that produce a specific overhang</td></tr>
@@ -646,9 +647,10 @@ translation in frame 1 of the sequence.
         Who has worked on the program in the past.
    -->
 
-Tim Carver (tcarver&nbsp;&copy;&nbsp;hgmp.mrc.ac.uk)
+Tim Carver (tcarver&nbsp;&copy;&nbsp;rfcgr.mrc.ac.uk)
 <br>
-HGMP-RC, Genome Campus, Hinxton, Cambridge CB10 1SB, UK
+MRC Rosalind Franklin Centre for Genomics Research
+Wellcome Trust Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
 
 
 

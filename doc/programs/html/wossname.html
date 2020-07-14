@@ -269,6 +269,7 @@ etandem          Looks for tandem repeats in a nucleotide sequence
 palindrome       Looks for inverted repeats in a nucleotide sequence
 
 NUCLEIC RESTRICTION
+recite           Find changes to an enzyme site that introduce new enzyme sites
 recoder          Remove restriction sites but maintain the same translation
 redata           Search REBASE for enzyme name, references, suppliers etc
 remap            Display a sequence with restriction cut sites, translation etc
@@ -302,6 +303,10 @@ pepcoil          Predicts coiled coil regions
 pepnet           Displays proteins as a helical net
 pepwheel         Shows protein sequences as helices
 tmap             Displays membrane spanning regions
+
+PROTEIN 3D STRUCTURE
+contactcount     counts specific versus non-specific contacts in a directory of cleaned protein chain contact files
+psiphi           calculates phi and psi torsion angles from cleaned EMBOSS-style protein co-ordinate file
 
 PROTEIN COMPOSITION
 backtranseq      Back translate a protein sequence
@@ -342,6 +347,9 @@ PROTEIN PROFILES
 profit           Scan a sequence or database with a matrix or profile
 prophecy         Creates matrices/profiles from multiple alignments
 prophet          Gapped alignment for profiles
+
+PROTEIN SEQUENCE ALIGNMENT
+contactalign     EMBOSS implementation of Damian Counsell's 2.5-D alignment algorithm
 
 UTILS DATABASE CREATION
 aaindexextract   Extract data from AAINDEX
@@ -395,6 +403,8 @@ codcmp           Codon usage table comparison
 coderet          Extract CDS, mRNA and translations from feature tables
 compseq          Counts the composition of dimer/trimer/etc words in a sequence
 cons             Creates a consensus from multiple alignments
+contactalign     EMBOSS implementation of Damian Counsell's 2.5-D alignment algorithm
+contactcount     counts specific versus non-specific contacts in a directory of cleaned protein chain contact files
 cpgplot          Plot CpG rich areas
 cpgreport        Reports all CpG rich regions
 cusp             Create a codon usage table
@@ -486,7 +496,9 @@ prophecy         Creates matrices/profiles from multiple alignments
 prophet          Gapped alignment for profiles
 prosextract      Builds the PROSITE motif database for patmatmotifs to search
 pscan            Scans proteins using PRINTS
+psiphi           calculates phi and psi torsion angles from cleaned EMBOSS-style protein co-ordinate file
 rebaseextract    Extract data from REBASE
+recite           Find changes to an enzyme site that introduce new enzyme sites
 recoder          Remove restriction sites but maintain the same translation
 redata           Search REBASE for enzyme name, references, suppliers etc
 remap            Display a sequence with restriction cut sites, translation etc
@@ -495,7 +507,6 @@ restrict         Finds restriction enzyme cleavage sites
 revseq           Reverse and complement a sequence
 seealso          Finds programs sharing group names
 seqmatchall      Does an all-against-all comparison of a set of sequences
-seqret           Reads and writes (returns) sequences
 seqret           Reads and writes (returns) sequences
 seqretsplit      Reads and writes (returns) sequences in individual files
 showalign        Displays a multiple sequence alignment
@@ -577,10 +588,12 @@ NUCLEIC TRANSCRIPTION
 NUCLEIC TRANSLATION
 PHYLOGENY DISTANCE MATRIX
 PROTEIN 2D STRUCTURE
+PROTEIN 3D STRUCTURE
 PROTEIN COMPOSITION
 PROTEIN MOTIFS
 PROTEIN MUTATION
 PROTEIN PROFILES
+PROTEIN SEQUENCE ALIGNMENT
 UTILS DATABASE CREATION
 UTILS DATABASE INDEXING
 UTILS MISC
@@ -628,10 +641,12 @@ Keyword to search for, or blank to list all programs: <b></b>
 <li><a href="#NUCLEIC TRANSLATION">NUCLEIC TRANSLATION</a></li>
 <li><a href="#PHYLOGENY DISTANCE MATRIX">PHYLOGENY DISTANCE MATRIX</a></li>
 <li><a href="#PROTEIN 2D STRUCTURE">PROTEIN 2D STRUCTURE</a></li>
+<li><a href="#PROTEIN 3D STRUCTURE">PROTEIN 3D STRUCTURE</a></li>
 <li><a href="#PROTEIN COMPOSITION">PROTEIN COMPOSITION</a></li>
 <li><a href="#PROTEIN MOTIFS">PROTEIN MOTIFS</a></li>
 <li><a href="#PROTEIN MUTATION">PROTEIN MUTATION</a></li>
 <li><a href="#PROTEIN PROFILES">PROTEIN PROFILES</a></li>
+<li><a href="#PROTEIN SEQUENCE ALIGNMENT">PROTEIN SEQUENCE ALIGNMENT</a></li>
 <li><a href="#UTILS DATABASE CREATION">UTILS DATABASE CREATION</a></li>
 <li><a href="#UTILS DATABASE INDEXING">UTILS DATABASE INDEXING</a></li>
 <li><a href="#UTILS MISC">UTILS MISC</a></li>
@@ -691,7 +706,7 @@ IT IS DONE FOR YOU.
                                   NAME2 NAME1'. The non-expanded names are
                                   simply like: 'NAME1 NAME2'.
    -outfile            outfile    Output file name
-   -html               boolean    If you are sending the output to a file,
+   -html               toggle     If you are sending the output to a file,
                                   this will format it for displaying as a
                                   table in a WWW document.
 *  -prelink            string     If you are outputting to a file in HTML
@@ -828,8 +843,8 @@ IT IS DONE FOR YOU.
 <tr>
 <td>-html</td>
 <td>If you are sending the output to a file, this will format it for displaying as a table in a WWW document.</td>
-<td>Boolean value Yes/No</td>
-<td>No</td>
+<td>Toggle value Yes/No</td>
+<td>N</td>
 </tr>
 
 <tr>
@@ -992,11 +1007,6 @@ that the programs belong to or the word that is being searched for.
 
 <font color=red>  [Part of this file has been deleted for brevity]</font>
 
-<tr><td><a href="http://www.uk.embnet.org/Software/EMBOSS/Apps/antigenic.html">antigenic</a></td><td>Finds antigenic sites in proteins</td></tr>
-<tr><td><a href="http://www.uk.embnet.org/Software/EMBOSS/Apps/digest.html">digest</a></td><td>Protein proteolytic enzyme or reagent cleavage digest</td></tr>
-<tr><td><a href="http://www.uk.embnet.org/Software/EMBOSS/Apps/epestfind.html">epestfind</a></td><td>Finds PEST motifs as potential proteolytic cleavage sites</td></tr>
-<tr><td><a href="http://www.uk.embnet.org/Software/EMBOSS/Apps/fuzzpro.html">fuzzpro</a></td><td>Protein pattern search</td></tr>
-<tr><td><a href="http://www.uk.embnet.org/Software/EMBOSS/Apps/fuzztran.html">fuzztran</a></td><td>Protein pattern search after translation</td></tr>
 <tr><td><a href="http://www.uk.embnet.org/Software/EMBOSS/Apps/helixturnhelix.html">helixturnhelix</a></td><td>Report nucleic acid binding motifs</td></tr>
 <tr><td><a href="http://www.uk.embnet.org/Software/EMBOSS/Apps/oddcomp.html">oddcomp</a></td><td>Finds protein sequence regions with a biased composition</td></tr>
 <tr><td><a href="http://www.uk.embnet.org/Software/EMBOSS/Apps/patmatdb.html">patmatdb</a></td><td>Search a protein sequence with a motif</td></tr>
@@ -1018,6 +1028,11 @@ that the programs belong to or the word that is being searched for.
 <tr><td><a href="http://www.uk.embnet.org/Software/EMBOSS/Apps/profit.html">profit</a></td><td>Scan a sequence or database with a matrix or profile</td></tr>
 <tr><td><a href="http://www.uk.embnet.org/Software/EMBOSS/Apps/prophecy.html">prophecy</a></td><td>Creates matrices/profiles from multiple alignments</td></tr>
 <tr><td><a href="http://www.uk.embnet.org/Software/EMBOSS/Apps/prophet.html">prophet</a></td><td>Gapped alignment for profiles</td></tr>
+</table>
+<h2><a name="PROTEIN SEQUENCE ALIGNMENT">PROTEIN SEQUENCE ALIGNMENT</a></h2>
+<table border cellpadding=4 bgcolor="#FFFFF0">
+<tr><th>Program name</th><th>Description</th></tr>
+<tr><td><a href="http://www.uk.embnet.org/Software/EMBOSS/Apps/contactalign.html">contactalign</a></td><td>EMBOSS implementation of Damian Counsell's 2.5-D alignment algorithm</td></tr>
 </table>
 <h2><a name="UTILS DATABASE CREATION">UTILS DATABASE CREATION</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
@@ -1146,9 +1161,11 @@ None.
 </H2>
 
 
-Gary Williams (gwilliam&nbsp;&copy;&nbsp;hgmp.mrc.ac.uk)
+Gary Williams (gwilliam&nbsp;&copy;&nbsp;rfcgr.mrc.ac.uk)
 <br>
-HGMP-RC, Genome Campus, Hinxton, Cambridge CB10 1SB, UK
+MRC Rosalind Franklin Centre for Genomics Research
+Wellcome Trust Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
+
 
 
 <H2>

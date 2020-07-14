@@ -21,7 +21,7 @@ Usage
 
 % prosextract 
 Builds the PROSITE motif database for patmatmotifs to search
-Name of prosite directory: ../../data/
+Name of prosite directory [.]: ../../data/
    
    Go to the output files for this example
    
@@ -32,7 +32,7 @@ Name of prosite directory: ../../data/
 Command line arguments
 
    Standard (Mandatory) qualifiers:
-  [-infdat]            string     Name of prosite directory
+  [-infdat]            directory  Name of prosite directory
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers: (none)
@@ -55,8 +55,7 @@ Command line arguments
 
    Standard (Mandatory) qualifiers Allowed values Default
    [-infdat]
-   (Parameter 1) Name of prosite directory Any string is accepted An
-   empty string is accepted
+   (Parameter 1) Name of prosite directory Directory
    Additional (Optional) qualifiers Allowed values Default
    (none)
    Advanced (Unprompted) qualifiers Allowed values Default

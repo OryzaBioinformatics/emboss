@@ -9,10 +9,35 @@ Function
    
 Description
 
-   This creates a profile matrix file from a nucleic acid or a protein
-   sequence alignment.
+   prophecy produces a simple frequency matrix for use by profit or a
+   position specific weighted profile using either the Gribskov (1) or
+   Henikoff (2) method for use by prophet.
    
-   The profile matrix file can then be used by profit or prophet.
+   Profile analysis is a method for detecting distantly related proteins
+   by sequence comparison. The basis for comparison is not only the
+   customary Dayhoff mutational-distance matrix but also the results of
+   structural studies and information implicit in the alignments of the
+   sequences of families of similar proteins. This information is
+   expressed in a position-specific scoring table (profile), which is
+   created from a group of sequences previously aligned by structural or
+   sequence similarity. The similarity of any other target sequence to
+   the group of aligned probe sequences can be tested by comparing the
+   target to the profile using dynamic programming algorithms. The
+   profile method differs in two major respects from methods of sequence
+   comparison in common use: (i) Any number of known sequences can be
+   used to construct the profile, allowing more information to be used in
+   the testing of the target than is possible with pairwise alignment
+   methods. (ii) The profile includes the penalties for insertion or
+   deletion at each position, which allow one to include the probe
+   secondary structure in the testing scheme.
+   
+  Algorithm
+  
+   For Gribskov the scoring scheme is based on a notion of distance
+   between a sequence and an ancestral or generalized sequence.
+   
+   For Henikoff it is based on weights of the diversity observed at each
+   position in the alignment, rather than on a sequence distance measure.
    
 Usage
 
@@ -45,8 +70,8 @@ Profile type
          G : Gribskov
          H : Henikoff
 Select type [F]: g
-Enter a name for the profile [mymatrix]: globins
 Scoring matrix [Epprofile]: 
+Enter a name for the profile [mymatrix]: globins
 Gap opening penalty [3.0]: 
 Gap extension penalty [0.3]: 
 Output file [globins.prophecy]: 
@@ -58,9 +83,9 @@ Command line arguments
    Standard (Mandatory) qualifiers (* if not always prompted):
   [-sequence]          seqset     Sequence set USA
    -type               menu       Select type
+*  -datafile           matrixf    Scoring matrix
    -name               string     Enter a name for the profile
 *  -threshold          integer    Enter threshold reporting percentage
-*  -datafile           matrixf    Scoring matrix
 *  -open               float      Gap opening penalty
 *  -extension          float      Gap extension penalty
   [-outfile]           outfile    Output file name
@@ -70,8 +95,8 @@ Command line arguments
    Associated qualifiers:
 
    "-sequence" associated qualifiers
-   -sbegin1             integer    First base used
-   -send1               integer    Last base used, def=seq length
+   -sbegin1             integer    Start of each sequence to be used
+   -send1               integer    End of each sequence to be used
    -sreverse1           boolean    Reverse (if DNA)
    -sask1               boolean    Ask for begin/end/reverse
    -snucleotide1        boolean    Sequence is nucleotide
@@ -112,11 +137,11 @@ Command line arguments
    G (Gribskov)
    H (Henikoff)
    F
+   -datafile Scoring matrix Comparison matrix file in EMBOSS data path
+   'Epprofile' for Gribskov type, or EBLOSUM62
    -name Enter a name for the profile Any string is accepted mymatrix
    -threshold Enter threshold reporting percentage Integer from 1 to 100
    75
-   -datafile Scoring matrix Comparison matrix file in EMBOSS data path
-   'Epprofile' for Gribskov type, or EBLOSUM62
    -open Gap opening penalty Any numeric value 3.0
    -extension Gap extension penalty Any numeric value 0.3
    [-outfile]
@@ -591,8 +616,31 @@ DKFLASVATVLASKYRELGYQG
 0.20 0.00 0.07 0.20 0.16 -0.20 0.49 -0.07 -0.10 0.00 -0.03 -0.16 -0.10 0.13 0.0
 0 0.10 0.07 -0.10 0.20 0.13 0.00 0.07 -0.33 0.00 -0.20 0.00 0.92 0.92
    
+  Simple frequency matrix
+  
+   The columns represent amino acid counts for the amino acid residues
+   from A to Z. The rows represent the alignment positions from 1->n. The
+   file is a "Simple" frequency matrix of "Length" 20 amino acids. The
+   maximum score this matrix can give is 496. The "Threshold" value is an
+   instruction to the profit application to only report matches above the
+   given score.
+   
+  Gribskov profile
+  
+   The columns represent the amino acids from A to Z, the rows denote the
+   alignment position from 1 to n. The last column is the indel penalty.
+   The "Name" is the name used by prophet to refer to the profile, the
+   "Matrix" is the name of the scoring matrix used (containing residue
+   substitution values). "Length" is the length of the alignment.
+   "Max_score" is the maximum score this profile can produce. The
+   threshold is an instruction to prophet to only report hits equal to or
+   above the given value. The gap opening and extension values are used
+   by prophet in the dynamic alignment (Smith Waterman equivalent).
+   
 Data files
 
+   The two profile methods require a residue substitution scoring matrix.
+   
    The Gribskov marices use the data file 'Epprofile' by default. This is
    derived from a PAM250 scoring matrix.
    
@@ -604,7 +652,9 @@ Notes
    
 References
 
-    1. Gribskov and Burgess NAR 14(16): 6745-6763
+    1. Gribskov M, McLachlan AD, Eisenberg D. Proc Natl Acad Sci U S A.
+       1987 Jul; 84(13): 4355-8.
+    2. Henikoff S, Henikoff JG. J Mol Biol. 1994 Nov 4; 243(4): 574-8.
        
 Warnings
 
@@ -630,8 +680,9 @@ See also
    
 Author(s)
 
-   Alan Bleasby (ableasby © hgmp.mrc.ac.uk)
-   HGMP-RC, Genome Campus, Hinxton, Cambridge CB10 1SB, UK
+   Alan Bleasby (ableasby © rfcgr.mrc.ac.uk)
+   MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
+   Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
    
 History
 

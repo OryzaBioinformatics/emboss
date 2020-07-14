@@ -73,8 +73,8 @@ Command line arguments
    Associated qualifiers:
 
    "-sequence" associated qualifiers
-   -sbegin1             integer    First base used
-   -send1               integer    Last base used, def=seq length
+   -sbegin1             integer    Start of each sequence to be used
+   -send1               integer    End of each sequence to be used
    -sreverse1           boolean    Reverse (if DNA)
    -sask1               boolean    Ask for begin/end/reverse
    -snucleotide1        boolean    Sequence is nucleotide
@@ -248,6 +248,23 @@ Output file format
 CLASS 1
 Fingerprints with all elements in order
 
+Fingerprint GPCRRHODOPSN Elements 7
+    Accession number PR00237
+    Rhodopsin-like GPCR superfamily signature
+  Element 1 Threshold 54% Score 64%
+             Start position 39 Length 25
+  Element 2 Threshold 49% Score 75%
+             Start position 72 Length 22
+  Element 3 Threshold 48% Score 56%
+             Start position 117 Length 23
+  Element 4 Threshold 50% Score 69%
+             Start position 152 Length 22
+  Element 5 Threshold 51% Score 74%
+             Start position 204 Length 24
+  Element 6 Threshold 42% Score 75%
+             Start position 250 Length 25
+  Element 7 Threshold 46% Score 67%
+             Start position 288 Length 27
 
 
 CLASS 2
@@ -262,22 +279,6 @@ Not all elements match but those that do are in order
 
 CLASS 4
 Remaining partial matches
-
-Fingerprint GPCRRHODOPSN Elements 7
-    Accession number PR00237
-    Rhodopsin-like GPCR superfamily signature
-  Element 2 Threshold 49% Score 75%
-             Start position 72 Length 22
-  Element 3 Threshold 48% Score 56%
-             Start position 117 Length 23
-  Element 4 Threshold 50% Score 69%
-             Start position 152 Length 22
-  Element 5 Threshold 51% Score 74%
-             Start position 204 Length 24
-  Element 6 Threshold 42% Score 75%
-             Start position 250 Length 25
-  Element 7 Threshold 46% Score 67%
-             Start position 288 Length 27
    
    The program reports hits in four classes.
    
@@ -403,8 +404,9 @@ See also
        
 Author(s)
 
-   Alan Bleasby (ableasby © hgmp.mrc.ac.uk)
-   HGMP-RC, Genome Campus, Hinxton, Cambridge CB10 1SB, UK
+   Alan Bleasby (ableasby © rfcgr.mrc.ac.uk)
+   MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
+   Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
    
 History
 

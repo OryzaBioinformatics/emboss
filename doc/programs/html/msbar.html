@@ -176,8 +176,6 @@ IT IS DONE FOR YOU.
 *  -inframe            boolean    Do 'codon' and 'block' operations in frame
 
    Advanced (Unprompted) qualifiers:
-   -minimum            integer    Minimum size for a block mutation
-   -maximum            integer    Maximum size for a block mutation
    -othersequence      seqall     If you require that the resulting mutated
                                   sequence should not match a set of other
                                   sequences, then you can specify that set of
@@ -196,12 +194,14 @@ IT IS DONE FOR YOU.
                                   is still a match to the set of sequence
                                   given here, then the matching mutated
                                   sequence is written with a warning message.
+   -minimum            integer    Minimum size for a block mutation
+   -maximum            integer    Maximum size for a block mutation
 
    Associated qualifiers:
 
    "-sequence" associated qualifiers
-   -sbegin1             integer    First base used
-   -send1               integer    Last base used, def=seq length
+   -sbegin1             integer    Start of each sequence to be used
+   -send1               integer    End of each sequence to be used
    -sreverse1           boolean    Reverse (if DNA)
    -sask1               boolean    Ask for begin/end/reverse
    -snucleotide1        boolean    Sequence is nucleotide
@@ -216,8 +216,8 @@ IT IS DONE FOR YOU.
    -fopenfile1          string     Features file name
 
    "-othersequence" associated qualifiers
-   -sbegin              integer    First base used
-   -send                integer    Last base used, def=seq length
+   -sbegin              integer    Start of each sequence to be used
+   -send                integer    End of each sequence to be used
    -sreverse            boolean    Reverse (if DNA)
    -sask                boolean    Ask for begin/end/reverse
    -snucleotide         boolean    Sequence is nucleotide
@@ -332,6 +332,13 @@ IT IS DONE FOR YOU.
 </tr>
 
 <tr>
+<td>-othersequence</td>
+<td>If you require that the resulting mutated sequence should not match a set of other sequences, then you can specify that set of sequences here. For example, if you require that the mutated sequence should not be the same as the input sequence, enter the input sequence here. If you want the result to be different to previous results of this program, specify the previous result sequences here. The program will check that the result does not match the sequences specified here before writing it out. If a match is found, then the mutation is started again with a fresh copy of the input sequence. If, after 10 such retries, there is still a match to the set of sequence given here, then the matching mutated sequence is written with a warning message.</td>
+<td>Readable sequence(s)</td>
+<td>asis:N</td>
+</tr>
+
+<tr>
 <td>-minimum</td>
 <td>Minimum size for a block mutation</td>
 <td>Integer 0 or more</td>
@@ -343,13 +350,6 @@ IT IS DONE FOR YOU.
 <td>Maximum size for a block mutation</td>
 <td>Any integer value</td>
 <td>10</td>
-</tr>
-
-<tr>
-<td>-othersequence</td>
-<td>If you require that the resulting mutated sequence should not match a set of other sequences, then you can specify that set of sequences here. For example, if you require that the mutated sequence should not be the same as the input sequence, enter the input sequence here. If you want the result to be different to previous results of this program, specify the previous result sequences here. The program will check that the result does not match the sequences specified here before writing it out. If a match is found, then the mutation is started again with a fresh copy of the input sequence. If, after 10 such retries, there is still a match to the set of sequence given here, then the matching mutated sequence is written with a warning message.</td>
-<td>Readable sequence(s)</td>
-<td>asis:N</td>
 </tr>
 
 </table>
@@ -498,17 +498,17 @@ gacaccatcgaatggcgcaaaacctttcgcggtatggcatgatagcgcccggaagagagt
 caattcagggtggtgaatgtgaaaccagtaacgttatacgatgtcgcagagtatgccggt
 gtctcttatcagaccgtttcccgcgtggtgaaccaggccagccacgtttctgcgaaaacg
 cgggaaaaagtggaagcggcgatggcggagctgaattacattcccaaccgcgtggcacaa
-caactggcgggcaaacagtcgttgctgattggcgttgccacctccagtctggccctgcac
+caactggcgggcaaacagtcgttgctgattggcgttgccacctccagtctAgccctgcac
 gcgccgtcgcaaattgtcgcggcgattaaatctcgcgccgatcaactgggtgccagcgtg
 gtggtgtcgatggtagaacgaagcggcgtcgaagcctgtaaagcggcggtgcacaatctt
 ctcgcgcaacgcgtcagtgggctgatcattaactatccgctggatgaccaggatgccatt
 gctgtggaagctgcctgcactaatgttccggcgttatttcttgatgtctctgaccagaca
-cccatcaacagAattattttctcccatgaagacggtacgcgactgggcgtggagcatctg
+cccatcaacagtattattttctcccatgaagacggtacgcgactgggcgtggagcatctg
 gtcgcattgggtcaccagcaaatcgcgctgttagcgggcccattaagttctgtctcggcg
 cgtctgcgtctggctggctggcataaatatctcactcgcaatcaaattcagccgatagcg
 gaacgggaaggcgactggagtgccatgtccggttttcaacaaaccatgcaaatgctgaat
 gagggcatcgttcccactgcgatgctggttgccaacgatcagatggcgctgggcgcaatg
-cgcgccattaccgagtccgggctgcgcgttggtgcggatatctcggtagtgggatacgac
+cgcgccattaccgagtccgggctgcgcgttggtgcggatatctcggtagtggAatacgac
 gataccgaagacagctcatgttatatcccgccgtcaaccaccatcaaacaggattttcgc
 ctgctggggcaaaccagcgtggaccgcttgctgcaactctctcagggccaggcggtgaag
 ggcaatcagctgttgcccgtctcactggtgaaaagaaaaaccaccctggcgcccaatacg
@@ -523,7 +523,7 @@ gctggctggagtgcgatcttcctgaggccgatactgtcgtcgtcccctcaaactggcaga
 tgcacggttacgatgcgcccatctacaccaacgtaacctatcccattacggtcaatccgc
 cgtttgttcccacggagaatccgacgggttgttactcgctcacatttaatgttgatgaaa
 gctggctacaggaaggccagacgcgaattatttttgatggcgttaactcggcgtttcatc
-tgtggtgcaacgggcgctgggtcggttacggccaggacagtcgtttgccgtctgaatttg
+tgtggtgcaacgggcgctgggtcggttacggccaggacagtcgGttgccgtctgaatttg
 acctgagcgcatttttacgcgccggagaaaaccgcctcgcggtgatggtgctgcgttgga
 gtgacggcagttatctggaagatcaggatatgtggcggatgagcggcattttccgtgacg
 tctcgttgctgcataaaccgactacacaaatcagcgatttccatgttgccactcgcttta
@@ -551,12 +551,12 @@ tgttcggtttattctttttcttttacttttttatcatgggagcctacttcccgtttttcc
 cgatttggctacatgacatcaaccatatcagcaaaagtgatacgggtattatttttgccg
 ctatttctctgttctcgctattattccaaccgctgtttggtctgctttctgacaaactcg
 ggctgcgcaaatacctgctgtggattattaccggcatgttagtgatgtttgcgccgttct
-ttatttttatcttcgggccactgttacaatacaacattttagtaggatcgattgttgCtg
+ttatttttatcttcgggccactgttacaatacaacattttagtaggatcgattgttggtg
 gtatttatctaggcttttgttttaacgccggtgcgccagcagtagaggcatttattgaga
-aagtcagccgtcgcagtaGtttcgaatttggtcgcgcgcggatgtttggctgtgttggct
+aagtcagccgtcgcagtaatttcgaatttggtcgcgcgcggatgtttggctgtgttggct
 gggcgctgtgtgcctcgattgtcggcatcatgttcaccatcaataatcagtttgttttct
 ggctgggctctggctgtgcactcatcctcgccgttttactctttttcgccaaaacggatg
-cgccctcttctgccacggttgccaatgcggtaggtgccaaccGttcggcatttagcctta
+cgccctcttctgccacggttgccaatgcggtaggtgccaaccattcggcatttagcctta
 agctggcactggaactgttcagacagccaaaactgtggtttttgtcactgtatgttattg
 gcgtttcctgcacctacgatgtttttgaccaacagtttgctaatttctttacttcgttct
 ttgctaccggtgaacagggtacgcgggtatttggctacgtaacgacaatgggcgaattac
@@ -597,7 +597,7 @@ gagccgcggaccacagccccatcaccagtggcgtgcgctgctgaaaccgccgtttaatca
 ccgaagcatcaccgcctgaatgatgccgatccccaccccaccaagcagtgcgctgctaag
 cagcagcgcactttgcgggtaaagctcacgcatcaatgcaccgacggcaatcagcaacag
 actgatggcgacactgcgacgttcgctgacatgctgatgaagccagcttccggccagcgc
-cagcccgcccatggtaaccaccggcagagcggtcgac
+cagcccgcccatgTtaaccaccggcagagcggtcgac
 </pre>
 </td></tr></table><p>
 
@@ -671,9 +671,11 @@ None.
 </H2>
 
 
-Gary Williams (gwilliam&nbsp;&copy;&nbsp;hgmp.mrc.ac.uk)
+Gary Williams (gwilliam&nbsp;&copy;&nbsp;rfcgr.mrc.ac.uk)
 <br>
-HGMP-RC, Genome Campus, Hinxton, Cambridge CB10 1SB, UK
+MRC Rosalind Franklin Centre for Genomics Research
+Wellcome Trust Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
+
 
 
 

@@ -51,15 +51,14 @@ Command line arguments
    -min                integer    Minimum cuts per RE
    -max                integer    Maximum cuts per RE
    -single             boolean    Force single site only cuts
-   -threeprime         boolean    3' overhang? (else 5') e.g. BamHI has CTAG
-                                  as a 5' overhang, and ApaI has CCGG as 3'
-                                  overhang.
+   -threeprime         boolean    Use 3' overhang e.g. BamHI has CTAG as a 5'
+                                  overhang, and ApaI has CCGG as 3' overhang.
    -[no]blunt          boolean    Allow blunt end cutters
    -[no]sticky         boolean    Allow sticky end cutters
    -[no]ambiguity      boolean    Allow ambiguous matches
    -plasmid            boolean    Allow circular DNA
    -[no]commercial     boolean    Only enzymes with suppliers
-   -datafile           string     Alternative RE data file
+   -datafile           datafile   Alternative RE data file
    -html               boolean    Create HTML output
    -[no]limit          boolean    Limits reports to one isoschizomer
    -alphabetic         boolean    Sort output alphabetically
@@ -69,8 +68,8 @@ Command line arguments
    Associated qualifiers:
 
    "-sequence" associated qualifiers
-   -sbegin1             integer    First base used
-   -send1               integer    Last base used, def=seq length
+   -sbegin1             integer    Start of each sequence to be used
+   -send1               integer    End of each sequence to be used
    -sreverse1           boolean    Reverse (if DNA)
    -sask1               boolean    Ask for begin/end/reverse
    -snucleotide1        boolean    Sequence is nucleotide
@@ -117,15 +116,15 @@ Command line arguments
    -min Minimum cuts per RE Integer from 1 to 1000 1
    -max Maximum cuts per RE Integer up to 2000000000 2000000000
    -single Force single site only cuts Boolean value Yes/No No
-   -threeprime 3' overhang? (else 5') e.g. BamHI has CTAG as a 5'
-   overhang, and ApaI has CCGG as 3' overhang. Boolean value Yes/No No
+   -threeprime Use 3' overhang e.g. BamHI has CTAG as a 5' overhang, and
+   ApaI has CCGG as 3' overhang. Boolean value Yes/No No
    -[no]blunt Allow blunt end cutters Boolean value Yes/No Yes
    -[no]sticky Allow sticky end cutters Boolean value Yes/No Yes
    -[no]ambiguity Allow ambiguous matches Boolean value Yes/No Yes
    -plasmid Allow circular DNA Boolean value Yes/No No
    -[no]commercial Only enzymes with suppliers Boolean value Yes/No Yes
-   -datafile Alternative RE data file Any string is accepted An empty
-   string is accepted
+   -datafile Alternative RE data file Data file File in the data file
+   path
    -html Create HTML output Boolean value Yes/No No
    -[no]limit Limits reports to one isoschizomer Boolean value Yes/No Yes
    -alphabetic Sort output alphabetically Boolean value Yes/No No
@@ -312,6 +311,7 @@ Known bugs
 See also
 
    Program name                          Description
+   recite       Find changes to an enzyme site that introduce new enzyme sites
    recoder      Remove restriction sites but maintain the same translation
    redata       Search REBASE for enzyme name, references, suppliers etc
    remap        Display a sequence with restriction cut sites, translation etc

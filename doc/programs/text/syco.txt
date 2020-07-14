@@ -49,13 +49,13 @@ Command line arguments
    -window             integer    Averaging window
    -uncommon           boolean    Show common codon usage
    -minimum            float      Minimum value for a common codon
-   -plot               boolean    Produce plot
+   -plot               toggle     Produce plot
 
    Associated qualifiers:
 
    "-sequence" associated qualifiers
-   -sbegin1             integer    First base used
-   -send1               integer    Last base used, def=seq length
+   -sbegin1             integer    Start of the sequence to be used
+   -send1               integer    End of the sequence to be used
    -sreverse1           boolean    Reverse (if DNA)
    -sask1               boolean    Ask for begin/end/reverse
    -snucleotide1        boolean    Sequence is nucleotide
@@ -113,7 +113,7 @@ Command line arguments
    -uncommon Show common codon usage Boolean value Yes/No No
    -minimum Minimum value for a common codon Number from 0.000 to 0.990
    .15
-   -plot Produce plot Boolean value Yes/No No
+   -plot Produce plot Toggle value Yes/No
    
 Input file format
 
@@ -357,8 +357,9 @@ See also
    
 Author(s)
 
-   Alan Bleasby (ableasby © hgmp.mrc.ac.uk)
-   HGMP-RC, Genome Campus, Hinxton, Cambridge CB10 1SB, UK
+   Alan Bleasby (ableasby © rfcgr.mrc.ac.uk)
+   MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
+   Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
    
 History
 

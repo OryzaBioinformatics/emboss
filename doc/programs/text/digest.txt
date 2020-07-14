@@ -72,11 +72,11 @@ Command line arguments
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers:
+   -aadata             datafile   Molecular weight data for amino acids
    -unfavoured         boolean    Trypsin will not normally cut after a K if
                                   it is followed by (e.g.) another K or a P.
                                   Specifying this shows those cuts. as well as
                                   the favoured ones.
-   -aadata             string     Molecular weight data for amino acids
    -overlap            boolean    Used for partial digestion. Shows all cuts
                                   from favoured cut sites plus 1..3, 2..4,
                                   3..5 etc but not (e.g.) 2..5. Overlaps are
@@ -88,8 +88,8 @@ Command line arguments
    Associated qualifiers:
 
    "-sequence" associated qualifiers
-   -sbegin1             integer    First base used
-   -send1               integer    Last base used, def=seq length
+   -sbegin1             integer    Start of the sequence to be used
+   -send1               integer    End of the sequence to be used
    -sreverse1           boolean    Reverse (if DNA)
    -sask1               boolean    Ask for begin/end/reverse
    -snucleotide1        boolean    Sequence is nucleotide
@@ -147,11 +147,10 @@ Command line arguments
    Additional (Optional) qualifiers Allowed values Default
    (none)
    Advanced (Unprompted) qualifiers Allowed values Default
+   -aadata Molecular weight data for amino acids Data file Eamino.dat
    -unfavoured Trypsin will not normally cut after a K if it is followed
    by (e.g.) another K or a P. Specifying this shows those cuts. as well
    as the favoured ones. Boolean value Yes/No No
-   -aadata Molecular weight data for amino acids Any string is accepted
-   Eamino.dat
    -overlap Used for partial digestion. Shows all cuts from favoured cut
    sites plus 1..3, 2..4, 3..5 etc but not (e.g.) 2..5. Overlaps are
    therefore fragments with exactly one potential cut site within it.
@@ -298,7 +297,7 @@ Output file format
   
 ########################################
 # Program: digest
-# Rundate: Thu Nov 27 15:19:44 2003
+# Rundate: Tue Apr 06 14:25:29 2004
 # Report_format: seqtable
 # Report_file: opsd_human.digest
 ########################################
@@ -395,8 +394,9 @@ See also
    
 Author(s)
 
-   Alan Bleasby (ableasby © hgmp.mrc.ac.uk)
-   HGMP-RC, Genome Campus, Hinxton, Cambridge CB10 1SB, UK
+   Alan Bleasby (ableasby © rfcgr.mrc.ac.uk)
+   MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
+   Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
    
 History
 

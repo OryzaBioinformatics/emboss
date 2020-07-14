@@ -158,6 +158,16 @@ IT IS DONE FOR YOU.
                                   the sequence.
    -dnaconc            float      Enter DNA concentration (nM)
    -saltconc           float      Enter salt concentration (mM)
+*  -mintemp            float      Enter a minimum value for the temperature
+                                  scale (y-axis) of the plot.
+*  -graph              xygraph    Graph type
+*  -outfile            report     If a plot is not being produced then data on
+                                  the melting point etc. in each window along
+                                  the sequence is output to the file.
+
+   Additional (Optional) qualifiers (* if not always prompted):
+   -product            toggle     This prompts for percent formamide, percent
+                                  of mismatches allowed and product length.
 *  -formamide          float      This specifies the percent formamide to be
                                   used in calculations (it is ignored unless
                                   -product is used).
@@ -167,14 +177,9 @@ IT IS DONE FOR YOU.
 *  -prodlen            integer    This specifies the product length to be used
                                   in calculations (it is ignored unless
                                   -product is used).
-*  -mintemp            float      Enter a minimum value for the temperature
-                                  scale (y-axis) of the plot.
-*  -graph              xygraph    Graph type
-*  -outfile            report     If a plot is not being produced then data on
-                                  the melting point etc. in each window along
-                                  the sequence is output to the file.
-
-   Additional (Optional) qualifiers (* if not always prompted):
+   -thermo             toggle     Output the DeltaG, DeltaH and DeltaS values
+                                  of the sequence windows to the output data
+                                  file.
 *  -temperature        float      If -thermo has been specified then this
                                   specifies the temperature at which to
                                   calculate the DeltaG, DeltaH and DeltaS
@@ -182,13 +187,8 @@ IT IS DONE FOR YOU.
 
    Advanced (Unprompted) qualifiers:
    -rna                boolean    This specifies that the sequence is an RNA
-                                  sequnce and not a DNA sequence.
-   -product            boolean    This prompts for percent formamide, percent
-                                  of mismatches allowed and product length.
-   -thermo             boolean    Output the DeltaG, DeltaH and DeltaS values
-                                  of the sequence windows to the output data
-                                  file.
-   -plot               boolean    If this is not specified then the file of
+                                  sequence and not a DNA sequence.
+   -plot               toggle     If this is not specified then the file of
                                   output data is produced, else a plot of the
                                   melting point along the sequence is
                                   produced.
@@ -196,8 +196,8 @@ IT IS DONE FOR YOU.
    Associated qualifiers:
 
    "-sequence" associated qualifiers
-   -sbegin1             integer    First base used
-   -send1               integer    Last base used, def=seq length
+   -sbegin1             integer    Start of each sequence to be used
+   -send1               integer    End of each sequence to be used
    -sreverse1           boolean    Reverse (if DNA)
    -sask1               boolean    Ask for begin/end/reverse
    -snucleotide1        boolean    Sequence is nucleotide
@@ -293,27 +293,6 @@ IT IS DONE FOR YOU.
 </tr>
 
 <tr>
-<td>-formamide</td>
-<td>This specifies the percent formamide to be used in calculations (it is ignored unless -product is used).</td>
-<td>Number from 0.000 to 100.000</td>
-<td>0.</td>
-</tr>
-
-<tr>
-<td>-mismatch</td>
-<td>This specifies the percent mismatch to be used in calculations (it is ignored unless -product is used).</td>
-<td>Number from 0.000 to 100.000</td>
-<td>0.</td>
-</tr>
-
-<tr>
-<td>-prodlen</td>
-<td>This specifies the product length to be used in calculations (it is ignored unless -product is used).</td>
-<td>Any integer value</td>
-<td>Window size (20)</td>
-</tr>
-
-<tr>
 <td>-mintemp</td>
 <td>Enter a minimum value for the temperature scale (y-axis) of the plot.</td>
 <td>Number from 0.000 to 150.000</td>
@@ -341,6 +320,41 @@ IT IS DONE FOR YOU.
 </tr>
 
 <tr>
+<td>-product</td>
+<td>This prompts for percent formamide, percent of mismatches allowed and product length.</td>
+<td>Toggle value Yes/No</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr>
+<td>-formamide</td>
+<td>This specifies the percent formamide to be used in calculations (it is ignored unless -product is used).</td>
+<td>Number from 0.000 to 100.000</td>
+<td>0.</td>
+</tr>
+
+<tr>
+<td>-mismatch</td>
+<td>This specifies the percent mismatch to be used in calculations (it is ignored unless -product is used).</td>
+<td>Number from 0.000 to 100.000</td>
+<td>0.</td>
+</tr>
+
+<tr>
+<td>-prodlen</td>
+<td>This specifies the product length to be used in calculations (it is ignored unless -product is used).</td>
+<td>Any integer value</td>
+<td>Window size (20)</td>
+</tr>
+
+<tr>
+<td>-thermo</td>
+<td>Output the DeltaG, DeltaH and DeltaS values of the sequence windows to the output data file.</td>
+<td>Toggle value Yes/No</td>
+<td>&nbsp;</td>
+</tr>
+
+<tr>
 <td>-temperature</td>
 <td>If -thermo has been specified then this specifies the temperature at which to calculate the DeltaG, DeltaH and DeltaS values.</td>
 <td>Number from 0.000 to 100.000</td>
@@ -355,21 +369,7 @@ IT IS DONE FOR YOU.
 
 <tr>
 <td>-rna</td>
-<td>This specifies that the sequence is an RNA sequnce and not a DNA sequence.</td>
-<td>Boolean value Yes/No</td>
-<td>No</td>
-</tr>
-
-<tr>
-<td>-product</td>
-<td>This prompts for percent formamide, percent of mismatches allowed and product length.</td>
-<td>Boolean value Yes/No</td>
-<td>No</td>
-</tr>
-
-<tr>
-<td>-thermo</td>
-<td>Output the DeltaG, DeltaH and DeltaS values of the sequence windows to the output data file.</td>
+<td>This specifies that the sequence is an RNA sequence and not a DNA sequence.</td>
 <td>Boolean value Yes/No</td>
 <td>No</td>
 </tr>
@@ -377,8 +377,8 @@ IT IS DONE FOR YOU.
 <tr>
 <td>-plot</td>
 <td>If this is not specified then the file of output data is produced, else a plot of the melting point along the sequence is produced.</td>
-<td>Boolean value Yes/No</td>
-<td>No</td>
+<td>Toggle value Yes/No</td>
+<td>&nbsp;</td>
 </tr>
 
 </table>
@@ -559,7 +559,7 @@ By default <b>dan</b> writes a 'seqtable' report file.
 <pre>
 ########################################
 # Program: dan
-# Rundate: Thu Nov 27 15:18:08 2003
+# Rundate: Tue Apr 06 14:23:41 2004
 # Report_format: seqtable
 # Report_file: paamir.dan
 ########################################
@@ -829,9 +829,11 @@ European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambri
 
 <p>
 This application was written by 
-Alan Bleasby (ableasby&nbsp;&copy;&nbsp;hgmp.mrc.ac.uk)
+Alan Bleasby (ableasby&nbsp;&copy;&nbsp;rfcgr.mrc.ac.uk)
 <br>
-HGMP-RC, Genome Campus, Hinxton, Cambridge CB10 1SB, UK
+MRC Rosalind Franklin Centre for Genomics Research
+Wellcome Trust Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
+
 
 
 

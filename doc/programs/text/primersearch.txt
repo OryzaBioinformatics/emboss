@@ -65,8 +65,8 @@ Command line arguments
    Associated qualifiers:
 
    "-seqall" associated qualifiers
-   -sbegin1             integer    First base used
-   -send1               integer    Last base used, def=seq length
+   -sbegin1             integer    Start of each sequence to be used
+   -send1               integer    End of each sequence to be used
    -sreverse1           boolean    Reverse (if DNA)
    -sask1               boolean    Ask for begin/end/reverse
    -snucleotide1        boolean    Sequence is nucleotide
@@ -96,9 +96,8 @@ Command line arguments
    -warning             boolean    Report warnings
    -error               boolean    Report errors
    -fatal               boolean    Report fatal errors
-   -die                 boolean    Report deaths
+   -die                 boolean
    
-
    Standard (Mandatory) qualifiers Allowed values Default
    [-seqall]
    (Parameter 1) Sequence database USA Readable sequence(s) Required

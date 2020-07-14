@@ -137,15 +137,14 @@ Output file [hsfau.restover]: <b></b>
    -min                integer    Minimum cuts per RE
    -max                integer    Maximum cuts per RE
    -single             boolean    Force single site only cuts
-   -threeprime         boolean    3' overhang? (else 5') e.g. BamHI has CTAG
-                                  as a 5' overhang, and ApaI has CCGG as 3'
-                                  overhang.
+   -threeprime         boolean    Use 3' overhang e.g. BamHI has CTAG as a 5'
+                                  overhang, and ApaI has CCGG as 3' overhang.
    -[no]blunt          boolean    Allow blunt end cutters
    -[no]sticky         boolean    Allow sticky end cutters
    -[no]ambiguity      boolean    Allow ambiguous matches
    -plasmid            boolean    Allow circular DNA
    -[no]commercial     boolean    Only enzymes with suppliers
-   -datafile           string     Alternative RE data file
+   -datafile           datafile   Alternative RE data file
    -html               boolean    Create HTML output
    -[no]limit          boolean    Limits reports to one isoschizomer
    -alphabetic         boolean    Sort output alphabetically
@@ -155,8 +154,8 @@ Output file [hsfau.restover]: <b></b>
    Associated qualifiers:
 
    "-sequence" associated qualifiers
-   -sbegin1             integer    First base used
-   -send1               integer    Last base used, def=seq length
+   -sbegin1             integer    Start of each sequence to be used
+   -send1               integer    End of each sequence to be used
    -sreverse1           boolean    Reverse (if DNA)
    -sask1               boolean    Ask for begin/end/reverse
    -snucleotide1        boolean    Sequence is nucleotide
@@ -259,7 +258,7 @@ Output file [hsfau.restover]: <b></b>
 
 <tr>
 <td>-threeprime</td>
-<td>3' overhang? (else 5') e.g. BamHI has CTAG as a 5' overhang, and ApaI has CCGG as 3' overhang.</td>
+<td>Use 3' overhang e.g. BamHI has CTAG as a 5' overhang, and ApaI has CCGG as 3' overhang.</td>
 <td>Boolean value Yes/No</td>
 <td>No</td>
 </tr>
@@ -302,8 +301,8 @@ Output file [hsfau.restover]: <b></b>
 <tr>
 <td>-datafile</td>
 <td>Alternative RE data file</td>
-<td>Any string is accepted</td>
-<td><i>An empty string is accepted</i></td>
+<td>Data file</td>
+<td><i>File in the data file path</i></td>
 </tr>
 
 <tr>
@@ -709,6 +708,7 @@ None.
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
+<tr><td><a href="recite.html">recite</a></td><td>Find changes to an enzyme site that introduce new enzyme sites</td></tr>
 <tr><td><a href="recoder.html">recoder</a></td><td>Remove restriction sites but maintain the same translation</td></tr>
 <tr><td><a href="redata.html">redata</a></td><td>Search REBASE for enzyme name, references, suppliers etc</td></tr>
 <tr><td><a href="remap.html">remap</a></td><td>Display a sequence with restriction cut sites, translation etc</td></tr>

@@ -44,17 +44,17 @@ Command line arguments
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers:
-   -step               float      pH step value
+   -step               float      Step value for pH
    -amino              integer    Number of N-termini
    -[no]termini        boolean    Include charge at N and C terminus
-   -plot               boolean    Plot charge vs pH
-   -[no]report         boolean    Write results to a file
+   -plot               toggle     Plot charge vs pH
+   -report             toggle     Write results to a file
 
    Associated qualifiers:
 
    "-sequence" associated qualifiers
-   -sbegin1             integer    First base used
-   -send1               integer    Last base used, def=seq length
+   -sbegin1             integer    Start of each sequence to be used
+   -send1               integer    End of each sequence to be used
    -sreverse1           boolean    Reverse (if DNA)
    -sask1               boolean    Ask for begin/end/reverse
    -snucleotide1        boolean    Sequence is nucleotide
@@ -107,12 +107,12 @@ Command line arguments
    Additional (Optional) qualifiers Allowed values Default
    (none)
    Advanced (Unprompted) qualifiers Allowed values Default
-   -step pH step value Number from 0.010 to 1.000 .5
+   -step Step value for pH Number from 0.010 to 1.000 .5
    -amino Number of N-termini Any integer value 1
    -[no]termini Include charge at N and C terminus Boolean value Yes/No
    Yes
-   -plot Plot charge vs pH Boolean value Yes/No No
-   -[no]report Write results to a file Boolean value Yes/No Yes
+   -plot Plot charge vs pH Toggle value Yes/No N
+   -report Write results to a file Toggle value Yes/No Y
    
 Input file format
 
@@ -320,8 +320,9 @@ See also
    
 Author(s)
 
-   Alan Bleasby (ableasby © hgmp.mrc.ac.uk)
-   HGMP-RC, Genome Campus, Hinxton, Cambridge CB10 1SB, UK
+   Alan Bleasby (ableasby © rfcgr.mrc.ac.uk)
+   MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
+   Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
    
 History
 

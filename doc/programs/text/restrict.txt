@@ -145,7 +145,7 @@ Command line arguments
                                   names that you have asked to be searched
                                   for, and which cut, will be reported whether
                                   or not they have a commercial supplier.
-   -datafile           string     Alternative RE data file
+   -datafile           datafile   Alternative RE data file
    -[no]limit          boolean    This limits the reporting of enzymes to just
                                   one enzyme from each group of
                                   isoschizomers. The enzyme chosen to
@@ -172,8 +172,8 @@ Command line arguments
    Associated qualifiers:
 
    "-sequence" associated qualifiers
-   -sbegin1             integer    First base used
-   -send1               integer    Last base used, def=seq length
+   -sbegin1             integer    Start of each sequence to be used
+   -send1               integer    End of each sequence to be used
    -sreverse1           boolean    Reverse (if DNA)
    -sask1               boolean    Ask for begin/end/reverse
    -snucleotide1        boolean    Sequence is nucleotide
@@ -268,8 +268,8 @@ Command line arguments
    probably know where to get it from and so all enzymes names that you
    have asked to be searched for, and which cut, will be reported whether
    or not they have a commercial supplier. Boolean value Yes/No Yes
-   -datafile Alternative RE data file Any string is accepted An empty
-   string is accepted
+   -datafile Alternative RE data file Data file File in the data file
+   path
    -[no]limit This limits the reporting of enzymes to just one enzyme
    from each group of isoschizomers. The enzyme chosen to represent an
    isoschizomer group is the prototype indicated in the data file
@@ -406,7 +406,7 @@ Output file format
   
 ########################################
 # Program: restrict
-# Rundate: Thu Nov 27 15:23:42 2003
+# Rundate: Tue Apr 06 14:32:55 2004
 # Report_format: table
 # Report_file: hsfau.restrict
 ########################################
@@ -490,7 +490,7 @@ Output file format
   
 ########################################
 # Program: restrict
-# Rundate: Thu Nov 27 15:23:43 2003
+# Rundate: Tue Apr 06 14:32:56 2004
 # Report_format: table
 # Report_file: hsfau.restrict
 ########################################
@@ -600,7 +600,7 @@ Output file format
   
 ########################################
 # Program: restrict
-# Rundate: Thu Nov 27 15:23:43 2003
+# Rundate: Tue Apr 06 14:32:56 2004
 # Report_format: table
 # Report_file: hsfau.restrict
 ########################################
@@ -807,6 +807,7 @@ Known bugs
 See also
 
    Program name                          Description
+   recite       Find changes to an enzyme site that introduce new enzyme sites
    recoder      Remove restriction sites but maintain the same translation
    redata       Search REBASE for enzyme name, references, suppliers etc
    remap        Display a sequence with restriction cut sites, translation etc
@@ -816,8 +817,9 @@ See also
    
 Author(s)
 
-   Alan Bleasby (ableasby © hgmp.mrc.ac.uk)
-   HGMP-RC, Genome Campus, Hinxton, Cambridge CB10 1SB, UK
+   Alan Bleasby (ableasby © rfcgr.mrc.ac.uk)
+   MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
+   Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
    
 History
 

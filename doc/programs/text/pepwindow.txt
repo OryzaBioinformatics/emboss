@@ -34,14 +34,14 @@ Command line arguments
 
    Additional (Optional) qualifiers:
    -datafile           datafile   Aaindex database file
-   -length             integer    window size
+   -length             integer    Window size
 
    Advanced (Unprompted) qualifiers: (none)
    Associated qualifiers:
 
    "-sequence" associated qualifiers
-   -sbegin1             integer    First base used
-   -send1               integer    Last base used, def=seq length
+   -sbegin1             integer    Start of the sequence to be used
+   -send1               integer    End of the sequence to be used
    -sreverse1           boolean    Reverse (if DNA)
    -sask1               boolean    Ask for begin/end/reverse
    -snucleotide1        boolean    Sequence is nucleotide
@@ -89,7 +89,7 @@ Command line arguments
    png EMBOSS_GRAPHICS value, or x11
    Additional (Optional) qualifiers Allowed values Default
    -datafile Aaindex database file Data file Enakai.dat
-   -length window size Integer from 1 to 200 7
+   -length Window size Integer from 1 to 200 7
    Advanced (Unprompted) qualifiers Allowed values Default
    (none)
    

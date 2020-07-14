@@ -166,13 +166,13 @@ Replace all 'RGD' protein motifs with 'XXRGDXX'
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers:
-   -delete             boolean    Delete the target sequence sections
+   -delete             toggle     Delete the target sequence sections
 
    Associated qualifiers:
 
    "-sequence" associated qualifiers
-   -sbegin1             integer    First base used
-   -send1               integer    Last base used, def=seq length
+   -sbegin1             integer    Start of each sequence to be used
+   -send1               integer    End of each sequence to be used
    -sreverse1           boolean    Reverse (if DNA)
    -sask1               boolean    Ask for begin/end/reverse
    -snucleotide1        boolean    Sequence is nucleotide
@@ -271,8 +271,8 @@ Replace all 'RGD' protein motifs with 'XXRGDXX'
 <tr>
 <td>-delete</td>
 <td>Delete the target sequence sections</td>
-<td>Boolean value Yes/No</td>
-<td>No</td>
+<td>Toggle value Yes/No</td>
+<td>N</td>
 </tr>
 
 </table>
@@ -757,9 +757,11 @@ None.
         Who has worked on the program in the past.
    -->
 
-Alan Bleasby (ableasby&nbsp;&copy;&nbsp;hgmp.mrc.ac.uk)
+Alan Bleasby (ableasby&nbsp;&copy;&nbsp;rfcgr.mrc.ac.uk)
 <br>
-HGMP-RC, Genome Campus, Hinxton, Cambridge CB10 1SB, UK
+MRC Rosalind Franklin Centre for Genomics Research
+Wellcome Trust Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
+
 
 
 

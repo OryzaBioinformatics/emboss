@@ -157,19 +157,19 @@ Output file [hbb_human.hmoment]: <b></b>
 
    Additional (Optional) qualifiers:
    -window             integer    Window
+   -aangle             integer    Alpha helix angle (degrees)
    -bangle             integer    Beta sheet angle (degrees)
 
    Advanced (Unprompted) qualifiers:
-   -aangle             integer    Alpha helix angle (degrees)
    -baseline           float      Graph marker line
-   -plot               boolean    Produce graphic
+   -plot               toggle     Produce graphic
    -double             boolean    Plot two graphs
 
    Associated qualifiers:
 
    "-seqall" associated qualifiers
-   -sbegin1             integer    First base used
-   -send1               integer    Last base used, def=seq length
+   -sbegin1             integer    Start of each sequence to be used
+   -send1               integer    End of each sequence to be used
    -sreverse1           boolean    Reverse (if DNA)
    -sask1               boolean    Ask for begin/end/reverse
    -snucleotide1        boolean    Sequence is nucleotide
@@ -256,6 +256,13 @@ Output file [hbb_human.hmoment]: <b></b>
 </tr>
 
 <tr>
+<td>-aangle</td>
+<td>Alpha helix angle (degrees)</td>
+<td>Any integer value</td>
+<td>100</td>
+</tr>
+
+<tr>
 <td>-bangle</td>
 <td>Beta sheet angle (degrees)</td>
 <td>Any integer value</td>
@@ -269,13 +276,6 @@ Output file [hbb_human.hmoment]: <b></b>
 </tr>
 
 <tr>
-<td>-aangle</td>
-<td>Alpha helix angle (degrees)</td>
-<td>Any integer value</td>
-<td>100</td>
-</tr>
-
-<tr>
 <td>-baseline</td>
 <td>Graph marker line</td>
 <td>Any numeric value</td>
@@ -285,8 +285,8 @@ Output file [hbb_human.hmoment]: <b></b>
 <tr>
 <td>-plot</td>
 <td>Produce graphic</td>
-<td>Boolean value Yes/No</td>
-<td>No</td>
+<td>Toggle value Yes/No</td>
+<td>N</td>
 </tr>
 
 <tr>
@@ -814,9 +814,11 @@ None.
         Who has worked on the program in the past.
    -->
 
-Alan Bleasby (ableasby&nbsp;&copy;&nbsp;hgmp.mrc.ac.uk)
+Alan Bleasby (ableasby&nbsp;&copy;&nbsp;rfcgr.mrc.ac.uk)
 <br>
-HGMP-RC, Genome Campus, Hinxton, Cambridge CB10 1SB, UK
+MRC Rosalind Franklin Centre for Genomics Research
+Wellcome Trust Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
+
 
 
 

@@ -125,18 +125,18 @@ IT IS DONE FOR YOU.
 <pre>
    Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Sequence database USA
-   -outfile            outfile    Output file name
+  [-outfile]           outfile    Output file name
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers:
    -[no]termini        boolean    Include charge at N and C terminus
-   -aadata             string     Molecular weight data for amino acids
+   -aadata             datafile   Molecular weight data for amino acids
 
    Associated qualifiers:
 
    "-sequence" associated qualifiers
-   -sbegin1             integer    First base used
-   -send1               integer    Last base used, def=seq length
+   -sbegin1             integer    Start of each sequence to be used
+   -send1               integer    End of each sequence to be used
    -sreverse1           boolean    Reverse (if DNA)
    -sask1               boolean    Ask for begin/end/reverse
    -snucleotide1        boolean    Sequence is nucleotide
@@ -151,7 +151,7 @@ IT IS DONE FOR YOU.
    -fopenfile1          string     Features file name
 
    "-outfile" associated qualifiers
-   -odirectory          string     Output directory
+   -odirectory2         string     Output directory
 
    General qualifiers:
    -auto                boolean    Turn off prompts
@@ -188,7 +188,7 @@ IT IS DONE FOR YOU.
 </tr>
 
 <tr>
-<td>-outfile</td>
+<td>[-outfile]<br>(Parameter 2)</td>
 <td>Output file name</td>
 <td>Output file</td>
 <td><i>&lt;sequence&gt;</i>.pepstats</td>
@@ -220,7 +220,7 @@ IT IS DONE FOR YOU.
 <tr>
 <td>-aadata</td>
 <td>Molecular weight data for amino acids</td>
-<td>Any string is accepted</td>
+<td>Data file</td>
 <td>Eamino.dat</td>
 </tr>
 
@@ -522,9 +522,11 @@ None.
 </H2>
 
 
-Alan Bleasby (ableasby&nbsp;&copy;&nbsp;hgmp.mrc.ac.uk)
+Alan Bleasby (ableasby&nbsp;&copy;&nbsp;rfcgr.mrc.ac.uk)
 <br>
-HGMP-RC, Genome Campus, Hinxton, Cambridge CB10 1SB, UK
+MRC Rosalind Franklin Centre for Genomics Research
+Wellcome Trust Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
+
 
 
 <H2>

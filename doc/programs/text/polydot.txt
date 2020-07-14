@@ -42,16 +42,15 @@ Created polydot.ps
    
 Command line arguments
 
-   Standard (Mandatory) qualifiers:
+   Standard (Mandatory) qualifiers (* if not always prompted):
   [-sequences]         seqset     File containing a sequence alignment
    -wordsize           integer    Word size
+*  -outfeat            featout    Output features UFO
    -graph              graph      Graph type
 
    Additional (Optional) qualifiers:
    -[no]boxit          boolean    Draw a box around each dotplot
-   -dumpfeat           boolean    Dump all matches as feature files
-   -format             string     format to Dump out as
-   -ext                string     Extension for feature file
+   -dumpfeat           toggle     Dump all matches as feature files
 
    Advanced (Unprompted) qualifiers:
    -gap                integer    This specifies the size of the gap that is
@@ -62,8 +61,8 @@ Command line arguments
    Associated qualifiers:
 
    "-sequences" associated qualifiers
-   -sbegin1             integer    First base used
-   -send1               integer    Last base used, def=seq length
+   -sbegin1             integer    Start of each sequence to be used
+   -send1               integer    End of each sequence to be used
    -sreverse1           boolean    Reverse (if DNA)
    -sask1               boolean    Ask for begin/end/reverse
    -snucleotide1        boolean    Sequence is nucleotide
@@ -76,6 +75,14 @@ Command line arguments
    -ufo1                string     UFO features
    -fformat1            string     Features format
    -fopenfile1          string     Features file name
+
+   "-outfeat" associated qualifiers
+   -offormat            string     Output feature format
+   -ofopenfile          string     Features file name
+   -ofextension         string     File name extension
+   -ofdirectory         string     Output directory
+   -ofname              string     Base file name
+   -ofsingle            boolean    Separate file for each entry
 
    "-graph" associated qualifiers
    -gprompt             boolean    Graph prompting
@@ -107,15 +114,14 @@ Command line arguments
    (Parameter 1) File containing a sequence alignment Readable set of
    sequences Required
    -wordsize Word size Integer 2 or more 6
+   -outfeat Output features UFO Writeable feature table unknown.gff
    -graph Graph type EMBOSS has a list of known devices, including
    postscript, ps, hpgl, hp7470, hp7580, meta, colourps, cps, xwindows,
    x11, tektronics, tekt, tek4107t, tek, none, null, text, data, xterm,
    png EMBOSS_GRAPHICS value, or x11
    Additional (Optional) qualifiers Allowed values Default
    -[no]boxit Draw a box around each dotplot Boolean value Yes/No Yes
-   -dumpfeat Dump all matches as feature files Boolean value Yes/No No
-   -format format to Dump out as Any string is accepted gff
-   -ext Extension for feature file Any string is accepted gff
+   -dumpfeat Dump all matches as feature files Toggle value Yes/No N
    Advanced (Unprompted) qualifiers Allowed values Default
    -gap This specifies the size of the gap that is used to separate the
    individual dotplots in the display. The size is measured in residues,

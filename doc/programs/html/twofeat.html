@@ -363,7 +363,7 @@ Output report [hsfau.twofeat]: <b></b>
                                   measured from the start positions of the
                                   features. This criterion is always applied
                                   despite the specified overlap type required.
-   -twoout             boolean    If you set this to be true, then the two
+   -twoout             toggle     If you set this to be true, then the two
                                   features themselves will be written out. If
                                   it is left as false, then a single feature
                                   will be written out covering the two
@@ -386,8 +386,8 @@ Output report [hsfau.twofeat]: <b></b>
    Associated qualifiers:
 
    "-sequence" associated qualifiers
-   -sbegin1             integer    First base used
-   -send1               integer    Last base used, def=seq length
+   -sbegin1             integer    Start of each sequence to be used
+   -send1               integer    End of each sequence to be used
    -sreverse1           boolean    Reverse (if DNA)
    -sask1               boolean    Ask for begin/end/reverse
    -snucleotide1        boolean    Sequence is nucleotide
@@ -631,8 +631,8 @@ You can allow any or no overlaps, specify that they must or must not overlap, th
 <tr>
 <td>-twoout</td>
 <td>If you set this to be true, then the two features themselves will be written out. If it is left as false, then a single feature will be written out covering the two features you found.</td>
-<td>Boolean value Yes/No</td>
-<td>No</td>
+<td>Toggle value Yes/No</td>
+<td>N</td>
 </tr>
 
 <tr>
@@ -823,7 +823,7 @@ outputs a report format file. The default format is <b>table</b>
 <pre>
 ########################################
 # Program: twofeat
-# Rundate: Thu Nov 27 15:25:59 2003
+# Rundate: Tue Apr 06 14:34:36 2004
 # Report_format: table
 # Report_file: hsfau.twofeat
 ########################################
@@ -848,7 +848,7 @@ outputs a report format file. The default format is <b>table</b>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 ##gff-version 2.0
-##date 2003-11-27
+##date 2004-04-06
 ##Type DNA HSFAU
 HSFAU	EMBL	polyA_signal	484	489	0.000	+	.	Sequence "HSFAU.6"
 HSFAU	EMBL	polyA_site	509	509	0.000	+	.	Sequence "HSFAU.7" ; FeatFlags "0x40"
@@ -1068,9 +1068,11 @@ This does no affect the results.
         Who has worked on the program in the past.
    -->
 
-Gary Williams (gwilliam&nbsp;&copy;&nbsp;hgmp.mrc.ac.uk)
+Gary Williams (gwilliam&nbsp;&copy;&nbsp;rfcgr.mrc.ac.uk)
 <br>
-HGMP-RC, Genome Campus, Hinxton, Cambridge CB10 1SB, UK
+MRC Rosalind Franklin Centre for Genomics Research
+Wellcome Trust Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
+
 
 
 

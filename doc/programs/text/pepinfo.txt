@@ -46,19 +46,19 @@ Command line arguments
   [-outfile]           outfile    Output file name
 
    Additional (Optional) qualifiers:
+   -aaproperties       datafile   Amino acid properties filename
+   -aahydropathy       datafile   Hydropathy data filename
    -hwindow            integer    Window size for hydropathy averaging
-   -aaproperties       string     User defined amino acid properties filename
-   -aahydropathy       string     User defined hydropathy data filename
 
    Advanced (Unprompted) qualifiers:
-   -[no]generalplot    boolean    plot histogram of general properties
-   -[no]hydropathyplot boolean    plot graphs of hydropathy
+   -[no]generalplot    boolean    Plot histogram of general properties
+   -[no]hydropathyplot boolean    Plot graphs of hydropathy
 
    Associated qualifiers:
 
    "-sequence" associated qualifiers
-   -sbegin1             integer    First base used
-   -send1               integer    Last base used, def=seq length
+   -sbegin1             integer    Start of the sequence to be used
+   -send1               integer    End of the sequence to be used
    -sreverse1           boolean    Reverse (if DNA)
    -sask1               boolean    Ask for begin/end/reverse
    -snucleotide1        boolean    Sequence is nucleotide
@@ -110,15 +110,14 @@ Command line arguments
    [-outfile]
    (Parameter 2) Output file name Output file <sequence>.pepinfo
    Additional (Optional) qualifiers Allowed values Default
+   -aaproperties Amino acid properties filename Data file
+   Eaa_properties.dat
+   -aahydropathy Hydropathy data filename Data file Eaa_hydropathy.dat
    -hwindow Window size for hydropathy averaging Integer 1 or more 9
-   -aaproperties User defined amino acid properties filename Any string
-   is accepted Eaa_properties.dat
-   -aahydropathy User defined hydropathy data filename Any string is
-   accepted Eaa_hydropathy.dat
    Advanced (Unprompted) qualifiers Allowed values Default
-   -[no]generalplot plot histogram of general properties Boolean value
+   -[no]generalplot Plot histogram of general properties Boolean value
    Yes/No Yes
-   -[no]hydropathyplot plot graphs of hydropathy Boolean value Yes/No Yes
+   -[no]hydropathyplot Plot graphs of hydropathy Boolean value Yes/No Yes
    
 Input file format
 

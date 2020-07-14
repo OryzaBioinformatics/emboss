@@ -65,8 +65,8 @@ Command line arguments
    Associated qualifiers:
 
    "-sequence" associated qualifiers
-   -sbegin1             integer    First base used
-   -send1               integer    Last base used, def=seq length
+   -sbegin1             integer    Start of each sequence to be used
+   -send1               integer    End of each sequence to be used
    -sreverse1           boolean    Reverse (if DNA)
    -sask1               boolean    Ask for begin/end/reverse
    -snucleotide1        boolean    Sequence is nucleotide
@@ -202,7 +202,7 @@ Output file format
   
 ########################################
 # Program: antigenic
-# Rundate: Thu Nov 27 15:17:51 2003
+# Rundate: Tue Apr 06 14:23:25 2004
 # Report_format: motif
 # Report_file: act1_fugru.antigenic
 ########################################
@@ -311,7 +311,7 @@ Max_score_pos at "*"
   File: act1_fugru.antigenic
   
 ##gff-version 2.0
-##date 2003-11-27
+##date 2004-04-06
 ##Type Protein ACT1_FUGRU
 ACT1_FUGRU      antigenic       site    214     222     1.207   +       .
 Sequence "ACT1_FUGRU.1" ; note "*pos 218"
@@ -440,8 +440,9 @@ See also
    
 Author(s)
 
-   Alan Bleasby (ableasby © hgmp.mrc.ac.uk)
-   HGMP-RC, Genome Campus, Hinxton, Cambridge CB10 1SB, UK
+   Alan Bleasby (ableasby © rfcgr.mrc.ac.uk)
+   MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
+   Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
    
    Original program "ANTIGENIC" by Peter Rice (EGCG 1991)
    

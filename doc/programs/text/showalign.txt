@@ -250,6 +250,12 @@ Command line arguments
   [-outfile]           outfile    Output file name
 
    Additional (Optional) qualifiers:
+   -matrix             matrix     This is the scoring matrix file used when
+                                  comparing sequences. By default it is the
+                                  file 'EBLOSUM62' (for proteins) or the file
+                                  'EDNAFULL' (for nucleic sequences). These
+                                  files are found in the 'data' directory of
+                                  the EMBOSS installation.
    -refseq             string     If you give the number in the alignment or
                                   the name of a sequence, it will be taken to
                                   be the reference sequence. The reference
@@ -274,12 +280,6 @@ Command line arguments
                                   this is False then no change to the case of
                                   the residues is made on the basis of their
                                   similarity to the reference sequence.
-   -matrix             matrix     This is the scoring matrix file used when
-                                  comparing sequences. By default it is the
-                                  file 'EBLOSUM62' (for proteins) or the file
-                                  'EDNAFULL' (for nucleic sequences). These
-                                  files are found in the 'data' directory of
-                                  the EMBOSS installation.
    -[no]consensus      boolean    If this is true then the consensus line is
                                   displayed.
 
@@ -349,8 +349,8 @@ Command line arguments
    Associated qualifiers:
 
    "-sequence" associated qualifiers
-   -sbegin1             integer    First base used
-   -send1               integer    Last base used, def=seq length
+   -sbegin1             integer    Start of each sequence to be used
+   -send1               integer    End of each sequence to be used
    -sreverse1           boolean    Reverse (if DNA)
    -sask1               boolean    Ask for begin/end/reverse
    -snucleotide1        boolean    Sequence is nucleotide
@@ -390,6 +390,12 @@ Command line arguments
    [-outfile]
    (Parameter 2) Output file name Output file <sequence>.showalign
    Additional (Optional) qualifiers Allowed values Default
+   -matrix This is the scoring matrix file used when comparing sequences.
+   By default it is the file 'EBLOSUM62' (for proteins) or the file
+   'EDNAFULL' (for nucleic sequences). These files are found in the
+   'data' directory of the EMBOSS installation. Comparison matrix file in
+   EMBOSS data path EBLOSUM62 for protein
+   EDNAFULL for DNA
    -refseq If you give the number in the alignment or the name of a
    sequence, it will be taken to be the reference sequence. The reference
    sequence is always show in full and is the one against which all the
@@ -419,12 +425,6 @@ Command line arguments
    residues will be changed to lower-case. If this is False then no
    change to the case of the residues is made on the basis of their
    similarity to the reference sequence. Boolean value Yes/No Yes
-   -matrix This is the scoring matrix file used when comparing sequences.
-   By default it is the file 'EBLOSUM62' (for proteins) or the file
-   'EDNAFULL' (for nucleic sequences). These files are found in the
-   'data' directory of the EMBOSS installation. Comparison matrix file in
-   EMBOSS data path EBLOSUM62 for protein
-   EDNAFULL for DNA
    -[no]consensus If this is true then the consensus line is displayed.
    Boolean value Yes/No Yes
    Advanced (Unprompted) qualifiers Allowed values Default
@@ -1083,8 +1083,9 @@ See also
    
 Author(s)
 
-   Gary Williams (gwilliam © hgmp.mrc.ac.uk)
-   HGMP-RC, Genome Campus, Hinxton, Cambridge CB10 1SB, UK
+   Gary Williams (gwilliam © rfcgr.mrc.ac.uk)
+   MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
+   Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
    
 History
 

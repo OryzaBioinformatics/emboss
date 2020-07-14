@@ -212,6 +212,7 @@ etandem          Looks for tandem repeats in a nucleotide sequence
 palindrome       Looks for inverted repeats in a nucleotide sequence
 
 NUCLEIC RESTRICTION
+recite           Find changes to an enzyme site that introduce new enzyme sites
 recoder          Remove restriction sites but maintain the same translation
 redata           Search REBASE for enzyme name, references, suppliers etc
 remap            Display a sequence with restriction cut sites, translation etc
@@ -245,6 +246,12 @@ pepcoil          Predicts coiled coil regions
 pepnet           Displays proteins as a helical net
 pepwheel         Shows protein sequences as helices
 tmap             Displays membrane spanning regions
+
+PROTEIN 3D STRUCTURE
+contactcount     counts specific versus non-specific contacts in a directory of
+ cleaned protein chain contact files
+psiphi           calculates phi and psi torsion angles from cleaned EMBOSS-styl
+e protein co-ordinate file
 
 PROTEIN COMPOSITION
 backtranseq      Back translate a protein sequence
@@ -285,6 +292,10 @@ PROTEIN PROFILES
 profit           Scan a sequence or database with a matrix or profile
 prophecy         Creates matrices/profiles from multiple alignments
 prophet          Gapped alignment for profiles
+
+PROTEIN SEQUENCE ALIGNMENT
+contactalign     EMBOSS implementation of Damian Counsell's 2.5-D alignment alg
+orithm
 
 UTILS DATABASE CREATION
 aaindexextract   Extract data from AAINDEX
@@ -331,6 +342,10 @@ codcmp           Codon usage table comparison
 coderet          Extract CDS, mRNA and translations from feature tables
 compseq          Counts the composition of dimer/trimer/etc words in a sequence
 cons             Creates a consensus from multiple alignments
+contactalign     EMBOSS implementation of Damian Counsell's 2.5-D alignment alg
+orithm
+contactcount     counts specific versus non-specific contacts in a directory of
+ cleaned protein chain contact files
 cpgplot          Plot CpG rich areas
 cpgreport        Reports all CpG rich regions
 cusp             Create a codon usage table
@@ -422,7 +437,10 @@ prophecy         Creates matrices/profiles from multiple alignments
 prophet          Gapped alignment for profiles
 prosextract      Builds the PROSITE motif database for patmatmotifs to search
 pscan            Scans proteins using PRINTS
+psiphi           calculates phi and psi torsion angles from cleaned EMBOSS-styl
+e protein co-ordinate file
 rebaseextract    Extract data from REBASE
+recite           Find changes to an enzyme site that introduce new enzyme sites
 recoder          Remove restriction sites but maintain the same translation
 redata           Search REBASE for enzyme name, references, suppliers etc
 remap            Display a sequence with restriction cut sites, translation etc
@@ -431,7 +449,6 @@ restrict         Finds restriction enzyme cleavage sites
 revseq           Reverse and complement a sequence
 seealso          Finds programs sharing group names
 seqmatchall      Does an all-against-all comparison of a set of sequences
-seqret           Reads and writes (returns) sequences
 seqret           Reads and writes (returns) sequences
 seqretsplit      Reads and writes (returns) sequences in individual files
 showalign        Displays a multiple sequence alignment
@@ -507,10 +524,12 @@ NUCLEIC TRANSCRIPTION
 NUCLEIC TRANSLATION
 PHYLOGENY DISTANCE MATRIX
 PROTEIN 2D STRUCTURE
+PROTEIN 3D STRUCTURE
 PROTEIN COMPOSITION
 PROTEIN MOTIFS
 PROTEIN MUTATION
 PROTEIN PROFILES
+PROTEIN SEQUENCE ALIGNMENT
 UTILS DATABASE CREATION
 UTILS DATABASE INDEXING
 UTILS MISC
@@ -550,10 +569,12 @@ Keyword to search for, or blank to list all programs:
      * NUCLEIC TRANSLATION
      * PHYLOGENY DISTANCE MATRIX
      * PROTEIN 2D STRUCTURE
+     * PROTEIN 3D STRUCTURE
      * PROTEIN COMPOSITION
      * PROTEIN MOTIFS
      * PROTEIN MUTATION
      * PROTEIN PROFILES
+     * PROTEIN SEQUENCE ALIGNMENT
      * UTILS DATABASE CREATION
      * UTILS DATABASE INDEXING
      * UTILS MISC
@@ -591,7 +612,7 @@ Command line arguments
                                   NAME2 NAME1'. The non-expanded names are
                                   simply like: 'NAME1 NAME2'.
    -outfile            outfile    Output file name
-   -html               boolean    If you are sending the output to a file,
+   -html               toggle     If you are sending the output to a file,
                                   this will format it for displaying as a
                                   table in a WWW document.
 *  -prelink            string     If you are outputting to a file in HTML
@@ -707,7 +728,7 @@ Command line arguments
    Yes/No No
    -outfile Output file name Output file stdout
    -html If you are sending the output to a file, this will format it for
-   displaying as a table in a WWW document. Boolean value Yes/No No
+   displaying as a table in a WWW document. Toggle value Yes/No N
    -prelink If you are outputting to a file in HTML format, you can make
    the program names into hyper-links by setting this to be the first
    half of the URL. For example, if you wish the program name to be a
@@ -826,14 +847,9 @@ ALIGNMENT MULTIPLE
    
 DISPLAY
 
-    Program name                         Description
+    Program name                        Description
    abiview        Reads ABI file and display the trace
    [Part of this file has been deleted for brevity]
-   antigenic      Finds antigenic sites in proteins
-   digest         Protein proteolytic enzyme or reagent cleavage digest
-   epestfind      Finds PEST motifs as potential proteolytic cleavage sites
-   fuzzpro        Protein pattern search
-   fuzztran       Protein pattern search after translation
    helixturnhelix Report nucleic acid binding motifs
    oddcomp        Finds protein sequence regions with a biased composition
    patmatdb       Search a protein sequence with a motif
@@ -855,6 +871,12 @@ PROTEIN PROFILES
    profit       Scan a sequence or database with a matrix or profile
    prophecy     Creates matrices/profiles from multiple alignments
    prophet      Gapped alignment for profiles
+   
+PROTEIN SEQUENCE ALIGNMENT
+
+   Program name Description
+   contactalign EMBOSS implementation of Damian Counsell's 2.5-D
+   alignment algorithm
    
 UTILS DATABASE CREATION
 
@@ -939,8 +961,9 @@ See also
    
 Author(s)
 
-   Gary Williams (gwilliam © hgmp.mrc.ac.uk)
-   HGMP-RC, Genome Campus, Hinxton, Cambridge CB10 1SB, UK
+   Gary Williams (gwilliam © rfcgr.mrc.ac.uk)
+   MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
+   Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
    
 History
 

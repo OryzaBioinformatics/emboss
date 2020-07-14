@@ -134,23 +134,23 @@ IT IS DONE FOR YOU.
 *  -xygraph            xygraph    Graph type
 
    Additional (Optional) qualifiers:
-   -windowsize         integer    window size over which to test threshhold
-   -threshold          integer    threshold
    -matrixfile         matrix     This is the scoring matrix file used when
                                   comparing sequences. By default it is the
                                   file 'EBLOSUM62' (for proteins) or the file
                                   'EDNAFULL' (for nucleic sequences). These
                                   files are found in the 'data' directory of
                                   the EMBOSS installation.
+   -windowsize         integer    Window size over which to test threshhold
+   -threshold          integer    Threshold
 
    Advanced (Unprompted) qualifiers:
-   -stretch            boolean    Display a non-proportional graph
+   -stretch            toggle     Display a non-proportional graph
 
    Associated qualifiers:
 
    "-asequence" associated qualifiers
-   -sbegin1             integer    First base used
-   -send1               integer    Last base used, def=seq length
+   -sbegin1             integer    Start of the sequence to be used
+   -send1               integer    End of the sequence to be used
    -sreverse1           boolean    Reverse (if DNA)
    -sask1               boolean    Ask for begin/end/reverse
    -snucleotide1        boolean    Sequence is nucleotide
@@ -165,8 +165,8 @@ IT IS DONE FOR YOU.
    -fopenfile1          string     Features file name
 
    "-bsequence" associated qualifiers
-   -sbegin2             integer    First base used
-   -send2               integer    Last base used, def=seq length
+   -sbegin2             integer    Start of the sequence to be used
+   -send2               integer    End of the sequence to be used
    -sreverse2           boolean    Reverse (if DNA)
    -sask2               boolean    Ask for begin/end/reverse
    -snucleotide2        boolean    Sequence is nucleotide
@@ -260,24 +260,24 @@ IT IS DONE FOR YOU.
 </tr>
 
 <tr>
+<td>-matrixfile</td>
+<td>This is the scoring matrix file used when comparing sequences. By default it is the file 'EBLOSUM62' (for proteins) or the file 'EDNAFULL' (for nucleic sequences). These files are found in the 'data' directory of the EMBOSS installation.</td>
+<td>Comparison matrix file in EMBOSS data path</td>
+<td>EBLOSUM62 for protein<br>EDNAFULL for DNA</td>
+</tr>
+
+<tr>
 <td>-windowsize</td>
-<td>window size over which to test threshhold</td>
+<td>Window size over which to test threshhold</td>
 <td>Integer 3 or more</td>
 <td>10</td>
 </tr>
 
 <tr>
 <td>-threshold</td>
-<td>threshold</td>
+<td>Threshold</td>
 <td>Integer 0 or more</td>
 <td>23</td>
-</tr>
-
-<tr>
-<td>-matrixfile</td>
-<td>This is the scoring matrix file used when comparing sequences. By default it is the file 'EBLOSUM62' (for proteins) or the file 'EDNAFULL' (for nucleic sequences). These files are found in the 'data' directory of the EMBOSS installation.</td>
-<td>Comparison matrix file in EMBOSS data path</td>
-<td>EBLOSUM62 for protein<br>EDNAFULL for DNA</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
@@ -289,8 +289,8 @@ IT IS DONE FOR YOU.
 <tr>
 <td>-stretch</td>
 <td>Display a non-proportional graph</td>
-<td>Boolean value Yes/No</td>
-<td>No</td>
+<td>Toggle value Yes/No</td>
+<td>N</td>
 </tr>
 
 </table>

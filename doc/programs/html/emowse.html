@@ -473,17 +473,17 @@ Output file [100k_rat.emowse]:
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers:
    -enzyme             menu       Enzyme or reagent
-   -aadata             string     Molecular weight data for amino acids
+   -aadata             datafile   Molecular weight data for amino acids
    -pcrange            integer    Allowed whole sequence weight variability
-   -frequencies        string     Frequencies file
+   -frequencies        datafile   Frequencies file
    -tolerance          float      Tolerance
    -partials           float      Partials factor
 
    Associated qualifiers:
 
    "-sequence" associated qualifiers
-   -sbegin1             integer    First base used
-   -send1               integer    Last base used, def=seq length
+   -sbegin1             integer    Start of each sequence to be used
+   -send1               integer    End of each sequence to be used
    -sreverse1           boolean    Reverse (if DNA)
    -sask1               boolean    Ask for begin/end/reverse
    -snucleotide1        boolean    Sequence is nucleotide
@@ -580,7 +580,7 @@ Output file [100k_rat.emowse]:
 <tr>
 <td>-aadata</td>
 <td>Molecular weight data for amino acids</td>
-<td>Any string is accepted</td>
+<td>Data file</td>
 <td>Eamino.dat</td>
 </tr>
 
@@ -594,7 +594,7 @@ Output file [100k_rat.emowse]:
 <tr>
 <td>-frequencies</td>
 <td>Frequencies file</td>
-<td>Any string is accepted</td>
+<td>Data file</td>
 <td>Efreqs.dat</td>
 </tr>
 
@@ -1217,9 +1217,11 @@ None.
         Who has worked on the program in the past.
    -->
 
-Alan Bleasby (ableasby&nbsp;&copy;&nbsp;hgmp.mrc.ac.uk)
+Alan Bleasby (ableasby&nbsp;&copy;&nbsp;rfcgr.mrc.ac.uk)
 <br>
-HGMP-RC, Genome Campus, Hinxton, Cambridge CB10 1SB, UK
+MRC Rosalind Franklin Centre for Genomics Research
+Wellcome Trust Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
+
 
 
 

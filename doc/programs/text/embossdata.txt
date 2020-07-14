@@ -895,7 +895,7 @@ Command line arguments
                                   altered when it is fetched.
 
    Additional (Optional) qualifiers (* if not always prompted):
-   -showall            boolean    Show all potential EMBOSS data files
+   -showall            toggle     Show all potential EMBOSS data files
 *  -fetch              boolean    Fetch a data file
    -outfile            outfile    This specifies the name of the file that the
                                   results of a search for a file in the
@@ -937,7 +937,7 @@ Command line arguments
    the file is not altered when it is fetched. Any string is accepted An
    empty string is accepted
    Additional (Optional) qualifiers Allowed values Default
-   -showall Show all potential EMBOSS data files Boolean value Yes/No No
+   -showall Show all potential EMBOSS data files Toggle value Yes/No
    -fetch Fetch a data file Boolean value Yes/No No
    -outfile This specifies the name of the file that the results of a
    search for a file in the various data directories is written to. By
@@ -1023,8 +1023,9 @@ See also
    
 Author(s)
 
-   Gary Williams (gwilliam © hgmp.mrc.ac.uk)
-   HGMP-RC, Genome Campus, Hinxton, Cambridge CB10 1SB, UK
+   Gary Williams (gwilliam © rfcgr.mrc.ac.uk)
+   MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
+   Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
    
 History
 

@@ -130,15 +130,15 @@ IT IS DONE FOR YOU.
                                   found. A value of 17 is more sensitive, but
                                   28 has also been used with some success.
   [-outfile]           outfile    Output file name
-  [-featout]           featout    File for output features
+  [-outfeat]           featout    File for output features
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers: (none)
    Associated qualifiers:
 
    "-sequence" associated qualifiers
-   -sbegin1             integer    First base used
-   -send1               integer    Last base used, def=seq length
+   -sbegin1             integer    Start of each sequence to be used
+   -send1               integer    End of each sequence to be used
    -sreverse1           boolean    Reverse (if DNA)
    -sask1               boolean    Ask for begin/end/reverse
    -snucleotide1        boolean    Sequence is nucleotide
@@ -155,7 +155,7 @@ IT IS DONE FOR YOU.
    "-outfile" associated qualifiers
    -odirectory2         string     Output directory
 
-   "-featout" associated qualifiers
+   "-outfeat" associated qualifiers
    -offormat3           string     Output feature format
    -ofopenfile3         string     Features file name
    -ofextension3        string     File name extension
@@ -212,7 +212,7 @@ IT IS DONE FOR YOU.
 </tr>
 
 <tr>
-<td>[-featout]<br>(Parameter 3)</td>
+<td>[-outfeat]<br>(Parameter 3)</td>
 <td>File for output features</td>
 <td>Writeable feature table</td>
 <td><i>unknown.gff</i></td>
@@ -368,7 +368,7 @@ RNU68037               1183   1193    26          2  72.7   2.00
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 ##gff-version 2.0
-##date 2003-11-27
+##date 2004-04-06
 ##Type DNA RNU68037
 RNU68037	cpgreport	misc_feature	12	13	17.000	+	.	Sequence "RNU68037.1"
 RNU68037	cpgreport	misc_feature	47	48	17.000	+	.	Sequence "RNU68037.2"
@@ -558,9 +558,11 @@ European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambri
 <p>
 
 This application was modified for inclusion in EMBOSS by 
-Alan Bleasby (ableasby&nbsp;&copy;&nbsp;hgmp.mrc.ac.uk)
+Alan Bleasby (ableasby&nbsp;&copy;&nbsp;rfcgr.mrc.ac.uk)
 <br>
-HGMP-RC, Genome Campus, Hinxton, Cambridge CB10 1SB, UK
+MRC Rosalind Franklin Centre for Genomics Research
+Wellcome Trust Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
+
 
 
 

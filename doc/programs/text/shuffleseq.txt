@@ -44,8 +44,8 @@ Command line arguments
    Associated qualifiers:
 
    "-sequence" associated qualifiers
-   -sbegin1             integer    First base used
-   -send1               integer    Last base used, def=seq length
+   -sbegin1             integer    Start of each sequence to be used
+   -send1               integer    End of each sequence to be used
    -sreverse1           boolean    Reverse (if DNA)
    -sask1               boolean    Ask for begin/end/reverse
    -snucleotide1        boolean    Sequence is nucleotide
@@ -172,22 +172,22 @@ Output file format
   
 >MMAM L48662.1 Mus musculus (cell line C3H/F2-11) chromosome 12 anti-DNA antibo
 dy heavy chain mRNA.
-ccagtcagtgctaaattgactcagaatcgaaaagaaacacggaatattcgagcataggct
-catgtgtatacggagagctggtaactcgaggctttcttcctttcgcggctattatttgct
-gtcaactatagccaaaccgctgcttaatagtagaaaaatcgcggtgccacggcgggaact
-taaacgggatccgtcactaattaacgcactctccgaccagcctaccccagagcactcgag
-tgtgtatcattatgggcggtcgattgccgtcttgcaccctntgaacgcgggaaaacagat
-attcgtggtggatatttagaancgacaagtccttcgccagaaacggacttaccctaacgg
-ctttat
+cagagtctcacccaagaaacggtcaaatctacgttaacccccatgctgncgtaacctgga
+gatagctagccttcagggccatcctcgttccaaacgatgtcaaattatcgcgtgaggact
+ggcattagtgctcgttcttatctnatgctttccatctcgggcttgcttgtaaaataattg
+atagggtgtaggacaccgaacgaggataccgctgcttaaaacaatagctctgctgctggt
+agggctctagggactaagtaccttctttaaggccctcgcacctgataaatcggtaaaagg
+attcgaggctgaaaaaacgattcatctaactagcgacagctccgagtgcgaaagcgatat
+gcgacc
 >MMAM L48662.1 Mus musculus (cell line C3H/F2-11) chromosome 12 anti-DNA antibo
 dy heavy chain mRNA.
-gcgtggctcccgtcgcctaacagcactgaccacgtatccaacaggttacagattgaatat
-aaagatttggtgtgcagacttaggcttttgccgnggatttcccctacttctacaggtggg
-gggcgtctattatttacaggactttagggacaaccaattaacgaatacgcgggacctggc
-agctgctatnacttttactcttatccataagaagccgacggtcaggtcataccgctcgaa
-acgcttagctatcacgtatctcgtgcttgcggatttgaacctaaacggagaagtcacgaa
-agcatgacgctaatcggatcgtagcgtccggaagaattccctactgtccaaaggtaaaaa
-caccaa
+tctttagcggggtgctcggccctgtcgttagngaggcacgcaccggcatactgtttaccc
+aaaccgatccagagtagcaaagcgataaattacttatttagcaaatgccatggaatgact
+tgtaaccggctaaggcgaacagccttcacgcggtccatagactacttgttctcagttcca
+atacaccctcaagaaaagtgataaattaagctatgggcggaccgaaagggttccgtttta
+caatctgctaactccacggttcggaactatacccacttgatagtcgttcttgngagacgt
+tccaacaccaaacaatttacggacacgctggtaagacaattagcgagtcgctgggatgcc
+ttggtg
    
    Each run will produce a different sequence.
    

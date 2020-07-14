@@ -169,7 +169,7 @@ Author(s)
    HGMP-RC, Genome Campus, Hinxton, Cambridge CB10 1SB, UK
    
    This application was modified by David Martin
-   (dmartin © hgmp.mrc.ac.uk)
+   (dmartin © rfcgr.mrc.ac.uk)
    
 History
 

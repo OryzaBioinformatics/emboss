@@ -63,8 +63,8 @@ Command line arguments
   [-graph]             xygraph    Graph type
 
    Additional (Optional) qualifiers:
-   -datafile           datafile   White-Wimley data file (Ewhite-wimley.dat)
-   -width              integer    window size
+   -datafile           datafile   White-Wimley data file
+   -width              integer    Window size
    -octanolplot        boolean    Display the octanol plot
    -interfaceplot      boolean    Display the interface plot
    -[no]differenceplot boolean    Display the difference plot
@@ -73,8 +73,8 @@ Command line arguments
    Associated qualifiers:
 
    "-sequence" associated qualifiers
-   -sbegin1             integer    First base used
-   -send1               integer    Last base used, def=seq length
+   -sbegin1             integer    Start of the sequence to be used
+   -send1               integer    End of the sequence to be used
    -sreverse1           boolean    Reverse (if DNA)
    -sask1               boolean    Ask for begin/end/reverse
    -snucleotide1        boolean    Sequence is nucleotide
@@ -122,9 +122,8 @@ Command line arguments
    x11, tektronics, tekt, tek4107t, tek, none, null, text, data, xterm,
    png EMBOSS_GRAPHICS value, or x11
    Additional (Optional) qualifiers Allowed values Default
-   -datafile White-Wimley data file (Ewhite-wimley.dat) Data file
-   Ewhite-wimley.dat
-   -width window size Integer from 1 to 200 19
+   -datafile White-Wimley data file Data file Ewhite-wimley.dat
+   -width Window size Integer from 1 to 200 19
    -octanolplot Display the octanol plot Boolean value Yes/No No
    -interfaceplot Display the interface plot Boolean value Yes/No No
    -[no]differenceplot Display the difference plot Boolean value Yes/No

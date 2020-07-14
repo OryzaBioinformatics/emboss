@@ -101,7 +101,7 @@ Command line arguments
                                   island parameters and the output details of
                                   any CpG islands that are found.
   [-graph]             xygraph    Graph type
-  [-featout]           featout    File for output features
+  [-outfeat]           featout    File for output features
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers:
@@ -118,8 +118,8 @@ Command line arguments
    Associated qualifiers:
 
    "-sequence" associated qualifiers
-   -sbegin1             integer    First base used
-   -send1               integer    Last base used, def=seq length
+   -sbegin1             integer    Start of each sequence to be used
+   -send1               integer    End of each sequence to be used
    -sreverse1           boolean    Reverse (if DNA)
    -sask1               boolean    Ask for begin/end/reverse
    -snucleotide1        boolean    Sequence is nucleotide
@@ -145,7 +145,7 @@ Command line arguments
    -goutfile3           string     Output file for non interactive displays
    -gdirectory3         string     Output directory
 
-   "-featout" associated qualifiers
+   "-outfeat" associated qualifiers
    -offormat4           string     Output feature format
    -ofopenfile4         string     Features file name
    -ofextension4        string     File name extension
@@ -196,7 +196,7 @@ Command line arguments
    postscript, ps, hpgl, hp7470, hp7580, meta, colourps, cps, xwindows,
    x11, tektronics, tekt, tek4107t, tek, none, null, text, data, xterm,
    png EMBOSS_GRAPHICS value, or x11
-   [-featout]
+   [-outfeat]
    (Parameter 4) File for output features Writeable feature table
    unknown.gff
    Additional (Optional) qualifiers Allowed values Default
@@ -355,7 +355,7 @@ RNU68037 from 1 to 1218
   File: rnu68037.gff
   
 ##gff-version 2.0
-##date 2003-11-27
+##date 2004-04-06
 ##Type DNA RNU68037
 RNU68037        cpgplot misc_feature    104     509     0.000   +       .
 Sequence "RNU68037.1"
@@ -432,8 +432,9 @@ See also
    
 Author(s)
 
-   Alan Bleasby (ableasby © hgmp.mrc.ac.uk)
-   HGMP-RC, Genome Campus, Hinxton, Cambridge CB10 1SB, UK
+   Alan Bleasby (ableasby © rfcgr.mrc.ac.uk)
+   MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
+   Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
    
 History
 

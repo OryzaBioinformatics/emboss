@@ -26,8 +26,12 @@ cutgextract
 
 
 
-
 <!--END OF HEADER-->
+
+
+
+
+
 
 <H2>
     Function
@@ -52,13 +56,90 @@ IT IS DONE FOR YOU.
         Long description.
         Why it is useful.
         When it should/shouldn't be used.
-        Algorithms
   -->
 
-**************** 
-EDIT HERE
-**************** 
 
+given the name of a directory containing the
+   CUTG database  (ftp://ftp.ebi.ac.uk/pub/databases/cutg) this
+   will calculate codon usage tables for individual species
+   (e.g. EHomo_sapiens.cut) and place them in the CODONS subdirectory
+   of the EMBOSS data directory. This is an all-or-nothing extraction,
+   will create many files and take several minutes. The usage tables
+   are from the sum of codons over all sequences for each organism.
+                          
+
+Given the name of a directory containing the CUTG database
+(ftp://ftp.ebi.ac.uk/pub/databases/cutg) <b>cutgextract</b> will
+calculate codon usage tables for individual species (e.g. 
+EHomo_sapiens.cut) and place them in the CODONS subdirectory of the
+EMBOSS data directory.  This is an all-or-nothing extraction, will
+create many files and take several minutes.  The usage tables are from
+the sum of codons over all sequences for each organism. 
+             
+<p>
+
+
+The EMBOSS distribution comes loaded with a set of codon usage tables. 
+Thes codon usage tables provided with the distribution are calculated
+from the files in <a
+href="ftp://ftp.ebi.ac.uk/pub/databases/codonusage/README">
+ftp://ftp.ebi.ac.uk/pub/databases/codonusage/README</a>), with a few
+additions whose exact derivation cannot easily be determined.  Many
+people would prefer to create their own from the public CUTG data. 
+
+<p>
+
+
+You run <b>cutgextract</b> on the CUTG database from <a
+href="ftp://ftp.ebi.ac.uk/pub/databases/cutg">
+ftp://ftp.ebi.ac.uk/pub/databases/cutg</a>.  You should get all the
+required *.codon files from CUTG, and uncompress them if they are
+compressed before running <b>cutgextract</b> on them. 
+
+<p>
+
+The task of downloading the CUTG database and running <b>cutgextract</b>
+to create the codon usage table files from it would normally be done
+only once when the EMBOSS package is being installled or if a new
+version of the CUTG database is released. 
+
+
+
+<p>
+
+Note by the way that CUTG has a drawback:  it has a table for each organism
+without making the distinction between different gene populations.
+
+<p>
+
+
+
+
+
+
+
+
+
+
+<H2>
+    Algorithm
+</H2>
+
+<!-- 
+        Algorithms
+	  Pseudocode/Vague description/Handwaving/web links to useful pages
+  -->
+
+<b>cutgextract</b> looks in the specified directory and opens all the
+files with the extension '.codon'.  These are all expected to be CUTG
+data files. 
+
+<p>
+
+It then parses out the codon usage data from these *.codon files and
+writes one file per species into the EMBOSS data/CODONS directory.  The
+names of the files are derived from the species names in the CUTG files. 
+These files names will be long (and therefore descriptive). 
 
 
 
@@ -80,27 +161,19 @@ EDIT HERE
         Many examples illustrating different behaviours is good.
  -->
 
+<b>Here is a sample session with cutgextract</b>
+<p>
 
-Here is a sample session with cutgextract:
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
-<pre>
+% <b>cutgextract </b>
+Extract data from CUTG
+CUTG directory [.]: <b>../../data</b>
 
-% cutgextract
-
-</pre>
-
-**************** 
-EDIT HERE
-**************** 
-
-
-
-
-
-
-
-
-
+</pre></td></tr></table><p>
+<p>
+<a href="#output.1">Go to the output files for this example</a><p><p>
 
 
 
@@ -166,15 +239,6 @@ IT IS DONE FOR YOU.
         happens in unusual cases - null input, etc. 
    -->
 
-**************** 
-EDIT HERE
-**************** 
-
-
-
-
-
-
 
 
 
@@ -191,22 +255,47 @@ EDIT HERE
         This should be a detailed description and example - assume
         someone will want to parse this file and will want to know what
         happens in unusual cases - null output, errors etc. 
+
+        If you wish to include the standard description of the avalable
+	report formats, use:
+<p>
+
+The output is a standard EMBOSS report file. 
+
+<p>
+
+The results can be output in one of several styles by using the
+command-line qualifier <b>-rformat xxx</b>, where 'xxx' is replaced by
+the name of the required format.  The available format names are: embl,
+genbank, gff, pir, swiss, trace, listfile, dbmotif, diffseq, excel,
+feattable, motif, regions, seqtable, simple, srs, table, tagseq
+
+<p>
+
+See:
+<A href="http://www.uk.embnet.org/Software/EMBOSS/Themes/ReportFormats.html">
+http://www.uk.embnet.org/Software/EMBOSS/Themes/ReportFormats.html</A>
+for further information on report formats.
+
+<p>
+
    -->
 
-**************** 
-EDIT HERE
-**************** 
+<b>cutgextract</b> outputs a set of EMBOSS codon usage data files to the EMBOSS
+data/CODONS data directory
 
 
 
+<p>
 
 
-
-
-
-
-
-
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: CODONS</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+</pre>
+</td></tr></table><p>
 
 
 
@@ -221,6 +310,7 @@ EDIT HERE
         Any data files used (e.g. translation table file)
         This includes example data file formats if they are
         not obvious.
+
 	If you wish to include the standard description of what data
 	files are and how to use embossdata to inspect and retrieve
 	them, use:
@@ -266,9 +356,45 @@ The directories are searched in the following order:
 
    -->
 
-**************** 
-EDIT HERE
-**************** 
+<p>
+EMBOSS data files are distributed with the application and stored
+in the standard EMBOSS data directory, which is defined
+by the EMBOSS environment variable EMBOSS_DATA.
+
+<p>
+
+To see the available EMBOSS data files, run:
+<p>
+<pre>
+% embossdata -showall
+</pre>
+<p>
+To fetch one of the data files (for example 'Exxx.dat') into your
+current directory for you to inspect or modify, run:
+
+<pre>
+
+% embossdata -fetch -file Exxx.dat
+
+</pre>
+<p>
+
+Users can provide their own data files in their own directories.
+Project specific files can be put in the current directory, or for
+tidier directory listings in a subdirectory called
+".embossdata". Files for all EMBOSS runs can be put in the user's home
+directory, or again in a subdirectory called ".embossdata".
+
+<p>
+The directories are searched in the following order:
+
+<ul>
+   <li> . (your current directory)
+   <li> .embossdata (under your current directory)
+   <li> ~/ (your home directory)
+   <li> ~/.embossdata
+</ul>
+<p>
 
 
 
@@ -420,17 +546,109 @@ None.
 </H2>
 <!--
         Who has worked on the program in the past.
-   -->
+e.g. one of:
+Alan Bleasby (ableasby&nbsp;&copy;&nbsp;rfcgr.mrc.ac.uk)
+<br>
+MRC Rosalind Franklin Centre for Genomics Research
+Wellcome Trust Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
 
-Alan Bleasby (ableasby&nbsp;&copy;&nbsp;hgmp.mrc.ac.uk)
+
+Bernd Jagla (bernd&nbsp;&copy;&nbsp;golgi.ski.mskcc.org)
+<br>
+Cellular Biochemistry and Biophysics Program, Rockefeller
+Research Laboratories, Memorial Sloan-Kettering Cancer Center, 1275 York
+Avenue, Box 251,New York, NY 10021.
+
+David Martin (dmartin&nbsp;&copy;&nbsp;rfcgr.mrc.ac.uk)
+<br>
+
+Gos Micklem (gos&nbsp;&copy;&nbsp;ebi.ac.uk)
+<br>
+Informatics Division, European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
+
+Gary Williams (gwilliam&nbsp;&copy;&nbsp;rfcgr.mrc.ac.uk)
+<br>
+MRC Rosalind Franklin Centre for Genomics Research
+Wellcome Trust Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
+
+
+Ian Longden (il&nbsp;&copy;&nbsp;sanger.ac.uk)
+<br>
+Sanger Institute, Wellcome Trust Genome Campus, Hinxton,
+Cambridge, CB10 1SA, UK.                      
+
+Mark Faller (current e-mail address unknown)
+<br>
+while he was with:
+<br>
+HGMP-RC, Genome Campus, Hinxton, Cambridge CB10 1SB, UK
+
+Michael K. Schuster and Martin Grabner (martin.grabner&nbsp;&copy;&nbsp;univie.ac.at)
+<br>
+from the Austrian National EMBnet node.
+
+
+Michael Schmitz (mschmitz&nbsp;&copy;&nbsp;lbl.gov)
+<br>
+Lawrence Berkeley Labs, USA
+
+Nicolas Tourasse (nicolas.tourasse&nbsp;&copy;&nbsp;biotek.uio.no)
+<br>
+Biotechnology Center of Oslo
+
+Peter Rice (pmr&nbsp;&copy;&nbsp;ebi.ac.uk)
+<br>
+Informatics Division, European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
+
+Richard Durbin (rd&nbsp;&copy;&nbsp;sanger.ac.uk)
+<br>
+Sanger Institute, Wellcome Trust Genome Campus, Hinxton,
+Cambridge, CB10 1SA, UK.                      
+
+Richard Bruskiewich (current e-mail address unknown)
+<br>
+while he was at:
+<br>
+Sanger Institute, Wellcome Trust Genome Campus, Hinxton,
+Cambridge, CB10 1SA, UK.                      
+
+Rodrigo Lopez (rls&nbsp;&copy;&nbsp;ebi.ac.uk)
+<br>
+European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
+
+Sinead O'Leary (current e-mail address unknown)
+<br>
+while she was at:
 <br>
 HGMP-RC, Genome Campus, Hinxton, Cambridge CB10 1SB, UK
 
 
+Tim Carver (tcarver&nbsp;&copy;&nbsp;rfcgr.mrc.ac.uk)
+<br>
+MRC Rosalind Franklin Centre for Genomics Research
+Wellcome Trust Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
+
+Thomas Laurent (thomas.laurent&nbsp;&copy;&nbsp;uk.lionbioscience.com)
+<br>
+Lion Bioscience Ltd,
+     Compass House,
+     80-82 Newmarket Road,
+     Cambridge,
+     CB5 8DZ,
+     UK
+
+Val Curwen (vac&nbsp;&copy;&nbsp;sanger.ac.uk)
+<br>
+Sanger Institute, Wellcome Trust Genome Campus, Hinxton,
+Cambridge, CB10 1SA, UK. 
 
 
+   -->
 
-
+Alan Bleasby (ableasby&nbsp;&copy;&nbsp;rfcgr.mrc.ac.uk)
+<br>
+MRC Rosalind Franklin Centre for Genomics Research
+Wellcome Trust Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
 
 
 
@@ -450,8 +668,7 @@ HGMP-RC, Genome Campus, Hinxton, Cambridge CB10 1SB, UK
         What changes have been made.
    -->
 
-
-Written (date) - author.
+Written (June 2001) - Alan Bleasby.
 
 <!--
 <p>
@@ -482,26 +699,11 @@ Written (date) - author.
 	Which is easy to include using:
    -->
 
-This program is intended to be used by everyone and everything, from naive users to embedded scripts.
+This program is intended to be run by people maintaining the data associated with
+an installation of EMBOSS.
 
 
 
-
-
-
-
-
-
-
-
-
-<H2>
-    Comments
-</H2>
-
-<!--
-	Any comments, requests etc. that people have about the program
-   -->
 
 
 

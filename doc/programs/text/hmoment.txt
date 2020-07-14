@@ -61,19 +61,19 @@ Command line arguments
 
    Additional (Optional) qualifiers:
    -window             integer    Window
+   -aangle             integer    Alpha helix angle (degrees)
    -bangle             integer    Beta sheet angle (degrees)
 
    Advanced (Unprompted) qualifiers:
-   -aangle             integer    Alpha helix angle (degrees)
    -baseline           float      Graph marker line
-   -plot               boolean    Produce graphic
+   -plot               toggle     Produce graphic
    -double             boolean    Plot two graphs
 
    Associated qualifiers:
 
    "-seqall" associated qualifiers
-   -sbegin1             integer    First base used
-   -send1               integer    Last base used, def=seq length
+   -sbegin1             integer    Start of each sequence to be used
+   -send1               integer    End of each sequence to be used
    -sreverse1           boolean    Reverse (if DNA)
    -sask1               boolean    Ask for begin/end/reverse
    -snucleotide1        boolean    Sequence is nucleotide
@@ -125,11 +125,11 @@ Command line arguments
    -outfile Output file name Output file <sequence>.hmoment
    Additional (Optional) qualifiers Allowed values Default
    -window Window Any integer value 10
+   -aangle Alpha helix angle (degrees) Any integer value 100
    -bangle Beta sheet angle (degrees) Any integer value 160
    Advanced (Unprompted) qualifiers Allowed values Default
-   -aangle Alpha helix angle (degrees) Any integer value 100
    -baseline Graph marker line Any numeric value 0.35
-   -plot Produce graphic Boolean value Yes/No No
+   -plot Produce graphic Toggle value Yes/No N
    -double Plot two graphs Boolean value Yes/No No
    
 Input file format
@@ -414,8 +414,9 @@ See also
    
 Author(s)
 
-   Alan Bleasby (ableasby © hgmp.mrc.ac.uk)
-   HGMP-RC, Genome Campus, Hinxton, Cambridge CB10 1SB, UK
+   Alan Bleasby (ableasby © rfcgr.mrc.ac.uk)
+   MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
+   Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
    
 History
 

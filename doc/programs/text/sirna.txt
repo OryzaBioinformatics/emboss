@@ -313,8 +313,8 @@ Command line arguments
    Associated qualifiers:
 
    "-sequence" associated qualifiers
-   -sbegin1             integer    First base used
-   -send1               integer    Last base used, def=seq length
+   -sbegin1             integer    Start of each sequence to be used
+   -send1               integer    End of each sequence to be used
    -sreverse1           boolean    Reverse (if DNA)
    -sask1               boolean    Ask for begin/end/reverse
    -snucleotide1        boolean    Sequence is nucleotide
@@ -645,7 +645,7 @@ taaaaaagccacttagttcagtc
   
 ########################################
 # Program: sirna
-# Rundate: Thu Nov 27 15:25:43 2003
+# Rundate: Tue Apr 06 14:34:20 2004
 # Report_format: table
 # Report_file: hsfau.sirna
 ########################################
@@ -755,7 +755,7 @@ taaaaaagccacttagttcagtc
   
 ########################################
 # Program: sirna
-# Rundate: Thu Nov 27 15:25:43 2003
+# Rundate: Tue Apr 06 14:34:21 2004
 # Report_format: table
 # Report_file: hsfau.sirna
 ########################################
@@ -988,8 +988,9 @@ See also
    
 Author(s)
 
-   Gary Williams (gwilliam © hgmp.mrc.ac.uk)
-   HGMP-RC, Genome Campus, Hinxton, Cambridge CB10 1SB, UK
+   Gary Williams (gwilliam © rfcgr.mrc.ac.uk)
+   MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
+   Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
    
 History
 

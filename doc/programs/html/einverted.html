@@ -54,7 +54,7 @@ sequence.
 It will find inverted repeats that include a proprtion of mismatches and
 gaps (bulges in the stem loop). 
 
-<p>
+<H2>Algorithm</H2>
 
 It works by finding alignments between the sequence and its reverse
 complement that exceed a threshold score.  Gaps and Mismatches are
@@ -71,8 +71,14 @@ It can find multiple inverted repeats in a sequence.
 
 <p>
 
-Secondary structures like inverted repeats in genomic sequences may be
-implicated in initiation of DNA replication.
+<b>einverted</b> does not report overlapping matches.
+
+<p>
+
+The original "inverted" program was written to annotate the nematode
+genome.  Excluding overlapping repeats saved problems with simple repeat
+sequences in this genome.
+
 
 <H2>
     Usage
@@ -145,8 +151,8 @@ IT IS DONE FOR YOU.
    Associated qualifiers:
 
    "-sequence" associated qualifiers
-   -sbegin1             integer    First base used
-   -send1               integer    Last base used, def=seq length
+   -sbegin1             integer    Start of the sequence to be used
+   -send1               integer    End of the sequence to be used
    -sreverse1           boolean    Reverse (if DNA)
    -sask1               boolean    Ask for begin/end/reverse
    -snucleotide1        boolean    Sequence is nucleotide
@@ -531,10 +537,23 @@ Score 33: 11/11 (100%) matches, 0 gaps
          |||||||||||
       98 ttttgattccg 88      
 </pre>
+
 <p>
 
-(Anything can be considered to be a repeat if you set the score
-threshold low enough!)
+
+Anything can be considered to be a repeat if you set the score
+threshold low enough!
+
+<p>
+
+<b>einverted</b> does not report overlapping matches.
+
+<p>
+
+The original "inverted" program was written to annotate the nematode
+genome.  Excluding overlapping repeats saved problems with simple repeat
+sequences in this genome.
+
 
 <H2>
     References

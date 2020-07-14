@@ -62,10 +62,6 @@ Usage
 Search all databases for an entry
 ID or Accession number: hsfau1
 Output file [outfile.whichdb]: 
-Warning: Cannot open division file '' for database 'ensdnamasked'
-Warning: seqCdQry failed
-Warning: Cannot open division file '' for database 'ensdnam'
-Warning: seqCdQry failed
 Error: socket connect failed for database 'tgb'
 socket connect failed for database 'tgb': 
 Connection timed out
@@ -80,7 +76,7 @@ Command line arguments
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers:
-   -get                boolean    Retrieve sequences
+   -get                toggle     Retrieve sequences
    -showall            boolean    Show failed attempts
 
    Associated qualifiers:
@@ -112,7 +108,7 @@ Command line arguments
    Additional (Optional) qualifiers Allowed values Default
    (none)
    Advanced (Unprompted) qualifiers Allowed values Default
-   -get Retrieve sequences Boolean value Yes/No No
+   -get Retrieve sequences Toggle value Yes/No N
    -showall Show failed attempts Boolean value Yes/No No
    
 Input file format
@@ -190,8 +186,9 @@ See also
    
 Author(s)
 
-   Alan Bleasby (ableasby © hgmp.mrc.ac.uk)
-   HGMP-RC, Genome Campus, Hinxton, Cambridge CB10 1SB, UK
+   Alan Bleasby (ableasby © rfcgr.mrc.ac.uk)
+   MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
+   Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
    
 History
 

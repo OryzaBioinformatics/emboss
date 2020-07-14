@@ -119,7 +119,7 @@ IT IS DONE FOR YOU.
    -orfml              integer    Minimum ORF Length to report
   [-outfile]           outfile    Output file name
   [-outseq]            seqoutall  Sequence file to hold output ORF sequences
-  [-featout]           featout    File for output features
+  [-outfeat]           featout    File for output features
 
    Additional (Optional) qualifiers:
    -[no]addlast        boolean    An asterisk in the protein sequence
@@ -136,8 +136,8 @@ IT IS DONE FOR YOU.
    Associated qualifiers:
 
    "-sequence" associated qualifiers
-   -sbegin1             integer    First base used
-   -send1               integer    Last base used, def=seq length
+   -sbegin1             integer    Start of each sequence to be used
+   -send1               integer    End of each sequence to be used
    -sreverse1           boolean    Reverse (if DNA)
    -sask1               boolean    Ask for begin/end/reverse
    -snucleotide1        boolean    Sequence is nucleotide
@@ -166,7 +166,7 @@ IT IS DONE FOR YOU.
    -ofname3             string     Features file name
    -ofdirectory3        string     Output directory
 
-   "-featout" associated qualifiers
+   "-outfeat" associated qualifiers
    -offormat4           string     Output feature format
    -ofopenfile4         string     Features file name
    -ofextension4        string     File name extension
@@ -230,7 +230,7 @@ IT IS DONE FOR YOU.
 </tr>
 
 <tr>
-<td>[-featout]<br>(Parameter 4)</td>
+<td>[-outfeat]<br>(Parameter 4)</td>
 <td>File for output features</td>
 <td>Writeable feature table</td>
 <td><i>unknown.gff</i></td>
@@ -341,7 +341,7 @@ DQPGQGVADAAPWLGRARGAPAPVAGSDEAARADPEDRSGVAGKRAVRLSDPGRPEQ
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 ##gff-version 2.0
-##date 2003-11-27
+##date 2004-04-06
 ##Type Protein PAAMIR_1
 PAAMIR_1	checktrans	misc_feature	278	634	0.000	+	.	Sequence "PAAMIR_1.1"
 </pre>
@@ -513,9 +513,11 @@ European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambri
 
 
 <p>
-Gary Williams (gwilliam&nbsp;&copy;&nbsp;hgmp.mrc.ac.uk)
+Gary Williams (gwilliam&nbsp;&copy;&nbsp;rfcgr.mrc.ac.uk)
 <br>
-HGMP-RC, Genome Campus, Hinxton, Cambridge CB10 1SB, UK
+MRC Rosalind Franklin Centre for Genomics Research
+Wellcome Trust Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
+
 
 
 <br>

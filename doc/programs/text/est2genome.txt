@@ -77,8 +77,8 @@ Output file [hs989235.est2genome]:
 Command line arguments
 
    Standard (Mandatory) qualifiers:
-  [-est]               seqall     EST sequence(s)
-  [-genome]            sequence   Genomic sequence
+  [-estsequence]       seqall     EST sequence(s)
+  [-genomesequence]    sequence   Genomic sequence
   [-outfile]           outfile    Output file name
 
    Additional (Optional) qualifiers:
@@ -97,7 +97,7 @@ Command line arguments
    -[no]splice         boolean    Use donor and acceptor splice sites. If you
                                   want to ignore donor-acceptor sites then set
                                   this to be false.
-   -mode               string     This determines the comparion mode. The
+   -mode               menu       This determines the comparion mode. The
                                   default value is 'both', in which case both
                                   strands of the est are compared assuming a
                                   forward gene direction (ie GT/AG splice
@@ -110,7 +110,7 @@ Command line arguments
    -[no]best           boolean    You can print out all comparisons instead of
                                   just the best one by setting this to be
                                   false.
-   -space              float      for linear-space recursion. If product of
+   -space              float      For linear-space recursion. If product of
                                   sequence lengths divided by 4 exceeds this
                                   then a divide-and-conquer strategy is used
                                   to control the memory requirements. In this
@@ -130,9 +130,9 @@ Command line arguments
 
    Associated qualifiers:
 
-   "-est" associated qualifiers
-   -sbegin1             integer    First base used
-   -send1               integer    Last base used, def=seq length
+   "-estsequence" associated qualifiers
+   -sbegin1             integer    Start of each sequence to be used
+   -send1               integer    End of each sequence to be used
    -sreverse1           boolean    Reverse (if DNA)
    -sask1               boolean    Ask for begin/end/reverse
    -snucleotide1        boolean    Sequence is nucleotide
@@ -146,9 +146,9 @@ Command line arguments
    -fformat1            string     Features format
    -fopenfile1          string     Features file name
 
-   "-genome" associated qualifiers
-   -sbegin2             integer    First base used
-   -send2               integer    Last base used, def=seq length
+   "-genomesequence" associated qualifiers
+   -sbegin2             integer    Start of the sequence to be used
+   -send2               integer    End of the sequence to be used
    -sreverse2           boolean    Reverse (if DNA)
    -sask2               boolean    Ask for begin/end/reverse
    -snucleotide2        boolean    Sequence is nucleotide
@@ -182,9 +182,9 @@ Command line arguments
    
 
    Standard (Mandatory) qualifiers Allowed values Default
-   [-est]
+   [-estsequence]
    (Parameter 1) EST sequence(s) Readable sequence(s) Required
-   [-genome]
+   [-genomesequence]
    (Parameter 2) Genomic sequence Readable sequence Required
    [-outfile]
    (Parameter 3) Output file name Output file <sequence>.est2genome
@@ -210,10 +210,14 @@ Command line arguments
    gene direction (ie GT/AG splice sites), and the best comparsion redone
    assuming a reversed (CT/AC) gene splicing direction. The other allowed
    modes are 'forward', when just the forward strand is searched, and
-   'reverse', ditto for the reverse strand. Any string is accepted both
+   'reverse', ditto for the reverse strand.
+   both    (Both strands)
+   forward (Forward strand only)
+   reverse (Reverse strand only)
+   both
    -[no]best You can print out all comparisons instead of just the best
    one by setting this to be false. Boolean value Yes/No Yes
-   -space for linear-space recursion. If product of sequence lengths
+   -space For linear-space recursion. If product of sequence lengths
    divided by 4 exceeds this then a divide-and-conquer strategy is used
    to control the memory requirements. In this way very long sequences
    can be aligned. If you have a machine with plenty of memory you can

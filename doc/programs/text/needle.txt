@@ -13,14 +13,6 @@ Description
    find the optimum alignment (including gaps) of two sequences when
    considering their entire length.
    
-   The Needleman-Wunsch algorithm is a member of the class of algorithms
-   that can calculate the best score and alignment in the order of mn
-   steps, (where 'n' and 'm' are the lengths of the two sequences). These
-   dynamic programming algorithms were first developed for protein
-   sequence comparison by Needleman and Wunsch, though similar methods
-   were independently devised during the late 1960's and early 1970's for
-   use in the fields of speech processing and computer science.
-   
    What is the optimal alignment? Dynamic programming methods ensure the
    optimal global alignment by exploring all possible alignments and
    choosing the best. It does this by reading in a scoring matrix that
@@ -28,6 +20,16 @@ Description
    finds an alignment with the maximum possible score where the score of
    an alignment is equal to the sum of the matches taken from the scoring
    matrix.
+   
+  Algorithm
+  
+   The Needleman-Wunsch algorithm is a member of the class of algorithms
+   that can calculate the best score and alignment in the order of mn
+   steps, (where 'n' and 'm' are the lengths of the two sequences). These
+   dynamic programming algorithms were first developed for protein
+   sequence comparison by Needleman and Wunsch, though similar methods
+   were independently devised during the late 1960's and early 1970's for
+   use in the fields of speech processing and computer science.
    
    An important problem is the treatment of gaps, i.e., spaces inserted
    to optimise the alignment score. A penalty is subtracted from the
@@ -37,6 +39,18 @@ Description
    
    Typically, the cost of extending a gap is set to be 5-10 times lower
    than the cost for opening a gap.
+   
+   There are two ways to compute a penalty for a gap of n positions :
+   
+gap opening penalty + (n - 1) * gap extension penalty
+gap penalty + n * gap length penalty
+
+   The first way is used by EMBOSS and WU-BLAST
+   The second way is used by NCBI-BLAST, GCG, Staden and CLUSTAL. Fasta
+   used it for a long time the first way, but Prof. Pearson decided
+   recently to shift to the second.
+   
+   The two methods are basically equivalent.
    
    In a Needleman-Wunsch global alignment, the entire length of each
    sequence is aligned. This can be thought of as an overlap between the
@@ -104,8 +118,8 @@ Command line arguments
    Associated qualifiers:
 
    "-asequence" associated qualifiers
-   -sbegin1             integer    First base used
-   -send1               integer    Last base used, def=seq length
+   -sbegin1             integer    Start of the sequence to be used
+   -send1               integer    End of the sequence to be used
    -sreverse1           boolean    Reverse (if DNA)
    -sask1               boolean    Ask for begin/end/reverse
    -snucleotide1        boolean    Sequence is nucleotide
@@ -120,8 +134,8 @@ Command line arguments
    -fopenfile1          string     Features file name
 
    "-bsequence" associated qualifiers
-   -sbegin2             integer    First base used
-   -send2               integer    Last base used, def=seq length
+   -sbegin2             integer    Start of each sequence to be used
+   -send2               integer    End of each sequence to be used
    -sreverse2           boolean    Reverse (if DNA)
    -sask2               boolean    Ask for begin/end/reverse
    -snucleotide2        boolean    Sequence is nucleotide
@@ -444,7 +458,7 @@ Output file format
   
 ########################################
 # Program:  needle
-# Rundate:  Thu Nov 27 15:22:34 2003
+# Rundate:  Tue Apr 06 14:30:14 2004
 # Align_format: srspair
 # Report_file: hba_human.needle
 ########################################
@@ -512,7 +526,7 @@ Data files
        
 Notes
 
-   needle is a true imple,entation of the Needleman-Wunsch algorithm and
+   needle is a true implementation of the Needleman-Wunsch algorithm and
    so produces a full path matrix. It therefore cannot be used with
    genome sized sequences unless you've a lot of memory and a lot of
    time.
@@ -578,8 +592,9 @@ See also
    
 Author(s)
 
-   Alan Bleasby (ableasby © hgmp.mrc.ac.uk)
-   HGMP-RC, Genome Campus, Hinxton, Cambridge CB10 1SB, UK
+   Alan Bleasby (ableasby © rfcgr.mrc.ac.uk)
+   MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
+   Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
    
 History
 

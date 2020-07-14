@@ -190,7 +190,7 @@ Command line arguments
    -graph              graph      Graph type
 
    Additional (Optional) qualifiers:
-   -anglesfile         datafile   angles file
+   -anglesfile         datafile   Angles data file
    -residuesperline    integer    Number of residues to be displayed on each
                                   line
    -outfile            outfile    Output file name
@@ -199,8 +199,8 @@ Command line arguments
    Associated qualifiers:
 
    "-sequence" associated qualifiers
-   -sbegin1             integer    First base used
-   -send1               integer    Last base used, def=seq length
+   -sbegin1             integer    Start of the sequence to be used
+   -send1               integer    End of the sequence to be used
    -sreverse1           boolean    Reverse (if DNA)
    -sask1               boolean    Ask for begin/end/reverse
    -snucleotide1        boolean    Sequence is nucleotide
@@ -250,7 +250,7 @@ Command line arguments
    x11, tektronics, tekt, tek4107t, tek, none, null, text, data, xterm,
    png EMBOSS_GRAPHICS value, or x11
    Additional (Optional) qualifiers Allowed values Default
-   -anglesfile angles file Data file Eangles_tri.dat
+   -anglesfile Angles data file Data file Eangles_tri.dat
    -residuesperline Number of residues to be displayed on each line Any
    integer value 50
    -outfile Output file name Output file banana.profile

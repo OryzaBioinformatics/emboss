@@ -44,7 +44,7 @@ Command line arguments
    -orfml              integer    Minimum ORF Length to report
   [-outfile]           outfile    Output file name
   [-outseq]            seqoutall  Sequence file to hold output ORF sequences
-  [-featout]           featout    File for output features
+  [-outfeat]           featout    File for output features
 
    Additional (Optional) qualifiers:
    -[no]addlast        boolean    An asterisk in the protein sequence
@@ -61,8 +61,8 @@ Command line arguments
    Associated qualifiers:
 
    "-sequence" associated qualifiers
-   -sbegin1             integer    First base used
-   -send1               integer    Last base used, def=seq length
+   -sbegin1             integer    Start of each sequence to be used
+   -send1               integer    End of each sequence to be used
    -sreverse1           boolean    Reverse (if DNA)
    -sask1               boolean    Ask for begin/end/reverse
    -snucleotide1        boolean    Sequence is nucleotide
@@ -91,7 +91,7 @@ Command line arguments
    -ofname3             string     Features file name
    -ofdirectory3        string     Output directory
 
-   "-featout" associated qualifiers
+   "-outfeat" associated qualifiers
    -offormat4           string     Output feature format
    -ofopenfile4         string     Features file name
    -ofextension4        string     File name extension
@@ -124,7 +124,7 @@ Command line arguments
    [-outseq]
    (Parameter 3) Sequence file to hold output ORF sequences Writeable
    sequence(s) <sequence>.format
-   [-featout]
+   [-outfeat]
    (Parameter 4) File for output features Writeable feature table
    unknown.gff
    Additional (Optional) qualifiers Allowed values Default
@@ -196,7 +196,7 @@ DQPGQGVADAAPWLGRARGAPAPVAGSDEAARADPEDRSGVAGKRAVRLSDPGRPEQ
   File: paamir_1.gff
   
 ##gff-version 2.0
-##date 2003-11-27
+##date 2004-04-06
 ##Type Protein PAAMIR_1
 PAAMIR_1        checktrans      misc_feature    278     634     0.000   +
 .       Sequence "PAAMIR_1.1"
@@ -265,8 +265,9 @@ Author(s)
    European Bioinformatics Institute, Wellcome Trust Genome Campus,
    Hinxton, Cambridge CB10 1SD, UK
    
-   Gary Williams (gwilliam © hgmp.mrc.ac.uk)
-   HGMP-RC, Genome Campus, Hinxton, Cambridge CB10 1SB, UK
+   Gary Williams (gwilliam © rfcgr.mrc.ac.uk)
+   MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
+   Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
    to output the sequence data to a single file in the conventional
    EMBOSS style.
    

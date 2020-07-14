@@ -551,13 +551,13 @@ Command line arguments
                                   ends before the required end of the
                                   extraction.
    -source             string     By default any feature source in the feature
-                                  table is shown. You can se t this to match
+                                  table is shown. You can set this to match
                                   any feature source you wish to show.
-                                  The source name is usuall y either the name
+                                  The source name is usually either the name
                                   of the program that detected the feature or
                                   it is the feature table (eg: EMBL) that the
                                   feature came from.
-                                  The source may be wildcarded by u sing '*'.
+                                  The source may be wildcarded by using '*'.
                                   If you wish to show more than one source,
                                   separate their names with the character '|',
                                   eg:
@@ -683,8 +683,8 @@ Command line arguments
    Associated qualifiers:
 
    "-sequence" associated qualifiers
-   -sbegin1             integer    First base used
-   -send1               integer    Last base used, def=seq length
+   -sbegin1             integer    Start of each sequence to be used
+   -send1               integer    End of each sequence to be used
    -sreverse1           boolean    Reverse (if DNA)
    -sask1               boolean    Ask for begin/end/reverse
    -snucleotide1        boolean    Sequence is nucleotide
@@ -753,10 +753,10 @@ Command line arguments
    or 'X' characters if the sequence ends before the required end of the
    extraction. Any integer value 0
    -source By default any feature source in the feature table is shown.
-   You can se t this to match any feature source you wish to show. The
-   source name is usuall y either the name of the program that detected
+   You can set this to match any feature source you wish to show. The
+   source name is usually either the name of the program that detected
    the feature or it is the feature table (eg: EMBL) that the feature
-   came from. The source may be wildcarded by u sing '*'. If you wish to
+   came from. The source may be wildcarded by using '*'. If you wish to
    show more than one source, separate their names with the character
    '|', eg: gene* | embl Any string is accepted *
    -type By default every feature in the feature table is extracted. You
@@ -1235,8 +1235,9 @@ See also
    
 Author(s)
 
-   Gary Williams (gwilliam © hgmp.mrc.ac.uk)
-   HGMP-RC, Genome Campus, Hinxton, Cambridge CB10 1SB, UK
+   Gary Williams (gwilliam © rfcgr.mrc.ac.uk)
+   MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
+   Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
    
 History
 

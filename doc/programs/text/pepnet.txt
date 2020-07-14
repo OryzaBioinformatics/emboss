@@ -51,7 +51,7 @@ Command line arguments
                                   HKR are marked with octagons.
 
    Advanced (Unprompted) qualifiers:
-   -amphipathic        boolean    If this is true then the residues ACFGILMVWY
+   -amphipathic        toggle     If this is true then the residues ACFGILMVWY
                                   are marked as squares and all other
                                   residues are unmarked. This overrides any
                                   other markup that you may have specified
@@ -61,8 +61,8 @@ Command line arguments
    Associated qualifiers:
 
    "-sequence" associated qualifiers
-   -sbegin1             integer    First base used
-   -send1               integer    Last base used, def=seq length
+   -sbegin1             integer    Start of the sequence to be used
+   -send1               integer    End of the sequence to be used
    -sreverse1           boolean    Reverse (if DNA)
    -sask1               boolean    Ask for begin/end/reverse
    -snucleotide1        boolean    Sequence is nucleotide
@@ -119,7 +119,7 @@ Command line arguments
    -amphipathic If this is true then the residues ACFGILMVWY are marked
    as squares and all other residues are unmarked. This overrides any
    other markup that you may have specified using the qualifiers
-   '-squares', '-diamonds' and '-octags'. Boolean value Yes/No No
+   '-squares', '-diamonds' and '-octags'. Toggle value Yes/No
    
 Input file format
 
@@ -300,8 +300,9 @@ See also
    
 Author(s)
 
-   Alan Bleasby (ableasby © hgmp.mrc.ac.uk)
-   HGMP-RC, Genome Campus, Hinxton, Cambridge CB10 1SB, UK
+   Alan Bleasby (ableasby © rfcgr.mrc.ac.uk)
+   MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
+   Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
    
 History
 

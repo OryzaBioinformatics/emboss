@@ -389,21 +389,21 @@ Output file [outfile.distmat]:
 *  -position           integer    Choose base positions to analyse in each
                                   codon i.e. 123 (all bases), 12 (the first
                                   two bases), 1, 2, or 3 individual bases.
-*  -calculatea         boolean    This will force the calculation of the
-                                  a-parameter in the Jin-Nei Gamma distance
+*  -calculatea         boolean    This will force the calculation of parameter
+                                  'a' in the Jin-Nei Gamma distance
                                   calculation, otherwise the default is 1.0
                                   (see -parametera option).
-*  -parametera         float      User defined a parameter to be use in the
+*  -parametera         float      User defined parameter 'a' to be use in the
                                   Jin-Nei Gamma distance calculation. The
-                                  suggested value to be used is 1.0 [Jin et
-                                  al.] and this is the default.
+                                  suggested value to be used is 1.0 (Jin et
+                                  al.) and this is the default.
 
    Advanced (Unprompted) qualifiers: (none)
    Associated qualifiers:
 
    "-sequence" associated qualifiers
-   -sbegin1             integer    First base used
-   -send1               integer    Last base used, def=seq length
+   -sbegin1             integer    Start of each sequence to be used
+   -send1               integer    End of each sequence to be used
    -sreverse1           boolean    Reverse (if DNA)
    -sask1               boolean    Ask for begin/end/reverse
    -snucleotide1        boolean    Sequence is nucleotide
@@ -503,14 +503,14 @@ Output file [outfile.distmat]:
 
 <tr>
 <td>-calculatea</td>
-<td>This will force the calculation of the a-parameter in the Jin-Nei Gamma distance calculation, otherwise the default is 1.0 (see -parametera option).</td>
+<td>This will force the calculation of parameter 'a' in the Jin-Nei Gamma distance calculation, otherwise the default is 1.0 (see -parametera option).</td>
 <td>Boolean value Yes/No</td>
 <td>No</td>
 </tr>
 
 <tr>
 <td>-parametera</td>
-<td>User defined a parameter to be use in the Jin-Nei Gamma distance calculation. The suggested value to be used is 1.0 [Jin et al.] and this is the default.</td>
+<td>User defined parameter 'a' to be use in the Jin-Nei Gamma distance calculation. The suggested value to be used is 1.0 (Jin et al.) and this is the default.</td>
 <td>Any numeric value</td>
 <td>1.0</td>
 </tr>
@@ -973,9 +973,10 @@ None.
         Who has worked on the program in the past.
    -->
 
-Tim Carver (tcarver&nbsp;&copy;&nbsp;hgmp.mrc.ac.uk)
+Tim Carver (tcarver&nbsp;&copy;&nbsp;rfcgr.mrc.ac.uk)
 <br>
-HGMP-RC, Genome Campus, Hinxton, Cambridge CB10 1SB, UK
+MRC Rosalind Franklin Centre for Genomics Research
+Wellcome Trust Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
 
 
 

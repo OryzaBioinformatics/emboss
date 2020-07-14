@@ -43,13 +43,13 @@ Command line arguments
    -window             integer    Averaging window
 
    Advanced (Unprompted) qualifiers:
-   -plot               boolean    Produce graphic
+   -plot               toggle     Produce graphic
 
    Associated qualifiers:
 
    "-seqall" associated qualifiers
-   -sbegin1             integer    First base used
-   -send1               integer    Last base used, def=seq length
+   -sbegin1             integer    Start of each sequence to be used
+   -send1               integer    End of each sequence to be used
    -sreverse1           boolean    Reverse (if DNA)
    -sask1               boolean    Ask for begin/end/reverse
    -snucleotide1        boolean    Sequence is nucleotide
@@ -104,7 +104,7 @@ Command line arguments
    -step Stepping value Any integer value 1
    -window Averaging window Any integer value 30
    Advanced (Unprompted) qualifiers Allowed values Default
-   -plot Produce graphic Boolean value Yes/No No
+   -plot Produce graphic Toggle value Yes/No N
    
 Input file format
 
@@ -374,8 +374,9 @@ See also
    
 Author(s)
 
-   Alan Bleasby (ableasby © hgmp.mrc.ac.uk)
-   HGMP-RC, Genome Campus, Hinxton, Cambridge CB10 1SB, UK
+   Alan Bleasby (ableasby © rfcgr.mrc.ac.uk)
+   MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
+   Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
    
 History
 

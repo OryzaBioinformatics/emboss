@@ -101,7 +101,9 @@ patent        N    OK  OK  OK  EMBL patented sequences
 phage         N    OK  OK  OK  EMBL phage sequences
 plant         N    OK  OK  OK  EMBL plant sequences
 prokaryotic   N    OK  OK  OK  EMBL prokaryotic sequences
-refseq        N    OK  OK  OK  REFSEQ sequences
+refseq        N    OK  OK  OK  REFSEQ sequences with features in /home/br2/data
+/Chris...
+refseq_srs    N    OK  -   -   REFSEQ-ID sequences from SRS
 rodent        N    OK  OK  OK  EMBL rodent sequences
 sts           N    OK  OK  OK  EMBL STS sequences
 synthetic     N    OK  OK  OK  EMBL synthetic sequences
@@ -232,7 +234,10 @@ index
 
  prokaryotic N OK   OK   OK   EMBL prokaryotic sequences
 
- refseq N OK   OK   OK   REFSEQ sequences
+ refseq N OK   OK   OK   REFSEQ sequences with features in /home/br2/data/Chris
+...
+
+ refseq_srs N OK   -    -    REFSEQ-ID sequences from SRS
 
  rodent N OK   OK   OK   EMBL rodent sequences
 
@@ -332,7 +337,9 @@ patent        N    OK  OK  OK  EMBL patented sequences
 phage         N    OK  OK  OK  EMBL phage sequences
 plant         N    OK  OK  OK  EMBL plant sequences
 prokaryotic   N    OK  OK  OK  EMBL prokaryotic sequences
-refseq        N    OK  OK  OK  REFSEQ sequences
+refseq        N    OK  OK  OK  REFSEQ sequences with features in /home/br2/data
+/Chris...
+refseq_srs    N    OK  -   -   REFSEQ-ID sequences from SRS
 rodent        N    OK  OK  OK  EMBL rodent sequences
 sts           N    OK  OK  OK  EMBL STS sequences
 synthetic     N    OK  OK  OK  EMBL synthetic sequences
@@ -394,6 +401,7 @@ phage
 plant
 prokaryotic
 refseq
+refseq_srs
 rodent
 sts
 synthetic
@@ -456,6 +464,7 @@ phage         N
 plant         N
 prokaryotic   N
 refseq        N
+refseq_srs    N
 rodent        N
 sts           N
 synthetic     N
@@ -602,7 +611,9 @@ patent        N    OK  OK  OK  EMBL patented sequences
 phage         N    OK  OK  OK  EMBL phage sequences
 plant         N    OK  OK  OK  EMBL plant sequences
 prokaryotic   N    OK  OK  OK  EMBL prokaryotic sequences
-refseq        N    OK  OK  OK  REFSEQ sequences
+refseq        N    OK  OK  OK  REFSEQ sequences with features in /home/br2/data
+/Chris...
+refseq_srs    N    OK  -   -   REFSEQ-ID sequences from SRS
 rodent        N    OK  OK  OK  EMBL rodent sequences
 sts           N    OK  OK  OK  EMBL STS sequences
 synthetic     N    OK  OK  OK  EMBL synthetic sequences
@@ -728,8 +739,9 @@ See also
    
 Author(s)
 
-   Gary Williams (gwilliam © hgmp.mrc.ac.uk)
-   HGMP-RC, Genome Campus, Hinxton, Cambridge CB10 1SB, UK
+   Gary Williams (gwilliam © rfcgr.mrc.ac.uk)
+   MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
+   Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
    
 History
 

@@ -95,8 +95,8 @@ Command line arguments
    Associated qualifiers:
 
    "-sequence" associated qualifiers
-   -sbegin1             integer    First base used
-   -send1               integer    Last base used, def=seq length
+   -sbegin1             integer    Start of each sequence to be used
+   -send1               integer    End of each sequence to be used
    -sreverse1           boolean    Reverse (if DNA)
    -sask1               boolean    Ask for begin/end/reverse
    -snucleotide1        boolean    Sequence is nucleotide
@@ -339,7 +339,7 @@ Output file format
   File: hshbb.marscan
   
 ##gff-version 2.0
-##date 2003-11-27
+##date 2004-04-06
 ##Type DNA HSHBB
 HSHBB   marscan misc_signal     2242    2458    0.000   +       .       Sequenc
 e "HSHBB.1" ; note "*type MAR/SAR recognition site (MRS)" ; note "*start8bp 245
@@ -423,8 +423,9 @@ See also
    
 Author(s)
 
-   Gary Williams (gwilliam © hgmp.mrc.ac.uk)
-   HGMP-RC, Genome Campus, Hinxton, Cambridge CB10 1SB, UK
+   Gary Williams (gwilliam © rfcgr.mrc.ac.uk)
+   MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
+   Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
    
 History
 

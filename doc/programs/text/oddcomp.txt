@@ -57,7 +57,8 @@ Usage
 % oddcomp 
 Finds protein sequence regions with a biased composition
 Input sequence(s): tsw:*
-'compseq' file to use for expected word frequencies: ../../data/oddcomp.comp
+Compseq output file to use for expected word frequencies: ../../data/oddcomp.co
+mp
 Window size to consider (e.g. 30 aa) [30]: 
 Output file [100k_rat.oddcomp]: out.odd
    
@@ -91,8 +92,8 @@ Command line arguments
    Associated qualifiers:
 
    "-sequence" associated qualifiers
-   -sbegin1             integer    First base used
-   -send1               integer    Last base used, def=seq length
+   -sbegin1             integer    Start of each sequence to be used
+   -send1               integer    End of each sequence to be used
    -sreverse1           boolean    Reverse (if DNA)
    -sask1               boolean    Ask for begin/end/reverse
    -snucleotide1        boolean    Sequence is nucleotide
@@ -264,7 +265,7 @@ See also
    
 Author(s)
 
-   David Martin (dmartin © hgmp.mrc.ac.uk)
+   David Martin (dmartin © rfcgr.mrc.ac.uk)
    
 History
 

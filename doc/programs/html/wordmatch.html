@@ -104,16 +104,16 @@ IT IS DONE FOR YOU.
   [-bsequence]         sequence   Sequence USA
    -wordsize           integer    Word size
   [-outfile]           align      Output alignment file name
-  [-afeatout]          featout    Output features UFO
-  [-bfeatout]          featout    Output features UFO
+  [-aoutfeat]          featout    Output features UFO
+  [-boutfeat]          featout    Output features UFO
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers: (none)
    Associated qualifiers:
 
    "-asequence" associated qualifiers
-   -sbegin1             integer    First base used
-   -send1               integer    Last base used, def=seq length
+   -sbegin1             integer    Start of the sequence to be used
+   -send1               integer    End of the sequence to be used
    -sreverse1           boolean    Reverse (if DNA)
    -sask1               boolean    Ask for begin/end/reverse
    -snucleotide1        boolean    Sequence is nucleotide
@@ -128,8 +128,8 @@ IT IS DONE FOR YOU.
    -fopenfile1          string     Features file name
 
    "-bsequence" associated qualifiers
-   -sbegin2             integer    First base used
-   -send2               integer    Last base used, def=seq length
+   -sbegin2             integer    Start of the sequence to be used
+   -send2               integer    End of the sequence to be used
    -sreverse2           boolean    Reverse (if DNA)
    -sask2               boolean    Ask for begin/end/reverse
    -snucleotide2        boolean    Sequence is nucleotide
@@ -154,7 +154,7 @@ IT IS DONE FOR YOU.
    -ausashow3           boolean    Show the full USA in the alignment
    -aglobal3            boolean    Show the full sequence in alignment
 
-   "-afeatout" associated qualifiers
+   "-aoutfeat" associated qualifiers
    -offormat4           string     Output feature format
    -ofopenfile4         string     Features file name
    -ofextension4        string     File name extension
@@ -162,7 +162,7 @@ IT IS DONE FOR YOU.
    -ofname4             string     Base file name
    -ofsingle4           boolean    Separate file for each entry
 
-   "-bfeatout" associated qualifiers
+   "-boutfeat" associated qualifiers
    -offormat5           string     Output feature format
    -ofopenfile5         string     Features file name
    -ofextension5        string     File name extension
@@ -226,14 +226,14 @@ IT IS DONE FOR YOU.
 </tr>
 
 <tr>
-<td>[-afeatout]<br>(Parameter 4)</td>
+<td>[-aoutfeat]<br>(Parameter 4)</td>
 <td>Output features UFO</td>
 <td>Writeable feature table</td>
 <td><i>unknown.gff</i></td>
 </tr>
 
 <tr>
-<td>[-bfeatout]<br>(Parameter 5)</td>
+<td>[-boutfeat]<br>(Parameter 5)</td>
 <td>Output features UFO</td>
 <td>Writeable feature table</td>
 <td><i>unknown.gff</i></td>
@@ -546,7 +546,7 @@ for further information on alignment formats.
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 ##gff-version 2.0
-##date 2003-11-27
+##date 2004-04-06
 ##Type Protein HBA_HUMAN
 HBA_HUMAN	wordmatch	misc_feature	58	62	1.000	+	.	Sequence "HBA_HUMAN.1" ; note "HBB_HUMAN"
 HBA_HUMAN	wordmatch	misc_feature	14	17	1.000	+	.	Sequence "HBA_HUMAN.2" ; note "HBB_HUMAN"
@@ -557,7 +557,7 @@ HBA_HUMAN	wordmatch	misc_feature	116	119	1.000	+	.	Sequence "HBA_HUMAN.3" ; note
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 ##gff-version 2.0
-##date 2003-11-27
+##date 2004-04-06
 ##Type Protein HBB_HUMAN
 HBB_HUMAN	wordmatch	misc_feature	63	67	1.000	+	.	Sequence "HBB_HUMAN.1" ; note "HBA_HUMAN"
 HBB_HUMAN	wordmatch	misc_feature	15	18	1.000	+	.	Sequence "HBB_HUMAN.2" ; note "HBA_HUMAN"
@@ -569,7 +569,7 @@ HBB_HUMAN	wordmatch	misc_feature	121	124	1.000	+	.	Sequence "HBB_HUMAN.3" ; note
 <pre>
 ########################################
 # Program:  wordmatch
-# Rundate:  Thu Nov 27 15:29:52 2003
+# Rundate:  Tue Apr 06 14:38:29 2004
 # Align_format: match
 # Report_file: hba_human.wordmatch
 ########################################
