@@ -22,7 +22,7 @@ section: advanced [
 ]
 
   list: table  [
-    optional: "Y"
+    additional: "Y"
     default: "0"
     minimum: "1"
     maximum: "1"
@@ -43,13 +43,19 @@ section: advanced [
   ]
 
   integer: minsize  [
-    optional: "Y"
+    additional: "Y"
     default: "30"
     information: "Minimum nucleotide size of ORF to report"
   ]
 
+  integer: maxsize  [
+    additional: "Y"
+    default: "1000000"
+    information: "Maximum nucleotide size of ORF to report"
+  ]
+
   list: find  [
-    optional: "Y"
+    additional: "Y"
     default: "0"
     minimum: "1"
     maximum: "1"
