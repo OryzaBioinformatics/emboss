@@ -17,7 +17,7 @@ section: input [
 
   section: afeaturesection [
     information: "First feature options"
-    type: "rame"
+    type: "frame"
   ]
 
     string: asource  [
@@ -336,7 +336,7 @@ section: output [
   type: "page"
 ]
 
-  boolean: twoout  [
+  toggle: twoout  [
     additional: "Y"
     default: "N"
     information: "Do you want the two features written out
