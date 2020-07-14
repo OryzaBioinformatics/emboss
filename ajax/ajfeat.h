@@ -70,8 +70,9 @@ AjPFeature    ajFeatNewII (AjPFeattable thys,
 AjPFeature    ajFeatNewProt (AjPFeattable thys,
 			     AjPStr source, AjPStr type,
 			     ajint Start, ajint End,  float score);
+AjBool        ajFeatOutFormatDefault (AjPStr* pformat);
 AjPFeattable  ajFeatRead  (AjPFeattabIn  ftin) ;
-void          ajFeatReverse  (AjPFeature  thys) ;
+void          ajFeatReverse  (AjPFeature  thys, ajint ilen) ;
 AjBool        ajFeatSetDesc (AjPFeature thys, AjPStr desc);
 AjBool        ajFeatSetDescApp (AjPFeature thys, AjPStr desc);
 void          ajFeatSortByEnd (AjPFeattable Feattab);
@@ -101,6 +102,8 @@ void          ajFeattableSetRange  (AjPFeattable thys,
 				     ajint fbegin, ajint fend) ;
 ajint         ajFeattableSize (AjPFeattable thys);
 void          ajFeattableTrace (AjPFeattable thys);
+AjBool        ajFeattableTrimOff (AjPFeattable thys,
+				  ajint ioffset, ajint ilen);
 AjBool        ajFeattableWriteDdbj (AjPFeattable features,
 				    AjPFile file);
 AjBool        ajFeattableWriteEmbl (AjPFeattable features,
@@ -119,29 +122,38 @@ AjPFeattabIn  ajFeattabInNew (void);
 AjPFeattabIn  ajFeattabInNewSS (AjPStr fmt, AjPStr name, char* type);
 AjPFeattabIn  ajFeattabInNewSSF (AjPStr fmt, AjPStr name, char* type,
 				 AjPFileBuff buff);
+AjBool        ajFeattabInSetType(AjPFeattabIn thys, AjPStr type);
+AjBool        ajFeattabInSetTypeC(AjPFeattabIn thys, char* type);
 void          ajFeattabOutDel (AjPFeattabOut* pthis);
 AjPFile       ajFeattabOutFile (AjPFeattabOut thys);
 AjPStr        ajFeattabOutFilename (AjPFeattabOut thys);
+AjBool        ajFeattabOutIsLocal(AjPFeattabOut thys);
 AjBool        ajFeattabOutIsOpen (AjPFeattabOut thys);
 AjPFeattabOut ajFeattabOutNew (void);
 AjPFeattabOut ajFeattabOutNewSSF (AjPStr fmt, AjPStr name, char* type,
 				  AjPFile buff);
 AjBool        ajFeattabOutOpen (AjPFeattabOut thys, AjPStr ufo);
 AjBool        ajFeattabOutSet (AjPFeattabOut thys, AjPStr ufo);
+void          ajFeattabOutSetBasename (AjPFeattabOut thys, AjPStr basename);
+AjBool        ajFeattabOutSetType(AjPFeattabOut thys, AjPStr type);
+AjBool        ajFeattabOutSetTypeC(AjPFeattabOut thys, char* type);
 AjPFeattable  ajFeattabRead (AjPFeattabIn ftin) ;
-void          ajFeatTagAdd (AjPFeature thys, AjPStr tag, AjPStr value);
-void          ajFeatTagAddC (AjPFeature thys, const char* tag, AjPStr value);
-void          ajFeatTagAddCC (AjPFeature thys, const char* tag,
+AjBool        ajFeatTagAdd (AjPFeature thys, AjPStr tag, AjPStr value);
+AjBool        ajFeatTagAddC (AjPFeature thys, const char* tag, AjPStr value);
+AjBool        ajFeatTagAddCC (AjPFeature thys, const char* tag,
 			      const char* value);
 AjIList       ajFeatTagIter (AjPFeature thys);
-AjPStr        ajFeatTagSet (AjPFeature thys, AjPStr tag, AjPStr value);
-AjPStr        ajFeatTagSetC (AjPFeature thys, char* tag, AjPStr value);
+AjBool        ajFeatTagSet (AjPFeature thys, AjPStr tag, AjPStr value);
+AjBool        ajFeatTagSetC (AjPFeature thys, char* tag, AjPStr value);
 void          ajFeatTagTrace (AjPFeature thys);
 AjBool        ajFeatTagval (AjIList iter, AjPStr* tagnam,
 			    AjPStr* tagval);
 void          ajFeatTest (void);
 void          ajFeatTrace (AjPFeature thys);
 void          ajFeatTraceOld (AjPFeattable thys);
+AjBool        ajFeatTrimOffRange (AjPFeature ft, ajint ioffset,
+				  ajint begin, ajint end,
+				  AjBool dobegin, AjBool doend);
 AjBool        ajFeatUfoRead (AjPFeattable* pthis,
 			     AjPFeattabIn tabin, AjPStr Ufo);
 AjBool        ajFeatUfoWrite (AjPFeattable thys,

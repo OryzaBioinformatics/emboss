@@ -34,7 +34,7 @@ typedef struct AjSFeattabIn {
   AjPStr        Formatstr;	/* Input format name */
   ajint         Format;		/* Input format enum */
   AjPStr        Filename;	/* Original filename */
-  AjPStr        Entryname;	/* Sequence entryname */
+  AjPStr        Seqid;		/* Sequence entryname */
   AjPStr        Type;		/* Type N or P */
   AjPFileBuff   Handle ;	/* Input buffered file */
   AjPStr        Seqname ;	/* name of AjPSeq assoc. with feature table */
@@ -53,14 +53,17 @@ typedef struct AjSFeattabIn {
 ******************************************************************************/
 
 typedef struct AjSFeattabOut {
-  AjPStr        Ufo;		/* Original output UFO */
-  AjPStr        Formatstr;	/* Output format name */
-  ajint         Format;		/* Output format enum */
-  AjPStr        Filename;	/* Output filename */
-  AjPStr        Entryname;	/* Output entryname */
-  AjPStr        Type;		/* Type N or P */
-  AjPFile       Handle ;	/* Output file */
-  AjPStr        Seqname ;	/* name of AjPSeq assoc. with feature table */
+  AjPStr        Ufo;			/* Original output UFO */
+  AjPStr        Formatstr;		/* Output format name */
+  ajint         Format;			/* Output format enum */
+  AjPStr        Filename;		/* Output filename */
+  AjPStr        Directory;		/* Output directory */
+  AjPStr        Seqid;			/* Output entryname */
+  AjPStr        Type;			/* Type N or P */
+  AjPFile       Handle;			/* Output file */
+  AjPStr        Seqname;	        /* AjPSeq assoc. with feature table */
+  AjPStr        Basename;		/* Basename for output file */
+  AjBool        Local;			/* Opened as a local file */
 }  AjOFeattabOut, *AjPFeattabOut ;
 
 
@@ -80,7 +83,7 @@ typedef struct AjSFeattabOut {
 ******************************************************************************/
 
 typedef struct AjSFeattable {
-  AjPStr            Name ;	/* Sequence name */
+  AjPStr            Seqid ;	/* Sequence name */
   AjPStr            Type ;	/* Sequence type: P or N */
   ajint             DefFormat ; /* Original input or 'source' format
 				   of the feature table */
@@ -88,6 +91,7 @@ typedef struct AjSFeattable {
   ajint             Start;      /* First position used (like sequence begin) */
   ajint             End;        /* Last position used (like sequence end) */
   ajint             Len;        /* Maximum length */
+  ajint             Offset;     /* Offset when trimmed */
   ajint             Groups;	/* Number of current group being added */
 }  AjOFeattable, *AjPFeattable ;
 
@@ -160,7 +164,7 @@ typedef struct AjSFeattable {
 
 typedef struct AjSFeature {
   AjBool            Protein ;	/* true for a protein feature */
-  AjPStr            Source ;	/* Source sequence name */
+  AjPStr            Source ;	/* Source program name (or EMBL) */
   AjPStr            Type ;	/* Feature type (feature key) */
   ajint             Start ;	/* Start position */
   ajint             End;	/* End position */
@@ -174,6 +178,8 @@ typedef struct AjSFeature {
   ajint             Group;	/* Group for join/order/one-of */
   ajint             Exon;	/* Exon number */
   AjPStr            Remote ;	/* Remote ID - EMBL Remote:a.b */
+
+  /* Label is obsolete - remove if not in databases */
   AjPStr            Label ;	/* Label name for location - EMBL legacy */
 
   /*AjPStr            Desc ;*/	/* One-line description obsolete */
