@@ -221,6 +221,7 @@ section: output [
 ]
 
   boolean: data  [
+    information: "Output as a data file"
     default: "N"
   ]
 
