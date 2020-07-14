@@ -91,7 +91,9 @@ static AjPStr namFixedRootBaseStr = NULL;
 static AjPStr namPrefixStr        = NULL;
 static AjPStr namFileOrig         = NULL;
 
-static AjPTable namMasterTable = NULL;
+static AjPTable namVarMasterTable = NULL;
+static AjPTable namDbMasterTable = NULL;
+static AjPTable namResMasterTable = NULL;
 static ajint namParseType      = 0;
 static AjPStr namFileName      = NULL;
 static ajint namLine           = 0;
@@ -153,7 +155,6 @@ typedef struct NamSValid
 
 NamOAttr namDbAttrs[] =
 {
-    {"name", "", "database name (required)"},
     {"format", "", "database entry format (required, at some level)"},
     {"method", "", "access method (required, at some level)"},
     {"type", "", "database type 'Nucleotide', 'Protein', etc (required)"},
@@ -193,17 +194,19 @@ NamOAttr namDbAttrs[] =
 
 NamOAttr namRsAttrs[] =
 {
-    {"name", "", "resource name (required)"},
     {"type", "", "resource type (required)"},
 
     {"identifier", "", "standard identifier (defaults to name)"},
     {"release", "", "release of the resource"},
 
-    {"order", "", "order of a primary B+tree"},
-    {"fill", "", "max number of entries in a primary B+tree bucket"},
-    {"secorder", "", "order of a secondary B+tree"},
-    {"secfill", "", "max number of entries in a secondary B+tree bucket"},
-    {"kwlimit", "", "cut-off length for a secondary B+tree key"},
+    {"idlen", "",  "maximum ID length"},
+    {"acclen", "", "maximum AC length"},
+    {"svlen", "",  "maximum SV length"},
+    {"keylen", "", "maximum KW length"},
+    {"deslen", "", "maximum DE length"},
+    {"orglen", "", "maximum TX length"},
+
+    {"value", "", "value appropriate to the resource type"},
     {NULL, NULL, NULL}
 };
 
@@ -220,7 +223,8 @@ NamOValid namDbTypes[] =
 NamOValid namRsTypes[] =
 {
     {"Blast", "Blast database file"},
-    {"Index", "Blast database file"},
+    {"Index", "EMBOSS database B+tree index"},
+    {"List", "List of possible values"},
     {NULL, NULL}
 };
 
@@ -235,10 +239,7 @@ NamOValid namRsTypes[] =
 ** @alias NamOEntry
 **
 ** @attr name [AjPStr] token name
-** @attr value [AjPStr] token value
-** @attr type [ajint] token type enumerated TYPE_ENV
-**                    TYPE_DB TYPE_RESOURCE TYPE_IFILE
-** @attr scope [ajint] token scope always zero
+** @attr value [AjPStr] token value for variables
 ** @attr data [void*] Attribute names and values for databases
 ** @@
 ******************************************************************************/
@@ -247,8 +248,6 @@ typedef struct NamSEntry
 {
     AjPStr name;
     AjPStr value;
-    ajint type;
-    ajint scope;
     void* data;
 } NamOEntry;
 
@@ -264,13 +263,13 @@ static AjBool namDbSetAttr(const AjPStr* dbattr, const char* attrib,
 static void   namDebugDatabase(const AjPStr* dbattr);
 static void   namDebugResource(const AjPStr* dbattr);
 static void   namDebugVariables(void);
-static void   namDebugMaster(ajint which);
-static void   namEntryDelete(NamPEntry* pentry);
+static void   namDebugMaster(const AjPTable table, ajint which);
+static void   namEntryDelete(NamPEntry* pentry, ajint which);
 static void   namError(const char* fmt, ...);
 static void   namListParse(AjPList listwords, AjPList listcount,
 			   AjPFile file);
-static void   namListMaster(ajint which);
-static void   namListMasterDelete(void);
+static void   namListMaster(const AjPTable table, ajint which);
+static void   namListMasterDelete(AjPTable table, ajint which);
 static ajint  namMethod2Scope(const AjPStr method);
 static void   namNoColon(AjPStr *thys);
 static void   namPrintDatabase(const AjPStr* dbattr);
@@ -279,7 +278,7 @@ static AjBool namProcessFile(AjPFile file);
 static ajint  namRsAttr(const AjPStr thys);
 static ajint  namRsAttrC(const char* str);
 static void   namUser(const char *fmt, ...);
-static AjBool namValid(const NamPEntry entry);
+static AjBool namValid(const NamPEntry entry, ajint entrytype);
 static AjBool namValidDatabase(const NamPEntry entry);
 static AjBool namValidResource(const NamPEntry entry);
 static AjBool namValidVariable(const NamPEntry entry);
@@ -293,11 +292,12 @@ static AjBool namVarResolve(AjPStr* var);
 ** Deletes a variable, database, or resource entry from the internal table.
 **
 ** @param [d] pentry [NamPEntry*] The entry to be deleted.
+** @param [r] which [ajint] Internal table entry type
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-static void namEntryDelete(NamPEntry* pentry)	
+static void namEntryDelete(NamPEntry* pentry, ajint which)	
 {
 
     ajint j;
@@ -309,22 +309,23 @@ static void namEntryDelete(NamPEntry* pentry)
     ajStrDel(&entry->name);
     ajStrDel(&entry->value);
 
-    if(entry->type == TYPE_DB)
+    if(which == TYPE_DB)
     {
-	attrs = entry->data;
+	attrs = (AjPStr *) entry->data;
 	for(j=0; namDbAttrs[j].Name; j++)
 	    ajStrDel(&attrs[j]);
 	AJFREE(entry->data);
     }
 
-    if(entry->type == TYPE_RESOURCE)
+    else if(which == TYPE_RESOURCE)
     {
-	attrs = entry->data;
+	attrs = (AjPStr *) entry->data;
 	for(j=0; namRsAttrs[j].Name; j++)
 	    ajStrDel(&attrs[j]);
 	AJFREE(entry->data);
     }
-    else if(entry->type == TYPE_ENV)
+
+    else if(which == TYPE_ENV)
     {
     }
 
@@ -341,24 +342,26 @@ static void namEntryDelete(NamPEntry* pentry)
 ** Deletes all databases in the internal table. The table is converted to
 ** an array, and each entry in turn is passed to namEntryDelete.
 **
+** @param [u] table [AjPTable] Table object
+** @param [r] which [ajint] Internal table entry type
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-static void namListMasterDelete(void)
+static void namListMasterDelete(AjPTable table, ajint which)
 {
     ajint i;
     NamPEntry fnew = 0;
     void **array;
 
 
-    array = ajTableToarray(namMasterTable, NULL);
+    array = ajTableToarray(table, NULL);
 
     for(i = 0; array[i]; i += 2)
     {
 	AJFREE(array[i]);		/* the key */
 	fnew = (NamPEntry) array[i+1];
-	namEntryDelete(&fnew);
+	namEntryDelete(&fnew, which);
     }
     AJFREE(array);
 
@@ -522,6 +525,7 @@ static void namDebugResource(const AjPStr* rsattr)
 **
 ** Lists databases or variables defined in the internal table.
 **
+** @param [r] table [const AjPTable] internal table
 ** @param [r] which [ajint] Variable type, either TYPE_ENV for environment
 **                        variables or TYPE_DB for databases or
 **                        TYPE_RESOURCE for resources.
@@ -529,37 +533,34 @@ static void namDebugResource(const AjPStr* rsattr)
 ** @@
 ******************************************************************************/
 
-static void namListMaster(ajint which)
+static void namListMaster(const AjPTable table, ajint which)
 {
     ajint i;
     NamPEntry fnew;
     void **array;
     char *key;
 
-    array = ajTableToarray(namMasterTable, NULL);
+    array = ajTableToarray(table, NULL);
 
     for(i = 0; array[i]; i += 2)
     {
 	fnew =(NamPEntry) array[i+1];
 	key = (char*) array[i];
-	if(fnew->type == which)
+	if(TYPE_DB == which)
 	{
-	    if(TYPE_DB == which)
-	    {
-		ajUser("DB %S\t *%s*", fnew->name, key);
-		namPrintDatabase(fnew->data);
-		ajUser("");
-	    }
-	    else if(TYPE_RESOURCE == which) 
-	    {
-		ajUser("RES %S\t *%s*", fnew->name, key);
-		namPrintResource(fnew->data);
-		ajUser("");
-	    }
-	    else if(TYPE_ENV == which)
-	    {
-		ajUser("ENV %S\t%S\t *%s*",fnew->name,fnew->value,key);
-	    }
+	    ajUser("DB %S\t *%s*", fnew->name, key);
+	    namPrintDatabase(fnew->data);
+	    ajUser("");
+	}
+	else if(TYPE_RESOURCE == which) 
+	{
+	    ajUser("RES %S\t *%s*", fnew->name, key);
+	    namPrintResource(fnew->data);
+	    ajUser("");
+	}
+	else if(TYPE_ENV == which)
+	{
+	    ajUser("ENV %S\t%S\t *%s*",fnew->name,fnew->value,key);
 	}
     }
     AJFREE(array);
@@ -574,6 +575,7 @@ static void namListMaster(ajint which)
 **
 ** Lists databases or variables defined in the internal table.
 **
+** @param [r] table [const AjPTable] Table object
 ** @param [r] which [ajint] Variable type, either TYPE_ENV for environment
 **                        variables or TYPE_DB for databases or
 **                        TYPE_RESOURCE for resources.
@@ -581,40 +583,40 @@ static void namListMaster(ajint which)
 ** @@
 ******************************************************************************/
 
-static void namDebugMaster(ajint which)
+static void namDebugMaster(const AjPTable table, ajint which)
 {
     ajint i;
     NamPEntry fnew;
     void **array;
     char *key;
 
-    array = ajTableToarray(namMasterTable, NULL);
+    array = ajTableToarray(table, NULL);
 
     for(i = 0; array[i]; i += 2)
     {
 	fnew = (NamPEntry) array[i+1];
 	key = (char*) array[i];
-	if(fnew->type == which)
+	if(TYPE_DB == which)
 	{
-	    if(TYPE_DB == which)
-	    {
-		ajDebug("DB %S\t *%s*\n", fnew->name, key);
-		namDebugDatabase(fnew->data);
-		ajDebug("\n");
-	    }
-
-	    if(TYPE_RESOURCE == which)
-	    {
-		ajDebug("RES %S\t *%s*\n", fnew->name, key);
-		namDebugResource(fnew->data);
-		ajDebug("\n");
-	    }
-	    else if(TYPE_ENV == which)
-	    {
-		ajDebug("ENV %S\t%S\t *%s*\n",fnew->name,fnew->value,key);
-	    }
+	    ajDebug("DB %S\t *%s*\n", fnew->name, key);
+	    namDebugDatabase(fnew->data);
+	    ajDebug("\n");
 	}
+
+	else if(TYPE_RESOURCE == which)
+	{
+	    ajDebug("RES %S\t *%s*\n", fnew->name, key);
+	    namDebugResource(fnew->data);
+	    ajDebug("\n");
+	}
+
+	else if(TYPE_ENV == which)
+	{
+	    ajDebug("ENV %S\t%S\t *%s*\n",fnew->name,fnew->value,key);
+	}
+
     }
+
     AJFREE(array);
 
     return;
@@ -653,12 +655,12 @@ AjBool ajNamDbDetails(const AjPStr name, AjPStr* type, AjBool* id,
     ajStrDelReuse(comment);
     ajStrDelReuse(release);
     
-    fnew = ajTableGet(namMasterTable, ajStrStr(name));
+    fnew = ajTableGet(namDbMasterTable, ajStrStr(name));
     if(fnew)
     {
 	/* ajDebug("  '%S' found\n", name); */
 	
-	dbattr = fnew->data;
+	dbattr = (AjPStr *) fnew->data;
 	for(i=0; namDbAttrs[i].Name; i++)
 	{
 	    /* ajDebug("Attribute name = %s, value = %S\n",
@@ -740,6 +742,10 @@ static ajint namMethod2Scope(const AjPStr method)
     ajint result = 0;
 
     if(!ajStrCmpC(method, "emblcd"))
+	result = (METHOD_ENTRY | METHOD_QUERY | METHOD_ALL);
+    else if(!ajStrCmpC(method, "embossgcg"))
+	result = (METHOD_ENTRY | METHOD_QUERY | METHOD_ALL);
+    else if(!ajStrCmpC(method, "emboss"))
 	result = (METHOD_ENTRY | METHOD_QUERY | METHOD_ALL);
     else if(!ajStrCmpC(method, "srs"))
 	result = (METHOD_ENTRY | METHOD_QUERY);
@@ -825,7 +831,7 @@ void ajNamDebugOrigin(void)
 void ajNamListDatabases(void)
 {
     ajUser("DB---------->");
-    namListMaster(TYPE_DB);
+    namListMaster(namDbMasterTable, TYPE_DB);
     ajUser("DB---------->");
     ajUser("");
 
@@ -847,7 +853,7 @@ void ajNamDebugDatabases(void)
 {
     ajDebug("DB databases\n");
     ajDebug("============\n");
-    namDebugMaster(TYPE_DB);
+    namDebugMaster(namDbMasterTable, TYPE_DB);
     ajDebug("[DB done]\n\n");
 
     return;
@@ -868,7 +874,7 @@ void ajNamDebugResources(void)
 {
     ajDebug("RES resources\n");
     ajDebug("=============\n");
-    namDebugMaster(TYPE_RESOURCE);
+    namDebugMaster(namResMasterTable, TYPE_RESOURCE);
     ajDebug("[RES done]\n\n");
 
     return;
@@ -890,7 +896,7 @@ void ajNamDebugVariables(void)
 {
     ajDebug("ENV variables\n");
     ajDebug("=============\n");
-    namDebugMaster(TYPE_ENV);
+    namDebugMaster(namVarMasterTable, TYPE_ENV);
     ajDebug("[ENV done]\n\n");
 
     return;
@@ -914,17 +920,14 @@ void ajNamListListDatabases(AjPList dbnames)
     NamPEntry fnew;
     void **array;
 
-    array = ajTableToarray(namMasterTable, NULL);
+    array = ajTableToarray(namDbMasterTable, NULL);
     ajDebug("ajNamListListDatabases\n");
 
     for(i = 0; array[i]; i += 2)
     {
 	fnew = (NamPEntry) array[i+1];
-	if(fnew->type == TYPE_DB)
-	{
-	    ajDebug("DB: %S\n", fnew->name);
-	    ajListstrPushApp(dbnames, fnew->name);
-	}
+	ajDebug("DB: %S\n", fnew->name);
+	ajListstrPushApp(dbnames, fnew->name);
     }
     AJFREE(array);
 
@@ -949,16 +952,13 @@ void ajNamListListResources(AjPList rsnames)
     NamPEntry fnew;
     void **array;
 
-    array = ajTableToarray(namMasterTable, NULL);
+    array = ajTableToarray(namResMasterTable, NULL);
 
     for(i = 0; array[i]; i += 2)
     {
 	fnew = (NamPEntry) array[i+1];
-	if(fnew->type == TYPE_RESOURCE)
-	{
-	    ajDebug("RES: %S\n", fnew->name);
-	    ajListstrPushApp(rsnames, fnew->name);
-	}
+	ajDebug("RES: %S\n", fnew->name);
+	ajListstrPushApp(rsnames, fnew->name);
     }
     AJFREE(array);
 
@@ -979,7 +979,7 @@ void ajNamListListResources(AjPList rsnames)
 void ajNamVariables(void)
 {
     ajUser("ENV---------->");
-    namListMaster(TYPE_ENV);
+    namListMaster(namDbMasterTable, TYPE_ENV);
     ajUser("ENV---------->");
     ajUser("");
 
@@ -1000,7 +1000,7 @@ void ajNamVariables(void)
 static void namDebugVariables(void)
 {
     namUser("ENV---------->\n");
-    namDebugMaster(TYPE_ENV);
+    namDebugMaster(namDbMasterTable, TYPE_ENV);
     namUser("ENV---------->\n");
     namUser("\n");
 
@@ -1036,6 +1036,7 @@ static void namListParse(AjPList listwords, AjPList listcount,
     static AjPStr* rsattr  = 0;
     static ajint  db_input = -1;
     static ajint  rs_input = -1;
+    AjPTable saveTable = NULL;
 
     NamPEntry fnew  = NULL;
     NamPEntry entry = NULL;
@@ -1375,19 +1376,31 @@ static void namListParse(AjPList listwords, AjPList listcount,
 	    name = 0;
 	    fnew->value = value;
 	    value = 0;
-	    fnew->type = namParseType;
 
 	    if(namParseType == TYPE_DB)
-		fnew->data = dbattr;
+	    {
+		fnew->data = (AjPStr *) dbattr;
+		saveTable = namDbMasterTable;
+	    }
 	    else if(namParseType == TYPE_RESOURCE)
-		fnew->data = rsattr;
+	    {
+		fnew->data = (AjPStr *) rsattr;
+		saveTable = namResMasterTable;
+	    }
+	    else if(namParseType == TYPE_ENV)
+	    {
+		fnew->data = NULL;
+		saveTable = namVarMasterTable;
+	    }
 	    else
-		fnew->data = 0;
+	    {
+		fnew->data = NULL;
+	    }
 
 	    /* Validate the master table entry */
 
 	    if(namDoValid)
-		namValid(fnew);
+		namValid(fnew, namParseType);
 
 	    /*
 	    ** Add new one to table 
@@ -1395,14 +1408,15 @@ static void namListParse(AjPList listwords, AjPList listcount,
 	    ** is not about to be deallocated - so do not use "name" here
 	    */
 
-	    entry = ajTablePut(namMasterTable, tabname, fnew);
+	    entry = ajTablePut(saveTable, tabname, fnew);
 	    if(entry)
 	    {
 		/* it existed so over wrote previous table entry */
-		namUser("%S: replaced previous definition of '%S'\n",
-			 namRootStr,
-			 entry->name);
-		namEntryDelete(&entry); /* we can delete the previous entry */
+		namUser("%S: replaced previous %s definition of '%S'\n",
+			namRootStr,
+			namTypes[namParseType],
+			entry->name);
+		namEntryDelete(&entry, namParseType); /* previous entry */
 		AJFREE(tabname);        /* ajTablePut reused the old key */
 	    }
 	    
@@ -1595,7 +1609,7 @@ AjBool ajNamGetValueC(const char* name, AjPStr* value)
 
     /* then test the table definitions - with the prefix */
     
-    fnew = ajTableGet(namMasterTable, ajStrStr(namstr));
+    fnew = ajTableGet(namVarMasterTable, ajStrStr(namstr));
     if(fnew)
     {
 	ajStrAssS(value, fnew->value);
@@ -1607,7 +1621,7 @@ AjBool ajNamGetValueC(const char* name, AjPStr* value)
 
 	/* then test the table definitions - as originally specified */
 
-	fnew = ajTableGet(namMasterTable, name);
+	fnew = ajTableGet(namVarMasterTable, name);
 	if(fnew)
 	{
 	    ajStrAssS(value, fnew->value);
@@ -1639,7 +1653,7 @@ AjBool ajNamDatabase(const AjPStr name)
 
     /* ajDebug("ajNamDatabase '%S'\n", name); */
 
-    fnew = ajTableGet(namMasterTable, ajStrStr(name));
+    fnew = ajTableGet(namDbMasterTable, ajStrStr(name));
     if(fnew)
     {
 	/* ajDebug("  '%S' found\n", name); */
@@ -1808,9 +1822,11 @@ void ajNamInit(const char* prefix)
     AjPStr debugVal      = NULL;
     AjPStr homercVal      = NULL;
     
-    /* create new table to hold the values */
+    /* create new tables to hold the values */
     
-    namMasterTable = ajStrTableNewCaseC(0);
+    namVarMasterTable = ajStrTableNewCaseC(0);
+    namDbMasterTable = ajStrTableNewCaseC(0);
+    namResMasterTable = ajStrTableNewCaseC(0);
     
     /*
     ** for each type of file read it and save the values 
@@ -2104,8 +2120,12 @@ static ajint namRsAttrC(const char* str)
 void ajNamExit(void)
 {
 
-    namListMasterDelete(); /* Delete elements from database structure */
-    ajTableFree(&namMasterTable); /* free table and database structures */
+    namListMasterDelete(namVarMasterTable, TYPE_ENV); /* Delete elements */
+    ajTableFree(&namVarMasterTable); /* free table and database structures */
+    namListMasterDelete(namDbMasterTable, TYPE_DB); /* Delete elements */
+    ajTableFree(&namDbMasterTable); /* free table and database structures */
+    namListMasterDelete(namResMasterTable, TYPE_RESOURCE);/* Delete elements */
+    ajTableFree(&namResMasterTable); /* free table and database structures */
     ajStrDel(&namFixedRootBaseStr);	/* allocated in ajNamInit */
     ajStrDel(&namPrefixStr);		/* allocated in ajNamInit */
     ajStrDel(&namFileOrig);		/* allocated in ajNamInit */
@@ -2135,12 +2155,9 @@ AjBool ajNamDbTest(const AjPStr dbname)
 {
     NamPEntry data;
 
-    data = ajTableGet(namMasterTable, ajStrStr(dbname));
+    data = ajTableGet(namDbMasterTable, ajStrStr(dbname));
 
     if(!data)
-	return ajFalse;
-
-    if(data->type != TYPE_DB)
 	return ajFalse;
 
     return ajTrue;
@@ -2172,15 +2189,12 @@ AjBool ajNamDbGetUrl(const AjPStr dbname, AjPStr* url)
 	iurl = namDbAttrC("url");
 	calls = 1;
     }
-    data = ajTableGet(namMasterTable, ajStrStr(dbname));
+    data = ajTableGet(namDbMasterTable, ajStrStr(dbname));
 
     if(!data)
 	ajFatal("%S is not a known database\n", dbname);
 
-    if(data->type != TYPE_DB)
-	ajFatal("%S is not a database\n", dbname);
-
-    dbattr = data->data;
+    dbattr = (AjPStr *) data->data;
 
     if(ajStrLen(dbattr[iurl]))
     {
@@ -2217,15 +2231,12 @@ AjBool ajNamDbGetDbalias(const AjPStr dbname, AjPStr* dbalias)
 	idba = namDbAttrC("dbalias");
 	calls = 1;
     }
-    data = ajTableGet(namMasterTable, ajStrStr(dbname));
+    data = ajTableGet(namDbMasterTable, ajStrStr(dbname));
 
     if(!data)
 	ajFatal("%S is not a known database\n", dbname);
 
-    if(data->type != TYPE_DB)
-	ajFatal("%S is not a database\n", dbname);
-
-    dbattr = data->data;
+    dbattr = (AjPStr *) data->data;
 
     if(ajStrLen(dbattr[idba]))
     {
@@ -2263,12 +2274,12 @@ AjBool ajNamDbData(AjPSeqQuery qry)
 
     const AjPStr* dbattr;
 
-    data = ajTableGet(namMasterTable, ajStrStr(qry->DbName));
+    data = ajTableGet(namDbMasterTable, ajStrStr(qry->DbName));
 
-    if(!data || (data->type != TYPE_DB))
+    if(!data)
 	ajFatal("database %S unknown\n", qry->DbName);
 
-    dbattr = data->data;
+    dbattr = (const AjPStr *) data->data;
 
     /* general defaults */
 
@@ -2322,12 +2333,12 @@ AjBool ajNamDbQuery(AjPSeqQuery qry)
 
     const AjPStr* dbattr;
 
-    data = ajTableGet(namMasterTable, ajStrStr(qry->DbName));
+    data = ajTableGet(namDbMasterTable, ajStrStr(qry->DbName));
 
-    if(!data || (data->type != TYPE_DB))
+    if(!data)
 	ajFatal("database %S unknown\n", qry->DbName);
 
-    dbattr = data->data;
+    dbattr = (const AjPStr *) data->data;
 
     if(!ajStrLen(qry->DbType))
 	ajNamDbData(qry);
@@ -2394,7 +2405,7 @@ static AjBool namDbSetAttr(const AjPStr* dbattr, const char* attrib,
 
     i = namDbAttrC(attrib);
 
-    if(!i)
+    if(i < 0)
 	ajFatal("unknown attribute '%s' requested",  attrib);
 
     if(!ajStrLen(dbattr[i]))
@@ -2662,22 +2673,23 @@ AjBool ajNamResolve(AjPStr* name)
 ** Validation of a master table entry
 **
 ** @param [r] entry [const NamPEntry] Internal table entry
+** @param [r] entrytype [ajint] Internal table entry type
 ** @return [AjBool] ajTrue on success
 ** @@
 ******************************************************************************/
 
-static AjBool namValid(const NamPEntry entry)
+static AjBool namValid(const NamPEntry entry, ajint entrytype)
 {
-    if(entry->type == TYPE_ENV)
+    if(entrytype == TYPE_ENV)
 	return namValidVariable(entry);
-    else if(entry->type == TYPE_DB)
+    else if(entrytype == TYPE_DB)
 	return namValidDatabase(entry);
-    else if(entry->type == TYPE_RESOURCE)
+    else if(entrytype == TYPE_RESOURCE)
 	return namValidResource(entry);
 
     /* fatal: cannot test - should not happen */
     namError("Unknown definition type number %d",
-	      entry->type);
+	      entrytype);
 
     return ajFalse;
 }
@@ -2706,7 +2718,7 @@ static AjBool namValidDatabase(const NamPEntry entry)
     AjBool hasmethod = ajFalse;
     AjBool hastype   = ajFalse;
     
-    attrs = entry->data;
+    attrs = (AjPStr *) entry->data;
     if(!attrs)
     {			 /* fatal - should be set for all databases */
 	namError("Database '%S' has no list of valid attributes",
@@ -2800,7 +2812,7 @@ static AjBool namValidResource(const NamPEntry entry)
     AjBool hastype = ajFalse;
     AjBool ok;
 
-    attrs = entry->data;
+    attrs = (AjPStr *) entry->data;
     if(!attrs)
     {			 /* fatal - should be set for all databases */
 	namError("Resource '%S' has no list of valid attributes",
@@ -2880,6 +2892,41 @@ AjBool ajNamSetControl(const char* optionName)
 
 
 
+/* @func ajNamRsAttrValue **************************************************
+**
+** Return the value for a resource attribute
+**
+** @param [r] name [const AjPStr] resource name
+** @param [r] attribute [const AjPStr] resource attribute
+** @param [w] value [AjPStr *] resource value
+
+**
+** @return [AjBool] true if found
+** @@
+******************************************************************************/
+
+AjBool ajNamRsAttrValue(const AjPStr name, const AjPStr attribute,
+			 AjPStr *value)
+{
+    ajint j;
+    NamPEntry fnew = NULL;
+    AjPStr *rsattr = NULL;
+
+    fnew = ajTableGet(namResMasterTable, ajStrStr(name));
+
+    rsattr = (AjPStr *) fnew->data;
+    j = namRsAttr(attribute);
+
+    if(ajStrLen(rsattr[j]))
+    {
+	ajStrAssS(value,rsattr[j]);
+	return ajTrue;
+    }
+
+    return ajFalse;
+}
+
+
 /* @func ajNamRsAttrValueC **************************************************
 **
 ** Return the value for a resource attribute
@@ -2896,33 +2943,59 @@ AjBool ajNamSetControl(const char* optionName)
 AjBool ajNamRsAttrValueC(const char *name, const char *attribute,
 			 AjPStr *value)
 {
-    ajint i;
     ajint j;
     NamPEntry fnew = NULL;
-    void **array   = NULL;
-    AjPStr *rsattr = NULL;
-    AjBool found   = ajFalse;
+    const AjPStr* rsattr;
+
+    fnew = ajTableGet(namResMasterTable, name);
+    if(!fnew)
+	return ajFalse;
     
-    array = ajTableToarray(namMasterTable, NULL);
+    rsattr = (const AjPStr *) fnew->data;
+    j = namRsAttrC(attribute);
 
-    for(i = 0; array[i] && !found; i += 2)
+    if(ajStrLen(rsattr[j]))
     {
-	fnew =(NamPEntry) array[i+1];
-	if(fnew->type == TYPE_RESOURCE)
-	    if(!ajStrCmpC(fnew->name,name))
-	    {
-		rsattr = (AjPStr *) fnew->data;
-		for(j=0; namRsAttrs[j].Name; ++j)
-		    if(!strcmp(namRsAttrs[j].Name,attribute))
-			if(ajStrLen(rsattr[j]))
-			{
-			    ajStrAssS(value,rsattr[j]);
-			    found = ajTrue;
-			    break;
-			}
-	    }
+	ajStrAssS(value,rsattr[j]);
+	return ajTrue;
     }
-    AJFREE(array);
 
-    return found;
+    return ajFalse;
 }
+
+
+/* @func ajNamRsListValue **************************************************
+**
+** Return the value for a resource attribute of type 'list'
+**
+** @param [r] name [const AjPStr] resource name
+** @param [w] value [AjPStr *] resource value
+**
+** @return [AjBool] true if found
+** @@
+******************************************************************************/
+
+AjBool ajNamRsListValue(const AjPStr name, AjPStr *value)
+{
+    ajint j;
+    NamPEntry fnew = NULL;
+    const AjPStr *rsattr = NULL;
+
+    fnew = ajTableGet(namResMasterTable, ajStrStr(name));
+
+    rsattr = (const AjPStr *) fnew->data;
+    j = namRsAttrC("type");
+    if(!ajStrMatchCaseC(rsattr[j], "list"))
+	return ajFalse;
+
+    j = namRsAttrC("value");
+    if(ajStrLen(rsattr[j]))
+    {
+	ajStrAssS(value,rsattr[j]);
+	return ajTrue;
+    }
+
+    return ajFalse;
+}
+
+

@@ -41,8 +41,11 @@ AjBool ajNamRootBase (AjPStr* rootbase);
 AjBool ajNamRootInstall (AjPStr* root);
 AjBool ajNamRootPack (AjPStr* pack);
 AjBool ajNamRootVersion (AjPStr* version);
+AjBool ajNamRsAttrValue(const AjPStr name, const AjPStr attribute,
+			 AjPStr *value);
 AjBool ajNamRsAttrValueC(const char *name, const char *attribute,
 			 AjPStr *value);
+AjBool ajNamRsListValue(const AjPStr name, AjPStr *value);
 AjBool ajNamSetControl (const char* optionName);
 void   ajNamVariables (void); /* "" "" may want to delete later */
 #endif
