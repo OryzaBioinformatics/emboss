@@ -10,13 +10,13 @@
 <table border=0 cellspacing=0 cellpadding=0>
  <tr>
   <td>
-  <p><a href="http://www.hgmp.mrc.ac.uk/Software/EMBOSS/index.html">
+  <p><a href="http://emboss.sourceforge.net/">
   <img border=0 width=55
   height=55
-  src="http://www.hgmp.mrc.ac.uk/Software/EMBOSS/emboss_icon.gif"></a></p>
+  src="http://emboss.sourceforge.net/images/emboss_icon.jpg"></a></p>
   </td>
   <td>
-  <h2 align=center>ACD Syntax 2.9.0</h2>
+  <h2 align=center>ACD Syntax 3.0.0</h2>
   </td>
  </tr>
 </table>
@@ -306,9 +306,15 @@ the use of a ':' character: <br>
 Several third-party interfaces are starting to rely upon there being a maximum
 of 2 levels, so do not use more than one ':' in a group name.</p>
 
-<p>The group name is not checked against a list of
-accepted values, however we try to stick to a fairly rigidly defined group
-structure.</p>
+<p>The group name is now checked against a list of
+accepted values in the file <b>groups.standard</b> which is defined
+and installed in the same directory as the ACD files. This file
+contains one line for each known group, with subgroups defined with a
+":" delimiter, and spaces replaced by underscores. Each group also
+has a short description.</p>
+
+<p>The table in the following section lists all groups currently
+defined</p>
 
 <a name=sect2214>&nbsp;</a>
 <h4>2.2.1.4 The groups structure</h4>
@@ -326,10 +332,11 @@ If the group consists of only one level, such as <br>
 it. (i.e. you must not use <b>"Display : Features"</b>)</p>
 
 <p>You are <b>strongly</b> encouraged to use the
-following groups structure. We have found that most things will fit in one or
+following groups structure. This is the set of groups defined by the
+<b>groups.standard</b> file. We have found that most things will fit in one or
 more of these groups. When, however, a completely new category of program is
-written, please discuss the creation of the new group name with the developer's
-mailing list. Sometimes a new group is required (c.f. the group "Enzyme
+written, please discuss the creation of the new group name with the developers'
+mailing list. Sometimes a new group is required (for example the group "Enzyme
 Kinetics" which had to be created to hold 'findkm').</p>
 
 <!-- #tablegroups -->
@@ -428,11 +435,11 @@ type.</p>
 "boolean" parameters. Toggle parameters are intended for use in
 turning on/off other parameters. When ACD parameters are grouped in
 sections, a clean ACD file will  have all the "required" parameters in
-the "requierd" secion and all the "additional" parameters ni the
+the "required" secion and all the "additional" parameters in the
 "additional" section. Some of these will have calculated values for
 the "standard" and "additional" attributes, controlled by the value of
 another parameter. The "toggle" parameters are designed to be used in
-these calculated values, and can be ni the "required" section even if
+these calculated values, and can be in the "required" section even if
 not themselves defined as "standard".</p>
 
 <p>Exactly like "boolean" parameters, if they
@@ -454,6 +461,8 @@ no.</p>
 
 <p>Codon usage tables are simple files read from the EMBOSS data
 search path, and are distributed in the emboss/data directory.</p>
+
+<p>Codon usage files can be read in several formats, including "gcg".</p>
 
 <!-- #acdtype-cpdb -->
 <h5>Cpdb</h5>
@@ -928,7 +937,7 @@ been read in and checked (see 1.4). The program must then assign the parameter
 to an actual EMBOSS object, like sequence (AjPSeq), string (AjPStr) etc. The
 actual function calls are beyond the scope of this document, and the reader is
 referred to the AJAX documentation
-(http://srs.hgmp.mrc.ac.uk/srs6bin/cgi-bin/wgetz?-fun+pagelibinfo+-info+EDATA
+(http://srs.ebi.ac.uk/srs7bin/cgi-bin/wgetz?-fun+pagelibinfo+-info+EDATA
 for the SRS searchable Object documentation), but some examples can be found in
 section 1.4 and 1.5.</p>
 
@@ -1242,17 +1251,50 @@ are data type-specific attributes.</p>
 <a name=sect2411>&nbsp;</a>
 <h4>2.4.1.1 The global attributes</h4>
 
-<p><i>code:</i></p>
-
-<p>A code word (no spaces) which is searched for
-in the file codes.english to give a standard prompt, for example when asking
-for an alignment gap penalty. The standard default prompts are in the same
-file. The code word is not case-sensitive. <i>information</i> is preferred.</p>
-
 <p><i>default:</i></p>
 
 <p>Defines the default value for the parameter,
-which can be dependent on the values of parameters defined earlier.</p>
+which can be dependent on the values of parameters defined
+earlier.</p>
+
+<p>Each data type has a default value, which can be valid (for example
+a boolean will default to "N") or invalid (many input types
+will default to an empty string).
+
+<p><i>information:</i></p>
+
+<p>The string giving information about the
+parameter, for use on Web forms and in GUIs and also a default prompt to the
+user</p>
+
+<p>For some data types (sequence is a good example) there are standard
+prompts so no value is expected, and the acdvalid utility will issue a
+warning if an information attribute is found.
+
+<p><i>parameter:</i></p>
+
+<p>Defines a parameter on the command line which can appear without a
+qualifier name. Also implies that the value is <i>required</i> and
+will be prompted for if missing.</p>
+
+<p><i>standard:</i></p>
+
+<p>Indicates whether a parameter is mandatory and
+will be prompted for if missing.</p>
+
+<p><i>additional:</i></p>
+
+<p>Indicates if the parameter should be queried
+for when the <i>-options</i> qualifier is set on the command line.</p>
+
+<p<i>help:</i></p>
+
+<p>The string shown when the <i>-help</i>
+qualifier is used on the command line</p>
+
+<p>Help is usually only defined if a specific string is needed.
+If help is not defined, the value of the "information" attribute,
+or the default prompt, will be used.</p>
 
 <p><i>expect:</i></p>
 
@@ -1262,45 +1304,6 @@ automatically generated from the ACD file, and in most cases there is a
 reasonable value generated. Where there is no suitable value, this attribute
 should be used to provide one.</p>
 
-<p<i>help:</i></p>
-
-<p>The string shown when the <i>-help</i>
-qualifier is used on the command line</p>
-
-<p><i>information:</i></p>
-
-<p>The string giving information about the
-parameter, for use on Web forms and in GUIs and also a default prompt to the
-user</p>
-
-<p><i>missing:</i></p>
-
-<p>Indicates whether a qualifier can have no
-value, especially when it appears on the command line (for example to override
-a default value in the ACD file).</p>
-
-<p><i>additional:</i></p>
-
-<p>Indicates if the parameter should be queried
-for when the <i>-options</i> qualifier is set on the command line.</p>
-
-<p><i>param:</i></p>
-
-<p>Defines a parameter on the command line which can appear without a
-qualifier name. Also implies that the value is <i>required</i> and
-will be prompted for if missing.</p>
-
-<p><i>prompt:</i></p>
-
-<p>The string used if the user has to be queried
-for a value, though <i>information</i> can be used instead and usually only one
-will be defined. <i>information</i> is preferred.</p>
-
-<p><i>standard:</i></p>
-
-<p>Indicates whether a parameter is mandatory and
-will be prompted for if missing.</p>
-
 <p><i>valid:</i></p>
 
 <p>A string used in the "Allowed values"
@@ -1309,12 +1312,44 @@ automatically generated from the ACD file, and in most cases there is a
 reasonable value generated. Where there is no suitable value, this attribute
 should be used to provide one.</p>
 
+<p><i>knowntype:</i></p>
+
+<p>The <i>knowntype</i> attribute defines one of a controlled vocabulary of
+known value types. Some ACD data types require a knowntype attribute.</p>
+
+<p>These standard values are read from a file
+<b>knowntypes.standard</B> which is stored and installed in the ACD
+file directory. A few other values are accepted, for example
+"(programname) output" for an outfile data type. These are documented
+under each output type. The acdvalid utility will check all <i>knowntype</i>
+values in an ACD file, and report any missing values for data types
+that require a knowntype.</p>
+
+<p><i>prompt:</i></p>
+
+<p>The string used if the user has to be queried
+for a value, though <i>information</i> can be used instead and usually only one
+will be defined. <i>information</i> is preferred.</p>
+
+<p><i>missing:</i></p>
+
+<p>Indicates whether a qualifier can have no
+value, especially when it appears on the command line (for example to override
+a default value in the ACD file).</p>
+
 <p><i>needed:</i></p>
 
 <p>Indicates whether a parameter is expected to be
 included in a GUI form. Some parameters are available on the command line, but
 are not generally useful to users, or can cause confusion when presented in a
 GUI form with all other options.</p>
+
+<p><i>code:</i></p>
+
+<p>A code word (no spaces) which is searched for
+in the file codes.english to give a standard prompt, for example when asking
+for an alignment gap penalty. The standard default prompts are in the same
+file. The code word is not case-sensitive. <i>information</i> is preferred.</p>
 
 <p><i>comment:</i></p>
 
@@ -1349,7 +1384,7 @@ standard: <i>"Y"/"N"</i>
 
 <pre>
 sequence: asequence [
-    standard: Y
+    standard: "Y"
     information: "Enter filename"
   ]
 </pre>
@@ -1971,6 +2006,12 @@ of the given type. By default, any sequence type is accepted.</p>
 <p>We recommend always defining the <i>type:</i> attribute so that the
 accepted input sequence type is always clear.</p>
 
+<p>The <i>aligned:</i> attribute, if true, specifies that all sequences in the
+input are expected to be aligned. If false, then the sequences are
+assumed to be unaligned, and are simply read into memory together for
+processing. We recommend always defining the <i>aligned:</i> attribute
+so that the nature of the sequence set if clearly defined.</p>
+
 <p>If the <i>features:</i> attribute is set, the sequence input will
 include feature information either in the same file (if the sequence
 format supports it) or in a separate file (by default in GFF format).</p>
@@ -2002,6 +2043,12 @@ of the given type. By default, any sequence type is accepted.</p>
 
 <p>We recommend always defining the <i>type:</i> attribute so that the
 accepted input sequence type is always clear.</p>
+
+<p>The <i>aligned:</i> attribute, if true, specifies that all sequences in the
+input are expected to be aligned. If false, then the sequences are
+assumed to be unaligned, and are simply read into memory together for
+processing. We recommend always defining the <i>aligned:</i> attribute
+so that the nature of the sequence set if clearly defined.</p>
 
 <p>If the <i>features:</i> attribute is set, the sequence input will
 include feature information either in the same file (if the sequence
@@ -2268,8 +2315,11 @@ feature file extension.</p>
 <!-- #acdattr-outcodon -->
 <h5>Outcodon</h5>
 
-<p>The <i>extension:</i> attribute will default to the output file
-format.</p>
+<p>The <i>name:</i> attribute will default to "outfile".</p>
+
+<p>The <i>extension:</i> attribute will default to the format, with
+"cut" defined as the default format to match the usual codon usage
+filenaming convention. This format is also called "emboss".</p>
 
 <p>The <i>nulldefault:</i> attribute overrides the default name
 generation, and uses an empty string (no data output) as the default for
@@ -2569,8 +2619,6 @@ the score value. For integer scores this can be set to "0".</p>
 
 The <i>multiple:</i> attribute should be set true if the output can
 contain more than one report from the same input.</p>
-
-The <i>mintags:</i> attribute appears to be obsolete.</p>
 
 <p>The <i>nullok:</i> attribute allows a default value to be replaced
 by an empty string or by -noxxx on the command line if the application
@@ -3134,8 +3182,8 @@ is run without any parameters or qualifiers and since the <i>asequence</i>
 parameter is a parameter it queries the user for the input filename. It also
 queries the user for the output sequence, since that parameter is labelled as
 being required by the attribute of that name. It will not query the user for
-the integer variable <i>outputLength</i>, since it is not labelled as neither a
-parameter nor required.</p>
+the integer variable <i>outputLength</i>, since it is not labelled as a
+parameter and is not labelled as required.</p>
 
 <p>In the second example the user IS queried for the integer, since
 the <i>-options</i> qualifier forces the program to query for those
@@ -3451,15 +3499,13 @@ arithmetic operations are used: + - * and /.</p>
 <p>The operands <i>a</i> and <i>b</i> must parse
 to an integer or a float value. Only a single arithmetic operation is allowed
 per operation. If more then one arithmetic operation is required, one should
-make use of internal variables to hold the intermediate results or nest
+make use of internal ACD variables to hold the intermediate results or nest
 separate @() operations.</p>
 
 <p>Example1:</p>
 
 <pre>
-var: protlen [
-    "@( $(sequence.length) / 3 )"
-  ]
+variable: protlen "@( $(sequence.length) / 3 )"
 
 integer: window  [
     maximum: "@($(protlen)-50)"
@@ -3467,8 +3513,8 @@ integer: window  [
   ]
 </pre>
 
-<p>This is an example of using an internal variable, to store the
-intermediate result. The internal variable <i>$(protlen)</i> is
+<p>This is an example of using an internal ACD variable, to store the
+intermediate result. The internal ACD variable <i>$(protlen)</i> is
 calculated from the length of the input sequence ( <i>sequence</i> data
 type) and used in the definition of maximum size of the <i>window
 </i>parameter.</p>
@@ -3628,8 +3674,113 @@ to unknown.</p>
 assigned to a single associated value, the operation will resolve to the LAST
 associated value that matches its possible value.</p>
 
-<a name=sect263>&nbsp;</a>
-<h3>2.6.3 Environment variables</h3>
+<a name=sect27>&nbsp;</a>
+<h3>2.7 Variables</h3>
+
+<p>The use of conditional operations in ACD files is often to test the
+values of <i>list</i> or <i>selection</i> data types.</p>
+
+<p>These tests are often used for several other qualifiers. To help
+understand the ACD file, and to help the developers of ACD parsers, an
+ACD file can use a <i>variable</i> definition to define the result
+once only, and then to refer to the variable by name in all later ACD
+data type definitions.</p>
+
+<p>Example1:</p>
+
+<pre>
+variable: usermatrix "@($(pwmatrix) == o)"
+
+infile: pairwisedata [
+  additional: "$(usermatrix)"
+  default: ""
+  nullok: "@(!$(usermatrix))"
+  information: "Filename of user pairwise matrix"
+  knowntype: "comparison matrix"
+]
+
+</pre>
+
+<p>Note that as a variable only has a single value and no attributes the
+square brackets are not used.</p>
+
+<p>Variables are used to simplify the ACD file, but they do indicate
+that there is some complexity in the ACD definitions. When a variable
+is used, or when a conditional operation refers to another ACD
+value, the application can be regarded as two or more separate
+applications with each possible condition resolved.</p>
+
+<a name=sect28>&nbsp;</a>
+<h3>2.8 Sections</h3>
+
+<p>The parameters and qualifiers defined by an ACD file are processed
+in the order in which they appear. This is sufficient for ACD
+processing by EMBOSS applications, but does not give enough detail for
+user interfaces to build clean groupings of options.</p>
+
+<p>To help user interfaces, all ACD parameters and qualifiers are now
+grouped into 5 major sections and in some cases into subsections. The
+5 major sections always appear in the following order in the ACD file
+(the order is tested by the acdvalid tool):</p>
+
+<table>
+<tr>
+<td><b>Section name</b></td>
+<td><b>Description</b></td>
+</tr>
+
+<tr>
+<td>Input</td>
+<td>Input values, including any infile, sequence, seqset, seqall,
+matrix, fmatrix, codon, or any
+other ACD type that will read input. At present datafile is included,
+although this may change. Other qualifiers related to input
+can also be placed in this section.</td>
+</tr>
+
+<tr>
+<td>Required</td>
+<td>Parameters and required qualifiers, including
+any whose "additional" attribute can be true but depends on a
+conditional operation. Also any toggles that their definitions
+use. Note that input and output parameters and qualifiers must be in
+their respective sections. Other qualifiers related to input and
+output can also be placed in those sections.</td>
+</tr>
+
+<tr>
+<td>Additional</td>
+<td>Additional qualifiers, including any whose "additional" attribute
+can be true but depends on a conditional operation. Also any toggles
+that their definitions use. Note that input and output parameters and
+qualifiers must be in their respective sections. Other qualifiers
+related to input and output can also be placed in those sections.</td>
+</tr>
+
+<tr>
+<td>Advanced</td>
+<td>Any qualifiers (except input and output qualifiers) which have no
+"standard" or "additional" attribute defined. Other qualifiers
+related to input and output can also be placed in those sections.</td>
+</tr>
+
+<tr>
+<td>Output</td>
+<td>Output values, including any outfile, outdata, seqout, seqoutall,
+seqoutset, outtree or any other data type that will write output. This
+is the last section to be defined, so all output definitions must be
+at the end. Other qualifiers related to output
+can also be placed in this section.</td>
+</tr>
+
+</table>
+
+<p>All sections and subsections are defined in the file
+<b>sections.standard</b> which is stored and installed in the same
+directory as the ACD files.</p>
+
+<a name=sect29>&nbsp;</a>
+<h3>2.9 Environment variables</h3>
 
 <p>The behaviour of EMBOSS programs can not only
 be influenced by command line options, but also by environment variables. Some
@@ -3638,11 +3789,156 @@ global qualifiers and they are listed here also, for completeness. There are a
 few others that are not directly related to specific data types, but are more
 general to the workings of an EMBOSS program.</p>
 
+
+<p>All environment variables should be described in the file
+<b>variables.standard</b> which is stored and installed in the same
+directory as the ACD files and is used to generate the table
+below. Unlike the other .standard files, there is no explicit test for
+a variable to be defined in this file.</p>
+
 <!-- #tableothervars -->
 
 
 <a name=sect3>&nbsp;</a>
-<h1>3. Command line syntax</h1>
+<h1>3. ACD utility programs</h1>
+
+
+<p>A set of 6 utility programs will run, test and document an ACD file
+without the need to write the program which will use the ACD file.</p>
+
+<p>The recommended approach for developing new applications is to
+first write and test the ACD file and then to write the application to
+use the values defined by the ACD file.
+
+
+<a name=sect31>&nbsp;</a>
+<h2>3.1 acdc</h2>
+
+
+<p>The <b>acdc</b> utility processes an ACD file in exactly the same
+way as an application, even if the application itself has not yet been
+written.</p>
+
+<p><b>acdc</b> can use general qualifiers such as -debug. Note that as
+the input files are read any debug calls made by the input functions
+will be reported.
+
+
+
+<a name=sect32>&nbsp;</a>
+<h2>3.2 acdtrace</h2>
+
+
+<p>The <b>acdtrace</b> utility runs like acdc but also reports the
+resolution of any ACD varaibles and operations as the file is
+processed. The output on screen can look a little confusing but is by
+far the best way to see how variables and operations work in your ACD file.</p>
+
+
+
+<a name=sect33>&nbsp;</a>
+<h2>3.3 acdvalid</h2>
+
+
+<p>The <b>acdvalid</b> utility validates an ACD file, testing many
+features which will not prevent an application from running, but will
+create problems for the user interface (commandline or some
+wrapper).</p>
+
+<p>Among the features tested by <b>acdvalid</b> are:</p>
+
+<ul>
+
+<li>sections in the correct order of input, required, additional,
+advanced and output</li>
+
+<li>calculated values for the <i>parameter</i> <i>standard</i> and
+<i>additional</i> attributes. These can use "toggle" data type values
+but not "boolean", so that interface wrappers can use "toggle" values
+to split an application into 2 or more simpler definitions.</li>
+
+<li><i>knowntype</i> attributes are defined for the data type in the
+<b>knowntypes.standard</b> file or match an accepted standard format
+for the data type</li>
+
+<li>qualifier names match an accepted standard, for example all
+sequence input should end in "sequence". The warning message will
+explain what the standard requires</li>
+
+<li>qualifiers that are restricted to one section (input or output)
+are ni the correct section</li>
+
+<li>Other qualifiers are valid in the section ni which they appear,
+for example the "advanced" section cannot have any qualifier that will
+be prompted, and the "additional" section can only have qualifiers
+whose <i>additional</i> attribute is set, or toggles which control them.</li>
+
+<li>sections and subsections must be defined in the
+<b>sections.standard</b> file</li>
+
+<li><i>parameter</i>, <i>standard</i> and <i>additional</i> attribute
+values cannot be "N" (the default) because this confuses parsers.</li>
+
+<li>section definitions must use a standard <i>information</i>
+attribute so that interface wrappers will have a consistent
+description when using sections to group qualifiers.</li>
+
+<li>The text values defined for <i>information</i> and other
+attributes should start in upper case</li>
+
+<li>Data types with standard prompts should not have
+<i>information</i> or <i>prompt</i> attributes</li>
+
+</ul>
+
+
+<p>If the message is a "Warning" then the ACD file will work, although
+it is worth trying to fix the problem. Recommended solutions are
+described in the web page
+http://www.ebi.ac.uk/~pmr/emboss/acdvalid-fix.html used by the
+developers
+</p>
+
+<p>Further validation tests will be added in future releases so it is
+worth running acdvalid on all local ACD files with each new version of
+EMBOSS</p>
+
+
+<a name=sect34>&nbsp;</a>
+<h2>3.4 acdpretty</h2>
+
+
+<p>The <b>acdpretty</b> utility simply reads an ACD file and rewrites
+it with clean indentation to file <b>(programname).acdpretty</b> which
+can be used to overwrite the original ACD file.</p>
+
+
+
+<a name=sect35>&nbsp;</a>
+<h2>3.5 acdtable</h2>
+
+
+<p>The <b>acdtable</b> utility is used to create the table of
+qualifiers, allowed values and defaults that appears in the
+application documentation. The allowed values uses the <i>valid</i>
+attribute, and the default value uses the <i>expect</i> attribute for
+cases where the ACD definition alone is not enough to define the value
+to be reported.</p>
+
+
+
+<a name=sect36>&nbsp;</a>
+<h2>3.6 acdlog</h2>
+
+
+<p>The <b>acdc</b> utility</p> runs like <b>acdc</b> but also produces
+a file <i>(programname).acdlog</i> which documents the internals of
+ACD processing.
+
+
+
+<a name=sect4>&nbsp;</a>
+<h1>4. Command line syntax</h1>
 
 <p>Most of the EMBOSS programs will be started
 from the UNIX command line, either with or without extra parameters and
@@ -3656,8 +3952,8 @@ confusion, there will be a recommended EMBOSS command style, which
 probably will be the UNIX style using '=' for parameter and qualifier
 values.</p>
 
-<a name=sect31>&nbsp;</a>
-<h2>3.1 Parameters and qualifiers.</h2>
+<a name=sect41>&nbsp;</a>
+<h2>4.1 Parameters and qualifiers.</h2>
 
 <p>For parameters it is not always mandatory to
 use the name of the parameter on the command line. If the <i>parameter:</i>
@@ -3670,8 +3966,8 @@ qualifier is to be given on the command line).</p>
 line syntax, wherever the word qualifier is used, it means both parameters and
 qualifiers. If 'parameter' is used it will only apply to parameters.</p>
 
-<a name=sect32>&nbsp;</a>
-<h2>3.2 Qualifier definition</h2>
+<a name=sect42>&nbsp;</a>
+<h2>4.2 Qualifier definition</h2>
 
 <ul type=disc>
  <li>Qualifiers are meaningful words rather than single letters. </li>
@@ -3766,8 +4062,8 @@ command lines.</p>
 <p>For general use, we strongly recommend the
 first example above.</p>
 
-<a name=sect4>&nbsp;</a>
-<h1>4. Using an ACD file in a new EMBOSS program</h1>
+<a name=sect5>&nbsp;</a>
+<h1>5. Using an ACD file in a new EMBOSS program</h1>
 
 <p>This part is intended as a simple guide to getting started as a
 developer using EMBOSS. EMBOSS is a new package, and can seem
@@ -3778,16 +4074,16 @@ easy.</p>
 need to write the application source code, which will use the EMBOSS
 libraries, and you also need to add the application to EMBOSS.</p>
 
-<a name=sect41>&nbsp;</a>
-<h2>4.1 Application Command Definitions</h2>
+<a name=sect51>&nbsp;</a>
+<h2>5.1 Application Command Definitions</h2>
 
 <p>Strangely, you add the application to EMBOSS
 before you write any source code. This is because EMBOSS can use the
 application command definition (ACD) file to test all the input for you,
 without any new source code.</p>
 
-<a name=sect411>&nbsp;</a>
-<h3>4.1.1 ACD files</h3>
+<a name=sect511>&nbsp;</a>
+<h3>5.1.1 ACD files</h3>
 
 <p>ACD files live in the <i>emboss/acd/</i>
 directory with a filename or <i>appname</i>.acd ("<i>appname</i>" is
@@ -3833,8 +4129,8 @@ for the user'" as well.</p>
 values can have defaults provided in the ACD file and tests to make sure the
 values are reasonable. See the ACD documentation for more information.</p>
 
-<a name=sect412>&nbsp;</a>
-<h3>4.1.2 Testing your ACD file</h3>
+<a name=sect512>&nbsp;</a>
+<h3>5.1.2 Testing your ACD file</h3>
 
 <p>Now for the cunning part. EMBOSS has an
 application called <b>acdc</b> which can pretend to be any other application.
@@ -3849,8 +4145,8 @@ and will read in any required data just as if the application itself was
 running. It will also test anything else you add on the command line and report
 syntax errors in exactly the same way as the real application.</p>
 
-<a name=sect42>&nbsp;</a>
-<h2>4.2 Application template</h2>
+<a name=sect52>&nbsp;</a>
+<h2>5.2 Application template</h2>
 
 <p>When the ACD file is ready, which should not take long, you can
 start on the application code. This lives in emboss/<i>appname</i>.c
@@ -3895,8 +4191,8 @@ like C's "printf" except that it uses an AJAX file object (AjPFile)
 and has some extra format options like %S for AJAX strings
 (AjPStr).</p>
 
-<a name=sect43>&nbsp;</a>
-<h2>4.3 Makefile changes</h2>
+<a name=sect53>&nbsp;</a>
+<h2>5.3 Makefile changes</h2>
 
 <p>You can add a new application without too much
 difficulty if you are using the full developers version from the CVS server. Go
@@ -3917,8 +4213,8 @@ You can then use <i>make</i> to make EMBOSS with your new application.</p>
 <p>Time to write some real code for your
 application. Good luck and happy coding!</p>
 
-<a name=sect5>&nbsp;</a>
-<h1>5. Examples</h1>
+<a name=sect6>&nbsp;</a>
+<h1>6. Examples</h1>
 
 <p>The following ACD file for a hypothetical
 application called <b>ajtest</b> tests the data types for both required and
@@ -4010,16 +4306,16 @@ string: string [
 </pre>
 
 
-<a name=sect51>&nbsp;</a>
-<h2>5.1 Processing the ACD File</h2>
+<a name=sect61>&nbsp;</a>
+<h2>6.1 Processing the ACD File</h2>
 
 <p>The AJAX Command Definition, and the command
 line entered by the user, are processed automatically by a single start-up call
 to <i>embInit</i>. The same call also handles all prompting of the user for
 missing information.</p>
 
-<a name=sect52>&nbsp;</a>
-<h2>5.2 Testing ACD Files</h2>
+<a name=sect62>&nbsp;</a>
+<h2>6.2 Testing ACD Files</h2>
 
 <p>To help in evaluating the ACD files, there is a
 special EMBOSS application <b>acdc</b> (the ACD compiler) which, when given the
@@ -4082,8 +4378,8 @@ Second sequence : paamir.tfa
 Too short - minimum length is 4 characters
 </pre>
 
-<a name=sect6>&nbsp;</a>
-<h1>6. Acknowledgements</h1>
+<a name=sect7>&nbsp;</a>
+<h1>7. Acknowledgements</h1>
 
 <p>This documentation was originally written by Thon de Boer at the
 HGMP RC in Hinxton, UK with input from Peter Rice at the Sanger Centre
@@ -4092,7 +4388,8 @@ href="mailto:pmr@ebi.ac.uk">Peter Rice at the European Bioinformatics
 Institute</a></p>
 
 <p>A web version can be found at
-http://www.uk.embnet.org/Software/EMBOSS/Acd/</p>
+<a href="http://emboss.sourceforge.net/developers/acd/">
+http://emboss.sourceforge.net/developers/acd/</a></p>
 
 
 <hr size=2 width="100%" align=center>
@@ -4113,11 +4410,6 @@ is no compelling reason to use this syntax.</p>
 
 <h2>Notes:</h2>
 
-<p>Need to add sections documentation - how they work and the standard
-naming</p>
-
-<p>Need to explain how to add new groups to groups.standard</p>
-
 <p>Need to add qualifier_assocqualifier syntax</p>
 
 <p>Need to add a lot more on features input and
@@ -4131,24 +4423,11 @@ e.g. forwardonly so range appears in the tables</p>
 <p>acd error checks - list and example for each - and how to log and
 debug the details</p>
 
-<p>acdvalid warnings and errors, and how to run it</p>
-
-<p>Documentation on ACD variables</p>
-
-<p>test attributes in acdstats match attributes documented</p>
-
-<p>codon, cpdb, scop should all use name and extension attributes
+<p>cpdb, scop should all use name and extension attributes
 - makes more sense than just name. Only codon should have a default.</p>
 
 <p>datafile - does extension get added to anything the user specifies?
 always, only if it has no extension? </p>
-
-<p>report mintags: can we remove it?</p>
-
-<p>knowntype table of standard values - check against acdstats</p>
-
-<p>When checking attribute (etc) documentation sections, add a
-subsection number to the h5 header</p>
 
 </body>
 
