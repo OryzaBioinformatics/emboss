@@ -18,62 +18,43 @@ section: input [
     type: "gapany"
   ]
 
-endsection: input
-
-section: advanced [
-  information: "Advanced section"
-  type: "page"
-]
-
-  section: dendsection [
-    information: "Dendrogram options"
-    type: "frame"
-  ]
-
-    boolean: onlydend  [
+    toggle: onlydend  [
       additional: "Y"
       default: "N"
       information: "Only produce dendrogram file"
     ]
 
-    boolean: dend  [
+    toggle: dend  [
       additional: "@(!$(onlydend))"
       default: "N"
       information: "Do alignment using an old dendrogram"
     ]
 
-    string: dendfile  [
+    infile: dendfile  [
       additional: "$(dend)"
-      default: "NULL"
+      default: ""
+      nullok: "@(!$(dend))"
       information: "Name of old dendrogram file"
+      knowntype: "dendrogram"
     ]
 
-  endsection: dendsection
+endsection: input
 
-  boolean: insist  [
-    additional: "Y"
-    default: "N"
-    information: "Insist that the sequence type is changed to
-                  protein"
-  ]
+section: additional [
+  information: "Additional section"
+  type: "page"
+]
 
   section: slowalignsection [
     information: "Slow align options"
     type: "frame"
   ]
 
-    list: slowfast  [
+    toggle: slow [
       additional: "Y"
-      default: "s"
-      header: "Do you want to carry out slow or fast pairwise
-               alignment"
-      minimum: "1"
-      maximum: "1"
-      values: "s:slow, f:fast"
-      delimiter: ","
-      codedelimiter: ":"
-      information: "Please select one"
-      button: "Y"
+      default: "Y"
+      information: "Do you want to carry out slow or fast pairwise
+                    alignment"
       help: "A distance is calculated between every pair of sequences
              and these are used to construct the dendrogram which guides the
              final multiple alignment. The scores are calculated from
@@ -84,8 +65,6 @@ section: advanced [
              VERY SLOW for many (e.g. >100) long (e.g. >1000 residue)
              sequences."
     ]
-
-    variable: slow "@($(slowfast) != f)"
 
     float: pwgapc  [
       additional: "$(slow)"
@@ -114,11 +93,8 @@ section: advanced [
     type: "frame"
   ]
 
-    variable: prot  "@($(insist) ?
-                @(!$(acdprotein)):$(acdprotein))"
-
     list: pwmatrix  [
-      additional: "@($(prot)?$(slow):False)"
+      additional: "@($(acdprotein) & $(slow))"
       default: "b"
       minimum: "1"
       maximum: "1"
@@ -157,7 +133,7 @@ section: advanced [
     ]
 
     list: pwdnamatrix  [
-      additional: "@($(prot)?False:$(slow))"
+      additional: "@(!$(acdprotein) & $(slow))"
       default: "i"
       minimum: "1"
       maximum: "1"
@@ -173,10 +149,12 @@ section: advanced [
 
     variable: usermatrix "@($(pwmatrix) == o)"
 
-    string: pairwisedata  [
+    infile: pairwisedata  [
       additional: "$(usermatrix)"
-      default: "NULL"
+      default: ""
+      nullok: "@(!$(usermatrix))"
       information: "Filename of user pairwise matrix"
+      knowntype: "comparison matrix"
     ]
 
   endsection: protalignsection
@@ -188,7 +166,7 @@ section: advanced [
 
     integer: ktup  [
       additional: "@(!$(slow))"
-      default: "@($(prot)?1:2)"
+      default: "@($(acdprotein)?1:2)"
       minimum: "0"
       maximum: "4"
       information: "Fast pairwise alignment: similarity scores:
@@ -203,7 +181,7 @@ section: advanced [
 
     integer: gapw  [
       additional: "@(!$(slow))"
-      default: "@($(prot)?3:5)"
+      default: "@($(acdprotein)?3:5)"
       minimum: "0"
       information: "Fast pairwise alignment: similarity scores:
                     gap penalty"
@@ -216,7 +194,7 @@ section: advanced [
 
     integer: topdiags  [
       additional: "@(!$(slow))"
-      default: "@($(prot)?5:4)"
+      default: "@($(acdprotein)?5:4)"
       minimum: "0"
       information: "Fast pairwise alignment: similarity scores:
                     number of diagonals to be considered"
@@ -231,7 +209,7 @@ section: advanced [
 
     integer: window  [
       additional: "@(!$(slow))"
-      default: "@($(prot)?5:4)"
+      default: "@($(acdprotein)?5:4)"
       minimum: "0"
       information: "Fast pairwise alignment: similarity scores:
                     diagonal window size"
@@ -257,7 +235,7 @@ section: advanced [
   ]
 
     list: matrix  [
-      additional: "$(prot)"
+      additional: "$(acdprotein)"
       default: "b"
       minimum: "1"
       maximum: "1"
@@ -302,7 +280,7 @@ section: advanced [
     variable: usermamatrix "@($(matrix) == o)"
 
     list: dnamatrix  [
-      additional: "@(!$(prot))"
+      additional: "@(!$(acdprotein))"
       default: "i"
       minimum: "1"
       maximum: "1"
@@ -316,17 +294,19 @@ section: advanced [
              single matrix (not a series) can be selected."
     ]
 
-    variable: umamatrix "(@($(dnamatrix) == own) ? True : False)"
+    variable: umamatrix "@($(dnamatrix) == own)"
 
-    string: mamatrix  [
-      additional: "@($(usermamatrix)?True:@$(umamatrix))"
-      default: "NULL"
+    infile: mamatrix  [
+      additional: "@($(usermamatrix)?True:$(umamatrix))"
+      default: ""
+      nullok: "@($(usermamatrix)?@(!$(umamatrix)):True)"
       information: "Filename of user multiple alignment matrix"
+      knowntype: "comparison matrix"
     ]
 
   endsection: matrixsection
 
-  section: gapsection [
+  section: gapoptions [
     information: "Gap options"
     type: "frame"
   ]
@@ -357,7 +337,7 @@ section: advanced [
       additional: "Y"
       default: "Y"
       information: "Use end gap separation penalty"
-      help: "'End gap separation' treats end gaps just like internal
+      help: "End gap separation: treats end gaps just like internal
              gaps for the purposes of avoiding gaps that are too close (set
              by 'gap separation distance'). If you turn this off, end gaps
              will be ignored for this purpose. This is useful when you wish
@@ -371,7 +351,7 @@ section: advanced [
       minimum: "0"
       information: "Gap separation distance"
       valid: "Positive integer"
-      help: "'Gap separation distance' tries to decrease the chances
+      help: "Gap separation distance: tries to decrease the chances
              of gaps being too close to each other. Gaps that are less than
              this distance apart are penalised more than other gaps. This
              does not prevent close gaps; it makes them less frequent,
@@ -379,10 +359,10 @@ section: advanced [
     ]
 
     boolean: norgap  [
-      additional: "$(prot)"
+      additional: "$(acdprotein)"
       default: "N"
       information: "No residue specific gaps"
-      help: "'Residue specific penalties' are amino acid specific gap
+      help: "Residue specific penalties:  amino acid specific gap
              penalties that reduce or increase the gap opening penalties at
              each position in the alignment or sequence. As an example,
              positions that are rich in glycine are more likely to have an
@@ -390,26 +370,27 @@ section: advanced [
     ]
 
     string: hgapres  [
-      additional: "$(prot)"
+      additional: "$(acdprotein)"
       default: "GPSNDQEKR"
       information: "List of hydrophilic residues"
       help: "This is a set of the residues 'considered' to be
              hydrophilic. It is used when introducing Hydrophilic gap
              penalties."
+      knowntype: "protein codes"
     ]
 
     boolean: nohgap  [
-      additional: "$(prot)"
+      additional: "$(acdprotein)"
       default: "N"
       information: "No hydrophilic gaps"
-      help: "'Hydrophilic gap penalties' are used to increase the
+      help: "Hydrophilic gap penalties: used to increase the
              chances of a gap within a run (5 or more residues) of
              hydrophilic amino acids; these are likely to be loop or random
              coil regions where gaps are more common. The residues that are
              'considered' to be hydrophilic are set by '-hgapres'."
     ]
 
-  endsection: gapsection
+  endsection: gapoptions
 
   integer: maxdiv  [
     additional: "Y"
@@ -427,7 +408,7 @@ section: advanced [
            aligned later."
   ]
 
-endsection: advanced
+endsection: additional
 
 section: output [
   information: "Output section"

@@ -591,7 +591,7 @@ Multiple alignment program - interface to ClustalW program
 Input sequence(s): <b>../../data/globins.fasta</b>
 Output sequence [hbb_human.aln]: <b></b>
 Dendogram output filename [hbb_human.dnd]: <b></b>
-..clustalw -infile=00024634A -outfile=00024634B -align -type=protein -output=gcg -pwmatrix=blosum -pwgapopen=10.000 -pwgapext=0.100 -newtree=00024634C -matrix=blosum -gapopen=10.000 -gapext=5.000 -gapdist=8 -hgapresidues=GPSNDQEKR -maxdiv=30..
+..clustalw -infile=00022843A -outfile=00022843B -align -type=protein -output=gcg -pwmatrix=blosum -pwgapopen=10.000 -pwgapext=0.100 -newtree=00022843C -matrix=blosum -gapopen=10.000 -gapext=5.000 -gapdist=8 -hgapresidues=GPSNDQEKR -maxdiv=30..
 
 
 
@@ -633,7 +633,7 @@ Sequences (4:7) Aligned. Score:  12
 Sequences (5:6) Aligned. Score:  21
 Sequences (5:7) Aligned. Score:  7
 Sequences (6:7) Aligned. Score:  11
-Guide tree        file created:   [00024634C]
+Guide tree        file created:   [00022843C]
 Start of Multiple Alignment
 There are 6 groups
 Aligning...
@@ -647,7 +647,7 @@ Sequence:5     Score:865
 Sequence:6     Score:797
 Sequence:7     Score:1044
 Alignment Score 4164
-GCG-Alignment file created      [00024634B]
+GCG-Alignment file created      [00022843B]
 
 </pre></td></tr></table><p>
 <p>
@@ -741,12 +741,10 @@ IT IS DONE FOR YOU.
   [-dendoutfile]       outfile    Dendogram output filename
 
    Additional (Optional) qualifiers (* if not always prompted):
-   -onlydend           boolean    Only produce dendrogram file
-*  -dend               boolean    Do alignment using an old dendrogram
-*  -dendfile           string     Name of old dendrogram file
-   -insist             boolean    Insist that the sequence type is changed to
-                                  protein
-   -slowfast           menu       A distance is calculated between every pair
+   -onlydend           toggle     Only produce dendrogram file
+*  -dend               toggle     Do alignment using an old dendrogram
+*  -dendfile           infile     Name of old dendrogram file
+   -slow               toggle     A distance is calculated between every pair
                                   of sequences and these are used to construct
                                   the dendrogram which guides the final
                                   multiple alignment. The scores are
@@ -803,7 +801,7 @@ IT IS DONE FOR YOU.
 *  -pwdnamatrix        menu       The scoring table which describes the scores
                                   assigned to matches and mismatches
                                   (including IUB ambiguity codes).
-*  -pairwisedata       string     Filename of user pairwise matrix
+*  -pairwisedata       infile     Filename of user pairwise matrix
 *  -ktup               integer    This is the size of exactly matching
                                   fragment that is used. INCREASE for speed
                                   (max= 2 for proteins; 4 for DNA), DECREASE
@@ -874,7 +872,7 @@ IT IS DONE FOR YOU.
 *  -dnamatrix          menu       This gives a menu where you are offered
                                   amenu where a single matrix (not a series)
                                   can be selected.
-*  -mamatrix           string     Filename of user multiple alignment matrix
+*  -mamatrix           infile     Filename of user multiple alignment matrix
    -gapc               float      The penalty for opening a gap in the
                                   alignment. Increasing the gap opening
                                   penalty will make gaps less frequent.
@@ -882,7 +880,7 @@ IT IS DONE FOR YOU.
                                   residue. Increasing the gap extension
                                   penalty will make gaps shorter. Terminal
                                   gaps are not penalised.
-   -[no]endgaps        boolean    'End gap separation' treats end gaps just
+   -[no]endgaps        boolean    End gap separation: treats end gaps just
                                   like internal gaps for the purposes of
                                   avoiding gaps that are too close (set by
                                   'gap separation distance'). If you turn this
@@ -890,14 +888,14 @@ IT IS DONE FOR YOU.
                                   purpose. This is useful when you wish to
                                   align fragments where the end gaps are not
                                   biologically meaningful.
-   -gapdist            integer    'Gap separation distance' tries to decrease
+   -gapdist            integer    Gap separation distance: tries to decrease
                                   the chances of gaps being too close to each
                                   other. Gaps that are less than this distance
                                   apart are penalised more than other gaps.
                                   This does not prevent close gaps; it makes
                                   them less frequent, promoting a block-like
                                   appearance of the alignment.
-*  -norgap             boolean    'Residue specific penalties' are amino acid
+*  -norgap             boolean    Residue specific penalties: amino acid
                                   specific gap penalties that reduce or
                                   increase the gap opening penalties at each
                                   position in the alignment or sequence. As an
@@ -907,12 +905,12 @@ IT IS DONE FOR YOU.
 *  -hgapres            string     This is a set of the residues 'considered'
                                   to be hydrophilic. It is used when
                                   introducing Hydrophilic gap penalties.
-*  -nohgap             boolean    'Hydrophilic gap penalties' are used to
-                                  increase the chances of a gap within a run
-                                  (5 or more residues) of hydrophilic amino
-                                  acids; these are likely to be loop or random
-                                  coil regions where gaps are more common.
-                                  The residues that are 'considered' to be
+*  -nohgap             boolean    Hydrophilic gap penalties: used to increase
+                                  the chances of a gap within a run (5 or more
+                                  residues) of hydrophilic amino acids; these
+                                  are likely to be loop or random coil
+                                  regions where gaps are more common. The
+                                  residues that are 'considered' to be
                                   hydrophilic are set by '-hgapres'.
    -maxdiv             integer    This switch, delays the alignment of the
                                   most distantly related sequences until after
@@ -927,8 +925,8 @@ IT IS DONE FOR YOU.
    Associated qualifiers:
 
    "-sequence" associated qualifiers
-   -sbegin1             integer    First base used
-   -send1               integer    Last base used, def=seq length
+   -sbegin1             integer    Start of each sequence to be used
+   -send1               integer    End of each sequence to be used
    -sreverse1           boolean    Reverse (if DNA)
    -sask1               boolean    Ask for begin/end/reverse
    -snucleotide1        boolean    Sequence is nucleotide
@@ -1014,37 +1012,30 @@ IT IS DONE FOR YOU.
 <tr>
 <td>-onlydend</td>
 <td>Only produce dendrogram file</td>
-<td>Boolean value Yes/No</td>
-<td>No</td>
+<td>Toggle value Yes/No</td>
+<td>N</td>
 </tr>
 
 <tr>
 <td>-dend</td>
 <td>Do alignment using an old dendrogram</td>
-<td>Boolean value Yes/No</td>
-<td>No</td>
+<td>Toggle value Yes/No</td>
+<td>N</td>
 </tr>
 
 <tr>
 <td>-dendfile</td>
 <td>Name of old dendrogram file</td>
-<td>Any string is accepted</td>
-<td>NULL</td>
+<td>Input file</td>
+<td><b>Required</b></td>
 </tr>
 
 <tr>
-<td>-insist</td>
-<td>Insist that the sequence type is changed to protein</td>
-<td>Boolean value Yes/No</td>
-<td>No</td>
-</tr>
-
-<tr>
-<td>-slowfast</td>
+<td>-slow</td>
 <td>A distance is calculated between every pair of sequences and these are used to construct the dendrogram which guides the final multiple alignment. The scores are calculated from separate pairwise alignments. These can be calculated using 2 methods: dynamic programming (slow but accurate) or by the method of Wilbur and Lipman (extremely fast but approximate).
 The slow-accurate method is fine for short sequences but will be VERY SLOW for many (e.g. >100) long (e.g. >1000 residue) sequences.</td>
-<td><table><tr><td>s</td> <td><i>(slow)</i></td></tr><tr><td>f</td> <td><i>(fast)</i></td></tr></table></td>
-<td>s</td>
+<td>Toggle value Yes/No</td>
+<td>Y</td>
 </tr>
 
 <tr>
@@ -1083,8 +1074,8 @@ We also supply an identity matrix which gives a score of 1.0 to two identical am
 <tr>
 <td>-pairwisedata</td>
 <td>Filename of user pairwise matrix</td>
-<td>Any string is accepted</td>
-<td>NULL</td>
+<td>Input file</td>
+<td><b>Required</b></td>
 </tr>
 
 <tr>
@@ -1144,8 +1135,8 @@ We also supply an identity matrix which gives a score of 1.0 to two identical am
 <tr>
 <td>-mamatrix</td>
 <td>Filename of user multiple alignment matrix</td>
-<td>Any string is accepted</td>
-<td>NULL</td>
+<td>Input file</td>
+<td><b>Required</b></td>
 </tr>
 
 <tr>
@@ -1164,21 +1155,21 @@ We also supply an identity matrix which gives a score of 1.0 to two identical am
 
 <tr>
 <td>-[no]endgaps</td>
-<td>'End gap separation' treats end gaps just like internal gaps for the purposes of avoiding gaps that are too close (set by 'gap separation distance'). If you turn this off, end gaps will be ignored for this purpose. This is useful when you wish to align fragments where the end gaps are not biologically meaningful.</td>
+<td>End gap separation: treats end gaps just like internal gaps for the purposes of avoiding gaps that are too close (set by 'gap separation distance'). If you turn this off, end gaps will be ignored for this purpose. This is useful when you wish to align fragments where the end gaps are not biologically meaningful.</td>
 <td>Boolean value Yes/No</td>
 <td>Yes</td>
 </tr>
 
 <tr>
 <td>-gapdist</td>
-<td>'Gap separation distance' tries to decrease the chances of gaps being too close to each other. Gaps that are less than this distance apart are penalised more than other gaps. This does not prevent close gaps; it makes them less frequent, promoting a block-like appearance of the alignment.</td>
+<td>Gap separation distance: tries to decrease the chances of gaps being too close to each other. Gaps that are less than this distance apart are penalised more than other gaps. This does not prevent close gaps; it makes them less frequent, promoting a block-like appearance of the alignment.</td>
 <td>Positive integer</td>
 <td>8</td>
 </tr>
 
 <tr>
 <td>-norgap</td>
-<td>'Residue specific penalties' are amino acid specific gap penalties that reduce or increase the gap opening penalties at each position in the alignment or sequence. As an example, positions that are rich in glycine are more likely to have an adjacent gap than positions that are rich in valine.</td>
+<td>Residue specific penalties: amino acid specific gap penalties that reduce or increase the gap opening penalties at each position in the alignment or sequence. As an example, positions that are rich in glycine are more likely to have an adjacent gap than positions that are rich in valine.</td>
 <td>Boolean value Yes/No</td>
 <td>No</td>
 </tr>
@@ -1192,7 +1183,7 @@ We also supply an identity matrix which gives a score of 1.0 to two identical am
 
 <tr>
 <td>-nohgap</td>
-<td>'Hydrophilic gap penalties' are used to increase the chances of a gap within a run (5 or more residues) of hydrophilic amino acids; these are likely to be loop or random coil regions where gaps are more common. The residues that are 'considered' to be hydrophilic are set by '-hgapres'.</td>
+<td>Hydrophilic gap penalties: used to increase the chances of a gap within a run (5 or more residues) of hydrophilic amino acids; these are likely to be loop or random coil regions where gaps are more common. The residues that are 'considered' to be hydrophilic are set by '-hgapres'.</td>
 <td>Boolean value Yes/No</td>
 <td>No</td>
 </tr>
