@@ -27,6 +27,7 @@
 # DL success or all or keep - whether to delete the files afterways
 # IN Line(s) of standard input
 # FI File name (stdout and stderr assumed to exist and be empty unless stated)
+# FK Keystrokes output File name (non-text)
 # FP File pattern - /regexp/ to be found. Optional count to check exact number.
 # FZ [<=>]number File size test. Implicit test for zero size stdout/stderr
 #                unless stated
@@ -88,7 +89,7 @@ sub runtest ($) {
   my $testq = 0;
   my $testa = 0;
   my $testpath="";
-  my $packa="unknown";
+  $packa="unknown";
 
 # these are globals, used by the caller
 
@@ -153,6 +154,7 @@ sub runtest ($) {
     elsif ($line =~ /^PP\s*(.*)/) {$ppcmd .= "$1 ; "}
     elsif ($line =~ /^QQ\s*(.*)/) {$qqcmd .= " ; $1"}
     elsif ($line =~ /^IN\s*(.*)/) {$testin .= "$1\n"}
+    elsif ($line =~ /^IK\s*(.*)/) {$testin .= "$1\n"}
     elsif ($line =~ /^AQ\s*(.*)/) {
 	$testq = 1;
 	$testapp = $1;
@@ -211,7 +213,7 @@ sub runtest ($) {
 
 # filename - must be unique
 
-    elsif ($line =~ /^FI\s+(\S+)/) {
+    elsif ($line =~ /^F[IK]\s+(\S+)/) {
       $filename = $1;
       if (defined($outfile{$filename})) {
 	$testerr = "$retcode{16} $testid/$filename\n";
@@ -683,7 +685,10 @@ $misssf=0;
 %dotest = ();
 %tfm = ();
 %sf = ();
-
+%packfail=();
+$mainfail=0;
+$packa="unknown";
+  
 $logfile = "qatest.log";
 
 foreach $test (@ARGV) {
@@ -694,7 +699,7 @@ foreach $test (@ARGV) {
     elsif ($opt eq "ka") {$defdelete="all"}
     elsif ($opt =~ /without=(\S+)/) {$without{$1}=1}
     elsif ($opt =~ /t=([0-9]+)/) {$timeoutdef=int($1)}
-    elsif ($opt =~ /logfile=(\S+)/) {$logfile=$1}
+    elsif ($opt =~ /logfile=(\S+)/) {$logfile=">$1"} # append to logfile
     else {print STDERR "+++ unknown option '$opt'\n"; usage()}
   }
   else {
@@ -837,7 +842,9 @@ while (<IN>) {
       print STDERR "$id test failed code $result $retcode{$result}\n\n";
       print LOG "$id test failed code $result $retcode{$result}\n";
       $tfail++;
-
+      if($packa eq "unknown") {$mainfail++}
+      else {$packfail{$packa}++}
+      
 # Usually we keep failed tests (unless delete is set to 'all')
 
       if ($globaltestdelete eq "all") {
@@ -860,7 +867,7 @@ while (<IN>) {
 
       print LOG "test $id success\n";
 
-# usually we delete sucessful results (unless delete is set to 'keep')
+# usually we delete successful results (unless delete is set to 'keep')
 
       if ($globaltestdelete ne "keep") {
 	$sysstat = system( "rm -rf $id");
@@ -910,7 +917,14 @@ $tpass = $totall - $tfail;
 $allendtime = time();
 $alltime = $allendtime - $allstarttime;
 
-
+if($mainfail){
+    print STDERR "Failed EMBOSS: $mainfail\n";
+}
+foreach $x (sort(keys(%packfail))) {
+    if(defined($packfail{$x})) {
+	print STDERR "Failed $x $packfail{$x}\n";
+    }
+}
 print STDERR "Tests total: $totall pass: $tpass fail: $tfail\n";
 print STDERR "Skipped: $totskip check: $skipcheck embassy: $skipembassy requirements: $skipreq\n";
 
