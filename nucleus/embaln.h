@@ -17,6 +17,10 @@ void embAlignPathCalc(char *a, char *b, ajint lena, ajint lenb, float gapopen,
 		     float gapextend, float *path, float **sub, AjPSeqCvt cvt,
 		     ajint *compass, AjBool show);
 
+void embAlignPathCalcSW(char *a, char *b, ajint lena, ajint lenb,
+			float gapopen, float gapextend, float *path,
+			float **sub, AjPSeqCvt cvt, ajint *compass,
+			AjBool show);
 
 void embAlignPrintGlobal(AjPFile outf, char *a, char *b, AjPStr m, AjPStr n,
 			ajint start1, ajint start2, float score, AjBool mark,
