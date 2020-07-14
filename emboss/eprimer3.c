@@ -26,7 +26,7 @@
 
 
 /* estimate size of a sequence's output table */
-#define TABLEGUESS 150
+#define TABLEGUESS 251
 
 
 
@@ -34,7 +34,7 @@
 static FILE*  eprimer3_start_write(int fd);
 static void   eprimer3_write(AjPStr str, FILE *stream);
 static void   eprimer3_end_write(FILE *stream);
-static AjPStr eprimer3_read(int fd);
+static void   eprimer3_read(int fd, AjPStr * result);
 static void   eprimer3_send_range(FILE * stream, char * tag, AjPRange value, 
 				  ajint begin);
 static void eprimer3_send_range2(FILE * stream, char * tag, AjPRange value);
@@ -70,6 +70,8 @@ int main(int argc, char **argv, char **env)
     AjBool explain_flag;
     AjBool file_flag;
     AjPStr* task;
+    AjBool do_primer;
+    AjBool do_hybrid;
     ajint num_return;
     ajint first_base_index;
 
@@ -186,6 +188,8 @@ int main(int argc, char **argv, char **env)
     explain_flag     = ajAcdGetBool("explainflag");
     file_flag        = ajAcdGetBool("fileflag");
     task             = ajAcdGetList("task");
+    do_primer        = ajAcdGetBool("primer");
+    do_hybrid        = ajAcdGetBool("hybridprobe");
     num_return       = ajAcdGetInt("numreturn");
     first_base_index = ajAcdGetInt("firstbaseindex");
 
@@ -199,7 +203,7 @@ int main(int argc, char **argv, char **env)
 
     /* Primer details */
     pick_anyway         = ajAcdGetBool("pickanyway");
-    mispriming_library  = ajAcdGetInfile("mispriminglibrary");
+    mispriming_library  = ajAcdGetInfile("mispriminglibraryfile");
     max_mispriming      = ajAcdGetFloat("maxmispriming");
     pair_max_mispriming = ajAcdGetFloat("pairmaxmispriming");
     gc_clamp            = ajAcdGetInt("gcclamp");
@@ -267,7 +271,7 @@ int main(int argc, char **argv, char **env)
     internal_oligo_self_any       = ajAcdGetFloat("oligoselfany");
     internal_oligo_self_end       = ajAcdGetFloat("oligoselfend");
     internal_oligo_max_poly_x     = ajAcdGetInt("oligomaxpolyx");
-    internal_oligo_mishyb_library = ajAcdGetInfile("oligomishyblibrary");
+    internal_oligo_mishyb_library = ajAcdGetInfile("oligomishyblibraryfile");
     internal_oligo_max_mishyb     = ajAcdGetFloat("oligomaxmishyb");
     /*
        internal_oligo_min_quality    = ajAcdGetInt("oligominquality");
@@ -276,165 +280,204 @@ int main(int argc, char **argv, char **env)
     /* Internal Oligo penalties */
     /* these are not (yet) implemented */
     
+
     /* EMBOSS-wrapper-specific stuff */
     outfile = ajAcdGetOutfile("outfile");
     
     
-    /* open the pipes to connect to primer3 */
-    if( pipe( pipeto ) != 0 )
-        ajFatal( "Couldn't open pipe() to" );
+    /*
+    ** OK - we will now try to do a separate fork-exec for each sequence.
+    */
 
-    if( pipe( pipefrom ) != 0 )
-        ajFatal( "Couldn't open pipe() from" );
+    result = ajStrNew();
+
+    while(ajSeqallNext(sequence, &seq))
+    {
+
+
+        /* open the pipes to connect to primer3 */
+        if( pipe( pipeto ) != 0 )
+            ajFatal( "Couldn't open pipe() to" );
+
+        if( pipe( pipefrom ) != 0 )
+            ajFatal( "Couldn't open pipe() from" );
     
     
-    /* fork off the primer3 executable */
-    nPid = fork();
-    if( nPid < 0 )
-        ajFatal( "Failure of fork()" );
-    else if( nPid == 0 )
-    {
-        /*
-	** CHILD PROCESS
-        ** dup pipe read/write to stdin/stdout
-	*/
-        dup2(pipeto[0],  fileno(stdin));
-        dup2(pipefrom[1], fileno(stdout));
+        /* fork off the child to run the primer3 executable */
+        nPid = fork();
+        if( nPid < 0 )
+            ajFatal( "Failure of fork()" );
+        else if( nPid == 0 )
+        {
+            /*
+            ** CHILD PROCESS
+            ** dup pipe read/write to stdin/stdout
+	    */
+            dup2(pipeto[0],  fileno(stdin));
+            dup2(pipefrom[1], fileno(stdout));
 
-        /* close unnecessary pipe descriptors */
-        close(pipeto[0]);
-        close(pipeto[1]);
-        close(pipefrom[0]);
-        close(pipefrom[1]);
+            /* close unnecessary pipe descriptors */
+            close(pipeto[0]);
+            close(pipeto[1]);
+            close(pipefrom[0]);
+            close(pipefrom[1]);
+    
+            program = ajStrNew();
+            ajStrAssC(&program, "primer3_core");
+    
+            if(ajSysWhich(&program))
+            {
+    	        execlp( "primer3_core", "primer3_core", NULL );
+    	        ajFatal("There was a problem while executing primer3");
+            }
+            else
+    	        ajFatal("The program 'primer3_core' must be on the path.\n"
+    		    "It is part of the 'primer3' package, version 0.9,\n"
+    		    "available from the Whitehead Institute.\n"
+    		    "See: http://www-genome.wi.mit.edu/");
+    
+            ajStrDel(&program);
 
-	program = ajStrNew();
-	ajStrAssC(&program, "primer3_core");
+        }
+        else
+        {
+            /*
+            ** PARENT PROCESS
+            ** Close unused pipe ends. This is especially important for the
+            ** pipefrom[1] write descriptor, otherwise eprimer3_read will never
+            ** get an EOF.
+            */
+            ajDebug("In PARENT process\n");
 
-	if(ajSysWhich(&program))
-	{
-	    execlp( "primer3_core", "primer3_core", NULL );
-	    ajFatal("There was a problem while executing primer3");
-	}
-	else
-	    ajFatal("The program 'primer3_core' must be on the path.\n"
-		    "It is part of the 'primer3' package,\n"
-		    "available from the Whitehead Institute.\n"
-		    "See: http://www-genome.wi.mit.edu/");
+            close(pipeto[0]);
+            close(pipefrom[1]);
 
-	ajStrDel(&program);
+            stream = eprimer3_start_write(pipeto[1]);
+    
+            /* send primer3 Primer "Global" parameters */
+            eprimer3_send_bool(stream, "PRIMER_EXPLAIN_FLAG", explain_flag);
+            eprimer3_send_bool(stream, "PRIMER_FILE_FLAG", file_flag);
+    
+            if(do_hybrid)
+            {
+                if(!ajStrCmpC(task[0], "1"))
+                ajStrAssC(&taskstr, "pick_pcr_primers_and_hyb_probe");
+                else if(!ajStrCmpC(task[0], "2"))
+                ajStrAssC(&taskstr, "pick_left_only");
+                else if(!ajStrCmpC(task[0], "3"))
+                ajStrAssC(&taskstr, "pick_right_only");
+                else if(!ajStrCmpC(task[0], "4"))
+                ajStrAssC(&taskstr, "pick_hyb_probe_only");
+        
+                if (!do_primer)
+                ajStrAssC(&taskstr, "pick_hyb_probe_only");
+            }
+            else
+            {
+                if(!ajStrCmpC(task[0], "1"))
+                ajStrAssC(&taskstr, "pick_pcr_primers");
+                else if(!ajStrCmpC(task[0], "2"))
+                ajStrAssC(&taskstr, "pick_left_only");
+                else if(!ajStrCmpC(task[0], "3"))
+                ajStrAssC(&taskstr, "pick_right_only");
+                else if(!ajStrCmpC(task[0], "4"))
+                ajStrAssC(&taskstr, "pick_hyb_probe_only");
+            }
+        
+            eprimer3_send_string(stream, "PRIMER_TASK", taskstr);
+            eprimer3_send_int(stream, "PRIMER_NUM_RETURN", num_return);
+            eprimer3_send_int(stream, "PRIMER_FIRST_BASE_INDEX", 
+                              first_base_index);
+            eprimer3_send_bool(stream, "PRIMER_PICK_ANYWAY", pick_anyway);
+        
+            /* mispriming library may not have been specified */
+            if(mispriming_library)
+            eprimer3_send_stringC(stream, "PRIMER_MISPRIMING_LIBRARY",
+                                  ajFileName(mispriming_library));
+    
+            eprimer3_send_float(stream, "PRIMER_MAX_MISPRIMING", 
+                                max_mispriming);
+            eprimer3_send_float(stream, "PRIMER_PAIR_MAX_MISPRIMING",
+                                pair_max_mispriming);
+            eprimer3_send_int(stream, "PRIMER_GC_CLAMP", gc_clamp);
+            eprimer3_send_int(stream, "PRIMER_OPT_SIZE", opt_size);
+            eprimer3_send_int(stream, "PRIMER_MIN_SIZE", min_size);
+            eprimer3_send_int(stream, "PRIMER_MAX_SIZE", max_size);
+            eprimer3_send_float(stream, "PRIMER_OPT_TM", opt_tm);
+            eprimer3_send_float(stream, "PRIMER_MIN_TM", min_tm);
+            eprimer3_send_float(stream, "PRIMER_MAX_TM", max_tm);
+            eprimer3_send_float(stream, "PRIMER_MAX_DIFF_TM", max_diff_tm);
+            eprimer3_send_float(stream, "PRIMER_OPT_GC_PERCENT", 
+                                opt_gc_percent);
+            eprimer3_send_float(stream, "PRIMER_MIN_GC", min_gc);
+            eprimer3_send_float(stream, "PRIMER_MAX_GC", max_gc);
+            eprimer3_send_float(stream, "PRIMER_SALT_CONC", salt_conc);
+            eprimer3_send_float(stream, "PRIMER_DNA_CONC", dna_conc);
+            eprimer3_send_int(stream, "PRIMER_NUM_NS_ACCEPTED", 
+                              num_ns_accepted);
+            eprimer3_send_float(stream, "PRIMER_SELF_ANY", self_any);
+            eprimer3_send_float(stream, "PRIMER_SELF_END", self_end);
+            eprimer3_send_int(stream, "PRIMER_MAX_POLY_X", max_poly_x);
+            eprimer3_send_int(stream, "PRIMER_PRODUCT_OPT_SIZE", 
+                              product_opt_size);
+            eprimer3_send_range2(stream, "PRIMER_PRODUCT_SIZE_RANGE",
+                                 product_size_range);
+            eprimer3_send_float(stream, "PRIMER_PRODUCT_OPT_TM", 
+                                product_opt_tm);
+            eprimer3_send_float(stream, "PRIMER_PRODUCT_MIN_TM", 
+                                product_min_tm);
+            eprimer3_send_float(stream, "PRIMER_PRODUCT_MAX_TM", 
+                                product_max_tm);
+            eprimer3_send_float(stream, "PRIMER_MAX_END_STABILITY",
+                                max_end_stability);
+    
+            /* send primer3 Internal Oligo "Global" parameters */
+            eprimer3_send_int(stream, "PRIMER_INTERNAL_OLIGO_OPT_SIZE",
+                    internal_oligo_opt_size);
+            eprimer3_send_int(stream, "PRIMER_INTERNAL_OLIGO_MIN_SIZE",
+                    internal_oligo_min_size);
+            eprimer3_send_int(stream, "PRIMER_INTERNAL_OLIGO_MAX_SIZE",
+                    internal_oligo_max_size);
+            eprimer3_send_float(stream, "PRIMER_INTERNAL_OLIGO_OPT_TM",
+                    internal_oligo_opt_tm);
+            eprimer3_send_float(stream, "PRIMER_INTERNAL_OLIGO_MIN_TM",
+                    internal_oligo_min_tm);
+            eprimer3_send_float(stream, "PRIMER_INTERNAL_OLIGO_MAX_TM",
+                    internal_oligo_max_tm);
+            eprimer3_send_float(stream, "PRIMER_INTERNAL_OLIGO_OPT_GC_PERCENT",
+                    internal_oligo_opt_gc_percent);
+            eprimer3_send_float(stream, "PRIMER_INTERNAL_OLIGO_MIN_GC",
+                    internal_oligo_min_gc);
+            eprimer3_send_float(stream, "PRIMER_INTERNAL_OLIGO_MAX_GC",
+                    internal_oligo_max_gc);
+            eprimer3_send_float(stream, "PRIMER_INTERNAL_OLIGO_SALT_CONC",
+                    internal_oligo_salt_conc);
+            eprimer3_send_float(stream, "PRIMER_INTERNAL_OLIGO_DNA_CONC",
+                    internal_oligo_dna_conc);
+            eprimer3_send_float(stream, "PRIMER_INTERNAL_OLIGO_SELF_ANY",
+                    internal_oligo_self_any);
+            eprimer3_send_float(stream, "PRIMER_INTERNAL_OLIGO_SELF_END",
+                    internal_oligo_self_end);
+            eprimer3_send_int(stream, "PRIMER_INTERNAL_OLIGO_MAX_POLY_X",
+                    internal_oligo_max_poly_x);
 
-    }
-    else
-    {
-        /*
-	** PARENT PROCESS
-        ** Close unused pipe ends. This is especially important for the
-	** pipefrom[1] write descriptor, otherwise eprimer3_read will never
-	** get an EOF.
-	*/
-        close(pipeto[0]);
-        close(pipefrom[1]);
-	
-        stream = eprimer3_start_write(pipeto[1]);
-	
-	/* send primer3 Primer "Global" parameters */
-        eprimer3_send_bool(stream, "PRIMER_EXPLAIN_FLAG", explain_flag);
-	eprimer3_send_bool(stream, "PRIMER_FILE_FLAG", file_flag);
+            /* 
+            ** internal oligo mishybridising library may not have been
+            ** specified 
+            */
+            if(internal_oligo_mishyb_library)
+                eprimer3_send_stringC(stream,
+                    "PRIMER_INTERNAL_OLIGO_MISHYB_LIBRARY",
+                    ajFileName(internal_oligo_mishyb_library));
 
-	if(!ajStrCmpC(task[0], "0"))
-	    ajStrAssC(&taskstr, "pick_pcr_primers");
-	else if(!ajStrCmpC(task[0], "1"))
-	    ajStrAssC(&taskstr, "pick_pcr_primers_and_hyb_probe");
-	else if(!ajStrCmpC(task[0], "2"))
-	    ajStrAssC(&taskstr, "pick_left_only");
-	else if(!ajStrCmpC(task[0], "3"))
-	    ajStrAssC(&taskstr, "pick_right_only");
-	else if(!ajStrCmpC(task[0], "4"))
-	    ajStrAssC(&taskstr, "pick_hyb_probe_only");
-	else
-	    ajFatal("Unknown value for TASK");
+            eprimer3_send_float(stream, "PRIMER_INTERNAL_OLIGO_MAX_MISHYB",
+                    internal_oligo_max_mishyb);
+        
+        
+            /* 
+            ** Start sequence-specific stuff 
+            */
 
-	eprimer3_send_string(stream, "PRIMER_TASK", taskstr);
-	eprimer3_send_int(stream, "PRIMER_NUM_RETURN", num_return);
-	eprimer3_send_int(stream, "PRIMER_FIRST_BASE_INDEX", first_base_index);
-	eprimer3_send_bool(stream, "PRIMER_PICK_ANYWAY", pick_anyway);
-
-        /* mispriming library may not have been specified */
-        if(mispriming_library)
-	    eprimer3_send_stringC(stream, "PRIMER_MISPRIMING_LIBRARY",
-				  ajFileName(mispriming_library));
-
-	eprimer3_send_float(stream, "PRIMER_MAX_MISPRIMING", max_mispriming);
-	eprimer3_send_float(stream, "PRIMER_PAIR_MAX_MISPRIMING",
-			    pair_max_mispriming);
-	eprimer3_send_int(stream, "PRIMER_GC_CLAMP", gc_clamp);
-	eprimer3_send_int(stream, "PRIMER_OPT_SIZE", opt_size);
-	eprimer3_send_int(stream, "PRIMER_MIN_SIZE", min_size);
-	eprimer3_send_int(stream, "PRIMER_MAX_SIZE", max_size);
-	eprimer3_send_float(stream, "PRIMER_OPT_TM", opt_tm);
-	eprimer3_send_float(stream, "PRIMER_MIN_TM", min_tm);
-	eprimer3_send_float(stream, "PRIMER_MAX_TM", max_tm);
-	eprimer3_send_float(stream, "PRIMER_MAX_DIFF_TM", max_diff_tm);
-	eprimer3_send_float(stream, "PRIMER_OPT_GC_PERCENT", opt_gc_percent);
-	eprimer3_send_float(stream, "PRIMER_MIN_GC", min_gc);
-	eprimer3_send_float(stream, "PRIMER_MAX_GC", max_gc);
-	eprimer3_send_float(stream, "PRIMER_SALT_CONC", salt_conc);
-	eprimer3_send_float(stream, "PRIMER_DNA_CONC", dna_conc);
-	eprimer3_send_int(stream, "PRIMER_NUM_NS_ACCEPTED", num_ns_accepted);
-	eprimer3_send_float(stream, "PRIMER_SELF_ANY", self_any);
-	eprimer3_send_float(stream, "PRIMER_SELF_END", self_end);
-	eprimer3_send_int(stream, "PRIMER_MAX_POLY_X", max_poly_x);
-        eprimer3_send_int(stream, "PRIMER_PRODUCT_OPT_SIZE", product_opt_size);
-	eprimer3_send_range2(stream, "PRIMER_PRODUCT_SIZE_RANGE",
-			     product_size_range);
-        eprimer3_send_float(stream, "PRIMER_PRODUCT_OPT_TM", product_opt_tm);
-	eprimer3_send_float(stream, "PRIMER_PRODUCT_MIN_TM", product_min_tm);
-	eprimer3_send_float(stream, "PRIMER_PRODUCT_MAX_TM", product_max_tm);
-	eprimer3_send_float(stream, "PRIMER_MAX_END_STABILITY",
-			    max_end_stability);
-	
-	/* send primer3 Internal Oligo "Global" parameters */
-	eprimer3_send_int(stream, "PRIMER_INTERNAL_OLIGO_OPT_SIZE",
-			  internal_oligo_opt_size);
-	eprimer3_send_int(stream, "PRIMER_INTERNAL_OLIGO_MIN_SIZE",
-			  internal_oligo_min_size);
-	eprimer3_send_int(stream, "PRIMER_INTERNAL_OLIGO_MAX_SIZE",
-			  internal_oligo_max_size);
-	eprimer3_send_float(stream, "PRIMER_INTERNAL_OLIGO_OPT_TM",
-			    internal_oligo_opt_tm);
-	eprimer3_send_float(stream, "PRIMER_INTERNAL_OLIGO_MIN_TM",
-			    internal_oligo_min_tm);
-	eprimer3_send_float(stream, "PRIMER_INTERNAL_OLIGO_MAX_TM",
-			    internal_oligo_max_tm);
-	eprimer3_send_float(stream, "PRIMER_INTERNAL_OLIGO_OPT_GC_PERCENT",
-			    internal_oligo_opt_gc_percent);
-	eprimer3_send_float(stream, "PRIMER_INTERNAL_OLIGO_MIN_GC",
-			    internal_oligo_min_gc);
-	eprimer3_send_float(stream, "PRIMER_INTERNAL_OLIGO_MAX_GC",
-			    internal_oligo_max_gc);
-	eprimer3_send_float(stream, "PRIMER_INTERNAL_OLIGO_SALT_CONC",
-			    internal_oligo_salt_conc);
-	eprimer3_send_float(stream, "PRIMER_INTERNAL_OLIGO_DNA_CONC",
-			    internal_oligo_dna_conc);
-	eprimer3_send_float(stream, "PRIMER_INTERNAL_OLIGO_SELF_ANY",
-			    internal_oligo_self_any);
-	eprimer3_send_float(stream, "PRIMER_INTERNAL_OLIGO_SELF_END",
-			    internal_oligo_self_end);
-	eprimer3_send_int(stream, "PRIMER_INTERNAL_OLIGO_MAX_POLY_X",
-			  internal_oligo_max_poly_x);
-
-        /* internal oligo mishybridising library may not have been specified */
-        if(internal_oligo_mishyb_library)
-	    eprimer3_send_stringC(stream,
-				  "PRIMER_INTERNAL_OLIGO_MISHYB_LIBRARY",
-				  ajFileName(internal_oligo_mishyb_library));
-
-	eprimer3_send_float(stream, "PRIMER_INTERNAL_OLIGO_MAX_MISHYB",
-			    internal_oligo_max_mishyb);
-	
-	
-	while(ajSeqallNext(sequence, &seq))
-	{
             begin = ajSeqallBegin(sequence) - 1;
             end   = ajSeqallEnd(sequence) - 1;
 
@@ -443,52 +486,59 @@ int main(int argc, char **argv, char **env)
             ajStrToUpper(&strand);
             ajStrAssSubC(&substr,ajStrStr(strand), begin, end);
 
-	    /* send flags to turn on using optimal product size */
-	    eprimer3_send_float(stream, "PRIMER_PAIR_WT_PRODUCT_SIZE_GT",
-				0.05);
-	    eprimer3_send_float(stream, "PRIMER_PAIR_WT_PRODUCT_SIZE_LT",
-				0.05);
+            /* send flags to turn on using optimal product size */
+            eprimer3_send_float(stream, "PRIMER_PAIR_WT_PRODUCT_SIZE_GT",
+                                0.05);
+            eprimer3_send_float(stream, "PRIMER_PAIR_WT_PRODUCT_SIZE_LT",
+                                0.05);
 
-	    /* send primer3 Primer "Sequence" parameters */
+            /* send primer3 Primer "Sequence" parameters */
             eprimer3_send_string(stream, "SEQUENCE", substr);
 
-	    /* if no ID name, use the USA */
+            /* if no ID name, use the USA */
             if(ajStrMatchC(ajSeqGetName(seq),""))
-		eprimer3_send_string(stream, "PRIMER_SEQUENCE_ID",
-				     ajSeqGetUsa(seq));
-	    else
-		eprimer3_send_string(stream, "PRIMER_SEQUENCE_ID",
-				     ajSeqGetName(seq));
+                eprimer3_send_string(stream, "PRIMER_SEQUENCE_ID",
+                                     ajSeqGetUsa(seq));
+            else
+                eprimer3_send_string(stream, "PRIMER_SEQUENCE_ID",
+                                     ajSeqGetName(seq));
 
             eprimer3_send_range(stream, "INCLUDED_REGION", included_region,
-				begin);
-	    eprimer3_send_range(stream, "TARGET", target, begin);
-	    eprimer3_send_range(stream, "EXCLUDED_REGION", excluded_region,
-				begin);
-	    eprimer3_send_string(stream, "PRIMER_LEFT_INPUT", left_input);
-	    eprimer3_send_string(stream, "PRIMER_RIGHT_INPUT", right_input);
+                                begin);
+            eprimer3_send_range(stream, "TARGET", target, begin);
+            eprimer3_send_range(stream, "EXCLUDED_REGION", excluded_region,
+                                begin);
+            eprimer3_send_string(stream, "PRIMER_LEFT_INPUT", left_input);
+            eprimer3_send_string(stream, "PRIMER_RIGHT_INPUT", right_input);
 
-	    /* send primer3 Internal Oligo "Sequence" parameters */
+            /* send primer3 Internal Oligo "Sequence" parameters */
             eprimer3_send_range(stream,
-				"PRIMER_INTERNAL_OLIGO_EXCLUDED_REGION",
-				internal_oligo_excluded_region, begin);
-	    eprimer3_send_string(stream, "PRIMER_INTERNAL_OLIGO_INPUT",
-				 internal_oligo_input);
+                                "PRIMER_INTERNAL_OLIGO_EXCLUDED_REGION",
+                                internal_oligo_excluded_region, begin);
+            eprimer3_send_string(stream, "PRIMER_INTERNAL_OLIGO_INPUT",
+                                 internal_oligo_input);
 
 
-	    /* end the primer3 input sequence record with a '=' */
+            /* end the primer3 input sequence record with a '=' */
             eprimer3_send_end(stream);
-        }
-	
- 	eprimer3_end_write(stream);
-	close( pipeto[1] );
-	
-	/* read the primer3 output */
-        result = eprimer3_read(pipefrom[0]);
-	
-       	eprimer3_report(outfile, result, num_return, begin);
-    }
+            /* and close the ouput pipe stream */
+            eprimer3_end_write(stream);
     
+            /* read the primer3 output */
+            eprimer3_read(pipefrom[0], &result);
+            
+            eprimer3_report(outfile, result, num_return, begin);
+    
+            ajStrClear(&result);
+
+            close( pipeto[1] );
+            close(pipefrom[0]);
+            
+        }	/* end of parent/child fork */
+
+    }	/* end of sequence loop */
+
+
     ajStrDel(&result);
     ajSeqDel(&seq);
     ajStrDel(&strand);
@@ -509,33 +559,31 @@ int main(int argc, char **argv, char **env)
 ** Reads the output from primer3_core into a returned AjPStr until EOF
 **
 ** @param [r] fd [int] file descriptor
-** @return [AjPStr] Returned string
+** @param [U] result [AjPStr] Returned string
+** @return void
 **
 ******************************************************************************/
 
-static AjPStr eprimer3_read(int fd)
+static void eprimer3_read(int fd, AjPStr * result)
 {
     FILE *stream;
     int ch;
-    AjPStr ret;
 
     ajDebug("reading primer3_core output\n");
-
-    ret = ajStrNew();
 
     if((stream = fdopen(fd, "r")) == NULL)
         ajFatal("fdopen() read error");
 
     while((ch = getc( stream )) != EOF)
-        ajStrAppK(&ret, ch);
+        ajStrAppK(result, ch);
 
-    ajDebug("primer3_core output\n%S\n", ret);
+    ajDebug("primer3_core output:\n%S\n", *result);
 
 
     fclose(stream);
     ajDebug("reading done\n");
 
-    return ret;
+    return;
 }
 
 
@@ -573,7 +621,7 @@ static void eprimer3_send_end(FILE * stream)
 ******************************************************************************/
 
 static void eprimer3_send_range(FILE * stream, char * tag, AjPRange value, 
-				ajint begin)
+                                ajint begin)
 {
     AjPStr str;
     ajint n;
@@ -584,22 +632,22 @@ static void eprimer3_send_range(FILE * stream, char * tag, AjPRange value,
 
     if(ajRangeNumber(value))
     {
-	ajFmtPrintS(&str, "%s=", tag);
-	eprimer3_write(str, stream);
-	ajStrClear(&str);
+        ajFmtPrintS(&str, "%s=", tag);
+        eprimer3_write(str, stream);
+        ajStrClear(&str);
 
-	for(n=0; n < ajRangeNumber(value); n++)
-	{
-	    ajRangeValues(value, n, &start, &end);
-	    start -= begin;
-	    end   -= begin;
-	    ajFmtPrintS(&str, "%d,%d ", start, end-start+1);
-	    eprimer3_write(str, stream);
-	    ajStrClear(&str);
-	}
+        for(n=0; n < ajRangeNumber(value); n++)
+        {
+            ajRangeValues(value, n, &start, &end);
+            start -= begin;
+            end   -= begin;
+            ajFmtPrintS(&str, "%d,%d ", start, end-start+1);
+            eprimer3_write(str, stream);
+            ajStrClear(&str);
+        }
 
-	ajFmtPrintS(&str, "\n");
-	eprimer3_write(str, stream);
+        ajFmtPrintS(&str, "\n");
+        eprimer3_write(str, stream);
     }
 
     ajStrDel(&str);
@@ -632,20 +680,20 @@ static void eprimer3_send_range2(FILE * stream, char * tag, AjPRange value)
 
     if(ajRangeNumber(value))
     {
-	ajFmtPrintS(&str, "%s=", tag);
-	eprimer3_write(str, stream);
-	ajStrClear(&str);
+        ajFmtPrintS(&str, "%s=", tag);
+        eprimer3_write(str, stream);
+        ajStrClear(&str);
 
-	for(n=0; n < ajRangeNumber(value); n++)
-	{
-	    ajRangeValues(value, n, &start, &end);
-	    ajFmtPrintS(&str, "%d-%d ", start, end);
-	    eprimer3_write(str, stream);
-	    ajStrClear(&str);
-	}
+        for(n=0; n < ajRangeNumber(value); n++)
+        {
+            ajRangeValues(value, n, &start, &end);
+            ajFmtPrintS(&str, "%d-%d ", start, end);
+            eprimer3_write(str, stream);
+            ajStrClear(&str);
+        }
 
-	ajFmtPrintS(&str, "\n");
-	eprimer3_write(str, stream);
+        ajFmtPrintS(&str, "\n");
+        eprimer3_write(str, stream);
     }
 
     ajStrDel(&str);
@@ -760,8 +808,8 @@ static void eprimer3_send_string(FILE * stream, char * tag, AjPStr value)
 
     if(ajStrLen(value))
     {
-	ajFmtPrintS(&str, "%s=%S\n", tag, value);
-	eprimer3_write(str, stream);
+        ajFmtPrintS(&str, "%s=%S\n", tag, value);
+        eprimer3_write(str, stream);
     }
 
     ajStrDel(&str);
@@ -791,8 +839,8 @@ static void eprimer3_send_stringC(FILE *stream, char *tag, const char *value)
 
     if(strlen(value))
     {
-	ajFmtPrintS(&str, "%s=%s\n", tag, value);
-	eprimer3_write(str, stream);
+        ajFmtPrintS(&str, "%s=%s\n", tag, value);
+        eprimer3_write(str, stream);
     }
 
     ajStrDel(&str);
@@ -818,7 +866,7 @@ static FILE* eprimer3_start_write(int fd)
 
     ajDebug( "start writing\n");
     if((stream = fdopen( fd, "w" )) == NULL)
-	ajFatal("Couldn't open pipe with fdopen()");
+        ajFatal("Couldn't open pipe with fdopen()");
 
     return stream;
 }
@@ -858,6 +906,7 @@ static void eprimer3_write(AjPStr str, FILE *stream)
 
 static void eprimer3_end_write(FILE *stream)
 {
+    ajDebug("Closing output pipe stream\n");
     fclose(stream);
 
     return;
@@ -879,7 +928,7 @@ static void eprimer3_end_write(FILE *stream)
 ******************************************************************************/
 
 static void eprimer3_report(AjPFile outfile, AjPStr output, 
-			    ajint numreturn, ajint begin)
+                            ajint numreturn, ajint begin)
 {
     AjPStr line = NULL;
     AjPStrTok linetokenhandle;
@@ -896,58 +945,58 @@ static void eprimer3_report(AjPFile outfile, AjPStr output,
     /* get next line of relevant results */
     while(ajStrToken(&line, &linetokenhandle, eol))
     {
-	if(!gotsequenceid)
-	{
-	    /*
-	    ** Att the start of another sequence's results?
-	    ** Start storing the results in the table.
-	    */
+        if(!gotsequenceid)
+        {
+            /*
+            ** Att the start of another sequence's results?
+            ** Start storing the results in the table.
+            */
 
-	    if(ajStrNCmpC(line, "PRIMER_SEQUENCE_ID=", 19) == 0)
-	    {
-		gotsequenceid = AJTRUE;
-		table = ajStrTableNew(TABLEGUESS);
+            if(ajStrNCmpC(line, "PRIMER_SEQUENCE_ID=", 19) == 0)
+            {
+                gotsequenceid = AJTRUE;
+                table = ajStrTableNew(TABLEGUESS);
 
-	    }
-	    else
-		continue;
-	}
-	else
-	{
-	    /*
-	    ** At the end of this sequence? - marked by a '=' in the primer3
-	    ** output - then output the results.
-	    */
-	    if(ajStrCmpC(line, "=") == 0)
-	    {
-		gotsequenceid = AJFALSE;
-		eprimer3_output_report(outfile, table, numreturn, begin);
-		ajStrTableFree(&table);
-		continue;
-	    }
-	}
+            }
+            else
+                continue;
+        }
+        else
+        {
+            /*
+            ** At the end of this sequence? - marked by a '=' in the primer3
+            ** output - then output the results.
+            */
+            if(ajStrCmpC(line, "=") == 0)
+            {
+                gotsequenceid = AJFALSE;
+                eprimer3_output_report(outfile, table, numreturn, begin);
+                ajStrTableFree(&table);
+                continue;
+            }
+        }
 
-	/*
-	** store key and value in table and parse values
-	** when have all of the sequence
-	** results in the table because the LEFT, RIGHT
-	** and INTERNAL results for each
-	** resulting primer are interleaved
-	*/
+        /*
+        ** store key and value in table and parse values
+        ** when have all of the sequence
+        ** results in the table because the LEFT, RIGHT
+        ** and INTERNAL results for each
+        ** resulting primer are interleaved
+        */
 
-	keytokenhandle = ajStrTokenInit(line, equals);
+        keytokenhandle = ajStrTokenInit(line, equals);
 
-	key = ajStrNew();
-	ajStrToken(&key, &keytokenhandle,NULL);
+        key = ajStrNew();
+        ajStrToken(&key, &keytokenhandle,NULL);
 
-	value = ajStrNew();
-	ajStrToken(&value, &keytokenhandle,NULL);
+        value = ajStrNew();
+        ajStrToken(&value, &keytokenhandle,NULL);
 
-	ajDebug("key=%S\tvalue=%S\n", key, value);
+        ajDebug("key=%S\tvalue=%S\n", key, value);
 
-	ajTablePut(table,(const void *)key, (void *)value);
+        ajTablePut(table,(const void *)key, (void *)value);
 
-	ajStrTokenClear(&keytokenhandle);
+        ajStrTokenClear(&keytokenhandle);
     }
 
     ajStrDel(&line);
@@ -973,7 +1022,7 @@ static void eprimer3_report(AjPFile outfile, AjPStr output,
 ******************************************************************************/
 
 static void eprimer3_output_report(AjPFile outfile, AjPTable table,
-				   ajint numreturn, ajint begin)
+                                   ajint numreturn, ajint begin)
 {
     AjPStr key   = NULL;
     AjPStr error = NULL;
@@ -1023,12 +1072,12 @@ static void eprimer3_output_report(AjPFile outfile, AjPTable table,
     ajStrAssC(&key, "PRIMER_ERROR");
     error =(AjPStr)ajTableGet(table,(const void*)key);
     if(error != NULL)
-	ajErr("%S", error);
+        ajErr("%S", error);
 
     ajStrAssC(&key, "PRIMER_WARNING");
     error = (AjPStr)ajTableGet(table,(const void*)key);
     if(error != NULL)
-	ajWarn("%S", error);
+        ajWarn("%S", error);
 
   
     /* get the sequence id */
@@ -1042,84 +1091,84 @@ static void eprimer3_output_report(AjPFile outfile, AjPTable table,
 
     if(explain != NULL)
     {
-	ajStrAssS(&explainstr, explain);
-	ajStrSubstituteCC(&explainstr, ",", "\n#");
-	ajFmtPrintF(outfile, "# FORWARD PRIMER STATISTICS:\n# %S\n\n",
-		    explainstr);
+        ajStrAssS(&explainstr, explain);
+        ajStrSubstituteCC(&explainstr, ",", "\n#");
+        ajFmtPrintF(outfile, "# FORWARD PRIMER STATISTICS:\n# %S\n\n",
+                    explainstr);
     }
     ajStrAssC(&key, "PRIMER_RIGHT_EXPLAIN");
     explain = (AjPStr)ajTableGet(table,(const void*)key);
 
     if(explain != NULL)
     {
-	ajStrAssS(&explainstr, explain);
-	ajStrSubstituteCC(&explainstr, ",", "\n#");
-	ajFmtPrintF(outfile, "# REVERSE PRIMER STATISTICS:\n# %S\n\n",
-		    explainstr);
+        ajStrAssS(&explainstr, explain);
+        ajStrSubstituteCC(&explainstr, ",", "\n#");
+        ajFmtPrintF(outfile, "# REVERSE PRIMER STATISTICS:\n# %S\n\n",
+                    explainstr);
     }
     ajStrAssC(&key, "PRIMER_PAIR_EXPLAIN");
     explain = (AjPStr)ajTableGet(table,(const void*)key);
 
     if(explain != NULL)
     {
-	ajStrAssS(&explainstr, explain);
-	ajStrSubstituteCC(&explainstr, ",", "\n#");
-	ajFmtPrintF(outfile, "# PRIMER PAIR STATISTICS:\n# %S\n\n",
-		    explainstr);
+        ajStrAssS(&explainstr, explain);
+        ajStrSubstituteCC(&explainstr, ",", "\n#");
+        ajFmtPrintF(outfile, "# PRIMER PAIR STATISTICS:\n# %S\n\n",
+                    explainstr);
     }
     ajStrAssC(&key, "PRIMER_INTERNAL_OLIGO_EXPLAIN");
     explain = (AjPStr)ajTableGet(table,(const void*)key);
 
     if(explain != NULL)
     {
-	ajStrAssS(&explainstr, explain);
-	ajStrSubstituteCC(&explainstr, ",", "\n#");
-	ajFmtPrintF(outfile, "# INTERNAL OLIGO STATISTICS:\n# %S\n\n",
-		    explainstr);
+        ajStrAssS(&explainstr, explain);
+        ajStrSubstituteCC(&explainstr, ",", "\n#");
+        ajFmtPrintF(outfile, "# INTERNAL OLIGO STATISTICS:\n# %S\n\n",
+                    explainstr);
     }
   
     /* table header */
     ajFmtPrintF(outfile,"#                      Start  Len   Tm     "
-		"GC%%   Sequence\n\n");
+                "GC%%   Sequence\n\n");
   
     /* get the results */
     for(i=0; i <= numreturn; i++)
     {
-	/* product data */
-	size = eprimer3_tableget("PRIMER_PRODUCT_SIZE", i, "", table);
-	if(size != NULL)
-	    ajFmtPrintF(outfile, "%4d PRODUCT SIZE: %S\n",
-			i+1, size);
+        /* product data */
+        size = eprimer3_tableget("PRIMER_PRODUCT_SIZE", i, "", table);
+        if(size != NULL)
+            ajFmtPrintF(outfile, "%4d PRODUCT SIZE: %S\n",
+                        i+1, size);
 
-	/* left primer data */
-	tm = eprimer3_tableget("PRIMER_LEFT", i, "TM", table);
-	gc = eprimer3_tableget("PRIMER_LEFT", i, "GC_PERCENT", table);
-	pos = eprimer3_tableget("PRIMER_LEFT", i, "", table);
-	seq = eprimer3_tableget("PRIMER_LEFT", i, "SEQUENCE", table);
-	eprimer3_write_primer(outfile, "FORWARD PRIMER",
-			      pos, tm, gc, seq, AJFALSE, begin);
-
-
-	/* right primer data */
-	tm = eprimer3_tableget("PRIMER_RIGHT", i, "TM", table);
-	gc = eprimer3_tableget("PRIMER_RIGHT", i, "GC_PERCENT", table);
-	pos = eprimer3_tableget("PRIMER_RIGHT", i, "", table);
-	seq = eprimer3_tableget("PRIMER_RIGHT", i, "SEQUENCE", table);
-	eprimer3_write_primer(outfile, "REVERSE PRIMER", 
-			      pos, tm, gc, seq, AJTRUE, begin);
+        /* left primer data */
+        tm = eprimer3_tableget("PRIMER_LEFT", i, "TM", table);
+        gc = eprimer3_tableget("PRIMER_LEFT", i, "GC_PERCENT", table);
+        pos = eprimer3_tableget("PRIMER_LEFT", i, "", table);
+        seq = eprimer3_tableget("PRIMER_LEFT", i, "SEQUENCE", table);
+        eprimer3_write_primer(outfile, "FORWARD PRIMER",
+                              pos, tm, gc, seq, AJFALSE, begin);
 
 
-	/* internal oligo data */
+        /* right primer data */
+        tm = eprimer3_tableget("PRIMER_RIGHT", i, "TM", table);
+        gc = eprimer3_tableget("PRIMER_RIGHT", i, "GC_PERCENT", table);
+        pos = eprimer3_tableget("PRIMER_RIGHT", i, "", table);
+        seq = eprimer3_tableget("PRIMER_RIGHT", i, "SEQUENCE", table);
+        eprimer3_write_primer(outfile, "REVERSE PRIMER", 
+                              pos, tm, gc, seq, AJTRUE, begin);
 
-	tm = eprimer3_tableget("PRIMER_INTERNAL_OLIGO", i, "TM", table);
-	gc = eprimer3_tableget("PRIMER_INTERNAL_OLIGO", i, "GC_PERCENT",
-			       table);
-	pos = eprimer3_tableget("PRIMER_INTERNAL_OLIGO", i, "", table);
-	seq = eprimer3_tableget("PRIMER_INTERNAL_OLIGO", i, "SEQUENCE", table);
-	eprimer3_write_primer(outfile, "INTERNAL OLIGO",
-			      pos, tm, gc, seq, AJFALSE, begin);
 
-	ajFmtPrintF(outfile, "\n");
+        /* internal oligo data */
+
+        tm = eprimer3_tableget("PRIMER_INTERNAL_OLIGO", i, "TM", table);
+        gc = eprimer3_tableget("PRIMER_INTERNAL_OLIGO", i, "GC_PERCENT",
+                               table);
+        pos = eprimer3_tableget("PRIMER_INTERNAL_OLIGO", i, "", table);
+        seq = eprimer3_tableget("PRIMER_INTERNAL_OLIGO", i, "SEQUENCE", table);
+        eprimer3_write_primer(outfile, "INTERNAL OLIGO",
+                              pos, tm, gc, seq, AJFALSE, begin);
+
+        ajFmtPrintF(outfile, "\n");
 
     }
   
@@ -1145,7 +1194,7 @@ static void eprimer3_output_report(AjPFile outfile, AjPTable table,
 ******************************************************************************/
 
 static AjPStr eprimer3_tableget(char *key1, ajint number, char *key2,
-				AjPTable table)
+                                AjPTable table)
 {
     AjPStr fullkey = NULL;
     AjPStr keynum  = NULL;
@@ -1155,13 +1204,13 @@ static AjPStr eprimer3_tableget(char *key1, ajint number, char *key2,
 
     if(number > 0)
     {
-	ajStrAppC(&fullkey, "_");
-	ajStrFromInt(&keynum, number);
-	ajStrApp(&fullkey, keynum);
+        ajStrAppC(&fullkey, "_");
+        ajStrFromInt(&keynum, number);
+        ajStrApp(&fullkey, keynum);
     }
 
     if(strcmp(key2, ""))
-	ajStrAppC(&fullkey, "_");
+        ajStrAppC(&fullkey, "_");
 
     ajStrAppC(&fullkey, key2);
     ajDebug("Constructed key=%S\n", fullkey);
@@ -1194,8 +1243,8 @@ static AjPStr eprimer3_tableget(char *key1, ajint number, char *key2,
 ******************************************************************************/
 
 static void eprimer3_write_primer(AjPFile outfile, char *tag, AjPStr pos,
-				  AjPStr tm, AjPStr gc, AjPStr seq,
-				  AjBool rev, ajint begin)
+                                  AjPStr tm, AjPStr gc, AjPStr seq,
+                                  AjBool rev, ajint begin)
 {
     ajint startint;
     ajint lenint;
@@ -1206,20 +1255,20 @@ static void eprimer3_write_primer(AjPFile outfile, char *tag, AjPStr pos,
 
     if(pos != NULL)
     {
-	ajStrToFloat(tm, &tmfloat);
-	ajStrToFloat(gc, &gcfloat);
-	comma = ajStrFindC(pos, ",");
-	ajStrAss(&start, pos);
-	ajStrCut(&start, comma, ajStrLen(start)-1);
-	ajStrToInt(start, &startint);
-	startint += begin;
-	ajStrCut(&pos, 0, comma);
-	ajStrToInt(pos, &lenint);
-	if(rev)
-	    startint = startint - lenint + 1;
+        ajStrToFloat(tm, &tmfloat);
+        ajStrToFloat(gc, &gcfloat);
+        comma = ajStrFindC(pos, ",");
+        ajStrAss(&start, pos);
+        ajStrCut(&start, comma, ajStrLen(start)-1);
+        ajStrToInt(start, &startint);
+        startint += begin;
+        ajStrCut(&pos, 0, comma);
+        ajStrToInt(pos, &lenint);
+        if(rev)
+            startint = startint - lenint + 1;
 
-	ajFmtPrintF(outfile, "     %s  %6d %4d  %2.2f  %2.2f  %S\n\n",
-		    tag, startint, lenint, tmfloat, gcfloat, seq);
+        ajFmtPrintF(outfile, "     %s  %6d %4d  %2.2f  %2.2f  %S\n\n",
+                    tag, startint, lenint, tmfloat, gcfloat, seq);
     }
 
 
