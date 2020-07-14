@@ -173,6 +173,15 @@ Trim poly-A tails off EST sequences
                                   forward sense when it is written out. If
                                   this option is not set, then the sense will
                                   not be changed.
+   -tolower            toggle     The poly-A region can be 'masked' by
+                                  converting the sequence characters to
+                                  lower-case. Some non-EMBOSS programs e.g.
+                                  fasta can interpret this as a masked region.
+                                  The sequence is unchanged apart from the
+                                  case change. You might like to ensure that
+                                  the whole sequence is in upper-case before
+                                  masking the specified regions to lower-case
+                                  by using the '-supper' sequence qualifier.
 
    Advanced (Unprompted) qualifiers:
    -[no]fiveprime      boolean    If this is set true, then the 5' end of teh
@@ -184,8 +193,8 @@ Trim poly-A tails off EST sequences
    Associated qualifiers:
 
    "-sequence" associated qualifiers
-   -sbegin1             integer    First base used
-   -send1               integer    Last base used, def=seq length
+   -sbegin1             integer    Start of each sequence to be used
+   -send1               integer    End of each sequence to be used
    -sreverse1           boolean    Reverse (if DNA)
    -sask1               boolean    Ask for begin/end/reverse
    -snucleotide1        boolean    Sequence is nucleotide
@@ -277,6 +286,13 @@ For example the terminal 4 A's of GCAGAAAA would be removed with the default val
 <td>When a poly-T region at the 5' end of the sequence is found and removed, it is likely that the sequence is in the reverse sense. This option will change the sequence to the forward sense when it is written out. If this option is not set, then the sense will not be changed.</td>
 <td>Boolean value Yes/No</td>
 <td>Yes</td>
+</tr>
+
+<tr>
+<td>-tolower</td>
+<td>The poly-A region can be 'masked' by converting the sequence characters to lower-case. Some non-EMBOSS programs e.g. fasta can interpret this as a masked region. The sequence is unchanged apart from the case change. You might like to ensure that the whole sequence is in upper-case before masking the specified regions to lower-case by using the '-supper' sequence qualifier.</td>
+<td>Toggle value Yes/No</td>
+<td>N</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
@@ -681,9 +697,11 @@ None.
         Who has worked on the program in the past.
    -->
 
-Gary Williams (gwilliam&nbsp;&copy;&nbsp;hgmp.mrc.ac.uk)
+Gary Williams (gwilliam&nbsp;&copy;&nbsp;rfcgr.mrc.ac.uk)
 <br>
-HGMP-RC, Genome Campus, Hinxton, Cambridge CB10 1SB, UK
+MRC Rosalind Franklin Centre for Genomics Research
+Wellcome Trust Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
+
 
 
 

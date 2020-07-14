@@ -26,9 +26,10 @@
 
 
 
-static ajint trimest_get_tail(AjPSeq seq, ajint direction, ajint minlength,
-			      ajint mismatches);
+static ajint trimest_get_tail(const AjPSeq seq, ajint direction,
+			      ajint minlength, ajint mismatches);
 
+static void trimest_tolower(AjPStr *string, ajint start, ajint end);
 
 
 
@@ -51,6 +52,7 @@ int main(int argc, char **argv)
     ajint  mismatches;
     AjBool reverse;
     AjBool fiveprime;
+    AjBool tolower;
 
     embInit("trimest", argc, argv);
 
@@ -60,13 +62,15 @@ int main(int argc, char **argv)
     mismatches 	= ajAcdGetInt("mismatches");
     reverse	= ajAcdGetBool("reverse");
     fiveprime	= ajAcdGetBool("fiveprime");
+    tolower     = ajAcdGetToggle("tolower");
+    
 
     str = ajStrNew();
 
     while(ajSeqallNext(seqall, &seq))
     {
         /* get sequence description */
-        ajStrAss(&desc, ajSeqGetDesc(seq));
+        ajStrAssS(&desc, ajSeqGetDesc(seq));
 
         /* get positions to cut in 5' poly-T and 3' poly-A tails */
 	if(fiveprime)
@@ -74,14 +78,17 @@ int main(int argc, char **argv)
 	tail3 = trimest_get_tail(seq, 3, minlength, mismatches);
 
 	/* get a COPY of the sequence string */
-	ajStrAss(&str, ajSeqStr(seq));
+	ajStrAssS(&str, ajSeqStr(seq));
 
         /* cut off longest of 3' or 5' tail */
 	if(tail5 > tail3)
 	{
 	    /* if 5' poly-T tail, then reverse the sequence */
 	    ajDebug("Tail=%d\n", tail5);
-	    ajStrSub(&str, tail5, ajSeqLen(seq)-1);
+            if(tolower)
+                trimest_tolower(&str, 0, tail5-1);
+            else
+	        ajStrSub(&str, tail5, ajSeqLen(seq)-1);
 	    ajStrAppC(&desc, " [poly-T tail removed]");
 
 	}
@@ -89,7 +96,10 @@ int main(int argc, char **argv)
 	{
 	    /* remove 3' poly-A tail */
 	    ajDebug("Tail=%d\n", tail3);
-	    ajStrSub(&str, 0, ajSeqLen(seq)-tail3-1);
+            if(tolower)
+                trimest_tolower(&str, ajSeqLen(seq)-tail3, ajSeqLen(seq));
+            else
+	        ajStrSub(&str, 0, ajSeqLen(seq)-tail3-1);
             ajStrAppC(&desc, " [poly-A tail removed]");
 
 	}
@@ -126,7 +136,7 @@ int main(int argc, char **argv)
 **
 ** Trim sequence
 **
-** @param [r] seq [AjPSeq] sequence
+** @param [r] seq [const AjPSeq] sequence
 ** @param [r] direction [ajint] 5 = 5' end, 3 = 3' end
 ** @param [r] minlength [ajint] minimum length of tail to cut
 ** @param [r] mismatches [ajint] max allowed contiguous mismatches in tail
@@ -134,11 +144,11 @@ int main(int argc, char **argv)
 ** @@
 ******************************************************************************/
 
-static ajint trimest_get_tail(AjPSeq seq, ajint direction, ajint minlength,
-	ajint mismatches)
+static ajint trimest_get_tail(const AjPSeq seq, ajint direction,
+			      ajint minlength, ajint mismatches)
 {
     char t;
-    char *s;
+    const char *s;
     char c;
     ajint inc;
     ajint start;
@@ -201,4 +211,32 @@ static ajint trimest_get_tail(AjPSeq seq, ajint direction, ajint minlength,
     }
 
     return result;
+}
+
+/* @funcstatic trimest_tolower ***********************************************
+**
+** Change a part of a string to lowercase
+**
+** @param [u] string [AjPStr *] string to change
+** @param [r] start [ajint] start of region of string to change
+** @param [r] end   [ajint] end of region of string to change
+** @return [void] 
+** @@
+******************************************************************************/
+
+static void trimest_tolower(AjPStr *string, ajint start, ajint end)
+{
+
+    AjPStr substr;
+    substr = ajStrNew();
+    
+    /* extract the region and lowercase */
+    ajStrAppSub(&substr, *string, start, end);
+    ajStrToLower(&substr);
+    
+    /* remove and replace the lowercased region */
+    ajStrCut(string, start, end);
+    ajStrInsert(string, start, substr);
+    ajStrDel(&substr);
+
 }
