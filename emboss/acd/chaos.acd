@@ -1,31 +1,39 @@
-appl: chaos [
-  documentation: "Create a chaos game representation plot for a sequence"
+application: chaos [
+  documentation: "Create a chaos game representation plot for
+                  a sequence"
   groups: "Nucleic:Composition"
 ]
 
-section: input [ info: "input Section" type: page ]
-sequence: sequence  [
-  parameter: "Y"
-  type: "dna"
+section: input [
+  information: "Input section"
+  type: "page"
 ]
+
+  sequence: sequence  [
+    parameter: "Y"
+    type: "dna"
+  ]
 
 endsection: input
 
-section: output [ info: "output Section" type: page ]
-bool: data  [
-  optional: "N"
-  default: "N"
-  information: "Display as data"
+section: output [
+  information: "Output section"
+  type: "page"
 ]
 
-graph: graph  [
-  required: "@(!$(data))"
-]
+  boolean: data  [
+    default: "N"
+    information: "Display as data"
+  ]
 
-outfile: outfile  [
-  required: "$(data)"
-  nullok: "Y"
-]
+  graph: graph  [
+    required: "@(!$(data))"
+  ]
+
+  outfile: outfile  [
+    required: "$(data)"
+    nullok: "Y"
+    standardtype: "chaos output"
+  ]
 
 endsection: output
-

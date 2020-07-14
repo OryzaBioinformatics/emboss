@@ -1,86 +1,112 @@
-appl: showdb [
-  documentation: "Displays information on the currently available databases"
+application: showdb [
+  documentation: "Displays information on the currently
+                  available databases"
   groups: "Display, Information"
 ]
 
-section: input [ info: "input Section" type: page ]
-string: database  [
-  default: ""
-  optional: "Y"
-  prompt: "Name of a single database to give information on"
+section: input [
+  information: "Input section"
+  type: "page"
 ]
+
+  string: database  [
+    default: ""
+    optional: "Y"
+    prompt: "Name of a single database to give information on"
+  ]
 
 endsection: input
 
-section: advanced [ info: "advanced Section" type: page ]
-bool: html  [
-  optional: "Y"
-  default: "N"
-  prompt: "Format output as an HTML table"
+section: advanced [
+  information: "Advanced section"
+  type: "page"
 ]
 
-bool: protein  [
-  optional: "Y"
-  default: "Y"
-  prompt: "Display protein databases"
-]
+  boolean: html  [
+    optional: "Y"
+    default: "N"
+    prompt: "Format output as an HTML table"
+  ]
 
-bool: nucleic  [
-  optional: "Y"
-  default: "Y"
-  prompt: "Display nucleic acid databases"
-]
+  boolean: protein  [
+    optional: "Y"
+    default: "Y"
+    prompt: "Display protein databases"
+  ]
 
-bool: only  [
-  default: "N"
-  information: "Display the specified columns"
-  help: "This is a way of shortening the command line if you only want a few things to be displayed. Instead of specifying: \ '-nohead -notype -noid -noquery -noall' \ to get only the comment output, you can specify \ '-only -comment'"
-]
+  boolean: nucleic  [
+    optional: "Y"
+    default: "Y"
+    prompt: "Display nucleic acid databases"
+  ]
 
-bool: heading  [
-  default: "@(!$(only))"
-  prompt: "Display column headings"
-]
+  boolean: only  [
+    default: "N"
+    information: "Display the specified columns"
+    help: "This is a way of shortening the command line if you only
+           want a few things to be displayed. Instead of specifying: \
+           '-nohead -notype -noid -noquery -noall' \
+           to get only the comment output, you can specify \
+           '-only -comment'"
+  ]
 
-bool: type  [
-  default: "@(!$(only))"
-  prompt: "Display 'type' column"
-]
+  boolean: heading  [
+    default: "@(!$(only))"
+    prompt: "Display column headings"
+  ]
 
-bool: id  [
-  default: "@(!$(only))"
-  prompt: "Display 'id' column"
-]
+  boolean: type  [
+    default: "@(!$(only))"
+    prompt: "Display 'type' column"
+  ]
 
-bool: query  [
-  default: "@(!$(only))"
-  prompt: "Display 'qry' column"
-]
+  boolean: id  [
+    default: "@(!$(only))"
+    prompt: "Display 'id' column"
+  ]
 
-bool: all  [
-  default: "@(!$(only))"
-  prompt: "Display 'all' column"
-]
+  boolean: query  [
+    default: "@(!$(only))"
+    prompt: "Display 'qry' column"
+  ]
 
-bool: comment  [
-  default: "@(!$(only))"
-  prompt: "Display 'comment' column"
-]
+  boolean: all  [
+    default: "@(!$(only))"
+    prompt: "Display 'all' column"
+  ]
 
-bool: release  [
-  optional: "Y"
-  default: "N"
-  prompt: "Display 'release' column"
-]
+  boolean: fields  [
+    optional: "Y"
+    default: "N"
+    prompt: "Display 'fields' column"
+    help: "This displays the search fields that can be used on this
+           database, other than the standard 'id' or 'acc' fields."
+  ]
+
+  boolean: comment  [
+    default: "@(!$(only))"
+    prompt: "Display 'comment' column"
+  ]
+
+  boolean: release  [
+    optional: "Y"
+    default: "N"
+    prompt: "Display 'release' column"
+  ]
+
 endsection: advanced
 
-section: output [ info: "output Section" type: page ]
-outfile: outfile  [
-  optional: "Y"
-  default: "stdout"
-  prompt: "Output database details to a file"
-  help: "If you enter the name of a file here then this program will write the database details into that file."
+section: output [
+  information: "Output section"
+  type: "page"
 ]
 
-endsection: output
+  outfile: outfile  [
+    optional: "Y"
+    default: "stdout"
+    prompt: "Output database details to a file"
+    help: "If you enter the name of a file here then this program will
+           write the database details into that file."
+  ]
 
+endsection: output

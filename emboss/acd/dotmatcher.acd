@@ -1,81 +1,94 @@
-appl: dotmatcher [
-  documentation: "Displays a thresholded dotplot of two sequences"
+application: dotmatcher [
+  documentation: "Displays a thresholded dotplot of two
+                  sequences"
   groups: "Alignment:Dot plots"
 ]
 
-section: input [ info: "input Section" type: page ]
-sequence: sequencea  [
-  parameter: "y"
-  type: "any"
+section: input [
+  information: "Input section"
+  type: "page"
 ]
 
-sequence: sequenceb  [
-  parameter: "y"
-  type: "@($(sequencea.protein) ? stopprotein : nucleotide)"
-]
+  sequence: asequence  [
+    parameter: "y"
+    type: "any"
+  ]
+
+  sequence: bsequence  [
+    parameter: "y"
+    type: "@($(asequence.protein) ? stopprotein : nucleotide)"
+  ]
 
 endsection: input
 
-section: advanced [ info: "advanced Section" type: page ]
-integer: windowsize  [
-  optional: "Y"
-  information: "window size over which to test threshhold"
-  default: "10"
-  minimum: "3"
+section: advanced [
+  information: "Advanced section"
+  type: "page"
 ]
 
-integer: threshold  [
-  optional: "Y"
-  information: "threshold"
-  default: "23"
-  minimum: "0"
-]
+  integer: windowsize  [
+    optional: "Y"
+    information: "window size over which to test threshhold"
+    default: "10"
+    minimum: "3"
+  ]
 
-matrix: matrixfile  [
-  optional: "Y"
-  information: "Matrix file"
-  protein: "$(sequencea.protein)"
-  help: "This is the scoring matrix file used when comparing sequences.  By default it is the file 'EBLOSUM62' (for proteins) or the file 'EDNAFULL' (for nucleic sequences).  These files are found in the 'data' directory of the EMBOSS installation."
-]
+  integer: threshold  [
+    optional: "Y"
+    information: "threshold"
+    default: "23"
+    minimum: "0"
+  ]
+
+  matrix: matrixfile  [
+    optional: "Y"
+    information: "Matrix file"
+    protein: "$(asequence.protein)"
+    help: "This is the scoring matrix file used when comparing
+           sequences. By default it is the file 'EBLOSUM62' (for proteins) or
+           the file 'EDNAFULL' (for nucleic sequences). These files are
+           found in the 'data' directory of the EMBOSS installation."
+  ]
 
 endsection: advanced
 
-section: output [ info: "output Section" type: page ]
-bool: stretch  [
-  required: "N"
-  default: "N"
-  information: "Stretch plot"
-  help: "Display a non-proportional graph"
+section: output [
+  information: "Output section"
+  type: "page"
 ]
 
-bool: data  [
-  required: "@(!$(stretch))"
-  default: "N"
-  information: "Display as data"
-  help: "Output the match data to a file instead of plotting it"
-]
+  boolean: stretch  [
+    default: "N"
+    information: "Stretch plot"
+    help: "Display a non-proportional graph"
+  ]
 
-graph: graph  [
-  required: "@(@(!$(data)) & @(!$(stretch)))"
-  optional: "N"
-  gtitle: "Dotmatcher: $(sequencea.name) vs $(sequenceb.name)"
-  gxtitle: "$(sequencea.name)"
-  gytitle: "$(sequenceb.name)"
-]
+  boolean: data  [
+    required: "@(!$(stretch))"
+    default: "N"
+    information: "Display as data"
+    help: "Output the match data to a file instead of plotting it"
+  ]
 
-xygraph: xygraph  [
-  required: "$(stretch)"
-  optional: "N"
-  gtitle: "Dotmatcher: $(sequencea.name) vs $(sequenceb.name)"
-  gxtitle: "$(sequencea.name)"
-  gytitle: "$(sequenceb.name)"
-]
+  graph: graph  [
+    required: "@(@(!$(data)) & @(!$(stretch)))"
+    gtitle: "Dotmatcher: $(asequence.name) vs $(bsequence.name)"
+    gxtitle: "$(asequence.name)"
+    gytitle: "$(bsequence.name)"
+  ]
 
-outfile: outfile  [
-  required: "@($(data) & @(!$(stretch)))"
-  nullok: "Y"
-  information: "Display as data"
-]
+  xygraph: xygraph  [
+    required: "$(stretch)"
+    gtitle: "Dotmatcher: $(asequence.name) vs $(bsequence.name)"
+    gxtitle: "$(asequence.name)"
+    gytitle: "$(bsequence.name)"
+  ]
+
+  outfile: outfile  [
+    required: "@($(data) & @(!$(stretch)))"
+    nullok: "Y"
+    information: "Display as data"
+    standardtype: "dotplot graph data"
+  ]
 
 endsection: output
-

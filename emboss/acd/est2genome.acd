@@ -1,121 +1,151 @@
-appl: est2genome [
+application: est2genome [
   documentation: "Align EST and genomic DNA sequences"
   groups: "Alignment:Global"
-  gui: yes
-  batch: yes
-  cpu: medium
+  gui: "yes"
+  batch: "yes"
+  cpu: "medium"
 ]
 
-section: input [ info: "input Section" type: page ]
-seqall: est  [
-  parameter: "Y"
-  type: "dna"
-  prompt: "EST sequence(s)"
+section: input [
+  information: "Input section"
+  type: "page"
 ]
 
-sequence: genome  [
-  parameter: "Y"
-  type: "dna"
-  prompt: "Genomic sequence"
-]
+  seqall: est [
+    parameter: "Y"
+    type: "dna"
+    information: "EST sequence(s)"
+  ]
+
+  sequence: genome [
+    parameter: "Y"
+    type: "dna"
+    information: "Genomic sequence"
+  ]
 
 endsection: input
 
-section: advanced [ info: "advanced Section" type: page ]
-integer: match  [
-  optional: "Y"
-  default: "1"
-  information: "Score for matching two bases"
+section: advanced [
+  information: "Advanced section"
+  type: "page"
 ]
 
-integer: mismatch  [
-  optional: "Y"
-  default: "1"
-  information: "Cost for mismatching two bases"
-]
+  integer: match  [
+    optional: "Y"
+    default: "1"
+    information: "Score for matching two bases"
+  ]
 
-integer: gappenalty  [
-  optional: "Y"
-  default: "2"
-  information: "Gap penalty"
-  help: "Cost for deleting a single base in either sequence, excluding introns"
-]
+  integer: mismatch  [
+    optional: "Y"
+    default: "1"
+    information: "Cost for mismatching two bases"
+  ]
 
-integer: intronpenalty  [
-  optional: "Y"
-  default: "40"
-  information: "Intron penalty"
-  help: "Cost for an intron, independent of length."
-]
+  integer: gappenalty  [
+    optional: "Y"
+    default: "2"
+    information: "Gap penalty"
+    help: "Cost for deleting a single base in either sequence,
+           excluding introns"
+  ]
 
-integer: splicepenalty  [
-  optional: "Y"
-  default: "20"
-  information: "Splice site penalty"
-  help: "Cost for an intron, independent of length and starting/ending on donor-acceptor sites"
-]
+  integer: intronpenalty  [
+    optional: "Y"
+    default: "40"
+    information: "Intron penalty"
+    help: "Cost for an intron, independent of length."
+  ]
 
-integer: minscore  [
-  optional: "Y"
-  default: "30"
-  information: "Minimum accepted score"
-  help: "Exclude alignments with scores below this threshold score."
-]
+  integer: splicepenalty  [
+    optional: "Y"
+    default: "20"
+    information: "Splice site penalty"
+    help: "Cost for an intron, independent of length and
+           starting/ending on donor-acceptor sites"
+  ]
 
-bool: reverse  [
-  information: "Reverse orientation"
-  help: "Reverse the orientation of the EST sequence"
-]
+  integer: minscore  [
+    optional: "Y"
+    default: "30"
+    information: "Minimum accepted score"
+    help: "Exclude alignments with scores below this threshold score."
+  ]
 
-bool: splice  [
-  default: "Y"
-  information: "Use donor and acceptor splice sites"
-  help: "Use donor and acceptor splice sites. If you want to ignore donor-acceptor sites then set this to be false."
-]
+  boolean: reverse  [
+    information: "Reverse orientation"
+    help: "Reverse the orientation of the EST sequence"
+  ]
 
-string: mode  [
-  default: "both"
-  information: "Comparison mode"
-  help: "This determines the comparion mode. The default value is 'both', in which case both strands of the est are compared assuming a forward gene direction (ie GT/AG splice sites), and the best comparsion redone assuming a reversed (CT/AC) gene splicing direction. The other allowed modes are 'forward', when just the forward strand is searched, and 'reverse', ditto for the reverse strand."
-]
+  boolean: splice  [
+    default: "Y"
+    information: "Use donor and acceptor splice sites"
+    help: "Use donor and acceptor splice sites. If you want to ignore
+           donor-acceptor sites then set this to be false."
+  ]
 
-bool: best  [
-  default: "Y"
-  information: "Print out only best alignment"
-  help: "You can print out all comparisons instead of just the best one by setting this to be false."
-]
+  string: mode  [
+    default: "both"
+    information: "Comparison mode"
+    help: "This determines the comparion mode. The default value is
+           'both', in which case both strands of the est are compared
+           assuming a forward gene direction (ie GT/AG splice sites), and the
+           best comparsion redone assuming a reversed (CT/AC) gene splicing
+           direction. The other allowed modes are 'forward', when just the
+           forward strand is searched, and 'reverse', ditto for the reverse
+           strand."
+  ]
 
-float: space  [
-  default: "10.0"
-  information: "Space threshold (in megabytes)"
-  help: "for linear-space recursion. If product of sequence lengths divided by 4 exceeds this then a divide-and-conquer strategy is used to control the memory requirements. In this way very long sequences can be aligned. \ If you have a machine with plenty of memory you can raise this parameter (but do not exceed the machine's physical RAM)"
-]
+  boolean: best  [
+    default: "Y"
+    information: "Print out only best alignment"
+    help: "You can print out all comparisons instead of just the best
+           one by setting this to be false."
+  ]
 
-integer: shuffle  [
-  information: "Shuffle"
-]
+  float: space  [
+    default: "10.0"
+    information: "Space threshold (in megabytes)"
+    help: "for linear-space recursion. If product of sequence lengths
+           divided by 4 exceeds this then a divide-and-conquer strategy is
+           used to control the memory requirements. In this way very long
+           sequences can be aligned. \
+           If you have a machine with plenty of memory you can raise this
+           parameter (but do not exceed the machine's physical RAM)"
+  ]
 
-integer: seed  [
-  default: "20825"
-  information: "Random number seed"
-]
+  integer: shuffle  [
+    information: "Shuffle"
+  ]
+
+  integer: seed  [
+    default: "20825"
+    information: "Random number seed"
+  ]
 
 endsection: advanced
 
-section: output [ info: "output Section" type: page ]
-outfile: outfile  [
-  param: "y"
+section: output [
+  information: "Output section"
+  type: "page"
 ]
 
-bool: align  [
-  information: "Show the alignment"
-  help: "Show the alignment. The alignment includes the first and last 5 bases of each intron, together with the intron width. The direction of splicing is indicated by angle brackets (forward or reverse) or ???? (unknown)."
-]
+  outfile: outfile  [
+    parameter: "y"
+    standardtype: "estgenome output"
+  ]
 
-integer: width  [
-  default: "50"
-  information: "Alignment width"
-]
+  boolean: align  [
+    information: "Show the alignment"
+    help: "Show the alignment. The alignment includes the first and
+           last 5 bases of each intron, together with the intron width. The
+           direction of splicing is indicated by angle brackets (forward or
+           reverse) or ???? (unknown)."
+  ]
+
+  integer: width  [
+    default: "50"
+    information: "Alignment width"
+  ]
 
 endsection: output
-

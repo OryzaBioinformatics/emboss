@@ -1,13 +1,17 @@
-appl: embossversion [
+application: embossversion [
   documentation: "Writes the current EMBOSS version number"
   groups: "Utils:Misc"
 ]
 
-section: output [ info: "output Section" type: page ]
-outfile: outfile  [
-  optional: "Y"
-  default: "stdout"
-  prompt: "Output file"
+section: output [
+  information: "Output section"
+  type: "page"
 ]
-endsection: output
 
+  outfile: outfile  [
+    optional: "Y"
+    default: "stdout"
+    standardtype: "embossversion output"
+  ]
+
+endsection: output

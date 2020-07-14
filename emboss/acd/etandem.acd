@@ -1,64 +1,83 @@
-appl: etandem [
-  documentation: "Looks for tandem repeats in a nucleotide sequence"
+application: etandem [
+  documentation: "Looks for tandem repeats in a nucleotide
+                  sequence"
   groups: "Nucleic:Repeats"
 ]
 
-section: input [ info: "input Section" type: page ]
-sequence: sequence  [
-  parameter: "Y"
-  type: "dna"
+section: input [
+  information: "Input section"
+  type: "page"
 ]
+
+  sequence: sequence  [
+    parameter: "Y"
+    type: "dna"
+  ]
 
 endsection: input
 
-section: required [ info: "required Section" type: page ]
-integer: minrepeat  [
-  required: "Y"
-  default: "10"
-  minimum: "2"
-  information: "Minimum repeat size"
-  valid: "Integer, 2 or higher"
+section: required [
+  information: "Required section"
+  type: "page"
 ]
 
-integer: maxrepeat  [
-  required: "Y"
-  default: "$(minrepeat)"
-  minimum: "$(minrepeat)"
-  information: "Maximum repeat size"
-  valid: "Integer, same as -minrepeat or higher"
-  expected: "Same as -minrepeat"
-]
+  integer: minrepeat  [
+    required: "Y"
+    default: "10"
+    minimum: "2"
+    information: "Minimum repeat size"
+    valid: "Integer, 2 or higher"
+  ]
+
+  integer: maxrepeat  [
+    required: "Y"
+    default: "$(minrepeat)"
+    minimum: "$(minrepeat)"
+    information: "Maximum repeat size"
+    valid: "Integer, same as -minrepeat or higher"
+    expected: "Same as -minrepeat"
+  ]
 
 endsection: required
 
-section: advanced [ info: "advanced Section" type: page ]
-integer: threshold  [
-  default: "20"
-  information: "Threshold score"
+section: advanced [
+  information: "Advanced section"
+  type: "page"
 ]
 
-bool: mismatch  [
-  information: "Allow N as a mismatch"
-]
+  integer: threshold  [
+    default: "20"
+    information: "Threshold score"
+  ]
 
-bool: uniform  [
-  information: "Allow uniform consensus"
-]
+  boolean: mismatch  [
+    information: "Allow N as a mismatch"
+  ]
+
+  boolean: uniform  [
+    information: "Allow uniform consensus"
+  ]
+
 endsection: advanced
 
-section: output [ info: "output Section" type: page ]
-
-report: outfile  [
-  parameter: "Y"
-  rformat: "table"
-  taglist: "int:rpt_size=Size int:rpt_count=Count float:identity=Identity str:consensus=Consensus"
-  rextension: "tan"
-  precision: 0
+section: output [
+  information: "Output section"
+  type: "page"
 ]
 
-outfile: origfile  [
-  extension: "oldtan"
-  nullok: "Y"
-]
+  report: outfile  [
+    parameter: "Y"
+    rformat: "table"
+    taglist: "int:rpt_size=Size int:rpt_count=Count
+              float:identity=Identity str:consensus=Consensus"
+    rextension: "tan"
+    precision: "0"
+  ]
+
+  outfile: origfile  [
+    extension: "oldtan"
+    nullok: "Y"
+    standardtype: "tandem output"
+  ]
 
 endsection: output

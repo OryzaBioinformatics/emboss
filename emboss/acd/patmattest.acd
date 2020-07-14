@@ -1,4 +1,4 @@
-appl: patmattest [
+application: patmattest [
   documentation: "test of pattern matching"
   groups: "Test"
 ]

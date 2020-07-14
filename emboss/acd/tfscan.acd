@@ -1,43 +1,55 @@
-appl: tfscan [
-  documentation: "Scans DNA sequences for transcription factors"
+application: tfscan [
+  documentation: "Scans DNA sequences for transcription
+                  factors"
   groups: "Nucleic:Transcription"
 ]
 
-section: input [ info: "input Section" type: page ]
-seqall: sequence  [
-  parameter: "Y"
-  type: "DNA"
+section: input [
+  information: "Input section"
+  type: "page"
 ]
+
+  seqall: sequence  [
+    parameter: "Y"
+    type: "DNA"
+  ]
 
 endsection: input
 
-section: required [ info: "required Section" type: page ]
-list: menu  [
-  required: "Y"
-  default: "V"
-  minimum: "1"
-  maximum: "1"
-  values: "F:fungi,I:insect,P:plant,V:vertebrate,O:other"
-  delimiter: ","
-  codedelimiter: ":"
-  header: "Transcription Factor Class"
-  prompt: "Select class"
-  button: "Y"
+section: required [
+  information: "Required section"
+  type: "page"
 ]
 
-integer: mismatch  [
-  required: "Y"
-  default: "0"
-  minimum: "0"
-  information: "Number of mismatches"
-]
+  list: menu  [
+    required: "Y"
+    default: "V"
+    minimum: "1"
+    maximum: "1"
+    values: "F:fungi,I:insect,P:plant,V:vertebrate,O:other"
+    delimiter: ","
+    codedelimiter: ":"
+    header: "Transcription Factor Class"
+    prompt: "Select class"
+    button: "Y"
+  ]
+
+  integer: mismatch  [
+    required: "Y"
+    default: "0"
+    minimum: "0"
+    information: "Number of mismatches"
+  ]
 
 endsection: required
 
-section: output [ info: "output Section" type: page ]
-outfile: outfile  [
-  parameter: "Y"
+section: output [
+  information: "Output section"
+  type: "page"
 ]
 
-endsection: output
+  outfile: outfile  [
+    parameter: "Y"
+  ]
 
+endsection: output

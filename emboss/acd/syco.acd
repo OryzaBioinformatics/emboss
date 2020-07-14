@@ -1,58 +1,65 @@
-appl: syco [
-  documentation: "Synonymous codon usage Gribskov statistic plot"
-  groups: "Nucleic:Codon usage"
+application: syco [
+  documentation: "Synonymous codon usage Gribskov statistic
+                  plot"
+  groups: "Nucleic:Codon usage, Nucleic:Gene finding"
 ]
 
-section: input [ info: "input Section" type: page ]
-sequence: sequence  [
-  parameter: "Y"
-  type: "DNA"
+section: input [
+  information: "Input section"
+  type: "page"
 ]
+
+  sequence: sequence  [
+    parameter: "Y"
+    type: "DNA"
+  ]
 
 endsection: input
 
-section: advanced [ info: "advanced Section" type: page ]
-codon: cfile  [
-  optional: "N"
-  information: "Codon usage file"
+section: advanced [
+  information: "Advanced section"
+  type: "page"
 ]
 
-integer: window  [
-  optional: "N"
-  default: "30"
-  information: "Averaging window"
-]
+  codon: cfile  [
+    information: "Codon usage file"
+  ]
 
-bool: uncommon  [
-  optional: "N"
-  default: "N"
-  information: "Show common codon usage"
-]
+  integer: window  [
+    default: "30"
+    information: "Averaging window"
+  ]
 
-float: minimum  [
-  optional: "N"
-  default: ".15"
-  minimum: "0.0"
-  maximum: ".99"
-  information: "Minimum value for a common codon"
-]
+  boolean: uncommon  [
+    default: "N"
+    information: "Show common codon usage"
+  ]
+
+  float: minimum  [
+    default: ".15"
+    minimum: "0.0"
+    maximum: ".99"
+    information: "Minimum value for a common codon"
+  ]
 
 endsection: advanced
 
-section: output [ info: "output Section" type: page ]
-bool: plot  [
-  optional: "N"
-  information: "Produce plot"
+section: output [
+  information: "Output section"
+  type: "page"
 ]
 
-xygraph: graph  [
-  required: "$(plot)"
-  multiple: "3"
-]
+  boolean: plot  [
+    information: "Produce plot"
+  ]
 
-outfile: outfile  [
-  required: "@(!$(plot))"
-]
+  xygraph: graph  [
+    required: "$(plot)"
+    multiple: "3"
+  ]
+
+  outfile: outfile  [
+    required: "@(!$(plot))"
+  ]
 
 endsection: output
-

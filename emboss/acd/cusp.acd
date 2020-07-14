@@ -1,26 +1,38 @@
-appl: cusp [
+application: cusp [
   documentation: "Create a codon usage table"
   groups: "Nucleic:Codon usage"
 ]
 
-section: input [ info: "input Section" type: page ]
-seqall: sequence  [
-  parameter: "Y"
-  type: "DNA"
+section: input [
+  information: "Input section"
+  type: "page"
 ]
+
+  seqall: sequence  [
+    parameter: "Y"
+    type: "DNA"
+  ]
 
 endsection: input
 
-section: advanced [ info: "advanced Section" type: page ]
-codon: cfile  [
-  required: "N"
+section: advanced [
+  information: "Advanced section"
+  type: "page"
 ]
+
+  codon: cfile  [
+  ]
 
 endsection: advanced
 
-section: output [ info: "output Section" type: page ]
-outfile: outfile  [
-  parameter: "Y"
+section: output [
+  information: "Output section"
+  type: "page"
 ]
-endsection: output
 
+  outfile: outfile  [
+    parameter: "Y"
+    standardtype: "cusp output"
+  ]
+
+endsection: output

@@ -1,28 +1,40 @@
-appl: cai [
+application: cai [
   documentation: "CAI codon adaptation index"
   groups: "Nucleic:Codon usage"
 ]
 
-section: input [ info: "input Section" type: page ]
-seqall: seqall  [
-  parameter: "Y"
-  type: "DNA"
+section: input [
+  information: "Input section"
+  type: "page"
 ]
+
+  seqall: seqall  [
+    parameter: "Y"
+    type: "DNA"
+  ]
 
 endsection: input
 
-section: required [ info: "required Section" type: page ]
-codon: cfile  [
-  required: "Y"
-  information: "Codon usage file"
-  default: "Eyeastcai.cut"
+section: required [
+  information: "Required section"
+  type: "page"
 ]
+
+  codon: cfile  [
+    required: "Y"
+    default: "Eyeastcai.cut"
+  ]
 
 endsection: required
 
-section: output [ info: "output Section" type: page ]
-outfile: outfile  [
-  parameter: "Y"
+section: output [
+  information: "Output section"
+  type: "page"
 ]
-endsection: output
 
+  outfile: outfile  [
+    parameter: "Y"
+    standardtype: "cai output"
+  ]
+
+endsection: output

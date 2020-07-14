@@ -1,43 +1,55 @@
-appl: splitter [
-  documentation: "Split a sequence into (overlapping) smaller sequences"
+application: splitter [
+  documentation: "Split a sequence into (overlapping) smaller
+                  sequences"
   groups: "Edit"
 ]
 
-section: input [ info: "input Section" type: page ]
-seqall: sequence  [
-  parameter: "Y"
-  type: "any"
+section: input [
+  information: "Input section"
+  type: "page"
 ]
+
+  seqall: sequence  [
+    parameter: "Y"
+    type: "any"
+  ]
 
 endsection: input
 
-section: advanced [ info: "advanced Section" type: page ]
-integer: size  [
-  optional: "Y"
-  minimum: "1"
-  default: "10000"
-  prompt: "Size to split at"
+section: advanced [
+  information: "Advanced section"
+  type: "page"
 ]
 
-integer: overlap  [
-  optional: "Y"
-  minimum: "0"
-  maximum: "@($(size)-1)"
-  default: "0"
-  prompt: "Overlap between split sequences"
-]
+  integer: size  [
+    optional: "Y"
+    minimum: "1"
+    default: "10000"
+    prompt: "Size to split at"
+  ]
 
-bool: addoverlap  [
-  optional: "N"
-  default: "N"
-  prompt: "Add overlap to size"
-]
+  integer: overlap  [
+    optional: "Y"
+    minimum: "0"
+    maximum: "@($(size)-1)"
+    default: "0"
+    prompt: "Overlap between split sequences"
+  ]
+
+  boolean: addoverlap  [
+    default: "N"
+    prompt: "Add overlap to size"
+  ]
 
 endsection: advanced
 
-section: output [ info: "output Section" type: page ]
-seqoutall: outseq  [
-  parameter: "Y"
+section: output [
+  information: "Output section"
+  type: "page"
 ]
+
+  seqoutall: outseq  [
+    parameter: "Y"
+  ]
 
 endsection: output

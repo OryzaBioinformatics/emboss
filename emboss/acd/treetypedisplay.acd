@@ -1,4 +1,4 @@
-appl: treetypedisplay [
+application: treetypedisplay [
   documentation: "test of graphics"
   groups: "Test"
 ]

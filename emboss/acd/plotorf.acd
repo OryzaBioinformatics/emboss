@@ -1,35 +1,45 @@
-appl: plotorf [
+application: plotorf [
   documentation: "Plot potential open reading frames"
   groups: "Nucleic:Gene finding, Nucleic:Translation"
 ]
 
-section: input [ info: "input Section" type: page ]
-sequence: sequence  [
-  parameter: "Y"
-  type: "dna"
+section: input [
+  information: "Input section"
+  type: "page"
 ]
+
+  sequence: sequence  [
+    parameter: "Y"
+    type: "dna"
+  ]
 
 endsection: input
 
-section: advanced [ info: "advanced Section" type: page ]
-string: start  [
-  optional: "N"
-  default: "ATG"
-  information: "Start codons"
+section: advanced [
+  information: "Advanced section"
+  type: "page"
 ]
 
-string: stop  [
-  optional: "N"
-  default: "TAA,TAG,TGA"
-  information: "Stop codons"
-]
+  string: start  [
+    default: "ATG"
+    information: "Start codons"
+  ]
+
+  string: stop  [
+    default: "TAA,TAG,TGA"
+    information: "Stop codons"
+  ]
 
 endsection: advanced
 
-section: output [ info: "output Section" type: page ]
-xygraph: graph  [
-  required: "Y"
-  multiple: "6"
+section: output [
+  information: "Output section"
+  type: "page"
 ]
+
+  xygraph: graph  [
+    required: "Y"
+    multiple: "6"
+  ]
 
 endsection: output

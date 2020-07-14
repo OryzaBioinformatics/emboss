@@ -1,38 +1,51 @@
-appl: pasteseq [
+application: pasteseq [
   documentation: "Insert one sequence into another"
   groups: "Edit"
 ]
 
-section: input [ info: "input Section" type: page ]
-sequence: sequence  [
-  parameter: "Y"
-  type: "any"
+section: input [
+  information: "Input section"
+  type: "page"
 ]
 
-sequence: insseq  [
-  parameter: "Y"
-  information: "Sequence to insert"
-  type: "@($(sequence.protein) ? stopprotein : nucleotide)"
-]
+  sequence: sequence  [
+    parameter: "Y"
+    type: "any"
+  ]
+
+  sequence: insseq  [
+    parameter: "Y"
+    information: "Sequence to insert"
+    type: "@($(sequence.protein) ? stopprotein : nucleotide)"
+  ]
 
 endsection: input
 
-section: required [ info: "required Section" type: page ]
-integer: pos  [
-  required: "Y"
-  default: "$(sequence.end)"
-  maximum: "$(sequence.end)"
-  minimum: "0"
-  information: "Position to insert after"
-  help: "The position in the main input sequence to insert after. \ To insert before the start use the position 0."
+section: required [
+  information: "Required section"
+  type: "page"
 ]
+
+  integer: pos  [
+    required: "Y"
+    default: "$(sequence.end)"
+    maximum: "$(sequence.end)"
+    minimum: "0"
+    information: "Position to insert after"
+    help: "The position in the main input sequence to insert after. \
+           To insert before the start use the position 0."
+  ]
 
 endsection: required
 
-section: output [ info: "output Section" type: page ]
-seqout: outseq  [
-  parameter: "Y"
-  required: "Y"
+section: output [
+  information: "Output section"
+  type: "page"
 ]
+
+  seqout: outseq  [
+    parameter: "Y"
+    required: "Y"
+  ]
 
 endsection: output

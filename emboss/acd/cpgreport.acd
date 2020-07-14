@@ -1,37 +1,51 @@
-appl: cpgreport [
+application: cpgreport [
   documentation: "Reports all CpG rich regions"
   groups: "Nucleic:CpG Islands"
 ]
 
-section: input [ info: "input Section" type: page ]
-seqall: sequence  [
-  parameter: "Y"
-  type: "DNA"
+section: input [
+  information: "Input section"
+  type: "page"
 ]
+
+  seqall: sequence  [
+    parameter: "Y"
+    type: "DNA"
+  ]
 
 endsection: input
 
-section: required [ info: "required Section" type: page ]
-integer: score  [
-  required: "Y"
-  minimum: "1"
-  maximum: "200"
-  default: "17"
-  information: "CpG score"
-  help: "This sets the score for each CG sequence found. A value of 17 is more sensitive, but 28 has also been used with some success."
+section: required [
+  information: "Required section"
+  type: "page"
 ]
+
+  integer: score  [
+    required: "Y"
+    minimum: "1"
+    maximum: "200"
+    default: "17"
+    information: "CpG score"
+    help: "This sets the score for each CG sequence found. A value of
+           17 is more sensitive, but 28 has also been used with some
+           success."
+  ]
 
 endsection: required
 
-section: output [ info: "output Section" type: page ]
-outfile: outfile  [
-  parameter: "Y"
+section: output [
+  information: "Output section"
+  type: "page"
 ]
 
-featout: featout  [
-  parameter: "N"
-  information: "feature file for output"
-  help: "File for output features"
-]
+  outfile: outfile  [
+    parameter: "Y"
+    standardtype: "cpgreport output"
+  ]
+
+  featout: featout  [
+    help: "File for output features"
+    type: "nucleotide"
+  ]
+
 endsection: output
-

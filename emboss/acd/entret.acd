@@ -1,25 +1,41 @@
-appl: entret [
-  documentation: "Reads and writes (returns) flatfile entries"
+application: entret [
+  documentation: "Reads and writes (returns) flatfile
+                  entries"
   groups: "Edit"
 ]
 
-section: input [ info: "input Section" type: page ]
-seqall: sequence  [
-  parameter: "Y"
-  entry: "Y"
+section: input [
+  information: "Input section"
+  type: "page"
 ]
+
+  seqall: sequence  [
+    parameter: "Y"
+    entry: "Y"
+    type: "any"
+  ]
 
 endsection: input
 
-section: advanced [ info: "advanced Section" type: page ]
-bool: firstonly  [
-  information: "Read one sequence and stop"
+section: advanced [
+  information: "Advanced section"
+  type: "page"
 ]
+
+  boolean: firstonly  [
+    information: "Read one sequence and stop"
+  ]
+
 endsection: advanced
 
-section: output [ info: "output Section" type: page ]
-outfile: outfile  [
-  parameter: "Y"
+section: output [
+  information: "Output section"
+  type: "page"
 ]
+
+  outfile: outfile  [
+    parameter: "Y"
+    standardtype: "entry full text"
+  ]
 
 endsection: output

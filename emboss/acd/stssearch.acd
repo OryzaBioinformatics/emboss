@@ -1,24 +1,33 @@
-appl: stssearch [
-  documentation: "Searches a DNA database for matches with a set of STS primers"
+application: stssearch [
+  documentation: "Searches a DNA database for matches with a
+                  set of STS primers"
   groups: "Nucleic:Primers"
 ]
 
-section: input [ info: "input Section" type: page ]
-seqall: sequences  [
-  parameter: "Y"
-  type: "dna"
+section: input [
+  information: "Input section"
+  type: "page"
 ]
 
-infile: primers  [
-  parameter: "Y"
-  prompt: "Primer file"
-]
+  seqall: sequences  [
+    parameter: "Y"
+    type: "dna"
+  ]
+
+  infile: primers  [
+    parameter: "Y"
+    prompt: "Primer file"
+  ]
 
 endsection: input
 
-section: output [ info: "output Section" type: page ]
-outfile: out  [
-  parameter: "Y"
+section: output [
+  information: "Output section"
+  type: "page"
 ]
-endsection: output
 
+  outfile: out  [
+    parameter: "Y"
+  ]
+
+endsection: output

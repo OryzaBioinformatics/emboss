@@ -1,82 +1,106 @@
-
-appl: prophecy [
-  documentation: "Creates matrices/profiles from multiple alignments"
+application: prophecy [
+  documentation: "Creates matrices/profiles from multiple
+                  alignments"
   groups: "Nucleic:Profiles, Protein:Profiles"
 ]
 
-section: input [ info: "input Section" type: page ]
-seqset: sequence  [
-  parameter: "Y"
-  type: "gapany"
+section: input [
+  information: "Input section"
+  type: "page"
 ]
+
+  seqset: sequence  [
+    parameter: "Y"
+    type: "gapany"
+  ]
 
 endsection: input
 
-section: required [ info: "required Section" type: page ]
-list: type  [
-  required: "Y"
-  default: "F"
-  minimum: "1"
-  maximum: "1"
-  values: "F:Frequency,G:Gribskov,H:Henikoff"
-  delimiter: ","
-  codedelimiter: ":"
-  header: "Profile type"
-  prompt: "Select type"
-  button: "Y"
+section: required [
+  information: "Required section"
+  type: "page"
 ]
 
-string: name  [
-  required: "Y"
-  default: "mymatrix"
-  information: "Enter a name for the profile"
-]
+  list: type  [
+    required: "Y"
+    default: "F"
+    minimum: "1"
+    maximum: "1"
+    values: "F:Frequency,G:Gribskov,H:Henikoff"
+    delimiter: ","
+    codedelimiter: ":"
+    header: "Profile type"
+    prompt: "Select type"
+    button: "Y"
+  ]
+
+  string: name  [
+    required: "Y"
+    default: "mymatrix"
+    information: "Enter a name for the profile"
+  ]
 
 endsection: required
 
-section: advanced [ info: "advanced Section" type: page ]
-variable:  dogap "@($(type) != f)"
-
-section: typesection [ info: "typesection Section" type: frame ]
-integer: threshold  [
-  required: "@($(type)==F)"
-  default: "75"
-  minimum: "1"
-  maximum: "100"
-  information: "Enter threshold reporting percentage"
+section: advanced [
+  information: "Advanced section"
+  type: "page"
 ]
 
-matrixf: datafile  [
-  required: "@($(type)!=F)"
-  information: "Scoring matrix"
-  default: "@($(type) = G: Epprofile H: EBLOSUM62 F: EBLOSUM62)"
-  protein: "$(sequence.protein)"
-  expected: "'Epprofile' for Gribskov type, or EBLOSUM62"
-]
+  variable: dogap "@($(type) != f)"
 
-endsection: typesection
+  section: typesection [
+    information: "typesection Section"
+    type: "frame"
+  ]
 
-section: dogapsection [ info: "dogapsection Section" type: frame ]
-float: open  [
-  required: "$(dogap)"
-  information: "Gap opening penalty"
-  default: "3.0"
-]
+    integer: threshold  [
+      required: "@($(type)==F)"
+      default: "75"
+      minimum: "1"
+      maximum: "100"
+      information: "Enter threshold reporting percentage"
+    ]
 
-float: extension  [
-  required: "$(dogap)"
-  information: "Gap extension penalty"
-  default: "0.3"
-]
+    matrixf: datafile  [
+      required: "@($(type)!=F)"
+      information: "Scoring matrix"
+      default: "@($(type) = G: Epprofile H: EBLOSUM62 F:
+                EBLOSUM62)"
+      protein: "$(sequence.protein)"
+      expected: "'Epprofile' for Gribskov type, or EBLOSUM62"
+    ]
 
-endsection: dogapsection
+  endsection: typesection
+
+  section: dogapsection [
+    information: "dogapsection Section"
+    type: "frame"
+  ]
+
+    float: open  [
+      required: "$(dogap)"
+      information: "Gap opening penalty"
+      default: "3.0"
+    ]
+
+    float: extension  [
+      required: "$(dogap)"
+      information: "Gap extension penalty"
+      default: "0.3"
+    ]
+
+  endsection: dogapsection
 
 endsection: advanced
 
-
-section: output [ info: "output Section" type: page ]
-outfile: outf  [
-  parameter: "Y"
+section: output [
+  information: "Output section"
+  type: "page"
 ]
-endsection: output
 
+  outfile: outf  [
+    parameter: "Y"
+  ]
+
+endsection: output

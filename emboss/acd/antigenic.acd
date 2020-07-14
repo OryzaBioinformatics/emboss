@@ -1,33 +1,45 @@
-appl: antigenic [
+application: antigenic [
   documentation: "Finds antigenic sites in proteins"
   groups: "Protein:Motifs"
 ]
 
-section: input [ info: "input Section" type: page ]
-seqall: sequence  [
-  parameter: "Y"
-  type: "PureProtein"
+section: input [
+  information: "Input section"
+  type: "page"
 ]
+
+  seqall: sequence  [
+    parameter: "Y"
+    type: "PureProtein"
+  ]
 
 endsection: input
 
-section: required [ info: "required Section" type: page ]
-integer: minlen  [
-  required: "Y"
-  minimum: "1"
-  maximum: "50"
-  default: "6"
-  information: "Minimum length"
+section: required [
+  information: "Required section"
+  type: "page"
 ]
+
+  integer: minlen  [
+    required: "Y"
+    minimum: "1"
+    maximum: "50"
+    default: "6"
+    information: "Minimum length"
+  ]
 
 endsection: required
 
-section: output [ info: "output Section" type: page ]
-report: outfile  [
-  parameter: "Y"
-  rformat: "motif"
-  multiple: "Y"
-  taglist: "int:pos=Max_score_pos"
+section: output [
+  information: "Output section"
+  type: "page"
 ]
-endsection: output
 
+  report: outfile  [
+    parameter: "Y"
+    rformat: "motif"
+    multiple: "Y"
+    taglist: "int:pos=Max_score_pos"
+  ]
+
+endsection: output

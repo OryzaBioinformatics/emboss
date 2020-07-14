@@ -1,29 +1,42 @@
-appl: nthseq [
-  documentation: "Writes one sequence from a multiple set of sequences"
+application: nthseq [
+  documentation: "Writes one sequence from a multiple set of
+                  sequences"
   groups: "Edit"
 ]
 
-section: input [ info: "input Section" type: page ]
-seqall: sequence  [
-  parameter: "Y"
+section: input [
+  information: "Input section"
+  type: "page"
 ]
+
+  seqall: sequence  [
+    parameter: "Y"
+    type: "gapany"
+  ]
 
 endsection: input
 
-section: required [ info: "required Section" type: page ]
-integer: number  [
-  required: "Y"
-  minimum: "1"
-  default: "1"
-  prompt: "The number of the sequence to output"
+section: required [
+  information: "Required section"
+  type: "page"
 ]
+
+  integer: number  [
+    required: "Y"
+    minimum: "1"
+    default: "1"
+    information: "The number of the sequence to output"
+  ]
 
 endsection: required
 
-section: output [ info: "output Section" type: page ]
-seqout: outseq  [
-  parameter: "Y"
+section: output [
+  information: "Output section"
+  type: "page"
 ]
 
-endsection: output
+  seqout: outseq  [
+    parameter: "Y"
+  ]
 
+endsection: output

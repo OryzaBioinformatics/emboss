@@ -1,30 +1,39 @@
-appl: skipseq [
-  documentation: "Reads and writes (returns) sequences, skipping the first few"
+application: skipseq [
+  documentation: "Reads and writes (returns) sequences,
+                  skipping the first few"
   groups: "Edit"
 ]
 
-section: input [ info: "input Section" type: page ]
-bool: feature  [
-  information: "Use feature information"
+section: input [
+  information: "Input section"
+  type: "page"
 ]
 
-seqall: sequence  [
-  parameter: "Y"
-  features: "$(feature)"
-]
+  boolean: feature  [
+    information: "Use feature information"
+  ]
 
-integer: skip  [
-  required: "Y"
-  default: "0" 
-  information: "Number of sequences to skip at start"
-]
+  seqall: sequence  [
+    parameter: "Y"
+    features: "$(feature)"
+  ]
+
+  integer: skip  [
+    required: "Y"
+    default: "0"
+    information: "Number of sequences to skip at start"
+  ]
+
 endsection: input
 
-section: output [ info: "output Section" type: page ]
-seqoutall: outseq  [
-  parameter: "Y"
-  features: "$(feature)"
+section: output [
+  information: "Output section"
+  type: "page"
 ]
 
-endsection: output
+  seqoutall: outseq  [
+    parameter: "Y"
+    features: "$(feature)"
+  ]
 
+endsection: output

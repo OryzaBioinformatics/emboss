@@ -1,60 +1,78 @@
-appl: einverted [
+application: einverted [
   documentation: "Finds DNA inverted repeats"
   groups: "Nucleic:Repeats, Nucleic:2D structure"
-  gui: yes
-  batch: yes
-  cpu: medium
+  gui: "yes"
+  batch: "yes"
+  cpu: "medium"
 ]
 
-section: input [ info: "input Section" type: page ]
-sequence: sequence  [
-  parameter: "Y"
-  type: "dna"
+section: input [
+  information: "Input section"
+  type: "page"
 ]
+
+  sequence: sequence  [
+    parameter: "Y"
+    type: "dna"
+  ]
 
 endsection: input
 
-section: required [ info: "required Section" type: page ]
-integer: gap  [
-  default: "12"
-  required: "Y"
-  information: "Gap penalty"
+section: required [
+  information: "Required section"
+  type: "page"
 ]
 
-integer: threshold  [
-  default: "50"
-  required: "Y"
-  information: "Minimum score threshold"
-]
+  integer: gap  [
+    default: "12"
+    required: "Y"
+    information: "Gap penalty"
+  ]
 
-integer: match  [
-  default: "3"
-  required: "Y"
-  information: "Match score"
-]
+  integer: threshold  [
+    default: "50"
+    required: "Y"
+    information: "Minimum score threshold"
+  ]
 
-integer: mismatch  [
-  default: "-4"
-  required: "Y"
-  information: "Mismatch score"
-]
+  integer: match  [
+    default: "3"
+    required: "Y"
+    information: "Match score"
+  ]
+
+  integer: mismatch  [
+    default: "-4"
+    required: "Y"
+    information: "Mismatch score"
+  ]
 
 endsection: required
 
-section: advanced [ info: "advanced Section" type: page ]
-integer: maxrepeat  [
-  optional: "Y"
-  default: "4000"
-  information: "Maximum extent of repeats"
-  help: "Maximum separation between the start of repeat and the end of the inverted repeat (the default is 4000 bases)."
+section: advanced [
+  information: "Advanced section"
+  type: "page"
 ]
+
+  integer: maxrepeat  [
+    optional: "Y"
+    default: "4000"
+    information: "Maximum extent of repeats"
+    help: "Maximum separation between the start of repeat and the end
+           of the inverted repeat (the default is 4000 bases)."
+  ]
 
 endsection: advanced
 
-section: output [ info: "output Section" type: page ]
-outfile: outfile  [
-  parameter: "Y"
-  extension: "inv"
+section: output [
+  information: "Output section"
+  type: "page"
 ]
+
+  outfile: outfile  [
+    parameter: "Y"
+    extension: "inv"
+    standardtype: "inverted output"
+  ]
 
 endsection: output

@@ -1,30 +1,37 @@
-appl: tmap [
+application: tmap [
   documentation: "Displays membrane spanning regions"
   groups: "Protein:2D Structure"
 ]
 
-section: input [ info: "input Section" type: page ]
-seqset: msf  [
-  parameter: "Y"
-  type: "gapprotein"
-  information: "Sequences file to be read in"
-  help: "File containing a sequence alignment"
+section: input [
+  information: "Input section"
+  type: "page"
 ]
+
+  seqset: msf  [
+    parameter: "Y"
+    type: "gapprotein"
+    information: "Sequences file to be read in"
+    help: "File containing a sequence alignment"
+  ]
 
 endsection: input
 
-section: output [ info: "output Section" type: page ]
-xygraph: graph  [
-  required: "y"
-  multiple: "2"
-  gxtitle: "Residue number"
-  goutfile: "tmap"
+section: output [
+  information: "Output section"
+  type: "page"
 ]
 
-outfile: outfile  [
-  optional: "Y"
-  default: "tmap.res"
-]
+  xygraph: graph  [
+    required: "y"
+    multiple: "2"
+    gxtitle: "Residue number"
+    goutfile: "tmap"
+  ]
+
+  outfile: outfile  [
+    optional: "Y"
+    default: "tmap.res"
+  ]
 
 endsection: output
-

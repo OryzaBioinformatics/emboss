@@ -1,80 +1,100 @@
-appl: supermatcher [
-  documentation: "Finds a match of a large sequence against one or more sequences"
+application: supermatcher [
+  documentation: "Finds a match of a large sequence against
+                  one or more sequences"
   groups: "Alignment:Local"
-  gui: yes
-  batch: yes
-  cpu: medium
+  gui: "yes"
+  batch: "yes"
+  cpu: "medium"
 ]
 
-section: input [ info: "input Section" type: page ]
-seqall: seqa  [
-  parameter: "Y"
-  type: "any"
+section: input [
+  information: "Input section"
+  type: "page"
 ]
 
-seqset: seqb  [
-  parameter: "Y"
-  type: "@($(seqa.protein) ? stopprotein : nucleotide)"
-]
+  seqall: seqa  [
+    parameter: "Y"
+    type: "any"
+  ]
+
+  seqset: seqb  [
+    parameter: "Y"
+    type: "@($(seqa.protein) ? stopprotein : nucleotide)"
+  ]
 
 endsection: input
 
-section: required [ info: "required Section" type: page ]
-float: gapopen  [
-  required: "Y"
-  information: "Gap opening penalty"
-  minimum: "1.0"
-  maximum: "100.0"
-  default: "@($(seqa.protein)? 10.0 : 10.0)"
-  expected: "10.0 for any sequence type"
+section: required [
+  information: "Required section"
+  type: "page"
 ]
 
-float: gapextend  [
-  required: "Y"
-  information: "Gap extension penalty"
-  minimum: "0.1"
-  maximum: "10.0"
-  default: "@($(seqa.protein)? 0.5 : 0.5)"
-  expected: "0.5 for any sequence type"
-]
+  float: gapopen  [
+    required: "Y"
+    information: "Gap opening penalty"
+    minimum: "1.0"
+    maximum: "100.0"
+    default: "@($(seqa.protein)? 10.0 : 10.0)"
+    expected: "10.0 for any sequence type"
+  ]
+
+  float: gapextend  [
+    required: "Y"
+    information: "Gap extension penalty"
+    minimum: "0.1"
+    maximum: "10.0"
+    default: "@($(seqa.protein)? 0.5 : 0.5)"
+    expected: "0.5 for any sequence type"
+  ]
 
 endsection: required
 
-section: advanced [ info: "advanced Section" type: page ]
-matrixf: datafile  [
-  optional: "Y"
-  information: "Matrix file"
-  protein: "$(seqa.protein)"
-  help: "This is the scoring matrix file used when comparing sequences.  By default it is the file 'EBLOSUM62' (for proteins) or the file 'EDNAFULL' (for nucleic sequences).  These files are found in the 'data' directory of the EMBOSS installation."
+section: advanced [
+  information: "Advanced section"
+  type: "page"
 ]
 
-integer: width  [
-  optional: "Y"
-  default: "16"
-  information: "Alignment width"
-]
+  matrixf: datafile  [
+    optional: "Y"
+    information: "Matrix file"
+    protein: "$(seqa.protein)"
+    help: "This is the scoring matrix file used when comparing
+           sequences. By default it is the file 'EBLOSUM62' (for proteins) or
+           the file 'EDNAFULL' (for nucleic sequences). These files are
+           found in the 'data' directory of the EMBOSS installation."
+  ]
 
-integer: wordlen  [
-  optional: "Y"
-  default: "6"
-  minimum: "3"
-  information: "word length for initial matching"
-]
+  integer: width  [
+    optional: "Y"
+    default: "16"
+    information: "Alignment width"
+  ]
+
+  integer: wordlen  [
+    optional: "Y"
+    default: "6"
+    minimum: "3"
+    information: "word length for initial matching"
+  ]
+
 endsection: advanced
 
-section: output [ info: "output Section" type: page ]
-align: outfile  [
-  required: "Y"
-  aformat: "simple"
-  minseqs: "2"
-  maxseqs: "2"
+section: output [
+  information: "Output section"
+  type: "page"
 ]
 
-outfile: errorfile  [
-  optional: "Y"
-  default: "supermatcher.error"
-  information: "Error file to be written to"
-]
+  align: outfile  [
+    required: "Y"
+    aformat: "simple"
+    minseqs: "2"
+    maxseqs: "2"
+  ]
+
+  outfile: errorfile  [
+    optional: "Y"
+    default: "supermatcher.error"
+    information: "Error file to be written to"
+  ]
 
 endsection: output
-

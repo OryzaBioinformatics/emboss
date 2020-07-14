@@ -1,34 +1,46 @@
-appl: btwisted [
-  documentation: "Calculates the twisting in a B-DNA sequence"
+application: btwisted [
+  documentation: "Calculates the twisting in a B-DNA
+                  sequence"
   groups: "Nucleic:Composition"
 ]
 
-section: input [ info: "input Section" type: page ]
-sequence: sequence  [
-  parameter: "Y"
-  type: "PureDNA"
+section: input [
+  information: "Input section"
+  type: "page"
 ]
+
+  sequence: sequence  [
+    parameter: "Y"
+    type: "PureDNA"
+  ]
 
 endsection: input
 
-section: advanced [ info: "advanced Section" type: page ]
-string: angledata  [
-  required: "N"
-  default: "Eangles.dat"
-  information: "File containing base pair twist angles"
+section: advanced [
+  information: "Advanced section"
+  type: "page"
 ]
 
-string: energydata  [
-  required: "N"
-  default: "Eenergy.dat"
-  information: "File containing base pair stacking energies"
-]
+  string: angledata  [
+    default: "Eangles.dat"
+    information: "File containing base pair twist angles"
+  ]
+
+  string: energydata  [
+    default: "Eenergy.dat"
+    information: "File containing base pair stacking energies"
+  ]
 
 endsection: advanced
 
-section: output [ info: "output Section" type: page ]
-outfile: outfile  [
-  parameter: "Y"
+section: output [
+  information: "Output section"
+  type: "page"
 ]
-endsection: output
 
+  outfile: outfile  [
+    parameter: "Y"
+    standardtype: "btwisted output"
+  ]
+
+endsection: output

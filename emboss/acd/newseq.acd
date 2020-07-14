@@ -1,48 +1,68 @@
-appl: newseq [
+application: newseq [
   documentation: "Type in a short new sequence."
   groups: "Edit"
 ]
 
-section: output [ info: "output Section" type: page ]
-seqout: outseq  [
-  parameter: "Y"
+section: required [
+  information: "Required section"
+  type: "page"
 ]
 
-endsection: output
+  string: name  [
+    parameter: "Y"
+    information: "Name of the sequence"
+    help: "The name of of the sequence should be a single word that
+           you will use to identify the sequence. It should have no (or few)
+           punctuation characters in it."
+  ]
 
-section: required [ info: "required Section" type: page ]
-string: name  [
-  parameter: "Y"
-  information: "Name of the sequence"
-  help: "The name of of the sequence should be a single word that you will use to identify the sequence. It should have no (or few) punctuation characters in it."
-]
+  string: description  [
+    parameter: "Y"
+    information: "Description of the sequence"
+    help: "Enter any description of the sequence that you require."
+  ]
 
-string: description  [
-  parameter: "Y"
-  information: "Description of the sequence"
-  help: "Enter any description of the sequence that you require."
-]
-
-list: type  [
-  parameter: "Y"
-  minimum: "1"
-  maximum: "1"
-  default: "N"
-  header: "Type of sequence"
-  values: "N:Nucleic, P:Protein"
-  delimiter: ","
-  codedelimiter: ":"
-  information: "Type of sequence"
-]
+  list: type  [
+    parameter: "Y"
+    minimum: "1"
+    maximum: "1"
+    default: "N"
+    header: "Type of sequence"
+    values: "N:Nucleic, P:Protein"
+    delimiter: ","
+    codedelimiter: ":"
+    information: "Type of sequence"
+  ]
 
 endsection: required
 
-section: input [ info: "input Section" type: page ]
-string: sequence  [
-  parameter: "Y"
-  information: "Enter the sequence"
-  help: "The sequence itself. \ Because of the limitation of the operating system, you will only be able to type in a short sequence of (typically) 250 characters, or so. \ The keyboard will beep at you when you have reached this limit and you will not be able to press the RETURN/ENTER key until you have deleted a few characters."
+section: output [
+  information: "Output section"
+  type: "page"
 ]
 
-endsection: input
+  seqout: outseq  [
+    parameter: "Y"
+    type: "@(@($(type) == P) ? gapprotein : gapnucleotide)"
+  ]
 
+endsection: output
+
+section: input [
+  information: "Input section"
+  type: "page"
+]
+
+  string: sequence  [
+    parameter: "Y"
+    information: "Enter the sequence"
+    help: "The sequence itself. \
+           Because of the limitation of the operating system, you will only
+           be able to type in a short sequence of (typically) 250 characters,
+           or so. \
+           The keyboard will beep at you when you have reached this limit and
+           you will not be able to press the RETURN/ENTER key until you have
+           deleted a few characters."
+  ]
+
+endsection: input

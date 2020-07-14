@@ -1,28 +1,42 @@
-appl: preg [
-  documentation: "Regular expression search of a protein sequence"
+application: preg [
+  documentation: "Regular expression search of a protein
+                  sequence"
   groups: "Protein:Motifs"
 ]
 
-section: input [ info: "input Section" type: page ]
-seqall: sequence  [
-  parameter: "Y"
-  type: "protein"
+section: input [
+  information: "Input section"
+  type: "page"
 ]
+
+  seqall: sequence  [
+    parameter: "Y"
+    type: "protein"
+  ]
 
 endsection: input
 
-section: required [ info: "required Section" type: page ]
-regexp: pattern  [
-  parameter: "Y"
-  upper: "Y"
-  information: "Regular expression pattern"
+section: required [
+  information: "Required section"
+  type: "page"
 ]
+
+  regexp: pattern  [
+    parameter: "Y"
+    upper: "Y"
+    information: "Regular expression pattern"
+  ]
 
 endsection: required
 
-section: output [ info: "output Section" type: page ]
-outfile: outfile  [
-  parameter: "Y"
+section: output [
+  information: "Output section"
+  type: "page"
 ]
+
+  outfile: outfile  [
+    parameter: "Y"
+    standardtype: "dreg output"
+  ]
 
 endsection: output

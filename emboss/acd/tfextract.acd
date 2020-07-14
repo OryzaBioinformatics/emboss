@@ -1,15 +1,19 @@
-appl: tfextract [
+application: tfextract [
   documentation: "Extract data from TRANSFAC"
   groups: "Utils:Database creation"
-  gui: yes
-  batch: yes
-  cpu: medium
+  gui: "yes"
+  batch: "yes"
+  cpu: "medium"
 ]
 
-section: input [ info: "input Section" type: page ]
-infile: inf  [
-  parameter: "Y"
-  prompt: "Full pathname of transfac SITE.DAT"
+section: input [
+  information: "Input section"
+  type: "page"
 ]
+
+  infile: inf  [
+    parameter: "Y"
+    prompt: "Full pathname of transfac SITE.DAT"
+  ]
+
 endsection: input
-

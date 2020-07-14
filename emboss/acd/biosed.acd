@@ -1,42 +1,58 @@
-appl: biosed [
+application: biosed [
   documentation: "Replace or delete sequence sections"
   groups: "Edit"
 ]
 
-section: input [ info: "input Section" type: page ]
-seqall: sequence  [
-  parameter: "Y"
+section: input [
+  information: "Input section"
+  type: "page"
 ]
+
+  seqall: sequence  [
+    parameter: "Y"
+    type: "gapany"
+  ]
 
 endsection: input
 
-section: required [ info: "required Section" type: page ]
-string: target  [
-  required: "Y"
-  information: "Sequence section to match"
-  default: "N"
+section: required [
+  information: "Required section"
+  type: "page"
 ]
+
+  string: target  [
+    required: "Y"
+    information: "Sequence section to match"
+    default: "N"
+  ]
 
 endsection: required
 
-section: advanced [ info: "advanced Section" type: page ]
-bool: delete  [
-  optional: "N"
-  information: "Delete the target sequence sections"
-  default: "N"
+section: advanced [
+  information: "Advanced section"
+  type: "page"
 ]
 
-string: replace  [
-  required: "@(!$(delete))"
-  information: "Replacement sequence section"
-  default: "A"
-]
+  boolean: delete  [
+    information: "Delete the target sequence sections"
+    default: "N"
+  ]
+
+  string: replace  [
+    required: "@(!$(delete))"
+    information: "Replacement sequence section"
+    default: "A"
+  ]
 
 endsection: advanced
 
-section: output [ info: "output Section" type: page ]
-seqout: outseq  [
-  parameter: "Y"
+section: output [
+  information: "Output section"
+  type: "page"
 ]
-endsection: output
 
+  seqout: outseq  [
+    parameter: "Y"
+  ]
+
+endsection: output

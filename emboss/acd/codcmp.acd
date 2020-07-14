@@ -1,24 +1,33 @@
-appl: codcmp [
+application: codcmp [
   documentation: "Codon usage table comparison"
   groups: "Nucleic:Codon usage"
 ]
 
-section: input [ info: "input Section" type: page ]
-codon: first  [
-  parameter: "Y"
-  information: "First codon usage file"
+section: input [
+  information: "Input section"
+  type: "page"
 ]
 
-codon: second  [
-  parameter: "Y"
-  information: "Second codon usage file"
-]
+  codon: first  [
+    parameter: "Y"
+    information: "First codon usage file"
+  ]
+
+  codon: second  [
+    parameter: "Y"
+    information: "Second codon usage file"
+  ]
 
 endsection: input
 
-section: output [ info: "output Section" type: page ]
-outfile: outfile  [
-  parameter: "Y"
+section: output [
+  information: "Output section"
+  type: "page"
 ]
-endsection: output
 
+  outfile: outfile  [
+    parameter: "Y"
+    standardtype: "codcmp output"
+  ]
+
+endsection: output

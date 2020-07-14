@@ -1,10 +1,11 @@
-appl: demotable [
+application: demotable [
   documentation: "demonstration of the table functions"
-  groups: "demo"
+  groups: "Test"
 ]
 
-infile: gff  [
+infile: infile  [
   parameter: "Y"
   information: "gff file to be read in"
-  help: "File containing normal tab delimted gff's"
+  help: "File containing normal tab delimited gff's"
+  standardtype: "gff"
 ]

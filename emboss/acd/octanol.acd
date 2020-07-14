@@ -1,58 +1,70 @@
-appl: octanol [
+application: octanol [
   documentation: "Displays protein hydropathy"
   groups: "Protein:Composition"
 ]
 
-section: input [ info: "input Section" type: page ]
-sequence: sequencea  [
-  parameter: "Y"
-  type: "pureprotein"
+section: input [
+  information: "Input section"
+  type: "page"
 ]
+
+  sequence: sequence  [
+    parameter: "Y"
+    type: "pureprotein"
+  ]
 
 endsection: input
 
-section: advanced [ info: "advanced Section" type: page ]
-datafile: datafile  [
-  optional: "Y"
-  information: "White-Wimley data file (Ewhite-wimley.dat)"
-  default: "Ewhite-wimley.dat"
+section: advanced [
+  information: "Advanced section"
+  type: "page"
 ]
 
-integer: width  [
-  optional: "Y"
-  information: "window size"
-  default: "19"
-  minimum: "1"
-  maximum: "200"
-]
+  datafile: datafile  [
+    optional: "Y"
+    information: "White-Wimley data file (Ewhite-wimley.dat)"
+    default: "Ewhite-wimley.dat"
+  ]
+
+  integer: width  [
+    optional: "Y"
+    information: "window size"
+    default: "19"
+    minimum: "1"
+    maximum: "200"
+  ]
 
 endsection: advanced
 
-section: output [ info: "output Section" type: page ]
-xygraph: graph  [
-  parameter: "Y"
-  multiple: "3"
-  gxtitle: "$(sequencea.name)"
-  gytitle: "Total Free Energy (Kcal/mol)"
-  gtitle: "White-Wimley Plot"
+section: output [
+  information: "Output section"
+  type: "page"
 ]
 
-bool: octanolplot  [
-  optional: "Y"
-  default: "N"
-  information: "Display the octanol plot"
-]
+  xygraph: graph  [
+    parameter: "Y"
+    multiple: "3"
+    gxtitle: "$(sequence.name)"
+    gytitle: "Total Free Energy (Kcal/mol)"
+    gtitle: "White-Wimley Plot"
+  ]
 
-bool: interfaceplot  [
-  optional: "Y"
-  default: "N"
-  information: "Display the interface plot"
-]
+  boolean: octanolplot  [
+    optional: "Y"
+    default: "N"
+    information: "Display the octanol plot"
+  ]
 
-bool: differenceplot  [
-  optional: "Y"
-  default: "Y"
-  information: "Display the difference plot"
-]
+  boolean: interfaceplot  [
+    optional: "Y"
+    default: "N"
+    information: "Display the interface plot"
+  ]
+
+  boolean: differenceplot  [
+    optional: "Y"
+    default: "Y"
+    information: "Display the difference plot"
+  ]
 
 endsection: output

@@ -1,19 +1,29 @@
-appl: noreturn [
+application: noreturn [
   documentation: "Removes carriage return from ASCII files"
   groups: "Edit"
 ]
 
-section: input [ info: "input Section" type: page ]
-infile: infile  [
-  parameter: "Y"
+section: input [
+  information: "Input section"
+  type: "page"
 ]
+
+  infile: infile  [
+    parameter: "Y"
+    standardtype: "ascii text"
+    information: "Input file"
+  ]
 
 endsection: input
 
-section: output [ info: "output Section" type: page ]
-outfile: outfile  [
-  parameter: "Y"
+section: output [
+  information: "Output section"
+  type: "page"
 ]
 
-endsection: output
+  outfile: outfile  [
+    parameter: "Y"
+    standardtype: "ascii text"
+  ]
 
+endsection: output

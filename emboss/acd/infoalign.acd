@@ -1,130 +1,162 @@
-appl: infoalign [
-  documentation: "Information on a multiple sequence alignment"
+application: infoalign [
+  documentation: "Information on a multiple sequence
+                  alignment"
   groups: "Alignment:Multiple, Information"
 ]
 
-section: input [ info: "input Section" type: page ]
-seqset: sequence  [
-  parameter: "Y"
-  type: "gapany"
-  help: "The sequence alignment to be displayed."
+section: input [
+  information: "Input section"
+  type: "page"
 ]
+
+  seqset: sequence  [
+    parameter: "Y"
+    type: "gapany"
+    help: "The sequence alignment to be displayed."
+  ]
 
 endsection: input
 
-section: advanced [ info: "advanced Section" type: page ]
-string: refseq  [
-  optional: "Y"
-  default: "0"
-  information: "The number or the name of the reference sequence"
-  help: "If you give the number in the alignment or the name of a sequence, it will be taken to be the reference sequence. The reference sequence is the one against which all the other sequences are compared. If this is set to 0 then the consensus sequence will be used as the reference sequence. By default the consensus sequence is used as the reference sequence."
+section: advanced [
+  information: "Advanced section"
+  type: "page"
 ]
 
-matrix: matrix  [
-  optional: "Y"
-  information: "Similarity scoring Matrix file"
-  protein: "$(sequence.protein)"
-  help: "This is the scoring matrix file used when comparing sequences.  By default it is the file 'EBLOSUM62' (for proteins) or the file 'EDNAFULL' (for nucleic sequences).  These files are found in the 'data' directory of the EMBOSS installation."
-]
+  string: refseq  [
+    optional: "Y"
+    default: "0"
+    information: "The number or the name of the reference
+                  sequence"
+    help: "If you give the number in the alignment or the name of a
+           sequence, it will be taken to be the reference sequence. The
+           reference sequence is the one against which all the other
+           sequences are compared. If this is set to 0 then the consensus
+           sequence will be used as the reference sequence. By default the
+           consensus sequence is used as the reference sequence."
+  ]
 
-float: plurality  [
-  default: "50.0"
-  minimum: "0.0"
-  maximum: "100.0"
-  information: "Plurality check % for consensus"
-  help: "Set a cut-off for the % of positive scoring matches below which there is no consensus. The default plurality is taken as 50% of the total weight of all the sequences in the alignment."
-]
+  matrix: matrix  [
+    optional: "Y"
+    information: "Similarity scoring Matrix file"
+    protein: "$(sequence.protein)"
+    help: "This is the scoring matrix file used when comparing
+           sequences. By default it is the file 'EBLOSUM62' (for proteins) or
+           the file 'EDNAFULL' (for nucleic sequences). These files are
+           found in the 'data' directory of the EMBOSS installation."
+  ]
 
-float: identity  [
-  default: "0.0"
-  minimum: "0.0"
-  maximum: "100.0"
-  information: "Required % of identities at a position fro consensus"
-  help: "Provides the facility of setting the required number of identities at a position for it to give a consensus. Therefore, if this is set to 100% only columns of identities contribute to the consensus."
-]
+  float: plurality  [
+    default: "50.0"
+    minimum: "0.0"
+    maximum: "100.0"
+    information: "Plurality check % for consensus"
+    help: "Set a cut-off for the % of positive scoring matches below
+           which there is no consensus. The default plurality is taken as 50%
+           of the total weight of all the sequences in the alignment."
+  ]
+
+  float: identity  [
+    default: "0.0"
+    minimum: "0.0"
+    maximum: "100.0"
+    information: "Required % of identities at a position fro
+                  consensus"
+    help: "Provides the facility of setting the required number of
+           identities at a position for it to give a consensus. Therefore, if
+           this is set to 100% only columns of identities contribute to the
+           consensus."
+  ]
 
 endsection: advanced
 
-section: output [ info: "output Section" type: page ]
-outfile: outfile  [
-  parameter: "Y"
-  extension: "infoalign"
-#  default: "stdout"
-  information: "Output sequence details to a file"
-  help: "If you enter the name of a file here then this program will write the sequence details into that file."
+section: output [
+  information: "Output section"
+  type: "page"
 ]
 
-bool: html  [
-  optional: "Y"
-  default: "N"
-  information: "Format output as an HTML table"
-]
+  outfile: outfile  [
+    parameter: "Y"
+    extension: "infoalign"
+    standardtype: "infoalign output"
+    help: "If you enter the name of a file here then this program will
+           write the sequence details into that file."
+  ]
 
-bool: only  [
-  default: "N"
-  information: "Display the specified columns"
-  help: "This is a way of shortening the command line if you only want a few things to be displayed. Instead of specifying: \ '-nohead -nousa -noname -noalign -nogaps -nogapcount -nosimcount -noidcount -nodiffcount' \ to get only the sequence length output, you can specify \ '-only -seqlength'"
-]
+  boolean: html  [
+    optional: "Y"
+    default: "N"
+    information: "Format output as an HTML table"
+  ]
 
-bool: heading  [
-  default: "@(!$(only))"
-  information: "Display column headings"
-]
+  boolean: only  [
+    default: "N"
+    information: "Display the specified columns"
+    help: "This is a way of shortening the command line if you only
+           want a few things to be displayed. Instead of specifying: \
+           '-nohead -nousa -noname -noalign -nogaps -nogapcount -nosimcount
+           -noidcount -nodiffcount' \
+           to get only the sequence length output, you can specify \
+           '-only -seqlength'"
+  ]
 
-bool: usa  [
-  default: "@(!$(only))"
-  information: "Display the USA of the sequence"
-]
+  boolean: heading  [
+    default: "@(!$(only))"
+    information: "Display column headings"
+  ]
 
-bool: name  [
-  default: "@(!$(only))"
-  information: "Display 'name' column"
-]
+  boolean: usa  [
+    default: "@(!$(only))"
+    information: "Display the USA of the sequence"
+  ]
 
-bool: seqlength  [
-  default: "@(!$(only))"
-  information: "Display 'seqlength' column"
-]
+  boolean: name  [
+    default: "@(!$(only))"
+    information: "Display 'name' column"
+  ]
 
-bool: alignlength  [
-  default: "@(!$(only))"
-  information: "Display 'alignlength' column"
-]
+  boolean: seqlength  [
+    default: "@(!$(only))"
+    information: "Display 'seqlength' column"
+  ]
 
-bool: gaps  [
-  default: "@(!$(only))"
-  information: "Display number of gaps"
-]
+  boolean: alignlength  [
+    default: "@(!$(only))"
+    information: "Display 'alignlength' column"
+  ]
 
-bool: gapcount  [
-  default: "@(!$(only))"
-  information: "Display number of gap positions"
-]
+  boolean: gaps  [
+    default: "@(!$(only))"
+    information: "Display number of gaps"
+  ]
 
-bool: idcount  [
-  default: "@(!$(only))"
-  information: "Display number of identical positions"
-]
+  boolean: gapcount  [
+    default: "@(!$(only))"
+    information: "Display number of gap positions"
+  ]
 
-bool: simcount  [
-  default: "@(!$(only))"
-  information: "Display number of similar positions"
-]
+  boolean: idcount  [
+    default: "@(!$(only))"
+    information: "Display number of identical positions"
+  ]
 
-bool: diffcount  [
-  default: "@(!$(only))"
-  information: "Display number of different positions"
-]
+  boolean: simcount  [
+    default: "@(!$(only))"
+    information: "Display number of similar positions"
+  ]
 
-bool: change  [
-  default: "@(!$(only))"
-  information: "Display % number of changed positions"
-]
+  boolean: diffcount  [
+    default: "@(!$(only))"
+    information: "Display number of different positions"
+  ]
 
-bool: description  [
-  default: "@(!$(only))"
-  information: "Display 'description' column"
-]
+  boolean: change  [
+    default: "@(!$(only))"
+    information: "Display % number of changed positions"
+  ]
+
+  boolean: description  [
+    default: "@(!$(only))"
+    information: "Display 'description' column"
+  ]
 
 endsection: output
-

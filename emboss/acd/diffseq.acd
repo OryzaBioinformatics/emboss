@@ -1,65 +1,92 @@
-appl: diffseq [
-  documentation: "Find differences between nearly identical sequences"
+application: diffseq [
+  documentation: "Find differences between nearly identical
+                  sequences"
   groups: "Alignment:Differences"
-  gui: yes
-  batch: yes
-  cpu: medium
+  gui: "yes"
+  batch: "yes"
+  cpu: "medium"
 ]
 
-section: input [ info: "input Section" type: page ]
-sequence: asequence  [
-  parameter: "Y"
-  type: "any"
-  features: "Y"
+section: input [
+  information: "Input section"
+  type: "page"
 ]
 
-sequence: bsequence  [
-  parameter: "Y"
-  type: "@($(asequence.protein) ? stopprotein : nucleotide)"
-  features: "Y"
-]
+  sequence: asequence  [
+    parameter: "Y"
+    type: "any"
+    features: "Y"
+  ]
+
+  sequence: bsequence  [
+    parameter: "Y"
+    type: "@($(asequence.protein) ? stopprotein : nucleotide)"
+    features: "Y"
+  ]
 
 endsection: input
 
-section: required [ info: "required Section" type: page ]
-integer: wordsize  [
-  required: "Y"
-  default: "10"
-  minimum: "2"
-  information: "Word size"
-  help: "The similar regions between the two sequences are found by creating a hash table of 'wordsize'd subsequences. 10 is a reasonable default. Making this value larger (20?) may speed up the program slightly, but will mean that any two differences within 'wordsize' of each other will be grouped as a single region of difference. This value may be made smaller (4?) to improve the resolution of nearby differences, but the program will go much slower."
+section: required [
+  information: "Required section"
+  type: "page"
 ]
+
+  integer: wordsize  [
+    required: "Y"
+    default: "10"
+    minimum: "2"
+    information: "Word size"
+    help: "The similar regions between the two sequences are found by
+           creating a hash table of 'wordsize'd subsequences. 10 is a
+           reasonable default. Making this value larger (20?) may speed up
+           the program slightly, but will mean that any two differences
+           within 'wordsize' of each other will be grouped as a single region
+           of difference. This value may be made smaller (4?) to improve the
+           resolution of nearby differences, but the program will go much
+           slower."
+  ]
 
 endsection: required
 
-section: output [ info: "output Section" type: page ]
-report: outfile  [
-  required: "Y"
-  rformat: "diffseq"
-  information: "Output report file"
-  taglist: "int:start int:end int:length str:name str:sequence str:first_feature str:second_feature"
+section: output [
+  information: "Output section"
+  type: "page"
 ]
 
-featout: afeatout  [
-  optional: "Y"
-  default: "$(asequence.name).diffgff"
-  information: "Feature file for output asequence"
-  help: "File for output of first sequence's normal tab delimited gff's"
-]
+  report: outfile  [
+    parameter: "Y"
+    rformat: "diffseq"
+    taglist: "int:start int:end int:length str:name str:sequence
+              str:first_feature str:second_feature"
+  ]
 
-featout: bfeatout  [
-  optional: "Y"
-  default: "$(bsequence.name).diffgff"
-  information: "Feature file for output bsequence"
-  help: "File for output of second sequence's normal tab delimited gff's"
-]
+  featout: afeatout  [
+    optional: "Y"
+    default: "$(asequence.name).diffgff"
+    information: "Feature file for output asequence"
+    help: "File for output of first sequence's normal tab delimited
+           gff's"
+    type: "@($(asequence.protein) ? protein : nucleotide)"
+  ]
 
-bool: columns  [
-  optional: "Y"
-  default: "N"
-  information: "Output in columns format"
-  help: "The default format for the output report file is to have several lines per difference giving the sequence positions, sequences and features. \ If this option is set true then the output report file's format is changed to a set of columns and no feature information is given."
-]
+  featout: bfeatout  [
+    optional: "Y"
+    default: "$(bsequence.name).diffgff"
+    information: "Feature file for output bsequence"
+    help: "File for output of second sequence's normal tab delimited
+           gff's"
+    type: "@($(bsequence.protein) ? protein : nucleotide)"
+  ]
+
+  boolean: columns  [
+    optional: "Y"
+    default: "N"
+    information: "Output in columns format"
+    help: "The default format for the output report file is to have
+           several lines per difference giving the sequence positions,
+           sequences and features. \
+           If this option is set true then the output report file's format is
+           changed to a set of columns and no feature information is given."
+  ]
 
 endsection: output
-

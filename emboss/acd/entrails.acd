@@ -1,16 +1,17 @@
-appl: entrails [
-  documentation: "Reports the internal data from the EMBOSS code"
+application: entrails [
+  documentation: "Reports the internal data from the EMBOSS
+                  code"
   groups: "Utils:Misc"
 ]
 
 outfile: outfile  [
   parameter: "Y"
-  optional: "Y"
+  standardtype: "entrails output"
 ]
 
-bool: fullreport  [
+boolean: fullreport  [
   optional: "Y"
   default: "N"
-  prompt: "Full report"
+  information: "Full report"
   help: "By default, only the essential details are reported"
 ]

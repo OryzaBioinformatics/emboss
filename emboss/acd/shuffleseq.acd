@@ -1,29 +1,40 @@
-appl: shuffleseq [
-  documentation: "Shuffles a set of sequences maintaining composition"
+application: shuffleseq [
+  documentation: "Shuffles a set of sequences maintaining
+                  composition"
   groups: "Nucleic:Mutation, Protein:Mutation"
 ]
 
-section: input [ info: "input Section" type: page ]
-seqall: sequence  [
-  parameter: "Y"
-  type: "any"
+section: input [
+  information: "Input section"
+  type: "page"
 ]
+
+  seqall: sequence  [
+    parameter: "Y"
+    type: "any"
+  ]
 
 endsection: input
 
-section: advanced [ info: "advanced Section" type: page ]
-integer: shuffle  [
-  required: "N"
-  default: "1"
-  information: "Number of shuffles"
+section: advanced [
+  information: "Advanced section"
+  type: "page"
 ]
+
+  integer: shuffle  [
+    default: "1"
+    information: "Number of shuffles"
+  ]
 
 endsection: advanced
 
-section: output [ info: "output Section" type: page ]
-seqoutall: outseq  [
-  parameter: "Y"
+section: output [
+  information: "Output section"
+  type: "page"
 ]
 
-endsection: output
+  seqoutall: outseq  [
+    parameter: "Y"
+  ]
 
+endsection: output

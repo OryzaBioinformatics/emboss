@@ -1,84 +1,99 @@
-appl: emowse [
-  documentation: "Protein identification by mass spectrometry"
+application: emowse [
+  documentation: "Protein identification by mass
+                  spectrometry"
   groups: "Protein:Composition"
 ]
 
-section: input [ info: "input Section" type: page ]
-seqall: sequences  [
-  parameter: "Y"
-  type: "protein"
+section: input [
+  information: "Input section"
+  type: "page"
 ]
 
-infile: infile  [
-  parameter: "Y"
-  information: "Name of molecular weight data file"
-]
+  seqall: sequence  [
+    parameter: "Y"
+    type: "protein"
+  ]
+
+  infile: infile  [
+    parameter: "Y"
+    information: "Name of molecular weight data file"
+    standardtype: "peptide molweights"
+  ]
 
 endsection: input
 
-section: required [ info: "required Section" type: page ]
-integer: weight  [
-  required: "Y"
-  default: "0"
-  information: "Whole sequence molwt"
+section: required [
+  information: "Required section"
+  type: "page"
 ]
+
+  integer: weight  [
+    required: "Y"
+    default: "0"
+    information: "Whole sequence molwt"
+  ]
 
 endsection: required
 
-section: advanced [ info: "advanced Section" type: page ]
-list: enzyme  [
-  optional: "N"
-  default: "1"
-  minimum: "1"
-  maximum: "1"
-  header: "Enzymes and reagents"
-  values: "1:Trypsin, 2:Lys-C, 3:Arg-C, 4:Asp-N, 5:V8-bicarb, 6:V8-phosph, 7:Chymotrypsin, 8:CNBr"
-  delimiter: ","
-  codedelimiter: ":"
-  prompt: "Enzyme or reagent"
+section: advanced [
+  information: "Advanced section"
+  type: "page"
 ]
 
-string: aadata  [
-  optional: "N"
-  information: "Amino acid data file"
-  help: "Molecular weight data for amino acids"
-  default: "Eamino.dat"
-]
+  list: enzyme  [
+    default: "1"
+    minimum: "1"
+    maximum: "1"
+    header: "Enzymes and reagents"
+    values: "1:Trypsin, 2:Lys-C, 3:Arg-C, 4:Asp-N, 5:V8-bicarb,
+             6:V8-phosph, 7:Chymotrypsin, 8:CNBr"
+    delimiter: ","
+    codedelimiter: ":"
+    information: "Enzyme or reagent"
+  ]
 
-integer: pcrange  [
-  required: "N"
-  default: "25"
-  minimum: "0"
-  maximum: "75"
-  information: "Allowed whole sequence weight variability"
-]
+  string: aadata  [
+    information: "Amino acid data file"
+    help: "Molecular weight data for amino acids"
+    default: "Eamino.dat"
+  ]
 
-string: frequencies  [
-  required: "N"
-  default: "Efreqs.dat"
-  information: "Frequencies file"
-]
+  integer: pcrange  [
+    default: "25"
+    minimum: "0"
+    maximum: "75"
+    information: "Allowed whole sequence weight variability"
+  ]
 
-float: tolerance  [
-  required: "N"
-  default: "0.1"
-  minimum: "0.1"
-  maximum: "1.0"
-]
+  string: frequencies  [
+    default: "Efreqs.dat"
+    information: "Frequencies file"
+  ]
 
-float: partials  [
-  required: "N"
-  default: "0.4"
-  minimum: "0.1"
-  maximum: "1.0"
-  information: "Partials factor"
-]
+  float: tolerance  [
+    default: "0.1"
+    minimum: "0.1"
+    maximum: "1.0"
+    information: "Tolerance"
+  ]
+
+  float: partials  [
+    default: "0.4"
+    minimum: "0.1"
+    maximum: "1.0"
+    information: "Partials factor"
+  ]
 
 endsection: advanced
 
-section: output [ info: "output Section" type: page ]
-outfile: outfile  [
-  required: "Y"
+section: output [
+  information: "Output section"
+  type: "page"
 ]
-endsection: output
 
+  outfile: outfile  [
+    parameter: "Y"
+    standardtype: "emowse output"
+  ]
+
+endsection: output

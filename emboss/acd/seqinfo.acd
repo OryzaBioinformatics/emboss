@@ -1,4 +1,4 @@
-appl: seqinfo [
+application: seqinfo [
   documentation: "Returns sequence information"
   groups: "Test"
 ]

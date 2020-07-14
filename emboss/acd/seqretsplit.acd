@@ -1,26 +1,39 @@
-appl: seqretsplit [
-  documentation: "Reads and writes (returns) sequences in individual files"
+application: seqretsplit [
+  documentation: "Reads and writes (returns) sequences in
+                  individual files"
   groups: "Edit"
 ]
 
-section: input [ info: "input Section" type: page ]
-seqall: sequence  [
-  parameter: "Y"
+section: input [
+  information: "Input section"
+  type: "page"
 ]
+
+  seqall: sequence  [
+    parameter: "Y"
+  ]
 
 endsection: input
 
-section: advanced [ info: "advanced Section" type: page ]
-bool: firstonly  [
-  information: "Read one sequence and stop"
+section: advanced [
+  information: "Advanced section"
+  type: "page"
 ]
+
+  boolean: firstonly  [
+    information: "Read one sequence and stop"
+  ]
 
 endsection: advanced
 
-section: output [ info: "output Section" type: page ]
-seqoutall: outseq  [
-  parameter: "Y"
-  ossingle: "Y"
+section: output [
+  information: "Output section"
+  type: "page"
 ]
+
+  seqoutall: outseq  [
+    parameter: "Y"
+    ossingle: "Y"
+  ]
 
 endsection: output

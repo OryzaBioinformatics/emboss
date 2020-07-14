@@ -1,30 +1,42 @@
-appl: wordcount [
-  documentation: "Counts words of a specified size in a DNA sequence"
+application: wordcount [
+  documentation: "Counts words of a specified size in a DNA
+                  sequence"
   groups: "Nucleic:Composition"
 ]
 
-section: input [ info: "input Section" type: page ]
-sequence: sequence  [
-  parameter: "Y"
-  type: "dna"
+section: input [
+  information: "Input section"
+  type: "page"
 ]
+
+  sequence: sequence  [
+    parameter: "Y"
+    type: "dna"
+  ]
 
 endsection: input
 
-section: required [ info: "required Section" type: page ]
-integer: wordsize  [
-  required: "Y"
-  default: "4"
-  minimum: "2"
-  information: "Word size"
+section: required [
+  information: "Required section"
+  type: "page"
 ]
+
+  integer: wordsize  [
+    required: "Y"
+    default: "4"
+    minimum: "2"
+    information: "Word size"
+  ]
 
 endsection: required
 
-section: output [ info: "output Section" type: page ]
-outfile: outfile  [
-  required: "Y"
+section: output [
+  information: "Output section"
+  type: "page"
 ]
 
-endsection: output
+  outfile: outfile  [
+    required: "Y"
+  ]
 
+endsection: output

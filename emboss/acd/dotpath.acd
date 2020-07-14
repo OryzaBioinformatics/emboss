@@ -1,67 +1,85 @@
-appl: dotpath [
-  documentation: "Displays a non-overlapping wordmatch dotplot of two sequences"
+application: dotpath [
+  documentation: "Displays a non-overlapping wordmatch
+                  dotplot of two sequences"
   groups: "Alignment:Dot plots"
-  gui: yes
-  batch: yes
-  cpu: high
+  gui: "yes"
+  batch: "yes"
+  cpu: "high"
 ]
 
-section: input [ info: "input Section" type: page ]
-sequence: sequencea  [
-  parameter: "y"
-  type: "any"
+section: input [
+  information: "Input section"
+  type: "page"
 ]
 
-sequence: sequenceb  [
-  parameter: "y"
-  type: "@($(sequencea.protein) ? stopprotein : nucleotide)"
-]
+  sequence: asequence [
+    parameter: "y"
+    type: "any"
+  ]
+
+  sequence: bsequence [
+    parameter: "y"
+    type: "@($(asequence.protein) ? stopprotein : nucleotide)"
+  ]
 
 endsection: input
 
-section: required [ info: "required Section" type: page ]
-integer: wordsize  [
-  required: "Y"
-  default: "4"
-  minimum: "2"
-  information: "Word size"
+section: required [
+  information: "Required section"
+  type: "page"
 ]
+
+  integer: wordsize  [
+    required: "Y"
+    default: "4"
+    minimum: "2"
+    information: "Word size"
+  ]
 
 endsection: required
 
-section: output [ info: "output Section" type: page ]
-bool: overlaps  [
-  optional: "Y"
-  default: "N"
-  information: "Display the overlapping matches"
-  help: "Displays the overlapping matches (in red) as well as the minimal set of non-overlapping matches"
+section: output [
+  information: "Output section"
+  type: "page"
 ]
 
-bool: boxit  [
-  default: "Y"
-  optional: "Y"
-  information: "Draw a box around dotplot"
-]
+  boolean: overlaps  [
+    optional: "Y"
+    default: "N"
+    information: "Display the overlapping matches"
+    help: "Displays the overlapping matches (in red) as well as the
+           minimal set of non-overlapping matches"
+  ]
 
-section: datasection [ info: "datasection Section" type: frame ]
-bool: data  [
-  required: "N"
-  default: "N"
-  information: "Display as data"
-  help: "Output the match data to a file instead of plotting it"
-]
+  boolean: boxit  [
+    default: "Y"
+    optional: "Y"
+    information: "Draw a box around dotplot"
+  ]
 
-graph: graph  [
-  required: "@(!$(data))"
-  gxtitle: "$(sequenceb.name)"
-  gytitle: "$(sequencea.name)"
-]
+  section: datasection [
+    information: "Data output section"
+    type: "frame"
+  ]
 
-outfile: outfile  [
-  required: "$(data)"
-  nullok: "Y"
-]
-endsection: datasection
+    boolean: data  [
+      default: "N"
+      information: "Display as data"
+      help: "Output the match data to a file instead of plotting it"
+    ]
+
+    graph: graph  [
+      required: "@(!$(data))"
+      gxtitle: "$(bsequence.name)"
+      gytitle: "$(asequence.name)"
+    ]
+
+    outfile: outfile  [
+      required: "$(data)"
+      nullok: "Y"
+      standardtype: "dotplot graph data"
+    ]
+
+  endsection: datasection
 
 endsection: output
-

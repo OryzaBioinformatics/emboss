@@ -1,21 +1,29 @@
-appl: seqretallfeat [
-  documentation: "Reads and writes (returns) one or more sequences"
+application: seqretallfeat [
+  documentation: "Reads and writes (returns) one or more
+                  sequences"
   groups: "Test"
 ]
 
-section: input [ info: "input Section" type: page ]
-seqall: sequence  [
-  parameter: "Y"
-  features: "Y"
+section: input [
+  information: "Input section"
+  type: "page"
 ]
+
+  seqall: sequence  [
+    parameter: "Y"
+    features: "Y"
+  ]
 
 endsection: input
 
-section: output [ info: "output Section" type: page ]
-seqoutall: outseq  [
-  parameter: "Y"
-  features: "Y"
+section: output [
+  information: "Output section"
+  type: "page"
 ]
 
-endsection: output
+  seqoutall: outseq  [
+    parameter: "Y"
+    features: "Y"
+  ]
 
+endsection: output

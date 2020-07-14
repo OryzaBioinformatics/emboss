@@ -1,69 +1,89 @@
-appl: vectorstrip [
-  documentation: "Strips out DNA between a pair of vector sequences"
+application: vectorstrip [
+  documentation: "Strips out DNA between a pair of vector
+                  sequences"
   groups: "Edit"
 ]
 
-section: input [ info: "input Section" type: page ]
-seqall: sequence  [
-  parameter: "Y"
-  type: "dna"
+section: input [
+  information: "Input section"
+  type: "page"
 ]
+
+  seqall: sequence  [
+    parameter: "Y"
+    type: "dna"
+  ]
 
 endsection: input
 
-section: required [ info: "required Section" type: page ]
-section: vectorfilesection [ info: "vectorfilesection Section" type: frame ]
-bool: vectorfile  [
-  parameter: "Y"
-  default: "Y"
-  prompt: "Are your vector sequences in a file?"
+section: required [
+  information: "Required section"
+  type: "page"
 ]
 
-infile: vectors  [
-  parameter: "Y"
-  required: "@($(vectorfile)?Y:N)"
-  nullok: "Y"
-  default: ""
-  prompt: "Name of vectorfile"
-]
+  section: vectorfilesection [
+    information: "vectorfilesection Section"
+    type: "frame"
+  ]
 
-endsection: vectorfilesection
+    boolean: vectorfile  [
+      parameter: "Y"
+      default: "Y"
+      prompt: "Are your vector sequences in a file?"
+    ]
 
-integer: mismatch  [
-  required: "Y"
-  default: "10"
-  prompt: "Max allowed % mismatch"
-]
+    infile: vectors  [
+      parameter: "Y"
+      required: "@($(vectorfile)?Y:N)"
+      nullok: "Y"
+      default: ""
+      prompt: "Name of vectorfile"
+    ]
 
-bool: besthits  [
-  required: "Y"
-  default: "Y"
-  prompt: "Show only the best hits (minimise mismatches)?"
-]
+  endsection: vectorfilesection
+
+  integer: mismatch  [
+    required: "Y"
+    default: "10"
+    prompt: "Max allowed % mismatch"
+  ]
+
+  boolean: besthits  [
+    required: "Y"
+    default: "Y"
+    prompt: "Show only the best hits (minimise mismatches)?"
+  ]
 
 endsection: required
 
-section: advanced [ info: "advanced Section" type: page ]
-string: linkera  [
-  required: "@(!$(vectorfile))"
-  prompt: "5' sequence"
+section: advanced [
+  information: "Advanced section"
+  type: "page"
 ]
 
-string: linkerb  [
-  required: "@(!$(vectorfile))"
-  prompt: "3' sequence"
-]
+  string: linkera  [
+    required: "@(!$(vectorfile))"
+    prompt: "5' sequence"
+  ]
+
+  string: linkerb  [
+    required: "@(!$(vectorfile))"
+    prompt: "3' sequence"
+  ]
 
 endsection: advanced
 
-section: output [ info: "output Section" type: page ]
-outfile: outf  [
-  parameter: "Y"
+section: output [
+  information: "Output section"
+  type: "page"
 ]
 
-seqoutall: outseq  [
-  parameter: "Y"
-]
+  outfile: outf  [
+    parameter: "Y"
+  ]
+
+  seqoutall: outseq  [
+    parameter: "Y"
+  ]
 
 endsection: output
-

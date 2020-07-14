@@ -1,131 +1,127 @@
-appl: restover [
-  documentation: "Finds restriction enzymes that produce a specific overhang"
+application: restover [
+  documentation: "Finds restriction enzymes that produce a
+                  specific overhang"
   groups: "Nucleic:Restriction"
 ]
 
-section: input [ info: "input Section" type: page ]
-seqall: sequence  [
-  parameter: "Y"
-  type: "DNA"
+section: input [
+  information: "Input section"
+  type: "page"
 ]
+
+  seqall: sequence  [
+    parameter: "Y"
+    type: "DNA"
+  ]
 
 endsection: input
 
-section: required [ info: "required Section" type: page ]
-string: seqcomp  [
-  parameter: "Y"
-  information: "Overlap sequence"
+section: required [
+  information: "Required section"
+  type: "page"
 ]
+
+  string: seqcomp  [
+    parameter: "Y"
+    information: "Overlap sequence"
+  ]
 
 endsection: required
 
-section: advanced [ info: "advanced Section" type: page ]
-integer: min  [
-  optional: "N"
-  minimum: "1"
-  maximum: "1000"
-  default: "1"
-  information: "Minimum cuts per RE"
+section: advanced [
+  information: "Advanced section"
+  type: "page"
 ]
 
-integer: max  [
-  optional: "N"
-  minimum: "$(min)"
-  maximum: "2000000000"
-  default: "2000000000"
-  information: "Maximum cuts per RE"
-]
+  integer: min  [
+    minimum: "1"
+    maximum: "1000"
+    default: "1"
+    information: "Minimum cuts per RE"
+  ]
 
-bool: single  [
-  optional: "N"
-  default: "N"
-  information: "Force single site only cuts"
-]
+  integer: max  [
+    minimum: "$(min)"
+    maximum: "2000000000"
+    default: "2000000000"
+    information: "Maximum cuts per RE"
+  ]
 
-bool: threeprime  [
-  optional: "N"
-  default: "N"
-  information: "3' overhang? (else 5') e.g. BamHI has CTAG as a 5' overhang, and ApaI has CCGG as 3' overhang."
-]
+  boolean: single  [
+    default: "N"
+    information: "Force single site only cuts"
+  ]
 
-bool: blunt  [
-  optional: "N"
-  default: "Y"
-  information: "Allow blunt end cutters"
-]
+  boolean: threeprime  [
+    default: "N"
+    information: "3' overhang? (else 5') e.g. BamHI has CTAG as
+                  a 5' overhang, and ApaI has CCGG as 3' overhang."
+  ]
 
-bool: sticky  [
-  optional: "N"
-  default: "Y"
-  information: "Allow sticky end cutters"
-]
+  boolean: blunt  [
+    default: "Y"
+    information: "Allow blunt end cutters"
+  ]
 
-bool: ambiguity  [
-  optional: "N"
-  default: "Y"
-  information: "Allow ambiguous matches"
-]
+  boolean: sticky  [
+    default: "Y"
+    information: "Allow sticky end cutters"
+  ]
 
-bool: plasmid  [
-  optional: "N"
-  default: "N"
-  information: "Allow circular DNA"
-]
+  boolean: ambiguity  [
+    default: "Y"
+    information: "Allow ambiguous matches"
+  ]
 
-bool: commercial  [
-  optional: "N"
-  default: "Y"
-  information: "Only enzymes with suppliers"
-]
+  boolean: plasmid  [
+    default: "N"
+    information: "Allow circular DNA"
+  ]
 
-string: datafile  [
-  required: "N"
-  default: ""
-  information: "Alternative RE data file"
-]
+  boolean: commercial  [
+    default: "Y"
+    information: "Only enzymes with suppliers"
+  ]
+
+  string: datafile  [
+    default: ""
+    information: "Alternative RE data file"
+  ]
 
 endsection: advanced
 
-section: output [ info: "output Section" type: page ]
-bool: html  [
-  optional: "N"
-  default: "N"
-  information: "Create HTML output"
+section: output [
+  information: "Output section"
+  type: "page"
 ]
 
-bool: limit  [
-  optional: "N"
-  default: "Y"
-  information: "Limits reports to one isoschizomer"
-]
+  boolean: html  [
+    default: "N"
+    information: "Create HTML output"
+  ]
 
-bool: preferred  [
-  optional: "N"
-  default: "N"
-  information: "Report preferred isoschizomers"
-]
+  boolean: limit  [
+    default: "Y"
+    information: "Limits reports to one isoschizomer"
+  ]
 
-bool: alphabetic  [
-  optional: "N"
-  default: "N"
-  information: "Sort output alphabetically"
-]
+  boolean: alphabetic  [
+    default: "N"
+    information: "Sort output alphabetically"
+  ]
 
-bool: fragments  [
-  optional: "N"
-  default: "N"
-  information: "Show fragment lengths"
-]
+  boolean: fragments  [
+    default: "N"
+    information: "Show fragment lengths"
+  ]
 
-bool: name  [
-  optional: "N"
-  default: "N"
-  information: "Show sequence name"
-]
+  boolean: name  [
+    default: "N"
+    information: "Show sequence name"
+  ]
 
-outfile: outfile  [
-  parameter: "Y"
-]
+  outfile: outfile  [
+    parameter: "Y"
+  ]
 
 endsection: output
-

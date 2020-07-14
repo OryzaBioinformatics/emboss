@@ -1,39 +1,55 @@
-appl: patmatmotifs [
-  documentation: "Search a PROSITE motif database with a protein sequence"
+application: patmatmotifs [
+  documentation: "Search a PROSITE motif database with a
+                  protein sequence"
   groups: "Protein:Motifs"
 ]
 
-section: input [ info: "input Section" type: page ]
-sequence: sequence  [
-  parameter: "Y"
-  type: "Protein"
+section: input [
+  information: "Input section"
+  type: "page"
 ]
+
+  sequence: sequence  [
+    parameter: "Y"
+    type: "Protein"
+  ]
 
 endsection: input
 
-section: advanced [ info: "advanced Section" type: page ]
-bool: full  [
-  optional: "Y"
-  default: "N"
-  information: "Provide full documentation for matching patterns"
+section: advanced [
+  information: "Advanced section"
+  type: "page"
 ]
 
-bool: prune  [
-  optional: "Y"
-  default: "Y"
-  information: "Ignore simple patterns"
-  help: "Ignore simple patterns. If this is true then these simple post-translational modification sites are not reported: myristyl, asn_glycosylation, camp_phospho_site, pkc_phospho_site, ck2_phospho_site, and tyr_phospho_site."
-]
+  boolean: full  [
+    optional: "Y"
+    default: "N"
+    information: "Provide full documentation for matching
+                  patterns"
+  ]
+
+  boolean: prune  [
+    optional: "Y"
+    default: "Y"
+    information: "Ignore simple patterns"
+    help: "Ignore simple patterns. If this is true then these simple
+           post-translational modification sites are not reported: myristyl,
+           asn_glycosylation, camp_phospho_site, pkc_phospho_site,
+           ck2_phospho_site, and tyr_phospho_site."
+  ]
 
 endsection: advanced
 
-section: output [ info: "output Section" type: page ]
-
-report: outfile  [
-  parameter: "Y"
-  rformat: "dbmotif"
-  taglist: "str:motif=Motif"
-  precision: 0
+section: output [
+  information: "Output section"
+  type: "page"
 ]
+
+  report: outfile  [
+    parameter: "Y"
+    rformat: "dbmotif"
+    taglist: "str:motif=Motif"
+    precision: "0"
+  ]
 
 endsection: output

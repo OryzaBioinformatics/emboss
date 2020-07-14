@@ -1,12 +1,16 @@
-appl: intconv [
-  documentation: "Convert ints to ajints and longs to ajlongs"
+application: intconv [
+  documentation: "Convert ints to ajints and longs to
+                  ajlongs"
   groups: "Test"
 ]
 
 infile: infile  [
   parameter: "Y"
+  standardtype: "integer long data"
+  information: "Input file"
 ]
 
 outfile: outfile  [
   parameter: "Y"
+  standardtype: "ajint ajlong data"
 ]

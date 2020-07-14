@@ -1,20 +1,29 @@
-appl: geecee [
-  documentation: "Calculates the fractional GC content of nucleic acid sequences"
+application: geecee [
+  documentation: "Calculates the fractional GC content of
+                  nucleic acid sequences"
   groups: "Nucleic:CpG Islands"
 ]
 
-section: input [ info: "input Section" type: page ]
-seqall: sequence  [
-  parameter: "Y"
-  type: "dna"
+section: input [
+  information: "Input section"
+  type: "page"
 ]
+
+  seqall: sequence  [
+    parameter: "Y"
+    type: "dna"
+  ]
 
 endsection: input
 
-section: output [ info: "output Section" type: page ]
-outfile: outfile  [
-  parameter: "Y"
+section: output [
+  information: "Output section"
+  type: "page"
 ]
 
-endsection: output
+  outfile: outfile  [
+    parameter: "Y"
+    standardtype: "geecee output"
+  ]
 
+endsection: output

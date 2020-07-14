@@ -1,88 +1,109 @@
-appl: pepwheel [
+application: pepwheel [
   documentation: "Shows protein sequences as helices"
   groups: "Display, Protein:2D Structure"
 ]
 
-section: input [ info: "input Section" type: page ]
-sequence: sequence  [
-  parameter: "Y"
-  type: "Protein"
+section: input [
+  information: "Input section"
+  type: "page"
 ]
+
+  sequence: sequence  [
+    parameter: "Y"
+    type: "Protein"
+  ]
 
 endsection: input
 
-section: output [ info: "output Section" type: page ]
-bool: wheel  [
-  default: "Y"
-  information: "Plot the wheel"
+section: output [
+  information: "Output section"
+  type: "page"
 ]
 
-integer: steps  [
-  optional: "Y"
-  minimum: "2"
-  maximum: "100"
-  default: "18"
-  information: "Number of steps"
-  help: "The number of residues plotted per turn is this value divided by the 'turns' value."
-]
+  boolean: wheel  [
+    default: "Y"
+    information: "Plot the wheel"
+  ]
 
-integer: turns  [
-  optional: "Y"
-  minimum: "1"
-  maximum: "100"
-  default: "5"
-  information: "Number of turns"
-  help: "The number of residues plotted per turn is the 'steps' value divided by this value."
-]
+  integer: steps  [
+    optional: "Y"
+    minimum: "2"
+    maximum: "100"
+    default: "18"
+    information: "Number of steps"
+    help: "The number of residues plotted per turn is this value
+           divided by the 'turns' value."
+  ]
 
-section: amphipathicsection [ info: "amphipathic Section" type: frame ]
-bool: amphipathic  [
-  information: "Prompt for amphipathic residue marking"
-  help: "If this is true then the residues ACFGILMVWY are marked as squares and all other residues are unmarked. This overrides any other markup that you may have specified using the qualifiers '-squares', '-diamonds' and '-octags'."
-]
+  integer: turns  [
+    optional: "Y"
+    minimum: "1"
+    maximum: "100"
+    default: "5"
+    information: "Number of turns"
+    help: "The number of residues plotted per turn is the 'steps'
+           value divided by this value."
+  ]
 
-string: squares  [
-  optional: "@(!$(amphipathic))"
-  default: "ILVM"
-  information: "Mark as squares"
-  help: "By default the aliphatic residues ILVM are marked with squares."
-]
+  section: amphipathicsection [
+    information: "amphipathic Section"
+    type: "frame"
+  ]
 
-string: diamonds  [
-  optional: "@(!$(amphipathic))"
-  default: "DENQST"
-  information: "Mark as diamonds"
-  help: "By default the residues DENQST are marked with diamonds."
-]
+    boolean: amphipathic  [
+      information: "Prompt for amphipathic residue marking"
+      help: "If this is true then the residues ACFGILMVWY are marked
+             as squares and all other residues are unmarked. This overrides
+             any other markup that you may have specified using the
+             qualifiers '-squares', '-diamonds' and '-octags'."
+    ]
 
-string: octags  [
-  optional: "@(!$(amphipathic))"
-  default: "HKR"
-  information: "Mark as octagons"
-  help: "By default the positively charged residues HKR are marked with octagons."
-]
+    string: squares  [
+      optional: "@(!$(amphipathic))"
+      default: "ILVM"
+      information: "Mark as squares"
+      help: "By default the aliphatic residues ILVM are marked with
+             squares."
+    ]
 
-endsection: amphipathicsection
+    string: diamonds  [
+      optional: "@(!$(amphipathic))"
+      default: "DENQST"
+      information: "Mark as diamonds"
+      help: "By default the residues DENQST are marked with diamonds."
+    ]
 
-section: datasection [ info: "datasection Section" type: frame ]
-bool: data  [
-  required: "N"
-  default: "N"
-  information: "Display as data"
-  help: "Output the match data to a file instead of plotting it"
-]
+    string: octags  [
+      optional: "@(!$(amphipathic))"
+      default: "HKR"
+      information: "Mark as octagons"
+      help: "By default the positively charged residues HKR are marked
+             with octagons."
+    ]
 
-outfile: outfile  [
-  required: "$(data)"
-  nullok: "Y"
-]
+  endsection: amphipathicsection
 
-graph: graph  [
-  required: "@(!$(data))"
-  gxtitle: "$(sequence.name)"
-]
+  section: datasection [
+    information: "Data section"
+    type: "frame"
+  ]
 
-endsection: datasection
+    boolean: data  [
+      default: "N"
+      information: "Display as data"
+      help: "Output the match data to a file instead of plotting it"
+    ]
+
+    outfile: outfile  [
+      required: "$(data)"
+      nullok: "Y"
+    ]
+
+    graph: graph  [
+      required: "@(!$(data))"
+      gxtitle: "$(sequence.name)"
+    ]
+
+  endsection: datasection
 
 endsection: output
-

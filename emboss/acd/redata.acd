@@ -1,40 +1,49 @@
-appl: redata [
-  documentation: "Search REBASE for enzyme name, references, suppliers etc."
+application: redata [
+  documentation: "Search REBASE for enzyme name, references,
+                  suppliers etc."
   groups: "Nucleic:Restriction"
 ]
 
-section: input [ info: "input Section" type: page ]
-string: enzyme  [
-  parameter: "Y"
-  information: "Restriction enzyme name"
-  default: "BamHI"
-  help: "Enter the name of the restrcition enzyme that you wish to get details of. The names often have a 'I' in them - this is a capital 'i', not a '1' or an 'l'. The names are case-indeppendent ('AaeI' is the same as 'aaei')"
+section: input [
+  information: "Input section"
+  type: "page"
 ]
+
+  string: enzyme  [
+    parameter: "Y"
+    information: "Restriction enzyme name"
+    default: "BamHI"
+    help: "Enter the name of the restrcition enzyme that you wish to
+           get details of. The names often have a 'I' in them - this is a
+           capital 'i', not a '1' or an 'l'. The names are case-indeppendent
+           ('AaeI' is the same as 'aaei')"
+  ]
 
 endsection: input
 
-section: output [ info: "output Section" type: page ]
-bool: isoschizomers  [
-  required: "N"
-  default: "Y"
-  information: "Show isoschizomers"
-  help: "Show other enzymes with this specificity. (Isoschizomers)"
+section: output [
+  information: "Output section"
+  type: "page"
 ]
 
-bool: references  [
-  required: "N"
-  default: "Y"
-  information: "Show references"
-]
+  boolean: isoschizomers  [
+    default: "Y"
+    information: "Show isoschizomers"
+    help: "Show other enzymes with this specificity. (Isoschizomers)"
+  ]
 
-bool: suppliers  [
-  required: "N"
-  default: "Y"
-  information: "Show suppliers"
-]
+  boolean: references  [
+    default: "Y"
+    information: "Show references"
+  ]
 
-outfile: outfile  [
-  parameter: "Y"
-]
+  boolean: suppliers  [
+    default: "Y"
+    information: "Show suppliers"
+  ]
+
+  outfile: outfile  [
+    parameter: "Y"
+  ]
+
 endsection: output
-

@@ -1,26 +1,33 @@
-appl: profit [
-  documentation: "Scan a sequence or database with a matrix or profile"
+application: profit [
+  documentation: "Scan a sequence or database with a matrix
+                  or profile"
   groups: "Nucleic:Profiles, Protein:Profiles"
 ]
 
-section: input [ info: "input Section" type: page ]
-
-infile: infile  [
-  parameter: "Y"
-  prompt: "Profile or matrix file"
+section: input [
+  information: "Input section"
+  type: "page"
 ]
 
-seqall: sequence  [
-  parameter: "Y"
-  type: "any"
-]
+  infile: infile  [
+    parameter: "Y"
+    prompt: "Profile or matrix file"
+  ]
+
+  seqall: sequence  [
+    parameter: "Y"
+    type: "any"
+  ]
 
 endsection: input
 
-section: output [ info: "output Section" type: page ]
-outfile: outfile  [
-  parameter: "Y"
+section: output [
+  information: "Output section"
+  type: "page"
 ]
 
-endsection: output
+  outfile: outfile  [
+    parameter: "Y"
+  ]
 
+endsection: output

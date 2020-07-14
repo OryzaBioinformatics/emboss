@@ -1,19 +1,14 @@
-# AJAX COMMAND DEFINITION (ACD) FILE
-
-
-# ajb 19 Nov 2000
-
-appl: corbatest [
-	doc: "Test of EMBL corba retrieval"
-	groups: "Test"
+application: corbatest [
+  documentation: "Test of EMBL corba retrieval"
+  groups: "Test"
 ]
 
-string: entry [
-	param: Y 
-	prompt: "Enter an EMBL ID or ACCNO"
-	def: "hsfau"
+string: entry  [
+  parameter: "Y"
+  prompt: "Enter an EMBL ID or ACCNO"
+  default: "hsfau"
 ]
 
-outfile: outfile [
-	param: Y
+outfile: outfile  [
+  parameter: "Y"
 ]

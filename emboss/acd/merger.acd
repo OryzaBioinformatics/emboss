@@ -1,59 +1,73 @@
-appl: merger [
-  documentation: "Merge two overlapping nucleic acid sequences"
+application: merger [
+  documentation: "Merge two overlapping nucleic acid
+                  sequences"
   groups: "Alignment:Consensus"
 ]
 
-section: input [ info: "input Section" type: page ]
-sequence: seqa  [
-  parameter: "Y"
-  type: "DNA"
+section: input [
+  information: "Input section"
+  type: "page"
 ]
 
-sequence: seqb  [
-  parameter: "Y"
-  type: "DNA"
-]
+  sequence: asequence [
+    parameter: "Y"
+    type: "DNA"
+  ]
+
+  sequence: bsequence [
+    parameter: "Y"
+    type: "DNA"
+  ]
 
 endsection: input
 
-section: advanced [ info: "advanced Section" type: page ]
-matrixf: datafile  [
-  optional: "Y"
-  information: "Matrix file"
-  protein: "$(seqa.protein)"
-  help: "This is the scoring matrix file used when comparing sequences.  By default it is the file 'EBLOSUM62' (for proteins) or the file 'EDNAFULL' (for nucleic sequences).  These files are found in the 'data' directory of the EMBOSS installation."
+section: advanced [
+  information: "Advanced section"
+  type: "page"
 ]
 
-float: gapopen  [
-  optional: "Y"
-  information: "Gap opening penalty"
-  minimum: "1."
-  maximum: "100."
-  default: "50.0"
-]
+  matrixf: datafile  [
+    optional: "Y"
+    information: "Matrix file"
+    protein: "$(asequence.protein)"
+    help: "This is the scoring matrix file used when comparing
+           sequences. By default it is the file 'EBLOSUM62' (for proteins) or
+           the file 'EDNAFULL' (for nucleic sequences). These files are
+           found in the 'data' directory of the EMBOSS installation."
+  ]
 
-float: gapextend  [
-  optional: "Y"
-  information: "Gap extension penalty"
-  minimum: ".1"
-  maximum: "10."
-  default: "5"
-]
+  float: gapopen  [
+    optional: "Y"
+    information: "Gap opening penalty"
+    minimum: "1."
+    maximum: "100."
+    default: "50.0"
+  ]
+
+  float: gapextend  [
+    optional: "Y"
+    information: "Gap extension penalty"
+    minimum: ".1"
+    maximum: "10."
+    default: "5"
+  ]
 
 endsection: advanced
 
-section: output [ info: "output Section" type: page ]
-seqout: outseq  [
-  parameter: "Y"
+section: output [
+  information: "Output section"
+  type: "page"
 ]
 
-align: outfile  [
-  parameter: "Y"
-  information: "Output alignment and explanation"
-  aformat: "simple"
-  minseqs: "2"
-  maxseqs: "2"
-]
+  seqout: outseq  [
+    parameter: "Y"
+  ]
+
+  align: outfile  [
+    parameter: "Y"
+    aformat: "simple"
+    minseqs: "2"
+    maxseqs: "2"
+  ]
 
 endsection: output
-

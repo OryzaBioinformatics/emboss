@@ -1,43 +1,56 @@
-appl: equicktandem [
+application: equicktandem [
   documentation: "Finds tandem repeats"
   groups: "Nucleic:Repeats"
 ]
 
-section: input [ info: "input Section" type: page ]
-sequence: sequence  [
-  parameter: "Y"
-  type: "dna"
+section: input [
+  information: "Input section"
+  type: "page"
 ]
+
+  sequence: sequence  [
+    parameter: "Y"
+    type: "dna"
+  ]
 
 endsection: input
 
-section: required [ info: "required Section" type: page ]
-integer: maxrepeat  [
-  required: "Y"
-  default: "600"
-  information: "Maximum repeat size"
+section: required [
+  information: "Required section"
+  type: "page"
 ]
 
-integer: threshold  [
-  required: "Y"
-  default: "20"
-  information: "Threshold score"
-]
+  integer: maxrepeat  [
+    required: "Y"
+    default: "600"
+    information: "Maximum repeat size"
+  ]
+
+  integer: threshold  [
+    required: "Y"
+    default: "20"
+    information: "Threshold score"
+  ]
+
 endsection: required
 
-section: output [ info: "output Section" type: page ]
-
-report: outfile  [
-  parameter: "Y"
-  rformat: "table"
-  taglist: "int:rpt_size=Size int:rpt_count=Count"
-  rextension: "qtan"
-  precision: 0
+section: output [
+  information: "Output section"
+  type: "page"
 ]
 
-outfile: origfile  [
-  extension: "oldqtan"
-  nullok: "Y"
-]
+  report: outfile  [
+    parameter: "Y"
+    rformat: "table"
+    taglist: "int:rpt_size=Size int:rpt_count=Count"
+    rextension: "qtan"
+    precision: "0"
+  ]
+
+  outfile: origfile  [
+    extension: "oldqtan"
+    nullok: "Y"
+    standardtype: "quicktandem output"
+  ]
 
 endsection: output

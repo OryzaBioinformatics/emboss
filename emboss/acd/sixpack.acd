@@ -1,139 +1,190 @@
-appl: sixpack [
-  documentation: "Display a DNA sequence with 6-frame translation and ORFs"
+application: sixpack [
+  documentation: "Display a DNA sequence with 6-frame
+                  translation and ORFs"
   groups: "Display, Nucleic:Gene finding, Nucleic:Translation"
 ]
 
-section: input [ info: "input Section" type: page ]
-sequence: sequence  [
-  parameter: "Y"
-  type: "DNA"
+section: input [
+  information: "Input section"
+  type: "page"
 ]
+
+  sequence: sequence  [
+    parameter: "Y"
+    type: "DNA"
+  ]
 
 endsection: input
 
-section: advanced [ info: "advanced Section" type: page ]
-
-list: table  [
-  optional: "Y"
-  default: "0"
-  minimum: "1"
-  maximum: "1"
-  header: "Genetic codes"
-  values: "0:Standard; 1:Standard (with alternative initiation codons); 2:Vertebrate Mitochondrial; 3:Yeast Mitochondrial; 4:Mold, Protozoan, Coelenterate Mitochondrial and Mycoplasma/Spiroplasma; 5:Invertebrate Mitochondrial; 6:Ciliate Macronuclear and Dasycladacean; 9:Echinoderm Mitochondrial; 10:Euplotid Nuclear; 11:Bacterial; 12:Alternative Yeast Nuclear; 13:Ascidian Mitochondrial; 14:Flatworm Mitochondrial; 15:Blepharisma Macronuclear; 16:Chlorophycean Mitochondrial; 21:Trematode Mitochondrial; 22:Scenedesmus obliquus; 23:Thraustochytrium Mitochondrial"
-  delimiter: ";"
-  codedelimiter: ":"
-  prompt: "Code to use"
-  help: "Genetics code used for the translation" 
+section: advanced [
+  information: "Advanced section"
+  type: "page"
 ]
 
-bool: firstorf  [
-  optional: "Y"
-  default: "Y"
-  prompt: "ORF at the beginning of the sequence"
-  help: "Count the beginning of a sequence as a possible ORF, even if it's inferior to the minimal ORF size."
-]
+  list: table  [
+    optional: "Y"
+    default: "0"
+    minimum: "1"
+    maximum: "1"
+    header: "Genetic codes"
+    values: "0:Standard; 1:Standard (with alternative initiation
+             codons); 2:Vertebrate Mitochondrial; 3:Yeast Mitochondrial;
+             4:Mold, Protozoan, Coelenterate Mitochondrial and
+             Mycoplasma/Spiroplasma; 5:Invertebrate Mitochondrial; 6:Ciliate
+             Macronuclear and Dasycladacean; 9:Echinoderm Mitochondrial;
+             10:Euplotid Nuclear; 11:Bacterial; 12:Alternative Yeast Nuclear;
+             13:Ascidian Mitochondrial; 14:Flatworm Mitochondrial;
+             15:Blepharisma Macronuclear; 16:Chlorophycean Mitochondrial;
+             21:Trematode Mitochondrial; 22:Scenedesmus obliquus;
+             23:Thraustochytrium Mitochondrial"
+    delimiter: ";"
+    codedelimiter: ":"
+    prompt: "Code to use"
+    help: "Genetics code used for the translation"
+  ]
 
-bool: lastorf  [
-  optional: "Y"
-  default: "Y"
-  prompt: "ORF at the end of the sequence"
-  help: "Count the end of a sequence as a possible ORF, even if it's not finishing with a STOP, or inferior to the minimal ORF size."
-]
+  boolean: firstorf  [
+    optional: "Y"
+    default: "Y"
+    prompt: "ORF at the beginning of the sequence"
+    help: "Count the beginning of a sequence as a possible ORF, even
+           if it's inferior to the minimal ORF size."
+  ]
 
-bool: mstart  [
-  optional: "Y"
-  default: "N"
-  prompt: "ORF start with an M"
-  help: "Displays only ORFs starting with an M."
-]
+  boolean: lastorf  [
+    optional: "Y"
+    default: "Y"
+    prompt: "ORF at the end of the sequence"
+    help: "Count the end of a sequence as a possible ORF, even if it's
+           not finishing with a STOP, or inferior to the minimal ORF size."
+  ]
+
+  boolean: mstart  [
+    optional: "Y"
+    default: "N"
+    prompt: "ORF start with an M"
+    help: "Displays only ORFs starting with an M."
+  ]
 
 endsection: advanced
 
-section: output [ info: "output Section" type: page ]
-outfile: outfile  [
-  parameter: "Y"
-  information: "Output sequence details to a file"
-  help: "If you enter the name of a file here then this program will write the sequence details into that file."
+section: output [
+  information: "Output section"
+  type: "page"
 ]
 
-seqoutall: outseq  [
-  required: "Y"
-  information: "Output ORFs to a file"
-  help: "If you enter the name of a file here then this program will write the ORFs into that file."
-]
+  outfile: outfile  [
+    parameter: "Y"
+    information: "Output sequence details to a file"
+    help: "If you enter the name of a file here then this program will
+           write the sequence details into that file."
+  ]
 
-bool: reverse  [
-  default: "Y"
-  information: "Display translation of reverse sense"
-  help: "Display also the translation of the DNA sequence in the 3 reverse frames"
-]
+  seqoutall: outseq  [
+    required: "Y"
+    information: "Output ORFs to a file"
+    type: "stopprotein"
+    help: "If you enter the name of a file here then this program will
+           write the ORFs into that file."
+  ]
 
-integer: orfminsize  [
-  default: "1"
-  minimum: "1"
-  information: "Minimum size of ORFs"
-  help: "Minimum size of Open Reading Frames (ORFs) to display in the translations."
-]
+  boolean: reverse  [
+    default: "Y"
+    information: "Display translation of reverse sense"
+    help: "Display also the translation of the DNA sequence in the 3
+           reverse frames"
+  ]
 
-range: uppercase  [
-  default: ""
-  information: "Regions to put in uppercase (eg: 4-57,78-94)"
-  help: "Regions to put in uppercase. \ If this is left blank, then the sequence case is left alone. \ A set of regions is specified by a set of pairs of positions. \ The positions are integers. \ They are separated by any non-digit, non-alpha character. \ Examples of region specifications are: \ 24-45, 56-78 \ 1:45, 67=99;765..888 \ 1,5,8,10,23,45,57,99"
-  expected: "If this is left blank, then the sequence case is left alone."
-]
+  integer: orfminsize  [
+    default: "1"
+    minimum: "1"
+    information: "Minimum size of ORFs"
+    help: "Minimum size of Open Reading Frames (ORFs) to display in
+           the translations."
+  ]
 
-range: highlight  [
-  default: ""
-  information: "Regions to colour in HTML (eg: 4-57 red 78-94 green)"
-  help: "Regions to colour if formatting for HTML. \ If this is left blank, then the sequence is left alone. \ A set of regions is specified by a set of pairs of positions. \ The positions are integers. \ They are followed by any valid HTML font colour. \ Examples of region specifications are: \ 24-45 blue 56-78 orange \ 1-100 green 120-156 red \ A file of ranges to colour (one range per line) can be specifed as '@filename'."
-]
+  range: uppercase  [
+    default: ""
+    information: "Regions to put in uppercase (eg: 4-57,78-94)"
+    help: "Regions to put in uppercase. \
+           If this is left blank, then the sequence case is left alone. \
+           A set of regions is specified by a set of pairs of positions. \
+           The positions are integers. \
+           They are separated by any non-digit, non-alpha character. \
+           Examples of region specifications are: \
+           24-45, 56-78 \
+           1:45, 67=99;765..888 \
+           1,5,8,10,23,45,57,99"
+    expected: "If this is left blank, then the sequence case is
+               left alone."
+  ]
 
-bool: number  [
-  default: "Y"
-  information: "Number the sequences"
-  help: "Number the sequence at the beginning and the end of each line."
-]
+  range: highlight  [
+    default: ""
+    information: "Regions to colour in HTML (eg: 4-57 red 78-94
+                  green)"
+    help: "Regions to colour if formatting for HTML. \
+           If this is left blank, then the sequence is left alone. \
+           A set of regions is specified by a set of pairs of positions. \
+           The positions are integers. \
+           They are followed by any valid HTML font colour. \
+           Examples of region specifications are: \
+           24-45 blue 56-78 orange \
+           1-100 green 120-156 red \
+           A file of ranges to colour (one range per line) can be specifed as
+           '@filename'."
+  ]
 
-integer: width  [
-  default: "60"
-  minimum: "1"
-  information: "Width of sequence to display"
-  help: "Number of nucleotides displayed on each line" 
-]
+  boolean: number  [
+    default: "Y"
+    information: "Number the sequences"
+    help: "Number the sequence at the beginning and the end of each
+           line."
+  ]
 
-integer: length  [
-  default: "0"
-  minimum: "0"
-  information: "Line length of page (0 for indefinite)"
-]
+  integer: width  [
+    default: "60"
+    minimum: "1"
+    information: "Width of sequence to display"
+    help: "Number of nucleotides displayed on each line"
+  ]
 
-integer: margin  [
-  default: "10"
-  minimum: "0"
-  information: "Margin around sequence for numbering."
-]
+  integer: length  [
+    default: "0"
+    minimum: "0"
+    information: "Line length of page (0 for indefinite)"
+  ]
 
-bool: name  [
-  default: "Y"
-  information: "Display sequence ID"
-  help: "Set this to be false if you do not wish to display the ID name of the sequence."
-]
+  integer: margin  [
+    default: "10"
+    minimum: "0"
+    information: "Margin around sequence for numbering."
+  ]
 
-bool: description  [
-  default: "Y"
-  information: "Display description"
-  help: "Set this to be false if you do not wish to display the description of the sequence."
-]
+  boolean: name  [
+    default: "Y"
+    information: "Display sequence ID"
+    help: "Set this to be false if you do not wish to display the ID
+           name of the sequence."
+  ]
 
-integer: offset  [
-  default: "1"
-  information: "Offset to start numbering the sequence from"
-  help: "Number from which you want the DNA sequence to be numbered."
-]
+  boolean: description  [
+    default: "Y"
+    information: "Display description"
+    help: "Set this to be false if you do not wish to display the
+           description of the sequence."
+  ]
 
-bool: html  [
-  default: "N"
-  information: "Use HTML formatting"
-]
+  integer: offset  [
+    default: "1"
+    information: "Offset to start numbering the sequence from"
+    help: "Number from which you want the DNA sequence to be
+           numbered."
+  ]
+
+  boolean: html  [
+    default: "N"
+    information: "Use HTML formatting"
+  ]
 
 endsection: output

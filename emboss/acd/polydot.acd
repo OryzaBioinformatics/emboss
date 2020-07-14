@@ -1,80 +1,96 @@
-appl: polydot [
-  documentation: "Displays all-against-all dotplots of a set of sequences"
+application: polydot [
+  documentation: "Displays all-against-all dotplots of a set
+                  of sequences"
   groups: "Alignment:Dot plots"
 ]
 
-section: input [ info: "input Section" type: page ]
-seqset: sequences  [
-  parameter: "Y"
-  type: "any"
-  information: "Sequences file to be read in"
-  help: "File containing a sequence alignment"
+section: input [
+  information: "Input section"
+  type: "page"
 ]
+
+  seqset: sequences  [
+    parameter: "Y"
+    type: "any"
+    information: "Sequences file to be read in"
+    help: "File containing a sequence alignment"
+  ]
 
 endsection: input
 
-section: required [ info: "required Section" type: page ]
-integer: wordsize  [
-  required: "Y"
-  default: "6"
-  minimum: "2"
-  information: "Word size"
+section: required [
+  information: "Required section"
+  type: "page"
 ]
+
+  integer: wordsize  [
+    required: "Y"
+    default: "6"
+    minimum: "2"
+    information: "Word size"
+  ]
 
 endsection: required
 
-section: output [ info: "output Section" type: page ]
-section: datasection [ info: "data Section" type: frame ]
-bool: data  [
-  required: "N"
-  default: "N"
-  information: "Display as data"
-  help: "Output the match data to a file instead of plotting it"
+section: output [
+  information: "Output section"
+  type: "page"
 ]
 
-graph: graph  [
-  required: "@(!$(data))"
-  gtitle: "Polydot:"
-]
+  section: datasection [
+    information: "data Section"
+    type: "frame"
+  ]
 
-outfile: outfile  [
-  required: "$(data)"
-  nullok: "Y"
-]
+    boolean: data  [
+      default: "N"
+      information: "Display as data"
+      help: "Output the match data to a file instead of plotting it"
+    ]
 
-endsection:datasection
+    graph: graph  [
+      required: "@(!$(data))"
+      gtitle: "Polydot:"
+    ]
 
-integer: gap  [
-  default: "10"
-  minimum: "0"
-  information: "Gap (in residues) between dotplots"
-  help: "This specifies the size of the gap that is used to separate the individual dotplots in the display. The size is measured in residues, as displayed in the output."
-]
+    outfile: outfile  [
+      required: "$(data)"
+      nullok: "Y"
+    ]
 
-bool: boxit  [
-  default: "Y"
-  optional: "Y"
-  information: "Draw a box around each dotplot"
-]
+  endsection: datasection
 
-bool: dumpfeat  [
-  default: "N"
-  optional: "Y"
-  information: "Dump all matches as feature files"
-]
+  integer: gap  [
+    default: "10"
+    minimum: "0"
+    information: "Gap (in residues) between dotplots"
+    help: "This specifies the size of the gap that is used to separate
+           the individual dotplots in the display. The size is measured in
+           residues, as displayed in the output."
+  ]
 
-string: format  [
-  default: "gff"
-  optional: "Y"
-  information: "format to Dump out as"
-]
+  boolean: boxit  [
+    default: "Y"
+    optional: "Y"
+    information: "Draw a box around each dotplot"
+  ]
 
-string: ext  [
-  default: "gff"
-  optional: "Y"
-  information: "Extension for feature file"
-]
+  boolean: dumpfeat  [
+    default: "N"
+    optional: "Y"
+    information: "Dump all matches as feature files"
+  ]
+
+  string: format  [
+    default: "gff"
+    optional: "Y"
+    information: "format to Dump out as"
+  ]
+
+  string: ext  [
+    default: "gff"
+    optional: "Y"
+    information: "Extension for feature file"
+  ]
 
 endsection: output
-
-

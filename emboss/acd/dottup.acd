@@ -1,66 +1,78 @@
-appl: dottup [
-  documentation: "Displays a wordmatch dotplot of two sequences"
+application: dottup [
+  documentation: "Displays a wordmatch dotplot of two
+                  sequences"
   groups: "Alignment:Dot plots"
 ]
 
-section: input [ info: "input Section" type: page ]
-sequence: sequencea  [
-  parameter: "y"
-  type: "any"
+section: input [
+  information: "Input section"
+  type: "page"
 ]
 
-sequence: sequenceb  [
-  parameter: "y"
-  type: "@($(sequencea.protein) ? stopprotein : nucleotide)"
-]
+  sequence: asequence [
+    parameter: "y"
+    type: "any"
+  ]
+
+  sequence: bsequence [
+    parameter: "y"
+    type: "@($(asequence.protein) ? stopprotein : nucleotide)"
+  ]
 
 endsection: input
 
-section: required [ info: "required Section" type: page ]
-integer: wordsize  [
-  required: "Y"
-  default: "10"
-  minimum: "2"
-  information: "Word size"
+section: required [
+  information: "Required section"
+  type: "page"
 ]
+
+  integer: wordsize  [
+    required: "Y"
+    default: "10"
+    minimum: "2"
+    information: "Word size"
+  ]
 
 endsection: required
 
-section: output [ info: "output Section" type: page ]
-bool: stretch  [
-  required: "N"
-  default: "N"
-  information: "Stretch axes"
-  help: "Use non-proportional axes"
+section: output [
+  information: "Output section"
+  type: "page"
 ]
 
-bool: data  [
-  required: "@(!$(stretch))"
-  default: "N"
-  information: "Display as data"
-  help: "Output the match data to a file instead of plotting it"
-]
+  boolean: stretch  [
+    default: "N"
+    information: "Stretch axes"
+    help: "Use non-proportional axes"
+  ]
 
-graph: graph  [
-  required: "@(@(!$(data)) & @(!$(stretch)))"
-  gxtitle: "$(sequenceb.name)"
-  gytitle: "$(sequencea.name)"
-]
+  boolean: data  [
+    required: "@(!$(stretch))"
+    default: "N"
+    information: "Display as data"
+    help: "Output the match data to a file instead of plotting it"
+  ]
 
-xygraph: xygraph  [
-  required: "$(stretch)"
-]
+  graph: graph  [
+    required: "@(@(!$(data)) & @(!$(stretch)))"
+    gxtitle: "$(bsequence.name)"
+    gytitle: "$(asequence.name)"
+  ]
 
-bool: boxit  [
-  default: "Y"
-  optional: "@(!$(stretch))"
-  information: "Draw a box around dotplot"
-]
+  xygraph: xygraph  [
+    required: "$(stretch)"
+  ]
 
-outfile: outfile  [
-  required: "@($(data) & @(!$(stretch)))"
-  nullok: "Y"
-]
+  boolean: boxit  [
+    default: "Y"
+    optional: "@(!$(stretch))"
+    information: "Draw a box around dotplot"
+  ]
+
+  outfile: outfile  [
+    required: "@($(data) & @(!$(stretch)))"
+    nullok: "Y"
+    standardtype: "dotplot graph data"
+  ]
 
 endsection: output
-

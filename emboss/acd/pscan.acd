@@ -1,39 +1,50 @@
-appl: pscan [
+application: pscan [
   documentation: "Scans proteins using PRINTS"
   groups: "Protein:Motifs"
 ]
 
-section: input [ info: "input Section" type: page ]
-seqall: sequence  [
-  parameter: "Y"
-  type: "Protein"
+section: input [
+  information: "Input section"
+  type: "page"
 ]
+
+  seqall: sequence  [
+    parameter: "Y"
+    type: "Protein"
+  ]
 
 endsection: input
 
-section: required [ info: "required Section" type: page ]
-integer: emin  [
-  required: "Y"
-  minimum: "1"
-  maximum: "20"
-  default: "2"
-  information: "Minimum number of elements per fingerprint"
+section: required [
+  information: "Required section"
+  type: "page"
 ]
 
-integer: emax  [
-  required: "Y"
-  minimum: "$(emin)"
-  maximum: "20"
-  default: "20"
-  information: "Maximum number of elements per fingerprint"
-]
+  integer: emin  [
+    required: "Y"
+    minimum: "1"
+    maximum: "20"
+    default: "2"
+    information: "Minimum number of elements per fingerprint"
+  ]
+
+  integer: emax  [
+    required: "Y"
+    minimum: "$(emin)"
+    maximum: "20"
+    default: "20"
+    information: "Maximum number of elements per fingerprint"
+  ]
 
 endsection: required
 
-section: output [ info: "output Section" type: page ]
-outfile: outfile  [
-  parameter: "Y"
+section: output [
+  information: "Output section"
+  type: "page"
 ]
 
-endsection: output
+  outfile: outfile  [
+    parameter: "Y"
+  ]
 
+endsection: output

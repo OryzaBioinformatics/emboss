@@ -1,41 +1,52 @@
-appl: coderet [
-  documentation: "Extract CDS, mRNA and translations from feature tables"
+application: coderet [
+  documentation: "Extract CDS, mRNA and translations from
+                  feature tables"
   groups: "Feature tables, Nucleic:Translation"
 ]
 
-section: input [ info: "input Section" type: page ]
-seqall: seqall  [
-  parameter: "Y"
-  type: "DNA"
-  entry: "Y"
+section: input [
+  information: "Input section"
+  type: "page"
 ]
+
+  seqall: seqall  [
+    parameter: "Y"
+    type: "DNA"
+    entry: "Y"
+  ]
 
 endsection: input
 
-section: advanced [ info: "advanced Section" type: page ]
-bool: cds  [
-  optional: "N"
-  default: "Y"
-  information: "Extract CDS sequences"
+section: advanced [
+  information: "Advanced section"
+  type: "page"
 ]
 
-bool: mrna  [
-  optional: "N"
-  default: "Y"
-  information: "Extract mrna sequences"
-]
+  boolean: cds  [
+    default: "Y"
+    information: "Extract CDS sequences"
+  ]
 
-bool: translation  [
-  optional: "N"
-  default: "Y"
-  information: "Extract translated sequences"
-]
+  boolean: mrna  [
+    default: "Y"
+    information: "Extract mrna sequences"
+  ]
+
+  boolean: translation  [
+    default: "Y"
+    information: "Extract translated sequences"
+  ]
 
 endsection: advanced
 
-section: output [ info: "output Section" type: page ]
-seqout: seqout  [
-  parameter: "Y"
+section: output [
+  information: "Output section"
+  type: "page"
 ]
-endsection: output
 
+  seqout: outseq [
+    parameter: "Y"
+    type: "protein"
+  ]
+
+endsection: output

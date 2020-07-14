@@ -1,31 +1,43 @@
-appl: garnier [
+application: garnier [
   documentation: "Predicts protein secondary structure"
   groups: "Protein:2D Structure"
 ]
 
-section: input [ info: "input Section" type: page ]
-seqall: sequencea  [
-  parameter: "Y"
-  type: "PureProtein"
+section: input [
+  information: "Input section"
+  type: "page"
 ]
+
+  seqall: sequence  [
+    parameter: "Y"
+    type: "PureProtein"
+  ]
 
 endsection: input
 
-section: advanced [ info: "advanced Section" type: page ]
-integer: idc  [
-  required: "N"
-  default: "0"
-  minimum: "0"
-  maximum: "6"
-  information: "idc param"
+section: advanced [
+  information: "Advanced section"
+  type: "page"
 ]
+
+  integer: idc  [
+    default: "0"
+    minimum: "0"
+    maximum: "6"
+    information: "idc param"
+  ]
+
 endsection: advanced
 
-section: output [ info: "output Section" type: page ]
-report: outfile  [
-  parameter: "Y"
-  rformat: "tagseq"
-  taglist: "str:helix str:sheet str:turns str:coil"
+section: output [
+  information: "Output section"
+  type: "page"
 ]
+
+  report: outfile  [
+    parameter: "Y"
+    rformat: "tagseq"
+    taglist: "str:helix str:sheet str:turns str:coil"
+  ]
 
 endsection: output

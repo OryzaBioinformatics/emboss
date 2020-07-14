@@ -1,47 +1,58 @@
-appl: pepcoil [
+application: pepcoil [
   documentation: "Predicts coiled coil regions"
   groups: "Protein:2D Structure, Protein:Motifs"
 ]
 
-section: input [ info: "input Section" type: page ]
-seqall: sequence  [
-  parameter: "Y"
-  type: "PureProtein"
+section: input [
+  information: "Input section"
+  type: "page"
 ]
+
+  seqall: sequence  [
+    parameter: "Y"
+    type: "PureProtein"
+  ]
 
 endsection: input
 
-section: required [ info: "required Section" type: page ]
-integer: window  [
-  required: "Y"
-  minimum: "7"
-  maximum: "28"
-  default: "28"
-  information: "Window size"
+section: required [
+  information: "Required section"
+  type: "page"
 ]
+
+  integer: window  [
+    required: "Y"
+    minimum: "7"
+    maximum: "28"
+    default: "28"
+    information: "Window size"
+  ]
 
 endsection: required
 
-section: output [ info: "output Section" type: page ]
-bool: coil  [
-  default: "Y"
-  information: "Report coiled coil regions"
+section: output [
+  information: "Output section"
+  type: "page"
 ]
 
-bool: frame  [
-  default: "$(coil)"
-  information: "Show coil frameshifts"
-  expected: "Yes if -coil is true"
-]
+  boolean: coil  [
+    default: "Y"
+    information: "Report coiled coil regions"
+  ]
 
-bool: other  [
-  default: "Y"
-  information: "Report non coiled coil regions"
-]
+  boolean: frame  [
+    default: "$(coil)"
+    information: "Show coil frameshifts"
+    expected: "Yes if -coil is true"
+  ]
 
-outfile: outfile  [
-  parameter: "Y"
-]
+  boolean: other  [
+    default: "Y"
+    information: "Report non coiled coil regions"
+  ]
+
+  outfile: outfile  [
+    parameter: "Y"
+  ]
 
 endsection: output
-

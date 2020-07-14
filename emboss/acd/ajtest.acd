@@ -1,12 +1,14 @@
-appl: ajtest [
+application: ajtest [
   documentation: "Test file for ACD parsing"
   groups: "Test"
 ]
 
 seqall: sequence  [
   parameter: "Y"
+  type: "any"
 ]
 
-seqset: seqset  [
+seqset: bsequence  [
   parameter: "Y"
+  type: "any"
 ]

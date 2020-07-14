@@ -1,53 +1,64 @@
-appl: pepnet [
+application: pepnet [
   documentation: "Displays proteins as a helical net"
   groups: "Display, Protein:2D Structure"
 ]
 
-section: input [ info: "input Section" type: page ]
-sequence: sequence  [
-  parameter: "Y"
-  type: "Protein"
+section: input [
+  information: "Input section"
+  type: "page"
 ]
+
+  sequence: sequence  [
+    parameter: "Y"
+    type: "Protein"
+  ]
 
 endsection: input
 
-section: output [ info: "output Section" type: page ]
-bool: amphipathic  [
-  information: "Prompt for amphipathic residue marking"
-  help: "If this is true then the residues ACFGILMVWY are marked as squares and all other residues are unmarked. This overrides any other markup that you may have specified using the qualifiers '-squares', '-diamonds' and '-octags'."
+section: output [
+  information: "Output section"
+  type: "page"
 ]
 
-string: squares  [
-  optional: "@(!$(amphipathic))"
-  default: "ILVM"
-  information: "Mark as squares"
-  help: "By default the aliphatic residues ILVM are marked with squares."
-]
+  boolean: amphipathic  [
+    information: "Prompt for amphipathic residue marking"
+    help: "If this is true then the residues ACFGILMVWY are marked as
+           squares and all other residues are unmarked. This overrides any
+           other markup that you may have specified using the qualifiers
+           '-squares', '-diamonds' and '-octags'."
+  ]
 
-string: diamonds  [
-  optional: "@(!$(amphipathic))"
-  default: "DENQST"
-  information: "Mark as diamonds"
-  help: "By default the residues DENQST are marked with diamonds."
-]
+  string: squares  [
+    optional: "@(!$(amphipathic))"
+    default: "ILVM"
+    information: "Mark as squares"
+    help: "By default the aliphatic residues ILVM are marked with
+           squares."
+  ]
 
-string: octags  [
-  optional: "@(!$(amphipathic))"
-  default: "HKR"
-  information: "Mark as octagons"
-  help: "By default the positively charged residues HKR are marked with octagons."
-]
+  string: diamonds  [
+    optional: "@(!$(amphipathic))"
+    default: "DENQST"
+    information: "Mark as diamonds"
+    help: "By default the residues DENQST are marked with diamonds."
+  ]
 
-bool: data  [
-  required: "N"
-  default: "N"
-  information: "Display as data"
-  help: "Output the data to a file instead of plotting it"
-]
+  string: octags  [
+    optional: "@(!$(amphipathic))"
+    default: "HKR"
+    information: "Mark as octagons"
+    help: "By default the positively charged residues HKR are marked
+           with octagons."
+  ]
 
-graph: graph  [
-  required: "@(!$(data))"
-]
+  boolean: data  [
+    default: "N"
+    information: "Display as data"
+    help: "Output the data to a file instead of plotting it"
+  ]
+
+  graph: graph  [
+    required: "@(!$(data))"
+  ]
 
 endsection: output
-

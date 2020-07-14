@@ -1,64 +1,75 @@
-appl: pepinfo [
-  documentation: "Plots simple amino acid properties in parallel"
+application: pepinfo [
+  documentation: "Plots simple amino acid properties in
+                  parallel"
   groups: "Protein:Composition"
 ]
 
-section: input [ info: "input Section" type: page ]
-sequence: inseq  [
-  parameter: "Y"
-  type: "protein"
+section: input [
+  information: "Input section"
+  type: "page"
 ]
+
+  sequence: inseq  [
+    parameter: "Y"
+    type: "protein"
+  ]
 
 endsection: input
 
-section: output [ info: "output Section" type: page ]
-xygraph: graph  [
-  required: "Y"
-  multiple: "3"
+section: output [
+  information: "Output section"
+  type: "page"
 ]
 
-outfile: outfile  [
-  parameter: "Y"
-  default: "pepinfo.out"
-]
+  xygraph: graph  [
+    required: "Y"
+    multiple: "3"
+  ]
 
-bool: generalplot  [
-  default: "Y"
-  information: "plot histogram of general properties"
-]
+  outfile: outfile  [
+    parameter: "Y"
+    default: "pepinfo.out"
+  ]
 
-bool: hydropathyplot  [
-  default: "Y"
-  information: "plot graphs of hydropathy"
-]
+  boolean: generalplot  [
+    default: "Y"
+    information: "plot histogram of general properties"
+  ]
+
+  boolean: hydropathyplot  [
+    default: "Y"
+    information: "plot graphs of hydropathy"
+  ]
 
 endsection: output
 
-section: advanced [ info: "advanced Section" type: page ]
-integer: hwindow  [
-  optional: "Y"
-  default: "9"
-  minimum: "1"
-  maximum: "$(inseq.length)"
-  information: "Window size for hydropathy averaging"
+section: advanced [
+  information: "Advanced section"
+  type: "page"
 ]
 
-string: aaproperties  [
-  optional: "Y"
-  default: "Eaa_properties.dat"
-  information: "User defined amino acid properties"
-  prompt: "Enter user defined file of amino acid properties or leave blank"
-]
+  integer: hwindow  [
+    optional: "Y"
+    default: "9"
+    minimum: "1"
+    maximum: "$(inseq.length)"
+    information: "Window size for hydropathy averaging"
+  ]
 
-string: aahydropathy  [
-  optional: "Y"
-  default: "Eaa_hydropathy.dat"
-  information: "User defined hydropathy data"
-  prompt: "Enter user defined file of hydropathy data or leave blank"
-]
+  string: aaproperties  [
+    optional: "Y"
+    default: "Eaa_properties.dat"
+    information: "User defined amino acid properties"
+    prompt: "Enter user defined file of amino acid properties or
+             leave blank"
+  ]
+
+  string: aahydropathy  [
+    optional: "Y"
+    default: "Eaa_hydropathy.dat"
+    information: "User defined hydropathy data"
+    prompt: "Enter user defined file of hydropathy data or leave
+             blank"
+  ]
+
 endsection: advanced
-
-
-
-
-

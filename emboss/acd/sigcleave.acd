@@ -1,63 +1,62 @@
-appl: sigcleave [
+application: sigcleave [
   documentation: "Reports protein signal cleavage sites"
   groups: "Protein:Motifs"
 ]
 
-section: input [ info: "input Section" type: page ]
-seqall: sequence  [
-  parameter: "Y"
-  type: "PureProtein"
+section: input [
+  information: "Input section"
+  type: "page"
 ]
+
+  seqall: sequence  [
+    parameter: "Y"
+    type: "PureProtein"
+  ]
 
 endsection: input
 
-section: required [ info: "required Section" type: page ]
-float: minweight  [
-  required: "Y"
-  minimum: "0."
-  maximum: "100."
-  default: "3.5"
-  information: "Minimum weight"
-  help: "Minimum scoring weight value for the predicted cleavage site"
+section: required [
+  information: "Required section"
+  type: "page"
 ]
+
+  float: minweight  [
+    required: "Y"
+    minimum: "0."
+    maximum: "100."
+    default: "3.5"
+    information: "Minimum weight"
+    help: "Minimum scoring weight value for the predicted cleavage
+           site"
+  ]
 
 endsection: required
 
-section: advanced [ info: "advanced Section" type: page ]
-bool: prokaryote  [
-  optional: "Y"
-  help: "Specifies the sequence is prokaryotic and changes the default scoring data file name"
-  information: "Use prokaryotic cleavage data"
+section: advanced [
+  information: "Advanced section"
+  type: "page"
 ]
 
-#integer: pval  [
-#  required: "N"
-#  minimum: "-13"
-#  maximum: "-1"
-#  default: "-13"
-#  information: "Pval"
-#  help: "Specifies the number of columns before the residue at the cleavage site in the weight matrix table"
-#]
-#
-#integer: nval  [
-#  required: "N"
-#  minimum: "1"
-#  maximum: "@(15+$(pval))"
-#  default: "@(15+$(pval))"
-#  information: "Nval"
-#  help: "specifies the number of columns after the residue at the cleavage site in the weight matrix table"
-#  expected: "Pval+15 (2)"
-#]
+  boolean: prokaryote  [
+    optional: "Y"
+    help: "Specifies the sequence is prokaryotic and changes the
+           default scoring data file name"
+    information: "Use prokaryotic cleavage data"
+  ]
 
 endsection: advanced
 
-section: output [ info: "output Section" type: page ]
-report: outfile  [
-  parameter: "Y"
-  rextension: "sig"
-  rformat: "motif"
-  multiple: "Y"
-  taglist: "str:mature_peptide"
+section: output [
+  information: "Output section"
+  type: "page"
 ]
+
+  report: outfile  [
+    parameter: "Y"
+    rextension: "sig"
+    rformat: "motif"
+    multiple: "Y"
+    taglist: "str:mature_peptide"
+  ]
 
 endsection: output

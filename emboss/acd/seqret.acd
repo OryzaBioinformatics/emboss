@@ -1,32 +1,43 @@
-appl: seqret [
+application: seqret [
   documentation: "Reads and writes (returns) sequences"
   groups: "Edit"
 ]
 
-section: input [ info: "input Section" type: page ]
-bool: feature  [
-  information: "Use feature information"
+section: input [
+  information: "Input section"
+  type: "page"
 ]
 
-seqall: sequence  [
-  parameter: "Y"
-  features: "$(feature)"
-]
+  boolean: feature  [
+    information: "Use feature information"
+  ]
+
+  seqall: sequence  [
+    parameter: "Y"
+    features: "$(feature)"
+  ]
 
 endsection: input
 
-section: advanced [ info: "advanced Section" type: page ]
-bool: firstonly  [
-  information: "Read one sequence and stop"
+section: advanced [
+  information: "Advanced section"
+  type: "page"
 ]
+
+  boolean: firstonly  [
+    information: "Read one sequence and stop"
+  ]
 
 endsection: advanced
 
-section: output [ info: "output Section" type: page ]
-seqoutall: outseq  [
-  parameter: "Y"
-  features: "$(feature)"
+section: output [
+  information: "Output section"
+  type: "page"
 ]
 
-endsection: output
+  seqoutall: outseq  [
+    parameter: "Y"
+    features: "$(feature)"
+  ]
 
+endsection: output

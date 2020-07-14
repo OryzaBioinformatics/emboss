@@ -1,4 +1,4 @@
-appl: testplot [
+application: testplot [
   documentation: "test"
   groups: "Test"
 ]
@@ -11,7 +11,7 @@ integer: points  [
   information: "Number of degrees to plot"
 ]
 
-bool: overlap  [
+boolean: overlap  [
   required: "y"
   default: "y"
   information: "Overlap the graphs"

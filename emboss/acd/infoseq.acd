@@ -1,86 +1,98 @@
-appl: infoseq [
-  documentation: "Displays some simple information about sequences"
+application: infoseq [
+  documentation: "Displays some simple information about
+                  sequences"
   groups: "Information"
 ]
 
-section: input [ info: "input Section" type: page ]
-seqall: sequence  [
-  parameter: "Y"
+section: input [
+  information: "Input section"
+  type: "page"
 ]
+
+  seqall: sequence  [
+    parameter: "Y"
+    type: "gapany"
+  ]
 
 endsection: input
 
-section: output [ info: "output Section" type: page ]
-outfile: outfile  [
-  optional: "Y"
-  default: "stdout"
-  information: "Output sequence details to a file"
-  help: "If you enter the name of a file here then this program will write the sequence details into that file."
+section: output [
+  information: "Output section"
+  type: "page"
 ]
 
-bool: html  [
-  optional: "Y"
-  default: "N"
-  information: "Format output as an HTML table"
-]
+  outfile: outfile  [
+    optional: "Y"
+    default: "stdout"
+    standardtype: "infoseq output"
+    help: "If you enter the name of a file here then this program will
+           write the sequence details into that file."
+  ]
 
-bool: only  [
-  default: "N"
-  information: "Display the specified columns"
-  help: "This is a way of shortening the command line if you only want a few things to be displayed. Instead of specifying: \ '-nohead -noname -noacc -notype -nopgc -nodesc' \ to get only the length output, you can specify \ '-only -length'"
-]
+  boolean: html  [
+    optional: "Y"
+    default: "N"
+    information: "Format output as an HTML table"
+  ]
 
-bool: heading  [
-  default: "@(!$(only))"
-  information: "Display column headings"
-]
+  boolean: only  [
+    default: "N"
+    information: "Display the specified columns"
+    help: "This is a way of shortening the command line if you only
+           want a few things to be displayed. Instead of specifying: \
+           '-nohead -noname -noacc -notype -nopgc -nodesc' \
+           to get only the length output, you can specify \
+           '-only -length'"
+  ]
 
-bool: usa  [
-  default: "@(!$(only))"
-  information: "Display the USA of the sequence"
-]
+  boolean: heading  [
+    default: "@(!$(only))"
+    information: "Display column headings"
+  ]
 
-bool: name  [
-  default: "@(!$(only))"
-  information: "Display 'name' column"
-]
+  boolean: usa  [
+    default: "@(!$(only))"
+    information: "Display the USA of the sequence"
+  ]
 
-bool: accession  [
-  default: "@(!$(only))"
-  information: "Display 'accession' column"
-]
+  boolean: name  [
+    default: "@(!$(only))"
+    information: "Display 'name' column"
+  ]
 
-bool: gi  [
-  required: "N"
-  default: "N"
-  information: "Display 'GI' column"
-]
+  boolean: accession  [
+    default: "@(!$(only))"
+    information: "Display 'accession' column"
+  ]
 
-bool: version [
-  required: "N"
-  default: "N"
-  information: "Display 'version' column"
-]
+  boolean: gi  [
+    default: "N"
+    information: "Display 'GI' column"
+  ]
 
-bool: type  [
-  default: "@(!$(only))"
-  information: "Display 'type' column"
-]
+  boolean: version  [
+    default: "N"
+    information: "Display 'version' column"
+  ]
 
-bool: length  [
-  default: "@(!$(only))"
-  information: "Display 'length' column"
-]
+  boolean: type  [
+    default: "@(!$(only))"
+    information: "Display 'type' column"
+  ]
 
-bool: pgc  [
-  default: "@(!$(only))"
-  information: "Display 'percent GC content' column"
-]
+  boolean: length  [
+    default: "@(!$(only))"
+    information: "Display 'length' column"
+  ]
 
-bool: description  [
-  default: "@(!$(only))"
-  information: "Display 'description' column"
-]
+  boolean: pgc  [
+    default: "@(!$(only))"
+    information: "Display 'percent GC content' column"
+  ]
+
+  boolean: description  [
+    default: "@(!$(only))"
+    information: "Display 'description' column"
+  ]
 
 endsection: output
-

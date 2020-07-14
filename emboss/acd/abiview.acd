@@ -1,74 +1,80 @@
-appl: abiview [
+application: abiview [
   documentation: "Reads ABI file and display the trace"
   groups: "Display"
 ]
 
-section: input [ info: "input Section" type: page ]
-infile: fname  [
-  parameter: "Y"
-  default: ""
-  information: "Name of the ABI trace file"
+section: input [
+  information: "Input section"
+  type: "page"
 ]
+
+  infile: infile  [
+    parameter: "Y"
+    default: ""
+    information: "ABI trace file"
+    standardtype: "abi trace"
+  ]
 
 endsection: input
 
-section: output [ info: "output Section" type: page ]
-seqout: outseq  [
-  parameter: "Y"
-  information: "Sequence file"
+section: output [
+  information: "Output section"
+  type: "page"
 ]
 
-xygraph: graph  [
-  required: "Y"
-  optional: "N"
-  gxtitle: "Residue Position"
-]
+  seqout: outseq  [
+    parameter: "Y"
+    type: "dna"
+  ]
 
-integer: startbase [
-  optional: "Y"
-  default:  "0"
-  minimum:  "0"
-  information: "First base to report or display"
-]
+  xygraph: graph  [
+    required: "Y"
+    gxtitle: "Residue Position"
+  ]
 
-integer: endbase [
-  optional: "Y"
-  default:  "0"
-  information: "Last base to report or display"
-  help: "Last sequence base to report or display.
-If the default is set to zero then the value of this 
-is taken as the maximum number of bases."
-] 
+  integer: startbase  [
+    optional: "Y"
+    default: "0"
+    minimum: "0"
+    information: "First base to report or display"
+  ]
 
-bool: separate  [
-  required: "N"
-  default: "N"
-  information: "Separate the trace graphs for the 4 bases"
-]
+  integer: endbase  [
+    optional: "Y"
+    default: "0"
+    information: "Last base to report or display"
+    help: "Last sequence base to report or display. If the default is
+           set to zero then the value of this is taken as the maximum number
+           of bases."
+  ]
 
-bool: yticks  [
-  optional: "Y"
-  default: "N"
-  information: "Display y-axis ticks"
-]
+  boolean: separate  [
+    default: "N"
+    information: "Separate the trace graphs for the 4 bases"
+  ]
 
-bool: sequence  [
-  optional: "Y"
-  default: "Y"
-  information: "Display the sequence on the graph"
-]
+  boolean: yticks  [
+    optional: "Y"
+    default: "N"
+    information: "Display y-axis ticks"
+  ]
 
-integer: window  [
-  optional: "Y"
-  default: "40"
-  information: "Sequence display window size"
-]
+  boolean: sequence  [
+    optional: "Y"
+    default: "Y"
+    information: "Display the sequence on the graph"
+  ]
 
-string: bases  [
-  optional: "Y"
-  default: "GATC"
-  information: "Base graphs to be displayed"
-]
+  integer: window  [
+    optional: "Y"
+    default: "40"
+    information: "Sequence display window size"
+  ]
+
+  string: bases  [
+    optional: "Y"
+    default: "GATC"
+    information: "Base graphs to be displayed"
+  ]
 
 endsection: output
-

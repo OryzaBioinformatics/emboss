@@ -1,5 +1,6 @@
-appl: complex [
-  documentation: "Find the linguistic complexity in nucleotide sequences"
+application: complex [
+  documentation: "Find the linguistic complexity in
+                  nucleotide sequences"
   groups: "Nucleic:Composition"
 ]
 
@@ -8,7 +9,7 @@ seqall: sequence  [
   type: "dna"
 ]
 
-bool: omnia  [
+boolean: omnia  [
   default: "N"
   information: "All sequences"
   help: "calculate over a set of sequences"
@@ -34,10 +35,10 @@ integer: step  [
 ]
 
 integer: sim  [
-  required: "N"
   default: "0"
   information: "Simulations"
-  help: "calculate the linguistic complexity by comparison with a number of simulations having a uniform distribution of bases"
+  help: "calculate the linguistic complexity by comparison with a
+         number of simulations having a uniform distribution of bases"
 ]
 
 integer: jmin  [
@@ -58,16 +59,18 @@ integer: jmax  [
   help: ""
 ]
 
-bool: freq  [
+boolean: freq  [
   default: "N"
   information: "Calculate frequency"
-  help: "execute the simulation of a sequence based on the base frequency of the original sequence"
+  help: "execute the simulation of a sequence based on the base
+         frequency of the original sequence"
 ]
 
-bool: print  [
+boolean: print  [
   default: "N"
   information: "Print to file"
-  help: "generate a file named UjTable containing the values of Uj for each word j in the real sequence(s) and in any simulated sequences"
+  help: "generate a file named UjTable containing the values of Uj for
+         each word j in the real sequence(s) and in any simulated sequences"
 ]
 
 outfile: outfile  [

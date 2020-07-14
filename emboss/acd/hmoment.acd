@@ -1,62 +1,71 @@
-appl: hmoment [
+application: hmoment [
   documentation: "Hydrophobic moment calculation"
   groups: "Protein:2D Structure"
 ]
 
-section: input [ info: "input Section" type: page ]
-seqall: seqall  [
-  parameter: "Y"
-  type: "pureprotein"
+section: input [
+  information: "Input section"
+  type: "page"
 ]
+
+  seqall: seqall  [
+    parameter: "Y"
+    type: "pureprotein"
+  ]
 
 endsection: input
 
-section: advanced [ info: "advanced Section" type: page ]
-integer: window  [
-  optional: "Y"
-  default: "10"
-  information: "Window"
+section: advanced [
+  information: "Advanced section"
+  type: "page"
 ]
 
-integer: aangle  [
-  optional: "N"
-  default: "100"
-  information: "Alpha helix angle (degrees)"
-]
+  integer: window  [
+    optional: "Y"
+    default: "10"
+    information: "Window"
+  ]
 
-integer: bangle  [
-  optional: "Y"
-  default: "160"
-  information: "Beta sheet angle (degrees)"
-]
+  integer: aangle  [
+    default: "100"
+    information: "Alpha helix angle (degrees)"
+  ]
 
-float: baseline  [
-  optional: "N"
-  default: "0.35"
-  information: "Graph marker line"
-]
+  integer: bangle  [
+    optional: "Y"
+    default: "160"
+    information: "Beta sheet angle (degrees)"
+  ]
+
+  float: baseline  [
+    default: "0.35"
+    information: "Graph marker line"
+  ]
 
 endsection: advanced
 
-section: output [ info: "output Section" type: page ]
-bool: plot  [
-  optional: "N"
-  default: "N"
-  information: "Produce graphic"
+section: output [
+  information: "Output section"
+  type: "page"
 ]
 
-bool: double  [
-  optional: "N"
-  default: "N"
-  information: "Plot two graphs"
-]
+  boolean: plot  [
+    default: "N"
+    information: "Produce graphic"
+  ]
 
-xygraph: graph  [
-  required: "$(plot)"
-]
+  boolean: double  [
+    default: "N"
+    information: "Plot two graphs"
+  ]
 
-outfile: outfile  [
-  required: "@(!$(plot))"
-]
+  xygraph: graph  [
+    required: "$(plot)"
+  ]
+
+  outfile: outfile  [
+    required: "@(!$(plot))"
+    standardtype: "hmoment output"
+  ]
 
 endsection: output

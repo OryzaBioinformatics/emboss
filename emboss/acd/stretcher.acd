@@ -1,56 +1,72 @@
-appl: stretcher [
-  documentation: "Finds the best global alignment between two sequences"
+application: stretcher [
+  documentation: "Finds the best global alignment between two
+                  sequences"
   groups: "Alignment:Global"
 ]
 
-section: input [ info: "input Section" type: page ]
-sequence: sequencea  [
-  parameter: "Y"
-  type: "any"
+section: input [
+  information: "Input section"
+  type: "page"
 ]
 
-sequence: sequenceb  [
-  parameter: "Y"
-  type: "@($(sequencea.protein) ? stopprotein : nucleotide)"
-]
+  sequence: asequence  [
+    parameter: "Y"
+    type: "any"
+  ]
+
+  sequence: bsequence  [
+    parameter: "Y"
+    type: "@($(asequence.protein) ? stopprotein : nucleotide)"
+  ]
 
 endsection: input
 
-section: advanced [ info: "advanced Section" type: page ]
-matrix: datafile  [
-  optional: "Y"
-  information: "Matrix file"
-  protein: "$(sequencea.protein)"
-  help: "This is the scoring matrix file used when comparing sequences.  By default it is the file 'EBLOSUM62' (for proteins) or the file 'EDNAFULL' (for nucleic sequences).  These files are found in the 'data' directory of the EMBOSS installation."
+section: advanced [
+  information: "Advanced section"
+  type: "page"
 ]
 
-integer: gappenalty  [
-  optional: "Y"
-  information: "Gap penalty"
-  default: "@($(sequencea.protein)? 12 : 16)"
-  minimum: "0"
-  valid: "Positive integer"
-  expected: "12 for protein, 16 for nucleic"
-]
+  matrix: datafile  [
+    optional: "Y"
+    information: "Matrix file"
+    protein: "$(asequence.protein)"
+    help: "This is the scoring matrix file used when comparing
+           sequences. By default it is the file 'EBLOSUM62' (for proteins) or
+           the file 'EDNAFULL' (for nucleic sequences). These files are
+           found in the 'data' directory of the EMBOSS installation."
+  ]
 
-integer: gaplength  [
-  optional: "Y"
-  information: "Gap length penalty"
-  default: "@($(sequencea.protein)? 2 : 4)"
-  minimum: "0"
-  valid: "Positive integer"
-  expected: "2 for protein, 4 for nucleic"
-]
+  integer: gappenalty  [
+    optional: "Y"
+    information: "Gap penalty"
+    default: "@($(asequence.protein)? 12 : 16)"
+    minimum: "0"
+    valid: "Positive integer"
+    expected: "12 for protein, 16 for nucleic"
+  ]
+
+  integer: gaplength  [
+    optional: "Y"
+    information: "Gap length penalty"
+    default: "@($(asequence.protein)? 2 : 4)"
+    minimum: "0"
+    valid: "Positive integer"
+    expected: "2 for protein, 4 for nucleic"
+  ]
 
 endsection: advanced
 
-section: output [ info: "output Section" type: page ]
-align: outfile  [
-  parameter: "Y"
-  aformat: "markx0"
-  minseqs: "2"
-  maxseqs: "2"
-  aglobal: "Y"
+section: output [
+  information: "Output section"
+  type: "page"
 ]
+
+  align: outfile  [
+    parameter: "Y"
+    aformat: "markx0"
+    minseqs: "2"
+    maxseqs: "2"
+    aglobal: "Y"
+  ]
 
 endsection: output

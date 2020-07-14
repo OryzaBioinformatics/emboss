@@ -1,76 +1,112 @@
-appl: primers [
-  documentation: "Simple version of primer3 to pick PCR primers"
+application: primers [
+  documentation: "Simple version of primer3 to pick PCR
+                  primers"
   groups: "Nucleic:Primers"
+  external: "primer3_core"
 ]
 
-section: input  [ info: "input Section" type: page ]
-
-seqall: sequence  [
-  parameter: "Y"
-  type: "dna"
-  help: "The sequence from which to choose primers. The sequence must be presented 5' -> 3'"
+section: input [
+  information: "Input section"
+  type: "page"
 ]
 
-endsection:  input
+  seqall: sequence  [
+    parameter: "Y"
+    type: "dna"
+    help: "The sequence from which to choose primers. The sequence
+           must be presented 5' -> 3'"
+  ]
 
-section: required  [ info: "required Section" type: page ]
+endsection: input
 
-range: target  [
-  optional: "Y"
-  default: ""
-  information: "Target region(s)"
-  help: "If one or more Targets is specified then a legal primer pair must flank at least one of them. A Target might be a simple sequence repeat site (for example a CA repeat) or a single-base-pair polymorphism. The value should be a space-separated list of \ <start>,<end> \ pairs where <start> is the index of the first base of a Target, and <end> is the last \ E.g. 50,51 requires primers to surround the 2 bases at positions 50 and 51."
+section: required [
+  information: "Required section"
+  type: "page"
 ]
 
-endsection:  required
+  range: target  [
+    optional: "Y"
+    default: ""
+    information: "Target region(s)"
+    help: "If one or more Targets is specified then a legal primer
+           pair must flank at least one of them. A Target might be a simple
+           sequence repeat site (for example a CA repeat) or a
+           single-base-pair polymorphism. The value should be a
+           space-separated list of \
+           <start>,<end> \
+           pairs where <start> is the index of the first base of a Target,
+           and <end> is the last \
+           E.g. 50,51 requires primers to surround the 2 bases at positions
+           50 and 51."
+  ]
 
-section: advanced  [ info: "advanced section"  type: page ]
+endsection: required
 
-integer: minsize  [
-  optional: "Y"
-  default: "18"
-  minimum: "1"
-  information: "Primer minimum size"
-  help: "Minimum acceptable length of a primer. Must be greater than 0 and less than or equal to MAX-SIZE."
+section: advanced [
+  information: "advanced section"
+  type: "page"
 ]
 
-integer: maxsize  [
-  optional: "Y"
-  default: "27"
-  minimum: "$(MinSize)"
-  maximum: "35"
-  information: "Primer maximum size"
-  help: "Maximum acceptable length (in bases) of a primer. Currently this parameter cannot be larger than 35. This limit is governed by the maximum oligo size for which Primer3's melting-temperature is valid."
+  integer: minsize  [
+    optional: "Y"
+    default: "18"
+    minimum: "1"
+    information: "Primer minimum size"
+    help: "Minimum acceptable length of a primer. Must be greater than
+           0 and less than or equal to MAX-SIZE."
+  ]
+
+  integer: maxsize  [
+    optional: "Y"
+    default: "27"
+    minimum: "$(MinSize)"
+    maximum: "35"
+    information: "Primer maximum size"
+    help: "Maximum acceptable length (in bases) of a primer. Currently
+           this parameter cannot be larger than 35. This limit is governed
+           by the maximum oligo size for which Primer3's melting-temperature
+           is valid."
+  ]
+
+  float: maxdifftm  [
+    optional: "Y"
+    default: "100.0"
+    information: "Maximum difference in Tm of primers"
+    help: "Maximum acceptable (unsigned) difference between the
+           melting temperatures of the forward and reverse primers."
+  ]
+
+endsection: advanced
+
+section: output [
+  information: "Output section"
+  type: "page"
 ]
 
-float: maxdifftm  [
-  optional: "Y"
-  default: "100.0"
-  information: "Maximum difference in Tm of primers"
-  help: "Maximum acceptable (unsigned) difference between the melting temperatures of the forward and reverse primers."
-]
+  boolean: explainflag  [
+    optional: "Y"
+    default: "N"
+    information: "Explain flag"
+    help: "If this flag is non-0, produce LEFT-EXPLAIN and
+           RIGHT-EXPLAIN, output, which are intended to provide information
+           on the number of primer pairs that Primer3 examined, and
+           statistics on the number discarded for various reasons."
+  ]
 
-endsection:  advanced
+  integer: numreturn  [
+    optional: "Y"
+    default: "5"
+    minimum: "0"
+    information: "Number of results to return"
+    help: "The maximum number of primer pairs to return. Primer pairs
+           returned are sorted by their 'quality', in other words by the
+           value of the objective function (where a lower number indicates a
+           better primer pair). Caution: setting this parameter to a large
+           value will increase running time."
+  ]
 
-section: output  [ info: "output Section" type: page ]
+  outfile: outfile  [
+    parameter: "Y"
+  ]
 
-bool: explainflag  [
-  optional: "Y"
-  default: "N"
-  information: "Explain flag"
-  help: "If this flag is non-0, produce LEFT-EXPLAIN and RIGHT-EXPLAIN, output, which are intended to provide information on the number of primer pairs that Primer3 examined, and statistics on the number discarded for various reasons."
-]
-
-integer: numreturn  [
-  optional: "Y"
-  default: "5"
-  minimum: "0"
-  information: "Number of results to return"
-  help: "The maximum number of primer pairs to return. Primer pairs returned are sorted by their 'quality', in other words by the value of the objective function (where a lower number indicates a better primer pair). Caution: setting this parameter to a large value will increase running time."
-]
-
-outfile: outfile  [
-  parameter: "Y"
-]
-
-endsection:  output
+endsection: output

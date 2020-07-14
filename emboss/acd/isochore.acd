@@ -1,43 +1,56 @@
-appl: isochore [
+application: isochore [
   documentation: "Plots isochores in large DNA sequences"
   groups: "Nucleic:Composition"
 ]
 
-section: input [ info: "input Section" type: page ]
-sequence: sequence  [
-  parameter: "Y"
-  type: "dna"
+section: input [
+  information: "Input section"
+  type: "page"
 ]
+
+  sequence: sequence  [
+    parameter: "Y"
+    type: "dna"
+  ]
 
 endsection: input
 
-section: advanced [ info: "advanced Section" type: page ]
-integer: window  [
-  optional: "Y"
-  default: "1000"
-  minimum: "1"
-  maximum: "@($(sequence.end)/2)"
-  information: "Window size"
+section: advanced [
+  information: "Advanced section"
+  type: "page"
 ]
 
-integer: shift  [
-  optional: "Y"
-  default: "100"
-  minimum: "1"
-  maximum: "@($(sequence.end)/10)"
-  information: "Shift increment"
-]
+  integer: window  [
+    optional: "Y"
+    default: "1000"
+    minimum: "1"
+    maximum: "@($(sequence.end)/2)"
+    information: "Window size"
+  ]
+
+  integer: shift  [
+    optional: "Y"
+    default: "100"
+    minimum: "1"
+    maximum: "@($(sequence.end)/10)"
+    information: "Shift increment"
+  ]
 
 endsection: advanced
 
-section: output [ info: "output Section" type: page ]
-outfile: out  [
-  parameter: "Y"
-  extension: "iso"
+section: output [
+  information: "Output section"
+  type: "page"
 ]
 
-xygraph: graph  [
-  required: "Y"
-]
+  outfile: outfile  [
+    parameter: "Y"
+    extension: "iso"
+    standardtype: "isochore output"
+  ]
+
+  xygraph: graph  [
+    required: "Y"
+  ]
 
 endsection: output

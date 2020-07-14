@@ -1,43 +1,53 @@
-appl: recoder [
-  documentation: "Remove restriction sites but maintain the same translation"
+application: recoder [
+  documentation: "Remove restriction sites but maintain the
+                  same translation"
   groups: "Nucleic:Restriction"
 ]
 
-section: input [ info: "input Section" type: page ]
-sequence: seq  [
-  parameter: "Y"
-  information: "Nucleic acid sequence"
-  type: "DNA"
+section: input [
+  information: "Input section"
+  type: "page"
 ]
+
+  sequence: seq  [
+    parameter: "Y"
+    information: "Nucleic acid sequence"
+    type: "DNA"
+  ]
 
 endsection: input
 
-section: required [ info: "required Section" type: page ]
-string: enzymes  [
-  required: "Y"
-  default: "all"
-  information: "Comma separated enzyme list"
+section: required [
+  information: "Required section"
+  type: "page"
 ]
+
+  string: enzymes  [
+    required: "Y"
+    default: "all"
+    information: "Comma separated enzyme list"
+  ]
 
 endsection: required
 
-section: output [ info: "output Section" type: page ]
-bool: sshow  [
-  required: "N"
-  default: "N"
-  information: "Display untranslated sequence"
+section: output [
+  information: "Output section"
+  type: "page"
 ]
 
-bool: tshow  [
-  required: "N"
-  default: "N"
-  information: "Display translated sequence"
-]
+  boolean: sshow  [
+    default: "N"
+    information: "Display untranslated sequence"
+  ]
 
-outfile: outf  [
-  parameter: "Y"
-  information: "Results file name"
-]
+  boolean: tshow  [
+    default: "N"
+    information: "Display translated sequence"
+  ]
+
+  outfile: outf  [
+    parameter: "Y"
+    information: "Results file name"
+  ]
 
 endsection: output
-

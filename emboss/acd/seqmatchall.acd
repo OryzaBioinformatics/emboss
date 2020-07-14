@@ -1,30 +1,42 @@
-appl: seqmatchall [
-  documentation: "Does an all-against-all comparison of a set of sequences"
+application: seqmatchall [
+  documentation: "Does an all-against-all comparison of a set
+                  of sequences"
   groups: "Alignment:Local"
 ]
 
-section: input [ info: "input Section" type: page ]
-seqset: sequence  [
-  parameter: "Y"
-  type: "any"
+section: input [
+  information: "Input section"
+  type: "page"
 ]
+
+  seqset: sequence  [
+    parameter: "Y"
+    type: "any"
+  ]
 
 endsection: input
 
-section: required [ info: "required Section" type: page ]
-integer: wordsize  [
-  required: "Y"
-  default: "4"
-  minimum: "2"
-  information: "Word size"
+section: required [
+  information: "Required section"
+  type: "page"
 ]
+
+  integer: wordsize  [
+    required: "Y"
+    default: "4"
+    minimum: "2"
+    information: "Word size"
+  ]
 
 endsection: required
 
-section: output [ info: "output Section" type: page ]
-outfile: outfile  [
-  parameter: "Y"
+section: output [
+  information: "Output section"
+  type: "page"
 ]
 
-endsection: output
+  outfile: outfile  [
+    parameter: "Y"
+  ]
 
+endsection: output

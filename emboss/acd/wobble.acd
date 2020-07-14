@@ -1,41 +1,51 @@
-appl: wobble [
+application: wobble [
   documentation: "Wobble base plot"
   groups: "Nucleic:Gene finding"
 ]
 
-section: input [ info: "input Section" type: page ]
-sequence: sequence  [
-  parameter: "Y"
-  type: "dna"
+section: input [
+  information: "Input section"
+  type: "page"
 ]
+
+  sequence: sequence  [
+    parameter: "Y"
+    type: "dna"
+  ]
 
 endsection: input
 
-section: advanced [ info: "advanced Section" type: page ]
-string: bases  [
-  optional: "N"
-  default: "GC"
-  information: "Bases used"
+section: advanced [
+  information: "Advanced section"
+  type: "page"
 ]
 
-integer: window  [
-  optional: "Y"
-  default: "30"
-  minimum: "1"
-  information: "Window size in codons"
-]
+  string: bases  [
+    default: "GC"
+    information: "Bases used"
+  ]
+
+  integer: window  [
+    optional: "Y"
+    default: "30"
+    minimum: "1"
+    information: "Window size in codons"
+  ]
 
 endsection: advanced
 
-section: output [ info: "output Section" type: page ]
-xygraph: graph  [
-  required: "Y"
-  multiple: "6"
+section: output [
+  information: "Output section"
+  type: "page"
 ]
 
-outfile: outf  [
-  required: "Y"
-]
+  xygraph: graph  [
+    required: "Y"
+    multiple: "6"
+  ]
+
+  outfile: outf  [
+    required: "Y"
+  ]
 
 endsection: output
-

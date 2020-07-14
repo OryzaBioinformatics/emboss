@@ -1,156 +1,223 @@
-appl: showalign [
+application: showalign [
   documentation: "Displays a multiple sequence alignment"
   groups: "Alignment:Multiple, Display"
 ]
 
-section: input [ info: "input Section" type: page ]
-seqset: sequence  [
-  parameter: "Y"
-  type: "gapany"
-  help: "The sequence alignment to be displayed."
+section: input [
+  information: "Input section"
+  type: "page"
 ]
+
+  seqset: sequence  [
+    parameter: "Y"
+    type: "gapany"
+    help: "The sequence alignment to be displayed."
+  ]
 
 endsection: input
 
-section: advanced [ info: "advanced Section" type: page ]
-string: refseq  [
-  optional: "Y"
-  default: "0"
-  information: "The number or the name of the reference sequence"
-  help: "If you give the number in the alignment or the name of a sequence, it will be taken to be the reference sequence. The reference sequence is always show in full and is the one against which all the other sequences are compared. If this is set to 0 then the consensus sequence will be used as the reference sequence. By default the consensus sequence is used as the reference sequence."
+section: advanced [
+  information: "Advanced section"
+  type: "page"
 ]
 
-bool: bottom  [
-  optional: "Y"
-  default: "Y"
-  information: "Display the reference sequence at the bottom"
-  help: "If this is true then the refernce sequence is displayed at the bottom of the alignment as well as at the top."
-]
+  string: refseq  [
+    optional: "Y"
+    default: "0"
+    information: "The number or the name of the reference
+                  sequence"
+    help: "If you give the number in the alignment or the name of a
+           sequence, it will be taken to be the reference sequence. The
+           reference sequence is always show in full and is the one against
+           which all the other sequences are compared. If this is set to 0
+           then the consensus sequence will be used as the reference
+           sequence. By default the consensus sequence is used as the
+           reference sequence."
+  ]
 
-list: show  [
-  optional: "Y"
-  default: "N"
-  minimum: "1"
-  maximum: "1"
-  header: "What to show"
-  values: "A:All of the sequences, I:Identities between the sequences, N:Non-identities between the sequences, S:Similarities between the sequences, D:Dissimilarities between the sequences"
-  delimiter: ","
-  codedelimiter: ":"
-  information: "What to show"
-]
+  boolean: bottom  [
+    optional: "Y"
+    default: "Y"
+    information: "Display the reference sequence at the bottom"
+    help: "If this is true then the refernce sequence is displayed at
+           the bottom of the alignment as well as at the top."
+  ]
 
-list: order  [
-  optional: "Y"
-  default: "I"
-  minimum: "1"
-  maximum: "1"
-  header: "Output order of the sequences"
-  values: "I:Input order - no change, A:Alphabetical order of the names, S:Similarity to the reference sequence"
-  delimiter: ","
-  codedelimiter: ":"
-  information: "Output order of the sequences"
-]
+  list: show  [
+    optional: "Y"
+    default: "N"
+    minimum: "1"
+    maximum: "1"
+    header: "What to show"
+    values: "A:All of the sequences, I:Identities between the
+             sequences, N:Non-identities between the sequences,
+             S:Similarities between the sequences, D:Dissimilarities between
+             the sequences"
+    delimiter: ","
+    codedelimiter: ":"
+    information: "What to show"
+  ]
 
-bool: similarcase  [
-  optional: "Y"
-  default: "Y"
-  information: "Show similar residues in lower-case"
-  help: "If this is set True, then when -show is set to 'Similarities' or 'Non-identities' and a residue is similar but not identical to the reference sequence residue, it will be changed to lower-case. If -show is set to 'All' then non-identical, non-similar residues will be changed to lower-case. If this is False then no change to the case of the residues is made on the basis of their similarity to the reference sequence."
-]
+  list: order  [
+    optional: "Y"
+    default: "I"
+    minimum: "1"
+    maximum: "1"
+    header: "Output order of the sequences"
+    values: "I:Input order - no change, A:Alphabetical order of the
+             names, S:Similarity to the reference sequence"
+    delimiter: ","
+    codedelimiter: ":"
+    information: "Output order of the sequences"
+  ]
 
-matrix: matrix  [
-  optional: "Y"
-  information: "Similarity scoring Matrix file"
-  protein: "$(sequence.protein)"
-  help: "This is the scoring matrix file used when comparing sequences.  By default it is the file 'EBLOSUM62' (for proteins) or the file 'EDNAFULL' (for nucleic sequences).  These files are found in the 'data' directory of the EMBOSS installation."
-]
+  boolean: similarcase  [
+    optional: "Y"
+    default: "Y"
+    information: "Show similar residues in lower-case"
+    help: "If this is set True, then when -show is set to
+           'Similarities' or 'Non-identities' and a residue is similar but
+           not identical to the reference sequence residue, it will be
+           changed to lower-case. If -show is set to 'All' then
+           non-identical, non-similar residues will be changed to lower-case.
+           If this is False then no change to the case of the residues is
+           made on the basis of their similarity to the reference sequence."
+  ]
 
-range: uppercase  [
-  default: ""
-  information: "Regions to put in uppercase (eg: 4-57,78-94)"
-  help: "Regions to put in uppercase. \ If this is left blank, then the sequence case is left alone. \ A set of regions is specified by a set of pairs of positions. \ The positions are integers. \ They are separated by any non-digit, non-alpha character. \ Examples of region specifications are: \ 24-45, 56-78 \ 1:45, 67=99;765..888 \ 1,5,8,10,23,45,57,99"
-  expected: "If this is left blank, then the sequence case is left alone."
-]
+  matrix: matrix  [
+    optional: "Y"
+    information: "Similarity scoring Matrix file"
+    protein: "$(sequence.protein)"
+    help: "This is the scoring matrix file used when comparing
+           sequences. By default it is the file 'EBLOSUM62' (for proteins) or
+           the file 'EDNAFULL' (for nucleic sequences). These files are
+           found in the 'data' directory of the EMBOSS installation."
+  ]
 
-bool: number  [
-  default: "Y"
-  information: "Number the sequences"
-  help: "If this option is true then a line giving the positions in the alignment is displayed every 10 characters above the alignment."
-]
+  range: uppercase  [
+    default: ""
+    information: "Regions to put in uppercase (eg: 4-57,78-94)"
+    help: "Regions to put in uppercase. \
+           If this is left blank, then the sequence case is left alone. \
+           A set of regions is specified by a set of pairs of positions. \
+           The positions are integers. \
+           They are separated by any non-digit, non-alpha character. \
+           Examples of region specifications are: \
+           24-45, 56-78 \
+           1:45, 67=99;765..888 \
+           1,5,8,10,23,45,57,99"
+    expected: "If this is left blank, then the sequence case is
+               left alone."
+  ]
 
-bool: ruler  [
-  default: "Y"
-  information: "Display ruler"
-  help: "If this option is true then a ruler line marking every 5th and 10th character in the alignment is displayed."
-]
+  boolean: number  [
+    default: "Y"
+    information: "Number the sequences"
+    help: "If this option is true then a line giving the positions in
+           the alignment is displayed every 10 characters above the
+           alignment."
+  ]
 
-integer: width  [
-  default: "60"
-  minimum: "1"
-  information: "Width of sequence to display"
-]
+  boolean: ruler  [
+    default: "Y"
+    information: "Display ruler"
+    help: "If this option is true then a ruler line marking every 5th
+           and 10th character in the alignment is displayed."
+  ]
 
-integer: margin  [
-  default: "-1"
-  minimum: "-1"
-  information: "Length of margin for sequence names"
-  help: "This sets the length of the left-hand margin for sequence names. If the margin is set at 0 then no margin and no names are displayed. If the margin is set to a value that is less than the length of a sequence name then the sequence name is displayed truncated to the length of the margin. If the margin is set to -1 then the minimum margin width that will allow all the sequence names to be displayed in full plus a space at the end of the name will automatically be selected."
-]
+  integer: width  [
+    default: "60"
+    minimum: "1"
+    information: "Width of sequence to display"
+  ]
 
-#bool: names  [
-#  default: "Y"
-#  information: "Show sequence IDs"
-#  help: "Set this to be false if you do not wish to display the ID name of the sequences"
-#]
+  integer: margin  [
+    default: "-1"
+    minimum: "-1"
+    information: "Length of margin for sequence names"
+    help: "This sets the length of the left-hand margin for sequence
+           names. If the margin is set at 0 then no margin and no names are
+           displayed. If the margin is set to a value that is less than the
+           length of a sequence name then the sequence name is displayed
+           truncated to the length of the margin. If the margin is set to -1
+           then the minimum margin width that will allow all the sequence
+           names to be displayed in full plus a space at the end of the name
+           will automatically be selected."
+  ]
 
-bool: html  [
-  default: "N"
-  information: "Use HTML formatting"
-]
+  boolean: html  [
+    default: "N"
+    information: "Use HTML formatting"
+  ]
 
-range: highlight  [
-  default: ""
-  information: "Regions to colour in HTML (eg: 4-57 red 78-94 green)"
-  help: "Regions to colour if formatting for HTML. \ If this is left blank, then the sequence is left alone. \ A set of regions is specified by a set of pairs of positions. \ The positions are integers. \ They are followed by any valid HTML font colour. \ Examples of region specifications are: \ 24-45 blue 56-78 orange \ 1-100 green 120-156 red \ A file of ranges to colour (one range per line) can be specified as '@filename'."
-]
+  range: highlight  [
+    default: ""
+    information: "Regions to colour in HTML (eg: 4-57 red 78-94
+                  green)"
+    help: "Regions to colour if formatting for HTML. \
+           If this is left blank, then the sequence is left alone. \
+           A set of regions is specified by a set of pairs of positions. \
+           The positions are integers. \
+           They are followed by any valid HTML font colour. \
+           Examples of region specifications are: \
+           24-45 blue 56-78 orange \
+           1-100 green 120-156 red \
+           A file of ranges to colour (one range per line) can be specified
+           as '@filename'."
+  ]
 
-float: plurality  [
-  default: "50.0"
-  minimum: "0.0"
-  maximum: "100.0"
-  information: "Plurality check % for consensus"
-  help: "Set a cut-off for the % of positive scoring matches below which there is no consensus. The default plurality is taken as 50% of the total weight of all the sequences in the alignment."
-]
+  float: plurality  [
+    default: "50.0"
+    minimum: "0.0"
+    maximum: "100.0"
+    information: "Plurality check % for consensus"
+    help: "Set a cut-off for the % of positive scoring matches below
+           which there is no consensus. The default plurality is taken as 50%
+           of the total weight of all the sequences in the alignment."
+  ]
 
-float: setcase  [
-  default: "0"
-  information: "Threshold above which the consensus is given in uppercase"
-  help: "Sets the threshold for the scores of the positive matches above which the consensus is is upper-case and below which the consensus is in lower-case."
-]
+  float: setcase  [
+    default: "0"
+    information: "Threshold above which the consensus is given
+                  in uppercase"
+    help: "Sets the threshold for the scores of the positive matches
+           above which the consensus is is upper-case and below which the
+           consensus is in lower-case."
+  ]
 
-float: identity  [
-  default: "0.0"
-  minimum: "0.0"
-  maximum: "100.0"
-  information: "Required % of identities at a position fro consensus"
-  help: "Provides the facility of setting the required number of identities at a position for it to give a consensus. Therefore, if this is set to 100% only columns of identities contribute to the consensus."
-]
+  float: identity  [
+    default: "0.0"
+    minimum: "0.0"
+    maximum: "100.0"
+    information: "Required % of identities at a position fro
+                  consensus"
+    help: "Provides the facility of setting the required number of
+           identities at a position for it to give a consensus. Therefore, if
+           this is set to 100% only columns of identities contribute to the
+           consensus."
+  ]
 
-bool: consensus  [
-  optional: "Y"
-  default: "Y"
-  information: "Display the consensus line"
-  help: "If this is true then the consensus line is displayed at the bottom."
-]
+  boolean: consensus  [
+    optional: "Y"
+    default: "Y"
+    information: "Display the consensus line"
+    help: "If this is true then the consensus line is displayed at the
+           bottom."
+  ]
+
 endsection: advanced
 
-section: output [ info: "output Section" type: page ]
-outfile: outfile  [
-  parameter: "Y"
-  extension: "showalign"
-#  default: "stdout"
-  information: "Output sequence details to a file"
-  help: "If you enter the name of a file here then this program will write the sequence details into that file."
+section: output [
+  information: "Output section"
+  type: "page"
 ]
+
+  outfile: outfile  [
+    parameter: "Y"
+    extension: "showalign"
+    information: "Output sequence details to a file"
+    help: "If you enter the name of a file here then this program will
+           write the sequence details into that file."
+  ]
 
 endsection: output

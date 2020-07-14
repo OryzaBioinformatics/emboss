@@ -1,64 +1,77 @@
-appl: prettyseq [
+application: prettyseq [
   documentation: "Output sequence with translated ranges"
   groups: "Display, Nucleic:Translation"
 ]
 
-section: input [ info: "input Section" type: page ]
-sequence: sequence  [
-  parameter: "Y"
-  type: "DNA"
+section: input [
+  information: "Input section"
+  type: "page"
 ]
+
+  sequence: sequence  [
+    parameter: "Y"
+    type: "DNA"
+  ]
 
 endsection: input
 
-section: required [ info: "required Section" type: page ]
-range: range  [
-  required: "Y"
-  information: "Range(s) to translate"
-  default: "$(sequence.begin)-$(sequence.end)"
-  expected: "Whole sequence"
+section: required [
+  information: "Required section"
+  type: "page"
 ]
+
+  range: range  [
+    required: "Y"
+    information: "Range(s) to translate"
+    default: "$(sequence.begin)-$(sequence.end)"
+    expected: "Whole sequence"
+  ]
 
 endsection: required
 
-section: advanced [ info: "advanced Section" type: page ]
-codon: cfile  [
-  optional: "N"
-  information: "Codon usage file"
-  default: "Ehum.cut"
+section: advanced [
+  information: "Advanced section"
+  type: "page"
 ]
 
-integer: width  [
-  optional: "N"
-  minimum: "10"
-  default: "60"
-  information: "Width of screen"
-]
+  codon: cfile  [
+    information: "Codon usage file"
+    default: "Ehum.cut"
+  ]
 
-bool: ruler  [
-  optional: "Y"
-  default: "Y"
-  information: "Add a ruler"
-]
+  integer: width  [
+    minimum: "10"
+    default: "60"
+    information: "Width of screen"
+  ]
 
-bool: plabel  [
-  optional: "Y"
-  default: "Y"
-  information: "Number translations"
-]
+  boolean: ruler  [
+    optional: "Y"
+    default: "Y"
+    information: "Add a ruler"
+  ]
 
-bool: nlabel  [
-  optional: "Y"
-  default: "Y"
-  information: "Number DNA sequence"
-]
+  boolean: plabel  [
+    optional: "Y"
+    default: "Y"
+    information: "Number translations"
+  ]
+
+  boolean: nlabel  [
+    optional: "Y"
+    default: "Y"
+    information: "Number DNA sequence"
+  ]
 
 endsection: advanced
 
-section: output [ info: "output Section" type: page ]
-outfile: outfile  [
-  parameter: "Y"
+section: output [
+  information: "Output section"
+  type: "page"
 ]
 
-endsection: output
+  outfile: outfile  [
+    parameter: "Y"
+  ]
 
+endsection: output

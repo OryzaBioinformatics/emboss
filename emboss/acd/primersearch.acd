@@ -1,34 +1,46 @@
-appl: primersearch [
-  documentation: "Searches DNA sequences for matches with primer pairs"
+application: primersearch [
+  documentation: "Searches DNA sequences for matches with
+                  primer pairs"
   groups: "Nucleic:Primers"
 ]
 
-section: input [ info: "input Section" type: page ]
-seqall: sequences  [
-  parameter: "Y"
-  type: "dna"
+section: input [
+  information: "Input section"
+  type: "page"
 ]
 
-infile: primers  [
-  parameter: "Y"
-  prompt: "Primer file"
-]
+  seqall: sequences  [
+    parameter: "Y"
+    type: "dna"
+  ]
+
+  infile: primers  [
+    parameter: "Y"
+    prompt: "Primer file"
+  ]
 
 endsection: input
 
-section: required [ info: "required Section" type: page ]
-integer: mismatchpercent  [
-  parameter: "Y"
-  default: "0"
-  prompt: "Allowed percent mismatch"
+section: required [
+  information: "Required section"
+  type: "page"
 ]
+
+  integer: mismatchpercent  [
+    parameter: "Y"
+    default: "0"
+    prompt: "Allowed percent mismatch"
+  ]
 
 endsection: required
 
-section: output [ info: "output Section" type: page ]
-outfile: out  [
-  parameter: "Y"
+section: output [
+  information: "Output section"
+  type: "page"
 ]
 
-endsection: output
+  outfile: out  [
+    parameter: "Y"
+  ]
 
+endsection: output

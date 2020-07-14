@@ -1,23 +1,28 @@
-appl: cutgextract [
+application: cutgextract [
   documentation: "Extract data from CUTG"
   groups: "Utils:Database creation"
 ]
 
-section: input [ info: "input Section" type: page ]
-dirlist: directory  [
-  parameter: "Y"
-  required: "Y"
-  prompt: "CUTG directory"
+section: input [
+  information: "Input section"
+  type: "page"
 ]
+
+  dirlist: directory  [
+    parameter: "Y"
+    information: "CUTG directory"
+  ]
 
 endsection: input
 
-section: advanced [ info: "advanced Section" type: page ]
-string: wildspec  [
-  required: "N"
-  default: "*.codon"
-  information: "Type of codon file"
+section: advanced [
+  information: "Advanced section"
+  type: "page"
 ]
 
-endsection: advanced
+  string: wildspec  [
+    default: "*.codon"
+    information: "Type of codon file"
+  ]
 
+endsection: advanced

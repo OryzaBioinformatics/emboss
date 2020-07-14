@@ -1,48 +1,75 @@
-appl: oddcomp [
-  documentation: "Finds protein sequence regions with a biased composition"
+application: oddcomp [
+  documentation: "Finds protein sequence regions with a
+                  biased composition"
   groups: "Protein:Motifs"
 ]
 
-section: input [ info: "input Section" type: page ]
-seqall: sequence  [
-  parameter: "Y"
-  type: "Protein"
+section: input [
+  information: "Input section"
+  type: "page"
 ]
+
+  seqall: sequence  [
+    parameter: "Y"
+    type: "Protein"
+  ]
 
 endsection: input
 
-section: required [ info: "required Section" type: page ]
-infile: compdata  [
-  parameter: "Y"
-  required: "Y"
-  information: "'compseq' file to use for expected word frequencies"
-  help: "This is a file in the format of the output produced by 'compseq' that is used to set the minimum frequencies of words in this analysis."
+section: required [
+  information: "Required section"
+  type: "page"
 ]
 
-integer: window  [
-  parameter: "Y"
-  minimum: "10"
-  default: "30"
-  information: "Window size to consider (e.g. 30 aa)"
-  help: "This is the size of window in which to count. \ Thus if you want to count frequencies in a 40 aa stretch you should enter 40 here."
-]
+  infile: compdata  [
+    parameter: "Y"
+    required: "Y"
+    information: "'compseq' file to use for expected word
+                  frequencies"
+    help: "This is a file in the format of the output produced by
+           'compseq' that is used to set the minimum frequencies of words in
+           this analysis."
+  ]
+
+  integer: window  [
+    parameter: "Y"
+    minimum: "10"
+    default: "30"
+    information: "Window size to consider (e.g. 30 aa)"
+    help: "This is the size of window in which to count. \
+           Thus if you want to count frequencies in a 40 aa stretch you
+           should enter 40 here."
+  ]
 
 endsection: required
 
-section: advanced [ info: "advanced Section" type: page ]
-bool: ignorebz  [
-  default: "Y"
-  information: "Ignore the amino acids B and Z and just count them as 'Other'"
-  help: "The amino acid code B represents Asparagine or Aspartic acid and the code Z represents Glutamine or Glutamic acid. \ These are not commonly used codes and you may wish not to count words containing them, just noting them in the count of 'Other' words."
+section: advanced [
+  information: "Advanced section"
+  type: "page"
 ]
+
+  boolean: ignorebz  [
+    default: "Y"
+    information: "Ignore the amino acids B and Z and just count
+                  them as 'Other'"
+    help: "The amino acid code B represents Asparagine or Aspartic
+           acid and the code Z represents Glutamine or Glutamic acid. \
+           These are not commonly used codes and you may wish not to count
+           words containing them, just noting them in the count of 'Other'
+           words."
+  ]
 
 endsection: advanced
 
-section: output [ info: "output Section" type: page ]
-outfile: outfile  [
-  parameter: "Y"
-  extension: "oddcomp"
-  help: "This is the results file."
+section: output [
+  information: "Output section"
+  type: "page"
 ]
+
+  outfile: outfile  [
+    parameter: "Y"
+    extension: "oddcomp"
+    help: "This is the results file."
+  ]
 
 endsection: output

@@ -1,17 +1,20 @@
-appl: printsextract [
+application: printsextract [
   documentation: "Extract data from PRINTS"
   groups: "Utils:Database creation"
-  gui: yes
-  batch: yes
-  cpu: medium
+  gui: "yes"
+  batch: "yes"
+  cpu: "medium"
 ]
 
-section: input [ info: "required Section" type: page ]
-infile: inf  [
-  parameter: "Y"
-  required: "Y"
-  information: "Full pathname of prints.dat"
+section: input [
+  information: "Required section"
+  type: "page"
 ]
+
+  infile: inf  [
+    parameter: "Y"
+    required: "Y"
+    information: "Full pathname of prints.dat"
+  ]
 
 endsection: input
-
