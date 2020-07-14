@@ -9,7 +9,7 @@ section: input [
   type: "page"
 ]
 
-  sequence: inseq  [
+  sequence: sequence  [
     parameter: "Y"
     type: "protein"
   ]
@@ -22,13 +22,13 @@ section: output [
 ]
 
   xygraph: graph  [
-    required: "Y"
+    standard: "Y"
     multiple: "3"
   ]
 
   outfile: outfile  [
     parameter: "Y"
-    default: "pepinfo.out"
+    knowntype: "pepinfo output"
   ]
 
   boolean: generalplot  [
@@ -49,27 +49,23 @@ section: advanced [
 ]
 
   integer: hwindow  [
-    optional: "Y"
+    additional: "Y"
     default: "9"
     minimum: "1"
-    maximum: "$(inseq.length)"
+    maximum: "$(sequence.length)"
     information: "Window size for hydropathy averaging"
   ]
 
   string: aaproperties  [
-    optional: "Y"
+    additional: "Y"
     default: "Eaa_properties.dat"
-    information: "User defined amino acid properties"
-    prompt: "Enter user defined file of amino acid properties or
-             leave blank"
+    information: "User defined amino acid properties filename"
   ]
 
   string: aahydropathy  [
-    optional: "Y"
+    additional: "Y"
     default: "Eaa_hydropathy.dat"
-    information: "User defined hydropathy data"
-    prompt: "Enter user defined file of hydropathy data or leave
-             blank"
+    information: "User defined hydropathy data filename"
   ]
 
 endsection: advanced

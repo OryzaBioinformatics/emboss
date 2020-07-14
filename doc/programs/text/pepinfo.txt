@@ -31,7 +31,7 @@ Usage
 Plots simple amino acid properties in parallel
 Input sequence: tsw:opsd_human
 Graph type [x11]: cps
-Output file [pepinfo.out]: 
+Output file [opsd_human.pepinfo]: 
 
 Created pepinfo.ps
    
@@ -40,22 +40,23 @@ Created pepinfo.ps
    
 Command line arguments
 
-   Mandatory qualifiers:
-  [-inseq]             sequence   Sequence USA
+   Standard (Mandatory) qualifiers:
+  [-sequence]          sequence   Sequence USA
    -graph              xygraph    Graph type
   [-outfile]           outfile    Output file name
 
-   Optional qualifiers:
+   Additional (Optional) qualifiers:
    -hwindow            integer    Window size for hydropathy averaging
-   -aaproperties       string     User defined amino acid properties
-   -aahydropathy       string     User defined hydropathy data
+   -aaproperties       string     User defined amino acid properties filename
+   -aahydropathy       string     User defined hydropathy data filename
 
-   Advanced qualifiers:
+   Advanced (Unprompted) qualifiers:
    -[no]generalplot    boolean    plot histogram of general properties
    -[no]hydropathyplot boolean    plot graphs of hydropathy
 
    Associated qualifiers:
-  "-inseq" related qualifiers
+
+   "-sequence" associated qualifiers
    -sbegin1             integer    First base used
    -send1               integer    Last base used, def=seq length
    -sreverse1           boolean    Reverse (if DNA)
@@ -65,13 +66,13 @@ Command line arguments
    -slower1             boolean    Make lower case
    -supper1             boolean    Make upper case
    -sformat1            string     Input sequence format
-   -sopenfile1          string     Input filename
    -sdbname1            string     Database name
    -sid1                string     Entryname
    -ufo1                string     UFO features
    -fformat1            string     Features format
    -fopenfile1          string     Features file name
-  "-graph" related qualifiers
+
+   "-graph" associated qualifiers
    -gprompt             boolean    Graph prompting
    -gtitle              string     Graph title
    -gsubtitle           string     Graph subtitle
@@ -79,18 +80,16 @@ Command line arguments
    -gytitle             string     Graph y axis title
    -goutfile            string     Output file for non interactive displays
    -gdirectory          string     Output directory
-  "-outfile" related qualifiers
+
+   "-outfile" associated qualifiers
    -odirectory2         string     Output directory
 
    General qualifiers:
    -auto                boolean    Turn off prompts
    -stdout              boolean    Write standard output
    -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for required and optional values
+   -options             boolean    Prompt for standard and additional values
    -debug               boolean    Write debug output to program.dbg
-   -acdlog              boolean    Write ACD processing log to program.acdlog
-   -acdpretty           boolean    Rewrite ACD file as program.acdpretty
-   -acdtable            boolean    Write HTML table of options
    -verbose             boolean    Report some/full command line options
    -help                boolean    Report command line options. More
                                   information on associated and general
@@ -101,22 +100,22 @@ Command line arguments
    -die                 boolean    Report deaths
    
 
-   Mandatory qualifiers Allowed values Default
-   [-inseq]
+   Standard (Mandatory) qualifiers Allowed values Default
+   [-sequence]
    (Parameter 1) Sequence USA Readable sequence Required
    -graph Graph type EMBOSS has a list of known devices, including
    postscript, ps, hpgl, hp7470, hp7580, meta, colourps, cps, xwindows,
    x11, tektronics, tekt, tek4107t, tek, none, null, text, data, xterm,
    png EMBOSS_GRAPHICS value, or x11
    [-outfile]
-   (Parameter 2) Output file name Output file pepinfo.out
-   Optional qualifiers Allowed values Default
+   (Parameter 2) Output file name Output file <sequence>.pepinfo
+   Additional (Optional) qualifiers Allowed values Default
    -hwindow Window size for hydropathy averaging Integer 1 or more 9
-   -aaproperties User defined amino acid properties Any string is
-   accepted Eaa_properties.dat
-   -aahydropathy User defined hydropathy data Any string is accepted
-   Eaa_hydropathy.dat
-   Advanced qualifiers Allowed values Default
+   -aaproperties User defined amino acid properties filename Any string
+   is accepted Eaa_properties.dat
+   -aahydropathy User defined hydropathy data filename Any string is
+   accepted Eaa_hydropathy.dat
+   Advanced (Unprompted) qualifiers Allowed values Default
    -[no]generalplot plot histogram of general properties Boolean value
    Yes/No Yes
    -[no]hydropathyplot plot graphs of hydropathy Boolean value Yes/No Yes
@@ -244,7 +243,7 @@ Output file format
    
   Output files for usage example
   
-  File: pepinfo.out
+  File: opsd_human.pepinfo
   
 Printing out Tiny residues in OPSD_HUMAN from position 1 to 348
 
