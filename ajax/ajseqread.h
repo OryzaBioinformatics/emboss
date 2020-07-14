@@ -60,7 +60,7 @@ AjBool       ajSeqQueryIs (const AjPSeqQuery qry);
 AjPSeqQuery  ajSeqQueryNew (void);
 void         ajSeqQueryStarclear (AjPSeqQuery qry);
 void         ajSeqQueryTrace (const AjPSeqQuery qry);
-AjBool       ajSeqQueryWild (const AjPSeqQuery qry);
+AjBool       ajSeqQueryWild (AjPSeqQuery qry);
 void         ajSeqPrintInFormat (AjPFile outf, AjBool full);
 AjBool       ajSeqRead (AjPSeq thys, AjPSeqin seqin);
 ajint        ajSeqsetApp (AjPSeqset thys, const AjPSeq seq);

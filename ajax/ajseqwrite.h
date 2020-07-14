@@ -50,6 +50,7 @@ extern "C"
 ** @attr Features [AjBool] If true, save features with sequence or in file
 ** @attr Extension [AjPStr] File extension
 ** @attr Count [ajint] Number of sequences
+** @attr Accuracy [ajint*] Accuracy values (one per base) from base calling
 ** @attr Savelist [AjPList] Previous sequences saved for later output
 **                          (e.g. MSF format)
 **
@@ -105,6 +106,7 @@ typedef struct AjSSeqout {
   AjBool Features;
   AjPStr Extension;
   ajint Count;
+  ajint* Accuracy;
   AjPList Savelist;
 } AjOSeqout;
 

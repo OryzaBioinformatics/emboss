@@ -30,7 +30,8 @@
 **
 ** Sequence output formats
 **
-** @attr Name [char*] format name
+** @attr Name [char*] Format name
+** @attr Desc [char*] Format description
 ** @attr Single [AjBool] Write each sequence to a new file if true (e.g. GCG)
 ** @attr Save [AjBool] Save in memory and write at end (e.g. MSF alignments)
 ** @attr Protein [AjBool] True if protein data is supported
@@ -45,6 +46,7 @@
 typedef struct SeqSOutFormat
 {
     char *Name;
+    char *Desc;
     AjBool Single;
     AjBool Save;
     AjBool Protein;
@@ -149,6 +151,7 @@ static void       seqWriteClustal(AjPSeqout outseq);
 static void       seqWriteCodata(AjPSeqout outseq);
 static void       seqWriteDebug(AjPSeqout outseq);
 static void       seqWriteEmbl(AjPSeqout outseq);
+static void       seqWriteExperiment(AjPSeqout outseq);
 static void       seqWriteFasta(AjPSeqout outseq);
 static void       seqWriteFitch(AjPSeqout outseq);
 static void       seqWriteGcg(AjPSeqout outseq);
@@ -168,7 +171,7 @@ static void       seqWriteNcbi(AjPSeqout outseq);
 static void       seqWriteNexus(AjPSeqout outseq);
 static void       seqWriteNexusnon(AjPSeqout outseq);
 static void       seqWritePhylip(AjPSeqout outseq);
-static void       seqWritePhylip3(AjPSeqout outseq);
+static void       seqWritePhylipnon(AjPSeqout outseq);
 static void       seqWriteSelex(AjPSeqout outseq);
 static void       seqWriteSeq(AjPSeqout outseq, const SeqPSeqFormat sf);
 static void       seqWriteStaden(AjPSeqout outseq);
@@ -188,103 +191,153 @@ static void       seqWriteTreecon(AjPSeqout outseq);
 
 static SeqOOutFormat seqOutFormat[] =
 {
-/*   Name,         Single,  Save,    Protein, Nucleotide */
+/*   Name,         Description */
+/*      Single,  Save,    Protein, Nucleotide */
 /*      Feature, Gap,     Multiset,WriteFunction */
-    {"unknown",    AJFALSE, AJFALSE, AJTRUE,  AJTRUE,
-	AJFALSE, AJTRUE,  AJFALSE, seqWriteFasta}, /* internal default
+    {"unknown",    "Unknown format",
+	 AJFALSE, AJFALSE, AJTRUE,  AJTRUE,
+	 AJFALSE, AJTRUE,  AJFALSE, seqWriteFasta}, /* internal default
 							writes FASTA */
     /* set 'fasta' in ajSeqOutFormatDefault */
-    {"gcg",        AJFALSE, AJFALSE, AJTRUE,  AJTRUE,
-	AJFALSE, AJTRUE,  AJFALSE, seqWriteGcg},
-    {"gcg8",       AJFALSE, AJFALSE, AJTRUE,  AJTRUE,
-	AJFALSE, AJTRUE,  AJFALSE, seqWriteGcg}, /* alias for gcg */
-    {"embl",       AJFALSE, AJFALSE, AJFALSE, AJTRUE,
-	AJTRUE,  AJTRUE,  AJFALSE, seqWriteEmbl},
-    {"em",         AJFALSE, AJFALSE, AJFALSE, AJTRUE,
-	AJTRUE,  AJTRUE,  AJFALSE, seqWriteEmbl}, /* alias for embl */
-    {"swiss",      AJFALSE, AJFALSE, AJTRUE,  AJFALSE,
-	AJTRUE,  AJTRUE,  AJFALSE, seqWriteSwiss},
-    {"sw",         AJFALSE, AJFALSE, AJTRUE,  AJFALSE,
-	AJTRUE,  AJTRUE,  AJFALSE, seqWriteSwiss}, /* alias for swiss */
-    {"swissprot",  AJFALSE, AJFALSE, AJTRUE,  AJFALSE,
-	AJTRUE,  AJTRUE,  AJFALSE, seqWriteSwiss}, /* alias for swiss */
-    {"fasta",      AJFALSE, AJFALSE, AJTRUE,  AJTRUE,
-	AJFALSE, AJTRUE,  AJFALSE, seqWriteFasta},
-    {"pearson",    AJFALSE, AJFALSE, AJTRUE,  AJTRUE,
-	AJFALSE, AJTRUE,  AJFALSE, seqWriteFasta}, /* alias for fasta */
-    {"ncbi",       AJFALSE, AJFALSE, AJTRUE,  AJTRUE,
-	AJFALSE, AJTRUE,  AJFALSE, seqWriteNcbi},
-    {"nbrf",       AJFALSE, AJFALSE, AJTRUE,  AJTRUE,
-	AJTRUE,  AJTRUE,  AJFALSE, seqWriteNbrf},
-    {"pir",        AJFALSE, AJFALSE, AJTRUE,  AJTRUE,
-	AJTRUE,  AJTRUE,  AJFALSE, seqWriteNbrf}, /* alias for nbrf */
-    {"genbank",    AJFALSE, AJFALSE, AJFALSE, AJTRUE,
-	AJFALSE, AJTRUE,  AJFALSE, seqWriteGenbank},
-    {"gb",         AJFALSE, AJFALSE, AJFALSE, AJTRUE,
-	AJFALSE, AJTRUE,  AJFALSE, seqWriteGenbank}, /* alias for genbank */
-    {"ddbj",         AJFALSE, AJFALSE, AJFALSE, AJTRUE,
-	AJFALSE, AJTRUE,  AJFALSE, seqWriteGenbank}, /* alias for genbank */
-    {"gff",        AJFALSE, AJFALSE, AJTRUE,  AJTRUE,
-	AJTRUE,  AJTRUE,  AJFALSE, seqWriteGff},
-    {"ig",         AJFALSE, AJFALSE, AJTRUE,  AJTRUE,
-	AJFALSE, AJTRUE,  AJFALSE, seqWriteIg},
-    {"codata",     AJFALSE, AJFALSE, AJTRUE,  AJTRUE,
-	AJFALSE, AJTRUE,  AJFALSE, seqWriteCodata},
-    {"strider",    AJFALSE, AJFALSE, AJTRUE,  AJTRUE,
-	AJFALSE, AJTRUE,  AJFALSE, seqWriteStrider},
-    {"acedb",      AJFALSE, AJFALSE, AJTRUE,  AJTRUE,
-	AJFALSE, AJTRUE,  AJFALSE, seqWriteAcedb},
-    {"experiment", AJFALSE, AJFALSE, AJTRUE,  AJTRUE,
-	AJFALSE, AJTRUE,  AJFALSE, seqWriteStaden},
-    {"staden",     AJFALSE, AJFALSE, AJTRUE,  AJTRUE,
-	AJFALSE, AJTRUE,  AJFALSE, seqWriteStaden}, /* alias for experiment*/
-    {"text",       AJFALSE, AJFALSE, AJTRUE,  AJTRUE,
-	AJFALSE, AJTRUE,  AJFALSE, seqWriteText},
-    {"plain",      AJFALSE, AJFALSE, AJTRUE,  AJTRUE,
-	AJFALSE, AJTRUE,  AJFALSE, seqWriteText}, /* alias for text */
-    {"raw",        AJFALSE, AJFALSE, AJTRUE,  AJTRUE,
-	AJFALSE, AJTRUE,  AJFALSE, seqWriteText}, /* alias for text output */
-    {"fitch",      AJFALSE, AJFALSE, AJTRUE,  AJTRUE,
-	AJFALSE, AJTRUE,  AJFALSE, seqWriteFitch},
-    {"msf",        AJFALSE, AJTRUE,  AJTRUE,  AJTRUE,
-	AJFALSE, AJTRUE,  AJFALSE, seqWriteMsf},
-    {"clustal",    AJFALSE, AJTRUE,  AJTRUE,  AJTRUE,
-	AJFALSE, AJTRUE,  AJFALSE, seqWriteClustal},
-    {"selex",      AJFALSE, AJTRUE,  AJTRUE,  AJTRUE,
-	AJFALSE, AJTRUE,  AJFALSE, seqWriteSelex},
-    {"aln",        AJFALSE, AJTRUE,  AJTRUE,  AJTRUE,
-	AJFALSE, AJTRUE,  AJFALSE, seqWriteClustal}, /* alias for clustal */
-    {"phylip",     AJFALSE, AJTRUE,  AJTRUE,  AJTRUE,
-	AJFALSE, AJTRUE,  AJTRUE,  seqWritePhylip},
-    {"phylip3",    AJFALSE, AJTRUE,  AJTRUE,  AJTRUE,
-	AJFALSE, AJTRUE,  AJFALSE, seqWritePhylip3},
-    {"asn1",       AJFALSE, AJFALSE, AJTRUE,  AJTRUE,
-	AJFALSE, AJTRUE,  AJFALSE, seqWriteAsn1},
-    {"hennig86",   AJFALSE, AJTRUE,  AJTRUE,  AJTRUE,
-	AJFALSE, AJTRUE,  AJFALSE, seqWriteHennig86},
-    {"mega",       AJFALSE, AJTRUE,  AJTRUE,  AJTRUE,
-	AJFALSE, AJTRUE,  AJFALSE, seqWriteMega},
-    {"meganon",    AJFALSE, AJTRUE,  AJTRUE,  AJTRUE,
-	AJFALSE, AJTRUE,  AJFALSE, seqWriteMeganon},
-    {"nexus",      AJFALSE, AJTRUE,  AJTRUE,  AJTRUE,
-	AJFALSE, AJTRUE,  AJFALSE, seqWriteNexus},
-    {"nexusnon",   AJFALSE, AJTRUE,  AJTRUE,  AJTRUE,
-	AJFALSE, AJTRUE,  AJFALSE, seqWriteNexusnon},
-    {"paup",       AJFALSE, AJTRUE,  AJTRUE,  AJTRUE,
-	AJFALSE, AJTRUE,  AJFALSE, seqWriteNexus}, /* alias for nexus */
-    {"paupnon",    AJFALSE, AJTRUE,  AJTRUE,  AJTRUE,
-	AJFALSE, AJTRUE,  AJFALSE, seqWriteNexusnon},	/* alias for nexusnon*/
-    {"jackknifer", AJFALSE, AJTRUE,  AJTRUE,  AJTRUE,
-	AJFALSE, AJTRUE,  AJFALSE, seqWriteJackknifer},
-    {"jackknifernon", AJFALSE, AJTRUE,  AJTRUE,  AJTRUE,
-	AJFALSE, AJTRUE,  AJFALSE, seqWriteJackknifernon},
-    {"treecon",    AJFALSE, AJTRUE,  AJTRUE,  AJTRUE,
-	AJFALSE, AJTRUE,  AJFALSE, seqWriteTreecon},
-    {"mase",       AJFALSE, AJFALSE, AJTRUE,  AJTRUE,
-	AJFALSE, AJTRUE,  AJFALSE, seqWriteMase},
-    {"debug",      AJFALSE, AJFALSE, AJTRUE,  AJTRUE,
-	AJFALSE, AJTRUE,  AJFALSE, seqWriteDebug}, /* trace report */
-    {NULL, 0, 0, 0, 0, 0, 0, 0, NULL}
+    {"gcg",        "GCG sequence format",
+	 AJFALSE, AJFALSE, AJTRUE,  AJTRUE,
+	 AJFALSE, AJTRUE,  AJFALSE, seqWriteGcg},
+    {"gcg8",       "GCG old (version 8) sequence format",
+	 AJFALSE, AJFALSE, AJTRUE,  AJTRUE,
+	 AJFALSE, AJTRUE,  AJFALSE, seqWriteGcg}, /* alias for gcg */
+    {"embl",       "EMBL entry format",
+	 AJFALSE, AJFALSE, AJFALSE, AJTRUE,
+	 AJTRUE,  AJTRUE,  AJFALSE, seqWriteEmbl},
+    {"em",         "EMBL entry format (alias)",
+	 AJFALSE, AJFALSE, AJFALSE, AJTRUE,
+	 AJTRUE,  AJTRUE,  AJFALSE, seqWriteEmbl}, /* alias for embl */
+    {"swiss",      "Swissprot entry format",
+	 AJFALSE, AJFALSE, AJTRUE,  AJFALSE,
+	 AJTRUE,  AJTRUE,  AJFALSE, seqWriteSwiss},
+    {"sw",         "Swissprot entry format(alias)",
+	 AJFALSE, AJFALSE, AJTRUE,  AJFALSE,
+	 AJTRUE,  AJTRUE,  AJFALSE, seqWriteSwiss}, /* alias for swiss */
+    {"swissprot",  "Swissprot entry format(alias)",
+	 AJFALSE, AJFALSE, AJTRUE,  AJFALSE,
+	 AJTRUE,  AJTRUE,  AJFALSE, seqWriteSwiss}, /* alias for swiss */
+    {"fasta",      "FASTA format",
+	 AJFALSE, AJFALSE, AJTRUE,  AJTRUE,
+	 AJFALSE, AJTRUE,  AJFALSE, seqWriteFasta},
+    {"pearson",    "FASTA format (alias)",
+	 AJFALSE, AJFALSE, AJTRUE,  AJTRUE,
+	 AJFALSE, AJTRUE,  AJFALSE, seqWriteFasta}, /* alias for fasta */
+    {"ncbi",       "NCBI fasta format with NCBI-style IDs",
+	 AJFALSE, AJFALSE, AJTRUE,  AJTRUE,
+	 AJFALSE, AJTRUE,  AJFALSE, seqWriteNcbi},
+    {"nbrf",       "NBRF/PIR entry format",
+	 AJFALSE, AJFALSE, AJTRUE,  AJTRUE,
+	 AJTRUE,  AJTRUE,  AJFALSE, seqWriteNbrf},
+    {"pir",        "NBRF/PIR entry format (alias)",
+	 AJFALSE, AJFALSE, AJTRUE,  AJTRUE,
+	 AJTRUE,  AJTRUE,  AJFALSE, seqWriteNbrf}, /* alias for nbrf */
+    {"genbank",    "Genbank entry format",
+	 AJFALSE, AJFALSE, AJFALSE, AJTRUE,
+	 AJFALSE, AJTRUE,  AJFALSE, seqWriteGenbank},
+    {"gb",         "Genbank entry format (alias)",
+	 AJFALSE, AJFALSE, AJFALSE, AJTRUE,
+	 AJFALSE, AJTRUE,  AJFALSE, seqWriteGenbank}, /* alias for genbank */
+    {"ddbj",       "Genbank/DDBJ entry format (alias)",
+	 AJFALSE, AJFALSE, AJFALSE, AJTRUE,
+	 AJFALSE, AJTRUE,  AJFALSE, seqWriteGenbank}, /* alias for genbank */
+    {"gff",        "GFF feature file with sequence in the header",
+	 AJFALSE, AJFALSE, AJTRUE,  AJTRUE,
+	 AJTRUE,  AJTRUE,  AJFALSE, seqWriteGff},
+    {"ig",         "Intelligenetics sequence format",
+	 AJFALSE, AJFALSE, AJTRUE,  AJTRUE,
+	 AJFALSE, AJTRUE,  AJFALSE, seqWriteIg},
+    {"codata",     "Codata entry format",
+	 AJFALSE, AJFALSE, AJTRUE,  AJTRUE,
+	 AJFALSE, AJTRUE,  AJFALSE, seqWriteCodata},
+    {"strider",    "DNA strider output format",
+	 AJFALSE, AJFALSE, AJTRUE,  AJTRUE,
+	 AJFALSE, AJTRUE,  AJFALSE, seqWriteStrider},
+    {"acedb",      "ACEDB sequence format",
+	 AJFALSE, AJFALSE, AJTRUE,  AJTRUE,
+	 AJFALSE, AJTRUE,  AJFALSE, seqWriteAcedb},
+    {"experiment", "Staden experiment file",
+	 AJFALSE, AJFALSE, AJTRUE,  AJTRUE,
+	 AJFALSE, AJTRUE,  AJFALSE, seqWriteExperiment},
+    {"staden",     "Old staden package sequence format",
+	 AJFALSE, AJFALSE, AJTRUE,  AJTRUE,
+	 AJFALSE, AJTRUE,  AJFALSE, seqWriteStaden},
+    {"text",       "Plain text",
+	 AJFALSE, AJFALSE, AJTRUE,  AJTRUE,
+	 AJFALSE, AJTRUE,  AJFALSE, seqWriteText},
+    {"plain",      "Plain text (alias)",
+	 AJFALSE, AJFALSE, AJTRUE,  AJTRUE,
+	 AJFALSE, AJTRUE,  AJFALSE, seqWriteText}, /* alias for text */
+    {"raw",        "Plain text (alias)",
+	 AJFALSE, AJFALSE, AJTRUE,  AJTRUE,
+	 AJFALSE, AJTRUE,  AJFALSE, seqWriteText}, /* alias for text output */
+    {"fitch",      "Fitch program format",
+	 AJFALSE, AJFALSE, AJTRUE,  AJTRUE,
+	 AJFALSE, AJTRUE,  AJFALSE, seqWriteFitch},
+    {"msf",        "GCG MSF (mutiple sequence file) file format",
+	 AJFALSE, AJTRUE,  AJTRUE,  AJTRUE,
+	 AJFALSE, AJTRUE,  AJFALSE, seqWriteMsf},
+    {"clustal",    "Clustalw output format",
+	 AJFALSE, AJTRUE,  AJTRUE,  AJTRUE,
+	 AJFALSE, AJTRUE,  AJFALSE, seqWriteClustal},
+    {"aln",        "Clustalw output format (alias)",
+	 AJFALSE, AJTRUE,  AJTRUE,  AJTRUE,
+	 AJFALSE, AJTRUE,  AJFALSE, seqWriteClustal}, /* alias for clustal */
+    {"selex",      "Selex format",
+	 AJFALSE, AJTRUE,  AJTRUE,  AJTRUE,
+	 AJFALSE, AJTRUE,  AJFALSE, seqWriteSelex},
+    {"phylip",     "Phylip interleaved format",
+	 AJFALSE, AJTRUE,  AJTRUE,  AJTRUE,
+	 AJFALSE, AJTRUE,  AJTRUE,  seqWritePhylip},
+    {"phylipnon",  "Phylip non-interleaved format",
+	 AJFALSE, AJTRUE,  AJTRUE,  AJTRUE,
+	 AJFALSE, AJTRUE,  AJFALSE, seqWritePhylipnon},
+    {"phylip3",    "Phylip non-interleaved format (alias)",
+	 AJFALSE, AJTRUE,  AJTRUE,  AJTRUE,  /* alias for phylipnon*/
+	 AJFALSE, AJTRUE,  AJFALSE, seqWritePhylipnon},
+    {"asn1",       "NCBI ASN.1 format",
+	 AJFALSE, AJFALSE, AJTRUE,  AJTRUE,
+	 AJFALSE, AJTRUE,  AJFALSE, seqWriteAsn1},
+    {"hennig86",   "Hennig86 output format",
+	 AJFALSE, AJTRUE,  AJTRUE,  AJTRUE,
+	 AJFALSE, AJTRUE,  AJFALSE, seqWriteHennig86},
+    {"mega",       "Mega interleaved output format",
+	 AJFALSE, AJTRUE,  AJTRUE,  AJTRUE,
+	 AJFALSE, AJTRUE,  AJFALSE, seqWriteMega},
+    {"meganon",    "Mega non-interleaved output format",
+	 AJFALSE, AJTRUE,  AJTRUE,  AJTRUE,
+	 AJFALSE, AJTRUE,  AJFALSE, seqWriteMeganon},
+    {"nexus",      "Nexus/paup interleaved format",
+	 AJFALSE, AJTRUE,  AJTRUE,  AJTRUE,
+	 AJFALSE, AJTRUE,  AJFALSE, seqWriteNexus},
+    {"paup",       "Nexus/paup interleaved format (alias)",
+	 AJFALSE, AJTRUE,  AJTRUE,  AJTRUE,
+	 AJFALSE, AJTRUE,  AJFALSE, seqWriteNexus}, /* alias for nexus */
+    {"nexusnon",   "Nexus/paup non-interleaved format",
+	 AJFALSE, AJTRUE,  AJTRUE,  AJTRUE,
+	 AJFALSE, AJTRUE,  AJFALSE, seqWriteNexusnon},
+    {"paupnon",    "Nexus/paup non-interleaved format (alias)",
+	 AJFALSE, AJTRUE,  AJTRUE,  AJTRUE,
+	 AJFALSE, AJTRUE,  AJFALSE, seqWriteNexusnon},	/* alias for nexusnon*/
+    {"jackknifer", "Jackknifer output interleaved format",
+	 AJFALSE, AJTRUE,  AJTRUE,  AJTRUE,
+	 AJFALSE, AJTRUE,  AJFALSE, seqWriteJackknifer},
+    {"jackknifernon", "Jackknifer output non-interleaved format",
+	 AJFALSE, AJTRUE,  AJTRUE,  AJTRUE,
+	 AJFALSE, AJTRUE,  AJFALSE, seqWriteJackknifernon},
+    {"treecon",    "Treecon output format",
+	 AJFALSE, AJTRUE,  AJTRUE,  AJTRUE,
+	 AJFALSE, AJTRUE,  AJFALSE, seqWriteTreecon},
+    {"mase",       "Mase program format",
+	 AJFALSE, AJFALSE, AJTRUE,  AJTRUE,
+	 AJFALSE, AJTRUE,  AJFALSE, seqWriteMase},
+    {"debug",      "Debugging trace of full internal data content",
+	 AJFALSE, AJFALSE, AJTRUE,  AJTRUE,
+	 AJFALSE, AJTRUE,  AJFALSE, seqWriteDebug}, /* trace report */
+    {NULL, NULL, 0, 0, 0, 0, 0, 0, 0, NULL}
 };
 
 
@@ -632,6 +685,9 @@ void ajSeqWrite(AjPSeqout outseq, const AjPSeq seq)
 	    outseq->Features,
 	    seqOutFormat[outseq->Format].Save);
     
+    ajDebug(" outseq '%S' seq '%S' '%S'\n",
+	    outseq->Name, seq->Name, seq->Entryname);
+
     if(seqOutFormat[outseq->Format].Save)
     {
 	seqWriteListAppend(outseq, seq);
@@ -1177,8 +1233,13 @@ static void seqWriteNexus(AjPSeqout outseq)
 		"begin data;\n");
     ajFmtPrintF(outseq->File,		/* count, length */
 		"dimensions ntax=%d nchar=%d;\n", isize, ilen);
-    ajFmtPrintF(outseq->File,
-		"format interleave datatype=DNA missing=N gap=-;\n");
+    if(ajStrMatchC(outseq->Type, "P"))
+	ajFmtPrintF(outseq->File,
+		    "format interleave datatype=protein missing=X gap=-;\n");
+    else
+	ajFmtPrintF(outseq->File,
+		    "format interleave datatype=DNA missing=N gap=-;\n");
+
     ajFmtPrintF(outseq->File, "\n");
     
     ajFmtPrintF(outseq->File,
@@ -1264,8 +1325,13 @@ static void seqWriteNexusnon(AjPSeqout outseq)
 		"begin data;\n");
     ajFmtPrintF(outseq->File,		/* count, length */
 		"dimensions ntax=%d nchar=%d;\n", isize, ilen);
-    ajFmtPrintF(outseq->File,
-		"format datatype=DNA missing=N gap=-;\n");
+    if(ajStrMatchC(outseq->Type, "P"))
+	ajFmtPrintF(outseq->File,
+		    "format datatype=protein missing=X gap=-;\n");
+    else
+	ajFmtPrintF(outseq->File,
+		    "format datatype=DNA missing=N gap=-;\n");
+
     ajFmtPrintF(outseq->File, "\n");
 
     ajFmtPrintF(outseq->File,
@@ -1523,6 +1589,7 @@ static void seqWriteClustal(AjPSeqout outseq)
     static AjPStr sseq = NULL;
     ajint ipos;
     ajint iend;
+    ajint iwidth = 50;
     
     ajDebug("seqWriteClustal list size %d\n", ajListLength(outseq->Savelist));
     
@@ -1553,24 +1620,29 @@ static void seqWriteClustal(AjPSeqout outseq)
     
     ajFmtPrintF(outseq->File, "\n\n");
     
+    iwidth = 50;
     for(ipos=1; ipos <= ilen; ipos += 50)
     {
 	iend = ipos + 50 -1;
 	if(iend > ilen)
+	{
 	    iend = ilen;
+	    iwidth = ilen - ipos + 1;
+	}
 
 	for(i=0; i < isize; i++)
 	{
 	    seq = seqarr[i];
 	    ajStrAssSub(&sseq, seq->Seq, ipos-1, iend-1);
 	    ajSeqGapS(&sseq, '-');
-	    ajStrBlock(&sseq, 10);
+	    /* clustalw no longer uses blocks of 10 - after version 1.4 */
+	    /*ajStrBlock(&sseq, 10);*/ 
 	    ajFmtPrintF(outseq->File,
 			"%-15.15S %S\n",
 			seq->Name, sseq);
 	}
 	ajFmtPrintF(outseq->File,	/* *. conserved line */
-		    "%-15.15s %54.54s\n", "", "");
+		    "%-15.15s %*.*s\n", "", iwidth, iwidth, "");
 	ajFmtPrintF(outseq->File, "\n"); /* blank line */
     }
     
@@ -2093,6 +2165,189 @@ static void seqWriteNbrf(AjPSeqout outseq)
     strcpy(sf->endstr, "*\n");
     seqWriteSeq(outseq, sf);
 
+    return;
+}
+
+
+
+
+/* @funcstatic seqWriteExperiment *********************************************
+**
+** Writes a sequence in Staden experiment format.
+**
+** @param [u] outseq [AjPSeqout] Sequence output object.
+** @return [void]
+** @@
+******************************************************************************/
+
+static void seqWriteExperiment(AjPSeqout outseq)
+{
+    static SeqPSeqFormat sf = NULL;
+    ajint b[5];
+    static AjPStr ftfmt = NULL;
+    AjIList it;
+    AjPStr cur;
+    ajint ilen;
+    ajint i;
+    ajint j;
+    ajint jend;
+    
+    if(!ftfmt)
+	ajStrAssC(&ftfmt, "embl");
+    
+    if(ajStrMatchC(outseq->Type, "P"))
+    {
+	seqWriteSwiss(outseq);
+	return;
+    }
+    
+    ajFmtPrintF(outseq->File,
+		"ID   %-10S standard; DNA; UNC; %d BP.\n",
+		outseq->Name, ajStrLen(outseq->Seq));
+    
+    if(ajListLength(outseq->Acclist))
+    {
+	ilen=0;
+	it = ajListIterRead(outseq->Acclist);
+	while((cur = (AjPStr) ajListIterNext(it)))
+	{
+	    if(ilen + ajStrLen(cur) > 77)
+	    {
+		ajFmtPrintF(outseq->File, ";\n", cur);
+		ilen = 0;
+	    }
+
+	    if(ilen == 0)
+	    {
+		ajFmtPrintF(outseq->File, "AC   ", cur);
+		ilen = 6;
+	    }
+	    else
+	    {
+		ajFmtPrintF(outseq->File, "; ", cur);
+		ilen += 2;
+	    }
+
+	    ajFmtPrintF(outseq->File, "%S", cur);
+	    ilen += ajStrLen(cur);
+
+	}
+	ajListIterFree(&it) ;
+	ajFmtPrintF(outseq->File, ";\n", cur);
+    }
+    
+    if(ajStrLen(outseq->Sv))
+	ajFmtPrintF(outseq->File, "SV   %S\n", outseq->Sv);
+    
+    /* no need to bother with outseq->Gi because Staden doesn't use it */
+    
+    if(ajStrLen(outseq->Desc))
+	ajFmtPrintF(outseq->File, "EX   %S\n", outseq->Desc);
+    
+    if(ajListLength(outseq->Keylist))
+    {
+	ilen=0;
+	it = ajListIterRead(outseq->Keylist);
+	while((cur = (AjPStr) ajListIterNext(it)))
+	{
+	    if(ilen+ajStrLen(cur) >= 77)
+	    {
+		ajFmtPrintF(outseq->File, ";\n", cur);
+		ilen = 0;
+	    }
+
+	    if(ilen == 0)
+	    {
+		ajFmtPrintF(outseq->File, "KW   ", cur);
+		ilen = 6;
+	    }
+	    else
+	    {
+		ajFmtPrintF(outseq->File, "; ", cur);
+		ilen += 2;
+	    }
+	    ajFmtPrintF(outseq->File, "%S", cur);
+	    ilen += ajStrLen(cur);
+	}
+	ajListIterFree(&it) ;
+	ajFmtPrintF(outseq->File, ".\n", cur);
+    }
+    
+    if(ajStrLen(outseq->Tax))
+	ajFmtPrintF(outseq->File, "OS   %S\n", outseq->Tax);
+    
+    if(ajListLength(outseq->Taxlist))
+    {
+	ilen=0;
+	it = ajListIterRead(outseq->Taxlist);
+	cur = (AjPStr) ajListIterNext(it); /* skip first, should be Tax */
+	while((cur = (AjPStr) ajListIterNext(it)))
+	{
+	    if(ilen+ajStrLen(cur) >= 77)
+	    {
+		ajFmtPrintF(outseq->File, ";\n", cur);
+		ilen = 0;
+	    }
+
+	    if(ilen == 0)
+	    {
+		ajFmtPrintF(outseq->File, "OC   ", cur);
+		ilen = 6;
+	    }
+	    else
+	    {
+		ajFmtPrintF(outseq->File, "; ", cur);
+		ilen += 2;
+	    }
+	    ajFmtPrintF(outseq->File, "%S", cur);
+	    ilen += ajStrLen(cur);
+	}
+	ajListIterFree(&it) ;
+	ajFmtPrintF(outseq->File, ".\n", cur);
+    }
+    
+    if(seqoutUfoLocal(outseq))
+    {
+        outseq->Ftquery = ajFeattabOutNewSSF(ftfmt, outseq->Name,
+					     ajStrStr(outseq->Type),
+					     outseq->File);
+	if(!ajFeatWrite(outseq->Ftquery, outseq->Fttable))
+	    ajWarn("seqWriteEmbl features output failed UFO: '%S'",
+		   outseq->Ufo);
+    }
+    
+
+    if(outseq->Accuracy)
+    {
+	ilen = ajStrLen(outseq->Seq);
+	for(i=0; i<ilen;i+=20)
+	{
+	    ajFmtPrintF(outseq->File, "AV  ");
+	    jend = i+20;
+	    if(jend > ilen)
+		jend = ilen;
+	    for(j=i;j<jend;j++)
+		ajFmtPrintF(outseq->File, " %2d", outseq->Accuracy[j]);
+	    ajFmtPrintF(outseq->File, "\n");
+	}
+    }
+
+    ajSeqCount(outseq->Seq, b);
+    ajFmtPrintF(outseq->File,
+		"SQ   Sequence %d BP; %d A; %d C; %d G; %d T; %d other;\n",
+		ajStrLen(outseq->Seq), b[0], b[1], b[2], b[3], b[4]);
+    
+    seqSeqFormat(ajStrLen(outseq->Seq), &sf);
+    strcpy(sf->endstr, "\n//");
+    sf->tab = 4;
+    sf->spacer = 11;
+    sf->width = 60;
+    sf->numright = ajTrue;
+    sf->numwidth = 9;
+    sf->numjust = ajTrue;
+    
+    seqWriteSeq(outseq, sf);
+    
     return;
 }
 
@@ -2865,7 +3120,7 @@ static void seqWritePhylip(AjPSeqout outseq)
 
 
 
-/* @funcstatic seqWritePhylip3 ************************************************
+/* @funcstatic seqWritePhylipnon **********************************************
 **
 ** Writes a sequence in PHYLIP non-interleaved format.
 **
@@ -2874,7 +3129,7 @@ static void seqWritePhylip(AjPSeqout outseq)
 ** @@
 ******************************************************************************/
 
-static void seqWritePhylip3(AjPSeqout outseq)
+static void seqWritePhylipnon(AjPSeqout outseq)
 {
     ajint isize;
     ajint ilen = 0;
@@ -2891,7 +3146,8 @@ static void seqWritePhylip3(AjPSeqout outseq)
     ajint iend  = 0;
     AjPStr tstr = NULL;
     
-    ajDebug("seqWritePhylip3 list size %d\n", ajListLength(outseq->Savelist));
+    ajDebug("seqWritePhylipnon list size %d\n",
+	    ajListLength(outseq->Savelist));
     
     isize = ajListLength(outseq->Savelist);
     if(!isize)
@@ -2908,7 +3164,7 @@ static void seqWritePhylip3(AjPSeqout outseq)
     }
     
     tstr = ajStrNewL(ilen+1);
-    ajFmtPrintF(outseq->File, "1 %d YF\n", ilen);
+    ajFmtPrintF(outseq->File, "%d %d\n", isize, ilen);
     
     for(n=0;n<isize;++n)
     {
@@ -3618,6 +3874,8 @@ void ajSeqoutClear(AjPSeqout thys)
     while(ajListstrPop(thys->Taxlist,&ptr))
 	ajStrDel(&ptr);
 
+    AJFREE(thys->Accuracy);
+
     return;
 }
 
@@ -3653,15 +3911,16 @@ void ajSeqPrintOutFormat(AjPFile outf, AjBool full)
     ajFmtPrintF(outf, "OutFormat {\n");
     for(i=0; seqOutFormat[i].Name; i++)
     {
-	ajFmtPrintF(outf, "  %-15s %3B  %3B  %3B  %3B  %3B  %3B  %3B\n",
-		     seqOutFormat[i].Name,
-		     seqOutFormat[i].Single,
-		     seqOutFormat[i].Save,
-		     seqOutFormat[i].Protein,
-		     seqOutFormat[i].Nucleotide,
-		     seqOutFormat[i].Feature,
-		     seqOutFormat[i].Gap,
-		     seqOutFormat[i].Multiset);
+	ajFmtPrintF(outf, "  %-15s %3B  %3B  %3B  %3B  %3B  %3B  %3B '%s'\n",
+		    seqOutFormat[i].Name,
+		    seqOutFormat[i].Single,
+		    seqOutFormat[i].Save,
+		    seqOutFormat[i].Protein,
+		    seqOutFormat[i].Nucleotide,
+		    seqOutFormat[i].Feature,
+		    seqOutFormat[i].Gap,
+		    seqOutFormat[i].Multiset,
+		    seqOutFormat[i].Desc);
     }
     ajFmtPrintF(outf, "}\n\n");
 
@@ -4073,6 +4332,8 @@ static void seqClone(AjPSeqout outseq, const AjPSeq seq)
 
     ajint ibegin = 1;
     ajint iend;
+    ajint ilen;
+    ajint i;
 
     iend = ajStrLen(seq->Seq);
 
@@ -4101,6 +4362,15 @@ static void seqClone(AjPSeqout outseq, const AjPSeq seq)
     ajStrSet(&outseq->Informatstr, seq->Formatstr);
     ajStrSet(&outseq->Entryname, seq->Entryname);
     ajStrSet(&outseq->Db, seq->Db);
+
+    AJFREE(outseq->Accuracy);
+    if(seq->Accuracy)
+    {
+	ilen = ajStrLen(seq->Seq);
+	AJCNEW(outseq->Accuracy, ilen);
+	for(i=0;i<ilen;i++)
+	    outseq->Accuracy[i] = seq->Accuracy[i];
+    }
 
     outseq->Offset = ibegin - 1;
 
@@ -4146,6 +4416,8 @@ static void seqAllClone(AjPSeqout outseq, const AjPSeq seq)
 
     ajint ibegin = 1;
     ajint iend;
+    ajint ilen;
+    ajint i;
 
     iend = ajStrLen(seq->Seq);
 
@@ -4174,6 +4446,15 @@ static void seqAllClone(AjPSeqout outseq, const AjPSeq seq)
     ajStrAssS(&outseq->Type, seq->Type);
     ajStrAssS(&outseq->Informatstr, seq->Formatstr);
     ajStrAssS(&outseq->Entryname, seq->Entryname);
+
+    AJFREE(outseq->Accuracy);
+    if(seq->Accuracy)
+    {
+	ilen = ajStrLen(seq->Seq);
+	AJCNEW(outseq->Accuracy, ilen);
+	for(i=0;i<ilen;i++)
+	    outseq->Accuracy[i] = seq->Accuracy[i];
+    }
 
     outseq->Offset = ibegin - 1;
 
@@ -4261,6 +4542,7 @@ static void seqDeclone(AjPSeqout outseq)
 	ajStrDel(&ptr);
 
     ajStrClear(&outseq->Seq);
+    AJFREE(outseq->Accuracy);
 
     return;
 }
