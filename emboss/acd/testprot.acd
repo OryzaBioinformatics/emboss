@@ -1,0 +1,17 @@
+appl: testprot [ groups: "test" doc: "testing acdprotein variable" ]
+
+string: astring [ info: "String A"  req: "Y" ]
+
+sequence: asequence [ type: "any"  req: "Y" ]
+
+string: bstring [
+  info: "@($(acdprotein) ? Protein : Nucleotide) string B"
+  req: "Y"
+]
+
+seqall: bsequence [ type: "any"  req: "Y" ]
+
+string: cstring [
+  info: "@($(acdprotein) ? Protein : Nucleotide) string C"
+  req: "Y"
+]
