@@ -72,7 +72,7 @@ int main(int argc, char **argv)
 
 	if(!addover)
 	{
-	    while(pos+size < len-1)
+	    while(pos+size <= len-1)
 	    {
 		ajStrAssSubC(&str,ajSeqChar(seq),pos,pos+size-1);
 		ajSeqReplace(subseq, str);
