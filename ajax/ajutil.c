@@ -25,20 +25,21 @@ static ajint utilBigendCalled = 0;
 void ajExit (void) {
   ajDebug("\nFinal Summary\n=============\n\n");
   ajLogInfo();
-  ajDebug("\nlog done\n");
   ajStrExit();
-  ajDebug("\nstr done\n");
+  ajRegExit();
   ajFileExit();
   ajFeatExit();
   ajAcdExit(ajFalse);
+  ajNamExit();
   ajMemExit();
+  ajMessExit();	      /* clears data for ajDebug - do this last!!!  */
   exit (0);
   return;
 }
 
 /* @func ajExitBad ************************************************************
 **
-** Calls 'exit' with an unsuccessful code (-1).
+** Calls 'exit' with an unsuccessful code (EXIT_FAILURE defined in stdlib.h).
 **
 ** No cleanup or reporting routines are called. Simply crashes.
 **
@@ -47,8 +48,8 @@ void ajExit (void) {
 ******************************************************************************/
 
 ajint ajExitBad (void) {
-  exit (-1);
-  return -1;
+  exit (EXIT_FAILURE);
+  return EXIT_FAILURE;
 }
 
 /* @func ajLogInfo ************************************************************
