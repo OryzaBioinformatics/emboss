@@ -19,39 +19,6 @@ section: input [
 
 endsection: input
 
-section: advanced [
-  information: "Advanced section"
-  type: "page"
-]
-
-  boolean: emboss  [
-    default: "Y"
-    information: "Search the EMBOSS programs"
-    help: "If you use this option then EMBOSS program documentation
-           will be searched. If this option is set to be false, then only the
-           EMBASSY programs will be searched (if the -embassy option is
-           true). EMBASSY programs are not strictly part of EMBOSS, but use
-           the same code libraries and share the same look and feel, but are
-           generally developed by people who wish the programs to be outside
-           of the GNU Public Licence scheme, ie. they may wish to charge
-           money for them."
-  ]
-
-  boolean: embassy  [
-    default: "Y"
-    information: "Search the EMBASSY programs"
-    help: "If you use this option then EMBASSY program documentation
-           will be searched. If this option is set to be false, then only the
-           EMBOSS programs will be searched (if the -emboss option is true).
-           EMBASSY programs are not strictly part of EMBOSS, but use the
-           same code libraries and share the same look and feel, but are
-           generally developed by people who wish the programs to be outside
-           of the GNU Public Licence scheme, ie. they may wish to charge
-           money for them."
-  ]
-
-endsection: advanced
-
 section: additional [
   information: "Additional section"
   type: "page"
@@ -77,6 +44,48 @@ section: additional [
   ]
 
 endsection: additional
+
+section: advanced [
+  information: "Advanced section"
+  type: "page"
+]
+
+  boolean: emboss  [
+    default: "Y"
+    information: "Search the EMBOSS programs"
+    help: "If you use this option then EMBOSS program documentation
+           will be searched. If this option is set to be false, then only the
+           EMBASSY programs will be searched (if the -embassy option is
+           true). EMBASSY programs are not strictly part of EMBOSS, but use
+           the same code libraries and share the same look and feel, but are
+           generally developed by people who wish the programs to be outside
+           of the GNU Public Licence scheme"
+  ]
+
+  boolean: embassy  [
+    default: "Y"
+    information: "Search the EMBASSY programs"
+    help: "If you use this option then EMBASSY program documentation
+           will be searched. If this option is set to be false, then only the
+           EMBOSS programs will be searched (if the -emboss option is true).
+           EMBASSY programs are not strictly part of EMBOSS, but use the
+           same code libraries and share the same look and feel, but are
+           generally developed by people who wish the programs to be outside
+           of the GNU Public Licence scheme"
+  ]
+
+  string: showembassy  [
+    default: ""
+    information: "Show programs in one EMBASSY package"
+    help: "If you use this option then this EMBASSY package
+           program documentation will be searched.
+           EMBASSY programs are not strictly part of EMBOSS, but use the
+           same code libraries and share the same look and feel, but are
+           generally developed by people who wish the programs to be outside
+           of the GNU Public Licence scheme"
+  ]
+
+endsection: advanced
 
 section: output [
   information: "Output section"
@@ -111,10 +120,10 @@ section: output [
              the first half of the URL. \
              For example, if you wish the program name to be a hyperlink to
              the URL: \
-             http://www.uk.embnet.org/Software/EMBOSS/Apps/ \
+             http://emboss.sourceforge.net/apps/ \
              programname.html \
              then if you enter \
-             http://www.uk.embnet.org/Software/EMBOSS/Apps/ here, then the
+             http://emboss.sourceforge.net/apps/ here, then the
              first half of the URL before the program name will be set."
       knowntype: "url prefix"
     ]
@@ -128,7 +137,7 @@ section: output [
              the second half of the URL. \
              For example, if you wish the program name to be a hyperlink to
              the URL: \
-             http://www.uk.embnet.org/Software/EMBOSS/Apps/ \
+             http://emboss.sourceforge.net/apps/ \
              programname.html \
              then if you enter '.html' here, the second half of the URL after
              the program name will be set."

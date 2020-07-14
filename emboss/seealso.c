@@ -37,6 +37,8 @@ int main(int argc, char **argv, char **env)
     AjPList newlist = NULL;
     AjPList glist;
     AjPList alpha;
+    AjPList appglist;
+    AjPList applist;
     AjPList appgroups = NULL;
 
     AjPFile outfile = NULL;
@@ -49,6 +51,7 @@ int main(int argc, char **argv, char **env)
     AjBool embassy;
     AjBool explode;
     AjBool colon;
+    AjPStr showembassy = NULL;
 
     embInit("seealso", argc, argv);
     
@@ -60,12 +63,15 @@ int main(int argc, char **argv, char **env)
     groups  = ajAcdGetBool("groups");
     emboss  = ajAcdGetBool("emboss");
     embassy = ajAcdGetBool("embassy");
+    showembassy = ajAcdGetString("showembassy");
     explode = ajAcdGetBool("explode");
     colon   = ajAcdGetBool("colon");
     
     
     glist = ajListNew();
     alpha = ajListNew();
+    appglist = ajListNew();
+    applist = ajListNew();
     
     
     
@@ -79,14 +85,19 @@ int main(int argc, char **argv, char **env)
     ** get the groups and program information - don't want to ignore
     ** applications that don't work well under GUIs
     */
-    embGrpGetProgGroups(glist, alpha, env, emboss, embassy,
+    embGrpGetProgGroups(appglist, applist, env, ajTrue, ajTrue, NULL,
+			explode, colon, ajFalse);
+    
+    embGrpGetProgGroups(glist, alpha, env, emboss, embassy, showembassy,
 			explode, colon, ajFalse);
     
     newlist = ajListNew();
-    embGrpKeySearchSeeAlso(newlist, &appgroups, alpha, glist, search);
+    embGrpKeySearchSeeAlso(newlist, &appgroups, applist, glist, search);
     if(appgroups == NULL)
-	ajFatal("Invalid application name specified.");
-    
+    {
+	ajErr("No applications match.");
+	ajExitBad();
+    }
     
     if(groups)
 	embGrpOutputGroupsList(outfile, appgroups, ajFalse, html,
@@ -100,6 +111,8 @@ int main(int argc, char **argv, char **env)
     
     embGrpGroupsListDel(&glist);
     embGrpGroupsListDel(&alpha);
+    embGrpGroupsListDel(&appglist);
+    embGrpGroupsListDel(&applist);
     
     ajStrDel(&link1);
     ajStrDel(&link2);

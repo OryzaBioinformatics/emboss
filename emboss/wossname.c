@@ -49,6 +49,7 @@ int main(int argc, char **argv, char **env)
     AjBool explode;
     AjBool colon;
     AjBool gui;
+    AjPStr showembassy;
 
     embInit("wossname", argc, argv);
     
@@ -61,6 +62,7 @@ int main(int argc, char **argv, char **env)
     alphabetic = ajAcdGetBool("alphabetic");
     emboss     = ajAcdGetBool("emboss");
     embassy    = ajAcdGetBool("embassy");
+    showembassy = ajAcdGetString("showembassy");
     explode    = ajAcdGetBool("explode");
     colon      = ajAcdGetBool("colon");
     gui        = ajAcdGetBool("gui");
@@ -70,7 +72,7 @@ int main(int argc, char **argv, char **env)
     alpha = ajListNew();
     
     /* get the groups and program information */
-    embGrpGetProgGroups(glist, alpha, env, emboss, embassy,
+    embGrpGetProgGroups(glist, alpha, env, emboss, embassy, showembassy,
 			explode, colon, gui);
     
     

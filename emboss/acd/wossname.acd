@@ -57,8 +57,7 @@ section: advanced [
            true). EMBASSY programs are not strictly part of EMBOSS, but use
            the same code libraries and share the same look and feel, but are
            generally developed by people who wish the programs to be outside
-           of the GNU Public Licence sheme, ie. they may wish to charge money
-           for them."
+           of the GNU Public Licence scheme"
   ]
 
   boolean: embassy  [
@@ -70,8 +69,18 @@ section: advanced [
            EMBASSY programs are not strictly part of EMBOSS, but use the
            same code libraries and share the same look and feel, but are
            generally developed by people who wish the programs to be outside
-           of the GNU Public Licence sheme, ie. they may wish to charge money
-           for them."
+           of the GNU Public Licence scheme"
+  ]
+
+  string: showembassy  [
+    default: ""
+    information: "Show programs in one EMBASSY package"
+    help: "If you use this option then this EMBASSY package
+           program documentation will be searched.
+           EMBASSY programs are not strictly part of EMBOSS, but use the
+           same code libraries and share the same look and feel, but are
+           generally developed by people who wish the programs to be outside
+           of the GNU Public Licence scheme"
   ]
 
   boolean: colon  [
