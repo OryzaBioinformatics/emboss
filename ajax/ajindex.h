@@ -30,8 +30,12 @@ extern "C"
 #define BTNO_NODE    100L
 
 
-
-
+#define ID_EXTENSION "xid"
+#define AC_EXTENSION "xac"
+#define SV_EXTENSION "xsv"
+#define DE_EXTENSION "xde"
+#define KW_EXTENSION "xkw"
+#define TX_EXTENSION "xtx"
 
 
 
@@ -71,6 +75,7 @@ typedef struct AjSBtNode
 ** @attr dbno [ajint] Database file number
 ** @attr dups [ajint] Duplicates
 ** @attr offset [ajlong] Offset within database file (ftello)
+** @attr refoffset [ajlong] Offset within reference database file (ftello)
 ******************************************************************************/
 
 typedef struct AjSBtId
@@ -79,6 +84,7 @@ typedef struct AjSBtId
     ajint  dbno;
     ajint  dups;
     ajlong offset;
+    ajlong refoffset;
 } AjOBtId;
 #define AjPBtId AjOBtId*
 
@@ -158,7 +164,8 @@ typedef struct AjSBucket
 
 
 #define BT_BUCKIDLEN(str) (ajStrLen(str) + 1 + sizeof(ajint) + \
-			   sizeof(ajint) + sizeof(ajlong))
+			   sizeof(ajint) + sizeof(ajlong) + \
+			   sizeof(ajlong))
 
 
 /*
@@ -379,6 +386,7 @@ typedef struct AjSBtpage
 ** @attr sorder [ajint] Undocumented
 ** @attr snperbucket [ajint] Undocumented
 ** @attr secrootblock [ajlong] secondary tree root block
+** @attr kwlimit [ajint] Max length of secondary key
 ******************************************************************************/
 
 typedef struct AjSBtCache
@@ -400,6 +408,7 @@ typedef struct AjSBtCache
     ajint sorder;
     ajint snperbucket;
     ajlong secrootblock;
+    ajint  kwlimit;
 } AjOBtcache;
 #define AjPBtcache AjOBtcache*
 
@@ -410,9 +419,9 @@ typedef struct AjSBtCache
 **
 ** Btree primary keyword
 **
-** @attr keyword [AjPStr] Keyword
-** @attr treeblock [ajlong] Disc block of secondary tree
-** @attr id [AjPStr] Identifier
+** @attr keyword [AjPStr] keyword
+** @attr treeblock [ajlong] disc block of secondary tree
+** @attr id [AjPStr] Id string
 ******************************************************************************/
 
 typedef struct AjSBtPri
@@ -433,8 +442,8 @@ typedef struct AjSBtPri
 ** @attr NodeType [ajint] Node type
 ** @attr Nentries [ajint] Number of entries
 ** @attr Overflow [ajlong] Offset to overflow block
-** @attr keylen [ajint*] Key lengths
-** @attr codes [AjPBtPri*] Codes
+** @attr keylen [ajint*] key lengths
+** @attr codes [AjPBtPri*] Primary keywords
 ******************************************************************************/
 
 typedef struct AjSPriBucket
@@ -474,6 +483,34 @@ typedef struct AjSSecBucket
 
 
 
+/* @data AjPBtKeyWild ***************************************************
+**
+** Btree keyword wildcard object
+**
+** @attr keyword [AjPStr] Wildcard keyword
+** @attr pageno [ajlong] Page number of primary tree leaf
+** @attr first [AjBool] true for first search
+** @attr list [AjPList] list of AjPBtPris
+** @attr cache [AjPBtcache] cache for secondary tree
+** @attr idlist [AjPList] list of AjPStr IDs
+** @attr secpageno [ajlong] Page number of secondary tree leaf
+******************************************************************************/
+
+typedef struct AjSBtKeyWild
+{
+    AjPStr keyword;
+    ajlong pageno;
+    AjBool first;
+    AjPList list;
+    AjPBtcache cache;
+    AjPList idlist;
+    ajlong secpageno;
+} AjOBtKeyWild;
+#define AjPBtKeyWild AjOBtKeyWild*
+
+
+
+
 AjPBtcache ajBtreeCacheNewC(const char *file, const char *ext,
 			    const char *idir, const char *mode,
 			    ajint pagesize, ajint order, ajint fill,
@@ -494,18 +531,29 @@ void     ajBtreeReadParams(const char *fn, const char *ext,
 			   const char *idir, ajint *order,
 			   ajint *nperbucket, ajint *pagesize, ajint *level,
 			   ajint *cachesize, ajint *sorder,
-			   ajint *snperbucket, ajint *count);
+			   ajint *snperbucket, ajlong *count, ajint *kwlimit);
 void     ajBtreeCacheSync(AjPBtcache cache, ajlong rootpage);
 
 AjBool   ajBtreeDeleteId(AjPBtcache cache, const AjPBtId id);
 
-AjPBtWild  ajBtreeWildNew(AjPBtcache cache, const AjPStr wild);
-void       ajBtreeWildDel(AjPBtWild *thys);
+AjPBtWild    ajBtreeWildNew(AjPBtcache cache, const AjPStr wild);
+AjPBtKeyWild ajBtreeKeyWildNew(AjPBtcache cache, const AjPStr wild);
+void         ajBtreeWildDel(AjPBtWild *thys);
+void         ajBtreeKeyWildDel(AjPBtKeyWild *thys);
+
 AjPBtpage  ajBtreeFindInsertW(AjPBtcache cache, const char *key);
 AjPBtId    ajBtreeIdFromKeyW(AjPBtcache cache, AjPBtWild wild);
+void       ajBtreeListFromKeyW(AjPBtcache cache, const char *key,
+			       AjPList idlist);
+AjPBtId    ajBtreeIdFromKeywordW(AjPBtcache cache, AjPBtKeyWild wild,
+				 AjPBtcache idcache);
+void       ajBtreeListFromKeywordW(AjPBtcache cache, const char *key,
+				   AjPBtcache idcache, AjPList btidlist);
+
 AjBool     ajBtreeReplaceId(AjPBtcache cache, const AjPBtId rid);
 
-AjPStr*    ajBtreeReadEntries(const char *filename, const char *indexdir);
+ajint      ajBtreeReadEntries(const char *filename, const char *indexdir,
+		   	      AjPStr **seqfiles, AjPStr **reffiles);
 void       ajBtreeInsertDupId(AjPBtcache cache, AjPBtId id);
 AjPList    ajBtreeDupFromKey(AjPBtcache cache, const char *key);
 
@@ -521,7 +569,7 @@ AjPBtcache ajBtreeSecCacheNewC(const char *file, const char *ext,
 			       ajint pagesize, ajint order, ajint fill,
 			       ajint level, ajint cachesize,
 			       ajint sorder, ajint slevel, ajint sfill,
-			       ajint count);
+			       ajlong count, ajint kwlimit);
 AjPBtpage  ajBtreeSecFindInsert(AjPBtcache cache, const char *key);
 void       ajBtreeInsertSecId(AjPBtcache cache, const AjPStr id);
 AjBool     ajBtreeSecFromId(AjPBtcache cache, const char *key);
@@ -531,7 +579,7 @@ AjBool     ajBtreeVerifyId(AjPBtcache cache, ajlong rootblock, const char *id);
 
 void       ajBtreeInsertKeyword(AjPBtcache cache, const AjPBtPri pri);
 
-void btreeLockTest(AjPBtcache cache);
+void       ajBtreeLockTest(AjPBtcache cache);
 
 #endif
 

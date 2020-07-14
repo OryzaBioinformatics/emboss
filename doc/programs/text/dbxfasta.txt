@@ -1,0 +1,215 @@
+
+                                 dbxfasta 
+
+
+
+Function
+
+   Database b+tree indexing for fasta file databases
+
+Description
+
+   dbxfasta indexes a flat file database of one or more files, and builds
+   EMBOSS B+tree format index files. These indexes allow access of flat
+   files larger than 2Gb.
+
+   Having created the EMBOSS indexes for this file, a database can then
+   be defined in the file emboss.defaults as something like:
+DB emrod [
+   type: N
+   dbalias: emrod   (see below)
+   format: fasta
+   method: emboss
+   directory: /data/embl/fasta
+   file: emrod.fasta
+   indexdirectory: /data/embl/fasta/indexes
+]
+
+   The index file 'basename' given to dbxfasta must match the DB name in
+   the definition. If not, then a 'dbalias' line must be given which
+   specifies the basename of the indexes.
+
+  Fields Indexed
+
+   By default, dbxfasta will index the ID name and the accession number
+   (if present).
+   If they are present in your database, you may also specify that
+   dbxfasta should index the Sequence Version and GI, the words in the
+   description, the keywords and the organism words using the '-fields'
+   qualifier with the appropriate values.
+
+Usage
+
+   Here is a sample session with dbxfasta
+
+
+% dbxfasta 
+Database b+tree indexing for fasta file databases
+Basename for index files: emrod
+Resource name: embl
+    simple : >ID
+     idacc : >ID ACC
+     gcgid : >db:ID
+  gcgidacc : >db:ID ACC
+      dbid : >db ID
+      ncbi : | formats
+ID line format [idacc]: idacc
+Database directory [.]: data
+Wildcard database filename [*.dat]: emrod
+Release number [0.0]: 
+Index date [00/00/00]: 
+
+Processing file /ebi/services/idata/pmr/hgmp/test/data/emrod
+
+   Go to the output files for this example
+
+Global Parameters
+
+   dbxfasta requires that two global parameters be defined in the file
+   emboss.defaults. These are:
+SET PAGESIZE 2048
+SET CACHESIZE 200
+
+   The above values are recommended for most systems. The PAGESIZE is a
+   multiple of the size of disc pages the operating system buffers. The
+   CACHESIZE is the number of disc pages dbxfasta is allowed to cache.
+
+Resources
+
+   dbxfasta will ask you for the name of a resource definition in the
+   file emboss.defaults. This will be something like:
+RES embl [
+   type: Index
+   idlen:  15
+   acclen: 15
+   svlen:  20
+   keylen: 25
+   deslen: 25
+   orglen: 25
+]
+
+   The length definitions are the maximum lengths of 'words' in the field
+   being indexed. Longer words will be truncated to the value set.
+
+Command line arguments
+
+   Standard (Mandatory) qualifiers:
+  [-dbname]            string     Basename for index files
+  [-dbresource]        string     Resource name
+   -idformat           menu       ID line format
+   -directory          directory  Database directory
+   -filenames          string     Wildcard database filename
+   -release            string     Release number
+   -date               string     Index date
+
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers:
+   -fields             menu       Index fields
+   -exclude            string     Wildcard filename(s) to exclude
+   -indexoutdir        outdir     Index directory
+
+   Associated qualifiers: (none)
+   General qualifiers:
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report deaths
+
+
+   Standard (Mandatory) qualifiers Allowed values Default
+   [-dbname]
+   (Parameter 1) Basename for index files A string from 2 to 19
+   characters, matching regular expression /[A-z][A-z0-9_]+/ Required
+   [-dbresource]
+   (Parameter 2) Resource name A string from 2 to 19 characters, matching
+   regular expression /[A-z][A-z0-9_]+/ Required
+   -idformat ID line format
+   simple   (>ID)
+   idacc    (>ID ACC)
+   gcgid    (>db:ID)
+   gcgidacc (>db:ID ACC)
+   dbid     (>db ID)
+   ncbi     (| formats)
+   idacc
+   -directory Database directory Directory .
+   -filenames Wildcard database filename Any string is accepted *.dat
+   -release Release number A string up to 9 characters 0.0
+   -date Index date Date string dd/mm/yy 00/00/00
+   Additional (Optional) qualifiers Allowed values Default
+   (none)
+   Advanced (Unprompted) qualifiers Allowed values Default
+   -fields Index fields
+   id  (ID)
+   acc (Accession number)
+   sv  (Sequence Version and GI)
+   des (Description)
+   id,acc
+   -exclude Wildcard filename(s) to exclude Any string is accepted An
+   empty string is accepted
+   -indexoutdir Index directory Output directory .
+
+Input file format
+
+   dbxfasta reads any normal sequence USAs.
+
+Output file format
+
+   The indexing system has been designed to allow on-the-fly updating of
+   indexes. This feature is, however, not implemented in the current
+   version. It will be made available in future releases.
+
+References
+
+   None.
+
+Warnings
+
+   None.
+
+Diagnostic Error Messages
+
+   None.
+
+Exit status
+
+   It always exits with status 0.
+
+Known bugs
+
+   None.
+
+See also
+
+   Program name                     Description
+   dbiblast     Index a BLAST database
+   dbifasta     Database indexing for fasta file databases
+   dbiflat      Index a flat file database
+   dbigcg       Index a GCG formatted database
+   dbxflat      Database b+tree indexing for flat file databases
+   dbxgcg       Database b+tree indexing for GCG formatted databases
+
+Author(s)
+
+   Alan Bleasby (ajb © ebi.ac.uk)
+   European Bioinformatics Institute, Wellcome Trust Genome Campus,
+   Hinxton, Cambridge CB10 1SD, UK
+
+History
+
+Target users
+
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts.
+
+Comments
+
+   None
