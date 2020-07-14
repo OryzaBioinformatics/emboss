@@ -1,0 +1,73 @@
+appl: newcoils [
+  documentation: "Predicts coils protein secondary structure"
+  groups: "Protein:2D Structure"
+]
+
+section: input [ info: "Input section" type: page ]
+seqall: sequence  [
+  parameter: "Y"
+  type: "PureProtein"
+]
+
+
+integer: window  [
+  standard: "Y"
+  minimum: "1"
+  maximum: "$(sequence.end)"
+  default: "21"
+  information: "Window size"
+]
+
+integer: weighted  [
+  standard: "Y"
+  minimum: "0"
+  default: "0"
+  information: "weighted value"
+]
+
+integer: verb  [
+  standard: "Y"
+  minimum: "0"
+  default: "0"
+  information: "verb - matrix file"
+]
+
+int: mode  [
+  standard: "Y"
+  minimum: "0"
+  maximum: "2"
+  default: "0"
+  information: "Display Mode"
+]
+
+int: minseg  [
+  standard: "Y"
+  minimum: "0"
+  maximum: "10"
+  default: "1"
+  information: "min number of seqments"
+]
+
+float: minp  [
+  standard: "Y"
+  minimum: "0."
+  maximum: "100."
+  default: "0.50"
+  information: "Minimum p"
+]
+
+datafile: datafile  [
+  information: "weight and matrix file"
+  default: "Enewcoils.mat"
+]
+
+endsection: input
+
+section: output [ info: "Output section" type: page ]
+
+outfile: outfile  [
+  parameter: "Y"
+  knowntype: "newcoils output"
+]
+
+endsection: output
