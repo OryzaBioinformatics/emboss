@@ -21,7 +21,7 @@
 package org.emboss.jemboss.programs;
 
 import java.io.*;
-
+import javax.swing.JTextArea;
 
 /**
 *
@@ -35,13 +35,16 @@ public class RunEmbossApplication2
   /** running process */
   private Process p;
   /** standard out */
-  private String stdout = "";
+  private StringBuffer stdout = new StringBuffer();
   /** standard error */
-  private String stderr = "";
+  private StringBuffer stderr = new StringBuffer();
   /** running directory */
   private File project;
   /** process status */
   private String status;
+  private StdoutHandler stdouth;
+  private StderrHandler stderrh;
+  private JTextArea textArea;
 
   /**
   *
@@ -63,11 +66,10 @@ public class RunEmbossApplication2
 
       // 2 threads to read in stdout & stderr buffers 
       // to prevent blocking
-//    StdoutHandler stdouth = new StdoutHandler(this);
-      StderrHandler stderrh = new StderrHandler(this);
-//    stdouth.start();
+      stdouth = new StdoutHandler(this);
+      stderrh = new StderrHandler(this);
+      stdouth.start();
       stderrh.start();
-
     }
     catch(IOException ioe)
     {
@@ -79,23 +81,25 @@ public class RunEmbossApplication2
 
   /**
   *
-  * @return true if there is any standard out
+  * @param embossCommand        emboss command to run
+  * @param envp                 environment
+  * @param project              running directory
   *
   */
-  public boolean isProcessStdout()
+  public RunEmbossApplication2(String embossCommand, 
+                        String envp[], File project,
+                        JTextArea textArea)
   {
-    if(stdout.equals(""))
-      return false;
-    return true;
+    this(embossCommand,envp,project);
+    this.textArea = textArea;
   }
 
   /**
   *
   * Read in the process stderr.
-  * @return	stderr
   *
   */
-  public String readProcessStderr()
+  private void readProcessStderr()
   {
 
     BufferedInputStream stderrStream = null;
@@ -108,14 +112,10 @@ public class RunEmbossApplication2
       stderrRead =
          new BufferedReader(new InputStreamReader(stderrStream));
       char c[] = new char[100];
-      int noff = 0;
       int nc = 0;
 
       while((nc = stderrRead.read(c,0,100)) != -1)
-      {
-        stderr = stderr.concat(new String(c,0,nc));
-        noff += nc;
-      }
+        stderr = stderr.append(new String(c,0,nc));
     }
     catch (IOException io)
     {
@@ -144,16 +144,15 @@ public class RunEmbossApplication2
       }
     }
 
-    return stderr;
+    return;
   }
 
   /**
   *
   * Read in the process stdout.
-  * @return 	stdout
   *
   */
-  public String readProcessStdout()
+  private void readProcessStdout()
   {
     
     BufferedInputStream stdoutStream = null;
@@ -168,13 +167,18 @@ public class RunEmbossApplication2
  
       
       char c[] = new char[100];
-      int noff = 0;
       int nc = 0;
+      String chunk;
 
       while((nc = stdoutRead.read(c,0,100)) != -1)
       {
-        stdout = stdout.concat(new String(c,0,nc));
-        noff += nc;
+        chunk  = new String(c,0,nc);
+        stdout = stdout.append(chunk);
+        if(textArea != null)
+        {
+          textArea.append(chunk);
+          textArea.setCaretPosition(textArea.getDocument().getLength());
+        }
       }
 
     }
@@ -205,7 +209,7 @@ public class RunEmbossApplication2
       }
     }
  
-    return stdout;
+    return;
   }
 
   /**
@@ -214,7 +218,7 @@ public class RunEmbossApplication2
   * to write the stdout to the project directory.
   *
   */
-  public void writeStdout()
+  private void writeStdout()
   {
     if(project != null)
     {
@@ -252,10 +256,58 @@ public class RunEmbossApplication2
   */
   public String getProcessStdout()
   {
-//  readProcessStdout();
-    return stdout;
+    try
+    {
+      // make sure we hang around for stdout
+      while(stdouth.isAlive())
+        Thread.currentThread().sleep(10);
+    }
+    catch(InterruptedException ie)
+    {
+      ie.printStackTrace();
+    }
+                                                                                
+    return new String(stdout.toString().trim());
   }
 
+
+  /**
+  *
+  * @return stderr
+  *
+  */
+  public String getProcessStderr()
+  {
+    try
+    {
+      // make sure we hang around for stdout
+      while(stderrh.isAlive())
+        Thread.currentThread().sleep(10);
+    }
+    catch(InterruptedException ie)
+    {
+      ie.printStackTrace();
+    }
+                                                                                
+    return new String(stderr.toString().trim());
+  }
+
+  /**
+  *
+  * Wait for the process to end
+  *
+  */
+  public void waitFor()
+  {
+    try
+    {
+      p.waitFor();
+    }
+    catch(InterruptedException ie)
+    {
+      ie.printStackTrace();
+    }
+  }
   /**
   *
   * @return process

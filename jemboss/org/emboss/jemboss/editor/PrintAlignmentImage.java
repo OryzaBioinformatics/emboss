@@ -60,6 +60,8 @@ public class PrintAlignmentImage extends ScrollPanel
   private JTextField statusField = new JTextField("");
   /** number of residues per line    */
   private int nResPerLine = 0;
+  /** use anti aliasing (default is false) */
+  private boolean antiAlias = false;
 
   /**
   *
@@ -264,7 +266,7 @@ public class PrintAlignmentImage extends ScrollPanel
       topMargin  = 0;
     }
     paper.setImageableArea(leftMargin,topMargin,
-                           imageWidth,imageHeight);
+                           imageWidth,imageHeight+imageHeight);
     format.setPaper(paper);
 
     try
@@ -368,6 +370,16 @@ public class PrintAlignmentImage extends ScrollPanel
 
   /**
   *
+  *
+  *
+  */
+  protected void setAntiAlias(boolean antiAlias)
+  {
+    this.antiAlias = antiAlias;
+  }
+
+  /**
+  *
   *  Returns a generated image 
   *  @param pageIndex	page number
   *  @return 		image
@@ -383,6 +395,14 @@ public class PrintAlignmentImage extends ScrollPanel
                                   BufferedImage.TYPE_INT_RGB);
     // Create a graphics contents on the buffered image
     Graphics2D g2d = bufferedImage.createGraphics();
+   
+    if(antiAlias)
+    {
+//    System.out.println("Anit-alias on!");
+      g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+               RenderingHints.VALUE_ANTIALIAS_ON);
+    }
+
     g2d.setColor(Color.white);
     g2d.fillRect(0,0,width,height);
     // Draw graphics
@@ -412,28 +432,11 @@ public class PrintAlignmentImage extends ScrollPanel
     double imageWidth  = d.getWidth();
     double imageHeight = d.getHeight();
     Paper paper  = format.getPaper();
-                                                                                                                               
-//  if(leftMargin > 0.d)
-//  {
-//    leftMargin  = leftMargin*72;
-//    topMargin   = topMargin*72;
-//    rightMargin = rightMargin*72;
-//    btmMargin   = btmMargin*72;
-//    paper.setSize(imageWidth+(leftMargin+rightMargin),
-//                  imageHeight+(topMargin+btmMargin));
-//  }
-//  else
-//  {
-//    paper.setSize(imageWidth,imageHeight);
-//    leftMargin = 0;
-//    topMargin  = 0;
-//  }
- 
+
     paper.setSize(imageWidth,imageHeight);
-    paper.setImageableArea(0,0,imageWidth,imageHeight);
+    paper.setImageableArea(0.d,0.d,imageWidth,imageHeight+imageHeight);
     format.setPaper(paper);
-                                                                                              
-//  showOptions(false);
+
     statusField.setText(pageIndex+"1 of 1 page(s)");
     final JFrame f = new JFrame("Print Preview");
     JPanel jpane = (JPanel)f.getContentPane();

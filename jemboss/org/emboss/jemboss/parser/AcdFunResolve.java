@@ -102,30 +102,18 @@ public class AcdFunResolve
   {
     result = "";
 
-    if(acdExpPlus(var))
-      System.out.println("PLUS " + result);      
-    if(acdExpMinus(var))
-      System.out.println("MINUS " + result);
-    if(acdExpStar(var))
-      System.out.println("MULT " + result);
-    if(acdExpDiv(var))
-      System.out.println("DIV " + result);
-    if(acdExpNot(var))
-      System.out.println("NOT " + result);
-    if(acdExpEqual(var))
-      System.out.println("EQUAL " + result);
-    if(acdExpNotEqual(var))
-      System.out.println("NOTEQUAL " + result);
-    if(acdExpGreater(var))
-      System.out.println("GREATER " + result);
-    if(acdExpLesser(var))
-      System.out.println("LESSER " + result);
-    if(acdExpOr(var))
-      System.out.println("OR " + result);
-    if(acdExpAnd(var))
-      System.out.println("AND " + result);
-    if(acdExpCond(var))
-      System.out.println("COND " + result);
+    acdExpPlus(var);
+    acdExpMinus(var);
+    acdExpStar(var);
+    acdExpDiv(var);
+    acdExpNot(var);
+    acdExpEqual(var);
+    acdExpNotEqual(var);
+    acdExpGreater(var);
+    acdExpLesser(var);
+    acdExpOr(var);
+    acdExpAnd(var);
+    acdExpCond(var);
 
     return result;
   }

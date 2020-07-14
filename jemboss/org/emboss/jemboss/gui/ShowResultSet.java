@@ -209,13 +209,13 @@ public class ShowResultSet extends JFrame
     JScrollPane r1;
 
     String cmd = "cmd";
-    Enumeration enum = h.keys();
+    Enumeration enumer = h.keys();
     String stabs[] = new String[h.size()];
     int ntabs = 0;
 
-    while (enum.hasMoreElements())
+    while (enumer.hasMoreElements())
     {
-      String thiskey = (String)enum.nextElement().toString();
+      String thiskey = (String)enumer.nextElement().toString();
       if(!thiskey.equals(cmd))
       {
         if (thiskey.endsWith("png") || thiskey.endsWith("html"))

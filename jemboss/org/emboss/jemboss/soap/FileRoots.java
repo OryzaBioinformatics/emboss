@@ -78,10 +78,10 @@ public class FileRoots implements Serializable
       defaultRoot = null;
     
     rootVector = new Vector();
-    Enumeration enum = fileRoots.keys();
-    while (enum.hasMoreElements()) 
+    Enumeration enumer = fileRoots.keys();
+    while(enumer.hasMoreElements()) 
     {
-      String s = (String) enum.nextElement();
+      String s = (String)enumer.nextElement();
       rootVector.add(s);
     }
 

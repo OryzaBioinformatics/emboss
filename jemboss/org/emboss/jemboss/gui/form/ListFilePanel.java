@@ -24,6 +24,8 @@ package org.emboss.jemboss.gui.form;
 
 import java.awt.*;
 import javax.swing.*;
+import java.io.FileWriter;
+import java.io.IOException;
 
 import org.emboss.jemboss.gui.ScrollPanel;
 import org.emboss.jemboss.gui.sequenceChooser.*;
@@ -125,6 +127,30 @@ public class ListFilePanel extends JPanel
     }
 
     return list;
+  }
+
+  /**
+  *
+  *  @param file name for list file
+  *
+  */ 
+  public boolean writeListFile(String fn)
+  {
+    boolean writeOK = true;
+                                                                                             
+    try
+    {
+      FileWriter out = new FileWriter(fn);
+      out.write(getListFile());
+      out.close();
+    }
+    catch(IOException ioe)
+    {
+      ioe.printStackTrace();
+      writeOK = false;
+    }
+                                                                                             
+    return writeOK;
   }
 
   /**

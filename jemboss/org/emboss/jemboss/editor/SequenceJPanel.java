@@ -87,6 +87,7 @@ public class SequenceJPanel extends JPanel
   /** observer panels in this group */
   private Vector observers;
 
+  
   /**
   *
   * @param seq		sequence to display
@@ -111,12 +112,13 @@ public class SequenceJPanel extends JPanel
     this.seq  = seq;
     this.ypad = ypad;
 
+    setOpaque(false);
     if(colorTable != null)
       this.colorTable = colorTable;
     else
       setDefaultColorHashtable();
 
-    setBackground(Color.white);
+//  setBackground(Color.white);
     if(fontSize != 0)
     {
       this.fontSize = fontSize;
@@ -205,7 +207,8 @@ public class SequenceJPanel extends JPanel
     this.drawNumber = true;
     this.interval   = interval;
     this.seqLength  = seqLength+1;
-    setBackground(Color.white);
+    setOpaque(false);
+//  setBackground(Color.white);
     FontMetrics metrics = getFontMetrics(font);
     boundWidth = metrics.stringWidth("A");
     boundWidth2 = boundWidth/2;
@@ -324,9 +327,9 @@ public class SequenceJPanel extends JPanel
   {
     if(observers != null)
     {
-      Enumeration enum = observers.elements();
-      while(enum.hasMoreElements())
-        ((SequenceJPanel)enum.nextElement()).update(res,pressed);
+      Enumeration enumer = observers.elements();
+      while(enumer.hasMoreElements())
+        ((SequenceJPanel)enumer.nextElement()).update(res,pressed);
     }
   }
 
@@ -591,6 +594,18 @@ public class SequenceJPanel extends JPanel
   public void setPrettyPlot(boolean prettyPlot)
   {
     this.prettyPlot = prettyPlot;
+  }
+
+ 
+  /**
+  *
+  * Determine if using prettyplot display
+  * @return  	true if the prettyplot display is to
+  *           	be used
+  */
+  public boolean isPrettyPlot()
+  {
+    return prettyPlot;
   }
 
 

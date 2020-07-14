@@ -277,10 +277,10 @@ public class PlotConsensus extends JPanel
   {
     int len = 0;
 
-    Enumeration enum = seqs.elements();
-    while(enum.hasMoreElements())
+    Enumeration enumer = seqs.elements();
+    while(enumer.hasMoreElements())
     {
-      Sequence seq = (Sequence)enum.nextElement();
+      Sequence seq = (Sequence)enumer.nextElement();
       if(len < seq.getLength())
         len = seq.getLength();
     }

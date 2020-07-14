@@ -309,6 +309,16 @@ public class SetInFileCard extends Box
 
   /**
   *
+  * @param file name for list file
+  *
+  */
+  public boolean writeListFile(String fn)
+  {
+    return listPane.writeListFile(fn);
+  }
+
+  /**
+  *
   * @return	cut 'n pasted text
   *
   */

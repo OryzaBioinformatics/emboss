@@ -1,4 +1,4 @@
-/********************************************************************
+/*******************************************************************
 *
 *  This library is free software; you can redistribute it and/or
 *  modify it under the terms of the GNU Library General Public
@@ -24,6 +24,8 @@ package org.emboss.jemboss.gui;
 import org.emboss.jemboss.*;
 import org.emboss.jemboss.soap.*;
 import org.emboss.jemboss.gui.filetree.*;
+import org.emboss.jemboss.draw.DNADraw;
+import org.emboss.jemboss.draw.Wizard;
 
 import java.net.URL;
 
@@ -32,6 +34,7 @@ import java.io.*;
 import javax.swing.*;
 import javax.swing.event.*;
 import java.awt.event.*;
+import java.util.Vector;
 
 /**
 *
@@ -188,16 +191,6 @@ public class SetUpMenuBar
     JMenu toolMenu = new JMenu("Tools");
     toolMenu.setMnemonic(KeyEvent.VK_T);
 
-    JMenuItem toolJalview  = new JMenuItem("Multiple Sequence Editor - Jalview");
-    toolJalview.addActionListener(new ActionListener()
-    {
-      public void actionPerformed(ActionEvent e)
-      {
-        new LaunchJalView();
-      }
-    });
-    toolMenu.add(toolJalview);
-
     JMenuItem toolAlignJFrame = new JMenuItem("Multiple Sequence Editor - Jemboss");
     toolAlignJFrame.addActionListener(new ActionListener()
     {
@@ -209,6 +202,52 @@ public class SetUpMenuBar
       }
     });
     toolMenu.add(toolAlignJFrame);
+
+    JMenuItem toolJalview  = new JMenuItem("Multiple Sequence Editor - Jalview");
+    toolJalview.addActionListener(new ActionListener()
+    {
+      public void actionPerformed(ActionEvent e)
+      {
+        new LaunchJalView();
+      }
+    });
+    toolMenu.add(toolJalview);
+
+    JMenuItem toolDNAEd = new JMenuItem("Jemboss DNA Editor");
+    toolDNAEd.addActionListener(new ActionListener()
+    {
+      public void actionPerformed(ActionEvent e)
+      {
+        Wizard wiz = new Wizard(null);
+        DNADraw dna = wiz.getDNADraw();
+
+        JFrame f = new JFrame("DNA Viewer");
+        Dimension d = f.getToolkit().getScreenSize();
+
+        Vector minTicks = new Vector();
+        Vector majTicks = new Vector();
+        Vector block = new Vector();
+        Vector restrictionEnzyme = new Vector();
+
+        if(dna == null)
+          dna = new DNADraw(minTicks,majTicks,block,
+                            restrictionEnzyme);
+        DNADraw.jsp = new JScrollPane(dna);
+        DNADraw.jsp.getViewport().setBackground(Color.white);
+        dna.setCloseAndDispose(true,f);
+
+        f.getContentPane().add(DNADraw.jsp);
+        f.setJMenuBar(dna.createMenuBar());
+
+        f.pack();
+        f.setLocation(((int)d.getWidth()-f.getWidth())/4,
+                  ((int)d.getHeight()-f.getHeight())/2);
+
+        f.setVisible(true);
+      }
+    });
+    toolMenu.add(toolDNAEd);
+
     toolMenu.addSeparator();
 
     JMenuItem toolWorkList = new JMenuItem("Sequence List");
@@ -269,7 +308,7 @@ public class SetUpMenuBar
                              "version");
         }
         JOptionPane.showMessageDialog(f, fc +
-                  " by the EMBOSS team at the HGMP-RC (UK)");
+                  " by the EMBOSS team");
       }
     });
     helpMenu.add(helpMenuAbout);

@@ -474,10 +474,10 @@ public class ShowSavedResults extends JFrame
 	epr.updateStatus();
 	setCursor(cdone);
 	datasets.removeAllElements();
-	Enumeration enum = epr.descriptionHash().keys();
-	while (enum.hasMoreElements()) 
+	Enumeration enumer = epr.descriptionHash().keys();
+	while (enumer.hasMoreElements()) 
         {
-	  String image = convertToPretty((String)enum.nextElement());
+	  String image = convertToPretty((String)enumer.nextElement());
 	  datasets.addElement(image);
 	}
       }
@@ -498,9 +498,9 @@ public class ShowSavedResults extends JFrame
     setJMenuBar(resMenu);
     
     // set up the results list in the gui
-    Enumeration enum = epr.descriptionHash().keys();
-    while (enum.hasMoreElements()) 
-      datasets.addElement(convertToPretty((String)enum.nextElement()));
+    Enumeration enumer = epr.descriptionHash().keys();
+    while (enumer.hasMoreElements()) 
+      datasets.addElement(convertToPretty((String)enumer.nextElement()));
 
     final JList st = new JList(datasets);
     st.setCellRenderer(new TabListCellRenderer());

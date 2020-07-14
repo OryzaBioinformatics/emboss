@@ -97,7 +97,10 @@ public class BuildProgramMenu
     }
     else 
     {
-      envp = new String[4];  /* environment vars */
+      if(mysettings.isCygwin())
+        envp = new String[5];  /* environment vars */
+      else
+        envp = new String[4];
       String ps = new String(System.getProperty("path.separator"));
       String embossBin  = mysettings.getEmbossBin();
       String embossPath = mysettings.getEmbossPath();
@@ -107,6 +110,8 @@ public class BuildProgramMenu
       envp[1] = "PLPLOT_LIB=" + mysettings.getPlplot();
       envp[2] = "EMBOSS_DATA=" + mysettings.getEmbossData();
       envp[3] = "HOME=" + System.getProperty("user.home") + fs;
+      if(mysettings.isCygwin())
+        envp[4] = "EMBOSSCYGROOT=" + mysettings.getCygwinRoot();
     }
 
 
@@ -118,6 +123,9 @@ public class BuildProgramMenu
       {
         if(withSoap) 
         {
+          mainMenu.setEnableFileManagers(false);
+          mainMenu.setEnableShowResults(false);
+
           if(mysettings.getPublicSoapURL().startsWith("https") &&
              !mysettings.getUseHTTPSProxy())
           {
@@ -192,8 +200,8 @@ public class BuildProgramMenu
               if(hwoss.containsKey("wossname.out"))
                 woss = new String((byte[])hwoss.get("wossname.out"));
 
-              mainMenu.setEnableFileManagers(false);
-              mainMenu.setEnableShowResults(false);
+//            mainMenu.setEnableFileManagers(false);
+//            mainMenu.setEnableShowResults(false);
 
 //            Hashtable hshowdb = (new JembossJarUtil("resources/showdb.jar")).getHash();
 //            mainMenu.setEnableFileManagers(false);
@@ -236,16 +244,15 @@ public class BuildProgramMenu
         {
           String embossBin = mysettings.getEmbossBin();
           String embossCommand = new String(embossBin + "wossname -colon -auto");
-          System.out.println(embossCommand);
-          RunEmbossApplication rea = new RunEmbossApplication(
+          RunEmbossApplication2 rea = new RunEmbossApplication2(
                                       embossCommand,envp,null);
-          rea.isProcessStdout();
+          rea.waitFor();
           woss = rea.getProcessStdout();
           Process processWoss = rea.getProcess();
 
           embossCommand = new String(embossBin + "showdb -auto");
-          rea = new RunEmbossApplication(embossCommand,envp,null);
-          rea.isProcessStdout();
+          rea = new RunEmbossApplication2(embossCommand,envp,null);
+          rea.waitFor();
           String showdbOut = rea.getProcessStdout();
 
           try 
@@ -256,6 +263,7 @@ public class BuildProgramMenu
           {
             System.out.println("BuildProgramMenu received interruption error");
           }
+
           Database d = new Database(showdbOut);
           db = d.getDB();
 

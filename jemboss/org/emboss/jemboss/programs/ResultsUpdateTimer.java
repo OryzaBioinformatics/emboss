@@ -79,10 +79,10 @@ public class ResultsUpdateTimer
     {
       datasets.removeAllElements();
       //get this information from the results manager
-      Enumeration enum = Jemboss.resultsManager.descriptionHash().keys();
-      while (enum.hasMoreElements())
+      Enumeration enumer = Jemboss.resultsManager.descriptionHash().keys();
+      while (enumer.hasMoreElements())
       {
-        String image = ShowSavedResults.convertToPretty((String)enum.nextElement());
+        String image = ShowSavedResults.convertToPretty((String)enumer.nextElement());
         datasets.addElement(image);
       }
       if(!savedResFrame.isVisible())

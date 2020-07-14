@@ -21,7 +21,7 @@
 package org.emboss.jemboss.server;
 
 import org.emboss.jemboss.JembossParams;
-import org.emboss.jemboss.programs.RunEmbossApplication;
+import org.emboss.jemboss.programs.RunEmbossApplication2;
 import org.emboss.jemboss.parser.Ajax;
 
 import java.io.*;
@@ -37,7 +37,7 @@ public class JembossAuthServer
 {
 
   /** SOAP results directory */
-  private String tmproot = new String("/tmp/SOAP/emboss/");
+  private String tmproot = new String("/data/sandbox/");
   /** Jemboss log file       */
   private String logFile = new String(tmproot+"/jemboss.log");
   /** Jemboss error log file */
@@ -46,6 +46,8 @@ public class JembossAuthServer
   private String fs = new String(System.getProperty("file.separator"));
   /** path separator */
   private String ps = new String(System.getProperty("path.separator"));
+  /** line seperator */
+  private String ls = System.getProperty("line.separator");
 
 //get paths to EMBOSS
   /** jemboss properties */
@@ -76,66 +78,6 @@ public class JembossAuthServer
                            jp.getEmbossEnvironment();
 // "LD_LIBRARY_PATH=/usr/local/lib"+" ";
 // FIX FOR SOME SUNOS
-
-  public String name()
-  {
-    return "The EMBOSS Application Suite";
-  }
-
-  public String version()
-  {
-    String[] envp = jp.getEmbossEnvironmentArray(env);
-    String embossCommand = new String(embossBin + "embossversion");
-    RunEmbossApplication rea = new RunEmbossApplication(embossCommand,
-                                                           envp,null);
-    rea.isProcessStdout();
-    return rea.getProcessStdout();
-  }
-
-
-  public String appversion()
-  {
-    String[] envp = jp.getEmbossEnvironmentArray(env);
-    String embossCommand = new String(embossBin + "embossversion");
-    RunEmbossApplication rea = new RunEmbossApplication(embossCommand,
-                                                           envp,null);
-    rea.isProcessStdout();
-    return rea.getProcessStdout();
-  }
-
-
-  public String about()
-  {
-    return "Jemboss is an interface to the EMBOSS suite of programs.";
-  }
-
-  public String helpurl()
-  {
-    return "http://www.uk.embnet.org/Software/EMBOSS/";
-  }
-
-  public String abouturl()
-  {
-    return "http://www.uk.embnet.org/Software/EMBOSS/overview.html";
-  }
-
-  public String docurl()
-  {
-    return "http://www.uk.embnet.org/Software/EMBOSS/general.html";
-  }
-
-  public Hashtable servicedesc()
-  {
-    Hashtable desc = new Hashtable();
-    desc.put("name",name());
-    desc.put("version",version());
-    desc.put("appversion",appversion());
-    desc.put("about",about());
-    desc.put("helpurl",helpurl());
-    desc.put("abouturl",abouturl());
-    desc.put("docurl",docurl());
-    return desc;
-  }
 
 
   /**
@@ -193,11 +135,11 @@ public class JembossAuthServer
     String embossCommand = new String(embossBin + 
                    "wossname -colon -gui -auto");
  
-    RunEmbossApplication rea = new RunEmbossApplication(embossCommand,
+    RunEmbossApplication2 rea = new RunEmbossApplication2(embossCommand,
                                                            envp,null);
+    rea.waitFor();
     wossOut.add("status");
-    wossOut.add("0");
-    rea.isProcessStdout();
+    wossOut.add(rea.getStatus());
     wossOut.add("wossname");
     wossOut.add(rea.getProcessStdout());
 
@@ -216,11 +158,12 @@ public class JembossAuthServer
   {
     String[] envp = jp.getEmbossEnvironmentArray(env);
     String command = embossBin.concat("tfm " + applName + " -html -nomore");
-    RunEmbossApplication rea = new RunEmbossApplication(command,envp,null);
-    String helptext = "";
-    if(rea.isProcessStdout())
-      helptext = rea.getProcessStdout();
-    else
+    RunEmbossApplication2 rea = new RunEmbossApplication2(command,
+                                                       envp,null);
+    rea.waitFor();
+    String helptext = rea.getProcessStdout();
+ 
+    if(helptext.equals(""))
       helptext = "No help available for this application.";
 
     Vector vans = new Vector();
@@ -452,17 +395,19 @@ public class JembossAuthServer
     String[] envp = jp.getEmbossEnvironmentArray(env);
     Vector showdbOut = new Vector();
     String embossCommand = new String(embossBin + "showdb -auto");
-    RunEmbossApplication rea = new RunEmbossApplication(embossCommand,
-                                                           envp,null);
+
+    RunEmbossApplication2 rea = new RunEmbossApplication2(embossCommand,
+                                                          envp,null);
+    rea.waitFor();
+
     showdbOut.add("status");
     showdbOut.add(rea.getStatus());
-                              
-    if(rea.getStatus().equals("0"))
-    {
-      rea.isProcessStdout();
-      showdbOut.add("showdb");
-      showdbOut.add(rea.getProcessStdout());
-    }
+     
+    if(!rea.getStatus().equals("0"))
+      return showdbOut;
+                        
+    showdbOut.add("showdb");
+    showdbOut.add(rea.getProcessStdout());
 
     // find available matrices
     String dataFile[] = (new File(embossData)).list(new FilenameFilter()
@@ -600,7 +545,6 @@ public class JembossAuthServer
       return returnError(aj,"run_prog failed to create dir "+
                           project);
 
-    String ls = System.getProperty("line.separator");
 //create description file & input files
     StringBuffer descript = new StringBuffer();
     descript.append("EMBOSS run details for ");
@@ -952,7 +896,7 @@ public class JembossAuthServer
       try
       {
         fbuf =  aj.getFile(userName,passwd,environ,
-                                  project+"/"+cl);
+                                  project+fs+cl);
         ssr.add(cl);
         ssr.add(new String(fbuf));
       }
@@ -1167,8 +1111,7 @@ public class JembossAuthServer
                       "STDOUT "+aj.getOutStd(),errorLog);
     }
 
-    String outStd = aj.getOutStd();
-    StringTokenizer stok = new StringTokenizer(outStd,"\n");
+    StringTokenizer stok = new StringTokenizer(aj.getOutStd(),"\n");
     String fn =  null;
     while(stok.hasMoreTokens()) 
     {
@@ -1179,7 +1122,7 @@ public class JembossAuthServer
         try
         {
           fbuf =  aj.getFile(userName,passwd,environ,
-                                    project+"/"+fn);
+                                    project+fs+fn);
         }
         catch(Exception exp){}
         if(aj.getFileok()==1)
@@ -1188,7 +1131,7 @@ public class JembossAuthServer
           result.add(fbuf);
         }
         else
-          appendToLogFile("Cannot getFile "+project+"/"+fn,errorLog);
+          appendToLogFile("Cannot getFile "+project+fs+fn,errorLog);
       }
     }
 
@@ -1273,7 +1216,6 @@ public class JembossAuthServer
                             byte[] passwd, Vector res)
   {
 
-
     if(userName == null || passwd == null)
     {
 //    System.out.println("Failed Authorisation "+userName);
@@ -1306,8 +1248,6 @@ public class JembossAuthServer
       return false;
     }
 
-//  appendToLogFile("userAuth STDERR "+aj.getErrStd(),errorLog);  //DEBUG
-       
     return true;
   }
 
@@ -1333,7 +1273,6 @@ public class JembossAuthServer
     vans.add("1");
     return vans;
   }
-
 
   public final Object clone() throws java.lang.CloneNotSupportedException
   {

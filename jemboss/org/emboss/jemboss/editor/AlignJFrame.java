@@ -308,6 +308,55 @@ public class AlignJFrame extends JFrame
     JMenu editMenu = new JMenu("Edit");
     menuBar.add(editMenu);
 
+    JMenuItem insertAnn = new JMenuItem("Insert Annotation Sequence");
+    editMenu.add(insertAnn);
+    insertAnn.addActionListener(new ActionListener()
+    {
+      public void actionPerformed(ActionEvent e)
+      {
+        ScrollPanel pane = new ScrollPanel(new BorderLayout());
+        Box bacross = Box.createVerticalBox();
+        JRadioButton openFile = new JRadioButton("Read from File");
+        JRadioButton cut      = new JRadioButton("Cut and Paste");
+        ButtonGroup group = new ButtonGroup();
+        group.add(openFile);
+        group.add(cut);
+        cut.setSelected(true);
+        bacross.add(openFile);
+        bacross.add(cut);
+        pane.add(bacross,BorderLayout.CENTER);
+        int selectedValue = JOptionPane.showConfirmDialog(null,
+                          pane, "Cut and Paste/Read from File",
+                          JOptionPane.OK_CANCEL_OPTION,
+                          JOptionPane.QUESTION_MESSAGE);
+        if(selectedValue == JOptionPane.OK_OPTION)
+        {
+          SequenceReader sr = null;
+          if(openFile.isSelected())
+            sr = new SequenceReader();
+          else
+          {
+            Paste pastePane = new Paste();
+            selectedValue = JOptionPane.showConfirmDialog(null,
+                          pastePane, "Cut and Paste",
+                          JOptionPane.OK_CANCEL_OPTION,
+                          JOptionPane.QUESTION_MESSAGE);
+            if(selectedValue == JOptionPane.OK_OPTION)
+              sr = new SequenceReader(pastePane.getSequence());
+          }
+          if(sr != null && sr.isReading())
+          {
+            sequenceFile = sr.getSequenceFile();
+            gsc.addAnnotationSequence(sr.getSequence(0));
+            Dimension dpane = gsc.getPanelSize();
+            gsc.setPreferredSize(dpane);
+            gsc.setNamePanelWidth(gsc.getNameWidth());
+            jspSequence.setViewportView(gsc);
+          }
+        }
+      }
+    });
+
     JMenuItem trimMenu = new JMenuItem("Trim Sequences");
     editMenu.add(trimMenu);
     trimMenu.addActionListener(new ActionListener()
@@ -332,10 +381,10 @@ public class AlignJFrame extends JFrame
         if(selectedValue == JOptionPane.OK_OPTION)
         {
           Vector vseq = gsc.getSequenceCollection();
-          Enumeration enum = vseq.elements();
-          while(enum.hasMoreElements())
+          Enumeration enumer = vseq.elements();
+          while(enumer.hasMoreElements())
           {
-            Sequence s = (Sequence)enum.nextElement();
+            Sequence s = (Sequence)enumer.nextElement();
             s.trim(start.getValue(),end.getValue());  
           }
           gsc.setMaxSeqLength();
@@ -498,7 +547,7 @@ public class AlignJFrame extends JFrame
                     options.getIdentity());
 
         int fontSize = gsc.getFontSize();
-        gsc.addSequence(conseq.getConsensusSequence(),true,5,fontSize);
+        gsc.addSequence(conseq.getConsensusSequence(),true,0,fontSize);
 
 //      if(pretty.isSelected())
 //        gsc.setPrettyPlot(pretty.isSelected(),ppj);
@@ -513,6 +562,7 @@ public class AlignJFrame extends JFrame
     });
     calculateMenu.add(calculateCons);
 
+    
     JMenuItem consOptions = new JMenuItem("Set consensus options...");
     consOptions.addActionListener(new ActionListener()
     {
@@ -521,7 +571,7 @@ public class AlignJFrame extends JFrame
         try
         {
           Vector vseq = gsc.getSequenceCollection();
-          Enumeration enum = vseq.elements();
+//        Enumeration enumer = vseq.elements();
           float wgt = getTotalWeight(gsc.getSequenceCollection());
           options.setCase(wgt/2.f);
           options.setPlurality(wgt/2.f);
@@ -648,10 +698,10 @@ public class AlignJFrame extends JFrame
   {
     float wgt = 0.f;
     vseq = gsc.getSequenceCollection();
-    Enumeration enum = vseq.elements();
-    while(enum.hasMoreElements())
+    Enumeration enumer = vseq.elements();
+    while(enumer.hasMoreElements())
     {
-      Sequence s = (Sequence)enum.nextElement();
+      Sequence s = (Sequence)enumer.nextElement();
       if(!s.getName().equals("Consensus"))
         wgt+=s.getWeight();
     }
@@ -1026,14 +1076,15 @@ public class AlignJFrame extends JFrame
               "           magenta , orange, pink, white, yellow, black\n"+     
               "-print     Print the alignment image. The following 2 flags can be\n"+
               "           used along with the print flag\n"+
-              "           -prefix    prefix for image output file.\n"+
-              "           -onePage   fit the alignment to one page. This option must be\n"+
-              "                      be used with the -nres flag to define the residues\n"+
-              "                      per line.\n"+
-              "           -type      png or jpeg (default is jpeg).\n"+
-              "           -landscape Print as landscape (the default is portrait).\n"+
-              "           -margin    Define the left, right, top and bottom margin\n"+
-              "                      (in cm).\n"+
+              "           -prefix     prefix for image output file.\n"+
+              "           -onePage    fit the alignment to one page. This option must be\n"+
+              "                       be used with the -nres flag to define the residues\n"+
+              "                       per line.\n"+
+              "           -type       png or jpeg (default is jpeg).\n"+
+              "           -antialias  turn anti-aliasing on.\n"+
+              "           -landscape  Print as landscape (the default is portrait).\n"+
+              "           -margin     Define the left, right, top and bottom margin\n"+
+              "                       (in cm).\n"+
               "       java org.emboss.jemboss.editor.AlignJFrame file -matrix EBLOSUM62 \\\n"+
               "                -noshow -print -margin 0.5 0.5 0.5 0.5\n\n"+
               "-matrix    To define a scoring matrix. Used with the -pretty and -calc\n"+
@@ -1084,6 +1135,7 @@ public class AlignJFrame extends JFrame
       boolean prettyBox  = true;
       boolean landscape  = false;
       boolean onePage    = false;
+      boolean antialias  = false;
 
       for(int i=0;i<args.length;i++)
       {
@@ -1143,6 +1195,8 @@ public class AlignJFrame extends JFrame
         }
         else if(args[i].indexOf("-onePage") > -1)
           onePage = true;
+        else if(args[i].indexOf("-antialias") > -1)
+          antialias = true;
       }
 
       for(int i=0;i<args.length;i++)
@@ -1233,12 +1287,16 @@ public class AlignJFrame extends JFrame
         if(onePage)
         {
           PrintAlignmentImage pai = new PrintAlignmentImage(gsc);
+          if(antialias)
+            pai.setAntiAlias(true);
           pai.print(nresiduesPerLine,type,prefix,                               
                     lmargin,rmargin,tmargin,bmargin);
         }
         else
         {
           PrintAlignmentImage pai = new PrintAlignmentImage(gsc);
+          if(antialias)
+            pai.setAntiAlias(true);
           pai.print(nresiduesPerLine,type,prefix,landscape,
                     lmargin,rmargin,tmargin,bmargin);
         }

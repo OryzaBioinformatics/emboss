@@ -128,6 +128,22 @@ public class SequenceReader
       if(index > -1)
         return readClustalFile(new BufferedReader(new FileReader(seqFile)));
 
+//jpred
+      index = line.indexOf(":");
+      if(index > -1)
+      {
+        if((index = line.indexOf(",",index)) > -1)
+        {
+          int index1 = line.indexOf(",",index+1);
+          if(index1 > -1 && (index1-index) == 2)
+          {
+            index = line.indexOf(",",index1+1);
+            if(index > -1 && (index-index1) == 2)
+              readJPredFile(new BufferedReader(new FileReader(seqFile)));
+          }
+        }
+      }
+
     }
     catch (IOException e)
     {
@@ -169,7 +185,24 @@ public class SequenceReader
 // clustal
       index = line.indexOf("CLUSTAL");
       if(index > -1)
-        return readClustalFile(new BufferedReader(new FileReader(seqFile)));
+        return readClustalFile(new BufferedReader(new StringReader(seqString)));
+
+//jpred 
+      index = line.indexOf(":");
+      if(index > -1)
+      {
+        if((index = line.indexOf(",",index)) > -1)
+        {
+          int index1 = line.indexOf(",",index+1);
+          if(index1 > -1 && (index1-index) == 2)
+          {
+            index = line.indexOf(",",index1+1);
+            if(index > -1 && (index-index1) == 2)
+              readJPredFile(new BufferedReader(new StringReader(seqString)));
+          }
+        }
+      }
+
     }
     catch (IOException e)
     {
@@ -376,6 +409,57 @@ public class SequenceReader
     return seqs;
 
   }
+
+
+  /**
+  *
+  * Reads in the JPred sequence file and creates a Vector
+  * containing the sequence(s).
+  * @param in   buffered reader
+  */
+  public Vector readJPredFile(BufferedReader in)
+  {
+    seqs = new Vector();
+
+    System.out.println("readJPredFile");
+    try
+    {
+      String line;
+      String name;
+      StringBuffer seqString;
+      Sequence seq;
+      StringTokenizer st;
+      while((line = in.readLine()) != null )
+      {
+        line = line.trim();
+        if(line.equals(""))
+          continue;
+        int index = line.indexOf(":");
+        if(index > -1)
+        {
+          int index1 = line.indexOf(";")+1;
+          if(index1 < 0)
+            index1 = 0;
+          name = line.substring(index1,index);
+          line = line.substring(index+1);
+        }
+        else
+          continue;
+        st = new StringTokenizer(line,",");
+        seqString = new StringBuffer();
+        while(st.hasMoreTokens())
+          seqString = seqString.append(st.nextToken(",").trim());
+        seq = new Sequence(name,seqString.toString());
+        seqs.add(seq);
+      }
+    }
+    catch (IOException e)
+    {
+      System.out.println("SequenceReader JPred Error");
+    }
+    return seqs;
+  }
+
 
   /**
   *

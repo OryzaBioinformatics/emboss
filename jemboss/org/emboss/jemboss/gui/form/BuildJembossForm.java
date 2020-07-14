@@ -62,7 +62,9 @@ public class BuildJembossForm implements ActionListener
   protected static OutputSequenceAttributes outSeqAttr;
 
   private Box advSectionBox;
+  private Box addSectionBox;
   protected static JPanel advSection;
+  protected static JPanel addSection;
   protected static JPanel reqdSection;
   protected static JPanel outSection;
   protected static JPanel inpSection;
@@ -132,8 +134,8 @@ public class BuildJembossForm implements ActionListener
     if(!withSoap) 
     {
       String command = embossBin.concat("tfm " + applName + " -html -nomore");
-      RunEmbossApplication rea = new RunEmbossApplication(command,envp,null);
-      rea.isProcessStdout();
+      RunEmbossApplication2 rea = new RunEmbossApplication2(command,envp,null);
+      rea.waitFor();
       helptext = rea.getProcessStdout(); 
     }
 
@@ -218,7 +220,8 @@ public class BuildJembossForm implements ActionListener
     tools.add(bhelp);
       
 // Advanced options
-    if(advSectionBox!= null)
+    if(advSectionBox != null ||
+       addSectionBox != null)
     {
       JButton badvanced = new JButton("Advanced Options");
       badvanced.addActionListener(this);
@@ -237,12 +240,20 @@ public class BuildJembossForm implements ActionListener
     bgo.setMinimumSize(new Dimension(200, 40));
     bgo.setMaximumSize(new Dimension(200, 40));
 
-    if(advSectionBox!= null)
+// additional section
+    if(addSectionBox != null)
+    {
+      fieldPane.add(addSectionBox);
+      addSectionBox.setVisible(false);
+    }
+
+// advanced section
+    if(advSectionBox != null)
     {
       fieldPane.add(advSectionBox);
       advSectionBox.setVisible(false);
     }
-     
+
     fieldPane.add(Box.createVerticalGlue());
   }
 
@@ -325,7 +336,7 @@ public class BuildJembossForm implements ActionListener
     int nfield = 0;
 
     advSectionBox = null;
-    advSection = null;
+    addSectionBox = null;
     reqdSection = null;
     outSection = null;
     inpSection = null;
@@ -346,7 +357,7 @@ public class BuildJembossForm implements ActionListener
         SectionPanel sp = new SectionPanel(f,p3,fieldPane,parseAcd,
               nfield,textf,textInt,textFloat,rangeField,checkBox,
               inSeqAttr,fieldOption,multiOption,inSeq,filelist,
-              db,appDescription,lab,numofFields,mysettings,withSoap);
+              db,appDescription,lab,numofFields,mysettings,withSoap,envp);
 
         if(sp.isReportFormat())
           rf = sp.getReportFormat();
@@ -357,7 +368,12 @@ public class BuildJembossForm implements ActionListener
         if(sp.isAdvancedSection())
         {
           advSectionBox = sp.getSectionBox();
-          advSection = sp.getSectionPanel();
+          advSection    = sp.getSectionPanel();
+        }
+        else if(sp.isAdditionalSection())
+        {
+          addSectionBox = sp.getSectionBox();
+          addSection    = sp.getSectionPanel();
         }
         else if(sp.getSectionBox() != null)
         {
@@ -387,22 +403,16 @@ public class BuildJembossForm implements ActionListener
   {
 
     String line;
-    String text = "";
 
     if( ae.getActionCommand().startsWith("Advanced Option"))
     {
-      if(advSectionBox.isVisible())
-      {
-        advSectionBox.setVisible(false);
-        p2.setVisible(false);
-        p2.setVisible(true);
-      }
-      else
-      {
-        advSectionBox.setVisible(true);
-        p2.setVisible(false);
-        p2.setVisible(true);
-      }
+      if(advSectionBox != null)
+        advSectionBox.setVisible(!advSectionBox.isVisible());
+      if(addSectionBox != null)
+        addSectionBox.setVisible(!addSectionBox.isVisible());
+
+      p2.setVisible(false);
+      p2.setVisible(true);
     }
     else if ( ae.getActionCommand().startsWith("GO"))
     {
@@ -413,19 +423,17 @@ public class BuildJembossForm implements ActionListener
 
         if(!embossCommand.equals("NOT OK"))
         {
-          RunEmbossApplication rea = new RunEmbossApplication(
+          RunEmbossApplication2 rea = new RunEmbossApplication2(
                                            embossCommand,envp,null);
-          rea.isProcessStdout();
+          rea.waitFor();
           stdout = rea.getProcessStdout();
-          Process p = rea.getProcess();
-          try
-          {
-            p.waitFor();
-          } 
-          catch (InterruptedException interre)
-          {
-            f.setCursor(cdone);
-          }
+
+          String msg = rea.getProcessStderr().trim();
+          if(msg != null && !msg.equals(""))
+            JOptionPane.showMessageDialog(null, msg, "alert",
+                                   JOptionPane.ERROR_MESSAGE);
+
+          f.setCursor(cdone);
           bresults.setVisible(true);
         }
       }
@@ -486,7 +494,8 @@ public class BuildJembossForm implements ActionListener
       JPanel pscroll;
       JScrollPane rscroll;
 
-      if(!stdout.equals(""))
+      if(!stdout.equals("") &&
+         !(stdout.startsWith("Created") && stdout.endsWith(".png")))
       {
         presults = new JPanel(new BorderLayout());
         pscroll = new JPanel(new BorderLayout());
@@ -500,6 +509,7 @@ public class BuildJembossForm implements ActionListener
         hashRes.put("stdout",stdout);
       }
 
+      boolean seenGraphs = false;
       for(int j=0;j<numofFields;j++) 
       {
         presults = new JPanel(new BorderLayout());
@@ -512,16 +522,17 @@ public class BuildJembossForm implements ActionListener
           try
           {
             BufferedReader in;
+            StringBuffer text = new StringBuffer();
             if(parseAcd.isOutputSequence(j))
               in = new BufferedReader(new FileReader(seqoutResult));
             else
               in = new BufferedReader(new FileReader(outfileResult));
 
             while((line = in.readLine()) != null)
-              text = text.concat(line + "\n");
+              text = text.append(line + "\n");
 
             in.close();
-            JTextArea seqText = new JTextArea(text);
+            JTextArea seqText = new JTextArea(text.toString());
             seqText.setFont(new Font("monospaced", Font.PLAIN, 12));
             pscroll.add(seqText, BorderLayout.CENTER);
             seqText.setCaretPosition(0);
@@ -530,11 +541,13 @@ public class BuildJembossForm implements ActionListener
           }
           catch (IOException ioe)
           {
-            System.out.println("Failed to open sequence file " + seqoutResult);
+            if(mysettings.getDebug())
+              System.out.println("Failed to open sequence file " + seqoutResult);
           }
         }
-        else if (parseAcd.isOutputGraph(j))
+        else if(parseAcd.isOutputGraph(j) && !seenGraphs)
         {
+          seenGraphs = true;
           File cwdFile = new File(cwd);
           String pngFiles[] = cwdFile.list(new FilenameFilter()
           {
@@ -547,32 +560,23 @@ public class BuildJembossForm implements ActionListener
             };
           });
 
-
           for(int i=0;i<pngFiles.length;i++)
           {
             presults = new JPanel(new BorderLayout());
-            pscroll = new JPanel(new BorderLayout());
-            rscroll = new JScrollPane(pscroll);
+            pscroll  = new JPanel(new BorderLayout());
+            rscroll  = new JScrollPane(pscroll);
             presults.add(rscroll, BorderLayout.CENTER);
-            ImageIcon icon = null;
-            URL iconURL = ClassLoader.getSystemResource(pngFiles[i]);
-            if (iconURL != null) {
-              icon = new ImageIcon(iconURL);
-              JLabel picture = new JLabel(icon);
-              pscroll.add(picture);
-              fresults.add(pngFiles[i],presults);
-              hashRes.put(pngFiles[i],getLocalFile(new File(pngFiles[i])));
-            }
-            else
-            {
-              System.out.println("Not opened file " +cwd+applName+".1.png");
-            }
+            byte pngContents[] = getLocalFile(new File(pngFiles[i]));
+            ImageIcon icon = new ImageIcon(pngContents);
+            JLabel picture = new JLabel(icon);
+            pscroll.add(picture);
+            fresults.add(pngFiles[i],presults);
+            hashRes.put(pngFiles[i],pngContents);
           }
         }
       }
  
       new ResultsMenuBar(res,fresults,hashRes,mysettings);
-//    new ResultsMenuBar(res,fresults,hashRes,null);
       res.setVisible(true);
     }
   }
@@ -800,9 +804,11 @@ public class BuildJembossForm implements ActionListener
           }
           else
           { 
-            String fna[] = inSeq[h].getArrayListFile();
-            for(int i=0;i<fna.length;i++)
-              options = options.concat(" -" + val + " " +  fna[i]);
+            String fna = System.getProperty("user.dir")+
+                         System.getProperty("file.separator")+"seq.list";
+
+            boolean ok = inSeq[h].writeListFile(fna);
+            options = options.concat(" -" + val + " list::" +  fna);
           }
         } 
         else                                               // cut 'n paste
@@ -823,13 +829,16 @@ public class BuildJembossForm implements ActionListener
             try
             {
               File tf = File.createTempFile(fn, ".jembosstmp",
-                                  new File(cwd));
+                                            new File(cwd));
               PrintWriter out = new PrintWriter(new FileWriter(tf));
               out.println(cp);
               out.close();
-              fn = new String(tf.getCanonicalPath());
+              if(mysettings.isCygwin())
+                fn = new String(tf.getName());
+              else
+                fn = new String(tf.getCanonicalPath());
             } catch (IOException ioe) {}
-            options = options.concat(" -" + val + " " + fn);
+            options = options.concat(" -" + val + " " + fn );
           }
         }
 

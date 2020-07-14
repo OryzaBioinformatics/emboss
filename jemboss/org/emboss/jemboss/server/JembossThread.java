@@ -53,16 +53,8 @@ public class JembossThread extends Thread
  
   public void run() 
   { 
-    try
-    {
-      rea.readProcessStdout();
-      rea.getProcess().waitFor();
-      createFinishedFile();
-    }
-    catch(InterruptedException intr)
-    {
-      createFinishedFile();
-    }
+    rea.waitFor();
+    createFinishedFile();
   }
  
   /**

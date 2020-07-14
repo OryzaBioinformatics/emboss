@@ -24,6 +24,8 @@ package org.emboss.jemboss.gui.form;
 
 import javax.swing.*;
 import java.awt.FontMetrics;
+import java.awt.Font;
+import java.awt.Color;
 
 /**
 *
@@ -44,6 +46,9 @@ public class LabelTextBox extends Box
   {
     super(BoxLayout.Y_AXIS);
  
+    Font labfont = new Font("SansSerif", Font.BOLD, 12);
+    Color labelColor = new Color(0, 0, 0);
+
     if(!sl.equals(""))
     {
       int stop;
@@ -55,7 +60,7 @@ public class LabelTextBox extends Box
       sl = sl.replace('\n',' ');
       String subLabel;
       JLabel l = new JLabel();     
-      FontMetrics fm = l.getFontMetrics(SectionPanel.labfont);
+      FontMetrics fm = l.getFontMetrics(labfont);
 
       while(fm.stringWidth(sl) > width)
       {
@@ -70,14 +75,14 @@ public class LabelTextBox extends Box
         l = new JLabel(" " + subLabel);
         add(l);
         sl = sl.substring(stop+1,sl.length());
-        l.setFont(SectionPanel.labfont);
-        l.setForeground(SectionPanel.labelColor);
+        l.setFont(labfont);
+        l.setForeground(labelColor);
         if(!tt.equals(""))
           l.setToolTipText(tt);
       }
       l = new JLabel(" " + sl);
-      l.setFont(SectionPanel.labfont);
-      l.setForeground(SectionPanel.labelColor);
+      l.setFont(labfont);
+      l.setForeground(labelColor);
       if(!tt.equals(""))
         l.setToolTipText(tt);
 

@@ -113,6 +113,7 @@ public class GraphicSequenceCollection extends JPanel
     this.drawColorBox = drawColorBox;
     this.drawNumber = drawNumber;
 
+    jspSequence.getViewport().setBackground(Color.white);
     setBackground(Color.white);
     MultiLineToolTipUI.initialize();
     graphicSequence = new Vector();
@@ -138,9 +139,9 @@ public class GraphicSequenceCollection extends JPanel
       drawNumber();
 
 // draw names and sequences 
-    Enumeration enum = seqs.elements();
-    while(enum.hasMoreElements())
-      addSequence((Sequence)enum.nextElement(),false,0,0);
+    Enumeration enumer = seqs.elements();
+    while(enumer.hasMoreElements())
+      addSequence((Sequence)enumer.nextElement(),false,0,0);
 
     westBox.add(Box.createVerticalGlue());
     centerBox.add(Box.createVerticalGlue());
@@ -193,10 +194,10 @@ public class GraphicSequenceCollection extends JPanel
   */
   protected Sequence getConsensusSequence()
   {
-    Enumeration enum = seqs.elements();
-    while(enum.hasMoreElements())
+    Enumeration enumer = seqs.elements();
+    while(enumer.hasMoreElements())
     {
-      Sequence s = (Sequence)enum.nextElement();
+      Sequence s = (Sequence)enumer.nextElement();
       String name = s.getName();
       if(name.equals("Consensus"))
         return s;
@@ -331,10 +332,10 @@ public class GraphicSequenceCollection extends JPanel
   protected void setMaxSeqLength()
   {
     MAXSEQLENGTH = 0;
-    Enumeration enum = seqs.elements();
-    while(enum.hasMoreElements())
+    Enumeration enumer = seqs.elements();
+    while(enumer.hasMoreElements())
     {
-      Sequence seq = (Sequence)(enum.nextElement());
+      Sequence seq = (Sequence)(enumer.nextElement());
       if(seq.getSequence().length()>MAXSEQLENGTH)
         MAXSEQLENGTH = seq.getSequence().length();
     }
@@ -359,23 +360,23 @@ public class GraphicSequenceCollection extends JPanel
   */
   protected void setSequenceLock(boolean llock)
   {
-    Enumeration enum = graphicName.elements();
+    Enumeration enumer = graphicName.elements();
     if(!llock)
     {
-      while(enum.hasMoreElements())
-        ((SequenceNameJButton)enum.nextElement()).setSelected(false); 
-      enum = graphicSequence.elements();
-      while(enum.hasMoreElements())
-        ((SequenceJPanel)enum.nextElement()).detachAll();  
+      while(enumer.hasMoreElements())
+        ((SequenceNameJButton)enumer.nextElement()).setSelected(false); 
+      enumer = graphicSequence.elements();
+      while(enumer.hasMoreElements())
+        ((SequenceJPanel)enumer.nextElement()).detachAll();  
        
       return;
     }
 
     int i = 0;
     Vector selected = new Vector();
-    while(enum.hasMoreElements())
+    while(enumer.hasMoreElements())
     {
-      SequenceNameJButton sbutt = (SequenceNameJButton)enum.nextElement();
+      SequenceNameJButton sbutt = (SequenceNameJButton)enumer.nextElement();
       if(sbutt.isSelected())
         selected.add((SequenceJPanel)graphicSequence.get(i));
       i++;
@@ -427,14 +428,15 @@ public class GraphicSequenceCollection extends JPanel
 
     int identical = 1;
     int nseqs = 0;
-    Enumeration enum = seqs.elements();
-    while(enum.hasMoreElements())
+    Enumeration enumer = seqs.elements();
+    while(enumer.hasMoreElements())
     {
       nseqs++;
-      Sequence seq = (Sequence)(enum.nextElement());
+      Sequence seq = (Sequence)(enumer.nextElement());
       if(!seqName.equals(seq.getName()))
       {
-        if(pos < seq.getLength())
+        SequenceJPanel seqPanel = (SequenceJPanel)graphicSequence.get(nseqs);
+        if(pos < seq.getLength() && seqPanel.isPrettyPlot())
           if(seq.getResidue(pos).equalsIgnoreCase(s))
             identical++;
       }
@@ -449,14 +451,17 @@ public class GraphicSequenceCollection extends JPanel
       int m1 = mat.getMatrixIndex(s);
       int matrix[][] = mat.getMatrix();
       float matching = 0.f;
+      nseqs = 0;
 
-      enum = seqs.elements();
-      while(enum.hasMoreElements())
+      enumer = seqs.elements();
+      while(enumer.hasMoreElements())
       {
-        Sequence seq = (Sequence)(enum.nextElement());
+        nseqs++;
+        Sequence seq = (Sequence)(enumer.nextElement());
+        SequenceJPanel seqPanel = (SequenceJPanel)graphicSequence.get(nseqs);
 //      if(!seqName.equals(seq.getName()))
 //      {
-          if(pos < seq.getLength())
+          if(pos < seq.getLength() && seqPanel.isPrettyPlot())
           {
             int m2 = mat.getMatrixIndex(seq.getResidue(pos));
             if(m1 >= 0 && m2 >= 0 && matrix[m1][m2]>0)
@@ -526,9 +531,10 @@ public class GraphicSequenceCollection extends JPanel
     else
     {
       Sequence seqDown = (Sequence)seqs.get(seqIndex+1);
+      SequenceJPanel seqPanelDown = (SequenceJPanel)graphicSequence.get(seqIndex+2);
       String res = seqDown.getSequence().substring(pos,pos+1);
       Color col = getColor(res,pos,seqDown.getName());
-      if(col.equals(Color.black))
+      if(col.equals(Color.black) || !seqPanelDown.isPrettyPlot())   
         testDown = 1;
     }
 
@@ -552,12 +558,12 @@ public class GraphicSequenceCollection extends JPanel
   {
     boolean removed = false;
     int index = 0;
-    Enumeration enum = seqs.elements();
+    Enumeration enumer = seqs.elements();
     Sequence seq = null;
 
-    while(enum.hasMoreElements())
+    while(enumer.hasMoreElements())
     {
-      seq = (Sequence)enum.nextElement();
+      seq = (Sequence)enumer.nextElement();
       if(seq.getName().equals(name))
       {
         removedSeqs.add(seq);
@@ -623,20 +629,20 @@ public class GraphicSequenceCollection extends JPanel
     int nseqs = 0;
 
 // get no. of sequences excl. consensus
-    Enumeration enum = seqs.elements();
-    while(enum.hasMoreElements())
+    Enumeration enumer = seqs.elements();
+    while(enumer.hasMoreElements())
     {  
-      String name = ((Sequence)enum.nextElement()).getName();
+      String name = ((Sequence)enumer.nextElement()).getName();
       if(!name.equals("Consensus"))
         nseqs++;
     }
 
     String seqName[] = new String[nseqs];
     int i = 0;
-    enum = seqs.elements(); 
-    while(enum.hasMoreElements())
+    enumer = seqs.elements(); 
+    while(enumer.hasMoreElements())
     {
-      String name = ((Sequence)enum.nextElement()).getName();
+      String name = ((Sequence)enumer.nextElement()).getName();
       if(!name.equals("Consensus"))
       {
         seqName[i] = new String(name);
@@ -696,6 +702,7 @@ public class GraphicSequenceCollection extends JPanel
   }
 
 
+
   /**
   *
   *  Add a sequence to the sequence collection display and
@@ -749,10 +756,10 @@ public class GraphicSequenceCollection extends JPanel
   {
     hgt = 1;
     len = 0; 
-    Enumeration enum = graphicSequence.elements();
-    while(enum.hasMoreElements())
+    Enumeration enumer = graphicSequence.elements();
+    while(enumer.hasMoreElements())
     {
-      SequenceJPanel gs = (SequenceJPanel)enum.nextElement();
+      SequenceJPanel gs = (SequenceJPanel)enumer.nextElement();
       hgt = hgt+gs.getSequenceHeight();
       if(len<gs.getSequenceWidth())
         len = gs.getSequenceWidth();
@@ -806,10 +813,10 @@ public class GraphicSequenceCollection extends JPanel
   public int getNameHeight()
   {
     int hgtName = 0;
-    Enumeration enum = graphicName.elements();
-    while(enum.hasMoreElements())
+    Enumeration enumer = graphicName.elements();
+    while(enumer.hasMoreElements())
       hgtName = hgtName+
-          ((SequenceNameJButton)enum.nextElement()).getPanelHeight();
+          ((SequenceNameJButton)enumer.nextElement()).getPanelHeight();
     return hgtName;
   }
 
@@ -822,10 +829,10 @@ public class GraphicSequenceCollection extends JPanel
   public int getNameWidth()
   {
     int lenName = 0;
-    Enumeration enum = graphicName.elements();
-    while(enum.hasMoreElements())
+    Enumeration enumer = graphicName.elements();
+    while(enumer.hasMoreElements())
     {
-      SequenceNameJButton gs = (SequenceNameJButton)enum.nextElement();
+      SequenceNameJButton gs = (SequenceNameJButton)enumer.nextElement();
       if(lenName<gs.getPanelWidth())
         lenName = gs.getPanelWidth();
     }
@@ -889,9 +896,9 @@ public class GraphicSequenceCollection extends JPanel
   public void setDrawBoxes(boolean drawBlackBox)
   {
     this.drawBlackBox = drawBlackBox;
-    Enumeration enum = graphicSequence.elements();
-    while(enum.hasMoreElements())
-      ((SequenceJPanel)(enum.nextElement())).setDrawBoxes(drawBlackBox);
+    Enumeration enumer = graphicSequence.elements();
+    while(enumer.hasMoreElements())
+      ((SequenceJPanel)(enumer.nextElement())).setDrawBoxes(drawBlackBox);
     setJScrollPaneViewportView();
   }
 
@@ -905,9 +912,9 @@ public class GraphicSequenceCollection extends JPanel
   public void setDrawColor(boolean drawColorBox)
   {
     this.drawColorBox = drawColorBox;
-    Enumeration enum = graphicSequence.elements();
-    while(enum.hasMoreElements())
-      ((SequenceJPanel)(enum.nextElement())).setDrawColor(drawColorBox);
+    Enumeration enumer = graphicSequence.elements();
+    while(enumer.hasMoreElements())
+      ((SequenceJPanel)(enumer.nextElement())).setDrawColor(drawColorBox);
     setJScrollPaneViewportView();
   }
 
@@ -919,11 +926,11 @@ public class GraphicSequenceCollection extends JPanel
   */
   public void setFontSizeForCollection(int fs)
   {
-    Enumeration enum = graphicSequence.elements();
+    Enumeration enumer = graphicSequence.elements();
 
-    while(enum.hasMoreElements())
+    while(enumer.hasMoreElements())
     {
-      SequenceJPanel gs = (SequenceJPanel)enum.nextElement();
+      SequenceJPanel gs = (SequenceJPanel)enumer.nextElement();
       gs.setFontSize(fs);
       Dimension actual = gs.getMaximumSize();
       int slen = gs.getResidueWidth()*(int)(MAXSEQLENGTH*1.2);
@@ -993,10 +1000,10 @@ public class GraphicSequenceCollection extends JPanel
     pat = pat.toLowerCase();
             
 // highlight matching segments of seqs
-    Enumeration enum = graphicSequence.elements();
-    while(enum.hasMoreElements())
+    Enumeration enumer = graphicSequence.elements();
+    while(enumer.hasMoreElements())
     {
-      SequenceJPanel sjp = (SequenceJPanel)enum.nextElement();
+      SequenceJPanel sjp = (SequenceJPanel)enumer.nextElement();
       sjp.showPattern(pat);
     }
 
@@ -1049,10 +1056,10 @@ public class GraphicSequenceCollection extends JPanel
     int newResPos = 0;
     int nfound = 0;
 
-    Enumeration enum = seqs.elements();
-    while(enum.hasMoreElements())
+    Enumeration enumer = seqs.elements();
+    while(enumer.hasMoreElements())
     {
-      Sequence seq = (Sequence)enum.nextElement();
+      Sequence seq = (Sequence)enumer.nextElement();
       int index = seq.getSequence().toLowerCase().indexOf(pat,startSearch);
       if(index > -1)
       {
@@ -1100,10 +1107,10 @@ public class GraphicSequenceCollection extends JPanel
     this.colorScheme  = colourTable;
     this.drawColorBox = true;
 
-    Enumeration enum = graphicSequence.elements();
-    while(enum.hasMoreElements())
+    Enumeration enumer = graphicSequence.elements();
+    while(enumer.hasMoreElements())
     {
-      SequenceJPanel sjp = (SequenceJPanel)enum.nextElement();
+      SequenceJPanel sjp = (SequenceJPanel)enumer.nextElement();
       sjp.setColorScheme(colourTable);
       sjp.setDrawColor(drawColorBox);
     }
@@ -1118,9 +1125,9 @@ public class GraphicSequenceCollection extends JPanel
   public void setPrettyPlot(boolean bpretty, PrettyPlotJFrame prettyPlot)
   {
     this.prettyPlot = prettyPlot;
-    Enumeration enum = graphicSequence.elements();
-    while(enum.hasMoreElements())
-      ((SequenceJPanel)(enum.nextElement())).setPrettyPlot(bpretty);
+    Enumeration enumer = graphicSequence.elements();
+    while(enumer.hasMoreElements())
+      ((SequenceJPanel)(enumer.nextElement())).setPrettyPlot(bpretty);
   }
  
   /**
@@ -1175,9 +1182,14 @@ public class GraphicSequenceCollection extends JPanel
   {
     SequenceJPanel seq = (SequenceJPanel)graphicSequence.get(0);
     int residueHeight = seq.getSequenceHeight();
-    int alignHeight   = (graphicSequence.size()+2)*residueHeight;
+    int alignHeight   = (graphicSequence.size()+1)*residueHeight;
     int nalign = Math.round(((float)MAXSEQLENGTH/
                              (float)numResPerLine)+.5f)*alignHeight;
+//  System.out.println("nalign "+
+//                     Math.round(((float)MAXSEQLENGTH/(float)numResPerLine)+.5f)+
+//                     "  alignHeight "+alignHeight+"  nalign "+nalign+" 
+//                     residueHeight "+residueHeight+ 
+//                     "  graphicSequence.size()+1 "+(graphicSequence.size()+1));
     int width  = (seq.getResidueWidth()*(numResPerLine+2))+getNameWidth();
     return new Dimension(width,nalign);
   }
@@ -1280,12 +1292,19 @@ public class GraphicSequenceCollection extends JPanel
 //  System.out.println("pageIndex "+pageIndex+" numResPerLine "+numResPerLine);
     for(int i=istart;i<istop;i+=numResPerLine)
     {
-      Enumeration enum = graphicSequence.elements();
+      Enumeration enumer = graphicSequence.elements();
       SequenceJPanel gs = null;
-      while(enum.hasMoreElements())
+      int iend;
+
+      while(enumer.hasMoreElements())
       {
-        gs = (SequenceJPanel)(enum.nextElement());
-        gs.getSequencePrintGraphic(g2d,getNameWidth(),i,i+numResPerLine);
+        iend = i+numResPerLine;
+        if(iend > istop)
+          iend = istop;
+
+        gs = (SequenceJPanel)(enumer.nextElement());
+        gs.getSequencePrintGraphic(g2d,getNameWidth(),i,iend);
+//                                 i+numResPerLine);
         gs.getNamePrintGraphic(g2d);
         g2d.translate(0,gs.getSequenceHeight());
       }
@@ -1351,10 +1370,12 @@ public class GraphicSequenceCollection extends JPanel
   public static void main(String args[])
   {
     Vector seqs = new Vector();
-    seqs.add(new Sequence("","ACCaaaaaaaaaaaaaaaaaaaaTAGAtTAT"+
+    seqs.add(new Sequence("Seq1","ACCaaaaaaaaaaaaaaaaaaaaTAGAtTAT"+
              "ACCaaaaaaaaaaaaaaaaaaaaTAGAtTAT"+
              "ACCaaaaaaaaaaaaaaaaaaaaTAGAtTAT"));
-
+    seqs.add(new Sequence("Seq2","ACCaaaaaaaaaaaaaaaaaaaaTAGAtTAT"+
+             "ACCaaaaaaaaaaaaaaaaaaaaTAGAtTAT"+
+             "ACCaaaaaaaaaaaaaaaaaaaaTAGAtTAT"));
 
     JScrollPane jspSequence = new JScrollPane();
     GraphicSequenceCollection gsc = new GraphicSequenceCollection(
@@ -1384,6 +1405,11 @@ public class GraphicSequenceCollection extends JPanel
                new SequenceNameJButton(new Sequence(" "),0);
     graphicName.add(snjBlank);
     seqNameBox.add(snjBlank);
+  }
+
+  protected void addAnnotationSequence(Sequence s)
+  {
+    addSequence(s,true,0,getFontSize());
   }
 
 }

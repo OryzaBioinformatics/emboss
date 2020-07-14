@@ -284,10 +284,10 @@ public class Consensus
   {
     int len = 0;
     int numseq=0;
-    Enumeration enum = seqs.elements();
-    while(enum.hasMoreElements())
+    Enumeration enumer = seqs.elements();
+    while(enumer.hasMoreElements())
     {
-      Sequence seq = (Sequence)enum.nextElement();
+      Sequence seq = (Sequence)enumer.nextElement();
       if(numseq > 0)
         if(len != seq.getLength())
           return false;
@@ -310,10 +310,10 @@ public class Consensus
   {
     int len = 0;
 
-    Enumeration enum = seqs.elements();
-    while(enum.hasMoreElements())
+    Enumeration enumer = seqs.elements();
+    while(enumer.hasMoreElements())
     {
-      Sequence seq = (Sequence)enum.nextElement();
+      Sequence seq = (Sequence)enumer.nextElement();
       if(len < seq.getLength())
         len = seq.getLength();
     }

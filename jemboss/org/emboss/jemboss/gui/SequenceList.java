@@ -38,6 +38,7 @@ import org.emboss.jemboss.parser.*;
 import org.emboss.jemboss.soap.*;
 import org.emboss.jemboss.JembossParams;
 import org.emboss.jemboss.gui.filetree.*;
+import org.emboss.jemboss.programs.RunEmbossApplication2;
 
 /**
 *
@@ -147,14 +148,24 @@ public class SequenceList extends JFrame
 
           if(!withSoap && fc!=null)    //Ajax without SOAP
           {
-            Ajax aj = new Ajax();
-            ok = aj.seqType(fc);
-            if(ok)
+            if(mysettings.isCygwin())
             {
-              ajaxLength  = aj.length;
-              ajaxWeight  = aj.weight;
-              ajaxProtein = aj.protein;
+              ajaxLength = cygwinSeqAttr(fc,mysettings);
+              if(ajaxLength > -1)
+                ok = true;
             }
+            else
+            {
+              Ajax aj = new Ajax();
+              ok = aj.seqType(fc);
+              if(ok)
+              {
+                ajaxLength  = aj.length;
+                ajaxWeight  = aj.weight;
+                ajaxProtein = aj.protein;
+              }
+            }
+
           }
           else if(fc!=null)    //Ajax with SOAP
           {
@@ -320,6 +331,36 @@ public class SequenceList extends JFrame
         return i;
     }
     return -1;
+  }
+
+  /**
+  *
+  * Cygwin uses infoseq to get sequence length and type
+  * and uses infoalign to get the sequence weight.
+  *
+  */
+  private int cygwinSeqAttr(String fc, JembossParams mysettings)
+  {
+    String[] envp = new String[2];  /* environment vars */
+    String ps = new String(System.getProperty("path.separator"));
+    String embossPath = mysettings.getEmbossPath();
+    embossPath = new String("PATH" + ps +
+                      embossPath + ps + mysettings.getEmbossBin() + ps);
+    envp[0] = "PATH=" + embossPath;
+    envp[1] = "EMBOSS_DATA=" + mysettings.getEmbossData();
+
+    String command = mysettings.getEmbossBin().concat(
+                "infoseq -only -type -length -nohead -auto "+fc);
+    RunEmbossApplication2 rea = new RunEmbossApplication2(command,envp,null);
+    rea.waitFor();
+
+    String stdout = rea.getProcessStdout();
+    if(stdout.trim().equals(""))
+      return -1;
+
+    StringTokenizer stok = new StringTokenizer(stdout,"\n ");
+    stok.nextToken();
+    return Integer.parseInt(stok.nextToken().trim());
   }
 
   /**

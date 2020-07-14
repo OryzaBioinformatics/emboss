@@ -138,6 +138,8 @@ public class ParseAcd
         if(colonPos < 0) continue;
 
         String dataType = line.substring(0,colonPos).toLowerCase();
+        if(dataType.equals("toggle"))
+          dataType = "boolean";
         braketPos = line.indexOf('[');
 
         if(braketPos >= 0) 
@@ -178,7 +180,8 @@ public class ParseAcd
         else if(line.startsWith("section"))
         {
           if(param.equals("input") || param.equals("required") ||
-             param.equals("output") || param.equals("advanced") )
+             param.equals("output") || param.equals("advanced") ||
+             param.equals("additional") )
             nsection++;
           else
             nsubsection++;
@@ -263,10 +266,10 @@ public class ParseAcd
   {
     String res=svalue;
 
-    Enumeration enum = variables.elements();
-    while(enum.hasMoreElements())
+    Enumeration enumer = variables.elements();
+    while(enumer.hasMoreElements())
     {
-      ApplicationFields var = (ApplicationFields)enum.nextElement();
+      ApplicationFields var = (ApplicationFields)enumer.nextElement();
       String vName  = var.getParamValueStr(0);
       String vValue = var.getParamValueStr(1);
 

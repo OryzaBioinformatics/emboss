@@ -92,7 +92,6 @@ public class JembossServer
                                                            envp,null);
     try
     {
-      rea.readProcessStdout();
       Process p = rea.getProcess();
       p.waitFor();
     }
@@ -109,7 +108,6 @@ public class JembossServer
                                                            envp,null);
     try
     {
-      rea.readProcessStdout();
       Process p = rea.getProcess();
       p.waitFor();
     }
@@ -210,7 +208,6 @@ public class JembossServer
     wossOut.add("0");
     try
     {
-      rea.readProcessStdout();
       Process p = rea.getProcess();
       p.waitFor();
     }
@@ -240,16 +237,13 @@ public class JembossServer
 
     try
     {
-      rea.readProcessStdout();
       Process p = rea.getProcess();
       p.waitFor();
     }
     catch(InterruptedException iexp){}
 
-    String helptext = "";
-    if(rea.isProcessStdout())
-      helptext = rea.getProcessStdout();
-    else
+    String helptext = rea.getProcessStdout();
+    if(helptext.equals(""))
       helptext = "No help available for this application.";
 
     Vector vans = new Vector();
@@ -382,7 +376,6 @@ public class JembossServer
 
     try
     {
-      rea.readProcessStdout();
       Process p = rea.getProcess();
       p.waitFor();
     }
@@ -605,17 +598,18 @@ public class JembossServer
     result.add("0");
 
     if(options.toLowerCase().indexOf("interactive") > -1)
-    {
+    { 
+      String stdout = "";
       try
       {
-        rea.readProcessStdout();
         rea.getProcess().waitFor();
+        stdout = rea.getProcessStdout();
       }
       catch(InterruptedException iexp){}    
-      if(rea.isProcessStdout())
+      if(!stdout.equals(""))
       {
         result.add("stdout");
-        result.add(rea.getProcessStdout());
+        result.add(stdout);
       }
       createFinishedFile(project);
     }

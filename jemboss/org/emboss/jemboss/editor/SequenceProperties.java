@@ -277,10 +277,12 @@ public class SequenceProperties
   static
   {
     baseColor = new Hashtable();
-    baseColor.put("A",Color.green);
-    baseColor.put("T",Color.red);
-    baseColor.put("C",Color.blue);
-    baseColor.put("G",Color.white);
+    baseColor.put("A",Color.red);
+    baseColor.put("T",Color.blue);
+    baseColor.put("U",Color.blue);
+    baseColor.put("C",Color.green);
+    baseColor.put("G",Color.yellow);
+    baseColor.put("N",Color.black);
   }
 
 

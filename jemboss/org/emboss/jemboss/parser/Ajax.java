@@ -131,6 +131,7 @@ public class Ajax
     }
     catch(UnsatisfiedLinkError e) 
     {
+      e.printStackTrace();
       if(e.getMessage().indexOf("already loaded in another classloader") 
                                != -1)
         System.err.println(e);

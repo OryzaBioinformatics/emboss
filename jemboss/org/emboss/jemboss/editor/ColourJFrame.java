@@ -104,10 +104,10 @@ public class ColourJFrame extends JFrame
     JLabel residueField;
     YBox.removeAll();
     
-    Enumeration enum = colourTable.keys();
-    while(enum.hasMoreElements())
+    Enumeration enumer = colourTable.keys();
+    while(enumer.hasMoreElements())
     {
-      String res = (String)enum.nextElement();
+      String res = (String)enumer.nextElement();
       XBox = new Box(BoxLayout.X_AXIS);
       residueField = new JLabel(res);
       residueField.setPreferredSize(new Dimension(20,20));

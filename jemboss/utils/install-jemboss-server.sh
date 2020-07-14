@@ -1545,8 +1545,8 @@ if [ "$AUTH" = "y" ]; then
   echo
   echo "It is *very* important to now:"
   echo "1. As root:"
-  echo "   chmod u+s $EMBOSS_INSTALL/bin/jembossctl"
   echo "   chown root $EMBOSS_INSTALL/bin/jembossctl"
+  echo "   chmod u+s $EMBOSS_INSTALL/bin/jembossctl"
   echo "2. Ensure that tomcat is running as the non-priveliged user,"
   echo "   with the same UID (i.e. $UUID) that was given to this script"
   echo "   (and NOT as root!)."

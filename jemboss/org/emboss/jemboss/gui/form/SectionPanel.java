@@ -27,9 +27,11 @@ import javax.swing.border.TitledBorder;
 import javax.swing.border.Border;
 import java.util.Vector;
 import java.util.Enumeration;
+import java.util.StringTokenizer;
 import java.awt.event.*;
 import java.io.*;
 
+import org.emboss.jemboss.programs.RunEmbossApplication2;
 import org.emboss.jemboss.gui.AdvancedOptions;
 import org.emboss.jemboss.gui.BuildProgramMenu;
 import org.emboss.jemboss.parser.*;
@@ -105,6 +107,8 @@ public class SectionPanel
   private boolean isReq = false;
   /** true if the advanced section */
   private boolean isAdv = false;
+  /** true if the additional section */
+  private boolean isAdd = false;
   /** true if the output section   */
   private boolean isOut = false;
 
@@ -161,7 +165,7 @@ public class SectionPanel
             JembossComboPopup fieldOption[], JList multiOption[], 
             SetInFileCard inSeq[], ListFilePanel filelist[],
             String db[], String des, Box lab[], int numofFields,
-            JembossParams mysettings, boolean withSoap)
+            JembossParams mysettings, boolean withSoap, String[] envp)
   {
 
     Border etched = BorderFactory.createEtchedBorder();
@@ -221,6 +225,8 @@ public class SectionPanel
       String secType = parseAcd.getInfoParamValue(nf).toLowerCase();
       if(secType.startsWith("advanced "))
         isAdv = true;
+      else if(secType.startsWith("additional "))
+        isAdd = true;
       else if(secType.startsWith("input "))
         isInp = true;
       else if(secType.startsWith("output "))
@@ -515,7 +521,7 @@ public class SectionPanel
 
 //using jni?
       if(AdvancedOptions.prefjni.isSelected())
-        checkDependents(section);
+        checkDependents(section,envp);
 
       if((att.startsWith("seqset") || att.startsWith("seqall")||
           att.startsWith("sequence")) && !isInp )
@@ -591,6 +597,8 @@ public class SectionPanel
   protected boolean isRequiredSection() { return isReq; }
   /** @return     true if the advanced section */
   protected boolean isAdvancedSection() { return isAdv; }
+  /** @return     true if the additional section */
+  protected boolean isAdditionalSection() { return isAdd; }
 
   /** 
   *
@@ -718,7 +726,7 @@ public class SectionPanel
   * @param section	form container for parameters
   *
   */
-  private void checkDependents(Box section)
+  private void checkDependents(Box section, final String[] envp)
   {
     final Cursor cbusy = new Cursor(Cursor.WAIT_CURSOR);
     final Cursor cdone = new Cursor(Cursor.DEFAULT_CURSOR);
@@ -770,36 +778,64 @@ public class SectionPanel
               fc = AjaxUtil.getFileOrDatabaseForAjax(fname,db,f,withSoap);
             }
             else                                     // Cut-n-Paste
+            {
               fc = sifc.getCutNPasteText();
+
+              if(!withSoap)
+              {
+                try
+                {
+                  File tf = File.createTempFile("attr", ".jembosstmp",
+                            new File(System.getProperty("user.dir")));
+                  PrintWriter out = new PrintWriter(new FileWriter(tf));
+                  out.println(fc);
+                  out.close();
+                  fc = tf.getName();
+                }
+                catch(IOException ioe) { ioe.printStackTrace(); }
+              }
+            }
 
             if(!withSoap && fc!=null)    //Ajax without SOAP
             {
-              Ajax aj = new Ajax();
-              boolean ok;
-              if(att.startsWith("seqset"))
-                ok = aj.seqsetType(fc);
+              boolean ok = true;
+              Ajax aj = null;
+              if(mysettings.isCygwin())
+                ok = cygwinSeqAttr(fc,envp,att);
               else
-                ok = aj.seqType(fc);
+              {
+                aj = new Ajax();
+                if(att.startsWith("seqset"))
+                  ok = aj.seqsetType(fc);
+                else
+                  ok = aj.seqType(fc);
+              }
+
               if(ok)
               {
-                ajaxLength  = aj.length;
-                ajaxWeight  = aj.weight;
-                ajaxProtein = aj.protein;
+                if(!mysettings.isCygwin())
+                {
+                  ajaxLength  = aj.length;
+                  ajaxWeight  = aj.weight;
+                  ajaxProtein = aj.protein;
+                }
+ 
                 if( (updateBeginEnd(inSeqAttr[h].getBegSeq(),
                                     inSeqAttr[h].getEndSeq())) &&
                     (!att.startsWith("seqset")) &&
                     (!att.startsWith("seqall"))  )
                 {
                   inSeqAttr[h].setBegSeq(1);
-                  inSeqAttr[h].setEndSeq(aj.length);
+                  inSeqAttr[h].setEndSeq(ajaxLength);
                 }
                 resolveDependents(nod,dep,sifc.getFileChosen(),varName);
               }
               else
                 JOptionPane.showMessageDialog(sectionPane,
-                          "Sequence not found." +
+                          "Sequence not found.\n" +
                           "Check the sequence entered.",
                           "Error Message", JOptionPane.ERROR_MESSAGE);
+
             }
             else if(fc!=null)    //Ajax with SOAP
             {
@@ -889,6 +925,48 @@ public class SectionPanel
       }
     }
 
+  }
+
+
+  /**
+  *
+  * Cygwin uses infoseq to get sequence length and type
+  * and uses infoalign to get the sequence weight.  
+  *
+  */
+  private boolean cygwinSeqAttr(String fc, String[] envp, String att)
+  {
+    String command = mysettings.getEmbossBin().concat(
+     "infoseq -only -type -length -nohead -auto "+fc);
+    RunEmbossApplication2 rea = new RunEmbossApplication2(command,envp,null);
+    rea.waitFor();
+
+    String stdout = rea.getProcessStdout();
+    if(stdout.trim().equals(""))
+      return false;
+
+    StringTokenizer stok = new StringTokenizer(stdout,"\n ");
+
+    if(stok.nextToken().trim().equalsIgnoreCase("P"))
+      ajaxProtein = true;
+    else
+      ajaxProtein = false;
+
+    ajaxLength = Integer.parseInt(stok.nextToken().trim());
+
+    if(att.startsWith("seqset"))
+    {
+      command = mysettings.getEmbossBin().concat(
+                 "infoalign -only -weight  -nohead -out stdout -auto "+fc);
+      rea = new RunEmbossApplication2(command,envp,null);
+      rea.waitFor();
+      stok = new StringTokenizer(rea.getProcessStdout(),"\n");
+      ajaxWeight = 0.f;
+      while(stok.hasMoreTokens())
+        ajaxWeight+= Float.parseFloat(stok.nextToken());
+    }
+//  System.out.println(command+"\n"+rea.getProcessStdout());
+    return true;
   }
 
   /**
@@ -1092,6 +1170,7 @@ public class SectionPanel
 //
     if(!isShadedGUI)
     {
+      sectionResize(BuildJembossForm.addSection);
       sectionResize(BuildJembossForm.advSection);
       sectionResize(BuildJembossForm.reqdSection);
       sectionResize(BuildJembossForm.outSection);

@@ -145,7 +145,13 @@ public class TextFieldSink extends JTextField implements DropTargetListener
     return;
   }
 
-  public void dragOver(DropTargetDragEvent e) {}
+  public void dragOver(DropTargetDragEvent e) 
+  {
+    if(e.isDataFlavorSupported(DataFlavor.stringFlavor) ||
+       e.isDataFlavorSupported(SequenceData.SEQUENCEDATA) )
+      e.acceptDrag(DnDConstants.ACTION_COPY_OR_MOVE);
+  }
+
   public void dropActionChanged(DropTargetDragEvent e) {}
 
 }
