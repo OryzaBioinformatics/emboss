@@ -51,6 +51,7 @@ AjStatus      ajAcdInitP (char *pgm, ajint argc, char *argv[], char *package);
 void          ajAcdPrintType (AjPFile outf, AjBool full);
 char*         ajAcdProgram (void);
 void          ajAcdProgramS (AjPStr* pgm);
+AjBool        ajAcdSetControl (char* optionName);
 AjBool        ajAcdStdout (void);
 AjPStr        ajAcdValue (char* token);
 
