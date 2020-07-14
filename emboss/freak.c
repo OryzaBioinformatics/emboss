@@ -24,6 +24,7 @@
 
 
 
+
 /* @prog freak ****************************************************************
 **
 ** Residue/base frequency table or plot
@@ -33,14 +34,14 @@
 int main(int argc, char **argv)
 {
     AjPSeqall  seqall;
-    AjPSeq     seq;
-    AjPFile    outf;
-    AjPStr     bases=NULL;
-    AjPStr     str=NULL;
-    AjBool     plot;
-    AjPGraph   graph=NULL;
+    AjPSeq seq;
+    AjPFile outf;
+    AjPStr bases = NULL;
+    AjPStr str   = NULL;
+    AjBool plot;
+    AjPGraph graph=NULL;
     AjPGraphData fgraph=NULL;
-    AjPStr     st=NULL;
+    AjPStr st = NULL;
 
     ajint c;
     ajint pos;
@@ -56,20 +57,20 @@ int main(int argc, char **argv)
     char *q;
     float f;
 
-    float *x=NULL;
-    float *y=NULL;
+    float *x = NULL;
+    float *y = NULL;
 
-    float max=0.;
-    float min=0.;
+    float max = 0.;
+    float min = 0.;
 
 
     ajGraphInit("freak", argc, argv);
 
-    seqall    = ajAcdGetSeqall("seqall");
-    plot      = ajAcdGetBool("plot");
-    step      = ajAcdGetInt("step");
-    window    = ajAcdGetInt("window");
-    bases     = ajAcdGetString("letters");
+    seqall = ajAcdGetSeqall("seqall");
+    plot   = ajAcdGetBool("plot");
+    step   = ajAcdGetInt("step");
+    window = ajAcdGetInt("window");
+    bases  = ajAcdGetString("letters");
 
     /* only one will be used - see variable 'plot' */
 
@@ -91,7 +92,7 @@ int main(int argc, char **argv)
 	ajStrToUpper(&str);
 	p = ajStrStr(str);
 
-	c=0;
+	c = 0;
 	--pos;
 	--end;
 	t = pos;
@@ -164,10 +165,12 @@ int main(int argc, char **argv)
         ajGraphClose();
     else
 	ajFileClose(&outf);
+
     ajStrDel(&str);
     ajStrDel(&bases);
     ajStrDel(&st);
 
     ajExit();
+
     return 0;
 }

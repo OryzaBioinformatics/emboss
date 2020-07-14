@@ -22,6 +22,8 @@
 #include "emboss.h"
 
 
+
+
 /* @prog needle ***************************************************************
 **
 ** Needleman-Wunsch global alignment
@@ -38,8 +40,8 @@ int main(int argc, char **argv)
     AjPStr n;
     AjPStr ss;
 
-    AjPFile outf=NULL;
-    AjBool show=ajFalse;
+    AjPFile outf = NULL;
+    AjBool show  = ajFalse;
 
     ajint    lena;
     ajint    lenb;
@@ -48,45 +50,45 @@ int main(int argc, char **argv)
     char   *p;
     char   *q;
 
-    ajint start1=0;
-    ajint start2=0;
+    ajint start1 = 0;
+    ajint start2 = 0;
 
-    float  *path;
-    ajint    *compass;
+    float *path;
+    ajint *compass;
 
     AjPMatrixf matrix;
-    AjPSeqCvt  cvt=0;
-    float      **sub;
+    AjPSeqCvt cvt = 0;
+    float **sub;
 
     float gapopen;
     float gapextend;
-    ajint maxarr=1000;
-    ajint len;			/* arbitrary. realloc'd if needed */
+    ajint maxarr = 1000; 	/* arbitrary. realloc'd if needed */
+    ajint len;			
 
     float score;
     ajint begina;
     ajint beginb;
 
-    AjBool dobrief=ajTrue;
+    AjBool dobrief = ajTrue;
 
-    float id=0.;
-    float sim=0.;
-    float idx=0.;
-    float simx=0.;
+    float id   = 0.;
+    float sim  = 0.;
+    float idx  = 0.;
+    float simx = 0.;
 
-    AjBool fasta=ajFalse;
-    AjPStr tmpstr=NULL;
+    AjBool fasta = ajFalse;
+    AjPStr tmpstr = NULL;
 
     embInit("needle", argc, argv);
 
     matrix    = ajAcdGetMatrixf("datafile");
     a         = ajAcdGetSeq("asequence");
     ajSeqTrim(a);
-    seqall    = ajAcdGetSeqall("seqall");
+    seqall    = ajAcdGetSeqall("bsequence");
     gapopen   = ajAcdGetFloat("gapopen");
     gapextend = ajAcdGetFloat("gapextend");
     dobrief   = ajAcdGetBool("brief");
-    /* fasta     = ajAcdGetBool("fasta");*/
+
     align     = ajAcdGetAlign("outfile");
 
     /* obsolete. Can be uncommented in acd file and here to reuse */
@@ -115,6 +117,10 @@ int main(int argc, char **argv)
 	ajSeqTrim(b);
 	lenb = ajSeqLen(b);
 	len = lena*lenb;
+
+	if(len < 0)
+	    ajFatal("Sequences too big. Try 'matcher' or 'supermatcher'");
+
 	if(len>maxarr)
 	{
 	    AJCRESIZE(path,len);
@@ -160,22 +166,22 @@ int main(int argc, char **argv)
 			    "%%similarity = %5.2f\n",idx,simx);
 	    }
 	}
-	else if (outf)		/* fasta format */
+	else if(outf)		/* fasta format */
 	{
 	    ajFmtPrintF(outf,">%s\n",ajSeqName(a));
 
 	    len = ajStrLen(m);
-	    for (i=0;i<len; i+=60)
+	    for(i=0;i<len; i+=60)
 	    {
-		(void) ajStrAssSub (&ss,m,i,i+60-1);
-		(void) ajFmtPrintF (outf,"%S\n", ss);
+		ajStrAssSub(&ss,m,i,i+60-1);
+		ajFmtPrintF(outf,"%S\n", ss);
 	    }
 	    ajFmtPrintF(outf,">%s\n",ajSeqName(b));
 	    len = ajStrLen(n);
-	    for (i=0;i<len; i+=60)
+	    for(i=0;i<len; i+=60)
 	    {
-		(void) ajStrAssSub (&ss,n,i,i+60-1);
-		(void) ajFmtPrintF (outf,"%S\n", ss);
+		ajStrAssSub(&ss,n,i,i+60-1);
+		ajFmtPrintF(outf,"%S\n", ss);
 	    }
 	}
 
@@ -184,7 +190,7 @@ int main(int argc, char **argv)
 			     gapopen, gapextend,
 			     score, matrix, begina, beginb);
 
-	if (!dobrief)
+	if(!dobrief)
 	{
 	  embAlignCalcSimilarity(m,n,sub,cvt,lena,lenb,&id,&sim,&idx,
 				 &simx);
@@ -198,7 +204,7 @@ int main(int argc, char **argv)
 			 simx);
 	  ajAlignSetSubHeaderApp(align, tmpstr);
 	}
-	ajAlignWrite (align);
+	ajAlignWrite(align);
 	ajAlignReset(align);
 
     }
@@ -215,5 +221,6 @@ int main(int argc, char **argv)
     ajStrDel(&tmpstr);
 
     ajExit();
+
     return 0;
 }

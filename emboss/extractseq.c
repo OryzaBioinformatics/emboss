@@ -27,6 +27,8 @@
 #include "emboss.h"
 
 
+
+
 /* @prog extractseq ***********************************************************
 **
 ** Extract regions from a sequence
@@ -38,7 +40,7 @@ int main(int argc, char **argv)
     AjPSeq seq;
     AjPSeqout seqout;
     AjPRange regions;
-    AjPStr newstr=NULL;
+    AjPStr newstr = NULL;
     AjBool separate;
     AjPList strlist;
     ajint nr;
@@ -46,64 +48,61 @@ int main(int argc, char **argv)
     ajint st;
     ajint en;
     AjPStr str;
-    AjPStr name = NULL;		/* new name of the sequence */
-    AjPStr value = NULL;	/* string value of start or end position */
+    AjPStr name   = NULL;		/* new name of the sequence */
+    AjPStr value  = NULL;  /* string value of start or end position */
     AjPSeq newseq = NULL;
 
-    (void) embInit ("extractseq", argc, argv);
+    embInit("extractseq", argc, argv);
 
-    seq = ajAcdGetSeq ("sequence");
-    regions = ajAcdGetRange("regions");
+    seq      = ajAcdGetSeq("sequence");
+    regions  = ajAcdGetRange("regions");
     separate = ajAcdGetBool("separate");
-    seqout = ajAcdGetSeqoutall ("outseq");
+    seqout   = ajAcdGetSeqoutall("outseq");
 
-    /* (void) ajRangeBegin (regions, ajSeqBegin(seq)); */
 
-    /* are we writing each region out to a separate sequence? */
-    if (separate)
+    /* Writing each region out to a separate sequence? */
+    if(separate)
     {
 	strlist = ajListstrNew();
-	(void) ajRangeStrExtractList (strlist, regions, ajSeqStr(seq));
+	ajRangeStrExtractList(strlist, regions, ajSeqStr(seq));
 	nr = ajRangeNumber(regions);
 	for(i=0; i<nr; i++)
 	{
-	    (void) ajRangeValues(regions, i, &st, &en);
-	    (void) ajListstrPop (strlist, &str);
+	    ajRangeValues(regions, i, &st, &en);
+	    ajListstrPop(strlist, &str);
 
 	    /* new sequence */
-	    newseq = ajSeqNew ();
+	    newseq = ajSeqNew();
 
-	    /* create a nice name for the new sequence */
-	    (void) ajStrAss(&name, ajSeqGetName(seq));
-	    (void) ajStrAppC(&name, "_");
-	    (void) ajStrFromInt(&value, st);
-	    (void) ajStrApp(&name, value);
-	    (void) ajStrAppC(&name, "_");
-	    (void) ajStrFromInt(&value, en);
-	    (void) ajStrApp(&name, value);
+	    /* create a name for the new sequence */
+	    ajStrAss(&name, ajSeqGetName(seq));
+	    ajStrAppC(&name, "_");
+	    ajStrFromInt(&value, st);
+	    ajStrApp(&name, value);
+	    ajStrAppC(&name, "_");
+	    ajStrFromInt(&value, en);
+	    ajStrApp(&name, value);
 	    ajSeqAssName(newseq, name);
 
 	    /* set the sequence description */
 	    ajSeqAssDesc(newseq, ajSeqGetDesc(seq));
 
 	    /* set the extracted sequence */
-	    ajSeqReplace (newseq, str);
+	    ajSeqReplace(newseq, str);
 
 	    /* set the type */
-	    if (ajSeqIsNuc(seq))
-		ajSeqSetNuc (newseq);
+	    if(ajSeqIsNuc(seq))
+		ajSeqSetNuc(newseq);
 	    else
-		ajSeqSetProt (newseq);
-
+		ajSeqSetProt(newseq);
 
 	    /* write this region of the sequence */
-	    (void) ajSeqAllWrite (seqout, newseq);
+	    ajSeqAllWrite(seqout, newseq);
 
-	    /* tidy up */
-	    (void) ajStrDel(&name);
-	    (void) ajStrDel(&value);
-	    (void) ajStrDel(&str);
-	    (void) ajSeqDel(&newseq);
+	    ajStrDel(&name);
+	    ajStrDel(&value);
+	    ajStrDel(&str);
+	    ajSeqDel(&newseq);
 	}
 
 	ajListstrFree(&strlist);
@@ -112,18 +111,19 @@ int main(int argc, char **argv)
     else
     {
 	/*
-	 *  concatenate all regions from the sequence into the same
-	 *  sequence
-	 */
-	(void) ajRangeStrExtract (&newstr, regions, ajSeqStr(seq));
-	(void) ajSeqReplace(seq, newstr);
-	(void) ajStrClear(&newstr);
-	(void) ajSeqAllWrite (seqout, seq);
+	**  concatenate all regions from the sequence into the same
+	**  sequence
+	*/
+	ajRangeStrExtract(&newstr, regions, ajSeqStr(seq));
+	ajSeqReplace(seq, newstr);
+	ajStrClear(&newstr);
+	ajSeqAllWrite(seqout, seq);
     }
 
 
-    ajSeqWriteClose (seqout);
+    ajSeqWriteClose(seqout);
 
-    ajExit ();
+    ajExit();
+
     return 0;
 }

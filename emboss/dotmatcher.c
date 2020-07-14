@@ -26,13 +26,25 @@
 
 
 
+
 static void dotmatcher_pushpoint(AjPList *l, float x1, float y1, float x2,
-				 float y2, AjBool text, AjBool stretch);
-static void dotmatcher_datapoints(AjPList *l, AjPFile outf, ajint b1,
-				  ajint b2);
+				 float y2, AjBool stretch);
 
 
 
+
+/* @datastatic PPoint *********************************************************
+**
+** Dotmatcher point data
+**
+** @alias SPoint
+** @alias OPoint
+**
+** @attr x1 [float] x1 coordinate
+** @attr y1 [float] y1 coordinate
+** @attr x2 [float] x2 coordinate
+** @attr y2 [float] y2 coordinate
+******************************************************************************/
 
 typedef struct SPoint
 {
@@ -53,36 +65,42 @@ typedef struct SPoint
 
 int main(int argc, char **argv)
 {
-    AjPList list=NULL;
+    AjPList list = NULL;
     AjPSeq seq;
     AjPSeq seq2;
-    AjPStr aa0str=0;
-    AjPStr aa1str=0;
+    AjPStr aa0str = 0;
+    AjPStr aa1str = 0;
     char *s1;
     char *s2;
-    char *strret=NULL;
+    char *strret = NULL;
     ajint i;
     ajint j;
     ajint k;
     ajint l;
     ajint abovethresh;
     ajint total;
-    ajint starti=0;
-    ajint startj=0;
+    ajint starti = 0;
+    ajint startj = 0;
     ajint windowsize;
     float thresh;
-    AjPGraph graph = NULL;
+    AjPGraph graph   = NULL;
     AjPGraph xygraph = NULL;
-    /* AjPStr title=0,subtitle=0;*/
+
     AjOTime ajtime;
-    const time_t tim = time(0);
+    time_t tim;
     AjBool boxit=AJTRUE;
     /* Different ticks as they need to be different for x and y due to
        length of string being important on x */
-    ajint acceptableticksx[]={1,10,50,100,500,1000,1500,10000,
-				500000,1000000,5000000};
-    ajint acceptableticks[]={1,10,50,100,200,500,1000,2000,5000,10000,15000,
-			       500000,1000000,5000000};
+    ajint acceptableticksx[]=
+    {
+	1,10,50,100,500,1000,1500,10000,
+	500000,1000000,5000000
+    };
+    ajint acceptableticks[]=
+    {
+	1,10,50,100,200,500,1000,2000,5000,10000,15000,
+	500000,1000000,5000000
+    };
     ajint numbofticks = 10;
     float xmargin;
     float ymargin;
@@ -95,9 +113,7 @@ int main(int argc, char **argv)
     AjPMatrix matrix = NULL;
     ajint** sub;
     AjPSeqCvt cvt;
-    AjBool text;
-    AjPFile outf=NULL;
-    AjPStr  subt=NULL;
+    AjPStr  subt = NULL;
 
     ajint b1;
     ajint b2;
@@ -107,110 +123,109 @@ int main(int argc, char **argv)
     AjPStr se2;
     ajint ithresh;
     AjBool stretch;
-    PPoint ppt=NULL;
+    PPoint ppt = NULL;
     float xa[1];
     float ya[1];
     AjPGraphData gdata=NULL;
-    AjPStr tit=NULL;
-    AjIList iter=NULL;
-    float x1=0.;
-    float x2=0.;
-    float y1=0.;
-    float y2=0.;
+    AjPStr tit   = NULL;
+    AjIList iter = NULL;
+    float x1 = 0.;
+    float x2 = 0.;
+    float y1 = 0.;
+    float y2 = 0.;
 
     se1 = ajStrNew();
     se2 = ajStrNew();
 
+    tim = time(0);
 
-    ajtime.time = localtime(&tim);
+    ajTimeLocal(tim,&ajtime);
     ajtime.format = 0;
-
+    
     ajGraphInit("dotmatcher", argc, argv);
-
-    seq = ajAcdGetSeq ("asequence");
-    seq2 = ajAcdGetSeq ("bsequence");
-    stretch = ajAcdGetBool("stretch");
-    graph = ajAcdGetGraph ("graph");
-    xygraph = ajAcdGetGraphxy("xygraph");
+    
+    seq        = ajAcdGetSeq("asequence");
+    seq2       = ajAcdGetSeq("bsequence");
+    stretch    = ajAcdGetBool("stretch");
+    graph      = ajAcdGetGraph("graph");
+    xygraph    = ajAcdGetGraphxy("xygraph");
     windowsize = ajAcdGetInt("windowsize");
-    ithresh = ajAcdGetInt("threshold");
-    matrix  = ajAcdGetMatrix("matrixfile");
-    text = ajAcdGetBool("data");
-    outf = ajAcdGetOutfile("outfile");
-
+    ithresh    = ajAcdGetInt("threshold");
+    matrix     = ajAcdGetMatrix("matrixfile");
+    
     sub = ajMatrixArray(matrix);
     cvt = ajMatrixCvt(matrix);
-
+    
     thresh = (float)ithresh;
-
+    
     b1 = ajSeqBegin(seq);
     b2 = ajSeqBegin(seq2);
     e1 = ajSeqEnd(seq);
     e2 = ajSeqEnd(seq2);
-
+    
     ajStrAssSubC(&se1,ajSeqChar(seq),b1-1,e1-1);
     ajStrAssSubC(&se2,ajSeqChar(seq2),b2-1,e2-1);
     ajSeqReplace(seq,se1);
     ajSeqReplace(seq2,se2);
-
-
+    
+    
     s1 = ajStrStr(ajSeqStr(seq));
     s2 = ajStrStr(ajSeqStr(seq2));
-
-
+    
+    
     aa0str = ajStrNewL(1+ajSeqLen(seq)); /* length plus trailing blank */
     aa1str = ajStrNewL(1+ajSeqLen(seq2));
-
+    
     list = ajListNew();
-
-
+    
+    
     for(i=0;i<ajSeqLen(seq);i++)
 	ajStrAppK(&aa0str,(char)ajSeqCvtK(cvt, *s1++));
-
+    
     for(i=0;i<ajSeqLen(seq2);i++)
 	ajStrAppK(&aa1str,(char)ajSeqCvtK(cvt, *s2++));
-
+    
     max= ajSeqLen(seq);
     if(ajSeqLen(seq2) > max)
 	max = ajSeqLen(seq2);
-
+    
     xmargin = ymargin = max *0.15;
     ticklen = xmargin*0.1;
     onefifth  = xmargin*0.2;
-
+    
     subt = ajStrNewC((strret=
-		  ajFmtString("(windowsize = %d, threshold = %3.2f  %D)",
-			      windowsize,thresh,&ajtime)));
-
-
-    if(!text && !stretch)
+		      ajFmtString("(windowsize = %d, threshold = %3.2f  %D)",
+				  windowsize,thresh,&ajtime)));
+    
+    
+    if(!stretch)
 	if( ajStrLen(graph->subtitle) <=1)
 	    ajStrApp(&graph->subtitle,subt);
-
-
-    if(!text && !stretch)
+    
+    
+    if(!stretch)
     {
 	ajGraphOpenWin(graph, 0.0-ymargin,(max*1.35)+ymargin,
 		       0.0-xmargin,(float)max+xmargin);
 
-	ajGraphTextMid (max*0.5,(ajSeqLen(seq2))+xmargin-onefifth,
-			ajStrStr(graph->title));
-	ajGraphTextMid ((ajSeqLen(seq))*0.5,0.0-(xmargin/2.0),
-			ajStrStr(graph->xaxis));
-	ajGraphTextLine (0.0-(xmargin*0.75),(ajSeqLen(seq2))*0.5,
-			 0.0-(xmargin*0.75),(ajSeqLen(seq)),
-			 ajStrStr(graph->yaxis),0.5);
+	ajGraphTextMid(max*0.5,(ajSeqLen(seq2))+xmargin-onefifth,
+		       ajStrStr(graph->title));
+	ajGraphTextMid((ajSeqLen(seq))*0.5,0.0-(xmargin/2.0),
+		       ajStrStr(graph->xaxis));
+	ajGraphTextLine(0.0-(xmargin*0.75),(ajSeqLen(seq2))*0.5,
+			0.0-(xmargin*0.75),(ajSeqLen(seq)),
+			ajStrStr(graph->yaxis),0.5);
 
 	ajGraphSetCharSize(0.5);
-	ajGraphTextMid (max*0.5,(ajSeqLen(seq2))+xmargin-(onefifth*3),
-			ajStrStr(graph->subtitle));
+	ajGraphTextMid(max*0.5,(ajSeqLen(seq2))+xmargin-(onefifth*3),
+		       ajStrStr(graph->subtitle));
     }
-
-
-
+    
+    
+    
     s1= ajStrStr(aa0str);
     s2 = ajStrStr(aa1str);
-
+    
     for(j=0;j < ajSeqLen(seq2)-windowsize;j++)
     {
 	i =0;
@@ -227,11 +242,13 @@ int main(int argc, char **argv)
 	    starti = i-windowsize;
 	    startj = k-windowsize;
 	}
+
 	while(i < ajSeqLen(seq) && k < ajSeqLen(seq2))
 	{
 	    total = total - sub[(ajint)s1[i-windowsize]]
 		[(ajint)s2[k-windowsize]];
 	    total = total + sub[(ajint)s1[i]][(ajint)s2[k]];
+
 	    if(abovethresh)
 	    {
 		if(total < thresh)
@@ -239,29 +256,29 @@ int main(int argc, char **argv)
 		    abovethresh = 0;
 		    /* draw the line */
 		    dotmatcher_pushpoint(&list,(float)starti,(float)startj,
-					 (float)i-1,(float)k-1,text,stretch);
+					 (float)i-1,(float)k-1,stretch);
 		}
 	    }
-	    else if (total >= thresh)
+	    else if(total >= thresh)
 	    {
 		starti = i-windowsize;
 		startj = k-windowsize;
 		abovethresh= 1;
 	    }
-	    i++;k++;
+	    i++;
+	    k++;
 	}
+
 	if(abovethresh)
-	{
 	    /* draw the line */
 	    dotmatcher_pushpoint(&list,(float)starti,(float)startj,
 				 (float)i-1,(float)k-1,
-		      text,stretch);
-	}
+				 stretch);
     }
-
+    
     for(i=0;i < ajSeqLen(seq)-windowsize;i++)
     {
-	j =0;
+	j = 0;
 	total = 0;
 	abovethresh =0;
 
@@ -275,11 +292,13 @@ int main(int argc, char **argv)
 	    starti = k-windowsize;
 	    startj = j-windowsize;
 	}
+
 	while(k < ajSeqLen(seq) && j < ajSeqLen(seq2))
 	{
 	    total = total - sub[(ajint)s1[k-windowsize]]
 		[(ajint)s2[j-windowsize]];
 	    total = total + sub[(ajint)s1[k]][(ajint)s2[j]];
+
 	    if(abovethresh)
 	    {
 		if(total < thresh)
@@ -287,30 +306,29 @@ int main(int argc, char **argv)
 		    abovethresh = 0;
 		    /* draw the line */
 		    dotmatcher_pushpoint(&list,(float)starti,(float)startj,
-					 (float)k-1,(float)j-1,text,stretch);
+					 (float)k-1,(float)j-1,stretch);
 		}
 	    }
-	    else if (total >= thresh)
+	    else if(total >= thresh)
 	    {
 		starti = k-windowsize;
 		startj = j-windowsize;
 		abovethresh= 1;
 	    }
-	    j++;k++;
+	    j++;
+	    k++;
 	}
+
 	if(abovethresh)
-	{
 	    /* draw the line */
-	    /*      printf("line (%d,%d) (%d,%d)\n",starti,startj,i-1,k-1);*/
 	    dotmatcher_pushpoint(&list,(float)starti,(float)startj,
 				 (float)k-1,(float)j-1,
-		      text,stretch);
-	}
+				 stretch);
     }
-
-    if(!text && boxit && !stretch)
+    
+    if(boxit && !stretch)
     {
-	ajGraphRect( 0.0,0.0,(float)ajSeqLen(seq),(float)ajSeqLen(seq2));
+	ajGraphRect(0.0,0.0,(float)ajSeqLen(seq),(float)ajSeqLen(seq2));
 
 	i=0;
 	while(acceptableticksx[i]*numbofticks < ajSeqLen(seq))
@@ -319,87 +337,63 @@ int main(int argc, char **argv)
 	if(i<=13)
 	    tickgap = acceptableticksx[i];
 	else
-	    /*      tickgap = acceptableticksx[13]; bugfixed AJB 26/7/00 */
 	    tickgap = acceptableticksx[10];
-	ticklen = xmargin*0.1;
+	ticklen   = xmargin*0.1;
 	onefifth  = xmargin*0.2;
+
 	if(ajSeqLen(seq2)/ajSeqLen(seq) > 10 )
-	{		/* alot smaller then just label start and end */
+	{
+	    /* alot smaller then just label start and end */
 	    ajGraphLine(0.0,0.0,0.0,0.0-ticklen);
 	    sprintf(ptr,"%d",b1-1);
-	    ajGraphTextMid ( 0.0,0.0-(onefifth),ptr);
+	    ajGraphTextMid( 0.0,0.0-(onefifth),ptr);
 
 	    ajGraphLine((float)(ajSeqLen(seq)),0.0,
 			(float)ajSeqLen(seq),0.0-ticklen);
 	    sprintf(ptr,"%d",ajSeqLen(seq)+b1-1);
-	    ajGraphTextMid ( (float)ajSeqLen(seq),0.0-(onefifth),ptr);
+	    ajGraphTextMid((float)ajSeqLen(seq),0.0-(onefifth),ptr);
 
 	}
 	else
-	{
 	    for(k2=0.0;k2<ajSeqLen(seq);k2+=tickgap)
 	    {
 		ajGraphLine(k2,0.0,k2,0.0-ticklen);
 		sprintf(ptr,"%d",(ajint)k2+b1-1);
-		ajGraphTextMid ( k2,0.0-(onefifth),ptr);
+		ajGraphTextMid( k2,0.0-(onefifth),ptr);
 	    }
-	}
 
-	i=0;
+	i = 0;
 	while(acceptableticks[i]*numbofticks < ajSeqLen(seq2))
 	    i++;
 
-	tickgap = acceptableticks[i];
-	ticklen = ymargin*0.01;
+	tickgap   = acceptableticks[i];
+	ticklen   = ymargin*0.01;
 	onefifth  = ymargin*0.02;
+
 	if(ajSeqLen(seq)/ajSeqLen(seq2) > 10 )
-	{		/* alot smaller then just label start and end */
+	{
+	    /* alot smaller then just label start and end */
 	    ajGraphLine(0.0,0.0,0.0-ticklen,0.0);
 	    sprintf(ptr,"%d",b2-1);
-	    ajGraphTextEnd ( 0.0-(onefifth),0.0,ptr);
+	    ajGraphTextEnd( 0.0-(onefifth),0.0,ptr);
 
 	    ajGraphLine(0.0,(float)ajSeqLen(seq2),0.0-ticklen,
 			(float)ajSeqLen(seq2));
 	    sprintf(ptr,"%d",ajSeqLen(seq2)+b2-1);
-	    ajGraphTextEnd ( 0.0-(onefifth),(float)ajSeqLen(seq2),ptr);
+	    ajGraphTextEnd( 0.0-(onefifth),(float)ajSeqLen(seq2),ptr);
 	}
 	else
-	{
 	    for(k2=0.0;k2<ajSeqLen(seq2);k2+=tickgap)
 	    {
 		ajGraphLine(0.0,k2,0.0-ticklen,k2);
 		sprintf(ptr,"%d",(ajint)k2+b2-1);
-		ajGraphTextEnd ( 0.0-(onefifth),k2,ptr);
+		ajGraphTextEnd( 0.0-(onefifth),k2,ptr);
 	    }
-	}
     }
-
-
-    if(!text && !stretch)
+    
+    
+    if(!stretch)
 	ajGraphClose();
-    else if(text && !stretch)
-    {
-	ajFmtPrintF(outf,"##2D Plot\n##Title dotmatcher: %s vs %s\n",
-		    ajSeqName(seq),ajSeqName(seq2));
-	ajFmtPrintF(outf,"##Graphs 1\n##Number 1\n##Points 0\n");
-	ajFmtPrintF(outf,"##XminA %f XmaxA %f YminA %f YmaxA %f\n",0.,
-		    (float)ajSeqLen(seq),0.,(float)ajSeqLen(seq2));
-	ajFmtPrintF(outf,"##Xmin %f Xmax %f Ymin %f Ymax %f\n",0.,
-		    (float)ajSeqLen(seq),0.,(float)ajSeqLen(seq2));
-	ajFmtPrintF(outf,"##ScaleXmin %f ScaleXmax %f "
-		    "ScaleYmin %f ScaleYmax %f\n",(float)b1,(float)e1,
-		    (float)b2,(float)e2);
-	ajFmtPrintF(outf,"##Maintitle %S\n",subt);
-	ajFmtPrintF(outf,"##Xtitle %s\n##Ytitle %s\n",ajSeqName(seq),
-		    ajSeqName(seq2));
-	ajFmtPrintF(outf,"##DataObjects\n##Number %d\n",
-		    ajListLength(list));
-
-	dotmatcher_datapoints(&list,outf,b1,b2);
-
-	ajFmtPrintF(outf,"##GraphObjects\n##Number 0\n");
-
-    }
     else			/* the xy graph for -stretch */
     {
 	tit = ajStrNew();
@@ -416,6 +410,7 @@ int main(int argc, char **argv)
 	ajGraphxyYtitleC(xygraph,ajSeqName(seq2));
 
 	ajGraphDataxySetTypeC(gdata,"2D Plot Float");
+	ajGraphxyDataSetTitle(gdata,subt);
 	ajGraphDataxySetMaxMin(gdata,(float)b1,(float)e1,(float)b2,
 			       (float)e2);
 	ajGraphDataxySetMaxima(gdata,(float)b1,(float)e1,(float)b2,
@@ -452,23 +447,27 @@ int main(int argc, char **argv)
 
 	ajStrDel(&tit);
     }
-
-
-
+    
+    
+    
     ajListDel(&list);
-
-
+    
+    
     /* deallocate memory */
     ajStrDel(&aa0str);
     ajStrDel(&aa1str);
     ajStrDel(&se1);
     ajStrDel(&se2);
-
-    AJFREE (strret);			/* created withing ajFmtString */
-
+    
+    AJFREE(strret);			/* created withing ajFmtString */
+    
     ajExit();
+
     return 0;
 }
+
+
+
 
 /* @funcstatic dotmatcher_pushpoint *******************************************
 **
@@ -479,56 +478,28 @@ int main(int argc, char **argv)
 ** @param [?] y1 [float] Undocumented
 ** @param [?] x2 [float] Undocumented
 ** @param [?] y2 [float] Undocumented
-** @param [?] text [AjBool] Undocumented
 ** @param [r] stretch [AjBool] Do a stretch plot
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-
 static void dotmatcher_pushpoint(AjPList *l, float x1, float y1, float x2,
-				 float y2, AjBool text, AjBool stretch)
+				 float y2, AjBool stretch)
 {
     PPoint p;
 
-    if(!text && !stretch)
+    if(!stretch)
     {
 	ajGraphLine(x1+1,y1+1,x2+1,y2+1);
 	return;
     }
 
     AJNEW0(p);
-    p->x1=x1+1;
-    p->y1=y1+1;
-    p->x2=x2+1;
-    p->y2=y2+1;
+    p->x1 = x1+1;
+    p->y1 = y1+1;
+    p->x2 = x2+1;
+    p->y2 = y2+1;
     ajListPush(*l,(void *)p);
-
-    return;
-}
-
-/* @funcstatic dotmatcher_datapoints ******************************************
-**
-** Undocumented.
-**
-** @param [?] l [AjPList*] Undocumented
-** @param [?] outf [AjPFile] Undocumented
-** @param [?] b1 [ajint] Undocumented
-** @param [?] b2 [ajint] Undocumented
-** @@
-******************************************************************************/
-
-
-static void dotmatcher_datapoints(AjPList *l,AjPFile outf, ajint b1, ajint b2)
-{
-    PPoint p;
-
-    while(ajListPop(*l,(void **)&p))
-    {
-	ajFmtPrintF(outf,"Line x1 %f y1 %f x2 %f y2 %f colour 0\n",
-		    p->x1+b1-1,p->y1+b2-1,p->x2+b1-1,p->y2+b2-1);
-	AJFREE(p);
-    }
 
     return;
 }

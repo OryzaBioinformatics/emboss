@@ -24,6 +24,7 @@
 
 
 
+
 /* @prog cusp *****************************************************************
 **
 ** Create a codon usage table
@@ -32,11 +33,11 @@
 
 int main(int argc, char **argv)
 {
-    AjPSeqall  seqall;
-    AjPSeq     seq;
-    AjPFile    outf;
-    AjPCod     codon;
-    AjPStr     substr;
+    AjPSeqall seqall;
+    AjPSeq seq;
+    AjPFile outf;
+    AjPCod codon;
+    AjPStr substr;
     ajint beg;
     ajint end;
     ajint ccnt;
@@ -44,19 +45,19 @@ int main(int argc, char **argv)
 
     embInit("cusp", argc, argv);
 
-    seqall    = ajAcdGetSeqall("sequence");
-    codon     = ajAcdGetCodon("cfile");
-    outf      = ajAcdGetOutfile("outfile");
+    seqall = ajAcdGetSeqall("sequence");
+    codon  = ajAcdGetCodon("cfile");
+    outf   = ajAcdGetOutfile("outfile");
 
     ajCodClear(&codon);
 
-    ccnt=0;
-    substr=ajStrNew();
+    ccnt   = 0;
+    substr = ajStrNew();
 
     while(ajSeqallNext(seqall, &seq))
     {
 	beg = ajSeqallBegin(seqall);
-	end = ajSeqallEnd(seqall);
+	end  = ajSeqallEnd(seqall);
 	ajStrAssSub(&substr,ajSeqStr(seq),beg-1,end-1);
 	ajCodCountTriplets(&codon,substr,&ccnt);
     }
@@ -72,5 +73,6 @@ int main(int argc, char **argv)
     ajCodDel(&codon);
 
     ajExit();
+
     return 0;
 }

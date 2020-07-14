@@ -23,6 +23,8 @@
 #include "emboss.h"
 
 
+
+
 /* @prog wossname *************************************************************
 **
 ** Finds programs by keywords in their one-line documentation
@@ -33,15 +35,12 @@ int main(int argc, char **argv, char **env)
 {
 
     AjPList newlist = NULL;
-    /* list of groups pointing to lists of programs */
-    AjPList glist = ajListNew();
-    /* alphabetical list of all programs */
-    AjPList alpha = ajListNew();
-
+    AjPList glist;    /* list of groups pointing to lists of programs */
+    AjPList alpha;    /* alphabetical list of all programs */
     AjPFile outfile = NULL;
-    AjPStr search = NULL;
-    AjPStr link1 = NULL;
-    AjPStr link2 = NULL;
+    AjPStr search   = NULL;
+    AjPStr link1    = NULL;
+    AjPStr link2    = NULL;
     AjBool html;
     AjBool groups;
     AjBool alphabetic;
@@ -51,57 +50,57 @@ int main(int argc, char **argv, char **env)
     AjBool colon;
     AjBool gui;
 
-    (void) embInit ("wossname", argc, argv);
-
-    search = ajAcdGetString ("search");
-    outfile = ajAcdGetOutfile ("outfile");
-    html = ajAcdGetBool("html");
-    link1 = ajAcdGetString ("prelink");
-    link2 = ajAcdGetString ("postlink");
-    groups = ajAcdGetBool("groups");
+    embInit("wossname", argc, argv);
+    
+    search     = ajAcdGetString("search");
+    outfile    = ajAcdGetOutfile("outfile");
+    html       = ajAcdGetBool("html");
+    link1      = ajAcdGetString("prelink");
+    link2      = ajAcdGetString("postlink");
+    groups     = ajAcdGetBool("groups");
     alphabetic = ajAcdGetBool("alphabetic");
-    emboss = ajAcdGetBool("emboss");
-    embassy = ajAcdGetBool("embassy");
-    explode = ajAcdGetBool("explode");
-    colon   = ajAcdGetBool("colon");
-    gui     = ajAcdGetBool("gui");
-
+    emboss     = ajAcdGetBool("emboss");
+    embassy    = ajAcdGetBool("embassy");
+    explode    = ajAcdGetBool("explode");
+    colon      = ajAcdGetBool("colon");
+    gui        = ajAcdGetBool("gui");
+    
+    
+    glist = ajListNew();
+    alpha = ajListNew();
+    
     /* get the groups and program information */
-    (void) embGrpGetProgGroups (glist, alpha, env, emboss, embassy,
-		explode, colon, gui);
-
-
+    embGrpGetProgGroups(glist, alpha, env, emboss, embassy,
+			explode, colon, gui);
+    
+    
     /* is a search string specified */
-    if (ajStrLen(search))
+    if(ajStrLen(search))
     {
 	newlist = ajListNew();
-	(void) embGrpKeySearchProgs(newlist, alpha, search);
-	(void) embGrpOutputGroupsList(outfile, newlist, !groups, html, link1,
-				      link2);
-	(void) embGrpGroupsListDel(&newlist);
+	embGrpKeySearchProgs(newlist, alpha, search);
+	embGrpOutputGroupsList(outfile, newlist, !groups, html, link1,
+			       link2);
+	embGrpGroupsListDel(&newlist);
     }
-    else if (alphabetic)
-    {
+    else if(alphabetic)
 	/* list all programs in alphabetic order */
-	(void) embGrpOutputGroupsList(outfile, alpha, !groups, html, link1,
-				      link2);
-    }
+	embGrpOutputGroupsList(outfile, alpha, !groups, html, link1,
+			       link2);
     else
-    {
 	/* just show the grouped sets of programs */
-	(void) embGrpOutputGroupsList(outfile, glist, !groups, html, link1,
-				      link2);
-
-    }
-    (void) ajFileClose(&outfile);
-
-    /* tidy up */
-    (void) embGrpGroupsListDel(&glist);
-    (void) embGrpGroupsListDel(&alpha);
-    (void) ajStrDel(&link1);
-    (void) ajStrDel(&link2);
-
-    (void) ajExit();
+	embGrpOutputGroupsList(outfile, glist, !groups, html, link1,
+			       link2);
+    
+    ajFileClose(&outfile);
+    
+    embGrpGroupsListDel(&glist);
+    embGrpGroupsListDel(&alpha);
+    ajStrDel(&link1);
+    ajStrDel(&link2);
+    
+    ajExit();
+    
     return 0;
 }
 

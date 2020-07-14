@@ -19,11 +19,12 @@
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 ******************************************************************************/
 
-
 #include "emboss.h"
 #include <string.h>
 
 #define AZ 28
+
+
 
 
 static ajint prophet_getType(AjPFile inf, AjPStr *tname);
@@ -53,32 +54,32 @@ static void prophet_scan_profile(AjPStr substr, AjPStr pname, AjPStr name,
 int main(int argc, char **argv)
 {
     AjPSeqall seqall;
-    AjPSeq    seq=NULL;
-    AjPFile   inf=NULL;
-    AjPFile   outf=NULL;
+    AjPSeq seq   = NULL;
+    AjPFile inf  = NULL;
+    AjPFile outf = NULL;
 
-    AjPStr    strand=NULL;
-    AjPStr    substr=NULL;
-    AjPStr    name=NULL;
-    AjPStr    mname=NULL;
-    AjPStr    tname=NULL;
-    AjPStr    pname=NULL;
-    AjPStr    line=NULL;
-    AjPStr    cons=NULL;
-    AjPStr    m=NULL;
-    AjPStr    n=NULL;
+    AjPStr strand = NULL;
+    AjPStr substr = NULL;
+    AjPStr name   = NULL;
+    AjPStr mname  = NULL;
+    AjPStr tname  = NULL;
+    AjPStr pname  = NULL;
+    AjPStr line   = NULL;
+    AjPStr cons   = NULL;
+    AjPStr m      = NULL;
+    AjPStr n      = NULL;
 
-    ajint       type;
-    ajint       begin;
-    ajint       end;
-    ajint       len;
-    ajint       i;
-    ajint       j;
+    ajint type;
+    ajint begin;
+    ajint end;
+    ajint len;
+    ajint i;
+    ajint j;
 
     float **fmatrix=NULL;
 
     ajint mlen;
-    ajint maxs=0;
+    ajint maxs = 0;
     float maxfs;
     ajint thresh;
 
@@ -89,10 +90,10 @@ int main(int argc, char **argv)
 
     char *p;
 
-    ajint maxarr=1000;
+    ajint maxarr = 1000;
     ajint alen;
     float *path;
-    ajint   *compass;
+    ajint *compass;
 
 
     embInit("prophet", argc, argv);
@@ -103,18 +104,18 @@ int main(int argc, char **argv)
     extendcoeff = ajAcdGetFloat("gapextend");
     outf        = ajAcdGetOutfile("outfile");
 
-    opencoeff = ajRoundF(opencoeff, 8);
+    opencoeff   = ajRoundF(opencoeff, 8);
     extendcoeff = ajRoundF(extendcoeff, 8);
 
-    substr=ajStrNew();
-    name=ajStrNew();
-    mname=ajStrNew();
-    tname=ajStrNew();
-    line=ajStrNew();
-    m=ajStrNewC("");
-    n=ajStrNewC("");
+    substr = ajStrNew();
+    name   = ajStrNew();
+    mname  = ajStrNew();
+    tname  = ajStrNew();
+    line   = ajStrNew();
+    m      = ajStrNewC("");
+    n      = ajStrNewC("");
 
-    type=prophet_getType(inf,&tname);
+    type = prophet_getType(inf,&tname);
     if(!type)
       ajFatal("Unrecognised profile/matrix file format");
 
@@ -141,11 +142,11 @@ int main(int argc, char **argv)
 
     while(ajSeqallNext(seqall, &seq))
     {
-	begin=ajSeqallBegin(seqall);
-	end=ajSeqallEnd(seqall);
+	begin = ajSeqallBegin(seqall);
+	end   = ajSeqallEnd(seqall);
 
 	ajStrAssC(&pname,ajSeqName(seq));
-	strand=ajSeqStrCopy(seq);
+	strand = ajSeqStrCopy(seq);
 
 	ajStrAssSubC(&substr,ajStrStr(strand),begin-1,end-1);
 	len = ajStrLen(substr);
@@ -180,6 +181,7 @@ int main(int argc, char **argv)
     ajFileClose(&inf);
     ajFileClose(&outf);
     ajExit();
+
     return 0;
 }
 
@@ -195,31 +197,34 @@ int main(int argc, char **argv)
 ** @@
 ******************************************************************************/
 
-
 static ajint prophet_getType(AjPFile inf, AjPStr *tname)
 {
-    AjPStr line=NULL;
-    char *p=NULL;
-    ajint  ret=0;
+    AjPStr line = NULL;
+    char *p = NULL;
+    ajint ret = 0;
 
-    line=ajStrNew();
+    line = ajStrNew();
 
     while(ajFileReadLine(inf,&line))
     {
-	p=ajStrStr(line);
-	if(!*p || *p=='#' || *p=='!' || *p=='\n') continue;
+	p = ajStrStr(line);
+	if(!*p || *p=='#' || *p=='!' || *p=='\n')
+	    continue;
 	break;
     }
 
-    if(!strncmp(p,"Gribskov",8)) ret=1;
-    if(!strncmp(p,"Henikoff",8)) ret=2;
+    if(!strncmp(p,"Gribskov",8))
+	ret = 1;
+
+    if(!strncmp(p,"Henikoff",8))
+	ret = 2;
 
     ajStrAssC(tname,p);
 
     ajStrDel(&line);
+
     return ret;
 }
-
 
 
 
@@ -240,40 +245,42 @@ static ajint prophet_getType(AjPFile inf, AjPStr *tname)
 ** @@
 ******************************************************************************/
 
-
 static void prophet_read_profile(AjPFile inf, AjPStr *name, AjPStr *mname,
 				 ajint *mlen, float *gapopen,
 				 float *gapextend, ajint *thresh,
 				 float *maxs, AjPStr *cons)
 {
     char *p;
+    AjPStr line = NULL;
 
-    AjPStr line=NULL;
-
-    line=ajStrNew();
+    line = ajStrNew();
 
     if(!ajFileReadLine(inf,&line))
 	ajFatal("Premature EOF in profile file");
     p = ajStrStr(line);
+
     if(strncmp(p,"Name",4))
 	ajFatal("Incorrect profile/matrix file format");
-    p=strtok(p," \t");
-    p=strtok(NULL," \t");
+
+    p = strtok(p," \t");
+    p = strtok(NULL," \t");
     ajStrAssC(name,p);
 
     if(!ajFileReadLine(inf,&line))
 	ajFatal("Premature EOF in profile file");
+
     p = ajStrStr(line);
     if(strncmp(p,"Matrix",6))
 	ajFatal("Incorrect profile/matrix file format");
-    p=strtok(p," \t");
-    p=strtok(NULL," \t");
+    p = strtok(p," \t");
+    p = strtok(NULL," \t");
     ajStrAssC(mname,p);
 
 
     if(!ajFileReadLine(inf,&line))
 	ajFatal("Premature EOF in profile file");
     p = ajStrStr(line);
+
     if(strncmp(p,"Length",6))
 	ajFatal("Incorrect profile/matrix file format");
     sscanf(p,"%*s%d",mlen);
@@ -281,6 +288,7 @@ static void prophet_read_profile(AjPFile inf, AjPStr *name, AjPStr *mname,
     if(!ajFileReadLine(inf,&line))
 	ajFatal("Premature EOF in profile file");
     p = ajStrStr(line);
+
     if(strncmp(p,"Max_score",9))
 	ajFatal("Incorrect profile/matrix file format");
     sscanf(p,"%*s%f",maxs);
@@ -288,6 +296,7 @@ static void prophet_read_profile(AjPFile inf, AjPStr *name, AjPStr *mname,
     if(!ajFileReadLine(inf,&line))
 	ajFatal("Premature EOF in profile file");
     p = ajStrStr(line);
+
     if(strncmp(p,"Threshold",9))
 	ajFatal("Incorrect profile/matrix file format");
     sscanf(p,"%*s%d",thresh);
@@ -296,6 +305,7 @@ static void prophet_read_profile(AjPFile inf, AjPStr *name, AjPStr *mname,
     if(!ajFileReadLine(inf,&line))
 	ajFatal("Premature EOF in profile file");
     p = ajStrStr(line);
+
     if(strncmp(p,"Gap_open",8))
 	ajFatal("Incorrect profile/matrix file format");
     sscanf(p,"%*s%f",gapopen);
@@ -303,6 +313,7 @@ static void prophet_read_profile(AjPFile inf, AjPStr *name, AjPStr *mname,
     if(!ajFileReadLine(inf,&line))
 	ajFatal("Premature EOF in profile file");
     p = ajStrStr(line);
+
     if(strncmp(p,"Gap_extend",10))
 	ajFatal("Incorrect profile/matrix file format");
     sscanf(p,"%*s%f",gapextend);
@@ -310,15 +321,16 @@ static void prophet_read_profile(AjPFile inf, AjPStr *name, AjPStr *mname,
     if(!ajFileReadLine(inf,&line))
 	ajFatal("Premature EOF in profile file");
     p = ajStrStr(line);
+
     if(strncmp(p,"Consensus",9))
 	ajFatal("Incorrect profile/matrix file format");
-    p=strtok(p," \t\n");
-    p=strtok(NULL," \t\n");
+    p = strtok(p," \t\n");
+    p = strtok(NULL," \t\n");
     ajStrAssC(cons,p);
 
-
-
     ajStrDel(&line);
+
+    return;
 }
 
 

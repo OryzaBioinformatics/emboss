@@ -24,6 +24,7 @@
 
 
 
+
 /* @prog backtranseq **********************************************************
 **
 ** Back translate a protein sequence
@@ -48,8 +49,8 @@ int main(int argc, char **argv)
     outf      = ajAcdGetSeqout("outfile");
 
     substr = ajStrNew();
-    beg = ajSeqBegin(a);
-    end = ajSeqEnd(a);
+    beg    = ajSeqBegin(a);
+    end    = ajSeqEnd(a);
     ajStrAssSubC(&substr,ajSeqChar(a),beg-1,end-1);
 
     back = ajStrNew();
@@ -66,5 +67,6 @@ int main(int argc, char **argv)
     ajCodDel(&codon);
 
     ajExit();
+
     return 0;
 }

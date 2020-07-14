@@ -22,28 +22,30 @@
 
 #include "emboss.h"
 
+
+
+
 /* @prog degapseq *************************************************************
 **
-** Testing
+** Remove gaps from a sequence
 **
 ******************************************************************************/
 
 int main(int argc, char **argv)
 {
-
     AjPSeqall seqall;
     AjPSeqout seqout;
     AjPSeq seq = NULL;
-    AjPStr str=NULL;
+    AjPStr str = NULL;
 
-    embInit ("degapseq", argc, argv);
+    embInit("degapseq", argc, argv);
 
     seqout = ajAcdGetSeqoutall ("outseq");
     seqall = ajAcdGetSeqall ("sequence");
 
-    while (ajSeqallNext(seqall, &seq))
+    while(ajSeqallNext(seqall, &seq))
     {
-	/* get a COPY of the sequence string */
+	/* get a copy of the sequence string */
 	str = ajStrNew();
 	ajStrAss (&str, ajSeqStr(seq));
 
@@ -51,12 +53,12 @@ int main(int argc, char **argv)
 	ajSeqReplace(seq, str);
 	ajStrDel(&str);
 
-	ajSeqAllWrite (seqout, seq);
+	ajSeqAllWrite(seqout, seq);
     }
 
-    ajSeqWriteClose (seqout);
+    ajSeqWriteClose(seqout);
 
-    ajExit ();
+    ajExit();
     return 0;
 }
 

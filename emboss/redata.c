@@ -19,7 +19,6 @@
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 ******************************************************************************/
 
-
 #include "emboss.h"
 
 #define ENZDATA "REBASE/embossre.enz"
@@ -29,10 +28,9 @@
 #define SUPPGUESS 50	/* Estimate of number of suppliers. */
 
 
+
+
 static AjPTable redata_supply_table(AjPFile inf);
-
-
-
 
 
 
@@ -45,13 +43,13 @@ static AjPTable redata_supply_table(AjPFile inf);
 
 int main(int argc, char **argv)
 {
-    AjPStr    enzyme=NULL;
+    AjPStr enzyme = NULL;
 
-    AjPFile   outf=NULL;
+    AjPFile outf = NULL;
 
-    AjPFile   enzfile=NULL;
-    AjPFile   reffile=NULL;
-    AjPFile   supfile=NULL;
+    AjPFile enzfile = NULL;
+    AjPFile reffile = NULL;
+    AjPFile supfile = NULL;
 
     AjBool isoschizomers;
     AjBool references;
@@ -69,8 +67,8 @@ int main(int argc, char **argv)
     AjPStr str;
     AjPStr iso;
 
-    AjPStr    *ea;
-    ajint       ne=0;
+    AjPStr *ea;
+    ajint  ne = 0;
 
     ajint len;
     ajint ncuts;
@@ -91,9 +89,6 @@ int main(int argc, char **argv)
     if(!enzfile || !reffile || !supfile)
 	ajFatal("EMBOSS_DATA undefined or REBASEEXTRACT needs running");
 
-
-
-
     enzyme        = ajAcdGetString("enzyme");
     outf          = ajAcdGetOutfile("outfile");
     isoschizomers = ajAcdGetBool("isoschizomers");
@@ -103,11 +98,11 @@ int main(int argc, char **argv)
 
     ajStrCleanWhite(&enzyme);
 
-    line   = ajStrNew();
-    enzline=ajStrNew();
-    str    =ajStrNew();
-    key    =ajStrNewC(".");
-    iso    =ajStrNew();
+    line    = ajStrNew();
+    enzline = ajStrNew();
+    str     = ajStrNew();
+    key     = ajStrNewC(".");
+    iso     = ajStrNew();
 
 
 
@@ -119,13 +114,16 @@ int main(int argc, char **argv)
     while(ajFileReadLine(enzfile,&enzline))
     {
 	p=ajStrStr(enzline);
+
 	if(*p=='#' || *p=='\n' || *p=='!')
 	    continue;
-	p=strtok(p," \t\n");
+	p = strtok(p," \t\n");
 	ajStrAssC(&str,p);
 	while(*p) ++p;
-	*p=' ';
-	if(ajStrMatchCase(str,enzyme)) break;
+	*p = ' ';
+
+	if(ajStrMatchCase(str,enzyme))
+	    break;
     }
 
     /* Only do the rest if a matching enzyme was found */
@@ -134,10 +132,10 @@ int main(int argc, char **argv)
 	ajFmtPrintF(outf,"%s\n\n",ajStrStr(str));
 	while(ajStrMatchCase(str,enzyme))
 	{
-	    p=ajStrStr(enzline);
-	    p=strtok(p," \t\n");
+	    p = ajStrStr(enzline);
+	    p = strtok(p," \t\n");
 	    ajStrAssC(&str,p);
-	    p=strtok(NULL," \t\n");
+	    p = strtok(NULL," \t\n");
 	    ajStrAssC(&line,p);
 	    while(*p) ++p;
 	    ++p;
@@ -154,27 +152,33 @@ int main(int argc, char **argv)
 		ajFmtPrintF(outf,"blunt ends\n");
 	    else
 		ajFmtPrintF(outf,"sticky ends\n");
+
 	    if(ncuts==2)
 		ajFmtPrintF(outf,"  Cut positions 5':%d 3':%d\n",cut1,cut2);
 	    else
 		ajFmtPrintF(outf,"  Cut positions 5':%d 3':%d [5':%d 3':%d]\n",
 			    cut1,cut2,cut3,cut4);
 
-	    if(!ajFileReadLine(enzfile,&enzline)) break;
-	    p=ajStrStr(enzline);
-	    p=strtok(p," \t\n");
+	    if(!ajFileReadLine(enzfile,&enzline))
+		break;
+
+	    p = ajStrStr(enzline);
+	    p = strtok(p," \t\n");
 	    ajStrAssC(&str,p);
 	    while(*p) ++p;
-	    *p=' ';
+	    *p = ' ';
 	}
 
 	/* Read the reference file */
 	while(ajFileReadLine(reffile,&line))
 	{
-	    p=ajStrStr(line);
+	    p = ajStrStr(line);
 	    if(*p=='#' || *p=='\n' || *p=='!')
 		continue;
-	    if(ajStrMatchCase(line,enzyme)) break;
+
+	    if(ajStrMatchCase(line,enzyme))
+		break;
+
 	    while(!ajStrMatchC(line,"//"))
 		ajFileReadLine(reffile,&line);
 	}
@@ -182,18 +186,22 @@ int main(int argc, char **argv)
 	ajFileReadLine(reffile,&line);
 	ajFmtPrintF(outf,"Organism: %s\n",ajStrStr(line));
 	ajFileReadLine(reffile,&iso);
+
 	if(ajStrLen(iso))
 	    ne = ajArrCommaList(iso,&ea);
 	ajFileReadLine(reffile,&line);
+
 	if(ajStrLen(line))
 	    ajFmtPrintF(outf,"Methylated: %s\n",ajStrStr(line));
 	ajFileReadLine(reffile,&line);
+
 	if(ajStrLen(line))
 	    ajFmtPrintF(outf,"Source: %s\n",ajStrStr(line));
+
 	if(isoschizomers && ajStrLen(iso))
 	{
 	    ajFmtPrintF(outf,"\nIsoschizomers:\n");
-	    n=0;
+	    n = 0;
 	    ajFmtPrintF(outf,"   ");
 	    for(i=0;i<ne;++i)
 	    {
@@ -201,22 +209,23 @@ int main(int argc, char **argv)
 		if(++n==6)
 		{
 		    ajFmtPrintF(outf,"\n   ");
-		    n=0;
+		    n = 0;
 		}
 	    }
 	    ajFmtPrintF(outf,"\n");
 	}
 	ajFileReadLine(reffile,&line);
+
 	if(suppliers && ajStrLen(line))
 	{
 	    ajFmtPrintF(outf,"\nSuppliers:\n");
-	    p=ajStrStr(line);
-	    q=ajStrStr(key);
+	    p = ajStrStr(line);
+	    q = ajStrStr(key);
 
 	    while(*p)
 	    {
-		*q=*p;
-		value=ajTableGet(t,key);
+		*q = *p;
+		value = ajTableGet(t,key);
 		ajFmtPrintF(outf,"%s\n",ajStrStr(value));
 		++p;
 	    }
@@ -224,7 +233,7 @@ int main(int argc, char **argv)
 	ajFileReadLine(reffile,&line);
 	if(references && ajStrLen(line))
 	{
-	    p=ajStrStr(line);
+	    p = ajStrStr(line);
 	    sscanf(p,"%d",&n);
 	    ajFmtPrintF(outf,"\nReferences:\n");
 	    for(i=0;i<n;++i)
@@ -244,8 +253,6 @@ int main(int argc, char **argv)
     else
 	ajFmtPrintF(outf,"Restriction enzyme %s not found\n",ajStrStr(enzyme));
 
-
-
     ajStrDel(&str);
     ajStrDel(&iso);
     ajStrDel(&enzyme);
@@ -258,8 +265,11 @@ int main(int argc, char **argv)
     ajFileClose(&outf);
 
     ajExit();
+
     return 0;
 }
+
+
 
 
 /* @funcstatic redata_supply_table ********************************************
@@ -271,34 +281,36 @@ int main(int argc, char **argv)
 ** @@
 ******************************************************************************/
 
-
 static AjPTable redata_supply_table(AjPFile inf)
 {
     AjPTable t;
 
-    AjPStr   line;
+    AjPStr line;
 
-    AjPStr   key;
-    AjPStr   value;
+    AjPStr key;
+    AjPStr value;
 
-    char     *p;
-    char     *q;
-    char     c;
+    char *p;
+    char *q;
+    char c;
 
     t = ajStrTableNew(SUPPGUESS);
     line = ajStrNew();
 
     while(ajFileReadLine(inf,&line))
     {
-	p=ajStrStr(line);
-	q=p;
+	p = ajStrStr(line);
+	q = p;
+
 	if(!*p || *p=='#' || *p=='\n' || *p=='!')
 	    continue;
-	p=ajSysStrtok(p," \t\n");
+	p = ajSysStrtok(p," \t\n");
 	key = ajStrNewC(p);
-	q=strstr(q,p);
+	q = strstr(q,p);
+
 	while((c=*q)!=' ' && c!='\t' && c!='\n' && c)
 	    ++q;
+
 	while((c=*q)==' ' || c=='\t' || c=='\n')
 	    ++q;
 	value=ajStrNewC(q);
@@ -306,5 +318,6 @@ static AjPTable redata_supply_table(AjPFile inf)
     }
 
     ajStrDel(&line);
+
     return t;
 }

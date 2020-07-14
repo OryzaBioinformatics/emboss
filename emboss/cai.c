@@ -24,6 +24,7 @@
 
 
 
+
 /* @prog cai ******************************************************************
 **
 ** CAI codon adaptation index
@@ -46,9 +47,9 @@ int main(int argc, char **argv)
 
     embInit("cai", argc, argv);
 
-    seqall    = ajAcdGetSeqall("seqall");
-    codon     = ajAcdGetCodon("cfile");
-    outf      = ajAcdGetOutfile("outfile");
+    seqall = ajAcdGetSeqall("seqall");
+    codon  = ajAcdGetCodon("cfile");
+    outf   = ajAcdGetOutfile("outfile");
 
     substr=ajStrNew();
 
@@ -67,6 +68,7 @@ int main(int argc, char **argv)
     ajCodDel(&codon);
 
     ajExit();
+
     return 0;
 }
 

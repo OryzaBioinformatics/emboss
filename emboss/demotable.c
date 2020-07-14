@@ -21,9 +21,12 @@
 #include "emboss.h"
 
 
+
+
 static AjPStr demotable_getsubfromstring(AjPStr line, ajint which);
 static void demotable_typePrint (const void* key, void** value, void* cl);
 static void demotable_freetype (const void* key, void** value, void* cl);
+
 
 
 
@@ -37,24 +40,24 @@ int main(int argc, char **argv)
 {
     AjPStr temp;
     AjPFile gfffile;
-    AjPStr  line=NULL;
+    AjPStr  line = NULL;
     AjPTable type;
     ajint *intptr;
 
-    embInit ("demotable", argc, argv);
+    embInit("demotable", argc, argv);
 
 
     /*open file */
     gfffile = ajAcdGetInfile("infile");
 
     /*
-     *  create new table using ajStrTableCmpCase as the comparison function
-     *  and ajStrTableHashCase as the hash function. Initial size of 50
-     *  is used
-     */
+    **  create new table using ajStrTableCmpCase as the comparison function
+    **  and ajStrTableHashCase as the hash function. Initial size of 50
+    **  is used
+    */
     type   = ajTableNew(50, ajStrTableCmpCase, ajStrTableHashCase);
 
-    while( ajFileReadLine(gfffile, &line) )
+    while(ajFileReadLine(gfffile, &line))
     {
 	temp = demotable_getsubfromstring(line,3); /* get the string to test */
 
@@ -79,15 +82,16 @@ int main(int argc, char **argv)
     ajUser("%d types found",ajTableLength(type));
 
     /* use the map function to print out the results */
-    ajTableMap (type, demotable_typePrint, NULL);
+    ajTableMap(type, demotable_typePrint, NULL);
 
     /* use the map function to free all memory */
-    ajTableMap (type, demotable_freetype, NULL);
-    ajTableFree (&type);
+    ajTableMap(type, demotable_freetype, NULL);
+    ajTableFree(&type);
 
     ajExit();
     return 0;
 }
+
 
 
 
@@ -103,8 +107,8 @@ int main(int argc, char **argv)
 
 static AjPStr demotable_getsubfromstring(AjPStr line, ajint which)
 {
-    static AjPRegexp gffexp=NULL;
-    AjPStr temp =NULL;
+    static AjPRegexp gffexp = NULL;
+    AjPStr temp = NULL;
 
     if(!gffexp)
 	gffexp = ajRegCompC("([^\t]+)\t([^\t]+)\t([^\t]+)");
@@ -129,10 +133,13 @@ static AjPStr demotable_getsubfromstring(AjPStr line, ajint which)
 ** @@
 ******************************************************************************/
 
-static void demotable_typePrint (const void* key, void** value, void* cl)
+static void demotable_typePrint(const void* key, void** value, void* cl)
 {
-    AjPStr keystr = (AjPStr) key;
-    ajint    *valptr = (ajint *) *value;
+    AjPStr keystr;
+    ajint *valptr;
+
+    keystr = (AjPStr) key;
+    valptr = (ajint *) *value;
 
     ajUser("type '%S' found %d times", keystr, *valptr);
 
@@ -153,10 +160,13 @@ static void demotable_typePrint (const void* key, void** value, void* cl)
 ** @@
 ******************************************************************************/
 
-static void demotable_freetype (const void* key, void** value, void* cl)
+static void demotable_freetype(const void* key, void** value, void* cl)
 {
-    AjPStr keystr = (AjPStr) key;
-    ajint    *valptr = (ajint *) *value;
+    AjPStr keystr;
+    ajint *valptr;
+
+    keystr = (AjPStr) key;
+    valptr = (ajint *) *value;
 
     ajStrDel(&keystr);
     AJFREE(valptr);

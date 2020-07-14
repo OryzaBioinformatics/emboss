@@ -19,13 +19,14 @@
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 ******************************************************************************/
 
-
 #include "emboss.h"
+
 
 
 
 static void pscan_print_hits(AjPFile *outf, AjPList *l, ajint nmotifs,
 			     AjPStr *name, ajint begin, ajint end);
+
 
 
 
@@ -38,56 +39,55 @@ static void pscan_print_hits(AjPFile *outf, AjPList *l, ajint nmotifs,
 int main(int argc, char **argv)
 {
     AjPSeqall seqall;
-    AjPSeq    seq=NULL;
-    AjPFile   outf=NULL;
+    AjPSeq seq   = NULL;
+    AjPFile outf = NULL;
     ajint begin;
     ajint end;
     ajint emin;
     ajint emax;
 
-    EmbPMatMatch mm=NULL;
+    EmbPMatMatch mm = NULL;
 
-    AjPFile   mfile=NULL;
-    EmbPMatPrints s=NULL;
-    AjPList   l=NULL;
-    AjPStr    strand=NULL;
-    AjPStr    substr=NULL;
-    AjPStr    name=NULL;
+    AjPFile mfile = NULL;
+    EmbPMatPrints s = NULL;
+    AjPList l = NULL;
+    AjPStr strand = NULL;
+    AjPStr substr = NULL;
+    AjPStr name = NULL;
 
-    AjBool    all;
-    AjBool    ordered;
+    AjBool all;
+    AjBool ordered;
 
     ajint hits;
     ajint nmotifs;
 
-
     embInit("pscan", argc, argv);
 
-    seqall    = ajAcdGetSeqall("sequence");
-    outf      = ajAcdGetOutfile("outfile");
-    emin      = ajAcdGetInt("emin");
-    emax      = ajAcdGetInt("emax");
+    seqall = ajAcdGetSeqall("sequence");
+    outf   = ajAcdGetOutfile("outfile");
+    emin   = ajAcdGetInt("emin");
+    emax   = ajAcdGetInt("emax");
 
-    substr=ajStrNew();
-    name =ajStrNew();
+    substr = ajStrNew();
+    name   = ajStrNew();
 
-    all=ordered=ajTrue;
+    all = ordered = ajTrue;
 
 
 
     while(ajSeqallNext(seqall, &seq))
     {
-	begin=ajSeqallBegin(seqall);
-	end=ajSeqallEnd(seqall);
+	begin = ajSeqallBegin(seqall);
+	end   = ajSeqallEnd(seqall);
 
 	ajStrAssC(&name,ajSeqName(seq));
-	strand=ajSeqStrCopy(seq);
+	strand = ajSeqStrCopy(seq);
 
 	ajStrAssSubC(&substr,ajStrStr(strand),begin-1,end-1);
 
-	nmotifs=0;
+	nmotifs = 0;
 	embMatPrintsInit(&mfile);
-	l=ajListNew();
+	l = ajListNew();
 	while(embMatProtReadInt(&mfile,&s))
 	{
 	    if(s->n >= emin && s->n <= emax)
@@ -110,20 +110,14 @@ int main(int argc, char **argv)
 	ajFileClose(&mfile);
     }
 
-
-
-
-
     ajStrDel(&substr);
     ajSeqDel(&seq);
     ajFileClose(&outf);
+
     ajExit();
+
     return 0;
 }
-
-
-
-
 
 
 
@@ -141,7 +135,6 @@ int main(int argc, char **argv)
 ** @@
 ******************************************************************************/
 
-
 static void pscan_print_hits(AjPFile *outf, AjPList *l, ajint nmotifs,
 			     AjPStr *name, ajint begin, ajint end)
 {
@@ -150,9 +143,9 @@ static void pscan_print_hits(AjPFile *outf, AjPList *l, ajint nmotifs,
     ajint j;
     AjBool found;
     ajint nleft;
-    ajint maxelem=0;
+    ajint maxelem = 0;
     ajint maxhpm;
-    ajint hpm=0;
+    ajint hpm = 0;
 
     nleft = nmotifs;
 
@@ -188,15 +181,16 @@ static void pscan_print_hits(AjPFile *outf, AjPList *l, ajint nmotifs,
 
 	if(found)
 	{
-
-	    found=ajFalse;
+	    found = ajFalse;
 	    for(i=0;i<nleft;++i)
 	    {
 		ajListPop(*l,(void **)&mm);
 		hpm = mm->hpm;
+
 		if(mm->all && mm->ordered && maxelem==mm->n)
 		    break;
 		ajListPushApp(*l,(void *)mm);
+
 		for(j=1;j<hpm;++j)
 		{
 		    ajListPop(*l,(void **)&mm);
@@ -206,16 +200,17 @@ static void pscan_print_hits(AjPFile *outf, AjPList *l, ajint nmotifs,
 
 	    if(mm->all && mm->ordered && maxelem==mm->n)
 	    {
-	    ajFmtPrintF(*outf,"Fingerprint %s Elements %d\n",
-			ajStrStr(mm->cod),mm->n);
-	    ajFmtPrintF(*outf,"    Accession number %s\n",ajStrStr(mm->acc));
-	    ajFmtPrintF(*outf,"    %s\n",ajStrStr(mm->tit));
-	    ajFmtPrintF(*outf,"  Element %d Threshold %d%% Score %d%%\n",
-			mm->element+1, mm->thresh, mm->score);
-	    ajFmtPrintF(*outf,"             Start position %d Length %d\n",
-			mm->start+begin,mm->len);
+		ajFmtPrintF(*outf,"Fingerprint %s Elements %d\n",
+			    ajStrStr(mm->cod),mm->n);
+		ajFmtPrintF(*outf,"    Accession number %s\n",
+			    ajStrStr(mm->acc));
+		ajFmtPrintF(*outf,"    %s\n",ajStrStr(mm->tit));
+		ajFmtPrintF(*outf,"  Element %d Threshold %d%% Score %d%%\n",
+			    mm->element+1, mm->thresh, mm->score);
+		ajFmtPrintF(*outf,"             Start position %d Length %d\n",
+			    mm->start+begin,mm->len);
 
-	    embMatMatchDel(&mm);
+		embMatMatchDel(&mm);
 	    }
 
 	    for(i=1;i<hpm;++i)
@@ -234,10 +229,6 @@ static void pscan_print_hits(AjPFile *outf, AjPList *l, ajint nmotifs,
 
     }
 
-
-
-
-
     ajFmtPrintF(*outf,"\n\nCLASS 2\n");
     ajFmtPrintF(*outf,"All elements match but not all in the "
 		"correct order\n\n");
@@ -248,6 +239,7 @@ static void pscan_print_hits(AjPFile *outf, AjPList *l, ajint nmotifs,
     {
 	found = ajFalse;
 	maxelem = 0;
+
 	for(i=0;i<nleft;++i)
 	{
 	    ajListPop(*l,(void **)&mm);
@@ -258,13 +250,13 @@ static void pscan_print_hits(AjPFile *outf, AjPList *l, ajint nmotifs,
 	    }
 	    hpm = mm->hpm;
 	    ajListPushApp(*l,(void *)mm);
+
 	    for(j=1;j<hpm;++j)
 	    {
 		ajListPop(*l,(void **)&mm);
 		ajListPushApp(*l,(void *)mm);
 	    }
 	}
-
 
 	if(found)
 	{
@@ -277,24 +269,27 @@ static void pscan_print_hits(AjPFile *outf, AjPList *l, ajint nmotifs,
 		if(mm->all && maxelem==mm->n)
 		    break;
 		ajListPushApp(*l,(void *)mm);
+
 		for(j=1;j<hpm;++j)
 		{
 		    ajListPop(*l,(void **)&mm);
 		    ajListPushApp(*l,(void *)mm);
 		}
 	    }
+
 	    if(mm->all && maxelem==mm->n)
 	    {
-	    ajFmtPrintF(*outf,"Fingerprint %s Elements %d\n",
-			ajStrStr(mm->cod),mm->n);
-	    ajFmtPrintF(*outf,"    Accession number %s\n",ajStrStr(mm->acc));
-	    ajFmtPrintF(*outf,"    %s\n",ajStrStr(mm->tit));
-	    ajFmtPrintF(*outf,"  Element %d Threshold %d%% Score %d%%\n",
-			mm->element+1, mm->thresh, mm->score);
-	    ajFmtPrintF(*outf,"             Start position %d Length %d\n",
-			mm->start+begin,mm->len);
+		ajFmtPrintF(*outf,"Fingerprint %s Elements %d\n",
+			    ajStrStr(mm->cod),mm->n);
+		ajFmtPrintF(*outf,"    Accession number %s\n",
+			    ajStrStr(mm->acc));
+		ajFmtPrintF(*outf,"    %s\n",ajStrStr(mm->tit));
+		ajFmtPrintF(*outf,"  Element %d Threshold %d%% Score %d%%\n",
+			    mm->element+1, mm->thresh, mm->score);
+		ajFmtPrintF(*outf,"             Start position %d Length %d\n",
+			    mm->start+begin,mm->len);
 
-	    embMatMatchDel(&mm);
+		embMatMatchDel(&mm);
 	    }
 
 	    for(i=1;i<hpm;++i)
@@ -324,7 +319,7 @@ static void pscan_print_hits(AjPFile *outf, AjPList *l, ajint nmotifs,
 
     while(found && nleft)
     {
-	found = ajFalse;
+	found  = ajFalse;
 	maxhpm = 0;
 	for(i=0;i<nleft;++i)
 	{
@@ -332,10 +327,11 @@ static void pscan_print_hits(AjPFile *outf, AjPList *l, ajint nmotifs,
 	    if(mm->ordered)
 	    {
 		maxhpm = AJMAX(maxelem,mm->hpm);
-		found = ajTrue;
+		found  = ajTrue;
 	    }
 	    hpm = mm->hpm;
 	    ajListPushApp(*l,(void *)mm);
+
 	    for(j=1;j<hpm;++j)
 	    {
 		ajListPop(*l,(void **)&mm);
@@ -346,34 +342,37 @@ static void pscan_print_hits(AjPFile *outf, AjPList *l, ajint nmotifs,
 
 	if(found)
 	{
-
-	    found=ajFalse;
+	    found = ajFalse;
 	    for(i=0;i<nleft;++i)
 	    {
 		ajListPop(*l,(void **)&mm);
 		hpm = mm->hpm;
+
 		if(mm->ordered && maxhpm==mm->hpm)
 		    break;
 		ajListPushApp(*l,(void *)mm);
+
 		for(j=1;j<hpm;++j)
 		{
 		    ajListPop(*l,(void **)&mm);
 		    ajListPushApp(*l,(void *)mm);
 		}
 	    }
+
 	    if(mm->ordered && maxhpm==mm->hpm)
 	    {
-	    ajFmtPrintF(*outf,"Fingerprint %s Elements %d\n",
-			ajStrStr(mm->cod),mm->n);
-	    ajFmtPrintF(*outf,"    Accession number %s\n",ajStrStr(mm->acc));
-	    ajFmtPrintF(*outf,"    %s\n",ajStrStr(mm->tit));
-	    ajFmtPrintF(*outf,"  Element %d Threshold %d%% Score %d%%\n",
-			mm->element+1, mm->thresh, mm->score);
-	    ajFmtPrintF(*outf,"             Start position %d Length %d\n",
-			mm->start+begin,mm->len);
+		ajFmtPrintF(*outf,"Fingerprint %s Elements %d\n",
+			    ajStrStr(mm->cod),mm->n);
+		ajFmtPrintF(*outf,"    Accession number %s\n",
+			    ajStrStr(mm->acc));
+		ajFmtPrintF(*outf,"    %s\n",ajStrStr(mm->tit));
+		ajFmtPrintF(*outf,"  Element %d Threshold %d%% Score %d%%\n",
+			    mm->element+1, mm->thresh, mm->score);
+		ajFmtPrintF(*outf,"             Start position %d Length %d\n",
+			    mm->start+begin,mm->len);
 
 
-            embMatMatchDel(&mm);
+		embMatMatchDel(&mm);
 	    }
 
 	    for(i=1;i<hpm;++i)
@@ -405,6 +404,7 @@ static void pscan_print_hits(AjPFile *outf, AjPList *l, ajint nmotifs,
     {
 	found = ajFalse;
 	maxhpm = 0;
+
 	for(i=0;i<nleft;++i)
 	{
 	    ajListPop(*l,(void **)&mm);
@@ -423,34 +423,37 @@ static void pscan_print_hits(AjPFile *outf, AjPList *l, ajint nmotifs,
 
 	if(found)
 	{
-
-	    found=ajFalse;
+	    found = ajFalse;
 	    for(i=0;i<nleft;++i)
 	    {
 		ajListPop(*l,(void **)&mm);
 		hpm = mm->hpm;
+
 		if(maxhpm==mm->hpm)
 		    break;
 		ajListPushApp(*l,(void *)mm);
+
 		for(j=1;j<hpm;++j)
 		{
 		    ajListPop(*l,(void **)&mm);
 		    ajListPushApp(*l,(void *)mm);
 		}
 	    }
+
 	    if(maxhpm==mm->hpm)
 	    {
-	    ajFmtPrintF(*outf,"Fingerprint %s Elements %d\n",
-			ajStrStr(mm->cod),mm->n);
-	    ajFmtPrintF(*outf,"    Accession number %s\n",ajStrStr(mm->acc));
-	    ajFmtPrintF(*outf,"    %s\n",ajStrStr(mm->tit));
-	    ajFmtPrintF(*outf,"  Element %d Threshold %d%% Score %d%%\n",
-			mm->element+1, mm->thresh, mm->score);
-	    ajFmtPrintF(*outf,"             Start position %d Length %d\n",
-			mm->start+begin,mm->len);
+		ajFmtPrintF(*outf,"Fingerprint %s Elements %d\n",
+			    ajStrStr(mm->cod),mm->n);
+		ajFmtPrintF(*outf,"    Accession number %s\n",
+			    ajStrStr(mm->acc));
+		ajFmtPrintF(*outf,"    %s\n",ajStrStr(mm->tit));
+		ajFmtPrintF(*outf,"  Element %d Threshold %d%% Score %d%%\n",
+			    mm->element+1, mm->thresh, mm->score);
+		ajFmtPrintF(*outf,"             Start position %d Length %d\n",
+			    mm->start+begin,mm->len);
 
 
-	    embMatMatchDel(&mm);
+		embMatMatchDel(&mm);
 	    }
 
 	    for(i=1;i<hpm;++i)

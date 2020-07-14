@@ -23,6 +23,8 @@
 #include "emboss.h"
 
 
+
+
 /* @prog cutseq ***************************************************************
 **
 ** Removes a specified section from a sequence
@@ -35,16 +37,16 @@ int main(int argc, char **argv)
     AjPSeqout seqout;
     ajint from;
     ajint to;
-    AjPStr str=NULL;
+    AjPStr str = NULL;
     ajint beg;
     ajint end;
 
-    embInit ("cutseq", argc, argv);
+    embInit("cutseq", argc, argv);
 
-    seq = ajAcdGetSeq ("sequence");
-    from = ajAcdGetInt ("from")-1;
-    to = ajAcdGetInt ("to")-1;
-    seqout = ajAcdGetSeqout ("outseq");
+    seq    = ajAcdGetSeq("sequence");
+    from   = ajAcdGetInt("from")-1;
+    to     = ajAcdGetInt("to")-1;
+    seqout = ajAcdGetSeqout("outseq");
 
     beg = ajSeqBegin(seq)-1;
     end = ajSeqEnd(seq)-1;
@@ -52,17 +54,16 @@ int main(int argc, char **argv)
     str = ajStrNew();
 
     /* get a COPY of the sequence string */
-    (void) ajStrAssSub (&str, ajSeqStr(seq), beg, end);
-    (void) ajStrCut(&str, from-beg, to-beg);
+    ajStrAssSub(&str, ajSeqStr(seq), beg, end);
+    ajStrCut(&str, from-beg, to-beg);
 
-    (void) ajSeqReplace(seq, str);
+    ajSeqReplace(seq, str);
 
-    (void) ajSeqWrite (seqout, seq);
-    (void) ajSeqWriteClose (seqout);
+    ajSeqWrite(seqout, seq);
+    ajSeqWriteClose(seqout);
 
     ajStrDel(&str);
 
-    ajExit ();
+    ajExit();
     return 0;
 }
-

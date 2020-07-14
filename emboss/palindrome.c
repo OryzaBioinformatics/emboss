@@ -24,6 +24,20 @@
 
 static AjBool overlap;
 
+
+
+
+/* @datastatic Palindrome *****************************************************
+**
+** Palindrome internals
+**
+** @attr forwardStart [ajint] Start forward
+** @attr forwardEnd [ajint] End forward
+** @attr revStart [ajint] Start reverse
+** @attr revEnd [ajint] End reverse
+** @attr next [struct palindrome *] Pointer to next in list
+******************************************************************************/
+
 typedef struct palindrome
 {
    ajint forwardStart;
@@ -33,16 +47,22 @@ typedef struct palindrome
    struct palindrome *next;
 } *Palindrome;
 
-static Palindrome palindrome_New( ajint fstart, ajint fend, ajint rstart,
+
+
+
+static Palindrome palindrome_New(ajint fstart, ajint fend, ajint rstart,
 				 ajint rend);
-static AjBool palindrome_AInB( Palindrome a, Palindrome b);
-static AjBool palindrome_AOverB( Palindrome a, Palindrome b);
-static AjBool palindrome_Over ( ajint astart, ajint aend, ajint bstart,
+static AjBool palindrome_AInB(Palindrome a, Palindrome b);
+static AjBool palindrome_AOverB(Palindrome a, Palindrome b);
+static AjBool palindrome_Over(ajint astart, ajint aend, ajint bstart,
 			     ajint bend);
-static void palindrome_Print( AjPFile outfile, AjPStr seq, Palindrome pal,
-               ajint maxLen);
-static AjBool palindrome_Longer( Palindrome a, Palindrome b );
-static void palindrome_Swap ( Palindrome a, Palindrome b );
+static void   palindrome_Print(AjPFile outfile, AjPStr seq, Palindrome pal,
+			       ajint maxLen);
+static AjBool palindrome_Longer(Palindrome a, Palindrome b);
+static void   palindrome_Swap(Palindrome a, Palindrome b);
+
+
+
 
 /* @prog palindrome ***********************************************************
 **
@@ -53,217 +73,222 @@ static void palindrome_Swap ( Palindrome a, Palindrome b );
 int main(int argc, char **argv)
 {
 
-  AjPSeqall seqall;
-  AjPSeq sequence;
-  AjPFile outfile;
-  ajint minLen;
-  ajint maxLen;
-  ajint maxGap;
-  ajint beginPos;
-  ajint endPos;
-  ajint maxmismatches;
+    AjPSeqall seqall;
+    AjPSeq sequence;
+    AjPFile outfile;
+    ajint minLen;
+    ajint maxLen;
+    ajint maxGap;
+    ajint beginPos;
+    ajint endPos;
+    ajint maxmismatches;
 
-  AjPStr seqstr;
-  ajint current;
-  ajint rev;
-  ajint count;
-  ajint gap;
+    AjPStr seqstr;
+    ajint current;
+    ajint rev;
+    ajint count;
+    ajint gap;
 
-  ajint begin;
-  ajint end;
-  ajint mismatches;
-  ajint mismatchAtEnd;
-  ajint istart;
-  ajint iend;
-  ajint ic;
-  ajint ir;
+    ajint begin;
+    ajint end;
+    ajint mismatches;
+    ajint mismatchAtEnd;
+    ajint istart;
+    ajint iend;
+    ajint ic;
+    ajint ir;
 
-  AjBool alln;	/* TRUE if all of palindrome is N's */
+    AjBool alln;		/* TRUE if all of palindrome is N's */
 
-  Palindrome pfirstpal;
-  Palindrome plastpal = NULL;
-  Palindrome ppal = NULL;
-  Palindrome pnext = NULL;
+    Palindrome pfirstpal;
+    Palindrome plastpal = NULL;
+    Palindrome ppal = NULL;
+    Palindrome pnext = NULL;
 
-  AjBool found = AJFALSE;
+    AjBool found = AJFALSE;
 
-  embInit("palindrome", argc, argv);
+    embInit("palindrome", argc, argv);
 
-  /*   minGap = 0; */
-  seqall = ajAcdGetSeqall( "insequence");
-  minLen = ajAcdGetInt( "minpallen");
-  maxLen = ajAcdGetInt( "maxpallen");
-  maxGap = ajAcdGetInt( "gaplimit");
-  outfile = ajAcdGetOutfile( "outfile");
-  maxmismatches = ajAcdGetInt( "nummismatches");
-  overlap = ajAcdGetBool("overlap");
+    seqall  = ajAcdGetSeqall("sequence");
+    minLen  = ajAcdGetInt("minpallen");
+    maxLen  = ajAcdGetInt("maxpallen");
+    maxGap  = ajAcdGetInt("gaplimit");
+    outfile = ajAcdGetOutfile("outfile");
 
-  while(ajSeqallNext(seqall, &sequence))
-  {
+    maxmismatches = ajAcdGetInt("nummismatches");
+    overlap       = ajAcdGetBool("overlap");
 
-    beginPos = ajSeqallBegin( seqall );
-    endPos = ajSeqallEnd( seqall );
-
-    /* set to NULL to indicate that we have no first palindrome find yet */
-    pfirstpal = NULL;
-
-    /* write header to file */
-
-    ajFmtPrintF( outfile, "Palindromes of:  %s \n", ajSeqName( sequence));
-    ajFmtPrintF( outfile, "Sequence length is: %d \n", ajSeqLen( sequence));
-    ajFmtPrintF( outfile, "Start at position: %d\nEnd at position: %d\n",
-        beginPos, endPos);
-    ajFmtPrintF( outfile, "Minimum length of Palindromes is: %d \n", minLen);
-    ajFmtPrintF( outfile, "Maximum length of Palindromes is: %d \n", maxLen);
-    ajFmtPrintF( outfile, "Maximum gap between elements is: %d \n", maxGap);
-    ajFmtPrintF( outfile, "Number of mismatches allowed in Palindrome: %d\n",
-          maxmismatches);
-    ajFmtPrintF( outfile, "\n\n\n");
-    ajFmtPrintF( outfile, "Palindromes:\n");
-
-    /* check sequence is of type nucleotide else return error */
-    if (!ajSeqIsNuc( sequence))
+    while(ajSeqallNext(seqall, &sequence))
     {
-      ajFmtPrintF( outfile, "Error, sequence must be a nucleotide sequence");
-      ajExit();
+	beginPos = ajSeqallBegin(seqall);
+	endPos = ajSeqallEnd(seqall);
+
+	/* set to NULL to indicate that we have no first palindrome find yet */
+	pfirstpal = NULL;
+
+	/* write header to file */
+
+	ajFmtPrintF(outfile, "Palindromes of:  %s \n", ajSeqName(sequence));
+	ajFmtPrintF(outfile, "Sequence length is: %d \n", ajSeqLen(sequence));
+	ajFmtPrintF(outfile, "Start at position: %d\nEnd at position: %d\n",
+		    beginPos, endPos);
+	ajFmtPrintF(outfile,"Minimum length of Palindromes is: %d \n", minLen);
+	ajFmtPrintF(outfile,"Maximum length of Palindromes is: %d \n", maxLen);
+	ajFmtPrintF(outfile,"Maximum gap between elements is: %d \n", maxGap);
+	ajFmtPrintF(outfile,"Number of mismatches allowed in Palindrome: %d\n",
+		    maxmismatches);
+	ajFmtPrintF(outfile, "\n\n\n");
+	ajFmtPrintF(outfile, "Palindromes:\n");
+
+	/* check sequence is of type nucleotide else return error */
+	if(!ajSeqIsNuc(sequence))
+	{
+	    ajFmtPrintF(outfile,"Error, sequence must be a "
+			"nucleotide sequence");
+	    ajExit();
+	}
+    
+
+	/* set vars in readiness to enter loop */
+	seqstr = ajStrNewC(ajSeqChar(sequence));
+	begin  = beginPos - 1;
+	end    = endPos - 1;
+
+	ajStrToLower(&seqstr); /* make comparisons case independent */
+
+	/* loop to look for inverted repeats */
+	for(current = begin; current < end; current++)
+	{
+	    iend = current + 2*(maxLen) + maxGap;
+	    if(iend > end)
+		iend = end;
+	    istart = current + minLen;
+
+	    for(rev = iend; rev > istart; rev--)
+	    {
+		count = 0;
+		mismatches = 0;
+		mismatchAtEnd = 0;
+		alln = ajTrue;
+		ic = current;
+		ir = rev;
+		if(ajStrChar(seqstr, ic) ==
+		   ajSeqBaseComp(ajStrChar(seqstr, ir)))
+		    while(mismatches <= maxmismatches && ic < ir)
+		    {
+			if(ajStrChar(seqstr, ic++) ==
+			   ajSeqBaseComp(ajStrChar(seqstr, ir--)))
+			{
+			    mismatchAtEnd = 0;
+			    if(ajStrChar(seqstr, ic-1) != 'n')
+				alln = ajFalse;
+			}
+			else
+			{
+			    mismatches++;
+			    mismatchAtEnd++;
+			}
+			count++;
+		    }
+
+		count -= mismatchAtEnd;
+		gap = rev - current - count - count + 1;
+
+		/* Find out if there's a reverse repeat long enough */
+		if(count >= minLen && gap <= maxGap && !alln)
+		{
+		    /* create new struct to hold palindrome data */
+		    ppal = palindrome_New(current,(current+count),rev,
+					  (rev-count));
+
+		    /*
+		    ** if it is the first palindrome find then save it as start
+		    **  of palindrome list
+		    */
+		    if(pfirstpal == NULL)
+		    {
+			pfirstpal = ppal;
+			plastpal = ppal;
+		    }
+		    else
+		    {
+			/* Is it  a subset of a palindrome already met */
+			pnext = pfirstpal;
+			found = AJFALSE;
+			while(pnext != NULL)
+			{
+			    if(overlap && palindrome_AInB(ppal, pnext))
+			    {
+				found = AJTRUE;
+				break;
+			    }
+
+			    if(!overlap && palindrome_AOverB(ppal, pnext))
+			    {
+				if(palindrome_Longer(ppal, pnext))
+				{
+				    ajDebug("swap...\n");
+				    palindrome_Swap(ppal, pnext);
+				}
+				else
+				    ajDebug("keep...\n");
+
+				found = AJTRUE;
+				break;
+			    }
+			    pnext = pnext->next;
+			}
+
+			/* if new palindrome add to end of list */
+			if(!found)
+			{
+			    plastpal->next = ppal;
+			    plastpal = ppal;
+			}
+			else
+			    AJFREE(ppal);
+		    }
+		}
+	    }
+	}
+    
+    
+    
+    
+	/* Print out palindromes */
+	ppal = pfirstpal;
+	while(ppal != NULL)
+	{
+	    palindrome_Print(outfile, seqstr, ppal, maxLen);
+	    ppal = ppal->next;
+	}
+    
+    
+	/* make a gap beween outputs of different sequences */
+	ajFmtPrintF(outfile, "\n\n\n");
+    
+    
+	/* free memory used for palindrome list */
+	ppal = pfirstpal;
+	while(ppal != NULL)
+	{
+	    pnext = ppal->next;
+	    AJFREE(ppal);
+	    ppal = pnext;
+	}
+    
+	ajStrDel(&seqstr);
+    
     }
+  
+  
+  
+  
+    ajFileClose(&outfile);
+  
+    ajExit();
 
-
-    /* set vars in readiness to enter loop */
-    seqstr = ajStrNewC(ajSeqChar( sequence));
-    begin = beginPos - 1;
-    end = endPos - 1;
-
-    ajStrToLower(&seqstr);	/* make comparisons case independent */
-
-    /* loop to look for inverted repeats */
-    for (current = begin; current < end; current++)
-    {
-      iend = current + 2*(maxLen) + maxGap;
-      if (iend > end) iend = end;
-      istart = current + minLen;
-
-      for (rev = iend; rev > istart; rev--)
-      {
-        count = 0;
-        mismatches = 0;
-        mismatchAtEnd = 0;
-        alln = ajTrue;
-        ic = current;
-        ir = rev;
-        if (ajStrChar(seqstr, ic) ==
-          ajSeqBaseComp(ajStrChar(seqstr, ir)))
-        {
-          while (mismatches <= maxmismatches && ic < ir)
-          {
-            if (ajStrChar(seqstr, ic++) ==
-              ajSeqBaseComp(ajStrChar(seqstr, ir--)))
-            {
-              mismatchAtEnd = 0;
-              if (ajStrChar(seqstr, ic-1) != 'n')
-                  alln = ajFalse;
-            }
-            else
-            {
-              mismatches++;
-              mismatchAtEnd++;
-            }
-            count++;
-          }
-        }
-        count -= mismatchAtEnd;
-        gap = rev - current - count - count + 1;
-
-        /* Find out if we have found reverse repeat long enough*/
-        if (count >= minLen && gap <= maxGap && !alln)
-        {
-          /* create new palindrome struct to hold new palindrome data */
-          ppal = palindrome_New(current,(current+count),rev,(rev-count));
-
-          /*
-           *  if it is our first palindrome find then save it as start
-           *  of palindrome list
-           */
-          if (pfirstpal == NULL)
-          {
-            pfirstpal = ppal;
-            plastpal = ppal;
-          }
-          else
-          {
-             /* check this isn't a subset of a palindrome already found */
-            pnext = pfirstpal;
-            found = AJFALSE;
-            while (pnext != NULL)
-            {
-              if (overlap && palindrome_AInB( ppal, pnext))
-              {
-                found = AJTRUE;
-                break;
-              }
-              if (!overlap && palindrome_AOverB( ppal, pnext))
-              {
-                if (palindrome_Longer(ppal, pnext))
-                {
-                  ajDebug("swap...\n");
-                  palindrome_Swap(ppal, pnext);
-                }
-                else
-                {
-                  ajDebug("keep...\n");
-                }
-                found = AJTRUE;
-                break;
-              }
-              pnext = pnext->next;
-            }
-
-            /* if new palindrome add to end of list */
-            if (!found)
-            {
-              plastpal->next = ppal;
-              plastpal = ppal;
-            }
-            else
-              AJFREE (ppal);
-          }
-        }
-      }
-    }
-
-
-
-    /*Print out palindromes*/
-    ppal = pfirstpal;
-    while (ppal != NULL)
-    {
-      palindrome_Print( outfile, seqstr, ppal, maxLen);
-      ppal = ppal->next;
-    }
-
-
-    /* make nice gap beween outputs of different sequences */
-    ajFmtPrintF( outfile, "\n\n\n");
-
-
-    /*free memory used for palindrome list*/
-    ppal = pfirstpal;
-    while (ppal != NULL)
-    {
-      pnext = ppal->next;
-      AJFREE (ppal);
-      ppal = pnext;
-    }
-
-    ajStrDel(&seqstr);
-
-  }
-
-
-  ajFileClose(&outfile);
-
-  ajExit();
-  return 0;
+    return 0;
 }
 
 
@@ -281,21 +306,24 @@ int main(int argc, char **argv)
 ** @@
 ******************************************************************************/
 
-static Palindrome palindrome_New( ajint fstart, ajint fend, ajint rstart,
+static Palindrome palindrome_New(ajint fstart, ajint fend, ajint rstart,
 				 ajint rend)
 {
 
-  Palindrome pal;
+    Palindrome pal;
 
-  AJNEW(pal);
-  pal->forwardStart = fstart;
-  pal->forwardEnd = fend;
-  pal->revStart = rstart;
-  pal->revEnd = rend;
-  pal->next = NULL;
+    AJNEW(pal);
+    pal->forwardStart = fstart;
+    pal->forwardEnd   = fend;
+    pal->revStart     = rstart;
+    pal->revEnd       = rend;
+    pal->next         = NULL;
 
-  return pal;
+    return pal;
 }
+
+
+
 
 /* @funcstatic palindrome_AInB ************************************************
 **
@@ -308,17 +336,19 @@ static Palindrome palindrome_New( ajint fstart, ajint fend, ajint rstart,
 ** @@
 ******************************************************************************/
 
-static AjBool palindrome_AInB( Palindrome a, Palindrome b)
+static AjBool palindrome_AInB(Palindrome a, Palindrome b)
 {
+    if((a->forwardStart >= b->forwardStart) &&
+       (a->forwardEnd <=b->forwardEnd))
+	if((a->revStart <= b->revStart) &&
+	   (a->revEnd >= b->revEnd))
+	    return AJTRUE;
 
-  if ((a->forwardStart >= b->forwardStart) &&
-	(a->forwardEnd <=b->forwardEnd))
-	if ((a->revStart <= b->revStart) &&
-	  (a->revEnd >= b->revEnd))
-	  return AJTRUE;
-
-  return AJFALSE;
+    return AJFALSE;
 }
+
+
+
 
 /* @funcstatic palindrome_AOverB **********************************************
 **
@@ -330,24 +360,19 @@ static AjBool palindrome_AInB( Palindrome a, Palindrome b)
 ** @@
 ******************************************************************************/
 
-static AjBool palindrome_AOverB( Palindrome a, Palindrome b)
+static AjBool palindrome_AOverB(Palindrome a, Palindrome b)
 {
+    if(palindrome_Over(a->forwardStart, a->forwardEnd,
+		       b->forwardStart, b->forwardEnd) &&
+       palindrome_Over(a->revEnd, a->revStart,
+		       b->revEnd, b->revStart))
+	return AJTRUE;
 
-/*ajDebug ("overlap %d..%d %d..%d\n",
-    a->forwardStart, a->forwardEnd,
-    a->revStart, a->revEnd);
-    ajDebug ("   with %d..%d %d..%d\n",
-    b->forwardStart, b->forwardEnd,
-    b->revStart, b->revEnd);*/
-
-  if (palindrome_Over(a->forwardStart, a->forwardEnd,
-             b->forwardStart, b->forwardEnd) &&
-    palindrome_Over(a->revEnd, a->revStart,
-             b->revEnd, b->revStart))
-    return AJTRUE;
-
-  return AJFALSE;
+    return AJFALSE;
 }
+
+
+
 
 /* @funcstatic palindrome_Over ************************************************
 **
@@ -361,16 +386,19 @@ static AjBool palindrome_AOverB( Palindrome a, Palindrome b)
 ** @@
 ******************************************************************************/
 
-static AjBool palindrome_Over( ajint astart, ajint aend, ajint bstart,
-                ajint bend)
+static AjBool palindrome_Over(ajint astart, ajint aend, ajint bstart,
+			      ajint bend)
 {
-  if (astart >= bstart && astart <= bend)
-    return ajTrue;
-  if (bstart >= astart && bstart <= aend)
-    return ajTrue;
+    if(astart >= bstart && astart <= bend)
+	return ajTrue;
+    if(bstart >= astart && bstart <= aend)
+	return ajTrue;
 
-  return ajFalse;
+    return ajFalse;
 }
+
+
+
 
 /* @funcstatic palindrome_Longer **********************************************
 **
@@ -383,14 +411,17 @@ static AjBool palindrome_Over( ajint astart, ajint aend, ajint bstart,
 ** @@
 ******************************************************************************/
 
-static AjBool palindrome_Longer( Palindrome a, Palindrome b )
+static AjBool palindrome_Longer(Palindrome a, Palindrome b)
 {
-  if ((a->forwardEnd - a->forwardStart) >
-    (b->forwardEnd - b->forwardStart))
-    return ajTrue;
+    if((a->forwardEnd - a->forwardStart) >
+       (b->forwardEnd - b->forwardStart))
+	return ajTrue;
 
-  return ajFalse;
+    return ajFalse;
 }
+
+
+
 
 /* @funcstatic palindrome_Swap ************************************************
 **
@@ -401,15 +432,17 @@ static AjBool palindrome_Longer( Palindrome a, Palindrome b )
 ** @@
 ******************************************************************************/
 
-static void palindrome_Swap ( Palindrome a, Palindrome b )
+static void palindrome_Swap(Palindrome a, Palindrome b)
 {
-  b->forwardStart =  a->forwardStart;
-  b->forwardEnd =  a->forwardEnd;
-  b->revStart =  a->revStart;
-  b->revEnd =  a->revEnd;
+    b->forwardStart =  a->forwardStart;
+    b->forwardEnd =  a->forwardEnd;
+    b->revStart =  a->revStart;
+    b->revEnd =  a->revEnd;
 
-  return;
+    return;
 }
+
+
 
 
 /* @funcstatic palindrome_Print ***********************************************
@@ -423,37 +456,35 @@ static void palindrome_Swap ( Palindrome a, Palindrome b )
 ** @@
 ******************************************************************************/
 
-static void palindrome_Print( AjPFile outfile, AjPStr seq, Palindrome pal,
-               ajint maxLen)
+static void palindrome_Print(AjPFile outfile, AjPStr seq, Palindrome pal,
+			     ajint maxLen)
 {
 
-  ajint i, j;
+    ajint i;
+    ajint j;
 
-  if(pal->forwardEnd - pal->forwardStart +1 > maxLen)
+    if(pal->forwardEnd - pal->forwardStart +1 > maxLen)
+	return;
+
+    ajFmtPrintF(outfile, "%-5d ", (pal->forwardStart+1));
+    for(i = pal->forwardStart; i < pal->forwardEnd; i++)
+	ajFmtPrintF(outfile, "%c", ajStrChar(seq, i));
+
+    ajFmtPrintF(outfile, " %5d\n      ", pal->forwardEnd);
+
+    for(i = pal->forwardStart,
+	j=pal->revStart; i < pal->forwardEnd; i++)
+	if(ajStrChar(seq, i) == ajSeqBaseComp(ajStrChar(seq, j--)))
+	    ajFmtPrintF(outfile, "|");
+	else
+	    ajFmtPrintF(outfile, " ");
+
+    ajFmtPrintF(outfile, "\n%-5d ", (pal->revStart+1));
+
+    for(i = pal->revStart; i > pal->revEnd; i--)
+	ajFmtPrintF(outfile, "%c", ajStrChar(seq, i));
+
+    ajFmtPrintF(outfile, " %5d\n\n", (pal->revEnd+2));
+
     return;
-
-  ajFmtPrintF( outfile, "%-5d ", (pal->forwardStart+1));
-  for (i = pal->forwardStart; i < pal->forwardEnd; i++)
-  {
-    ajFmtPrintF( outfile, "%c", ajStrChar( seq, i));
-  }
-  ajFmtPrintF(outfile, " %5d\n      ", pal->forwardEnd);
-
-  for (i = pal->forwardStart,
-     j=pal->revStart; i < pal->forwardEnd; i++)
-  {
-    if (ajStrChar(seq, i) == ajSeqBaseComp(ajStrChar(seq, j--)))
-      ajFmtPrintF( outfile, "|");
-    else
-      ajFmtPrintF( outfile, " ");
-  }
-
-  ajFmtPrintF( outfile, "\n%-5d ", (pal->revStart+1));
-  for (i = pal->revStart; i > pal->revEnd; i--)
-  {
-    ajFmtPrintF( outfile, "%c", ajStrChar(seq, i));
-  }
-  ajFmtPrintF( outfile, " %5d\n\n", (pal->revEnd+2));
-
-  return;
 }

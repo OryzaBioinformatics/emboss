@@ -27,8 +27,10 @@
 
 
 
+
 static char *cutgextract_next(AjPFile inf, AjPInt *array);
 static void cutgextract_readcodons(AjPFile inf, AjPInt *count);
+
 
 
 
@@ -58,25 +60,25 @@ int main(int argc, char **argv)
     char *aa=
 	"***AAAACCDDEEFFGGGGHHIIIKKLLLLLLMNNPPPPQQRRRRRRSSSSSSTTTTVVVVWYY";
 
-    AjPFile inf=NULL;
-    AjPFile outf=NULL;
-    char *entryname=NULL;
-    AjPStr fname=NULL;
-    AjPStr line=NULL;
-    AjPInt count=NULL;
-    AjPStr key=NULL;
-    AjPStr tmpkey=NULL;
-    AjPInt value=NULL;
+    AjPFile inf     = NULL;
+    AjPFile outf    = NULL;
+    char *entryname = NULL;
+    AjPStr fname    = NULL;
+    AjPStr line     = NULL;
+    AjPInt count    = NULL;
+    AjPStr key      = NULL;
+    AjPStr tmpkey   = NULL;
+    AjPInt value    = NULL;
 
-    AjPTable table=NULL;
-    ajint i=0;
-    ajint j=0;
-    ajint n=0;
-    ajint x=0;
+    AjPTable table  = NULL;
+    ajint i = 0;
+    ajint j = 0;
+    ajint n = 0;
+    ajint x = 0;
 
-    AjPStr *array=NULL;
-    AjPCod codon=NULL;
-    ajint sum=0;
+    AjPStr *array = NULL;
+    AjPCod codon  = NULL;
+    ajint sum = 0;
     char c;
 
     AjPList flist = NULL;
@@ -87,8 +89,8 @@ int main(int argc, char **argv)
     embInit("cutgextract",argc,argv);
 
 
-    line = ajStrNew();
-    count = ajIntNew();
+    line   = ajStrNew();
+    count  = ajIntNew();
     tmpkey = ajStrNew();
     fname  = ajStrNew();
 
@@ -118,8 +120,8 @@ int main(int argc, char **argv)
 	    cutgextract_readcodons(inf,&count);
 
 	    ajStrAssC(&tmpkey,entryname);
-	    /* See if organism is already in the table */
 
+	    /* See if organism is already in the table */
 	    value = ajTableGet(table,tmpkey);
 	    if(!value)			/* Initialise */
 	    {
@@ -141,16 +143,15 @@ int main(int argc, char **argv)
 	ajFileClose(&inf);
     }
 
-
     array = (AjPStr *) ajTableToarray(table,NULL);
-    i=0;
 
+    i = 0;
     while(array[i])
     {
-	key = array[i++];
+	key   = array[i++];
 	value = (AjPInt) array[i++];
 	codon = ajCodNew();
-	sum=0;
+	sum   = 0;
 	for(j=0;j<CODONS;++j)
 	{
 	    sum += ajIntGet(value,j);
@@ -180,15 +181,11 @@ int main(int argc, char **argv)
 	ajCodDel(&codon);
     }
 
-
-
     ajTableFree(&table);
-
-
     ajListDel(&flist);
 
-
     ajExit();
+
     return 0;
 }
 
@@ -206,12 +203,12 @@ int main(int argc, char **argv)
 
 static char* cutgextract_next(AjPFile inf, AjPInt *array)
 {
-    static AjPStr line=NULL;
-    static AjPStr org=NULL;
-    AjPStrTok token=NULL;
+    static AjPStr line = NULL;
+    static AjPStr org  = NULL;
+    AjPStrTok token    = NULL;
     ajint i;
     ajint len;
-    char *p=NULL;
+    char *p = NULL;
     char c;
 
     if(!line)
@@ -235,7 +232,7 @@ static char* cutgextract_next(AjPFile inf, AjPInt *array)
     ajStrInsertC(&org,0,"E");
 
     len = ajStrLen(org);
-    p = ajStrStr(org);
+    p   = ajStrStr(org);
     for(i=0;i<len;++i)
     {
 	c = p[i];
@@ -248,6 +245,8 @@ static char* cutgextract_next(AjPFile inf, AjPInt *array)
 
     return p;
 }
+
+
 
 
 /* @funcstatic cutgextract_readcodons *****************************************
@@ -268,17 +267,17 @@ static void cutgextract_readcodons(AjPFile inf, AjPInt *count)
 	16,15,57,59,60,58,24,25,34,33,39,40,20,19,11,12,
 	10, 9,63,62, 8, 7,14,13,21,23,22,32,61, 1, 0, 2
     };
-    static AjPStr line=NULL;
-    static AjPStr value=NULL;
+    static AjPStr line  = NULL;
+    static AjPStr value = NULL;
 
-    AjPStrTok token=NULL;
+    AjPStrTok token = NULL;
     ajint i;
-    ajint n=0;
+    ajint n = 0;
 
 
     if(!line)
     {
-	line = ajStrNew();
+	line  = ajStrNew();
 	value = ajStrNew();
     }
 

@@ -26,6 +26,9 @@
 #include <ctype.h>
 #include <limits.h>
 
+
+
+
 /* @prog aaindexextract *******************************************************
 **
 ** Extract data from AAINDEX.
@@ -41,16 +44,16 @@ int main(int argc, char **argv)
     AjPFile outf  = NULL;
 
     AjPStr  line;
-    AjPStr  outdir = NULL;
+    AjPStr  outdir   = NULL;
     AjPStr  outfname = NULL;
-    AjPStr  id = NULL;
+    AjPStr  id       = NULL;
     AjBool  done;
 
-    AjPRegexp idexp = NULL;
+    AjPRegexp idexp  = NULL;
     AjPRegexp endexp = NULL;
 
-    idexp = ajRegCompC ("^H ([^ \n\r\t]+)$");
-    endexp = ajRegCompC ("^//$");
+    idexp = ajRegCompC("^H ([^ \n\r\t]+)$");
+    endexp = ajRegCompC("^//$");
     ajStrAssC(&outdir, "AAINDEX");
 
     embInit("aaindexextract",argc,argv);
@@ -61,45 +64,41 @@ int main(int argc, char **argv)
     line = ajStrNew();
 
     done = ajTrue;
-    while (ajFileGetsTrim(inf, &line))
+    while(ajFileGetsTrim(inf, &line))
     {
+	/* process the ID for a new index */
+	if(ajRegExec(idexp, line))
+	{
+	    if(!done)
+		ajFatal("bad aaindex1 format new ID at: %S", line);
+	    ajRegSubI(idexp, 1, &id);
+	    ajStrToLower(&id);
+	    ajFmtPrintS(&outfname, "%S/%S", outdir, id);
+	    ajFileDataNewWrite(outfname,&outf);
+	    done = ajFalse;
+	}
+	else
+	{
+	    if(done)
+		ajFatal("bad aaindex1 format expected ID at: %S", line);
+	    done = ajFalse;
+	}
 
+	/* write the current line */
+	ajFmtPrintF(outf, "%S\n", line);
 
-      /* process the ID for a new index */
-
-      if (ajRegExec(idexp, line))
-      {
-	if (!done)
-	  ajFatal("bad aaindex1 format new ID at: %S", line);
-	ajRegSubI (idexp, 1, &id);
-	ajStrToLower(&id);
-	ajFmtPrintS(&outfname, "%S/%S", outdir, id);
-	ajFileDataNewWrite(outfname,&outf);
-	done = ajFalse;
-      }
-      else
-      {
-	if (done)
-	  ajFatal("bad aaindex1 format expected ID at: %S", line);
-	done = ajFalse;
-      }
-
-      /* write the current line */
-
-      ajFmtPrintF (outf, "%S\n", line);
-
-      /* close the file at end of index */
-
-      if (ajRegExec(endexp, line))
-      {
-	done = ajTrue;
-	ajFileClose (&outf);
-      }
+	/* close the file at end of index */
+	if(ajRegExec(endexp, line))
+	{
+	    done = ajTrue;
+	    ajFileClose (&outf);
+	}
     }
     ajFileClose (&inf);
 
     ajStrDel(&line);
 
     ajExit();
+
     return 0;
 }

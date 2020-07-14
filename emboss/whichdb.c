@@ -19,7 +19,10 @@
 ** along with this program; if not, write to the Free Software
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 ******************************************************************************/
+
 #include "emboss.h"
+
+
 
 
 /* @prog whichdb **************************************************************
@@ -51,19 +54,19 @@ int main(int argc, char **argv)
 
     AjPSeqout seqout = NULL;
 
-    embInit ("whichdb", argc, argv);
-
-    entry = ajAcdGetString("entry");
-    outf  = ajAcdGetOutfile("outfile");
-    get   = ajAcdGetBool("get");
+    embInit("whichdb", argc, argv);
+    
+    entry   = ajAcdGetString("entry");
+    outf    = ajAcdGetOutfile("outfile");
+    get     = ajAcdGetBool("get");
     showall = ajAcdGetBool("showall");
-
+    
     if(!ajStrLen(entry))
     {
 	ajExit();
 	return 0;
     }
-
+    
     dblist = ajListNew();
     type   = ajStrNew();
     comm   = ajStrNew();
@@ -71,9 +74,9 @@ int main(int argc, char **argv)
     idqry  = ajStrNew();
     seq    = ajSeqNew();
     snam   = ajStrNew();
-
+    
     ajNamListListDatabases(dblist);
-
+    
     while(ajListPop(dblist,(void **)&lnam))
     {
 	ajStrAssS(&name,lnam);
@@ -81,22 +84,24 @@ int main(int argc, char **argv)
 
 	if(!ajNamDbDetails(name,&type,&id,&qry,&all,&comm,&rel))
 	    continue;
+
 	if(!id)
 	    continue;
 
 	ajFmtPrintS(&idqry,"%S:%S",name,entry);
+
 	if(ajStrPrefixC(type,"P"))
 	    pro = ajTrue;
 	else
 	    pro = ajFalse;
 
-	if (showall && !get)
-	  ajFmtPrintF(outf,"# Trying '%S'\n",idqry);
+	if(showall && !get)
+	    ajFmtPrintF(outf,"# Trying '%S'\n",idqry);
 
 	if(!ajSeqGetFromUsa(idqry,pro,&seq))
 	{
-	    if (showall && !get)
-	      ajFmtPrintF(outf,"# Failed '%S'\n",idqry);
+	    if(showall && !get)
+		ajFmtPrintF(outf,"# Failed '%S'\n",idqry);
 	    continue;
 	}
 
@@ -115,11 +120,11 @@ int main(int argc, char **argv)
 	else
 	    ajFmtPrintF(outf,"%S\n",idqry);
     }
-
-
-
-
-
+    
+    
+    
+    
+    
     ajListDel(&dblist);
     ajStrDel(&type);
     ajStrDel(&comm);
@@ -127,7 +132,8 @@ int main(int argc, char **argv)
     ajStrDel(&idqry);
     ajStrDel(&snam);
     ajSeqDel(&seq);
+    
+    ajExit();
 
-    ajExit ();
     return 0;
 }

@@ -28,6 +28,9 @@
 
 #define COILFILE "Epepcoil.dat"
 
+
+
+
 static void pepcoil_readcoildat(AjPFloat2d *rdat);
 static float pepcoil_probcoil(float score);
 static ajint pepcoil_inframe(ajint start, ajint pos, ajint frame, ajint len);
@@ -44,12 +47,12 @@ static ajint pepcoil_inframe(ajint start, ajint pos, ajint frame, ajint len);
 int main(int argc, char **argv)
 {
     AjPSeqall seqall;
-    AjPSeq    seq=NULL;
-    AjPFile   outf=NULL;
-    AjPStr    strand=NULL;
-    AjPStr    sstr=NULL;
-    AjPStr    stmp=NULL;
-    AjPStr    substr=NULL;
+    AjPSeq seq    = NULL;
+    AjPFile outf  = NULL;
+    AjPStr strand = NULL;
+    AjPStr sstr   = NULL;
+    AjPStr stmp   = NULL;
+    AjPStr substr = NULL;
 
     ajint begin;
     ajint end;
@@ -63,18 +66,17 @@ int main(int argc, char **argv)
     ajint k;
     ajint window;
 
-    /*    AjBool plot;*/
     AjBool coil;
     AjBool frame;
     AjBool other;
 
 
-    AjPFloat scores=NULL;
-    AjPFloat pscores=NULL;
-    AjPFloat probs=NULL;
-    AjPFloat rframes=NULL;
-    AjPInt   frames=NULL;
-    AjPInt   parray=NULL;
+    AjPFloat scores  = NULL;
+    AjPFloat pscores = NULL;
+    AjPFloat probs   = NULL;
+    AjPFloat rframes = NULL;
+    AjPInt   frames  = NULL;
+    AjPInt   parray  = NULL;
 
     float score;
     float maxscore;
@@ -95,23 +97,23 @@ int main(int argc, char **argv)
     ajint coilframe;
     ajint fframe;
 
-    AjBool     iscoil;
-    AjPFloat2d rdat=NULL;
+    AjBool iscoil;
+    AjPFloat2d rdat = NULL;
 
 
-    (void) ajGraphInit("pepcoil", argc, argv);
+    ajGraphInit("pepcoil", argc, argv);
 
 
     rdat = ajFloat2dNew();
     pepcoil_readcoildat(&rdat);
 
-    seqall    = ajAcdGetSeqall("sequence");
-    window    = ajAcdGetInt("window");
-    outf      = ajAcdGetOutfile("outfile");
+    seqall = ajAcdGetSeqall("sequence");
+    window = ajAcdGetInt("window");
+    outf   = ajAcdGetOutfile("outfile");
 
-    coil      = ajAcdGetBool("coil");
-    frame     = ajAcdGetBool("frame");
-    other     = ajAcdGetBool("other");
+    coil   = ajAcdGetBool("coil");
+    frame  = ajAcdGetBool("frame");
+    other  = ajAcdGetBool("other");
 
 
     substr = ajStrNew();
@@ -127,8 +129,8 @@ int main(int argc, char **argv)
 
     while(ajSeqallNext(seqall, &seq))
     {
-	begin=ajSeqallBegin(seqall);
-	end=ajSeqallEnd(seqall);
+	begin = ajSeqallBegin(seqall);
+	end   = ajSeqallEnd(seqall);
 
 	strand = ajSeqStrCopy(seq);
 	ajStrToUpper(&strand);
@@ -136,13 +138,13 @@ int main(int argc, char **argv)
 	ajStrAssSubC(&substr,ajStrStr(strand),begin-1,end-1);
 	ajStrAssSubC(&sstr,ajStrStr(strand),begin-1,end-1);
 
-	len    = ajStrLen(substr);
+	len = ajStrLen(substr);
 
 	q = p = ajStrStr(substr);
 	for(i=0;i<len;++i,++p)
 	    *p = (char) ajAZToInt(*p);
 
-	p=q;
+	p = q;
 
 	maxmaxscore = -1.0;
 	isub = window -1;
@@ -153,13 +155,16 @@ int main(int argc, char **argv)
 	    wend = (i < lwin-isub) ? i : lwin-isub;
 
 	    maxscore = -1.0;
-	    maxframe=0;
+	    maxframe = 0;
 
 	    for(win=wstart;win<=wend;++win)
 		for(fframe=1;fframe<=7;++fframe)
 		{
 		    k = fframe - (((i-win)+1)%7);
-		    if(k<1) k+=7;
+
+		    if(k<1)
+			k+=7;
+
 		    for(j=0;j<window;++j)
 		    {
 			rescode = *(p+win+j);
@@ -167,10 +172,11 @@ int main(int argc, char **argv)
 			if(k>7) k=1;
 		    }
 		    score = ajGeoMean(ajFloatFloat(scores),window);
+
 		    if(score>maxscore)
 		    {
-			maxscore=score;
-			maxframe=fframe;
+			maxscore = score;
+			maxframe = fframe;
 		    }
 		}
 	    ajFloatPut(&pscores,i,maxscore);
@@ -211,14 +217,14 @@ int main(int argc, char **argv)
 					startframe+begin,i-1+begin,
 					coilframe+begin,ajIntGet(frames,i-1)
 					+begin);
-			coilframe=ajIntGet(frames,i);
-			startframe=i;
+			coilframe  = ajIntGet(frames,i);
+			startframe = i;
 		    }
 		}
 		else
 		{
-		    endcoil=i-1;
-		    lencoil=endcoil-startcoil+1;
+		    endcoil = i-1;
+		    lencoil = endcoil-startcoil+1;
 		    if(other)
 		    {
 			ajFmtPrintF(outf,
@@ -228,12 +234,12 @@ int main(int argc, char **argv)
 				    "   Max score: %.3f (probability %.2f)\n",
 				    maxscore,maxcoil);
 		    }
-		    iscoil=ajTrue;
-		    startcoil=i;
-		    maxcoil=ajFloatGet(probs,i);
-		    maxscore=ajFloatGet(pscores,i);
-		    coilframe=ajIntGet(frames,i);
-		    startframe=i;
+		    iscoil = ajTrue;
+		    startcoil  = i;
+		    maxcoil    = ajFloatGet(probs,i);
+		    maxscore   = ajFloatGet(pscores,i);
+		    coilframe  = ajIntGet(frames,i);
+		    startframe = i;
 		    if(coil)
 			ajFmtPrintF(outf,"\nPrediction starts at %d\n",
 				    startcoil+begin);
@@ -259,20 +265,20 @@ int main(int argc, char **argv)
 				    "   Max score: %.3f (probability %.2f)\n",
 				    maxscore,maxcoil);
 		    }
-		    iscoil=ajFalse;
-		    maxcoil=ajFloatGet(probs,i);
-		    maxscore=ajFloatGet(pscores,i);
-		    startcoil=i;
+		    iscoil    = ajFalse;
+		    maxcoil   = ajFloatGet(probs,i);
+		    maxscore  = ajFloatGet(pscores,i);
+		    startcoil = i;
 		}
 		else
 		{
-		    maxcoil=AJMAX(maxcoil,ajFloatGet(probs,i));
-		    maxscore=AJMAX(maxscore,ajFloatGet(pscores,i));
+		    maxcoil  = AJMAX(maxcoil,ajFloatGet(probs,i));
+		    maxscore = AJMAX(maxscore,ajFloatGet(pscores,i));
 		}
 	    }
 	}
 
-	lencoil=len-startcoil;
+	lencoil = len-startcoil;
 	if(iscoil)
 	{
 	    if(coil)
@@ -285,7 +291,6 @@ int main(int argc, char **argv)
 	    }
 	}
 	else
-	{
 	    if(other)
 	    {
 		ajFmtPrintF(outf,
@@ -294,7 +299,6 @@ int main(int argc, char **argv)
 		ajFmtPrintF(outf,"   Max score: %.3f (probability %.2f)\n",
 			    maxscore,maxcoil);
 	    }
-	}
 
 	ajStrDel(&strand);
     }
@@ -315,6 +319,7 @@ int main(int argc, char **argv)
     ajFileClose(&outf);
 
     ajExit();
+
     return 0;
 }
 
@@ -329,17 +334,16 @@ int main(int argc, char **argv)
 ** @@
 ******************************************************************************/
 
-
 static void pepcoil_readcoildat(AjPFloat2d *rdat)
 {
-    AjPFile mfptr=NULL;
-    AjPStr  line=NULL;
+    AjPFile mfptr = NULL;
+    AjPStr  line  = NULL;
     static  char delim[]=" \t\n";
 
     char *p;
     char *q;
-    ajint  n;
-    ajint  c;
+    ajint n;
+    ajint c;
 
     float v;
 
@@ -347,7 +351,7 @@ static void pepcoil_readcoildat(AjPFloat2d *rdat)
     if(!mfptr)
 	ajFatal("%s file not found\n",COILFILE);
 
-    line=ajStrNew();
+    line = ajStrNew();
 
     while(ajFileGets(mfptr, &line))
     {
@@ -360,13 +364,15 @@ static void pepcoil_readcoildat(AjPFloat2d *rdat)
 	c = 0;
 	while((q=ajSysStrtok(NULL,delim)))
 	{
-	    (void) sscanf(q,"%f",&v);
+	    sscanf(q,"%f",&v);
 	    ajFloat2dPut(rdat,n,c++,v);
 	}
     }
 
     ajStrDel(&line);
     ajFileClose(&mfptr);
+
+    return;
 }
 
 
@@ -380,7 +386,6 @@ static void pepcoil_readcoildat(AjPFloat2d *rdat)
 ** @return [float] probability
 ** @@
 ******************************************************************************/
-
 
 static float pepcoil_probcoil(float score)
 {

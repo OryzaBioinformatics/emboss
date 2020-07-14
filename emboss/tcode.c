@@ -19,10 +19,37 @@
 ** along with this program; if not, write to the Free Software
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 ******************************************************************************/
+
 #include "emboss.h"
 
 
 #define BIGVAL 10.
+
+
+
+
+/* @datastatic AjPTestcode ****************************************************
+**
+** tcode internals
+**
+** @alias AjStestcode
+** @alias AjOTestcode
+**
+** @attr positions [AjPFloat] Undocumented
+** @attr npositions [ajint] Undocumented
+** @attr content [AjPFloat] Undocumented
+** @attr ncontent [ajint] Undocumented
+** @attr pprobA [AjPFloat] Undocumented
+** @attr pprobC [AjPFloat] Undocumented
+** @attr pprobG [AjPFloat] Undocumented
+** @attr pprobT [AjPFloat] Undocumented
+** @attr cprobA [AjPFloat] Undocumented
+** @attr cprobC [AjPFloat] Undocumented
+** @attr cprobG [AjPFloat] Undocumented
+** @attr cprobT [AjPFloat] Undocumented
+** @attr pweights [AjPFloat] Undocumented
+** @attr cweights [AjPFloat] Undocumented
+******************************************************************************/
 
 typedef struct AjSTestcode 
 {
@@ -43,6 +70,8 @@ typedef struct AjSTestcode
 } AjOTestcode,*AjPTestcode;
 
 
+
+
 static AjBool tcode_readdata(AjPTestcode *table1, AjPFile datafile);
 static AjPTestcode tcode_new(void);
 static void tcode_del(AjPTestcode *thys);
@@ -52,6 +81,9 @@ static ajint tcode_index(AjPFloat array, float value);
 static void tcode_report(AjPReport report, AjPInt from, AjPInt to,
 			 AjPFloat testcodes, ajint npoints,
 			 AjPFeattable ftable, AjPSeq seq);
+
+
+
 
 /* @prog tcode ***************************************************************
 **
@@ -78,7 +110,7 @@ int main(int argc, char **argv)
     ajint step;
     
     float testcode = 0.;
-    ajint npoints = 0;
+    ajint npoints  = 0;
     
     AjPFloat testcodes = NULL;
     AjPInt   from      = NULL;
@@ -207,7 +239,7 @@ int main(int argc, char **argv)
 **
 ** Read Etcode.dat data file
 **
-** @param [w] table1 [AjPFTestcode*] data object
+** @param [w] table1 [AjPTestcode*] data object
 ** @param [r] datafile [AjPFile] data file object 
 ** @return [AjBool] true if successful read
 ** @@
@@ -216,19 +248,19 @@ int main(int argc, char **argv)
 static AjBool tcode_readdata(AjPTestcode *table1, AjPFile datafile)
 {
     AjPTestcode table = NULL;
-    AjPStr      line  = NULL;
-    AjBool      ok    = ajTrue;
-    float       val   = 0.;
-    float       vala  = 0.;
-    float       valc  = 0.;
-    float       valg  = 0.;
-    float       valt  = 0.;
-    char        c     = '\0';
-    ajint       i     = 0;
+    AjPStr line  = NULL;
+    AjBool ok    = ajTrue;
+    float  val   = 0.;
+    float  vala  = 0.;
+    float  valc  = 0.;
+    float  valg  = 0.;
+    float  valt  = 0.;
+    char   c     = '\0';
+    ajint  i     = 0;
 
 
-    line    = ajStrNew();
-    table   = *table1;
+    line  = ajStrNew();
+    table = *table1;
     
 
     ok  = ajTrue;
@@ -238,8 +270,10 @@ static AjBool tcode_readdata(AjPTestcode *table1, AjPFile datafile)
     {
 	ok = ajFileReadLine(datafile,&line);
 	c  = *ajStrStr(line);
+
 	if(c=='#' || c=='\n')
 	    continue;
+
 	ajFmtScanS(line,"%f",&val);
 	ajFloatPut(&table->positions,table->npositions++,val);
     }
@@ -251,8 +285,10 @@ static AjBool tcode_readdata(AjPTestcode *table1, AjPFile datafile)
     {
 	ok = ajFileReadLine(datafile,&line);
 	c = *ajStrStr(line);
+
 	if(c=='#' || c=='\n')
 	    continue;
+
 	ajFmtScanS(line,"%f",&val);
 	ajFloatPut(&table->content,table->ncontent++,val);
     }
@@ -263,8 +299,10 @@ static AjBool tcode_readdata(AjPTestcode *table1, AjPFile datafile)
     {
 	ok = ajFileReadLine(datafile,&line);
 	c = *ajStrStr(line);
+
 	if(c=='#' || c=='\n')
 	    continue;
+
 	ajFmtScanS(line,"%f%f%f%f",&vala,&valc,&valg,&valt);
 
 	ajFloatPut(&table->pprobA,i,vala);
@@ -281,8 +319,10 @@ static AjBool tcode_readdata(AjPTestcode *table1, AjPFile datafile)
     {
 	ok = ajFileReadLine(datafile,&line);
 	c = *ajStrStr(line);
+
 	if(c=='#' || c=='\n')
 	    continue;
+
 	ajFmtScanS(line,"%f%f%f%f",&vala,&valc,&valg,&valt);
 
 	ajFloatPut(&table->cprobA,i,vala);
@@ -299,8 +339,10 @@ static AjBool tcode_readdata(AjPTestcode *table1, AjPFile datafile)
     {
 	ok = ajFileReadLine(datafile,&line);
 	c = *ajStrStr(line);
+
 	if(c=='#' || c=='\n')
 	    continue;
+
 	ajFmtScanS(line,"%f",&val);
 
 	ajFloatPut(&table->pweights,i,val);
@@ -313,8 +355,10 @@ static AjBool tcode_readdata(AjPTestcode *table1, AjPFile datafile)
     {
 	ok = ajFileReadLine(datafile,&line);
 	c = *ajStrStr(line);
+
 	if(c=='#' || c=='\n')
 	    continue;
+
 	ajFmtScanS(line,"%f",&val);
 
 	ajFloatPut(&table->cweights,i,val);
@@ -323,8 +367,11 @@ static AjBool tcode_readdata(AjPTestcode *table1, AjPFile datafile)
     }
 
     ajStrDel(&line);
+
     return ok;
 }
+
+
 
 
 /* @funcstatic tcode_new ********************************************
@@ -334,7 +381,6 @@ static AjBool tcode_readdata(AjPTestcode *table1, AjPFile datafile)
 ** @return [AjPTestcode] allocated object
 ** @@
 ******************************************************************************/
-
 
 static AjPTestcode tcode_new(void)
 {
@@ -363,11 +409,12 @@ static AjPTestcode tcode_new(void)
 
 
 
+
 /* @funcstatic tcode_del ********************************************
 **
 ** Testcode data object destructor
 **
-** @param [w] thys [AjPFTestcode*] testcodedata object
+** @param [w] thys [AjPTestcode*] testcodedata object
 ** @return [void]
 ** @@
 ******************************************************************************/
@@ -405,13 +452,15 @@ static void tcode_del(AjPTestcode *thys)
 }
 
 
+
+
 /* @funcstatic tcode_slide ********************************************
 **
 ** Return a single TESTCODE value
 **
 ** @param [r] substr [AjPStr] sequence
 ** @param [r] window [ajint] size of sliding window
-** @param [r] table [AjPTestcode*] testcode data object
+** @param [r] table [AjPTestcode] testcode data object
 ** @param [r] pos [ajint] start position within sequence
 **
 ** @return [float] Testcode value
@@ -449,7 +498,7 @@ static float tcode_slide(AjPStr substr, ajint window, AjPTestcode table,
     float p8 = 0.;
     
     
-    char  *p   = NULL;
+    char  *p = NULL;
     char  c;
     
     ajint scores[3][4];
@@ -584,12 +633,13 @@ static float tcode_slide(AjPStr substr, ajint window, AjPTestcode table,
 static ajint tcode_index(AjPFloat array, float value)
 {
     ajint i = 0;
-    float thisval  = 0.;
-    AjBool found = ajFalse;
+    float thisval = 0.;
+    AjBool found  = ajFalse;
 
     while(!found)
     {
 	thisval = ajFloatGet(array,i);
+
 	if(value >= thisval)
 	{
 	    found = ajTrue;
@@ -600,6 +650,8 @@ static ajint tcode_index(AjPFloat array, float value)
 
     return i;
 }
+
+
 
 
 /* @funcstatic tcode_report ********************************************
@@ -614,7 +666,7 @@ static ajint tcode_index(AjPFloat array, float value)
 ** @param [w] ftable [AjPFeattable] feature table for loading report
 ** @param [r] seq [AjPSeq] original sequence
 **
-** @return [ajint] index
+** @return [void]
 ** @@
 ******************************************************************************/
 
@@ -625,7 +677,7 @@ static void tcode_report(AjPReport report, AjPInt from, AjPInt to,
     AjPFeature feat = NULL;
     AjPStr tmpstr   = NULL;
     ajint i;
-    float fval=0.;
+    float fval = 0.;
     AjPStr coding = NULL;
 
     AjPStr source = NULL;

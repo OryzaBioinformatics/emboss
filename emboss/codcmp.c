@@ -24,6 +24,8 @@
 #include <math.h>
 
 
+
+
 /* @prog codcmp ***************************************************************
 **
 ** Codon usage table comparison
@@ -32,24 +34,23 @@
 
 int main(int argc, char **argv)
 {
-    AjPFile    outf;
-    AjPCod     first;
-    AjPCod     second;
+    AjPFile outf;
+    AjPCod first;
+    AjPCod second;
 
-    double     sum;
-    double     sum2;
+    double sum;
+    double sum2;
 
-    double     t;
-    ajint      unused;
-    ajint      i;
-
+    double t;
+    ajint unused;
+    ajint i;
 
 
     embInit("codcmp", argc, argv);
 
-    first     = ajAcdGetCodon("first");
-    second    = ajAcdGetCodon("second");
-    outf      = ajAcdGetOutfile("outfile");
+    first  = ajAcdGetCodon("first");
+    second = ajAcdGetCodon("second");
+    outf   = ajAcdGetOutfile("outfile");
 
 
     sum    = 0.0;
@@ -70,7 +71,7 @@ int main(int argc, char **argv)
     ajFmtPrintF(outf,"# %s vs %s\n\n",ajStrStr(first->name),
                 ajStrStr(second->name));
 
-    if (unused<64)
+    if(unused<64)
     {
         ajFmtPrintF(outf,"Sum Squared Difference = %.3f\n",sum2);
         ajFmtPrintF(outf,"Mean Squared Difference = %.3f\n",
@@ -89,5 +90,6 @@ int main(int argc, char **argv)
     ajCodDel(&second);
 
     ajExit();
+
     return 0;
 }

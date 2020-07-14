@@ -22,7 +22,6 @@
  ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *****************************************************************************/
 
-
 #include "emboss.h"
 #include <string.h>
 #include <limits.h>
@@ -54,6 +53,8 @@ static void restrict_read_file_of_enzyme_names(AjPStr *enzymes);
 static ajint restrict_enzcompare(const void *a, const void *b);
 
 
+
+
 /* @prog restrict *************************************************************
 **
 ** Finds restriction enzyme cleavage sites
@@ -63,11 +64,11 @@ static ajint restrict_enzcompare(const void *a, const void *b);
 int main(int argc, char **argv)
 {
     AjPSeqall seqall;
-    AjPSeq    seq=NULL;
-    AjPStr    enzymes=NULL;
-    AjPFile   outf=NULL;
-    AjPReport report=NULL;
-    AjPFeattable TabRpt=NULL;
+    AjPSeq seq     = NULL;
+    AjPStr enzymes = NULL;
+    AjPFile outf   = NULL;
+    AjPReport report    = NULL;
+    AjPFeattable TabRpt = NULL;
     ajint begin;
     ajint end;
     ajint min;
@@ -85,34 +86,34 @@ int main(int argc, char **argv)
     AjBool frags;
     AjPStr dfile;
 
-    AjPFile   enzfile=NULL;
-    AjPFile   equfile=NULL;
+    AjPFile enzfile = NULL;
+    AjPFile equfile = NULL;
 
-    AjPStr    name=NULL;
+    AjPStr name = NULL;
 
-    AjPTable  table=NULL;
+    AjPTable table = NULL;
 
-    ajint       hits;
+    ajint hits;
 
 
-    AjPList     l;
-    AjBool      ifrag;
+    AjPList l;
+    AjBool  ifrag;
 
     
     embInit("restrict", argc, argv);
 
-    seqall    = ajAcdGetSeqall("sequence");
-    enzymes   = ajAcdGetString("enzymes");
-    report    = ajAcdGetReport("outfile");
-    min       = ajAcdGetInt("min");
-    max       = ajAcdGetInt("max");
-    sitelen   = ajAcdGetInt("sitelen");
-    blunt     = ajAcdGetBool("blunt");
-    sticky    = ajAcdGetBool("sticky");
-    single    = ajAcdGetBool("single");
-    alpha     = ajAcdGetBool("alphabetic");
-    ambiguity = ajAcdGetBool("ambiguity");
-    plasmid   = ajAcdGetBool("plasmid");
+    seqall     = ajAcdGetSeqall("sequence");
+    enzymes    = ajAcdGetString("enzymes");
+    report     = ajAcdGetReport("outfile");
+    min        = ajAcdGetInt("min");
+    max        = ajAcdGetInt("max");
+    sitelen    = ajAcdGetInt("sitelen");
+    blunt      = ajAcdGetBool("blunt");
+    sticky     = ajAcdGetBool("sticky");
+    single     = ajAcdGetBool("single");
+    alpha      = ajAcdGetBool("alphabetic");
+    ambiguity  = ajAcdGetBool("ambiguity");
+    plasmid    = ajAcdGetBool("plasmid");
     commercial = ajAcdGetBool("commercial");
     limit      = ajAcdGetBool("limit");
     frags      = ajAcdGetBool("fragments");
@@ -128,7 +129,8 @@ int main(int argc, char **argv)
 	ajFatal("Blunt/Sticky end cutters shouldn't both be disabled.");
 
 
-    if(single) max=min=1;
+    if(single)
+	max = min = 1;
 
     table = ajStrTableNew(EQUGUESS);
 
@@ -136,7 +138,7 @@ int main(int argc, char **argv)
     /* read the local file of enzymes names */
     restrict_read_file_of_enzyme_names(&enzymes);
 
-     if(!*ajStrStr(dfile))
+    if(!*ajStrStr(dfile))
     {
 	ajFileDataNewC(ENZDATA,&enzfile);
 	if(!enzfile)
@@ -155,7 +157,7 @@ int main(int argc, char **argv)
     {
 	ajFileDataNewC(EQUDATA,&equfile);
 	if(!equfile)
-	    limit=ajFalse;
+	    limit = ajFalse;
 	else
 	    restrict_read_equiv(&equfile,&table);
     }
@@ -164,8 +166,8 @@ int main(int argc, char **argv)
 
     while(ajSeqallNext(seqall, &seq))
     {
-	begin=ajSeqallBegin(seqall);
-	end=ajSeqallEnd(seqall);
+	begin = ajSeqallBegin(seqall);
+	end   = ajSeqallEnd(seqall);
 	ajFileSeek(enzfile,0L,0);
 
 	TabRpt = ajFeattableNewSeq(seq);
@@ -177,18 +179,18 @@ int main(int argc, char **argv)
 	if(hits)
 	{
 	    name = ajStrNewC(ajSeqName(seq));
-	      restrict_reportHits(report, seq, TabRpt,
-				  &l,hits,begin,end,
-				  ambiguity,min,max,
-				  plasmid,blunt,sticky,sitelen,
-				  limit,table,
-				  alpha,frags,nameit,ifrag);
-	    if (outf)
-	      restrict_printHits(&outf,&l,&name,hits,begin,end,
-				 ambiguity,min,max,
-				 plasmid,blunt,sticky,sitelen,
-				 limit,table,
-				 alpha,frags,nameit);
+	    restrict_reportHits(report, seq, TabRpt,
+				&l,hits,begin,end,
+				ambiguity,min,max,
+				plasmid,blunt,sticky,sitelen,
+				limit,table,
+				alpha,frags,nameit,ifrag);
+	    if(outf)
+		restrict_printHits(&outf,&l,&name,hits,begin,end,
+				   ambiguity,min,max,
+				   plasmid,blunt,sticky,sitelen,
+				   limit,table,
+				   alpha,frags,nameit);
 	    ajStrDel(&name);
 	}
 
@@ -201,15 +203,15 @@ int main(int argc, char **argv)
 
     ajSeqDel(&seq);
     ajFileClose(&enzfile);
-    if (outf)
-      ajFileClose(&outf);
+    if(outf)
+	ajFileClose(&outf);
 
-    (void) ajReportClose(report);
+    ajReportClose(report);
 
     ajExit();
+
     return 0;
 }
-
 
 
 
@@ -239,7 +241,6 @@ int main(int argc, char **argv)
 ** @@
 ******************************************************************************/
 
-
 static void restrict_printHits(AjPFile *outf, AjPList *l, AjPStr *name,
 			       ajint hits, ajint begin, ajint end,
 			       AjBool ambiguity, ajint mincut, ajint maxcut,
@@ -248,21 +249,21 @@ static void restrict_printHits(AjPFile *outf, AjPList *l, AjPStr *name,
 			       AjPTable table, AjBool alpha, AjBool frags,
 			       AjBool nameit)
 {
-    EmbPMatMatch m=NULL;
-    AjPStr  ps=NULL;
-    ajint *fa=NULL;
-    ajint *fx=NULL;
-    ajint fc=0;
-    ajint fn=0;
-    ajint fb=0;
-    ajint last=0;
+    EmbPMatMatch m = NULL;
+    AjPStr ps = NULL;
+    ajint *fa = NULL;
+    ajint *fx = NULL;
+    ajint fc   = 0;
+    ajint fn   = 0;
+    ajint fb   = 0;
+    ajint last = 0;
 
-    AjPStr value=NULL;
+    AjPStr value = NULL;
 
     ajint i;
-    ajint c=0;
+    ajint c = 0;
 
-    ps=ajStrNew();
+    ps = ajStrNew();
     fn = 0;
 
 
@@ -274,12 +275,15 @@ static void restrict_printHits(AjPFile *outf, AjPList *l, AjPStr *name,
 		sitelen);
     if(blunt)
 	ajFmtPrintF(*outf,"# Blunt ends allowed\n");
+
     if(sticky)
 	ajFmtPrintF(*outf,"# Sticky ends allowed\n");
+
     if(plasmid)
 	ajFmtPrintF(*outf,"# DNA is circular\n");
     else
 	ajFmtPrintF(*outf,"# DNA is linear\n");
+
     if(!ambiguity)
 	ajFmtPrintF(*outf,"# No ambiguities allowed\n");
     else
@@ -311,7 +315,8 @@ static void restrict_printHits(AjPFile *outf, AjPList *l, AjPStr *name,
 
 	if(limit)
 	{
-	    value=ajTableGet(table,m->cod);
+	    value = ajTableGet(table,m->cod);
+
 	    if(value)
 		ajStrAss(&m->cod,value);
 	}
@@ -329,6 +334,7 @@ static void restrict_printHits(AjPFile *outf, AjPList *l, AjPStr *name,
 		fa[fn++] = m->cut3;
 	    ajFmtPrintF(*outf,"%d\t%d",m->cut3,m->cut4);
 	}
+
 	if(nameit)
 	    ajFmtPrintF(*outf,"  %S",*name);
 
@@ -342,29 +348,32 @@ static void restrict_printHits(AjPFile *outf, AjPList *l, AjPStr *name,
     {
 	ajSortIntInc(fa,fn);
 	ajFmtPrintF(*outf,"\n\nFragment lengths:\n");
+
 	if(!fn || (fn==1 && plasmid))
 	    ajFmtPrintF(*outf,"    %d\n",end-begin+1);
 	else
 	{
 	    last = -1;
-	    fb=0;
+	    fb = 0;
 	    for(i=0;i<fn;++i)
 	    {
 		if((c=fa[i])!=last)
-		    fa[fb++]=c;
-		last=c;
+		    fa[fb++] = c;
+		last = c;
 	    }
-	    fn=fb;
+	    fn = fb;
+
 	    /* Calc lengths */
 	    for(i=0;i<fn-1;++i)
-		fx[fc++]=fa[i+1]-fa[i];
+		fx[fc++] = fa[i+1]-fa[i];
+
 	    if(!plasmid)
 	    {
-		fx[fc++]=fa[0]-begin+1;
-		fx[fc++]=end-fa[fn-1];
+		fx[fc++] = fa[0]-begin+1;
+		fx[fc++] = end-fa[fn-1];
 	    }
 	    else
-		fx[fc++]=(fa[0]-begin+1)+(end-fa[fn-1]);
+		fx[fc++] = (fa[0]-begin+1)+(end-fa[fn-1]);
 	    ajSortIntDec(fx,fc);
 	    for(i=0;i<fc;++i)
 		ajFmtPrintF(*outf,"    %d\n",fx[i]);
@@ -373,13 +382,13 @@ static void restrict_printHits(AjPFile *outf, AjPList *l, AjPStr *name,
 	AJFREE(fx);
     }
 
-
     ajListDel(l);
     ajStrDel(&ps);
 
-
     return;
 }
+
+
 
 
 /* @funcstatic restrict_reportHits ********************************************
@@ -409,7 +418,6 @@ static void restrict_printHits(AjPFile *outf, AjPList *l, AjPStr *name,
 ** @@
 ******************************************************************************/
 
-
 static void restrict_reportHits(AjPReport report, AjPSeq seq,
 				AjPFeattable TabRpt, AjPList *l,
 				ajint hits, ajint begin, ajint end,
@@ -419,27 +427,27 @@ static void restrict_reportHits(AjPReport report, AjPSeq seq,
 				AjPTable table, AjBool alpha, AjBool frags,
 				AjBool nameit, AjBool ifrag)
 {
-    AjPFeature gf = NULL;
-    EmbPMatMatch m=NULL;
-    AjPStr  ps=NULL;
-    ajint *fa=NULL;
-    ajint *fx=NULL;
-    ajint fc=0;
-    ajint fn=0;
-    ajint fb=0;
-    ajint last=0;
+    AjPFeature gf  = NULL;
+    EmbPMatMatch m = NULL;
+    AjPStr ps = NULL;
+    ajint *fa = NULL;
+    ajint *fx = NULL;
+    ajint fc = 0;
+    ajint fn = 0;
+    ajint fb = 0;
+    ajint last = 0;
 
-    AjPStr value=NULL;
-    AjPStr tmpStr=NULL;
-    AjPStr fthit = NULL;
+    AjPStr value   = NULL;
+    AjPStr tmpStr  = NULL;
+    AjPStr fthit   = NULL;
     AjPStr fragStr = NULL;
-    AjPStr codStr = NULL;
-    AjPStr patStr = NULL;
+    AjPStr codStr  = NULL;
+    AjPStr patStr  = NULL;
     
     ajint i;
     ajint j;
     
-    ajint c=0;
+    ajint c = 0;
     ajint len;
     
     AjPInt farray = NULL;
@@ -447,8 +455,8 @@ static void restrict_reportHits(AjPReport report, AjPSeq seq,
 
 
 
-    farray = ajIntNew();
-    ps=ajStrNew();
+    farray  = ajIntNew();
+    ps      = ajStrNew();
     fragStr = ajStrNew();
     codStr  = ajStrNew();
     patStr  = ajStrNew();
@@ -464,12 +472,15 @@ static void restrict_reportHits(AjPReport report, AjPSeq seq,
 		sitelen);
     if(blunt)
 	ajFmtPrintAppS(&tmpStr,"Blunt ends allowed\n");
+
     if(sticky)
 	ajFmtPrintAppS(&tmpStr,"Sticky ends allowed\n");
+
     if(plasmid)
 	ajFmtPrintAppS(&tmpStr,"DNA is circular\n");
     else
 	ajFmtPrintAppS(&tmpStr,"DNA is linear\n");
+
     if(!ambiguity)
 	ajFmtPrintAppS(&tmpStr,"No ambiguities allowed\n");
     else
@@ -486,12 +497,6 @@ static void restrict_reportHits(AjPReport report, AjPSeq seq,
 
     ajReportSetHeader(report, tmpStr);
 
-    /* not needed - column headings from the old report */
-    /*
-    // ajFmtPrintAppS(&tmpStr,
-    //		   "Base Number\tEnzyme\t\tSite\t\t5'\t3'\t[5'\t3']\n");
-    */
-
     for(i=0;i<hits;++i)
     {
 	ajListPop(*l,(void **)&m);
@@ -503,7 +508,7 @@ static void restrict_reportHits(AjPReport report, AjPSeq seq,
 
 	if(limit)
 	{
-	    value=ajTableGet(table,m->cod);
+	    value = ajTableGet(table,m->cod);
 	    if(value)
 		ajStrAssS(&m->cod,value);
 	}
@@ -542,37 +547,37 @@ static void restrict_reportHits(AjPReport report, AjPSeq seq,
         ajStrAssC (&tmpStr, "");
 	ajSortIntInc(fa,fn);
 	ajFmtPrintAppS(&tmpStr,"Fragment lengths:\n");
-	if(!fn || (fn==1 && plasmid)) {
+
+	if(!fn || (fn==1 && plasmid))
 	    ajFmtPrintAppS(&tmpStr,"    %d\n",end-begin+1);
-	}
 	else
 	{
 	    last = -1;
-	    fb=0;
+	    fb = 0;
 	    for(i=0;i<fn;++i)
 	    {
 		if((c=fa[i])!=last)
 		    fa[fb++]=c;
 		last=c;
 	    }
-	    fn=fb;
+	    fn = fb;
+
 	    /* Calc lengths */
 	    for(i=0;i<fn-1;++i)
-		fx[fc++]=fa[i+1]-fa[i];
+		fx[fc++] = fa[i+1]-fa[i];
+
 	    if(!plasmid)
 	    {
-		fx[fc++]=fa[0]-begin+1;
-		fx[fc++]=end-fa[fn-1];
+		fx[fc++] = fa[0]-begin+1;
+		fx[fc++] = end-fa[fn-1];
 	    }
 	    else
-		fx[fc++]=(fa[0]-begin+1)+(end-fa[fn-1]);
+		fx[fc++] = (fa[0]-begin+1)+(end-fa[fn-1]);
 	    ajSortIntDec(fx,fc);
 
 	    for(i=0;i<fc;++i)
 		ajFmtPrintAppS(&tmpStr,"    %d\n",fx[i]);
 	}
-
-
 
 	AJFREE(fa);
 	AJFREE(fx);
@@ -598,7 +603,8 @@ static void restrict_reportHits(AjPReport report, AjPSeq seq,
 
 	    if(limit)
 	    {
-		value=ajTableGet(table,m->cod);
+		value = ajTableGet(table,m->cod);
+
 		if(value)
 		    ajStrAssS(&m->cod,value);
 	    }
@@ -627,7 +633,7 @@ static void restrict_reportHits(AjPReport report, AjPSeq seq,
 		ajSortIntInc(ajIntInt(farray),nfrags);
 
 
-		fa = AJALLOC(nfrags*sizeof(ajint)+1);		
+		fa   = AJALLOC((nfrags+1)*sizeof(ajint));		
 		last = 0;
 		for(j=0;j<nfrags;++j)
 		{
@@ -677,7 +683,7 @@ static void restrict_reportHits(AjPReport report, AjPSeq seq,
 	    ajSortIntInc(ajIntInt(farray),nfrags);
 
 
-	    fa = AJALLOC(nfrags*sizeof(ajint)+1);		
+	    fa = AJALLOC((nfrags+1)*sizeof(ajint));		
 	    last = 0;
 	    for(j=0;j<nfrags;++j)
 	    {
@@ -738,6 +744,9 @@ static void restrict_reportHits(AjPReport report, AjPSeq seq,
     return;
 }
 
+
+
+
 /* @funcstatic restrict_read_equiv ********************************************
 **
 ** Read table of equivalents
@@ -760,20 +769,26 @@ static void restrict_read_equiv(AjPFile *equfile, AjPTable *table)
 
     while(ajFileReadLine(*equfile,&line))
     {
-	p=ajStrStr(line);
+	p = ajStrStr(line);
+
 	if(!*p || *p=='#' || *p=='!')
 	    continue;
-	p=strtok(p," \t\n");
-	key=ajStrNewC(p);
-	p=strtok(NULL," \t\n");
-	value=ajStrNewC(p);
+
+	p     = strtok(p," \t\n");
+	key   = ajStrNewC(p);
+	p     = strtok(NULL," \t\n");
+	value = ajStrNewC(p);
 	ajTablePut(*table,(const void *)key, (void *)value);
     }
 
+    ajStrDel(&line);
     ajFileClose(equfile);
 
     return;
 }
+
+
+
 
 /* @funcstatic restrict_read_file_of_enzyme_names *****************************
 **
@@ -787,15 +802,15 @@ static void restrict_read_equiv(AjPFile *equfile, AjPTable *table)
 
 static void restrict_read_file_of_enzyme_names(AjPStr *enzymes)
 {
-    AjPFile file=NULL;
+    AjPFile file = NULL;
     AjPStr line;
-    char   *p=NULL;
+    char *p = NULL;
 
-    if (ajStrFindC(*enzymes, "@") == 0)
+    if(ajStrFindC(*enzymes, "@") == 0)
     {
 	ajStrTrimC(enzymes, "@");	/* remove the @ */
 	file = ajFileNewIn(*enzymes);
-	if (file == NULL)
+	if(file == NULL)
 	    ajFatal ("Cannot open the file of enzyme names: '%S'", enzymes);
 
 	/* blank off the enzyme file name and replace with the enzyme names */
@@ -804,7 +819,10 @@ static void restrict_read_file_of_enzyme_names(AjPStr *enzymes)
 	while(ajFileReadLine(file, &line))
 	{
 	    p = ajStrStr(line);
-	    if (!*p || *p == '#' || *p == '!') continue;
+
+	    if(!*p || *p == '#' || *p == '!')
+		continue;
+
 	    ajStrApp(enzymes, line);
 	    ajStrAppC(enzymes, ",");
 	}
@@ -815,6 +833,7 @@ static void restrict_read_file_of_enzyme_names(AjPStr *enzymes)
 
     return;
 }
+
 
 
 

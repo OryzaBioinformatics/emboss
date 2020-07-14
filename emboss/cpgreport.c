@@ -32,6 +32,8 @@
 #include <stdlib.h>
 
 
+
+
 static void cpgreport_cpgsearch(AjPFile *outf, ajint s, ajint len, char *seq,
 				char *name, ajint begin, ajint *score,
 				AjPFeattabOut featout,
@@ -51,10 +53,10 @@ static void cpgreport_calcgc(ajint from, ajint to, char *p, ajint *dcg,
 int main(int argc, char **argv)
 {
     AjPSeqall seqall;
-    AjPSeq    seq=NULL;
-    AjPFile   outf=NULL;
-    AjPStr    strand=NULL;
-    AjPStr    substr=NULL;
+    AjPSeq seq    = NULL;
+    AjPFile outf  = NULL;
+    AjPStr strand = NULL;
+    AjPStr substr = NULL;
     AjPFeattabOut featout;
     AjPFeattable feattable=NULL;
     ajint begin;
@@ -64,10 +66,10 @@ int main(int argc, char **argv)
 
     embInit("cpgreport",argc,argv);
 
-    seqall    = ajAcdGetSeqall("sequence");
-    score     = ajAcdGetInt("score");
-    outf      = ajAcdGetOutfile("outfile");
-    featout   = ajAcdGetFeatout("featout");
+    seqall  = ajAcdGetSeqall("sequence");
+    score   = ajAcdGetInt("score");
+    outf    = ajAcdGetOutfile("outfile");
+    featout = ajAcdGetFeatout("featout");
 
 
     substr = ajStrNew();
@@ -75,8 +77,8 @@ int main(int argc, char **argv)
 
     while(ajSeqallNext(seqall, &seq))
     {
-	begin=ajSeqallBegin(seqall);
-	end=ajSeqallEnd(seqall);
+	begin = ajSeqallBegin(seqall);
+	end   = ajSeqallEnd(seqall);
 
 	strand = ajSeqStrCopy(seq);
 	ajStrToUpper(&strand);
@@ -99,17 +101,15 @@ int main(int argc, char **argv)
     ajSeqDel(&seq);
     ajStrDel(&substr);
     ajFileClose(&outf);
+
     ajFeatSortByStart(feattable);
-    ajFeatWrite (featout, feattable);
+    ajFeatWrite(featout, feattable);
     ajFeattableDel(&feattable);
 
     ajExit();
+
     return 0;
 }
-
-
-
-
 
 
 
@@ -130,8 +130,6 @@ int main(int argc, char **argv)
 ** @@
 ******************************************************************************/
 
-
-
 static void cpgreport_cpgsearch(AjPFile *outf, ajint from, ajint to, char *p,
 				char *name, ajint begin, ajint *score,
 				AjPFeattabOut featout,
@@ -150,9 +148,11 @@ static void cpgreport_cpgsearch(AjPFile *outf, ajint from, ajint to, char *p,
     ajint dcg;
     ajint dgc;
     ajint gc;
-    static AjPStr name2=NULL,source=NULL,type=NULL;
-    char  strand='+';
-    ajint frame=0;
+    static AjPStr name2  = NULL;
+    static AjPStr source = NULL;
+    static AjPStr type   = NULL;
+    char  strand = '+';
+    ajint frame  = 0;
     AjPFeature feature;
     float score2 = 0.0;
 
@@ -169,21 +169,25 @@ static void cpgreport_cpgsearch(AjPFile *outf, ajint from, ajint to, char *p,
 
     for(i=from,c=to-1,sum=ssum=t=top=0,lsum=-1,z=begin-1;i<to;++i,ssum=sum)
     {
-	if(p[i]=='C' && p[i+1]=='G' && c-i) sum+=*score+1;
+	if(p[i]=='C' && p[i+1]=='G' && c-i)
+	    sum += *score+1;
 	--sum;
-	if(sum<0) sum=0;
+
+	if(sum<0)
+	    sum = 0;
+
 	if(!sum && ssum)
 	{
 	    cpgreport_calcgc(lsum+1,t+2,p,&dcg,&dgc,&gc);
 	    if(dgc)
 	    {
 	        score2 = (float) top;
-		/*ajFmtPrintS(&score2,"%d.0",top);*/
 	        feature = ajFeatNew(*feattable, source, type,
 				    lsum+2+z,t+2+z,
 				    score2, strand, frame) ;
 		if(!feature)
-		  ajDebug("Error feature not added to feature table");
+		    ajDebug("Error feature not added to feature table");
+
 		ajFmtPrintF(*outf,"%-20.20s %6d %6d %5d ",name,lsum+2+z,
 			    t+2+z,top);
 		ajFmtPrintF(*outf,"     %5d %5.1f %6.2f\n",
@@ -192,26 +196,28 @@ static void cpgreport_cpgsearch(AjPFile *outf, ajint from, ajint to, char *p,
 	    }
 	    else
 	    {
-	      score2 = (float) top;
-	      /*score2 = ajFmtPrintS(&score2,"%d.0",top);*/
-	      feature = ajFeatNew(*feattable, source, type,
-				  lsum+2+z,t+2+z,
-				  score2, strand, frame) ;
-	      ajFmtPrintF(*outf,"%-20s %6d %6d %5d ",name,lsum+2+z,t+2+z,
-			  top);
+		score2   = (float) top;
+		feature = ajFeatNew(*feattable, source, type,
+				    lsum+2+z,t+2+z,
+				    score2, strand, frame) ;
+		ajFmtPrintF(*outf,"%-20s %6d %6d %5d ",name,lsum+2+z,t+2+z,
+			    top);
 		ajFmtPrintF(*outf,"     %5d %5.1f    -\n",
 			    dcg,(float)gc*100.0/(float)(t+1-lsum));
 	    }
 	    cpgreport_cpgsearch(outf,t+2,i,p,name,begin,score,featout,
 				feattable);
-	    sum=ssum=lsum=t=top=0;
+	    sum = ssum = lsum = t = top = 0;
 	}
+
 	if(sum>top)
 	{
-	    t=i;
-	    top=sum;
+	    t   = i;
+	    top = sum;
 	}
-	if(!sum) lsum=i;
+
+	if(!sum)
+	    lsum = i;
     }
 
 
@@ -225,29 +231,29 @@ static void cpgreport_cpgsearch(AjPFile *outf, ajint from, ajint to, char *p,
 	    ajFmtPrintF(*outf,"     %5d %5.1f %6.2f\n",
 			dcg,(float)gc*100.0/(float)(t+1-lsum),
 			((float)dcg/(float)dgc));
-	    score2 = (float) top;
+	    score2   = (float) top;
 	    /*score2 = ajFmtPrintS(&score2,"%d.0",top);*/
-	    feature = ajFeatNew(*feattable, source, type,
-				lsum+2+z,t+2+z,
-				score2, strand, frame) ;
+	    feature  = ajFeatNew(*feattable, source, type,
+				 lsum+2+z,t+2+z,
+				 score2, strand, frame);
 	}
 	else
 	{
 	    ajFmtPrintF(*outf,"%-20s %6d %6d %5d ",name,lsum+2+z,t+2+z,top);
 	    ajFmtPrintF(*outf,"     %5d %5.1f    -\n",dcg,
 			(float)gc*100.0/(float)(t+1-lsum));
-	    score2 = (float) top;
+	    score2   = (float) top;
 	    /*score2 = ajFmtPrintS(&score2,"%d.0",top);*/
-	    feature = ajFeatNew(*feattable, source, type,
-				lsum+2+z,t+2+z,
-				score2, strand, frame) ;
+	    feature  = ajFeatNew(*feattable, source, type,
+				 lsum+2+z,t+2+z,
+				 score2, strand, frame);
 	}
+
 	cpgreport_cpgsearch(outf,t+2,to,p,name,begin,score,featout,feattable);
     }
 
     return;
 }
-
 
 
 
@@ -272,13 +278,18 @@ static void cpgreport_calcgc(ajint from, ajint to, char *p, ajint *dcg,
     ajint i;
     ajint c;
 
-    c=to-1;
+    c = to-1;
 
     for(i=from,*gc=*dgc=*dcg=0;i<=c;++i)
     {
-	if(p[i]=='G' || p[i]=='C') ++*gc;
-	if(p[i]=='C' && p[i+1]=='G' && c-i) ++*dcg ;
-	if(p[i]=='G' && p[i+1]=='C' && c-i ) ++*dgc ;
+	if(p[i]=='G' || p[i]=='C')
+	    ++*gc;
+
+	if(p[i]=='C' && p[i+1]=='G' && c-i)
+	    ++*dcg ;
+
+	if(p[i]=='G' && p[i+1]=='C' && c-i )
+	    ++*dgc ;
     }
 
     return;

@@ -24,6 +24,7 @@
 
 
 
+
 /* @prog chips ****************************************************************
 **
 ** Codon usage statistics
@@ -48,15 +49,15 @@ int main(int argc, char **argv)
 
     embInit("chips", argc, argv);
 
-    seqall    = ajAcdGetSeqall("seqall");
-    codon     = ajAcdGetCodon("cfile");
-    outf      = ajAcdGetOutfile("outfile");
-    sum       = ajAcdGetBool("sum");
+    seqall = ajAcdGetSeqall("seqall");
+    codon  = ajAcdGetCodon("cfile");
+    outf   = ajAcdGetOutfile("outfile");
+    sum    = ajAcdGetBool("sum");
     
     ajCodClear(&codon);
 
-    ccnt=0;
-    substr=ajStrNew();
+    ccnt = 0;
+    substr = ajStrNew();
 
     while(ajSeqallNext(seqall, &seq))
     {
@@ -68,7 +69,7 @@ int main(int argc, char **argv)
 	if(!sum)
 	{
 	    ajCodCalculateUsage(&codon,ccnt);
-	    Nc=ajCodCalcNc(&codon);
+	    Nc = ajCodCalcNc(&codon);
 	    
 	    ajFmtPrintF(outf,"%-20s Nc = %.3f\n",ajSeqName(seq),Nc);
 	    ajCodClear(&codon);
@@ -78,19 +79,16 @@ int main(int argc, char **argv)
     if(sum)
     {
 	ajCodCalculateUsage(&codon,ccnt);
-	Nc=ajCodCalcNc(&codon);
+	Nc = ajCodCalcNc(&codon);
 	
 	ajFmtPrintF(outf,"# CHIPS codon usage statistics\n\n");
 	ajFmtPrintF(outf,"Nc = %.3f\n",Nc);
     }
     
-
-
-
     ajFileClose(&outf);
-
     ajCodDel(&codon);
 
     ajExit();
+
     return 0;
 }

@@ -23,8 +23,11 @@
 #include "emboss.h"
 
 
+
+
 static void seqmatchall_matchListPrint(void **x,void *cl);
 static void seqmatchall_listPrint(AjPFile outfile, AjPList list);
+
 
 
 
@@ -32,6 +35,8 @@ static AjPSeq seq2;
 static AjPSeq seq1;
 
 ajint statwordlen;
+
+
 
 
 /* @prog seqmatchall **********************************************************
@@ -42,8 +47,8 @@ ajint statwordlen;
 
 int main(int argc, char **argv)
 {
-    AjPTable seq1MatchTable =0 ;
-    AjPList matchlist ;
+    AjPTable seq1MatchTable = 0;
+    AjPList matchlist;
     AjPSeqset seqset;
     AjPFile outfile;
 
@@ -51,15 +56,13 @@ int main(int argc, char **argv)
     ajint j;
 
 
-    embInit ("seqmatchall", argc, argv);
+    embInit("seqmatchall", argc, argv);
 
-    seqset = ajAcdGetSeqset ("sequence1");
+    seqset      = ajAcdGetSeqset("sequence1");
+    statwordlen = ajAcdGetInt("wordsize");
+    outfile     = ajAcdGetOutfile("outfile");
 
-    statwordlen = ajAcdGetInt ("wordsize");
-
-    outfile = ajAcdGetOutfile ("outfile");
-
-    embWordLength (statwordlen);
+    embWordLength(statwordlen);
 
     for(i=0;i<ajSeqsetSize(seqset);i++)
     {
@@ -90,6 +93,7 @@ int main(int argc, char **argv)
     }
 
     ajExit();
+
     return 0;
 }
 
@@ -108,15 +112,18 @@ int main(int argc, char **argv)
 
 static void seqmatchall_matchListPrint(void **x,void *cl)
 {
-  EmbPWordMatch p = (EmbPWordMatch)*x;
-  AjPFile outfile = (AjPFile) cl;
+    EmbPWordMatch p;
+    AjPFile outfile;
 
-  ajFmtPrintF(outfile, "%d  %d %d %s %d %d %s\n",
-	 (*p).length,
-	 (*p).seq1start+1,(*p).seq1start+(*p).length,seq1->Name->Ptr,
-	 (*p).seq2start+1,(*p).seq2start+(*p).length,seq2->Name->Ptr);
+    p = (EmbPWordMatch)*x;
+    outfile = (AjPFile) cl;
 
-  return;
+    ajFmtPrintF(outfile, "%d  %d %d %s %d %d %s\n",
+		(*p).length,
+		(*p).seq1start+1,(*p).seq1start+(*p).length,seq1->Name->Ptr,
+		(*p).seq2start+1,(*p).seq2start+(*p).length,seq2->Name->Ptr);
+
+    return;
 }
 
 
@@ -133,6 +140,7 @@ static void seqmatchall_matchListPrint(void **x,void *cl)
 
 static void seqmatchall_listPrint(AjPFile outfile, AjPList list)
 {
-  ajListMap(list,seqmatchall_matchListPrint, outfile);
-  return;
+    ajListMap(list,seqmatchall_matchListPrint, outfile);
+
+    return;
 }

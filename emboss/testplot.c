@@ -16,6 +16,7 @@
 ** along with this program; if not, write to the Free Software
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 ******************************************************************************/
+
 #ifndef NO_PLOT
 #include "emboss.h"
 #include "ajax.h"
@@ -25,6 +26,8 @@
 #define numpoints 360
 
 ajint ipoints;
+
+
 
 
 /* @prog testplot *************************************************************
@@ -40,10 +43,10 @@ int main(int argc, char **argv)
     AjPGraph mult;
     AjBool overlap;
 
-    (void) ajGraphInit ("testplot", argc, argv);
+    ajGraphInit("testplot", argc, argv);
 
-    mult = ajAcdGetGraphxy ("graph");
-    ipoints = ajAcdGetInt ("points");
+    mult    = ajAcdGetGraphxy("graph");
+    ipoints = ajAcdGetInt("points");
     overlap = ajAcdGetBool("overlap");
 
     ajUser("Plotting sin, cos and  tan for %d degrees",ipoints);
@@ -72,6 +75,7 @@ int main(int argc, char **argv)
     ajGraphxyDataSetXtitleC(graphdata,"degrees");
     ajGraphxyDataSetTitleC(graphdata,"hello");
     ajGraphxySetColour(graphdata,GREEN);
+
     if(!overlap)
     {
 	ajGraphDataObjAddRect(graphdata,70.0,0.55,80.0,0.45,GREEN,1);
@@ -92,6 +96,7 @@ int main(int argc, char **argv)
     ajGraphxyDataSetYtitleC(graphdata,"COS(degrees)");
     ajGraphxyDataSetTitleC(graphdata,"hello");
     ajGraphxySetColour(graphdata,RED);
+
     if(!overlap)
     {
 	ajGraphDataObjAddLine(graphdata,5.0,0.1,15.0,0.1,RED);
@@ -143,6 +148,7 @@ int main(int argc, char **argv)
     ajGraphxyDisplay(mult,AJTRUE);
 
     ajExit();
+
     return 0;
 }
 #else

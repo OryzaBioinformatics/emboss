@@ -25,12 +25,17 @@
 #include <float.h>
 #include <math.h>
 
+
+
+
 #ifdef PLD_png
 
 extern int PNGWidth;
 extern int PNGHeight;
 
 #endif
+
+
 
 
 /* @prog syco *****************************************************************
@@ -41,18 +46,18 @@ extern int PNGHeight;
 
 int main(int argc, char **argv)
 {
-    AjPSeq       a;
-    AjPFile      outf;
-    AjBool       plot;
-    AjBool       show;
-    AjPCod       codon;
-    AjPCod       cdup;
-    AjPStr       substr;
-    AjPStr       tmp;
-    float        min;
+    AjPSeq a;
+    AjPFile outf;
+    AjBool plot;
+    AjBool show;
+    AjPCod codon;
+    AjPCod cdup;
+    AjPStr substr;
+    AjPStr tmp;
+    float min;
 
-    AjPGraph     graph=NULL;
-    AjPGraphData this=NULL;
+    AjPGraph graph = NULL;
+    AjPGraphData this = NULL;
 
     char *frames[]=
     {
@@ -62,7 +67,7 @@ int main(int argc, char **argv)
 
     float *xarr[3];
     float *farr[3];
-    ajint   *unc[3];
+    ajint *unc[3];
 
     float sum;
 
@@ -102,49 +107,49 @@ int main(int argc, char **argv)
 
 #endif
 
-    (void) ajGraphInit("syco", argc, argv);
-
-    a         = ajAcdGetSeq("sequence");
-    codon     = ajAcdGetCodon("cfile");
-    window    = ajAcdGetInt("window");
-    plot      = ajAcdGetBool("plot");
-    outf      = ajAcdGetOutfile("outfile");
-    show      = ajAcdGetBool("uncommon");
-    min       = ajAcdGetFloat("minimum");
-
+    ajGraphInit("syco", argc, argv);
+    
+    a      = ajAcdGetSeq("sequence");
+    codon  = ajAcdGetCodon("cfile");
+    window = ajAcdGetInt("window");
+    plot   = ajAcdGetBool("plot");
+    outf   = ajAcdGetOutfile("outfile");
+    show   = ajAcdGetBool("uncommon");
+    min    = ajAcdGetFloat("minimum");
+    
     if(plot)
     {
         graph = ajAcdGetGraphxy("graph");
-	(void) ajGraphSetCharSize(0.60);
+	ajGraphSetCharSize(0.60);
     }
-
-
+    
+    
     cdup = ajCodDup(codon);
-
+    
     substr = ajStrNew();
     tmp    = ajStrNew();
-
+    
     beg = ajSeqBegin(a);
     end = ajSeqEnd(a);
     ajStrAssSubC(&substr,ajSeqChar(a),beg-1,end-1);
-
-
-
-    p=ajStrStr(substr);
-    len=ajStrLen(substr);
+    
+    
+    
+    p   = ajStrStr(substr);
+    len = ajStrLen(substr);
     ajStrToUpper(&substr);
-
-    w=window*3;
-
-    limit=len-w-3;
-    count=(limit/3)+1;
+    
+    w = window*3;
+    
+    limit = len-w-3;
+    count = (limit/3)+1;
     if(count>0)
     {
-      for(i=0;i<3;++i)
+	for(i=0;i<3;++i)
 	{
-	  AJCNEW(farr[i],count);
-	  AJCNEW(unc[i],count);
-	  AJCNEW(xarr[i],count);
+	    AJCNEW(farr[i],count);
+	    AJCNEW(unc[i],count);
+	    AJCNEW(xarr[i],count);
 	}
     }
     else
@@ -153,41 +158,41 @@ int main(int argc, char **argv)
 	ajExit();
 	return 0;
     }
-
-
-
+    
+    
+    
     if(!plot)
 	ajFmtPrintF(outf,"SYCO of %s from %d to %d\n",ajSeqName(a),beg,
 		    end);
-
-
-    miny=FLT_MAX;
-    maxy=FLT_MIN;
-
+    
+    
+    miny = FLT_MAX;
+    maxy = FLT_MIN;
+    
     for(base=0;base<3;++base)
     {
-	q=p+base;
-	(void) ajStrAssC(&tmp,q);
+	q = p+base;
+	ajStrAssC(&tmp,q);
 
 	ajCodCalcGribskov(&cdup, tmp);
-	startp=(w/2)+base;
+	startp = (w/2)+base;
 	for(i=0,pos=base;i<count;++i,pos+=3)
 	{
-	    sum=0.0;
+	    sum = 0.0;
 	    for(j=0;j<w;j+=3)
 	    {
-		idx=ajCodIndexC(&p[pos+j]);
-		sum+=cdup->tcount[idx];
+		idx = ajCodIndexC(&p[pos+j]);
+		sum += cdup->tcount[idx];
 	    }
-	    xarr[base][i]=(float)(beg+startp);
-	    farr[base][i]=(float)exp((double)((double)sum/(double)w));
-	    startp+=3;
+	    xarr[base][i] = (float)(beg+startp);
+	    farr[base][i] = (float)exp((double)((double)sum/(double)w));
+	    startp += 3;
 	}
 
 	for(j=0;j<count;++j)
 	{
-	    miny=(miny<farr[base][j]) ? miny : farr[base][j];
-	    maxy=(maxy>farr[base][j]) ? maxy : farr[base][j];
+	    miny = (miny<farr[base][j]) ? miny : farr[base][j];
+	    maxy = (maxy>farr[base][j]) ? maxy : farr[base][j];
 	}
 
 	if(plot)
@@ -211,14 +216,15 @@ int main(int argc, char **argv)
 		{
 		    idx = ajCodIndexC(&q[i*3]);
 		    if(codon->fraction[idx]<=min)
-			unc[base][i]=1;
+			unc[base][i] = 1;
 		    else
-			unc[base][i]=0;
+			unc[base][i] = 0;
 		}
+
 		for(i=0;i<count;++i)
 		    if(unc[base][i])
-		      ajGraphDataObjAddLine(this,xarr[base][i],1.,
-			        		   xarr[base][i],1.005,3);
+			ajGraphDataObjAddLine(this,xarr[base][i],1.,
+					      xarr[base][i],1.005,3);
 	    }
 
 
@@ -226,7 +232,7 @@ int main(int argc, char **argv)
 	    ajGraphxyDataSetXtitleC(this,"Sequence position");
 	    ajGraphxyDataSetTitleC(this,frames[base]);
 	    ajGraphDataObjAddLine(this,(float)beg,1.0,(float)end,
-					       1.0,4);
+				  1.0,4);
 	}
 	else
 	{
@@ -237,23 +243,24 @@ int main(int argc, char **argv)
 			    farr[base][i]);
 	}
     }
-
+    
     if(plot)
     {
-	ajGraphxySetTitleDo (graph, ajTrue);
+	ajGraphxySetTitleDo(graph, ajTrue);
 	ajGraphxySetMaxMin(graph,(float)beg,(float)end,miny,maxy);
 	ajGraphxySetYStart(graph,0.0);
 	ajGraphxySetYEnd(graph,2.0);
 	ajGraphxyTitleC(graph,"Gribskov Codon Plot");
 	ajGraphxyDisplay(graph,ajTrue);
     }
-
-
+    
+    
     ajStrDel(&substr);
     ajFileClose(&outf);
     ajCodDel(&codon);
     ajCodDel(&cdup);
-
+    
     ajExit();
+
     return 0;
 }

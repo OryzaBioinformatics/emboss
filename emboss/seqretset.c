@@ -19,7 +19,10 @@
 ** along with this program; if not, write to the Free Software
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 ******************************************************************************/
+
 #include "emboss.h"
+
+
 
 
 /* @prog seqretset ************************************************************
@@ -30,19 +33,19 @@
 
 int main(int argc, char **argv)
 {
-
     AjPSeqset seqset;
     AjPSeqout seqout;
 
-    embInit ("seqretset", argc, argv);
+    embInit("seqretset", argc, argv);
 
-    seqset = ajAcdGetSeqset ("sequence1");
-    seqout = ajAcdGetSeqoutset ("outseq2");
+    seqset = ajAcdGetSeqset("sequence1");
+    seqout = ajAcdGetSeqoutset("outseq2");
 
-    ajSeqsetWrite (seqout, seqset);
+    ajSeqsetWrite(seqout, seqset);
 
-    ajSeqWriteClose (seqout);
+    ajSeqWriteClose(seqout);
 
-    ajExit ();
+    ajExit();
+
     return 0;
 }

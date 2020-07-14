@@ -20,19 +20,16 @@
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 ******************************************************************************/
 
-
 #include "emboss.h"
 #include <math.h>
 #include <string.h>
 
 
 
-static void pepnet_plotresidue(char c, float x, float y, char *squares,
-			       char *circles, char *diamonds, AjBool text,
-			       AjPFile outf);
-static void pepnet_drawocta(float x, float y, float size, AjBool text,
-			    AjPFile outf);
 
+static void pepnet_plotresidue(char c, float x, float y, char *squares,
+			       char *circles, char *diamonds);
+static void pepnet_drawocta(float x, float y, float size);
 
 
 
@@ -45,15 +42,15 @@ static void pepnet_drawocta(float x, float y, float size, AjBool text,
 
 int main(int argc, char **argv)
 {
-    AjPSeq    seq=NULL;
-    AjPStr    strand=NULL;
-    AjPStr    substr=NULL;
-    AjPStr    squares=NULL;
-    AjPStr    diamonds=NULL;
-    AjPStr    octags=NULL;
+    AjPSeq    seq = NULL;
+    AjPStr    strand   = NULL;
+    AjPStr    substr   = NULL;
+    AjPStr    squares  = NULL;
+    AjPStr    diamonds = NULL;
+    AjPStr    octags   = NULL;
     AjBool    amphipathic;
-    AjPStr    txt=NULL;
-    AjPGraph  graph=NULL;
+    AjPStr    txt   = NULL;
+    AjPGraph  graph = NULL;
 
     ajint begin;
     ajint end;
@@ -68,28 +65,24 @@ int main(int argc, char **argv)
     ajint pstart;
     ajint pstop;
 
-    float xmin=   0.0;
-    float xmax= 150.0;
-    float ymin=   0.0;
-    float ymax= 112.5;
+    float xmin =   0.0;
+    float xmax = 150.0;
+    float ymin =   0.0;
+    float ymax = 112.5;
 
     float xstart;
     float ystart;
-    float ch     =   1.8;
+    float ch = 1.8;
     float xinc;
     float yinc;
-    AjBool text;
-    AjPFile outf=NULL;
     ajint fno;
-    AjPStr fstr=NULL;
-
-
+    AjPStr fstr = NULL;
 
     float x;
     float y;
 
 
-    (void) ajGraphInit("pepnet", argc, argv);
+    ajGraphInit("pepnet", argc, argv);
 
 
     seq         = ajAcdGetSeq("sequence");
@@ -98,7 +91,6 @@ int main(int argc, char **argv)
     squares     = ajAcdGetString("squares");
     diamonds    = ajAcdGetString("diamonds");
     amphipathic = ajAcdGetBool("amphipathic");
-    text        = ajAcdGetBool("data");
 
     ajStrToUpper(&octags);
     ajStrToUpper(&squares);
@@ -120,8 +112,8 @@ int main(int argc, char **argv)
 
 
 
-    begin=ajSeqBegin(seq);
-    end=ajSeqEnd(seq);
+    begin = ajSeqBegin(seq);
+    end   = ajSeqEnd(seq);
 
     strand = ajSeqStrCopy(seq);
 
@@ -131,21 +123,12 @@ int main(int argc, char **argv)
     ajGraphSetBackWhite();
 
 
-    if(!text)
-	ajGraphOpenWin(graph, xmin,xmax,ymin,ymax);
-    else
-    {
-	ajFmtPrintS(&fstr,"pepnet%d.dat",fno++);
-	if(!(outf = ajFileNewOut(fstr)))
-	    ajFatal("Cannot open file %S",fstr);
-	ajUser("Writing to file %S",fstr);
-	ajFmtPrintF(outf,"##Graphic\n##Screen x1 %f y1 %f x2 %f y2 %f\n",
-		    xmin,ymin,xmax,ymax);
-    }
-
+    ajGraphOpenWin(graph, xmin,xmax,ymin,ymax);
 
     for(count=begin-1,r=0;count<end;count+=231)
     {
+	if (count > begin)
+	    ajGraphNewPage(1);
 	pstart=count;
 	pstop = AJMIN(end-1, count+230);
 
@@ -153,17 +136,9 @@ int main(int argc, char **argv)
 		    pstart+1,pstop+1);
 
 
-	if(!text)
-	{
-	    ajGraphSetFore(RED);
-	    ajGraphText(75.0,110.0,ajStrStr(txt),0.5);
-	    ajGraphSetCharSize(0.75);
-	}
-	else
-	    ajFmtPrintF(outf,"Text1 x1 %f y1 %f colour %d size 0.5 %s\n",
-			75.,110.,RED,ajStrStr(txt));
-
-
+	ajGraphSetFore(RED);
+	ajGraphText(75.0,110.0,ajStrStr(txt),0.5);
+	ajGraphSetCharSize(0.75);
 
 	xstart = 145.0;
 	ystart =  80.0;
@@ -185,15 +160,8 @@ int main(int argc, char **argv)
 
 	    ajFmtPrintS(&txt,"%d",i+1);
 
-	    if(!text)
-	    {
-		ajGraphSetFore(RED);
-		ajGraphText(x-xinc,y-yinc-1,ajStrStr(txt),0.5);
-	    }
-	    else
-		ajFmtPrintF(outf,"Text1 x1 %f y1 %f colour %d size 0.5 %s\n",
-			    x-xinc,y-yinc-1,RED,ajStrStr(txt));
-
+	    ajGraphSetFore(RED);
+	    ajGraphText(x-xinc,y-yinc-1,ajStrStr(txt),0.5);
 
 	    for(j=0;j<4;++j)
 	    {
@@ -202,11 +170,12 @@ int main(int argc, char **argv)
 		if(lc <= pstop)
 		    pepnet_plotresidue(*(ajStrStr(substr)+r),x,y,
 				       ajStrStr(squares),ajStrStr(octags),
-				       ajStrStr(diamonds),text,outf);
+				       ajStrStr(diamonds));
 		++r;
 		++lc;
 	    }
 	    y=ystart+yinc/2.0;
+
 	    for(j=4;j<7;++j)
 	    {
 		x -= xinc;
@@ -214,48 +183,26 @@ int main(int argc, char **argv)
 		if(lc <= pstop)
 		    pepnet_plotresidue(*(ajStrStr(substr)+r),x,y,
 				       ajStrStr(squares),ajStrStr(octags),
-				       ajStrStr(diamonds),text,outf);
+				       ajStrStr(diamonds));
 		++r;
 		++lc;
 	    }
 	}
-
-	if(!text)
-	    ajGraphNewPage(1);
-	else
-	{
-	    ajFileClose(&outf);
-	    if(count+231<end)
-	    {
-		ajFmtPrintS(&fstr,"pepnet%d.dat",fno++);
-		if(!(outf = ajFileNewOut(fstr)))
-		    ajFatal("Cannot open file %S",fstr);
-		ajUser("Writing to file %S",fstr);
-		ajFmtPrintF(outf,"##Graphic\n##Screen x1 %f y1 %f x2 %f "
-			    "y2 %f\n",xmin,ymin,xmax,ymax);
-	    }
-
-	}
-
     }
 
-    if(!text)
-	ajGraphCloseWin();
-    else
-	ajFileClose(&outf);
+    ajGraphCloseWin();
 
     ajStrDel(&strand);
     ajStrDel(&fstr);
-
-
-
 
     ajSeqDel(&seq);
     ajStrDel(&substr);
 
     ajExit();
+
     return 0;
 }
+
 
 
 
@@ -266,13 +213,10 @@ int main(int argc, char **argv)
 ** @param [r] x [float] xpos
 ** @param [r] y [float] xpos
 ** @param [r] size [float] size
-** @param [r] text [AjBool] text or graphic
-** @param [w] outf [AjPFile] outfile
 ** @@
 ******************************************************************************/
 
-static void pepnet_drawocta(float x, float y, float size, AjBool text,
-			    AjPFile outf)
+static void pepnet_drawocta(float x, float y, float size)
 {
     static float polyx[]=
     {
@@ -286,15 +230,8 @@ static void pepnet_drawocta(float x, float y, float size, AjBool text,
     ajint i;
 
     for(i=0;i<8;++i)
-    {
-	if(!text)
-	    ajGraphLine(x+polyx[i]*size,y+polyy[i]*size,x+polyx[i+1]*size,
+	ajGraphLine(x+polyx[i]*size,y+polyy[i]*size,x+polyx[i+1]*size,
 			y+polyy[i+1]*size);
-	else
-	    ajFmtPrintF(outf,"Line x1 %f y1 %f x2 %f y2 %f colour %d\n",
-			x+polyx[i]*size,y+polyy[i]*size,x+polyx[i+1]*size,
-			y+polyy[i+1]*size,BLUEVIOLET);
-    }
 
     return;
 }
@@ -312,62 +249,40 @@ static void pepnet_drawocta(float x, float y, float size, AjBool text,
 ** @param [r] squares [char*] residues for squares
 ** @param [r] octags [char*] residues for octagons
 ** @param [r] diamonds [char*] residues for diamonds
-** @param [r] text [AjBool] text or graphic output
-** @param [w] outf [AjPFile] outfile
 ** @@
 ******************************************************************************/
 
 static void pepnet_plotresidue(char c, float x, float y, char *squares,
-			       char *octags, char *diamonds, AjBool text,
-			       AjPFile outf)
+			       char *octags, char *diamonds)
 {
     static char cs[2];
 
-    cs[1]='\0';
+    cs[1] = '\0';
     *cs=c;
 
 
-    if(!text)
-	ajGraphSetFore(GREEN);
+    ajGraphSetFore(GREEN);
 
     if(strstr(squares,cs))
     {
-	if(!text)
-	{
-	    ajGraphSetFore(BLUE);
-	    ajGraphBox(x-1.5,y-1.32,3.0);
-	}
-	else
-	    ajFmtPrintF(outf,"Rectangle x1 %f y1 %f x2 %f y2 %f colour %d\n",
-			x-1.5,y-1.32,x+1.5,y+1.68,BLUE);
+	ajGraphSetFore(BLUE);
+	ajGraphBox(x-1.5,y-1.32,3.0);
     }
+
     if(strstr(octags,cs))
     {
-	if(!text)
-	    ajGraphSetFore(BLUEVIOLET);
-	pepnet_drawocta(x,y+0.225,20.0,text,outf);
+	ajGraphSetFore(BLUEVIOLET);
+	pepnet_drawocta(x,y+0.225,20.0);
     }
+
     if(strstr(diamonds,cs))
     {
-	if(!text)
-	{
-	    ajGraphSetFore(RED);
-	    ajGraphDia(x-2.5,y-2.25,5.0);
-	}
-	else
-	    ajFmtPrintF(outf,"Shaded Rectangle x1 %f y1 %f x2 %f y2 %f "
-			"colour %d\n",
-			x-1.5,y-1.32,x+1.5,y+1.68,RED);
-
+	ajGraphSetFore(RED);
+	ajGraphDia(x-2.5,y-2.25,5.0);
     }
 
-    if(!text)
-    {
-	ajGraphText(x,y,cs,0.5);
-	ajGraphSetFore(GREEN);
-    }
-    else
-	ajFmtPrintF(outf,"Text1 x1 %f y1 %f colour %d size 0.5 %s\n",
-		    x,y,GREEN,cs);
+    ajGraphText(x,y,cs,0.5);
+    ajGraphSetFore(GREEN);
+
     return;
 }

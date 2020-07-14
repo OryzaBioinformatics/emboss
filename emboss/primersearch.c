@@ -29,52 +29,114 @@
 
 #define AJA2 50
 
-/* the internals of a primer; each Primer has two of these,
-   one forward and one reverse */
+
+
+
+/* @datastatic PGuts **********************************************************
+**
+** the internals of a primer; each Primer has two of these,
+** one forward and one reverse
+**
+** @alias primerguts
+**
+** @attr patstr [AjPStr] Undocumented
+** @attr origpat [AjPStr] Undocumented
+** @attr type [ajint] Undocumented
+** @attr len [ajint] Undocumented
+** @attr real_len [ajint] Undocumented
+** @attr amino [AjBool] Undocumented
+** @attr carboxyl [AjBool] Undocumented
+** @attr mm [ajint] Undocumented
+** @attr buf [ajint*] Undocumented
+** @attr sotable [ajuint*] Undocumented
+** @attr solimit [ajuint] Undocumented
+** @attr off [EmbOPatBYPNode[AJALPHA]] Undocumented
+** @attr re [AjPStr] Undocumented
+** @attr skipm [ajint**] Undocumented
+** @attr tidy [void*] Undocumented
+******************************************************************************/
+
 typedef struct primerguts
 {
-  AjPStr patstr;
-  AjPStr origpat;
-  ajint type;
-  ajint len;
-  ajint real_len;
-  AjBool amino;
-  AjBool carboxyl;
+    AjPStr patstr;
+    AjPStr origpat;
+    ajint type;
+    ajint len;
+    ajint real_len;
+    AjBool amino;
+    AjBool carboxyl;
 
-  ajint mm;
+    ajint mm;
 
-  ajint* buf;
-  ajuint* sotable;
-  ajuint solimit;
-  EmbOPatBYPNode off[AJALPHA];
-  AjPStr re;
-  ajint **skipm;
-  void* tidy;
+    ajint* buf;
+    ajuint* sotable;
+    ajuint solimit;
+    EmbOPatBYPNode off[AJALPHA];
+    AjPStr re;
+    ajint **skipm;
+    void* tidy;
 } *PGuts;
 
-/* holds details of a hit against a sequence ie this primer will amplify */
+
+
+
+/* @datastatic PHit ***********************************************************
+**
+** holds details of a hit against a sequence ie this primer will amplify
+**
+** @alias primerhit
+**
+** @attr seqname [AjPStr] Undocumented
+** @attr desc [AjPStr] Undocumented
+** @attr acc [AjPStr] Undocumented
+** @attr forward [AjPStr] pattern that hits forward strand 
+** @attr reverse [AjPStr] pattern that hits reverse strand 
+** @attr forward_pos [ajint] Undocumented
+** @attr reverse_pos [ajint] Undocumented
+** @attr amplen [ajint] Undocumented
+** @attr forward_mismatch [ajint] Undocumented
+** @attr reverse_mismatch [ajint] Undocumented
+******************************************************************************/
+
 typedef struct primerhit
 {
-  AjPStr seqname;
-  AjPStr desc;
-  AjPStr acc;
-  AjPStr forward; /* pattern that hits forward strand */
-  AjPStr reverse; /* pattern that hits reverse strand */
-  ajint forward_pos;
-  ajint reverse_pos;
-  ajint amplen;
-  ajint forward_mismatch;
-  ajint reverse_mismatch;
+    AjPStr seqname;
+    AjPStr desc;
+    AjPStr acc;
+    AjPStr forward;		/* pattern that hits forward strand */
+    AjPStr reverse;		/* pattern that hits reverse strand */
+    ajint forward_pos;
+    ajint reverse_pos;
+    ajint amplen;
+    ajint forward_mismatch;
+    ajint reverse_mismatch;
 } *PHit;
 
-/* primer pairs will be read into a list of these structs */
+
+
+
+/* @datastatic Primer *********************************************************
+**
+** primer pairs will be read into a list of these structs
+**
+** @alias primers
+**
+** @attr Name [AjPStr] Undocumented
+** @attr forward [PGuts] Undocumented
+** @attr reverse [PGuts] Undocumented
+** @attr hitlist [AjPList] Undocumented
+******************************************************************************/
+
 typedef struct primers
 {
-  AjPStr Name;
-  PGuts forward;
-  PGuts reverse;
-  AjPList hitlist;
+    AjPStr Name;
+    PGuts forward;
+    PGuts reverse;
+    AjPList hitlist;
 } *Primer;
+
+
+
 
 /* "constructors" */
 static void psearch_initialise_pguts(PGuts* primer);
@@ -98,6 +160,7 @@ static void psearch_print_hits(AjPList primerList, AjPFile outf);
 
 
 
+
 /* @prog primersearch *********************************************************
 **
 ** Searches DNA sequences for matches with primer pairs
@@ -108,18 +171,18 @@ int main(int argc, char **argv)
 {
     AjPSeqall seqall;
     AjPSeq seq = NULL;
-    AjPFile primerFile;			/* we read the primer pairs from a file */
+    AjPFile primerFile;		  /* read the primer pairs from a file */
     AjPFile outf;
     AjPList primerList;
 
-    ajint mmp=0;
+    ajint mmp = 0;
 
-    embInit ("primersearch", argc, argv);
+    embInit("primersearch", argc, argv);
 
-    seqall   = ajAcdGetSeqall("sequences");
-    outf     = ajAcdGetOutfile("out");
-    primerFile  = ajAcdGetInfile("primers");
-    mmp = ajAcdGetInt("mismatchpercent");
+    seqall     = ajAcdGetSeqall("seqall");
+    outf       = ajAcdGetOutfile("outfile");
+    primerFile = ajAcdGetInfile("primersfile");
+    mmp        = ajAcdGetInt("mismatchpercent");
 
     /* build list of forward/reverse primer pairs as read from primerfile */
     primerList = ajListNew();
@@ -135,6 +198,7 @@ int main(int argc, char **argv)
 	return 0;
 
     }
+
     /* query sequences one by one */
     while(ajSeqallNext(seqall,&seq))
 	psearch_primer_search(primerList, seq, outf);
@@ -150,8 +214,12 @@ int main(int argc, char **argv)
     ajFileClose(&outf);
 
     ajExit();
+
     return 0;
 }
+
+
+
 
 /* "constructors" */
 
@@ -167,25 +235,26 @@ static void psearch_initialise_pguts(PGuts* primer)
 {
 
     AJNEW(*primer);
-    (*primer)->patstr=NULL;
-    (*primer)->origpat=ajStrNew();
-    (*primer)->type=0;
-    (*primer)->len=0;
-    (*primer)->real_len=0;
-    (*primer)->re=NULL;
-    (*primer)->amino=0;
-    (*primer)->carboxyl=0;
-    (*primer)->tidy=NULL;
+    (*primer)->patstr  = NULL;
+    (*primer)->origpat = ajStrNew();
+    (*primer)->type = 0;
+    (*primer)->len  = 0;
+    (*primer)->real_len = 0;
+    (*primer)->re = NULL;
+    (*primer)->amino = 0;
+    (*primer)->carboxyl = 0;
+    (*primer)->tidy = NULL;
 
-    (*primer)->mm=0;
-    (*primer)->buf=NULL;
-    (*primer)->sotable=NULL;
-    (*primer)->solimit=0;
-    (*primer)->re=NULL;
-    (*primer)->skipm=NULL;
+    (*primer)->mm = 0;
+    (*primer)->buf = NULL;
+    (*primer)->sotable = NULL;
+    (*primer)->solimit = 0;
+    (*primer)->re = NULL;
+    (*primer)->skipm = NULL;
 
     return;
 }
+
 
 
 
@@ -202,7 +271,7 @@ static void psearch_initialise_pguts(PGuts* primer)
 
 static void psearch_free_pguts(PGuts* primer)
 {
-    ajint i=0;
+    ajint i = 0;
 
     ajStrDel(&(*primer)->patstr);
     ajStrDel(&(*primer)->origpat);
@@ -221,6 +290,7 @@ static void psearch_free_pguts(PGuts* primer)
 
     return;
 }
+
 
 
 
@@ -276,7 +346,7 @@ static void psearch_free_primer(void **x, void *cl)
 **
 ** Clean the hitlist
 **
-** @param [rw] hlist [AjPList] Undocumented
+** @param [u] hlist [AjPList] Undocumented
 ** @@
 ******************************************************************************/
 
@@ -696,9 +766,9 @@ static void psearch_store_hits(Primer primdata, AjPList fhits, AjPList rhits,
 	    }
 	}
 	/*
-	 *  clean up rListIter here as it will be new'ed again next
-	 *  time through
-	 */
+	**  clean up rListIter here as it will be new'ed again next
+	**  time through
+	*/
 	ajListIterFree(ri);
     }
 
@@ -717,7 +787,6 @@ static void psearch_store_hits(Primer primdata, AjPList fhits, AjPList rhits,
 ** @param [w] outf [AjPFile] outfile
 ** @@
 ******************************************************************************/
-
 
 static void psearch_print_hits(AjPList primerList, AjPFile outf)
 {

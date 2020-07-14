@@ -23,6 +23,9 @@
 
 #include "emboss.h"
 
+
+
+
 /* @prog acdpretty ************************************************************
 **
 ** Generate pretty version of acd files
@@ -31,16 +34,17 @@
 
 int main(int argc, char **argv)
 {
-
-    if (argc < 2)
+    if(argc < 2)
 	ajFatal("Error - must specify an application to compile\n");
 
     ajAcdSetControl("acdpretty");
     ajAcdSetControl("acdhelp");
-    ajGraphInit (argv[1], argc-1, &argv[1]);
+    ajGraphInit(argv[1], argc-1, &argv[1]);
 
-    ajAcdExit (ajTrue);		/* turn off the 'never used' ACD warnings */
-    ajExit ();
+    ajAcdExit(ajTrue);		/* turn off the 'never used' ACD warnings */
+
+    ajExit();
+
     return 0;
 }
 

@@ -26,13 +26,15 @@
 #include <stdlib.h>
 #include <limits.h>
 
+
+
+
 static float findkm_summation(float *arr, ajint number);
 static float findkm_multisum (float *arr1, float *arr2, ajint number);
 static float findkm_findmax(float *arr1, ajint number);
 static float findkm_findmin(float *arr1, ajint number);
 
 
-/*Func declarations */
 
 
 /* @prog findkm ***************************************************************
@@ -46,17 +48,17 @@ int main(int argc, char **argv)
     AjPFile infile = NULL;
     AjPFile outfile = NULL;
     AjPStr line;
-    AjPGraph graphLB =NULL;
-    AjPGraphData xygraph=NULL;
-    AjPGraphData xygraph2 =NULL;
+    AjPGraph graphLB = NULL;
+    AjPGraphData xygraph  = NULL;
+    AjPGraphData xygraph2 = NULL;
     AjBool doplot;
 
     ajint N=0;
 
-    float *xdata=NULL;
-    float *ydata=NULL;
-    float *V=NULL;
-    float *S=NULL;
+    float *xdata = NULL;
+    float *ydata = NULL;
+    float *V = NULL;
+    float *S = NULL;
 
     float a;
     float b;
@@ -81,45 +83,44 @@ int main(int argc, char **argv)
     float cutx;
     float cuty;
 
-    float amin=0.;
-    float amax=0.;
-    float bmin=0.;
-    float bmax=0.;
+    float amin = 0.;
+    float amax = 0.;
+    float bmin = 0.;
+    float bmax = 0.;
 
 
-    (void)ajGraphInit("findkm", argc, argv);
+    ajGraphInit("findkm", argc, argv);
 
-    infile = ajAcdGetInfile("infile");
+    infile  = ajAcdGetInfile("infile");
     outfile = ajAcdGetOutfile ("outfile");
-    doplot =ajAcdGetBool("plot");
+    doplot  = ajAcdGetBool("plot");
     graphLB = ajAcdGetGraphxy("graphLB");
     line = ajStrNew();
 
 
     /* Determine N by reading infile */
 
-    while (ajFileReadLine(infile, &line))
-    {
-        if (ajStrLen(line) >0) N++;
-    }
+    while(ajFileReadLine(infile, &line))
+        if(ajStrLen(line) >0)
+	    N++;
 
 
     /* only allocate memory to the arrays */
 
-    AJCNEW (xdata, N);
-    AJCNEW (ydata, N);
-    AJCNEW (S, N);
-    AJCNEW (V, N);
+    AJCNEW(xdata, N);
+    AJCNEW(ydata, N);
+    AJCNEW(S, N);
+    AJCNEW(V, N);
 
-    (void)ajFileSeek(infile, 0L, 0);
+    ajFileSeek(infile, 0L, 0);
 
     N=0;
-    while (ajFileReadLine(infile, &line))
+    while(ajFileReadLine(infile, &line))
     {
-	if (ajStrLen(line) > 0)
+	if(ajStrLen(line) > 0)
         {
-            (void)sscanf(ajStrStr(line),"%f %f",&S[N],&V[N]);
-            if (S[N] > 0.0 && V[N] > 0.0)
+            sscanf(ajStrStr(line),"%f %f",&S[N],&V[N]);
+            if(S[N] > 0.0 && V[N] > 0.0)
             {
                 xdata[N] = S[N];
                 ydata[N] = S[N]/V[N];
@@ -142,24 +143,28 @@ int main(int argc, char **argv)
 
 
 
-    /* Incase the casted ints turn out to be same number on the axis,
-       make the max number larger than the min so graph can be seen. */
+    /*
+    ** In case the casted ints turn out to be same number on the axis,
+    ** make the max number larger than the min so graph can be seen.
+    */
 
-    if ((ajint)xmax == (ajint)xmin)
+    if((ajint)xmax == (ajint)xmin)
         ++xmax;
-    if ((ajint)ymax == (ajint)ymin)
+    if((ajint)ymax == (ajint)ymin)
         ++ymax;
 
 
-    if ((ajint)xmax2 == (ajint)xmin2)
+    if((ajint)xmax2 == (ajint)xmin2)
         ++xmax2;
-    if ((ajint)ymax2 == (ajint)ymin2)
+    if((ajint)ymax2 == (ajint)ymin2)
         ++ymax2;
 
 
 
-    /* Gaussian Elimination for Best-fit curve plotting and
-       calculating Km and Vmax */
+    /*
+    ** Gaussian Elimination for Best-fit curve plotting and
+    ** calculating Km and Vmax
+    */
 
     A = findkm_summation(xdata, N);
     B = findkm_summation(ydata, N);
@@ -167,33 +172,29 @@ int main(int argc, char **argv)
     C = findkm_multisum(xdata, ydata, N);
     D = findkm_multisum(xdata, xdata, N);
 
-    /*    c2 = (C -((A*B)/N) / (D - (D/N)));
-	  c1 = ((B-A) * c2 /N);
 
-	  Vmax = c1;
-
-	  Km = (1/c1)/c2;*/
-
-
-
-    /*To find the best fit line, Least Squares Fit:    y =ax +b;
-      Two Simultaneous equations, REARRANGE FOR b
-
-      findkm_summation(ydata, N) - findkm_summation(xdata,N)*a - N*b =0;
-      b = (findkm_summation(ydata,N) - findkm_summation(xdata,N)*a) /  N;
-      b = (B - A*a)/ N;
-
-      C - D*a - A*((B - A*a)/ N) =0;
-      C - D*a - A*B/N + A*A*a/N =0;
-      C - A*B/N = D*a - A*A*a/N;*/
+    /*
+    ** To find the best fit line, Least Squares Fit:    y =ax +b;
+    ** Two Simultaneous equations, REARRANGE FOR b
+    **
+    ** findkm_summation(ydata, N) - findkm_summation(xdata,N)*a - N*b =0;
+    ** b = (findkm_summation(ydata,N) - findkm_summation(xdata,N)*a) /  N;
+    ** b = (B - A*a)/ N;
+    **
+    ** C - D*a - A*((B - A*a)/ N) =0;
+    ** C - D*a - A*B/N + A*A*a/N =0;
+    ** C - A*B/N = D*a - A*A*a/N;
+    */
 
     /* REARRANGE FOR a */
 
     a = (N*C - A*B)/ (N*D - A*A);
     b = (B - A*a)/ N;
 
-    /* Equation of Line - Lineweaver burk eqn*/
-    /* 1/V = (Km/Vmax)*(1/S) + 1/Vmax;*/
+    /*
+    ** Equation of Line - Lineweaver burk eqn
+    ** 1/V = (Km/Vmax)*(1/S) + 1/Vmax;
+    */
 
 
     Vmax = 1/a;
@@ -207,18 +208,16 @@ int main(int argc, char **argv)
     upperXlimit = findkm_findmax(xdata,N)+3;
     upperYlimit = (upperXlimit)*a + b;
 
-    (void)ajFmtPrintF(outfile, "---Hanes Woolf Plot Calculations---\n");
-    (void)ajFmtPrintF(outfile, "Slope of best fit line is a = %.2f\n", a);
-    (void)ajFmtPrintF(
-		      outfile,"Coefficient in Eqn of line y = ma +b is b "
-		      "= %.2f\n", b);
+    ajFmtPrintF(outfile, "---Hanes Woolf Plot Calculations---\n");
+    ajFmtPrintF(outfile, "Slope of best fit line is a = %.2f\n", a);
+    ajFmtPrintF(outfile,"Coefficient in Eqn of line y = ma +b is b "
+		"= %.2f\n", b);
 
-    (void)ajFmtPrintF(outfile, "Where line cuts x axis = (%.2f, 0)\n", cutx);
-    (void)ajFmtPrintF(outfile, "Where line cuts y axis = (0, %.2f)\n", cuty);
-    (void)ajFmtPrintF(outfile,
-		      "Limit-point of graph for plot = (%.2f, %.2f)\n\n",
-		      upperXlimit, upperYlimit);
-    (void)ajFmtPrintF(outfile, "Vmax = %.2f, Km = %f\n",Vmax, Km);
+    ajFmtPrintF(outfile, "Where line cuts x axis = (%.2f, 0)\n", cutx);
+    ajFmtPrintF(outfile, "Where line cuts y axis = (0, %.2f)\n", cuty);
+    ajFmtPrintF(outfile, "Limit-point of graph for plot = (%.2f, %.2f)\n\n",
+		upperXlimit, upperYlimit);
+    ajFmtPrintF(outfile, "Vmax = %.2f, Km = %f\n",Vmax, Km);
 
     /* draw graphs */
 
@@ -237,8 +236,7 @@ int main(int argc, char **argv)
 	ajGraphxySetYEnd(graphLB, ymax2);
 	ajGraphxySetXRangeII(graphLB, (ajint)0.0, (ajint)xmax2);
 	ajGraphxySetYRangeII(graphLB, (ajint)0.0, (ajint)ymax2);
-	ajGraphDataObjAddLine
-	    (xygraph, 0.0, 0.0, S[0], V[0], (ajint)BLACK);
+	ajGraphDataObjAddLine(xygraph, 0.0, 0.0, S[0], V[0], (ajint)BLACK);
 	ajGraphxySetCirclePoints(graphLB, ajTrue);
 	ajGraphDataxySetMaxMin(xygraph,0.0,xmax2,0.0,ymax2);
 
@@ -262,8 +260,7 @@ int main(int argc, char **argv)
 	ajGraphxySetYEnd(graphLB, upperYlimit);
 	ajGraphxySetXRangeII(graphLB, (ajint)cutx, (ajint)upperXlimit);
 	ajGraphxySetYRangeII(graphLB, (ajint)0.0, (ajint)upperYlimit);
-	/*    ajGraphDataObjAddLine
-	      (xygraph2, cutx, 0.0, upperXlimit, upperYlimit, (ajint)RED);*/
+
 	ajGraphxySetCirclePoints(graphLB, ajTrue);
 	ajGraphDataxySetMaxMin(xygraph2, cutx,upperXlimit,0.0,upperYlimit);
 	ajGraphDataxyMaxMin(xdata,N,&amin,&amax);
@@ -278,20 +275,19 @@ int main(int argc, char **argv)
 	ajGraphxyDisplay(graphLB, ajTrue);
     }
 
+    AJFREE(xdata);
+    AJFREE(ydata);
 
-
-
-    AJFREE (xdata);
-    AJFREE (ydata);
-
-    AJFREE (S);
-    AJFREE (V);
+    AJFREE(S);
+    AJFREE(V);
 
     ajFileClose(&infile);
 
     ajExit();
+
     return 0;
 }
+
 
 
 
@@ -311,11 +307,13 @@ static float findkm_summation(float *arr, ajint number)
     ajint i;
     float sum=0;
 
-    for (i = 0; i < number; i++)
+    for(i = 0; i < number; i++)
         sum += arr[i];
 
     return sum;
 }
+
+
 
 
 /* @funcstatic findkm_multisum ************************************************
@@ -332,9 +330,9 @@ static float findkm_summation(float *arr, ajint number)
 static float findkm_multisum(float *arr1, float *arr2, ajint number)
 {
     ajint i;
-    float sum=0;
+    float sum = 0;
 
-    for (i = 0; i < number; i++)
+    for(i = 0; i < number; i++)
         sum += arr1[i]*arr2[i];
 
     return sum;
@@ -356,10 +354,12 @@ static float findkm_multisum(float *arr1, float *arr2, ajint number)
 static float findkm_findmax(float *arr, ajint number)
 {
     ajint i;
-    float max=arr[0];
+    float max;
 
-    for (i=1; i<number; ++i)
-        if (arr[i] > max)
+    max = arr[0];
+
+    for(i=1; i<number; ++i)
+        if(arr[i] > max)
             max = arr[i];
 
     return max;
@@ -381,73 +381,13 @@ static float findkm_findmax(float *arr, ajint number)
 static float findkm_findmin(float *arr, ajint number)
 {
     ajint i;
-    float min=arr[0];
+    float min;
 
-    for (i=1; i<number; ++i)
-        if (arr[i] < min)
+    min = arr[0];
+
+    for(i=1; i<number; ++i)
+        if(arr[i] < min)
             min = arr[i];
 
     return min;
 }
-
-
-
-
-
-
-
-
-    /* Gaussian Elimination -from 'Algorithms in C' .
-
-       Best fit curves
-
-       -Matrix multiplication
-    (N      sumX)   (c1) =  sumY
-    (sum X  sumX^2) (c2)    sumXY
-
-    sim eqns:
-    1   N*c1 +sumX*c2 = sumY
-    2   sumX*c1 + sumX^2 * c2 = sumXY
-
-
-    Subs for c2:
-
-    c2  = (sumXY - sumX*c1)/ sumX^2
-    c2  = sumXY - (sumY -c2*sumX / N) *sumX
-    c2  = sumXY - (sumX*sumY + c2*sumX^2) / N
-    c2  = sumXY - (sumX*sumY/N) + (c2 * (sumX^2)/ N)
-    c2 - (c2*sumX^2)/ N = sumXY -sumX*sumY/ N
-    c2(1 - sumX^2 / N) = sumXY - (sumX*sumY / N)
-    c2 =  (sumXY - (sumX*sumY / N)) / sumX^2-(sumX^2 / N))
-
-
-
-    Joining both together:
-
-
-    c1  = sumY -sumX ((sumXY - (sumX*sumY / N)) / sumX^2 -(sumX^2 / N)) / N
-
-
-    A = sumX
-    B = sumY
-    C = sumX*sumY
-    D = sumX^2
-
-    so sub'ing these values into the c1 & c2 eqns:
-
-    c1 = (B-A ((C - A*B/N)/ (D - D/N)) )/N
-
-    c2 = ((C - A*B/N)/ (D- D/N))
-
-    */
-
-
-
-
-
-
-
-
-
-
-

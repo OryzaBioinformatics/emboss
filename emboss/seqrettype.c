@@ -19,7 +19,10 @@
 ** along with this program; if not, write to the Free Software
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 ******************************************************************************/
+
 #include "emboss.h"
+
+
 
 
 /* @prog seqrettype ***********************************************************
@@ -30,26 +33,28 @@
 
 int main(int argc, char **argv)
 {
-
     AjPSeqall seqall;
     AjPSeqout seqout;
     AjPSeq seq = NULL;
     AjBool firstonly;
 
-    embInit ("seqrettype", argc, argv);
+    embInit("seqrettype", argc, argv);
 
-    seqout = ajAcdGetSeqoutall ("outseq");
-    seqall = ajAcdGetSeqall ("sequence");
+    seqout = ajAcdGetSeqoutall("outseq");
+    seqall = ajAcdGetSeqall("sequence");
 
-    firstonly = ajAcdGetBool ("firstonly");
-    while (ajSeqallNext(seqall, &seq))
+    firstonly = ajAcdGetBool("firstonly");
+    while(ajSeqallNext(seqall, &seq))
     {
-	ajSeqAllWrite (seqout, seq);
-	if (firstonly) break;
+	ajSeqAllWrite(seqout, seq);
+
+	if(firstonly)
+	    break;
     }
 
-    ajSeqWriteClose (seqout);
+    ajSeqWriteClose(seqout);
 
-    ajExit ();
+    ajExit();
+
     return 0;
 }

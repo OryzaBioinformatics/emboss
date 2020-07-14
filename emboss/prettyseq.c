@@ -27,6 +27,9 @@
 
 #define POFF 1000000	/* Printing flag */
 
+
+
+
 static void prettyseq_makeRuler(ajint len, ajint begin, char *ruler,
 				ajint *npos);
 static void prettyseq_calcProteinPos(ajint *ppos, AjPStr pro,
@@ -46,6 +49,8 @@ static void prettyseq_Translate(AjPFile outf, ajint beg, ajint end, AjPStr s,
 				AjPStr pro);
 
 
+
+
 /* @prog prettyseq ************************************************************
 **
 ** Output sequence with translated ranges
@@ -54,16 +59,16 @@ static void prettyseq_Translate(AjPFile outf, ajint beg, ajint end, AjPStr s,
 
 int main(int argc, char **argv)
 {
-    AjPSeq       a;
-    AjPFile      outf;
-    AjPCod       codon;
-    AjPStr       substr;
-    AjPRange     range;
-    AjBool       isrule;
-    AjBool       isp;
-    AjBool       isn;
+    AjPSeq a;
+    AjPFile outf;
+    AjPCod codon;
+    AjPStr substr;
+    AjPRange range;
+    AjBool isrule;
+    AjBool isp;
+    AjBool isn;
 
-    AjPStr       pro;
+    AjPStr pro;
 
     ajint beg;
     ajint end;
@@ -72,20 +77,20 @@ int main(int argc, char **argv)
     ajint width;
 
     char *ruler;
-    ajint  *ppos=NULL;
-    ajint  *npos=NULL;
+    ajint *ppos = NULL;
+    ajint *npos = NULL;
 
 
     embInit("prettyseq", argc, argv);
 
-    a         = ajAcdGetSeq("sequence");
-    codon     = ajAcdGetCodon("cfile");
-    width     = ajAcdGetInt("width");
-    range     = ajAcdGetRange("range");
-    outf      = ajAcdGetOutfile("outfile");
-    isrule    = ajAcdGetBool("ruler");
-    isp       = ajAcdGetBool("plabel");
-    isn       = ajAcdGetBool("nlabel");
+    a      = ajAcdGetSeq("sequence");
+    codon  = ajAcdGetCodon("cfile");
+    width  = ajAcdGetInt("width");
+    range  = ajAcdGetRange("range");
+    outf   = ajAcdGetOutfile("outfile");
+    isrule = ajAcdGetBool("ruler");
+    isp    = ajAcdGetBool("plabel");
+    isn    = ajAcdGetBool("nlabel");
 
     beg = ajSeqBegin(a);
     end = ajSeqEnd(a);
@@ -95,9 +100,9 @@ int main(int argc, char **argv)
     pro=ajStrNewC(ajStrStr(substr));
     len = ajStrLen(substr);
 
-    AJCNEW (ruler, len);
-    AJCNEW (npos, len);
-    AJCNEW (ppos, len);
+    AJCNEW(ruler, len);
+    AJCNEW(npos, len);
+    AJCNEW(ppos, len);
 
     prettyseq_Translate(outf,beg,end,substr,codon,range,width,pro);
     prettyseq_makeRuler(len,beg,ruler,npos);
@@ -105,17 +110,20 @@ int main(int argc, char **argv)
     prettyseq_showTrans(ppos,npos,pro,substr,len,ruler,beg,
 			outf,isrule,isp,isn,width,ajSeqName(a));
 
-    AJFREE (npos);
-    AJFREE (ppos);
-    AJFREE (ruler);
+    AJFREE(npos);
+    AJFREE(ppos);
+    AJFREE(ruler);
 
     ajStrDel(&substr);
     ajCodDel(&codon);
     ajRangeDel(&range);
 
     ajExit();
+
     return 0;
 }
+
+
 
 
 /* @funcstatic prettyseq_Translate ********************************************
@@ -132,7 +140,6 @@ int main(int argc, char **argv)
 ** @param [w] pro [AjPStr] protein
 ** @@
 ******************************************************************************/
-
 
 static void prettyseq_Translate(AjPFile outf, ajint beg, ajint end, AjPStr s,
 				AjPCod codon, AjPRange range, ajint width,
@@ -151,7 +158,7 @@ static void prettyseq_Translate(AjPFile outf, ajint beg, ajint end, AjPStr s,
     char c;
 
     char tri[4];
-    ajint  idx;
+    ajint idx;
 
 
     tri[3]='0';
@@ -170,15 +177,15 @@ static void prettyseq_Translate(AjPFile outf, ajint beg, ajint end, AjPStr s,
     /* Test ranges for validity */
     for(i=0;i<nr;++i)
     {
-	st=range->start[i];
-	en=range->end[i];
+	st = range->start[i];
+	en = range->end[i];
 	if(st<0 || st>=limit || en<0 || en>=limit)
 	    ajFatal("Range outside length of sequence [%d-%d]",st+beg,
 		    end+beg);
     }
 
     /* Set areas of sequence to translate to lower case */
-    p=ajStrStr(s);
+    p = ajStrStr(s);
     for(i=0;i<nr;++i)
     {
 	ajRangeValues(range,i,&st,&en);
@@ -193,34 +200,36 @@ static void prettyseq_Translate(AjPFile outf, ajint beg, ajint end, AjPStr s,
     {
 	if(isupper((ajint)p[i]))
 	{
-	    q[i]=' ';
+	    q[i] = ' ';
 	    continue;
 	}
 	tri[0]=p[i];
-	if(!p[i+1] || isupper((ajint)p[i+1]) || !p[i+2] || isupper((ajint)p[i+2]))
+	if(!p[i+1] || isupper((ajint)p[i+1]) || !p[i+2] ||
+	   isupper((ajint)p[i+2]))
 	{
-	    q[i]=' ';
+	    q[i] = ' ';
 	    if(q[i+1])
-		q[i+1]=' ';
+		q[i+1] = ' ';
 	    if(q[i+2])
-		q[i+2]=' ';
-	    i+=2;
+		q[i+2] = ' ';
+	    i += 2;
 	    continue;
 	}
-	tri[1]=p[i+1];
-	tri[2]=p[i+2];
+	tri[1] = p[i+1];
+	tri[2] = p[i+2];
 	idx = ajCodIndexC(tri);
 	if(codon->aa[idx]==27)
-	    c='*';
+	    c = '*';
 	else
-	    c=(char)(codon->aa[idx]+'A');
-	q[i]=c;
-	q[i+1]=q[i+2]=' ';
-	i+=2;
+	    c = (char)(codon->aa[idx]+'A');
+	q[i] = c;
+	q[i+1] = q[i+2] = ' ';
+	i += 2;
     }
 
     return;
 }
+
 
 
 
@@ -235,7 +244,6 @@ static void prettyseq_Translate(AjPFile outf, ajint beg, ajint end, AjPStr s,
 ** @@
 ******************************************************************************/
 
-
 static void prettyseq_makeRuler(ajint len, ajint begin, char *ruler,
 				ajint *npos)
 {
@@ -243,12 +251,15 @@ static void prettyseq_makeRuler(ajint len, ajint begin, char *ruler,
 
     for(i=0;i<len;++i)
     {
-	npos[i]=i+begin;
+	npos[i] = i+begin;
+
 	if(!((i+begin)%10))
-	    ruler[i]='|';
+	    ruler[i] = '|';
 	else
-	    ruler[i]='-';
+	    ruler[i] = '-';
     }
+
+    return;
 }
 
 
@@ -276,10 +287,10 @@ static void prettyseq_calcProteinPos(ajint *ppos, AjPStr pro, ajint len)
 
 
 
-    pos=0;
-    v=1;
+    pos = 0;
+    v   = 1;
 
-    p=ajStrStr(pro);
+    p = ajStrStr(pro);
     while(p[pos]==' ')
 	ppos[pos++]=0;
 
@@ -287,25 +298,25 @@ static void prettyseq_calcProteinPos(ajint *ppos, AjPStr pro, ajint len)
     {
 	if(p[pos]=='*')
 	{
-	    ppos[pos]=0;
+	    ppos[pos] = 0;
 	    ++pos;
 	    while(p[pos]==' ')
 	    {
-		ppos[pos]=0;
+		ppos[pos] = 0;
 		++pos;
 	    }
-	    v=1;
+	    v = 1;
 	    continue;
 	}
 
 	if(p[pos]!=' ')
 	{
-	    ppos[pos]=v+POFF;
+	    ppos[pos] = v+POFF;
 	    ++pos;
 	    for(j=0;j<2 && p[pos];++j,++pos)
-		ppos[pos]=v;
+		ppos[pos] = v;
 	    if(p[pos]==' ')
-		v=1;
+		v = 1;
 	    else
 		++v;
 	}
@@ -315,9 +326,6 @@ static void prettyseq_calcProteinPos(ajint *ppos, AjPStr pro, ajint len)
 
     return;
 }
-
-
-
 
 
 
@@ -354,7 +362,7 @@ static void prettyseq_showTrans(ajint *ppos, ajint *npos, AjPStr pro,
 		begin+len-1);
 
 
-    pos=0;
+    pos = 0;
     while(pos<len)
     {
 	if(pos+width<len)
@@ -371,6 +379,7 @@ static void prettyseq_showTrans(ajint *ppos, ajint *npos, AjPStr pro,
 
     return;
 }
+
 
 
 
@@ -394,7 +403,6 @@ static void prettyseq_showTrans(ajint *ppos, ajint *npos, AjPStr pro,
 ** @@
 ******************************************************************************/
 
-
 static void prettyseq_showTransb(ajint *ppos, ajint *npos, AjPStr pro,
 				 AjPStr substr, ajint len, char *ruler,
 				 ajint begin, AjPFile outf, AjBool isrule,
@@ -403,11 +411,11 @@ static void prettyseq_showTransb(ajint *ppos, ajint *npos, AjPStr pro,
 {
     AjPStr s;
     ajint b;
-    ajint e=0;
+    ajint e = 0;
     ajint v;
     ajint pos;
 
-    s=ajStrNew();
+    s = ajStrNew();
 
     if(isrule)
     {
@@ -419,16 +427,18 @@ static void prettyseq_showTransb(ajint *ppos, ajint *npos, AjPStr pro,
 	ajFmtPrintF(outf,"%10d ",npos[start]);
     else
 	ajFmtPrintF(outf,"           ");
+
     ajStrAssSub(&s,substr,start,end);
     ajFmtPrintF(outf,"%s ",ajStrStr(s));
+
     if(isn)
 	ajFmtPrintF(outf,"%d",npos[end]);
     ajFmtPrintF(outf,"\n");
 
     if(isp)
     {
-	pos=start;
-	b=e=0;
+	pos = start;
+	b = e = 0;
 	while(pos<=end)
 	{
 	    if(!(v=ppos[pos]))
@@ -436,6 +446,7 @@ static void prettyseq_showTransb(ajint *ppos, ajint *npos, AjPStr pro,
 		++pos;
 		continue;
 	    }
+
 	    if(v<POFF)
 	    {
 		while(ppos[pos]==v && pos<=end)
@@ -444,10 +455,11 @@ static void prettyseq_showTransb(ajint *ppos, ajint *npos, AjPStr pro,
 		    break;
 		continue;
 	    }
-	    b=v-POFF;
+	    b = v-POFF;
 	    break;
 	}
-	pos=end;
+
+	pos = end;
 	while(pos>=start)
 	{
 	    if(!(v=ppos[pos]))
@@ -456,18 +468,18 @@ static void prettyseq_showTransb(ajint *ppos, ajint *npos, AjPStr pro,
 		continue;
 	    }
 	    if(v>POFF)
-		v-=POFF;
+		v -= POFF;
 	    else
 		while(ppos[pos]==v)
 		{
 		    --pos;
 		    if(pos<start)
 		    {
-			v=0;
+			v = 0;
 			break;
 		    }
 		}
-	    e=v;
+	    e = v;
 	    break;
 	}
 

@@ -19,9 +19,10 @@
 ******************************************************************************/
 
 #include <stdio.h>
-
-
 #include "emboss.h"
+
+
+
 
 #ifndef HAVE_ORB_ORBIT_H
 int main(int argc, char **argv)
@@ -31,6 +32,9 @@ int main(int argc, char **argv)
 }
 #else
 
+
+
+
 /* @prog corbatest ************************************************************
 **
 ** Testing
@@ -39,16 +43,16 @@ int main(int argc, char **argv)
 
 int main(int argc, char **argv)
 {
-    AjPFile      outf  = NULL;
-    AjPStr       entry = NULL;
-    AjPCorbafeat feat = NULL;
-    AjPStr       seq   = NULL;
-    AjBool       dofeat=ajTrue;
+    AjPFile outf = NULL;
+    AjPStr entry = NULL;
+    AjPCorbafeat feat  = NULL;
+    AjPStr seq    = NULL;
+    AjBool dofeat = ajTrue;
 
-    char *exerr=NULL;
-    ajint  exint=0;
-    ajint  nfeat=0;
-    ajint  nlocs=0;
+    char *exerr  = NULL;
+    ajint  exint = 0;
+    ajint  nfeat = 0;
+    ajint  nlocs = 0;
     ajint  i;
     ajint  j;
     ajint  k;
@@ -100,17 +104,13 @@ int main(int argc, char **argv)
 	}
     }
 
-
-
-
-
-
     ajStrDel(&seq);
     ajFileClose(&outf);
 
     ajCorbafeatDel(&feat);
 
     ajExit();
+
     return 0;
 }
 

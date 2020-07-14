@@ -28,6 +28,9 @@
 #define MAXGROUPS 20
 #define MAXLABELS 10000
 
+
+
+
 static void cirdna_ReadInput(AjPFile infile, float *Start, float *End);
 static AjPStr cirdna_ReadGroup(AjPFile infile, float *From, float *To,
 			       AjPStr *Name2, char *FromSymbol,
@@ -131,8 +134,13 @@ static float cirdna_HorTextPileLengthMax(AjPStr Name2, ajint NumNames);
 static float cirdna_ComputeAngle(float RealLength, float Length,
 				 float OriginAngle);
 
+
+
+
 static AjPStr Style[MAXGROUPS][MAXLABELS];
 static AjPStr Name[MAXGROUPS][MAXLABELS];
+
+
 
 
 /* @prog cirdna ***************************************************************
@@ -253,12 +261,13 @@ int main(int argc, char **argv)
 
     /* height of a tick, a block, and a range */
     TickHeight = 10*ajAcdGetFloat("tickheight");
-    if( ajStrMatchCaseC(PosBlocks, "Out") ) {
-      BlockHeight = 10*ajAcdGetFloat("blockheight");
-    }
-    else {
-      BlockHeight = (TextHeight+10)*ajAcdGetFloat("blockheight");
-      if( BlockHeight<(TextHeight+10) ) BlockHeight = (TextHeight+10);
+    if( ajStrMatchCaseC(PosBlocks, "Out") )
+	BlockHeight = 10*ajAcdGetFloat("blockheight");
+    else
+    {
+	BlockHeight = (TextHeight+10)*ajAcdGetFloat("blockheight");
+	if(BlockHeight<(TextHeight+10) )
+	    BlockHeight = (TextHeight+10);
     }
     RangeHeight = 10*ajAcdGetFloat("rangeheight");
 
@@ -300,11 +309,12 @@ int main(int argc, char **argv)
     NumGroups = i;
 
     /* remove the beginning of the molecule in case it doesn't begin at 1 */
-    for(i=0; i<NumGroups; i++) for(j=0; j<NumLabels[i]; j++)
-    {
-	From[i][j]-=( Start-1 );
-	To[i][j]-=( Start-1 );
-    }
+    for(i=0; i<NumGroups; i++)
+	for(j=0; j<NumLabels[i]; j++)
+	{
+	    From[i][j] -= (Start-1);
+	    To[i][j]   -= (Start-1);
+	}
 
     /* compute the character size that fits all groups, including the ruler */
     minsize = 100.0;
@@ -350,16 +360,16 @@ int main(int argc, char **argv)
     }
 
     /*
-     *  decrease the radius such that the innermost group is not
-     *  compressed in the centre of the circle
-     */
+    **  decrease the radius such that the innermost group is not
+    **  compressed in the centre of the circle
+    */
     DrawRadius = Radius - (TotalHeight/NumGroups);
 
     /*
-     *  if the groups are too big, resize them such that they fit in the
-     *  window
-     */
-    if( TotalHeight<DrawRadius )
+    **  if the groups are too big, resize them such that they fit in the
+    **  window
+    */
+    if(TotalHeight<DrawRadius)
 	TotalHeight = DrawRadius;
     TickHeight/=(TotalHeight/DrawRadius);
     BlockHeight/=(TotalHeight/DrawRadius);
@@ -372,21 +382,22 @@ int main(int argc, char **argv)
     GapGroup/=(TotalHeight/DrawRadius);
 
     /*
-     *  the groups having been resized, recompute the character size that
-     * fits all groups, including the ruler
-     */
+    **  the groups having been resized, recompute the character size that
+    ** fits all groups, including the ruler
+    */
     minsize = 100.0;
     charsize = cirdna_TextRulerStr(Start, End, GapSize,
 				   (TotalHeight/DrawRadius),
 				   PosTicks, NumGroups, NumLabels);
-    if( charsize<minsize ) minsize = charsize;
+    if(charsize<minsize)
+	minsize = charsize;
     for(i=0; i<NumGroups; i++)
     {
 	charsize = cirdna_TextGroupStr(Name[i], NumLabels[i], NumNames[i],
 				       GroupName[i], (TotalHeight/DrawRadius),
 				       Style[i], From[i], To[i], BlockHeight,
 				       PosTicks);
-	if( charsize<minsize )
+	if(charsize<minsize)
 	    minsize = charsize;
     }
     ajGraphSetDefCharSize(minsize);
@@ -409,18 +420,17 @@ int main(int argc, char **argv)
     }
 
     /* draw the ruler */
-    if( Ruler ) {
-      cirdna_DrawRuler(xDraw, yDraw, Start, End,
-		       RealLength, Radius, TickHeight,
-		       OriginAngle, GapSize, TickLines, TextLength, TextHeight,
-		       postext, NumGroups, NumLabels, &From[0][0],
-		       PosTicks, 1);
-      }
+    if(Ruler)
+	cirdna_DrawRuler(xDraw, yDraw, Start, End,
+			 RealLength, Radius, TickHeight,
+			 OriginAngle, GapSize, TickLines, TextLength,
+			 TextHeight, postext, NumGroups, NumLabels,
+			 &From[0][0], PosTicks, 1);
 
     /* draw the groups */
     for(i=0; i<NumGroups; i++)
     {
-	Radius-=( GroupHeight[i]+GapGroup );
+	Radius -= (GroupHeight[i]+GapGroup);
 	cirdna_DrawGroup(xDraw, yDraw, posblock, posrange, postext, TickHeight,
 			 BlockHeight, RangeHeight, RealLength, TextLength,
 			 TextHeight, Radius, RadiusMax, From[i], To[i],
@@ -440,10 +450,9 @@ int main(int argc, char **argv)
     ajGraphCloseWin();
 
     ajExit();
+
     return 0;
 }
-
-
 
 
 
@@ -474,46 +483,48 @@ static float cirdna_TextRuler(float Start, float End, ajint GapSize,
     ajint i;
     ajint j;
     AjPStr token;
-    AjPStr string = ajStrNew();
+    AjPStr string;
     float charsize;
     float minsize = 100.0;
 
+    string = ajStrNew();
+
     ajStrFromInt(&string, Start);
-    charsize = ajGraphFitTextOnLine( 0, 0, TextLength, TextLength,
+    charsize = ajGraphFitTextOnLine(0, 0, TextLength, TextLength,
 				    ajStrStr(string), TextHeight );
-    if( charsize < minsize )
+    if(charsize < minsize)
 	minsize = charsize;
 
     for(i=GapSize; i<End; i+=GapSize)
-	if( i>Start )
+	if(i>Start)
 	{
 	    ajStrFromInt(&string, i);
-	    charsize = ajGraphFitTextOnLine( 0, 0, TextLength, TextLength,
+	    charsize = ajGraphFitTextOnLine(0, 0, TextLength, TextLength,
 					    ajStrStr(string), TextHeight );
-	    if( charsize < minsize )
+	    if(charsize < minsize)
 		minsize = charsize;
 	}
 
     for(i=0; i<NumGroups; i++)
-    {
 	for(j=0; j<NumLabels[i]; j++)
-	{
-	    if( ajStrMatchCaseC(Style[i][j], "Tick") &&
+	    if(ajStrMatchCaseC(Style[i][j], "Tick") &&
 	       ajStrMatchCaseC(PosTicks, "Out") )
 	    {
 		token = ajStrTokC(Name[i][j], ";");
 		charsize = ajGraphFitTextOnLine( 0, 0, TextLength,
 						TextLength, ajStrStr(token),
 						TextHeight );
-		if( charsize < minsize ) minsize = charsize;
+		if(charsize < minsize)
+		    minsize = charsize;
 	    }
-	}
-    }
 
     ajStrDel(&string);
 
     return minsize;
 }
+
+
+
 
 /* @funcstatic cirdna_TextRulerStr ********************************************
 **
@@ -538,31 +549,33 @@ static float cirdna_TextRulerStr(float Start, float End, ajint GapSize,
     ajint i;
     ajint  j;
     AjPStr token;
-    AjPStr string = ajStrNew();
+    AjPStr string;
     float charsize;
     float minsize = 100.0;
     float stringLength;
     float stringHeight;
 
+    string = ajStrNew();
+
     ajStrFromInt(&string, Start);
-    stringLength = ajGraphTextLength( 0, 0, 1, 1, ajStrStr(string) );
+    stringLength = ajGraphTextLength(0, 0, 1, 1, ajStrStr(string) );
     stringHeight = ajGraphTextHeight(0, 0, 1, 1);
-    charsize = ajGraphFitTextOnLine( 0, 0, stringLength/TextCoef,
+    charsize = ajGraphFitTextOnLine(0, 0, stringLength/TextCoef,
 				    stringLength/TextCoef, ajStrStr(string),
 				    stringHeight/TextCoef );
     if( charsize < minsize ) minsize = charsize;
 
     for(i=GapSize; i<End; i+=GapSize)
-	if( i>Start )
+	if(i>Start)
 	{
 	    ajStrFromInt(&string, i);
-	    stringLength = ajGraphTextLength( 0, 0, 1, 1, ajStrStr(string) );
+	    stringLength = ajGraphTextLength(0, 0, 1, 1, ajStrStr(string) );
 	    stringHeight = ajGraphTextHeight(0, 0, 1, 1);
-	    charsize = ajGraphFitTextOnLine( 0, 0, stringLength/TextCoef,
-					     stringLength/TextCoef,
-					     ajStrStr(string),
-					     stringHeight/TextCoef );
-	    if( charsize < minsize )
+	    charsize = ajGraphFitTextOnLine(0, 0, stringLength/TextCoef,
+					    stringLength/TextCoef,
+					    ajStrStr(string),
+					    stringHeight/TextCoef);
+	    if(charsize < minsize)
 		minsize = charsize;
 	}
 
@@ -570,16 +583,17 @@ static float cirdna_TextRulerStr(float Start, float End, ajint GapSize,
 	for(j=0; j<NumLabels[i]; j++)
 	{
 	    if( ajStrMatchCaseC(Style[i][j], "Tick") &&
-	       ajStrMatchCaseC(PosTicks, "Out") ) {
+	       ajStrMatchCaseC(PosTicks, "Out") )
+	    {
 		token = ajStrTokC(Name[i][j], ";");
-		stringLength = ajGraphTextLength( 0, 0, 1, 1,
-						 ajStrStr(token) );
+		stringLength = ajGraphTextLength(0, 0, 1, 1,
+						 ajStrStr(token));
 		stringHeight = ajGraphTextHeight(0, 0, 1, 1);
-		charsize = ajGraphFitTextOnLine( 0, 0, stringLength/TextCoef,
+		charsize = ajGraphFitTextOnLine(0, 0, stringLength/TextCoef,
 						stringLength/TextCoef,
 						ajStrStr(token),
 						stringHeight/TextCoef );
-		if( charsize < minsize )
+		if(charsize < minsize)
 		    minsize = charsize;
 	    }
 	}
@@ -588,6 +602,9 @@ static float cirdna_TextRulerStr(float Start, float End, ajint GapSize,
 
     return minsize;
 }
+
+
+
 
 /* @funcstatic cirdna_HeightRuler *********************************************
 **
@@ -616,27 +633,29 @@ static float cirdna_HeightRuler(float Start, float End, ajint GapSize,
     float stringLength;
     float maxLength = 0.0;
     AjPStr token;
-    AjPStr string = ajStrNew();
+    AjPStr string;
+
+    string = ajStrNew();
 
     RulerHeight = TickHeight+postext;
 
     ajStrFromInt(&string, Start);
     stringLength = ajGraphTextLength( 0, 0, 1, 0, ajStrStr(string) );
-    if( stringLength>maxLength ) maxLength = stringLength;
+    if(stringLength>maxLength)
+	maxLength = stringLength;
+
     for(i=GapSize; i<End; i+=GapSize)
-	if( i>Start )
+	if(i>Start)
 	{
 	    ajStrFromInt(&string, i);
-	    stringLength = ajGraphTextLength( 0, 0, 1, 0, ajStrStr(string) );
-	    if( stringLength>maxLength )
+	    stringLength = ajGraphTextLength(0, 0, 1, 0, ajStrStr(string));
+	    if(stringLength>maxLength)
 		maxLength = stringLength;
 	}
 
     for(i=0; i<NumGroups; i++)
-    {
 	for(j=0; j<NumLabels[i]; j++)
-	{
-	    if( ajStrMatchCaseC(Style[i][j], "Tick") &&
+	    if(ajStrMatchCaseC(Style[i][j], "Tick") &&
 	       ajStrMatchCaseC(PosTicks, "Out") )
 	    {
 		token = ajStrTokC(Name[i][j], ";");
@@ -645,8 +664,6 @@ static float cirdna_HeightRuler(float Start, float End, ajint GapSize,
 		if( stringLength>maxLength )
 		    maxLength = stringLength;
 	    }
-	}
-    }
 
     RulerHeight += maxLength;
 
@@ -654,6 +671,7 @@ static float cirdna_HeightRuler(float Start, float End, ajint GapSize,
 
     return RulerHeight;
 }
+
 
 
 
@@ -691,10 +709,13 @@ static void cirdna_DrawRuler(float xDraw, float yDraw, float Start, float End,
 			     AjPStr PosTicks, ajint Colour)
 {
     ajint i;
-    AjPStr string = ajStrNew();
-    AjPStr posticks = ajStrNew();
+    AjPStr string;
+    AjPStr posticks;
     float *xy;
     float Angle;
+
+    string   = ajStrNew();
+    posticks = ajStrNew();
 
     ajGraphSetFore(Colour);
 
@@ -704,40 +725,46 @@ static void cirdna_DrawRuler(float xDraw, float yDraw, float Start, float End,
 
     /* set the circle's origin */
     ajStrFromInt(&string, Start);
-    if( TickLines )
+    if(TickLines)
     {
 	Angle = cirdna_ComputeAngle(RealLength, 0, OriginAngle);
 	xy = ajComputeCoord(xDraw, yDraw, Radius, Angle);
 	ajGraphDrawLine(xDraw, yDraw, xy[0], xy[1]);
 	AJFREE(xy);
     }
-    if( !cirdna_OverlapTickRuler(NumGroups, NumLabels, From, PosTicks, Start) )
+
+    if(!cirdna_OverlapTickRuler(NumGroups, NumLabels, From, PosTicks, Start) )
 	cirdna_DrawTicks(xDraw, yDraw, RealLength, Radius, TickHeight, 0,
 			 string, OriginAngle, TextLength, TextHeight, postext,
 			 posticks, 1, 0, Colour);
 
     /* draw the ruler's ticks */
-    for(i=GapSize; i<End; i+=GapSize) if( i>Start )
-    {
-	ajStrFromInt(&string, i);
-	if( TickLines )
+    for(i=GapSize; i<End; i+=GapSize)
+	if(i>Start)
 	{
-	    Angle = cirdna_ComputeAngle(RealLength, i-Start, OriginAngle);
-	    xy = ajComputeCoord(xDraw, yDraw, Radius, Angle);
-	    ajGraphDrawLine(xDraw, yDraw, xy[0], xy[1]);
-	    AJFREE(xy);
+	    ajStrFromInt(&string, i);
+	    if( TickLines )
+	    {
+		Angle = cirdna_ComputeAngle(RealLength, i-Start, OriginAngle);
+		xy = ajComputeCoord(xDraw, yDraw, Radius, Angle);
+		ajGraphDrawLine(xDraw, yDraw, xy[0], xy[1]);
+		AJFREE(xy);
+	    }
+	    if(!cirdna_OverlapTickRuler(NumGroups, NumLabels, From, PosTicks,
+					i))
+		cirdna_DrawTicks(xDraw, yDraw, RealLength, Radius, TickHeight,
+				 i-Start, string, OriginAngle, TextLength,
+				 TextHeight, postext, posticks, 1, 0, Colour);
 	}
-	if( !cirdna_OverlapTickRuler(NumGroups, NumLabels, From, PosTicks, i) )
-	    cirdna_DrawTicks(xDraw, yDraw, RealLength, Radius, TickHeight,
-			     i-Start, string, OriginAngle, TextLength,
-			     TextHeight, postext, posticks, 1, 0, Colour);
-    }
 
     ajStrDel(&string);
     ajStrDel(&posticks);
 
     return;
 }
+
+
+
 
 /* @funcstatic cirdna_DrawTicks ***********************************************
 **
@@ -785,11 +812,11 @@ static void cirdna_DrawTicks(float xDraw, float yDraw, float RealLength,
 
     xy1 = ajComputeCoord(xDraw, yDraw, r1Ticks, Angle);
     xy2 = ajComputeCoord(xDraw, yDraw, r2Ticks, Angle);
-    ajGraphDrawLine( xy1[0], xy1[1], xy2[0], xy2[1] );
+    ajGraphDrawLine(xy1[0], xy1[1], xy2[0], xy2[1] );
     AJFREE(xy1);
     AJFREE(xy2);
 
-    if( ajStrMatchCaseC(PosTicks, "In") )
+    if(ajStrMatchCaseC(PosTicks, "In") )
     {
 	stringLength = cirdna_HorTextPileLengthMax(Name2, NumNames);
 	StartAngle = cirdna_ComputeAngle(RealLength, From+stringLength/2,
@@ -803,13 +830,13 @@ static void cirdna_DrawTicks(float xDraw, float yDraw, float RealLength,
     {
 	token = ajStrTokC(Name2, ";");
 	/*ajStrSubstituteCC(&Name2, ";", " ");*/
-	stringLength = ajGraphTextLength( 0, 0, 1, 1, ajStrStr(token) );
+	stringLength = ajGraphTextLength(0, 0, 1, 1, ajStrStr(token) );
 	xy1 = ajComputeCoord(xDraw, yDraw, r2Ticks+postext, Angle);
 	xy2 = ajComputeCoord(xDraw, yDraw, r2Ticks+postext+stringLength,
 			     Angle);
 	xy3 = ajComputeCoord(xDraw, yDraw, r2Ticks+postext-stringLength,
 			     Angle);
-	if( (Angle>=0.0 && Angle<=90.0) || (Angle>=270.0 && Angle<=360.0) ||
+	if((Angle>=0.0 && Angle<=90.0) || (Angle>=270.0 && Angle<=360.0) ||
 	   (Angle>=360.0 && Angle<=450.0) || (Angle>=630.0 && Angle<=720.0) )
 	    ajGraphDrawTextOnLine( xy1[0], xy1[1], xy2[0], xy2[1],
 				  ajStrStr(token), 0.0 );
@@ -823,6 +850,9 @@ static void cirdna_DrawTicks(float xDraw, float yDraw, float RealLength,
 
     return;
 }
+
+
+
 
 /* @funcstatic cirdna_DrawBlocks **********************************************
 **
@@ -864,31 +894,30 @@ static void cirdna_DrawBlocks(float xDraw, float yDraw, float RealLength,
     EndAngle = cirdna_ComputeAngle(RealLength, To, OriginAngle);
 
     ajGraphSetFore(Colour);
-    if( ajStrCmpCaseCC(ajStrStr(BlockType), "Open")==0 )
-    {
+    if(ajStrCmpCaseCC(ajStrStr(BlockType), "Open")==0 )
 	ajGraphRectangleOnCurve(xDraw, yDraw, r2Blocks, BlockHeight,
 				StartAngle, EndAngle);
+    else if( ajStrCmpCaseCC(ajStrStr(BlockType), "Filled")==0 )
+	ajGraphFillRectangleOnCurve(xDraw, yDraw, r2Blocks, BlockHeight,
+				    StartAngle, EndAngle);
+    else
+    {
+	ajGraphFillRectangleOnCurve(xDraw, yDraw, r2Blocks, BlockHeight,
+				    StartAngle, EndAngle);
+	ajGraphSetFore(0);
+	ajGraphRectangleOnCurve(xDraw, yDraw, r2Blocks, BlockHeight,
+				StartAngle, EndAngle);
+	ajGraphSetFore(Colour);
     }
-    else if( ajStrCmpCaseCC(ajStrStr(BlockType), "Filled")==0 ) {
-      ajGraphFillRectangleOnCurve(xDraw, yDraw, r2Blocks, BlockHeight,
-			    StartAngle, EndAngle);
-      }
-    else {
-      ajGraphFillRectangleOnCurve(xDraw, yDraw, r2Blocks, BlockHeight,
-			    StartAngle, EndAngle);
-      ajGraphSetFore(0);
-      ajGraphRectangleOnCurve(xDraw, yDraw, r2Blocks, BlockHeight,
-			    StartAngle, EndAngle);
-      ajGraphSetFore(Colour);
-      }
 
     stringLength = cirdna_HorTextPileLengthMax(Name2, NumNames);
     stringHeight = ajGraphTextHeight(0, 0, 1, 1);
-    StartAngle = cirdna_ComputeAngle(RealLength, (To+From)/2+stringLength/2,
-				     OriginAngle);
+    StartAngle   = cirdna_ComputeAngle(RealLength, (To+From)/2+stringLength/2,
+				       OriginAngle);
     EndAngle = cirdna_ComputeAngle(RealLength, (To+From)/2-stringLength/2,
 				   OriginAngle);
-    if( ajStrMatchCaseC(PosBlocks, "Out") )
+
+    if(ajStrMatchCaseC(PosBlocks, "Out") )
 	cirdna_HorTextPile(xDraw, yDraw, r1Blocks+(Adjust*postext), StartAngle,
 			   EndAngle, Name2, postext, 1);
     else
@@ -898,6 +927,9 @@ static void cirdna_DrawBlocks(float xDraw, float yDraw, float RealLength,
 
     return;
 }
+
+
+
 
 /* @funcstatic cirdna_DrawRanges **********************************************
 **
@@ -928,7 +960,8 @@ static void cirdna_DrawRanges(float xDraw, float yDraw, float RealLength,
 			      ajint NumNames, float postext, ajint Adjust,
 			      ajint Colour)
 {
-    float StartAngle, EndAngle;
+    float StartAngle;
+    float EndAngle;
     float stringLength;
     float rRanges = Radius;
     float rupper = rRanges+(1.0*RangeHeight/2);
@@ -937,7 +970,7 @@ static void cirdna_DrawRanges(float xDraw, float yDraw, float RealLength,
     ajGraphSetFore(Colour);
 
     StartAngle = cirdna_ComputeAngle(RealLength, From, OriginAngle);
-    EndAngle = cirdna_ComputeAngle(RealLength, To, OriginAngle);
+    EndAngle   = cirdna_ComputeAngle(RealLength, To, OriginAngle);
     ajGraphPartCircle(xDraw, yDraw, rRanges, StartAngle, EndAngle);
 
     if( RangeHeight>(From-To)/3 )
@@ -945,49 +978,49 @@ static void cirdna_DrawRanges(float xDraw, float yDraw, float RealLength,
     else
 	BoundaryLength = RangeHeight;
 
-    if( FromSymbol=='<' )
+    if(FromSymbol=='<')
 	cirdna_DrawArrowHeadsOnCurve(xDraw, yDraw, RealLength, RangeHeight,
 				     BoundaryLength, rRanges, StartAngle,
 				     OriginAngle, +1);
-    if( FromSymbol=='>' )
+    if(FromSymbol=='>')
 	cirdna_DrawArrowHeadsOnCurve(xDraw, yDraw, RealLength, RangeHeight,
 				     BoundaryLength, rRanges, StartAngle,
 				     OriginAngle, -1);
-    if( FromSymbol=='[' )
+    if(FromSymbol=='[')
 	cirdna_DrawBracketsOnCurve(xDraw, yDraw, RealLength, RangeHeight,
 				   BoundaryLength, rRanges, StartAngle,
 				   OriginAngle, +1);
-    if( FromSymbol==']' )
+    if(FromSymbol==']')
 	cirdna_DrawBracketsOnCurve(xDraw, yDraw, RealLength, RangeHeight,
 				   BoundaryLength, rRanges, StartAngle,
 				   OriginAngle, -1);
-    if( FromSymbol=='|' )
+    if(FromSymbol=='|')
 	cirdna_DrawBarsOnCurve(xDraw, yDraw, RangeHeight,
 				   rRanges, StartAngle);
 
-    if( ToSymbol=='<' )
+    if(ToSymbol=='<')
 	cirdna_DrawArrowHeadsOnCurve(xDraw, yDraw, RealLength, RangeHeight,
 				     BoundaryLength, rRanges, EndAngle,
 				     OriginAngle, +1);
-    if( ToSymbol=='>' )
+    if(ToSymbol=='>')
 	cirdna_DrawArrowHeadsOnCurve(xDraw, yDraw, RealLength, RangeHeight,
 				     BoundaryLength, rRanges, EndAngle,
 				     OriginAngle, -1);
-    if( ToSymbol=='[' )
+    if(ToSymbol=='[')
 	cirdna_DrawBracketsOnCurve(xDraw, yDraw, RealLength, RangeHeight,
 				   BoundaryLength, rRanges, EndAngle,
 				   OriginAngle, +1);
-    if( ToSymbol==']' )
+    if(ToSymbol==']')
 	cirdna_DrawBracketsOnCurve(xDraw, yDraw, RealLength, RangeHeight,
 				   BoundaryLength, rRanges, EndAngle,
 				   OriginAngle, -1);
-    if( ToSymbol=='|' )
+    if(ToSymbol=='|')
 	cirdna_DrawBarsOnCurve(xDraw, yDraw, RangeHeight,
-				   rRanges, EndAngle);
+			       rRanges, EndAngle);
 
     stringLength = cirdna_HorTextPileLengthMax(Name2, NumNames);
-    StartAngle = cirdna_ComputeAngle(RealLength, (To+From)/2+stringLength/2,
-				     OriginAngle);
+    StartAngle   = cirdna_ComputeAngle(RealLength, (To+From)/2+stringLength/2,
+				       OriginAngle);
     EndAngle = cirdna_ComputeAngle(RealLength, (To+From)/2-stringLength/2,
 				   OriginAngle);
     cirdna_HorTextPile(xDraw, yDraw, rupper+(Adjust*postext), StartAngle,
@@ -995,6 +1028,9 @@ static void cirdna_DrawRanges(float xDraw, float yDraw, float RealLength,
 
     return;
 }
+
+
+
 
 /* @funcstatic cirdna_InterBlocks *********************************************
 **
@@ -1026,12 +1062,17 @@ static void cirdna_InterBlocks(float xDraw, float yDraw, float RealLength,
     ajGraphSetFore(Colour);
 
     StartAngle = cirdna_ComputeAngle(RealLength, To, OriginAngle);
-    EndAngle = cirdna_ComputeAngle(RealLength, From, OriginAngle);
+    EndAngle   = cirdna_ComputeAngle(RealLength, From, OriginAngle);
 
-    if( InterSymbol )
+    if(InterSymbol)
 	ajGraphPartCircle(xDraw, yDraw, (r1Inter+r2Inter)/2, StartAngle,
 			  EndAngle);
+
+    return;
 }
+
+
+
 
 /* @funcstatic cirdna_ComputeAngle ********************************************
 **
@@ -1055,6 +1096,9 @@ static float cirdna_ComputeAngle(float RealLength, float Length,
 
     return 360-j;
 }
+
+
+
 
 /* @funcstatic cirdna_DrawArrowHeadsOnCurve ***********************************
 **
@@ -1086,7 +1130,7 @@ static void cirdna_DrawArrowHeadsOnCurve(float xDraw, float yDraw,
     float middle = 1.0*Height/2;
 
     StartAngle = cirdna_ComputeAngle(RealLength, 0, OriginAngle);
-    EndAngle = cirdna_ComputeAngle(RealLength, Length, OriginAngle);
+    EndAngle   = cirdna_ComputeAngle(RealLength, Length, OriginAngle);
     pos = EndAngle-StartAngle;
 
     if(Way==1)
@@ -1100,6 +1144,7 @@ static void cirdna_DrawArrowHeadsOnCurve(float xDraw, float yDraw,
 	AJFREE(xy1);
 	AJFREE(xy2);
     }
+
     if(Way==-1)
     {
 	xy1 = ajComputeCoord(xDraw, yDraw, Radius, Angle);
@@ -1114,6 +1159,9 @@ static void cirdna_DrawArrowHeadsOnCurve(float xDraw, float yDraw,
 
     return;
 }
+
+
+
 
 /* @funcstatic cirdna_DrawBracketsOnCurve *************************************
 **
@@ -1145,25 +1193,26 @@ static void cirdna_DrawBracketsOnCurve(float xDraw, float yDraw,
     float middle = 1.0*Height/2;
 
     StartAngle = cirdna_ComputeAngle(RealLength, 0, OriginAngle);
-    EndAngle = cirdna_ComputeAngle(RealLength, Length, OriginAngle);
+    EndAngle   = cirdna_ComputeAngle(RealLength, Length, OriginAngle);
     pos = EndAngle-StartAngle;
 
     if(Way==1)
     {
 	xy1 = ajComputeCoord(xDraw, yDraw, Radius+middle, Angle);
 	xy2 = ajComputeCoord(xDraw, yDraw, Radius-middle, Angle);
-	ajGraphDrawLine( xy1[0], xy1[1], xy2[0], xy2[1] );
+	ajGraphDrawLine(xy1[0], xy1[1], xy2[0], xy2[1]);
 	AJFREE(xy1);
 	AJFREE(xy2);
 
 	ajGraphPartCircle(xDraw, yDraw, Radius+middle, Angle, Angle+pos);
 	ajGraphPartCircle(xDraw, yDraw, Radius-middle, Angle, Angle+pos);
     }
+
     if(Way==-1)
     {
 	xy1 = ajComputeCoord(xDraw, yDraw, Radius+middle, Angle);
 	xy2 = ajComputeCoord(xDraw, yDraw, Radius-middle, Angle);
-	ajGraphDrawLine( xy1[0], xy1[1], xy2[0], xy2[1] );
+	ajGraphDrawLine(xy1[0], xy1[1], xy2[0], xy2[1]);
 	AJFREE(xy1);
 	AJFREE(xy2);
 	ajGraphPartCircle(xDraw, yDraw, Radius+middle, Angle, Angle-pos);
@@ -1172,6 +1221,9 @@ static void cirdna_DrawBracketsOnCurve(float xDraw, float yDraw,
 
     return;
 }
+
+
+
 
 /* @funcstatic cirdna_DrawBarsOnCurve *****************************************
 **
@@ -1187,8 +1239,8 @@ static void cirdna_DrawBracketsOnCurve(float xDraw, float yDraw,
 ******************************************************************************/
 
 static void cirdna_DrawBarsOnCurve(float xDraw, float yDraw,
-				       float Height, float Radius,
-				       float Angle)
+				   float Height, float Radius,
+				   float Angle)
 {
     float *xy1;
     float *xy2;
@@ -1202,6 +1254,9 @@ static void cirdna_DrawBarsOnCurve(float xDraw, float yDraw,
 
     return;
 }
+
+
+
 
 /* @funcstatic cirdna_HorTextPile *********************************************
 **
@@ -1247,6 +1302,9 @@ static void cirdna_HorTextPile(float x, float y, float Radius,
     return;
 }
 
+
+
+
 /* @funcstatic cirdna_HorTextPileHeight ***************************************
 **
 ** compute the height of a pile of horizontal text strings
@@ -1267,11 +1325,14 @@ static float cirdna_HorTextPileHeight(float postext, ajint NumNames)
     for(i=0; i<NumNames; i++)
     {
 	stringHeight = ajGraphTextHeight(0, 0, 1, 1);
-	totalHeight+=(stringHeight+postext);
+	totalHeight += (stringHeight+postext);
     }
 
     return totalHeight;
 }
+
+
+
 
 /* @funcstatic cirdna_HorTextPileLengthMax ************************************
 **
@@ -1294,10 +1355,13 @@ static float cirdna_HorTextPileLengthMax(AjPStr Name2, ajint NumNames)
     maxLength = 0.0;
     for(i=0; i<NumNames; i++)
     {
-	if(i==0) token = ajStrTokC(Name2, ";");
-	else token = ajStrTokC(NULL, ";");
+	if(i==0)
+	    token = ajStrTokC(Name2, ";");
+	else
+	    token = ajStrTokC(NULL, ";");
 	stringLength = ajGraphTextLength( 0, 0, 1, 1, ajStrStr(token) );
-	if( stringLength>maxLength )
+
+	if(stringLength>maxLength)
 	    maxLength = stringLength;
     }
 
@@ -1322,19 +1386,20 @@ static void cirdna_ReadInput(AjPFile infile, float *Start, float *End)
     AjPStr line;
 
     line = ajStrNew();
-    while( ajFileReadLine(infile, &line) )
+    while(ajFileReadLine(infile, &line))
     {
 	/* read the start and end positions */
-	if( ajStrPrefixC(line, "Start") )
+	if(ajStrPrefixC(line, "Start"))
 	    sscanf(ajStrStr(line), "%*s%f", Start);
-	if( ajStrPrefixC(line, "End") )
+
+	if(ajStrPrefixC(line, "End"))
 	    sscanf(ajStrStr(line), "%*s%f", End);
     }
 
     ajStrDel(&line);
+
     return;
 }
-
 
 
 
@@ -1371,21 +1436,23 @@ static AjPStr cirdna_ReadGroup(AjPFile infile, float *From, float *To,
     char *style;
     ajlong pos;
 
-    line = ajStrNew();
+    line      = ajStrNew();
     GroupName = ajStrNew();
+
     style = (char *)AJALLOC( 10*sizeof(char) );
 
     /* read the group's name */
     pos = ajFileTell(infile);
-    while( ajFileReadLine(infile, &GroupName) )
+    while(ajFileReadLine(infile, &GroupName))
     {
 	token = ajStrTokC(GroupName, " \n\t\r\f");
-	if( ajStrLen(token)!=0 )
+	if(ajStrLen(token)!=0)
 	{
-	    if( ajStrMatchCaseC(GroupName, "label") ||
-	       ajStrMatchCaseC(GroupName, "endgroup") )
+	    if(ajStrMatchCaseC(GroupName, "label") ||
+	       ajStrMatchCaseC(GroupName, "endgroup"))
 		ajStrAssC(&GroupName, " ");
-	    if( ajStrLen(GroupName)>20 )
+
+	    if(ajStrLen(GroupName)>20)
 		ajStrCut( &GroupName, 20, ajStrLen(GroupName)-1 );
 	    break;
 	}
@@ -1393,33 +1460,36 @@ static AjPStr cirdna_ReadGroup(AjPFile infile, float *From, float *To,
 
     i = 0;
     ajFileSeek(infile, pos, 0);
-    while( ajFileReadLine(infile, &line) )
+    while(ajFileReadLine(infile, &line))
     {
 	token = ajStrTokC(line, " \n\t\r\f");
-	if( ajStrLen(token)!=0 )
+	if(ajStrLen(token)!=0)
 	{
-	    if( ajStrPrefixC(line, "endgroup") )
+	    if(ajStrPrefixC(line, "endgroup"))
 		break;
 	    else
 	    {
 		/* read the group's label(s) */
-		if( ajStrPrefixC(line, "label") )
+		if(ajStrPrefixC(line, "label"))
 		{
-		    while( ajFileReadLine(infile, &line) )
+		    while(ajFileReadLine(infile, &line))
 		    {
 			token = ajStrTokC(line, " \n\t\r\f");
-			if( ajStrLen(token)!=0 )
+			if(ajStrLen(token)!=0)
 			{
 			    FromSymbol[i] = '<';
 			    ToSymbol[i] = '>';
 			    sscanf( ajStrStr(line), "%s", style );
-			    if( ajStrMatchCaseCC(style, "Tick") )
+
+			    if(ajStrMatchCaseCC(style, "Tick"))
 				sscanf( ajStrStr(line), "%*s %f %d %*c",
  				       &From[i], &Colour[i] );
-			    if( ajStrMatchCaseCC(style, "Block") )
+
+			    if(ajStrMatchCaseCC(style, "Block"))
 				sscanf( ajStrStr(line), "%*s %f %f %d %*c",
  				       &To[i], &From[i], &Colour[i] );
-			    if( ajStrMatchCaseCC(style, "Range") )
+
+			    if(ajStrMatchCaseCC(style, "Range"))
 			     sscanf( ajStrStr(line), "%*s %f %f %c %c %d %*c",
 				    &To[i], &From[i],
  				       &FromSymbol[i], &ToSymbol[i],
@@ -1430,13 +1500,14 @@ static AjPStr cirdna_ReadGroup(AjPFile infile, float *From, float *To,
 		    }
 
 		    j = 0;
+
 		    /* read the label's name(s) */
-		    while( ajFileReadLine(infile, &line) )
+		    while(ajFileReadLine(infile, &line))
 		    {
 			token = ajStrTokC(line, " \n\t\r\f");
-			if( ajStrLen(token)!=0 )
+			if(ajStrLen(token)!=0)
 			{
-			    if( ajStrPrefixC(line, "endlabel") )
+			    if(ajStrPrefixC(line, "endlabel"))
 				break;
 			    else
 			    {
@@ -1456,11 +1527,9 @@ static AjPStr cirdna_ReadGroup(AjPFile infile, float *From, float *To,
 
     AJFREE(style);
     ajStrDel(&line);
+
     return GroupName;
 }
-
-
-
 
 
 
@@ -1475,7 +1544,7 @@ static AjPStr cirdna_ReadGroup(AjPFile infile, float *From, float *To,
 ** @param [?] TextLength [float] Undocumented
 ** @param [?] Name [AjPStr*] Undocumented
 ** @param [?] NumLabels [ajint] Undocumented
-** @param [?] NumNames [ajint] Undocumented
+** @param [?] NumNames [ajint*] Undocumented
 ** @param [?] GroupName [AjPStr] Undocumented
 ** @param [?] Style2 [AjPStr*] Undocumented
 ** @param [?] From [float*] Undocumented
@@ -1499,25 +1568,25 @@ static float cirdna_TextGroup(float TextHeight, float TextLength,
     {
 	for(j=0; j<NumNames[i]; j++)
 	{
-	    if( !(ajStrMatchCaseC(Style2[i], "Tick") &&
-		  ajStrMatchCaseC(PosTicks, "Out")) )
+	    if(!(ajStrMatchCaseC(Style2[i], "Tick") &&
+		  ajStrMatchCaseC(PosTicks, "Out")))
 	    {
 		if(j==0)
 		    token = ajStrTokC(Name[i], ";");
 		else
 		    token = ajStrTokC(NULL, ";");
-		if( ajStrMatchCaseC(Style2[i], "Block") &&
-		   ((From[i]-To[i])<TextLength) )
-		    charsize = ajGraphFitTextOnLine( 0, 0, From[i]-To[i],
+		if(ajStrMatchCaseC(Style2[i], "Block") &&
+		   ((From[i]-To[i])<TextLength))
+		    charsize = ajGraphFitTextOnLine(0, 0, From[i]-To[i],
 						    From[i]-To[i],
 						    ajStrStr(token),
-						    TextHeight );
+						    TextHeight);
 		else
-		    charsize = ajGraphFitTextOnLine( 0, 0, TextLength,
+		    charsize = ajGraphFitTextOnLine(0, 0, TextLength,
 						    TextLength,
 						    ajStrStr(token),
-						    TextHeight );
-		if( charsize < minsize )
+						    TextHeight);
+		if(charsize < minsize)
 		    minsize = charsize;
 	    }
 	}
@@ -1525,8 +1594,6 @@ static float cirdna_TextGroup(float TextHeight, float TextLength,
 
     return minsize;
 }
-
-
 
 
 
@@ -1566,30 +1633,30 @@ static float cirdna_TextGroupStr(AjPStr *Name2, ajint NumLabels,
     {
 	for(j=0; j<NumNames[i]; j++)
 	{
-	    if( !(ajStrMatchCaseC(Style2[i], "Tick") &&
-		  ajStrMatchCaseC(PosTicks, "Out")) )
+	    if(!(ajStrMatchCaseC(Style2[i], "Tick") &&
+		  ajStrMatchCaseC(PosTicks, "Out")))
 	    {
 		if(j==0)
 		    token = ajStrTokC(Name2[i], ";");
 		else
 		    token = ajStrTokC(NULL, ";");
-		stringLength = ajGraphTextLength( 0, 0, 1, 1,
-						 ajStrStr(token) );
+		stringLength = ajGraphTextLength(0, 0, 1, 1,
+						 ajStrStr(token));
 		stringHeight = ajGraphTextHeight(0, 0, 1, 1);
-		if( ajStrMatchCaseC(Style2[i], "Block") &&
-		   ((From[i]-To[i])<stringLength) )
-		    charsize = ajGraphFitTextOnLine( 0, 0,
+		if(ajStrMatchCaseC(Style2[i], "Block") &&
+		   ((From[i]-To[i])<stringLength))
+		    charsize = ajGraphFitTextOnLine(0, 0,
 						    (From[i]-To[i])/TextCoef,
 						    (From[i]-To[i])/TextCoef,
 						    ajStrStr(token),
-						    stringHeight/TextCoef );
+						    stringHeight/TextCoef);
 		else
-		    charsize = ajGraphFitTextOnLine( 0, 0,
+		    charsize = ajGraphFitTextOnLine(0, 0,
 						    stringLength/TextCoef,
 						    stringLength/TextCoef,
 						    ajStrStr(token),
-						    stringHeight/TextCoef );
-		if( charsize < minsize )
+						    stringHeight/TextCoef);
+		if(charsize < minsize)
 		    minsize = charsize;
 	    }
 	}
@@ -1638,38 +1705,45 @@ static float cirdna_HeightGroup(float posblock, float posrange, float postext,
 
     for(i=0; i<NumLabels; i++)
     {
-	if( ajStrMatchCaseC(Style2[i], "Tick") &&
-	   ajStrMatchCaseC(PosTicks, "In") )
+	if(ajStrMatchCaseC(Style2[i], "Tick") &&
+	   ajStrMatchCaseC(PosTicks, "In"))
 	{
 	    uheight = TickHeight;
 	    lheight = 0.0;
 	    uheight+=cirdna_HorTextPileHeight(postext, 1);
-	    if( uheight > umaxheight )
+
+	    if(uheight > umaxheight)
 		umaxheight = uheight;
-	    if( lheight > lmaxheight )
+
+	    if(lheight > lmaxheight)
 		lmaxheight = lheight;
 	}
 
-	if( ajStrMatchCaseC(Style2[i], "Block") )
+	if(ajStrMatchCaseC(Style2[i], "Block"))
 	{
 	    uheight = 1.0*BlockHeight/2;
 	    lheight = 1.0*BlockHeight/2;
-	    if( ajStrMatchCaseC(PosBlocks, "Out") )
+
+	    if(ajStrMatchCaseC(PosBlocks, "Out"))
 		uheight+=cirdna_HorTextPileHeight(postext, 1);
-	    if( uheight > umaxheight )
+
+	    if(uheight > umaxheight)
 		umaxheight = uheight;
+
 	    if( lheight > lmaxheight )
 		lmaxheight = lheight;
 	}
 
-	if( ajStrMatchCaseC(Style2[i], "Range") )
+	if(ajStrMatchCaseC(Style2[i], "Range"))
 	{
 	    uheight = 1.0*RangeHeight/2;
 	    lheight = 1.0*RangeHeight/2;
 	    uheight+=cirdna_HorTextPileHeight(postext, 1);
-	    if( uheight > umaxheight )
+
+	    if(uheight > umaxheight)
 		umaxheight = uheight;
-	    if( lheight > lmaxheight )
+
+	    if(lheight > lmaxheight)
 		lmaxheight = lheight;
 	}
     }
@@ -1678,7 +1752,6 @@ static float cirdna_HeightGroup(float posblock, float posrange, float postext,
 
     return GroupHeight;
 }
-
 
 
 
@@ -1718,16 +1791,16 @@ static ajint cirdna_OverlapTextGroup(AjPStr *Name2, AjPStr *Style2,
     /* compute the length of the horizontal strings */
     for(i=0; i<NumLabels; i++)
     {
-	if( ajStrMatchCaseC(Style2[i], "Tick") &&
-	   ajStrMatchCaseC(PosTicks, "In") )
+	if(ajStrMatchCaseC(Style2[i], "Tick") &&
+	   ajStrMatchCaseC(PosTicks, "In"))
 	{
 	    token = ajStrTokC(Name2[i], ";");
-	    stringLength = ajGraphTextLength( 0, 0, 1, 1, ajStrStr(token) );
+	    stringLength = ajGraphTextLength(0, 0, 1, 1, ajStrStr(token));
 	    ulim = From[i]+stringLength/2;
-	    if( ulim>(End-Start-1) )
+	    if(ulim>(End-Start-1))
 		ulim = End-Start-1-ulim;
 	    llim = From[i]-stringLength/2;
-	    if( (ulim<0.0) || (llim<0.0) )
+	    if((ulim<0.0) || (llim<0.0))
 	    {
 		FromText[i] = llim;
 		ToText[i] = ulim;
@@ -1738,15 +1811,15 @@ static ajint cirdna_OverlapTextGroup(AjPStr *Name2, AjPStr *Style2,
 		ToText[i] = llim;
 	    }
 	}
-	else if( ajStrMatchCaseC(Style2[i], "Block") )
+	else if(ajStrMatchCaseC(Style2[i], "Block"))
 	{
 	    token = ajStrTokC(Name2[i], ";");
 	    stringLength = ajGraphTextLength( 0, 0, 1, 1, ajStrStr(token) );
 	    ulim = (To[i]+From[i])/2+stringLength/2;
-	    if( ulim>(End-Start-1) )
+	    if(ulim>(End-Start-1))
 		ulim = End-Start-1-ulim;
 	    llim = (To[i]+From[i])/2-stringLength/2;
-	    if( (ulim<0.0) || (llim<0.0) )
+	    if((ulim<0.0) || (llim<0.0))
 	    {
 		FromText[i] = llim;
 		ToText[i] = ulim;
@@ -1757,15 +1830,15 @@ static ajint cirdna_OverlapTextGroup(AjPStr *Name2, AjPStr *Style2,
 		ToText[i] = llim;
 	    }
 	}
-	else if( ajStrMatchCaseC(Style2[i], "Range") )
+	else if(ajStrMatchCaseC(Style2[i], "Range"))
 	{
 	    token = ajStrTokC(Name2[i], ";");
-	    stringLength = ajGraphTextLength( 0, 0, 1, 1, ajStrStr(token) );
+	    stringLength = ajGraphTextLength(0, 0, 1, 1, ajStrStr(token));
 	    ulim = (To[i]+From[i])/2+stringLength/2;
-	    if( ulim>(End-Start-1) )
+	    if(ulim>(End-Start-1))
 		ulim = End-Start-1-ulim;
 	    llim = (To[i]+From[i])/2-stringLength/2;
-	    if( (ulim<0.0) || (llim<0.0) )
+	    if((ulim<0.0) || (llim<0.0))
 	    {
 		FromText[i] = llim;
 		ToText[i] = ulim;
@@ -1777,46 +1850,46 @@ static ajint cirdna_OverlapTextGroup(AjPStr *Name2, AjPStr *Style2,
 	    }
 	}
 	else
-	{
 	    FromText[i] =  ToText[i] = 0.0;
-	    /*    ajUser("HELLO should not get here: *%d*%S*",i,Style2[i]);*/
-	}
     }
 
     /*
-     *  if some strings overlap, the position of the overlapping strings
-     *  is moved upwards by Adjust
-     */
+    **  if some strings overlap, the position of the overlapping strings
+    **  is moved upwards by Adjust
+    */
     for(i=0; i<NumLabels; i++)
 	Adjust[i] = 0;
+
     for(i=0; i<NumLabels; i++)
     {
 	for(j=0; j<NumLabels; j++)
 	{
-	    if( (i!=j) && (Adjust[i]==Adjust[j]) )
+	    if((i!=j) && (Adjust[i]==Adjust[j]))
 	    {
 		if(j>i)
 		{
-		    if( FromText[i]<0.0 )
+		    if(FromText[i]<0.0)
 		    {
 			ulim = End-Start-1+FromText[i];
-			if( (ToText[j]<=ulim) && (FromText[j]>=ulim) )
+			if((ToText[j]<=ulim) && (FromText[j]>=ulim))
 			    Adjust[j] = Adjust[i]+1;
 		    }
-		    if( (ToText[j]<=FromText[i]) &&
-		       (FromText[j]>=FromText[i]) )
+		    if((ToText[j]<=FromText[i]) &&
+		       (FromText[j]>=FromText[i]))
 			Adjust[j] = Adjust[i]+1;
 		}
+
 		if(i>j)
 		{
-		    if( FromText[j]<0.0 )
+		    if(FromText[j]<0.0)
 		    {
 			ulim = End-Start-1+FromText[j];
-			if( (ToText[i]<=ulim) && (FromText[i]>=ulim) )
+			if((ToText[i]<=ulim) && (FromText[i]>=ulim))
 			    Adjust[i] = Adjust[j]+1;
 		    }
-		    if( (ToText[i]<=FromText[j]) &&
-		       (FromText[i]>=FromText[j]) )
+
+		    if((ToText[i]<=FromText[j]) &&
+		       (FromText[i]>=FromText[j]))
 			Adjust[i] = Adjust[j]+1;
 		}
 	    }
@@ -1825,7 +1898,7 @@ static ajint cirdna_OverlapTextGroup(AjPStr *Name2, AjPStr *Style2,
 
     AdjustMax = 0.0;
     for(i=0; i<NumLabels; i++)
-	if( Adjust[i]>AdjustMax )
+	if(Adjust[i]>AdjustMax)
 	    AdjustMax = Adjust[i];
 
     return AdjustMax;
@@ -1857,17 +1930,18 @@ static AjBool cirdna_OverlapTickRuler(ajint NumGroups, ajint *NumLabels,
     for(i=0; i<NumGroups; i++)
 	for(j=0; j<NumLabels[i]; j++)
 	{
-	    if( ajStrMatchCaseC(Style[i][j], "Tick") &&
+	    if(ajStrMatchCaseC(Style[i][j], "Tick") &&
 	       ajStrMatchCaseC(PosTicks, "Out") &&
-	       From[(i*MAXLABELS)+j]==RulerTick )
+	       From[(i*MAXLABELS)+j]==RulerTick)
 	    {
 		overlap = 1;
 		break;
 	    }
 	}
 
-    if( overlap==0 )
+    if(overlap==0)
 	return ajFalse;
+
     return ajTrue;
 }
 
@@ -1923,7 +1997,8 @@ static void cirdna_DrawGroup(float xDraw, float yDraw, float posblock,
 			     ajint NumLabels, AjPStr GroupName,
 			     float OriginAngle, ajint *NumNames,
 			     AjPStr PosTicks, AjPStr PosBlocks, ajint *Adjust,
-			     ajint InterColour, ajint *Colour, AjPStr BlockType)
+			     ajint InterColour, ajint *Colour,
+			     AjPStr BlockType)
 {
     ajint i;
     ajint j;
@@ -1934,16 +2009,16 @@ static void cirdna_DrawGroup(float xDraw, float yDraw, float posblock,
     /* draw all labels */
     for(j=0, i=0; i<NumLabels; i++)
     {
-	if( ajStrMatchCaseC(Style2[i], "Tick") )
+	if(ajStrMatchCaseC(Style2[i], "Tick"))
 	{
-	    if( ajStrMatchCaseC(PosTicks, "In") )
+	    if(ajStrMatchCaseC(PosTicks, "In"))
 	    {
 		cirdna_DrawTicks(xDraw, yDraw, RealLength, Radius, TickHeight,
 				 From[i], Name2[i], OriginAngle, TextLength,
 				 TextHeight, postext, PosTicks, NumNames[i],
 				 Adjust[i], Colour[i]);
-		if( InterTicks )
-		    ajGraphCircle( xDraw, yDraw, Radius );
+		if(InterTicks)
+		    ajGraphCircle(xDraw, yDraw, Radius);
 	    }
 	    else
 		cirdna_DrawTicks(xDraw, yDraw, RealLength, RadiusMax,
@@ -1961,7 +2036,7 @@ static void cirdna_DrawGroup(float xDraw, float yDraw, float posblock,
 	    Inter[j++] = i;
 	}
 
-	if( ajStrMatchCaseC(Style2[i], "Range") )
+	if(ajStrMatchCaseC(Style2[i], "Range"))
 	    cirdna_DrawRanges(xDraw, yDraw, RealLength, Radius-posrange,
 			      RangeHeight, From[i], To[i], FromSymbol[i],
 			      ToSymbol[i], Name2[i], OriginAngle, NumNames[i],

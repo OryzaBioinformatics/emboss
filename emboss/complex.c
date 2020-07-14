@@ -52,23 +52,23 @@ int main(int argc, char **argv)
 
     float MedValue = 0.0;
 
-    embInit ("complex",argc,argv);
+    embInit("complex",argc,argv);
 
-    lwin  = ajAcdGetInt ("lwin");
-    step  = ajAcdGetInt ("step");
-    sim   = ajAcdGetInt ("sim");
-    jmin  = ajAcdGetInt ("jmin");
-    jmax  = ajAcdGetInt ("jmax");
+    lwin  = ajAcdGetInt("lwin");
+    step  = ajAcdGetInt("step");
+    sim   = ajAcdGetInt("sim");
+    jmin  = ajAcdGetInt("jmin");
+    jmax  = ajAcdGetInt("jmax");
 
-    omnia = ajAcdGetBool ("omnia");
-    freq  = ajAcdGetBool ("freq");
-    print = ajAcdGetBool ("print");
+    omnia = ajAcdGetBool("omnia");
+    freq  = ajAcdGetBool("freq");
+    print = ajAcdGetBool("print");
 
-    seqall = ajAcdGetSeqall ("sequence");
+    seqall = ajAcdGetSeqall("sequence");
 
-    seqout = ajAcdGetSeqoutall ("outseq");
+    seqout = ajAcdGetSeqoutall("outseq");
     outfile = ajAcdGetOutfile("outfile");
-    pfile = ajAcdGetOutfile("ujtable");
+    pfile = ajAcdGetOutfile("ujtablefile");
 
     ajDebug("Output file: %F \n",outfile);
 
@@ -76,9 +76,9 @@ int main(int argc, char **argv)
     {
 	embComWriteFile(outfile,jmin,jmax,lwin,step,sim);
 
-	while (ajSeqallNext(seqall, &seq))
+	while(ajSeqallNext(seqall, &seq))
 	{
-	    ajSeqAllWrite (seqout,seq);
+	    ajSeqAllWrite(seqout,seq);
 	    len = ajSeqLen(seq);
 	    name = ajSeqName(seq);
 
@@ -109,13 +109,10 @@ int main(int argc, char **argv)
     }
 
 
-    ajFileClose (&pfile);
-
-    ajFileClose (&outfile);
-
-    /*    ajUser("%d %d %d %d %d",lwin,step,sim,jmin,jmax); */
-    /*embComGraphComplex();*/
+    ajFileClose(&pfile);
+    ajFileClose(&outfile);
 
     ajExit();
+
     return 0;
 }

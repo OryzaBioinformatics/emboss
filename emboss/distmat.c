@@ -33,9 +33,14 @@
 
 #include "emboss.h"
 #include "math.h"
+
+
+
+
 #define IUBFILE "Ebases.iub"
 
 AjIUB aj_base_iubS[256];      /* base letters and their alternatives */
+
 
 
 
@@ -74,6 +79,8 @@ static char** distmat_getSeq(AjPSeqset seqset, ajint nseqs, ajint mlen,
 			     ajint incr, ajint posn, ajint* len);
 
 
+
+
 int main (int argc, char * argv[])
 {
     ajint nseqs;
@@ -90,33 +97,31 @@ int main (int argc, char * argv[])
     char  *p;
     char **seqcharptr;
 
-    AjPSeqset seqset=NULL;
-    AjPFloat2d match=NULL;
-    AjPFloat2d matchDist=NULL;
-    AjPFloat2d gap=NULL;
+    AjPSeqset seqset = NULL;
+    AjPFloat2d match = NULL;
+    AjPFloat2d matchDist = NULL;
+    AjPFloat2d gap = NULL;
     AjPStr* methodlist;
-    AjPFile outf=NULL;
+    AjPFile outf = NULL;
 
-    AjBool nuc=ajFalse;
+    AjBool nuc = ajFalse;
     AjBool ambig;
     AjBool calc_a;
 
 
+    embInit("distmat", argc, argv);
 
-
-    embInit ("distmat", argc, argv);
-
-    seqset = ajAcdGetSeqset ("sequence");
+    seqset = ajAcdGetSeqset("sequence");
 
     if(ajSeqsetIsNuc(seqset))		/* nucleic acid seq */
 	nuc = ajTrue;
-    else if ( ajSeqsetIsProt(seqset))
+    else if( ajSeqsetIsProt(seqset))
 	nuc = ajFalse;
     else
 	ajExit();
 
 
-    outf   = ajAcdGetOutfile("outfile");	/* output filename  */
+    outf   = ajAcdGetOutfile("outfile"); /* output filename  */
     ambig  = ajAcdGetBool("ambiguous");
     gapwt  = ajAcdGetFloat("gapweight");
     if(nuc)
@@ -145,14 +150,14 @@ int main (int argc, char * argv[])
     else if(posn == 23 || posn == 13 || posn != 12)
 	ajFatal("Choose base positions 1, 2, 3, 12, or 123");
 
-    (void) ajStrToInt(methodlist[0], &method);
+    ajStrToInt(methodlist[0], &method);
 
     nseqs = ajSeqsetSize(seqset);
     if(nseqs<2)
 	ajFatal("Insufficient sequences (%d) to create a matrix",nseqs);
 
     mlen = ajSeqsetLen(seqset);
-    for(i=0;i<nseqs;++i)		/* check seqs are same length */
+    for(i=0;i<nseqs;++i)	      /* check seqs are same length */
     {
 	p = ajSeqsetSeq(seqset,i);
 	if(strlen(p)!=mlen)
@@ -198,7 +203,8 @@ int main (int argc, char * argv[])
     if(method == 0 || method == 1 || method == 4 )
         ajFloat2dDel(&gap);
 
-    ajExit ();
+    ajExit();
+
     return 0;
 }
 
@@ -217,9 +223,9 @@ int main (int argc, char * argv[])
 ** @return [AjPFloat2d] corrected distance matrix
 **
 ******************************************************************************/
+
 static AjPFloat2d distmat_Tamura(char** seqcharptr, ajint len, ajint nseqs)
 {
-
     ajint i;
     ajint j;
     ajint k;
@@ -237,13 +243,13 @@ static AjPFloat2d distmat_Tamura(char** seqcharptr, ajint len, ajint nseqs)
     float geecee;
     float cgap;
 
-    AjPInt2d Ptrans=NULL;
-    AjPInt2d Qtranv=NULL;
-    AjPInt2d score=NULL;
+    AjPInt2d Ptrans = NULL;
+    AjPInt2d Qtranv = NULL;
+    AjPInt2d score  = NULL;
 
-    AjPFloat2d matDist=NULL;
-    AjPFloat2d gap=NULL;
-    AjPFloat2d GC=NULL;
+    AjPFloat2d matDist = NULL;
+    AjPFloat2d gap     = NULL;
+    AjPFloat2d GC      = NULL;
 
     Ptrans  = ajInt2dNew();
     Qtranv  = ajInt2dNew();
@@ -268,8 +274,10 @@ static AjPFloat2d distmat_Tamura(char** seqcharptr, ajint len, ajint nseqs)
 	}
     }
 
-    /* calc GC content for each seq for each pair */
-    /* of seq - ignoring gap posns in both seqs   */
+    /*
+    ** calc GC content for each seq for each pair
+    ** of seq - ignoring gap posns in both seqs
+    */
     for(i=0;i<nseqs;++i)
     {
 	for(j=0; j<nseqs; j++)
@@ -389,10 +397,10 @@ static AjPFloat2d distmat_Kimura(char** seqcharptr, ajint len, ajint nseqs)
     ajint trans;
     ajint tranv;
 
-    AjPFloat2d matDist=NULL;
-    AjPInt2d Ptrans=NULL;
-    AjPInt2d Qtranv=NULL;
-    AjPInt2d match=NULL;
+    AjPFloat2d matDist = NULL;
+    AjPInt2d Ptrans    = NULL;
+    AjPInt2d Qtranv    = NULL;
+    AjPInt2d match     = NULL;
 
 
 
@@ -463,6 +471,7 @@ static AjPFloat2d distmat_Kimura(char** seqcharptr, ajint len, ajint nseqs)
 
 
 
+
 /* @funcstatic distmat_KimuraProt *********************************************
 **
 ** Kimura protein distance
@@ -488,9 +497,9 @@ static AjPFloat2d distmat_KimuraProt(char** seqcharptr, ajint mlen,
     float D;
     float m;
 
-    AjPFloat2d matDist=NULL;
-    AjPFloat2d match=NULL;
-    AjPInt2d scored=NULL;
+    AjPFloat2d matDist = NULL;
+    AjPFloat2d match   = NULL;
+    AjPInt2d scored    = NULL;
 
 
 
@@ -553,6 +562,8 @@ static AjPFloat2d distmat_KimuraProt(char** seqcharptr, ajint mlen,
 }
 
 
+
+
 /* @funcstatic distmat_calc_match *********************************************
 **
 ** Sum the no. of matches between each pair of sequence in an
@@ -580,7 +591,7 @@ static AjPFloat2d distmat_calc_match(char** seqcharptr, ajint len, ajint nseqs,
     char m2;
 
     float m;
-    AjPFloat2d match=NULL;
+    AjPFloat2d match = NULL;
 
 
 
@@ -600,9 +611,7 @@ static AjPFloat2d distmat_calc_match(char** seqcharptr, ajint len, ajint nseqs,
 
 
     for(i=0;i<nseqs;i++)
-    {
 	for(j=i+1;j<nseqs;j++)
-	{
 	    for(k=0; k< len; k++)
 	    {
 		m1 = seqcharptr[i][k];
@@ -632,12 +641,10 @@ static AjPFloat2d distmat_calc_match(char** seqcharptr, ajint len, ajint nseqs,
 		    ajFloat2dPut(gap,i,j,m);
 		}
 	    }
-	}
-    }
-
 
     return match;
 }
+
 
 
 
@@ -662,7 +669,6 @@ static AjPFloat2d distmat_uncorrected(AjPFloat2d match, AjPFloat2d gap,
 				      float gapwt, ajint len, ajint nseqs,
 				      AjBool nuc)
 {
-
     ajint i;
     ajint j;
 
@@ -670,7 +676,7 @@ static AjPFloat2d distmat_uncorrected(AjPFloat2d match, AjPFloat2d gap,
     float g;
     float D;
 
-    AjPFloat2d matchUn=NULL;
+    AjPFloat2d matchUn = NULL;
 
 
     matchUn = ajFloat2dNew();
@@ -694,6 +700,7 @@ static AjPFloat2d distmat_uncorrected(AjPFloat2d match, AjPFloat2d gap,
 
 
 
+
 /* @funcstatic distmat_TajimaNei **********************************************
 **
 ** Tajima-Nei correction used for multiple substitutions in the calc
@@ -713,6 +720,7 @@ static AjPFloat2d distmat_uncorrected(AjPFloat2d match, AjPFloat2d gap,
 ** @return [AjPFloat2d] corrected distance matrix
 **
 ******************************************************************************/
+
 static AjPFloat2d distmat_TajimaNei(char** seqcharptr, AjPFloat2d match,
 				    ajint mlen, ajint nseqs, AjBool nuc)
 {
@@ -728,23 +736,25 @@ static AjPFloat2d distmat_TajimaNei(char** seqcharptr, AjPFloat2d match,
     ajint pair;
     ajint val;
 
-    AjPInt2d len=NULL;
-    AjPInt3d pfreq=NULL;
-    AjPInt3d cbase=NULL;
+    AjPInt2d len   = NULL;
+    AjPInt3d pfreq = NULL;
+    AjPInt3d cbase = NULL;
 
     float fi;
     float fj;
     float fij;
     float fij2;
-    float ci1,ci2;
-    float cj1,cj2;
+    float ci1;
+    float ci2;
+    float cj1;
+    float cj2;
     float slen;
     float h;
     float m;
     float D;
     float b;
 
-    AjPFloat2d matchTN=NULL;
+    AjPFloat2d matchTN = NULL;
 
 
     len   = ajInt2dNew();		/* scored length for pairs */
@@ -768,9 +778,7 @@ static AjPFloat2d distmat_TajimaNei(char** seqcharptr, AjPFloat2d match,
 
     /* calc content of each seq  - ignoring gaps */
     for(i=0;i<nseqs;i++)
-    {
 	for(j=0;j<nseqs;j++)
-	{
 	    for(l=0; l< mlen; l++)
 	    {
 		ti = toupper((int) seqcharptr[i][l]);
@@ -808,37 +816,37 @@ static AjPFloat2d distmat_TajimaNei(char** seqcharptr, AjPFloat2d match,
 		    if(ti != tj)
 		    {
 
-			if( (strchr("A",ti) && strchr("T",tj)) ||
+			if((strchr("A",ti) && strchr("T",tj)) ||
 			   (strchr("T",ti) && strchr("A",tj)) )
 			{		/* AT pair */
 			    val = ajInt3dGet(pfreq,i,j,0)+1;
 			    ajInt3dPut(&pfreq,i,j,0,val);
 			}
-			else if( (strchr("A",ti) && strchr("C",tj)) ||
+			else if((strchr("A",ti) && strchr("C",tj)) ||
 				(strchr("C",ti) && strchr("A",tj)) )
 			{		/* AC pair */
 			    val = ajInt3dGet(pfreq,i,j,1)+1;
 			    ajInt3dPut(&pfreq,i,j,1,val);
 			}
-			else if( (strchr("A",ti) && strchr("G",tj)) ||
+			else if((strchr("A",ti) && strchr("G",tj)) ||
 				(strchr("G",ti) && strchr("A",tj)) )
 			{		/* AG pair */
 			    val = ajInt3dGet(pfreq,i,j,2)+1;
 			    ajInt3dPut(&pfreq,i,j,2,val);
 			}
-			else if( (strchr("T",ti) && strchr("C",tj)) ||
+			else if((strchr("T",ti) && strchr("C",tj)) ||
 				(strchr("C",ti) && strchr("T",tj)) )
 			{		/* TC pair */
 			    val = ajInt3dGet(pfreq,i,j,3)+1;
 			    ajInt3dPut(&pfreq,i,j,3,val);
 			}
-			else if( (strchr("T",ti) && strchr("G",tj)) ||
+			else if((strchr("T",ti) && strchr("G",tj)) ||
 				(strchr("G",ti) && strchr("T",tj)) )
 			{		/* TG pair */
 			    val = ajInt3dGet(pfreq,i,j,4)+1;
 			    ajInt3dPut(&pfreq,i,j,4,val);
 			}
-			else if( (strchr("C",ti) && strchr("G",tj)) ||
+			else if((strchr("C",ti) && strchr("G",tj)) ||
 				(strchr("G",ti) && strchr("C",tj)) )
 			{		/* CG pair */
 			    val = ajInt3dGet(pfreq,i,j,5)+1;
@@ -847,12 +855,10 @@ static AjPFloat2d distmat_TajimaNei(char** seqcharptr, AjPFloat2d match,
 		    }
 		}
 	    }
-	}
-    }
+    
 
     /* calc distance matrix */
     for(i=0;i<nseqs;i++)
-    {
 	for(j=i+1;j<nseqs;j++)
 	{
 	    slen = (float)ajInt2dGet(len,i,j);
@@ -894,7 +900,6 @@ static AjPFloat2d distmat_TajimaNei(char** seqcharptr, AjPFloat2d match,
 
 	    ajFloat2dPut(&matchTN,i,j, (-b*log(1.-(D/b))) );
 	}
-    }
 
 
     ajInt2dDel(&len);
@@ -903,7 +908,6 @@ static AjPFloat2d distmat_TajimaNei(char** seqcharptr, AjPFloat2d match,
 
     return matchTN;
 }
-
 
 
 
@@ -921,10 +925,10 @@ static AjPFloat2d distmat_TajimaNei(char** seqcharptr, AjPFloat2d match,
 ** @param [r] var_a [float] Variable
 ** @return [AjPFloat2d] corrected distance matrix
 ******************************************************************************/
+
 static AjPFloat2d distmat_JinNei(char** seqcharptr, ajint mlen, ajint nseqs,
 				 AjBool calc_a, float var_a)
 {
-
     ajint i;
     ajint j;
     ajint k;
@@ -933,7 +937,7 @@ static AjPFloat2d distmat_JinNei(char** seqcharptr, ajint mlen, ajint nseqs,
     ajint t2;
     ajint trans;
     ajint tranv;
-    ajint slen=0;
+    ajint slen = 0;
 
     float av;
     float var;
@@ -941,13 +945,13 @@ static AjPFloat2d distmat_JinNei(char** seqcharptr, ajint mlen, ajint nseqs,
     float P;
     float Q;
 
-    AjPFloat2d matDist=NULL;
-    AjPFloat2d cval=NULL;
-    AjPFloat2d avL=NULL;
+    AjPFloat2d matDist = NULL;
+    AjPFloat2d cval    = NULL;
+    AjPFloat2d avL     = NULL;
 
-    AjPInt2d Ptrans=NULL;
-    AjPInt2d Qtranv=NULL;
-    AjPInt2d len=NULL;
+    AjPInt2d Ptrans = NULL;
+    AjPInt2d Qtranv = NULL;
+    AjPInt2d len    = NULL;
 
 
     matDist = ajFloat2dNew();
@@ -959,7 +963,6 @@ static AjPFloat2d distmat_JinNei(char** seqcharptr, ajint mlen, ajint nseqs,
 
     /* initialise array */
     for(i=0;i<nseqs;++i)
-    {
 	for(j=i+1;j<nseqs;++j)
 	{
 	    ajFloat2dPut(&matDist,i,j,0.);
@@ -968,15 +971,12 @@ static AjPFloat2d distmat_JinNei(char** seqcharptr, ajint mlen, ajint nseqs,
 	    ajInt2dPut(&len,i,j,0);
 	    ajFloat2dPut(&avL,i,j,0);
 	}
-    }
 
 
     /* calc transition & transversion subst.'s */
     for(i=0;i<nseqs;i++)
-    {
 	for(j=i+1;j<nseqs;j++)
 	{
-
 	    av = ajFloat2dGet(avL,i,j);
 	    for(k=0; k< mlen; k++)
 	    {
@@ -1002,13 +1002,10 @@ static AjPFloat2d distmat_JinNei(char** seqcharptr, ajint mlen, ajint nseqs,
 	    }
 	    ajFloat2dPut(&avL,i,j,av/slen);
 	}
-    }
 
 
     if(calc_a)		/* calc inverse of coeff of variance */
-    {
 	for(i=0;i<nseqs;i++)
-	{
 	    for(j=i+1;j<nseqs;j++)
 	    {
 		slen = (float)ajInt2dGet(len,i,j);
@@ -1036,12 +1033,10 @@ static AjPFloat2d distmat_JinNei(char** seqcharptr, ajint mlen, ajint nseqs,
 		var = var/slen;
 		ajFloat2dPut(&cval,i,j,(av*av)/var);
 	    }
-	}
-    }
+
 
     /* calc the dist matrix */
     for(i=0;i<nseqs;i++)
-    {
 	for(j=i+1;j<nseqs;j++)
 	{
 	    slen = ajInt2dGet(len,i,j);
@@ -1057,7 +1052,6 @@ static AjPFloat2d distmat_JinNei(char** seqcharptr, ajint mlen, ajint nseqs,
 
 	    ajFloat2dPut(&matDist,i,j,dist);
 	}
-    }
 
     ajFloat2dDel(&cval);
     ajFloat2dDel(&avL);
@@ -1100,7 +1094,6 @@ static AjPFloat2d distmat_JukesCantor(AjPFloat2d match, AjPFloat2d gap,
 				      float gapwt, ajint mlen, ajint nseqs,
 				      AjBool nuc)
 {
-
     ajint i;
     ajint j;
 
@@ -1109,7 +1102,7 @@ static AjPFloat2d distmat_JukesCantor(AjPFloat2d match, AjPFloat2d gap,
     float b;
     float D;
 
-    AjPFloat2d matchJC=NULL;
+    AjPFloat2d matchJC = NULL;
 
 
     b = 19./20.;
@@ -1123,7 +1116,6 @@ static AjPFloat2d distmat_JukesCantor(AjPFloat2d match, AjPFloat2d gap,
 
 
     for(j=0;j<nseqs;j++)
-    {
 	for(i=j;i<nseqs;i++)
 	{
 	    m = ajFloat2dGet(match,j,i); /* no. matches */
@@ -1133,11 +1125,11 @@ static AjPFloat2d distmat_JukesCantor(AjPFloat2d match, AjPFloat2d gap,
 
 	    ajFloat2dPut(&matchJC,j,i, (-b * log(1. - (D/b))) );
 	}
-    }
 
 
     return matchJC;
 }
+
 
 
 
@@ -1153,6 +1145,7 @@ static AjPFloat2d distmat_JukesCantor(AjPFloat2d match, AjPFloat2d gap,
 ** @return [void]
 **
 ******************************************************************************/
+
 static void distmat_checkRY(ajint t1, ajint t2, ajint* trans, ajint* tranv)
 {
 
@@ -1163,21 +1156,21 @@ static void distmat_checkRY(ajint t1, ajint t2, ajint* trans, ajint* tranv)
 	else if(strchr("CTUY",t2))	/* transversion */
 	    ++*tranv;
     }
-    else if (strchr("AG",t1))
+    else if(strchr("AG",t1))
     {
 	if(strchr("R",t2))		/* transitions */
 	    ++*trans;
 	else if(strchr("Y",t2))		/* transversion */
 	    ++*tranv;
     }
-    else if (strchr("Y",t1))
+    else if(strchr("Y",t1))
     {
 	if(strchr("CTUY",t2))		/* transitions */
 	    ++*trans;
 	else if(strchr("AGR",t2))	/* transversion */
 	    ++*tranv;
     }
-    else if (strchr("CTU",t1))
+    else if(strchr("CTU",t1))
     {
 	if(strchr("Y",t2))		/* transitions */
 	    ++*trans;
@@ -1187,6 +1180,8 @@ static void distmat_checkRY(ajint t1, ajint t2, ajint* trans, ajint* tranv)
 
     return;
 }
+
+
 
 
 /* @funcstatic distmat_checkSubs **********************************************
@@ -1201,10 +1196,9 @@ static void distmat_checkRY(ajint t1, ajint t2, ajint* trans, ajint* tranv)
 ** @return [void]
 **
 ******************************************************************************/
+
 static void distmat_checkSubs(ajint t1, ajint t2, ajint* trans, ajint* tranv)
 {
-
-
     if(strchr("A",t1))
     {
 	if(strchr("G",t2))		/* transitions */
@@ -1212,7 +1206,7 @@ static void distmat_checkSubs(ajint t1, ajint t2, ajint* trans, ajint* tranv)
 	else if(strchr("CTU",t2))	/* transversion */
 	    ++*tranv;
     }
-    else if (strchr("G",t1))
+    else if(strchr("G",t1))
     {
 	if(strchr("A",t2))		/* transitions */
 	    ++*trans;
@@ -1241,9 +1235,9 @@ static void distmat_checkSubs(ajint t1, ajint t2, ajint* trans, ajint* tranv)
 	    ++*tranv;
     }
 
-
     return;
 }
+
 
 
 
@@ -1256,19 +1250,19 @@ static void distmat_checkSubs(ajint t1, ajint t2, ajint* trans, ajint* tranv)
 ** @return [float] Estimated distance score
 **
 ******************************************************************************/
+
 static float distmat_checkambigProt(ajint t1, ajint t2)
 {
     float n;
-
 
     n = 0.;
 
     if( !strchr("X",t1) && t1 == t2 )
 	n = 1.0;
-    else if( ((strchr("B",t1) && strchr("DN",t2)) ||
+    else if(((strchr("B",t1) && strchr("DN",t2)) ||
               (strchr("B",t2) && strchr("DN",t1))) )
 	n = 0.5;
-    else if( ((strchr("Z",t1) && strchr("EQ",t2)) ||
+    else if(((strchr("Z",t1) && strchr("EQ",t2)) ||
               (strchr("Z",t2) && strchr("EQ",t1))) )
 	n = 0.5;
     else if( strchr("X",t1) && strchr("X",t2) )
@@ -1280,6 +1274,8 @@ static float distmat_checkambigProt(ajint t1, ajint t2)
 }
 
 
+
+
 /* @funcstatic distmat_checkambigNuc ******************************************
 **
 ** Check ambiguity codes (IUB) to estimate the distance score.
@@ -1289,6 +1285,7 @@ static float distmat_checkambigProt(ajint t1, ajint t2)
 ** @return [float] estimated match
 **
 ******************************************************************************/
+
 static float distmat_checkambigNuc(char m1, char m2)
 {
     AjPStr b1 = NULL;
@@ -1314,8 +1311,10 @@ static float distmat_checkambigNuc(char m1, char m2)
     b2 = ajStrNew();
     ajStrAssI(&b2,aj_base_iubS[(int)m2].list,len2);
 
-    /* for each base code in 1 cf. base code */
-    /* for seq 2 to see if there is a match  */
+    /*
+    ** for each base code in 1 cf. base code
+    ** for seq 2 to see if there is a match
+    */
     for(i = 0;i < len1;i++)
     {
 	b = ajStrNew();
@@ -1342,6 +1341,7 @@ static float distmat_checkambigNuc(char m1, char m2)
 
 
 
+
 /* @funcstatic distmat_getSeq *************************************************
 **
 ** Get the part of the sequences that the distances are calculated from.
@@ -1356,6 +1356,7 @@ static float distmat_checkambigNuc(char m1, char m2)
 ** @return [char**] Sequences as an array of C strings
 **
 ******************************************************************************/
+
 static char** distmat_getSeq(AjPSeqset seqset, ajint nseqs, ajint mlen,
 			     ajint incr, ajint posn, ajint* len)
 {
@@ -1363,7 +1364,7 @@ static char** distmat_getSeq(AjPSeqset seqset, ajint nseqs, ajint mlen,
     ajint j;
     ajint count;
 
-    AjBool onetwo=ajFalse;
+    AjBool onetwo = ajFalse;
     char*  pseqset;
     char** pseq;
 
@@ -1392,11 +1393,11 @@ static char** distmat_getSeq(AjPSeqset seqset, ajint nseqs, ajint mlen,
 	count = 0;
 	for(j=posn;j<mlen;j+=incr)
 	{
-	    (void) strncpy(pseq[i]+count,pseqset+j,1);
+	    strncpy(pseq[i]+count,pseqset+j,1);
 	    count++;
 	    if(onetwo)
 	    {
-		(void) strncpy(pseq[i]+count,pseqset+j+1,1);
+		strncpy(pseq[i]+count,pseqset+j+1,1);
 		count++;
 	    }
 	}
@@ -1405,6 +1406,8 @@ static char** distmat_getSeq(AjPSeqset seqset, ajint nseqs, ajint mlen,
 
     return pseq;
 }
+
+
 
 
 /* @funcstatic distmat_outputDist *********************************************
@@ -1426,6 +1429,7 @@ static char** distmat_getSeq(AjPSeqset seqset, ajint nseqs, ajint mlen,
 ** @return [void]
 **
 ******************************************************************************/
+
 static void distmat_outputDist(AjPFile outf, ajint nseqs, ajint mlen,
 			       AjPSeqset seqset, AjPFloat2d match,
 			       AjPFloat2d gap, float gapwt, ajint method,
@@ -1443,6 +1447,8 @@ static void distmat_outputDist(AjPFile outf, ajint nseqs, ajint mlen,
 	else
 	    posn = 123;
     }
+    else if(posn == 1 || posn == 2)
+      	posn++;
 
     /* print title and parameters */
     ajFmtPrintF(outf,"Distance Matrix\n---------------\n\n");
@@ -1476,8 +1482,7 @@ static void distmat_outputDist(AjPFile outf, ajint nseqs, ajint mlen,
     {
 	ajFmtPrintF(outf,"\t");
 	for(i=0;i<nseqs;i++)
-	{
-	    if (i >= j)
+	    if(i >= j)
 	    {
 		if(i==j)
 		    D = 0.;
@@ -1485,16 +1490,16 @@ static void distmat_outputDist(AjPFile outf, ajint nseqs, ajint mlen,
 		    D=ajFloat2dGet(match,j,i);
 
 		D=D*100.;
-		if (D < 10.)
+		if(D < 10.)
 		    ajFmtPrintF(outf,"  %.2f\t",D);
-		else if (D < 100.)
+		else if(D < 100.)
 		    ajFmtPrintF(outf," %.2f\t",D);
 		else
 		    ajFmtPrintF(outf,"%.2f\t",D);
 	    }
 	    else
 		ajFmtPrintF(outf,"\t");
-	}
+
 	ajFmtPrintF(outf,"\t%S %d",ajSeqsetName(seqset,j),j+1);
 	ajFmtPrintF(outf,"\n");
     }

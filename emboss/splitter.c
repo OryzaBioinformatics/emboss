@@ -24,8 +24,12 @@
 #include "emboss.h"
 
 
+
+
 static void splitter_write(AjPSeqout seqout, AjPSeq subseq, ajint start,
 			   ajint end, AjPSeq seq);
+
+
 
 
 /* @prog splitter *************************************************************
@@ -48,22 +52,22 @@ int main(int argc, char **argv)
     ajint pos;
     AjBool addover;
 
-    (void) embInit ("splitter", argc, argv);
+    embInit("splitter", argc, argv);
 
-    seqout = ajAcdGetSeqoutall ("outseq");
-    seqall = ajAcdGetSeqall ("sequence");
-    size = ajAcdGetInt ("size");
-    overlap = ajAcdGetInt ("overlap");
+    seqout  = ajAcdGetSeqoutall("outseq");
+    seqall  = ajAcdGetSeqall("sequence");
+    size    = ajAcdGetInt("size");
+    overlap = ajAcdGetInt("overlap");
     addover = ajAcdGetBool("addoverlap");
 
-    subseq = ajSeqNew ();
+    subseq = ajSeqNew();
     str    = ajStrNew();
 
-    while (ajSeqallNext(seqall, &seq))
+    while(ajSeqallNext(seqall, &seq))
     {
 	ajSeqTrim(seq);
 
-	len = ajSeqLen (seq);
+	len = ajSeqLen(seq);
 	pos = 0;
 
 	if(!addover)
@@ -102,9 +106,12 @@ int main(int argc, char **argv)
     ajSeqDel(&subseq);
     ajStrDel(&str);
 
-    ajExit ();
+    ajExit();
+
     return 0;
 }
+
+
 
 
 /* @funcstatic splitter_write  ************************************************
@@ -130,7 +137,7 @@ static void splitter_write(AjPSeqout seqout, AjPSeq subseq, ajint start,
     value = ajStrNew();
 
 
-    /* create a nice name for the subsequence */
+    /* create a name for the subsequence */
     ajStrAss(&name, ajSeqGetName(seq));
     ajStrAppC(&name, "_");
     ajStrFromInt(&value, ajSeqBegin(seq)+start);
@@ -146,7 +153,7 @@ static void splitter_write(AjPSeqout seqout, AjPSeq subseq, ajint start,
     /* set the type of the subsequence */
     ajSeqType(subseq);
 
-    ajSeqAllWrite (seqout, subseq);
+    ajSeqAllWrite(seqout, subseq);
 
 
     ajStrDel(&name);

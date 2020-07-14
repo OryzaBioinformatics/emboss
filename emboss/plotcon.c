@@ -48,9 +48,21 @@
 #include "ajtime.h"
 
 
-static void plotcon_pushpoint(AjPList *l, float x1, float y1, float x2,
-			      float y2);
-static void plotcon_datapoints(AjPList *l, AjPFile outf);
+
+
+/* @datastatic PPoint *********************************************************
+**
+** Plotcon internals
+**
+** @alias SPoint
+** @alias OPoint
+**
+** @attr x1 [float] x1 coordinate
+** @attr y1 [float] y1 coordinate
+** @attr x2 [float] x2 coordinate
+** @attr y2 [float] y2 coordinate
+******************************************************************************/
+
 
 typedef struct SPoint
 {
@@ -73,33 +85,31 @@ int main(int argc, char **argv)
 {
 
     AjPSeqset seqset;
-    AjPFile outf=NULL;
     ajint i;
     ajint numseq;
     ajint lenseq;
-    ajint j=0;
+    ajint j = 0;
     ajint k;
-    AjPMatrix cmpmatrix=0;
-    AjPSeqCvt cvt=0;
-    AjBool text;
+    AjPMatrix cmpmatrix = 0;
+    AjPSeqCvt cvt = 0;
     AjOTime ajtime;
-    const time_t tim = time(0);
+    time_t tim;
 
     char **seqcharptr;
 
     float *x;
     float *y;
-    AjPFloat2d score=NULL;
-    float *sumscore=0;
-    float scoremax=0;
+    AjPFloat2d score = NULL;
+    float *sumscore  = 0;
+    float scoremax   = 0;
     float ymin;
     float ymax;
-    float contri=0;
-    float contrj=0;
+    float contri = 0;
+    float contrj = 0;
     ajint **matrix;
-    ajint m1=0;
-    ajint m2=0;
-    ajint highindex=0;
+    ajint m1 = 0;
+    ajint m2 = 0;
+    ajint highindex = 0;
     ajint winsize;	/* window size */
     ajint numbins;	/* total no. of bins making up the seq length */
     ajint binup;
@@ -109,27 +119,26 @@ int main(int argc, char **argv)
     ajint bin2;
     AjPGraph graphs = NULL;
     AjPGraphData gdata;
-    AjPList list=NULL;
+    AjPList list = NULL;
 
 
+    tim = time(0);
 
-    ajtime.time = localtime(&tim);
+    ajTimeLocal(tim,&ajtime);
     ajtime.format = 0;
 
-    (void) ajGraphInit ("plotcon", argc, argv);
+    ajGraphInit ("plotcon", argc, argv);
 
-    seqset = ajAcdGetSeqset("msf");
+    seqset = ajAcdGetSeqset("sequences");
 
     ajSeqsetFill(seqset);               /* Pads seq set with gap characters */
     numseq = ajSeqsetSize (seqset);
     lenseq = ajSeqsetLen(seqset);
 
-    winsize = ajAcdGetInt("winsize");
+    winsize   = ajAcdGetInt("winsize");
     cmpmatrix = ajAcdGetMatrix("scorefile");
 
-    text = ajAcdGetBool("data");
     graphs = ajAcdGetGraphxy( "graph");
-    outf = ajAcdGetOutfile("outfile");
 
     matrix  = ajMatrixArray(cmpmatrix);
     cvt     = ajMatrixCvt(cmpmatrix);	/* Returns conversion table */
@@ -150,8 +159,10 @@ int main(int argc, char **argv)
     for(i=0;i<numseq;i++)
     {
 	ajSeqsetToUpper(seqset);
+
 	/* get sequence as a string */
 	seqcharptr[i] =  ajSeqsetSeq (seqset, i);
+
 	for(j=0;j<ajSeqsetLen(seqset);j++)
 	    ajFloat2dPut(&score,i,j,0.);
     }
@@ -206,7 +217,7 @@ int main(int argc, char **argv)
 
     /*************** End of Loop ***************/
 
-    if(!text) ajGraphSetCharSize(0.50);
+    ajGraphSetCharSize(0.50);
     gdata = ajGraphxyDataNewI(ajSeqsetLen(seqset));
 
 
@@ -216,71 +227,25 @@ int main(int argc, char **argv)
 
     /* plot out results */
 
-    list = ajListNew();
-    if(text)
-	for(bin=1;bin<numbins;bin++)
-	{
-	    if(bin == 1)
-	    {
-		ymin = sumscore[bin-1];
-		ymax = sumscore[bin-1];
-	    }
-	    else
-	    {
-		if(ymin > sumscore[bin-1]) ymin=sumscore[bin-1];
-		if(ymax < sumscore[bin-1]) ymax=sumscore[bin-1];
-	    }
-	    plotcon_pushpoint(&list,(float)(bin+1),sumscore[bin],
-			      (float)(bin),sumscore[bin-1]);
-	}
-    else
-	for(bin=0;bin<numbins;bin++)
-	{
-	    gdata->x[bin] = (float)(bin+1);
-	    gdata->y[bin] = sumscore[bin];
-	}
-
-
-
-    if(!text)
+    for(bin=0;bin<numbins;bin++)
     {
-	ajGraphDataxyMaxMin(gdata->y,ajSeqsetLen(seqset),&ymin,&ymax);
-	ajGraphDataxySetMaxima(gdata,0,ajSeqsetLen(seqset),ymin,ymax);
-
-	ajGraphDataxySetTypeC(gdata,"2D Plot");
-	ajGraphxyAddGraph(graphs,gdata);
-	ajGraphxySetYTick(graphs, ajTrue);
-	ajGraphxyTitleC(graphs,"Similarity Plot of Aligned Sequences");
-	ajGraphxyYtitleC(graphs,"Similarity");
-
-	ajGraphxyDisplay(graphs,ajTrue);
-
-	ajGraphCloseWin();
-    }
-    else
-    {
-	/* print out results */
-	ajFmtPrintF(outf,"##2D Plot\n##Title Similarity Plot of Aligned "
-		    "Sequences\n");
-	ajFmtPrintF(outf,"##Graphs 1\n##Number 1\n##Points %d\n",
-		    ajSeqsetLen(seqset));
-	ajFmtPrintF(outf,"##Xmin %f Xmax %f Ymin %f Ymax %f\n",0.,
-		    (float)ajSeqsetLen(seqset),ymin,ymax);
-	ajFmtPrintF(outf,"##ScaleXmin %f ScaleXmax %f "
-		    "ScaleYmin %f ScaleYmax %f\n",0.,
-		    (float)ajSeqsetLen(seqset),ymin,ymax);
-	ajFmtPrintF(outf,"##Maintitle (windowsize = %d  %D)\n",winsize,
-		    &ajtime);
-	ajFmtPrintF(outf,"##Xtitle %s\n##Ytitle %s\n",
-		    "Relative Residue Position","Similarity");
-	ajFmtPrintF(outf,"##DataObjects\n##Number %d\n",ajListLength(list));
-
-	plotcon_datapoints(&list,outf);
-
-	ajFmtPrintF(outf,"##GraphObjects\n##Number 0\n");
-
+	gdata->x[bin] = (float)(bin+1);
+	gdata->y[bin] = sumscore[bin];
     }
 
+
+    ajGraphDataxyMaxMin(gdata->y,ajSeqsetLen(seqset),&ymin,&ymax);
+    ajGraphDataxySetMaxima(gdata,0,ajSeqsetLen(seqset),ymin,ymax);
+    
+    ajGraphDataxySetTypeC(gdata,"2D Plot");
+    ajGraphxyAddGraph(graphs,gdata);
+    ajGraphxySetYTick(graphs, ajTrue);
+    ajGraphxyTitleC(graphs,"Similarity Plot of Aligned Sequences");
+    ajGraphxyYtitleC(graphs,"Similarity");
+    
+    ajGraphxyDisplay(graphs,ajTrue);
+    
+    ajGraphCloseWin();
 
     AJFREE(x);
     AJFREE(y);
@@ -290,64 +255,6 @@ int main(int argc, char **argv)
     ajFloat2dDel(&score);
 
     ajExit ();
+
     return 0;
-}
-
-
-
-
-/* @funcstatic plotcon_pushpoint **********************************************
-**
-** Adds data points to the list.
-**
-** @param [w] l [AjPList*] List to push data point to.
-** @param [r] x1 [float]   x value at bin+1
-** @param [r] y1 [float]   y value at bin+1
-** @param [r] x2 [float]   x value at bin
-** @param [r] y2 [float]   y value at bin
-** @@
-******************************************************************************/
-
-
-
-static void plotcon_pushpoint(AjPList *l, float x1, float y1, float x2,
-			      float y2)
-{
-    PPoint p;
-    AJNEW0(p);
-    p->x1=x1;
-    p->y1=y1;
-    p->x2=x2;
-    p->y2=y2;
-    ajListPush(*l,(void *)p);
-
-    return;
-}
-
-
-
-
-
-/* @funcstatic plotcon_datapoints *********************************************
-**
-** Output a list of data points to a text file
-**
-** @param [r] l [AjPList*]   List of data points
-** @param [w] outf [AjPFile] File to write to
-** @@
-******************************************************************************/
-
-
-static void plotcon_datapoints(AjPList *l,AjPFile outf)
-{
-    PPoint p;
-
-    while(ajListPop(*l,(void **)&p))
-    {
-	ajFmtPrintF(outf,"Line x1 %f y1 %f x2 %f y2 %f colour 0\n",
-		    p->x1,p->y1,p->x2,p->y2);
-	AJFREE(p);
-    }
-
-    return;
 }

@@ -19,11 +19,12 @@
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 ******************************************************************************/
 
-
 #include "emboss.h"
 #include <string.h>
 
 #define AZ 27
+
+
 
 
 static void profit_read_profile(AjPFile inf, AjPStr *name, AjPStr *mname,
@@ -51,11 +52,6 @@ static ajint profit_getType(AjPFile inf);
 
 
 
-
-
-
-
-
 /* @prog profit ***************************************************************
 **
 ** Scan a sequence or database with a matrix or profile
@@ -65,29 +61,29 @@ static ajint profit_getType(AjPFile inf);
 int main(int argc, char **argv)
 {
     AjPSeqall seqall;
-    AjPSeq    seq=NULL;
-    AjPFile   inf=NULL;
-    AjPFile   outf=NULL;
+    AjPSeq seq   = NULL;
+    AjPFile inf  = NULL;
+    AjPFile outf = NULL;
 
-    AjPStr    strand=NULL;
-    AjPStr    substr=NULL;
-    AjPStr    name=NULL;
-    AjPStr    mname=NULL;
-    AjPStr    pname=NULL;
-    AjPStr    line=NULL;
-    AjPStr    cons=NULL;
+    AjPStr strand = NULL;
+    AjPStr substr = NULL;
+    AjPStr name   = NULL;
+    AjPStr mname  = NULL;
+    AjPStr pname  = NULL;
+    AjPStr line   = NULL;
+    AjPStr cons   = NULL;
 
-    ajint       type;
-    ajint       begin;
-    ajint       end;
-    /*    ajint       len;*/
-    ajint       i;
-    ajint       j;
+    ajint type;
+    ajint begin;
+    ajint end;
 
-    ajint   **matrix=NULL;
-    float **fmatrix=NULL;
+    ajint i;
+    ajint j;
 
-    void  **fptr=NULL;
+    ajint **matrix  = NULL;
+    float **fmatrix = NULL;
+
+    void  **fptr = NULL;
 
     ajint mlen;
     ajint maxs;
@@ -102,14 +98,14 @@ int main(int argc, char **argv)
 
     embInit("profit", argc, argv);
 
-    seqall    = ajAcdGetSeqall("sequence");
-    inf       = ajAcdGetInfile("infile");
-    outf      = ajAcdGetOutfile("outfile");
+    seqall = ajAcdGetSeqall("sequence");
+    inf    = ajAcdGetInfile("infile");
+    outf   = ajAcdGetOutfile("outfile");
 
-    substr=ajStrNew();
-    name=ajStrNew();
-    mname=ajStrNew();
-    line=ajStrNew();
+    substr = ajStrNew();
+    name   = ajStrNew();
+    mname  = ajStrNew();
+    line   = ajStrNew();
 
     if(!(type=profit_getType(inf)))
 	ajFatal("Unrecognised profile/matrix file format");
@@ -193,14 +189,14 @@ int main(int argc, char **argv)
 
     while(ajSeqallNext(seqall, &seq))
     {
-	begin=ajSeqallBegin(seqall);
-	end=ajSeqallEnd(seqall);
+	begin = ajSeqallBegin(seqall);
+	end   = ajSeqallEnd(seqall);
 
 	ajStrAssC(&pname,ajSeqName(seq));
-	strand=ajSeqStrCopy(seq);
+	strand = ajSeqStrCopy(seq);
 
 	ajStrAssSubC(&substr,ajStrStr(strand),begin-1,end-1);
-	/*	len = ajStrLen(substr); NOT USED */
+
 	switch(type)
 	{
 	case 1:
@@ -233,9 +229,12 @@ int main(int argc, char **argv)
     ajSeqDel(&seq);
     ajFileClose(&inf);
     ajFileClose(&outf);
+
     ajExit();
+
     return 0;
 }
+
 
 
 
@@ -248,12 +247,11 @@ int main(int argc, char **argv)
 ** @@
 ******************************************************************************/
 
-
 static ajint profit_getType(AjPFile inf)
 {
-    AjPStr line=NULL;
-    char *p=NULL;
-    ajint  ret=0;
+    AjPStr line = NULL;
+    char *p = NULL;
+    ajint ret = 0;
 
     line=ajStrNew();
 
@@ -264,14 +262,19 @@ static ajint profit_getType(AjPFile inf)
 	break;
     }
 
-    if(!strncmp(p,"Simple",6)) ret=1;
-    if(!strncmp(p,"Gribskov",8)) ret=2;
-    if(!strncmp(p,"Henikoff",8)) ret=3;
+    if(!strncmp(p,"Simple",6))
+	ret = 1;
+
+    if(!strncmp(p,"Gribskov",8))
+	ret = 2;
+
+    if(!strncmp(p,"Henikoff",8))
+	ret = 3;
 
     ajStrDel(&line);
+
     return ret;
 }
-
 
 
 
@@ -295,22 +298,24 @@ static void profit_read_simple(AjPFile inf, AjPStr *name, ajint *mlen,
 {
     char *p;
 
-    AjPStr line=NULL;
+    AjPStr line = NULL;
 
-    line=ajStrNew();
+    line = ajStrNew();
 
     if(!ajFileReadLine(inf,&line))
 	ajFatal("Premature EOF in profile file");
     p = ajStrStr(line);
+
     if(strncmp(p,"Name",4))
 	ajFatal("Incorrect profile/matrix file format");
-    p=strtok(p," \t");
-    p=strtok(NULL," \t");
+    p = strtok(p," \t");
+    p = strtok(NULL," \t");
     ajStrAssC(name,p);
 
     if(!ajFileReadLine(inf,&line))
 	ajFatal("Premature EOF in profile file");
     p = ajStrStr(line);
+
     if(strncmp(p,"Length",6))
 	ajFatal("Incorrect profile/matrix file format");
     sscanf(p,"%*s%d",mlen);
@@ -318,6 +323,7 @@ static void profit_read_simple(AjPFile inf, AjPStr *name, ajint *mlen,
     if(!ajFileReadLine(inf,&line))
 	ajFatal("Premature EOF in profile file");
     p = ajStrStr(line);
+
     if(strncmp(p,"Maximum",7))
 	ajFatal("Incorrect profile/matrix file format");
     sscanf(p,"%*s%*s%d",maxs);
@@ -325,6 +331,7 @@ static void profit_read_simple(AjPFile inf, AjPStr *name, ajint *mlen,
     if(!ajFileReadLine(inf,&line))
 	ajFatal("Premature EOF in profile file");
     p = ajStrStr(line);
+
     if(strncmp(p,"Thresh",6))
 	ajFatal("Incorrect profile/matrix file format");
     sscanf(p,"%*s%d",thresh);
@@ -332,15 +339,17 @@ static void profit_read_simple(AjPFile inf, AjPStr *name, ajint *mlen,
     if(!ajFileReadLine(inf,&line))
 	ajFatal("Premature EOF in profile file");
     p = ajStrStr(line);
+
     if(strncmp(p,"Consensus",9))
 	ajFatal("Incorrect profile/matrix file format");
-    p=strtok(p," \t\n");
-    p=strtok(NULL," \t\n");
+    p = strtok(p," \t\n");
+    p = strtok(NULL," \t\n");
     ajStrAssC(cons,p);
 
     ajStrDel(&line);
-}
 
+    return;
+}
 
 
 
@@ -361,39 +370,40 @@ static void profit_read_simple(AjPFile inf, AjPStr *name, ajint *mlen,
 ** @@
 ******************************************************************************/
 
-
 static void profit_read_profile(AjPFile inf, AjPStr *name, AjPStr *mname,
 				ajint *mlen, float *gapopen, float *gapextend,
 				ajint *thresh, float *maxs, AjPStr *cons)
 {
     char *p;
+    AjPStr line = NULL;
 
-    AjPStr line=NULL;
-
-    line=ajStrNew();
+    line = ajStrNew();
 
     if(!ajFileReadLine(inf,&line))
 	ajFatal("Premature EOF in profile file");
     p = ajStrStr(line);
+
     if(strncmp(p,"Name",4))
 	ajFatal("Incorrect profile/matrix file format");
-    p=strtok(p," \t");
-    p=strtok(NULL," \t");
+    p = strtok(p," \t");
+    p = strtok(NULL," \t");
     ajStrAssC(name,p);
 
     if(!ajFileReadLine(inf,&line))
 	ajFatal("Premature EOF in profile file");
     p = ajStrStr(line);
+
     if(strncmp(p,"Matrix",6))
 	ajFatal("Incorrect profile/matrix file format");
-    p=strtok(p," \t");
-    p=strtok(NULL," \t");
+    p = strtok(p," \t");
+    p = strtok(NULL," \t");
     ajStrAssC(mname,p);
 
 
     if(!ajFileReadLine(inf,&line))
 	ajFatal("Premature EOF in profile file");
     p = ajStrStr(line);
+
     if(strncmp(p,"Length",6))
 	ajFatal("Incorrect profile/matrix file format");
     sscanf(p,"%*s%d",mlen);
@@ -401,6 +411,7 @@ static void profit_read_profile(AjPFile inf, AjPStr *name, AjPStr *mname,
     if(!ajFileReadLine(inf,&line))
 	ajFatal("Premature EOF in profile file");
     p = ajStrStr(line);
+
     if(strncmp(p,"Max_score",9))
 	ajFatal("Incorrect profile/matrix file format");
     sscanf(p,"%*s%f",maxs);
@@ -408,6 +419,7 @@ static void profit_read_profile(AjPFile inf, AjPStr *name, AjPStr *mname,
     if(!ajFileReadLine(inf,&line))
 	ajFatal("Premature EOF in profile file");
     p = ajStrStr(line);
+
     if(strncmp(p,"Threshold",9))
 	ajFatal("Incorrect profile/matrix file format");
     sscanf(p,"%*s%d",thresh);
@@ -416,6 +428,7 @@ static void profit_read_profile(AjPFile inf, AjPStr *name, AjPStr *mname,
     if(!ajFileReadLine(inf,&line))
 	ajFatal("Premature EOF in profile file");
     p = ajStrStr(line);
+
     if(strncmp(p,"Gap_open",8))
 	ajFatal("Incorrect profile/matrix file format");
     sscanf(p,"%*s%f",gapopen);
@@ -423,6 +436,7 @@ static void profit_read_profile(AjPFile inf, AjPStr *name, AjPStr *mname,
     if(!ajFileReadLine(inf,&line))
 	ajFatal("Premature EOF in profile file");
     p = ajStrStr(line);
+
     if(strncmp(p,"Gap_extend",10))
 	ajFatal("Incorrect profile/matrix file format");
     sscanf(p,"%*s%f",gapextend);
@@ -430,13 +444,12 @@ static void profit_read_profile(AjPFile inf, AjPStr *name, AjPStr *mname,
     if(!ajFileReadLine(inf,&line))
 	ajFatal("Premature EOF in profile file");
     p = ajStrStr(line);
+
     if(strncmp(p,"Consensus",9))
 	ajFatal("Incorrect profile/matrix file format");
-    p=strtok(p," \t\n");
-    p=strtok(NULL," \t\n");
+    p = strtok(p," \t\n");
+    p = strtok(NULL," \t\n");
     ajStrAssC(cons,p);
-
-
 
     ajStrDel(&line);
 
@@ -462,7 +475,6 @@ static void profit_read_profile(AjPFile inf, AjPStr *name, AjPStr *mname,
 ** @@
 ******************************************************************************/
 
-
 static void profit_scan_simple(AjPStr substr, AjPStr pname, AjPStr name,
 			       ajint mlen, ajint maxs, ajint thresh,
 			       ajint **matrix,AjPFile outf, AjPStr *cons)
@@ -483,7 +495,7 @@ static void profit_scan_simple(AjPStr substr, AjPStr pname, AjPStr name,
 
     for(i=0;i<lim;++i)
     {
-	sum=0;
+	sum = 0;
 	for(j=0;j<mlen;++j)
 	    sum += matrix[j][ajAZToInt(*(p+i+j))];
 	score = sum * 100 / maxs;
@@ -491,7 +503,10 @@ static void profit_scan_simple(AjPStr substr, AjPStr pname, AjPStr name,
 	    profit_printHits(substr,pname,i,name,score,thresh,(float)maxs,outf,
 			     cons);
     }
+
+    return;
 }
+
 
 
 
@@ -516,10 +531,12 @@ static void profit_printHits(AjPStr substr,AjPStr pname, ajint pos,
 			     AjPStr name, ajint score, ajint thresh,
 			     float maxs, AjPFile outf, AjPStr *cons)
 {
-
     ajFmtPrintF(outf,"%s %d Percentage: %d\n",ajStrStr(pname),pos+1,score);
+
     return;
 }
+
+
 
 
 /* @funcstatic profit_scan_profile ********************************************
@@ -571,5 +588,6 @@ static void profit_scan_profile(AjPStr substr, AjPStr pname, AjPStr name,
 	    profit_printHits(substr,pname,i,name,(ajint)score,thresh,maxs,outf,
 			     cons);
     }
+
     return;
 }

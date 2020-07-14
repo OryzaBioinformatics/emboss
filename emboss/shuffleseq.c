@@ -32,42 +32,34 @@
 
 int main(int argc, char **argv)
 {
-
-    ajint shuffles=1;
+    ajint shuffles = 1;
     ajint n;
     AjPSeqall seqall;
     AjPSeqout seqout;
     AjPSeq seq;
     AjPStr seq_str;
 
-    embInit ("shuffleseq", argc, argv);
+    embInit("shuffleseq", argc, argv);
 
     ajRandomSeed();
 
-    seqout = ajAcdGetSeqoutall ("outseq");
-    seqall = ajAcdGetSeqall ("sequence");
-
+    seqout   = ajAcdGetSeqoutall("outseq");
+    seqall   = ajAcdGetSeqall("sequence");
     shuffles = ajAcdGetInt("shuffle");
 
-    while (ajSeqallNext(seqall, &seq))
-    {
+    while(ajSeqallNext(seqall, &seq))
 	for(n=0;n<shuffles;++n)
 	{
-	    /* get a COPY of the sequence string object */
 	    seq_str = ajSeqStrCopy(seq);
-	    /* shuffle it */
 	    ajStrRandom(&seq_str);
-	    /* stuff back the string */
-	    ajSeqReplace (seq, seq_str);
-
-	    ajSeqAllWrite (seqout, seq);
-
+	    ajSeqReplace(seq, seq_str);
+	    ajSeqAllWrite(seqout, seq);
 	    ajStrDel(&seq_str);
 	}
-    }
 
-    ajSeqWriteClose (seqout);
+    ajSeqWriteClose(seqout);
 
-    ajExit ();
+    ajExit();
+
     return 0;
 }

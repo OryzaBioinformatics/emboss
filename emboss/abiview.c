@@ -61,8 +61,8 @@ int main(int argc, char **argv)
     AjPSeq    seqo;
     AjPStr    nseq;
     AjPStr    baseN;
-    AjPInt2d  trace=NULL;
-    AjPShort  basePositions=NULL;
+    AjPInt2d  trace = NULL;
+    AjPShort  basePositions = NULL;
     AjPGraph  graphs = NULL;
 
     AjBool graph1;
@@ -109,7 +109,7 @@ int main(int argc, char **argv)
     const ajlong BYTE[] = { 0x000000ff };
 
 
-    (void) ajGraphInit ("abiview", argc, argv);
+    ajGraphInit ("abiview", argc, argv);
 
     fp         = ajAcdGetInfile("infile");
     graphs     = ajAcdGetGraphxy("graph");
@@ -124,7 +124,7 @@ int main(int argc, char **argv)
 
     fname = ajStrNewC(ajFileName(fp));
 
-    nbases = ajStrLen(baseN);
+    nbases  = ajStrLen(baseN);
     overlay = !separate;
 
 
@@ -134,7 +134,7 @@ int main(int argc, char **argv)
     numBases = ajSeqABIGetNBase(fp);
 
     baseO = ajSeqABIGetBaseOffset(fp);	/* find BASE tag & get offset */
-    nseq = ajStrNew();			/* read in sequence */
+    nseq  = ajStrNew();			/* read in sequence */
 
     if(base_end != 0 && base_end < numBases)      /* define end base */
         numBases = base_end;
@@ -150,6 +150,7 @@ int main(int argc, char **argv)
     basePositions = ajShortNew();
 
     numPoints = ajSeqABIGetNData(fp);  /* find DATA tag & get no. of points */
+
     /* get data trace offsets           */
     ajSeqABIGetTraceOffset(fp,dataOffset);
     ajSeqABIGetData(fp,dataOffset,numPoints,trace); /* read in trace data   */
@@ -178,11 +179,9 @@ int main(int argc, char **argv)
     /* find trace max */
     tmax = 0.;
     for(iloop=0;iloop<numPoints;iloop++)
-    {
 	for(ibase=0;ibase<4;ibase++)
 	    if(tmax < (float)ajInt2dGet(trace,ibase,iloop))
 		tmax = (float)ajInt2dGet(trace,ibase,iloop);
-    }
 
 
     /* setup graph parameters */
@@ -201,11 +200,9 @@ int main(int argc, char **argv)
 	ajGraphxySetYInvTicks(graphs,ajTrue);
     }
     else
-    {
 	ajGraphxySetYTick(graphs,ajFalse);
-    }
-    ajGraphxySetXInvTicks(graphs,ajTrue);
 
+    ajGraphxySetXInvTicks(graphs,ajTrue);
 
     ntrace = 0;
     strace = 0;
@@ -214,7 +211,6 @@ int main(int argc, char **argv)
     /* loop over pages to be displayed */
     while(nstart < numBases-1)
     {
-
 	if(nstop > numBases)
 	    nstop = numBases;
 
@@ -298,7 +294,7 @@ int main(int argc, char **argv)
     if(dseq && !overlay)
 	ajGraphDataObjDel(&gd5);  /* free seq text mem */
 
-    ajGraphxyDel(graphs);
+/*    ajGraphxyDel(&graphs);*/
     ajInt2dDel(&trace);
     ajShortDel(&basePositions);
 
@@ -312,9 +308,10 @@ int main(int argc, char **argv)
     ajSeqDel(&seqo);
 
     ajExit ();
-    return 0;
 
+    return 0;
 }
+
 
 
 
@@ -335,6 +332,7 @@ int main(int argc, char **argv)
 ** @return [AjPGraphData] graph data object
 **
 ******************************************************************************/
+
 static AjPGraphData abiview_graphDisplay(AjPGraph graphs, AjPInt2d trace,
 					 ajint nstart, ajint nstop,
 					 AjPShort  basePositions,
@@ -385,6 +383,7 @@ static AjPGraphData abiview_graphDisplay(AjPGraph graphs, AjPInt2d trace,
 
 
 
+
 /* @funcstatic abiview_graphTextDisplay ***************************************
 **
 ** Draw sequence in a separate graph if the trace data is plotted
@@ -401,6 +400,7 @@ static AjPGraphData abiview_graphDisplay(AjPGraph graphs, AjPInt2d trace,
 ** @return [AjPGraphData] graph data object containing the sequence text
 **
 ******************************************************************************/
+
 static AjPGraphData abiview_graphTextDisplay(AjPGraph graphs, ajint nstart,
 					     ajint nstop,
 					     AjPShort basePositions,
@@ -411,7 +411,6 @@ static AjPGraphData abiview_graphTextDisplay(AjPGraph graphs, ajint nstart,
     ajint colres;
 
     AjPGraphData gdata;
-
     char res[2];
 
     res[1]='\0';
@@ -437,6 +436,7 @@ static AjPGraphData abiview_graphTextDisplay(AjPGraph graphs, ajint nstart,
 
 
 
+
 /* @funcstatic abiview_TextDisplay ********************************************
 **
 ** Add sequence on top of the same graph as the trace data
@@ -450,6 +450,7 @@ static AjPGraphData abiview_graphTextDisplay(AjPGraph graphs, ajint nstart,
 ** @return [void]
 **
 ******************************************************************************/
+
 static void abiview_TextDisplay(AjPGraph graphs, ajint nstart, ajint nstop,
 				AjPStr nseq, float tmax)
 {
@@ -470,6 +471,8 @@ static void abiview_TextDisplay(AjPGraph graphs, ajint nstart, ajint nstop,
 }
 
 
+
+
 /* @funcstatic abiview_drawbase ***********************************************
 **
 ** Test to see if this base, i.e. res, is selected to be drawn
@@ -480,6 +483,7 @@ static void abiview_TextDisplay(AjPGraph graphs, ajint nstart, ajint nstop,
 ** @return [AjBool] ajTrue on success
 **
 ******************************************************************************/
+
 static AjBool abiview_drawbase(char* res, AjPStr baseN)
 {
 
@@ -496,9 +500,8 @@ static AjBool abiview_drawbase(char* res, AjPStr baseN)
     {
 	rexp = ajRegComp(b);
 	if(ajRegExec(rexp,baseN))
-	{
 	    draw = ajTrue;
-	}
+
 	ajRegFree(&rexp);
     }
 
@@ -506,6 +509,8 @@ static AjBool abiview_drawbase(char* res, AjPStr baseN)
 
     return draw;
 }
+
+
 
 
 /* @funcstatic abiview_getResColour *******************************************
@@ -516,6 +521,7 @@ static AjBool abiview_drawbase(char* res, AjPStr baseN)
 ** @return [ajint] base colour code
 **
 ******************************************************************************/
+
 static ajint abiview_getResColour(char B)
 {
     return ((B)=='C'?RED:(B)=='A'?GREEN:(B)=='G'?BLUE:(B)=='T'?BLACK:YELLOW);

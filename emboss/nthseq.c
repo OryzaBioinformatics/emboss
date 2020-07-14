@@ -21,8 +21,9 @@
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 ******************************************************************************/
 
-
 #include "emboss.h"
+
+
 
 
 /* @prog nthseq ***************************************************************
@@ -40,24 +41,24 @@ int main(int argc, char **argv)
     ajint n;
     ajint count;
 
-    embInit ("nthseq", argc, argv);
+    embInit("nthseq", argc, argv);
 
-    seqall = ajAcdGetSeqall ("sequence");
-    n = ajAcdGetInt ("number");
-    seqout = ajAcdGetSeqout ("outseq");
+    seqall = ajAcdGetSeqall("sequence");
+    n      = ajAcdGetInt("number");
+    seqout = ajAcdGetSeqout("outseq");
 
     count = 0;
-    while (ajSeqallNext(seqall, &seq))
-	if (++count == n)
+    while(ajSeqallNext(seqall, &seq))
+	if(++count == n)
 	{
-	    ajSeqWrite (seqout, seq);
-	    ajSeqWriteClose (seqout);
-	    ajExit ();
+	    ajSeqWrite(seqout, seq);
+	    ajSeqWriteClose(seqout);
+	    ajExit();
 	    return 0;
 	}
 
-    ajSeqWriteClose (seqout);
-    (void) ajFatal ("No such sequence - only %d sequences were input.", count);
+    ajSeqWriteClose(seqout);
+    ajFatal("No such sequence - only %d sequences were input.", count);
 
     return 1;
 }

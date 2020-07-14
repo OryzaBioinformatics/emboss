@@ -22,6 +22,8 @@
 #include "emboss.h"
 
 
+
+
 /* @prog demoalign ************************************************************
 **
 ** Reads a sequence set and writes it as an alignment
@@ -30,41 +32,43 @@
 
 int main(int argc, char **argv)
 {
-
     AjPSeqset seqset;
     AjPAlign align;
     AjPMatrix imat;
     AjPMatrixf fmat;
     AjBool dofloat;
 
-    embInit ("demoalign", argc, argv);
+    embInit("demoalign", argc, argv);
 
-    seqset = ajAcdGetSeqset ("sequence");
-    align = ajAcdGetAlign ("outfile");
-    fmat = ajAcdGetMatrixf ("floatmatrix");
-    imat = ajAcdGetMatrix ("intmatrix");
-    dofloat = ajAcdGetBool ("dofloat");
+    seqset  = ajAcdGetSeqset("sequence");
+    align   = ajAcdGetAlign("outfile");
+    fmat    = ajAcdGetMatrixf("floatmatrix");
+    imat    = ajAcdGetMatrix("intmatrix");
+    dofloat = ajAcdGetBool("dofloat");
 
-    ajSeqsetFill (seqset);
+    ajSeqsetFill(seqset);
 
-    ajAlignDefine (align, seqset);
-    if (dofloat) {
-      ajAlignSetMatrixFloat(align, fmat);
-      ajAlignSetGapR(align, 5.0, -0.3);
+    ajAlignDefine(align, seqset);
+
+    if(dofloat)
+    {
+	ajAlignSetMatrixFloat(align, fmat);
+	ajAlignSetGapR(align, 5.0, -0.3);
     }
-    else {
-      ajAlignSetMatrixInt(align, imat);
-      ajAlignSetGapI(align, 9, -1);
+    else
+    {
+	ajAlignSetMatrixInt(align, imat);
+	ajAlignSetGapI(align, 9, -1);
     }
 
-    ajAlignWrite (align);
-    ajAlignClose (align);
+    ajAlignWrite(align);
+    ajAlignClose(align);
 
     ajAlignDel(&align);
 
-    ajExit ();
+    ajExit();
+
     return 0;
 }
-
 
 

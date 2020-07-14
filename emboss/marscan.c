@@ -19,27 +19,31 @@
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 ******************************************************************************/
 
-
 #include "emboss.h"
 #include "stdlib.h"
 
 
-static AjBool marscan_getpos (AjPList l, ajint *thisprev, ajint otherprev,
-			      AjBool *stored_match, ajint *stored_dist,
-			      ajint *stored_8_pos, ajint *stored_16_pos,
-			      ajint *stored_lastpos, AjPFeattable *tab,
-			      AjBool this_is_8,
-			      ajint *end_of_last_output_match);
 
-static void marscan_stepdown (AjPList l16, AjPList l8, AjPFeattable *tab);
+
+static AjBool marscan_getpos(AjPList l, ajint *thisprev, ajint otherprev,
+			     AjBool *stored_match, ajint *stored_dist,
+			     ajint *stored_8_pos, ajint *stored_16_pos,
+			     ajint *stored_lastpos, AjPFeattable *tab,
+			     AjBool this_is_8,
+			     ajint *end_of_last_output_match);
+
+static void marscan_stepdown(AjPList l16, AjPList l8, AjPFeattable *tab);
 
 static void marscan_output_stored_match(AjBool stored_match, ajint stored_dist,
 					ajint s8, ajint s16,
 					AjPFeattable *tab);
 
-/* the maximum distance between a length 16 pattern and a length 8
-pattern in a MRS */
+/*
+** the maximum distance between a length 16 pattern and a length 8
+** pattern in a MRS
+*/
 #define MAXDIST 200
+
 
 
 
@@ -53,115 +57,119 @@ int main(int argc, char **argv)
 {
     AjPSeqall seqall;
     AjPSeq seq;
-    AjPFeattable tab=NULL;
-    AjPReport report=NULL;
+    AjPFeattable tab = NULL;
+    AjPReport report = NULL;
 
-    AjPStr pattern16=ajStrNewC("awwrtaannwwgnnnc");
-    AjPStr opattern16=NULL;
-    AjBool amino16=ajFalse;
-    AjBool carboxyl16=ajFalse;
-    ajint  type16=0;
-    ajint  m16=0;
-    ajint  plen16=0;
-    ajint  *buf16=NULL;
+    AjPStr pattern16;
+    AjPStr opattern16 = NULL;
+    AjBool amino16    = ajFalse;
+    AjBool carboxyl16 = ajFalse;
+    ajint  type16 = 0;
+    ajint  m16    = 0;
+    ajint  plen16 = 0;
+    ajint  *buf16 = NULL;
 
     EmbOPatBYPNode off16[AJALPHA];
 
-    ajuint *sotable16=NULL;
-    ajint  solimit16=0;
-    AjPStr regexp16=NULL;
-    ajint  **skipm16=NULL;
-    ajint  mismatch16=1;		/* allow a single mismatch */
+    ajuint *sotable16 = NULL;
+    ajuint solimit16  = 0;
+    AjPStr regexp16   = NULL;
+    ajint  **skipm16  = NULL;
+    ajint  mismatch16 = 1;		/* allow a single mismatch */
     AjPList l16;
-    ajint  hits16=0;
-    void   *tidy16=NULL;
+    ajint  hits16  = 0;
+    void   *tidy16 = NULL;
 
-    AjPStr pattern16rev=ajStrNewC("gnnncwwnnttaywwt");
-    AjPStr opattern16rev=NULL;
-    AjBool amino16rev=ajFalse;
-    AjBool carboxyl16rev=ajFalse;
-    ajint  type16rev=0;
-    ajint  m16rev=0;
-    ajint  plen16rev=0;
-    ajint  *buf16rev=NULL;
+    AjPStr pattern16rev;
+    AjPStr opattern16rev = NULL;
+    AjBool amino16rev    = ajFalse;
+    AjBool carboxyl16rev = ajFalse;
+    ajint  type16rev = 0;
+    ajint  m16rev    = 0;
+    ajint  plen16rev = 0;
+    ajint  *buf16rev = NULL;
 
     EmbOPatBYPNode off16rev[AJALPHA];
 
-    ajuint   *sotable16rev=NULL;
-    ajint    solimit16rev=0;
-    AjPStr   regexp16rev=NULL;
-    ajint    **skipm16rev=NULL;
-    ajint    mismatch16rev=1;		/* allow a single mismatch */
+    ajuint   *sotable16rev = NULL;
+    ajuint   solimit16rev  = 0;
+    AjPStr   regexp16rev   = NULL;
+    ajint    **skipm16rev  = NULL;
+    ajint    mismatch16rev = 1;		/* allow a single mismatch */
     AjPList  l16rev;
-    ajint    hits16rev=0;
-    void     *tidy16rev=NULL;
+    ajint    hits16rev  = 0;
+    void     *tidy16rev = NULL;
 
-    AjPStr pattern8=ajStrNewC("aataayaa");
-    AjPStr opattern8=NULL;
-    AjBool amino8=ajFalse;
-    AjBool carboxyl8=ajFalse;
-    ajint  type8=0;
-    ajint  m8=0;
-    ajint  plen8=0;
-    ajint  *buf8=NULL;
+    AjPStr pattern8;
+    AjPStr opattern8 = NULL;
+    AjBool amino8    = ajFalse;
+    AjBool carboxyl8 = ajFalse;
+    ajint  type8 = 0;
+    ajint  m8    = 0;
+    ajint  plen8 = 0;
+    ajint  *buf8 = NULL;
 
     EmbOPatBYPNode off8[AJALPHA];
 
-    ajuint   *sotable8=NULL;
-    ajint    solimit8=0;
-    AjPStr   regexp8=NULL;
-    ajint    **skipm8=NULL;
-    ajint    mismatch8=0;
+    ajuint   *sotable8 = NULL;
+    ajuint   solimit8  = 0;
+    AjPStr   regexp8   = NULL;
+    ajint    **skipm8  = NULL;
+    ajint    mismatch8 = 0;
     AjPList  l8;
-    ajint    hits8=0;
-    void     *tidy8=NULL;
+    ajint    hits8  = 0;
+    void     *tidy8 = NULL;
 
-    AjPStr pattern8rev=ajStrNewC("ttrttatt");
-    AjPStr opattern8rev=NULL;
-    AjBool amino8rev=ajFalse;
-    AjBool carboxyl8rev=ajFalse;
-    ajint  type8rev=0;
-    ajint  m8rev=0;
-    ajint  plen8rev=0;
-    ajint  *buf8rev=NULL;
+    AjPStr pattern8rev;
+    AjPStr opattern8rev = NULL;
+    AjBool amino8rev    = ajFalse;
+    AjBool carboxyl8rev = ajFalse;
+    ajint  type8rev = 0;
+    ajint  m8rev    = 0;
+    ajint  plen8rev = 0;
+    ajint  *buf8rev = NULL;
 
     EmbOPatBYPNode off8rev[AJALPHA];
 
-    ajuint   *sotable8rev=NULL;
-    ajint    solimit8rev=0;
-    AjPStr   regexp8rev=NULL;
-    ajint    **skipm8rev=NULL;
-    ajint    mismatch8rev=0;
+    ajuint   *sotable8rev = NULL;
+    ajuint   solimit8rev  = 0;
+    AjPStr   regexp8rev   = NULL;
+    ajint    **skipm8rev  = NULL;
+    ajint    mismatch8rev = 0;
     AjPList  l8rev;
-    ajint    hits8rev=0;
-    void     *tidy8rev=NULL;
+    ajint    hits8rev  = 0;
+    void     *tidy8rev = NULL;
 
-    AjPStr seqname=NULL;
-    AjPStr text=NULL;
+    AjPStr seqname = NULL;
+    AjPStr text = NULL;
 
     ajint    i;
     ajint    begin;
     ajint    end;
     ajint    adj;
 
-    EmbPMatMatch aptr=NULL;
-
-    /* feature table stuff */
-
-    embInit ("marscan", argc, argv);
-
-    seqall   = ajAcdGetSeqall("sequence");
-    /*  outf     = ajAcdGetFeatout("outf"); */
-    report = ajAcdGetReport ("outfile");
-
-    seqname = ajStrNew();
-    opattern16=ajStrNew();
-    opattern16rev=ajStrNew();
-    opattern8=ajStrNew();
-    opattern8rev=ajStrNew();
+    EmbPMatMatch aptr = NULL;
 
 
-    /* Copy original patterns for dear Henry */
+    embInit("marscan", argc, argv);
+
+    seqall = ajAcdGetSeqall("sequence");
+    report = ajAcdGetReport("outfile");
+
+
+    pattern16    = ajStrNewC("awwrtaannwwgnnnc");
+    pattern16rev = ajStrNewC("gnnncwwnnttaywwt");
+    pattern8     = ajStrNewC("aataayaa");
+    pattern8rev  = ajStrNewC("ttrttatt");
+
+    seqname       = ajStrNew();
+    opattern16    = ajStrNew();
+    opattern16rev = ajStrNew();
+    opattern8     = ajStrNew();
+    opattern8rev  = ajStrNew();
+
+
+    /* Copy original patterns for regexps */
     ajStrAssC(&opattern16, ajStrStr(pattern16));
     ajStrAssC(&opattern16rev, ajStrStr(pattern16rev));
     ajStrAssC(&opattern8, ajStrStr(pattern8));
@@ -205,10 +213,10 @@ int main(int argc, char **argv)
 
     while(ajSeqallNext(seqall, &seq))
     {
-	l16 = ajListNew();
+	l16    = ajListNew();
 	l16rev = ajListNew();
-	l8 = ajListNew();
-	l8rev = ajListNew();
+	l8     = ajListNew();
+	l8rev  = ajListNew();
 
 	ajStrAssC(&seqname, ajSeqName(seq));
 	begin = ajSeqallBegin(seqall);
@@ -242,9 +250,9 @@ int main(int argc, char **argv)
 	if((hits16 || hits16rev) && (hits8 || hits8rev))
 	{
 	    /*
-	     *  append reverse lists to forward lists and sort them by match
-	     *  position
-	     */
+	    **  append reverse lists to forward lists and sort them by match
+	    **  position
+	    */
 	    ajListPushList(l8, &l8rev);
 	    ajListSort(l8, embPatRestrictStartCompare);
 
@@ -256,13 +264,13 @@ int main(int argc, char **argv)
 		tab = ajFeattableNewDna(seqname);
 
 	    /*
-	     *  find pairs of hits within the required distance and output
-	     *  the results
-	     */
-	    marscan_stepdown (l16, l8, &tab);
+	    **  find pairs of hits within the required distance and output
+	    **  the results
+	    */
+	    marscan_stepdown(l16, l8, &tab);
 
 	    /* write features and tidy up */
-	    (void) ajReportWrite(report, tab, seq);
+	    ajReportWrite(report, tab, seq);
 	    ajFeattableDel(&tab);
 	}
 
@@ -273,10 +281,10 @@ int main(int argc, char **argv)
             embMatMatchDel(&aptr);
 
 	/*
-	 *  tidy up - (l8rev and l16rev have already been deleted in
-	 *  ajListPushList)
-	 *  but not if the routine was never called.
-	 */
+	**  tidy up - (l8rev and l16rev have already been deleted in
+	**  ajListPushList)
+	**  but not if the routine was never called.
+	*/
 	ajListDel(&l16);
 	ajListDel(&l8);
 
@@ -285,21 +293,27 @@ int main(int argc, char **argv)
     if(type16==6)
 	for(i=0;i<m16;++i)
 	    AJFREE(skipm16[i]);
+
     if(type16rev==6)
 	for(i=0;i<m16rev;++i) AJFREE(skipm16rev[i]);
+
     if(type8==6)
 	for(i=0;i<m8;++i)
 	    AJFREE(skipm8[i]);
+
     if(type8rev==6)
 	for(i=0;i<m8rev;++i)
 	    AJFREE(skipm8rev[i]);
 
     if(tidy16)
 	AJFREE(tidy16);
+
     if(tidy16rev)
 	AJFREE(tidy16rev);
+
     if(tidy8)
 	AJFREE(tidy8);
+
     if(tidy8rev)
 	AJFREE(tidy8rev);
 
@@ -311,10 +325,11 @@ int main(int argc, char **argv)
     ajStrDel(&seqname);
     ajSeqDel(&seq);
 
-    (void) ajReportClose(report);
+    ajReportClose(report);
     ajReportDel(&report);
 
     ajExit();
+
     return 0;
 }
 
@@ -328,15 +343,15 @@ int main(int argc, char **argv)
 **
 ** @param [r] l16 [AjPList] List of length 16 hits (both forward and reverse)
 ** @param [r] l8 [AjPList] List of length 8 hits (both forward and reverse)
-** @param [rw] tab [AjPFeattable*] feature table
+** @param [u] tab [AjPFeattable*] feature table
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-static void marscan_stepdown (AjPList l16, AjPList l8, AjPFeattable *tab)
+static void marscan_stepdown(AjPList l16, AjPList l8, AjPFeattable *tab)
 {
-    ajint prev16 = -1;	/* we have not got a stored position for length 16 */
-    ajint prev8 = -1;	/* we have not got a stored position for length 8  */
+    ajint prev16 = -1;	/* haven't got a stored position for length 16 */
+    ajint prev8  = -1;	/* haven'tgot a stored position for length 8  */
 
 
     /* flag ajtrue if have stored match */
@@ -355,15 +370,15 @@ static void marscan_stepdown (AjPList l16, AjPList l8, AjPFeattable *tab)
     ajint stored_lastpos;
 
     /* flag for empty list of length 16 pattern matches*/
-    AjBool notend16=ajTrue;
+    AjBool notend16 = ajTrue;
 
     /* flag for empty list of length 8 pattern matches*/
-    AjBool notend8=ajTrue;
+    AjBool notend8 = ajTrue;
 
     /* used to prevent clusters of MRS within MAXDIST of each other */
     ajint end_of_last_output_match = -(MAXDIST+1);
 
-    while (notend16 || notend8)
+    while(notend16 || notend8)
     {
 	notend16 = marscan_getpos(l16, &prev16, prev8, &stored_match,
 				  &stored_dist, &stored_8_pos, &stored_16_pos,
@@ -371,10 +386,10 @@ static void marscan_stepdown (AjPList l16, AjPList l8, AjPFeattable *tab)
 				  &end_of_last_output_match);
 
 	/*
-	 *  if the list of 8 pattern matches is empty and the 16's have
-	 *  gone past the last 8 pattern match, stop searching
-	 */
-	if (prev16 >= prev8 && !notend8)
+	**  if the list of 8 pattern matches is empty and the 16's have
+	**  gone past the last 8 pattern match, stop searching
+	*/
+	if(prev16 >= prev8 && !notend8)
 	    notend16 = ajFalse;
 
 	notend8 = marscan_getpos(l8, &prev8, prev16, &stored_match,
@@ -383,32 +398,23 @@ static void marscan_stepdown (AjPList l16, AjPList l8, AjPFeattable *tab)
 				 &end_of_last_output_match);
 
 	/*
-	 *  if the list of 16 pattern matches is empty and the 8's have
-	 *  gone past the last 16 pattern match, stop searching
-	 */
-	if (prev8 >= prev16 && !notend16)
+	**  if the list of 16 pattern matches is empty and the 8's have
+	**  gone past the last 16 pattern match, stop searching
+	*/
+	if(prev8 >= prev16 && !notend16)
 	    notend8 = ajFalse;
     }
 
     /*
-     *  Both lists are empty. Output any remaining stored match
-     *  only output if this match is further than MAXDIST from the last hit
-     *  output to prevent lots of outputs for a cluster of MRS's
-     */
+    **  Both lists are empty. Output any remaining stored match
+    **  only output if this match is further than MAXDIST from the last hit
+    **  output to prevent lots of outputs for a cluster of MRS's
+    */
 
-    if (stored_8_pos - end_of_last_output_match > MAXDIST ||
+    if(stored_8_pos - end_of_last_output_match > MAXDIST ||
 	stored_16_pos - end_of_last_output_match > MAXDIST)
 	marscan_output_stored_match(stored_match, stored_dist, stored_8_pos,
 				    stored_16_pos, tab);
-
-    /*
-     *  else
-     *  {
-     *     printf("REJECT (at end) stored_8_pos=%d, stored_16_pos=%d
-     *     end_of_last_output_match=%d", stored_8_pos, stored_16_pos,
-     *     end_of_last_output_match);
-     *  }
-     */
 
     return;
 }
@@ -422,27 +428,27 @@ static void marscan_stepdown (AjPList l16, AjPList l8, AjPFeattable *tab)
 ** within MAXDIST of the last match in the other list
 **
 ** @param [r] l [AjPList] the list of matching positions
-** @param [rw] thisprev [ajint *] pointer to last stored position of
+** @param [u] thisprev [ajint *] pointer to last stored position of
 **                                this pattern
 ** @param [r] otherprev [ajint] last stored position of the other pattern
-** @param [rw] stored_match [AjBool *] flag set to ajtrue if have stored match
-** @param [rw] stored_dist [ajint *] distance between the patterns in
+** @param [u] stored_match [AjBool *] flag set to ajtrue if have stored match
+** @param [u] stored_dist [ajint *] distance between the patterns in
 **                                   the stored match
-** @param [rw] stored_8_pos [ajint *] position of this pattern match in
+** @param [u] stored_8_pos [ajint *] position of this pattern match in
 **                                    stored match
-** @param [rw] stored_16_pos [ajint *] position of 8 pattern match in
+** @param [u] stored_16_pos [ajint *] position of 8 pattern match in
 **                                     stored match
-** @param [rw] stored_lastpos [ajint *] position of end of second pattern
+** @param [u] stored_lastpos [ajint *] position of end of second pattern
 **                                      in stored match
-** @param [rw] tab [AjPFeattable*] feature table
+** @param [u] tab [AjPFeattable*] feature table
 ** @param [r] this_is_8 [AjBool] ajTrue is 'thisprev' refers to the
 **                               length 8 pattern
-** @param [rw] end_of_last_output_match [ajint *] end of the last output match
+** @param [u] end_of_last_output_match [ajint *] end of the last output match
 ** @return [AjBool] False if the list is empty
 ** @@
 ******************************************************************************/
 
-static AjBool marscan_getpos (AjPList l, ajint *thisprev, ajint otherprev,
+static AjBool marscan_getpos(AjPList l, ajint *thisprev, ajint otherprev,
 			      AjBool *stored_match, ajint *stored_dist,
 			      ajint *stored_8_pos, ajint *stored_16_pos,
 			      ajint *stored_lastpos,
@@ -459,10 +465,10 @@ static AjBool marscan_getpos (AjPList l, ajint *thisprev, ajint otherprev,
     ajint e8;
     ajint e16;		/* start and end positions */
 
-    while (*thisprev <= otherprev)
+    while(*thisprev <= otherprev)
     {
 	/* if the list is empty, return ajFalse */
-	if (!ajListPop(l, (void **)&m))
+	if(!ajListPop(l, (void **)&m))
 	    return ajFalse;
 
 	/* get position of next list element and store it */
@@ -470,104 +476,81 @@ static AjBool marscan_getpos (AjPList l, ajint *thisprev, ajint otherprev,
 	embMatMatchDel(&m);
 
 	/*
-	 *  get the start and end positions of the 8bp and 16bp patterns
-	 *  and get the end position of the MRS = second pattern + length
-	 *  of second pattern -1
-	 */
-	if (this_is_8)
+	**  get the start and end positions of the 8bp and 16bp patterns
+	**  and get the end position of the MRS = second pattern + length
+	**  of second pattern -1
+	*/
+	if(this_is_8)
 	{
-	    s8 = *thisprev;
+	    s8  = *thisprev;
 	    s16 = otherprev;
 	}
 	else
 	{
-	    s8 = otherprev;
+	    s8  = otherprev;
 	    s16 = *thisprev;
 	}
-	e8 = s8+7;
+
+	e8  = s8+7;
 	e16 = s16+15;
 
 	/* get last position of the two patterns */
-	if (e8>e16)
+	if(e8>e16)
 	    lastpos = e8;
 	else
 	    lastpos = e16;
 
 	/* get distance from end of first pattern to start of second */
-	if (e8 < s16)
+	if(e8 < s16)
 	    dist = s16-e8;
-	else if (e16 < s8)
+	else if(e16 < s8)
 	    dist = s8-e16;
 	else				/* overlap */
 	    dist = 0;
 
 
 	/* the first position of the two patterns */
-	if (s8>s16)
+	if(s8>s16)
 	    firstpos = s16;
 	else
 	    firstpos = s8;
 
 
 	/* otherprev is -1 if it hasn't got a position stored in it yet */
-	if (otherprev == -1)
+	if(otherprev == -1)
 	{
 	    dist = MAXDIST + 1;
 	    firstpos = MAXDIST + 1;
 	}
 
-	/* if they are overlapping, we may still have a negative length */
-	if (dist < 0)
+	/* if they are overlapping, maybe still have a negative length */
+	if(dist < 0)
 	    ajFatal("Have a negative distance!\n");
 
 
 	/* if dist to other stored pos is within range */
-	if (dist <= MAXDIST)
+	if(dist <= MAXDIST)
 	{
-	    /* if we have a stored match output it */
-	    if (*stored_match)
+	    /* if there's a stored match output it */
+	    if(*stored_match)
 	    {
-		if (dist < *stored_dist)
+		if(dist < *stored_dist)
 		{
 		    /*
-		     *  store new match
-		     *  only output if this match is further than MAXDIST
-		     *  from the last hit output to prevent lots of outputs
-		     *  for a cluster of MRS's
-		     */
-		    /*
-		     *  printf("*end_of_last_output_match=%d firstpos=%d
-		     *  dist=%d\n", *end_of_last_output_match, firstpos,
-		     *  firstpos - *end_of_last_output_match);
-		     */
+		    **  store new match
+		    **  only output if this match is further than MAXDIST
+		    **  from the last hit output to prevent lots of outputs
+		    **  for a cluster of MRS's
+		    */
 
-		    if (firstpos - *end_of_last_output_match > MAXDIST)
+		    if(firstpos - *end_of_last_output_match > MAXDIST)
 		    {
-			/*
-			 *  printf("STORE for OUTPUT dist=%d\n", firstpos -
-			 *  *end_of_last_output_match);
-			 */
-
-			*stored_match = ajTrue;
-			*stored_dist = dist;
-			*stored_8_pos = s8;
-			*stored_16_pos = s16;
+			*stored_match   = ajTrue;
+			*stored_dist    = dist;
+			*stored_8_pos   = s8;
+			*stored_16_pos  = s16;
 			*stored_lastpos = lastpos;
-
-			/*
-			 *  printf("storing:\nstored_8_pos=%d, stored_16_pos
-			 *  =%d, stored_lastpos=%d\n", *stored_8_pos,
-			 *  *stored_16_pos, *stored_lastpos);
-			 *  printf("In getpos() s8=%d, e8=%d, s16=%d, e16=%d
-			 *  dist=%d\n", s8, e8, s16, e16, firstpos -
-			 *  *end_of_last_output_match);
-			 */
 		    }
-		    /*
-		     *  else { printf("REJECT (in a cluster) s8=%d, e8=%d,
-		     *  s16=%d, e16=%d dist=%d\n", s8, e8, s16, e16,
-		     *  firstpos - *end_of_last_output_match); }
-		     */
 		}
 		else
 		{
@@ -586,12 +569,7 @@ static AjBool marscan_getpos (AjPList l, ajint *thisprev, ajint otherprev,
 		 *  the last hit output to prevent lots of outputs for a
 		 *  cluster of MRS's
 		 */
-		/*
-		 *  printf("*end_of_last_output_match=%d firstpos=%d
-		 *  dist=%d\n", *end_of_last_output_match, firstpos, firstpos
-		 *  - *end_of_last_output_match);
-		 */
-		if (firstpos - *end_of_last_output_match > MAXDIST)
+		if(firstpos - *end_of_last_output_match > MAXDIST)
 		{
 		    /*
 		     *  printf("STORE for OUTPUT dist = %d\n", firstpos -
@@ -602,25 +580,12 @@ static AjBool marscan_getpos (AjPList l, ajint *thisprev, ajint otherprev,
 		    *stored_8_pos = s8;
 		    *stored_16_pos = s16;
 		    *stored_lastpos = lastpos;
-		    /*
-		     *  printf("storing:\nstored_8_pos=%d, stored_16_pos=%d,
-		     *  stored_lastpos=%d\n", *stored_8_pos, *stored_16_pos,
-		     *  *stored_lastpos);
-		     *  printf("in getpos() s8=%d, e8=%d, s16=%d, e16=%d
-		     *  dist=%d\n", s8, e8, s16, e16, firstpos -
-		     *  *end_of_last_output_match);
-		     */
 		}
-		/*
-		 *  else { printf("REJECT (in a cluster) s8=%d, e8=%d,
-		 *  s16=%d, e16=%d dist=%d\n", s8, e8, s16, e16, firstpos
-		 *  - *end_of_last_output_match); }
-		 */
 	    }
 	}
 	else
 	{
-	    if (*stored_match)
+	    if(*stored_match)
 	    {
 		marscan_output_stored_match(*stored_match, *stored_dist,
 					    *stored_8_pos, *stored_16_pos,
@@ -632,8 +597,9 @@ static AjBool marscan_getpos (AjPList l, ajint *thisprev, ajint otherprev,
     }
 
     return ajTrue;
-
 }
+
+
 
 
 /* @funcstatic marscan_output_stored_match ************************************
@@ -645,7 +611,7 @@ static AjBool marscan_getpos (AjPList l, ajint *thisprev, ajint otherprev,
 **                                stored match
 ** @param [r] s8 [ajint]  position of 8bp pattern match in stored match
 ** @param [r] s16 [ajint] position of 16bp pattern match in stored match
-** @param [rw] tab [AjPFeattable*] feature table
+** @param [u] tab [AjPFeattable*] feature table
 ** @return [void]
 ** @@
 ******************************************************************************/
@@ -653,47 +619,46 @@ static AjBool marscan_getpos (AjPList l, ajint *thisprev, ajint otherprev,
 static void marscan_output_stored_match(AjBool stored_match, ajint stored_dist,
 					ajint s8, ajint s16, AjPFeattable *tab)
 {
-
     /*
-     *  strand is set to forward because the MAR/SAR recognition
-     *  signature (MRS) is not dependent on the strand(s) it is on
-     */
-    char strand='+';
+    **  strand is set to forward because the MAR/SAR recognition
+    **  signature (MRS) is not dependent on the strand(s) it is on
+    */
+    char strand = '+';
 
-    ajint frame=0;
-    float score=0.0;
-    AjPStr source=NULL;
-    AjPStr type=NULL;
-/*    AjPStr desc=NULL;*/
+    ajint frame = 0;
+    float score = 0.0;
+    AjPStr source = NULL;
+    AjPStr type   = NULL;
+
     AjPFeature feature;
-    static AjPStr tmp=NULL;
+    static AjPStr tmp = NULL;
     ajint start;
     ajint end;
     ajint e8;
     ajint e16;	/* end positions of the 8bp and 16 bp pattern matches */
 
-    if (!stored_match)
+    if(!stored_match)
 	return;
 
-    if (!type)
+    if(!type)
     {
       ajStrAssC(&source,"marscan");
       ajStrAssC(&type,"misc_signal");
     }
 
     /*
-     *  get the start and end positions of the 8bp and 16bp patterns and get
-     *  the end position of the MRS = second pattern + length of second
-     *  pattern -1
-     */
-    e8 = s8+7;
+    **  get the start and end positions of the 8bp and 16bp patterns and get
+    **  the end position of the MRS = second pattern + length of second
+    **  pattern -1
+    */
+    e8  = s8+7;
     e16 = s16+15;
-    if (s8 < s16)
+    if(s8 < s16)
 	start = s8;
     else
 	start = s16;
 
-    if (e8>e16)
+    if(e8>e16)
 	end = e8;
     else
 	end = e16;
@@ -702,12 +667,6 @@ static void marscan_output_stored_match(AjBool stored_match, ajint stored_dist,
     feature = ajFeatNew(*tab, source, type, start, end,
 			score, strand, frame) ;
 
-    /*
-//    ajFmtPrintS(&notestr,
-//		"MAR/SAR recognition site (MRS). 8bp pattern=%d..%d. 16bp "
-//		"pattern = %d..%d",
-//		s8, e8, s16, e16);
-    */
 
     ajFmtPrintS(&tmp, "*type MAR/SAR recognition site (MRS)");
     ajFeatTagAdd(feature, NULL, tmp);

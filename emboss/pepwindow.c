@@ -25,7 +25,10 @@
 #define AZ 28
 
 
+
+
 static AjBool pepwindow_getnakaidata(AjPFile file, float matrix[]);
+
 
 
 
@@ -38,7 +41,7 @@ static AjBool pepwindow_getnakaidata(AjPFile file, float matrix[]);
 int main(int argc, char **argv)
 {
     AjPFile datafile;
-    AjPStr aa0str=0;
+    AjPStr aa0str = 0;
     char *s1;
     AjPSeq seq;
     ajint llen;
@@ -48,17 +51,17 @@ int main(int argc, char **argv)
     ajint j;
     AjPGraphData graphdata;
     AjPGraph mult;
-    float min= 555.5;
+    float min = 555.5;
     float max = -555.5;
     float total;
 
-    (void) ajGraphInit("pepwindow", argc, argv);
+    ajGraphInit("pepwindow", argc, argv);
 
-    seq = ajAcdGetSeq ("sequence");
+    seq = ajAcdGetSeq("sequence");
 
-    mult = ajAcdGetGraphxy ("graph");
-    datafile  = ajAcdGetDatafile("datafile");
-    llen = ajAcdGetInt("length");
+    mult     = ajAcdGetGraphxy("graph");
+    datafile = ajAcdGetDatafile("datafile");
+    llen     = ajAcdGetInt("length");
 
     s1 = ajStrStr(ajSeqStr(seq));
 
@@ -88,7 +91,7 @@ int main(int argc, char **argv)
 	    total += matrix[(ajint)s1[j]];
 
 
-	total/=(float)llen;
+	total /= (float)llen;
 	graphdata->x[i] = (float)i+midpoint;
 	graphdata->y[i] = total;
 	if(total > max)
@@ -101,8 +104,8 @@ int main(int argc, char **argv)
 
     ajGraphDataxySetMaxima(graphdata,0.,(float)ajSeqLen(seq),min,max);
 
-    min=min*1.1;
-    max=max*1.1;
+    min = min*1.1;
+    max = max*1.1;
 
     ajGraphDataxySetMaxMin(graphdata,0.0,(float)ajSeqLen(seq),min,max);
     ajGraphxySetMaxMin(mult,0.0,(float)ajSeqLen(seq),min,max);
@@ -110,15 +113,19 @@ int main(int argc, char **argv)
     ajGraphxyDisplay(mult,AJTRUE);
 
     ajExit();
+
     return 0;
 }
+
+
+
 
 /* @funcstatic pepwindow_getnakaidata *****************************************
 **
 ** Read the NAKAI (AAINDEX) data file
 **
-** @param [W] file [AjPFile] Input file
-** @param [W] matrix [float[]] Data values for each amino acid
+** @param [r] file [AjPFile] Input file
+** @param [w] matrix [float[]] Data values for each amino acid
 ** @return [AjBool] ajTrue on success
 ** @@
 ******************************************************************************/
@@ -127,26 +134,25 @@ int main(int argc, char **argv)
 static AjBool pepwindow_getnakaidata(AjPFile file, float matrix[])
 {
     AjPStr buffer = NULL;
-    AjPStr buf2 = NULL;
-    AjPStr delim = NULL;
-    AjPStr description=NULL;
+    AjPStr buf2   = NULL;
+    AjPStr delim  = NULL;
+    AjPStr description = NULL;
     AjPStrTok token;
-    ajint line =0;
+    ajint line = 0;
     char *ptr;
 
 
     if(!file)
 	return 0;
 
-
-    delim = ajStrNewC(" :\t\n");
+    delim  = ajStrNewC(" :\t\n");
     buffer = ajStrNew();
     buf2   = ajStrNew();
     description = ajStrNew();
 
 
 
-    while (ajFileGets(file,&buffer))
+    while(ajFileGets(file,&buffer))
     {
 	ptr = ajStrStr(buffer);
 	if(*ptr == 'D')			/* save description */
@@ -232,7 +238,7 @@ static AjBool pepwindow_getnakaidata(AjPFile file, float matrix[])
 	    ajStrTokenClear(&token);
 	}
     }
-    ajFileClose (&file);
+    ajFileClose(&file);
 
     ajStrDel(&buffer);
     ajStrDel(&description);

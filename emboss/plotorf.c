@@ -24,10 +24,16 @@
 #include <string.h>
 
 
+
+
 static void plotorf_norfs(char *seq, char *rev, ajint n, float **x, float **y,
 			  AjPInt *cnt, ajint beg, AjPStr *starts,
 			  ajint nstarts, AjPStr *stops, ajint nstops);
 static AjBool plotorf_isin(char *p, AjPStr *str, ajint n);
+
+
+
+
 
 #ifdef PLD_png
 
@@ -35,6 +41,7 @@ extern int PNGWidth;
 extern int PNGHeight;
 
 #endif
+
 
 
 
@@ -46,35 +53,32 @@ extern int PNGHeight;
 
 int main(int argc, char **argv)
 {
-    AjPSeq     seq;
-    AjPStr     str;
-    AjPStr     rev;
-    AjPStr     *starts=NULL;
-    AjPStr     *stops=NULL;
-    AjPStr     start;
-    AjPStr     stop;
-    ajint      nstarts;
-    ajint      nstops;
+    AjPSeq seq;
+    AjPStr str;
+    AjPStr rev;
+    AjPStr *starts = NULL;
+    AjPStr *stops  = NULL;
+    AjPStr start;
+    AjPStr stop;
+    ajint nstarts;
+    ajint nstops;
 
-    AjPGraph   graph;
+    AjPGraph graph;
     AjPGraphData data;
 
-    float      *x[6];
-    float      *y[6];
-    AjPInt     cnt;
-    ajint        beg;
-    ajint	       end;
+    float *x[6];
+    float *y[6];
+    AjPInt cnt;
+    ajint beg;
+    ajint end;
 
-    ajint        i;
-    ajint        j;
+    ajint i;
+    ajint j;
 
     char *ftit[6]=
     {
 	"F1","F2","F3","R1","R2","R3"
     };
-
-
-
 
 
 #ifdef PLD_png
@@ -89,7 +93,7 @@ int main(int argc, char **argv)
 
 #endif
 
-    (void) ajGraphInit("plotorf", argc, argv);
+    ajGraphInit("plotorf", argc, argv);
 
     seq       = ajAcdGetSeq("sequence");
     graph     = ajAcdGetGraphxy("graph");
@@ -109,7 +113,7 @@ int main(int argc, char **argv)
     cnt = ajIntNew();
 
     ajSeqToUpper(seq);
-    (void) ajStrAssSubC(&str,ajSeqChar(seq),beg-1,end-1);
+    ajStrAssSubC(&str,ajSeqChar(seq),beg-1,end-1);
 
     rev = ajStrNewC(ajStrStr(str));
     ajSeqReverseStr(&rev);
@@ -160,8 +164,12 @@ int main(int argc, char **argv)
     AJFREE(stops);
 
     ajExit();
+
     return 0;
 }
+
+
+
 
 /* @funcstatic plotorf_norfs **************************************************
 **
@@ -185,7 +193,6 @@ static void plotorf_norfs(char *seq, char *rev, ajint n, float **x, float **y,
 			  AjPInt *cnt, ajint beg, AjPStr *starts,
 			  ajint nstarts, AjPStr *stops, ajint nstops)
 {
-
     ajint len;
     ajint i;
     ajint count;
@@ -196,24 +203,23 @@ static void plotorf_norfs(char *seq, char *rev, ajint n, float **x, float **y,
 
 
     len = strlen(seq);
+
     if(n<3)
     {
-	p = seq;
+	p  = seq;
 	po = n%3;
     }
     else
     {
-	p=rev;
-	po=len%3;
-	po-=n%3;
+	p  = rev;
+	po = len%3;
+	po -= n%3;
 	if(po<0)
-	    po+=3;
+	    po += 3;
     }
 
 
-
-
-    inframe=ajFalse;
+    inframe = ajFalse;
     count = 0;
 
     for(i=po;i<len-2;i+=3)
@@ -235,10 +241,10 @@ static void plotorf_norfs(char *seq, char *rev, ajint n, float **x, float **y,
 
     if(count)
     {
-      AJCNEW (x[n], count);
-      AJCNEW (y[n], count);
+	AJCNEW(x[n], count);
+	AJCNEW(y[n], count);
     }
-    (void) ajIntPut(cnt,n,count);
+    ajIntPut(cnt,n,count);
 
 
     count = 0;
@@ -247,7 +253,6 @@ static void plotorf_norfs(char *seq, char *rev, ajint n, float **x, float **y,
     for(i=po;i<len-2;i+=3)
     {
 	if(plotorf_isin(&p[i],starts,nstarts))
-	{
 	    if(!inframe)
 	    {
 		if(ajIntGet(*cnt,n))
@@ -258,10 +263,10 @@ static void plotorf_norfs(char *seq, char *rev, ajint n, float **x, float **y,
 			x[n][count]=(float)((len-i-1)+beg);
 		}
 		++count;
-		inframe=ajTrue;
+		inframe = ajTrue;
 		continue;
 	    }
-	}
+
 
 	if(plotorf_isin(&p[i],stops,nstops))
 	    if(inframe)
@@ -273,12 +278,11 @@ static void plotorf_norfs(char *seq, char *rev, ajint n, float **x, float **y,
 		    else
 			y[n][count-1]=(float)((len-i-1)+beg);
 		}
-		inframe=ajFalse;
+		inframe = ajFalse;
 	    }
     }
 
     if(inframe)
-    {
 	if(ajIntGet(*cnt,n))
 	{
 	    if(n<3)
@@ -286,12 +290,12 @@ static void plotorf_norfs(char *seq, char *rev, ajint n, float **x, float **y,
 	    else
 		y[n][count-1]=(float) beg;
 	}
-    }
-
-
 
     return;
 }
+
+
+
 
 /* @funcstatic plotorf_isin ***************************************************
 **

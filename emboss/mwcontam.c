@@ -27,11 +27,11 @@
 #define MILLION 1000000.
 
 
+
+
 static void mwcontam_readdata(AjPList files, AjPList **lists,
 			      ajint *n);
 static void mwcontam_complists(AjPList one, AjPList *two, float tolerance);
-
-
 
 
 
@@ -44,11 +44,11 @@ static void mwcontam_complists(AjPList one, AjPList *two, float tolerance);
 
 int main(int argc, char **argv)
 {
-    AjPList files  = NULL;
+    AjPList files = NULL;
     AjPFile outf = NULL;
     float tolerance = 0.0;
-    AjPList *lists=NULL;
-    double  *ptr=NULL;
+    AjPList *lists = NULL;
+    double  *ptr = NULL;
 
     ajint n;
     ajint i;
@@ -87,6 +87,7 @@ int main(int argc, char **argv)
     ajFileClose(&outf);
 
     ajExit();
+
     return 0;
 }
 
@@ -105,13 +106,13 @@ int main(int argc, char **argv)
 static void mwcontam_readdata(AjPList files, AjPList **lists,
 			      ajint *n)
 {
-    AjPFile inf=NULL;
-    AjPStr  line = NULL;
+    AjPFile inf   = NULL;
+    AjPStr  line  = NULL;
     AjPStr  thysf = NULL;
     ajint   nfiles;
     ajint   i;
-    double  *ptr=NULL;
-    double  val=0.;
+    double  *ptr = NULL;
+    double  val = 0.;
     char    c;
 
     nfiles = *n = ajListLength(files);
@@ -128,13 +129,17 @@ static void mwcontam_readdata(AjPList files, AjPList **lists,
 	(*lists)[i] = ajListNew();
 	ajListPop(files,(void **)&thysf);
 	inf = ajFileNewIn(thysf);
+
 	if(!inf)
 	    ajFatal("Cannot open file %S",thysf);
+
 	while(ajFileReadLine(inf,&line))
 	{
 	    c = *ajStrStr(line);
+
 	    if(c=='#' || !c || c=='\n')
 		continue;
+
 	    if(sscanf(ajStrStr(line),"%lf",&val)!=1)
 		continue;
 	    AJNEW(ptr);
@@ -158,7 +163,7 @@ static void mwcontam_readdata(AjPList files, AjPList **lists,
 ** the second list.
 **
 ** @param [r] one [AjPList] First list
-** @param [rw] two [AjPList*] Second list
+** @param [u] two [AjPList*] Second list
 ** @param [r] tolerance [float] mw tolerance (ppm)
 ** @@
 ******************************************************************************/
@@ -201,12 +206,13 @@ static void mwcontam_complists(AjPList one, AjPList *two, float tolerance)
 	    ajListPop(*two,(void **)&ptr);
 	    tval = *ptr;
 	    ajListPushApp(*two,(void *)ptr);
+
 	    if(tval>=mwmin && tval<=mwmax)
 	    {
 		AJNEW0(ptr);
 		*ptr = oval;
 		ajListPush(result,(void *)ptr);
-		j=len2-1;
+		j = len2-1;
 	    }
 	}
     }

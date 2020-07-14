@@ -1,6 +1,37 @@
+/* @source newcpgreport application
+**
+** Reports ALL cpg rich regions in a sequence
+** @author: Copyright (C) Rodrigo Lopez (rls@ebi.ac.uk)
+** @@
+**
+** Original program "CPGREPORT" by Rodrigo Lopez (EGCG 1995)
+**  CpG island finder. Larsen et al Genomics 13 1992 p1095-1107
+**  "usually defined as >200bp with %GC > 50% and obs/exp CpG >
+**  0.6". Here use running sum rather than window to score: if not CpG
+**  at position i, then decrement runSum counter, but if CpG then runSum
+**  += CPGSCORE.     Spans > threshold are searched
+**  for recursively.
+**
+** This program is free software; you can redistribute it and/or
+** modify it under the terms of the GNU General Public License
+** as published by the Free Software Foundation; either version 2
+** of the License, or (at your option) any later version.
+**
+** This program is distributed in the hope that it will be useful,
+** but WITHOUT ANY WARRANTY; without even the implied warranty of
+** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+** GNU General Public License for more details.
+**
+** You should have received a copy of the GNU General Public License
+** along with this program; if not, write to the Free Software
+** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+******************************************************************************/
+
 #include "emboss.h"
 #include <math.h>
 #include <stdlib.h>
+
+
 
 
 static void newcpgreport_findbases(AjPStr *substr, ajint begin, ajint len,
@@ -35,11 +66,11 @@ static void newcpgreport_compisl(AjPFile outf, char *p, ajint begin1,
 int main(int argc, char **argv)
 {
     AjPSeqall seqall;
-    AjPSeq    seq=NULL;
-    AjPFile   outf=NULL;
-    AjPStr    strand=NULL;
-    AjPStr    substr=NULL;
-    AjPStr    bases=NULL;
+    AjPSeq seq    = NULL;
+    AjPFile outf  = NULL;
+    AjPStr strand = NULL;
+    AjPStr substr = NULL;
+    AjPStr bases  = NULL;
 
     ajint begin;
     ajint end;
@@ -54,9 +85,9 @@ int main(int argc, char **argv)
     ajint plstart;
     ajint plend;
 
-    float  *xypc=NULL;
-    float  *obsexp=NULL;
-    AjBool *thresh=NULL;
+    float  *xypc   = NULL;
+    float  *obsexp = NULL;
+    AjBool *thresh = NULL;
     float  obsexpmax;
 
     ajint i;
@@ -79,20 +110,20 @@ int main(int argc, char **argv)
 
     while(ajSeqallNext(seqall, &seq))
     {
-	begin=ajSeqallBegin(seqall);
-	end=ajSeqallEnd(seqall);
+	begin = ajSeqallBegin(seqall);
+	end   = ajSeqallEnd(seqall);
 	strand = ajSeqStrCopy(seq);
 	ajStrToUpper(&strand);
 
 	ajStrAssSubC(&substr,ajStrStr(strand),--begin,--end);
 	len=ajStrLen(substr);
 
-	if (len > maxarr)
+	if(len > maxarr)
 	{
-	  AJCRESIZE(obsexp, len);
-	  AJCRESIZE(thresh, len);
-	  AJCRESIZE(xypc, len);
-	  maxarr = len;
+	    AJCRESIZE(obsexp, len);
+	    AJCRESIZE(thresh, len);
+	    AJCRESIZE(xypc, len);
+	    maxarr = len;
 	}
 	for(i=0;i<len;++i)
 	    obsexp[i]=xypc[i]=0.0;
@@ -114,8 +145,11 @@ int main(int argc, char **argv)
     ajFileClose(&outf);
 
     ajExit();
+
     return 0;
 }
+
+
 
 
 /* @funcstatic newcpgreport_findbases *****************************************
@@ -154,18 +188,16 @@ static void newcpgreport_findbases(AjPStr *substr, ajint begin, ajint len,
     float obs;
     float exp;
     ajint i;
-    ajint j=0;
+    ajint j = 0;
     ajint offset;
-    /*    ajint start;
-	  ajint stop;*/
 
     char *p;
     char *q;
 
     windowf = (float)window;
     *obsexpmax = 0.0;
-    offset=window/2;
-    *plstart = offset;
+    offset     = window/2;
+    *plstart   = offset;
     q = ajStrStr(*bases);
 
     for(i=0; i<(len-window+1);i+=shift)
@@ -175,15 +207,16 @@ static void newcpgreport_findbases(AjPStr *substr, ajint begin, ajint len,
 	newcpgreport_countbases(p, q, window, &cx, &cy, &cxpy);
 	obs = (float) cxpy;
 	exp = (float)(cx*cy)/windowf;
-	cxf=(float)cx;
-	cyf=(float)cy;
-	if(!exp) obsexp[j]=0.0;
+	cxf = (float)cx;
+	cyf = (float)cy;
+	if(!exp)
+	    obsexp[j] = 0.0;
 	else
 	{
-	    obsexp[j]=obs/exp;
+	    obsexp[j]  = obs/exp;
 	    *obsexpmax = (*obsexpmax > obsexp[j]) ? *obsexpmax : obsexp[j];
 	}
-	xypc[j]=(cxf/windowf)*100.0 + (cyf/windowf)*100.0;
+	xypc[j] = (cxf/windowf)*100.0 + (cyf/windowf)*100.0;
     }
 
     *plend = j;
@@ -206,7 +239,6 @@ static void newcpgreport_findbases(AjPStr *substr, ajint begin, ajint len,
 ** @@
 ******************************************************************************/
 
-
 static void newcpgreport_countbases(char *seq, char *bases, ajint window,
 				    ajint *cx, ajint *cy, ajint *cxpy)
 {
@@ -226,16 +258,23 @@ static void newcpgreport_countbases(char *seq, char *bases, ajint window,
 
     for(i=0; i<window; ++i)
     {
-	codea=codeb;
-	codeb=ajAZToBin(seq[i+1]);
+	codea = codeb;
+	codeb = ajAZToBin(seq[i+1]);
 	if(codea && !(codea & (15-codex)))
 	{
 	    ++*cx;
-	    if(codeb && !(codeb & (15-codey))) ++*cxpy;
+
+	    if(codeb && !(codeb & (15-codey)))
+		++*cxpy;
 	}
-	if(codea && !(codea & (15-codey))) ++*cy;
+
+	if(codea && !(codea & (15-codey)))
+	    ++*cy;
     }
+
+    return;
 }
+
 
 
 
@@ -269,7 +308,7 @@ static void newcpgreport_identify(AjPFile outf, float *obsexp, float *xypc,
 				  ajint minlen, float minobsexp, float minpc,
 				  char *seq)
 {
-    static ajint avwindow=10;
+    static ajint avwindow = 10;
     float avpc;
     float avobsexp;
     float sumpc;
@@ -284,13 +323,13 @@ static void newcpgreport_identify(AjPFile outf, float *obsexp, float *xypc,
 
 
     for(i=0; i<len; ++i)
-	thresh[i]=ajFalse;
+	thresh[i] = ajFalse;
 
     sumlen=0;
     posmin = begin;
     for(pos=0,first=0;pos<(len-avwindow*shift);pos+=shift)
     {
-	sumpc=sumobsexp=0.0;
+	sumpc = sumobsexp = 0.0;
 
 	ajDebug("pos: %d max: %d\n", pos, pos+avwindow*shift);
 	for(i=pos;i<=(pos+avwindow*shift);++i)
@@ -305,9 +344,11 @@ static void newcpgreport_identify(AjPFile outf, float *obsexp, float *xypc,
 	avobsexp = sumobsexp/(float)avwindow;
 	ajDebug("sumpc: %.2f sumobsexp: %.2f\n", sumpc, sumobsexp);
 	ajDebug(" avpc: %.2f  avobsexp: %.2f\n", avpc, avobsexp);
+
 	if((avobsexp>minobsexp)&&(avpc>minpc))
 	{
-	    if(!sumlen) first=pos;	/* start a new island */
+	    if(!sumlen)
+		first=pos;	/* start a new island */
 	    sumlen += shift;
 	    ajDebug(" ** hit first: %d sumlen: %d\n", first, sumlen);
 	}
@@ -318,14 +359,14 @@ static void newcpgreport_identify(AjPFile outf, float *obsexp, float *xypc,
 		for(i=first; i<=pos-shift;++i)
 		    thresh[i]=ajTrue;
 	    }
-	    sumlen=0;
+	    sumlen = 0;
 	}
     }
 
     if(sumlen>=minlen)
     {
 	for(i=first;i<len;++i)
-	    thresh[i]=ajTrue;
+	    thresh[i] = ajTrue;
     }
 
 
@@ -336,6 +377,7 @@ static void newcpgreport_identify(AjPFile outf, float *obsexp, float *xypc,
 
     return;
 }
+
 
 
 
@@ -364,11 +406,11 @@ static void newcpgreport_reportislands(AjPFile outf, AjBool *thresh,
 				       ajint len, char *seq)
 {
     AjBool island;
-    ajint startpos=0;
+    ajint startpos = 0;
     ajint endpos;
     ajint slen;
     ajint i;
-    ajint cnt=0;
+    ajint cnt = 0;
 
     ajFmtPrintF(outf,"ID   %s  %d BP.\n",name, len);
     ajFmtPrintF(outf,"XX\n");
@@ -404,16 +446,17 @@ static void newcpgreport_reportislands(AjPFile outf, AjBool *thresh,
 	}
 	else
 	{
-	    island=thresh[i];
-	    if(island) startpos=i;
+	    island = thresh[i];
+	    if(island)
+		startpos=i;
 
 	}
     }
 
     if(island)
     {
-        slen=len-startpos+1;
-	endpos=len-1;
+        slen   = len-startpos+1;
+	endpos = len-1;
        	ajFmtPrintF(outf,"FT   CpG island       %d..%d\n",
 			    startpos+begin+1, endpos+begin);
         ajFmtPrintF(outf,"FT                    /size=%d\n",
@@ -447,32 +490,30 @@ static void newcpgreport_reportislands(AjPFile outf, AjBool *thresh,
 ** @@
 ******************************************************************************/
 
-
 static void newcpgreport_compisl(AjPFile outf, char *p, ajint begin1,
 				 ajint end1)
 {
-    ajint C=0;
-    ajint G=0;
-    ajint CG=0;
-    ajint i=0;
-    ajint sumcg=0;
-    ajint len=0;
+    ajint C  = 0;
+    ajint G  = 0;
+    ajint CG = 0;
+    ajint i  = 0;
+    ajint sumcg = 0;
+    ajint len = 0;
     float pcg;
     float oe;
 
     len = end1-begin1+1;
-
 
     for(i=begin1;i<end1;++i)
     {
 	if(p[i]=='C')
 	{
 	    ++C;
-	    if (p[i+1]=='G')
+	    if(p[i+1]=='G')
 		++CG;
 	}
 
-	if (p[i]=='G')
+	if(p[i]=='G')
 	    ++G;
     }
 

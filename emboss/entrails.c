@@ -21,6 +21,9 @@
 ******************************************************************************/
 #include "emboss.h"
 
+
+
+
 /* @prog entrails *************************************************************
 **
 ** Reports internal data structures as a guide for user interface developers
@@ -33,23 +36,25 @@ int main(int argc, char **argv)
     AjPFile outf;
     AjBool full;
 
-    embInit ("entrails", argc, argv);
+    embInit("entrails", argc, argv);
 
-    outf = ajAcdGetOutfile ("outfile");
-    full = ajAcdGetBool ("fullreport");
+    outf = ajAcdGetOutfile("outfile");
+    full = ajAcdGetBool("fullreport");
 
-    ajAcdPrintType (outf, full);
-    ajSeqPrintInFormat (outf, full);
-    ajSeqPrintOutFormat (outf, full);
-    ajSeqPrintType (outf, full);
-    ajSeqPrintAccess (outf, full);
-    ajNamPrintDbAttr (outf, full);
-    ajNamPrintRsAttr (outf, full);
-    ajAlignPrintFormat (outf, full);
-    ajReportPrintFormat (outf, full);
+    ajAcdPrintType(outf, full);
+    ajAcdPrintQual(outf, full);
+    ajSeqPrintInFormat(outf, full);
+    ajSeqPrintOutFormat(outf, full);
+    ajSeqPrintType(outf, full);
+    ajSeqPrintAccess(outf, full);
+    ajNamPrintDbAttr(outf, full);
+    ajNamPrintRsAttr(outf, full);
+    ajAlignPrintFormat(outf, full);
+    ajReportPrintFormat(outf, full);
 
-    ajGraphPrintType (outf, full);
+    ajGraphPrintType(outf, full);
 
-    ajExit ();
+    ajExit();
+
     return 0;
 }

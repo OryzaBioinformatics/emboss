@@ -20,8 +20,9 @@
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 ******************************************************************************/
 
-
 #include "emboss.h"
+
+
 
 
 /* @prog maskseq **************************************************************
@@ -37,43 +38,40 @@ int main(int argc, char **argv)
     AjPRange regions;
     AjPStr maskchar;
     AjBool tolower;
-    AjPStr str=NULL;
+    AjPStr str = NULL;
     ajint beg;
     ajint end;
 
-    (void) embInit ("maskseq", argc, argv);
+    embInit("maskseq", argc, argv);
 
-    seq = ajAcdGetSeq ("sequence");
-    seqout = ajAcdGetSeqout ("outseq");
-    regions = ajAcdGetRange("regions");
-    maskchar = ajAcdGetString ("maskchar");
-    tolower = ajAcdGetBool ("tolower");
+    seq      = ajAcdGetSeq("sequence");
+    seqout   = ajAcdGetSeqout("outseq");
+    regions  = ajAcdGetRange("regions");
+    maskchar = ajAcdGetString("maskchar");
+    tolower  = ajAcdGetBool("tolower");
 
     beg = ajSeqBegin(seq)-1;
     end = ajSeqEnd(seq)-1;
 
 
     /* get the copy of the sequence and the regions */
-    (void) ajStrAssSub (&str, ajSeqStr(seq), beg, end);
-    (void) ajRangeBegin (regions, beg+1);
+    ajStrAssSub(&str, ajSeqStr(seq), beg, end);
+    ajRangeBegin(regions, beg+1);
 
-    /* if the mask character is null or space or 'tower' is True, then
+    /*
+    ** if the mask character is null or space or 'tower' is True, then
     ** ToLower the regions, else replace with maskseq
     */
-    if (tolower || ajStrLen(maskchar) == 0 || ajStrMatchC(maskchar, " ")) {
-
-    	(void) ajRangeStrToLower (&str, regions);
-
-    } else {
-
-        (void) ajRangeStrMask (&str, regions, maskchar);
-
-    }
+    if(tolower || ajStrLen(maskchar) == 0 || ajStrMatchC(maskchar, " "))
+    	ajRangeStrToLower(&str, regions);
+    else
+        ajRangeStrMask(&str, regions, maskchar);
     
-    (void) ajSeqReplace(seq, str);
-    (void) ajSeqWrite (seqout, seq);
-    (void) ajSeqWriteClose (seqout);
+    ajSeqReplace(seq, str);
+    ajSeqWrite(seqout, seq);
+    ajSeqWriteClose(seqout);
 
-    ajExit ();
+    ajExit();
+
     return 0;
 }

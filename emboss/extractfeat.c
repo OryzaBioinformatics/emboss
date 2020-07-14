@@ -20,50 +20,62 @@
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 ******************************************************************************/
 
-
 #include "emboss.h"
 
 
-static void extractfeat_FeatSeqExtract (AjPSeq seq, AjPSeqout seqout,
-	AjPFeattable featab, ajint before, ajint after, AjBool join,
-	AjBool featinname, AjPStr describe);
+
+
+static void extractfeat_FeatSeqExtract(AjPSeq seq, AjPSeqout seqout,
+				       AjPFeattable featab, ajint before,
+				       ajint after, AjBool join,
+				       AjBool featinname, AjPStr describe);
 
 static void extractfeat_GetFeatseq(AjPSeq seq, AjPFeature gf, AjPStr
-	*gfstr, AjBool sense);
+				   *gfstr, AjBool sense);
 
-static void extractfeat_WriteOut (AjPSeqout seqout, AjPStr *featstr,
-	AjBool compall, AjBool sense, ajint firstpos, ajint lastpos,
-	ajint before, ajint after, AjPSeq seq, AjBool remote, AjPStr type,
-	AjBool featinname, AjPStr describestr);
+static void extractfeat_WriteOut(AjPSeqout seqout, AjPStr *featstr,
+				 AjBool compall, AjBool sense, ajint firstpos,
+				 ajint lastpos,
+				 ajint before, ajint after, AjPSeq seq,
+				 AjBool remote, AjPStr type,
+				 AjBool featinname, AjPStr describestr);
 
-static void extractfeat_BeforeAfter (AjPSeq seq, AjPStr * featstr,
-	ajint firstpos, ajint lastpos, ajint before, ajint after,
-	AjBool sense);
+static void extractfeat_BeforeAfter(AjPSeq seq, AjPStr * featstr,
+				    ajint firstpos, ajint lastpos,
+				    ajint before, ajint after,
+				    AjBool sense);
 
 static void extractfeat_GetRegionPad(AjPSeq seq, AjPStr *featstr, ajint
-	start, ajint end, AjBool sense, AjBool beginning);
+				     start, ajint end, AjBool sense,
+				     AjBool beginning);
 
 static void extractfeat_FeatureFilter(AjPFeattable featab, AjPStr
-        source, AjPStr type, ajint sense, float minscore,
-        float maxscore, AjPStr tag, AjPStr value);
+				      source, AjPStr type, ajint sense,
+				      float minscore,
+				      float maxscore, AjPStr tag,
+				      AjPStr value);
 
-static AjBool extractfeat_MatchFeature (AjPFeature gf, AjPStr
-        source, AjPStr type, ajint sense, float minscore,
-        float maxscore, AjPStr tag, AjPStr value, AjBool *tagsmatch);
+static AjBool extractfeat_MatchFeature(AjPFeature gf, AjPStr
+				       source, AjPStr type, ajint sense,
+				       float minscore,
+				       float maxscore, AjPStr tag,
+				       AjPStr value, AjBool *tagsmatch);
 
-static AjBool extractfeat_MatchPatternTags (AjPFeature feat, AjPStr tpattern,
-        AjPStr vpattern);
+static AjBool extractfeat_MatchPatternTags(AjPFeature feat, AjPStr tpattern,
+					   AjPStr vpattern);
 
-static AjBool extractfeat_MatchPatternDescribe (AjPFeature feat, 
-	AjPStr describe, AjPStr *strout);
+static AjBool extractfeat_MatchPatternDescribe(AjPFeature feat, 
+					       AjPStr describe,
+					       AjPStr *strout);
+
+
+
 
 /* @prog extractfeat **********************************************************
 **
 ** Extract features from a sequence
 **
 ******************************************************************************/
-
-
 
 int main(int argc, char **argv)
 {
@@ -79,57 +91,58 @@ int main(int argc, char **argv)
 
     /* feature filter criteria */
     AjPStr source = NULL;
-    AjPStr type = NULL;
+    AjPStr type   = NULL;
     ajint sense;
     float minscore;
     float maxscore;
-    AjPStr tag = NULL;
+    AjPStr tag  = NULL;
     AjPStr value = NULL;
 
-    (void) embInit ("extractfeat", argc, argv);
-
-    seqall = ajAcdGetSeqall ("sequence");
-    seqout = ajAcdGetSeqout ("outseq");
-    before = ajAcdGetInt ("before");
-    after = ajAcdGetInt ("after");
-    join = ajAcdGetBool ("join");
-    featinname = ajAcdGetBool ("featinname");
-    describe = ajAcdGetString ("describe");
-
+    embInit("extractfeat", argc, argv);
+    
+    seqall     = ajAcdGetSeqall("sequence");
+    seqout     = ajAcdGetSeqout("outseq");
+    before     = ajAcdGetInt("before");
+    after      = ajAcdGetInt("after");
+    join       = ajAcdGetBool("join");
+    featinname = ajAcdGetBool("featinname");
+    describe   = ajAcdGetString("describe");
+    
     /* feature filter criteria */
-    source = ajAcdGetString ("source");
-    type = ajAcdGetString ("type");
-    sense = ajAcdGetInt ("sense");
-    minscore = ajAcdGetFloat ("minscore");
-    maxscore = ajAcdGetFloat ("maxscore");
-    tag = ajAcdGetString ("tag");
-    value = ajAcdGetString ("value");
-
-    while (ajSeqallNext(seqall, &seq))
+    source   = ajAcdGetString("source");
+    type     = ajAcdGetString("type");
+    sense    = ajAcdGetInt("sense");
+    minscore = ajAcdGetFloat("minscore");
+    maxscore = ajAcdGetFloat("maxscore");
+    tag      = ajAcdGetString("tag");
+    value    = ajAcdGetString("value");
+    
+    while(ajSeqallNext(seqall, &seq))
     {
-
 	/* get the feature table of the sequence */
 	featab = ajSeqCopyFeat(seq);
 
         /* delete features in the table that don't match our criteria */
         extractfeat_FeatureFilter(featab, source, type, sense,
-                              minscore, maxscore, tag, value);
+				  minscore, maxscore, tag, value);
 
         /* extract the features */
-        (void) extractfeat_FeatSeqExtract (seq, seqout, featab, before,
-		after, join, featinname, describe);
+        extractfeat_FeatSeqExtract(seq, seqout, featab, before,
+				   after, join, featinname, describe);
 
-        /* tidy up */
         ajFeattableDel(&featab);
 
     }
+    
+    ajSeqWriteClose(seqout);
+    
+    
+    ajExit();
 
-    ajSeqWriteClose (seqout);
-
-
-    ajExit ();
     return 0;
 }
+
+
 
 
 /* @funcstatic extractfeat_FeatSeqExtract *************************************
@@ -151,13 +164,13 @@ int main(int argc, char **argv)
 ** @@
 ******************************************************************************/
 
-
-static void extractfeat_FeatSeqExtract (AjPSeq seq, AjPSeqout seqout,
-	AjPFeattable featab, ajint before, ajint after, AjBool join,
-	AjBool featinname, AjPStr describe)
+static void extractfeat_FeatSeqExtract(AjPSeq seq, AjPSeqout seqout,
+				       AjPFeattable featab, ajint before,
+				       ajint after, AjBool join,
+				       AjBool featinname, AjPStr describe)
 {
     AjIList iter = NULL;
-    AjPFeature gf   = NULL;
+    AjPFeature gf = NULL;
     AjBool  single;		/* ajtrue = is not a multiple */
     AjBool  parent;		/* ajtrue = is a parent of a multiple */
     AjBool  child;		/* ajTrue = is a child of a multiple */
@@ -167,34 +180,37 @@ static void extractfeat_FeatSeqExtract (AjPSeq seq, AjPSeqout seqout,
     AjPStr  type = NULL;	/* name of feature */
     AjPStr  featseq = NULL;	/* feature sequence string */
     AjPStr  tmpseq = NULL;	/* temporary sequence string */
-    ajint   firstpos, lastpos;	/* bounds of feature in sequence */
+    ajint   firstpos;
+    ajint   lastpos;	        /* bounds of feature in sequence */
     AjPStr  describeout = NULL;	/* tag names/values to add to descriptions */
 
 
     /* For all features... */
-    if (featab && featab->Features)
+    if(featab && featab->Features)
     {
-
-/* initialise details of a feature */
+	/* initialise details of a feature */
         featseq = ajStrNew();
-        tmpseq = ajStrNew();
-        type = ajStrNew();
-        remote = ajFalse;
+        tmpseq  = ajStrNew();
+        type    = ajStrNew();
+        remote  = ajFalse;
         compall = ajFalse;
-        sense = ajTrue;
+        sense   = ajTrue;
         firstpos = 0;
-        lastpos = 0;
+        lastpos  = 0;
         describeout = ajStrNew();
 
 
-	iter = ajListIter(featab->Features) ;
+	iter = ajListIter(featab->Features);
 	while(ajListIterMore(iter))
 	{
-	    gf = ajListIterNext (iter) ;
+	    gf = ajListIterNext(iter) ;
 
-	    /* Determine what sort of thing this feature is. Only one of these will be true. */
-
-	    /* True if this is part of a multiple join and it is not the parent */
+	    /*
+	    ** Determine what sort of thing this feature is. Only one of
+	    ** these will be true.
+	    ** True if this is part of a multiple join and it is not
+	    ** the parent
+	    */
 	    child = ajFalse;
 
 	    /* True if this is part of a multiple join and it is the parent */
@@ -203,21 +219,22 @@ static void extractfeat_FeatSeqExtract (AjPSeq seq, AjPSeqout seqout,
 	    /* True if this is not part of a multiple join */
 	    single = ajFalse;
 
-            if (ajFeatIsMultiple(gf)) {
-            	if (ajFeatIsChild(gf)) {
+            if(ajFeatIsMultiple(gf))
+	    {
+            	if(ajFeatIsChild(gf))
             	    child = ajTrue;
-            	} else {
+		else
             	    parent = ajTrue;
-            	}
-            } else {
+            }
+	    else
             	single = ajTrue;
-	    }
 
 	    /* 
-	    ** If we do not wish to assemble joins(), then force all features
+	    ** If not wish to assembling joins(), then force all features
 	    ** to be treated as single 
 	    */
-	    if (!join) {
+	    if(!join)
+	    {
 	    	child = ajFalse;
 	    	parent = ajFalse;
 	    	single = ajTrue;
@@ -225,15 +242,19 @@ static void extractfeat_FeatSeqExtract (AjPSeq seq, AjPSeqout seqout,
 
 
 
-	    ajDebug ("feature %S %d-%d is parent %B, child %B, single %B\n",
-			gf->Type, gf->Start, gf->End, parent, child, single);
+	    ajDebug("feature %S %d-%d is parent %B, child %B, single %B\n",
+		    gf->Type, gf->Start, gf->End, parent, child, single);
 
-	    /* If single or parent, write out any stored previous feature
-	       sequence */	    
-            if (single || parent) {
+	    /*
+	    ** If single or parent, write out any stored previous feature
+	    ** sequence
+	    */	    
+            if(single || parent)
+	    {
             	extractfeat_WriteOut(seqout, &featseq, compall, sense,
-			firstpos, lastpos, before, after, seq, remote, type, 
-			featinname, describeout);
+				     firstpos, lastpos, before, after, seq,
+				     remote, type, 
+				     featinname, describeout);
 
                 /* reset joined feature information */
                 ajStrClear(&featseq);
@@ -247,78 +268,90 @@ static void extractfeat_FeatSeqExtract (AjPSeq seq, AjPSeqout seqout,
                 lastpos = 0;
             }
 
-	    /* Don't process Remote IDs and abort a multiple join if one
-	       contains a Remote ID */
-            if (! ajFeatIsLocal(gf)) {
+	    /*
+	    ** Don't process Remote IDs and abort a multiple join if one
+	    ** contains a Remote ID
+	    */
+            if(! ajFeatIsLocal(gf))
                 remote = ajTrue;
-            }
+
 	    ajDebug("remote=%B\n", remote);
-            if (remote)
+            if(remote)
             	continue;
 
 
-/* if parent, note if have Complemented Join */
-            if (parent) {
+	    /* if parent, note if have Complemented Join */
+            if(parent)
                 compall = ajFeatIsCompMult(gf);
-            }
 
-/*
-** Get the sense of the feature
-** NB.  if we are complementing several joined features, then pretend they
-** are forward sense until we can reverse-complement them all together.
-*/
-	    if (!compall && gf->Strand == '-')
+	    /*
+	    ** Get the sense of the feature
+	    ** NB.  if complementing several joined features, then pretend they
+	    ** are forward sense until its possible to  reverse-complement
+	    ** them all together.
+	    */
+	    if(!compall && gf->Strand == '-')
 	        sense = ajFalse;
-
-/* get 'type' name of feature */
-	    if (single || parent)
+	    
+	    /* get 'type' name of feature */
+	    if(single || parent)
 	    	ajStrAss(&type, gf->Type);
-
-/* if single or parent, get 'before' + 'after' sequence positions */
-            if (single || parent) {
+	    
+	    /*
+	    ** if single or parent, get 'before' + 'after' sequence
+	    ** positions
+	    */
+            if(single || parent)
+	    {
                 firstpos = gf->Start-1;
                 lastpos = gf->End-1;
             }
-
-/* if child, update the boundary positions */
-            if (child) {
-                if (sense) {
+	    
+	    /* if child, update the boundary positions */
+            if(child)
+	    {
+                if(sense)
                     lastpos = gf->End-1;
-		} else {
+		else
 		    firstpos = gf->Start-1;
-		}
             }
-
-            extractfeat_MatchPatternDescribe (gf, describe, &describeout);
-
-/* get feature sequence (complement if required) */
+	    
+            extractfeat_MatchPatternDescribe(gf, describe, &describeout);
+	    
+	    /* get feature sequence(complement if required) */
             extractfeat_GetFeatseq(seq, gf, &tmpseq, sense);
 	    ajDebug("extracted feature = %d bases\n", ajStrLen(tmpseq));
-
-/* if child, append to previous sequence, otherwise simply assign */
-            if (child) {
+	    
+	    /*
+	    ** if child, append to previous sequence, otherwise
+	    ** simply assign
+	    */
+            if(child)
+	    {
             	ajStrApp(&featseq, tmpseq);
-	        ajDebug("joined feature so far = %d bases\n", ajStrLen(featseq));
-            } else {
-            	ajStrAss(&featseq, tmpseq);
+	        ajDebug("joined feature so far = %d bases\n",
+			ajStrLen(featseq));
             }
-
+	    else
+            	ajStrAss(&featseq, tmpseq);
 	}
 	ajListIterFree(iter) ;
-
-/* write out any previous sequence(s)
-- add before + after, complement all */
+	
+	/*
+	** write out any previous sequence(s)
+	** - add before + after, complement all
+	*/
         extractfeat_WriteOut(seqout, &featseq, compall, sense,
-		firstpos, lastpos, before, after, seq, remote, type, 
-		featinname, describeout);
-
-/* tidy up */
+			     firstpos, lastpos, before, after,
+			     seq, remote, type, 
+			     featinname, describeout);
+	
         ajStrDel(&featseq);
         ajStrDel(&tmpseq);
         ajStrDel(&type);
         ajStrDel(&describeout);
     }
-
+    
     return;
 }
 
@@ -338,9 +371,8 @@ static void extractfeat_FeatSeqExtract (AjPSeq seq, AjPSeqout seqout,
 ******************************************************************************/
 
 static void extractfeat_GetFeatseq(AjPSeq seq, AjPFeature gf, AjPStr
-	*gfstr, AjBool sense)
+				   *gfstr, AjBool sense)
 {
-
     AjPStr str = NULL;		/* sequence string */
     AjPStr tmp = NULL;
 
@@ -350,20 +382,20 @@ static void extractfeat_GetFeatseq(AjPSeq seq, AjPFeature gf, AjPStr
     ajDebug("about to get sequence from %d-%d, len=%d\n",
 	    gf->Start, gf->End, gf->End - gf->Start+1);
 
-    ajStrAssSub (&tmp, str, gf->Start-1, gf->End-1);
+    ajStrAssSub(&tmp, str, gf->Start-1, gf->End-1);
 
     /* if feature was in reverse sense, then get reverse complement */
-    if (!sense) {
+    if(!sense)
     	ajSeqReverseStr(&tmp);
-    }
 
     ajStrAss(gfstr, tmp);
 
-
-    /* tidy up */
     ajStrDel(&tmp);
 
+    return;
 }
+
+
 
 
 /* @funcstatic extractfeat_WriteOut *******************************************
@@ -388,70 +420,76 @@ static void extractfeat_GetFeatseq(AjPSeq seq, AjPFeature gf, AjPStr
 ** @@
 ******************************************************************************/
 
-static void extractfeat_WriteOut (AjPSeqout seqout, AjPStr *featstr,
-	AjBool compall, AjBool sense, ajint firstpos, ajint lastpos,
-	ajint before, ajint after, AjPSeq seq, AjBool remote, AjPStr type,
-	AjBool featinname, AjPStr describestr)
-
+static void extractfeat_WriteOut(AjPSeqout seqout, AjPStr *featstr,
+				 AjBool compall, AjBool sense, ajint firstpos,
+				 ajint lastpos, ajint before, ajint after,
+				 AjPSeq seq, AjBool remote, AjPStr type,
+				 AjBool featinname, AjPStr describestr)
 {
-
     AjPSeq newseq = NULL;
-    AjPStr name = NULL;		/* new name of the sequence */
-    AjPStr value = NULL;	/* string value of start or end position */
-    AjPStr desc = NULL;		/* sequence description */
+    AjPStr name   = NULL;	/* new name of the sequence */
+    AjPStr value  = NULL;	/* string value of start or end position */
+    AjPStr desc   = NULL;	/* sequence description */
     ajint tmp;
 
     /* see if there is a sequence to be written out */
-    if (!ajStrLen(*featstr)) {
-        ajDebug("feature not written out because it has length=0 (probably first time round)\n");
+    if(!ajStrLen(*featstr))
+    {
+        ajDebug("feature not written out because it has length=0 "
+		"(probably first time round)\n");
     	return;
     }
 
     /* see if must abort because there were Remote IDs in the features */
-    if (remote) {
+    if(remote)
+    {
         ajDebug("feature not written out because it has Remote IDs\n");
         return;
     }
 
     /* if complementing the whole sequence, swap before and after */
-    if (compall) {
-        tmp = before;
+    if(compall)
+    {
+        tmp    = before;
         before = after;
-        after = tmp;
+        after  = tmp;
     }
 
     ajDebug("feature = %d bases\n", ajStrLen(*featstr));
 
     /* featstr may be edited, so it is a AjPStr* */
     extractfeat_BeforeAfter (seq, featstr, firstpos, lastpos, before,
-		after, sense);
+			     after, sense);
 
     ajDebug("feature+before/after = %d bases\n", ajStrLen(*featstr));
 
-    /* if join was all in reverse sense, now finally get reverse complement */
-    if (compall) {
+    /*
+    ** if join was all in reverse sense, now finally get reverse
+    ** complement
+    */
+    if(compall)
     	ajSeqReverseStr(featstr);
-    }
 
     /* set the extracted sequence */
-    newseq = ajSeqNew ();
-    ajSeqReplace (newseq, *featstr);
+    newseq = ajSeqNew();
+    ajSeqReplace(newseq, *featstr);
 
      /* create a nice name for the new sequence */
     name = ajStrNew();
-    (void) ajStrApp(&name, ajSeqGetName(seq));
-    (void) ajStrAppC(&name, "_");
+    ajStrApp(&name, ajSeqGetName(seq));
+    ajStrAppC(&name, "_");
     value = ajStrNew();
-    (void) ajStrFromInt(&value, firstpos+1);
-    (void) ajStrApp(&name, value);
-    (void) ajStrAppC(&name, "_");
-    (void) ajStrFromInt(&value, lastpos+1);
-    (void) ajStrApp(&name, value);
+    ajStrFromInt(&value, firstpos+1);
+    ajStrApp(&name, value);
+    ajStrAppC(&name, "_");
+    ajStrFromInt(&value, lastpos+1);
+    ajStrApp(&name, value);
 
     /* add the type of feature to the name, if required */
-    if (featinname) {
-    	(void) ajStrAppC(&name, "_");
-    	(void) ajStrApp(&name, type);
+    if(featinname)
+    {
+    	ajStrAppC(&name, "_");
+    	ajStrApp(&name, type);
     }
 
     ajSeqAssName(newseq, name);
@@ -461,29 +499,32 @@ static void extractfeat_WriteOut (AjPSeqout seqout, AjPStr *featstr,
     ajStrAppC(&desc, "[");
     ajStrApp(&desc, type);
     ajStrAppC(&desc, "] ");
-    if (ajStrLen(describestr)) {
+    if(ajStrLen(describestr))
     	ajStrApp(&desc, describestr);
-    }
+
     ajStrApp(&desc, ajSeqGetDesc(seq));
     ajSeqAssDesc(newseq, desc);
 
     /* set the type */
-    if (ajSeqIsNuc(seq))
-        ajSeqSetNuc (newseq);
+    if(ajSeqIsNuc(seq))
+        ajSeqSetNuc(newseq);
     else
-        ajSeqSetProt (newseq);
+        ajSeqSetProt(newseq);
 
 
     /* write the new sequence */
-    (void) ajSeqAllWrite (seqout, newseq);
+    ajSeqAllWrite(seqout, newseq);
 
 
-    /* tidy up */
-    (void) ajSeqDel(&newseq);
-    (void) ajStrDel(&name);
-    (void) ajStrDel(&value);
-    (void) ajStrDel(&desc);
+    ajSeqDel(&newseq);
+    ajStrDel(&name);
+    ajStrDel(&value);
+    ajStrDel(&desc);
+
+    return;
 }
+
+
 
 
 /* @funcstatic extractfeat_BeforeAfter ****************************************
@@ -501,13 +542,13 @@ static void extractfeat_WriteOut (AjPSeqout seqout, AjPStr *featstr,
 ** @@
 ******************************************************************************/
 
-static void extractfeat_BeforeAfter (AjPSeq seq, AjPStr * featstr,
-		ajint firstpos, ajint lastpos, ajint before, ajint after,
-		AjBool sense)
+static void extractfeat_BeforeAfter(AjPSeq seq, AjPStr * featstr,
+				    ajint firstpos, ajint lastpos,
+				    ajint before, ajint after,
+				    AjBool sense)
 
 {
-
-    AjPStr str = NULL;		/* sequence string */
+    AjPStr str = NULL;			/* sequence string */
     ajint start;
     ajint end;
     ajint featlen;
@@ -515,106 +556,128 @@ static void extractfeat_BeforeAfter (AjPSeq seq, AjPStr * featstr,
 
 
 
-/*
-** We now have:
-** A complete set of joined features in featstr.
-** 'sense' is FALSE if any feature was reverse sense (ignore 'compall'
-** in this routine).
-** 'firstpos' and 'lastpos' set to the first and last positions of the feature
-*/
+    /*
+     ** There is now:
+     ** A complete set of joined features in featstr.
+     ** 'sense' is FALSE if any feature was reverse sense (ignore 'compall'
+     ** in this routine).
+     ** 'firstpos' and 'lastpos' set to the first and last positions
+     ** of the feature
+     */
 
 
-    str = ajSeqStr(seq);	/* NB don't alter this sequence string */
+    str = ajSeqStr(seq);     /* NB don't alter this sequence string */
 
-/* get start and end positions to truncate featstr at or to extract from seq */
+    /*
+    ** get start and end positions to truncate featstr at or to
+    ** extract from seq
+    */
 
-/* do negative values of before/after */
+    /* do negative values of before/after */
     featlen = ajStrLen(*featstr)-1;
     start = 0;
     end = featlen;
 
-    if (before < 0) {		/* negative, so before end */
+    if(before < 0)			/* negative, so before end */
     	start = end + before+1;
-    }
 
-    if (after < 0) {		/* negative, so after start */
+    if(after < 0)			/* negative, so after start */
     	end = start - after-1;
-    }
 
-    if (end < start) {
+    if(end < start)
+    {
         ajWarn("Extraction region end less than start for %S [%d-%d]",
-		ajSeqGetName(seq), firstpos+1, lastpos+1);
+	       ajSeqGetName(seq), firstpos+1, lastpos+1);
         return;
     }
 
 
-/*
-** truncate the featstr
-** if start or end are past start/end of featstr, use 0 or featlen
-*/
-    if (before < 0 || after < 0) {
+     /*
+     ** truncate the featstr
+     ** if start or end are past start/end of featstr, use 0 or featlen
+     */
+    if(before < 0 || after < 0)
+    {
         ajDebug("truncating featstr to %d-%d\n",
-		start<0?0:start, end>featlen?featlen:end);
+		start < 0 ? 0 : start, end>featlen ? featlen : end);
         ajDebug("featstr len=%d bases\n", ajStrLen(*featstr));
-    	ajStrSub(featstr, start<0?0:start, end>featlen?featlen:end);
+    	ajStrSub(featstr, start<0 ? 0 : start, end>featlen ? featlen :end);
         ajDebug("featstr len=%d bases\n", ajStrLen(*featstr));
     }
 
 
-/* add surrounding sequence if past 0/featlen when before/after are negative */
-    if (start < 0) {
+    /*
+    ** add surrounding sequence if past 0/featlen when before/after
+    ** are negative
+    */
+    if(start < 0)
+    {
         ajDebug("start < 0\n");
         len = -start;
-        if (sense) {
+        if(sense)
             extractfeat_GetRegionPad(seq, featstr, firstpos-len,
-		firstpos-1, sense, ajTrue);
-	} else {
+				     firstpos-1, sense, ajTrue);
+	else
             extractfeat_GetRegionPad(seq, featstr, lastpos+1,
-		lastpos+len, sense, ajTrue);
-	}
+				     lastpos+len, sense, ajTrue);
     }
-    if (end > featlen) {	/* NB use the original length of featstr */
+
+    if(end > featlen)
+    {
+	/* NB use the original length of featstr */
         ajDebug("end > featlen\n");
         len = end-featlen;
         ajDebug("len=%d, end=%d\n", len, end);
-        if (sense) {
+
+        if(sense)
             extractfeat_GetRegionPad(seq, featstr, lastpos+1,
-		lastpos+len, sense, ajFalse);
-	} else {
+				     lastpos+len, sense, ajFalse);
+	else
             extractfeat_GetRegionPad(seq, featstr, firstpos-len,
-		firstpos-1, sense, ajFalse);
-	}
+				     firstpos-1, sense, ajFalse);
     }
 
 
-/* add surrounding sequence if have positive values of before/after */
-    if (before > 0) {
+    /* add surrounding sequence if have positive values of before/after */
+    if(before > 0)
+    {
         ajDebug("before > 0\n");
-        if (sense) {
+        if(sense)
+	{
             ajDebug("get Before firstpos=%d\n", firstpos);
             extractfeat_GetRegionPad(seq, featstr, firstpos-before,
-		firstpos-1, sense, ajTrue);
-	} else {
+				     firstpos-1, sense, ajTrue);
+	}
+	else
+	{
 	    ajDebug("get Before (reverse sense) lastpos=%d\n", lastpos);
             extractfeat_GetRegionPad(seq, featstr, lastpos+1, lastpos+before,
-		sense, ajTrue);
+				     sense, ajTrue);
 	}
     }
 
-    if (after > 0) {
+    if(after > 0)
+    {
         ajDebug("after > 0\n");
-        if (sense) {
+        if(sense)
+	{
 	    ajDebug("get After lastpos=%d\n", lastpos);
             extractfeat_GetRegionPad(seq, featstr, lastpos+1, lastpos+after,
-		sense, ajFalse);
-	} else {
+				     sense, ajFalse);
+	}
+	else
+	{
 	    ajDebug("get After (reverse sense) firstpos=%d\n", firstpos);
             extractfeat_GetRegionPad(seq, featstr, firstpos-after,
-		firstpos-1, sense, ajFalse);
+				     firstpos-1, sense, ajFalse);
 	}
     }
 
+    return;
 }
+
+
+
 
 /* @funcstatic extractfeat_GetRegionPad ***************************************
 **
@@ -631,44 +694,48 @@ static void extractfeat_BeforeAfter (AjPSeq seq, AjPStr * featstr,
 ******************************************************************************/
 
 static void extractfeat_GetRegionPad(AjPSeq seq, AjPStr *featstr, ajint
-	start, ajint end, AjBool sense, AjBool beginning)
+				     start, ajint end, AjBool sense,
+				     AjBool beginning)
 {
     ajint tmp;
     ajint pad;
 
-    AjPStr result = ajStrNew();
+    AjPStr result;
 
     ajDebug("In extractfeat_GetRegionPad start=%d, end=%d\n", start, end);
 
-    if (start > end) {
+    result = ajStrNew();
+
+
+    if(start > end)
     	return;
-    }
 
-
-    if (start < 0) {
+    if(start < 0)
+    {
         pad = -start;
-        if (ajSeqIsNuc(seq))
+        if(ajSeqIsNuc(seq))
             ajStrAppKI(&result, 'N', pad);
         else
             ajStrAppKI(&result, 'X', pad);
         start = 0;
     }
 
-    if (end > ajSeqLen(seq)-1) {
+    if(end > ajSeqLen(seq)-1)
     	tmp = ajSeqLen(seq)-1;
-    } else {
+    else
     	tmp = end;
-    }
 
-    if (start <= ajSeqLen(seq) && tmp >= 0) {
+    if(start <= ajSeqLen(seq) && tmp >= 0)
+    {
         ajDebug("Get subsequence %d-%d\n", start, tmp);
-        ajStrAppSub (&result, ajSeqStr(seq), start, tmp);
+        ajStrAppSub(&result, ajSeqStr(seq), start, tmp);
         ajDebug("result=%S\n", result);
     }
 
-    if (end > ajSeqLen(seq)-1) {
+    if(end > ajSeqLen(seq)-1)
+    {
         pad = end - ajSeqLen(seq)+1;
-        if (ajSeqIsNuc(seq))
+        if(ajSeqIsNuc(seq))
             ajStrAppKI(&result, 'N', pad);
         else
             ajStrAppKI(&result, 'X', pad);
@@ -677,26 +744,33 @@ static void extractfeat_GetRegionPad(AjPSeq seq, AjPStr *featstr, ajint
 
 
     /* if feature was in reverse sense, then get reverse complement */
-    if (!sense) {
+    if(!sense)
+    {
 	ajDebug("get reverse sense of subsequence\n");
     	ajSeqReverseStr(&result);
 	ajDebug("result=%S\n", result);
     }
 
-    if (beginning) {
+    if(beginning)
+    {
 	ajDebug("Prepend to featstr: %S\n", result);
         ajStrInsert(featstr, 0, result);
-    } else {
+    }
+    else
+    {
 	ajDebug("Append to featstr: %S\n", result);
     	ajStrApp(featstr, result);
     }
     ajDebug("featstr=%S\n", *featstr);
 
 
-/* tidy up */
     ajStrDel(&result);
 
+    return;
 }
+
+
+
 
 /* @funcstatic extractfeat_FeatureFilter **************************************
 **
@@ -715,35 +789,46 @@ static void extractfeat_GetRegionPad(AjPSeq seq, AjPStr *featstr, ajint
 ******************************************************************************/
 
 static void extractfeat_FeatureFilter(AjPFeattable featab, AjPStr
-        source, AjPStr type, ajint sense, float minscore,
-        float maxscore, AjPStr tag, AjPStr value)
+				      source, AjPStr type, ajint sense,
+				      float minscore, float maxscore,
+				      AjPStr tag, AjPStr value)
 {
+    AjIList iter = NULL;
+    AjPFeature gf = NULL;
 
-  AjIList iter = NULL;
-  AjPFeature gf = NULL;
+    /*
+     ** 'tagsmatch' is set true if a parent of a join()
+     ** has matching tag/values.
+     ** Remember the value of a the pattern match to the tags
+     ** of the parent of a join() because the children of the join()
+     ** don't contain the tags information in their gf's
+     */
+    AjBool tagsmatch = ajFalse;
 
-/*
-** 'tagsmatch' is set true if a parent of a join() has matching tag/values.
-** We have to remember the value of a the pattern match to the tags
-** of the parent of a join() because the children of the join()
-** don't contain the tags information in their gf's
-*/
-  AjBool tagsmatch = ajFalse;
 
-  /* foreach feature in the feature table */
-  if (featab) {
-    iter = ajListIter(featab->Features);
-    while(ajListIterMore(iter)) {
-      gf = (AjPFeature)ajListIterNext(iter);
-      if (!extractfeat_MatchFeature(gf, source, type, sense,
-          minscore, maxscore, tag, value, &tagsmatch)) {
-        /* no match, so delete feature from feature table */
-        ajFeatDel(&gf);
-        ajListRemove(iter);
-      }
+    /* foreach feature in the feature table */
+    if(featab)
+    {
+	iter = ajListIter(featab->Features);
+	while(ajListIterMore(iter))
+	{
+	    gf = (AjPFeature)ajListIterNext(iter);
+	    if(!extractfeat_MatchFeature(gf, source, type, sense,
+					 minscore, maxscore, tag, value,
+					 &tagsmatch))
+	    {
+		/* no match, so delete feature from feature table */
+		ajFeatDel(&gf);
+		ajListRemove(iter);
+	    }
+	}
     }
-  }
+
+    return;
 }
+
+
+
 
 /* @funcstatic extractfeat_MatchFeature ***************************************
 **
@@ -757,54 +842,61 @@ static void extractfeat_FeatureFilter(AjPFeattable featab, AjPStr
 ** @param [r] maxscore [float] Max required Score pattern
 ** @param [r] tag [AjPStr] Required Tag pattern
 ** @param [r] value [AjPStr] Required Value pattern
-** @param [rw] tagsmatch [AjBool *] true if a join has matching tag/values
+** @param [u] tagsmatch [AjBool *] true if a join has matching tag/values
 ** @return [AjBool] True if feature matches criteria
 ** @@
 ******************************************************************************/
 
-static AjBool extractfeat_MatchFeature (AjPFeature gf, AjPStr
-        source, AjPStr type, ajint sense, float minscore,
-        float maxscore, AjPStr tag, AjPStr value, AjBool *tagsmatch)
+static AjBool extractfeat_MatchFeature(AjPFeature gf, AjPStr source,
+				       AjPStr type, ajint sense,
+				       float minscore,
+				       float maxscore, AjPStr tag,
+				       AjPStr value, AjBool *tagsmatch)
 {
+    AjBool scoreok;
 
-/* if maxscore < minscore, then don't test the scores */
-AjBool scoreok = (minscore < maxscore);
+    /* if maxscore < minscore, then don't test the scores */
+    scoreok = (minscore < maxscore);
 
 
-/*
-** is this not a child of a join() ?
-** if it is a child, then we use the previous result of MatchPatternTags
-*/
-  if (!ajFeatIsMultiple(gf) || !ajFeatIsChild(gf)) {
+     /*
+     ** is this a child of a join() ?
+     ** if it is a child, then we use the previous result of MatchPatternTags
+     */
+    if(!ajFeatIsMultiple(gf) || !ajFeatIsChild(gf))
         *tagsmatch = extractfeat_MatchPatternTags(gf, tag, value);
-  }
 
-/* ignore remote IDs */
+    /* ignore remote IDs */
 
-/* No - don't reject remote IDs here.  We want to include all features
-in this routine so that we can reject a whole join later on if any one
-member of the join is remote. 
-  if (!ajFeatIsLocal(gf))
-    return ajFalse;
-*/
+    /*
+    ** No - don't reject remote IDs here.  We want to include all features
+    ** in this routine so that we can reject a whole join later on if any one
+    ** member of the join is remote. 
+    ** if(!ajFeatIsLocal(gf))
+    ** return ajFalse;
+    */
 
-/* check source, type, sense, score, tags, values */
-/* Special values indication that we match anything:
-**      for strings, '*'
-**      for sense, 0
-**      for score, maxscore <= minscore
-*/
-  if (!embMiscMatchPattern (gf->Source, source) ||
-      !embMiscMatchPattern (gf->Type, type) ||
-      (gf->Strand == '+' && sense == -1) ||
-      (gf->Strand == '-' && sense == +1) ||
-      (scoreok && gf->Score < minscore) ||
-      (scoreok && gf->Score > maxscore) ||
-      !*tagsmatch)
-    return ajFalse;
+    /* check source, type, sense, score, tags, values */
+    /* Special values indication that we match anything:
+    **      for strings, '*'
+    **      for sense, 0
+    **      for score, maxscore <= minscore
+    */
 
-  return ajTrue;
+    if(!embMiscMatchPattern(gf->Source, source) ||
+       !embMiscMatchPattern(gf->Type, type) ||
+       (gf->Strand == '+' && sense == -1) ||
+       (gf->Strand == '-' && sense == +1) ||
+       (scoreok && gf->Score < minscore) ||
+       (scoreok && gf->Score > maxscore) ||
+       !*tagsmatch)
+	return ajFalse;
+
+    return ajTrue;
 }
+
+
+
 
 /* @funcstatic extractfeat_MatchPatternTags ***********************************
 **
@@ -819,30 +911,30 @@ member of the join is remote.
 ** @@
 ******************************************************************************/
 
-static AjBool extractfeat_MatchPatternTags (AjPFeature feat, AjPStr tpattern,
-                                         AjPStr vpattern)
+static AjBool extractfeat_MatchPatternTags(AjPFeature feat, AjPStr tpattern,
+					   AjPStr vpattern)
 {
     AjIList titer;                      /* iterator for feat */
-    static AjPStr tagnam=NULL;          /* tag structure */
-    static AjPStr tagval=NULL;          /* tag structure */
+    static AjPStr tagnam = NULL;        /* tag structure */
+    static AjPStr tagval = NULL;        /* tag structure */
     AjBool val = ajFalse;               /* returned value */
     AjBool tval;                        /* tags result */
     AjBool vval;                        /* value result */
 
 
     /*
-     *  if there are no tags to match, but the patterns are
-     *  both '*', then allow this as a match
-     */
-    if (!ajStrCmpC(tpattern, "*") &&
+    **  if there are no tags to match, but the patterns are
+    **  both '*', then allow this as a match
+    */
+    if(!ajStrCmpC(tpattern, "*") &&
         !ajStrCmpC(vpattern, "*"))
         return ajTrue;
 
     /* iterate through the tags and test for match to patterns */
     titer = ajFeatTagIter(feat);
 
-    while (ajFeatTagval(titer, &tagnam, &tagval)) {
-
+    while(ajFeatTagval(titer, &tagnam, &tagval))
+    {
         tval = embMiscMatchPattern(tagnam, tpattern);
 
         /*
@@ -850,26 +942,31 @@ static AjBool extractfeat_MatchPatternTags (AjPFeature feat, AjPStr tpattern,
         **   If vpattern is '*' the value pattern is a match
         ** Else check vpattern
         */
-        if (!ajStrLen(tagval)) {
-            if (!ajStrCmpC(vpattern, "*"))
+        if(!ajStrLen(tagval))
+	{
+            if(!ajStrCmpC(vpattern, "*"))
             	vval = ajTrue;
             else
 		vval = ajFalse;
-        } else
+        }
+	else
             vval = embMiscMatchPattern(tagval, vpattern);
 
-        if (tval && vval) {
+        if(tval && vval)
+	{
             val = ajTrue;
             break;
         }
     }
-    (void) ajListIterFree(titer);
+    ajListIterFree(titer);
 
     return val;
 }
 
 
-/* @funcstatic extractfeat_MatchPatternTagsDescribe ***********************************
+
+
+/* @funcstatic extractfeat_MatchPatternDescribe *******************************
 **
 ** Checks all of the tag names of a feature against a set of patterns.
 ** If one or more matches are found, then it writes the matching tags
@@ -878,48 +975,49 @@ static AjBool extractfeat_MatchPatternTags (AjPFeature feat, AjPStr tpattern,
 **
 ** @param [r] feat [AjPFeature] Feature to process
 ** @param [r] describe [AjPStr] tags patterns to search with
-** @param [w] strout [AjPStr *] returned string to add to Description line
+** @param [w] strout [AjPStr*] returned string to add to Description line
 **
 ** @return [AjBool] ajTrue if any matching tags were found
 ** @@
 ******************************************************************************/
 
-static AjBool extractfeat_MatchPatternDescribe (AjPFeature feat, 
-	AjPStr describe, AjPStr *strout)
+static AjBool extractfeat_MatchPatternDescribe(AjPFeature feat, 
+					       AjPStr describe,
+					       AjPStr *strout)
 {
     AjIList titer;                      /* iterator for feat */
-    static AjPStr tagnam=NULL;          /* tag structure */
-    static AjPStr tagval=NULL;          /* tag structure */
+    static AjPStr tagnam = NULL;        /* tag structure */
+    static AjPStr tagval = NULL;        /* tag structure */
     AjBool val = ajFalse;               /* returned value */
 
 
     /* iterate through the tags and test for match to patterns */
     titer = ajFeatTagIter(feat);
 
-    while (ajFeatTagval(titer, &tagnam, &tagval)) {
-
-        if (embMiscMatchPattern(tagnam, describe)) {
-            /* we have a match, so write to strout in a pretty format */
-            if (!val)
+    while(ajFeatTagval(titer, &tagnam, &tagval))
+    {
+        if(embMiscMatchPattern(tagnam, describe))
+	{
+            /* There's a match, so write to strout in a pretty format */
+            if(!val)
             	ajStrAssC(strout, "(");
             else
             	ajStrAppC(strout, ", ");
             val = ajTrue;
             ajStrApp(strout, tagnam);
-            if (ajStrLen(tagval)) {
+
+            if(ajStrLen(tagval))
+	    {
             	ajStrAppC(strout, "=\"");
             	ajStrApp(strout, tagval);
             	ajStrAppC(strout, "\"");
             }
         }	
     }
-    (void) ajListIterFree(titer);
+    ajListIterFree(titer);
 
-    if (val)
+    if(val)
         ajStrAppC(strout, ") ");
 
     return val;
 }
-
-
-

@@ -23,6 +23,8 @@
 #include "emboss.h"
 
 
+
+
 /* @prog entret ***************************************************************
 **
 ** Reads and writes (returns) flatfile entries
@@ -31,26 +33,26 @@
 
 int main(int argc, char **argv)
 {
-    AjPSeqall seqall=NULL;
-    AjPFile outf=NULL;
-    AjPSeq seq = NULL;
+    AjPSeqall seqall = NULL;
+    AjPFile outf = NULL;
+    AjPSeq seq   = NULL;
     AjBool firstonly;
 
-    embInit ("entret", argc, argv);
+    embInit("entret", argc, argv);
 
-    outf  = ajAcdGetOutfile ("outfile");
-    seqall = ajAcdGetSeqall ("sequence");
+    outf   = ajAcdGetOutfile("outfile");
+    seqall = ajAcdGetSeqall("sequence");
 
-    firstonly = ajAcdGetBool ("firstonly");
-    while (ajSeqallNext(seqall,&seq))
+    firstonly = ajAcdGetBool("firstonly");
+    while(ajSeqallNext(seqall,&seq))
     {
 	ajFmtPrintF(outf,"%S",ajSeqGetEntry(seq));
-	if (firstonly)
+	if(firstonly)
 	    break;
     }
 
     ajFileClose(&outf);
 
-    ajExit ();
+    ajExit();
     return 0;
 }

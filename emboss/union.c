@@ -19,7 +19,10 @@
 ** along with this program; if not, write to the Free Software
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 ******************************************************************************/
+
 #include "emboss.h"
+
+
 
 
 /* @prog union ****************************************************************
@@ -33,32 +36,36 @@ int main(int argc, char **argv)
 
     AjPSeqall seqall;
     AjPSeqout seqout;
-    AjPSeq seq = NULL;
+    AjPSeq seq    = NULL;
     AjPSeq uniseq = NULL;
     AjPStr unistr = NULL;
-    AjBool first = ajTrue;
+    AjBool first  = ajTrue;
 
-    embInit ("union", argc, argv);
+    embInit("union", argc, argv);
 
-    seqout = ajAcdGetSeqout ("outseq");
-    seqall = ajAcdGetSeqall ("sequence");
+    seqout = ajAcdGetSeqout("outseq");
+    seqall = ajAcdGetSeqall("sequence");
 
-    while (ajSeqallNext(seqall, &seq))
+    while(ajSeqallNext(seqall, &seq))
     {
-      if (first) {
-	uniseq = ajSeqNewS(seq);
-	first = ajFalse;
-      }
-      ajSeqTrim(seq);
-      if (ajSeqGetReverse(seq))
-	ajSeqReverse(seq);
-      ajStrApp(&unistr, ajSeqStr(seq));
+	if(first)
+	{
+	    uniseq = ajSeqNewS(seq);
+	    first  = ajFalse;
+	}
+	ajSeqTrim(seq);
+
+	if(ajSeqGetReverse(seq))
+	    ajSeqReverse(seq);
+
+	ajStrApp(&unistr, ajSeqStr(seq));
     }
 
-    ajSeqReplace (uniseq, unistr);
-    ajSeqWrite (seqout, uniseq);
-    ajSeqWriteClose (seqout);
+    ajSeqReplace(uniseq, unistr);
+    ajSeqWrite(seqout, uniseq);
+    ajSeqWriteClose(seqout);
 
-    ajExit ();
+    ajExit();
+
     return 0;
 }

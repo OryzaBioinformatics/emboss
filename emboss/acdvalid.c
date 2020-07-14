@@ -20,8 +20,10 @@
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 ******************************************************************************/
 
-
 #include "emboss.h"
+
+
+
 
 /* @prog acdvalid *************************************************************
 **
@@ -35,15 +37,16 @@
 
 int main(int argc, char **argv)
 {
-
-    if (argc < 2)
+    if(argc < 2)
 	ajFatal("Error - must specify an application to compile\n");
 
     ajAcdSetControl("acdvalid");
-    ajGraphInit (argv[1], argc-1, &argv[1]);
+    ajGraphInit(argv[1], argc-1, &argv[1]);
 
-    ajAcdExit (ajTrue);		/* turn off the 'never used' ACD warnings */
-    ajExit ();
+    ajAcdExit(ajTrue);		/* turn off the 'never used' ACD warnings */
+
+    ajExit();
+
     return 0;
 }
 

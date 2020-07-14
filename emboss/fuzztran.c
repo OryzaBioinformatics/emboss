@@ -19,14 +19,16 @@
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 ******************************************************************************/
 
-
 #include "emboss.h"
 #include "stdlib.h"
 
 
-static void fuzztran_save_hits (AjPList *l, ajint hits, ajint fnum,
-				AjPStr pro,
-				AjPFeattable* ptab, AjPSeq seq);
+
+
+static void fuzztran_save_hits(AjPList *l, ajint hits, ajint fnum,
+			       AjPStr pro,
+			       AjPFeattable* ptab, AjPSeq seq);
+
 
 
 
@@ -40,12 +42,12 @@ int main(int argc, char **argv)
 {
     AjPSeqall seqall;
     AjPSeq seq;
-    AjPReport report=NULL;
-    AjPFeattable tab=NULL;
-    AjPStr pattern=NULL;
-    AjPStr opattern=NULL;
-    AjPStr seqname=NULL;
-    AjPStr text=NULL;
+    AjPReport report = NULL;
+    AjPFeattable tab = NULL;
+    AjPStr pattern   = NULL;
+    AjPStr opattern  = NULL;
+    AjPStr seqname   = NULL;
+    AjPStr text      = NULL;
 
     AjPList l;
 
@@ -53,9 +55,9 @@ int main(int argc, char **argv)
     AjPStr *lgcode;
     AjPTrn ttable;
     AjPStr frame;
-    ajint    table;
-    AjPStr pro=NULL;
-    ajint    frameno;
+    ajint  table;
+    AjPStr pro = NULL;
+    ajint frameno;
 
 
     ajint plen;
@@ -64,50 +66,49 @@ int main(int argc, char **argv)
     AjBool amino;
     AjBool carboxyl;
 
-    ajint    type=0;
-    ajint    *buf=NULL;
-    ajint    hits=0;
-    ajint    m;
-    ajint    i;
-    ajint    begin;
-    ajint    end;
+    ajint type = 0;
+    ajint *buf = NULL;
+    ajint hits = 0;
+    ajint m;
+    ajint i;
+    ajint begin;
+    ajint end;
 
     EmbOPatBYPNode off[AJALPHA];
 
-    ajuint *sotable=NULL;
+    ajuint *sotable = NULL;
     ajuint solimit;
 
-    AjPStr	 regexp=NULL;
+    AjPStr regexp = NULL;
+    ajint **skipm = NULL;
 
-    ajint **skipm=NULL;
 
+    AjPStr tmpstr = NULL;
+    void  *tidy   = NULL;
 
-    AjPStr         tmpstr = NULL;
-    void   *tidy=NULL;
-
-    embInit ("fuzztran", argc, argv);
+    embInit("fuzztran", argc, argv);
 
     seqall   = ajAcdGetSeqall("sequence");
     pattern  = ajAcdGetString("pattern");
-    report = ajAcdGetReport ("outfile");
+    report   = ajAcdGetReport("outfile");
     mismatch = ajAcdGetInt("mismatch");
     lgcode   = ajAcdGetList("table");
     lframe   = ajAcdGetList("frame");
 
-    ajFmtPrintAppS (&tmpstr, "Pattern: %S\n", pattern);
-    ajFmtPrintAppS (&tmpstr, "Mismatch: %d\n", mismatch);
-    ajFmtPrintAppS (&tmpstr, "TransTable: %S\n", ajAcdValue("table"));
-    ajFmtPrintAppS (&tmpstr, "Frames: %S\n", ajAcdValue("frame"));
-    ajReportSetHeader (report, tmpstr);
+    ajFmtPrintAppS(&tmpstr, "Pattern: %S\n", pattern);
+    ajFmtPrintAppS(&tmpstr, "Mismatch: %d\n", mismatch);
+    ajFmtPrintAppS(&tmpstr, "TransTable: %S\n", ajAcdValue("table"));
+    ajFmtPrintAppS(&tmpstr, "Frames: %S\n", ajAcdValue("frame"));
+    ajReportSetHeader(report, tmpstr);
 
 
     ajStrTrimEndC(&pattern," .\t\n");
 
-    seqname = ajStrNew();
-    opattern=ajStrNew();
+    seqname  = ajStrNew();
+    opattern = ajStrNew();
 
     frame = lframe[0];
-    (void) ajStrToInt(lgcode[0],&table);
+    ajStrToInt(lgcode[0],&table);
     ttable = ajTrnNewI(table);
 
 
@@ -140,9 +141,7 @@ int main(int argc, char **argv)
 			     plen,mismatch,amino,carboxyl,buf,off,sotable,
 			     solimit,regexp,skipm,&hits,m,&tidy);
 	    if(hits)
-	    {
-	      fuzztran_save_hits (&l,hits,1, pro, &tab, seq);
-	    }
+		fuzztran_save_hits(&l,hits,1, pro, &tab, seq);
 
 	    ajStrAssC(&pro,"");
 
@@ -151,9 +150,8 @@ int main(int argc, char **argv)
 			     plen,mismatch,amino,carboxyl,buf,off,sotable,
 			     solimit,regexp,skipm,&hits,m,&tidy);
 	    if(hits)
-	    {
-		fuzztran_save_hits (&l,hits,2, pro, &tab, seq);
-	    }
+		fuzztran_save_hits(&l,hits,2, pro, &tab, seq);
+
 	    ajStrAssC(&pro,"");
 
 	    ajTrnStrFrame(ttable,text,3,&pro);
@@ -161,9 +159,8 @@ int main(int argc, char **argv)
 			     plen,mismatch,amino,carboxyl,buf,off,sotable,
 			     solimit,regexp,skipm,&hits,m,&tidy);
 	    if(hits)
-	    {
 		fuzztran_save_hits(&l,hits,3, pro, &tab, seq);
-	    }
+
 	    ajStrAssC(&pro,"");
 	}
 	else if(!ajStrCmpC(frame,"R"))
@@ -173,9 +170,8 @@ int main(int argc, char **argv)
 			     plen,mismatch,amino,carboxyl,buf,off,sotable,
 			     solimit,regexp,skipm,&hits,m,&tidy);
 	    if(hits)
-	    {
 		fuzztran_save_hits(&l,hits, -1, pro, &tab, seq);
-	    }
+
 	    ajStrAssC(&pro,"");
 
 	    ajTrnStrFrame(ttable,text,-2,&pro);
@@ -183,9 +179,8 @@ int main(int argc, char **argv)
 			     plen,mismatch,amino,carboxyl,buf,off,sotable,
 			     solimit,regexp,skipm,&hits,m,&tidy);
 	    if(hits)
-	    {
 		fuzztran_save_hits(&l,hits,-2, pro, &tab, seq);
-	    }
+
 	    ajStrAssC(&pro,"");
 
 	    ajTrnStrFrame(ttable,text,-3,&pro);
@@ -193,9 +188,8 @@ int main(int argc, char **argv)
 			     plen,mismatch,amino,carboxyl,buf,off,sotable,
 			     solimit,regexp,skipm,&hits,m,&tidy);
 	    if(hits)
-	    {
 		fuzztran_save_hits(&l,hits,-3, pro, &tab, seq);
-	    }
+
 	    ajStrAssC(&pro,"");
 	}
 	else if(!ajStrCmpC(frame,"6"))
@@ -205,9 +199,8 @@ int main(int argc, char **argv)
 			     plen,mismatch,amino,carboxyl,buf,off,sotable,
 			     solimit,regexp,skipm,&hits,m,&tidy);
 	    if(hits)
-	    {
 		fuzztran_save_hits(&l,hits, 1, pro, &tab, seq);
-	    }
+
 	    ajStrAssC(&pro,"");
 
 	    ajTrnStrFrame(ttable,text,2,&pro);
@@ -215,9 +208,8 @@ int main(int argc, char **argv)
 			     plen,mismatch,amino,carboxyl,buf,off,sotable,
 			     solimit,regexp,skipm,&hits,m,&tidy);
 	    if(hits)
-	    {
 		fuzztran_save_hits(&l,hits, 2, pro, &tab, seq);
-	    }
+
 	    ajStrAssC(&pro,"");
 
 	    ajTrnStrFrame(ttable,text,3,&pro);
@@ -225,9 +217,8 @@ int main(int argc, char **argv)
 			     plen,mismatch,amino,carboxyl,buf,off,sotable,
 			     solimit,regexp,skipm,&hits,m,&tidy);
 	    if(hits)
-	    {
 		fuzztran_save_hits(&l,hits,3, pro, &tab, seq);
-	    }
+
 	    ajStrAssC(&pro,"");
 
 	    ajTrnStrFrame(ttable,text,-1,&pro);
@@ -235,9 +226,8 @@ int main(int argc, char **argv)
 			     plen,mismatch,amino,carboxyl,buf,off,sotable,
 			     solimit,regexp,skipm,&hits,m,&tidy);
 	    if(hits)
-	    {
 		fuzztran_save_hits(&l,hits,-1, pro, &tab, seq);
-	    }
+
 	    ajStrAssC(&pro,"");
 
 	    ajTrnStrFrame(ttable,text,-2,&pro);
@@ -245,9 +235,8 @@ int main(int argc, char **argv)
 			     plen,mismatch,amino,carboxyl,buf,off,sotable,
 			     solimit,regexp,skipm,&hits,m,&tidy);
 	    if(hits)
-	    {
 		fuzztran_save_hits(&l,hits, -2, pro, &tab, seq);
-	    }
+
 	    ajStrAssC(&pro,"");
 
 	    ajTrnStrFrame(ttable,text,-3,&pro);
@@ -255,39 +244,40 @@ int main(int argc, char **argv)
 			     plen,mismatch,amino,carboxyl,buf,off,sotable,
 			     solimit,regexp,skipm,&hits,m,&tidy);
 	    if(hits)
-	    {
 		fuzztran_save_hits(&l,hits, -3, pro, &tab, seq);
-	    }
+
 	    ajStrAssC(&pro,"");
 	}
 	else
 	{
-	    (void) ajStrToInt(frame,&frameno);
+	    ajStrToInt(frame,&frameno);
 	    ajTrnStrFrame(ttable,text,frameno,&pro);
 	    embPatFuzzSearch(type,begin,pattern,opattern,seqname,pro,&l,
 			     plen,mismatch,amino,carboxyl,buf,off,sotable,
 			     solimit,regexp,skipm,&hits,m,&tidy);
 	    if(hits)
-	    {
 		fuzztran_save_hits(&l,hits,frameno, pro, &tab, seq);
-	    }
+
 	    ajStrAssC(&pro,"");
 	}
 
-	if (ajFeattableSize(tab))
+	if(ajFeattableSize(tab))
 	{
-	  (void) ajReportWrite(report, tab, seq);
+	  ajReportWrite(report, tab, seq);
 	  ajFeattableDel(&tab);
 	}
+
 	ajListDel(&l);
     }
 
 
 
     if(type==6)
-	for(i=0;i<m;++i) AJFREE(skipm[i]);
+	for(i=0;i<m;++i)
+	    AJFREE(skipm[i]);
 
-    if(tidy) AJFREE(tidy);
+    if(tidy)
+	AJFREE(tidy);
 
     ajStrDel(&pro);
     ajStrDel(&text);
@@ -295,11 +285,13 @@ int main(int argc, char **argv)
     ajStrDel(&seqname);
     ajSeqDel(&seq);
 
-    ajReportClose (report);
-    ajReportDel (&report);
+    ajReportClose(report);
+    ajReportDel(&report);
     ajExit();
+
     return 0;
 }
+
 
 
 
@@ -332,21 +324,21 @@ static void fuzztran_save_hits(AjPList *l, ajint hits, ajint fnum,
     char strand = '+';
     ajint begin;
     ajint end;
-    AjPFeature gf=NULL;
+    AjPFeature gf = NULL;
     static AjPStr fthit;
-    static AjPStr s=NULL;
-    static AjPStr t=NULL;
+    static AjPStr s = NULL;
+    static AjPStr t = NULL;
 
-    if (!fthit)
-      ajStrAssC(&fthit, "hit");
+    if(!fthit)
+	ajStrAssC(&fthit, "hit");
 
-    if (!*ptab)
-      *ptab = ajFeattableNewSeq(seq);
+    if(!*ptab)
+	*ptab = ajFeattableNewSeq(seq);
 
     tab = *ptab;
 
     begin = ajSeqBegin(seq);
-    end = ajSeqEnd(seq);
+    end   = ajSeqEnd(seq);
 
     forward=ajTrue;
     if(fnum<0)
@@ -357,16 +349,17 @@ static void fuzztran_save_hits(AjPList *l, ajint hits, ajint fnum,
 
     slen = end-begin+1;
 
-    s=ajStrNew();
+    s = ajStrNew();
     ff = abs(fnum);
     if(ff>3)
     {
-	ff-=3;
-	forward=ajFalse;
+	ff -= 3;
+	forward = ajFalse;
     }
-    ff%=3;
+
+    ff %= 3;
     if(ff)
-	ff-=3;
+	ff -= 3;
 
     ajListReverse(*l);
 
@@ -375,38 +368,36 @@ static void fuzztran_save_hits(AjPList *l, ajint hits, ajint fnum,
 	ajListPop(*l,(void **)&m);
 	if(forward)
 	{
-	    npos = (m->start*3) + ff + (begin-1);
+	    npos  = (m->start*3) + ff + (begin-1);
 	    nlast = npos + m->len*3 - 1;
 	}
 	else
 	{
 	    nlast = (slen/3)*3  - (m->start*3) - (fnum-1) + (begin);
-	    npos = nlast - m->len*3 + 1;
+	    npos  = nlast - m->len*3 + 1;
 	}
 
-        gf = ajFeatNew(tab, NULL, fthit,
-		       npos,
-		       nlast,
+        gf = ajFeatNew(tab, NULL, fthit, npos, nlast,
 		       (float) (m->len - m->mm), strand, fnum);
 
-	if (m->mm)
+	if(m->mm)
 	{
-	  ajFmtPrintS(&s, "*mismatch %d", m->mm);
-	  ajFeatTagAdd (gf, NULL, s);
+	    ajFmtPrintS(&s, "*mismatch %d", m->mm);
+	    ajFeatTagAdd(gf, NULL, s);
 	}
 
 	ajFmtPrintS(&s, "*frame %d", fnum);
-	ajFeatTagAdd (gf, NULL, s);
+	ajFeatTagAdd(gf, NULL, s);
 
 	ajFmtPrintS(&s, "*start %d", m->start);
-	ajFeatTagAdd (gf, NULL, s);
+	ajFeatTagAdd(gf, NULL, s);
 
 	ajFmtPrintS(&s, "*end %d", m->start + m->len - 1);
-	ajFeatTagAdd (gf, NULL, s);
+	ajFeatTagAdd(gf, NULL, s);
 
 	ajStrAssSub(&t,pro,m->start-1,m->start+m->len-2);
 	ajFmtPrintS(&s, "*translation %S", t);
-	ajFeatTagAdd (gf, NULL, s);
+	ajFeatTagAdd(gf, NULL, s);
 
 	embMatMatchDel(&m);
     }

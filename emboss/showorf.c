@@ -28,6 +28,8 @@
 #define POFF 1000000
 
 
+
+
 static void showorf_SixTranslate(AjPStr substr, AjPStr revstr, ajint len,
 				   AjPStr *pseqs, ajint begin, AjPCod codon);
 static void showorf_DoTrans(AjPStr s, AjPStr r, ajint n, ajint len,
@@ -48,6 +50,7 @@ static void showorf_showTransb(ajint **ppos, ajint *npos, AjPStr *pseqs,
 
 
 
+
 /* @prog showorf **************************************************************
 **
 ** Pretty output of DNA translations
@@ -56,30 +59,30 @@ static void showorf_showTransb(ajint **ppos, ajint *npos, AjPStr *pseqs,
 
 int main(int argc, char **argv)
 {
-    AjPSeq       a;
-    AjPFile      outf;
-    AjPCod       codon;
-    AjPStr       substr;
-    AjPStr	 revstr;
-    AjPStr       *frames;
-    AjPStr	 *f;
-    AjBool	 isrule;
-    AjBool       isp;
-    AjBool       isn;
+    AjPSeq a;
+    AjPFile outf;
+    AjPCod codon;
+    AjPStr substr;
+    AjPStr revstr;
+    AjPStr *frames;
+    AjPStr *f;
+    AjBool isrule;
+    AjBool isp;
+    AjBool isn;
 
 
-    AjPStr       pseqs[6];
-    char	 *ruler;
+    AjPStr pseqs[6];
+    char *ruler;
 
-    ajint          *npos=NULL;
-    ajint		 *ppos[6];
-    ajint          mark[6];
+    ajint *npos = NULL;
+    ajint *ppos[6];
+    ajint mark[6];
 
     ajint beg;
     ajint end;
     ajint len;
     ajint i;
-    ajint v=0;
+    ajint v = 0;
 
     char *p;
 
@@ -98,18 +101,18 @@ int main(int argc, char **argv)
 
     for(i=0;i<6;++i)
 	mark[i]=0;
-    f=frames;
+    f = frames;
     while(*f)
     {
-	p=ajStrStr(*f);
+	p = ajStrStr(*f);
 	sscanf(p,"%d",&v);
 	if(!v)
 	{
 	    for(i=0;i<6;++i)
-		mark[i]=0;
+		mark[i] = 0;
 	    break;
 	}
-	mark[v-1]=1;
+	mark[v-1] = 1;
 	++f;
     }
 
@@ -124,12 +127,10 @@ int main(int argc, char **argv)
     revstr = ajStrNewC(ajStrStr(substr));
     ajSeqReverseStr(&revstr);
 
-    /*
-     *  Allocate memory for translations and positions
-     */
+    /* Allocate memory for translations and positions */
     for(i=0;i<6;++i)
     {
-	pseqs[i]=ajStrNewC(ajStrStr(substr));
+	pseqs[i] = ajStrNewC(ajStrStr(substr));
 	AJCNEW(ppos[i], len);
     }
     AJCNEW (ruler, len);
@@ -155,8 +156,11 @@ int main(int argc, char **argv)
     ajCodDel(&codon);
 
     ajExit();
+
     return 0;
 }
+
+
 
 
 /* @funcstatic showorf_SixTranslate *******************************************
@@ -172,13 +176,10 @@ int main(int argc, char **argv)
 ** @@
 ******************************************************************************/
 
-
 static void showorf_SixTranslate(AjPStr substr, AjPStr revstr, ajint len,
 				 AjPStr *pseqs, ajint begin, AjPCod codon)
 {
     ajint i;
-
-
 
     for(i=0;i<6;++i)
     {
@@ -189,6 +190,8 @@ static void showorf_SixTranslate(AjPStr substr, AjPStr revstr, ajint len,
 
     return;
 }
+
+
 
 
 /* @funcstatic showorf_DoTrans ************************************************
@@ -223,42 +226,43 @@ static void showorf_DoTrans(AjPStr s, AjPStr r, ajint n, ajint len,
 
     if(n<3)
     {
-	p=ajStrStr(s);
+	p  = ajStrStr(s);
 	po = n%3;
     }
     else
     {
-	p=ajStrStr(r);
+	p  = ajStrStr(r);
 	po = len%3;
 	po -= n%3;
 	if(po<0)
-	    po+=3;
+	    po += 3;
     }
 
     for(i=0,q=ajStrStr(pseqs[n]);i<po;++i)
-	q[i]=' ';
+	q[i] = ' ';
 
 
     for(i=po,c=0,tri[3]='\0';i<len;++i,++c)
     {
 	if(c%3 || len-i<3)
 	{
-	    q[i]=' ';
+	    q[i] = ' ';
 	    continue;
 	}
 
-	tri[0]=p[i];
-	tri[1]=p[i+1];
-	tri[2]=p[i+2];
+	tri[0] = p[i];
+	tri[1] = p[i+1];
+	tri[2] = p[i+2];
 	idx = ajCodIndexC(tri);
 	if(codon->aa[idx]==27)
-	    q[i]='*';
+	    q[i] = '*';
 	else
-	    q[i]=(char)(codon->aa[idx]+'A');
+	    q[i] = (char)(codon->aa[idx]+'A');
     }
 
     return;
 }
+
 
 
 
@@ -280,13 +284,16 @@ static void showorf_MakeRuler(ajint len, ajint begin, char *ruler, ajint *npos)
 
     for(i=0;i<len;++i)
     {
-	npos[i]=i+begin;
+	npos[i] = i+begin;
 	if(!((i+begin)%10))
-	    ruler[i]='|';
+	    ruler[i] = '|';
 	else
-	    ruler[i]='-';
+	    ruler[i] = '-';
     }
+
+    return;
 }
+
 
 
 
@@ -299,7 +306,6 @@ static void showorf_MakeRuler(ajint len, ajint begin, char *ruler, ajint *npos)
 ** @param [r] len [ajint] length
 ** @@
 ******************************************************************************/
-
 
 static void showorf_CalcProteinPos(ajint **ppos, AjPStr *pseqs, ajint len)
 {
@@ -314,10 +320,10 @@ static void showorf_CalcProteinPos(ajint **ppos, AjPStr *pseqs, ajint len)
 
     for(i=0;i<3;++i)
     {
-	pos=0;
-	v=1;
+	pos = 0;
+	v   = 1;
 
-	p=ajStrStr(pseqs[i]);
+	p = ajStrStr(pseqs[i]);
 	while(p[pos]==' ')
 	    ppos[i][pos++]=0;
 
@@ -329,10 +335,10 @@ static void showorf_CalcProteinPos(ajint **ppos, AjPStr *pseqs, ajint len)
 		++pos;
 		while(p[pos]==' ')
 		{
-		    ppos[i][pos]=0;
+		    ppos[i][pos] = 0;
 		    ++pos;
 		}
-		v=1;
+		v = 1;
 		continue;
 	    }
 
@@ -341,14 +347,14 @@ static void showorf_CalcProteinPos(ajint **ppos, AjPStr *pseqs, ajint len)
 		ppos[i][pos]=v+POFF;
 		++pos;
 		for(j=0;j<2 && p[pos];++j,++pos)
-		    ppos[i][pos]=v;
+		    ppos[i][pos] = v;
 		if(p[pos]==' ')
-		    v=1;
+		    v = 1;
 		else
 		    ++v;
 	    }
 	    else
-		ppos[i][pos++]=0;
+		ppos[i][pos++] = 0;
 	}
     }
 
@@ -358,8 +364,8 @@ static void showorf_CalcProteinPos(ajint **ppos, AjPStr *pseqs, ajint len)
 
     for(i=3;i<6 && len;++i)
     {
-	pos=len-1;
-	v=1;
+	pos = len-1;
+	v   = 1;
 
 	p=ajStrStr(pseqs[i]);
 	while(p[pos]==' ')
@@ -376,7 +382,7 @@ static void showorf_CalcProteinPos(ajint **ppos, AjPStr *pseqs, ajint len)
 		    ppos[i][pos]=0;
 		    --pos;
 		}
-		v=1;
+		v = 1;
 		continue;
 	    }
 
@@ -385,20 +391,21 @@ static void showorf_CalcProteinPos(ajint **ppos, AjPStr *pseqs, ajint len)
 		ppos[i][pos]=v+POFF;
 		--pos;
 		for(j=0;j<2 && p[pos];++j,--pos)
-		    ppos[i][pos]=v;
+		    ppos[i][pos] = v;
 		if(pos<0) continue;
 		if(p[pos]==' ')
-		    v=1;
+		    v = 1;
 		else
 		    ++v;
 	    }
 	    else
-		ppos[i][pos--]=0;
+		ppos[i][pos--] = 0;
 	}
     }
 
     return;
 }
+
 
 
 
@@ -436,7 +443,7 @@ static void showorf_showTrans(ajint **ppos, ajint *npos, AjPStr *pseqs,
 		begin+len-1);
 
 
-    pos=0;
+    pos = 0;
     while(pos<len)
     {
 	if(pos+width<len)
@@ -453,6 +460,7 @@ static void showorf_showTrans(ajint **ppos, ajint *npos, AjPStr *pseqs,
 
     return;
 }
+
 
 
 
@@ -491,11 +499,11 @@ static void showorf_showTransb(ajint **ppos, ajint *npos, AjPStr *pseqs,
     };
     ajint i;
     ajint b;
-    ajint e=0;
+    ajint e = 0;
     ajint v;
     ajint pos;
 
-    s=ajStrNew();
+    s = ajStrNew();
 
     if(isrule)
     {
@@ -507,20 +515,24 @@ static void showorf_showTransb(ajint **ppos, ajint *npos, AjPStr *pseqs,
 	ajFmtPrintF(outf,"%10d ",npos[start]);
     else
 	ajFmtPrintF(outf,"           ");
+
     ajStrAssSub(&s,substr,start,end);
     ajFmtPrintF(outf,"%s ",ajStrStr(s));
+
     if(isn)
 	ajFmtPrintF(outf,"%d",npos[end]);
+
     ajFmtPrintF(outf,"\n");
 
     for(i=0;i<3;++i)
     {
-	if(!mark[i]) continue;
+	if(!mark[i])
+	    continue;
 	ajFmtPrintF(outf,"%s ",fr[i]);
 	if(isp)
 	{
-	    pos=start;
-	    b=e=0;
+	    pos = start;
+	    b = e = 0;
 	    while(pos<=end)
 	    {
 		if(!(v=ppos[i][pos]))
@@ -536,10 +548,10 @@ static void showorf_showTransb(ajint **ppos, ajint *npos, AjPStr *pseqs,
 			break;
 		    continue;
 		}
-		b=v-POFF;
+		b = v-POFF;
 		break;
 	    }
-	    pos=end;
+	    pos = end;
 	    while(pos>=start)
 	    {
 		if(!(v=ppos[i][pos]))
@@ -548,18 +560,18 @@ static void showorf_showTransb(ajint **ppos, ajint *npos, AjPStr *pseqs,
 		    continue;
 		}
 		if(v>POFF)
-		    v-=POFF;
+		    v -= POFF;
 		else
 		    while(ppos[i][pos]==v)
 		    {
 			--pos;
 			if(pos<start)
 			{
-			    v=0;
+			    v = 0;
 			    break;
 			}
 		    }
-		e=v;
+		e = v;
 		break;
 	    }
 
@@ -580,16 +592,15 @@ static void showorf_showTransb(ajint **ppos, ajint *npos, AjPStr *pseqs,
 
 
 
-
-
     for(i=3;i<6;++i)
     {
-	if(!mark[i]) continue;
+	if(!mark[i])
+	    continue;
 	ajFmtPrintF(outf,"%s ",fr[i]);
 	if(isp)
 	{
-	    pos=start;
-	    b=e=0;
+	    pos = start;
+	    b = e = 0;
 	    while(pos<=end)
 	    {
 		if(!(v=ppos[i][pos]))
@@ -598,22 +609,22 @@ static void showorf_showTransb(ajint **ppos, ajint *npos, AjPStr *pseqs,
 		    continue;
 		}
 		if(v>POFF)
-		    v-=POFF;
+		    v -= POFF;
 		else
 		    while(ppos[i][pos]==v)
 		    {
 			++pos;
 			if(pos>end)
 			{
-			    v=0;
+			    v = 0;
 			    break;
 			}
 		    }
 
-		b=v;
+		b = v;
 		break;
 	    }
-	    pos=end;
+	    pos = end;
 	    while(pos>=start)
 	    {
 		if(!(v=ppos[i][pos]))
@@ -629,9 +640,10 @@ static void showorf_showTransb(ajint **ppos, ajint *npos, AjPStr *pseqs,
 			break;
 		    continue;
 		}
-		e=v-POFF;
+		e = v-POFF;
 		break;
 	    }
+
 	    if(!b)
 		ajFmtPrintF(outf,"        ");
 	    else
@@ -642,8 +654,10 @@ static void showorf_showTransb(ajint **ppos, ajint *npos, AjPStr *pseqs,
 
 	ajStrAssSub(&s,pseqs[i],start,end);
 	ajFmtPrintF(outf,"%s ",ajStrStr(s));
+
 	if(isp && e)
 	    ajFmtPrintF(outf,"%d",e);
+
 	ajFmtPrintF(outf,"\n");
     }
 

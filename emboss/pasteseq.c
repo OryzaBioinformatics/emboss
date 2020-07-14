@@ -23,6 +23,8 @@
 #include "emboss.h"
 
 
+
+
 /* @prog pasteseq *************************************************************
 **
 ** Insert one sequence into another
@@ -31,31 +33,31 @@
 
 int main(int argc, char **argv)
 {
-    AjPSeq seq=NULL;
-    AjPSeq insertseq=NULL;
-    AjPSeqout seqout=NULL;
+    AjPSeq seq = NULL;
+    AjPSeq insertseq = NULL;
+    AjPSeqout seqout = NULL;
     /* position to insert after - can be 0 to sequence.length */
-    ajint pos=0;
-    AjPStr str=NULL;
+    ajint pos  = 0;
+    AjPStr str = NULL;
 
-    AjPSeq newseq=NULL;			/* the new sequence */
+    AjPSeq newseq = NULL;			/* the new sequence */
 
 
-    embInit ("pasteseq", argc, argv);
+    embInit("pasteseq", argc, argv);
 
-    seq = ajAcdGetSeq ("sequence");
-    insertseq = ajAcdGetSeq ("insseq");
-    pos = ajAcdGetInt ("pos");
-    seqout = ajAcdGetSeqout ("outseq");
+    seq       = ajAcdGetSeq("asequence");
+    insertseq = ajAcdGetSeq("bsequence");
+    pos       = ajAcdGetInt("pos");
+    seqout    = ajAcdGetSeqout("outseq");
 
     /* trim to -sbegin and -send positions */
     ajSeqTrim(seq);
     ajSeqTrim(insertseq);
 
     /*
-     *  create the new sequence - set the size to the size of the two input
-     *  sequences plus 1 for the terminating NULL
-     */
+    **  create the new sequence - set the size to the size of the two input
+    **  sequences plus 1 for the terminating NULL
+    */
     newseq = ajSeqNewL(ajSeqLen(seq) + ajSeqLen(insertseq) + 1);
 
     /* create a name for the sequence */
@@ -70,13 +72,13 @@ int main(int argc, char **argv)
     ajStrInsert(&str, pos, ajSeqStr(insertseq));
 
     /* set the type of the output sequence (is this required?) */
-    ajSeqType (newseq);
+    ajSeqType(newseq);
 
     /* output the sequence */
-    ajSeqWrite (seqout, newseq);
-    ajSeqWriteClose (seqout);
+    ajSeqWrite(seqout, newseq);
+    ajSeqWriteClose(seqout);
 
+    ajExit();
 
-    ajExit ();
     return 0;
 }

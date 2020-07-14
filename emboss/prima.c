@@ -27,26 +27,58 @@
 #define SIMLIMIT2 70
 
 
-/* Definition of the primer object */
+
+
+/* @datastatic AjPPrimer ******************************************************
+**
+** Definition of the primer object
+**
+** @alias AjSPrimer
+** @alias AjOPrimer
+**
+** @attr substr [AjPStr] Undocumented
+** @attr start [ajint]  Undocumented
+** @attr primerlen [ajint]  Undocumented
+** @attr primerTm [float]  Undocumented
+** @attr primGCcont [float]  Undocumented
+** @attr prodTm [float]  Undocumented
+** @attr prodGC [float]  Undocumented
+** @attr score [ajint]  Undocumented
+******************************************************************************/
+
 typedef struct AjSPrimer
 {
-  AjPStr substr;
-  ajint start;
-  ajint primerlen;
-  float primerTm;
-  float primGCcont;
-  float prodTm;
-  float prodGC;
-  ajint   score;
+    AjPStr substr;
+    ajint start;
+    ajint primerlen;
+    float primerTm;
+    float primGCcont;
+    float prodTm;
+    float prodGC;
+    ajint   score;
 } AjOPrimer, *AjPPrimer;
 
 
-/* Object to hold awesome primer pairs */
+
+
+/* @datastatic AjPPair ********************************************************
+**
+** Object to hold awesome primer pairs
+**
+** @alias AjSPair
+** @alias AjOPair
+**
+** @attr f [AjPPrimer] Forward primer
+** @attr r [AjPPrimer] Reverse primer
+******************************************************************************/
+
 typedef struct AjSPair
 {
     AjPPrimer f;
     AjPPrimer r;
 } AjOPair, *AjPPair;
+
+
 
 
 static ajint prima_primalign(char *a, char *b);
@@ -92,6 +124,8 @@ static void prima_testtarget(AjPStr seqstr, AjPStr revstr, ajint targetstart,
 			     AjPList *pairlist, ajint *npair);
 
 
+
+
 /* @prog prima ****************************************************************
 **
 ** Selects primers for PCR and DNA amplification
@@ -100,49 +134,50 @@ static void prima_testtarget(AjPStr seqstr, AjPStr revstr, ajint targetstart,
 
 int main(int argc, char **argv)
 {
-    AjPFile outf=NULL;
+    AjPFile outf = NULL;
 
-    AjPSeq sequence=NULL;
-    AjPStr substr = ajStrNew();
-    AjPStr seqstr=NULL;
-    AjPStr revstr=NULL;
+    AjPSeq sequence = NULL;
+    AjPStr substr;
+    AjPStr seqstr = NULL;
+    AjPStr revstr = NULL;
 
     AjPStr p1;
     AjPStr p2;
 
-    AjPPrimer eric=NULL, fred=NULL;
+    AjPPrimer eric = NULL;
+    AjPPrimer fred = NULL;
 
     AjPPrimer f;
     AjPPrimer r;
 
     AjPPair pair;
 
-    AjPList forlist=NULL;
-    AjPList revlist=NULL;
-    AjPList pairlist=NULL;
+    AjPList forlist  = NULL;
+    AjPList revlist  = NULL;
+    AjPList pairlist = NULL;
 
     AjBool targetrange;
-    AjBool isDNA=ajTrue;
-    AjBool dolist=ajFalse;
+    AjBool isDNA  = ajTrue;
+    AjBool dolist = ajFalse;
 
-    ajint primerlen=0;
-    ajint minprimerlen=0;
-    ajint maxprimerlen=0;
-    ajint minprodlen=0;
-    ajint maxprodlen=0;
-    ajint prodlen=0;
+    ajint primerlen    = 0;
+    ajint minprimerlen = 0;
+    ajint maxprimerlen = 0;
+    ajint minprodlen   = 0;
+    ajint maxprodlen   = 0;
+    ajint prodlen      = 0;
 
-    ajint seqlen=0;
-    ajint stepping_value=1;
+    ajint seqlen = 0;
+    ajint stepping_value = 1;
 
-    ajint targetstart=0;
-    ajint targetend=0;
+    ajint targetstart = 0;
+    ajint targetend   = 0;
 
-    ajint limit=0;
-    ajint limit2=0;
-    ajint lastpos=0;
-    ajint startpos=0;
-    ajint endpos=0;
+    ajint limit    = 0;
+    ajint limit2   = 0;
+    ajint lastpos  = 0;
+    ajint startpos = 0;
+    ajint endpos   = 0;
 
     ajint begin;
     ajint end;
@@ -151,10 +186,10 @@ int main(int argc, char **argv)
 
     ajint overlap;
 
-    float minpmGCcont=0.;
-    float maxpmGCcont=0.;
-    float minprodGCcont=0.;
-    float maxprodGCcont=0.;
+    float minpmGCcont   = 0.;
+    float maxpmGCcont   = 0.;
+    float minprodGCcont = 0.;
+    float maxprodGCcont = 0.;
     float prodTm;
     float prodGC;
 
@@ -165,45 +200,45 @@ int main(int argc, char **argv)
     ajint nfred=0;
     ajint npair=0;
 
-    float minprimerTm=0.0;
-    float maxprimerTm=0.0;
+    float minprimerTm = 0.0;
+    float maxprimerTm = 0.0;
 
-    float saltconc=0.0;
-    float dnaconc=0.0;
-
-    forlist=ajListNew();
-    revlist=ajListNew();
-    pairlist=ajListNew();
+    float saltconc = 0.0;
+    float dnaconc  = 0.0;
 
     embInit ("prima", argc, argv);
 
+    substr = ajStrNew();
 
+    forlist  = ajListNew();
+    revlist  = ajListNew();
+    pairlist = ajListNew();
 
     p1 = ajStrNew();
     p2 = ajStrNew();
 
 
     sequence = ajAcdGetSeq("sequence");
-    outf = ajAcdGetOutfile("outf");
+    outf     = ajAcdGetOutfile("outfile");
 
     minprimerlen = ajAcdGetInt("minprimerlen");
     maxprimerlen = ajAcdGetInt("maxprimerlen");
-    minpmGCcont = ajAcdGetFloat("minpmGCcont");
-    maxpmGCcont = ajAcdGetFloat("maxpmGCcont");
-    minprimerTm = ajAcdGetFloat("minprimerTm");
-    maxprimerTm = ajAcdGetFloat("maxprimerTm");
+    minpmGCcont  = ajAcdGetFloat("minpmGCcont");
+    maxpmGCcont  = ajAcdGetFloat("maxpmGCcont");
+    minprimerTm  = ajAcdGetFloat("minprimerTm");
+    maxprimerTm  = ajAcdGetFloat("maxprimerTm");
 
-    minprodlen = ajAcdGetInt("minprodlen");
-    maxprodlen = ajAcdGetInt("maxprodlen");
+    minprodlen    = ajAcdGetInt("minprodlen");
+    maxprodlen    = ajAcdGetInt("maxprodlen");
     minprodGCcont = ajAcdGetFloat("minprodGCcont");
     maxprodGCcont = ajAcdGetFloat("maxprodGCcont");
 
     saltconc = ajAcdGetFloat("saltconc");
-    dnaconc = ajAcdGetFloat("dnaconc");
+    dnaconc  = ajAcdGetFloat("dnaconc");
 
     targetrange = ajAcdGetBool("targetrange");
     targetstart = ajAcdGetInt("targetstart");
-    targetend = ajAcdGetInt("targetend");
+    targetend   = ajAcdGetInt("targetend");
 
     overlap = ajAcdGetInt("overlap");
     dolist  = ajAcdGetBool("list");
@@ -211,20 +246,16 @@ int main(int argc, char **argv)
     seqstr = ajSeqStrCopy(sequence);
     ajStrToUpper(&seqstr);
 
-    begin = ajSeqBegin(sequence);
-    end   = ajSeqEnd(sequence);
+    begin  = ajSeqBegin(sequence);
+    end    = ajSeqEnd(sequence);
     seqlen = end-begin+1;
 
     ajStrAssSubC(&substr,ajStrStr(seqstr),begin-1,end-1);
-    revstr=ajStrNewC(ajStrStr(substr));
+    revstr = ajStrNewC(ajStrStr(substr));
     ajSeqReverseStr(&revstr);
 
     /* Initialise Tm calculation arrays */
     ajTm2(ajStrStr(substr),0,seqlen,saltconc,dnaconc,1);
-
-
-
-    /************** END OF DECLARATIONS ******************************/
 
 
     ajFmtPrintF(outf, "\n\nINPUT SUMMARY\n");
@@ -274,23 +305,15 @@ int main(int argc, char **argv)
     ajFmtPrintF(outf, "*****************************************\n\n");
 
 
-
-
-    /*************/
-
-
     if(seqlen-minprimerlen < 0)
 	ajFatal("Sequence too short");
-
-
-
 
     if(targetrange)
     {
 	ajStrAssSubC(&p1,ajStrStr(substr),targetstart-begin,targetend-begin);
 
-	prodGC=ajMeltGC(&substr,seqlen);
-	prodTm=ajProdTm(prodGC,saltconc,seqlen);
+	prodGC = ajMeltGC(&substr,seqlen);
+	prodTm = ajProdTm(prodGC,saltconc,seqlen);
 
 	if(prodGC<minprodGCcont || prodGC>maxprodGCcont)
 	{
@@ -313,20 +336,21 @@ int main(int argc, char **argv)
     if(!targetrange)
     {
 
-    limit=seqlen-minprimerlen-minprodlen+1;
-    lastpos=seqlen-minprodlen;
-    limit2=maxprodlen-minprodlen;
+    limit   = seqlen-minprimerlen-minprodlen+1;
+    lastpos = seqlen-minprodlen;
+    limit2  = maxprodlen-minprodlen;
 
     /* Outer loop selects all possible product start points */
     for(i=minprimerlen; i<limit; ++i)
     {
-	startpos=i;
+	startpos = i;
 	ajDebug("Position in sequence %d\n",startpos);
-	endpos=i+minprodlen-1;
+	endpos = i+minprodlen-1;
 	/* Inner loop selects all possible product lengths  */
 	for(j=0; j<limit2; ++j, ++endpos)
 	{
-	    if(endpos>lastpos) break;
+	    if(endpos>lastpos)
+		break;
 
 	    v1 = endpos-startpos+1;
 	    ajStrAssSubC(&p1,ajStrStr(substr),startpos,endpos);
@@ -337,8 +361,8 @@ int main(int argc, char **argv)
 		continue;
 
 	    /* Only accept primers with acceptable Tm and GC */
-	    neric=0;
-	    nfred=0;
+	    neric = 0;
+	    nfred = 0;
 	    prima_testproduct(substr, startpos, endpos, primerlen,
 			      minprimerlen, maxprimerlen,minpmGCcont,
 			      maxpmGCcont, minprimerTm, maxprimerTm,
@@ -399,6 +423,7 @@ int main(int argc, char **argv)
 	else
 	    ajFmtPrintF(outf,
 			"Closest primer pair to specified product is:\n\n");
+
 	if((maxprimerlen<26 && seqlen<999999 && !dolist))
 	    ajFmtPrintF(outf,"\n\t\tForward\t\t\t\t\tReverse\n\n");
     }
@@ -500,7 +525,7 @@ int main(int argc, char **argv)
 	prima_PrimerDel(&pair->f);
 	prima_PrimerDel(&pair->r);
 	AJFREE(pair);
-}
+    }
 
 
 
@@ -513,9 +538,11 @@ int main(int argc, char **argv)
 
 
     ajExit();
-    return 0;
 
+    return 0;
 }
+
+
 
 
 /* @funcstatic prima_primalign ************************************************
@@ -530,30 +557,38 @@ int main(int argc, char **argv)
 
 static ajint prima_primalign(char *a, char *b)
 {
-    ajint plen, qlen, limit, i, n=0, mm=0, j;
-    char *p, *q;
-    ajint alen,blen;
+    ajint plen;
+    ajint qlen;
+    ajint limit;
+    ajint i;
+    ajint n = 0;
+    ajint mm = 0;
+    ajint j;
+    char *p;
+    char *q;
+    ajint alen;
+    ajint blen;
 
-    alen=strlen(a);
-    blen=strlen(b);
+    alen = strlen(a);
+    blen = strlen(b);
 
 
-    if ( alen > blen)
+    if(alen > blen)
     {
         plen = alen;
 	qlen = blen;
-        p=a;
-        q=b;
+        p = a;
+        q = b;
     }
     else
     {
         plen = blen;
         qlen = alen;
-        p=b;
-        q=a;
+        p = b;
+        q = a;
     }
 
-    limit= plen-qlen+1;
+    limit = plen-qlen+1;
 
     for(i=0; i<limit; ++i)
     {
@@ -569,50 +604,6 @@ static ajint prima_primalign(char *a, char *b)
 }
 
 
-/* #funcstatic prima_probAlign ************************************************
-**
-** prob score
-**
-** #param [r] seq1 [AjPStr*] seq1
-** #param [r] seq2 [AjPStr*] seq2
-** #return [float] probability
-** ##
-******************************************************************************/
-/*
-//static float prima_probAlign(AjPStr *seq1, AjPStr *seq2)
-//{
-//
-//    float score;
-//    ajint i;
-//    ajint x;
-//    ajint y;
-//    char *p;
-//    char *q;
-//    ajint len;
-//
-//
-//    len = (ajStrLen(*seq1) <= ajStrLen(*seq2)) ? ajStrLen(*seq1) :
-//	ajStrLen(*seq2);
-//
-//
-//    if(!aj_base_I) ajBaseInit();
-//    score = 0.0;
-//    if(!len) return score;
-//
-//    score = 1.0;
-//    p = ajStrStr(*seq1);
-//    q = ajStrStr(*seq2);
-//
-//    for(i=0; i<len; ++i)
-//    {
-//	x = ajAZToInt(*(p+i));
-//	y = ajAZToInt(*(q+i));
-//	score *= aj_base_prob[x][y];
-//    }
-//
-//    return score;
-//}
-*/
 
 
 /* @funcstatic prima_testproduct **********************************************
@@ -648,30 +639,33 @@ static ajint prima_primalign(char *a, char *b)
 ** @@
 ******************************************************************************/
 
-static void prima_testproduct
- (AjPStr seqstr, ajint startpos, ajint endpos, ajint primerlen,
- ajint minprimerlen, ajint maxprimerlen, float minpmGCcont, float maxpmGCcont,
- ajint minprimerTm, ajint maxprimerTm, ajint minprodlen, ajint maxprodlen,
- float prodTm, float prodGC, ajint seqlen, AjPPrimer *eric,
- AjPPrimer *fred, AjPList *forlist, AjPList *revlist, ajint *neric,
- ajint *nfred, ajint stepping_value, float saltconc, float dnaconc,
- AjBool isDNA, ajint begin)
-
+static void prima_testproduct(AjPStr seqstr, ajint startpos, ajint endpos,
+			      ajint primerlen, ajint minprimerlen,
+			      ajint maxprimerlen, float minpmGCcont,
+			      float maxpmGCcont, ajint minprimerTm,
+			      ajint maxprimerTm, ajint minprodlen,
+			      ajint maxprodlen, float prodTm, float prodGC,
+			      ajint seqlen, AjPPrimer *eric,
+			      AjPPrimer *fred, AjPList *forlist,
+			      AjPList *revlist, ajint *neric,
+			      ajint *nfred, ajint stepping_value,
+			      float saltconc, float dnaconc,
+			      AjBool isDNA, ajint begin)
 {
-    AjPStr substr=NULL;
-    AjPPrimer rubbish=NULL;
+    AjPStr substr = NULL;
+    AjPPrimer rubbish = NULL;
     ajint forpstart;
     ajint forpend;
     ajint revpstart;
     ajint revpend;
     ajint i;
-    ajint tnum=0;
+    ajint tnum = 0;
     ajint thisplen;
 
-    float primerTm=0.0;
-    float primGCcont=0.0;
+    float primerTm   = 0.0;
+    float primGCcont = 0.0;
 
-    forpend = startpos -1;
+    forpend   = startpos -1;
     revpstart = endpos +1;
 
     tnum = maxprimerlen-minprimerlen+1;
@@ -685,7 +679,8 @@ static void prima_testproduct
 
     for(i=0; i<tnum; ++i,--forpstart)
     {
-	if(forpstart<0) break;
+	if(forpstart<0)
+	    break;
 
 	ajStrAssSubC(&substr,ajStrStr(seqstr),forpstart,forpend);
 	thisplen = minprimerlen + i;
@@ -704,18 +699,18 @@ static void prima_testproduct
 	    continue;
 
 	/*
-	 *  This is a valid primer as far as Tm & GC is concerned
-	 *  so push it to the storage list
-         */
+	**  This is a valid primer as far as Tm & GC is concerned
+	**  so push it to the storage list
+        */
 	AJNEW0(*eric);
 
-	(*eric)->substr = ajStrNewC(ajStrStr(substr));
-	(*eric)->start = forpstart+begin;
-	(*eric)->primerlen = thisplen;
-	(*eric)->primerTm = primerTm;
+	(*eric)->substr     = ajStrNewC(ajStrStr(substr));
+	(*eric)->start      = forpstart+begin;
+	(*eric)->primerlen  = thisplen;
+	(*eric)->primerTm   = primerTm;
 	(*eric)->primGCcont = primGCcont;
-	(*eric)->prodTm = prodTm;
-	(*eric)->prodGC = prodGC;
+	(*eric)->prodTm     = prodTm;
+	(*eric)->prodGC     = prodGC;
 	ajListPush(*forlist, (void*)*eric);
 	(*neric)++;
     }
@@ -730,7 +725,8 @@ static void prima_testproduct
     revpend=revpstart + minprimerlen-1;
     for(i=0; i<tnum; ++i,++revpend)
     {
-	if(revpend>seqlen) break;
+	if(revpend>seqlen)
+	    break;
 
 	ajStrAssSubC(&substr,ajStrStr(seqstr),revpstart,revpend);
 	ajSeqReverseStr(&substr);
@@ -749,14 +745,14 @@ static void prima_testproduct
 	    continue;
 
 	/*
-	 *  This is a valid primer as far as Tm & GC is concerned
-	 *  so push it to the reverse primer storage list
-         */
+	**  This is a valid primer as far as Tm & GC is concerned
+	**  so push it to the reverse primer storage list
+        */
 	AJNEW0(*fred);
-	(*fred)->substr = ajStrNewC(ajStrStr(substr));
-	(*fred)->start = revpstart+begin;
-	(*fred)->primerlen = thisplen;
-	(*fred)->primerTm = primerTm;
+	(*fred)->substr     = ajStrNewC(ajStrStr(substr));
+	(*fred)->start      = revpstart+begin;
+	(*fred)->primerlen  = thisplen;
+	(*fred)->primerTm   = primerTm;
 	(*fred)->primGCcont = primGCcont;
 	ajListPush(*revlist, (void*)*fred);
 	(*nfred)++;
@@ -774,6 +770,7 @@ static void prima_testproduct
 
     return;
 }
+
 
 
 
@@ -803,8 +800,8 @@ static void prima_reject_self(AjPList *forlist,AjPList *revlist, ajint *neric,
     ajint x;
 
 
-    str1=ajStrNew();
-    str2=ajStrNew();
+    str1 = ajStrNew();
+    str2 = ajStrNew();
 
     /* deal with forwards */
     count = *neric;
@@ -825,6 +822,7 @@ static void prima_reject_self(AjPList *forlist,AjPList *revlist, ajint *neric,
 	}
     }
     *neric = count;
+
     if (!*neric)
     {
 	ajStrDel(&str1);
@@ -837,7 +835,7 @@ static void prima_reject_self(AjPList *forlist,AjPList *revlist, ajint *neric,
 
 
 
-/****** reverses ********/
+    /****** reverses ********/
 
     count = *nfred;
 
@@ -849,6 +847,7 @@ static void prima_reject_self(AjPList *forlist,AjPList *revlist, ajint *neric,
 	ajStrAssSubC(&str1,ajStrStr(tmp->substr),0,cut);
 	ajStrAssSubC(&str2,ajStrStr(tmp->substr),cut+1,len-1);
 	x = prima_primalign(ajStrStr(str1),ajStrStr(str2));
+
 	if(x<SIMLIMIT)
 	    ajListPushApp(*revlist,(void *)tmp);
 	else
@@ -867,9 +866,12 @@ static void prima_reject_self(AjPList *forlist,AjPList *revlist, ajint *neric,
     }
     ajStrDel(&str1);
     ajStrDel(&str2);
-    return;
 
+    return;
 }
+
+
+
 
 /* @funcstatic prima_best_primer **********************************************
 **
@@ -901,8 +903,8 @@ static void prima_best_primer(AjPList *forlist, AjPList *revlist,
     AjBool good;
 
 
-    lowx =INT_MAX;
-    bestf=bestr=0;
+    lowx = INT_MAX;
+    bestf = bestr = 0;
 
 
     /* First find the best primer (if any) */
@@ -923,12 +925,12 @@ static void prima_best_primer(AjPList *forlist, AjPList *revlist,
 		good = ajTrue;
 
 	    if (x < lowx)
-		{
-		    temp->score=x;
-		    bestf=i;
-		    bestr=j;
-		    lowx=x;
-		}
+	    {
+		temp->score=x;
+		bestf=i;
+		bestr=j;
+		lowx=x;
+	    }
 	    ajListPushApp(*revlist, (void *)temp2);
 
 	}
@@ -940,6 +942,7 @@ static void prima_best_primer(AjPList *forlist, AjPList *revlist,
     {
 	while(ajListPop(*forlist,(void **)&temp))
 	    prima_PrimerDel(&temp);
+
 	while(ajListPop(*revlist,(void **)&temp))
 	    prima_PrimerDel(&temp);
 	*neric = 0;
@@ -948,15 +951,19 @@ static void prima_best_primer(AjPList *forlist, AjPList *revlist,
     }
 
 
-    /* Get the best fwd one in hitf, discard the rest */
-    /* Discard ones before our hit */
+    /*
+    ** Get the best fwd one in hitf, discard the rest
+    * Discard ones before a hit
+    */
     for(i=0;i<bestf;++i)
     {
 	ajListPop(*forlist,(void **)&temp);
 	prima_PrimerDel(&temp);
     }
-    /* Next on the list is our hit */
+
+    /* Next on the list is a hit */
     ajListPop(*forlist,(void **)&hitf);
+
     /* Get rid of anything left on the list */
     for(i++;i<*neric;++i)
     {
@@ -972,6 +979,7 @@ static void prima_best_primer(AjPList *forlist, AjPList *revlist,
 	prima_PrimerDel(&temp);
     }
     ajListPop(*revlist,(void **)&hitr);
+
     for(i++;i<*nfred;++i)
     {
 	ajListPop(*revlist,(void **)&temp);
@@ -988,6 +996,8 @@ static void prima_best_primer(AjPList *forlist, AjPList *revlist,
 }
 
 
+
+
 /* @funcstatic prima_PrimerDel ************************************************
 **
 ** Free memory from primers
@@ -1000,13 +1010,14 @@ static void prima_PrimerDel(AjPPrimer *p)
 {
     ajStrDel(&((*p)->substr));
     AJFREE(*p);
+
     return;
 }
 
 
 
 
-/* @funcstatic prima_PrimerCompare ********************************************
+/* @funcstatic prima_Compare ********************************************
 **
 ** Undocumented.
 **
@@ -1021,6 +1032,7 @@ static ajint prima_Compare(const void *a, const void *b)
     return (*(AjPPair *)a)->f->score -
 		   (*(AjPPair *)b)->f->score;
 }
+
 
 
 
@@ -1040,6 +1052,8 @@ static ajint prima_PosCompare(const void *a, const void *b)
     return ((*(AjPPair *)a)->f->start + (*(AjPPair *)a)->f->primerlen - 1)  -
 	   ((*(AjPPair *)b)->f->start + (*(AjPPair *)b)->f->primerlen - 1);
 }
+
+
 
 
 /* @funcstatic prima_PosEndCompare ********************************************
@@ -1105,36 +1119,36 @@ static void prima_testtarget(AjPStr seqstr, AjPStr revstr, ajint targetstart,
     AjPPrimer f;
     AjPPrimer r;
 
-    AjPPair   ppair;
+    AjPPair ppair;
 
     ajint i;
     ajint j;
-    ajint forstart=0;
+    ajint forstart = 0;
     ajint forend;
-    ajint revstart=0;
+    ajint revstart = 0;
     ajint revend;
     ajint Limit;
     ajint tnum;
     ajint thisplen;
     ajint cut;
 
-    float primerTm=0.0;
-    float primGCcont=0.0;
-    float prodgc=0.0;
+    float primerTm = 0.0;
+    float primGCcont = 0.0;
+    float prodgc = 0.0;
 
-    AjBool found=ajFalse;
-    AjBool revfound=ajFalse;
-    AjBool isDNA=ajTrue;
+    AjBool found = ajFalse;
+    AjBool revfound = ajFalse;
+    AjBool isDNA = ajTrue;
 
-    ajint flen=0;
-    ajint rlen=0;
+    ajint flen = 0;
+    ajint rlen = 0;
 
-    float ftm=0.0;
-    float rtm=0.0;
-    float fgc=0.0;
-    float rgc=0.0;
-    ajint fsc=0;
-    ajint rsc=0;
+    float ftm = 0.0;
+    float rtm = 0.0;
+    float fgc = 0.0;
+    float rgc = 0.0;
+    ajint fsc = 0;
+    ajint rsc = 0;
 
     char *s;
     char *s2;
@@ -1145,9 +1159,9 @@ static void prima_testtarget(AjPStr seqstr, AjPStr revstr, ajint targetstart,
     ajint  k;
 
 
-    fstr  =ajStrNew();
-    rstr  =ajStrNew();
-    str1 =ajStrNew();
+    fstr = ajStrNew();
+    rstr = ajStrNew();
+    str1 = ajStrNew();
     str2 = ajStrNew();
 
 
@@ -1158,8 +1172,8 @@ static void prima_testtarget(AjPStr seqstr, AjPStr revstr, ajint targetstart,
 
     for(i=targetstart-minprimerlen; i>-1; --i)
     {
-	forstart=i;
-	forend=i+minprimerlen-1;
+	forstart = i;
+	forend = i+minprimerlen-1;
 
 
 	for(j=0; j<tnum; ++j,++forend)
@@ -1176,12 +1190,12 @@ static void prima_testtarget(AjPStr seqstr, AjPStr revstr, ajint targetstart,
 		continue;
 
 	    primGCcont= ajMeltGC(&fstr, thisplen);
-	    if (primGCcont< minpmGCcont || primGCcont >maxpmGCcont)
+	    if(primGCcont< minpmGCcont || primGCcont >maxpmGCcont)
 		continue;
 
 
 	    /*instead of calling the self-reject function */
-	    cut =(thisplen/2)-1;
+	    cut = (thisplen/2)-1;
 
 	    ajStrAssSubC(&str1, ajStrStr(fstr), 0, cut);
 	    ajStrAssSubC(&str2, ajStrStr(fstr), cut+1, thisplen-1);
@@ -1191,12 +1205,12 @@ static void prima_testtarget(AjPStr seqstr, AjPStr revstr, ajint targetstart,
 		continue;
 
 	    /* Test for match with rest of sequence */
-	    s = ajStrStr(seqstr);
+	    s  = ajStrStr(seqstr);
 	    s2 = ajStrStr(revstr);
-	    p = ajStrStr(fstr);
+	    p  = ajStrStr(fstr);
 	    pv = thisplen;
-	    pcount=0;
-	    plimit=seqlen-pv+1;
+	    pcount = 0;
+	    plimit = seqlen-pv+1;
 	    for(k=0;k<plimit && pcount<2;++k)
 	    {
 		if(prima_seq_align(s+k,p,pv)>SIMLIMIT2)
@@ -1207,10 +1221,10 @@ static void prima_testtarget(AjPStr seqstr, AjPStr revstr, ajint targetstart,
 
 	    if(pcount<2)
 	    {
-		found =ajTrue;
-		flen = thisplen;
-		ftm = primerTm;
-		fgc = primGCcont;
+		found = ajTrue;
+		flen  = thisplen;
+		ftm   = primerTm;
+		fgc   = primGCcont;
 		break;
 	    }
 	}
@@ -1229,29 +1243,29 @@ static void prima_testtarget(AjPStr seqstr, AjPStr revstr, ajint targetstart,
     if(found)
 	for(i=targetend+1; i<Limit; ++i)
 	{
-	    revstart=i;
-	    revend=i+minprimerlen-1;
+	    revstart = i;
+	    revend = i+minprimerlen-1;
 
 	    for(j=0; j<tnum; ++j,++revend)
 	    {
-		if (revend==seqlen)
+		if(revend==seqlen)
 		    break;
 
 		ajStrAssSubC(&rstr, ajStrStr(seqstr), revstart, revend);
 		ajSeqReverseStr(&rstr);
 
 		thisplen = ajStrLen(rstr);
-		primerTm =ajTm2("", revstart, thisplen, saltconc, dnaconc, 1);
+		primerTm = ajTm2("", revstart, thisplen, saltconc, dnaconc, 1);
 
 		if(primerTm <minprimerTm || primerTm>maxprimerTm)
 		    continue;
 
 		primGCcont= ajMeltGC(&rstr, thisplen);
-		if (primGCcont< minpmGCcont || primGCcont >maxpmGCcont)
+		if(primGCcont< minpmGCcont || primGCcont >maxpmGCcont)
 		    continue;
 
 		/*instead of calling the self-reject function */
-		cut =(thisplen/2)-1;
+		cut = (thisplen/2)-1;
 
 		ajStrAssSubC(&str1, ajStrStr(rstr), 0, cut);
 		ajStrAssSubC(&str2, ajStrStr(rstr), cut+1, thisplen-1);
@@ -1261,26 +1275,27 @@ static void prima_testtarget(AjPStr seqstr, AjPStr revstr, ajint targetstart,
 		    continue;
 
 		/* Test for match with rest of sequence */
-		s = ajStrStr(seqstr);
+		s  = ajStrStr(seqstr);
 		s2 = ajStrStr(revstr);
-		p = ajStrStr(rstr);
+		p  = ajStrStr(rstr);
 		pv = thisplen;
-		pcount=0;
-		plimit=seqlen-pv+1;
+		pcount = 0;
+		plimit = seqlen-pv+1;
 		for(k=0;k<plimit && pcount<2;++k)
 		{
 		    if(prima_seq_align(s+k,p,pv)>SIMLIMIT2)
 			++pcount;
+
 		    if(prima_seq_align(s2+k,p,pv)>SIMLIMIT2)
 			++pcount;
 		}
 
 		if(pcount<2)
 		{
-		    revfound =ajTrue;
-		    rlen = thisplen;
-		    rtm = primerTm;
-		    rgc = primGCcont;
+		    revfound = ajTrue;
+		    rlen     = thisplen;
+		    rtm      = primerTm;
+		    rgc      = primGCcont;
 		    break;
 		}
 	    }
@@ -1292,9 +1307,9 @@ static void prima_testtarget(AjPStr seqstr, AjPStr revstr, ajint targetstart,
 
     if(found && !revfound)
     {
-	found=ajFalse;
+	found = ajFalse;
 	ajWarn("No reverse primers found in targetrange");
-	*npair=0;
+	*npair = 0;
 	return;
     }
 
@@ -1303,7 +1318,7 @@ static void prima_testtarget(AjPStr seqstr, AjPStr revstr, ajint targetstart,
     if(!found)
     {
 	ajWarn("No forward primers found in targetrange");
-	*npair=0;
+	*npair = 0;
 	return;
     }
 
@@ -1313,30 +1328,30 @@ static void prima_testtarget(AjPStr seqstr, AjPStr revstr, ajint targetstart,
 
 
     AJNEW0(f);
-    f->substr = ajStrNewC(ajStrStr(fstr));
-    f->start = forstart;
-    f->primerlen = flen;
-    f->primerTm = ftm;
+    f->substr     = ajStrNewC(ajStrStr(fstr));
+    f->start      = forstart;
+    f->primerlen  = flen;
+    f->primerTm   = ftm;
     f->primGCcont = fgc;
-    f->score = fsc;
-    f->prodGC = prodgc;
-    f->prodTm = ajProdTm(prodgc,saltconc,revstart-(forstart+flen));
+    f->score      = fsc;
+    f->prodGC     = prodgc;
+    f->prodTm     = ajProdTm(prodgc,saltconc,revstart-(forstart+flen));
 
 
     AJNEW0(r);
-    r->substr = ajStrNewC(ajStrStr(rstr));
-    r->start = revstart;
-    r->primerlen = rlen;
-    r->primerTm = rtm;
+    r->substr     = ajStrNewC(ajStrStr(rstr));
+    r->start      = revstart;
+    r->primerlen  = rlen;
+    r->primerTm   = rtm;
     r->primGCcont = rgc;
-    r->score = rsc;
+    r->score      = rsc;
 
 
     AJNEW0(ppair);
     ppair->f = f;
     ppair->r = r;
     ajListPush(*pairlist,(void *)ppair);
-    *npair=1;
+    *npair = 1;
 
     return;
 }
@@ -1363,7 +1378,7 @@ static void prima_test_multi(AjPList *forlist, AjPList *revlist, ajint *neric,
 			     ajint *nfred, AjPStr seq, AjPStr rseq, ajint len)
 {
     AjPPrimer tmp;
-    AjPStr st=ajStrNew();
+    AjPStr st;
 
     ajint i;
     ajint j;
@@ -1376,22 +1391,25 @@ static void prima_test_multi(AjPList *forlist, AjPList *revlist, ajint *neric,
     char *r;
     char *p;
 
-    s=ajStrStr(seq);
-    r=ajStrStr(rseq);
+    st = ajStrNew();
 
-    pc=*neric;
+    s = ajStrStr(seq);
+    r = ajStrStr(rseq);
+
+    pc = *neric;
 
     for(i=0;i<*neric;++i)
     {
 	ajListPop(*forlist,(void **)&tmp);
-	count=0;
-	v=tmp->primerlen;
-	limit=len-v+1;
-	p=ajStrStr(tmp->substr);
+	count = 0;
+	v = tmp->primerlen;
+	limit = len-v+1;
+	p = ajStrStr(tmp->substr);
 	for(j=0;j<limit && count<2;++j)
 	{
 	    if(prima_seq_align(s+j,p,v)>SIMLIMIT2)
 		++count;
+
 	    if(prima_seq_align(r+j,p,v)>SIMLIMIT2)
 		++count;
 	}
@@ -1406,31 +1424,32 @@ static void prima_test_multi(AjPList *forlist, AjPList *revlist, ajint *neric,
 	    ajListPushApp(*forlist,(void *)tmp);
     }
 
-    *neric=pc;
+    *neric = pc;
     if(!*neric)
     {
 	while(ajListPop(*revlist,(void **)&tmp))
 	    prima_PrimerDel(&tmp);
-	*nfred=0;
+	*nfred = 0;
 	ajStrDel(&st);
 	return;
     }
 
 
-    pc=*nfred;
+    pc = *nfred;
     for(i=0;i<*nfred;++i)
     {
 	ajListPop(*revlist,(void **)&tmp);
-	count=0;
-	v=tmp->primerlen;
-	limit=len-v+1;
+	count = 0;
+	v = tmp->primerlen;
+	limit = len-v+1;
 	ajStrAssC(&st,ajStrStr(tmp->substr));
 	ajSeqReverseStr(&st);
-	p=ajStrStr(st);
+	p = ajStrStr(st);
 	for(j=0;j<limit && count<2;++j)
 	{
 	    if(prima_seq_align(s+j,p,v)>SIMLIMIT2)
 		++count;
+
 	    if(prima_seq_align(r+j,p,v)>SIMLIMIT2)
 		++count;
 	}
@@ -1445,17 +1464,20 @@ static void prima_test_multi(AjPList *forlist, AjPList *revlist, ajint *neric,
 	    ajListPushApp(*revlist,(void *)tmp);
     }
 
-    *nfred=pc;
+    *nfred = pc;
     if(!*nfred)
     {
 	while(ajListPop(*forlist,(void **)&tmp))
 	    prima_PrimerDel(&tmp);
-	*neric=0;
+	*neric = 0;
     }
 
     ajStrDel(&st);
+
     return;
 }
+
+
 
 
 /* @funcstatic prima_seq_align ************************************************
@@ -1469,20 +1491,18 @@ static void prima_test_multi(AjPList *forlist, AjPList *revlist, ajint *neric,
 ** @@
 ******************************************************************************/
 
-
 static ajint prima_seq_align(char *a, char *b, ajint len)
 {
     ajint i;
     ajint count;
 
-    count=0;
+    count = 0;
     for(i=0;i<len;++i)
 	if(a[i]==b[i])
 	    ++count;
 
     return (ajint)(((float)count/(float)len)*(float)100.0);
 }
-
 
 
 
@@ -1496,7 +1516,6 @@ static ajint prima_seq_align(char *a, char *b, ajint len)
 ** @param [?] range [ajint] Undocumented
 ** @@
 ******************************************************************************/
-
 
 static void prima_prune_nearby(AjPList *pairlist, ajint *npair, ajint range)
 {
@@ -1522,14 +1541,14 @@ static void prima_prune_nearby(AjPList *pairlist, ajint *npair, ajint range)
 	}
 
 	ajListPop(*pairlist,(void **)&pair);/* Get next high scoring pair */
-	len = pair->f->primerlen;
-	fst = pair->f->start + len -1;
-	blim=fst-/*len*/range;
-	elim=fst+/*len*/range;
+	len  = pair->f->primerlen;
+	fst  = pair->f->start + len -1;
+	blim = fst-range;
+	elim = fst+range;
 
-	len = pair->r->primerlen;
-	blim2 = pair->r->start - /*len*/range;
-	elim2 = pair->r->start + /*len*/range;
+	len   = pair->r->primerlen;
+	blim2 = pair->r->start - range;
+	elim2 = pair->r->start + range;
 
 	ajListPushApp(*pairlist,(void *)pair);
 	count = *npair;
@@ -1549,11 +1568,12 @@ static void prima_prune_nearby(AjPList *pairlist, ajint *npair, ajint range)
 	    }
 	}
 
-	*npair=count;
+	*npair = count;
     }
 
     return;
 }
+
 
 
 
@@ -1566,7 +1586,6 @@ static void prima_prune_nearby(AjPList *pairlist, ajint *npair, ajint range)
 ** @param [?] overlap [ajint] Undocumented
 ** @@
 ******************************************************************************/
-
 
 static void prima_check_overlap(AjPList *pairlist, ajint *npair, ajint overlap)
 {
@@ -1588,8 +1607,8 @@ static void prima_check_overlap(AjPList *pairlist, ajint *npair, ajint overlap)
 
 	ajListPop(*pairlist,(void **)&pair);
 
-	end=pair->r->start;
-	limit=end-overlap;
+	end   = pair->r->start;
+	limit = end-overlap;
 	ajListPushApp(*pairlist,(void *)pair);
 
 	count = *npair;
@@ -1606,11 +1625,14 @@ static void prima_check_overlap(AjPList *pairlist, ajint *npair, ajint overlap)
 		ajListPushApp(*pairlist,(void *)pair);
 	}
 
-	*npair=count;
+	*npair = count;
     }
 
     return;
 }
+
+
+
 
 /* @funcstatic prima_TwoSortscorepos ******************************************
 **
@@ -1626,11 +1648,11 @@ static void prima_check_overlap(AjPList *pairlist, ajint *npair, ajint overlap)
 
 static void prima_TwoSortscorepos(AjPList *pairlist)
 {
-    AjPPair tmp=NULL;
-    AjPList intlist=NULL;
-    AjPList filist=NULL;
-    AjPPair save=NULL;
-    float   score=0.0;
+    AjPPair tmp = NULL;
+    AjPList intlist = NULL;
+    AjPList filist  = NULL;
+    AjPPair save  = NULL;
+    float   score = 0.0;
 
 
     ajListSort(*pairlist,prima_Compare);
@@ -1670,6 +1692,9 @@ static void prima_TwoSortscorepos(AjPList *pairlist)
     return;
 }
 
+
+
+
 /* @funcstatic prima_RevSort **************************************************
 **
 ** See TwoSortscorepos
@@ -1680,11 +1705,11 @@ static void prima_TwoSortscorepos(AjPList *pairlist)
 
 static void prima_RevSort(AjPList *alist)
 {
-    AjPPair tmp=NULL;
-    AjPList intlist=NULL;
-    AjPList filist=NULL;
-    AjPPair save=NULL;
-    ajint     pos=-1;
+    AjPPair tmp = NULL;
+    AjPList intlist = NULL;
+    AjPList filist  = NULL;
+    AjPPair save = NULL;
+    ajint pos = -1;
 
 
     intlist = ajListNew();
@@ -1716,5 +1741,6 @@ static void prima_RevSort(AjPList *alist)
     ajListDel(alist);
 
     *alist = filist;
+
     return;
 }

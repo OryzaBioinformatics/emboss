@@ -26,13 +26,10 @@
 
 
 
+
 static ajint octanol_getwhitewimbleydata(AjPFile file, float matrix[],
 					 float err[], float matrix2[],
 					 float err2[]);
-
-
-
-
 
 
 
@@ -60,32 +57,32 @@ int main(int argc, char **argv)
     AjPGraph mult;
     float min = 555.5;
     float max = -555.5;
-    float total=0;
-    float total2=0;
+    float total  = 0;
+    float total2 = 0;
     char *s1;
     float midpoint;
     AjBool interface;
     AjBool octanol;
     AjBool difference;
-    float xmin1=64000.;
-    float xmax1=-64000.;
-    float xmin2=64000.;
-    float xmax2=-64000.;
-    float xmin3=64000.;
-    float xmax3=-64000.;
-    float ymin1=64000.;
-    float ymax1=-64000.;
-    float ymin2=64000.;
-    float ymax2=-64000.;
-    float ymin3=64000.;
-    float ymax3=-64000.;
+    float xmin1 = 64000.;
+    float xmax1 = -64000.;
+    float xmin2 = 64000.;
+    float xmax2 = -64000.;
+    float xmin3 = 64000.;
+    float xmax3 = -64000.;
+    float ymin1 = 64000.;
+    float ymax1 = -64000.;
+    float ymin2 = 64000.;
+    float ymax2 = -64000.;
+    float ymin3 = 64000.;
+    float ymax3 = -64000.;
     float v;
 
     ajGraphInit("octanol", argc, argv);
 
-    seq = ajAcdGetSeq ("sequence");
+    seq = ajAcdGetSeq("sequence");
 
-    mult = ajAcdGetGraphxy ("graph");
+    mult = ajAcdGetGraphxy("graph");
     datafile  = ajAcdGetDatafile("datafile");
     llen = ajAcdGetInt("width");
     interface  = ajAcdGetBool("interfaceplot");
@@ -94,10 +91,11 @@ int main(int argc, char **argv)
 
     if(!octanol_getwhitewimbleydata(datafile,&matrix[0],&err[0],&matrix2[0],
 				    &err2[0]))
-	ajFatal ("Could not read data file");
+	ajFatal("Could not read data file");
 
     graphdata = ajGraphxyDataNewI(ajSeqLen(seq)-llen);
     ajGraphxySetColour(graphdata,GREEN);
+
     if(interface)
     {
 	ajGraphxyAddGraph(mult,graphdata);
@@ -108,6 +106,7 @@ int main(int argc, char **argv)
 
     graphdata3 = ajGraphxyDataNewI(ajSeqLen(seq)-llen);
     ajGraphxySetColour(graphdata3,BLACK);
+
     if(difference)
     {
 	ajGraphxyAddGraph(mult,graphdata3);
@@ -117,6 +116,7 @@ int main(int argc, char **argv)
 
     graphdata2 = ajGraphxyDataNewI(ajSeqLen(seq)-llen);
     ajGraphxySetColour(graphdata2,RED);
+
     if(octanol)
     {
 	ajGraphxyAddGraph(mult,graphdata2);
@@ -184,8 +184,8 @@ int main(int argc, char **argv)
 
 	s1++;
     }
-    min=min*1.1;
-    max=max*1.1;
+    min = min*1.1;
+    max = max*1.1;
 
     ajGraphxySetMaxMin(mult,0.0,(float)ajSeqLen(seq),min,max);
     ajGraphDataxySetMaxima(graphdata,xmin1,xmax1,ymin1,ymax1);
@@ -195,6 +195,7 @@ int main(int argc, char **argv)
     ajGraphxyDisplay(mult,AJTRUE);
 
     ajExit();
+
     return 0;
 }
 
@@ -206,8 +207,8 @@ static ajint octanol_getwhitewimbleydata(AjPFile file, float matrix[],
 					 float err2[])
 {
     AjPStr buffer = NULL;
-    AjPStr buf2 = NULL;
-    AjPStr delim = NULL;
+    AjPStr buf2   = NULL;
+    AjPStr delim  = NULL;
     AjPStrTok token;
     char *s1;
     ajint cols;
@@ -218,13 +219,13 @@ static ajint octanol_getwhitewimbleydata(AjPFile file, float matrix[],
     if(!file)
 	return 0;
 
-    delim = ajStrNewC(" :\t\n");
+    delim  = ajStrNewC(" :\t\n");
     buffer = ajStrNew();
     buf2   = ajStrNew();
 
 
 
-    while (ajFileGets(file,&buffer))
+    while(ajFileGets(file,&buffer))
     {
 	s1 = ajStrStr(buffer);
 	if(*s1 == '#')			/* ignore lines */

@@ -28,6 +28,9 @@
 #define GRIBSKOV_LENGTH 27
 #define HENIKOFF_LENGTH 27
 
+
+
+
 static void prophecy_simple_matrix(AjPSeqset seqset, AjPFile outf, AjPStr name,
 				   ajint thresh);
 static void prophecy_gribskov_profile(AjPSeqset seqset, float **sub,
@@ -42,6 +45,7 @@ static void prophecy_henikoff_profile(AjPSeqset seqset, AjPMatrixf imtx,
 
 
 
+
 /* @prog prophecy *************************************************************
 **
 ** Creates matrices/profiles from multiple alignments
@@ -51,53 +55,60 @@ static void prophecy_henikoff_profile(AjPSeqset seqset, AjPMatrixf imtx,
 int main(int argc, char **argv)
 {
 
-    AjPSeqset seqset=NULL;
-    AjPFile   outf=NULL;
-    AjPStr    name=NULL;
-    AjPStr    cons=NULL;
+    AjPSeqset seqset = NULL;
+    AjPFile outf = NULL;
+    AjPStr name  = NULL;
+    AjPStr cons  = NULL;
 
-    ajint       thresh;
+    ajint thresh;
     char *p;
     AjPStr *type;
 
-    float **sub=NULL;
-    AjPMatrixf imtx=NULL;
-    AjPSeqCvt cvt=NULL;
+    float **sub = NULL;
+    AjPMatrixf imtx = NULL;
+    AjPSeqCvt cvt = NULL;
     float gapopen;
     float gapextend;
 
-    embInit ("prophecy", argc, argv);
+    embInit("prophecy", argc, argv);
 
 
-    seqset = ajAcdGetSeqset ("sequence");
+    seqset = ajAcdGetSeqset("sequence");
     name   = ajAcdGetString("name");
     thresh = ajAcdGetInt("threshold");
     imtx   = ajAcdGetMatrixf("datafile");
     type   = ajAcdGetList("type");
-    outf   = ajAcdGetOutfile ("outf");
+    outf   = ajAcdGetOutfile("outfile");
 
     gapopen   = ajAcdGetFloat("open");
     gapextend = ajAcdGetFloat("extension");
 
-    gapopen = ajRoundF(gapopen, 8);
+    gapopen   = ajRoundF(gapopen, 8);
     gapextend = ajRoundF(gapextend, 8);
 
     p = ajStrStr(*type);
     cons = ajStrNewC("");
 
 
-    if(*p=='F') prophecy_simple_matrix(seqset,outf,name,thresh);
-    if(*p=='G') prophecy_gribskov_profile(seqset,sub,outf,name,thresh,
+    if(*p=='F')
+	prophecy_simple_matrix(seqset,outf,name,thresh);
+
+    if(*p=='G')
+	prophecy_gribskov_profile(seqset,sub,outf,name,thresh,
 				 gapopen,gapextend,&cons);
-    if(*p=='H') prophecy_henikoff_profile(seqset,imtx,sub,thresh,cvt,outf,name,
+
+    if(*p=='H')
+	prophecy_henikoff_profile(seqset,imtx,sub,thresh,cvt,outf,name,
 				 gapopen,gapextend,&cons);
 
 
 
     ajFileClose(&outf);
-    ajExit ();
+    ajExit();
+
     return 0;
 }
+
 
 
 
@@ -128,7 +139,7 @@ static void prophecy_simple_matrix(AjPSeqset seqset, AjPFile outf, AjPStr name,
     ajint maxscore;
     ajint score;
     ajint *matrix[AZ+2];
-    AjPStr cons=NULL;
+    AjPStr cons = NULL;
 
     nseqs = ajSeqsetSize(seqset);
     if(nseqs<2)
@@ -152,6 +163,7 @@ static void prophecy_simple_matrix(AjPSeqset seqset, AjPFile outf, AjPStr name,
     {
 	p = ajSeqsetSeq(seqset,i);
 	len = strlen(p);
+
 	for(j=0;j<len;++j)
 	{
 	    x = toupper((ajint)*p++);
@@ -164,6 +176,7 @@ static void prophecy_simple_matrix(AjPSeqset seqset, AjPFile outf, AjPStr name,
     for(i=0;i<mlen;++i)
     {
 	px=x=-INT_MAX;
+
 	for(j=0;j<AZ-1;++j)
 	    if(matrix[j][i]>x)
 	    {
@@ -174,7 +187,7 @@ static void prophecy_simple_matrix(AjPSeqset seqset, AjPFile outf, AjPStr name,
     }
 
     /* Find maximum score for matrix */
-    maxscore=0;
+    maxscore = 0;
     for(i=0;i<mlen;++i)
     {
 	for(j=score=0;j<AZ;++j)
@@ -201,12 +214,14 @@ static void prophecy_simple_matrix(AjPSeqset seqset, AjPFile outf, AjPStr name,
     }
 
     for(i=0;i<AZ+2;++i)
-	AJFREE (matrix[i]);
+	AJFREE(matrix[i]);
 
     ajStrDel(&cons);
 
     return;
 }
+
+
 
 
 /* @funcstatic prophecy_gribskov_profile **************************************
@@ -224,15 +239,14 @@ static void prophecy_simple_matrix(AjPSeqset seqset, AjPFile outf, AjPStr name,
 ** @@
 ******************************************************************************/
 
-
 static void prophecy_gribskov_profile(AjPSeqset seqset, float **sub,
 				      AjPFile outf, AjPStr name, ajint thresh,
 				      float gapopen, float gapextend,
 				      AjPStr *cons)
 {
-    AjPMatrixf imtx=0;
-    AjPSeqCvt cvt=0;
-    AjPStr mname=NULL;
+    AjPMatrixf imtx = 0;
+    AjPSeqCvt cvt = 0;
+    AjPStr mname = NULL;
 
     float **mat;
     ajint nseqs;
@@ -244,21 +258,21 @@ static void prophecy_gribskov_profile(AjPSeqset seqset, float **sub,
     char *q;
     float score;
     float sum;
-    ajint   gsum;
-    float   mmax;
-    float   pmax;
-    float   psum;
-    ajint  start;
-    ajint  end;
-    ajint  pos;
-    float  x;
-    ajint  px;
+    ajint gsum;
+    float mmax;
+    float pmax;
+    float psum;
+    ajint start;
+    ajint end;
+    ajint pos;
+    float x;
+    ajint px;
 
     float **weights;
     ajint *gaps;
 
 
-    mname=ajStrNewC("Epprofile");
+    mname = ajStrNewC("Epprofile");
     ajMatrixfRead(&imtx,mname);
     ajStrDel(&mname);
 
@@ -270,40 +284,44 @@ static void prophecy_gribskov_profile(AjPSeqset seqset, float **sub,
 
 
 
-    /* Set gaps to be maximum length of gap that can occur
-     * including that position
-     */
+    /*
+    ** Set gaps to be maximum length of gap that can occur
+    ** including that position
+    */
     AJCNEW(gaps, mlen);
     for(i=0;i<mlen;++i)
     {
-	gsum=0;
+	gsum = 0;
 	for(j=0;j<nseqs;++j)
 	{
 	    p=ajSeqsetSeq(seqset,j);
 	    if(i>=strlen(p))
 		continue;
+
 	    if(ajAZToInt(p[i])!=27)	  /* if not a gap */
 		continue;
 	    pos = i;
+
 	    while(pos>-1 && ajAZToInt(p[pos])==27)
 		--pos;
 	    start = ++pos;
-	    pos=i;
+	    pos = i;
+
 	    while(pos<mlen && ajAZToInt(p[pos])==27)
 		++pos;
-	    end = pos-1;
-	    gsum = AJMAX(gsum, (end-start)+1);
+	    end  = pos-1;
+	    gsum = AJMAX(gsum,(end-start)+1);
 	}
-	gaps[i]=gsum;
+	gaps[i] = gsum;
     }
 
 
     /* get maximum score in scoring matrix */
-    mmax=0.0;
-    p=valid;
+    mmax = 0.0;
+    p = valid;
     while(*p)
     {
-	q=valid;
+	q = valid;
 	while(*q)
 	{
 	    mmax=(mmax>sub[ajSeqCvtK(cvt,*p)][ajSeqCvtK(cvt,*q)]) ? mmax :
@@ -317,16 +335,16 @@ static void prophecy_gribskov_profile(AjPSeqset seqset, float **sub,
     /* Create the weight matrix and zero it */
     AJCNEW(weights, mlen);
     for(i=0;i<mlen;++i)
-      AJCNEW0(weights[i], GRIBSKOV_LENGTH+1);
+	AJCNEW0(weights[i], GRIBSKOV_LENGTH+1);
 
     /*
-     *  count the number of times each residue occurs at each
-     *  position in the alignment
-     */
+    **  count the number of times each residue occurs at each
+    **  position in the alignment
+    */
     for(i=0;i<mlen;++i)
 	for(j=0;j<nseqs;++j)
 	{
-	    p=ajSeqsetSeq(seqset,j);
+	    p = ajSeqsetSeq(seqset,j);
 	    if(i>=strlen(p))
 		continue;
 	    weights[i][ajAZToInt(p[i])] += ajSeqsetWeight(seqset,j);
@@ -337,6 +355,7 @@ static void prophecy_gribskov_profile(AjPSeqset seqset, float **sub,
     for(i=0;i<mlen;++i)
     {
 	x = (float)-INT_MAX;
+
 	for(j=0;j<AZ-1;++j)
 	    if(weights[i][j]>x)
 	    {
@@ -380,13 +399,13 @@ static void prophecy_gribskov_profile(AjPSeqset seqset, float **sub,
 
 
     /* Get maximum matrix score */
-    psum=0.0;
+    psum = 0.0;
     for(i=0;i<mlen;++i)
     {
-	pmax= (float)-INT_MAX;
+	pmax = (float)-INT_MAX;
 	for(j=0;j<AZ;++j)
 	    pmax=(pmax>mat[i][j]) ? pmax : mat[i][j];
-	psum+=pmax;
+	psum += pmax;
     }
 
     /* Print matrix */
@@ -415,19 +434,19 @@ static void prophecy_gribskov_profile(AjPSeqset seqset, float **sub,
 
     for(i=0;i<mlen;++i)
     {
-	AJFREE (mat[i]);
-	AJFREE (weights[i]);
+	AJFREE(mat[i]);
+	AJFREE(weights[i]);
     }
-    AJFREE (mat);
-    AJFREE (weights);
+    AJFREE(mat);
+    AJFREE(weights);
 
-    AJFREE (gaps);
+    AJFREE(gaps);
 
     ajMatrixfDel(&imtx);
 
-
     return;
 }
+
 
 
 
@@ -468,11 +487,11 @@ static void prophecy_henikoff_profile(AjPSeqset seqset, AjPMatrixf imtx,
     float sum;
     float psum;
     float pmax;
-    ajint   gsum;
-    ajint   mmax;
-    ajint  start;
-    ajint  end;
-    ajint  pos;
+    ajint gsum;
+    ajint mmax;
+    ajint start;
+    ajint end;
+    ajint pos;
 
     float **weights;
     ajint *gaps;
@@ -489,42 +508,46 @@ static void prophecy_henikoff_profile(AjPSeqset seqset, AjPMatrixf imtx,
     cvt = ajMatrixfCvt(imtx);
 
 
-    /* Set gaps to be maximum length of gap that can occur
-     * including that position
-     */
+    /*
+    ** Set gaps to be maximum length of gap that can occur
+    ** including that position
+    */
     AJCNEW(gaps, mlen);
     for(i=0;i<mlen;++i)
     {
-	gsum=0;
+	gsum = 0;
 	for(j=0;j<nseqs;++j)
 	{
 	    p=ajSeqsetSeq(seqset,j);
 	    if(i>=strlen(p))
 		continue;
+
 	    if(ajAZToInt(p[i])!=27)
 		continue; /* if not a gap */
+
 	    pos = i;
 	    while(pos>-1 && ajAZToInt(p[pos])==27)
 		--pos;
 	    start = ++pos;
-	    pos=i;
+
+	    pos = i;
 	    while(pos<mlen && ajAZToInt(p[pos])==27)
 		++pos;
 	    end = pos-1;
-	    gsum = AJMAX(gsum, (end-start)+1);
+	    gsum = AJMAX(gsum,(end-start)+1);
 	}
-	gaps[i]=gsum;
+	gaps[i] = gsum;
     }
 
     /* get maximum score in scoring matrix */
-    mmax=0;
-    p=valid;
+    mmax = 0;
+    p = valid;
     while(*p)
     {
 	q=valid;
 	while(*q)
 	{
-	    mmax=(mmax>sub[ajSeqCvtK(cvt,*p)][ajSeqCvtK(cvt,*q)]) ? mmax :
+	    mmax = (mmax>sub[ajSeqCvtK(cvt,*p)][ajSeqCvtK(cvt,*q)]) ? mmax :
 		sub[ajSeqCvtK(cvt,*p)][ajSeqCvtK(cvt,*q)];
 	    ++q;
 	}
@@ -538,13 +561,13 @@ static void prophecy_henikoff_profile(AjPSeqset seqset, AjPMatrixf imtx,
 	AJCNEW0(weights[i],HENIKOFF_LENGTH+1);
 
     /*
-     *  count the number of times each residue occurs at each
-     *  position in the alignment
-     */
+    **  count the number of times each residue occurs at each
+    **  position in the alignment
+    */
     for(i=0;i<mlen;++i)
 	for(j=0;j<nseqs;++j)
 	{
-	    p=ajSeqsetSeq(seqset,j);
+	    p = ajSeqsetSeq(seqset,j);
 	    if(i>=strlen(p))
 		continue;
 	    weights[i][ajAZToInt(p[i])] += ajSeqsetWeight(seqset,j);
@@ -553,7 +576,7 @@ static void prophecy_henikoff_profile(AjPSeqset seqset, AjPMatrixf imtx,
     px = -INT_MAX;
     for(i=0;i<mlen;++i)
     {
-	x=(float)-INT_MAX;
+	x = (float)-INT_MAX;
 	for(j=0;j<AZ-1;++j)
 	    if(weights[i][j]>x)
 	    {
@@ -591,7 +614,7 @@ static void prophecy_henikoff_profile(AjPSeqset seqset, AjPMatrixf imtx,
 	for(p=valid;*p;++p)
 	{
 	    sum = 0.0;
-	    q = valid;
+	    q   = valid;
 	    while(*q)
 	    {
 		score = weights[i][ajAZToInt(*q)];
@@ -609,13 +632,13 @@ static void prophecy_henikoff_profile(AjPSeqset seqset, AjPMatrixf imtx,
 
 
     /* Get maximum matrix score */
-    psum=0.0;
+    psum = 0.0;
     for(i=0;i<mlen;++i)
     {
-	pmax= (float)-INT_MAX;
+	pmax = (float)-INT_MAX;
 	for(j=0;j<HENIKOFF_LENGTH-1;++j)
 	    pmax=(pmax>mat[i][j]) ? pmax : mat[i][j];
-	psum+=pmax;
+	psum += pmax;
     }
 
     /* Print matrix */
@@ -644,12 +667,13 @@ static void prophecy_henikoff_profile(AjPSeqset seqset, AjPMatrixf imtx,
 
     for(i=0;i<mlen;++i)
     {
-	AJFREE (mat[i]);
-	AJFREE (weights[i]);
+	AJFREE(mat[i]);
+	AJFREE(weights[i]);
     }
-    AJFREE (mat);
-    AJFREE (weights);
-    AJFREE (gaps);
-    AJFREE (pcnt);
+    AJFREE(mat);
+    AJFREE(weights);
+    AJFREE(gaps);
+    AJFREE(pcnt);
+
     return;
 }

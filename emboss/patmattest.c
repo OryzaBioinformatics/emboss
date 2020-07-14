@@ -19,10 +19,16 @@
 
 #include "emboss.h"
 
+
+
+
 static char *testset[] =
 {
     "GAN","GAATTC","CCSGG","GANTC","GABNNNNNVTC","GA", "GANN","TC"
 };
+
+
+
 
 /* @prog patmattest ***********************************************************
 **
@@ -32,23 +38,23 @@ static char *testset[] =
 
 int main(int argc, char **argv)
 {
-    AjPStr cut = NULL;
-    AjPStr new = NULL;
-    AjPStr test = NULL;
+    AjPStr cut    = NULL;
+    AjPStr new    = NULL;
+    AjPStr test   = NULL;
     AjPStr regexp = NULL;
     EmbPPatMatch results = NULL;
     AjPSeq seq;
     ajint i;
     ajint j;
 
-    embInit ("patmattest", argc, argv);
+    embInit("patmattest", argc, argv);
 
-    ajStrAssC (&test,"GAATTCCCGGAGATTCCGACTC");
+    ajStrAssC(&test,"GAATTCCCGGAGATTCCGACTC");
 
 
     for(i=0;i<8;i++)
     {
-	ajStrAssC (&cut,testset[i]);
+	ajStrAssC(&cut,testset[i]);
 
 	/* Create the regular expression from the plain text */
 	regexp = embPatSeqCreateRegExp(cut,0);
@@ -70,7 +76,7 @@ int main(int argc, char **argv)
     }
     ajStrDel(&test);
 
-    seq = ajAcdGetSeq ("sequence1");
+    seq = ajAcdGetSeq("sequence1");
 
     cut = ajAcdGetString("expression");
 
@@ -95,5 +101,6 @@ int main(int argc, char **argv)
     ajSeqDel(&seq);
 
     ajExit();
+
     return 0;
 }

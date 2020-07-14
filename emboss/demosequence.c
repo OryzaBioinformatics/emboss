@@ -20,6 +20,9 @@
 
 #include "emboss.h"
 
+
+
+
 /* @prog demosequence *********************************************************
 **
 ** Testing
@@ -29,11 +32,12 @@
 int main(int argc, char **argv)
 {
 
-    embInit ("demosequence", argc, argv);
+    embInit("demosequence", argc, argv);
 
 
     /* in progress ... */
 
     ajExit();
+
     return 0;
 }

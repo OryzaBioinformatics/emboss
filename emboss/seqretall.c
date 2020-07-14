@@ -19,7 +19,10 @@
 ** along with this program; if not, write to the Free Software
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 ******************************************************************************/
+
 #include "emboss.h"
+
+
 
 
 /* @prog seqretall ************************************************************
@@ -35,16 +38,17 @@ int main(int argc, char **argv)
     AjPSeqout seqout;
     AjPSeq seq = NULL;
 
-    embInit ("seqretall", argc, argv);
+    embInit("seqretall", argc, argv);
 
-    seqout = ajAcdGetSeqoutall ("outseq2");
-    seqall = ajAcdGetSeqall ("sequence1");
+    seqout = ajAcdGetSeqoutall("outseq2");
+    seqall = ajAcdGetSeqall("sequence1");
 
-    while (ajSeqallNext(seqall, &seq))
-	ajSeqAllWrite (seqout, seq);
+    while(ajSeqallNext(seqall, &seq))
+	ajSeqAllWrite(seqout, seq);
 
-    ajSeqWriteClose (seqout);
+    ajSeqWriteClose(seqout);
 
-    ajExit ();
+    ajExit();
+
     return 0;
 }

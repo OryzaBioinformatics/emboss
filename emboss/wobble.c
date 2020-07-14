@@ -25,10 +25,13 @@
 #include <stdlib.h>
 
 
+
+
 static void wobble_checkstring(AjPStr *str);
 static void wobble_calcpc(char *seq, char *rev, ajint n, float **x, float **y,
 			  ajint *count, ajint beg, char *gc, ajint window);
 static float wobble_get_mean(char *bases, char *s);
+
 
 
 
@@ -39,6 +42,9 @@ extern int PNGHeight;
 
 #endif
 
+
+
+
 /* @prog wobble ***************************************************************
 **
 ** Wobble base plot
@@ -47,41 +53,38 @@ extern int PNGHeight;
 
 int main(int argc, char **argv)
 {
-    AjPFile    outf;
-    AjPSeq     seq;
-    AjPStr     gc;
-    AjPStr     fwd;
-    AjPStr     rev;
+    AjPFile outf;
+    AjPSeq seq;
+    AjPStr gc;
+    AjPStr fwd;
+    AjPStr rev;
 
 
     AjPGraph   graph;
     AjPGraphData data;
 
-    float      *x[6];
-    float      *y[6];
-    float      xt;
-    float      mean;
-    float      ymin;
-    float      ymax;
+    float *x[6];
+    float *y[6];
+    float xt;
+    float mean;
+    float ymin;
+    float ymax;
 
-    ajint        count[6];
+    ajint count[6];
 
-    ajint        window;
+    ajint window;
 
 
-    ajint        beg;
-    ajint	       end;
+    ajint beg;
+    ajint end;
 
-    ajint        i;
-    ajint        j;
+    ajint i;
+    ajint j;
 
     char *ftit[6]=
     {
 	"F1","F2","F3","R1","R2","R3"
     };
-
-
-
 
 
 #ifdef PLD_png
@@ -96,37 +99,37 @@ int main(int argc, char **argv)
 
 #endif
 
-    (void) ajGraphInit("wobble", argc, argv);
-
-    seq       = ajAcdGetSeq("sequence");
-    graph     = ajAcdGetGraphxy("graph");
-    gc        = ajAcdGetString("bases");
-    window    = ajAcdGetInt("window");
-    outf      = ajAcdGetOutfile("outf");
-
+    ajGraphInit("wobble", argc, argv);
+    
+    seq    = ajAcdGetSeq("sequence");
+    graph  = ajAcdGetGraphxy("graph");
+    gc     = ajAcdGetString("bases");
+    window = ajAcdGetInt("window");
+    outf   = ajAcdGetOutfile("outfile");
+    
     ajSeqToUpper(seq);
     ajStrToUpper(&gc);
-
+    
     beg = ajSeqBegin(seq);
     end = ajSeqEnd(seq);
-
+    
     fwd = ajStrNew();
     rev = ajStrNew();
-
-    (void) ajStrAssSubC(&fwd,ajSeqChar(seq),beg-1,end-1);
+    
+    ajStrAssSubC(&fwd,ajSeqChar(seq),beg-1,end-1);
     rev = ajStrNewC(ajStrStr(fwd));
     ajSeqReverseStr(&rev);
-
-
+    
+    
     wobble_checkstring(&gc);
     mean = wobble_get_mean(ajStrStr(gc),ajStrStr(fwd));
     ajFmtPrintF(outf,"Expected %s content in third position = %.2f\n",
 		ajStrStr(gc),mean);
-
+    
     for(i=0;i<6;++i)
     {
 	wobble_calcpc(ajStrStr(fwd),ajStrStr(rev),i,x,y,count,beg,ajStrStr(gc),
-	       window);
+		      window);
 
 	data = ajGraphxyDataNewI(count[i]);
 
@@ -137,11 +140,11 @@ int main(int argc, char **argv)
 	    xt = x[i][j];
 	    if(!xt)
 	    {
-		x[i][j]=x[i][j-1];
-		y[i][j]=y[i][j-1];
+		x[i][j] = x[i][j-1];
+		y[i][j] = y[i][j-1];
 	    }
-	    data->x[j]=x[i][j];
-	    data->y[j]=y[i][j];
+	    data->x[j] = x[i][j];
+	    data->y[j] = y[i][j];
 	}
 
 	ajGraphDataxyMaxMin(data->y,count[i],&ymin,&ymax);
@@ -157,26 +160,30 @@ int main(int argc, char **argv)
 	ajGraphxyDataSetTitleC(data,ftit[i]);
 	ajGraphDataObjAddLine(data,(float)beg,mean,(float)end,mean,4);
     }
-
-
+    
+    
     ajGraphxySetTitleDo(graph, ajTrue);
     ajGraphxySetMaxMin(graph,(float)beg,(float)end,0.0,100.0);
-
+    
     ajGraphxySetYStart(graph,0.0);
     ajGraphxySetYEnd(graph,100.0);
     ajGraphxyTitleC(graph,"Wobble bases");
-
+    
     ajGraphSetCharSize(0.7);
-
+    
     ajGraphxyDisplay(graph,ajTrue);
-
-
+    
+    
     ajStrDel(&gc);
     ajStrDel(&fwd);
     ajStrDel(&rev);
+
     ajExit();
+
     return 0;
 }
+
+
 
 
 /* @funcstatic wobble_calcpc **************************************************
@@ -198,7 +205,6 @@ int main(int argc, char **argv)
 static void wobble_calcpc(char *seq, char *rev, ajint n, float **x, float **y,
 			  ajint *count, ajint beg, char *gc, ajint window)
 {
-
     ajint len;
     ajint limit;
 
@@ -223,11 +229,11 @@ static void wobble_calcpc(char *seq, char *rev, ajint n, float **x, float **y,
     }
     else
     {
-	p=rev;
-	po=len%3;
-	po-=n%3;
+	p  = rev;
+	po = len%3;
+	po -= n%3;
 	if(po<0)
-	    po+=3;
+	    po += 3;
     }
     nb = len-po;
     cds = nb/3 - window + 1;
@@ -263,6 +269,8 @@ static void wobble_calcpc(char *seq, char *rev, ajint n, float **x, float **y,
 }
 
 
+
+
 /* @funcstatic wobble_checkstring *********************************************
 **
 ** Check that a sensible -bases option has been given. Modify if necessary
@@ -278,10 +286,11 @@ static void wobble_checkstring(AjPStr *str)
     ajint i;
 
     tmp = ajStrNewC("");
+
     for(i=0;i<4;++i)
 	if(strchr(ajStrStr(*str),(ajint)bases[i]))
 	    ajStrAppK(&tmp,bases[i]);
-    (void) ajStrAssC(str,ajStrStr(tmp));
+    ajStrAssC(str,ajStrStr(tmp));
 
     if(ajStrLen(tmp) >3)
 	ajFatal("Specifying ACG&T is meaningless");
@@ -290,8 +299,12 @@ static void wobble_checkstring(AjPStr *str)
 	ajFatal("No bases specified");
 
     ajStrDel(&tmp);
+
     return;
 }
+
+
+
 
 /* @funcstatic wobble_get_mean ************************************************
 **
@@ -312,19 +325,24 @@ static float wobble_get_mean(char *bases, char *s)
     float tot;
     float sum;
     char  *p;
-    ajint   c;
+    ajint c;
 
-    na=nc=ng=nt=0;
+    na = nc = ng = nt = 0;
     ajCodComp(&na,&nc,&ng,&nt,s);
     sum = (float) 0.0;
-    p=bases;
+    p = bases;
 
     while((c=*p))
     {
-	if(c=='A') sum+=na;
-	else if(c=='C') sum+=nc;
-	else if(c=='G') sum+=ng;
-	else if(c=='T') sum+=nt;
+	if(c=='A')
+	    sum+=na;
+	else if(c=='C')
+	    sum+=nc;
+	else if(c=='G')
+	    sum+=ng;
+	else if(c=='T')
+	    sum+=nt;
+
 	++p;
     }
 

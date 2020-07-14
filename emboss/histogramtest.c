@@ -23,6 +23,9 @@
 #include "emboss.h"
 #include "ajhist.h"
 
+
+
+
 /* @prog histogramtest ********************************************************
 **
 ** Testing histogram plot functions
@@ -31,41 +34,41 @@
 
 int main(int argc, char **argv)
 {
-    AjPHist hist=NULL;
-    AjPGraph graph=NULL;
-    PLFLT **data,*data2;
-    ajint i,j,k=1;
-    ajint sets,points;
+    AjPHist hist   = NULL;
+    AjPGraph graph = NULL;
+    PLFLT **data;
+    PLFLT *data2;
+    ajint i;
+    ajint j;
+    ajint k = 1;
+    ajint sets;
+    ajint points;
     char temp[20];
     ajint ibins;
     ajint xstart;
     ajint xend;
 
-    (void) ajGraphInit ("histogramtest", argc, argv);
+    ajGraphInit("histogramtest", argc, argv);
 
-    graph = ajAcdGetGraphxy ("graph");
-    sets = ajAcdGetInt ("sets");
-
-    points = ajAcdGetInt ("points");
+    graph  = ajAcdGetGraphxy("graph");
+    sets   = ajAcdGetInt("sets");
+    points = ajAcdGetInt("points");
 
     hist = ajHistNewG(sets,points, graph);
 
-    ibins = ajAcdGetInt ("bins");
+    ibins = ajAcdGetInt("bins");
     hist->bins = ibins;
 
-    hist->displaytype=HIST_ONTOP;
+    hist->displaytype = HIST_ONTOP;
 
-    xstart = ajAcdGetInt ("xstart");
+    xstart = ajAcdGetInt("xstart");
     hist->xmin = xstart;
-    xend = ajAcdGetInt ("xend");
+    xend = ajAcdGetInt("xend");
     hist->xmax = xend;
 
     ajHistSetTitleC(hist, "A demo of the Histogram suite");
-
     ajHistSetXAxisC(hist, "X axis");
-
     ajHistSetYAxisLeftC(hist, "LEFT");
-
     ajHistSetYAxisRightC(hist, "RIGHT");
 
     AJCNEW(data, sets);
@@ -79,9 +82,8 @@ int main(int argc, char **argv)
 	ajHistSetPtrToData(hist, i, data2);
     }
 
-    ajHistDisplay (hist);
+    ajHistDisplay(hist);
 
-    /* free all memory */
     for(i=0;i<sets;i++)
 	AJFREE(data[i]);
     ajHistDelete(hist);
@@ -90,23 +92,16 @@ int main(int argc, char **argv)
     hist = ajHistNewG(sets,points, graph);
 
     hist->bins = ibins;
-
-    /*  hist->displaytype = ajAcdGetInt ("sidebyside");*/
-    hist->displaytype=HIST_SIDEBYSIDE;
-
+    hist->displaytype = HIST_SIDEBYSIDE;
     hist->xmin = xstart;
-
     hist->xmax = xend;
 
     ajHistSetTitleC(hist, "A demo of the Histogram suite");
-
     ajHistSetXAxisC(hist, "X axis");
-
     ajHistSetYAxisLeftC(hist, "LEFT");
-
     ajHistSetYAxisRightC(hist, "RIGHT");
 
-    k=-10;
+    k = -10;
     for(i=0;i<sets;i++)
     {
 	AJCNEW(data2, points);
@@ -117,13 +112,11 @@ int main(int argc, char **argv)
 	AJFREE(data2);
     }
 
-    /*  hist->displaytype = !hist->displaytype;*/
     for(i=0;i<sets;i++)
 	ajHistSetPattern(hist, i, i);
 
     ajHistSetBlackandWhite(hist , AJTRUE);
-
-    ajHistDisplay (hist);
+    ajHistDisplay(hist);
 
     hist->displaytype=HIST_SEPARATE;
 
@@ -137,13 +130,12 @@ int main(int argc, char **argv)
 	ajHistSetMultiYTitleC(hist,i,temp);
     }
     ajHistSetBlackandWhite(hist , AJFALSE);
-    ajHistDisplay (hist);
-
-
+    ajHistDisplay(hist);
 
     ajHistDelete(hist);
 
 
-    ajExit ();
+    ajExit();
+
     return 0;
 }

@@ -23,6 +23,8 @@
 #include "emboss.h"
 
 
+
+
 /* @prog descseq **************************************************************
 **
 ** Alter the name or description of a sequence
@@ -31,7 +33,6 @@
 
 int main(int argc, char **argv)
 {
-
     AjPSeqout seqout;
     AjPSeq seq;
     AjPStr name = NULL;
@@ -39,50 +40,51 @@ int main(int argc, char **argv)
     AjPStr temp = NULL;
     AjBool append;
 
-    (void) embInit ("descseq", argc, argv);
+    embInit("descseq", argc, argv);
 
-    seqout = ajAcdGetSeqout ("outseq");
-    seq = ajAcdGetSeq ("sequence");
-    append = ajAcdGetBool ("append");
-    name = ajAcdGetString ("name");
-    desc = ajAcdGetString ("description");
+    seqout = ajAcdGetSeqout("outseq");
+    seq    = ajAcdGetSeq("sequence");
+    append = ajAcdGetBool("append");
+    name   = ajAcdGetString("name");
+    desc   = ajAcdGetString("description");
 
 
     /* if appending, then do this */
-    if (append)
+    if(append)
     {
-	/* do we have a name? */
-	if (ajStrLen(name))
+	/* is there a name? */
+	if(ajStrLen(name))
 	{
-	    (void) ajStrAss(&temp, ajSeqGetName(seq));
-	    (void) ajStrApp(&temp, name);
-	    (void) ajSeqAssName(seq, temp);
+	    ajStrAss(&temp, ajSeqGetName(seq));
+	    ajStrApp(&temp, name);
+	    ajSeqAssName(seq, temp);
 	}
 
-	/* do we have a description? */
-	if (ajStrLen(desc))
+	/* is there a description? */
+	if(ajStrLen(desc))
 	{
-	    (void) ajStrAss(&temp, ajSeqGetDesc(seq));
-	    (void) ajStrApp(&temp, desc);
-	    (void) ajSeqAssDesc(seq, temp);
+	    ajStrAss(&temp, ajSeqGetDesc(seq));
+	    ajStrApp(&temp, desc);
+	    ajSeqAssDesc(seq, temp);
 	}
 
 	/* otherwise, just overwrite the existing values */
     }
     else
     {
-	/* do we have a name? */
-	if (ajStrLen(name))
-	    (void) ajSeqAssName(seq, name);
+	/* is there a name? */
+	if(ajStrLen(name))
+	    ajSeqAssName(seq, name);
 
-	/* do we have a description? */
-	if (ajStrLen(desc))
-	    (void) ajSeqAssDesc(seq, desc);
+	/* is there a description? */
+	if(ajStrLen(desc))
+	    ajSeqAssDesc(seq, desc);
     }
 
-    (void) ajSeqWrite (seqout, seq);
-    (void) ajSeqWriteClose (seqout);
+    ajSeqWrite(seqout, seq);
+    ajSeqWriteClose(seqout);
 
-    ajExit ();
+    ajExit();
+
     return 0;
 }

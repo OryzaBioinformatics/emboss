@@ -27,6 +27,8 @@ static void biosed_replace(AjPStr *substr, AjPStr target, AjPStr replace);
 static void biosed_delete(AjPStr *substr, AjPStr target);
 
 
+
+
 /* @prog biosed ***************************************************************
 **
 ** Replace or delete sequence sections
@@ -35,7 +37,7 @@ static void biosed_delete(AjPStr *substr, AjPStr target);
 
 int main(int argc, char **argv)
 {
-    AjPSeq       seq=NULL;
+    AjPSeq       seq = NULL;
     AjPSeqall    seqall;
     AjPStr	 target;
     AjPStr	 replace;
@@ -52,11 +54,11 @@ int main(int argc, char **argv)
 
     embInit("biosed", argc, argv);
 
-    seqall     = ajAcdGetSeqall("sequence");
-    delete     = ajAcdGetBool("delete");
-    target     = ajAcdGetString("target");
-    replace    = ajAcdGetString("replace");
-    outseq     = ajAcdGetSeqout("outseq");
+    seqall  = ajAcdGetSeqall("sequence");
+    delete  = ajAcdGetBool("delete");
+    target  = ajAcdGetString("target");
+    replace = ajAcdGetString("replace");
+    outseq  = ajAcdGetSeqout("outseq");
 
     substr = ajStrNew();
     str    = ajStrNew();
@@ -87,8 +89,11 @@ int main(int argc, char **argv)
     ajSeqWriteClose(outseq);
 
     ajExit();
+
     return 0;
 }
+
+
 
 
 /* @funcstatic biosed_replace *************************************************
@@ -102,15 +107,16 @@ int main(int argc, char **argv)
 ** @return [void]
 ** @@
 ******************************************************************************/
+
 static void biosed_replace(AjPStr *substr, AjPStr target, AjPStr replace)
 {
     AjPStr str = NULL;
     AjPStr tmp = NULL;
 
     ajint  tlen;
-    ajint  end=0;
+    ajint  end = 0;
 
-    char   *p  = NULL;
+    char   *p = NULL;
     char   *q  = NULL;
     char   *v;
 
@@ -144,6 +150,8 @@ static void biosed_replace(AjPStr *substr, AjPStr target, AjPStr replace)
 }
 
 
+
+
 /* @funcstatic biosed_delete **************************************************
 **
 ** Generic (unoptimised) delete of all matching string subsections
@@ -154,6 +162,7 @@ static void biosed_replace(AjPStr *substr, AjPStr target, AjPStr replace)
 ** @return [void]
 ** @@
 ******************************************************************************/
+
 static void biosed_delete(AjPStr *substr, AjPStr target)
 {
     AjPStr str = NULL;

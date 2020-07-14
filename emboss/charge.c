@@ -27,19 +27,21 @@
 
 #define AMINOFILE "Eamino.dat"
 
+
+
+
 static void  charge_addgraph(AjPGraph graph, ajint limit, float *x,
 			     float *y, float ymax, float ymin,
 			     ajint window, char *sname);
 static AjPFloat charge_read_amino(AjPFile* fp);
 
+
+
+
 /* @prog charge ***************************************************************
 **
 ** Protein charge plot
 **
-** @param [?] argc [int] Undocumented
-** @param [?] argv [char**] Undocumented
-** @return [int] Undocumented
-** @@
 ******************************************************************************/
 
 int main(int argc, char **argv)
@@ -47,15 +49,15 @@ int main(int argc, char **argv)
     AjPSeqall  seqall;
     AjPSeq     seq;
 
-    AjPFloat   chg=NULL;
+    AjPFloat   chg = NULL;
 
     AjPFile    outf;
     AjPFile    cdata;
-    AjPStr     str=NULL;
-    AjPStr     aadata=NULL;
+    AjPStr     str    = NULL;
+    AjPStr     aadata = NULL;
 
     AjBool     plot;
-    AjPGraph   graph=NULL;
+    AjPGraph   graph = NULL;
 
     float      ymax;
     float      ymin;
@@ -70,10 +72,10 @@ int main(int argc, char **argv)
     ajint j;
     ajint idx;
 
-    float *x=NULL;
-    float *y=NULL;
+    float *x = NULL;
+    float *y = NULL;
 
-    float sum=0.;
+    float sum = 0.;
 
 
     char *p;
@@ -181,6 +183,7 @@ int main(int argc, char **argv)
     ajFileClose(&cdata);
 
     ajExit();
+
     return 0;
 }
 
@@ -190,14 +193,14 @@ int main(int argc, char **argv)
 **
 ** Undocumented.
 **
-** @param [?] graph [AjPGraph] Undocumented
-** @param [?] limit [ajint] Undocumented
-** @param [?] x [float*] Undocumented
-** @param [?] y [float*] Undocumented
-** @param [?] ymax [float] Undocumented
-** @param [?] ymin [float] Undocumented
-** @param [?] window [ajint] Undocumented
-** @param [?] sname [char*] Undocumented
+** @param [?] graph [AjPGraph] graph object
+** @param [?] limit [ajint] range
+** @param [?] x [float*] x co-ords
+** @param [?] y [float*] y co-ords
+** @param [?] ymax [float] max y value
+** @param [?] ymin [float] max x value
+** @param [?] window [ajint] window
+** @param [?] sname [char*] sequence name
 ** @@
 ******************************************************************************/
 
@@ -208,8 +211,8 @@ static void charge_addgraph(AjPGraph graph, ajint limit, float *x,
     ajint i;
 
     AjPGraphData data;
-    AjPStr st=NULL;
-    float baseline=0.;
+    AjPStr st = NULL;
+    float baseline = 0.;
 
     if(limit<1)
 	return;
@@ -249,6 +252,8 @@ static void charge_addgraph(AjPGraph graph, ajint limit, float *x,
 }
 
 
+
+
 /* @funcstatic charge_read_amino **********************************************
 **
 ** Undocumented.
@@ -260,17 +265,11 @@ static void charge_addgraph(AjPGraph graph, ajint limit, float *x,
 
 static AjPFloat charge_read_amino(AjPFile* fp)
 {
-  /*    AjPFile  fp=NULL; */
     AjPStr   line;
-    AjPFloat chg=NULL;
+    AjPFloat chg = NULL;
     char     c;
-    float    v=0.;
+    float    v = 0.;
     ajint    idx;
-
-    /*    ajFileDataNewC(AMINOFILE,fp);
-    if(!*fp)
-	ajFatal("Cannot find data file %s\n",AMINOFILE);
-    */
 
     line = ajStrNew();
     chg  = ajFloatNew();

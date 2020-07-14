@@ -25,25 +25,55 @@
 #include "ajgraph.h"
 #endif
 
+
+
+
+/* @datastatic AjPIntarr ******************************************************
+**
+** Integer array
+**
+** @alias AjSIntarr
+** @alias AjPIntarr
+**
+** @attr Size [ajint] Size
+** @attr Array [ajint*] Integer array
+******************************************************************************/
+
 typedef struct AjSIntarr
 {
-  ajint Size;
-  ajint* Array;
+    ajint Size;
+    ajint* Array;
 } AjOIntarr, *AjPIntarr;
 
 
+
+
+/* @datastatic AjPFltarr ******************************************************
+**
+** Integer array
+**
+** @alias AjSFltarr
+** @alias AjPFltarr
+**
+** @attr Size [ajint] Size
+** @attr Array [float*] Float array
+******************************************************************************/
+
 typedef struct AjSFltarr
 {
-  ajint Size;
-  float* Array;
+    ajint Size;
+    float* Array;
 } AjOFltarr, *AjPFltarr;
+
+
 
 
 static AjPFltarr isochore_FltarrNew0(size_t size);
 
 
 
-/* @program isochore
+
+/* @program isochore **********************************************************
 **
 **
 ** Calculates the G+C content of a DNA sequence
@@ -89,22 +119,22 @@ int main(int argc, char **argv)
     ajint k;
     ajint ipos;
     ajint isize;
-    char * sq;
+    char *sq;
     ajint igc;
     ajint imax;
     ajint ibeg;
     ajint iend;
     ajint ilen;
-    float amin=0.;
-    float amax=0.;
+    float amin = 0.;
+    float amax = 0.;
 
-    (void) ajGraphInit ("isochore", argc, argv);
+    ajGraphInit("isochore", argc, argv);
 
-    seq = ajAcdGetSeq ("sequence");
-    out = ajAcdGetOutfile ("outfile");
+    seq  = ajAcdGetSeq("sequence");
+    out  = ajAcdGetOutfile("outfile");
     plot = ajAcdGetGraphxy("graph");
 
-    ajGraphInitSeq (plot, seq);
+    ajGraphInitSeq(plot, seq);
 
     sq = ajStrStr(ajSeqStr(seq));
 
@@ -116,43 +146,44 @@ int main(int argc, char **argv)
     ishift = ajAcdGetInt("shift");
 
     imax = iend +  iwin/2;		/* stop at imax */
-    if (imax > ilen)
+    if(imax > ilen)
 	imax = ilen;
 
     i = ibeg - iwin/2;			/* start calculating from i */
-    if (i < 0)
+    if(i < 0)
 	i = 0;
 
     isize = 1 + (imax - iwin - i)/ishift; /* size of results array */
     results = isochore_FltarrNew0(isize);
 
-    ajDebug ("ilen: %d ibeg: %d iend: %d\n", ilen, ibeg, iend);
-    ajDebug ("iwin: %d ishift: %d isize: %d imax: %d i: %d\n",
-	     iwin, ishift, isize, imax, i);
+    ajDebug("ilen: %d ibeg: %d iend: %d\n", ilen, ibeg, iend);
+    ajDebug("iwin: %d ishift: %d isize: %d imax: %d i: %d\n",
+	    iwin, ishift, isize, imax, i);
 
     ipos = i + iwin/2;
-    ajFmtPrintF (out, "Position\tPercent G+C %d .. %d\n",
-		 ibeg, iend);
+    ajFmtPrintF(out, "Position\tPercent G+C %d .. %d\n",
+		ibeg, iend);
 
-    for (j=0; j < isize; i+=ishift, j++)
+    for(j=0; j < isize; i+=ishift, j++)
     {					/* sum over window */
 	igc = 0;
-	for (k=0; k < iwin; k++)
-	    if (strchr("CcGg", sq[i+k]))
+	for(k=0; k < iwin; k++)
+	    if(strchr("CcGg", sq[i+k]))
 		igc++;
 
 	results->Array[j] = (float) igc / (float) iwin;
-	ajFmtPrintF (out, "%d\t%.3f\n", ipos, results->Array[j]);
+	ajFmtPrintF(out, "%d\t%.3f\n", ipos, results->Array[j]);
 	ipos += ishift;
     }
 
 
-    ajFileClose (&out);
+    ajFileClose(&out);
 
 
 #ifndef NO_PLOT
     i = ibeg - iwin/2;			/* start calculating from i */
-    if (i < 0) i = 0;
+    if(i < 0)
+	i = 0;
     ipos = i + iwin/2;
 
     /* create the graph */
@@ -178,32 +209,30 @@ int main(int argc, char **argv)
     /* display the region 0 -> 1 for the y axis */
     ajGraphxySetYStart(plot,0.0);
     ajGraphxySetYEnd(plot,1.0);
+
     /* draw the graph */
     ajGraphxyDisplay(plot,AJTRUE);
+
     /* Delete the structures and data */
-    /*  ajStrDel(&plot->title);
-	ajStrDel(&plot->subtitle);
-	ajStrDel(&plot->xaxis);
-	ajStrDel(&plot->yaxis);
-	ajStrDel(&plot->outputfile);*/
-    ajGraphxyDel(plot);
+    ajGraphxyDel(&plot);
 #endif
 
 
 
-    /*
+     /*
      ** plot is an XY graph definition object created by acdSetGraphxy
      ** something like this to plot the data:
      ** sequence, startposition, increment, array, arraysize
      ** Note: seq has Begin and End values which can limit the plot range
-
-     ioff = ibeg + iwin/2;
-     ajPlotInit (plot, seq);
-     ajPlotFloat (plot, ioff, ishift, results->Array, isize);
-
+     **
+     ** ioff = ibeg + iwin/2;
+     ** ajPlotInit(plot, seq);
+     ** ajPlotFloat(plot, ioff, ishift, results->Array, isize);
+     **
      */
 
-    ajExit ();
+    ajExit();
+
     return 0;
 }
 

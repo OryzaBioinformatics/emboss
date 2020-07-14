@@ -23,6 +23,9 @@
 #include "emboss.h"
 #include <strings.h>
 
+
+
+
 static void digest_report_hits(AjPReport report, AjPSeq seq,
 			       AjPFeattable TabRpt,
 			       AjPList l, ajint be, char *s);
@@ -39,28 +42,27 @@ static void digest_print_hits(AjPList l, AjPFile outf, ajint be, char *s);
 
 int main(int argc, char **argv)
 {
-
-    AjPSeq   a;
-    AjPStr   substr;
-    AjPStr   rname;
-    ajint      be;
-    ajint      en;
-    ajint      len;
+    AjPSeq  a;
+    AjPStr  substr;
+    AjPStr  rname;
+    ajint be;
+    ajint en;
+    ajint len;
 
     AjBool unfavoured;
     AjBool overlap;
     AjBool allpartials;
     AjPStr *menu;
-    ajint    n;
+    ajint  n;
 
-    AjPFile  outf=NULL;
-    AjPReport report=NULL;
-    AjPFeattable TabRpt=NULL;
-    AjPStr tmpStr=NULL;
+    AjPFile  outf = NULL;
+    AjPReport report    = NULL;
+    AjPFeattable TabRpt = NULL;
+    AjPStr tmpStr = NULL;
     AjPList  l;
     AjPList  pa;
     AjPStr   datafn = NULL;
-    AjPFile mfptr=NULL;
+    AjPFile mfptr   = NULL;
 
     ajint     ncomp;
     ajint     npart;
@@ -83,44 +85,46 @@ int main(int argc, char **argv)
     sscanf(ajStrStr(*menu),"%d",&n);
     --n;
 
-    substr=ajStrNew();
-    be=ajSeqBegin(a);
-    en=ajSeqEnd(a);
+    substr = ajStrNew();
+    be     = ajSeqBegin(a);
+    en     = ajSeqEnd(a);
     ajStrAssSubC(&substr,ajSeqChar(a),be-1,en-1);
     len = en-be+1;
-
-    l  = ajListNew();
-    pa = ajListNew();
+    
+    l     = ajListNew();
+    pa    = ajListNew();
     rname = ajStrNew();
-
+    
     TabRpt = ajFeattableNewSeq(a);
-
+    
     ajFileDataNew(datafn, &mfptr);
     if(!mfptr)
 	ajFatal("%S  not found\n",datafn);
-
+    
     embPropAminoRead(mfptr);
-
+    
     embPropCalcFragments(ajStrStr(substr),n,be,&l,&pa,unfavoured,overlap,
-			allpartials,&ncomp,&npart,&rname);
-
-
-    if (outf)
-      ajFmtPrintF(outf,"DIGEST of %s from %d to %d Molwt=%10.3f\n\n",
-		  ajSeqName(a),be,en,embPropCalcMolwt(ajSeqChar(a),0,len-1));
+			 allpartials,&ncomp,&npart,&rname);
+    
+    
+    if(outf)
+	ajFmtPrintF(outf,"DIGEST of %s from %d to %d Molwt=%10.3f\n\n",
+		    ajSeqName(a),be,en,embPropCalcMolwt(ajSeqChar(a),0,len-1));
     if(!ncomp)
     {
-	if (outf)
-	  ajFmtPrintF(outf,"Is not proteolytically digested using %s\n",
-		      ajStrStr(rname));
+	if(outf)
+	    ajFmtPrintF(outf,"Is not proteolytically digested using %s\n",
+			ajStrStr(rname));
     }
     else
     {
-      if (outf) {
-	ajFmtPrintF(outf,"Complete digestion with %s yields %d fragments:\n",
-		    ajStrStr(rname),ncomp);
-	digest_print_hits(l,outf,be,ajStrStr(substr));
-      }
+	if(outf)
+	{
+	    ajFmtPrintF(outf,"Complete digestion with %s "
+			"yields %d fragments:\n",
+			ajStrStr(rname),ncomp);
+	    digest_print_hits(l,outf,be,ajStrStr(substr));
+	}
 	ajFmtPrintS(&tmpStr,
 		    "Complete digestion with %S yields %d fragments",
 		    rname,ncomp);
@@ -129,15 +133,15 @@ int main(int argc, char **argv)
 	ajReportWrite(report, TabRpt, a);
 	ajFeattableClear(TabRpt);
     }
-
+    
     if(overlap && !allpartials && npart)
     {
-	if (outf)
+	if(outf)
 	{
-	  ajFmtPrintF(outf,"\n\nPartial digest with %s yields %d extras.\n",
-		      ajStrStr(rname),npart);
-	  ajFmtPrintF(outf,"Only overlapping partials shown:\n");
-	  digest_print_hits(pa,outf,be,ajStrStr(substr));
+	    ajFmtPrintF(outf,"\n\nPartial digest with %s yields %d extras.\n",
+			ajStrStr(rname),npart);
+	    ajFmtPrintF(outf,"Only overlapping partials shown:\n");
+	    digest_print_hits(pa,outf,be,ajStrStr(substr));
 	}
 	ajFmtPrintS(&tmpStr,
 		    "\n\nPartial digest with %S yields %d extras.\n",
@@ -148,15 +152,15 @@ int main(int argc, char **argv)
 	ajReportWrite(report, TabRpt, a);
 	ajFeattableClear(TabRpt);
     }
-
+    
     if(allpartials && npart)
     {
-	if (outf)
+	if(outf)
 	{
-	  ajFmtPrintF(outf,"\n\nPartial digest with %s yields %d extras.\n",
-		      ajStrStr(rname),npart);
-	  ajFmtPrintF(outf,"All partials shown:\n");
-	  digest_print_hits(pa,outf,be,ajStrStr(substr));
+	    ajFmtPrintF(outf,"\n\nPartial digest with %s yields %d extras.\n",
+			ajStrStr(rname),npart);
+	    ajFmtPrintF(outf,"All partials shown:\n");
+	    digest_print_hits(pa,outf,be,ajStrStr(substr));
 	}
 	ajFmtPrintS(&tmpStr,
 		    "\n\nPartial digest with %S yields %d extras.\n",
@@ -167,23 +171,26 @@ int main(int argc, char **argv)
 	ajReportWrite(report, TabRpt, a);
 	ajFeattableClear(TabRpt);
     }
-
-
+    
+    
     ajFeattableDel(&TabRpt);
-
+    
     ajSeqDel(&a);
     ajStrDel(&rname);
     ajStrDel(&substr);
     ajListDel(&pa);
     ajListDel(&l);
-
-    if (outf)
-      ajFileClose(&outf);
+    
+    if(outf)
+	ajFileClose(&outf);
     ajFileClose(&mfptr);
-
+    
     ajExit();
+
     return 0;
 }
+
+
 
 
 /* @funcstatic digest_print_hits **********************************************
@@ -202,11 +209,11 @@ int main(int argc, char **argv)
 static void digest_print_hits(AjPList l, AjPFile outf, ajint be, char *s)
 {
     EmbPPropFrag fr;
-    AjPStr  t;
-    ajint     len;
+    AjPStr t;
+    ajint len;
 
-    t=ajStrNew();
-    len=strlen(s);
+    t   = ajStrNew();
+    len = strlen(s);
 
     ajFmtPrintF(outf,
 		"Start   End     Molwt      Sequence (up to 38 residues)\n");
@@ -229,13 +236,16 @@ static void digest_print_hits(AjPList l, AjPFile outf, ajint be, char *s)
 	if(fr->end-fr->start+1>38)
 	    ajFmtPrintF(outf,"...");
 	ajFmtPrintF(outf,"\n");
-	AJFREE (fr);
+	AJFREE(fr);
     }
 
     ajStrDel(&t);
 
     return;
 }
+
+
+
 
 /* @funcstatic digest_report_hits *********************************************
 **
@@ -250,41 +260,38 @@ static void digest_print_hits(AjPList l, AjPFile outf, ajint be, char *s)
 ** @@
 ******************************************************************************/
 
-
-
 static void digest_report_hits(AjPReport report, AjPSeq seq,
 			       AjPFeattable TabRpt, AjPList l, ajint be,
 			       char* s)
 {
     AjPFeature gf = NULL;
     EmbPPropFrag fr;
-    AjPStr  t;
-    ajint     len;
-    static AjPStr tmpStr=NULL;
+    AjPStr t;
+    ajint len;
+    static AjPStr tmpStr = NULL;
 
-    t=ajStrNew();
-    len=strlen(s);
+    t   = ajStrNew();
+    len = strlen(s);
 
     while(ajListPop(l,(void **)&fr))
     {
 	ajStrAssSubC(&t,s,fr->start,fr->end);
-	gf = ajFeatNewII (TabRpt,
-			   fr->start+be,fr->end+be);
+	gf = ajFeatNewII(TabRpt,fr->start+be,fr->end+be);
 	ajFmtPrintS(&tmpStr, "*molwt %.3f", fr->molwt);
 	ajFeatTagAdd(gf,  NULL, tmpStr);
 	if(fr->start>0)
 	{
-	  ajFmtPrintS(&tmpStr, "*cterm %c", *(s+(fr->start+be-1)-1));
-	  ajFeatTagAdd(gf,  NULL, tmpStr);
+	    ajFmtPrintS(&tmpStr, "*cterm %c", *(s+(fr->start+be-1)-1));
+	    ajFeatTagAdd(gf,  NULL, tmpStr);
 	}
 
 	if(fr->end<len-1)
 	{
-	  ajFmtPrintS(&tmpStr, "*nterm %c", *(s+(fr->end+be)));
-	  ajFeatTagAdd(gf,  NULL, tmpStr);
+	    ajFmtPrintS(&tmpStr, "*nterm %c", *(s+(fr->end+be)));
+	    ajFeatTagAdd(gf,  NULL, tmpStr);
 	}
 
-	AJFREE (fr);
+	AJFREE(fr);
     }
 
     ajStrDel(&t);

@@ -24,10 +24,13 @@
 #include <math.h>
 
 
+
+
 static float hmoment_calchm(char *p, int pos, int window, ajint angle);
 static void  hmoment_addgraph(AjPGraph graph, ajint limit, float *x, float *y,
 			      float ymax, ajint colour, ajint angle,
 			      ajint window, float baseline, char *sname);
+
 
 
 
@@ -40,16 +43,16 @@ static void  hmoment_addgraph(AjPGraph graph, ajint limit, float *x, float *y,
 int main(int argc, char **argv)
 {
     AjPSeqall  seqall;
-    AjPSeq     seq;
-    AjPFile    outf;
-    AjPStr     str=NULL;
-    AjPStr     st=NULL;
+    AjPSeq seq;
+    AjPFile outf;
+    AjPStr str = NULL;
+    AjPStr st  = NULL;
 
-    AjBool     plot;
-    AjPGraph   graph=NULL;
-    AjBool     twin;
-    float      baseline;
-    float      ymax;
+    AjBool plot;
+    AjPGraph graph = NULL;
+    AjBool twin;
+    float baseline;
+    float ymax;
 
     ajint beg;
     ajint end;
@@ -62,11 +65,9 @@ int main(int argc, char **argv)
 
     ajint i;
 
-    float *x=NULL;
-    float *ya=NULL;
-    float *yb=NULL;
-
-
+    float *x  = NULL;
+    float *ya = NULL;
+    float *yb = NULL;
 
     char *p;
     char *sname;
@@ -110,7 +111,6 @@ int main(int argc, char **argv)
 	    AJCNEW0(ya,limit);
 	    AJCNEW0(yb,limit);
 	}
-
 
 	for(i=0;i<limit;++i)
 	{
@@ -185,8 +185,11 @@ int main(int argc, char **argv)
     ajStrDel(&st);
 
     ajExit();
+
     return 0;
 }
+
+
 
 
 /* @funcstatic hmoment_addgraph ***********************************************
@@ -214,7 +217,7 @@ static void hmoment_addgraph(AjPGraph graph, ajint limit, float *x, float *y,
     ajint i;
 
     AjPGraphData data;
-    AjPStr st=NULL;
+    AjPStr st = NULL;
 
     if(limit<1)
 	return;
@@ -253,6 +256,8 @@ static void hmoment_addgraph(AjPGraph graph, ajint limit, float *x, float *y,
 
     return;
 }
+
+
 
 
 /* @funcstatic hmoment_calchm *************************************************

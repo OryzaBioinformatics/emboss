@@ -31,8 +31,9 @@
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 ******************************************************************************/
 
-
 #include "emboss.h"
+
+
 
 
 /* @prog cons *****************************************************************
@@ -55,7 +56,7 @@ int main(int argc, char **argv)
     AjPSeq    seqo;
     AjPStr    name = NULL;
     AjPStr    cons;
-    AjPMatrix cmpmatrix=0;
+    AjPMatrix cmpmatrix = 0;
 
 
     embInit ("cons", argc, argv);
@@ -103,5 +104,6 @@ int main(int argc, char **argv)
     ajSeqDel(&seqo);
 
     ajExit ();
+
     return 0;
 }

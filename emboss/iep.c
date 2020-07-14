@@ -28,6 +28,7 @@
 
 
 
+
 /* @prog iep ******************************************************************
 **
 ** Calculates the isoelectric point of a protein
@@ -37,43 +38,43 @@
 int main(int argc, char **argv)
 {
     AjPSeqall all;
-    AjPSeq   a;
-    AjPStr   substr;
-    AjPFile  outf;
-    AjBool   termini;
-    AjBool   doplot;
-    AjBool   dofile;
-    AjPGraph graph=NULL;
+    AjPSeq a;
+    AjPStr substr;
+    AjPFile outf;
+    AjBool termini;
+    AjBool doplot;
+    AjBool dofile;
+    AjPGraph graph = NULL;
 
     float step;
-    ajint   amino=1;
+    ajint amino = 1;
 
     double H;
     double pH;
     double iep;
 
-    ajint    *c=NULL;
-    ajint    *op=NULL;
-    double *K=NULL;
-    double *pro=NULL;
+    ajint *c    = NULL;
+    ajint *op   = NULL;
+    double *K   = NULL;
+    double *pro = NULL;
     double sum;
     double charge;
 
-    AjPGraphData phGraph=NULL;
-    AjPStr tit=NULL;
-    AjPStr tmp=NULL;
+    AjPGraphData phGraph = NULL;
+    AjPStr tit = NULL;
+    AjPStr tmp = NULL;
 
-    float *xa=NULL;
-    float *ya=NULL;
-    float minchg=0.0;
-    float maxchg=0.0;
-    ajint   npoints;
-    ajint   k;
-    ajint   be;
-    ajint   en;
-    ajint   i;
+    float *xa = NULL;
+    float *ya = NULL;
+    float minchg = 0.0;
+    float maxchg = 0.0;
+    ajint npoints;
+    ajint k;
+    ajint be;
+    ajint en;
+    ajint i;
 
-    (void) ajGraphInit("iep", argc, argv);
+    ajGraphInit("iep", argc, argv);
 
     all       = ajAcdGetSeqall("sequence");
     doplot    = ajAcdGetBool("plot");
@@ -85,22 +86,22 @@ int main(int argc, char **argv)
 
 
     substr=ajStrNew();
-    AJCNEW (K,   EMBIEPSIZE);
-    AJCNEW (c,   EMBIEPSIZE);
-    AJCNEW (op,  EMBIEPSIZE);
-    AJCNEW (pro, EMBIEPSIZE);
+    AJCNEW(K,   EMBIEPSIZE);
+    AJCNEW(c,   EMBIEPSIZE);
+    AJCNEW(op,  EMBIEPSIZE);
+    AJCNEW(pro, EMBIEPSIZE);
 
     embIepPkRead();				/* read pK's */
     embIepCalcK(K);				/* Convert to dissoc consts */
 
-     /* only used if variable 'plot' is ajTrue */
+     /* only used if variable 'plot' is true */
 
    graph = ajAcdGetGraphxy("graph");
 
     while(ajSeqallNext(all,&a))
     {
-	be=ajSeqallBegin(all);
-	en=ajSeqallEnd(all);
+	be = ajSeqallBegin(all);
+	en = ajSeqallEnd(all);
 	ajStrAssSubC(&substr,ajSeqChar(a),be-1,en-1);
 
 	for(i=0;i<EMBIEPSIZE;++i)
@@ -112,7 +113,7 @@ int main(int argc, char **argv)
 	embIepComp(ajStrStr(substr),amino,c); /* Get sequence composition */
 
 
-	if (dofile)
+	if(dofile)
 	{
 	    ajFmtPrintF(outf,"IEP of %s from %d to %d\n",ajSeqName(a),be,en);
 	    if(!embIepIEP(ajStrStr(substr),amino,&iep,termini))
@@ -124,7 +125,7 @@ int main(int argc, char **argv)
 
 	    for(pH=1.0;pH<=14.0;pH+=step)
 	    {
-		H=embIepPhToHConc(pH);
+		H = embIepPhToHConc(pH);
 		if(!termini)
 		    c[EMBIEPAMINO]=c[EMBIEPCARBOXYL]=0;
 		embIepGetProto(K,c,op,H,pro);
@@ -132,28 +133,29 @@ int main(int argc, char **argv)
 		ajFmtPrintF(outf,"%6.2lf   %6.2lf   %6.2lf\n",pH,sum,charge);
 	    }
 	}
+
 	if(doplot)
 	{
-	    npoints = (ajint) ((14.0-1.0)/(double)GSTEP) +1;
-	    AJCNEW (xa, npoints);
-	    AJCNEW (ya, npoints);
+	    npoints = (ajint)((14.0-1.0)/(double)GSTEP) +1;
+	    AJCNEW(xa,npoints);
+	    AJCNEW(ya,npoints);
 
 	    minchg = (float) INT_MAX;
 	    maxchg = (float)-INT_MAX;
 
 	    for(pH=1.0,k=0;pH<=14.0;pH+=GSTEP,++k)
 	    {
-		xa[k]=(float)pH;
+		xa[k] = (float)pH;
 		H=embIepPhToHConc(pH);
 		if(!termini)
-		    c[EMBIEPAMINO]=c[EMBIEPCARBOXYL]=0;
+		    c[EMBIEPAMINO] = c[EMBIEPCARBOXYL]=0;
 		embIepGetProto(K,c,op,H,pro);
-		charge=embIepGetCharge(c,pro,&sum);
-		ya[k]=(float)charge;
+		charge = embIepGetCharge(c,pro,&sum);
+		ya[k]  = (float)charge;
 		minchg = (minchg<charge) ? minchg : (float)charge;
 		maxchg = (maxchg>charge) ? maxchg : (float)charge;
 	    }
-	    npoints=k;
+	    npoints = k;
 
 	    tit = ajStrNew();
 	    tmp = ajStrNew();
@@ -166,7 +168,7 @@ int main(int argc, char **argv)
 	    ajStrApp(&tit,tmp);
 
 
-	    phGraph=ajGraphxyDataNewI(npoints);
+	    phGraph = ajGraphxyDataNewI(npoints);
 	    ajGraphxyTitleC(graph,ajStrStr(tit));
 	    ajGraphxyXtitleC(graph,"pH");
 	    ajGraphxyYtitleC(graph,"Charge");
@@ -188,19 +190,20 @@ int main(int argc, char **argv)
 	    ajGraphxyDisplay(graph,ajFalse);
 	    ajStrDel(&tmp);
 	    ajStrDel(&tit);
-	    AJFREE (ya);
-	    AJFREE (xa);
+	    AJFREE(ya);
+	    AJFREE(xa);
 	}
     }
     ajGraphClose();
-    AJFREE (K);
-    AJFREE (pro);
-    AJFREE (op);
-    AJFREE (c);
+    AJFREE(K);
+    AJFREE(pro);
+    AJFREE(op);
+    AJFREE(c);
 
     ajStrDel(&substr);
     ajFileClose(&outf);
 
     ajExit();
+
     return 0;
 }

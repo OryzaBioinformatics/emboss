@@ -26,11 +26,14 @@
 #define TRIMCHARSET 256		/* size of character set */
 
 
+
+
 static ajint trimseq_trim(AjPSeq seq, ajint sense, AjBool isnuc,
 			  ajint window, float percent, AjBool strict,
 			  AjBool star);
 static void trimseq_parole(AjBool *gang, char *good_guys);
-/*static void trimseq_arrest(AjBool *gang, char *bad_guys);*/
+
+
 
 
 /* @prog trimseq **************************************************************
@@ -41,66 +44,71 @@ static void trimseq_parole(AjBool *gang, char *good_guys);
 
 int main(int argc, char **argv)
 {
-
     AjPSeqall seqall;
     AjPSeqout seqout;
     AjPSeq seq = NULL;
     ajint window;
-    AjBool left, right, strict, star;
+    AjBool left;
+    AjBool right;
+    AjBool strict;
+    AjBool star;
     float percent;
     AjBool isnuc;
-    AjPStr str=NULL;
-    ajint start, end;
+    AjPStr str = NULL;
+    ajint start;
+    ajint end;
 
 
-    (void) embInit ("trimseq", argc, argv);
+    embInit("trimseq", argc, argv);
 
-    seqall = ajAcdGetSeqall ("sequence");
-    seqout = ajAcdGetSeqoutall ("outseq");
-    window = ajAcdGetInt ("window");
-    percent = ajAcdGetFloat ("percent");
-    left = ajAcdGetBool ("left");
-    right = ajAcdGetBool ("right");
-    strict = ajAcdGetBool ("strict");
-    star = ajAcdGetBool ("star");
+    seqall  = ajAcdGetSeqall("sequence");
+    seqout  = ajAcdGetSeqoutall("outseq");
+    window  = ajAcdGetInt("window");
+    percent = ajAcdGetFloat("percent");
+    left    = ajAcdGetBool("left");
+    right   = ajAcdGetBool("right");
+    strict  = ajAcdGetBool("strict");
+    star    = ajAcdGetBool("star");
 
     str = ajStrNew();
 
-    while (ajSeqallNext(seqall, &seq))
+    while(ajSeqallNext(seqall, &seq))
     {
-
 	/* is this a protein or nucleic sequence? */
 	isnuc = ajSeqIsNuc(seq);
 
 	/* find the left start */
-	if (left)
+	if(left)
 	    start = trimseq_trim(seq, 1, isnuc, window, percent, strict, star)
 		+ 1;
 	else
 	    start = 0;
 
 	/* find the right end */
-	if (right)
+	if(right)
 	    end = trimseq_trim(seq, 0, isnuc, window, percent, strict, star)
 		- 1;
 	else
 	    end = ajSeqLen(seq)-1;
 
 	/* get a COPY of the sequence string */
-	(void) ajStrAss (&str, ajSeqStr(seq));
+	ajStrAss(&str, ajSeqStr(seq));
 
-	(void) ajStrSub(&str, start, end);
-	(void) ajSeqReplace(seq, str);
-	(void) ajSeqAllWrite (seqout, seq);
+	ajStrSub(&str, start, end);
+	ajSeqReplace(seq, str);
+	ajSeqAllWrite(seqout, seq);
     }
 
-    (void) ajSeqWriteClose (seqout);
+    ajSeqWriteClose(seqout);
 
     ajStrDel(&str);
 
-    (void) ajExit ();
+    ajExit();
+
     return 0;
 }
+
+
 
 
 /* @funcstatic trimseq_trim ***************************************************
@@ -138,35 +146,35 @@ static ajint trimseq_trim(AjPSeq seq, ajint sense, AjBool isnuc, ajint window,
     char c;
 
     /* set the characters to trim */
-    for (i=0; i<TRIMCHARSET; i++) 	/* set them all to be bad initially */
+    for(i=0; i<TRIMCHARSET; i++) 	/* set them all to be bad initially */
 	gang[i] = ajTrue;
 
-    if (isnuc)
+    if(isnuc)
     {
 	/* normal bases and gap characters are good guys */
-	(void) trimseq_parole(gang, "acgtu.-~ ");
-	if (!strict)
+	trimseq_parole(gang, "acgtu.-~ ");
+	if(!strict)
 	    /* so are ambiguity codes if we are not strict */
-	    (void) trimseq_parole(gang, "mrwsykvhdb");
+	    trimseq_parole(gang, "mrwsykvhdb");
     }
     else
     {
 	/*
-	 * protein
-	 * normal residues and gap characters are good guys
-	 */
-	(void) trimseq_parole(gang, "arndcqeghilkmfpstwyv.-~ ");
-	if (!strict)
-	    /* so are ambiguity codes if we are not strict */
-	    (void) trimseq_parole(gang, "bz");
+	** protein
+	** normal residues and gap characters are good guys
+	*/
+	trimseq_parole(gang, "arndcqeghilkmfpstwyv.-~ ");
+	if(!strict)
+	    /* so are ambiguity codes if not strict */
+	    trimseq_parole(gang, "bz");
 
-	if (star)
-	    /* so is an asterisk if we want them */
-	    (void) trimseq_parole(gang, "*");
+	if(star)
+	    /* so is an asterisk if needed */
+	    trimseq_parole(gang, "*");
     }
 
-    /* start loop - see which way we are moving */
-    if (sense)
+    /* start loop - see direction */
+    if(sense)
     {
 	a = 0;
 	z = ajSeqLen(seq) - window;
@@ -184,27 +192,27 @@ static ajint trimseq_trim(AjPSeq seq, ajint sense, AjBool isnuc, ajint window,
     }
 
     /*
-     *   do an initial trim of contiguous runs of bad characters from the ends
-     *   We always trim gaps from the end
-     */
-    for (; a != z; a += inc)
+    **   do an initial trim of contiguous runs of bad characters from the ends
+    **   Always trim gaps from the end
+    **/
+    for(; a != z; a += inc)
     {
 	c = (ajSeqChar(seq))[a];
 	if(gang[(ajint)c] || c == '.' || c == '-' || c == '~' || c == ' ')
-	    /* trim if we have a bad character or a gap character at the end */
+	    /* trim if bad character or a gap character at the end */
 	    leroy_brown = a;		/* want to trim down to here */
 	else
 	    break;
     }
 
     /* do the window trim of the remainder of the sequence */
-    for (; a != z; a += inc)
+    for(; a != z; a += inc)
     {
 	/* look in the window */
-	for (count = 0, look = 0; look < window && look > -window; look += inc)
+	for(count = 0, look = 0; look < window && look > -window; look += inc)
 	{
 	    c = (ajSeqChar(seq))[a+look];
-	    if (gang[(ajint)c])
+	    if(gang[(ajint)c])
 	    {
 		/* count the bad characters */
 		count++;
@@ -212,28 +220,29 @@ static ajint trimseq_trim(AjPSeq seq, ajint sense, AjBool isnuc, ajint window,
 		suspect = a+look;
 	    }
 	}
+
 	/* what is the percentage of bad characters in this window */
 	pc = 100.0 * (float)count/(float)window;
-	/* do we want to trim this window? */
-	if (pc < percent) break;
-	if (sense)
+	/* Need to trim this window? */
+	if(pc < percent)
+	    break;
+
+	if(sense)
 	{
-	    if (suspect > leroy_brown)
+	    if(suspect > leroy_brown)
 		leroy_brown = suspect;
 	}
 	else
-	{
-	    if (suspect < leroy_brown)
+	    if(suspect < leroy_brown)
 		leroy_brown = suspect;
-	}
     }
 
     /*
-     *  do a final tidy up of gap characters left at the new end of the
-     *  sequence
-     *  We always trim gaps from the end
-     */
-    for (a = leroy_brown+inc; a != z; a += inc)
+    **  do a final tidy up of gap characters left at the new end of the
+    **  sequence
+    **  Always trim gaps from the end
+    */
+    for(a = leroy_brown+inc; a != z; a += inc)
     {
 	c = (ajSeqChar(seq))[a];
 	if(c == '.' || c == '-' || c == '~' || c == ' ')
@@ -245,6 +254,9 @@ static ajint trimseq_trim(AjPSeq seq, ajint sense, AjBool isnuc, ajint window,
 
     return leroy_brown;
 }
+
+
+
 
 /* @funcstatic trimseq_parole *************************************************
 **
@@ -260,7 +272,7 @@ static void trimseq_parole(AjBool *gang, char *good_guys)
 {
     ajint i;
 
-    for (i=0; good_guys[i]; i++)
+    for(i=0; good_guys[i]; i++)
     {
 	gang[tolower((ajint) good_guys[i])] = ajFalse;
 	gang[toupper((ajint) good_guys[i])] = ajFalse;
@@ -268,28 +280,3 @@ static void trimseq_parole(AjBool *gang, char *good_guys)
 
     return;
 }
-
-
-/* #funcstatic trimseq_arrest *************************************************
-**
-**  resets the upper and lowercase characters in the array 'gang' to be ajTrue
-**
-** #param [w] gang [AjBool*] array of flags for whether a character
-**                           is required or not
-** #param [r] bad_guys [char*] string of chars that are not required
-** ##
-******************************************************************************/
-/*
-//static void trimseq_arrest(AjBool *gang, char *bad_guys)
-//{
-//    ajint i;
-//
-//    for (i=0; bad_guys[i]; i++)
-//    {
-//	gang[tolower((ajint) bad_guys[i])] = ajTrue;
-//	gang[toupper((ajint) bad_guys[i])] = ajTrue;
-//   }
-//
-//    return;
-//}
-*/

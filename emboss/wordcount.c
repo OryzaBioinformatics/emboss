@@ -34,37 +34,36 @@
 
 int main(int argc, char **argv)
 {
-
     AjPSeq seq;
-    AjPTable table =0 ;
+    AjPTable table = 0;
     AjPFile outf;
     ajint wordsize;
 
     embInit("wordcount", argc, argv);
 
-    seq = ajAcdGetSeq ("sequence1");
+    seq = ajAcdGetSeq("sequence1");
 
-    wordsize = ajAcdGetInt ("wordsize");
-    outf = ajAcdGetOutfile ("outfile");
+    wordsize = ajAcdGetInt("wordsize");
+    outf     = ajAcdGetOutfile("outfile");
 
-    embWordLength (wordsize);
+    embWordLength(wordsize);
 
     if(embWordGetTable(&table, seq))		/* get table of words   */
     {
 	embWordPrintTableF(table, outf); 	/* print table of words */
 	/*
-         *  test if you can add to table
-         *  if(getWordTable(&table, seq, wordcount)) ?? get table of words ??
-	 *  {
-	 *       printWordTable(table);              ?? print table of words ??
-	 *   }
-	 */
+        **  test if table can be added to
+        **  if(getWordTable(&table, seq, wordcount)) ?? get table of words ??
+	**  {
+	**       printWordTable(table);              ?? print table of words ??
+	**  }
+	*/
 	embWordFreeTable(table);	/* free table of words */
     }
     else
 	ajFatal("ERROR generating word table");
 
-
     ajExit();
+
     return 0;
 }

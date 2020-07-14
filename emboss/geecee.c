@@ -19,7 +19,10 @@
 ** along with this program; if not, write to the Free Software
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 ******************************************************************************/
+
 #include "emboss.h"
+
+
 
 
 /* @prog geecee ***************************************************************
@@ -33,27 +36,27 @@ int main(int argc, char **argv)
 
     AjPSeq seq;
     AjPSeqall seqall;
-    AjPStr seqstr ;
+    AjPStr seqstr;
     AjPFile outf;
-    ajint len ;
-    float pgc ;
+    ajint len;
+    float pgc;
 
-    embInit ("geecee", argc, argv);
+    embInit("geecee", argc, argv);
 
-    seqall = ajAcdGetSeqall ("sequence");
-    outf = ajAcdGetOutfile ("outfile");
+    seqall = ajAcdGetSeqall("sequence");
+    outf   = ajAcdGetOutfile("outfile");
 
-    ajFmtPrintF(outf, "#Sequence   GC content\n") ;
-    while (ajSeqallNext(seqall, &seq))
+    ajFmtPrintF(outf, "#Sequence   GC content\n");
+    while(ajSeqallNext(seqall, &seq))
     {
 	ajSeqTrim(seq);
-	seqstr = ajSeqStr(seq) ;
-	len    = ajSeqLen(seq) ;
-	pgc    = ajMeltGC(&seqstr,len) ; /* forward strand for now... */
+	seqstr = ajSeqStr(seq);
+	len    = ajSeqLen(seq);
+	pgc    = ajMeltGC(&seqstr,len); /* forward strand for now... */
 
-	ajFmtPrintF(outf, "%-12s %5.2f\n", ajSeqName(seq), pgc) ;
+	ajFmtPrintF(outf, "%-12s %5.2f\n", ajSeqName(seq), pgc);
     }
 
-    ajExit ();
-    return 0 ;
+    ajExit();
+    return 0;
 }

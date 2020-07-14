@@ -19,8 +19,6 @@
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 ******************************************************************************/
 
-
-
 #include "emboss.h"
 #include <math.h>
 #include <stdlib.h>
@@ -36,11 +34,14 @@
 #define EQUGUESS  5000
 
 
+
+
 static void rebex_process_pattern(AjPStr *pattern, AjPStr *code, AjPFile outf,
 		     AjBool hassup);
 static void rebex_printEnzHeader(AjPFile outf);
 static void rebex_printRefHeader(AjPFile outf);
 static void rebex_printSuppHeader(AjPFile outf);
+
 
 
 
@@ -71,28 +72,28 @@ int main(int argc, char **argv)
     AjBool  isref  = ajFalse;
     AjBool  hassup;
 
-    ajint     count;
-    ajlong    pos;
-    ajint     i;
+    ajint  count;
+    ajlong pos;
+    ajint  i;
 
     AjBool    doequ;
-    AjPFile   oute      = NULL;
-    AjPStr    isostr    = NULL;
-    AjPTable  ptable    = NULL;
-    AjPStr    key       = NULL;
-    AjPStr    value     = NULL;
-    AjPStrTok handle    = NULL;
-    AjPStr    token     = NULL;
-    AjPStr    line2     = NULL;
+    AjPFile   oute   = NULL;
+    AjPStr    isostr = NULL;
+    AjPTable  ptable = NULL;
+    AjPStr    key    = NULL;
+    AjPStr    value  = NULL;
+    AjPStrTok handle = NULL;
+    AjPStr    token  = NULL;
+    AjPStr    line2  = NULL;
     
-    AjBool    isproto   = ajFalse;
-    char      c;
-    char      *sptr     = NULL;
+    AjBool isproto = ajFalse;
+    char c;
+    char *sptr = NULL;
     
     embInit("rebaseextract",argc,argv);
 
-    inf   = ajAcdGetInfile("inf");
-    infp  = ajAcdGetInfile("proto");
+    inf   = ajAcdGetInfile("infile");
+    infp  = ajAcdGetInfile("protofile");
     doequ = ajAcdGetBool("equivalences");
     
 
@@ -135,6 +136,7 @@ int main(int argc, char **argv)
     {
 	if(ajStrFindC(line,"withrefm.")>=0)
 	    isrefm = ajTrue;
+
 	if(ajStrFindC(line,"withref.")>=0)
 	    isref = ajTrue;
 
@@ -190,6 +192,7 @@ int main(int argc, char **argv)
     
     if(!ajFileReadLine(inf,&line))
 	ajFatal("No Supplier Information Found");
+
     if(!ajFileReadLine(inf,&line))
 	ajFatal("Unexpected EOF");
 
@@ -209,15 +212,15 @@ int main(int argc, char **argv)
 	/* Get RE */
 	if(!ajStrPrefixC(line,"<1>"))
 	    continue;
+
 	ajStrAssC(&code,ajStrStr(line)+3);
+
 	/* Get isoschizomers */
 	if(!ajFileReadLine(inf,&line2))
 	    ajFatal("Unexpected EOF");
 
 	if(ajStrLen(line2)>3)
-	{
 	    ajStrAssC(&isoschiz,ajStrStr(line2)+3);
-	}
 	else
 	    ajStrAssC(&isoschiz,"");
 
@@ -235,6 +238,7 @@ int main(int argc, char **argv)
 		ajStrAssS(&isostr,isoschiz);
 		handle = ajStrTokenInit(isostr,"\t\n>,");
 	        ajStrToken (&token, &handle, NULL);
+
 		if((value=ajTableGet(ptable,(const void *)token)))
 		    if(ajStrMatch(value,pattern))
 			ajFmtPrintF(oute,"%S %S\n",code,token);
@@ -278,7 +282,7 @@ int main(int argc, char **argv)
 	hassup=ajFalse;
 	if(ajStrLen(line)>3)
 	{
-	    hassup=ajTrue;
+	    hassup = ajTrue;
 	    ajStrAssC(&comm,ajStrStr(line)+3);
 	}
 	else
@@ -305,6 +309,7 @@ int main(int argc, char **argv)
 
 	if(!ajFileReadLine(inf,&line))
 	    ajFatal("Unexpected EOF");
+
 	if(ajStrLen(line)==3)
 	    ajFmtPrintF(outf2,"0\n");
 	else
@@ -350,6 +355,7 @@ int main(int argc, char **argv)
     ajStrDel(&code);
 
     ajExit();
+
     return 0;
 }
 
@@ -367,7 +373,6 @@ int main(int argc, char **argv)
 ** @@
 ******************************************************************************/
 
-
 static void rebex_process_pattern(AjPStr *pattern, AjPStr *code, AjPFile outf,
 				  AjBool hassup)
 {
@@ -375,12 +380,11 @@ static void rebex_process_pattern(AjPStr *pattern, AjPStr *code, AjPFile outf,
     AjPStr ppat;
     AjPStrTok tokens;
 
-    char   *p;
-    char   *q;
-    char   *r;
-    char   *t;
+    char *p;
+    char *q;
+    char *r;
+    char *t;
 
-    /*  ajint    carat;*/
     AjBool hascarat;
 
     ajint cut1;
@@ -391,7 +395,7 @@ static void rebex_process_pattern(AjPStr *pattern, AjPStr *code, AjPFile outf,
     ajint ncuts;
     ajint nc;
     ajint i;
-    AjBool blunt=ajFalse;
+    AjBool blunt = ajFalse;
 
 
     ajStrToUpper(pattern);
@@ -407,8 +411,7 @@ static void rebex_process_pattern(AjPStr *pattern, AjPStr *code, AjPFile outf,
 	ajStrAssC(&temp,ajStrStr(ppat));
 
 	hascarat = ajFalse;
-	/*      carat=0; NOT USED */
-	p=ajStrStr(ppat);
+	p = ajStrStr(ppat);
 
 	if(*p=='?')
 	{
@@ -417,7 +420,7 @@ static void rebex_process_pattern(AjPStr *pattern, AjPStr *code, AjPFile outf,
 	}
 
 
-	t=p;
+	t = p;
 	if(*p=='(')
 	{
 	    sscanf(p+1,"%d/%d",&cut1,&cut2);
@@ -434,8 +437,8 @@ static void rebex_process_pattern(AjPStr *pattern, AjPStr *code, AjPFile outf,
 	    if(!(p=strchr(p,(ajint)')')))
 		ajFatal("%s mismatched parentheses",ajStrStr(*code));
 
-	    p=ajStrStr(ppat);
-	    r=ajStrStr(temp);
+	    p = ajStrStr(ppat);
+	    r = ajStrStr(temp);
 	    while(*p)
 	    {
 		if(*p>='A' && *p<='Z')
@@ -448,21 +451,28 @@ static void rebex_process_pattern(AjPStr *pattern, AjPStr *code, AjPFile outf,
 	    cut3 += len;
 	    cut4 += len;
 	    ncuts = 4;
-	    if(cut1==cut2 && cut3==cut4) blunt=ajTrue;
-	    else blunt=ajFalse;
-	    p=t;
+
+	    if(cut1==cut2 && cut3==cut4)
+		blunt = ajTrue;
+	    else
+		blunt = ajFalse;
+
+	    p = t;
 	}
 	else
 	{
-	    ncuts=2;
-	    cut3=cut4=0;
+	    ncuts = 2;
+	    cut3 = cut4 = 0;
 	    if((p=strchr(p,(ajint)'(')))
 	    {
 		sscanf(p+1,"%d/%d",&cut1,&cut2);
-		if(cut1==cut2) blunt=ajTrue;
-		else blunt=ajFalse;
-		p=ajStrStr(ppat);
-		r=ajStrStr(temp);
+		if(cut1==cut2)
+		    blunt = ajTrue;
+		else
+		    blunt = ajFalse;
+
+		p = ajStrStr(ppat);
+		r = ajStrStr(temp);
 		while(*p)
 		{
 		    if(*p>='A' && *p<='Z')
@@ -474,62 +484,69 @@ static void rebex_process_pattern(AjPStr *pattern, AjPStr *code, AjPFile outf,
 		len=ajStrLen(ppat);
 		cut1 += len;
 		cut2 += len;
-		if(cut1<=0) --cut1;
-		if(cut2<=0) --cut2;
+		if(cut1<=0)
+		    --cut1;
+
+		if(cut2<=0)
+		    --cut2;
 	    }
 	    else			/* probably a carat */
 	    {
-		p=ajStrStr(ppat);
-		r=ajStrStr(temp);
-		cut1=0;
-		hascarat=ajFalse;
+		p = ajStrStr(ppat);
+		r = ajStrStr(temp);
+		cut1 = 0;
+		hascarat = ajFalse;
 
 		while(*p)
 		{
 		    if(*p>='A' && *p<='Z')
 		    {
 			*r++ = *p;
-			if(!hascarat) ++cut1;
+			if(!hascarat)
+			    ++cut1;
 		    }
-		    if(*p=='^') hascarat=ajTrue;
+		    if(*p=='^')
+			hascarat = ajTrue;
+
 		    ++p;
 		}
 		*r = '\0';
 		ajStrAssC(&ppat,ajStrStr(temp));
-		len=ajStrLen(ppat);
+		len = ajStrLen(ppat);
 		if(!hascarat)
 		{
-		    ncuts=0;
-		    blunt=ajFalse;
-		    cut1=0;
-		    cut2=0;
+		    ncuts = 0;
+		    blunt = ajFalse;
+		    cut1  = 0;
+		    cut2  = 0;
 		}
 		else
 		{
 		    if(len==cut1*2)
 		    {
-			blunt=ajTrue;
-			cut2=cut1;
+			blunt = ajTrue;
+			cut2  = cut1;
 		    }
 		    else if(!cut1)
 		    {
-			cut1=-1;
-			cut2=len;
+			cut1 = -1;
+			cut2 = len;
 		    }
 		    else
 		    {
-			p=ajStrStr(ppat);
+			p = ajStrStr(ppat);
 			if(p[cut1-1]=='N' && cut1==len)
 			{
 			    for(i=cut1-1,nc=0;i>-1;--i)
 				if(p[i]=='N')
 				    ++nc;
-			    cut2=len-cut1-nc-1;
+			    cut2 = len-cut1-nc-1;
 			}
-			else if(cut1==len) cut2=-1;
+			else if(cut1==len)
+			    cut2 = -1;
 			else
-			    cut2=len-cut1;
-			blunt=ajFalse;
+			    cut2 = len-cut1;
+			blunt = ajFalse;
 		    }
 		}
 	    }
@@ -547,6 +564,7 @@ static void rebex_process_pattern(AjPStr *pattern, AjPStr *code, AjPFile outf,
 	    ajFmtPrintF(outf,"%s\t%d\t%d\t%d\t%d\t%d\t0\t0\n",ajStrStr(ppat),
 			len,ncuts,blunt,cut1,cut2);
     }
+
     ajStrDel(&temp);
     ajStrDel(&ppat);
     ajStrTokenClear(&tokens);
@@ -564,7 +582,6 @@ static void rebex_process_pattern(AjPStr *pattern, AjPStr *code, AjPFile outf,
 ** @param [w] outf [AjPFile] outfile
 ** @@
 ******************************************************************************/
-
 
 static void rebex_printEnzHeader(AjPFile outf)
 {
@@ -602,6 +619,7 @@ static void rebex_printEnzHeader(AjPFile outf)
 
 
 
+
 /* @funcstatic rebex_printRefHeader *******************************************
 **
 ** Print header to embossre.ref
@@ -609,7 +627,6 @@ static void rebex_printEnzHeader(AjPFile outf)
 ** @param [w] outf [AjPFile] outfile
 ** @@
 ******************************************************************************/
-
 
 static void rebex_printRefHeader(AjPFile outf)
 {
@@ -630,6 +647,8 @@ static void rebex_printRefHeader(AjPFile outf)
 }
 
 
+
+
 /* @funcstatic rebex_printSuppHeader ******************************************
 **
 ** Print header to embossre.sup
@@ -637,7 +656,6 @@ static void rebex_printRefHeader(AjPFile outf)
 ** @param [w] outf [AjPFile] outfile
 ** @@
 ******************************************************************************/
-
 
 static void rebex_printSuppHeader(AjPFile outf)
 {

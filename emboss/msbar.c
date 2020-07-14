@@ -39,7 +39,6 @@ static AjBool msbar_Unlike(AjPStr str, AjPSeqall other);
 
 
 
-
 /* @prog msbar ****************************************************************
 **
 ** Mutate sequence beyond all recognition
@@ -55,7 +54,7 @@ int main(int argc, char **argv)
     AjPSeq seq = NULL;
 
     AjBool isnuc;
-    AjPStr str=NULL;
+    AjPStr str = NULL;
 
     AjPStr *pointlist;
     AjPStr *codonlist;
@@ -67,73 +66,78 @@ int main(int argc, char **argv)
     ajint max;
     AjBool inframe;
 
-    /* the number of times to try to produce a sequence that is different to
-       the 'other' sequences before we give up and output it anyway */
-    ajint attempts = 01;
+    /*
+    ** the number of times to try to produce a sequence that is different to
+    **  the 'other' sequences before we give up and output it anyway
+    */
+    ajint attempts = 10;
 
     /* count of tries to get a unique sequence */
     ajint try;
 
-    (void) embInit ("msbar", argc, argv);
+    embInit("msbar", argc, argv);
 
-    seqall = ajAcdGetSeqall ("sequence");
-    seqout = ajAcdGetSeqoutall ("outseq");
+    seqall = ajAcdGetSeqall("sequence");
+    seqout = ajAcdGetSeqoutall("outseq");
 
-    pointlist = ajAcdGetList ("point");
-    codonlist = ajAcdGetList ("codon");
-    blocklist = ajAcdGetList ("block");
+    pointlist = ajAcdGetList("point");
+    codonlist = ajAcdGetList("codon");
+    blocklist = ajAcdGetList("block");
 
-    count = ajAcdGetInt ("count");
-    inframe = ajAcdGetBool ("inframe");
-    min = ajAcdGetInt ("minimum");
-    max = ajAcdGetInt ("maximum");
-    other = ajAcdGetSeqall ("other");
+    count   = ajAcdGetInt("count");
+    inframe = ajAcdGetBool("inframe");
+    min     = ajAcdGetInt("minimum");
+    max     = ajAcdGetInt("maximum");
+    other   = ajAcdGetSeqall("othersequence");
 
 
     str = ajStrNew();
 
-    while (ajSeqallNext(seqall, &seq))
+    /* seed the random number generator */
+    ajRandomSeed();
+
+    while(ajSeqallNext(seqall, &seq))
     {
         ajSeqTrim(seq);
         
 	/* is this a protein or nucleic sequence? */
 	isnuc = ajSeqIsNuc(seq);
 
-	/* seed the random number generator */
-	(void) ajRandomSeed();
-
-        /* try mutating until we have a result that is not the same as
-	   the 'other' sequences */
-        for (try=0; try<attempts; try++) {
-
+        /*
+	** try mutating until there is a result that is not the same as
+	** the 'other' sequences
+	*/
+        for(try=0; try<attempts; try++)
+	{
 	    /* get a copy of the sequence string */
-	    (void) ajStrAss (&str, ajSeqStr(seq));
+	    ajStrAss(&str, ajSeqStr(seq));
 
 	    /* do the mutation operations */
-	    for (i=0; i<count; i++)
+	    for(i=0; i<count; i++)
 	    {
-	        (void) msbar_blockmutn(&str, isnuc, blocklist, min, max, inframe);
-	        (void) msbar_codonmutn(&str, isnuc, codonlist, inframe);
-	        (void) msbar_pointmutn(&str, isnuc, pointlist);
+	        msbar_blockmutn(&str, isnuc, blocklist, min, max, inframe);
+	        msbar_codonmutn(&str, isnuc, codonlist, inframe);
+	        msbar_pointmutn(&str, isnuc, pointlist);
 	    }
 
             /* Is this mutated sequence different to the 'other' sequences?  */
-	    if (msbar_Unlike(str, other))
+	    if(msbar_Unlike(str, other))
 	        break;
 	}
 
-	if (try >= attempts)
+	if(try >= attempts)
 	    ajWarn("No unique mutation found after %d attempts", attempts);
 
-	(void) ajSeqReplace(seq, str);
-	(void) ajSeqAllWrite (seqout, seq);
+	ajSeqReplace(seq, str);
+	ajSeqAllWrite(seqout, seq);
     }
 
-    (void) ajSeqWriteClose (seqout);
+    ajSeqWriteClose(seqout);
 
     ajStrDel(&str);
 
-    ajExit ();
+    ajExit();
+
     return 0;
 }
 
@@ -144,7 +148,7 @@ int main(int argc, char **argv)
 **
 ** Mutate a random block of sequence
 **
-** @param [U] str [AjPStr*] sequence to mutate
+** @param [u] str [AjPStr*] sequence to mutate
 ** @param [r] isnuc [AjBool] TRUE if sequence is nucleic
 ** @param [r] blocklist [AjPStr*] Types of block mutations to perform
 ** @param [r] min [ajint] minimum size of block
@@ -156,37 +160,37 @@ int main(int argc, char **argv)
 static void msbar_blockmutn(AjPStr *str, AjBool isnuc, AjPStr *blocklist,
 			    ajint min, ajint max, AjBool inframe)
 {
-    ajint i=-1;
+    ajint i = -1;
     ajint rposstart;
     ajint rposend;
     ajint rpos2;
     ajint opt;
 
-    while (blocklist[++i])
+    while(blocklist[++i])
     {
-	(void) ajDebug("Next block mutation operation = %S\n", blocklist[i]);
+	ajDebug("Next block mutation operation = %S\n", blocklist[i]);
 
 	/* None */
-	if (!ajStrCmpC(blocklist[i], "0"))
+	if(!ajStrCmpC(blocklist[i], "0"))
 	    return;
 
 	/* get the option value */
-	(void) ajStrToInt(blocklist[i], &opt);
+	ajStrToInt(blocklist[i], &opt);
 
-	/* if we want 'Any', then choose which one */
-	if (opt == 1)
+	/* if 'Any' required, then choose which one */
+	if(opt == 1)
 	{
 	    opt = ajRandomNumberD() * 5;
 	    opt += 2;
 	}
 
 	/*
-	 *  get random block start and end positions in the sequence
-	 *  (0 to ajStrLen - 1)
-	 */
-	if (inframe)
+	**  get random block start and end positions in the sequence
+	**  (0 to ajStrLen - 1)
+	*/
+	if(inframe)
 	{
-	    if (min < 3) min = 3;
+	    if(min < 3) min = 3;
 	    rposstart = ajRandomNumberD() * (double)ajStrLen(*str)/3;
 	    rposend = rposstart + (min/3) + ajRandomNumberD() *
 		(double)((max - min)/3);
@@ -202,41 +206,41 @@ static void msbar_blockmutn(AjPStr *str, AjBool isnuc, AjPStr *blocklist,
 	}
 
 
-	if (opt == 2)
+	if(opt == 2)
 	{
 	    /* Insert */
-	    (void) ajDebug("block insert from %d to %d\n", rposstart, rposend);
-	    (void) msbar_Insert(str, isnuc, rposstart, rposend);
+	    ajDebug("block insert from %d to %d\n", rposstart, rposend);
+	    msbar_Insert(str, isnuc, rposstart, rposend);
 	}
 
-	if (opt == 3)
+	if(opt == 3)
 	{
 	    /* Delete */
-	    (void) ajDebug("block deletion from %d to %d\n", rposstart,
+	    ajDebug("block deletion from %d to %d\n", rposstart,
 			   rposend);
-	    (void) ajStrCut(str, rposstart, rposend);
+	    ajStrCut(str, rposstart, rposend);
 	}
 
-	if (opt == 4)
+	if(opt == 4)
 	{
 	    /* Change */
-	    (void) ajDebug("block change from %d to %d\n", rposstart, rposend);
-	    (void) ajStrCut(str, rposstart, rposend);
-	    (void) msbar_Insert(str, isnuc, rposstart, rposend);
+	    ajDebug("block change from %d to %d\n", rposstart, rposend);
+	    ajStrCut(str, rposstart, rposend);
+	    msbar_Insert(str, isnuc, rposstart, rposend);
 	}
 
-	if (opt == 5)
+	if(opt == 5)
 	{
 	    /* Duplication */
-	    (void) ajDebug("block duplication from %d to %d\n", rposstart,
+	    ajDebug("block duplication from %d to %d\n", rposstart,
 			   rposend);
-	    (void) msbar_Duplicate(str, rposstart, rposend);
+	    msbar_Duplicate(str, rposstart, rposend);
 	}
 
-	if (opt == 6)
+	if(opt == 6)
 	{
 	    /* Move */
-	    if (inframe)
+	    if(inframe)
 	    {
 		rpos2 = ajRandomNumberD() * (double)(ajStrLen(*str)/3);
 		rpos2 *= 3;
@@ -244,9 +248,9 @@ static void msbar_blockmutn(AjPStr *str, AjBool isnuc, AjPStr *blocklist,
 	    else
 		rpos2 = ajRandomNumberD() * (double)ajStrLen(*str);
 
-	    (void) ajDebug("block move from %d to %d to position %d\n",
+	    ajDebug("block move from %d to %d to position %d\n",
 			   rposstart, rposend, rpos2);
-	    (void) msbar_Move(str, rposstart, rposend, rpos2);
+	    msbar_Move(str, rposstart, rposend, rpos2);
 	}
     }
 
@@ -254,11 +258,13 @@ static void msbar_blockmutn(AjPStr *str, AjBool isnuc, AjPStr *blocklist,
 }
 
 
+
+
 /* @funcstatic msbar_codonmutn ************************************************
 **
 ** Mutate codons
 **
-** @param [U] str [AjPStr*] Sequence to mutate
+** @param [u] str [AjPStr*] Sequence to mutate
 ** @param [r] isnuc [AjBool] TRUE if sequence is nucleic
 ** @param [r] codonlist [AjPStr*] Types of codon mutations to perform
 ** @param [r] inframe [AjBool] mutate blocks preserving codon frame if TRUE
@@ -270,21 +276,22 @@ static void msbar_codonmutn(AjPStr *str, AjBool isnuc, AjPStr *codonlist,
 {
     ajint rpos;
     ajint rpos2;
-    ajint i=-1;
+    ajint i = -1;
     ajint opt;
 
-    while (codonlist[++i])
+    while(codonlist[++i])
     {
-	(void) ajDebug("Next codon mutation operation = %S\n", codonlist[i]);
+	ajDebug("Next codon mutation operation = %S\n", codonlist[i]);
 
 	/* None */
-	if (!ajStrCmpC(codonlist[i], "0")) return;
+	if(!ajStrCmpC(codonlist[i], "0"))
+	    return;
 
 	/* get the option value */
-	(void) ajStrToInt(codonlist[i], &opt);
+	ajStrToInt(codonlist[i], &opt);
 
-	/* if we want 'Any', then choose which one */
-	if (opt == 1)
+	/* if 'Any' required, then choose which one */
+	if(opt == 1)
 	{
 	    opt = ajRandomNumberD() * 5;
 	    opt += 2;
@@ -292,7 +299,7 @@ static void msbar_codonmutn(AjPStr *str, AjBool isnuc, AjPStr *codonlist,
 
 
 	/* get a random position in the sequence (0 to ajStrLen - 1) */
-	if (inframe)
+	if(inframe)
 	{
 	    rpos = ajRandomNumberD() * (double)(ajStrLen(*str)/3);
 	    rpos *= 3;
@@ -301,40 +308,40 @@ static void msbar_codonmutn(AjPStr *str, AjBool isnuc, AjPStr *codonlist,
 	    rpos = ajRandomNumberD() * (double)ajStrLen(*str);
 
 
-	if (opt == 2)
+	if(opt == 2)
 	{
 	    /* Insert */
-	    (void) ajDebug("codon insert at %d\n", rpos);
-	    (void) msbar_Insert(str, isnuc, rpos, rpos+2);
+	    ajDebug("codon insert at %d\n", rpos);
+	    msbar_Insert(str, isnuc, rpos, rpos+2);
 	}
 
-	if (opt == 3)
+	if(opt == 3)
 	{
 	    /* Delete */
-	    (void) ajDebug("codon deletion at %d\n", rpos);
-	    (void) ajStrCut(str, rpos, rpos+2);
+	    ajDebug("codon deletion at %d\n", rpos);
+	    ajStrCut(str, rpos, rpos+2);
 	}
 
-	if (opt == 4)
+	if(opt == 4)
 	{
 	    /* Change */
-	    (void) ajDebug("codon change at %d\n", rpos);
-	    (void) ajStrCut(str, rpos, rpos+2);
-	    (void) msbar_Insert(str, isnuc, rpos, rpos+2);
+	    ajDebug("codon change at %d\n", rpos);
+	    ajStrCut(str, rpos, rpos+2);
+	    msbar_Insert(str, isnuc, rpos, rpos+2);
 	}
 
-	if (opt == 5)
+	if(opt == 5)
 	{
 	    /* Duplication */
-	    (void) ajDebug("codon duplication at %d\n", rpos);
-	    (void) msbar_Duplicate(str, rpos, rpos+2);
+	    ajDebug("codon duplication at %d\n", rpos);
+	    msbar_Duplicate(str, rpos, rpos+2);
 
 	}
 
-	if (opt == 6)
+	if(opt == 6)
 	{
 	    /* Move */
-	    if (inframe)
+	    if(inframe)
 	    {
 		rpos2 = ajRandomNumberD() * (double)(ajStrLen(*str)/3);
 		rpos2 *= 3;
@@ -342,8 +349,8 @@ static void msbar_codonmutn(AjPStr *str, AjBool isnuc, AjPStr *codonlist,
 	    else
 		rpos2 = ajRandomNumberD() * (double)ajStrLen(*str);
 
-	    (void) ajDebug("codon move from %d to %d\n", rpos, rpos2);
-	    (void) msbar_Move(str, rpos, rpos+2, rpos2);
+	    ajDebug("codon move from %d to %d\n", rpos, rpos2);
+	    msbar_Move(str, rpos, rpos+2, rpos2);
 	}
 
 
@@ -359,7 +366,7 @@ static void msbar_codonmutn(AjPStr *str, AjBool isnuc, AjPStr *codonlist,
 **
 ** Mutate random single points
 **
-** @param [U] str [AjPStr*] sequence to mutate
+** @param [u] str [AjPStr*] sequence to mutate
 ** @param [r] isnuc [AjBool] TRUE if sequence is nucleic
 ** @param [r] pointlist [AjPStr*] Types of point mutations to perform
 ** @@
@@ -367,21 +374,22 @@ static void msbar_codonmutn(AjPStr *str, AjBool isnuc, AjPStr *codonlist,
 
 static void msbar_pointmutn(AjPStr *str, AjBool isnuc, AjPStr *pointlist)
 {
-    ajint i=-1;
+    ajint i = -1;
     ajint rpos, rpos2;
     ajint opt;
 
-    while (pointlist[++i])
+    while(pointlist[++i])
     {
-	(void) ajDebug("Next point mutation operation = %S\n", pointlist[i]);
+	ajDebug("Next point mutation operation = %S\n", pointlist[i]);
 	/* None */
-	if (!ajStrCmpC(pointlist[i], "0")) return;
+	if(!ajStrCmpC(pointlist[i], "0"))
+	    return;
 
 	/* get the option value */
-	(void) ajStrToInt(pointlist[i], &opt);
+	ajStrToInt(pointlist[i], &opt);
 
-	/* if we want 'Any', then choose which one */
-	if (opt == 1)
+	/* if 'Any' required, then choose which one */
+	if(opt == 1)
 	{
 	    opt = ajRandomNumberD() * 5;
 	    opt += 2;
@@ -390,45 +398,45 @@ static void msbar_pointmutn(AjPStr *str, AjBool isnuc, AjPStr *pointlist)
 	/* get a random position in the sequence (0 to ajStrLen - 1) */
 	rpos = ajRandomNumberD() * (double)ajStrLen(*str);
 
-	if (opt == 2)
+	if(opt == 2)
 	{
 	    /* Insert */
-	    (void) ajDebug("Point insert at %d\n", rpos);
-	    (void) msbar_Insert(str, isnuc, rpos, rpos);
+	    ajDebug("Point insert at %d\n", rpos);
+	    msbar_Insert(str, isnuc, rpos, rpos);
 
 	}
 
-	if (opt == 3)
+	if(opt == 3)
 	{
 	    /* Delete */
-	    (void) ajDebug("Point deletion at %d\n", rpos);
-	    (void) ajStrCut(str, rpos, rpos);
+	    ajDebug("Point deletion at %d\n", rpos);
+	    ajStrCut(str, rpos, rpos);
 
 	}
 
-	if (opt == 4)
+	if(opt == 4)
 	{
 	    /* Change */
-	    (void) ajDebug("Point change at %d\n", rpos);
-	    (void) ajStrCut(str, rpos, rpos);
-	    (void) msbar_Insert(str, isnuc, rpos, rpos);
+	    ajDebug("Point change at %d\n", rpos);
+	    ajStrCut(str, rpos, rpos);
+	    msbar_Insert(str, isnuc, rpos, rpos);
 
 	}
 
-	if (opt == 5)
+	if(opt == 5)
 	{
 	    /* Duplication */
-	    (void) ajDebug("Point duplication at %d\n", rpos);
-	    (void) msbar_Duplicate(str, rpos, rpos);
+	    ajDebug("Point duplication at %d\n", rpos);
+	    msbar_Duplicate(str, rpos, rpos);
 
 	}
 
-	if (opt == 6)
+	if(opt == 6)
 	{
 	    /* Move */
 	    rpos2 = ajRandomNumberD() * (double)ajStrLen(*str);
-	    (void) ajDebug("Point move from %d to %d\n", rpos, rpos2);
-	    (void) msbar_Move(str, rpos, rpos, rpos2);
+	    ajDebug("Point move from %d to %d\n", rpos, rpos2);
+	    msbar_Move(str, rpos, rpos, rpos2);
 	}
     }
 
@@ -442,7 +450,7 @@ static void msbar_pointmutn(AjPStr *str, AjBool isnuc, AjPStr *pointlist)
 **
 ** Insert random sequence at a position in the main sequence
 **
-** @param [U] str [AjPStr*] sequence to insert into
+** @param [u] str [AjPStr*] sequence to insert into
 ** @param [r] isnuc [AjBool] TRUE if sequence is nucleic
 ** @param [r] start [ajint] start position of insert
 ** @param [r] end [ajint] end of insert
@@ -453,35 +461,40 @@ static void msbar_Insert(AjPStr *str, AjBool isnuc, ajint start, ajint end)
 {
     char nuc[] = "ACGT";
     char prot[] = "ARNDCQEGHILKMFPSTWYV";
-    AjPStr ins=NULL;
-    ajint count = end - start +1;
+    AjPStr ins = NULL;
+    ajint count;
     ajint r;
 
-    while (count--)
+    count = end - start +1;
+
+    while(count--)
     {
-	if (isnuc)
+	if(isnuc)
 	{
 	    r = ajRandomNumberD() * (double)strlen(nuc);
-	    (void) ajStrAppK(&ins, nuc[r]);
+	    ajStrAppK(&ins, nuc[r]);
 	}
 	else
 	{
 	    r = ajRandomNumberD() * (double)strlen(prot);
-	    (void) ajStrAppK(&ins, prot[r]);
+	    ajStrAppK(&ins, prot[r]);
 	}
     }
-    (void) ajDebug("Inserting %S at %d\n", ins, start);
-    (void) ajStrInsert(str, start, ins);
-    (void) ajStrDel(&ins);
+    ajDebug("Inserting %S at %d\n", ins, start);
+    ajStrInsert(str, start, ins);
+    ajStrDel(&ins);
 
     return;
 }
+
+
+
 
 /* @funcstatic msbar_Move *****************************************************
 **
 ** Move a block of sequence from one position to another
 **
-** @param [U] str [AjPStr*] sequence to move within
+** @param [u] str [AjPStr*] sequence to move within
 ** @param [r] start [ajint] start position of block to move
 ** @param [r] end [ajint] end position of block to move
 ** @param [r] destination [ajint] destination of move
@@ -490,21 +503,24 @@ static void msbar_Insert(AjPStr *str, AjBool isnuc, ajint start, ajint end)
 
 static void msbar_Move(AjPStr *str, ajint start, ajint end, ajint destination)
 {
-    AjPStr mov=NULL;
+    AjPStr mov = NULL;
 
-    (void) ajStrAss(&mov, *str);
-    (void) ajStrSub(&mov, start, end);
-    (void) ajStrInsert(str, destination, mov);
-    (void) ajStrDel(&mov);
+    ajStrAss(&mov, *str);
+    ajStrSub(&mov, start, end);
+    ajStrInsert(str, destination, mov);
+    ajStrDel(&mov);
 
     return;
 }
+
+
+
 
 /* @funcstatic msbar_Duplicate ************************************************
 **
 ** Duplicate a block of sequence adjacent to the source block of sequence
 **
-** @param [U] str [AjPStr*] sequence to duplicate within
+** @param [u] str [AjPStr*] sequence to duplicate within
 ** @param [r] start [ajint] start position of block to duplicate
 ** @param [r] end [ajint] end position of block to duplicate
 ** @@
@@ -512,10 +528,12 @@ static void msbar_Move(AjPStr *str, ajint start, ajint end, ajint destination)
 
 static void msbar_Duplicate(AjPStr *str, ajint start, ajint end)
 {
+    msbar_Move(str, start, end, start);
 
-    (void) msbar_Move(str, start, end, start);
     return;
 }
+
+
 
 
 /* @funcstatic msbar_Unlike ************************************************
@@ -532,11 +550,9 @@ static AjBool msbar_Unlike(AjPStr str, AjPSeqall other)
 {
     AjPSeq nextother;
 
-    while (ajSeqallNext(other, &nextother))
-    {
-        if (ajStrMatchCase(str, ajSeqStr(nextother)))
+    while(ajSeqallNext(other, &nextother))
+        if(ajStrMatchCase(str, ajSeqStr(nextother)))
             return ajFalse;
-    }
     
     return ajTrue;
 }

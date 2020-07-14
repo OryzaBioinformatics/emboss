@@ -22,6 +22,9 @@
 
 #include "emboss.h"
 
+
+
+
 static void coderet_put_seq(AjPSeq seq, AjPStr strseq, ajint n, char *name,
 			    ajint type, AjPSeqout seqout);
 
@@ -36,27 +39,27 @@ static void coderet_put_seq(AjPSeq seq, AjPStr strseq, ajint n, char *name,
 
 int main(int argc, char **argv)
 {
-    AjPSeqall seqall=NULL;
-    AjPSeq seq=NULL;
-    AjPSeqout seqout=NULL;
+    AjPSeqall seqall = NULL;
+    AjPSeq seq       = NULL;
+    AjPSeqout seqout = NULL;
 
-    ajint ncds=0;
-    ajint nmrna=0;
-    ajint ntran=0;
-    ajint i=0;
+    ajint ncds  = 0;
+    ajint nmrna = 0;
+    ajint ntran = 0;
+    ajint i =0;
 
-    AjPStr cds=NULL;
-    AjPStr mrna=NULL;
-    AjPStr usa=NULL;
+    AjPStr cds  = NULL;
+    AjPStr mrna = NULL;
+    AjPStr usa  = NULL;
 
-    AjBool ret=ajFalse;
-    AjPStr *cdslines=NULL;
-    AjPStr *mrnalines=NULL;
-    AjPStr *tranlines=NULL;
-    AjBool docds=ajFalse;
-    AjBool domrna=ajFalse;
-    AjBool dotran=ajFalse;
+    AjBool ret = ajFalse;
+    AjPStr *cdslines  = NULL;
+    AjPStr *mrnalines = NULL;
+    AjPStr *tranlines = NULL;
 
+    AjBool docds  = ajFalse;
+    AjBool domrna = ajFalse;
+    AjBool dotran = ajFalse;
 
     embInit("coderet",argc,argv);
 
@@ -74,9 +77,9 @@ int main(int argc, char **argv)
 
 
     /*
-     *  Must get this so that embedded references in the same database
-     *  can be resolved
-     */
+    **  Must get this so that embedded references in the same database
+    **  can be resolved
+    */
     ajStrAssS(&usa,ajSeqallGetUsa(seqall));
 
     while(ajSeqallNext(seqall,&seq))
@@ -145,6 +148,7 @@ int main(int argc, char **argv)
     ajStrDel(&usa);
 
     ajExit();
+
     return 0;
 }
 
@@ -167,8 +171,8 @@ int main(int argc, char **argv)
 static void coderet_put_seq(AjPSeq seq, AjPStr strseq, ajint n, char *name,
 			    ajint type, AjPSeqout seqout)
 {
-    AjPSeq nseq=NULL;
-    AjPStr fn=NULL;
+    AjPSeq nseq = NULL;
+    AjPStr fn   = NULL;
 
     fn = ajStrNew();
 
@@ -188,12 +192,11 @@ static void coderet_put_seq(AjPSeq seq, AjPStr strseq, ajint n, char *name,
     ajSeqReplace(nseq,strseq);
 
 
-    ajSeqWrite (seqout,nseq);
+    ajSeqWrite(seqout,nseq);
 
 
     ajSeqDel(&nseq);
     ajStrDel(&fn);
-
 
     return;
 }

@@ -25,6 +25,8 @@
 #include "emboss.h"
 
 
+
+
 /* @macro stretchergap ********************************************************
 **
 ** k-symbol indel score
@@ -34,6 +36,8 @@
 ******************************************************************************/
 
 #define stretchergap(k)  ((k) <= 0 ? 0 : g+hh*(k)) /* k-symbol indel score */
+
+
 
 
 static ajint stretcher_Ealign(char *A, char *B, ajint M, ajint N, ajint G,
@@ -58,6 +62,8 @@ static ajint hh;
 static ajint m;					/* g = G, hh = H, m = g+h */
 
 
+
+
 /* @macro STRETCHERDEL ********************************************************
 **
 ** Macro for a "Delete k" operation
@@ -66,13 +72,17 @@ static ajint m;					/* g = G, hh = H, m = g+h */
 ** @return [void]
 ******************************************************************************/
 
-#define STRETCHERDEL(k)				\
+#define STRETCHERDEL(k)			\
 { if (last < 0)				\
     last = sapp[-1] -= (k);		\
   else					\
     last = *sapp++ = -(k);		\
 }
 						/* Append "Insert k" op */
+
+
+
+
 /* @macro STRETCHERINS ********************************************************
 **
 ** Macro for an "Insert k" operation
@@ -81,12 +91,15 @@ static ajint m;					/* g = G, hh = H, m = g+h */
 ** @return [void]
 ******************************************************************************/
 
-#define STRETCHERINS(k)				\
+#define STRETCHERINS(k)			\
 { if (last < 0)				\
     { sapp[-1] = (k); *sapp++ = last; }	\
   else					\
     last = *sapp++ = (k);		\
 }
+
+
+
 
 /* @macro STRETCHERREP ********************************************************
 **
@@ -119,6 +132,9 @@ static AjPSeqCvt cvt = NULL;
 static char *seqc0;
 static char *seqc1;   /* aligned sequences */
 
+
+
+
 /* @prog stretcher ************************************************************
 **
 ** Finds the best global alignment between two sequences
@@ -127,28 +143,30 @@ static char *seqc1;   /* aligned sequences */
 
 int main(int argc, char **argv)
 {
-    AjPStr aa0str=0,aa1str=0;
+    AjPStr aa0str = 0;
+    AjPStr aa1str = 0;
     char *s1,*s2;
-    ajint gdelval,ggapval;
+    ajint gdelval;
+    ajint ggapval;
     ajint i;
     ajint gscore;
     float percent;
-    AjPAlign align = NULL;
+    AjPAlign align   = NULL;
     AjPSeqset seqset = NULL;
 
-    AjPSeq res1  = NULL;
+    AjPSeq res1 = NULL;
     AjPSeq res2 = NULL;
     ajint beg;
     ajint beg2;
 
     embInit("stretcher", argc, argv);
 
-    seq = ajAcdGetSeq ("asequence");
-    seq2 = ajAcdGetSeq ("bsequence");
+    seq     = ajAcdGetSeq("asequence");
+    seq2    = ajAcdGetSeq("bsequence");
     matrix  = ajAcdGetMatrix("datafile");
     gdelval = ajAcdGetInt("gappenalty");
     ggapval = ajAcdGetInt("gaplength");
-    align = ajAcdGetAlign("outfile");
+    align   = ajAcdGetAlign("outfile");
 
     /* obsolete. Can be uncommented in acd file and here to reuse */
 
@@ -157,14 +175,14 @@ int main(int argc, char **argv)
     /* markx = ajAcdGetInt("markx"); */ /* use aformat markx0 */
 
     /*
-      create sequences indexes. i.e. A->0, B->1 ... Z->25 etc.
-      This is done so that ajAZToInt has only to be done once for
-      each residue in the sequence
+    ** create sequences indexes. i.e. A->0, B->1 ... Z->25 etc.
+    ** This is done so that ajAZToInt has only to be done once for
+    ** each residue in the sequence
     */
 
     ajSeqTrim(seq);
     ajSeqTrim(seq2);
-    beg = 1 + ajSeqOffset(seq);
+    beg  = 1 + ajSeqOffset(seq);
     beg2 = 1 + ajSeqOffset(seq2);
 
     ajSeqToUpper(seq);
@@ -177,8 +195,8 @@ int main(int argc, char **argv)
     cvt = ajMatrixCvt(matrix);
 
     /*
-       ajMatrixSeqNum (matrix, seq,  &aa0str);
-       ajMatrixSeqNum (matrix, seq2, &aa1str);
+    ** ajMatrixSeqNum(matrix, seq,  &aa0str);
+    ** ajMatrixSeqNum(matrix, seq2, &aa1str);
     */
 
     aa0str = ajStrNewL(2+ajSeqLen(seq)); /* length + blank + trailing null */
@@ -200,49 +218,49 @@ int main(int argc, char **argv)
 			      ajSeqLen(seq),ajSeqLen(seq2),
 			      (gdelval-ggapval),ggapval,res,&nres);
 
-    nc=stretcher_Calcons(ajStrStr(aa0str),ajSeqLen(seq),ajStrStr(aa1str),
-			 ajSeqLen(seq2),res);
+    nc = stretcher_Calcons(ajStrStr(aa0str),ajSeqLen(seq),ajStrStr(aa1str),
+			   ajSeqLen(seq2),res);
     percent = (double)nd*100.0/(double)nc;
 
-    if (outf)
+    if(outf)
     {
-      ajFmtPrintF (outf,"%-50s %4d  vs.\n%-50s %4d \n",
-		   ajSeqName(seq),ajSeqLen(seq),
-		   ajSeqName(seq2),ajSeqLen(seq2));
-      ajFmtPrintF (outf,"scoring matrix: %S, gap penalties: %d/%d\n",
-		   ajMatrixName(matrix),gdelval,ggapval);
-      ajFmtPrintF (outf,"%4.1f%% identity;\t\tGlobal alignment score: %d\n",
-		   percent,gscore);
+	ajFmtPrintF(outf,"%-50s %4d  vs.\n%-50s %4d \n",
+		    ajSeqName(seq),ajSeqLen(seq),
+		    ajSeqName(seq2),ajSeqLen(seq2));
+	ajFmtPrintF(outf,"scoring matrix: %S, gap penalties: %d/%d\n",
+		    ajMatrixName(matrix),gdelval,ggapval);
+	ajFmtPrintF(outf,"%4.1f%% identity;\t\tGlobal alignment score: %d\n",
+		    percent,gscore);
     }
 
-    if (outf)
-      stretcher_Discons(seqc0,seqc1,nc);
+    if(outf)
+	stretcher_Discons(seqc0,seqc1,nc);
 
     seqset = ajSeqsetNew();
-    res1 = ajSeqNewS(seq);
-    res2 = ajSeqNewS(seq2);
-    ajSeqReplaceC (res1, seqc0);
-    ajSeqReplaceC (res2, seqc1);
-    ajSeqsetFromPair (seqset, res1, res2);
+    res1   = ajSeqNewS(seq);
+    res2   = ajSeqNewS(seq2);
+    ajSeqReplaceC(res1, seqc0);
+    ajSeqReplaceC(res2, seqc1);
+    ajSeqsetFromPair(seqset, res1, res2);
 
-    ajAlignDefine (align, seqset);
+    ajAlignDefine(align, seqset);
 
     ajAlignSetGapI(align, gdelval, ggapval);
-    ajAlignSetMatrixInt (align, matrix);
-    ajAlignSetRange (align, beg, beg+ajSeqLen(seq), beg2, beg2+ajSeqLen(seq2));
+    ajAlignSetMatrixInt(align, matrix);
+    ajAlignSetRange(align, beg, beg+ajSeqLen(seq), beg2, beg2+ajSeqLen(seq2));
     ajAlignSetScoreI(align, gscore);
 
-    ajAlignWrite (align);
+    ajAlignWrite(align);
 
-    if (outf)
-      ajFileClose(&outf);
+    if(outf)
+	ajFileClose(&outf);
 
-    ajAlignClose (align);
+    ajAlignClose(align);
 
-    ajSeqsetDel (&seqset);
-    ajAlignDel (&align);
+    ajSeqsetDel(&seqset);
+    ajAlignDel(&align);
 
-    /* now free all that lovely memory */
+
     AJFREE(res);
     AJFREE(seqc0);
     AJFREE(seqc1);
@@ -258,8 +276,12 @@ int main(int argc, char **argv)
 
 
     ajExit();
+
     return 0;
 }
+
+
+
 
 /* Interface and top level of comparator */
 
@@ -286,16 +308,16 @@ static ajint stretcher_Ealign(char *A,char *B,ajint M,ajint N,ajint G,
     ajint c;
     ajint ck;
 
-    /*  if (N > NMAX) return -1;*/	/* Error check */
+    /*  if(N > NMAX) return -1;*/	/* Error check */
 
     /* Setup global parameters */
-    g = G;
-    hh = H;
-    m = g+hh;
+    g    = G;
+    hh   = H;
+    m    = g+hh;
     sapp = S;
     last = 0;
 
-    if (CC==NULL)
+    if(CC==NULL)
     {
 	nmax = N;
 	AJCNEW(CC, nmax+1);
@@ -303,7 +325,7 @@ static ajint stretcher_Ealign(char *A,char *B,ajint M,ajint N,ajint G,
 	AJCNEW(RR, nmax+1);
 	AJCNEW(SS, nmax+1);
     }
-    else if (N > nmax )
+    else if(N > nmax)
     {
 	nmax = N;
 	AJCRESIZE(CC, nmax+1);
@@ -312,19 +334,20 @@ static ajint stretcher_Ealign(char *A,char *B,ajint M,ajint N,ajint G,
 	AJCRESIZE(SS, nmax+1);
     }
 
-    if (CC==NULL || DD==NULL || RR==NULL || SS==NULL)
+    if(CC==NULL || DD==NULL || RR==NULL || SS==NULL)
     {
 	ajErr(" cannot allocate llmax arrays\n");
 	exit(1);
     }
 
-    c = stretcher_Align(A,B,M,N,-g,-g);		/* OK, do it */
+    c  = stretcher_Align(A,B,M,N,-g,-g);	/* OK, do it */
     ck = stretcher_CheckScore((unsigned char *)A,(unsigned char *)B,M,N,S,NC);
-    if (c != ck) ajWarn("stretcher CheckScore failed");
+
+    if(c != ck)
+	ajWarn("stretcher CheckScore failed");
+
     return c;
 }
-
-
 
 
 
@@ -353,7 +376,7 @@ static ajint stretcher_Align(char *A,char *B,ajint M,ajint N,ajint tb,ajint te)
     ajint c1;
     ajint c2;
 
-  {
+
     register ajint i;
     register ajint j;
     register ajint c;
@@ -365,77 +388,87 @@ static ajint stretcher_Align(char *A,char *B,ajint M,ajint N,ajint tb,ajint te)
 
     /* Boundary cases: M <= 1 or N == 0 */
 
-    if (N <= 0)
+    if(N <= 0)
     {
-	if (M > 0)
+	if(M > 0)
 	    STRETCHERDEL(M);
+
 	return -stretchergap(M);
     }
 
-    if (M <= 1)
+    if(M <= 1)
     {
-	if (M <= 0)
+	if(M <= 0)
 	{
 	    STRETCHERINS(N)
 	    return -stretchergap(N);
 	}
 
-	if (tb < te)
+	if(tb < te)
 	    tb = te;
 
 	midc = (tb-hh) - stretchergap(N);
 	midj = 0;
 	wa = sub[(ajint)A[1]];
-	for (j = 1; j <= N; j++)
+	for(j = 1; j <= N; j++)
         {
 	    c = -stretchergap(j-1) + wa[(ajint)B[j]] - stretchergap(N-j);
-	    if (c > midc)
+
+	    if(c > midc)
             {
 		midc = c;
 		midj = j;
             }
         }
-	if (midj == 0)
+
+	if(midj == 0)
         {
 	    STRETCHERINS(N) STRETCHERDEL(1)
 	}
 	else
         {
-	    if (midj > 1)
+	    if(midj > 1)
 		STRETCHERINS(midj-1)
-	    STRETCHERREP
-	    if (midj < N)
-		STRETCHERINS(N-midj)
+		    STRETCHERREP
+			if(midj < N)
+			    STRETCHERINS(N-midj)
         }
+
 	return midc;
     }
 
     /* Divide: Find optimum midpoint (midi,midj) of cost midc */
 
-    midi = M/2;		/* Forward phase:                          */
-    CC[0] = 0;		/*   Compute C(M/2,k) & D(M/2,k) for all k */
-    t = -g;
-    for (j = 1; j <= N; j++)
+    midi  = M/2;	 /* Forward phase:                          */
+    CC[0] = 0;		 /*   Compute C(M/2,k) & D(M/2,k) for all k */
+    t     = -g;
+    for(j = 1; j <= N; j++)
     {
 	CC[j] = t = t-hh;
 	DD[j] = t-g;
     }
     t = tb;
-    for (i = 1; i <= midi; i++)
+
+    for(i = 1; i <= midi; i++)
     {
 	s = CC[0];
 	CC[0] = c = t = t-hh;
 	e = t-g;
 	wa = sub[(ajint)A[i]];
-	for (j = 1; j <= N; j++)
+	for(j = 1; j <= N; j++)
         {
-	    if ((c =   c   - m) > (e =   e   - hh))
+	    if((c =   c   - m) > (e =   e   - hh))
 		e = c;
-	    if ((c = CC[j] - m) > (d = DD[j] - hh))
+	    if((c = CC[j] - m) > (d = DD[j] - hh))
 		d = c;
 	    c = s + wa[(ajint)B[j]];
-	    if (e > c) c = e;
-	    if (d > c) c = d;
+
+	    if(e > c)
+		c = e;
+
+	    if(d > c)
+		c = d;
+
 	    s = CC[j];
 	    CC[j] = c;
 	    DD[j] = d;
@@ -443,29 +476,36 @@ static ajint stretcher_Align(char *A,char *B,ajint M,ajint N,ajint tb,ajint te)
     }
     DD[0] = CC[0];
 
-    RR[N] = 0;		/* Reverse phase:                          */
-    t = -g;		/*   Compute R(M/2,k) & S(M/2,k) for all k */
-    for (j = N-1; j >= 0; j--)
+    RR[N] = 0;		 /* Reverse phase:                          */
+    t = -g;		 /*   Compute R(M/2,k) & S(M/2,k) for all k */
+    for(j = N-1; j >= 0; j--)
     {
 	RR[j] = t = t-hh;
 	SS[j] = t-g;
     }
     t = te;
-    for (i = M-1; i >= midi; i--)
+
+    for(i = M-1; i >= midi; i--)
     {
 	s = RR[N];
 	RR[N] = c = t = t-hh;
 	e = t-g;
 	wa = sub[(ajint)A[i+1]];
-	for (j = N-1; j >= 0; j--)
+	for(j = N-1; j >= 0; j--)
         {
-	    if ((c =   c   - m) > (e =   e   - hh))
+	    if((c =   c   - m) > (e =   e   - hh))
 		e = c;
-	    if ((c = RR[j] - m) > (d = SS[j] - hh))
+
+	    if((c = RR[j] - m) > (d = SS[j] - hh))
 		d = c;
 	    c = s + wa[(ajint)B[j+1]];
-	    if (e > c) c = e;
-	    if (d > c) c = d;
+
+	    if(e > c)
+		c = e;
+
+	    if(d > c)
+		c = d;
+
 	    s = RR[j];
 	    RR[j] = c;
 	    SS[j] = d;
@@ -476,23 +516,26 @@ static ajint stretcher_Align(char *A,char *B,ajint M,ajint N,ajint tb,ajint te)
     midc = CC[0]+RR[0];			/* Find optimal midpoint */
     midj = 0;
     type = 1;
-    for (j = 0; j <= N; j++)
-	if ((c = CC[j] + RR[j]) >= midc)
-	    if (c > midc || (CC[j] != DD[j] && RR[j] == SS[j]))
-	    { midc = c;
+    for(j = 0; j <= N; j++)
+	if((c = CC[j] + RR[j]) >= midc)
+	    if(c > midc || (CC[j] != DD[j] && RR[j] == SS[j]))
+	    {
+		midc = c;
 		midj = j;
 	    }
-    for (j = N; j >= 0; j--)
-	if ((c = DD[j] + SS[j] + g) > midc)
-	{ midc = c;
+
+    for(j = N; j >= 0; j--)
+	if((c = DD[j] + SS[j] + g) > midc)
+	{
+	    midc = c;
 	    midj = j;
 	    type = 2;
 	}
-  }
+
 
     /* Conquer: recursively around midpoint */
 
-    if (type == 1)
+    if(type == 1)
     {
 	c1 = stretcher_Align(A,B,midi,midj,tb,-g);
 	c2 = stretcher_Align(A+midi,B+midj,M-midi,N-midj,-g,te);
@@ -507,6 +550,8 @@ static ajint stretcher_Align(char *A,char *B,ajint M,ajint N,ajint tb,ajint te)
 
     return midc;
 }
+
+
 
 
 /* @funcstatic stretcher_Calcons **********************************************
@@ -541,29 +586,31 @@ static ajint stretcher_Calcons(char *aa0,ajint n0,char *aa1,ajint n1,
 
     sp0 = seqc0;
     sp1 = seqc1;
-    rp = res;
+    rp  = res;
     nc = nd = i0 = i1 = op = 0;
     min0 = min1 = 0;
 
     sq1 = ajStrStr(ajSeqStr(seq));
     sq2 = ajStrStr(ajSeqStr(seq2));
 
-    while (i0 < n0 || i1 < n1)
+    while(i0 < n0 || i1 < n1)
     {
-	if (op == 0 && *rp == 0)
+	if(op == 0 && *rp == 0)
 	{
 	    op = *rp++;
 	    *sp0 = sq1[i0++];
 	    *sp1 = sq2[i1++];
 	    nc++;
-	    if (*sp0++ == *sp1++)
+
+	    if(*sp0++ == *sp1++)
 		nd++;
 	}
 	else
 	{
-	    if (op==0)
+	    if(op==0)
 		op = *rp++;
-	    if (op>0)
+
+	    if(op>0)
 	    {
 		*sp0++ = '-';
 		*sp1++ = sq2[i1++];
@@ -581,11 +628,11 @@ static ajint stretcher_Calcons(char *aa0,ajint n0,char *aa1,ajint n1,
     }
 
     max0 = max1 = nc;
-    ajDebug ("calcons donenc %d min0 %d min1 %d  max0 %d max1 %d\n",
+    ajDebug("calcons donenc %d min0 %d min1 %d  max0 %d max1 %d\n",
 	     nc, min0, min1, max0, max1);
+
     return nc;
 }
-
 
 
 
@@ -604,23 +651,23 @@ static ajint stretcher_Discons(char *seqc0, char *seqc1, ajint nc)
 {
 #define MAXOUT 201
 
-static ajint smin0;
-static ajint  smin1;
+    static ajint smin0;
+    static ajint  smin1;
 
-static ajint min0;
-static ajint min1;
-static ajint max0;
-static ajint max1;
+    static ajint min0;
+    static ajint min1;
+    static ajint max0;
+    static ajint max1;
 
-static ajint llen;
+    static ajint llen;
 
 #define YES 1
 #define NO 0
 
-static AjPSeqCvt cvt = NULL;
-static ajint **sub;
+    static AjPSeqCvt cvt = NULL;
+    static ajint **sub;
 
-     char line[3][MAXOUT];
+    char line[3][MAXOUT];
     char cline[2][MAXOUT+10];
     ajint il;
     ajint i;
@@ -648,13 +695,21 @@ static ajint **sub;
     ajint lloff;
     ajint have_res;
     char *name01;
-    char *name0= ajSeqName(seq);
-    char *name1= ajSeqName(seq2);
-    ajint n0 = ajSeqLen(seq);
-    ajint smark[4] = {-10000,-10000,-10000,-10000}; /* BIT WEIRD THIS */
+    char *name0;
+    char *name1;
+    ajint n0;
+    ajint smark[4] =
+    {
+	-10000,-10000,-10000,-10000
+    }; /* BIT WEIRD THIS */
 
-    if (markx==2)
-	name01=name1;
+
+    name0 = ajSeqName(seq);
+    name1 = ajSeqName(seq2);
+    n0    = ajSeqLen(seq);
+
+    if(markx==2)
+	name01 = name1;
     else
 	name01 = "\0";
 
@@ -663,53 +718,57 @@ static ajint **sub;
     i10 = smark[2];
     i1n = smark[3];
 
-    /* (il) smins is always 0 ?? so why bother with this ??
-       ioff0=smin0-smins;
-       ioff1=smin1-smins;
+    /*
+    ** (il) smins is always 0 ?? so why bother with this ??
+    ** ioff0=smin0-smins;
+    ** ioff1=smin1-smins;
     */
 
-    ioff0=smin0;
-    ioff1=smin1;
+    ioff0 = smin0;
+    ioff1 = smin1;
 
-    if (markx==4)
+    if(markx==4)
 	return 0;
 
-    if (markx==3)
+    if(markx==3)
     {
-	ajFmtPrintF (outf,">%s ..\n",name0);
-	for (i=0; i<nc; i++)
+	ajFmtPrintF(outf,">%s ..\n",name0);
+	for(i=0; i<nc; i++)
 	{
 	    ajFmtPrintF(outf, "%c",seqc0[i]);
-	    if (i%50 == 49)
+	    if(i%50 == 49)
 		ajFmtPrintF(outf, "\n");
 	}
 	ajFmtPrintF(outf, "\n");
-	ajFmtPrintF (outf,">%s ..\n",name1);
-	for (i=0; i<nc; i++)
+	ajFmtPrintF(outf,">%s ..\n",name1);
+
+	for(i=0; i<nc; i++)
 	{
 	    ajFmtPrintF(outf, "%c", seqc1[i]);
-	    if (i%50 == 49)
+	    if(i%50 == 49)
 		ajFmtPrintF(outf, "\n");
 	}
+
 	ajFmtPrintF(outf, "\n");
+
 	return 0;
     }
 
-    if (markx==10)
+    if(markx==10)
     {
-	ajFmtPrintF (outf,">%s ..\n",name0);
-	ajFmtPrintF (outf,"; sq_len: %d\n",n0);
-	/*    ajFmtPrintF (outf,"; sq_type: %c\n",sqtype[0]);*/
-	ajFmtPrintF (outf,"; al_start: %d\n",min0+1);
-	ajFmtPrintF (outf,"; al_stop: %d\n",max0);
-	ajFmtPrintF (outf,"; al_display_start: %d\n",ioff0+1);
+	ajFmtPrintF(outf,">%s ..\n",name0);
+	ajFmtPrintF(outf,"; sq_len: %d\n",n0);
+	/*    ajFmtPrintF(outf,"; sq_type: %c\n",sqtype[0]);*/
+	ajFmtPrintF(outf,"; al_start: %d\n",min0+1);
+	ajFmtPrintF(outf,"; al_stop: %d\n",max0);
+	ajFmtPrintF(outf,"; al_display_start: %d\n",ioff0+1);
 
 	have_res = 0;
-	for (i=0; i<nc; i++)
+	for(i=0; i<nc; i++)
 	{
-	    if (!have_res && seqc0[i]==' ')
+	    if(!have_res && seqc0[i]==' ')
 		ajFmtPrintF(outf, "-");
-	    else if (seqc0[i]==' ')
+	    else if(seqc0[i]==' ')
 		break;
 	    else
 	    {
@@ -717,176 +776,184 @@ static ajint **sub;
 		ajFmtPrintF(outf, "%c", seqc0[i]);
 	    }
 
-	    if (i%50 == 49)
+	    if(i%50 == 49)
 		ajFmtPrintF(outf, "-");
 	}
 
-	if ((i-1)%50!=49 || seqc0[i-1]==' ')
+	if((i-1)%50!=49 || seqc0[i-1]==' ')
 	    ajFmtPrintF(outf, "-");
-	ajFmtPrintF (outf,"\n>%s ..\n",name1);
-	ajFmtPrintF (outf,"; sq_len: %d\n",ajSeqLen(seq2));
-	/*    ajFmtPrintF (outf,"; sq_type: %c\n",sqtype[0]);*/
-	ajFmtPrintF (outf,"; al_start: %ld\n", /*loffset+*/(ajlong)min1+1);
-	ajFmtPrintF (outf,"; al_stop: %ld\n", /*loffset+*/(ajlong)max1);
-	ajFmtPrintF (outf,"; al_display_start: %d\n", /*loffset+*/ioff1+1);
+
+	ajFmtPrintF(outf,"\n>%s ..\n",name1);
+	ajFmtPrintF(outf,"; sq_len: %d\n",ajSeqLen(seq2));
+	/*    ajFmtPrintF(outf,"; sq_type: %c\n",sqtype[0]);*/
+	ajFmtPrintF(outf,"; al_start: %ld\n", /*loffset+*/(ajlong)min1+1);
+	ajFmtPrintF(outf,"; al_stop: %ld\n", /*loffset+*/(ajlong)max1);
+	ajFmtPrintF(outf,"; al_display_start: %d\n", /*loffset+*/ioff1+1);
 
 	have_res = 0;
-	for (i=0; i<nc; i++)
+	for(i=0; i<nc; i++)
 	{
-	    if (!have_res && seqc1[i]==' ')
+	    if(!have_res && seqc1[i]==' ')
 		ajFmtPrintF(outf, "-");
-	    else if (seqc1[i]==' ')
+	    else if(seqc1[i]==' ')
 		break;
 	    else
 	    {
 		have_res = 1;
 		ajFmtPrintF(outf, "%c", seqc1[i]);
 	    }
-	    if (i%50 == 49)
+
+	    if(i%50 == 49)
 		ajFmtPrintF(outf, "\n");
 	}
 
-	if ((i-1)%50!=49 || seqc1[i-1]==' ')
+	if((i-1)%50!=49 || seqc1[i-1]==' ')
 	    ajFmtPrintF(outf, "\n");
 
 	return 0;
     }
 
-    for (i=0; i<3; i++)
+    for(i=0; i<3; i++)
 	memset(line[i],' ',MAXOUT);
 
-    ic = 0; del0=del1=0;
-    for (il=0; il<(nc+llen-1)/llen; il++)
+    ic = 0;
+    del0 = del1 = 0;
+    for(il=0; il<(nc+llen-1)/llen; il++)
     {
 	loff=il*llen;
 	lend=AJMIN(llen,nc-loff);
 
-	ll0 = NO; ll1 = NO;
+	ll0 = NO;
+	ll1 = NO;
 
-	for (i=0; i<2; i++)
+	for(i=0; i<2; i++)
 	    memset(cline[i],' ',MAXOUT);
 
-	for (i=0; i<lend; i++, ic++,ioff0++,ioff1++)
+	for(i=0; i<lend; i++, ic++,ioff0++,ioff1++)
 	{
 	    cl0 =  cl1 = rl0 = rl1 = YES;
-	    if ((line[0][i]=seqc0[ic])=='-')
+	    if((line[0][i]=seqc0[ic])=='-')
 	    {
 		del0++;
-		cl0=rl0=NO;
-	    }
-	    if ((line[2][i]=seqc1[ic])=='-')
-	    {
-		del1++;
-		cl1=rl1=NO;
+		cl0 = rl0 = NO;
 	    }
 
-	    if (seqc0[ic]==' ')
+	    if((line[2][i]=seqc1[ic])=='-')
+	    {
+		del1++;
+		cl1 = rl1 = NO;
+	    }
+
+	    if(seqc0[ic]==' ')
 	    {
 		del0++;
-		cl0=rl0=NO;
+		cl0 = rl0 = NO;
 	    }
 	    else
 		ll0 = YES;
 
-	    if (seqc1[ic]==' ')
+	    if(seqc1[ic]==' ')
 	    {
 		del1++;
-		cl1=rl1=NO;
+		cl1 = rl1 = NO;
 	    }
 	    else
 		ll1 = YES;
 
 	    qqoff = ajSeqBegin(seq) - 1 + (ajlong)(ioff0-del0);
-	    if (cl0 && qqoff%10 == 9)
+	    if(cl0 && qqoff%10 == 9)
 	    {
 		sprintf(&cline[0][i],"%8ld",(long)qqoff+1l);
-		cline[0][i+8]=' ';
+		cline[0][i+8] = ' ';
 		rl0 = NO;
 	    }
-	    else if (cl0 && qqoff== -1)
+	    else if(cl0 && qqoff== -1)
 	    {
 		sprintf(&cline[0][i],"%8ld",0l);
-		cline[0][i+8]=' ';
+		cline[0][i+8] = ' ';
 		rl0 = NO;
 	    }
-	    else if (rl0 && (qqoff+1)%10 == 0)
+	    else if(rl0 && (qqoff+1)%10 == 0)
 	    {
 		sprintf(&cline[0][i],"%8ld",(long)qqoff+1);
-		cline[0][i+8]=' ';
+		cline[0][i+8] = ' ';
 	    }
 
 	    lloff = ajSeqBegin(seq2)-1 + /*loffset +*/ (ajlong)(ioff1-del1);
-	    if (cl1 && lloff%10 == 9)
+	    if(cl1 && lloff%10 == 9)
 	    {
 		sprintf(&cline[1][i],"%8ld",(long)lloff+1l);
-		cline[1][i+8]=' ';
+		cline[1][i+8] = ' ';
 		rl1 = NO;
 	    }
-	    else if (cl1 && lloff== -1)
+	    else if(cl1 && lloff== -1)
 	    {
 		sprintf(&cline[1][i],"%8ld",0l);
-		cline[1][i+8]=' ';
+		cline[1][i+8] = ' ';
 		rl1 = NO;
 	    }
-	    else if (rl1 && (lloff+1)%10 == 0)
+	    else if(rl1 && (lloff+1)%10 == 0)
 	    {
 		sprintf(&cline[1][i],"%8ld",(long)lloff+1);
-		cline[1][i+8]=' ';
+		cline[1][i+8] = ' ';
 	    }
 
 
 	    line[1][i] = ' ';
-	    if (ioff0-del0 >= min0 && ioff0-del0 <= max0)
+	    if(ioff0-del0 >= min0 && ioff0-del0 <= max0)
 	    {
-		if (toupper((ajint)line[0][i])==toupper((ajint)line[2][i]))
-		    switch (markx)
+		if(toupper((ajint)line[0][i])==toupper((ajint)line[2][i]))
+		    switch(markx)
 		    {
 		    case 0:
-			line[1][i]= ':';
+			line[1][i] = ':';
 			break;
 		    case 1:
-			line[1][i]= ' ';
+			line[1][i] = ' ';
 			break;
 		    case 2:
-			line[1][i]= '.';
+			line[1][i] = '.';
 			break;
 		    }
-		else if (markx==2)
-		    line[1][i]=line[2][i];
-		else if ((il1 = ajSeqCvtK(cvt, line[0][i])) &&
-			 (il2 = ajSeqCvtK(cvt, line[2][i])) &&
-			 sub[il1][il2]>= 0)
-		    line[1][i]= (markx) ? 'x':'.';
-		else if ((il1 = ajSeqCvtK(cvt, line[0][i])) &&
-			 (il2 = ajSeqCvtK(cvt, line[2][i])))
-		    line[1][i]= (markx) ? 'X':' ';
+		else if(markx==2)
+		    line[1][i] = line[2][i];
+		else if((il1 = ajSeqCvtK(cvt, line[0][i])) &&
+			(il2 = ajSeqCvtK(cvt, line[2][i])) &&
+			sub[il1][il2]>= 0)
+		    line[1][i] = (markx) ? 'x':'.';
+		else if((il1 = ajSeqCvtK(cvt, line[0][i])) &&
+			(il2 = ajSeqCvtK(cvt, line[2][i])))
+		    line[1][i] = (markx) ? 'X':' ';
 	    }
-	    else if (markx==2)
-		line[1][i]=line[2][i];
+	    else if(markx==2)
+		line[1][i] = line[2][i];
 
-	    if (markx==0)
+	    if(markx==0)
 	    {
-		if (ioff0-del0 == i00 && ioff1-del1 == i10)
+		if(ioff0-del0 == i00 && ioff1-del1 == i10)
 		{
-		    line[1][i]='X';
+		    line[1][i] = 'X';
 		    i00 = i10 = -1;
 		}
-		if (ioff0-del0 == i0n && ioff1-del1 == i1n)
+
+		if(ioff0-del0 == i0n && ioff1-del1 == i1n)
 		{
-		    line[1][i]='X';
+		    line[1][i] = 'X';
 		    i0n = i1n = -1;
 		}
-		if ((ioff0-del0 == i00) || (ioff0-del0 == i0n))
+
+		if((ioff0-del0 == i00) || (ioff0-del0 == i0n))
 		{
-		    line[1][i]='^';
+		    line[1][i] = '^';
 		    if(ioff0-del0 == i00)
-			i00= -1;
+			i00 = -1;
 		    else
 			i0n = -1;
 		}
-		if (ioff1-del1 == i10 || ioff1-del1 == i1n)
+
+		if(ioff1-del1 == i10 || ioff1-del1 == i1n)
 		{
-		    line[1][i]='v';
+		    line[1][i] = 'v';
 		    if(ioff1-del1 == i10)
 			i10= -1;
 		    else
@@ -895,30 +962,37 @@ static ajint **sub;
 	    }
 	}
 
-	for (i=0; i<3; i++)
-	    line[i][lend]=0;
+	for(i=0; i<3; i++)
+	    line[i][lend] = 0;
 
-	for (i=0; i<2; i++)
-	    cline[i][lend+7]=0;
+	for(i=0; i<2; i++)
+	    cline[i][lend+7] = 0;
 
 	ll01 = ll0&&ll1;
-	if (markx==2 && (ll0))
+
+	if(markx==2 && (ll0))
 	    ll1=0;
-	ajFmtPrintF (outf,"\n");
-	if (ll0)
-	    ajFmtPrintF (outf,"%s\n",cline[0]);
-	if (ll0)
-	    ajFmtPrintF (outf,"%6.6s %s\n",name0,line[0]);
-	if (ll01)
-	    ajFmtPrintF (outf,"%-6.6s %s\n",name01,line[1]);
-	if (ll1)
-	    ajFmtPrintF (outf,"%6.6s %s\n",name1,line[2]);
-	if (ll1)
-	    ajFmtPrintF (outf,"%s\n",cline[1]);
+	ajFmtPrintF(outf,"\n");
+
+	if(ll0)
+	    ajFmtPrintF(outf,"%s\n",cline[0]);
+
+	if(ll0)
+	    ajFmtPrintF(outf,"%6.6s %s\n",name0,line[0]);
+
+	if(ll01)
+	    ajFmtPrintF(outf,"%-6.6s %s\n",name01,line[1]);
+
+	if(ll1)
+	    ajFmtPrintF(outf,"%6.6s %s\n",name1,line[2]);
+
+	if(ll1)
+	    ajFmtPrintF(outf,"%s\n",cline[1]);
     }
 
     return 0;
 }
+
 
 
 
@@ -936,7 +1010,7 @@ static ajint **sub;
 ******************************************************************************/
 
 static ajint stretcher_CheckScore(unsigned char *A,unsigned char *B,ajint M,
-				   ajint N,ajint *S,ajint *NC)
+				  ajint N,ajint *S,ajint *NC)
 {
     register ajint i;
     register ajint j;
@@ -945,15 +1019,15 @@ static ajint stretcher_CheckScore(unsigned char *A,unsigned char *B,ajint M,
     ajint score;
 
     score = i = j = op = nc1 = 0;
-    while (i < M || j < N)
+    while(i < M || j < N)
     {
 	op = *S++;
-	if (op == 0)
+	if(op == 0)
 	{
 	    score = sub[A[++i]][B[++j]] + score;
 	    nc1++;
 	}
-	else if (op > 0)
+	else if(op > 0)
 	{
 	    score = score - (g+op*hh);
 	    j = j+op;
@@ -968,6 +1042,7 @@ static ajint stretcher_CheckScore(unsigned char *A,unsigned char *B,ajint M,
     }
 
     *NC = nc1;
+
     return(score);
 }
 

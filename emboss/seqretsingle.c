@@ -9,18 +9,18 @@
 
 int main(int argc, char **argv)
 {
-
     AjPSeqout seqout;
     AjPSeq seq = NULL;
 
-    embInit ("seqretsingle", argc, argv);
+    embInit("seqretsingle", argc, argv);
 
-    seqout = ajAcdGetSeqout ("outseq");
-    seq = ajAcdGetSeq ("sequence");
+    seqout = ajAcdGetSeqout("outseq");
+    seq = ajAcdGetSeq("sequence");
 
-    ajSeqWrite (seqout, seq);
-    ajSeqWriteClose (seqout);
+    ajSeqWrite(seqout, seq);
+    ajSeqWriteClose(seqout);
 
     ajExit ();
+
     return 0;
 }

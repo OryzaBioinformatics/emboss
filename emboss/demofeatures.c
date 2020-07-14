@@ -1,5 +1,8 @@
 #include "emboss.h"
 
+
+
+
 /* @prog demofeatures *********************************************************
 **
 ** Testing
@@ -9,11 +12,11 @@
 int main (int argc, char **argv)
 {
     AjPFeattable feattable;
-    AjPStr name=NULL;
-    AjPStr source=NULL;
-    AjPStr type=NULL;
-    char strand='+';
-    ajint frame=0;
+    AjPStr name   = NULL;
+    AjPStr source = NULL;
+    AjPStr type   = NULL;
+    char strand   = '+';
+    ajint frame   = 0;
     AjBool sortbytype;
     AjBool dictionary;
     AjBool sortbystart;
@@ -23,13 +26,13 @@ int main (int argc, char **argv)
     ajint i;
     float score = 0.0;
 
-    embInit ("demofeatures", argc, argv);
+    embInit("demofeatures", argc, argv);
 
-    output     =  ajAcdGetFeatout("featout");
-    dictionary =  ajAcdGetBool("dictionary");
-    sortbytype =  ajAcdGetBool("typesort");
+    output      = ajAcdGetFeatout("featout");
+    dictionary  = ajAcdGetBool("dictionary");
+    sortbytype  = ajAcdGetBool("typesort");
     sortbystart = ajAcdGetBool("startsort");
-    tracedict =   ajAcdGetBool("tracedict");
+    tracedict   = ajAcdGetBool("tracedict");
 
     /* first read the dictionary if one is to be used */
 
@@ -47,21 +50,23 @@ int main (int argc, char **argv)
 	else
 	    ajStrAssC(&type,"misc_feature");
 
-	feature = ajFeatNew(feattable, source, type,
-			    i, i+10, score, strand, frame) ;
+	feature = ajFeatNew(feattable, source, type, i, i+10, score, strand,
+			    frame) ;
     }
 
 
     if(sortbytype)
 	ajFeatSortByType(feattable);
+
     if(sortbystart)
 	ajFeatSortByStart(feattable);
 
-    ajFeatWrite (output, feattable);
+    ajFeatWrite(output, feattable);
 
     ajStrDel(&name);
     ajStrDel(&type);
 
     ajExit();
+
     return 0;
 }

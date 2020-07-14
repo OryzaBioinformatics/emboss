@@ -22,7 +22,12 @@
 
 #include "emboss.h"
 
+
+
+
 static AjPTable btwisted_getdinucdata(AjPFile anglesfile);
+
+
 
 
 /* @prog btwisted *************************************************************
@@ -34,35 +39,38 @@ static AjPTable btwisted_getdinucdata(AjPFile anglesfile);
 int main(int argc, char **argv)
 {
 
-    AjPSeq   seq = NULL;
+    AjPSeq   seq   = NULL;
     AjPStr   afile = NULL;
     AjPStr   efile = NULL;
-    AjPFile  angles=NULL;
-    AjPFile  energies=NULL;
-    AjPFile  result=NULL;
-    AjPTable angletable=NULL;
-    AjPTable energytable=NULL;
-    AjPStr   nucs=NULL;
-    AjPStr   valstr=NULL;
+    AjPFile  angles   = NULL;
+    AjPFile  energies = NULL;
+    AjPFile  result   = NULL;
 
-    char * dinuc=NULL;
+    AjPTable angletable  = NULL;
+    AjPTable energytable = NULL;
+
+    AjPStr   nucs   = NULL;
+    AjPStr   valstr = NULL;
+
+    char * dinuc = NULL;
     ajint    len;
     ajint    begin;
     ajint    end;
     ajint    i;
     float  val;
-    float  anglesum=0.0;
-    float  energysum=0.0;
-    float  twists=0.0;
-    float  basesperturn=0.0;
-    float  energyperbase=0.0;
+    float  anglesum  = 0.0;
+    float  energysum = 0.0;
+    float  twists    = 0.0;
+
+    float  basesperturn  = 0.0;
+    float  energyperbase = 0.0;
 
     embInit ("btwisted", argc, argv);
 
-    seq      = ajAcdGetSeq ("sequence");
-    afile    = ajAcdGetString("angledata");
-    efile    = ajAcdGetString("energydata");
-    result   = ajAcdGetOutfile ("outfile");
+    seq    = ajAcdGetSeq ("sequence");
+    afile  = ajAcdGetString("angledata");
+    efile  = ajAcdGetString("energydata");
+    result = ajAcdGetOutfile ("outfile");
 
 
     nucs = ajStrNew();
@@ -71,6 +79,7 @@ int main(int argc, char **argv)
     if(!angles)
 	ajFatal("Cannot open file %S",afile);
     ajFileDataNew(efile,&energies);
+
     if(!energies)
 	ajFatal("Cannot open file %S",efile);
 
@@ -122,6 +131,7 @@ int main(int argc, char **argv)
     ajStrDel(&nucs);
 
     ajExit ();
+
     return 0;
 }
 
@@ -137,15 +147,13 @@ int main(int argc, char **argv)
 ** @@
 ******************************************************************************/
 
-
-
 static AjPTable btwisted_getdinucdata(AjPFile inf)
 {
-    AjPStr valstr=NULL;
-    AjPStr key=NULL;
-    AjPStr line=NULL;
-    AjPStrTok token=NULL;
-    AjPTable table = NULL;
+    AjPStr valstr   = NULL;
+    AjPStr key      = NULL;
+    AjPStr line     = NULL;
+    AjPStrTok token = NULL;
+    AjPTable table  = NULL;
 
     valstr = ajStrNew();
     line = ajStrNew();
@@ -157,7 +165,7 @@ static AjPTable btwisted_getdinucdata(AjPFile inf)
 	if(*ajStrStr(line)=='#')
 	    continue;
 	token = ajStrTokenInit(line," \n\t\r");
-	key = ajStrNew();
+	key   = ajStrNew();
 	ajStrToken(&key,&token," \n\t\r");
 	valstr = ajStrNew();
 	ajStrToken(&valstr,&token," \n\t\r");
@@ -167,8 +175,6 @@ static AjPTable btwisted_getdinucdata(AjPFile inf)
 
 
     ajStrDel(&line);
+
     return table;
 }
-
-
-

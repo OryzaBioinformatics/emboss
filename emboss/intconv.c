@@ -23,13 +23,18 @@
 #include "emboss.h"
 #include <string.h>
 
+
+
+
 static void intconv_modLineInt(AjPStr *line, ajint pos);
 static void intconv_modLineLong(AjPStr *line, ajint pos);
 
 
+
+
 /* @prog intconv **************************************************************
 **
-** Testing
+** int/ajint long/ajlong conversion
 **
 ******************************************************************************/
 
@@ -38,13 +43,13 @@ int main(int argc, char **argv)
     AjPFile inf  = NULL;
     AjPFile outf = NULL;
     AjPStr  line = NULL;
-    ajint     pos;
-    char    *p;
-    char    *q;
-    char    c;
-    char    d='\0';
+    ajint pos;
+    char *p;
+    char *q;
+    char c;
+    char d = '\0';
 
-    (void) embInit("intconv", argc, argv);
+    embInit("intconv", argc, argv);
 
     inf  = ajAcdGetInfile("infile");
     outf = ajAcdGetOutfile("outfile");
@@ -153,6 +158,7 @@ int main(int argc, char **argv)
     ajStrDel(&line);
 
     ajExit();
+
     return 0;
 }
 
@@ -168,11 +174,10 @@ int main(int argc, char **argv)
 ** @@
 ******************************************************************************/
 
-
 static void intconv_modLineInt(AjPStr *line, ajint pos)
 {
     AjPStr t;
-    char   *p;
+    char *p;
 
     t = ajStrNew();
     p = ajStrStr(*line);
@@ -188,8 +193,8 @@ static void intconv_modLineInt(AjPStr *line, ajint pos)
 
     ajStrAssC(line,ajStrStr(t));
 
-
     ajStrDel(&t);
+
     return;
 }
 
@@ -204,7 +209,6 @@ static void intconv_modLineInt(AjPStr *line, ajint pos)
 ** @param [?] pos [ajint] Undocumented
 ** @@
 ******************************************************************************/
-
 
 static void intconv_modLineLong(AjPStr *line, ajint pos)
 {
@@ -227,6 +231,7 @@ static void intconv_modLineLong(AjPStr *line, ajint pos)
     ajStrAssC(line,ajStrStr(t));
 
     ajStrDel(&t);
+
     return;
 }
 

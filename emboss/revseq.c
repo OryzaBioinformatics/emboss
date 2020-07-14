@@ -23,6 +23,8 @@
 #include "emboss.h"
 
 
+
+
 /* @prog revseq ***************************************************************
 **
 ** Reverse and complement a sequence
@@ -35,38 +37,40 @@ int main(int argc, char **argv)
     AjPSeqall seqall;
     AjPSeq seq;
     AjPSeqout seqout;
-    AjBool reverse, complement;
+    AjBool reverse;
+    AjBool complement;
 
-    (void) embInit ("revseq", argc, argv);
+    embInit("revseq", argc, argv);
 
-    seqall = ajAcdGetSeqall ("sequence");
-    seqout = ajAcdGetSeqoutall ("outseq");
+    seqall = ajAcdGetSeqall("sequence");
+    seqout = ajAcdGetSeqoutall("outseq");
 
-    reverse = ajAcdGetBool("reverse");
+    reverse    = ajAcdGetBool("reverse");
     complement = ajAcdGetBool("complement");
 
-    while (ajSeqallNext(seqall, &seq))
+    while(ajSeqallNext(seqall, &seq))
     {
 	/* is this a nucleotide sequence */
-	if (ajSeqIsProt(seq))
-	    (void) ajFatal ("%s", "Input sequence must be nucleic");
+	if(ajSeqIsProt(seq))
+	    ajFatal("%s", "Input sequence must be nucleic");
 
-	/* see if we have both reverse and complement */
-	if (reverse && complement)
-	    (void) ajSeqReverse(seq);	/* reverses and complements */
-	else if (reverse)
-	    (void) ajSeqRevOnly(seq);
-	else if (complement)
-	    (void) ajSeqCompOnly(seq);
+	/* see if both reverse and complement */
+	if(reverse && complement)
+	    ajSeqReverse(seq);	/* reverses and complements */
+	else if(reverse)
+	    ajSeqRevOnly(seq);
+	else if(complement)
+	    ajSeqCompOnly(seq);
 	else
-	  (void) ajDebug("Are you kidding ... you want to do nothing!!!\n");
+	  ajDebug("No action was specified\n");
 
-	(void) ajSeqAllWrite (seqout, seq);
+	ajSeqAllWrite(seqout, seq);
 
     }
 
-    (void) ajSeqWriteClose (seqout);
+    ajSeqWriteClose(seqout);
 
-    (void) ajExit ();
+    ajExit();
+
     return 0;
 }

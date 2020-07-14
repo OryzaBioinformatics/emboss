@@ -19,9 +19,16 @@
 ** along with this program; if not, write to the Free Software
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 ******************************************************************************/
+
 #include "emboss.h"
 
+
+
+
 static void notseq_readfile(AjPStr *pattern);
+
+
+
 
 /* @prog notseq ***************************************************************
 **
@@ -37,51 +44,55 @@ int main(int argc, char **argv)
     AjPSeqout junkout;
     AjPSeq seq = NULL;
     AjPStr pattern = NULL;
-    AjPStr name=NULL;
-    AjPStr acc=NULL;
+    AjPStr name = NULL;
+    AjPStr acc  = NULL;
     AjBool gotone=ajFalse;
 
-    embInit ("notseq", argc, argv);
+    embInit("notseq", argc, argv);
 
-    seqout = ajAcdGetSeqoutall ("outseq");
-    junkout = ajAcdGetSeqoutall ("junkoutseq");
-    seqall = ajAcdGetSeqall ("sequence");
-    pattern = ajAcdGetString ("exclude");
+    seqout  = ajAcdGetSeqoutall("outseq");
+    junkout = ajAcdGetSeqoutall("junkoutseq");
+    seqall  = ajAcdGetSeqall("sequence");
+    pattern = ajAcdGetString("exclude");
 
     notseq_readfile(&pattern);
 
-    while (ajSeqallNext(seqall, &seq))
+    while(ajSeqallNext(seqall, &seq))
     {
-	(void) ajStrAss(&name, ajSeqGetName(seq));
-	(void) ajStrAss(&acc, ajSeqGetAcc(seq));
+	ajStrAss(&name, ajSeqGetName(seq));
+	ajStrAss(&acc, ajSeqGetAcc(seq));
 
-	if (embMiscMatchPattern(name, pattern) ||
+	if(embMiscMatchPattern(name, pattern) ||
 	    embMiscMatchPattern(acc, pattern))
 	{
-	    ajSeqAllWrite (junkout, seq);
+	    ajSeqAllWrite(junkout, seq);
 	    gotone = ajTrue;
 	}
 	else
 	    /* no match, so not excluded */
-	    ajSeqAllWrite (seqout, seq);
+	    ajSeqAllWrite(seqout, seq);
 
 	ajStrClear(&name);
 	ajStrClear(&acc);
     }
 
-    ajSeqWriteClose (seqout);
-    ajSeqWriteClose (junkout);
+    ajSeqWriteClose(seqout);
+    ajSeqWriteClose(junkout);
 
-    if (gotone)
-	ajExit ();
+    if(gotone)
+	ajExit();
     else
     {
 	ajWarn("No matches found.");
-	ajExitBad ();
+	ajExitBad();
     }
 
     return 0;
 }
+
+
+
+
 /* @funcstatic notseq_readfile ************************************************
 **
 ** If the list of names starts with a '@', open that file, read in
@@ -94,16 +105,16 @@ int main(int argc, char **argv)
 
 static void notseq_readfile(AjPStr *pattern)
 {
-    AjPFile file=NULL;
+    AjPFile file = NULL;
     AjPStr line;
-    char   *p=NULL;
+    char *p = NULL;
 
-    if (ajStrFindC(*pattern, "@") == 0)
+    if(ajStrFindC(*pattern, "@") == 0)
     {
         ajStrTrimC(pattern, "@");       /* remove the @ */
         file = ajFileNewIn(*pattern);
-        if (file == NULL)
-            ajFatal ("Cannot open the file of sequence names: '%S'", pattern);
+        if(file == NULL)
+            ajFatal("Cannot open the file of sequence names: '%S'", pattern);
 
         /* blank off the file name and replace with the sequence names */
         ajStrClear(pattern);
@@ -111,7 +122,10 @@ static void notseq_readfile(AjPStr *pattern)
         while(ajFileReadLine(file, &line))
         {
             p = ajStrStr(line);
-            if (!*p || *p == '#' || *p == '!') continue;
+
+            if(!*p || *p == '#' || *p == '!')
+		continue;
+
             ajStrApp(pattern, line);
             ajStrAppC(pattern, ",");
         }

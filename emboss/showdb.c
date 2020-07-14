@@ -22,6 +22,9 @@
 
 #include "emboss.h"
 
+
+
+
 static void showdb_DBOut(AjPFile outfile, AjPStr dbname, AjPStr type,
 			 AjBool id, AjBool qry, AjBool all, AjPStr comment,
 			 AjPStr release, AjBool html, AjBool dotype,
@@ -29,6 +32,9 @@ static void showdb_DBOut(AjPFile outfile, AjPStr dbname, AjPStr type,
 			 AjBool dofields, AjBool docomment, AjBool dorelease);
 
 static AjPStr showdb_GetFields(AjPStr dbname);
+
+
+
 
 /* @prog showdb ***************************************************************
 **
@@ -52,214 +58,218 @@ int main(int argc, char **argv)
     AjBool only;
 
     AjPFile outfile = NULL;
-    AjPStr dbname = NULL;	/* the next database name to look at */
-    AjPStr type = NULL;
+    AjPStr dbname   = NULL;	/* the next database name to look at */
+    AjPStr type     = NULL;
     AjBool id;
     AjBool qry;
     AjBool all;
     AjPStr comment = NULL;
     AjPStr release = NULL;
 
-    AjPList dbnames = ajListstrNew();
+    AjPList dbnames;
     AjIList iter = NULL;
 
-    (void) ajNamSetControl("namvalid");	/* validate database/resource defs */
+    ajNamSetControl("namvalid");	/* validate database/resource defs */
 
-    (void) embInit ("showdb", argc, argv);
+    embInit("showdb", argc, argv);
 
     dbname  = ajAcdGetString("database");
-    outfile = ajAcdGetOutfile ("outfile");
+    outfile = ajAcdGetOutfile("outfile");
 
-    html = ajAcdGetBool("html");
+    html    = ajAcdGetBool("html");
     protein = ajAcdGetBool("protein");
     nucleic = ajAcdGetBool("nucleic");
 
-    doheader = ajAcdGetBool("heading");
-    dotype = ajAcdGetBool("type");
-    doid = ajAcdGetBool("id");
-    doqry = ajAcdGetBool("query");
-    doall = ajAcdGetBool("all");
-    dofields = ajAcdGetBool("fields");
+    doheader  = ajAcdGetBool("heading");
+    dotype    = ajAcdGetBool("type");
+    doid      = ajAcdGetBool("id");
+    doqry     = ajAcdGetBool("query");
+    doall     = ajAcdGetBool("all");
+    dofields  = ajAcdGetBool("fields");
     docomment = ajAcdGetBool("comment");
     dorelease = ajAcdGetBool("release");
-    only = ajAcdGetBool("only"); /* not needed, but users can set all */
-				 /* that depend on it to make it */
-				 /* "unused" otherwise */
-
+    only      = ajAcdGetBool("only");
+    
+    dbnames = ajListstrNew();
+    
+    
     /* start the HTML table */
-    if (html)
-	(void) ajFmtPrintF(outfile, "<table border cellpadding=4 bgcolor="
-			   "\"#FFFFF0\">\n");
-
-
+    if(html)
+	ajFmtPrintF(outfile, "<table border cellpadding=4 bgcolor="
+		    "\"#FFFFF0\">\n");
+    
+    
     /* print the header information */
-    if (doheader)
+    if(doheader)
     {
-	if (html)
+	if(html)
 	    /* start the HTML table title line and output the Name header */
-	    (void) ajFmtPrintF(outfile, "<tr><th>Name</th>");
+	    ajFmtPrintF(outfile, "<tr><th>Name</th>");
 	else
-	    (void) ajFmtPrintF(outfile, "%-14.13s", "# Name");
+	    ajFmtPrintF(outfile, "%-14.13s", "# Name");
 
-	if (dotype)
+	if(dotype)
 	{
-	    if (html)
-		(void) ajFmtPrintF(outfile, "<th>Type</th>");
+	    if(html)
+		ajFmtPrintF(outfile, "<th>Type</th>");
 	    else
-		(void) ajFmtPrintF(outfile, "Type ");
+		ajFmtPrintF(outfile, "Type ");
 	}
 
-	if (doid)
+	if(doid)
 	{
-	    if (html)
-		(void) ajFmtPrintF(outfile, "<th>ID</th>");
+	    if(html)
+		ajFmtPrintF(outfile, "<th>ID</th>");
 	    else
-		(void) ajFmtPrintF(outfile, "ID  ");
+		ajFmtPrintF(outfile, "ID  ");
 	}
 
-	if (doqry)
+	if(doqry)
 	{
-	    if (html)
-		(void) ajFmtPrintF(outfile, "<th>Qry</th>");
+	    if(html)
+		ajFmtPrintF(outfile, "<th>Qry</th>");
 	    else
-		(void) ajFmtPrintF(outfile, "Qry ");
+		ajFmtPrintF(outfile, "Qry ");
 	}
 
-	if (doall)
+	if(doall)
 	{
-	    if (html)
-		(void) ajFmtPrintF(outfile, "<th>All</th>");
+	    if(html)
+		ajFmtPrintF(outfile, "<th>All</th>");
 	    else
-		(void) ajFmtPrintF(outfile, "All ");
+		ajFmtPrintF(outfile, "All ");
 	}
 
-	if (dofields)
+	if(dofields)
 	{
-	    if (html)
-		(void) ajFmtPrintF(outfile, "<th>Fields</th>");
+	    if(html)
+		ajFmtPrintF(outfile, "<th>Fields</th>");
 	    else
-		(void) ajFmtPrintF(outfile, "Fields ");
+		ajFmtPrintF(outfile, "Fields ");
 	}
 
-	if (dorelease)
+	if(dorelease)
 	{
-	    if (html)
-		(void) ajFmtPrintF(outfile, "<th>Release</th>");
+	    if(html)
+		ajFmtPrintF(outfile, "<th>Release</th>");
 	    else
-		(void) ajFmtPrintF(outfile, "Release\t");
+		ajFmtPrintF(outfile, "Release\t");
 	}
 
-	if (docomment)
+	if(docomment)
 	{
-	    if (html)
-		(void) ajFmtPrintF(outfile, "<th>Comment</th>");
+	    if(html)
+		ajFmtPrintF(outfile, "<th>Comment</th>");
 	    else
-		(void) ajFmtPrintF(outfile, "Comment");
+		ajFmtPrintF(outfile, "Comment");
 	}
 
-	if (html)
+	if(html)
 	    /* end the HTML table title line */
-	    (void) ajFmtPrintF(outfile, "</tr>\n");
+	    ajFmtPrintF(outfile, "</tr>\n");
 	else
 	{
-	    (void) ajFmtPrintF(outfile, "\n");
+	    ajFmtPrintF(outfile, "\n");
 
-	    (void) ajFmtPrintF(outfile, "%-14.13s", "# ====");
-	    if (dotype)
-		(void) ajFmtPrintF(outfile, "==== ");
+	    ajFmtPrintF(outfile, "%-14.13s", "# ====");
+	    if(dotype)
+		ajFmtPrintF(outfile, "==== ");
 
-	    if (doid)
-		(void) ajFmtPrintF(outfile, "==  ");
+	    if(doid)
+		ajFmtPrintF(outfile, "==  ");
 
-	    if (doqry)
-		(void) ajFmtPrintF(outfile, "=== ");
+	    if(doqry)
+		ajFmtPrintF(outfile, "=== ");
 
-	    if (doall)
-		(void) ajFmtPrintF(outfile, "=== ");
+	    if(doall)
+		ajFmtPrintF(outfile, "=== ");
 
-	    if (dofields)
-		(void) ajFmtPrintF(outfile, "====== ");
+	    if(dofields)
+		ajFmtPrintF(outfile, "====== ");
 
-	    if (dorelease)
-		(void) ajFmtPrintF(outfile, "=======\t");
+	    if(dorelease)
+		ajFmtPrintF(outfile, "=======\t");
 
-	    if (docomment)
-		(void) ajFmtPrintF(outfile, "=======");
+	    if(docomment)
+		ajFmtPrintF(outfile, "=======");
 
-	    (void) ajFmtPrintF(outfile, "\n");
+	    ajFmtPrintF(outfile, "\n");
 	}
     }
-
-
-    /* do we have just one specified name to get details on? */
-    if (ajStrLen(dbname))
+    
+    
+    /* Just one specified name to get details on? */
+    if(ajStrLen(dbname))
     {
-	if (ajNamDbDetails (dbname, &type, &id, &qry, &all, &comment,
-			    &release))
-	    (void) showdb_DBOut(outfile, dbname, type, id, qry, all, comment,
-				release, html, dotype, doid, doqry, doall, 
-				dofields, docomment, dorelease);
+	if(ajNamDbDetails(dbname, &type, &id, &qry, &all, &comment,
+			  &release))
+	    showdb_DBOut(outfile, dbname, type, id, qry, all, comment,
+			 release, html, dotype, doid, doqry, doall, 
+			 dofields, docomment, dorelease);
 	else
-	    (void) ajFatal ("The database '%S' does not exist", dbname);
+	    ajFatal("The database '%S' does not exist", dbname);
     }
     else
     {
 	/* get the list of database names */
-	(void) ajNamListListDatabases (dbnames);
+	ajNamListListDatabases(dbnames);
 
 	/* sort it */
-	(void) ajListSort(dbnames, ajStrCmp);
+	ajListSort(dbnames, ajStrCmp);
 
 	/* iterate through the dbnames list */
 	iter = ajListIter(dbnames);
 
 	/* write out protein databases */
-	while ((dbname = ajListIterNext(iter)) != NULL)
-	    if (ajNamDbDetails (dbname, &type, &id, &qry, &all, &comment,
-				&release))
+	while((dbname = ajListIterNext(iter)) != NULL)
+	    if(ajNamDbDetails(dbname, &type, &id, &qry, &all, &comment,
+			      &release))
 	    {
-		if (!ajStrCmpC(type, "P") && protein)
-		    (void) showdb_DBOut(outfile, dbname, type, id, qry, all,
-					comment, release, html, dotype, doid,
-					doqry, doall, dofields, docomment, 
-					dorelease);
+		if(!ajStrCmpC(type, "P") && protein)
+		    showdb_DBOut(outfile, dbname, type, id, qry, all,
+				 comment, release, html, dotype, doid,
+				 doqry, doall, dofields, docomment, 
+				 dorelease);
 	    }
 	    else
-		(void) ajFatal ("The database '%S' does not exist", dbname);
+		ajFatal("The database '%S' does not exist", dbname);
 
 
 	/* reset the iterator */
-	(void) ajListIterFree(iter);
+	ajListIterFree(iter);
 	iter = ajListIter(dbnames);
 
 	/* now write out nucleic databases */
-	while ((dbname = ajListIterNext(iter)) != NULL)
+	while((dbname = ajListIterNext(iter)) != NULL)
 	{
-	    if (ajNamDbDetails (dbname, &type, &id, &qry, &all, &comment,
-				&release))
+	    if(ajNamDbDetails(dbname, &type, &id, &qry, &all, &comment,
+			      &release))
 	    {
-		if (!ajStrCmpC(type, "N") && nucleic)
-		    (void) showdb_DBOut(outfile, dbname, type, id, qry, all,
-					comment, release, html, dotype, doid,
-					doqry, doall, dofields, docomment, 
-					dorelease);
+		if(!ajStrCmpC(type, "N") && nucleic)
+		    showdb_DBOut(outfile, dbname, type, id, qry, all,
+				 comment, release, html, dotype, doid,
+				 doqry, doall, dofields, docomment, 
+				 dorelease);
 	    }
 	    else
-		(void) ajFatal ("The database '%S' does not exist", dbname);
+		ajFatal("The database '%S' does not exist", dbname);
 	}
 
-	(void) ajListIterFree(iter);
+	ajListIterFree(iter);
     }
-
+    
     /* end the HTML table */
-    if (html)
-	(void) ajFmtPrintF(outfile, "</table>\n");
-
-    (void) ajFileClose(&outfile);
-
+    if(html)
+	ajFmtPrintF(outfile, "</table>\n");
+    
+    ajFileClose(&outfile);
+    
     ajExit();
+
     return 0;
 }
+
+
 
 
 /* @funcstatic showdb_DBOut ***************************************************
@@ -292,118 +302,121 @@ static void showdb_DBOut(AjPFile outfile, AjPStr dbname, AjPStr type,
 			 AjBool dofields, AjBool docomment, AjBool dorelease)
 {
 
-    if (html)
+    if(html)
 	/* start table line and output name */
-	(void) ajFmtPrintF(outfile, "<tr><td>%S</td>", dbname);
+	ajFmtPrintF(outfile, "<tr><td>%S</td>", dbname);
     else
     {
 	/* if the name is shorter than 14 characters make a nice formatted
 	   output, otherwise, just output it and a space */
-	if (ajStrLen(dbname) < 14)
-	    (void) ajFmtPrintF(outfile, "%-14.13S", dbname);
+	if(ajStrLen(dbname) < 14)
+	    ajFmtPrintF(outfile, "%-14.13S", dbname);
 	else
-	    (void) ajFmtPrintF(outfile, "%S ", dbname);
+	    ajFmtPrintF(outfile, "%S ", dbname);
     }
 
-    if (dotype)
+    if(dotype)
     {
-	if (html)
-	    (void) ajFmtPrintF(outfile, "<td>%S</td>", type);
+	if(html)
+	    ajFmtPrintF(outfile, "<td>%S</td>", type);
 	else
-	    (void) ajFmtPrintF(outfile, "%S    ", type);
+	    ajFmtPrintF(outfile, "%S    ", type);
     }
 
-    if (doid)
+    if(doid)
     {
-	if (html)
-	    (void) ajFmtPrintF(outfile, "<td>");
+	if(html)
+	    ajFmtPrintF(outfile, "<td>");
 
-	if (id)
-	    (void) ajFmtPrintF(outfile, "%s", "OK  ");
+	if(id)
+	    ajFmtPrintF(outfile, "%s", "OK  ");
 	else
-	    (void) ajFmtPrintF(outfile, "%s", "-   ");
+	    ajFmtPrintF(outfile, "%s", "-   ");
 
-	if (html)
-	    (void) ajFmtPrintF(outfile, "</td>");
+	if(html)
+	    ajFmtPrintF(outfile, "</td>");
     }
 
-    if (doqry)
+    if(doqry)
     {
-	if (html)
-	    (void) ajFmtPrintF(outfile, "<td>");
+	if(html)
+	    ajFmtPrintF(outfile, "<td>");
 
-	if (qry)
-	    (void) ajFmtPrintF(outfile, "%s", "OK  ");
+	if(qry)
+	    ajFmtPrintF(outfile, "%s", "OK  ");
 	else
-	    (void) ajFmtPrintF(outfile, "%s", "-   ");
+	    ajFmtPrintF(outfile, "%s", "-   ");
 
-	if (html)
-	    (void) ajFmtPrintF(outfile, "</td>");
+	if(html)
+	    ajFmtPrintF(outfile, "</td>");
     }
 
-    if (doall)
+    if(doall)
     {
-	if (html)
-	    (void) ajFmtPrintF(outfile, "<td>");
+	if(html)
+	    ajFmtPrintF(outfile, "<td>");
 
-	if (all)
-	    (void) ajFmtPrintF(outfile, "%s", "OK  ");
+	if(all)
+	    ajFmtPrintF(outfile, "%s", "OK  ");
 	else
-	    (void) ajFmtPrintF(outfile, "%s", "-   ");
+	    ajFmtPrintF(outfile, "%s", "-   ");
 
-	if (html)
-	    (void) ajFmtPrintF(outfile, "</td>");
+	if(html)
+	    ajFmtPrintF(outfile, "</td>");
     }
 
-    if (dofields)
+    if(dofields)
     {
-	if (html)
-	    (void) ajFmtPrintF(outfile, "<td>");
+	if(html)
+	    ajFmtPrintF(outfile, "<td>");
 
-        (void) ajFmtPrintF(outfile, "%S ", showdb_GetFields(dbname));
+        ajFmtPrintF(outfile, "%S ", showdb_GetFields(dbname));
 
-	if (html)
-	    (void) ajFmtPrintF(outfile, "</td>");
+	if(html)
+	    ajFmtPrintF(outfile, "</td>");
     }
 
-    if (dorelease)
+    if(dorelease)
     {
-	if (html)
-	    (void) ajFmtPrintF(outfile, "<td>");
+	if(html)
+	    ajFmtPrintF(outfile, "<td>");
 
-	if (release != NULL)
-	    (void) ajFmtPrintF(outfile, "%S\t", release);
+	if(release != NULL)
+	    ajFmtPrintF(outfile, "%S\t", release);
 	else
-	    (void) ajFmtPrintF(outfile, "-\t");
+	    ajFmtPrintF(outfile, "-\t");
 
-	if (html)
-	    (void) ajFmtPrintF(outfile, "</td>");
+	if(html)
+	    ajFmtPrintF(outfile, "</td>");
     }
 
 
-    if (docomment)
+    if(docomment)
     {
-	if (html)
-	    (void) ajFmtPrintF(outfile, "<td>");
+	if(html)
+	    ajFmtPrintF(outfile, "<td>");
 
-	if (comment != NULL)
-	    (void) ajFmtPrintF(outfile, "%S", comment);
+	if(comment != NULL)
+	    ajFmtPrintF(outfile, "%S", comment);
 	else
-	    (void) ajFmtPrintF(outfile, "-");
+	    ajFmtPrintF(outfile, "-");
 
-	if (html)
-	    (void) ajFmtPrintF(outfile, "</td>");
+	if(html)
+	    ajFmtPrintF(outfile, "</td>");
     }
 
-    if (html)
-	(void) ajFmtPrintF(outfile, "</tr>\n");	/* end table line */
+    if(html)
+	ajFmtPrintF(outfile, "</tr>\n");	/* end table line */
     else
-	(void) ajFmtPrintF(outfile, "\n");
+	ajFmtPrintF(outfile, "\n");
 
     return;
 }
 
-/* @funcstatic showdb_GetFields ***************************************************
+
+
+
+/* @funcstatic showdb_GetFields **********************************************
 **
 ** Get a database's valid query fields (apart from the default 'id' and 'acc')
 **
@@ -414,21 +427,22 @@ static void showdb_DBOut(AjPFile outfile, AjPStr dbname, AjPStr type,
 
 static AjPStr showdb_GetFields(AjPStr dbname)
 {
+    static AjPStr str = NULL;
+    AjPSeqQuery query;
 
-  static AjPStr str = NULL;
-  AjPSeqQuery query = ajSeqQueryNew();
 
-  ajStrAss(&query->DbName, dbname);
-  ajNamDbData(query);
-  ajStrAssS(&str, query->DbFields);
+    query = ajSeqQueryNew();
 
-  /* if there are no query fields, then change to a '_' */
-  if (str == NULL || ajStrMatchC(str, "")) {
+    ajStrAss(&query->DbName, dbname);
+    ajNamDbData(query);
+    ajStrAssS(&str, query->DbFields);
+
+    /* if there are no query fields, then change to a '_' */
+    if(str == NULL || ajStrMatchC(str, ""))
   	ajStrAssC(&str, "-     ");
-  } else {
-  /* change spaces to commas to make the result one word */
+    else
+	/* change spaces to commas to make the result one word */
 	ajStrConvertCC(&str, " ", ",");
-  }
 
-  return str;
+    return str;
 }

@@ -24,7 +24,7 @@
 #include "emboss.h"
 
 
-/* declare functions */
+
 
 static void showseq_FormatShow(EmbPShow ss, AjPStr format, AjPTrn trnTable,
 			       AjPRange translaterange, AjPRange uppercase,
@@ -35,23 +35,27 @@ static void showseq_FormatShow(EmbPShow ss, AjPStr format, AjPTrn trnTable,
 
 static void showseq_read_equiv(AjPFile *equfile, AjPTable *table);
 static void showseq_read_file_of_enzyme_names(AjPStr *enzymes);
-static AjBool showseq_MatchFeature (AjPFeature gf, AjPFeature newgf, AjPStr
-        matchsource, AjPStr matchtype, ajint matchsense, float minscore,
-        float maxscore, AjPStr matchtag, AjPStr matchvalue, AjBool *tagsmatch, 
-        AjBool stricttags);
-static AjBool showseq_MatchPatternTags (AjPFeature gf, AjPFeature newgf, 
-					AjPStr tpattern, AjPStr vpattern,
-					AjBool stricttags);
-static void showseq_FeatureFilter (AjPFeattable featab, AjPFeattable newfeatab,
-				   AjPStr
-        matchsource, AjPStr matchtype, ajint matchsense, float minscore,
-        float maxscore, AjPStr matchtag, AjPStr matchvalue, AjBool stricttags);
-static AjPFeature showseq_FeatCopy (AjPFeature orig);
+static AjBool showseq_MatchFeature(AjPFeature gf, AjPFeature newgf, AjPStr
+				   matchsource, AjPStr matchtype,
+				   ajint matchsense, float minscore,
+				   float maxscore, AjPStr matchtag,
+				   AjPStr matchvalue, AjBool *tagsmatch, 
+				   AjBool stricttags);
+static AjBool showseq_MatchPatternTags(AjPFeature gf, AjPFeature newgf, 
+				       AjPStr tpattern, AjPStr vpattern,
+				       AjBool stricttags);
+static void showseq_FeatureFilter(AjPFeattable featab, AjPFeattable newfeatab,
+				  AjPStr matchsource, AjPStr matchtype,
+				  ajint matchsense, float minscore,
+				  float maxscore, AjPStr matchtag,
+				  AjPStr matchvalue, AjBool stricttags);
+static AjPFeature showseq_FeatCopy(AjPFeature orig);
 
 
 #define ENZDATA "REBASE/embossre.enz"
 #define EQUDATA "embossre.equ"
 #define EQUGUESS 3500     /* Estimate of number of equivalent names */
+
 
 
 
@@ -64,15 +68,16 @@ static AjPFeature showseq_FeatCopy (AjPFeature orig);
 int main(int argc, char **argv)
 {
 
-    ajint begin, end;
+    ajint begin;
+    ajint end;
     AjPSeqall seqall;
     AjPSeq seq;
     EmbPShow ss;
     AjPFile outfile;
-    AjPStr * formatlist;
-    AjPStr * thinglist;
-    AjPStr * tablelist;
-    ajint table=0;
+    AjPStr *formatlist;
+    AjPStr *thinglist;
+    AjPStr *tablelist;
+    ajint table = 0;
     AjPRange translaterange;
     AjPRange uppercase;
     AjPRange highlight;
@@ -96,11 +101,11 @@ int main(int argc, char **argv)
     AjPRange annotation;
 
     /* holds ACD or constructed format for output */
-    AjPStr format=ajStrNew();
+    AjPStr format;
     ajint i;
 
     /* stuff lifted from Alan's 'restrict.c' */
-    AjPStr    enzymes=NULL;
+    AjPStr enzymes = NULL;
     ajint mincuts;
     ajint maxcuts;
     ajint sitelen;
@@ -111,175 +116,180 @@ int main(int argc, char **argv)
     AjBool plasmid;
     AjBool commercial;
     AjBool limit;
-    AjPFile   enzfile=NULL;
-    AjPFile   equfile=NULL;
-    AjPTable  retable=NULL;
-    ajint       hits;
-    AjPList   restrictlist=NULL;
+    AjPFile enzfile  = NULL;
+    AjPFile equfile  = NULL;
+    AjPTable retable = NULL;
+    ajint hits;
+    AjPList restrictlist = NULL;
 
     /* feature filter criteria */
     AjPStr matchsource = NULL;
-    AjPStr matchtype = NULL;
+    AjPStr matchtype   = NULL;
     ajint matchsense;
     float minscore;
     float maxscore;
-    AjPStr matchtag = NULL;
+    AjPStr matchtag   = NULL;
     AjPStr matchvalue = NULL;
 
 
-    (void) embInit ("showseq", argc, argv);
+    embInit("showseq", argc, argv);
 
-    seqall = ajAcdGetSeqall ("sequence");
-    outfile = ajAcdGetOutfile ("outfile");
-    formatlist = ajAcdGetList ("format");
-    thinglist = ajAcdGetList ("things");
-    tablelist = ajAcdGetList ("table");
-    translaterange = ajAcdGetRange ("translate");
-    uppercase = ajAcdGetRange ("uppercase");
-    highlight = ajAcdGetRange ("highlight");
-    annotation = ajAcdGetRange ("annotation");
-    threeletter = ajAcdGetBool ("threeletter");
-    numberseq = ajAcdGetBool ("number");
-    width = ajAcdGetInt ("width");
-    length = ajAcdGetInt ("length");
-    margin = ajAcdGetInt ("margin");
-    nameseq = ajAcdGetBool ("name");
-    description = ajAcdGetBool ("description");
-    offset = ajAcdGetInt ("offset");
-    html = ajAcdGetBool ("html");
-    orfminsize = ajAcdGetInt ("orfminsize");
-    flat = ajAcdGetBool ("flatreformat");
+    seqall         = ajAcdGetSeqall("sequence");
+    outfile        = ajAcdGetOutfile("outfile");
+    formatlist     = ajAcdGetList("format");
+    thinglist      = ajAcdGetList("things");
+    tablelist      = ajAcdGetList("table");
+    translaterange = ajAcdGetRange("translate");
+    uppercase      = ajAcdGetRange("uppercase");
+    highlight      = ajAcdGetRange("highlight");
+    annotation     = ajAcdGetRange("annotation");
+    threeletter    = ajAcdGetBool("threeletter");
+    numberseq      = ajAcdGetBool("number");
+    width          = ajAcdGetInt("width");
+    length         = ajAcdGetInt("length");
+    margin         = ajAcdGetInt("margin");
+    nameseq        = ajAcdGetBool("name");
+    description    = ajAcdGetBool("description");
+    offset         = ajAcdGetInt("offset");
+    html           = ajAcdGetBool("html");
+    orfminsize     = ajAcdGetInt("orfminsize");
+    flat           = ajAcdGetBool("flatreformat");
 
     /*  restriction enzyme stuff */
-    mincuts = ajAcdGetInt ("mincuts");
-    maxcuts = ajAcdGetInt ("maxcuts");
-    sitelen  = ajAcdGetInt ("sitelen");
-    single = ajAcdGetBool ("single");
-    blunt = ajAcdGetBool ("blunt");
-    sticky = ajAcdGetBool ("sticky");
-    ambiguity = ajAcdGetBool ("ambiguity");
-    plasmid = ajAcdGetBool ("plasmid");
-    commercial = ajAcdGetBool ("commercial");
-    limit = ajAcdGetBool ("limit");
-    enzymes = ajAcdGetString ("enzymes");
+    mincuts    = ajAcdGetInt("mincuts");
+    maxcuts    = ajAcdGetInt("maxcuts");
+    sitelen    = ajAcdGetInt("sitelen");
+    single     = ajAcdGetBool("single");
+    blunt      = ajAcdGetBool("blunt");
+    sticky     = ajAcdGetBool("sticky");
+    ambiguity  = ajAcdGetBool("ambiguity");
+    plasmid    = ajAcdGetBool("plasmid");
+    commercial = ajAcdGetBool("commercial");
+    limit      = ajAcdGetBool("limit");
+    enzymes    = ajAcdGetString("enzymes");
 
     /* feature filter criteria */
-    matchsource = ajAcdGetString ("matchsource");
-    matchtype = ajAcdGetString ("matchtype");
-    matchsense = ajAcdGetInt ("matchsense");
-    minscore = ajAcdGetFloat ("minscore");
-    maxscore = ajAcdGetFloat ("maxscore");
-    matchtag = ajAcdGetString ("matchtag");
-    matchvalue = ajAcdGetString ("matchvalue");
-    stricttags = ajAcdGetBool ("stricttags");
+    matchsource = ajAcdGetString("matchsource");
+    matchtype   = ajAcdGetString("matchtype");
+    matchsense  = ajAcdGetInt("matchsense");
+    minscore    = ajAcdGetFloat("minscore");
+    maxscore    = ajAcdGetFloat("maxscore");
+    matchtag    = ajAcdGetString("matchtag");
+    matchvalue  = ajAcdGetString("matchvalue");
+    stricttags  = ajAcdGetBool("stricttags");
 
+
+    format = ajStrNew();
+    
     /* read the local file of enzymes names */
     showseq_read_file_of_enzyme_names(&enzymes);
-
+    
     /* check that the translate range is ordered */
-    if (!ajRangeOrdered(translaterange))
-	(void) ajFatal ("Translation ranges are not in ascending, "
-			"non-overlapping order.");
-
-
+    if(!ajRangeOrdered(translaterange))
+	ajFatal("Translation ranges are not in ascending, "
+		"non-overlapping order.");
+    
+    
     /* get the format to use */
-    if (!ajStrCmpC(formatlist[0], "0"))
-	for (i=0; thinglist[i]; i++)
+    if(!ajStrCmpC(formatlist[0], "0"))
+	for(i=0; thinglist[i]; i++)
 	{
-	    (void) ajStrApp(&format, thinglist[i]);
-	    (void) ajStrAppC(&format, " ");
+	    ajStrApp(&format, thinglist[i]);
+	    ajStrAppC(&format, " ");
 	}
-    else if (!ajStrCmpC(formatlist[0], "1"))
-	(void) ajStrAssC(&format, "S A ");
-    else if (!ajStrCmpC(formatlist[0], "2"))
-	(void) ajStrAssC(&format, "B N T S A F ");
-    else if (!ajStrCmpC(formatlist[0], "3"))
-	(void) ajStrAssC(&format, "B N T S A ");
-    else if (!ajStrCmpC(formatlist[0], "4"))
-	(void) ajStrAssC(&format, "B N T S B 1 A F ");
-    else if (!ajStrCmpC(formatlist[0], "5"))
-	(void) ajStrAssC(&format, "B N T S B 1 2 3 A F ");
-    else if (!ajStrCmpC(formatlist[0], "6"))
-	(void) ajStrAssC(&format, "B N T S B 1 2 3 T -3 -2 -1 A F ");
-    else if (!ajStrCmpC(formatlist[0], "7"))
-	(void) ajStrAssC(&format, "B R S N T C -R B 1 2 3 T -3 -2 -1 A ");
-    else if (!ajStrCmpC(formatlist[0], "8"))
-	(void) ajStrAssC(&format, "B 1 2 3 N T R S T C -R T -3 -2 -1 A F ");
+    else if(!ajStrCmpC(formatlist[0], "1"))
+	ajStrAssC(&format, "S A ");
+    else if(!ajStrCmpC(formatlist[0], "2"))
+	ajStrAssC(&format, "B N T S A F ");
+    else if(!ajStrCmpC(formatlist[0], "3"))
+	ajStrAssC(&format, "B N T S A ");
+    else if(!ajStrCmpC(formatlist[0], "4"))
+	ajStrAssC(&format, "B N T S B 1 A F ");
+    else if(!ajStrCmpC(formatlist[0], "5"))
+	ajStrAssC(&format, "B N T S B 1 2 3 A F ");
+    else if(!ajStrCmpC(formatlist[0], "6"))
+	ajStrAssC(&format, "B N T S B 1 2 3 T -3 -2 -1 A F ");
+    else if(!ajStrCmpC(formatlist[0], "7"))
+	ajStrAssC(&format, "B R S N T C -R B 1 2 3 T -3 -2 -1 A ");
+    else if(!ajStrCmpC(formatlist[0], "8"))
+	ajStrAssC(&format, "B 1 2 3 N T R S T C -R T -3 -2 -1 A F ");
     else
-	(void) ajFatal("Invalid format type: %S", formatlist[0]);
-
-
+	ajFatal("Invalid format type: %S", formatlist[0]);
+    
+    
     /* make the format upper case */
-    (void) ajStrToUpper(&format);
-
+    ajStrToUpper(&format);
+    
     /* create the translation table */
     trnTable = ajTrnNewI(table);
-
-    while (ajSeqallNext(seqall, &seq))
+    
+    while(ajSeqallNext(seqall, &seq))
     {
-	/* get begin and end positions */
 	begin = ajSeqBegin(seq)-1;
-	end = ajSeqEnd(seq)-1;
+	end   = ajSeqEnd(seq)-1;
 
 	/* do the name and description */
-	if (nameseq)
+	if(nameseq)
 	{
-	    if (html)
-		(void) ajFmtPrintF(outfile, "<H2>%S</H2>\n",
-				   ajSeqGetName(seq));
+	    if(html)
+		ajFmtPrintF(outfile, "<H2>%S</H2>\n",
+			    ajSeqGetName(seq));
 	    else
-		(void) ajFmtPrintF(outfile, "%S\n", ajSeqGetName(seq));
+		ajFmtPrintF(outfile, "%S\n", ajSeqGetName(seq));
 	}
 
-	if (description)
+	if(description)
 	{
 	    /*
-	     *  wrap the description line at the width of the sequence
-	     *  plus margin
-	     */
-	    if (html)
-		(void) ajFmtPrintF(outfile, "<H3>%S</H3>\n",
-				   ajSeqGetDesc(seq));
+	    **  wrap the description line at the width of the sequence
+	    **  plus margin
+	    */
+	    if(html)
+		ajFmtPrintF(outfile, "<H3>%S</H3>\n",
+			    ajSeqGetDesc(seq));
 	    else
 	    {
 		descriptionline = ajStrNew();
-		(void) ajStrAss(&descriptionline, ajSeqGetDesc(seq));
-		(void) ajStrWrap(&descriptionline, width+margin);
-		(void) ajFmtPrintF(outfile, "%S\n", descriptionline);
-		(void) ajStrDel(&descriptionline);
+		ajStrAss(&descriptionline, ajSeqGetDesc(seq));
+		ajStrWrap(&descriptionline, width+margin);
+		ajFmtPrintF(outfile, "%S\n", descriptionline);
+		ajStrDel(&descriptionline);
 	    }
 	}
+
 
 	/* get the feature table of the sequence */
 	feattab = ajSeqCopyFeat(seq);
 
 	/* new feature table to hold the filetered features */
         newfeattab = ajFeattableNew(NULL);
-	ajDebug ("created newfeattab %x\n", newfeattab);
+	ajDebug("created newfeattab %x\n", newfeattab);
 
         /* only copy features in the table that match our criteria */
-        showseq_FeatureFilter (feattab, newfeattab, matchsource, matchtype,
-			       matchsense, minscore, maxscore, matchtag,
-			       matchvalue, stricttags);
+        showseq_FeatureFilter(feattab, newfeattab, matchsource, matchtype,
+			      matchsense, minscore, maxscore, matchtag,
+			      matchvalue, stricttags);
 
-	/* get the restriction cut sites */
+
 	/*
-	 *  most of this is lifted from the program 'restrict.c' by Alan
-	 *  Bleasby
-	 */
-	if (ajStrFindC(format, "R") != -1)
+	**  most of this is lifted from the program 'restrict.c' by Alan
+	**  Bleasby
+	*/
+	if(ajStrFindC(format, "R") != -1)
 	{
-	    if (single)
-		maxcuts=mincuts=1;
+	    if(single)
+		maxcuts = mincuts = 1;
 	    retable = ajStrTableNew(EQUGUESS);
 	    ajFileDataNewC(ENZDATA, &enzfile);
+
 	    if(!enzfile)
 		ajFatal("Cannot locate enzyme file. Run REBASEEXTRACT");
-	    if (limit)
+
+	    if(limit)
 	    {
 		ajFileDataNewC(EQUDATA,&equfile);
-		if (!equfile)
-		    limit=ajFalse;
+		if(!equfile)
+		    limit = ajFalse;
 		else
 		    showseq_read_equiv(&equfile, &retable);
 	    }
@@ -289,16 +299,16 @@ int main(int argc, char **argv)
 				       sitelen, plasmid, ambiguity, mincuts,
 				       maxcuts, blunt, sticky, commercial,
 				       &restrictlist);
-	    if (hits)
+	    if(hits)
 	    {
 		/* this bit is lifted from printHits */
-		(void) embPatRestrictRestrict(&restrictlist, hits, !limit,
-					      ajFalse);
+		embPatRestrictRestrict(&restrictlist, hits, !limit,
+				       ajFalse);
 		if(limit)
 		    embPatRestrictPreferred(restrictlist,retable);
 	    }
 
-	    /* tidy up */
+
 	    ajFileClose(&enzfile);
 	}
 
@@ -308,37 +318,38 @@ int main(int argc, char **argv)
 	ss = embShowNew(seq, begin, end, width, length, margin, html, offset);
 
 	/* get the number of the genetic code used */
-	(void) ajStrToInt(tablelist[0], &table);
+	ajStrToInt(tablelist[0], &table);
 
-	if (html)
-	    (void) ajFmtPrintF(outfile, "<PRE>");
+	if(html)
+	    ajFmtPrintF(outfile, "<PRE>");
 
-	(void) showseq_FormatShow(ss, format, trnTable, translaterange,
-				  uppercase, highlight, threeletter,
-				  numberseq, newfeattab, orfminsize,
-				  restrictlist, flat, annotation);
+	showseq_FormatShow(ss, format, trnTable, translaterange,
+			   uppercase, highlight, threeletter,
+			   numberseq, newfeattab, orfminsize,
+			   restrictlist, flat, annotation);
 
-	(void) embShowPrint(outfile, ss);
+	embShowPrint(outfile, ss);
 
-	/* tidy up */
-	(void) embShowDel(&ss);
+	embShowDel(&ss);
 
-	(void) ajListDel(&restrictlist);
-	(void) ajFeattableDel(&newfeattab);
+	ajListDel(&restrictlist);
+	ajFeattableDel(&newfeattab);
+	ajFeattableDel(&feattab);
 
-	/* add a gratuitous newline at the end of the sequence */
-	(void) ajFmtPrintF(outfile, "\n");
+	/* add a newline at the end of the sequence */
+	ajFmtPrintF(outfile, "\n");
 
-	if (html)
-	    (void) ajFmtPrintF(outfile, "<PRE>");
+	if(html)
+	    ajFmtPrintF(outfile, "<PRE>");
     }
+    
 
-    /* tidy up */
-    (void) ajStrDel(&format);
+    ajStrDel(&format);
     ajFileClose(&outfile);
-    ajTrnDel (&trnTable);
+    ajTrnDel(&trnTable);
+    
+    ajExit();
 
-    (void) ajExit ();
     return 0;
 }
 
@@ -357,11 +368,11 @@ int main(int argc, char **argv)
 ** @param [r] highlight [AjPRange] ranges to colour in HTML
 ** @param [r] threeletter [AjBool] use 3-letter code
 ** @param [r] numberseq [AjBool] put numbers on sequences
-** @param [r] feat [AjPFeattable*] sequence's feature table
+** @param [r] feat [AjPFeattable] sequence's feature table
 **                                 NULL after - pointer stored internally
 ** @param [r] orfminsize [ajint] minimum size of ORFs to display
 **                              (0 for no ORFs)
-** @param [r] restrictlist [AjPList*] restriction enzyme site list (or NULL)
+** @param [r] restrictlist [AjPList] restriction enzyme site list (or NULL)
 **                                 NULL after - pointer stored internally
 ** @param [r] flat [AjBool] show restriction sites in flat format
 ** @param [r] annotation [AjPRange] ranges to annotate
@@ -383,63 +394,65 @@ static void showseq_FormatShow(EmbPShow ss, AjPStr format, AjPTrn trnTable,
 
     /* start token to parse format */
     tok = ajStrTokenInit(format,  white);
-    while (ajStrToken (&code, &tok, whiteplus))
+    while(ajStrToken(&code, &tok, whiteplus))
     {
-	(void) ajStrToUpper(&code);
+	ajStrToUpper(&code);
 
-	if (!ajStrCmpC(code, "S"))
-	    (void) embShowAddSeq(ss, numberseq, threeletter, uppercase,
-				 highlight);
-	else if (!ajStrCmpC(code, "B"))
-	    (void) embShowAddBlank(ss);
-	else if (!ajStrCmpC(code, "1"))
-	    (void) embShowAddTran (ss, trnTable, 1, threeletter, numberseq,
-				   translaterange, orfminsize,
-				   AJFALSE, AJFALSE, AJFALSE, AJFALSE);
-	else if (!ajStrCmpC(code, "2"))
-	    (void) embShowAddTran (ss, trnTable, 2, threeletter, numberseq,
-				   NULL, orfminsize,
-				   AJFALSE, AJFALSE, AJFALSE, AJFALSE);
-	else if (!ajStrCmpC(code, "3"))
-	    (void) embShowAddTran (ss, trnTable, 3, threeletter, numberseq,
-				   NULL, orfminsize,
-				   AJFALSE, AJFALSE, AJFALSE, AJFALSE);
-	else if (!ajStrCmpC(code, "-1"))
-	    (void) embShowAddTran (ss, trnTable, -1, threeletter, numberseq,
-				   NULL, orfminsize,
-				   AJFALSE, AJFALSE, AJFALSE, AJFALSE);
-	else if (!ajStrCmpC(code, "-2"))
-	    (void) embShowAddTran (ss, trnTable, -2, threeletter, numberseq,
-				   NULL, orfminsize,
-				   AJFALSE, AJFALSE, AJFALSE, AJFALSE);
-	else if (!ajStrCmpC(code, "-3"))
-	    (void) embShowAddTran (ss, trnTable, -3, threeletter, numberseq,
-				   NULL, orfminsize,
-				   AJFALSE, AJFALSE, AJFALSE, AJFALSE);
-	else if (!ajStrCmpC(code, "T"))
-	    (void) embShowAddTicks(ss);
-	else if (!ajStrCmpC(code, "N"))
-	    (void) embShowAddTicknum(ss);
-	else if (!ajStrCmpC(code, "C"))
-	    (void) embShowAddComp(ss, numberseq);
-	else if (!ajStrCmpC(code, "F"))
-	    (void) embShowAddFT(ss, feat);
-	else if (!ajStrCmpC(code, "R"))
-	    (void) embShowAddRE (ss, 1, restrictlist, flat);
-	else if (!ajStrCmpC(code, "-R"))
-	    (void) embShowAddRE (ss, -1, restrictlist, flat);
-	else if (!ajStrCmpC(code, "A"))
-	    (void) embShowAddNote (ss, annotation);
+	if(!ajStrCmpC(code, "S"))
+	    embShowAddSeq(ss, numberseq, threeletter, uppercase,
+			  highlight);
+	else if(!ajStrCmpC(code, "B"))
+	    embShowAddBlank(ss);
+	else if(!ajStrCmpC(code, "1"))
+	    embShowAddTran(ss, trnTable, 1, threeletter, numberseq,
+			   translaterange, orfminsize,
+			   AJFALSE, AJFALSE, AJFALSE, AJFALSE);
+	else if(!ajStrCmpC(code, "2"))
+	    embShowAddTran(ss, trnTable, 2, threeletter, numberseq,
+			   NULL, orfminsize,
+			   AJFALSE, AJFALSE, AJFALSE, AJFALSE);
+	else if(!ajStrCmpC(code, "3"))
+	    embShowAddTran(ss, trnTable, 3, threeletter, numberseq,
+			   NULL, orfminsize,
+			   AJFALSE, AJFALSE, AJFALSE, AJFALSE);
+	else if(!ajStrCmpC(code, "-1"))
+	    embShowAddTran(ss, trnTable, -1, threeletter, numberseq,
+			   NULL, orfminsize,
+			   AJFALSE, AJFALSE, AJFALSE, AJFALSE);
+	else if(!ajStrCmpC(code, "-2"))
+	    embShowAddTran(ss, trnTable, -2, threeletter, numberseq,
+			   NULL, orfminsize,
+			   AJFALSE, AJFALSE, AJFALSE, AJFALSE);
+	else if(!ajStrCmpC(code, "-3"))
+	    embShowAddTran(ss, trnTable, -3, threeletter, numberseq,
+			   NULL, orfminsize,
+			   AJFALSE, AJFALSE, AJFALSE, AJFALSE);
+	else if(!ajStrCmpC(code, "T"))
+	    embShowAddTicks(ss);
+	else if(!ajStrCmpC(code, "N"))
+	    embShowAddTicknum(ss);
+	else if(!ajStrCmpC(code, "C"))
+	    embShowAddComp(ss, numberseq);
+	else if(!ajStrCmpC(code, "F"))
+	    embShowAddFT(ss, feat);
+	else if(!ajStrCmpC(code, "R"))
+	    embShowAddRE(ss, 1, restrictlist, flat);
+	else if(!ajStrCmpC(code, "-R"))
+	    embShowAddRE(ss, -1, restrictlist, flat);
+	else if(!ajStrCmpC(code, "A"))
+	    embShowAddNote(ss, annotation);
 	else
-	    (void) ajFatal ("Formatting code not recognised: '%S'", code);
+	    ajFatal("Formatting code not recognised: '%S'", code);
     }
 
-    /* tidy up */
-    (void) ajStrDel(&code);
-    (void) ajStrTokenClear(&tok);
+    ajStrDel(&code);
+    ajStrTokenClear(&tok);
 
     return;
 }
+
+
+
 
 /* @funcstatic showseq_read_equiv *********************************************
 **
@@ -463,19 +476,24 @@ static void showseq_read_equiv(AjPFile *equfile, AjPTable *table)
 
     while(ajFileReadLine(*equfile,&line))
     {
-        p=ajStrStr(line);
+        p = ajStrStr(line);
+
         if(!*p || *p=='#' || *p=='!')
             continue;
-        p=strtok(p," \t\n");
-        key=ajStrNewC(p);
-        p=strtok(NULL," \t\n");
-        value=ajStrNewC(p);
+
+        p = strtok(p," \t\n");
+        key = ajStrNewC(p);
+        p = strtok(NULL," \t\n");
+        value = ajStrNewC(p);
         ajTablePut(*table,(const void *)key, (void *)value);
     }
 
     ajFileClose(equfile);
+
     return;
 }
+
+
 
 
 /* @funcstatic showseq_read_file_of_enzyme_names ******************************
@@ -491,16 +509,16 @@ static void showseq_read_equiv(AjPFile *equfile, AjPTable *table)
 
 static void showseq_read_file_of_enzyme_names(AjPStr *enzymes)
 {
-    AjPFile file=NULL;
+    AjPFile file = NULL;
     AjPStr line;
-    char   *p=NULL;
+    char *p = NULL;
 
-    if (ajStrFindC(*enzymes, "@") == 0)
+    if(ajStrFindC(*enzymes, "@") == 0)
     {
 	ajStrTrimC(enzymes, "@");	/* remove the @ */
 	file = ajFileNewIn(*enzymes);
-	if (file == NULL)
-	    ajFatal ("Cannot open the file of enzyme names: '%S'", enzymes);
+	if(file == NULL)
+	    ajFatal("Cannot open the file of enzyme names: '%S'", enzymes);
 
 	/* blank off the enzyme file name and replace with the enzyme names */
 	ajStrClear(enzymes);
@@ -508,7 +526,10 @@ static void showseq_read_file_of_enzyme_names(AjPStr *enzymes)
 	while(ajFileReadLine(file, &line))
 	{
 	    p = ajStrStr(line);
-	    if (!*p || *p == '#' || *p == '!') continue;
+
+	    if(!*p || *p == '#' || *p == '!')
+		continue;
+
 	    ajStrApp(enzymes, line);
 	    ajStrAppC(enzymes, ",");
 	}
@@ -519,6 +540,9 @@ static void showseq_read_file_of_enzyme_names(AjPStr *enzymes)
 
     return;
 }
+
+
+
 
 /* @funcstatic showseq_FeatureFilter ******************************************
 **
@@ -555,34 +579,34 @@ static void showseq_FeatureFilter(AjPFeattable featab, AjPFeattable newfeatab,
     tagsmatch = ajFalse;
 
     /* foreach feature in the feature table */
-    if (featab)
+    if(featab)
     {
 	iter = ajListIter(featab->Features);
 	while(ajListIterMore(iter))
 	{
 	    gf = (AjPFeature)ajListIterNext(iter);
             newgf = showseq_FeatCopy(gf); /* copy of gf that we can add */
-				          /* required tags to */
-	    if (showseq_MatchFeature(gf, newgf, matchsource, matchtype,
-				     matchsense,
-				     minscore, maxscore, matchtag,
-				     matchvalue, &tagsmatch, stricttags))
-	    {
-	    	/* 
-	    	** We have a match, so add the copy of gf
-		** to the new feature table
-	    	*/
+	    /* required tags to */
+	    if(showseq_MatchFeature(gf, newgf, matchsource, matchtype,
+				    matchsense,
+				    minscore, maxscore, matchtag,
+				    matchvalue, &tagsmatch, stricttags))
+	    	 /* 
+		 ** There's a match, so add the copy of gf
+		 ** to the new feature table
+		 */
                 ajFeattableAdd(newfeatab, newgf);
-	    } else {
-		/* We don't need this as we don't have a match after all */
+	    else
 	    	ajFeatDel(&newgf);
-	    }
 	}
 	ajListIterFree(iter);
     }
 
     return;
 }
+
+
+
 
 /* @funcstatic showseq_MatchFeature *******************************************
 **
@@ -597,53 +621,55 @@ static void showseq_FeatureFilter(AjPFeattable featab, AjPFeattable newfeatab,
 ** @param [r] maxscore [float] Max required Score pattern
 ** @param [r] tag [AjPStr] Required Tag pattern
 ** @param [r] value [AjPStr] Required Value pattern
-** @param [rw] tagsmatch [AjBool *] true if a join has matching tag/values
+** @param [u] tagsmatch [AjBool *] true if a join has matching tag/values
 ** @param [r] stricttags [AjBool] If false then only display tag/values
 **                                that match the criteria
 ** @return [AjBool] True if feature matches criteria
 ** @@
 ******************************************************************************/
 
-static AjBool showseq_MatchFeature (AjPFeature gf, AjPFeature newgf,
-				    AjPStr source, AjPStr type, ajint sense,
-				    float minscore, float maxscore,
-				    AjPStr tag, AjPStr value,
-				    AjBool *tagsmatch, AjBool stricttags)
+static AjBool showseq_MatchFeature(AjPFeature gf, AjPFeature newgf,
+				   AjPStr source, AjPStr type, ajint sense,
+				   float minscore, float maxscore,
+				   AjPStr tag, AjPStr value,
+				   AjBool *tagsmatch, AjBool stricttags)
 {
+    AjBool scoreok;
 
-/* if maxscore < minscore, then don't test the scores */
-AjBool scoreok = (minscore < maxscore);
+    scoreok = (minscore < maxscore);
 
+     /*
+     ** is this a child of a join() ?
+     ** if it is a child, then we use the previous result of MatchPatternTags
+     */
+    if(!ajFeatIsMultiple(gf) || !ajFeatIsChild(gf))
+	*tagsmatch = showseq_MatchPatternTags(gf, newgf, tag, value,
+					      stricttags);
 
-/*
-** is this not a child of a join() ?
-** if it is a child, then we use the previous result of MatchPatternTags
-*/
-  if (!ajFeatIsMultiple(gf) || !ajFeatIsChild(gf)) {
-      *tagsmatch = showseq_MatchPatternTags(gf, newgf, tag, value, stricttags);
-  }
+    /* ignore remote IDs */
+    if(!ajFeatIsLocal(gf))
+	return ajFalse;
 
-/* ignore remote IDs */
-  if (!ajFeatIsLocal(gf))
-    return ajFalse;
+     /* check source, type, sense, score, tags, values
+     ** Match anything:
+     **      for strings, '*'
+     **      for sense, 0
+     **      for score, maxscore <= minscore
+     */
+    if(!embMiscMatchPattern(gf->Source, source) ||
+       !embMiscMatchPattern(gf->Type, type) ||
+       (gf->Strand == '+' && sense == -1) ||
+       (gf->Strand == '-' && sense == +1) ||
+       (scoreok && gf->Score < minscore) ||
+       (scoreok && gf->Score > maxscore) ||
+       !*tagsmatch)
+	return ajFalse;
 
-/* check source, type, sense, score, tags, values */
-/* Match anything:
-**      for strings, '*'
-**      for sense, 0
-**      for score, maxscore <= minscore
-*/
-  if (!embMiscMatchPattern (gf->Source, source) ||
-      !embMiscMatchPattern (gf->Type, type) ||
-      (gf->Strand == '+' && sense == -1) ||
-      (gf->Strand == '-' && sense == +1) ||
-      (scoreok && gf->Score < minscore) ||
-      (scoreok && gf->Score > maxscore) ||
-      !*tagsmatch)
-    return ajFalse;
-
-  return ajTrue;
+    return ajTrue;
 }
+
+
+
 
 /* @funcstatic showseq_MatchPatternTags ***************************************
 **
@@ -662,7 +688,7 @@ AjBool scoreok = (minscore < maxscore);
 ** @@
 ******************************************************************************/
 
-static AjBool showseq_MatchPatternTags (AjPFeature gf, AjPFeature newgf,
+static AjBool showseq_MatchPatternTags(AjPFeature gf, AjPFeature newgf,
 					AjPStr tpattern,
 					AjPStr vpattern, AjBool stricttags)
 {
@@ -674,10 +700,10 @@ static AjBool showseq_MatchPatternTags (AjPFeature gf, AjPFeature newgf,
     AjBool vval;                        /* value result */
 
     /*
-     *  If there are no tags to match, but the patterns are
-     *  both '*', then allow this as a match
-     */
-    if (ajListLength(gf->Tags) == 0 && 
+    **  If there are no tags to match, but the patterns are
+    **  both '*', then allow this as a match
+    */
+    if(ajListLength(gf->Tags) == 0 && 
         !ajStrCmpC(tpattern, "*") &&
         !ajStrCmpC(vpattern, "*"))
         return ajTrue;
@@ -685,19 +711,22 @@ static AjBool showseq_MatchPatternTags (AjPFeature gf, AjPFeature newgf,
 
     /* iterate through the tags and test for match to patterns */
     titer = ajFeatTagIter(gf);
-    while (ajFeatTagval(titer, &tagnam, &tagval)) {
+    while(ajFeatTagval(titer, &tagnam, &tagval))
+    {
         tval = embMiscMatchPattern(tagnam, tpattern);
         /*
         ** If tag has no value then
         **   If vpattern is '*' the value pattern is a match
         ** Else check vpattern
         */
-        if (!ajStrLen(tagval)) {
-            if (!ajStrCmpC(vpattern, "*"))
+        if(!ajStrLen(tagval))
+	{
+            if(!ajStrCmpC(vpattern, "*"))
             	vval = ajTrue;
             else
 		vval = ajFalse;
-        } else {
+        }
+	else
             /*
             ** The value can be one or more words and the vpattern could
             ** be the whole phrase, so test not only each word in vpattern
@@ -706,27 +735,32 @@ static AjBool showseq_MatchPatternTags (AjPFeature gf, AjPFeature newgf,
             */
             vval = (ajStrMatch(tagval, vpattern) ||
 		    embMiscMatchPattern(tagval, vpattern));
+
+
+        if(tval && vval)
+	{
+            val = ajTrue;
+	    /*
+	    ** if strict tags then only want to see the tags
+	    ** that match the criteria
+	    */
+	    if(stricttags)
+	    	ajFeatTagAdd(newgf, tagnam, tagval);
         }
 
-        if (tval && vval) {
-            val = ajTrue;
-	    /* if strict tags then we only want to see the tags */
-	    /* that match the criteria */
-	    if (stricttags) {	
-	    	ajFeatTagAdd(newgf, tagnam, tagval);
-	    }
-        }
-        /* if not strict tags then we want to see all the tags */
-        if (!stricttags) {
+        /* if not strict tags then need to see all the tags */
+        if(!stricttags)
             ajFeatTagAdd(newgf, tagnam, tagval);
-        }
     }
-    (void) ajListIterFree(titer);
+    ajListIterFree(titer);
 
     return val;
 }
 
-/* @func showseq_FeatCopy *****************************************************
+
+
+
+/* @funcstatic showseq_FeatCopy ***********************************************
 **
 ** Makes a copy of a feature, except for the Tags list which is added later.
 ** This is mostly copied from the original in ajFeatCopy,
@@ -737,31 +771,31 @@ static AjBool showseq_MatchPatternTags (AjPFeature gf, AjPFeature newgf,
 ** @@
 ******************************************************************************/
 
-static AjPFeature showseq_FeatCopy (AjPFeature orig) 
+static AjPFeature showseq_FeatCopy(AjPFeature orig) 
 {
 	
-  AjPFeature ret;
+    AjPFeature ret;
       
-  AJNEW0(ret);
+    AJNEW0(ret);
 
-  ret->Tags = ajListNew();
+    ret->Tags = ajListNew();
 
-  ajStrAssS (&ret->Source, orig->Source);
-  ajStrAssS (&ret->Type, orig->Type);
-  ajStrAssS (&ret->Remote, orig->Remote);
-  ajStrAssS (&ret->Label, orig->Label);
+    ajStrAssS(&ret->Source, orig->Source);
+    ajStrAssS(&ret->Type, orig->Type);
+    ajStrAssS(&ret->Remote, orig->Remote);
+    ajStrAssS(&ret->Label, orig->Label);
                  
-  ret->Protein = orig->Protein;     
-  ret->Start = orig->Start;
-  ret->End = orig->End;
-  ret->Start2 = orig->Start2;
-  ret->End2 = orig->End2;
-  ret->Score = orig->Score;
-  ret->Strand = orig->Strand;
-  ret->Frame = orig->Frame;
-  ret->Flags = orig->Flags;
-  ret->Group = orig->Group;
-  ret->Exon = orig->Exon;
+    ret->Protein = orig->Protein;     
+    ret->Start   = orig->Start;
+    ret->End     = orig->End;
+    ret->Start2  = orig->Start2;
+    ret->End2    = orig->End2;
+    ret->Score   = orig->Score;
+    ret->Strand  = orig->Strand;
+    ret->Frame   = orig->Frame;
+    ret->Flags   = orig->Flags;
+    ret->Group   = orig->Group;
+    ret->Exon    = orig->Exon;
                    
-  return ret;
+    return ret;
 }       

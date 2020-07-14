@@ -19,7 +19,10 @@
 ** along with this program; if not, write to the Free Software
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 ******************************************************************************/
+
 #include "emboss.h"
+
+
 
 
 /* @prog skipseq **************************************************************
@@ -35,23 +38,25 @@ int main(int argc, char **argv)
     AjPSeqout seqout;
     AjPSeq seq = NULL;
     ajint skip;
-    ajint skipcnt=0;
+    ajint skipcnt = 0;
 
-    embInit ("skipseq", argc, argv);
+    embInit("skipseq", argc, argv);
 
-    seqout = ajAcdGetSeqoutall ("outseq");
-    seqall = ajAcdGetSeqall ("sequence");
+    seqout = ajAcdGetSeqoutall("outseq");
+    seqall = ajAcdGetSeqall("sequence");
 
-    skip = ajAcdGetInt ("skip");
-    while (ajSeqallNext(seqall, &seq))
+    skip = ajAcdGetInt("skip");
+    while(ajSeqallNext(seqall, &seq))
     {
         skipcnt++;
-	if (skipcnt > skip)
-	  ajSeqAllWrite (seqout, seq);
+
+	if(skipcnt > skip)
+	    ajSeqAllWrite(seqout, seq);
     }
 
-    ajSeqWriteClose (seqout);
+    ajSeqWriteClose(seqout);
 
-    ajExit ();
+    ajExit();
+
     return 0;
 }

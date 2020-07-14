@@ -31,6 +31,8 @@
 #define EQUGUESS 3500	  /* Estimate of number of equivalent names */
 
 
+
+
 static void restover_printHits(AjPSeq, AjPStr, AjPFile *outf, AjPList *l,
 			       AjPStr *name, ajint hits, ajint begin,
 			       ajint end, AjBool ambiguity, ajint mincut,
@@ -42,6 +44,8 @@ static void restover_read_equiv(AjPFile *equfile, AjPTable *table);
 static void restover_read_file_of_enzyme_names(AjPStr *enzymes);
 
 
+
+
 /* @prog restover *************************************************************
 **
 ** Finds restriction enzymes that produce a specific overhang
@@ -51,10 +55,10 @@ static void restover_read_file_of_enzyme_names(AjPStr *enzymes);
 int main(int argc, char **argv)
 {
     AjPSeqall seqall;
-    AjPSeq    seq=NULL;
-    AjPStr    seqcmp=NULL;
-    AjPStr    enzymes=NULL;
-    AjPFile   outf=NULL;
+    AjPSeq seq     = NULL;
+    AjPStr seqcmp  = NULL;
+    AjPStr enzymes = NULL;
+    AjPFile outf   = NULL;
     ajint begin;
     ajint end;
     ajint min;
@@ -74,17 +78,16 @@ int main(int argc, char **argv)
     AjBool frags;
     AjPStr dfile;
 
-    AjPFile   enzfile=NULL;
-    AjPFile   equfile=NULL;
+    AjPFile enzfile = NULL;
+    AjPFile equfile = NULL;
 
-    AjPStr    name=NULL;
+    AjPStr name = NULL;
 
-    AjPTable  table=NULL;
+    AjPTable table = NULL;
 
-    ajint       hits;
+    ajint hits;
 
-
-    AjPList     l;
+    AjPList l;
 
     embInit("restover", argc, argv);
 
@@ -93,21 +96,23 @@ int main(int argc, char **argv)
     ajStrToUpper(&seqcmp);
     outf      = ajAcdGetOutfile("outfile");
 
-    /* Some of these are not needed but I left them in case someone wants to
-       use them some time ... */
+    /*
+    ** Some of these are not needed but I left them in case someone wants to
+    ** use them some time ...
+    */
     enzymes   = ajStrNewC("all");
 
-    min       = ajAcdGetInt("min");
-    max       = ajAcdGetInt("max");
-    sitelen   = 2;
+    min        = ajAcdGetInt("min");
+    max        = ajAcdGetInt("max");
+    sitelen    = 2;
     threeprime = ajAcdGetBool("threeprime");
-    blunt     = ajAcdGetBool("blunt");
-    sticky    = ajAcdGetBool("sticky");
-    single    = ajAcdGetBool("single");
-    html      = ajAcdGetBool("html");
-    alpha     = ajAcdGetBool("alphabetic");
-    ambiguity = ajAcdGetBool("ambiguity");
-    plasmid   = ajAcdGetBool("plasmid");
+    blunt      = ajAcdGetBool("blunt");
+    sticky     = ajAcdGetBool("sticky");
+    single     = ajAcdGetBool("single");
+    html       = ajAcdGetBool("html");
+    alpha      = ajAcdGetBool("alphabetic");
+    ambiguity  = ajAcdGetBool("ambiguity");
+    plasmid    = ajAcdGetBool("plasmid");
     commercial = ajAcdGetBool("commercial");
     limit      = ajAcdGetBool("limit");
     frags      = ajAcdGetBool("fragments");
@@ -115,7 +120,7 @@ int main(int argc, char **argv)
     dfile      = ajAcdGetString("datafile");
 
     if(single)
-	max=min=1;
+	max = min = 1;
 
     table = ajStrTableNew(EQUGUESS);
 
@@ -153,8 +158,8 @@ int main(int argc, char **argv)
 
     while(ajSeqallNext(seqall, &seq))
     {
-	begin=ajSeqallBegin(seqall);
-	end=ajSeqallEnd(seqall);
+	begin = ajSeqallBegin(seqall);
+	end   = ajSeqallEnd(seqall);
 	ajFileSeek(enzfile,0L,0);
 
 	hits = embPatRestrictMatch(seq,begin,end,enzfile,enzymes,sitelen,
@@ -180,9 +185,9 @@ int main(int argc, char **argv)
     ajFileClose(&outf);
 
     ajExit();
+
     return 0;
 }
-
 
 
 
@@ -215,7 +220,6 @@ int main(int argc, char **argv)
 ** @@
 ******************************************************************************/
 
-
 static void restover_printHits(AjPSeq seq, AjPStr seqcmp, AjPFile *outf,
 			       AjPList *l,AjPStr *name, ajint hits,
 			       ajint begin, ajint end, AjBool ambiguity,
@@ -225,56 +229,46 @@ static void restover_printHits(AjPSeq seq, AjPStr seqcmp, AjPFile *outf,
 			       AjBool alpha, AjBool frags,AjBool nameit,
 			       AjBool html)
 {
-    EmbPMatMatch m=NULL;
-    AjPStr  ps=NULL;
-    ajint *fa=NULL;
-    ajint *fx=NULL;
-    ajint fc=0;
-    ajint fn=0;
-    ajint fb=0;
-    ajint last=0;
-    AjPStr overhead=NULL;
+    EmbPMatMatch m = NULL;
+    AjPStr ps = NULL;
+    ajint *fa = NULL;
+    ajint *fx = NULL;
+    ajint fc = 0;
+    ajint fn = 0;
+    ajint fb = 0;
+    ajint last = 0;
+    AjPStr overhead = NULL;
 
-    AjPStr value=NULL;
+    AjPStr value = NULL;
 
     ajint i;
-    ajint c=0;
+    ajint c = 0;
 
-    ps=ajStrNew();
+    ps = ajStrNew();
     fn = 0;
 
     if(html)
 	ajFmtPrintF(*outf,"<BR>");
     ajFmtPrintF(*outf,"# Restrict of %S from %d to %d\n",*name,begin,end);
+
     if(html)
 	ajFmtPrintF(*outf,"<BR>");
     ajFmtPrintF(*outf,"#\n");
+
     if(html)
 	ajFmtPrintF(*outf,"<BR>");
     ajFmtPrintF(*outf,"# Minimum cuts per enzyme: %d\n",mincut);
+
     if(html)
 	ajFmtPrintF(*outf,"<BR>");
     ajFmtPrintF(*outf,"# Maximum cuts per enzyme: %d\n",maxcut);
+
     if(html)
 	ajFmtPrintF(*outf,"<BR>");
     ajFmtPrintF(*outf,"# Minimum length of recognition site: %d\n",
 		sitelen);
     if(html)
 	ajFmtPrintF(*outf,"<BR>");
-
-    /*    if(blunt)*/
-    /*	ajFmtPrintF(*outf,"# Blunt ends allowed\n");*/
-    /*    if(sticky)*/
-    /*	ajFmtPrintF(*outf,"# Sticky ends allowed\n");*/
-    /*    if(plasmid)*/
-    /*	ajFmtPrintF(*outf,"# DNA is circular\n");*/
-    /*    else*/
-    /*	ajFmtPrintF(*outf,"# DNA is linear\n");*/
-    /*    if(!ambiguity)*/
-    /*	ajFmtPrintF(*outf,"# No ambiguities allowed\n");*/
-    /*    else*/
-    /*	ajFmtPrintF(*outf,"# Ambiguities allowed\n");*/
-
 
     hits = embPatRestrictRestrict(l,hits,!limit,alpha);
 
@@ -286,8 +280,10 @@ static void restover_printHits(AjPSeq seq, AjPStr seqcmp, AjPFile *outf,
 
 
     ajFmtPrintF(*outf,"# Number of hits with any overlap: %d\n",hits);
+
     if(html)
 	ajFmtPrintF(*outf,"<BR>");
+
     if(html)
 	ajFmtPrintF(*outf,"</p><table  border cellpadding=4 "
 		    "bgcolor=\"#FFFFF0\">\n");
@@ -302,6 +298,7 @@ static void restover_printHits(AjPSeq seq, AjPStr seqcmp, AjPFile *outf,
     for(i=0;i<hits;++i)
     {
 	ajListPop(*l,(void **)&m);
+
 	if(!plasmid && (m->cut1-m->start>100 || m->cut2-m->start>100))
 	{
 	    embMatMatchDel(&m);
@@ -342,6 +339,7 @@ static void restover_printHits(AjPSeq seq, AjPStr seqcmp, AjPFile *outf,
 
 	if(frags)
 	    fa[fn++] = m->cut1;
+
 	if(m->cut3 && m->cut4)
 	{
 	    if(m->cut4 >= m->cut3)
@@ -351,6 +349,7 @@ static void restover_printHits(AjPSeq seq, AjPStr seqcmp, AjPFile *outf,
 		ajStrAssSub(&overhead, ajSeqStr( seq), m->cut4, m->cut3-1);
 		ajStrRev(&overhead);
 	    }
+
 	    if(!ajStrCmpO(seqcmp, overhead))
 	    {
 		if(html)
@@ -390,24 +389,26 @@ static void restover_printHits(AjPSeq seq, AjPStr seqcmp, AjPFile *outf,
 	else
 	{
 	    last = -1;
-	    fb=0;
+	    fb = 0;
 	    for(i=0;i<fn;++i)
 	    {
 		if((c=fa[i])!=last)
 		    fa[fb++]=c;
-		last=c;
+		last = c;
 	    }
-	    fn=fb;
+	    fn = fb;
 	    /* Calc lengths */
+
 	    for(i=0;i<fn-1;++i)
-		fx[fc++]=fa[i+1]-fa[i];
+		fx[fc++] = fa[i+1]-fa[i];
 	    if(!plasmid)
 	    {
-		fx[fc++]=fa[0]-begin+1;
-		fx[fc++]=end-fa[fn-1];
+		fx[fc++] = fa[0]-begin+1;
+		fx[fc++] = end-fa[fn-1];
 	    }
 	    else
-		fx[fc++]=(fa[0]-begin+1)+(end-fa[fn-1]);
+		fx[fc++] = (fa[0]-begin+1)+(end-fa[fn-1]);
+
 	    ajSortIntDec(fx,fc);
 	    for(i=0;i<fc;++i)
 		ajFmtPrintF(*outf,"    %d\n",fx[i]);
@@ -427,6 +428,8 @@ static void restover_printHits(AjPSeq seq, AjPStr seqcmp, AjPFile *outf,
 }
 
 
+
+
 /* @funcstatic restover_read_equiv ********************************************
 **
 ** Load table with equivalent RE names
@@ -435,7 +438,6 @@ static void restover_printHits(AjPSeq seq, AjPStr seqcmp, AjPFile *outf,
 ** @param [w] table [AjPTable*] table to store names in
 ** @@
 ******************************************************************************/
-
 
 static void restover_read_equiv(AjPFile *equfile, AjPTable *table)
 {
@@ -460,7 +462,13 @@ static void restover_read_equiv(AjPFile *equfile, AjPTable *table)
     }
 
     ajFileClose(equfile);
+    ajStrDel(&line);
+
+    return;
 }
+
+
+
 
 /* @funcstatic restover_read_file_of_enzyme_names *****************************
 **
@@ -474,9 +482,9 @@ static void restover_read_equiv(AjPFile *equfile, AjPTable *table)
 
 static void restover_read_file_of_enzyme_names(AjPStr *enzymes)
 {
-    AjPFile file=NULL;
+    AjPFile file = NULL;
     AjPStr line;
-    char   *p=NULL;
+    char *p = NULL;
 
     if (ajStrFindC(*enzymes, "@") == 0)
     {
@@ -492,7 +500,9 @@ static void restover_read_file_of_enzyme_names(AjPStr *enzymes)
 	while(ajFileReadLine(file, &line))
 	{
 	    p = ajStrStr(line);
-	    if (!*p || *p == '#' || *p == '!') continue;
+	    if (!*p || *p == '#' || *p == '!')
+		continue;
+
 	    ajStrApp(enzymes, line);
 	    ajStrAppC(enzymes, ",");
 	}
