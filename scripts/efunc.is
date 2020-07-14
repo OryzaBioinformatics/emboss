@@ -1,8 +1,8 @@
 #!/bin/env icarus
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #    $RCSfile: efunc.is,v $
-#    $Revision: 1.5 $
-#    $Date: 2004/04/14 14:22:43 $
+#    $Revision: 1.6 $
+#    $Date: 2004/08/05 13:12:52 $
 #    $Author: rice $
 #
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -13,9 +13,20 @@ $fn={
   ID:id      TY:typ       MO:mod   LB:lib   DE:des
   PN:par     PA:par       PD:par   PX:par
   RT:ret     RD:ret       RX:ret
+  CA:cat     CT:cat       CD:cat       CX:cat
   XX:rest    '//':rest   'other':rest
 }
 
+$code={
+	r:Read w:Write u:Update d:Delete f:Function v:Vararg
+}
+
+$codeb={
+	N:"Null value accepted"
+	E:"Empty value accepted"
+	P:"Pointer updated"
+	C:"Value checked at runtime"
+}
 
 $rules={
 
@@ -80,6 +91,10 @@ $rules={
   ret:     ~ {$In:[fields c:ret] $Out} 
              /RT/ ln {$Wrt} (/RD/ (word {$Uniq} | noword)* ln )*~        
 #             /RT/ ln {$Wrt} (/RD/ ln {$App})* ~        
+  cat:     ~ {$In:[fields c:cat] $Out} 
+             (/CA/ ln {$Wrt} /CT/ ln {$Wrt} (/CD/ (word {$Uniq} | noword)* ln )*
+              'CX' ln)* 
+	   ~        
 
   text:    ~ (/\n/)?
              (ln {$App})* ~
@@ -115,7 +130,8 @@ $rules={
                     |<TD VALIGN=TOP bgcolor=$col1><FONT color="#FFFFFF">
                     |<B>Name</B></TD><TD>
                     |<B>($entry.name)</B>
-                    |($Alt:[$showtyp.=="public" f:" (Hidden function)"])
+                    |($Alt:[$showtyp.=="static" t:" (Hidden function)"])
+                    |($Alt:[$showtyp.=="macro" t:" (Macro)"])
                     |<P>
                     |Source file: <B>$showlib/$showmod\.c</B>
                   }
@@ -136,6 +152,13 @@ $rules={
             ('PD' ln {if:$Ct.=="" $StrApp:[$tmp.comment s:"<p>\n"]
                       else $StrApp:[$tmp.comment s:$Ct]})*
              'PX' ln {$args.app:$tmp} )* ~
+
+  categories:  ~ x{$cats={}}
+            ('CA' sp {$tmp={} } ln {$tmp.type=$Ct $tmp.comment=""}
+             'CT' sp ln {$tmp.data=$Ct}
+            ('CD' ln {if:$Ct.=="" $StrApp:[$tmp.comment s:"<p>\n"]
+                      else $StrApp:[$tmp.comment s:$Ct]})*
+             'CX' ln {$cats.app:$tmp} )* ~
 
 # Productions for links internally, and for links to EDATA.
 # These are for links, so we need to use $Uniq to avoid duplicate links.
@@ -161,7 +184,9 @@ $rules={
 		   /[a-zA-Z0-9_]+/ | /./)+
 	       ~
 
-  writecode: ~ (/[wu][A-Za-z]*/ {$write=$Ct} | word {$write=""} ) ~
+  writecode: ~ (/([wrdu])([A-Za-z]*)/ {$write=$code.$1
+                 if:$2!=""  $write.app:" ($codeb.$2)"}
+               | word {$write="$Ct"} ) ~
   sp:  ~ /[ \t]*/ ~
   h_input: ~ {$In:[fields c:par t:html]}
              params {$Rep:
@@ -206,25 +231,34 @@ $rules={
                      |($Foreach:[$rs in:$rtxt s:@"$rs"])
                      |&nbsp;</TD></TR></TABLE>
                   } ~
+  h_cat:   ~ {$In:[fields c:cat t:html]}
+             categories {$Rep:
+                        |<TR>
+                        |<TD VALIGN=TOP bgcolor=$col1><FONT color="#FFFFFF">
+                        |<B>Category</B></TD><TD>
+                        |<TABLE BORDER CELLPADDING=4 BGCOLOR="#FFFFF0">
+                        | <TR BGCOLOR="#d3b5b5">
+                        |  <TH><FONT SIZE=-1>Type</TH>
+                        |  <TH><FONT SIZE=-1>Data</TH>
+                        |  <TH><FONT SIZE=-1>Comment</TH>
+              		|($Foreach:[$tmp in:$cats s:@
+			     |<TR>
+			     | <TD VALIGN=TOP>($tmp.type)</TD>
+			     | <TD VALIGN=TOP>($tmp.data)</TD>
+			     | <TD VALIGN=TOP>($Alt:[$tmp.comment.trim.==""
+                                               t:'&nbsp;' f:$tmp.comment])</TD>
+			     |</TR>
+			   ])
+                        |</TR>
+                        |</TABLE>
+                        |</TD></TR>
+                  }
+           ~
   h_called:~ {$In:[fields c:proto t:html]}
              (/[a-zA-Z0-9]*[A-Z_][a-zA-Z0-9_]+/  {
-#                $dp:"Fix $Ct\n"
                 $q=$Query:"[efunc-id:$Ct]"
                 if:$q.size>0 {	$sup="" $sdn=""  # we have a known function
 		   $qup = $Query:"[efunc-id:$Ct]>efunc_up"
-#		   if:$qup.size>0 {$sup=
-#		    |<A HREF="wgetz?-sl+($ParStr:userIdOpt)\
-#		    |[efunc-id:$Ct]%3eefunc_up+-page+qResult">
-#		    |<IMG BORDER=0 SRC=($ParStr:imgdir)/up.gif 
-#		    |ALIGN=middle  ALT = "Up" WIDTH="16" HEIGHT="14"></A>  
-#		   }
-#		   $qdn = $Query:"[efunc-id:$Ct]>efunc_down"
-#		   if:$qdn.size>0 {$sdn=
-#		    | <A HREF="wgetz?-sl+($ParStr:userIdOpt)\
-#		    |[efunc-id:$Ct]%3eefunc_down+-page+qResult">
-#		    |<IMG BORDER=0 SRC=($ParStr:imgdir)/down.gif 
-#		    |ALIGN=middle  ALT = "Down" WIDTH="16" HEIGHT="14"></A> 
-#		   }
 		   if:$qup.size>0 {$sup=
 		    |<A HREF="wgetz?($ParStr:userIdOpt)\
 		    |[efunc-id:$Ct]%3eefunc_up+-page+qResult">
@@ -238,14 +272,10 @@ $rules={
 		    |<IMG BORDER=0 SRC=($ParStr:imgdir)/down.gif 
 		    |ALIGN=middle  ALT = "Down" WIDTH="16" HEIGHT="14"></A> 
 		   }
-###		   $Rep:"$qup $Hlink:[efuncR p:$Ct] $qdn"
-		   $Rep:"$sup$Hlink:[efuncR p:$Ct]$sdn"
+		   $Rep:"$sup$Ct$sdn" #$Hlink:[efuncR p:$Ct]$sdn"
 		 }
                 else {$q=$Query:"[edata-alias:$Ct]"
                 if:$q.size>0 {$Rep:$Hlink:[edataR p:$Ct]}}
-#                if:$q.size>0 {$Rep:{$ParStr:efuncR $Ct $Ct}}
-#                else {$q=$Query:"[edata-alias:$Ct]"
-#                if:$q.size>0 {$Rep:{$ParStr:edataR $Ct $Ct}}} $q.delete
               } | /./)+
            ~
   h_proto: ~ {$In:[fields c:proto t:html]}

@@ -1,8 +1,8 @@
 #!/bin/env icarus
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #    $RCSfile: edata.is,v $
-#    $Revision: 1.3 $
-#    $Date: 2004/04/14 14:22:43 $
+#    $Revision: 1.4 $
+#    $Date: 2004/08/05 13:12:52 $
 #    $Author: rice $
 #
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -10,20 +10,22 @@
 $col1 = '"#58081a"'
 
 $fn={
-  ID:id      DE:des
-  TY:typ     MO:module    LB:lib
-  NN:new     ND:new       NX:new
-  DN:delete  DD:delete    DX:delete
-  AN:attr    AT:attr      AD:attr      AX:attr
-  EN:assign  ED:assign    EX:assign
-  MN:modify  MD:modify    MX:modify
-  ON:use     OD:use       OX:use
-  CN:cast    CD:cast      CX:cast
-  JN:input   JD:input     JX:input
-  PN:output  PD:output    PX:output
-  RN:other   RD:other     RX:other
-  TN:alias   TD:alias     TX:alias
-  XX:rest    '//':rest   'other':rest
+  ID:id       DE:des
+  TY:typ      MO:module    LB:lib
+  NN:new      ND:new       NX:new
+  DN:del   DD:del    DX:del
+  AN:attr     AT:attr      AD:attr     AX:attr
+  EN:assign   ED:assign    EX:assign
+  MN:modify   MD:modify    MX:modify
+  ON:use      OD:use       OX:use
+  CN:cast     CD:cast      CX:cast
+  JN:input    JD:input     JX:input
+  KN:iterator KD:iterator  KX:iterator
+  LN:iterate  LD:iterate   LX:iterate
+  PN:output   PD:output    PX:output
+  RN:other    RD:other     RX:other
+  TN:alias    TD:alias     TX:alias
+  XX:rest   '//':rest 'other':rest
 }
 
 
@@ -58,8 +60,7 @@ $rules={
   id:      ~ {$In:[fields c:id] $Out}
              /../ word {$Wrt $id=$Ct} ~
   des:     ~ {$In:[clFields c:des] $Out}
-             (word {$Uniq} | noword)*
-~
+             (word {$Uniq} | noword)* ~
 
 #  hdes:    ~ {$In:[fields c:des] $Out}
 #             (/../ (/\n/ {$Wrt:[s:"<p>\n"]} | ln {$Wrt}) )* ~
@@ -86,7 +87,7 @@ $rules={
              ( /.N/  word {$Wrt} ln
               (/.D/ ln)*
                /.X/ ln)* ~
-  delete:  ~ {$In:[fields c:delete] $Out} 
+  del:  ~ {$In:[fields c:del] $Out} 
              ( /.N/  word {$Wrt} ln
               (/.D/ ln)*
                /.X/ ln)* ~
@@ -111,6 +112,14 @@ $rules={
               (/.D/ ln)*
                /.X/ ln)* ~
   output:  ~ {$In:[fields c:output] $Out} 
+             ( /.N/  word {$Wrt} ln
+              (/.D/ ln)*
+               /.X/ ln)* ~
+  iterate:  ~ {$In:[fields c:iterate] $Out} 
+             ( /.N/  word {$Wrt} ln
+              (/.D/ ln)*
+               /.X/ ln)* ~
+  iterator:  ~ {$In:[fields c:iterator] $Out} 
              ( /.N/  word {$Wrt} ln
               (/.D/ ln)*
                /.X/ ln)* ~
@@ -208,6 +217,32 @@ $rules={
                         |</TD></TR>
                   }
            ~
+  h_iterator: ~ {$In:[fields c:iterator t:html] }
+	   x{$fun={}} fundoc {$efun=$fun
+	            $Rep:
+                        |<TR>
+                        |<TD VALIGN=TOP bgcolor=$col1><FONT color="#FFFFFF">
+                        |<B>Iterator(s)</B></TD><TD>
+                        |Iterators are objects that allow functions to
+                        |step through the contents of an
+                        |<b>($entry.name)</b> object.<p>
+                        |<TABLE BORDER CELLPADDING=4 BGCOLOR="#FFFFF0">
+                        | <TR BGCOLOR="#d3b5b5">
+                        |  <TH><FONT SIZE=-1>Name</TH>
+                        |  <TH><FONT SIZE=-1>Comment</TH>
+              		|($Foreach:[$tmp in:$efun s:@
+	       		     |<TR>
+			     | <TD VALIGN=TOP>
+		             | ($tmp.name)</TD>
+			     | <TD VALIGN=TOP>($Alt:[$tmp.comment.trim.==""
+                                              t:'&nbsp' f:$tmp.comment])</TD>
+			     |</TR>
+			   ])
+                        |</TR>
+                        |</TABLE>
+                        |</TD></TR>
+                  }
+           ~
   h_new: ~ {$In:[fields c:new t:html] }
 	   x{$fun={}} fundoc {$nfun=$fun
 	            $Rep:
@@ -232,7 +267,7 @@ $rules={
                         |</TD></TR>
                   }
            ~
-  h_delete: ~ {$In:[fields c:delete t:html]}
+  h_del: ~ {$In:[fields c:del t:html]}
              x{$fun={}} fundoc {$dfun=$fun
 	            $Rep:
                         |<TR>
@@ -376,7 +411,7 @@ $rules={
                         |</TD></TR>
                   }
            ~
- h_output: ~ {$In:[fields c:input t:html]}
+ h_output: ~ {$In:[fields c:output t:html]}
              x{$fun={}} fundoc {$ufun=$fun
                    $Rep:
                         |<TR>
@@ -384,6 +419,31 @@ $rules={
                         |<B>Output(s)</B></TD><TD>
                         |Outputs write the contents of an
                         |<b>($entry.name)</b> object to an external file.<p>
+                        |<TABLE BORDER CELLPADDING=4 BGCOLOR="#FFFFF0">
+                        | <TR BGCOLOR="#d3b5b5">
+                        |  <TH><FONT SIZE=-1>Name</TH>
+                        |  <TH><FONT SIZE=-1>Comment</TH>
+              		|($Foreach:[$tmp in:$ufun s:@
+			     |<TR>
+			     | <TD VALIGN=TOP>($tmp.name)</TD>
+			     | <TD VALIGN=TOP>($Alt:[$tmp.comment.trim.==""
+                                               t:'&nbsp;' f:$tmp.comment])</TD>
+			     |</TR>
+			   ])
+                        |</TR>
+                        |</TABLE>
+                        |</TD></TR>
+                  }
+           ~
+  h_iterate: ~ {$In:[fields c:iterate t:html]}
+             x{$fun={}} fundoc {$ufun=$fun
+                   $Rep:
+                        |<TR>
+                        |<TD VALIGN=TOP bgcolor=$col1><FONT color="#FFFFFF">
+                        |<B>Iterate function(s)</B></TD><TD>
+                        |Iterate functions use the iterator type associated
+                        |with an <b>($entry.name)</b> object to
+                        |step through the contents.<p>
                         |<TABLE BORDER CELLPADDING=4 BGCOLOR="#FFFFF0">
                         | <TR BGCOLOR="#d3b5b5">
                         |  <TH><FONT SIZE=-1>Name</TH>
@@ -429,12 +489,13 @@ $rules={
                     |<TR>
                     |<TD VALIGN=TOP bgcolor="#58081a"><FONT color="#FFFFFF">
                     |<B>Body</B></TD><TD>
-                    |<TABLE BORDER=5 BGCOLOR="#FFFFF0"><TR><TD><PRE>
+                    |<TABLE BORDER=5 BGCOLOR="#FFFFF0"><TR><TD WIDTH=500><PRE>
                     |($Ct.trim:'\n')
                     |</TD></TR></TABLE>
                     |</TD></TR>
              }
              (/[^<>]+/ | '>' {$Rep:'&gt;'} | '<' {$Rep:'&lt;'})*
+	     #(/.*/)*
            ~
   fundoc:  ~
             ( 
@@ -477,12 +538,42 @@ $rules={
 		~
   h_bodyLink:   ~ { $In:[fields c:{body} t:html]}
              (/[a-zA-Z0-9]*[a-zA-Z_][a-zA-Z0-9_]+/ {
-                $q=$Query:"[efunc-id:$Ct]"
-                if:$q.size>0 {$Rep:$Hlink:[efuncR p:$Ct]}
-                else {$q=$Query:"[edata-alias:$Ct]"
-                if:$q.size>0 {$Rep:$Hlink:[edataR p:$Ct]}}
-                } | /./)+
+                 if:$Ct==$id {	$sup=$Ct   # we have the datatype
+		   $qup = $Query:"[edata-id:$Ct]>efunc"
+		   if:$qup.size>0 {$sup=
+		    |<A HREF="wgetz?($ParStr:userIdOpt)\
+		    |[edata-id:$Ct]%3eefunc+-page+qResult">\
+		    |<IMG BORDER=0 SRC=($ParStr:imgdir)/up.gif \
+		    |ALIGN=middle  ALT = "Up" WIDTH="16" HEIGHT="14"></A>$Ct
+		   }
+		   $Rep:"$sup.rep:['\n' to:'']" #$Hlink:[efuncR p:$Ct]"
+		 }
+		else {
+                   $q=$Query:"[efunc-id:$Ct]"
+                   if:$q.size>0 {$Rep:$Hlink:[efuncR p:$Ct]}
+                   else {$q=$Query:"[edata-alias:$Ct]"
+                   if:$q.size>0 {$Rep:$Hlink:[edataR p:$Ct]}
+                     }
+                }
+		    } | /./)+
 		~
+
+#  h_used:  ~ { $In:[fields c:body t:html] }
+#             (/[a-zA-Z0-9]*[A-Z_][a-zA-Z0-9_]+/  {
+#                if:$Ct==$id {	$sup=""   # we have the datatype
+#		   $qup = $Query:"[edata-id:$Ct]>efunc"
+#		   if:$qup.size>0 {$sup=
+#		    |<A HREF="wgetz?($ParStr:userIdOpt)\
+#		    |[edata-id:$Ct]%3eefunc+-page+qResult">
+#		    |<IMG BORDER=0 SRC=($ParStr:imgdir)/up.gif 
+#		    |ALIGN=middle  ALT = "Up" WIDTH="16" HEIGHT="14"></A>  
+#		   }
+#		   $Rep:"$sup$Hlink:[efuncR p:$Ct]"
+#		 }
+#                else {$qq=$Query:"[edata-alias:$Ct]"
+#                if:$qq.size>0 {$Rep:$Hlink:[edataR p:$Ct]}}
+#              } | /./)+
+#           ~
 
   # other stuff
   ln:      ~ /[^\n]*\n/ ~
@@ -512,4 +603,3 @@ if:$TestMode {
     $job.reset
   }
 }
-
