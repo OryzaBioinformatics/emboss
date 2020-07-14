@@ -20,7 +20,7 @@ print "\n";
 print "============================\n";
 print ".. File $infile\n";
 print "============================\n";
-@presrc = split (m"^typedef\s+struct\s+\S*\s*[{][^}]+[}]\s*[^;]+;\s*$"gosm, $allsrc);
+@presrc = split (m"^typedef\s+struct\s+\S*\s*[{][^}]+[}]\s*[^;]+;\s*$"osm, $allsrc);
 $ip = 0;
 $dalias="";
 

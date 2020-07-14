@@ -78,13 +78,17 @@ cat *.srsdata >> ../edata.dat
 cd ..
 \rm -rf x/
 
+# Check the categories are all defined
+
+embossdoccategories.pl efunc.out edata.out >! ecat.out
+
 source ~/srsfunc/etc/prep_srs
 
 srsbuild efunc -nn
-srsbuild efunc -rel '2.5.0'
+srsbuild efunc -rel '2.9.0'
 
 srsbuild edata -nn
-srsbuild edata -rel '2.5.0'
+srsbuild edata -rel '2.9.0'
 
 srsbuild -l efunc
 srsbuild -l edata

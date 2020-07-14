@@ -20,7 +20,7 @@ print "\n";
 print "============================\n";
 print ".. File $infile\n";
 print "============================\n";
-@presrc = split (m"^[A-Za-z][^/\{\[;=]+[\)]\s*[\{]\s*$"gosm, $allsrc);
+@presrc = split (m"^[A-Za-z][^/\{\[;=]+[\)]\s*[\{]\s*$"osm, $allsrc);
 $ip = 0;
 
 while ($allsrc =~ m"^([A-Za-z][^/\{\[;=]+[\)]\s*[\{])\s*$"gosm) {
