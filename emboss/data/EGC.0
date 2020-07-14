@@ -1,12 +1,15 @@
 # Genetic Code Table
 #
-# Obtained from: http://www.ncbi.nlm.nih.gov/collab/FT/genetic_codes.html
-# and: http://www3.ncbi.nlm.nih.gov/htbin-post/Taxonomy/wprintgc?mode=c
+# Obtained from: http://www3.ncbi.nlm.nih.gov/Taxonomy/Utils/wprintgc.cgi
 #
 # Differs from Genetic Code [1] only in that the initiation sites have been
-# changed to only 'AUG'
+# changed to only 'AUG'.
+#
+# This is intended to be the default genetic code where the use of
+# the rare initiation sites (CUG, UUG ) is not intended.
 
 Genetic Code [0]
+
 Standard
  
 AAs  =   FFLLSSSSYY**CC*WLLLLPPPPHHQQRRRRIIIMTTTTNNKKSSRRVVVVAAAADDEEGGGG

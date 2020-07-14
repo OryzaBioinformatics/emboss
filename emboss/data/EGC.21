@@ -1,8 +1,13 @@
 # Genetic Code Table
 #
-# Obtained from: http://www.ncbi.nlm.nih.gov/collab/FT/genetic_codes.html
-# and: http://www3.ncbi.nlm.nih.gov/htbin-post/Taxonomy/wprintgc?mode=c
+# Obtained from: http://www3.ncbi.nlm.nih.gov/Taxonomy/Utils/wprintgc.cgi
 #
+# Systematic Range:
+#
+# Trematoda: Ohama, T, S.  Osawa, K.  Watanabe, T.H.  Jukes, 1990.  J. 
+# Molec Evol.  30 Garey, J.R.  and D.R.  Wolstenholme, 1989.  J.  Molec. 
+# Evol.  28: 374-387 329-332. 
+# 
 # Other Alternative Initiation Codons
 #
 # GUG, UUG (and possibly CUG) in the Archaea (Noelling et al., unpublished) 
@@ -20,15 +25,10 @@
 # CUG is the initiation codon for one of the two alternative products of the
 # human c-myc gene (Hann et al., 1987). 
 #
-# Systematic Range:
-#
-# Thraustochytrium Mitochondrial Code (transl_table=23)
-#
-
 
 Genetic Code [21]
 
-Thraustochytrium Mitochondrial
+Trematode Mitochondrial
 
 AAs  =   FFLLSSSSYY**CCWWLLLLPPPPHHQQRRRRIIMMTTTTNNNKSSSSVVVVAAAADDEEGGGG
 Starts = -----------------------------------M---------------M------------

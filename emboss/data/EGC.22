@@ -1,7 +1,6 @@
 # Genetic Code Table
 #
-# Obtained from: http://www.ncbi.nlm.nih.gov/collab/FT/genetic_codes.html
-# and: http://www3.ncbi.nlm.nih.gov/htbin-post/Taxonomy/wprintgc?mode=c
+# Obtained from: http://www3.ncbi.nlm.nih.gov/Taxonomy/Utils/wprintgc.cgi
 #
 # Other Alternative Initiation Codons
 #
@@ -28,7 +27,7 @@
 
 Genetic Code [22]
 
-Scenedesmus obliquus
+Scenedesmus obliquus Mitochondrial
 
 AAs  =   FFLLSS*SYY*LCC*WLLLLPPPPHHQQRRRRIIIMTTTTNNKKSSRRVVVVAAAADDEEGGGG
 Starts = -----------------------------------M----------------------------

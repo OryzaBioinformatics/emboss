@@ -1,13 +1,11 @@
 # Genetic Code Table
 #
-# Obtained from: http://www.ncbi.nlm.nih.gov/collab/FT/genetic_codes.html
-# and: http://www3.ncbi.nlm.nih.gov/htbin-post/Taxonomy/wprintgc?mode=c
-#
+# Obtained from: http://www3.ncbi.nlm.nih.gov/Taxonomy/Utils/wprintgc.cgi
 #
 # Systematic Range:
 #
-# Chlorophycean Mitochondrial Code (transl_table=16)
-
+# Chlorophyceae: Hayashi-Ishiimaru, Y, T.  Ohama, Y.  Kawatsu, K. 
+# Nakamura, S.  Osawa, 1996.  Current Genetics 30: 29-33
 
 Genetic Code [16]
 
