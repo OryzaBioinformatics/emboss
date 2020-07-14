@@ -1,18 +1,41 @@
+/* @source embdata.c
+**
+** General routines for alignment.
+** Copyright (c) 1999 Mark Faller
+**
+** This program is free software; you can redistribute it and/or
+** modify it under the terms of the GNU General Public License
+** as published by the Free Software Foundation; either version 2
+** of the License, or (at your option) any later version.
+**
+** This program is distributed in the hope that it will be useful,
+** but WITHOUT ANY WARRANTY; without even the implied warranty of
+** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+** GNU General Public License for more details.
+**
+** You should have received a copy of the GNU General Public License
+** along with this program; if not, write to the Free Software
+** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+******************************************************************************/
+
 #include "emboss.h"
 
 
 
 
-/*Routines for getting the data into the data structure. The data structure */
-/*consists of a list of tables. This means the routine can read any amount*/
-/*of data from a file. It is up to the developer to know the order of the*/
-/*tables in the list and what each refers to*/
+/*
+** Routines for getting the data into the data structure. The data structure
+** consists of a list of tables. This means the routine can read any amount
+** of data from a file. It is up to the developer to know the order of the
+** tables in the list and what each refers to
+*/
 
 
 
-static AjBool dataListNextLine( AjPFile pfile, char *commentLine,
+
+static AjBool dataListNextLine(AjPFile pfile, char *commentLine,
 				 AjPStr * line);
-static void dataListRead( AjPList data, AjPFile pfile);
+static void dataListRead(AjPList data, AjPFile pfile);
 
 
 
@@ -28,23 +51,22 @@ static void dataListRead( AjPList data, AjPFile pfile);
 ** @@
 ******************************************************************************/
 
-void embDataListDel( AjPList data)
+void embDataListDel(AjPList data)
 {
-/*Delete the data structure, and the data in it*/
-/*This is a public routine*/
    AjIList iter;
    AjPTable table;
 
-   iter = ajListIter( data);
-   while (ajListIterMore( iter))
+   iter = ajListIter(data);
+   while(ajListIterMore(iter))
    {
-      table = ajListIterNext( iter);
-      ajTableFree( &table);
+      table = ajListIterNext(iter);
+      ajTableFree(&table);
    }
-   ajListIterFree( iter);
-   ajListFree( &data);
-}
+   ajListIterFree(iter);
+   ajListFree(&data);
 
+   return;
+}
 
 
 
@@ -64,25 +86,28 @@ void embDataListDel( AjPList data)
 ** @@
 ******************************************************************************/
 
-static AjBool dataListNextLine( AjPFile pfile, char *commentLine,
-				 AjPStr * line)
+static AjBool dataListNextLine(AjPFile pfile, char *commentLine,
+			       AjPStr * line)
 {
-/*read routine to get the next line of data from the file. This is a private*/
-/*routine. It is called from ajGenReadData*/
-
    ajint i;
    AjBool test;
 
-   test = ajFileReadLine( pfile, line);
-   while ( test)
+   test = ajFileReadLine(pfile, line);
+   while(test)
    {
-      i = ajStrFindC( *line, commentLine);
-      if (i!=0) break;
-      test = ajFileReadLine( pfile, line);
+      i = ajStrFindC(*line, commentLine);
+      if(i!=0)
+	  break;
+      test = ajFileReadLine(pfile, line);
    }
-   if (test) return ajTrue;
+
+   if(test)
+       return ajTrue;
+
    return ajFalse;
 }
+
+
 
 
 /* @funcstatic dataListRead ***************************************************
@@ -98,84 +123,84 @@ static AjBool dataListNextLine( AjPFile pfile, char *commentLine,
 ** @@
 ******************************************************************************/
 
-static void dataListRead( AjPList data, AjPFile pfile)
+static void dataListRead(AjPList data, AjPFile pfile)
 {
-
-/*General read data routine. The key and values are stored as AjPStrs. This*/
-/*allows the data to be of any type. This is a private routine. It is called*/
-/*from embDataListInit*/
-
    AjPStr line = NULL;
    AjPStrTok tokens;
-   char whiteSpace[] = " \t\n\r";
+   char whiteSpace[]  = " \t\n\r";
    char commentLine[] = "#";
-   char endOfData[] = "//";
-   AjPStr key, copyKey;
+   char endOfData[]   = "//";
+   AjPStr key;
+   AjPStr copyKey;
    AjPStr value;
    static AjPTable table;
-   AjIList iter=NULL;
+   AjIList iter = NULL;
    AjPTable ptable;
    AjPStr tmp;
 
-   tmp = ajStrNew();
-   line =ajStrNew();
+   tmp  = ajStrNew();
+   line = ajStrNew();
 
-/* Outer loop is for each data block */
 
-   while (dataListNextLine( pfile, commentLine, &line))
+   while(dataListNextLine(pfile, commentLine, &line))
    {
-      tokens = ajStrTokenInit( line, whiteSpace);
+      tokens = ajStrTokenInit(line, whiteSpace);
 
-/* the first token is the key for the row */
+      /* the first token is the key for the row */
       key = ajStrNew();
-      (void) ajStrToken( &key, &tokens, NULL);
-      if (!ajStrLen(key))
+      ajStrToken(&key, &tokens, NULL);
+      if(!ajStrLen(key))
       {
-         ajFmtError( "Error, did not pick up first key");
-         ajFatal( "Error, did not pick up first key");
+         ajFmtError("Error, did not pick up first key");
+         ajFatal("Error, did not pick up first key");
       }
 
-      while (1)
+      while(1)
       {
-
-/* while there are more tokens generate new table in list and add (key,value)*/
+	  /*
+	  ** while there are more tokens generate new table in list and
+	  ** add (key,value)
+	  */
          value = NULL;
-         if (ajStrToken( &value, &tokens, NULL))
+         if(ajStrToken(&value, &tokens, NULL))
          {
             table = ajStrTableNewCase(350);
-            copyKey = ajStrDup( key);
-            (void) ajTablePut( table, copyKey, value);
-            ajListPushApp( data, table);
-         } else break;
+            copyKey = ajStrDup(key);
+            ajTablePut(table, copyKey, value);
+            ajListPushApp(data, table);
+         }
+	 else break;
       }
 
-      while (dataListNextLine( pfile, commentLine, &line))
+      while(dataListNextLine(pfile, commentLine, &line))
       {
-         /* for rest of data iterate for each table in list adding */
-	 /*(key,value) to each*/
-         tokens = ajStrTokenInit( line, whiteSpace);
-         (void) ajStrToken( &key, &tokens, NULL);
+         /*
+	 ** for rest of data iterate for each table in list adding
+	 ** (key,value) to each
+	 */
+         tokens = ajStrTokenInit(line, whiteSpace);
+         ajStrToken(&key, &tokens, NULL);
 	 /* check for end of data block*/
-	 if (! ajStrCmpC( key, endOfData)) break;
-         iter = ajListIter( data);
-         while (ajListIterMore( iter))
+	 if(! ajStrCmpC(key, endOfData))
+	     break;
+         iter = ajListIter(data);
+         while(ajListIterMore(iter))
          {
-            ptable = ajListIterNext( iter);
-            copyKey = ajStrDup( key);
-            if (!ajStrToken( &tmp, &tokens, NULL)) break;
-            value = ajStrDup( tmp);
-            (void) ajTablePut( ptable, copyKey, value);
+            ptable = ajListIterNext(iter);
+            copyKey = ajStrDup(key);
+            if(!ajStrToken(&tmp, &tokens, NULL)) break;
+            value = ajStrDup(tmp);
+            ajTablePut(ptable, copyKey, value);
          }
       }
    }
 
+   ajStrDel(&tmp);
+   ajStrDel(&line);
+   ajStrTokenClear(&tokens);
+   ajListIterFree(iter);
 
-/*tidy up*/
-   ajStrDel( &tmp);
-   ajStrDel( &line);
-   ajStrTokenClear( &tokens);
-   ajListIterFree( iter);
-
+   return;
 }
 
 
@@ -193,23 +218,23 @@ static void dataListRead( AjPList data, AjPFile pfile)
 ** @@
 ******************************************************************************/
 
-void embDataListInit( AjPList data, AjPStr file_name)
+void embDataListInit(AjPList data, AjPStr file_name)
 {
-/*This is the public routine to read in a data file, it takes a list and */
-/*filename as parameters. the file is read and the data returned as tables*/
-/* in the list*/
-
-/* initialise the hash table - use case insensitive comparison */
-
    AjPFile pfile = NULL;
 
 
-/* open the data table file */
-   ajFileDataNew( file_name, &pfile);
-   if (pfile==NULL) ajFatal ("Unable to find the data file %S", file_name);
-   dataListRead( data, pfile);
-   ajFileClose( &pfile);
+   /* open the data table file */
+   ajFileDataNew(file_name, &pfile);
+   if(pfile==NULL)
+       ajFatal("Unable to find the data file %S", file_name);
+
+   dataListRead(data, pfile);
+   ajFileClose(&pfile);
+
+   return;
 }
+
+
 
 
 /* @func embDataListGetTables *************************************************
@@ -233,31 +258,28 @@ void embDataListInit( AjPList data, AjPStr file_name)
 **
 ** @@
 ******************************************************************************/
-void embDataListGetTables( AjPList fullList, AjPList returnList,
+
+void embDataListGetTables(AjPList fullList, AjPList returnList,
 			   ajuint required)
 {
-
-/*This is a public routine to return a list of data tables requested by the*/
-/*developer. embDataListInit must have been previously called. Uses list of*/
-/*tables generated from embDataListInit, an unsigned integer telling routine */
-/*which tables to return in list, and the returned list containing only*/
-/*the tables requested*/
-
    AjIList iter;
    AjPTable table;
 
-   iter = ajListIter( fullList);
-   while ( ajListIterMore( iter))
+   iter = ajListIter(fullList);
+   while(ajListIterMore(iter))
    {
-      table = ajListIterNext( iter);
-      if ( required & 1) ajListPushApp( returnList, table);
+      table = ajListIterNext(iter);
+      if(required & 1) ajListPushApp(returnList, table);
       required >>= 1;
    }
 
-/*tidy up*/
-   ajListIterFree( iter);
+   ajListIterFree(iter);
 
+   return;
 }
+
+
+
 
 /* @func embDataListGetTable **************************************************
 **
@@ -278,28 +300,23 @@ void embDataListGetTables( AjPList fullList, AjPList returnList,
 **
 ** @@
 ******************************************************************************/
-AjPTable embDataListGetTable( AjPList fullList, ajuint required)
+
+AjPTable embDataListGetTable(AjPList fullList, ajuint required)
 {
-
-/*This is a public routine to return a single table of data from a list of*/
-/*tables. embDataListInit must previously have been called. */
-/* Uses list of tables generated from embDataListInit, */
-/* an unsigned iterator telling routine which*/
-/*table to return from list. It returns the AjPTable*/
-
    AjIList iter;
-   AjPTable returnTable=NULL;
+   AjPTable returnTable = NULL;
 
-   iter = ajListIter( fullList);
-   while ( ajListIterMore( iter))
+   iter = ajListIter(fullList);
+   while(ajListIterMore(iter))
    {
-      returnTable = ajListIterNext( iter);
-      if (required & 1) break;
+      returnTable = ajListIterNext(iter);
+      if(required & 1)
+	  break;
       required >>= 1;
    }
 
-/*tidy up*/
-   ajListIterFree( iter);
+
+   ajListIterFree(iter);
 
    return returnTable;
 }

@@ -105,7 +105,7 @@ AjBool      embPatClassify (AjPStr *pat, AjBool *amino, AjBool *carboxyl,
 
 void embPatCompile(ajint type, AjPStr pattern, AjPStr opattern, ajint* plen,
 		   ajint** buf, EmbOPatBYPNode* off, ajuint** sotable,
-		   ajint* solimit, ajint* m, AjPStr* regexp, ajint*** skipm,
+		   ajuint* solimit, ajint* m, AjPStr* regexp, ajint*** skipm,
 		   ajint mismatch);
 
 void            embPatFuzzSearch(ajint type, ajint begin, AjPStr pattern,
@@ -133,18 +133,6 @@ ajint           embPatMatchGetEnd (EmbPPatMatch data, ajint index);
 ajint           embPatMatchGetLen (EmbPPatMatch data, ajint index);
 ajint           embPatMatchGetNumber (EmbPPatMatch data);
 ajint           embPatMatchGetStart (EmbPPatMatch data, ajint index);
-
-EmbPPatMatch    embPatPosMatchFind  (AjPStr regexp, AjPStr string);
-EmbPPatMatch    embPatPosMatchFindC (AjPStr regexp, char *sptr);
-void            embPatPosMatchDel (EmbPPatMatch* pthis);
-ajint           embPatPosMatchGetEnd (EmbPPatMatch data, ajint index);
-ajint           embPatPosMatchGetNumber (EmbPPatMatch data);
-ajint           embPatPosMatchGetLen (EmbPPatMatch data, ajint index);
-ajint           embPatPosMatchGetStart (EmbPPatMatch data, ajint index);
-AjPStr          embPatPosSeqCreateRegExp  (AjPStr thys, AjBool protein);
-AjPStr          embPatPosSeqCreateRegExpC (char *ptr, AjBool protein);
-EmbPPatMatch    embPatPosSeqMatchFind  (AjPSeq seq, AjPStr reg);
-EmbPPatMatch    embPatPosSeqMatchFindC (AjPSeq seq, char *reg);
 
 AjPStr          embPatPrositeToRegExp (AjPStr *s);
 

@@ -24,10 +24,15 @@
 #include <string.h>
 #include <ctype.h>
 
+
+
+
 #define PKFILE "Epk.dat"
 
 static  AjBool AjIEPinit=0;		/* Has Epk.dat file been read? */
 static  double AjpK[EMBIEPSIZE];	/* pK values from Epk.dat      */
+
+
 
 
 /* @func embIepPhToHConc  *****************************************************
@@ -38,10 +43,13 @@ static  double AjpK[EMBIEPSIZE];	/* pK values from Epk.dat      */
 **
 ** @return [double] hydrogen ion concentrration
 ******************************************************************************/
+
 double embIepPhToHConc(double pH)
 {
     return pow(10.0,-pH);
 }
+
+
 
 
 /* @func embIepHConcToPh  *****************************************************
@@ -52,10 +60,13 @@ double embIepPhToHConc(double pH)
 **
 ** @return [double] pH
 ******************************************************************************/
+
 double embIepHConcToPh(double H)
 {
     return -log10(H);
 }
+
+
 
 
 /* @func embIepPkToK  *********************************************************
@@ -66,10 +77,13 @@ double embIepHConcToPh(double H)
 **
 ** @return [double] dissociation constant
 ******************************************************************************/
+
 double embIepPkToK(double pK)
 {
     return pow(10.0,-pK);
 }
+
+
 
 
 /* @func embIePkTopK  *********************************************************
@@ -80,10 +94,13 @@ double embIepPkToK(double pK)
 **
 ** @return [double] pK
 ******************************************************************************/
+
 double embIePkTopK(double K)
 {
     return -log10(K);
 }
+
+
 
 
 /* @func embIepPkRead  ********************************************************
@@ -92,18 +109,19 @@ double embIePkTopK(double K)
 **
 ** @return [void]
 ******************************************************************************/
+
 void embIepPkRead(void)
 {
-    AjPFile inf=NULL;
-    AjPStr  line;
-    char    *p;
-    double  amino=8.6;
-    double  carboxyl=3.6;
-    char    ch;
-    ajint     i;
+    AjPFile inf = NULL;
+    AjPStr line;
+    char *p;
+    double  amino    = 8.6;
+    double  carboxyl = 3.6;
+    char ch;
+    ajint i;
 
-    if(AjIEPinit) return;
-
+    if(AjIEPinit)
+	return;
 
     ajFileDataNewC(PKFILE,&inf);
     if(!inf)
@@ -112,41 +130,46 @@ void embIepPkRead(void)
     for(i=0;i<EMBIEPSIZE;++i)
 	AjpK[i]=0.0;
 
-    line=ajStrNew();
+    line = ajStrNew();
     while(ajFileGets(inf,&line))
     {
-	p=ajStrStr(line);
+	p = ajStrStr(line);
 	if(*p=='#' || *p=='!' || *p=='\n')
 	    continue;
+
 	if(!ajStrNCmpC(line,"Amino",5))
 	{
-	    p=ajSysStrtok(p," \t\n");
-	    p=ajSysStrtok(NULL," \t\n");
-	    (void) sscanf(p,"%lf",&amino);
+	    p = ajSysStrtok(p," \t\n");
+	    p = ajSysStrtok(NULL," \t\n");
+	    sscanf(p,"%lf",&amino);
 	    continue;
 	}
+
 	if(!ajStrNCmpC(line,"Carboxyl",8))
 	{
-	    p=ajSysStrtok(p," \t\n");
-	    p=ajSysStrtok(NULL," \t\n");
-	    (void) sscanf(p,"%lf",&carboxyl);
+	    p = ajSysStrtok(p," \t\n");
+	    p = ajSysStrtok(NULL," \t\n");
+	    sscanf(p,"%lf",&carboxyl);
 	    continue;
 	}
-	p=ajSysStrtok(p," \t\n");
-	ch=ajSysItoC(toupper((ajint)*p));
-	p=ajSysStrtok(NULL," \t\n");
-	(void) sscanf(p,"%lf",&AjpK[ajAZToInt(ch)]);
+
+	p  = ajSysStrtok(p," \t\n");
+	ch = ajSysItoC(toupper((ajint)*p));
+	p  = ajSysStrtok(NULL," \t\n");
+	sscanf(p,"%lf",&AjpK[ajAZToInt(ch)]);
     }
 
-    AjpK[EMBIEPAMINO]=amino;
-    AjpK[EMBIEPCARBOXYL]=carboxyl;
+    AjpK[EMBIEPAMINO]    = amino;
+    AjpK[EMBIEPCARBOXYL] = carboxyl;
 
-    AjIEPinit=ajTrue;
+    AjIEPinit = ajTrue;
     ajStrDel(&line);
     ajFileClose(&inf);
 
     return;
 }
+
+
 
 
 /* @func embIepComp  **********************************************************
@@ -159,6 +182,7 @@ void embIepPkRead(void)
 **
 ** @return [void]
 ******************************************************************************/
+
 void embIepComp(char *s, ajint amino, ajint *c)
 {
     ajint i;
@@ -174,10 +198,13 @@ void embIepComp(char *s, ajint amino, ajint *c)
 	++p;
     }
 
-    c[EMBIEPAMINO]=amino;
-    c[EMBIEPCARBOXYL]=1;
+    c[EMBIEPAMINO]    = amino;
+    c[EMBIEPCARBOXYL] = 1;
+
     return;
 }
+
+
 
 
 /* @func embIepCalcK  *********************************************************
@@ -189,6 +216,7 @@ void embIepComp(char *s, ajint amino, ajint *c)
 **
 ** @return [void]
 ******************************************************************************/
+
 void embIepCalcK(double *K)
 {
     ajint i;
@@ -198,11 +226,14 @@ void embIepCalcK(double *K)
 
     for(i=0;i<EMBIEPSIZE;++i)
 	if(!AjpK[i])
-	    K[i]=0.0;
+	    K[i] = 0.0;
 	else
-	    K[i]=embIepPkToK(AjpK[i]);
+	    K[i] = embIepPkToK(AjpK[i]);
+
     return;
 }
+
+
 
 
 /* @func embIepGetProto  ******************************************************
@@ -240,6 +271,8 @@ void embIepGetProto(double *K, ajint *c, ajint *op, double H, double *pro)
 
     return;
 }
+
+
 
 
 /* @func embIepGetCharge  *****************************************************
@@ -288,38 +321,39 @@ double embIepGetCharge(ajint *c, double *pro, double *total)
 
 double embIepPhConverge(ajint *c, double *K, ajint *op, double *pro)
 {
-    double sum=0.0;
+    double sum = 0.0;
     double charge;
     double top;
     double mid;
     double bot;
     double H;
-    double tph=1.0;
-    double bph=14.0;
+    double tph = 1.0;
+    double bph = 14.0;
 
-    H=embIepPhToHConc(tph);
+    H = embIepPhToHConc(tph);
     embIepGetProto(K,c,op,H,pro);
-    top=embIepGetCharge(c,pro,&sum);
-    H=embIepPhToHConc(bph);
+    top = embIepGetCharge(c,pro,&sum);
+    H = embIepPhToHConc(bph);
     embIepGetProto(K,c,op,H,pro);
-    bot=embIepGetCharge(c,pro,&sum);
+    bot = embIepGetCharge(c,pro,&sum);
     if((top>0.0 && bot>0.0) || (top<0.0 && bot<0.0))
 	return 0.0;
 
     while(bph-tph>0.0001)
     {
 	mid = ((bph-tph) / 2.0) + tph;
-	H=embIepPhToHConc(mid);
+	H = embIepPhToHConc(mid);
 	embIepGetProto(K,c,op,H,pro);
-	charge=embIepGetCharge(c,pro,&sum);
+	charge = embIepGetCharge(c,pro,&sum);
 	if(charge>0.0)
 	{
-	    tph=mid;
+	    tph = mid;
 	    continue;
 	}
+
 	if(charge<0.0)
 	{
-	    bph=mid;
+	    bph = mid;
 	    continue;
 	}
 	else
@@ -328,6 +362,7 @@ double embIepPhConverge(ajint *c, double *K, ajint *op, double *pro)
 
     return tph;
 }
+
 
 
 
@@ -342,31 +377,34 @@ double embIepPhConverge(ajint *c, double *K, ajint *op, double *pro)
 **
 ** @return [AjBool] True if IEP exists
 ******************************************************************************/
+
 AjBool embIepIEP(char *s, ajint amino, double *iep, AjBool termini)
 {
-    ajint *c=NULL;
-    ajint *op=NULL;
-    double *K=NULL;
-    double *pro=NULL;
+    ajint *c    = NULL;
+    ajint *op   = NULL;
+    double *K   = NULL;
+    double *pro = NULL;
 
-    *iep=0.0;
+    *iep = 0.0;
 
-    AJCNEW (c,   EMBIEPSIZE);
-    AJCNEW (op,  EMBIEPSIZE);
-    AJCNEW (K,   EMBIEPSIZE);
-    AJCNEW (pro, EMBIEPSIZE);
+    AJCNEW(c,   EMBIEPSIZE);
+    AJCNEW(op,  EMBIEPSIZE);
+    AJCNEW(K,   EMBIEPSIZE);
+    AJCNEW(pro, EMBIEPSIZE);
 
     embIepPkRead();			/* read pK's */
     embIepCalcK(K);			/* Convert to dissoc consts */
     embIepComp(s,amino,c);		/* Get sequence composition */
-    if(!termini)
-	c[EMBIEPAMINO]=c[EMBIEPCARBOXYL]=0;
-    *iep=embIepPhConverge(c,K,op,pro);
 
-    AJFREE (pro);
-    AJFREE (K);
-    AJFREE (op);
-    AJFREE (c);
+    if(!termini)
+	c[EMBIEPAMINO] = c[EMBIEPCARBOXYL] = 0;
+
+    *iep = embIepPhConverge(c,K,op,pro);
+
+    AJFREE(pro);
+    AJFREE(K);
+    AJFREE(op);
+    AJFREE(c);
 
     if(!*iep)
 	return ajFalse;

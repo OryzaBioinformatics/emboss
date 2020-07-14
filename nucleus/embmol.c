@@ -25,7 +25,13 @@
 #include "stdio.h"
 #include "math.h"
 
+
+
+
 static ajint embMolFragSort(const void* a, const void* b);
+
+
+
 
 /* @func embMolGetFrags *******************************************************
 **
@@ -57,14 +63,15 @@ ajint embMolGetFrags(AjPStr thys, ajint rno, AjPList *l)
 	{"Chymotrypsin","FYWLM","CCCCC",""},
 	{"CNBr","M","C",""}
     };
-    EmbPMolFrag frag=NULL;
-    EmbPMolFrag *ptr=NULL;
+
+    EmbPMolFrag frag = NULL;
+    EmbPMolFrag *ptr = NULL;
 
     ajint len;
     ajint pos;
     char *p;
 
-    static AjPInt defcut=NULL;
+    static AjPInt defcut =NULL;
     ajint defcnt;
 
     ajint beg;
@@ -88,12 +95,16 @@ ajint embMolGetFrags(AjPStr thys, ajint rno, AjPList *l)
     {
 	if(!strchr(zyme[rno].residues,(ajint)p[pos]))
 	    continue;
+
 	if(len==pos+1)
 	    continue;
+
 	if(p[pos+1]=='P' && rno!=3 && rno!=7)
 	    continue;
+
 	if(rno==4 && p[pos+1]=='E')
 	    continue;
+
 	ajIntPut(&defcut,defcnt++,pos);
     }
 
@@ -116,6 +127,7 @@ ajint embMolGetFrags(AjPStr thys, ajint rno, AjPList *l)
 	ajListPush(*l,(void *)frag);
 	beg = end+1;
     }
+
     if(defcnt)
     {
 	mw = embPropCalcMolwt(p,beg,len-1);
@@ -123,11 +135,10 @@ ajint embMolGetFrags(AjPStr thys, ajint rno, AjPList *l)
 	    mw -= (double)(17.0079 + 31.095);
 	AJNEW0(frag);
 	frag->begin = beg+1;
-	frag->end = len;
-	frag->mwt = mw;
+	frag->end   = len;
+	frag->mwt   = mw;
 	ajListPush(*l,(void *)frag);
     }
-
 
     /* Overlaps */
     if(defcnt)
@@ -153,6 +164,7 @@ ajint embMolGetFrags(AjPStr thys, ajint rno, AjPList *l)
 
     return ajListLength(*l);
 }
+
 
 
 

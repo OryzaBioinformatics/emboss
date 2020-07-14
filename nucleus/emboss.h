@@ -21,5 +21,6 @@
 #include "embmisc.h"
 #include "embmol.h"
 #include "embxyz.h"
+#include "embindex.h"
 
 #endif

@@ -1,3 +1,23 @@
+/* @source embaln.c
+**
+** General matchroutines
+** Copyright (c) 1999 Alan Bleasby
+**
+** This program is free software; you can redistribute it and/or
+** modify it under the terms of the GNU General Public License
+** as published by the Free Software Foundation; either version 2
+** of the License, or (at your option) any later version.
+**
+** This program is distributed in the hope that it will be useful,
+** but WITHOUT ANY WARRANTY; without even the implied warranty of
+** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+** GNU General Public License for more details.
+**
+** You should have received a copy of the GNU General Public License
+** along with this program; if not, write to the Free Software
+** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+******************************************************************************/
+
 #include "ajax.h"
 #include "embmat.h"
 #include "stdlib.h"
@@ -5,7 +25,7 @@
 
 
 static void matPushHitInt(AjPStr *n, EmbPMatPrints *m, AjPList *l, ajint pos,
-			       ajint score, ajint elem, ajint hpe, ajint hpm);
+			  ajint score, ajint elem, ajint hpe, ajint hpm);
 
 
 
@@ -28,20 +48,20 @@ static void matPushHitInt(AjPStr *n, EmbPMatPrints *m, AjPList *l, ajint pos,
 ******************************************************************************/
 
 static void matPushHitInt(AjPStr *n, EmbPMatPrints *m, AjPList *l, ajint pos,
-			       ajint score, ajint elem, ajint hpe, ajint hpm)
+			  ajint score, ajint elem, ajint hpe, ajint hpm)
 {
     EmbPMatMatch mat;
 
     AJNEW0 (mat);
-    mat->seqname=ajStrNewC(ajStrStr(*n));
-    mat->cod=ajStrNewC(ajStrStr((*m)->cod));
-    mat->acc=ajStrNewC(ajStrStr((*m)->acc));
-    mat->tit=ajStrNewC(ajStrStr((*m)->tit));
-    mat->pat=ajStrNew();
-    mat->n = (*m)->n;
-    mat->len = (*m)->len[elem];
-    mat->thresh = (*m)->thresh[elem];
-    mat->max = (*m)->max[elem];
+    mat->seqname = ajStrNewC(ajStrStr(*n));
+    mat->cod     = ajStrNewC(ajStrStr((*m)->cod));
+    mat->acc     = ajStrNewC(ajStrStr((*m)->acc));
+    mat->tit     = ajStrNewC(ajStrStr((*m)->tit));
+    mat->pat     = ajStrNew();
+    mat->n       = (*m)->n;
+    mat->len     = (*m)->len[elem];
+    mat->thresh  = (*m)->thresh[elem];
+    mat->max     = (*m)->max[elem];
     mat->element = elem;
     mat->start   = pos;
     mat->score   = score;
@@ -49,7 +69,6 @@ static void matPushHitInt(AjPStr *n, EmbPMatPrints *m, AjPList *l, ajint pos,
     mat->hpm     = hpm;
     mat->all	 = ajFalse;
     mat->ordered = ajFalse;
-
 
     ajListPush(*l,(void *)mat);
 
@@ -85,6 +104,7 @@ void embMatMatchDel(EmbPMatMatch *s)
 
 
 
+
 /* @func embMatPrintsInit *****************************************************
 **
 ** Initialise file pointer to the EMBOSS PRINTS data file
@@ -95,12 +115,14 @@ void embMatMatchDel(EmbPMatMatch *s)
 
 void embMatPrintsInit(AjPFile *fp)
 {
-
     ajFileDataNewC(PRINTS_MAT,fp);
+
     if(!*fp)
 	ajFatal("prints.mat file not found. Create it with printsextract.");
+
     return;
 }
+
 
 
 
@@ -126,7 +148,7 @@ AjBool embMatProtReadInt(AjPFile *fp, EmbPMatPrints *s)
 
     line = ajStrNewC("#");
 
-    p=ajStrStr(line);
+    p = ajStrStr(line);
     while(!*p || *p=='#' || *p=='!' || *p=='\n')
     {
 	if(!ajFileReadLine(*fp,&line))
@@ -134,53 +156,59 @@ AjBool embMatProtReadInt(AjPFile *fp, EmbPMatPrints *s)
 	    ajStrDel(&line);
 	    return ajFalse;
 	}
-	p=ajStrStr(line);
+	p = ajStrStr(line);
     }
 
     AJNEW0 (*s);
 
     (*s)->cod = ajStrNew();
-    (void) ajStrAss(&(*s)->cod,line);
+    ajStrAss(&(*s)->cod,line);
 
-    (void) ajFileReadLine(*fp,&line);
+    ajFileReadLine(*fp,&line);
     (*s)->acc = ajStrNew();
-    (void) ajStrAss(&(*s)->acc,line);
-    (void) ajFileReadLine(*fp,&line);
-    (void) ajStrToInt(line,&(*s)->n);
-    (void) ajFileReadLine(*fp,&line);
+    ajStrAss(&(*s)->acc,line);
+    ajFileReadLine(*fp,&line);
+    ajStrToInt(line,&(*s)->n);
+    ajFileReadLine(*fp,&line);
     (*s)->tit = ajStrNew();
-    (void) ajStrAss(&(*s)->tit,line);
+    ajStrAss(&(*s)->tit,line);
 
-    AJCNEW ((*s)->len, (*s)->n);
-    AJCNEW ((*s)->max, (*s)->n);
-    AJCNEW ((*s)->thresh, (*s)->n);
-    AJCNEW ((*s)->matrix, (*s)->n);
+    AJCNEW((*s)->len, (*s)->n);
+    AJCNEW((*s)->max, (*s)->n);
+    AJCNEW((*s)->thresh, (*s)->n);
+    AJCNEW((*s)->matrix, (*s)->n);
 
     for(m=0;m<(*s)->n;++m)
     {
-	(void) ajFileReadLine(*fp,&line);
-	(void) ajStrToInt(line,&(*s)->len[m]);
-	(void) ajFileReadLine(*fp,&line);
-	(void) ajStrToInt(line,&(*s)->thresh[m]);
-	(void) ajFileReadLine(*fp,&line);
-	(void) ajStrToInt(line,&(*s)->max[m]);
+	ajFileReadLine(*fp,&line);
+	ajStrToInt(line,&(*s)->len[m]);
+	ajFileReadLine(*fp,&line);
+	ajStrToInt(line,&(*s)->thresh[m]);
+	ajFileReadLine(*fp,&line);
+	ajStrToInt(line,&(*s)->max[m]);
 	for(i=0;i<26;++i)
 	{
 	    AJCNEW((*s)->matrix[m][i], (*s)->len[m]);
-	    (void) ajFileReadLine(*fp,&line);
-	    p=ajStrStr(line);
+	    ajFileReadLine(*fp,&line);
+	    p = ajStrStr(line);
 	    for(j=0;j<(*s)->len[m];++j)
 	    {
-		if(!j) p=strtok(p," ");
-		else   p=strtok(NULL," ");
-		(void) sscanf(p,"%d",&(*s)->matrix[m][i][j]);
+		if(!j)
+		    p = strtok(p," ");
+		else
+		    p = strtok(NULL," ");
+		sscanf(p,"%d",&(*s)->matrix[m][i][j]);
 	    }
 	}
     }
-    (void) ajFileReadLine(*fp,&line);
+
+    ajFileReadLine(*fp,&line);
+
     ajStrDel(&line);
+
     return ajTrue;
 }
+
 
 
 
@@ -202,7 +230,8 @@ void embMatProtDelInt(EmbPMatPrints *s)
     n = (*s)->n;
 
     for(i=0;i<n;++i)
-	for(j=0;j<26;++j) AJFREE((*s)->matrix[i][j]);
+	for(j=0;j<26;++j)
+	    AJFREE((*s)->matrix[i][j]);
 
     AJFREE((*s)->matrix);
     AJFREE((*s)->len);
@@ -213,7 +242,10 @@ void embMatProtDelInt(EmbPMatPrints *s)
     ajStrDel(&(*s)->acc);
     ajStrDel(&(*s)->tit);
     AJFREE(*s);
+
+    return;
 }
+
 
 
 
@@ -233,7 +265,7 @@ void embMatProtDelInt(EmbPMatPrints *s)
 ******************************************************************************/
 
 ajint embMatProtScanInt(AjPStr *s, AjPStr *n, EmbPMatPrints *m, AjPList *l,
-			   AjBool *all, AjBool *ordered, AjBool overlap)
+			AjBool *all, AjBool *ordered, AjBool overlap)
 {
     EmbPMatMatch mm;
     AjPStr t;
@@ -258,11 +290,12 @@ ajint embMatProtScanInt(AjPStr *s, AjPStr *n, EmbPMatPrints *m, AjPList *l,
     ajint j;
 
     t = ajStrNewC(ajStrStr(*s));
-    (void) ajStrToUpper(&t);
+    ajStrToUpper(&t);
     p = q = ajStrStr(t);
     slen = ajStrLen(t);
-    for(i=0;i<slen;++i,++p) *p=ajSysItoC(ajAZToInt((ajint)*p));
-    p=q;
+    for(i=0;i<slen;++i,++p)
+	*p = ajSysItoC(ajAZToInt((ajint)*p));
+    p = q;
 
     *all = *ordered = ajTrue;
     lastelem = lastpos = INT_MAX;
@@ -271,7 +304,7 @@ ajint embMatProtScanInt(AjPStr *s, AjPStr *n, EmbPMatPrints *m, AjPList *l,
 
     for(elem=(*m)->n - 1;elem >= 0;--elem)
     {
-	hpe=0;
+	hpe = 0;
 
 	mlen     = (*m)->len[elem];
 	minpc    = (*m)->thresh[elem];
@@ -280,26 +313,28 @@ ajint embMatProtScanInt(AjPStr *s, AjPStr *n, EmbPMatPrints *m, AjPList *l,
 	limit = slen-mlen;
 	for(i=0;i<limit;++i)
 	{
-	    sum=0;
+	    sum = 0;
 	    for(j=0;j<mlen;++j)
-		sum+=(*m)->matrix[elem][(ajint) p[i+j]][j];
-	    score=(sum*100)/maxscore;
+		sum += (*m)->matrix[elem][(ajint) p[i+j]][j];
+	    score = (sum*100)/maxscore;
 	    if(score>=minpc)
 	    {
 		if(elem<lastelem && *ordered)
 		{
 		    if(lastelem == INT_MAX)
 		    {
-			lastelem=elem;
-			lastpos=i;
+			lastelem = elem;
+			lastpos  = i;
 		    }
 		    else
 		    {
-			lastelem=elem;
-			op=i;
-			if(!overlap) op+=mlen;
-			if(op >= lastpos) *ordered=ajFalse;
-			lastpos=i;
+			lastelem = elem;
+			op = i;
+			if(!overlap)
+			    op += mlen;
+			if(op >= lastpos)
+			    *ordered = ajFalse;
+			lastpos = i;
 		    }
 		}
 
@@ -308,27 +343,33 @@ ajint embMatProtScanInt(AjPStr *s, AjPStr *n, EmbPMatPrints *m, AjPList *l,
 		matPushHitInt(n,m,l,i,score,elem,hpe,hpm);
 	    }
 	}
-	if(!hpe) *all=ajFalse;
+	if(!hpe)
+	    *all = ajFalse;
     }
 
     if(hpm)
     {
-	(void) ajListPop(*l,(void **)&mm);
+	ajListPop(*l,(void **)&mm);
 	if(*all)
 	{
 	    mm->all = ajTrue;
-	    if(*ordered) mm->ordered=ajTrue;
-	    else mm->ordered=ajFalse;
+	    if(*ordered)
+		mm->ordered = ajTrue;
+	    else
+		mm->ordered = ajFalse;
 	}
 	else
 	{
-	    mm->all=ajFalse;
-	    if(*ordered) mm->ordered=ajTrue;
-	    else mm->ordered=ajFalse;
+	    mm->all = ajFalse;
+	    if(*ordered)
+		mm->ordered = ajTrue;
+	    else
+		mm->ordered = ajFalse;
 	}
 	ajListPush(*l,(void *)mm);
     }
 
     ajStrDel(&t);
+
     return hpm;
 }

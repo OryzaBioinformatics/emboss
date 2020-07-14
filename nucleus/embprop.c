@@ -30,6 +30,9 @@
 #include <string.h>
 #include <ctype.h>
 
+
+
+
 #define PROPENZTRYPSIN 0
 #define PROPENZLYSC    1
 #define PROPENZARGC    2
@@ -41,14 +44,18 @@
 
 #define AMINODATFILE "Eamino.dat"
 
-static AjBool propInit=0;
+static AjBool propInit = 0;
 
 double *EmbPropTable[EMBPROPSIZE];
 
-static char propPurines[] = "agrAGR";
+static char propPurines[]     = "agrAGR";
 static char propPyrimidines[] = "ctuyCTUY";
 
+
+
+
 static ajint propFragCompare(const void *a, const void *b);
+
 
 
 
@@ -56,34 +63,35 @@ static ajint propFragCompare(const void *a, const void *b);
 **
 ** Read amino acid properties from Eamino.dat
 **
-** @param [R] mfptr [AjPFile] Input file object
+** @param [r] mfptr [AjPFile] Input file object
 ** @return [void]
 ** @@
 ******************************************************************************/
 
 void embPropAminoRead(AjPFile mfptr)
 {
-  /*    AjPFile mfptr=NULL; */
-    AjPStr  line=NULL;
-    AjPStr  delim=NULL;
+    AjPStr  line  = NULL;
+    AjPStr  delim = NULL;
 
     char *p;
 
-    ajint cols=0;
-
+    ajint cols = 0;
 
     if(propInit)
 	return;
 
-
-    line=ajStrNew();
-    delim=ajStrNewC(" :\t\n");
+    line  = ajStrNew();
+    delim = ajStrNewC(" :\t\n");
 
     while(ajFileGets(mfptr, &line))
     {
-	p=ajStrStr(line);
-	if(*p=='#' || *p=='!' || !*p) continue;
-	while(*p && (*p<'A' || *p>'Z')) ++p;
+	p = ajStrStr(line);
+	if(*p=='#' || *p=='!' || !*p)
+	    continue;
+
+	while(*p && (*p<'A' || *p>'Z'))
+	    ++p;
+
 	cols = ajStrTokenCount(&line,ajStrStr(delim));
 	EmbPropTable[ajAZToInt(toupper((ajint)*p))] =
 	    ajArrDoubleLine(&line,ajStrStr(delim),cols,2,cols);
@@ -93,9 +101,11 @@ void embPropAminoRead(AjPFile mfptr)
     ajStrDel(&line);
     ajStrDel(&delim);
 
-    propInit=ajTrue;
+    propInit = ajTrue;
+
     return;
 }
+
 
 
 
@@ -111,11 +121,13 @@ void embPropAminoRead(AjPFile mfptr)
 ** @return [double] molecular weight
 ** @@
 ******************************************************************************/
+
 double embPropCalcMolwt(char *s, ajint start, ajint end)
 {
-
-  return embPropCalcMolwtMod(s,start,end,EMBPROPMSTN_H, EMBPROPMSTC_OH );
+    return embPropCalcMolwtMod(s,start,end,EMBPROPMSTN_H, EMBPROPMSTC_OH );
 }
+
+
 
 
 /* @func embPropCalcMolwtMod  *************************************************
@@ -132,10 +144,10 @@ double embPropCalcMolwt(char *s, ajint start, ajint end)
 ** @return [double] molecular weight
 ** @@
 ******************************************************************************/
+
 double embPropCalcMolwtMod(char *s, ajint start, ajint end, double nmass,
 			   double cmass)
 {
-
     char *p;
     double sum;
     ajint i;
@@ -143,17 +155,54 @@ double embPropCalcMolwtMod(char *s, ajint start, ajint end, double nmass,
 
     if(!propInit)
       ajFatal("Amino Acid data not initialised. Call embPropAminoRead");
-    /*embPropAminoRead();*/
 
     len = end-start+1;
 
-    p=s+start;
-    sum=0.0;
+    p = s+start;
+    sum = 0.0;
 
     for(i=0;i<len;++i)
 	sum += EmbPropTable[ajAZToInt(toupper((ajint)p[i]))][EMBPROPMOLWT];
 
     return sum + nmass + cmass;
+}
+
+
+
+
+/* @func embPropCalcMolextcoeff*********************************************
+**
+** Calculate the molecular extinction coefficient of a protein sequence
+**
+** @param [r] s [char *] sequence
+** @param [r] start [ajint] start position
+** @param [r] end [ajint] end position
+**
+** @return [double] molar extinction coefficient
+** @@
+******************************************************************************/
+
+double embPropCalcMolextcoeff(char *s, ajint start, ajint end)
+{
+
+    char *p;
+    double sum;
+    ajint i;
+    ajint len;
+    
+    if(!propInit)
+	ajFatal("Amino Acid data not initialised. Call embPropAminoRead");
+
+    len = end-start+1;
+    
+    p   = s+start;
+    sum = 0.0;
+
+    for(i=0;i<len;++i)
+	sum += EmbPropTable[ajAZToInt(toupper((ajint)p[i]))]
+	    [EMBPROPABSORBANCE];
+
+    return sum;
 }
 
 
@@ -168,10 +217,12 @@ double embPropCalcMolwtMod(char *s, ajint start, ajint end, double nmass,
 ** @return [char*] three letter amino acid code
 ** @@
 ******************************************************************************/
+
 char* embPropCharToThree(char c)
 {
     return embPropIntToThree(ajAZToInt(c));
 }
+
 
 
 
@@ -184,6 +235,7 @@ char* embPropCharToThree(char c)
 ** @return [char*] three letter amino acid code
 ** @@
 ******************************************************************************/
+
 char* embPropIntToThree(ajint c)
 {
     static char *tab[]=
@@ -193,9 +245,10 @@ char* embPropIntToThree(ajint c)
 	"Val","Trp","Xaa","Tyr","Glx"
     };
 
-
     return tab[c];
 }
+
+
 
 
 /* @func embPropCalcFragments  ************************************************
@@ -217,11 +270,12 @@ char* embPropIntToThree(ajint c)
 ** @return [void]
 ** @@
 ******************************************************************************/
+
 void embPropCalcFragments(char *s, ajint n, ajint begin,
 			  AjPList *l, AjPList *pa,
-			 AjBool unfavoured, AjBool overlap,
-			 AjBool allpartials, ajint *ncomp, ajint *npart,
-			 AjPStr *rname)
+			  AjBool unfavoured, AjBool overlap,
+			  AjBool allpartials, ajint *ncomp, ajint *npart,
+			  AjPStr *rname)
 {
     static char *PROPENZReagent[]=
     {
@@ -251,11 +305,11 @@ void embPropCalcFragments(char *s, ajint n, ajint begin,
     ajint len;
     AjPList t;
     EmbPPropFrag fr;
-    ajint *begsa=NULL;
-    ajint *endsa=NULL;
+    ajint *begsa = NULL;
+    ajint *endsa = NULL;
     double molwt;
-    double *molwtsa=NULL;
-    AjBool *afrag=NULL;
+    double *molwtsa = NULL;
+    AjBool *afrag   = NULL;
     ajint mark;
     ajint bwp;
     ajint ewp;
@@ -263,76 +317,86 @@ void embPropCalcFragments(char *s, ajint n, ajint begin,
     ajint defcnt;
 
 
-    (void) ajStrAssC(rname,PROPENZReagent[n]);
+    ajStrAssC(rname,PROPENZReagent[n]);
     defcnt = 0;
     len = strlen(s);
 
-    t=ajListNew();		/* Temporary list */
+    t = ajListNew();			/* Temporary list */
 
 
     /* First get all potential cut points */
     for(i=0;i<len;++i)
     {
-	if(!strchr(PROPENZSite[n],s[i])) continue;   /* A cut residue?       */
-	if(len==i+1) continue;			   /* Is there a followup? */
-	if(strchr(PROPENZUnfavoured[n],s[i+1])      /* Followed by naughty? */
-	   && !unfavoured) continue;
+	if(!strchr(PROPENZSite[n],s[i]))
+	    continue;
+
+	if(len==i+1)
+	    continue;
+
+	if(strchr(PROPENZUnfavoured[n],s[i+1])
+	   && !unfavoured)
+	    continue;
+
 	AJNEW0(ival);
-	*ival=i;
+	*ival = i;
 	ajListPushApp(t,(void *)ival);
 	++defcnt;
     }
 
     if(defcnt)
     {
-      AJCNEW (begsa, (defcnt+1));
-      AJCNEW (endsa, (defcnt+1));
-      AJCNEW (molwtsa, (defcnt+1));
-      AJCNEW (afrag, (defcnt+1));
+	AJCNEW(begsa,(defcnt+1));
+	AJCNEW(endsa,(defcnt+1));
+	AJCNEW(molwtsa,(defcnt+1));
+	AJCNEW(afrag,(defcnt+1));
     }
 
-    for(i=0;i<defcnt;++i)	/* Pop them into a temporary array 	 */
+    for(i=0;i<defcnt;++i)  /* Pop them into a temporary array 	 */
     {
-	(void) ajListPop(t,(void **)&ival);
-	endsa[i]=*ival;
+	ajListPop(t,(void **)&ival);
+	endsa[i] = *ival;
 	AJFREE(ival);
     }
 
 
-    mark=0;
-    for(i=0;i<defcnt;++i)	/* Work out true starts, ends and molwts */
+    mark = 0;
+    for(i=0;i<defcnt;++i)  /* Work out true starts, ends and molwts */
     {
-	bwp=mark;
-	ewp=endsa[i];
-	if(strchr(PROPENZAminoCarboxyl[n],'N')) --ewp;
+	bwp = mark;
+	ewp = endsa[i];
+	if(strchr(PROPENZAminoCarboxyl[n],'N'))
+	    --ewp;
 	molwt=embPropCalcMolwt(s,bwp,ewp);
+
 	if(n==PROPENZCNBR)
 	    molwt -= (17.045 + 31.095);
-	begsa[i]=mark;
-	endsa[i]=ewp;
-	molwtsa[i]=molwt;
-	afrag[i]=ajFalse;
-	mark=ewp+1;
+
+	begsa[i]   = mark;
+	endsa[i]   = ewp;
+	molwtsa[i] = molwt;
+	afrag[i]   = ajFalse;
+	mark       = ewp+1;
     }
-    if(defcnt)			/* Special treatment for last fragment   */
+
+    if(defcnt)		   /* Special treatment for last fragment   */
     {
-	molwt=embPropCalcMolwt(s,mark,len-1);
+	molwt = embPropCalcMolwt(s,mark,len-1);
 	if(n==PROPENZCNBR)
 	    molwt -= (17.045 + 31.095);
-	begsa[i]=mark;
-	endsa[i]=len-1;
-	molwtsa[i]=molwt;
-	afrag[i]=ajFalse;
+	begsa[i]   = mark;
+	endsa[i]   = len-1;
+	molwtsa[i] = molwt;
+	afrag[i]   = ajFalse;
 	++defcnt;
     }
 
     /* Push the hits */
     for(i=0;i<defcnt;++i)
     {
-	AJNEW0 (fr);
-	fr->start = begsa[i];
-	fr->end   = endsa[i];
-	fr->molwt = molwtsa[i];
+	AJNEW0(fr);
+	fr->start  = begsa[i];
+	fr->end    = endsa[i];
+	fr->molwt  = molwtsa[i];
 	fr->isfrag = afrag[i];
 	ajListPush(*l,(void *) fr);
     }
@@ -349,9 +413,9 @@ void embPropCalcFragments(char *s, ajint n, ajint begin,
     {
 	for(i=0;i<lim;++i)
 	{
-	    AJNEW0 (fr);
+	    AJNEW0(fr);
 	    fr->isfrag = ajTrue;
-	    fr->molwt=embPropCalcMolwt(s,begsa[i],endsa[i+1]);
+	    fr->molwt = embPropCalcMolwt(s,begsa[i],endsa[i+1]);
 	    if(n==PROPENZCNBR)
 		fr->molwt -= (17.045 + 31.095);
 	    fr->start = begsa[i];
@@ -359,10 +423,11 @@ void embPropCalcFragments(char *s, ajint n, ajint begin,
 	    ajListPush(*pa,(void *)fr);
 	    ++(*npart);
 	}
-	if(*npart)		/* Remove complete sequence */
+
+	if(*npart)			/* Remove complete sequence */
 	{
 	    --(*npart);
-	    (void) ajListPop(*pa,(void **)&fr);
+	    ajListPop(*pa,(void **)&fr);
 	}
 	ajListSort(*pa,propFragCompare);
     }
@@ -372,9 +437,9 @@ void embPropCalcFragments(char *s, ajint n, ajint begin,
 	for(i=0;i<lim;++i)
 	    for(j=i+1;j<lim;++j)
 	    {
-		AJNEW0 (fr);
+		AJNEW0(fr);
 		fr->isfrag = ajTrue;
-		fr->molwt=embPropCalcMolwt(s,begsa[i],endsa[j]);
+		fr->molwt = embPropCalcMolwt(s,begsa[i],endsa[j]);
 		if(n==PROPENZCNBR)
 		    fr->molwt -= (17.045 + 31.095);
 		fr->start = begsa[i];
@@ -382,10 +447,11 @@ void embPropCalcFragments(char *s, ajint n, ajint begin,
 		ajListPush(*pa,(void *)fr);
 		++(*npart);
 	    }
-	if(*npart)		/* Remove complete sequence */
+
+	if(*npart)			/* Remove complete sequence */
 	{
 	    --(*npart);
-	    (void) ajListPop(*pa,(void **)&fr);
+	    ajListPop(*pa,(void **)&fr);
 	}
 	ajListSort(*pa,propFragCompare);
     }
@@ -399,8 +465,10 @@ void embPropCalcFragments(char *s, ajint n, ajint begin,
     }
 
     ajListFree(&t);
+
     return;
 }
+
 
 
 
@@ -414,10 +482,14 @@ void embPropCalcFragments(char *s, ajint n, ajint begin,
 ** @return [ajint] 0=equal +ve=(a greater than b) -ve=(a less than b)
 ** @@
 ******************************************************************************/
+
 static ajint propFragCompare(const void *a, const void *b)
 {
     return (ajint)((*(EmbPPropFrag *)b)->molwt - (*(EmbPPropFrag *)a)->molwt);
 }
+
+
+
 
 /* @func embPropProtGaps ******************************************************
 **
@@ -431,25 +503,30 @@ static ajint propFragCompare(const void *a, const void *b)
 ** @@
 ******************************************************************************/
 
-AjPStr embPropProtGaps (AjPSeq seq, ajint pad) {
+AjPStr embPropProtGaps(AjPSeq seq, ajint pad)
+{
+    char *p;
+    AjPStr temp;
+    ajint i;
 
-  char *p;
-  AjPStr temp = ajStrNewL(ajSeqLen(seq)*3 + pad+1);
-  ajint i;
+    temp = ajStrNewL(ajSeqLen(seq)*3 + pad+1);
 
-/* put any required padding spaces at the start */
-  for (i=0; i<pad; i++) {
-    (void) ajStrAppC(&temp, " ");
-  }
+    /* put any required padding spaces at the start */
+    for(i=0; i<pad; i++)
+	ajStrAppC(&temp, " ");
 
-  for (p=ajSeqChar(seq); *p; p++) {
-    (void) ajStrAppK(&temp, *p);
-    (void) ajStrAppC(&temp, "  ");
-  }
 
-  return temp;
+    for(p=ajSeqChar(seq); *p; p++)
+    {
+	ajStrAppK(&temp, *p);
+	ajStrAppC(&temp, "  ");
+    }
 
+    return temp;
 }
+
+
+
 
 /* @func embPropProt1to3 ******************************************************
 **
@@ -463,36 +540,44 @@ AjPStr embPropProtGaps (AjPSeq seq, ajint pad) {
 ** @@
 ******************************************************************************/
 
-AjPStr embPropProt1to3 (AjPSeq seq, ajint pad) {
+AjPStr embPropProt1to3(AjPSeq seq, ajint pad)
+{
+    char *p;
+    char *p3;
+    AjPStr temp;
+    ajint i;
 
-  char *p, *p3;
-  AjPStr temp = ajStrNewL(ajSeqLen(seq)*3 + pad+1);
-  ajint i;
+    temp = ajStrNewL(ajSeqLen(seq)*3 + pad+1);
 
-/* put any required padding spaces at the start */
-  for (i=0; i<pad; i++) {
-    (void) ajStrAppC(&temp, " ");
-  }
+    /* put any required padding spaces at the start */
+    for(i=0; i<pad; i++)
+	ajStrAppC(&temp, " ");
 
-  for (p=ajSeqChar(seq); *p; p++) {
-    if (*p == '*') {
-      (void) ajStrAppC(&temp, "***");
-    } else if (*p == '.') {
-      (void) ajStrAppC(&temp, "...");
-    } else if (*p == '-') {
-      (void) ajStrAppC(&temp, "---");
-    } else if (!isalpha((ajint)*p)) {
-      (void) ajStrAppC(&temp, "???");
-    } else {
-      p3 = embPropCharToThree(*p);
-      (void) ajStrAppK(&temp, *p3);
-      (void) ajStrAppK(&temp, *(p3+1));
-      (void) ajStrAppK(&temp, *(p3+2));
+
+    for(p=ajSeqChar(seq); *p; p++)
+    {
+	if(*p == '*')
+	    ajStrAppC(&temp, "***");
+	else if(*p == '.')
+	    ajStrAppC(&temp, "...");
+	else if(*p == '-')
+	    ajStrAppC(&temp, "---");
+	else if(!isalpha((ajint)*p))
+	    ajStrAppC(&temp, "???");
+	else
+	{
+	    p3 = embPropCharToThree(*p);
+	    ajStrAppK(&temp, *p3);
+	    ajStrAppK(&temp, *(p3+1));
+	    ajStrAppK(&temp, *(p3+2));
+	}
     }
-  }
 
-  return temp;
+    return temp;
 }
+
+
+
 
 /* @func embPropPurine ********************************************************
 **
@@ -504,11 +589,12 @@ AjPStr embPropProt1to3 (AjPSeq seq, ajint pad) {
 ** @@
 ******************************************************************************/
 
-AjBool embPropPurine (char base) {
-
-  return (strchr(propPurines, (ajint)base) != NULL);
-
+AjBool embPropPurine(char base)
+{
+    return (strchr(propPurines, (ajint)base) != NULL);
 }
+
+
 
 
 /* @func embPropPyrimidine ****************************************************
@@ -521,11 +607,12 @@ AjBool embPropPurine (char base) {
 ** @@
 ******************************************************************************/
 
-AjBool embPropPyrimidine (char base) {
-
-  return (strchr(propPyrimidines, (ajint)base) != NULL);
-
+AjBool embPropPyrimidine(char base)
+{
+    return (strchr(propPyrimidines, (ajint)base) != NULL);
 }
+
+
 
 
 /* @func embPropTransversion **************************************************
@@ -541,29 +628,35 @@ AjBool embPropPyrimidine (char base) {
 ** @@
 ******************************************************************************/
 
-AjBool embPropTransversion (char base1, char base2) {
-  AjBool u1, u2;
-  AjBool y1, y2;
+AjBool embPropTransversion(char base1, char base2)
+{
+    AjBool u1;
+    AjBool u2;
+    AjBool y1;
+    AjBool y2;
 
-  u1 = embPropPurine(base1);
-  u2 = embPropPurine(base2);
+    u1 = embPropPurine(base1);
+    u2 = embPropPurine(base2);
 
-  y1 = embPropPyrimidine(base1);
-  y2 = embPropPyrimidine(base2);
+    y1 = embPropPyrimidine(base1);
+    y2 = embPropPyrimidine(base2);
 
-  ajDebug("base1 py = %d, pu = %d", u1, y1);
-  ajDebug("base2 py = %d, pu = %d", u2, y2);
+    ajDebug("base1 py = %d, pu = %d", u1, y1);
+    ajDebug("base2 py = %d, pu = %d", u2, y2);
 
 
-/* not a purine or a pyrimidine - ambiguous - return ajFalse */
-  if (!u1 && !y1) return ajFalse;
-  if (!u2 && !y2) return ajFalse;
+    /* not a purine or a pyrimidine - ambiguous - return ajFalse */
+    if(!u1 && !y1)
+	return ajFalse;
 
-  ajDebug("embPropTransversion result = %d", (u1 != u2));
+    if(!u2 && !y2)
+	return ajFalse;
 
-  return (u1 != u2);
+    ajDebug("embPropTransversion result = %d", (u1 != u2));
 
+    return (u1 != u2);
 }
+
 
 
 
@@ -580,42 +673,54 @@ AjBool embPropTransversion (char base1, char base2) {
 ** @@
 ******************************************************************************/
 
-AjBool embPropTransition (char base1, char base2) {
-  AjBool u1, u2;
-  AjBool y1, y2;
+AjBool embPropTransition(char base1, char base2)
+{
+    AjBool u1;
+    AjBool u2;
+    AjBool y1;
+    AjBool y2;
 
-  u1 = embPropPurine(base1);
-  u2 = embPropPurine(base2);
+    u1 = embPropPurine(base1);
+    u2 = embPropPurine(base2);
 
-  y1 = embPropPyrimidine(base1);
-  y2 = embPropPyrimidine(base2);
+    y1 = embPropPyrimidine(base1);
+    y2 = embPropPyrimidine(base2);
 
-  ajDebug("base1 py = %d, pu = %d", u1, y1);
-  ajDebug("base2 py = %d, pu = %d", u2, y2);
+    ajDebug("base1 py = %d, pu = %d", u1, y1);
+    ajDebug("base2 py = %d, pu = %d", u2, y2);
 
-/* not a purine or a pyrimidine - ambiguous - return ajFalse */
-  if (!u1 && !y1) return ajFalse;
-  if (!u2 && !y2) return ajFalse;
+    /* not a purine or a pyrimidine - ambiguous - return ajFalse */
+    if(!u1 && !y1)
+	return ajFalse;
 
-/* no change - return ajFalse */
-  if (tolower((int)base1) == tolower((int)base2)) return ajFalse;
+    if(!u2 && !y2)
+	return ajFalse;
 
-/* U to T is not a transition */
-  if (tolower((int)base1) == 't' && tolower((int)base2) == 'u') return ajFalse;
-  if (tolower((int)base1) == 'u' && tolower((int)base2) == 't') return ajFalse;
+    /* no change - return ajFalse */
+    if(tolower((int)base1) == tolower((int)base2))
+	return ajFalse;
 
-/* C to Y, T to Y, A to R, G to R - ambiguous - not a transition */
-  if (u1 && tolower((int)base2) == 'r') return ajFalse;
-  if (u2 && tolower((int)base1) == 'r') return ajFalse;
-  if (y1 && tolower((int)base2) == 'y') return ajFalse;
-  if (y2 && tolower((int)base1) == 'y') return ajFalse;
+    /* U to T is not a transition */
+    if(tolower((int)base1) == 't' && tolower((int)base2) == 'u')
+	return ajFalse;
 
-  ajDebug("embPropTransition result = %d", (u1 == u2));
+    if(tolower((int)base1) == 'u' && tolower((int)base2) == 't')
+	return ajFalse;
 
-  return (u1 == u2);
+    /* C to Y, T to Y, A to R, G to R - ambiguous - not a transition */
+    if(u1 && tolower((int)base2) == 'r')
+	return ajFalse;
 
+    if(u2 && tolower((int)base1) == 'r')
+	return ajFalse;
+
+    if(y1 && tolower((int)base2) == 'y')
+	return ajFalse;
+
+    if(y2 && tolower((int)base1) == 'y')
+	return ajFalse;
+
+    ajDebug("embPropTransition result = %d", (u1 == u2));
+
+    return (u1 == u2);
 }
-
-
-
-

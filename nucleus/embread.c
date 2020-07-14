@@ -26,6 +26,7 @@
 
 
 
+
 /* @func embReadAminoDataDoubleC **********************************************
 **
 ** Read amino acid properties from amino.dat
@@ -37,6 +38,7 @@
 ** @return [AjBool] ajTrue on success
 ** @@
 ******************************************************************************/
+
 AjBool embReadAminoDataDoubleC(char *s, double **a, double fill)
 {
     AjPFile inf;
@@ -48,6 +50,7 @@ AjBool embReadAminoDataDoubleC(char *s, double **a, double fill)
 
     inf = ajFileNew();
     ajFileDataNewC(s,&inf);
+
     if(!inf)
     {
 	ajWarn("File [%s] not found",s);
@@ -56,15 +59,16 @@ AjBool embReadAminoDataDoubleC(char *s, double **a, double fill)
 
     *a = AJALLOC(AJREADAMINO*sizeof(double));
     for(i=0;i<AJREADAMINO;++i)
-	(*a)[i]=fill;
+	(*a)[i] = fill;
 
     line = ajStrNew();
     while(ajFileReadLine(inf,&line))
     {
-	p=ajStrStr(line);
+	p = ajStrStr(line);
 	if(*p=='#' || *p=='!' || !*p)
 	    continue;
-	p=ajSysStrtok(p," \t\r");
+	p = ajSysStrtok(p," \t\r");
+
 	if(!p || *(p+1))
 	{
 	    ajWarn("First token is not a single letter");
@@ -74,7 +78,8 @@ AjBool embReadAminoDataDoubleC(char *s, double **a, double fill)
 	    return ajFalse;
 	}
 	idx = ajAZToInt(*p);
-	p=ajSysStrtok(NULL," \t\r");
+	p = ajSysStrtok(NULL," \t\r");
+
 	if(!p)
 	{
 	    ajWarn("Missing second token");
@@ -83,6 +88,7 @@ AjBool embReadAminoDataDoubleC(char *s, double **a, double fill)
 	    AJFREE(*a);
 	    return ajFalse;
 	}
+
 	if(sscanf(p,"%lf",&(*a)[idx])!=1)
 	{
 	    ajWarn("Bad numeric conversion [%s]",p);
@@ -99,6 +105,9 @@ AjBool embReadAminoDataDoubleC(char *s, double **a, double fill)
     return ajTrue;
 }
 
+
+
+
 /* @func embReadAminoDataFloatC ***********************************************
 **
 ** Read amino acid properties from amino.dat
@@ -110,6 +119,7 @@ AjBool embReadAminoDataDoubleC(char *s, double **a, double fill)
 ** @return [AjBool] ajTrue on success
 ** @@
 ******************************************************************************/
+
 AjBool embReadAminoDataFloatC(char *s, float **a, float fill)
 {
     AjPFile inf;
@@ -128,16 +138,16 @@ AjBool embReadAminoDataFloatC(char *s, float **a, float fill)
 
     *a = AJALLOC(AJREADAMINO*sizeof(float));
     for(i=0;i<AJREADAMINO;++i)
-	(*a)[i]=fill;
+	(*a)[i] = fill;
 
     line = ajStrNew();
     while(ajFileReadLine(inf,&line))
     {
-	p=ajStrStr(line);
+	p = ajStrStr(line);
 	if(*p=='#' || *p=='!' || !*p)
 	    continue;
 
-	p=ajSysStrtok(p," \t\r");
+	p = ajSysStrtok(p," \t\r");
 	if(!p || *(p+1))
 	{
 	    ajWarn("First token is not a single letter");
@@ -147,7 +157,8 @@ AjBool embReadAminoDataFloatC(char *s, float **a, float fill)
 	    return ajFalse;
 	}
 	idx = ajAZToInt(*p);
-	p=ajSysStrtok(NULL," \t\r");
+	p   = ajSysStrtok(NULL," \t\r");
+
 	if(!p)
 	{
 	    ajWarn("Missing second token");
@@ -156,6 +167,7 @@ AjBool embReadAminoDataFloatC(char *s, float **a, float fill)
 	    AJFREE(*a);
 	    return ajFalse;
 	}
+
 	if(sscanf(p,"%f",&(*a)[idx])!=1)
 	{
 	    ajWarn("Bad numeric conversion [%s]",p);
@@ -172,6 +184,9 @@ AjBool embReadAminoDataFloatC(char *s, float **a, float fill)
     return ajTrue;
 }
 
+
+
+
 /* @func embReadAminoDataIntC *************************************************
 **
 ** Read amino acid properties from amino.dat
@@ -183,6 +198,7 @@ AjBool embReadAminoDataFloatC(char *s, float **a, float fill)
 ** @return [AjBool] ajTrue on success
 ** @@
 ******************************************************************************/
+
 AjBool embReadAminoDataIntC(char *s, ajint **a, ajint fill)
 {
     AjPFile inf;
@@ -194,6 +210,7 @@ AjBool embReadAminoDataIntC(char *s, ajint **a, ajint fill)
 
     inf = ajFileNew();
     ajFileDataNewC(s,&inf);
+
     if(!inf)
     {
 	ajWarn("File [%s] not found",s);
@@ -202,16 +219,17 @@ AjBool embReadAminoDataIntC(char *s, ajint **a, ajint fill)
 
     *a = AJALLOC(AJREADAMINO*sizeof(ajint));
     for(i=0;i<AJREADAMINO;++i)
-	(*a)[i]=fill;
+	(*a)[i] = fill;
 
 
     line = ajStrNew();
     while(ajFileReadLine(inf,&line))
     {
-	p=ajStrStr(line);
+	p = ajStrStr(line);
 	if(*p=='#' || *p=='!' || !*p)
 	    continue;
-	p=ajSysStrtok(p," \t\r");
+	p = ajSysStrtok(p," \t\r");
+
 	if(!p || *(p+1))
 	{
 	    ajWarn("First token is not a single letter");
@@ -221,7 +239,8 @@ AjBool embReadAminoDataIntC(char *s, ajint **a, ajint fill)
 	    return ajFalse;
 	}
 	idx = ajAZToInt(*p);
-	p=ajSysStrtok(NULL," \t\r");
+	p   = ajSysStrtok(NULL," \t\r");
+
 	if(!p)
 	{
 	    ajWarn("Missing second token");
@@ -230,6 +249,7 @@ AjBool embReadAminoDataIntC(char *s, ajint **a, ajint fill)
 	    AJFREE(*a);
 	    return ajFalse;
 	}
+
 	if(sscanf(p,"%d",&(*a)[idx])!=1)
 	{
 	    ajWarn("Bad numeric conversion [%s]",p);
