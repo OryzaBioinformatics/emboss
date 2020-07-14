@@ -27,7 +27,13 @@ static int synchronize = 0;	/* change to 1 for synchronized operation */
  * match.
  */
 
+/* Fix for X11 beta 3 on MacOSX */
+#ifndef __ppc__
 #define DEFAULT_VISUAL 0
+#else
+#define DEFAULT_VISUAL 1
+#endif
+
 /*#define HACK_STATICCOLOR*/
 
 /* Number of instructions to skip between querying the X server for events */
