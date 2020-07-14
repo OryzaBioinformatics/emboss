@@ -23,6 +23,7 @@ string blast_protein_dbname blast protein database name
 file clique_input Phylip clique program input file
 file clique_output Phylip clique program output file
 string codon_list Codon triplet(s)
+file codon_usage Codon usage file
 file comparison_matrix Comparison matrix file
 string comparison_matrix_name Comparison matrix name
 file complex_temporary_output Program complex temporary file
@@ -35,6 +36,7 @@ frequencies continuous_character Continuous character frequency input file
 file continuous_character_frequency_file Phylip continuous character frequency  input file
 file contrast_output Phylip contrast program output file
 file copy_of_datafile An EMBOSS datafile in its original format
+string database_release Database name and release number
 file dictionary_of_heterogen_groups Dictionary of heterogen groups
 file dirichlet_prior HMMER dirichlet prior file
 file discrete_characters_input Phylip discrete characters input file
@@ -51,10 +53,12 @@ file domain_families_file Domain families file
 file domain_hits_file Domain hits file
 file domain_pdb_file Domain pdb file
 file domainatrix_log_file Domainatrix log file
+string embassy_package EMBASSY package name
 directory emboss_database_directory Database directory
 string emboss_database_name Database name
 string emboss_database_release Database release number
 string emboss_database_wildcard_filename Database wildcard filename for database files
+string emboss_resource_name Resource name
 string date Date in dd/mm/yy format
 file dendrogram Dendrogram (tree file) from clustalw
 file distance_matrix Distance matrix usable by phylip
@@ -93,6 +97,7 @@ file freqboot_input Phylip freqboot program input file
 file freqboot_output Phylip freqboot program output file
 file gendist_input Phylip gendist program input file
 file gendist_output Phylip gendist program output file
+list genetic_code Standard genetic code
 file gff feature file in GFF format
 file hmm_database HMMER hmm database filename
 string hmm_database_name HMMER hmm database name
@@ -117,6 +122,7 @@ file keywords_file Keywords file
 file kitsch_input Phylip kitsch program input file
 file kitsch_output Phylip kitsch program output file
 file lindna_mapping_commands Commands to the lindna drawing program
+file log_file General log file for application results
 report megamerger_report report file from megamerger program
 file mix_input Phylipmix  program input file
 file mix_output Phylip mix program output file
@@ -131,6 +137,7 @@ string nucleotide_codes DNA/RNA sequence characters - see pattern for allowed se
 string nucleotide_sequence DNA/RNA sequence
 directory input_directory Directory for input files
 outdir output_directory Directory for output files
+string output_filename Output filename
 string output_format Output file format
 file overlap_file Sequence overlap length(s)
 string pdb_file_prefix Pdb file prefix
@@ -162,6 +169,7 @@ file proml_output Phylip proml program output file
 file promlk_output Phylip promlk program output file
 string prosite_nucleotide_pattern PROSITE nucleotide pattern
 string prosite_pattern PROSITE protein pattern
+file prosite_database PROSITE database file
 file protdist_input Phylip protdist program input file
 file protdist_output Phylip protdist program output file
 file protein_clean_coordinates Clean protein structure coordinates
@@ -209,6 +217,7 @@ file swissprot_database Swissprot-format (embl) database
 file swissprot_pdb_equivalence_file Embl-like format swissprot:pdb equivalence file
 file swissprot_pdb_equivalence_table Swissprot:pdb equivalence table
 file tandem_output Output from the Sanger Centre tandem program
+file temporary_file Temporary file read, written and deleted
 file testcode_data Testcode data file
 file text_documentation Program documentation in ASCII text
 string threshold_identity_similar_related Three floating point threshold values for identical, similar and related residues
@@ -222,3 +231,4 @@ file usa_list List of USAs suitable for @list input
 file van_der_waals_radii Van der waals radii file
 file vector_file vector definition file
 properties weights File of weights
+string wildcard_string String with wildcard characters
