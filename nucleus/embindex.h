@@ -91,6 +91,7 @@ typedef struct EmbSBtreeEntry
 void   embBtreeEmblAC(const AjPStr acline, AjPList aclist);
 void   embBtreeEmblKW(const AjPStr kwline, AjPList kwlist, ajint maxlen);
 void   embBtreeEmblDE(const AjPStr deline, AjPList delist, ajint maxlen);
+void   embBtreeEmblSV(const AjPStr idline, AjPList svlist);
 void   embBtreeEmblTX(const AjPStr kwline, AjPList kwlist, ajint maxlen);
 void   embBtreeGenBankAC(const AjPStr acline, AjPList aclist);
 void   embBtreeGenBankKW(const AjPStr kwline, AjPList kwlist, ajint maxlen);
