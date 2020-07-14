@@ -43,49 +43,49 @@ Command line arguments
   [-outfile]           outfile    Output file name
 
    Additional (Optional) qualifiers:
+   -table              menu       Genetic code to use
    -[no]ruler          boolean    Add a ruler
    -[no]plabel         boolean    Number translations
    -[no]nlabel         boolean    Number DNA sequence
 
    Advanced (Unprompted) qualifiers:
-   -cfile              codon      Codon usage table name
    -width              integer    Width of screen
 
    Associated qualifiers:
 
    "-sequence" associated qualifiers
-   -sbegin1             integer    Start of the sequence to be used
-   -send1               integer    End of the sequence to be used
-   -sreverse1           boolean    Reverse (if DNA)
-   -sask1               boolean    Ask for begin/end/reverse
-   -snucleotide1        boolean    Sequence is nucleotide
-   -sprotein1           boolean    Sequence is protein
-   -slower1             boolean    Make lower case
-   -supper1             boolean    Make upper case
-   -sformat1            string     Input sequence format
-   -sdbname1            string     Database name
-   -sid1                string     Entryname
-   -ufo1                string     UFO features
-   -fformat1            string     Features format
-   -fopenfile1          string     Features file name
+   -sbegin1            integer    Start of the sequence to be used
+   -send1              integer    End of the sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
 
    "-outfile" associated qualifiers
-   -odirectory2         string     Output directory
+   -odirectory2        string     Output directory
 
    General qualifiers:
-   -auto                boolean    Turn off prompts
-   -stdout              boolean    Write standard output
-   -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for standard and additional values
-   -debug               boolean    Write debug output to program.dbg
-   -verbose             boolean    Report some/full command line options
-   -help                boolean    Report command line options. More
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
-   -warning             boolean    Report warnings
-   -error               boolean    Report errors
-   -fatal               boolean    Report fatal errors
-   -die                 boolean    Report deaths
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report deaths
 
 
    Standard (Mandatory) qualifiers Allowed values Default
@@ -95,12 +95,31 @@ Command line arguments
    [-outfile]
    (Parameter 2) Output file name Output file <sequence>.prettyseq
    Additional (Optional) qualifiers Allowed values Default
+   -table Genetic code to use
+   0 (Standard)
+   1 (Standard (with alternative initiation codons))
+   2 (Vertebrate Mitochondrial)
+   3 (Yeast Mitochondrial)
+   4 (Mold, Protozoan, Coelenterate Mitochondrial and
+   Mycoplasma/Spiroplasma)
+   5 (Invertebrate Mitochondrial)
+   6 (Ciliate Macronuclear and Dasycladacean)
+   9 (Echinoderm Mitochondrial)
+   10 (Euplotid Nuclear)
+   11 (Bacterial)
+   12 (Alternative Yeast Nuclear)
+   13 (Ascidian Mitochondrial)
+   14 (Flatworm Mitochondrial)
+   15 (Blepharisma Macronuclear)
+   16 (Chlorophycean Mitochondrial)
+   21 (Trematode Mitochondrial)
+   22 (Scenedesmus obliquus)
+   23 (Thraustochytrium Mitochondrial)
+   0
    -[no]ruler Add a ruler Boolean value Yes/No Yes
    -[no]plabel Number translations Boolean value Yes/No Yes
    -[no]nlabel Number DNA sequence Boolean value Yes/No Yes
    Advanced (Unprompted) qualifiers Allowed values Default
-   -cfile Codon usage table name Codon usage file in EMBOSS data path
-   Ehum.cut
    -width Width of screen Integer 10 or more 60
 
 Input file format
@@ -456,36 +475,35 @@ Known bugs
 
 See also
 
-   Program name Description
-   abiview Reads ABI file and display the trace
-   backtranseq Back translate a protein sequence
-   cirdna Draws circular maps of DNA constructs
-   coderet Extract CDS, mRNA and translations from feature tables
-   lindna Draws linear maps of DNA constructs
-   pepnet Displays proteins as a helical net
-   pepwheel Shows protein sequences as helices
-   plotorf Plot potential open reading frames
-   prettyplot Displays aligned sequences, with colouring and boxing
-   remap Display a sequence with restriction cut sites, translation etc
-   seealso Finds programs sharing group names
-   showalign Displays a multiple sequence alignment
-   showdb Displays information on the currently available databases
-   showfeat Show features of a sequence
-   showorf Pretty output of DNA translations
-   showseq Display a sequence with features, translation etc
-   sixpack Display a DNA sequence with 6-frame translation and ORFs
-   textsearch Search sequence documentation text. SRS and Entrez are
-   faster!
-   transeq Translate nucleic acid sequences
+   Program name                        Description
+   abiview      Reads ABI file and display the trace
+   backtranseq  Back translate a protein sequence
+   cirdna       Draws circular maps of DNA constructs
+   coderet      Extract CDS, mRNA and translations from feature tables
+   lindna       Draws linear maps of DNA constructs
+   pepnet       Displays proteins as a helical net
+   pepwheel     Shows protein sequences as helices
+   plotorf      Plot potential open reading frames
+   prettyplot   Displays aligned sequences, with colouring and boxing
+   remap        Display sequence with restriction sites, translation etc
+   seealso      Finds programs sharing group names
+   showalign    Displays a multiple sequence alignment
+   showdb       Displays information on the currently available databases
+   showfeat     Show features of a sequence
+   showorf      Pretty output of DNA translations
+   showseq      Display a sequence with features, translation etc
+   sixpack      Display a DNA sequence with 6-frame translation and ORFs
+   textsearch   Search sequence documentation. Slow, use SRS and Entrez!
+   transeq      Translate nucleic acid sequences
 
    showseq has more options for specifying various ways of displaying a
    sequence, with or without various ways of translating it.
 
 Author(s)
 
-   Alan Bleasby (ableasby © rfcgr.mrc.ac.uk)
-   MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
-   Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
+   Alan Bleasby (ajb © ebi.ac.uk)
+   European Bioinformatics Institute, Wellcome Trust Genome Campus,
+   Hinxton, Cambridge CB10 1SD, UK
 
 History
 

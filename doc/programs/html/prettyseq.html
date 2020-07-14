@@ -84,49 +84,49 @@ Output file [paamir.prettyseq]: <b></b>
   [-outfile]           outfile    Output file name
 
    Additional (Optional) qualifiers:
+   -table              menu       Genetic code to use
    -[no]ruler          boolean    Add a ruler
    -[no]plabel         boolean    Number translations
    -[no]nlabel         boolean    Number DNA sequence
 
    Advanced (Unprompted) qualifiers:
-   -cfile              codon      Codon usage table name
    -width              integer    Width of screen
 
    Associated qualifiers:
 
    "-sequence" associated qualifiers
-   -sbegin1             integer    Start of the sequence to be used
-   -send1               integer    End of the sequence to be used
-   -sreverse1           boolean    Reverse (if DNA)
-   -sask1               boolean    Ask for begin/end/reverse
-   -snucleotide1        boolean    Sequence is nucleotide
-   -sprotein1           boolean    Sequence is protein
-   -slower1             boolean    Make lower case
-   -supper1             boolean    Make upper case
-   -sformat1            string     Input sequence format
-   -sdbname1            string     Database name
-   -sid1                string     Entryname
-   -ufo1                string     UFO features
-   -fformat1            string     Features format
-   -fopenfile1          string     Features file name
+   -sbegin1            integer    Start of the sequence to be used
+   -send1              integer    End of the sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
 
    "-outfile" associated qualifiers
-   -odirectory2         string     Output directory
+   -odirectory2        string     Output directory
 
    General qualifiers:
-   -auto                boolean    Turn off prompts
-   -stdout              boolean    Write standard output
-   -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for standard and additional values
-   -debug               boolean    Write debug output to program.dbg
-   -verbose             boolean    Report some/full command line options
-   -help                boolean    Report command line options. More
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
-   -warning             boolean    Report warnings
-   -error               boolean    Report errors
-   -fatal               boolean    Report fatal errors
-   -die                 boolean    Report deaths
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report deaths
 
 
 </pre>
@@ -168,6 +168,13 @@ Output file [paamir.prettyseq]: <b></b>
 </tr>
 
 <tr>
+<td>-table</td>
+<td>Genetic code to use</td>
+<td><table><tr><td>0</td> <td><i>(Standard)</i></td></tr><tr><td>1</td> <td><i>(Standard (with alternative initiation codons))</i></td></tr><tr><td>2</td> <td><i>(Vertebrate Mitochondrial)</i></td></tr><tr><td>3</td> <td><i>(Yeast Mitochondrial)</i></td></tr><tr><td>4</td> <td><i>(Mold, Protozoan, Coelenterate Mitochondrial and Mycoplasma/Spiroplasma)</i></td></tr><tr><td>5</td> <td><i>(Invertebrate Mitochondrial)</i></td></tr><tr><td>6</td> <td><i>(Ciliate Macronuclear and Dasycladacean)</i></td></tr><tr><td>9</td> <td><i>(Echinoderm Mitochondrial)</i></td></tr><tr><td>10</td> <td><i>(Euplotid Nuclear)</i></td></tr><tr><td>11</td> <td><i>(Bacterial)</i></td></tr><tr><td>12</td> <td><i>(Alternative Yeast Nuclear)</i></td></tr><tr><td>13</td> <td><i>(Ascidian Mitochondrial)</i></td></tr><tr><td>14</td> <td><i>(Flatworm Mitochondrial)</i></td></tr><tr><td>15</td> <td><i>(Blepharisma Macronuclear)</i></td></tr><tr><td>16</td> <td><i>(Chlorophycean Mitochondrial)</i></td></tr><tr><td>21</td> <td><i>(Trematode Mitochondrial)</i></td></tr><tr><td>22</td> <td><i>(Scenedesmus obliquus)</i></td></tr><tr><td>23</td> <td><i>(Thraustochytrium Mitochondrial)</i></td></tr></table></td>
+<td>0</td>
+</tr>
+
+<tr>
 <td>-[no]ruler</td>
 <td>Add a ruler</td>
 <td>Boolean value Yes/No</td>
@@ -192,13 +199,6 @@ Output file [paamir.prettyseq]: <b></b>
 <th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
 <th align="left">Allowed values</th>
 <th align="left">Default</th>
-</tr>
-
-<tr>
-<td>-cfile</td>
-<td>Codon usage table name</td>
-<td>Codon usage file in EMBOSS data path</td>
-<td>Ehum.cut</td>
 </tr>
 
 <tr>
@@ -604,7 +604,7 @@ None.
 <tr><td><a href="pepwheel.html">pepwheel</a></td><td>Shows protein sequences as helices</td></tr>
 <tr><td><a href="plotorf.html">plotorf</a></td><td>Plot potential open reading frames</td></tr>
 <tr><td><a href="prettyplot.html">prettyplot</a></td><td>Displays aligned sequences, with colouring and boxing</td></tr>
-<tr><td><a href="remap.html">remap</a></td><td>Display a sequence with restriction cut sites, translation etc</td></tr>
+<tr><td><a href="remap.html">remap</a></td><td>Display sequence with restriction sites, translation etc</td></tr>
 <tr><td><a href="seealso.html">seealso</a></td><td>Finds programs sharing group names</td></tr>
 <tr><td><a href="showalign.html">showalign</a></td><td>Displays a multiple sequence alignment</td></tr>
 <tr><td><a href="showdb.html">showdb</a></td><td>Displays information on the currently available databases</td></tr>
@@ -612,7 +612,7 @@ None.
 <tr><td><a href="showorf.html">showorf</a></td><td>Pretty output of DNA translations</td></tr>
 <tr><td><a href="showseq.html">showseq</a></td><td>Display a sequence with features, translation etc</td></tr>
 <tr><td><a href="sixpack.html">sixpack</a></td><td>Display a DNA sequence with 6-frame translation and ORFs</td></tr>
-<tr><td><a href="textsearch.html">textsearch</a></td><td>Search sequence documentation text. SRS and Entrez are faster!</td></tr>
+<tr><td><a href="textsearch.html">textsearch</a></td><td>Search sequence documentation. Slow, use SRS and Entrez!</td></tr>
 <tr><td><a href="transeq.html">transeq</a></td><td>Translate nucleic acid sequences</td></tr>
 </table>
 
@@ -626,10 +626,9 @@ various ways of translating it.
 <H2>
     Author(s)
 </H2>
-Alan Bleasby (ableasby&nbsp;&copy;&nbsp;rfcgr.mrc.ac.uk)
+Alan Bleasby (ajb&nbsp;&copy;&nbsp;ebi.ac.uk)
 <br>
-MRC Rosalind Franklin Centre for Genomics Research
-Wellcome Trust Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
+European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
 
 
 

@@ -64,6 +64,7 @@ int main(int argc, char **argv)
 {
     AjPSeq a;
     AjPFile outf;
+    AjPStr codestr;
     AjPCod codon;
     AjPStr substr;
     AjPRange range;
@@ -82,12 +83,13 @@ int main(int argc, char **argv)
     char *ruler;
     ajint *ppos = NULL;
     ajint *npos = NULL;
+    ajint gcode;
 
 
     embInit("prettyseq", argc, argv);
 
     a      = ajAcdGetSeq("sequence");
-    codon  = ajAcdGetCodon("cfile");
+    codestr = ajAcdGetListI("table",1);
     width  = ajAcdGetInt("width");
     range  = ajAcdGetRange("range");
     outf   = ajAcdGetOutfile("outfile");
@@ -95,6 +97,8 @@ int main(int argc, char **argv)
     isp    = ajAcdGetBool("plabel");
     isn    = ajAcdGetBool("nlabel");
 
+    ajStrToInt(codestr, &gcode);
+    codon  = ajCodNewCode(gcode);;
     beg = ajSeqBegin(a);
     end = ajSeqEnd(a);
 

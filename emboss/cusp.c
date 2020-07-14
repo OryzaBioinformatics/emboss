@@ -46,26 +46,24 @@ int main(int argc, char **argv)
     embInit("cusp", argc, argv);
 
     seqall = ajAcdGetSeqall("sequence");
-    codon  = ajAcdGetCodon("cfile");
     outf   = ajAcdGetOutfile("outfile");
-
-    ajCodClear(&codon);
 
     ccnt   = 0;
     substr = ajStrNew();
+    codon  = ajCodNewCode(0);
+    ajCodAssName(codon, ajFileGetName(outf));
 
     while(ajSeqallNext(seqall, &seq))
     {
 	beg = ajSeqallBegin(seqall);
 	end  = ajSeqallEnd(seqall);
 	ajStrAssSub(&substr,ajSeqStr(seq),beg-1,end-1);
-	ajCodCountTriplets(&codon,substr,&ccnt);
+	ajCodCountTriplets(codon,substr,&ccnt);
     }
 
-    ajCodCalculateUsage(&codon,ccnt);
+    ajCodCalculateUsage(codon,ccnt);
 
-    ajFmtPrintF(outf,"# CUSP codon usage file\n");
-    ajFmtPrintF(outf,"# Codon\tAmino acid\tFract   /1000\tNumber\n");
+    ajCodAssDescC(codon, "CUSP codon usage file");
     ajCodWrite(codon, outf);
     ajFileClose(&outf);
 

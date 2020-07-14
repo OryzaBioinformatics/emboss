@@ -13,9 +13,6 @@ section: input [
     type: "DNA"
   ]
 
-  codon: cfile  [
-  ]
-
 endsection: input
 
 section: advanced [
