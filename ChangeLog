@@ -1,3 +1,106 @@
+Version 3.0.0
+	Profile analysis with gprof indicates that the regular expressions
+	(and the PCRE library) are very inefficient. Wildcards in regular
+	expressions lead to millions of recursive calls to the match
+	function. Although they are very readable for code maintenance,
+	replaced them for EMBL sequence and feature reading to get about a
+	4-fold speedup. Profile analysis will continue up to version 3.0.0
+
+	Feature table updated for nucleotide sequences to
+	EMBL/GenBank/DDBJ version 6.2. A few obsoleted qualifiers.
+
+	tranalign now allows for the proteins to have Methionine residues
+	at the start which now match a START codon in the corresponding
+	nucleic acid sequence.
+
+	diffseq has a new option '-global' which makes it treat the whole
+	of the sequences as regions to be aligned, rather than the
+	default which looks for the longest region of overlap and only
+	reports differences within that overlapping region.  This new
+	option is useful when looking at protein and mRNA sequences
+	which are expected to align over their whole length.
+
+	Alignment output issues resolved. Specifying begin and end of
+	input sequences now works for all alignment formats. Markx formats
+	have been rewritten as the original code we used has nasty
+	dependencies on global variables which we struggled to reproduce
+	for all cases. The rewritten code is much simpler. Note that the
+	gap penalty reported by markx10 format is the EMBOSS
+	penalty. Markx10 as used in the FASTA package subtracts the gap
+	extension penalty from the gap penalty ... and adds it back when
+	calculating.
+
+	transeq failed to check sequence ranges in list files
+	correctly. It was only using the range from the first sequence if
+	the USA included a start and end. The range is now reset for each
+	sequence.
+
+	remap (and other programs that display translations) had problems
+	with masking ORFs (using strange characters instead of '0'),
+	caused by bad calls to an AJAX function.
+	
+	Entrez added as an access method. Sequence format must be
+	genbank. Server URL is hard-coded at NCBI (for now). Works by
+	finding GIs GenInfo Identifiers) that match the query, and then
+	retrieving them one at a time. This is still a prototype - more work is
+	needed. Note that apparently Entrez cannot retrieve by LOCUS (id).
+
+	Seqhound added as an access method. Sequence format must be
+	genbank. Needs a URL to find the server. Works by finding GIs
+	(GenInfo Identifiers) that match the query, and then retrieving
+	them one at a time. This is still a prototype - more work is
+	needed. Some Entrez error conditions are less graceful in
+	SeqHound. Des and Key searches are turned off until SeqHound adds
+	indexing for these. Org searches work, but require the numeric
+	taxon ID. This is not friendly, so we are looking for a way to get
+	the taxid from the species or genus.
+
+	Direct access databases now support exclude wildcards. The syntax
+	is as for emblcd indexing, but only files listed in filename are
+	included.
+	
+	Database names must be letters, numbers and underscores
+	only. Reading emboss.default and .embossrc now generates a warning
+	message for any bad database name. Bad names were ignored by USA
+	processing, leading to confusing results.
+
+	seqretsplit has a new -feature option (as for seqret)
+	
+	noreturn can write files for PC or Mac file systems using a new
+	-system qualifier.
+
+	FASTA format sequence files with a seqeunce ID starting P1; were
+	assumed to be PIR format. These can now be read as FASTA, assuming
+	that PIR format has already beed tested for.
+
+	Added a calculated attribute "haslengths" to (phylogenetic) tree
+	input in ACD for use in phylipnew interfaces
+
+	Wossname and seealso have a new commanline option -showembassy
+	which defines one embassy package to be shown. The main use is in
+	finding applications when automatically building the
+	documentation, but end users and interface builders may find some
+	uses for this option too.
+
+	Added an "embassy" string attribute to the application in ACD so
+	that wossname can find whether an application is in EMBASSY or
+	not. Wossname was depending on the source directory, but could not
+	distinguish between EMBOSS and EMBASSY ACD files once they were
+	installed.
+
+	The EFUNC and EDATA databases have been enhanced to provide better
+	views and links within SRS. The new versions are available at both
+	HGMP and EBI. In future, EBI will probably become the sole site
+	(as HGMP/RFCGR is closing in 2005).
+
+	The official EMBOSS website has moved to emboss.sourceforge.net
+	which includes redefining links in applications and major
+	modifications to the scripts which maintain the application web
+	pages. The sourceforge web pages are now committed to CVS under
+	doc/sourceforge. The pages on sourceforge itself can only be
+	modified by registering at sourceforge and joining the emboss
+	project.
+
 Version 2.9.0
 	ajListMapRead and ajListstrMapRead functions for read-only lists.
 	As an added check, the functions these call for each element have

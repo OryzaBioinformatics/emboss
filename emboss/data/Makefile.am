@@ -19,7 +19,7 @@ pkgdata_DATA = EBLOSUM30 EBLOSUM35 EBLOSUM40 EBLOSUM45 EBLOSUM50 \
                Ebases.iub Edayhoff.freq Edna.melt Eembl.ior Eenergy.dat \
                Efeatures.embl Efeatures.emboss Efeatures.gff \
                Efeatures.pir Efeatures.protein Efeatures.swiss \
-               Efreqs.dat Ehth.dat \
+               Efreqs.dat Ehet.dat Ehth.dat \
                Ehth87.dat Ememe.dat Enakai.dat Epepcoil.dat Epk.dat \
                Epprofile Eprior1.plib Eprior30.plib Erna.melt \
                Esig.euk Esig.pro \

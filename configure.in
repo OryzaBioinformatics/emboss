@@ -6,7 +6,7 @@ dnl Process this file with autoconf to produce a configure script.
 #CC=cc
 
 AC_INIT(ajax/ajacd.c)
-AM_INIT_AUTOMAKE(EMBOSS, 2.9.0)
+AM_INIT_AUTOMAKE(EMBOSS, 2.10.0)
 
 
 AC_PROG_AWK
@@ -457,7 +457,9 @@ jemboss/api/org/emboss/jemboss/soap/Makefile
 jemboss/images/Makefile
 jemboss/lib/Makefile jemboss/lib/axis/Makefile
 jemboss/org/Makefile jemboss/org/emboss/Makefile
-jemboss/org/emboss/jemboss/Makefile jemboss/org/emboss/jemboss/gui/Makefile
+jemboss/org/emboss/jemboss/Makefile 
+jemboss/org/emboss/jemboss/graphics/Makefile
+jemboss/org/emboss/jemboss/gui/Makefile
 jemboss/org/emboss/jemboss/gui/filetree/Makefile
 jemboss/org/emboss/jemboss/gui/form/Makefile
 jemboss/org/emboss/jemboss/gui/startup/Makefile
