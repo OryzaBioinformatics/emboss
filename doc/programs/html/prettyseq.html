@@ -13,7 +13,6 @@
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
-
 prettyseq
 </font></b>
 </td></tr>
@@ -22,12 +21,10 @@ prettyseq
 <p>
 
 
-
 <H2>
     Function
 </H2>
 Output sequence with translated ranges
-
 
 <H2>
     Description
@@ -63,7 +60,7 @@ translate the codons.
 
 % <b>prettyseq </b>
 Output sequence with translated ranges
-Input sequence: <b>tembl:paamir</b>
+Input nucleotide sequence: <b>tembl:paamir</b>
 Range(s) to translate [1-2167]: <b>135-1292</b>
 Output file [paamir.prettyseq]: <b></b>
 
@@ -72,25 +69,40 @@ Output file [paamir.prettyseq]: <b></b>
 <a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
 
 
-
 <H2>
     Command line arguments
 </H2>
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
    Standard (Mandatory) qualifiers:
-  [-sequence]          sequence   Sequence USA
-   -range              range      Range(s) to translate
-  [-outfile]           outfile    Output file name
+  [-sequence]          sequence   Nucleotide sequence filename and optional
+                                  format, or reference (input USA)
+   -range              range      [Whole sequence] Range(s) to translate
+  [-outfile]           outfile    [*.prettyseq] Output file name
 
    Additional (Optional) qualifiers:
-   -table              menu       Genetic code to use
-   -[no]ruler          boolean    Add a ruler
-   -[no]plabel         boolean    Number translations
-   -[no]nlabel         boolean    Number DNA sequence
+   -table              menu       [0] Genetic code to use (Values: 0
+                                  (Standard); 1 (Standard (with alternative
+                                  initiation codons)); 2 (Vertebrate
+                                  Mitochondrial); 3 (Yeast Mitochondrial); 4
+                                  (Mold, Protozoan, Coelenterate Mitochondrial
+                                  and Mycoplasma/Spiroplasma); 5
+                                  (Invertebrate Mitochondrial); 6 (Ciliate
+                                  Macronuclear and Dasycladacean); 9
+                                  (Echinoderm Mitochondrial); 10 (Euplotid
+                                  Nuclear); 11 (Bacterial); 12 (Alternative
+                                  Yeast Nuclear); 13 (Ascidian Mitochondrial);
+                                  14 (Flatworm Mitochondrial); 15
+                                  (Blepharisma Macronuclear); 16
+                                  (Chlorophycean Mitochondrial); 21 (Trematode
+                                  Mitochondrial); 22 (Scenedesmus obliquus);
+                                  23 (Thraustochytrium Mitochondrial))
+   -[no]ruler          boolean    [Y] Add a ruler
+   -[no]plabel         boolean    [Y] Number translations
+   -[no]nlabel         boolean    [Y] Number DNA sequence
 
    Advanced (Unprompted) qualifiers:
-   -width              integer    Width of screen
+   -width              integer    [60] Width of screen (Integer 10 or more)
 
    Associated qualifiers:
 
@@ -126,8 +138,7 @@ Output file [paamir.prettyseq]: <b></b>
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
-   -die                boolean    Report deaths
-
+   -die                boolean    Report dying program messages
 
 </pre>
 </td></tr></table>
@@ -142,7 +153,7 @@ Output file [paamir.prettyseq]: <b></b>
 
 <tr>
 <td>[-sequence]<br>(Parameter 1)</td>
-<td>Sequence USA</td>
+<td>Nucleotide sequence filename and optional format, or reference (input USA)</td>
 <td>Readable sequence</td>
 <td><b>Required</b></td>
 </tr>
@@ -158,7 +169,7 @@ Output file [paamir.prettyseq]: <b></b>
 <td>[-outfile]<br>(Parameter 2)</td>
 <td>Output file name</td>
 <td>Output file</td>
-<td><i>&lt;sequence&gt;</i>.prettyseq</td>
+<td>&nbsp;</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
@@ -209,7 +220,6 @@ Output file [paamir.prettyseq]: <b></b>
 </tr>
 
 </table>
-
 
 
 <H2>
@@ -336,7 +346,6 @@ SQ   Sequence 2167 BP; 363 A; 712 C; 730 G; 362 T; 0 other;
 //
 </pre>
 </td></tr></table><p>
-
 
 <p>
 
@@ -500,7 +509,6 @@ PRETTYSEQ of PAAMIR from 1 to 2167
 </td></tr></table><p>
 
 
-
 <H2>
     Data files
 </H2>
@@ -552,7 +560,6 @@ The directories are searched in the following order:
 </ul>
 <p>
 
-
 <H2>
     Notes
 </H2>
@@ -595,27 +602,107 @@ None.
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
-<tr><td><a href="abiview.html">abiview</a></td><td>Reads ABI file and display the trace</td></tr>
-<tr><td><a href="backtranseq.html">backtranseq</a></td><td>Back translate a protein sequence</td></tr>
-<tr><td><a href="cirdna.html">cirdna</a></td><td>Draws circular maps of DNA constructs</td></tr>
-<tr><td><a href="coderet.html">coderet</a></td><td>Extract CDS, mRNA and translations from feature tables</td></tr>
-<tr><td><a href="lindna.html">lindna</a></td><td>Draws linear maps of DNA constructs</td></tr>
-<tr><td><a href="pepnet.html">pepnet</a></td><td>Displays proteins as a helical net</td></tr>
-<tr><td><a href="pepwheel.html">pepwheel</a></td><td>Shows protein sequences as helices</td></tr>
-<tr><td><a href="plotorf.html">plotorf</a></td><td>Plot potential open reading frames</td></tr>
-<tr><td><a href="prettyplot.html">prettyplot</a></td><td>Displays aligned sequences, with colouring and boxing</td></tr>
-<tr><td><a href="remap.html">remap</a></td><td>Display sequence with restriction sites, translation etc</td></tr>
-<tr><td><a href="seealso.html">seealso</a></td><td>Finds programs sharing group names</td></tr>
-<tr><td><a href="showalign.html">showalign</a></td><td>Displays a multiple sequence alignment</td></tr>
-<tr><td><a href="showdb.html">showdb</a></td><td>Displays information on the currently available databases</td></tr>
-<tr><td><a href="showfeat.html">showfeat</a></td><td>Show features of a sequence</td></tr>
-<tr><td><a href="showorf.html">showorf</a></td><td>Pretty output of DNA translations</td></tr>
-<tr><td><a href="showseq.html">showseq</a></td><td>Display a sequence with features, translation etc</td></tr>
-<tr><td><a href="sixpack.html">sixpack</a></td><td>Display a DNA sequence with 6-frame translation and ORFs</td></tr>
-<tr><td><a href="textsearch.html">textsearch</a></td><td>Search sequence documentation. Slow, use SRS and Entrez!</td></tr>
-<tr><td><a href="transeq.html">transeq</a></td><td>Translate nucleic acid sequences</td></tr>
-</table>
+<tr>
+<td><a href="abiview.html">abiview</a></td>
+<td>Reads ABI file and display the trace</td>
+</tr>
 
+<tr>
+<td><a href="backtranambig.html">backtranambig</a></td>
+<td>Back translate a protein sequence to ambiguous codons</td>
+</tr>
+
+<tr>
+<td><a href="backtranseq.html">backtranseq</a></td>
+<td>Back translate a protein sequence</td>
+</tr>
+
+<tr>
+<td><a href="cirdna.html">cirdna</a></td>
+<td>Draws circular maps of DNA constructs</td>
+</tr>
+
+<tr>
+<td><a href="coderet.html">coderet</a></td>
+<td>Extract CDS, mRNA and translations from feature tables</td>
+</tr>
+
+<tr>
+<td><a href="lindna.html">lindna</a></td>
+<td>Draws linear maps of DNA constructs</td>
+</tr>
+
+<tr>
+<td><a href="pepnet.html">pepnet</a></td>
+<td>Displays proteins as a helical net</td>
+</tr>
+
+<tr>
+<td><a href="pepwheel.html">pepwheel</a></td>
+<td>Shows protein sequences as helices</td>
+</tr>
+
+<tr>
+<td><a href="plotorf.html">plotorf</a></td>
+<td>Plot potential open reading frames</td>
+</tr>
+
+<tr>
+<td><a href="prettyplot.html">prettyplot</a></td>
+<td>Displays aligned sequences, with colouring and boxing</td>
+</tr>
+
+<tr>
+<td><a href="remap.html">remap</a></td>
+<td>Display sequence with restriction sites, translation etc</td>
+</tr>
+
+<tr>
+<td><a href="seealso.html">seealso</a></td>
+<td>Finds programs sharing group names</td>
+</tr>
+
+<tr>
+<td><a href="showalign.html">showalign</a></td>
+<td>Displays a multiple sequence alignment</td>
+</tr>
+
+<tr>
+<td><a href="showdb.html">showdb</a></td>
+<td>Displays information on the currently available databases</td>
+</tr>
+
+<tr>
+<td><a href="showfeat.html">showfeat</a></td>
+<td>Show features of a sequence</td>
+</tr>
+
+<tr>
+<td><a href="showorf.html">showorf</a></td>
+<td>Pretty output of DNA translations</td>
+</tr>
+
+<tr>
+<td><a href="showseq.html">showseq</a></td>
+<td>Display a sequence with features, translation etc</td>
+</tr>
+
+<tr>
+<td><a href="sixpack.html">sixpack</a></td>
+<td>Display a DNA sequence with 6-frame translation and ORFs</td>
+</tr>
+
+<tr>
+<td><a href="textsearch.html">textsearch</a></td>
+<td>Search sequence documentation. Slow, use SRS and Entrez!</td>
+</tr>
+
+<tr>
+<td><a href="transeq.html">transeq</a></td>
+<td>Translate nucleic acid sequences</td>
+</tr>
+
+</table>
 <p>
 
 <a href="showseq.html"><b>showseq</b></a> has more options for
@@ -632,25 +719,21 @@ European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambri
 
 
 
-
 <H2>
     History
 </H2>
 
 Written (1999) - Alan Bleasby
 
-
 <H2>
     Target users
 </H2>
 
 This program is intended to be used by everyone and everything, from naive users to embedded scripts.
-
 <H2>
     Comments
 </H2>
 None
-
 
 </BODY>
 </HTML>

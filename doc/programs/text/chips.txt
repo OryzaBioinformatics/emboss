@@ -43,7 +43,7 @@ Usage
 
 % chips -sbeg 135 -send 1292 
 Codon usage statistics
-Input sequence(s): tembl:paamir
+Input nucleotide sequence(s): tembl:paamir
 Output file [paamir.chips]: 
 
    Go to the input files for this example
@@ -52,12 +52,13 @@ Output file [paamir.chips]:
 Command line arguments
 
    Standard (Mandatory) qualifiers:
-  [-seqall]            seqall     Sequence database USA
-  [-outfile]           outfile    Output file name
+  [-seqall]            seqall     Nucleotide sequence(s) filename and optional
+                                  format, or reference (input USA)
+  [-outfile]           outfile    [*.chips] Output file name
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers:
-   -[no]sum            boolean    Sum codons over all sequences
+   -[no]sum            boolean    [Y] Sum codons over all sequences
 
    Associated qualifiers:
 
@@ -93,18 +94,7 @@ Command line arguments
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
-   -die                boolean    Report deaths
-
-
-   Standard (Mandatory) qualifiers Allowed values Default
-   [-seqall]
-   (Parameter 1) Sequence database USA Readable sequence(s) Required
-   [-outfile]
-   (Parameter 2) Output file name Output file <sequence>.chips
-   Additional (Optional) qualifiers Allowed values Default
-   (none)
-   Advanced (Unprompted) qualifiers Allowed values Default
-   -[no]sum Sum codons over all sequences Boolean value Yes/No Yes
+   -die                boolean    Report dying program messages
 
 Input file format
 

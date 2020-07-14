@@ -62,15 +62,15 @@ Wildcard database filename [*.seq]:
        org : Taxonomy
 Index fields [id,acc]: 
 
-Processing file /ebi/services/idata/pmr/hgmp/test/embl/eem_ba1.seq
-Processing file /ebi/services/idata/pmr/hgmp/test/embl/eem_est.seq
-Processing file /ebi/services/idata/pmr/hgmp/test/embl/eem_fun.seq
-Processing file /ebi/services/idata/pmr/hgmp/test/embl/eem_htginv1.seq
-Processing file /ebi/services/idata/pmr/hgmp/test/embl/eem_hum1.seq
-Processing file /ebi/services/idata/pmr/hgmp/test/embl/eem_in.seq
-Processing file /ebi/services/idata/pmr/hgmp/test/embl/eem_ov.seq
-Processing file /ebi/services/idata/pmr/hgmp/test/embl/eem_ro.seq
-Processing file /ebi/services/idata/pmr/hgmp/test/embl/eem_vi.seq
+Processing file /homes/user/test/embl/eem_ba1.seq
+Processing file /homes/user/test/embl/eem_est.seq
+Processing file /homes/user/test/embl/eem_fun.seq
+Processing file /homes/user/test/embl/eem_htginv1.seq
+Processing file /homes/user/test/embl/eem_hum1.seq
+Processing file /homes/user/test/embl/eem_in.seq
+Processing file /homes/user/test/embl/eem_ov.seq
+Processing file /homes/user/test/embl/eem_ro.seq
+Processing file /homes/user/test/embl/eem_vi.seq
 
    Go to the output files for this example
 
@@ -105,19 +105,31 @@ RES embl [
 Command line arguments
 
    Standard (Mandatory) qualifiers:
-  [-dbname]            string     Basename for index files
-  [-dbresource]        string     Resource name
-   -idformat           menu       Entry format
-   -directory          directory  Database directory
-   -filenames          string     Wildcard database filename
-   -fields             menu       Index fields
+  [-dbname]            string     Basename for index files (Any string from 2
+                                  to 19 characters, matching regular
+                                  expression /[A-z][A-z0-9_]+/)
+  [-dbresource]        string     Resource name (Any string from 2 to 19
+                                  characters, matching regular expression
+                                  /[A-z][A-z0-9_]+/)
+   -idformat           menu       [SWISS] Entry format (Values: EMBL (EMBL);
+                                  SWISS (Swiss-Prot, SpTrEMBL, TrEMBLnew);
+                                  GENBANK (Genbank, DDBJ); PIR (NBRF))
+   -directory          directory  [.] Database directory
+   -filenames          string     [*.seq] Wildcard database filename (Any
+                                  string is accepted)
+   -fields             menu       [id,acc] Index fields (Values: id (ID); acc
+                                  (Accession number); sv (Sequence Version and
+                                  GI); des (Description); key (Keywords); org
+                                  (Taxonomy))
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers:
-   -release            string     Release number
-   -date               string     Index date
-   -exclude            string     Wildcard filename(s) to exclude
-   -indexoutdir        outdir     Index directory
+   -release            string     [0.0] Release number (Any string up to 9
+                                  characters)
+   -date               string     [00/00/00] Index date (Date string dd/mm/yy)
+   -exclude            string     Wildcard filename(s) to exclude (Any string
+                                  is accepted)
+   -indexoutdir        outdir     [.] Index file output directory
 
    Associated qualifiers: (none)
    General qualifiers:
@@ -133,46 +145,82 @@ Command line arguments
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
-   -die                boolean    Report deaths
-
-
-   Standard (Mandatory) qualifiers Allowed values Default
-   [-dbname]
-   (Parameter 1) Basename for index files A string from 2 to 19
-   characters, matching regular expression /[A-z][A-z0-9_]+/ Required
-   [-dbresource]
-   (Parameter 2) Resource name A string from 2 to 19 characters, matching
-   regular expression /[A-z][A-z0-9_]+/ Required
-   -idformat Entry format
-   EMBL    (EMBL)
-   SWISS   (Swiss-Prot, SpTrEMBL, TrEMBLnew)
-   GENBANK (Genbank, DDBJ)
-   PIR     (NBRF)
-   SWISS
-   -directory Database directory Directory .
-   -filenames Wildcard database filename Any string is accepted *.seq
-   -fields Index fields
-   id  (ID)
-   acc (Accession number)
-   sv  (Sequence Version and GI)
-   des (Description)
-   key (Keywords)
-   org (Taxonomy)
-   id,acc
-   Additional (Optional) qualifiers Allowed values Default
-   (none)
-   Advanced (Unprompted) qualifiers Allowed values Default
-   -release Release number A string up to 9 characters 0.0
-   -date Index date Date string dd/mm/yy 00/00/00
-   -exclude Wildcard filename(s) to exclude Any string is accepted An
-   empty string is accepted
-   -indexoutdir Index directory Output directory .
+   -die                boolean    Report dying program messages
 
 Input file format
 
    dbxgcg reads any normal sequence USAs.
 
 Output file format
+
+   dbxgcg creates one summary file for the database and two files for
+   each field indexed.
+
+     * dbalias.ent is the master file containing the names of the files
+       that have been indexed. It is an ASCII file. This file also
+       contains the database release and date information.
+     * dbalias.xid is the B+tree index file for the ID names. It is a
+       binary file.
+     * dbalias.pxid is an ASCII file containing information regarding the
+       structure of the ID name index.
+
+  Output files for usage example
+
+  File: embl.ent
+
+# Number of files: 9
+# Release: 0.0
+# Date:    00/00/00
+Dual filename database
+eem_ba1.seq eem_ba1.ref
+eem_est.seq eem_est.ref
+eem_fun.seq eem_fun.ref
+eem_htginv1.seq eem_htginv1.ref
+eem_hum1.seq eem_hum1.ref
+eem_in.seq eem_in.ref
+eem_ov.seq eem_ov.ref
+eem_ro.seq eem_ro.ref
+eem_vi.seq eem_vi.ref
+
+  File: embl.pxac
+
+Order     71
+Fill      47
+Pagesize  2048
+Level     0
+Cachesize 200
+Order2    82
+Fill2     99
+Count     47
+Kwlimit   15
+
+  File: embl.pxid
+
+Order     71
+Fill      47
+Pagesize  2048
+Level     0
+Cachesize 200
+Order2    82
+Fill2     99
+Count     39
+Kwlimit   15
+
+  File: embl.xac
+
+   This file contains non-printing characters and so cannot be displayed
+   here.
+
+  File: embl.xid
+
+   This file contains non-printing characters and so cannot be displayed
+   here.
+
+Data files
+
+   None.
+
+Notes
 
    The indexing system has been designed to allow on-the-fly updating of
    indexes. This feature is, however, not implemented in the current

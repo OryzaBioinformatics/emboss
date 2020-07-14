@@ -12,7 +12,6 @@
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
-
 codcopy
 </font></b>
 </td></tr>
@@ -21,12 +20,10 @@ codcopy
 <p>
 
 
-
 <H2>
     Function
 </H2>
 Reads and writes a codon usage table
-
 <!--
 DON'T WRITE ANYTHING HERE.
 IT IS DONE FOR YOU.
@@ -106,12 +103,11 @@ EDIT HERE
 % <b>codcopy </b>
 Reads and writes a codon usage table
 Codon usage file: <b>Eecoli.cut</b>
-Output codon usage file [eecoli.cut]: <b></b>
+Codon usage output file [eecoli.cut]: <b></b>
 
 </pre></td></tr></table><p>
 <p>
 <a href="#output.1">Go to the output files for this example</a><p><p>
-
 
 
 
@@ -123,7 +119,7 @@ Output codon usage file [eecoli.cut]: <b></b>
 <pre>
    Standard (Mandatory) qualifiers:
   [-infile]            codon      Codon usage table name
-  [-outfile]           outcodon   (no help text) outcodon value
+  [-outfile]           outcodon   Codon usage table name
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers: (none)
@@ -134,7 +130,7 @@ Output codon usage file [eecoli.cut]: <b></b>
 
    "-outfile" associated qualifiers
    -odirectory2        string     Output directory
-   -oformat2           string     Output format specific to this output type
+   -oformat2           string     Output format specific to this data type
 
    General qualifiers:
    -auto               boolean    Turn off prompts
@@ -149,8 +145,7 @@ Output codon usage file [eecoli.cut]: <b></b>
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
-   -die                boolean    Report deaths
-
+   -die                boolean    Report dying program messages
 
 </pre>
 </td></tr></table>
@@ -171,7 +166,7 @@ Output codon usage file [eecoli.cut]: <b></b>
 
 <tr>
 <td>[-outfile]<br>(Parameter 2)</td>
-<td>(no help text) outcodon value</td>
+<td>Codon usage table name</td>
 <td>Codon usage file</td>
 <td>&nbsp;</td>
 </tr>
@@ -197,7 +192,6 @@ Output codon usage file [eecoli.cut]: <b></b>
 </tr>
 
 </table>
-
 
 <!--
 DON'T WRITE ANYTHING HERE.
@@ -231,41 +225,10 @@ IT IS DONE FOR YOU.
 
 
 
-
 <H2>
     Output file format
 </H2>
 
-<!-- 
-        This includes example output file formats.
-        This should be a detailed description and example - assume
-        someone will want to parse this file and will want to know what
-        happens in unusual cases - null output, errors etc. 
-
-        If you wish to include the standard description of the avalable
-	report formats, use:
-<p>
-
-The output is a standard EMBOSS report file. 
-
-<p>
-
-The results can be output in one of several styles by using the
-command-line qualifier <b>-rformat xxx</b>, where 'xxx' is replaced by
-the name of the required format.  The available format names are: embl,
-genbank, gff, pir, swiss, trace, listfile, dbmotif, diffseq, excel,
-feattable, motif, regions, seqtable, simple, srs, table, tagseq
-
-<p>
-
-See:
-<A href="http://emboss.sf.net/docs/themes/ReportFormats.html">
-http://emboss.sf.net/docs/themes/ReportFormats.html</A>
-for further information on report formats.
-
-<p>
-
-   -->
 
 <b>codcopy</b> 
 outputs a graph to the specified graphics device. 
@@ -362,60 +325,10 @@ TGA    *     0.286     0.902   1443
 
 
 
-
 <H2>
     Data files
 </H2>
 
-<!-- 
-        Any data files used (e.g. translation table file)
-        This includes example data file formats if they are
-        not obvious.
-
-	If you wish to include the standard description of what data
-	files are and how to use embossdata to inspect and retrieve
-	them, use:
-<p>
-EMBOSS data files are distributed with the application and stored
-in the standard EMBOSS data directory, which is defined
-by the EMBOSS environment variable EMBOSS_DATA.
-
-<p>
-
-To see the available EMBOSS data files, run:
-<p>
-<pre>
-% embossdata -showall
-</pre>
-<p>
-To fetch one of the data files (for example 'Exxx.dat') into your
-current directory for you to inspect or modify, run:
-
-<pre>
-
-% embossdata -fetch -file Exxx.dat
-
-</pre>
-<p>
-
-Users can provide their own data files in their own directories.
-Project specific files can be put in the current directory, or for
-tidier directory listings in a subdirectory called
-".embossdata". Files for all EMBOSS runs can be put in the user's home
-directory, or again in a subdirectory called ".embossdata".
-
-<p>
-The directories are searched in the following order:
-
-<ul>
-   <li> . (your current directory)
-   <li> .embossdata (under your current directory)
-   <li> ~/ (your home directory)
-   <li> ~/.embossdata
-</ul>
-<p>
-
-   -->
 
 **************** 
 EDIT HERE
@@ -551,33 +464,142 @@ None.
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
-<tr><td><a href="biosed.html">biosed</a></td><td>Replace or delete sequence sections</td></tr>
-<tr><td><a href="cutseq.html">cutseq</a></td><td>Removes a specified section from a sequence</td></tr>
-<tr><td><a href="degapseq.html">degapseq</a></td><td>Removes gap characters from sequences</td></tr>
-<tr><td><a href="descseq.html">descseq</a></td><td>Alter the name or description of a sequence</td></tr>
-<tr><td><a href="entret.html">entret</a></td><td>Reads and writes (returns) flatfile entries</td></tr>
-<tr><td><a href="extractfeat.html">extractfeat</a></td><td>Extract features from a sequence</td></tr>
-<tr><td><a href="extractseq.html">extractseq</a></td><td>Extract regions from a sequence</td></tr>
-<tr><td><a href="listor.html">listor</a></td><td>Write a list file of the logical OR of two sets of sequences</td></tr>
-<tr><td><a href="maskfeat.html">maskfeat</a></td><td>Mask off features of a sequence</td></tr>
-<tr><td><a href="maskseq.html">maskseq</a></td><td>Mask off regions of a sequence</td></tr>
-<tr><td><a href="newseq.html">newseq</a></td><td>Type in a short new sequence</td></tr>
-<tr><td><a href="noreturn.html">noreturn</a></td><td>Removes carriage return from ASCII files</td></tr>
-<tr><td><a href="notseq.html">notseq</a></td><td>Exclude a set of sequences and write out the remaining ones</td></tr>
-<tr><td><a href="nthseq.html">nthseq</a></td><td>Writes one sequence from a multiple set of sequences</td></tr>
-<tr><td><a href="pasteseq.html">pasteseq</a></td><td>Insert one sequence into another</td></tr>
-<tr><td><a href="revseq.html">revseq</a></td><td>Reverse and complement a sequence</td></tr>
-<tr><td><a href="seqret.html">seqret</a></td><td>Reads and writes (returns) sequences</td></tr>
-<tr><td><a href="seqretsplit.html">seqretsplit</a></td><td>Reads and writes (returns) sequences in individual files</td></tr>
-<tr><td><a href="skipseq.html">skipseq</a></td><td>Reads and writes (returns) sequences, skipping first few</td></tr>
-<tr><td><a href="splitter.html">splitter</a></td><td>Split a sequence into (overlapping) smaller sequences</td></tr>
-<tr><td><a href="trimest.html">trimest</a></td><td>Trim poly-A tails off EST sequences</td></tr>
-<tr><td><a href="trimseq.html">trimseq</a></td><td>Trim ambiguous bits off the ends of sequences</td></tr>
-<tr><td><a href="union.html">union</a></td><td>Reads sequence fragments and builds one sequence</td></tr>
-<tr><td><a href="vectorstrip.html">vectorstrip</a></td><td>Strips out DNA between a pair of vector sequences</td></tr>
-<tr><td><a href="yank.html">yank</a></td><td>Reads a sequence range, appends the full USA to a list file</td></tr>
-</table>
+<tr>
+<td><a href="biosed.html">biosed</a></td>
+<td>Replace or delete sequence sections</td>
+</tr>
 
+<tr>
+<td><a href="cutseq.html">cutseq</a></td>
+<td>Removes a specified section from a sequence</td>
+</tr>
+
+<tr>
+<td><a href="degapseq.html">degapseq</a></td>
+<td>Removes gap characters from sequences</td>
+</tr>
+
+<tr>
+<td><a href="descseq.html">descseq</a></td>
+<td>Alter the name or description of a sequence</td>
+</tr>
+
+<tr>
+<td><a href="entret.html">entret</a></td>
+<td>Reads and writes (returns) flatfile entries</td>
+</tr>
+
+<tr>
+<td><a href="extractfeat.html">extractfeat</a></td>
+<td>Extract features from a sequence</td>
+</tr>
+
+<tr>
+<td><a href="extractseq.html">extractseq</a></td>
+<td>Extract regions from a sequence</td>
+</tr>
+
+<tr>
+<td><a href="listor.html">listor</a></td>
+<td>Write a list file of the logical OR of two sets of sequences</td>
+</tr>
+
+<tr>
+<td><a href="makenucseq.html">makenucseq</a></td>
+<td>Creates random nucleotide sequences</td>
+</tr>
+
+<tr>
+<td><a href="makeprotseq.html">makeprotseq</a></td>
+<td>Creates random protein sequences</td>
+</tr>
+
+<tr>
+<td><a href="maskfeat.html">maskfeat</a></td>
+<td>Mask off features of a sequence</td>
+</tr>
+
+<tr>
+<td><a href="maskseq.html">maskseq</a></td>
+<td>Mask off regions of a sequence</td>
+</tr>
+
+<tr>
+<td><a href="newseq.html">newseq</a></td>
+<td>Type in a short new sequence</td>
+</tr>
+
+<tr>
+<td><a href="noreturn.html">noreturn</a></td>
+<td>Removes carriage return from ASCII files</td>
+</tr>
+
+<tr>
+<td><a href="notseq.html">notseq</a></td>
+<td>Exclude a set of sequences and write out the remaining ones</td>
+</tr>
+
+<tr>
+<td><a href="nthseq.html">nthseq</a></td>
+<td>Writes one sequence from a multiple set of sequences</td>
+</tr>
+
+<tr>
+<td><a href="pasteseq.html">pasteseq</a></td>
+<td>Insert one sequence into another</td>
+</tr>
+
+<tr>
+<td><a href="revseq.html">revseq</a></td>
+<td>Reverse and complement a sequence</td>
+</tr>
+
+<tr>
+<td><a href="seqret.html">seqret</a></td>
+<td>Reads and writes (returns) sequences</td>
+</tr>
+
+<tr>
+<td><a href="seqretsplit.html">seqretsplit</a></td>
+<td>Reads and writes (returns) sequences in individual files</td>
+</tr>
+
+<tr>
+<td><a href="skipseq.html">skipseq</a></td>
+<td>Reads and writes (returns) sequences, skipping first few</td>
+</tr>
+
+<tr>
+<td><a href="splitter.html">splitter</a></td>
+<td>Split a sequence into (overlapping) smaller sequences</td>
+</tr>
+
+<tr>
+<td><a href="trimest.html">trimest</a></td>
+<td>Trim poly-A tails off EST sequences</td>
+</tr>
+
+<tr>
+<td><a href="trimseq.html">trimseq</a></td>
+<td>Trim ambiguous bits off the ends of sequences</td>
+</tr>
+
+<tr>
+<td><a href="union.html">union</a></td>
+<td>Reads sequence fragments and builds one sequence</td>
+</tr>
+
+<tr>
+<td><a href="vectorstrip.html">vectorstrip</a></td>
+<td>Strips out DNA between a pair of vector sequences</td>
+</tr>
+
+<tr>
+<td><a href="yank.html">yank</a></td>
+<td>Reads a sequence range, appends the full USA to a list file</td>
+</tr>
+
+</table>
 <!-- 
         Add any comments about other associated programs (to prepare
         data files?) that seealso doesn't find. 
@@ -602,82 +624,66 @@ Alan Bleasby (ajb&nbsp;&copy;&nbsp;ebi.ac.uk)
 <br>
 European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
 
-
 Bernd Jagla (bernd&nbsp;&copy;&nbsp;golgi.ski.mskcc.org)
 <br>
 Cellular Biochemistry and Biophysics Program, Rockefeller
 Research Laboratories, Memorial Sloan-Kettering Cancer Center, 1275 York
 Avenue, Box 251,New York, NY 10021.
-
 David Martin (dmartin&nbsp;&copy;&nbsp;rfcgr.mrc.ac.uk)
 <br>
-
 Gos Micklem (gos&nbsp;&copy;&nbsp;ebi.ac.uk)
 <br>
 Informatics Division, European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
-
 Gary Williams (gwilliam&nbsp;&copy;&nbsp;rfcgr.mrc.ac.uk)
 <br>
 MRC Rosalind Franklin Centre for Genomics Research
 Wellcome Trust Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
 
-
 Ian Longden (il&nbsp;&copy;&nbsp;sanger.ac.uk)
 <br>
 Sanger Institute, Wellcome Trust Genome Campus, Hinxton,
 Cambridge, CB10 1SA, UK.                      
-
 Mark Faller (current e-mail address unknown)
 <br>
 while he was with:
 <br>
 HGMP-RC, Genome Campus, Hinxton, Cambridge CB10 1SB, UK
-
 Michael K. Schuster and Martin Grabner (martin.grabner&nbsp;&copy;&nbsp;univie.ac.at)
 <br>
 from the Austrian National EMBnet node.
 
-
 Michael Schmitz (mschmitz&nbsp;&copy;&nbsp;lbl.gov)
 <br>
 Lawrence Berkeley Labs, USA
-
 Nicolas Tourasse (nicolas.tourasse&nbsp;&copy;&nbsp;biotek.uio.no)
 <br>
 Biotechnology Center of Oslo
-
 Peter Rice (pmr&nbsp;&copy;&nbsp;ebi.ac.uk)
 <br>
 Informatics Division, European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
-
 Richard Durbin (rd&nbsp;&copy;&nbsp;sanger.ac.uk)
 <br>
 Sanger Institute, Wellcome Trust Genome Campus, Hinxton,
 Cambridge, CB10 1SA, UK.                      
-
 Richard Bruskiewich (r.bruskiewich@cgiar.org)
 <br>
 while he was at:
 <br>
 Sanger Institute, Wellcome Trust Genome Campus, Hinxton,
 Cambridge, CB10 1SA, UK.                      
-
 Rodrigo Lopez (rls&nbsp;&copy;&nbsp;ebi.ac.uk)
 <br>
 European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
-
 Sinead O'Leary (current e-mail address unknown)
 <br>
 while she was at:
 <br>
 HGMP-RC, Genome Campus, Hinxton, Cambridge CB10 1SB, UK
 
-
 Tim Carver (tcarver&nbsp;&copy;&nbsp;rfcgr.mrc.ac.uk)
 <br>
 MRC Rosalind Franklin Centre for Genomics Research
 Wellcome Trust Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
-
 Thomas Laurent (thomas.laurent&nbsp;&copy;&nbsp;uk.lionbioscience.com)
 <br>
 Lion Bioscience Ltd,
@@ -686,12 +692,10 @@ Lion Bioscience Ltd,
      Cambridge,
      CB5 8DZ,
      UK
-
 Val Curwen (vac&nbsp;&copy;&nbsp;sanger.ac.uk)
 <br>
 Sanger Institute, Wellcome Trust Genome Campus, Hinxton,
 Cambridge, CB10 1SA, UK. 
-
 
    -->
 
@@ -719,7 +723,6 @@ EDIT HERE
 
 
 
-
 <H2>
     Target users
 </H2>
@@ -728,7 +731,6 @@ EDIT HERE
    -->
 This program is intended to be used by everyone and everything, from naive users to embedded scripts.
 
-
 <H2>
     Comments
 </H2>
@@ -736,7 +738,6 @@ This program is intended to be used by everyone and everything, from naive users
         User/developer/other comments go in this file.
    -->
 None
-
 
 
 </BODY>

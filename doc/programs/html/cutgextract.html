@@ -12,7 +12,6 @@
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
-
 cutgextract
 </font></b>
 </td></tr>
@@ -22,12 +21,10 @@ cutgextract
 
 
 
-
 <H2>
     Function
 </H2>
 Extract data from CUTG
-
 <H2>
     Description
 </H2>
@@ -105,13 +102,12 @@ These files names will be long (and therefore descriptive).
 
 % <b>cutgextract </b>
 Extract data from CUTG
-CUTG directory [.]: <b>data</b>
-Output file [outfile.cutgextract]: <b></b>
+Codon usage directories [.]: <b>data</b>
+General log output file [outfile.cutgextract]: <b></b>
 
 </pre></td></tr></table><p>
 <p>
 <a href="#output.1">Go to the output files for this example</a><p><p>
-
 
 
 <H2>
@@ -120,20 +116,23 @@ Output file [outfile.cutgextract]: <b></b>
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
    Standard (Mandatory) qualifiers:
-  [-directory]         dirlist    CUTG directory
-  [-outfile]           outfile    Output file name
+  [-directory]         dirlist    [.] Codon usage directories
+  [-outfile]           outfile    [*.cutgextract] General log output file
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers:
-   -release            string     CUTG release
-   -wildspec           string     Type of codon file
-   -species            string     Species wildcard
-   -allrecords         boolean    Include all records, including those with
-                                  warnings
+   -release            string     CUTG release (Any string is accepted)
+   -wildspec           string     [*.codon] Type of codon file (Any string is
+                                  accepted)
+   -species            string     [*] Species wildcard (Any string is
+                                  accepted)
+   -allrecords         boolean    [N] Include all records, including those
+                                  with warnings
    -filename           string     Single output filename to override automatic
                                   one file for each species. Leave blank to
                                   generate the filenames. Specify a filename
                                   to combine several species into one file.
+                                  (Any string is accepted)
 
    Associated qualifiers:
 
@@ -153,8 +152,7 @@ Output file [outfile.cutgextract]: <b></b>
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
-   -die                boolean    Report deaths
-
+   -die                boolean    Report dying program messages
 
 </pre>
 </td></tr></table>
@@ -168,16 +166,16 @@ Output file [outfile.cutgextract]: <b></b>
 
 <tr>
 <td>[-directory]<br>(Parameter 1)</td>
-<td>CUTG directory</td>
+<td>Codon usage directories</td>
 <td>Directory with files</td>
 <td>.</td>
 </tr>
 
 <tr>
 <td>[-outfile]<br>(Parameter 2)</td>
-<td>Output file name</td>
+<td>General log output file</td>
 <td>Output file</td>
-<td><i>&lt;sequence&gt;</i>.cutgextract</td>
+<td>&nbsp;</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
@@ -233,11 +231,9 @@ Output file [outfile.cutgextract]: <b></b>
 
 </table>
 
-
 <H2>
     Input file format
 </H2>
-
 
 <H2>
     Output file format
@@ -267,7 +263,6 @@ Writing EAedes_aegypti.cut CDS: 23
 Writing EAnadara_trapezia.cut CDS: 2
 </pre>
 </td></tr></table><p>
-
 
 
 <H2>
@@ -315,13 +310,32 @@ None.
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
-<tr><td><a href="aaindexextract.html">aaindexextract</a></td><td>Extract data from AAINDEX</td></tr>
-<tr><td><a href="printsextract.html">printsextract</a></td><td>Extract data from PRINTS</td></tr>
-<tr><td><a href="prosextract.html">prosextract</a></td><td>Build the PROSITE motif database for use by patmatmotifs</td></tr>
-<tr><td><a href="rebaseextract.html">rebaseextract</a></td><td>Extract data from REBASE</td></tr>
-<tr><td><a href="tfextract.html">tfextract</a></td><td>Extract data from TRANSFAC</td></tr>
-</table>
+<tr>
+<td><a href="aaindexextract.html">aaindexextract</a></td>
+<td>Extract data from AAINDEX</td>
+</tr>
 
+<tr>
+<td><a href="printsextract.html">printsextract</a></td>
+<td>Extract data from PRINTS</td>
+</tr>
+
+<tr>
+<td><a href="prosextract.html">prosextract</a></td>
+<td>Build the PROSITE motif database for use by patmatmotifs</td>
+</tr>
+
+<tr>
+<td><a href="rebaseextract.html">rebaseextract</a></td>
+<td>Extract data from REBASE</td>
+</tr>
+
+<tr>
+<td><a href="tfextract.html">tfextract</a></td>
+<td>Extract data from TRANSFAC</td>
+</tr>
+
+</table>
 
 <H2>
     Author(s)
@@ -332,13 +346,11 @@ Alan Bleasby (ajb&nbsp;&copy;&nbsp;ebi.ac.uk)
 European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
 
 
-
 <H2>
     History
 </H2>
 
 Written (June 2001) - Alan Bleasby.
-
 
 <H2>
     Target users
@@ -346,12 +358,10 @@ Written (June 2001) - Alan Bleasby.
 This program is intended to be used by administrators responsible
 for software and database installation and maintenance. 
 
-
 <H2>
     Comments
 </H2>
 None
-
 
 
 </BODY>

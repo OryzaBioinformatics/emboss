@@ -1,0 +1,24 @@
+   Mandatory qualifiers (* if not always prompted):
+  [-sequence]          seqall     Sequence database USA
+*  -outseq             seqoutall  Output sequence(s) USA
+   -lwin               integer    Window length
+   -step               integer    the displacement of the window over the
+                                  sequence
+   -jmin               integer    Minimum word length
+   -jmax               integer    Maximum word length
+   -outfile            outfile    Output file name
+*  -ujtable            outfile    UjTable temporary file name
+
+   Optional qualifiers: (none)
+   Advanced qualifiers:
+   -omnia              bool       calculate over a set of sequences
+   -sim                integer    calculate the linguistic complexity by
+                                  comparison with a number of simulations
+                                  having a uniform distribution of bases
+   -freq               bool       execute the simulation of a sequence based
+                                  on the base frequency of the original
+                                  sequence
+   -print              bool       generate a file named UjTable containing the
+                                  values of Uj for each word j in the real
+                                  sequence(s) and in any simulated sequences
+

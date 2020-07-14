@@ -14,7 +14,6 @@
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
-
 sixpack
 </font></b>
 </td></tr>
@@ -23,12 +22,10 @@ sixpack
 <p>
 
 
-
 <H2>
     Function
 </H2>
 Display a DNA sequence with 6-frame translation and ORFs
-
 <!--
 DON'T WRITE ANYTHING HERE.
 IT IS DONE FOR YOU.
@@ -103,14 +100,13 @@ the output sequence file.
 
 % <b>sixpack </b>
 Display a DNA sequence with 6-frame translation and ORFs
-Input sequence: <b>tembl:paamir</b>
+Input nucleotide sequence: <b>tembl:paamir</b>
 Output file [paamir.sixpack]: <b></b>
-Output sequence [paamir.fasta]: <b></b>
+protein output sequence(s) [paamir.fasta]: <b></b>
 
 </pre></td></tr></table><p>
 <p>
 <a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
-
 
 
 
@@ -121,26 +117,47 @@ Output sequence [paamir.fasta]: <b></b>
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
    Standard (Mandatory) qualifiers:
-  [-sequence]          sequence   Sequence USA
-  [-outfile]           outfile    Output file name
-   -outseq             seqoutall  ORF sequence output
+  [-sequence]          sequence   Nucleotide sequence filename and optional
+                                  format, or reference (input USA)
+  [-outfile]           outfile    [*.sixpack] Output file name
+   -outseq             seqoutall  [<sequence>.<format>] ORF sequence output
 
    Additional (Optional) qualifiers:
-   -table              menu       Genetics code used for the translation
-   -[no]firstorf       boolean    Count the beginning of a sequence as a
+   -table              menu       [0] Genetics code used for the translation
+                                  (Values: 0 (Standard); 1 (Standard (with
+                                  alternative initiation codons)); 2
+                                  (Vertebrate Mitochondrial); 3 (Yeast
+                                  Mitochondrial); 4 (Mold, Protozoan,
+                                  Coelenterate Mitochondrial and
+                                  Mycoplasma/Spiroplasma); 5 (Invertebrate
+                                  Mitochondrial); 6 (Ciliate Macronuclear and
+                                  Dasycladacean); 9 (Echinoderm
+                                  Mitochondrial); 10 (Euplotid Nuclear); 11
+                                  (Bacterial); 12 (Alternative Yeast Nuclear);
+                                  13 (Ascidian Mitochondrial); 14 (Flatworm
+                                  Mitochondrial); 15 (Blepharisma
+                                  Macronuclear); 16 (Chlorophycean
+                                  Mitochondrial); 21 (Trematode
+                                  Mitochondrial); 22 (Scenedesmus obliquus);
+                                  23 (Thraustochytrium Mitochondrial))
+   -[no]firstorf       boolean    [Y] Count the beginning of a sequence as a
                                   possible ORF, even if it's inferior to the
                                   minimal ORF size.
-   -[no]lastorf        boolean    Count the end of a sequence as a possible
-                                  ORF, even if it's not finishing with a STOP,
-                                  or inferior to the minimal ORF size.
-   -mstart             boolean    Displays only ORFs starting with an M.
+   -[no]lastorf        boolean    [Y] Count the end of a sequence as a
+                                  possible ORF, even if it's not finishing
+                                  with a STOP, or inferior to the minimal ORF
+                                  size.
+   -mstart             boolean    [N] Displays only ORFs starting with an M.
 
    Advanced (Unprompted) qualifiers:
-   -[no]reverse        boolean    Display also the translation of the DNA
+   -[no]reverse        boolean    [Y] Display also the translation of the DNA
                                   sequence in the 3 reverse frames
-   -orfminsize         integer    Minimum size of Open Reading Frames (ORFs)
-                                  to display in the translations.
-   -uppercase          range      Regions to put in uppercase.
+   -orfminsize         integer    [1] Minimum size of Open Reading Frames
+                                  (ORFs) to display in the translations.
+                                  (Integer 1 or more)
+   -uppercase          range      [If this is left blank, then the sequence
+                                  case is left alone.] Regions to put in
+                                  uppercase.
                                   If this is left blank, then the sequence
                                   case is left alone.
                                   A set of regions is specified by a set of
@@ -152,7 +169,8 @@ Output sequence [paamir.fasta]: <b></b>
                                   24-45, 56-78
                                   1:45, 67=99;765..888
                                   1,5,8,10,23,45,57,99
-   -highlight          range      Regions to colour if formatting for HTML.
+   -highlight          range      [(full sequence)] Regions to colour if
+                                  formatting for HTML.
                                   If this is left blank, then the sequence is
                                   left alone.
                                   A set of regions is specified by a set of
@@ -165,67 +183,69 @@ Output sequence [paamir.fasta]: <b></b>
                                   1-100 green 120-156 red
                                   A file of ranges to colour (one range per
                                   line) can be specifed as '@filename'.
-   -[no]number         boolean    Number the sequence at the beginning and the
-                                  end of each line.
-   -width              integer    Number of nucleotides displayed on each line
-   -length             integer    Line length of page (0 for indefinite)
-   -margin             integer    Margin around sequence for numbering.
-   -[no]name           boolean    Set this to be false if you do not wish to
-                                  display the ID name of the sequence.
-   -[no]description    boolean    Set this to be false if you do not wish to
-                                  display the description of the sequence.
-   -offset             integer    Number from which you want the DNA sequence
-                                  to be numbered.
-   -html               boolean    Use HTML formatting
+   -[no]number         boolean    [Y] Number the sequence at the beginning and
+                                  the end of each line.
+   -width              integer    [60] Number of nucleotides displayed on each
+                                  line (Integer 1 or more)
+   -length             integer    [0] Line length of page (0 for indefinite)
+                                  (Integer 0 or more)
+   -margin             integer    [10] Margin around sequence for numbering.
+                                  (Integer 0 or more)
+   -[no]name           boolean    [Y] Set this to be false if you do not wish
+                                  to display the ID name of the sequence.
+   -[no]description    boolean    [Y] Set this to be false if you do not wish
+                                  to display the description of the sequence.
+   -offset             integer    [1] Number from which you want the DNA
+                                  sequence to be numbered. (Any integer value)
+   -html               boolean    [N] Use HTML formatting
 
    Associated qualifiers:
 
    "-sequence" associated qualifiers
-   -sbegin1             integer    Start of the sequence to be used
-   -send1               integer    End of the sequence to be used
-   -sreverse1           boolean    Reverse (if DNA)
-   -sask1               boolean    Ask for begin/end/reverse
-   -snucleotide1        boolean    Sequence is nucleotide
-   -sprotein1           boolean    Sequence is protein
-   -slower1             boolean    Make lower case
-   -supper1             boolean    Make upper case
-   -sformat1            string     Input sequence format
-   -sdbname1            string     Database name
-   -sid1                string     Entryname
-   -ufo1                string     UFO features
-   -fformat1            string     Features format
-   -fopenfile1          string     Features file name
+   -sbegin1            integer    Start of the sequence to be used
+   -send1              integer    End of the sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
 
    "-outfile" associated qualifiers
-   -odirectory2         string     Output directory
+   -odirectory2        string     Output directory
 
    "-outseq" associated qualifiers
-   -osformat            string     Output seq format
-   -osextension         string     File name extension
-   -osname              string     Base file name
-   -osdirectory         string     Output directory
-   -osdbname            string     Database name to add
-   -ossingle            boolean    Separate file for each entry
-   -oufo                string     UFO features
-   -offormat            string     Features format
-   -ofname              string     Features file name
-   -ofdirectory         string     Output directory
+   -osformat           string     Output seq format
+   -osextension        string     File name extension
+   -osname             string     Base file name
+   -osdirectory        string     Output directory
+   -osdbname           string     Database name to add
+   -ossingle           boolean    Separate file for each entry
+   -oufo               string     UFO features
+   -offormat           string     Features format
+   -ofname             string     Features file name
+   -ofdirectory        string     Output directory
 
    General qualifiers:
-   -auto                boolean    Turn off prompts
-   -stdout              boolean    Write standard output
-   -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for standard and additional values
-   -debug               boolean    Write debug output to program.dbg
-   -verbose             boolean    Report some/full command line options
-   -help                boolean    Report command line options. More
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
-   -warning             boolean    Report warnings
-   -error               boolean    Report errors
-   -fatal               boolean    Report fatal errors
-   -die                 boolean    Report deaths
-
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
 
 </pre>
 </td></tr></table>
@@ -239,7 +259,7 @@ Output sequence [paamir.fasta]: <b></b>
 
 <tr>
 <td>[-sequence]<br>(Parameter 1)</td>
-<td>Sequence USA</td>
+<td>Nucleotide sequence filename and optional format, or reference (input USA)</td>
 <td>Readable sequence</td>
 <td><b>Required</b></td>
 </tr>
@@ -248,14 +268,14 @@ Output sequence [paamir.fasta]: <b></b>
 <td>[-outfile]<br>(Parameter 2)</td>
 <td>Output file name</td>
 <td>Output file</td>
-<td><i>&lt;sequence&gt;</i>.sixpack</td>
+<td>&nbsp;</td>
 </tr>
 
 <tr>
 <td>-outseq</td>
 <td>ORF sequence output</td>
 <td>Writeable sequence(s)</td>
-<td><i>&lt;sequence&gt;</i>.<i>format</i></td>
+<td>&nbsp;</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
@@ -400,7 +420,6 @@ A file of ranges to colour (one range per line) can be specifed as '@filename'.<
 
 </table>
 
-
 <H2>
     Input file format
 </H2>
@@ -525,7 +544,6 @@ SQ   Sequence 2167 BP; 363 A; 712 C; 730 G; 362 T; 0 other;
 //
 </pre>
 </td></tr></table><p>
-
 
 <H2>
     Output file format
@@ -755,7 +773,6 @@ LSLSAVRSEPARAPGSPGRSCSSRRPAGGDRADARPAVP
 </pre>
 </td></tr></table><p>
 
-
 <H2>
     Data files
 </H2>
@@ -799,7 +816,6 @@ The directories are searched in the following order:
    <li> ~/.embossdata
 </ul>
 <p>
-
 
 <p>
 The Genetic Code data files are based on the NCBI genetic code tables.
@@ -893,7 +909,6 @@ Base3  = TCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAG
 </pre>
 
 
-
 <H2>
     Notes
 </H2>
@@ -933,32 +948,132 @@ None.
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
-<tr><td><a href="abiview.html">abiview</a></td><td>Reads ABI file and display the trace</td></tr>
-<tr><td><a href="backtranseq.html">backtranseq</a></td><td>Back translate a protein sequence</td></tr>
-<tr><td><a href="cirdna.html">cirdna</a></td><td>Draws circular maps of DNA constructs</td></tr>
-<tr><td><a href="coderet.html">coderet</a></td><td>Extract CDS, mRNA and translations from feature tables</td></tr>
-<tr><td><a href="getorf.html">getorf</a></td><td>Finds and extracts open reading frames (ORFs)</td></tr>
-<tr><td><a href="lindna.html">lindna</a></td><td>Draws linear maps of DNA constructs</td></tr>
-<tr><td><a href="marscan.html">marscan</a></td><td>Finds MAR/SAR sites in nucleic sequences</td></tr>
-<tr><td><a href="pepnet.html">pepnet</a></td><td>Displays proteins as a helical net</td></tr>
-<tr><td><a href="pepwheel.html">pepwheel</a></td><td>Shows protein sequences as helices</td></tr>
-<tr><td><a href="plotorf.html">plotorf</a></td><td>Plot potential open reading frames</td></tr>
-<tr><td><a href="prettyplot.html">prettyplot</a></td><td>Displays aligned sequences, with colouring and boxing</td></tr>
-<tr><td><a href="prettyseq.html">prettyseq</a></td><td>Output sequence with translated ranges</td></tr>
-<tr><td><a href="remap.html">remap</a></td><td>Display sequence with restriction sites, translation etc</td></tr>
-<tr><td><a href="seealso.html">seealso</a></td><td>Finds programs sharing group names</td></tr>
-<tr><td><a href="showalign.html">showalign</a></td><td>Displays a multiple sequence alignment</td></tr>
-<tr><td><a href="showdb.html">showdb</a></td><td>Displays information on the currently available databases</td></tr>
-<tr><td><a href="showfeat.html">showfeat</a></td><td>Show features of a sequence</td></tr>
-<tr><td><a href="showorf.html">showorf</a></td><td>Pretty output of DNA translations</td></tr>
-<tr><td><a href="showseq.html">showseq</a></td><td>Display a sequence with features, translation etc</td></tr>
-<tr><td><a href="syco.html">syco</a></td><td>Synonymous codon usage Gribskov statistic plot</td></tr>
-<tr><td><a href="tcode.html">tcode</a></td><td>Fickett TESTCODE statistic to identify protein-coding DNA</td></tr>
-<tr><td><a href="textsearch.html">textsearch</a></td><td>Search sequence documentation. Slow, use SRS and Entrez!</td></tr>
-<tr><td><a href="transeq.html">transeq</a></td><td>Translate nucleic acid sequences</td></tr>
-<tr><td><a href="wobble.html">wobble</a></td><td>Wobble base plot</td></tr>
-</table>
+<tr>
+<td><a href="abiview.html">abiview</a></td>
+<td>Reads ABI file and display the trace</td>
+</tr>
 
+<tr>
+<td><a href="backtranambig.html">backtranambig</a></td>
+<td>Back translate a protein sequence to ambiguous codons</td>
+</tr>
+
+<tr>
+<td><a href="backtranseq.html">backtranseq</a></td>
+<td>Back translate a protein sequence</td>
+</tr>
+
+<tr>
+<td><a href="cirdna.html">cirdna</a></td>
+<td>Draws circular maps of DNA constructs</td>
+</tr>
+
+<tr>
+<td><a href="coderet.html">coderet</a></td>
+<td>Extract CDS, mRNA and translations from feature tables</td>
+</tr>
+
+<tr>
+<td><a href="getorf.html">getorf</a></td>
+<td>Finds and extracts open reading frames (ORFs)</td>
+</tr>
+
+<tr>
+<td><a href="lindna.html">lindna</a></td>
+<td>Draws linear maps of DNA constructs</td>
+</tr>
+
+<tr>
+<td><a href="marscan.html">marscan</a></td>
+<td>Finds MAR/SAR sites in nucleic sequences</td>
+</tr>
+
+<tr>
+<td><a href="pepnet.html">pepnet</a></td>
+<td>Displays proteins as a helical net</td>
+</tr>
+
+<tr>
+<td><a href="pepwheel.html">pepwheel</a></td>
+<td>Shows protein sequences as helices</td>
+</tr>
+
+<tr>
+<td><a href="plotorf.html">plotorf</a></td>
+<td>Plot potential open reading frames</td>
+</tr>
+
+<tr>
+<td><a href="prettyplot.html">prettyplot</a></td>
+<td>Displays aligned sequences, with colouring and boxing</td>
+</tr>
+
+<tr>
+<td><a href="prettyseq.html">prettyseq</a></td>
+<td>Output sequence with translated ranges</td>
+</tr>
+
+<tr>
+<td><a href="remap.html">remap</a></td>
+<td>Display sequence with restriction sites, translation etc</td>
+</tr>
+
+<tr>
+<td><a href="seealso.html">seealso</a></td>
+<td>Finds programs sharing group names</td>
+</tr>
+
+<tr>
+<td><a href="showalign.html">showalign</a></td>
+<td>Displays a multiple sequence alignment</td>
+</tr>
+
+<tr>
+<td><a href="showdb.html">showdb</a></td>
+<td>Displays information on the currently available databases</td>
+</tr>
+
+<tr>
+<td><a href="showfeat.html">showfeat</a></td>
+<td>Show features of a sequence</td>
+</tr>
+
+<tr>
+<td><a href="showorf.html">showorf</a></td>
+<td>Pretty output of DNA translations</td>
+</tr>
+
+<tr>
+<td><a href="showseq.html">showseq</a></td>
+<td>Display a sequence with features, translation etc</td>
+</tr>
+
+<tr>
+<td><a href="syco.html">syco</a></td>
+<td>Synonymous codon usage Gribskov statistic plot</td>
+</tr>
+
+<tr>
+<td><a href="tcode.html">tcode</a></td>
+<td>Fickett TESTCODE statistic to identify protein-coding DNA</td>
+</tr>
+
+<tr>
+<td><a href="textsearch.html">textsearch</a></td>
+<td>Search sequence documentation. Slow, use SRS and Entrez!</td>
+</tr>
+
+<tr>
+<td><a href="transeq.html">transeq</a></td>
+<td>Translate nucleic acid sequences</td>
+</tr>
+
+<tr>
+<td><a href="wobble.html">wobble</a></td>
+<td>Wobble base plot</td>
+</tr>
+
+</table>
 
 <H2>
     Author(s)
@@ -973,7 +1088,6 @@ Lion Bioscience Ltd,
      CB5 8DZ,
      UK
 
-
 <H2>
     History
 </H2>
@@ -982,19 +1096,16 @@ Lion Bioscience Ltd,
 Written (November 2002) - Thomas Laurent
 
 
-
 <H2>
     Target users
 </H2>
 This program is intended to be used by everyone and everything, from naive users to embedded scripts.
 
 
-
 <H2>
     Comments
 </H2>
 None
-
 
 </BODY>
 </HTML>

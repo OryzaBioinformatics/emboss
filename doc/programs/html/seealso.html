@@ -13,7 +13,6 @@
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
-
 seealso
 </font></b>
 </td></tr>
@@ -22,12 +21,10 @@ seealso
 <p>
 
 
-
 <H2>
     Function
 </H2>
 Finds programs sharing group names
-
 
 <H2>
     Description
@@ -88,18 +85,18 @@ wordmatch        Finds all exact matches of a given size between 2 sequences
 <p>
 
 
-
 <H2>
     Command line arguments
 </H2>
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
    Standard (Mandatory) qualifiers:
-  [-search]            string     Enter the name of an EMBOSS program
+  [-search]            string     Enter the name of an EMBOSS program (Any
+                                  string of at least 1 characters)
 
-   Additional (Optional) qualifiers (* if not always prompted):
-   -explode            boolean    The groups that EMBOSS applications belong
-                                  to have two forms, exploded and not
+   Additional (Optional) qualifiers:
+   -explode            boolean    [N] The groups that EMBOSS applications
+                                  belong to have two forms, exploded and not
                                   exploded. The exploded group names are more
                                   numerous and often vaguely phrased than the
                                   non-exploded ones. The exploded names are
@@ -116,51 +113,28 @@ wordmatch        Finds all exact matches of a given size between 2 sequences
                                   programs reported as sharing a similar
                                   function than you will if you specify that
                                   you wish to use non-exploded names
-   -outfile            outfile    Output file name
-   -html               toggle     If you are sending the output to a file,
+   -outfile            outfile    [stdout] Output file name
+   -html               toggle     [N] If you are sending the output to a file,
                                   this will format it for displaying as a
                                   table in a WWW document.
-*  -prelink            string     If you are outputting to a file in HTML
-                                  format, you can make the program names into
-                                  hyper-links by setting this to be the first
-                                  half of the URL.
-                                  For example, if you wish the program name to
-                                  be a hyperlink to the URL:
-                                  http://emboss.sourceforge.net/apps/
-                                  programname.html
-                                  then if you enter
-                                  http://emboss.sourceforge.net/apps/ here,
-                                  then the first half of the URL before the
-                                  program name will be set.
-*  -postlink           string     If you are outputting to a file in HTML
-                                  format, you can make the program names into
-                                  hyper-links by setting this to be the second
-                                  half of the URL.
-                                  For example, if you wish the program name to
-                                  be a hyperlink to the URL:
-                                  http://emboss.sourceforge.net/apps/
-                                  programname.html
-                                  then if you enter '.html' here, the second
-                                  half of the URL after the program name will
-                                  be set.
-   -groups             boolean    If you use this option, then only the group
-                                  names will output to the file
+   -groups             boolean    [N] If you use this option, then only the
+                                  group names will output to the file
 
    Advanced (Unprompted) qualifiers:
-   -[no]emboss         boolean    If you use this option then EMBOSS program
-                                  documentation will be searched. If this
-                                  option is set to be false, then only the
-                                  EMBASSY programs will be searched (if the
-                                  -embassy option is true). EMBASSY programs
-                                  are not strictly part of EMBOSS, but use the
-                                  same code libraries and share the same look
-                                  and feel, but are generally developed by
-                                  people who wish the programs to be outside
-                                  of the GNU Public Licence scheme
-   -[no]embassy        boolean    If you use this option then EMBASSY program
-                                  documentation will be searched. If this
-                                  option is set to be false, then only the
-                                  EMBOSS programs will be searched (if the
+   -[no]emboss         boolean    [Y] If you use this option then EMBOSS
+                                  program documentation will be searched. If
+                                  this option is set to be false, then only
+                                  the EMBASSY programs will be searched (if
+                                  the -embassy option is true). EMBASSY
+                                  programs are not strictly part of EMBOSS,
+                                  but use the same code libraries and share
+                                  the same look and feel, but are generally
+                                  developed by people who wish the programs to
+                                  be outside of the GNU Public Licence scheme
+   -[no]embassy        boolean    [Y] If you use this option then EMBASSY
+                                  program documentation will be searched. If
+                                  this option is set to be false, then only
+                                  the EMBOSS programs will be searched (if the
                                   -emboss option is true). EMBASSY programs
                                   are not strictly part of EMBOSS, but use the
                                   same code libraries and share the same look
@@ -174,10 +148,11 @@ wordmatch        Finds all exact matches of a given size between 2 sequences
                                   libraries and share the same look and feel,
                                   but are generally developed by people who
                                   wish the programs to be outside of the GNU
-                                  Public Licence scheme
-   -colon              boolean    The groups that EMBOSS applications belong
-                                  to have up to two levels, for example the
-                                  primary group 'ALIGNMENT' has several
+                                  Public Licence scheme (Any string is
+                                  accepted)
+   -colon              boolean    [N] The groups that EMBOSS applications
+                                  belong to have up to two levels, for example
+                                  the primary group 'ALIGNMENT' has several
                                   sub-groups, or second-level groups, e.g.:
                                   CONSENSUS, DIFFERENCES, DOT PLOTS, GLOBAL,
                                   LOCAL, MULTIPLE. To aid programs that parse
@@ -204,8 +179,7 @@ wordmatch        Finds all exact matches of a given size between 2 sequences
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
-   -die                boolean    Report deaths
-
+   -die                boolean    Report dying program messages
 
 </pre>
 </td></tr></table>
@@ -221,7 +195,7 @@ wordmatch        Finds all exact matches of a given size between 2 sequences
 <tr>
 <td>[-search]<br>(Parameter 1)</td>
 <td>Enter the name of an EMBOSS program</td>
-<td>A string of at least 1 characters</td>
+<td>Any string of at least 1 characters</td>
 <td><b>Required</b></td>
 </tr>
 
@@ -251,29 +225,6 @@ Using expanded group names will find many more programs which share at least som
 <td>If you are sending the output to a file, this will format it for displaying as a table in a WWW document.</td>
 <td>Toggle value Yes/No</td>
 <td>No</td>
-</tr>
-
-<tr>
-<td>-prelink</td>
-<td>If you are outputting to a file in HTML format, you can make the program names into hyper-links by setting this to be the first half of the URL.
-For example, if you wish the program name to be a hyperlink to the URL:
-http://emboss.sourceforge.net/apps/
-programname.html
-then if you enter
-http://emboss.sourceforge.net/apps/ here, then the first half of the URL before the program name will be set.</td>
-<td>Any string is accepted</td>
-<td><i>An empty string is accepted</i></td>
-</tr>
-
-<tr>
-<td>-postlink</td>
-<td>If you are outputting to a file in HTML format, you can make the program names into hyper-links by setting this to be the second half of the URL.
-For example, if you wish the program name to be a hyperlink to the URL:
-http://emboss.sourceforge.net/apps/
-programname.html
-then if you enter '.html' here, the second half of the URL after the program name will be set.</td>
-<td>Any string is accepted</td>
-<td><i>An empty string is accepted</i></td>
 </tr>
 
 <tr>
@@ -320,17 +271,14 @@ then if you enter '.html' here, the second half of the URL after the program nam
 </table>
 
 
-
 <H2>
     Input file format
 </H2>
 
 
-
 <H2>
     Output file format
 </H2>
-
 
 
 
@@ -408,27 +356,102 @@ None.
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
-<tr><td><a href="abiview.html">abiview</a></td><td>Reads ABI file and display the trace</td></tr>
-<tr><td><a href="cirdna.html">cirdna</a></td><td>Draws circular maps of DNA constructs</td></tr>
-<tr><td><a href="infoalign.html">infoalign</a></td><td>Information on a multiple sequence alignment</td></tr>
-<tr><td><a href="infoseq.html">infoseq</a></td><td>Displays some simple information about sequences</td></tr>
-<tr><td><a href="lindna.html">lindna</a></td><td>Draws linear maps of DNA constructs</td></tr>
-<tr><td><a href="pepnet.html">pepnet</a></td><td>Displays proteins as a helical net</td></tr>
-<tr><td><a href="pepwheel.html">pepwheel</a></td><td>Shows protein sequences as helices</td></tr>
-<tr><td><a href="prettyplot.html">prettyplot</a></td><td>Displays aligned sequences, with colouring and boxing</td></tr>
-<tr><td><a href="prettyseq.html">prettyseq</a></td><td>Output sequence with translated ranges</td></tr>
-<tr><td><a href="remap.html">remap</a></td><td>Display sequence with restriction sites, translation etc</td></tr>
-<tr><td><a href="showalign.html">showalign</a></td><td>Displays a multiple sequence alignment</td></tr>
-<tr><td><a href="showdb.html">showdb</a></td><td>Displays information on the currently available databases</td></tr>
-<tr><td><a href="showfeat.html">showfeat</a></td><td>Show features of a sequence</td></tr>
-<tr><td><a href="showseq.html">showseq</a></td><td>Display a sequence with features, translation etc</td></tr>
-<tr><td><a href="sixpack.html">sixpack</a></td><td>Display a DNA sequence with 6-frame translation and ORFs</td></tr>
-<tr><td><a href="textsearch.html">textsearch</a></td><td>Search sequence documentation. Slow, use SRS and Entrez!</td></tr>
-<tr><td><a href="tfm.html">tfm</a></td><td>Displays a program's help documentation manual</td></tr>
-<tr><td><a href="whichdb.html">whichdb</a></td><td>Search all databases for an entry</td></tr>
-<tr><td><a href="wossname.html">wossname</a></td><td>Finds programs by keywords in their one-line documentation</td></tr>
-</table>
+<tr>
+<td><a href="abiview.html">abiview</a></td>
+<td>Reads ABI file and display the trace</td>
+</tr>
 
+<tr>
+<td><a href="cirdna.html">cirdna</a></td>
+<td>Draws circular maps of DNA constructs</td>
+</tr>
+
+<tr>
+<td><a href="infoalign.html">infoalign</a></td>
+<td>Information on a multiple sequence alignment</td>
+</tr>
+
+<tr>
+<td><a href="infoseq.html">infoseq</a></td>
+<td>Displays some simple information about sequences</td>
+</tr>
+
+<tr>
+<td><a href="lindna.html">lindna</a></td>
+<td>Draws linear maps of DNA constructs</td>
+</tr>
+
+<tr>
+<td><a href="pepnet.html">pepnet</a></td>
+<td>Displays proteins as a helical net</td>
+</tr>
+
+<tr>
+<td><a href="pepwheel.html">pepwheel</a></td>
+<td>Shows protein sequences as helices</td>
+</tr>
+
+<tr>
+<td><a href="prettyplot.html">prettyplot</a></td>
+<td>Displays aligned sequences, with colouring and boxing</td>
+</tr>
+
+<tr>
+<td><a href="prettyseq.html">prettyseq</a></td>
+<td>Output sequence with translated ranges</td>
+</tr>
+
+<tr>
+<td><a href="remap.html">remap</a></td>
+<td>Display sequence with restriction sites, translation etc</td>
+</tr>
+
+<tr>
+<td><a href="showalign.html">showalign</a></td>
+<td>Displays a multiple sequence alignment</td>
+</tr>
+
+<tr>
+<td><a href="showdb.html">showdb</a></td>
+<td>Displays information on the currently available databases</td>
+</tr>
+
+<tr>
+<td><a href="showfeat.html">showfeat</a></td>
+<td>Show features of a sequence</td>
+</tr>
+
+<tr>
+<td><a href="showseq.html">showseq</a></td>
+<td>Display a sequence with features, translation etc</td>
+</tr>
+
+<tr>
+<td><a href="sixpack.html">sixpack</a></td>
+<td>Display a DNA sequence with 6-frame translation and ORFs</td>
+</tr>
+
+<tr>
+<td><a href="textsearch.html">textsearch</a></td>
+<td>Search sequence documentation. Slow, use SRS and Entrez!</td>
+</tr>
+
+<tr>
+<td><a href="tfm.html">tfm</a></td>
+<td>Displays a program's help documentation manual</td>
+</tr>
+
+<tr>
+<td><a href="whichdb.html">whichdb</a></td>
+<td>Search all databases for an entry</td>
+</tr>
+
+<tr>
+<td><a href="wossname.html">wossname</a></td>
+<td>Finds programs by keywords in their one-line documentation</td>
+</tr>
+
+</table>
 
 
 <H2>
@@ -443,14 +466,12 @@ Wellcome Trust Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
 
 
 
-
 <H2>
     History
 </H2>
 
 Written 16 June 2000 in response to a need to improve the automatic
 construction of EMBOSS documentation web pages. 
-
 <H2>
     Target users
 </H2>
@@ -458,12 +479,10 @@ This program is intended to be used by everyone and everything, from naive users
 
 
 
-
 <H2>
     Comments
 </H2>
 None
-
 
 
 

@@ -13,7 +13,6 @@
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
-
 remap
 </font></b>
 </td></tr>
@@ -22,13 +21,11 @@ remap
 <p>
 
 
-
 <H2>
     Function
 </H2>
 
 Display sequence with restriction sites, translation etc
-
 
 <H2>
     Description
@@ -107,7 +104,7 @@ This example uses only a small region of the input sequence to save space. This 
 
 % <b>remap -notran -sbeg 1 -send 60 </b>
 Display sequence with restriction sites, translation etc.
-Input sequence(s): <b>tembl:eclac</b>
+Input nucleotide sequence(s): <b>tembl:eclac</b>
 Comma separated enzyme list [all]: <b>taqi,bsu6i,acii,bsski</b>
 Minimum recognition site length [4]: <b></b>
 Output file [eclac.remap]: <b></b>
@@ -126,7 +123,7 @@ This is an example where all enzymes in the REBASE database are used, (but only 
 
 % <b>remap -notran -sbeg 1 -send 60 </b>
 Display sequence with restriction sites, translation etc.
-Input sequence(s): <b>tembl:eclac</b>
+Input nucleotide sequence(s): <b>tembl:eclac</b>
 Comma separated enzyme list [all]: <b></b>
 Minimum recognition site length [4]: <b></b>
 Output file [eclac.remap]: <b></b>
@@ -145,7 +142,7 @@ This is an example where all enzymes in the REBASE database are used but the -li
 
 % <b>remap -notran -sbeg 1 -send 60 -nolimit </b>
 Display sequence with restriction sites, translation etc.
-Input sequence(s): <b>tembl:eclac</b>
+Input nucleotide sequence(s): <b>tembl:eclac</b>
 Comma separated enzyme list [all]: <b></b>
 Minimum recognition site length [4]: <b></b>
 Output file [eclac.remap]: <b></b>
@@ -164,7 +161,7 @@ This shows the 'flat' format: This is run with a small test version of the restr
 
 % <b>remap -notran -sbeg 1 -send 60 -flat </b>
 Display sequence with restriction sites, translation etc.
-Input sequence(s): <b>tembl:eclac</b>
+Input nucleotide sequence(s): <b>tembl:eclac</b>
 Comma separated enzyme list [all]: <b></b>
 Minimum recognition site length [4]: <b></b>
 Output file [eclac.remap]: <b></b>
@@ -173,18 +170,18 @@ Output file [eclac.remap]: <b></b>
 <p>
 <a href="#output.4">Go to the output files for this example</a><p><p>
 
-
 <H2>
     Command line arguments
 </H2>
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
    Standard (Mandatory) qualifiers:
-  [-sequence]          seqall     Sequence database USA
-   -enzymes            string     The name 'all' reads in all enzyme names
-                                  from the REBASE database. You can specify
-                                  enzymes by giving their names with commas
-                                  between then, such as:
+  [-sequence]          seqall     Nucleotide sequence(s) filename and optional
+                                  format, or reference (input USA)
+   -enzymes            string     [all] The name 'all' reads in all enzyme
+                                  names from the REBASE database. You can
+                                  specify enzymes by giving their names with
+                                  commas between then, such as:
                                   'HincII,hinfI,ppiI,hindiii'.
                                   The case of the names is not important. You
                                   can specify a file of enzyme names to read
@@ -202,43 +199,45 @@ Output file [eclac.remap]: <b></b>
                                   ! other enzymes
                                   hindiii
                                   HinfI
-                                  PpiI
-   -sitelen            integer    This sets the minimum length of the
+                                  PpiI (Any string is accepted)
+   -sitelen            integer    [4] This sets the minimum length of the
                                   restriction enzyme recognition site. Any
                                   enzymes with sites shorter than this will be
-                                  ignored.
-  [-outfile]           outfile    Output file name
+                                  ignored. (Integer from 2 to 20)
+  [-outfile]           outfile    [*.remap] Output file name
 
    Additional (Optional) qualifiers:
-   -mincuts            integer    This sets the minimum number of cuts for any
-                                  restriction enzyme that will be considered.
-                                  Any enzymes that cut fewer times than this
-                                  will be ignored.
-   -maxcuts            integer    This sets the maximum number of cuts for any
-                                  restriction enzyme that will be considered.
-                                  Any enzymes that cut more times than this
-                                  will be ignored.
-   -single             boolean    If this is set then this forces the values
-                                  of the mincuts and maxcuts qualifiers to
-                                  both be 1. Any other value you may have set
-                                  them to will be ignored.
-   -[no]blunt          boolean    This allows those enzymes which cut at the
-                                  same position on the forward and reverse
+   -mincuts            integer    [1] This sets the minimum number of cuts for
+                                  any restriction enzyme that will be
+                                  considered. Any enzymes that cut fewer times
+                                  than this will be ignored. (Integer from 1
+                                  to 1000)
+   -maxcuts            integer    [2000000000] This sets the maximum number of
+                                  cuts for any restriction enzyme that will
+                                  be considered. Any enzymes that cut more
+                                  times than this will be ignored. (Integer up
+                                  to 2000000000)
+   -single             boolean    [N] If this is set then this forces the
+                                  values of the mincuts and maxcuts qualifiers
+                                  to both be 1. Any other value you may have
+                                  set them to will be ignored.
+   -[no]blunt          boolean    [Y] This allows those enzymes which cut at
+                                  the same position on the forward and reverse
                                   strands to be considered.
-   -[no]sticky         boolean    This allows those enzymes which cut at
+   -[no]sticky         boolean    [Y] This allows those enzymes which cut at
                                   different positions on the forward and
                                   reverse strands, leaving an overhang, to be
                                   considered.
-   -[no]ambiguity      boolean    This allows those enzymes which have one or
-                                  more 'N' ambiguity codes in their pattern to
-                                  be considered
-   -plasmid            boolean    If this is set then this allows searches for
-                                  restriction enzyme recognition site and cut
-                                  postions that span the end of the sequence
-                                  to be considered.
-   -[no]commercial     boolean    If this is set, then only those enzymes with
-                                  a commercial supplier will be searched for.
-                                  This qualifier is ignored if you have
+   -[no]ambiguity      boolean    [Y] This allows those enzymes which have one
+                                  or more 'N' ambiguity codes in their
+                                  pattern to be considered
+   -plasmid            boolean    [N] If this is set then this allows searches
+                                  for restriction enzyme recognition site and
+                                  cut postions that span the end of the
+                                  sequence to be considered.
+   -[no]commercial     boolean    [Y] If this is set, then only those enzymes
+                                  with a commercial supplier will be searched
+                                  for. This qualifier is ignored if you have
                                   specified an explicit list of enzymes to
                                   search for, rather than searching through
                                   'all' the enzymes in the REBASE database. It
@@ -248,27 +247,45 @@ Output file [eclac.remap]: <b></b>
                                   names that you have asked to be searched
                                   for, and which cut, will be reported whether
                                   or not they have a commercial supplier.
-   -table              menu       Genetic code to use
-   -frame              menu       This allows you to specify the frames that
-                                  are translated. If you are not displaying
-                                  cut sites on the reverse sense, then the
-                                  reverse sense translations will not be
-                                  displayed even if you have requested frames
-                                  4, 5 or 6. By default, all six frames will
-                                  be displayed.
-   -[no]cutlist        boolean    This produces lists in the output of the
+   -table              menu       [0] Genetic code to use (Values: 0
+                                  (Standard); 1 (Standard (with alternative
+                                  initiation codons)); 2 (Vertebrate
+                                  Mitochondrial); 3 (Yeast Mitochondrial); 4
+                                  (Mold, Protozoan, Coelenterate Mitochondrial
+                                  and Mycoplasma/Spiroplasma); 5
+                                  (Invertebrate Mitochondrial); 6 (Ciliate
+                                  Macronuclear and Dasycladacean); 9
+                                  (Echinoderm Mitochondrial); 10 (Euplotid
+                                  Nuclear); 11 (Bacterial); 12 (Alternative
+                                  Yeast Nuclear); 13 (Ascidian Mitochondrial);
+                                  14 (Flatworm Mitochondrial); 15
+                                  (Blepharisma Macronuclear); 16
+                                  (Chlorophycean Mitochondrial); 21 (Trematode
+                                  Mitochondrial); 22 (Scenedesmus obliquus);
+                                  23 (Thraustochytrium Mitochondrial))
+   -frame              menu       [6] This allows you to specify the frames
+                                  that are translated. If you are not
+                                  displaying cut sites on the reverse sense,
+                                  then the reverse sense translations will not
+                                  be displayed even if you have requested
+                                  frames 4, 5 or 6. By default, all six frames
+                                  will be displayed. (Values: 1 (1); 2 (2); 3
+                                  (3); F (Forward three frames); -1 (-1); -2
+                                  (-2); -3 (-3); R (Reverse three frames); 6
+                                  (All six frames))
+   -[no]cutlist        boolean    [Y] This produces lists in the output of the
                                   enzymes that cut, those that cut but are
                                   excluded because that cut fewer times than
                                   mincut or more times than maxcut and those
                                   enzymes that do not cut.
-   -flatreformat       boolean    This changes the output format to one where
-                                  the recognition site is indicated by a row
-                                  of '===' characters and the cut site is
-                                  pointed to by a '>' character in the forward
-                                  sense, or a '<' in the reverse sense
+   -flatreformat       boolean    [N] This changes the output format to one
+                                  where the recognition site is indicated by a
+                                  row of '===' characters and the cut site is
+                                  pointed to by a '>' character in the
+                                  forward sense, or a '<' in the reverse sense
                                   strand.
-   -[no]limit          boolean    This limits the reporting of enzymes to just
-                                  one enzyme from each group of
+   -[no]limit          boolean    [Y] This limits the reporting of enzymes to
+                                  just one enzyme from each group of
                                   isoschizomers. The enzyme chosen to
                                   represent an isoschizomer group is the
                                   prototype indicated in the data file
@@ -284,16 +301,20 @@ Output file [eclac.remap]: <b></b>
                                   them.
 
    Advanced (Unprompted) qualifiers:
-   -[no]translation    boolean    This displays the 6-frame translations of
-                                  the sequence in the output.
-   -[no]reverse        boolean    This displays the cut sites and translation
-                                  of the reverse sense.
-   -orfminsize         integer    This sets the minimum size of Open Reading
-                                  Frames (ORFs) to display in the
-                                  translations. All other translation regions
-                                  are masked by changing the amino acids to
-                                  '-' characters.
-   -uppercase          range      Regions to put in uppercase.
+   -[no]translation    boolean    [Y] This displays the 6-frame translations
+                                  of the sequence in the output.
+   -[no]reverse        boolean    [Y] This displays the cut sites and
+                                  translation of the reverse sense.
+   -orfminsize         integer    [If this value is left as 0 then all of the
+                                  translation is shown.] This sets the minimum
+                                  size of Open Reading Frames (ORFs) to
+                                  display in the translations. All other
+                                  translation regions are masked by changing
+                                  the amino acids to '-' characters. (Integer
+                                  0 or more)
+   -uppercase          range      [If this is left blank, then the sequence
+                                  case is left alone.] Regions to put in
+                                  uppercase.
                                   If this is left blank, then the sequence
                                   case is left alone.
                                   A set of regions is specified by a set of
@@ -305,7 +326,8 @@ Output file [eclac.remap]: <b></b>
                                   24-45, 56-78
                                   1:45, 67=99;765..888
                                   1,5,8,10,23,45,57,99
-   -highlight          range      Regions to colour if formatting for HTML.
+   -highlight          range      [(full sequence)] Regions to colour if
+                                  formatting for HTML.
                                   If this is left blank, then the sequence is
                                   left alone.
                                   A set of regions is specified by a set of
@@ -318,55 +340,58 @@ Output file [eclac.remap]: <b></b>
                                   1-100 green 120-156 red
                                   A file of ranges to colour (one range per
                                   line) can be specifed as '@filename'.
-   -threeletter        boolean    Display protein sequences in three-letter
-                                  code
-   -number             boolean    Number the sequences
-   -width              integer    Width of sequence to display
-   -length             integer    Line length of page (0 for indefinite)
-   -margin             integer    Margin around sequence for numbering
-   -[no]name           boolean    Set this to be false if you do not wish to
-                                  display the ID name of the sequence
-   -[no]description    boolean    Set this to be false if you do not wish to
-                                  display the description of the sequence
-   -offset             integer    Offset to start numbering the sequence from
-   -html               boolean    Use HTML formatting
+   -threeletter        boolean    [N] Display protein sequences in
+                                  three-letter code
+   -number             boolean    [N] Number the sequences
+   -width              integer    [60] Width of sequence to display (Integer 1
+                                  or more)
+   -length             integer    [0] Line length of page (0 for indefinite)
+                                  (Integer 0 or more)
+   -margin             integer    [10] Margin around sequence for numbering
+                                  (Integer 0 or more)
+   -[no]name           boolean    [Y] Set this to be false if you do not wish
+                                  to display the ID name of the sequence
+   -[no]description    boolean    [Y] Set this to be false if you do not wish
+                                  to display the description of the sequence
+   -offset             integer    [1] Offset to start numbering the sequence
+                                  from (Any integer value)
+   -html               boolean    [N] Use HTML formatting
 
    Associated qualifiers:
 
    "-sequence" associated qualifiers
-   -sbegin1             integer    Start of each sequence to be used
-   -send1               integer    End of each sequence to be used
-   -sreverse1           boolean    Reverse (if DNA)
-   -sask1               boolean    Ask for begin/end/reverse
-   -snucleotide1        boolean    Sequence is nucleotide
-   -sprotein1           boolean    Sequence is protein
-   -slower1             boolean    Make lower case
-   -supper1             boolean    Make upper case
-   -sformat1            string     Input sequence format
-   -sdbname1            string     Database name
-   -sid1                string     Entryname
-   -ufo1                string     UFO features
-   -fformat1            string     Features format
-   -fopenfile1          string     Features file name
+   -sbegin1            integer    Start of each sequence to be used
+   -send1              integer    End of each sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
 
    "-outfile" associated qualifiers
-   -odirectory2         string     Output directory
+   -odirectory2        string     Output directory
 
    General qualifiers:
-   -auto                boolean    Turn off prompts
-   -stdout              boolean    Write standard output
-   -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for standard and additional values
-   -debug               boolean    Write debug output to program.dbg
-   -verbose             boolean    Report some/full command line options
-   -help                boolean    Report command line options. More
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
-   -warning             boolean    Report warnings
-   -error               boolean    Report errors
-   -fatal               boolean    Report fatal errors
-   -die                 boolean    Report deaths
-
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
 
 </pre>
 </td></tr></table>
@@ -381,7 +406,7 @@ Output file [eclac.remap]: <b></b>
 
 <tr>
 <td>[-sequence]<br>(Parameter 1)</td>
-<td>Sequence database USA</td>
+<td>Nucleotide sequence(s) filename and optional format, or reference (input USA)</td>
 <td>Readable sequence(s)</td>
 <td><b>Required</b></td>
 </tr>
@@ -413,7 +438,7 @@ PpiI</td>
 <td>[-outfile]<br>(Parameter 2)</td>
 <td>Output file name</td>
 <td>Output file</td>
-<td><i>&lt;sequence&gt;</i>.remap</td>
+<td>&nbsp;</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
@@ -636,7 +661,6 @@ A file of ranges to colour (one range per line) can be specifed as '@filename'.<
 </table>
 
 
-
 <H2>
     Input file format
 </H2>
@@ -758,7 +782,6 @@ RP   1146-1282
 //
 </pre>
 </td></tr></table><p>
-
 
 <p>
 
@@ -969,12 +992,12 @@ HaeIII    Hin4I     HindII    HindIII   KpnI      MaeII     NotI
 ECLAC
 E.coli lactose operon with lacI, lacZ, lacY and lacA genes.
 
-                                                      Hin6I
-                 TaqI                                 HspAI 
+                                                      HspAI
+                 TaqI                                 Hin6I 
                  |  Bsc4I                             HinP1I
                  |  |   HspAI                         | HhaI 
-                 |  |   Hin6I                         | BssKI
-                 |  |   HinP1I                        | Bsu6I 
+                 |  |   Hin6I                         | Bsu6I
+                 |  |   HinP1I                        | BssKI 
                  |  |   | HhaI        AciI            | | BsiSI
                  \  \   \ \           \               \ \ \
           gacaccatcgaatggcgcaaaacctttcgcggtatggcatgatagcgcccggaagagagt
@@ -983,8 +1006,8 @@ E.coli lactose operon with lacI, lacZ, lacY and lacA genes.
           ctgtggtagcttaccgcgttttggaaagcgccataccgtactatcgcgggccttctctca
                  / /    / /             /             / /  ///
                  | TaqI | HinP1I        AciI          | |  ||BssKI
-                 Bsc4I  | HspAI                       | |  |BsiSI
-                        | Hin6I                       | |  Bsu6I
+                 Bsc4I  | Hin6I                       | |  |BsiSI
+                        | HspAI                       | |  Bsu6I
                         HhaI                          | HinP1I
                                                       | Hin6I 
                                                       | HspAI
@@ -1041,22 +1064,22 @@ E.coli lactose operon with lacI, lacZ, lacY and lacA genes.
                                                         &gt;.........====
                                                           HpaII
                                                           &gt;===
-                        Hin6I                            BssKI
-                        &gt;===                            &gt;=====
-                 TaqI   HhaI                          Hin6I
-                 &gt;===   ==&gt;=                          &gt;===
-              BsiYI                      AciI         HhaI
-              ======&gt;====             &gt;..====         ==&gt;=
+                        HhaI                             BssKI
+                        ==&gt;=                            &gt;=====
+                 TaqI   Hin6I                         HhaI
+                 &gt;===   &gt;===                          ==&gt;=
+              BsiYI                      AciI         Hin6I
+              ======&gt;====             &gt;..====         &gt;===
           gacaccatcgaatggcgcaaaacctttcgcggtatggcatgatagcgcccggaagagagt
                    10        20        30        40        50        60        
           ----:----|----:----|----:----|----:----|----:----|----:----|
           ctgtggtagcttaccgcgttttggaaagcgccataccgtactatcgcgggccttctctca
-              ====&lt;======                &lt;===         =&lt;==  &lt;.....====
-              BsiYI                      AciI         HhaI        Ksp632I
-                 ===&lt;   =&lt;==                          ===&lt;
-                 TaqI   HhaI                          Hin6I
-                        ===&lt;                             =====&lt;
-                        Hin6I                            BssKI
+              ====&lt;======                &lt;===         ===&lt;
+              BsiYI                      AciI         Hin6I
+                 ===&lt;   ===&lt;                          =&lt;==  &lt;.....====
+                 TaqI   Hin6I                         HhaI        Ksp632I
+                        =&lt;==                             =====&lt;
+                        HhaI                             BssKI
                                                           ===&lt;
                                                           HpaII
 
@@ -1096,7 +1119,6 @@ HaeIII    Hin4I     HindII    HindIII   KpnI      MaeII     NotI
 
 </pre>
 </td></tr></table><p>
-
 
 <p>
 
@@ -1206,7 +1228,6 @@ The directories are searched in the following order:
 </ul>
 <p>
 
-
 <p>
 
 The EMBOSS REBASE restriction enzyme data files are stored iin
@@ -1252,7 +1273,6 @@ is the preferred (prototype) name.
 	 
 	          
 
-
 <H2>
     Notes
 </H2>
@@ -1295,32 +1315,132 @@ None.
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
-<tr><td><a href="abiview.html">abiview</a></td><td>Reads ABI file and display the trace</td></tr>
-<tr><td><a href="backtranseq.html">backtranseq</a></td><td>Back translate a protein sequence</td></tr>
-<tr><td><a href="cirdna.html">cirdna</a></td><td>Draws circular maps of DNA constructs</td></tr>
-<tr><td><a href="coderet.html">coderet</a></td><td>Extract CDS, mRNA and translations from feature tables</td></tr>
-<tr><td><a href="lindna.html">lindna</a></td><td>Draws linear maps of DNA constructs</td></tr>
-<tr><td><a href="pepnet.html">pepnet</a></td><td>Displays proteins as a helical net</td></tr>
-<tr><td><a href="pepwheel.html">pepwheel</a></td><td>Shows protein sequences as helices</td></tr>
-<tr><td><a href="plotorf.html">plotorf</a></td><td>Plot potential open reading frames</td></tr>
-<tr><td><a href="prettyplot.html">prettyplot</a></td><td>Displays aligned sequences, with colouring and boxing</td></tr>
-<tr><td><a href="prettyseq.html">prettyseq</a></td><td>Output sequence with translated ranges</td></tr>
-<tr><td><a href="recoder.html">recoder</a></td><td>Remove restriction sites but maintain same translation</td></tr>
-<tr><td><a href="redata.html">redata</a></td><td>Search REBASE for enzyme name, references, suppliers etc</td></tr>
-<tr><td><a href="restover.html">restover</a></td><td>Find restriction enzymes producing specific overhang</td></tr>
-<tr><td><a href="restrict.html">restrict</a></td><td>Finds restriction enzyme cleavage sites</td></tr>
-<tr><td><a href="seealso.html">seealso</a></td><td>Finds programs sharing group names</td></tr>
-<tr><td><a href="showalign.html">showalign</a></td><td>Displays a multiple sequence alignment</td></tr>
-<tr><td><a href="showdb.html">showdb</a></td><td>Displays information on the currently available databases</td></tr>
-<tr><td><a href="showfeat.html">showfeat</a></td><td>Show features of a sequence</td></tr>
-<tr><td><a href="showorf.html">showorf</a></td><td>Pretty output of DNA translations</td></tr>
-<tr><td><a href="showseq.html">showseq</a></td><td>Display a sequence with features, translation etc</td></tr>
-<tr><td><a href="silent.html">silent</a></td><td>Silent mutation restriction enzyme scan</td></tr>
-<tr><td><a href="sixpack.html">sixpack</a></td><td>Display a DNA sequence with 6-frame translation and ORFs</td></tr>
-<tr><td><a href="textsearch.html">textsearch</a></td><td>Search sequence documentation. Slow, use SRS and Entrez!</td></tr>
-<tr><td><a href="transeq.html">transeq</a></td><td>Translate nucleic acid sequences</td></tr>
-</table>
+<tr>
+<td><a href="abiview.html">abiview</a></td>
+<td>Reads ABI file and display the trace</td>
+</tr>
 
+<tr>
+<td><a href="backtranambig.html">backtranambig</a></td>
+<td>Back translate a protein sequence to ambiguous codons</td>
+</tr>
+
+<tr>
+<td><a href="backtranseq.html">backtranseq</a></td>
+<td>Back translate a protein sequence</td>
+</tr>
+
+<tr>
+<td><a href="cirdna.html">cirdna</a></td>
+<td>Draws circular maps of DNA constructs</td>
+</tr>
+
+<tr>
+<td><a href="coderet.html">coderet</a></td>
+<td>Extract CDS, mRNA and translations from feature tables</td>
+</tr>
+
+<tr>
+<td><a href="lindna.html">lindna</a></td>
+<td>Draws linear maps of DNA constructs</td>
+</tr>
+
+<tr>
+<td><a href="pepnet.html">pepnet</a></td>
+<td>Displays proteins as a helical net</td>
+</tr>
+
+<tr>
+<td><a href="pepwheel.html">pepwheel</a></td>
+<td>Shows protein sequences as helices</td>
+</tr>
+
+<tr>
+<td><a href="plotorf.html">plotorf</a></td>
+<td>Plot potential open reading frames</td>
+</tr>
+
+<tr>
+<td><a href="prettyplot.html">prettyplot</a></td>
+<td>Displays aligned sequences, with colouring and boxing</td>
+</tr>
+
+<tr>
+<td><a href="prettyseq.html">prettyseq</a></td>
+<td>Output sequence with translated ranges</td>
+</tr>
+
+<tr>
+<td><a href="recoder.html">recoder</a></td>
+<td>Remove restriction sites but maintain same translation</td>
+</tr>
+
+<tr>
+<td><a href="redata.html">redata</a></td>
+<td>Search REBASE for enzyme name, references, suppliers etc</td>
+</tr>
+
+<tr>
+<td><a href="restover.html">restover</a></td>
+<td>Find restriction enzymes producing specific overhang</td>
+</tr>
+
+<tr>
+<td><a href="restrict.html">restrict</a></td>
+<td>Finds restriction enzyme cleavage sites</td>
+</tr>
+
+<tr>
+<td><a href="seealso.html">seealso</a></td>
+<td>Finds programs sharing group names</td>
+</tr>
+
+<tr>
+<td><a href="showalign.html">showalign</a></td>
+<td>Displays a multiple sequence alignment</td>
+</tr>
+
+<tr>
+<td><a href="showdb.html">showdb</a></td>
+<td>Displays information on the currently available databases</td>
+</tr>
+
+<tr>
+<td><a href="showfeat.html">showfeat</a></td>
+<td>Show features of a sequence</td>
+</tr>
+
+<tr>
+<td><a href="showorf.html">showorf</a></td>
+<td>Pretty output of DNA translations</td>
+</tr>
+
+<tr>
+<td><a href="showseq.html">showseq</a></td>
+<td>Display a sequence with features, translation etc</td>
+</tr>
+
+<tr>
+<td><a href="silent.html">silent</a></td>
+<td>Silent mutation restriction enzyme scan</td>
+</tr>
+
+<tr>
+<td><a href="sixpack.html">sixpack</a></td>
+<td>Display a DNA sequence with 6-frame translation and ORFs</td>
+</tr>
+
+<tr>
+<td><a href="textsearch.html">textsearch</a></td>
+<td>Search sequence documentation. Slow, use SRS and Entrez!</td>
+</tr>
+
+<tr>
+<td><a href="transeq.html">transeq</a></td>
+<td>Translate nucleic acid sequences</td>
+</tr>
+
+</table>
 
 
 <H2>
@@ -1335,7 +1455,6 @@ Wellcome Trust Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
 
 
 
-
 <H2>
     History
 </H2>
@@ -1345,19 +1464,16 @@ Written Spring 2000
 
 Changed 7 Dec 2000 - GWW - to declare isoschizomers that cut
 
-
 <H2>
     Target users
 </H2>
 This program is intended to be used by everyone and everything, from naive users to embedded scripts.
 
 
-
 <H2>
     Comments
 </H2>
 None
-
 
 </BODY>
 </HTML>

@@ -13,7 +13,6 @@
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
-
 tfscan
 </font></b>
 </td></tr>
@@ -22,12 +21,10 @@ tfscan
 <p>
 
 
-
 <H2>
     Function
 </H2>
 Scans DNA sequences for transcription factors
-
 
 <H2>
     Description
@@ -91,7 +88,7 @@ Because the binding sites are so small, there will be many spurious
 
 % <b>tfscan </b>
 Scans DNA sequences for transcription factors
-Input sequence(s): <b>tembl:hsfos</b>
+Input nucleotide sequence(s): <b>tembl:hsfos</b>
 Transcription Factor Class
          F : fungi
          I : insect
@@ -109,60 +106,61 @@ Output file [hsfos.tfscan]: <b></b>
 
 
 
-
 <H2>
     Command line arguments
 </H2>
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
    Standard (Mandatory) qualifiers (* if not always prompted):
-  [-sequence]          seqall     Sequence database USA
-   -menu               menu       Select class
-*  -custom             datafile   Name of data file
-   -mismatch           integer    Number of mismatches
-  [-outfile]           outfile    Output file name
+  [-sequence]          seqall     Nucleotide sequence(s) filename and optional
+                                  format, or reference (input USA)
+   -menu               menu       [V] Select class (Values: F (fungi); I
+                                  (insect); P (plant); V (vertebrate); O
+                                  (other); C (Custom))
+*  -custom             datafile   Transfac database data file (optional)
+   -mismatch           integer    [0] Number of mismatches (Integer 0 or more)
+  [-outfile]           outfile    [*.tfscan] Output file name
 
    Additional (Optional) qualifiers:
-   -minlength          integer    Display matches equal to or above this
-                                  length
+   -minlength          integer    [1] Display matches equal to or above this
+                                  length (Integer 1 or more)
 
    Advanced (Unprompted) qualifiers: (none)
    Associated qualifiers:
 
    "-sequence" associated qualifiers
-   -sbegin1             integer    Start of each sequence to be used
-   -send1               integer    End of each sequence to be used
-   -sreverse1           boolean    Reverse (if DNA)
-   -sask1               boolean    Ask for begin/end/reverse
-   -snucleotide1        boolean    Sequence is nucleotide
-   -sprotein1           boolean    Sequence is protein
-   -slower1             boolean    Make lower case
-   -supper1             boolean    Make upper case
-   -sformat1            string     Input sequence format
-   -sdbname1            string     Database name
-   -sid1                string     Entryname
-   -ufo1                string     UFO features
-   -fformat1            string     Features format
-   -fopenfile1          string     Features file name
+   -sbegin1            integer    Start of each sequence to be used
+   -send1              integer    End of each sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
 
    "-outfile" associated qualifiers
-   -odirectory2         string     Output directory
+   -odirectory2        string     Output directory
 
    General qualifiers:
-   -auto                boolean    Turn off prompts
-   -stdout              boolean    Write standard output
-   -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for standard and additional values
-   -debug               boolean    Write debug output to program.dbg
-   -verbose             boolean    Report some/full command line options
-   -help                boolean    Report command line options. More
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
-   -warning             boolean    Report warnings
-   -error               boolean    Report errors
-   -fatal               boolean    Report fatal errors
-   -die                 boolean    Report deaths
-
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
 
 </pre>
 </td></tr></table>
@@ -176,7 +174,7 @@ Output file [hsfos.tfscan]: <b></b>
 
 <tr>
 <td>[-sequence]<br>(Parameter 1)</td>
-<td>Sequence database USA</td>
+<td>Nucleotide sequence(s) filename and optional format, or reference (input USA)</td>
 <td>Readable sequence(s)</td>
 <td><b>Required</b></td>
 </tr>
@@ -190,7 +188,7 @@ Output file [hsfos.tfscan]: <b></b>
 
 <tr>
 <td>-custom</td>
-<td>Name of data file</td>
+<td>Transfac database data file (optional)</td>
 <td>Data file</td>
 <td><i>File in the data file path</i></td>
 </tr>
@@ -206,7 +204,7 @@ Output file [hsfos.tfscan]: <b></b>
 <td>[-outfile]<br>(Parameter 2)</td>
 <td>Output file name</td>
 <td>Output file</td>
-<td><i>&lt;sequence&gt;</i>.tfscan</td>
+<td>&nbsp;</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
@@ -233,7 +231,6 @@ Output file [hsfos.tfscan]: <b></b>
 </tr>
 
 </table>
-
 
 
 <H2>
@@ -361,7 +358,6 @@ DR   TRANSFAC; R00466; HS$CFOS_09.
 </pre>
 </td></tr></table><p>
 
-
 <H2>
     Output file format
 </H2>
@@ -388,7 +384,6 @@ HS$ALBU_03           R00079   1356  1360  tggca
 HS$ALBU_02           R00078   2009  2014  ttggca
 </pre>
 </td></tr></table><p>
-
 
 <p>
 
@@ -478,7 +473,6 @@ The directories are searched in the following order:
 <p>
 
 
-
 <H2>
     Notes
 </H2>
@@ -541,7 +535,6 @@ None.
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
 </table>
-
 <p>
 
 Your EMBOSS administrator will have to run the EMBOSS program <b>tfextract</b>
@@ -558,25 +551,21 @@ European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambri
 
 
 
-
 <H2>
     History
 </H2>
 
 Written Summer 2000 - Alan Bleasby
 
-
 <H2>
     Target users
 </H2>
 This program is intended to be used by everyone and everything, from naive users to embedded scripts.
 
-
 <H2>
     Comments
 </H2>
 None
-
 
 </BODY>
 </HTML>

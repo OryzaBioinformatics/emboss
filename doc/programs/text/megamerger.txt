@@ -51,7 +51,7 @@ Usage
 % megamerger tembl:ap000504 tembl:af129756 
 Merge two large overlapping nucleic acid sequences
 Word size [20]: 
-Output sequence [ap000504.merged]: 
+output sequence [ap000504.merged]: 
 Output file [ap000504.megamerger]: report
 
    Go to the input files for this example
@@ -60,15 +60,18 @@ Output file [ap000504.megamerger]: report
 Command line arguments
 
    Standard (Mandatory) qualifiers:
-  [-asequence]         sequence   Sequence USA
-  [-bsequence]         sequence   Sequence USA
-   -wordsize           integer    Word size
-  [-outseq]            seqout     Output sequence USA
-  [-outfile]           outfile    Output file name
+  [-asequence]         sequence   Nucleotide sequence filename and optional
+                                  format, or reference (input USA)
+  [-bsequence]         sequence   Nucleotide sequence filename and optional
+                                  format, or reference (input USA)
+   -wordsize           integer    [20] Word size (Integer 2 or more)
+  [-outseq]            seqout     [.] Sequence filename and
+                                  optional format (output USA)
+  [-outfile]           outfile    [*.megamerger] Output file name
 
    Additional (Optional) qualifiers:
-   -prefer             boolean    When a mismatch between the two sequence is
-                                  discovered, one or other of the two
+   -prefer             boolean    [N] When a mismatch between the two sequence
+                                  is discovered, one or other of the two
                                   sequences must be used to create the merged
                                   sequence over this mismatch region. The
                                   default action is to create the merged
@@ -83,88 +86,66 @@ Command line arguments
    Associated qualifiers:
 
    "-asequence" associated qualifiers
-   -sbegin1             integer    Start of the sequence to be used
-   -send1               integer    End of the sequence to be used
-   -sreverse1           boolean    Reverse (if DNA)
-   -sask1               boolean    Ask for begin/end/reverse
-   -snucleotide1        boolean    Sequence is nucleotide
-   -sprotein1           boolean    Sequence is protein
-   -slower1             boolean    Make lower case
-   -supper1             boolean    Make upper case
-   -sformat1            string     Input sequence format
-   -sdbname1            string     Database name
-   -sid1                string     Entryname
-   -ufo1                string     UFO features
-   -fformat1            string     Features format
-   -fopenfile1          string     Features file name
+   -sbegin1            integer    Start of the sequence to be used
+   -send1              integer    End of the sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
 
    "-bsequence" associated qualifiers
-   -sbegin2             integer    Start of the sequence to be used
-   -send2               integer    End of the sequence to be used
-   -sreverse2           boolean    Reverse (if DNA)
-   -sask2               boolean    Ask for begin/end/reverse
-   -snucleotide2        boolean    Sequence is nucleotide
-   -sprotein2           boolean    Sequence is protein
-   -slower2             boolean    Make lower case
-   -supper2             boolean    Make upper case
-   -sformat2            string     Input sequence format
-   -sdbname2            string     Database name
-   -sid2                string     Entryname
-   -ufo2                string     UFO features
-   -fformat2            string     Features format
-   -fopenfile2          string     Features file name
+   -sbegin2            integer    Start of the sequence to be used
+   -send2              integer    End of the sequence to be used
+   -sreverse2          boolean    Reverse (if DNA)
+   -sask2              boolean    Ask for begin/end/reverse
+   -snucleotide2       boolean    Sequence is nucleotide
+   -sprotein2          boolean    Sequence is protein
+   -slower2            boolean    Make lower case
+   -supper2            boolean    Make upper case
+   -sformat2           string     Input sequence format
+   -sdbname2           string     Database name
+   -sid2               string     Entryname
+   -ufo2               string     UFO features
+   -fformat2           string     Features format
+   -fopenfile2         string     Features file name
 
    "-outseq" associated qualifiers
-   -osformat3           string     Output seq format
-   -osextension3        string     File name extension
-   -osname3             string     Base file name
-   -osdirectory3        string     Output directory
-   -osdbname3           string     Database name to add
-   -ossingle3           boolean    Separate file for each entry
-   -oufo3               string     UFO features
-   -offormat3           string     Features format
-   -ofname3             string     Features file name
-   -ofdirectory3        string     Output directory
+   -osformat3          string     Output seq format
+   -osextension3       string     File name extension
+   -osname3            string     Base file name
+   -osdirectory3       string     Output directory
+   -osdbname3          string     Database name to add
+   -ossingle3          boolean    Separate file for each entry
+   -oufo3              string     UFO features
+   -offormat3          string     Features format
+   -ofname3            string     Features file name
+   -ofdirectory3       string     Output directory
 
    "-outfile" associated qualifiers
-   -odirectory4         string     Output directory
+   -odirectory4        string     Output directory
 
    General qualifiers:
-   -auto                boolean    Turn off prompts
-   -stdout              boolean    Write standard output
-   -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for standard and additional values
-   -debug               boolean    Write debug output to program.dbg
-   -verbose             boolean    Report some/full command line options
-   -help                boolean    Report command line options. More
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
-   -warning             boolean    Report warnings
-   -error               boolean    Report errors
-   -fatal               boolean    Report fatal errors
-   -die                 boolean    Report deaths
-
-
-   Standard (Mandatory) qualifiers Allowed values Default
-   [-asequence]
-   (Parameter 1) Sequence USA Readable sequence Required
-   [-bsequence]
-   (Parameter 2) Sequence USA Readable sequence Required
-   -wordsize Word size Integer 2 or more 20
-   [-outseq]
-   (Parameter 3) Output sequence USA Writeable sequence <sequence>.format
-   [-outfile]
-   (Parameter 4) Output file name Output file <sequence>.megamerger
-   Additional (Optional) qualifiers Allowed values Default
-   -prefer When a mismatch between the two sequence is discovered, one or
-   other of the two sequences must be used to create the merged sequence
-   over this mismatch region. The default action is to create the merged
-   sequence using the sequence where the mismatch is closest to that
-   sequence's centre. If this option is used, then the first sequence
-   (seqa) will always be used in preference to the other sequence when
-   there is a mismatch. Boolean value Yes/No No
-   Advanced (Unprompted) qualifiers Allowed values Default
-   (none)
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
 
 Input file format
 
@@ -768,7 +749,7 @@ See also
 
    Program name                 Description
    cons         Creates a consensus from multiple alignments
-   merger       Merge two overlapping nucleic acid sequences
+   merger       Merge two overlapping sequences
 
    Compare this with the program merger which does a more accurate
    alignment of more divergent sequences using the Needle and Wunsch

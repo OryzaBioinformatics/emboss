@@ -56,8 +56,8 @@ Usage
 
 % oddcomp 
 Find protein sequence regions with a biased composition
-Input sequence(s): tsw:*
-Compseq output file to use for expected word frequencies: oddcomp.comp
+Input protein sequence(s): tsw:*
+Program compseq output file: oddcomp.comp
 Window size to consider (e.g. 30 aa) [30]: 
 Output file [100k_rat.oddcomp]: out.odd
 
@@ -66,23 +66,30 @@ Output file [100k_rat.oddcomp]: out.odd
 
 Command line arguments
 
-   Standard (Mandatory) qualifiers:
-  [-sequence]          seqall     Sequence database USA
+   Standard (Mandatory) qualifiers (* if not always prompted):
+  [-sequence]          seqall     Protein sequence(s) filename and optional
+                                  format, or reference (input USA)
   [-infile]            infile     This is a file in the format of the output
                                   produced by 'compseq' that is used to set
                                   the minimum frequencies of words in this
                                   analysis.
-  [-window]            integer    This is the size of window in which to
+*  -window             integer    [30] This is the size of window in which to
                                   count.
                                   Thus if you want to count frequencies in a
                                   40 aa stretch you should enter 40 here.
-  [-outfile]           outfile    This is the results file.
+                                  (Integer 10 or more)
+  [-outfile]           outfile    [*.oddcomp] This is the results file.
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers:
-   -[no]ignorebz       boolean    The amino acid code B represents Asparagine
-                                  or Aspartic acid and the code Z represents
-                                  Glutamine or Glutamic acid.
+   -fullwindow         toggle     [N] Set this option on (Y) if you want the
+                                  window size to be set to the length of the
+                                  current protein. Otherwise, leave this
+                                  option unset, in which case you'll be
+                                  prompted for a window size to use.
+   -[no]ignorebz       boolean    [Y] The amino acid code B represents
+                                  Asparagine or Aspartic acid and the code Z
+                                  represents Glutamine or Glutamic acid.
                                   These are not commonly used codes and you
                                   may wish not to count words containing them,
                                   just noting them in the count of 'Other'
@@ -107,7 +114,7 @@ Command line arguments
    -fopenfile1         string     Features file name
 
    "-outfile" associated qualifiers
-   -odirectory4        string     Output directory
+   -odirectory3        string     Output directory
 
    General qualifiers:
    -auto               boolean    Turn off prompts
@@ -122,30 +129,7 @@ Command line arguments
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
-   -die                boolean    Report deaths
-
-
-   Standard (Mandatory) qualifiers Allowed values Default
-   [-sequence]
-   (Parameter 1) Sequence database USA Readable sequence(s) Required
-   [-infile]
-   (Parameter 2) This is a file in the format of the output produced by
-   'compseq' that is used to set the minimum frequencies of words in this
-   analysis. Input file Required
-   [-window]
-   (Parameter 3) This is the size of window in which to count. Thus if
-   you want to count frequencies in a 40 aa stretch you should enter 40
-   here. Integer 10 or more 30
-   [-outfile]
-   (Parameter 4) This is the results file. Output file <sequence>.oddcomp
-   Additional (Optional) qualifiers Allowed values Default
-   (none)
-   Advanced (Unprompted) qualifiers Allowed values Default
-   -[no]ignorebz The amino acid code B represents Asparagine or Aspartic
-   acid and the code Z represents Glutamine or Glutamic acid. These are
-   not commonly used codes and you may wish not to count words containing
-   them, just noting them in the count of 'Other' words. Boolean value
-   Yes/No Yes
+   -die                boolean    Report dying program messages
 
 Input file format
 

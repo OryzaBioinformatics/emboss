@@ -13,7 +13,6 @@
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
-
 infoseq
 </font></b>
 </td></tr>
@@ -22,12 +21,10 @@ infoseq
 <p>
 
 
-
 <H2>
     Function
 </H2>
 Displays some simple information about sequences
-
 
 <H2>
     Description
@@ -62,8 +59,8 @@ Display information on a sequence:
 % <b>infoseq tembl:paamir </b>
 Displays some simple information about sequences
 
-# USA             Name        Accession Type Length	 %GC   Description
-tembl-id:PAAMIR   PAAMIR        X13776	N    2167	 66.54 Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase regulation
+USA                      Name           Accession      Type Length %GC    Description 
+tembl-id:PAAMIR          PAAMIR         X13776         N    2167   66.54  Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase regulation
 
 </pre></td></tr></table><p>
 <p>
@@ -80,8 +77,8 @@ Don't display the USA of a sequence:
 % <b>infoseq tembl:paamir -nousa </b>
 Displays some simple information about sequences
 
-# Name        Accession Type Length	 %GC   Description
-PAAMIR        X13776	N    2167	 66.54 Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase regulation
+Name           Accession      Type Length %GC    Description 
+PAAMIR         X13776         N    2167   66.54  Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase regulation
 
 </pre></td></tr></table><p>
 <p>
@@ -98,7 +95,8 @@ Display only the name and length of a sequence:
 % <b>infoseq tembl:paamir -only -name -length </b>
 Displays some simple information about sequences
 
-PAAMIR        2167
+Name           Length 
+PAAMIR         2167   
 
 </pre></td></tr></table><p>
 <p>
@@ -115,6 +113,7 @@ Display only the description of a sequence:
 % <b>infoseq tembl:paamir -only -desc </b>
 Displays some simple information about sequences
 
+Description 
 Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase regulation
 
 </pre></td></tr></table><p>
@@ -132,7 +131,8 @@ Display the type of a sequence:
 % <b>infoseq tembl:paamir -only -type </b>
 Displays some simple information about sequences
 
-N
+Type 
+N    
 
 </pre></td></tr></table><p>
 <p>
@@ -151,13 +151,12 @@ Displays some simple information about sequences
 
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>USA</th><th>Name</th><th>Accession</th><th>Type</th><th>Length</th><th>%GC</th><th>Description</th></tr>
-<tr><td>tembl-id:PAAMIR</td><td>PAAMIR</td><td>X13776</td><td>N</td><td>2167</td><td>66.54 </td><td>Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase regulation</td></tr>
+<tr><td>tembl-id:PAAMIR</td><td>PAAMIR</td><td>X13776</td><td>N</td><td>2167</td><td>66.54</td><td>Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase regulation</td></tr>
 </table>
 
 </pre></td></tr></table><p>
 <p>
 <p>
-
 
 <H2>
     Command line arguments
@@ -165,70 +164,88 @@ Displays some simple information about sequences
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
    Standard (Mandatory) qualifiers:
-  [-sequence]          seqall     Sequence database USA
+  [-sequence]          seqall     (Gapped) sequence(s) filename and optional
+                                  format, or reference (input USA)
 
    Additional (Optional) qualifiers:
-   -outfile            outfile    If you enter the name of a file here then
-                                  this program will write the sequence details
-                                  into that file.
-   -html               boolean    Format output as an HTML table
+   -outfile            outfile    [stdout] If you enter the name of a file
+                                  here then this program will write the
+                                  sequence details into that file.
+   -html               boolean    [N] Format output as an HTML table
 
    Advanced (Unprompted) qualifiers:
-   -only               boolean    This is a way of shortening the command line
-                                  if you only want a few things to be
+   -[no]columns        boolean    [Y] Set this option on (Y) to print the
+                                  sequence information into neat, aligned
+                                  columns in the output file. Alternatively,
+                                  leave it unset (N), in which case the
+                                  information records will be delimited by a
+                                  character, which you may specify by using
+                                  the -delimiter option. In other words, if
+                                  -columns is set on, the -delimiter option is
+                                  overriden.
+   -delimiter          string     [|] This string, which is usually a single
+                                  character only, is used to delimit
+                                  individual records in the text output file.
+                                  It could be a space character, a tab
+                                  character, a pipe character or any other
+                                  character or string. (Any string is
+                                  accepted)
+   -only               boolean    [N] This is a way of shortening the command
+                                  line if you only want a few things to be
                                   displayed. Instead of specifying:
                                   '-nohead -noname -noacc -notype -nopgc
                                   -nodesc'
                                   to get only the length output, you can
                                   specify
                                   '-only -length'
-   -heading            boolean    Display column headings
-   -usa                boolean    Display the USA of the sequence
-   -name               boolean    Display 'name' column
-   -accession          boolean    Display 'accession' column
-   -gi                 boolean    Display 'GI' column
-   -version            boolean    Display 'version' column
-   -type               boolean    Display 'type' column
-   -length             boolean    Display 'length' column
-   -pgc                boolean    Display 'percent GC content' column
-   -description        boolean    Display 'description' column
+   -[no]heading        boolean    [Y] Display column headings
+   -usa                boolean    [@(!$(only))] Display the USA of the
+                                  sequence
+   -name               boolean    [@(!$(only))] Display 'name' column
+   -accession          boolean    [@(!$(only))] Display 'accession' column
+   -gi                 boolean    [N] Display 'GI' column
+   -version            boolean    [N] Display 'version' column
+   -type               boolean    [@(!$(only))] Display 'type' column
+   -length             boolean    [@(!$(only))] Display 'length' column
+   -pgc                boolean    [@(!$(only))] Display 'percent GC content'
+                                  column
+   -description        boolean    [@(!$(only))] Display 'description' column
 
    Associated qualifiers:
 
    "-sequence" associated qualifiers
-   -sbegin1             integer    Start of each sequence to be used
-   -send1               integer    End of each sequence to be used
-   -sreverse1           boolean    Reverse (if DNA)
-   -sask1               boolean    Ask for begin/end/reverse
-   -snucleotide1        boolean    Sequence is nucleotide
-   -sprotein1           boolean    Sequence is protein
-   -slower1             boolean    Make lower case
-   -supper1             boolean    Make upper case
-   -sformat1            string     Input sequence format
-   -sdbname1            string     Database name
-   -sid1                string     Entryname
-   -ufo1                string     UFO features
-   -fformat1            string     Features format
-   -fopenfile1          string     Features file name
+   -sbegin1            integer    Start of each sequence to be used
+   -send1              integer    End of each sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
 
    "-outfile" associated qualifiers
-   -odirectory          string     Output directory
+   -odirectory         string     Output directory
 
    General qualifiers:
-   -auto                boolean    Turn off prompts
-   -stdout              boolean    Write standard output
-   -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for standard and additional values
-   -debug               boolean    Write debug output to program.dbg
-   -verbose             boolean    Report some/full command line options
-   -help                boolean    Report command line options. More
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
-   -warning             boolean    Report warnings
-   -error               boolean    Report errors
-   -fatal               boolean    Report fatal errors
-   -die                 boolean    Report deaths
-
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
 
 </pre>
 </td></tr></table>
@@ -243,7 +260,7 @@ Displays some simple information about sequences
 
 <tr>
 <td>[-sequence]<br>(Parameter 1)</td>
-<td>Sequence database USA</td>
+<td>(Gapped) sequence(s) filename and optional format, or reference (input USA)</td>
 <td>Readable sequence(s)</td>
 <td><b>Required</b></td>
 </tr>
@@ -275,6 +292,20 @@ Displays some simple information about sequences
 </tr>
 
 <tr>
+<td>-[no]columns</td>
+<td>Set this option on (Y) to print the sequence information into neat, aligned columns in the output file. Alternatively, leave it unset (N), in which case the information records will be delimited by a character, which you may specify by using the -delimiter option. In other words, if -columns is set on, the -delimiter option is overriden.</td>
+<td>Boolean value Yes/No</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>-delimiter</td>
+<td>This string, which is usually a single character only, is used to delimit individual records in the text output file. It could be a space character, a tab character, a pipe character or any other character or string.</td>
+<td>Any string is accepted</td>
+<td>|</td>
+</tr>
+
+<tr>
 <td>-only</td>
 <td>This is a way of shortening the command line if you only want a few things to be displayed. Instead of specifying:
 '-nohead -noname -noacc -notype -nopgc -nodesc'
@@ -285,10 +316,10 @@ to get only the length output, you can specify
 </tr>
 
 <tr>
-<td>-heading</td>
+<td>-[no]heading</td>
 <td>Display column headings</td>
 <td>Boolean value Yes/No</td>
-<td>@(!$(only))</td>
+<td>Yes</td>
 </tr>
 
 <tr>
@@ -355,7 +386,6 @@ to get only the length output, you can specify
 </tr>
 
 </table>
-
 
 
 <H2>
@@ -484,7 +514,6 @@ SQ   Sequence 2167 BP; 363 A; 712 C; 730 G; 362 T; 0 other;
 </pre>
 </td></tr></table><p>
 
-
 <H2>
     Output file format
 </H2>
@@ -493,7 +522,6 @@ SQ   Sequence 2167 BP; 363 A; 712 C; 730 G; 362 T; 0 other;
 	The output is displayed on the screen (stdout) by default.
 <p>
 	
-
 
 <p>
 
@@ -602,15 +630,42 @@ None noted.
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
-<tr><td><a href="infoalign.html">infoalign</a></td><td>Information on a multiple sequence alignment</td></tr>
-<tr><td><a href="seealso.html">seealso</a></td><td>Finds programs sharing group names</td></tr>
-<tr><td><a href="showdb.html">showdb</a></td><td>Displays information on the currently available databases</td></tr>
-<tr><td><a href="textsearch.html">textsearch</a></td><td>Search sequence documentation. Slow, use SRS and Entrez!</td></tr>
-<tr><td><a href="tfm.html">tfm</a></td><td>Displays a program's help documentation manual</td></tr>
-<tr><td><a href="whichdb.html">whichdb</a></td><td>Search all databases for an entry</td></tr>
-<tr><td><a href="wossname.html">wossname</a></td><td>Finds programs by keywords in their one-line documentation</td></tr>
-</table>
+<tr>
+<td><a href="infoalign.html">infoalign</a></td>
+<td>Information on a multiple sequence alignment</td>
+</tr>
 
+<tr>
+<td><a href="seealso.html">seealso</a></td>
+<td>Finds programs sharing group names</td>
+</tr>
+
+<tr>
+<td><a href="showdb.html">showdb</a></td>
+<td>Displays information on the currently available databases</td>
+</tr>
+
+<tr>
+<td><a href="textsearch.html">textsearch</a></td>
+<td>Search sequence documentation. Slow, use SRS and Entrez!</td>
+</tr>
+
+<tr>
+<td><a href="tfm.html">tfm</a></td>
+<td>Displays a program's help documentation manual</td>
+</tr>
+
+<tr>
+<td><a href="whichdb.html">whichdb</a></td>
+<td>Search all databases for an entry</td>
+</tr>
+
+<tr>
+<td><a href="wossname.html">wossname</a></td>
+<td>Finds programs by keywords in their one-line documentation</td>
+</tr>
+
+</table>
 <ul>
 
 <li><a href="geecee.html">geecee</a> - Calculates the fractional GC
@@ -629,11 +684,9 @@ MRC Rosalind Franklin Centre for Genomics Research
 Wellcome Trust Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
 
 
-
 <H2>
     History
 </H2>
-
 
 
 
@@ -643,12 +696,10 @@ Wellcome Trust Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
 
 This program is intended to be used by everyone and everything, from naive users to embedded scripts.
 
-
 <H2>
     Comments
 </H2>
 None
-
 
 </BODY>
 </HTML>

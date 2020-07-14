@@ -13,7 +13,6 @@
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
-
 newcpgreport
 </font></b>
 </td></tr>
@@ -21,12 +20,10 @@ newcpgreport
 <br>&nbsp;
 <p>
 
-
 <H2>
     Function
 </H2>
 Report CpG rich areas
-
 
 <H2>
     Description
@@ -96,7 +93,7 @@ proportion of CpG compared to GpC.
 
 % <b>newcpgreport </b>
 Report CpG rich areas
-Input sequence(s): <b>tembl:rnu68037</b>
+Input nucleotide sequence(s): <b>tembl:rnu68037</b>
 Window size [100]: <b></b>
 Shift increment [1]: <b></b>
 Minimum Length [200]: <b></b>
@@ -109,59 +106,60 @@ Output file [rnu68037.newcpgreport]: <b></b>
 <a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
 
 
-
 <H2>
     Command line arguments
 </H2>
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
    Standard (Mandatory) qualifiers:
-  [-sequence]          seqall     Sequence database USA
-   -window             integer    Window size
-   -shift              integer    Shift increment
-   -minlen             integer    Minimum Length
-   -minoe              float      Minimum observed/expected
-   -minpc              float      Minimum percentage
-  [-outfile]           outfile    Output file name
+  [-sequence]          seqall     Nucleotide sequence(s) filename and optional
+                                  format, or reference (input USA)
+   -window             integer    [100] Window size (Integer 1 or more)
+   -shift              integer    [1] Shift increment (Integer 1 or more)
+   -minlen             integer    [200] Minimum Length (Integer 1 or more)
+   -minoe              float      [0.6] Minimum observed/expected (Number from
+                                  0.000 to 10.000)
+   -minpc              float      [50.] Minimum percentage (Number from 0.000
+                                  to 100.000)
+  [-outfile]           outfile    [*.newcpgreport] Output file name
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers: (none)
    Associated qualifiers:
 
    "-sequence" associated qualifiers
-   -sbegin1             integer    Start of each sequence to be used
-   -send1               integer    End of each sequence to be used
-   -sreverse1           boolean    Reverse (if DNA)
-   -sask1               boolean    Ask for begin/end/reverse
-   -snucleotide1        boolean    Sequence is nucleotide
-   -sprotein1           boolean    Sequence is protein
-   -slower1             boolean    Make lower case
-   -supper1             boolean    Make upper case
-   -sformat1            string     Input sequence format
-   -sdbname1            string     Database name
-   -sid1                string     Entryname
-   -ufo1                string     UFO features
-   -fformat1            string     Features format
-   -fopenfile1          string     Features file name
+   -sbegin1            integer    Start of each sequence to be used
+   -send1              integer    End of each sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
 
    "-outfile" associated qualifiers
-   -odirectory2         string     Output directory
+   -odirectory2        string     Output directory
 
    General qualifiers:
-   -auto                boolean    Turn off prompts
-   -stdout              boolean    Write standard output
-   -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for standard and additional values
-   -debug               boolean    Write debug output to program.dbg
-   -verbose             boolean    Report some/full command line options
-   -help                boolean    Report command line options. More
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
-   -warning             boolean    Report warnings
-   -error               boolean    Report errors
-   -fatal               boolean    Report fatal errors
-   -die                 boolean    Report deaths
-
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
 
 </pre>
 </td></tr></table>
@@ -176,7 +174,7 @@ Output file [rnu68037.newcpgreport]: <b></b>
 
 <tr>
 <td>[-sequence]<br>(Parameter 1)</td>
-<td>Sequence database USA</td>
+<td>Nucleotide sequence(s) filename and optional format, or reference (input USA)</td>
 <td>Readable sequence(s)</td>
 <td><b>Required</b></td>
 </tr>
@@ -220,7 +218,7 @@ Output file [rnu68037.newcpgreport]: <b></b>
 <td>[-outfile]<br>(Parameter 2)</td>
 <td>Output file name</td>
 <td>Output file</td>
-<td><i>&lt;sequence&gt;</i>.newcpgreport</td>
+<td>&nbsp;</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
@@ -244,7 +242,6 @@ Output file [rnu68037.newcpgreport]: <b></b>
 </tr>
 
 </table>
-
 
 
 <H2>
@@ -345,7 +342,6 @@ SQ   Sequence 1218 BP; 162 A; 397 C; 387 G; 272 T; 0 other;
 </pre>
 </td></tr></table><p>
 
-
 <H2>
     Output file format
 </H2>
@@ -380,7 +376,6 @@ FT   numislands       2
 //
 </pre>
 </td></tr></table><p>
-
 
 
 <H2>
@@ -436,12 +431,27 @@ None.
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
-<tr><td><a href="cpgplot.html">cpgplot</a></td><td>Plot CpG rich areas</td></tr>
-<tr><td><a href="cpgreport.html">cpgreport</a></td><td>Reports all CpG rich regions</td></tr>
-<tr><td><a href="geecee.html">geecee</a></td><td>Calculates fractional GC content of nucleic acid sequences</td></tr>
-<tr><td><a href="newcpgseek.html">newcpgseek</a></td><td>Reports CpG rich regions</td></tr>
-</table>
+<tr>
+<td><a href="cpgplot.html">cpgplot</a></td>
+<td>Plot CpG rich areas</td>
+</tr>
 
+<tr>
+<td><a href="cpgreport.html">cpgreport</a></td>
+<td>Reports all CpG rich regions</td>
+</tr>
+
+<tr>
+<td><a href="geecee.html">geecee</a></td>
+<td>Calculates fractional GC content of nucleic acid sequences</td>
+</tr>
+
+<tr>
+<td><a href="newcpgseek.html">newcpgseek</a></td>
+<td>Reports CpG rich regions</td>
+</tr>
+
+</table>
 
 <p>
 
@@ -497,13 +507,11 @@ Rodrigo Lopez (rls&nbsp;&copy;&nbsp;ebi.ac.uk)
 European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
 
 
-
 <H2>
     History
 </H2>
 
 Written (1999) - Rodrigo Lopez.
-
 
 <H2>
     Target users
@@ -511,12 +519,10 @@ Written (1999) - Rodrigo Lopez.
 This program is intended to be used by everyone and everything, from naive users to embedded scripts.
 
 
-
 <H2>
     Comments
 </H2>
 None
-
 
 </BODY>
 </HTML>

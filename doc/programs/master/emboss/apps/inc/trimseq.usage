@@ -1,0 +1,90 @@
+<b>Here is a sample session with trimseq</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>trimseq tembl:hsfau hsfau.seq -window 1 -percent 100 </b>
+Trim ambiguous bits off the ends of sequences
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
+<p>
+<b>Example 2</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>trimseq tembl:hsfau hsfau.seq -window 5 -percent 40 </b>
+Trim ambiguous bits off the ends of sequences
+
+</pre></td></tr></table><p>
+<p>
+<p>
+<p>
+<b>Example 3</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>trimseq tembl:hsfau hsfau.seq -window 20 -percent 80 </b>
+Trim ambiguous bits off the ends of sequences
+
+</pre></td></tr></table><p>
+<p>
+<p>
+<p>
+<b>Example 4</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>trimseq tembl:hsfau hsfau.seq -window 20 -percent 10 </b>
+Trim ambiguous bits off the ends of sequences
+
+</pre></td></tr></table><p>
+<p>
+<p>
+<p>
+<b>Example 5</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>trimseq tembl:hsfau hsfau.seq -window 20 -percent 50 -strict </b>
+Trim ambiguous bits off the ends of sequences
+
+</pre></td></tr></table><p>
+<p>
+<p>
+<p>
+<b>Example 6</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>trimseq tembl:hsfau hsfau.seq -window 1 -percent 100 -star </b>
+Trim ambiguous bits off the ends of sequences
+
+</pre></td></tr></table><p>
+<p>
+<p>
+<p>
+<b>Example 7</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>trimseq tembl:hsfau hsfau.seq -window 20 -percent 50 -noright </b>
+Trim ambiguous bits off the ends of sequences
+
+</pre></td></tr></table><p>
+<p>
+<p>

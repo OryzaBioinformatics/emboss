@@ -13,7 +13,6 @@
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
-
 diffseq
 </font></b>
 </td></tr>
@@ -22,12 +21,10 @@ diffseq
 <p>
 
 
-
 <H2>
     Function
 </H2>
 Find differences between nearly identical sequences
-
 <H2>
     Description
 </H2>
@@ -81,13 +78,12 @@ long.
 Find differences between nearly identical sequences
 Word size [10]: <b></b>
 Output report [ap000504.diffseq]: <b></b>
-Output features [AP000504.diffgff]: <b></b>
-Second output features [AF129756.diffgff]: <b></b>
+Features output [AP000504.diffgff]: <b></b>
+Second features output [AF129756.diffgff]: <b></b>
 
 </pre></td></tr></table><p>
 <p>
 <a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
-
 
 <H2>
     Command line arguments
@@ -95,9 +91,11 @@ Second output features [AF129756.diffgff]: <b></b>
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
    Standard (Mandatory) qualifiers:
-  [-asequence]         sequence   Sequence USA
-  [-bsequence]         sequence   Sequence USA
-   -wordsize           integer    The similar regions between the two
+  [-asequence]         sequence   Sequence filename and optional format, or
+                                  reference (input USA)
+  [-bsequence]         sequence   Sequence filename and optional format, or
+                                  reference (input USA)
+   -wordsize           integer    [10] The similar regions between the two
                                   sequences are found by creating a hash table
                                   of 'wordsize'd subsequences. 10 is a
                                   reasonable default. Making this value larger
@@ -108,15 +106,16 @@ Second output features [AF129756.diffgff]: <b></b>
                                   This value may be made smaller (4?) to
                                   improve the resolution of nearby
                                   differences, but the program will go much
-                                  slower.
+                                  slower. (Integer 2 or more)
   [-outfile]           report     Output report file name
-  [-aoutfeat]          featout    File for output of first sequence's features
-  [-boutfeat]          featout    File for output of second sequence's
-                                  features
+  [-aoutfeat]          featout    [$(asequence.name).diffgff] File for output
+                                  of first sequence's features
+  [-boutfeat]          featout    [$(bsequence.name).diffgff] File for output
+                                  of second sequence's features
 
    Additional (Optional) qualifiers:
-   -globaldifferences  boolean    Normally this program will find regions of
-                                  identity that are the length of the
+   -globaldifferences  boolean    [N] Normally this program will find regions
+                                  of identity that are the length of the
                                   specified word-size or greater and will then
                                   report the regions of difference between
                                   these matching regions. This works well and
@@ -205,8 +204,7 @@ Second output features [AF129756.diffgff]: <b></b>
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
-   -die                boolean    Report deaths
-
+   -die                boolean    Report dying program messages
 
 </pre>
 </td></tr></table>
@@ -220,14 +218,14 @@ Second output features [AF129756.diffgff]: <b></b>
 
 <tr>
 <td>[-asequence]<br>(Parameter 1)</td>
-<td>Sequence USA</td>
+<td>Sequence filename and optional format, or reference (input USA)</td>
 <td>Readable sequence</td>
 <td><b>Required</b></td>
 </tr>
 
 <tr>
 <td>[-bsequence]<br>(Parameter 2)</td>
-<td>Sequence USA</td>
+<td>Sequence filename and optional format, or reference (input USA)</td>
 <td>Readable sequence</td>
 <td><b>Required</b></td>
 </tr>
@@ -284,7 +282,6 @@ Second output features [AF129756.diffgff]: <b></b>
 </tr>
 
 </table>
-
 
 <H2>
     Input file format
@@ -521,7 +518,6 @@ DR   SPTREMBL; O95870; O95870.
 </td></tr></table><p>
 
 
-
 <H2>
     Output file format
 </H2>
@@ -546,7 +542,6 @@ http://emboss.sf.net/docs/themes/ReportFormats.html</A>
 for further information on report formats.
 
 <p>
-
 <p>
 
 By default <b>diffseq</b> writes a 'diffseq' report file.
@@ -560,7 +555,10 @@ By default <b>diffseq</b> writes a 'diffseq' report file.
 <pre>
 ########################################
 # Program: diffseq
-# Rundate: Fri Jul 15 2005 12:00:00
+# Rundate: Sat Jul 15 2006 12:00:00
+# Commandline: diffseq
+#    [-asequence] tembl:ap000504
+#    [-bsequence] tembl:af129756
 # Report_format: diffseq
 # Report_file: ap000504.diffseq
 # Additional_files: 2
@@ -605,9 +603,6 @@ AP000504 2466-2466 Length: 1
 Sequence: g
 Sequence: a
 Feature: repeat_region 8391-8686 rpt_family='AluSg'
-AF129756 8500-8500 Length: 1
-
-AP000504 2655-2658 Length: 4
 
 
 <font color=red>  [Part of this file has been deleted for brevity]</font>
@@ -669,7 +664,7 @@ AF129756 103855-103855 Length: 1
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 ##gff-version 2.0
-##date 2005-07-15
+##date 2006-07-15
 ##Type DNA AF129756
 AF129756	diffseq	conflict	6882	6882	1.000	+	.	Sequence "AF129756.1" ; note "SNP in AP000504" ; replace "a"
 AF129756	diffseq	conflict	7830	7830	1.000	+	.	Sequence "AF129756.2" ; note "SNP in AP000504" ; replace "g"
@@ -779,7 +774,7 @@ AF129756	diffseq	conflict	103855	103855	1.000	+	.	Sequence "AF129756.105" ; note
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 ##gff-version 2.0
-##date 2005-07-15
+##date 2006-07-15
 ##Type DNA AP000504
 AP000504	diffseq	conflict	847	847	1.000	+	.	Sequence "AP000504.1" ; note "SNP in AF129756" ; replace "t"
 AP000504	diffseq	conflict	1795	1795	1.000	+	.	Sequence "AP000504.2" ; note "SNP in AF129756" ; replace "a"
@@ -885,7 +880,6 @@ AP000504	diffseq	conflict	97716	97716	1.000	+	.	Sequence "AP000504.104" ; note "
 AP000504	diffseq	conflict	97827	97827	1.000	+	.	Sequence "AP000504.105" ; note "SNP in AF129756" ; replace "t"
 </pre>
 </td></tr></table><p>
-
 
 <p>
 
@@ -1023,7 +1017,6 @@ None.
 <tr><th>Program name</th><th>Description</th></tr>
 </table>
 
-
 <H2>
     Author(s)
 </H2>
@@ -1034,7 +1027,6 @@ MRC Rosalind Franklin Centre for Genomics Research
 Wellcome Trust Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
 
 
-
 <H2>
     History
 </H2>
@@ -1043,18 +1035,15 @@ Written 15th Aug 2000 - Gary Williams.
 <p>
 18th Aug 2000 - Added writing out GFF files of the mismatched regions
 
-
 <H2>
     Target users
 </H2>
 This program is intended to be used by everyone and everything, from naive users to embedded scripts.
 
-
 <H2>
     Comments
 </H2>
 None
-
 
 
 </BODY>

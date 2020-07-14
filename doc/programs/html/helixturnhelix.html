@@ -13,7 +13,6 @@
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
-
 helixturnhelix
 </font></b>
 </td></tr>
@@ -21,12 +20,10 @@ helixturnhelix
 <br>&nbsp;
 <p>
 
-
 <H2>
     Function
 </H2>
 Report nucleic acid binding motifs
-
 <H2>
     Description
 </H2>
@@ -53,13 +50,12 @@ DNA; the other lies at an angle across DNA.
 
 % <b>helixturnhelix </b>
 Report nucleic acid binding motifs
-Input sequence(s): <b>tsw:laci_ecoli</b>
+Input protein sequence(s): <b>tsw:laci_ecoli</b>
 Output report [laci_ecoli.hth]: <b></b>
 
 </pre></td></tr></table><p>
 <p>
 <a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
-
 
 
 <H2>
@@ -68,59 +64,62 @@ Output report [laci_ecoli.hth]: <b></b>
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
    Standard (Mandatory) qualifiers:
-  [-sequence]          seqall     Sequence database USA
+  [-sequence]          seqall     Protein sequence(s) filename and optional
+                                  format, or reference (input USA)
   [-outfile]           report     Output report file name
 
    Additional (Optional) qualifiers:
-   -mean               float      Mean value
-   -sd                 float      Standard Deviation value
-   -minsd              float      Minimum SD
+   -mean               float      [238.71] Mean value (Number from 1.000 to
+                                  10000.000)
+   -sd                 float      [293.61] Standard Deviation value (Number
+                                  from 1.000 to 10000.000)
+   -minsd              float      [2.5] Minimum SD (Number from 0.000 to
+                                  100.000)
    -eightyseven        boolean    Use the old (1987) weight data
 
    Advanced (Unprompted) qualifiers: (none)
    Associated qualifiers:
 
    "-sequence" associated qualifiers
-   -sbegin1             integer    Start of each sequence to be used
-   -send1               integer    End of each sequence to be used
-   -sreverse1           boolean    Reverse (if DNA)
-   -sask1               boolean    Ask for begin/end/reverse
-   -snucleotide1        boolean    Sequence is nucleotide
-   -sprotein1           boolean    Sequence is protein
-   -slower1             boolean    Make lower case
-   -supper1             boolean    Make upper case
-   -sformat1            string     Input sequence format
-   -sdbname1            string     Database name
-   -sid1                string     Entryname
-   -ufo1                string     UFO features
-   -fformat1            string     Features format
-   -fopenfile1          string     Features file name
+   -sbegin1            integer    Start of each sequence to be used
+   -send1              integer    End of each sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
 
    "-outfile" associated qualifiers
-   -rformat2            string     Report format
-   -rname2              string     Base file name
-   -rextension2         string     File name extension
-   -rdirectory2         string     Output directory
-   -raccshow2           boolean    Show accession number in the report
-   -rdesshow2           boolean    Show description in the report
-   -rscoreshow2         boolean    Show the score in the report
-   -rusashow2           boolean    Show the full USA in the report
+   -rformat2           string     Report format
+   -rname2             string     Base file name
+   -rextension2        string     File name extension
+   -rdirectory2        string     Output directory
+   -raccshow2          boolean    Show accession number in the report
+   -rdesshow2          boolean    Show description in the report
+   -rscoreshow2        boolean    Show the score in the report
+   -rusashow2          boolean    Show the full USA in the report
 
    General qualifiers:
-   -auto                boolean    Turn off prompts
-   -stdout              boolean    Write standard output
-   -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for standard and additional values
-   -debug               boolean    Write debug output to program.dbg
-   -verbose             boolean    Report some/full command line options
-   -help                boolean    Report command line options. More
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
-   -warning             boolean    Report warnings
-   -error               boolean    Report errors
-   -fatal               boolean    Report fatal errors
-   -die                 boolean    Report deaths
-
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
 
 </pre>
 </td></tr></table>
@@ -134,7 +133,7 @@ Output report [laci_ecoli.hth]: <b></b>
 
 <tr>
 <td>[-sequence]<br>(Parameter 1)</td>
-<td>Sequence database USA</td>
+<td>Protein sequence(s) filename and optional format, or reference (input USA)</td>
 <td>Readable sequence(s)</td>
 <td><b>Required</b></td>
 </tr>
@@ -191,7 +190,6 @@ Output report [laci_ecoli.hth]: <b></b>
 </tr>
 
 </table>
-
 
 
 <H2>
@@ -319,7 +317,6 @@ SQ   SEQUENCE   360 AA;  38564 MW;  4CA5A1D6 CRC32;
 </pre>
 </td></tr></table><p>
 
-
 <H2>
     Output file format
 </H2>
@@ -344,7 +341,6 @@ http://emboss.sf.net/docs/themes/ReportFormats.html</A>
 for further information on report formats.
 
 <p>
-
 <p>
 
 By default <b>helixturnhelix</b> writes a 'motif' report file.
@@ -358,7 +354,9 @@ By default <b>helixturnhelix</b> writes a 'motif' report file.
 <pre>
 ########################################
 # Program: helixturnhelix
-# Rundate: Fri Jul 15 2005 12:00:00
+# Rundate: Sat Jul 15 2006 12:00:00
+# Commandline: helixturnhelix
+#    -sequence tsw:laci_ecoli
 # Report_format: motif
 # Report_file: laci_ecoli.hth
 ########################################
@@ -386,7 +384,6 @@ Maximum_score_at at "*"
 #---------------------------------------
 </pre>
 </td></tr></table><p>
-
 
 <H2>
     Data files
@@ -431,7 +428,6 @@ The directories are searched in the following order:
    <li> ~/.embossdata
 </ul>
 <p>
-
 <p>
 The data files are stored in the standard EMBOSS data directory. The
 names are:
@@ -552,25 +548,92 @@ None.
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
-<tr><td><a href="antigenic.html">antigenic</a></td><td>Finds antigenic sites in proteins</td></tr>
-<tr><td><a href="digest.html">digest</a></td><td>Protein proteolytic enzyme or reagent cleavage digest</td></tr>
-<tr><td><a href="epestfind.html">epestfind</a></td><td>Finds PEST motifs as potential proteolytic cleavage sites</td></tr>
-<tr><td><a href="fuzzpro.html">fuzzpro</a></td><td>Protein pattern search</td></tr>
-<tr><td><a href="fuzztran.html">fuzztran</a></td><td>Protein pattern search after translation</td></tr>
-<tr><td><a href="garnier.html">garnier</a></td><td>Predicts protein secondary structure</td></tr>
-<tr><td><a href="hmoment.html">hmoment</a></td><td>Hydrophobic moment calculation</td></tr>
-<tr><td><a href="oddcomp.html">oddcomp</a></td><td>Find protein sequence regions with a biased composition</td></tr>
-<tr><td><a href="patmatdb.html">patmatdb</a></td><td>Search a protein sequence with a motif</td></tr>
-<tr><td><a href="patmatmotifs.html">patmatmotifs</a></td><td>Search a PROSITE motif database with a protein sequence</td></tr>
-<tr><td><a href="pepcoil.html">pepcoil</a></td><td>Predicts coiled coil regions</td></tr>
-<tr><td><a href="pepnet.html">pepnet</a></td><td>Displays proteins as a helical net</td></tr>
-<tr><td><a href="pepwheel.html">pepwheel</a></td><td>Shows protein sequences as helices</td></tr>
-<tr><td><a href="preg.html">preg</a></td><td>Regular expression search of a protein sequence</td></tr>
-<tr><td><a href="pscan.html">pscan</a></td><td>Scans proteins using PRINTS</td></tr>
-<tr><td><a href="sigcleave.html">sigcleave</a></td><td>Reports protein signal cleavage sites</td></tr>
-<tr><td><a href="tmap.html">tmap</a></td><td>Displays membrane spanning regions</td></tr>
-</table>
+<tr>
+<td><a href="antigenic.html">antigenic</a></td>
+<td>Finds antigenic sites in proteins</td>
+</tr>
 
+<tr>
+<td><a href="digest.html">digest</a></td>
+<td>Protein proteolytic enzyme or reagent cleavage digest</td>
+</tr>
+
+<tr>
+<td><a href="epestfind.html">epestfind</a></td>
+<td>Finds PEST motifs as potential proteolytic cleavage sites</td>
+</tr>
+
+<tr>
+<td><a href="fuzzpro.html">fuzzpro</a></td>
+<td>Protein pattern search</td>
+</tr>
+
+<tr>
+<td><a href="fuzztran.html">fuzztran</a></td>
+<td>Protein pattern search after translation</td>
+</tr>
+
+<tr>
+<td><a href="garnier.html">garnier</a></td>
+<td>Predicts protein secondary structure</td>
+</tr>
+
+<tr>
+<td><a href="hmoment.html">hmoment</a></td>
+<td>Hydrophobic moment calculation</td>
+</tr>
+
+<tr>
+<td><a href="oddcomp.html">oddcomp</a></td>
+<td>Find protein sequence regions with a biased composition</td>
+</tr>
+
+<tr>
+<td><a href="patmatdb.html">patmatdb</a></td>
+<td>Search a protein sequence with a motif</td>
+</tr>
+
+<tr>
+<td><a href="patmatmotifs.html">patmatmotifs</a></td>
+<td>Search a PROSITE motif database with a protein sequence</td>
+</tr>
+
+<tr>
+<td><a href="pepcoil.html">pepcoil</a></td>
+<td>Predicts coiled coil regions</td>
+</tr>
+
+<tr>
+<td><a href="pepnet.html">pepnet</a></td>
+<td>Displays proteins as a helical net</td>
+</tr>
+
+<tr>
+<td><a href="pepwheel.html">pepwheel</a></td>
+<td>Shows protein sequences as helices</td>
+</tr>
+
+<tr>
+<td><a href="preg.html">preg</a></td>
+<td>Regular expression search of a protein sequence</td>
+</tr>
+
+<tr>
+<td><a href="pscan.html">pscan</a></td>
+<td>Scans proteins using PRINTS</td>
+</tr>
+
+<tr>
+<td><a href="sigcleave.html">sigcleave</a></td>
+<td>Reports protein signal cleavage sites</td>
+</tr>
+
+<tr>
+<td><a href="tmap.html">tmap</a></td>
+<td>Displays membrane spanning regions</td>
+</tr>
+
+</table>
 <H2>
     Author(s)
 </H2>
@@ -580,7 +643,6 @@ Alan Bleasby (ajb&nbsp;&copy;&nbsp;ebi.ac.uk)
 <br>
 European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
 
-
 <p>
 
 Original program "HELIXTURNHELIX" (EGCG 1990) by
@@ -589,25 +651,21 @@ Peter Rice (pmr&nbsp;&copy;&nbsp;ebi.ac.uk)
 Informatics Division, European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
 
 
-
 <H2>
     History
 </H2>
 
 Completed 11th March 1999
 
-
 <H2>
     Target users
 </H2>
 This program is intended to be used by everyone and everything, from naive users to embedded scripts.
 
-
 <H2>
     Comments
 </H2>
 None
-
 
 </BODY>
 </HTML>

@@ -57,61 +57,64 @@ Usage
 % showdb 
 Displays information on the currently available databases
 
-# Name        Type ID  Qry All Comment
-# ====        ==== ==  === === =======
-qapblast      P    OK  OK  OK  BLAST swissnew
-qapblastall   P    OK  OK  OK  BLAST swissnew, all fields indexed
-qapblastsplit P    OK  OK  OK  BLAST swissnew split in 5 files
+# Name           Type  ID  Qry All Comment
+# ============== ==== ==  === === =======
+qapblast         P    OK  OK  OK  BLAST swissnew
+qapblastall      P    OK  OK  OK  BLAST swissnew, all fields indexed
+qapblastsplit    P    OK  OK  OK  BLAST swissnew split in 5 files
 qapblastsplitexc P    OK  OK  OK  BLAST swissnew split in 5 files, not file 02
 qapblastsplitinc P    OK  OK  OK  BLAST swissnew split in 5 files, only file 02
-qapfasta      P    OK  OK  OK  FASTA file swissnew entries
-qapflat       P    OK  OK  OK  Swissnew flatfiles
-qapflatall    P    OK  OK  OK  Swissnew flatfiles, all fields indexed
-qapflatexc    P    OK  OK  OK  Swissnew flatfiles, no updated sequence file
-qapflatinc    P    OK  OK  OK  Swissnew flatfiles, only updated sequence file
-qapir         P    OK  OK  OK  PIR
-qapirall      P    OK  OK  OK  PIR
-qapirinc      P    OK  OK  OK  PIR
-qapxfasta     P    OK  OK  OK  FASTA file swissnew entries
-qapxflat      P    OK  OK  OK  Swissnew flatfiles
-qapxflatexc   P    OK  OK  OK  Swissnew flatfiles, no updated sequence file
-qapxflatinc   P    OK  OK  OK  Swissnew flatfiles, only updated sequence file
-qaxpir        P    OK  OK  OK  PIR
-qaxpirall     P    OK  OK  OK  PIR
-qaxpirinc     P    OK  OK  OK  PIR
-tpir          P    OK  OK  OK  PIR using NBRF access for 4 files
-tsw           P    OK  OK  OK  Swissprot native format with EMBL CD-ROM index
-tswnew        P    OK  OK  OK  Swissnew as 3 files in native format with EMBL C
-D-ROM index
-twp           P    OK  OK  OK  EMBL new in native format with EMBL CD-ROM index
-qanfasta      N    OK  OK  OK  FASTA file EMBL rodents
-qanfastaall   N    OK  OK  OK  FASTA file EMBL rodents, all fields indexed
-qanflat       N    OK  OK  OK  EMBL flatfiles
-qangcg        N    OK  OK  OK  GCG format EMBL
-qangcgall     N    OK  OK  OK  GCG format EMBL
-qangcgexc     N    OK  OK  OK  GCG format EMBL without prokaryotes
-qangcginc     N    OK  OK  OK  GCG format EMBL only prokaryotes
-qanxfasta     N    OK  OK  OK  FASTA file EMBL rodents
-qanxfastaall  N    OK  OK  OK  FASTA file EMBL rodents, all fields indexed
-qanxflat      N    OK  OK  OK  EMBL flatfiles
-qanxflatall   N    OK  OK  OK  EMBL flatfiles, all fields indexed
-qanxgcg       N    OK  OK  OK  GCG format EMBL
-qanxgcgall    N    OK  OK  OK  GCG format EMBL
-qanxgcgexc    N    OK  OK  OK  GCG format EMBL without prokaryotes
-qanxgcginc    N    OK  OK  OK  GCG format EMBL only prokaryotes
-qapirexc      N    OK  OK  OK  PIR
-qasrs         N    OK  OK  -   EMBL in local srs installation
-qasrsfasta    N    OK  OK  -   EMBL in local srs installation, fasta format
-qasrswww      N    OK  -   -   Remote SRS web server
-qawfasta      N    OK  OK  OK  FASTA file wormpep entries
-qawxfasta     N    OK  OK  OK  FASTA file wormpep entries
-qaxpirexc     N    OK  OK  OK  PIR
-tembl         N    OK  OK  OK  EMBL in native format with EMBL CD-ROM index
-temblall      N    -   -   OK  EMBL in native format with EMBL CD-ROM index
-temblrest     N    -   -   OK  EMBL in native format with EMBL CD-ROM index
-temblvrt      N    -   -   OK  EMBL in native format with EMBL CD-ROM index
-tgb           N    OK  -   -   Genbank IDs
-tgenbank      N    OK  OK  OK  GenBank in native format with EMBL CD-ROM index
+qapfasta         P    OK  OK  OK  FASTA file swissnew entries
+qapflat          P    OK  OK  OK  Swissnew flatfiles
+qapflatall       P    OK  OK  OK  Swissnew flatfiles, all fields indexed
+qapflatexc       P    OK  OK  OK  Swissnew flatfiles, no updated sequence file
+qapflatinc       P    OK  OK  OK  Swissnew flatfiles, only updated sequence fil
+e
+qapir            P    OK  OK  OK  PIR
+qapirall         P    OK  OK  OK  PIR
+qapirinc         P    OK  OK  OK  PIR
+qapxfasta        P    OK  OK  OK  FASTA file swissnew entries
+qapxflat         P    OK  OK  OK  Swissnew flatfiles
+qapxflatexc      P    OK  OK  OK  Swissnew flatfiles, no updated sequence file
+qapxflatinc      P    OK  OK  OK  Swissnew flatfiles, only updated sequence fil
+e
+qaxpir           P    OK  OK  OK  PIR
+qaxpirall        P    OK  OK  OK  PIR
+qaxpirinc        P    OK  OK  OK  PIR
+tpir             P    OK  OK  OK  PIR using NBRF access for 4 files
+tsw              P    OK  OK  OK  Swissprot native format with EMBL CD-ROM inde
+x
+tswnew           P    OK  OK  OK  Swissnew as 3 files in native format with EMB
+L CD-ROM index
+twp              P    OK  OK  OK  EMBL new in native format with EMBL CD-ROM in
+dex
+qanfasta         N    OK  OK  OK  FASTA file EMBL rodents
+qanfastaall      N    OK  OK  OK  FASTA file EMBL rodents, all fields indexed
+qanflat          N    OK  OK  OK  EMBL flatfiles
+qangcg           N    OK  OK  OK  GCG format EMBL
+qangcgall        N    OK  OK  OK  GCG format EMBL
+qangcgexc        N    OK  OK  OK  GCG format EMBL without prokaryotes
+qangcginc        N    OK  OK  OK  GCG format EMBL only prokaryotes
+qanxfasta        N    OK  OK  OK  FASTA file EMBL rodents
+qanxfastaall     N    OK  OK  OK  FASTA file EMBL rodents, all fields indexed
+qanxflat         N    OK  OK  OK  EMBL flatfiles
+qanxflatall      N    OK  OK  OK  EMBL flatfiles, all fields indexed
+qanxgcg          N    OK  OK  OK  GCG format EMBL
+qanxgcgall       N    OK  OK  OK  GCG format EMBL
+qanxgcgexc       N    OK  OK  OK  GCG format EMBL without prokaryotes
+qanxgcginc       N    OK  OK  OK  GCG format EMBL only prokaryotes
+qapirexc         N    OK  OK  OK  PIR
+qasrswww         N    OK  -   -   Remote SRS web server
+qawfasta         N    OK  OK  OK  FASTA file wormpep entries
+qawxfasta        N    OK  OK  OK  FASTA file wormpep entries
+qaxpirexc        N    OK  OK  OK  PIR
+tembl            N    OK  OK  OK  EMBL in native format with EMBL CD-ROM index
+temblall         N    -   -   OK  EMBL in native format with EMBL CD-ROM index
+temblrest        N    -   -   OK  EMBL in native format with EMBL CD-ROM index
+temblvrt         N    -   -   OK  EMBL in native format with EMBL CD-ROM index
+tgb              N    OK  -   -   Genbank IDs
+tgenbank         N    OK  OK  OK  GenBank in native format with EMBL CD-ROM ind
+ex
 
    Example 2
 
@@ -131,9 +134,9 @@ Displays information on the currently available databases
 % showdb -database tsw 
 Displays information on the currently available databases
 
-# Name        Type ID  Qry All Comment
-# ====        ==== ==  === === =======
-tsw           P    OK  OK  OK  Swissprot native format with EMBL CD-ROM index
+# Name         Type  ID  Qry All Comment
+# ============ ==== ==  === === =======
+tsw            P    OK  OK  OK  Swissprot native format with EMBL CD-ROM index
 
    Go to the input files for this example
 
@@ -230,10 +233,6 @@ index
 
  qapirexc N OK   OK   OK   PIR
 
- qasrs N OK   OK   -    EMBL in local srs installation
-
- qasrsfasta N OK   OK   -    EMBL in local srs installation, fasta format
-
  qasrswww N OK   -    -    Remote SRS web server
 
  qawfasta N OK   OK   OK   FASTA file wormpep entries
@@ -264,33 +263,37 @@ index
 % showdb -nonucleic 
 Displays information on the currently available databases
 
-# Name        Type ID  Qry All Comment
-# ====        ==== ==  === === =======
-qapblast      P    OK  OK  OK  BLAST swissnew
-qapblastall   P    OK  OK  OK  BLAST swissnew, all fields indexed
-qapblastsplit P    OK  OK  OK  BLAST swissnew split in 5 files
+# Name           Type  ID  Qry All Comment
+# ============== ==== ==  === === =======
+qapblast         P    OK  OK  OK  BLAST swissnew
+qapblastall      P    OK  OK  OK  BLAST swissnew, all fields indexed
+qapblastsplit    P    OK  OK  OK  BLAST swissnew split in 5 files
 qapblastsplitexc P    OK  OK  OK  BLAST swissnew split in 5 files, not file 02
 qapblastsplitinc P    OK  OK  OK  BLAST swissnew split in 5 files, only file 02
-qapfasta      P    OK  OK  OK  FASTA file swissnew entries
-qapflat       P    OK  OK  OK  Swissnew flatfiles
-qapflatall    P    OK  OK  OK  Swissnew flatfiles, all fields indexed
-qapflatexc    P    OK  OK  OK  Swissnew flatfiles, no updated sequence file
-qapflatinc    P    OK  OK  OK  Swissnew flatfiles, only updated sequence file
-qapir         P    OK  OK  OK  PIR
-qapirall      P    OK  OK  OK  PIR
-qapirinc      P    OK  OK  OK  PIR
-qapxfasta     P    OK  OK  OK  FASTA file swissnew entries
-qapxflat      P    OK  OK  OK  Swissnew flatfiles
-qapxflatexc   P    OK  OK  OK  Swissnew flatfiles, no updated sequence file
-qapxflatinc   P    OK  OK  OK  Swissnew flatfiles, only updated sequence file
-qaxpir        P    OK  OK  OK  PIR
-qaxpirall     P    OK  OK  OK  PIR
-qaxpirinc     P    OK  OK  OK  PIR
-tpir          P    OK  OK  OK  PIR using NBRF access for 4 files
-tsw           P    OK  OK  OK  Swissprot native format with EMBL CD-ROM index
-tswnew        P    OK  OK  OK  Swissnew as 3 files in native format with EMBL C
-D-ROM index
-twp           P    OK  OK  OK  EMBL new in native format with EMBL CD-ROM index
+qapfasta         P    OK  OK  OK  FASTA file swissnew entries
+qapflat          P    OK  OK  OK  Swissnew flatfiles
+qapflatall       P    OK  OK  OK  Swissnew flatfiles, all fields indexed
+qapflatexc       P    OK  OK  OK  Swissnew flatfiles, no updated sequence file
+qapflatinc       P    OK  OK  OK  Swissnew flatfiles, only updated sequence fil
+e
+qapir            P    OK  OK  OK  PIR
+qapirall         P    OK  OK  OK  PIR
+qapirinc         P    OK  OK  OK  PIR
+qapxfasta        P    OK  OK  OK  FASTA file swissnew entries
+qapxflat         P    OK  OK  OK  Swissnew flatfiles
+qapxflatexc      P    OK  OK  OK  Swissnew flatfiles, no updated sequence file
+qapxflatinc      P    OK  OK  OK  Swissnew flatfiles, only updated sequence fil
+e
+qaxpir           P    OK  OK  OK  PIR
+qaxpirall        P    OK  OK  OK  PIR
+qaxpirinc        P    OK  OK  OK  PIR
+tpir             P    OK  OK  OK  PIR using NBRF access for 4 files
+tsw              P    OK  OK  OK  Swissprot native format with EMBL CD-ROM inde
+x
+tswnew           P    OK  OK  OK  Swissnew as 3 files in native format with EMB
+L CD-ROM index
+twp              P    OK  OK  OK  EMBL new in native format with EMBL CD-ROM in
+dex
 
    Example 6
 
@@ -300,59 +303,62 @@ twp           P    OK  OK  OK  EMBL new in native format with EMBL CD-ROM index
 % showdb -noheading 
 Displays information on the currently available databases
 
-qapblast      P    OK  OK  OK  BLAST swissnew
-qapblastall   P    OK  OK  OK  BLAST swissnew, all fields indexed
-qapblastsplit P    OK  OK  OK  BLAST swissnew split in 5 files
+qapblast         P    OK  OK  OK  BLAST swissnew
+qapblastall      P    OK  OK  OK  BLAST swissnew, all fields indexed
+qapblastsplit    P    OK  OK  OK  BLAST swissnew split in 5 files
 qapblastsplitexc P    OK  OK  OK  BLAST swissnew split in 5 files, not file 02
 qapblastsplitinc P    OK  OK  OK  BLAST swissnew split in 5 files, only file 02
-qapfasta      P    OK  OK  OK  FASTA file swissnew entries
-qapflat       P    OK  OK  OK  Swissnew flatfiles
-qapflatall    P    OK  OK  OK  Swissnew flatfiles, all fields indexed
-qapflatexc    P    OK  OK  OK  Swissnew flatfiles, no updated sequence file
-qapflatinc    P    OK  OK  OK  Swissnew flatfiles, only updated sequence file
-qapir         P    OK  OK  OK  PIR
-qapirall      P    OK  OK  OK  PIR
-qapirinc      P    OK  OK  OK  PIR
-qapxfasta     P    OK  OK  OK  FASTA file swissnew entries
-qapxflat      P    OK  OK  OK  Swissnew flatfiles
-qapxflatexc   P    OK  OK  OK  Swissnew flatfiles, no updated sequence file
-qapxflatinc   P    OK  OK  OK  Swissnew flatfiles, only updated sequence file
-qaxpir        P    OK  OK  OK  PIR
-qaxpirall     P    OK  OK  OK  PIR
-qaxpirinc     P    OK  OK  OK  PIR
-tpir          P    OK  OK  OK  PIR using NBRF access for 4 files
-tsw           P    OK  OK  OK  Swissprot native format with EMBL CD-ROM index
-tswnew        P    OK  OK  OK  Swissnew as 3 files in native format with EMBL C
-D-ROM index
-twp           P    OK  OK  OK  EMBL new in native format with EMBL CD-ROM index
-qanfasta      N    OK  OK  OK  FASTA file EMBL rodents
-qanfastaall   N    OK  OK  OK  FASTA file EMBL rodents, all fields indexed
-qanflat       N    OK  OK  OK  EMBL flatfiles
-qangcg        N    OK  OK  OK  GCG format EMBL
-qangcgall     N    OK  OK  OK  GCG format EMBL
-qangcgexc     N    OK  OK  OK  GCG format EMBL without prokaryotes
-qangcginc     N    OK  OK  OK  GCG format EMBL only prokaryotes
-qanxfasta     N    OK  OK  OK  FASTA file EMBL rodents
-qanxfastaall  N    OK  OK  OK  FASTA file EMBL rodents, all fields indexed
-qanxflat      N    OK  OK  OK  EMBL flatfiles
-qanxflatall   N    OK  OK  OK  EMBL flatfiles, all fields indexed
-qanxgcg       N    OK  OK  OK  GCG format EMBL
-qanxgcgall    N    OK  OK  OK  GCG format EMBL
-qanxgcgexc    N    OK  OK  OK  GCG format EMBL without prokaryotes
-qanxgcginc    N    OK  OK  OK  GCG format EMBL only prokaryotes
-qapirexc      N    OK  OK  OK  PIR
-qasrs         N    OK  OK  -   EMBL in local srs installation
-qasrsfasta    N    OK  OK  -   EMBL in local srs installation, fasta format
-qasrswww      N    OK  -   -   Remote SRS web server
-qawfasta      N    OK  OK  OK  FASTA file wormpep entries
-qawxfasta     N    OK  OK  OK  FASTA file wormpep entries
-qaxpirexc     N    OK  OK  OK  PIR
-tembl         N    OK  OK  OK  EMBL in native format with EMBL CD-ROM index
-temblall      N    -   -   OK  EMBL in native format with EMBL CD-ROM index
-temblrest     N    -   -   OK  EMBL in native format with EMBL CD-ROM index
-temblvrt      N    -   -   OK  EMBL in native format with EMBL CD-ROM index
-tgb           N    OK  -   -   Genbank IDs
-tgenbank      N    OK  OK  OK  GenBank in native format with EMBL CD-ROM index
+qapfasta         P    OK  OK  OK  FASTA file swissnew entries
+qapflat          P    OK  OK  OK  Swissnew flatfiles
+qapflatall       P    OK  OK  OK  Swissnew flatfiles, all fields indexed
+qapflatexc       P    OK  OK  OK  Swissnew flatfiles, no updated sequence file
+qapflatinc       P    OK  OK  OK  Swissnew flatfiles, only updated sequence fil
+e
+qapir            P    OK  OK  OK  PIR
+qapirall         P    OK  OK  OK  PIR
+qapirinc         P    OK  OK  OK  PIR
+qapxfasta        P    OK  OK  OK  FASTA file swissnew entries
+qapxflat         P    OK  OK  OK  Swissnew flatfiles
+qapxflatexc      P    OK  OK  OK  Swissnew flatfiles, no updated sequence file
+qapxflatinc      P    OK  OK  OK  Swissnew flatfiles, only updated sequence fil
+e
+qaxpir           P    OK  OK  OK  PIR
+qaxpirall        P    OK  OK  OK  PIR
+qaxpirinc        P    OK  OK  OK  PIR
+tpir             P    OK  OK  OK  PIR using NBRF access for 4 files
+tsw              P    OK  OK  OK  Swissprot native format with EMBL CD-ROM inde
+x
+tswnew           P    OK  OK  OK  Swissnew as 3 files in native format with EMB
+L CD-ROM index
+twp              P    OK  OK  OK  EMBL new in native format with EMBL CD-ROM in
+dex
+qanfasta         N    OK  OK  OK  FASTA file EMBL rodents
+qanfastaall      N    OK  OK  OK  FASTA file EMBL rodents, all fields indexed
+qanflat          N    OK  OK  OK  EMBL flatfiles
+qangcg           N    OK  OK  OK  GCG format EMBL
+qangcgall        N    OK  OK  OK  GCG format EMBL
+qangcgexc        N    OK  OK  OK  GCG format EMBL without prokaryotes
+qangcginc        N    OK  OK  OK  GCG format EMBL only prokaryotes
+qanxfasta        N    OK  OK  OK  FASTA file EMBL rodents
+qanxfastaall     N    OK  OK  OK  FASTA file EMBL rodents, all fields indexed
+qanxflat         N    OK  OK  OK  EMBL flatfiles
+qanxflatall      N    OK  OK  OK  EMBL flatfiles, all fields indexed
+qanxgcg          N    OK  OK  OK  GCG format EMBL
+qanxgcgall       N    OK  OK  OK  GCG format EMBL
+qanxgcgexc       N    OK  OK  OK  GCG format EMBL without prokaryotes
+qanxgcginc       N    OK  OK  OK  GCG format EMBL only prokaryotes
+qapirexc         N    OK  OK  OK  PIR
+qasrswww         N    OK  -   -   Remote SRS web server
+qawfasta         N    OK  OK  OK  FASTA file wormpep entries
+qawxfasta        N    OK  OK  OK  FASTA file wormpep entries
+qaxpirexc        N    OK  OK  OK  PIR
+tembl            N    OK  OK  OK  EMBL in native format with EMBL CD-ROM index
+temblall         N    -   -   OK  EMBL in native format with EMBL CD-ROM index
+temblrest        N    -   -   OK  EMBL in native format with EMBL CD-ROM index
+temblvrt         N    -   -   OK  EMBL in native format with EMBL CD-ROM index
+tgb              N    OK  -   -   Genbank IDs
+tgenbank         N    OK  OK  OK  GenBank in native format with EMBL CD-ROM ind
+ex
 
    Example 7
 
@@ -401,8 +407,6 @@ qanxgcgall
 qanxgcgexc
 qanxgcginc
 qapirexc
-qasrs
-qasrsfasta
 qasrswww
 qawfasta
 qawxfasta
@@ -422,134 +426,217 @@ tgenbank
 % showdb -only -type 
 Displays information on the currently available databases
 
-qapblast      P
-qapblastall   P
-qapblastsplit P
+qapblast         P
+qapblastall      P
+qapblastsplit    P
 qapblastsplitexc P
 qapblastsplitinc P
-qapfasta      P
-qapflat       P
-qapflatall    P
-qapflatexc    P
-qapflatinc    P
-qapir         P
-qapirall      P
-qapirinc      P
-qapxfasta     P
-qapxflat      P
-qapxflatexc   P
-qapxflatinc   P
-qaxpir        P
-qaxpirall     P
-qaxpirinc     P
-tpir          P
-tsw           P
-tswnew        P
-twp           P
-qanfasta      N
-qanfastaall   N
-qanflat       N
-qangcg        N
-qangcgall     N
-qangcgexc     N
-qangcginc     N
-qanxfasta     N
-qanxfastaall  N
-qanxflat      N
-qanxflatall   N
-qanxgcg       N
-qanxgcgall    N
-qanxgcgexc    N
-qanxgcginc    N
-qapirexc      N
-qasrs         N
-qasrsfasta    N
-qasrswww      N
-qawfasta      N
-qawxfasta     N
-qaxpirexc     N
-tembl         N
-temblall      N
-temblrest     N
-temblvrt      N
-tgb           N
-tgenbank      N
+qapfasta         P
+qapflat          P
+qapflatall       P
+qapflatexc       P
+qapflatinc       P
+qapir            P
+qapirall         P
+qapirinc         P
+qapxfasta        P
+qapxflat         P
+qapxflatexc      P
+qapxflatinc      P
+qaxpir           P
+qaxpirall        P
+qaxpirinc        P
+tpir             P
+tsw              P
+tswnew           P
+twp              P
+qanfasta         N
+qanfastaall      N
+qanflat          N
+qangcg           N
+qangcgall        N
+qangcgexc        N
+qangcginc        N
+qanxfasta        N
+qanxfastaall     N
+qanxflat         N
+qanxflatall      N
+qanxgcg          N
+qanxgcgall       N
+qanxgcgexc       N
+qanxgcginc       N
+qapirexc         N
+qasrswww         N
+qawfasta         N
+qawxfasta        N
+qaxpirexc        N
+tembl            N
+temblall         N
+temblrest        N
+temblvrt         N
+tgb              N
+tgenbank         N
+
+   Example 9
+
+   Display everything
+
+
+% showdb -full 
+Displays information on the currently available databases
+
+# Name           Type  ID  Qry All Method    Fields         Defined  Release  C
+omment
+# ============== ==== ==  === === ========= ============== ======= ======= ====
+===
+qapblast         P    OK  OK  OK  blast     -              special         BLAS
+T swissnew
+qapblastall      P    OK  OK  OK  blast     sv,des         special         BLAS
+T swissnew, all fields indexed
+qapblastsplit    P    OK  OK  OK  blast     -              special         BLAS
+T swissnew split in 5 files
+qapblastsplitexc P    OK  OK  OK  blast     -              special         BLAS
+T swissnew split in 5 files, not file 02
+qapblastsplitinc P    OK  OK  OK  blast     -              special         BLAS
+T swissnew split in 5 files, only file 02
+qapfasta         P    OK  OK  OK  emblcd    -              special         FAST
+A file swissnew entries
+qapflat          P    OK  OK  OK  emblcd    -              special         Swis
+snew flatfiles
+qapflatall       P    OK  OK  OK  emblcd    sv,des,org,key special         Swis
+snew flatfiles, all fields indexed
+qapflatexc       P    OK  OK  OK  emblcd    -              special         Swis
+snew flatfiles, no updated sequence file
+qapflatinc       P    OK  OK  OK  emblcd    -              special         Swis
+snew flatfiles, only updated sequence file
+qapir            P    OK  OK  OK  gcg       -              special         PIR
+qapirall         P    OK  OK  OK  gcg       des,org,key    special         PIR
+qapirinc         P    OK  OK  OK  gcg       -              special         PIR
+qapxfasta        P    OK  OK  OK  emboss    -              special         FAST
+A file swissnew entries
+qapxflat         P    OK  OK  OK  emboss    -              special         Swis
+snew flatfiles
+qapxflatexc      P    OK  OK  OK  emboss    -              special         Swis
+snew flatfiles, no updated sequence file
+qapxflatinc      P    OK  OK  OK  emboss    -              special         Swis
+snew flatfiles, only updated sequence file
+qaxpir           P    OK  OK  OK  embossgcg -              special         PIR
+qaxpirall        P    OK  OK  OK  embossgcg des,org,key    special         PIR
+qaxpirinc        P    OK  OK  OK  embossgcg -              special         PIR
+tpir             P    OK  OK  OK  gcg       des,org,key    special         PIR
+using NBRF access for 4 files
+tsw              P    OK  OK  OK  emblcd    sv,des,org,key special 36      Swis
+sprot native format with EMBL CD-ROM index
+tswnew           P    OK  OK  OK  emblcd    sv,des,org,key special 37      Swis
+snew as 3 files in native format with EMBL CD-ROM index
+twp              P    OK  OK  OK  emblcd    des            special 16      EMBL
+ new in native format with EMBL CD-ROM index
+qanfasta         N    OK  OK  OK  emblcd    -              special         FAST
+A file EMBL rodents
+qanfastaall      N    OK  OK  OK  emblcd    sv,des         special         FAST
+A file EMBL rodents, all fields indexed
+qanflat          N    OK  OK  OK  emblcd    -              special         EMBL
+ flatfiles
+qangcg           N    OK  OK  OK  gcg       -              special         GCG
+format EMBL
+qangcgall        N    OK  OK  OK  gcg       sv,des,org,key special         GCG
+format EMBL
+qangcgexc        N    OK  OK  OK  gcg       -              special         GCG
+format EMBL without prokaryotes
+qangcginc        N    OK  OK  OK  gcg       -              special         GCG
+format EMBL only prokaryotes
+qanxfasta        N    OK  OK  OK  emboss    -              special         FAST
+A file EMBL rodents
+qanxfastaall     N    OK  OK  OK  emboss    sv,des         special         FAST
+A file EMBL rodents, all fields indexed
+qanxflat         N    OK  OK  OK  emboss    -              special         EMBL
+ flatfiles
+qanxflatall      N    OK  OK  OK  emboss    des,org,key    special         EMBL
+ flatfiles, all fields indexed
+qanxgcg          N    OK  OK  OK  embossgcg -              special         GCG
+format EMBL
+qanxgcgall       N    OK  OK  OK  embossgcg sv,des,org,key special         GCG
+format EMBL
+qanxgcgexc       N    OK  OK  OK  embossgcg -              special         GCG
+format EMBL without prokaryotes
+qanxgcginc       N    OK  OK  OK  embossgcg -              special         GCG
+format EMBL only prokaryotes
+qapirexc         N    OK  OK  OK  gcg       -              special         PIR
+qasrswww         N    OK  -   -   srswww    sv,des,org,key special         Remo
+te SRS web server
+qawfasta         N    OK  OK  OK  emblcd    -              special         FAST
+A file wormpep entries
+qawxfasta        N    OK  OK  OK  emboss    -              special         FAST
+A file wormpep entries
+qaxpirexc        N    OK  OK  OK  embossgcg -              special         PIR
+tembl            N    OK  OK  OK  emblcd    sv,des,org,key special 57      EMBL
+ in native format with EMBL CD-ROM index
+temblall         N    -   -   OK  direct    sv,des,org,key special 57      EMBL
+ in native format with EMBL CD-ROM index
+temblrest        N    -   -   OK  direct    sv,des,org,key special 57      EMBL
+ in native format with EMBL CD-ROM index
+temblvrt         N    -   -   OK  direct    sv,des,org,key special 57      EMBL
+ in native format with EMBL CD-ROM index
+tgb              N    OK  -   -   srswww    sv,des,org,key special         Genb
+ank IDs
+tgenbank         N    OK  OK  OK  emblcd    sv,des,org,key special 01      GenB
+ank in native format with EMBL CD-ROM index
 
 Command line arguments
 
    Standard (Mandatory) qualifiers: (none)
    Additional (Optional) qualifiers:
    -database           string     Name of a single database to give
-                                  information on
-   -html               boolean    Format output as an HTML table
-   -[no]protein        boolean    Display protein databases
-   -[no]nucleic        boolean    Display nucleic acid databases
-   -fields             boolean    This displays the search fields that can be
-                                  used on this database, other than the
-                                  standard 'id' or 'acc' fields.
-   -release            boolean    Display 'release' column
-   -outfile            outfile    Output file name
+                                  information on (Any string is accepted)
+   -html               boolean    [N] Format output as an HTML table
+   -[no]protein        boolean    [Y] Display protein databases
+   -[no]nucleic        boolean    [Y] Display nucleic acid databases
+   -full               boolean    [N] Display all columns
+   -methods            boolean    [$(full)] This displays the access methods
+                                  that can be used on this database, for all,
+                                  query or ID access
+   -fields             boolean    [$(full)] This displays the search fields
+                                  that can be used on this database, other
+                                  than the standard 'id' or 'acc' fields.
+   -defined            boolean    [$(full)] This displays a short name for the
+                                  file containing the database definition
+   -release            boolean    [$(full)] Display 'release' column
+   -outfile            outfile    [stdout] Output file name
 
    Advanced (Unprompted) qualifiers:
-   -only               boolean    This is a way of shortening the command line
-                                  if you only want a few things to be
-                                  displayed. Instead of specifying:
+   -only               boolean    [N] This is a way of shortening the command
+                                  line if you only want a few standard columns
+                                  to be displayed. Instead of specifying:
                                   '-nohead -notype -noid -noquery -noall'
                                   to get only the comment output, you can
                                   specify
                                   '-only -comment'
-   -heading            boolean    Display column headings
-   -type               boolean    Display 'type' column
-   -id                 boolean    Display 'id' column
-   -query              boolean    Display 'qry' column
-   -all                boolean    Display 'all' column
-   -comment            boolean    Display 'comment' column
+   -heading            boolean    [@(!$(only))] Display column headings
+   -type               boolean    [@(!$(only))] Display 'type' column
+   -id                 boolean    [@(!$(only))] Display 'id' column
+   -query              boolean    [@(!$(only))] Display 'qry' column
+   -all                boolean    [@(!$(only))] Display 'all' column
+   -comment            boolean    [@(!$(only))] Display 'comment' column
 
    Associated qualifiers:
 
    "-outfile" associated qualifiers
-   -odirectory          string     Output directory
+   -odirectory         string     Output directory
 
    General qualifiers:
-   -auto                boolean    Turn off prompts
-   -stdout              boolean    Write standard output
-   -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for standard and additional values
-   -debug               boolean    Write debug output to program.dbg
-   -verbose             boolean    Report some/full command line options
-   -help                boolean    Report command line options. More
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
-   -warning             boolean    Report warnings
-   -error               boolean    Report errors
-   -fatal               boolean    Report fatal errors
-   -die                 boolean    Report deaths
-
-
-   Standard (Mandatory) qualifiers Allowed values Default
-   (none)
-   Additional (Optional) qualifiers Allowed values Default
-   -database Name of a single database to give information on Any string
-   is accepted An empty string is accepted
-   -html Format output as an HTML table Boolean value Yes/No No
-   -[no]protein Display protein databases Boolean value Yes/No Yes
-   -[no]nucleic Display nucleic acid databases Boolean value Yes/No Yes
-   -fields This displays the search fields that can be used on this
-   database, other than the standard 'id' or 'acc' fields. Boolean value
-   Yes/No No
-   -release Display 'release' column Boolean value Yes/No No
-   -outfile Output file name Output file stdout
-   Advanced (Unprompted) qualifiers Allowed values Default
-   -only This is a way of shortening the command line if you only want a
-   few things to be displayed. Instead of specifying: '-nohead -notype
-   -noid -noquery -noall' to get only the comment output, you can specify
-   '-only -comment' Boolean value Yes/No No
-   -heading Display column headings Boolean value Yes/No @(!$(only))
-   -type Display 'type' column Boolean value Yes/No @(!$(only))
-   -id Display 'id' column Boolean value Yes/No @(!$(only))
-   -query Display 'qry' column Boolean value Yes/No @(!$(only))
-   -all Display 'all' column Boolean value Yes/No @(!$(only))
-   -comment Display 'comment' column Boolean value Yes/No @(!$(only))
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
 
 Input file format
 
@@ -565,61 +652,64 @@ Output file format
 
   File: showdb.out
 
-# Name        Type ID  Qry All Comment
-# ====        ==== ==  === === =======
-qapblast      P    OK  OK  OK  BLAST swissnew
-qapblastall   P    OK  OK  OK  BLAST swissnew, all fields indexed
-qapblastsplit P    OK  OK  OK  BLAST swissnew split in 5 files
+# Name           Type  ID  Qry All Comment
+# ============== ==== ==  === === =======
+qapblast         P    OK  OK  OK  BLAST swissnew
+qapblastall      P    OK  OK  OK  BLAST swissnew, all fields indexed
+qapblastsplit    P    OK  OK  OK  BLAST swissnew split in 5 files
 qapblastsplitexc P    OK  OK  OK  BLAST swissnew split in 5 files, not file 02
 qapblastsplitinc P    OK  OK  OK  BLAST swissnew split in 5 files, only file 02
-qapfasta      P    OK  OK  OK  FASTA file swissnew entries
-qapflat       P    OK  OK  OK  Swissnew flatfiles
-qapflatall    P    OK  OK  OK  Swissnew flatfiles, all fields indexed
-qapflatexc    P    OK  OK  OK  Swissnew flatfiles, no updated sequence file
-qapflatinc    P    OK  OK  OK  Swissnew flatfiles, only updated sequence file
-qapir         P    OK  OK  OK  PIR
-qapirall      P    OK  OK  OK  PIR
-qapirinc      P    OK  OK  OK  PIR
-qapxfasta     P    OK  OK  OK  FASTA file swissnew entries
-qapxflat      P    OK  OK  OK  Swissnew flatfiles
-qapxflatexc   P    OK  OK  OK  Swissnew flatfiles, no updated sequence file
-qapxflatinc   P    OK  OK  OK  Swissnew flatfiles, only updated sequence file
-qaxpir        P    OK  OK  OK  PIR
-qaxpirall     P    OK  OK  OK  PIR
-qaxpirinc     P    OK  OK  OK  PIR
-tpir          P    OK  OK  OK  PIR using NBRF access for 4 files
-tsw           P    OK  OK  OK  Swissprot native format with EMBL CD-ROM index
-tswnew        P    OK  OK  OK  Swissnew as 3 files in native format with EMBL C
-D-ROM index
-twp           P    OK  OK  OK  EMBL new in native format with EMBL CD-ROM index
-qanfasta      N    OK  OK  OK  FASTA file EMBL rodents
-qanfastaall   N    OK  OK  OK  FASTA file EMBL rodents, all fields indexed
-qanflat       N    OK  OK  OK  EMBL flatfiles
-qangcg        N    OK  OK  OK  GCG format EMBL
-qangcgall     N    OK  OK  OK  GCG format EMBL
-qangcgexc     N    OK  OK  OK  GCG format EMBL without prokaryotes
-qangcginc     N    OK  OK  OK  GCG format EMBL only prokaryotes
-qanxfasta     N    OK  OK  OK  FASTA file EMBL rodents
-qanxfastaall  N    OK  OK  OK  FASTA file EMBL rodents, all fields indexed
-qanxflat      N    OK  OK  OK  EMBL flatfiles
-qanxflatall   N    OK  OK  OK  EMBL flatfiles, all fields indexed
-qanxgcg       N    OK  OK  OK  GCG format EMBL
-qanxgcgall    N    OK  OK  OK  GCG format EMBL
-qanxgcgexc    N    OK  OK  OK  GCG format EMBL without prokaryotes
-qanxgcginc    N    OK  OK  OK  GCG format EMBL only prokaryotes
-qapirexc      N    OK  OK  OK  PIR
-qasrs         N    OK  OK  -   EMBL in local srs installation
-qasrsfasta    N    OK  OK  -   EMBL in local srs installation, fasta format
-qasrswww      N    OK  -   -   Remote SRS web server
-qawfasta      N    OK  OK  OK  FASTA file wormpep entries
-qawxfasta     N    OK  OK  OK  FASTA file wormpep entries
-qaxpirexc     N    OK  OK  OK  PIR
-tembl         N    OK  OK  OK  EMBL in native format with EMBL CD-ROM index
-temblall      N    -   -   OK  EMBL in native format with EMBL CD-ROM index
-temblrest     N    -   -   OK  EMBL in native format with EMBL CD-ROM index
-temblvrt      N    -   -   OK  EMBL in native format with EMBL CD-ROM index
-tgb           N    OK  -   -   Genbank IDs
-tgenbank      N    OK  OK  OK  GenBank in native format with EMBL CD-ROM index
+qapfasta         P    OK  OK  OK  FASTA file swissnew entries
+qapflat          P    OK  OK  OK  Swissnew flatfiles
+qapflatall       P    OK  OK  OK  Swissnew flatfiles, all fields indexed
+qapflatexc       P    OK  OK  OK  Swissnew flatfiles, no updated sequence file
+qapflatinc       P    OK  OK  OK  Swissnew flatfiles, only updated sequence fil
+e
+qapir            P    OK  OK  OK  PIR
+qapirall         P    OK  OK  OK  PIR
+qapirinc         P    OK  OK  OK  PIR
+qapxfasta        P    OK  OK  OK  FASTA file swissnew entries
+qapxflat         P    OK  OK  OK  Swissnew flatfiles
+qapxflatexc      P    OK  OK  OK  Swissnew flatfiles, no updated sequence file
+qapxflatinc      P    OK  OK  OK  Swissnew flatfiles, only updated sequence fil
+e
+qaxpir           P    OK  OK  OK  PIR
+qaxpirall        P    OK  OK  OK  PIR
+qaxpirinc        P    OK  OK  OK  PIR
+tpir             P    OK  OK  OK  PIR using NBRF access for 4 files
+tsw              P    OK  OK  OK  Swissprot native format with EMBL CD-ROM inde
+x
+tswnew           P    OK  OK  OK  Swissnew as 3 files in native format with EMB
+L CD-ROM index
+twp              P    OK  OK  OK  EMBL new in native format with EMBL CD-ROM in
+dex
+qanfasta         N    OK  OK  OK  FASTA file EMBL rodents
+qanfastaall      N    OK  OK  OK  FASTA file EMBL rodents, all fields indexed
+qanflat          N    OK  OK  OK  EMBL flatfiles
+qangcg           N    OK  OK  OK  GCG format EMBL
+qangcgall        N    OK  OK  OK  GCG format EMBL
+qangcgexc        N    OK  OK  OK  GCG format EMBL without prokaryotes
+qangcginc        N    OK  OK  OK  GCG format EMBL only prokaryotes
+qanxfasta        N    OK  OK  OK  FASTA file EMBL rodents
+qanxfastaall     N    OK  OK  OK  FASTA file EMBL rodents, all fields indexed
+qanxflat         N    OK  OK  OK  EMBL flatfiles
+qanxflatall      N    OK  OK  OK  EMBL flatfiles, all fields indexed
+qanxgcg          N    OK  OK  OK  GCG format EMBL
+qanxgcgall       N    OK  OK  OK  GCG format EMBL
+qanxgcgexc       N    OK  OK  OK  GCG format EMBL without prokaryotes
+qanxgcginc       N    OK  OK  OK  GCG format EMBL only prokaryotes
+qapirexc         N    OK  OK  OK  PIR
+qasrswww         N    OK  -   -   Remote SRS web server
+qawfasta         N    OK  OK  OK  FASTA file wormpep entries
+qawxfasta        N    OK  OK  OK  FASTA file wormpep entries
+qaxpirexc        N    OK  OK  OK  PIR
+tembl            N    OK  OK  OK  EMBL in native format with EMBL CD-ROM index
+temblall         N    -   -   OK  EMBL in native format with EMBL CD-ROM index
+temblrest        N    -   -   OK  EMBL in native format with EMBL CD-ROM index
+temblvrt         N    -   -   OK  EMBL in native format with EMBL CD-ROM index
+tgb              N    OK  -   -   Genbank IDs
+tgenbank         N    OK  OK  OK  GenBank in native format with EMBL CD-ROM ind
+ex
 
    The output is a simple table.
 

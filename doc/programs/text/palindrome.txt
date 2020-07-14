@@ -36,7 +36,7 @@ Usage
 
 % palindrome 
 Looks for inverted repeats in a nucleotide sequence
-Input sequence(s): tembl:hsts1
+Input nucleotide sequence(s): tembl:hsts1
 Enter minimum length of palindrome [10]: 15
 Enter maximum length of palindrome [100]: 
 Enter maximum gap between repeated regions [100]: 
@@ -50,68 +50,56 @@ Report overlapping matches [Y]:
 Command line arguments
 
    Standard (Mandatory) qualifiers:
-  [-sequence]          seqall     Sequence database USA
-   -minpallen          integer    Enter minimum length of palindrome
-   -maxpallen          integer    Enter maximum length of palindrome
-   -gaplimit           integer    Enter maximum gap between repeated regions
-   -nummismatches      integer    Number of mismatches allowed
-  [-outfile]           outfile    Output file name
-   -[no]overlap        boolean    Report overlapping matches
+  [-sequence]          seqall     Nucleotide sequence(s) filename and optional
+                                  format, or reference (input USA)
+   -minpallen          integer    [10] Enter minimum length of palindrome
+                                  (Integer 1 or more)
+   -maxpallen          integer    [100] Enter maximum length of palindrome
+                                  (Any integer value)
+   -gaplimit           integer    [100] Enter maximum gap between repeated
+                                  regions (Integer 0 or more)
+   -nummismatches      integer    [0] Number of mismatches allowed (Positive
+                                  integer)
+  [-outfile]           outfile    [*.palindrome] Output file name
+   -[no]overlap        boolean    [Y] Report overlapping matches
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers: (none)
    Associated qualifiers:
 
    "-sequence" associated qualifiers
-   -sbegin1             integer    Start of each sequence to be used
-   -send1               integer    End of each sequence to be used
-   -sreverse1           boolean    Reverse (if DNA)
-   -sask1               boolean    Ask for begin/end/reverse
-   -snucleotide1        boolean    Sequence is nucleotide
-   -sprotein1           boolean    Sequence is protein
-   -slower1             boolean    Make lower case
-   -supper1             boolean    Make upper case
-   -sformat1            string     Input sequence format
-   -sdbname1            string     Database name
-   -sid1                string     Entryname
-   -ufo1                string     UFO features
-   -fformat1            string     Features format
-   -fopenfile1          string     Features file name
+   -sbegin1            integer    Start of each sequence to be used
+   -send1              integer    End of each sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
 
    "-outfile" associated qualifiers
-   -odirectory2         string     Output directory
+   -odirectory2        string     Output directory
 
    General qualifiers:
-   -auto                boolean    Turn off prompts
-   -stdout              boolean    Write standard output
-   -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for standard and additional values
-   -debug               boolean    Write debug output to program.dbg
-   -verbose             boolean    Report some/full command line options
-   -help                boolean    Report command line options. More
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
-   -warning             boolean    Report warnings
-   -error               boolean    Report errors
-   -fatal               boolean    Report fatal errors
-   -die                 boolean    Report deaths
-
-
-   Standard (Mandatory) qualifiers Allowed values Default
-   [-sequence]
-   (Parameter 1) Sequence database USA Readable sequence(s) Required
-   -minpallen Enter minimum length of palindrome Integer 1 or more 10
-   -maxpallen Enter maximum length of palindrome Any integer value 100
-   -gaplimit Enter maximum gap between repeated regions Integer 0 or more
-   100
-   -nummismatches Number of mismatches allowed Positive integer 0
-   [-outfile]
-   (Parameter 2) Output file name Output file <sequence>.palindrome
-   -[no]overlap Report overlapping matches Boolean value Yes/No Yes
-   Additional (Optional) qualifiers Allowed values Default
-   (none)
-   Advanced (Unprompted) qualifiers Allowed values Default
-   (none)
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
 
 Input file format
 
@@ -299,57 +287,57 @@ Number of mismatches allowed in Palindrome: 0
 
 
 Palindromes:
-126   caaaaaaaaaaaaaaaa   142
-      |||||||||||||||||
-217   gtttttttttttttttt   201
+126      caaaaaaaaaaaaaaaa      142
+         |||||||||||||||||
+217      gtttttttttttttttt      201
 
-127   aaaaaaaaaaaaaaaa   142
-      ||||||||||||||||
-215   tttttttttttttttt   200
+127      aaaaaaaaaaaaaaaa      142
+         ||||||||||||||||
+215      tttttttttttttttt      200
 
-127   aaaaaaaaaaaaaaaa   142
-      ||||||||||||||||
-214   tttttttttttttttt   199
+127      aaaaaaaaaaaaaaaa      142
+         ||||||||||||||||
+214      tttttttttttttttt      199
 
-127   aaaaaaaaaaaaaaaa   142
-      ||||||||||||||||
-213   tttttttttttttttt   198
+127      aaaaaaaaaaaaaaaa      142
+         ||||||||||||||||
+213      tttttttttttttttt      198
 
-127   aaaaaaaaaaaaaaaa   142
-      ||||||||||||||||
-212   tttttttttttttttt   197
+127      aaaaaaaaaaaaaaaa      142
+         ||||||||||||||||
+212      tttttttttttttttt      197
 
-127   aaaaaaaaaaaaaaaa   142
-      ||||||||||||||||
-211   tttttttttttttttt   196
+127      aaaaaaaaaaaaaaaa      142
+         ||||||||||||||||
+211      tttttttttttttttt      196
 
-127   aaaaaaaaaaaaaaaa   142
-      ||||||||||||||||
-210   tttttttttttttttt   195
+127      aaaaaaaaaaaaaaaa      142
+         ||||||||||||||||
+210      tttttttttttttttt      195
 
-127   aaaaaaaaaaaaaaaa   142
-      ||||||||||||||||
-209   tttttttttttttttt   194
+127      aaaaaaaaaaaaaaaa      142
+         ||||||||||||||||
+209      tttttttttttttttt      194
 
-127   aaaaaaaaaaaaaaaa   142
-      ||||||||||||||||
-208   tttttttttttttttt   193
+127      aaaaaaaaaaaaaaaa      142
+         ||||||||||||||||
+208      tttttttttttttttt      193
 
-127   aaaaaaaaaaaaaaaa   142
-      ||||||||||||||||
-207   tttttttttttttttt   192
+127      aaaaaaaaaaaaaaaa      142
+         ||||||||||||||||
+207      tttttttttttttttt      192
 
-127   aaaaaaaaaaaaaaaa   142
-      ||||||||||||||||
-206   tttttttttttttttt   191
+127      aaaaaaaaaaaaaaaa      142
+         ||||||||||||||||
+206      tttttttttttttttt      191
 
-127   aaaaaaaaaaaaaaaa   142
-      ||||||||||||||||
-205   tttttttttttttttt   190
+127      aaaaaaaaaaaaaaaa      142
+         ||||||||||||||||
+205      tttttttttttttttt      190
 
-127   aaaaaaaaaaaaaaaagaccgccagggct   155
-      |||||||||||||||||||||||||||||
-204   ttttttttttttttttctggcggtcccga   176
+127      aaaaaaaaaaaaaaaagaccgccagggct      155
+         |||||||||||||||||||||||||||||
+204      ttttttttttttttttctggcggtcccga      176
 
 
 

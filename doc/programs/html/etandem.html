@@ -13,7 +13,6 @@
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
-
 etandem
 </font></b>
 </td></tr>
@@ -21,12 +20,10 @@ etandem
 <br>&nbsp;
 <p>
 
-
 <H2>
     Function
 </H2>
 Looks for tandem repeats in a nucleotide sequence
-
 <H2>
 Description
 </H2>
@@ -76,7 +73,7 @@ The input sequence is the human herpesvirus tandem repeat.
 
 % <b>etandem -noorigfile </b>
 Looks for tandem repeats in a nucleotide sequence
-Input sequence: <b>tembl:hhtetra</b>
+Input nucleotide sequence: <b>tembl:hhtetra</b>
 Minimum repeat size [10]: <b>6</b>
 Maximum repeat size [6]: <b></b>
 Output report [hhtetra.tan]: <b></b>
@@ -85,71 +82,73 @@ Output report [hhtetra.tan]: <b></b>
 <p>
 <a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
 
-
 <H2>
     Command line arguments
 </H2>
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
    Standard (Mandatory) qualifiers:
-  [-sequence]          sequence   Sequence USA
-   -minrepeat          integer    Minimum repeat size
-   -maxrepeat          integer    Maximum repeat size
+  [-sequence]          sequence   Nucleotide sequence filename and optional
+                                  format, or reference (input USA)
+   -minrepeat          integer    [10] Minimum repeat size (Integer, 2 or
+                                  higher)
+   -maxrepeat          integer    [Same as -minrepeat] Maximum repeat size
+                                  (Integer, same as -minrepeat or higher)
   [-outfile]           report     Output report file name
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers:
-   -threshold          integer    Threshold score
+   -threshold          integer    [20] Threshold score (Any integer value)
    -mismatch           boolean    Allow N as a mismatch
    -uniform            boolean    Allow uniform consensus
-   -origfile           outfile    Output file name
+   -origfile           outfile    [*.etandem] Sanger Centre program tandem
+                                  output file (optional)
 
    Associated qualifiers:
 
    "-sequence" associated qualifiers
-   -sbegin1             integer    Start of the sequence to be used
-   -send1               integer    End of the sequence to be used
-   -sreverse1           boolean    Reverse (if DNA)
-   -sask1               boolean    Ask for begin/end/reverse
-   -snucleotide1        boolean    Sequence is nucleotide
-   -sprotein1           boolean    Sequence is protein
-   -slower1             boolean    Make lower case
-   -supper1             boolean    Make upper case
-   -sformat1            string     Input sequence format
-   -sdbname1            string     Database name
-   -sid1                string     Entryname
-   -ufo1                string     UFO features
-   -fformat1            string     Features format
-   -fopenfile1          string     Features file name
+   -sbegin1            integer    Start of the sequence to be used
+   -send1              integer    End of the sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
 
    "-outfile" associated qualifiers
-   -rformat2            string     Report format
-   -rname2              string     Base file name
-   -rextension2         string     File name extension
-   -rdirectory2         string     Output directory
-   -raccshow2           boolean    Show accession number in the report
-   -rdesshow2           boolean    Show description in the report
-   -rscoreshow2         boolean    Show the score in the report
-   -rusashow2           boolean    Show the full USA in the report
+   -rformat2           string     Report format
+   -rname2             string     Base file name
+   -rextension2        string     File name extension
+   -rdirectory2        string     Output directory
+   -raccshow2          boolean    Show accession number in the report
+   -rdesshow2          boolean    Show description in the report
+   -rscoreshow2        boolean    Show the score in the report
+   -rusashow2          boolean    Show the full USA in the report
 
    "-origfile" associated qualifiers
-   -odirectory          string     Output directory
+   -odirectory         string     Output directory
 
    General qualifiers:
-   -auto                boolean    Turn off prompts
-   -stdout              boolean    Write standard output
-   -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for standard and additional values
-   -debug               boolean    Write debug output to program.dbg
-   -verbose             boolean    Report some/full command line options
-   -help                boolean    Report command line options. More
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
-   -warning             boolean    Report warnings
-   -error               boolean    Report errors
-   -fatal               boolean    Report fatal errors
-   -die                 boolean    Report deaths
-
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
 
 </pre>
 </pre>
@@ -164,7 +163,7 @@ Output report [hhtetra.tan]: <b></b>
 
 <tr>
 <td>[-sequence]<br>(Parameter 1)</td>
-<td>Sequence USA</td>
+<td>Nucleotide sequence filename and optional format, or reference (input USA)</td>
 <td>Readable sequence</td>
 <td><b>Required</b></td>
 </tr>
@@ -229,13 +228,12 @@ Output report [hhtetra.tan]: <b></b>
 
 <tr>
 <td>-origfile</td>
-<td>Output file name</td>
+<td>Sanger Centre program tandem output file (optional)</td>
 <td>Output file</td>
-<td><i>&lt;sequence&gt;</i>.etandem</td>
+<td>&nbsp;</td>
 </tr>
 
 </table>
-
 
 <H2>
     Input file format
@@ -323,7 +321,6 @@ SQ   Sequence 1272 BP; 346 A; 455 C; 222 G; 249 T; 0 other;
 </td></tr></table><p>
 
 
-
 <H2>
     Output file format
 </H2>
@@ -348,7 +345,6 @@ http://emboss.sf.net/docs/themes/ReportFormats.html</A>
 for further information on report formats.
 
 <p>
-
 <p>
 
 By default <b>etandem</b> writes a 'table' report file.
@@ -363,7 +359,11 @@ By default <b>etandem</b> writes a 'table' report file.
 <pre>
 ########################################
 # Program: etandem
-# Rundate: Fri Jul 15 2005 12:00:00
+# Rundate: Sat Jul 15 2006 12:00:00
+# Commandline: etandem
+#    -noorigfile
+#    -sequence tembl:hhtetra
+#    -minrepeat 6
 # Report_format: table
 # Report_file: hhtetra.tan
 ########################################
@@ -392,7 +392,6 @@ By default <b>etandem</b> writes a 'table' report file.
 #---------------------------------------
 </pre>
 </td></tr></table><p>
-
 
 <H2>
     Data files
@@ -443,11 +442,22 @@ None.
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
-<tr><td><a href="einverted.html">einverted</a></td><td>Finds DNA inverted repeats</td></tr>
-<tr><td><a href="equicktandem.html">equicktandem</a></td><td>Finds tandem repeats</td></tr>
-<tr><td><a href="palindrome.html">palindrome</a></td><td>Looks for inverted repeats in a nucleotide sequence</td></tr>
-</table>
+<tr>
+<td><a href="einverted.html">einverted</a></td>
+<td>Finds DNA inverted repeats</td>
+</tr>
 
+<tr>
+<td><a href="equicktandem.html">equicktandem</a></td>
+<td>Finds tandem repeats</td>
+</tr>
+
+<tr>
+<td><a href="palindrome.html">palindrome</a></td>
+<td>Looks for inverted repeats in a nucleotide sequence</td>
+</tr>
+
+</table>
 <p>
 
 Running with a wide range of repeat sizes is inefficient. That is why
@@ -465,7 +475,6 @@ Richard Durbin (rd&nbsp;&copy;&nbsp;sanger.ac.uk)
 Sanger Institute, Wellcome Trust Genome Campus, Hinxton,
 Cambridge, CB10 1SA, UK.                      
 
-
 <p>
 
 This application was modified for inclusion in EMBOSS by 
@@ -473,25 +482,21 @@ Peter Rice (pmr&nbsp;&copy;&nbsp;ebi.ac.uk)
 <br>
 Informatics Division, European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
 
-
 <H2>
     History
 </H2>
 
 Completed 25 May 1999
 
-
 <H2>
     Target users
 </H2>
 This program is intended to be used by everyone and everything, from naive users to embedded scripts.
 
-
 <H2>
     Comments
 </H2>
 None
-
 
 </BODY>
 </HTML>

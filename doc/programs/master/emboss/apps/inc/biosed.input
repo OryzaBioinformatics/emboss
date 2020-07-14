@@ -1,0 +1,144 @@
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+
+'tembl:hsfau' is a sequence entry in the example nucleic acid database 'tembl'
+<p>
+<p><h3>Database entry: tembl:hsfau</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+ID   HSFAU      standard; RNA; HUM; 518 BP.
+XX
+AC   X65923;
+XX
+SV   X65923.1
+XX
+DT   13-MAY-1992 (Rel. 31, Created)
+DT   23-SEP-1993 (Rel. 37, Last updated, Version 10)
+XX
+DE   H.sapiens fau mRNA
+XX
+KW   fau gene.
+XX
+OS   Homo sapiens (human)
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia;
+OC   Eutheria; Primates; Catarrhini; Hominidae; Homo.
+XX
+RN   [1]
+RP   1-518
+RA   Michiels L.M.R.;
+RT   ;
+RL   Submitted (29-APR-1992) to the EMBL/GenBank/DDBJ databases.
+RL   L.M.R. Michiels, University of Antwerp, Dept of Biochemistry,
+RL   Universiteisplein 1, 2610 Wilrijk, BELGIUM
+XX
+RN   [2]
+RP   1-518
+RX   MEDLINE; 93368957.
+RA   Michiels L., Van der Rauwelaert E., Van Hasselt F., Kas K., Merregaert J.;
+RT   " fau cDNA encodes a ubiquitin-like-S30 fusion protein and is expressed as
+RT   an antisense sequences in the Finkel-Biskis-Reilly murine sarcoma virus";
+RL   Oncogene 8:2537-2546(1993).
+XX
+DR   SWISS-PROT; P35544; UBIM_HUMAN.
+DR   SWISS-PROT; Q05472; RS30_HUMAN.
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..518
+FT                   /chromosome="11q"
+FT                   /db_xref="taxon:9606"
+FT                   /organism="Homo sapiens"
+FT                   /tissue_type="placenta"
+FT                   /clone_lib="cDNA"
+FT                   /clone="pUIA 631"
+FT                   /map="13"
+FT   misc_feature    57..278
+FT                   /note="ubiquitin like part"
+FT   CDS             57..458
+FT                   /db_xref="SWISS-PROT:P35544"
+FT                   /db_xref="SWISS-PROT:Q05472"
+FT                   /gene="fau"
+FT                   /protein_id="CAA46716.1"
+FT                   /translation="MQLFVRAQELHTFEVTGQETVAQIKAHVASLEGIAPEDQVVLLAG
+FT                   APLEDEATLGQCGVEALTTLEVAGRMLGGKVHGSLARAGKVRGQTPKVAKQEKKKKKTG
+FT                   RAKRRMQYNRRFVNVVPTFGKKKGPNANS"
+FT   misc_feature    98..102
+FT                   /note="nucleolar localization signal"
+FT   misc_feature    279..458
+FT                   /note="S30 part"
+FT   polyA_signal    484..489
+FT   polyA_site      509
+XX
+SQ   Sequence 518 BP; 125 A; 139 C; 148 G; 106 T; 0 other;
+     ttcctctttc tcgactccat cttcgcggta gctgggaccg ccgttcagtc gccaatatgc        60
+     agctctttgt ccgcgcccag gagctacaca ccttcgaggt gaccggccag gaaacggtcg       120
+     cccagatcaa ggctcatgta gcctcactgg agggcattgc cccggaagat caagtcgtgc       180
+     tcctggcagg cgcgcccctg gaggatgagg ccactctggg ccagtgcggg gtggaggccc       240
+     tgactaccct ggaagtagca ggccgcatgc ttggaggtaa agttcatggt tccctggccc       300
+     gtgctggaaa agtgagaggt cagactccta aggtggccaa acaggagaag aagaagaaga       360
+     agacaggtcg ggctaagcgg cggatgcagt acaaccggcg ctttgtcaac gttgtgccca       420
+     cctttggcaa gaagaagggc cccaatgcca actcttaagt cttttgtaat tctggctttc       480
+     tctaataaaa aagccactta gttcagtcaa aaaaaaaa                               518
+//
+</pre>
+</td></tr></table><p>
+
+<a name="input.2"></a>
+<h3>Input files for usage example 2</h3>
+
+'tsw:AMIR_PSEAE' is a sequence entry in the example protein database 'tsw'
+<p>
+<p><h3>Database entry: tsw:AMIR_PSEAE</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+ID   AMIR_PSEAE     STANDARD;      PRT;   196 AA.
+AC   P10932;
+DT   01-JUL-1989 (Rel. 11, Created)
+DT   01-JUL-1989 (Rel. 11, Last sequence update)
+DT   15-DEC-1998 (Rel. 37, Last annotation update)
+DE   ALIPHATIC AMIDASE REGULATOR.
+GN   AMIR.
+OS   Pseudomonas aeruginosa.
+OC   Bacteria; Proteobacteria; gamma subdivision; Pseudomonas group;
+OC   Pseudomonas.
+RN   [1]
+RP   SEQUENCE FROM N.A.
+RC   STRAIN=PAC;
+RX   MEDLINE; 89211409.
+RA   LOWE N., RICE P.M., DREW R.E.;
+RT   "Nucleotide sequence of the aliphatic amidase regulator gene (amiR)
+RT   of Pseudomonas aeruginosa.";
+RL   FEBS Lett. 246:39-43(1989).
+RN   [2]
+RP   CHARACTERIZATION.
+RX   MEDLINE; 95286483.
+RA   WILSON S.A., DREW R.E.;
+RT   "Transcriptional analysis of the amidase operon from Pseudomonas
+RT   aeruginosa.";
+RL   J. Bacteriol. 177:3052-3057(1995).
+CC   -!- FUNCTION: POSITIVE CONTROLLING ELEMENT OF AMIE, THE GENE FOR
+CC       ALIPHATIC AMIDASE. ACTS AS A TRANSCRIPTIONAL ANTITERMINATION
+CC       FACTOR. IT IS THOUGHT TO ALLOW RNA POLYMERASE READ THROUGH A RHO-
+CC       INDEPENDENT TRANSCRIPTION TERMINATOR BETWEEN THE AMIE PROMOTER AND
+CC       GENE.
+CC   --------------------------------------------------------------------------
+CC   This SWISS-PROT entry is copyright. It is produced through a collaboration
+CC   between  the Swiss Institute of Bioinformatics  and the  EMBL outstation -
+CC   the European Bioinformatics Institute.  There are no  restrictions on  its
+CC   use  by  non-profit  institutions as long  as its content  is  in  no  way
+CC   modified and this statement is not removed.  Usage  by  and for commercial
+CC   entities requires a license agreement (See http://www.isb-sib.ch/announce/
+CC   or send an email to license@isb-sib.ch).
+CC   --------------------------------------------------------------------------
+DR   EMBL; X13776; CAA32023.1; -.
+DR   PIR; S03884; S03884.
+KW   Transcription regulation; Activator.
+SQ   SEQUENCE   196 AA;  21776 MW;  560A8AE3 CRC32;
+     MSANSLLGSL RELQVLVLNP PGEVSDALVL QLIRIGCSVR QCWPPPEAFD VPVDVVFTSI
+     FQNGHHDEIA ALLAAGTPRT TLVALVEYES PAVLSQIIEL ECHGVITQPL DAHRVLPVLV
+     SARRISEEMA KLKQKTEQLQ DRIAGQARIN QAKVLLMQRH GWDEREAHQH LSREAMKRRE
+     PILKIAQELL GNEPSA
+//
+</pre>
+</td></tr></table><p>

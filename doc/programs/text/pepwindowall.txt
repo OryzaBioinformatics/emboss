@@ -35,13 +35,15 @@ Created pepwindowall.ps
 Command line arguments
 
    Standard (Mandatory) qualifiers: [-sequences] seqset File containing a
-   sequence alignment [-graph] xygraph Graph type Additional (Optional)
-   qualifiers: -datafile datafile Aaindex database file -length integer
-   Window size Advanced (Unprompted) qualifiers: (none) Associated
-   qualifiers: "-sequences" associated qualifiers -sbegin1 integer Start
-   of each sequence to be used -send1 integer End of each sequence to be
-   used -sreverse1 boolean Reverse (if DNA) -sask1 boolean Ask for
-   begin/end/reverse -snucleotide1 boolean Sequence is nucleotide
+   sequence alignment [-graph] xygraph [$EMBOSS_GRAPHICS value, or x11]
+   Graph type (ps, hpgl, hp7470, hp7580, meta, cps, x11, tekt, tek, none,
+   data, xterm, png) Additional (Optional) qualifiers: -datafile datafile
+   [Enakai.dat] AAINDEX entry data file -length integer [7] Window size
+   (Integer from 1 to 200) Advanced (Unprompted) qualifiers: (none)
+   Associated qualifiers: "-sequences" associated qualifiers -sbegin1
+   integer Start of each sequence to be used -send1 integer End of each
+   sequence to be used -sreverse1 boolean Reverse (if DNA) -sask1 boolean
+   Ask for begin/end/reverse -snucleotide1 boolean Sequence is nucleotide
    -sprotein1 boolean Sequence is protein -slower1 boolean Make lower
    case -supper1 boolean Make upper case -sformat1 string Input sequence
    format -sdbname1 string Database name -sid1 string Entryname -ufo1
@@ -58,22 +60,8 @@ Command line arguments
    line options -help boolean Report command line options. More
    information on associated and general qualifiers can be found with
    -help -verbose -warning boolean Report warnings -error boolean Report
-   errors -fatal boolean Report fatal errors -die boolean Report deaths
-
-   Standard (Mandatory) qualifiers Allowed values Default
-   [-sequences]
-   (Parameter 1) File containing a sequence alignment Readable set of
-   sequences Required
-   [-graph]
-   (Parameter 2) Graph type EMBOSS has a list of known devices, including
-   postscript, ps, hpgl, hp7470, hp7580, meta, colourps, cps, xwindows,
-   x11, tektronics, tekt, tek4107t, tek, none, null, text, data, xterm,
-   png, xml EMBOSS_GRAPHICS value, or x11
-   Additional (Optional) qualifiers Allowed values Default
-   -datafile Aaindex database file Data file Enakai.dat
-   -length Window size Integer from 1 to 200 7
-   Advanced (Unprompted) qualifiers Allowed values Default
-   (none)
+   errors -fatal boolean Report fatal errors -die boolean Report dying
+   program messages
 
 Input file format
 
@@ -88,13 +76,13 @@ Input file format
 
   ../data/globins.msf MSF:  164 Type: P 25/06/01 CompCheck: 4278 ..
 
-  Name: HBB_HUMAN Len: 164  Check: 6914 Weight: 0.14
-  Name: HBB_HORSE Len: 164  Check: 6007 Weight: 0.15
-  Name: HBA_HUMAN Len: 164  Check: 3921 Weight: 0.15
-  Name: HBA_HORSE Len: 164  Check: 4770 Weight: 0.19
-  Name: MYG_PHYCA Len: 164  Check: 7930 Weight: 0.23
-  Name: GLB5_PETMA Len: 164  Check: 1857 Weight: 0.21
-  Name: LGB2_LUPLU Len: 164  Check: 2879 Weight: 0.10
+  Name: HBB_HUMAN Len: 164  Check: 6914 Weight: 0.61
+  Name: HBB_HORSE Len: 164  Check: 6007 Weight: 0.65
+  Name: HBA_HUMAN Len: 164  Check: 3921 Weight: 0.65
+  Name: HBA_HORSE Len: 164  Check: 4770 Weight: 0.83
+  Name: MYG_PHYCA Len: 164  Check: 7930 Weight: 1.00
+  Name: GLB5_PETMA Len: 164  Check: 1857 Weight: 0.91
+  Name: LGB2_LUPLU Len: 164  Check: 2879 Weight: 0.43
 
 //
 
@@ -230,20 +218,21 @@ Known bugs
 
 See also
 
-   Program name                        Description
-   backtranseq  Back translate a protein sequence
-   charge       Protein charge plot
-   checktrans   Reports STOP codons and ORF statistics of a protein
-   compseq      Count composition of dimer/trimer/etc words in a sequence
-   emowse       Protein identification by mass spectrometry
-   freak        Residue/base frequency table or plot
-   iep          Calculates the isoelectric point of a protein
-   mwcontam     Shows molwts that match across a set of files
-   mwfilter     Filter noisy molwts from mass spec output
-   octanol      Displays protein hydropathy
-   pepinfo      Plots simple amino acid properties in parallel
-   pepstats     Protein statistics
-   pepwindow    Displays protein hydropathy
+   Program name                         Description
+   backtranambig Back translate a protein sequence to ambiguous codons
+   backtranseq   Back translate a protein sequence
+   charge        Protein charge plot
+   checktrans    Reports STOP codons and ORF statistics of a protein
+   compseq       Count composition of dimer/trimer/etc words in a sequence
+   emowse        Protein identification by mass spectrometry
+   freak         Residue/base frequency table or plot
+   iep           Calculates the isoelectric point of a protein
+   mwcontam      Shows molwts that match across a set of files
+   mwfilter      Filter noisy molwts from mass spec output
+   octanol       Displays protein hydropathy
+   pepinfo       Plots simple amino acid properties in parallel
+   pepstats      Protein statistics
+   pepwindow     Displays protein hydropathy
 
 Author(s)
 

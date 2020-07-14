@@ -13,7 +13,6 @@
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
-
 seqret
 </font></b>
 </td></tr>
@@ -23,12 +22,10 @@ seqret
 
 
 
-
 <H2>
     Function
 </H2>
 Reads and writes (returns) sequences
-
 
 <H2>
     Description
@@ -790,8 +787,8 @@ Extract an entry from a database and write it to a file:
 
 % <b>seqret </b>
 Reads and writes (returns) sequences
-Input sequence(s): <b>tembl:hsfau</b>
-Output sequence [hsfau.fasta]: <b></b>
+Input (gapped) sequence(s): <b>tembl:hsfau</b>
+output sequence(s) [hsfau.fasta]: <b></b>
 
 </pre></td></tr></table><p>
 <p>
@@ -822,8 +819,8 @@ seqret does not read in features by default because this results in slightly fas
 
 % <b>seqret -feature </b>
 Reads and writes (returns) sequences
-Input sequence(s): <b>tembl:hsfau</b>
-Output sequence [hsfau.fasta]: <b>embl::hsfau.embl</b>
+Input (gapped) sequence(s): <b>tembl:hsfau</b>
+output sequence(s) [hsfau.fasta]: <b>embl::hsfau.embl</b>
 
 </pre></td></tr></table><p>
 <p>
@@ -839,8 +836,8 @@ Display the contents of the sequence on the screen:
 
 % <b>seqret </b>
 Reads and writes (returns) sequences
-Input sequence(s): <b>tembl:hsfau</b>
-Output sequence [hsfau.fasta]: <b>stdout</b>
+Input (gapped) sequence(s): <b>tembl:hsfau</b>
+output sequence(s) [hsfau.fasta]: <b>stdout</b>
 
 >HSFAU X65923.1 H.sapiens fau mRNA
 ttcctctttctcgactccatcttcgcggtagctgggaccgccgttcagtcgccaatatgc
@@ -867,8 +864,8 @@ Write the result in GCG format by using the qualifier '-osformat'.
 
 % <b>seqret -osf gcg </b>
 Reads and writes (returns) sequences
-Input sequence(s): <b>tembl:hsfau</b>
-Output sequence [hsfau.gcg]: <b></b>
+Input (gapped) sequence(s): <b>tembl:hsfau</b>
+output sequence(s) [hsfau.gcg]: <b></b>
 
 </pre></td></tr></table><p>
 <p>
@@ -884,7 +881,7 @@ Write the result in GCG format by specifying the format in the output USA on the
 
 % <b>seqret -outseq gcg::hsfau.gcg </b>
 Reads and writes (returns) sequences
-Input sequence(s): <b>tembl:hsfau</b>
+Input (gapped) sequence(s): <b>tembl:hsfau</b>
 
 </pre></td></tr></table><p>
 <p>
@@ -900,8 +897,8 @@ Write the result in GCG format by specifying the format in the output USA at the
 
 % <b>seqret </b>
 Reads and writes (returns) sequences
-Input sequence(s): <b>tembl:hsfau</b>
-Output sequence [hsfau.fasta]: <b>gcg::hsfau.gcg</b>
+Input (gapped) sequence(s): <b>tembl:hsfau</b>
+output sequence(s) [hsfau.fasta]: <b>gcg::hsfau.gcg</b>
 
 </pre></td></tr></table><p>
 <p>
@@ -917,8 +914,8 @@ Write the reverse-complement of a sequence:
 
 % <b>seqret -srev </b>
 Reads and writes (returns) sequences
-Input sequence(s): <b>tembl:hsfau</b>
-Output sequence [hsfau.fasta]: <b></b>
+Input (gapped) sequence(s): <b>tembl:hsfau</b>
+output sequence(s) [hsfau.fasta]: <b></b>
 
 </pre></td></tr></table><p>
 <p>
@@ -934,8 +931,8 @@ Extract the bases between the positions starting at 5 and ending at 25:
 
 % <b>seqret -sbegin 5 -send 25 </b>
 Reads and writes (returns) sequences
-Input sequence(s): <b>tembl:hsfau</b>
-Output sequence [hsfau.fasta]: <b></b>
+Input (gapped) sequence(s): <b>tembl:hsfau</b>
+output sequence(s) [hsfau.fasta]: <b></b>
 
 </pre></td></tr></table><p>
 <p>
@@ -951,8 +948,8 @@ Extract the bases between the positions starting at 5 and ending at 5 bases befo
 
 % <b>seqret -sbegin 5 -send -5 </b>
 Reads and writes (returns) sequences
-Input sequence(s): <b>tembl:hsfau</b>
-Output sequence [hsfau.fasta]: <b></b>
+Input (gapped) sequence(s): <b>tembl:hsfau</b>
+output sequence(s) [hsfau.fasta]: <b></b>
 
 </pre></td></tr></table><p>
 <p>
@@ -968,13 +965,12 @@ Read all entries in the database 'tembl' that start with 'hs' and write them to 
 
 % <b>seqret </b>
 Reads and writes (returns) sequences
-Input sequence(s): <b>tembl:hs*</b>
-Output sequence [hs989235.fasta]: <b>hsall.seq</b>
+Input (gapped) sequence(s): <b>tembl:hs*</b>
+output sequence(s) [hs989235.fasta]: <b>hsall.seq</b>
 
 </pre></td></tr></table><p>
 <p>
 <p>
-
 
 
 <H2>
@@ -983,8 +979,10 @@ Output sequence [hs989235.fasta]: <b>hsall.seq</b>
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
    Standard (Mandatory) qualifiers:
-  [-sequence]          seqall     Sequence database USA
-  [-outseq]            seqoutall  Output sequence(s) USA
+  [-sequence]          seqall     (Gapped) sequence(s) filename and optional
+                                  format, or reference (input USA)
+  [-outseq]            seqoutall  [<sequence>.<format>] Sequence set(s)
+                                  filename and optional format (output USA)
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers:
@@ -994,48 +992,47 @@ Output sequence [hs989235.fasta]: <b>hsall.seq</b>
    Associated qualifiers:
 
    "-sequence" associated qualifiers
-   -sbegin1             integer    Start of each sequence to be used
-   -send1               integer    End of each sequence to be used
-   -sreverse1           boolean    Reverse (if DNA)
-   -sask1               boolean    Ask for begin/end/reverse
-   -snucleotide1        boolean    Sequence is nucleotide
-   -sprotein1           boolean    Sequence is protein
-   -slower1             boolean    Make lower case
-   -supper1             boolean    Make upper case
-   -sformat1            string     Input sequence format
-   -sdbname1            string     Database name
-   -sid1                string     Entryname
-   -ufo1                string     UFO features
-   -fformat1            string     Features format
-   -fopenfile1          string     Features file name
+   -sbegin1            integer    Start of each sequence to be used
+   -send1              integer    End of each sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
 
    "-outseq" associated qualifiers
-   -osformat2           string     Output seq format
-   -osextension2        string     File name extension
-   -osname2             string     Base file name
-   -osdirectory2        string     Output directory
-   -osdbname2           string     Database name to add
-   -ossingle2           boolean    Separate file for each entry
-   -oufo2               string     UFO features
-   -offormat2           string     Features format
-   -ofname2             string     Features file name
-   -ofdirectory2        string     Output directory
+   -osformat2          string     Output seq format
+   -osextension2       string     File name extension
+   -osname2            string     Base file name
+   -osdirectory2       string     Output directory
+   -osdbname2          string     Database name to add
+   -ossingle2          boolean    Separate file for each entry
+   -oufo2              string     UFO features
+   -offormat2          string     Features format
+   -ofname2            string     Features file name
+   -ofdirectory2       string     Output directory
 
    General qualifiers:
-   -auto                boolean    Turn off prompts
-   -stdout              boolean    Write standard output
-   -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for standard and additional values
-   -debug               boolean    Write debug output to program.dbg
-   -verbose             boolean    Report some/full command line options
-   -help                boolean    Report command line options. More
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
-   -warning             boolean    Report warnings
-   -error               boolean    Report errors
-   -fatal               boolean    Report fatal errors
-   -die                 boolean    Report deaths
-
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
 
 </pre>
 </td></tr></table>
@@ -1050,16 +1047,16 @@ Output sequence [hs989235.fasta]: <b>hsall.seq</b>
 
 <tr>
 <td>[-sequence]<br>(Parameter 1)</td>
-<td>Sequence database USA</td>
+<td>(Gapped) sequence(s) filename and optional format, or reference (input USA)</td>
 <td>Readable sequence(s)</td>
 <td><b>Required</b></td>
 </tr>
 
 <tr>
 <td>[-outseq]<br>(Parameter 2)</td>
-<td>Output sequence(s) USA</td>
+<td>Sequence set(s) filename and optional format (output USA)</td>
 <td>Writeable sequence(s)</td>
-<td><i>&lt;sequence&gt;</i>.<i>format</i></td>
+<td>&nbsp;</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
@@ -1093,7 +1090,6 @@ Output sequence [hs989235.fasta]: <b>hsall.seq</b>
 </tr>
 
 </table>
-
 
 
 <H2>
@@ -1190,7 +1186,6 @@ SQ   Sequence 518 BP; 125 A; 139 C; 148 G; 106 T; 0 other;
 //
 </pre>
 </td></tr></table><p>
-
 
 <H2>
     Output file format
@@ -1358,8 +1353,8 @@ SV   X65923.1
 DE   H.sapiens fau mRNA
 KW   fau gene.
 OS   Homo sapiens (human)
-OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi;
-OC   Mammalia; Eutheria; Primates; Catarrhini; Hominidae; Homo.
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia;
+OC   Eutheria; Primates; Catarrhini; Hominidae; Homo.
 FH   Key             Location/Qualifiers
 FH
 FT   source          1..518
@@ -1482,7 +1477,6 @@ ataaaaaagccacttagttcagtcaaaaaa
 </pre>
 </td></tr></table><p>
 
-
 <H2>
     Data files
 </H2>
@@ -1551,33 +1545,142 @@ None.
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
-<tr><td><a href="biosed.html">biosed</a></td><td>Replace or delete sequence sections</td></tr>
-<tr><td><a href="codcopy.html">codcopy</a></td><td>Reads and writes a codon usage table</td></tr>
-<tr><td><a href="cutseq.html">cutseq</a></td><td>Removes a specified section from a sequence</td></tr>
-<tr><td><a href="degapseq.html">degapseq</a></td><td>Removes gap characters from sequences</td></tr>
-<tr><td><a href="descseq.html">descseq</a></td><td>Alter the name or description of a sequence</td></tr>
-<tr><td><a href="entret.html">entret</a></td><td>Reads and writes (returns) flatfile entries</td></tr>
-<tr><td><a href="extractfeat.html">extractfeat</a></td><td>Extract features from a sequence</td></tr>
-<tr><td><a href="extractseq.html">extractseq</a></td><td>Extract regions from a sequence</td></tr>
-<tr><td><a href="listor.html">listor</a></td><td>Write a list file of the logical OR of two sets of sequences</td></tr>
-<tr><td><a href="maskfeat.html">maskfeat</a></td><td>Mask off features of a sequence</td></tr>
-<tr><td><a href="maskseq.html">maskseq</a></td><td>Mask off regions of a sequence</td></tr>
-<tr><td><a href="newseq.html">newseq</a></td><td>Type in a short new sequence</td></tr>
-<tr><td><a href="noreturn.html">noreturn</a></td><td>Removes carriage return from ASCII files</td></tr>
-<tr><td><a href="notseq.html">notseq</a></td><td>Exclude a set of sequences and write out the remaining ones</td></tr>
-<tr><td><a href="nthseq.html">nthseq</a></td><td>Writes one sequence from a multiple set of sequences</td></tr>
-<tr><td><a href="pasteseq.html">pasteseq</a></td><td>Insert one sequence into another</td></tr>
-<tr><td><a href="revseq.html">revseq</a></td><td>Reverse and complement a sequence</td></tr>
-<tr><td><a href="seqretsplit.html">seqretsplit</a></td><td>Reads and writes (returns) sequences in individual files</td></tr>
-<tr><td><a href="skipseq.html">skipseq</a></td><td>Reads and writes (returns) sequences, skipping first few</td></tr>
-<tr><td><a href="splitter.html">splitter</a></td><td>Split a sequence into (overlapping) smaller sequences</td></tr>
-<tr><td><a href="trimest.html">trimest</a></td><td>Trim poly-A tails off EST sequences</td></tr>
-<tr><td><a href="trimseq.html">trimseq</a></td><td>Trim ambiguous bits off the ends of sequences</td></tr>
-<tr><td><a href="union.html">union</a></td><td>Reads sequence fragments and builds one sequence</td></tr>
-<tr><td><a href="vectorstrip.html">vectorstrip</a></td><td>Strips out DNA between a pair of vector sequences</td></tr>
-<tr><td><a href="yank.html">yank</a></td><td>Reads a sequence range, appends the full USA to a list file</td></tr>
-</table>
+<tr>
+<td><a href="biosed.html">biosed</a></td>
+<td>Replace or delete sequence sections</td>
+</tr>
 
+<tr>
+<td><a href="codcopy.html">codcopy</a></td>
+<td>Reads and writes a codon usage table</td>
+</tr>
+
+<tr>
+<td><a href="cutseq.html">cutseq</a></td>
+<td>Removes a specified section from a sequence</td>
+</tr>
+
+<tr>
+<td><a href="degapseq.html">degapseq</a></td>
+<td>Removes gap characters from sequences</td>
+</tr>
+
+<tr>
+<td><a href="descseq.html">descseq</a></td>
+<td>Alter the name or description of a sequence</td>
+</tr>
+
+<tr>
+<td><a href="entret.html">entret</a></td>
+<td>Reads and writes (returns) flatfile entries</td>
+</tr>
+
+<tr>
+<td><a href="extractfeat.html">extractfeat</a></td>
+<td>Extract features from a sequence</td>
+</tr>
+
+<tr>
+<td><a href="extractseq.html">extractseq</a></td>
+<td>Extract regions from a sequence</td>
+</tr>
+
+<tr>
+<td><a href="listor.html">listor</a></td>
+<td>Write a list file of the logical OR of two sets of sequences</td>
+</tr>
+
+<tr>
+<td><a href="makenucseq.html">makenucseq</a></td>
+<td>Creates random nucleotide sequences</td>
+</tr>
+
+<tr>
+<td><a href="makeprotseq.html">makeprotseq</a></td>
+<td>Creates random protein sequences</td>
+</tr>
+
+<tr>
+<td><a href="maskfeat.html">maskfeat</a></td>
+<td>Mask off features of a sequence</td>
+</tr>
+
+<tr>
+<td><a href="maskseq.html">maskseq</a></td>
+<td>Mask off regions of a sequence</td>
+</tr>
+
+<tr>
+<td><a href="newseq.html">newseq</a></td>
+<td>Type in a short new sequence</td>
+</tr>
+
+<tr>
+<td><a href="noreturn.html">noreturn</a></td>
+<td>Removes carriage return from ASCII files</td>
+</tr>
+
+<tr>
+<td><a href="notseq.html">notseq</a></td>
+<td>Exclude a set of sequences and write out the remaining ones</td>
+</tr>
+
+<tr>
+<td><a href="nthseq.html">nthseq</a></td>
+<td>Writes one sequence from a multiple set of sequences</td>
+</tr>
+
+<tr>
+<td><a href="pasteseq.html">pasteseq</a></td>
+<td>Insert one sequence into another</td>
+</tr>
+
+<tr>
+<td><a href="revseq.html">revseq</a></td>
+<td>Reverse and complement a sequence</td>
+</tr>
+
+<tr>
+<td><a href="seqretsplit.html">seqretsplit</a></td>
+<td>Reads and writes (returns) sequences in individual files</td>
+</tr>
+
+<tr>
+<td><a href="skipseq.html">skipseq</a></td>
+<td>Reads and writes (returns) sequences, skipping first few</td>
+</tr>
+
+<tr>
+<td><a href="splitter.html">splitter</a></td>
+<td>Split a sequence into (overlapping) smaller sequences</td>
+</tr>
+
+<tr>
+<td><a href="trimest.html">trimest</a></td>
+<td>Trim poly-A tails off EST sequences</td>
+</tr>
+
+<tr>
+<td><a href="trimseq.html">trimseq</a></td>
+<td>Trim ambiguous bits off the ends of sequences</td>
+</tr>
+
+<tr>
+<td><a href="union.html">union</a></td>
+<td>Reads sequence fragments and builds one sequence</td>
+</tr>
+
+<tr>
+<td><a href="vectorstrip.html">vectorstrip</a></td>
+<td>Strips out DNA between a pair of vector sequences</td>
+</tr>
+
+<tr>
+<td><a href="yank.html">yank</a></td>
+<td>Reads a sequence range, appends the full USA to a list file</td>
+</tr>
+
+</table>
 <p>
 
 Valid names of the databases set up in your local implementation of
@@ -1592,7 +1695,6 @@ Peter Rice (pmr&nbsp;&copy;&nbsp;ebi.ac.uk)
 Informatics Division, European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
 
 
-
 <H2>
     History
 </H2>
@@ -1601,12 +1703,10 @@ Informatics Division, European Bioinformatics Institute, Wellcome Trust Genome C
 <br>
 Feb 2002 - '-feature' qualifier added by Peter Rice
 
-
 <H2>
     Target users
 </H2>
 This program is intended to be used by everyone and everything, from naive users to embedded scripts.
-
 
 
 <H2>
@@ -1642,7 +1742,6 @@ characters in the IDs).
 Your EMBL format file has IDs that look like accession numbers, so
 EMBOSS fills in the accession number for each sequence, and reports it
 in the FASTA format. 
-
 
 
 

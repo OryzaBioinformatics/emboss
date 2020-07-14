@@ -13,7 +13,6 @@
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
-
 matcher
 </font></b>
 </td></tr>
@@ -22,12 +21,10 @@ matcher
 <p>
 
 
-
 <H2>
     Function
 </H2>
 Finds the best local alignments between two sequences
-
 
 <H2>
     Description
@@ -102,52 +99,57 @@ Output alignment [hba_human.matcher]: <b></b>
 
 
 
-
 <H2>
     Command line arguments
 </H2>
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
    Standard (Mandatory) qualifiers:
-  [-asequence]         sequence   Sequence USA
-  [-bsequence]         sequence   Sequence USA
+  [-asequence]         sequence   Sequence filename and optional format, or
+                                  reference (input USA)
+  [-bsequence]         sequence   Sequence filename and optional format, or
+                                  reference (input USA)
   [-outfile]           align      Output alignment file name
 
    Additional (Optional) qualifiers:
-   -datafile           matrix     This is the scoring matrix file used when
+   -datafile           matrix     [EBLOSUM62 for protein, EDNAFULL for DNA]
+                                  This is the scoring matrix file used when
                                   comparing sequences. By default it is the
                                   file 'EBLOSUM62' (for proteins) or the file
                                   'EDNAFULL' (for nucleic sequences). These
                                   files are found in the 'data' directory of
                                   the EMBOSS installation.
-   -alternatives       integer    This sets the number of alternative matches
-                                  output. By default only the highest scoring
-                                  alignment is shown. A value of 2 gves you
-                                  other reasonable alignments. In some cases,
-                                  for example multidomain proteins of cDNA and
-                                  gemomic DNA comparisons, there may be other
-                                  interesting and significant alignments.
-   -gapopen            integer    The gap penalty is the score taken away when
-                                  a gap is created. The best value depends on
-                                  the choice of comparison matrix. The
-                                  default value of 14 assumes you are using
-                                  the EBLOSUM62 matrix for protein sequences,
-                                  or a value of 16 and the EDNAFULL matrix for
-                                  nucleotide sequences.
-   -gapextend          integer    The gap length, or gap extension, penalty is
-                                  added to the standard gap penalty for each
-                                  base or residue in the gap. This is how long
-                                  gaps are penalized. Usually you will expect
-                                  a few long gaps rather than many short
-                                  gaps, so the gap extension penalty should be
-                                  lower than the gap penalty. An exception is
-                                  where one or both sequences are single
-                                  reads with possible sequencing errors in
-                                  which case you would expect many single base
-                                  gaps. You can get this result by setting
-                                  the gap penalty to zero (or very low) and
-                                  using the gap extension penalty to control
-                                  gap scoring.
+   -alternatives       integer    [1] This sets the number of alternative
+                                  matches output. By default only the highest
+                                  scoring alignment is shown. A value of 2
+                                  gves you other reasonable alignments. In
+                                  some cases, for example multidomain proteins
+                                  of cDNA and gemomic DNA comparisons, there
+                                  may be other interesting and significant
+                                  alignments. (Integer 1 or more)
+   -gapopen            integer    [14 for protein, 16 for nucleic] The gap
+                                  penalty is the score taken away when a gap
+                                  is created. The best value depends on the
+                                  choice of comparison matrix. The default
+                                  value of 14 assumes you are using the
+                                  EBLOSUM62 matrix for protein sequences, or a
+                                  value of 16 and the EDNAFULL matrix for
+                                  nucleotide sequences. (Positive integer)
+   -gapextend          integer    [4 for any sequence] The gap length, or gap
+                                  extension, penalty is added to the standard
+                                  gap penalty for each base or residue in the
+                                  gap. This is how long gaps are penalized.
+                                  Usually you will expect a few long gaps
+                                  rather than many short gaps, so the gap
+                                  extension penalty should be lower than the
+                                  gap penalty. An exception is where one or
+                                  both sequences are single reads with
+                                  possible sequencing errors in which case you
+                                  would expect many single base gaps. You can
+                                  get this result by setting the gap penalty
+                                  to zero (or very low) and using the gap
+                                  extension penalty to control gap scoring.
+                                  (Positive integer)
 
    Advanced (Unprompted) qualifiers: (none)
    Associated qualifiers:
@@ -208,8 +210,7 @@ Output alignment [hba_human.matcher]: <b></b>
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
-   -die                boolean    Report deaths
-
+   -die                boolean    Report dying program messages
 
 </pre>
 </td></tr></table>
@@ -224,14 +225,14 @@ Output alignment [hba_human.matcher]: <b></b>
 
 <tr>
 <td>[-asequence]<br>(Parameter 1)</td>
-<td>Sequence USA</td>
+<td>Sequence filename and optional format, or reference (input USA)</td>
 <td>Readable sequence</td>
 <td><b>Required</b></td>
 </tr>
 
 <tr>
 <td>[-bsequence]<br>(Parameter 2)</td>
-<td>Sequence USA</td>
+<td>Sequence filename and optional format, or reference (input USA)</td>
 <td>Readable sequence</td>
 <td><b>Required</b></td>
 </tr>
@@ -288,7 +289,6 @@ Output alignment [hba_human.matcher]: <b></b>
 </tr>
 
 </table>
-
 
 
 <H2>
@@ -527,7 +527,6 @@ SQ   SEQUENCE   146 AA;  15867 MW;  EC9744C9 CRC32;
 </pre>
 </td></tr></table><p>
 
-
 <H2>
     Output file format
 </H2>
@@ -563,7 +562,6 @@ http://emboss.sf.net/docs/themes/AlignFormats.html</A>
 for further information on alignment formats.
 
 <p>
-
  
 
 <p>
@@ -576,7 +574,10 @@ for further information on alignment formats.
 <pre>
 ########################################
 # Program: matcher
-# Rundate: Fri Jul 15 2005 12:00:00
+# Rundate: Sat Jul 15 2006 12:00:00
+# Commandline: matcher
+#    [-asequence] tsw:hba_human
+#    [-bsequence] tsw:hbb_human
 # Align_format: markx0
 # Report_file: hba_human.matcher
 ########################################
@@ -630,7 +631,11 @@ HBB_HU ENFRLLGNVLVCVLAHHFGKEFTPPVQAAYQKVVAGVANALAHKY
 <pre>
 ########################################
 # Program: matcher
-# Rundate: Fri Jul 15 2005 12:00:00
+# Rundate: Sat Jul 15 2006 12:00:00
+# Commandline: matcher
+#    [-asequence] tsw:hba_human
+#    [-bsequence] tsw:hbb_human
+#    -alternatives 10
 # Align_format: markx0
 # Report_file: hba_human.matcher
 ########################################
@@ -674,10 +679,6 @@ HBB_HU ENFRLLGNVLVCVLAHHFGKEFTPPVQAAYQKVVAGVANALAHKY
 
 #=======================================
 #
-# Aligned_sequences: 2
-# 1: HBA_HUMAN
-# 2: HBB_HUMAN
-# Matrix: EBLOSUM62
 
 
 <font color=red>  [Part of this file has been deleted for brevity]</font>
@@ -735,7 +736,6 @@ HBB_HU PVQAAYQKVVAGVANALAHKY
 #---------------------------------------
 </pre>
 </td></tr></table><p>
-
 
 
 <H2>
@@ -815,12 +815,27 @@ None.
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
-<tr><td><a href="seqmatchall.html">seqmatchall</a></td><td>All-against-all comparison of a set of sequences</td></tr>
-<tr><td><a href="supermatcher.html">supermatcher</a></td><td>Match large sequences against one or more other sequences</td></tr>
-<tr><td><a href="water.html">water</a></td><td>Smith-Waterman local alignment</td></tr>
-<tr><td><a href="wordmatch.html">wordmatch</a></td><td>Finds all exact matches of a given size between 2 sequences</td></tr>
-</table>
+<tr>
+<td><a href="seqmatchall.html">seqmatchall</a></td>
+<td>All-against-all comparison of a set of sequences</td>
+</tr>
 
+<tr>
+<td><a href="supermatcher.html">supermatcher</a></td>
+<td>Match large sequences against one or more other sequences</td>
+</tr>
+
+<tr>
+<td><a href="water.html">water</a></td>
+<td>Smith-Waterman local alignment</td>
+</tr>
+
+<tr>
+<td><a href="wordmatch.html">wordmatch</a></td>
+<td>Finds all exact matches of a given size between 2 sequences</td>
+</tr>
+
+</table>
 
 <p>
 
@@ -845,13 +860,11 @@ Ian Longden (il&nbsp;&copy;&nbsp;sanger.ac.uk)
 Sanger Institute, Wellcome Trust Genome Campus, Hinxton,
 Cambridge, CB10 1SA, UK.                      
 
-
 <H2>
     History
 </H2>
 
  Completed 11th May 1999.
-
 
 <H2>
     Target users
@@ -860,12 +873,10 @@ Cambridge, CB10 1SA, UK.
 This program is intended to be used by everyone and everything, from naive users to embedded scripts.
 
 
-
 <H2>
     Comments
 </H2>
 None
-
 
 </BODY>
 </HTML>

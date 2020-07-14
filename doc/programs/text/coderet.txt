@@ -93,9 +93,11 @@ Usage
 
 % coderet 
 Extract CDS, mRNA and translations from feature tables
-Input sequence(s): tembl:X03487
-Output sequence [hsferg1.fasta]: 
+Input nucleotide sequence(s): tembl:X03487
 Output file [hsferg1.coderet]: 
+Coding nucleotide output sequence(s) (optional) [hsferg1.cds]: 
+Messenger RNA nucleotide output sequence(s) (optional) [hsferg1.mrna]: 
+Translated coding protein output sequence(s) (optional) [hsferg1.prot]: 
 
    Go to the input files for this example
    Go to the output files for this example
@@ -107,25 +109,27 @@ Output file [hsferg1.coderet]:
 
 % coderet -nocds -notranslation 
 Extract CDS, mRNA and translations from feature tables
-Input sequence(s): tembl:X03487
-Output sequence [hsferg1.fasta]: 
+Input nucleotide sequence(s): tembl:X03487
 Output file [hsferg1.coderet]: 
+Messenger RNA nucleotide output sequence(s) (optional) [hsferg1.mrna]: 
 
    Go to the output files for this example
 
 Command line arguments
 
    Standard (Mandatory) qualifiers:
-  [-seqall]            seqall     Sequence database USA
-  [-outseq]            seqout     Output sequence USA
-  [-outfile]           outfile    Output file name
+  [-seqall]            seqall     Nucleotide sequence(s) filename and optional
+                                  format, or reference (input USA)
+  [-outfile]           outfile    [*.coderet] Output file name
+  [-cdsoutseq]         seqoutall  [.] Coding nucleotide
+                                  output sequence(s) (optional)
+  [-mrnaoutseq]        seqoutall  Messenger RNA nucleotide output sequence(s)
+                                  (optional)
+  [-translationoutseq] seqoutall  Translated coding protein output sequence(s)
+                                  (optional)
 
    Additional (Optional) qualifiers: (none)
-   Advanced (Unprompted) qualifiers:
-   -[no]cds            boolean    Extract CDS sequences
-   -[no]mrna           boolean    Extract mrna sequences
-   -[no]translation    boolean    Extract translated sequences
-
+   Advanced (Unprompted) qualifiers: (none)
    Associated qualifiers:
 
    "-seqall" associated qualifiers
@@ -144,20 +148,44 @@ Command line arguments
    -fformat1           string     Features format
    -fopenfile1         string     Features file name
 
-   "-outseq" associated qualifiers
-   -osformat2          string     Output seq format
-   -osextension2       string     File name extension
-   -osname2            string     Base file name
-   -osdirectory2       string     Output directory
-   -osdbname2          string     Database name to add
-   -ossingle2          boolean    Separate file for each entry
-   -oufo2              string     UFO features
-   -offormat2          string     Features format
-   -ofname2            string     Features file name
-   -ofdirectory2       string     Output directory
-
    "-outfile" associated qualifiers
-   -odirectory3        string     Output directory
+   -odirectory2        string     Output directory
+
+   "-cdsoutseq" associated qualifiers
+   -osformat3          string     Output seq format
+   -osextension3       string     File name extension
+   -osname3            string     Base file name
+   -osdirectory3       string     Output directory
+   -osdbname3          string     Database name to add
+   -ossingle3          boolean    Separate file for each entry
+   -oufo3              string     UFO features
+   -offormat3          string     Features format
+   -ofname3            string     Features file name
+   -ofdirectory3       string     Output directory
+
+   "-mrnaoutseq" associated qualifiers
+   -osformat4          string     Output seq format
+   -osextension4       string     File name extension
+   -osname4            string     Base file name
+   -osdirectory4       string     Output directory
+   -osdbname4          string     Database name to add
+   -ossingle4          boolean    Separate file for each entry
+   -oufo4              string     UFO features
+   -offormat4          string     Features format
+   -ofname4            string     Features file name
+   -ofdirectory4       string     Output directory
+
+   "-translationoutseq" associated qualifiers
+   -osformat5          string     Output seq format
+   -osextension5       string     File name extension
+   -osname5            string     Base file name
+   -osdirectory5       string     Output directory
+   -osdbname5          string     Database name to add
+   -ossingle5          boolean    Separate file for each entry
+   -oufo5              string     UFO features
+   -offormat5          string     Features format
+   -ofname5            string     Features file name
+   -ofdirectory5       string     Output directory
 
    General qualifiers:
    -auto               boolean    Turn off prompts
@@ -172,22 +200,7 @@ Command line arguments
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
-   -die                boolean    Report deaths
-
-
-   Standard (Mandatory) qualifiers Allowed values Default
-   [-seqall]
-   (Parameter 1) Sequence database USA Readable sequence(s) Required
-   [-outseq]
-   (Parameter 2) Output sequence USA Writeable sequence <sequence>.format
-   [-outfile]
-   (Parameter 3) Output file name Output file <sequence>.coderet
-   Additional (Optional) qualifiers Allowed values Default
-   (none)
-   Advanced (Unprompted) qualifiers Allowed values Default
-   -[no]cds Extract CDS sequences Boolean value Yes/No Yes
-   -[no]mrna Extract mrna sequences Boolean value Yes/No Yes
-   -[no]translation Extract translated sequences Boolean value Yes/No Yes
+   -die                boolean    Report dying program messages
 
 Input file format
 
@@ -304,7 +317,7 @@ Output file format
 
   Output files for usage example
 
-  File: hsferg1.fasta
+  File: hsferg1.cds
 
 >x03487_cds_1
 atgacgaccgcgtccacctcgcaggtgcgccagaactaccaccaggactcagaggccgcc
@@ -317,6 +330,9 @@ ctggccactgacaaaaatgacccccatttgtgtgacttcattgagacacattacctgaat
 gagcaggtgaaagccatcaaagaattgggtgaccacgtgaccaacttgcgcaagatggga
 gcgcccgaatctggcttggcggaatatctctttgacaagcacaccctgggagacagtgat
 aatgaaagctaa
+
+  File: hsferg1.mrna
+
 >x03487_mrna_1
 cagacgttcttcgccgagagtcgtcggggtttcctgcttcaacagtgcttggacggaacc
 cggcgctcgttccccaccccggccggccgcccatagccagccctccgtcgacctcttcac
@@ -324,6 +340,9 @@ cgcaccctcggactgccccaaggcccccgccgccgctccagcgccgcgcagccaccgccg
 ccgccgccgcctctccttagtcgccgccatgacgaccgcgtccacctcgcaggtgcgcca
 gaactaccaccaggactcagaggccgccatcaaccgccagatcaacctggagctctacgc
 ctcctacgtttacctgtccatg
+
+  File: hsferg1.prot
+
 >x03487_pro_1
 MTTASTSQVRQNYHQDSEAAINRQINLELYASYVYLSMSYYFDRDDVALKNFAKYFLHQS
 HEEREHAEKLMKLQNQRGGRIFLQDIKKPDCDDWESGLNAMECALHLEKNVNQSLLELHK
@@ -337,16 +356,6 @@ NES
      1     1     1     3 HSFERG1
 
   Output files for usage example 2
-
-  File: hsferg1.fasta
-
->x03487_mrna_1
-cagacgttcttcgccgagagtcgtcggggtttcctgcttcaacagtgcttggacggaacc
-cggcgctcgttccccaccccggccggccgcccatagccagccctccgtcgacctcttcac
-cgcaccctcggactgccccaaggcccccgccgccgctccagcgccgcgcagccaccgccg
-ccgccgccgcctctccttagtcgccgccatgacgaccgcgtccacctcgcaggtgcgcca
-gaactaccaccaggactcagaggccgccatcaaccgccagatcaacctggagctctacgc
-ctcctacgtttacctgtccatg
 
   File: hsferg1.coderet
 
@@ -386,19 +395,20 @@ Known bugs
 
 See also
 
-   Program name                       Description
-   backtranseq  Back translate a protein sequence
-   extractfeat  Extract features from a sequence
-   maskfeat     Mask off features of a sequence
-   plotorf      Plot potential open reading frames
-   prettyseq    Output sequence with translated ranges
-   remap        Display sequence with restriction sites, translation etc
-   showfeat     Show features of a sequence
-   showorf      Pretty output of DNA translations
-   showseq      Display a sequence with features, translation etc
-   sixpack      Display a DNA sequence with 6-frame translation and ORFs
-   transeq      Translate nucleic acid sequences
-   twofeat      Finds neighbouring pairs of features in sequences
+   Program name                        Description
+   backtranambig Back translate a protein sequence to ambiguous codons
+   backtranseq   Back translate a protein sequence
+   extractfeat   Extract features from a sequence
+   maskfeat      Mask off features of a sequence
+   plotorf       Plot potential open reading frames
+   prettyseq     Output sequence with translated ranges
+   remap         Display sequence with restriction sites, translation etc
+   showfeat      Show features of a sequence
+   showorf       Pretty output of DNA translations
+   showseq       Display a sequence with features, translation etc
+   sixpack       Display a DNA sequence with 6-frame translation and ORFs
+   transeq       Translate nucleic acid sequences
+   twofeat       Finds neighbouring pairs of features in sequences
 
 Author(s)
 

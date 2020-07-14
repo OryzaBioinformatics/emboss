@@ -81,26 +81,6 @@ Data file name:
 
 DIRECTORY: /homes/pmr/local/share/EMBOSS/data/
 
-  EBLOSUM30
-  EBLOSUM35
-  EBLOSUM40
-  EBLOSUM45
-  EBLOSUM50
-  EBLOSUM55
-  EBLOSUM60
-  EBLOSUM62
-  EBLOSUM62-12
-  EBLOSUM65
-  EBLOSUM70
-  EBLOSUM75
-  EBLOSUM80
-  EBLOSUM85
-  EBLOSUM90
-  EBLOSUMN
-  EDNAFULL
-  EDNAMAT
-  EGC.0
-  EGC.1
   EGC.10
   EGC.11
   EGC.12
@@ -108,18 +88,46 @@ DIRECTORY: /homes/pmr/local/share/EMBOSS/data/
   EGC.14
   EGC.15
   EGC.16
-  EGC.2
   EGC.21
   EGC.22
   EGC.23
+  EPAM10
+  EPAM20
+  EPAM30
+  EPAM40
+  EPAM50
+  EPAM60
+  EPAM70
+  EPAM80
+  EPAM90
+  Eenergy.dat
+  EDNAMAT
+  Etags.swiss
+  Matrices.proteinstructure
+  Emass.dat
+  Etags.gffprotein
+  EGC.txt
+  Ehth87.dat
+  Eaa_hydropathy.dat
+  Enakai.dat
+  EGC.0
+  EGC.1
+  EGC.2
   EGC.3
   EGC.4
   EGC.5
   EGC.6
   EGC.9
+  Eangles_tri.dat
+  Epprofile
+  Efreqs.dat
+  Emwfilter.dat
   ENUC.4.2
   ENUC.4.4
-  EPAM10
+  Etags.embl
+  Etags.gff3
+  Etags.gff
+  Etags.pir
   EPAM100
   EPAM110
   EPAM120
@@ -130,7 +138,6 @@ DIRECTORY: /homes/pmr/local/share/EMBOSS/data/
   EPAM170
   EPAM180
   EPAM190
-  EPAM20
   EPAM200
   EPAM210
   EPAM220
@@ -141,7 +148,6 @@ DIRECTORY: /homes/pmr/local/share/EMBOSS/data/
   EPAM270
   EPAM280
   EPAM290
-  EPAM30
   EPAM300
   EPAM310
   EPAM320
@@ -152,7 +158,6 @@ DIRECTORY: /homes/pmr/local/share/EMBOSS/data/
   EPAM370
   EPAM380
   EPAM390
-  EPAM40
   EPAM400
   EPAM410
   EPAM420
@@ -163,828 +168,62 @@ DIRECTORY: /homes/pmr/local/share/EMBOSS/data/
   EPAM470
   EPAM480
   EPAM490
-  EPAM50
   EPAM500
-  EPAM60
-  EPAM70
-  EPAM80
-  EPAM90
-  Eaa_acc_surface.dat
-  Eaa_hydropathy.dat
-  Eaa_properties.dat
-  Eamino.dat
-  Eangles.dat
-  Eangles_tri.dat
-  Eantigenic.dat
-  Ebases.iub
-  Edayhoff.freq
+  Ehet.dat
+  Evdw.dat
   Edna.melt
-  Eembl.ior
-  Eenergy.dat
-  Efeatures.embl
-  Efeatures.emboss
+  Eaa_properties.dat
+  Eamino.dat~
+  EBLOSUMN
+  Eangles.dat
+  Etcode.dat
+  Ehth.dat
+  Etags.emboss
+  Ebases.iub
   Efeatures.gff
   Efeatures.pir
-  Efeatures.protein
-  Efeatures.swiss
-  Efreqs.dat
-  Ehth.dat
-  Ehth87.dat
-  Ememe.dat
-  Enakai.dat
+  Etags.protein
+  Eaa_acc_surface.dat
   Epepcoil.dat
-  Epk.dat
-  Epprofile
+  Ememe.dat
+  Efeatures.gffprotein
   Eprior1.plib
-  Eprior30.plib
+  Efeatures.embl
+  Efeatures.gff3
+  EBLOSUM30
+  EBLOSUM35
+  EBLOSUM40
+  EBLOSUM45
+  EBLOSUM50
+  EBLOSUM55
+  EBLOSUM60
+  EBLOSUM62
+  EBLOSUM65
+  EBLOSUM70
+  EBLOSUM75
+  EBLOSUM80
+  EBLOSUM85
+  EBLOSUM90
+  EDNAFULL
+  Emassmod.dat
+  Efeatures.emboss
+  Matrices.nucleotide
+  Epk.dat
+  Efeatures.protein
   Erna.melt
+  Eamino.dat
+  EBLOSUM62-12
+  Eantigenic.dat
+  Efeatures.swiss
+  Eembl.ior
+  Eprior30.plib
   Esig.euk
   Esig.pro
-  Etags.embl
-  Etags.emboss
-  Etags.gff
-  Etags.pir
-  Etags.protein
-  Etags.swiss
-  Ewhite-wimley.dat
-  embossre.equ
-  Emwfilter.dat
-  Emass.dat
-  Emassmod.dat
-  Etcode.dat
-  Evdw.dat
-  Ehet.dat
   EGC.index
-  EGC.txt
-  Matrices.nucleotide
+  Ewhite-wimley.dat
   Matrices.protein
-  Matrices.proteinstructure
-
-
-DIRECTORY: /homes/pmr/local/share/EMBOSS/data/AAINDEX
-
-  dummyfile
-  andn920101
-  argp820101
-  argp820102
-  argp820103
-  begf750101
-  begf750102
-  begf750103
-  bhar880101
-  bigc670101
-  biov880101
-  biov880102
-  broc820101
-  broc820102
-  bulh740101
-  bulh740102
-  buna790101
-  buna790102
-  buna790103
-  bura740101
-  bura740102
-  cham810101
-  cham820101
-  cham820102
-  cham830101
-  cham830102
-  cham830103
-  cham830104
-  cham830105
-  cham830106
-  cham830107
-  cham830108
-  choc750101
-  choc760101
-  choc760102
-  choc760103
-  choc760104
-  chop780101
-  chop780201
-  chop780202
-  chop780203
-  chop780204
-  chop780205
-  chop780206
-  chop780207
-  chop780208
-  chop780209
-  chop780210
-  chop780211
-  chop780212
-  chop780213
-  chop780214
-  chop780215
-  chop780216
-  cidh920101
-  cidh920102
-  cidh920103
-  cidh920104
-  cidh920105
-  cohe430101
-  craj730101
-  craj730102
-  craj730103
-  dawd720101
-  daym780101
-  daym780201
-  desm900101
-  desm900102
-  eisd840101
-  eisd860101
-  eisd860102
-  eisd860103
-  fasg760101
-  fasg760102
-  fasg760103
-  fasg760104
-  fasg760105
-  fauj830101
-  fauj880101
-  fauj880102
-  fauj880103
-  fauj880104
-  fauj880105
-  fauj880106
-  fauj880107
-  fauj880108
-  fauj880109
-  fauj880110
-  fauj880111
-  fauj880112
-  fauj880113
-  fina770101
-  fina910101
-  fina910102
-  fina910103
-  fina910104
-  garj730101
-  geim800101
-  geim800102
-  geim800103
-  geim800104
-  geim800105
-  geim800106
-  geim800107
-  geim800108
-  geim800109
-  geim800110
-  geim800111
-  gold730101
-  gold730102
-  grar740101
-  grar740102
-  grar740103
-  guyh850101
-  hopa770101
-  hopt810101
-  hutj700101
-  hutj700102
-  hutj700103
-  isoy800101
-  isoy800102
-  isoy800103
-  isoy800104
-  isoy800105
-  isoy800106
-  isoy800107
-  isoy800108
-  janj780101
-  janj780102
-  janj780103
-  janj790101
-  janj790102
-  jond750101
-  jond750102
-  jond920101
-  jond920102
-  jukt750101
-  junj780101
-  kanm800101
-  kanm800102
-  kanm800103
-  kanm800104
-  karp850101
-  karp850102
-  karp850103
-  khag800101
-  klep840101
-  kriw710101
-  kriw790101
-  kriw790102
-  kriw790103
-  kytj820101
-  lawe840101
-  levm760101
-  levm760102
-  levm760103
-  levm760104
-  levm760105
-  levm760106
-  levm760107
-  levm780101
-  levm780102
-  levm780103
-  levm780104
-  levm780105
-  levm780106
-  lewp710101
-  lifs790101
-  lifs790102
-  lifs790103
-  manp780101
-  maxf760101
-  maxf760102
-  maxf760103
-  maxf760104
-  maxf760105
-  maxf760106
-  mcmt640101
-  meej800101
-  meej800102
-  meej810101
-  meej810102
-  meih800101
-  meih800102
-  meih800103
-  miys850101
-  nagk730101
-  nagk730102
-  nagk730103
-  nakh900101
-  nakh900102
-  nakh900103
-  nakh900104
-  nakh900105
-  nakh900106
-  nakh900107
-  nakh900108
-  nakh900109
-  nakh900110
-  nakh900111
-  nakh900112
-  nakh900113
-  nakh920101
-  nakh920102
-  nakh920103
-  nakh920104
-  nakh920105
-  nakh920106
-  nakh920107
-  nakh920108
-  nisk800101
-  nisk860101
-  nozy710101
-  oobm770101
-  oobm770102
-  oobm770103
-  oobm770104
-  oobm770105
-  oobm850101
-  oobm850102
-  oobm850103
-  oobm850104
-  oobm850105
-  palj810101
-  palj810102
-  palj810103
-  palj810104
-  palj810105
-  palj810106
-  palj810107
-  palj810108
-  palj810109
-  palj810110
-  palj810111
-  palj810112
-  palj810113
-  palj810114
-  palj810115
-  palj810116
-  parj860101
-  pliv810101
-  ponp800101
-  ponp800102
-  ponp800103
-  ponp800104
-  ponp800105
-  ponp800106
-  ponp800107
-  ponp800108
-  pram820101
-  pram820102
-  pram820103
-  pram900101
-  pram900102
-  pram900103
-  pram900104
-  ptio830101
-  ptio830102
-  qian880101
-  qian880102
-  qian880103
-  qian880104
-  qian880105
-  qian880106
-  qian880107
-  qian880108
-  qian880109
-  qian880110
-  qian880111
-  qian880112
-  qian880113
-  qian880114
-  qian880115
-  qian880116
-  qian880117
-  qian880118
-  qian880119
-  qian880120
-  qian880121
-  qian880122
-  qian880123
-  qian880124
-  qian880125
-  qian880126
-  qian880127
-  qian880128
-  qian880129
-  qian880130
-  qian880131
-  qian880132
-  qian880133
-  qian880134
-  qian880135
-  qian880136
-  qian880137
-  qian880138
-  qian880139
-  racs770101
-  racs770102
-  racs770103
-  racs820101
-  racs820102
-  racs820103
-  racs820104
-  racs820105
-  racs820106
-  racs820107
-  racs820108
-  racs820109
-  racs820110
-  racs820111
-  racs820112
-  racs820113
-  racs820114
-  rada880101
-  rada880102
-  rada880103
-  rada880104
-  rada880105
-  rada880106
-  rada880107
-  rada880108
-  ricj880101
-  ricj880102
-  ricj880103
-  ricj880104
-  ricj880105
-  ricj880106
-  ricj880107
-  ricj880108
-  ricj880109
-  ricj880110
-  ricj880111
-  ricj880112
-  ricj880113
-  ricj880114
-  ricj880115
-  ricj880116
-  ricj880117
-  robb760101
-  robb760102
-  robb760103
-  robb760104
-  robb760105
-  robb760106
-  robb760107
-  robb760108
-  robb760109
-  robb760110
-  robb760111
-  robb760112
-  robb760113
-  robb790101
-  rosg850101
-  rosg850102
-  rosm880101
-  rosm880102
-  rosm880103
-  simz760101
-  snep660101
-  snep660102
-  snep660103
-  snep660104
-  suem840101
-  suem840102
-  swer830101
-  tans770101
-  tans770102
-  tans770103
-  tans770104
-  tans770105
-  tans770106
-  tans770107
-  tans770108
-  tans770109
-  tans770110
-  vasm830101
-  vasm830102
-  vasm830103
-  velv850101
-  vent840101
-  vheg790101
-  warp780101
-  weba780101
-  werd780101
-  werd780102
-  werd780103
-  werd780104
-  woec730101
-  wolr810101
-  wols870101
-  wols870102
-  wols870103
-  yutk870101
-  yutk870102
-  yutk870103
-  yutk870104
-  zasb820101
-  zimj680101
-  zimj680102
-  zimj680103
-  zimj680104
-  zimj680105
-  aurr980101
-  aurr980102
-  aurr980103
-  aurr980104
-  aurr980105
-  aurr980106
-  aurr980107
-  aurr980108
-  aurr980109
-  aurr980110
-  aurr980111
-  aurr980112
-  aurr980113
-  aurr980114
-  aurr980115
-  aurr980116
-  aurr980117
-  aurr980118
-  aurr980119
-  aurr980120
-  onek900101
-  onek900102
-  vinm940101
-  vinm940102
-  vinm940103
-  vinm940104
-  munv940101
-  munv940102
-  munv940103
-  munv940104
-  munv940105
-  wimw960101
-  kimc930101
-  monm990101
-  blam930101
-  pars000101
-  pars000102
-  kums000101
-  kums000102
-  kums000103
-  kums000104
-  takk010101
-  fodm020101
-  nadh010101
-  nadh010102
-  nadh010103
-  nadh010104
-  nadh010105
-  nadh010106
-  nadh010107
-  monm990201
-  koep990101
-  koep990102
-  cedj970101
-  cedj970102
-  cedj970103
-  cedj970104
-  cedj970105
-  fuks010101
-  fuks010102
-  fuks010103
-  fuks010104
-  fuks010105
-  fuks010106
-  fuks010107
-  fuks010108
-  fuks010109
-  fuks010110
-  fuks010111
-  fuks010112
-  avbf000101
-  avbf000102
-  avbf000103
-  avbf000104
-  avbf000105
-  avbf000106
-  avbf000107
-  avbf000108
-  avbf000109
-  yanj020101
-  mits020101
-  tsaj990101
-  tsaj990102
-  cosi940101
-  ponp930101
-  wilm950101
-  wilm950102
-  wilm950103
-  wilm950104
-  kuhl950101
-  guod860101
-  jurd980101
-
-
-DIRECTORY: /homes/pmr/local/share/EMBOSS/data/CODONS
-
-  Eacc.cut
-  Eadenovirus5.cut
-  Eadenovirus7.cut
-  Eaidlav.cut
-  Cut.index
-  Eani.cut
-  Eani_h.cut
-  Eanidmit.cut
-  Easn.cut
-  Eath.cut
-  Eatu.cut
-  Eavi.cut
-  Ebja.cut
-  Ebly.cut
-  Ebme.cut
-  Ebmo.cut
-  Ebna.cut
-  Ebov.cut
-  Ebovsp.cut
-  Ebst.cut
-  Ebsu.cut
-  Ebsu_h.cut
-  Ecac.cut
-  Ecal.cut
-  Eccr.cut
-  Ecel.cut
-  Echi.cut
-  Echicken.cut
-  Echisp.cut
-  Echk.cut
-  Echmp.cut
-  Echnt.cut
-  Echos.cut
-  Echzm.cut
-  Echzmrubp.cut
-  Ecpx.cut
-  Ecre.cut
-  Ecrisp.cut
-  Ectr.cut
-  Edayhoff.cut
-  Eddi.cut
-  Eddi_h.cut
-  Edog.cut
-  Edro.cut
-  Edro_h.cut
-  Edrosophila.cut
-  Eeca.cut
-  Eeco.cut
-  Eeco_h.cut
-  Eacica.cut
-  Ef1.cut
-  Efish.cut
-  Efmdvpolyp.cut
-  Eham.cut
-  Ehha.cut
-  Ehin.cut
-  Ehma.cut
-  Ehum.cut
-  Eagrtu.cut
-  Ekla.cut
-  Ekpn.cut
-  Ella.cut
-  Emac.cut
-  Eanasp.cut
-  Emam_h.cut
-  Emixlg.cut
-  Earath.cut
-  Emsa.cut
-  Emse.cut
-  Emta.cut
-  Emtu.cut
-  Emus.cut
-  Emussp.cut
-  Emva.cut
-  Emze.cut
-  Emzecp.cut
-  Encr.cut
-  Eneu.cut
-  Engo.cut
-  Eazovi.cut
-  Epae.cut
-  Ebacme.cut
-  Epet.cut
-  Epfa.cut
-  Ephix174.cut
-  Ephv.cut
-  Ephy.cut
-  Ebacst.cut
-  Epolyomaa2.cut
-  Epombe.cut
-  Epombecai.cut
-  Epot.cut
-  Eppu.cut
-  Epse.cut
-  Epsy.cut
-  Epvu.cut
-  Erab.cut
-  Erabbit.cut
-  Erabsp.cut
-  Ebacsu.cut
-  Eratsp.cut
-  Erca.cut
-  Erhm.cut
-  Eric.cut
-  Erle.cut
-  Erme.cut
-  Ersp.cut
-  Esalsp.cut
-  Esau.cut
-  Esco.cut
-  Esgi.cut
-  Eshp.cut
-  Eshpsp.cut
-  Esli.cut
-  Eslm.cut
-  Esma.cut
-  Esmi.cut
-  Esmu.cut
-  Esoy.cut
-  Espi.cut
-  Espn.cut
-  Espo.cut
-  Espo_h.cut
-  Espu.cut
-  Esta.cut
-  Esty.cut
-  Esus.cut
-  Ebommo.cut
-  Esyhsp.cut
-  Esynsp.cut
-  Etbr.cut
-  Etcr.cut
-  Eter.cut
-  Etetsp.cut
-  Etob.cut
-  Etobcp.cut
-  Etom.cut
-  Etrb.cut
-  Evco.cut
-  Ewht.cut
-  Exel.cut
-  Exenopus.cut
-  Ebovin.cut
-  Eyeastcai.cut
-  Eyen.cut
-  Eysc.cut
-  Eysc_h.cut
-  Eyscmt.cut
-  Eysp.cut
-  Ezebrafish.cut
-  Ezma.cut
-  EAedes_atropalpus.cut
-  EDictyostelium_discoideum.cut
-  EAndroctonus_australis.cut
-  EAmblyomma_americanum.cut
-  EAedes_albopictus.cut
-  EAedes_aegypti.cut
-  EAphrodite_aculeata.cut
-  EAsellus_aquaticus.cut
-  EAcanthocheilonema_viteae.cut
-  EAstacus_astacus.cut
-  EAgelenopsis_aperta.cut
-  EAcrolepiopsis_assectella.cut
-  EAnadara_trapezia.cut
-  Ebacsu_high.cut
-  Ebpphx.cut
-  Ebraja.cut
-  Ebrana.cut
-  Ebrare.cut
-  Ecaeel.cut
-  Ecanal.cut
-  Ecanfa.cut
-  Ecaucr.cut
-  Echick.cut
-  Echlre.cut
-  Echltr.cut
-  Ecloab.cut
-  Ecrigr.cut
-  Ecyapa.cut
-  Edicdi.cut
-  Edicdi_high.cut
-  Edrome.cut
-  Edrome_high.cut
-  Eecoli.cut
-  Eecoli_high.cut
-  Eemeni.cut
-  Eemeni_mit.cut
-  Eemeni_high.cut
-  Eerwct.cut
-  Ehaein.cut
-  Ehalma.cut
-  Ehalsa.cut
-  Ehorvu.cut
-  Ehuman.cut
-  Eklepn.cut
-  Eklula.cut
-  Elacdl.cut
-  Elyces.cut
-  Emacfa.cut
-  Emaize.cut
-  Emaize_chl.cut
-  Emammal_high.cut
-  Emanse.cut
-  Emarpo_chl.cut
-  Emedsa.cut
-  Emetth.cut
-  Emouse.cut
-  Emyctu.cut
-  Eneigo.cut
-  Eneucr.cut
-  Eoncmy.cut
-  Eorysa.cut
-  Eorysa_chl.cut
-  Epea.cut
-  Epethy.cut
-  Ephavu.cut
-  Epig.cut
-  Eplafa.cut
-  Eprovu.cut
-  Epseae.cut
-  Epsepu.cut
-  Epsesm.cut
-  Erabit.cut
-  Erat.cut
-  Erhile.cut
-  Erhime.cut
-  Erhoca.cut
-  Erhosh.cut
-  Esalsa.cut
-  Esalty.cut
-  Eschma.cut
-  Eschpo.cut
-  Eschpo_cai.cut
-  Eschpo_high.cut
-  Eserma.cut
-  Esheep.cut
-  Esoltu.cut
-  Esoybn.cut
-  Espiol.cut
-  Estaau.cut
-  Estrco.cut
-  Estrmu.cut
-  Estrpn.cut
-  Estrpu.cut
-  Esyncy.cut
-  Esynco.cut
-  Etetth.cut
-  Etheth.cut
-  Etobac.cut
-  Etobac_chl.cut
-  Etrybr.cut
-  Etrycr.cut
-  Evibch.cut
-  Ewheat.cut
-  Exenla.cut
-  Eyeast.cut
-  Eyeast_cai.cut
-  Eyeast_high.cut
-  Eyeast_mit.cut
-  Eyeren.cut
-  Eyerpe.cut
-  Eoncsp.cut
-  Esv40.cut
+  embossre.equ
+  Edayhoff.freq
 
 
 DIRECTORY: /homes/pmr/local/share/EMBOSS/data/REBASE
@@ -993,6 +232,274 @@ DIRECTORY: /homes/pmr/local/share/EMBOSS/data/REBASE
   embossre.enz
   embossre.ref
   embossre.sup
+
+
+DIRECTORY: /homes/pmr/local/share/EMBOSS/data/AAINDEX
+
+  dummyfile
+
+
+DIRECTORY: /homes/pmr/local/share/EMBOSS/data/CODONS
+
+  EAedes_aegypti.cut
+  Ecyapa.cut
+  Eerwct.cut
+  Ehuman.cut
+  Eratsp.cut
+  Esta.cut
+  Ecaeel.cut
+  EAedes_atropalpus.cut
+  Estaau.cut
+  Edrome_high.cut
+  Echmp.cut
+  Eyerpe.cut
+  Ecrisp.cut
+  Efish.cut
+  Esty.cut
+  Ehalsa.cut
+  Emyctu.cut
+  Esus.cut
+  Echnt.cut
+  Edicdi.cut
+  Echos.cut
+  EAmblyomma_americanum.cut
+  Encr.cut
+  Epolyomaa2.cut
+  EAphrodite_aculeata.cut
+  Ebommo.cut
+  Eysc_h.cut
+  Eschpo_high.cut
+  Etob.cut
+  Eneu.cut
+  Etom.cut
+  Ephix174.cut
+  Emedsa.cut
+  Eanidmit.cut
+  Emsa.cut
+  Engo.cut
+  Emse.cut
+  Epethy.cut
+  Esynsp.cut
+  Emta.cut
+  Etrb.cut
+  Eani_h.cut
+  Etheth.cut
+  Echicken.cut
+  Emtu.cut
+  Emva.cut
+  Ebpphx.cut
+  Eschpo_cai.cut
+  Emus.cut
+  Eacc.cut
+  Eorysa.cut
+  Eham.cut
+  Ebraja.cut
+  Eshpsp.cut
+  Emanse.cut
+  Emaize_chl.cut
+  Edro_h.cut
+  Echzm.cut
+  Echzmrubp.cut
+  Emze.cut
+  Evibch.cut
+  Epombecai.cut
+  EAstacus_astacus.cut
+  Ebrana.cut
+  Erhoca.cut
+  Eemeni_high.cut
+  Evco.cut
+  Ehha.cut
+  Eanasp.cut
+  Ebacme.cut
+  Esyhsp.cut
+  Erabit.cut
+  Eneigo.cut
+  Ecanal.cut
+  Ehin.cut
+  Elyces.cut
+  Eklepn.cut
+  Ebrare.cut
+  Eyscmt.cut
+  Epseae.cut
+  Eemeni_mit.cut
+  Ehma.cut
+  Eani.cut
+  Ecanfa.cut
+  Emixlg.cut
+  Ecaucr.cut
+  Epae.cut
+  Ephavu.cut
+  Ebovin.cut
+  Ehorvu.cut
+  Ebacst.cut
+  Ebacsu.cut
+  Echlre.cut
+  Epea.cut
+  Edrome.cut
+  Esheep.cut
+  Erabsp.cut
+  Epfa.cut
+  Esalsa.cut
+  Easn.cut
+  Ebacsu_high.cut
+  Eecoli_high.cut
+  Eath.cut
+  Epet.cut
+  Ebja.cut
+  Emacfa.cut
+  EAcanthocheilonema_viteae.cut
+  Esalsp.cut
+  Eyeast_cai.cut
+  Eatu.cut
+  Echltr.cut
+  Eoncmy.cut
+  Eavi.cut
+  Ecac.cut
+  Eemeni.cut
+  Esalty.cut
+  Ehum.cut
+  Eprovu.cut
+  Epig.cut
+  Esoybn.cut
+  Ecal.cut
+  Ephv.cut
+  Ephy.cut
+  Ebme.cut
+  Erhosh.cut
+  Ebna.cut
+  Ewht.cut
+  Ebly.cut
+  Ebmo.cut
+  Ef1.cut
+  Emetth.cut
+  EAnadara_trapezia.cut
+  Ebovsp.cut
+  Eccr.cut
+  Erhile.cut
+  Eplafa.cut
+  Erhime.cut
+  Ebov.cut
+  Ecel.cut
+  Eoncsp.cut
+  Epsepu.cut
+  Estrco.cut
+  Echi.cut
+  Epot.cut
+  Echk.cut
+  Epsesm.cut
+  Etetsp.cut
+  Eklula.cut
+  Etetth.cut
+  Ebsu_h.cut
+  Ebst.cut
+  Ebsu.cut
+  Emaize.cut
+  Eppu.cut
+  Exel.cut
+  Emouse.cut
+  Eagrtu.cut
+  Epse.cut
+  Eserma.cut
+  Eazovi.cut
+  Epsy.cut
+  Ewheat.cut
+  Eyeast.cut
+  Eacica.cut
+  Erab.cut
+  Eddi.cut
+  EAedes_albopictus.cut
+  Espo_h.cut
+  Epvu.cut
+  Etobac.cut
+  Erat.cut
+  Erca.cut
+  Eaidlav.cut
+  Ezebrafish.cut
+  Ecpx.cut
+  Ecre.cut
+  Cut.index
+  Estrmu.cut
+  Efmdvpolyp.cut
+  Etobcp.cut
+  Eyeastcai.cut
+  Estrpn.cut
+  Eyen.cut
+  Ectr.cut
+  Estrpu.cut
+  Emzecp.cut
+  Exenopus.cut
+  Edrosophila.cut
+  Eeco_h.cut
+  Eorysa_chl.cut
+  Erhm.cut
+  Eric.cut
+  Ekla.cut
+  Earath.cut
+  Eeca.cut
+  Echick.cut
+  Eeco.cut
+  Erle.cut
+  Edog.cut
+  Emam_h.cut
+  Eyeast_high.cut
+  Erme.cut
+  Esau.cut
+  Esoltu.cut
+  Emammal_high.cut
+  Esco.cut
+  Ekpn.cut
+  Edro.cut
+  Eadenovirus5.cut
+  Exenla.cut
+  Eadenovirus7.cut
+  Etobac_chl.cut
+  Elacdl.cut
+  Esgi.cut
+  EDictyostelium_discoideum.cut
+  Erabbit.cut
+  Eddi_h.cut
+  Eshp.cut
+  Ersp.cut
+  Eysc.cut
+  Ella.cut
+  Ecrigr.cut
+  Emac.cut
+  Emarpo_chl.cut
+  Eecoli.cut
+  Edicdi_high.cut
+  Eysp.cut
+  Esv40.cut
+  Eyeren.cut
+  Edayhoff.cut
+  Etrybr.cut
+  Ehaein.cut
+  Etrycr.cut
+  Esli.cut
+  Esynco.cut
+  Esma.cut
+  Eslm.cut
+  Eschma.cut
+  Esmi.cut
+  Esyncy.cut
+  Ezma.cut
+  Etbr.cut
+  Esmu.cut
+  Etcr.cut
+  Ehalma.cut
+  Eneucr.cut
+  Echisp.cut
+  Espi.cut
+  Emussp.cut
+  Ecloab.cut
+  Epombe.cut
+  Espiol.cut
+  Esoy.cut
+  Espn.cut
+  Espo.cut
+  Eter.cut
+  Eyeast_mit.cut
+  Eschpo.cut
+  Espu.cut
 
    Example 3
 
@@ -1038,19 +545,20 @@ Command line arguments
                                   or searched for in all of the directories
                                   that EMBOSS programs search when looking for
                                   a data file. The name of the file is not
-                                  altered when it is fetched.
+                                  altered when it is fetched. (Any string is
+                                  accepted)
 
    Additional (Optional) qualifiers (* if not always prompted):
    -showall            toggle     Show all potential EMBOSS data files
 *  -fetch              boolean    Fetch a data file
-   -outfile            outfile    This specifies the name of the file that the
-                                  results of a search for a file in the
-                                  various data directories is written to. By
-                                  default these results are written to the
+   -outfile            outfile    [stdout] This specifies the name of the file
+                                  that the results of a search for a file in
+                                  the various data directories is written to.
+                                  By default these results are written to the
                                   screen (stdout).
 
    Advanced (Unprompted) qualifiers:
-   -reject             selection  This specifies the names of the
+   -reject             selection  [3, 5, 6] This specifies the names of the
                                   sub-directories of the EMBOSS data directory
                                   that should be ignored when displaying data
                                   directories.
@@ -1073,27 +581,7 @@ Command line arguments
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
-   -die                boolean    Report deaths
-
-
-   Standard (Mandatory) qualifiers Allowed values Default
-   [-filename]
-   (Parameter 1) This specifies the name of the file that should be
-   fetched into the current directory or searched for in all of the
-   directories that EMBOSS programs search when looking for a data file.
-   The name of the file is not altered when it is fetched. Any string is
-   accepted An empty string is accepted
-   Additional (Optional) qualifiers Allowed values Default
-   -showall Show all potential EMBOSS data files Toggle value Yes/No No
-   -fetch Fetch a data file Boolean value Yes/No No
-   -outfile This specifies the name of the file that the results of a
-   search for a file in the various data directories is written to. By
-   default these results are written to the screen (stdout). Output file
-   stdout
-   Advanced (Unprompted) qualifiers Allowed values Default
-   -reject This specifies the names of the sub-directories of the EMBOSS
-   data directory that should be ignored when displaying data
-   directories. Choose from selection list of values 3, 5, 6
+   -die                boolean    Report dying program messages
 
 Input file format
 

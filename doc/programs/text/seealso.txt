@@ -54,11 +54,12 @@ wordmatch        Finds all exact matches of a given size between 2 sequences
 Command line arguments
 
    Standard (Mandatory) qualifiers:
-  [-search]            string     Enter the name of an EMBOSS program
+  [-search]            string     Enter the name of an EMBOSS program (Any
+                                  string of at least 1 characters)
 
-   Additional (Optional) qualifiers (* if not always prompted):
-   -explode            boolean    The groups that EMBOSS applications belong
-                                  to have two forms, exploded and not
+   Additional (Optional) qualifiers:
+   -explode            boolean    [N] The groups that EMBOSS applications
+                                  belong to have two forms, exploded and not
                                   exploded. The exploded group names are more
                                   numerous and often vaguely phrased than the
                                   non-exploded ones. The exploded names are
@@ -75,51 +76,28 @@ Command line arguments
                                   programs reported as sharing a similar
                                   function than you will if you specify that
                                   you wish to use non-exploded names
-   -outfile            outfile    Output file name
-   -html               toggle     If you are sending the output to a file,
+   -outfile            outfile    [stdout] Output file name
+   -html               toggle     [N] If you are sending the output to a file,
                                   this will format it for displaying as a
                                   table in a WWW document.
-*  -prelink            string     If you are outputting to a file in HTML
-                                  format, you can make the program names into
-                                  hyper-links by setting this to be the first
-                                  half of the URL.
-                                  For example, if you wish the program name to
-                                  be a hyperlink to the URL:
-                                  http://emboss.sourceforge.net/apps/
-                                  programname.html
-                                  then if you enter
-                                  http://emboss.sourceforge.net/apps/ here,
-                                  then the first half of the URL before the
-                                  program name will be set.
-*  -postlink           string     If you are outputting to a file in HTML
-                                  format, you can make the program names into
-                                  hyper-links by setting this to be the second
-                                  half of the URL.
-                                  For example, if you wish the program name to
-                                  be a hyperlink to the URL:
-                                  http://emboss.sourceforge.net/apps/
-                                  programname.html
-                                  then if you enter '.html' here, the second
-                                  half of the URL after the program name will
-                                  be set.
-   -groups             boolean    If you use this option, then only the group
-                                  names will output to the file
+   -groups             boolean    [N] If you use this option, then only the
+                                  group names will output to the file
 
    Advanced (Unprompted) qualifiers:
-   -[no]emboss         boolean    If you use this option then EMBOSS program
-                                  documentation will be searched. If this
-                                  option is set to be false, then only the
-                                  EMBASSY programs will be searched (if the
-                                  -embassy option is true). EMBASSY programs
-                                  are not strictly part of EMBOSS, but use the
-                                  same code libraries and share the same look
-                                  and feel, but are generally developed by
-                                  people who wish the programs to be outside
-                                  of the GNU Public Licence scheme
-   -[no]embassy        boolean    If you use this option then EMBASSY program
-                                  documentation will be searched. If this
-                                  option is set to be false, then only the
-                                  EMBOSS programs will be searched (if the
+   -[no]emboss         boolean    [Y] If you use this option then EMBOSS
+                                  program documentation will be searched. If
+                                  this option is set to be false, then only
+                                  the EMBASSY programs will be searched (if
+                                  the -embassy option is true). EMBASSY
+                                  programs are not strictly part of EMBOSS,
+                                  but use the same code libraries and share
+                                  the same look and feel, but are generally
+                                  developed by people who wish the programs to
+                                  be outside of the GNU Public Licence scheme
+   -[no]embassy        boolean    [Y] If you use this option then EMBASSY
+                                  program documentation will be searched. If
+                                  this option is set to be false, then only
+                                  the EMBOSS programs will be searched (if the
                                   -emboss option is true). EMBASSY programs
                                   are not strictly part of EMBOSS, but use the
                                   same code libraries and share the same look
@@ -133,10 +111,11 @@ Command line arguments
                                   libraries and share the same look and feel,
                                   but are generally developed by people who
                                   wish the programs to be outside of the GNU
-                                  Public Licence scheme
-   -colon              boolean    The groups that EMBOSS applications belong
-                                  to have up to two levels, for example the
-                                  primary group 'ALIGNMENT' has several
+                                  Public Licence scheme (Any string is
+                                  accepted)
+   -colon              boolean    [N] The groups that EMBOSS applications
+                                  belong to have up to two levels, for example
+                                  the primary group 'ALIGNMENT' has several
                                   sub-groups, or second-level groups, e.g.:
                                   CONSENSUS, DIFFERENCES, DOT PLOTS, GLOBAL,
                                   LOCAL, MULTIPLE. To aid programs that parse
@@ -163,73 +142,7 @@ Command line arguments
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
-   -die                boolean    Report deaths
-
-
-   Standard (Mandatory) qualifiers Allowed values Default
-   [-search]
-   (Parameter 1) Enter the name of an EMBOSS program A string of at least
-   1 characters Required
-   Additional (Optional) qualifiers Allowed values Default
-   -explode The groups that EMBOSS applications belong to have two forms,
-   exploded and not exploded. The exploded group names are more numerous
-   and often vaguely phrased than the non-exploded ones. The exploded
-   names are formed from definitions of the group names that start like
-   NAME1:NAME2 and which are then expanded into many combinations of the
-   names as: 'NAME1', 'NAME2', 'NAME1 NAME2', NAME2 NAME1'. The
-   non-expanded names are simply like: 'NAME1 NAME2'. Using expanded
-   group names will find many more programs which share at least some of
-   the expanded names than using the non-exploded names and so you will
-   get more programs reported as sharing a similar function than you will
-   if you specify that you wish to use non-exploded names Boolean value
-   Yes/No No
-   -outfile Output file name Output file stdout
-   -html If you are sending the output to a file, this will format it for
-   displaying as a table in a WWW document. Toggle value Yes/No No
-   -prelink If you are outputting to a file in HTML format, you can make
-   the program names into hyper-links by setting this to be the first
-   half of the URL. For example, if you wish the program name to be a
-   hyperlink to the URL: http://emboss.sourceforge.net/apps/
-   programname.html then if you enter http://emboss.sourceforge.net/apps/
-   here, then the first half of the URL before the program name will be
-   set. Any string is accepted An empty string is accepted
-   -postlink If you are outputting to a file in HTML format, you can make
-   the program names into hyper-links by setting this to be the second
-   half of the URL. For example, if you wish the program name to be a
-   hyperlink to the URL: http://emboss.sourceforge.net/apps/
-   programname.html then if you enter '.html' here, the second half of
-   the URL after the program name will be set. Any string is accepted An
-   empty string is accepted
-   -groups If you use this option, then only the group names will output
-   to the file Boolean value Yes/No No
-   Advanced (Unprompted) qualifiers Allowed values Default
-   -[no]emboss If you use this option then EMBOSS program documentation
-   will be searched. If this option is set to be false, then only the
-   EMBASSY programs will be searched (if the -embassy option is true).
-   EMBASSY programs are not strictly part of EMBOSS, but use the same
-   code libraries and share the same look and feel, but are generally
-   developed by people who wish the programs to be outside of the GNU
-   Public Licence scheme Boolean value Yes/No Yes
-   -[no]embassy If you use this option then EMBASSY program documentation
-   will be searched. If this option is set to be false, then only the
-   EMBOSS programs will be searched (if the -emboss option is true).
-   EMBASSY programs are not strictly part of EMBOSS, but use the same
-   code libraries and share the same look and feel, but are generally
-   developed by people who wish the programs to be outside of the GNU
-   Public Licence scheme Boolean value Yes/No Yes
-   -showembassy If you use this option then this EMBASSY package program
-   documentation will be searched. EMBASSY programs are not strictly part
-   of EMBOSS, but use the same code libraries and share the same look and
-   feel, but are generally developed by people who wish the programs to
-   be outside of the GNU Public Licence scheme Any string is accepted An
-   empty string is accepted
-   -colon The groups that EMBOSS applications belong to have up to two
-   levels, for example the primary group 'ALIGNMENT' has several
-   sub-groups, or second-level groups, e.g.: CONSENSUS, DIFFERENCES, DOT
-   PLOTS, GLOBAL, LOCAL, MULTIPLE. To aid programs that parse the output
-   of seealso that require the names of these subgroups, a colon ':' will
-   be placed between the first and second level of the group name if this
-   option is true. Boolean value Yes/No No
+   -die                boolean    Report dying program messages
 
 Input file format
 

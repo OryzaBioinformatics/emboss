@@ -23,7 +23,7 @@ Usage
 % codcopy 
 Reads and writes a codon usage table
 Codon usage file: Eecoli.cut
-Output codon usage file [eecoli.cut]: 
+Codon usage output file [eecoli.cut]: 
 
    Go to the output files for this example
 
@@ -31,7 +31,7 @@ Command line arguments
 
    Standard (Mandatory) qualifiers:
   [-infile]            codon      Codon usage table name
-  [-outfile]           outcodon   (no help text) outcodon value
+  [-outfile]           outcodon   Codon usage table name
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers: (none)
@@ -42,7 +42,7 @@ Command line arguments
 
    "-outfile" associated qualifiers
    -odirectory2        string     Output directory
-   -oformat2           string     Output format specific to this output type
+   -oformat2           string     Output format specific to this data type
 
    General qualifiers:
    -auto               boolean    Turn off prompts
@@ -57,19 +57,7 @@ Command line arguments
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
-   -die                boolean    Report deaths
-
-
-   Standard (Mandatory) qualifiers Allowed values Default
-   [-infile]
-   (Parameter 1) Codon usage table name Codon usage file in EMBOSS data
-   path
-   [-outfile]
-   (Parameter 2) (no help text) outcodon value Codon usage file
-   Additional (Optional) qualifiers Allowed values Default
-   (none)
-   Advanced (Unprompted) qualifiers Allowed values Default
-   (none)
+   -die                boolean    Report dying program messages
 
 Input file format
 
@@ -199,6 +187,8 @@ See also
    extractfeat  Extract features from a sequence
    extractseq   Extract regions from a sequence
    listor       Write a list file of the logical OR of two sets of sequences
+   makenucseq   Creates random nucleotide sequences
+   makeprotseq  Creates random protein sequences
    maskfeat     Mask off features of a sequence
    maskseq      Mask off regions of a sequence
    newseq       Type in a short new sequence

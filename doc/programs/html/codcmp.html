@@ -13,7 +13,6 @@
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
-
 codcmp
 </font></b>
 </td></tr>
@@ -22,12 +21,10 @@ codcmp
 <p>
 
 
-
 <H2>
     Function
 </H2>
 Codon usage table comparison
-
 <H2>
     Description
 </H2>
@@ -135,7 +132,6 @@ Output file [eecoli.codcmp]: <b></b>
 <p>
 <a href="#output.1">Go to the output files for this example</a><p><p>
 
-
 <H2>
     Command line arguments
 </H2>
@@ -145,7 +141,7 @@ Output file [eecoli.codcmp]: <b></b>
    Standard (Mandatory) qualifiers:
   [-first]             codon      First codon usage file
   [-second]            codon      Second codon usage file for comparison
-  [-outfile]           outfile    Output file name
+  [-outfile]           outfile    [*.codcmp] Output file name
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers: (none)
@@ -173,8 +169,7 @@ Output file [eecoli.codcmp]: <b></b>
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
-   -die                boolean    Report deaths
-
+   -die                boolean    Report dying program messages
 
 </pre>
 </td></tr></table>
@@ -204,7 +199,7 @@ Output file [eecoli.codcmp]: <b></b>
 <td>[-outfile]<br>(Parameter 3)</td>
 <td>Output file name</td>
 <td>Output file</td>
-<td><i>&lt;sequence&gt;</i>.codcmp</td>
+<td>&nbsp;</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
@@ -229,7 +224,6 @@ Output file [eecoli.codcmp]: <b></b>
 
 </table>
 
-
 <H2>
     Input file format
 </H2>
@@ -238,7 +232,6 @@ It reads in the Codon Usage Tables - these are available as EMBOSS data files.
 See below for details.
 
 <p>
-
 
 
 
@@ -262,7 +255,6 @@ Mean Difference         = 0.149
 Codons not appearing   = 0
 </pre>
 </td></tr></table><p>
-
 
 
 <H2>
@@ -318,7 +310,6 @@ The directories are searched in the following order:
 </ul>
 <p>
 
-
 <H2>
     Notes
 </H2>
@@ -363,12 +354,27 @@ None.
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
-<tr><td><a href="cai.html">cai</a></td><td>CAI codon adaptation index</td></tr>
-<tr><td><a href="chips.html">chips</a></td><td>Codon usage statistics</td></tr>
-<tr><td><a href="cusp.html">cusp</a></td><td>Create a codon usage table</td></tr>
-<tr><td><a href="syco.html">syco</a></td><td>Synonymous codon usage Gribskov statistic plot</td></tr>
-</table>
+<tr>
+<td><a href="cai.html">cai</a></td>
+<td>CAI codon adaptation index</td>
+</tr>
 
+<tr>
+<td><a href="chips.html">chips</a></td>
+<td>Codon usage statistics</td>
+</tr>
+
+<tr>
+<td><a href="cusp.html">cusp</a></td>
+<td>Create a codon usage table</td>
+</tr>
+
+<tr>
+<td><a href="syco.html">syco</a></td>
+<td>Synonymous codon usage Gribskov statistic plot</td>
+</tr>
+
+</table>
 <H2>
     Author(s)
 </H2>
@@ -377,13 +383,11 @@ Alan Bleasby (ajb&nbsp;&copy;&nbsp;ebi.ac.uk)
 <br>
 European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
 
-
 <p>
 
 Some more statistics were added by 
 David Martin (dmartin&nbsp;&copy;&nbsp;rfcgr.mrc.ac.uk)
 <br>
-
 
 <H2>
     History
@@ -393,18 +397,15 @@ Completed 9 Sept 1999
 <br>
 20 Oct 2000 - David Martin added a couple more statistics to the output.
 
-
 <H2>
     Target users
 </H2>
 This program is intended to be used by everyone and everything, from naive users to embedded scripts.
 
-
 <H2>
     Comments
 </H2>
 None
-
 
 </BODY>
 </HTML>

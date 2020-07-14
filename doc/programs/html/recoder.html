@@ -12,7 +12,6 @@
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
-
 recoder
 </font></b>
 </td></tr>
@@ -21,12 +20,10 @@ recoder
 <p>
 
 
-
 <H2>
     Function
 </H2>
 Remove restriction sites but maintain same translation
-
 <H2>
     Description
 </H2>
@@ -61,14 +58,13 @@ The output for 'recoder' is similar to the format used by 'silent'.
 
 % <b>recoder </b>
 Remove restriction sites but maintain same translation
-Input sequence: <b>tembl:hsfau</b>
+Input nucleotide sequence: <b>tembl:hsfau</b>
 Comma separated enzyme list [all]: <b>EcoRII</b>
 Output report [hsfau.recoder]: <b></b>
 
 </pre></td></tr></table><p>
 <p>
 <a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
-
 
 
 
@@ -79,58 +75,59 @@ Output report [hsfau.recoder]: <b></b>
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
    Standard (Mandatory) qualifiers:
-  [-sequence]          sequence   Sequence USA
-   -enzymes            string     Comma separated enzyme list
+  [-sequence]          sequence   Nucleotide sequence filename and optional
+                                  format, or reference (input USA)
+   -enzymes            string     [all] Comma separated enzyme list (Any
+                                  string is accepted)
   [-outfile]           report     Output report file name
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers:
-   -sshow              boolean    Display untranslated sequence
-   -tshow              boolean    Display translated sequence
+   -sshow              boolean    [N] Display untranslated sequence
+   -tshow              boolean    [N] Display translated sequence
 
    Associated qualifiers:
 
    "-sequence" associated qualifiers
-   -sbegin1             integer    Start of the sequence to be used
-   -send1               integer    End of the sequence to be used
-   -sreverse1           boolean    Reverse (if DNA)
-   -sask1               boolean    Ask for begin/end/reverse
-   -snucleotide1        boolean    Sequence is nucleotide
-   -sprotein1           boolean    Sequence is protein
-   -slower1             boolean    Make lower case
-   -supper1             boolean    Make upper case
-   -sformat1            string     Input sequence format
-   -sdbname1            string     Database name
-   -sid1                string     Entryname
-   -ufo1                string     UFO features
-   -fformat1            string     Features format
-   -fopenfile1          string     Features file name
+   -sbegin1            integer    Start of the sequence to be used
+   -send1              integer    End of the sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
 
    "-outfile" associated qualifiers
-   -rformat2            string     Report format
-   -rname2              string     Base file name
-   -rextension2         string     File name extension
-   -rdirectory2         string     Output directory
-   -raccshow2           boolean    Show accession number in the report
-   -rdesshow2           boolean    Show description in the report
-   -rscoreshow2         boolean    Show the score in the report
-   -rusashow2           boolean    Show the full USA in the report
+   -rformat2           string     Report format
+   -rname2             string     Base file name
+   -rextension2        string     File name extension
+   -rdirectory2        string     Output directory
+   -raccshow2          boolean    Show accession number in the report
+   -rdesshow2          boolean    Show description in the report
+   -rscoreshow2        boolean    Show the score in the report
+   -rusashow2          boolean    Show the full USA in the report
 
    General qualifiers:
-   -auto                boolean    Turn off prompts
-   -stdout              boolean    Write standard output
-   -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for standard and additional values
-   -debug               boolean    Write debug output to program.dbg
-   -verbose             boolean    Report some/full command line options
-   -help                boolean    Report command line options. More
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
-   -warning             boolean    Report warnings
-   -error               boolean    Report errors
-   -fatal               boolean    Report fatal errors
-   -die                 boolean    Report deaths
-
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
 
 </pre>
 </td></tr></table>
@@ -144,7 +141,7 @@ Output report [hsfau.recoder]: <b></b>
 
 <tr>
 <td>[-sequence]<br>(Parameter 1)</td>
-<td>Sequence USA</td>
+<td>Nucleotide sequence filename and optional format, or reference (input USA)</td>
 <td>Readable sequence</td>
 <td><b>Required</b></td>
 </tr>
@@ -194,7 +191,6 @@ Output report [hsfau.recoder]: <b></b>
 </tr>
 
 </table>
-
 
 <H2>
     Input file format
@@ -293,7 +289,6 @@ SQ   Sequence 518 BP; 125 A; 139 C; 148 G; 106 T; 0 other;
 
 
 
-
 <H2>
     Output file format
 </H2>
@@ -306,7 +301,10 @@ SQ   Sequence 518 BP; 125 A; 139 C; 148 G; 106 T; 0 other;
 <pre>
 ########################################
 # Program: recoder
-# Rundate: Fri Jul 15 2005 12:00:00
+# Rundate: Sat Jul 15 2006 12:00:00
+# Commandline: recoder
+#    -sequence tembl:hsfau
+#    -enzymes EcoRII
 # Report_format: table
 # Report_file: hsfau.recoder
 ########################################
@@ -329,14 +327,14 @@ SQ   Sequence 518 BP; 125 A; 139 C; 148 G; 106 T; 0 other;
 #=======================================
 
   Start     End Dir    EnzymeName RS-Pattern Base-Posn    AAs Mutation
-     77      81 .      EcoRII     CCWGG             78    P.P     C-&gt;T
      77      81 .      EcoRII     CCWGG             78    P.P     C-&gt;G
      77      81 .      EcoRII     CCWGG             78    P.P     C-&gt;A
+     77      81 .      EcoRII     CCWGG             78    P.P     C-&gt;T
      77      81 .      EcoRII     CCWGG             79    R.R     A-&gt;C
      77      81 .      EcoRII     CCWGG             81    R.R     G-&gt;A
-    107     111 .      EcoRII     CCWGG            108    A.A     C-&gt;T
     107     111 .      EcoRII     CCWGG            108    A.A     C-&gt;G
     107     111 .      EcoRII     CCWGG            108    A.A     C-&gt;A
+    107     111 .      EcoRII     CCWGG            108    A.A     C-&gt;T
     107     111 .      EcoRII     CCWGG            109    R.R     A-&gt;C
     107     111 .      EcoRII     CCWGG            111    R.R     G-&gt;A
     182     186 .      EcoRII     CCWGG            183    S.S     C-&gt;G
@@ -351,24 +349,23 @@ SQ   Sequence 518 BP; 125 A; 139 C; 148 G; 106 T; 0 other;
     293     297 .      EcoRII     CCWGG            294    P.P     C-&gt;G
     293     297 .      EcoRII     CCWGG            294    P.P     C-&gt;A
     293     297 .      EcoRII     CCWGG            294    P.P     C-&gt;T
-     81      77 Rev    EcoRII     CCWGG             79    P.P     T-&gt;C
      81      77 Rev    EcoRII     CCWGG             79    P.P     T-&gt;G
-    111     107 Rev    EcoRII     CCWGG            109    P.P     T-&gt;C
+     81      77 Rev    EcoRII     CCWGG             79    P.P     T-&gt;C
     111     107 Rev    EcoRII     CCWGG            109    P.P     T-&gt;G
+    111     107 Rev    EcoRII     CCWGG            109    P.P     T-&gt;C
     186     182 Rev    EcoRII     CCWGG            184    P.P     A-&gt;G
     186     182 Rev    EcoRII     CCWGG            184    P.P     A-&gt;C
-    201     197 Rev    EcoRII     CCWGG            199    P.P     A-&gt;C
     201     197 Rev    EcoRII     CCWGG            199    P.P     A-&gt;G
-    252     248 Rev    EcoRII     CCWGG            250    P.P     A-&gt;C
+    201     197 Rev    EcoRII     CCWGG            199    P.P     A-&gt;C
     252     248 Rev    EcoRII     CCWGG            250    P.P     A-&gt;G
-    297     293 Rev    EcoRII     CCWGG            295    P.P     A-&gt;C
+    252     248 Rev    EcoRII     CCWGG            250    P.P     A-&gt;C
     297     293 Rev    EcoRII     CCWGG            295    P.P     A-&gt;G
+    297     293 Rev    EcoRII     CCWGG            295    P.P     A-&gt;C
 
 #---------------------------------------
 #---------------------------------------
 </pre>
 </td></tr></table><p>
-
 
 
 
@@ -415,7 +412,6 @@ The directories are searched in the following order:
    <li> ~/.embossdata
 </ul>
 <p>
-
 <p>
 The EMBOSS REBASE restriction enzyme data files are stored iin
 directory 'data/REBASE/*' under the EMBOSS installation directory.
@@ -460,7 +456,6 @@ is the preferred (prototype) name.
 	 
 	          
 
-
 <H2>
     Notes
 </H2>
@@ -500,14 +495,37 @@ None.
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
-<tr><td><a href="redata.html">redata</a></td><td>Search REBASE for enzyme name, references, suppliers etc</td></tr>
-<tr><td><a href="remap.html">remap</a></td><td>Display sequence with restriction sites, translation etc</td></tr>
-<tr><td><a href="restover.html">restover</a></td><td>Find restriction enzymes producing specific overhang</td></tr>
-<tr><td><a href="restrict.html">restrict</a></td><td>Finds restriction enzyme cleavage sites</td></tr>
-<tr><td><a href="showseq.html">showseq</a></td><td>Display a sequence with features, translation etc</td></tr>
-<tr><td><a href="silent.html">silent</a></td><td>Silent mutation restriction enzyme scan</td></tr>
-</table>
+<tr>
+<td><a href="redata.html">redata</a></td>
+<td>Search REBASE for enzyme name, references, suppliers etc</td>
+</tr>
 
+<tr>
+<td><a href="remap.html">remap</a></td>
+<td>Display sequence with restriction sites, translation etc</td>
+</tr>
+
+<tr>
+<td><a href="restover.html">restover</a></td>
+<td>Find restriction enzymes producing specific overhang</td>
+</tr>
+
+<tr>
+<td><a href="restrict.html">restrict</a></td>
+<td>Finds restriction enzyme cleavage sites</td>
+</tr>
+
+<tr>
+<td><a href="showseq.html">showseq</a></td>
+<td>Display a sequence with features, translation etc</td>
+</tr>
+
+<tr>
+<td><a href="silent.html">silent</a></td>
+<td>Silent mutation restriction enzyme scan</td>
+</tr>
+
+</table>
 <p>
 
 <b>silent</b> does the opposite to <b>recoder</b>.  <b>silent</b> finds
@@ -525,7 +543,6 @@ Tim Carver (tcarver&nbsp;&copy;&nbsp;rfcgr.mrc.ac.uk)
 MRC Rosalind Franklin Centre for Genomics Research
 Wellcome Trust Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
 
-
 <H2>
     History
 </H2>
@@ -538,19 +555,16 @@ clashed with a common UNIX print utility:
 <br>
 <A HREF="http://www.iro.umontreal.ca/contrib/recode/HTML/">http://www.iro.umontreal.ca/contrib/recode/HTML/</a>
 
-
 <H2>
     Target users
 </H2>
 This program is intended to be used by everyone and everything, from naive users to embedded scripts.
 
 
-
 <H2>
     Comments
 </H2>
 None
-
 
 </BODY>
 </HTML>

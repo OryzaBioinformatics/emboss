@@ -61,19 +61,24 @@ Output alignment [hba_human.stretcher]:
 Command line arguments
 
    Standard (Mandatory) qualifiers:
-  [-asequence]         sequence   Sequence USA
-  [-bsequence]         sequence   Sequence USA
+  [-asequence]         sequence   Sequence filename and optional format, or
+                                  reference (input USA)
+  [-bsequence]         sequence   Sequence filename and optional format, or
+                                  reference (input USA)
   [-outfile]           align      Output alignment file name
 
    Additional (Optional) qualifiers:
-   -datafile           matrix     This is the scoring matrix file used when
+   -datafile           matrix     [EBLOSUM62 for protein, EDNAFULL for DNA]
+                                  This is the scoring matrix file used when
                                   comparing sequences. By default it is the
                                   file 'EBLOSUM62' (for proteins) or the file
                                   'EDNAFULL' (for nucleic sequences). These
                                   files are found in the 'data' directory of
                                   the EMBOSS installation.
-   -gapopen            integer    Gap penalty
-   -gapextend          integer    Gap length penalty
+   -gapopen            integer    [12 for protein, 16 for nucleic] Gap penalty
+                                  (Positive integer)
+   -gapextend          integer    [2 for protein, 4 for nucleic] Gap length
+                                  penalty (Positive integer)
 
    Advanced (Unprompted) qualifiers: (none)
    Associated qualifiers:
@@ -134,28 +139,7 @@ Command line arguments
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
-   -die                boolean    Report deaths
-
-
-   Standard (Mandatory) qualifiers Allowed values Default
-   [-asequence]
-   (Parameter 1) Sequence USA Readable sequence Required
-   [-bsequence]
-   (Parameter 2) Sequence USA Readable sequence Required
-   [-outfile]
-   (Parameter 3) Output alignment file name Alignment output file
-   Additional (Optional) qualifiers Allowed values Default
-   -datafile This is the scoring matrix file used when comparing
-   sequences. By default it is the file 'EBLOSUM62' (for proteins) or the
-   file 'EDNAFULL' (for nucleic sequences). These files are found in the
-   'data' directory of the EMBOSS installation. Comparison matrix file in
-   EMBOSS data path EBLOSUM62 for protein
-   EDNAFULL for DNA
-   -gapopen Gap penalty Positive integer 12 for protein, 16 for nucleic
-   -gapextend Gap length penalty Positive integer 2 for protein, 4 for
-   nucleic
-   Advanced (Unprompted) qualifiers Allowed values Default
-   (none)
+   -die                boolean    Report dying program messages
 
 Input file format
 
@@ -409,7 +393,10 @@ Output file format
 
 ########################################
 # Program: stretcher
-# Rundate: Fri Jul 15 2005 12:00:00
+# Rundate: Sat Jul 15 2006 12:00:00
+# Commandline: stretcher
+#    [-asequence] tsw:hba_human
+#    [-bsequence] tsw:hbb_human
 # Align_format: markx0
 # Report_file: hba_human.stretcher
 ########################################

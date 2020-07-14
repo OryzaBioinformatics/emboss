@@ -12,7 +12,6 @@
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
-
 silent
 </font></b>
 </td></tr>
@@ -21,12 +20,10 @@ silent
 <p>
 
 
-
 <H2>
     Function
 </H2>
 Silent mutation restriction enzyme scan
-
 <H2>
     Description
 </H2>
@@ -55,14 +52,13 @@ Several restriction enzyme can be specified.
 
 % <b>silent </b>
 Silent mutation restriction enzyme scan
-Input sequence: <b>tembl:hsfau</b>
+Input nucleotide sequence: <b>tembl:hsfau</b>
 Comma separated enzyme list [all]: <b>ecori,hindiii</b>
 Output report [hsfau.silent]: <b></b>
 
 </pre></td></tr></table><p>
 <p>
 <a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
-
 
 <H2>
     Command line arguments
@@ -71,59 +67,60 @@ Output report [hsfau.silent]: <b></b>
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
    Standard (Mandatory) qualifiers:
-  [-sequence]          sequence   Sequence USA
-   -enzymes            string     Comma separated enzyme list
+  [-sequence]          sequence   Nucleotide sequence filename and optional
+                                  format, or reference (input USA)
+   -enzymes            string     [all] Comma separated enzyme list (Any
+                                  string is accepted)
   [-outfile]           report     Output report file name
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers:
-   -sshow              boolean    Display untranslated sequence
-   -tshow              boolean    Display translated sequence
-   -allmut             boolean    Display all mutations
+   -sshow              boolean    [N] Display untranslated sequence
+   -tshow              boolean    [N] Display translated sequence
+   -allmut             boolean    [N] Display all mutations
 
    Associated qualifiers:
 
    "-sequence" associated qualifiers
-   -sbegin1             integer    Start of the sequence to be used
-   -send1               integer    End of the sequence to be used
-   -sreverse1           boolean    Reverse (if DNA)
-   -sask1               boolean    Ask for begin/end/reverse
-   -snucleotide1        boolean    Sequence is nucleotide
-   -sprotein1           boolean    Sequence is protein
-   -slower1             boolean    Make lower case
-   -supper1             boolean    Make upper case
-   -sformat1            string     Input sequence format
-   -sdbname1            string     Database name
-   -sid1                string     Entryname
-   -ufo1                string     UFO features
-   -fformat1            string     Features format
-   -fopenfile1          string     Features file name
+   -sbegin1            integer    Start of the sequence to be used
+   -send1              integer    End of the sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
 
    "-outfile" associated qualifiers
-   -rformat2            string     Report format
-   -rname2              string     Base file name
-   -rextension2         string     File name extension
-   -rdirectory2         string     Output directory
-   -raccshow2           boolean    Show accession number in the report
-   -rdesshow2           boolean    Show description in the report
-   -rscoreshow2         boolean    Show the score in the report
-   -rusashow2           boolean    Show the full USA in the report
+   -rformat2           string     Report format
+   -rname2             string     Base file name
+   -rextension2        string     File name extension
+   -rdirectory2        string     Output directory
+   -raccshow2          boolean    Show accession number in the report
+   -rdesshow2          boolean    Show description in the report
+   -rscoreshow2        boolean    Show the score in the report
+   -rusashow2          boolean    Show the full USA in the report
 
    General qualifiers:
-   -auto                boolean    Turn off prompts
-   -stdout              boolean    Write standard output
-   -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for standard and additional values
-   -debug               boolean    Write debug output to program.dbg
-   -verbose             boolean    Report some/full command line options
-   -help                boolean    Report command line options. More
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
-   -warning             boolean    Report warnings
-   -error               boolean    Report errors
-   -fatal               boolean    Report fatal errors
-   -die                 boolean    Report deaths
-
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
 
 </pre>
 </td></tr></table>
@@ -137,7 +134,7 @@ Output report [hsfau.silent]: <b></b>
 
 <tr>
 <td>[-sequence]<br>(Parameter 1)</td>
-<td>Sequence USA</td>
+<td>Nucleotide sequence filename and optional format, or reference (input USA)</td>
 <td>Readable sequence</td>
 <td><b>Required</b></td>
 </tr>
@@ -194,7 +191,6 @@ Output report [hsfau.silent]: <b></b>
 </tr>
 
 </table>
-
 
 
 <H2>
@@ -292,7 +288,6 @@ SQ   Sequence 518 BP; 125 A; 139 C; 148 G; 106 T; 0 other;
 </td></tr></table><p>
 
 
-
 <H2>
     Output file format
 </H2>
@@ -305,7 +300,10 @@ SQ   Sequence 518 BP; 125 A; 139 C; 148 G; 106 T; 0 other;
 <pre>
 ########################################
 # Program: silent
-# Rundate: Fri Jul 15 2005 12:00:00
+# Rundate: Sat Jul 15 2006 12:00:00
+# Commandline: silent
+#    -sequence tembl:hsfau
+#    -enzymes ecori,hindiii
 # Report_format: table
 # Report_file: hsfau.silent
 ########################################
@@ -334,7 +332,6 @@ SQ   Sequence 518 BP; 125 A; 139 C; 148 G; 106 T; 0 other;
 #---------------------------------------
 </pre>
 </td></tr></table><p>
-
 
 
 <H2>
@@ -380,7 +377,6 @@ The directories are searched in the following order:
    <li> ~/.embossdata
 </ul>
 <p>
-
 <p>
 The EMBOSS REBASE restriction enzyme data files are stored iin
 directory 'data/REBASE/*' under the EMBOSS installation directory.
@@ -426,7 +422,6 @@ is the preferred (prototype) name.
 	          
 
 
-
 <H2>
     Notes
 </H2>
@@ -466,14 +461,37 @@ None.
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
-<tr><td><a href="recoder.html">recoder</a></td><td>Remove restriction sites but maintain same translation</td></tr>
-<tr><td><a href="redata.html">redata</a></td><td>Search REBASE for enzyme name, references, suppliers etc</td></tr>
-<tr><td><a href="remap.html">remap</a></td><td>Display sequence with restriction sites, translation etc</td></tr>
-<tr><td><a href="restover.html">restover</a></td><td>Find restriction enzymes producing specific overhang</td></tr>
-<tr><td><a href="restrict.html">restrict</a></td><td>Finds restriction enzyme cleavage sites</td></tr>
-<tr><td><a href="showseq.html">showseq</a></td><td>Display a sequence with features, translation etc</td></tr>
-</table>
+<tr>
+<td><a href="recoder.html">recoder</a></td>
+<td>Remove restriction sites but maintain same translation</td>
+</tr>
 
+<tr>
+<td><a href="redata.html">redata</a></td>
+<td>Search REBASE for enzyme name, references, suppliers etc</td>
+</tr>
+
+<tr>
+<td><a href="remap.html">remap</a></td>
+<td>Display sequence with restriction sites, translation etc</td>
+</tr>
+
+<tr>
+<td><a href="restover.html">restover</a></td>
+<td>Find restriction enzymes producing specific overhang</td>
+</tr>
+
+<tr>
+<td><a href="restrict.html">restrict</a></td>
+<td>Finds restriction enzyme cleavage sites</td>
+</tr>
+
+<tr>
+<td><a href="showseq.html">showseq</a></td>
+<td>Display a sequence with features, translation etc</td>
+</tr>
+
+</table>
 <p>
 
 <b>silent</b> does the opposite to <b>recode</b>.  <b>silent</b> finds
@@ -491,25 +509,21 @@ European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambri
 
 
 
-
 <H2>
     History
 </H2>
 
 Written (Aug 2000) - Alan Bleasby.
 
-
 <H2>
     Target users
 </H2>
 This program is intended to be used by everyone and everything, from naive users to embedded scripts.
 
-
 <H2>
     Comments
 </H2>
 None
-
 
 
 </BODY>

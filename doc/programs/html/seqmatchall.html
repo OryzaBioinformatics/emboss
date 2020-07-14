@@ -13,7 +13,6 @@
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
-
 seqmatchall
 </font></b>
 </td></tr>
@@ -22,13 +21,11 @@ seqmatchall
 <p>
 
 
-
 <H2>
     Function
 </H2>
 
 All-against-all comparison of a set of sequences
-
 
 <H2>
     Description
@@ -70,15 +67,15 @@ Output alignment [eclac.seqmatchall]: <b></b>
 
 
 
-
 <H2>
     Command line arguments
 </H2>
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
    Standard (Mandatory) qualifiers:
-  [-sequence]          seqset     Sequence set USA
-   -wordsize           integer    Word size
+  [-sequence]          seqset     Sequence set filename and optional format,
+                                  or reference (input USA)
+   -wordsize           integer    [4] Word size (Integer 2 or more)
   [-outfile]           align      Output alignment file name
 
    Additional (Optional) qualifiers: (none)
@@ -86,47 +83,46 @@ Output alignment [eclac.seqmatchall]: <b></b>
    Associated qualifiers:
 
    "-sequence" associated qualifiers
-   -sbegin1             integer    Start of each sequence to be used
-   -send1               integer    End of each sequence to be used
-   -sreverse1           boolean    Reverse (if DNA)
-   -sask1               boolean    Ask for begin/end/reverse
-   -snucleotide1        boolean    Sequence is nucleotide
-   -sprotein1           boolean    Sequence is protein
-   -slower1             boolean    Make lower case
-   -supper1             boolean    Make upper case
-   -sformat1            string     Input sequence format
-   -sdbname1            string     Database name
-   -sid1                string     Entryname
-   -ufo1                string     UFO features
-   -fformat1            string     Features format
-   -fopenfile1          string     Features file name
+   -sbegin1            integer    Start of each sequence to be used
+   -send1              integer    End of each sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
 
    "-outfile" associated qualifiers
-   -aformat2            string     Alignment format
-   -aextension2         string     File name extension
-   -adirectory2         string     Output directory
-   -aname2              string     Base file name
-   -awidth2             integer    Alignment width
-   -aaccshow2           boolean    Show accession number in the header
-   -adesshow2           boolean    Show description in the header
-   -ausashow2           boolean    Show the full USA in the alignment
-   -aglobal2            boolean    Show the full sequence in alignment
+   -aformat2           string     Alignment format
+   -aextension2        string     File name extension
+   -adirectory2        string     Output directory
+   -aname2             string     Base file name
+   -awidth2            integer    Alignment width
+   -aaccshow2          boolean    Show accession number in the header
+   -adesshow2          boolean    Show description in the header
+   -ausashow2          boolean    Show the full USA in the alignment
+   -aglobal2           boolean    Show the full sequence in alignment
 
    General qualifiers:
-   -auto                boolean    Turn off prompts
-   -stdout              boolean    Write standard output
-   -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for standard and additional values
-   -debug               boolean    Write debug output to program.dbg
-   -verbose             boolean    Report some/full command line options
-   -help                boolean    Report command line options. More
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
-   -warning             boolean    Report warnings
-   -error               boolean    Report errors
-   -fatal               boolean    Report fatal errors
-   -die                 boolean    Report deaths
-
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
 
 </pre>
 </td></tr></table>
@@ -141,7 +137,7 @@ Output alignment [eclac.seqmatchall]: <b></b>
 
 <tr>
 <td>[-sequence]<br>(Parameter 1)</td>
-<td>Sequence set USA</td>
+<td>Sequence set filename and optional format, or reference (input USA)</td>
 <td>Readable set of sequences</td>
 <td><b>Required</b></td>
 </tr>
@@ -183,7 +179,6 @@ Output alignment [eclac.seqmatchall]: <b></b>
 </table>
 
 
-
 <H2>
     Input file format
 </H2>
@@ -204,7 +199,6 @@ The sequences must be either all protein or all nucleic acid.
 'tembl:eclac*' is a sequence entry in the example nucleic acid database 'tembl'
 <p>
 
-
 <H2>
     Output file format
 </H2>
@@ -218,7 +212,10 @@ The sequences must be either all protein or all nucleic acid.
 <pre>
 ########################################
 # Program: seqmatchall
-# Rundate: Fri Jul 15 2005 12:00:00
+# Rundate: Sat Jul 15 2006 12:00:00
+# Commandline: seqmatchall
+#    -sequence tembl:eclac*
+#    -wordsize 15
 # Align_format: match
 # Report_file: eclac.seqmatchall
 ########################################
@@ -281,7 +278,6 @@ The sequences must be either all protein or all nucleic acid.
 #---------------------------------------
 </pre>
 </td></tr></table><p>
-
 
 
 <p>
@@ -364,12 +360,27 @@ None.
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
-<tr><td><a href="matcher.html">matcher</a></td><td>Finds the best local alignments between two sequences</td></tr>
-<tr><td><a href="supermatcher.html">supermatcher</a></td><td>Match large sequences against one or more other sequences</td></tr>
-<tr><td><a href="water.html">water</a></td><td>Smith-Waterman local alignment</td></tr>
-<tr><td><a href="wordmatch.html">wordmatch</a></td><td>Finds all exact matches of a given size between 2 sequences</td></tr>
-</table>
+<tr>
+<td><a href="matcher.html">matcher</a></td>
+<td>Finds the best local alignments between two sequences</td>
+</tr>
 
+<tr>
+<td><a href="supermatcher.html">supermatcher</a></td>
+<td>Match large sequences against one or more other sequences</td>
+</tr>
+
+<tr>
+<td><a href="water.html">water</a></td>
+<td>Smith-Waterman local alignment</td>
+</tr>
+
+<tr>
+<td><a href="wordmatch.html">wordmatch</a></td>
+<td>Finds all exact matches of a given size between 2 sequences</td>
+</tr>
+
+</table>
 
 <P>
 <a href="polydot.html">polydot</A> will give a graphical view of the
@@ -384,13 +395,11 @@ Sanger Institute, Wellcome Trust Genome Campus, Hinxton,
 Cambridge, CB10 1SA, UK.                      
 
 
-
 <H2>
     History
 </H2>
 
 1999 - written - Ian Longden
-
 
 <H2>
     Target users
@@ -398,12 +407,10 @@ Cambridge, CB10 1SA, UK.
 This program is intended to be used by everyone and everything, from naive users to embedded scripts.
 
 
-
 <H2>
     Comments
 </H2>
 None
-
 
 </BODY>
 </HTML>

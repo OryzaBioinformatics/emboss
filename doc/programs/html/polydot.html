@@ -13,7 +13,6 @@
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
-
 polydot
 </font></b>
 </td></tr>
@@ -22,12 +21,10 @@ polydot
 <p>
 
 
-
 <H2>
     Function
 </H2>
 Displays all-against-all dotplots of a set of sequences
-
 
 <H2>
     Description
@@ -73,7 +70,6 @@ Created polydot.ps
 <a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
 
 
-
 <H2>
     Command line arguments
 </H2>
@@ -81,70 +77,72 @@ Created polydot.ps
 <pre>
    Standard (Mandatory) qualifiers (* if not always prompted):
   [-sequences]         seqset     File containing a sequence alignment
-   -wordsize           integer    Word size
-*  -outfeat            featout    Output features UFO
-   -graph              graph      Graph type
+   -wordsize           integer    [6] Word size (Integer 2 or more)
+*  -outfeat            featout    [unknown.gff] Output features UFO
+   -graph              graph      [$EMBOSS_GRAPHICS value, or x11] Graph type
+                                  (ps, hpgl, hp7470, hp7580, meta, cps, x11,
+                                  tekt, tek, none, data, xterm, png)
 
    Additional (Optional) qualifiers:
-   -[no]boxit          boolean    Draw a box around each dotplot
-   -dumpfeat           toggle     Dump all matches as feature files
+   -[no]boxit          boolean    [Y] Draw a box around each dotplot
+   -dumpfeat           toggle     [N] Dump all matches as feature files
 
    Advanced (Unprompted) qualifiers:
-   -gap                integer    This specifies the size of the gap that is
-                                  used to separate the individual dotplots in
-                                  the display. The size is measured in
+   -gap                integer    [10] This specifies the size of the gap that
+                                  is used to separate the individual dotplots
+                                  in the display. The size is measured in
                                   residues, as displayed in the output.
+                                  (Integer 0 or more)
 
    Associated qualifiers:
 
    "-sequences" associated qualifiers
-   -sbegin1             integer    Start of each sequence to be used
-   -send1               integer    End of each sequence to be used
-   -sreverse1           boolean    Reverse (if DNA)
-   -sask1               boolean    Ask for begin/end/reverse
-   -snucleotide1        boolean    Sequence is nucleotide
-   -sprotein1           boolean    Sequence is protein
-   -slower1             boolean    Make lower case
-   -supper1             boolean    Make upper case
-   -sformat1            string     Input sequence format
-   -sdbname1            string     Database name
-   -sid1                string     Entryname
-   -ufo1                string     UFO features
-   -fformat1            string     Features format
-   -fopenfile1          string     Features file name
+   -sbegin1            integer    Start of each sequence to be used
+   -send1              integer    End of each sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
 
    "-outfeat" associated qualifiers
-   -offormat            string     Output feature format
-   -ofopenfile          string     Features file name
-   -ofextension         string     File name extension
-   -ofdirectory         string     Output directory
-   -ofname              string     Base file name
-   -ofsingle            boolean    Separate file for each entry
+   -offormat           string     Output feature format
+   -ofopenfile         string     Features file name
+   -ofextension        string     File name extension
+   -ofdirectory        string     Output directory
+   -ofname             string     Base file name
+   -ofsingle           boolean    Separate file for each entry
 
    "-graph" associated qualifiers
-   -gprompt             boolean    Graph prompting
-   -gtitle              string     Graph title
-   -gsubtitle           string     Graph subtitle
-   -gxtitle             string     Graph x axis title
-   -gytitle             string     Graph y axis title
-   -goutfile            string     Output file for non interactive displays
-   -gdirectory          string     Output directory
+   -gprompt            boolean    Graph prompting
+   -gtitle             string     Graph title
+   -gsubtitle          string     Graph subtitle
+   -gxtitle            string     Graph x axis title
+   -gytitle            string     Graph y axis title
+   -goutfile           string     Output file for non interactive displays
+   -gdirectory         string     Output directory
 
    General qualifiers:
-   -auto                boolean    Turn off prompts
-   -stdout              boolean    Write standard output
-   -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for standard and additional values
-   -debug               boolean    Write debug output to program.dbg
-   -verbose             boolean    Report some/full command line options
-   -help                boolean    Report command line options. More
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
-   -warning             boolean    Report warnings
-   -error               boolean    Report errors
-   -fatal               boolean    Report fatal errors
-   -die                 boolean    Report deaths
-
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
 
 </pre>
 </td></tr></table>
@@ -181,7 +179,7 @@ Created polydot.ps
 <tr>
 <td>-graph</td>
 <td>Graph type</td>
-<td>EMBOSS has a list of known devices, including postscript, ps, hpgl, hp7470, hp7580, meta, colourps, cps, xwindows, x11, tektronics, tekt, tek4107t, tek, none, null, text, data, xterm, png, xml</td>
+<td>EMBOSS has a list of known devices, including ps, hpgl, hp7470, hp7580, meta, cps, x11, tekt, tek, none, data, xterm, png</td>
 <td><i>EMBOSS_GRAPHICS</i> value, or x11</td>
 </tr>
 
@@ -219,7 +217,6 @@ Created polydot.ps
 </tr>
 
 </table>
-
 
 
 <H2>
@@ -271,7 +268,6 @@ VVGAKWSEELNSAWTIAYDELAIVIKKEMNDAA
 </pre>
 </td></tr></table><p>
 
-
 <H2>
     Output file format
 </H2>
@@ -285,7 +281,6 @@ A graphical image is displayed on the specified graphics device.
 <h3>Output files for usage example </h3>
 <p><h3>Graphics File: polydot.ps</h3>
 <p><img src="polydot.1.polydot.gif" alt="[polydot results]">
-
 
 <H2>
     Data files
@@ -333,11 +328,22 @@ None.
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
-<tr><td><a href="dotmatcher.html">dotmatcher</a></td><td>Displays a thresholded dotplot of two sequences</td></tr>
-<tr><td><a href="dotpath.html">dotpath</a></td><td>Non-overlapping wordmatch dotplot of two sequences</td></tr>
-<tr><td><a href="dottup.html">dottup</a></td><td>Displays a wordmatch dotplot of two sequences</td></tr>
-</table>
+<tr>
+<td><a href="dotmatcher.html">dotmatcher</a></td>
+<td>Displays a thresholded dotplot of two sequences</td>
+</tr>
 
+<tr>
+<td><a href="dotpath.html">dotpath</a></td>
+<td>Non-overlapping wordmatch dotplot of two sequences</td>
+</tr>
+
+<tr>
+<td><a href="dottup.html">dottup</a></td>
+<td>Displays a wordmatch dotplot of two sequences</td>
+</tr>
+
+</table>
 
 <H2>
     Author(s)
@@ -350,13 +356,11 @@ Sanger Institute, Wellcome Trust Genome Campus, Hinxton,
 Cambridge, CB10 1SA, UK.                      
 
 
-
 <H2>
     History
 </H2>
 
 Completed 2nd June 1999.
-
 
 <H2>
     Target users
@@ -364,12 +368,10 @@ Completed 2nd June 1999.
 This program is intended to be used by everyone and everything, from naive users to embedded scripts.
 
 
-
 <H2>
     Comments
 </H2>
 None
-
 
 </BODY>
 </HTML>

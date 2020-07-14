@@ -31,9 +31,10 @@ Usage
 % infoseq tembl:paamir 
 Displays some simple information about sequences
 
-# USA             Name        Accession Type Length      %GC   Description
-tembl-id:PAAMIR   PAAMIR        X13776  N    2167        66.54 Pseudomonas aeru
-ginosa amiC and amiR gene for aliphatic amidase regulation
+USA                      Name           Accession      Type Length %GC    Descr
+iption
+tembl-id:PAAMIR          PAAMIR         X13776         N    2167   66.54  Pseud
+omonas aeruginosa amiC and amiR gene for aliphatic amidase regulation
 
    Go to the input files for this example
 
@@ -45,9 +46,9 @@ ginosa amiC and amiR gene for aliphatic amidase regulation
 % infoseq tembl:paamir -nousa 
 Displays some simple information about sequences
 
-# Name        Accession Type Length      %GC   Description
-PAAMIR        X13776    N    2167        66.54 Pseudomonas aeruginosa amiC and
-amiR gene for aliphatic amidase regulation
+Name           Accession      Type Length %GC    Description
+PAAMIR         X13776         N    2167   66.54  Pseudomonas aeruginosa amiC an
+d amiR gene for aliphatic amidase regulation
 
    Example 3
 
@@ -57,7 +58,8 @@ amiR gene for aliphatic amidase regulation
 % infoseq tembl:paamir -only -name -length 
 Displays some simple information about sequences
 
-PAAMIR        2167
+Name           Length
+PAAMIR         2167
 
    Example 4
 
@@ -67,6 +69,7 @@ PAAMIR        2167
 % infoseq tembl:paamir -only -desc 
 Displays some simple information about sequences
 
+Description
 Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase regulation
 
    Example 5
@@ -77,6 +80,7 @@ Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase regulation
 % infoseq tembl:paamir -only -type 
 Displays some simple information about sequences
 
+Type
 N
 
    Example 6
@@ -90,103 +94,96 @@ Displays some simple information about sequences
 
  USA Name Accession Type Length %GC Description
 
- tembl-id:PAAMIR PAAMIR X13776 N 2167 66.54  Pseudomonas aeruginosa amiC and am
-iR gene for aliphatic amidase regulation
+ tembl-id:PAAMIR PAAMIR X13776 N 2167 66.54 Pseudomonas aeruginosa amiC and ami
+R gene for aliphatic amidase regulation
 
 
 
 Command line arguments
 
    Standard (Mandatory) qualifiers:
-  [-sequence]          seqall     Sequence database USA
+  [-sequence]          seqall     (Gapped) sequence(s) filename and optional
+                                  format, or reference (input USA)
 
    Additional (Optional) qualifiers:
-   -outfile            outfile    If you enter the name of a file here then
-                                  this program will write the sequence details
-                                  into that file.
-   -html               boolean    Format output as an HTML table
+   -outfile            outfile    [stdout] If you enter the name of a file
+                                  here then this program will write the
+                                  sequence details into that file.
+   -html               boolean    [N] Format output as an HTML table
 
    Advanced (Unprompted) qualifiers:
-   -only               boolean    This is a way of shortening the command line
-                                  if you only want a few things to be
+   -[no]columns        boolean    [Y] Set this option on (Y) to print the
+                                  sequence information into neat, aligned
+                                  columns in the output file. Alternatively,
+                                  leave it unset (N), in which case the
+                                  information records will be delimited by a
+                                  character, which you may specify by using
+                                  the -delimiter option. In other words, if
+                                  -columns is set on, the -delimiter option is
+                                  overriden.
+   -delimiter          string     [|] This string, which is usually a single
+                                  character only, is used to delimit
+                                  individual records in the text output file.
+                                  It could be a space character, a tab
+                                  character, a pipe character or any other
+                                  character or string. (Any string is
+                                  accepted)
+   -only               boolean    [N] This is a way of shortening the command
+                                  line if you only want a few things to be
                                   displayed. Instead of specifying:
                                   '-nohead -noname -noacc -notype -nopgc
                                   -nodesc'
                                   to get only the length output, you can
                                   specify
                                   '-only -length'
-   -heading            boolean    Display column headings
-   -usa                boolean    Display the USA of the sequence
-   -name               boolean    Display 'name' column
-   -accession          boolean    Display 'accession' column
-   -gi                 boolean    Display 'GI' column
-   -version            boolean    Display 'version' column
-   -type               boolean    Display 'type' column
-   -length             boolean    Display 'length' column
-   -pgc                boolean    Display 'percent GC content' column
-   -description        boolean    Display 'description' column
+   -[no]heading        boolean    [Y] Display column headings
+   -usa                boolean    [@(!$(only))] Display the USA of the
+                                  sequence
+   -name               boolean    [@(!$(only))] Display 'name' column
+   -accession          boolean    [@(!$(only))] Display 'accession' column
+   -gi                 boolean    [N] Display 'GI' column
+   -version            boolean    [N] Display 'version' column
+   -type               boolean    [@(!$(only))] Display 'type' column
+   -length             boolean    [@(!$(only))] Display 'length' column
+   -pgc                boolean    [@(!$(only))] Display 'percent GC content'
+                                  column
+   -description        boolean    [@(!$(only))] Display 'description' column
 
    Associated qualifiers:
 
    "-sequence" associated qualifiers
-   -sbegin1             integer    Start of each sequence to be used
-   -send1               integer    End of each sequence to be used
-   -sreverse1           boolean    Reverse (if DNA)
-   -sask1               boolean    Ask for begin/end/reverse
-   -snucleotide1        boolean    Sequence is nucleotide
-   -sprotein1           boolean    Sequence is protein
-   -slower1             boolean    Make lower case
-   -supper1             boolean    Make upper case
-   -sformat1            string     Input sequence format
-   -sdbname1            string     Database name
-   -sid1                string     Entryname
-   -ufo1                string     UFO features
-   -fformat1            string     Features format
-   -fopenfile1          string     Features file name
+   -sbegin1            integer    Start of each sequence to be used
+   -send1              integer    End of each sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
 
    "-outfile" associated qualifiers
-   -odirectory          string     Output directory
+   -odirectory         string     Output directory
 
    General qualifiers:
-   -auto                boolean    Turn off prompts
-   -stdout              boolean    Write standard output
-   -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for standard and additional values
-   -debug               boolean    Write debug output to program.dbg
-   -verbose             boolean    Report some/full command line options
-   -help                boolean    Report command line options. More
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
-   -warning             boolean    Report warnings
-   -error               boolean    Report errors
-   -fatal               boolean    Report fatal errors
-   -die                 boolean    Report deaths
-
-
-   Standard (Mandatory) qualifiers Allowed values Default
-   [-sequence]
-   (Parameter 1) Sequence database USA Readable sequence(s) Required
-   Additional (Optional) qualifiers Allowed values Default
-   -outfile If you enter the name of a file here then this program will
-   write the sequence details into that file. Output file stdout
-   -html Format output as an HTML table Boolean value Yes/No No
-   Advanced (Unprompted) qualifiers Allowed values Default
-   -only This is a way of shortening the command line if you only want a
-   few things to be displayed. Instead of specifying: '-nohead -noname
-   -noacc -notype -nopgc -nodesc' to get only the length output, you can
-   specify '-only -length' Boolean value Yes/No No
-   -heading Display column headings Boolean value Yes/No @(!$(only))
-   -usa Display the USA of the sequence Boolean value Yes/No @(!$(only))
-   -name Display 'name' column Boolean value Yes/No @(!$(only))
-   -accession Display 'accession' column Boolean value Yes/No @(!$(only))
-   -gi Display 'GI' column Boolean value Yes/No No
-   -version Display 'version' column Boolean value Yes/No No
-   -type Display 'type' column Boolean value Yes/No @(!$(only))
-   -length Display 'length' column Boolean value Yes/No @(!$(only))
-   -pgc Display 'percent GC content' column Boolean value Yes/No
-   @(!$(only))
-   -description Display 'description' column Boolean value Yes/No
-   @(!$(only))
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
 
 Input file format
 

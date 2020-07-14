@@ -12,7 +12,6 @@
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
-
 epestfind
 </font></b>
 </td></tr>
@@ -20,12 +19,10 @@ epestfind
 <br>&nbsp;
 <p>
 
-
 <H2>
     Function
 </H2>
 Finds PEST motifs as potential proteolytic cleavage sites
-
 <H2>
     Description
 </H2>
@@ -168,7 +165,7 @@ X=10*0+45=45
 
 % <b>epestfind -graph cps -invalid </b>
 Finds PEST motifs as potential proteolytic cleavage sites
-Input sequence: <b>exu2_drops.embl</b>
+Input protein sequence: <b>exu2_drops.embl</b>
 Window length [10]: <b></b>
 Sort order of results
       1 : length
@@ -184,7 +181,6 @@ Created epestfind.ps
 <a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
 
 
-
 <H2>
     Command line arguments
 </H2>
@@ -192,82 +188,84 @@ Created epestfind.ps
 <pre>
    Standard (Mandatory) qualifiers:
   [-sequence]          sequence   Protein sequence USA to be analysed.
-   -window             integer    Minimal distance between positively charged
-                                  amino acids.
-   -order              selection  Name of the output file which holds the
-                                  results of the analysis. Results may be
+   -window             integer    [10] Minimal distance between positively
+                                  charged amino acids. (Integer 2 or more)
+   -order              selection  [score] Name of the output file which holds
+                                  the results of the analysis. Results may be
                                   sorted by length, position and score.
-  [-outfile]           outfile    Name of file to which results will be
-                                  written.
-   -graph              xygraph    Graph type
+  [-outfile]           outfile    [*.epestfind] Name of file to which results
+                                  will be written.
+   -graph              xygraph    [$EMBOSS_GRAPHICS value, or x11] Graph type
+                                  (ps, hpgl, hp7470, hp7580, meta, cps, x11,
+                                  tekt, tek, none, data, xterm, png)
 
    Additional (Optional) qualifiers:
-   -aadata             datafile   File of amino acid properties and molecular
-                                  masses.
-   -threshold          float      Threshold value to discriminate weak from
-                                  potential PEST motifs. Valid PEST motifs are
-                                  discriminated into 'poor' and 'potential'
-                                  motifs depending on this threshold score. By
-                                  default, the default value is set to +5.0
-                                  based on experimental data. Alterations are
-                                  not recommended since significance is a
-                                  matter of biology, not mathematics.
+   -aadata             datafile   [Eamino.dat] Amino acids properties and
+                                  molecular weight data file
+   -threshold          float      [+5.0] Threshold value to discriminate weak
+                                  from potential PEST motifs. Valid PEST
+                                  motifs are discriminated into 'poor' and
+                                  'potential' motifs depending on this
+                                  threshold score. By default, the default
+                                  value is set to +5.0 based on experimental
+                                  data. Alterations are not recommended since
+                                  significance is a matter of biology, not
+                                  mathematics. (Number from -55.00 to 55.00)
 
    Advanced (Unprompted) qualifiers:
-   -[no]potential      boolean    Decide whether potential PEST motifs should
+   -[no]potential      boolean    [Y] Decide whether potential PEST motifs
+                                  should be printed.
+   -[no]poor           boolean    [Y] Decide whether poor PEST motifs should
                                   be printed.
-   -[no]poor           boolean    Decide whether poor PEST motifs should be
-                                  printed.
-   -invalid            boolean    Decide whether invalid PEST motifs should be
-                                  printed.
-   -[no]map            boolean    Decide whether PEST motifs should be mapped
-                                  to sequence.
+   -invalid            boolean    [N] Decide whether invalid PEST motifs
+                                  should be printed.
+   -[no]map            boolean    [Y] Decide whether PEST motifs should be
+                                  mapped to sequence.
 
    Associated qualifiers:
 
    "-sequence" associated qualifiers
-   -sbegin1             integer    Start of the sequence to be used
-   -send1               integer    End of the sequence to be used
-   -sreverse1           boolean    Reverse (if DNA)
-   -sask1               boolean    Ask for begin/end/reverse
-   -snucleotide1        boolean    Sequence is nucleotide
-   -sprotein1           boolean    Sequence is protein
-   -slower1             boolean    Make lower case
-   -supper1             boolean    Make upper case
-   -sformat1            string     Input sequence format
-   -sdbname1            string     Database name
-   -sid1                string     Entryname
-   -ufo1                string     UFO features
-   -fformat1            string     Features format
-   -fopenfile1          string     Features file name
+   -sbegin1            integer    Start of the sequence to be used
+   -send1              integer    End of the sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
 
    "-outfile" associated qualifiers
-   -odirectory2         string     Output directory
+   -odirectory2        string     Output directory
 
    "-graph" associated qualifiers
-   -gprompt             boolean    Graph prompting
-   -gtitle              string     Graph title
-   -gsubtitle           string     Graph subtitle
-   -gxtitle             string     Graph x axis title
-   -gytitle             string     Graph y axis title
-   -goutfile            string     Output file for non interactive displays
-   -gdirectory          string     Output directory
+   -gprompt            boolean    Graph prompting
+   -gtitle             string     Graph title
+   -gsubtitle          string     Graph subtitle
+   -gxtitle            string     Graph x axis title
+   -gytitle            string     Graph y axis title
+   -goutfile           string     Output file for non interactive displays
+   -gdirectory         string     Output directory
 
    General qualifiers:
-   -auto                boolean    Turn off prompts
-   -stdout              boolean    Write standard output
-   -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for standard and additional values
-   -debug               boolean    Write debug output to program.dbg
-   -verbose             boolean    Report some/full command line options
-   -help                boolean    Report command line options. More
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
-   -warning             boolean    Report warnings
-   -error               boolean    Report errors
-   -fatal               boolean    Report fatal errors
-   -die                 boolean    Report deaths
-
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
 
 </pre>
 </td></tr></table>
@@ -304,13 +302,13 @@ Created epestfind.ps
 <td>[-outfile]<br>(Parameter 2)</td>
 <td>Name of file to which results will be written.</td>
 <td>Output file</td>
-<td><i>&lt;sequence&gt;</i>.epestfind</td>
+<td>&nbsp;</td>
 </tr>
 
 <tr>
 <td>-graph</td>
 <td>Graph type</td>
-<td>EMBOSS has a list of known devices, including postscript, ps, hpgl, hp7470, hp7580, meta, colourps, cps, xwindows, x11, tektronics, tekt, tek4107t, tek, none, null, text, data, xterm, png, xml</td>
+<td>EMBOSS has a list of known devices, including ps, hpgl, hp7470, hp7580, meta, cps, x11, tekt, tek, none, data, xterm, png</td>
 <td><i>EMBOSS_GRAPHICS</i> value, or x11</td>
 </tr>
 
@@ -322,7 +320,7 @@ Created epestfind.ps
 
 <tr>
 <td>-aadata</td>
-<td>File of amino acid properties and molecular masses.</td>
+<td>Amino acids properties and molecular weight data file</td>
 <td>Data file</td>
 <td>Eamino.dat</td>
 </tr>
@@ -369,7 +367,6 @@ Created epestfind.ps
 </tr>
 
 </table>
-
 
 <H2>
     Input file format
@@ -432,7 +429,6 @@ SQ   SEQUENCE   477 AA;  53194 MW;  8B5334A77DB9467B CRC64;
 //
 </pre>
 </td></tr></table><p>
-
 
 
 <H2>
@@ -545,7 +541,6 @@ Invalid PEST motif with 10 amino acids between position 225 and 236.
 </td></tr></table><p>
 <p><h3>Graphics File: epestfind.ps</h3>
 <p><img src="epestfind.1.epestfind.gif" alt="[epestfind results]">
-
 <p>
 
 The output from <b>epestfind</b> is a simple text one.  It reports poor
@@ -613,7 +608,6 @@ The directories are searched in the following order:
    <li> ~/.embossdata
 </ul>
 <p>
-
 
 <p>
 
@@ -715,20 +709,67 @@ None.
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
-<tr><td><a href="antigenic.html">antigenic</a></td><td>Finds antigenic sites in proteins</td></tr>
-<tr><td><a href="digest.html">digest</a></td><td>Protein proteolytic enzyme or reagent cleavage digest</td></tr>
-<tr><td><a href="fuzzpro.html">fuzzpro</a></td><td>Protein pattern search</td></tr>
-<tr><td><a href="fuzztran.html">fuzztran</a></td><td>Protein pattern search after translation</td></tr>
-<tr><td><a href="helixturnhelix.html">helixturnhelix</a></td><td>Report nucleic acid binding motifs</td></tr>
-<tr><td><a href="oddcomp.html">oddcomp</a></td><td>Find protein sequence regions with a biased composition</td></tr>
-<tr><td><a href="patmatdb.html">patmatdb</a></td><td>Search a protein sequence with a motif</td></tr>
-<tr><td><a href="patmatmotifs.html">patmatmotifs</a></td><td>Search a PROSITE motif database with a protein sequence</td></tr>
-<tr><td><a href="pepcoil.html">pepcoil</a></td><td>Predicts coiled coil regions</td></tr>
-<tr><td><a href="preg.html">preg</a></td><td>Regular expression search of a protein sequence</td></tr>
-<tr><td><a href="pscan.html">pscan</a></td><td>Scans proteins using PRINTS</td></tr>
-<tr><td><a href="sigcleave.html">sigcleave</a></td><td>Reports protein signal cleavage sites</td></tr>
-</table>
+<tr>
+<td><a href="antigenic.html">antigenic</a></td>
+<td>Finds antigenic sites in proteins</td>
+</tr>
 
+<tr>
+<td><a href="digest.html">digest</a></td>
+<td>Protein proteolytic enzyme or reagent cleavage digest</td>
+</tr>
+
+<tr>
+<td><a href="fuzzpro.html">fuzzpro</a></td>
+<td>Protein pattern search</td>
+</tr>
+
+<tr>
+<td><a href="fuzztran.html">fuzztran</a></td>
+<td>Protein pattern search after translation</td>
+</tr>
+
+<tr>
+<td><a href="helixturnhelix.html">helixturnhelix</a></td>
+<td>Report nucleic acid binding motifs</td>
+</tr>
+
+<tr>
+<td><a href="oddcomp.html">oddcomp</a></td>
+<td>Find protein sequence regions with a biased composition</td>
+</tr>
+
+<tr>
+<td><a href="patmatdb.html">patmatdb</a></td>
+<td>Search a protein sequence with a motif</td>
+</tr>
+
+<tr>
+<td><a href="patmatmotifs.html">patmatmotifs</a></td>
+<td>Search a PROSITE motif database with a protein sequence</td>
+</tr>
+
+<tr>
+<td><a href="pepcoil.html">pepcoil</a></td>
+<td>Predicts coiled coil regions</td>
+</tr>
+
+<tr>
+<td><a href="preg.html">preg</a></td>
+<td>Regular expression search of a protein sequence</td>
+</tr>
+
+<tr>
+<td><a href="pscan.html">pscan</a></td>
+<td>Scans proteins using PRINTS</td>
+</tr>
+
+<tr>
+<td><a href="sigcleave.html">sigcleave</a></td>
+<td>Reports protein signal cleavage sites</td>
+</tr>
+
+</table>
 
 <H2>
     Author(s)
@@ -737,7 +778,6 @@ None.
 Michael K. Schuster and Martin Grabner (martin.grabner&nbsp;&copy;&nbsp;univie.ac.at)
 <br>
 from the Austrian National EMBnet node.
-
 
 <p>
 
@@ -755,18 +795,15 @@ This is based on the algorithm used in the QuickBasic program by Rodgers et al.
 
 Written (March 2002).
 
-
 <H2>
     Target users
 </H2>
 This program is intended to be used by everyone and everything, from naive users to embedded scripts.
 
-
 <H2>
     Comments
 </H2>
 None
-
 </BODY>
 </HTML>
 

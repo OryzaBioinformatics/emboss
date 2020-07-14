@@ -1,0 +1,116 @@
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+
+'tsw:gcn4_yeast' is a sequence entry in the example protein database 'tsw'
+<p>
+<p><h3>Database entry: tsw:gcn4_yeast</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+ID   GCN4_YEAST     STANDARD;      PRT;   281 AA.
+AC   P03069; P03068;
+DT   21-JUL-1986 (Rel. 01, Created)
+DT   21-JUL-1986 (Rel. 01, Last sequence update)
+DT   15-JUL-1999 (Rel. 38, Last annotation update)
+DE   GENERAL CONTROL PROTEIN GCN4 (AMINO ACID BIOSYNTHESIS REGULATORY
+DE   PROTEIN).
+GN   GCN4 OR ARG9 OR AAS3 OR YEL009C.
+OS   Saccharomyces cerevisiae (Baker's yeast).
+OC   Eukaryota; Fungi; Ascomycota; Hemiascomycetes; Saccharomycetales;
+OC   Saccharomycetaceae; Saccharomyces.
+RN   [1]
+RP   SEQUENCE FROM N.A.
+RX   MEDLINE; 85038531.
+RA   HINNEBUSCH A.G.;
+RT   "Evidence for translational regulation of the activator of general
+RT   amino acid control in yeast.";
+RL   Proc. Natl. Acad. Sci. U.S.A. 81:6442-6446(1984).
+RN   [2]
+RP   SEQUENCE FROM N.A.
+RX   MEDLINE; 84298088.
+RA   THIREOS G., PENN M.D., GREER H.;
+RT   "5' untranslated sequences are required for the translational control
+RT   of a yeast regulatory gene.";
+RL   Proc. Natl. Acad. Sci. U.S.A. 81:5096-5100(1984).
+RN   [3]
+RP   SEQUENCE FROM N.A.
+RC   STRAIN=S288C / AB972;
+RA   DIETRICH F.S., MULLIGAN J.T., HENNESSEY K.M., ALLEN E., ARAUJO R.,
+RA   AVILES E., BERNO A., BRENNAN T., CARPENTER J., CHEN E., CHERRY J.M.,
+RA   CHUNG E., DUNCAN M., GUZMAN E., HARTZELL G., HUNICKE-SMITH S.,
+RA   HYMAN R., KAYSER A., KOMP C., LASHKARI D., LEW H., LIN D.,
+RA   MOSEDALE D., NAKAHARA K., NAMATH A., NORGREN R., OEFNER P., OH C.,
+RA   PETEL F.X., ROBERTS D., SEHL P., SCHRAMM S., SHOGREN T., SMITH V.,
+RA   TAYLOR P., WEI Y., YELTON M., BOTSTEIN D., DAVIS R.W.;
+RL   Submitted (DEC-1994) to the EMBL/GenBank/DDBJ databases.
+RN   [4]
+RP   DOMAINS.
+RX   MEDLINE; 87002456.
+RA   HOPE I.A., STRUHL K.;
+RT   "Functional dissection of a eukaryotic transcriptional activator
+RT   protein, GCN4 of yeast.";
+RL   Cell 46:885-894(1986).
+RN   [5]
+RP   X-RAY CRYSTALLOGRAPHY (1.8 ANGSTROMS) OF 250-281.
+RX   MEDLINE; 92054531.
+RA   O'SHEA E.K., KLEMM J.D., KIM P.S., ALBER T.;
+RT   "X-ray structure of the GCN4 leucine zipper, a two-stranded, parallel
+RT   coiled coil.";
+RL   Science 254:539-544(1991).
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+CC   -!- SUBCELLULAR LOCATION: NUCLEAR.
+CC   -!- SIMILARITY: TO OTHER BZIP PROTEINS.
+CC   --------------------------------------------------------------------------
+CC   This SWISS-PROT entry is copyright. It is produced through a collaboration
+CC   between  the Swiss Institute of Bioinformatics  and the  EMBL outstation -
+CC   the European Bioinformatics Institute.  There are no  restrictions on  its
+CC   use  by  non-profit  institutions as long  as its content  is  in  no  way
+CC   modified and this statement is not removed.  Usage  by  and for commercial
+CC   entities requires a license agreement (See http://www.isb-sib.ch/announce/
+CC   or send an email to license@isb-sib.ch).
+CC   --------------------------------------------------------------------------
+DR   EMBL; K02205; AAA34640.1; -.
+DR   EMBL; K02649; AAA65521.1; -.
+DR   EMBL; U18530; AAB64486.1; -.
+DR   PIR; A03604; RGBYA1.
+DR   PIR; A03605; RGBYA2.
+DR   PDB; 1ZTA; 15-APR-93.
+DR   PDB; 2ZTA; 15-OCT-92.
+DR   PDB; 1YSA; 31-OCT-93.
+DR   PDB; 1DGC; 22-JUN-94.
+DR   PDB; 2DGC; 08-MAR-96.
+DR   PDB; 1GCL; 03-JUN-95.
+DR   PDB; 1GCM; 29-JAN-96.
+DR   PDB; 1SWI; 08-NOV-96.
+DR   PDB; 1ZII; 07-JUL-97.
+DR   PDB; 1ZIJ; 07-JUL-97.
+DR   PDB; 1ZIK; 07-JUL-97.
+DR   PDB; 1ZIL; 07-JUL-97.
+DR   PDB; 1ZIM; 07-JUL-97.
+DR   PDB; 1PIQ; 30-SEP-98.
+DR   PDB; 1CE9; 25-MAR-99.
+DR   TRANSFAC; T00321; -.
+DR   SGD; L0000683; GCN4.
+DR   PFAM; PF00170; bZIP; 1.
+DR   PROSITE; PS00036; BZIP_BASIC; 1.
+KW   Amino-acid biosynthesis; Transcription regulation; Activator;
+KW   DNA-binding; Nuclear protein; 3D-structure.
+FT   DOMAIN      106    125       REQUIRED FOR TRANSCRIPTIONAL ACTIVATION.
+FT   DNA_BIND    231    249       BASIC MOTIF.
+FT   DOMAIN      253    274       LEUCINE-ZIPPER.
+FT   CONFLICT    239    281       ARRSRARKLQRMKQLEDKVEELLSKNYHLENEVARLKKLVG
+FT                                ER -&gt; PGVLVRESCKE (IN REF. 2).
+FT   HELIX       227    276
+FT   TURN        277    277
+SQ   SEQUENCE   281 AA;  31310 MW;  A2155238 CRC32;
+     MSEYQPSLFA LNPMGFSPLD GSKSTNENVS ASTSTAKPMV GQLIFDKFIK TEEDPIIKQD
+     TPSNLDFDFA LPQTATAPDA KTVLPIPELD DAVVESFFSS STDSTPMFEY ENLEDNSKEW
+     TSLFDNDIPV TTDDVSLADK AIESTEEVSL VPSNLEVSTT SFLPTPVLED AKLTQTRKVK
+     KPNSVVKKSH HVGKDDESRL DHLGVVAYNR KQRSIPLSPI VPESSDPAAL KRARNTEAAR
+     RSRARKLQRM KQLEDKVEEL LSKNYHLENE VARLKKLVGE R
+//
+</pre>
+</td></tr></table><p>

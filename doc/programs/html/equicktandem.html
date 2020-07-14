@@ -13,7 +13,6 @@
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
-
 equicktandem
 </font></b>
 </td></tr>
@@ -21,12 +20,10 @@ equicktandem
 <br>&nbsp;
 <p>
 
-
 <H2>
     Function
 </H2>
 Finds tandem repeats
-
 <H2>
     Description
 </H2>
@@ -61,7 +58,7 @@ The input sequence is the human herpesvirus tandem repeat.
 
 % <b>equicktandem -noorigfile </b>
 Finds tandem repeats
-Input sequence: <b>tembl:hhtetra</b>
+Input nucleotide sequence: <b>tembl:hhtetra</b>
 Maximum repeat size [600]: <b></b>
 Threshold score [20]: <b></b>
 Output report [hhtetra.qtan]: <b></b>
@@ -71,68 +68,69 @@ Output report [hhtetra.qtan]: <b></b>
 <a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
 
 
-
 <H2>
     Command line arguments
 </H2>
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
    Standard (Mandatory) qualifiers:
-  [-sequence]          sequence   Sequence USA
-   -maxrepeat          integer    Maximum repeat size
-   -threshold          integer    Threshold score
+  [-sequence]          sequence   Nucleotide sequence filename and optional
+                                  format, or reference (input USA)
+   -maxrepeat          integer    [600] Maximum repeat size (Any integer
+                                  value)
+   -threshold          integer    [20] Threshold score (Any integer value)
   [-outfile]           report     Output report file name
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers:
-   -origfile           outfile    Output file name
+   -origfile           outfile    [*.equicktandem] Sanger Centre program
+                                  quicktandem output file (optional)
 
    Associated qualifiers:
 
    "-sequence" associated qualifiers
-   -sbegin1             integer    Start of the sequence to be used
-   -send1               integer    End of the sequence to be used
-   -sreverse1           boolean    Reverse (if DNA)
-   -sask1               boolean    Ask for begin/end/reverse
-   -snucleotide1        boolean    Sequence is nucleotide
-   -sprotein1           boolean    Sequence is protein
-   -slower1             boolean    Make lower case
-   -supper1             boolean    Make upper case
-   -sformat1            string     Input sequence format
-   -sdbname1            string     Database name
-   -sid1                string     Entryname
-   -ufo1                string     UFO features
-   -fformat1            string     Features format
-   -fopenfile1          string     Features file name
+   -sbegin1            integer    Start of the sequence to be used
+   -send1              integer    End of the sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
 
    "-outfile" associated qualifiers
-   -rformat2            string     Report format
-   -rname2              string     Base file name
-   -rextension2         string     File name extension
-   -rdirectory2         string     Output directory
-   -raccshow2           boolean    Show accession number in the report
-   -rdesshow2           boolean    Show description in the report
-   -rscoreshow2         boolean    Show the score in the report
-   -rusashow2           boolean    Show the full USA in the report
+   -rformat2           string     Report format
+   -rname2             string     Base file name
+   -rextension2        string     File name extension
+   -rdirectory2        string     Output directory
+   -raccshow2          boolean    Show accession number in the report
+   -rdesshow2          boolean    Show description in the report
+   -rscoreshow2        boolean    Show the score in the report
+   -rusashow2          boolean    Show the full USA in the report
 
    "-origfile" associated qualifiers
-   -odirectory          string     Output directory
+   -odirectory         string     Output directory
 
    General qualifiers:
-   -auto                boolean    Turn off prompts
-   -stdout              boolean    Write standard output
-   -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for standard and additional values
-   -debug               boolean    Write debug output to program.dbg
-   -verbose             boolean    Report some/full command line options
-   -help                boolean    Report command line options. More
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
-   -warning             boolean    Report warnings
-   -error               boolean    Report errors
-   -fatal               boolean    Report fatal errors
-   -die                 boolean    Report deaths
-
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
 
 </pre>
 </td></tr></table>
@@ -146,7 +144,7 @@ Output report [hhtetra.qtan]: <b></b>
 
 <tr>
 <td>[-sequence]<br>(Parameter 1)</td>
-<td>Sequence USA</td>
+<td>Nucleotide sequence filename and optional format, or reference (input USA)</td>
 <td>Readable sequence</td>
 <td><b>Required</b></td>
 </tr>
@@ -190,13 +188,12 @@ Output report [hhtetra.qtan]: <b></b>
 
 <tr>
 <td>-origfile</td>
-<td>Output file name</td>
+<td>Sanger Centre program quicktandem output file (optional)</td>
 <td>Output file</td>
-<td><i>&lt;sequence&gt;</i>.equicktandem</td>
+<td>&nbsp;</td>
 </tr>
 
 </table>
-
 <H2>
     Input file format
 </H2>
@@ -283,7 +280,6 @@ SQ   Sequence 1272 BP; 346 A; 455 C; 222 G; 249 T; 0 other;
 </td></tr></table><p>
 
 
-
 <H2>
     Output file format
 </H2>
@@ -308,7 +304,6 @@ http://emboss.sf.net/docs/themes/ReportFormats.html</A>
 for further information on report formats.
 
 <p>
-
 <p>
 
 By default <b>equicktandem</b> writes a 'table' report file.
@@ -322,7 +317,10 @@ By default <b>equicktandem</b> writes a 'table' report file.
 <pre>
 ########################################
 # Program: equicktandem
-# Rundate: Fri Jul 15 2005 12:00:00
+# Rundate: Sat Jul 15 2006 12:00:00
+# Commandline: equicktandem
+#    -noorigfile
+#    -sequence tembl:hhtetra
 # Report_format: table
 # Report_file: hhtetra.qtan
 ########################################
@@ -344,7 +342,6 @@ By default <b>equicktandem</b> writes a 'table' report file.
 #---------------------------------------
 </pre>
 </td></tr></table><p>
-
 
 <H2>
     Data files
@@ -391,11 +388,22 @@ None.
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
-<tr><td><a href="einverted.html">einverted</a></td><td>Finds DNA inverted repeats</td></tr>
-<tr><td><a href="etandem.html">etandem</a></td><td>Looks for tandem repeats in a nucleotide sequence</td></tr>
-<tr><td><a href="palindrome.html">palindrome</a></td><td>Looks for inverted repeats in a nucleotide sequence</td></tr>
-</table>
+<tr>
+<td><a href="einverted.html">einverted</a></td>
+<td>Finds DNA inverted repeats</td>
+</tr>
 
+<tr>
+<td><a href="etandem.html">etandem</a></td>
+<td>Looks for tandem repeats in a nucleotide sequence</td>
+</tr>
+
+<tr>
+<td><a href="palindrome.html">palindrome</a></td>
+<td>Looks for inverted repeats in a nucleotide sequence</td>
+</tr>
+
+</table>
 <p>
 
 <b>equicktandem</b> identifies regions wich are likely to contain tanden
@@ -414,7 +422,6 @@ Richard Durbin (rd&nbsp;&copy;&nbsp;sanger.ac.uk)
 Sanger Institute, Wellcome Trust Genome Campus, Hinxton,
 Cambridge, CB10 1SA, UK.                      
 
-
 <p>
 
 This application was modified for inclusion in EMBOSS by 
@@ -422,25 +429,21 @@ Peter Rice (pmr&nbsp;&copy;&nbsp;ebi.ac.uk)
 <br>
 Informatics Division, European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
 
-
 <H2>
     History
 </H2>
 
 Completed 25 May 1999
 
-
 <H2>
     Target users
 </H2>
 This program is intended to be used by everyone and everything, from naive users to embedded scripts.
 
-
 <H2>
     Comments
 </H2>
 None
-
 
 
 </BODY>

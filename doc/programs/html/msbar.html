@@ -13,7 +13,6 @@
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
-
 msbar
 </font></b>
 </td></tr>
@@ -22,12 +21,10 @@ msbar
 <p>
 
 
-
 <H2>
     Function
 </H2>
 Mutate sequence beyond all recognition
-
 
 <H2>
     Description
@@ -125,12 +122,11 @@ Codon mutation operations
          5 : Duplications
          6 : Moves
 Types of codon mutations to perform [0]: <b></b>
-Output sequence [eclac.fasta]: <b></b>
+output sequence(s) [eclac.fasta]: <b></b>
 
 </pre></td></tr></table><p>
 <p>
 <a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
-
 
 
 
@@ -140,28 +136,40 @@ Output sequence [eclac.fasta]: <b></b>
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
    Standard (Mandatory) qualifiers (* if not always prompted):
-  [-sequence]          seqall     Sequence database USA
-   -count              integer    Number of times to perform the mutation
-                                  operations
-   -point              menu       Types of point mutations to perform
-   -block              menu       Types of block mutations to perform
-*  -codon              menu       Types of codon mutations to perform. These
-                                  are only done if the sequence is nucleic.
-  [-outseq]            seqoutall  Output sequence(s) USA
+  [-sequence]          seqall     Sequence(s) filename and optional format, or
+                                  reference (input USA)
+   -count              integer    [1] Number of times to perform the mutation
+                                  operations (Integer 0 or more)
+   -point              menu       [0] Types of point mutations to perform
+                                  (Values: 0 (None); 1 (Any of the following);
+                                  2 (Insertions); 3 (Deletions); 4 (Changes);
+                                  5 (Duplications); 6 (Moves))
+   -block              menu       [0] Types of block mutations to perform
+                                  (Values: 0 (None); 1 (Any of the following);
+                                  2 (Insertions); 3 (Deletions); 4 (Changes);
+                                  5 (Duplications); 6 (Moves))
+*  -codon              menu       [0] Types of codon mutations to perform.
+                                  These are only done if the sequence is
+                                  nucleic. (Values: 0 (None); 1 (Any of the
+                                  following); 2 (Insertions); 3 (Deletions); 4
+                                  (Changes); 5 (Duplications); 6 (Moves))
+  [-outseq]            seqoutall  [<sequence>.<format>] Sequence set(s)
+                                  filename and optional format (output USA)
 
    Additional (Optional) qualifiers (* if not always prompted):
-*  -inframe            boolean    Do 'codon' and 'block' operations in frame
+*  -inframe            boolean    [N] Do 'codon' and 'block' operations in
+                                  frame
 
    Advanced (Unprompted) qualifiers:
-   -othersequence      seqall     If you require that the resulting mutated
-                                  sequence should not match a set of other
-                                  sequences, then you can specify that set of
-                                  sequences here. For example, if you require
-                                  that the mutated sequence should not be the
-                                  same as the input sequence, enter the input
-                                  sequence here. If you want the result to be
-                                  different to previous results of this
-                                  program, specify the previous result
+   -othersequence      seqall     [asis:N] If you require that the resulting
+                                  mutated sequence should not match a set of
+                                  other sequences, then you can specify that
+                                  set of sequences here. For example, if you
+                                  require that the mutated sequence should not
+                                  be the same as the input sequence, enter
+                                  the input sequence here. If you want the
+                                  result to be different to previous results
+                                  of this program, specify the previous result
                                   sequences here. The program will check that
                                   the result does not match the sequences
                                   specified here before writing it out. If a
@@ -171,70 +179,71 @@ Output sequence [eclac.fasta]: <b></b>
                                   is still a match to the set of sequence
                                   given here, then the matching mutated
                                   sequence is written with a warning message.
-   -minimum            integer    Minimum size for a block mutation
-   -maximum            integer    Maximum size for a block mutation
+   -minimum            integer    [1] Minimum size for a block mutation
+                                  (Integer 0 or more)
+   -maximum            integer    [10] Maximum size for a block mutation (Any
+                                  integer value)
 
    Associated qualifiers:
 
    "-sequence" associated qualifiers
-   -sbegin1             integer    Start of each sequence to be used
-   -send1               integer    End of each sequence to be used
-   -sreverse1           boolean    Reverse (if DNA)
-   -sask1               boolean    Ask for begin/end/reverse
-   -snucleotide1        boolean    Sequence is nucleotide
-   -sprotein1           boolean    Sequence is protein
-   -slower1             boolean    Make lower case
-   -supper1             boolean    Make upper case
-   -sformat1            string     Input sequence format
-   -sdbname1            string     Database name
-   -sid1                string     Entryname
-   -ufo1                string     UFO features
-   -fformat1            string     Features format
-   -fopenfile1          string     Features file name
+   -sbegin1            integer    Start of each sequence to be used
+   -send1              integer    End of each sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
 
    "-othersequence" associated qualifiers
-   -sbegin              integer    Start of each sequence to be used
-   -send                integer    End of each sequence to be used
-   -sreverse            boolean    Reverse (if DNA)
-   -sask                boolean    Ask for begin/end/reverse
-   -snucleotide         boolean    Sequence is nucleotide
-   -sprotein            boolean    Sequence is protein
-   -slower              boolean    Make lower case
-   -supper              boolean    Make upper case
-   -sformat             string     Input sequence format
-   -sdbname             string     Database name
-   -sid                 string     Entryname
-   -ufo                 string     UFO features
-   -fformat             string     Features format
-   -fopenfile           string     Features file name
+   -sbegin             integer    Start of each sequence to be used
+   -send               integer    End of each sequence to be used
+   -sreverse           boolean    Reverse (if DNA)
+   -sask               boolean    Ask for begin/end/reverse
+   -snucleotide        boolean    Sequence is nucleotide
+   -sprotein           boolean    Sequence is protein
+   -slower             boolean    Make lower case
+   -supper             boolean    Make upper case
+   -sformat            string     Input sequence format
+   -sdbname            string     Database name
+   -sid                string     Entryname
+   -ufo                string     UFO features
+   -fformat            string     Features format
+   -fopenfile          string     Features file name
 
    "-outseq" associated qualifiers
-   -osformat2           string     Output seq format
-   -osextension2        string     File name extension
-   -osname2             string     Base file name
-   -osdirectory2        string     Output directory
-   -osdbname2           string     Database name to add
-   -ossingle2           boolean    Separate file for each entry
-   -oufo2               string     UFO features
-   -offormat2           string     Features format
-   -ofname2             string     Features file name
-   -ofdirectory2        string     Output directory
+   -osformat2          string     Output seq format
+   -osextension2       string     File name extension
+   -osname2            string     Base file name
+   -osdirectory2       string     Output directory
+   -osdbname2          string     Database name to add
+   -ossingle2          boolean    Separate file for each entry
+   -oufo2              string     UFO features
+   -offormat2          string     Features format
+   -ofname2            string     Features file name
+   -ofdirectory2       string     Output directory
 
    General qualifiers:
-   -auto                boolean    Turn off prompts
-   -stdout              boolean    Write standard output
-   -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for standard and additional values
-   -debug               boolean    Write debug output to program.dbg
-   -verbose             boolean    Report some/full command line options
-   -help                boolean    Report command line options. More
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
-   -warning             boolean    Report warnings
-   -error               boolean    Report errors
-   -fatal               boolean    Report fatal errors
-   -die                 boolean    Report deaths
-
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
 
 </pre>
 </td></tr></table>
@@ -249,7 +258,7 @@ Output sequence [eclac.fasta]: <b></b>
 
 <tr>
 <td>[-sequence]<br>(Parameter 1)</td>
-<td>Sequence database USA</td>
+<td>Sequence(s) filename and optional format, or reference (input USA)</td>
 <td>Readable sequence(s)</td>
 <td><b>Required</b></td>
 </tr>
@@ -284,9 +293,9 @@ Output sequence [eclac.fasta]: <b></b>
 
 <tr>
 <td>[-outseq]<br>(Parameter 2)</td>
-<td>Output sequence(s) USA</td>
+<td>Sequence set(s) filename and optional format (output USA)</td>
 <td>Writeable sequence(s)</td>
-<td><i>&lt;sequence&gt;</i>.<i>format</i></td>
+<td>&nbsp;</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
@@ -330,7 +339,6 @@ Output sequence [eclac.fasta]: <b></b>
 </tr>
 
 </table>
-
 
 
 <H2>
@@ -458,7 +466,6 @@ RP   1146-1282
 </pre>
 </td></tr></table><p>
 
-
 <H2>
     Output file format
 </H2>
@@ -578,7 +585,6 @@ cagcccgcccatggtaaccaccggcagagcggtcgac
 </pre>
 </td></tr></table><p>
 
-
 <p>
 
 The output is a sequence file with 5 substitutions relative to the
@@ -629,9 +635,12 @@ None.
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
-<tr><td><a href="shuffleseq.html">shuffleseq</a></td><td>Shuffles a set of sequences maintaining composition</td></tr>
-</table>
+<tr>
+<td><a href="shuffleseq.html">shuffleseq</a></td>
+<td>Shuffles a set of sequences maintaining composition</td>
+</tr>
 
+</table>
 
 
 <H2>
@@ -646,13 +655,11 @@ Wellcome Trust Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
 
 
 
-
 <H2>
     History
 </H2>
 
 Written (1999) - Gary Williams
-
 
 <H2>
     Target users
@@ -660,12 +667,10 @@ Written (1999) - Gary Williams
 This program is intended to be used by everyone and everything, from naive users to embedded scripts.
 
 
-
 <H2>
     Comments
 </H2>
 None
-
 
 
 </BODY>

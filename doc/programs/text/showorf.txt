@@ -24,7 +24,7 @@ Usage
 
 % showorf 
 Pretty output of DNA translations
-Input sequence: tembl:paamir
+Input nucleotide sequence: tembl:paamir
 Select Frames To Translate
          0 : None
          1 : F1
@@ -42,18 +42,36 @@ Output file [paamir.showorf]:
 Command line arguments
 
    Standard (Mandatory) qualifiers:
-  [-sequence]          sequence   Sequence USA
-   -frames             menu       Select one or more values
-  [-outfile]           outfile    Output file name
+  [-sequence]          sequence   Nucleotide sequence filename and optional
+                                  format, or reference (input USA)
+   -frames             menu       [1,2,3,4,5,6] Select one or more values
+                                  (Values: 0 (None); 1 (F1); 2 (F2); 3 (F3); 4
+                                  (R1); 5 (R2); 6 (R3))
+  [-outfile]           outfile    [*.showorf] Output file name
 
    Additional (Optional) qualifiers:
-   -table              menu       Genetic code to use
-   -[no]ruler          boolean    Add a ruler
-   -[no]plabel         boolean    Number translations
-   -[no]nlabel         boolean    Number DNA sequence
+   -table              menu       [0] Genetic code to use (Values: 0
+                                  (Standard); 1 (Standard (with alternative
+                                  initiation codons)); 2 (Vertebrate
+                                  Mitochondrial); 3 (Yeast Mitochondrial); 4
+                                  (Mold, Protozoan, Coelenterate Mitochondrial
+                                  and Mycoplasma/Spiroplasma); 5
+                                  (Invertebrate Mitochondrial); 6 (Ciliate
+                                  Macronuclear and Dasycladacean); 9
+                                  (Echinoderm Mitochondrial); 10 (Euplotid
+                                  Nuclear); 11 (Bacterial); 12 (Alternative
+                                  Yeast Nuclear); 13 (Ascidian Mitochondrial);
+                                  14 (Flatworm Mitochondrial); 15
+                                  (Blepharisma Macronuclear); 16
+                                  (Chlorophycean Mitochondrial); 21 (Trematode
+                                  Mitochondrial); 22 (Scenedesmus obliquus);
+                                  23 (Thraustochytrium Mitochondrial))
+   -[no]ruler          boolean    [Y] Add a ruler
+   -[no]plabel         boolean    [Y] Number translations
+   -[no]nlabel         boolean    [Y] Number DNA sequence
 
    Advanced (Unprompted) qualifiers:
-   -width              integer    Width of screen
+   -width              integer    [50] Width of screen (Integer 10 or more)
 
    Associated qualifiers:
 
@@ -89,50 +107,7 @@ Command line arguments
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
-   -die                boolean    Report deaths
-
-
-   Standard (Mandatory) qualifiers Allowed values Default
-   [-sequence]
-   (Parameter 1) Sequence USA Readable sequence Required
-   -frames Select one or more values
-   0 (None)
-   1 (F1)
-   2 (F2)
-   3 (F3)
-   4 (R1)
-   5 (R2)
-   6 (R3)
-   1,2,3,4,5,6
-   [-outfile]
-   (Parameter 2) Output file name Output file <sequence>.showorf
-   Additional (Optional) qualifiers Allowed values Default
-   -table Genetic code to use
-   0 (Standard)
-   1 (Standard (with alternative initiation codons))
-   2 (Vertebrate Mitochondrial)
-   3 (Yeast Mitochondrial)
-   4 (Mold, Protozoan, Coelenterate Mitochondrial and
-   Mycoplasma/Spiroplasma)
-   5 (Invertebrate Mitochondrial)
-   6 (Ciliate Macronuclear and Dasycladacean)
-   9 (Echinoderm Mitochondrial)
-   10 (Euplotid Nuclear)
-   11 (Bacterial)
-   12 (Alternative Yeast Nuclear)
-   13 (Ascidian Mitochondrial)
-   14 (Flatworm Mitochondrial)
-   15 (Blepharisma Macronuclear)
-   16 (Chlorophycean Mitochondrial)
-   21 (Trematode Mitochondrial)
-   22 (Scenedesmus obliquus)
-   23 (Thraustochytrium Mitochondrial)
-   0
-   -[no]ruler Add a ruler Boolean value Yes/No Yes
-   -[no]plabel Number translations Boolean value Yes/No Yes
-   -[no]nlabel Number DNA sequence Boolean value Yes/No Yes
-   Advanced (Unprompted) qualifiers Allowed values Default
-   -width Width of screen Integer 10 or more 50
+   -die                boolean    Report dying program messages
 
 Input file format
 
@@ -456,20 +431,21 @@ Known bugs
 
 See also
 
-   Program name                        Description
-   backtranseq  Back translate a protein sequence
-   coderet      Extract CDS, mRNA and translations from feature tables
-   getorf       Finds and extracts open reading frames (ORFs)
-   marscan      Finds MAR/SAR sites in nucleic sequences
-   plotorf      Plot potential open reading frames
-   prettyseq    Output sequence with translated ranges
-   remap        Display sequence with restriction sites, translation etc
-   showseq      Display a sequence with features, translation etc
-   sixpack      Display a DNA sequence with 6-frame translation and ORFs
-   syco         Synonymous codon usage Gribskov statistic plot
-   tcode        Fickett TESTCODE statistic to identify protein-coding DNA
-   transeq      Translate nucleic acid sequences
-   wobble       Wobble base plot
+   Program name                         Description
+   backtranambig Back translate a protein sequence to ambiguous codons
+   backtranseq   Back translate a protein sequence
+   coderet       Extract CDS, mRNA and translations from feature tables
+   getorf        Finds and extracts open reading frames (ORFs)
+   marscan       Finds MAR/SAR sites in nucleic sequences
+   plotorf       Plot potential open reading frames
+   prettyseq     Output sequence with translated ranges
+   remap         Display sequence with restriction sites, translation etc
+   showseq       Display a sequence with features, translation etc
+   sixpack       Display a DNA sequence with 6-frame translation and ORFs
+   syco          Synonymous codon usage Gribskov statistic plot
+   tcode         Fickett TESTCODE statistic to identify protein-coding DNA
+   transeq       Translate nucleic acid sequences
+   wobble        Wobble base plot
 
 Author(s)
 

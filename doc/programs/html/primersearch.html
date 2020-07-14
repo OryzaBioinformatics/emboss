@@ -13,7 +13,6 @@
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
-
 primersearch
 </font></b>
 </td></tr>
@@ -22,12 +21,10 @@ primersearch
 <p>
 
 
-
 <H2>
     Function
 </H2>
 Searches DNA sequences for matches with primer pairs
-
 
 <H2>
     Description
@@ -59,9 +56,9 @@ opposite orientations.
 
 % <b>primersearch tembl:z52466 </b>
 Searches DNA sequences for matches with primer pairs
-Primer file: <b>primers</b>
+Primer pairs file: <b>primers</b>
 Allowed percent mismatch [0]: <b></b>
-Output file [hsa203yc1.primersearch]: <b></b>
+Whitehead primer3_core program output file [hsa203yc1.primersearch]: <b></b>
 
 </pre></td></tr></table><p>
 <p>
@@ -77,14 +74,13 @@ Here we run the same example but allowing 20% mismatch between the primers and t
 
 % <b>primersearch tembl:z52466 </b>
 Searches DNA sequences for matches with primer pairs
-Primer file: <b>primers</b>
+Primer pairs file: <b>primers</b>
 Allowed percent mismatch [0]: <b>20</b>
-Output file [hsa203yc1.primersearch]: <b></b>
+Whitehead primer3_core program output file [hsa203yc1.primersearch]: <b></b>
 
 </pre></td></tr></table><p>
 <p>
 <a href="#output.2">Go to the output files for this example</a><p><p>
-
 
 
 <H2>
@@ -93,10 +89,13 @@ Output file [hsa203yc1.primersearch]: <b></b>
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
    Standard (Mandatory) qualifiers:
-  [-seqall]            seqall     Sequence database USA
-  [-infile]            infile     Primer file
-  [-mismatchpercent]   integer    Allowed percent mismatch
-  [-outfile]           outfile    Output file name
+  [-seqall]            seqall     Nucleotide sequence(s) filename and optional
+                                  format, or reference (input USA)
+  [-infile]            infile     Primer pairs file
+  [-mismatchpercent]   integer    [0] Allowed percent mismatch (Any integer
+                                  value)
+  [-outfile]           outfile    [*.primersearch] Whitehead primer3_core
+                                  program output file
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers: (none)
@@ -134,8 +133,7 @@ Output file [hsa203yc1.primersearch]: <b></b>
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
-   -die                boolean    Report deaths
-
+   -die                boolean    Report dying program messages
 
 </pre>
 </td></tr></table>
@@ -150,14 +148,14 @@ Output file [hsa203yc1.primersearch]: <b></b>
 
 <tr>
 <td>[-seqall]<br>(Parameter 1)</td>
-<td>Sequence database USA</td>
+<td>Nucleotide sequence(s) filename and optional format, or reference (input USA)</td>
 <td>Readable sequence(s)</td>
 <td><b>Required</b></td>
 </tr>
 
 <tr>
 <td>[-infile]<br>(Parameter 2)</td>
-<td>Primer file</td>
+<td>Primer pairs file</td>
 <td>Input file</td>
 <td><b>Required</b></td>
 </tr>
@@ -171,9 +169,9 @@ Output file [hsa203yc1.primersearch]: <b></b>
 
 <tr>
 <td>[-outfile]<br>(Parameter 4)</td>
-<td>Output file name</td>
+<td>Whitehead primer3_core program output file</td>
 <td>Output file</td>
-<td><i>&lt;sequence&gt;</i>.primersearch</td>
+<td>&nbsp;</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
@@ -197,7 +195,6 @@ Output file [hsa203yc1.primersearch]: <b></b>
 </tr>
 
 </table>
-
 
 
 <H2>
@@ -290,7 +287,6 @@ SQ   Sequence 389 BP; 118 A; 124 C; 86 G; 57 T; 4 other;
 </pre>
 </td></tr></table><p>
 
-
 <p>
 
 The input primer file has the following format:
@@ -375,7 +371,6 @@ Amplimer 2
 </pre>
 </td></tr></table><p>
 
-
 <H2>
     Data files
 </H2>
@@ -448,10 +443,17 @@ None.
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
-<tr><td><a href="eprimer3.html">eprimer3</a></td><td>Picks PCR primers and hybridization oligos</td></tr>
-<tr><td><a href="stssearch.html">stssearch</a></td><td>Search a DNA database for matches with a set of STS primers</td></tr>
-</table>
+<tr>
+<td><a href="eprimer3.html">eprimer3</a></td>
+<td>Picks PCR primers and hybridization oligos</td>
+</tr>
 
+<tr>
+<td><a href="stssearch.html">stssearch</a></td>
+<td>Search a DNA database for matches with a set of STS primers</td>
+</tr>
+
+</table>
 
 <p>
 
@@ -470,13 +472,11 @@ Sanger Institute, Wellcome Trust Genome Campus, Hinxton,
 Cambridge, CB10 1SA, UK. 
 
 
-
 <H2>
     History
 </H2>
 
 Written Aug 2000 - Val Curwen
-
 
 <H2>
     Target users
@@ -484,12 +484,10 @@ Written Aug 2000 - Val Curwen
 This program is intended to be used by everyone and everything, from naive users to embedded scripts.
 
 
-
 <H2>
     Comments
 </H2>
 None
-
 
 </BODY>
 </HTML>

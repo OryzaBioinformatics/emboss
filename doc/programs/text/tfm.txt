@@ -23,7 +23,7 @@ Description
 
    If you have problems understanding the function or usage of an EMBOSS
    program, then you should contact the EMBOSS mailing list
-   (emboss@embnet.org).
+   (emboss@emboss.open-bio.org).
 
    The unusual name of this program comes from the common computing
    science expression: RTFM. This acronym, as you probably already know,
@@ -69,6 +69,9 @@ Usage
 % tfm wossname 
 Displays a program's help documentation manual
 
+::::::::::::::
+/homes/pmr/local/share/EMBOSS/doc/programs/text/wossname.txt
+::::::::::::::
 
                                  wossname
 
@@ -109,9 +112,11 @@ frestboot        Bootstrapped restriction sites algorithm
 frestdist        Distance matrix from restriction sites or fragments
 frestml          Restriction site maximum Likelihood method
 recoder          Remove restriction sites but maintain same translation
+redata           Search REBASE for enzyme name, references, suppliers etc
 remap            Display sequence with restriction sites, translation etc
 restover         Find restriction enzymes producing specific overhang
 restrict         Finds restriction enzyme cleavage sites
+showseq          Display a sequence with features, translation etc
 silent           Silent mutation restriction enzyme scan
 
 
@@ -133,7 +138,7 @@ acdvalid         ACD file validation
 ALIGNMENT CONSENSUS
 cons             Creates a consensus from multiple alignments
 megamerger       Merge two large overlapping nucleic acid sequences
-merger           Merge two overlapping nucleic acid sequences
+merger           Merge two overlapping sequences
 
 ALIGNMENT DIFFERENCES
 diffseq          Find differences between nearly identical sequences
@@ -145,20 +150,10 @@ dottup           Displays a wordmatch dotplot of two sequences
 polydot          Displays all-against-all dotplots of a set of sequences
 
 ALIGNMENT GLOBAL
-alignrunner      Align sequence pairs in a directory
-comparator       Compare contact scores of two sequence alignments
-contactalign     Damian Counsell's experimental 2.5-D alignment algorithm
 esim4            Align an mRNA to a genomic DNA sequence
 est2genome       Align EST and genomic DNA sequences
-nawalign         Damian Counsell's NW implementation
-nawalignrunner   Nawalign all sequence pairs in a directory
 needle           Needleman-Wunsch global alignment
-needlerunner     Needle all sequence pairs in a directory
-scorer           Score alignments using structural alignments
-scorerrunner     SCORER for ordered pairs of substituted seqs
 stretcher        Finds the best global alignment between two sequences
-substitute       Substitute matches into a template
-substituterunner Run SUBSTITUTE on a directory of traces
 
 ALIGNMENT LOCAL
 matcher          Finds the best local alignments between two sequences
@@ -198,12 +193,13 @@ biosed           Replace or delete sequence sections
 codcopy          Reads and writes a codon usage table
 cutseq           Removes a specified section from a sequence
 degapseq         Removes gap characters from sequences
-degapseqrunner   Degapseq all sequence pairs in a directory
 descseq          Alter the name or description of a sequence
 entret           Reads and writes (returns) flatfile entries
 extractfeat      Extract features from a sequence
 extractseq       Extract regions from a sequence
 listor           Write a list file of the logical OR of two sets of sequences
+makenucseq       Creates random nucleotide sequences
+makeprotseq      Creates random protein sequences
 maskfeat         Mask off features of a sequence
 maskseq          Mask off regions of a sequence
 newseq           Type in a short new sequence
@@ -233,16 +229,25 @@ showfeat         Show features of a sequence
 twofeat          Finds neighbouring pairs of features in sequences
 
 HMM
-ealistat         Statistics for multiple alignment files
-ehmmalign        Align sequences with an HMM
-ehmmbuild        Build HMM
-ehmmcalibrate    Calibrate a hidden Markov model
-ehmmconvert      Convert between HMM formats
-ehmmemit         Extract HMM sequences
-ehmmfetch        Extract HMM from a database
-ehmmindex        Index an HMM database
-ehmmpfam         Align single sequence with an HMM
-ehmmsearch       Search sequence database with an HMM
+ehmmalign        Align sequences to an HMM profile
+ehmmbuild        Build a profile HMM from an alignment
+ehmmcalibrate    Calibrate HMM search statistics
+ehmmconvert      Convert between profile HMM file formats
+ehmmemit         Generate sequences from a profile HMM
+ehmmfetch        Retrieve an HMM from an HMM database
+ehmmindex        Create a binary SSI index for an HMM database
+ehmmpfam         Search one or more sequences against an HMM database
+ehmmsearch       Search a sequence database with a profile HMM
+oalistat         Statistics for multiple alignment files
+ohmmalign        Align sequences with an HMM
+ohmmbuild        Build HMM
+ohmmcalibrate    Calibrate a hidden Markov model
+ohmmconvert      Convert between HMM formats
+ohmmemit         Extract HMM sequences
+ohmmfetch        Extract HMM from a database
+ohmmindex        Index an HMM database
+ohmmpfam         Align single sequence with an HMM
+ohmmsearch       Search sequence database with an HMM
 
 INFORMATION
 infoalign        Information on a multiple sequence alignment
@@ -330,10 +335,29 @@ restrict         Finds restriction enzyme cleavage sites
 showseq          Display a sequence with features, translation etc
 silent           Silent mutation restriction enzyme scan
 
+NUCLEIC RNA FOLDING
+vrnaalifold      RNA alignment folding
+vrnaalifoldpf    RNA alignment folding with partition
+vrnacofold       RNA cofolding
+vrnacofoldconc   RNA cofolding with concentrations
+vrnacofoldpf     RNA cofolding with partitioning
+vrnadistance     RNA distances
+vrnaduplex       RNA duplex calculation
+vrnaeval         RNA eval
+vrnaevalpair     RNA eval with cofold
+vrnafold         Calculate secondary structures of RNAs
+vrnafoldpf       Secondary structures of RNAs with partition
+vrnaheat         RNA melting
+vrnainverse      RNA sequences matching a structure
+vrnalfold        Calculate locally stable secondary structures of RNAs
+vrnaplot         Plot vrnafold output
+vrnasubopt       Calculate RNA suboptimals
+
 NUCLEIC TRANSCRIPTION
 tfscan           Scans DNA sequences for transcription factors
 
 NUCLEIC TRANSLATION
+backtranambig    Back translate a protein sequence to ambiguous codons
 backtranseq      Back translate a protein sequence
 coderet          Extract CDS, mRNA and translations from feature tables
 plotorf          Plot potential open reading frames
@@ -372,7 +396,6 @@ fpars            Discrete character parsimony
 fpenny           Penny algorithm, branch-and-bound
 
 PHYLOGENY DISTANCE MATRIX
-distmat          Creates a distance matrix from multiple alignments
 efitch           Fitch-Margoliash and Least-Squares Distance Methods
 ekitsch          Fitch-Margoliash method with contemporary tips
 eneighbor        Phylogenies from distance matrix by N-J or UPGMA method
@@ -386,6 +409,7 @@ fcontml          Gene frequency and continuous character Maximum Likelihood
 fgendist         Compute genetic distances from gene frequencies
 
 PHYLOGENY MOLECULAR SEQUENCE
+distmat          Creates a distance matrix from multiple alignments
 ednacomp         DNA compatibility algorithm
 ednadist         Nucleic acid sequence Distance Matrix program
 ednainvar        Nucleic acid sequence Invariants method
@@ -434,7 +458,6 @@ tmap             Displays membrane spanning regions
 topo             Draws an image of a transmembrane protein
 
 PROTEIN 3D STRUCTURE
-contactcount     Count specific versus non-specific contacts
 contacts         Generate intra-chain CON files from CCF files
 domainalign      Generate alignments (DAF file) for nodes in a DCF file
 domainrep        Reorder DCF file to identify representative structures
@@ -445,7 +468,6 @@ matgen3d         Generate a 3D-1D scoring matrix from CCF files
 psiphi           Phi and psi torsion angles from protein coordinates
 rocon            Generates a hits file from comparing two DHF files
 rocplot          Performs ROC analysis on hits files
-scorecmapdir     Contact scores for cleaned protein chain contact files
 seqalign         Extend alignments (DAF file) with sequences (DHF file)
 seqfraggle       Removes fragment sequences from DHF files
 seqsearch        Generate PSI-BLAST hits (DHF file) from a DAF file
@@ -457,6 +479,7 @@ sigscan          Generate hits (DHF file) from a signature search
 sigscanlig       Search ligand-signature library & write hits (LHF file)
 
 PROTEIN COMPOSITION
+backtranambig    Back translate a protein sequence to ambiguous codons
 backtranseq      Back translate a protein sequence
 charge           Protein charge plot
 checktrans       Reports STOP codons and ORF statistics of a protein
@@ -475,12 +498,14 @@ pepwindowall     Displays protein hydropathy of a set of sequences
 PROTEIN MOTIFS
 antigenic        Finds antigenic sites in proteins
 digest           Protein proteolytic enzyme or reagent cleavage digest
+emast            Motif detection
+ememe            Motif detection
 epestfind        Finds PEST motifs as potential proteolytic cleavage sites
 fuzzpro          Protein pattern search
 fuzztran         Protein pattern search after translation
 helixturnhelix   Report nucleic acid binding motifs
-meme             Motif detection
 oddcomp          Find protein sequence regions with a biased composition
+omeme            Motif detection
 patmatdb         Search a protein sequence with a motif
 patmatmotifs     Search a PROSITE motif database with a protein sequence
 pepcoil          Predicts coiled coil regions
@@ -500,6 +525,7 @@ prophet          Gapped alignment for profiles
 TEST
 crystalball      Answers every drug discovery question about a sequence
 myseq            Demonstration of sequence reading
+mytest           Demonstration of sequence reading
 
 UTILS DATABASE CREATION
 aaindexextract   Extract data from AAINDEX
@@ -553,9 +579,9 @@ acdpretty        ACD pretty printing utility
 acdtable         Creates an HTML table from an ACD file
 acdtrace         ACD compiler on-screen trace
 acdvalid         ACD file validation
-alignrunner      Align sequence pairs in a directory
 allversusall     Sequence similarity data from all-versus-all comparison
 antigenic        Finds antigenic sites in proteins
+backtranambig    Back translate a protein sequence to ambiguous codons
 backtranseq      Back translate a protein sequence
 banana           Bending and curvature plot in B-DNA
 biosed           Replace or delete sequence sections
@@ -570,11 +596,8 @@ cirdna           Draws circular maps of DNA constructs
 codcmp           Codon usage table comparison
 codcopy          Reads and writes a codon usage table
 coderet          Extract CDS, mRNA and translations from feature tables
-comparator       Compare contact scores of two sequence alignments
 compseq          Count composition of dimer/trimer/etc words in a sequence
 cons             Creates a consensus from multiple alignments
-contactalign     Damian Counsell's experimental 2.5-D alignment algorithm
-contactcount     Count specific versus non-specific contacts
 contacts         Generate intra-chain CON files from CCF files
 cpgplot          Plot CpG rich areas
 cpgreport        Reports all CpG rich regions
@@ -591,7 +614,6 @@ dbxfasta         Database b+tree indexing for fasta file databases
 dbxflat          Database b+tree indexing for flat file databases
 dbxgcg           Database b+tree indexing for GCG formatted databases
 degapseq         Removes gap characters from sequences
-degapseqrunner   Degapseq all sequence pairs in a directory
 descseq          Alter the name or description of a sequence
 diffseq          Find differences between nearly identical sequences
 digest           Protein proteolytic enzyme or reagent cleavage digest
@@ -607,7 +629,6 @@ dotmatcher       Displays a thresholded dotplot of two sequences
 dotpath          Non-overlapping wordmatch dotplot of two sequences
 dottup           Displays a wordmatch dotplot of two sequences
 dreg             Regular expression search of a nucleotide sequence
-ealistat         Statistics for multiple alignment files
 eclique          Largest clique program
 econsense        Majority-rule and strict consensus tree
 econtml          Continuous character Maximum Likelihood method
@@ -624,19 +645,21 @@ edolpenny        Penny algorithm Dollo or polymorphism
 efactor          Multistate to binary recoding program
 efitch           Fitch-Margoliash and Least-Squares Distance Methods
 egendist         Genetic Distance Matrix program
-ehmmalign        Align sequences with an HMM
-ehmmbuild        Build HMM
-ehmmcalibrate    Calibrate a hidden Markov model
-ehmmconvert      Convert between HMM formats
-ehmmemit         Extract HMM sequences
-ehmmfetch        Extract HMM from a database
-ehmmindex        Index an HMM database
-ehmmpfam         Align single sequence with an HMM
-ehmmsearch       Search sequence database with an HMM
+ehmmalign        Align sequences to an HMM profile
+ehmmbuild        Build a profile HMM from an alignment
+ehmmcalibrate    Calibrate HMM search statistics
+ehmmconvert      Convert between profile HMM file formats
+ehmmemit         Generate sequences from a profile HMM
+ehmmfetch        Retrieve an HMM from an HMM database
+ehmmindex        Create a binary SSI index for an HMM database
+ehmmpfam         Search one or more sequences against an HMM database
+ehmmsearch       Search a sequence database with a profile HMM
 einverted        Finds DNA inverted repeats
 ekitsch          Fitch-Margoliash method with contemporary tips
+emast            Motif detection
 embossdata       Finds or fetches data files read by EMBOSS programs
 embossversion    Writes the current EMBOSS version number
+ememe            Motif detection
 emix             Mixed parsimony algorithm
 emma             Multiple alignment program - interface to ClustalW program
 emnu             Simple menu of EMBOSS applications
@@ -715,31 +738,41 @@ isochore         Plots isochores in large DNA sequences
 libgen           Generate discriminating elements from alignments
 lindna           Draws linear maps of DNA constructs
 listor           Write a list file of the logical OR of two sets of sequences
+makenucseq       Creates random nucleotide sequences
+makeprotseq      Creates random protein sequences
 marscan          Finds MAR/SAR sites in nucleic sequences
 maskfeat         Mask off features of a sequence
 maskseq          Mask off regions of a sequence
 matcher          Finds the best local alignments between two sequences
 matgen3d         Generate a 3D-1D scoring matrix from CCF files
 megamerger       Merge two large overlapping nucleic acid sequences
-meme             Motif detection
-merger           Merge two overlapping nucleic acid sequences
+merger           Merge two overlapping sequences
 msbar            Mutate sequence beyond all recognition
 mse              Multiple Sequence Editor
 mwcontam         Shows molwts that match across a set of files
 mwfilter         Filter noisy molwts from mass spec output
 myseq            Demonstration of sequence reading
-nawalign         Damian Counsell's NW implementation
-nawalignrunner   Nawalign all sequence pairs in a directory
+mytest           Demonstration of sequence reading
 needle           Needleman-Wunsch global alignment
-needlerunner     Needle all sequence pairs in a directory
 newcpgreport     Report CpG rich areas
 newcpgseek       Reports CpG rich regions
 newseq           Type in a short new sequence
 noreturn         Removes carriage return from ASCII files
 notseq           Exclude a set of sequences and write out the remaining ones
 nthseq           Writes one sequence from a multiple set of sequences
+oalistat         Statistics for multiple alignment files
 octanol          Displays protein hydropathy
 oddcomp          Find protein sequence regions with a biased composition
+ohmmalign        Align sequences with an HMM
+ohmmbuild        Build HMM
+ohmmcalibrate    Calibrate a hidden Markov model
+ohmmconvert      Convert between HMM formats
+ohmmemit         Extract HMM sequences
+ohmmfetch        Extract HMM from a database
+ohmmindex        Index an HMM database
+ohmmpfam         Align single sequence with an HMM
+ohmmsearch       Search sequence database with an HMM
+omeme            Motif detection
 palindrome       Looks for inverted repeats in a nucleotide sequence
 pasteseq         Insert one sequence into another
 patmatdb         Search a protein sequence with a motif
@@ -778,9 +811,6 @@ revseq           Reverse and complement a sequence
 rocon            Generates a hits file from comparing two DHF files
 rocplot          Performs ROC analysis on hits files
 scopparse        Generate DCF file from raw SCOP files
-scorecmapdir     Contact scores for cleaned protein chain contact files
-scorer           Score alignments using structural alignments
-scorerrunner     SCORER for ordered pairs of substituted seqs
 seealso          Finds programs sharing group names
 seqalign         Extend alignments (DAF file) with sequences (DHF file)
 seqfraggle       Removes fragment sequences from DHF files
@@ -811,8 +841,6 @@ splitter         Split a sequence into (overlapping) smaller sequences
 ssematch         Search a DCF file for secondary structure matches
 stretcher        Finds the best global alignment between two sequences
 stssearch        Search a DNA database for matches with a set of STS primers
-substitute       Substitute matches into a template
-substituterunner Run SUBSTITUTE on a directory of traces
 supermatcher     Match large sequences against one or more other sequences
 syco             Synonymous codon usage Gribskov statistic plot
 tcode            Fickett TESTCODE statistic to identify protein-coding DNA
@@ -829,6 +857,22 @@ trimseq          Trim ambiguous bits off the ends of sequences
 twofeat          Finds neighbouring pairs of features in sequences
 union            Reads sequence fragments and builds one sequence
 vectorstrip      Strips out DNA between a pair of vector sequences
+vrnaalifold      RNA alignment folding
+vrnaalifoldpf    RNA alignment folding with partition
+vrnacofold       RNA cofolding
+vrnacofoldconc   RNA cofolding with concentrations
+vrnacofoldpf     RNA cofolding with partitioning
+vrnadistance     RNA distances
+vrnaduplex       RNA duplex calculation
+vrnaeval         RNA eval
+vrnaevalpair     RNA eval with cofold
+vrnafold         Calculate secondary structures of RNAs
+vrnafoldpf       Secondary structures of RNAs with partition
+vrnaheat         RNA melting
+vrnainverse      RNA sequences matching a structure
+vrnalfold        Calculate locally stable secondary structures of RNAs
+vrnaplot         Plot vrnafold output
+vrnasubopt       Calculate RNA suboptimals
 water            Smith-Waterman local alignment
 whichdb          Search all databases for an entry
 wobble           Wobble base plot
@@ -871,6 +915,7 @@ NUCLEIC PRIMERS
 NUCLEIC PROFILES
 NUCLEIC REPEATS
 NUCLEIC RESTRICTION
+NUCLEIC RNA FOLDING
 NUCLEIC TRANSCRIPTION
 NUCLEIC TRANSLATION
 PHYLOGENY CONSENSUS
@@ -893,65 +938,10 @@ UTILS MISC
 
    Example 5
 
-   Output html tags around the list of program groups:
-
-
-% wossname -groups -html -prelink '#'
-Finds programs by keywords in their one-line documentation
-Keyword to search for, or blank to list all programs:
-
-     * ACD
-     * ALIGNMENT CONSENSUS
-     * ALIGNMENT DIFFERENCES
-     * ALIGNMENT DOT PLOTS
-     * ALIGNMENT GLOBAL
-     * ALIGNMENT LOCAL
-     * ALIGNMENT MULTIPLE
-     * DISPLAY
-     * EDIT
-     * ENZYME KINETICS
-     * FEATURE TABLES
-     * HMM
-     * INFORMATION
-     * MENUS
-     * NUCLEIC 2D STRUCTURE
-     * NUCLEIC CODON USAGE
-     * NUCLEIC COMPOSITION
-     * NUCLEIC CPG ISLANDS
-     * NUCLEIC GENE FINDING
-     * NUCLEIC MOTIFS
-     * NUCLEIC MUTATION
-     * NUCLEIC PRIMERS
-     * NUCLEIC PROFILES
-     * NUCLEIC REPEATS
-     * NUCLEIC RESTRICTION
-     * NUCLEIC TRANSCRIPTION
-     * NUCLEIC TRANSLATION
-     * PHYLOGENY CONSENSUS
-     * PHYLOGENY CONTINUOUS CHARACTERS
-     * PHYLOGENY DISCRETE CHARACTERS
-     * PHYLOGENY DISTANCE MATRIX
-     * PHYLOGENY GENE FREQUENCIES
-     * PHYLOGENY MOLECULAR SEQUENCE
-     * PHYLOGENY TREE DRAWING
-     * PROTEIN 2D STRUCTURE
-     * PROTEIN 3D STRUCTURE
-     * PROTEIN COMPOSITION
-     * PROTEIN MOTIFS
-     * PROTEIN MUTATION
-     * PROTEIN PROFILES
-     * TEST
-     * UTILS DATABASE CREATION
-     * UTILS DATABASE INDEXING
-     * UTILS MISC
-
-   Example 6
-
    Output html tags around the list of programs:
 
 
-% wossname '' -html -prelink 'http://emboss.sf.net/apps/' -postlink '.html' -ou
-t wossname.html
+% wossname '' -html -out wossname.html
 Finds programs by keywords in their one-line documentation
 
    Go to the output files for this example
@@ -961,13 +951,14 @@ Command line arguments
    Standard (Mandatory) qualifiers:
   [-search]            string     Enter a word or words here and a
                                   case-independent search for it will be made
-                                  in the one-line documentation of all of the
-                                  EMBOSS programs. If no keyword is specified,
-                                  all programs will be listed.
+                                  in the one-line documentation, group names
+                                  and keywords of all of the EMBOSS programs.
+                                  If no keyword is specified, all programs
+                                  will be listed. (Any string is accepted)
 
-   Additional (Optional) qualifiers (* if not always prompted):
-   -explode            boolean    The groups that EMBOSS applications belong
-                                  to have two forms, exploded and not
+   Additional (Optional) qualifiers:
+   -explode            boolean    [N] The groups that EMBOSS applications
+                                  belong to have two forms, exploded and not
                                   exploded. The exploded group names are more
                                   numerous and often vaguely phrased than the
                                   non-exploded ones. The exploded names are
@@ -977,56 +968,37 @@ Command line arguments
                                   names as: 'NAME1', 'NAME2', 'NAME1 NAME2',
                                   NAME2 NAME1'. The non-expanded names are
                                   simply like: 'NAME1 NAME2'.
-   -outfile            outfile    Output file name
-   -html               toggle     If you are sending the output to a file,
+   -[no]allmatch       boolean    [Y] By default, all words in the search
+                                  string must match. This option searches for
+                                  a match to any word in a list of
+                                  possibilities
+   -showkeywords       boolean    [N] Show keywords with program documentation
+   -outfile            outfile    [stdout] Output file name
+   -html               toggle     [N] If you are sending the output to a file,
                                   this will format it for displaying as a
                                   table in a WWW document.
-*  -prelink            string     If you are outputting to a file in HTML
-                                  format, you can make the program names into
-                                  hyper-links by setting this to be the first
-                                  half of the URL.
-                                  For example, if you wish the program name to
-                                  be a hyperlink to the URL:
-                                  http://www.uk.embnet.org/Software/EMBOSS/Apps
-/programname.html
-                                  then if you enter
-                                  http://www.uk.embnet.org/Software/EMBOSS/Apps
-/
-                                  here, then the first half of the URL before
-                                  the programname will be set.
-*  -postlink           string     If you are outputting to a file in HTML
-                                  format, you can make the program names into
-                                  hyper-links by setting this to be the second
-                                  half of the URL.
-                                  For example, if you wish the program name to
-                                  be a hyperlink to the URL:
-                                  http://www.uk.embnet.org/Software/EMBOSS/Apps
-/programname.html
-                                  then if you enter '.html' here, the second
-                                  half of the URL after the programname will
-                                  be set.
-   -groups             boolean    If you use this option, then only the group
-                                  names will output to the file
-   -alphabetic         boolean    If you use this option, then you will get a
-                                  single list of the program names and
+   -groups             boolean    [N] If you use this option, then only the
+                                  group names will output to the file
+   -alphabetic         boolean    [N] If you use this option, then you will
+                                  get a single list of the program names and
                                   descriptions instead of the programs being
                                   listed in their functional groups.
 
    Advanced (Unprompted) qualifiers:
-   -[no]emboss         boolean    If you use this option then EMBOSS program
-                                  documentation will be searched. If this
-                                  option is set to be false, then only the
-                                  EMBASSY programs will be searched (if the
-                                  -embassy option is true). EMBASSY programs
-                                  are not strictly part of EMBOSS, but use the
-                                  same code libraries and share the same look
-                                  and feel, but are generally developed by
-                                  people who wish the programs to be outside
-                                  of the GNU Public Licence scheme
-   -[no]embassy        boolean    If you use this option then EMBASSY program
-                                  documentation will be searched. If this
-                                  option is set to be false, then only the
-                                  EMBOSS programs will be searched (if the
+   -[no]emboss         boolean    [Y] If you use this option then EMBOSS
+                                  program documentation will be searched. If
+                                  this option is set to be false, then only
+                                  the EMBASSY programs will be searched (if
+                                  the -embassy option is true). EMBASSY
+                                  programs are not strictly part of EMBOSS,
+                                  but use the same code libraries and share
+                                  the same look and feel, but are generally
+                                  developed by people who wish the programs to
+                                  be outside of the GNU Public Licence scheme
+   -[no]embassy        boolean    [Y] If you use this option then EMBASSY
+                                  program documentation will be searched. If
+                                  this option is set to be false, then only
+                                  the EMBOSS programs will be searched (if the
                                   -emboss option is true). EMBASSY programs
                                   are not strictly part of EMBOSS, but use the
                                   same code libraries and share the same look
@@ -1040,22 +1012,24 @@ Command line arguments
                                   libraries and share the same look and feel,
                                   but are generally developed by people who
                                   wish the programs to be outside of the GNU
-                                  Public Licence scheme
-   -colon              boolean    The groups that EMBOSS applications belong
-                                  to up to two levels, for example the primary
-                                  group 'ALIGNMENT' has several sub-groups,
-                                  or second-level groups, e.g.: CONSENSUS,
-                                  DIFFERENCES, DOT PLOTS, GLOBAL, LOCAL,
-                                  MULTIPLE. To aid programs that parse the
-                                  output of wossname that require the names of
-                                  these subgroups, a colon ':' will be placed
-                                  between the first and second level of the
-                                  group name if this option is true. Note:
-                                  This does not apply if the group names have
-                                  been exploded with the 'explode' option.
-   -gui                boolean    This option is intended to help those who
-                                  are designing Graphical User Interfaces to
-                                  the EMBOSS applications. Some EMBOSS
+                                  Public Licence scheme (Any string is
+                                  accepted)
+   -colon              boolean    [N] The groups that EMBOSS applications
+                                  belong to up to two levels, for example the
+                                  primary group 'ALIGNMENT' has several
+                                  sub-groups, or second-level groups, e.g.:
+                                  CONSENSUS, DIFFERENCES, DOT PLOTS, GLOBAL,
+                                  LOCAL, MULTIPLE. To aid programs that parse
+                                  the output of wossname that require the
+                                  names of these subgroups, a colon ':' will
+                                  be placed between the first and second level
+                                  of the group name if this option is true.
+                                  Note: This does not apply if the group names
+                                  have been exploded with the 'explode'
+                                  option.
+   -gui                boolean    [N] This option is intended to help those
+                                  who are designing Graphical User Interfaces
+                                  to the EMBOSS applications. Some EMBOSS
                                   programs are inappropriate for running in a
                                   GUI, these include other menu programs and
                                   interactive editors. This option allows you
@@ -1065,97 +1039,22 @@ Command line arguments
    Associated qualifiers:
 
    "-outfile" associated qualifiers
-   -odirectory          string     Output directory
+   -odirectory         string     Output directory
 
    General qualifiers:
-   -auto                boolean    Turn off prompts
-   -stdout              boolean    Write standard output
-   -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for standard and additional values
-   -debug               boolean    Write debug output to program.dbg
-   -verbose             boolean    Report some/full command line options
-   -help                boolean    Report command line options. More
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
-   -warning             boolean    Report warnings
-   -error               boolean    Report errors
-   -fatal               boolean    Report fatal errors
-   -die                 boolean    Report deaths
-
-
-   Standard (Mandatory) qualifiers Allowed values Default
-   [-search]
-   (Parameter 1) Enter a word or words here and a case-independent search
-   for it will be made in the one-line documentation of all of the EMBOSS
-   programs. If no keyword is specified, all programs will be listed. Any
-   string is accepted An empty string is accepted
-   Additional (Optional) qualifiers Allowed values Default
-   -explode The groups that EMBOSS applications belong to have two forms,
-   exploded and not exploded. The exploded group names are more numerous
-   and often vaguely phrased than the non-exploded ones. The exploded
-   names are formed from definitions of the group names that start like
-   NAME1:NAME2 and which are then expanded into many combinations of the
-   names as: 'NAME1', 'NAME2', 'NAME1 NAME2', NAME2 NAME1'. The
-   non-expanded names are simply like: 'NAME1 NAME2'. Boolean value
-   Yes/No No
-   -outfile Output file name Output file stdout
-   -html If you are sending the output to a file, this will format it for
-   displaying as a table in a WWW document. Toggle value Yes/No No
-   -prelink If you are outputting to a file in HTML format, you can make
-   the program names into hyper-links by setting this to be the first
-   half of the URL. For example, if you wish the program name to be a
-   hyperlink to the URL:
-   http://www.uk.embnet.org/Software/EMBOSS/Apps/programname.html then if
-   you enter http://www.uk.embnet.org/Software/EMBOSS/Apps/ here, then
-   the first half of the URL before the programname will be set. Any
-   string is accepted An empty string is accepted
-   -postlink If you are outputting to a file in HTML format, you can make
-   the program names into hyper-links by setting this to be the second
-   half of the URL. For example, if you wish the program name to be a
-   hyperlink to the URL:
-   http://www.uk.embnet.org/Software/EMBOSS/Apps/programname.html then if
-   you enter '.html' here, the second half of the URL after the
-   programname will be set. Any string is accepted An empty string is
-   accepted
-   -groups If you use this option, then only the group names will output
-   to the file Boolean value Yes/No No
-   -alphabetic If you use this option, then you will get a single list of
-   the program names and descriptions instead of the programs being
-   listed in their functional groups. Boolean value Yes/No No
-   Advanced (Unprompted) qualifiers Allowed values Default
-   -[no]emboss If you use this option then EMBOSS program documentation
-   will be searched. If this option is set to be false, then only the
-   EMBASSY programs will be searched (if the -embassy option is true).
-   EMBASSY programs are not strictly part of EMBOSS, but use the same
-   code libraries and share the same look and feel, but are generally
-   developed by people who wish the programs to be outside of the GNU
-   Public Licence scheme Boolean value Yes/No Yes
-   -[no]embassy If you use this option then EMBASSY program documentation
-   will be searched. If this option is set to be false, then only the
-   EMBOSS programs will be searched (if the -emboss option is true).
-   EMBASSY programs are not strictly part of EMBOSS, but use the same
-   code libraries and share the same look and feel, but are generally
-   developed by people who wish the programs to be outside of the GNU
-   Public Licence scheme Boolean value Yes/No Yes
-   -showembassy If you use this option then this EMBASSY package program
-   documentation will be searched. EMBASSY programs are not strictly part
-   of EMBOSS, but use the same code libraries and share the same look and
-   feel, but are generally developed by people who wish the programs to
-   be outside of the GNU Public Licence scheme Any string is accepted An
-   empty string is accepted
-   -colon The groups that EMBOSS applications belong to up to two levels,
-   for example the primary group 'ALIGNMENT' has several sub-groups, or
-   second-level groups, e.g.: CONSENSUS, DIFFERENCES, DOT PLOTS, GLOBAL,
-   LOCAL, MULTIPLE. To aid programs that parse the output of wossname
-   that require the names of these subgroups, a colon ':' will be placed
-   between the first and second level of the group name if this option is
-   true. Note: This does not apply if the group names have been exploded
-   with the 'explode' option. Boolean value Yes/No No
-   -gui This option is intended to help those who are designing Graphical
-   User Interfaces to the EMBOSS applications. Some EMBOSS programs are
-   inappropriate for running in a GUI, these include other menu programs
-   and interactive editors. This option allows you to only report those
-   programs that can be run from a GUI Boolean value Yes/No No
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
 
 Input file format
 
@@ -1170,7 +1069,7 @@ Output file format
    The results are written out as a simple list preceded by the group
    that the programs belong to or the word that is being searched for.
 
-  Output files for usage example 6
+  Output files for usage example 5
 
   File: wossname.html
 
@@ -1188,79 +1087,11 @@ ALIGNMENT CONSENSUS
    Program name                    Description
    cons         Creates a consensus from multiple alignments
    megamerger   Merge two large overlapping nucleic acid sequences
-   merger       Merge two overlapping nucleic acid sequences
+   merger       Merge two overlapping sequences
 
 ALIGNMENT DIFFERENCES
 
-   Program name                     Description
-   diffseq      Find differences between nearly identical sequences
-
-ALIGNMENT DOT PLOTS
-
-   Program name                       Description
-   dotmatcher   Displays a thresholded dotplot of two sequences
-   dotpath      Non-overlapping wordmatch dotplot of two sequences
-   dottup       Displays a wordmatch dotplot of two sequences
-   polydot      Displays all-against-all dotplots of a set of sequences
-
-ALIGNMENT GLOBAL
-
-     Program name                         Description
-   alignrunner      Align sequence pairs in a directory
-   comparator       Compare contact scores of two sequence alignments
-   contactalign     Damian Counsell's experimental 2.5-D alignment algorithm
-   esim4            Align an mRNA to a genomic DNA sequence
-   est2genome       Align EST and genomic DNA sequences
-   nawalign         Damian Counsell's NW implementation
-   nawalignrunner   Nawalign all sequence pairs in a directory
-   needle           Needleman-Wunsch global alignment
-   needlerunner     Needle all sequence pairs in a directory
-   scorer           Score alignments using structural alignments
-   scorerrunner     SCORER for ordered pairs of substituted seqs
-   stretcher        Finds the best global alignment between two sequences
-   substitute       Substitute matches into a template
-   substituterunner Run SUBSTITUTE on a directory of traces
-
-ALIGNMENT LOCAL
-
-   Program name                     Description
    [Part of this file has been deleted for brevity]
-   profit       Scan a sequence or database with a matrix or profile
-   prophecy     Creates matrices/profiles from multiple alignments
-   prophet      Gapped alignment for profiles
-
-TEST
-
-   Program name                      Description
-   crystalball  Answers every drug discovery question about a sequence
-   myseq        Demonstration of sequence reading
-
-UTILS DATABASE CREATION
-
-    Program name                        Description
-   aaindexextract Extract data from AAINDEX
-   allversusall   Sequence similarity data from all-versus-all comparison
-   cathparse      Generates DCF file from raw CATH files
-   cutgextract    Extract data from CUTG
-   domainer       Generates domain CCF files from protein CCF files
-   domainnr       Removes redundant domains from a DCF file
-   domainseqs     Adds sequence records to a DCF file
-   domainsse      Add secondary structure records to a DCF file
-   hetparse       Converts heterogen group dictionary to EMBL-like format
-   pdbparse       Parses PDB files and writes protein CCF files
-   pdbplus        Add accessibility & secondary structure to a CCF file
-   pdbtosp        Convert swissprot:PDB codes file to EMBL-like format
-   printsextract  Extract data from PRINTS
-   prosextract    Build the PROSITE motif database for use by patmatmotifs
-   rebaseextract  Extract data from REBASE
-   scopparse      Generate DCF file from raw SCOP files
-   seqnr          Removes redundancy from DHF files
-   sites          Generate residue-ligand CON files from CCF files
-   ssematch       Search a DCF file for secondary structure matches
-   tfextract      Extract data from TRANSFAC
-
-UTILS DATABASE INDEXING
-
    Program name                     Description
    dbiblast     Index a BLAST database
    dbifasta     Database indexing for fasta file databases
@@ -1307,56 +1138,42 @@ UTILS MISC
 Command line arguments
 
    Standard (Mandatory) qualifiers:
-  [-program]           string     Enter the name of an EMBOSS program
+  [-program]           string     Enter the name of an EMBOSS program (Any
+                                  string of at least 1 characters)
 
    Additional (Optional) qualifiers:
-   -outfile            outfile    Output file name
-   -html               boolean    This will format the output for displaying
-                                  as a WWW document.
-   -more               boolean    This uses the standard UNIX utility 'more'
-                                  to display the text page-by-page, waiting
-                                  for you to read one screen-full before going
-                                  on to the next page. When you have finished
-                                  reading a page, press the SPACE bar to
-                                  proceed to the next page.
+   -outfile            outfile    [stdout] Program documentation text output
+                                  file
+   -html               boolean    [N] This will format the output for
+                                  displaying as a WWW document.
+   -more               boolean    [@(!$(html))] This uses the standard UNIX
+                                  utility 'more' to display the text
+                                  page-by-page, waiting for you to read one
+                                  screen-full before going on to the next
+                                  page. When you have finished reading a page,
+                                  press the SPACE bar to proceed to the next
+                                  page.
 
    Advanced (Unprompted) qualifiers: (none)
    Associated qualifiers:
 
    "-outfile" associated qualifiers
-   -odirectory          string     Output directory
+   -odirectory         string     Output directory
 
    General qualifiers:
-   -auto                boolean    Turn off prompts
-   -stdout              boolean    Write standard output
-   -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for standard and additional values
-   -debug               boolean    Write debug output to program.dbg
-   -verbose             boolean    Report some/full command line options
-   -help                boolean    Report command line options. More
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
-   -warning             boolean    Report warnings
-   -error               boolean    Report errors
-   -fatal               boolean    Report fatal errors
-   -die                 boolean    Report deaths
-
-
-   Standard (Mandatory) qualifiers Allowed values Default
-   [-program]
-   (Parameter 1) Enter the name of an EMBOSS program A string of at least
-   1 characters Required
-   Additional (Optional) qualifiers Allowed values Default
-   -outfile Output file name Output file stdout
-   -html This will format the output for displaying as a WWW document.
-   Boolean value Yes/No No
-   -more This uses the standard UNIX utility 'more' to display the text
-   page-by-page, waiting for you to read one screen-full before going on
-   to the next page. When you have finished reading a page, press the
-   SPACE bar to proceed to the next page. Boolean value Yes/No
-   @(!$(html))
-   Advanced (Unprompted) qualifiers Allowed values Default
-   (none)
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
 
 Input file format
 

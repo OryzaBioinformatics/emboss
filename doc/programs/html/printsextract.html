@@ -13,7 +13,6 @@
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
-
 printsextract
 </font></b>
 </td></tr>
@@ -22,12 +21,10 @@ printsextract
 <p>
 
 
-
 <H2>
     Function
 </H2>
 Extract data from PRINTS
-
 
 <H2>
     Description
@@ -53,12 +50,11 @@ of your system manager.
 
 % <b>printsextract </b>
 Extract data from PRINTS
-Full pathname of prints.dat: <b>prints.test</b>
+PRINTS database file: <b>prints.test</b>
 
 </pre></td></tr></table><p>
 <p>
 <a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
-
 
 
 <H2>
@@ -67,26 +63,25 @@ Full pathname of prints.dat: <b>prints.test</b>
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
    Standard (Mandatory) qualifiers:
-  [-infile]            infile     Full pathname of prints.dat
+  [-infile]            infile     PRINTS database file
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers: (none)
    Associated qualifiers: (none)
    General qualifiers:
-   -auto                boolean    Turn off prompts
-   -stdout              boolean    Write standard output
-   -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for standard and additional values
-   -debug               boolean    Write debug output to program.dbg
-   -verbose             boolean    Report some/full command line options
-   -help                boolean    Report command line options. More
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
-   -warning             boolean    Report warnings
-   -error               boolean    Report errors
-   -fatal               boolean    Report fatal errors
-   -die                 boolean    Report deaths
-
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
 
 </pre>
 </td></tr></table>
@@ -101,7 +96,7 @@ Full pathname of prints.dat: <b>prints.test</b>
 
 <tr>
 <td>[-infile]<br>(Parameter 1)</td>
-<td>Full pathname of prints.dat</td>
+<td>PRINTS database file</td>
 <td>Input file</td>
 <td><b>Required</b></td>
 </tr>
@@ -127,7 +122,6 @@ Full pathname of prints.dat: <b>prints.test</b>
 </tr>
 
 </table>
-
 
 
 <H2>
@@ -249,7 +243,6 @@ bb;
 </pre>
 </td></tr></table><p>
 
-
 <p>
 
 The input file must be the "prints.dat" file of a PRINTS distribution. 
@@ -284,7 +277,6 @@ href="http://www.bioinf.man.ac.uk/dbbrowser/PRINTS/">http://www.bioinf.man.ac.uk
 <p><h3>Directory: PRINTS</h3>
 <p>This directory contains output files.
 <p>
-
 
 <p>
 
@@ -409,13 +401,32 @@ None.
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
-<tr><td><a href="aaindexextract.html">aaindexextract</a></td><td>Extract data from AAINDEX</td></tr>
-<tr><td><a href="cutgextract.html">cutgextract</a></td><td>Extract data from CUTG</td></tr>
-<tr><td><a href="prosextract.html">prosextract</a></td><td>Build the PROSITE motif database for use by patmatmotifs</td></tr>
-<tr><td><a href="rebaseextract.html">rebaseextract</a></td><td>Extract data from REBASE</td></tr>
-<tr><td><a href="tfextract.html">tfextract</a></td><td>Extract data from TRANSFAC</td></tr>
-</table>
+<tr>
+<td><a href="aaindexextract.html">aaindexextract</a></td>
+<td>Extract data from AAINDEX</td>
+</tr>
 
+<tr>
+<td><a href="cutgextract.html">cutgextract</a></td>
+<td>Extract data from CUTG</td>
+</tr>
+
+<tr>
+<td><a href="prosextract.html">prosextract</a></td>
+<td>Build the PROSITE motif database for use by patmatmotifs</td>
+</tr>
+
+<tr>
+<td><a href="rebaseextract.html">rebaseextract</a></td>
+<td>Extract data from REBASE</td>
+</tr>
+
+<tr>
+<td><a href="tfextract.html">tfextract</a></td>
+<td>Extract data from TRANSFAC</td>
+</tr>
+
+</table>
 
 <H2>
     Author(s)
@@ -428,13 +439,11 @@ European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambri
 
 
 
-
 <H2>
     History
 </H2>
 
 Completed 8th April 1999
-
 
 <H2>
     Target users
@@ -442,12 +451,10 @@ Completed 8th April 1999
 This program is intended to be used by administrators responsible
 for software and database installation and maintenance. 
 
-
 <H2>
     Comments
 </H2>
 None
-
 
 
 </BODY>

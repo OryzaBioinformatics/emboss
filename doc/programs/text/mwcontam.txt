@@ -24,9 +24,9 @@ Usage
 
 % mwcontam 
 Shows molwts that match across a set of files
-Comma separated file list: ../data/mw2.dat,mw3.dat
+Molecular weights file list: ../data/mw2.dat,mw3.dat
 Ppm tolerance [50.0]: 
-Output file [outfile.mwcontam]: 
+Molecular weights output file [outfile.mwcontam]: 
 
    Go to the input files for this example
    Go to the output files for this example
@@ -34,44 +34,31 @@ Output file [outfile.mwcontam]:
 Command line arguments
 
    Standard (Mandatory) qualifiers:
-  [-files]             filelist   Comma separated file list
-   -tolerance          float      Ppm tolerance
-  [-outfile]           outfile    Output file name
+  [-files]             filelist   Molecular weights file list
+   -tolerance          float      [50.0] Ppm tolerance (Any numeric value)
+  [-outfile]           outfile    [*.mwcontam] Molecular weights output file
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers: (none)
    Associated qualifiers:
 
    "-outfile" associated qualifiers
-   -odirectory2         string     Output directory
+   -odirectory2        string     Output directory
 
    General qualifiers:
-   -auto                boolean    Turn off prompts
-   -stdout              boolean    Write standard output
-   -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for standard and additional values
-   -debug               boolean    Write debug output to program.dbg
-   -verbose             boolean    Report some/full command line options
-   -help                boolean    Report command line options. More
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
-   -warning             boolean    Report warnings
-   -error               boolean    Report errors
-   -fatal               boolean    Report fatal errors
-   -die                 boolean    Report deaths
-
-
-   Standard (Mandatory) qualifiers Allowed values Default
-   [-files]
-   (Parameter 1) Comma separated file list Comma-separated file list
-   comma-separated file list
-   -tolerance Ppm tolerance Any numeric value 50.0
-   [-outfile]
-   (Parameter 2) Output file name Output file <sequence>.mwcontam
-   Additional (Optional) qualifiers Allowed values Default
-   (none)
-   Advanced (Unprompted) qualifiers Allowed values Default
-   (none)
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
 
 Input file format
 
@@ -168,20 +155,21 @@ Known bugs
 
 See also
 
-   Program name                        Description
-   backtranseq  Back translate a protein sequence
-   charge       Protein charge plot
-   checktrans   Reports STOP codons and ORF statistics of a protein
-   compseq      Count composition of dimer/trimer/etc words in a sequence
-   emowse       Protein identification by mass spectrometry
-   freak        Residue/base frequency table or plot
-   iep          Calculates the isoelectric point of a protein
-   mwfilter     Filter noisy molwts from mass spec output
-   octanol      Displays protein hydropathy
-   pepinfo      Plots simple amino acid properties in parallel
-   pepstats     Protein statistics
-   pepwindow    Displays protein hydropathy
-   pepwindowall Displays protein hydropathy of a set of sequences
+   Program name                         Description
+   backtranambig Back translate a protein sequence to ambiguous codons
+   backtranseq   Back translate a protein sequence
+   charge        Protein charge plot
+   checktrans    Reports STOP codons and ORF statistics of a protein
+   compseq       Count composition of dimer/trimer/etc words in a sequence
+   emowse        Protein identification by mass spectrometry
+   freak         Residue/base frequency table or plot
+   iep           Calculates the isoelectric point of a protein
+   mwfilter      Filter noisy molwts from mass spec output
+   octanol       Displays protein hydropathy
+   pepinfo       Plots simple amino acid properties in parallel
+   pepstats      Protein statistics
+   pepwindow     Displays protein hydropathy
+   pepwindowall  Displays protein hydropathy of a set of sequences
 
 Author(s)
 

@@ -56,28 +56,31 @@ Usage
 
 % cutgextract 
 Extract data from CUTG
-CUTG directory [.]: data
-Output file [outfile.cutgextract]: 
+Codon usage directories [.]: data
+General log output file [outfile.cutgextract]: 
 
    Go to the output files for this example
 
 Command line arguments
 
    Standard (Mandatory) qualifiers:
-  [-directory]         dirlist    CUTG directory
-  [-outfile]           outfile    Output file name
+  [-directory]         dirlist    [.] Codon usage directories
+  [-outfile]           outfile    [*.cutgextract] General log output file
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers:
-   -release            string     CUTG release
-   -wildspec           string     Type of codon file
-   -species            string     Species wildcard
-   -allrecords         boolean    Include all records, including those with
-                                  warnings
+   -release            string     CUTG release (Any string is accepted)
+   -wildspec           string     [*.codon] Type of codon file (Any string is
+                                  accepted)
+   -species            string     [*] Species wildcard (Any string is
+                                  accepted)
+   -allrecords         boolean    [N] Include all records, including those
+                                  with warnings
    -filename           string     Single output filename to override automatic
                                   one file for each species. Leave blank to
                                   generate the filenames. Specify a filename
                                   to combine several species into one file.
+                                  (Any string is accepted)
 
    Associated qualifiers:
 
@@ -97,27 +100,7 @@ Command line arguments
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
-   -die                boolean    Report deaths
-
-
-   Standard (Mandatory) qualifiers Allowed values Default
-   [-directory]
-   (Parameter 1) CUTG directory Directory with files .
-   [-outfile]
-   (Parameter 2) Output file name Output file <sequence>.cutgextract
-   Additional (Optional) qualifiers Allowed values Default
-   (none)
-   Advanced (Unprompted) qualifiers Allowed values Default
-   -release CUTG release Any string is accepted An empty string is
-   accepted
-   -wildspec Type of codon file Any string is accepted *.codon
-   -species Species wildcard Any string is accepted *
-   -allrecords Include all records, including those with warnings Boolean
-   value Yes/No No
-   -filename Single output filename to override automatic one file for
-   each species. Leave blank to generate the filenames. Specify a
-   filename to combine several species into one file. Any string is
-   accepted An empty string is accepted
+   -die                boolean    Report dying program messages
 
 Input file format
 

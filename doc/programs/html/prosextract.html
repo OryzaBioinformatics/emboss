@@ -13,7 +13,6 @@
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
-
 prosextract
 </font></b>
 </td></tr>
@@ -22,12 +21,10 @@ prosextract
 <p>
 
 
-
 <H2>
     Function
 </H2>
 Build the PROSITE motif database for use by patmatmotifs
-
 
 <H2>
     Description
@@ -50,12 +47,11 @@ be called 'prosite.lines'.
 
 % <b>prosextract </b>
 Build the PROSITE motif database for use by patmatmotifs
-Name of prosite directory [.]: <b></b>
+PROSITE database directory [.]: <b></b>
 
 </pre></td></tr></table><p>
 <p>
 <a href="#output.1">Go to the output files for this example</a><p><p>
-
 
 <p>
 
@@ -70,7 +66,7 @@ created after prosextract is run.
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
    Standard (Mandatory) qualifiers:
-  [-prositedir]        directory  Name of prosite directory
+  [-prositedir]        directory  PROSITE database directory
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers: (none)
@@ -88,8 +84,7 @@ created after prosextract is run.
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
-   -die                boolean    Report deaths
-
+   -die                boolean    Report dying program messages
 
 </pre>
 </td></tr></table>
@@ -104,7 +99,7 @@ created after prosextract is run.
 
 <tr>
 <td>[-prositedir]<br>(Parameter 1)</td>
-<td>Name of prosite directory</td>
+<td>PROSITE database directory</td>
 <td>Directory</td>
 <td>&nbsp;</td>
 </tr>
@@ -132,7 +127,6 @@ created after prosextract is run.
 </table>
 
 
-
 <H2>
     Input file format
 </H2>
@@ -142,7 +136,6 @@ These files must be the "prosite.dat" and "prosite.doc" file of a
 Prosite distribution, containing all current prosite data.
 
 <p>
-
 
 
 <H2>
@@ -162,7 +155,6 @@ directory. The default names are "prosite.lines" and "PS*****"
 <p><h3>Directory: PROSITE</h3>
 <p>This directory contains output files.
 <p>
-
 
 
 <H2>
@@ -225,13 +217,32 @@ Always exits with status 0
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
-<tr><td><a href="aaindexextract.html">aaindexextract</a></td><td>Extract data from AAINDEX</td></tr>
-<tr><td><a href="cutgextract.html">cutgextract</a></td><td>Extract data from CUTG</td></tr>
-<tr><td><a href="printsextract.html">printsextract</a></td><td>Extract data from PRINTS</td></tr>
-<tr><td><a href="rebaseextract.html">rebaseextract</a></td><td>Extract data from REBASE</td></tr>
-<tr><td><a href="tfextract.html">tfextract</a></td><td>Extract data from TRANSFAC</td></tr>
-</table>
+<tr>
+<td><a href="aaindexextract.html">aaindexextract</a></td>
+<td>Extract data from AAINDEX</td>
+</tr>
 
+<tr>
+<td><a href="cutgextract.html">cutgextract</a></td>
+<td>Extract data from CUTG</td>
+</tr>
+
+<tr>
+<td><a href="printsextract.html">printsextract</a></td>
+<td>Extract data from PRINTS</td>
+</tr>
+
+<tr>
+<td><a href="rebaseextract.html">rebaseextract</a></td>
+<td>Extract data from REBASE</td>
+</tr>
+
+<tr>
+<td><a href="tfextract.html">tfextract</a></td>
+<td>Extract data from TRANSFAC</td>
+</tr>
+
+</table>
 
 
 <H2>
@@ -247,14 +258,12 @@ HGMP-RC, Genome Campus, Hinxton, Cambridge CB10 1SB, UK
 
 
 
-
 <H2>
     History
 </H2>
 
 
 Completed March 24 1999.
-
 
 <H2>
     Target users
@@ -263,12 +272,10 @@ This program is intended to be used by administrators responsible
 for software and database installation and maintenance. 
 
 
-
 <H2>
     Comments
 </H2>
 None
-
 
 
 </BODY>

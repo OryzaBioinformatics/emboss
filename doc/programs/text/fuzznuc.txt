@@ -26,9 +26,8 @@ Usage
 
 % fuzznuc 
 Nucleic acid pattern search
-Input sequence(s): tembl:hhtetra
+Input nucleotide sequence(s): tembl:hhtetra
 Search pattern: AAGCTT
-Number of mismatches [0]: 
 Output report [hhtetra.fuzznuc]: 
 
    Go to the input files for this example
@@ -37,8 +36,9 @@ Output report [hhtetra.fuzznuc]:
 Command line arguments
 
    Standard (Mandatory) qualifiers:
-  [-sequence]          seqall     Sequence database USA
-   -pattern            string     The standard IUPAC one-letter codes for the
+  [-sequence]          seqall     Nucleotide sequence(s) filename and optional
+                                  format, or reference (input USA)
+   -pattern            pattern    The standard IUPAC one-letter codes for the
                                   nucleotides are used.
                                   The symbol `n' is used for a position where
                                   any nucleotide is accepted.
@@ -67,84 +67,59 @@ Command line arguments
                                   A period ends the pattern. (Optional in
                                   fuzznuc).
                                   For example, [CG](5)TG{A}N(1,5)C
-   -mismatch           integer    Number of mismatches
   [-outfile]           report     Output report file name
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers:
-   -complement         boolean    Search complementary strand
+   -complement         boolean    [0] Search complementary strand
 
    Associated qualifiers:
 
    "-sequence" associated qualifiers
-   -sbegin1             integer    Start of each sequence to be used
-   -send1               integer    End of each sequence to be used
-   -sreverse1           boolean    Reverse (if DNA)
-   -sask1               boolean    Ask for begin/end/reverse
-   -snucleotide1        boolean    Sequence is nucleotide
-   -sprotein1           boolean    Sequence is protein
-   -slower1             boolean    Make lower case
-   -supper1             boolean    Make upper case
-   -sformat1            string     Input sequence format
-   -sdbname1            string     Database name
-   -sid1                string     Entryname
-   -ufo1                string     UFO features
-   -fformat1            string     Features format
-   -fopenfile1          string     Features file name
+   -sbegin1            integer    Start of each sequence to be used
+   -send1              integer    End of each sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
+
+   "-pattern" associated qualifiers
+   -pformat            string     File format
+   -pmismatch          integer    Pattern mismatch
+   -pname              string     Pattern base name
 
    "-outfile" associated qualifiers
-   -rformat2            string     Report format
-   -rname2              string     Base file name
-   -rextension2         string     File name extension
-   -rdirectory2         string     Output directory
-   -raccshow2           boolean    Show accession number in the report
-   -rdesshow2           boolean    Show description in the report
-   -rscoreshow2         boolean    Show the score in the report
-   -rusashow2           boolean    Show the full USA in the report
+   -rformat2           string     Report format
+   -rname2             string     Base file name
+   -rextension2        string     File name extension
+   -rdirectory2        string     Output directory
+   -raccshow2          boolean    Show accession number in the report
+   -rdesshow2          boolean    Show description in the report
+   -rscoreshow2        boolean    Show the score in the report
+   -rusashow2          boolean    Show the full USA in the report
 
    General qualifiers:
-   -auto                boolean    Turn off prompts
-   -stdout              boolean    Write standard output
-   -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for standard and additional values
-   -debug               boolean    Write debug output to program.dbg
-   -verbose             boolean    Report some/full command line options
-   -help                boolean    Report command line options. More
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
-   -warning             boolean    Report warnings
-   -error               boolean    Report errors
-   -fatal               boolean    Report fatal errors
-   -die                 boolean    Report deaths
-
-
-   Standard (Mandatory) qualifiers Allowed values Default
-   [-sequence]
-   (Parameter 1) Sequence database USA Readable sequence(s) Required
-   -pattern The standard IUPAC one-letter codes for the nucleotides are
-   used. The symbol `n' is used for a position where any nucleotide is
-   accepted. Ambiguities are indicated by listing the acceptable
-   nucleotides for a given position, between square parentheses `[ ]'.
-   For example: [ACG] stands for A or C or G. Ambiguities are also
-   indicated by listing between a pair of curly brackets `{ }' the
-   nucleotides that are not accepted at a given position. For example:
-   {AG} stands for any nucleotides except A and G. Each element in a
-   pattern is separated from its neighbor by a `-'. (Optional in
-   fuzznuc). Repetition of an element of the pattern can be indicated by
-   following that element with a numerical value or a numerical range
-   between parenthesis. Examples: N(3) corresponds to N-N-N, N(2,4)
-   corresponds to N-N or N-N-N or N-N-N-N. When a pattern is restricted
-   to either the 5' or 3' end of a sequence, that pattern either starts
-   with a `<' symbol or respectively ends with a `>' symbol. A period
-   ends the pattern. (Optional in fuzznuc). For example,
-   [CG](5)TG{A}N(1,5)C Any string is accepted An empty string is accepted
-   -mismatch Number of mismatches Integer 0 or more 0
-   [-outfile]
-   (Parameter 2) Output report file name Report output file
-   Additional (Optional) qualifiers Allowed values Default
-   (none)
-   Advanced (Unprompted) qualifiers Allowed values Default
-   -complement Search complementary strand Boolean value Yes/No No
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
 
 Input file format
 
@@ -313,7 +288,10 @@ Output file format
 
 ########################################
 # Program: fuzznuc
-# Rundate: Fri Jul 15 2005 12:00:00
+# Rundate: Sat Jul 15 2006 12:00:00
+# Commandline: fuzznuc
+#    -sequence tembl:hhtetra
+#    -pattern AAGCTT
 # Report_format: seqtable
 # Report_file: hhtetra.fuzznuc
 ########################################
@@ -323,15 +301,16 @@ Output file format
 # Sequence: HHTETRA     from: 1   to: 1272
 # HitCount: 2
 #
-# Pattern: AAGCTT
-# Mismatch: 0
+# Pattern_name Mismatch Pattern
+# pattern1            0 AAGCTT
+#
 # Complement: No
 #
 #=======================================
 
-  Start     End Mismatch Sequence
-      1       6        . aagctt
-   1267    1272        . aagctt
+  Start     End Pattern_name Mismatch Sequence
+      1       6 pattern1            . aagctt
+   1267    1272 pattern1            . aagctt
 
 #---------------------------------------
 #---------------------------------------

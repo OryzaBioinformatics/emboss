@@ -45,8 +45,8 @@ Usage
 
 % rebaseextract 
 Extract data from REBASE
-Full pathname of WITHREFM file: withrefm
-Full pathname of PROTO file: proto
+REBASE database withrefm file: withrefm
+REBASE database proto file: proto
 
    Go to the input files for this example
    Go to the output files for this example
@@ -54,43 +54,30 @@ Full pathname of PROTO file: proto
 Command line arguments
 
    Standard (Mandatory) qualifiers:
-  [-infile]            infile     Full pathname of WITHREFM file
-  [-protofile]         infile     Full pathname of PROTO file
+  [-infile]            infile     REBASE database withrefm file
+  [-protofile]         infile     REBASE database proto file
 
    Additional (Optional) qualifiers:
-   -[no]equivalences   boolean    This option calculates an embossre.equ file
-                                  using restriction enzyme prototypes in the
-                                  withrefm file.
+   -[no]equivalences   boolean    [Y] This option calculates an embossre.equ
+                                  file using restriction enzyme prototypes in
+                                  the withrefm file.
 
    Advanced (Unprompted) qualifiers: (none)
    Associated qualifiers: (none)
    General qualifiers:
-   -auto                boolean    Turn off prompts
-   -stdout              boolean    Write standard output
-   -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for standard and additional values
-   -debug               boolean    Write debug output to program.dbg
-   -verbose             boolean    Report some/full command line options
-   -help                boolean    Report command line options. More
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
-   -warning             boolean    Report warnings
-   -error               boolean    Report errors
-   -fatal               boolean    Report fatal errors
-   -die                 boolean    Report deaths
-
-
-   Standard (Mandatory) qualifiers Allowed values Default
-   [-infile]
-   (Parameter 1) Full pathname of WITHREFM file Input file Required
-   [-protofile]
-   (Parameter 2) Full pathname of PROTO file Input file Required
-   Additional (Optional) qualifiers Allowed values Default
-   -[no]equivalences This option calculates an embossre.equ file using
-   restriction enzyme prototypes in the withrefm file. Boolean value
-   Yes/No Yes
-   Advanced (Unprompted) qualifiers Allowed values Default
-   (none)
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
 
 Input file format
 

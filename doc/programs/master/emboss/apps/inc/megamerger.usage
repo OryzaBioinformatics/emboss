@@ -1,0 +1,15 @@
+<b>Here is a sample session with megamerger</b>
+<p>
+
+<p>
+<table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
+
+% <b>megamerger tembl:ap000504 tembl:af129756 </b>
+Merge two large overlapping nucleic acid sequences
+Word size [20]: <b></b>
+output sequence [ap000504.merged]: <b></b>
+Output file [ap000504.megamerger]: <b>report</b>
+
+</pre></td></tr></table><p>
+<p>
+<a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>

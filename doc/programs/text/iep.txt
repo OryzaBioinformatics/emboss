@@ -35,84 +35,84 @@ Output file [laci_ecoli.iep]:
    Go to the input files for this example
    Go to the output files for this example
 
+   Example 2
+
+
+% iep tsw:ifna2_human -disulphide 2 -lysinemodified 2  
+Calculates the isoelectric point of a protein
+Output file [ifna2_human.iep]: 
+
+   Go to the input files for this example
+   Go to the output files for this example
+
 Command line arguments
 
    Standard (Mandatory) qualifiers (* if not always prompted):
-  [-sequence]          seqall     Sequence database USA
-*  -graph              xygraph    Graph type
-*  -outfile            outfile    Output file name
+  [-sequence]          seqall     Protein sequence(s) filename and optional
+                                  format, or reference (input USA)
+*  -graph              xygraph    [$EMBOSS_GRAPHICS value, or x11] Graph type
+                                  (ps, hpgl, hp7470, hp7580, meta, cps, x11,
+                                  tekt, tek, none, data, xterm, png)
+*  -outfile            outfile    [*.iep] Output file name
 
-   Additional (Optional) qualifiers: (none)
+   Additional (Optional) qualifiers:
+   -amino              integer    [1] Number of N-termini (Integer 0 or more)
+   -[no]termini        boolean    [Y] Include charge at N and C terminus
+   -lysinemodified     integer    [0] Number of modified lysines (Integer 0 or
+                                  more)
+   -disulphides        integer    [0] Number of disulphide bridges (Integer 0
+                                  or more)
+
    Advanced (Unprompted) qualifiers:
-   -step               float      Step value for pH
-   -amino              integer    Number of N-termini
-   -[no]termini        boolean    Include charge at N and C terminus
-   -plot               toggle     Plot charge vs pH
-   -[no]report         toggle     Write results to a file
+   -step               float      [.5] Step value for pH (Number from 0.010 to
+                                  1.000)
+   -plot               toggle     [N] Plot charge vs pH
+   -[no]report         toggle     [Y] Write results to a file
 
    Associated qualifiers:
 
    "-sequence" associated qualifiers
-   -sbegin1             integer    Start of each sequence to be used
-   -send1               integer    End of each sequence to be used
-   -sreverse1           boolean    Reverse (if DNA)
-   -sask1               boolean    Ask for begin/end/reverse
-   -snucleotide1        boolean    Sequence is nucleotide
-   -sprotein1           boolean    Sequence is protein
-   -slower1             boolean    Make lower case
-   -supper1             boolean    Make upper case
-   -sformat1            string     Input sequence format
-   -sdbname1            string     Database name
-   -sid1                string     Entryname
-   -ufo1                string     UFO features
-   -fformat1            string     Features format
-   -fopenfile1          string     Features file name
+   -sbegin1            integer    Start of each sequence to be used
+   -send1              integer    End of each sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
 
    "-graph" associated qualifiers
-   -gprompt             boolean    Graph prompting
-   -gtitle              string     Graph title
-   -gsubtitle           string     Graph subtitle
-   -gxtitle             string     Graph x axis title
-   -gytitle             string     Graph y axis title
-   -goutfile            string     Output file for non interactive displays
-   -gdirectory          string     Output directory
+   -gprompt            boolean    Graph prompting
+   -gtitle             string     Graph title
+   -gsubtitle          string     Graph subtitle
+   -gxtitle            string     Graph x axis title
+   -gytitle            string     Graph y axis title
+   -goutfile           string     Output file for non interactive displays
+   -gdirectory         string     Output directory
 
    "-outfile" associated qualifiers
-   -odirectory          string     Output directory
+   -odirectory         string     Output directory
 
    General qualifiers:
-   -auto                boolean    Turn off prompts
-   -stdout              boolean    Write standard output
-   -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for standard and additional values
-   -debug               boolean    Write debug output to program.dbg
-   -verbose             boolean    Report some/full command line options
-   -help                boolean    Report command line options. More
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
-   -warning             boolean    Report warnings
-   -error               boolean    Report errors
-   -fatal               boolean    Report fatal errors
-   -die                 boolean    Report deaths
-
-
-   Standard (Mandatory) qualifiers Allowed values Default
-   [-sequence]
-   (Parameter 1) Sequence database USA Readable sequence(s) Required
-   -graph Graph type EMBOSS has a list of known devices, including
-   postscript, ps, hpgl, hp7470, hp7580, meta, colourps, cps, xwindows,
-   x11, tektronics, tekt, tek4107t, tek, none, null, text, data, xterm,
-   png, xml EMBOSS_GRAPHICS value, or x11
-   -outfile Output file name Output file <sequence>.iep
-   Additional (Optional) qualifiers Allowed values Default
-   (none)
-   Advanced (Unprompted) qualifiers Allowed values Default
-   -step Step value for pH Number from 0.010 to 1.000 .5
-   -amino Number of N-termini Any integer value 1
-   -[no]termini Include charge at N and C terminus Boolean value Yes/No
-   Yes
-   -plot Plot charge vs pH Toggle value Yes/No No
-   -[no]report Write results to a file Toggle value Yes/No Yes
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
 
 Input file format
 
@@ -232,6 +232,116 @@ SQ   SEQUENCE   360 AA;  38564 MW;  4CA5A1D6 CRC32;
      VDRLLQLSQG QAVKGNQLLP VSLVKRKTTL APNTQTASPR ALADSLMQLA RQVSRLESGQ
 //
 
+  Input files for usage example 2
+
+  Database entry: tsw:ifna2_human
+
+ID   IFNA2_HUMAN    STANDARD;      PRT;   188 AA.
+AC   P01563; P01564; Q14606; Q96KI6;
+DT   21-JUL-1986, integrated into UniProtKB/Swiss-Prot.
+DT   21-JUL-1986, sequence version 1.
+DT   27-JUN-2006, entry version 72.
+DE   Interferon alpha-2 precursor (Interferon alpha-A) (LeIF A).
+GN   Name=IFNA2;
+OS   Homo sapiens (Human).
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi;
+OC   Mammalia; Eutheria; Euarchontoglires; Primates; Haplorrhini;
+OC   Catarrhini; Hominidae; Homo.
+OX   NCBI_TaxID=9606;
+RN   [1]
+RP   NUCLEOTIDE SEQUENCE.
+RX   MEDLINE=81052322; PubMed=6159538; DOI=10.1038/287411a0;
+RA   Goeddel D.V., Yelverton E., Ullrich A., Heyneker H.L., Miozzari G.,
+RA   Holmes W., Seeburg P.H., Dull T.J., May L., Stebbing N., Crea R.,
+RA   Maeda S., McCandliss R., Sloma A., Tabor J.M., Gross M.,
+RA   Familletti P.C., Pestka S.;
+RT   "Human leukocyte interferon produced by E. coli is biologically
+RT   active.";
+RL   Nature 287:411-416(1980).
+RN   [2]
+RP   NUCLEOTIDE SEQUENCE.
+RX   MEDLINE=81148795; PubMed=6163083; DOI=10.1038/290020a0;
+RA   Goeddel D.V., Leung D.W., Dull T.J., Gross M., Lawn R.M.,
+RA   McCandliss R., Seeburg P.H., Ullrich A., Yelverton E., Gray P.W.;
+RT   "The structure of eight distinct cloned human leukocyte interferon
+RT   cDNAs.";
+RL   Nature 290:20-26(1981).
+RN   [3]
+RP   NUCLEOTIDE SEQUENCE.
+RX   MEDLINE=82060261; PubMed=6170983;
+RA   Lawn R.M., Gross M., Houck C.M., Franke A.E., Gray P.V., Goeddel D.V.;
+RT   "DNA sequence of a major human leukocyte interferon gene.";
+RL   Proc. Natl. Acad. Sci. U.S.A. 78:5435-5439(1981).
+RN   [4]
+RP   NUCLEOTIDE SEQUENCE.
+RC   TISSUE=Bone marrow tumor;
+RX   MEDLINE=86069501; PubMed=3906813;
+RA   Oliver G., Balbas P., Valle F., Soberon X., Bolivar F.;
+RT   "Cloning of human leukocyte interferon cDNA and a strategy for its
+RT   production in E. coli.";
+RL   Rev. Latinoam. Microbiol. 27:141-150(1985).
+RN   [5]
+RP   NUCLEOTIDE SEQUENCE.
+RC   TISSUE=Placenta;
+RX   MEDLINE=98357449; PubMed=9694076;
+RA   Austruy E., Bagnis C., Carbuccia N., Maroc C., Birg F., Dubreuil P.,
+RA   Mannoni P., Chabannon C.;
+
+
+  [Part of this file has been deleted for brevity]
+
+DR   Ensembl; ENSG00000188379; Homo sapiens.
+DR   HGNC; HGNC:5423; IFNA2.
+DR   MIM; 147562; gene.
+DR   LinkHub; P01563; -.
+DR   RZPD-ProtExp; A0813; -.
+DR   RZPD-ProtExp; IOH35221; -.
+DR   RZPD-ProtExp; RZPDo834E0933; -.
+DR   GO; GO:0005132; F:interferon-alpha/beta receptor binding; TAS.
+DR   GO; GO:0007166; P:cell surface receptor linked signal transdu...; TAS.
+DR   GO; GO:0007267; P:cell-cell signaling; TAS.
+DR   GO; GO:0006917; P:induction of apoptosis; TAS.
+DR   GO; GO:0006954; P:inflammatory response; TAS.
+DR   InterPro; IPR009079; 4_helix_cytokine.
+DR   InterPro; IPR000471; Interferon_abd.
+DR   PANTHER; PTHR11691; Interferon_abd; 1.
+DR   Pfam; PF00143; Interferon; 1.
+DR   PRINTS; PR00266; INTERFERONAB.
+DR   ProDom; PD000550; Interferon_abd; 1.
+DR   SMART; SM00076; IFabd; 1.
+DR   PROSITE; PS00252; INTERFERON_A_B_D; 1.
+KW   3D-structure; Antiviral defense; Cytokine; Direct protein sequencing;
+KW   Glycoprotein; Pharmaceutical; Polymorphism; Signal.
+FT   SIGNAL        1     23
+FT   CHAIN        24    188       Interferon alpha-2.
+FT                                /FTId=PRO_0000016360.
+FT   CARBOHYD    129    129       O-linked (GalNAc...).
+FT                                /FTId=CAR_000049.
+FT   DISULFID     24    121
+FT   DISULFID     52    161
+FT   VARIANT      46     46       K -> R (in alpha-2B and alpha-2C).
+FT                                /FTId=VAR_004012.
+FT   VARIANT      57     57       H -> R (in alpha-2C).
+FT                                /FTId=VAR_013001.
+FT   HELIX        33     44
+FT   TURN         49     54
+FT   HELIX        63     66
+FT   HELIX        76     91
+FT   HELIX        93     98
+FT   HELIX       101    123
+FT   TURN        126    127
+FT   TURN        133    133
+FT   HELIX       134    155
+FT   TURN        156    157
+FT   HELIX       160    178
+FT   TURN        179    182
+SQ   SEQUENCE   188 AA;  21550 MW;  101DD21D394CBF97 CRC64;
+     MALTFALLVA LLVLSCKSSC SVGCDLPQTH SLGSRRTLML LAQMRKISLF SCLKDRHDFG
+     FPQEEFGNQF QKAETIPVLH EMIQQIFNLF STKDSSAAWD ETLLDKFYTE LYQQLNDLEA
+     CVIQGVGVTE TPLMKEDSIL AVRKYFQRIT LYLKEKKYSP CAWEVVRAEI MRSFSLSTNL
+     QESLRSKE
+//
+
 Output file format
 
   Output files for usage example
@@ -269,6 +379,42 @@ Isoelectric Point = 6.8820
  13.00     4.64   -39.36
  13.50     1.75   -42.25
  14.00     0.59   -43.41
+
+  Output files for usage example 2
+
+  File: ifna2_human.iep
+
+IEP of IFNA2_HUMAN from 1 to 188
+Isoelectric Point = 5.7322
+
+   pH     Bound    Charge
+  1.00    52.98    22.98
+  1.50    52.93    22.93
+  2.00    52.77    22.77
+  2.50    52.28    22.28
+  3.00    50.87    20.87
+  3.50    47.47    17.47
+  4.00    41.62    11.62
+  4.50    35.67     5.67
+  5.00    32.10     2.10
+  5.50    30.47     0.47
+  6.00    29.51    -0.49
+  6.50    28.55    -1.45
+  7.00    27.65    -2.35
+  7.50    27.01    -2.99
+  8.00    26.36    -3.64
+  8.50    25.41    -4.59
+  9.00    24.25    -5.75
+  9.50    22.81    -7.19
+ 10.00    20.49    -9.51
+ 10.50    17.03   -12.97
+ 11.00    13.16   -16.84
+ 11.50    10.04   -19.96
+ 12.00     7.49   -22.51
+ 12.50     4.72   -25.28
+ 13.00     2.23   -27.77
+ 13.50     0.84   -29.16
+ 14.00     0.28   -29.72
 
    For each pH point it gives the number of bound electrons and the
    charge.
@@ -345,20 +491,21 @@ Known bugs
 
 See also
 
-   Program name                        Description
-   backtranseq  Back translate a protein sequence
-   charge       Protein charge plot
-   checktrans   Reports STOP codons and ORF statistics of a protein
-   compseq      Count composition of dimer/trimer/etc words in a sequence
-   emowse       Protein identification by mass spectrometry
-   freak        Residue/base frequency table or plot
-   mwcontam     Shows molwts that match across a set of files
-   mwfilter     Filter noisy molwts from mass spec output
-   octanol      Displays protein hydropathy
-   pepinfo      Plots simple amino acid properties in parallel
-   pepstats     Protein statistics
-   pepwindow    Displays protein hydropathy
-   pepwindowall Displays protein hydropathy of a set of sequences
+   Program name                         Description
+   backtranambig Back translate a protein sequence to ambiguous codons
+   backtranseq   Back translate a protein sequence
+   charge        Protein charge plot
+   checktrans    Reports STOP codons and ORF statistics of a protein
+   compseq       Count composition of dimer/trimer/etc words in a sequence
+   emowse        Protein identification by mass spectrometry
+   freak         Residue/base frequency table or plot
+   mwcontam      Shows molwts that match across a set of files
+   mwfilter      Filter noisy molwts from mass spec output
+   octanol       Displays protein hydropathy
+   pepinfo       Plots simple amino acid properties in parallel
+   pepstats      Protein statistics
+   pepwindow     Displays protein hydropathy
+   pepwindowall  Displays protein hydropathy of a set of sequences
 
 Author(s)
 

@@ -13,7 +13,6 @@
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
-
 cpgplot
 </font></b>
 </td></tr>
@@ -22,12 +21,10 @@ cpgplot
 <p>
 
 
-
 <H2>
     Function
 </H2>
 Plot CpG rich areas
-
 <H2>
     Description
 </H2>
@@ -109,7 +106,7 @@ Minimum length of an island [200]: <b></b>
 Minimum observed/expected [0.6]: <b></b>
 Minimum percentage [50.]: <b></b>
 Output file [rnu68037.cpgplot]: <b></b>
-Output features [rnu68037.gff]: <b></b>
+Features output [rnu68037.gff]: <b></b>
 
 Created cpgplot.ps
 
@@ -117,46 +114,52 @@ Created cpgplot.ps
 <p>
 <a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
 
-
 <H2>
     Command line arguments
 </H2>
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
    Standard (Mandatory) qualifiers:
-  [-sequence]          seqall     Sequence database USA
-   -window             integer    The percentage CG content and the Observed
-                                  frequency of CG is calculated within a
-                                  window whose size is set by this parameter.
-                                  The window is moved down the sequence and
-                                  these statistics are calculated at each
-                                  postition that the window is moved to.
-   -minlen             integer    This sets the minimum length that a CpG
-                                  island has to be before it is reported.
-   -minoe              float      This sets the minimum average observed to
-                                  expected ratio of C plus G to CpG in a set
-                                  of 10 windows that are required before a CpG
-                                  island is reported.
-   -minpc              float      This sets the minimum average percentage of
-                                  G plus C a set of 10 windows that are
-                                  required before a CpG island is reported.
-  [-outfile]           outfile    This sets the name of the file holding the
-                                  report of the input sequence name, CpG
-                                  island parameters and the output details of
-                                  any CpG islands that are found.
-  [-graph]             xygraph    Graph type
-  [-outfeat]           featout    File for output features
+  [-sequence]          seqall     Nucleotide sequence(s) filename and optional
+                                  format, or reference (input USA)
+   -window             integer    [100] The percentage CG content and the
+                                  Observed frequency of CG is calculated
+                                  within a window whose size is set by this
+                                  parameter. The window is moved down the
+                                  sequence and these statistics are calculated
+                                  at each postition that the window is moved
+                                  to. (Integer 1 or more)
+   -minlen             integer    [200] This sets the minimum length that a
+                                  CpG island has to be before it is reported.
+                                  (Integer 1 or more)
+   -minoe              float      [0.6] This sets the minimum average observed
+                                  to expected ratio of C plus G to CpG in a
+                                  set of 10 windows that are required before a
+                                  CpG island is reported. (Number from 0.000
+                                  to 10.000)
+   -minpc              float      [50.] This sets the minimum average
+                                  percentage of G plus C a set of 10 windows
+                                  that are required before a CpG island is
+                                  reported. (Number from 0.000 to 100.000)
+  [-outfile]           outfile    [*.cpgplot] This sets the name of the file
+                                  holding the report of the input sequence
+                                  name, CpG island parameters and the output
+                                  details of any CpG islands that are found.
+  [-graph]             xygraph    [$EMBOSS_GRAPHICS value, or x11] Graph type
+                                  (ps, hpgl, hp7470, hp7580, meta, cps, x11,
+                                  tekt, tek, none, data, xterm, png)
+  [-outfeat]           featout    [unknown.gff] File for output features
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers:
-   -[no]obsexp         boolean    If this is set to true then the graph of the
-                                  observed to expected ratio of C plus G to
-                                  CpG within a window is displayed.
-   -[no]cg             boolean    If this is set to true then the graph of the
-                                  regions which have been determined to be
-                                  CpG islands is displayed.
-   -[no]pc             boolean    If this is set to true then the graph of the
-                                  percentage C plus G within a window is
+   -[no]obsexp         boolean    [Y] If this is set to true then the graph of
+                                  the observed to expected ratio of C plus G
+                                  to CpG within a window is displayed.
+   -[no]cg             boolean    [Y] If this is set to true then the graph of
+                                  the regions which have been determined to
+                                  be CpG islands is displayed.
+   -[no]pc             boolean    [Y] If this is set to true then the graph of
+                                  the percentage C plus G within a window is
                                   displayed.
 
    Associated qualifiers:
@@ -210,8 +213,7 @@ Created cpgplot.ps
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
-   -die                boolean    Report deaths
-
+   -die                boolean    Report dying program messages
 
 </pre>
 </td></tr></table>
@@ -225,7 +227,7 @@ Created cpgplot.ps
 
 <tr>
 <td>[-sequence]<br>(Parameter 1)</td>
-<td>Sequence database USA</td>
+<td>Nucleotide sequence(s) filename and optional format, or reference (input USA)</td>
 <td>Readable sequence(s)</td>
 <td><b>Required</b></td>
 </tr>
@@ -262,13 +264,13 @@ Created cpgplot.ps
 <td>[-outfile]<br>(Parameter 2)</td>
 <td>This sets the name of the file holding the report of the input sequence name, CpG island parameters and the output details of any CpG islands that are found.</td>
 <td>Output file</td>
-<td><i>&lt;sequence&gt;</i>.cpgplot</td>
+<td>&nbsp;</td>
 </tr>
 
 <tr>
 <td>[-graph]<br>(Parameter 3)</td>
 <td>Graph type</td>
-<td>EMBOSS has a list of known devices, including postscript, ps, hpgl, hp7470, hp7580, meta, colourps, cps, xwindows, x11, tektronics, tekt, tek4107t, tek, none, null, text, data, xterm, png, xml</td>
+<td>EMBOSS has a list of known devices, including ps, hpgl, hp7470, hp7580, meta, cps, x11, tekt, tek, none, data, xterm, png</td>
 <td><i>EMBOSS_GRAPHICS</i> value, or x11</td>
 </tr>
 
@@ -317,7 +319,6 @@ Created cpgplot.ps
 </tr>
 
 </table>
-
 
 <H2>
     Input file format
@@ -415,7 +416,6 @@ SQ   Sequence 1218 BP; 162 A; 397 C; 387 G; 272 T; 0 other;
 </pre>
 </td></tr></table><p>
 
-
 <H2>
     Output file format
 </H2>
@@ -443,7 +443,7 @@ RNU68037 from 1 to 1218
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 ##gff-version 2.0
-##date 2005-07-15
+##date 2006-07-15
 ##Type DNA RNU68037
 RNU68037	cpgplot	misc_feature	104	509	0.000	+	.	Sequence "RNU68037.1"
 RNU68037	cpgplot	misc_feature	596	924	0.000	+	.	Sequence "RNU68037.2"
@@ -451,7 +451,6 @@ RNU68037	cpgplot	misc_feature	596	924	0.000	+	.	Sequence "RNU68037.2"
 </td></tr></table><p>
 <p><h3>Graphics File: cpgplot.ps</h3>
 <p><img src="cpgplot.1.cpgplot.gif" alt="[cpgplot results]">
-
 
 
 <H2>
@@ -502,12 +501,27 @@ None.
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
-<tr><td><a href="cpgreport.html">cpgreport</a></td><td>Reports all CpG rich regions</td></tr>
-<tr><td><a href="geecee.html">geecee</a></td><td>Calculates fractional GC content of nucleic acid sequences</td></tr>
-<tr><td><a href="newcpgreport.html">newcpgreport</a></td><td>Report CpG rich areas</td></tr>
-<tr><td><a href="newcpgseek.html">newcpgseek</a></td><td>Reports CpG rich regions</td></tr>
-</table>
+<tr>
+<td><a href="cpgreport.html">cpgreport</a></td>
+<td>Reports all CpG rich regions</td>
+</tr>
 
+<tr>
+<td><a href="geecee.html">geecee</a></td>
+<td>Calculates fractional GC content of nucleic acid sequences</td>
+</tr>
+
+<tr>
+<td><a href="newcpgreport.html">newcpgreport</a></td>
+<td>Report CpG rich areas</td>
+</tr>
+
+<tr>
+<td><a href="newcpgseek.html">newcpgseek</a></td>
+<td>Reports CpG rich regions</td>
+</tr>
+
+</table>
 
 
 <p>
@@ -563,25 +577,21 @@ Alan Bleasby (ajb&nbsp;&copy;&nbsp;ebi.ac.uk)
 European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
 
 
-
 <H2>
     History
 </H2>
 
 Completed 23rd March 1999.
 
-
 <H2>
     Target users
 </H2>
 This program is intended to be used by everyone and everything, from naive users to embedded scripts.
 
-
 <H2>
     Comments
 </H2>
 None
-
 
 </BODY>
 </HTML>

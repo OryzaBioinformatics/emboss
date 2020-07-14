@@ -20,7 +20,7 @@ Usage
 
 % findkm -graph cps 
 Find Km and Vmax for an enzyme reaction
-Enter name of file containing data: enztest.dat
+Enzyme kinetics data (application-specific) file: enztest.dat
 Output file [enztest.findkm]: 
 
 Created findkm.ps
@@ -31,57 +31,45 @@ Created findkm.ps
 Command line arguments
 
    Standard (Mandatory) qualifiers:
-  [-infile]            infile     Enter name of file containing data
-  [-outfile]           outfile    Output file name
-   -graphlb            xygraph    Graph type
+  [-infile]            infile     Enzyme kinetics data (application-specific)
+                                  file
+  [-outfile]           outfile    [*.findkm] Output file name
+   -graphlb            xygraph    [$EMBOSS_GRAPHICS value, or x11] Graph type
+                                  (ps, hpgl, hp7470, hp7580, meta, cps, x11,
+                                  tekt, tek, none, data, xterm, png)
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers:
-   -[no]plot           boolean    S/V vs S
+   -[no]plot           boolean    [Y] S/V vs S
 
    Associated qualifiers:
 
    "-outfile" associated qualifiers
-   -odirectory2         string     Output directory
+   -odirectory2        string     Output directory
 
    "-graphlb" associated qualifiers
-   -gprompt             boolean    Graph prompting
-   -gtitle              string     Graph title
-   -gsubtitle           string     Graph subtitle
-   -gxtitle             string     Graph x axis title
-   -gytitle             string     Graph y axis title
-   -goutfile            string     Output file for non interactive displays
-   -gdirectory          string     Output directory
+   -gprompt            boolean    Graph prompting
+   -gtitle             string     Graph title
+   -gsubtitle          string     Graph subtitle
+   -gxtitle            string     Graph x axis title
+   -gytitle            string     Graph y axis title
+   -goutfile           string     Output file for non interactive displays
+   -gdirectory         string     Output directory
 
    General qualifiers:
-   -auto                boolean    Turn off prompts
-   -stdout              boolean    Write standard output
-   -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for standard and additional values
-   -debug               boolean    Write debug output to program.dbg
-   -verbose             boolean    Report some/full command line options
-   -help                boolean    Report command line options. More
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
-   -warning             boolean    Report warnings
-   -error               boolean    Report errors
-   -fatal               boolean    Report fatal errors
-   -die                 boolean    Report deaths
-
-
-   Standard (Mandatory) qualifiers Allowed values Default
-   [-infile]
-   (Parameter 1) Enter name of file containing data Input file Required
-   [-outfile]
-   (Parameter 2) Output file name Output file <sequence>.findkm
-   -graphlb Graph type EMBOSS has a list of known devices, including
-   postscript, ps, hpgl, hp7470, hp7580, meta, colourps, cps, xwindows,
-   x11, tektronics, tekt, tek4107t, tek, none, null, text, data, xterm,
-   png, xml EMBOSS_GRAPHICS value, or x11
-   Additional (Optional) qualifiers Allowed values Default
-   (none)
-   Advanced (Unprompted) qualifiers Allowed values Default
-   -[no]plot S/V vs S Boolean value Yes/No Yes
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
 
 Input file format
 
@@ -116,7 +104,7 @@ Where line cuts x axis = (-0.20, 0)
 Where line cuts y axis = (0, 0.05)
 Limit-point of graph for plot = (103.00, 1.08)
 
-Vmax = 99.70, Km = 4.894612
+Vmax = 99.70, Km = 4.894611
 
   Graphics File: findkm.ps
 

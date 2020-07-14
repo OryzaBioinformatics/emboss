@@ -32,7 +32,7 @@ Usage
 
 % wobble 
 Wobble base plot
-Input sequence: tembl:paamir
+Input nucleotide sequence: tembl:paamir
 Graph type [x11]: cps
 Output file [paamir.wobble]: 
 
@@ -44,15 +44,19 @@ Created wobble.ps
 Command line arguments
 
    Standard (Mandatory) qualifiers:
-  [-sequence]          sequence   Sequence USA
-   -graph              xygraph    Graph type
-  [-outfile]           outfile    Output file name
+  [-sequence]          sequence   Nucleotide sequence filename and optional
+                                  format, or reference (input USA)
+   -graph              xygraph    [$EMBOSS_GRAPHICS value, or x11] Graph type
+                                  (ps, hpgl, hp7470, hp7580, meta, cps, x11,
+                                  tekt, tek, none, data, xterm, png)
+  [-outfile]           outfile    [*.wobble] Output file name
 
    Additional (Optional) qualifiers:
-   -window             integer    Window size in codons
+   -window             integer    [30] Window size in codons (Integer 1 or
+                                  more)
 
    Advanced (Unprompted) qualifiers:
-   -bases              string     Bases used
+   -bases              string     [GC] Bases used (Any string is accepted)
 
    Associated qualifiers:
 
@@ -97,22 +101,7 @@ Command line arguments
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
-   -die                boolean    Report deaths
-
-
-   Standard (Mandatory) qualifiers Allowed values Default
-   [-sequence]
-   (Parameter 1) Sequence USA Readable sequence Required
-   -graph Graph type EMBOSS has a list of known devices, including
-   postscript, ps, hpgl, hp7470, hp7580, meta, colourps, cps, xwindows,
-   x11, tektronics, tekt, tek4107t, tek, none, null, text, data, xterm,
-   png, xml EMBOSS_GRAPHICS value, or x11
-   [-outfile]
-   (Parameter 2) Output file name Output file <sequence>.wobble
-   Additional (Optional) qualifiers Allowed values Default
-   -window Window size in codons Integer 1 or more 30
-   Advanced (Unprompted) qualifiers Allowed values Default
-   -bases Bases used Any string is accepted GC
+   -die                boolean    Report dying program messages
 
 Input file format
 

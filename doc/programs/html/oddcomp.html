@@ -13,7 +13,6 @@
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
-
 oddcomp
 </font></b>
 </td></tr>
@@ -22,12 +21,10 @@ oddcomp
 <p>
 
 
-
 <H2>
     Function
 </H2>
 Find protein sequence regions with a biased composition
-
 
 <H2>
     Description
@@ -92,8 +89,8 @@ To search for entries in swissprot with at least 1 SR AND at least 2 RS:
 
 % <b>oddcomp </b>
 Find protein sequence regions with a biased composition
-Input sequence(s): <b>tsw:*</b>
-Compseq output file to use for expected word frequencies: <b>oddcomp.comp</b>
+Input protein sequence(s): <b>tsw:*</b>
+Program compseq output file: <b>oddcomp.comp</b>
 Window size to consider (e.g. 30 aa) [30]: <b></b>
 Output file [100k_rat.oddcomp]: <b>out.odd</b>
 
@@ -102,29 +99,35 @@ Output file [100k_rat.oddcomp]: <b>out.odd</b>
 <a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
 
 
-
 <H2>
     Command line arguments
 </H2>
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
-   Standard (Mandatory) qualifiers:
-  [-sequence]          seqall     Sequence database USA
+   Standard (Mandatory) qualifiers (* if not always prompted):
+  [-sequence]          seqall     Protein sequence(s) filename and optional
+                                  format, or reference (input USA)
   [-infile]            infile     This is a file in the format of the output
                                   produced by 'compseq' that is used to set
                                   the minimum frequencies of words in this
                                   analysis.
-  [-window]            integer    This is the size of window in which to
+*  -window             integer    [30] This is the size of window in which to
                                   count.
                                   Thus if you want to count frequencies in a
                                   40 aa stretch you should enter 40 here.
-  [-outfile]           outfile    This is the results file.
+                                  (Integer 10 or more)
+  [-outfile]           outfile    [*.oddcomp] This is the results file.
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers:
-   -[no]ignorebz       boolean    The amino acid code B represents Asparagine
-                                  or Aspartic acid and the code Z represents
-                                  Glutamine or Glutamic acid.
+   -fullwindow         toggle     [N] Set this option on (Y) if you want the
+                                  window size to be set to the length of the
+                                  current protein. Otherwise, leave this
+                                  option unset, in which case you'll be
+                                  prompted for a window size to use.
+   -[no]ignorebz       boolean    [Y] The amino acid code B represents
+                                  Asparagine or Aspartic acid and the code Z
+                                  represents Glutamine or Glutamic acid.
                                   These are not commonly used codes and you
                                   may wish not to count words containing them,
                                   just noting them in the count of 'Other'
@@ -149,7 +152,7 @@ Output file [100k_rat.oddcomp]: <b>out.odd</b>
    -fopenfile1         string     Features file name
 
    "-outfile" associated qualifiers
-   -odirectory4        string     Output directory
+   -odirectory3        string     Output directory
 
    General qualifiers:
    -auto               boolean    Turn off prompts
@@ -164,8 +167,7 @@ Output file [100k_rat.oddcomp]: <b>out.odd</b>
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
-   -die                boolean    Report deaths
-
+   -die                boolean    Report dying program messages
 
 </pre>
 </td></tr></table>
@@ -180,7 +182,7 @@ Output file [100k_rat.oddcomp]: <b>out.odd</b>
 
 <tr>
 <td>[-sequence]<br>(Parameter 1)</td>
-<td>Sequence database USA</td>
+<td>Protein sequence(s) filename and optional format, or reference (input USA)</td>
 <td>Readable sequence(s)</td>
 <td><b>Required</b></td>
 </tr>
@@ -193,7 +195,7 @@ Output file [100k_rat.oddcomp]: <b>out.odd</b>
 </tr>
 
 <tr>
-<td>[-window]<br>(Parameter 3)</td>
+<td>-window</td>
 <td>This is the size of window in which to count.
 Thus if you want to count frequencies in a 40 aa stretch you should enter 40 here.</td>
 <td>Integer 10 or more</td>
@@ -201,10 +203,10 @@ Thus if you want to count frequencies in a 40 aa stretch you should enter 40 her
 </tr>
 
 <tr>
-<td>[-outfile]<br>(Parameter 4)</td>
+<td>[-outfile]<br>(Parameter 3)</td>
 <td>This is the results file.</td>
 <td>Output file</td>
-<td><i>&lt;sequence&gt;</i>.oddcomp</td>
+<td>&nbsp;</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
@@ -224,6 +226,13 @@ Thus if you want to count frequencies in a 40 aa stretch you should enter 40 her
 </tr>
 
 <tr>
+<td>-fullwindow</td>
+<td>Set this option on (Y) if you want the window size to be set to the length of the current protein. Otherwise, leave this option unset, in which case you'll be prompted for a window size to use.</td>
+<td>Toggle value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
 <td>-[no]ignorebz</td>
 <td>The amino acid code B represents Asparagine or Aspartic acid and the code Z represents Glutamine or Glutamic acid.
 These are not commonly used codes and you may wish not to count words containing them, just noting them in the count of 'Other' words.</td>
@@ -232,7 +241,6 @@ These are not commonly used codes and you may wish not to count words containing
 </tr>
 
 </table>
-
 
 
 <H2>
@@ -261,7 +269,6 @@ SR      1               0               0               0
 Other   0               0               0               0
 </pre>
 </td></tr></table><p>
-
 
 <p>
 
@@ -341,7 +348,6 @@ will be ignored.
 </td></tr></table><p>
 
 
-
 <H2>
     Data files
 </H2>
@@ -387,20 +393,67 @@ None.
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
-<tr><td><a href="antigenic.html">antigenic</a></td><td>Finds antigenic sites in proteins</td></tr>
-<tr><td><a href="digest.html">digest</a></td><td>Protein proteolytic enzyme or reagent cleavage digest</td></tr>
-<tr><td><a href="epestfind.html">epestfind</a></td><td>Finds PEST motifs as potential proteolytic cleavage sites</td></tr>
-<tr><td><a href="fuzzpro.html">fuzzpro</a></td><td>Protein pattern search</td></tr>
-<tr><td><a href="fuzztran.html">fuzztran</a></td><td>Protein pattern search after translation</td></tr>
-<tr><td><a href="helixturnhelix.html">helixturnhelix</a></td><td>Report nucleic acid binding motifs</td></tr>
-<tr><td><a href="patmatdb.html">patmatdb</a></td><td>Search a protein sequence with a motif</td></tr>
-<tr><td><a href="patmatmotifs.html">patmatmotifs</a></td><td>Search a PROSITE motif database with a protein sequence</td></tr>
-<tr><td><a href="pepcoil.html">pepcoil</a></td><td>Predicts coiled coil regions</td></tr>
-<tr><td><a href="preg.html">preg</a></td><td>Regular expression search of a protein sequence</td></tr>
-<tr><td><a href="pscan.html">pscan</a></td><td>Scans proteins using PRINTS</td></tr>
-<tr><td><a href="sigcleave.html">sigcleave</a></td><td>Reports protein signal cleavage sites</td></tr>
-</table>
+<tr>
+<td><a href="antigenic.html">antigenic</a></td>
+<td>Finds antigenic sites in proteins</td>
+</tr>
 
+<tr>
+<td><a href="digest.html">digest</a></td>
+<td>Protein proteolytic enzyme or reagent cleavage digest</td>
+</tr>
+
+<tr>
+<td><a href="epestfind.html">epestfind</a></td>
+<td>Finds PEST motifs as potential proteolytic cleavage sites</td>
+</tr>
+
+<tr>
+<td><a href="fuzzpro.html">fuzzpro</a></td>
+<td>Protein pattern search</td>
+</tr>
+
+<tr>
+<td><a href="fuzztran.html">fuzztran</a></td>
+<td>Protein pattern search after translation</td>
+</tr>
+
+<tr>
+<td><a href="helixturnhelix.html">helixturnhelix</a></td>
+<td>Report nucleic acid binding motifs</td>
+</tr>
+
+<tr>
+<td><a href="patmatdb.html">patmatdb</a></td>
+<td>Search a protein sequence with a motif</td>
+</tr>
+
+<tr>
+<td><a href="patmatmotifs.html">patmatmotifs</a></td>
+<td>Search a PROSITE motif database with a protein sequence</td>
+</tr>
+
+<tr>
+<td><a href="pepcoil.html">pepcoil</a></td>
+<td>Predicts coiled coil regions</td>
+</tr>
+
+<tr>
+<td><a href="preg.html">preg</a></td>
+<td>Regular expression search of a protein sequence</td>
+</tr>
+
+<tr>
+<td><a href="pscan.html">pscan</a></td>
+<td>Scans proteins using PRINTS</td>
+</tr>
+
+<tr>
+<td><a href="sigcleave.html">sigcleave</a></td>
+<td>Reports protein signal cleavage sites</td>
+</tr>
+
+</table>
 
 <H2>
     Author(s)
@@ -411,13 +464,11 @@ David Martin (dmartin&nbsp;&copy;&nbsp;rfcgr.mrc.ac.uk)
 <br>
 
 
-
 <H2>
     History
 </H2>
 
 Written (1999) - David Martin
-
 
 <H2>
     Target users
@@ -425,12 +476,10 @@ Written (1999) - David Martin
 This program is intended to be used by everyone and everything, from naive users to embedded scripts.
 
 
-
 <H2>
     Comments
 </H2>
 None
-
 
 </BODY>
 </HTML>

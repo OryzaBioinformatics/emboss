@@ -499,9 +499,9 @@ Usage
 
 % emma 
 Multiple alignment program - interface to ClustalW program
-Input sequence(s): globins.fasta
-Output sequence [hbb_human.aln]: 
-Dendogram output filename [hbb_human.dnd]: 
+Input (gapped) sequence(s): globins.fasta
+output sequence set [hbb_human.aln]: 
+Dendrogram (tree file) from clustalw output file [hbb_human.dnd]: 
 
 
 
@@ -564,15 +564,19 @@ GCG-Alignment file created      [12345678A]
 Command line arguments
 
    Standard (Mandatory) qualifiers:
-  [-sequence]          seqall     Sequence database USA
-  [-outseq]            seqoutset  Output sequence set USA
-  [-dendoutfile]       outfile    Dendogram output filename
+  [-sequence]          seqall     (Gapped) sequence(s) filename and optional
+                                  format, or reference (input USA)
+  [-outseq]            seqoutset  [.] Sequence set filename
+                                  and optional format (output USA)
+  [-dendoutfile]       outfile    [*.emma] Dendrogram (tree file) from
+                                  clustalw output file
 
    Additional (Optional) qualifiers (* if not always prompted):
-   -onlydend           toggle     Only produce dendrogram file
-*  -dend               toggle     Do alignment using an old dendrogram
-*  -dendfile           infile     Name of old dendrogram file
-*  -pwmatrix           menu       The scoring table which describes the
+   -onlydend           toggle     [N] Only produce dendrogram file
+*  -dend               toggle     [N] Do alignment using an old dendrogram
+*  -dendfile           infile     Dendrogram (tree file) from clustalw file
+                                  (optional)
+*  -pwmatrix           menu       [b] The scoring table which describes the
                                   similarity of each amino acid to each other.
                                   There are three 'in-built' series of weight
                                   matrices offered. Each consists of several
@@ -608,19 +612,23 @@ Command line arguments
                                   We also supply an identity matrix which
                                   gives a score of 1.0 to two identical amino
                                   acids and a score of zero otherwise. This
-                                  matrix is not very useful.
-*  -pwdnamatrix        menu       The scoring table which describes the scores
-                                  assigned to matches and mismatches
-                                  (including IUB ambiguity codes).
-*  -pairwisedata       infile     Filename of user pairwise matrix
-*  -matrix             menu       This gives a menu where you are offered a
-                                  choice of weight matrices. The default for
-                                  proteins is the PAM series derived by Gonnet
-                                  and colleagues. Note, a series is used! The
-                                  actual matrix that is used depends on how
-                                  similar the sequences to be aligned at this
-                                  alignment step are. Different matrices work
-                                  differently at each evolutionary distance.
+                                  matrix is not very useful. (Values: b
+                                  (blosum); p (pam); g (gonnet); i (id); o
+                                  (own))
+*  -pwdnamatrix        menu       [i] The scoring table which describes the
+                                  scores assigned to matches and mismatches
+                                  (including IUB ambiguity codes). (Values: i
+                                  (iub); c (clustalw); o (own))
+*  -pairwisedatafile   infile     Comparison matrix file (optional)
+*  -matrix             menu       [b] This gives a menu where you are offered
+                                  a choice of weight matrices. The default for
+                                  proteins is the PAM series derived by
+                                  Gonnet and colleagues. Note, a series is
+                                  used! The actual matrix that is used depends
+                                  on how similar the sequences to be aligned
+                                  at this alignment step are. Different
+                                  matrices work differently at each
+                                  evolutionary distance.
                                   There are three 'in-built' series of weight
                                   matrices offered. Each consists of several
                                   matrices which work differently at different
@@ -657,15 +665,16 @@ Command line arguments
                                   acids and a score of zero otherwise. This
                                   matrix is not very useful. Alternatively,
                                   you can read in your own (just one matrix,
-                                  not a series).
-*  -dnamatrix          menu       This gives a menu where you are offered
-                                  amenu where a single matrix (not a series)
-                                  can be selected.
-*  -mamatrix           infile     Filename of user multiple alignment matrix
-   -[no]slow           toggle     A distance is calculated between every pair
-                                  of sequences and these are used to construct
-                                  the dendrogram which guides the final
-                                  multiple alignment. The scores are
+                                  not a series). (Values: b (blosum); p (pam);
+                                  g (gonnet); i (id); o (own))
+*  -dnamatrix          menu       [i] This gives a menu where a single matrix
+                                  (not a series) can be selected. (Values: i
+                                  (iub); c (clustalw); o (own))
+*  -mamatrixfile       infile     Comparison matrix file (optional)'
+   -[no]slow           toggle     [Y] A distance is calculated between every
+                                  pair of sequences and these are used to
+                                  construct the dendrogram which guides the
+                                  final multiple alignment. The scores are
                                   calculated from separate pairwise
                                   alignments. These can be calculated using 2
                                   methods: dynamic programming (slow but
@@ -675,40 +684,47 @@ Command line arguments
                                   sequences but will be VERY SLOW for many
                                   (e.g. >100) long (e.g. >1000 residue)
                                   sequences.
-*  -pwgapopen          float      The penalty for opening a gap in the
-                                  pairwise alignments.
-*  -pwgapextend        float      The penalty for extending a gap by 1 residue
-                                  in the pairwise alignments.
-*  -ktup               integer    This is the size of exactly matching
-                                  fragment that is used. INCREASE for speed
-                                  (max= 2 for proteins; 4 for DNA), DECREASE
-                                  for sensitivity. For longer sequences (e.g.
+*  -pwgapopen          float      [10.0] The penalty for opening a gap in the
+                                  pairwise alignments. (Number 0.000 or more)
+*  -pwgapextend        float      [0.1] The penalty for extending a gap by 1
+                                  residue in the pairwise alignments. (Number
+                                  0.000 or more)
+*  -ktup               integer    [1 for protein, 2 for nucleic] This is the
+                                  size of exactly matching fragment that is
+                                  used. INCREASE for speed (max= 2 for
+                                  proteins; 4 for DNA), DECREASE for
+                                  sensitivity. For longer sequences (e.g.
                                   >1000 residues) you may need to increase the
-                                  default.
-*  -gapw               integer    This is a penalty for each gap in the fast
-                                  alignments. It has little affect on the
-                                  speed or sensitivity except for extreme
-                                  values.
-*  -topdiags           integer    The number of k-tuple matches on each
-                                  diagonal (in an imaginary dot-matrix plot)
-                                  is calculated. Only the best ones (with most
-                                  matches) are used in the alignment. This
-                                  parameter specifies how many. Decrease for
-                                  speed; increase for sensitivity.
-*  -window             integer    This is the number of diagonals around each
-                                  of the 'best' diagonals that will be used.
-                                  Decrease for speed; increase for
-                                  sensitivity.
-*  -nopercent          boolean    Fast pairwise alignment: similarity scores:
-                                  suppresses percentage score
-   -gapopen            float      The penalty for opening a gap in the
+                                  default. (integer from 0 to 4)
+*  -gapw               integer    [3 for protein, 5 for nucleic] This is a
+                                  penalty for each gap in the fast alignments.
+                                  It has little affect on the speed or
+                                  sensitivity except for extreme values.
+                                  (Positive integer)
+*  -topdiags           integer    [5 for protein, 4 for nucleic] The number of
+                                  k-tuple matches on each diagonal (in an
+                                  imaginary dot-matrix plot) is calculated.
+                                  Only the best ones (with most matches) are
+                                  used in the alignment. This parameter
+                                  specifies how many. Decrease for speed;
+                                  increase for sensitivity. (Positive integer)
+*  -window             integer    [5 for protein, 4 for nucleic] This is the
+                                  number of diagonals around each of the
+                                  'best' diagonals that will be used. Decrease
+                                  for speed; increase for sensitivity.
+                                  (Positive integer)
+*  -nopercent          boolean    [N] Fast pairwise alignment: similarity
+                                  scores: suppresses percentage score
+   -gapopen            float      [10.0] The penalty for opening a gap in the
                                   alignment. Increasing the gap opening
                                   penalty will make gaps less frequent.
-   -gapextend          float      The penalty for extending a gap by 1
+                                  (Positive foating point number)
+   -gapextend          float      [5.0] The penalty for extending a gap by 1
                                   residue. Increasing the gap extension
                                   penalty will make gaps shorter. Terminal
-                                  gaps are not penalised.
-   -[no]endgaps        boolean    End gap separation: treats end gaps just
+                                  gaps are not penalised. (Positive foating
+                                  point number)
+   -[no]endgaps        boolean    [Y] End gap separation: treats end gaps just
                                   like internal gaps for the purposes of
                                   avoiding gaps that are too close (set by
                                   'gap separation distance'). If you turn this
@@ -716,38 +732,41 @@ Command line arguments
                                   purpose. This is useful when you wish to
                                   align fragments where the end gaps are not
                                   biologically meaningful.
-   -gapdist            integer    Gap separation distance: tries to decrease
-                                  the chances of gaps being too close to each
-                                  other. Gaps that are less than this distance
-                                  apart are penalised more than other gaps.
-                                  This does not prevent close gaps; it makes
-                                  them less frequent, promoting a block-like
-                                  appearance of the alignment.
-*  -norgap             boolean    Residue specific penalties: amino acid
+   -gapdist            integer    [8] Gap separation distance: tries to
+                                  decrease the chances of gaps being too close
+                                  to each other. Gaps that are less than this
+                                  distance apart are penalised more than
+                                  other gaps. This does not prevent close
+                                  gaps; it makes them less frequent, promoting
+                                  a block-like appearance of the alignment.
+                                  (Positive integer)
+*  -norgap             boolean    [N] Residue specific penalties: amino acid
                                   specific gap penalties that reduce or
                                   increase the gap opening penalties at each
                                   position in the alignment or sequence. As an
                                   example, positions that are rich in glycine
                                   are more likely to have an adjacent gap
                                   than positions that are rich in valine.
-*  -hgapres            string     This is a set of the residues 'considered'
-                                  to be hydrophilic. It is used when
-                                  introducing Hydrophilic gap penalties.
-*  -nohgap             boolean    Hydrophilic gap penalties: used to increase
-                                  the chances of a gap within a run (5 or more
-                                  residues) of hydrophilic amino acids; these
-                                  are likely to be loop or random coil
-                                  regions where gaps are more common. The
-                                  residues that are 'considered' to be
+*  -hgapres            string     [GPSNDQEKR] This is a set of the residues
+                                  'considered' to be hydrophilic. It is used
+                                  when introducing Hydrophilic gap penalties.
+                                  (Any string is accepted)
+*  -nohgap             boolean    [N] Hydrophilic gap penalties: used to
+                                  increase the chances of a gap within a run
+                                  (5 or more residues) of hydrophilic amino
+                                  acids; these are likely to be loop or random
+                                  coil regions where gaps are more common.
+                                  The residues that are 'considered' to be
                                   hydrophilic are set by '-hgapres'.
-   -maxdiv             integer    This switch, delays the alignment of the
-                                  most distantly related sequences until after
-                                  the most closely related sequences have
-                                  been aligned. The setting shows the percent
-                                  identity level required to delay the
+   -maxdiv             integer    [30] This switch, delays the alignment of
+                                  the most distantly related sequences until
+                                  after the most closely related sequences
+                                  have been aligned. The setting shows the
+                                  percent identity level required to delay the
                                   addition of a sequence; sequences that are
                                   less identical than this level to any other
-                                  sequences will be aligned later.
+                                  sequences will be aligned later. (Integer
+                                  from 0 to 100)
 
    Advanced (Unprompted) qualifiers: (none)
    Associated qualifiers:
@@ -796,165 +815,7 @@ Command line arguments
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
-   -die                boolean    Report deaths
-
-
-   Standard (Mandatory) qualifiers Allowed values Default
-   [-sequence]
-   (Parameter 1) Sequence database USA Readable sequence(s) Required
-   [-outseq]
-   (Parameter 2) Output sequence set USA Writeable sequences
-   <sequence>.format
-   [-dendoutfile]
-   (Parameter 3) Dendogram output filename Output file <sequence>.emma
-   Additional (Optional) qualifiers Allowed values Default
-   -onlydend Only produce dendrogram file Toggle value Yes/No No
-   -dend Do alignment using an old dendrogram Toggle value Yes/No No
-   -dendfile Name of old dendrogram file Input file Required
-   -pwmatrix The scoring table which describes the similarity of each
-   amino acid to each other. There are three 'in-built' series of weight
-   matrices offered. Each consists of several matrices which work
-   differently at different evolutionary distances. To see the exact
-   details, read the documentation. Crudely, we store several matrices in
-   memory, spanning the full range of amino acid distance (from almost
-   identical sequences to highly divergent ones). For very similar
-   sequences, it is best to use a strict weight matrix which only gives a
-   high score to identities and the most favoured conservative
-   substitutions. For more divergent sequences, it is appropriate to use
-   'softer' matrices which give a high score to many other frequent
-   substitutions. 1) BLOSUM (Henikoff). These matrices appear to be the
-   best available for carrying out data base similarity (homology
-   searches). The matrices used are: Blosum80, 62, 45 and 30. 2) PAM
-   (Dayhoff). These have been extremely widely used since the late '70s.
-   We use the PAM 120, 160, 250 and 350 matrices. 3) GONNET . These
-   matrices were derived using almost the same procedure as the Dayhoff
-   one (above) but are much more up to date and are based on a far larger
-   data set. They appear to be more sensitive than the Dayhoff series. We
-   use the GONNET 40, 80, 120, 160, 250 and 350 matrices. We also supply
-   an identity matrix which gives a score of 1.0 to two identical amino
-   acids and a score of zero otherwise. This matrix is not very useful.
-   b (blosum)
-   p (pam)
-   g (gonnet)
-   i (id)
-   o (own)
-   b
-   -pwdnamatrix The scoring table which describes the scores assigned to
-   matches and mismatches (including IUB ambiguity codes).
-   i (iub)
-   c (clustalw)
-   o (own)
-   i
-   -pairwisedata Filename of user pairwise matrix Input file Required
-   -matrix This gives a menu where you are offered a choice of weight
-   matrices. The default for proteins is the PAM series derived by Gonnet
-   and colleagues. Note, a series is used! The actual matrix that is used
-   depends on how similar the sequences to be aligned at this alignment
-   step are. Different matrices work differently at each evolutionary
-   distance. There are three 'in-built' series of weight matrices
-   offered. Each consists of several matrices which work differently at
-   different evolutionary distances. To see the exact details, read the
-   documentation. Crudely, we store several matrices in memory, spanning
-   the full range of amino acid distance (from almost identical sequences
-   to highly divergent ones). For very similar sequences, it is best to
-   use a strict weight matrix which only gives a high score to identities
-   and the most favoured conservative substitutions. For more divergent
-   sequences, it is appropriate to use 'softer' matrices which give a
-   high score to many other frequent substitutions. 1) BLOSUM (Henikoff).
-   These matrices appear to be the best available for carrying out data
-   base similarity (homology searches). The matrices used are: Blosum80,
-   62, 45 and 30. 2) PAM (Dayhoff). These have been extremely widely used
-   since the late '70s. We use the PAM 120, 160, 250 and 350 matrices. 3)
-   GONNET . These matrices were derived using almost the same procedure
-   as the Dayhoff one (above) but are much more up to date and are based
-   on a far larger data set. They appear to be more sensitive than the
-   Dayhoff series. We use the GONNET 40, 80, 120, 160, 250 and 350
-   matrices. We also supply an identity matrix which gives a score of 1.0
-   to two identical amino acids and a score of zero otherwise. This
-   matrix is not very useful. Alternatively, you can read in your own
-   (just one matrix, not a series).
-   b (blosum)
-   p (pam)
-   g (gonnet)
-   i (id)
-   o (own)
-   b
-   -dnamatrix This gives a menu where you are offered amenu where a
-   single matrix (not a series) can be selected.
-   i (iub)
-   c (clustalw)
-   o (own)
-   i
-   -mamatrix Filename of user multiple alignment matrix Input file
-   Required
-   -[no]slow A distance is calculated between every pair of sequences and
-   these are used to construct the dendrogram which guides the final
-   multiple alignment. The scores are calculated from separate pairwise
-   alignments. These can be calculated using 2 methods: dynamic
-   programming (slow but accurate) or by the method of Wilbur and Lipman
-   (extremely fast but approximate). The slow-accurate method is fine for
-   short sequences but will be VERY SLOW for many (e.g. >100) long (e.g.
-   >1000 residue) sequences. Toggle value Yes/No Yes
-   -pwgapopen The penalty for opening a gap in the pairwise alignments.
-   Number 0.000 or more 10.0
-   -pwgapextend The penalty for extending a gap by 1 residue in the
-   pairwise alignments. Number 0.000 or more 0.1
-   -ktup This is the size of exactly matching fragment that is used.
-   INCREASE for speed (max= 2 for proteins; 4 for DNA), DECREASE for
-   sensitivity. For longer sequences (e.g. >1000 residues) you may need
-   to increase the default. integer from 0 to 4 1 for protein, 2 for
-   nucleic
-   -gapw This is a penalty for each gap in the fast alignments. It has
-   little affect on the speed or sensitivity except for extreme values.
-   Positive integer 3 for protein, 5 for nucleic
-   -topdiags The number of k-tuple matches on each diagonal (in an
-   imaginary dot-matrix plot) is calculated. Only the best ones (with
-   most matches) are used in the alignment. This parameter specifies how
-   many. Decrease for speed; increase for sensitivity. Positive integer 5
-   for protein, 4 for nucleic
-   -window This is the number of diagonals around each of the 'best'
-   diagonals that will be used. Decrease for speed; increase for
-   sensitivity. Positive integer 5 for protein, 4 for nucleic
-   -nopercent Fast pairwise alignment: similarity scores: suppresses
-   percentage score Boolean value Yes/No No
-   -gapopen The penalty for opening a gap in the alignment. Increasing
-   the gap opening penalty will make gaps less frequent. Positive foating
-   point number 10.0
-   -gapextend The penalty for extending a gap by 1 residue. Increasing
-   the gap extension penalty will make gaps shorter. Terminal gaps are
-   not penalised. Positive foating point number 5.0
-   -[no]endgaps End gap separation: treats end gaps just like internal
-   gaps for the purposes of avoiding gaps that are too close (set by 'gap
-   separation distance'). If you turn this off, end gaps will be ignored
-   for this purpose. This is useful when you wish to align fragments
-   where the end gaps are not biologically meaningful. Boolean value
-   Yes/No Yes
-   -gapdist Gap separation distance: tries to decrease the chances of
-   gaps being too close to each other. Gaps that are less than this
-   distance apart are penalised more than other gaps. This does not
-   prevent close gaps; it makes them less frequent, promoting a
-   block-like appearance of the alignment. Positive integer 8
-   -norgap Residue specific penalties: amino acid specific gap penalties
-   that reduce or increase the gap opening penalties at each position in
-   the alignment or sequence. As an example, positions that are rich in
-   glycine are more likely to have an adjacent gap than positions that
-   are rich in valine. Boolean value Yes/No No
-   -hgapres This is a set of the residues 'considered' to be hydrophilic.
-   It is used when introducing Hydrophilic gap penalties. Any string is
-   accepted GPSNDQEKR
-   -nohgap Hydrophilic gap penalties: used to increase the chances of a
-   gap within a run (5 or more residues) of hydrophilic amino acids;
-   these are likely to be loop or random coil regions where gaps are more
-   common. The residues that are 'considered' to be hydrophilic are set
-   by '-hgapres'. Boolean value Yes/No No
-   -maxdiv This switch, delays the alignment of the most distantly
-   related sequences until after the most closely related sequences have
-   been aligned. The setting shows the percent identity level required to
-   delay the addition of a sequence; sequences that are less identical
-   than this level to any other sequences will be aligned later. Integer
-   from 0 to 100 30
-   Advanced (Unprompted) qualifiers Allowed values Default
-   (none)
+   -die                boolean    Report dying program messages
 
 Input file format
 

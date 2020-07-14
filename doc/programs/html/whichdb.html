@@ -12,7 +12,6 @@
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
-
 whichdb
 </font></b>
 </td></tr>
@@ -21,12 +20,10 @@ whichdb
 <p>
 
 
-
 <H2>
     Function
 </H2>
 Search all databases for an entry
-
 <H2>
     Description
 </H2>
@@ -108,7 +105,6 @@ Output file [outfile.whichdb]: <b></b>
 <a href="#output.1">Go to the output files for this example</a><p><p>
 
 
-
 <H2>
     Command line arguments
 </H2>
@@ -116,34 +112,34 @@ Output file [outfile.whichdb]: <b></b>
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
    Standard (Mandatory) qualifiers (* if not always prompted):
-  [-entry]             string     ID or Accession number
-*  -outfile            outfile    Output file name
+  [-entry]             string     ID or Accession number (Any string is
+                                  accepted)
+*  -outfile            outfile    [*.whichdb] Output file name
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers:
-   -get                toggle     Retrieve sequences
-   -showall            boolean    Show failed attempts
+   -get                toggle     [N] Retrieve sequences
+   -showall            boolean    [N] Show failed attempts
 
    Associated qualifiers:
 
    "-outfile" associated qualifiers
-   -odirectory          string     Output directory
+   -odirectory         string     Output directory
 
    General qualifiers:
-   -auto                boolean    Turn off prompts
-   -stdout              boolean    Write standard output
-   -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for standard and additional values
-   -debug               boolean    Write debug output to program.dbg
-   -verbose             boolean    Report some/full command line options
-   -help                boolean    Report command line options. More
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
-   -warning             boolean    Report warnings
-   -error               boolean    Report errors
-   -fatal               boolean    Report fatal errors
-   -die                 boolean    Report deaths
-
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
 
 </pre>
 </td></tr></table>
@@ -166,7 +162,7 @@ Output file [outfile.whichdb]: <b></b>
 <td>-outfile</td>
 <td>Output file name</td>
 <td>Output file</td>
-<td><i>&lt;sequence&gt;</i>.whichdb</td>
+<td>&nbsp;</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
@@ -201,7 +197,6 @@ Output file [outfile.whichdb]: <b></b>
 
 </table>
 
-
 <H2>
     Input file format
 </H2>
@@ -209,7 +204,6 @@ Output file [outfile.whichdb]: <b></b>
 None.
 
 <p>
-
 
 
 <H2>
@@ -236,8 +230,6 @@ None.
 # Failed 'qangcginc:hsfau1'
 # Trying 'qangcgexc:hsfau1'
 # Failed 'qangcgexc:hsfau1'
-# Trying 'qasrsfasta:hsfau1'
-qasrsfasta:hsfau1
 # Trying 'qapir:hsfau1'
 # Failed 'qapir:hsfau1'
 # Trying 'tgenbank:hsfau1'
@@ -262,8 +254,6 @@ qanxflatall:hsfau1
 # Failed 'qapflatinc:hsfau1'
 # Trying 'qapflatexc:hsfau1'
 # Failed 'qapflatexc:hsfau1'
-# Trying 'qasrs:hsfau1'
-qasrs:hsfau1
 # Trying 'qapxflatinc:hsfau1'
 # Failed 'qapxflatinc:hsfau1'
 # Trying 'qapxflatexc:hsfau1'
@@ -271,7 +261,7 @@ qasrs:hsfau1
 # Trying 'tpir:hsfau1'
 # Failed 'tpir:hsfau1'
 # Trying 'qasrswww:hsfau1'
-qasrswww:hsfau1
+# Failed 'qasrswww:hsfau1'
 # Trying 'qanxfasta:hsfau1'
 # Failed 'qanxfasta:hsfau1'
 # Trying 'qanxgcgall:hsfau1'
@@ -322,7 +312,6 @@ tembl:hsfau1
 # Failed 'qawfasta:hsfau1'
 </pre>
 </td></tr></table><p>
-
 
 <p>
 
@@ -410,15 +399,42 @@ None.
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
-<tr><td><a href="infoalign.html">infoalign</a></td><td>Information on a multiple sequence alignment</td></tr>
-<tr><td><a href="infoseq.html">infoseq</a></td><td>Displays some simple information about sequences</td></tr>
-<tr><td><a href="seealso.html">seealso</a></td><td>Finds programs sharing group names</td></tr>
-<tr><td><a href="showdb.html">showdb</a></td><td>Displays information on the currently available databases</td></tr>
-<tr><td><a href="textsearch.html">textsearch</a></td><td>Search sequence documentation. Slow, use SRS and Entrez!</td></tr>
-<tr><td><a href="tfm.html">tfm</a></td><td>Displays a program's help documentation manual</td></tr>
-<tr><td><a href="wossname.html">wossname</a></td><td>Finds programs by keywords in their one-line documentation</td></tr>
-</table>
+<tr>
+<td><a href="infoalign.html">infoalign</a></td>
+<td>Information on a multiple sequence alignment</td>
+</tr>
 
+<tr>
+<td><a href="infoseq.html">infoseq</a></td>
+<td>Displays some simple information about sequences</td>
+</tr>
+
+<tr>
+<td><a href="seealso.html">seealso</a></td>
+<td>Finds programs sharing group names</td>
+</tr>
+
+<tr>
+<td><a href="showdb.html">showdb</a></td>
+<td>Displays information on the currently available databases</td>
+</tr>
+
+<tr>
+<td><a href="textsearch.html">textsearch</a></td>
+<td>Search sequence documentation. Slow, use SRS and Entrez!</td>
+</tr>
+
+<tr>
+<td><a href="tfm.html">tfm</a></td>
+<td>Displays a program's help documentation manual</td>
+</tr>
+
+<tr>
+<td><a href="wossname.html">wossname</a></td>
+<td>Finds programs by keywords in their one-line documentation</td>
+</tr>
+
+</table>
 
 
 
@@ -430,7 +446,6 @@ Alan Bleasby (ajb&nbsp;&copy;&nbsp;ebi.ac.uk)
 European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
 
 
-
 <H2>
     History
 </H2>
@@ -438,18 +453,15 @@ European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambri
 Written (Jan 2002) - Alan Bleasby.
 
 
-
 <H2>
     Target users
 </H2>
 This program is intended to be used by everyone and everything, from naive users to embedded scripts.
 
-
 <H2>
     Comments
 </H2>
 None
-
 
 </BODY>
 </HTML>

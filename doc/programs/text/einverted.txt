@@ -45,7 +45,8 @@ Gap penalty [12]:
 Minimum score threshold [50]: 
 Match score [3]: 
 Mismatch score [-4]: 
-Output file [hsts1.inv]: 
+Sanger Centre program inverted output file [hsts1.inv]: 
+File for sequence of regions of inverted repeats. [hsts1.fasta]: 
 
    Go to the input files for this example
    Go to the output files for this example
@@ -53,71 +54,73 @@ Output file [hsts1.inv]:
 Command line arguments
 
    Standard (Mandatory) qualifiers:
-  [-sequence]          sequence   Sequence USA
-   -gap                integer    Gap penalty
-   -threshold          integer    Minimum score threshold
-   -match              integer    Match score
-   -mismatch           integer    Mismatch score
-  [-outfile]           outfile    Output file name
+  [-sequence]          seqall     Nucleotide sequence(s) filename and optional
+                                  format, or reference (input USA)
+   -gap                integer    [12] Gap penalty (Any integer value)
+   -threshold          integer    [50] Minimum score threshold (Any integer
+                                  value)
+   -match              integer    [3] Match score (Any integer value)
+   -mismatch           integer    [-4] Mismatch score (Any integer value)
+  [-outfile]           outfile    [*.einverted] Sanger Centre program inverted
+                                  output file
+  [-outseq]            seqout     [.] The sequence of the
+                                  inverted repeat regions without gap
+                                  characters.
 
    Additional (Optional) qualifiers:
-   -maxrepeat          integer    Maximum separation between the start of
-                                  repeat and the end of the inverted repeat
-                                  (the default is 4000 bases).
+   -maxrepeat          integer    [2000] Maximum separation between the start
+                                  of repeat and the end of the inverted repeat
+                                  (the default is 2000 bases). (Any integer
+                                  value)
 
    Advanced (Unprompted) qualifiers: (none)
    Associated qualifiers:
 
    "-sequence" associated qualifiers
-   -sbegin1             integer    Start of the sequence to be used
-   -send1               integer    End of the sequence to be used
-   -sreverse1           boolean    Reverse (if DNA)
-   -sask1               boolean    Ask for begin/end/reverse
-   -snucleotide1        boolean    Sequence is nucleotide
-   -sprotein1           boolean    Sequence is protein
-   -slower1             boolean    Make lower case
-   -supper1             boolean    Make upper case
-   -sformat1            string     Input sequence format
-   -sdbname1            string     Database name
-   -sid1                string     Entryname
-   -ufo1                string     UFO features
-   -fformat1            string     Features format
-   -fopenfile1          string     Features file name
+   -sbegin1            integer    Start of each sequence to be used
+   -send1              integer    End of each sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
 
    "-outfile" associated qualifiers
-   -odirectory2         string     Output directory
+   -odirectory2        string     Output directory
+
+   "-outseq" associated qualifiers
+   -osformat3          string     Output seq format
+   -osextension3       string     File name extension
+   -osname3            string     Base file name
+   -osdirectory3       string     Output directory
+   -osdbname3          string     Database name to add
+   -ossingle3          boolean    Separate file for each entry
+   -oufo3              string     UFO features
+   -offormat3          string     Features format
+   -ofname3            string     Features file name
+   -ofdirectory3       string     Output directory
 
    General qualifiers:
-   -auto                boolean    Turn off prompts
-   -stdout              boolean    Write standard output
-   -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for standard and additional values
-   -debug               boolean    Write debug output to program.dbg
-   -verbose             boolean    Report some/full command line options
-   -help                boolean    Report command line options. More
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
-   -warning             boolean    Report warnings
-   -error               boolean    Report errors
-   -fatal               boolean    Report fatal errors
-   -die                 boolean    Report deaths
-
-
-   Standard (Mandatory) qualifiers Allowed values Default
-   [-sequence]
-   (Parameter 1) Sequence USA Readable sequence Required
-   -gap Gap penalty Any integer value 12
-   -threshold Minimum score threshold Any integer value 50
-   -match Match score Any integer value 3
-   -mismatch Mismatch score Any integer value -4
-   [-outfile]
-   (Parameter 2) Output file name Output file <sequence>.einverted
-   Additional (Optional) qualifiers Allowed values Default
-   -maxrepeat Maximum separation between the start of repeat and the end
-   of the inverted repeat (the default is 4000 bases). Any integer value
-   4000
-   Advanced (Unprompted) qualifiers Allowed values Default
-   (none)
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
 
 Input file format
 
@@ -291,10 +294,39 @@ Output file format
 
   Output files for usage example
 
+  File: hsts1.fasta
+
+>HSTS1_13_142
+gctacgcgagaggctgaggcagcagaattacttgaacccaggaggcggaggttgcagtga
+gccgagatcgcgccactgcactccagcctgggtgagagagcgagactctgtctcaaaaaa
+aaaaaaaaaa
+>HSTS1_199_328
+ttttttttttttttttttgggacagtcttgctctgtcgcccaggctggagtacaatggtc
+ggatcttggctcactgcaacctctgcctcccaggttcaagcaattcttctgcctcagcct
+cccaagtagc
+>HSTS1_12128_12301
+agaggatttttttttttttttttttttttgagacagagttttgctctgttgcccaggctg
+gaatgcaacggcgtgatcttggctcactgtaacctctgcctcctgggttcgagtgattct
+cctgcctcagcctccaagtagctgggattacagcatgtgccaccatgcctggct
+>HSTS1_12573_12749
+agccaggtgtggtggctcacacctgtaattccaacaactccagaggccaaggcgagagga
+tcatttgaacccacggaatttgaggctgtagtgagtcatgatcacgccattgcactccat
+cctgggcaacagagtgagaccctgaatatttaaaaacaacaacaacaacaaaactct
+>HSTS1_12246_12296
+ctcctgcctcagcctccaagtagctgggattacagcatgtgccaccatgcc
+>HSTS1_13886_13938
+ggtatggtggctcatgcctgtaatcccagcactttggaagactgagacaggag
+>HSTS1_13884_13949
+tgggtatggtggctcatgcctgtaatcccagcactttggaagactgagacaggagcaatt
+gcttga
+>HSTS1_14628_14692
+tcaagcaattcttctgcctcagcctcccaggtagctgggattacaggcacatgccaccac
+accca
+
   File: hsts1.inv
 
 
-Score 236: 108/130 ( 83%) matches, 0 gaps
+HSTS1: Score 236: 108/130 ( 83%) matches, 0 gaps
       13 gctacgcgagaggctgaggcagcagaattacttgaacccaggaggcggaggttgcagtgagccgagatcg
 cgccactgcactccagcctgggtgagagagcgagactctgtctcaaaaaaaaaaaaaaaa 142
          |||||  | ||||||||||||| |||||| ||||||||  |||||| |||||||||||||||| |||||
@@ -302,71 +334,7 @@ cgccactgcactccagcctgggtgagagagcgagactctgtctcaaaaaaaaaaaaaaaa 142
      328 cgatgaaccctccgactccgtcttcttaacgaacttggaccctccgtctccaacgtcactcggttctagg
 ctggtaacatgaggtcggacccgctgtctcgttctgacagggtttttttttttttttttt 199
 
-Score 228: 108/132 ( 81%) matches, 0 gaps
-      11 cagctacgcgagaggctgaggcagcagaattacttgaacccaggaggcggaggttgcagtgagccgagat
-cgcgccactgcactccagcctgggtgagagagcgagactctgtctcaaaaaaaaaaaaaaaa 142
-           |||||  | ||||||||||||| |||||| ||||||||  |||||| |||||||||||||||| ||||
-|   ||| || ||||||||||||| || ||||| ||||| |  |  ||||||||||||||||
-     330 accgatgaaccctccgactccgtcttcttaacgaacttggaccctccgtctccaacgtcactcggttcta
-ggctggtaacatgaggtcggacccgctgtctcgttctgacagggtttttttttttttttttt 199
-
-Score 226: 110/136 ( 80%) matches, 0 gaps
-       7 gtcccagctacgcgagaggctgaggcagcagaattacttgaacccaggaggcggaggttgcagtgagccg
-agatcgcgccactgcactccagcctgggtgagagagcgagactctgtctcaaaaaaaaaaaaaaaa 142
-         ||    |||||  | ||||||||||||| |||||| ||||||||  |||||| ||||||||||||||||
-|||||   ||| || ||||||||||||| || ||||| ||||| |  |  ||||||||||||||||
-     334 caccaccgatgaaccctccgactccgtcttcttaacgaacttggaccctccgtctccaacgtcactcggt
-tctaggctggtaacatgaggtcggacccgctgtctcgttctgacagggtttttttttttttttttt 199
-
-Score 221: 111/139 ( 79%) matches, 0 gaps
-       4 gtagtcccagctacgcgagaggctgaggcagcagaattacttgaacccaggaggcggaggttgcagtgag
-ccgagatcgcgccactgcactccagcctgggtgagagagcgagactctgtctcaaaaaaaaaaaaaaaa 142
-         |  ||    |||||  | ||||||||||||| |||||| ||||||||  |||||| ||||||||||||||
-|| |||||   ||| || ||||||||||||| || ||||| ||||| |  |  ||||||||||||||||
-     337 ccgcaccaccgatgaaccctccgactccgtcttcttaacgaacttggaccctccgtctccaacgtcactc
-ggttctaggctggtaacatgaggtcggacccgctgtctcgttctgacagggtttttttttttttttttt 199
-
-Score 216: 112/142 ( 78%) matches, 0 gaps
-       1 cctgtagtcccagctacgcgagaggctgaggcagcagaattacttgaacccaggaggcggaggttgcagt
-gagccgagatcgcgccactgcactccagcctgggtgagagagcgagactctgtctcaaaaaaaaaaaaaaaa 142
-
-         |  |  ||    |||||  | ||||||||||||| |||||| ||||||||  |||||| |||||||||||
-||||| |||||   ||| || ||||||||||||| || ||||| ||||| |  |  ||||||||||||||||
-     340 gacccgcaccaccgatgaaccctccgactccgtcttcttaacgaacttggaccctccgtctccaacgtca
-ctcggttctaggctggtaacatgaggtcggacccgctgtctcgttctgacagggtttttttttttttttttt 199
-
-
-Score 199: 54/170 ( 31%) matches, 1 gaps
-       1 -cctgtagtcccagctacgcgagaggctgaggcagcagaattacttgaacccaggaggcggaggttgcag
-tgagccgagatcgcgccactgcactccagcctgggtgagagagcgagactctgtctcaaaaaaaaaaaaaaaagaccgc
-cagggctcaaacaaaaaacctc 170
-           |||        |        |  |     |    |  | |   |  | || ||  |     | |
-     | |     || |  |      |   |  ||          |        |  |||||||||||||||| |
- |     |   ||       ||
-     342 tcgacccgcaccaccgatgaaccctccgactccgtcttcttaacgaacttggaccctccgtctccaacgt
-cactcggttctaggctggtaacatgaggtcggacccgctgtctcgttctgacagggttttttttttttttttttttttt
-tttttctggcggtcccgaaaag 172
-
-Score 175: 56/171 ( 32%) matches, 1 gaps
-       1 -cctgtagtcccagctacgcgagaggctgaggcagcagaattacttgaacccaggaggcggaggttgcag
-tgagccgagatcgcgccactgcactccagcctgggtgagagagcgagactctgtctcaaaaaaaaaaaaaaaagaccgc
-cagggctcaaacaaaaaacctcg 171
-              | | |   |   |      ||  |  |  ||||||  | |           || ||  |  |  |
-      |  |     | ||     | |  |      |          |        | ||||||||||||||| |
- |      |     |   | |
-     344 aatcgacccgcaccaccgatgaaccctccgactccgtcttcttaacgaacttggaccctccgtctccaac
-gtcactcggttctaggctggtaacatgaggtcggacccgctgtctcgttctgacagggttttttttttttttttttttt
-tttttttctggcggtcccgaaaa 173
-
-Score 172: 100/120 ( 83%) matches, 4 gaps
-     345 tttttgtacttttagtagagacgggggtttcaccatgttgtccaggctggtcttgaactcctgacctcag
-gtgatccacccgcctcggccccccaaagtactaggattacaggcgtgagccacc 468
-         |||||||  | ||||||||||| ||||| || |||||||| |||||||||||   || |||| |||||||
-|||||    | | ||| ||| |||||||   | |||||||||||||||||||||
-    3177 aaaaacacaataatcatctctgaccccacagcggtacaaccggtccgaccagggtttaaggattggagtc
-cacta----gactgagtcggagggtttcgccaccctaatgtccgcactcggtgg 3058
-
-Score 164: 128/174 ( 73%) matches, 3 gaps
+HSTS1: Score 164: 128/174 ( 73%) matches, 3 gaps
    12128 agaggatttttttttttttttttttttttgagacagagttttgctctgttgcccaggctggaatgcaacg
 gcgtgatcttggctcactgtaacctctgcctcc-tgggttcgagtgattctcctgcctcagcctc-caagtagctggga
 ttaca-gcatgtgccaccatgcctggct 12301
@@ -377,18 +345,17 @@ ttaca-gcatgtgccaccatgcctggct 12301
 cgcactagtactgagtgatgtcggagtttaaggcacccaagtttactaggagagcggaaccggagacctcaacaacctt
 aatgtccacactcggtggtgtggaccga 12573
 
-Score 80: 44/51 ( 86%) matches, 2 gaps
+HSTS1: Score 80: 44/51 ( 86%) matches, 2 gaps
    12246 ctcctgcctcag-cctccaagtagctgggattaca-gcatgtgccaccatgcc 12296
          |||||| ||||| | |||||   |||||||||||| ||||| |||||||| ||
    13938 gaggacagagtcagaaggtttcacgaccctaatgtccgtactcggtggtatgg 13886
 
-Score 130: 74/94 ( 78%) matches, 1 gaps
-   13890 tggtggctcatgcctgtaatcccagcactttggaagactgagacaggagcaattgcttgaggtctggagt
-tcaataccagcctgggcaacataac 13984
-         |||||||| ||||||||||| |||| ||||| | || ||||| |||| |  |   ||||| ||| |||||
-|  | | |||||||| |||||| ||
-   14822 accaccgaatacggacattaaggtcttgaaagcctccgactccgtccaccat-gtgaacttcagtcctca
-aactctagtcggaccggttgtactg 14729
+HSTS1: Score 99: 53/65 ( 81%) matches, 1 gaps
+   13884 tgggtatggtggctcatgcctgtaatcccagcactttggaagactgagacaggagcaattgcttga 139
+49
+         ||||| |||||||   ||||||||||||||||    ||| || ||||| ||| || ||||||||||
+   14692 acccacaccaccgtacacggacattagggtcgatggaccctccgactccgtcttc-ttaacgaact 146
+28
 
 Data files
 

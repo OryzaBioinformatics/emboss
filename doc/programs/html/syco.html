@@ -13,7 +13,6 @@
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
-
 syco
 </font></b>
 </td></tr>
@@ -22,12 +21,10 @@ syco
 <p>
 
 
-
 <H2>
     Function
 </H2>
 Synonymous codon usage Gribskov statistic plot
-
 
 <H2>
     Description
@@ -58,7 +55,7 @@ It is essential to use the correct codon usage file for the species.
 
 % <b>syco -plot -cfile Epseae.cut </b>
 Synonymous codon usage Gribskov statistic plot
-Input sequence: <b>tembl:paamir</b>
+Input nucleotide sequence: <b>tembl:paamir</b>
 Graph type [x11]: <b>ps</b>
 
 Created syco.ps
@@ -69,24 +66,27 @@ Created syco.ps
 
 
 
-
 <H2>
     Command line arguments
 </H2>
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
    Standard (Mandatory) qualifiers (* if not always prompted):
-  [-sequence]          sequence   Sequence USA
-*  -graph              xygraph    Graph type
-*  -outfile            outfile    Output file name
+  [-sequence]          sequence   Nucleotide sequence filename and optional
+                                  format, or reference (input USA)
+*  -graph              xygraph    [$EMBOSS_GRAPHICS value, or x11] Graph type
+                                  (ps, hpgl, hp7470, hp7580, meta, cps, x11,
+                                  tekt, tek, none, data, xterm, png)
+*  -outfile            outfile    [*.syco] Output file name
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers:
    -cfile              codon      Codon usage file
-   -window             integer    Averaging window
-   -uncommon           boolean    Show common codon usage
-   -minimum            float      Minimum value for a common codon
-   -[no]plot           toggle     Produce plot
+   -window             integer    [30] Averaging window (Any integer value)
+   -uncommon           boolean    [N] Show common codon usage
+   -minimum            float      [.15] Minimum value for a common codon
+                                  (Number from 0.000 to 0.990)
+   -[no]plot           toggle     [Y] Produce plot
 
    Associated qualifiers:
 
@@ -134,8 +134,7 @@ Created syco.ps
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
-   -die                boolean    Report deaths
-
+   -die                boolean    Report dying program messages
 
 </pre>
 </td></tr></table>
@@ -149,7 +148,7 @@ Created syco.ps
 
 <tr>
 <td>[-sequence]<br>(Parameter 1)</td>
-<td>Sequence USA</td>
+<td>Nucleotide sequence filename and optional format, or reference (input USA)</td>
 <td>Readable sequence</td>
 <td><b>Required</b></td>
 </tr>
@@ -157,7 +156,7 @@ Created syco.ps
 <tr>
 <td>-graph</td>
 <td>Graph type</td>
-<td>EMBOSS has a list of known devices, including postscript, ps, hpgl, hp7470, hp7580, meta, colourps, cps, xwindows, x11, tektronics, tekt, tek4107t, tek, none, null, text, data, xterm, png, xml</td>
+<td>EMBOSS has a list of known devices, including ps, hpgl, hp7470, hp7580, meta, cps, x11, tekt, tek, none, data, xterm, png</td>
 <td><i>EMBOSS_GRAPHICS</i> value, or x11</td>
 </tr>
 
@@ -165,7 +164,7 @@ Created syco.ps
 <td>-outfile</td>
 <td>Output file name</td>
 <td>Output file</td>
-<td><i>&lt;sequence&gt;</i>.syco</td>
+<td>&nbsp;</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
@@ -220,7 +219,6 @@ Created syco.ps
 </tr>
 
 </table>
-
 
 
 <H2>
@@ -348,7 +346,6 @@ SQ   Sequence 2167 BP; 363 A; 712 C; 730 G; 362 T; 0 other;
 </pre>
 </td></tr></table><p>
 
-
 <H2>
     Output file format
 </H2>
@@ -363,7 +360,6 @@ SQ   Sequence 2167 BP; 363 A; 712 C; 730 G; 362 T; 0 other;
 </td></tr></table><p>
 <p><h3>Graphics File: syco.ps</h3>
 <p><img src="syco.1.syco.gif" alt="[syco results]">
-
 
 
 <H2>
@@ -416,7 +412,6 @@ The directories are searched in the following order:
 </ul>
 <p>
 
-
 <H2>
     Notes
 </H2>
@@ -459,19 +454,62 @@ None.
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
-<tr><td><a href="cai.html">cai</a></td><td>CAI codon adaptation index</td></tr>
-<tr><td><a href="chips.html">chips</a></td><td>Codon usage statistics</td></tr>
-<tr><td><a href="codcmp.html">codcmp</a></td><td>Codon usage table comparison</td></tr>
-<tr><td><a href="cusp.html">cusp</a></td><td>Create a codon usage table</td></tr>
-<tr><td><a href="getorf.html">getorf</a></td><td>Finds and extracts open reading frames (ORFs)</td></tr>
-<tr><td><a href="marscan.html">marscan</a></td><td>Finds MAR/SAR sites in nucleic sequences</td></tr>
-<tr><td><a href="plotorf.html">plotorf</a></td><td>Plot potential open reading frames</td></tr>
-<tr><td><a href="showorf.html">showorf</a></td><td>Pretty output of DNA translations</td></tr>
-<tr><td><a href="sixpack.html">sixpack</a></td><td>Display a DNA sequence with 6-frame translation and ORFs</td></tr>
-<tr><td><a href="tcode.html">tcode</a></td><td>Fickett TESTCODE statistic to identify protein-coding DNA</td></tr>
-<tr><td><a href="wobble.html">wobble</a></td><td>Wobble base plot</td></tr>
-</table>
+<tr>
+<td><a href="cai.html">cai</a></td>
+<td>CAI codon adaptation index</td>
+</tr>
 
+<tr>
+<td><a href="chips.html">chips</a></td>
+<td>Codon usage statistics</td>
+</tr>
+
+<tr>
+<td><a href="codcmp.html">codcmp</a></td>
+<td>Codon usage table comparison</td>
+</tr>
+
+<tr>
+<td><a href="cusp.html">cusp</a></td>
+<td>Create a codon usage table</td>
+</tr>
+
+<tr>
+<td><a href="getorf.html">getorf</a></td>
+<td>Finds and extracts open reading frames (ORFs)</td>
+</tr>
+
+<tr>
+<td><a href="marscan.html">marscan</a></td>
+<td>Finds MAR/SAR sites in nucleic sequences</td>
+</tr>
+
+<tr>
+<td><a href="plotorf.html">plotorf</a></td>
+<td>Plot potential open reading frames</td>
+</tr>
+
+<tr>
+<td><a href="showorf.html">showorf</a></td>
+<td>Pretty output of DNA translations</td>
+</tr>
+
+<tr>
+<td><a href="sixpack.html">sixpack</a></td>
+<td>Display a DNA sequence with 6-frame translation and ORFs</td>
+</tr>
+
+<tr>
+<td><a href="tcode.html">tcode</a></td>
+<td>Fickett TESTCODE statistic to identify protein-coding DNA</td>
+</tr>
+
+<tr>
+<td><a href="wobble.html">wobble</a></td>
+<td>Wobble base plot</td>
+</tr>
+
+</table>
 <b>wobble</b> does the analysis of the third base.
 
 
@@ -486,11 +524,9 @@ European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambri
 
 
 
-
 <H2>
     History
 </H2>
-
 
 
 
@@ -499,12 +535,10 @@ European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambri
 </H2>
 This program is intended to be used by everyone and everything, from naive users to embedded scripts.
 
-
 <H2>
     Comments
 </H2>
 None
-
 
 </BODY>
 </HTML>

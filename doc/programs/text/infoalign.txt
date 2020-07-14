@@ -190,41 +190,44 @@ Command line arguments
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqset     The sequence alignment to be displayed.
-  [-outfile]           outfile    If you enter the name of a file here then
-                                  this program will write the sequence details
-                                  into that file.
+  [-outfile]           outfile    [*.infoalign] If you enter the name of a
+                                  file here then this program will write the
+                                  sequence details into that file.
 
    Additional (Optional) qualifiers:
-   -matrix             matrix     This is the scoring matrix file used when
+   -matrix             matrix     [EBLOSUM62 for protein, EDNAFULL for DNA]
+                                  This is the scoring matrix file used when
                                   comparing sequences. By default it is the
                                   file 'EBLOSUM62' (for proteins) or the file
                                   'EDNAFULL' (for nucleic sequences). These
                                   files are found in the 'data' directory of
                                   the EMBOSS installation.
-   -refseq             string     If you give the number in the alignment or
-                                  the name of a sequence, it will be taken to
-                                  be the reference sequence. The reference
+   -refseq             string     [0] If you give the number in the alignment
+                                  or the name of a sequence, it will be taken
+                                  to be the reference sequence. The reference
                                   sequence is the one against which all the
                                   other sequences are compared. If this is set
                                   to 0 then the consensus sequence will be
                                   used as the reference sequence. By default
                                   the consensus sequence is used as the
-                                  reference sequence.
-   -html               boolean    Format output as an HTML table
+                                  reference sequence. (Any string is accepted)
+   -html               boolean    [N] Format output as an HTML table
 
    Advanced (Unprompted) qualifiers:
-   -plurality          float      Set a cut-off for the % of positive scoring
-                                  matches below which there is no consensus.
-                                  The default plurality is taken as 50% of the
-                                  total weight of all the sequences in the
-                                  alignment.
-   -identity           float      Provides the facility of setting the
+   -plurality          float      [50.0] Set a cut-off for the % of positive
+                                  scoring matches below which there is no
+                                  consensus. The default plurality is taken as
+                                  50% of the total weight of all the
+                                  sequences in the alignment. (Number from
+                                  0.000 to 100.000)
+   -identity           float      [0.0] Provides the facility of setting the
                                   required number of identities at a position
                                   for it to give a consensus. Therefore, if
                                   this is set to 100% only columns of
                                   identities contribute to the consensus.
-   -only               boolean    This is a way of shortening the command line
-                                  if you only want a few things to be
+                                  (Number from 0.000 to 100.000)
+   -only               boolean    [N] This is a way of shortening the command
+                                  line if you only want a few things to be
                                   displayed. Instead of specifying:
                                   '-nohead -nousa -noname -noalign -nogaps
                                   -nogapcount -nosimcount -noidcount
@@ -232,113 +235,61 @@ Command line arguments
                                   to get only the sequence length output, you
                                   can specify
                                   '-only -seqlength'
-   -heading            boolean    Display column headings
-   -usa                boolean    Display the USA of the sequence
-   -name               boolean    Display 'name' column
-   -seqlength          boolean    Display 'seqlength' column
-   -alignlength        boolean    Display 'alignlength' column
-   -gaps               boolean    Display number of gaps
-   -gapcount           boolean    Display number of gap positions
-   -idcount            boolean    Display number of identical positions
-   -simcount           boolean    Display number of similar positions
-   -diffcount          boolean    Display number of different positions
-   -change             boolean    Display % number of changed positions
-   -weight             boolean    Display 'weight' column
-   -description        boolean    Display 'description' column
+   -heading            boolean    [@(!$(only))] Display column headings
+   -usa                boolean    [@(!$(only))] Display the USA of the
+                                  sequence
+   -name               boolean    [@(!$(only))] Display 'name' column
+   -seqlength          boolean    [@(!$(only))] Display 'seqlength' column
+   -alignlength        boolean    [@(!$(only))] Display 'alignlength' column
+   -gaps               boolean    [@(!$(only))] Display number of gaps
+   -gapcount           boolean    [@(!$(only))] Display number of gap
+                                  positions
+   -idcount            boolean    [@(!$(only))] Display number of identical
+                                  positions
+   -simcount           boolean    [@(!$(only))] Display number of similar
+                                  positions
+   -diffcount          boolean    [@(!$(only))] Display number of different
+                                  positions
+   -change             boolean    [@(!$(only))] Display % number of changed
+                                  positions
+   -weight             boolean    [@(!$(only))] Display 'weight' column
+   -description        boolean    [@(!$(only))] Display 'description' column
 
    Associated qualifiers:
 
    "-sequence" associated qualifiers
-   -sbegin1             integer    Start of each sequence to be used
-   -send1               integer    End of each sequence to be used
-   -sreverse1           boolean    Reverse (if DNA)
-   -sask1               boolean    Ask for begin/end/reverse
-   -snucleotide1        boolean    Sequence is nucleotide
-   -sprotein1           boolean    Sequence is protein
-   -slower1             boolean    Make lower case
-   -supper1             boolean    Make upper case
-   -sformat1            string     Input sequence format
-   -sdbname1            string     Database name
-   -sid1                string     Entryname
-   -ufo1                string     UFO features
-   -fformat1            string     Features format
-   -fopenfile1          string     Features file name
+   -sbegin1            integer    Start of each sequence to be used
+   -send1              integer    End of each sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
 
    "-outfile" associated qualifiers
-   -odirectory2         string     Output directory
+   -odirectory2        string     Output directory
 
    General qualifiers:
-   -auto                boolean    Turn off prompts
-   -stdout              boolean    Write standard output
-   -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for standard and additional values
-   -debug               boolean    Write debug output to program.dbg
-   -verbose             boolean    Report some/full command line options
-   -help                boolean    Report command line options. More
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
-   -warning             boolean    Report warnings
-   -error               boolean    Report errors
-   -fatal               boolean    Report fatal errors
-   -die                 boolean    Report deaths
-
-
-   Standard (Mandatory) qualifiers Allowed values Default
-   [-sequence]
-   (Parameter 1) The sequence alignment to be displayed. Readable set of
-   sequences Required
-   [-outfile]
-   (Parameter 2) If you enter the name of a file here then this program
-   will write the sequence details into that file. Output file
-   <sequence>.infoalign
-   Additional (Optional) qualifiers Allowed values Default
-   -matrix This is the scoring matrix file used when comparing sequences.
-   By default it is the file 'EBLOSUM62' (for proteins) or the file
-   'EDNAFULL' (for nucleic sequences). These files are found in the
-   'data' directory of the EMBOSS installation. Comparison matrix file in
-   EMBOSS data path EBLOSUM62 for protein
-   EDNAFULL for DNA
-   -refseq If you give the number in the alignment or the name of a
-   sequence, it will be taken to be the reference sequence. The reference
-   sequence is the one against which all the other sequences are
-   compared. If this is set to 0 then the consensus sequence will be used
-   as the reference sequence. By default the consensus sequence is used
-   as the reference sequence. Any string is accepted 0
-   -html Format output as an HTML table Boolean value Yes/No No
-   Advanced (Unprompted) qualifiers Allowed values Default
-   -plurality Set a cut-off for the % of positive scoring matches below
-   which there is no consensus. The default plurality is taken as 50% of
-   the total weight of all the sequences in the alignment. Number from
-   0.000 to 100.000 50.0
-   -identity Provides the facility of setting the required number of
-   identities at a position for it to give a consensus. Therefore, if
-   this is set to 100% only columns of identities contribute to the
-   consensus. Number from 0.000 to 100.000 0.0
-   -only This is a way of shortening the command line if you only want a
-   few things to be displayed. Instead of specifying: '-nohead -nousa
-   -noname -noalign -nogaps -nogapcount -nosimcount -noidcount
-   -nodiffcount -noweight' to get only the sequence length output, you
-   can specify '-only -seqlength' Boolean value Yes/No No
-   -heading Display column headings Boolean value Yes/No @(!$(only))
-   -usa Display the USA of the sequence Boolean value Yes/No @(!$(only))
-   -name Display 'name' column Boolean value Yes/No @(!$(only))
-   -seqlength Display 'seqlength' column Boolean value Yes/No @(!$(only))
-   -alignlength Display 'alignlength' column Boolean value Yes/No
-   @(!$(only))
-   -gaps Display number of gaps Boolean value Yes/No @(!$(only))
-   -gapcount Display number of gap positions Boolean value Yes/No
-   @(!$(only))
-   -idcount Display number of identical positions Boolean value Yes/No
-   @(!$(only))
-   -simcount Display number of similar positions Boolean value Yes/No
-   @(!$(only))
-   -diffcount Display number of different positions Boolean value Yes/No
-   @(!$(only))
-   -change Display % number of changed positions Boolean value Yes/No
-   @(!$(only))
-   -weight Display 'weight' column Boolean value Yes/No @(!$(only))
-   -description Display 'description' column Boolean value Yes/No
-   @(!$(only))
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
 
 Input file format
 
@@ -353,13 +304,13 @@ Input file format
 
   ../data/globins.msf MSF:  164 Type: P 25/06/01 CompCheck: 4278 ..
 
-  Name: HBB_HUMAN Len: 164  Check: 6914 Weight: 0.14
-  Name: HBB_HORSE Len: 164  Check: 6007 Weight: 0.15
-  Name: HBA_HUMAN Len: 164  Check: 3921 Weight: 0.15
-  Name: HBA_HORSE Len: 164  Check: 4770 Weight: 0.19
-  Name: MYG_PHYCA Len: 164  Check: 7930 Weight: 0.23
-  Name: GLB5_PETMA Len: 164  Check: 1857 Weight: 0.21
-  Name: LGB2_LUPLU Len: 164  Check: 2879 Weight: 0.10
+  Name: HBB_HUMAN Len: 164  Check: 6914 Weight: 0.61
+  Name: HBB_HORSE Len: 164  Check: 6007 Weight: 0.65
+  Name: HBA_HUMAN Len: 164  Check: 3921 Weight: 0.65
+  Name: HBA_HORSE Len: 164  Check: 4770 Weight: 0.83
+  Name: MYG_PHYCA Len: 164  Check: 7930 Weight: 1.00
+  Name: GLB5_PETMA Len: 164  Check: 1857 Weight: 0.91
+  Name: LGB2_LUPLU Len: 164  Check: 2879 Weight: 0.43
 
 //
 
@@ -578,19 +529,19 @@ Output file format
 # USA             Name        SeqLen    AlignLen        Gaps    GapLen  Ident
 Similar Differ  % Change        Weight  Description
 msf::../../data/globins.msf:HBB_HUMAN   HBB_HUMAN     146       150     3
-4       48      10      88      68.000000       0.140000
+4       68      17      61      54.666668       0.610000
 msf::../../data/globins.msf:HBB_HORSE   HBB_HORSE     146       150     3
-4       48      10      88      68.000000       0.150000
+4       68      17      61      54.666668       0.650000
 msf::../../data/globins.msf:HBA_HUMAN   HBA_HUMAN     141       144     2
-3       45      7       89      68.750000       0.150000
+3       60      9       72      58.333332       0.650000
 msf::../../data/globins.msf:HBA_HORSE   HBA_HORSE     141       144     2
-3       48      4       89      66.666664       0.190000
+3       63      6       72      56.250000       0.830000
 msf::../../data/globins.msf:MYG_PHYCA   MYG_PHYCA     153       157     3
-4       25      13      115     84.076431       0.230000
+4       30      15      108     80.891716       1.000000
 msf::../../data/globins.msf:GLB5_PETMA  GLB5_PETMA    149       151     1
-2       21      13      115     86.092712       0.210000
+2       32      16      101     78.807945       0.910000
 msf::../../data/globins.msf:LGB2_LUPLU  LGB2_LUPLU    153       153     0
-0       11      20      122     92.810455       0.100000
+0       19      24      110     87.581696       0.430000
 
   Output files for usage example 2
 
@@ -598,20 +549,20 @@ msf::../../data/globins.msf:LGB2_LUPLU  LGB2_LUPLU    153       153     0
 
 # Name        SeqLen    AlignLen        Gaps    GapLen  Ident   Similar Differ
 % Change        Weight  Description
-HBB_HUMAN     146       150     3       4       48      10      88      68.0000
-00      0.140000
-HBB_HORSE     146       150     3       4       48      10      88      68.0000
-00      0.150000
-HBA_HUMAN     141       144     2       3       45      7       89      68.7500
-00      0.150000
-HBA_HORSE     141       144     2       3       48      4       89      66.6666
-64      0.190000
-MYG_PHYCA     153       157     3       4       25      13      115     84.0764
-31      0.230000
-GLB5_PETMA    149       151     1       2       21      13      115     86.0927
-12      0.210000
-LGB2_LUPLU    153       153     0       0       11      20      122     92.8104
-55      0.100000
+HBB_HUMAN     146       150     3       4       68      17      61      54.6666
+68      0.610000
+HBB_HORSE     146       150     3       4       68      17      61      54.6666
+68      0.650000
+HBA_HUMAN     141       144     2       3       60      9       72      58.3333
+32      0.650000
+HBA_HORSE     141       144     2       3       63      6       72      56.2500
+00      0.830000
+MYG_PHYCA     153       157     3       4       30      15      108     80.8917
+16      1.000000
+GLB5_PETMA    149       151     1       2       32      16      101     78.8079
+45      0.910000
+LGB2_LUPLU    153       153     0       0       19      24      110     87.5816
+96      0.430000
 
   Output files for usage example 3
 
@@ -629,13 +580,13 @@ LGB2_LUPLU    153
 
   File: globins.infoalign
 
-HBB_HUMAN     4 88
-HBB_HORSE     4 88
-HBA_HUMAN     3 89
-HBA_HORSE     3 89
-MYG_PHYCA     4 115
-GLB5_PETMA    2 115
-LGB2_LUPLU    0 122
+HBB_HUMAN     4 61
+HBB_HORSE     4 61
+HBA_HUMAN     3 72
+HBA_HORSE     3 72
+MYG_PHYCA     4 108
+GLB5_PETMA    2 101
+LGB2_LUPLU    0 110
 
   Output files for usage example 5
 
@@ -663,11 +614,11 @@ LGB2_LUPLU    0
 <td>150</td>
 <td>3</td>
 <td>4</td>
-<td>48</td>
-<td>10</td>
-<td>88</td>
-<td>68.000000</td>
-<td>0.140000</td>
+<td>68</td>
+<td>17</td>
+<td>61</td>
+<td>54.666668</td>
+<td>0.610000</td>
 <td></td>
 </tr>
 <tr><td>msf::../../data/globins.msf:HBB_HORSE</td>
@@ -676,11 +627,11 @@ LGB2_LUPLU    0
 <td>150</td>
 <td>3</td>
 <td>4</td>
-<td>48</td>
-<td>10</td>
-<td>88</td>
-<td>68.000000</td>
-<td>0.150000</td>
+<td>68</td>
+<td>17</td>
+<td>61</td>
+<td>54.666668</td>
+<td>0.650000</td>
 <td></td>
 </tr>
 <tr><td>msf::../../data/globins.msf:HBA_HUMAN</td>
@@ -689,11 +640,11 @@ LGB2_LUPLU    0
 <td>144</td>
 <td>2</td>
 <td>3</td>
-<td>45</td>
-<td>7</td>
-<td>89</td>
-<td>68.750000</td>
-<td>0.150000</td>
+<td>60</td>
+<td>9</td>
+<td>72</td>
+<td>58.333332</td>
+<td>0.650000</td>
 <td></td>
 </tr>
 <tr><td>msf::../../data/globins.msf:HBA_HORSE</td>
@@ -702,11 +653,11 @@ LGB2_LUPLU    0
 <td>144</td>
 <td>2</td>
 <td>3</td>
-<td>48</td>
-<td>4</td>
-<td>89</td>
-<td>66.666664</td>
-<td>0.190000</td>
+<td>63</td>
+<td>6</td>
+<td>72</td>
+<td>56.250000</td>
+<td>0.830000</td>
 <td></td>
 </tr>
 <tr><td>msf::../../data/globins.msf:MYG_PHYCA</td>
@@ -715,11 +666,11 @@ LGB2_LUPLU    0
 <td>157</td>
 <td>3</td>
 <td>4</td>
-<td>25</td>
-<td>13</td>
-<td>115</td>
-<td>84.076431</td>
-<td>0.230000</td>
+<td>30</td>
+<td>15</td>
+<td>108</td>
+<td>80.891716</td>
+<td>1.000000</td>
 <td></td>
 </tr>
 <tr><td>msf::../../data/globins.msf:GLB5_PETMA</td>
@@ -728,11 +679,11 @@ LGB2_LUPLU    0
 <td>151</td>
 <td>1</td>
 <td>2</td>
-<td>21</td>
-<td>13</td>
-<td>115</td>
-<td>86.092712</td>
-<td>0.210000</td>
+<td>32</td>
+<td>16</td>
+<td>101</td>
+<td>78.807945</td>
+<td>0.910000</td>
 <td></td>
 </tr>
 <tr><td>msf::../../data/globins.msf:LGB2_LUPLU</td>
@@ -741,11 +692,11 @@ LGB2_LUPLU    0
 <td>153</td>
 <td>0</td>
 <td>0</td>
-<td>11</td>
-<td>20</td>
-<td>122</td>
-<td>92.810455</td>
-<td>0.100000</td>
+<td>19</td>
+<td>24</td>
+<td>110</td>
+<td>87.581696</td>
+<td>0.430000</td>
 <td></td>
 </tr>
 </table>
@@ -757,19 +708,19 @@ LGB2_LUPLU    0
 # USA             Name        SeqLen    AlignLen        Gaps    GapLen  Ident
 Similar Differ  % Change        Weight  Description
 msf::../../data/globins.msf:HBB_HUMAN   HBB_HUMAN     146       150     3
-4       146     0       0       2.666667        0.140000
+4       146     0       0       2.666667        0.610000
 msf::../../data/globins.msf:HBB_HORSE   HBB_HORSE     146       150     3
-4       122     10      14      18.666666       0.150000
+4       122     10      14      18.666666       0.650000
 msf::../../data/globins.msf:HBA_HUMAN   HBA_HUMAN     141       144     2
-3       48      19      74      66.666664       0.150000
+3       48      19      74      66.666664       0.650000
 msf::../../data/globins.msf:HBA_HORSE   HBA_HORSE     141       144     2
-3       51      18      72      64.583336       0.190000
+3       51      18      72      64.583336       0.830000
 msf::../../data/globins.msf:MYG_PHYCA   MYG_PHYCA     153       157     3
-4       30      22      101     80.891716       0.230000
+4       30      22      101     80.891716       1.000000
 msf::../../data/globins.msf:GLB5_PETMA  GLB5_PETMA    149       151     1
-2       24      27      98      84.105957       0.210000
+2       24      27      98      84.105957       0.910000
 msf::../../data/globins.msf:LGB2_LUPLU  LGB2_LUPLU    153       153     0
-0       21      28      104     86.274513       0.100000
+0       21      28      104     86.274513       0.430000
 
   Output files for usage example 8
 
@@ -777,20 +728,20 @@ msf::../../data/globins.msf:LGB2_LUPLU  LGB2_LUPLU    153       153     0
 
 # USA             Name        SeqLen    AlignLen        Gaps    GapLen  Ident
 Similar Differ  % Change        Weight  Description
-tembl-id:ECLAC    ECLAC         7477    7477    0       0       65      0
-7412    99.130669       1.000000        E.coli lactose operon with lacI, lacZ,
+tembl-id:ECLAC    ECLAC         7477    7477    0       0       374     0
+7103    94.997993       1.000000        E.coli lactose operon with lacI, lacZ,
 lacY and lacA genes.
-tembl-id:ECLACA   ECLACA        1832    1832    0       0       71      0
-1761    96.124451       1.000000        Escherichia coli lacA gene for thiogala
+tembl-id:ECLACA   ECLACA        1832    1832    0       0       374     0
+1458    79.585152       1.000000        Escherichia coli lacA gene for thiogala
 ctoside transacetylase
-tembl-id:ECLACI   ECLACI        1113    1113    0       0       67      0
-1046    93.980232       1.000000        E. coli laci gene (codes for the lac re
+tembl-id:ECLACI   ECLACI        1113    1113    0       0       302     0
+811     72.866127       1.000000        E. coli laci gene (codes for the lac re
 pressor).
-tembl-id:ECLACY   ECLACY        1500    1500    0       0       68      0
-1432    95.466667       1.000000        E. coli lacY gene (codes for lactose pe
+tembl-id:ECLACY   ECLACY        1500    1500    0       0       336     0
+1164    77.599998       1.000000        E. coli lacY gene (codes for lactose pe
 rmease).
-tembl-id:ECLACZ   ECLACZ        3078    3078    0       0       72      0
-3006    97.660820       1.000000        E. coli gene lacZ coding for beta-galac
+tembl-id:ECLACZ   ECLACZ        3078    3078    0       0       373     0
+2705    87.881744       1.000000        E. coli gene lacZ coding for beta-galac
 tosidase (EC 3.2.1.23).
 
   Output files for usage example 9
@@ -799,8 +750,8 @@ tosidase (EC 3.2.1.23).
 
 # USA             Name        SeqLen    AlignLen        Gaps    GapLen  Ident
 Similar Differ  % Change        Weight  Description
-tembl-id:ECLACZ   ECLACZ        3078    3078    0       0       0       0
-3078    100.000000      1.000000        E. coli gene lacZ coding for beta-galac
+tembl-id:ECLACZ   ECLACZ        3078    3078    0       0       3078    0
+0       0.000000        1.000000        E. coli gene lacZ coding for beta-galac
 tosidase (EC 3.2.1.23).
 
    The first non-blank line is the heading. This is followed by one line

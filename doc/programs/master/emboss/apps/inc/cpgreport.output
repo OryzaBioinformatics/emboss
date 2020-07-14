@@ -1,0 +1,33 @@
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: rnu68037.cpgreport</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+
+
+CPGREPORT of RNU68037 from 1 to 1218
+
+Sequence              Begin    End Score        CpG   %CG  CG/GC
+RNU68037                 12     13    17          1 100.0    -
+RNU68037                 47     48    17          1 100.0    -
+RNU68037                 96   1032   630         87  66.1   0.65
+RNU68037               1072   1100    26          3  62.1   0.00
+RNU68037               1139   1140    17          1 100.0    -
+RNU68037               1183   1193    26          2  72.7   2.00
+</pre>
+</td></tr></table><p>
+<p><h3>File: rnu68037.gff</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+##gff-version 2.0
+##date 2006-07-15
+##Type DNA RNU68037
+RNU68037	cpgreport	misc_feature	12	13	17.000	+	.	Sequence "RNU68037.1"
+RNU68037	cpgreport	misc_feature	47	48	17.000	+	.	Sequence "RNU68037.2"
+RNU68037	cpgreport	misc_feature	96	1032	630.000	+	.	Sequence "RNU68037.3"
+RNU68037	cpgreport	misc_feature	1072	1100	26.000	+	.	Sequence "RNU68037.4"
+RNU68037	cpgreport	misc_feature	1139	1140	17.000	+	.	Sequence "RNU68037.5"
+RNU68037	cpgreport	misc_feature	1183	1193	26.000	+	.	Sequence "RNU68037.6"
+</pre>
+</td></tr></table><p>

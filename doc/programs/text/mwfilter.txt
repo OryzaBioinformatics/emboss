@@ -28,9 +28,9 @@ Usage
 
 % mwfilter 
 Filter noisy molwts from mass spec output
-Molecular weight file input: molwts.dat
+Molecular weights file: molwts.dat
 Ppm tolerance [50.0]: 
-Output file [molwts.mwfilter]: 
+Molecular weights output file [molwts.mwfilter]: 
 
    Go to the input files for this example
    Go to the output files for this example
@@ -38,47 +38,36 @@ Output file [molwts.mwfilter]:
 Command line arguments
 
    Standard (Mandatory) qualifiers:
-  [-infile]            infile     Molecular weight file input
-   -tolerance          float      Ppm tolerance
-  [-outfile]           outfile    Output file name
+  [-infile]            infile     Molecular weights file
+   -tolerance          float      [50.0] Ppm tolerance (Any numeric value)
+  [-outfile]           outfile    [*.mwfilter] Molecular weights output file
 
    Additional (Optional) qualifiers:
-   -showdel            boolean    Output deleted mwts
+   -showdel            boolean    [N] Output deleted mwts
 
    Advanced (Unprompted) qualifiers:
-   -datafile           datafile   Data file of noisy molecular weights
+   -datafile           datafile   [Emwfilter.dat] Molecular weight standards
+                                  data file
 
    Associated qualifiers:
 
    "-outfile" associated qualifiers
-   -odirectory2         string     Output directory
+   -odirectory2        string     Output directory
 
    General qualifiers:
-   -auto                boolean    Turn off prompts
-   -stdout              boolean    Write standard output
-   -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for standard and additional values
-   -debug               boolean    Write debug output to program.dbg
-   -verbose             boolean    Report some/full command line options
-   -help                boolean    Report command line options. More
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
-   -warning             boolean    Report warnings
-   -error               boolean    Report errors
-   -fatal               boolean    Report fatal errors
-   -die                 boolean    Report deaths
-
-
-   Standard (Mandatory) qualifiers Allowed values Default
-   [-infile]
-   (Parameter 1) Molecular weight file input Input file Required
-   -tolerance Ppm tolerance Any numeric value 50.0
-   [-outfile]
-   (Parameter 2) Output file name Output file <sequence>.mwfilter
-   Additional (Optional) qualifiers Allowed values Default
-   -showdel Output deleted mwts Boolean value Yes/No No
-   Advanced (Unprompted) qualifiers Allowed values Default
-   -datafile Data file of noisy molecular weights Data file Emwfilter.dat
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
 
 Input file format
 
@@ -194,20 +183,21 @@ Known bugs
 
 See also
 
-   Program name                        Description
-   backtranseq  Back translate a protein sequence
-   charge       Protein charge plot
-   checktrans   Reports STOP codons and ORF statistics of a protein
-   compseq      Count composition of dimer/trimer/etc words in a sequence
-   emowse       Protein identification by mass spectrometry
-   freak        Residue/base frequency table or plot
-   iep          Calculates the isoelectric point of a protein
-   mwcontam     Shows molwts that match across a set of files
-   octanol      Displays protein hydropathy
-   pepinfo      Plots simple amino acid properties in parallel
-   pepstats     Protein statistics
-   pepwindow    Displays protein hydropathy
-   pepwindowall Displays protein hydropathy of a set of sequences
+   Program name                         Description
+   backtranambig Back translate a protein sequence to ambiguous codons
+   backtranseq   Back translate a protein sequence
+   charge        Protein charge plot
+   checktrans    Reports STOP codons and ORF statistics of a protein
+   compseq       Count composition of dimer/trimer/etc words in a sequence
+   emowse        Protein identification by mass spectrometry
+   freak         Residue/base frequency table or plot
+   iep           Calculates the isoelectric point of a protein
+   mwcontam      Shows molwts that match across a set of files
+   octanol       Displays protein hydropathy
+   pepinfo       Plots simple amino acid properties in parallel
+   pepstats      Protein statistics
+   pepwindow     Displays protein hydropathy
+   pepwindowall  Displays protein hydropathy of a set of sequences
 
 Author(s)
 

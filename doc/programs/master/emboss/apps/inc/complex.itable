@@ -1,0 +1,108 @@
+<table border cellspacing=0 cellpadding=3 bgcolor="#f5f5ff">
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Mandatory qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>[-sequence]<br>(Parameter 1)</td>
+<td>Sequence database USA</td>
+<td>Readable sequence(s)</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr>
+<td>-outseq</td>
+<td>Output sequence(s) USA</td>
+<td>Writeable sequence(s)</td>
+<td><i>&lt;sequence&gt;</i>.<i>format</i></td>
+</tr>
+
+<tr>
+<td>-lwin</td>
+<td>Window length</td>
+<td>Any integer value</td>
+<td>100</td>
+</tr>
+
+<tr>
+<td>-step</td>
+<td>the displacement of the window over the sequence</td>
+<td>Any integer value</td>
+<td>5</td>
+</tr>
+
+<tr>
+<td>-jmin</td>
+<td>Minimum word length</td>
+<td>Integer from 2 to 20</td>
+<td>4</td>
+</tr>
+
+<tr>
+<td>-jmax</td>
+<td>Maximum word length</td>
+<td>Integer from 2 to 50</td>
+<td>6</td>
+</tr>
+
+<tr>
+<td>-outfile</td>
+<td>Output file name</td>
+<td>Output file</td>
+<td><i>&lt;sequence&gt;</i>.complex</td>
+</tr>
+
+<tr>
+<td>-ujtable</td>
+<td>UjTable temporary file name</td>
+<td>Output file</td>
+<td>complex.ujtable</td>
+</tr>
+
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Optional qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td colspan=4>(none)</td>
+</tr>
+
+<tr bgcolor="#FFFFD0">
+<th align="left" colspan=2>Advanced qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
+</tr>
+
+<tr>
+<td>-omnia</td>
+<td>calculate over a set of sequences</td>
+<td>Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-sim</td>
+<td>calculate the linguistic complexity by comparison with a number of simulations having a uniform distribution of bases</td>
+<td>Any integer value</td>
+<td>0</td>
+</tr>
+
+<tr>
+<td>-freq</td>
+<td>execute the simulation of a sequence based on the base frequency of the original sequence</td>
+<td>Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-print</td>
+<td>generate a file named UjTable containing the values of Uj for each word j in the real sequence(s) and in any simulated sequences</td>
+<td>Yes/No</td>
+<td>No</td>
+</tr>
+
+</table>

@@ -29,9 +29,9 @@ Usage
 
 % primersearch tembl:z52466 
 Searches DNA sequences for matches with primer pairs
-Primer file: primers
+Primer pairs file: primers
 Allowed percent mismatch [0]: 
-Output file [hsa203yc1.primersearch]: 
+Whitehead primer3_core program output file [hsa203yc1.primersearch]: 
 
    Go to the input files for this example
    Go to the output files for this example
@@ -44,19 +44,22 @@ Output file [hsa203yc1.primersearch]:
 
 % primersearch tembl:z52466 
 Searches DNA sequences for matches with primer pairs
-Primer file: primers
+Primer pairs file: primers
 Allowed percent mismatch [0]: 20
-Output file [hsa203yc1.primersearch]: 
+Whitehead primer3_core program output file [hsa203yc1.primersearch]: 
 
    Go to the output files for this example
 
 Command line arguments
 
    Standard (Mandatory) qualifiers:
-  [-seqall]            seqall     Sequence database USA
-  [-infile]            infile     Primer file
-  [-mismatchpercent]   integer    Allowed percent mismatch
-  [-outfile]           outfile    Output file name
+  [-seqall]            seqall     Nucleotide sequence(s) filename and optional
+                                  format, or reference (input USA)
+  [-infile]            infile     Primer pairs file
+  [-mismatchpercent]   integer    [0] Allowed percent mismatch (Any integer
+                                  value)
+  [-outfile]           outfile    [*.primersearch] Whitehead primer3_core
+                                  program output file
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers: (none)
@@ -94,22 +97,7 @@ Command line arguments
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
-   -die                boolean    Report deaths
-
-
-   Standard (Mandatory) qualifiers Allowed values Default
-   [-seqall]
-   (Parameter 1) Sequence database USA Readable sequence(s) Required
-   [-infile]
-   (Parameter 2) Primer file Input file Required
-   [-mismatchpercent]
-   (Parameter 3) Allowed percent mismatch Any integer value 0
-   [-outfile]
-   (Parameter 4) Output file name Output file <sequence>.primersearch
-   Additional (Optional) qualifiers Allowed values Default
-   (none)
-   Advanced (Unprompted) qualifiers Allowed values Default
-   (none)
+   -die                boolean    Report dying program messages
 
 Input file format
 

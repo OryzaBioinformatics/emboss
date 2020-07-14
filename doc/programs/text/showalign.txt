@@ -103,7 +103,7 @@ Usage
 
 % showalign 
 Displays a multiple sequence alignment
-Input sequence set: globins.msf
+Input (aligned) sequence set: globins.msf
 Output file [globins.showalign]: 
 
    Go to the input files for this example
@@ -116,7 +116,7 @@ Output file [globins.showalign]:
 
 % showalign -order=s 
 Displays a multiple sequence alignment
-Input sequence set: globins.msf
+Input (aligned) sequence set: globins.msf
 Output file [globins.showalign]: 
 
    Go to the output files for this example
@@ -129,7 +129,7 @@ Output file [globins.showalign]:
 
 % showalign -html -high '4-13 green 43-43 red 51-56 blue' 
 Displays a multiple sequence alignment
-Input sequence set: globins.msf
+Input (aligned) sequence set: globins.msf
 Output file [globins.showalign]: 
 
    Go to the output files for this example
@@ -144,7 +144,7 @@ Output file [globins.showalign]:
 
 % showalign -nocon -norule -nonum -nobot -ref=1 -sb=10 -send=30 
 Displays a multiple sequence alignment
-Input sequence set: globins.msf
+Input (aligned) sequence set: globins.msf
 Output file [globins.showalign]: 
 
    Go to the output files for this example
@@ -156,7 +156,7 @@ Output file [globins.showalign]:
 
 % showalign -show=n 
 Displays a multiple sequence alignment
-Input sequence set: globins.msf
+Input (aligned) sequence set: globins.msf
 Output file [globins.showalign]: 
 
    Example 6
@@ -166,7 +166,7 @@ Output file [globins.showalign]:
 
 % showalign -show=a 
 Displays a multiple sequence alignment
-Input sequence set: globins.msf
+Input (aligned) sequence set: globins.msf
 Output file [globins.showalign]: 
 
    Go to the output files for this example
@@ -178,7 +178,7 @@ Output file [globins.showalign]:
 
 % showalign -show=i 
 Displays a multiple sequence alignment
-Input sequence set: globins.msf
+Input (aligned) sequence set: globins.msf
 Output file [globins.showalign]: 
 
    Go to the output files for this example
@@ -190,7 +190,7 @@ Output file [globins.showalign]:
 
 % showalign -show=s 
 Displays a multiple sequence alignment
-Input sequence set: globins.msf
+Input (aligned) sequence set: globins.msf
 Output file [globins.showalign]: 
 
    Go to the output files for this example
@@ -202,7 +202,7 @@ Output file [globins.showalign]:
 
 % showalign -show=d 
 Displays a multiple sequence alignment
-Input sequence set: globins.msf
+Input (aligned) sequence set: globins.msf
 Output file [globins.showalign]: 
 
    Go to the output files for this example
@@ -214,7 +214,7 @@ Output file [globins.showalign]:
 
 % showalign -ref=1 
 Displays a multiple sequence alignment
-Input sequence set: globins.msf
+Input (aligned) sequence set: globins.msf
 Output file [globins.showalign]: 
 
    Go to the output files for this example
@@ -226,7 +226,7 @@ Output file [globins.showalign]:
 
 % showalign -nocon -ref=1 -sl -upper 9-15 -nosimilarcase 
 Displays a multiple sequence alignment
-Input sequence set: globins.msf
+Input (aligned) sequence set: globins.msf
 Output file [globins.showalign]: 
 
    Go to the output files for this example
@@ -238,7 +238,7 @@ Output file [globins.showalign]:
 
 % showalign -order=a 
 Displays a multiple sequence alignment
-Input sequence set: globins.msf
+Input (aligned) sequence set: globins.msf
 Output file [globins.showalign]: 
 
    Go to the output files for this example
@@ -247,44 +247,56 @@ Command line arguments
 
    Standard (Mandatory) qualifiers:
   [-sequence]          seqset     The sequence alignment to be displayed.
-  [-outfile]           outfile    Output file name
+  [-outfile]           outfile    [*.showalign] Output file name
 
    Additional (Optional) qualifiers:
-   -matrix             matrix     This is the scoring matrix file used when
+   -matrix             matrix     [EBLOSUM62 for protein, EDNAFULL for DNA]
+                                  This is the scoring matrix file used when
                                   comparing sequences. By default it is the
                                   file 'EBLOSUM62' (for proteins) or the file
                                   'EDNAFULL' (for nucleic sequences). These
                                   files are found in the 'data' directory of
                                   the EMBOSS installation.
-   -refseq             string     If you give the number in the alignment or
-                                  the name of a sequence, it will be taken to
-                                  be the reference sequence. The reference
+   -refseq             string     [0] If you give the number in the alignment
+                                  or the name of a sequence, it will be taken
+                                  to be the reference sequence. The reference
                                   sequence is always show in full and is the
                                   one against which all the other sequences
                                   are compared. If this is set to 0 then the
                                   consensus sequence will be used as the
                                   reference sequence. By default the consensus
                                   sequence is used as the reference sequence.
-   -[no]bottom         boolean    If this is true then the reference sequence
-                                  is displayed at the bottom of the alignment
-                                  as well as at the top.
-   -show               menu       What to show
-   -order              menu       Output order of the sequences
-   -[no]similarcase    boolean    If this is set True, then when -show is set
-                                  to 'Similarities' or 'Non-identities' and a
-                                  residue is similar but not identical to the
-                                  reference sequence residue, it will be
-                                  changed to lower-case. If -show is set to
+                                  (Any string is accepted)
+   -[no]bottom         boolean    [Y] If this is true then the reference
+                                  sequence is displayed at the bottom of the
+                                  alignment as well as at the top.
+   -show               menu       [N] What to show (Values: A (All of the
+                                  sequences); I (Identities between the
+                                  sequences); N (Non-identities between the
+                                  sequences); S (Similarities between the
+                                  sequences); D (Dissimilarities between the
+                                  sequences))
+   -order              menu       [I] Output order of the sequences (Values: I
+                                  (Input order - no change); A (Alphabetical
+                                  order of the names); S (Similarity to the
+                                  reference sequence))
+   -[no]similarcase    boolean    [Y] If this is set True, then when -show is
+                                  set to 'Similarities' or 'Non-identities'
+                                  and a residue is similar but not identical
+                                  to the reference sequence residue, it will
+                                  be changed to lower-case. If -show is set to
                                   'All' then non-identical, non-similar
                                   residues will be changed to lower-case. If
                                   this is False then no change to the case of
                                   the residues is made on the basis of their
                                   similarity to the reference sequence.
-   -[no]consensus      boolean    If this is true then the consensus line is
-                                  displayed.
+   -[no]consensus      boolean    [Y] If this is true then the consensus line
+                                  is displayed.
 
    Advanced (Unprompted) qualifiers:
-   -uppercase          range      Regions to put in uppercase.
+   -uppercase          range      [If this is left blank, then the sequence
+                                  case is left alone.] Regions to put in
+                                  uppercase.
                                   If this is left blank, then the sequence
                                   case is left alone.
                                   A set of regions is specified by a set of
@@ -296,16 +308,18 @@ Command line arguments
                                   24-45, 56-78
                                   1:45, 67=99;765..888
                                   1,5,8,10,23,45,57,99
-   -[no]number         boolean    If this option is true then a line giving
-                                  the positions in the alignment is displayed
-                                  every 10 characters above the alignment.
-   -[no]ruler          boolean    If this option is true then a ruler line
+   -[no]number         boolean    [Y] If this option is true then a line
+                                  giving the positions in the alignment is
+                                  displayed every 10 characters above the
+                                  alignment.
+   -[no]ruler          boolean    [Y] If this option is true then a ruler line
                                   marking every 5th and 10th character in the
                                   alignment is displayed.
-   -width              integer    Width of sequence to display
-   -margin             integer    This sets the length of the left-hand margin
-                                  for sequence names. If the margin is set at
-                                  0 then no margin and no names are
+   -width              integer    [60] Width of sequence to display (Integer 1
+                                  or more)
+   -margin             integer    [-1] This sets the length of the left-hand
+                                  margin for sequence names. If the margin is
+                                  set at 0 then no margin and no names are
                                   displayed. If the margin is set to a value
                                   that is less than the length of a sequence
                                   name then the sequence name is displayed
@@ -314,9 +328,11 @@ Command line arguments
                                   margin width that will allow all the
                                   sequence names to be displayed in full plus
                                   a space at the end of the name will
-                                  automatically be selected.
-   -html               boolean    Use HTML formatting
-   -highlight          range      Regions to colour if formatting for HTML.
+                                  automatically be selected. (Integer -1 or
+                                  more)
+   -html               boolean    [N] Use HTML formatting
+   -highlight          range      [(full sequence)] Regions to colour if
+                                  formatting for HTML.
                                   If this is left blank, then the sequence is
                                   left alone.
                                   A set of regions is specified by a set of
@@ -329,148 +345,66 @@ Command line arguments
                                   1-100 green 120-156 red
                                   A file of ranges to colour (one range per
                                   line) can be specified as '@filename'.
-   -plurality          float      Set a cut-off for the % of positive scoring
-                                  matches below which there is no consensus.
-                                  The default plurality is taken as 50% of the
-                                  total weight of all the sequences in the
-                                  alignment.
-   -setcase            float      Sets the threshold for the scores of the
-                                  positive matches above which the consensus
-                                  is in upper-case and below which the
-                                  consensus is in lower-case. By default this
-                                  is set to be half of the (weight-adjusted)
-                                  number of sequences in the alignment.
-   -identity           float      Provides the facility of setting the
+   -plurality          float      [50.0] Set a cut-off for the % of positive
+                                  scoring matches below which there is no
+                                  consensus. The default plurality is taken as
+                                  50% of the total weight of all the
+                                  sequences in the alignment. (Number from
+                                  0.000 to 100.000)
+   -setcase            float      [@( $(sequence.totweight) / 2)] Sets the
+                                  threshold for the scores of the positive
+                                  matches above which the consensus is in
+                                  upper-case and below which the consensus is
+                                  in lower-case. By default this is set to be
+                                  half of the (weight-adjusted) number of
+                                  sequences in the alignment. (Any numeric
+                                  value)
+   -identity           float      [0.0] Provides the facility of setting the
                                   required number of identities at a position
                                   for it to give a consensus. Therefore, if
                                   this is set to 100% only columns of
                                   identities contribute to the consensus.
+                                  (Number from 0.000 to 100.000)
+   -[no]gaps           boolean    [Y] If this option is true then gap
+                                  characters can appear in the consensus. The
+                                  alternative is 'N' for nucleotide, or 'X'
+                                  for protein
 
    Associated qualifiers:
 
    "-sequence" associated qualifiers
-   -sbegin1             integer    Start of each sequence to be used
-   -send1               integer    End of each sequence to be used
-   -sreverse1           boolean    Reverse (if DNA)
-   -sask1               boolean    Ask for begin/end/reverse
-   -snucleotide1        boolean    Sequence is nucleotide
-   -sprotein1           boolean    Sequence is protein
-   -slower1             boolean    Make lower case
-   -supper1             boolean    Make upper case
-   -sformat1            string     Input sequence format
-   -sdbname1            string     Database name
-   -sid1                string     Entryname
-   -ufo1                string     UFO features
-   -fformat1            string     Features format
-   -fopenfile1          string     Features file name
+   -sbegin1            integer    Start of each sequence to be used
+   -send1              integer    End of each sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
 
    "-outfile" associated qualifiers
-   -odirectory2         string     Output directory
+   -odirectory2        string     Output directory
 
    General qualifiers:
-   -auto                boolean    Turn off prompts
-   -stdout              boolean    Write standard output
-   -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for standard and additional values
-   -debug               boolean    Write debug output to program.dbg
-   -verbose             boolean    Report some/full command line options
-   -help                boolean    Report command line options. More
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
-   -warning             boolean    Report warnings
-   -error               boolean    Report errors
-   -fatal               boolean    Report fatal errors
-   -die                 boolean    Report deaths
-
-
-   Standard (Mandatory) qualifiers Allowed values Default
-   [-sequence]
-   (Parameter 1) The sequence alignment to be displayed. Readable set of
-   sequences Required
-   [-outfile]
-   (Parameter 2) Output file name Output file <sequence>.showalign
-   Additional (Optional) qualifiers Allowed values Default
-   -matrix This is the scoring matrix file used when comparing sequences.
-   By default it is the file 'EBLOSUM62' (for proteins) or the file
-   'EDNAFULL' (for nucleic sequences). These files are found in the
-   'data' directory of the EMBOSS installation. Comparison matrix file in
-   EMBOSS data path EBLOSUM62 for protein
-   EDNAFULL for DNA
-   -refseq If you give the number in the alignment or the name of a
-   sequence, it will be taken to be the reference sequence. The reference
-   sequence is always show in full and is the one against which all the
-   other sequences are compared. If this is set to 0 then the consensus
-   sequence will be used as the reference sequence. By default the
-   consensus sequence is used as the reference sequence. Any string is
-   accepted 0
-   -[no]bottom If this is true then the reference sequence is displayed
-   at the bottom of the alignment as well as at the top. Boolean value
-   Yes/No Yes
-   -show What to show
-   A (All of the sequences)
-   I (Identities between the sequences)
-   N (Non-identities between the sequences)
-   S (Similarities between the sequences)
-   D (Dissimilarities between the sequences)
-   N
-   -order Output order of the sequences
-   I (Input order - no change)
-   A (Alphabetical order of the names)
-   S (Similarity to the reference sequence)
-   I
-   -[no]similarcase If this is set True, then when -show is set to
-   'Similarities' or 'Non-identities' and a residue is similar but not
-   identical to the reference sequence residue, it will be changed to
-   lower-case. If -show is set to 'All' then non-identical, non-similar
-   residues will be changed to lower-case. If this is False then no
-   change to the case of the residues is made on the basis of their
-   similarity to the reference sequence. Boolean value Yes/No Yes
-   -[no]consensus If this is true then the consensus line is displayed.
-   Boolean value Yes/No Yes
-   Advanced (Unprompted) qualifiers Allowed values Default
-   -uppercase Regions to put in uppercase. If this is left blank, then
-   the sequence case is left alone. A set of regions is specified by a
-   set of pairs of positions. The positions are integers. They are
-   separated by any non-digit, non-alpha character. Examples of region
-   specifications are: 24-45, 56-78 1:45, 67=99;765..888
-   1,5,8,10,23,45,57,99 Sequence range If this is left blank, then the
-   sequence case is left alone.
-   -[no]number If this option is true then a line giving the positions in
-   the alignment is displayed every 10 characters above the alignment.
-   Boolean value Yes/No Yes
-   -[no]ruler If this option is true then a ruler line marking every 5th
-   and 10th character in the alignment is displayed. Boolean value Yes/No
-   Yes
-   -width Width of sequence to display Integer 1 or more 60
-   -margin This sets the length of the left-hand margin for sequence
-   names. If the margin is set at 0 then no margin and no names are
-   displayed. If the margin is set to a value that is less than the
-   length of a sequence name then the sequence name is displayed
-   truncated to the length of the margin. If the margin is set to -1 then
-   the minimum margin width that will allow all the sequence names to be
-   displayed in full plus a space at the end of the name will
-   automatically be selected. Integer -1 or more -1
-   -html Use HTML formatting Boolean value Yes/No No
-   -highlight Regions to colour if formatting for HTML. If this is left
-   blank, then the sequence is left alone. A set of regions is specified
-   by a set of pairs of positions. The positions are integers. They are
-   followed by any valid HTML font colour. Examples of region
-   specifications are: 24-45 blue 56-78 orange 1-100 green 120-156 red A
-   file of ranges to colour (one range per line) can be specified as
-   '@filename'. Sequence range full sequence
-   -plurality Set a cut-off for the % of positive scoring matches below
-   which there is no consensus. The default plurality is taken as 50% of
-   the total weight of all the sequences in the alignment. Number from
-   0.000 to 100.000 50.0
-   -setcase Sets the threshold for the scores of the positive matches
-   above which the consensus is in upper-case and below which the
-   consensus is in lower-case. By default this is set to be half of the
-   (weight-adjusted) number of sequences in the alignment. Any numeric
-   value @( $(sequence.totweight) / 2)
-   -identity Provides the facility of setting the required number of
-   identities at a position for it to give a consensus. Therefore, if
-   this is set to 100% only columns of identities contribute to the
-   consensus. Number from 0.000 to 100.000 0.0
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
 
 Input file format
 
@@ -484,13 +418,13 @@ Input file format
 
   ../data/globins.msf MSF:  164 Type: P 25/06/01 CompCheck: 4278 ..
 
-  Name: HBB_HUMAN Len: 164  Check: 6914 Weight: 0.14
-  Name: HBB_HORSE Len: 164  Check: 6007 Weight: 0.15
-  Name: HBA_HUMAN Len: 164  Check: 3921 Weight: 0.15
-  Name: HBA_HORSE Len: 164  Check: 4770 Weight: 0.19
-  Name: MYG_PHYCA Len: 164  Check: 7930 Weight: 0.23
-  Name: GLB5_PETMA Len: 164  Check: 1857 Weight: 0.21
-  Name: LGB2_LUPLU Len: 164  Check: 2879 Weight: 0.10
+  Name: HBB_HUMAN Len: 164  Check: 6914 Weight: 0.61
+  Name: HBB_HORSE Len: 164  Check: 6007 Weight: 0.65
+  Name: HBA_HUMAN Len: 164  Check: 3921 Weight: 0.65
+  Name: HBA_HORSE Len: 164  Check: 4770 Weight: 0.83
+  Name: MYG_PHYCA Len: 164  Check: 7930 Weight: 1.00
+  Name: GLB5_PETMA Len: 164  Check: 1857 Weight: 0.91
+  Name: LGB2_LUPLU Len: 164  Check: 2879 Weight: 0.43
 
 //
 
@@ -589,39 +523,39 @@ Output file format
 
                    10        20        30        40        50        60
            ----:----|----:----|----:----|----:----|----:----|----:----|
-Consensus  xxxxxxxxxxxxxxExSxxxxxxxKxxxxxExGxxxLxxxxxxIxPxxxxFFxxFxxLxx
-HBB_HUMAN  --------VHLTPE.K.AVTALWG.VN-VD.V.GEA.GR-LLVvY.WTQR..ES.GD.ST
-HBB_HORSE  --------VQLSGE.KaAVLALWD.VN-EE.V.GEA.GR-LLVvY.WTQR..DS.GD.SN
-HBA_HUMAN  --------------VL.PADKTNV.AA-WGkV.AHAGEYGAEAlERMFLS.PTTKTYFPH
-HBA_HORSE  --------------VL.AADKTNV.AA-WSkV.GHAGEYGAEAlERMFLG.PTTKTYFPH
-MYG_PHYCA  -------VLSEGEWqLVLHVWAKVeAD-VAGH.QDI.IR-LFKSH.ETLEK.DR.KH.KT
-GLB5_PETMA PIVDTGSVAPLSAA.KtKIRSAWAPVYSTY.TSGVDiLVKFFTST.AAQE..PK.KG.TT
-LGB2_LUPLU --------GALTESqAaLVKSSWEeFNANIPKHTHRFFILVLE.A.AAKDL.SFLKGTSE
-Consensus  xxxxxxxxxxxxxxExSxxxxxxxKxxxxxExGxxxLxxxxxxIxPxxxxFFxxFxxLxx
+Consensus  xxxxxxxxxxLSxxExSxVxSxWxKxNxxxEVGGxALxxxLxxIxPxxQxFFxTFxxLSx
+HBB_HUMAN  --------VH.tPE.K.A.TaL.G.V.-VD....E..GR-.LVvY.WT.R..Es.GD..T
+HBB_HORSE  --------VQ..GE.KaA.LaL.D.V.-EE....E..GR-.LVvY.WT.R..Ds.GD..N
+HBA_HUMAN  --------------VL.PADKTNV.AA-WGk..AH.GEYGAEAlERMFLS.PT.KTYFPH
+HBA_HORSE  --------------VL.AADKTNV.AA-WSk...H.GEYGAEAlERMFLG.PT.KTYFPH
+MYG_PHYCA  -------VLSEGEWqLVLHVWAKVeAd-VAGH.QDI.IR-.FKSH.ETLEK.DR.KH.KT
+GLB5_PETMA PIVDTGSVAP..AA.KtKiR.A.APVYSTY.TS.VDiLVKFFTST.AA.E..PK.KG.tT
+LGB2_LUPLU --------GA.tESqAaL.K.S.EeF.ANIPKHTHRFFILvLE.A.AAkDL.SFLKGT.E
+Consensus  xxxxxxxxxxLSxxExSxVxSxWxKxNxxxEVGGxALxxxLxxIxPxxQxFFxTFxxLSx
 
                    70        80        90       100       110       120
            ----:----|----:----|----:----|----:----|----:----|----:----|
-Consensus  xxxxxxSxxVKxHGKKVLxALxxxVxxLDDLxxxxAxLSDLHxxKLRxxVxxxNFKLLxx
-HBB_HUMAN  PDAVMGnPK..A......G.FSDGlAH..n.KGTF.T..e..CD..H--.DPE..r..GN
-HBB_HORSE  PGAVMGnPK..A......HsFGEG.HH..n.KGTF.A..e..CD..H--.DPE..r..GN
-HBA_HUMAN  FDLSHG.AQ..G.....AD..TNA.AHv..mPNALsA.....AH...--.DPV.....SH
-HBA_HORSE  FDLSHG.AQ..A.....GD..TLA.GH....PGALsN.....AH...--.DPV.....SH
-MYG_PHYCA  EAEMKA.EDl.K..VT..T..GAIlKKKGHHEAELKP.aQS.AT.Hk--iPIKYLeFiSE
-GLB5_PETMA ADQLKK.AD.rW.AeriiN.vNDA.ASm..TEKMSMK.R..SGKHAk--SFQVdPqYFKV
-LGB2_LUPLU VPQNNPELQAHAGKVFK.VYEAAIQLQvTGvVVTD.T.Kn.GSVHvSKG.ADAh.PvvKE
-Consensus  xxxxxxSxxVKxHGKKVLxALxxxVxxLDDLxxxxAxLSDLHxxKLRxxVxxxNFKLLxx
+Consensus  xDxMxGSxQVKxHGKKVLxALxDxVxHLDDLExxxAxLSDLHAxKLRxxVDPxNFKLLxH
+HBB_HUMAN  P.AvM.nPk..A......G.FS.GlA...n.kGTF.T..e..CD..H--...E..r..Gn
+HBB_HORSE  PGAvM.nPk..A......HsFGeG.H...n.kGTF.A..e..CD..H--...E..r..Gn
+HBA_HUMAN  F.LSH..A...G.....AD..TnA.A.v..mPNALsA......H...--...V.....S.
+HBA_HORSE  F.LSH..A...A.....GD..TLA.G.....PGALsN......H...--...V.....S.
+MYG_PHYCA  EAE.KA.EDl.K..VT..T..GAIlKKKGHH.AELKP.aQS..T.Hk--iPIKYLeFiSE
+GLB5_PETMA A.QlKK.AD.rW.AeriiN.vN.A.ASm..T.KMSMK.R..SGKHAk--SFQVdPqYFKV
+LGB2_LUPLU VPQNNPEL.AHAGKVFK.VYEAAIQLQvTGvVVTD.T.Kn.GsVHvSKG.ADAh.PvvKE
+Consensus  xDxMxGSxQVKxHGKKVLxALxDxVxHLDDLExxxAxLSDLHAxKLRxxVDPxNFKLLxH
 
                   130       140       150       160       170       180
            ----:----|----:----|----:----|----:----|----:----|----:----|
-Consensus  xLLxVLxxxxxxDFTxxVxASxxKxLxxVAxxLxxKYxxxxxxx
-HBB_HUMAN  V.vC..AHHFGKe..PP.Q.aYQ.VvAG..NA.AH..H------
-HBB_HORSE  V.vV..ARHFGK...PElQ..YQ.VvAG..NA.AH..H------
-HBA_HUMAN  C..VT.AAHLPAe..PA.H..LD.F.AS.sTV.TS..R------
-HBA_HORSE  C..ST.AVHLPN...PA.H..LD.F.SS.sTV.TS..R------
-MYG_PHYCA  AiiH..HSRHPG..GADAQGaMN.A.ELFRKDiAA..KELGYQG
-GLB5_PETMA LAAViADTVAAG.AGFEKLM.MICI.LRS.Y-------------
-LGB2_LUPLU Ai.KTiKEVVGAKwsEElNsaWTIAYDEl.IViKKeMNDAA---
-Consensus  xLLxVLxxxxxxDFTxxVxASxxKxLxxVAxxLxxKYxxxxxxx
+Consensus  xLLxVLAxHxxxDFTPEVxASMxKxLAxVAxxLxxKYxx-xxxx
+HBB_HUMAN  V.vC...H.FGKe...P.Q.aYQ.Vv.G..NA.AH..H------
+HBB_HORSE  V.vV...R.FGK.....lQ..YQ.Vv.G..NA.AH..H------
+HBA_HUMAN  C..VT..A.LPAe...A.H..lD.F..S.sTV.TS..R------
+HBA_HORSE  C..ST..V.LPN....A.H..lD.F.sS.sTV.TS..R------
+MYG_PHYCA  AiiH..HSRHPG..GAdAQGa.N.A.ELFRKDiAA..KELGYQG
+GLB5_PETMA LAAViADTVAAG.AGF.KLM..ICI.LRS.Y-------------
+LGB2_LUPLU Ai.KTiKEVVGAKwsE.lNsaWTIAYDEl.IViKKeMNDAA---
+Consensus  xLLxVLAxHxxxDFTPEVxASMxKxLAxVAxxLxxKYxx-xxxx
 
   Output files for usage example 2
 
@@ -629,39 +563,39 @@ Consensus  xLLxVLxxxxxxDFTxxVxASxxKxLxxVAxxLxxKYxxxxxxx
 
                    10        20        30        40        50        60
            ----:----|----:----|----:----|----:----|----:----|----:----|
-Consensus  xxxxxxxxxxxxxxExSxxxxxxxKxxxxxExGxxxLxxxxxxIxPxxxxFFxxFxxLxx
-HBB_HUMAN  --------VHLTPE.K.AVTALWG.VN-VD.V.GEA.GR-LLVvY.WTQR..ES.GD.ST
-HBB_HORSE  --------VQLSGE.KaAVLALWD.VN-EE.V.GEA.GR-LLVvY.WTQR..DS.GD.SN
-HBA_HORSE  --------------VL.AADKTNV.AA-WSkV.GHAGEYGAEAlERMFLG.PTTKTYFPH
-HBA_HUMAN  --------------VL.PADKTNV.AA-WGkV.AHAGEYGAEAlERMFLS.PTTKTYFPH
-MYG_PHYCA  -------VLSEGEWqLVLHVWAKVeAD-VAGH.QDI.IR-LFKSH.ETLEK.DR.KH.KT
-GLB5_PETMA PIVDTGSVAPLSAA.KtKIRSAWAPVYSTY.TSGVDiLVKFFTST.AAQE..PK.KG.TT
-LGB2_LUPLU --------GALTESqAaLVKSSWEeFNANIPKHTHRFFILVLE.A.AAKDL.SFLKGTSE
-Consensus  xxxxxxxxxxxxxxExSxxxxxxxKxxxxxExGxxxLxxxxxxIxPxxxxFFxxFxxLxx
+Consensus  xxxxxxxxxxLSxxExSxVxSxWxKxNxxxEVGGxALxxxLxxIxPxxQxFFxTFxxLSx
+HBB_HUMAN  --------VH.tPE.K.A.TaL.G.V.-VD....E..GR-.LVvY.WT.R..Es.GD..T
+HBB_HORSE  --------VQ..GE.KaA.LaL.D.V.-EE....E..GR-.LVvY.WT.R..Ds.GD..N
+HBA_HORSE  --------------VL.AADKTNV.AA-WSk...H.GEYGAEAlERMFLG.PT.KTYFPH
+HBA_HUMAN  --------------VL.PADKTNV.AA-WGk..AH.GEYGAEAlERMFLS.PT.KTYFPH
+GLB5_PETMA PIVDTGSVAP..AA.KtKiR.A.APVYSTY.TS.VDiLVKFFTST.AA.E..PK.KG.tT
+MYG_PHYCA  -------VLSEGEWqLVLHVWAKVeAd-VAGH.QDI.IR-.FKSH.ETLEK.DR.KH.KT
+LGB2_LUPLU --------GA.tESqAaL.K.S.EeF.ANIPKHTHRFFILvLE.A.AAkDL.SFLKGT.E
+Consensus  xxxxxxxxxxLSxxExSxVxSxWxKxNxxxEVGGxALxxxLxxIxPxxQxFFxTFxxLSx
 
                    70        80        90       100       110       120
            ----:----|----:----|----:----|----:----|----:----|----:----|
-Consensus  xxxxxxSxxVKxHGKKVLxALxxxVxxLDDLxxxxAxLSDLHxxKLRxxVxxxNFKLLxx
-HBB_HUMAN  PDAVMGnPK..A......G.FSDGlAH..n.KGTF.T..e..CD..H--.DPE..r..GN
-HBB_HORSE  PGAVMGnPK..A......HsFGEG.HH..n.KGTF.A..e..CD..H--.DPE..r..GN
-HBA_HORSE  FDLSHG.AQ..A.....GD..TLA.GH....PGALsN.....AH...--.DPV.....SH
-HBA_HUMAN  FDLSHG.AQ..G.....AD..TNA.AHv..mPNALsA.....AH...--.DPV.....SH
-MYG_PHYCA  EAEMKA.EDl.K..VT..T..GAIlKKKGHHEAELKP.aQS.AT.Hk--iPIKYLeFiSE
-GLB5_PETMA ADQLKK.AD.rW.AeriiN.vNDA.ASm..TEKMSMK.R..SGKHAk--SFQVdPqYFKV
-LGB2_LUPLU VPQNNPELQAHAGKVFK.VYEAAIQLQvTGvVVTD.T.Kn.GSVHvSKG.ADAh.PvvKE
-Consensus  xxxxxxSxxVKxHGKKVLxALxxxVxxLDDLxxxxAxLSDLHxxKLRxxVxxxNFKLLxx
+Consensus  xDxMxGSxQVKxHGKKVLxALxDxVxHLDDLExxxAxLSDLHAxKLRxxVDPxNFKLLxH
+HBB_HUMAN  P.AvM.nPk..A......G.FS.GlA...n.kGTF.T..e..CD..H--...E..r..Gn
+HBB_HORSE  PGAvM.nPk..A......HsFGeG.H...n.kGTF.A..e..CD..H--...E..r..Gn
+HBA_HORSE  F.LSH..A...A.....GD..TLA.G.....PGALsN......H...--...V.....S.
+HBA_HUMAN  F.LSH..A...G.....AD..TnA.A.v..mPNALsA......H...--...V.....S.
+GLB5_PETMA A.QlKK.AD.rW.AeriiN.vN.A.ASm..T.KMSMK.R..SGKHAk--SFQVdPqYFKV
+MYG_PHYCA  EAE.KA.EDl.K..VT..T..GAIlKKKGHH.AELKP.aQS..T.Hk--iPIKYLeFiSE
+LGB2_LUPLU VPQNNPEL.AHAGKVFK.VYEAAIQLQvTGvVVTD.T.Kn.GsVHvSKG.ADAh.PvvKE
+Consensus  xDxMxGSxQVKxHGKKVLxALxDxVxHLDDLExxxAxLSDLHAxKLRxxVDPxNFKLLxH
 
                   130       140       150       160       170       180
            ----:----|----:----|----:----|----:----|----:----|----:----|
-Consensus  xLLxVLxxxxxxDFTxxVxASxxKxLxxVAxxLxxKYxxxxxxx
-HBB_HUMAN  V.vC..AHHFGKe..PP.Q.aYQ.VvAG..NA.AH..H------
-HBB_HORSE  V.vV..ARHFGK...PElQ..YQ.VvAG..NA.AH..H------
-HBA_HORSE  C..ST.AVHLPN...PA.H..LD.F.SS.sTV.TS..R------
-HBA_HUMAN  C..VT.AAHLPAe..PA.H..LD.F.AS.sTV.TS..R------
-MYG_PHYCA  AiiH..HSRHPG..GADAQGaMN.A.ELFRKDiAA..KELGYQG
-GLB5_PETMA LAAViADTVAAG.AGFEKLM.MICI.LRS.Y-------------
-LGB2_LUPLU Ai.KTiKEVVGAKwsEElNsaWTIAYDEl.IViKKeMNDAA---
-Consensus  xLLxVLxxxxxxDFTxxVxASxxKxLxxVAxxLxxKYxxxxxxx
+Consensus  xLLxVLAxHxxxDFTPEVxASMxKxLAxVAxxLxxKYxx-xxxx
+HBB_HUMAN  V.vC...H.FGKe...P.Q.aYQ.Vv.G..NA.AH..H------
+HBB_HORSE  V.vV...R.FGK.....lQ..YQ.Vv.G..NA.AH..H------
+HBA_HORSE  C..ST..V.LPN....A.H..lD.F.sS.sTV.TS..R------
+HBA_HUMAN  C..VT..A.LPAe...A.H..lD.F..S.sTV.TS..R------
+GLB5_PETMA LAAViADTVAAG.AGF.KLM..ICI.LRS.Y-------------
+MYG_PHYCA  AiiH..HSRHPG..GAdAQGa.N.A.ELFRKDiAA..KELGYQG
+LGB2_LUPLU Ai.KTiKEVVGAKwsE.lNsaWTIAYDEl.IViKKeMNDAA---
+Consensus  xLLxVLAxHxxxDFTPEVxASMxKxLAxVAxxLxxKYxx-xxxx
 
   Output files for usage example 3
 
@@ -670,48 +604,48 @@ Consensus  xLLxVLxxxxxxDFTxxVxASxxKxLxxVAxxLxxKYxxxxxxx
 <pre>
                    10        20        30        40        50        60
            ----:----|----:----|----:----|----:----|----:----|----:----|
-Consensus  xxx<font color=green>xxxxxxxxxx</font>xExSxxxxxxxKxxxxxExGxxxLxxxxx<
-font color=red>x</font>IxPxxxx<font color=blue>FFxxFx</font>xLxx
-HBB_HUMAN  ---<font color=green>-----VHLTP</font>E.K.AVTALWG.VN-VD.V.GEA.GR-LL<
-font color=red>V</font>vY.WTQR<font color=blue>..ES.G</font>D.ST
-HBB_HORSE  ---<font color=green>-----VQLSG</font>E.KaAVLALWD.VN-EE.V.GEA.GR-LL<
-font color=red>V</font>vY.WTQR<font color=blue>..DS.G</font>D.SN
-HBA_HUMAN  ---<font color=green>----------</font>-VL.PADKTNV.AA-WGkV.AHAGEYGAE<
-font color=red>A</font>lERMFLS<font color=blue>.PTTKT</font>YFPH
-HBA_HORSE  ---<font color=green>----------</font>-VL.AADKTNV.AA-WSkV.GHAGEYGAE<
-font color=red>A</font>lERMFLG<font color=blue>.PTTKT</font>YFPH
-MYG_PHYCA  ---<font color=green>----VLSEGE</font>WqLVLHVWAKVeAD-VAGH.QDI.IR-LF<
+Consensus  xxx<font color=green>xxxxxxxLSx</font>xExSxVxSxWxKxNxxxEVGGxALxxxLx<
+font color=red>x</font>IxPxxQx<font color=blue>FFxTFx</font>xLSx
+HBB_HUMAN  ---<font color=green>-----VH.tP</font>E.K.A.TaL.G.V.-VD....E..GR-.L<
+font color=red>V</font>vY.WT.R<font color=blue>..Es.G</font>D..T
+HBB_HORSE  ---<font color=green>-----VQ..G</font>E.KaA.LaL.D.V.-EE....E..GR-.L<
+font color=red>V</font>vY.WT.R<font color=blue>..Ds.G</font>D..N
+HBA_HUMAN  ---<font color=green>----------</font>-VL.PADKTNV.AA-WGk..AH.GEYGAE<
+font color=red>A</font>lERMFLS<font color=blue>.PT.KT</font>YFPH
+HBA_HORSE  ---<font color=green>----------</font>-VL.AADKTNV.AA-WSk...H.GEYGAE<
+font color=red>A</font>lERMFLG<font color=blue>.PT.KT</font>YFPH
+MYG_PHYCA  ---<font color=green>----VLSEGE</font>WqLVLHVWAKVeAd-VAGH.QDI.IR-.F<
 font color=red>K</font>SH.ETLE<font color=blue>K.DR.K</font>H.KT
-GLB5_PETMA PIV<font color=green>DTGSVAPLSA</font>A.KtKIRSAWAPVYSTY.TSGVDiLVKFF<
-font color=red>T</font>ST.AAQE<font color=blue>..PK.K</font>G.TT
-LGB2_LUPLU ---<font color=green>-----GALTE</font>SqAaLVKSSWEeFNANIPKHTHRFFILVL<
-font color=red>E</font>.A.AAKD<font color=blue>L.SFLK</font>GTSE
-Consensus  xxx<font color=green>xxxxxxxxxx</font>xExSxxxxxxxKxxxxxExGxxxLxxxxx<
-font color=red>x</font>IxPxxxx<font color=blue>FFxxFx</font>xLxx
+GLB5_PETMA PIV<font color=green>DTGSVAP..A</font>A.KtKiR.A.APVYSTY.TS.VDiLVKFF<
+font color=red>T</font>ST.AA.E<font color=blue>..PK.K</font>G.tT
+LGB2_LUPLU ---<font color=green>-----GA.tE</font>SqAaL.K.S.EeF.ANIPKHTHRFFILvL<
+font color=red>E</font>.A.AAkD<font color=blue>L.SFLK</font>GT.E
+Consensus  xxx<font color=green>xxxxxxxLSx</font>xExSxVxSxWxKxNxxxEVGGxALxxxLx<
+font color=red>x</font>IxPxxQx<font color=blue>FFxTFx</font>xLSx
 
                    70        80        90       100       110       120
            ----:----|----:----|----:----|----:----|----:----|----:----|
-Consensus  xxxxxxSxxVKxHGKKVLxALxxxVxxLDDLxxxxAxLSDLHxxKLRxxVxxxNFKLLxx
-HBB_HUMAN  PDAVMGnPK..A......G.FSDGlAH..n.KGTF.T..e..CD..H--.DPE..r..GN
-HBB_HORSE  PGAVMGnPK..A......HsFGEG.HH..n.KGTF.A..e..CD..H--.DPE..r..GN
-HBA_HUMAN  FDLSHG.AQ..G.....AD..TNA.AHv..mPNALsA.....AH...--.DPV.....SH
-HBA_HORSE  FDLSHG.AQ..A.....GD..TLA.GH....PGALsN.....AH...--.DPV.....SH
-MYG_PHYCA  EAEMKA.EDl.K..VT..T..GAIlKKKGHHEAELKP.aQS.AT.Hk--iPIKYLeFiSE
-GLB5_PETMA ADQLKK.AD.rW.AeriiN.vNDA.ASm..TEKMSMK.R..SGKHAk--SFQVdPqYFKV
-LGB2_LUPLU VPQNNPELQAHAGKVFK.VYEAAIQLQvTGvVVTD.T.Kn.GSVHvSKG.ADAh.PvvKE
-Consensus  xxxxxxSxxVKxHGKKVLxALxxxVxxLDDLxxxxAxLSDLHxxKLRxxVxxxNFKLLxx
+Consensus  xDxMxGSxQVKxHGKKVLxALxDxVxHLDDLExxxAxLSDLHAxKLRxxVDPxNFKLLxH
+HBB_HUMAN  P.AvM.nPk..A......G.FS.GlA...n.kGTF.T..e..CD..H--...E..r..Gn
+HBB_HORSE  PGAvM.nPk..A......HsFGeG.H...n.kGTF.A..e..CD..H--...E..r..Gn
+HBA_HUMAN  F.LSH..A...G.....AD..TnA.A.v..mPNALsA......H...--...V.....S.
+HBA_HORSE  F.LSH..A...A.....GD..TLA.G.....PGALsN......H...--...V.....S.
+MYG_PHYCA  EAE.KA.EDl.K..VT..T..GAIlKKKGHH.AELKP.aQS..T.Hk--iPIKYLeFiSE
+GLB5_PETMA A.QlKK.AD.rW.AeriiN.vN.A.ASm..T.KMSMK.R..SGKHAk--SFQVdPqYFKV
+LGB2_LUPLU VPQNNPEL.AHAGKVFK.VYEAAIQLQvTGvVVTD.T.Kn.GsVHvSKG.ADAh.PvvKE
+Consensus  xDxMxGSxQVKxHGKKVLxALxDxVxHLDDLExxxAxLSDLHAxKLRxxVDPxNFKLLxH
 
                   130       140       150       160       170       180
            ----:----|----:----|----:----|----:----|----:----|----:----|
-Consensus  xLLxVLxxxxxxDFTxxVxASxxKxLxxVAxxLxxKYxxxxxxx
-HBB_HUMAN  V.vC..AHHFGKe..PP.Q.aYQ.VvAG..NA.AH..H------
-HBB_HORSE  V.vV..ARHFGK...PElQ..YQ.VvAG..NA.AH..H------
-HBA_HUMAN  C..VT.AAHLPAe..PA.H..LD.F.AS.sTV.TS..R------
-HBA_HORSE  C..ST.AVHLPN...PA.H..LD.F.SS.sTV.TS..R------
-MYG_PHYCA  AiiH..HSRHPG..GADAQGaMN.A.ELFRKDiAA..KELGYQG
-GLB5_PETMA LAAViADTVAAG.AGFEKLM.MICI.LRS.Y-------------
-LGB2_LUPLU Ai.KTiKEVVGAKwsEElNsaWTIAYDEl.IViKKeMNDAA---
-Consensus  xLLxVLxxxxxxDFTxxVxASxxKxLxxVAxxLxxKYxxxxxxx
+Consensus  xLLxVLAxHxxxDFTPEVxASMxKxLAxVAxxLxxKYxx-xxxx
+HBB_HUMAN  V.vC...H.FGKe...P.Q.aYQ.Vv.G..NA.AH..H------
+HBB_HORSE  V.vV...R.FGK.....lQ..YQ.Vv.G..NA.AH..H------
+HBA_HUMAN  C..VT..A.LPAe...A.H..lD.F..S.sTV.TS..R------
+HBA_HORSE  C..ST..V.LPN....A.H..lD.F.sS.sTV.TS..R------
+MYG_PHYCA  AiiH..HSRHPG..GAdAQGa.N.A.ELFRKDiAA..KELGYQG
+GLB5_PETMA LAAViADTVAAG.AGF.KLM..ICI.LRS.Y-------------
+LGB2_LUPLU Ai.KTiKEVVGAKwsE.lNsaWTIAYDEl.IViKKeMNDAA---
+Consensus  xLLxVLAxHxxxDFTPEVxASMxKxLAxVAxxLxxKYxx-xxxx
 
 </pre>
 
@@ -733,39 +667,39 @@ LGB2_LUPLU A..ESqAaL.KsS.EeF.ANI
 
                    10        20        30        40        50        60
            ----:----|----:----|----:----|----:----|----:----|----:----|
-Consensus  xxxxxxxxxxxxxxExSxxxxxxxKxxxxxExGxxxLxxxxxxIxPxxxxFFxxFxxLxx
-HBB_HUMAN  --------vhltpeEkSavtalwgKvn-vdEvGgeaLgr-llvVyPwtqrFFesFgdLst
-HBB_HORSE  --------vqlsgeEkAavlalwdKvn-eeEvGgeaLgr-llvVyPwtqrFFdsFgdLsn
-HBA_HUMAN  --------------vlSpadktnvKaa-wgKvGahageygaeaLermflsFpttktyfph
-HBA_HORSE  --------------vlSaadktnvKaa-wsKvGghageygaeaLermflgFpttktyfph
-MYG_PHYCA  -------vlsegewQlvlhvwakvEad-vaghGqdiLir-lfkshPetlekFdrFkhLkt
-GLB5_PETMA pivdtgsvaplsaaEkTkirsawapvystyEtsgvdIlvkfftstPaaqeFFpkFkgLtt
-LGB2_LUPLU --------galtesQaAlvkssweEfnanipkhthrffilvleIaPaakdlFsflkgtse
-Consensus  xxxxxxxxxxxxxxExSxxxxxxxKxxxxxExGxxxLxxxxxxIxPxxxxFFxxFxxLxx
+Consensus  xxxxxxxxxxLSxxExSxVxSxWxKxNxxxEVGGxALxxxLxxIxPxxQxFFxTFxxLSx
+HBB_HUMAN  --------vhLTpeEkSaVtAlWgKvN-vdEVGGeALgr-LlvVyPwtQrFFeSFgdLSt
+HBB_HORSE  --------vqLSgeEkAaVlAlWdKvN-eeEVGGeALgr-LlvVyPwtQrFFdSFgdLSn
+HBA_HUMAN  --------------vlSpadktnvKaa-wgKVGahAgeygaeaLermflsFptTktyfph
+HBA_HORSE  --------------vlSaadktnvKaa-wsKVGGhAgeygaeaLermflgFptTktyfph
+MYG_PHYCA  -------vlsegewQlvlhvwakvEaD-vaghGqdiLir-LfkshPetlekFdrFkhLkt
+GLB5_PETMA pivdtgsvapLSaaEkTkIrSaWapvystyEtsGvdIlvkfftstPaaQeFFpkFkgLTt
+LGB2_LUPLU --------gaLTesQaAlVkSsWeEfNanipkhthrffilVleIaPaaKdlFsflkgtSe
+Consensus  xxxxxxxxxxLSxxExSxVxSxWxKxNxxxEVGGxALxxxLxxIxPxxQxFFxTFxxLSx
 
                    70        80        90       100       110       120
            ----:----|----:----|----:----|----:----|----:----|----:----|
-Consensus  xxxxxxSxxVKxHGKKVLxALxxxVxxLDDLxxxxAxLSDLHxxKLRxxVxxxNFKLLxx
-HBB_HUMAN  pdavmgNpkVKaHGKKVLgAfsdgLahLDNLkgtfAtLSELHcdKLh--VdpeNFRLLgn
-HBB_HORSE  pgavmgNpkVKaHGKKVLhSfgegVhhLDNLkgtfAaLSELHcdKLh--VdpeNFRLLgn
-HBA_HUMAN  fdlshgSaqVKgHGKKVadALtnaVahVDDMpnalSaLSDLHahKLR--VdpvNFKLLsh
-HBA_HORSE  fdlshgSaqVKaHGKKVgdALtlaVghLDDLpgalSnLSDLHahKLR--VdpvNFKLLsh
-MYG_PHYCA  eaemkaSedLKkHGvtVLtALgaiLkkkghheaelkpLAqsHatKhK--IpikylEfIse
-GLB5_PETMA adqlkkSadVRwHaERIInAVndaVasMDDtekmsmkLrDLsgkhaK--sfqvDpQyfkv
-LGB2_LUPLU vpqnnpelqahagkvfkLvyeaaiqlqVtgVvvtdAtLkNLgsvhVskgVadaHFpVVke
-Consensus  xxxxxxSxxVKxHGKKVLxALxxxVxxLDDLxxxxAxLSDLHxxKLRxxVxxxNFKLLxx
+Consensus  xDxMxGSxQVKxHGKKVLxALxDxVxHLDDLExxxAxLSDLHAxKLRxxVDPxNFKLLxH
+HBB_HUMAN  pDaVmGNpKVKaHGKKVLgAfsDgLaHLDNLKgtfAtLSELHcdKLh--VDPeNFRLLgN
+HBB_HORSE  pgaVmGNpKVKaHGKKVLhSfgEgVhHLDNLKgtfAaLSELHcdKLh--VDPeNFRLLgN
+HBA_HUMAN  fDlshGSaQVKgHGKKVadALtNaVaHVDDMpnalSaLSDLHAhKLR--VDPvNFKLLsH
+HBA_HORSE  fDlshGSaQVKaHGKKVgdALtlaVgHLDDLpgalSnLSDLHAhKLR--VDPvNFKLLsH
+MYG_PHYCA  eaeMkaSedLKkHGvtVLtALgaiLkkkghhEaelkpLAqsHAtKhK--IpikylEfIse
+GLB5_PETMA aDqLkkSadVRwHaERIInAVnDaVasMDDtEkmsmkLrDLsgkhaK--sfqvDpQyfkv
+LGB2_LUPLU vpqnnpelQahagkvfkLvyeaaiqlqVtgVvvtdAtLkNLgSvhVskgVadaHFpVVke
+Consensus  xDxMxGSxQVKxHGKKVLxALxDxVxHLDDLExxxAxLSDLHAxKLRxxVDPxNFKLLxH
 
                   130       140       150       160       170       180
            ----:----|----:----|----:----|----:----|----:----|----:----|
-Consensus  xLLxVLxxxxxxDFTxxVxASxxKxLxxVAxxLxxKYxxxxxxx
-HBB_HUMAN  vLVcVLahhfgkEFTppVqAAyqKvVagVAnaLahKYh------
-HBB_HORSE  vLVvVLarhfgkDFTpeLqASyqKvVagVAnaLahKYh------
-HBA_HUMAN  cLLvtLaahlpaEFTpaVhASldKfLasVStvLtsKYr------
-HBA_HORSE  cLLstLavhlpnDFTpaVhASldKfLssVStvLtsKYr------
-MYG_PHYCA  aIIhVLhsrhpgDFgadaqgAmnKaLelfrkdIaaKYkelgyqg
-GLB5_PETMA laavIadtvaagDagfeklmSmiciLlrsAy-------------
-LGB2_LUPLU aILktIkevvgakWSeeLnSAwtiaydeLAivIkkEmndaa---
-Consensus  xLLxVLxxxxxxDFTxxVxASxxKxLxxVAxxLxxKYxxxxxxx
+Consensus  xLLxVLAxHxxxDFTPEVxASMxKxLAxVAxxLxxKYxx-xxxx
+HBB_HUMAN  vLVcVLAhHfgkEFTPpVqAAyqKvVAgVAnaLahKYh------
+HBB_HORSE  vLVvVLArHfgkDFTPELqASyqKvVAgVAnaLahKYh------
+HBA_HUMAN  cLLvtLAaHlpaEFTPaVhASLdKfLAsVStvLtsKYr------
+HBA_HORSE  cLLstLAvHlpnDFTPaVhASLdKfLSsVStvLtsKYr------
+MYG_PHYCA  aIIhVLhsrhpgDFgaDaqgAMnKaLelfrkdIaaKYkelgyqg
+GLB5_PETMA laavIadtvaagDagfEklmSMiciLlrsAy-------------
+LGB2_LUPLU aILktIkevvgakWSeELnSAwtiaydeLAivIkkEmndaa---
+Consensus  xLLxVLAxHxxxDFTPEVxASMxKxLAxVAxxLxxKYxx-xxxx
 
   Output files for usage example 7
 
@@ -773,39 +707,39 @@ Consensus  xLLxVLxxxxxxDFTxxVxASxxKxLxxVAxxLxxKYxxxxxxx
 
                    10        20        30        40        50        60
            ----:----|----:----|----:----|----:----|----:----|----:----|
-Consensus  xxxxxxxxxxxxxxExSxxxxxxxKxxxxxExGxxxLxxxxxxIxPxxxxFFxxFxxLxx
-HBB_HUMAN  --------......E.S.......K..-..E.G...L..-.....P....FF..F..L..
-HBB_HORSE  --------......E.........K..-..E.G...L..-.....P....FF..F..L..
-HBA_HUMAN  --------------..S.......K..-....G.................F.........
-HBA_HORSE  --------------..S.......K..-....G.................F.........
-MYG_PHYCA  -------....................-....G...L..-.....P.....F..F..L..
-GLB5_PETMA ..............E...............E..............P....FF..F..L..
-LGB2_LUPLU --------...................................I.P.....F........
-Consensus  xxxxxxxxxxxxxxExSxxxxxxxKxxxxxExGxxxLxxxxxxIxPxxxxFFxxFxxLxx
+Consensus  xxxxxxxxxxLSxxExSxVxSxWxKxNxxxEVGGxALxxxLxxIxPxxQxFFxTFxxLSx
+HBB_HUMAN  --------..L...E.S.V...W.K.N-..EVGG.AL..-L....P..Q.FF..F..LS.
+HBB_HORSE  --------..LS..E...V...W.K.N-..EVGG.AL..-L....P..Q.FF..F..LS.
+HBA_HUMAN  --------------..S.......K..-...VG..A..............F..T......
+HBA_HORSE  --------------..S.......K..-...VGG.A..............F..T......
+MYG_PHYCA  -------....................-....G...L..-L....P.....F..F..L..
+GLB5_PETMA ..........LS..E.....S.W.......E..G...........P..Q.FF..F..L..
+LGB2_LUPLU --------..L.......V.S.W...N................I.P.....F......S.
+Consensus  xxxxxxxxxxLSxxExSxVxSxWxKxNxxxEVGGxALxxxLxxIxPxxQxFFxTFxxLSx
 
                    70        80        90       100       110       120
            ----:----|----:----|----:----|----:----|----:----|----:----|
-Consensus  xxxxxxSxxVKxHGKKVLxALxxxVxxLDDLxxxxAxLSDLHxxKLRxxVxxxNFKLLxx
-HBB_HUMAN  .........VK.HGKKVL.A.......LD.L....A.LS.LH..KL.--V...NF.LL..
-HBB_HORSE  .........VK.HGKKVL......V..LD.L....A.LS.LH..KL.--V...NF.LL..
-HBA_HUMAN  ......S..VK.HGKKV..AL...V...DD.......LSDLH..KLR--V...NFKLL..
-HBA_HORSE  ......S..VK.HGKKV..AL...V..LDDL......LSDLH..KLR--V...NFKLL..
-MYG_PHYCA  ......S...K.HG..VL.AL................L...H..K..--...........
-GLB5_PETMA ......S..V..H......A....V...DD.......L.DL......--...........
-LGB2_LUPLU .................L.................A.L..L........V....F.....
-Consensus  xxxxxxSxxVKxHGKKVLxALxxxVxxLDDLxxxxAxLSDLHxxKLRxxVxxxNFKLLxx
+Consensus  xDxMxGSxQVKxHGKKVLxALxDxVxHLDDLExxxAxLSDLHAxKLRxxVDPxNFKLLxH
+HBB_HUMAN  .D...G...VK.HGKKVL.A..D...HLD.L....A.LS.LH..KL.--VDP.NF.LL..
+HBB_HORSE  .....G...VK.HGKKVL......V.HLD.L....A.LS.LH..KL.--VDP.NF.LL..
+HBA_HUMAN  .D...GS.QVK.HGKKV..AL...V.H.DD.......LSDLHA.KLR--VDP.NFKLL.H
+HBA_HORSE  .D...GS.QVK.HGKKV..AL...V.HLDDL......LSDLHA.KLR--VDP.NFKLL.H
+MYG_PHYCA  ...M..S...K.HG..VL.AL..........E.....L...HA.K..--...........
+GLB5_PETMA .D....S..V..H......A..D.V...DD.E.....L.DL......--...........
+LGB2_LUPLU ........Q........L.................A.L..L........V....F.....
+Consensus  xDxMxGSxQVKxHGKKVLxALxDxVxHLDDLExxxAxLSDLHAxKLRxxVDPxNFKLLxH
 
                   130       140       150       160       170       180
            ----:----|----:----|----:----|----:----|----:----|----:----|
-Consensus  xLLxVLxxxxxxDFTxxVxASxxKxLxxVAxxLxxKYxxxxxxx
-HBB_HUMAN  .L..VL.......FT..V.A...K....VA..L..KY.------
-HBB_HORSE  .L..VL......DFT....AS..K....VA..L..KY.------
-HBA_HUMAN  .LL..L.......FT..V.AS..K.L..V...L..KY.------
-HBA_HORSE  .LL..L......DFT..V.AS..K.L..V...L..KY.------
-MYG_PHYCA  ....VL......DF.........K.L.........KY.......
-GLB5_PETMA ............D.......S....L...A.-------------
-LGB2_LUPLU ..L..........................A...........---
-Consensus  xLLxVLxxxxxxDFTxxVxASxxKxLxxVAxxLxxKYxxxxxxx
+Consensus  xLLxVLAxHxxxDFTPEVxASMxKxLAxVAxxLxxKYxx-xxxx
+HBB_HUMAN  .L..VLA.H....FTP.V.A...K..A.VA..L..KY.------
+HBB_HORSE  .L..VLA.H...DFTPE..AS..K..A.VA..L..KY.------
+HBA_HUMAN  .LL..LA.H....FTP.V.AS..K.LA.V...L..KY.------
+HBA_HORSE  .LL..LA.H...DFTP.V.AS..K.L..V...L..KY.------
+MYG_PHYCA  ....VL......DF.......M.K.L.........KY.......
+GLB5_PETMA ............D...E...SM...L...A.-------------
+LGB2_LUPLU ..L.............E............A...........---
+Consensus  xLLxVLAxHxxxDFTPEVxASMxKxLAxVAxxLxxKYxx-xxxx
 
   Output files for usage example 8
 
@@ -813,39 +747,39 @@ Consensus  xLLxVLxxxxxxDFTxxVxASxxKxLxxVAxxLxxKYxxxxxxx
 
                    10        20        30        40        50        60
            ----:----|----:----|----:----|----:----|----:----|----:----|
-Consensus  xxxxxxxxxxxxxxExSxxxxxxxKxxxxxExGxxxLxxxxxxIxPxxxxFFxxFxxLxx
-HBB_HUMAN  --------......E.S.......K..-..E.G...L..-...v.P....FF..F..L..
-HBB_HORSE  --------......E.a.......K..-..E.G...L..-...v.P....FF..F..L..
-HBA_HUMAN  --------------..S.......K..-..k.G..........l......F.........
-HBA_HORSE  --------------..S.......K..-..k.G..........l......F.........
-MYG_PHYCA  -------.......q.........e..-....G...L..-.....P.....F..F..L..
-GLB5_PETMA ..............E.t.............E.....i........P....FF..F..L..
-LGB2_LUPLU --------......q.a.......e..................I.P.....F........
-Consensus  xxxxxxxxxxxxxxExSxxxxxxxKxxxxxExGxxxLxxxxxxIxPxxxxFFxxFxxLxx
+Consensus  xxxxxxxxxxLSxxExSxVxSxWxKxNxxxEVGGxALxxxLxxIxPxxQxFFxTFxxLSx
+HBB_HUMAN  --------..Lt..E.S.V.a.W.K.N-..EVGG.AL..-L..v.P..Q.FF.sF..LS.
+HBB_HORSE  --------..LS..E.a.V.a.W.K.N-..EVGG.AL..-L..v.P..Q.FF.sF..LS.
+HBA_HUMAN  --------------..S.......K..-..kVG..A.......l......F..T......
+HBA_HORSE  --------------..S.......K..-..kVGG.A.......l......F..T......
+MYG_PHYCA  -------.......q.........e.d-....G...L..-L....P.....F..F..L..
+GLB5_PETMA ..........LS..E.t.i.S.W.......E..G..i........P..Q.FF..F..Lt.
+LGB2_LUPLU --------..Lt..q.a.V.S.W.e.N.............v..I.P..k..F......S.
+Consensus  xxxxxxxxxxLSxxExSxVxSxWxKxNxxxEVGGxALxxxLxxIxPxxQxFFxTFxxLSx
 
                    70        80        90       100       110       120
            ----:----|----:----|----:----|----:----|----:----|----:----|
-Consensus  xxxxxxSxxVKxHGKKVLxALxxxVxxLDDLxxxxAxLSDLHxxKLRxxVxxxNFKLLxx
-HBB_HUMAN  ......n..VK.HGKKVL.A....l..LDnL....A.LSeLH..KL.--V...NFrLL..
-HBB_HORSE  ......n..VK.HGKKVL.s....V..LDnL....A.LSeLH..KL.--V...NFrLL..
-HBA_HUMAN  ......S..VK.HGKKV..AL...V..vDDm....s.LSDLH..KLR--V...NFKLL..
-HBA_HORSE  ......S..VK.HGKKV..AL...V..LDDL....s.LSDLH..KLR--V...NFKLL..
-MYG_PHYCA  ......S..lK.HG..VL.AL...l............La..H..K.k--i.....e.i..
-GLB5_PETMA ......S..Vr.H.erii.Av...V..mDD.......L.DL.....k--....d.q....
-LGB2_LUPLU .................L.........v..v....A.L.nL....v...V...hF.vv..
-Consensus  xxxxxxSxxVKxHGKKVLxALxxxVxxLDDLxxxxAxLSDLHxxKLRxxVxxxNFKLLxx
+Consensus  xDxMxGSxQVKxHGKKVLxALxDxVxHLDDLExxxAxLSDLHAxKLRxxVDPxNFKLLxH
+HBB_HUMAN  .D.v.Gn.kVK.HGKKVL.A..D.l.HLDnLk...A.LSeLH..KL.--VDP.NFrLL.n
+HBB_HORSE  ...v.Gn.kVK.HGKKVL.s..e.V.HLDnLk...A.LSeLH..KL.--VDP.NFrLL.n
+HBA_HUMAN  .D...GS.QVK.HGKKV..AL.n.V.HvDDm....s.LSDLHA.KLR--VDP.NFKLL.H
+HBA_HORSE  .D...GS.QVK.HGKKV..AL...V.HLDDL....s.LSDLHA.KLR--VDP.NFKLL.H
+MYG_PHYCA  ...M..S..lK.HG..VL.AL...l......E.....La..HA.K.k--i.....e.i..
+GLB5_PETMA .D.l..S..Vr.H.erii.Av.D.V..mDD.E.....L.DL.....k--....d.q....
+LGB2_LUPLU ........Q........L.........v..v....A.L.nL.s..v...V...hF.vv..
+Consensus  xDxMxGSxQVKxHGKKVLxALxDxVxHLDDLExxxAxLSDLHAxKLRxxVDPxNFKLLxH
 
                   130       140       150       160       170       180
            ----:----|----:----|----:----|----:----|----:----|----:----|
-Consensus  xLLxVLxxxxxxDFTxxVxASxxKxLxxVAxxLxxKYxxxxxxx
-HBB_HUMAN  .Lv.VL......eFT..V.Aa..K.v..VA..L..KY.------
-HBB_HORSE  .Lv.VL......DFT..l.AS..K.v..VA..L..KY.------
-HBA_HUMAN  .LL..L......eFT..V.AS..K.L..Vs..L..KY.------
-HBA_HORSE  .LL..L......DFT..V.AS..K.L..Vs..L..KY.------
-MYG_PHYCA  .ii.VL......DF......a..K.L......i..KY.......
-GLB5_PETMA ....i.......D.......S....L...A.-------------
-LGB2_LUPLU .iL..i.......ws..l.sa.......lA..i..e.....---
-Consensus  xLLxVLxxxxxxDFTxxVxASxxKxLxxVAxxLxxKYxxxxxxx
+Consensus  xLLxVLAxHxxxDFTPEVxASMxKxLAxVAxxLxxKYxx-xxxx
+HBB_HUMAN  .Lv.VLA.H...eFTP.V.Aa..K.vA.VA..L..KY.------
+HBB_HORSE  .Lv.VLA.H...DFTPEl.AS..K.vA.VA..L..KY.------
+HBA_HUMAN  .LL..LA.H...eFTP.V.ASl.K.LA.Vs..L..KY.------
+HBA_HORSE  .LL..LA.H...DFTP.V.ASl.K.Ls.Vs..L..KY.------
+MYG_PHYCA  .ii.VL......DF..d...aM.K.L......i..KY.......
+GLB5_PETMA ....i.......D...E...SM...L...A.-------------
+LGB2_LUPLU .iL..i.......ws.El.sa.......lA..i..e.....---
+Consensus  xLLxVLAxHxxxDFTPEVxASMxKxLAxVAxxLxxKYxx-xxxx
 
   Output files for usage example 9
 
@@ -853,39 +787,39 @@ Consensus  xLLxVLxxxxxxDFTxxVxASxxKxLxxVAxxLxxKYxxxxxxx
 
                    10        20        30        40        50        60
            ----:----|----:----|----:----|----:----|----:----|----:----|
-Consensus  xxxxxxxxxxxxxxExSxxxxxxxKxxxxxExGxxxLxxxxxxIxPxxxxFFxxFxxLxx
-HBB_HUMAN  --------VHLTPE.K.AVTALWG.VN-VD.V.GEA.GR-LLV.Y.WTQR..ES.GD.ST
-HBB_HORSE  --------VQLSGE.K.AVLALWD.VN-EE.V.GEA.GR-LLV.Y.WTQR..DS.GD.SN
-HBA_HUMAN  --------------VL.PADKTNV.AA-WG.V.AHAGEYGAEA.ERMFLS.PTTKTYFPH
-HBA_HORSE  --------------VL.AADKTNV.AA-WS.V.GHAGEYGAEA.ERMFLG.PTTKTYFPH
-MYG_PHYCA  -------VLSEGEW.LVLHVWAKV.AD-VAGH.QDI.IR-LFKSH.ETLEK.DR.KH.KT
-GLB5_PETMA PIVDTGSVAPLSAA.K.KIRSAWAPVYSTY.TSGVD.LVKFFTST.AAQE..PK.KG.TT
-LGB2_LUPLU --------GALTES.A.LVKSSWE.FNANIPKHTHRFFILVLE.A.AAKDL.SFLKGTSE
-Consensus  xxxxxxxxxxxxxxExSxxxxxxxKxxxxxExGxxxLxxxxxxIxPxxxxFFxxFxxLxx
+Consensus  xxxxxxxxxxLSxxExSxVxSxWxKxNxxxEVGGxALxxxLxxIxPxxQxFFxTFxxLSx
+HBB_HUMAN  --------VH..PE.K.A.T.L.G.V.-VD....E..GR-.LV.Y.WT.R..E..GD..T
+HBB_HORSE  --------VQ..GE.K.A.L.L.D.V.-EE....E..GR-.LV.Y.WT.R..D..GD..N
+HBA_HUMAN  --------------VL.PADKTNV.AA-WG...AH.GEYGAEA.ERMFLS.PT.KTYFPH
+HBA_HORSE  --------------VL.AADKTNV.AA-WS....H.GEYGAEA.ERMFLG.PT.KTYFPH
+MYG_PHYCA  -------VLSEGEW.LVLHVWAKV.A.-VAGH.QDI.IR-.FKSH.ETLEK.DR.KH.KT
+GLB5_PETMA PIVDTGSVAP..AA.K.K.R.A.APVYSTY.TS.VD.LVKFFTST.AA.E..PK.KG..T
+LGB2_LUPLU --------GA..ES.A.L.K.S.E.F.ANIPKHTHRFFIL.LE.A.AA.DL.SFLKGT.E
+Consensus  xxxxxxxxxxLSxxExSxVxSxWxKxNxxxEVGGxALxxxLxxIxPxxQxFFxTFxxLSx
 
                    70        80        90       100       110       120
            ----:----|----:----|----:----|----:----|----:----|----:----|
-Consensus  xxxxxxSxxVKxHGKKVLxALxxxVxxLDDLxxxxAxLSDLHxxKLRxxVxxxNFKLLxx
-HBB_HUMAN  PDAVMG.PK..A......G.FSDG.AH....KGTF.T.....CD..H--.DPE.....GN
-HBB_HORSE  PGAVMG.PK..A......H.FGEG.HH....KGTF.A.....CD..H--.DPE.....GN
-HBA_HUMAN  FDLSHG.AQ..G.....AD..TNA.AH....PNAL.A.....AH...--.DPV.....SH
-HBA_HORSE  FDLSHG.AQ..A.....GD..TLA.GH....PGAL.N.....AH...--.DPV.....SH
-MYG_PHYCA  EAEMKA.ED..K..VT..T..GAI.KKKGHHEAELKP..QS.AT.H.--.PIKYL.F.SE
-GLB5_PETMA ADQLKK.AD..W.A....N..NDA.AS...TEKMSMK.R..SGKHA.--SFQV.P.YFKV
-LGB2_LUPLU VPQNNPELQAHAGKVFK.VYEAAIQLQ.TG.VVTD.T.K..GSVH.SKG.ADA..P..KE
-Consensus  xxxxxxSxxVKxHGKKVLxALxxxVxxLDDLxxxxAxLSDLHxxKLRxxVxxxNFKLLxx
+Consensus  xDxMxGSxQVKxHGKKVLxALxDxVxHLDDLExxxAxLSDLHAxKLRxxVDPxNFKLLxH
+HBB_HUMAN  P.A.M..P...A......G.FS.G.A......GTF.T.....CD..H--...E.....G.
+HBB_HORSE  PGA.M..P...A......H.FG.G.H......GTF.A.....CD..H--...E.....G.
+HBA_HUMAN  F.LSH..A...G.....AD..T.A.A.....PNAL.A......H...--...V.....S.
+HBA_HORSE  F.LSH..A...A.....GD..TLA.G.....PGAL.N......H...--...V.....S.
+MYG_PHYCA  EAE.KA.ED..K..VT..T..GAI.KKKGHH.AELKP..QS..T.H.--.PIKYL.F.SE
+GLB5_PETMA A.Q.KK.AD..W.A....N..N.A.AS...T.KMSMK.R..SGKHA.--SFQV.P.YFKV
+LGB2_LUPLU VPQNNPEL.AHAGKVFK.VYEAAIQLQ.TG.VVTD.T.K..G.VH.SKG.ADA..P..KE
+Consensus  xDxMxGSxQVKxHGKKVLxALxDxVxHLDDLExxxAxLSDLHAxKLRxxVDPxNFKLLxH
 
                   130       140       150       160       170       180
            ----:----|----:----|----:----|----:----|----:----|----:----|
-Consensus  xLLxVLxxxxxxDFTxxVxASxxKxLxxVAxxLxxKYxxxxxxx
-HBB_HUMAN  V..C..AHHFGK...PP.Q..YQ.V.AG..NA.AH..H------
-HBB_HORSE  V..V..ARHFGK...PE.Q..YQ.V.AG..NA.AH..H------
-HBA_HUMAN  C..VT.AAHLPA...PA.H..LD.F.AS..TV.TS..R------
-HBA_HORSE  C..ST.AVHLPN...PA.H..LD.F.SS..TV.TS..R------
-MYG_PHYCA  A..H..HSRHPG..GADAQG.MN.A.ELFRKD.AA..KELGYQG
-GLB5_PETMA LAAV.ADTVAAG.AGFEKLM.MICI.LRS.Y-------------
-LGB2_LUPLU A..KT.KEVVGAK..EE.N..WTIAYDE..IV.KK.MNDAA---
-Consensus  xLLxVLxxxxxxDFTxxVxASxxKxLxxVAxxLxxKYxxxxxxx
+Consensus  xLLxVLAxHxxxDFTPEVxASMxKxLAxVAxxLxxKYxx-xxxx
+HBB_HUMAN  V..C...H.FGK....P.Q..YQ.V..G..NA.AH..H------
+HBB_HORSE  V..V...R.FGK......Q..YQ.V..G..NA.AH..H------
+HBA_HUMAN  C..VT..A.LPA....A.H...D.F..S..TV.TS..R------
+HBA_HORSE  C..ST..V.LPN....A.H...D.F..S..TV.TS..R------
+MYG_PHYCA  A..H..HSRHPG..GA.AQG..N.A.ELFRKD.AA..KELGYQG
+GLB5_PETMA LAAV.ADTVAAG.AGF.KLM..ICI.LRS.Y-------------
+LGB2_LUPLU A..KT.KEVVGAK..E..N..WTIAYDE..IV.KK.MNDAA---
+Consensus  xLLxVLAxHxxxDFTPEVxASMxKxLAxVAxxLxxKYxx-xxxx
 
   Output files for usage example 10
 
@@ -901,7 +835,7 @@ MYG_PHYCA  -------VlSEGEWqLVLHVWAKVeAd-.AGH.QdI.I.-.FKSh.E.LEK.dR.KH.K.
 GLB5_PETMA PIVDTGSVAP.sAA..tKiRsA.AP.YSTY.TS.VDiLVKFFTST.AA.E..PK.KG.t.
 LGB2_LUPLU --------GA..ESqAaL.KsS.EeF.ANIPKHTHRFFILv.EiA.AAkDL.SFLKGT.E
 HBB_HUMAN  --------VHLTPEEKSAVTALWGKVN-VDEVGGEALGR-LLVVYPWTQRFFESFGDLST
-Consensus  xxxxxxxxxxxxxxExSxxxxxxxKxxxxxExGxxxLxxxxxxIxPxxxxFFxxFxxLxx
+Consensus  xxxxxxxxxxLSxxExSxVxSxWxKxNxxxEVGGxALxxxLxxIxPxxQxFFxTFxxLSx
 
                    70        80        90       100       110       120
            ----:----|----:----|----:----|----:----|----:----|----:----|
@@ -913,7 +847,7 @@ MYG_PHYCA  EAEmKAsEDl.K..VT..T.LGAI.KKKGhHeAELKP.aqS.AT.HK--iPIkYLEFiSE
 GLB5_PETMA A.QlKKsAD.rW.AeriiN.Vn.Av.Sm.dTeKMSMK.Rd.SGKHAK--SFQVdPqYFKV
 LGB2_LUPLU VPQNNPELqAH.GKVFK.VYEaAIQLQvTGvVV.D...KN.GSVHvSKG.ADAh.PvvKE
 HBB_HUMAN  PDAVMGNPKVKAHGKKVLGAFSDGLAHLDNLKGTFATLSELHCDKLH--VDPENFRLLGN
-Consensus  xxxxxxSxxVKxHGKKVLxALxxxVxxLDDLxxxxAxLSDLHxxKLRxxVxxxNFKLLxx
+Consensus  xDxMxGSxQVKxHGKKVLxALxDxVxHLDDLExxxAxLSDLHAxKLRxxVDPxNFKLLxH
 
                   130       140       150       160       170       180
            ----:----|----:----|----:----|----:----|----:----|----:----|
@@ -925,7 +859,7 @@ MYG_PHYCA  AiiH..HSRHPGd.GADA.G.MN.AlELFRKDi.A..KELGYQG
 GLB5_PETMA lAAViADTVAAGdAGFEKLMsMICilLRS.Y-------------
 LGB2_LUPLU AilKTiKEVV.AkwsEElNs.wTIAYDEl.IViKKeMnDAA---
 HBB_HUMAN  VLVCVLAHHFGKEFTPPVQAAYQKVVAGVANALAHKYH------
-Consensus  xLLxVLxxxxxxDFTxxVxASxxKxLxxVAxxLxxKYxxxxxxx
+Consensus  xLLxVLAxHxxxDFTPEVxASMxKxLAxVAxxLxxKYxx-xxxx
 
   Output files for usage example 11
 
@@ -970,39 +904,39 @@ HBB_HUMAN  vlvcvlahhfgkeftppvqaayqkvvagvanalahkyh------
 
                    10        20        30        40        50        60
            ----:----|----:----|----:----|----:----|----:----|----:----|
-Consensus  xxxxxxxxxxxxxxExSxxxxxxxKxxxxxExGxxxLxxxxxxIxPxxxxFFxxFxxLxx
-GLB5_PETMA PIVDTGSVAPLSAA.KtKIRSAWAPVYSTY.TSGVDiLVKFFTST.AAQE..PK.KG.TT
-HBA_HORSE  --------------VL.AADKTNV.AA-WSkV.GHAGEYGAEAlERMFLG.PTTKTYFPH
-HBA_HUMAN  --------------VL.PADKTNV.AA-WGkV.AHAGEYGAEAlERMFLS.PTTKTYFPH
-HBB_HORSE  --------VQLSGE.KaAVLALWD.VN-EE.V.GEA.GR-LLVvY.WTQR..DS.GD.SN
-HBB_HUMAN  --------VHLTPE.K.AVTALWG.VN-VD.V.GEA.GR-LLVvY.WTQR..ES.GD.ST
-LGB2_LUPLU --------GALTESqAaLVKSSWEeFNANIPKHTHRFFILVLE.A.AAKDL.SFLKGTSE
-MYG_PHYCA  -------VLSEGEWqLVLHVWAKVeAD-VAGH.QDI.IR-LFKSH.ETLEK.DR.KH.KT
-Consensus  xxxxxxxxxxxxxxExSxxxxxxxKxxxxxExGxxxLxxxxxxIxPxxxxFFxxFxxLxx
+Consensus  xxxxxxxxxxLSxxExSxVxSxWxKxNxxxEVGGxALxxxLxxIxPxxQxFFxTFxxLSx
+GLB5_PETMA PIVDTGSVAP..AA.KtKiR.A.APVYSTY.TS.VDiLVKFFTST.AA.E..PK.KG.tT
+HBA_HORSE  --------------VL.AADKTNV.AA-WSk...H.GEYGAEAlERMFLG.PT.KTYFPH
+HBA_HUMAN  --------------VL.PADKTNV.AA-WGk..AH.GEYGAEAlERMFLS.PT.KTYFPH
+HBB_HORSE  --------VQ..GE.KaA.LaL.D.V.-EE....E..GR-.LVvY.WT.R..Ds.GD..N
+HBB_HUMAN  --------VH.tPE.K.A.TaL.G.V.-VD....E..GR-.LVvY.WT.R..Es.GD..T
+LGB2_LUPLU --------GA.tESqAaL.K.S.EeF.ANIPKHTHRFFILvLE.A.AAkDL.SFLKGT.E
+MYG_PHYCA  -------VLSEGEWqLVLHVWAKVeAd-VAGH.QDI.IR-.FKSH.ETLEK.DR.KH.KT
+Consensus  xxxxxxxxxxLSxxExSxVxSxWxKxNxxxEVGGxALxxxLxxIxPxxQxFFxTFxxLSx
 
                    70        80        90       100       110       120
            ----:----|----:----|----:----|----:----|----:----|----:----|
-Consensus  xxxxxxSxxVKxHGKKVLxALxxxVxxLDDLxxxxAxLSDLHxxKLRxxVxxxNFKLLxx
-GLB5_PETMA ADQLKK.AD.rW.AeriiN.vNDA.ASm..TEKMSMK.R..SGKHAk--SFQVdPqYFKV
-HBA_HORSE  FDLSHG.AQ..A.....GD..TLA.GH....PGALsN.....AH...--.DPV.....SH
-HBA_HUMAN  FDLSHG.AQ..G.....AD..TNA.AHv..mPNALsA.....AH...--.DPV.....SH
-HBB_HORSE  PGAVMGnPK..A......HsFGEG.HH..n.KGTF.A..e..CD..H--.DPE..r..GN
-HBB_HUMAN  PDAVMGnPK..A......G.FSDGlAH..n.KGTF.T..e..CD..H--.DPE..r..GN
-LGB2_LUPLU VPQNNPELQAHAGKVFK.VYEAAIQLQvTGvVVTD.T.Kn.GSVHvSKG.ADAh.PvvKE
-MYG_PHYCA  EAEMKA.EDl.K..VT..T..GAIlKKKGHHEAELKP.aQS.AT.Hk--iPIKYLeFiSE
-Consensus  xxxxxxSxxVKxHGKKVLxALxxxVxxLDDLxxxxAxLSDLHxxKLRxxVxxxNFKLLxx
+Consensus  xDxMxGSxQVKxHGKKVLxALxDxVxHLDDLExxxAxLSDLHAxKLRxxVDPxNFKLLxH
+GLB5_PETMA A.QlKK.AD.rW.AeriiN.vN.A.ASm..T.KMSMK.R..SGKHAk--SFQVdPqYFKV
+HBA_HORSE  F.LSH..A...A.....GD..TLA.G.....PGALsN......H...--...V.....S.
+HBA_HUMAN  F.LSH..A...G.....AD..TnA.A.v..mPNALsA......H...--...V.....S.
+HBB_HORSE  PGAvM.nPk..A......HsFGeG.H...n.kGTF.A..e..CD..H--...E..r..Gn
+HBB_HUMAN  P.AvM.nPk..A......G.FS.GlA...n.kGTF.T..e..CD..H--...E..r..Gn
+LGB2_LUPLU VPQNNPEL.AHAGKVFK.VYEAAIQLQvTGvVVTD.T.Kn.GsVHvSKG.ADAh.PvvKE
+MYG_PHYCA  EAE.KA.EDl.K..VT..T..GAIlKKKGHH.AELKP.aQS..T.Hk--iPIKYLeFiSE
+Consensus  xDxMxGSxQVKxHGKKVLxALxDxVxHLDDLExxxAxLSDLHAxKLRxxVDPxNFKLLxH
 
                   130       140       150       160       170       180
            ----:----|----:----|----:----|----:----|----:----|----:----|
-Consensus  xLLxVLxxxxxxDFTxxVxASxxKxLxxVAxxLxxKYxxxxxxx
-GLB5_PETMA LAAViADTVAAG.AGFEKLM.MICI.LRS.Y-------------
-HBA_HORSE  C..ST.AVHLPN...PA.H..LD.F.SS.sTV.TS..R------
-HBA_HUMAN  C..VT.AAHLPAe..PA.H..LD.F.AS.sTV.TS..R------
-HBB_HORSE  V.vV..ARHFGK...PElQ..YQ.VvAG..NA.AH..H------
-HBB_HUMAN  V.vC..AHHFGKe..PP.Q.aYQ.VvAG..NA.AH..H------
-LGB2_LUPLU Ai.KTiKEVVGAKwsEElNsaWTIAYDEl.IViKKeMNDAA---
-MYG_PHYCA  AiiH..HSRHPG..GADAQGaMN.A.ELFRKDiAA..KELGYQG
-Consensus  xLLxVLxxxxxxDFTxxVxASxxKxLxxVAxxLxxKYxxxxxxx
+Consensus  xLLxVLAxHxxxDFTPEVxASMxKxLAxVAxxLxxKYxx-xxxx
+GLB5_PETMA LAAViADTVAAG.AGF.KLM..ICI.LRS.Y-------------
+HBA_HORSE  C..ST..V.LPN....A.H..lD.F.sS.sTV.TS..R------
+HBA_HUMAN  C..VT..A.LPAe...A.H..lD.F..S.sTV.TS..R------
+HBB_HORSE  V.vV...R.FGK.....lQ..YQ.Vv.G..NA.AH..H------
+HBB_HUMAN  V.vC...H.FGKe...P.Q.aYQ.Vv.G..NA.AH..H------
+LGB2_LUPLU Ai.KTiKEVVGAKwsE.lNsaWTIAYDEl.IViKKeMNDAA---
+MYG_PHYCA  AiiH..HSRHPG..GAdAQGa.N.A.ELFRKDiAA..KELGYQG
+Consensus  xLLxVLAxHxxxDFTPEVxASMxKxLAxVAxxLxxKYxx-xxxx
 
 Data files
 

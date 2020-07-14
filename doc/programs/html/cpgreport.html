@@ -13,7 +13,6 @@
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
-
 cpgreport
 </font></b>
 </td></tr>
@@ -22,12 +21,10 @@ cpgreport
 <p>
 
 
-
 <H2>
     Function
 </H2>
 Reports all CpG rich regions
-
 <H2>
     Description
 </H2>
@@ -74,12 +71,11 @@ primary exons.
 Reports all CpG rich regions
 CpG score [17]: <b></b>
 Output file [rnu68037.cpgreport]: <b></b>
-Output features [rnu68037.gff]: <b></b>
+Features output [rnu68037.gff]: <b></b>
 
 </pre></td></tr></table><p>
 <p>
 <a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
-
 
 <H2>
     Command line arguments
@@ -88,59 +84,60 @@ Output features [rnu68037.gff]: <b></b>
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
    Standard (Mandatory) qualifiers:
-  [-sequence]          seqall     Sequence database USA
-   -score              integer    This sets the score for each CG sequence
-                                  found. A value of 17 is more sensitive, but
-                                  28 has also been used with some success.
-  [-outfile]           outfile    Output file name
-  [-outfeat]           featout    File for output features
+  [-sequence]          seqall     Nucleotide sequence(s) filename and optional
+                                  format, or reference (input USA)
+   -score              integer    [17] This sets the score for each CG
+                                  sequence found. A value of 17 is more
+                                  sensitive, but 28 has also been used with
+                                  some success. (Integer from 1 to 200)
+  [-outfile]           outfile    [*.cpgreport] Output file name
+  [-outfeat]           featout    [unknown.gff] File for output features
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers: (none)
    Associated qualifiers:
 
    "-sequence" associated qualifiers
-   -sbegin1             integer    Start of each sequence to be used
-   -send1               integer    End of each sequence to be used
-   -sreverse1           boolean    Reverse (if DNA)
-   -sask1               boolean    Ask for begin/end/reverse
-   -snucleotide1        boolean    Sequence is nucleotide
-   -sprotein1           boolean    Sequence is protein
-   -slower1             boolean    Make lower case
-   -supper1             boolean    Make upper case
-   -sformat1            string     Input sequence format
-   -sdbname1            string     Database name
-   -sid1                string     Entryname
-   -ufo1                string     UFO features
-   -fformat1            string     Features format
-   -fopenfile1          string     Features file name
+   -sbegin1            integer    Start of each sequence to be used
+   -send1              integer    End of each sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
 
    "-outfile" associated qualifiers
-   -odirectory2         string     Output directory
+   -odirectory2        string     Output directory
 
    "-outfeat" associated qualifiers
-   -offormat3           string     Output feature format
-   -ofopenfile3         string     Features file name
-   -ofextension3        string     File name extension
-   -ofdirectory3        string     Output directory
-   -ofname3             string     Base file name
-   -ofsingle3           boolean    Separate file for each entry
+   -offormat3          string     Output feature format
+   -ofopenfile3        string     Features file name
+   -ofextension3       string     File name extension
+   -ofdirectory3       string     Output directory
+   -ofname3            string     Base file name
+   -ofsingle3          boolean    Separate file for each entry
 
    General qualifiers:
-   -auto                boolean    Turn off prompts
-   -stdout              boolean    Write standard output
-   -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for standard and additional values
-   -debug               boolean    Write debug output to program.dbg
-   -verbose             boolean    Report some/full command line options
-   -help                boolean    Report command line options. More
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
-   -warning             boolean    Report warnings
-   -error               boolean    Report errors
-   -fatal               boolean    Report fatal errors
-   -die                 boolean    Report deaths
-
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
 
 </pre>
 </td></tr></table>
@@ -154,7 +151,7 @@ Output features [rnu68037.gff]: <b></b>
 
 <tr>
 <td>[-sequence]<br>(Parameter 1)</td>
-<td>Sequence database USA</td>
+<td>Nucleotide sequence(s) filename and optional format, or reference (input USA)</td>
 <td>Readable sequence(s)</td>
 <td><b>Required</b></td>
 </tr>
@@ -170,7 +167,7 @@ Output features [rnu68037.gff]: <b></b>
 <td>[-outfile]<br>(Parameter 2)</td>
 <td>Output file name</td>
 <td>Output file</td>
-<td><i>&lt;sequence&gt;</i>.cpgreport</td>
+<td>&nbsp;</td>
 </tr>
 
 <tr>
@@ -201,7 +198,6 @@ Output features [rnu68037.gff]: <b></b>
 </tr>
 
 </table>
-
 
 <H2>
     Input file format
@@ -299,7 +295,6 @@ SQ   Sequence 1218 BP; 162 A; 397 C; 387 G; 272 T; 0 other;
 </pre>
 </td></tr></table><p>
 
-
 <H2>
     Output file format
 </H2>
@@ -327,7 +322,7 @@ RNU68037               1183   1193    26          2  72.7   2.00
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 ##gff-version 2.0
-##date 2005-07-15
+##date 2006-07-15
 ##Type DNA RNU68037
 RNU68037	cpgreport	misc_feature	12	13	17.000	+	.	Sequence "RNU68037.1"
 RNU68037	cpgreport	misc_feature	47	48	17.000	+	.	Sequence "RNU68037.2"
@@ -337,7 +332,6 @@ RNU68037	cpgreport	misc_feature	1139	1140	17.000	+	.	Sequence "RNU68037.5"
 RNU68037	cpgreport	misc_feature	1183	1193	26.000	+	.	Sequence "RNU68037.6"
 </pre>
 </td></tr></table><p>
-
 <p>
 
 The first non-blank line of the output file 'rnu68037.cpgreport' is the
@@ -414,12 +408,27 @@ None.
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
-<tr><td><a href="cpgplot.html">cpgplot</a></td><td>Plot CpG rich areas</td></tr>
-<tr><td><a href="geecee.html">geecee</a></td><td>Calculates fractional GC content of nucleic acid sequences</td></tr>
-<tr><td><a href="newcpgreport.html">newcpgreport</a></td><td>Report CpG rich areas</td></tr>
-<tr><td><a href="newcpgseek.html">newcpgseek</a></td><td>Reports CpG rich regions</td></tr>
-</table>
+<tr>
+<td><a href="cpgplot.html">cpgplot</a></td>
+<td>Plot CpG rich areas</td>
+</tr>
 
+<tr>
+<td><a href="geecee.html">geecee</a></td>
+<td>Calculates fractional GC content of nucleic acid sequences</td>
+</tr>
+
+<tr>
+<td><a href="newcpgreport.html">newcpgreport</a></td>
+<td>Report CpG rich areas</td>
+</tr>
+
+<tr>
+<td><a href="newcpgseek.html">newcpgseek</a></td>
+<td>Reports CpG rich regions</td>
+</tr>
+
+</table>
 
 As there is no official definition of what is a cpg island is, and worst
 where they begin and end, we have to live with 2 definitions and thus
@@ -475,13 +484,11 @@ Gos Micklem (gos&nbsp;&copy;&nbsp;ebi.ac.uk)
 <br>
 Informatics Division, European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
 
-
 <p>
 The algorithm was modified for inclusion in EGCG under the name 'CPGSPANS' by
 Rodrigo Lopez (rls&nbsp;&copy;&nbsp;ebi.ac.uk)
 <br>
 European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
-
 
 
 <p>
@@ -493,25 +500,21 @@ European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambri
 
 
 
-
 <H2>
     History
 </H2>
 
 Completed 22nd March 1999.
 
-
 <H2>
     Target users
 </H2>
 This program is intended to be used by everyone and everything, from naive users to embedded scripts.
 
-
 <H2>
     Comments
 </H2>
 None
-
 
 </BODY>
 </HTML>

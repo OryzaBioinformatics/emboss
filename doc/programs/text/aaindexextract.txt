@@ -30,7 +30,7 @@ Usage
 
 % aaindexextract 
 Extract data from AAINDEX
-Full pathname of file aaindex1: aaindex1.test
+AAINDEX database file: aaindex1.test
 
    Go to the input files for this example
    Go to the output files for this example
@@ -38,34 +38,33 @@ Full pathname of file aaindex1: aaindex1.test
 Command line arguments
 
    Standard (Mandatory) qualifiers:
-  [-infile]            infile     Full pathname of file aaindex1
+  [-infile]            infile     AAINDEX database file
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers: (none)
    Associated qualifiers: (none)
    General qualifiers:
-   -auto                boolean    Turn off prompts
-   -stdout              boolean    Write standard output
-   -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for standard and additional values
-   -debug               boolean    Write debug output to program.dbg
-   -verbose             boolean    Report some/full command line options
-   -help                boolean    Report command line options. More
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
-   -warning             boolean    Report warnings
-   -error               boolean    Report errors
-   -fatal               boolean    Report fatal errors
-   -die                 boolean    Report deaths
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
 
-
-   Standard (Mandatory) qualifiers Allowed values Default
+                 Standard (Mandatory) qualifiers  Allowed values Default
    [-infile]
-   (Parameter 1) Full pathname of file aaindex1 Input file Required
-   Additional (Optional) qualifiers Allowed values Default
-   (none)
-   Advanced (Unprompted) qualifiers Allowed values Default
-   (none)
+   (Parameter 1) AAINDEX database file Input file Required
+                 Additional (Optional) qualifiers Allowed values Default
+                 (none)
+                 Advanced (Unprompted) qualifiers Allowed values Default
+                 (none)
 
 Input file format
 

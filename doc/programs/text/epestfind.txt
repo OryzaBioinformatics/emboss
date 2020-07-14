@@ -115,7 +115,7 @@ Usage
 
 % epestfind -graph cps -invalid 
 Finds PEST motifs as potential proteolytic cleavage sites
-Input sequence: exu2_drops.embl
+Input protein sequence: exu2_drops.embl
 Window length [10]: 
 Sort order of results
       1 : length
@@ -133,117 +133,84 @@ Command line arguments
 
    Standard (Mandatory) qualifiers:
   [-sequence]          sequence   Protein sequence USA to be analysed.
-   -window             integer    Minimal distance between positively charged
-                                  amino acids.
-   -order              selection  Name of the output file which holds the
-                                  results of the analysis. Results may be
+   -window             integer    [10] Minimal distance between positively
+                                  charged amino acids. (Integer 2 or more)
+   -order              selection  [score] Name of the output file which holds
+                                  the results of the analysis. Results may be
                                   sorted by length, position and score.
-  [-outfile]           outfile    Name of file to which results will be
-                                  written.
-   -graph              xygraph    Graph type
+  [-outfile]           outfile    [*.epestfind] Name of file to which results
+                                  will be written.
+   -graph              xygraph    [$EMBOSS_GRAPHICS value, or x11] Graph type
+                                  (ps, hpgl, hp7470, hp7580, meta, cps, x11,
+                                  tekt, tek, none, data, xterm, png)
 
    Additional (Optional) qualifiers:
-   -aadata             datafile   File of amino acid properties and molecular
-                                  masses.
-   -threshold          float      Threshold value to discriminate weak from
-                                  potential PEST motifs. Valid PEST motifs are
-                                  discriminated into 'poor' and 'potential'
-                                  motifs depending on this threshold score. By
-                                  default, the default value is set to +5.0
-                                  based on experimental data. Alterations are
-                                  not recommended since significance is a
-                                  matter of biology, not mathematics.
+   -aadata             datafile   [Eamino.dat] Amino acids properties and
+                                  molecular weight data file
+   -threshold          float      [+5.0] Threshold value to discriminate weak
+                                  from potential PEST motifs. Valid PEST
+                                  motifs are discriminated into 'poor' and
+                                  'potential' motifs depending on this
+                                  threshold score. By default, the default
+                                  value is set to +5.0 based on experimental
+                                  data. Alterations are not recommended since
+                                  significance is a matter of biology, not
+                                  mathematics. (Number from -55.00 to 55.00)
 
    Advanced (Unprompted) qualifiers:
-   -[no]potential      boolean    Decide whether potential PEST motifs should
+   -[no]potential      boolean    [Y] Decide whether potential PEST motifs
+                                  should be printed.
+   -[no]poor           boolean    [Y] Decide whether poor PEST motifs should
                                   be printed.
-   -[no]poor           boolean    Decide whether poor PEST motifs should be
-                                  printed.
-   -invalid            boolean    Decide whether invalid PEST motifs should be
-                                  printed.
-   -[no]map            boolean    Decide whether PEST motifs should be mapped
-                                  to sequence.
+   -invalid            boolean    [N] Decide whether invalid PEST motifs
+                                  should be printed.
+   -[no]map            boolean    [Y] Decide whether PEST motifs should be
+                                  mapped to sequence.
 
    Associated qualifiers:
 
    "-sequence" associated qualifiers
-   -sbegin1             integer    Start of the sequence to be used
-   -send1               integer    End of the sequence to be used
-   -sreverse1           boolean    Reverse (if DNA)
-   -sask1               boolean    Ask for begin/end/reverse
-   -snucleotide1        boolean    Sequence is nucleotide
-   -sprotein1           boolean    Sequence is protein
-   -slower1             boolean    Make lower case
-   -supper1             boolean    Make upper case
-   -sformat1            string     Input sequence format
-   -sdbname1            string     Database name
-   -sid1                string     Entryname
-   -ufo1                string     UFO features
-   -fformat1            string     Features format
-   -fopenfile1          string     Features file name
+   -sbegin1            integer    Start of the sequence to be used
+   -send1              integer    End of the sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
 
    "-outfile" associated qualifiers
-   -odirectory2         string     Output directory
+   -odirectory2        string     Output directory
 
    "-graph" associated qualifiers
-   -gprompt             boolean    Graph prompting
-   -gtitle              string     Graph title
-   -gsubtitle           string     Graph subtitle
-   -gxtitle             string     Graph x axis title
-   -gytitle             string     Graph y axis title
-   -goutfile            string     Output file for non interactive displays
-   -gdirectory          string     Output directory
+   -gprompt            boolean    Graph prompting
+   -gtitle             string     Graph title
+   -gsubtitle          string     Graph subtitle
+   -gxtitle            string     Graph x axis title
+   -gytitle            string     Graph y axis title
+   -goutfile           string     Output file for non interactive displays
+   -gdirectory         string     Output directory
 
    General qualifiers:
-   -auto                boolean    Turn off prompts
-   -stdout              boolean    Write standard output
-   -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for standard and additional values
-   -debug               boolean    Write debug output to program.dbg
-   -verbose             boolean    Report some/full command line options
-   -help                boolean    Report command line options. More
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
-   -warning             boolean    Report warnings
-   -error               boolean    Report errors
-   -fatal               boolean    Report fatal errors
-   -die                 boolean    Report deaths
-
-
-   Standard (Mandatory) qualifiers Allowed values Default
-   [-sequence]
-   (Parameter 1) Protein sequence USA to be analysed. Readable sequence
-   Required
-   -window Minimal distance between positively charged amino acids.
-   Integer 2 or more 10
-   -order Name of the output file which holds the results of the
-   analysis. Results may be sorted by length, position and score. Choose
-   from selection list of values score
-   [-outfile]
-   (Parameter 2) Name of file to which results will be written. Output
-   file <sequence>.epestfind
-   -graph Graph type EMBOSS has a list of known devices, including
-   postscript, ps, hpgl, hp7470, hp7580, meta, colourps, cps, xwindows,
-   x11, tektronics, tekt, tek4107t, tek, none, null, text, data, xterm,
-   png, xml EMBOSS_GRAPHICS value, or x11
-   Additional (Optional) qualifiers Allowed values Default
-   -aadata File of amino acid properties and molecular masses. Data file
-   Eamino.dat
-   -threshold Threshold value to discriminate weak from potential PEST
-   motifs. Valid PEST motifs are discriminated into 'poor' and
-   'potential' motifs depending on this threshold score. By default, the
-   default value is set to +5.0 based on experimental data. Alterations
-   are not recommended since significance is a matter of biology, not
-   mathematics. Number from -55.00 to 55.00 +5.0
-   Advanced (Unprompted) qualifiers Allowed values Default
-   -[no]potential Decide whether potential PEST motifs should be printed.
-   Boolean value Yes/No Yes
-   -[no]poor Decide whether poor PEST motifs should be printed. Boolean
-   value Yes/No Yes
-   -invalid Decide whether invalid PEST motifs should be printed. Boolean
-   value Yes/No No
-   -[no]map Decide whether PEST motifs should be mapped to sequence.
-   Boolean value Yes/No Yes
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
 
 Input file format
 

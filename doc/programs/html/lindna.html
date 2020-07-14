@@ -13,7 +13,6 @@
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
-
 lindna
 </font></b>
 </td></tr>
@@ -22,12 +21,10 @@ lindna
 <p>
 
 
-
 <H2>
     Function
 </H2>
 Draws linear maps of DNA constructs
-
 
 <H2>
     Description
@@ -63,7 +60,7 @@ the desired parameters.
 
 % <b>lindna -graph cps </b>
 Draws linear maps of DNA constructs
-Input file containing mapping data [inputfile]: <b>data.linp</b>
+Commands to the lindna drawing program file [inputfile]: <b>data.linp</b>
 Draw a ruler [Y]: <b></b>
       Open : Open blocks
     Filled : Filled blocks
@@ -76,81 +73,89 @@ Created lindna.ps
 <p>
 <a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
 
-
 <H2>
     Command line arguments
 </H2>
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
    Standard (Mandatory) qualifiers:
-  [-infile]            infile     Input file containing mapping data
-   -[no]ruler          boolean    Draw a ruler
-   -blocktype          menu       Type of blocks
-   -graphout           graph      Graph type
+  [-infile]            infile     [inputfile] Commands to the lindna drawing
+                                  program file
+   -[no]ruler          boolean    [Y] Draw a ruler
+   -blocktype          menu       [Filled] Type of blocks (Values: Open (Open
+                                  blocks); Filled (Filled blocks); Outline
+                                  (Black border))
+   -graphout           graph      [$EMBOSS_GRAPHICS value, or x11] Graph type
+                                  (ps, hpgl, hp7470, hp7580, meta, cps, x11,
+                                  tekt, tek, none, data, xterm, png)
 
    Additional (Optional) qualifiers:
-   -maxgroups          integer    Maximum number of groups
-   -maxlabels          integer    Maximum number of labels
-   -intersymbol        selection  Type of junctions between blocks
-   -intercolour        integer    Colour of junctions between blocks (enter a
-                                  colour number)
-   -interticks         boolean    Horizontal junctions between ticks
-   -gapsize            integer    Interval between ticks in the ruler
-   -ticklines          boolean    Vertical lines at the ruler's ticks
-   -textheight         float      Height of text. Enter a number <1.0 or >1.0
-                                  to decrease or increase the size,
-                                  respectively
-   -textlength         float      Length of text. Enter a number <1.0 or >1.0
-                                  to decrease or increase the size,
-                                  respectively
-   -margin             float      Width of left margin. This is the region
-                                  left to the groups where the names of the
-                                  groups are displayed. Enter a number <1.0 or
+   -maxgroups          integer    [20] Maximum number of groups (Integer 1 or
+                                  more)
+   -maxlabels          integer    [10000] Maximum number of labels (Integer 1
+                                  or more)
+   -intersymbol        selection  [Straight] Type of junctions between blocks
+   -intercolour        integer    [1] Colour of junctions between blocks
+                                  (enter a colour number) (Integer from 0 to
+                                  15)
+   -interticks         boolean    [N] Horizontal junctions between ticks
+   -gapsize            integer    [500] Interval between ticks in the ruler
+                                  (Integer 0 or more)
+   -ticklines          boolean    [N] Vertical lines at the ruler's ticks
+   -textheight         float      [1.0] Height of text. Enter a number <1.0 or
                                   >1.0 to decrease or increase the size,
-                                  respectively
-   -tickheight         float      Height of ticks. Enter a number <1.0 or >1.0
-                                  to decrease or increase the size,
-                                  respectively
-   -blockheight        float      Height of blocks. Enter a number <1.0 or
+                                  respectively (Number 0.000 or more)
+   -textlength         float      [1.0] Length of text. Enter a number <1.0 or
                                   >1.0 to decrease or increase the size,
-                                  respectively
-   -rangeheight        float      Height of range ends. Enter a number <1.0 or
+                                  respectively (Number 0.000 or more)
+   -margin             float      [1.0] Width of left margin. This is the
+                                  region left to the groups where the names of
+                                  the groups are displayed. Enter a number
+                                  <1.0 or >1.0 to decrease or increase the
+                                  size, respectively (Number 0.000 or more)
+   -tickheight         float      [1.0] Height of ticks. Enter a number <1.0
+                                  or >1.0 to decrease or increase the size,
+                                  respectively (Number 0.000 or more)
+   -blockheight        float      [1] Height of blocks. Enter a number <1.0 or
                                   >1.0 to decrease or increase the size,
-                                  respectively
-   -gapgroup           float      Space between groups. Enter a number <1.0 or
-                                  >1.0 to decrease or increase the size,
-                                  respectively
-   -postext            float      Space between text and ticks, blocks, and
-                                  ranges. Enter a number <1.0 or >1.0 to
+                                  respectively (Number 0.000 or more)
+   -rangeheight        float      [1.0] Height of range ends. Enter a number
+                                  <1.0 or >1.0 to decrease or increase the
+                                  size, respectively (Number 0.000 or more)
+   -gapgroup           float      [1.0] Space between groups. Enter a number
+                                  <1.0 or >1.0 to decrease or increase the
+                                  size, respectively (Number 0.000 or more)
+   -postext            float      [1.0] Space between text and ticks, blocks,
+                                  and ranges. Enter a number <1.0 or >1.0 to
                                   decrease or increase the size, respectively
+                                  (Number 0.000 or more)
 
    Advanced (Unprompted) qualifiers: (none)
    Associated qualifiers:
 
    "-graphout" associated qualifiers
-   -gprompt             boolean    Graph prompting
-   -gtitle              string     Graph title
-   -gsubtitle           string     Graph subtitle
-   -gxtitle             string     Graph x axis title
-   -gytitle             string     Graph y axis title
-   -goutfile            string     Output file for non interactive displays
-   -gdirectory          string     Output directory
+   -gprompt            boolean    Graph prompting
+   -gtitle             string     Graph title
+   -gsubtitle          string     Graph subtitle
+   -gxtitle            string     Graph x axis title
+   -gytitle            string     Graph y axis title
+   -goutfile           string     Output file for non interactive displays
+   -gdirectory         string     Output directory
 
    General qualifiers:
-   -auto                boolean    Turn off prompts
-   -stdout              boolean    Write standard output
-   -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for standard and additional values
-   -debug               boolean    Write debug output to program.dbg
-   -verbose             boolean    Report some/full command line options
-   -help                boolean    Report command line options. More
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
-   -warning             boolean    Report warnings
-   -error               boolean    Report errors
-   -fatal               boolean    Report fatal errors
-   -die                 boolean    Report deaths
-
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
 
 </pre>
 </td></tr></table>
@@ -165,7 +170,7 @@ Created lindna.ps
 
 <tr>
 <td>[-infile]<br>(Parameter 1)</td>
-<td>Input file containing mapping data</td>
+<td>Commands to the lindna drawing program file</td>
 <td>Input file</td>
 <td>inputfile</td>
 </tr>
@@ -187,7 +192,7 @@ Created lindna.ps
 <tr>
 <td>-graphout</td>
 <td>Graph type</td>
-<td>EMBOSS has a list of known devices, including postscript, ps, hpgl, hp7470, hp7580, meta, colourps, cps, xwindows, x11, tektronics, tekt, tek4107t, tek, none, null, text, data, xterm, png, xml</td>
+<td>EMBOSS has a list of known devices, including ps, hpgl, hp7470, hp7580, meta, cps, x11, tekt, tek, none, data, xterm, png</td>
 <td><i>EMBOSS_GRAPHICS</i> value, or x11</td>
 </tr>
 
@@ -315,7 +320,6 @@ Created lindna.ps
 </table>
 
 
-
 <H2>
     Input file format
 </H2>
@@ -364,7 +368,6 @@ MER13
 endlabel
 </pre>
 </td></tr></table><p>
-
 
 
 <p>
@@ -485,7 +488,6 @@ Output is to the specified graphics device.
 
 
 
-
 <H2>
     Data files
 </H2>
@@ -531,22 +533,77 @@ None.
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
-<tr><td><a href="abiview.html">abiview</a></td><td>Reads ABI file and display the trace</td></tr>
-<tr><td><a href="cirdna.html">cirdna</a></td><td>Draws circular maps of DNA constructs</td></tr>
-<tr><td><a href="pepnet.html">pepnet</a></td><td>Displays proteins as a helical net</td></tr>
-<tr><td><a href="pepwheel.html">pepwheel</a></td><td>Shows protein sequences as helices</td></tr>
-<tr><td><a href="prettyplot.html">prettyplot</a></td><td>Displays aligned sequences, with colouring and boxing</td></tr>
-<tr><td><a href="prettyseq.html">prettyseq</a></td><td>Output sequence with translated ranges</td></tr>
-<tr><td><a href="remap.html">remap</a></td><td>Display sequence with restriction sites, translation etc</td></tr>
-<tr><td><a href="seealso.html">seealso</a></td><td>Finds programs sharing group names</td></tr>
-<tr><td><a href="showalign.html">showalign</a></td><td>Displays a multiple sequence alignment</td></tr>
-<tr><td><a href="showdb.html">showdb</a></td><td>Displays information on the currently available databases</td></tr>
-<tr><td><a href="showfeat.html">showfeat</a></td><td>Show features of a sequence</td></tr>
-<tr><td><a href="showseq.html">showseq</a></td><td>Display a sequence with features, translation etc</td></tr>
-<tr><td><a href="sixpack.html">sixpack</a></td><td>Display a DNA sequence with 6-frame translation and ORFs</td></tr>
-<tr><td><a href="textsearch.html">textsearch</a></td><td>Search sequence documentation. Slow, use SRS and Entrez!</td></tr>
-</table>
+<tr>
+<td><a href="abiview.html">abiview</a></td>
+<td>Reads ABI file and display the trace</td>
+</tr>
 
+<tr>
+<td><a href="cirdna.html">cirdna</a></td>
+<td>Draws circular maps of DNA constructs</td>
+</tr>
+
+<tr>
+<td><a href="pepnet.html">pepnet</a></td>
+<td>Displays proteins as a helical net</td>
+</tr>
+
+<tr>
+<td><a href="pepwheel.html">pepwheel</a></td>
+<td>Shows protein sequences as helices</td>
+</tr>
+
+<tr>
+<td><a href="prettyplot.html">prettyplot</a></td>
+<td>Displays aligned sequences, with colouring and boxing</td>
+</tr>
+
+<tr>
+<td><a href="prettyseq.html">prettyseq</a></td>
+<td>Output sequence with translated ranges</td>
+</tr>
+
+<tr>
+<td><a href="remap.html">remap</a></td>
+<td>Display sequence with restriction sites, translation etc</td>
+</tr>
+
+<tr>
+<td><a href="seealso.html">seealso</a></td>
+<td>Finds programs sharing group names</td>
+</tr>
+
+<tr>
+<td><a href="showalign.html">showalign</a></td>
+<td>Displays a multiple sequence alignment</td>
+</tr>
+
+<tr>
+<td><a href="showdb.html">showdb</a></td>
+<td>Displays information on the currently available databases</td>
+</tr>
+
+<tr>
+<td><a href="showfeat.html">showfeat</a></td>
+<td>Show features of a sequence</td>
+</tr>
+
+<tr>
+<td><a href="showseq.html">showseq</a></td>
+<td>Display a sequence with features, translation etc</td>
+</tr>
+
+<tr>
+<td><a href="sixpack.html">sixpack</a></td>
+<td>Display a DNA sequence with 6-frame translation and ORFs</td>
+</tr>
+
+<tr>
+<td><a href="textsearch.html">textsearch</a></td>
+<td>Search sequence documentation. Slow, use SRS and Entrez!</td>
+</tr>
+
+</table>
 
 <H2>
     Author(s)
@@ -556,7 +613,6 @@ None.
 Nicolas Tourasse (nicolas.tourasse&nbsp;&copy;&nbsp;biotek.uio.no)
 <br>
 Biotechnology Center of Oslo
-
 
 <H2>
     History
@@ -569,7 +625,6 @@ Written  (2000) - Nicolas Tourasse
 Updated (2002) - Nicolas Tourasse
 
 
-
 <H2>
     Target users
 </H2>
@@ -577,12 +632,10 @@ Updated (2002) - Nicolas Tourasse
 This program is intended to be used by everyone and everything, from naive users to embedded scripts.
 
 
-
 <H2>
     Comments
 </H2>
 None
-
 
 </BODY>
 </HTML>

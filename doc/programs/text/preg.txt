@@ -659,7 +659,7 @@ Usage
 
 % preg 
 Regular expression search of a protein sequence
-Input sequence(s): tsw:*_rat
+Input protein sequence(s): tsw:*_rat
 Regular expression pattern: IA[QWF]A
 Output report [100k_rat.preg]: 
 
@@ -669,8 +669,9 @@ Output report [100k_rat.preg]:
 Command line arguments
 
    Standard (Mandatory) qualifiers:
-  [-sequence]          seqall     Sequence database USA
-  [-pattern]           regexp     Regular expression pattern
+  [-sequence]          seqall     Protein sequence(s) filename and optional
+                                  format, or reference (input USA)
+  [-pattern]           regexp     Any regular epression pattern is accepted
   [-outfile]           report     Output report file name
 
    Additional (Optional) qualifiers: (none)
@@ -678,59 +679,49 @@ Command line arguments
    Associated qualifiers:
 
    "-sequence" associated qualifiers
-   -sbegin1             integer    Start of each sequence to be used
-   -send1               integer    End of each sequence to be used
-   -sreverse1           boolean    Reverse (if DNA)
-   -sask1               boolean    Ask for begin/end/reverse
-   -snucleotide1        boolean    Sequence is nucleotide
-   -sprotein1           boolean    Sequence is protein
-   -slower1             boolean    Make lower case
-   -supper1             boolean    Make upper case
-   -sformat1            string     Input sequence format
-   -sdbname1            string     Database name
-   -sid1                string     Entryname
-   -ufo1                string     UFO features
-   -fformat1            string     Features format
-   -fopenfile1          string     Features file name
+   -sbegin1            integer    Start of each sequence to be used
+   -send1              integer    End of each sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
+
+   "-pattern" associated qualifiers
+   -pformat2           string     File format
+   -pname2             string     Pattern base name
 
    "-outfile" associated qualifiers
-   -rformat3            string     Report format
-   -rname3              string     Base file name
-   -rextension3         string     File name extension
-   -rdirectory3         string     Output directory
-   -raccshow3           boolean    Show accession number in the report
-   -rdesshow3           boolean    Show description in the report
-   -rscoreshow3         boolean    Show the score in the report
-   -rusashow3           boolean    Show the full USA in the report
+   -rformat3           string     Report format
+   -rname3             string     Base file name
+   -rextension3        string     File name extension
+   -rdirectory3        string     Output directory
+   -raccshow3          boolean    Show accession number in the report
+   -rdesshow3          boolean    Show description in the report
+   -rscoreshow3        boolean    Show the score in the report
+   -rusashow3          boolean    Show the full USA in the report
 
    General qualifiers:
-   -auto                boolean    Turn off prompts
-   -stdout              boolean    Write standard output
-   -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for standard and additional values
-   -debug               boolean    Write debug output to program.dbg
-   -verbose             boolean    Report some/full command line options
-   -help                boolean    Report command line options. More
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
-   -warning             boolean    Report warnings
-   -error               boolean    Report errors
-   -fatal               boolean    Report fatal errors
-   -die                 boolean    Report deaths
-
-
-   Standard (Mandatory) qualifiers Allowed values Default
-   [-sequence]
-   (Parameter 1) Sequence database USA Readable sequence(s) Required
-   [-pattern]
-   (Parameter 2) Regular expression pattern Any regular epression pattern
-   is accepted Required
-   [-outfile]
-   (Parameter 3) Output report file name Report output file
-   Additional (Optional) qualifiers Allowed values Default
-   (none)
-   Advanced (Unprompted) qualifiers Allowed values Default
-   (none)
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
 
 Input file format
 
@@ -748,7 +739,10 @@ Output file format
 
 ########################################
 # Program: preg
-# Rundate: Fri Jul 15 2005 12:00:00
+# Rundate: Sat Jul 15 2006 12:00:00
+# Commandline: preg
+#    -sequence tsw:*_rat
+#    -pattern IA[QWF]A
 # Report_format: seqtable
 # Report_file: 100k_rat.preg
 ########################################
@@ -762,8 +756,8 @@ Output file format
 #
 #=======================================
 
-  Start     End Sequence
-    390     393 IAQA
+  Start     End Pattern_name Sequence
+    390     393 regex1       IAQA
 
 #---------------------------------------
 #---------------------------------------

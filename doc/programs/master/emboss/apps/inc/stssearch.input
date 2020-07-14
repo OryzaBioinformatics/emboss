@@ -1,0 +1,16 @@
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+
+'tembl:eclac*' is a sequence entry in the example nucleic acid database 'tembl'
+<p>
+<p><h3>File: lac.primers</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+PrimA ACCAGACACCCATCAACAG    TATTTATGCCAGCCAGCCAG
+PrimB CGAAAGAATAAGAGCAGGCAAG GTAAGAGAAATAGACAGGCGG
+PrimC CGTCAGTATCCCCGTTTACAG  TATCGCCAAAATCACCGCC
+PrimD AATACGCAAACCGCCTCTCC   TTATCCGCTCACAATTCCACAC
+PrimE AATACGCAAACCGCCTCTCC   CACAACCCGCTCACAATTCCA
+</pre>
+</td></tr></table><p>

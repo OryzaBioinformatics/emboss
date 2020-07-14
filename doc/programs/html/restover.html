@@ -12,7 +12,6 @@
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
-
 restover
 </font></b>
 </td></tr>
@@ -21,12 +20,10 @@ restover
 <p>
 
 
-
 <H2>
     Function
 </H2>
 Find restriction enzymes producing specific overhang
-
 <H2>
     Description
 </H2>
@@ -65,7 +62,7 @@ input sequence.
 
 % <b>restover </b>
 Find restriction enzymes producing specific overhang
-Input sequence(s): <b>tembl:hsfau</b>
+Input nucleotide sequence(s): <b>tembl:hsfau</b>
 Overlap sequence: <b>cg</b>
 Output file [hsfau.restover]: <b></b>
 
@@ -75,72 +72,74 @@ Output file [hsfau.restover]: <b></b>
 
 
 
-
 <H2>
     Command line arguments
 </H2>
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
    Standard (Mandatory) qualifiers:
-  [-sequence]          seqall     Sequence database USA
-  [-seqcomp]           string     Overlap sequence
-  [-outfile]           outfile    Output file name
+  [-sequence]          seqall     Nucleotide sequence(s) filename and optional
+                                  format, or reference (input USA)
+  [-seqcomp]           string     Overlap sequence (Any string is accepted)
+  [-outfile]           outfile    [*.restover] Output file name
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers:
-   -datafile           datafile   Alternative RE data file
-   -min                integer    Minimum cuts per RE
-   -max                integer    Maximum cuts per RE
-   -single             boolean    Force single site only cuts
-   -threeprime         boolean    Use 3' overhang e.g. BamHI has CTAG as a 5'
-                                  overhang, and ApaI has CCGG as 3' overhang.
-   -[no]blunt          boolean    Allow blunt end cutters
-   -[no]sticky         boolean    Allow sticky end cutters
-   -[no]ambiguity      boolean    Allow ambiguous matches
-   -plasmid            boolean    Allow circular DNA
-   -[no]commercial     boolean    Only enzymes with suppliers
-   -html               boolean    Create HTML output
-   -[no]limit          boolean    Limits reports to one isoschizomer
-   -alphabetic         boolean    Sort output alphabetically
-   -fragments          boolean    Show fragment lengths
-   -name               boolean    Show sequence name
+   -datafile           datafile   Restriction enzyme data file (optional)
+   -min                integer    [1] Minimum cuts per RE (Integer from 1 to
+                                  1000)
+   -max                integer    [2000000000] Maximum cuts per RE (Integer up
+                                  to 2000000000)
+   -single             boolean    [N] Force single site only cuts
+   -threeprime         boolean    [N] Use 3' overhang e.g. BamHI has CTAG as a
+                                  5' overhang, and ApaI has CCGG as 3'
+                                  overhang.
+   -[no]blunt          boolean    [Y] Allow blunt end cutters
+   -[no]sticky         boolean    [Y] Allow sticky end cutters
+   -[no]ambiguity      boolean    [Y] Allow ambiguous matches
+   -plasmid            boolean    [N] Allow circular DNA
+   -[no]commercial     boolean    [Y] Only enzymes with suppliers
+   -html               boolean    [N] Create HTML output
+   -[no]limit          boolean    [Y] Limits reports to one isoschizomer
+   -alphabetic         boolean    [N] Sort output alphabetically
+   -fragments          boolean    [N] Show fragment lengths
+   -name               boolean    [N] Show sequence name
 
    Associated qualifiers:
 
    "-sequence" associated qualifiers
-   -sbegin1             integer    Start of each sequence to be used
-   -send1               integer    End of each sequence to be used
-   -sreverse1           boolean    Reverse (if DNA)
-   -sask1               boolean    Ask for begin/end/reverse
-   -snucleotide1        boolean    Sequence is nucleotide
-   -sprotein1           boolean    Sequence is protein
-   -slower1             boolean    Make lower case
-   -supper1             boolean    Make upper case
-   -sformat1            string     Input sequence format
-   -sdbname1            string     Database name
-   -sid1                string     Entryname
-   -ufo1                string     UFO features
-   -fformat1            string     Features format
-   -fopenfile1          string     Features file name
+   -sbegin1            integer    Start of each sequence to be used
+   -send1              integer    End of each sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
 
    "-outfile" associated qualifiers
-   -odirectory3         string     Output directory
+   -odirectory3        string     Output directory
 
    General qualifiers:
-   -auto                boolean    Turn off prompts
-   -stdout              boolean    Write standard output
-   -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for standard and additional values
-   -debug               boolean    Write debug output to program.dbg
-   -verbose             boolean    Report some/full command line options
-   -help                boolean    Report command line options. More
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
-   -warning             boolean    Report warnings
-   -error               boolean    Report errors
-   -fatal               boolean    Report fatal errors
-   -die                 boolean    Report deaths
-
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
 
 </pre>
 </td></tr></table>
@@ -154,7 +153,7 @@ Output file [hsfau.restover]: <b></b>
 
 <tr>
 <td>[-sequence]<br>(Parameter 1)</td>
-<td>Sequence database USA</td>
+<td>Nucleotide sequence(s) filename and optional format, or reference (input USA)</td>
 <td>Readable sequence(s)</td>
 <td><b>Required</b></td>
 </tr>
@@ -170,7 +169,7 @@ Output file [hsfau.restover]: <b></b>
 <td>[-outfile]<br>(Parameter 3)</td>
 <td>Output file name</td>
 <td>Output file</td>
-<td><i>&lt;sequence&gt;</i>.restover</td>
+<td>&nbsp;</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
@@ -191,7 +190,7 @@ Output file [hsfau.restover]: <b></b>
 
 <tr>
 <td>-datafile</td>
-<td>Alternative RE data file</td>
+<td>Restriction enzyme data file (optional)</td>
 <td>Data file</td>
 <td><i>File in the data file path</i></td>
 </tr>
@@ -296,7 +295,6 @@ Output file [hsfau.restover]: <b></b>
 
 </table>
 
-
 <H2>
     Input file format
 </H2>
@@ -392,7 +390,6 @@ SQ   Sequence 518 BP; 125 A; 139 C; 148 G; 106 T; 0 other;
 </td></tr></table><p>
 
 
-
 <H2>
     Output file format
 </H2>
@@ -432,7 +429,6 @@ SQ   Sequence 518 BP; 125 A; 139 C; 148 G; 106 T; 0 other;
 	409	MaeII           ACGT            409	411	
 </pre>
 </td></tr></table><p>
-
 
 <p>
 
@@ -489,7 +485,6 @@ The directories are searched in the following order:
 </ul>
 <p>
 
-
 <p>
 
 The EMBOSS REBASE restriction enzyme data files are stored iin
@@ -535,7 +530,6 @@ is the preferred (prototype) name.
 	 
 	          
 
-
 <H2>
     Notes
 </H2>
@@ -576,14 +570,37 @@ None.
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
-<tr><td><a href="recoder.html">recoder</a></td><td>Remove restriction sites but maintain same translation</td></tr>
-<tr><td><a href="redata.html">redata</a></td><td>Search REBASE for enzyme name, references, suppliers etc</td></tr>
-<tr><td><a href="remap.html">remap</a></td><td>Display sequence with restriction sites, translation etc</td></tr>
-<tr><td><a href="restrict.html">restrict</a></td><td>Finds restriction enzyme cleavage sites</td></tr>
-<tr><td><a href="showseq.html">showseq</a></td><td>Display a sequence with features, translation etc</td></tr>
-<tr><td><a href="silent.html">silent</a></td><td>Silent mutation restriction enzyme scan</td></tr>
-</table>
+<tr>
+<td><a href="recoder.html">recoder</a></td>
+<td>Remove restriction sites but maintain same translation</td>
+</tr>
 
+<tr>
+<td><a href="redata.html">redata</a></td>
+<td>Search REBASE for enzyme name, references, suppliers etc</td>
+</tr>
+
+<tr>
+<td><a href="remap.html">remap</a></td>
+<td>Display sequence with restriction sites, translation etc</td>
+</tr>
+
+<tr>
+<td><a href="restrict.html">restrict</a></td>
+<td>Finds restriction enzyme cleavage sites</td>
+</tr>
+
+<tr>
+<td><a href="showseq.html">showseq</a></td>
+<td>Display a sequence with features, translation etc</td>
+</tr>
+
+<tr>
+<td><a href="silent.html">silent</a></td>
+<td>Silent mutation restriction enzyme scan</td>
+</tr>
+
+</table>
 
 <H2>
     Author(s)
@@ -594,7 +611,6 @@ Cellular Biochemistry and Biophysics Program, Rockefeller
 Research Laboratories, Memorial Sloan-Kettering Cancer Center, 1275 York
 Avenue, Box 251,New York, NY 10021.
 
-
 <H2>
     History
 </H2>
@@ -602,18 +618,15 @@ Avenue, Box 251,New York, NY 10021.
 Written (Jan 2001) - Bernd Jagla
 
 
-
 <H2>
     Target users
 </H2>
 This program is intended to be used by everyone and everything, from naive users to embedded scripts.
 
-
 <H2>
     Comments
 </H2>
 None
-
 
 
 </BODY>

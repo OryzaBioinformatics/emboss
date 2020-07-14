@@ -12,7 +12,6 @@
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
-
 sirna
 </font></b>
 </td></tr>
@@ -21,12 +20,10 @@ sirna
 <p>
 
 
-
 <H2>
     Function
 </H2>
 Finds siRNA duplexes in mRNA
-
 
 <H2>
     Description
@@ -313,9 +310,9 @@ for each input sequence:
 
 % <b>sirna </b>
 Finds siRNA duplexes in mRNA
-Input sequence(s): <b>tembl:hsfau</b>
+Input nucleotide sequence(s): <b>tembl:hsfau</b>
 Output report [hsfau.sirna]: <b></b>
-Output sequence [hsfau.fasta]: <b></b>
+output sequence(s) [hsfau.fasta]: <b></b>
 
 </pre></td></tr></table><p>
 <p>
@@ -331,14 +328,13 @@ Show the first two bases of the 23 base target region in brackets. These do not 
 
 % <b>sirna -context </b>
 Finds siRNA duplexes in mRNA
-Input sequence(s): <b>tembl:hsfau</b>
+Input nucleotide sequence(s): <b>tembl:hsfau</b>
 Output report [hsfau.sirna]: <b></b>
-Output sequence [hsfau.fasta]: <b></b>
+output sequence(s) [hsfau.fasta]: <b></b>
 
 </pre></td></tr></table><p>
 <p>
 <a href="#output.2">Go to the output files for this example</a><p><p>
-
 
 
 
@@ -348,7 +344,8 @@ Output sequence [hsfau.fasta]: <b></b>
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
    Standard (Mandatory) qualifiers:
-  [-sequence]          seqall     Sequence database USA
+  [-sequence]          seqall     Nucleotide sequence(s) filename and optional
+                                  format, or reference (input USA)
   [-outfile]           report     The output is a table of the forward and
                                   reverse parts of the 21 base siRNA duplex.
                                   Both the forward and reverse sequences are
@@ -364,39 +361,40 @@ Output sequence [hsfau.fasta]: <b></b>
                                   withthe first two bases in brackets. These
                                   first two bases do not form part of the
                                   siRNA probe to be ordered.
-  [-outseq]            seqoutall  This is a file of the sequences of the 23
-                                  base regions that the siRNAs are selected
-                                  from. You may use it to do searches of mRNA
-                                  databases (e.g. REFSEQ) to confirm that the
-                                  probes are unique to the gene you wish to
-                                  use it on.
+  [-outseq]            seqoutall  [<sequence>.<format>] This is a file of the
+                                  sequences of the 23 base regions that the
+                                  siRNAs are selected from. You may use it to
+                                  do searches of mRNA databases (e.g. REFSEQ)
+                                  to confirm that the probes are unique to the
+                                  gene you wish to use it on.
 
    Additional (Optional) qualifiers:
-   -poliii             boolean    This option allows you to select only the 21
-                                  base probes that start with a purine and so
-                                  can be expressed from Pol III expression
-                                  vectors. This is the NARN(17)YNN pattern
-                                  that has been suggested by Tuschl et al.
-   -aa                 boolean    This option allows you to select only those
-                                  23 base regions that start with AA. If this
-                                  option is not selected then regions that
-                                  start with AA will be favoured by giving
+   -poliii             boolean    [N] This option allows you to select only
+                                  the 21 base probes that start with a purine
+                                  and so can be expressed from Pol III
+                                  expression vectors. This is the NARN(17)YNN
+                                  pattern that has been suggested by Tuschl et
+                                  al.
+   -aa                 boolean    [N] This option allows you to select only
+                                  those 23 base regions that start with AA. If
+                                  this option is not selected then regions
+                                  that start with AA will be favoured by
+                                  giving them a higher score, but regions that
+                                  do not start with AA will also be reported.
+   -tt                 boolean    [N] This option allows you to select only
+                                  those 23 base regions that end with TT. If
+                                  this option is not selected then regions
+                                  that end with TT will be favoured by giving
                                   them a higher score, but regions that do not
-                                  start with AA will also be reported.
-   -tt                 boolean    This option allows you to select only those
-                                  23 base regions that end with TT. If this
-                                  option is not selected then regions that end
-                                  with TT will be favoured by giving them a
-                                  higher score, but regions that do not end
-                                  with TT will also be reported.
-   -[no]polybase       boolean    If this option is FALSE then only those 23
-                                  base regions that have no repeat of 4 or
+                                  end with TT will also be reported.
+   -[no]polybase       boolean    [Y] If this option is FALSE then only those
+                                  23 base regions that have no repeat of 4 or
                                   more of any bases in a row will be reported.
                                   No regions will ever be reported that have
                                   4 or more G's in a row.
-   -context            boolean    The output report file gives the sequences
-                                  of the 21 base siRNA regions ready to be
-                                  ordered. This does not give you an
+   -context            boolean    [N] The output report file gives the
+                                  sequences of the 21 base siRNA regions ready
+                                  to be ordered. This does not give you an
                                   indication of the 2 bases before the 21
                                   bases. It is often interesting to see which
                                   of the suggested possible probe regions have
@@ -413,58 +411,57 @@ Output sequence [hsfau.fasta]: <b></b>
    Associated qualifiers:
 
    "-sequence" associated qualifiers
-   -sbegin1             integer    Start of each sequence to be used
-   -send1               integer    End of each sequence to be used
-   -sreverse1           boolean    Reverse (if DNA)
-   -sask1               boolean    Ask for begin/end/reverse
-   -snucleotide1        boolean    Sequence is nucleotide
-   -sprotein1           boolean    Sequence is protein
-   -slower1             boolean    Make lower case
-   -supper1             boolean    Make upper case
-   -sformat1            string     Input sequence format
-   -sdbname1            string     Database name
-   -sid1                string     Entryname
-   -ufo1                string     UFO features
-   -fformat1            string     Features format
-   -fopenfile1          string     Features file name
+   -sbegin1            integer    Start of each sequence to be used
+   -send1              integer    End of each sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
 
    "-outfile" associated qualifiers
-   -rformat2            string     Report format
-   -rname2              string     Base file name
-   -rextension2         string     File name extension
-   -rdirectory2         string     Output directory
-   -raccshow2           boolean    Show accession number in the report
-   -rdesshow2           boolean    Show description in the report
-   -rscoreshow2         boolean    Show the score in the report
-   -rusashow2           boolean    Show the full USA in the report
+   -rformat2           string     Report format
+   -rname2             string     Base file name
+   -rextension2        string     File name extension
+   -rdirectory2        string     Output directory
+   -raccshow2          boolean    Show accession number in the report
+   -rdesshow2          boolean    Show description in the report
+   -rscoreshow2        boolean    Show the score in the report
+   -rusashow2          boolean    Show the full USA in the report
 
    "-outseq" associated qualifiers
-   -osformat3           string     Output seq format
-   -osextension3        string     File name extension
-   -osname3             string     Base file name
-   -osdirectory3        string     Output directory
-   -osdbname3           string     Database name to add
-   -ossingle3           boolean    Separate file for each entry
-   -oufo3               string     UFO features
-   -offormat3           string     Features format
-   -ofname3             string     Features file name
-   -ofdirectory3        string     Output directory
+   -osformat3          string     Output seq format
+   -osextension3       string     File name extension
+   -osname3            string     Base file name
+   -osdirectory3       string     Output directory
+   -osdbname3          string     Database name to add
+   -ossingle3          boolean    Separate file for each entry
+   -oufo3              string     UFO features
+   -offormat3          string     Features format
+   -ofname3            string     Features file name
+   -ofdirectory3       string     Output directory
 
    General qualifiers:
-   -auto                boolean    Turn off prompts
-   -stdout              boolean    Write standard output
-   -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for standard and additional values
-   -debug               boolean    Write debug output to program.dbg
-   -verbose             boolean    Report some/full command line options
-   -help                boolean    Report command line options. More
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
-   -warning             boolean    Report warnings
-   -error               boolean    Report errors
-   -fatal               boolean    Report fatal errors
-   -die                 boolean    Report deaths
-
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
 
 </pre>
 </td></tr></table>
@@ -478,7 +475,7 @@ Output sequence [hsfau.fasta]: <b></b>
 
 <tr>
 <td>[-sequence]<br>(Parameter 1)</td>
-<td>Sequence database USA</td>
+<td>Nucleotide sequence(s) filename and optional format, or reference (input USA)</td>
 <td>Readable sequence(s)</td>
 <td><b>Required</b></td>
 </tr>
@@ -494,7 +491,7 @@ Output sequence [hsfau.fasta]: <b></b>
 <td>[-outseq]<br>(Parameter 3)</td>
 <td>This is a file of the sequences of the 23 base regions that the siRNAs are selected from. You may use it to do searches of mRNA databases (e.g. REFSEQ) to confirm that the probes are unique to the gene you wish to use it on.</td>
 <td>Writeable sequence(s)</td>
-<td><i>&lt;sequence&gt;</i>.<i>format</i></td>
+<td>&nbsp;</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
@@ -549,7 +546,6 @@ Output sequence [hsfau.fasta]: <b></b>
 </tr>
 
 </table>
-
 
 <H2>
     Input file format
@@ -646,7 +642,6 @@ SQ   Sequence 518 BP; 125 A; 139 C; 148 G; 106 T; 0 other;
 </td></tr></table><p>
 
 
-
 <H2>
     Output file format
 </H2>
@@ -671,7 +666,6 @@ http://emboss.sf.net/docs/themes/ReportFormats.html</A>
 for further information on report formats.
 
 <p>
-
 <p>
 
 <b>sirna</b> 
@@ -687,7 +681,9 @@ outputs a report format file. The default format is 'table'
 <pre>
 ########################################
 # Program: sirna
-# Rundate: Fri Jul 15 2005 12:00:00
+# Rundate: Sat Jul 15 2006 12:00:00
+# Commandline: sirna
+#    -sequence tembl:hsfau
 # Report_format: table
 # Report_file: hsfau.sirna
 ########################################
@@ -733,8 +729,6 @@ outputs a report format file. The default format is 'table'
     321     343   6.000   50.0 GACUCCUAAGGUGGCCAAAdTdT UUUGGCCACCUUAGGAGUCdTdT
     323     345   6.000   50.0 CUCCUAAGGUGGCCAAACAdTdT UGUUUGGCCACCUUAGGAGdTdT
     329     351   6.000   50.0 AGGUGGCCAAACAGGAGAAdTdT UUCUCCUGUUUGGCCACCUdTdT
-    356     378   6.000   50.0 AGAAGACAGGUCGGGCUAAdTdT UUAGCCCGACCUGUCUUCUdTdT
-    419     441   6.000   50.0 CCUUUGGCAAGAAGAAGGGdTdT CCCUUCUUCUUGCCAAAGGdTdT
 
 
 <font color=red>  [Part of this file has been deleted for brevity]</font>
@@ -910,7 +904,10 @@ taaaaaagccacttagttcagtc
 <pre>
 ########################################
 # Program: sirna
-# Rundate: Fri Jul 15 2005 12:00:00
+# Rundate: Sat Jul 15 2006 12:00:00
+# Commandline: sirna
+#    -context
+#    -sequence tembl:hsfau
 # Report_format: table
 # Report_file: hsfau.sirna
 ########################################
@@ -955,9 +952,6 @@ taaaaaagccacttagttcagtc
     129     151   6.000   55.0 (AA)GGCUCAUGUAGCCUCACUGdTdT CAGUGAGGCUACAUGAGCCdTdT
     165     187   6.000   50.0 (GA)AGAUCAAGUCGUGCUCCUGdTdT CAGGAGCACGACUUGAUCUdTdT
     278     300   6.000   50.0 (UA)AAGUUCAUGGUUCCCUGGCdTdT GCCAGGGAACCAUGAACUUdTdT
-    314     336   6.000   50.0 (GA)GAGGUCAGACUCCUAAGGUdTdT ACCUUAGGAGUCUGACCUCdTdT
-    321     343   6.000   50.0 (CA)GACUCCUAAGGUGGCCAAAdTdT UUUGGCCACCUUAGGAGUCdTdT
-    323     345   6.000   50.0 (GA)CUCCUAAGGUGGCCAAACAdTdT UGUUUGGCCACCUUAGGAGdTdT
 
 
 <font color=red>  [Part of this file has been deleted for brevity]</font>
@@ -1015,7 +1009,6 @@ taaaaaagccacttagttcagtc
 #---------------------------------------
 </pre>
 </td></tr></table><p>
-
 
 <p>
 
@@ -1083,16 +1076,47 @@ None.
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
-<tr><td><a href="banana.html">banana</a></td><td>Bending and curvature plot in B-DNA</td></tr>
-<tr><td><a href="btwisted.html">btwisted</a></td><td>Calculates the twisting in a B-DNA sequence</td></tr>
-<tr><td><a href="chaos.html">chaos</a></td><td>Create a chaos game representation plot for a sequence</td></tr>
-<tr><td><a href="compseq.html">compseq</a></td><td>Count composition of dimer/trimer/etc words in a sequence</td></tr>
-<tr><td><a href="dan.html">dan</a></td><td>Calculates DNA RNA/DNA melting temperature</td></tr>
-<tr><td><a href="freak.html">freak</a></td><td>Residue/base frequency table or plot</td></tr>
-<tr><td><a href="isochore.html">isochore</a></td><td>Plots isochores in large DNA sequences</td></tr>
-<tr><td><a href="wordcount.html">wordcount</a></td><td>Counts words of a specified size in a DNA sequence</td></tr>
-</table>
+<tr>
+<td><a href="banana.html">banana</a></td>
+<td>Bending and curvature plot in B-DNA</td>
+</tr>
 
+<tr>
+<td><a href="btwisted.html">btwisted</a></td>
+<td>Calculates the twisting in a B-DNA sequence</td>
+</tr>
+
+<tr>
+<td><a href="chaos.html">chaos</a></td>
+<td>Create a chaos game representation plot for a sequence</td>
+</tr>
+
+<tr>
+<td><a href="compseq.html">compseq</a></td>
+<td>Count composition of dimer/trimer/etc words in a sequence</td>
+</tr>
+
+<tr>
+<td><a href="dan.html">dan</a></td>
+<td>Calculates DNA RNA/DNA melting temperature</td>
+</tr>
+
+<tr>
+<td><a href="freak.html">freak</a></td>
+<td>Residue/base frequency table or plot</td>
+</tr>
+
+<tr>
+<td><a href="isochore.html">isochore</a></td>
+<td>Plots isochores in large DNA sequences</td>
+</tr>
+
+<tr>
+<td><a href="wordcount.html">wordcount</a></td>
+<td>Counts words of a specified size in a DNA sequence</td>
+</tr>
+
+</table>
 
 
 <H2>
@@ -1105,25 +1129,21 @@ MRC Rosalind Franklin Centre for Genomics Research
 Wellcome Trust Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
 
 
-
 <H2>
     History
 </H2>
 
 Written (November 2002) - Gary Williams.
 
-
 <H2>
     Target users
 </H2>
 This program is intended to be used by everyone and everything, from naive users to embedded scripts.
 
-
 <H2>
     Comments
 </H2>
 None
-
 
 
 </BODY>

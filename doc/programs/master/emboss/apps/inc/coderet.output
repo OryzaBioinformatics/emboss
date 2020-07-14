@@ -1,0 +1,60 @@
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: hsferg1.cds</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+&gt;x03487_cds_1
+atgacgaccgcgtccacctcgcaggtgcgccagaactaccaccaggactcagaggccgcc
+atcaaccgccagatcaacctggagctctacgcctcctacgtttacctgtccatgtcttac
+tactttgaccgcgatgatgtggctttgaagaactttgccaaatactttcttcaccaatct
+catgaggagagggaacatgctgagaaactgatgaagctgcagaaccaacgaggtggccga
+atcttccttcaggatatcaagaaaccagactgtgatgactgggagagcgggctgaatgca
+atggagtgtgcattacatttggaaaaaaatgtgaatcagtcactactggaactgcacaaa
+ctggccactgacaaaaatgacccccatttgtgtgacttcattgagacacattacctgaat
+gagcaggtgaaagccatcaaagaattgggtgaccacgtgaccaacttgcgcaagatggga
+gcgcccgaatctggcttggcggaatatctctttgacaagcacaccctgggagacagtgat
+aatgaaagctaa
+</pre>
+</td></tr></table><p>
+<p><h3>File: hsferg1.mrna</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+&gt;x03487_mrna_1
+cagacgttcttcgccgagagtcgtcggggtttcctgcttcaacagtgcttggacggaacc
+cggcgctcgttccccaccccggccggccgcccatagccagccctccgtcgacctcttcac
+cgcaccctcggactgccccaaggcccccgccgccgctccagcgccgcgcagccaccgccg
+ccgccgccgcctctccttagtcgccgccatgacgaccgcgtccacctcgcaggtgcgcca
+gaactaccaccaggactcagaggccgccatcaaccgccagatcaacctggagctctacgc
+ctcctacgtttacctgtccatg
+</pre>
+</td></tr></table><p>
+<p><h3>File: hsferg1.prot</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+&gt;x03487_pro_1
+MTTASTSQVRQNYHQDSEAAINRQINLELYASYVYLSMSYYFDRDDVALKNFAKYFLHQS
+HEEREHAEKLMKLQNQRGGRIFLQDIKKPDCDDWESGLNAMECALHLEKNVNQSLLELHK
+LATDKNDPHLCDFIETHYLNEQVKAIKELGDHVTNLRKMGAPESGLAEYLFDKHTLGDSD
+NES
+</pre>
+</td></tr></table><p>
+<p><h3>File: hsferg1.coderet</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+   CDS  mRNA Trans Total Sequence
+ ===== ===== ===== ===== ========
+     1     1     1     3 HSFERG1
+</pre>
+</td></tr></table><p>
+
+<a name="output.2"></a>
+<h3>Output files for usage example 2</h3>
+<p><h3>File: hsferg1.coderet</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+  mRNA Total Sequence
+ ===== ===== ========
+     1     1 HSFERG1
+</pre>
+</td></tr></table><p>

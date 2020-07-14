@@ -13,7 +13,6 @@
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
-
 getorf
 </font></b>
 </td></tr>
@@ -22,12 +21,10 @@ getorf
 <p>
 
 
-
 <H2>
     Function
 </H2>
 Finds and extracts open reading frames (ORFs)
-
 <H2>
     Description
 </H2>
@@ -63,13 +60,12 @@ investigating.
 
 % <b>getorf -minsize 300 </b>
 Finds and extracts open reading frames (ORFs)
-Input sequence(s): <b>tembl:eclaci</b>
-Output sequence [eclaci.orf]: <b></b>
+Input nucleotide sequence(s): <b>tembl:eclaci</b>
+protein output sequence(s) [eclaci.orf]: <b></b>
 
 </pre></td></tr></table><p>
 <p>
 <a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
-
 
 <H2>
     Command line arguments
@@ -77,14 +73,34 @@ Output sequence [eclaci.orf]: <b></b>
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
    Standard (Mandatory) qualifiers:
-  [-sequence]          seqall     Sequence database USA
-  [-outseq]            seqoutall  Output sequence(s) USA
+  [-sequence]          seqall     Nucleotide sequence(s) filename and optional
+                                  format, or reference (input USA)
+  [-outseq]            seqoutall  [<sequence>.<format>] Protein sequence
+                                  set(s) filename and optional format (output
+                                  USA)
 
    Additional (Optional) qualifiers:
-   -table              menu       Code to use
-   -minsize            integer    Minimum nucleotide size of ORF to report
-   -maxsize            integer    Maximum nucleotide size of ORF to report
-   -find               menu       This is a small menu of possible output
+   -table              menu       [0] Code to use (Values: 0 (Standard); 1
+                                  (Standard (with alternative initiation
+                                  codons)); 2 (Vertebrate Mitochondrial); 3
+                                  (Yeast Mitochondrial); 4 (Mold, Protozoan,
+                                  Coelenterate Mitochondrial and
+                                  Mycoplasma/Spiroplasma); 5 (Invertebrate
+                                  Mitochondrial); 6 (Ciliate Macronuclear and
+                                  Dasycladacean); 9 (Echinoderm
+                                  Mitochondrial); 10 (Euplotid Nuclear); 11
+                                  (Bacterial); 12 (Alternative Yeast Nuclear);
+                                  13 (Ascidian Mitochondrial); 14 (Flatworm
+                                  Mitochondrial); 15 (Blepharisma
+                                  Macronuclear); 16 (Chlorophycean
+                                  Mitochondrial); 21 (Trematode
+                                  Mitochondrial); 22 (Scenedesmus obliquus);
+                                  23 (Thraustochytrium Mitochondrial))
+   -minsize            integer    [30] Minimum nucleotide size of ORF to
+                                  report (Any integer value)
+   -maxsize            integer    [1000000] Maximum nucleotide size of ORF to
+                                  report (Any integer value)
+   -find               menu       [0] This is a small menu of possible output
                                   options. The first four options are to
                                   select either the protein translation or the
                                   original nucleic acid sequence of the open
@@ -98,73 +114,81 @@ Output sequence [eclaci.orf]: <b></b>
                                   statistical properties of the regions around
                                   potential START or STOP codons. The last
                                   option assumes that ORF lengths are
-                                  calculated between two STOP codons.
+                                  calculated between two STOP codons. (Values:
+                                  0 (Translation of regions between STOP
+                                  codons); 1 (Translation of regions between
+                                  START and STOP codons); 2 (Nucleic sequences
+                                  between STOP codons); 3 (Nucleic sequences
+                                  between START and STOP codons); 4
+                                  (Nucleotides flanking START codons); 5
+                                  (Nucleotides flanking initial STOP codons);
+                                  6 (Nucleotides flanking ending STOP codons))
 
    Advanced (Unprompted) qualifiers:
-   -[no]methionine     boolean    START codons at the beginning of protein
+   -[no]methionine     boolean    [Y] START codons at the beginning of protein
                                   products will usually code for Methionine,
                                   despite what the codon will code for when it
                                   is internal to a protein. This qualifier
                                   sets all such START codons to code for
                                   Methionine by default.
-   -circular           boolean    Is the sequence circular
-   -[no]reverse        boolean    Set this to be false if you do not wish to
-                                  find ORFs in the reverse complement of the
-                                  sequence.
-   -flanking           integer    If you have chosen one of the options of the
-                                  type of sequence to find that gives the
-                                  flanking sequence around a STOP or START
+   -circular           boolean    [N] Is the sequence circular
+   -[no]reverse        boolean    [Y] Set this to be false if you do not wish
+                                  to find ORFs in the reverse complement of
+                                  the sequence.
+   -flanking           integer    [100] If you have chosen one of the options
+                                  of the type of sequence to find that gives
+                                  the flanking sequence around a STOP or START
                                   codon, this allows you to set the number of
                                   nucleotides either side of that codon to
                                   output. If the region of flanking
                                   nucleotides crosses the start or end of the
                                   sequence, no output is given for this codon.
+                                  (Any integer value)
 
    Associated qualifiers:
 
    "-sequence" associated qualifiers
-   -sbegin1             integer    Start of each sequence to be used
-   -send1               integer    End of each sequence to be used
-   -sreverse1           boolean    Reverse (if DNA)
-   -sask1               boolean    Ask for begin/end/reverse
-   -snucleotide1        boolean    Sequence is nucleotide
-   -sprotein1           boolean    Sequence is protein
-   -slower1             boolean    Make lower case
-   -supper1             boolean    Make upper case
-   -sformat1            string     Input sequence format
-   -sdbname1            string     Database name
-   -sid1                string     Entryname
-   -ufo1                string     UFO features
-   -fformat1            string     Features format
-   -fopenfile1          string     Features file name
+   -sbegin1            integer    Start of each sequence to be used
+   -send1              integer    End of each sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
 
    "-outseq" associated qualifiers
-   -osformat2           string     Output seq format
-   -osextension2        string     File name extension
-   -osname2             string     Base file name
-   -osdirectory2        string     Output directory
-   -osdbname2           string     Database name to add
-   -ossingle2           boolean    Separate file for each entry
-   -oufo2               string     UFO features
-   -offormat2           string     Features format
-   -ofname2             string     Features file name
-   -ofdirectory2        string     Output directory
+   -osformat2          string     Output seq format
+   -osextension2       string     File name extension
+   -osname2            string     Base file name
+   -osdirectory2       string     Output directory
+   -osdbname2          string     Database name to add
+   -ossingle2          boolean    Separate file for each entry
+   -oufo2              string     UFO features
+   -offormat2          string     Features format
+   -ofname2            string     Features file name
+   -ofdirectory2       string     Output directory
 
    General qualifiers:
-   -auto                boolean    Turn off prompts
-   -stdout              boolean    Write standard output
-   -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for standard and additional values
-   -debug               boolean    Write debug output to program.dbg
-   -verbose             boolean    Report some/full command line options
-   -help                boolean    Report command line options. More
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
-   -warning             boolean    Report warnings
-   -error               boolean    Report errors
-   -fatal               boolean    Report fatal errors
-   -die                 boolean    Report deaths
-
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
 
 </pre>
 </td></tr></table>
@@ -178,16 +202,16 @@ Output sequence [eclaci.orf]: <b></b>
 
 <tr>
 <td>[-sequence]<br>(Parameter 1)</td>
-<td>Sequence database USA</td>
+<td>Nucleotide sequence(s) filename and optional format, or reference (input USA)</td>
 <td>Readable sequence(s)</td>
 <td><b>Required</b></td>
 </tr>
 
 <tr>
 <td>[-outseq]<br>(Parameter 2)</td>
-<td>Output sequence(s) USA</td>
+<td>Protein sequence set(s) filename and optional format (output USA)</td>
 <td>Writeable sequence(s)</td>
-<td><i>&lt;sequence&gt;</i>.<i>format</i></td>
+<td>&nbsp;</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
@@ -259,7 +283,6 @@ Output sequence [eclaci.orf]: <b></b>
 </tr>
 
 </table>
-
 
 <H2>
     Input file format
@@ -349,7 +372,6 @@ SQ   Sequence 1113 BP; 249 A; 304 C; 322 G; 238 T; 0 other;
 </td></tr></table><p>
 
 
-
 <H2>
     Output file format
 </H2>
@@ -383,7 +405,6 @@ RFNRRDNLRRRVQGQTGGGNANQQRLFARQLLCHAVGNVIQLRHRRFHFFPRFRRNVAGL
 VHHAGNGLIRDTGILCDIV
 </pre>
 </td></tr></table><p>
-
 
 <p> 
 
@@ -485,7 +506,6 @@ The directories are searched in the following order:
 </ul>
 <p>
 
-
 <p>
 The Genetic Code data files are based on the NCBI genetic code tables.
 Their names and descriptions are:
@@ -579,7 +599,6 @@ Base3  = TCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAG
 
 
 
-
 <H2>
     Notes
 </H2>
@@ -622,15 +641,42 @@ It always exits with status 0.
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
-<tr><td><a href="marscan.html">marscan</a></td><td>Finds MAR/SAR sites in nucleic sequences</td></tr>
-<tr><td><a href="plotorf.html">plotorf</a></td><td>Plot potential open reading frames</td></tr>
-<tr><td><a href="showorf.html">showorf</a></td><td>Pretty output of DNA translations</td></tr>
-<tr><td><a href="sixpack.html">sixpack</a></td><td>Display a DNA sequence with 6-frame translation and ORFs</td></tr>
-<tr><td><a href="syco.html">syco</a></td><td>Synonymous codon usage Gribskov statistic plot</td></tr>
-<tr><td><a href="tcode.html">tcode</a></td><td>Fickett TESTCODE statistic to identify protein-coding DNA</td></tr>
-<tr><td><a href="wobble.html">wobble</a></td><td>Wobble base plot</td></tr>
-</table>
+<tr>
+<td><a href="marscan.html">marscan</a></td>
+<td>Finds MAR/SAR sites in nucleic sequences</td>
+</tr>
 
+<tr>
+<td><a href="plotorf.html">plotorf</a></td>
+<td>Plot potential open reading frames</td>
+</tr>
+
+<tr>
+<td><a href="showorf.html">showorf</a></td>
+<td>Pretty output of DNA translations</td>
+</tr>
+
+<tr>
+<td><a href="sixpack.html">sixpack</a></td>
+<td>Display a DNA sequence with 6-frame translation and ORFs</td>
+</tr>
+
+<tr>
+<td><a href="syco.html">syco</a></td>
+<td>Synonymous codon usage Gribskov statistic plot</td>
+</tr>
+
+<tr>
+<td><a href="tcode.html">tcode</a></td>
+<td>Fickett TESTCODE statistic to identify protein-coding DNA</td>
+</tr>
+
+<tr>
+<td><a href="wobble.html">wobble</a></td>
+<td>Wobble base plot</td>
+</tr>
+
+</table>
 <P>
 <ul>
 
@@ -649,7 +695,6 @@ MRC Rosalind Franklin Centre for Genomics Research
 Wellcome Trust Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
 
 
-
 <H2>
     History
 </H2>
@@ -665,18 +710,15 @@ November 2002 - added indication of reverse sense ORFs
 November 2002 - added indication of ORFs that cross the breakpoint at
 position 1 in circular genomes. 
 
-
 <H2>
     Target users
 </H2>
 This program is intended to be used by everyone and everything, from naive users to embedded scripts.
 
-
 <H2>
     Comments
 </H2>
 None
-
 
 </BODY>
 </HTML>

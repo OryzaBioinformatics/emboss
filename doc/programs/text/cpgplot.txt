@@ -64,7 +64,7 @@ Minimum length of an island [200]:
 Minimum observed/expected [0.6]: 
 Minimum percentage [50.]: 
 Output file [rnu68037.cpgplot]: 
-Output features [rnu68037.gff]: 
+Features output [rnu68037.gff]: 
 
 Created cpgplot.ps
 
@@ -74,39 +74,46 @@ Created cpgplot.ps
 Command line arguments
 
    Standard (Mandatory) qualifiers:
-  [-sequence]          seqall     Sequence database USA
-   -window             integer    The percentage CG content and the Observed
-                                  frequency of CG is calculated within a
-                                  window whose size is set by this parameter.
-                                  The window is moved down the sequence and
-                                  these statistics are calculated at each
-                                  postition that the window is moved to.
-   -minlen             integer    This sets the minimum length that a CpG
-                                  island has to be before it is reported.
-   -minoe              float      This sets the minimum average observed to
-                                  expected ratio of C plus G to CpG in a set
-                                  of 10 windows that are required before a CpG
-                                  island is reported.
-   -minpc              float      This sets the minimum average percentage of
-                                  G plus C a set of 10 windows that are
-                                  required before a CpG island is reported.
-  [-outfile]           outfile    This sets the name of the file holding the
-                                  report of the input sequence name, CpG
-                                  island parameters and the output details of
-                                  any CpG islands that are found.
-  [-graph]             xygraph    Graph type
-  [-outfeat]           featout    File for output features
+  [-sequence]          seqall     Nucleotide sequence(s) filename and optional
+                                  format, or reference (input USA)
+   -window             integer    [100] The percentage CG content and the
+                                  Observed frequency of CG is calculated
+                                  within a window whose size is set by this
+                                  parameter. The window is moved down the
+                                  sequence and these statistics are calculated
+                                  at each postition that the window is moved
+                                  to. (Integer 1 or more)
+   -minlen             integer    [200] This sets the minimum length that a
+                                  CpG island has to be before it is reported.
+                                  (Integer 1 or more)
+   -minoe              float      [0.6] This sets the minimum average observed
+                                  to expected ratio of C plus G to CpG in a
+                                  set of 10 windows that are required before a
+                                  CpG island is reported. (Number from 0.000
+                                  to 10.000)
+   -minpc              float      [50.] This sets the minimum average
+                                  percentage of G plus C a set of 10 windows
+                                  that are required before a CpG island is
+                                  reported. (Number from 0.000 to 100.000)
+  [-outfile]           outfile    [*.cpgplot] This sets the name of the file
+                                  holding the report of the input sequence
+                                  name, CpG island parameters and the output
+                                  details of any CpG islands that are found.
+  [-graph]             xygraph    [$EMBOSS_GRAPHICS value, or x11] Graph type
+                                  (ps, hpgl, hp7470, hp7580, meta, cps, x11,
+                                  tekt, tek, none, data, xterm, png)
+  [-outfeat]           featout    [unknown.gff] File for output features
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers:
-   -[no]obsexp         boolean    If this is set to true then the graph of the
-                                  observed to expected ratio of C plus G to
-                                  CpG within a window is displayed.
-   -[no]cg             boolean    If this is set to true then the graph of the
-                                  regions which have been determined to be
-                                  CpG islands is displayed.
-   -[no]pc             boolean    If this is set to true then the graph of the
-                                  percentage C plus G within a window is
+   -[no]obsexp         boolean    [Y] If this is set to true then the graph of
+                                  the observed to expected ratio of C plus G
+                                  to CpG within a window is displayed.
+   -[no]cg             boolean    [Y] If this is set to true then the graph of
+                                  the regions which have been determined to
+                                  be CpG islands is displayed.
+   -[no]pc             boolean    [Y] If this is set to true then the graph of
+                                  the percentage C plus G within a window is
                                   displayed.
 
    Associated qualifiers:
@@ -160,47 +167,7 @@ Command line arguments
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
-   -die                boolean    Report deaths
-
-
-   Standard (Mandatory) qualifiers Allowed values Default
-   [-sequence]
-   (Parameter 1) Sequence database USA Readable sequence(s) Required
-   -window The percentage CG content and the Observed frequency of CG is
-   calculated within a window whose size is set by this parameter. The
-   window is moved down the sequence and these statistics are calculated
-   at each postition that the window is moved to. Integer 1 or more 100
-   -minlen This sets the minimum length that a CpG island has to be
-   before it is reported. Integer 1 or more 200
-   -minoe This sets the minimum average observed to expected ratio of C
-   plus G to CpG in a set of 10 windows that are required before a CpG
-   island is reported. Number from 0.000 to 10.000 0.6
-   -minpc This sets the minimum average percentage of G plus C a set of
-   10 windows that are required before a CpG island is reported. Number
-   from 0.000 to 100.000 50.
-   [-outfile]
-   (Parameter 2) This sets the name of the file holding the report of the
-   input sequence name, CpG island parameters and the output details of
-   any CpG islands that are found. Output file <sequence>.cpgplot
-   [-graph]
-   (Parameter 3) Graph type EMBOSS has a list of known devices, including
-   postscript, ps, hpgl, hp7470, hp7580, meta, colourps, cps, xwindows,
-   x11, tektronics, tekt, tek4107t, tek, none, null, text, data, xterm,
-   png, xml EMBOSS_GRAPHICS value, or x11
-   [-outfeat]
-   (Parameter 4) File for output features Writeable feature table
-   unknown.gff
-   Additional (Optional) qualifiers Allowed values Default
-   (none)
-   Advanced (Unprompted) qualifiers Allowed values Default
-   -[no]obsexp If this is set to true then the graph of the observed to
-   expected ratio of C plus G to CpG within a window is displayed.
-   Boolean value Yes/No Yes
-   -[no]cg If this is set to true then the graph of the regions which
-   have been determined to be CpG islands is displayed. Boolean value
-   Yes/No Yes
-   -[no]pc If this is set to true then the graph of the percentage C plus
-   G within a window is displayed. Boolean value Yes/No Yes
+   -die                boolean    Report dying program messages
 
 Input file format
 
@@ -342,7 +309,7 @@ RNU68037 from 1 to 1218
   File: rnu68037.gff
 
 ##gff-version 2.0
-##date 2005-07-15
+##date 2006-07-15
 ##Type DNA RNU68037
 RNU68037        cpgplot misc_feature    104     509     0.000   +       .
 Sequence "RNU68037.1"

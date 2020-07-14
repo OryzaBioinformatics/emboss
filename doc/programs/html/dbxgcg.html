@@ -12,7 +12,6 @@
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
-
 dbxgcg
 </font></b>
 </td></tr>
@@ -21,12 +20,10 @@ dbxgcg
 <p>
 
 
-
 <H2>
     Function
 </H2>
 Database b+tree indexing for GCG formatted databases
-
 <!--
 DON'T WRITE ANYTHING HERE.
 IT IS DONE FOR YOU.
@@ -122,20 +119,19 @@ Wildcard database filename [*.seq]: <b></b>
        org : Taxonomy
 Index fields [id,acc]: <b></b>
 
-Processing file /ebi/services/idata/pmr/hgmp/test/embl/eem_ba1.seq
-Processing file /ebi/services/idata/pmr/hgmp/test/embl/eem_est.seq
-Processing file /ebi/services/idata/pmr/hgmp/test/embl/eem_fun.seq
-Processing file /ebi/services/idata/pmr/hgmp/test/embl/eem_htginv1.seq
-Processing file /ebi/services/idata/pmr/hgmp/test/embl/eem_hum1.seq
-Processing file /ebi/services/idata/pmr/hgmp/test/embl/eem_in.seq
-Processing file /ebi/services/idata/pmr/hgmp/test/embl/eem_ov.seq
-Processing file /ebi/services/idata/pmr/hgmp/test/embl/eem_ro.seq
-Processing file /ebi/services/idata/pmr/hgmp/test/embl/eem_vi.seq
+Processing file /homes/user/test/embl/eem_ba1.seq
+Processing file /homes/user/test/embl/eem_est.seq
+Processing file /homes/user/test/embl/eem_fun.seq
+Processing file /homes/user/test/embl/eem_htginv1.seq
+Processing file /homes/user/test/embl/eem_hum1.seq
+Processing file /homes/user/test/embl/eem_in.seq
+Processing file /homes/user/test/embl/eem_ov.seq
+Processing file /homes/user/test/embl/eem_ro.seq
+Processing file /homes/user/test/embl/eem_vi.seq
 
 </pre></td></tr></table><p>
 <p>
 <a href="#output.1">Go to the output files for this example</a><p><p>
-
 
 <H2>
     Global Parameters
@@ -192,19 +188,31 @@ value set.
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
    Standard (Mandatory) qualifiers:
-  [-dbname]            string     Basename for index files
-  [-dbresource]        string     Resource name
-   -idformat           menu       Entry format
-   -directory          directory  Database directory
-   -filenames          string     Wildcard database filename
-   -fields             menu       Index fields
+  [-dbname]            string     Basename for index files (Any string from 2
+                                  to 19 characters, matching regular
+                                  expression /[A-z][A-z0-9_]+/)
+  [-dbresource]        string     Resource name (Any string from 2 to 19
+                                  characters, matching regular expression
+                                  /[A-z][A-z0-9_]+/)
+   -idformat           menu       [SWISS] Entry format (Values: EMBL (EMBL);
+                                  SWISS (Swiss-Prot, SpTrEMBL, TrEMBLnew);
+                                  GENBANK (Genbank, DDBJ); PIR (NBRF))
+   -directory          directory  [.] Database directory
+   -filenames          string     [*.seq] Wildcard database filename (Any
+                                  string is accepted)
+   -fields             menu       [id,acc] Index fields (Values: id (ID); acc
+                                  (Accession number); sv (Sequence Version and
+                                  GI); des (Description); key (Keywords); org
+                                  (Taxonomy))
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers:
-   -release            string     Release number
-   -date               string     Index date
-   -exclude            string     Wildcard filename(s) to exclude
-   -indexoutdir        outdir     Index directory
+   -release            string     [0.0] Release number (Any string up to 9
+                                  characters)
+   -date               string     [00/00/00] Index date (Date string dd/mm/yy)
+   -exclude            string     Wildcard filename(s) to exclude (Any string
+                                  is accepted)
+   -indexoutdir        outdir     [.] Index file output directory
 
    Associated qualifiers: (none)
    General qualifiers:
@@ -220,8 +228,7 @@ value set.
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
-   -die                boolean    Report deaths
-
+   -die                boolean    Report dying program messages
 
 </pre>
 </td></tr></table>
@@ -236,14 +243,14 @@ value set.
 <tr>
 <td>[-dbname]<br>(Parameter 1)</td>
 <td>Basename for index files</td>
-<td>A string from 2 to 19 characters, matching regular expression /[A-z][A-z0-9_]+/</td>
+<td>Any string from 2 to 19 characters, matching regular expression /[A-z][A-z0-9_]+/</td>
 <td><b>Required</b></td>
 </tr>
 
 <tr>
 <td>[-dbresource]<br>(Parameter 2)</td>
 <td>Resource name</td>
-<td>A string from 2 to 19 characters, matching regular expression /[A-z][A-z0-9_]+/</td>
+<td>Any string from 2 to 19 characters, matching regular expression /[A-z][A-z0-9_]+/</td>
 <td><b>Required</b></td>
 </tr>
 
@@ -294,7 +301,7 @@ value set.
 <tr>
 <td>-release</td>
 <td>Release number</td>
-<td>A string up to 9 characters</td>
+<td>Any string up to 9 characters</td>
 <td>0.0</td>
 </tr>
 
@@ -314,13 +321,12 @@ value set.
 
 <tr>
 <td>-indexoutdir</td>
-<td>Index directory</td>
+<td>Index file output directory</td>
 <td>Output directory</td>
 <td>.</td>
 </tr>
 
 </table>
-
 
 <!--
 DON'T WRITE ANYTHING HERE.
@@ -354,39 +360,9 @@ IT IS DONE FOR YOU.
 
 
 
-
 <H2>
     Output file format
 </H2>
-
-<!-- 
-        This includes example output file formats.
-        This should be a detailed description and example - assume
-        someone will want to parse this file and will want to know what
-        happens in unusual cases - null output, errors etc. 
-
-        If you wish to include the standard description of the avalable
-	report formats, use:
-<p>
-
-The output is a standard EMBOSS report file. 
-
-<p>
-
-The results can be output in one of several styles by using the
-command-line qualifier <b>-rformat xxx</b>, where 'xxx' is replaced by
-the name of the required format.  The available format names are: embl,
-genbank, gff, pir, swiss, trace, listfile, dbmotif, diffseq, excel,
-feattable, motif, regions, seqtable, simple, srs, table, tagseq
-
-<p>
-
-See:
-<A href="http://emboss.sf.net/docs/themes/ReportFormats.html">
-http://emboss.sf.net/docs/themes/ReportFormats.html</A>
-for further information on report formats.
-
-<p>
 
 
 <b>dbxgcg</b> creates one summary file for the database and two files
@@ -421,15 +397,15 @@ structure of the ID name index.
 # Release: 0.0
 # Date:    00/00/00
 Dual filename database
-/ebi/services/idata/pmr/hgmp/test/embl/eem_ba1.seq /ebi/services/idata/pmr/hgmp/test/embl/eem_ba1.ref
-/ebi/services/idata/pmr/hgmp/test/embl/eem_est.seq /ebi/services/idata/pmr/hgmp/test/embl/eem_est.ref
-/ebi/services/idata/pmr/hgmp/test/embl/eem_fun.seq /ebi/services/idata/pmr/hgmp/test/embl/eem_fun.ref
-/ebi/services/idata/pmr/hgmp/test/embl/eem_htginv1.seq /ebi/services/idata/pmr/hgmp/test/embl/eem_htginv1.ref
-/ebi/services/idata/pmr/hgmp/test/embl/eem_hum1.seq /ebi/services/idata/pmr/hgmp/test/embl/eem_hum1.ref
-/ebi/services/idata/pmr/hgmp/test/embl/eem_in.seq /ebi/services/idata/pmr/hgmp/test/embl/eem_in.ref
-/ebi/services/idata/pmr/hgmp/test/embl/eem_ov.seq /ebi/services/idata/pmr/hgmp/test/embl/eem_ov.ref
-/ebi/services/idata/pmr/hgmp/test/embl/eem_ro.seq /ebi/services/idata/pmr/hgmp/test/embl/eem_ro.ref
-/ebi/services/idata/pmr/hgmp/test/embl/eem_vi.seq /ebi/services/idata/pmr/hgmp/test/embl/eem_vi.ref
+eem_ba1.seq eem_ba1.ref
+eem_est.seq eem_est.ref
+eem_fun.seq eem_fun.ref
+eem_htginv1.seq eem_htginv1.ref
+eem_hum1.seq eem_hum1.ref
+eem_in.seq eem_in.ref
+eem_ov.seq eem_ov.ref
+eem_ro.seq eem_ro.ref
+eem_vi.seq eem_vi.ref
 </pre>
 </td></tr></table><p>
 <p><h3>File: embl.pxac</h3>
@@ -439,11 +415,11 @@ Order     71
 Fill      47
 Pagesize  2048
 Level     0
-Cachesize 100
-Order2    0
-Fill2     0
+Cachesize 200
+Order2    82
+Fill2     99
 Count     47
-Kwlimit   0
+Kwlimit   15
 </pre>
 </td></tr></table><p>
 <p><h3>File: embl.pxid</h3>
@@ -453,11 +429,11 @@ Order     71
 Fill      47
 Pagesize  2048
 Level     0
-Cachesize 100
-Order2    0
-Fill2     0
+Cachesize 200
+Order2    82
+Fill2     99
 Count     39
-Kwlimit   0
+Kwlimit   15
 </pre>
 </td></tr></table><p>
 <p><h3>File: embl.xac</h3>
@@ -469,58 +445,9 @@ Kwlimit   0
 
 
 
-
 <H2>
     Data files
 </H2>
-
-<!-- 
-        Any data files used (e.g. translation table file)
-        This includes example data file formats if they are
-        not obvious.
-
-	If you wish to include the standard description of what data
-	files are and how to use embossdata to inspect and retrieve
-	them, use:
-<p>
-EMBOSS data files are distributed with the application and stored
-in the standard EMBOSS data directory, which is defined
-by the EMBOSS environment variable EMBOSS_DATA.
-
-<p>
-
-To see the available EMBOSS data files, run:
-<p>
-<pre>
-% embossdata -showall
-</pre>
-<p>
-To fetch one of the data files (for example 'Exxx.dat') into your
-current directory for you to inspect or modify, run:
-
-<pre>
-
-% embossdata -fetch -file Exxx.dat
-
-</pre>
-<p>
-
-Users can provide their own data files in their own directories.
-Project specific files can be put in the current directory, or for
-tidier directory listings in a subdirectory called
-".embossdata". Files for all EMBOSS runs can be put in the user's home
-directory, or again in a subdirectory called ".embossdata".
-
-<p>
-The directories are searched in the following order:
-
-<ul>
-   <li> . (your current directory)
-   <li> .embossdata (under your current directory)
-   <li> ~/ (your home directory)
-   <li> ~/.embossdata
-</ul>
-<p>
 
 
 None.
@@ -654,14 +581,37 @@ None.
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
-<tr><td><a href="dbiblast.html">dbiblast</a></td><td>Index a BLAST database</td></tr>
-<tr><td><a href="dbifasta.html">dbifasta</a></td><td>Database indexing for fasta file databases</td></tr>
-<tr><td><a href="dbiflat.html">dbiflat</a></td><td>Index a flat file database</td></tr>
-<tr><td><a href="dbigcg.html">dbigcg</a></td><td>Index a GCG formatted database</td></tr>
-<tr><td><a href="dbxfasta.html">dbxfasta</a></td><td>Database b+tree indexing for fasta file databases</td></tr>
-<tr><td><a href="dbxflat.html">dbxflat</a></td><td>Database b+tree indexing for flat file databases</td></tr>
-</table>
+<tr>
+<td><a href="dbiblast.html">dbiblast</a></td>
+<td>Index a BLAST database</td>
+</tr>
 
+<tr>
+<td><a href="dbifasta.html">dbifasta</a></td>
+<td>Database indexing for fasta file databases</td>
+</tr>
+
+<tr>
+<td><a href="dbiflat.html">dbiflat</a></td>
+<td>Index a flat file database</td>
+</tr>
+
+<tr>
+<td><a href="dbigcg.html">dbigcg</a></td>
+<td>Index a GCG formatted database</td>
+</tr>
+
+<tr>
+<td><a href="dbxfasta.html">dbxfasta</a></td>
+<td>Database b+tree indexing for fasta file databases</td>
+</tr>
+
+<tr>
+<td><a href="dbxflat.html">dbxflat</a></td>
+<td>Database b+tree indexing for flat file databases</td>
+</tr>
+
+</table>
 <!-- 
         Add any comments about other associated programs (to prepare
         data files?) that seealso doesn't find. 
@@ -695,14 +645,12 @@ European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambri
 
 
 
-
 <H2>
     History
 </H2>
 <!--
         Date written and what changes have been made go in this file.
    -->
-
 
 
 
@@ -715,7 +663,6 @@ European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambri
    -->
 This program is intended to be used by everyone and everything, from naive users to embedded scripts.
 
-
 <H2>
     Comments
 </H2>
@@ -723,7 +670,6 @@ This program is intended to be used by everyone and everything, from naive users
         User/developer/other comments go in this file.
    -->
 None
-
 
 
 </BODY>

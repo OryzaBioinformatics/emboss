@@ -36,7 +36,7 @@ Usage
 
 % noreturn abc.dat 
 Removes carriage return from ASCII files
-Output file [abc.noreturn]: 
+ASCII text output file [abc.noreturn]: 
 
    Go to the input files for this example
    Go to the output files for this example
@@ -44,48 +44,35 @@ Output file [abc.noreturn]:
 Command line arguments
 
    Standard (Mandatory) qualifiers:
-  [-infile]            infile     Input file
-  [-outfile]           outfile    Output file name
+  [-infile]            infile     ASCII text file
+  [-outfile]           outfile    [*.noreturn] ASCII text output file
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers:
-   -system             menu       Target operating system for end-of-line
-                                  format
+   -system             menu       [unix] Target operating system for
+                                  end-of-line format (Values: unix (Unix/Linux
+                                  systems); pc (Windows/DOS); mac (Apple
+                                  Macintosh))
 
    Associated qualifiers:
 
    "-outfile" associated qualifiers
-   -odirectory2         string     Output directory
+   -odirectory2        string     Output directory
 
    General qualifiers:
-   -auto                boolean    Turn off prompts
-   -stdout              boolean    Write standard output
-   -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for standard and additional values
-   -debug               boolean    Write debug output to program.dbg
-   -verbose             boolean    Report some/full command line options
-   -help                boolean    Report command line options. More
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
-   -warning             boolean    Report warnings
-   -error               boolean    Report errors
-   -fatal               boolean    Report fatal errors
-   -die                 boolean    Report deaths
-
-
-   Standard (Mandatory) qualifiers Allowed values Default
-   [-infile]
-   (Parameter 1) Input file Input file Required
-   [-outfile]
-   (Parameter 2) Output file name Output file <sequence>.noreturn
-   Additional (Optional) qualifiers Allowed values Default
-   (none)
-   Advanced (Unprompted) qualifiers Allowed values Default
-   -system Target operating system for end-of-line format
-   unix (Unix/Linux systems)
-   pc   (Windows/DOS)
-   mac  (Apple Macintosh)
-   unix
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
 
 Input file format
 
@@ -153,6 +140,8 @@ See also
    extractfeat  Extract features from a sequence
    extractseq   Extract regions from a sequence
    listor       Write a list file of the logical OR of two sets of sequences
+   makenucseq   Creates random nucleotide sequences
+   makeprotseq  Creates random protein sequences
    maskfeat     Mask off features of a sequence
    maskseq      Mask off regions of a sequence
    newseq       Type in a short new sequence

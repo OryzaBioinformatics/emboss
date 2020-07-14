@@ -13,7 +13,6 @@
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
-
 dan
 </font></b>
 </td></tr>
@@ -22,12 +21,10 @@ dan
 <p>
 
 
-
 <H2>
     Function
 </H2>
 Calculates DNA RNA/DNA melting temperature
-
 <H2>
     Description
 </H2>
@@ -50,7 +47,7 @@ USA 83, 3746-3750 and Baldino et al.  Methods in Enzymol.  168,
 
 % <b>dan </b>
 Calculates DNA RNA/DNA melting temperature
-Input sequence(s): <b>tembl:paamir</b>
+Input nucleotide sequence(s): <b>tembl:paamir</b>
 Enter window size [20]: <b></b>
 Enter Shift Increment [1]: <b></b>
 Enter DNA concentration (nM) [50.]: <b></b>
@@ -71,7 +68,7 @@ An example of producing a plot of Tm:
 
 % <b>dan -plot -graph cps </b>
 Calculates DNA RNA/DNA melting temperature
-Input sequence(s): <b>tembl:paamir</b>
+Input nucleotide sequence(s): <b>tembl:paamir</b>
 Enter window size [20]: <b></b>
 Enter Shift Increment [1]: <b></b>
 Enter DNA concentration (nM) [50.]: <b></b>
@@ -85,7 +82,6 @@ Created dan.ps
 <a href="#output.2">Go to the output files for this example</a><p><p>
 
 
-
 <H2>
     Command line arguments
 </H2>
@@ -93,24 +89,31 @@ Created dan.ps
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
    Standard (Mandatory) qualifiers (* if not always prompted):
-  [-sequence]          seqall     Sequence database USA
-   -windowsize         integer    The values of melting point and other
+  [-sequence]          seqall     Nucleotide sequence(s) filename and optional
+                                  format, or reference (input USA)
+   -windowsize         integer    [20] The values of melting point and other
                                   thermodynamic properties of the sequence are
                                   determined by taking a short length of
                                   sequence known as a window and determining
                                   the properties of the sequence in that
                                   window. The window is incrementally moved
                                   along the sequence with the properties being
-                                  calculated at each new position.
-   -shiftincrement     integer    This is the amount by which the window is
-                                  moved at each increment in order to find the
-                                  melting point and other properties along
-                                  the sequence.
-   -dnaconc            float      Enter DNA concentration (nM)
-   -saltconc           float      Enter salt concentration (mM)
-*  -mintemp            float      Enter a minimum value for the temperature
-                                  scale (y-axis) of the plot.
-*  -graph              xygraph    Graph type
+                                  calculated at each new position. (Integer
+                                  from 1 to 100)
+   -shiftincrement     integer    [1] This is the amount by which the window
+                                  is moved at each increment in order to find
+                                  the melting point and other properties along
+                                  the sequence. (Integer 1 or more)
+   -dnaconc            float      [50.] Enter DNA concentration (nM) (Number
+                                  from 1.000 to 100000.000)
+   -saltconc           float      [50.] Enter salt concentration (mM) (Number
+                                  from 1.000 to 1000.000)
+*  -mintemp            float      [55.] Enter a minimum value for the
+                                  temperature scale (y-axis) of the plot.
+                                  (Number from 0.000 to 150.000)
+*  -graph              xygraph    [$EMBOSS_GRAPHICS value, or x11] Graph type
+                                  (ps, hpgl, hp7470, hp7580, meta, cps, x11,
+                                  tekt, tek, none, data, xterm, png)
 *  -outfile            report     If a plot is not being produced then data on
                                   the melting point etc. in each window along
                                   the sequence is output to the file.
@@ -118,22 +121,25 @@ Created dan.ps
    Additional (Optional) qualifiers (* if not always prompted):
    -product            toggle     This prompts for percent formamide, percent
                                   of mismatches allowed and product length.
-*  -formamide          float      This specifies the percent formamide to be
-                                  used in calculations (it is ignored unless
-                                  -product is used).
-*  -mismatch           float      This specifies the percent mismatch to be
-                                  used in calculations (it is ignored unless
-                                  -product is used).
-*  -prodlen            integer    This specifies the product length to be used
-                                  in calculations (it is ignored unless
-                                  -product is used).
+*  -formamide          float      [0.] This specifies the percent formamide to
+                                  be used in calculations (it is ignored
+                                  unless -product is used). (Number from 0.000
+                                  to 100.000)
+*  -mismatch           float      [0.] This specifies the percent mismatch to
+                                  be used in calculations (it is ignored
+                                  unless -product is used). (Number from 0.000
+                                  to 100.000)
+*  -prodlen            integer    [Window size (20)] This specifies the
+                                  product length to be used in calculations
+                                  (it is ignored unless -product is used).
+                                  (Any integer value)
    -thermo             toggle     Output the DeltaG, DeltaH and DeltaS values
                                   of the sequence windows to the output data
                                   file.
-*  -temperature        float      If -thermo has been specified then this
-                                  specifies the temperature at which to
+*  -temperature        float      [25.] If -thermo has been specified then
+                                  this specifies the temperature at which to
                                   calculate the DeltaG, DeltaH and DeltaS
-                                  values.
+                                  values. (Number from 0.000 to 100.000)
 
    Advanced (Unprompted) qualifiers:
    -rna                boolean    This specifies that the sequence is an RNA
@@ -146,55 +152,54 @@ Created dan.ps
    Associated qualifiers:
 
    "-sequence" associated qualifiers
-   -sbegin1             integer    Start of each sequence to be used
-   -send1               integer    End of each sequence to be used
-   -sreverse1           boolean    Reverse (if DNA)
-   -sask1               boolean    Ask for begin/end/reverse
-   -snucleotide1        boolean    Sequence is nucleotide
-   -sprotein1           boolean    Sequence is protein
-   -slower1             boolean    Make lower case
-   -supper1             boolean    Make upper case
-   -sformat1            string     Input sequence format
-   -sdbname1            string     Database name
-   -sid1                string     Entryname
-   -ufo1                string     UFO features
-   -fformat1            string     Features format
-   -fopenfile1          string     Features file name
+   -sbegin1            integer    Start of each sequence to be used
+   -send1              integer    End of each sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
 
    "-graph" associated qualifiers
-   -gprompt             boolean    Graph prompting
-   -gtitle              string     Graph title
-   -gsubtitle           string     Graph subtitle
-   -gxtitle             string     Graph x axis title
-   -gytitle             string     Graph y axis title
-   -goutfile            string     Output file for non interactive displays
-   -gdirectory          string     Output directory
+   -gprompt            boolean    Graph prompting
+   -gtitle             string     Graph title
+   -gsubtitle          string     Graph subtitle
+   -gxtitle            string     Graph x axis title
+   -gytitle            string     Graph y axis title
+   -goutfile           string     Output file for non interactive displays
+   -gdirectory         string     Output directory
 
    "-outfile" associated qualifiers
-   -rformat             string     Report format
-   -rname               string     Base file name
-   -rextension          string     File name extension
-   -rdirectory          string     Output directory
-   -raccshow            boolean    Show accession number in the report
-   -rdesshow            boolean    Show description in the report
-   -rscoreshow          boolean    Show the score in the report
-   -rusashow            boolean    Show the full USA in the report
+   -rformat            string     Report format
+   -rname              string     Base file name
+   -rextension         string     File name extension
+   -rdirectory         string     Output directory
+   -raccshow           boolean    Show accession number in the report
+   -rdesshow           boolean    Show description in the report
+   -rscoreshow         boolean    Show the score in the report
+   -rusashow           boolean    Show the full USA in the report
 
    General qualifiers:
-   -auto                boolean    Turn off prompts
-   -stdout              boolean    Write standard output
-   -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for standard and additional values
-   -debug               boolean    Write debug output to program.dbg
-   -verbose             boolean    Report some/full command line options
-   -help                boolean    Report command line options. More
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
-   -warning             boolean    Report warnings
-   -error               boolean    Report errors
-   -fatal               boolean    Report fatal errors
-   -die                 boolean    Report deaths
-
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
 
 </pre>
 </td></tr></table>
@@ -208,7 +213,7 @@ Created dan.ps
 
 <tr>
 <td>[-sequence]<br>(Parameter 1)</td>
-<td>Sequence database USA</td>
+<td>Nucleotide sequence(s) filename and optional format, or reference (input USA)</td>
 <td>Readable sequence(s)</td>
 <td><b>Required</b></td>
 </tr>
@@ -251,7 +256,7 @@ Created dan.ps
 <tr>
 <td>-graph</td>
 <td>Graph type</td>
-<td>EMBOSS has a list of known devices, including postscript, ps, hpgl, hp7470, hp7580, meta, colourps, cps, xwindows, x11, tektronics, tekt, tek4107t, tek, none, null, text, data, xterm, png, xml</td>
+<td>EMBOSS has a list of known devices, including ps, hpgl, hp7470, hp7580, meta, cps, x11, tekt, tek, none, data, xterm, png</td>
 <td><i>EMBOSS_GRAPHICS</i> value, or x11</td>
 </tr>
 
@@ -331,7 +336,6 @@ Created dan.ps
 </tr>
 
 </table>
-
 
 <H2>
     Input file format
@@ -458,7 +462,6 @@ SQ   Sequence 2167 BP; 363 A; 712 C; 730 G; 362 T; 0 other;
 </td></tr></table><p>
 
 
-
 <H2>
     Output file format
 </H2>
@@ -488,7 +491,6 @@ http://emboss.sf.net/docs/themes/ReportFormats.html</A>
 for further information on report formats.
 
 <p>
-
 <p>
 
 By default <b>dan</b> writes a 'seqtable' report file.
@@ -502,7 +504,9 @@ By default <b>dan</b> writes a 'seqtable' report file.
 <pre>
 ########################################
 # Program: dan
-# Rundate: Fri Jul 15 2005 12:00:00
+# Rundate: Sat Jul 15 2006 12:00:00
+# Commandline: dan
+#    -sequence tembl:paamir
 # Report_format: seqtable
 # Report_file: paamir.dan
 ########################################
@@ -548,8 +552,6 @@ By default <b>dan</b> writes a 'seqtable' report file.
      32      51   68.6   75.0      .      .      .      . caccagccgggcgacgggaa
      33      52   68.6   75.0      .      .      .      . accagccgggcgacgggaac
      34      53   68.4   75.0      .      .      .      . ccagccgggcgacgggaact
-     35      54   67.4   75.0      .      .      .      . cagccgggcgacgggaactg
-     36      55   68.9   75.0      .      .      .      . agccgggcgacgggaactgc
 
 
 <font color=red>  [Part of this file has been deleted for brevity]</font>
@@ -617,7 +619,6 @@ By default <b>dan</b> writes a 'seqtable' report file.
 <pre>
 </pre>
 </td></tr></table><p>
-
 <p>
 
 The header information contains details of the program, date and sequence
@@ -695,7 +696,6 @@ The directories are searched in the following order:
 </ul>
 <p>
 
-
 <H2>
     Notes
 </H2>
@@ -752,16 +752,47 @@ None.
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
-<tr><td><a href="banana.html">banana</a></td><td>Bending and curvature plot in B-DNA</td></tr>
-<tr><td><a href="btwisted.html">btwisted</a></td><td>Calculates the twisting in a B-DNA sequence</td></tr>
-<tr><td><a href="chaos.html">chaos</a></td><td>Create a chaos game representation plot for a sequence</td></tr>
-<tr><td><a href="compseq.html">compseq</a></td><td>Count composition of dimer/trimer/etc words in a sequence</td></tr>
-<tr><td><a href="freak.html">freak</a></td><td>Residue/base frequency table or plot</td></tr>
-<tr><td><a href="isochore.html">isochore</a></td><td>Plots isochores in large DNA sequences</td></tr>
-<tr><td><a href="sirna.html">sirna</a></td><td>Finds siRNA duplexes in mRNA</td></tr>
-<tr><td><a href="wordcount.html">wordcount</a></td><td>Counts words of a specified size in a DNA sequence</td></tr>
-</table>
+<tr>
+<td><a href="banana.html">banana</a></td>
+<td>Bending and curvature plot in B-DNA</td>
+</tr>
 
+<tr>
+<td><a href="btwisted.html">btwisted</a></td>
+<td>Calculates the twisting in a B-DNA sequence</td>
+</tr>
+
+<tr>
+<td><a href="chaos.html">chaos</a></td>
+<td>Create a chaos game representation plot for a sequence</td>
+</tr>
+
+<tr>
+<td><a href="compseq.html">compseq</a></td>
+<td>Count composition of dimer/trimer/etc words in a sequence</td>
+</tr>
+
+<tr>
+<td><a href="freak.html">freak</a></td>
+<td>Residue/base frequency table or plot</td>
+</tr>
+
+<tr>
+<td><a href="isochore.html">isochore</a></td>
+<td>Plots isochores in large DNA sequences</td>
+</tr>
+
+<tr>
+<td><a href="sirna.html">sirna</a></td>
+<td>Finds siRNA duplexes in mRNA</td>
+</tr>
+
+<tr>
+<td><a href="wordcount.html">wordcount</a></td>
+<td>Counts words of a specified size in a DNA sequence</td>
+</tr>
+
+</table>
 
 <H2>
     Author(s)
@@ -774,13 +805,11 @@ Rodrigo Lopez (rls&nbsp;&copy;&nbsp;ebi.ac.uk)
 European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
 
 
-
 <p>
 This application was written by 
 Alan Bleasby (ajb&nbsp;&copy;&nbsp;ebi.ac.uk)
 <br>
 European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
-
 
 
 
@@ -791,18 +820,15 @@ European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambri
 
 Written (1999) - Alan Bleasby
 
-
 <H2>
     Target users
 </H2>
 This program is intended to be used by everyone and everything, from naive users to embedded scripts.
 
-
 <H2>
     Comments
 </H2>
 None
-
 
 </BODY>
 </HTML>

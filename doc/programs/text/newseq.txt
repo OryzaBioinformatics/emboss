@@ -43,7 +43,7 @@ Type of sequence
          P : Protein
 Type of sequence [N]: p
 Enter the sequence: KKKEERADLIAY
-Output sequence [outfile.fasta]: swiss::mycc.pep
+output sequence [outfile.fasta]: swiss::mycc.pep
 
    Go to the output files for this example
 
@@ -53,10 +53,12 @@ Command line arguments
   [-name]              string     The name of of the sequence should be a
                                   single word that you will use to identify
                                   the sequence. It should have no (or few)
-                                  punctuation characters in it.
+                                  punctuation characters in it. (Any string is
+                                  accepted)
   [-description]       string     Enter any description of the sequence that
-                                  you require.
-  [-type]              menu       Type of sequence
+                                  you require. (Any string is accepted)
+  [-type]              menu       [N] Type of sequence (Values: N (Nucleic); P
+                                  (Protein))
   [-sequence]          string     The sequence itself.
                                   Because of the limitation of the operating
                                   system, you will only be able to type in a
@@ -65,68 +67,41 @@ Command line arguments
                                   The keyboard will beep at you when you have
                                   reached this limit and you will not be able
                                   to press the RETURN/ENTER key until you have
-                                  deleted a few characters.
-  [-outseq]            seqout     Output sequence USA
+                                  deleted a few characters. (Any string is
+                                  accepted)
+  [-outseq]            seqout     [.] Sequence filename and
+                                  optional format (output USA)
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers: (none)
    Associated qualifiers:
 
    "-outseq" associated qualifiers
-   -osformat5           string     Output seq format
-   -osextension5        string     File name extension
-   -osname5             string     Base file name
-   -osdirectory5        string     Output directory
-   -osdbname5           string     Database name to add
-   -ossingle5           boolean    Separate file for each entry
-   -oufo5               string     UFO features
-   -offormat5           string     Features format
-   -ofname5             string     Features file name
-   -ofdirectory5        string     Output directory
+   -osformat5          string     Output seq format
+   -osextension5       string     File name extension
+   -osname5            string     Base file name
+   -osdirectory5       string     Output directory
+   -osdbname5          string     Database name to add
+   -ossingle5          boolean    Separate file for each entry
+   -oufo5              string     UFO features
+   -offormat5          string     Features format
+   -ofname5            string     Features file name
+   -ofdirectory5       string     Output directory
 
    General qualifiers:
-   -auto                boolean    Turn off prompts
-   -stdout              boolean    Write standard output
-   -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for standard and additional values
-   -debug               boolean    Write debug output to program.dbg
-   -verbose             boolean    Report some/full command line options
-   -help                boolean    Report command line options. More
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
-   -warning             boolean    Report warnings
-   -error               boolean    Report errors
-   -fatal               boolean    Report fatal errors
-   -die                 boolean    Report deaths
-
-
-   Standard (Mandatory) qualifiers Allowed values Default
-   [-name]
-   (Parameter 1) The name of of the sequence should be a single word that
-   you will use to identify the sequence. It should have no (or few)
-   punctuation characters in it. Any string is accepted An empty string
-   is accepted
-   [-description]
-   (Parameter 2) Enter any description of the sequence that you require.
-   Any string is accepted An empty string is accepted
-   [-type]
-   (Parameter 3) Type of sequence
-   N (Nucleic)
-   P (Protein)
-   N
-   [-sequence]
-   (Parameter 4) The sequence itself. Because of the limitation of the
-   operating system, you will only be able to type in a short sequence of
-   (typically) 250 characters, or so. The keyboard will beep at you when
-   you have reached this limit and you will not be able to press the
-   RETURN/ENTER key until you have deleted a few characters. Any string
-   is accepted An empty string is accepted
-   [-outseq]
-   (Parameter 5) Output sequence USA Writeable sequence <sequence>.format
-   Additional (Optional) qualifiers Allowed values Default
-   (none)
-   Advanced (Unprompted) qualifiers Allowed values Default
-   (none)
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
 
 Input file format
 
@@ -187,6 +162,8 @@ See also
    extractfeat  Extract features from a sequence
    extractseq   Extract regions from a sequence
    listor       Write a list file of the logical OR of two sets of sequences
+   makenucseq   Creates random nucleotide sequences
+   makeprotseq  Creates random protein sequences
    maskfeat     Mask off features of a sequence
    maskseq      Mask off regions of a sequence
    noreturn     Removes carriage return from ASCII files

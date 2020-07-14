@@ -13,7 +13,6 @@
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
-
 prettyplot
 </font></b>
 </td></tr>
@@ -22,12 +21,10 @@ prettyplot
 <p>
 
 
-
 <H2>
     Function
 </H2>
 Displays aligned sequences, with colouring and boxing
-
 
 <H2>
     Description
@@ -49,7 +46,7 @@ various ways.
 
 % <b>prettyplot -resbreak=10 -boxcol -consensus -plurality=3 </b>
 Displays aligned sequences, with colouring and boxing
-Input sequence set: <b>globins.msf</b>
+Input (aligned) sequence set: <b>globins.msf</b>
 Graph type [x11]: <b>cps</b>
 
 Created prettyplot.ps
@@ -75,114 +72,131 @@ Created prettyplot.ps
 <a href="#output.2">Go to the output files for this example</a><p><p>
 
 
-
 <H2>
     Command line arguments
 </H2>
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
    Standard (Mandatory) qualifiers:
-  [-sequences]         seqset     File containing a sequence alignment
-   -graph              graph      Graph type
+  [-sequences]         seqset     (Aligned) sequence set filename and optional
+                                  format, or reference (input USA)
+   -graph              graph      [$EMBOSS_GRAPHICS value, or x11] Graph type
+                                  (ps, hpgl, hp7470, hp7580, meta, cps, x11,
+                                  tekt, tek, none, data, xterm, png)
 
    Additional (Optional) qualifiers:
-   -matrixfile         matrix     This is the scoring matrix file used when
+   -matrixfile         matrix     [EBLOSUM62 for protein, EDNAFULL for DNA]
+                                  This is the scoring matrix file used when
                                   comparing sequences. By default it is the
                                   file 'EBLOSUM62' (for proteins) or the file
                                   'EDNAFULL' (for nucleic sequences). These
                                   files are found in the 'data' directory of
                                   the EMBOSS installation.
-   -residuesperline    integer    The number of residues to be displayed on
-                                  each line
-   -resbreak           integer    Residues before a space
-   -[no]ccolours       boolean    Colour residues by their consensus value.
-   -cidentity          string     Colour to display identical residues (RED)
-   -csimilarity        string     Colour to display similar residues (GREEN)
-   -cother             string     Colour to display other residues (BLACK)
-   -docolour           boolean    Colour residues by table oily, amide etc.
-   -[no]title          boolean    Do not display the title
+   -residuesperline    integer    [50] The number of residues to be displayed
+                                  on each line (Any integer value)
+   -resbreak           integer    [Same as -residuesperline to give no breaks]
+                                  Residues before a space (Integer 1 or more)
+   -[no]ccolours       boolean    [Y] Colour residues by their consensus
+                                  value.
+   -cidentity          string     [RED] Colour to display identical residues
+                                  (RED) (Any string is accepted)
+   -csimilarity        string     [GREEN] Colour to display similar residues
+                                  (GREEN) (Any string is accepted)
+   -cother             string     [BLACK] Colour to display other residues
+                                  (BLACK) (Any string is accepted)
+   -docolour           boolean    [N] Colour residues by table oily, amide
+                                  etc.
+   -[no]title          boolean    [Y] Do not display the title
    -shade              string     Set to BPLW for normal shading
+                                  (black, pale, light, white)
                                   so for pair = 1.5,1.0,0.5 and shade = BPLW
                                   Residues score Colour
-                                  1.5 or over....... BLACK (B)
-                                  1.0 to 1.5 ....... BROWN (P)
-                                  0.5 to 1.0 ....... WHEAT (L)
-                                  under 0.5 ....... WHITE (W)
+                                  1.5 or over... BLACK (B)
+                                  1.0 to 1.5 ... BROWN (P)
+                                  0.5 to 1.0 ... WHEAT (L)
+                                  under 0.5 .... WHITE (W)
                                   The only four letters allowed are BPLW, in
-                                  any order.
-   -pair               string     Values to represent identical similar
-                                  related
-   -identity           integer    Only match those which are identical in all
-                                  sequences.
-   -[no]box            boolean    Display prettyboxes
-   -boxcol             boolean    Colour the background in the boxes
-   -boxcolval          string     Colour to be used for background. (GREY)
-   -[no]name           boolean    Display the sequence names
-   -maxnamelen         integer    Margin size for the sequence name.
-   -[no]number         boolean    Display the residue number
-   -[no]listoptions    boolean    Display the date and options used
-   -plurality          float      Plurality check value (totweight/2)
-   -consensus          boolean    Display the consensus
-   -[no]collision      boolean    Allow collisions in calculating consensus
-   -alternative        integer    Use alternative collisions routine
-                                  0) Normal collision check. (default)
-                                  1) checks identical scores with the max
+                                  any order. (Any string up to 4 characters,
+                                  matching regular expression
+                                  /^([BPLW]{4})?$/)
+   -pair               array      [1.5,1.0,0.5] Values to represent identical
+                                  similar related
+   -identity           integer    [0] Only match those which are identical in
+                                  all sequences. (Integer 0 or more)
+   -[no]box            boolean    [Y] Display prettyboxes
+   -boxcol             boolean    [N] Colour the background in the boxes
+   -boxcolval          string     [GREY] Colour to be used for background.
+                                  (GREY) (Any string is accepted)
+   -[no]name           boolean    [Y] Display the sequence names
+   -maxnamelen         integer    [10] Margin size for the sequence name. (Any
+                                  integer value)
+   -[no]number         boolean    [Y] Display the residue number
+   -[no]listoptions    boolean    [Y] Display the date and options used
+   -plurality          float      [Half the total sequence weighting]
+                                  Plurality check value (totweight/2) (Any
+                                  numeric value)
+   -consensus          boolean    [N] Display the consensus
+   -[no]collision      boolean    [Y] Allow collisions in calculating
+                                  consensus
+   -alternative        selection  [0] Values are 0:Normal collision check.
+                                  (default)
+                                  1:Compares identical scores with the max
                                   score found. So if any other residue matches
                                   the identical score then a collision has
                                   occurred.
-                                  2) If another residue has a greater than or
+                                  2:If another residue has a greater than or
                                   equal to matching score and these do not
                                   match then a collision has occurred.
-                                  3) Checks all those not in the current
+                                  3:Checks all those not in the current
                                   consensus.If any of these give a top score
                                   for matching or identical scores then a
                                   collision has occured.
-   -showscore          integer    Print residue scores
-   -portrait           boolean    Set page to Portrait
+   -showscore          integer    [-1] Print residue scores (Any integer
+                                  value)
+   -portrait           boolean    [N] Set page to Portrait
 
    Advanced (Unprompted) qualifiers: (none)
    Associated qualifiers:
 
    "-sequences" associated qualifiers
-   -sbegin1             integer    Start of each sequence to be used
-   -send1               integer    End of each sequence to be used
-   -sreverse1           boolean    Reverse (if DNA)
-   -sask1               boolean    Ask for begin/end/reverse
-   -snucleotide1        boolean    Sequence is nucleotide
-   -sprotein1           boolean    Sequence is protein
-   -slower1             boolean    Make lower case
-   -supper1             boolean    Make upper case
-   -sformat1            string     Input sequence format
-   -sdbname1            string     Database name
-   -sid1                string     Entryname
-   -ufo1                string     UFO features
-   -fformat1            string     Features format
-   -fopenfile1          string     Features file name
+   -sbegin1            integer    Start of each sequence to be used
+   -send1              integer    End of each sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
 
    "-graph" associated qualifiers
-   -gprompt             boolean    Graph prompting
-   -gtitle              string     Graph title
-   -gsubtitle           string     Graph subtitle
-   -gxtitle             string     Graph x axis title
-   -gytitle             string     Graph y axis title
-   -goutfile            string     Output file for non interactive displays
-   -gdirectory          string     Output directory
+   -gprompt            boolean    Graph prompting
+   -gtitle             string     Graph title
+   -gsubtitle          string     Graph subtitle
+   -gxtitle            string     Graph x axis title
+   -gytitle            string     Graph y axis title
+   -goutfile           string     Output file for non interactive displays
+   -gdirectory         string     Output directory
 
    General qualifiers:
-   -auto                boolean    Turn off prompts
-   -stdout              boolean    Write standard output
-   -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for standard and additional values
-   -debug               boolean    Write debug output to program.dbg
-   -verbose             boolean    Report some/full command line options
-   -help                boolean    Report command line options. More
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
-   -warning             boolean    Report warnings
-   -error               boolean    Report errors
-   -fatal               boolean    Report fatal errors
-   -die                 boolean    Report deaths
-
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
 
 </pre>
 </td></tr></table>
@@ -197,7 +211,7 @@ Created prettyplot.ps
 
 <tr>
 <td>[-sequences]<br>(Parameter 1)</td>
-<td>File containing a sequence alignment</td>
+<td>(Aligned) sequence set filename and optional format, or reference (input USA)</td>
 <td>Readable set of sequences</td>
 <td><b>Required</b></td>
 </tr>
@@ -205,7 +219,7 @@ Created prettyplot.ps
 <tr>
 <td>-graph</td>
 <td>Graph type</td>
-<td>EMBOSS has a list of known devices, including postscript, ps, hpgl, hp7470, hp7580, meta, colourps, cps, xwindows, x11, tektronics, tekt, tek4107t, tek, none, null, text, data, xterm, png, xml</td>
+<td>EMBOSS has a list of known devices, including ps, hpgl, hp7470, hp7580, meta, cps, x11, tekt, tek, none, data, xterm, png</td>
 <td><i>EMBOSS_GRAPHICS</i> value, or x11</td>
 </tr>
 
@@ -281,21 +295,22 @@ Created prettyplot.ps
 <tr>
 <td>-shade</td>
 <td>Set to BPLW for normal shading
+(black, pale, light, white)
 so for pair = 1.5,1.0,0.5 and shade = BPLW
 Residues score Colour
-1.5 or over....... BLACK (B)
-1.0 to 1.5 ....... BROWN (P)
-0.5 to 1.0 ....... WHEAT (L)
-under 0.5 ....... WHITE (W)
+1.5 or over... BLACK (B)
+1.0 to 1.5 ... BROWN (P)
+0.5 to 1.0 ... WHEAT (L)
+under 0.5 .... WHITE (W)
 The only four letters allowed are BPLW, in any order.</td>
-<td>A string up to 4 characters, matching regular expression /^([BPLW]{4})?$/</td>
+<td>Any string up to 4 characters, matching regular expression /^([BPLW]{4})?$/</td>
 <td><i>An empty string is accepted</i></td>
 </tr>
 
 <tr>
 <td>-pair</td>
 <td>Values to represent identical similar related</td>
-<td>Any string is accepted</td>
+<td>List of floating point numbers</td>
 <td>1.5,1.0,0.5</td>
 </tr>
 
@@ -378,12 +393,11 @@ The only four letters allowed are BPLW, in any order.</td>
 
 <tr>
 <td>-alternative</td>
-<td>Use alternative collisions routine
-0) Normal collision check. (default)
-1) checks identical scores with the max score found. So if any other residue matches the identical score then a collision has occurred.
-2) If another residue has a greater than or equal to matching score and these do not match then a collision has occurred.
-3) Checks all those not in the current consensus.If any of these give a top score for matching or identical scores then a collision has occured.</td>
-<td>Integer from 0 to 3</td>
+<td>Values are 0:Normal collision check. (default)
+1:Compares identical scores with the max score found. So if any other residue matches the identical score then a collision has occurred.
+2:If another residue has a greater than or equal to matching score and these do not match then a collision has occurred.
+3:Checks all those not in the current consensus.If any of these give a top score for matching or identical scores then a collision has occured.</td>
+<td>Choose from selection list of values</td>
 <td>0</td>
 </tr>
 
@@ -414,7 +428,6 @@ The only four letters allowed are BPLW, in any order.</td>
 </table>
 
 
-
 <H2>
     Input file format
 </H2>
@@ -433,13 +446,13 @@ The only four letters allowed are BPLW, in any order.</td>
 
   ../data/globins.msf MSF:  164 Type: P 25/06/01 CompCheck: 4278 ..
 
-  Name: HBB_HUMAN Len: 164  Check: 6914 Weight: 0.14
-  Name: HBB_HORSE Len: 164  Check: 6007 Weight: 0.15
-  Name: HBA_HUMAN Len: 164  Check: 3921 Weight: 0.15
-  Name: HBA_HORSE Len: 164  Check: 4770 Weight: 0.19
-  Name: MYG_PHYCA Len: 164  Check: 7930 Weight: 0.23
-  Name: GLB5_PETMA Len: 164  Check: 1857 Weight: 0.21
-  Name: LGB2_LUPLU Len: 164  Check: 2879 Weight: 0.10
+  Name: HBB_HUMAN Len: 164  Check: 6914 Weight: 0.61
+  Name: HBB_HORSE Len: 164  Check: 6007 Weight: 0.65
+  Name: HBA_HUMAN Len: 164  Check: 3921 Weight: 0.65
+  Name: HBA_HORSE Len: 164  Check: 4770 Weight: 0.83
+  Name: MYG_PHYCA Len: 164  Check: 7930 Weight: 1.00
+  Name: GLB5_PETMA Len: 164  Check: 1857 Weight: 0.91
+  Name: LGB2_LUPLU Len: 164  Check: 2879 Weight: 0.43
 
 //
 
@@ -482,7 +495,6 @@ LGB2_LUPLU IVIKKEMNDAA~~~
 </pre>
 </td></tr></table><p>
 
-
 <H2>
     Output file format
 </H2>
@@ -501,7 +513,6 @@ An image of the alignment is displayed on the specified graphics device.
 <h3>Output files for usage example 2</h3>
 <p><h3>Graphics File: prettyplot.ps</h3>
 <p><img src="prettyplot.2.prettyplot.gif" alt="[prettyplot results]">
-
 
 <H2>
     Data files
@@ -555,7 +566,6 @@ The directories are searched in the following order:
 </ul>
 <p>
 
-
 <H2>
     Notes
 </H2>
@@ -597,26 +607,97 @@ plplot.
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
-<tr><td><a href="abiview.html">abiview</a></td><td>Reads ABI file and display the trace</td></tr>
-<tr><td><a href="cirdna.html">cirdna</a></td><td>Draws circular maps of DNA constructs</td></tr>
-<tr><td><a href="emma.html">emma</a></td><td>Multiple alignment program - interface to ClustalW program</td></tr>
-<tr><td><a href="infoalign.html">infoalign</a></td><td>Information on a multiple sequence alignment</td></tr>
-<tr><td><a href="lindna.html">lindna</a></td><td>Draws linear maps of DNA constructs</td></tr>
-<tr><td><a href="pepnet.html">pepnet</a></td><td>Displays proteins as a helical net</td></tr>
-<tr><td><a href="pepwheel.html">pepwheel</a></td><td>Shows protein sequences as helices</td></tr>
-<tr><td><a href="plotcon.html">plotcon</a></td><td>Plot quality of conservation of a sequence alignment</td></tr>
-<tr><td><a href="prettyseq.html">prettyseq</a></td><td>Output sequence with translated ranges</td></tr>
-<tr><td><a href="remap.html">remap</a></td><td>Display sequence with restriction sites, translation etc</td></tr>
-<tr><td><a href="seealso.html">seealso</a></td><td>Finds programs sharing group names</td></tr>
-<tr><td><a href="showalign.html">showalign</a></td><td>Displays a multiple sequence alignment</td></tr>
-<tr><td><a href="showdb.html">showdb</a></td><td>Displays information on the currently available databases</td></tr>
-<tr><td><a href="showfeat.html">showfeat</a></td><td>Show features of a sequence</td></tr>
-<tr><td><a href="showseq.html">showseq</a></td><td>Display a sequence with features, translation etc</td></tr>
-<tr><td><a href="sixpack.html">sixpack</a></td><td>Display a DNA sequence with 6-frame translation and ORFs</td></tr>
-<tr><td><a href="textsearch.html">textsearch</a></td><td>Search sequence documentation. Slow, use SRS and Entrez!</td></tr>
-<tr><td><a href="tranalign.html">tranalign</a></td><td>Align nucleic coding regions given the aligned proteins</td></tr>
-</table>
+<tr>
+<td><a href="abiview.html">abiview</a></td>
+<td>Reads ABI file and display the trace</td>
+</tr>
 
+<tr>
+<td><a href="cirdna.html">cirdna</a></td>
+<td>Draws circular maps of DNA constructs</td>
+</tr>
+
+<tr>
+<td><a href="emma.html">emma</a></td>
+<td>Multiple alignment program - interface to ClustalW program</td>
+</tr>
+
+<tr>
+<td><a href="infoalign.html">infoalign</a></td>
+<td>Information on a multiple sequence alignment</td>
+</tr>
+
+<tr>
+<td><a href="lindna.html">lindna</a></td>
+<td>Draws linear maps of DNA constructs</td>
+</tr>
+
+<tr>
+<td><a href="pepnet.html">pepnet</a></td>
+<td>Displays proteins as a helical net</td>
+</tr>
+
+<tr>
+<td><a href="pepwheel.html">pepwheel</a></td>
+<td>Shows protein sequences as helices</td>
+</tr>
+
+<tr>
+<td><a href="plotcon.html">plotcon</a></td>
+<td>Plot quality of conservation of a sequence alignment</td>
+</tr>
+
+<tr>
+<td><a href="prettyseq.html">prettyseq</a></td>
+<td>Output sequence with translated ranges</td>
+</tr>
+
+<tr>
+<td><a href="remap.html">remap</a></td>
+<td>Display sequence with restriction sites, translation etc</td>
+</tr>
+
+<tr>
+<td><a href="seealso.html">seealso</a></td>
+<td>Finds programs sharing group names</td>
+</tr>
+
+<tr>
+<td><a href="showalign.html">showalign</a></td>
+<td>Displays a multiple sequence alignment</td>
+</tr>
+
+<tr>
+<td><a href="showdb.html">showdb</a></td>
+<td>Displays information on the currently available databases</td>
+</tr>
+
+<tr>
+<td><a href="showfeat.html">showfeat</a></td>
+<td>Show features of a sequence</td>
+</tr>
+
+<tr>
+<td><a href="showseq.html">showseq</a></td>
+<td>Display a sequence with features, translation etc</td>
+</tr>
+
+<tr>
+<td><a href="sixpack.html">sixpack</a></td>
+<td>Display a DNA sequence with 6-frame translation and ORFs</td>
+</tr>
+
+<tr>
+<td><a href="textsearch.html">textsearch</a></td>
+<td>Search sequence documentation. Slow, use SRS and Entrez!</td>
+</tr>
+
+<tr>
+<td><a href="tranalign.html">tranalign</a></td>
+<td>Align nucleic coding regions given the aligned proteins</td>
+</tr>
+
+</table>
 
 <H2>
     Author(s)
@@ -627,14 +708,12 @@ Sanger Institute, Wellcome Trust Genome Campus, Hinxton,
 Cambridge, CB10 1SA, UK.                      
 
 
-
 <p>
 
 Many features were first implemented in the EGCG program "prettyplot" by
 Peter Rice (pmr&nbsp;&copy;&nbsp;ebi.ac.uk)
 <br>
 Informatics Division, European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
-
 
 
 <p> 
@@ -649,18 +728,15 @@ marking. Rita Grandori suggested the -NOCOLLISION option.
 
 Completed 5th May 1999.
 
-
 <H2>
     Target users
 </H2>
 This program is intended to be used by everyone and everything, from naive users to embedded scripts.
 
-
 <H2>
     Comments
 </H2>
 None
-
 
 </BODY>
 </HTML>

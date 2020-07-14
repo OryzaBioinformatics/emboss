@@ -13,7 +13,6 @@
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
-
 cusp
 </font></b>
 </td></tr>
@@ -22,12 +21,10 @@ cusp
 <p>
 
 
-
 <H2>
     Function
 </H2>
 Create a codon usage table
-
 <H2>
     Description
 </H2>
@@ -51,13 +48,12 @@ This example uses only one input sequence. The normal use would be to use a set 
 
 % <b>cusp -sbeg 135 -send 1292 </b>
 Create a codon usage table
-Input sequence(s): <b>tembl:paamir</b>
+Input nucleotide sequence(s): <b>tembl:paamir</b>
 Output file [paamir.cusp]: <b></b>
 
 </pre></td></tr></table><p>
 <p>
 <a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
-
 
 <H2>
     Command line arguments
@@ -66,8 +62,9 @@ Output file [paamir.cusp]: <b></b>
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
    Standard (Mandatory) qualifiers:
-  [-sequence]          seqall     Sequence database USA
-  [-outfile]           outfile    Output file name
+  [-sequence]          seqall     Nucleotide sequence(s) filename and optional
+                                  format, or reference (input USA)
+  [-outfile]           outfile    [*.cusp] Output file name
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers: (none)
@@ -105,8 +102,7 @@ Output file [paamir.cusp]: <b></b>
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
-   -die                boolean    Report deaths
-
+   -die                boolean    Report dying program messages
 
 </pre>
 </td></tr></table>
@@ -119,7 +115,7 @@ Output file [paamir.cusp]: <b></b>
 
 <tr>
 <td>[-sequence]<br>(Parameter 1)</td>
-<td>Sequence database USA</td>
+<td>Nucleotide sequence(s) filename and optional format, or reference (input USA)</td>
 <td>Readable sequence(s)</td>
 <td><b>Required</b></td>
 </tr>
@@ -128,7 +124,7 @@ Output file [paamir.cusp]: <b></b>
 <td>[-outfile]<br>(Parameter 2)</td>
 <td>Output file name</td>
 <td>Output file</td>
-<td><i>&lt;sequence&gt;</i>.cusp</td>
+<td>&nbsp;</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
@@ -152,7 +148,6 @@ Output file [paamir.cusp]: <b></b>
 </tr>
 
 </table>
-
 <P>
 
 
@@ -278,7 +273,6 @@ SQ   Sequence 2167 BP; 363 A; 712 C; 730 G; 362 T; 0 other;
 
 
 
-
 <H2>
     Output file format
 </H2>
@@ -363,7 +357,6 @@ TAG    *     0.000     0.000      0
 TGA    *     1.000     2.591      1
 </pre>
 </td></tr></table><p>
-
 <p>
 The example usage read in a
 single CDS from Pseudomonas aeruginosa which has a very high GC
@@ -436,7 +429,6 @@ The directories are searched in the following order:
 </ul>
 <p>
 
-
 <H2>
     Notes
 </H2>
@@ -476,12 +468,27 @@ None.
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
-<tr><td><a href="cai.html">cai</a></td><td>CAI codon adaptation index</td></tr>
-<tr><td><a href="chips.html">chips</a></td><td>Codon usage statistics</td></tr>
-<tr><td><a href="codcmp.html">codcmp</a></td><td>Codon usage table comparison</td></tr>
-<tr><td><a href="syco.html">syco</a></td><td>Synonymous codon usage Gribskov statistic plot</td></tr>
-</table>
+<tr>
+<td><a href="cai.html">cai</a></td>
+<td>CAI codon adaptation index</td>
+</tr>
 
+<tr>
+<td><a href="chips.html">chips</a></td>
+<td>Codon usage statistics</td>
+</tr>
+
+<tr>
+<td><a href="codcmp.html">codcmp</a></td>
+<td>Codon usage table comparison</td>
+</tr>
+
+<tr>
+<td><a href="syco.html">syco</a></td>
+<td>Synonymous codon usage Gribskov statistic plot</td>
+</tr>
+
+</table>
 
 <H2>
     Author(s)
@@ -492,11 +499,9 @@ Alan Bleasby (ajb&nbsp;&copy;&nbsp;ebi.ac.uk)
 European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
 
 
-
 <H2>
     History
 </H2>
-
 
 
 <H2>
@@ -504,12 +509,10 @@ European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambri
 </H2>
 This program is intended to be used by everyone and everything, from naive users to embedded scripts.
 
-
 <H2>
     Comments
 </H2>
 None
-
 
 </BODY>
 </HTML>

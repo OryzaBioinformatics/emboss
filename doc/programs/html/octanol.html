@@ -13,7 +13,6 @@
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
-
 octanol
 </font></b>
 </td></tr>
@@ -22,12 +21,10 @@ octanol
 <p>
 
 
-
 <H2>
     Function
 </H2>
 Displays protein hydropathy
-
 
 <H2>
     Description
@@ -84,7 +81,7 @@ values for each residue are added over the window.
 
 % <b>octanol </b>
 Displays protein hydropathy
-Input sequence: <b>tsw:opsd_human</b>
+Input protein sequence: <b>tsw:opsd_human</b>
 Graph type [x11]: <b>ps</b>
 
 Created octanol.ps
@@ -94,66 +91,67 @@ Created octanol.ps
 <a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
 
 
-
 <H2>
     Command line arguments
 </H2>
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
    Standard (Mandatory) qualifiers:
-  [-sequence]          sequence   Sequence USA
-  [-graph]             xygraph    Graph type
+  [-sequence]          sequence   Protein sequence filename and optional
+                                  format, or reference (input USA)
+  [-graph]             xygraph    [$EMBOSS_GRAPHICS value, or x11] Graph type
+                                  (ps, hpgl, hp7470, hp7580, meta, cps, x11,
+                                  tekt, tek, none, data, xterm, png)
 
    Additional (Optional) qualifiers:
-   -datafile           datafile   White-Wimley data file
-   -width              integer    Window size
-   -octanolplot        boolean    Display the octanol plot
-   -interfaceplot      boolean    Display the interface plot
-   -[no]differenceplot boolean    Display the difference plot
+   -datafile           datafile   [Ewhite-wimley.dat] White-Wimley data file
+   -width              integer    [19] Window size (Integer from 1 to 200)
+   -octanolplot        boolean    [N] Display the octanol plot
+   -interfaceplot      boolean    [N] Display the interface plot
+   -[no]differenceplot boolean    [Y] Display the difference plot
 
    Advanced (Unprompted) qualifiers: (none)
    Associated qualifiers:
 
    "-sequence" associated qualifiers
-   -sbegin1             integer    Start of the sequence to be used
-   -send1               integer    End of the sequence to be used
-   -sreverse1           boolean    Reverse (if DNA)
-   -sask1               boolean    Ask for begin/end/reverse
-   -snucleotide1        boolean    Sequence is nucleotide
-   -sprotein1           boolean    Sequence is protein
-   -slower1             boolean    Make lower case
-   -supper1             boolean    Make upper case
-   -sformat1            string     Input sequence format
-   -sdbname1            string     Database name
-   -sid1                string     Entryname
-   -ufo1                string     UFO features
-   -fformat1            string     Features format
-   -fopenfile1          string     Features file name
+   -sbegin1            integer    Start of the sequence to be used
+   -send1              integer    End of the sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
 
    "-graph" associated qualifiers
-   -gprompt2            boolean    Graph prompting
-   -gtitle2             string     Graph title
-   -gsubtitle2          string     Graph subtitle
-   -gxtitle2            string     Graph x axis title
-   -gytitle2            string     Graph y axis title
-   -goutfile2           string     Output file for non interactive displays
-   -gdirectory2         string     Output directory
+   -gprompt2           boolean    Graph prompting
+   -gtitle2            string     Graph title
+   -gsubtitle2         string     Graph subtitle
+   -gxtitle2           string     Graph x axis title
+   -gytitle2           string     Graph y axis title
+   -goutfile2          string     Output file for non interactive displays
+   -gdirectory2        string     Output directory
 
    General qualifiers:
-   -auto                boolean    Turn off prompts
-   -stdout              boolean    Write standard output
-   -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for standard and additional values
-   -debug               boolean    Write debug output to program.dbg
-   -verbose             boolean    Report some/full command line options
-   -help                boolean    Report command line options. More
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
-   -warning             boolean    Report warnings
-   -error               boolean    Report errors
-   -fatal               boolean    Report fatal errors
-   -die                 boolean    Report deaths
-
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
 
 </pre>
 </td></tr></table>
@@ -168,7 +166,7 @@ Created octanol.ps
 
 <tr>
 <td>[-sequence]<br>(Parameter 1)</td>
-<td>Sequence USA</td>
+<td>Protein sequence filename and optional format, or reference (input USA)</td>
 <td>Readable sequence</td>
 <td><b>Required</b></td>
 </tr>
@@ -176,7 +174,7 @@ Created octanol.ps
 <tr>
 <td>[-graph]<br>(Parameter 2)</td>
 <td>Graph type</td>
-<td>EMBOSS has a list of known devices, including postscript, ps, hpgl, hp7470, hp7580, meta, colourps, cps, xwindows, x11, tektronics, tekt, tek4107t, tek, none, null, text, data, xterm, png, xml</td>
+<td>EMBOSS has a list of known devices, including ps, hpgl, hp7470, hp7580, meta, cps, x11, tekt, tek, none, data, xterm, png</td>
 <td><i>EMBOSS_GRAPHICS</i> value, or x11</td>
 </tr>
 
@@ -232,7 +230,6 @@ Created octanol.ps
 </tr>
 
 </table>
-
 
 
 <H2>
@@ -360,7 +357,6 @@ SQ   SEQUENCE   348 AA;  38892 MW;  07443BEA CRC32;
 </pre>
 </td></tr></table><p>
 
-
 <H2>
     Output file format
 </H2>
@@ -375,7 +371,6 @@ free energy calcuated over a sliding window.
 <h3>Output files for usage example </h3>
 <p><h3>Graphics File: octanol.ps</h3>
 <p><img src="octanol.1.octanol.gif" alt="[octanol results]">
-
 
 <p>
 
@@ -462,7 +457,6 @@ The directories are searched in the following order:
 </ul>
 <p>
 
-
 <H2>
     Notes
 </H2>
@@ -509,21 +503,77 @@ None.
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
-<tr><td><a href="backtranseq.html">backtranseq</a></td><td>Back translate a protein sequence</td></tr>
-<tr><td><a href="charge.html">charge</a></td><td>Protein charge plot</td></tr>
-<tr><td><a href="checktrans.html">checktrans</a></td><td>Reports STOP codons and ORF statistics of a protein</td></tr>
-<tr><td><a href="compseq.html">compseq</a></td><td>Count composition of dimer/trimer/etc words in a sequence</td></tr>
-<tr><td><a href="emowse.html">emowse</a></td><td>Protein identification by mass spectrometry</td></tr>
-<tr><td><a href="freak.html">freak</a></td><td>Residue/base frequency table or plot</td></tr>
-<tr><td><a href="iep.html">iep</a></td><td>Calculates the isoelectric point of a protein</td></tr>
-<tr><td><a href="mwcontam.html">mwcontam</a></td><td>Shows molwts that match across a set of files</td></tr>
-<tr><td><a href="mwfilter.html">mwfilter</a></td><td>Filter noisy molwts from mass spec output</td></tr>
-<tr><td><a href="pepinfo.html">pepinfo</a></td><td>Plots simple amino acid properties in parallel</td></tr>
-<tr><td><a href="pepstats.html">pepstats</a></td><td>Protein statistics</td></tr>
-<tr><td><a href="pepwindow.html">pepwindow</a></td><td>Displays protein hydropathy</td></tr>
-<tr><td><a href="pepwindowall.html">pepwindowall</a></td><td>Displays protein hydropathy of a set of sequences</td></tr>
-</table>
+<tr>
+<td><a href="backtranambig.html">backtranambig</a></td>
+<td>Back translate a protein sequence to ambiguous codons</td>
+</tr>
 
+<tr>
+<td><a href="backtranseq.html">backtranseq</a></td>
+<td>Back translate a protein sequence</td>
+</tr>
+
+<tr>
+<td><a href="charge.html">charge</a></td>
+<td>Protein charge plot</td>
+</tr>
+
+<tr>
+<td><a href="checktrans.html">checktrans</a></td>
+<td>Reports STOP codons and ORF statistics of a protein</td>
+</tr>
+
+<tr>
+<td><a href="compseq.html">compseq</a></td>
+<td>Count composition of dimer/trimer/etc words in a sequence</td>
+</tr>
+
+<tr>
+<td><a href="emowse.html">emowse</a></td>
+<td>Protein identification by mass spectrometry</td>
+</tr>
+
+<tr>
+<td><a href="freak.html">freak</a></td>
+<td>Residue/base frequency table or plot</td>
+</tr>
+
+<tr>
+<td><a href="iep.html">iep</a></td>
+<td>Calculates the isoelectric point of a protein</td>
+</tr>
+
+<tr>
+<td><a href="mwcontam.html">mwcontam</a></td>
+<td>Shows molwts that match across a set of files</td>
+</tr>
+
+<tr>
+<td><a href="mwfilter.html">mwfilter</a></td>
+<td>Filter noisy molwts from mass spec output</td>
+</tr>
+
+<tr>
+<td><a href="pepinfo.html">pepinfo</a></td>
+<td>Plots simple amino acid properties in parallel</td>
+</tr>
+
+<tr>
+<td><a href="pepstats.html">pepstats</a></td>
+<td>Protein statistics</td>
+</tr>
+
+<tr>
+<td><a href="pepwindow.html">pepwindow</a></td>
+<td>Displays protein hydropathy</td>
+</tr>
+
+<tr>
+<td><a href="pepwindowall.html">pepwindowall</a></td>
+<td>Displays protein hydropathy of a set of sequences</td>
+</tr>
+
+</table>
 
 
 <H2>
@@ -537,11 +587,9 @@ Sanger Institute, Wellcome Trust Genome Campus, Hinxton,
 Cambridge, CB10 1SA, UK.                      
 
 
-
 <H2>
     History
 </H2>
-
 
 
 
@@ -552,12 +600,10 @@ Cambridge, CB10 1SA, UK.
 This program is intended to be used by everyone and everything, from naive users to embedded scripts.
 
 
-
 <H2>
     Comments
 </H2>
 None
-
 
 
 </BODY>

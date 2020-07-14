@@ -29,7 +29,7 @@ Usage
 
 % acdtrace antigenic 
 Finds antigenic sites in proteins
-Input sequence(s): tsw:act1_fugru
+Input protein sequence(s): tsw:act1_fugru
 Minimum length [6]: 
 Output report [act1_fugru.antigenic]: 
 

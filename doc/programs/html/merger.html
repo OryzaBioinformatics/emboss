@@ -13,7 +13,6 @@
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
-
 merger
 </font></b>
 </td></tr>
@@ -22,12 +21,10 @@ merger
 <p>
 
 
-
 <H2>
     Function
 </H2>
-Merge two overlapping nucleic acid sequences
-
+Merge two overlapping sequences
 
 <H2>
     Description
@@ -103,16 +100,15 @@ the best results with a set of poor quality EST test sequences.
 <table width="90%"><tr><td bgcolor="#CCFFFF"><pre>
 
 % <b>merger </b>
-Merge two overlapping nucleic acid sequences
+Merge two overlapping sequences
 Input sequence: <b>tembl:eclacy</b>
 Second sequence: <b>tembl:eclaca</b>
 Output alignment [eclacy.merger]: <b></b>
-Output sequence [eclacy.fasta]: <b></b>
+output sequence [eclacy.fasta]: <b></b>
 
 </pre></td></tr></table><p>
 <p>
 <a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
-
 
 
 <p>
@@ -132,20 +128,26 @@ into the correct orientation to make it join. For example:
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
    Standard (Mandatory) qualifiers:
-  [-asequence]         sequence   Sequence USA
-  [-bsequence]         sequence   Sequence USA
+  [-asequence]         sequence   Sequence filename and optional format, or
+                                  reference (input USA)
+  [-bsequence]         sequence   Sequence filename and optional format, or
+                                  reference (input USA)
   [-outfile]           align      Output alignment file name
-  [-outseq]            seqout     Output sequence USA
+  [-outseq]            seqout     [<sequence>.<format>] Sequence filename and
+                                  optional format (output USA)
 
    Additional (Optional) qualifiers:
-   -datafile           matrixf    This is the scoring matrix file used when
+   -datafile           matrixf    [EBLOSUM62 for protein, EDNAFULL for DNA]
+                                  This is the scoring matrix file used when
                                   comparing sequences. By default it is the
                                   file 'EBLOSUM62' (for proteins) or the file
                                   'EDNAFULL' (for nucleic sequences). These
                                   files are found in the 'data' directory of
                                   the EMBOSS installation.
-   -gapopen            float      Gap opening penalty
-   -gapextend          float      Gap extension penalty
+   -gapopen            float      [@($(acdprotein)? 50.0 : 50.0 )] Gap opening
+                                  penalty (Number from 0.000 to 100.000)
+   -gapextend          float      [@($(acdprotein)? 5.0 : 5.0)] Gap extension
+                                  penalty (Number from 0.000 to 10.000)
 
    Advanced (Unprompted) qualifiers: (none)
    Associated qualifiers:
@@ -218,8 +220,7 @@ into the correct orientation to make it join. For example:
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
-   -die                boolean    Report deaths
-
+   -die                boolean    Report dying program messages
 
 </pre>
 </td></tr></table>
@@ -234,14 +235,14 @@ into the correct orientation to make it join. For example:
 
 <tr>
 <td>[-asequence]<br>(Parameter 1)</td>
-<td>Sequence USA</td>
+<td>Sequence filename and optional format, or reference (input USA)</td>
 <td>Readable sequence</td>
 <td><b>Required</b></td>
 </tr>
 
 <tr>
 <td>[-bsequence]<br>(Parameter 2)</td>
-<td>Sequence USA</td>
+<td>Sequence filename and optional format, or reference (input USA)</td>
 <td>Readable sequence</td>
 <td><b>Required</b></td>
 </tr>
@@ -255,9 +256,9 @@ into the correct orientation to make it join. For example:
 
 <tr>
 <td>[-outseq]<br>(Parameter 4)</td>
-<td>Output sequence USA</td>
+<td>Sequence filename and optional format (output USA)</td>
 <td>Writeable sequence</td>
-<td><i>&lt;sequence&gt;</i>.<i>format</i></td>
+<td>&nbsp;</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
@@ -277,14 +278,14 @@ into the correct orientation to make it join. For example:
 <td>-gapopen</td>
 <td>Gap opening penalty</td>
 <td>Number from 0.000 to 100.000</td>
-<td>50.0</td>
+<td>@($(acdprotein)? 50.0 : 50.0 )</td>
 </tr>
 
 <tr>
 <td>-gapextend</td>
 <td>Gap extension penalty</td>
 <td>Number from 0.000 to 10.000</td>
-<td>5.0</td>
+<td>@($(acdprotein)? 5.0 : 5.0)</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
@@ -298,7 +299,6 @@ into the correct orientation to make it join. For example:
 </tr>
 
 </table>
-
 
 
 <H2>
@@ -502,7 +502,6 @@ SQ   Sequence 1832 BP; 519 A; 510 C; 450 G; 353 T; 0 other;
 </pre>
 </td></tr></table><p>
 
-
 <H2>
     Output file format
 </H2>
@@ -544,7 +543,6 @@ http://emboss.sf.net/docs/themes/AlignFormats.html</A>
 for further information on alignment formats.
 
 <p>
-
  
 <p>
 
@@ -564,7 +562,10 @@ uppercase.
 <pre>
 ########################################
 # Program: merger
-# Rundate: Fri Jul 15 2005 12:00:00
+# Rundate: Sat Jul 15 2006 12:00:00
+# Commandline: merger
+#    -asequence tembl:eclacy
+#    -bsequence tembl:eclaca
 # Align_format: simple
 # Report_file: eclacy.merger
 ########################################
@@ -609,9 +610,6 @@ ECLACA             1 --------------------------------------------------      0
 
 ECLACY           251 ttgccgctatttctctgttctcgctattattccaaccgctgtttggtctg    300
                                                                        
-ECLACA             1 --------------------------------------------------      0
-
-ECLACY           301 ctttctgacaaactcgggctgcgcaaatacctgctgtggattattaccgg    350
 
 
 <font color=red>  [Part of this file has been deleted for brevity]</font>
@@ -730,7 +728,6 @@ agcttccggccagcgccagcccgcccatggtaaccaccggcagagcggtcgac
 </td></tr></table><p>
 
 
-
 <H2>
     Data files
 </H2>
@@ -779,10 +776,17 @@ None.
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
-<tr><td><a href="cons.html">cons</a></td><td>Creates a consensus from multiple alignments</td></tr>
-<tr><td><a href="megamerger.html">megamerger</a></td><td>Merge two large overlapping nucleic acid sequences</td></tr>
-</table>
+<tr>
+<td><a href="cons.html">cons</a></td>
+<td>Creates a consensus from multiple alignments</td>
+</tr>
 
+<tr>
+<td><a href="megamerger.html">megamerger</a></td>
+<td>Merge two large overlapping nucleic acid sequences</td>
+</tr>
+
+</table>
 
 <H2>
     Author(s)
@@ -796,13 +800,11 @@ Wellcome Trust Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
 
 
 
-
 <H2>
     History
 </H2>
 
 Written (Gary Williams) 1999
-
 
 <H2>
     Target users
@@ -810,12 +812,10 @@ Written (Gary Williams) 1999
 This program is intended to be used by everyone and everything, from naive users to embedded scripts.
 
 
-
 <H2>
     Comments
 </H2>
 None
-
 
 </BODY>
 </HTML>

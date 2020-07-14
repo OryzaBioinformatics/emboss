@@ -19,14 +19,12 @@
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
-
 wordmatch
 </font></b>
 </td></tr>
 </table>
 <br>&nbsp;
 <p>
-
 
 
 
@@ -44,7 +42,6 @@ DON'T WRITE ANYTHING HERE.
 IT IS DONE FOR YOU.
 -->
 Finds all exact matches of a given size between 2 sequences
-
 
 <H2>
     Description
@@ -77,13 +74,12 @@ It will not find identical regions smaller than the specified <b>wordsize</b>.
 Finds all exact matches of a given size between 2 sequences
 Word size [4]: <b></b>
 Output alignment [hba_human.wordmatch]: <b></b>
-Output features [HBA_HUMAN.gff]: <b></b>
-Second output features [HBB_HUMAN.gff]: <b></b>
+Features output [HBA_HUMAN.gff]: <b></b>
+Second features output [HBB_HUMAN.gff]: <b></b>
 
 </pre></td></tr></table><p>
 <p>
 <a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
-
 
 
 <H2>
@@ -100,91 +96,92 @@ IT IS DONE FOR YOU.
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
    Standard (Mandatory) qualifiers:
-  [-asequence]         sequence   Sequence USA
-  [-bsequence]         sequence   Sequence USA
-   -wordsize           integer    Word size
+  [-asequence]         sequence   Sequence filename and optional format, or
+                                  reference (input USA)
+  [-bsequence]         sequence   Sequence filename and optional format, or
+                                  reference (input USA)
+   -wordsize           integer    [4] Word size (Integer 2 or more)
   [-outfile]           align      Output alignment file name
-  [-aoutfeat]          featout    Output features UFO
-  [-boutfeat]          featout    Output features UFO
+  [-aoutfeat]          featout    [unknown.gff] Output features UFO
+  [-boutfeat]          featout    [unknown.gff] Output features UFO
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers: (none)
    Associated qualifiers:
 
    "-asequence" associated qualifiers
-   -sbegin1             integer    Start of the sequence to be used
-   -send1               integer    End of the sequence to be used
-   -sreverse1           boolean    Reverse (if DNA)
-   -sask1               boolean    Ask for begin/end/reverse
-   -snucleotide1        boolean    Sequence is nucleotide
-   -sprotein1           boolean    Sequence is protein
-   -slower1             boolean    Make lower case
-   -supper1             boolean    Make upper case
-   -sformat1            string     Input sequence format
-   -sdbname1            string     Database name
-   -sid1                string     Entryname
-   -ufo1                string     UFO features
-   -fformat1            string     Features format
-   -fopenfile1          string     Features file name
+   -sbegin1            integer    Start of the sequence to be used
+   -send1              integer    End of the sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
 
    "-bsequence" associated qualifiers
-   -sbegin2             integer    Start of the sequence to be used
-   -send2               integer    End of the sequence to be used
-   -sreverse2           boolean    Reverse (if DNA)
-   -sask2               boolean    Ask for begin/end/reverse
-   -snucleotide2        boolean    Sequence is nucleotide
-   -sprotein2           boolean    Sequence is protein
-   -slower2             boolean    Make lower case
-   -supper2             boolean    Make upper case
-   -sformat2            string     Input sequence format
-   -sdbname2            string     Database name
-   -sid2                string     Entryname
-   -ufo2                string     UFO features
-   -fformat2            string     Features format
-   -fopenfile2          string     Features file name
+   -sbegin2            integer    Start of the sequence to be used
+   -send2              integer    End of the sequence to be used
+   -sreverse2          boolean    Reverse (if DNA)
+   -sask2              boolean    Ask for begin/end/reverse
+   -snucleotide2       boolean    Sequence is nucleotide
+   -sprotein2          boolean    Sequence is protein
+   -slower2            boolean    Make lower case
+   -supper2            boolean    Make upper case
+   -sformat2           string     Input sequence format
+   -sdbname2           string     Database name
+   -sid2               string     Entryname
+   -ufo2               string     UFO features
+   -fformat2           string     Features format
+   -fopenfile2         string     Features file name
 
    "-outfile" associated qualifiers
-   -aformat3            string     Alignment format
-   -aextension3         string     File name extension
-   -adirectory3         string     Output directory
-   -aname3              string     Base file name
-   -awidth3             integer    Alignment width
-   -aaccshow3           boolean    Show accession number in the header
-   -adesshow3           boolean    Show description in the header
-   -ausashow3           boolean    Show the full USA in the alignment
-   -aglobal3            boolean    Show the full sequence in alignment
+   -aformat3           string     Alignment format
+   -aextension3        string     File name extension
+   -adirectory3        string     Output directory
+   -aname3             string     Base file name
+   -awidth3            integer    Alignment width
+   -aaccshow3          boolean    Show accession number in the header
+   -adesshow3          boolean    Show description in the header
+   -ausashow3          boolean    Show the full USA in the alignment
+   -aglobal3           boolean    Show the full sequence in alignment
 
    "-aoutfeat" associated qualifiers
-   -offormat4           string     Output feature format
-   -ofopenfile4         string     Features file name
-   -ofextension4        string     File name extension
-   -ofdirectory4        string     Output directory
-   -ofname4             string     Base file name
-   -ofsingle4           boolean    Separate file for each entry
+   -offormat4          string     Output feature format
+   -ofopenfile4        string     Features file name
+   -ofextension4       string     File name extension
+   -ofdirectory4       string     Output directory
+   -ofname4            string     Base file name
+   -ofsingle4          boolean    Separate file for each entry
 
    "-boutfeat" associated qualifiers
-   -offormat5           string     Output feature format
-   -ofopenfile5         string     Features file name
-   -ofextension5        string     File name extension
-   -ofdirectory5        string     Output directory
-   -ofname5             string     Base file name
-   -ofsingle5           boolean    Separate file for each entry
+   -offormat5          string     Output feature format
+   -ofopenfile5        string     Features file name
+   -ofextension5       string     File name extension
+   -ofdirectory5       string     Output directory
+   -ofname5            string     Base file name
+   -ofsingle5          boolean    Separate file for each entry
 
    General qualifiers:
-   -auto                boolean    Turn off prompts
-   -stdout              boolean    Write standard output
-   -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for standard and additional values
-   -debug               boolean    Write debug output to program.dbg
-   -verbose             boolean    Report some/full command line options
-   -help                boolean    Report command line options. More
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
-   -warning             boolean    Report warnings
-   -error               boolean    Report errors
-   -fatal               boolean    Report fatal errors
-   -die                 boolean    Report deaths
-
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
 
 </pre>
 </td></tr></table>
@@ -199,14 +196,14 @@ IT IS DONE FOR YOU.
 
 <tr>
 <td>[-asequence]<br>(Parameter 1)</td>
-<td>Sequence USA</td>
+<td>Sequence filename and optional format, or reference (input USA)</td>
 <td>Readable sequence</td>
 <td><b>Required</b></td>
 </tr>
 
 <tr>
 <td>[-bsequence]<br>(Parameter 2)</td>
-<td>Sequence USA</td>
+<td>Sequence filename and optional format, or reference (input USA)</td>
 <td>Readable sequence</td>
 <td><b>Required</b></td>
 </tr>
@@ -260,7 +257,6 @@ IT IS DONE FOR YOU.
 </tr>
 
 </table>
-
 
 
 <H2>
@@ -500,7 +496,6 @@ SQ   SEQUENCE   146 AA;  15867 MW;  EC9744C9 CRC32;
 </td></tr></table><p>
 
 
-
 <H2>
     Output file format
 </H2>
@@ -536,7 +531,6 @@ for further information on alignment formats.
 
 <p>
 
-
 <p>
 
 
@@ -547,7 +541,10 @@ for further information on alignment formats.
 <pre>
 ########################################
 # Program: wordmatch
-# Rundate: Fri Jul 15 2005 12:00:00
+# Rundate: Sat Jul 15 2006 12:00:00
+# Commandline: wordmatch
+#    [-asequence] tsw:hba_human
+#    [-bsequence] tsw:hbb_human
 # Align_format: match
 # Report_file: hba_human.wordmatch
 ########################################
@@ -571,7 +568,7 @@ for further information on alignment formats.
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 ##gff-version 2.0
-##date 2005-07-15
+##date 2006-07-15
 ##Type Protein HBA_HUMAN
 HBA_HUMAN	wordmatch	misc_feature	58	62	1.000	+	.	Sequence "HBA_HUMAN.1" ; note "HBB_HUMAN"
 HBA_HUMAN	wordmatch	misc_feature	14	17	1.000	+	.	Sequence "HBA_HUMAN.2" ; note "HBB_HUMAN"
@@ -582,14 +579,13 @@ HBA_HUMAN	wordmatch	misc_feature	116	119	1.000	+	.	Sequence "HBA_HUMAN.3" ; note
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 ##gff-version 2.0
-##date 2005-07-15
+##date 2006-07-15
 ##Type Protein HBB_HUMAN
 HBB_HUMAN	wordmatch	misc_feature	63	67	1.000	+	.	Sequence "HBB_HUMAN.1" ; note "HBA_HUMAN"
 HBB_HUMAN	wordmatch	misc_feature	15	18	1.000	+	.	Sequence "HBB_HUMAN.2" ; note "HBA_HUMAN"
 HBB_HUMAN	wordmatch	misc_feature	121	124	1.000	+	.	Sequence "HBB_HUMAN.3" ; note "HBA_HUMAN"
 </pre>
 </td></tr></table><p>
-
 
 <p>
 
@@ -661,12 +657,27 @@ None.
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
-<tr><td><a href="matcher.html">matcher</a></td><td>Finds the best local alignments between two sequences</td></tr>
-<tr><td><a href="seqmatchall.html">seqmatchall</a></td><td>All-against-all comparison of a set of sequences</td></tr>
-<tr><td><a href="supermatcher.html">supermatcher</a></td><td>Match large sequences against one or more other sequences</td></tr>
-<tr><td><a href="water.html">water</a></td><td>Smith-Waterman local alignment</td></tr>
-</table>
+<tr>
+<td><a href="matcher.html">matcher</a></td>
+<td>Finds the best local alignments between two sequences</td>
+</tr>
 
+<tr>
+<td><a href="seqmatchall.html">seqmatchall</a></td>
+<td>All-against-all comparison of a set of sequences</td>
+</tr>
+
+<tr>
+<td><a href="supermatcher.html">supermatcher</a></td>
+<td>Match large sequences against one or more other sequences</td>
+</tr>
+
+<tr>
+<td><a href="water.html">water</a></td>
+<td>Smith-Waterman local alignment</td>
+</tr>
+
+</table>
 <!--
         Add any comments about other associated programs (to prepare
         data files?) that seealso doesn't find.
@@ -684,7 +695,6 @@ Sanger Institute, Wellcome Trust Genome Campus, Hinxton,
 Cambridge, CB10 1SA, UK.                      
 
 
-
 <H2>
     History
 </H2>
@@ -694,7 +704,6 @@ Completed 27th November 1998.
 <!--
 <p>
 
-
 -->
 
 <H2>
@@ -703,7 +712,6 @@ Completed 27th November 1998.
 
 
 This program is intended to be used by everyone and everything, from naive users to embedded scripts.
-
 
 
 <H2>

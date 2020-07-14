@@ -82,7 +82,7 @@ Usage
 
 % tcode 
 Fickett TESTCODE statistic to identify protein-coding DNA
-Input sequence(s): tembl:hsfau1
+Input nucleotide sequence(s): tembl:hsfau1
 Length of sliding window [200]: 
 Output report [hsfau1.tcode]: 
 
@@ -96,7 +96,7 @@ Output report [hsfau1.tcode]:
 
 % tcode -plot -graph cps 
 Fickett TESTCODE statistic to identify protein-coding DNA
-Input sequence(s): tembl:hsfau1
+Input nucleotide sequence(s): tembl:hsfau1
 Length of sliding window [200]: 
 
 Created tcode.ps
@@ -106,28 +106,34 @@ Created tcode.ps
 Command line arguments
 
    Standard (Mandatory) qualifiers (* if not always prompted):
-  [-sequence]          seqall     Sequence database USA
-   -window             integer    This is the number of nucleotide bases over
-                                  which the TESTCODE statistic will be
+  [-sequence]          seqall     Nucleotide sequence(s) filename and optional
+                                  format, or reference (input USA)
+   -window             integer    [200] This is the number of nucleotide bases
+                                  over which the TESTCODE statistic will be
                                   performed each time. The window will then
                                   slide along the sequence, covering the same
-                                  number of bases each time.
+                                  number of bases each time. (Integer 200 or
+                                  more)
 *  -outfile            report     Output report file name
-*  -graph              xygraph    Graph type
+*  -graph              xygraph    [$EMBOSS_GRAPHICS value, or x11] Graph type
+                                  (ps, hpgl, hp7470, hp7580, meta, cps, x11,
+                                  tekt, tek, none, data, xterm, png)
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers:
-   -datafile           datafile   The default data file is Etcode.dat and
-                                  contains coding probabilities for each base.
-                                  The probabilities are for both positional
-                                  and compositional information.
-   -step               integer    The selected window will, by default, slide
-                                  along the nucleotide sequence by three bases
-                                  at a time, retaining the frame (although
-                                  the algorithm is not frame sensitive). This
-                                  may be altered to increase or decrease the
-                                  increment of the slide.
-   -plot               toggle     On selection a graph of the sequence (X
+   -datafile           datafile   [Etcode.dat] The default data file is
+                                  Etcode.dat and contains coding probabilities
+                                  for each base. The probabilities are for
+                                  both positional and compositional
+                                  information.
+   -step               integer    [3] The selected window will, by default,
+                                  slide along the nucleotide sequence by three
+                                  bases at a time, retaining the frame
+                                  (although the algorithm is not frame
+                                  sensitive). This may be altered to increase
+                                  or decrease the increment of the slide.
+                                  (Integer 1 or more)
+   -plot               toggle     [N] On selection a graph of the sequence (X
                                   axis) plotted against the coding score (Y
                                   axis) will be displayed. Sequence above the
                                   green line is coding, that below the red
@@ -136,82 +142,54 @@ Command line arguments
    Associated qualifiers:
 
    "-sequence" associated qualifiers
-   -sbegin1             integer    Start of each sequence to be used
-   -send1               integer    End of each sequence to be used
-   -sreverse1           boolean    Reverse (if DNA)
-   -sask1               boolean    Ask for begin/end/reverse
-   -snucleotide1        boolean    Sequence is nucleotide
-   -sprotein1           boolean    Sequence is protein
-   -slower1             boolean    Make lower case
-   -supper1             boolean    Make upper case
-   -sformat1            string     Input sequence format
-   -sdbname1            string     Database name
-   -sid1                string     Entryname
-   -ufo1                string     UFO features
-   -fformat1            string     Features format
-   -fopenfile1          string     Features file name
+   -sbegin1            integer    Start of each sequence to be used
+   -send1              integer    End of each sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
 
    "-outfile" associated qualifiers
-   -rformat             string     Report format
-   -rname               string     Base file name
-   -rextension          string     File name extension
-   -rdirectory          string     Output directory
-   -raccshow            boolean    Show accession number in the report
-   -rdesshow            boolean    Show description in the report
-   -rscoreshow          boolean    Show the score in the report
-   -rusashow            boolean    Show the full USA in the report
+   -rformat            string     Report format
+   -rname              string     Base file name
+   -rextension         string     File name extension
+   -rdirectory         string     Output directory
+   -raccshow           boolean    Show accession number in the report
+   -rdesshow           boolean    Show description in the report
+   -rscoreshow         boolean    Show the score in the report
+   -rusashow           boolean    Show the full USA in the report
 
    "-graph" associated qualifiers
-   -gprompt             boolean    Graph prompting
-   -gtitle              string     Graph title
-   -gsubtitle           string     Graph subtitle
-   -gxtitle             string     Graph x axis title
-   -gytitle             string     Graph y axis title
-   -goutfile            string     Output file for non interactive displays
-   -gdirectory          string     Output directory
+   -gprompt            boolean    Graph prompting
+   -gtitle             string     Graph title
+   -gsubtitle          string     Graph subtitle
+   -gxtitle            string     Graph x axis title
+   -gytitle            string     Graph y axis title
+   -goutfile           string     Output file for non interactive displays
+   -gdirectory         string     Output directory
 
    General qualifiers:
-   -auto                boolean    Turn off prompts
-   -stdout              boolean    Write standard output
-   -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for standard and additional values
-   -debug               boolean    Write debug output to program.dbg
-   -verbose             boolean    Report some/full command line options
-   -help                boolean    Report command line options. More
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
-   -warning             boolean    Report warnings
-   -error               boolean    Report errors
-   -fatal               boolean    Report fatal errors
-   -die                 boolean    Report deaths
-
-
-   Standard (Mandatory) qualifiers Allowed values Default
-   [-sequence]
-   (Parameter 1) Sequence database USA Readable sequence(s) Required
-   -window This is the number of nucleotide bases over which the TESTCODE
-   statistic will be performed each time. The window will then slide
-   along the sequence, covering the same number of bases each time.
-   Integer 200 or more 200
-   -outfile Output report file name Report output file
-   -graph Graph type EMBOSS has a list of known devices, including
-   postscript, ps, hpgl, hp7470, hp7580, meta, colourps, cps, xwindows,
-   x11, tektronics, tekt, tek4107t, tek, none, null, text, data, xterm,
-   png, xml EMBOSS_GRAPHICS value, or x11
-   Additional (Optional) qualifiers Allowed values Default
-   (none)
-   Advanced (Unprompted) qualifiers Allowed values Default
-   -datafile The default data file is Etcode.dat and contains coding
-   probabilities for each base. The probabilities are for both positional
-   and compositional information. Data file Etcode.dat
-   -step The selected window will, by default, slide along the nucleotide
-   sequence by three bases at a time, retaining the frame (although the
-   algorithm is not frame sensitive). This may be altered to increase or
-   decrease the increment of the slide. Integer 1 or more 3
-   -plot On selection a graph of the sequence (X axis) plotted against
-   the coding score (Y axis) will be displayed. Sequence above the green
-   line is coding, that below the red line is non-coding. Toggle value
-   Yes/No No
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
 
 Input file format
 
@@ -404,7 +382,9 @@ Output file format
 
 ########################################
 # Program: tcode
-# Rundate: Fri Jul 15 2005 12:00:00
+# Rundate: Sat Jul 15 2006 12:00:00
+# Commandline: tcode
+#    -sequence tembl:hsfau1
 # Report_format: table
 # Report_file: hsfau1.tcode
 ########################################
@@ -450,8 +430,6 @@ Output file format
      85     284   1.098 Coding
      88     287   0.976 Coding
      91     290   0.962 Coding
-     94     293   0.944 No opinion
-     97     296   0.897 No opinion
 
 
   [Part of this file has been deleted for brevity]
@@ -469,8 +447,8 @@ Output file format
    1705    1904   0.985 Coding
    1708    1907   0.988 Coding
    1711    1910   0.981 Coding
-   1714    1913   1.001 Coding
-   1717    1916   1.001 Coding
+   1714    1913   1.000 Coding
+   1717    1916   1.000 Coding
    1720    1919   1.004 Coding
    1723    1922   0.975 Coding
    1726    1925   0.975 Coding

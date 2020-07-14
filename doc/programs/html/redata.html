@@ -13,7 +13,6 @@
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
-
 redata
 </font></b>
 </td></tr>
@@ -22,12 +21,10 @@ redata
 <p>
 
 
-
 <H2>
     Function
 </H2>
 Search REBASE for enzyme name, references, suppliers etc
-
 
 <H2>
     Description
@@ -73,48 +70,46 @@ Output file [outfile.redata]: <b></b>
 <p>
 <a href="#output.1">Go to the output files for this example</a><p><p>
 
-
 <H2>
     Command line arguments
 </H2>
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
    Standard (Mandatory) qualifiers:
-  [-enzyme]            string     Enter the name of the restriction enzyme
-                                  that you wish to get details of. The names
-                                  often have a 'I' in them - this is a capital
-                                  'i', not a '1' or an 'l'. The names are
-                                  case-independent ('AaeI' is the same as
-                                  'aaei')
-  [-outfile]           outfile    Output file name
+  [-enzyme]            string     [BamHI] Enter the name of the restriction
+                                  enzyme that you wish to get details of. The
+                                  names often have a 'I' in them - this is a
+                                  capital 'i', not a '1' or an 'l'. The names
+                                  are case-independent ('AaeI' is the same as
+                                  'aaei') (Any string is accepted)
+  [-outfile]           outfile    [*.redata] Output file name
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers:
-   -[no]isoschizomers  boolean    Show other enzymes with this specificity.
-                                  (Isoschizomers)
-   -[no]references     boolean    Show references
-   -[no]suppliers      boolean    Show suppliers
+   -[no]isoschizomers  boolean    [Y] Show other enzymes with this
+                                  specificity. (Isoschizomers)
+   -[no]references     boolean    [Y] Show references
+   -[no]suppliers      boolean    [Y] Show suppliers
 
    Associated qualifiers:
 
    "-outfile" associated qualifiers
-   -odirectory2         string     Output directory
+   -odirectory2        string     Output directory
 
    General qualifiers:
-   -auto                boolean    Turn off prompts
-   -stdout              boolean    Write standard output
-   -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for standard and additional values
-   -debug               boolean    Write debug output to program.dbg
-   -verbose             boolean    Report some/full command line options
-   -help                boolean    Report command line options. More
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
-   -warning             boolean    Report warnings
-   -error               boolean    Report errors
-   -fatal               boolean    Report fatal errors
-   -die                 boolean    Report deaths
-
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
 
 </pre>
 </td></tr></table>
@@ -138,7 +133,7 @@ Output file [outfile.redata]: <b></b>
 <td>[-outfile]<br>(Parameter 2)</td>
 <td>Output file name</td>
 <td>Output file</td>
-<td><i>&lt;sequence&gt;</i>.redata</td>
+<td>&nbsp;</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
@@ -181,11 +176,9 @@ Output file [outfile.redata]: <b></b>
 </table>
 
 
-
 <H2>
     Input file format
 </H2>
-
 
 
 
@@ -262,7 +255,6 @@ Xu, S.-Y., Fomenkov, A., (1994) Biotechniques, vol. 17, pp. 57.
 </pre>
 </td></tr></table><p>
 
-
 <p>
 
 This includes the full list of isoschizomers (enzymes with the same
@@ -311,7 +303,6 @@ The directories are searched in the following order:
    <li> ~/.embossdata
 </ul>
 <p>
-
 <p>
 The EMBOSS REBASE restriction enzyme data files are stored iin
 directory 'data/REBASE/*' under the EMBOSS installation directory.
@@ -356,7 +347,6 @@ is the preferred (prototype) name.
 	 
 	          
 
-
 <H2>
     Notes
 </H2>
@@ -397,14 +387,37 @@ None.
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
-<tr><td><a href="recoder.html">recoder</a></td><td>Remove restriction sites but maintain same translation</td></tr>
-<tr><td><a href="remap.html">remap</a></td><td>Display sequence with restriction sites, translation etc</td></tr>
-<tr><td><a href="restover.html">restover</a></td><td>Find restriction enzymes producing specific overhang</td></tr>
-<tr><td><a href="restrict.html">restrict</a></td><td>Finds restriction enzyme cleavage sites</td></tr>
-<tr><td><a href="showseq.html">showseq</a></td><td>Display a sequence with features, translation etc</td></tr>
-<tr><td><a href="silent.html">silent</a></td><td>Silent mutation restriction enzyme scan</td></tr>
-</table>
+<tr>
+<td><a href="recoder.html">recoder</a></td>
+<td>Remove restriction sites but maintain same translation</td>
+</tr>
 
+<tr>
+<td><a href="remap.html">remap</a></td>
+<td>Display sequence with restriction sites, translation etc</td>
+</tr>
+
+<tr>
+<td><a href="restover.html">restover</a></td>
+<td>Find restriction enzymes producing specific overhang</td>
+</tr>
+
+<tr>
+<td><a href="restrict.html">restrict</a></td>
+<td>Finds restriction enzyme cleavage sites</td>
+</tr>
+
+<tr>
+<td><a href="showseq.html">showseq</a></td>
+<td>Display a sequence with features, translation etc</td>
+</tr>
+
+<tr>
+<td><a href="silent.html">silent</a></td>
+<td>Silent mutation restriction enzyme scan</td>
+</tr>
+
+</table>
 
 <H2>
     Author(s)
@@ -417,13 +430,11 @@ European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambri
 
 
 
-
 <H2>
     History
 </H2>
 
 Written 1999 - Alan Bleasby
-
 
 <H2>
     Target users
@@ -433,12 +444,10 @@ Written 1999 - Alan Bleasby
 This program is intended to be used by everyone and everything, from naive users to embedded scripts.
 
 
-
 <H2>
     Comments
 </H2>
 None
-
 
 
 </BODY>

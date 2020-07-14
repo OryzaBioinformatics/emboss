@@ -13,7 +13,6 @@
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
-
 showfeat
 </font></b>
 </td></tr>
@@ -21,12 +20,10 @@ showfeat
 <br>&nbsp;
 <p>
 
-
 <H2>
     Function
 </H2>
 Show features of a sequence
-
 
 <H2>
     Description
@@ -88,20 +85,20 @@ Output file [hsfau1.showfeat]: <b></b>
 <a href="#output.3">Go to the output files for this example</a><p><p>
 
 
-
 <H2>
     Command line arguments
 </H2>
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
    Standard (Mandatory) qualifiers:
-  [-sequence]          seqall     Sequence database USA
-  [-outfile]           outfile    Output file name
+  [-sequence]          seqall     Sequence(s) filename and optional format, or
+                                  reference (input USA)
+  [-outfile]           outfile    [*.showfeat] Output file name
 
    Additional (Optional) qualifiers:
-   -matchsource        string     By default any feature source in the feature
-                                  table is shown. You can set this to match
-                                  any feature source you wish to show.
+   -matchsource        string     [*] By default any feature source in the
+                                  feature table is shown. You can set this to
+                                  match any feature source you wish to show.
                                   The source name is usually either the name
                                   of the program that detected the feature or
                                   it is the feature table (eg: EMBL) that the
@@ -110,10 +107,10 @@ Output file [hsfau1.showfeat]: <b></b>
                                   If you wish to show more than one source,
                                   separate their names with the character '|',
                                   eg:
-                                  gene* | embl
-   -matchtype          string     By default any feature type in the feature
-                                  table is shown. You can set this to match
-                                  any feature type you wish to show.
+                                  gene* | embl (Any string is accepted)
+   -matchtype          string     [*] By default any feature type in the
+                                  feature table is shown. You can set this to
+                                  match any feature type you wish to show.
                                   See http://www3.ebi.ac.uk/Services/WebFeat/
                                   for a list of the EMBL feature types and see
                                   Appendix A of the Swissprot user manual in
@@ -123,9 +120,9 @@ Output file [hsfau1.showfeat]: <b></b>
                                   If you wish to show more than one type,
                                   separate their names with the character '|',
                                   eg:
-                                  *UTR | intron
-   -matchtag           string     Tags are the types of extra values that a
-                                  feature may have. For example in the EMBL
+                                  *UTR | intron (Any string is accepted)
+   -matchtag           string     [*] Tags are the types of extra values that
+                                  a feature may have. For example in the EMBL
                                   feature table, a 'CDS' type of feature may
                                   have the tags '/codon', '/codon_start',
                                   '/db_xref', '/EC_number', '/evidence',
@@ -144,12 +141,12 @@ Output file [hsfau1.showfeat]: <b></b>
                                   If you wish to show more than one tag,
                                   separate their names with the character '|',
                                   eg:
-                                  gene | label
-   -matchvalue         string     Tag values are the values associated with a
-                                  feature tag. Tags are the types of extra
-                                  values that a feature may have. For example
-                                  in the EMBL feature table, a 'CDS' type of
-                                  feature may have the tags '/codon',
+                                  gene | label (Any string is accepted)
+   -matchvalue         string     [*] Tag values are the values associated
+                                  with a feature tag. Tags are the types of
+                                  extra values that a feature may have. For
+                                  example in the EMBL feature table, a 'CDS'
+                                  type of feature may have the tags '/codon',
                                   '/codon_start', '/db_xref', '/EC_number',
                                   '/evidence', '/exception', '/function',
                                   '/gene', '/label', '/map', '/note',
@@ -167,12 +164,17 @@ Output file [hsfau1.showfeat]: <b></b>
                                   If you wish to show more than one tag value,
                                   separate their names with the character
                                   '|', eg:
-                                  pax* | 10
-   -sort               menu       Sort features by Type, Start or Source,
-                                  Nosort (don't sort - use input order) or
-                                  join coding regions together and leave other
-                                  features in the input order
-   -annotation         range      Regions to annotate by marking.
+                                  pax* | 10 (Any string is accepted)
+   -sort               menu       [start] Sort features by Type, Start or
+                                  Source, Nosort (don't sort - use input
+                                  order) or join coding regions together and
+                                  leave other features in the input order
+                                  (Values: source (Sort by Source); start
+                                  (Sort by Start position); type (Sort by
+                                  Type); nosort (No sorting done); join (Join
+                                  coding regions together))
+   -annotation         range      [If this is left blank, then no annotation
+                                  is added.] Regions to annotate by marking.
                                   If this is left blank, then no annotation is
                                   added.
                                   A set of regions is specified by a set of
@@ -188,74 +190,77 @@ Output file [hsfau1.showfeat]: <b></b>
                                   line) can be specified as '@filename'.
 
    Advanced (Unprompted) qualifiers:
-   -html               boolean    Use HTML formatting
-   -[no]id             boolean    Set this to be false if you do not wish to
-                                  display the ID name of the sequence.
-   -[no]description    boolean    Set this to be false if you do not wish to
-                                  display the description of the sequence.
-   -[no]scale          boolean    Set this to be false if you do not wish to
-                                  display the scale line.
-   -width              integer    You can expand (or contract) the width of
-                                  the ASCII-character graphics display of the
-                                  positions of the features using this value.
+   -html               boolean    [N] Use HTML formatting
+   -[no]id             boolean    [Y] Set this to be false if you do not wish
+                                  to display the ID name of the sequence.
+   -[no]description    boolean    [Y] Set this to be false if you do not wish
+                                  to display the description of the sequence.
+   -[no]scale          boolean    [Y] Set this to be false if you do not wish
+                                  to display the scale line.
+   -width              integer    [60] You can expand (or contract) the width
+                                  of the ASCII-character graphics display of
+                                  the positions of the features using this
+                                  value.
                                   For example, a width of 80 characters would
                                   cover a standard page width and a width a 10
                                   characters would be nearly unreadable.
                                   If the width is set to less than 4, the
                                   graphics lines and the scale line will not
-                                  be displayed.
-   -collapse           boolean    If this is set, then features from the same
-                                  source and of the same type and sense are
-                                  all printed on the same line. For instance
-                                  if there are several features from the EMBL
-                                  feature table (ie. the same source) which
-                                  are all of type 'exon' in the same sense,
-                                  then they will all be displayed on the same
-                                  line. This makes it hard to distinguish
-                                  overlapping features.
+                                  be displayed. (Integer 0 or more)
+   -collapse           boolean    [N] If this is set, then features from the
+                                  same source and of the same type and sense
+                                  are all printed on the same line. For
+                                  instance if there are several features from
+                                  the EMBL feature table (ie. the same source)
+                                  which are all of type 'exon' in the same
+                                  sense, then they will all be displayed on
+                                  the same line. This makes it hard to
+                                  distinguish overlapping features.
                                   If this is set to false then each feature is
                                   displayed on a separate line making it
                                   easier to distinguish where features start
                                   and end.
-   -[no]forward        boolean    Set this to be false if you do not wish to
-                                  display forward sense features.
-   -[no]reverse        boolean    Set this to be false if you do not wish to
-                                  display reverse sense features.
-   -[no]unknown        boolean    Set this to be false if you do not wish to
-                                  display unknown sense features. (ie.
+   -[no]forward        boolean    [Y] Set this to be false if you do not wish
+                                  to display forward sense features.
+   -[no]reverse        boolean    [Y] Set this to be false if you do not wish
+                                  to display reverse sense features.
+   -[no]unknown        boolean    [Y] Set this to be false if you do not wish
+                                  to display unknown sense features. (ie.
                                   features with no directionality - all
                                   protein features are of this type and some
                                   nucleic features (for example, CG-rich
                                   regions)).
-   -strand             boolean    Set this if you wish to display the strand
-                                  of the features. Protein features are always
-                                  directionless (indicated by '0'), forward
-                                  is indicated by '+' and reverse is '-'.
-   -source             boolean    Set this if you wish to display the source
-                                  of the features.
+   -strand             boolean    [N] Set this if you wish to display the
+                                  strand of the features. Protein features are
+                                  always directionless (indicated by '0'),
+                                  forward is indicated by '+' and reverse is
+                                  '-'.
+   -source             boolean    [N] Set this if you wish to display the
+                                  source of the features.
                                   The source name is usually either the name
                                   of the program that detected the feature or
                                   it is the name of the feature table (eg:
                                   EMBL) that the feature came from.
-   -position           boolean    Set this if you wish to display the start
-                                  and end position of the features. If several
-                                  features are being displayed on the same
-                                  line, then the start and end positions will
-                                  be joined by a comma, for example:
+   -position           boolean    [N] Set this if you wish to display the
+                                  start and end position of the features. If
+                                  several features are being displayed on the
+                                  same line, then the start and end positions
+                                  will be joined by a comma, for example:
                                   '189-189,225-225'.
-   -[no]type           boolean    Set this to be false if you do not wish to
-                                  display the type of the features.
-   -tags               boolean    Set this to be false if you do not wish to
-                                  display the tags and values of the features.
-   -[no]values         boolean    Set this to be false if you do not wish to
-                                  display the tag values of the features. If
-                                  this is set to be false, only the tag names
-                                  will be displayed. If the tags are not
+   -[no]type           boolean    [Y] Set this to be false if you do not wish
+                                  to display the type of the features.
+   -tags               boolean    [N] Set this to be false if you do not wish
+                                  to display the tags and values of the
+                                  features.
+   -[no]values         boolean    [Y] Set this to be false if you do not wish
+                                  to display the tag values of the features.
+                                  If this is set to be false, only the tag
+                                  names will be displayed. If the tags are not
                                   displayed, then the values will not be
                                   displayed. The value of the 'translation'
                                   tag is never displayed as it is often
                                   extremely long.
-   -stricttags         boolean    By default if any tag/value pair in a
+   -stricttags         boolean    [N] By default if any tag/value pair in a
                                   feature matches the specified tag and value,
                                   then all the tags/value pairs of that
                                   feature will be displayed. If this is set to
@@ -266,39 +271,38 @@ Output file [hsfau1.showfeat]: <b></b>
    Associated qualifiers:
 
    "-sequence" associated qualifiers
-   -sbegin1             integer    Start of each sequence to be used
-   -send1               integer    End of each sequence to be used
-   -sreverse1           boolean    Reverse (if DNA)
-   -sask1               boolean    Ask for begin/end/reverse
-   -snucleotide1        boolean    Sequence is nucleotide
-   -sprotein1           boolean    Sequence is protein
-   -slower1             boolean    Make lower case
-   -supper1             boolean    Make upper case
-   -sformat1            string     Input sequence format
-   -sdbname1            string     Database name
-   -sid1                string     Entryname
-   -ufo1                string     UFO features
-   -fformat1            string     Features format
-   -fopenfile1          string     Features file name
+   -sbegin1            integer    Start of each sequence to be used
+   -send1              integer    End of each sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
 
    "-outfile" associated qualifiers
-   -odirectory2         string     Output directory
+   -odirectory2        string     Output directory
 
    General qualifiers:
-   -auto                boolean    Turn off prompts
-   -stdout              boolean    Write standard output
-   -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for standard and additional values
-   -debug               boolean    Write debug output to program.dbg
-   -verbose             boolean    Report some/full command line options
-   -help                boolean    Report command line options. More
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
-   -warning             boolean    Report warnings
-   -error               boolean    Report errors
-   -fatal               boolean    Report fatal errors
-   -die                 boolean    Report deaths
-
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
 
 </pre>
 </td></tr></table>
@@ -312,7 +316,7 @@ Output file [hsfau1.showfeat]: <b></b>
 
 <tr>
 <td>[-sequence]<br>(Parameter 1)</td>
-<td>Sequence database USA</td>
+<td>Sequence(s) filename and optional format, or reference (input USA)</td>
 <td>Readable sequence(s)</td>
 <td><b>Required</b></td>
 </tr>
@@ -321,7 +325,7 @@ Output file [hsfau1.showfeat]: <b></b>
 <td>[-outfile]<br>(Parameter 2)</td>
 <td>Output file name</td>
 <td>Output file</td>
-<td><i>&lt;sequence&gt;</i>.showfeat</td>
+<td>&nbsp;</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
@@ -520,7 +524,6 @@ The source name is usually either the name of the program that detected the feat
 </table>
 
 
-
 <H2>
     Input file format
 </H2>
@@ -647,7 +650,6 @@ SQ   Sequence 2016 BP; 421 A; 562 C; 538 G; 495 T; 0 other;
 </pre>
 </td></tr></table><p>
 
-
 <H2>
     Output file format
 </H2>
@@ -729,7 +731,6 @@ H.sapiens fau 1 gene
 </td></tr></table><p>
 
 
-
 <H2>
     Data files
 </H2>
@@ -780,26 +781,97 @@ None.
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
-<tr><td><a href="abiview.html">abiview</a></td><td>Reads ABI file and display the trace</td></tr>
-<tr><td><a href="cirdna.html">cirdna</a></td><td>Draws circular maps of DNA constructs</td></tr>
-<tr><td><a href="coderet.html">coderet</a></td><td>Extract CDS, mRNA and translations from feature tables</td></tr>
-<tr><td><a href="extractfeat.html">extractfeat</a></td><td>Extract features from a sequence</td></tr>
-<tr><td><a href="lindna.html">lindna</a></td><td>Draws linear maps of DNA constructs</td></tr>
-<tr><td><a href="maskfeat.html">maskfeat</a></td><td>Mask off features of a sequence</td></tr>
-<tr><td><a href="pepnet.html">pepnet</a></td><td>Displays proteins as a helical net</td></tr>
-<tr><td><a href="pepwheel.html">pepwheel</a></td><td>Shows protein sequences as helices</td></tr>
-<tr><td><a href="prettyplot.html">prettyplot</a></td><td>Displays aligned sequences, with colouring and boxing</td></tr>
-<tr><td><a href="prettyseq.html">prettyseq</a></td><td>Output sequence with translated ranges</td></tr>
-<tr><td><a href="remap.html">remap</a></td><td>Display sequence with restriction sites, translation etc</td></tr>
-<tr><td><a href="seealso.html">seealso</a></td><td>Finds programs sharing group names</td></tr>
-<tr><td><a href="showalign.html">showalign</a></td><td>Displays a multiple sequence alignment</td></tr>
-<tr><td><a href="showdb.html">showdb</a></td><td>Displays information on the currently available databases</td></tr>
-<tr><td><a href="showseq.html">showseq</a></td><td>Display a sequence with features, translation etc</td></tr>
-<tr><td><a href="sixpack.html">sixpack</a></td><td>Display a DNA sequence with 6-frame translation and ORFs</td></tr>
-<tr><td><a href="textsearch.html">textsearch</a></td><td>Search sequence documentation. Slow, use SRS and Entrez!</td></tr>
-<tr><td><a href="twofeat.html">twofeat</a></td><td>Finds neighbouring pairs of features in sequences</td></tr>
-</table>
+<tr>
+<td><a href="abiview.html">abiview</a></td>
+<td>Reads ABI file and display the trace</td>
+</tr>
 
+<tr>
+<td><a href="cirdna.html">cirdna</a></td>
+<td>Draws circular maps of DNA constructs</td>
+</tr>
+
+<tr>
+<td><a href="coderet.html">coderet</a></td>
+<td>Extract CDS, mRNA and translations from feature tables</td>
+</tr>
+
+<tr>
+<td><a href="extractfeat.html">extractfeat</a></td>
+<td>Extract features from a sequence</td>
+</tr>
+
+<tr>
+<td><a href="lindna.html">lindna</a></td>
+<td>Draws linear maps of DNA constructs</td>
+</tr>
+
+<tr>
+<td><a href="maskfeat.html">maskfeat</a></td>
+<td>Mask off features of a sequence</td>
+</tr>
+
+<tr>
+<td><a href="pepnet.html">pepnet</a></td>
+<td>Displays proteins as a helical net</td>
+</tr>
+
+<tr>
+<td><a href="pepwheel.html">pepwheel</a></td>
+<td>Shows protein sequences as helices</td>
+</tr>
+
+<tr>
+<td><a href="prettyplot.html">prettyplot</a></td>
+<td>Displays aligned sequences, with colouring and boxing</td>
+</tr>
+
+<tr>
+<td><a href="prettyseq.html">prettyseq</a></td>
+<td>Output sequence with translated ranges</td>
+</tr>
+
+<tr>
+<td><a href="remap.html">remap</a></td>
+<td>Display sequence with restriction sites, translation etc</td>
+</tr>
+
+<tr>
+<td><a href="seealso.html">seealso</a></td>
+<td>Finds programs sharing group names</td>
+</tr>
+
+<tr>
+<td><a href="showalign.html">showalign</a></td>
+<td>Displays a multiple sequence alignment</td>
+</tr>
+
+<tr>
+<td><a href="showdb.html">showdb</a></td>
+<td>Displays information on the currently available databases</td>
+</tr>
+
+<tr>
+<td><a href="showseq.html">showseq</a></td>
+<td>Display a sequence with features, translation etc</td>
+</tr>
+
+<tr>
+<td><a href="sixpack.html">sixpack</a></td>
+<td>Display a DNA sequence with 6-frame translation and ORFs</td>
+</tr>
+
+<tr>
+<td><a href="textsearch.html">textsearch</a></td>
+<td>Search sequence documentation. Slow, use SRS and Entrez!</td>
+</tr>
+
+<tr>
+<td><a href="twofeat.html">twofeat</a></td>
+<td>Finds neighbouring pairs of features in sequences</td>
+</tr>
+
+</table>
 
 <H2>
     Author(s)
@@ -808,7 +880,6 @@ Gary Williams (gwilliam&nbsp;&copy;&nbsp;rfcgr.mrc.ac.uk)
 <br>
 MRC Rosalind Franklin Centre for Genomics Research
 Wellcome Trust Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
-
 
 
 
@@ -822,7 +893,6 @@ Written 1999 - Gary Williams
 
 Dec 2001 - added -sort nosort option to get the features in the input order
 
-
 <H2>
     Target users
 </H2>
@@ -830,12 +900,10 @@ This program is intended to be used by everyone and everything, from naive users
 
 
 
-
 <H2>
     Comments
 </H2>
 None
-
 
 </BODY>
 </HTML>

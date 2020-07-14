@@ -21,7 +21,7 @@ Usage
 
 % prosextract 
 Build the PROSITE motif database for use by patmatmotifs
-Name of prosite directory [.]: 
+PROSITE database directory [.]: 
 
    Go to the output files for this example
 
@@ -32,7 +32,7 @@ Name of prosite directory [.]:
 Command line arguments
 
    Standard (Mandatory) qualifiers:
-  [-prositedir]        directory  Name of prosite directory
+  [-prositedir]        directory  PROSITE database directory
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers: (none)
@@ -50,15 +50,14 @@ Command line arguments
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
-   -die                boolean    Report deaths
+   -die                boolean    Report dying program messages
 
-
-                 Standard (Mandatory) qualifiers     Allowed values Default
+                 Standard (Mandatory) qualifiers      Allowed values Default
    [-prositedir]
-   (Parameter 1) Name of prosite directory Directory
-                 Additional (Optional) qualifiers    Allowed values Default
+   (Parameter 1) PROSITE database directory Directory
+                 Additional (Optional) qualifiers     Allowed values Default
                  (none)
-                 Advanced (Unprompted) qualifiers    Allowed values Default
+                 Advanced (Unprompted) qualifiers     Allowed values Default
                  (none)
 
 Input file format

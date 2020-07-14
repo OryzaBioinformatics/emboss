@@ -33,7 +33,7 @@ Usage
 
 % cirdna -graph cps 
 Draws circular maps of DNA constructs
-Input file containing mapping data [inputfile]: data.cirp
+Commands to the lindna drawing program file [inputfile]: data.cirp
 Draw a ruler [Y]: 
       Open : Open blocks
     Filled : Filled blocks
@@ -54,120 +54,83 @@ Created cirdna.ps
 Command line arguments
 
    Standard (Mandatory) qualifiers:
-  [-infile]            infile     Input file containing mapping data
-   -[no]ruler          boolean    Draw a ruler
-   -blocktype          menu       Type of blocks
-   -posticks           selection  Ticks inside or outside the circle
-   -posblocks          selection  Text inside or outside the blocks
-   -graphout           graph      Graph type
+  [-infile]            infile     [inputfile] Commands to the lindna drawing
+                                  program file
+   -[no]ruler          boolean    [Y] Draw a ruler
+   -blocktype          menu       [Filled] Type of blocks (Values: Open (Open
+                                  blocks); Filled (Filled blocks); Outline
+                                  (Black border))
+   -posticks           selection  [Out] Ticks inside or outside the circle
+   -posblocks          selection  [In] Text inside or outside the blocks
+   -graphout           graph      [$EMBOSS_GRAPHICS value, or x11] Graph type
+                                  (ps, hpgl, hp7470, hp7580, meta, cps, x11,
+                                  tekt, tek, none, data, xterm, png)
 
    Additional (Optional) qualifiers:
-   -maxgroups          integer    Maximum number of groups
-   -maxlabels          integer    Maximum number of labels
-   -originangle        float      Position in degrees of the molecule's origin
-                                  on the circle
-   -[no]intersymbol    boolean    Horizontal junctions between blocks
-   -intercolour        integer    Colour of junctions between blocks (enter a
-                                  colour number)
-   -interticks         boolean    Horizontal junctions between ticks
-   -gapsize            integer    Interval between ticks in the ruler
-   -ticklines          boolean    Vertical lines at the ruler's ticks
-   -textheight         float      Height of text. Enter a number <1.0 or >1.0
-                                  to decrease or increase the size,
-                                  respectively
-   -textlength         float      Length of text. Enter a number <1.0 or >1.0
-                                  to decrease or increase the size,
-                                  respectively
-   -tickheight         float      Height of ticks. Enter a number <1.0 or >1.0
-                                  to decrease or increase the size,
-                                  respectively
-   -blockheight        float      Height of blocks. Enter a number <1.0 or
+   -maxgroups          integer    [20] Maximum number of groups (Integer 1 or
+                                  more)
+   -maxlabels          integer    [10000] Maximum number of labels (Integer 1
+                                  or more)
+   -originangle        float      [90] Position in degrees of the molecule's
+                                  origin on the circle (Number from 0.000 to
+                                  360.000)
+   -[no]intersymbol    boolean    [Y] Horizontal junctions between blocks
+   -intercolour        integer    [1] Colour of junctions between blocks
+                                  (enter a colour number) (Integer from 0 to
+                                  15)
+   -interticks         boolean    [N] Horizontal junctions between ticks
+   -gapsize            integer    [500] Interval between ticks in the ruler
+                                  (Integer 0 or more)
+   -ticklines          boolean    [N] Vertical lines at the ruler's ticks
+   -textheight         float      [1.0] Height of text. Enter a number <1.0 or
                                   >1.0 to decrease or increase the size,
-                                  respectively
-   -rangeheight        float      Height of range ends. Enter a number <1.0 or
+                                  respectively (Number 0.000 or more)
+   -textlength         float      [1.0] Length of text. Enter a number <1.0 or
                                   >1.0 to decrease or increase the size,
-                                  respectively
-   -gapgroup           float      Space between groups. Enter a number <1.0 or
-                                  >1.0 to decrease or increase the size,
-                                  respectively
-   -postext            float      Space between text and ticks, blocks, and
-                                  ranges. Enter a number <1.0 or >1.0 to
+                                  respectively (Number 0.000 or more)
+   -tickheight         float      [1.0] Height of ticks. Enter a number <1.0
+                                  or >1.0 to decrease or increase the size,
+                                  respectively (Number 0.000 or more)
+   -blockheight        float      [1.0] Height of blocks. Enter a number <1.0
+                                  or >1.0 to decrease or increase the size,
+                                  respectively (Number 0.000 or more)
+   -rangeheight        float      [1.0] Height of range ends. Enter a number
+                                  <1.0 or >1.0 to decrease or increase the
+                                  size, respectively (Number 0.000 or more)
+   -gapgroup           float      [1.0] Space between groups. Enter a number
+                                  <1.0 or >1.0 to decrease or increase the
+                                  size, respectively (Number 0.000 or more)
+   -postext            float      [1.0] Space between text and ticks, blocks,
+                                  and ranges. Enter a number <1.0 or >1.0 to
                                   decrease or increase the size, respectively
+                                  (Number 0.000 or more)
 
    Advanced (Unprompted) qualifiers: (none)
    Associated qualifiers:
 
    "-graphout" associated qualifiers
-   -gprompt             boolean    Graph prompting
-   -gtitle              string     Graph title
-   -gsubtitle           string     Graph subtitle
-   -gxtitle             string     Graph x axis title
-   -gytitle             string     Graph y axis title
-   -goutfile            string     Output file for non interactive displays
-   -gdirectory          string     Output directory
+   -gprompt            boolean    Graph prompting
+   -gtitle             string     Graph title
+   -gsubtitle          string     Graph subtitle
+   -gxtitle            string     Graph x axis title
+   -gytitle            string     Graph y axis title
+   -goutfile           string     Output file for non interactive displays
+   -gdirectory         string     Output directory
 
    General qualifiers:
-   -auto                boolean    Turn off prompts
-   -stdout              boolean    Write standard output
-   -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for standard and additional values
-   -debug               boolean    Write debug output to program.dbg
-   -verbose             boolean    Report some/full command line options
-   -help                boolean    Report command line options. More
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
-   -warning             boolean    Report warnings
-   -error               boolean    Report errors
-   -fatal               boolean    Report fatal errors
-   -die                 boolean    Report deaths
-
-
-   Standard (Mandatory) qualifiers Allowed values Default
-   [-infile]
-   (Parameter 1) Input file containing mapping data Input file inputfile
-   -[no]ruler Draw a ruler Boolean value Yes/No Yes
-   -blocktype Type of blocks
-   Open    (Open blocks)
-   Filled  (Filled blocks)
-   Outline (Black border)
-   Filled
-   -posticks Ticks inside or outside the circle Choose from selection
-   list of values Out
-   -posblocks Text inside or outside the blocks Choose from selection
-   list of values In
-   -graphout Graph type EMBOSS has a list of known devices, including
-   postscript, ps, hpgl, hp7470, hp7580, meta, colourps, cps, xwindows,
-   x11, tektronics, tekt, tek4107t, tek, none, null, text, data, xterm,
-   png, xml EMBOSS_GRAPHICS value, or x11
-   Additional (Optional) qualifiers Allowed values Default
-   -maxgroups Maximum number of groups Integer 1 or more 20
-   -maxlabels Maximum number of labels Integer 1 or more 10000
-   -originangle Position in degrees of the molecule's origin on the
-   circle Number from 0.000 to 360.000 90
-   -[no]intersymbol Horizontal junctions between blocks Boolean value
-   Yes/No Yes
-   -intercolour Colour of junctions between blocks (enter a colour
-   number) Integer from 0 to 15 1
-   -interticks Horizontal junctions between ticks Boolean value Yes/No No
-   -gapsize Interval between ticks in the ruler Integer 0 or more 500
-   -ticklines Vertical lines at the ruler's ticks Boolean value Yes/No No
-   -textheight Height of text. Enter a number <1.0 or >1.0 to decrease or
-   increase the size, respectively Number 0.000 or more 1.0
-   -textlength Length of text. Enter a number <1.0 or >1.0 to decrease or
-   increase the size, respectively Number 0.000 or more 1.0
-   -tickheight Height of ticks. Enter a number <1.0 or >1.0 to decrease
-   or increase the size, respectively Number 0.000 or more 1.0
-   -blockheight Height of blocks. Enter a number <1.0 or >1.0 to decrease
-   or increase the size, respectively Number 0.000 or more 1.0
-   -rangeheight Height of range ends. Enter a number <1.0 or >1.0 to
-   decrease or increase the size, respectively Number 0.000 or more 1.0
-   -gapgroup Space between groups. Enter a number <1.0 or >1.0 to
-   decrease or increase the size, respectively Number 0.000 or more 1.0
-   -postext Space between text and ticks, blocks, and ranges. Enter a
-   number <1.0 or >1.0 to decrease or increase the size, respectively
-   Number 0.000 or more 1.0
-   Advanced (Unprompted) qualifiers Allowed values Default
-   (none)
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
 
 Input file format
 

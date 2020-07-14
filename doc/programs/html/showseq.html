@@ -13,7 +13,6 @@
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
-
 showseq
 </font></b>
 </td></tr>
@@ -22,12 +21,10 @@ showseq
 <p>
 
 
-
 <H2>
     Function
 </H2>
 Display a sequence with features, translation etc
-
 <H2>
     Description
 </H2>
@@ -369,27 +366,45 @@ Output file [paamir.showseq]: <b></b>
 <p>
 <a href="#output.9">Go to the output files for this example</a><p><p>
 
-
 <H2>
     Command line arguments
 </H2>
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
    Standard (Mandatory) qualifiers (* if not always prompted):
-  [-sequence]          seqall     Sequence database USA
-   -format             menu       Display format
-*  -things             menu       Specify a list of one or more code
-                                  characters in the order in which you wish
-                                  things to be displayed one above the other
-                                  down the page. For example if you wish to
-                                  see things displayed in the order: sequence,
-                                  complement sequence, ticks line, frame 1
-                                  translation, blank line; then you should
-                                  enter 'S,C,T,1,B'.
-  [-outfile]           outfile    Output file name
+  [-sequence]          seqall     (Gapped) sequence(s) filename and optional
+                                  format, or reference (input USA)
+   -format             menu       [2] Display format (Values: 0 (Enter your
+                                  own list of things to display); 1 (Sequence
+                                  only); 2 (Default sequence with features); 3
+                                  (Pretty sequence); 4 (One frame
+                                  translation); 5 (Three frame translations);
+                                  6 (Six frame translations); 7 (Restriction
+                                  enzyme map); 8 (Baroque))
+*  -things             menu       [B,N,T,S,A,F] Specify a list of one or more
+                                  code characters in the order in which you
+                                  wish things to be displayed one above the
+                                  other down the page. For example if you wish
+                                  to see things displayed in the order:
+                                  sequence, complement sequence, ticks line,
+                                  frame 1 translation, blank line; then you
+                                  should enter 'S,C,T,1,B'. (Values: S
+                                  (Sequence); B (Blank line); 1 (Frame1
+                                  translation); 2 (Frame2 translation); 3
+                                  (Frame3 translation); -1 (CompFrame1
+                                  translation); -2 (CompFrame2 translation);
+                                  -3 (CompFrame3 translation); T (Ticks line);
+                                  N (Number ticks line); C (Complement
+                                  sequence); F (Features); R (Restriction
+                                  enzyme cut sites in forward sense); -R
+                                  (Restriction enzyme cut sites in reverse
+                                  sense); A (Annotation))
+  [-outfile]           outfile    [*.showseq] Output file name
 
    Additional (Optional) qualifiers:
-   -translate          range      Regions to translate (if translating).
+   -translate          range      [If this is left blank the complete sequence
+                                  is translated.] Regions to translate (if
+                                  translating).
                                   If this is left blank the complete sequence
                                   is translated.
                                   A set of regions is specified by a set of
@@ -401,7 +416,9 @@ Output file [paamir.showseq]: <b></b>
                                   24-45, 56-78
                                   1:45, 67=99;765..888
                                   1,5,8,10,23,45,57,99
-   -uppercase          range      Regions to put in uppercase.
+   -uppercase          range      [If this is left blank, then the sequence
+                                  case is left alone.] Regions to put in
+                                  uppercase.
                                   If this is left blank, then the sequence
                                   case is left alone.
                                   A set of regions is specified by a set of
@@ -413,7 +430,8 @@ Output file [paamir.showseq]: <b></b>
                                   24-45, 56-78
                                   1:45, 67=99;765..888
                                   1,5,8,10,23,45,57,99
-   -highlight          range      Regions to colour if formatting for HTML.
+   -highlight          range      [(full sequence)] Regions to colour if
+                                  formatting for HTML.
                                   If this is left blank, then the sequence is
                                   left alone.
                                   A set of regions is specified by a set of
@@ -426,7 +444,8 @@ Output file [paamir.showseq]: <b></b>
                                   1-100 green 120-156 red
                                   A file of ranges to colour (one range per
                                   line) can be specified as '@filename'.
-   -annotation         range      Regions to annotate by marking.
+   -annotation         range      [If this is left blank, then no annotation
+                                  is added.] Regions to annotate by marking.
                                   If this is left blank, then no annotation is
                                   added.
                                   A set of regions is specified by a set of
@@ -440,10 +459,10 @@ Output file [paamir.showseq]: <b></b>
                                   1-100 First part 120-156 oligo
                                   A file of ranges to annotate (one range per
                                   line) can be specified as '@filename'.
-   -enzymes            string     The name 'all' reads in all enzyme names
-                                  from the REBASE database. You can specify
-                                  enzymes by giving their names with commas
-                                  between then, such as:
+   -enzymes            string     [all] The name 'all' reads in all enzyme
+                                  names from the REBASE database. You can
+                                  specify enzymes by giving their names with
+                                  commas between then, such as:
                                   'HincII,hinfI,ppiI,hindiii'.
                                   The case of the names is not important. You
                                   can specify a file of enzyme names to read
@@ -461,11 +480,26 @@ Output file [paamir.showseq]: <b></b>
                                   ! other enzymes
                                   hindiii
                                   HinfI
-                                  PpiI
-   -table              menu       Genetic code to use
-   -matchsource        string     By default any feature source in the feature
-                                  table is shown. You can set this to match
-                                  any feature source you wish to show.
+                                  PpiI (Any string is accepted)
+   -table              menu       [0] Genetic code to use (Values: 0
+                                  (Standard); 1 (Standard (with alternative
+                                  initiation codons)); 2 (Vertebrate
+                                  Mitochondrial); 3 (Yeast Mitochondrial); 4
+                                  (Mold, Protozoan, Coelenterate Mitochondrial
+                                  and Mycoplasma/Spiroplasma); 5
+                                  (Invertebrate Mitochondrial); 6 (Ciliate
+                                  Macronuclear and Dasycladacean); 9
+                                  (Echinoderm Mitochondrial); 10 (Euplotid
+                                  Nuclear); 11 (Bacterial); 12 (Alternative
+                                  Yeast Nuclear); 13 (Ascidian Mitochondrial);
+                                  14 (Flatworm Mitochondrial); 15
+                                  (Blepharisma Macronuclear); 16
+                                  (Chlorophycean Mitochondrial); 21 (Trematode
+                                  Mitochondrial); 22 (Scenedesmus obliquus);
+                                  23 (Thraustochytrium Mitochondrial))
+   -matchsource        string     [*] By default any feature source in the
+                                  feature table is shown. You can set this to
+                                  match any feature source you wish to show.
                                   The source name is usually either the name
                                   of the program that detected the feature or
                                   it is the feature table (eg: EMBL) that the
@@ -474,10 +508,10 @@ Output file [paamir.showseq]: <b></b>
                                   If you wish to show more than one source,
                                   separate their names with the character '|',
                                   eg:
-                                  gene* | embl
-   -matchtype          string     By default any feature type in the feature
-                                  table is shown. You can set this to match
-                                  any feature type you wish to show.
+                                  gene* | embl (Any string is accepted)
+   -matchtype          string     [*] By default any feature type in the
+                                  feature table is shown. You can set this to
+                                  match any feature type you wish to show.
                                   See http://www3.ebi.ac.uk/Services/WebFeat/
                                   for a list of the EMBL feature types and see
                                   Appendix A of the Swissprot user manual in
@@ -487,17 +521,21 @@ Output file [paamir.showseq]: <b></b>
                                   If you wish to show more than one type,
                                   separate their names with the character '|',
                                   eg:
-                                  *UTR | intron
-   -matchsense         integer    By default any feature type in the feature
-                                  table is shown. You can set this to match
-                                  any feature sense you wish to show. 0 - any
-                                  sense, 1 - forward sense, -1 - reverse sense
-   -minscore           float      If this is greater than or equal to the
+                                  *UTR | intron (Any string is accepted)
+   -matchsense         integer    [0 - any sense, 1 - forward sense, -1 -
+                                  reverse sense] By default any feature type
+                                  in the feature table is shown. You can set
+                                  this to match any feature sense you wish to
+                                  show. 0 - any sense, 1 - forward sense, -1 -
+                                  reverse sense (Any integer value)
+   -minscore           float      [0.0] If this is greater than or equal to
+                                  the maximum score, then any score is
+                                  permitted (Any numeric value)
+   -maxscore           float      [0.0] If this is less than or equal to the
                                   maximum score, then any score is permitted
-   -maxscore           float      If this is less than or equal to the maximum
-                                  score, then any score is permitted
-   -matchtag           string     Tags are the types of extra values that a
-                                  feature may have. For example in the EMBL
+                                  (Any numeric value)
+   -matchtag           string     [*] Tags are the types of extra values that
+                                  a feature may have. For example in the EMBL
                                   feature table, a 'CDS' type of feature may
                                   have the tags '/codon', '/codon_start',
                                   '/db_xref', '/EC_number', '/evidence',
@@ -516,12 +554,12 @@ Output file [paamir.showseq]: <b></b>
                                   If you wish to show more than one tag,
                                   separate their names with the character '|',
                                   eg:
-                                  gene | label
-   -matchvalue         string     Tag values are the values associated with a
-                                  feature tag. Tags are the types of extra
-                                  values that a feature may have. For example
-                                  in the EMBL feature table, a 'CDS' type of
-                                  feature may have the tags '/codon',
+                                  gene | label (Any string is accepted)
+   -matchvalue         string     [*] Tag values are the values associated
+                                  with a feature tag. Tags are the types of
+                                  extra values that a feature may have. For
+                                  example in the EMBL feature table, a 'CDS'
+                                  type of feature may have the tags '/codon',
                                   '/codon_start', '/db_xref', '/EC_number',
                                   '/evidence', '/exception', '/function',
                                   '/gene', '/label', '/map', '/note',
@@ -539,8 +577,8 @@ Output file [paamir.showseq]: <b></b>
                                   If you wish to show more than one tag value,
                                   separate their names with the character
                                   '|', eg:
-                                  pax* | 10
-   -stricttags         boolean    By default if any tag/value pair in a
+                                  pax* | 10 (Any string is accepted)
+   -stricttags         boolean    [N] By default if any tag/value pair in a
                                   feature matches the specified tag and value,
                                   then all the tags/value pairs of that
                                   feature will be displayed. If this is set to
@@ -549,45 +587,47 @@ Output file [paamir.showseq]: <b></b>
                                   value will be displayed.
 
    Advanced (Unprompted) qualifiers:
-   -flatreformat       boolean    This changes the output format to one where
-                                  the recognition site is indicated by a row
-                                  of '===' characters and the cut site is
-                                  pointed to by a '>' character in the forward
-                                  sense, or a '<' in the reverse sense
+   -flatreformat       boolean    [N] This changes the output format to one
+                                  where the recognition site is indicated by a
+                                  row of '===' characters and the cut site is
+                                  pointed to by a '>' character in the
+                                  forward sense, or a '<' in the reverse sense
                                   strand.
-   -mincuts            integer    This sets the minimum number of cuts for any
-                                  restriction enzyme that will be considered.
-                                  Any enzymes that cut fewer times than this
-                                  will be ignored.
-   -maxcuts            integer    This sets the maximum number of cuts for any
-                                  restriction enzyme that will be considered.
-                                  Any enzymes that cut more times than this
-                                  will be ignored.
-   -sitelen            integer    This sets the minimum length of the
+   -mincuts            integer    [1] This sets the minimum number of cuts for
+                                  any restriction enzyme that will be
+                                  considered. Any enzymes that cut fewer times
+                                  than this will be ignored. (Integer from 1
+                                  to 1000)
+   -maxcuts            integer    [2000000000] This sets the maximum number of
+                                  cuts for any restriction enzyme that will
+                                  be considered. Any enzymes that cut more
+                                  times than this will be ignored. (Integer up
+                                  to 2000000000)
+   -sitelen            integer    [4] This sets the minimum length of the
                                   restriction enzyme recognition site. Any
                                   enzymes with sites shorter than this will be
-                                  ignored.
-   -single             boolean    If this is set then this forces the values
-                                  of the mincuts and maxcuts qualifiers to
-                                  both be 1. Any other value you may have set
-                                  them to will be ignored.
-   -[no]blunt          boolean    This allows those enzymes which cut at the
-                                  same position on the forward and reverse
+                                  ignored. (Integer from 2 to 20)
+   -single             boolean    [N] If this is set then this forces the
+                                  values of the mincuts and maxcuts qualifiers
+                                  to both be 1. Any other value you may have
+                                  set them to will be ignored.
+   -[no]blunt          boolean    [Y] This allows those enzymes which cut at
+                                  the same position on the forward and reverse
                                   strands to be considered.
-   -[no]sticky         boolean    This allows those enzymes which cut at
+   -[no]sticky         boolean    [Y] This allows those enzymes which cut at
                                   different positions on the forward and
                                   reverse strands, leaving an overhang, to be
                                   considered.
-   -[no]ambiguity      boolean    This allows those enzymes which have one or
-                                  more 'N' ambiguity codes in their pattern to
-                                  be considered
-   -plasmid            boolean    If this is set then this allows searches for
-                                  restriction enzyme recognition site and cut
-                                  postions that span the end of the sequence
-                                  to be considered.
-   -[no]commercial     boolean    If this is set, then only those enzymes with
-                                  a commercial supplier will be searched for.
-                                  This qualifier is ignored if you have
+   -[no]ambiguity      boolean    [Y] This allows those enzymes which have one
+                                  or more 'N' ambiguity codes in their
+                                  pattern to be considered
+   -plasmid            boolean    [N] If this is set then this allows searches
+                                  for restriction enzyme recognition site and
+                                  cut postions that span the end of the
+                                  sequence to be considered.
+   -[no]commercial     boolean    [Y] If this is set, then only those enzymes
+                                  with a commercial supplier will be searched
+                                  for. This qualifier is ignored if you have
                                   specified an explicit list of enzymes to
                                   search for, rather than searching through
                                   'all' the enzymes in the REBASE database. It
@@ -597,8 +637,8 @@ Output file [paamir.showseq]: <b></b>
                                   names that you have asked to be searched
                                   for, and which cut, will be reported whether
                                   or not they have a commercial supplier.
-   -[no]limit          boolean    This limits the reporting of enzymes to just
-                                  one enzyme from each group of
+   -[no]limit          boolean    [Y] This limits the reporting of enzymes to
+                                  just one enzyme from each group of
                                   isoschizomers. The enzyme chosen to
                                   represent an isoschizomer group is the
                                   prototype indicated in the data file
@@ -612,60 +652,63 @@ Output file [paamir.showseq]: <b></b>
                                   false if you are supplying an explicit set
                                   of enzymes rather than searching 'all' of
                                   them.
-   -orfminsize         integer    This sets the minimum size of Open Reading
-                                  Frames (ORFs) to display in the
+   -orfminsize         integer    [0] This sets the minimum size of Open
+                                  Reading Frames (ORFs) to display in the
                                   translations. All other translation regions
                                   are masked by changing the amino acids to
-                                  '-' characters.
-   -threeletter        boolean    Display protein sequences in three-letter
-                                  code
-   -number             boolean    Number the sequences
-   -width              integer    Width of sequence to display
-   -length             integer    Line length of page (0 for indefinite)
-   -margin             integer    Margin around sequence for numbering
-   -[no]name           boolean    Set this to be false if you do not wish to
-                                  display the ID name of the sequence
-   -[no]description    boolean    Set this to be false if you do not wish to
-                                  display the description of the sequence
-   -offset             integer    Offset to start numbering the sequence from
-   -html               boolean    Use HTML formatting
+                                  '-' characters. (Integer 0 or more)
+   -threeletter        boolean    [N] Display protein sequences in
+                                  three-letter code
+   -number             boolean    [N] Number the sequences
+   -width              integer    [60] Width of sequence to display (Integer 1
+                                  or more)
+   -length             integer    [0] Line length of page (0 for indefinite)
+                                  (Integer 0 or more)
+   -margin             integer    [10] Margin around sequence for numbering
+                                  (Integer 0 or more)
+   -[no]name           boolean    [Y] Set this to be false if you do not wish
+                                  to display the ID name of the sequence
+   -[no]description    boolean    [Y] Set this to be false if you do not wish
+                                  to display the description of the sequence
+   -offset             integer    [1] Offset to start numbering the sequence
+                                  from (Any integer value)
+   -html               boolean    [N] Use HTML formatting
 
    Associated qualifiers:
 
    "-sequence" associated qualifiers
-   -sbegin1             integer    Start of each sequence to be used
-   -send1               integer    End of each sequence to be used
-   -sreverse1           boolean    Reverse (if DNA)
-   -sask1               boolean    Ask for begin/end/reverse
-   -snucleotide1        boolean    Sequence is nucleotide
-   -sprotein1           boolean    Sequence is protein
-   -slower1             boolean    Make lower case
-   -supper1             boolean    Make upper case
-   -sformat1            string     Input sequence format
-   -sdbname1            string     Database name
-   -sid1                string     Entryname
-   -ufo1                string     UFO features
-   -fformat1            string     Features format
-   -fopenfile1          string     Features file name
+   -sbegin1            integer    Start of each sequence to be used
+   -send1              integer    End of each sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
 
    "-outfile" associated qualifiers
-   -odirectory2         string     Output directory
+   -odirectory2        string     Output directory
 
    General qualifiers:
-   -auto                boolean    Turn off prompts
-   -stdout              boolean    Write standard output
-   -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for standard and additional values
-   -debug               boolean    Write debug output to program.dbg
-   -verbose             boolean    Report some/full command line options
-   -help                boolean    Report command line options. More
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
-   -warning             boolean    Report warnings
-   -error               boolean    Report errors
-   -fatal               boolean    Report fatal errors
-   -die                 boolean    Report deaths
-
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
 
 </pre>
 </td></tr></table>
@@ -680,7 +723,7 @@ Output file [paamir.showseq]: <b></b>
 
 <tr>
 <td>[-sequence]<br>(Parameter 1)</td>
-<td>Sequence database USA</td>
+<td>(Gapped) sequence(s) filename and optional format, or reference (input USA)</td>
 <td>Readable sequence(s)</td>
 <td><b>Required</b></td>
 </tr>
@@ -703,7 +746,7 @@ Output file [paamir.showseq]: <b></b>
 <td>[-outfile]<br>(Parameter 2)</td>
 <td>Output file name</td>
 <td>Output file</td>
-<td><i>&lt;sequence&gt;</i>.showseq</td>
+<td>&nbsp;</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
@@ -1022,7 +1065,6 @@ pax* | 10</td>
 </table>
 
 
-
 <H2>
     Input file format
 </H2>
@@ -1181,7 +1223,6 @@ SQ   SEQUENCE   132 AA;  15305 MW;  BCF9EB31 CRC32;
 //
 </pre>
 </td></tr></table><p>
-
 
 <p>
 
@@ -1514,7 +1555,6 @@ regulation
 </pre>
 </td></tr></table><p>
 
-
 <p>
 
 Most of the variants of the output format have already been described in
@@ -1637,7 +1677,6 @@ The directories are searched in the following order:
 <p>
 
 
-
 <p>
 The Genetic Code data files are based on the NCBI genetic code tables.
 Their names and descriptions are:
@@ -1729,7 +1768,6 @@ Base3  = TCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAG
 
 </pre>
 
-
 <p>      
 The EMBOSS REBASE restriction enzyme data files are stored iin
 directory 'data/REBASE/*' under the EMBOSS installation directory.
@@ -1773,7 +1811,6 @@ of the pair of enzymes is the name that is not preferred and the second
 is the preferred (prototype) name. 
 	 
 	          
-
 
 <H2>
     Notes
@@ -1822,32 +1859,132 @@ It is not a bug. Please don't report it.
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
-<tr><td><a href="abiview.html">abiview</a></td><td>Reads ABI file and display the trace</td></tr>
-<tr><td><a href="backtranseq.html">backtranseq</a></td><td>Back translate a protein sequence</td></tr>
-<tr><td><a href="cirdna.html">cirdna</a></td><td>Draws circular maps of DNA constructs</td></tr>
-<tr><td><a href="coderet.html">coderet</a></td><td>Extract CDS, mRNA and translations from feature tables</td></tr>
-<tr><td><a href="lindna.html">lindna</a></td><td>Draws linear maps of DNA constructs</td></tr>
-<tr><td><a href="pepnet.html">pepnet</a></td><td>Displays proteins as a helical net</td></tr>
-<tr><td><a href="pepwheel.html">pepwheel</a></td><td>Shows protein sequences as helices</td></tr>
-<tr><td><a href="plotorf.html">plotorf</a></td><td>Plot potential open reading frames</td></tr>
-<tr><td><a href="prettyplot.html">prettyplot</a></td><td>Displays aligned sequences, with colouring and boxing</td></tr>
-<tr><td><a href="prettyseq.html">prettyseq</a></td><td>Output sequence with translated ranges</td></tr>
-<tr><td><a href="recoder.html">recoder</a></td><td>Remove restriction sites but maintain same translation</td></tr>
-<tr><td><a href="redata.html">redata</a></td><td>Search REBASE for enzyme name, references, suppliers etc</td></tr>
-<tr><td><a href="remap.html">remap</a></td><td>Display sequence with restriction sites, translation etc</td></tr>
-<tr><td><a href="restover.html">restover</a></td><td>Find restriction enzymes producing specific overhang</td></tr>
-<tr><td><a href="restrict.html">restrict</a></td><td>Finds restriction enzyme cleavage sites</td></tr>
-<tr><td><a href="seealso.html">seealso</a></td><td>Finds programs sharing group names</td></tr>
-<tr><td><a href="showalign.html">showalign</a></td><td>Displays a multiple sequence alignment</td></tr>
-<tr><td><a href="showdb.html">showdb</a></td><td>Displays information on the currently available databases</td></tr>
-<tr><td><a href="showfeat.html">showfeat</a></td><td>Show features of a sequence</td></tr>
-<tr><td><a href="showorf.html">showorf</a></td><td>Pretty output of DNA translations</td></tr>
-<tr><td><a href="silent.html">silent</a></td><td>Silent mutation restriction enzyme scan</td></tr>
-<tr><td><a href="sixpack.html">sixpack</a></td><td>Display a DNA sequence with 6-frame translation and ORFs</td></tr>
-<tr><td><a href="textsearch.html">textsearch</a></td><td>Search sequence documentation. Slow, use SRS and Entrez!</td></tr>
-<tr><td><a href="transeq.html">transeq</a></td><td>Translate nucleic acid sequences</td></tr>
-</table>
+<tr>
+<td><a href="abiview.html">abiview</a></td>
+<td>Reads ABI file and display the trace</td>
+</tr>
 
+<tr>
+<td><a href="backtranambig.html">backtranambig</a></td>
+<td>Back translate a protein sequence to ambiguous codons</td>
+</tr>
+
+<tr>
+<td><a href="backtranseq.html">backtranseq</a></td>
+<td>Back translate a protein sequence</td>
+</tr>
+
+<tr>
+<td><a href="cirdna.html">cirdna</a></td>
+<td>Draws circular maps of DNA constructs</td>
+</tr>
+
+<tr>
+<td><a href="coderet.html">coderet</a></td>
+<td>Extract CDS, mRNA and translations from feature tables</td>
+</tr>
+
+<tr>
+<td><a href="lindna.html">lindna</a></td>
+<td>Draws linear maps of DNA constructs</td>
+</tr>
+
+<tr>
+<td><a href="pepnet.html">pepnet</a></td>
+<td>Displays proteins as a helical net</td>
+</tr>
+
+<tr>
+<td><a href="pepwheel.html">pepwheel</a></td>
+<td>Shows protein sequences as helices</td>
+</tr>
+
+<tr>
+<td><a href="plotorf.html">plotorf</a></td>
+<td>Plot potential open reading frames</td>
+</tr>
+
+<tr>
+<td><a href="prettyplot.html">prettyplot</a></td>
+<td>Displays aligned sequences, with colouring and boxing</td>
+</tr>
+
+<tr>
+<td><a href="prettyseq.html">prettyseq</a></td>
+<td>Output sequence with translated ranges</td>
+</tr>
+
+<tr>
+<td><a href="recoder.html">recoder</a></td>
+<td>Remove restriction sites but maintain same translation</td>
+</tr>
+
+<tr>
+<td><a href="redata.html">redata</a></td>
+<td>Search REBASE for enzyme name, references, suppliers etc</td>
+</tr>
+
+<tr>
+<td><a href="remap.html">remap</a></td>
+<td>Display sequence with restriction sites, translation etc</td>
+</tr>
+
+<tr>
+<td><a href="restover.html">restover</a></td>
+<td>Find restriction enzymes producing specific overhang</td>
+</tr>
+
+<tr>
+<td><a href="restrict.html">restrict</a></td>
+<td>Finds restriction enzyme cleavage sites</td>
+</tr>
+
+<tr>
+<td><a href="seealso.html">seealso</a></td>
+<td>Finds programs sharing group names</td>
+</tr>
+
+<tr>
+<td><a href="showalign.html">showalign</a></td>
+<td>Displays a multiple sequence alignment</td>
+</tr>
+
+<tr>
+<td><a href="showdb.html">showdb</a></td>
+<td>Displays information on the currently available databases</td>
+</tr>
+
+<tr>
+<td><a href="showfeat.html">showfeat</a></td>
+<td>Show features of a sequence</td>
+</tr>
+
+<tr>
+<td><a href="showorf.html">showorf</a></td>
+<td>Pretty output of DNA translations</td>
+</tr>
+
+<tr>
+<td><a href="silent.html">silent</a></td>
+<td>Silent mutation restriction enzyme scan</td>
+</tr>
+
+<tr>
+<td><a href="sixpack.html">sixpack</a></td>
+<td>Display a DNA sequence with 6-frame translation and ORFs</td>
+</tr>
+
+<tr>
+<td><a href="textsearch.html">textsearch</a></td>
+<td>Search sequence documentation. Slow, use SRS and Entrez!</td>
+</tr>
+
+<tr>
+<td><a href="transeq.html">transeq</a></td>
+<td>Translate nucleic acid sequences</td>
+</tr>
+
+</table>
 
 <H2>
     Author(s)
@@ -1856,7 +1993,6 @@ Gary Williams (gwilliam&nbsp;&copy;&nbsp;rfcgr.mrc.ac.uk)
 <br>
 MRC Rosalind Franklin Centre for Genomics Research
 Wellcome Trust Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
-
 
 
 
@@ -1870,18 +2006,15 @@ Written 1999 - GWW
 <br>
 20 Nov 2001 - feature matches and annotation display added - GWW
 
-
 <H2>
     Target users
 </H2>
 This program is intended to be used by everyone and everything, from naive users to embedded scripts.
 
-
 <H2>
     Comments
 </H2>
 None
-
 
 </BODY>
 </HTML>

@@ -13,7 +13,6 @@
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
-
 rebaseextract
 </font></b>
 </td></tr>
@@ -22,12 +21,10 @@ rebaseextract
 <p>
 
 
-
 <H2>
     Function
 </H2>
 Extract data from REBASE
-
 
 <H2>
     Description
@@ -87,13 +84,12 @@ Running this program may be the job of your system manager.
 
 % <b>rebaseextract </b>
 Extract data from REBASE
-Full pathname of WITHREFM file: <b>withrefm</b>
-Full pathname of PROTO file: <b>proto</b>
+REBASE database withrefm file: <b>withrefm</b>
+REBASE database proto file: <b>proto</b>
 
 </pre></td></tr></table><p>
 <p>
 <a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
-
 
 
 <H2>
@@ -102,31 +98,30 @@ Full pathname of PROTO file: <b>proto</b>
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
    Standard (Mandatory) qualifiers:
-  [-infile]            infile     Full pathname of WITHREFM file
-  [-protofile]         infile     Full pathname of PROTO file
+  [-infile]            infile     REBASE database withrefm file
+  [-protofile]         infile     REBASE database proto file
 
    Additional (Optional) qualifiers:
-   -[no]equivalences   boolean    This option calculates an embossre.equ file
-                                  using restriction enzyme prototypes in the
-                                  withrefm file.
+   -[no]equivalences   boolean    [Y] This option calculates an embossre.equ
+                                  file using restriction enzyme prototypes in
+                                  the withrefm file.
 
    Advanced (Unprompted) qualifiers: (none)
    Associated qualifiers: (none)
    General qualifiers:
-   -auto                boolean    Turn off prompts
-   -stdout              boolean    Write standard output
-   -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for standard and additional values
-   -debug               boolean    Write debug output to program.dbg
-   -verbose             boolean    Report some/full command line options
-   -help                boolean    Report command line options. More
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
-   -warning             boolean    Report warnings
-   -error               boolean    Report errors
-   -fatal               boolean    Report fatal errors
-   -die                 boolean    Report deaths
-
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
 
 </pre>
 </td></tr></table>
@@ -141,14 +136,14 @@ Full pathname of PROTO file: <b>proto</b>
 
 <tr>
 <td>[-infile]<br>(Parameter 1)</td>
-<td>Full pathname of WITHREFM file</td>
+<td>REBASE database withrefm file</td>
 <td>Input file</td>
 <td><b>Required</b></td>
 </tr>
 
 <tr>
 <td>[-protofile]<br>(Parameter 2)</td>
-<td>Full pathname of PROTO file</td>
+<td>REBASE database proto file</td>
 <td>Input file</td>
 <td><b>Required</b></td>
 </tr>
@@ -177,7 +172,6 @@ Full pathname of PROTO file: <b>proto</b>
 </tr>
 
 </table>
-
 
 
 <H2>
@@ -360,7 +354,6 @@ StyLTI                         CAGAG
 </pre>
 </td></tr></table><p>
 
-
 <H2>
     Output file format
 </H2>
@@ -383,7 +376,6 @@ HpyCH4IV MaeII
 <p><h3>Directory: REBASE</h3>
 <p>This directory contains output files.
 <p>
-
 
 <p>
 
@@ -475,13 +467,32 @@ It exits with status 0 unless an error is reported.
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
-<tr><td><a href="aaindexextract.html">aaindexextract</a></td><td>Extract data from AAINDEX</td></tr>
-<tr><td><a href="cutgextract.html">cutgextract</a></td><td>Extract data from CUTG</td></tr>
-<tr><td><a href="printsextract.html">printsextract</a></td><td>Extract data from PRINTS</td></tr>
-<tr><td><a href="prosextract.html">prosextract</a></td><td>Build the PROSITE motif database for use by patmatmotifs</td></tr>
-<tr><td><a href="tfextract.html">tfextract</a></td><td>Extract data from TRANSFAC</td></tr>
-</table>
+<tr>
+<td><a href="aaindexextract.html">aaindexextract</a></td>
+<td>Extract data from AAINDEX</td>
+</tr>
 
+<tr>
+<td><a href="cutgextract.html">cutgextract</a></td>
+<td>Extract data from CUTG</td>
+</tr>
+
+<tr>
+<td><a href="printsextract.html">printsextract</a></td>
+<td>Extract data from PRINTS</td>
+</tr>
+
+<tr>
+<td><a href="prosextract.html">prosextract</a></td>
+<td>Build the PROSITE motif database for use by patmatmotifs</td>
+</tr>
+
+<tr>
+<td><a href="tfextract.html">tfextract</a></td>
+<td>Extract data from TRANSFAC</td>
+</tr>
+
+</table>
 
 
 <H2>
@@ -495,13 +506,11 @@ European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambri
 
 
 
-
 <H2>
     History
 </H2>
 
 Completed 12th April 1999
-
 
 <H2>
     Target users
@@ -510,12 +519,10 @@ This program is intended to be used by administrators responsible
 for software and database installation and maintenance. 
 
 
-
 <H2>
     Comments
 </H2>
 None
-
 
 </BODY>
 </HTML>

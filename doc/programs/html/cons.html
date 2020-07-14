@@ -13,7 +13,6 @@
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
-
 cons
 </font></b>
 </td></tr>
@@ -22,12 +21,10 @@ cons
 <p>
 
 
-
 <H2>
     Function
 </H2>
 Creates a consensus from multiple alignments
-
 <H2>
     Description
 </H2>
@@ -86,13 +83,12 @@ is in lower-case.
 
 % <b>cons </b>
 Creates a consensus from multiple alignments
-Input sequence set: <b>dna.msf</b>
-Output sequence [dna.fasta]: <b>aligned.cons</b>
+Input (aligned) sequence set: <b>dna.msf</b>
+output sequence [dna.fasta]: <b>aligned.cons</b>
 
 </pre></td></tr></table><p>
 <p>
 <a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
-
 
 
 <H2>
@@ -103,78 +99,83 @@ Output sequence [dna.fasta]: <b>aligned.cons</b>
 <pre>
    Standard (Mandatory) qualifiers:
   [-sequence]          seqset     File containing a sequence alignment.
-  [-outseq]            seqout     Output sequence USA
+  [-outseq]            seqout     [<sequence>.<format>] Sequence filename and
+                                  optional format (output USA)
 
    Additional (Optional) qualifiers:
-   -datafile           matrix     This is the scoring matrix file used when
+   -datafile           matrix     [EBLOSUM62 for protein, EDNAFULL for DNA]
+                                  This is the scoring matrix file used when
                                   comparing sequences. By default it is the
                                   file 'EBLOSUM62' (for proteins) or the file
                                   'EDNAFULL' (for nucleic sequences). These
                                   files are found in the 'data' directory of
                                   the EMBOSS installation.
-   -plurality          float      Set a cut-off for the number of positive
-                                  matches below which there is no consensus.
-                                  The default plurality is taken as half the
-                                  total weight of all the sequences in the
-                                  alignment.
-   -identity           integer    Provides the facility of setting the
+   -plurality          float      [Half the total sequence weighting] Set a
+                                  cut-off for the number of positive matches
+                                  below which there is no consensus. The
+                                  default plurality is taken as half the total
+                                  weight of all the sequences in the
+                                  alignment. (Any numeric value)
+   -identity           integer    [0] Provides the facility of setting the
                                   required number of identities at a site for
                                   it to give a consensus at that position.
                                   Therefore, if this is set to the number of
                                   sequences in the alignment only columns of
                                   identities contribute to the consensus.
-   -setcase            float      Sets the threshold for the positive matches
-                                  above which the consensus is is upper-case
-                                  and below which the consensus is in
-                                  lower-case.
-   -name               string     Name of the consensus sequence
+                                  (Integer 0 or more)
+   -setcase            float      [@( $(sequence.totweight) / 2)] Sets the
+                                  threshold for the positive matches above
+                                  which the consensus is is upper-case and
+                                  below which the consensus is in lower-case.
+                                  (Any numeric value)
+   -name               string     Name of the consensus sequence (Any string
+                                  is accepted)
 
    Advanced (Unprompted) qualifiers: (none)
    Associated qualifiers:
 
    "-sequence" associated qualifiers
-   -sbegin1             integer    Start of each sequence to be used
-   -send1               integer    End of each sequence to be used
-   -sreverse1           boolean    Reverse (if DNA)
-   -sask1               boolean    Ask for begin/end/reverse
-   -snucleotide1        boolean    Sequence is nucleotide
-   -sprotein1           boolean    Sequence is protein
-   -slower1             boolean    Make lower case
-   -supper1             boolean    Make upper case
-   -sformat1            string     Input sequence format
-   -sdbname1            string     Database name
-   -sid1                string     Entryname
-   -ufo1                string     UFO features
-   -fformat1            string     Features format
-   -fopenfile1          string     Features file name
+   -sbegin1            integer    Start of each sequence to be used
+   -send1              integer    End of each sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
 
    "-outseq" associated qualifiers
-   -osformat2           string     Output seq format
-   -osextension2        string     File name extension
-   -osname2             string     Base file name
-   -osdirectory2        string     Output directory
-   -osdbname2           string     Database name to add
-   -ossingle2           boolean    Separate file for each entry
-   -oufo2               string     UFO features
-   -offormat2           string     Features format
-   -ofname2             string     Features file name
-   -ofdirectory2        string     Output directory
+   -osformat2          string     Output seq format
+   -osextension2       string     File name extension
+   -osname2            string     Base file name
+   -osdirectory2       string     Output directory
+   -osdbname2          string     Database name to add
+   -ossingle2          boolean    Separate file for each entry
+   -oufo2              string     UFO features
+   -offormat2          string     Features format
+   -ofname2            string     Features file name
+   -ofdirectory2       string     Output directory
 
    General qualifiers:
-   -auto                boolean    Turn off prompts
-   -stdout              boolean    Write standard output
-   -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for standard and additional values
-   -debug               boolean    Write debug output to program.dbg
-   -verbose             boolean    Report some/full command line options
-   -help                boolean    Report command line options. More
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
-   -warning             boolean    Report warnings
-   -error               boolean    Report errors
-   -fatal               boolean    Report fatal errors
-   -die                 boolean    Report deaths
-
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
 
 </pre>
 </td></tr></table>
@@ -195,9 +196,9 @@ Output sequence [dna.fasta]: <b>aligned.cons</b>
 
 <tr>
 <td>[-outseq]<br>(Parameter 2)</td>
-<td>Output sequence USA</td>
+<td>Sequence filename and optional format (output USA)</td>
 <td>Writeable sequence</td>
-<td><i>&lt;sequence&gt;</i>.<i>format</i></td>
+<td>&nbsp;</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
@@ -254,7 +255,6 @@ Output sequence [dna.fasta]: <b>aligned.cons</b>
 </table>
 
 
-
 <H2>
     Input file format
 </H2>
@@ -293,7 +293,6 @@ The USA of a set of aligned sequences.
 </pre>
 </td></tr></table><p>
 
-
 <H2>
     Output file format
 </H2>
@@ -307,11 +306,10 @@ The output consists of a sequence file holding the consensus sequence.
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 &gt;EMBOSS_001
-ACGTACGTACGTACGTACGTnnnnACGTACGTACGTACGTnnnnnnnnnnnnnnnnnnnn
-nnnnnnnnnnnnnnnnnnnnACGTACGTACGTACGTACGTACGTACGTnnnnACGTACGT
+ACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGT
+ACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGTACGT
 </pre>
 </td></tr></table><p>
-
 
 
 
@@ -362,7 +360,6 @@ The directories are searched in the following order:
 <p>
 
 
-
 <H2>
     Notes
 </H2>
@@ -403,10 +400,17 @@ None.
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
-<tr><td><a href="megamerger.html">megamerger</a></td><td>Merge two large overlapping nucleic acid sequences</td></tr>
-<tr><td><a href="merger.html">merger</a></td><td>Merge two overlapping nucleic acid sequences</td></tr>
-</table>
+<tr>
+<td><a href="megamerger.html">megamerger</a></td>
+<td>Merge two large overlapping nucleic acid sequences</td>
+</tr>
 
+<tr>
+<td><a href="merger.html">merger</a></td>
+<td>Merge two overlapping sequences</td>
+</tr>
+
+</table>
 
 <H2>
     Author(s)
@@ -416,11 +420,9 @@ Tim Carver (tcarver&nbsp;&copy;&nbsp;rfcgr.mrc.ac.uk)
 MRC Rosalind Franklin Centre for Genomics Research
 Wellcome Trust Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
 
-
 <H2>
     History
 </H2>
-
 
 
 <H2>
@@ -428,12 +430,10 @@ Wellcome Trust Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
 </H2>
 This program is intended to be used by everyone and everything, from naive users to embedded scripts.
 
-
 <H2>
     Comments
 </H2>
 None
-
 
 
 </BODY>

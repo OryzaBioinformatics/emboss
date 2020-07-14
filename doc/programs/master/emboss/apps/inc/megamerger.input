@@ -1,0 +1,226 @@
+
+<a name="input.1"></a>
+<h3>Input files for usage example </h3>
+
+'tembl:ap000504' is a sequence entry in the example nucleic acid database 'tembl'
+<p>
+<p><h3>Database entry: tembl:ap000504</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+ID   AP000504   standard; DNA; HUM; 100000 BP.
+XX
+AC   AP000504; BA000025;
+XX
+SV   AP000504.1
+XX
+DT   28-SEP-1999 (Rel. 61, Created)
+DT   22-AUG-2001 (Rel. 68, Last updated, Version 3)
+XX
+DE   Homo sapiens genomic DNA, chromosome 6p21.3, HLA Class I region, section
+DE   3/20.
+XX
+KW   .
+XX
+OS   Homo sapiens (human)
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia;
+OC   Eutheria; Primates; Catarrhini; Hominidae; Homo.
+XX
+RN   [1]
+RP   1-100000
+RA   Hirakawa M., Yamaguchi H., Imai K., Shimada J.;
+RT   ;
+RL   Submitted (21-SEP-1999) to the EMBL/GenBank/DDBJ databases.
+RL   Mika Hirakawa, Japan Science and Technology Corporation (JST), Advanced
+RL   Databases Department; 5-3, Yonbancho, Chiyoda-ku, Tokyo 102-0081, Japan
+RL   (E-mail:mika@tokyo.jst.go.jp, URL:http://www-alis.tokyo.jst.go.jp/,
+RL   Tel:81-3-5214-8491, Fax:81-3-5214-8470)
+XX
+RN   [2]
+RA   Shiina S., Tamiya G., Oka A., Inoko H.;
+RT   "Homo sapiens 2,229,817bp genomic DNA of 6p21.3 HLA class I region";
+RL   Unpublished.
+XX
+DR   SWISS-PROT; O00299; CLI1_HUMAN.
+DR   SWISS-PROT; O43196; MSH5_HUMAN.
+DR   SWISS-PROT; O95445; APOM_HUMAN.
+DR   SWISS-PROT; O95865; DDH2_HUMAN.
+DR   SWISS-PROT; O95867; NG24_HUMAN.
+DR   SWISS-PROT; P13862; KC2B_HUMAN.
+XX
+CC   This sequence is conducted by Tokai University as a JST sequencing
+CC   Team.
+CC   Principal Investigator: Hidetoshi Inoko Ph.D
+CC   Phone:+81-463-93-1121, Fax:+81-463-94-8884,
+CC   The sequence is submitted by Human Genome Sequencing in ALIS
+CC   project of JST
+CC   Japan Science and Technology Corporation (JST)
+CC   5-3, Yonbancyo, Chiyoda-ku, Tokyo, 102-0081 Japan
+CC   For further infomation about this sequences, please visit our
+CC   sequence archive Web site (http://www-alis.tokyo.jst.go.jp/HGS/top.
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+     gggtggatca tgaggtcaag agatcgagac tatcctggct aacatgatga aaccccgtct     97080
+     ctactaaaaa tacaaaaaat tagctgggca tggtggcggg cacctgtagt cccagctact     97140
+     cgggaggctg agtcaggaga atggtgtgaa cccaggagac ggagcttgca gtgagctgag     97200
+     gtcgcaccac tgcactccag cctgggtgat agagcgagac tctgtctcaa aaaaaaaaaa     97260
+     aaaaaaaaaa aaaacaaaaa ttagccgggt gtggtggcag gcaacttaat cccagctact     97320
+     tgggaggcag aggcaggaga atcgtttgaa cctgggaggc ggaggttgaa gagaatagaa     97380
+     gctctgctgg tccagagaag gattgggcca gggctctggg agaccaggga gaaagagggc     97440
+     acatgtggtc cctgttgact gtgagggtgg gaatctgagg aaggctttgg ctcattgccc     97500
+     cttgggtttg tccacagcca tccttcccct gcggagtatg tcgaggtgct ccaggagcta     97560
+     cagcggctgg agagtcgcct ccagcccttc ttgcagcgct actacgaggt tctgggtgct     97620
+     gctgccacca cggactacaa taacaatgtg agccctttga tggccctgcc ctttctcctc     97680
+     agccccagta ctcccaaaac agaacaggct gaaatacaga taactctttc cctccctgga     97740
+     aaaacattgc aacagggcca ggtgcagtgg ctcacgcctg taatcccagc actttgggag     97800
+     gccaaggtgg gcggatcatc tgagatcggg agtttgagac cagcctggcc aacatggtgc     97860
+     aaccccatct ctactgaaaa tataaacatt agctggatgt agtggtgcac acctgtaatc     97920
+     ccagctactc aggaggctga ggcaggagaa tcgctagaac tcgggaggag ggggttgcag     97980
+     tgagccgaga ttgcactact gcactctagc ctgggtgaca gagcgagact gtctcaaaaa     98040
+     acaaaacaaa acaaaaaaac acacattgca acaaaacaat ttctctctaa acctgtaagt     98100
+     gattttgtcc tcccttacag agaaggtgat aatctttgct gtaagcactg tcctcgtatc     98160
+     gtaccccttg tgcccctgaa tgaatttaga aaatgtaaag tacaggagat cagtatatga     98220
+     tgacttactg attcatagta gtgttttaat aggatgttcc ttatgtgaat aagatataat     98280
+     ttatttgcaa agatttggtc tacatgtaaa cttccaagga tataactgaa agttttggag     98340
+     gacatggtat tctcagtagg cattattgct tttattagtg agatggactc cagcttgata     98400
+     ttttctgcct ttttgtgttt ggctggttgt gcgcagcacg agggccggga ggaggatcag     98460
+     cggttgatca acttggtagg ggagagcctg cgactgctgg gcaacacctt tgttgcactg     98520
+     tctgacctgc gctgcaatct ggcctgcacg cccccacgac acctgcatgt ggtccggcct     98580
+     atgtctcact acaccacccc catggtgctc cagcaggcag ccattcccat acaggtgggt     98640
+     tagggggagt ctggcctgag ggagagtgag gggtgttgat agagtgaccc agggtagcta     98700
+     ctgggcctga aggaggttag gaaaggagga gactggaaac atggtgatga aggctggaga     98760
+     tactttagag gtttatcatg aggttttctt ggttaggctc ttgtattttt ctcacatctg     98820
+     cctgtccatc tgtctttttc agatcaatgt gggaaccact gtgaccatga caggaaatgg     98880
+     gactcggccc cccccaactc ccaatgcaga ggcacctccc cctggtcctg ggcaggcctc     98940
+     atccgtggct ccgtcttcta ccaatgtcga gtcctcagct gagggggctc ccccgccagg     99000
+     tccagctccc ccgccagcca ccagccaccc gagggtcatc cggatttccc accagagtgt     99060
+     ggaacccgtg gtcatgatgc acatgaacat tcaaggtgag aatagttgct ggcgagaaga     99120
+     gcaggatcag catgatgagg gaggttcatg ctgaggtgtg agggaacagg gtggggaagg     99180
+     gagaggcaca tgctggtggt ggtagcctgg ggaccagagc agaagcttaa gtagacagat     99240
+     gtggggggtg tgggggttgg tttgtctttg gaggtgtgtt tgtgtggtga agggagtacc     99300
+     tctccctgtt tagatggagg gaaaggcagg ctttctgatt gggggattat gggcctgaag     99360
+     tatgcctgat ctcagaagga tatagttagg ccttggccct acctacctca gggccactgt     99420
+     ctctgtctcc ctgcccagat tctggcacac agcctggtgg tgttccgagt gctcccactg     99480
+     gccccctggg accccctggt catggccaaa ccctgggtaa gagtgagggc atcagggcag     99540
+     gctgagctct gggtagagaa agggaagggc tgagtgggtg ggttgaaggg gtccaggttc     99600
+     aaggttacat cagacccgcc ccccaggctc caccctcatc cagctgccct ccctgccccc     99660
+     tgagttcatg cacgccgtcg cccaccagat cactcatcag gccatggtgg cagctgttgc     99720
+     ctccgcggcc gcaggtaatg acctggaagg ggaggcttgg gaggtagggc acagtccatg     99780
+     gtggcagctg gctggcaagg gcctggccct cagccctctt cggtctgtct cttctgccac     99840
+     ccacaggaca gcaggtgcca ggcttcccaa cagctccaac ccgggtggtg attgcccggc     99900
+     ccactcctcc acaggctcgg ccttcccatc ctggagggcc cccagtctct gggacactgg     99960
+     tgagcaaggg tcggggagtt ctagtgcgta acagtctagg                          100000
+//
+</pre>
+</td></tr></table><p>
+<p><h3>Database entry: tembl:af129756</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+ID   AF129756   standard; DNA; HUM; 184666 BP.
+XX
+AC   AF129756;
+XX
+SV   AF129756.1
+XX
+DT   12-MAR-1999 (Rel. 59, Created)
+DT   29-OCT-1999 (Rel. 61, Last updated, Version 2)
+XX
+DE   Homo sapiens MSH55 gene, partial cds; and CLIC1, DDAH, G6b, G6c, G5b, G6d,
+DE   G6e, G6f, BAT5, G5b, CSK2B, BAT4, G4, Apo M, BAT3, BAT2, AIF-1, 1C7, LST-1,
+DE   LTB, TNF, and LTA genes, complete cds.
+XX
+KW   .
+XX
+OS   Homo sapiens (human)
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia;
+OC   Eutheria; Primates; Catarrhini; Hominidae; Homo.
+XX
+RN   [1]
+RP   1-184666
+RA   Rowen L., Madan A., Qin S., Shaffer T., James R., Ratcliffe A., Abbasi N.,
+RA   Dickhoff R., Loretz C., Madan A., Dors M., Young J., Lasky S., Hood L.;
+RT   "Sequence of the human major histocompatibility complex class III region";
+RL   Unpublished.
+XX
+RN   [2]
+RP   1-184666
+RA   Rowen L.;
+RT   ;
+RL   Submitted (22-FEB-1999) to the EMBL/GenBank/DDBJ databases.
+RL   Department of Molecular Biotechnology, Box 357730 University of Washington,
+RL   Seattle, WA 98195, USA
+XX
+RN   [3]
+RP   1-184666
+RA   Rowen L.;
+RT   ;
+RL   Submitted (28-OCT-1999) to the EMBL/GenBank/DDBJ databases.
+RL   Multimegabase Sequencing Center, University of Washington, PO Box 357730,
+RL   Seattle, WA 98195, USA
+XX
+DR   EPD; EP11158; HS_TNFA.
+DR   EPD; EP11159; HS_TNFB.
+DR   SPTREMBL; O00452; O00452.
+DR   SPTREMBL; O14931; O14931.
+DR   SPTREMBL; O95866; O95866.
+DR   SPTREMBL; O95868; O95868.
+DR   SPTREMBL; O95869; O95869.
+DR   SPTREMBL; O95870; O95870.
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+     aaaccagttt accaccactc ctaacactaa acttaaatct gactctaaat gtaagtccaa    181740
+     tctgagccac aagcctaaag ttgaacttta tcctgcttta tgaattattc atccattcct    181800
+     ccatttagtg agtatctgcg tgcctaacac atgctgggca ttgtcctaag gcaggaggga    181860
+     catggaggca aagggatcag agaaggtacc agcacctgtg gagcttgtat tccagtgagg    181920
+     ccagacggaa aagaaagaaa ctgaagaaga aattggtact atgagaaaat aagacaggct    181980
+     gatgttgtaa gagtggcagg gagctacttt taaatacagt agtcagcaaa atcctctttg    182040
+     agtgtttggg tggcactgga gctgagaccc aaatgacaaa aaatagtgac caggtaaaag    182100
+     tttgggagca aagcatttca ggtaaaggga gcagctactg caaaggctgg aaggcggaac    182160
+     caagctgggg gtgttgacga caaacagaag gccagtgtgg ctggagcaga gagagagact    182220
+     gggaggcggg tgggagatga ggtcagagag gagggcaggg gccaggtcat gcagggccat    182280
+     gcaagaaggg taaagcctct agatttcatc cagccacagg aagcctttaa aggtcgtcag    182340
+     agtgtgtggt gcgtgcgtgt gtgtgtgtgt gtgtgtgtgt gttgcagggg agagaggggg    182400
+     agggagagag agagagagag agagaagagg gaggtgagca gaggtgattg gatttttttt    182460
+     tcttttgaca tggtgtcttg ctctgtggcc taggctggag tgcagtggca ccatcatagc    182520
+     ccactgcaac ctcaaaacca tgggctcaag tcatccttcc acctcagctt cccaagtatc    182580
+     taggactaca ggtgtgtgcc actgtgcctg gctaatttta aaaaatattt taaaattttt    182640
+     gttgagacag ggtctatgct gctcaggctg gtctcgaact cctggtttca agtgatctgc    182700
+     ccatcttggc ctcccaaagt ttttttttgt tagtttgaga ggcggtttcg ctcgttgccc    182760
+     aggctggagt gcaatgactg atctcatctc actgcaacct ctgcctcctg ggttcaagcg    182820
+     attctcctgc ttcagcctcc caagtagctg ggattacagg tgcatgccac cattcccggc    182880
+     taattttttg tatttagtag agatggggtt tcaccatgtt agtcaggctg atctcaaact    182940
+     cctgacctca ggtgatccgc ctgcctcagc ctcccaaagt tttgggatta caggtgtgag    183000
+     ccaccatgct gggccagcct cccaaagttt tgggattaca ggcatgagtc accacactgg    183060
+     ccctggattt tttttctttc ttttttttgg agacggagtc tcactctgtt gcccaggctg    183120
+     gagtgcaatg gcgtaatctc agctcactgc aacctctgct gcccgggttc aaacgattct    183180
+     cctgtcttag cctcctgagt agctgggatt ataggtgcat gccaccatgc ctggctaatt    183240
+     tttgtacttt tagtagagaa agtacaccat cttggccagg ctggtctcga actcctgacc    183300
+     tcaggtgatc cacttgcgtc ggcctcccaa agtgctggga ttacaggcgt gagacaccgc    183360
+     acccagcctt tttttttttt tttcttttaa gacagaatcg ctctgtcacc caggctggag    183420
+     tgcagtggca caatctcggc tcactgcaac ctctgcctcc caggtttaag caatccacct    183480
+     atgtcagtct cccaagtagc tgggattata ggtgcatgtc accatgcctg gctaattttt    183540
+     gtacttttag tatagaaagt acaccatgtt ggccaggctg gtcttgaact cctgacctca    183600
+     agtgatccgc ctgcctcagc ctcccgaagt gctggaatta cagacatgtg ccactgcacc    183660
+     cggcctggtt ttttttttct aagagatgga gtctcacttt tctgcccagg ttggagtgca    183720
+     atggcaccat catagctcac tgcagccttc aactcttggc ctcaggcaat ccttgcacct    183780
+     tagcctcgca gtgttgggat tacaggcatg agccactgag ccttgcctgg actttttttt    183840
+     ttttttgaga tggcgtctcg ctctgttgcc caggttggag tgctacggca tgatcttggc    183900
+     tcactgcaac ttccacctcc caggttcaag cgattctctt gcctcggccc cccgagtagc    183960
+     tgggattaca ggcatgcgcc accgtgcctg gctaattttg gtatttttag tagagatagg    184020
+     gtttcatcat gttgggcagg ctggtcttga actcctgacc tcgtgatcca cccacctcgg    184080
+     cctcccaaag tgctgggatt ataggcatag ccaacgcgcc cagcctggac ttgtttttaa    184140
+     aagatcactg tggctcctgt gtttaggctg gctggtagga gacaggtggc agtggcattg    184200
+     atggtgaaga gaaaatagtg gcagccatgg agatggagag aagtagacaa gtttgggata    184260
+     tattatacat tccaggggta gaaacaacag gactagatga tggattgatg ggtgggagat    184320
+     gtagatactg ggagagaagc aggattctga tggatggaaa aactaaaaaa ttctattttg    184380
+     ggtgtggtaa gtctaagtct attagacatg caagtagaga tgtcactggg cagatacaca    184440
+     tctggatttc aggggcaagg tccaagctag agaaagaaac ctgggcatgg tcagcatgag    184500
+     gatggtgttt aaagccatgg aacttatctt gtgcatccct ataagacccc tttgaggcac    184560
+     ttgtttcccc tcacaatgga tgcagtgcat cttccattct gaattccaga ggcaacaacc    184620
+     tcctgctcct agaagctaaa ctctccagac ttagtcttct gaattc                   184666
+//
+</pre>
+</td></tr></table><p>

@@ -1,0 +1,32 @@
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: paamir.dreg</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+########################################
+# Program: dreg
+# Rundate: Sat Jul 15 2006 12:00:00
+# Commandline: dreg
+#    -sequence tembl:paamir
+#    -pattern ggtacc
+# Report_format: seqtable
+# Report_file: paamir.dreg
+########################################
+
+#=======================================
+#
+# Sequence: PAAMIR     from: 1   to: 2167
+# HitCount: 1
+#
+# Pattern: GGTACC
+#
+#=======================================
+
+  Start     End Pattern_name Sequence
+      1       6 regex1       ggtacc
+
+#---------------------------------------
+#---------------------------------------
+</pre>
+</td></tr></table><p>

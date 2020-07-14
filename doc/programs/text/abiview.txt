@@ -24,8 +24,8 @@ Usage
 
 % abiview -graph cps 
 Reads ABI file and display the trace
-ABI trace file: abiview.abi
-Output sequence [abiview.fasta]: 
+ABI sequencing trace file: abiview.abi
+nucleotide output sequence [abiview.fasta]: 
 
 Created abiview.ps
 
@@ -35,86 +35,69 @@ Created abiview.ps
 Command line arguments
 
    Standard (Mandatory) qualifiers:
-  [-infile]            infile     ABI trace file
-  [-outseq]            seqout     Output sequence USA
-   -graph              xygraph    Graph type
+  [-infile]            infile     ABI sequencing trace file
+  [-outseq]            seqout     [.] Nucleotide sequence
+                                  filename and optional format (output USA)
+   -graph              xygraph    [$EMBOSS_GRAPHICS value, or x11] Graph type
+                                  (ps, hpgl, hp7470, hp7580, meta, cps, x11,
+                                  tekt, tek, none, data, xterm, png)
 
    Additional (Optional) qualifiers:
-   -startbase          integer    First base to report or display
-   -endbase            integer    Last sequence base to report or display. If
-                                  the default is set to zero then the value of
-                                  this is taken as the maximum number of
-                                  bases.
-   -yticks             boolean    Display y-axis ticks
-   -[no]sequence       boolean    Display the sequence on the graph
-   -window             integer    Sequence display window size
-   -bases              string     Base graphs to be displayed
+   -startbase          integer    [0] First base to report or display (Integer
+                                  0 or more)
+   -endbase            integer    [0] Last sequence base to report or display.
+                                  If the default is set to zero then the
+                                  value of this is taken as the maximum number
+                                  of bases. (Any integer value)
+   -yticks             boolean    [N] Display y-axis ticks
+   -[no]sequence       boolean    [Y] Display the sequence on the graph
+   -window             integer    [40] Sequence display window size (Any
+                                  integer value)
+   -bases              string     [GATC] Base graphs to be displayed (Any
+                                  string is accepted, matching regular
+                                  expression /[GATC]+/)
 
    Advanced (Unprompted) qualifiers:
-   -separate           boolean    Separate the trace graphs for the 4 bases
+   -separate           boolean    [N] Separate the trace graphs for the 4
+                                  bases
 
    Associated qualifiers:
 
    "-outseq" associated qualifiers
-   -osformat2           string     Output seq format
-   -osextension2        string     File name extension
-   -osname2             string     Base file name
-   -osdirectory2        string     Output directory
-   -osdbname2           string     Database name to add
-   -ossingle2           boolean    Separate file for each entry
-   -oufo2               string     UFO features
-   -offormat2           string     Features format
-   -ofname2             string     Features file name
-   -ofdirectory2        string     Output directory
+   -osformat2          string     Output seq format
+   -osextension2       string     File name extension
+   -osname2            string     Base file name
+   -osdirectory2       string     Output directory
+   -osdbname2          string     Database name to add
+   -ossingle2          boolean    Separate file for each entry
+   -oufo2              string     UFO features
+   -offormat2          string     Features format
+   -ofname2            string     Features file name
+   -ofdirectory2       string     Output directory
 
    "-graph" associated qualifiers
-   -gprompt             boolean    Graph prompting
-   -gtitle              string     Graph title
-   -gsubtitle           string     Graph subtitle
-   -gxtitle             string     Graph x axis title
-   -gytitle             string     Graph y axis title
-   -goutfile            string     Output file for non interactive displays
-   -gdirectory          string     Output directory
+   -gprompt            boolean    Graph prompting
+   -gtitle             string     Graph title
+   -gsubtitle          string     Graph subtitle
+   -gxtitle            string     Graph x axis title
+   -gytitle            string     Graph y axis title
+   -goutfile           string     Output file for non interactive displays
+   -gdirectory         string     Output directory
 
    General qualifiers:
-   -auto                boolean    Turn off prompts
-   -stdout              boolean    Write standard output
-   -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for standard and additional values
-   -debug               boolean    Write debug output to program.dbg
-   -verbose             boolean    Report some/full command line options
-   -help                boolean    Report command line options. More
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
-   -warning             boolean    Report warnings
-   -error               boolean    Report errors
-   -fatal               boolean    Report fatal errors
-   -die                 boolean    Report deaths
-
-
-   Standard (Mandatory) qualifiers Allowed values Default
-   [-infile]
-   (Parameter 1) ABI trace file Input file Required
-   [-outseq]
-   (Parameter 2) Output sequence USA Writeable sequence <sequence>.format
-   -graph Graph type EMBOSS has a list of known devices, including
-   postscript, ps, hpgl, hp7470, hp7580, meta, colourps, cps, xwindows,
-   x11, tektronics, tekt, tek4107t, tek, none, null, text, data, xterm,
-   png, xml EMBOSS_GRAPHICS value, or x11
-   Additional (Optional) qualifiers Allowed values Default
-   -startbase First base to report or display Integer 0 or more 0
-   -endbase Last sequence base to report or display. If the default is
-   set to zero then the value of this is taken as the maximum number of
-   bases. Any integer value 0
-   -yticks Display y-axis ticks Boolean value Yes/No No
-   -[no]sequence Display the sequence on the graph Boolean value Yes/No
-   Yes
-   -window Sequence display window size Any integer value 40
-   -bases Base graphs to be displayed Any string is accepted, matching
-   regular expression /[GATC]+/ GATC
-   Advanced (Unprompted) qualifiers Allowed values Default
-   -separate Separate the trace graphs for the 4 bases Boolean value
-   Yes/No No
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
 
 Input file format
 

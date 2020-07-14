@@ -13,7 +13,6 @@
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
-
 dbiflat
 </font></b>
 </td></tr>
@@ -22,12 +21,10 @@ dbiflat
 <p>
 
 
-
 <H2>
     Function
 </H2>
 Index a flat file database
-
 <H2>
     Description
 </H2>
@@ -99,11 +96,11 @@ Database directory [.]: <b>embl</b>
 Wildcard database filename [*.dat]: <b>rod.dat</b>
 Release number [0.0]: <b></b>
 Index date [00/00/00]: <b></b>
+General log output file [outfile.dbiflat]: <b></b>
 
 </pre></td></tr></table><p>
 <p>
 <a href="#output.1">Go to the output files for this example</a><p><p>
-
 
 <H2>
     Command line arguments
@@ -111,27 +108,44 @@ Index date [00/00/00]: <b></b>
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
    Standard (Mandatory) qualifiers:
-  [-dbname]            string     Database name
-   -idformat           menu       Entry format
-   -directory          directory  Database directory
-   -filenames          string     Wildcard database filename
-   -release            string     Release number
-   -date               string     Index date
+  [-dbname]            string     Database name (Any string from 2 to 19
+                                  characters, matching regular expression
+                                  /[A-z][A-z0-9_]+/)
+   -idformat           menu       [SWISS] Entry format (Values: EMBL (EMBL);
+                                  SWISS (Swiss-Prot, SpTrEMBL, TrEMBLnew); GB
+                                  (Genbank, DDBJ); REFSEQ (Refseq))
+   -directory          directory  [.] Database directory
+   -filenames          string     [*.dat] Wildcard database filename (Any
+                                  string is accepted)
+   -release            string     [0.0] Release number (Any string up to 9
+                                  characters)
+   -date               string     [00/00/00] Index date (Date string dd/mm/yy)
+   -outfile            outfile    [*.dbiflat] General log output file
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers:
-   -fields             menu       Index fields
-   -exclude            string     Wildcard filename(s) to exclude
-   -maxindex           integer    Maximum index length
-   -sortoptions        string     Sort options, typically '-T .' to use
-                                  current directory for work files and '-k
-                                  1,1' to force GNU sort to use the first
-                                  field
-   -[no]systemsort     boolean    Use system sort utility
-   -[no]cleanup        boolean    Clean up temporary files
-   -indexoutdir        outdir     Index directory
+   -fields             menu       [acc] Index fields (Values: acc (acnum
+                                  accession number index); sv (seqvn sequence
+                                  version and gi number index); des (des
+                                  description index); key (keyword keywords
+                                  index); org (taxon taxonomy and organism
+                                  index))
+   -exclude            string     Wildcard filename(s) to exclude (Any string
+                                  is accepted)
+   -maxindex           integer    [0] Maximum index length (Integer 0 or more)
+   -sortoptions        string     [-T . -k 1,1] Sort options, typically '-T .'
+                                  to use current directory for work files and
+                                  '-k 1,1' to force GNU sort to use the first
+                                  field (Any string is accepted)
+   -[no]systemsort     boolean    [Y] Use system sort utility
+   -[no]cleanup        boolean    [Y] Clean up temporary files
+   -indexoutdir        outdir     [.] Index file output directory
 
-   Associated qualifiers: (none)
+   Associated qualifiers:
+
+   "-outfile" associated qualifiers
+   -odirectory         string     Output directory
+
    General qualifiers:
    -auto               boolean    Turn off prompts
    -stdout             boolean    Write standard output
@@ -145,8 +159,7 @@ Index date [00/00/00]: <b></b>
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
-   -die                boolean    Report deaths
-
+   -die                boolean    Report dying program messages
 
 </pre>
 </td></tr></table>
@@ -161,7 +174,7 @@ Index date [00/00/00]: <b></b>
 <tr>
 <td>[-dbname]<br>(Parameter 1)</td>
 <td>Database name</td>
-<td>A string from 2 to 19 characters, matching regular expression /[A-z][A-z0-9_]+/</td>
+<td>Any string from 2 to 19 characters, matching regular expression /[A-z][A-z0-9_]+/</td>
 <td><b>Required</b></td>
 </tr>
 
@@ -189,7 +202,7 @@ Index date [00/00/00]: <b></b>
 <tr>
 <td>-release</td>
 <td>Release number</td>
-<td>A string up to 9 characters</td>
+<td>Any string up to 9 characters</td>
 <td>0.0</td>
 </tr>
 
@@ -198,6 +211,13 @@ Index date [00/00/00]: <b></b>
 <td>Index date</td>
 <td>Date string dd/mm/yy</td>
 <td>00/00/00</td>
+</tr>
+
+<tr>
+<td>-outfile</td>
+<td>General log output file</td>
+<td>Output file</td>
+<td>&nbsp;</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
@@ -219,8 +239,8 @@ Index date [00/00/00]: <b></b>
 <tr>
 <td>-fields</td>
 <td>Index fields</td>
-<td><table><tr><td>acnum</td> <td><i>(Accession number)</i></td></tr><tr><td>seqvn</td> <td><i>(Sequence Version and GI)</i></td></tr><tr><td>des</td> <td><i>(Description)</i></td></tr><tr><td>keyword</td> <td><i>(Keywords)</i></td></tr><tr><td>taxon</td> <td><i>(Taxonomy)</i></td></tr></table></td>
-<td>acnum</td>
+<td><table><tr><td>acc</td> <td><i>(acnum accession number index)</i></td></tr><tr><td>sv</td> <td><i>(seqvn sequence version and gi number index)</i></td></tr><tr><td>des</td> <td><i>(des description index)</i></td></tr><tr><td>key</td> <td><i>(keyword keywords index)</i></td></tr><tr><td>org</td> <td><i>(taxon taxonomy and organism index)</i></td></tr></table></td>
+<td>acc</td>
 </tr>
 
 <tr>
@@ -260,13 +280,12 @@ Index date [00/00/00]: <b></b>
 
 <tr>
 <td>-indexoutdir</td>
-<td>Index directory</td>
+<td>Index file output directory</td>
 <td>Output directory</td>
 <td>.</td>
 </tr>
 
 </table>
-
 
 <H2>
     Input file format
@@ -276,7 +295,6 @@ Index date [00/00/00]: <b></b>
 sequence database. 
 
 <p>
-
 
 <H2>
     Output file format
@@ -293,7 +311,45 @@ sequence database.
 <p>This file contains non-printing characters and so cannot be displayed here.
 <p><h3>File: acnum.trg</h3>
 <p>This file contains non-printing characters and so cannot be displayed here.
+<p><h3>File: outfile.dbiflat</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+########################################
+# Program: dbiflat
+# Rundate: Sat Jul 15 2006 12:00:00
+# Dbname: EMBL
+# Release: 0.0
+# Date: 15/07/06
+# CurrentDirectory: /homes/user/test/qa/dbiflat-ex-keep/
+# IndexDirectory: ./
+# IndexDirectoryPath: /homes/user/test/qa/dbiflat-ex-keep/
+# Maxindex: 0
+# Fields: 2
+#   Field 1: id
+#   Field 2: acc
+# Directory: /homes/user/test/embl/
+# DirectoryPath: /homes/user/test/embl/
+# Filenames: rod.dat
+# Exclude: 
+# Files: 1
+#   File 1: /homes/user/test/embl/rod.dat
+########################################
+# Commandline: dbiflat
+#    -dbname EMBL
+#    -idformat EMBL
+#    -directory ../../embl
+#    -filenames rod.dat
+########################################
 
+filename: 'rod.dat'
+    id: 3
+   acc: 3
+
+Index acc: maxlen 6 items 3
+
+Total 1 files 3 entries (0 duplicates)
+</pre>
+</td></tr></table><p>
 <p>
 
 <b>dbiflat</b> creates four index files.  All are binary but with a
@@ -381,14 +437,37 @@ None.
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
-<tr><td><a href="dbiblast.html">dbiblast</a></td><td>Index a BLAST database</td></tr>
-<tr><td><a href="dbifasta.html">dbifasta</a></td><td>Database indexing for fasta file databases</td></tr>
-<tr><td><a href="dbigcg.html">dbigcg</a></td><td>Index a GCG formatted database</td></tr>
-<tr><td><a href="dbxfasta.html">dbxfasta</a></td><td>Database b+tree indexing for fasta file databases</td></tr>
-<tr><td><a href="dbxflat.html">dbxflat</a></td><td>Database b+tree indexing for flat file databases</td></tr>
-<tr><td><a href="dbxgcg.html">dbxgcg</a></td><td>Database b+tree indexing for GCG formatted databases</td></tr>
-</table>
+<tr>
+<td><a href="dbiblast.html">dbiblast</a></td>
+<td>Index a BLAST database</td>
+</tr>
 
+<tr>
+<td><a href="dbifasta.html">dbifasta</a></td>
+<td>Database indexing for fasta file databases</td>
+</tr>
+
+<tr>
+<td><a href="dbigcg.html">dbigcg</a></td>
+<td>Index a GCG formatted database</td>
+</tr>
+
+<tr>
+<td><a href="dbxfasta.html">dbxfasta</a></td>
+<td>Database b+tree indexing for fasta file databases</td>
+</tr>
+
+<tr>
+<td><a href="dbxflat.html">dbxflat</a></td>
+<td>Database b+tree indexing for flat file databases</td>
+</tr>
+
+<tr>
+<td><a href="dbxgcg.html">dbxgcg</a></td>
+<td>Database b+tree indexing for GCG formatted databases</td>
+</tr>
+
+</table>
 
 <H2>
     Author(s)
@@ -398,13 +477,11 @@ Peter Rice (pmr&nbsp;&copy;&nbsp;ebi.ac.uk)
 <br>
 Informatics Division, European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
 
-
 <H2>
     History
 </H2>
 
 Completed December 1999
-
 
 <H2>
     Target users
@@ -412,12 +489,10 @@ Completed December 1999
 This program is intended to be used by administrators responsible
 for software and database installation and maintenance. 
 
-
 <H2>
     Comments
 </H2>
 None
-
 
 </BODY>
 </HTML>

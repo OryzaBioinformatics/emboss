@@ -45,7 +45,7 @@ Usage
 
 % listor ../data/file2 
 Write a list file of the logical OR of two sets of sequences
-Output file [file1.list]: 
+List of USAs output file [file1.list]: 
 
    Go to the input files for this example
    Go to the output files for this example
@@ -57,7 +57,7 @@ Output file [file1.list]:
 
 % listor ../data/file2 -operator and 
 Write a list file of the logical OR of two sets of sequences
-Output file [file1.list]: 
+List of USAs output file [file1.list]: 
 
    Go to the output files for this example
 
@@ -68,7 +68,7 @@ Output file [file1.list]:
 
 % listor ../data/file2 -operator xor 
 Write a list file of the logical OR of two sets of sequences
-Output file [file1.list]: 
+List of USAs output file [file1.list]: 
 
    Go to the output files for this example
 
@@ -79,21 +79,23 @@ Output file [file1.list]:
 
 % listor ../data/file2 -operator not 
 Write a list file of the logical OR of two sets of sequences
-Output file [file1.list]: 
+List of USAs output file [file1.list]: 
 
    Go to the output files for this example
 
 Command line arguments
 
    Standard (Mandatory) qualifiers:
-  [-firstsequences]    seqset     Sequence set USA
-  [-secondsequences]   seqset     Sequence set USA
-  [-outfile]           outfile    The list of sequence names will be written
-                                  to this list file
+  [-firstsequences]    seqset     Sequence set filename and optional format,
+                                  or reference (input USA)
+  [-secondsequences]   seqset     Sequence set filename and optional format,
+                                  or reference (input USA)
+  [-outfile]           outfile    [*.listor] The list of sequence names will
+                                  be written to this list file
 
    Additional (Optional) qualifiers:
-   -operator           menu       The following logical operators combine the
-                                  sequences in the following ways:
+   -operator           menu       [OR] The following logical operators combine
+                                  the sequences in the following ways:
                                   OR - gives all that occur in one set or the
                                   other
                                   AND - gives only those which occur in both
@@ -102,7 +104,11 @@ Command line arguments
                                   set or the other, but not in both
                                   NOT - gives those which occur in the first
                                   set except for those that also occur in the
-                                  second
+                                  second (Values: O (OR - merger of both
+                                  sets); A (AND - only those in both sets); X
+                                  (XOR - only those not in both sets); N (NOT
+                                  - those of the first set that are not in the
+                                  second))
 
    Advanced (Unprompted) qualifiers: (none)
    Associated qualifiers:
@@ -155,31 +161,7 @@ Command line arguments
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
-   -die                boolean    Report deaths
-
-
-   Standard (Mandatory) qualifiers Allowed values Default
-   [-firstsequences]
-   (Parameter 1) Sequence set USA Readable set of sequences Required
-   [-secondsequences]
-   (Parameter 2) Sequence set USA Readable set of sequences Required
-   [-outfile]
-   (Parameter 3) The list of sequence names will be written to this list
-   file Output file <sequence>.listor
-   Additional (Optional) qualifiers Allowed values Default
-   -operator The following logical operators combine the sequences in the
-   following ways: OR - gives all that occur in one set or the other AND
-   - gives only those which occur in both sets XOR - gives those which
-   only occur in one set or the other, but not in both NOT - gives those
-   which occur in the first set except for those that also occur in the
-   second
-   O (OR - merger of both sets)
-   A (AND - only those in both sets)
-   X (XOR - only those not in both sets)
-   N (NOT - those of the first set that are not in the second)
-   OR
-   Advanced (Unprompted) qualifiers Allowed values Default
-   (none)
+   -die                boolean    Report dying program messages
 
 Input file format
 
@@ -297,6 +279,8 @@ See also
    entret       Reads and writes (returns) flatfile entries
    extractfeat  Extract features from a sequence
    extractseq   Extract regions from a sequence
+   makenucseq   Creates random nucleotide sequences
+   makeprotseq  Creates random protein sequences
    maskfeat     Mask off features of a sequence
    maskseq      Mask off regions of a sequence
    newseq       Type in a short new sequence

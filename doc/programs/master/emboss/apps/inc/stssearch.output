@@ -1,0 +1,26 @@
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: eclac.stssearch</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+ECLAC: PrimA PrimerA matched at 532
+ECLAC: (rev) PrimA PrimerB matched at 689
+ECLAC: PrimB PrimerA matched at 5743
+ECLAC: (rev) PrimB PrimerB matched at 5942
+ECLAC: PrimC PrimerA matched at 2954
+ECLAC: (rev) PrimC PrimerB matched at 3069
+ECLAC: PrimD PrimerA matched at 1074
+ECLAC: (rev) PrimD PrimerB matched at 1261
+ECLAC: PrimE PrimerA matched at 1074
+ECLACA: PrimB PrimerA matched at 98
+ECLACA: (rev) PrimB PrimerB matched at 297
+ECLACI: PrimA PrimerA matched at 484
+ECLACI: (rev) PrimA PrimerB matched at 641
+ECLACI: PrimD PrimerA matched at 1026
+ECLACI: PrimE PrimerA matched at 1026
+ECLACY: PrimB PrimerA matched at 1439
+ECLACZ: PrimC PrimerA matched at 1668
+ECLACZ: (rev) PrimC PrimerB matched at 1783
+</pre>
+</td></tr></table><p>

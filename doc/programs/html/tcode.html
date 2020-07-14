@@ -11,7 +11,6 @@
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
-
 tcode
 </font></b>
 </td></tr>
@@ -20,12 +19,10 @@ tcode
 <p>
 
 
-
 <H2>
     Function
 </H2>
 Fickett TESTCODE statistic to identify protein-coding DNA
-
 <H2>
     Description
 </H2>
@@ -147,7 +144,7 @@ Anything in between these two values is uncertain.
 
 % <b>tcode </b>
 Fickett TESTCODE statistic to identify protein-coding DNA
-Input sequence(s): <b>tembl:hsfau1</b>
+Input nucleotide sequence(s): <b>tembl:hsfau1</b>
 Length of sliding window [200]: <b></b>
 Output report [hsfau1.tcode]: <b></b>
 
@@ -165,7 +162,7 @@ Produce a graphical plot
 
 % <b>tcode -plot -graph cps </b>
 Fickett TESTCODE statistic to identify protein-coding DNA
-Input sequence(s): <b>tembl:hsfau1</b>
+Input nucleotide sequence(s): <b>tembl:hsfau1</b>
 Length of sliding window [200]: <b></b>
 
 Created tcode.ps
@@ -176,7 +173,6 @@ Created tcode.ps
 
 
 
-
 <H2>
     Command line arguments
 </H2>
@@ -184,28 +180,34 @@ Created tcode.ps
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
    Standard (Mandatory) qualifiers (* if not always prompted):
-  [-sequence]          seqall     Sequence database USA
-   -window             integer    This is the number of nucleotide bases over
-                                  which the TESTCODE statistic will be
+  [-sequence]          seqall     Nucleotide sequence(s) filename and optional
+                                  format, or reference (input USA)
+   -window             integer    [200] This is the number of nucleotide bases
+                                  over which the TESTCODE statistic will be
                                   performed each time. The window will then
                                   slide along the sequence, covering the same
-                                  number of bases each time.
+                                  number of bases each time. (Integer 200 or
+                                  more)
 *  -outfile            report     Output report file name
-*  -graph              xygraph    Graph type
+*  -graph              xygraph    [$EMBOSS_GRAPHICS value, or x11] Graph type
+                                  (ps, hpgl, hp7470, hp7580, meta, cps, x11,
+                                  tekt, tek, none, data, xterm, png)
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers:
-   -datafile           datafile   The default data file is Etcode.dat and
-                                  contains coding probabilities for each base.
-                                  The probabilities are for both positional
-                                  and compositional information.
-   -step               integer    The selected window will, by default, slide
-                                  along the nucleotide sequence by three bases
-                                  at a time, retaining the frame (although
-                                  the algorithm is not frame sensitive). This
-                                  may be altered to increase or decrease the
-                                  increment of the slide.
-   -plot               toggle     On selection a graph of the sequence (X
+   -datafile           datafile   [Etcode.dat] The default data file is
+                                  Etcode.dat and contains coding probabilities
+                                  for each base. The probabilities are for
+                                  both positional and compositional
+                                  information.
+   -step               integer    [3] The selected window will, by default,
+                                  slide along the nucleotide sequence by three
+                                  bases at a time, retaining the frame
+                                  (although the algorithm is not frame
+                                  sensitive). This may be altered to increase
+                                  or decrease the increment of the slide.
+                                  (Integer 1 or more)
+   -plot               toggle     [N] On selection a graph of the sequence (X
                                   axis) plotted against the coding score (Y
                                   axis) will be displayed. Sequence above the
                                   green line is coding, that below the red
@@ -214,55 +216,54 @@ Created tcode.ps
    Associated qualifiers:
 
    "-sequence" associated qualifiers
-   -sbegin1             integer    Start of each sequence to be used
-   -send1               integer    End of each sequence to be used
-   -sreverse1           boolean    Reverse (if DNA)
-   -sask1               boolean    Ask for begin/end/reverse
-   -snucleotide1        boolean    Sequence is nucleotide
-   -sprotein1           boolean    Sequence is protein
-   -slower1             boolean    Make lower case
-   -supper1             boolean    Make upper case
-   -sformat1            string     Input sequence format
-   -sdbname1            string     Database name
-   -sid1                string     Entryname
-   -ufo1                string     UFO features
-   -fformat1            string     Features format
-   -fopenfile1          string     Features file name
+   -sbegin1            integer    Start of each sequence to be used
+   -send1              integer    End of each sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
 
    "-outfile" associated qualifiers
-   -rformat             string     Report format
-   -rname               string     Base file name
-   -rextension          string     File name extension
-   -rdirectory          string     Output directory
-   -raccshow            boolean    Show accession number in the report
-   -rdesshow            boolean    Show description in the report
-   -rscoreshow          boolean    Show the score in the report
-   -rusashow            boolean    Show the full USA in the report
+   -rformat            string     Report format
+   -rname              string     Base file name
+   -rextension         string     File name extension
+   -rdirectory         string     Output directory
+   -raccshow           boolean    Show accession number in the report
+   -rdesshow           boolean    Show description in the report
+   -rscoreshow         boolean    Show the score in the report
+   -rusashow           boolean    Show the full USA in the report
 
    "-graph" associated qualifiers
-   -gprompt             boolean    Graph prompting
-   -gtitle              string     Graph title
-   -gsubtitle           string     Graph subtitle
-   -gxtitle             string     Graph x axis title
-   -gytitle             string     Graph y axis title
-   -goutfile            string     Output file for non interactive displays
-   -gdirectory          string     Output directory
+   -gprompt            boolean    Graph prompting
+   -gtitle             string     Graph title
+   -gsubtitle          string     Graph subtitle
+   -gxtitle            string     Graph x axis title
+   -gytitle            string     Graph y axis title
+   -goutfile           string     Output file for non interactive displays
+   -gdirectory         string     Output directory
 
    General qualifiers:
-   -auto                boolean    Turn off prompts
-   -stdout              boolean    Write standard output
-   -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for standard and additional values
-   -debug               boolean    Write debug output to program.dbg
-   -verbose             boolean    Report some/full command line options
-   -help                boolean    Report command line options. More
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
-   -warning             boolean    Report warnings
-   -error               boolean    Report errors
-   -fatal               boolean    Report fatal errors
-   -die                 boolean    Report deaths
-
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
 
 </pre>
 </td></tr></table>
@@ -276,7 +277,7 @@ Created tcode.ps
 
 <tr>
 <td>[-sequence]<br>(Parameter 1)</td>
-<td>Sequence database USA</td>
+<td>Nucleotide sequence(s) filename and optional format, or reference (input USA)</td>
 <td>Readable sequence(s)</td>
 <td><b>Required</b></td>
 </tr>
@@ -298,7 +299,7 @@ Created tcode.ps
 <tr>
 <td>-graph</td>
 <td>Graph type</td>
-<td>EMBOSS has a list of known devices, including postscript, ps, hpgl, hp7470, hp7580, meta, colourps, cps, xwindows, x11, tektronics, tekt, tek4107t, tek, none, null, text, data, xterm, png, xml</td>
+<td>EMBOSS has a list of known devices, including ps, hpgl, hp7470, hp7580, meta, cps, x11, tekt, tek, none, data, xterm, png</td>
 <td><i>EMBOSS_GRAPHICS</i> value, or x11</td>
 </tr>
 
@@ -340,7 +341,6 @@ Created tcode.ps
 </tr>
 
 </table>
-
 
 <H2>
     Input file format
@@ -473,7 +473,6 @@ SQ   Sequence 2016 BP; 421 A; 562 C; 538 G; 495 T; 0 other;
 </pre>
 </td></tr></table><p>
 
-
 <H2>
     Output file format
 </H2>
@@ -498,7 +497,6 @@ http://emboss.sf.net/docs/themes/ReportFormats.html</A>
 for further information on report formats.
 
 <p>
-
 
 <p>
 
@@ -536,7 +534,9 @@ red horizontal line.
 <pre>
 ########################################
 # Program: tcode
-# Rundate: Fri Jul 15 2005 12:00:00
+# Rundate: Sat Jul 15 2006 12:00:00
+# Commandline: tcode
+#    -sequence tembl:hsfau1
 # Report_format: table
 # Report_file: hsfau1.tcode
 ########################################
@@ -582,8 +582,6 @@ red horizontal line.
      85     284   1.098 Coding    
      88     287   0.976 Coding    
      91     290   0.962 Coding    
-     94     293   0.944 No opinion
-     97     296   0.897 No opinion
 
 
 <font color=red>  [Part of this file has been deleted for brevity]</font>
@@ -601,8 +599,8 @@ red horizontal line.
    1705    1904   0.985 Coding    
    1708    1907   0.988 Coding    
    1711    1910   0.981 Coding    
-   1714    1913   1.001 Coding    
-   1717    1916   1.001 Coding    
+   1714    1913   1.000 Coding    
+   1717    1916   1.000 Coding    
    1720    1919   1.004 Coding    
    1723    1922   0.975 Coding    
    1726    1925   0.975 Coding    
@@ -653,7 +651,6 @@ red horizontal line.
 </td></tr></table><p>
 
 
-
 <H2>
     Data files
 </H2>
@@ -697,7 +694,6 @@ The directories are searched in the following order:
    <li> ~/.embossdata
 </ul>
 <p>
-
 
 <p>
 
@@ -866,15 +862,42 @@ It always exits with status 0.
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
-<tr><td><a href="getorf.html">getorf</a></td><td>Finds and extracts open reading frames (ORFs)</td></tr>
-<tr><td><a href="marscan.html">marscan</a></td><td>Finds MAR/SAR sites in nucleic sequences</td></tr>
-<tr><td><a href="plotorf.html">plotorf</a></td><td>Plot potential open reading frames</td></tr>
-<tr><td><a href="showorf.html">showorf</a></td><td>Pretty output of DNA translations</td></tr>
-<tr><td><a href="sixpack.html">sixpack</a></td><td>Display a DNA sequence with 6-frame translation and ORFs</td></tr>
-<tr><td><a href="syco.html">syco</a></td><td>Synonymous codon usage Gribskov statistic plot</td></tr>
-<tr><td><a href="wobble.html">wobble</a></td><td>Wobble base plot</td></tr>
-</table>
+<tr>
+<td><a href="getorf.html">getorf</a></td>
+<td>Finds and extracts open reading frames (ORFs)</td>
+</tr>
 
+<tr>
+<td><a href="marscan.html">marscan</a></td>
+<td>Finds MAR/SAR sites in nucleic sequences</td>
+</tr>
+
+<tr>
+<td><a href="plotorf.html">plotorf</a></td>
+<td>Plot potential open reading frames</td>
+</tr>
+
+<tr>
+<td><a href="showorf.html">showorf</a></td>
+<td>Pretty output of DNA translations</td>
+</tr>
+
+<tr>
+<td><a href="sixpack.html">sixpack</a></td>
+<td>Display a DNA sequence with 6-frame translation and ORFs</td>
+</tr>
+
+<tr>
+<td><a href="syco.html">syco</a></td>
+<td>Synonymous codon usage Gribskov statistic plot</td>
+</tr>
+
+<tr>
+<td><a href="wobble.html">wobble</a></td>
+<td>Wobble base plot</td>
+</tr>
+
+</table>
 
 
 <h3>
@@ -900,25 +923,21 @@ European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambri
 
 
 
-
 <H2>
     History
 </H2>
 
 Date of original completion: 2nd March 2003
 
-
 <H2>
     Target users
 </H2>
 This program is intended to be used by everyone and everything, from naive users to embedded scripts.
 
-
 <H2>
     Comments
 </H2>
 None
-
 
 </BODY>
 </HTML>

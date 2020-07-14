@@ -73,7 +73,7 @@ Usage
 
 % patmatmotifs -full 
 Search a PROSITE motif database with a protein sequence
-Input sequence: tsw:opsd_human
+Input protein sequence: tsw:opsd_human
 Output report [opsd_human.patmatmotifs]: 
 
    Go to the input files for this example
@@ -82,14 +82,15 @@ Output report [opsd_human.patmatmotifs]:
 Command line arguments
 
    Standard (Mandatory) qualifiers:
-  [-sequence]          sequence   Sequence USA
+  [-sequence]          sequence   Protein sequence filename and optional
+                                  format, or reference (input USA)
   [-outfile]           report     Output report file name
 
    Additional (Optional) qualifiers:
-   -full               boolean    Provide full documentation for matching
+   -full               boolean    [N] Provide full documentation for matching
                                   patterns
-   -[no]prune          boolean    Ignore simple patterns. If this is true then
-                                  these simple post-translational
+   -[no]prune          boolean    [Y] Ignore simple patterns. If this is true
+                                  then these simple post-translational
                                   modification sites are not reported:
                                   myristyl, asn_glycosylation,
                                   camp_phospho_site, pkc_phospho_site,
@@ -99,61 +100,45 @@ Command line arguments
    Associated qualifiers:
 
    "-sequence" associated qualifiers
-   -sbegin1             integer    Start of the sequence to be used
-   -send1               integer    End of the sequence to be used
-   -sreverse1           boolean    Reverse (if DNA)
-   -sask1               boolean    Ask for begin/end/reverse
-   -snucleotide1        boolean    Sequence is nucleotide
-   -sprotein1           boolean    Sequence is protein
-   -slower1             boolean    Make lower case
-   -supper1             boolean    Make upper case
-   -sformat1            string     Input sequence format
-   -sdbname1            string     Database name
-   -sid1                string     Entryname
-   -ufo1                string     UFO features
-   -fformat1            string     Features format
-   -fopenfile1          string     Features file name
+   -sbegin1            integer    Start of the sequence to be used
+   -send1              integer    End of the sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
 
    "-outfile" associated qualifiers
-   -rformat2            string     Report format
-   -rname2              string     Base file name
-   -rextension2         string     File name extension
-   -rdirectory2         string     Output directory
-   -raccshow2           boolean    Show accession number in the report
-   -rdesshow2           boolean    Show description in the report
-   -rscoreshow2         boolean    Show the score in the report
-   -rusashow2           boolean    Show the full USA in the report
+   -rformat2           string     Report format
+   -rname2             string     Base file name
+   -rextension2        string     File name extension
+   -rdirectory2        string     Output directory
+   -raccshow2          boolean    Show accession number in the report
+   -rdesshow2          boolean    Show description in the report
+   -rscoreshow2        boolean    Show the score in the report
+   -rusashow2          boolean    Show the full USA in the report
 
    General qualifiers:
-   -auto                boolean    Turn off prompts
-   -stdout              boolean    Write standard output
-   -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for standard and additional values
-   -debug               boolean    Write debug output to program.dbg
-   -verbose             boolean    Report some/full command line options
-   -help                boolean    Report command line options. More
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
-   -warning             boolean    Report warnings
-   -error               boolean    Report errors
-   -fatal               boolean    Report fatal errors
-   -die                 boolean    Report deaths
-
-
-   Standard (Mandatory) qualifiers Allowed values Default
-   [-sequence]
-   (Parameter 1) Sequence USA Readable sequence Required
-   [-outfile]
-   (Parameter 2) Output report file name Report output file
-   Additional (Optional) qualifiers Allowed values Default
-   -full Provide full documentation for matching patterns Boolean value
-   Yes/No No
-   -[no]prune Ignore simple patterns. If this is true then these simple
-   post-translational modification sites are not reported: myristyl,
-   asn_glycosylation, camp_phospho_site, pkc_phospho_site,
-   ck2_phospho_site, and tyr_phospho_site. Boolean value Yes/No Yes
-   Advanced (Unprompted) qualifiers Allowed values Default
-   (none)
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
 
 Input file format
 
@@ -293,7 +278,10 @@ Output file format
 
 ########################################
 # Program: patmatmotifs
-# Rundate: Fri Jul 15 2005 12:00:00
+# Rundate: Sat Jul 15 2006 12:00:00
+# Commandline: patmatmotifs
+#    -full
+#    -sequence tsw:opsd_human
 # Report_format: dbmotif
 # Report_file: opsd_human.patmatmotifs
 ########################################
@@ -338,11 +326,6 @@ PIFMTIPAFFAKSAAIYNPVIYIMMNK
 # *****************************************
 # * G-protein coupled receptors signature *
 # *****************************************
-#
-# G-protein coupled receptors [1 to 4,E1,E2] (also called R7G) are  an extensiv
-e
-# group of  hormones,  neurotransmitters,  odorants  and  light  receptors whic
-h
 
 
   [Part of this file has been deleted for brevity]

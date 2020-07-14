@@ -12,7 +12,6 @@
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
-
 cai
 </font></b>
 </td></tr>
@@ -21,12 +20,10 @@ cai
 <p>
 
 
-
 <H2>
     Function
 </H2>
 CAI codon adaptation index
-
 <H2>
     Description
 </H2>
@@ -66,7 +63,6 @@ Output file [ab009602.cai]: <b></b>
 <p>
 <a href="#input.1">Go to the input files for this example</a><br><a href="#output.1">Go to the output files for this example</a><p><p>
 
-
 <H2>
     Command line arguments
 </H2>
@@ -74,9 +70,10 @@ Output file [ab009602.cai]: <b></b>
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
    Standard (Mandatory) qualifiers:
-  [-seqall]            seqall     Sequence database USA
-   -cfile              codon      Codon usage table name
-  [-outfile]           outfile    Output file name
+  [-seqall]            seqall     Nucleotide sequence(s) filename and optional
+                                  format, or reference (input USA)
+   -cfile              codon      [Eyeast_cai.cut] Codon usage table name
+  [-outfile]           outfile    [*.cai] Output file name
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers: (none)
@@ -117,8 +114,7 @@ Output file [ab009602.cai]: <b></b>
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
-   -die                boolean    Report deaths
-
+   -die                boolean    Report dying program messages
 
 </pre>
 </td></tr></table>
@@ -132,7 +128,7 @@ Output file [ab009602.cai]: <b></b>
 
 <tr>
 <td>[-seqall]<br>(Parameter 1)</td>
-<td>Sequence database USA</td>
+<td>Nucleotide sequence(s) filename and optional format, or reference (input USA)</td>
 <td>Readable sequence(s)</td>
 <td><b>Required</b></td>
 </tr>
@@ -148,7 +144,7 @@ Output file [ab009602.cai]: <b></b>
 <td>[-outfile]<br>(Parameter 2)</td>
 <td>Output file name</td>
 <td>Output file</td>
-<td><i>&lt;sequence&gt;</i>.cai</td>
+<td>&nbsp;</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
@@ -172,7 +168,6 @@ Output file [ab009602.cai]: <b></b>
 </tr>
 
 </table>
-
 
 
 <H2>
@@ -254,7 +249,6 @@ SQ   Sequence 561 BP; 135 A; 106 C; 98 G; 222 T; 0 other;
 </pre>
 </td></tr></table><p>
 
-
 <H2>
     Output file format
 </H2>
@@ -271,7 +265,6 @@ SQ   Sequence 561 BP; 135 A; 106 C; 98 G; 222 T; 0 other;
 Sequence: AB009602 CAI: 0.188
 </pre>
 </td></tr></table><p>
-
 
 <H2>
     Data files
@@ -330,7 +323,6 @@ The directories are searched in the following order:
 </ul>
 <p>
 
-
 <H2>
     Notes
 </H2>
@@ -377,12 +369,27 @@ None.
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
-<tr><td><a href="chips.html">chips</a></td><td>Codon usage statistics</td></tr>
-<tr><td><a href="codcmp.html">codcmp</a></td><td>Codon usage table comparison</td></tr>
-<tr><td><a href="cusp.html">cusp</a></td><td>Create a codon usage table</td></tr>
-<tr><td><a href="syco.html">syco</a></td><td>Synonymous codon usage Gribskov statistic plot</td></tr>
-</table>
+<tr>
+<td><a href="chips.html">chips</a></td>
+<td>Codon usage statistics</td>
+</tr>
 
+<tr>
+<td><a href="codcmp.html">codcmp</a></td>
+<td>Codon usage table comparison</td>
+</tr>
+
+<tr>
+<td><a href="cusp.html">cusp</a></td>
+<td>Create a codon usage table</td>
+</tr>
+
+<tr>
+<td><a href="syco.html">syco</a></td>
+<td>Synonymous codon usage Gribskov statistic plot</td>
+</tr>
+
+</table>
 
 
 <H2>
@@ -394,7 +401,6 @@ European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambri
 
 
 
-
 <H2>
     History
 </H2>
@@ -403,18 +409,15 @@ Written (March 2001) - Alan Bleasby.
 
 
 
-
 <H2>
     Target users
 </H2>
 This program is intended to be used by everyone and everything, from naive users to embedded scripts.
 
-
 <H2>
     Comments
 </H2>
 None
-
 
 </BODY>
 </HTML>

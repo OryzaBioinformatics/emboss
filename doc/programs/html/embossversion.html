@@ -12,7 +12,6 @@
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
-
 embossversion
 </font></b>
 </td></tr>
@@ -21,12 +20,10 @@ embossversion
 <p>
 
 
-
 <H2>
     Function
 </H2>
 Writes the current EMBOSS version number
-
 <H2>
     Description
 </H2>
@@ -54,12 +51,11 @@ being run if they are giving user-support to people in another site.
 % <b>embossversion </b>
 Writes the current EMBOSS version number
 
-3.0.0
+4.0.0
 
 </pre></td></tr></table><p>
 <p>
 <p>
-
 
 
 <H2>
@@ -70,29 +66,28 @@ Writes the current EMBOSS version number
    Standard (Mandatory) qualifiers: (none)
    Additional (Optional) qualifiers:
    -full               boolean    Show all EMBOSS version information fields
-   -outfile            outfile    Output file name
+   -outfile            outfile    [stdout] Output file name
 
    Advanced (Unprompted) qualifiers: (none)
    Associated qualifiers:
 
    "-outfile" associated qualifiers
-   -odirectory          string     Output directory
+   -odirectory         string     Output directory
 
    General qualifiers:
-   -auto                boolean    Turn off prompts
-   -stdout              boolean    Write standard output
-   -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for standard and additional values
-   -debug               boolean    Write debug output to program.dbg
-   -verbose             boolean    Report some/full command line options
-   -help                boolean    Report command line options. More
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
-   -warning             boolean    Report warnings
-   -error               boolean    Report errors
-   -fatal               boolean    Report fatal errors
-   -die                 boolean    Report deaths
-
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
 
 </pre>
 </td></tr></table>
@@ -140,14 +135,12 @@ Writes the current EMBOSS version number
 
 </table>
 
-
 <H2>
     Input file format
 </H2>
 
 None.
 <p>
-
 
 <H2>
     Output file format
@@ -164,7 +157,6 @@ The output is written to the screen by default, but can be written to a
 named file by using the '-outfile' option. 
 
 <p>
-
 <p>
 
 The version number is in three parts, separated by '.'s.
@@ -220,9 +212,12 @@ None.
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
-<tr><td><a href="embossdata.html">embossdata</a></td><td>Finds or fetches data files read by EMBOSS programs</td></tr>
-</table>
+<tr>
+<td><a href="embossdata.html">embossdata</a></td>
+<td>Finds or fetches data files read by EMBOSS programs</td>
+</tr>
 
+</table>
 
 <H2>
     Author(s)
@@ -234,25 +229,21 @@ MRC Rosalind Franklin Centre for Genomics Research
 Wellcome Trust Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
 
 
-
 <H2>
     History
 </H2>
 
 Written (23 May 2001) - Gary Williams.
 
-
 <H2>
     Target users
 </H2>
 This program is intended to be used by everyone and everything, from naive users to embedded scripts.
 
-
 <H2>
     Comments
 </H2>
 None
-
 
 </BODY>
 </HTML>

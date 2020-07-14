@@ -38,7 +38,7 @@ Usage
 
  [-sequence]
 (Parameter 1)
- Sequence database USA
+ Protein sequence(s) filename and optional format, or reference (input USA)
  Readable sequence(s)
  Required
 

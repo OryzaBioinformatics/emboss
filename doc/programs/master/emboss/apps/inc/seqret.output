@@ -1,0 +1,266 @@
+
+<a name="output.1"></a>
+<h3>Output files for usage example </h3>
+<p><h3>File: hsfau.fasta</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+&gt;HSFAU X65923.1 H.sapiens fau mRNA
+ttcctctttctcgactccatcttcgcggtagctgggaccgccgttcagtcgccaatatgc
+agctctttgtccgcgcccaggagctacacaccttcgaggtgaccggccaggaaacggtcg
+cccagatcaaggctcatgtagcctcactggagggcattgccccggaagatcaagtcgtgc
+tcctggcaggcgcgcccctggaggatgaggccactctgggccagtgcggggtggaggccc
+tgactaccctggaagtagcaggccgcatgcttggaggtaaagttcatggttccctggccc
+gtgctggaaaagtgagaggtcagactcctaaggtggccaaacaggagaagaagaagaaga
+agacaggtcgggctaagcggcggatgcagtacaaccggcgctttgtcaacgttgtgccca
+cctttggcaagaagaagggccccaatgccaactcttaagtcttttgtaattctggctttc
+tctaataaaaaagccacttagttcagtcaaaaaaaaaa
+</pre>
+</td></tr></table><p>
+
+<a name="output.2"></a>
+<h3>Output files for usage example 2</h3>
+<p><h3>File: hsall.seq</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+&gt;HS989235 H45989.1 yo13c02.s1 Soares adult brain N2b5HB55Y Homo sapiens cDNA clone IMAGE:177794 3', mRNA sequence.
+ccggnaagctcancttggaccaccgactctcgantgnntcgccgcgggagccggntggan
+aacctgagcgggactggnagaaggagcagagggaggcagcacccggcgtgacggnagtgt
+gtggggcactcaggccttccgcagtgtcatctgccacacggaaggcacggccacgggcag
+gggggtctatgatcttctgcatgcccagctggcatggccccacgtagagtggnntggcgt
+ctcggtgctggtcagcgacacgttgtcctggctgggcaggtccagctcccggaggacctg
+gggcttcagcttcccgtagcgctggctgcagtgacggatgctcttgcgctgccatttctg
+ggtgctgtcactgtccttgctcactccaaaccagttcggcggtccccctgcggatggtct
+gtgttgatggacgtttgggctttgcagcaccggccgccgagttcatggtngggtnaagag
+atttgggttttttcn
+&gt;HSCAD5 X59796.1 H.sapiens mRNA for cadherin-5
+ctccactcacgctcagccctggacggacaggcagtccaacggaacagaaacatccctcag
+cccacaggcacgatctgttcctcctgggaagatgcagaggctcatgatgctcctcgccac
+atcgggcgcctgcctgggcctgctggcagtggcagcagtggcagcagcaggtgctaaccc
+tgcccaacgggacacccacagcctgctgcccacccaccggcgccaaaagagagattggat
+ttggaaccagatgcacattgatgaagagaaaaacacctcacttccccatcatgtaggcaa
+gatcaagtcaagcgtgagtcgcaagaatgccaagtacctgctcaaaggagaatatgtggg
+caaggtcttccgggtcgatgcagagacaggagacgtgttcgccattgagaggctggaccg
+ggagaatatctcagagtaccacctcactgctgtcattgtggacaaggacactggcgaaaa
+cctggagactccttccagcttcaccatcaaagttcatgacgtgaacgacaactggcctgt
+gttcacgcatcggttgttcaatgcgtccgtgcctgagtcgtcggctgtggggacctcagt
+catctctgtgacagcagtggatgcagacgaccccactgtgggagaccacgcctctgtcat
+gtaccaaatcctgaaggggaaagagtattttgccatcgataattctggacgtattatcac
+aataacgaaaagcttggaccgagagaagcaggccaggtatgagatcgtggtggaagcgcg
+agatgcccagggcctccggggggactcgggcacggccaccgtgctggtcactctgcaaga
+catcaatgacaacttccccttcttcacccagaccaagtacacatttgtcgtgcctgaaga
+cacccgtgtgggcacctctgtgggctctctgtttgttgaggacccagatgagccccagaa
+ccggatgaccaagtacagcatcttgcggggcgactaccaggacgctttcaccattgagac
+aaaccccgcccacaacgagggcatcatcaagcccatgaagcctctggattatgaatacat
+ccagcaatacagcttcatagtcgaggccacagaccccaccatcgacctccgatacatgag
+ccctcccgcgggaaacagagcccaggtcattatcaacatcacagatgtggacgagccccc
+cattttccagcagcctttctaccacttccagctgaaggaaaaccagaagaagcctctgat
+tggcacagtgctggccatggaccctgatgcggctaggcatagcattggatactccatccg
+caggaccagtgacaagggccagttcttccgagtcacaaaaaagggggacatttacaatga
+gaaagaactggacagagaagtctacccctggtataacctgactgtggaggccaaagaact
+ggattccactggaacccccacaggaaaagaatccattgtgcaagtccacattgaagtttt
+ggatgagaatgacaatgccccggagtttgccaagccctaccagcccaaagtgtgtgagaa
+cgctgtccatggccagctggtcctgcagatctccgcaatagacaaggacataacaccacg
+aaacgtgaagttcaaattcatcttgaatactgagaacaactttaccctcacggataatca
+cgataacacggccaacatcacagtcaagtatgggcagtttgaccgggagcataccaaggt
+ccacttcctacccgtggtcatctcagacaatgggatgccaagtcgcacgggcaccagcac
+gctgaccgtggccgtgtgcaagtgcaacgagcagggcgagttcaccttctgcgaggatat
+ggccgcccaggtgggcgtgagcatccaggcagtggtagccatcttactctgcatcctcac
+catcacagtgatcaccctgctcatcttcctgcggcggcggctccggaagcaggcccgcgc
+gcacggcaagagcgtgccggagatccacgagcagctggtcacctacgacgaggagggcgg
+cggcgagatggacaccaccagctacgatgtgtcggtgctcaactcggtgcgccgcggcgg
+ggccaagcccccgcggcccgcgctggacgcccggccttccctctatgcgcaggtgcagaa
+gccaccgaggcacgcgcctggggcacacggagggcccggggagatggcagccatgatcga
+ggtgaagaaggacgaggcggaccacgacggcgacggccccccctacgacacgctgcacat
+ctacggctacgagggctccgagtccatagccgagtccctcagctccctgggcaccgactc
+
+
+<font color=red>  [Part of this file has been deleted for brevity]</font>
+
+aacaaaaaaagagaatgttacaccaatatccttgatgaacatcgatgcaaaaatcctcaa
+taaaatactggcaaactgaatccagcagcacatcaaaaagcttatcctccatgatcaagt
+gggcttcatccctgccatgcaaggctggttcaacatacgaaatcaataaacataatccag
+catataaacagaaccaaagacacaaaccatatgattatctcaatagatgcagaaaaggcc
+tttgacaaaattcaacaatgcttcatgctaaaaactctcaataaattaggtattgatggg
+acatatctcaaaataataagagctatctatgacaaacccacagccaatatcatactgagt
+ggacaaaaactggaagcattccctttgaaaactggcacaaggcagggatgccctctctca
+ccactcctattcaacatagtgttggaagttctggccagggcaatcaggcaggagaaggaa
+ataaagggcattcaattaggaaaagaggaaggtgaaattgtccctgtttgcagatgacat
+gattgtatatctagaaaaccccattgtctcagcccaaaatctccttaagctgataagcaa
+cttcagcaaagtctcaggatataaaatcagtgtgcaaaaatcacaagtattcctatgcac
+caataacagacaaacagagagccaaatcatgagtgaactcccattcacaattgcttcaaa
+gagaataaaatacctaggaatccaacttacaagggatgtgaaggacctcttcaaggagaa
+ctacaaaccactgctcaatgaaataaaagaggatacaaacaaatggaagaacattccatg
+cttatgggtaggaagaatcatatcgtgaaaatggtcatactgcccaaggtaatttataga
+ttcaatgccatccccatcaagctaccaatgactttcttcacagaactggaaaaaactact
+ttaaagttcatatggaatcaaaaaagagcccacatcaccaaggcaatcctaagccaaaag
+aacaaagctggaggcatcacgctacctgacttcaaactatactacaatgctacggtaacc
+aaaacagcatggtactggtaccaaaacagagatctagaccaatggaacagaacagagccc
+tcagaaataatgccgcatatctacaactatccgatctttgacaaacctgagagaaacaag
+caatggggaaaggattccctatttaataaatggtgctgggaaaactggctagccatatgt
+agaaagctgaaactggatccttccttacaccttatacaaaaattaattcaagatggatta
+aagacttaaacattagacctaaaaccataaaaaccctagaaaaaaacctaggcaatacca
+ttcaggacataggcatgggcaaggacttcatgtctaaaacaccaaaacgaatggcaacaa
+aagacaaaatggacaaacgggatctaattaaactaaagagcttctgcacagctaaagaaa
+ctaccatcagagtgaacaggcaacctacaaaatgggagaaaatttttgcaatctactcat
+ctgacaaagggctaatatccagaatctacaatgaactcaaacaaatttacaagaaaaaac
+aaacaaccccatcaaaaagtgggcaaaggatatgaacagacacttctcaaaagaagacat
+ttatgtaatcaaaaaacacatgaaaaaatgctcatcatcactagccatcagagaaatgca
+aatcaaaaccacaatgagataccatctcacaccagttagaatggcgatcattaaaaagtc
+aggaaacaacaggtgctggagaggatgtggagaaacaggaacaacttttacactgttggt
+gggactgtaaactagttcaaccattgcggaagtcagtgtggcaattcctcaggaatctag
+aactagaaataccatttgacccagccatcccattactgggtagatacccaaaggattata
+aatcatgctgctataaagacacatgcacacgtatgtttattgcagcactattcacaatag
+caaagacttggaaccaacccaaatgtccaacaacgatagattggattaagaaaatgtggc
+acatatacaccatggaatactatgcagccataaaaaatgatgagttcatgtcctttgtag
+ggacatggatgaagctggaaactatcattctcagcaaactatcacaaggacaataaacca
+aacaccgcatgttctcactcataggtgggaattgaacaatgagaacacatggacacatga
+agaggaacatcacactctggggactgttatggggtggggggcaggggcagggatagcact
+aggagatatacctaatgctaaatgacgagttaatgggtgcagcacaccaacatggcacat
+gtatacatatataacaaacctgccgttgtgcacatgtaccctaaaacttgaagtataata
+ataaaaaaaagttatcctattaaaactgatctcacacatccgtagagccattatcaagtc
+tttctctttgaaacagacagaaatttagtgttttctcagtcagttaac
+&gt;HSA203YC1 Z52466.1 H.sapiens (D1S2660) DNA segment containing (CA) repeat; clone AFMa203yc1; single read.
+agctgtgtgcacacaacatganggggcacacatgcacatgcacacatgcccacatgcata
+tgcacacacacacacacacacacacacacattcatgcccaagcacgcccaccctcatgtc
+tcaccatgtgcacataacacacagtcacatataccctggcacacatgcccacatgcagac
+acgaaacacaggcccacgnttncatgcacacaggtatgggcacacataccatgcacacat
+aangacaaataccaggccagacatgatttgcccctgctggtgtcactgttaagtgtgaca
+gacaagcagaggacacacacccacctgggacgcggggcttcaggagagaggcagacctaa
+tagggcccggattcggggctggggaggct
+</pre>
+</td></tr></table><p>
+
+<a name="output.3"></a>
+<h3>Output files for usage example 3</h3>
+<p><h3>File: hsfau.embl</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+ID   HSFAU      standard; DNA; UNC; 518 BP.
+AC   X65923;
+SV   X65923.1
+DE   H.sapiens fau mRNA
+KW   fau gene.
+OS   Homo sapiens (human)
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia;
+OC   Eutheria; Primates; Catarrhini; Hominidae; Homo.
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..518
+FT                   /chromosome="11q"
+FT                   /db_xref="taxon:9606"
+FT                   /organism="Homo sapiens"
+FT                   /tissue_type="placenta"
+FT                   /clone_lib="cDNA"
+FT                   /clone="pUIA 631"
+FT                   /map="13"
+FT   misc_feature    57..278
+FT                   /note="ubiquitin like part"
+FT   CDS             57..458
+FT                   /db_xref="SWISS-PROT:P35544"
+FT                   /db_xref="SWISS-PROT:Q05472"
+FT                   /gene="fau"
+FT                   /protein_id="CAA46716.1"
+FT                   /translation="MQLFVRAQELHTFEVTGQETVAQIKAHVASLEGIAPEDQVVLLAG
+FT                   APLEDEATLGQCGVEALTTLEVAGRMLGGKVHGSLARAGKVRGQTPKVAKQEKKKKKTG
+FT                   RAKRRMQYNRRFVNVVPTFGKKKGPNANS"
+FT   misc_feature    98..102
+FT                   /note="nucleolar localization signal"
+FT   misc_feature    279..458
+FT                   /note="S30 part"
+FT   polyA_signal    484..489
+FT   polyA_site      509
+SQ   Sequence 518 BP; 125 A; 139 C; 148 G; 106 T; 0 other;
+     ttcctctttc tcgactccat cttcgcggta gctgggaccg ccgttcagtc gccaatatgc        60
+     agctctttgt ccgcgcccag gagctacaca ccttcgaggt gaccggccag gaaacggtcg       120
+     cccagatcaa ggctcatgta gcctcactgg agggcattgc cccggaagat caagtcgtgc       180
+     tcctggcagg cgcgcccctg gaggatgagg ccactctggg ccagtgcggg gtggaggccc       240
+     tgactaccct ggaagtagca ggccgcatgc ttggaggtaa agttcatggt tccctggccc       300
+     gtgctggaaa agtgagaggt cagactccta aggtggccaa acaggagaag aagaagaaga       360
+     agacaggtcg ggctaagcgg cggatgcagt acaaccggcg ctttgtcaac gttgtgccca       420
+     cctttggcaa gaagaagggc cccaatgcca actcttaagt cttttgtaat tctggctttc       480
+     tctaataaaa aagccactta gttcagtcaa aaaaaaaa                               518
+//
+</pre>
+</td></tr></table><p>
+
+<a name="output.5"></a>
+<h3>Output files for usage example 5</h3>
+<p><h3>File: hsfau.gcg</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+!!NA_SEQUENCE 1.0
+
+H.sapiens fau mRNA
+
+HSFAU  Length: 518  Type: N  Check: 2981 ..
+
+   1 ttcctctttc tcgactccat cttcgcggta gctgggaccg ccgttcagtc
+
+  51 gccaatatgc agctctttgt ccgcgcccag gagctacaca ccttcgaggt
+
+ 101 gaccggccag gaaacggtcg cccagatcaa ggctcatgta gcctcactgg
+
+ 151 agggcattgc cccggaagat caagtcgtgc tcctggcagg cgcgcccctg
+
+ 201 gaggatgagg ccactctggg ccagtgcggg gtggaggccc tgactaccct
+
+ 251 ggaagtagca ggccgcatgc ttggaggtaa agttcatggt tccctggccc
+
+ 301 gtgctggaaa agtgagaggt cagactccta aggtggccaa acaggagaag
+
+ 351 aagaagaaga agacaggtcg ggctaagcgg cggatgcagt acaaccggcg
+
+ 401 ctttgtcaac gttgtgccca cctttggcaa gaagaagggc cccaatgcca
+
+ 451 actcttaagt cttttgtaat tctggctttc tctaataaaa aagccactta
+
+ 501 gttcagtcaa aaaaaaaa
+
+</pre>
+</td></tr></table><p>
+
+<a name="output.8"></a>
+<h3>Output files for usage example 8</h3>
+<p><h3>File: hsfau.fasta</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+&gt;HSFAU X65923.1 H.sapiens fau mRNA
+ttttttttttgactgaactaagtggcttttttattagagaaagccagaattacaaaagac
+ttaagagttggcattggggcccttcttcttgccaaaggtgggcacaacgttgacaaagcg
+ccggttgtactgcatccgccgcttagcccgacctgtcttcttcttcttcttctcctgttt
+ggccaccttaggagtctgacctctcacttttccagcacgggccagggaaccatgaacttt
+acctccaagcatgcggcctgctacttccagggtagtcagggcctccaccccgcactggcc
+cagagtggcctcatcctccaggggcgcgcctgccaggagcacgacttgatcttccggggc
+aatgccctccagtgaggctacatgagccttgatctgggcgaccgtttcctggccggtcac
+ctcgaaggtgtgtagctcctgggcgcggacaaagagctgcatattggcgactgaacggcg
+gtcccagctaccgcgaagatggagtcgagaaagaggaa
+</pre>
+</td></tr></table><p>
+
+<a name="output.9"></a>
+<h3>Output files for usage example 9</h3>
+<p><h3>File: hsfau.fasta</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+&gt;HSFAU X65923.1 H.sapiens fau mRNA
+tctttctcgactccatcttcg
+</pre>
+</td></tr></table><p>
+
+<a name="output.10"></a>
+<h3>Output files for usage example 10</h3>
+<p><h3>File: hsfau.fasta</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+&gt;HSFAU X65923.1 H.sapiens fau mRNA
+tctttctcgactccatcttcgcggtagctgggaccgccgttcagtcgccaatatgcagct
+ctttgtccgcgcccaggagctacacaccttcgaggtgaccggccaggaaacggtcgccca
+gatcaaggctcatgtagcctcactggagggcattgccccggaagatcaagtcgtgctcct
+ggcaggcgcgcccctggaggatgaggccactctgggccagtgcggggtggaggccctgac
+taccctggaagtagcaggccgcatgcttggaggtaaagttcatggttccctggcccgtgc
+tggaaaagtgagaggtcagactcctaaggtggccaaacaggagaagaagaagaagaagac
+aggtcgggctaagcggcggatgcagtacaaccggcgctttgtcaacgttgtgcccacctt
+tggcaagaagaagggccccaatgccaactcttaagtcttttgtaattctggctttctcta
+ataaaaaagccacttagttcagtcaaaaaa
+</pre>
+</td></tr></table><p>

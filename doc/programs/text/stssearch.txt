@@ -26,8 +26,8 @@ Usage
 
 % stssearch 
 Search a DNA database for matches with a set of STS primers
-Input sequence(s): tembl:eclac*
-Primer file: lac.primers
+Input nucleotide sequence(s): tembl:eclac*
+Primer pairs file: lac.primers
 Output file [eclac.stssearch]: 
 
    Go to the input files for this example
@@ -36,9 +36,10 @@ Output file [eclac.stssearch]:
 Command line arguments
 
    Standard (Mandatory) qualifiers:
-  [-seqall]            seqall     Sequence database USA
-  [-infile]            infile     Primer file
-  [-outfile]           outfile    Output file name
+  [-seqall]            seqall     Nucleotide sequence(s) filename and optional
+                                  format, or reference (input USA)
+  [-infile]            infile     Primer pairs file
+  [-outfile]           outfile    [*.stssearch] Output file name
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers: (none)
@@ -76,20 +77,7 @@ Command line arguments
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
-   -die                boolean    Report deaths
-
-
-   Standard (Mandatory) qualifiers Allowed values Default
-   [-seqall]
-   (Parameter 1) Sequence database USA Readable sequence(s) Required
-   [-infile]
-   (Parameter 2) Primer file Input file Required
-   [-outfile]
-   (Parameter 3) Output file name Output file <sequence>.stssearch
-   Additional (Optional) qualifiers Allowed values Default
-   (none)
-   Advanced (Unprompted) qualifiers Allowed values Default
-   (none)
+   -die                boolean    Report dying program messages
 
 Input file format
 

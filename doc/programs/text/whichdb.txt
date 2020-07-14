@@ -68,45 +68,34 @@ Output file [outfile.whichdb]:
 Command line arguments
 
    Standard (Mandatory) qualifiers (* if not always prompted):
-  [-entry]             string     ID or Accession number
-*  -outfile            outfile    Output file name
+  [-entry]             string     ID or Accession number (Any string is
+                                  accepted)
+*  -outfile            outfile    [*.whichdb] Output file name
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers:
-   -get                toggle     Retrieve sequences
-   -showall            boolean    Show failed attempts
+   -get                toggle     [N] Retrieve sequences
+   -showall            boolean    [N] Show failed attempts
 
    Associated qualifiers:
 
    "-outfile" associated qualifiers
-   -odirectory          string     Output directory
+   -odirectory         string     Output directory
 
    General qualifiers:
-   -auto                boolean    Turn off prompts
-   -stdout              boolean    Write standard output
-   -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for standard and additional values
-   -debug               boolean    Write debug output to program.dbg
-   -verbose             boolean    Report some/full command line options
-   -help                boolean    Report command line options. More
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
-   -warning             boolean    Report warnings
-   -error               boolean    Report errors
-   -fatal               boolean    Report fatal errors
-   -die                 boolean    Report deaths
-
-
-   Standard (Mandatory) qualifiers Allowed values Default
-   [-entry]
-   (Parameter 1) ID or Accession number Any string is accepted An empty
-   string is accepted
-   -outfile Output file name Output file <sequence>.whichdb
-   Additional (Optional) qualifiers Allowed values Default
-   (none)
-   Advanced (Unprompted) qualifiers Allowed values Default
-   -get Retrieve sequences Toggle value Yes/No No
-   -showall Show failed attempts Boolean value Yes/No No
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
 
 Input file format
 
@@ -132,8 +121,6 @@ Output file format
 # Failed 'qangcginc:hsfau1'
 # Trying 'qangcgexc:hsfau1'
 # Failed 'qangcgexc:hsfau1'
-# Trying 'qasrsfasta:hsfau1'
-qasrsfasta:hsfau1
 # Trying 'qapir:hsfau1'
 # Failed 'qapir:hsfau1'
 # Trying 'tgenbank:hsfau1'
@@ -158,8 +145,6 @@ qanxflatall:hsfau1
 # Failed 'qapflatinc:hsfau1'
 # Trying 'qapflatexc:hsfau1'
 # Failed 'qapflatexc:hsfau1'
-# Trying 'qasrs:hsfau1'
-qasrs:hsfau1
 # Trying 'qapxflatinc:hsfau1'
 # Failed 'qapxflatinc:hsfau1'
 # Trying 'qapxflatexc:hsfau1'
@@ -167,7 +152,7 @@ qasrs:hsfau1
 # Trying 'tpir:hsfau1'
 # Failed 'tpir:hsfau1'
 # Trying 'qasrswww:hsfau1'
-qasrswww:hsfau1
+# Failed 'qasrswww:hsfau1'
 # Trying 'qanxfasta:hsfau1'
 # Failed 'qanxfasta:hsfau1'
 # Trying 'qanxgcgall:hsfau1'

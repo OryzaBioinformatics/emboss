@@ -12,7 +12,6 @@
 </td>
 <td align=left valign=middle>
 <b><font size="+6">
-
 restrict
 </font></b>
 </td></tr>
@@ -21,12 +20,10 @@ restrict
 <p>
 
 
-
 <H2>
     Function
 </H2>
 Finds restriction enzyme cleavage sites
-
 
 <H2>
     Description
@@ -60,7 +57,7 @@ your own preferred prototype,if you wish.
 
 % <b>restrict </b>
 Finds restriction enzyme cleavage sites
-Input sequence(s): <b>tembl:hsfau</b>
+Input nucleotide sequence(s): <b>tembl:hsfau</b>
 Minimum recognition site length [4]: <b></b>
 Comma separated enzyme list [all]: <b></b>
 Output report [hsfau.restrict]: <b></b>
@@ -79,7 +76,7 @@ This gives the lengths of the restriction fragments produced by cutting with all
 
 % <b>restrict -fragments </b>
 Finds restriction enzyme cleavage sites
-Input sequence(s): <b>tembl:hsfau</b>
+Input nucleotide sequence(s): <b>tembl:hsfau</b>
 Minimum recognition site length [4]: <b></b>
 Comma separated enzyme list [all]: <b></b>
 Output report [hsfau.restrict]: <b></b>
@@ -98,7 +95,7 @@ This gives the lengths of the restriction fragments created by cutting with just
 
 % <b>restrict -solofragment </b>
 Finds restriction enzyme cleavage sites
-Input sequence(s): <b>tembl:hsfau</b>
+Input nucleotide sequence(s): <b>tembl:hsfau</b>
 Minimum recognition site length [4]: <b></b>
 Comma separated enzyme list [all]: <b></b>
 Output report [hsfau.restrict]: <b></b>
@@ -108,22 +105,22 @@ Output report [hsfau.restrict]: <b></b>
 <a href="#output.3">Go to the output files for this example</a><p><p>
 
 
-
 <H2>
     Command line arguments
 </H2>
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
    Standard (Mandatory) qualifiers:
-  [-sequence]          seqall     Sequence database USA
-   -sitelen            integer    This sets the minimum length of the
+  [-sequence]          seqall     Nucleotide sequence(s) filename and optional
+                                  format, or reference (input USA)
+   -sitelen            integer    [4] This sets the minimum length of the
                                   restriction enzyme recognition site. Any
                                   enzymes with sites shorter than this will be
-                                  ignored.
-   -enzymes            string     The name 'all' reads in all enzyme names
-                                  from the REBASE database. You can specify
-                                  enzymes by giving their names with commas
-                                  between then, such as:
+                                  ignored. (Integer from 2 to 20)
+   -enzymes            string     [all] The name 'all' reads in all enzyme
+                                  names from the REBASE database. You can
+                                  specify enzymes by giving their names with
+                                  commas between then, such as:
                                   'HincII,hinfI,ppiI,hindiii'.
                                   The case of the names is not important. You
                                   can specify a file of enzyme names to read
@@ -141,46 +138,48 @@ Output report [hsfau.restrict]: <b></b>
                                   ! other enzymes
                                   hindiii
                                   HinfI
-                                  PpiI
+                                  PpiI (Any string is accepted)
   [-outfile]           report     Output report file name
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers:
-   -datafile           datafile   Alternative RE data file
-   -min                integer    This sets the minimum number of cuts for any
-                                  restriction enzyme that will be considered.
-                                  Any enzymes that cut fewer times than this
-                                  will be ignored.
-   -max                integer    This sets the maximum number of cuts for any
-                                  restriction enzyme that will be considered.
-                                  Any enzymes that cut more times than this
-                                  will be ignored.
-   -solofragment       boolean    This gives the fragment lengths of the
+   -datafile           datafile   Restriction enzyme data file (optional)
+   -min                integer    [1] This sets the minimum number of cuts for
+                                  any restriction enzyme that will be
+                                  considered. Any enzymes that cut fewer times
+                                  than this will be ignored. (Integer from 1
+                                  to 1000)
+   -max                integer    [2000000000] This sets the maximum number of
+                                  cuts for any restriction enzyme that will
+                                  be considered. Any enzymes that cut more
+                                  times than this will be ignored. (Integer up
+                                  to 2000000000)
+   -solofragment       boolean    [N] This gives the fragment lengths of the
                                   forward sense strand produced by complete
                                   restriction by each restriction enzyme on
                                   its own. Results are added to the tail
                                   section of the report.
-   -single             boolean    If this is set then this forces the values
-                                  of the mincuts and maxcuts qualifiers to
-                                  both be 1. Any other value you may have set
-                                  them to will be ignored.
-   -[no]blunt          boolean    This allows those enzymes which cut at the
-                                  same position on the forward and reverse
+   -single             boolean    [N] If this is set then this forces the
+                                  values of the mincuts and maxcuts qualifiers
+                                  to both be 1. Any other value you may have
+                                  set them to will be ignored.
+   -[no]blunt          boolean    [Y] This allows those enzymes which cut at
+                                  the same position on the forward and reverse
                                   strands to be considered.
-   -[no]sticky         boolean    This allows those enzymes which cut at
+   -[no]sticky         boolean    [Y] This allows those enzymes which cut at
                                   different positions on the forward and
                                   reverse strands, leaving an overhang, to be
                                   considered.
-   -[no]ambiguity      boolean    This allows those enzymes which have one or
-                                  more 'N' ambiguity codes in their pattern to
-                                  be considered
-   -plasmid            boolean    If this is set then this allows searches for
-                                  restriction enzyme recognition site and cut
-                                  postions that span the end of the sequence
-                                  to be considered.
-   -[no]commercial     boolean    If this is set, then only those enzymes with
-                                  a commercial supplier will be searched for.
-                                  This qualifier is ignored if you have
+   -[no]ambiguity      boolean    [Y] This allows those enzymes which have one
+                                  or more 'N' ambiguity codes in their
+                                  pattern to be considered
+   -plasmid            boolean    [N] If this is set then this allows searches
+                                  for restriction enzyme recognition site and
+                                  cut postions that span the end of the
+                                  sequence to be considered.
+   -[no]commercial     boolean    [Y] If this is set, then only those enzymes
+                                  with a commercial supplier will be searched
+                                  for. This qualifier is ignored if you have
                                   specified an explicit list of enzymes to
                                   search for, rather than searching through
                                   'all' the enzymes in the REBASE database. It
@@ -190,8 +189,8 @@ Output report [hsfau.restrict]: <b></b>
                                   names that you have asked to be searched
                                   for, and which cut, will be reported whether
                                   or not they have a commercial supplier.
-   -[no]limit          boolean    This limits the reporting of enzymes to just
-                                  one enzyme from each group of
+   -[no]limit          boolean    [Y] This limits the reporting of enzymes to
+                                  just one enzyme from each group of
                                   isoschizomers. The enzyme chosen to
                                   represent an isoschizomer group is the
                                   prototype indicated in the data file
@@ -205,13 +204,13 @@ Output report [hsfau.restrict]: <b></b>
                                   false if you are supplying an explicit set
                                   of enzymes rather than searching 'all' of
                                   them.
-   -alphabetic         boolean    Sort output alphabetically
-   -fragments          boolean    This gives the fragment lengths of the
+   -alphabetic         boolean    [N] Sort output alphabetically
+   -fragments          boolean    [N] This gives the fragment lengths of the
                                   forward sense strand produced by complete
                                   restriction using all of the input enzymes
                                   together. Results are added to the tail
                                   section of the report.
-   -name               boolean    Show sequence name
+   -name               boolean    [N] Show sequence name
 
    Associated qualifiers:
 
@@ -254,8 +253,7 @@ Output report [hsfau.restrict]: <b></b>
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
-   -die                boolean    Report deaths
-
+   -die                boolean    Report dying program messages
 
 </pre>
 </td></tr></table>
@@ -270,7 +268,7 @@ Output report [hsfau.restrict]: <b></b>
 
 <tr>
 <td>[-sequence]<br>(Parameter 1)</td>
-<td>Sequence database USA</td>
+<td>Nucleotide sequence(s) filename and optional format, or reference (input USA)</td>
 <td>Readable sequence(s)</td>
 <td><b>Required</b></td>
 </tr>
@@ -323,7 +321,7 @@ PpiI</td>
 
 <tr>
 <td>-datafile</td>
-<td>Alternative RE data file</td>
+<td>Restriction enzyme data file (optional)</td>
 <td>Data file</td>
 <td><i>File in the data file path</i></td>
 </tr>
@@ -422,7 +420,6 @@ PpiI</td>
 </table>
 
 
-
 <H2>
     Input file format
 </H2>
@@ -518,7 +515,6 @@ SQ   Sequence 518 BP; 125 A; 139 C; 148 G; 106 T; 0 other;
 </pre>
 </td></tr></table><p>
 
-
 <H2>
     Output file format
 </H2>
@@ -545,7 +541,6 @@ for further information on report formats.
 
 <p>
 
-
 <p>
 
 By default <b>restrict</b> writes a 'table' report file.
@@ -560,7 +555,9 @@ By default <b>restrict</b> writes a 'table' report file.
 <pre>
 ########################################
 # Program: restrict
-# Rundate: Fri Jul 15 2005 12:00:00
+# Rundate: Sat Jul 15 2006 12:00:00
+# Commandline: restrict
+#    -sequence tembl:hsfau
 # Report_format: table
 # Report_file: hsfau.restrict
 ########################################
@@ -586,50 +583,50 @@ By default <b>restrict</b> writes a 'table' report file.
      36      31 BseYI       CCCAGC               31     35         .         .
      38      41 AciI        CCGC                 38     40         .         .
      44      40 BceAI       ACGGC                25     27         .         .
-     71      74 AciI        CCGC                 71     73         .         .
      71      81 BsiYI       CCNNNNNNNGG          77     74         .         .
-     73      76 HhaI        GCGC                 75     73         .         .
+     71      74 AciI        CCGC                 71     73         .         .
      73      76 Hin6I       GCGC                 73     75         .         .
-     77      81 BssKI       CCNGG                76     81         .         .
+     73      76 HhaI        GCGC                 75     73         .         .
      77      81 EcoRII      CCWGG                76     81         .         .
+     77      81 BssKI       CCNGG                76     81         .         .
      94      97 TaqI        TCGA                 94     96         .         .
     103     106 HpaII       CCGG                103    105         .         .
     105     108 HaeIII      GGCC                106    106         .         .
-    107     117 BsiYI       CCNNNNNNNGG         113    110         .         .
-    107     111 BssKI       CCNGG               106    111         .         .
     107     111 EcoRII      CCWGG               106    111         .         .
+    107     111 BssKI       CCNGG               106    111         .         .
+    107     117 BsiYI       CCNNNNNNNGG         113    110         .         .
     122     132 BsiYI       CCNNNNNNNGG         128    125         .         .
     125     135 Hin4I       GAYNNNNNVTC         116    111       148       143
     146     150 BsrI        ACTGG               151    149         .         .
     161     165 BssKI       CCNGG               160    165         .         .
     162     165 HpaII       CCGG                162    164         .         .
-    182     186 BssKI       CCNGG               181    186         .         .
     182     186 EcoRII      CCWGG               181    186         .         .
-    190     193 HhaI        GCGC                192    190         .         .
+    182     186 BssKI       CCNGG               181    186         .         .
     190     193 Hin6I       GCGC                190    192         .         .
+    190     193 HhaI        GCGC                192    190         .         .
     192     195 Hin6I       GCGC                192    194         .         .
     192     195 HhaI        GCGC                194    192         .         .
-    197     201 BssKI       CCNGG               196    201         .         .
     197     201 EcoRII      CCWGG               196    201         .         .
+    197     201 BssKI       CCNGG               196    201         .         .
     209     212 HaeIII      GGCC                210    210         .         .
     219     222 HaeIII      GGCC                220    220         .         .
     221     231 BsiYI       CCNNNNNNNGG         227    224         .         .
     225     221 BsrI        ACTGG               221    219         .         .
     229     226 AciI        CCGC                226    228         .         .
     236     239 HaeIII      GGCC                237    237         .         .
-    248     252 BssKI       CCNGG               247    252         .         .
     248     252 EcoRII      CCWGG               247    252         .         .
+    248     252 BssKI       CCNGG               247    252         .         .
     261     264 HaeIII      GGCC                262    262         .         .
     263     266 AciI        CCGC                263    265         .         .
-    293     297 BssKI       CCNGG               292    297         .         .
     293     297 EcoRII      CCWGG               292    297         .         .
+    293     297 BssKI       CCNGG               292    297         .         .
     296     299 HaeIII      GGCC                297    297         .         .
     335     338 HaeIII      GGCC                336    336         .         .
     380     377 AciI        CCGC                377    379         .         .
     383     380 AciI        CCGC                380    382         .         .
     395     398 HpaII       CCGG                395    397         .         .
-    398     401 HhaI        GCGC                400    398         .         .
     398     401 Hin6I       GCGC                398    400         .         .
+    398     401 HhaI        GCGC                400    398         .         .
     405     410 HindII      GTYRAC              407    407         .         .
     408     413 AclI        AACGTT              409    411         .         .
     409     412 MaeII       ACGT                409    411         .         .
@@ -648,7 +645,10 @@ By default <b>restrict</b> writes a 'table' report file.
 <pre>
 ########################################
 # Program: restrict
-# Rundate: Fri Jul 15 2005 12:00:00
+# Rundate: Sat Jul 15 2006 12:00:00
+# Commandline: restrict
+#    -fragments
+#    -sequence tembl:hsfau
 # Report_format: table
 # Report_file: hsfau.restrict
 ########################################
@@ -674,28 +674,25 @@ By default <b>restrict</b> writes a 'table' report file.
      36      31 BseYI       CCCAGC               31     35         .         .
      38      41 AciI        CCGC                 38     40         .         .
      44      40 BceAI       ACGGC                25     27         .         .
-     71      74 AciI        CCGC                 71     73         .         .
      71      81 BsiYI       CCNNNNNNNGG          77     74         .         .
-     73      76 HhaI        GCGC                 75     73         .         .
+     71      74 AciI        CCGC                 71     73         .         .
      73      76 Hin6I       GCGC                 73     75         .         .
-     77      81 BssKI       CCNGG                76     81         .         .
+     73      76 HhaI        GCGC                 75     73         .         .
      77      81 EcoRII      CCWGG                76     81         .         .
+     77      81 BssKI       CCNGG                76     81         .         .
      94      97 TaqI        TCGA                 94     96         .         .
     103     106 HpaII       CCGG                103    105         .         .
     105     108 HaeIII      GGCC                106    106         .         .
-    107     117 BsiYI       CCNNNNNNNGG         113    110         .         .
-    107     111 BssKI       CCNGG               106    111         .         .
     107     111 EcoRII      CCWGG               106    111         .         .
+    107     111 BssKI       CCNGG               106    111         .         .
+    107     117 BsiYI       CCNNNNNNNGG         113    110         .         .
     122     132 BsiYI       CCNNNNNNNGG         128    125         .         .
     125     135 Hin4I       GAYNNNNNVTC         116    111       148       143
     146     150 BsrI        ACTGG               151    149         .         .
     161     165 BssKI       CCNGG               160    165         .         .
     162     165 HpaII       CCGG                162    164         .         .
-    182     186 BssKI       CCNGG               181    186         .         .
     182     186 EcoRII      CCWGG               181    186         .         .
-    190     193 HhaI        GCGC                192    190         .         .
-    190     193 Hin6I       GCGC                190    192         .         .
-    192     195 Hin6I       GCGC                192    194         .         .
+    182     186 BssKI       CCNGG               181    186         .         .
 
 
 <font color=red>  [Part of this file has been deleted for brevity]</font>
@@ -761,7 +758,10 @@ By default <b>restrict</b> writes a 'table' report file.
 <pre>
 ########################################
 # Program: restrict
-# Rundate: Fri Jul 15 2005 12:00:00
+# Rundate: Sat Jul 15 2006 12:00:00
+# Commandline: restrict
+#    -solofragment
+#    -sequence tembl:hsfau
 # Report_format: table
 # Report_file: hsfau.restrict
 ########################################
@@ -787,28 +787,25 @@ By default <b>restrict</b> writes a 'table' report file.
      36      31 BseYI       CCCAGC               31     35         .         .
      38      41 AciI        CCGC                 38     40         .         .
      44      40 BceAI       ACGGC                25     27         .         .
-     71      74 AciI        CCGC                 71     73         .         .
      71      81 BsiYI       CCNNNNNNNGG          77     74         .         .
-     73      76 HhaI        GCGC                 75     73         .         .
+     71      74 AciI        CCGC                 71     73         .         .
      73      76 Hin6I       GCGC                 73     75         .         .
-     77      81 BssKI       CCNGG                76     81         .         .
+     73      76 HhaI        GCGC                 75     73         .         .
      77      81 EcoRII      CCWGG                76     81         .         .
+     77      81 BssKI       CCNGG                76     81         .         .
      94      97 TaqI        TCGA                 94     96         .         .
     103     106 HpaII       CCGG                103    105         .         .
     105     108 HaeIII      GGCC                106    106         .         .
-    107     117 BsiYI       CCNNNNNNNGG         113    110         .         .
-    107     111 BssKI       CCNGG               106    111         .         .
     107     111 EcoRII      CCWGG               106    111         .         .
+    107     111 BssKI       CCNGG               106    111         .         .
+    107     117 BsiYI       CCNNNNNNNGG         113    110         .         .
     122     132 BsiYI       CCNNNNNNNGG         128    125         .         .
     125     135 Hin4I       GAYNNNNNVTC         116    111       148       143
     146     150 BsrI        ACTGG               151    149         .         .
     161     165 BssKI       CCNGG               160    165         .         .
     162     165 HpaII       CCGG                162    164         .         .
-    182     186 BssKI       CCNGG               181    186         .         .
     182     186 EcoRII      CCWGG               181    186         .         .
-    190     193 HhaI        GCGC                192    190         .         .
-    190     193 Hin6I       GCGC                190    192         .         .
-    192     195 Hin6I       GCGC                192    194         .         .
+    182     186 BssKI       CCNGG               181    186         .         .
 
 
 <font color=red>  [Part of this file has been deleted for brevity]</font>
@@ -866,7 +863,6 @@ By default <b>restrict</b> writes a 'table' report file.
 #---------------------------------------
 </pre>
 </td></tr></table><p>
-
 
 <p>
 
@@ -933,7 +929,6 @@ The directories are searched in the following order:
    <li> ~/.embossdata
 </ul>
 <p>
-
 <p>
 The EMBOSS REBASE restriction enzyme data files are stored iin
 directory 'data/REBASE/*' under the EMBOSS installation directory.
@@ -977,7 +972,6 @@ of the pair of enzymes is the name that is not preferred and the second
 is the preferred (prototype) name. 
 	 
 	          
-
 
 
 
@@ -1041,14 +1035,37 @@ None.
 <h2><a name="See also">See also</a></h2>
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
-<tr><td><a href="recoder.html">recoder</a></td><td>Remove restriction sites but maintain same translation</td></tr>
-<tr><td><a href="redata.html">redata</a></td><td>Search REBASE for enzyme name, references, suppliers etc</td></tr>
-<tr><td><a href="remap.html">remap</a></td><td>Display sequence with restriction sites, translation etc</td></tr>
-<tr><td><a href="restover.html">restover</a></td><td>Find restriction enzymes producing specific overhang</td></tr>
-<tr><td><a href="showseq.html">showseq</a></td><td>Display a sequence with features, translation etc</td></tr>
-<tr><td><a href="silent.html">silent</a></td><td>Silent mutation restriction enzyme scan</td></tr>
-</table>
+<tr>
+<td><a href="recoder.html">recoder</a></td>
+<td>Remove restriction sites but maintain same translation</td>
+</tr>
 
+<tr>
+<td><a href="redata.html">redata</a></td>
+<td>Search REBASE for enzyme name, references, suppliers etc</td>
+</tr>
+
+<tr>
+<td><a href="remap.html">remap</a></td>
+<td>Display sequence with restriction sites, translation etc</td>
+</tr>
+
+<tr>
+<td><a href="restover.html">restover</a></td>
+<td>Find restriction enzymes producing specific overhang</td>
+</tr>
+
+<tr>
+<td><a href="showseq.html">showseq</a></td>
+<td>Display a sequence with features, translation etc</td>
+</tr>
+
+<tr>
+<td><a href="silent.html">silent</a></td>
+<td>Silent mutation restriction enzyme scan</td>
+</tr>
+
+</table>
 
 
 <H2>
@@ -1061,13 +1078,11 @@ Alan Bleasby (ajb&nbsp;&copy;&nbsp;ebi.ac.uk)
 European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
 
 
-
 <H2>
     History
 </H2>
 
 Completed 16th April 1999
-
 
 <H2>
     Target users
@@ -1075,12 +1090,10 @@ Completed 16th April 1999
 This program is intended to be used by everyone and everything, from naive users to embedded scripts.
 
 
-
 <H2>
     Comments
 </H2>
 None
-
 
 
 

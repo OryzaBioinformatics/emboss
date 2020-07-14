@@ -30,7 +30,7 @@ Usage
 
 % recoder 
 Remove restriction sites but maintain same translation
-Input sequence: tembl:hsfau
+Input nucleotide sequence: tembl:hsfau
 Comma separated enzyme list [all]: EcoRII
 Output report [hsfau.recoder]: 
 
@@ -40,70 +40,59 @@ Output report [hsfau.recoder]:
 Command line arguments
 
    Standard (Mandatory) qualifiers:
-  [-sequence]          sequence   Sequence USA
-   -enzymes            string     Comma separated enzyme list
+  [-sequence]          sequence   Nucleotide sequence filename and optional
+                                  format, or reference (input USA)
+   -enzymes            string     [all] Comma separated enzyme list (Any
+                                  string is accepted)
   [-outfile]           report     Output report file name
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers:
-   -sshow              boolean    Display untranslated sequence
-   -tshow              boolean    Display translated sequence
+   -sshow              boolean    [N] Display untranslated sequence
+   -tshow              boolean    [N] Display translated sequence
 
    Associated qualifiers:
 
    "-sequence" associated qualifiers
-   -sbegin1             integer    Start of the sequence to be used
-   -send1               integer    End of the sequence to be used
-   -sreverse1           boolean    Reverse (if DNA)
-   -sask1               boolean    Ask for begin/end/reverse
-   -snucleotide1        boolean    Sequence is nucleotide
-   -sprotein1           boolean    Sequence is protein
-   -slower1             boolean    Make lower case
-   -supper1             boolean    Make upper case
-   -sformat1            string     Input sequence format
-   -sdbname1            string     Database name
-   -sid1                string     Entryname
-   -ufo1                string     UFO features
-   -fformat1            string     Features format
-   -fopenfile1          string     Features file name
+   -sbegin1            integer    Start of the sequence to be used
+   -send1              integer    End of the sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
 
    "-outfile" associated qualifiers
-   -rformat2            string     Report format
-   -rname2              string     Base file name
-   -rextension2         string     File name extension
-   -rdirectory2         string     Output directory
-   -raccshow2           boolean    Show accession number in the report
-   -rdesshow2           boolean    Show description in the report
-   -rscoreshow2         boolean    Show the score in the report
-   -rusashow2           boolean    Show the full USA in the report
+   -rformat2           string     Report format
+   -rname2             string     Base file name
+   -rextension2        string     File name extension
+   -rdirectory2        string     Output directory
+   -raccshow2          boolean    Show accession number in the report
+   -rdesshow2          boolean    Show description in the report
+   -rscoreshow2        boolean    Show the score in the report
+   -rusashow2          boolean    Show the full USA in the report
 
    General qualifiers:
-   -auto                boolean    Turn off prompts
-   -stdout              boolean    Write standard output
-   -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for standard and additional values
-   -debug               boolean    Write debug output to program.dbg
-   -verbose             boolean    Report some/full command line options
-   -help                boolean    Report command line options. More
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
-   -warning             boolean    Report warnings
-   -error               boolean    Report errors
-   -fatal               boolean    Report fatal errors
-   -die                 boolean    Report deaths
-
-
-   Standard (Mandatory) qualifiers Allowed values Default
-   [-sequence]
-   (Parameter 1) Sequence USA Readable sequence Required
-   -enzymes Comma separated enzyme list Any string is accepted all
-   [-outfile]
-   (Parameter 2) Output report file name Report output file
-   Additional (Optional) qualifiers Allowed values Default
-   (none)
-   Advanced (Unprompted) qualifiers Allowed values Default
-   -sshow Display untranslated sequence Boolean value Yes/No No
-   -tshow Display translated sequence Boolean value Yes/No No
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
 
 Input file format
 
@@ -211,7 +200,10 @@ Output file format
 
 ########################################
 # Program: recoder
-# Rundate: Fri Jul 15 2005 12:00:00
+# Rundate: Sat Jul 15 2006 12:00:00
+# Commandline: recoder
+#    -sequence tembl:hsfau
+#    -enzymes EcoRII
 # Report_format: table
 # Report_file: hsfau.recoder
 ########################################
@@ -234,14 +226,14 @@ Output file format
 #=======================================
 
   Start     End Dir    EnzymeName RS-Pattern Base-Posn    AAs Mutation
-     77      81 .      EcoRII     CCWGG             78    P.P     C->T
      77      81 .      EcoRII     CCWGG             78    P.P     C->G
      77      81 .      EcoRII     CCWGG             78    P.P     C->A
+     77      81 .      EcoRII     CCWGG             78    P.P     C->T
      77      81 .      EcoRII     CCWGG             79    R.R     A->C
      77      81 .      EcoRII     CCWGG             81    R.R     G->A
-    107     111 .      EcoRII     CCWGG            108    A.A     C->T
     107     111 .      EcoRII     CCWGG            108    A.A     C->G
     107     111 .      EcoRII     CCWGG            108    A.A     C->A
+    107     111 .      EcoRII     CCWGG            108    A.A     C->T
     107     111 .      EcoRII     CCWGG            109    R.R     A->C
     107     111 .      EcoRII     CCWGG            111    R.R     G->A
     182     186 .      EcoRII     CCWGG            183    S.S     C->G
@@ -256,18 +248,18 @@ Output file format
     293     297 .      EcoRII     CCWGG            294    P.P     C->G
     293     297 .      EcoRII     CCWGG            294    P.P     C->A
     293     297 .      EcoRII     CCWGG            294    P.P     C->T
-     81      77 Rev    EcoRII     CCWGG             79    P.P     T->C
      81      77 Rev    EcoRII     CCWGG             79    P.P     T->G
-    111     107 Rev    EcoRII     CCWGG            109    P.P     T->C
+     81      77 Rev    EcoRII     CCWGG             79    P.P     T->C
     111     107 Rev    EcoRII     CCWGG            109    P.P     T->G
+    111     107 Rev    EcoRII     CCWGG            109    P.P     T->C
     186     182 Rev    EcoRII     CCWGG            184    P.P     A->G
     186     182 Rev    EcoRII     CCWGG            184    P.P     A->C
-    201     197 Rev    EcoRII     CCWGG            199    P.P     A->C
     201     197 Rev    EcoRII     CCWGG            199    P.P     A->G
-    252     248 Rev    EcoRII     CCWGG            250    P.P     A->C
+    201     197 Rev    EcoRII     CCWGG            199    P.P     A->C
     252     248 Rev    EcoRII     CCWGG            250    P.P     A->G
-    297     293 Rev    EcoRII     CCWGG            295    P.P     A->C
+    252     248 Rev    EcoRII     CCWGG            250    P.P     A->C
     297     293 Rev    EcoRII     CCWGG            295    P.P     A->G
+    297     293 Rev    EcoRII     CCWGG            295    P.P     A->C
 
 #---------------------------------------
 #---------------------------------------

@@ -87,7 +87,7 @@ Command line arguments
    Standard (Mandatory) qualifiers:
   [-first]             codon      First codon usage file
   [-second]            codon      Second codon usage file for comparison
-  [-outfile]           outfile    Output file name
+  [-outfile]           outfile    [*.codcmp] Output file name
 
    Additional (Optional) qualifiers: (none)
    Advanced (Unprompted) qualifiers: (none)
@@ -115,22 +115,7 @@ Command line arguments
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
-   -die                boolean    Report deaths
-
-
-   Standard (Mandatory) qualifiers Allowed values Default
-   [-first]
-   (Parameter 1) First codon usage file Codon usage file in EMBOSS data
-   path
-   [-second]
-   (Parameter 2) Second codon usage file for comparison Codon usage file
-   in EMBOSS data path
-   [-outfile]
-   (Parameter 3) Output file name Output file <sequence>.codcmp
-   Additional (Optional) qualifiers Allowed values Default
-   (none)
-   Advanced (Unprompted) qualifiers Allowed values Default
-   (none)
+   -die                boolean    Report dying program messages
 
 Input file format
 

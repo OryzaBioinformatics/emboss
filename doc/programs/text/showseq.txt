@@ -264,20 +264,39 @@ Output file [paamir.showseq]:
 Command line arguments
 
    Standard (Mandatory) qualifiers (* if not always prompted):
-  [-sequence]          seqall     Sequence database USA
-   -format             menu       Display format
-*  -things             menu       Specify a list of one or more code
-                                  characters in the order in which you wish
-                                  things to be displayed one above the other
-                                  down the page. For example if you wish to
-                                  see things displayed in the order: sequence,
-                                  complement sequence, ticks line, frame 1
-                                  translation, blank line; then you should
-                                  enter 'S,C,T,1,B'.
-  [-outfile]           outfile    Output file name
+  [-sequence]          seqall     (Gapped) sequence(s) filename and optional
+                                  format, or reference (input USA)
+   -format             menu       [2] Display format (Values: 0 (Enter your
+                                  own list of things to display); 1 (Sequence
+                                  only); 2 (Default sequence with features); 3
+                                  (Pretty sequence); 4 (One frame
+                                  translation); 5 (Three frame translations);
+                                  6 (Six frame translations); 7 (Restriction
+                                  enzyme map); 8 (Baroque))
+*  -things             menu       [B,N,T,S,A,F] Specify a list of one or more
+                                  code characters in the order in which you
+                                  wish things to be displayed one above the
+                                  other down the page. For example if you wish
+                                  to see things displayed in the order:
+                                  sequence, complement sequence, ticks line,
+                                  frame 1 translation, blank line; then you
+                                  should enter 'S,C,T,1,B'. (Values: S
+                                  (Sequence); B (Blank line); 1 (Frame1
+                                  translation); 2 (Frame2 translation); 3
+                                  (Frame3 translation); -1 (CompFrame1
+                                  translation); -2 (CompFrame2 translation);
+                                  -3 (CompFrame3 translation); T (Ticks line);
+                                  N (Number ticks line); C (Complement
+                                  sequence); F (Features); R (Restriction
+                                  enzyme cut sites in forward sense); -R
+                                  (Restriction enzyme cut sites in reverse
+                                  sense); A (Annotation))
+  [-outfile]           outfile    [*.showseq] Output file name
 
    Additional (Optional) qualifiers:
-   -translate          range      Regions to translate (if translating).
+   -translate          range      [If this is left blank the complete sequence
+                                  is translated.] Regions to translate (if
+                                  translating).
                                   If this is left blank the complete sequence
                                   is translated.
                                   A set of regions is specified by a set of
@@ -289,7 +308,9 @@ Command line arguments
                                   24-45, 56-78
                                   1:45, 67=99;765..888
                                   1,5,8,10,23,45,57,99
-   -uppercase          range      Regions to put in uppercase.
+   -uppercase          range      [If this is left blank, then the sequence
+                                  case is left alone.] Regions to put in
+                                  uppercase.
                                   If this is left blank, then the sequence
                                   case is left alone.
                                   A set of regions is specified by a set of
@@ -301,7 +322,8 @@ Command line arguments
                                   24-45, 56-78
                                   1:45, 67=99;765..888
                                   1,5,8,10,23,45,57,99
-   -highlight          range      Regions to colour if formatting for HTML.
+   -highlight          range      [(full sequence)] Regions to colour if
+                                  formatting for HTML.
                                   If this is left blank, then the sequence is
                                   left alone.
                                   A set of regions is specified by a set of
@@ -314,7 +336,8 @@ Command line arguments
                                   1-100 green 120-156 red
                                   A file of ranges to colour (one range per
                                   line) can be specified as '@filename'.
-   -annotation         range      Regions to annotate by marking.
+   -annotation         range      [If this is left blank, then no annotation
+                                  is added.] Regions to annotate by marking.
                                   If this is left blank, then no annotation is
                                   added.
                                   A set of regions is specified by a set of
@@ -328,10 +351,10 @@ Command line arguments
                                   1-100 First part 120-156 oligo
                                   A file of ranges to annotate (one range per
                                   line) can be specified as '@filename'.
-   -enzymes            string     The name 'all' reads in all enzyme names
-                                  from the REBASE database. You can specify
-                                  enzymes by giving their names with commas
-                                  between then, such as:
+   -enzymes            string     [all] The name 'all' reads in all enzyme
+                                  names from the REBASE database. You can
+                                  specify enzymes by giving their names with
+                                  commas between then, such as:
                                   'HincII,hinfI,ppiI,hindiii'.
                                   The case of the names is not important. You
                                   can specify a file of enzyme names to read
@@ -349,11 +372,26 @@ Command line arguments
                                   ! other enzymes
                                   hindiii
                                   HinfI
-                                  PpiI
-   -table              menu       Genetic code to use
-   -matchsource        string     By default any feature source in the feature
-                                  table is shown. You can set this to match
-                                  any feature source you wish to show.
+                                  PpiI (Any string is accepted)
+   -table              menu       [0] Genetic code to use (Values: 0
+                                  (Standard); 1 (Standard (with alternative
+                                  initiation codons)); 2 (Vertebrate
+                                  Mitochondrial); 3 (Yeast Mitochondrial); 4
+                                  (Mold, Protozoan, Coelenterate Mitochondrial
+                                  and Mycoplasma/Spiroplasma); 5
+                                  (Invertebrate Mitochondrial); 6 (Ciliate
+                                  Macronuclear and Dasycladacean); 9
+                                  (Echinoderm Mitochondrial); 10 (Euplotid
+                                  Nuclear); 11 (Bacterial); 12 (Alternative
+                                  Yeast Nuclear); 13 (Ascidian Mitochondrial);
+                                  14 (Flatworm Mitochondrial); 15
+                                  (Blepharisma Macronuclear); 16
+                                  (Chlorophycean Mitochondrial); 21 (Trematode
+                                  Mitochondrial); 22 (Scenedesmus obliquus);
+                                  23 (Thraustochytrium Mitochondrial))
+   -matchsource        string     [*] By default any feature source in the
+                                  feature table is shown. You can set this to
+                                  match any feature source you wish to show.
                                   The source name is usually either the name
                                   of the program that detected the feature or
                                   it is the feature table (eg: EMBL) that the
@@ -362,10 +400,10 @@ Command line arguments
                                   If you wish to show more than one source,
                                   separate their names with the character '|',
                                   eg:
-                                  gene* | embl
-   -matchtype          string     By default any feature type in the feature
-                                  table is shown. You can set this to match
-                                  any feature type you wish to show.
+                                  gene* | embl (Any string is accepted)
+   -matchtype          string     [*] By default any feature type in the
+                                  feature table is shown. You can set this to
+                                  match any feature type you wish to show.
                                   See http://www3.ebi.ac.uk/Services/WebFeat/
                                   for a list of the EMBL feature types and see
                                   Appendix A of the Swissprot user manual in
@@ -375,17 +413,21 @@ Command line arguments
                                   If you wish to show more than one type,
                                   separate their names with the character '|',
                                   eg:
-                                  *UTR | intron
-   -matchsense         integer    By default any feature type in the feature
-                                  table is shown. You can set this to match
-                                  any feature sense you wish to show. 0 - any
-                                  sense, 1 - forward sense, -1 - reverse sense
-   -minscore           float      If this is greater than or equal to the
+                                  *UTR | intron (Any string is accepted)
+   -matchsense         integer    [0 - any sense, 1 - forward sense, -1 -
+                                  reverse sense] By default any feature type
+                                  in the feature table is shown. You can set
+                                  this to match any feature sense you wish to
+                                  show. 0 - any sense, 1 - forward sense, -1 -
+                                  reverse sense (Any integer value)
+   -minscore           float      [0.0] If this is greater than or equal to
+                                  the maximum score, then any score is
+                                  permitted (Any numeric value)
+   -maxscore           float      [0.0] If this is less than or equal to the
                                   maximum score, then any score is permitted
-   -maxscore           float      If this is less than or equal to the maximum
-                                  score, then any score is permitted
-   -matchtag           string     Tags are the types of extra values that a
-                                  feature may have. For example in the EMBL
+                                  (Any numeric value)
+   -matchtag           string     [*] Tags are the types of extra values that
+                                  a feature may have. For example in the EMBL
                                   feature table, a 'CDS' type of feature may
                                   have the tags '/codon', '/codon_start',
                                   '/db_xref', '/EC_number', '/evidence',
@@ -404,12 +446,12 @@ Command line arguments
                                   If you wish to show more than one tag,
                                   separate their names with the character '|',
                                   eg:
-                                  gene | label
-   -matchvalue         string     Tag values are the values associated with a
-                                  feature tag. Tags are the types of extra
-                                  values that a feature may have. For example
-                                  in the EMBL feature table, a 'CDS' type of
-                                  feature may have the tags '/codon',
+                                  gene | label (Any string is accepted)
+   -matchvalue         string     [*] Tag values are the values associated
+                                  with a feature tag. Tags are the types of
+                                  extra values that a feature may have. For
+                                  example in the EMBL feature table, a 'CDS'
+                                  type of feature may have the tags '/codon',
                                   '/codon_start', '/db_xref', '/EC_number',
                                   '/evidence', '/exception', '/function',
                                   '/gene', '/label', '/map', '/note',
@@ -427,8 +469,8 @@ Command line arguments
                                   If you wish to show more than one tag value,
                                   separate their names with the character
                                   '|', eg:
-                                  pax* | 10
-   -stricttags         boolean    By default if any tag/value pair in a
+                                  pax* | 10 (Any string is accepted)
+   -stricttags         boolean    [N] By default if any tag/value pair in a
                                   feature matches the specified tag and value,
                                   then all the tags/value pairs of that
                                   feature will be displayed. If this is set to
@@ -437,45 +479,47 @@ Command line arguments
                                   value will be displayed.
 
    Advanced (Unprompted) qualifiers:
-   -flatreformat       boolean    This changes the output format to one where
-                                  the recognition site is indicated by a row
-                                  of '===' characters and the cut site is
-                                  pointed to by a '>' character in the forward
-                                  sense, or a '<' in the reverse sense
+   -flatreformat       boolean    [N] This changes the output format to one
+                                  where the recognition site is indicated by a
+                                  row of '===' characters and the cut site is
+                                  pointed to by a '>' character in the
+                                  forward sense, or a '<' in the reverse sense
                                   strand.
-   -mincuts            integer    This sets the minimum number of cuts for any
-                                  restriction enzyme that will be considered.
-                                  Any enzymes that cut fewer times than this
-                                  will be ignored.
-   -maxcuts            integer    This sets the maximum number of cuts for any
-                                  restriction enzyme that will be considered.
-                                  Any enzymes that cut more times than this
-                                  will be ignored.
-   -sitelen            integer    This sets the minimum length of the
+   -mincuts            integer    [1] This sets the minimum number of cuts for
+                                  any restriction enzyme that will be
+                                  considered. Any enzymes that cut fewer times
+                                  than this will be ignored. (Integer from 1
+                                  to 1000)
+   -maxcuts            integer    [2000000000] This sets the maximum number of
+                                  cuts for any restriction enzyme that will
+                                  be considered. Any enzymes that cut more
+                                  times than this will be ignored. (Integer up
+                                  to 2000000000)
+   -sitelen            integer    [4] This sets the minimum length of the
                                   restriction enzyme recognition site. Any
                                   enzymes with sites shorter than this will be
-                                  ignored.
-   -single             boolean    If this is set then this forces the values
-                                  of the mincuts and maxcuts qualifiers to
-                                  both be 1. Any other value you may have set
-                                  them to will be ignored.
-   -[no]blunt          boolean    This allows those enzymes which cut at the
-                                  same position on the forward and reverse
+                                  ignored. (Integer from 2 to 20)
+   -single             boolean    [N] If this is set then this forces the
+                                  values of the mincuts and maxcuts qualifiers
+                                  to both be 1. Any other value you may have
+                                  set them to will be ignored.
+   -[no]blunt          boolean    [Y] This allows those enzymes which cut at
+                                  the same position on the forward and reverse
                                   strands to be considered.
-   -[no]sticky         boolean    This allows those enzymes which cut at
+   -[no]sticky         boolean    [Y] This allows those enzymes which cut at
                                   different positions on the forward and
                                   reverse strands, leaving an overhang, to be
                                   considered.
-   -[no]ambiguity      boolean    This allows those enzymes which have one or
-                                  more 'N' ambiguity codes in their pattern to
-                                  be considered
-   -plasmid            boolean    If this is set then this allows searches for
-                                  restriction enzyme recognition site and cut
-                                  postions that span the end of the sequence
-                                  to be considered.
-   -[no]commercial     boolean    If this is set, then only those enzymes with
-                                  a commercial supplier will be searched for.
-                                  This qualifier is ignored if you have
+   -[no]ambiguity      boolean    [Y] This allows those enzymes which have one
+                                  or more 'N' ambiguity codes in their
+                                  pattern to be considered
+   -plasmid            boolean    [N] If this is set then this allows searches
+                                  for restriction enzyme recognition site and
+                                  cut postions that span the end of the
+                                  sequence to be considered.
+   -[no]commercial     boolean    [Y] If this is set, then only those enzymes
+                                  with a commercial supplier will be searched
+                                  for. This qualifier is ignored if you have
                                   specified an explicit list of enzymes to
                                   search for, rather than searching through
                                   'all' the enzymes in the REBASE database. It
@@ -485,8 +529,8 @@ Command line arguments
                                   names that you have asked to be searched
                                   for, and which cut, will be reported whether
                                   or not they have a commercial supplier.
-   -[no]limit          boolean    This limits the reporting of enzymes to just
-                                  one enzyme from each group of
+   -[no]limit          boolean    [Y] This limits the reporting of enzymes to
+                                  just one enzyme from each group of
                                   isoschizomers. The enzyme chosen to
                                   represent an isoschizomer group is the
                                   prototype indicated in the data file
@@ -500,276 +544,63 @@ Command line arguments
                                   false if you are supplying an explicit set
                                   of enzymes rather than searching 'all' of
                                   them.
-   -orfminsize         integer    This sets the minimum size of Open Reading
-                                  Frames (ORFs) to display in the
+   -orfminsize         integer    [0] This sets the minimum size of Open
+                                  Reading Frames (ORFs) to display in the
                                   translations. All other translation regions
                                   are masked by changing the amino acids to
-                                  '-' characters.
-   -threeletter        boolean    Display protein sequences in three-letter
-                                  code
-   -number             boolean    Number the sequences
-   -width              integer    Width of sequence to display
-   -length             integer    Line length of page (0 for indefinite)
-   -margin             integer    Margin around sequence for numbering
-   -[no]name           boolean    Set this to be false if you do not wish to
-                                  display the ID name of the sequence
-   -[no]description    boolean    Set this to be false if you do not wish to
-                                  display the description of the sequence
-   -offset             integer    Offset to start numbering the sequence from
-   -html               boolean    Use HTML formatting
+                                  '-' characters. (Integer 0 or more)
+   -threeletter        boolean    [N] Display protein sequences in
+                                  three-letter code
+   -number             boolean    [N] Number the sequences
+   -width              integer    [60] Width of sequence to display (Integer 1
+                                  or more)
+   -length             integer    [0] Line length of page (0 for indefinite)
+                                  (Integer 0 or more)
+   -margin             integer    [10] Margin around sequence for numbering
+                                  (Integer 0 or more)
+   -[no]name           boolean    [Y] Set this to be false if you do not wish
+                                  to display the ID name of the sequence
+   -[no]description    boolean    [Y] Set this to be false if you do not wish
+                                  to display the description of the sequence
+   -offset             integer    [1] Offset to start numbering the sequence
+                                  from (Any integer value)
+   -html               boolean    [N] Use HTML formatting
 
    Associated qualifiers:
 
    "-sequence" associated qualifiers
-   -sbegin1             integer    Start of each sequence to be used
-   -send1               integer    End of each sequence to be used
-   -sreverse1           boolean    Reverse (if DNA)
-   -sask1               boolean    Ask for begin/end/reverse
-   -snucleotide1        boolean    Sequence is nucleotide
-   -sprotein1           boolean    Sequence is protein
-   -slower1             boolean    Make lower case
-   -supper1             boolean    Make upper case
-   -sformat1            string     Input sequence format
-   -sdbname1            string     Database name
-   -sid1                string     Entryname
-   -ufo1                string     UFO features
-   -fformat1            string     Features format
-   -fopenfile1          string     Features file name
+   -sbegin1            integer    Start of each sequence to be used
+   -send1              integer    End of each sequence to be used
+   -sreverse1          boolean    Reverse (if DNA)
+   -sask1              boolean    Ask for begin/end/reverse
+   -snucleotide1       boolean    Sequence is nucleotide
+   -sprotein1          boolean    Sequence is protein
+   -slower1            boolean    Make lower case
+   -supper1            boolean    Make upper case
+   -sformat1           string     Input sequence format
+   -sdbname1           string     Database name
+   -sid1               string     Entryname
+   -ufo1               string     UFO features
+   -fformat1           string     Features format
+   -fopenfile1         string     Features file name
 
    "-outfile" associated qualifiers
-   -odirectory2         string     Output directory
+   -odirectory2        string     Output directory
 
    General qualifiers:
-   -auto                boolean    Turn off prompts
-   -stdout              boolean    Write standard output
-   -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for standard and additional values
-   -debug               boolean    Write debug output to program.dbg
-   -verbose             boolean    Report some/full command line options
-   -help                boolean    Report command line options. More
+   -auto               boolean    Turn off prompts
+   -stdout             boolean    Write standard output
+   -filter             boolean    Read standard input, write standard output
+   -options            boolean    Prompt for standard and additional values
+   -debug              boolean    Write debug output to program.dbg
+   -verbose            boolean    Report some/full command line options
+   -help               boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
-   -warning             boolean    Report warnings
-   -error               boolean    Report errors
-   -fatal               boolean    Report fatal errors
-   -die                 boolean    Report deaths
-
-
-   Standard (Mandatory) qualifiers Allowed values Default
-   [-sequence]
-   (Parameter 1) Sequence database USA Readable sequence(s) Required
-   -format Display format
-   0 (Enter your own list of things to display)
-   1 (Sequence only)
-   2 (Default sequence with features)
-   3 (Pretty sequence)
-   4 (One frame translation)
-   5 (Three frame translations)
-   6 (Six frame translations)
-   7 (Restriction enzyme map)
-   8 (Baroque)
-   2
-   -things Specify a list of one or more code characters in the order in
-   which you wish things to be displayed one above the other down the
-   page. For example if you wish to see things displayed in the order:
-   sequence, complement sequence, ticks line, frame 1 translation, blank
-   line; then you should enter 'S,C,T,1,B'.
-   S  (Sequence)
-   B  (Blank line)
-   1  (Frame1 translation)
-   2  (Frame2 translation)
-   3  (Frame3 translation)
-   -1 (CompFrame1 translation)
-   -2 (CompFrame2 translation)
-   -3 (CompFrame3 translation)
-   T  (Ticks line)
-   N  (Number ticks line)
-   C  (Complement sequence)
-   F  (Features)
-   R  (Restriction enzyme cut sites in forward sense)
-   -R (Restriction enzyme cut sites in reverse sense)
-   A  (Annotation)
-   B,N,T,S,A,F
-   [-outfile]
-   (Parameter 2) Output file name Output file <sequence>.showseq
-   Additional (Optional) qualifiers Allowed values Default
-   -translate Regions to translate (if translating). If this is left
-   blank the complete sequence is translated. A set of regions is
-   specified by a set of pairs of positions. The positions are integers.
-   They are separated by any non-digit, non-alpha character. Examples of
-   region specifications are: 24-45, 56-78 1:45, 67=99;765..888
-   1,5,8,10,23,45,57,99 Sequence range If this is left blank the complete
-   sequence is translated.
-   -uppercase Regions to put in uppercase. If this is left blank, then
-   the sequence case is left alone. A set of regions is specified by a
-   set of pairs of positions. The positions are integers. They are
-   separated by any non-digit, non-alpha character. Examples of region
-   specifications are: 24-45, 56-78 1:45, 67=99;765..888
-   1,5,8,10,23,45,57,99 Sequence range If this is left blank, then the
-   sequence case is left alone.
-   -highlight Regions to colour if formatting for HTML. If this is left
-   blank, then the sequence is left alone. A set of regions is specified
-   by a set of pairs of positions. The positions are integers. They are
-   followed by any valid HTML font colour. Examples of region
-   specifications are: 24-45 blue 56-78 orange 1-100 green 120-156 red A
-   file of ranges to colour (one range per line) can be specified as
-   '@filename'. Sequence range full sequence
-   -annotation Regions to annotate by marking. If this is left blank,
-   then no annotation is added. A set of regions is specified by a set of
-   pairs of positions followed by optional text. The positions are
-   integers. They are followed by any text (but not digits when on the
-   command-line). Examples of region specifications are: 24-45 new domain
-   56-78 match to Mouse 1-100 First part 120-156 oligo A file of ranges
-   to annotate (one range per line) can be specified as '@filename'.
-   Sequence range If this is left blank, then no annotation is added.
-   -enzymes The name 'all' reads in all enzyme names from the REBASE
-   database. You can specify enzymes by giving their names with commas
-   between then, such as: 'HincII,hinfI,ppiI,hindiii'. The case of the
-   names is not important. You can specify a file of enzyme names to read
-   in by giving the name of the file holding the enzyme names with a '@'
-   character in front of it, for example, '@enz.list'. Blank lines and
-   lines starting with a hash character or '!' are ignored and all other
-   lines are concatenated together with a comma character ',' and then
-   treated as the list of enzymes to search for. An example of a file of
-   enzyme names is: ! my enzymes HincII, ppiII ! other enzymes hindiii
-   HinfI PpiI Any string is accepted all
-   -table Genetic code to use
-   0 (Standard)
-   1 (Standard (with alternative initiation codons))
-   2 (Vertebrate Mitochondrial)
-   3 (Yeast Mitochondrial)
-   4 (Mold, Protozoan, Coelenterate Mitochondrial and
-   Mycoplasma/Spiroplasma)
-   5 (Invertebrate Mitochondrial)
-   6 (Ciliate Macronuclear and Dasycladacean)
-   9 (Echinoderm Mitochondrial)
-   10 (Euplotid Nuclear)
-   11 (Bacterial)
-   12 (Alternative Yeast Nuclear)
-   13 (Ascidian Mitochondrial)
-   14 (Flatworm Mitochondrial)
-   15 (Blepharisma Macronuclear)
-   16 (Chlorophycean Mitochondrial)
-   21 (Trematode Mitochondrial)
-   22 (Scenedesmus obliquus)
-   23 (Thraustochytrium Mitochondrial)
-   0
-   -matchsource By default any feature source in the feature table is
-   shown. You can set this to match any feature source you wish to show.
-   The source name is usually either the name of the program that
-   detected the feature or it is the feature table (eg: EMBL) that the
-   feature came from. The source may be wildcarded by using '*'. If you
-   wish to show more than one source, separate their names with the
-   character '|', eg: gene* | embl Any string is accepted *
-   -matchtype By default any feature type in the feature table is shown.
-   You can set this to match any feature type you wish to show. See
-   http://www3.ebi.ac.uk/Services/WebFeat/ for a list of the EMBL feature
-   types and see Appendix A of the Swissprot user manual in
-   http://www.expasy.ch/txt/userman.txt for a list of the Swissprot
-   feature types. The type may be wildcarded by using '*'. If you wish to
-   show more than one type, separate their names with the character '|',
-   eg: *UTR | intron Any string is accepted *
-   -matchsense By default any feature type in the feature table is shown.
-   You can set this to match any feature sense you wish to show. 0 - any
-   sense, 1 - forward sense, -1 - reverse sense Any integer value 0 - any
-   sense, 1 - forward sense, -1 - reverse sense
-   -minscore If this is greater than or equal to the maximum score, then
-   any score is permitted Any numeric value 0.0
-   -maxscore If this is less than or equal to the maximum score, then any
-   score is permitted Any numeric value 0.0
-   -matchtag Tags are the types of extra values that a feature may have.
-   For example in the EMBL feature table, a 'CDS' type of feature may
-   have the tags '/codon', '/codon_start', '/db_xref', '/EC_number',
-   '/evidence', '/exception', '/function', '/gene', '/label', '/map',
-   '/note', '/number', '/partial', '/product', '/protein_id', '/pseudo',
-   '/standard_name', '/translation', '/transl_except', '/transl_table',
-   or '/usedin'. Some of these tags also have values, for example '/gene'
-   can have the value of the gene name. By default any feature tag in the
-   feature table is shown. You can set this to match any feature tag you
-   wish to show. The tag may be wildcarded by using '*'. If you wish to
-   show more than one tag, separate their names with the character '|',
-   eg: gene | label Any string is accepted *
-   -matchvalue Tag values are the values associated with a feature tag.
-   Tags are the types of extra values that a feature may have. For
-   example in the EMBL feature table, a 'CDS' type of feature may have
-   the tags '/codon', '/codon_start', '/db_xref', '/EC_number',
-   '/evidence', '/exception', '/function', '/gene', '/label', '/map',
-   '/note', '/number', '/partial', '/product', '/protein_id', '/pseudo',
-   '/standard_name', '/translation', '/transl_except', '/transl_table',
-   or '/usedin'. Only some of these tags can have values, for example
-   '/gene' can have the value of the gene name. By default any feature
-   tag value in the feature table is shown. You can set this to match any
-   feature tag valueyou wish to show. The tag value may be wildcarded by
-   using '*'. If you wish to show more than one tag value, separate their
-   names with the character '|', eg: pax* | 10 Any string is accepted *
-   -stricttags By default if any tag/value pair in a feature matches the
-   specified tag and value, then all the tags/value pairs of that feature
-   will be displayed. If this is set to be true, then only those
-   tag/value pairs in a feature that match the specified tag and value
-   will be displayed. Boolean value Yes/No No
-   Advanced (Unprompted) qualifiers Allowed values Default
-   -flatreformat This changes the output format to one where the
-   recognition site is indicated by a row of '===' characters and the cut
-   site is pointed to by a '>' character in the forward sense, or a '<'
-   in the reverse sense strand. Boolean value Yes/No No
-   -mincuts This sets the minimum number of cuts for any restriction
-   enzyme that will be considered. Any enzymes that cut fewer times than
-   this will be ignored. Integer from 1 to 1000 1
-   -maxcuts This sets the maximum number of cuts for any restriction
-   enzyme that will be considered. Any enzymes that cut more times than
-   this will be ignored. Integer up to 2000000000 2000000000
-   -sitelen This sets the minimum length of the restriction enzyme
-   recognition site. Any enzymes with sites shorter than this will be
-   ignored. Integer from 2 to 20 4
-   -single If this is set then this forces the values of the mincuts and
-   maxcuts qualifiers to both be 1. Any other value you may have set them
-   to will be ignored. Boolean value Yes/No No
-   -[no]blunt This allows those enzymes which cut at the same position on
-   the forward and reverse strands to be considered. Boolean value Yes/No
-   Yes
-   -[no]sticky This allows those enzymes which cut at different positions
-   on the forward and reverse strands, leaving an overhang, to be
-   considered. Boolean value Yes/No Yes
-   -[no]ambiguity This allows those enzymes which have one or more 'N'
-   ambiguity codes in their pattern to be considered Boolean value Yes/No
-   Yes
-   -plasmid If this is set then this allows searches for restriction
-   enzyme recognition site and cut postions that span the end of the
-   sequence to be considered. Boolean value Yes/No No
-   -[no]commercial If this is set, then only those enzymes with a
-   commercial supplier will be searched for. This qualifier is ignored if
-   you have specified an explicit list of enzymes to search for, rather
-   than searching through 'all' the enzymes in the REBASE database. It is
-   assumed that, if you are asking for an explicit enzyme, then you
-   probably know where to get it from and so all enzymes names that you
-   have asked to be searched for, and which cut, will be reported whether
-   or not they have a commercial supplier. Boolean value Yes/No Yes
-   -[no]limit This limits the reporting of enzymes to just one enzyme
-   from each group of isoschizomers. The enzyme chosen to represent an
-   isoschizomer group is the prototype indicated in the data file
-   'embossre.equ', which is created by the program 'rebaseextract'. If
-   you prefer different prototypes to be used, make a copy of
-   embossre.equ in your home directory and edit it. If this value is set
-   to be false then all of the input enzymes will be reported. You might
-   like to set this to false if you are supplying an explicit set of
-   enzymes rather than searching 'all' of them. Boolean value Yes/No Yes
-   -orfminsize This sets the minimum size of Open Reading Frames (ORFs)
-   to display in the translations. All other translation regions are
-   masked by changing the amino acids to '-' characters. Integer 0 or
-   more 0
-   -threeletter Display protein sequences in three-letter code Boolean
-   value Yes/No No
-   -number Number the sequences Boolean value Yes/No No
-   -width Width of sequence to display Integer 1 or more 60
-   -length Line length of page (0 for indefinite) Integer 0 or more 0
-   -margin Margin around sequence for numbering Integer 0 or more 10
-   -[no]name Set this to be false if you do not wish to display the ID
-   name of the sequence Boolean value Yes/No Yes
-   -[no]description Set this to be false if you do not wish to display
-   the description of the sequence Boolean value Yes/No Yes
-   -offset Offset to start numbering the sequence from Any integer value
-   1
-   -html Use HTML formatting Boolean value Yes/No No
+   -warning            boolean    Report warnings
+   -error              boolean    Report errors
+   -fatal              boolean    Report fatal errors
+   -die                boolean    Report dying program messages
 
 Input file format
 
@@ -1433,31 +1264,32 @@ Known bugs
 
 See also
 
-   Program name                        Description
-   abiview      Reads ABI file and display the trace
-   backtranseq  Back translate a protein sequence
-   cirdna       Draws circular maps of DNA constructs
-   coderet      Extract CDS, mRNA and translations from feature tables
-   lindna       Draws linear maps of DNA constructs
-   pepnet       Displays proteins as a helical net
-   pepwheel     Shows protein sequences as helices
-   plotorf      Plot potential open reading frames
-   prettyplot   Displays aligned sequences, with colouring and boxing
-   prettyseq    Output sequence with translated ranges
-   recoder      Remove restriction sites but maintain same translation
-   redata       Search REBASE for enzyme name, references, suppliers etc
-   remap        Display sequence with restriction sites, translation etc
-   restover     Find restriction enzymes producing specific overhang
-   restrict     Finds restriction enzyme cleavage sites
-   seealso      Finds programs sharing group names
-   showalign    Displays a multiple sequence alignment
-   showdb       Displays information on the currently available databases
-   showfeat     Show features of a sequence
-   showorf      Pretty output of DNA translations
-   silent       Silent mutation restriction enzyme scan
-   sixpack      Display a DNA sequence with 6-frame translation and ORFs
-   textsearch   Search sequence documentation. Slow, use SRS and Entrez!
-   transeq      Translate nucleic acid sequences
+   Program name                         Description
+   abiview       Reads ABI file and display the trace
+   backtranambig Back translate a protein sequence to ambiguous codons
+   backtranseq   Back translate a protein sequence
+   cirdna        Draws circular maps of DNA constructs
+   coderet       Extract CDS, mRNA and translations from feature tables
+   lindna        Draws linear maps of DNA constructs
+   pepnet        Displays proteins as a helical net
+   pepwheel      Shows protein sequences as helices
+   plotorf       Plot potential open reading frames
+   prettyplot    Displays aligned sequences, with colouring and boxing
+   prettyseq     Output sequence with translated ranges
+   recoder       Remove restriction sites but maintain same translation
+   redata        Search REBASE for enzyme name, references, suppliers etc
+   remap         Display sequence with restriction sites, translation etc
+   restover      Find restriction enzymes producing specific overhang
+   restrict      Finds restriction enzyme cleavage sites
+   seealso       Finds programs sharing group names
+   showalign     Displays a multiple sequence alignment
+   showdb        Displays information on the currently available databases
+   showfeat      Show features of a sequence
+   showorf       Pretty output of DNA translations
+   silent        Silent mutation restriction enzyme scan
+   sixpack       Display a DNA sequence with 6-frame translation and ORFs
+   textsearch    Search sequence documentation. Slow, use SRS and Entrez!
+   transeq       Translate nucleic acid sequences
 
 Author(s)
 

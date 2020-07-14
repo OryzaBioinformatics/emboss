@@ -5,7 +5,7 @@
 
 Function
 
-   Merge two overlapping nucleic acid sequences
+   Merge two overlapping sequences
 
 Description
 
@@ -64,11 +64,11 @@ Usage
 
 
 % merger 
-Merge two overlapping nucleic acid sequences
+Merge two overlapping sequences
 Input sequence: tembl:eclacy
 Second sequence: tembl:eclaca
 Output alignment [eclacy.merger]: 
-Output sequence [eclacy.fasta]: 
+output sequence [eclacy.fasta]: 
 
    Go to the input files for this example
    Go to the output files for this example
@@ -81,20 +81,26 @@ Output sequence [eclacy.fasta]:
 Command line arguments
 
    Standard (Mandatory) qualifiers:
-  [-asequence]         sequence   Sequence USA
-  [-bsequence]         sequence   Sequence USA
+  [-asequence]         sequence   Sequence filename and optional format, or
+                                  reference (input USA)
+  [-bsequence]         sequence   Sequence filename and optional format, or
+                                  reference (input USA)
   [-outfile]           align      Output alignment file name
-  [-outseq]            seqout     Output sequence USA
+  [-outseq]            seqout     [.] Sequence filename and
+                                  optional format (output USA)
 
    Additional (Optional) qualifiers:
-   -datafile           matrixf    This is the scoring matrix file used when
+   -datafile           matrixf    [EBLOSUM62 for protein, EDNAFULL for DNA]
+                                  This is the scoring matrix file used when
                                   comparing sequences. By default it is the
                                   file 'EBLOSUM62' (for proteins) or the file
                                   'EDNAFULL' (for nucleic sequences). These
                                   files are found in the 'data' directory of
                                   the EMBOSS installation.
-   -gapopen            float      Gap opening penalty
-   -gapextend          float      Gap extension penalty
+   -gapopen            float      [@($(acdprotein)? 50.0 : 50.0 )] Gap opening
+                                  penalty (Number from 0.000 to 100.000)
+   -gapextend          float      [@($(acdprotein)? 5.0 : 5.0)] Gap extension
+                                  penalty (Number from 0.000 to 10.000)
 
    Advanced (Unprompted) qualifiers: (none)
    Associated qualifiers:
@@ -167,29 +173,7 @@ Command line arguments
    -warning            boolean    Report warnings
    -error              boolean    Report errors
    -fatal              boolean    Report fatal errors
-   -die                boolean    Report deaths
-
-
-   Standard (Mandatory) qualifiers Allowed values Default
-   [-asequence]
-   (Parameter 1) Sequence USA Readable sequence Required
-   [-bsequence]
-   (Parameter 2) Sequence USA Readable sequence Required
-   [-outfile]
-   (Parameter 3) Output alignment file name Alignment output file
-   [-outseq]
-   (Parameter 4) Output sequence USA Writeable sequence <sequence>.format
-   Additional (Optional) qualifiers Allowed values Default
-   -datafile This is the scoring matrix file used when comparing
-   sequences. By default it is the file 'EBLOSUM62' (for proteins) or the
-   file 'EDNAFULL' (for nucleic sequences). These files are found in the
-   'data' directory of the EMBOSS installation. Comparison matrix file in
-   EMBOSS data path EBLOSUM62 for protein
-   EDNAFULL for DNA
-   -gapopen Gap opening penalty Number from 0.000 to 100.000 50.0
-   -gapextend Gap extension penalty Number from 0.000 to 10.000 5.0
-   Advanced (Unprompted) qualifiers Allowed values Default
-   (none)
+   -die                boolean    Report dying program messages
 
 Input file format
 
@@ -482,7 +466,10 @@ Output file format
 
 ########################################
 # Program: merger
-# Rundate: Fri Jul 15 2005 12:00:00
+# Rundate: Sat Jul 15 2006 12:00:00
+# Commandline: merger
+#    -asequence tembl:eclacy
+#    -bsequence tembl:eclaca
 # Align_format: simple
 # Report_file: eclacy.merger
 ########################################
@@ -527,9 +514,6 @@ ECLACA             1 --------------------------------------------------      0
 
 ECLACY           251 ttgccgctatttctctgttctcgctattattccaaccgctgtttggtctg    300
 
-ECLACA             1 --------------------------------------------------      0
-
-ECLACY           301 ctttctgacaaactcgggctgcgcaaatacctgctgtggattattaccgg    350
 
 
   [Part of this file has been deleted for brevity]
