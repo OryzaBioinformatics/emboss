@@ -18,7 +18,7 @@ extern "C"
 #include <sys/stat.h>
 
 
-AjBool ajSysArglist (AjPStr cmdline, char** pgm, char*** arglist);
+AjBool ajSysArglist (const AjPStr cmdline, char** pgm, char*** arglist);
 void ajSysArgListFree (char*** arglist);
 void ajSysBasename(AjPStr *filename);
 char ajSysItoC(ajint v);
