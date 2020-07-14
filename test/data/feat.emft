@@ -3,7 +3,7 @@ FH
 FT   source          1..32987
 FT                   /db_xref="taxon:77818"
 FT                   /focus
-FT                   /sequenced_mol="DNA"
+FT                   /mol_type="genomic DNA"
 FT                   /organism="Wolbachia sp. wKue"
 FT   CDS             <1..2169
 FT                   /codon_start=1
@@ -536,7 +536,7 @@ FT                   /db_xref="taxon:562"
 FT                   /note="Nucleotide position 2327544-2345628 from the
 FT                   initiation site of ThrA (0 min.)."
 FT                   /note="This clone is from Kohara lambda miniset library"
-FT                   /sequenced_mol="DNA"
+FT                   /mol_type="genomic DNA"
 FT                   /organism="Escherichia coli"
 FT                   /clone="Kohara clone #376"
 FT                   /clone_lib="Kohara lambda miniset library"

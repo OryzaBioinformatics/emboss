@@ -2,7 +2,7 @@ FEATURES             Location/Qualifiers
      source          1..32987
                      /db_xref="taxon:77818"
                      /focus
-                     /sequenced_mol="DNA"
+                     /mol_type="genomic DNA"
                      /organism="Wolbachia sp. wKue"
      CDS             <1..2169
                      /codon_start=1
@@ -535,7 +535,7 @@ FEATURES             Location/Qualifiers
                      /note="Nucleotide position 2327544-2345628 from the
                      initiation site of ThrA (0 min.)."
                      /note="This clone is from Kohara lambda miniset library"
-                     /sequenced_mol="DNA"
+                     /mol_type="genomic DNA"
                      /organism="Escherichia coli"
                      /clone="Kohara clone #376"
                      /clone_lib="Kohara lambda miniset library"
