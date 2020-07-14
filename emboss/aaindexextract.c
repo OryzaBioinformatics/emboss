@@ -55,7 +55,7 @@ int main(int argc, char **argv)
 
     embInit("aaindexextract",argc,argv);
 
-    inf = ajAcdGetInfile("inf");
+    inf = ajAcdGetInfile("infile");
 
 
     line = ajStrNew();

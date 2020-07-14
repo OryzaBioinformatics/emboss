@@ -172,7 +172,10 @@ static void diffseq_WordMatchListConvDiffToFeat(AjPList list,
     ajint misstart2 = -1;		/* start of mismatch region in seq2 */
     ajint misend1;
     ajint misend2;			/* end of mismatch region */
-    AjPStr notestr=NULL, replacestr=NULL;
+    AjPStr notestr=NULL;
+    AjPStr replacestr=NULL;
+    AjPStr sourcestr=NULL;
+    AjPStr conflictstr=NULL;
     float score = 0.0;
 
     if(!*tab1)
@@ -231,7 +234,21 @@ static void diffseq_WordMatchListConvDiffToFeat(AjPList list,
 		else
 		    ajStrAssC(&replacestr, "");
 
-		ajFeatTagSet(feature, replace, replacestr);
+		if (ajFeattableIsProt(*tab1))
+		{
+		    if (ajStrLen(replacestr))
+		    {
+			ajStrAssSub(&sourcestr, ajSeqStr(seq1), misstart1,
+				    misend1);
+			ajFmtPrintS(&conflictstr, "%S -> %S",
+				    sourcestr, replacestr);
+		    }
+		    else
+			ajFmtPrintS(&conflictstr, "MISSING");
+		    ajFeatTagSet(feature, note, conflictstr);
+		}
+		else
+		    ajFeatTagSet(feature, replace, replacestr);
 	    }
 
 	    if (misstart2 <= misend2)
@@ -262,7 +279,22 @@ static void diffseq_WordMatchListConvDiffToFeat(AjPList list,
 		else
 		    ajStrAssC(&replacestr, "");
 
-		ajFeatTagSet(feature, replace, replacestr);
+		if (ajFeattableIsProt(*tab2))
+		{
+		    if (ajStrLen(replacestr))
+		    {
+			ajStrAssSub(&sourcestr, ajSeqStr(seq2), misstart2,
+				    misend2);
+			ajFmtPrintS(&conflictstr, "%S -> %S",
+				    sourcestr, replacestr);
+		    }
+		    else
+			ajFmtPrintS(&conflictstr, "MISSING");
+			
+		    ajFeatTagSet(feature, note, conflictstr);
+		}
+		else
+		    ajFeatTagSet(feature, replace, replacestr);
 	    }
 
 	}
@@ -279,6 +311,8 @@ static void diffseq_WordMatchListConvDiffToFeat(AjPList list,
     ajStrDel(&note);
     ajStrDel(&replace);
     ajStrDel(&replacestr);
+    ajStrDel(&sourcestr);
+    ajStrDel(&conflictstr);
     ajStrDel(&notestr);
 
     return;

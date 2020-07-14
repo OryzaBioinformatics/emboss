@@ -56,7 +56,7 @@ int main(int argc, char **argv)
 
   seq1 = ajAcdGetSeqset ("firstset");
   seq2 = ajAcdGetSeqset ("secondset");
-  list = ajAcdGetOutfile ("outlist");
+  list = ajAcdGetOutfile ("outfile");
   operator = ajAcdGetList ("operator");
 
 /* get the operator value */

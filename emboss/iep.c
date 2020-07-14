@@ -75,7 +75,7 @@ int main(int argc, char **argv)
 
     (void) ajGraphInit("iep", argc, argv);
 
-    all       = ajAcdGetSeqall("sequencea");
+    all       = ajAcdGetSeqall("sequence");
     doplot    = ajAcdGetBool("plot");
     dofile    = ajAcdGetBool("report");
     step      = ajAcdGetFloat("step");

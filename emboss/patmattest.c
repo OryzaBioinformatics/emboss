@@ -50,7 +50,7 @@ int main(int argc, char **argv)
     {
 	ajStrAssC (&cut,testset[i]);
 
-	/* Create the regular expression form the plain text */
+	/* Create the regular expression from the plain text */
 	regexp = embPatSeqCreateRegExp(cut,0);
 
 	/* find the matches */
@@ -81,7 +81,7 @@ int main(int argc, char **argv)
     {
 	ajUser("start = %d len = %d",embPatMatchGetStart(results,j),
 	       embPatMatchGetLen(results,j));
-	/*get a copy off the string */
+	/* get a copy of the string */
 	new = ajStrNewL(results->len[j]);
 	ajStrAssSub(&new,ajSeqStr(seq),embPatMatchGetStart(results,j),
 		    embPatMatchGetEnd(results,j));

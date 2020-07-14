@@ -77,7 +77,7 @@ int main(int argc, char **argv)
 
     embInit("pepstats", argc, argv);
 
-    a         = ajAcdGetSeq("sequencea");
+    a         = ajAcdGetSeq("sequence");
     termini   = ajAcdGetBool("termini");
     outf      = ajAcdGetOutfile("outfile");
     datafn    = ajAcdGetString("aadata");

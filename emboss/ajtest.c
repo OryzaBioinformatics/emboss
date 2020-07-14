@@ -17,7 +17,7 @@ int main(int argc, char **argv)
     embInit ("ajtest", argc, argv);
 
     seqall = ajAcdGetSeqall ("sequence");
-    seqset = ajAcdGetSeqset ("seqset");
+    seqset = ajAcdGetSeqset ("bsequence");
 
     ajUser ("Set of %d", ajSeqsetSize(seqset));
     while (ajSeqallNext (seqall, &seq))

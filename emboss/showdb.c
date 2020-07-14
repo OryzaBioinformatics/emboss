@@ -26,8 +26,9 @@ static void showdb_DBOut(AjPFile outfile, AjPStr dbname, AjPStr type,
 			 AjBool id, AjBool qry, AjBool all, AjPStr comment,
 			 AjPStr release, AjBool html, AjBool dotype,
 			 AjBool doid, AjBool doqry, AjBool doall,
-			 AjBool docomment, AjBool dorelease);
+			 AjBool dofields, AjBool docomment, AjBool dorelease);
 
+static AjPStr showdb_GetFields(AjPStr dbname);
 
 /* @prog showdb ***************************************************************
 **
@@ -45,6 +46,7 @@ int main(int argc, char **argv)
     AjBool doid;
     AjBool doqry;
     AjBool doall;
+    AjBool dofields;
     AjBool docomment;
     AjBool dorelease;
     AjBool only;
@@ -61,6 +63,8 @@ int main(int argc, char **argv)
     AjPList dbnames = ajListstrNew();
     AjIList iter = NULL;
 
+    (void) ajNamSetControl("namvalid");	/* validate database/resource defs */
+
     (void) embInit ("showdb", argc, argv);
 
     dbname  = ajAcdGetString("database");
@@ -75,6 +79,7 @@ int main(int argc, char **argv)
     doid = ajAcdGetBool("id");
     doqry = ajAcdGetBool("query");
     doall = ajAcdGetBool("all");
+    dofields = ajAcdGetBool("fields");
     docomment = ajAcdGetBool("comment");
     dorelease = ajAcdGetBool("release");
     only = ajAcdGetBool("only"); /* not needed, but users can set all */
@@ -128,6 +133,14 @@ int main(int argc, char **argv)
 		(void) ajFmtPrintF(outfile, "All ");
 	}
 
+	if (dofields)
+	{
+	    if (html)
+		(void) ajFmtPrintF(outfile, "<th>Fields</th>");
+	    else
+		(void) ajFmtPrintF(outfile, "Fields ");
+	}
+
 	if (dorelease)
 	{
 	    if (html)
@@ -164,6 +177,9 @@ int main(int argc, char **argv)
 	    if (doall)
 		(void) ajFmtPrintF(outfile, "=== ");
 
+	    if (dofields)
+		(void) ajFmtPrintF(outfile, "====== ");
+
 	    if (dorelease)
 		(void) ajFmtPrintF(outfile, "=======\t");
 
@@ -181,8 +197,8 @@ int main(int argc, char **argv)
 	if (ajNamDbDetails (dbname, &type, &id, &qry, &all, &comment,
 			    &release))
 	    (void) showdb_DBOut(outfile, dbname, type, id, qry, all, comment,
-				release, html, dotype, doid, doqry, doall,
-				docomment, dorelease);
+				release, html, dotype, doid, doqry, doall, 
+				dofields, docomment, dorelease);
 	else
 	    (void) ajFatal ("The database '%S' does not exist", dbname);
     }
@@ -205,7 +221,8 @@ int main(int argc, char **argv)
 		if (!ajStrCmpC(type, "P") && protein)
 		    (void) showdb_DBOut(outfile, dbname, type, id, qry, all,
 					comment, release, html, dotype, doid,
-					doqry, doall, docomment, dorelease);
+					doqry, doall, dofields, docomment, 
+					dorelease);
 	    }
 	    else
 		(void) ajFatal ("The database '%S' does not exist", dbname);
@@ -224,7 +241,8 @@ int main(int argc, char **argv)
 		if (!ajStrCmpC(type, "N") && nucleic)
 		    (void) showdb_DBOut(outfile, dbname, type, id, qry, all,
 					comment, release, html, dotype, doid,
-					doqry, doall, docomment, dorelease);
+					doqry, doall, dofields, docomment, 
+					dorelease);
 	    }
 	    else
 		(void) ajFatal ("The database '%S' does not exist", dbname);
@@ -261,6 +279,7 @@ int main(int argc, char **argv)
 ** @param [r] doid [AjBool] show id
 ** @param [r] doqry [AjBool] show query status
 ** @param [r] doall [AjBool] show everything
+** @param [r] dofields [AjBool] show query fields
 ** @param [r] docomment [AjBool] show comment
 ** @param [r] dorelease [AjBool] show release
 ** @@
@@ -270,7 +289,7 @@ static void showdb_DBOut(AjPFile outfile, AjPStr dbname, AjPStr type,
 			 AjBool id, AjBool qry, AjBool all, AjPStr comment,
 			 AjPStr release, AjBool html, AjBool dotype,
 			 AjBool doid, AjBool doqry, AjBool doall,
-			 AjBool docomment, AjBool dorelease)
+			 AjBool dofields, AjBool docomment, AjBool dorelease)
 {
 
     if (html)
@@ -336,6 +355,17 @@ static void showdb_DBOut(AjPFile outfile, AjPStr dbname, AjPStr type,
 	    (void) ajFmtPrintF(outfile, "</td>");
     }
 
+    if (dofields)
+    {
+	if (html)
+	    (void) ajFmtPrintF(outfile, "<td>");
+
+        (void) ajFmtPrintF(outfile, "%S ", showdb_GetFields(dbname));
+
+	if (html)
+	    (void) ajFmtPrintF(outfile, "</td>");
+    }
+
     if (dorelease)
     {
 	if (html)
@@ -371,4 +401,34 @@ static void showdb_DBOut(AjPFile outfile, AjPStr dbname, AjPStr type,
 	(void) ajFmtPrintF(outfile, "\n");
 
     return;
+}
+
+/* @funcstatic showdb_GetFields ***************************************************
+**
+** Get a database's valid query fields (apart from the default 'id' and 'acc')
+**
+** @param [r] dbname [AjPStr] database name
+** @return [AjPStr] the available search fields
+** @@
+******************************************************************************/
+
+static AjPStr showdb_GetFields(AjPStr dbname)
+{
+
+  static AjPStr str = NULL;
+  AjPSeqQuery query = ajSeqQueryNew();
+
+  ajStrAss(&query->DbName, dbname);
+  ajNamDbData(query);
+  ajStrAssS(&str, query->DbFields);
+
+  /* if there are no query fields, then change to a '_' */
+  if (str == NULL || ajStrMatchC(str, "")) {
+  	ajStrAssC(&str, "-     ");
+  } else {
+  /* change spaces to commas to make the result one word */
+	ajStrConvertCC(&str, " ", ",");
+  }
+
+  return str;
 }

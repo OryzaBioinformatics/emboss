@@ -290,7 +290,7 @@ int main(int argc, char **argv)
 	    if ( search_mode != FORWARD_ONLY ) /* reverse strand */
 	    {
 		reversed_est = ajSeqNewS(est);
-		ajSeqReverse(reversed_est);
+		ajSeqReverseForce(reversed_est);
 
 		rge = embEstAlignLinearSpace ( reversed_est, genome,
 					      match, mismatch, gap_penalty,

@@ -68,7 +68,7 @@ int main(int argc, char **argv)
     EmbOPatBYPNode off16[AJALPHA];
 
     ajuint *sotable16=NULL;
-    ajuint solimit16=0;
+    ajint  solimit16=0;
     AjPStr regexp16=NULL;
     ajint  **skipm16=NULL;
     ajint  mismatch16=1;		/* allow a single mismatch */
@@ -88,7 +88,7 @@ int main(int argc, char **argv)
     EmbOPatBYPNode off16rev[AJALPHA];
 
     ajuint   *sotable16rev=NULL;
-    ajuint   solimit16rev=0;
+    ajint    solimit16rev=0;
     AjPStr   regexp16rev=NULL;
     ajint    **skipm16rev=NULL;
     ajint    mismatch16rev=1;		/* allow a single mismatch */
@@ -108,7 +108,7 @@ int main(int argc, char **argv)
     EmbOPatBYPNode off8[AJALPHA];
 
     ajuint   *sotable8=NULL;
-    ajuint   solimit8=0;
+    ajint    solimit8=0;
     AjPStr   regexp8=NULL;
     ajint    **skipm8=NULL;
     ajint    mismatch8=0;
@@ -128,7 +128,7 @@ int main(int argc, char **argv)
     EmbOPatBYPNode off8rev[AJALPHA];
 
     ajuint   *sotable8rev=NULL;
-    ajuint   solimit8rev=0;
+    ajint    solimit8rev=0;
     AjPStr   regexp8rev=NULL;
     ajint    **skipm8rev=NULL;
     ajint    mismatch8rev=0;
@@ -171,32 +171,33 @@ int main(int argc, char **argv)
 			      &carboxyl16)))
 	ajFatal("Illegal pattern");
 
-    embPatCompile(type16, pattern16, opattern16, &plen16, &buf16, off16,
-		  &sotable16, &solimit16, &m16, &regexp16, &skipm16,
-		  mismatch16);
+    embPatCompile(type16, pattern16, opattern16, &plen16,
+		  &buf16, off16, &sotable16, &solimit16,
+		  &m16, &regexp16, &skipm16, mismatch16);
 
     if(!(type16rev=embPatGetType(&pattern16rev, mismatch16rev, 0, &m16rev,
 				 &amino16rev, &carboxyl16rev)))
 	ajFatal("Illegal pattern");
 
     embPatCompile(type16rev, pattern16rev, opattern16rev, &plen16rev,
-		  &buf16rev, off16rev, &sotable16rev, &solimit16rev, &m16rev,
-		  &regexp16rev, &skipm16rev, mismatch16rev);
+		  &buf16rev, off16rev, &sotable16rev, &solimit16rev,
+		  &m16rev, &regexp16rev, &skipm16rev, mismatch16rev);
 
     if(!(type8=embPatGetType(&pattern8, mismatch8, 0, &m8, &amino8,
 			     &carboxyl8)))
 	ajFatal("Illegal pattern");
 
-    embPatCompile(type8, pattern8, opattern8, &plen8, &buf8, off8,
-		  &sotable8, &solimit8, &m8, &regexp8, &skipm8, mismatch8);
+    embPatCompile(type8, pattern8, opattern8, &plen8,
+		  &buf8, off8, &sotable8, &solimit8,
+		  &m8, &regexp8, &skipm8, mismatch8);
 
     if(!(type8rev=embPatGetType(&pattern8rev, mismatch8rev, 0, &m8rev,
 				&amino8rev, &carboxyl8rev)))
 	ajFatal("Illegal pattern");
 
     embPatCompile(type8rev, pattern8rev, opattern8rev, &plen8rev,
-		  &buf8rev, off8rev, &sotable8rev, &solimit8rev, &m8rev,
-		  &regexp8rev, &skipm8rev, mismatch8rev);
+		  &buf8rev, off8rev, &sotable8rev, &solimit8rev,
+		  &m8rev, &regexp8rev, &skipm8rev, mismatch8rev);
 
 
     text = ajStrNew();

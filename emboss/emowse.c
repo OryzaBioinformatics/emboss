@@ -114,7 +114,7 @@ int main(int argc, char **argv)
 
     (void) embInit("emowse", argc, argv);
 
-    seqall   = ajAcdGetSeqall("sequences");
+    seqall   = ajAcdGetSeqall("sequence");
     mwinf    = ajAcdGetInfile("infile");
     enzyme   = ajAcdGetList("enzyme");
     smolwt   = ajAcdGetInt("weight");

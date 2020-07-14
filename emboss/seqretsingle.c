@@ -15,7 +15,7 @@ int main(int argc, char **argv)
 
     embInit ("seqretsingle", argc, argv);
 
-    seqout = ajAcdGetSeqoutall ("outseq");
+    seqout = ajAcdGetSeqout ("outseq");
     seq = ajAcdGetSeq ("sequence");
 
     ajSeqWrite (seqout, seq);

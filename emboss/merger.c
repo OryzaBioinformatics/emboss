@@ -82,8 +82,8 @@ int main(int argc, char **argv)
 
     (void) embInit("merger", argc, argv);
 
-    a      = ajAcdGetSeq("seqa");
-    b      = ajAcdGetSeq("seqb");
+    a      = ajAcdGetSeq("asequence");
+    b      = ajAcdGetSeq("bsequence");
     seqout = ajAcdGetSeqout ("outseq");
     matrix    = ajAcdGetMatrixf("datafile");
     gapopen   = ajAcdGetFloat("gapopen");

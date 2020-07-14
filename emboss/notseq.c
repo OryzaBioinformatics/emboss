@@ -44,7 +44,7 @@ int main(int argc, char **argv)
     embInit ("notseq", argc, argv);
 
     seqout = ajAcdGetSeqoutall ("outseq");
-    junkout = ajAcdGetSeqoutall ("junkout");
+    junkout = ajAcdGetSeqoutall ("junkoutseq");
     seqall = ajAcdGetSeqall ("sequence");
     pattern = ajAcdGetString ("exclude");
 

@@ -490,7 +490,7 @@ int main(int argc, char **argv)
     count = 0;
 
 
-    if(boxcol)
+    if(boxit && boxcol)
     {
 	if(!data)
 	    old = ajGraphSetFore(iboxcolval);
@@ -903,7 +903,7 @@ int main(int argc, char **argv)
 		}
 
 	    } /* end box */
-	    if(boxcol)
+	    if(boxit && boxcol)
 		if(boxindex != -1)
 		{
 		    index = boxindex;
@@ -1007,7 +1007,7 @@ int main(int argc, char **argv)
     if(!data)
 	ajGraphGetCharSize(&defheight,&currentheight);
 
-    if(boxcol)
+    if(boxit && boxcol)
 	if(!data)
 	    old = ajGraphSetFore(old);
 
@@ -1137,7 +1137,7 @@ static ajint prettyplot_fillinboxes(float ystart, ajint length, ajint numseq,
     ajStrAppC(&strcon,"Consensus");
     ajStrTruncate(&strcon,charlen);
 
-    if(boxcol)
+    if(boxit && boxcol)
     {
 	if(!title)
 	    y=ystart;

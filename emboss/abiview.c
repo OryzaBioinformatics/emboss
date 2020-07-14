@@ -111,7 +111,7 @@ int main(int argc, char **argv)
 
     (void) ajGraphInit ("abiview", argc, argv);
 
-    fp         = ajAcdGetInfile("fname");
+    fp         = ajAcdGetInfile("infile");
     graphs     = ajAcdGetGraphxy("graph");
     base_start = ajAcdGetInt("startbase");
     base_end   = ajAcdGetInt("endbase");

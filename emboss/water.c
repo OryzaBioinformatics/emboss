@@ -82,7 +82,7 @@ int main(int argc, char **argv)
     embInit("water", argc, argv);
 
     matrix    = ajAcdGetMatrixf("datafile");
-    a         = ajAcdGetSeq("sequencea");
+    a         = ajAcdGetSeq("asequence");
     ajSeqTrim(a);
     seqall    = ajAcdGetSeqall("seqall");
     gapopen   = ajAcdGetFloat("gapopen");

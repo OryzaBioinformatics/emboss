@@ -143,8 +143,8 @@ int main(int argc, char **argv)
 
     embInit("stretcher", argc, argv);
 
-    seq = ajAcdGetSeq ("sequencea");
-    seq2 = ajAcdGetSeq ("sequenceb");
+    seq = ajAcdGetSeq ("asequence");
+    seq2 = ajAcdGetSeq ("bsequence");
     matrix  = ajAcdGetMatrix("datafile");
     gdelval = ajAcdGetInt("gappenalty");
     ggapval = ajAcdGetInt("gaplength");

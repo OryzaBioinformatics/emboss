@@ -61,7 +61,7 @@ int main(int argc, char **argv)
     embInit ("demolist", argc, argv);
 
     /*open file */
-    gfffile = ajAcdGetInfile("gff");
+    gfffile = ajAcdGetInfile("infile");
 
     /* create a new list */
     list = ajListNew();

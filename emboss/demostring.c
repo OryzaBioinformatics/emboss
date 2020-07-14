@@ -33,6 +33,10 @@ int main(int argc, char **argv)
     AjPStr nustr;
     AjPStrTok handle = NULL;
     AjPStr token = NULL;
+    AjPStr maskstr = NULL;
+    AjPStr masktest = NULL;
+    ajint maskbegin = 0;
+    ajint maskend = 0;
 
     AjPTime today;
 
@@ -56,9 +60,17 @@ int main(int argc, char **argv)
     ajDebug ("\nTrace of instr:\n");
     ajStrTrace(instr);
 
+    ajUser ("Processing '%S'", instr);
+    handle = ajStrTokenInit (instr, " ");
+    ajStrToken (&token, &handle, " ");
+    ajUser ("first token '%S'", token);
+    ajStrTokenRest (&token, &handle);
+    ajUser ("second token '%S'", token);
+    ajStrTokenClear (&handle);
+
     /*
      *  nustr will be created using the string constructor functions.  We
-     *  can create is using ajStrNew() but this just makes a clone of a null
+     *  can create it using ajStrNew() but this just makes a clone of a null
      *  string and is pointless if we want to put anything in the string.
      *  More useful is to make a string of the right size, for example 32
      *  bytes
@@ -74,11 +86,12 @@ int main(int argc, char **argv)
     ajDebug ("\nAssigned nustr:\n");
     ajStrTrace(nustr);
 
+    ajUser ("Processing '%S'", nustr);
     handle = ajStrTokenInit (nustr, " ");
     ajStrToken (&token, &handle, " ");
-    ajUser ("first token '%S'\n", token);
+    ajUser ("first token '%S'", token);
     ajStrTokenRest (&token, &handle);
-    ajUser ("second token '%S'\n", token);
+    ajUser ("second token '%S'", token);
     ajStrTokenClear (&handle);
 
     today = ajTimeTodayF("yyyy-mm-dd");
@@ -93,6 +106,80 @@ int main(int argc, char **argv)
     today = ajTimeTodayF("gff");
     ajTimeTrace (today);
     ajUser("gff Today is '%D'", today);
+
+    ajStrAssC(&maskstr, "abcdefghijklmnopqrstuvwxyz");
+    ajStrAssS(&masktest, maskstr);
+    maskbegin=0;
+    maskend=0;
+    ajStrMask(&masktest, maskbegin, maskend, '.');
+    ajUser("Mask %d..%d '%S'", maskbegin, maskend, masktest);
+
+    ajStrAssC(&maskstr, "abcdefghijklmnopqrstuvwxyz");
+    ajStrAssS(&masktest, maskstr);
+    maskbegin=1;
+    maskend=1;
+    ajStrMask(&masktest, maskbegin, maskend, '.');
+    ajUser("Mask %d..%d '%S'", maskbegin, maskend, masktest);
+
+    ajStrAssS(&masktest, maskstr);
+    maskbegin=25;
+    maskend=25;
+    ajStrMask(&masktest, maskbegin, maskend, '.');
+    ajUser("Mask %d..%d '%S'", maskbegin, maskend, masktest);
+
+    ajStrAssS(&masktest, maskstr);
+    maskbegin=24;
+    maskend=24;
+    ajStrMask(&masktest, maskbegin, maskend, '.');
+    ajUser("Mask %d..%d '%S'", maskbegin, maskend, masktest);
+
+    ajStrAssS(&masktest, maskstr);
+    maskbegin=0;
+    maskend=25;
+    ajStrMask(&masktest, maskbegin, maskend, '.');
+    ajUser("Mask %d..%d '%S'", maskbegin, maskend, masktest);
+
+    ajStrAssS(&masktest, maskstr);
+    maskbegin=-1;
+    maskend=-1;
+    ajStrMask(&masktest, maskbegin, maskend, '.');
+    ajUser("Mask %d..%d '%S'", maskbegin, maskend, masktest);
+
+    ajStrAssS(&masktest, maskstr);
+    maskbegin=-2;
+    maskend=-2;
+    ajStrMask(&masktest, maskbegin, maskend, '.');
+    ajUser("Mask %d..%d '%S'", maskbegin, maskend, masktest);
+
+    ajStrAssS(&masktest, maskstr);
+    maskbegin=26;
+    maskend=26;
+    ajStrMask(&masktest, maskbegin, maskend, '.');
+    ajUser("Mask %d..%d '%S'", maskbegin, maskend, masktest);
+
+    ajStrAssS(&masktest, maskstr);
+    maskbegin=30;
+    maskend=30;
+    ajStrMask(&masktest, maskbegin, maskend, '.');
+    ajUser("Mask %d..%d '%S'", maskbegin, maskend, masktest);
+
+    ajStrAssS(&masktest, maskstr);
+    maskbegin=-30;
+    maskend=30;
+    ajStrMask(&masktest, maskbegin, maskend, '.');
+    ajUser("Mask %d..%d '%S'", maskbegin, maskend, masktest);
+
+    ajStrAssS(&masktest, maskstr);
+    maskbegin=-30;
+    maskend=-30;
+    ajStrMask(&masktest, maskbegin, maskend, '.');
+    ajUser("Mask %d..%d '%S'", maskbegin, maskend, masktest);
+
+    ajStrAssS(&masktest, maskstr);
+    maskbegin=-25;
+    maskend=-2;
+    ajStrMask(&masktest, maskbegin, maskend, '.');
+    ajUser("Mask %d..%d '%S'", maskbegin, maskend, masktest);
 
     ajExit();
     return 0;

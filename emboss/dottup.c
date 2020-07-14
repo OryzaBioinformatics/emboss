@@ -80,8 +80,8 @@ int main(int argc, char **argv)
     ajGraphInit("dottup", argc, argv);
 
     wordlen = ajAcdGetInt ("wordsize");
-    seq1 = ajAcdGetSeq ("sequencea");
-    seq2 = ajAcdGetSeq ("sequenceb");
+    seq1 = ajAcdGetSeq ("asequence");
+    seq2 = ajAcdGetSeq ("bsequence");
     graph = ajAcdGetGraph ("graph");
     text = ajAcdGetBool("data");
     boxit = ajAcdGetBool("boxit");

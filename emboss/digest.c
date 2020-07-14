@@ -68,7 +68,7 @@ int main(int argc, char **argv)
 
     embInit("digest", argc, argv);
 
-    a           = ajAcdGetSeq("sequencea");
+    a           = ajAcdGetSeq("sequence");
     menu        = ajAcdGetList("menu");
     unfavoured  = ajAcdGetBool("unfavoured");
     overlap     = ajAcdGetBool("overlap");

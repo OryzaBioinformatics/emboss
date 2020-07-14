@@ -106,7 +106,7 @@ int main (int argc, char * argv[])
 
     embInit ("distmat", argc, argv);
 
-    seqset = ajAcdGetSeqset ("msf");
+    seqset = ajAcdGetSeqset ("sequence");
 
     if(ajSeqsetIsNuc(seqset))		/* nucleic acid seq */
 	nuc = ajTrue;
@@ -116,7 +116,7 @@ int main (int argc, char * argv[])
 	ajExit();
 
 
-    outf   = ajAcdGetOutfile("outf");	/* output filename  */
+    outf   = ajAcdGetOutfile("outfile");	/* output filename  */
     ambig  = ajAcdGetBool("ambiguous");
     gapwt  = ajAcdGetFloat("gapweight");
     if(nuc)

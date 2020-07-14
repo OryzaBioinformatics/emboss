@@ -54,7 +54,7 @@ int main(int argc, char **argv)
 
     (void) ajGraphInit("pepwindow", argc, argv);
 
-    seq = ajAcdGetSeq ("sequencea");
+    seq = ajAcdGetSeq ("sequence");
 
     mult = ajAcdGetGraphxy ("graph");
     datafile  = ajAcdGetDatafile("datafile");

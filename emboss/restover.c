@@ -36,7 +36,7 @@ static void restover_printHits(AjPSeq, AjPStr, AjPFile *outf, AjPList *l,
 			       ajint end, AjBool ambiguity, ajint mincut,
 			       ajint maxcut, AjBool plasmid, AjBool blunt,
 			       AjBool sticky, ajint sitelen, AjBool limit,
-			       AjBool equiv, AjPTable table, AjBool alpha,
+			       AjPTable table, AjBool alpha,
 			       AjBool frags, AjBool nameit, AjBool html);
 static void restover_read_equiv(AjPFile *equfile, AjPTable *table);
 static void restover_read_file_of_enzyme_names(AjPStr *enzymes);
@@ -71,7 +71,6 @@ int main(int argc, char **argv)
     AjBool nameit;
     AjBool html;
     AjBool limit;
-    AjBool equiv;
     AjBool frags;
     AjPStr dfile;
 
@@ -111,7 +110,6 @@ int main(int argc, char **argv)
     plasmid   = ajAcdGetBool("plasmid");
     commercial = ajAcdGetBool("commercial");
     limit      = ajAcdGetBool("limit");
-    equiv      = ajAcdGetBool("preferred");
     frags      = ajAcdGetBool("fragments");
     nameit     = ajAcdGetBool("name");
     dfile      = ajAcdGetString("datafile");
@@ -142,11 +140,11 @@ int main(int argc, char **argv)
 
 
 
-    if(equiv)
+    if(limit)
     {
 	ajFileDataNewC(EQUDATA,&equfile);
 	if(!equfile)
-	    equiv=ajFalse;
+	    limit=ajFalse;
 	else
 	    restover_read_equiv(&equfile,&table);
     }
@@ -168,7 +166,7 @@ int main(int argc, char **argv)
 	    name = ajStrNewC(ajSeqName(seq));
 	    restover_printHits(seq, seqcmp, &outf,&l,&name,hits,begin,end,
 			       ambiguity,min,max,plasmid,blunt,sticky,
-			       sitelen,limit,equiv,table,alpha,frags,nameit,
+			       sitelen,limit,table,alpha,frags,nameit,
 			       html);
 	    ajStrDel(&name);
 	}
@@ -209,7 +207,6 @@ int main(int argc, char **argv)
 ** @param [r] sticky [AjBool] allow sticky cutters
 ** @param [r] sitelen [ajint] length of cut site
 ** @param [r] limit [AjBool] limit count
-** @param [r] equiv [AjBool] show equivalents
 ** @param [r] table [AjPTable] supplier table
 ** @param [r] alpha [AjBool] alphabetic sort
 ** @param [r] frags [AjBool] show fragment lengths
@@ -224,7 +221,7 @@ static void restover_printHits(AjPSeq seq, AjPStr seqcmp, AjPFile *outf,
 			       ajint begin, ajint end, AjBool ambiguity,
 			       ajint mincut, ajint maxcut, AjBool plasmid,
 			       AjBool blunt, AjBool sticky, ajint sitelen,
-			       AjBool limit, AjBool equiv, AjPTable table,
+			       AjBool limit, AjPTable table,
 			       AjBool alpha, AjBool frags,AjBool nameit,
 			       AjBool html)
 {
@@ -311,7 +308,7 @@ static void restover_printHits(AjPSeq seq, AjPStr seqcmp, AjPFile *outf,
 	    continue;
 	}
 
-	if(equiv && limit)
+	if(limit)
 	{
 	    value=ajTableGet(table,m->cod);
 	    if(value)

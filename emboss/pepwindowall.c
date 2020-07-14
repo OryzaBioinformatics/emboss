@@ -70,7 +70,7 @@ int main(int argc, char **argv)
     llen = ajAcdGetInt("length");
 
     if(!pepwindowall_getnakaidata(datafile,&matrix[0]))
-	exit(-1);
+	ajExitBad ();
 
 
     maxlen = ajSeqsetLen(seqset);
@@ -143,6 +143,7 @@ int main(int argc, char **argv)
 	    graphdata->y[a] = graphdata->y[a+beg];
 	}
 	end = graphdata->numofpoints-1;
+
 	while(graphdata->x[end--]<0.00001)
 	    --graphdata->numofpoints;
 

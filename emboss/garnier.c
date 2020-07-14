@@ -318,7 +318,7 @@ int main(int argc, char **argv)
 
     embInit("garnier",argc,argv);
 
-    seqall    = ajAcdGetSeqall("sequencea");
+    seqall    = ajAcdGetSeqall("sequence");
     Idc       = ajAcdGetInt("idc");
     report    = ajAcdGetReport("outfile");
 

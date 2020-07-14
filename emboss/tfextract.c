@@ -97,7 +97,7 @@ int main(int argc, char **argv)
 	    p=strtok(NULL," \t\n");
 	    ajStrAssC(&acc,p);
 	}
-	if(ajStrPrefixC(line,"SQ"))
+	if(ajStrPrefixC(line,"SQ") || ajStrPrefixC(line,"SE"))
 	{
 	    p=strtok(p," .\t\n");
 	    p=strtok(NULL," .\t\n");
@@ -120,6 +120,11 @@ int main(int argc, char **argv)
 	    if(strstr(p,"thallobionta"))
 */
 	    if(strstr(p,"Fungi"))
+	    {
+		done=ajTrue;
+		fp=fout;
+	    }
+	    else if(strstr(p,"saccharomycetaceae"))
 	    {
 		done=ajTrue;
 		fp=fout;

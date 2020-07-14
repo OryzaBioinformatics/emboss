@@ -16,7 +16,7 @@ int main(int argc, char **argv)
 
     embInit ("demoreport", argc, argv);
 
-    report = ajAcdGetReport ("report");
+    report = ajAcdGetReport ("outfile");
     seq = ajAcdGetSeq ("sequence");
 
     ftab = ajSeqGetFeat(seq);

@@ -60,7 +60,7 @@ int main(int argc, char **argv)
 
     embInit ("cons", argc, argv);
 
-    seqset    = ajAcdGetSeqset ("msf");
+    seqset    = ajAcdGetSeqset ("sequence");
     cmpmatrix = ajAcdGetMatrix("datafile");
     fplural   = ajAcdGetFloat("plurality");
     setcase   = ajAcdGetFloat("setcase");

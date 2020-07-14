@@ -66,7 +66,7 @@ int main(int argc, char **argv)
     docds  = ajAcdGetBool("cds");
     dotran = ajAcdGetBool("translation");
 
-    seqout = ajAcdGetSeqout("seqout");
+    seqout = ajAcdGetSeqout("outseq");
 
     cds  = ajStrNew();
     mrna = ajStrNew();

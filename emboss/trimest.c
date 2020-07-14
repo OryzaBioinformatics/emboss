@@ -158,7 +158,7 @@ static ajint trimest_get_tail(AjPSeq seq, ajint direction, ajint minlength,
     length = 0;
     result = 0;
     for (i = start; i != end; i += inc, length++) {
-        c = toupper(s[i]);
+        c = toupper((int)s[i]);
 	ajDebug("end = %d, c=%c\n", direction, c);
         if (c == t) {
             polycount++;

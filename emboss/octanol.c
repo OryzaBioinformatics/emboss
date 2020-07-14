@@ -83,7 +83,7 @@ int main(int argc, char **argv)
 
     ajGraphInit("octanol", argc, argv);
 
-    seq = ajAcdGetSeq ("sequencea");
+    seq = ajAcdGetSeq ("sequence");
 
     mult = ajAcdGetGraphxy ("graph");
     datafile  = ajAcdGetDatafile("datafile");

@@ -101,7 +101,7 @@ int main(int argc, char **argv)
     (void) ajGraphInit ("isochore", argc, argv);
 
     seq = ajAcdGetSeq ("sequence");
-    out = ajAcdGetOutfile ("out");
+    out = ajAcdGetOutfile ("outfile");
     plot = ajAcdGetGraphxy("graph");
 
     ajGraphInitSeq (plot, seq);

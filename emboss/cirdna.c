@@ -233,7 +233,7 @@ int main(int argc, char **argv)
     graph = ajAcdGetGraph("graphout");
 
     /* get the input file */
-    infile = ajAcdGetInfile("inputfile");
+    infile = ajAcdGetInfile("infile");
 
     /* length and height of text */
     /*TextHeight = 10;

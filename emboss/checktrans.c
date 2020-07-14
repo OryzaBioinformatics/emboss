@@ -65,7 +65,7 @@ int main(int argc, char **argv)
 
     embInit("checktrans",argc,argv);
     seqall    = ajAcdGetSeqall("sequence");
-    outf      = ajAcdGetOutfile("report");
+    outf      = ajAcdGetOutfile("outfile");
     orfml     = ajAcdGetInt("orfml");
     outseq    = ajAcdGetSeqoutall("outseq");
     featout   = ajAcdGetFeatout("featout");

@@ -127,8 +127,8 @@ int main(int argc, char **argv)
 
     ajGraphInit("dotmatcher", argc, argv);
 
-    seq = ajAcdGetSeq ("sequencea");
-    seq2 = ajAcdGetSeq ("sequenceb");
+    seq = ajAcdGetSeq ("asequence");
+    seq2 = ajAcdGetSeq ("bsequence");
     stretch = ajAcdGetBool("stretch");
     graph = ajAcdGetGraph ("graph");
     xygraph = ajAcdGetGraphxy("xygraph");

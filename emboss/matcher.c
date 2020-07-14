@@ -227,10 +227,10 @@ int main(int argc, char **argv)
     AjPAlign align = NULL;
 
     embInit("matcher", argc, argv);
-    seq = ajAcdGetSeq ("sequencea");
+    seq = ajAcdGetSeq ("asequence");
     ajSeqTrim(seq);
     beg = ajSeqOffset(seq);
-    seq2 = ajAcdGetSeq ("sequenceb");
+    seq2 = ajAcdGetSeq ("bsequence");
     ajSeqTrim(seq2);
     beg2 = ajSeqOffset(seq2);
     matrix = ajAcdGetMatrix("datafile");
