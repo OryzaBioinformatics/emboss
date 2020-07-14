@@ -1,13 +1,13 @@
-This is TeX, Version 3.14159 (Web2C 7.3.1) (format=latex 2000.3.7)  8 FEB 2001 18:58
-**admin.tex
+This is TeX, Version 3.14159 (Web2C 7.3.1) (format=latex 2000.5.31)  12 MAY 2003 16:27
+**admin
 (admin.tex
-LaTeX2e <1998/12/01> patch level 1
-Babel <v3.6x> and hyphenation patterns for american, french, german, ngerman, i
-talian, nohyphenation, loaded.
-(/usr/share/texmf/tex/latex/base/report.cls
-Document Class: report 1999/01/07 v1.4a Standard LaTeX document class
-(/usr/share/texmf/tex/latex/base/size10.clo
-File: size10.clo 1999/01/07 v1.4a Standard LaTeX file (size option)
+LaTeX2e <1999/12/01> patch level 1
+Babel <v3.6Z> and hyphenation patterns for american, french, german, ngerman, n
+ohyphenation, loaded.
+(/packages/teTeX/share/texmf/tex/latex/base/report.cls
+Document Class: report 1999/09/10 v1.4a Standard LaTeX document class
+(/packages/teTeX/share/texmf/tex/latex/base/size10.clo
+File: size10.clo 1999/09/10 v1.4a Standard LaTeX file (size option)
 )
 \c@part=\count79
 \c@chapter=\count80
@@ -22,14 +22,15 @@ File: size10.clo 1999/01/07 v1.4a Standard LaTeX file (size option)
 \belowcaptionskip=\skip42
 \bibindent=\dimen102
 )
-(/usr/share/texmf/tex/latex/tools/verbatim.sty
-Package: verbatim 1997/04/30 v1.5k LaTeX2e package for verbatim enhancements
+(/packages/teTeX/share/texmf/tex/latex/tools/verbatim.sty
+Package: verbatim 2000/01/07 v1.5m LaTeX2e package for verbatim enhancements
 \every@verbatim=\toks14
 \verbatim@line=\toks15
 \verbatim@in@stream=\read1
 ) (emboss.sty
 Package: emboss 
-) (admin.aux)
+)
+(admin.aux)
 \openout1 = `admin.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 5.
@@ -45,102 +46,117 @@ LaTeX Font Info:    ... okay on input line 5.
 LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 5.
 LaTeX Font Info:    ... okay on input line 5.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <12> on input line 10.
+(Font)              <12> on input line 12.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <8> on input line 10.
+(Font)              <8> on input line 12.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <6> on input line 10.
-
-[1
-
-] (admin.toc
-LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <7> on input line 2.
-LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <5> on input line 2.
+(Font)              <6> on input line 12.
  [1
+
+]
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <7> on input line 18.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <5> on input line 18.
+ [1] (admin.toc [2
 
 ])
 \tf@toc=\write3
 \openout3 = `admin.toc'.
 
- [2]
+ [3]
  1.
-[3
+[4
 
-] [4]
+] [5]
  2.
-[5
+[6
 
 ]
-Underfull \hbox (badness 4479) in paragraph at lines 145--146
-\OT1/cmr/m/n/10 A new di-rec-tory \OT1/cmss/m/sl/10 ftp.uk.embnet.org \OT1/cmr/
-m/n/10 has been cre-ated and EM-BOSS can be found at
- []
-
-[6]
-Overfull \hbox (3.20515pt too wide) in paragraph at lines 206--208
-\OT1/cmr/m/n/10 will in-stall \OT1/cmss/bx/n/10 EM-BOSS \OT1/cmr/m/n/10 un-der 
-\OT1/cmss/m/sl/10 /site/prog/emboss\OT1/cmr/m/n/10 . The bi-na-ries will be in-
-stalled in \OT1/cmss/m/sl/10 /site/prog/emboss/bin
- []
-
-
-Overfull \hbox (5.81628pt too wide) in paragraph at lines 206--208
-\OT1/cmr/m/n/10 spond-ing to the pack-age name.) Doc-u-men-ta-tion is in-stalle
-d in \OT1/cmss/m/sl/10 /site/prog/emboss/share/EMBOSS/doc\OT1/cmr/m/n/10 .
+Underfull \hbox (badness 2197) in paragraph at lines 199--203
+[]\OT1/cmr/m/n/10 A new di-rec-tory \OT1/cmss/m/sl/10 ftp.uk.embnet.org \OT1/cm
+r/m/n/10 has been cre-ated and EM-BOSS can be found at
  []
 
 [7] [8]
-LaTeX Font Info:    Try loading font information for OMS+cmr on input line 303.
+Overfull \hbox (27.64272pt too wide) in paragraph at lines 294--297
+[]\OT1/cmr/m/n/10 GD) http://www.boutell.com/gd/ Z) http://www.mirror.ac.uk/sit
+es/ftp.cdrom.com/pub/infozip/zlib/
+ []
 
- (/usr/share/texmf/tex/latex/base/omscmr.fd
-File: omscmr.fd 1998/03/27 v2.5g Standard LaTeX font definitions
+
+Overfull \hbox (34.42168pt too wide) in paragraph at lines 302--307
+\OT1/cmr/m/n/10 zip.org/pub/infozip/zlib/zlib-1.1.3.tar.gz PNG) ftp://swrinde.n
+de.swri.edu/pub/png/src/libpng.1.2.1.tar.gz
+ []
+
+
+Overfull \hbox (39.25284pt too wide) in paragraph at lines 320--326
+[]\OT1/cmss/m/sl/10 http://www.mirror.ac.uk/sites/ftp.cdrom.com/pub/infozip/zli
+b/ [] http://www.info-zip.org/pub/infozip/zlib/
+ []
+
+[9] [10]
+Underfull \hbox (badness 4181) in paragraph at lines 451--462
+[]\OT1/cmr/m/n/10 will in-stall \OT1/cmss/bx/n/10 EM-BOSS \OT1/cmr/m/n/10 un-de
+r \OT1/cmss/m/sl/10 /site/prog/emboss\OT1/cmr/m/n/10 . The bi-na-ries will be i
+n-stalled in
+ []
+
+[11]
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 577.
+
+ (/packages/teTeX/share/texmf/tex/latex/base/omscmr.fd
+File: omscmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 303.
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 577.
 
-Underfull \hbox (badness 1158) in paragraph at lines 304--305
+Underfull \hbox (badness 1158) in paragraph at lines 578--582
 []\OT1/cmr/m/n/10 define \OT1/cmss/m/sl/10 COM-PILER[]DEFAULTS[]PATH \OT1/cmr/m
 /n/10 ap-pro-pri-ately (see \OT1/cmss/m/sl/10 pe[]environ\OT1/cmr/m/n/10 ) to l
 ook for a \OT1/cmss/m/sl/10 com-
  []
 
-[9] [10] [11] [12]
+[12] [13] [14] [15]
  3.
-[13
+[16
 
-] [14]
-Underfull \hbox (badness 10000) in paragraph at lines 591--593
-
- []
-
-[15] [16] [17] [18] [19] [20] [21] [22] [23] [24] [25] [26] [27]
+] [17] [18] [19] [20] [21] [22] [23] [24] [25] [26] [27] [28] [29] [30]
+[31] [32] [33] [34]
  4.
-[28
+[35
 
 ]
  5.
 
-Overfull \hbox (2.83832pt too wide) in paragraph at lines 1272--1273
+Overfull \hbox (2.83832pt too wide) in paragraph at lines 2278--2281
 []\OT1/cmr/m/n/10 Detailed doc-u-men-ta-tion on in-stal-la-tion of \OT1/cmss/bx
 /n/10 EM-BOSS \OT1/cmr/m/n/10 on FreeBSD.[] 
  []
 
-[29
+[36
 
-] [30] [31] [32]
+] [37] [38] [39]
  6.
-[33
+[40
 
-] (admin.aux) ) 
+] [41] [42] [43] [44] [45] [46]
+ 7.
+[47
+
+] (admin.aux)
+
+LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
+
+ ) 
 Here is how much of TeX's memory you used:
- 342 strings out of 10898
- 3700 string characters out of 96882
- 51138 words of memory out of 263001
- 3315 multiletter control sequences out of 10000+0
+ 341 strings out of 10901
+ 3723 string characters out of 72220
+ 51168 words of memory out of 263001
+ 3314 multiletter control sequences out of 10000+0
  14746 words of font info for 51 fonts, out of 400000 for 1000
  14 hyphenation exceptions out of 1000
- 23i,11n,20p,737b,313s stack positions out of 300i,100n,500p,50000b,4000s
+ 25i,11n,20p,178b,318s stack positions out of 300i,100n,500p,50000b,4000s
 
-Output written on admin.dvi (34 pages, 101756 bytes).
+Output written on admin.dvi (48 pages, 139508 bytes).
