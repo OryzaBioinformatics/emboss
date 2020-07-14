@@ -154,6 +154,10 @@ print "$application.isee *created*\n";
 system "$scripts/makeexample.pl $application";
 
 ###################################################################
+# create the .history include files for all applications   
+system "$scripts/makehistory.pl";   
+
+###################################################################
 # edit the index.html file
 ###################################################################
 print "\n\n
