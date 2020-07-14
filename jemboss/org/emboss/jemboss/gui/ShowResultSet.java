@@ -45,7 +45,8 @@ public class ShowResultSet extends JFrame
 * @param the result data to display
 *
 */
-  public ShowResultSet(Hashtable reslist, String project, JembossParams mysettings)
+  public ShowResultSet(Hashtable reslist, String project, 
+                                JembossParams mysettings)
   {
     this(reslist,null,project,mysettings);
   }
@@ -67,15 +68,15 @@ public class ShowResultSet extends JFrame
 * @param the input data to display
 *
 */
-  public ShowResultSet(Hashtable reslist, Hashtable inputFiles, String project,
-                       JembossParams mysettings)
+  public ShowResultSet(Hashtable reslist, Hashtable inputFiles, 
+                       String project, JembossParams mysettings)
   {
     super("Saved Results on the Server");
     JTabbedPane rtp = new JTabbedPane();
 
     setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
-    JPanel s1;
+    ScrollPanel s1;
     JScrollPane r1;
 
     String stabs[] = addHashContentsToTab(reslist,rtp);
@@ -85,8 +86,10 @@ public class ShowResultSet extends JFrame
 // now load png files into pane
     for(int i=0; i<stabs.length;i++)
     {
-      s1 = new JPanel(new BorderLayout());
+      s1 = new ScrollPanel(new GridLayout());
       r1 = new JScrollPane(s1);
+      r1.getViewport().setBackground(Color.white);
+
       ImageIcon i1 = new ImageIcon((byte [])reslist.get(stabs[i]));
       JLabel l1 = new JLabel(i1);
       s1.add(l1);
@@ -100,13 +103,10 @@ public class ShowResultSet extends JFrame
     String cmd = "cmd";
     if(reslist.containsKey(cmd))
     {
-      s1 = new JPanel(new BorderLayout());
-      r1 = new JScrollPane(s1);
-
       FileEditorDisplay fed = new FileEditorDisplay(null,cmd,
                                          reslist.get(cmd));
       fed.setCaretPosition(0);
-      s1.add(fed, BorderLayout.CENTER);
+      r1 = new JScrollPane(fed);
       rtp.add(cmd,r1);
     }
 
@@ -120,7 +120,7 @@ public class ShowResultSet extends JFrame
   private String[] addHashContentsToTab(Hashtable h,JTabbedPane rtp)
   {
 
-    JPanel s1;
+    ScrollPanel s1;
     JScrollPane r1;
 
     String cmd = "cmd";
@@ -133,10 +133,11 @@ public class ShowResultSet extends JFrame
       String thiskey = (String)enum.nextElement().toString();
       if(!thiskey.equals(cmd))
       {
-        s1 = new JPanel(new BorderLayout());
-        r1 = new JScrollPane(s1);
         if (thiskey.endsWith("png") || thiskey.endsWith("html"))
         {
+          s1 = new ScrollPanel(new GridLayout());
+          r1 = new JScrollPane(s1);
+          r1.getViewport().setBackground(Color.white);
           int index = findInt(thiskey);
           if(index>0)
           {
@@ -156,7 +157,7 @@ public class ShowResultSet extends JFrame
           FileEditorDisplay fed = new FileEditorDisplay(null,thiskey,
                                                      h.get(thiskey));
           fed.setCaretPosition(0);
-          s1.add(fed, BorderLayout.CENTER);
+          r1 = new JScrollPane(fed);
           rtp.add(thiskey,r1);
         }
       }

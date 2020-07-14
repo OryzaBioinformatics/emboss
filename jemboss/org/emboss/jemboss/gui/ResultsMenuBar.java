@@ -367,12 +367,20 @@ public class ResultsMenuBar extends JMenuBar
 //        save results
           String tabTitle = rtb.getTitleAt(rtb.getSelectedIndex());
 
-          if(hashOut.containsKey(tabTitle))
-            fileSave(cwd,fileSelected,tabTitle,hashOut);
-          else if(hashIn != null)
+          JTextComponent jtc = getJTextComponentAt(rtb,rtb.getSelectedIndex());
+          if(jtc != null)    // text save
           {
-            if(hashIn.containsKey(tabTitle))
-              fileSave(cwd,fileSelected,tabTitle,hashIn);
+            fileSave(cwd,fileSelected,jtc.getText());
+          }
+          else               // image icon save
+          {
+            if(hashOut.containsKey(tabTitle))
+              fileSave(cwd,fileSelected,tabTitle,hashOut);
+            else if(hashIn != null)
+            {
+              if(hashIn.containsKey(tabTitle))
+                fileSave(cwd,fileSelected,tabTitle,hashIn);
+            }
           }
           frame.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
         }
@@ -459,17 +467,13 @@ public class ResultsMenuBar extends JMenuBar
         public void actionPerformed(ActionEvent e)
         {
           JTextComponent jtc = getJTextComponentAt(rtb,rtb.getSelectedIndex());      
-
+          String tabTitle = rtb.getTitleAt(rtb.getSelectedIndex());
           Vector params = new Vector();
-//        params.addElement(new Parameter("project", String.class,
-//                          project, null));
-//        params.addElement(new Parameter("filename", String.class,
-//                          rtb.getTitleAt(rtb.getSelectedIndex()), null));
-//        params.addElement(new Parameter("filecontent", String.class,
-//                          jtc.getText(), null));
           params.addElement(project);
-          params.addElement(rtb.getTitleAt(rtb.getSelectedIndex()));
-          params.addElement(jtc.getText());
+          params.addElement(tabTitle);
+          // remove return characters for Win machines
+          params.addElement(jtc.getText().replace('\r',' '));
+
           try
           {
             PrivateRequest gReq = new PrivateRequest(mysettings,
@@ -558,10 +562,16 @@ public class ResultsMenuBar extends JMenuBar
   private void fileSave(String cwd, String fileSelected, 
                         String tabTitle, Hashtable h)
   {
+    fileSave(cwd,fileSelected,h.get(tabTitle));
+  }
+
+  private void fileSave(String cwd, String fileSelected,
+                        Object fileContents)
+  {
     String fs = new String(System.getProperty("file.separator"));
     FileSave fsave = new FileSave(new File(cwd + fs + fileSelected));
     if(fsave.doWrite())
-      fsave.fileSaving(h.get(tabTitle));
+      fsave.fileSaving(fileContents);
     if(!fsave.fileExists())
     {
       org.emboss.jemboss.Jemboss.tree.addObject(fileSelected,cwd,null);
@@ -578,35 +588,24 @@ public class ResultsMenuBar extends JMenuBar
 
   private JTextPane getSelectedJTextPane(JTabbedPane rtb)
   {
-    JScrollPane jsp = (JScrollPane)(rtb.getSelectedComponent());
-    JPanel jp = (JPanel)(jsp.getViewport().getView());
     try
     {
-      return (JTextPane)jp.getComponent(0);
-    }
-    catch(ClassCastException cce){}
+      JScrollPane jsp = (JScrollPane)(rtb.getSelectedComponent());
+      return (JTextPane)(jsp.getViewport().getView());
+    } catch(ClassCastException cce) {}
+
     return null;
   }
 
   private JTextComponent getJTextComponentAt(JTabbedPane rtb, int index)
   {
-    JPanel jp;
     try
     {
       JScrollPane jsp = (JScrollPane)(rtb.getComponentAt(index));
-      jp = (JPanel)(jsp.getViewport().getView());
+      return (JTextComponent)(jsp.getViewport().getView());
+    } catch(ClassCastException cce) {}
 
-    }
-    catch(ClassCastException cce)
-    {
-      jp = (JPanel)(rtb.getComponentAt(index));
-    }
-
-    try
-    {
-      return (JTextComponent)jp.getComponent(0);
-    }
-    catch(ClassCastException cce){}
+    
     return null;
   }
   

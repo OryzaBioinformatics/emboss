@@ -23,6 +23,7 @@
 package org.emboss.jemboss.gui.filetree;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import javax.swing.*;
 import javax.swing.text.*;
 import java.io.*;
@@ -123,6 +124,29 @@ public class FileEditorDisplay extends JTextPane
 
    }
 
+/**
+*
+* Override to avoid line wrapping.
+*
+*/
+   public void setSize(Dimension d)
+   {
+     if (d.width < getParent().getSize().width)
+       d.width = getParent().getSize().width;
+
+     super.setSize(d);
+   }
+
+/**
+*
+* Override to avoid line wrapping.
+*
+*/
+   public boolean getScrollableTracksViewportWidth()
+   {
+     return false;
+   }
+                           
 /**
 *
 * Returns instance of JTextPane.

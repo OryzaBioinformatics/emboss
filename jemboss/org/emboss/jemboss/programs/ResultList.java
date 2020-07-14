@@ -22,17 +22,19 @@
 
 package org.emboss.jemboss.programs;
 
-import java.io.*;
 import java.util.*;
 
-import org.emboss.jemboss.soap.*;
+import org.emboss.jemboss.soap.JembossSoapException;
+import org.emboss.jemboss.soap.PrivateRequest;
 import org.emboss.jemboss.JembossParams;
 
-//import org.apache.soap.rpc.*;
-
+/**
+*
+* Used by ShowSavedResults to show (show_saved_results),
+* delete (delete_saved_results) & list results (list_saved_results).
+*/
 public class ResultList 
 {
-
   private String statusmsg;
   private String status;
   private Hashtable proganswer;
@@ -60,23 +62,18 @@ public class ResultList
 * Manipulate a dataset.
 * @param mysettings JembossParams defining server parameters
 * @param dataset    Which dataset to manipulate
+* @param options    A project file to retrieve
 * @param methodname What method to invoke on this dataset
 *
 */
    public ResultList(JembossParams mysettings, String dataset, 
                      String options, String methodname) throws JembossSoapException 
    {
-
      PrivateRequest eRun;
-
      Vector params = new Vector();
 
      if(dataset != null) 
      {
-//     params.addElement(new Parameter("dataset", String.class,
-//                                  dataset, null));
-//     params.addElement(new Parameter("options", String.class,
-//                                  options, null));
        params.addElement(dataset);
        params.addElement(options);
      }
@@ -96,7 +93,6 @@ public class ResultList
      
      proganswer.remove("status");      //delete out of the hash
      proganswer.remove("msg");
-
    }
 
 /**

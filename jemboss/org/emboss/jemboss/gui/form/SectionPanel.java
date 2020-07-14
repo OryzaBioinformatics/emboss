@@ -49,7 +49,6 @@ import org.emboss.jemboss.JembossParams;
 */
 public class SectionPanel
 {
-
   private TextFieldSink textf[];
   private TextFieldInt textInt[];
   private TextFieldFloat textFloat[];
@@ -113,8 +112,8 @@ public class SectionPanel
 * @param Box for all the component labels
 * @param int total number of fields
 * @param JembossParams mysettings
+* @param boolean withSoap true if using a soap server
 *
-* 
 */
   protected SectionPanel(JFrame f, JPanel p3, Box fieldPane, 
             ParseAcd parseAcd, int nff, final TextFieldSink textf[], 
@@ -196,9 +195,7 @@ public class SectionPanel
       nf++;
       att = parseAcd.getParameterAttribute(nf,0).toLowerCase();
     }
-
     String varName = parseAcd.getParamValueStr(nf, 0);
-
 
 // loop over all the fields in the section or the all fields in the ACD
     while( !( att.equals("endsection")  && varName.equals(nameSect)) &&
@@ -389,11 +386,12 @@ public class SectionPanel
         }
         else if(att.startsWith("bool"))
         {
-          checkBox[h] = new JCheckBox();
+//        checkBox[h] = new JCheckBox();
           if(parseAcd.isDefaultParamValueStr(nf))
             if(parseAcd.getDefaultParamValueStr(nf).equalsIgnoreCase("Y") ||
                parseAcd.getDefaultParamValueStr(nf).equalsIgnoreCase("Yes") )
               checkBox[h].setSelected(true);
+
           pan.add(checkBox[h]);
           pan.add(lab[nf]);
         }
@@ -543,6 +541,11 @@ public class SectionPanel
     appName = parseAcd.getParamValueStr(nf,0).toUpperCase();
     Box bylabP = new Box(BoxLayout.Y_AXIS);
     Box bxlabP = new Box(BoxLayout.X_AXIS);
+  
+    JScrollPane mainScroller = (JScrollPane)(p3.getParent().getParent().getParent());
+
+    JPanel jTitle = new JPanel(new BorderLayout());
+    jTitle.setBackground(Color.white);
 
     final ApplicationNamePanel namePanel = new ApplicationNamePanel(
                                               appName,10,18,18);
@@ -551,36 +554,15 @@ public class SectionPanel
     bylabP.add(bxlabP);
 
     JLabel labP = new JLabel(des);
-    labP.setForeground(Color.black);
     labP.setFont(labfont);
     bxlabP = new Box(BoxLayout.X_AXIS);
     bxlabP.add(Box.createHorizontalStrut(10));
     bxlabP.add(labP);
     bxlabP.add(Box.createHorizontalGlue());
     bylabP.add(bxlabP);
-    p3.add(bylabP, BorderLayout.NORTH);
 
-//  appName = parseAcd.getParamValueStr(nf,0).toUpperCase();
-//  Box bylabP = new Box(BoxLayout.Y_AXIS);
-//  Box bxlabP = new Box(BoxLayout.X_AXIS);
-
-//  JLabel labP = new JLabel("<html><font size=+1><FONT COLOR=RED>"  +
-//                                appName + "</FONT>");
-//  bxlabP.add(Box.createHorizontalStrut(10));
-//  bxlabP.add(labP);
-//  bxlabP.add(Box.createHorizontalGlue());
-//  bylabP.add(bxlabP);
-//  labP = new JLabel(des);
-//  labP.setForeground(Color.black);
-//  labP.setFont(labfont);
-
-//  bxlabP = new Box(BoxLayout.X_AXIS);
-//  bxlabP.add(Box.createHorizontalStrut(10));
-//  bxlabP.add(labP);
-//  bxlabP.add(Box.createHorizontalGlue());
-//  bylabP.add(bxlabP);
-//  p3.add(bylabP, BorderLayout.NORTH);
-
+    jTitle.add(bylabP, BorderLayout.WEST);
+    mainScroller.setColumnHeaderView(jTitle);
   }
 
 
@@ -595,7 +577,6 @@ public class SectionPanel
   private String getMinMaxDefault(String min,String max,
                                  String def, int nfield)
   {
-
     String l = new String("");
 
     if(parseAcd.isMinParamValue(nfield) && min == null)
@@ -664,7 +645,6 @@ public class SectionPanel
 */
   private void checkDependents(Box section)
   {
-
     final Cursor cbusy = new Cursor(Cursor.WAIT_CURSOR);
     final Cursor cdone = new Cursor(Cursor.DEFAULT_CURSOR);
     final String att = parseAcd.getParameterAttribute(nf,0).toLowerCase();
@@ -824,6 +804,13 @@ public class SectionPanel
             resolveDependents(nod,dep,sel,varName);
           }
         });
+        // resolve dependents as for is loaded in
+        String sel = "";
+        if(checkBox[h].isSelected())
+          sel = new String("true");
+        else
+          sel = new String("false");
+        resolveDependents(nod,dep,sel,varName);
       }
     }
 
@@ -875,7 +862,6 @@ public class SectionPanel
 //            +" : "+ parseAcd.getParamValueStr(dep[i].getDependentField(),0));
       int h = parseAcd.getGuiHandleNumber(field);
 
-
       if( (att.equals("list")     || att.equals("select")) && 
           (type.startsWith("req") || type.startsWith("opt")) ) 
       {
@@ -908,14 +894,10 @@ public class SectionPanel
 
         if( (type.startsWith("opt") || type.startsWith("req")) 
                                     && result.equals("false"))
-        {
           setShadingAndVisibility(textf[h], false, field);
-        }
         else if ( (type.startsWith("opt") || type.startsWith("req")) 
                                            && result.equals("true"))
-        {
           setShadingAndVisibility(textf[h], true, field);
-        }
 
         if(type.startsWith("def"))
         {
@@ -942,14 +924,11 @@ public class SectionPanel
       {
         if( (type.startsWith("opt") || type.startsWith("req"))
                                     && result.equals("false"))
-        {
           setShadingAndVisibility(textInt[h], false, field);
-        }
         else if ( (type.startsWith("opt") || type.startsWith("req"))
                                            && result.equals("true"))
-        {
           setShadingAndVisibility(textInt[h], true, field);
-        }
+        
         if(type.startsWith("def"))
           textInt[h].setValue(Integer.parseInt(result));
       }
@@ -957,14 +936,11 @@ public class SectionPanel
       {
         if( (type.startsWith("opt") || type.startsWith("req"))
                                     && result.equals("false"))
-        {
           setShadingAndVisibility(textFloat[h], false, field);
-        }
         else if ( (type.startsWith("opt") || type.startsWith("req"))
                                            && result.equals("true"))
-        {
           setShadingAndVisibility(textFloat[h], true, field);
-        }
+        
         if(type.startsWith("def"))
           textFloat[h].setValue(Double.parseDouble(result));
       }

@@ -111,12 +111,28 @@ public class LaunchJalView extends JFrame
           public Object construct()
           {
             setCursor(cbusy);
+
+            String name = tfs.getText();
+            File fn = new File(name);
+            if(!fn.exists())
+            {
+              JOptionPane.showMessageDialog(fr,name+" not found.\n"+
+                                            "Note if this is a file on the server then\n"+
+                                            "drag it to the local file manager first.",
+                                            "File Not Found",
+                                            JOptionPane.ERROR_MESSAGE);
+              setCursor(cdone);
+              setVisible(false);
+              return null;
+            }           
+
+
             String args[] = { 
-              tfs.getText(),                         //alignment file
+              name,                                //alignment file
               "File",
-              (String)format.getSelectedItem(),      //format 
+              (String)format.getSelectedItem(),    //format 
               "-mail",
-              mailServer.getText()                   //mail server
+              mailServer.getText()                 //mail server
             };
             try
             {

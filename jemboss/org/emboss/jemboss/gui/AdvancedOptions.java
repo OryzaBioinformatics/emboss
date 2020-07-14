@@ -221,6 +221,7 @@ public class AdvancedOptions extends JPanel
        }
        bufferedreader.close();
        bufferedwriter.close();
+       file_txt.delete();
        file_tmp.renameTo(file_txt);
      } 
      catch (FileNotFoundException filenotfoundexception)

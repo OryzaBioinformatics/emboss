@@ -273,7 +273,7 @@ public class SequenceList extends JFrame
     // help menu
    JMenu helpMenu = new JMenu("Help");
    helpMenu.setMnemonic(KeyEvent.VK_H);
-   JMenuItem fmh = new JMenuItem("About File Manager");
+   JMenuItem fmh = new JMenuItem("About Sequence List");
    fmh.addActionListener(new ActionListener()
    {
      public void actionPerformed(ActionEvent e)

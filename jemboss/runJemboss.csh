@@ -4,7 +4,7 @@
 #
 setenv LIB ./lib
 
-setenv CLASSPATH :$LIB/axis/axis.jar:$LIB/axis/jaxrpc.jar:$LIB/axis/saaj.jar:$LIB/axis/commons-logging.jar:$LIB/axis/commons-discovery.jar:$LIB/jakarta-regexp-1.2.jar:$LIB/jalview.jar:$LIB/jnet.jar:$LIB/jcert.jar:$LIB/jsse.jar:.:$LIB/axis/servlet.jar:$LIB/xerces.jar
+setenv CLASSPATH :$LIB/JembossAlignment.jar:$LIB/axis/axis.jar:$LIB/axis/jaxrpc.jar:$LIB/axis/saaj.jar:$LIB/axis/commons-logging.jar:$LIB/axis/commons-discovery.jar:$LIB/jakarta-regexp-1.2.jar:$LIB/jalview.jar:$LIB/jnet.jar:$LIB/jcert.jar:$LIB/jsse.jar:.:$LIB/axis/servlet.jar:$LIB/xerces.jar
 
 #
 #Commented vars are required for standalone use

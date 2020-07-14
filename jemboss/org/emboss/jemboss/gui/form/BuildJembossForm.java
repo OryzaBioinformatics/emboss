@@ -88,16 +88,15 @@ public class BuildJembossForm implements ActionListener
   private String helptext = "";
   private boolean withSoap;
   private JFrame f;
-  private JPanel p2;
+  private ScrollPanel p2;
   private String embossBin;
 
   private int numofFields;
   private JembossParams mysettings;
-
   
   public BuildJembossForm(String appDescription, String db[],
         final String applName, String[] envp, String cwd, String embossBin,
-        String acdText, final boolean withSoap, JPanel p2, 
+        String acdText, final boolean withSoap, ScrollPanel p2, 
         final JembossParams mysettings, final JFrame f)
   {
 
@@ -112,7 +111,7 @@ public class BuildJembossForm implements ActionListener
     this.applName = applName;
 
     JPanel pC = new JPanel();
-    pC.setBackground(Color.white);
+//  pC.setBackground(Color.white);
 
     p2.add(pC, applName);
     pC.setLayout(new BorderLayout());
@@ -124,9 +123,9 @@ public class BuildJembossForm implements ActionListener
 
     attach(pC, fieldPane, appDescription);
 
-    JScrollPane scroll = new JScrollPane(fieldPane);
-//  scroll.getViewport().setBackground(Color.lightGray);
-    pC.add(scroll, BorderLayout.CENTER);
+//  JScrollPane scroll = new JScrollPane(fieldPane);
+//  pC.add(scroll, BorderLayout.CENTER);
+    pC.add(fieldPane,BorderLayout.CENTER);
 
 // get help for current application
     if(!withSoap) 
@@ -280,6 +279,9 @@ public class BuildJembossForm implements ActionListener
     inSeq  = new SetInFileCard[nseqs];
 //  JRadioButton rpaste[] = new JRadioButton [nseqs];
     Box lab[] = new Box[numofFields];
+
+    for(int j=0;j<nbool;j++)
+      checkBox[j] = new JCheckBox();
 
     for(int j=0;j<ntextf;j++)
     {

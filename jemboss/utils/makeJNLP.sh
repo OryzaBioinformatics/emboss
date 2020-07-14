@@ -199,7 +199,7 @@ if [ -f "$JNLP" ]; then
   read JNLP
 fi
 
-echo '<!-- JNLP File for SwingSet2 Demo Application -->' > $JNLP
+echo '<?xml version="1.0" encoding="UTF-8"?>'            > $JNLP
 echo '<jnlp'                                            >> $JNLP
 echo '        spec="1.0+"'                              >> $JNLP
 echo '        codebase="http://EDIT"'                   >> $JNLP

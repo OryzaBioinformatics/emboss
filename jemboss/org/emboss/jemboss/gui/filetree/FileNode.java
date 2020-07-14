@@ -89,7 +89,14 @@ public class FileNode extends DefaultMutableTreeNode
       }
     }
 
-  
+ 
+    public void reExplore()
+    {
+      explored = false;
+      removeAllChildren();
+      explore();
+    }
+ 
 // Transferable
     public DataFlavor[] getTransferDataFlavors()
     {

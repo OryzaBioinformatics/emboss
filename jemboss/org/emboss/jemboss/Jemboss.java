@@ -146,17 +146,14 @@ public class Jemboss implements ActionListener
 
     f = new JFrame("Jemboss");
 // make the local file manager
-//  tree = new DragTree( new File(System.getProperty("user.home")), 
-//                                                  f, mysettings);
-
     tree = new DragTree(new File(mysettings.getUserHome()),
                         f, mysettings);
 
     scrollTree = new JScrollPane(tree);
 
-    JPanel p1 = new JPanel(new BorderLayout());     // menu panel
-    JPanel p2 = new JPanel(new GridLayout());       // emboss form pain
-    p3 = new JPanel(new BorderLayout());            // filemanager panel
+    JPanel p1 = new JPanel(new BorderLayout());         // menu panel
+    ScrollPanel p2 = new ScrollPanel(new GridLayout()); // emboss form pain
+    p3 = new JPanel(new BorderLayout());                // filemanager panel
 
     JScrollPane scrollProgForm = new JScrollPane(p2);
     JPanel pwork = new JPanel(new BorderLayout());
@@ -192,6 +189,8 @@ public class Jemboss implements ActionListener
                                   p1,pwork);
     pmain.setOneTouchExpandable(true);
 
+    int arrowSize = fwdArrow.getIconWidth();
+    Dimension jform;
 // set window dimensions, dependent on screen size
     if(d.getWidth()<1024)
     {
@@ -199,6 +198,7 @@ public class Jemboss implements ActionListener
       jdimExtend = new Dimension(795,500);
       pmain.setPreferredSize(jdim);
       scrollTree.setPreferredSize(new Dimension(180,500));
+      jform = new Dimension(615-180+arrowSize,500);
     }
     else
     {
@@ -206,6 +206,7 @@ public class Jemboss implements ActionListener
       jdimExtend = new Dimension(840,540);
       pmain.setPreferredSize(jdim);
       scrollTree.setPreferredSize(new Dimension(180,540));
+      jform = new Dimension(660-180+arrowSize,500);
     }
 
 // setup the top menu bar
@@ -219,7 +220,7 @@ public class Jemboss implements ActionListener
 
     new BuildProgramMenu(p1,p2,pform,scrollProgForm,embossBin,
                          envp,mysettings,withSoap,cwd,
-                         acdDirToParse,mainMenu,f);
+                         acdDirToParse,mainMenu,f,jform);
 
     f.addWindowListener(new winExit());
 

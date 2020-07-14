@@ -240,16 +240,39 @@ public class JembossFileServer
                              "/" + filename;
 
     File fn = new File(fullname);
-    boolean ok = fn.delete();
-
     vans.add("msg");
-    if(ok)
+    if(fn.delete())
       vans.add("");
     else
       vans.add("NOT OK");
 
     return vans;
   }
+
+/**
+*
+*
+*
+*/
+  public Vector delDir(String options, String filename,
+                        String userName)
+  {
+    Vector vans = new Vector();
+
+    int split = options.indexOf("=")+1;
+    String fullname = getRoot(options.substring(split),userName)+
+                             "/" + filename;
+
+    File fn = new File(fullname);
+    vans.add("msg");
+    if(fn.delete())
+      vans.add("");
+    else
+      vans.add("NOT OK");
+
+    return vans;
+  }
+
 
 /**
 *

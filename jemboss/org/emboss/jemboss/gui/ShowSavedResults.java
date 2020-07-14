@@ -50,7 +50,7 @@ public class ShowSavedResults
   private Cursor cdone = new Cursor(Cursor.DEFAULT_CURSOR);
   private DefaultListModel datasets = new DefaultListModel();
   private JFrame savedResFrame;
-  private JPanel sp = new JPanel();
+  private ScrollPanel sp = new ScrollPanel();
   private JTextArea aboutRes; 
   private JScrollPane aboutScroll;
   private JScrollPane ss;
@@ -70,6 +70,8 @@ public class ShowSavedResults
                               +"\nresults using the buttons below.");
     aboutScroll = new JScrollPane(aboutRes);  
     ss = new JScrollPane(sp);
+    ss.getViewport().setBackground(Color.white);
+
     resMenu.setLayout(new FlowLayout(FlowLayout.LEFT,10,1));
     ClassLoader cl = this.getClass().getClassLoader();
     rfii = new ImageIcon(cl.getResource("images/Refresh_button.gif"));

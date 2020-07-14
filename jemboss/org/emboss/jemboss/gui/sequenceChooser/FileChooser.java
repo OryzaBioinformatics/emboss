@@ -39,7 +39,7 @@ import org.emboss.jemboss.JembossParams;
 * Creates a JFileChooser and add it to the Box.
 *
 */
-public class FileChooser
+public class FileChooser 
 {
 
   private String fileSelected;
@@ -49,7 +49,8 @@ public class FileChooser
   private String currentDirectory;
   private JLabel lname;
 
-  public FileChooser (Box bdown, String name, final JembossParams mysettings) 
+  public FileChooser(Box bdown, String name,
+             final JembossParams mysettings)
   {
 
     SecurityManager sm = System.getSecurityManager();
@@ -58,10 +59,10 @@ public class FileChooser
     fc = new JFileChooser();
     System.setSecurityManager(sm);
 
+    JButton openButton = new JButton("Browse files...");
     fileName = new TextFieldSink();
 
-    Box pname;
-    pname = Box.createHorizontalBox();
+    Box pname = Box.createHorizontalBox();
     lname = new JLabel(name);
     lname.setFont(org.emboss.jemboss.gui.form.SectionPanel.labfont);
 
@@ -69,11 +70,9 @@ public class FileChooser
     pname.add(lname);
     pname.add(Box.createHorizontalGlue());
 
-    Box file;
-    file = Box.createHorizontalBox();
+    Box file = Box.createHorizontalBox();
     bdown.add(file);
 
-    JButton openButton = new JButton("Browse files...");
     file.add(fileName);
     file.add(Box.createRigidArea(new Dimension(2,2)));
     file.add(openButton);
@@ -127,6 +126,16 @@ public class FileChooser
     fileName.setPreferredSize(d);
     fileName.setMinimumSize(d);
     fileName.setMaximumSize(d);
+  }
+
+  public void setPreferredSize(Dimension d)
+  {
+    fileName.setPreferredSize(d);
+  }
+
+  public Dimension getPreferredSize()
+  {
+    return fileName.getPreferredSize();
   }
 
   public void setForeground(Color c)

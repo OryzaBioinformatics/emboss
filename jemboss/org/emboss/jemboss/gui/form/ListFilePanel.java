@@ -24,6 +24,8 @@ package org.emboss.jemboss.gui.form;
 
 import java.awt.*;
 import javax.swing.*;
+
+import org.emboss.jemboss.gui.ScrollPanel;
 import org.emboss.jemboss.gui.sequenceChooser.*;
 import org.emboss.jemboss.JembossParams;
 
@@ -46,14 +48,25 @@ public class ListFilePanel extends JPanel
     Box bdown = Box.createVerticalBox();
     fileChooser = new FileChooser[nFiles];
 
+    Dimension fcdim = null;
+
     bdown.add(Box.createVerticalStrut(2));
     for(int i=0;i < nFiles;i++)
     {
       fileChooser[i] = new FileChooser(bdown,"",mysettings); 
+      if(fcdim == null)
+      {
+        fcdim = fileChooser[i].getPreferredSize();
+        fcdim = new Dimension(210, (int)fcdim.getHeight());
+      }
+      fileChooser[i].setPreferredSize(fcdim);
+
       bdown.add(Box.createVerticalStrut(2));  
     }
 
-    JScrollPane scroll = new JScrollPane(bdown);
+    ScrollPanel sp = new ScrollPanel(new BorderLayout());
+    sp.add(bdown);
+    JScrollPane scroll = new JScrollPane(sp);
     scroll.setPreferredSize(new Dimension(350,100));
     
     this.add(scroll, BorderLayout.WEST);

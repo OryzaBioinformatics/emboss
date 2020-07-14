@@ -239,6 +239,35 @@ public class JembossFileAuthServer
     return vans;
   }
 
+  public Vector delDir(String options, String filename,
+                       String userName, byte[] passwd)
+  {
+    Vector vans = new Vector();
+    Ajax aj = new Ajax();
+
+    int split = options.indexOf("=")+1;
+    String fullname = getRoot(options.substring(split),userName,passwd)+
+                             "/" + filename;
+    boolean ok=true;
+    try
+    {
+      ok = aj.delDir(userName,passwd,environ,fullname);
+    }
+    catch(Exception exp){}
+
+    vans.add("msg");
+    if(ok)
+      vans.add("");
+    else
+      vans.add("NOT OK");
+
+    for(int i=0;i<passwd.length;i++)
+      passwd[i] = '\0';
+
+    return vans;
+  }
+
+
 /**
 *
 *

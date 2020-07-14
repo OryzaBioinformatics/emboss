@@ -1,5 +1,7 @@
 jalview.jar 		- JalView 1.3 beta - Michele Clamp
 
+JembossAlignment.jar    - Jemboss Alignment Editor, Tim Carver
+
 jakarta-regexp-1.2.jar 	- From Jakarta Project, Regexp 1.2
                           http://jakarta.apache.org/regexp/index.html
                           http://jakarta.apache.org/builds/jakarta-regexp/release/
