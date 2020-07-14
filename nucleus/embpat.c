@@ -2996,6 +2996,37 @@ ajint embPatVariablePattern (AjPStr *pattern, AjPStr opattern, AjPStr text,
 }
 
 
+/* @func embPatRestrictPreferred ********************************************
+**
+** Replace RE names by the name of the prototype for that RE
+**
+** @param [rw] l [AjPList] list of EmbPMatMatch hits
+** @param [r] t [AjPTable] table from embossre.equ file
+**
+** @return [void]
+** @@
+******************************************************************************/
+
+void embPatRestrictPreferred(AjPList l, AjPTable t)
+{
+    AjIList iter = NULL;
+    EmbPMatMatch m = NULL;
+    AjPStr value = NULL;
+
+    iter = ajListIter(l);
+
+    while((m = (EmbPMatMatch)ajListIterNext(iter)))
+    {
+	value = ajTableGet(t,m->cod);
+	if(value)
+	    ajStrAssS(&m->cod,value);
+    }
+
+    ajListIterFree(iter);
+
+    return;
+}
+
 
 /* @func embPatRestrictRestrict ***********************************************
 **
@@ -3556,6 +3587,10 @@ ajint embPatGetType(AjPStr *pattern, ajint mismatch, AjBool protein, ajint *m,
 	    type=7;
 	else
 	    type = 5;
+	/* Fix for broken Henry Spencer using <M( patterns */
+	q = ajStrStr(*pattern);
+	if(*(q+1)=='(')
+	    type = 7;
     }
     else if(mismatch && !range && (fclass || compl))
     {

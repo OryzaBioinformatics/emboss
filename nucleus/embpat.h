@@ -159,6 +159,7 @@ ajint           embPatRestrictMatch (AjPSeq seq, ajint begin, ajint end,
 				 AjBool ambiguity, ajint min, ajint max,
 				 AjBool blunt, AjBool sticky,
 				 AjBool commercial, AjPList *l);
+void            embPatRestrictPreferred(AjPList l, AjPTable t);
 AjBool          embPatRestrictReadEntry (EmbPPatRestrict *re, AjPFile *inf);
 
 ajint           embPatRestrictRestrict (AjPList *l, ajint hits, AjBool isos,
