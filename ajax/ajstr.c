@@ -2053,14 +2053,14 @@ AjBool ajStrMask (AjPStr* pthis, ajint begin, ajint end, char maskchar) {
   thys = *pthis;
 
   ibegin = strPos (thys, begin);
-  iend = strPosI (thys, ibegin, end+1);
+  iend = strPosI (thys, ibegin, end);
 
   ajDebug ("ajStrMask %d %d len: %d ibegin: %d iend: %d char '%c'\n",
 	   begin, end, thys->Len, ibegin, iend, maskchar);
 
   if (iend < ibegin) return ajFalse;
 
-  for (i=ibegin; i<iend; i++)
+  for (i=ibegin; i<=iend; i++)
     thys->Ptr[i] = maskchar;
 
   return ajTrue;
@@ -2477,7 +2477,7 @@ void ajCharToUpper (char* txt)
 ** Remove excess whitespace from a string
 **
 ** Leading/trailing whitespace removed. Multiple spaces replaced by
-** singles spaces.
+** single spaces.
 **
 ** @param [rw] s [AjPStr *] String to clean.
 ** @return [AjBool] ajTrue if string was reallocated
@@ -2779,6 +2779,64 @@ void ajStrFixTestI (const AjPStr thys, ajint ilen) {
 }
 
 
+/* @func ajStrUncomment *******************************************************
+**
+** Strips comments from a character string (a line from an ACD file
+** or the package.default or the .packagerc file or a data file).
+** Comments are blank lines or any text following a "#" character.
+**
+** See ajStrUncommentStart for comments that must have "#" at the start only
+**
+** @param [u] text [AjPStr*] Line of text from input file
+** @return [AjBool] ajTrue if there is some text remaining
+** @@
+******************************************************************************/
+
+AjBool ajStrUncomment (AjPStr* text)
+{
+    char *cp;
+
+    if (!ajStrLen (*text))	/* empty string */
+      return ajFalse;
+
+    cp = strchr(ajStrStr(*text), '#');
+    if (cp)
+    {				/* comment found */
+	*cp = '\0';
+	(void) ajStrFix (*text);
+    }
+
+    if (!ajStrLen(*text))	/* no text before the comment */
+      return ajFalse;
+
+    return ajTrue;
+}
+
+/* @func ajStrUncommentStart **************************************************
+**
+** Strips comments from a character string (a line from an ACD file
+** or the package.default or the .packagerc file or a data file).
+** Comments are blank lines or any text starting with a "#" character.
+**
+** @param [u] text [AjPStr*] Line of text from input file
+** @return [AjBool] ajTrue if there is some text remaining
+** @@
+******************************************************************************/
+
+AjBool ajStrUncommentStart (AjPStr* text)
+{
+    if (!ajStrLen (*text))	/* empty string */
+      return ajFalse;
+
+    if (ajStrChar(*text, 0) == '#')
+    {				/* comment found */
+	ajStrAssC(text, "");
+	return ajFalse;
+    }
+
+    return ajTrue;
+}
+
 /* ==================================================================== */
 /* ======================== Operators ==================================*/
 /* ==================================================================== */
@@ -2915,6 +2973,7 @@ ajint ajStrRFindC (const AjPStr thys, const char* text) {
   }
   return -1;
 }
+
 /* @func ajStrCmp *************************************************************
 **
 ** Compares the value of two strings for use in sorting (e.g. ajListSort)
@@ -4082,6 +4141,9 @@ AjPStr ajStrTokC (const AjPStr thys, const char* delim) {
 **
 ** Simple test for a string having a valid Boolean value.
 **
+** Must be a single character boolean value, or one of "yes, "no",
+** "true" or "false".
+**
 ** @param [rE] thys [const AjPStr] String
 ** @return [AjBool] ajTrue if the string is acceptable as a boolean.
 ** @cre an empty string always returns false.
@@ -4097,6 +4159,11 @@ AjBool ajStrIsBool (const AjPStr thys) {
   if (!thys->Len) return ajFalse;
 
   if (!strchr("YyTt1NnFf0", *cp)) return ajFalse;
+  if (!ajStrChar(thys, 1)) return ajTrue;
+  if (ajStrMatchCaseC(thys, "yes")) return ajTrue;
+  if (ajStrMatchCaseC(thys, "no")) return ajTrue;
+  if (ajStrMatchCaseC(thys, "true")) return ajTrue;
+  if (ajStrMatchCaseC(thys, "false")) return ajTrue;
 
   return ajTrue;
 }
@@ -4259,33 +4326,44 @@ AjBool ajStrIsDouble (const AjPStr thys) {
 
 AjBool ajStrToBool (const AjPStr thys, AjBool* result) {
 
-  AjBool ret=ajFalse;
   char* cp = ajStrStr(thys);
   ajint i;
 
   *result = ajFalse;
 
-  if (!thys) return ret;
-  if (thys->Len < 1) return ret;
+  if (!thys) return ajFalse;
+  if (thys->Len < 1) return ajFalse;
 
   if (strchr("YyTt1", *cp)) {
     *result = ajTrue;
-    ret = ajTrue;
+    if (!ajStrChar(thys, 1)) return ajTrue;
+    if (ajStrMatchCaseC(thys, "yes")) return ajTrue;
+    if (ajStrMatchCaseC(thys, "true")) return ajTrue;
+    return ajFalse;
   }
   else if (strchr("NnFf", *cp)) {
     *result = ajFalse;
-    ret = ajTrue;
+    if (!ajStrChar(thys, 1)) return ajTrue;
+    if (ajStrMatchCaseC(thys, "no")) return ajTrue;
+    if (ajStrMatchCaseC(thys, "false")) return ajTrue;
+    return ajFalse;
   }
-  else if (strchr("0+", *cp)) {
+  else if (strchr("123456789", *cp)) {
+    *result = ajTrue;
+    if (ajStrIsFloat(thys)) return ajTrue;
+    return ajFalse;
+  }
+  else if (strchr("0+-", *cp)) {
     i = strcspn(cp, "123456789"); /* e.g. 0.1, 0007 */
     if (cp[i])
       *result = ajTrue;
     else
       *result = ajFalse;
-    ret = ajTrue;
+    if (ajStrIsFloat(thys)) return ajTrue;
+    return ajFalse;
   }
 
-  return ret;
+  return ajFalse;
 }
 
 /* @func ajStrToHex ***********************************************************
@@ -5579,6 +5657,52 @@ AjBool ajStrIsSpace (const AjPStr thys) {
   return ajTrue;
 }
 
+/* @func ajStrIsLower *********************************************************
+**
+** Simple test for a string having no alphabetic upper case
+** as defined by isupper in the C RTL..
+**
+** @param [rE] thys [const AjPStr] String
+** @return [AjBool] ajTrue if the string is entirely alphabetic
+** @cre an empty string returns ajTrue
+** @@
+******************************************************************************/
+
+AjBool ajStrIsLower (const AjPStr thys) {
+  char* cp = ajStrStr(thys);
+
+  if (!thys->Len) return ajTrue;
+
+  while (*cp) {
+    if (isupper((ajint)*cp++)) return ajFalse;
+  }
+
+  return ajTrue;
+}
+
+/* @func ajStrIsUpper *********************************************************
+**
+** Simple test for a string having no alphabetic lower case
+** as defined by islower in the C RTL.
+**
+** @param [rE] thys [const AjPStr] String
+** @return [AjBool] ajTrue if the string has no lower case characters.
+** @cre an empty string returns ajTrue
+** @@
+******************************************************************************/
+
+AjBool ajStrIsUpper (const AjPStr thys) {
+  char* cp = ajStrStr(thys);
+
+  if (!thys->Len) return ajFalse;
+
+  while (*cp) {
+    if (islower((ajint)*cp++)) return ajFalse;
+  }
+
+  return ajTrue;
+}
+
 /* @func ajStrWrap ************************************************************
 **
 ** Inserts newlines into a ajlong string, at white space if possible,
@@ -5621,10 +5745,13 @@ AjBool ajStrWrap(AjPStr* pthis, ajint width ) {
 
 /* @func ajStrWrapLeft ********************************************************
 **
-** Inserts newlines into a ajlong string, at white space if possible,
+** Inserts newlines into a long string, at white space if possible,
 ** so that it wraps when printed.
 **
 ** This version asks for a left margin of space characters.
+**
+** The margin is not added to the start of the string.
+** At present the margin is added to the end of the string.
 **
 ** @param [uP] pthis [AjPStr*] Target string
 ** @param [r] width [ajint] Line width
@@ -5784,7 +5911,8 @@ ajint ajStrListToArray(AjPStr thys, AjPStr **array)
 
 /* @func ajStrDegap ***********************************************************
 **
-** Removes all but alphabetic characters from a string
+** Removes all but alphabetic characters and asterisk (possible sequence
+** characters) from a string
 **
 ** @param [w] thys [AjPStr*] String
 ** @return [void]
@@ -5805,7 +5933,9 @@ void ajStrDegap(AjPStr* thys)
     for(i=0;i<len;++i)
     {
 	c = *(p++);
-	if((c>='A' && c<='Z') || (c>='a' && c<='z'))
+	if((c=='O') || (c=='o'))	/* O is a gap character for Phylip */
+	    --(*thys)->Len;
+	else if((c>='A' && c<='Z') || (c>='a' && c<='z') || (c=='*'))
 	    *(q++) = c;
 	else
 	    --(*thys)->Len;

@@ -333,7 +333,9 @@ AjBool     ajStrIsFloat (const AjPStr thys);
 AjBool     ajStrIsHex (const AjPStr thys);
 AjBool     ajStrIsInt (const AjPStr thys);
 AjBool     ajStrIsLong (const AjPStr thys);
+AjBool     ajStrIsLower (const AjPStr thys);
 AjBool     ajStrIsSpace (const AjPStr thys);
+AjBool     ajStrIsUpper (const AjPStr thys);
 AjBool     ajStrIsWild (const AjPStr thys);
 AjBool     ajStrIsWord (const AjPStr thys);
 AjIStr     ajStrIter (const AjPStr thys);
@@ -463,6 +465,8 @@ AjBool     ajStrWhole (const AjPStr thys, ajint begin, ajint end);
 AjBool     ajStrWildPrefix (AjPStr* str);
 AjBool     ajStrWrap (AjPStr* pthis, ajint width);
 AjBool     ajStrWrapLeft (AjPStr* pthis, ajint width, ajint left);
+AjBool     ajStrUncomment (AjPStr* text);
+AjBool     ajStrUncommentStart (AjPStr* text);
 char*      ajStrYN (AjBool boule);
 
 #endif
