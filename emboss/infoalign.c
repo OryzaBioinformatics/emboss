@@ -27,15 +27,16 @@
 
 
 
-static int infoalign_Getrefseq(AjPStr refseq, AjPSeqset seqset);
+static int infoalign_Getrefseq(const AjPStr refseq, const AjPSeqset seqset);
 static void infoalign_OutputFloat(AjPFile outfile, float num, AjBool html,
 				   AjBool after);
 static void infoalign_OutputInt(AjPFile outfile, ajint num, AjBool html,
 				 AjBool after);
-static void infoalign_OutputStr(AjPFile outfile, AjPStr str, AjBool html,
+static void infoalign_OutputStr(AjPFile outfile, const AjPStr str, AjBool html,
 				 AjBool after, ajint minlength);
-static void infoalign_Compare(AjPSeq ref, AjPSeq seq, ajint **sub,
-			      AjPSeqCvt cvt, ajint *seqlength,
+static void infoalign_Compare(const AjPSeq ref, const AjPSeq seq,
+			      ajint *const *sub,
+			      const AjPSeqCvt cvt, ajint *seqlength,
 			      ajint *alignlength, ajint *gaps,
 			      ajint *gapcount, ajint *idcount,
 			      ajint *simcount, ajint *difcount, float *change);
@@ -65,8 +66,8 @@ int main(int argc, char **argv)
     AjPStr cons;
     AjPSeq consensus;
 
-    AjPSeq ref;
-    AjPSeq seq;
+    const AjPSeq ref;
+    const AjPSeq seq;
     ajint i;
 
     AjBool html;
@@ -82,6 +83,8 @@ int main(int argc, char **argv)
     AjBool dodifcount;
     AjBool dochange;
     AjBool dodesc;
+    AjBool dowt;
+
     ajint  seqlength;
     ajint  alignlength;
     ajint  gaps;
@@ -93,13 +96,12 @@ int main(int argc, char **argv)
 
     AjPFile outfile;
 
-    AjPStr usa;
-    AjPStr name;
+    const AjPStr usa;
+    const AjPStr name;
     AjPStr altusa;			/* default name when the real name
 					   is not known */
     AjPStr altname;
 
-    AjPStr desc;
     AjPStr xxx = NULL;
 
     embInit("infoalign", argc, argv);
@@ -126,6 +128,7 @@ int main(int argc, char **argv)
     dodifcount    = ajAcdGetBool("diffcount");
     dochange      = ajAcdGetBool("change");
     dodesc        = ajAcdGetBool("description");
+    dowt          = ajAcdGetBool("weight");
 
     /* consensus parameters */
     fplural   = ajAcdGetFloat("plurality");
@@ -262,6 +265,15 @@ int main(int argc, char **argv)
 		ajFmtPrintF(outfile, "%% Change\t");
 	}
 
+        if(dowt)
+        {
+            if(html)
+                ajFmtPrintF(outfile, "<th>Weight</th>");
+            else
+                ajFmtPrintF(outfile, "Weight\t");
+        }
+
+
 	if(dodesc)
 	{
 	    if(html)
@@ -292,13 +304,10 @@ int main(int argc, char **argv)
 	if(ajStrLen(name) == 0)
 	    name = altname;
 
-	desc = ajSeqGetDesc(seq);
-
 	/* get the stats from the comparison to the reference sequence */
 	infoalign_Compare(ref, seq, sub, cvt, &seqlength, &alignlength,
 			  &gaps, &gapcount, &idcount, &simcount,
 			  &difcount, &change);
-
 
 	/* start table line */
 	if(html)
@@ -306,60 +315,67 @@ int main(int argc, char **argv)
 
 	if(dousa)
 	    infoalign_OutputStr(outfile, usa, html,
-				(dodesc || dochange ||
+				(dodesc || dowt || dochange ||
 				 dodifcount || dosimcount ||
 				 doidcount || dogapcount || dogaps ||
 				 doseqlength || doalignlength || doname), 18);
 	
 	if(doname)
 	    infoalign_OutputStr(outfile, name, html,
-				(dodesc || dochange ||
+				(dodesc || dowt || dochange ||
 				 dodifcount || dosimcount ||
 				 doidcount || dogapcount || dogaps ||
 				 doseqlength || doalignlength), 14);
 	
 	if(doseqlength)
 	    infoalign_OutputInt(outfile, seqlength, html,
-				(dodesc || dochange ||
+				(dodesc || dowt || dochange ||
 				 dodifcount || dosimcount ||
 				 doidcount || dogapcount ||
 				 dogaps || doalignlength));
 	
 	if(doalignlength)
 	    infoalign_OutputInt(outfile, alignlength, html,
-				(dodesc || dochange ||
+				(dodesc || dowt || dochange ||
 				 dodifcount || dosimcount ||
 				 doidcount || dogapcount || dogaps));
 	
 	if(dogaps)
 	    infoalign_OutputInt(outfile, gaps, html,
-				(dodesc || dochange ||
+				(dodesc || dowt || dochange ||
 				 dodifcount || dosimcount ||
 				 doidcount || dogapcount));
 	
 	if(dogapcount)
 	    infoalign_OutputInt(outfile, gapcount, html,
-				(dodesc || dochange ||
+				(dodesc || dowt || dochange ||
 				 dodifcount || dosimcount ||
 				 doidcount));
 	
 	if(doidcount)
 	    infoalign_OutputInt(outfile, idcount, html,
-				(dodesc || dochange || dodifcount ||
-				 dosimcount));
+				(dodesc || dowt || dochange ||
+                                 dodifcount || dosimcount));
 	
 	if(dosimcount)
-	    infoalign_OutputInt(outfile, simcount, html, (dodesc || dochange ||
-							  dodifcount));
+	    infoalign_OutputInt(outfile, simcount, html, 
+                                (dodesc || dowt || dochange ||
+				 dodifcount));
 	
 	if(dodifcount)
-	    infoalign_OutputInt(outfile, difcount, html, (dodesc || dochange));
+	    infoalign_OutputInt(outfile, difcount, html, 
+           		        (dodesc || dowt || dochange));
 	
 	if(dochange)
-	    infoalign_OutputFloat(outfile, change, html, dodesc);
+	    infoalign_OutputFloat(outfile, change, html, (dodesc || dowt) );
 	
+        if(dowt)
+            infoalign_OutputFloat(outfile, ajSeqsetWeight(seqset,i), html, 
+            	dodesc);
+
 	if(dodesc)
-	    infoalign_OutputStr(outfile, desc, html, ajFalse, NOLIMIT);
+	    infoalign_OutputStr(outfile, ajSeqGetDesc(seq), html, ajFalse, 
+	    	NOLIMIT);
 	
 	/* end table line */
 	if(html)
@@ -395,7 +411,7 @@ int main(int argc, char **argv)
 ** then add a TAB after it, else ensure that the last data item has no
 ** characters after it.
 **
-** @param [r] outfile [AjPFile] output file handle
+** @param [u] outfile [AjPFile] output file handle
 ** @param [r] num [float] number to be printed
 ** @param [r] html [AjBool] True if want it formatted as an HTML table
 **                          data item
@@ -432,7 +448,7 @@ static void infoalign_OutputFloat(AjPFile outfile, float num, AjBool html,
 ** then add a TAB after it, else ensure that the last data item has no
 ** characters after it.
 **
-** @param [r] outfile [AjPFile] output file handle
+** @param [u] outfile [AjPFile] output file handle
 ** @param [r] num [ajint] number to be printed
 ** @param [r] html [AjBool] True if want it formatted as an HTML table
 **                          data item
@@ -468,19 +484,19 @@ static void infoalign_OutputInt(AjPFile outfile, ajint num, AjBool html,
 ** then try to format it within a minimum length field.
 ** If it is longer than this field, just add a TAB.
 **
-** @param [r] outfile [AjPFile] output file handle
-** @param [r] str [AjPStr] string to be printed
+** @param [u] outfile [AjPFile] output file handle
+** @param [r] str [const AjPStr] string to be printed
 ** @param [r] html [AjBool] True if want it formatted as an HTML table
 **                          data item
 ** @param [r] after [AjBool] True if we want to output more columns
 **                           after this one
 ** @param [r] minlength [ajint] minimum length of field to print the
-**                              string in (NOLIMIT = no limit)
+**                              string in (-1 (NOLIMIT) = no limit)
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-static void infoalign_OutputStr(AjPFile outfile, AjPStr str, AjBool html,
+static void infoalign_OutputStr(AjPFile outfile, const AjPStr str, AjBool html,
 				 AjBool after, ajint minlength)
 {
     AjPStr marginfmt;
@@ -524,16 +540,16 @@ static void infoalign_OutputStr(AjPFile outfile, AjPStr str, AjBool html,
 ** The first sequence in the set is returned as 0.
 ** -1 is returned as the consensus sequence.
 **
-** @param [r] refseq [AjPStr] input name/number of reference sequence
-** @param [r] seqset [AjPSeqset] the sequences
+** @param [r] refseq [const AjPStr] input name/number of reference sequence
+** @param [r] seqset [const AjPSeqset] the sequences
 ** @return [int] the number of the reference sequence
 ** @@
 ******************************************************************************/
 
-static int infoalign_Getrefseq(AjPStr refseq, AjPSeqset seqset)
+static int infoalign_Getrefseq(const AjPStr refseq, const AjPSeqset seqset)
 {
     ajint i;
-    AjPSeq seq;
+    const AjPSeq seq;
 
     for(i=0; i<ajSeqsetSize(seqset); i++)
     {
@@ -562,24 +578,25 @@ static int infoalign_Getrefseq(AjPStr refseq, AjPSeqset seqset)
 ** Returns lots of trivial measures of comparison between a sequence and a
 ** reference sequence
 **
-** @param [r] ref [AjPSeq] the reference sequence
-** @param [r] seq [AjPSeq] the sequence to be compared to 'ref'
-** @param [r] sub [ajint **] scoring matrix
-** @param [r] cvt [AjPSeqCvt] conversion table for scoring matrix
-** @param [r] seqlength [ajint *] sequence length
-** @param [r] alignlength [ajint *] alignment length
-** @param [r] gaps [ajint *] number of gaps
-** @param [r] gapcount [ajint *] number of gap characters
-** @param [r] idcount [ajint *] number of identical positions
-** @param [r] simcount [ajint *] number of similar positions
-** @param [r] difcount [ajint *] number of different positions
-** @param [r] change [float *] % difference
+** @param [r] ref [const AjPSeq] the reference sequence
+** @param [r] seq [const AjPSeq] the sequence to be compared to 'ref'
+** @param [r] sub [ajint * const *] scoring matrix
+** @param [r] cvt [const AjPSeqCvt] conversion table for scoring matrix
+** @param [w] seqlength [ajint *] sequence length
+** @param [w] alignlength [ajint *] alignment length
+** @param [w] gaps [ajint *] number of gaps
+** @param [w] gapcount [ajint *] number of gap characters
+** @param [w] idcount [ajint *] number of identical positions
+** @param [w] simcount [ajint *] number of similar positions
+** @param [w] difcount [ajint *] number of different positions
+** @param [w] change [float *] % difference
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-static void infoalign_Compare(AjPSeq ref, AjPSeq seq, ajint **sub,
-			      AjPSeqCvt cvt, ajint *seqlength,
+static void infoalign_Compare(const AjPSeq ref, const AjPSeq seq,
+			      ajint * const *sub,
+			      const AjPSeqCvt cvt, ajint *seqlength,
 			      ajint *alignlength, ajint *gaps,
 			      ajint *gapcount, ajint *idcount,
 			      ajint *simcount, ajint *difcount,
@@ -588,8 +605,8 @@ static void infoalign_Compare(AjPSeq ref, AjPSeq seq, ajint **sub,
     ajint i;
     ajint lenseq;
     ajint lenref;
-    char *s;
-    char *r;
+    const char *s;
+    const char *r;
 
     AjBool inGap = ajFalse;	/* true if in a gap in 'seq' */
     ajint begin;

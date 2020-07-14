@@ -15,12 +15,15 @@ section: input [
     help: "The sequence alignment to be displayed."
   ]
 
-endsection: input
-
-section: advanced [
-  information: "Advanced section"
-  type: "page"
-]
+  matrix: matrix  [
+    additional: "Y"
+    information: "Similarity scoring Matrix file"
+    protein: "$(acdprotein)"
+    help: "This is the scoring matrix file used when comparing
+           sequences. By default it is the file 'EBLOSUM62' (for proteins) or
+           the file 'EDNAFULL' (for nucleic sequences). These files are
+           found in the 'data' directory of the EMBOSS installation."
+  ]
 
   string: refseq  [
     additional: "Y"
@@ -33,17 +36,15 @@ section: advanced [
            sequences are compared. If this is set to 0 then the consensus
            sequence will be used as the reference sequence. By default the
            consensus sequence is used as the reference sequence."
+    knowntype: "sequence id input"
   ]
 
-  matrix: matrix  [
-    additional: "Y"
-    information: "Similarity scoring Matrix file"
-    protein: "$(acdprotein)"
-    help: "This is the scoring matrix file used when comparing
-           sequences. By default it is the file 'EBLOSUM62' (for proteins) or
-           the file 'EDNAFULL' (for nucleic sequences). These files are
-           found in the 'data' directory of the EMBOSS installation."
-  ]
+endsection: input
+
+section: advanced [
+  information: "Advanced section"
+  type: "page"
+]
 
   float: plurality  [
     default: "50.0"
@@ -94,7 +95,7 @@ section: output [
     help: "This is a way of shortening the command line if you only
            want a few things to be displayed. Instead of specifying: \
            '-nohead -nousa -noname -noalign -nogaps -nogapcount -nosimcount
-           -noidcount -nodiffcount' \
+           -noidcount -nodiffcount -noweight' \
            to get only the sequence length output, you can specify \
            '-only -seqlength'"
   ]
@@ -154,9 +155,15 @@ section: output [
     information: "Display % number of changed positions"
   ]
 
+  boolean: weight  [
+    default: "@(!$(only))"
+    information: "Display 'weight' column"
+  ]
+
   boolean: description  [
     default: "@(!$(only))"
     information: "Display 'description' column"
   ]
+
 
 endsection: output
