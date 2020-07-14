@@ -1,3 +1,5 @@
+# Updated to EMBL/GenBank/DDBJ FTv5.0 by Peter Rice 17th Jan 2003
+
 note QTEXT
 
 allele QTEXT
@@ -38,6 +40,7 @@ cons_splice SPECIAL
 
 country QTEXT
 
+# artificially selected plants or fungi - see also /variety
 cultivar QTEXT
 
 # removed in FTv3.0 Jan 2001
@@ -58,6 +61,8 @@ evidence LIMITED experimental,not_experimental
 
 exception QTEXT
 
+#source feature of biological interest - defines the translation table
+# and which organism to put in the taxonomy of the entry
 focus VOID
 
 frequency QTEXT
@@ -83,6 +88,10 @@ label TEXT
 
 lab_host QTEXT
 
+# new in FTv5.0 - for tracking purposes
+# Use in any features if /gene is valid - must be unique in the entry
+locus_tag QTEXT
+
 map QTEXT
 
 macronuclear VOID
@@ -92,13 +101,22 @@ macronuclear VOID
 
 mod_base TEXT
 
+# mRNA (incl. EST)
+# other RNA (incl. synthetic)
+# other DNA (incl. synthetic)
+# unassigned DNA (incl. unknown)
+# unassigned RNA (incl. unknown)
+mol_type QLIMITED genomic DNA,genomic RNA,mRNA,tRNA,rRNA,snoRNA,snRNA,scRNA,pre-mRNA,other RNA,other DNA,unassigned DNA,unassigned RNA
+
+
+#alphanumeric e.g. 4, 6B, XIIb for order of genetic elements
 number TEXT
 
 organelle QLIMITED mitochondrion,nucleomorph,plastid,mitochondrion:kinetoplast,plastid:chloroplast,plastid:apicoplast,plastid:chromoplast,plastid:cyanelle,platid:leucoplast,plastid:protoplastid
 
 organism QTEXT
 
-# obsolete, but used in old entries
+# obsolete from 15-Dec-01, but used in old entries
 partial VOID
 
 PCR_conditions QTEXT
@@ -122,6 +140,7 @@ rearranged VOID
 
 replace QSPECIAL
 #      "ACGT"
+#      "" for a deletion
 
 rpt_family QTEXT
 
@@ -129,6 +148,9 @@ rpt_type LIMITED TANDEM,INVERTED,FLANKING,TERMINAL,DIRECT,DISPERSED,OTHER
 
 rpt_unit SPECIAL
 #    202..245
+
+# new in FTv5.0 for viral segments
+segment QTEXT
 
 sequenced_mol QLIMITED cDNA,cDNA to genomic RNA,cDNA to mRNA,cDNA to other RNA,cDNA to rRNA,DNA,mRNA,RNA,rRNA,scRNA,snRNA,tRNA
 
@@ -157,20 +179,22 @@ tissue_lib QTEXT
 
 tissue_type QTEXT
 
+# transgenic is supposed to be only in extra source keys for an entry
+transgenic VOID
+
 translation QSPECIAL
 
 transl_except SPECIAL
 #  (pos:213..215,aa:Trp)
 
-transl_table LIMITED 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,21,22,23
 # FTv3.0 has no definition for 17, 18, 19, 20
-
-transgenic VOID
+transl_table LIMITED 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,21,22,23
 
 transposon QTEXT
 
 usedin TEXT
 
+# plant and fungal varieties only
 variety QTEXT
 
 virion VOID
