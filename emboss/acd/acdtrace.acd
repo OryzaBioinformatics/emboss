@@ -1,0 +1,17 @@
+application: acdtrace [
+  documentation: "ACD compiler on-screen trace"
+  groups: "Acd"
+]
+
+section: required [
+  information: "Required section"
+  type: "page"
+]
+
+  string: program [
+    parameter: "Y"
+    information: "Program name, followed by command line"
+    knowntype: "Program name"
+  ]
+
+endsection: required

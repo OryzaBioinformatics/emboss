@@ -1,0 +1,4 @@
+application: acdtable [
+  documentation: "Creates an HTML table from an ACD file"
+  groups: "Acd"
+]

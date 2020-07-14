@@ -1,0 +1,4 @@
+application: acdlog [
+  documentation: "ACD compiler logging"
+  groups: "Acd"
+]

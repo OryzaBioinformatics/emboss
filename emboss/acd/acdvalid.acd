@@ -1,0 +1,4 @@
+application: acdvalid [
+  documentation: "ACD file validation"
+  groups: "Acd"
+]
