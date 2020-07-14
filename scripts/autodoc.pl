@@ -220,7 +220,11 @@ while (<PROGS>) {
   $cvsdoctextcommit = '';
 
 ###################################################################
+# create the .history include files for all applications
+      system "$scripts/makehistory.pl";
 
+
+###################################################################
 # open the index.html file we will be putting in the distribution
   open (INDEX, "> i.i") || die "Cannot open i.i\n";
   indexheader(INDEX);
