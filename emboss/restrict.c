@@ -434,6 +434,7 @@ static void restrict_reportHits(AjPReport report, AjPSeq seq,
     AjPStr fthit = NULL;
     AjPStr fragStr = NULL;
     AjPStr codStr = NULL;
+    AjPStr patStr = NULL;
     
     ajint i;
     ajint j;
@@ -450,6 +451,7 @@ static void restrict_reportHits(AjPReport report, AjPSeq seq,
     ps=ajStrNew();
     fragStr = ajStrNew();
     codStr  = ajStrNew();
+    patStr  = ajStrNew();
     
     fn = 0;
     len = ajSeqLen(seq);
@@ -496,10 +498,7 @@ static void restrict_reportHits(AjPReport report, AjPSeq seq,
 	ajListPushApp(*l,(void *)m);	/* Might need for ifrag display */
 	if(!plasmid && (m->cut1 - m->start>100 ||
 			m->cut2 - m->start>100))
-	{
-/*	    embMatMatchDel(&m); */
 	    continue;
-	}
 
 
 	if(limit)
@@ -606,7 +605,10 @@ static void restrict_reportHits(AjPReport report, AjPSeq seq,
 
 
 	    if(!ajStrLen(codStr))
+	    {
+		ajStrAssS(&patStr,m->pat);
 		ajStrAssS(&codStr,m->cod);
+	    }
 
 
 	    if(ajStrMatch(codStr,m->cod))
@@ -618,9 +620,10 @@ static void restrict_reportHits(AjPReport report, AjPSeq seq,
 	    else
 	    {
 		ajFmtPrintAppS(&fragStr,"\n%S:\n[%S]",
-			       codStr,m->pat);
+			       codStr,patStr);
 		ajStrAssS(&codStr,m->cod);
-
+		ajStrAssS(&patStr,m->pat);
+		
 		ajSortIntInc(ajIntInt(farray),nfrags);
 
 
@@ -727,6 +730,7 @@ static void restrict_reportHits(AjPReport report, AjPSeq seq,
     ajListDel(l);
     ajStrDel(&fragStr);
     ajStrDel(&codStr);
+    ajStrDel(&patStr);
     ajStrDel(&ps);
     ajStrDel(&tmpStr);
     ajStrDel(&fthit);
