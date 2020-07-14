@@ -3495,7 +3495,15 @@ fi
 
 
 else
+
+if test "`uname -a | grep Darwin`"; then
+  if test "`uname -a | grep i386`"; then
+    CFLAGS="$CFLAGS -O1"
+  fi
+else
 CFLAGS="$CFLAGS -O2"
+fi
+
 fi
 
 
