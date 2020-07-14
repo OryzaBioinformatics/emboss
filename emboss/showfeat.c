@@ -326,6 +326,10 @@ static void showfeat_ShowFeatSeq(AjPFile outfile, const AjPSeq seq, ajint beg,
 	    	want_multiple_line = ajFalse;
 
 
+	    /* check that the feature is within the range we wish to display */
+	    if(beg+1 > gf->End || end+1 < gf->Start)
+		continue;
+
             /* ignore remote IDs */
             if(!ajFeatIsLocal(gf))
                 continue;
@@ -337,15 +341,12 @@ static void showfeat_ShowFeatSeq(AjPFile outfile, const AjPSeq seq, ajint beg,
 		continue;
 	    if(!unknown && gf->Strand == '\0')
 		continue;
+
 	    /* check that we want to output this match of source, type */
 	    if(!embMiscMatchPattern(gf->Source, matchsource) ||
 	       !embMiscMatchPattern(gf->Type, matchtype) ||
 	       !showfeat_MatchPatternTags(gf, matchtag, matchvalue,
 					  stricttags, &tagstmp, values))
-		continue;
-
-	    /* check that the feature is within the range we wish to display */
-	    if(beg+1 > gf->End || end+1 < gf->Start)
 		continue;
 
 	     /*
