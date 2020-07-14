@@ -72,7 +72,7 @@ infoalign = infoalign ../data/globins.msf -auto
 infoseq = infoseq tsw:opsd_human
 intconv =test= intconv ../data/data.linp -auto
 isochore = isochore tembl:paamir -graph ps -graph ps -auto
-lindna = lindna -infile ../data/data.linp -graph ps -auto
+lindna = lindna -infile ../data/data.linp -graph cps -auto
 marscan = marscan tembl:hsfau -auto
 maskfeat = maskfeat tembl:hsfau -auto
 maskseq = maskseq tembl:hsfau -regions '20-50' -auto
@@ -143,6 +143,7 @@ silent = silent tembl:hsfau -sbeg 31 -send 50 -auto
 sixpack = sixpack -sbeg 1 -send 60 tembl:eclac  -auto
 splitter = splitter -size 500 tembl:hsfau -auto
 stretcher = stretcher tembl:hsfau tembl:hsfau1 -auto
+stretchercoffee = stretcher tsw:opsd_human tsw:opsd_xenla -aform tcoffee -auto
 supermatcher = supermatcher tembl:hsfau tembl:hsfau1 -auto
 syco = syco -plot tembl:hsfau -cfile Echicken.cut -graph ps -auto
 textsearch = textsearch 'tsw:*' opsin -auto
@@ -157,3 +158,4 @@ wobble = wobble tembl:hsfau -graph ps -auto
 wordcount = wordcount tembl:hsfau -auto
 wordmatch = wordmatch tembl:hsfau tembl:hsfau1 -auto
 wossname = wossname -search codon -auto
+topo = topo tsw:aqp1_human -signa -prol=UM -cys=cg -gly=sr -acid=dr -basic=db -ohaa=da -araa=dg -graph ps -sections="18 35 49 67 94 115 136 156 165 184 211 232" -nomembrane -sigrange="74 82 sy 189 189 hm 239 239 sa 157 157 sa 262 262 sa"
