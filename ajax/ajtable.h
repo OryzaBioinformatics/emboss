@@ -52,39 +52,47 @@ typedef struct AjSTable {
   ajint length;
   unsigned timestamp;
   struct binding **buckets;
-} AjOTable, *AjPTable;
+} AjOTable;
 
+#define AjPTable AjOTable*
+
+void       ajTableExit(void);
 AjPTable   ajTableNew (ajint hint,
-		      ajint cmp(const void *x, const void *y),
-		      unsigned hash(const void *key, unsigned hashsize));
-void       ajTableFree(AjPTable* table);
-ajint      ajTableLength(AjPTable table);
-void       ajTableTrace   (AjPTable table);
-void      *ajTablePut   (AjPTable table, const void *key,
-		    void *value);
-void      *ajTableGet   (AjPTable table, const void *key);
-void      *ajTableKey   (AjPTable table, const void *key);
-void      *ajTableRemove(AjPTable table, const void *key);
+		       ajint cmp(const void *x, const void *y),
+		       unsigned hash(const void *key, unsigned hashsize));
+AjPTable   ajTableNewL (ajint size,
+			ajint cmp(const void *x, const void *y),
+			unsigned hash(const void *key, unsigned hashsize));
+void       ajTableFree (AjPTable* table);
+void      *ajTableGet  (const AjPTable table, const void *key);
+void      *ajTableKey  (const AjPTable table, const void *key);
+ajint      ajTableLength (const AjPTable table);
 void       ajTableMap    (AjPTable table,
 			  void apply(const void *key, void **value, void *cl),
 			  void *cl);
-void     **ajTableToarray(AjPTable table, void *end);
-ajint      ajStrTableCmp (const void *x, const void *y);
-ajint      ajStrTableCmpC (const void *x, const void *y);
-ajint      ajStrTableCmpCase (const void *x, const void *y);
+void      *ajTablePut   (AjPTable table, const void *key,
+			 void *value);
+void      *ajTableRemove (AjPTable table, const void *key);
+void     **ajTableToarray (AjPTable table, void *end);
+void       ajTableTrace   (const AjPTable table);
+
+ajint      ajStrTableCmp      (const void *x, const void *y);
+ajint      ajStrTableCmpC     (const void *x, const void *y);
+ajint      ajStrTableCmpCase  (const void *x, const void *y);
 ajint      ajStrTableCmpCaseC (const void *x, const void *y);
 void       ajStrTableFree (AjPTable *table);
-unsigned   ajStrTableHash (const void *key, unsigned hashsize);
-unsigned   ajStrTableHashC (const void *key, unsigned hashsize);
-unsigned   ajStrTableHashCase (const void *key, unsigned hashsize);
+unsigned   ajStrTableHash      (const void *key, unsigned hashsize);
+unsigned   ajStrTableHashC     (const void *key, unsigned hashsize);
+unsigned   ajStrTableHashCase  (const void *key, unsigned hashsize);
 unsigned   ajStrTableHashCaseC (const void *key, unsigned hashsize);
-AjPTable   ajStrTableNew (ajint hint);
+AjPTable   ajStrTableNew  (ajint hint);
 AjPTable   ajStrTableNewC (ajint hint);
-AjPTable   ajStrTableNewCase (ajint hint);
+AjPTable   ajStrTableNewCase  (ajint hint);
 AjPTable   ajStrTableNewCaseC (ajint hint);
-void       ajStrTablePrint (AjPTable table);
+void       ajStrTablePrint  (AjPTable table);
 void       ajStrTablePrintC (AjPTable table);
-void       ajStrTableTrace   (AjPTable table);
+void       ajStrTableTrace (const AjPTable table);
+
 #endif
 
 #ifdef __cplusplus
