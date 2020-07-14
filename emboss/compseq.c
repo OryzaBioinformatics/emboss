@@ -25,9 +25,16 @@
 
 
 
-static ajint compseq_readexpfreq(AjPTable *exptable, AjPFile infile,
+static void compseq_readexpfreq(AjPTable *exptable, AjPFile infile,
 				 ajint size);
-static ajint compseq_makebigarray(ajulong no_elements, ajulong **bigarray);
+static void compseq_makebigarray(ajulong no_elements, ajulong **bigarray);
+static double compseq_getexpfreqnuc(const AjPStr dispseq, ajint word,
+				    const ajulong *calcfreq_array,
+				    ajulong calcfreq_total);
+static double compseq_getexpfreqprot(const AjPStr dispseq, ajint word,
+				     AjBool ignorebz,
+				     const ajulong *calcfreq_array,
+				     ajulong calcfreq_total);
 
 
 
@@ -50,18 +57,25 @@ int main(int argc, char **argv)
     AjPFile outfile;
     AjPFile infile;
     AjBool reverse;
+    AjBool calcfreq;
     AjPStr ajb=NULL;
 
     ajint pos;
-    char *s;
+    const char *s;
     ajulong result;
     ajulong *bigarray;
+    ajulong *calcfreq_array;
     ajulong no_elements;
+    ajulong no_calcfreq_elements;
     AjBool first_time_round = ajTrue;
     ajulong count;
     AjPStr dispseq = NULL;
-    ajulong total  = 0;
-    ajulong other  = 0;
+
+    ajulong total = 0;		/* no. of words counted */
+    ajulong calcfreq_total = 0; /* no. of single bases/residues counted */
+    ajulong other = 0;		/* no. of words containing 'other' bases/residues */
+    ajulong calcfreq_other = 0; /* no. of single 'other' bases/residues observed */
+
     AjBool otherflag;
     AjBool seqisnuc=ajFalse;
     ajint increment;
@@ -74,6 +88,7 @@ int main(int argc, char **argv)
 
     /* Don't have a file of expected frequencies yet */
     AjBool have_exp_freq = ajFalse;
+
     double default_exp_freq;
     double obs_freq = 0.0;
     double exp_freq;
@@ -89,6 +104,7 @@ int main(int argc, char **argv)
     ignorebz  = ajAcdGetBool("ignorebz");
     frame     = ajAcdGetInt("frame");
     reverse   = ajAcdGetBool("reverse");
+    calcfreq  = ajAcdGetBool("calcfreq");
 
     /* Output some documentation to the results file */
     ajFmtPrintF(outfile, "#\n# Output from 'compseq'\n#\n");
@@ -107,10 +123,18 @@ int main(int argc, char **argv)
 	ajFmtPrintF(outfile,"# Only words in frame %d will be "
 		    "counted.\n", frame);
     
-    if(infile == NULL)
-	ajFmtPrintF(outfile,"# The Expected frequencies are "
-		    "calculated on the (false) assumption that every\n"
-		    "# word has equal frequency.\n");
+    if(infile == NULL) {
+        if (calcfreq)
+ 	    ajFmtPrintF(outfile,"# The Expected frequencies are "
+		      "calculated from the observed single\n"
+                      "# base or residue frequencies in these sequences\n");
+
+	else
+ 	    ajFmtPrintF(outfile,"# The Expected frequencies are "
+		      "calculated on the (false) assumption that every\n"
+		      "# word has equal frequency.\n");
+
+    }
     else
     {
 	ajFmtPrintF(outfile,"# The Expected frequencies are taken "
@@ -152,6 +176,18 @@ int main(int argc, char **argv)
 
 	    compseq_makebigarray(no_elements, &bigarray);
 	    first_time_round = ajFalse;
+
+            if(calcfreq) 
+            {
+                if(!embNmerGetNoElements(&no_calcfreq_elements, word,
+					 seqisnuc, 
+                                         ignorebz))
+                    ajFatal("The word size is too large for the data "
+                            "structure available.");
+                    compseq_makebigarray(no_calcfreq_elements,
+					 &calcfreq_array);
+            }
+          
 	}
 
 	ajSeqToUpper(seq);
@@ -181,6 +217,27 @@ int main(int argc, char **argv)
 	    total++;
 	}
 
+        if(calcfreq) 
+        {
+        /* Count the single bases or residues to get the observed frequences */
+            for(pos=0; pos < ajSeqLen(seq); pos++) 
+            {
+                if(seqisnuc)
+                    result = embNmerNuc2int(s, 1, pos, &otherflag);
+                else
+                    result = embNmerProt2int(s, 1, pos, &otherflag, ignorebz);
+                
+                if(!otherflag)
+                    calcfreq_array[result]++;
+                else
+                    calcfreq_other++;
+
+                calcfreq_total++;
+            }
+        }
+
+
+
 	if(seqisnuc && reverse)
 	{
 	    /* Do it again on the reverse strand */
@@ -189,11 +246,7 @@ int main(int argc, char **argv)
 
 	    for(pos=frame; pos <= ajSeqLen(seq)-word; pos += increment)
 	    {
-		if(seqisnuc)
-		    result = embNmerNuc2int(s, word, pos, &otherflag);
-		else
-		    result = embNmerProt2int(s, word, pos, &otherflag,
-					     ignorebz);
+		result = embNmerNuc2int(s, word, pos, &otherflag);
 
 		/* count this word */
 		if(!otherflag)
@@ -203,6 +256,26 @@ int main(int argc, char **argv)
 
 		total++;
 	    }
+
+            if(calcfreq) 
+            {
+                /* 
+                ** Count the complemented single bases to get their
+                ** observed frequences 
+                */
+
+                for(pos=0; pos < ajSeqLen(seq); pos++) 
+                {
+                    result = embNmerNuc2int(s, 1, pos, &otherflag);
+                                    
+                    if(!otherflag)
+                        calcfreq_array[result]++;
+                    else
+                        calcfreq_other++;
+
+                    calcfreq_total++;
+                }
+            }
 	}
     }
     
@@ -218,8 +291,10 @@ int main(int argc, char **argv)
 		"Obs/Exp Frequency\n#\n");
     
     /*
-    **  if there's no file of expected frequencies, then make one
-    **  by giving each word an equal frequency
+    **  If there's no file of expected word frequencies, 
+    **  then use the frequencies of single bases or residues to calculate them.
+    **  If we are not calculating the frequencies, then make a default
+    **  by giving each word an equal frequency.
     */
     default_exp_freq = 1/(double)no_elements;
     
@@ -235,40 +310,79 @@ int main(int argc, char **argv)
 	else
 	    embNmerInt2prot(&dispseq, word, count, ignorebz);
 
+        /* the default value will cover all contingencies if things fail */
+	exp_freq = default_exp_freq;
+
 	if(have_exp_freq)
 	{
 	    if((ajb=ajTableGet(exptable,dispseq)))
 		ajStrToDouble(ajb, &exp_freq);
-	    else
-		exp_freq = default_exp_freq;
 	}
 	else
-	    exp_freq = default_exp_freq;
+	{
+            if (calcfreq) 
+            {
+                /* 
+                ** get the expected frequency of this word based on
+                ** observed single frequencies 
+                */
+		if(seqisnuc)
+		{
+		    exp_freq = compseq_getexpfreqnuc(dispseq, word,
+                                             calcfreq_array, calcfreq_total);
+                }
+		else
+		{
+		    exp_freq = compseq_getexpfreqprot(dispseq, word, ignorebz,
+                                             calcfreq_array, calcfreq_total);
+                }
+            }
+	}
+	
+        obs_freq = (double)bigarray[count]/(double)total;
 
 	if(exp_freq == 0.0)
 	    /* display a big number rather than a divide by zero error */
 	    obs_exp = 10000000000.0;
 	else
-	{
-	    obs_freq = (double)bigarray[count]/(double)total;
 	    obs_exp = obs_freq/exp_freq;
-	}
 
 	ajFmtPrintF(outfile, "%S\t%Lu\t\t%.7f\t%.7f\t%.7f\n", dispseq,
 		    bigarray[count], obs_freq, exp_freq, obs_exp);
     }
-    
-    /* now output the Other count */
+
+    /* 
+    **
+    ** now output the Other count 
+    **
+    */
+
+    /* get the observed Other frequency */
+    obs_freq = (double)other/(double)total;
+
+    /* get the expected Other frequency */
     if(have_exp_freq)
     {
 	ajStrAssC(&strother, "Other");
 	ajStrToDouble(ajTableGet(exptable, strother), &exp_freq);
     }
-    else
-	obs_freq = (double)other/(double)total;
-    
-    
-    if(!have_exp_freq || exp_freq==0.0)
+    else 
+    {
+        if (calcfreq) 
+            /*
+            ** Is it correct to calculate exp_freq using expected single
+            ** base 'other' when the words are of size > 1?
+            ** I don't think so, because words may contain more than 1
+            ** 'other' base, but there isn't an easy way to do this
+            ** without storing the sequence of all words with an 'other'
+            ** in them.  Maybe do this in a later version?
+            **/
+            exp_freq = (double)calcfreq_other/(double)calcfreq_total;
+    }
+
+
+    /* get the Other Observed/Expected ratio */
+    if((!have_exp_freq && !calcfreq) || exp_freq==0.0)
     {
 	exp_freq = 0.0;
 	/* display a big number rather than a divide by zero error */
@@ -299,21 +413,22 @@ int main(int argc, char **argv)
 
 /* @funcstatic compseq_makebigarray *******************************************
 **
-** Undocumented.
+** Create an array to hold counts of the observed frequencies of words.
 **
-** @param [?] no_elements [ajulong] Undocumented
-** @param [?] bigarray [ajulong**] Undocumented
-** @return [ajint] Undocumented
+** @param [r] no_elements [ajulong] Size of array
+** @param [w] bigarray [ajulong**] Returned pointer to array
+** @return [void] 
 ** @@
 ******************************************************************************/
 
-static ajint compseq_makebigarray(ajulong no_elements, ajulong **bigarray)
+static void compseq_makebigarray(ajulong no_elements, ajulong **bigarray)
 {
 
     ajDebug("makebigarray for %ld elements\n", no_elements);
     AJCNEW(*bigarray, no_elements);
+    ajDebug("makebigarray - after AJCNEW\n");
 
-    return 0;
+    return;
 }
 
 
@@ -321,16 +436,18 @@ static ajint compseq_makebigarray(ajulong no_elements, ajulong **bigarray)
 
 /* @funcstatic compseq_readexpfreq ********************************************
 **
-** Undocumented.
+** Read the expected frequencies of words from a file produced by a
+** previous run of this program. 
 **
-** @param [?] exptable [AjPTable*] Undocumented
-** @param [?] infile [AjPFile] Undocumented
-** @param [?] size [ajint] Undocumented
-** @return [ajint] Undocumented
+** @param [w] exptable [AjPTable*] Table of words and their
+**                                 expected frequencies
+** @param [u] infile [AjPFile] Input file holding expected frequencies
+** @param [r] size [ajint] Size of word expected (used for validation)
+** @return [void] 
 ** @@
 ******************************************************************************/
 
-static ajint compseq_readexpfreq(AjPTable *exptable, AjPFile infile,
+static void compseq_readexpfreq(AjPTable *exptable, AjPFile infile,
 				 ajint size)
 {
 
@@ -428,5 +545,95 @@ static ajint compseq_readexpfreq(AjPTable *exptable, AjPFile infile,
     ajStrDel(&line);
     ajStrTokenClear(&tokens);
 
-    return 0;
+    return;
 }
+
+
+/* @funcstatic compseq_getexpfreqnuc ******************************************
+**
+** Using the observed counts of single bases in the sequence this
+** calculates the expected frequency of a word of one or more bases
+** as the product of the single base frequencies.
+**
+** @param [r] dispseq [const AjPStr] sequence of word
+** @param [r] word [ajint] word length
+** @param [r] calcfreq_array [const ajulong *] array of counts of single bases
+** @param [r] calcfreq_total [ajulong] number of bases counted
+** @return [double] Calculated expected frequency of this word
+** @@
+******************************************************************************/
+
+static double compseq_getexpfreqnuc(const AjPStr dispseq, ajint word,
+	const ajulong *calcfreq_array, ajulong calcfreq_total)
+{
+    ajint i;
+    ajint offset = 0;
+    char c;
+    double result;
+    
+    result = 1.0;
+
+    for(i=0; i<word; i++)
+    {
+        c = ajStrStr(dispseq)[i];
+
+        if(c == 'A')
+            offset = 0;
+        else if(c == 'C')
+            offset = 1;
+        else if(c == 'G')
+            offset = 2;
+        else if(c == 'T')
+            offset = 3; 
+        else
+            ajFatal("A non-ACGT base was found: %c\n", c);
+
+        result *= (double)calcfreq_array[offset]/(double)calcfreq_total;
+    }
+
+    return result;
+
+}
+
+
+/* @funcstatic compseq_getexpfreqprot *****************************************
+**
+** Using the observed counts of single residues in the sequence this
+** calculates the expected frequency of a word of one or more residues
+** by simply summing the single residue frequencies.
+**
+** @param [r] dispseq [const AjPStr] sequence of word
+** @param [r] word [ajint] word length
+** @param [r] ignorebz [AjBool] True if ignoring B and Z residues
+** @param [r] calcfreq_array [const ajulong *] array of counts of single bases
+** @param [r] calcfreq_total [ajulong] number of bases counted
+** @return [double] Calculated expected frequency of this word
+** @@
+******************************************************************************/
+
+
+static double compseq_getexpfreqprot(const AjPStr dispseq, ajint word,
+				     AjBool ignorebz,
+				     const ajulong *calcfreq_array,
+				     ajulong calcfreq_total)
+{
+    double result;
+    ajint i;
+    ajint offset = 0;
+    const char *s;
+    AjBool otherflag;
+    
+    result = 1.0;
+
+    s = ajStrStr(dispseq);
+
+    for(i=0; i<word; i++)
+    {
+        /* get the value of the next residue in dispseq */
+        offset = embNmerProt2int(s, 1, i, &otherflag, ignorebz);
+        result *= (double)calcfreq_array[offset]/(double)calcfreq_total;
+    }
+    return result;
+
+}                                      
+

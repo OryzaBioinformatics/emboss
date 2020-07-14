@@ -198,7 +198,7 @@ IT IS DONE FOR YOU.
                                   from protein sequences if you are counting
                                   protein sequence word frequencies, and you
                                   must use one made from nucleotide
-                                  frequencies if you and analysing a
+                                  frequencies if you are analysing a
                                   nucleotide sequence.
    -frame              integer    The normal behaviour of 'compseq' is to
                                   count the frequencies of all words that
@@ -223,6 +223,26 @@ IT IS DONE FOR YOU.
 *  -reverse            boolean    Set this to be true if you also wish to also
                                   count words in the reverse complement of a
                                   nucleic sequence.
+   -calcfreq           boolean    If this is set true then the expected
+                                  frequencies of words are calculated from the
+                                  observed frequency of single bases or
+                                  residues in the sequences.
+                                  If you are reporting a word size of 1
+                                  (single bases or residues) then there is no
+                                  point in using this option because the
+                                  calculated expected frequency will be equal
+                                  to the observed frequency.
+                                  Calculating the expected frequencies like
+                                  this will give an approximation of the
+                                  expected frequencies that you might get by
+                                  using an input file of frequencies produced
+                                  by a previous run of this program. If an
+                                  input file of expected word frequencies has
+                                  been specified then the values from that
+                                  file will be used instead of this
+                                  calculation of expected frequency from the
+                                  sequence, even if 'calcfreq' is set to be
+                                  true.
    -[no]zerocount      boolean    You can make the output results file much
                                   smaller if you do not display the words with
                                   a zero count.
@@ -231,8 +251,8 @@ IT IS DONE FOR YOU.
    Associated qualifiers:
 
    "-sequence" associated qualifiers
-   -sbegin1             integer    First base used
-   -send1               integer    Last base used, def=seq length
+   -sbegin1             integer    Start of each sequence to be used
+   -send1               integer    End of each sequence to be used
    -sreverse1           boolean    Reverse (if DNA)
    -sask1               boolean    Ask for begin/end/reverse
    -snucleotide1        boolean    Sequence is nucleotide
@@ -307,7 +327,7 @@ Thus if you want to count codon frequencies, you should enter 3 here.</td>
 <tr>
 <td>-infile</td>
 <td>This is a file previously produced by 'compseq' that can be used to set the expected frequencies of words in this analysis.
-The word size in the current run must be the same as the one in this results file. Obviously, you should use a file produced from protein sequences if you are counting protein sequence word frequencies, and you must use one made from nucleotide frequencies if you and analysing a nucleotide sequence.</td>
+The word size in the current run must be the same as the one in this results file. Obviously, you should use a file produced from protein sequences if you are counting protein sequence word frequencies, and you must use one made from nucleotide frequencies if you are analysing a nucleotide sequence.</td>
 <td>Input file</td>
 <td><b>Required</b></td>
 </tr>
@@ -333,6 +353,15 @@ These are not commonly used codes and you may wish not to count words containing
 <tr>
 <td>-reverse</td>
 <td>Set this to be true if you also wish to also count words in the reverse complement of a nucleic sequence.</td>
+<td>Boolean value Yes/No</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>-calcfreq</td>
+<td>If this is set true then the expected frequencies of words are calculated from the observed frequency of single bases or residues in the sequences.
+If you are reporting a word size of 1 (single bases or residues) then there is no point in using this option because the calculated expected frequency will be equal to the observed frequency.
+Calculating the expected frequencies like this will give an approximation of the expected frequencies that you might get by using an input file of frequencies produced by a previous run of this program. If an input file of expected word frequencies has been specified then the values from that file will be used instead of this calculation of expected frequency from the sequence, even if 'calcfreq' is set to be true.</td>
 <td>Boolean value Yes/No</td>
 <td>No</td>
 </tr>
@@ -812,7 +841,7 @@ TTC	1		0.0058140	0.0193798	0.3000007
 TTG	0		0.0000000	0.0135659	0.0000000
 TTT	5		0.0290698	0.0135659	2.1428558
 
-Other	0		0.0290698	0.0000000	10000000000.0000000
+Other	0		0.0000000	0.0000000	10000000000.0000000
 </pre>
 </td></tr></table><p>
 
@@ -987,9 +1016,11 @@ amounts of memory.
 </H2>
 
 
-Gary Williams (gwilliam&nbsp;&copy;&nbsp;hgmp.mrc.ac.uk)
+Gary Williams (gwilliam&nbsp;&copy;&nbsp;rfcgr.mrc.ac.uk)
 <br>
-HGMP-RC, Genome Campus, Hinxton, Cambridge CB10 1SB, UK
+MRC Rosalind Franklin Centre for Genomics Research
+Wellcome Trust Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
+
 
 
 <H2>
