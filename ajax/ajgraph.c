@@ -7117,6 +7117,9 @@ void ajGraphUnused(void)
     GraphArrayGapsI(0, &i, &i);
     GraphOpenNull(NULL,NULL);
 
+#ifndef GROUT
+    GraphOpenXml(NULL,NULL);
+#endif
     return;
 }
 

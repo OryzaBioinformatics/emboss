@@ -2183,31 +2183,60 @@ static AjBool nexusSetSequences(AjPNexus thys)
     AjBool havetaxa = ajFalse;
     ajint itax=0;
     AjPRegexp word;
+    char gapch;
+
+    ajDebug("nexusSetSequences\n");
 
 
     if (!thys->Characters)		/* no characters defined */
+    {
+	ajDebug("Failed - No characters defined\n");
 	return ajFalse;
+    }
 
     if (thys->Characters->Sequences)	/* already done */
+    {
+	ajDebug("Success - Sequences already done\n");
 	return ajTrue;
+    }
 
     if (!thys->Characters->Nchar)	/* must have been defined */
+    {
+	ajDebug("Failed - must have been defined\n");
 	return ajFalse;
+    }
 
     if (!thys->Ntax)			/* taxa required */
+    {
+	ajDebug("Failed - number of taxa required\n");
 	return ajFalse;
+    }
 
     if (!thys->Taxa)			/* taxa required */
+    {
+	ajDebug("Failed - taxa names required\n");
 	return ajFalse;
+    }
 
     if (!thys->Characters->Matrix)	/* matrix required */
+    {
+	ajDebug("Failed - matrix required\n");
 	return ajFalse;
+    }
 
     if (ajStrMatchCaseC(thys->Characters->DataType, /* must be sequence data */
 			"continuous") ||
 	ajStrMatchCaseC(thys->Characters->DataType, /* must be sequence data */
 			"standard"))
+    {
+	ajDebug("Failed - not sequence data\n");
 	return ajFalse;
+    }
+
+    if(thys->Characters->Gap)
+	gapch = thys->Characters->Gap;
+    else
+	gapch = '.';
 
     word = ajRegCompC("\\S+");
 
@@ -2243,6 +2272,7 @@ static AjBool nexusSetSequences(AjPNexus thys)
 	    ajRegSubI(word, 0, &taxlabel);
 	    ajRegPost(word, &tmpstr);
 	    ajStrAssS(&rdline, tmpstr);
+	    ajStrQuoteStripAll(&taxlabel);
 
 	    if (!havetaxa)
 	    {
@@ -2276,6 +2306,7 @@ static AjBool nexusSetSequences(AjPNexus thys)
 	    ajRegPost(word, &tmpstr);
 	    ajStrAssS(&rdline, tmpstr);
 	}
+	ajStrSubstituteKK(&seqstr, gapch, '-');
     }
 
     ajRegFree(&word);

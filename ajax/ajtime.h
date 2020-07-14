@@ -33,6 +33,7 @@ const AjPTime ajTimeTodayRef (void);
 const AjPTime ajTimeTodayRefF (const char* timefmt);
 void    ajTimeTrace (const AjPTime thys);
 AjPTime ajTimeSet( const char *timefmt, ajint mday, ajint mon, ajint year) ;
+AjBool  ajTimeSetC(AjPTime thys, const char* timestr);
 AjPTime ajTimeNew(void);
 void    ajTimeDel(AjPTime *thys);
 

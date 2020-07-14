@@ -363,11 +363,11 @@ void ajMemStat(const char* title)
     static ajlong statZero        = 0;
 
     ajDebug("Memory usage since last call %s:\n", title);
-    ajDebug("Memory usage (bytes): %ld allocated, %ld reallocated "
-	    "%ld zeroed\n",
+    ajDebug("Memory usage (bytes): %Ld allocated, %Ld reallocated "
+	    "%Ld zeroed\n",
 	    memAlloc - statAlloc, memResize - statResize, memZero - statZero);
-    ajDebug("Memory usage (number): %ld allocates, "
-	    "%ld frees, %ld resizes, %ld in use\n",
+    ajDebug("Memory usage (number): %Ld allocates, "
+	    "%Ld frees, %Ld resizes, %Ld in use\n",
 	    memTotal - statTotal, memFree - statFree,
 	    memResizeCount - statResizeCount, memCount - statCount);
 
@@ -396,11 +396,11 @@ void ajMemStat(const char* title)
 
 void ajMemExit(void)
 {
-    ajDebug("Memory usage (bytes): %ld allocated, %ld reallocated "
-	    "%ld zeroed\n",
+    ajDebug("Memory usage (bytes): %Ld allocated, %Ld reallocated "
+	    "%Ld zeroed\n",
 	    memAlloc, memResize, memZero);
-    ajDebug("Memory usage (number): %ld allocates, "
-	    "%ld frees, %ld resizes, %ld in use\n",
+    ajDebug("Memory usage (number): %Ld allocates, "
+	    "%Ld frees, %Ld resizes, %Ld in use\n",
 	    memTotal, memFree, memResizeCount, memCount);
 
     return;

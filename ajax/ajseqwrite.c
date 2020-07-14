@@ -2757,7 +2757,7 @@ static void seqWriteMase(AjPSeqout outseq)
 
     if (!ajFileTell(outseq->File))
 	ajFmtPrintF(outseq->File, ";;Written by EMBOSS on %D\n",
-		ajTimeTodayRefF("log"));
+		ajTimeTodayRefF("report"));
 
     ajFmtPrintF(outseq->File, ";%S\n",
 		outseq->Desc);
@@ -3100,7 +3100,7 @@ static void seqWriteDebug(AjPSeqout outseq)
     }
     
     ajFmtPrintF(outseq->File, "  SeqVersion: '%S'\n", outseq->Sv);
-    ajFmtPrintF(outseq->File, "  GI Version: '%S'\n", outseq->Gi);
+    ajFmtPrintF(outseq->File, "  GenInfo Id: '%S'\n", outseq->Gi);
     ajFmtPrintF(outseq->File, "  Description: '%S'\n", outseq->Desc);
     if(ajListLength(outseq->Keylist))
     {
@@ -4416,7 +4416,7 @@ void ajSeqoutTrace(const AjPSeqout seq)
 	ajDebug( "  SeqVersion: '%S'\n", seq->Sv);
 
     if(ajStrLen(seq->Gi))
-	ajDebug( "  GI Version: '%S'\n", seq->Gi);
+	ajDebug( "  GenInfo Id: '%S'\n", seq->Gi);
 
     if(ajStrLen(seq->Desc))
 	ajDebug( "  Description: '%S'\n", seq->Desc);

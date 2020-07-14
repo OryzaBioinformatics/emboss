@@ -59,7 +59,7 @@ AjIntArray*   ajMatrixArray (const AjPMatrix thys);
 void          ajMatrixChar (const AjPMatrix thys, ajint i, AjPStr *label);
 AjPSeqCvt     ajMatrixCvt (const AjPMatrix thys);
 void          ajMatrixDel (AjPMatrix *thys);
-AjPStr        ajMatrixName (const AjPMatrix thys);
+const AjPStr  ajMatrixName (const AjPMatrix thys);
 AjPMatrix     ajMatrixNew (const AjPPStr codes, ajint n,
 			   const AjPStr filename);
 AjBool        ajMatrixSeqNum (const AjPMatrix thys, const AjPSeq seq,
@@ -71,7 +71,7 @@ AjFloatArray* ajMatrixfArray (const AjPMatrixf thys);
 void          ajMatrixfChar (const AjPMatrixf thys, ajint i, AjPStr *label);
 AjPSeqCvt     ajMatrixfCvt (const AjPMatrixf thys);
 void          ajMatrixfDel (AjPMatrixf *thys);
-AjPStr        ajMatrixfName (const AjPMatrixf thys);
+const AjPStr  ajMatrixfName (const AjPMatrixf thys);
 AjPMatrixf    ajMatrixfNew (const AjPPStr codes, ajint n,
 			    const AjPStr filename);
 AjBool        ajMatrixfSeqNum (const AjPMatrixf thys, const AjPSeq seq,

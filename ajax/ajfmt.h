@@ -72,7 +72,7 @@ ajint  ajFmtVfmtStrCL (char** buf, ajint pos, ajint *size,
 
 ajint  ajFmtScanS (const AjPStr thys, const char* fmt, ...);
 ajint  ajFmtScanC (const char* thys, const char* fmt, ...);
-
+ajint  ajFmtScanF (AjPFile thys, const char* fmt, ...);
 #endif
 
 #ifdef __cplusplus

@@ -60,19 +60,19 @@ typedef struct AjSListNode {
 ** @modify ajListstrReverse Reverse the order of the nodes in an AjPStr list
 ** @modify ajListMap Call a function for each node in a list.
 ** @modify ajListstrMap Call a function for each node in a list.
-** @cast   ajListToArray Create an array of the pointers to the data.
-** @cast   ajListstrToArray Create an array of the pointers to the data.
 ** @modify ajListPushList Merges two lists.
 ** @modify ajListstrPushList Merges two AjPStr lists.
 ** @modify ajListSort Sorts a list.
+** @modify ajListPop Removes and returns the first node.
+** @modify ajListstrPop Removes and returns the first AjPStr node.
+** @cast   ajListToArray Create an array of the pointers to the data.
+** @cast   ajListstrToArray Create an array of the pointers to the data.
 ** @cast ajListFirst Set pointer to first node's data. Doesn't remove the node.
 ** @cast ajListLast Set pointer to last node's data. Doesn't remove the node.
 ** @cast ajListLength get the number of nodes in a linked list.
 ** @cast ajListstrLength get the number of nodes in an AjPStr linked list.
 ** @cast ajListPeek Returns the first node but keeps it on the list
 ** @cast ajListstrPeek Returns the first node but keeps it on the list
-** @modify ajListPop Removes and returns the first node.
-** @modify ajListstrPop Removes and returns the first AjPStr node.
 ** @use ajListFind For each node in the list call a function
 **                 and return ajTrue when found.
 ** @use ajListstrFind For each node in the list call a function
@@ -111,12 +111,12 @@ typedef struct AjSList {
 ** @new ajListIterRead Default constructor for a read-only list iterator
 ** @cast ajListIterDone Tests whether an iterator is finished.
 ** @delete ajListIterFree Deletes a list iterator.
-** @cast ajListIterMore Tests whether iterator can return another item.
 ** @modify ajListIterNext Returns next item using iterator, or steps off the end.
 ** @modify ajListRemove Removes an item at the current iterator.
 ** @modify ajListstrRemove Removes an AjPStr item at the current iterator.
 ** @modify ajListInsert Inserts an item at the current iterator.
 ** @modify ajListstrInsert Inserts an AjPStr item at the current iterator.
+** @cast ajListIterMore Tests whether iterator can return another item.
 ** @output ajListIterTrace Traces a list iterator.
 ** @output ajListstrIterTrace Traces an AjPStr list iterator.
 ** @@

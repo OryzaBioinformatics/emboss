@@ -269,6 +269,8 @@ AjPFileBuff ajFileBuffNew (void);
 AjPFileBuff ajFileBuffNewDC (const AjPStr dir, const char* filename);
 AjPFileBuff ajFileBuffNewDF (const AjPStr dir, const AjPStr filename);
 AjPFileBuff ajFileBuffNewDW (const AjPStr dir, const AjPStr wildfile);
+AjPFileBuff ajFileBuffNewDWE (const AjPStr dir, const AjPStr wildfile,
+			      const AjPStr exclude);
 AjPFileBuff ajFileBuffNewF (FILE *fp);
 AjPFileBuff ajFileBuffNewFile (AjPFile file);
 AjPFileBuff ajFileBuffNewIn (const AjPStr name);
@@ -329,6 +331,8 @@ AjPFile     ajFileNewDirF(const AjPDir dir, const AjPStr filename);
 AjPFile     ajFileNewDC (const AjPStr dir, const char* filename);
 AjPFile     ajFileNewDF (const AjPStr dir, const AjPStr filename);
 AjPFile     ajFileNewDW (const AjPStr dir, const AjPStr wildfile);
+AjPFile     ajFileNewDWE (const AjPStr dir, const AjPStr wildfile,
+			  const AjPStr exclude);
 AjPFile     ajFileNewF (FILE* file);
 AjPFile     ajFileNewIn (const AjPStr name);
 AjPFile     ajFileNewInC (const char *name);

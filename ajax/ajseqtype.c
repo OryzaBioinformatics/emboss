@@ -177,7 +177,7 @@ static SeqOType seqType[] =
 	 seqTypeCharNucGapPhylo,
 	 "DNA sequence with gaps and queries"},
     {"rna",            AJFALSE, AJTRUE,  ISNUC,  "?XxTt", "NNNUu",
-	 seqTypeCharAny,
+	 seqTypeCharNuc,
 	 "RNA sequence"},
     {"purerna",        AJFALSE, AJFALSE, ISNUC,  "Tt", "Uu",
 	 seqTypeCharNucPure,
@@ -354,7 +354,7 @@ static AjBool seqTypeFix(AjPSeq thys, ajint itype)
 		ret = seqTypeFixReg(thys, itype, 'X');
 	    break;
 	default:
-	    ajDie("Unknown sequence type code for '%c'", seqType[itype].Name);
+	    ajDie("Unknown sequence type code for '%s'", seqType[itype].Name);
 	    return ajFalse;
 	}
     }
@@ -560,9 +560,9 @@ AjBool ajSeqTypeCheckIn(AjPSeq thys, const AjPSeqin seqin)
     
     AjPStr Type;
     
-    ajDebug("testing sequence '%s' '%S' type '%S' IsNuc %B IsProt %B\n",
+    /*ajDebug("testing sequence '%s' '%S' type '%S' IsNuc %B IsProt %B\n",
 	    ajSeqName(thys), thys->Seq,
-	    seqin->Inputtype, seqin->IsNuc, seqin->IsProt);
+	    seqin->Inputtype, seqin->IsNuc, seqin->IsProt);*/
 
     Type = seqin->Inputtype; /* ACD file had a predefined seq type */
     
@@ -1181,14 +1181,14 @@ static char seqTypeTest(const AjPStr thys, AjPRegexp badchars)
     if(!ajStrLen(thys))
 	return ret;
 
-    ajDebug("seqTypeTest, Sequence '%S'\n", thys);
+    /*ajDebug("seqTypeTest, Sequence '%S'\n", thys);*/
     if(!ajRegExec(badchars, thys))
 	return ret;
 
     ajRegSubI(badchars, 1, &tmpstr);
     ret = ajStrChar(tmpstr, 0);
-    ajDebug(
-     "seqTypeTest, Sequence had bad character '%c' (%x) at %d of %d/%d\n '%S'",
+    ajDebug("seqTypeTest, Sequence had bad character '%c' (%x) "
+	    "at %d of %d/%d\n '%S'\n",
 	    ret, ret,
 	    ajRegOffset(badchars),
 	    ajStrLen(thys), strlen(ajStrStr(thys)), tmpstr);

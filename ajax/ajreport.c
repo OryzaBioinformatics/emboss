@@ -1924,9 +1924,10 @@ static void reportWriteTagseq(AjPReport thys,
 	ajStrAppKI(&seqmarkup[j], ' ', seqlen);
     }
     
-    for(i=0; i < seqend-9; i+=10)
+    ajFmtPrintAppS(&seqnumber, "    .%5d", 10);
+    for(i=10; i < seqend-9; i+=10)
 	ajFmtPrintAppS(&seqnumber, "    .%5d", i+10);
-    
+
     iterft = ajListIterRead(ftable->Features);
     while(ajListIterMore(iterft))
     {
@@ -2406,7 +2407,7 @@ void ajReportWriteHeader(AjPReport thys,
     
     outf = thys->File;
 
-    today =  ajTimeTodayF("log");
+    today =  ajTimeTodayF("report");
     
     /* Header for the top of the file (first call for report only) */
     

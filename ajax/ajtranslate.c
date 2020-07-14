@@ -347,7 +347,8 @@ AjPTrn ajTrnNew(const AjPStr trnFileName)
 /* @func ajTrnReadFile ********************************************************
 **
 ** Reads a translation data file
-** ajTrnDel(trnObj); should be called when translation has ceased.
+**
+** The destructor ajTrnDel should be called when translation has ceased.
 **
 ** @param [w] trnObj [AjPTrn] translation table object
 ** @param [u] trnFile [AjPFile] translation table file handle
@@ -398,9 +399,11 @@ void ajTrnReadFile(AjPTrn trnObj, AjPFile trnFile)
     char white[] = " \t\n\r!@#$%^&()_+=|\\~`{[}]:;\"'<,>.?/";
 
 
+    ajDebug("ajTrnReadFile\n");
 
     while(ajFileReadLine(trnFile, &trnLine))
     {
+	ajDebug("Line: '%S'\n", trnLine);
 	trnNoComment(&trnLine);
 	if(ajStrLen(trnLine))
 	{
@@ -416,6 +419,7 @@ void ajTrnReadFile(AjPTrn trnObj, AjPFile trnFile)
     /* title */
     while(ajFileReadLine(trnFile, &trnLine))
     {
+	ajDebug("Line: '%S'\n", trnLine);
 	trnNoComment(&trnLine);
 	if(ajStrLen(trnLine))
 	{
@@ -427,6 +431,7 @@ void ajTrnReadFile(AjPTrn trnObj, AjPFile trnFile)
     /* rest */
     while(ajFileReadLine(trnFile, &trnLine))
     {
+	ajDebug("Line: '%S'\n", trnLine);
 	trnNoComment(&trnLine);
 	if(ajStrLen(trnLine))
 	{
@@ -1132,9 +1137,6 @@ char ajTrnRevCodonK(const AjPTrn trnObj, const char *codon)
 **
 ** Translates a sequence in a char *
 **
-** ajTrnInit must be called before this routine to set up the
-** translation table.
-**
 ** This routine translates in frame 1 (from the first base) to the last full
 ** triplet codon, (i.e. if there are 1 or 2 bases extra at the end, they are
 ** ignored)
@@ -1171,9 +1173,6 @@ void ajTrnC(const AjPTrn trnObj, const char *str, ajint len, AjPStr *pep)
 /* @func ajTrnRevC ************************************************************
 **
 ** Translates the reverse complement of a sequence in a char *.
-**
-** ajTrnInit must be called before this routine to set up the
-** translation table.
 **
 ** This routine translates in frame -1 (using the frame '1' codons)
 ** to the first full triplet codon,
@@ -1213,9 +1212,6 @@ void ajTrnRevC(const AjPTrn trnObj, const char *str, ajint len, AjPStr *pep)
 **
 ** Translates the reverse complement of a sequence in a char *.
 **
-** ajTrnInit must be called before this routine to set up the
-** translation table.
-**
 ** This routine translates in frame -4 (from the last base) to the first full
 ** triplet codon, (i.e. if there are 1 or 2 bases extra at the start, they are
 ** ignored).
@@ -1253,9 +1249,6 @@ void ajTrnAltRevC(const AjPTrn trnObj, const char *str, ajint len, AjPStr *pep)
 **
 ** Translates a sequence in a AjPStr.
 **
-** ajTrnInit must be called before this routine to set up the
-** translation table.
-**
 ** This routine translates in frame 1 (from the first base) to the last full
 ** triplet codon, (i.e. if there are 1 or 2 bases extra at the end, they are
 ** ignored)
@@ -1285,9 +1278,6 @@ void ajTrnStr(const AjPTrn trnObj, const AjPStr str, AjPStr *pep)
 **
 ** Translates the reverse complement of a sequence in a AjPStr.
 **
-** ajTrnInit must be called before this routine to set up the
-** translation table.
-**
 ** This routine translates in frame -1 (from the first base) to the last full
 ** triplet codon, (i.e. if there are 1 or 2 bases extra at the end, they are
 ** ignored)
@@ -1316,9 +1306,6 @@ void ajTrnRevStr(const AjPTrn trnObj, const AjPStr str, AjPStr *pep)
 /* @func ajTrnAltRevStr *******************************************************
 **
 ** Translates the reverse complement of a sequence in a AjPStr.
-**
-** ajTrnInit must be called before this routine to set up the
-** translation table.
 **
 ** This routine translates in frame -4 (from the last base) to the first full
 ** triplet codon, (i.e. if there are 1 or 2 bases extra at the start, they are
@@ -1351,9 +1338,6 @@ void ajTrnAltRevStr(const AjPTrn trnObj, const AjPStr str, AjPStr *pep)
 **
 ** Translates a sequence in a AjPSeq
 **
-** ajTrnInit must be called before this routine to set up the
-** translation table.
-**
 ** This routine translates in frame 1 (from the first base) to the last full
 ** triplet codon, (i.e. if there are 1 or 2 bases extra at the end, they are
 ** ignored)
@@ -1384,9 +1368,6 @@ void ajTrnSeq(const AjPTrn trnObj, const AjPSeq seq, AjPStr *pep)
 ** Translates the reverse complement of a sequence in a AjPSeq
 ** The translation is APPENDED to the input peptide.
 **
-** ajTrnInit must be called before this routine to set up the
-** translation table.
-**
 ** This routine translates in frame 1 (from the first base) to the last full
 ** triplet codon, (i.e. if there are 1 or 2 bases extra at the end, they are
 ** ignored)
@@ -1416,9 +1397,6 @@ void ajTrnRevSeq(const AjPTrn trnObj, const AjPSeq seq, AjPStr *pep)
 **
 ** Translates the reverse complement of a sequence in a AjPSeq
 ** The translation is APPENDED to the input peptide.
-**
-** ajTrnInit must be called before this routine to set up the
-** translation table.
 **
 ** This routine translates in frame -4 (from the last base) to the first full
 ** triplet codon, (i.e. if there are 1 or 2 bases extra at the start, they are
@@ -1452,9 +1430,6 @@ void ajTrnAltRevSeq(const AjPTrn trnObj, const AjPSeq seq, AjPStr *pep)
 **
 ** Translates a sequence in a char * in the specified frame.
 ** The translation is APPENDED to the input peptide.
-**
-** ajTrnInit must be called before this routine to set up the
-** translation table.
 **
 ** This routine translates in the specified frame (one of:
 ** 1,2,3,-1,-2,-3,4,5,6,-4,-5,-6) to the last full triplet codon,
@@ -1519,9 +1494,6 @@ void ajTrnCFrame(const AjPTrn trnObj, const char *seq, ajint len, ajint frame,
 ** Translates a sequence in a AjStr in the specified frame.
 ** The translation is APPENDED to the input peptide.
 **
-** ajTrnInit must be called before this routine to set up the
-** translation table.
-**
 ** This routine translates in the specified frame (one of:
 ** 1,2,3,-1,-2,-3,4,5,6,-4,-5,-6) to the last full triplet codon,
 ** (i.e.  if there are 1 or 2 bases extra at the end, they are ignored).
@@ -1567,9 +1539,6 @@ void ajTrnStrFrame(const AjPTrn trnObj, const AjPStr seq, ajint frame,
 **
 ** Translates a sequence in a AjSeq in the specified frame.
 ** The translation is APPENDED to the input peptide.
-**
-** ajTrnInit must be called before this routine to set up the
-** translation table.
 **
 ** This routine translates in the specified frame (one of:
 ** 1,2,3,-1,-2,-3,4,5,6,-4,-5,-6) to the last full triplet codon,
@@ -1617,9 +1586,6 @@ void ajTrnSeqFrame(const AjPTrn trnObj, const AjPSeq seq, ajint frame,
 **
 ** Translates a sequence in a AjSeq in the specified frame and returns a
 ** new peptide.
-**
-** ajTrnInit must be called before this routine to set up the
-** translation table.
 **
 ** This routine translates in the specified frame (one of:
 ** 1,2,3,-1,-2,-3,4,5,6,-4,-5,-6) to the last full triplet codon,
@@ -1683,9 +1649,6 @@ AjPSeq ajTrnSeqFramePep(const AjPTrn trnObj, const AjPSeq seq, ajint frame)
 ** in the specified frame.
 ** The translation is APPENDED to the input peptide.
 **
-** ajTrnInit must be called before this routine to set up the
-** translation table.
-**
 ** @param [r] trnObj [const AjPTrn] Translation tables
 ** @param [r] seq [const char *] sequence string to translate
 ** @param [r] len [ajint] sequence string length
@@ -1747,9 +1710,6 @@ ajint ajTrnCDangle(const AjPTrn trnObj, const char *seq, ajint len,
 ** in the specified frame.
 ** The translation is APPENDED to the input peptide.
 **
-** ajTrnInit must be called before this routine to set up the
-** translation table.
-**
 ** @param [r] trnObj [const AjPTrn] Translation tables
 ** @param [r] seq [const AjPStr] sequence string to translate
 ** @param [r] frame [ajint] frame to translate in
@@ -1774,9 +1734,6 @@ ajint ajTrnStrDangle(const AjPTrn trnObj, const AjPStr seq, ajint frame,
 /* @func ajTrnSeqOrig *********************************************************
 **
 ** Translates a sequence.
-**
-** ajTrnInit must be called before this routine to set up the
-** translation table.
 **
 ** The frame to translate is in the range -3 to 6.
 ** Frames 1 to 3 give normal forward translations.

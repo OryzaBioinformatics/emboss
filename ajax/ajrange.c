@@ -79,7 +79,6 @@
 AjPRange ajRangeNewI(ajint n)
 {
     AjPRange thys;
-    ajint i;
 
     AJNEW0(thys);
 
@@ -87,11 +86,51 @@ AjPRange ajRangeNewI(ajint n)
 
     if(n>0)
     {
-	thys->start = AJALLOC(n*sizeof(ajint));
-	thys->end   = AJALLOC(n*sizeof(ajint));
-	thys->text  = AJALLOC(n*sizeof(AjPStr *));
+	thys->start = AJALLOC0(n*sizeof(ajint));
+	thys->end   = AJALLOC0(n*sizeof(ajint));
+	thys->text  = AJALLOC0(n*sizeof(AjPStr *));
+    }
+
+    return thys;
+}
+
+
+
+
+/* @func ajRangeCopy **********************************************************
+**
+** Default constructor for AJAX range objects.
+**
+** @param [r] src [const AjPRange] Source range
+**
+** @return [AjPRange] Pointer to a range object
+** @category new [AjPRange] Copy constructor for range objects
+** @@
+******************************************************************************/
+
+AjPRange ajRangeCopy(const AjPRange src)
+{
+    AjPRange thys;
+    ajint i;
+    ajint n;
+
+    AJNEW0(thys);
+
+    n = src->n;
+
+    thys->n = n;
+
+    if(src->n > 0)
+    {
+	thys->start = AJALLOC0(n*sizeof(ajint));
+	thys->end   = AJALLOC0(n*sizeof(ajint));
+	thys->text  = AJALLOC0(n*sizeof(AjPStr *));
 	for(i=0; i < n; i++)
-	    thys->text[i] = NULL;
+	{
+	    thys->start[i] = src->start[i];
+	    thys->end[i] = src->end[i];
+	    ajStrAssS(&thys->text[i], src->text[i]);
+	}
     }
 
     return thys;
@@ -513,6 +552,12 @@ AjBool ajRangeValues(const AjPRange thys, ajint element,
 {
     if(element<0 || element>=thys->n)
 	return ajFalse;
+    if(thys->start[element] < 1)
+	return ajFalse;
+    if(thys->end[element] < 1)
+	return ajFalse;
+    if(thys->start[element] > thys->end[element])
+	return ajFalse;
 
     *start = thys->start[element];
     *end   = thys->end[element];
@@ -627,6 +672,297 @@ AjBool ajRangeBegin(AjPRange thys, ajint begin)
 
 
 
+/* @func ajRangeSeqExtractList ************************************************
+**
+** Extract the range from a sequence and place the resulting text in a
+** list of strings.
+**
+** N.B. the resulting list will be regions of the input sequence listed
+** in the order specified in the set of ranges. If these are not in ascending
+** order, the resulting list of strings will not be in ascending order either.
+**
+** @param [r] thys [const AjPRange] range object
+** @param [r] seq [const AjPSeq] sequence to extract from
+** @param [w] outliststr [AjPList] resulting list of strings
+**
+** @return [AjBool] true if result is not the whole sequence
+** @category use [AjPRange] PushApp substrings defined by range onto list
+** @@
+******************************************************************************/
+
+AjBool ajRangeSeqExtractList(const AjPRange thys,
+			     const AjPSeq seq, AjPList outliststr)
+{
+
+    ajint nr;
+    ajint i;
+    ajint st;
+    ajint en;
+    AjBool result = ajFalse;
+    AjPStr str;
+
+    nr = ajRangeNumber(thys);
+
+    if(nr)
+    {
+	for(i=0; i<nr; i++)
+	{
+	    result = ajTrue;
+	    if(!ajRangeValues(thys,i,&st,&en))
+		continue;
+	    str = ajStrNew();
+	    ajStrAppSub(&str, ajSeqStr(seq), st-1, en-1);
+	    ajListstrPushApp(outliststr, str);
+	}
+    }
+    else
+    {
+	str = ajSeqStrCopy(seq);
+	ajListstrPushApp(outliststr, str);
+    }
+
+    return result;
+}
+
+
+
+
+/* @func ajRangeSeqExtract ****************************************************
+**
+** Extract the range from a sequence (Remove regions not in the range(s))
+** N.B. the resulting sequence will be regions of the original concatenated
+** in the order specified in the set of ranges. If these are not in ascending
+** order, the resulting sequence will not be in position order either.
+**
+** @param [r] thys [const AjPRange] range object
+** @param [u] seq [AjPSeq] Sequence
+**
+** @return [AjBool] true if sequence was modified
+** @category use [AjPRange] Extract substrings defined by range
+** @@
+******************************************************************************/
+
+AjBool ajRangeSeqExtract(const AjPRange thys, AjPSeq seq)
+{
+    ajint nr;
+    ajint i;
+    ajint st;
+    ajint en;
+    AjBool result = ajFalse;
+    AjPStr outstr = NULL;
+
+    nr = ajRangeNumber(thys);
+
+    ajDebug("ajRangeStrExtract Number:%d\n", nr);
+
+    if (nr)
+    {
+	for(i=0; i<nr; i++)
+	{
+	    result = ajTrue;
+	    if(!ajRangeValues(thys,i,&st,&en))
+	       continue;
+	    ajStrAppSub(&outstr, ajSeqStr(seq), st-1, en-1);
+	    ajDebug("Range [%d] %d..%d '%S'\n", i, st, en, outstr);
+	}
+	ajSeqReplace(seq, outstr);
+	ajStrDel(&outstr);
+    }
+
+    return result;
+}
+
+
+
+
+
+/* @func ajRangeSeqStuff ******************************************************
+**
+** The opposite of ajRangeStrExtract()
+** Stuff space characters into a string to pad out to the range.
+**
+** It takes a string and an ordered, non-overlapping set of ranges and puts
+** spaces into the string between the ranges.
+** So starting with the string 'abcde' and the ranges 3-5,7-8 it will produce:
+** '  abc de'
+**
+** @param [r] thys [const AjPRange] range object
+** @param [u] seq [AjPSeq] Sequence to be modified
+**
+** @return [AjBool] true if sequence was modified
+** @category use [AjPRange] The opposite of ajRangeSeqExtract
+** @@
+******************************************************************************/
+
+AjBool ajRangeSeqStuff(const AjPRange thys, AjPSeq seq)
+{
+    ajint nr;
+    ajint i;
+    ajint j;
+    ajint lasten = 0;
+    ajint lastst = 0;
+    ajint len;
+    ajint st;
+    ajint en;
+    AjBool result = ajFalse;
+    AjPStr outstr = NULL;
+
+    nr = ajRangeNumber(thys);
+
+    if(nr)
+    {
+	for(i=0; i<nr; i++)
+	{
+	    result = ajTrue;
+	    if(!ajRangeValues(thys,i,&st,&en))
+		continue;
+
+	    /* change range positions to string positions */
+	    --st;
+	    --en;
+	    len = en-st;
+
+	    for(j=lasten; j<st; j++)
+		ajStrAppC(&outstr, " ");
+
+	    ajStrAppSub(&outstr, ajSeqStr(seq), lastst, lastst+len);
+	    lastst = lastst+len+1;
+	    lasten = en+1;
+	}
+	ajSeqReplace(seq, outstr);
+	ajStrDel(&outstr);
+    }
+
+    return result;
+}
+
+
+
+
+/* @func ajRangeSeqMask *******************************************************
+**
+** Mask the range in a String
+**
+** @param [r] thys [const AjPRange] range object
+** @param [r] maskchar [const AjPStr] character to mask with
+** @param [u] seq [AjPSeq] sequence to be masked
+**
+** @return [AjBool] true if string modified
+** @category use [AjPRange] Mask the range in a String
+** @@
+******************************************************************************/
+
+AjBool ajRangeSeqMask(const AjPRange thys, const AjPStr maskchar, AjPSeq seq)
+{
+    ajint nr;
+    ajint i;
+    ajint j;
+    ajint st;
+    ajint en;
+    AjBool result = ajFalse;
+    AjPStr str = NULL;
+
+    nr = ajRangeNumber(thys);
+
+    if (nr)
+    {
+	for(i=0; i<nr; ++i)
+	{
+	    result = ajTrue;
+	    if(!ajRangeValues(thys,i,&st,&en))
+		continue;
+
+	    /* change range positions to string positions */
+	    --st;
+	    --en;
+
+	    /* cut out the region */
+	    ajStrCut(&str, st, en);
+
+	    /* replace the region with the mask character */
+	    for(j=st; j<=en; ++j)
+		ajStrInsert(&str, st, maskchar);
+	}
+	ajSeqReplace(seq, str);
+	ajStrDel(&str);
+    }
+    else
+    {
+	str = ajStrNew();
+	for(j=0; j<=ajStrLen(str); ++j)
+	    ajStrInsert(&str, j, maskchar);
+	ajSeqReplace(seq, str);
+	ajStrDel(&str);
+    }
+
+    return result;
+}
+
+
+
+
+/* @func ajRangeSeqToLower ****************************************************
+**
+** Change the range in a String to lower-case
+**
+** @param [r] thys [const AjPRange] range object
+** @param [u] seq [AjPSeq] sequence to be lower-cased
+**
+** @return [AjBool] true if sequence was modified
+** @category use [AjPRange] Change to lower-case the range in a sequence
+** @@
+******************************************************************************/
+
+AjBool ajRangeSeqToLower(const AjPRange thys, AjPSeq seq)
+{
+    ajint nr;
+    ajint i;
+    ajint st;
+    ajint en;
+    AjBool result = ajFalse;
+    AjPStr substr = NULL;
+    AjPStr str = NULL;
+    const AjPStr seqstr;
+
+
+    nr = ajRangeNumber(thys);
+
+    if (nr)
+    {
+	substr = ajStrNew();
+	str = ajStrNew();
+	seqstr = ajSeqStr(seq);
+	for(i=0; i<nr; ++i)
+	{
+	    if(!ajRangeValues(thys,i,&st,&en))
+		continue;
+
+	    /* change range positions to string positions */
+	    --st;
+	    --en;
+
+	    /* extract the region and lowercase */
+	    ajStrAppSub(&substr, seqstr, st, en);
+	    ajStrToLower(&substr);
+
+	    /* remove and replace the lowercased region */
+	    ajStrCut(&str, st, en);
+	    ajStrInsert(&str, st, substr);
+	    ajStrClear(&substr);        
+	}
+	ajStrDel(&substr);
+    }
+    else
+    {
+	ajSeqToLower(seq);
+    }
+
+    
+    return result;
+}
+
+
+
 
 /* @func ajRangeStrExtractList ************************************************
 **
@@ -700,11 +1036,21 @@ AjBool ajRangeStrExtract(const AjPRange thys, const AjPStr instr,
 
     nr = ajRangeNumber(thys);
 
-    for(i=0; i<nr; i++)
+    ajDebug("ajRangeStrExtract Number:%d\n", nr);
+
+    if (nr)
     {
-	result = ajTrue;
-	ajRangeValues(thys,i,&st,&en);
-	ajStrAppSub(outstr, instr, st-1, en-1);
+	for(i=0; i<nr; i++)
+	{
+	    result = ajTrue;
+	    ajRangeValues(thys,i,&st,&en);
+	    ajStrAppSub(outstr, instr, st-1, en-1);
+	    ajDebug("Range [%d] %d..%d '%S'\n", i, st, en, *outstr);
+	}
+    }
+    else
+    {
+	ajStrAssS(outstr, instr);
     }
 
     return result;
@@ -789,7 +1135,7 @@ AjBool ajRangeStrMask(const AjPRange thys, const AjPStr maskchar, AjPStr *str)
     ajint j;
     ajint st;
     ajint en;
-    AjBool result = ajFalse;;
+    AjBool result = ajFalse;
 
     nr = ajRangeNumber(thys);
 
@@ -986,22 +1332,29 @@ AjBool ajRangeOrdered(const AjPRange thys)
 
 /* @func ajRangeDefault *******************************************************
 **
-** Test whether the default range has been set for a string
+** Test whether the default range is used for a sequence
 **
-** IE tests whether the given range is a single range from the start to
+** The test is whether the given range is a single range from the start to
 ** the end of a sequence string.
 **
 ** @param [r] thys [const AjPRange] range object
-** @param [r] s [const AjPStr] string
+** @param [r] s [const AjPSeq] sequence
 **
 ** @return [AjBool] true if default range
 ** @category use [AjPRange] Test if the default range has been set
 ** @@
 ******************************************************************************/
 
-AjBool ajRangeDefault(const AjPRange thys, const AjPStr s)
+AjBool ajRangeDefault(const AjPRange thys, const AjPSeq s)
 {
-    if(thys->n==1 && thys->start[0]==1 && thys->end[0]==ajStrLen(s))
+    /* test the range - 1..end or empty means whole sequence */
+
+    if(thys->n==0)
+	return ajTrue;
+
+    if(thys->n==1 &&
+       thys->start[0]==ajSeqBegin(s) &&
+       thys->end[0]==ajSeqEnd(s))
 	return ajTrue;
 
     return ajFalse;

@@ -42,9 +42,8 @@ extern "C"
 **
 ** Ajax Scophit object.
 **
-** Holds data associated with a protein / domain sequence that is generated 
-** / manipulated by the EMBOSS applications psiblasts, swissparse, seqsort, 
-** seqmerge and groups.  Includes SCOP classification records.
+** Holds data associated with a protein / domain sequence. Includes SCOP 
+** classification records.
 **
 ** AjPScophit is implemented as a pointer to a C data structure.
 **
@@ -53,11 +52,15 @@ extern "C"
 ** @alias AjSScophit
 ** @alias AjOScophit
 **
+** @attr Type    [ajint]   Type, either ajSCOP (1) or ajCATH (2).
 ** @attr Class [AjPStr] Class name
+** @attr  Architecture  [AjPStr]    CATH classification.
+** @attr  Topology     [AjPStr]    CATH classification.
 ** @attr Fold [AjPStr] Fold name
 ** @attr Superfamily [AjPStr] Superfamily name
 ** @attr Family [AjPStr] Family name
-** @attr Sunid_Family [ajint] SCOP sunid for family
+** @attr Sunid_Family [ajint] Domain identifier of node (e.g. family or 
+** superfamily) represented.
 ** @attr Seq [AjPStr] Sequence as string
 ** @attr Start [ajint] Start of sequence or signature alignment 
 **	 relative to full length swissprot sequence
@@ -65,6 +68,7 @@ extern "C"
 **	 to full length swissprot sequence
 ** @attr Acc [AjPStr] Accession number of sequence entry
 ** @attr Spr [AjPStr] Swissprot code of sequence entry
+** @attr  Dom      [AjPStr]  SCOP or CATH database identifier code of entry. 
 ** @attr Typeobj [AjPStr] Bibliographic information ... objective
 ** @attr Typesbj [AjPStr] Bibliographic information ... subjective
 ** @attr Model [AjPStr] String for model type (HMM, Gribskov etc)
@@ -82,18 +86,18 @@ extern "C"
 ** 
 ** 
 ** @new   ajDmxScophitNew Default Scophit object constructor. 
-** @delete ajDmxScophitDel Default Scophit object destructor. 
-** @delete ajDmxScophitDelWrap Wrapper to destructor for Scophit object for use
+** @delete   ajDmxScophitDel Default Scophit object destructor. 
+** @delete   ajDmxScophitDelWrap Wrapper to destructor for Scophit object for use
 **        with generic functions.
-** @assign ajDmxScophitListCopy Reads a list of Scophit structures and returns
+** @assign   ajDmxScophitListCopy Reads a list of Scophit structures and returns
 **        a pointer to a duplicate of the list. 
 ** @use   ajDmxScophitCheckTarget Checks to see if the Target element of a 
 **        Scophit object == ajTrue.
-** @modify ajDmxScophitTarget Sets the Target element of a Scophit object to 
+** @modify   ajDmxScophitTarget Sets the Target element of a Scophit object to 
 **        True.
-** @modify ajDmxScophitTarget2 Sets the Target2 element of a Scophit object to 
+** @modify   ajDmxScophitTarget2 Sets the Target2 element of a Scophit object to 
 **        True.
-** @modify ajDmxScophitTargetLowPriority  Sets the Target element of a Scophit 
+** @modify   ajDmxScophitTargetLowPriority  Sets the Target element of a Scophit 
 **        object to True if its Priority is low.
 ** @use   ajDmxScophitCompSpr Function to sort Scophit object by Spr element. 
 ** @use   ajDmxScophitCompStart  Function to sort Scophit object by Spr 
@@ -116,15 +120,22 @@ extern "C"
 **        domain given a Sunid for the domain. The sequence is taken from one
 **        of a list of Scop objects that is provided.  
 ** @output ajDmxScophitsWrite Write contents of a list of Scophits to an output
-**        file.
-** @assign ajDmxScophitCopy Copies the contents from one Scophit object to 
+**         file.
+** @output ajDmxScophitsWriteFasta Write contents of a list of Scophits to an 
+**         output file in extended FASTA format.
+** @input ajDmxScophitReadFasta  Read a Scophit object from a file in 
+**        extended FASTA format. 
+** @assign   ajDmxScophitCopy Copies the contents from one Scophit object to 
 **        another.
 ** @@
 ****************************************************************************/
 
 typedef struct AjSScophit
 {
+    ajint     Type;
     AjPStr    Class;
+    AjPStr    Architecture;
+    AjPStr    Topology;
     AjPStr    Fold;
     AjPStr    Superfamily;
     AjPStr    Family;
@@ -134,14 +145,15 @@ typedef struct AjSScophit
     ajint     End;
     AjPStr    Acc;
     AjPStr    Spr;
+    AjPStr    Dom;        
     AjPStr    Typeobj;
     AjPStr    Typesbj;
     AjPStr    Model;
     AjPStr    Group;
     ajint     Rank;
     float     Score;
-    float     Eval;
-    float     Pval;
+    float    Eval;
+    float    Pval;
     AjPStr    Alg;
     AjBool    Target;
     AjBool    Target2;
@@ -158,7 +170,8 @@ typedef struct AjSScophit
 ** Ajax Scopalg object.
 **
 ** Holds data associated with a structure alignment that is generated 
-** by the EMBOSS applications scopalign.
+** by the EMBOSS applications scopalign.  Now adapted to hold CATH domain
+** data also by addition of Type, Architecture and Topology elements.
 **
 ** AjPScopalg is implemented as a pointer to a C data structure.
 **
@@ -167,10 +180,13 @@ typedef struct AjSScophit
 ** @alias AjSScopalg
 ** @alias AjOScopalg
 **
+** @attr Type    [ajint]   Type of domains, either ajSCOP (1) or ajCATH (2).
 ** @attr Class [AjPStr] Class name
+** @attr  Architecture [AjPStr]    CATH classification.
+** @attr  Topology     [AjPStr]    CATH classification.
 ** @attr Fold [AjPStr] Fold name
 ** @attr Superfamily [AjPStr] Superfamily name
-** @attr Family [AjPStr] Family name
+** @attr Family [AjPStr] Family name (SCOP only)
 ** @attr Sunid_Family [ajint] SCOP sunid for family
 ** @attr width [ajint] Width (residues) of widest part of alignment
 ** @attr N [ajint] No. of sequences in alignment
@@ -183,7 +199,7 @@ typedef struct AjSScophit
 **
 **
 **
-** @input ajDmxScopalgRead Read a Scopalg object from a file.
+** @new   ajDmxScopalgRead Read a Scopalg object from a file.
 ** @output ajDmxScopalgWrite Write a Scopalg object to file in clustal format
 **        annotated with SCOP classification info.
 ** @output ajDmxScopalgWriteClustal Writes a Scopalg object to file in clustal
@@ -196,14 +212,17 @@ typedef struct AjSScophit
 **        format (just the alignment without the SCOP classification 
 **        information).
 ** @new   ajDmxScopalgNew Scopalg object constructor.
-** @delete ajDmxScopalgDel Scopalg object destructor.
+** @delete   ajDmxScopalgDel Scopalg object destructor.
 ** @input ajDmxScopalgGetseqs Read a Scopalg object and writes an array of 
 **        AjPStr containing the sequences without gaps.
 ** @@
 ****************************************************************************/
 typedef struct AjSScopalg
 {
+    ajint   Type;
     AjPStr   Class;
+    AjPStr  Architecture;   
+    AjPStr  Topology;      
     AjPStr   Fold;
     AjPStr   Superfamily;
     AjPStr   Family;
@@ -214,7 +233,7 @@ typedef struct AjSScopalg
     AjPStr  *Seqs;
     AjPStr   Post_similar;
     AjPStr   Positions;
-} AjOScopalg;
+}AjOScopalg;
 #define AjPScopalg AjOScopalg*
 
 
@@ -248,6 +267,8 @@ ajint         ajDmxScophitCompPval(const void *hit1, const void *hit2);
 
 AjBool        ajDmxScopSeqFromSunid(ajint id, AjPStr *seq, const AjPList list);
 AjBool        ajDmxScophitsWrite(AjPFile outf, const AjPList list);
+AjBool        ajDmxScophitsWriteFasta(AjPFile outf, const AjPList list);
+AjPScophit    ajDmxScophitReadFasta(AjPFile inf);
 AjBool        ajDmxScophitCopy(AjPScophit *to, const AjPScophit from);
 
 

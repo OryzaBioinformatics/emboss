@@ -1440,6 +1440,7 @@ AjPPhyloTree* ajPhyloTreeRead(const AjPStr filename, ajint size)
     static AjPRegexp unrootexp = NULL;
     static AjPRegexp multiexp  = NULL;
     static AjPRegexp quartexp  = NULL;
+    static AjPRegexp lengthexp  = NULL;
     
     if(!treeexp)			/* tree definition */
 	treeexp = ajRegCompC("\\S+");
@@ -1451,6 +1452,8 @@ AjPPhyloTree* ajPhyloTreeRead(const AjPStr filename, ajint size)
 	multiexp = ajRegCompC("^\\([^,]*,[^,]*,.*\\)$");
     if(!quartexp)			/* unrooted quartet ((a,b),(c,d)); */
 	quartexp = ajRegCompC("^\\(\\.*\\)\\);$");
+    if(!lengthexp)			/* unrooted quartet ((a,b),(c,d)); */
+	lengthexp = ajRegCompC(":[0-9][0-9.]*");
 
     treelist = ajListNew();
     count = size;
@@ -1517,11 +1520,16 @@ AjPPhyloTree* ajPhyloTreeRead(const AjPStr filename, ajint size)
 	    {
 		ajDebug("ajPhyloTreeRead tree done tree->Tree '%S'\n",
 			tree->Tree);
+		tree->Size = 1 + ajStrCountK(tree->Tree, ',');
 		tree->BaseBifurcated = ajTrue;
 		if(ajRegExec(quartexp, tree->Tree))
 		{
 		    tree->BaseBifurcated = ajFalse; /* but rooted for phylip */
 		    tree->BaseQuartet = ajTrue;
+		}
+		if(ajRegExec(lengthexp, tree->Tree))
+		{
+		    tree->HasLengths = ajTrue;
 		}
 		tree->Multifurcated = ajFalse;
 		ajStrAssS(&treecopy, tree->Tree);

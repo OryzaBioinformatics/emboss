@@ -716,14 +716,14 @@ void ajHistCopyData(AjPHist hist, ajint index, const PLFLT *data)
 ** Copy Title for the histogram.
 **
 ** @param [u] hist [AjPHist] histogram to set string in.
-** @param [r] string [const char*] text to be copied.
+** @param [r] strng [const char*] text to be copied.
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-void ajHistSetTitleC(AjPHist hist, const char* string)
+void ajHistSetTitleC(AjPHist hist, const char* strng)
 {
-    ajStrAssC(&hist->title,string);
+    ajStrAssC(&hist->title,strng);
 
     return;
 }
@@ -736,14 +736,14 @@ void ajHistSetTitleC(AjPHist hist, const char* string)
 ** Store X axis label for the histogram
 **
 ** @param [u] hist [AjPHist] histogram to set string in.
-** @param [r] string [const char*] text to be copied.
+** @param [r] strng [const char*] text to be copied.
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-void ajHistSetXAxisC(AjPHist hist, const char* string)
+void ajHistSetXAxisC(AjPHist hist, const char* strng)
 {
-    ajStrAssC(&hist->xaxis,string);
+    ajStrAssC(&hist->xaxis,strng);
 
     return;
 }
@@ -756,14 +756,14 @@ void ajHistSetXAxisC(AjPHist hist, const char* string)
 ** Store Y Axis Left Label for the histogram
 **
 ** @param [u] hist [AjPHist] histogram to set string in.
-** @param [r] string [const char*] text to be copied.
+** @param [r] strng [const char*] text to be copied.
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-void ajHistSetYAxisLeftC(AjPHist hist, const char* string)
+void ajHistSetYAxisLeftC(AjPHist hist, const char* strng)
 {
-    ajStrAssC(&hist->yaxisleft,string);
+    ajStrAssC(&hist->yaxisleft,strng);
 
     return;
 }
@@ -776,14 +776,14 @@ void ajHistSetYAxisLeftC(AjPHist hist, const char* string)
 ** Store Y Axis Right Label for the histogram
 **
 ** @param [u] hist [AjPHist] histogram to set string in.
-** @param [r] string [const char*] text to be copied.
+** @param [r] strng [const char*] text to be copied.
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-void ajHistSetYAxisRightC(AjPHist hist, const char* string)
+void ajHistSetYAxisRightC(AjPHist hist, const char* strng)
 {
-    ajStrAssC(&hist->yaxisright,string);
+    ajStrAssC(&hist->yaxisright,strng);
 
     return;
 }

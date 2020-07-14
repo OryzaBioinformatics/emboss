@@ -40,6 +40,7 @@ extern "C"
 ** @new ajStrNewL Constructor with reserved size
 ** @new ajStrNewCL Constructor with char* text and reserved size
 ** @new ajStrNewCIL Constructor with char* text, length and reserved size
+** @new ajStrNull Null string pointer
 ** @new ajStrDup Duplicates an existing string (with increased reference count)
 **
 ** @delete ajStrDel Default destructor
@@ -91,6 +92,7 @@ extern "C"
 ** @modify ajStrTrim  Removes a number of characters from start of end of a string
 ** @modify ajStrTrimC Removes a set of characters from start of end of a string
 ** @modify ajStrTrimEndC Removes a set of characters from end of a string
+** @modify ajStrTrimStartC Removes a set of characters from start of a string
 ** @modify ajStrCut Removes a range of character positions from a string
 ** @modify ajStrMask Masks out a range of characters from a string
 ** @modify ajStrRev Reverses the order of characters in a string
@@ -255,6 +257,7 @@ void       ajCharToUpper (char *txt);
 
 AjBool     ajStrApp  (AjPStr* pthis, const AjPStr src);
 AjBool     ajStrAppC (AjPStr* pthis, const char *txt);
+AjBool     ajStrAppCI (AjPStr* pthis, const char *txt, size_t i);
 AjBool     ajStrAppK (AjPStr* pthis, const char chr);
 AjBool     ajStrAppKI (AjPStr* pthis, const char chr, ajint number);
 AjBool     ajStrAppSub (AjPStr* pthis, const AjPStr src,
@@ -310,6 +313,7 @@ ajint      ajStrFind (const AjPStr thys, const AjPStr text);
 ajint      ajStrFindC  (const AjPStr thys, const char* txt);
 ajint      ajStrFindCase (const AjPStr thys, const AjPStr text);
 ajint      ajStrFindCaseC (const AjPStr thys, const char* txt);
+ajint      ajStrFindK  (const AjPStr thys, const char chr);
 
 void       ajStrFill (AjPStr* pthis, ajint count, char fill);
 void       ajStrFix (AjPStr *pthys);
@@ -334,6 +338,7 @@ AjBool     ajStrIsHex (const AjPStr thys);
 AjBool     ajStrIsInt (const AjPStr thys);
 AjBool     ajStrIsLong (const AjPStr thys);
 AjBool     ajStrIsLower (const AjPStr thys);
+AjBool     ajStrIsNum (const AjPStr thys);
 AjBool     ajStrIsSpace (const AjPStr thys);
 AjBool     ajStrIsUpper (const AjPStr thys);
 AjBool     ajStrIsWild (const AjPStr thys);
@@ -358,6 +363,8 @@ AjBool     ajStrJoin  (AjPStr* pthis, ajint pos1,
 AjBool     ajStrJoinC (AjPStr* pthis, ajint pos1,
 		       const char* addbit, ajint pos2);
 
+AjBool     ajStrKeepAlphaC (AjPStr* pthis, const char* chars);
+AjBool     ajStrKeepC (AjPStr* pthis, const char* chars);
 ajint      ajStrLen(const AjPStr thys);
 
 #define    MAJSTRLEN(str) str->Len
@@ -378,6 +385,7 @@ AjBool     ajStrMatchWordC (const AjPStr str, const char* text);
 AjBool     ajStrMatchWordCC (const char* str, const char* text);
 AjBool     ajStrMod  (AjPStr* pthis);
 AjBool     ajStrModL (AjPStr* pthis, size_t size);
+AjBool     ajStrModMinL (AjPStr* pthis, size_t size);
 ajint      ajStrNCmpC (const AjPStr thys, const char *text, ajint n);
 ajint 	   ajStrNCmpCaseCC (const char* str1, const char* str2, ajint len);
 ajint      ajStrNCmpO (const AjPStr thys, const AjPStr anoth, ajint n);
@@ -387,6 +395,7 @@ AjPStr     ajStrNewCIL (const char *txt, ajint len, size_t size);
 AjPStr     ajStrNewCL (const char *txt, size_t size);
 AjPStr     ajStrNewL (size_t size);
 AjPStr     ajStrNewS (const AjPStr str);
+const AjPStr ajStrNull(void);
 
 AjBool     ajStrParentheses(const AjPStr s);
 ajint      ajStrPos  (const AjPStr thys, ajint ipos);
@@ -402,6 +411,7 @@ AjBool     ajStrPrefixCaseCO (const char* thys, const AjPStr pref);
 AjBool     ajStrPrefixCO (const char *str, const AjPStr thys);
 void       ajStrQuote(AjPStr *s);
 void       ajStrQuoteStrip(AjPStr *s);
+void       ajStrQuoteStripAll(AjPStr *s);
 void       ajStrRandom(AjPStr *s);
 AjBool     ajStrReplace  (AjPStr* pthis, ajint pos1,
 			  const AjPStr overwrite, ajint len);
@@ -412,7 +422,7 @@ AjBool     ajStrReplaceK (AjPStr* pthis, ajint pos1,
 AjBool     ajStrReplaceS( AjPStr* pthis, ajint begin, const AjPStr overwrite);
 ajint      ajStrRef(const AjPStr thys);
 #define    MAJSTRREF(str) str->Use
-void       ajStrRemoveCharsC(AjPStr* this, const char *string);
+void       ajStrRemoveCharsC(AjPStr* thys, const char *strng);
 void       ajStrRemoveHtml(AjPStr* pthis);
 void       ajStrRemoveNewline(AjPStr* pthis);
 AjBool     ajStrRev (AjPStr* pthis);
@@ -469,6 +479,7 @@ void       ajStrTraceT (const AjPStr thys, const char* title);
 AjBool     ajStrTrim  (AjPStr* pthis, ajint num);
 AjBool     ajStrTrimC (AjPStr* pthis, const char* chars);
 AjBool     ajStrTrimEndC (AjPStr* pthis, const char* chars);
+AjBool     ajStrTrimStartC (AjPStr* pthis, const char* chars);
 AjBool     ajStrTruncate (AjPStr* pthis, ajint pos);
 AjBool     ajStrWhole (const AjPStr thys, ajint begin, ajint end);
 AjBool     ajStrWildPrefix (AjPStr* str);

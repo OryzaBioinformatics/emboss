@@ -100,7 +100,7 @@ AjBool ajSeqABIReadSeq(AjPFile fp,ajlong baseO,ajlong numBases,
     ajint i;
     char pseq;
 
-    ajDebug("ajSeqABIReadSeq base0 %ld numBases %ld\n", baseO, numBases);
+    ajDebug("ajSeqABIReadSeq base0 %Ld numBases %Ld\n", baseO, numBases);
 
     ajFileSeek(fp,baseO,SEEK_SET);
     for (i=0;i<(ajint)numBases;i++)

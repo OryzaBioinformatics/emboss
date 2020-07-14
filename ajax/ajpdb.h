@@ -253,9 +253,9 @@ typedef struct AjSChain
 ** 
 ** 
 ** @new     ajPdbNew Default Pdb constructor.
-** @input   ajPdbReadRawNew Pdb constructor from reading pdb format file.
-** @input   ajPdbReadNew Pdb constructor from reading ccf format file.
-** @input   ajPdbReadFirstModelNew Pdb constructor from reading ccf format 
+** @new     ajPdbReadRawNew Pdb constructor from reading pdb format file.
+** @new     ajPdbReadNew Pdb constructor from reading CCF format file.
+** @new     ajPdbReadFirstModelNew Pdb constructor from reading CCF format 
 **          file (retrive data for 1st model only).
 ** @delete  ajPdbDel Default Pdb destructor.
 ** @assign  ajPdbCopy Replicates a Pdb object.
@@ -292,9 +292,9 @@ typedef struct AjSChain
 **          protein.
 ** @output  ajPdbWriteAllRaw Writes a pdb-format file for a protein.
 ** @output  ajPdbWriteDomainRaw Writes a pdb-format file for a SCOP domain.
-** @output  ajPdbWriteAll Writes a ccf-format file for a protein.
-** @output  ajPdbWriteDomain Writes a ccf-format file for a domain).
-** @output  ajPdbWriteSegment Writes a ccf-format file for a segment of a 
+** @output  ajPdbWriteAll Writes a CCF-format file for a protein.
+** @output  ajPdbWriteDomain Writes a CCF-format file for a domain).
+** @output  ajPdbWriteSegment Writes a CCF-format file for a segment of a 
 **          protein.
 ** @cast    embPdbListHeterogens Construct a list of arrays of Atom objects 
 **          for ligands in the current Pdb object (a single array for each
@@ -317,7 +317,7 @@ typedef struct AjSPdb
     AjPChar    gpid;	
     AjPList    Groups;    
     AjPList    Water;     
-}AjOPdb;
+} AjOPdb;
 #define AjPPdb AjOPdb*
 
 
@@ -383,13 +383,13 @@ typedef struct AjSHetent
 **
 ** 
 ** @new     ajHetNew Default Het constructor.
-** @input   ajHetReadRawNew Het constructor from reading dictionary of 
+** @new     ajHetReadRawNew Het constructor from reading dictionary of 
 **          heterogen groups in raw format.
-** @input   ajHetReadNew Het constructor from reading dictionary of 
-**          heterogen groups in clean format (see documentation for the 
+** @new     ajHetReadNew Het constructor from reading dictionary of 
+**          heterogen groups in embl-like format (see documentation for the 
 **          EMBASSY DOMAINATRIX package).
 ** @delete  ajHetDel Default Het destructor.
-** @output  ajHetWrite Write Het object to file in clean format (see 
+** @output  ajHetWrite Write Het object to file in embl-like format (see 
 **          documentation for the EMBASSY DOMAINATRIX package).
 **
 ** @@
@@ -468,7 +468,7 @@ typedef struct AjSVdwres
 **
 ** 
 ** @new     ajVdwallNew Default Vdwall constructor.
-** @input   ajVdwallReadNew Vdwall constructor from reading file in embl-like
+** @new     ajVdwallReadNew Vdwall constructor from reading file in embl-like
 **          format (see documentation for the EMBASSY DOMAINATRIX package).
 ** @delete  ajVdwallDel Default Vdwall destructor.
 **
@@ -489,31 +489,42 @@ typedef struct AjSVdwall
 **
 ** Ajax Cmap object.
 **
-** Holds a contact map and associated data for a protein domain / chain.
+** Holds a contact map and associated data for a protein domain / chain 
+** (intra or inter-chain contacts) or between a protein / domain and a 
+** ligand.  For ligand contacts, the first row / column only of the contact
+** map is used. 
 **
 ** AjPCmap is implemented as a pointer to a C data structure.
-**
 **
 **
 ** @alias AjSCmap
 ** @alias AjOCmap
 **
 **
-**
+** @attr  Type  [ajint]    Type of contact, either ajINTRA, ajINTER or ajLIGAND
+** for intra-chain, inter-chain and chain-ligand contacts respectively.
 ** @attr  Id    [AjPStr]   Protein id code. 
-** @attr  Seq   [AjPStr]   The sequence of the domain or chain. 
+** @attr  Domid [AjPStr]   Domain id code. 
+** @attr  Ligid [AjPStr]   Ligand id code. 
+** @attr  Chn1  [ajint]    Chain number 1 (first chain)
+** @attr  Chn2  [ajint]    Chain number 2 (second chain if available)
+** @attr  Chid1 [char]     Chain identifier 1 (first chain)
+** @attr  Chid2 [char]     Chain identifier 2 (second chain if available)
+** @attr  Nres1 [ajint]    Number of residues in chain/domain 1 
+** @attr  Nres2 [ajint]    Number of residues in chain/domain 2 
+** @attr  Seq1  [AjPStr]   The sequence of the first domain or chain.
+** @attr  Seq2  [AjPStr]   The sequence of the second domain or chain. 
 ** @attr  Mat   [AjPInt2d] Contact map. 
 ** @attr  Dim   [ajint]    Dimension of contact map. 
 ** @attr  Ncon  [ajint]    No. of contacts (1's in contact map). 
 ** 
 ** 
-** 
 ** @new     ajCmapNew Default Cmap constructor.
-** @input   ajCmapReadINew Cmap constructor from reading file in embl-like
+** @new     ajCmapReadINew Cmap constructor from reading file in CON (embl-like)
 **          format (see documentation for the EMBASSY DOMAINATRIX package).
-** @input   ajCmapReadCNew Cmap constructor from reading file in embl-like
+** @new     ajCmapReadCNew Cmap constructor from reading file in CON (embl-like)
 **          format (see documentation for the EMBASSY DOMAINATRIX package).
-** @input   ajCmapReadNew Cmap constructor from reading file in embl-like
+** @new     ajCmapReadNew Cmap constructor from reading file in CON (embl-like)
 **          format (see documentation for the EMBASSY DOMAINATRIX package).
 ** @delete  ajCmapDel Default Cmap destructor.
 **
@@ -521,8 +532,20 @@ typedef struct AjSVdwall
 ****************************************************************************/
 typedef struct AjSCmap
 {
+    ajint     Type;
     AjPStr    Id;     
-    AjPStr    Seq;    
+    AjPStr    Domid;     
+    AjPStr    Ligid;     
+
+    ajint     Chn1;
+    ajint     Chn2;
+    char      Chid1;
+    char      Chid2;
+    ajint     Nres1;
+    ajint     Nres2;
+    AjPStr    Seq1;    
+    AjPStr    Seq2;    
+
     AjPInt2d  Mat;    
     ajint     Dim;    
     ajint     Ncon;   
@@ -556,16 +579,16 @@ typedef struct AjSCmap
 ** 
 ** 
 ** @new     ajPdbtospNew Default Pdbtosp constructor.
-** @input   ajPdbtospReadAllRawNew Pdbtosp constructor from reading swissprot-
+** @new     ajPdbtospReadAllRawNew Pdbtosp constructor from reading swissprot-
 **          pdb equivalence table in raw format.
-** @input   ajPdbtospReadNew Pdbtosp constructor from reading file in 
+** @new     ajPdbtospReadNew Pdbtosp constructor from reading file in 
 **          embl-like format (see documentation for the EMBASSY DOMAINATRIX
 **          package).
-** @input   ajPdbtospReadCNew Pdbtosp constructor from reading file in 
+** @new     ajPdbtospReadCNew Pdbtosp constructor from reading file in 
 **          embl-like format (see documentation for the EMBASSY DOMAINATRIX
 **          package).
 ** @delete  ajPdbtospDel Default Pdbtosp destructor.
-** @input   ajPdbtospReadAllNew Constructor for list of Pdbtosp objects from
+** @new     ajPdbtospReadAllNew Constructor for list of Pdbtosp objects from
 **          reading file in embl-like format (see documentation for the 
 **          EMBASSY DOMAINATRIX package).
 ** @output  ajPdbtospWrite Write Pdbtosp object to file in embl-like format 
@@ -656,7 +679,7 @@ void         ajCmapDel(AjPCmap *ptr);
 /* ======================================================================= */
 AjPPdbtosp   ajPdbtospNew(ajint n);
 void         ajPdbtospDel(AjPPdbtosp *ptr);
-ajint        ajPdbtospArrFindPdbid(AjPPdbtosp const *arr,
+ajint        ajPdbtospArrFindPdbid(const AjPPdbtosp *arr,
 				   ajint siz, const AjPStr id);
 
 
@@ -685,9 +708,9 @@ AjPPdb       ajPdbReadNew(AjPFile inf);
 AjPPdb       ajPdbReadFirstModelNew(AjPFile inf);
 AjBool       ajPdbWriteAll(AjPFile out, const AjPPdb obj);
 AjBool       ajPdbWriteSegment(AjPFile outf, const AjPPdb pdb, 
-				const AjPStr seq, char chn,
+			       const AjPStr seq, char chn,
 			       const AjPStr domain, 
-				AjPFile errf);
+			       AjPFile errf);
 ajint        ajPdbGetEStrideType(const AjPPdb obj, ajint chn, 
 				 AjPStr *EStrideType);
 

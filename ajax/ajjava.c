@@ -56,6 +56,10 @@
 #include <signal.h>
 #endif
 
+#ifdef linux
+#include <signal.h>
+#endif
+
 #if defined(__CYGWIN__)
 #include <sys/termios.h>
 #endif
@@ -931,8 +935,13 @@ static AjBool java_pass(AjPStr username,AjPStr password,ajint *uid,
 
     ajStrAssC(home,pwd->pw_dir);
 
+#ifndef DEBIAN
     retval = pam_start("login",ajStrStr(username),
 		       (struct pam_conv*)&conv,&pamh);
+#else
+    retval = pam_start("ssh",ajStrStr(username),
+		       (struct pam_conv*)&conv,&pamh);
+#endif
 
     if (retval == PAM_SUCCESS)
 	retval= pam_authenticate(pamh,PAM_SILENT);
@@ -2844,6 +2853,9 @@ static int java_jembossctl(ajint command,
 	if(n==-1 || !c)
 	    ajStrAppC(errstd,"Error receiving (java_batch)\n");
 #ifdef __hpux
+	signal(SIGCLD,SIG_IGN);
+#endif
+#ifdef linux
 	signal(SIGCLD,SIG_IGN);
 #endif
 #if defined (__SVR4) && defined (__sun)

@@ -3,7 +3,7 @@
 ** @source ajdomain.h
 **
 ** AJAX objects for handling protein domain data.  
-** Scop and Cath objects. 
+** Scop, Cath and Domain objects. 
 ** 
 ** @author: Copyright (C) 2004 Jon Ison (jison@hgmp.mrc.ac.uk) 
 ** @version 1.0 
@@ -67,6 +67,8 @@ extern "C"
 **                                    domain.
 ** @attr End                [AjPStr*] PDB residue number of last residue in 
 **                                    domain.
+** @attr Sse                [AjPStr]  Secondary structure element map
+** @attr Sss                [AjPStr]  Secondary structure element string
 ** @attr Sunid_Class        [ajint]   SCOP sunid for class.
 ** @attr Sunid_Fold         [ajint]   SCOP sunid for fold.
 ** @attr Sunid_Superfamily  [ajint]   SCOP sunid for superfamily.
@@ -77,18 +79,19 @@ extern "C"
 **
 ** @attr Acc                [AjPStr]  Accession number of sequence entry.
 ** @attr Spr                [AjPStr]  Swissprot code of sequence entry.
-** @attr SeqPdb	            [AjPStr]  Sequence (from pdb) as string.
+** @attr SeqPdb	            [AjPStr]  Sequence (from PDB) as string.
 ** @attr SeqSpr	            [AjPStr]  Sequence (from swissprot) as string.
 ** @attr Startd             [ajint]   Start of sequence relative to full 
 **                                    length swissprot sequence.
 ** @attr Endd               [ajint]   End of sequence relative to full length 
 **                                    swissprot sequence.
+** @attr Score              [float]   Used by misc. algorithms for scoring the domain.
 **
 **
 **
 ** @new    ajScopNew Scop default constructor.
-** @input  ajScopReadNew Scop constructor from reading dcf format file.
-** @input  ajScopReadCNew Scop constructor from reading dcf format file.
+** @new    ajScopReadNew Scop constructor from reading DCF format file.
+** @new    ajScopReadCNew Scop constructor from reading DCF format file.
 ** @delete ajScopDel Default Scop destructor.
 ** @assign ajScopCopy Replicates a Scop object.
 ** @use    ajScopMatchSunid Sort Scop objects by Sunid_Family element.
@@ -106,14 +109,14 @@ extern "C"
 **         array of Scop objects. 
 ** @use    ajScopArrFindPdbid Binary search for Pdb element over array of
 **         Scop objects. 
-** @input  ajScopReadAllNew Construct list of Scop objects from reading dcf
+** @new    ajScopReadAllNew Construct list of Scop objects from reading DCF
 **         format file.
-** @input  ajScopReadAllRawNew Construct list of Scop objects from reading 
+** @new  ajScopReadAllRawNew Construct list of Scop objects from reading 
 **         raw SCOP parsable files.
-** @output ajScopWrite Write Scop object to dcf format file.
-** @output ajPdbWriteDomain Writes a ccf format file for a SCOP domain.
-** @output ajPdbWriteDomainRaw Writes a pdb-format file for a SCOP domain.
-** @output ajPdbWriteDomainRecordRaw Writes lines to a pdb format file for 
+** @output ajScopWrite Write Scop object to DCF format file.
+** @output ajPdbWriteDomain Writes a CCF format file for a SCOP domain.
+** @output ajPdbWriteDomainRaw Writes a PDB-format file for a SCOP domain.
+** @output ajPdbWriteDomainRecordRaw Writes lines to a PDB format file for 
 **         a domain.
 **
 ** @@
@@ -134,6 +137,9 @@ typedef struct AjSScop
     AjPStr *Start;        
     AjPStr *End;          
 
+    AjPStr Sse;
+    AjPStr Sss; 
+
     ajint  Sunid_Class;       
     ajint  Sunid_Fold;        
     ajint  Sunid_Superfamily; 
@@ -148,6 +154,8 @@ typedef struct AjSScop
     AjPStr SeqSpr;	
     ajint  Startd;      
     ajint  Endd;        
+
+    float  Score;
 } AjOScop;
 #define AjPScop AjOScop*
 
@@ -171,7 +179,7 @@ typedef struct AjSScop
 **
 **
 ** @attr DomainID       [AjPStr]  Domain identifer code        
-** @attr Pdb            [AjPStr]  Corresponding pdb identifer code
+** @attr Pdb            [AjPStr]  Corresponding PDB identifer code
 ** @attr Class          [AjPStr]  CATH class name as an AjPStr
 ** @attr Architecture   [AjPStr]  CATH architecture name as an AjPStr
 ** @attr Topology       [AjPStr]  CATH topology name as an AjPStr
@@ -190,19 +198,29 @@ typedef struct AjSScop
 ** @attr IFamily_Id     [ajint]   CATH identical family no. as an ajint 
 **
 **
+** @attr Acc                [AjPStr]  Accession number of sequence entry.
+** @attr Spr                [AjPStr]  Swissprot code of sequence entry.
+** @attr SeqPdb	            [AjPStr]  Sequence (from PDB) as string.
+** @attr SeqSpr	            [AjPStr]  Sequence (from swissprot) as string.
+** @attr Startd             [ajint]   Start of sequence relative to full 
+**                                    length swissprot sequence.
+** @attr Endd               [ajint]   End of sequence relative to full length 
+**                                    swissprot sequence.
+**
 ** 
 ** @new    ajCathNew Default Cath constructor
-** @input  ajCathReadCNew Cath constructor from reading dcf format file.
-** @input  ajCathReadNew Cath constructor from reading dcf format file.
+** @new    ajCathReadCNew Cath constructor from reading DCF format file.
+** @new    ajCathReadNew Cath constructor from reading DCF format file.
 ** @delete ajCathDel Default Cath destructor
+** @assign ajCathCopy Replicates a Scop object.
 ** @use    ajCathArrFindPdbid Binary search for Pdb element over array of
 **         Cath objects. 
 ** @use    ajCathMatchPdbId Sort Cath objects by Pdb element.
-** @input  ajCathReadAllNew Construct list of Cath objects from reading dcf
+** @new    ajCathReadAllNew Construct list of Cath objects from reading DCF
 **         format file.
-** @input  ajCathReadAllRawNew Construct list of Cath objects from reading 
+** @new    ajCathReadAllRawNew Construct list of Cath objects from reading 
 **         raw CATH parsable files.
-** @other  ajCathWrite Write Cath object to dcf format file.
+** @other  ajCathWrite Write Cath object to DCF format file.
 ** 
 ** @@
 ****************************************************************************/
@@ -230,8 +248,77 @@ typedef struct AjSCath
     ajint   Family_Id;      
     ajint   NIFamily_Id;     
     ajint   IFamily_Id;     
+
+    AjPStr Acc;        
+    AjPStr Spr;        
+    AjPStr SeqPdb;	
+    AjPStr SeqSpr;	
+    ajint  Startd;      
+    ajint  Endd;   
 } AjOCath;
 #define AjPCath AjOCath*
+
+
+
+
+
+/* @data AjPDomain ************************************************************
+**
+** Ajax Domain object.
+**
+** Holds an entry from a DCF file (domain classification file)
+**
+** AjPDomain is implemented as a pointer to a C data structure.
+**
+**
+**
+** @alias AjSDomain
+** @alias AjODomain
+**
+**
+**
+** @attr Type    [ajint]   Type, either ajSCOP (1) or ajCATH (2).
+** @attr Scop    [AjPScop] Scop object pointer.
+** @attr Cath    [AjPCath] Cath object pointer.
+**
+**
+**
+** @new    ajDomainNew Default Domain constructor.
+** @new    ajDomainReadNew Domain constructor from reading DCF format file.
+** @new    ajDomainReadCNew Domain constructor from reading DCF format file.
+** @new    ajDomainReadAllNew Construct list of Domain objects from reading DCF
+**         format file.
+** @delete ajDomainDel Default Domain destructor.
+** @output ajDomainWrite Write Domain object to DCF format file.
+** @other  ajDomainDCFType Assertains type of domains (ajSCOP or ajCATH) in a 
+**         DCF file.
+** @assign ajDomainCopy Replicates a Domain object.
+** @cast   ajDomainGetId Returns domain id, either DomainID element
+**                      (Cath object) or Entry (Scop object).
+** @cast   ajDomainGetSeqPdb Returns the PDB sequence from a Domain object.
+** @cast   ajDomainGetSeqSpr Returns the swissprot sequence from a
+**                           Domain object.
+** @cast   ajDomainGetPdb Returns the PDB identifier code corresponding to the
+**                        domain 
+** @cast   ajDomainGetAcc Returns the accession number corresponding to the
+**                        domain. 
+** @cast   ajDomainGetSpr Returns the swissprot code corresponding to the
+**                        domain.
+** @cast   ajDomainGetN  Returns no. chains or chain segments in a domain, 
+** either NSegment element (Cath domains) or N element (Scop domains).
+**
+**
+**
+** @@
+****************************************************************************/
+typedef struct AjSDomain
+{
+    ajint   Type;
+    AjPScop Scop;
+    AjPCath Cath;
+} AjODomain;
+#define AjPDomain AjODomain*
+
 
 
 
@@ -244,9 +331,9 @@ AjPScop  ajScopNew(ajint n);
 void     ajScopDel(AjPScop *ptr);
 AjBool   ajScopCopy(AjPScop *to, const AjPScop from);
 
-ajint    ajScopArrFindScopid(AjPScop const *arr, ajint siz, const AjPStr id);
-ajint    ajScopArrFindSunid(AjPScop const *arr, ajint siz, ajint id);
-ajint    ajScopArrFindPdbid(AjPScop const *arr, ajint siz, const AjPStr id);
+ajint    ajScopArrFindScopid(const AjPScop *arr, ajint siz, const AjPStr id);
+ajint    ajScopArrFindSunid(const AjPScop *arr, ajint siz, ajint id);
+ajint    ajScopArrFindPdbid(const AjPScop *arr, ajint siz, const AjPStr id);
 
 ajint    ajScopMatchScopid(const void *hit1, const void *hit2);
 ajint    ajScopMatchPdbId(const void *hit1, const void *hit2);
@@ -255,7 +342,7 @@ ajint    ajScopMatchSunid(const void *entry1, const void *entry2);
 AjPScop  ajScopReadCNew(AjPFile inf, const char *entry);
 AjPScop  ajScopReadNew(AjPFile inf, const AjPStr entry);
 AjPList  ajScopReadAllNew(AjPFile inf); 
-AjPList  ajScopReadAllRawNew(AjPFile claf, AjPFile desf, AjBool outputall);
+AjPList  ajScopReadAllRawNew(AjPFile claf, AjPFile desf, AjBool omit);
 AjBool   ajScopWrite(AjPFile outf, const AjPScop obj);
 
 AjBool   ajPdbWriteDomain(AjPFile outf, const AjPPdb pdb,
@@ -271,6 +358,7 @@ AjBool   ajPdbWriteDomain(AjPFile outf, const AjPPdb pdb,
 /* ======================================================================= */
 AjPCath   ajCathNew(ajint n);
 void      ajCathDel(AjPCath *ptr);
+AjBool   ajCathCopy(AjPCath *to, const AjPCath from);
 
 ajint     ajCathArrFindPdbid(const AjPCath *arr, ajint siz, const AjPStr id);
 ajint     ajCathMatchPdbid(const void *hit1, const void *hit2);
@@ -281,6 +369,59 @@ AjPList   ajCathReadAllNew(AjPFile inf);
 AjPList   ajCathReadAllRawNew(AjPFile cathf, AjPFile domf, 
 			      AjPFile namesf, AjPFile logf);
 AjBool    ajCathWrite(AjPFile outf, const AjPCath obj);
+
+
+
+
+
+
+
+
+/* ======================================================================= */
+/* =========================== Domain object ============================= */
+/* ======================================================================= */
+AjPDomain   ajDomainNew(ajint n, ajint type);
+AjPDomain   ajDomainReadNew(AjPFile inf, const AjPStr entry);
+AjPDomain   ajDomainReadCNew(AjPFile inf, const char *entry, ajint type);
+AjPList     ajDomainReadAllNew(AjPFile inf); 
+void        ajDomainDel(AjPDomain *ptr);
+AjBool      ajDomainWrite(AjPFile outf, const AjPDomain obj);
+ajint       ajDomainDCFType(AjPFile inf);
+AjBool      ajDomainCopy(AjPDomain *to, const AjPDomain from);
+
+AjPStr      ajDomainGetId(const AjPDomain obj);
+AjPStr      ajDomainGetSeqPdb(const AjPDomain obj);
+AjPStr      ajDomainGetSeqSpr(const AjPDomain obj);
+AjPStr      ajDomainGetPdb(const AjPDomain obj);
+AjPStr      ajDomainGetAcc(const AjPDomain obj);
+AjPStr      ajDomainGetSpr(const AjPDomain obj);
+ajint       ajDomainGetN(const AjPDomain obj);
+
+
+/******************************************************************************
+**                                                                           
+** Macros for returning elements from an instance of a                       
+**
+** Domain object                                                          
+**                                                                           
+******************************************************************************/
+#define DOMAIN_S_Entry (ptr)   ptr->Scop->Entry
+#define DOMAIN_S_Pdb (ptr)   ptr->Scop->Pdb
+#define DOMAIN_S_Class (ptr)   ptr->Scop->Class
+#define DOMAIN_S_Fold (ptr)   ptr->Scop->Fold
+#define DOMAIN_S_Superfamily (ptr)   ptr->Scop->Superfamily
+#define DOMAIN_S_Family (ptr)   ptr->Scop->Family
+#define DOMAIN_S_Sunid_Class (ptr)   ptr->Scop->Sunid_Class
+#define DOMAIN_S_Sunid_Fold (ptr)   ptr->Scop->Sunid_Fold
+#define DOMAIN_S_Sunid_Superfamily (ptr)   ptr->Scop->Sunid_Superfamily
+#define DOMAIN_S_Sunid_Family (ptr)   ptr->Scop->Sunid_Family
+#define DOMAIN_S_Acc (ptr)   ptr->Scop->Acc
+#define DOMAIN_S_Spr (ptr)   ptr->Scop->Spr
+#define DOMAIN_S_SeqPdb (ptr)   ptr->Scop->SeqPdb
+#define DOMAIN_S_SeqSpr (ptr)   ptr->Scop->SeqSpr
+/* #define DOMAIN_S_ (ptr)   ptr->Scop-> */
+
+
 
 
 #endif

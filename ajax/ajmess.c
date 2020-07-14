@@ -1002,6 +1002,7 @@ char* ajMessSysErrorText(void)
 	AJFREE(errmess);
     errmess = ajSysStrdup(mess);
 
+    AJFREE(mess);
     return errmess;
 }
 

@@ -51,7 +51,8 @@ typedef struct AjSRange
 
 AjBool    ajRangeBegin (AjPRange thys, ajint begin);
 AjBool    ajRangeChange(AjPRange thys, ajint element, ajint start, ajint end);
-AjBool    ajRangeDefault(const AjPRange thys, const AjPStr s);
+AjPRange  ajRangeCopy(const AjPRange src);
+AjBool    ajRangeDefault(const AjPRange thys, const AjPSeq s);
 void      ajRangeDel(AjPRange *thys);
 AjPRange  ajRangeFile(const AjPStr name);
 AjPRange  ajRangeGet(const AjPStr s);
@@ -61,6 +62,13 @@ AjBool    ajRangeOrdered (const AjPRange thys);
 ajint	  ajRangeOverlaps (const AjPRange thys, ajint pos, ajint length);
 ajint	  ajRangeOverlapSingle (ajint start, ajint end,
 				ajint pos, ajint length);
+AjBool    ajRangeSeqExtract (const AjPRange thys, AjPSeq seq);
+AjBool    ajRangeSeqExtractList (const AjPRange thys,
+				 const AjPSeq seq, AjPList outliststr);
+AjBool    ajRangeSeqMask (const AjPRange thys,
+			  const AjPStr maskchar, AjPSeq seq);
+AjBool    ajRangeSeqStuff (const AjPRange thys, AjPSeq seq);
+AjBool    ajRangeSeqToLower (const AjPRange thys, AjPSeq seq);
 AjBool    ajRangeStrExtract (const AjPRange thys,
 			     const AjPStr instr, AjPStr *outstr);
 AjBool    ajRangeStrExtractList (const AjPRange thys,

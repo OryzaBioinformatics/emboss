@@ -25,6 +25,7 @@
 #include "ajax.h"
 #include <stdarg.h>
 #include <pwd.h>
+#include <unistd.h>
 
 
 
@@ -54,7 +55,6 @@ void ajExit(void)
     ajRegExit();
     ajTableExit();
     ajListExit();
-    ajRegExit();
     ajFileExit();
     ajFeatExit();
     ajAcdExit(ajFalse);
@@ -82,6 +82,32 @@ void ajExit(void)
 ajint ajExitBad(void)
 {
     exit(EXIT_FAILURE);
+
+    return EXIT_FAILURE;
+}
+
+
+
+
+/* @func ajExitAbort **********************************************************
+**
+** Exits without flushing any files. Needed for exit from, for example,
+** a failed system call (ajFileNewInPipe, and so on) where the parent
+** process has open output files, and the child priocess needs to exit
+** without affecting them. Failure to exit this way can mean the output
+** buffer is flushed twice.
+**
+** Calls '-exit' with an unsuccessful code (EXIT_FAILURE defined in stdlib.h).
+**
+** No cleanup or reporting routines are called. Simply crashes.
+**
+** @return [ajint] Exit code
+** @@
+******************************************************************************/
+
+ajint ajExitAbort(void)
+{
+    _exit(EXIT_FAILURE);
 
     return EXIT_FAILURE;
 }

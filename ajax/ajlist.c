@@ -159,6 +159,9 @@ void ajListPush(AjPList thys, void* x)
     if(!thys->Count++)
 	thys->Last->Prev = thys->First;
 
+    if(thys->Count > listMaxNum)
+	listMaxNum = thys->Count;
+
     return;
 }
 
@@ -464,6 +467,8 @@ void ajListAppend(AjPList thys, AjPListNode* morenodes)
     {				/* need to get to the end of the list */
 	more = more->Next;
 	thys->Count++;
+	if(thys->Count > listMaxNum)
+	    listMaxNum = thys->Count;
     }
 
     thys->Last = more;		/* now we can set the end of the list */
@@ -511,6 +516,8 @@ void ajListPushApp(AjPList thys, void* x)
     thys->Last->Prev = tmp;
 
     thys->Count++;
+    if(thys->Count > listMaxNum)
+	listMaxNum = thys->Count;
 
     return;
 }
@@ -2007,6 +2014,8 @@ void ajListInsert(AjIList iter, void* x)
     }
 
     list->Count++;
+    if(list->Count > listMaxNum)
+	listMaxNum = list->Count;
 
     /*ajListTrace(list);*/
     /*ajListIterTrace(iter);*/
@@ -2067,6 +2076,8 @@ void ajListstrInsert(AjIList iter, AjPStr x)
     }
 
     list->Count++;
+    if(list->Count > listMaxNum)
+	listMaxNum = list->Count;
 
     ajListstrTrace(list);
     ajListstrIterTrace(iter);
@@ -2211,6 +2222,8 @@ void ajListPushList(AjPList thys, AjPList* pmore)
 	thys->First = more->First;
 	thys->Count += more->Count;
 	thys->First->Prev = NULL;
+	if(thys->Count > listMaxNum)
+	    listMaxNum = thys->Count;
     }
 
     AJFREE(more);	/* free the list but not the nodes */
@@ -2655,7 +2668,7 @@ void ajListExit(void)
 {
     ajDebug("List usage : %d opened, %d closed, %d maxsize %d nodes\n",
 	     listNewCnt, listDelCnt, listMaxNum, listNodeCnt);
-    ajDebug("List iterator usage : %d opened, %d closed, %d maxsize\n",
+    ajDebug("List iterator usage : %d opened, %d closed\n",
 	     listIterNewCnt, listIterDelCnt);
 
     return;

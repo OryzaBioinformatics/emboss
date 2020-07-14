@@ -37,6 +37,7 @@ typedef struct SeqSAccess SeqSAccess;
 ** @attr Key [AjPStr] Keyword Wildcard
 ** @attr Org [AjPStr] Taxonomy Wildcard
 ** @attr Sv [AjPStr] SeqVersion Wildcard
+** @attr Gi [AjPStr] GenInfo Identifier Wildcard
 ** @attr Method [AjPStr] Name of access method
 ** @attr Formatstr [AjPStr] Name of input sequence format
 ** @attr IndexDir [AjPStr] Index directory
@@ -75,6 +76,7 @@ typedef struct AjSSeqQuery {
   AjPStr Key;
   AjPStr Org;
   AjPStr Sv;
+  AjPStr Gi;
   AjPStr Method;
   AjPStr Formatstr;
   AjPStr IndexDir;
@@ -478,24 +480,26 @@ typedef struct AjSSeqin {
 ** @attr Doc [AjPStr] Obsolete - see TextPtr
 ** @attr Rev [AjBool] true: to be reverse-complemented
 ** @attr Reversed [AjBool] true: has been reverse-complemented
+** @attr Trimmed [AjBool] true: has been trimmed
+** @attr Garbage [AjBool] Flag for garbage collection
 ** @attr Begin [ajint] start position (processed on reading)
 ** @attr End [ajint] end position (processed on reading)
 ** @attr Offset [ajint] offset from start
 ** @attr Offend [ajint] offset from end 
+** @attr Weight [float] Weight from multiple alignment
 ** @attr Fpos [ajlong] File position (fseek) for USA
 ** @attr Usa [AjPStr] USA fo re-reading
 ** @attr Ufo [AjPStr] UFO for re-reading
-** @attr Fttable [AjPFeattable] Feature table
 ** @attr Formatstr [AjPStr] Input format name
 ** @attr Format [AjEnum] Input format enum
 ** @attr Filename [AjPStr] Original filename
 ** @attr Entryname [AjPStr] Entryname (ID)
 ** @attr TextPtr [AjPStr] Full text
-** @attr Weight [float] Weight from multiple alignment
 ** @attr Acclist [AjPList] Secondary accessions
 ** @attr Keylist [AjPList] Keyword list
 ** @attr Taxlist [AjPList] Taxonomy list (just species for now)
 ** @attr Seq [AjPStr] The sequence
+** @attr Fttable [AjPFeattable] Feature table
 ** @attr Selexdata [AjPSelexdata] Selex data
 ** @attr Stock [AjPStockholmdata] Stockholm data
 **
@@ -523,6 +527,8 @@ typedef struct AjSSeqin {
 ** @modify ajSeqReverse Reverse complements a nucleotide sequence
 ** @modify ajSeqRevOnly Reverses a sequence (does not complement)
 ** @modify ajSeqCompOnly Complements a nucleotide sequence (does not reverse)
+** @modify ajSeqGarbageOn Sets Garbage to True.
+** @modify ajSeqGarbageOff Sets Garbage to False.
 ** @cast ajSeqChar Returns the actual char* holding the sequence.
 ** @cast ajSeqCharCopy Returns a copy of the sequence as char*.
 ** @cast ajSeqCharCopyL Returns a copy of the sequence as char* with
@@ -534,6 +540,7 @@ typedef struct AjSSeqin {
 ** @cast ajSeqEnd Returns the sequence end position
 ** @cast ajSeqCheckGcg Calculates the GCG checksum for a sequence.
 ** @cast ajSeqNum Convert sequence to numbers
+** @cast ajSeqIsGarbage Returns the Garbage element.
 ** @use ajSeqIsNuc tests whether a sequence is nucleotide
 ** @use ajSeqIsProt tests whether a sequence is protein
 ** @output ajSeqWrite Master sequence output routine
@@ -557,24 +564,26 @@ typedef struct AjSSeq {
   AjPStr Doc;
   AjBool Rev;
   AjBool Reversed;
+  AjBool Trimmed;
+  AjBool Garbage;
   ajint Begin;
   ajint End;
   ajint Offset;
   ajint Offend;
+  float Weight;
   ajlong Fpos;
   AjPStr Usa;
   AjPStr Ufo;
-  AjPFeattable Fttable;
   AjPStr Formatstr;
   AjEnum Format;
   AjPStr Filename;
   AjPStr Entryname;
   AjPStr TextPtr;
-  float Weight;
   AjPList Acclist;
   AjPList Keylist;
   AjPList Taxlist;
   AjPStr Seq;
+  AjPFeattable Fttable;
   AjPSelexdata Selexdata;
   AjPStockholmdata Stock;
 } AjOSeq;
@@ -625,6 +634,7 @@ typedef struct AjSSeq {
 ** @modify ajSeqsetToUpper Converts a sequence set to upper case
 ** @cast ajSeqsetLen Returns the maximum length of a sequence set
 ** @cast ajSeqsetSize Returns the number of sequences in a sequence set
+** @cast ajSeqsetAcc Returns the accession number of a sequence in a set
 ** @cast ajSeqsetName Returns the name of a sequence in a set
 ** @cast ajSeqsetSeq Returns the char* pointer to a sequence in a set
 ** @cast ajSeqsetIsNuc Tests whether the sequence set is nucleotide

@@ -223,7 +223,10 @@ void ajMatrixDel(AjPMatrix *thys)
 
 AjIntArray* ajMatrixArray(const AjPMatrix thys)
 {
-    return thys->Matrix;
+    if(thys)
+	return thys->Matrix;
+    else
+	return NULL;
 }
 
 
@@ -242,7 +245,10 @@ AjIntArray* ajMatrixArray(const AjPMatrix thys)
 
 AjFloatArray* ajMatrixfArray(const AjPMatrixf thys)
 {
-    return thys->Matrixf;
+    if(thys)
+	return thys->Matrixf;
+    else
+	return NULL;
 }
 
 
@@ -259,7 +265,10 @@ AjFloatArray* ajMatrixfArray(const AjPMatrixf thys)
 
 ajint ajMatrixSize(const AjPMatrix thys)
 {
-    return thys->Size;
+    if(thys)
+	return thys->Size;
+    else
+	return 0;
 }
 
 
@@ -276,7 +285,10 @@ ajint ajMatrixSize(const AjPMatrix thys)
 
 ajint ajMatrixfSize(const AjPMatrixf thys)
 {
-    return thys->Size;
+    if(thys)
+	return thys->Size;
+    else
+	return 0;
 }
 
 
@@ -295,7 +307,10 @@ ajint ajMatrixfSize(const AjPMatrixf thys)
 
 AjPSeqCvt ajMatrixCvt(const AjPMatrix thys)
 {
-    return thys->Cvt;
+    if(thys)
+	return thys->Cvt;
+    else
+	return NULL;
 }
 
 
@@ -314,7 +329,10 @@ AjPSeqCvt ajMatrixCvt(const AjPMatrix thys)
 
 AjPSeqCvt ajMatrixfCvt(const AjPMatrixf thys)
 {
-    return thys->Cvt;
+    if(thys)
+	return thys->Cvt;
+    else
+	return NULL;
 }
 
 
@@ -335,6 +353,12 @@ AjPSeqCvt ajMatrixfCvt(const AjPMatrixf thys)
 
 void ajMatrixChar(const AjPMatrix thys, ajint i, AjPStr *label)
 {
+    if(!thys)
+    {
+	ajStrAssC(label, "?");
+	return;
+    }
+
     if(i >= thys->Size)
     {
 	ajStrAssC(label, "?");
@@ -370,6 +394,12 @@ void ajMatrixChar(const AjPMatrix thys, ajint i, AjPStr *label)
 
 void ajMatrixfChar(const AjPMatrixf thys, ajint i, AjPStr *label)
 {
+    if(!thys)
+    {
+	ajStrAssC(label, "?");
+	return;
+    }
+
     if(i >= thys->Size) 
     {	
 	ajStrAssC(label, "?");
@@ -396,13 +426,16 @@ void ajMatrixfChar(const AjPMatrixf thys, ajint i, AjPStr *label)
 ** which it was read.
 **
 ** @param [r] thys [const AjPMatrix] Matrix object
-** @return [AjPStr] The name, a pointer to the internal name.
+** @return [const AjPStr] The name, a pointer to the internal name.
 ** @@
 ******************************************************************************/
 
-AjPStr ajMatrixName(const AjPMatrix thys)
+const AjPStr ajMatrixName(const AjPMatrix thys)
 {
-    return thys->Name;
+    if(thys)
+	return thys->Name;
+    else
+	return ajStrNull();
 }
 
 
@@ -414,13 +447,16 @@ AjPStr ajMatrixName(const AjPMatrix thys)
 ** which it was read.
 **
 ** @param [r] thys [const AjPMatrixf] Matrix object
-** @return [AjPStr] The name, a pointer to the internal name.
+** @return [const AjPStr] The name, a pointer to the internal name.
 ** @@
 ******************************************************************************/
 
-AjPStr ajMatrixfName(const AjPMatrixf thys)
+const AjPStr ajMatrixfName(const AjPMatrixf thys)
 {
-    return thys->Name;
+    if(thys)
+	return thys->Name;
+    else
+	return ajStrNull();
 }
 
 
@@ -498,7 +534,10 @@ AjBool ajMatrixRead(AjPMatrix* pthis, const AjPStr filename)
 	    {
 		ajFmtScanC(ptr, "%S", &firststring);
 		
-		k = ajSeqCvtK(thys->Cvt, ajStrChar(firststring,0));
+		/* JISON 19/7/4
+		   k = ajSeqCvtK(thys->Cvt, ajStrChar(firststring,0)); */
+		k = ajSeqCvtKS(thys->Cvt, firststring);
+
 		/* 
 		 ** cols+1 is used below because 2nd and subsequent lines have 
 		 ** one more string in them (the residue label) 
@@ -510,9 +549,14 @@ AjBool ajMatrixRead(AjPMatrix* pthis, const AjPStr filename)
 		{
 		    if(templine[i] < minval) 
 			minval = templine[i];
+
+		    /* JISON 19/7/4
 		    matrix[k][ajSeqCvtK(thys->Cvt,
 					ajStrChar(orderstring[i],0))] 
-					    = templine[i];
+					    = templine[i]; */
+		    matrix[k][ajSeqCvtKS(thys->Cvt,
+					 orderstring[i])] 
+					     = templine[i];
 		}
 		AJFREE(templine);
 	    }
@@ -615,7 +659,10 @@ AjBool ajMatrixfRead(AjPMatrixf* pthis, const AjPStr filename)
 	    else
 	    {
 		ajFmtScanC(ptr, "%S", &firststring);
-		k = ajSeqCvtK(thys->Cvt, ajStrChar(firststring,0));
+		/* JISON 19/7/4 
+		   k = ajSeqCvtK(thys->Cvt, ajStrChar(firststring,0)); */
+		k = ajSeqCvtKS(thys->Cvt, firststring); 
+
 		len = MAJSTRLEN(firststring);
 		ajStrAssSubC(&reststring, ptr, len, -1);
 
@@ -636,9 +683,14 @@ AjBool ajMatrixfRead(AjPMatrixf* pthis, const AjPStr filename)
 		{
 		    if(templine[i] < minval) 
 			minval = templine[i];
+		    /* JISON 19/7/4
 		    matrix[k][ajSeqCvtK(thys->Cvt,
 					ajStrChar(orderstring[i],0))] 
-					    = templine[i];
+					    = templine[i]; */
+
+		    matrix[k][ajSeqCvtKS(thys->Cvt,
+					 orderstring[i])] 
+					     = templine[i];
 		}
 		AJFREE(templine);
 	    }

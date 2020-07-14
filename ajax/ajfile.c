@@ -32,6 +32,7 @@
 #include <errno.h>
 #include <unistd.h>
 #include <limits.h>
+#include <fcntl.h>
 
 #define FILERECURSLV 20
 static ajint fileBuffSize = 2048;
@@ -57,7 +58,6 @@ static AjBool fileBuffLineNext(AjPFileBuff thys);
 static void   fileClose(AjPFile thys);
 static void   fileListRecurs(const AjPStr file, AjPList list, ajint *recurs);
 static DIR*   fileOpenDir(AjPStr *dir);
-
 
 #ifdef __CYGWIN__
 #define fopen(a,b) ajSysFopen(a,b)
@@ -432,7 +432,7 @@ AjPFile ajFileNewInPipe(const AjPStr name)
 	execvp(pgm, arglist);
 	ajErr("execvp ('%S', NULL) failed: '%s'\n",
 		tmpname, strerror(errno));
-	ajExitBad();
+	ajExitAbort();
     }
     
     ajDebug("pid %d, pipe '%d', '%d'\n",
@@ -442,10 +442,11 @@ AjPFile ajFileNewInPipe(const AjPStr name)
     thys->fp = ajSysFdopen(pipefds[0], "r");
     close(pipefds[1]);
     ajStrDelReuse(&tmpname);
-    
+
     if(!thys->fp)
     {
 	thys->Handle = 0;
+	ajFileClose(&thys);
 	return NULL;
     }
     thys->Handle = ++fileHandle;
@@ -681,9 +682,6 @@ AjPFile ajFileNewApp(const AjPStr name)
 
     return thys;
 }
-
-
-
 
 /* @func ajFileNewOut *********************************************************
 **
@@ -1794,7 +1792,7 @@ AjBool ajFileGetsTrimL(AjPFile thys, AjPStr* pdest, ajlong* fpos)
 
     if(dest->Len && dest->Ptr[dest->Len-1] == '\r')
     {
-	ajDebug("Remove carriage-return characters from PC-style files\n");
+	/*ajDebug("Remove carriage-return characters from PC-style files\n");*/
 	dest->Ptr[--dest->Len] = '\0';
     }
 
@@ -1834,9 +1832,11 @@ AjBool ajFileGetsTrim(AjPFile thys, AjPStr* pdest)
     if(dest->Ptr[dest->Len-1] == '\n')
 	dest->Ptr[--dest->Len] = '\0';
 
+    /* PC files have \r\n Macintosh files have just \r : this fixes both */
+
     if(dest->Len && dest->Ptr[dest->Len-1] == '\r')
     {
-	ajDebug("Remove carriage-return characters from PC-style files\n");
+	/*ajDebug("Remove carriage-return characters from PC-style files\n");*/
 	dest->Ptr[--dest->Len] = '\0';
     }
 
@@ -3068,13 +3068,107 @@ AjPFileBuff ajFileBuffNewDW(const AjPStr dir, const AjPStr wildfile)
 
 
 
+/* @func ajFileBuffNewDWE *****************************************************
+**
+** Opens directory "dir"
+** Looks for file(s) matching "file"
+** Skip files natching excluded files wildcard
+** Opens them as a list of files using a buffered file object.
+**
+** @param [r] dir [const AjPStr] Directory
+** @param [r] wildfile [const AjPStr] Wildcard filename.
+** @param [r] exclude [const AjPStr] Wildcard excluded filename.
+** @return [AjPFileBuff] New buffered file object.
+** @category new [AjPFileBuff] Constructor using a directory and
+**                             wildcard filename
+** @@
+******************************************************************************/
+
+AjPFileBuff ajFileBuffNewDWE(const AjPStr dir, const AjPStr wildfile,
+			     const AjPStr exclude)
+{
+    DIR* dp;
+    static AjPStr dirfix = NULL;
+#if defined(AJ_IRIXLF)
+    struct dirent64 *de;
+#else
+    struct dirent* de;
+#endif
+    ajint dirsize;
+    AjPList list = NULL;
+    AjPStr name  = NULL;
+    AjPStr tmpname  = NULL;
+#ifdef _POSIX_C_SOURCE
+    char buf[sizeof(struct dirent)+MAXNAMLEN];
+#endif
+    
+    if(ajStrLen(dir))
+	ajStrAssS(&dirfix, dir);
+    else
+	ajStrAssC(&dirfix, "./");
+    
+    if(ajStrChar(dir, -1) != '/')
+	ajStrAppC(&dirfix, "/");
+    
+    dp = fileOpenDir(&dirfix);
+    if(!dp)
+	return NULL;
+    
+    dirsize = 0;
+    list = ajListstrNew();
+
+#if defined(AJ_IRIXLF)
+#ifdef _POSIX_C_SOURCE
+    while(!readdir64_r(dp,(struct dirent64 *)buf,&de))
+    {
+	if(!de)
+	    break;
+#else
+	while((de=readdir64(dp)))
+	{
+#endif
+#else
+#ifdef _POSIX_C_SOURCE
+    while(!readdir_r(dp,(struct dirent *)buf,&de))
+    {
+	if(!de)
+	    break;
+#else
+	while((de=readdir(dp)))
+	{
+#endif
+#endif
+	/* skip deleted files with inode zero */
+	if(!de->d_ino)
+	    continue;
+	ajStrAssC(&tmpname, de->d_name);
+	ajDebug("testing '%s'\n", de->d_name);
+	if(!ajFileTestSkip(tmpname, exclude, wildfile, ajFalse, ajFalse))
+	    continue;
+	dirsize++;
+	ajDebug("accept '%s'\n", de->d_name);
+	name = NULL;
+	ajFmtPrintS(&name, "%S%s", dirfix, de->d_name);
+	ajListstrPushApp(list, name);
+    }
+    
+    closedir(dp);
+    ajDebug("%d files for '%S' '%S'\n", dirsize, dir, wildfile);
+	ajStrDel(&tmpname);
+    
+    return ajFileBuffNewInList(list);
+}
+
+
+
+
 /* @func ajFileBuffNewDC ******************************************************
 **
 ** Opens directory "dir"
 ** Looks for file "file"
-** Opens them as a list of files using a buffered file object.
+** Opens the file.
 **
-** @param [r] dir [const AjPStr] Directory
+** @param [r] dir [const AjPStr] Directory. If empty uses current directory.
 ** @param [r] filename [const char*] Filename.
 ** @return [AjPFileBuff] New buffered file object.
 ** @@
@@ -3104,9 +3198,9 @@ AjPFileBuff ajFileBuffNewDC(const AjPStr dir, const char* filename)
 **
 ** Opens directory "dir"
 ** Looks for file "file"
-** Opens them as a list of files using a buffered file object.
+** Opens the file.
 **
-** @param [r] dir [const AjPStr] Directory
+** @param [r] dir [const AjPStr] Directory. If empty uses current directory.
 ** @param [r] filename [const AjPStr] Filename.
 ** @return [AjPFileBuff] New buffered file object.
 ** @@
@@ -3200,6 +3294,96 @@ AjPFile ajFileNewDW(const AjPStr dir, const AjPStr wildfile)
 	if(!de->d_ino)
 	    continue;
 	if(!ajStrMatchWildCO(de->d_name, wildfile))
+	    continue;
+	dirsize++;
+	ajDebug("accept '%s'\n", de->d_name);
+	name = NULL;
+	ajFmtPrintS(&name, "%S%s", dirfix, de->d_name);
+	ajListstrPushApp(list, name);
+    }
+    
+    closedir(dp);
+    ajDebug("%d files for '%S' '%S'\n", dirsize, dir, wildfile);
+    
+    return ajFileNewInList(list);
+}
+
+
+
+
+/* @func ajFileNewDWE *********************************************************
+**
+** Opens directory "dir"
+** Looks for file(s) matching "file"
+** Skip files natching excluded files wildcard
+** Opens them as a list of files using a simple file object.
+**
+** @param [r] dir [const AjPStr] Directory
+** @param [r] wildfile [const AjPStr] Wildcard filename.
+** @param [r] exclude [const AjPStr] Wildcard excluded filename.
+** @return [AjPFile] New file object.
+** @@
+******************************************************************************/
+
+AjPFile ajFileNewDWE(const AjPStr dir, const AjPStr wildfile,
+			     const AjPStr exclude)
+{
+    DIR* dp;
+    static AjPStr dirfix = NULL;
+#if defined(AJ_IRIXLF)
+    struct dirent64 *de;
+#else
+    struct dirent* de;
+#endif
+    ajint dirsize;
+    AjPList list = NULL;
+    AjPStr name  = NULL;
+    AjPStr tmpname  = NULL;
+#ifdef _POSIX_C_SOURCE
+    char buf[sizeof(struct dirent)+MAXNAMLEN];
+#endif
+    
+    if(ajStrLen(dir))
+	ajStrAssS(&dirfix, dir);
+    else
+	ajStrAssC(&dirfix, "./");
+    
+    if(ajStrChar(dir, -1) != '/')
+	ajStrAppC(&dirfix, "/");
+    
+    dp = fileOpenDir(&dirfix);
+    if(!dp)
+	return NULL;
+    
+    dirsize = 0;
+    list = ajListstrNew();
+    
+#if defined(AJ_IRIXLF)
+#ifdef _POSIX_C_SOURCE
+    while(!readdir64_r(dp,(struct dirent64 *)buf,&de))
+    {
+	if(!de)
+	    break;
+#else
+	while((de=readdir64(dp)))
+	{
+#endif
+#else
+#ifdef _POSIX_C_SOURCE
+    while(!readdir_r(dp,(struct dirent *)buf,&de))
+    {
+	if(!de)
+	    break;
+#else
+	while((de=readdir(dp)))
+	{
+#endif
+#endif
+	/* skip deleted files with inode zero */
+	if(!de->d_ino)
+	    continue;
+	ajStrAssC(&tmpname, de->d_name);
+	if(!ajFileTestSkip(tmpname, exclude, wildfile, ajFalse, ajFalse))
 	    continue;
 	dirsize++;
 	ajDebug("accept '%s'\n", de->d_name);
@@ -3570,7 +3754,7 @@ AjBool ajFileBuffGetL(AjPFileBuff thys, AjPStr* pdest, ajlong* fpos)
 		    /* OK - read the new file */
 		    ok = ajFileBuffGetL(thys, pdest, fpos);
 		    ajDebug("End of file - trying next file ok: %B "
-			    "fpos: %ld %ld\n",
+			    "fpos: %Ld %Ld\n",
 			    ok, *fpos, thys->Fpos);
 		    return ok;
 		}
@@ -3591,7 +3775,7 @@ AjBool ajFileBuffGetL(AjPFileBuff thys, AjPStr* pdest, ajlong* fpos)
     if(thys->Nobuff)
     {
 	*fpos = thys->Fpos;
-	/*ajDebug("ajFileBuffGetL unbuffered fpos: %ld\n", *fpos);*/
+	/*ajDebug("ajFileBuffGetL unbuffered fpos: %Ld\n", *fpos);*/
 	return ajTrue;
     }
     
@@ -4146,7 +4330,7 @@ void ajFileBuffFreeClear(AjPFileBuff thys)
     if(!thys)
 	return;
 
-    ajDebug("ajFileBuffFreeClear %x\n", thys->Free);
+    /*ajDebug("ajFileBuffFreeClear %x\n", thys->Free);*/
 
     while(thys->Free)
     {
@@ -4187,7 +4371,7 @@ void ajFileBuffClear(AjPFileBuff thys, ajint lines)
     ajint first;
     ajint ifree = 0;
     
-    ajDebug("ajFileBuffClear (%d) Nobuff: %B\n", lines, thys->Nobuff);
+    /*ajDebug("ajFileBuffClear (%d) Nobuff: %B\n", lines, thys->Nobuff);*/
     /*FileBuffTraceFull(thys, thys->Size, 100);*/
     if(!thys)
 	return;
@@ -4491,7 +4675,7 @@ void ajFileBuffTraceFull(const AjPFileBuff thys, size_t nlines,
     AjBool last = ajFalse;
 
     ajDebug("Trace buffer file '%S' End: %B\n"
-	     "             Pos: %d Size: %d Nobuff: %B Fpos: %ld\n",
+	     "             Pos: %d Size: %d Nobuff: %B Fpos: %Ld\n",
 	     thys->File->Name, thys->File->End,
 	     thys->Pos, thys->Size, thys->Nobuff, thys->Fpos);
 
@@ -5447,7 +5631,7 @@ AjBool ajFileBuffStripHtmlPre(AjPFileBuff thys)
     lptr = thys->Curr;
     
     preexp = ajRegCompC("<[Pp][Rr][Ee]>");
-    endexp = ajRegCompC("</[Pp][Rr][Ee]>");
+
     lptr=thys->Curr;
     
     ajDebug("ajFileBuffStripHtmlPre testing for <pre> line(s)\n");
@@ -5461,12 +5645,14 @@ AjBool ajFileBuffStripHtmlPre(AjPFileBuff thys)
     if(!ifound)
     {
 	ajDebug("ajFileBuffStripHtmlPre no <pre> line(s)\n");
+	ajRegFree(&preexp);
 	return ajFalse;
     }
 
     if (ifound > 1)
     {
 	ajDebug("ajFileBuffStripHtmlPre found %d <pre> lines\n", ifound);
+	ajRegFree(&preexp);
 	return ajFalse;
     }
 
@@ -5490,8 +5676,12 @@ AjBool ajFileBuffStripHtmlPre(AjPFileBuff thys)
 	ajDebug("++ajFileBuffStripHtmlPre <pre> at: %S\n", lptr->Line);
     thys->Lines = thys->Curr = lptr;
     ajRegPost(preexp, &lptr->Line);
+    ajRegFree(&preexp);
 
     ajDebug("++ajFileBuffStripHtmlPre skip to </pre>\n");
+
+    endexp = ajRegCompC("</[Pp][Rr][Ee]>");
+
     while(lptr && !ajRegExec(endexp,lptr->Line))
     {
 	ajDebug("keep: %S\n", lptr->Line);
@@ -5501,6 +5691,7 @@ AjBool ajFileBuffStripHtmlPre(AjPFileBuff thys)
     ajRegPre(endexp, &lptr->Line);
     thys->Last = lptr;
     lptr = lptr->Next;
+    ajRegFree(&endexp);
 
     while(lptr)
     {
@@ -5515,6 +5706,7 @@ AjBool ajFileBuffStripHtmlPre(AjPFileBuff thys)
     thys->Last->Next = NULL;
     ajFileBuffReset(thys);
     ajFileBuffPrint(thys, "ajFileBuffStripHtmlPre completed");
+
     return ajTrue;
 }
 

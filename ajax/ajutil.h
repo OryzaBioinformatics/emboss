@@ -7,6 +7,7 @@ extern "C"
 #define ajutil_h
 
 void   ajExit (void);
+ajint  ajExitAbort (void);
 ajint  ajExitBad (void);
 void   ajLogInfo (void);
 AjBool ajUtilBigendian (void);

@@ -221,6 +221,52 @@ AjBool ajRegExec(AjPRegexp prog, const AjPStr str)
 
 
 
+/* @func ajRegExecB ***********************************************************
+**
+** Execute a regular expression search.
+** The expression must first have been compiled with ajRegComp or ajRegCompC.
+**
+** Internal data structures in the expression will be set to substrings
+** which other functions can retrieve.
+**
+** @param [u] prog [AjPRegexp] Compiled regular expression.
+** @param [r] str [const AjPStr] String to be compared.
+** @return [AjBool] ajTrue if a match was found.
+** @@
+******************************************************************************/
+
+AjBool ajRegExecB(AjPRegexp prog, const AjPStr str)
+{
+    int startoffset = 0;
+    int options     = 0;
+    int status      = 0;
+
+    status = pcre_exec(prog->pcre, prog->extra, ajStrStr(str), ajStrLen(str),
+		       startoffset, options, prog->ovector, 3*prog->ovecsize);
+
+    if(status >= 0)
+    {
+	prog->orig = ajStrStr(str);
+	if(status == 0)
+	    ajWarn("ajRegExec too many substrings");
+	return ajTrue;
+    }
+
+    if(status < -1)		    /* -1 is a simple fail to match */
+    {				/* others are recursion limits etc. */
+	ajDebug("ajRegExec returned unexpected status '%d'\n", status);
+	prog->orig = ajStrStr(str);	/* needed for the trace */
+	ajRegTrace(prog);
+    }
+
+    prog->orig = NULL;
+
+    return ajFalse;
+}
+
+
+
+
 /* @func ajRegExecC ***********************************************************
 **
 ** Execute a regular expression search.
@@ -618,10 +664,10 @@ void ajRegTrace(const AjPRegexp exp)
 
 void ajRegExit(void)
 {
-    ajDebug("Regexp usage (bytes): %ld allocated, %ld freed, %ld in use\n",
-	     regAlloc, regFree, regAlloc - regFree);
-    ajDebug("Regexp usage (number): %ld allocated, %ld freed %ld in use\n",
-	     regTotal, regFreeCount, regCount);
+    ajDebug("Regexp usage (bytes): %Ld allocated, %Ld freed, %Ld in use\n",
+	    regAlloc, regFree, (regAlloc - regFree));
+    ajDebug("Regexp usage (number): %Ld allocated, %Ld freed %Ld in use\n",
+	    regTotal, regFreeCount, regCount);
 
     return;
 }

@@ -125,10 +125,10 @@ void    ajHistSetMultiYTitle  (AjPHist hist, ajint index, const AjPStr title);
 void    ajHistSetMultiYTitleC (AjPHist hist, ajint index, const char *title);
 void    ajHistSetPattern (AjPHist hist, ajint index, ajint style);
 void    ajHistSetPtrToData (AjPHist hist, ajint index, PLFLT *data);
-void    ajHistSetTitleC (AjPHist hist, const char* string);
-void    ajHistSetXAxisC (AjPHist hist, const char* string);
-void    ajHistSetYAxisLeftC (AjPHist hist,const  char* string);
-void    ajHistSetYAxisRightC (AjPHist hist, const char* string);
+void    ajHistSetTitleC (AjPHist hist, const char* strng);
+void    ajHistSetXAxisC (AjPHist hist, const char* strng);
+void    ajHistSetYAxisLeftC (AjPHist hist,const  char* strng);
+void    ajHistSetYAxisRightC (AjPHist hist, const char* strng);
 
 #endif /* ajhist_h */
 

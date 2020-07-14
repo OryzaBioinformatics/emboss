@@ -133,9 +133,13 @@ static const ajint ajXRAY = 0;    /* Structure was determined by X-ray crystallo
 static const ajint ajNMR  = 1;    /* Structure was determined by NMR or is a model     */
 static const ajint ajPDB  = 0;    /* Use original PDB residue numbering                */
 static const ajint ajIDX  = 1;    /* Use corrected residue numbering                   */
-#define ajESCOP "Escop.dat" /* Scop data file */
-#define ajSCOP 1
-#define ajCATH 2
+#define ajESCOP "Escop.dat"       /* Scop data file */
+#define ajSCOP   1                /* Type of domain */
+#define ajCATH   2                /* Type of domain */
+#define ajINTRA  1                /* Type of contact */
+#define ajINTER  2                /* Type of contact */
+#define ajLIGAND 3                /* Type of contact */
+
 
 
 

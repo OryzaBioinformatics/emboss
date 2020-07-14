@@ -1113,15 +1113,15 @@ AjBool ajSeqRead(AjPSeq thys, AjPSeqin seqin)
     /* if values are missing in the sequence object, we can use defaults
        from seqin or calculate where possible */
 
-    ajDebug("++keep restored %d..%d (%b) '%S' %d\n",
+    /*ajDebug("++keep restored %d..%d (%b) '%S' %d\n",
 	    seqin->Begin, seqin->End, seqin->Rev,
-	    seqin->Formatstr, seqin->Format);
-    ajDebug("ajSeqRead: thys->Db '%S', seqin->Db '%S'\n",
-	    thys->Db, seqin->Db);
-    ajDebug("ajSeqRead: thys->Name '%S'\n",
-	    thys->Name);
-    ajDebug("ajSeqRead: thys->Entryname '%S', seqin->Entryname '%S'\n",
-	    thys->Entryname, seqin->Entryname);
+	    seqin->Formatstr, seqin->Format);*/
+    /*ajDebug("ajSeqRead: thys->Db '%S', seqin->Db '%S'\n",
+	    thys->Db, seqin->Db);*/
+    /*ajDebug("ajSeqRead: thys->Name '%S'\n",
+	    thys->Name);*/
+    /*ajDebug("ajSeqRead: thys->Entryname '%S', seqin->Entryname '%S'\n",
+	    thys->Entryname, seqin->Entryname);*/
     ajStrSet(&thys->Db, seqin->Db);
     ajStrSet(&thys->Entryname, seqin->Entryname);
     /*ajStrSet(&thys->Name, thys->Entryname); */
@@ -1794,7 +1794,7 @@ static AjBool seqReadFasta(AjPSeq thys, AjPSeqin seqin)
     ajlong fpos     = 0;
     ajlong fposb    = 0;
     AjBool ok       = ajTrue;
-
+    AjPStr tmpline = NULL;
 
     ajDebug("seqReadFasta\n");
 
@@ -1809,8 +1809,14 @@ static AjBool seqReadFasta(AjPSeq thys, AjPSeqin seqin)
 
     bufflines++;
 
+    ajDebug("First line: %S\n", rdline);
     if(ajStrChar(rdline, 3) == ';') /* then it is really PIR format */
-	return ajFalse;
+    {
+	ajStrAssSub(&tmpline,rdline, 3, -1);
+	ajFmtPrintS(&rdline, ">%S",tmpline);
+	ajDebug("PIR format changed line to %S\n", rdline);
+	ajStrDel(&tmpline);
+    }
 
     cp = ajStrStr(rdline);
     if(*cp != '>')
@@ -1867,7 +1873,7 @@ static AjBool seqReadFasta(AjPSeq thys, AjPSeqin seqin)
 
     thys->Fpos = fpos;
 
-    ajDebug("started at fpos %ld ok: %B fposb: %ld\n", fpos, ok, fposb);
+    ajDebug("started at fpos %Ld ok: %B fposb: %Ld\n", fpos, ok, fposb);
 
     return ajTrue;
 }
@@ -1983,7 +1989,7 @@ static AjBool seqReadDbId(AjPSeq thys, AjPSeqin seqin)
 
     thys->Fpos = fpos;
 
-    ajDebug("started at fpos %ld ok: %B fposb: %ld\n", fpos, ok, fposb);
+    ajDebug("started at fpos %Ld ok: %B fposb: %Ld\n", fpos, ok, fposb);
 
     return ajTrue;
 }
@@ -3221,7 +3227,7 @@ static AjBool seqReadStaden(AjPSeq thys, AjPSeqin seqin)
     }
     else
     {
-	seqSetName(&thys->Name, thys->Filename);
+	seqSetName(&thys->Name, seqin->Filename);
 	seqAppend(&thys->Seq, rdline);
     }
 
@@ -3682,9 +3688,11 @@ static AjBool seqReadPhylip(AjPSeq thys, AjPSeqin seqin)
 		AJFREE(seqin->Data);
 		return ajFalse;
 	    }
+	    ajDebug("line: '%S'\n", rdline);
 	    AJNEW0(phyitem);
 	    ajRegSubI(headexp, 1, &tmpstr);
 	    seqSetName(&phyitem->Name, tmpstr);
+	    ajDebug("name: '%S' => '%S'\n", tmpstr, phyitem->Name);
 	    phyitem->Weight = 1.0;
 	    ajRegPost(headexp, &seqstr);
 	    seqAppend(&phyitem->Seq, seqstr);
@@ -4524,6 +4532,7 @@ static AjBool seqReadNexus(AjPSeq thys, AjPSeqin seqin)
 	if (!phydata->Nexus)
 	{
 	    ajFileBuffReset(buff);
+	    ajDebug("Failed to parse in nexus format\n");
 	    return ajFalse;
 	}
 	phydata->Count = 0;
@@ -4531,6 +4540,7 @@ static AjBool seqReadNexus(AjPSeq thys, AjPSeqin seqin)
 	/* GetTaxa may fail if names are only defined in the sequences */
 	phydata->Names = ajNexusGetTaxa(phydata->Nexus);
 	seqin->Data = phydata;
+	ajDebug("Nexus parsed %d sequences\n", phydata->Nseq);
     }
 
     phydata = seqin->Data;
@@ -6487,24 +6497,26 @@ static AjBool seqSetInFormat(const AjPStr format)
 
 static ajint seqAppend(AjPStr* pseq, const AjPStr line)
 {
-    const char* cp;
-    static AjPStr token     = NULL;
-    static AjPRegexp seqexp = NULL;
-    ajint i = 0;
+    AjPStr tmpstr = NULL;
+    ajint ret = 0;
 
-    if(!seqexp)
-	seqexp = ajRegCompC("[A-Za-z*.~?-]+");
+    ajStrAssS(&tmpstr, line);
+    ajStrKeepAlphaC(&tmpstr, "*.~?#+-");
+    ajStrApp(pseq, tmpstr);
 
-    cp = ajStrStr(line);
-    while(cp && ajRegExecC(seqexp, cp))
+/*
+    while(ajStrLen(tmpstr) && ajRegExec(seqexp, tmpstr))
     {
 	ajRegSubI(seqexp, 0, &token);
 	ajStrApp(pseq, token);
 	i += ajStrLen(token);
-	ajRegPostC(seqexp, &cp);
+	ajRegPost(seqexp, &tmpstr);
     }
+*/
+    ret = ajStrLen(tmpstr);
+    ajStrDel(&tmpstr);
 
-    return i;
+    return ret;;
 }
 
 
@@ -6854,16 +6866,16 @@ static AjBool seqUsaProcess(AjPSeq thys, AjPSeqin seqin)
 
     if(!fmtexp)
 	fmtexp = ajRegCompC("^([A-Za-z0-9]*)::(.*)$");
-    /* \1 format */
-    /* \2 remainder */
+    /* \1 format letters and numbers only */
+    /* \2 remainder (filename, etc.)*/
 
     if(!dbexp)
-	dbexp = ajRegCompC("^([A-Za-z0-9_]+)([-]([A-Za-z]+))?"
+	dbexp = ajRegCompC("^([A-Za-z][A-Za-z0-9_]+)([-]([A-Za-z]+))?"
 			   "([:{]([^}]*)}?)?$");
 
-    /* \1 dbname */
-    /* \2 -id or -acc */
-    /* \3 qry->Field (id or acc) */
+    /* \1 dbname (start with a letter, then alphanumeric) */
+    /* \2 -id or -acc etc. */
+    /* \3 qry->Field (id or acc etc.) */
     /* \4 :qry->QryString */
     /* \5 qry->QryString */
 
@@ -7011,9 +7023,10 @@ static AjBool seqUsaProcess(AjPSeq thys, AjPSeqin seqin)
 			return ajFalse;
 		    }
 
-		    /* treat Gi as another Sv, so no new query field */
 		    if(ajStrMatchCaseC(qry->Field, "sv"))
 			ajStrAssS(&qry->Sv, qry->QryString);
+		    else if(ajStrMatchCaseC(qry->Field, "gi"))
+			ajStrAssS(&qry->Gi, qry->QryString);
 		    else if(ajStrMatchCaseC(qry->Field, "des"))
 			ajStrAssS(&qry->Des, qry->QryString);
 		    else if(ajStrMatchCaseC(qry->Field, "org"))
@@ -7112,11 +7125,10 @@ static AjBool seqUsaProcess(AjPSeq thys, AjPSeqin seqin)
 			    ajStrAssS(&qry->Id, qry->QryString);
 			else if(ajStrMatchCaseC(qry->Field, "acc"))
 			    ajStrAssS(&qry->Acc, qry->QryString);
-
-			/* treat Gi as another Sv, so no new query field */
-
 			else if(ajStrMatchCaseC(qry->Field, "sv"))
 			    ajStrAssS(&qry->Sv, qry->QryString);
+			else if(ajStrMatchCaseC(qry->Field, "gi"))
+			    ajStrAssS(&qry->Gi, qry->QryString);
 			else if(ajStrMatchCaseC(qry->Field, "des"))
 			    ajStrAssS(&qry->Des, qry->QryString);
 			else if(ajStrMatchCaseC(qry->Field, "org"))
@@ -7512,26 +7524,31 @@ static AjBool seqinUfoLocal(const AjPSeqin thys)
 
 static void seqSetName(AjPStr* name, const AjPStr str)
 {
-    static AjPRegexp idexp = NULL;	/* dbname:id */
+    AjPStrTok split = NULL;
+    AjPStr token = NULL;
 
-    if(!idexp)
-	idexp = ajRegCompC("^([^ \t\n\r,<>|;]+:)?([^ \t\n\r,<>|;]+)$");
-
-    if(ajRegExec(idexp, str))
-	ajRegSubI(idexp, 2, name);
+    if(ajStrIsWord(str))
+    {
+	ajDebug("seqSetName word '%S'\n", str);
+	split = ajStrTokenInit(str, ":");
+	while(ajStrToken(&token, &split, NULL))
+	{
+	    if(ajStrLen(token))
+	       ajStrAssS(name, token);
+	}
+	ajStrTokenClear(&split);
+    }
     else
     {
+	ajDebug("seqSetName non-word '%S'\n", str);
 	ajStrAssS(name, str);
-	ajDebug("seqSetName default '%S'\n", str);
-	if (!ajStrIsWord(*name))
-	{
-	    ajStrClean(name);
-	    ajStrSubstituteKK(name, ' ', '_');
-	    ajDebug("seqSetName cleaned '%S'\n", *name);
-	}
+	ajStrClean(name);
+	ajStrSubstituteKK(name, ' ', '_');
+	ajDebug("seqSetName cleaned '%S'\n", *name);
     }
-    ajDebug("seqSetName '%S' result: '%S'\n", str, *name);
 
+    ajDebug("seqSetName '%S' result: '%S'\n", str, *name);
+    ajStrDel(&token);
     return;
 }
 
@@ -7679,6 +7696,7 @@ AjPSeqQuery ajSeqQueryNew(void)
     pthis->Id     = ajStrNew();
     pthis->Acc    = ajStrNew();
     pthis->Sv     = ajStrNew();
+    pthis->Gi     = ajStrNew();
     pthis->Des    = ajStrNew();
     pthis->Org    = ajStrNew();
     pthis->Key    = ajStrNew();
@@ -7742,6 +7760,7 @@ void ajSeqQueryDel(AjPSeqQuery* pthis)
     ajStrDel(&thys->Key);
     ajStrDel(&thys->Org);
     ajStrDel(&thys->Sv);
+    ajStrDel(&thys->Gi);
     ajStrDel(&thys->Method);
     ajStrDel(&thys->Formatstr);
     ajStrDel(&thys->IndexDir);
@@ -7816,6 +7835,7 @@ void ajSeqQueryClear(AjPSeqQuery thys)
     ajStrClear(&thys->Id);
     ajStrClear(&thys->Acc);
     ajStrClear(&thys->Sv);
+    ajStrClear(&thys->Gi);
     ajStrClear(&thys->Des);
     ajStrClear(&thys->Org);
     ajStrClear(&thys->Key);
@@ -7873,9 +7893,9 @@ static AjBool seqQueryMatch(const AjPSeqQuery thys, const AjPSeq seq)
     AjPStr taxstr;			/* from list, do not delete */
     AjBool ok = ajFalse;
 
-    ajDebug("seqQueryMatch '%S' id '%S' acc '%S' Sv '%S' Des '%S'"
+    ajDebug("seqQueryMatch '%S' id '%S' acc '%S' Sv '%S' Gi '%S' Des '%S'"
 	    " Key '%S' Org '%S'\n",
-	    seq->Name, thys->Id, thys->Acc, thys->Sv,
+	    seq->Name, thys->Id, thys->Acc, thys->Sv, thys->Gi,
 	    thys->Des, thys->Key, thys->Org);
 
     if(!thys)			   /* no query to test, that's fine */
@@ -7896,12 +7916,9 @@ static AjBool seqQueryMatch(const AjPSeqQuery thys, const AjPSeq seq)
 	ok = ajFalse;
     }
 
-    if(ajStrLen(thys->Sv))		/* test Sv and Gi */
+    if(ajStrLen(thys->Sv)) /* test Sv and Gi */
     {
 	if(ajStrMatchWild(seq->Sv, thys->Sv))
-	    return ajTrue;
-
-	if(ajStrMatchWild(seq->Gi, thys->Sv))
 	    return ajTrue;
 
 	ajDebug("sv test failed\n");
@@ -7909,8 +7926,20 @@ static AjBool seqQueryMatch(const AjPSeqQuery thys, const AjPSeq seq)
 	ok = ajFalse;
     }
 
+    if(ajStrLen(thys->Gi)) /* test Sv and Gi */
+    {
+	if(ajStrMatchWild(seq->Gi, thys->Gi))
+	    return ajTrue;
+
+	ajDebug("gi test failed\n");
+	tested = ajTrue;
+	ok = ajFalse;
+    }
+
     if(!ajStrLen(thys->Acc))
-	ajDebug("No accession number to test\n");
+    {
+	/*ajDebug("No accession number to test\n");*/
+    }
     else if(ajListLength(seq->Acclist))
     {		   /* accession number test - check the entire list */
 	iter = ajListIterRead(seq->Acclist);
@@ -7929,7 +7958,9 @@ static AjBool seqQueryMatch(const AjPSeqQuery thys, const AjPSeq seq)
     }
 
     if(!ajStrLen(thys->Org))
-	ajDebug("No taxonomy to test\n");
+    {
+	/*ajDebug("No taxonomy to test\n"); */
+    }
     else if(ajListLength(seq->Taxlist))
     {			   /* taxonomy test - check the entire list */
 	iter = ajListIterRead(seq->Taxlist);
@@ -7953,7 +7984,9 @@ static AjBool seqQueryMatch(const AjPSeqQuery thys, const AjPSeq seq)
     }
 
     if(!ajStrLen(thys->Key))
-	ajDebug("No keyword to test\n");
+    {
+	/*ajDebug("No keyword to test\n");*/
+    }
     else if(ajListLength(seq->Keylist))
     {			    /* keyword test - check the entire list */
 	iter = ajListIterRead(seq->Keylist);
@@ -7978,7 +8011,7 @@ static AjBool seqQueryMatch(const AjPSeqQuery thys, const AjPSeq seq)
 
     if(!ajStrLen(thys->Des))
     {
-	ajDebug("No description to test\n");
+	/*ajDebug("No description to test\n");*/
 	ok = ajFalse;
     }
     else if(ajStrLen(seq->Desc))
@@ -8013,7 +8046,8 @@ static AjBool seqQueryMatch(const AjPSeqQuery thys, const AjPSeq seq)
 /* @func ajSeqQueryWild *******************************************************
 **
 ** Tests whether a query includes wild cards in any element,
-** of can return more than one entry.
+** or can return more than one entry (keyword and some other search terms
+** will find multiple entries)
 **
 ** @param [r] qry [const AjPSeqQuery] Query object.
 ** @return [AjBool] ajTrue if query had wild cards.
@@ -8027,9 +8061,9 @@ AjBool ajSeqQueryWild(const AjPSeqQuery qry)
     if(!qrywildexp)
 	seqQryWildComp();
 
-    ajDebug("ajSeqQueryWild id '%S' acc '%S' sv '%S' des '%S'"
+    ajDebug("ajSeqQueryWild id '%S' acc '%S' sv '%S' gi '%S' des '%S'"
 	    " org '%S' key '%S'\n",
-	    qry->Id, qry->Acc, qry->Sv, qry->Des, qry->Org, qry->Key);
+	    qry->Id, qry->Acc, qry->Sv, qry->Gi, qry->Des, qry->Org, qry->Key);
 
     if(ajRegExec(qrywildexp, qry->Id))
     {
@@ -8055,6 +8089,15 @@ AjBool ajSeqQueryWild(const AjPSeqQuery qry)
     {
 	ajDebug("wild (has) query Sv '%S'\n", qry->Sv);
 	return ajTrue;
+    }
+
+    if(ajStrLen(qry->Gi))
+    {
+	if(!ajStrIsNum(qry->Gi))
+	{
+	    ajDebug("wild (has) query Gi '%S'\n", qry->Gi);
+	    return ajTrue;
+	}
     }
 
     if(ajStrLen(qry->Des))
@@ -8115,6 +8158,12 @@ void ajSeqQueryStarclear(AjPSeqQuery qry)
 	ajStrClear(&qry->Sv);
     }
 
+    if(ajStrMatchC(qry->Gi, "*"))
+    {
+	ajDebug("ajSeqQueryStarclear clear Gi '%S'\n", qry->Gi);
+	ajStrClear(&qry->Gi);
+    }
+
     if(ajStrMatchC(qry->Des, "*"))
     {
 	ajDebug("ajSeqQueryStarclear clear Des '%S'\n", qry->Des);
@@ -8159,6 +8208,8 @@ AjBool ajSeqQueryIs(const AjPSeqQuery qry)
     if(ajStrLen(qry->Acc))
 	return ajTrue;
     if(ajStrLen(qry->Sv))
+	return ajTrue;
+    if(ajStrLen(qry->Gi))
 	return ajTrue;
     if(ajStrLen(qry->Des))
 	return ajTrue;
@@ -8221,6 +8272,9 @@ void ajSeqQueryTrace(const AjPSeqQuery thys)
 
     if(ajStrLen(thys->Sv))
 	ajDebug( "    Sv: '%S'\n", thys->Sv);
+
+    if(ajStrLen(thys->Gi))
+	ajDebug( "    Gi: '%S'\n", thys->Gi);
 
     if(ajStrLen(thys->Des))
 	ajDebug( "    Des: '%S'\n", thys->Des);

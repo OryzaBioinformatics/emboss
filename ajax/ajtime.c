@@ -59,6 +59,7 @@ static TimeOFormat timeFormat[] =  /* formats for strftime */
     {"day", "%d-%b-%Y"},
     {"daytime", "%d-%b-%Y %H:%M"},
     {"log", "%a %b %d %H:%M:%S %Y"},
+    {"report", "%a %b %d %Y %H:%M:%S"},
     { NULL, NULL}
 };
 
@@ -278,7 +279,53 @@ AjPTime ajTimeSet( const char *timefmt, ajint mday, ajint mon, ajint year)
 
 
 
-/* @func ajTimeLocal ************************************************************ 
+/* @func ajTimeSetS ***********************************************************
+**
+** Constructor for user specification of an AjPTime object.
+** using the time set as a string in format
+** yyyy-mm-dd hh:mm:ss
+**
+** used so that graphs which include the date can remain constant for
+** documentation and testing.
+**
+** @param [w] thys [AjPTime] Time object
+** @param [r] timestr [const char*] Time in format yyyy-mm-dd hh:mm:ss
+** @return [AjBool] ajTrue on success
+** @@
+******************************************************************************/
+
+AjBool ajTimeSetS(AjPTime thys, const char* timestr)
+{
+    ajint year;
+    ajint mon;
+    ajint mday;
+    ajint hour;
+    ajint min;
+    ajint sec;
+
+    if(!ajFmtScanC(timestr, "%4d-%2d-%2d %2d:%2d:%2d",
+	       &year, &mon, &mday, &hour, &min, &sec))
+	return ajFalse;
+
+    if(year > 1899) year = year-1900;
+    thys->time.tm_year  = year ;
+    thys->time.tm_mon   = mon-1;
+    thys->time.tm_mday  = mday ;
+    thys->time.tm_hour = hour;
+    thys->time.tm_min = min;
+    thys->time.tm_sec = sec;
+    thys->time.tm_isdst = -1;
+
+    mktime(&thys->time);
+
+    return ajTrue;
+}
+
+
+
+
+/* @func ajTimeLocal **********************************************************
+**
 ** A localtime()/localtime_r() replacement for AjPTime objects
 **
 ** @param  [r] timer [const time_t] Time
@@ -291,6 +338,17 @@ AjPTime ajTimeSet( const char *timefmt, ajint mday, ajint mon, ajint year)
 AjBool ajTimeLocal(const time_t timer, AjPTime thys)
 {
     struct tm *result;
+    AjPStr timestr = NULL;
+
+    if(ajNamGetValueC("timetoday", &timestr))
+    {
+	if(ajTimeSetS(thys, ajStrStr(timestr)))
+	{
+	    ajStrDel(&timestr);
+	    return ajTrue;
+	}
+	ajStrDel(&timestr);
+    }
 
 #ifdef __ppc__
     result = localtime(&timer);

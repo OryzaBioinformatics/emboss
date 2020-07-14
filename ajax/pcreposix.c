@@ -248,7 +248,7 @@ pcre_regcomp(regex_t *preg, const char *pattern, int cflags)
 ** The threshold is in a macro that can be changed at configure time.
 **
 ** @param [r] preg [const regex_t*] Undocumented
-** @param [r] string [const char*] Undocumented
+** @param [r] strng [const char*] Undocumented
 ** @param [r] nmatch [size_t] Undocumented
 ** @param [u] pmatch [regmatch_t[]] Undocumented
 ** @param [r] eflags [int] Undocumented
@@ -256,7 +256,7 @@ pcre_regcomp(regex_t *preg, const char *pattern, int cflags)
 ******************************************************************************/
 
 int
-pcre_regexec(const regex_t *preg, const char *string, size_t nmatch,
+pcre_regexec(const regex_t *preg, const char *strng, size_t nmatch,
 	     regmatch_t pmatch[], int eflags)
 {
     int rc;
@@ -285,7 +285,7 @@ pcre_regexec(const regex_t *preg, const char *string, size_t nmatch,
 	}
     }
     
-    rc = pcre_exec(preg->re_pcre, NULL, string, (int)strlen(string),
+    rc = pcre_exec(preg->re_pcre, NULL, strng, (int)strlen(strng),
 		   0, options, ovector, nmatch * 3);
     
     if (rc == 0) rc = nmatch;    /* All captured slots were filled in */
