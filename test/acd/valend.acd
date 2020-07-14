@@ -1,0 +1,6 @@
+# ACD file for QA testing - missing the application definition
+#
+appl: noleftq [ doc: "testing" group: "testing" ]
+
+outfile: outtest [ required: Y prompt: "Some text"
+

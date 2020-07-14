@@ -1,0 +1,10 @@
+# ACD file for QA testing - missing the application definition
+#
+appl: noleftq [ doc: "testing" group: "testing" ]
+
+bool: mybool sbegin [ ]
+
+sequence: sequence [ param: Y ]
+
+outfile: outtest [ required: Y prompt: "Some text" ]
+

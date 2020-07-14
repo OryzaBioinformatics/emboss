@@ -1,0 +1,15 @@
+# ACD file for QA testing - missing the application definition
+#
+
+appl: testselect [ doc: "testing" group: "testing" ]
+
+section: input [ info: "Input section" type: "page" ]
+
+report: test [
+      required: Y
+      taglist: "float:tm=Tm int:ival=Number str s=String"
+      rformat: table
+      mintags: 3
+]
+
+endsection: input
