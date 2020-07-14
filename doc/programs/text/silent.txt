@@ -27,26 +27,27 @@ Usage
 Silent mutation restriction enzyme scan
 Input sequence: tembl:hsfau
 Comma separated enzyme list [all]: ecori,hindiii
-Output file [hsfau.silent]: 
+Output report [hsfau.silent]: 
    
    Go to the input files for this example
    Go to the output files for this example
    
 Command line arguments
 
-   Mandatory qualifiers:
-  [-seq]               sequence   Sequence USA
+   Standard (Mandatory) qualifiers:
+  [-sequence]          sequence   Sequence USA
    -enzymes            string     Comma separated enzyme list
-  [-outf]              outfile    Output file name
+  [-outfile]           report     Output report file name
 
-   Optional qualifiers: (none)
-   Advanced qualifiers:
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers:
    -sshow              boolean    Display untranslated sequence
    -tshow              boolean    Display translated sequence
    -allmut             boolean    Display all mutations
 
    Associated qualifiers:
-  "-seq" related qualifiers
+
+   "-sequence" associated qualifiers
    -sbegin1             integer    First base used
    -send1               integer    Last base used, def=seq length
    -sreverse1           boolean    Reverse (if DNA)
@@ -56,24 +57,28 @@ Command line arguments
    -slower1             boolean    Make lower case
    -supper1             boolean    Make upper case
    -sformat1            string     Input sequence format
-   -sopenfile1          string     Input filename
    -sdbname1            string     Database name
    -sid1                string     Entryname
    -ufo1                string     UFO features
    -fformat1            string     Features format
    -fopenfile1          string     Features file name
-  "-outf" related qualifiers
-   -odirectory2         string     Output directory
+
+   "-outfile" associated qualifiers
+   -rformat2            string     Report format
+   -rname2              string     Base file name
+   -rextension2         string     File name extension
+   -rdirectory2         string     Output directory
+   -raccshow2           boolean    Show accession number in the report
+   -rdesshow2           boolean    Show description in the report
+   -rscoreshow2         boolean    Show the score in the report
+   -rusashow2           boolean    Show the full USA in the report
 
    General qualifiers:
    -auto                boolean    Turn off prompts
    -stdout              boolean    Write standard output
    -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for required and optional values
+   -options             boolean    Prompt for standard and additional values
    -debug               boolean    Write debug output to program.dbg
-   -acdlog              boolean    Write ACD processing log to program.acdlog
-   -acdpretty           boolean    Rewrite ACD file as program.acdpretty
-   -acdtable            boolean    Write HTML table of options
    -verbose             boolean    Report some/full command line options
    -help                boolean    Report command line options. More
                                   information on associated and general
@@ -84,15 +89,15 @@ Command line arguments
    -die                 boolean    Report deaths
    
 
-   Mandatory qualifiers Allowed values Default
-   [-seq]
+   Standard (Mandatory) qualifiers Allowed values Default
+   [-sequence]
    (Parameter 1) Sequence USA Readable sequence Required
    -enzymes Comma separated enzyme list Any string is accepted all
-   [-outf]
-   (Parameter 2) Output file name Output file <sequence>.silent
-   Optional qualifiers Allowed values Default
+   [-outfile]
+   (Parameter 2) Output report file name Report output file
+   Additional (Optional) qualifiers Allowed values Default
    (none)
-   Advanced qualifiers Allowed values Default
+   Advanced (Unprompted) qualifiers Allowed values Default
    -sshow Display untranslated sequence Boolean value Yes/No No
    -tshow Display translated sequence Boolean value Yes/No No
    -allmut Display all mutations Boolean value Yes/No No
@@ -201,30 +206,36 @@ Output file format
   
   File: hsfau.silent
   
-Results for HSFAU:
+########################################
+# Program: silent
+# Rundate: Thu Nov 27 15:25:41 2003
+# Report_format: table
+# Report_file: hsfau.silent
+########################################
 
-KEY:
-        Enzyme          Enzyme name
-        RS-Pattern      Restriction enzyme recognition site pattern
-        Match-Posn      Position of the first base of RS pattern in sequence
-        AA              Amino acid. Original sequence(.)After mutation
-        Base-Posn       Position of base to be mutated in sequence
-        Mutation        The base mutation to perform
+#=======================================
+#
+# Sequence: HSFAU     from: 1   to: 518
+# HitCount: 1
+#
+# KEY:
+# EnzymeName: Enzyme name
+# RS-Pattern: Restriction enzyme recognition site pattern
+# Base-Posn: Position of base to be mutated
+# AAs: Amino acid. Original sequence(.)After mutation
+# Silent: Yes for unchanged amino acid
+# Mutation: The base mutation to perform
+#
+# Creating silent and non-silent mutations
+#
+#=======================================
 
-Silent mutations
+  Start     End Dir    EnzymeName RS-Pattern Base-Posn    AAs Silent Mutation
+    272     267 Rev    HindIII    AAGCTT           268    A.A    Yes     A->T
 
-Enzyme      RS-Pattern  Match-Posn   AA  Base-Posn Mutation
-
-
-
-Results for reverse of HSFAU:
-
-Silent mutations
-
-Enzyme      RS-Pattern  Match-Posn   AA  Base-Posn Mutation
-HindIII     AAGCTT         267       A.A    268      A->T
+#---------------------------------------
+#---------------------------------------
    
-
 Data files
 
    None.

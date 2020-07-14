@@ -8,8 +8,9 @@ section: input [
   type: "page"
 ]
 
-  sequence: seq  [
+  sequence: sequence  [
     parameter: "Y"
+    type: "dna"
   ]
 
 endsection: input
@@ -20,7 +21,7 @@ section: required [
 ]
 
   string: enzymes  [
-    required: "Y"
+    standard: "Y"
     default: "all"
     information: "Comma separated enzyme list"
   ]
@@ -47,8 +48,13 @@ section: output [
     information: "Display all mutations"
   ]
 
-  outfile: outf  [
+  report: outfile  [
     parameter: "Y"
+    rformat: "table"
+    taglist: "str:Dir str:enzyme=EnzymeName str:rspattern=RS-Pattern
+              int:baseposn=Base-Posn rstr:aa=AAs rstr:silent=Silent
+	      rstr:mutation=Mutation"
+    rscoreshow: "N"
   ]
 
 endsection: output
