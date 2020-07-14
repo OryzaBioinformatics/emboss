@@ -228,3 +228,209 @@ SQ   Sequence 4734 BP; 1315 A; 1046 C; 985 G; 1388 T; 0 other;
      gccagacccc ttgcattaaa atcctgtatt aaaaatttct ttgcaagtaa aaaaaaaaac      4680
      acaaaaagtc aaatgtctta ttcgatttat ttcacacttt gattgtctgg ttat            4734
 //
+ID   AF123456   standard; mRNA; VRT; 1510 BP.
+XX
+AC   AF123456;
+XX
+SV   AF123456.2
+XX
+DT   24-MAR-1999 (Rel. 59, Created)
+DT   29-JUL-2000 (Rel. 64, Last updated, Version 4)
+XX
+DE   Gallus gallus doublesex and mab-3 related transcription factor 1 (DMRT1)
+DE   mRNA, partial cds.
+XX
+KW   .
+XX
+OS   Gallus gallus (chicken)
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi;
+OC   Archosauria; Aves; Neognathae; Galliformes; Phasianidae; Phasianinae;
+OC   Gallus.
+XX
+RN   [1]
+RP   1-1510
+RX   MEDLINE; 99178258.
+RX   PUBMED; 10080173.
+RA   Nanda I., Shan Z.H., Schartl M., Burt D.V., Koehler M., Nothwang H.-G.,
+RA   Gruetzner F., Paton I.R., Windsor D., Dunn I., Engel W., Staeheli P.,
+RA   Mizuno S., Haaf T., Schmid M.;
+RT   "300 million years of conserved synteny between chicken Z and human
+RT   chromosome 9";
+RL   Nat. Genet. 21(3):258-259(1999).
+XX
+RN   [2]
+RP   1-1510
+RX   MEDLINE; 20354995.
+RX   PUBMED; 10894941.
+RA   Nanda I., Zend-Ajusch E., Shan Z., Gruetzner F., Schartl M., Burt D.W.,
+RA   Koehler M., Fowler V.M., Goodwin G., Schneider W.J., Mizuno S., Dechant G.,
+RA   Haaf T., Schmid M.;
+RT   "Conserved synteny between the chicken Z sex chromosome and human
+RT   chromosome 9 includes the male regulatory gene DMRT1: a comparative
+RT   (re)view on avian sex determination";
+RL   Cytogenet. Cell Genet. 89(1-2):67-78(2000).
+XX
+RN   [3]
+RP   1-1510
+RA   Haaf T., Shan Z.H.;
+RT   ;
+RL   Submitted (25-JAN-1999) to the EMBL/GenBank/DDBJ databases.
+RL   Max-Planck Institute for Molecular Genetics, Ihnestr. 73, Berlin 14195,
+RL   Germany
+XX
+RN   [4]
+RC   Sequence update by submitter
+RP   1-1510
+RA   Shan Z.;
+RT   ;
+RL   Submitted (23-DEC-1999) to the EMBL/GenBank/DDBJ databases.
+RL   MPI of Molecular Genetics, Ihnestr. 73, Berlin 14195, Germany
+XX
+CC   On Dec 23, 1999 this sequence version replaced gi:4454562.
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..1510
+FT                   /chromosome="Z"
+FT                   /db_xref="taxon:9031"
+FT                   /mol_type="mRNA"
+FT                   /organism="Gallus gallus"
+FT                   /map="Zp21"
+FT   CDS             <1..936
+FT                   /codon_start=1
+FT                   /db_xref="GOA:Q9PTQ7"
+FT                   /db_xref="UniProt/Swiss-Prot:Q9PTQ7"
+FT                   /note="cDMRT1"
+FT                   /gene="DMRT1"
+FT                   /product="doublesex and mab-3 related transcription factor
+FT                   1"
+FT                   /protein_id="AAF19666.1"
+FT                   /translation="PAAGKKLPRLPKCARCRNHGYSSPLKGHKRFCMWRDCQCKKCSLI
+FT                   AERQRVMAVQVALRRQQAQEEELGISHPVPLPSAPEPVVKKSSSSSSCLLQDSSSPAHS
+FT                   TSTVAAAAASAPPEGRMLIQDIPSIPSRGHLESTSDLVVDSTYYSSFYQPSLYPYYNNL
+FT                   YNYSQYQMAVATESSSSETGGTFVGSAMKNSLRSLPATYMSSQSGKQWQMKGMENRHAM
+FT                   SSQYRMCSYYPPTSYLGQGVGSPTCVTQILASEDTPSYSESKARVFSPPSSQDSGLGCL
+FT                   SSSESTKGDLECEPHQEPGAFAVSPVLEGE"
+XX
+SQ   Sequence 1510 BP; 320 A; 433 C; 472 G; 285 T; 0 other;
+     ccggcggcgg gcaagaagct gccgcgtctg cccaagtgtg cccgctgccg caaccacggc        60
+     tactcctcgc cgctgaaggg gcacaagcgg ttctgcatgt ggcgggactg ccagtgcaag       120
+     aagtgcagcc tgatcgccga gcggcagcgg gtgatggccg tgcaggttgc actgaggagg       180
+     cagcaagccc aggaagagga gctggggatc agccaccctg tacccctgcc cagtgcccct       240
+     gagccagttg tcaagaagag cagcagcagc agctcctgtc tcctgcagga cagcagcagc       300
+     cctgctcact ccacgagcac ggtggcagca gcagcagcga gcgcaccacc agagggacgg       360
+     atgctcattc aggacatccc ttccatcccc agcagagggc acttggagag cacgtctgat       420
+     ttggttgtgg actccaccta ctacagcagt ttttaccagc catccctgta tccttactat       480
+     aacaacctgt acaactactc ccagtaccaa atggcagtgg ccactgagtc ttcctcaagt       540
+     gagacagggg gtacgtttgt agggtcagcc atgaaaaaca gccttcgaag cctcccagca       600
+     acatacatgt caagccagtc aggaaaacag tggcagatga agggaatgga gaaccgccat       660
+     gccatgagct cccagtaccg gatgtgctcc tactacccgc ccacctcata cctgggccag       720
+     ggggttggca gtcccacctg cgtcacacag atactggcct cggaggacac cccctcctac       780
+     tcagagtcga aagcgagagt gttttcgccg cccagcagcc aggactcggg cctggggtgc       840
+     ctgtcgagca gcgagagcac caagggagac ctggagtgcg agccccacca agagcccggc       900
+     gccttcgcgg tgagcccggt tcttgagggc gagtaggcgc ggcgtcgggc ggctgctgcg       960
+     cggcgttcac tgttgccttg ttctgttggg gttgcggggg ggcgttgggt ttcttctttc      1020
+     cggggcgggg ggggcacggc ggggccgcgg ccgggccggc ggggcggggc ggggcgggac      1080
+     ggggcggggc ggagccgcgc gggggccgca gtccgggccg gggccgccgt cgggtctcgg      1140
+     cccgctcccg tcggggcgga gcgtccgacg atcggcctcc acgaaacgcg gtgccgtgat      1200
+     gtgtttgtag tggttcctcg taggctccag acgttttctc ctcgtatcgc caaattaacg      1260
+     cgttttgcat attacagttg agtgcctcga cttagattgc aatataagcg gccagcaaac      1320
+     aagtctcaaa aaaaagttac gtgcgtttct gcgagtgtta ttttgttaag aacggctcac      1380
+     agtgtcctct tcctgtgtta cagaagccaa cctgaaatga aactagtctg gaaaaattca      1440
+     ttgttctctg tagttgcagc tgtacctgaa ataaaaatgt tattgatgac tgaaaaaaaa      1500
+     aaaaaaaaaa                                                             1510
+//
+ID   AF123457   standard; mRNA; INV; 1634 BP.
+XX
+AC   AF123457;
+XX
+SV   AF123457.1
+XX
+DT   31-JAN-2001 (Rel. 66, Created)
+DT   31-AUG-2001 (Rel. 69, Last updated, Version 2)
+XX
+DE   Toxoplasma gondii enolase (ENO2) mRNA, complete cds.
+XX
+KW   .
+XX
+OS   Toxoplasma gondii
+OC   Eukaryota; Alveolata; Apicomplexa; Coccidia; Eimeriida; Sarcocystidae;
+OC   Toxoplasma.
+XX
+RN   [1]
+RP   1-1634
+RX   MEDLINE; 21293203.
+RX   PUBMED; 11399076.
+RA   Dzierszinski F., Mortuaire M., Dendouga N., Popescu O., Tomavo S.;
+RT   "Differential expression of two plant-like enolases with distinct enzymatic
+RT   and antigenic properties during stage conversion of the protozoan parasite
+RT   Toxoplasma gondii";
+RL   J. Mol. Biol. 309(5):1017-1027(2001).
+XX
+RN   [2]
+RP   1-1634
+RA   Dzierszinski F., Tomavo S.;
+RT   "Tachyzoite 76K strain enolase of Toxoplasma gondii";
+RL   Unpublished.
+XX
+RN   [3]
+RP   1-1634
+RA   Dzierszinski F., Tomavo S.;
+RT   ;
+RL   Submitted (25-JAN-1999) to the EMBL/GenBank/DDBJ databases.
+RL   INSERM, 369, Rue Jules Guesde BP 39, Villeneuve D'Ascq 59651, France
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..1634
+FT                   /db_xref="taxon:5811"
+FT                   /mol_type="mRNA"
+FT                   /organism="Toxoplasma gondii"
+FT                   /strain="76K"
+FT                   /dev_stage="tachyzoite"
+FT   CDS             27..1361
+FT                   /codon_start=1
+FT                   /db_xref="GOA:Q9BPL7"
+FT                   /db_xref="UniProt/Swiss-Prot:Q9BPL7"
+FT                   /gene="ENO2"
+FT                   /product="enolase"
+FT                   /protein_id="AAG60329.1"
+FT                   /translation="MVAIKDITARQILDSRGNPTVEVDLLTDGGCFRAAVPSGASTGIY
+FT                   EALELRDKDQTKFMGKGVMKAVENIHKIIKPALIGKDPCDQKGIDKLMVEELDGTKNEW
+FT                   GWCKSKLGANAILAVSMACCRAGAAAKGMPLYKYIATLAGNPTDKMVMPVPFFNVINGG
+FT                   SHAGNKVAMQEFMIAPVGASTIQEAIQIGAEVYQHLKVVIKKKYGLDATNVGDEGGFAP
+FT                   NISGATEALDLLMEAIKVSGHEGKVKIAADVAASEFFLQDDKVYDLDFKTPNNDKSQRK
+FT                   TGEELRNLYKDLCQKYPFVSIEDPFDQDDFHSYAQLTNEVGEKVQIVGDDLLVTNPTRI
+FT                   EKAVQEKACNGLLLKVNQIGTVSESIEACQLAQKNKWGVMVSHRSGETEDSFIADLVVG
+FT                   LRTGQIKTGAPCRSERLCKYNQLMRIEESLGSDCQYAGAGFRHPN"
+XX
+SQ   Sequence 1634 BP; 396 A; 463 C; 457 G; 318 T; 0 other;
+     tctaccgtta ctcaacttcc aacaaaatgg tggccatcaa ggacatcact gctcgtcaga        60
+     tcctcgactc ccgaggaaac ccgaccgtcg aggttgactt gttgaccgat ggcggctgct       120
+     tccgtgccgc tgtccccagc ggcgcatcca ctggcatcta cgaggcgctt gagctccgtg       180
+     acaaggacca aactaagttc atgggcaagg gtgtgatgaa ggccgtggag aacatccaca       240
+     agattatcaa gccggcgctt attggcaagg acccgtgcga ccagaagggt attgacaagc       300
+     tgatggtcga ggagctcgat ggaactaaga acgagtgggg ctggtgcaag tcgaagctcg       360
+     gcgcgaacgc gatcctggcc gtctcgatgg cttgctgccg cgccggcgct gctgccaagg       420
+     gcatgcccct gtacaagtac attgccactt tggctggaaa cccgacagac aagatggtaa       480
+     tgcccgtccc gttcttcaac gtcatcaacg gcggctccca cgcaggcaac aaggtcgcga       540
+     tgcaggagtt catgatcgcc cccgtcggcg cctccacaat ccaagaggcg atccagatcg       600
+     gcgcggaagt gtaccagcac ctgaaggtcg tcattaagaa gaagtatggc ctcgacgcca       660
+     cgaacgtcgg cgacgagggt ggcttcgccc ccaacatcag cggcgccacg gaggccctcg       720
+     acttgctgat ggaggccatc aaggtgtctg gtcacgaagg caaggtcaag attgccgccg       780
+     acgtcgccgc ttccgagttc ttcctccagg acgacaaagt ctatgaccta gacttcaaga       840
+     ctccgaacaa cgacaagtcg caacgcaaga ctggcgaaga gcttcgcaac ctgtacaagg       900
+     acctgtgcca gaagtatccc ttcgtgtcca tcgaggaccc gttcgaccag gacgacttcc       960
+     acagctacgc tcagctcacc aacgaggttg gcgagaaggt ccaaatcgtc ggcgacgacc      1020
+     tcctggtcac caacccgacg cgcattgaga aggccgttca ggagaaagcg tgcaacggcc      1080
+     tgcttctcaa ggtgaaccag attggcacag tcagcgagtc tatcgaggcc tgccagcttg      1140
+     cccagaagaa caagtggggc gttatggttt ctcaccgctc cggtgagact gaggactcct      1200
+     tcatcgctga cctcgtcgtc ggtctccgca ccgggcaaat caagactggc gccccgtgca      1260
+     gatccgagcg tctctgcaag tacaaccagc tgatgcgtat cgaagagtcg ctcggctccg      1320
+     actgtcagta cgccggcgct ggcttccgcc atcccaacta agtggaaacg gagtttcgac      1380
+     tacccaactg ctcaattggg gctgggtggt ttgtccactc tgcaacaagg gcgtgacgag      1440
+     atcgttgcac atgcaactgc cttttttgtg cttggtggga aggagcactt tcgcaggtgc      1500
+     agcaccgagt tgcggttgat gggaatttcg gaactgattt gtttcttgca tgccatcacc      1560
+     gaaggaacga gcagtttcgt tgataatatt ggaaagtctt ttgaaaaaaa aaaaaaaaaa      1620
+     aaaaaaaaaa aaaa                                                        1634
+//
