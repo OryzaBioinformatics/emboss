@@ -12,16 +12,17 @@ endif
 endif
 
 
-check_PROGRAMS = ajtest \
+check_PROGRAMS = acdlog ajtest \
 complex corbatest \
 demoalign demofeatures demolist demoreport demosequence demostring demotable \
 entrails histogramtest intconv \
 patmattest \
 prima primers \
-seqinfo seqretall seqretallfeat seqretset seqretsingle \
+seqinfo seqretall seqretallfeat seqretset seqretsingle seqrettype \
 testplot treetypedisplay
 
-bin_PROGRAMS = aaindexextract abiview acdc antigenic \
+bin_PROGRAMS = aaindexextract abiview acdc acdpretty acdtable acdvalid \
+antigenic \
 backtranseq banana biosed btwisted \
 cai chaos charge checktrans chips cirdna codcmp coderet \
 compseq cons cpgplot cpgreport cusp cutgextract cutseq \
@@ -51,7 +52,7 @@ showalign showdb showfeat showorf showseq \
 shuffleseq sigcleave silent sirna sixpack skipseq \
 splitter stretcher \
 stssearch supermatcher syco \
-textsearch tfextract tfm tfscan \
+tcode textsearch tfextract tfm tfscan \
 tmap tranalign transeq trimest trimseq twofeat \
 union vectorstrip \
 water whichdb wobble wordcount wordmatch \
@@ -62,6 +63,9 @@ INCLUDES = -I$(top_srcdir)/nucleus -I$(top_srcdir)/ajax -I$(top_srcdir)/plplot
 aaindexextract_SOURCES = aaindexextract.c
 abiview_SOURCES = abiview.c
 acdc_SOURCES = acdc.c
+acdpretty_SOURCES = acdpretty.c
+acdtable_SOURCES = acdtable.c
+acdvalid_SOURCES = acdvalid.c
 antigenic_SOURCES = antigenic.c
 backtranseq_SOURCES = backtranseq.c
 banana_SOURCES = banana.c
@@ -75,10 +79,8 @@ chips_SOURCES = chips.c
 cirdna_SOURCES = cirdna.c
 codcmp_SOURCES = codcmp.c
 coderet_SOURCES = coderet.c
-complex_SOURCES = complex.c
 compseq_SOURCES = compseq.c
 cons_SOURCES = cons.c
-corbatest_SOURCES = corbatest.c
 cpgplot_SOURCES = cpgplot.c
 cpgreport_SOURCES = cpgreport.c
 cusp_SOURCES = cusp.c
@@ -102,7 +104,6 @@ einverted_SOURCES = einverted.c
 embossdata_SOURCES = embossdata.c
 emma_SOURCES = emma.c
 emowse_SOURCES = emowse.c
-entrails_SOURCES = entrails.c
 entret_SOURCES = entret.c
 eprimer3_SOURCES = eprimer3.c
 equicktandem_SOURCES = equicktandem.c
@@ -124,7 +125,6 @@ hmoment_SOURCES = hmoment.c
 iep_SOURCES = iep.c
 infoalign_SOURCES = infoalign.c
 infoseq_SOURCES = infoseq.c
-intconv_SOURCES = intconv.c
 isochore_SOURCES = isochore.c
 jembossctl_SOURCES = jembossctl.c
 lindna_SOURCES = lindna.c
@@ -165,8 +165,6 @@ polydot_SOURCES = polydot.c
 preg_SOURCES = preg.c
 prettyplot_SOURCES = prettyplot.c
 prettyseq_SOURCES = prettyseq.c
-prima_SOURCES = prima.c
-primers_SOURCES = primers.c
 primersearch_SOURCES = primersearch.c
 printsextract_SOURCES = printsextract.c
 profit_SOURCES = profit.c
@@ -184,10 +182,6 @@ revseq_SOURCES = revseq.c
 seealso_SOURCES = seealso.c
 seqmatchall_SOURCES = seqmatchall.c
 seqret_SOURCES = seqret.c
-seqinfo_SOURCES = seqinfo.c
-seqretall_SOURCES = seqretall.c
-seqretallfeat_SOURCES = seqretallfeat.c
-seqretset_SOURCES = seqretset.c
 seqretsplit_SOURCES = seqretsplit.c
 showalign_SOURCES = showalign.c
 showdb_SOURCES = showdb.c
@@ -204,6 +198,7 @@ stretcher_SOURCES = stretcher.c
 stssearch_SOURCES = stssearch.c
 supermatcher_SOURCES = supermatcher.c
 syco_SOURCES = syco.c
+tcode_SOURCES = tcode.c
 textsearch_SOURCES = textsearch.c
 tfextract_SOURCES = tfextract.c
 tfm_SOURCES = tfm.c
@@ -225,7 +220,10 @@ wossname_SOURCES = wossname.c
 yank_SOURCES = yank.c
 
 
+acdlog_SOURCES = acdlog.c
 ajtest_SOURCES = ajtest.c
+complex_SOURCES = complex.c
+corbatest_SOURCES = corbatest.c
 demoalign_SOURCES = demoalign.c
 demofeatures_SOURCES = demofeatures.c
 demolist_SOURCES = demolist.c
@@ -233,9 +231,18 @@ demoreport_SOURCES = demoreport.c
 demosequence_SOURCES = demosequence.c
 demostring_SOURCES = demostring.c
 demotable_SOURCES = demotable.c
+entrails_SOURCES = entrails.c
 histogramtest_SOURCES = histogramtest.c
+intconv_SOURCES = intconv.c
 patmattest_SOURCES = patmattest.c
+prima_SOURCES = prima.c
+primers_SOURCES = primers.c
+seqinfo_SOURCES = seqinfo.c
+seqretall_SOURCES = seqretall.c
+seqretallfeat_SOURCES = seqretallfeat.c
+seqretset_SOURCES = seqretset.c
 seqretsingle_SOURCES = seqretsingle.c
+seqrettype_SOURCES = seqrettype.c
 testplot_SOURCES = testplot.c
 treetypedisplay_SOURCES = treetypedisplay.c
 

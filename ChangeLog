@@ -1,19 +1,232 @@
+Version 2.7.0
+	Standardtype attribute added for filelist in ACD
+	
+	Datafile for mwfilter changed from string to datafile ACD type.
+
+	A new test application acdvalid will check for deprecated ACD
+	syntax and report errors for something that should be fixed, or
+	warnings for something still to be clearly defined. None of these
+	"errors" will stop an ACD file from worknig correctly, but they do
+	cause confusion to the authors and maintainers of wrappers, GUIs,
+	and so on.
+
+	Sequence types are extended to include new types for programs that
+	can handle selenocysteine.
+
+	Sequence types are simplified so that input can be converted to
+	the specified type. Gaps can be removed, and unsupported
+	characters can be converted to X for protein or N for nucleotide.
+	A few applications may be unable to handle any ambiguity
+	(pureprotein, puredna, etc.) and will require correct input. To
+	make it safe to run a program over (for example) swissprot or
+	embl, such programs should read single sequences only, or be
+	converted to support ambiguity codes. This may take a little
+	time. banana, octanol and pepwindow alread reads single sequences.
+	In need of attention are hmoment and  iep.
+
+	In ACD files a new application attribute "external" is added where
+	a third-party tool is needed. examples include clustalw (emma) and
+	primer3_core (eprimer3 and primers).
+
+	ACD definitions for feature and featout now have a "type"
+	attribute. The feature output type defaults to the sequence type,
+	as for sequence output. Feature types are "protein" or
+	"nucleotide" or "any".
+	
+	ACD sections now have "information" instead of merely "info" for
+	consistency.
+	
+	Boundary fix for ajStrMask
+
+	Tightened up on reporting of isoschizomer groups in 'showseq -limit'
+	and 'remap -limit'. 
+
+        Added embPatRestrictPreferred.
+
+	Added -individual option to RESTRICT. This gives the fragment
+	lengths produced by restriction assuming only each named RE
+	of the set that can cut the sequence is used. Results are
+	added to the tail section of the report.
+
+	Added a -equivalences option (on by default) to rebaseextract.
+	This option calculates an embossre.equ file using RE
+	prototypes in the withrefm file.
+
+	A guide to the EMBASSY package domainatrix (domainatrix.doc)
+	has been added to /emboss/emboss/doc/manuals
+
+	Extractfeat now has the -describe qualifier to allow it to add
+	the value of selected tags to the Description line of the output
+	sequence. 
+
+	Revseq can now read in gapped nucleic acid sequences.
+
+	Removed old corba code in preparation for adding corba server as
+	an embassy package.
+
+	Simplified error messages for sequence reading, and corrected
+	handling of a bad USA as the first in a list file.
+
+	Padded temporary filename for emma to avoid clustalw bug with
+	short input filename (this will not work in all cases and
+	a corrected clustalw should be used nevertheless). 
+	
+	-help output modified to align all the qualifiers
+
+	acdpretty output revised to resolve to full names
+
+	Complete overhaul of all ACD error conditions. Parsing and command
+	line validation messages are now all used, and all tested in the
+	qatest suite. These tests used bad ACD files in the test/acd
+	directory.
+
+	whichdb failed to report error mesasges. They are now turned on -
+	and most of the common errors are reported with less evrbosity.
+
+	TCODE application added. Calculates the TESTCODE statistic.
+
+	Eprimer3 now reports the primer positions using the coordinates
+	of the original sequence when -sbegin and -send are used to
+	specify a sub-sequence to consider.  The input ranges, such as
+	the -exclude and -target ranges are always given using the
+	positions from the original sequence. 
+
+	tfm looks for documentation in EMBOSS_DOCROOT (an environment
+	variable, or defined in emboss.default), then in the install
+	directory, and finally the original build directory.
+
+	In some cases, EMBOSS programs could terminate with an exit status
+	of 255 (-1). Terminating with "Die:" message exists with status 1.
+	All exit calls now use either 0 (success) or the standard
+	library EXIT_FAILURE value (usually 1).
+
+	All report output fields have a new attribute (and qualifier)
+	rscoreshow which defaults to "Y". Setting rscoreshow: "N" will
+	remove the score from the output, except for GFF where it is
+	required, and SRS format where it can be kept for use in standard
+	parsers. The aim is to exclude the score value from applications
+	that have no scoring method (restrict for example). For these,
+	putting -rscore on the command line will override the ACD file and
+	display the score.
+	
+	Showseq and showfeat both now have the qualifier '-stricttags'.
+	By default if any tag/value pair in a feature matches the
+	specified tag and value, then all the tags/value pairs of that
+	feature will be displayed.  If '-stricttags' is set to be true,
+	then only those tag/value pairs in a feature that match the
+	specified tag and value will be displayed. 
+
+	Megamerger now has the qualifier '-prefer' which makes it use
+	the first sequence to create the merged sequence whenever there is a
+	mismatch between the two sequences. 
+
+	Sirna now has the qualifier '-context' which writes the first
+	two bases (in brackets) of the 23 base target region.
+
+	Maskseq and maskfeat now both have the qualifier '-tolower'
+	which will change the masked regions to lower-case characters
+	instead of replacing them with a mask character. 
+
+	ACD parsing internals are rewritten to find and report errors more
+	cleanly and to make the syntax stricter for other ACD parsers used
+	by (for example) GUI developers.
+
+	Sequence output types now have a 'type:' attribute which defaults
+	to the type of the first input sequence. For most applications
+	this is good enough as a default. For those which add gaps or
+	translate DNA to protein (or vice versa) a 'type:' attribute will
+	be needed. This is to improve support for automated workflow
+	building by more strongly typing input and output data.
+
+	acdpretty now wraps long lines of ACD definitions, splitting at
+	any lone backslash (which defines a newline for -help output) or
+	at whitespace. Attributes and sections are indented by 2 spaces.
+
+	Until now, the ACD file syntax has allowed name=value syntax and
+	the use of {} () and even <> for quoted strings just in case they
+	needed both ' and " characters. These are now removed. We believe
+	no ACD files were using this syntax.
+
+	valgrind.pl is a new addition to the script directory that runs
+	valgrind memory leak tests under linux. the tests are a copy of
+	those in purify.pl - they may one day move to a separate file.
+
+	EMBOSS feature output now copies (where available) the name of the
+	input sequence as the filename, so filenames match more closely to
+	the sequence ouptut. For example, "seqret -feat tembl:paamir" will
+	now create 2 files called paamir.fasta and paamir.gff where the
+	feature file previously was called 'unknown.gff'
+
+	EMBOSS feature output defaults (as before) to GFF format, but the
+	default format can now be set by variable EMBOSS_OUTFEATFORMAT
+
+	All EMBOSS output files now have a default output directory
+	(required by some webservices implementations that run in
+	the 'wrong'default directory). Variable EMBOSS_OUTDIRECTORY
+	if set becomes the default output directory for outfile, align,
+	report, graph, sequence and feature output.
+
+	The output directory can also be set from the command line (or as
+	an ACD attribute) using the associated qualifier -odirectory
+	(outfile), -rdirectory (report) -adirectory (align) -gdirectory
+	(Graph and graphxy) -osdirectory (sequence) or -ofdirectory
+	(featout).
+
+	The "g*"" attributes for graph and graphxy in ACD have been deleted as
+	they have the same name (and function) as existing associated
+	qualifiers - and can still be used with these names in ACD files.
+	Duplicate ACD attribute and associated qualifier functions exist
+	in many ACD types, but usually have different names and so are
+	left for compatibility purposes.
+	
+	emboss.default and ~/.embossrc configuration files now have
+	extensive error messages reporting filename and line number.
+	showdb has additional validation for all database definitions.
+	Environment variable EMBOSS_NAMVALID (boolean) turns this on for
+	all programs.
+
+	ajnam.c has debugging turned on by environment variable
+	EMBOSS_NAMDEBUG (boolean). This processing (of emboss.default and
+	~/.embossrc) happens before command line option -debug has taken
+	effect. The output goes to standard error.
+
+	Function ajFmtVPrintS is a previously missing complement to ajFmtPrintS
+
+	EMBL/Genbank feature tables updated to FTv5.0
+
+	SwissProt feature table '<' '>' and '?' location modifiers are
+	now handled correctly.
+
+	Added new applications acdlog, acdpretty and acdtable. Run like
+	acdc they provide the same functions as the command line options
+	-acdlog -acdpretty and "-acdtable -help" These -acd options are
+	now obsolete and will be removed in a future release to clean up
+	the ACD interface.
+
+	Transeq now has the option '-clean' that converts all '*'
+	characters to 'X's.  This may be useful because not all programs
+	accept protein sequences containing '*' characters. 
+
 Version 2.6.0
 
-	Added twofeat - Finds neighbouring pairs of features in sequences
+	Showdb now can display the presence of any of the extra sv, des,
+	org, and key search fields that can be used to index and search in
+	databases. 
+
+	Added twofeat - Finds neighbouring pairs of features in sequences.
 
 	Extractfeat - added option (-featinname) to include the name of
 	the feature as part of the ID name of the sequence that is
 	written out. 
 
-	Added sirna - designs siRNA probes in mRNA
+	Added sirna - designs siRNA probes in mRNA.
 
-	Sigcleave sorts results highest score first
+	Sigcleave sorts results highest score first.
 
 	Helixturnhelix sorts results highest score first and reports the
-	score position as an integer
+	score position as an integer.
 
-	Added pestfind
+	Added pestfind.
 
 	Moved the following programs into the "domainatrix" embassy
 	package:
@@ -23,14 +236,14 @@ Version 2.6.0
 	 seqsort, seqwords, siggen, sigplot, sigscan
 	
 	Palindrome no longer reports palindromes that are only composed
-	of N's
+	of N's.
 
 	Msbar can now check that the result doesn't match a set of
 	input other sequences.  For example you could specify that it
 	doesn't match the input sequence or a set of previously produced
 	mutation results. 
 
-        Getorf reporting of circular genome positions tidied up - it now
+	Getorf reporting of circular genome positions tidied up - it now
 	reports positions starting in the range 1 to the sequence length
 	and indicates if the ORF goes through the breakpoint.  A clear
 	indication of when ORFs are in the reverse sense has been added.
@@ -64,7 +277,7 @@ Version 2.5.1
 	no install data directory, and to check EMBOSS_DATA (if defined) is
 	a real directory.
 	
-	sigcleave options pval and nval hardcoded. They depend on the
+	Sigcleave options pval and nval hardcoded. They depend on the
 	weight matrix size - which is hardcoded as 15 in the ACD file and
 	is not checked in the program. They were introduced in EGCG in
 	1988 but never used because no other weight matrix length was
@@ -149,34 +362,34 @@ Version 2.5.0
 	applications. Sequences and alignments still have a "type"
 	attribute for protein or dna sequence types.
 	
-	aaindexextract (new) reads the AAINDEX database and writes each
+	Aaindexextract (new) reads the AAINDEX database and writes each
 	entry to data/AAINDEX directory. New function ajFileDataDirNew to
 	read data files from a named directory. New ACD datafile attribute
 	'directory' passed to ajFileDataDirNew. AAINDEX directory defined
 	for pepwindow and pepwindowall.
 	
-	palindrome can now read in multiple sequences
+	Palindrome can now read in multiple sequences
 
-        palindrome now does not print a '|' in an alignment where there
-        is a mismatched pair of bases.
+	Palindrome now does not print a '|' in an alignment where there
+	is a mismatched pair of bases.
 
 	Added filelist datatype to ACD
 
-	mwcontam program added. Displays molecular weights that are common
+	Mwcontam program added. Displays molecular weights that are common
 	across a set of files.
 
-	showfeat - added '-sort join' to display joined features on one line.
+	Showfeat - added '-sort join' to display joined features on one line.
 
-	diffseq - don't give summary of SNPs if the sequences are proteins.
+	Diffseq - don't give summary of SNPs if the sequences are proteins.
 
 	Inclusion of stat64 and readdir64 for offsetbits=64 (ajfile.c
 	and ajsys.c)
 
 	Workaround for broken Solaris readdir64_r (jembossctl)
 	
-        infoseq can now optionally display GI and Sequence Version numbers.
+	Infoseq can now optionally display GI and Sequence Version numbers.
 
-	notseq can now read in a file of sequence names.
+	Notseq can now read in a file of sequence names.
 
 	Added '-alternative' qualifier to transeq to allow reverse frame
 	translations to be done using the codons counted from the start
@@ -201,7 +414,7 @@ Version 2.5.0
  	text size on the command-line. They can also read and display
  	complete genomic sequences.
 
-        Major new revision of protein structure applications - w/o full
+	Major new revision of protein structure applications - w/o full
  	documentation.
 
 	New applications have been added:  
@@ -264,55 +477,55 @@ Version 2.5.0
 
 	Short summaries of the applications are as follows:
 	     pdbparse - Parses pdb files and writes cleaned-up protein 
-	                coordinate files.
+			coordinate files.
 	     domainer - Reads protein coordinate files and writes 
-	                domains coordinate files.
+			domains coordinate files.
 	     contacts - Reads coordinate files and writes files of 
-	                intra-chain residue-residue contact data.
+			intra-chain residue-residue contact data.
 	     interface- Reads coordinate files and writes files of 
-	                inter-chain residue-residue contact data.
+			inter-chain residue-residue contact data.
 	     pdbtosp  - Convert raw swissprot:pdb equivalence file to 
-		        embl-like format.
+			embl-like format.
 	     scopparse- Converts raw scop classification files to a 
-	                file in embl-like format.
+			file in embl-like format.
 	     scopreso - Removes low resolution domains from a scop 
-	                classification file.
+			classification file.
 	     scopseqs - Adds pdb and swissprot sequence records to a 
-	                scop classification file.
+			scop classification file.
 	     scopnr   - Removes redundant domains from a scop 
-	                classification file.
+			classification file.
 	     scoprep  - Reorder scop classificaiton file so that the 
-	                representative structure of each family is 
+			representative structure of each family is 
 			given first.
 	     scopalign- Generate alignments for families in a scop 
-	                classification file by using STAMP.
+			classification file by using STAMP.
 	     seqsearch- Generate files of hits for families in a scop
-	                classification file by using PSI-BLAST with 
+			classification file by using PSI-BLAST with 
 			seed alignments.
 	     seqwords - Generate files of hits for scop families by 
-	                searching swissprot with keywords.
+			searching swissprot with keywords.
 	     seqsort  - Reads multiple files of hits and writes a 
-	                non-ambiguous file of hits (scop families file) 
+			non-ambiguous file of hits (scop families file) 
 			plus a validation file.
 	     seqnr    - Removes redundant hits from a scop families file.
 	     seqalign - Generate extended alignments for families in 
-	                a scop families file by using CLUSTALW with seed 
+			a scop families file by using CLUSTALW with seed 
 			alignments.
 	     siggen   - Generates a sparse protein signature from an 
-	                alignment and residue contact data.
+			alignment and residue contact data.
 	     sigscan  - Scans a signature against swissprot and writes 
-	                a signature hits files.
+			a signature hits files.
 	     sigplot  - Reads a signature hits file and validation file 
-	                and generates gnuplot data files of signature 
+			and generates gnuplot data files of signature 
 			performance.
 	     profgen  - Generates various profiles for each alignment 
-	                in a directory.
+			in a directory.
 	     hmmgen   - Generates a hidden Markov model for each alignment 
-	                in a directory.
+			in a directory.
 	     hetparse - Converts raw dictionary of heterogen groups to 
-	                a file in embl-like format.
+			a file in embl-like format.
 	     funky    -	Reads clean coordinate files and writes file 
-	                of protein-heterogen contact data.
+			of protein-heterogen contact data.
 
 	Updated "make check" program entrails. Corrected sequence format
 	reports, added report and alignment formats and database access
@@ -322,15 +535,17 @@ Version 2.5.0
 	logfile. Takes the logfile name on the command line. Reports
 	total use, most active user, and total user count.
 
-	extractseq now only reads one sequence as input. 
+	Extractseq now only reads one sequence as input. 
 
 Version 2.4.1
 	Fixed error reading multiple databases
+
 	Fixed MacOSX reading of incomplete sequence files
+
 	Fixed indexing of REFSEQ
 
 Version 2.4.0
-        New Jemboss authorising server code. This uses a new set-uid
+	New Jemboss authorising server code. This uses a new set-uid
 	program (jembossctl) to perform tasks as the user.
 
 	New alignment output format "match" for wordmatch, reports the
@@ -438,10 +653,10 @@ Version 2.4.0
 	Database entry text and sequence saved for binary formats (GCG, BLAST)
 	for use by entret and other applications
 
-	dbiblast indices with split databases (formatdb -v) fixed for reading
+	Dbiblast indices with split databases (formatdb -v) fixed for reading
 	all entries (was only reading the first file)
 
-	dbiblast and dbigcg indices support exclude and file definitions
+	Dbiblast and dbigcg indices support exclude and file definitions
 	to create database subsets
 
 	Database include and file definitions can use the simple filename.
@@ -495,7 +710,7 @@ Version 2.4.0
 	Missing description, keyword, organism, or seqversion fields cause
 	queries to fail if they are used on inappropriate data.
 
-	dbiflat, dbigcg dbifasta and dbiblast can index the new
+	Dbiflat, dbigcg dbifasta and dbiblast can index the new
 	fields. All fields are available in dbiflat and dbigcg. The sv and
 	des fields are available in dbifasta and dbiblast. If any specific
 	formats make it possible to parse the org (or key) field they can
@@ -542,27 +757,41 @@ Version 2.4.0
 	
 Version 2.3.1
 
-	est2genome fixed for large alignments (over 40Mbase for
-	est * genomic sequence length)
-	sequence reading for ABI files fixed (and selex files tested)
-	genbank feature input working
-	pepinfo PNG output larger to make the text readable (only affects
-	PNG output)
-	empty sequence file input fails gracefully
-	empty sequence input fails gracefully (and only needs one
-	^D from stdin)
+	Est2genome fixed for large alignments (over 40Mbase for
+	est * genomic sequence length).
+
+	Sequence reading for ABI files fixed (and selex files tested).
+
+	Genbank feature input working.
+
+	Pepinfo PNG output larger to make the text readable (only affects
+	PNG output).
+
+	Empty sequence file input fails gracefully.
+
+	Empty sequence input fails gracefully (and only needs one
+	^D from stdin).
 	
 Version 2.3.0
 
 	Seqretall, seqretallfeat and seqretset moved to 'make check'.
 	Seqret has all the functionality of the above.
-	Fix for NBRF accession number reading (ajseqread.c)
+
+	Fix for NBRF accession number reading (ajseqread.c).
+
 	Whichdb program added.
-	Fix for dbifasta and wormpep
+
+	Fix for dbifasta and wormpep.
+
 	Fix for problem reading plain format sequences by primer3.
+
 	Primer3 renamed eprimer3 to avoid conflicts with the Whitehead's
-	primer3 version 3.0.6.
-	transeq's '-frame' can have a list of values, as: '-frame=1,2,3'
-	Non-existent files in lists are again ignored
-	Various wildcard database search fixes
-	ESIM4 added as an embassy package
+	Primer3 version 3.0.6.
+
+	Transeq's '-frame' can have a list of values, as: '-frame=1,2,3'.
+
+	Non-existent files in lists are again ignored.
+
+	Various wildcard database search fixes.
+
+	ESIM4 added as an embassy package.

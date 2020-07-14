@@ -6,7 +6,7 @@ dnl Process this file with autoconf to produce a configure script.
 #CC=cc
 
 AC_INIT(ajax/ajacd.c)
-AM_INIT_AUTOMAKE(EMBOSS, 2.6.0)
+AM_INIT_AUTOMAKE(EMBOSS, 2.7.0)
 
 
 dnl Use libtool to make a shared library.
@@ -62,26 +62,27 @@ AC_CHECK_LIB(c, socket, LIBS="$LIBS" , LIBS="$LIBS -lsocket")
 AC_CHECK_LIB(m, main)
 
 AM_CONDITIONAL(AMPNG, false)
-CHECK_PNGDRIVER
+CHECK_GENERAL
 CHECK_JAVA
 CHECK_JAVAOS
+CHECK_PNGDRIVER
 CHECK_AUTH
 
-dnl Test if --enable-corba is given
-AC_ARG_ENABLE(corba,
-[ --enable-corba	   corba (need glib and orbit)])
-if test "${enable_corba}" = "yes" ; then
-AC_MSG_CHECKING(for ORBit and glib)
-CPPFLAGS="$CPPFLAGS -I/usr/lib/glib/include -I/usr/local/lib/glib/include"
-
-AC_CHECK_HEADERS(glib.h)
-AC_CHECK_HEADERS(orb/orbit.h)
-AC_CHECK_LIB(glib, main)
-
-AC_CHECK_LIB(ORBitutil, main)
-AC_CHECK_LIB(IIOP, main)
-AC_CHECK_LIB(ORBit, main)
-fi
+#dnl Test if --enable-corba is given
+#AC_ARG_ENABLE(corba,
+#[ --enable-corba	   corba (need glib and orbit)])
+#if test "${enable_corba}" = "yes" ; then
+#AC_MSG_CHECKING(for ORBit and glib)
+#CPPFLAGS="$CPPFLAGS -I/usr/lib/glib/include -I/usr/local/lib/glib/include"
+#
+#AC_CHECK_HEADERS(glib.h)
+#AC_CHECK_HEADERS(orb/orbit.h)
+#AC_CHECK_LIB(glib, main)
+#
+#AC_CHECK_LIB(ORBitutil, main)
+#AC_CHECK_LIB(IIOP, main)
+#AC_CHECK_LIB(ORBit, main)
+#fi
 
 dnl Test if --enable-debug given
 AC_ARG_ENABLE(debug,
@@ -276,5 +277,6 @@ jemboss/org/emboss/jemboss/parser/acd/Makefile
 jemboss/org/emboss/jemboss/programs/Makefile
 jemboss/org/emboss/jemboss/server/Makefile
 jemboss/org/emboss/jemboss/soap/Makefile
+jemboss/org/emboss/jemboss/editor/Makefile
 jemboss/resources/Makefile jemboss/utils/Makefile
 Makefile)

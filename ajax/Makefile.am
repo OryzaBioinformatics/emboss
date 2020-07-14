@@ -21,7 +21,6 @@ LIBS =
 AJAXSRC = ajacd.c ajalign.c ajarr.c ajassert.c \
 ajbase.c \
 ajcall.c ajcod.c \
-ajcorba.c ajcorbaemc.c ajcorbaems.c \
 ajdan.c ajexcept.c \
 ajfeat.c ajfile.c ajfmt.c ajjava.c ajlist.c \
 ajmath.c ajmatrices.c ajmem.c ajmess.c ajnam.c \
@@ -38,7 +37,6 @@ AJAXGSRC = ajgraph.c ajhist.c
 noinst_HEADERS = ajax.h ajarch.h ajdefine.h \
 ajacd.h ajalign.h ajarr.h ajassert.h \
 ajbase.h ajcall.h ajcod.h \
-ajcorba.h ajcorbaembl.h \
 ajdan.h ajexcept.h ajfeat.h ajfeatdata.h ajfile.h ajfmt.h \
 ajgraph.h ajgraphstruct.h ajhist.h ajjava.h ajlist.h \
 ajmath.h ajmatrices.h ajmem.h ajmess.h ajnam.h \

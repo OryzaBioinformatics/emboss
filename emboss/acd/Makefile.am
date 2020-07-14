@@ -1,5 +1,5 @@
 
-pkgdata_DATA = codes.english \
+pkgdata_DATA = codes.english groups.standard sections.standard \
 	aaindexextract.acd abiview.acd ajbad.acd ajfeatest.acd ajtest.acd \
 	antigenic.acd backtranseq.acd banana.acd biosed.acd \
 	btwisted.acd cai.acd chaos.acd charge.acd checktrans.acd chips.acd \
@@ -34,23 +34,21 @@ pkgdata2_DATA =	megamerger.acd merger.acd msbar.acd \
 	preg.acd prettyplot.acd prettyseq.acd prima.acd \
 	primers.acd primersearch.acd printsextract.acd profit.acd \
 	prophecy.acd prophet.acd prosextract.acd pscan.acd  \
-	qatest.acd qatestcalcfeat.acd qatestcalcregexp.acd \
-	qatestcalcseq.acd qatestcalcseqall.acd qatestcalcseqset.acd \
-	qatestcalcstring.acd \
 	rebaseextract.acd recoder.acd redata.acd remap.acd \
 	restover.acd restrict.acd revseq.acd \
 	seealso.acd \
 	seqinfo.acd seqmatchall.acd seqret.acd seqretall.acd \
 	seqretallfeat.acd seqretset.acd seqretsingle.acd \
-	seqretsplit.acd showalign.acd \
+	seqretsplit.acd seqrettype.acd showalign.acd \
 	showdb.acd showfeat.acd showorf.acd showseq.acd shuffleseq.acd \
 	sigcleave.acd silent.acd sirna.acd sixpack.acd \
 	skipseq.acd splitter.acd \
 	stretcher.acd stssearch.acd supermatcher.acd syco.acd \
-	testplot.acd textsearch.acd tfextract.acd tfm.acd \
+	tcode.acd testplot.acd textsearch.acd tfextract.acd tfm.acd \
 	tfscan.acd tmap.acd tranalign.acd transeq.acd treetypedisplay.acd \
 	trimest.acd trimseq.acd twofeat.acd union.acd vectorstrip.acd \
-	water.acd whichdb.acd wobble.acd wordcount.acd wordmatch.acd wossname.acd \
+	water.acd whichdb.acd wobble.acd wordcount.acd \
+	wordmatch.acd wossname.acd \
 	yank.acd
 
 pkgdatadir=$(prefix)/share/$(PACKAGE)/acd
