@@ -1,0 +1,33 @@
+#
+# ACD sections
+#
+# top level (page) sections
+# =========================
+advanced page Advanced section
+input page Input section
+output page Output section
+required page Required section
+#
+# 1 afeature
+# 1 bfeature
+# 1 relation
+# 1 selection
+#
+# sub level (frame) sections
+# ==========================
+datasection output Data output section
+dendsection advanced Dendrogram options
+fastalignsection advanced Fast align options
+gapsection advanced Gap options
+htmlsection output Html section
+matrixsection advanced Matrix options
+oligosinput advanced Internal oligo input
+oligosection advanced Internal oligo options
+primersection advanced Primer options
+primerweights advanced Primer penalty weights
+programsection advanced Program options
+productsection advanced Product options
+protalignsection advanced Protein align options
+seqoptsection advanced Sequence options
+slowalignsection advanced Slow align options
+thermosection advanced Thermodynamic options
