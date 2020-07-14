@@ -151,6 +151,7 @@ static void       seqWriteClustal(AjPSeqout outseq);
 static void       seqWriteCodata(AjPSeqout outseq);
 static void       seqWriteDebug(AjPSeqout outseq);
 static void       seqWriteEmbl(AjPSeqout outseq);
+static void       seqWriteEmblnew(AjPSeqout outseq);
 static void       seqWriteExperiment(AjPSeqout outseq);
 static void       seqWriteFasta(AjPSeqout outseq);
 static void       seqWriteFitch(AjPSeqout outseq);
@@ -211,6 +212,12 @@ static SeqOOutFormat seqOutFormat[] =
     {"em",         "EMBL entry format (alias)",
 	 AJFALSE, AJFALSE, AJFALSE, AJTRUE,
 	 AJTRUE,  AJTRUE,  AJFALSE, seqWriteEmbl}, /* alias for embl */
+    {"emblold",    "EMBL entry format (alias)",
+	 AJFALSE, AJFALSE, AJFALSE, AJTRUE,
+	 AJTRUE,  AJTRUE,  AJFALSE, seqWriteEmbl}, /* alias for embl */
+    {"emblnew",    "EMBL new entry format",
+	 AJFALSE, AJFALSE, AJFALSE, AJTRUE,
+	 AJTRUE,  AJTRUE,  AJFALSE, seqWriteEmblnew},
     {"swiss",      "Swissprot entry format",
 	 AJFALSE, AJFALSE, AJTRUE,  AJFALSE,
 	 AJTRUE,  AJTRUE,  AJFALSE, seqWriteSwiss},
@@ -2211,7 +2218,7 @@ static void seqWriteExperiment(AjPSeqout outseq)
 	it = ajListIterRead(outseq->Acclist);
 	while((cur = (AjPStr) ajListIterNext(it)))
 	{
-	    if(ilen + ajStrLen(cur) > 77)
+	    if(ilen + ajStrLen(cur) > 79)
 	    {
 		ajFmtPrintF(outseq->File, ";\n", cur);
 		ilen = 0;
@@ -2250,7 +2257,7 @@ static void seqWriteExperiment(AjPSeqout outseq)
 	it = ajListIterRead(outseq->Keylist);
 	while((cur = (AjPStr) ajListIterNext(it)))
 	{
-	    if(ilen+ajStrLen(cur) >= 77)
+	    if(ilen+ajStrLen(cur) >= 79)
 	    {
 		ajFmtPrintF(outseq->File, ";\n", cur);
 		ilen = 0;
@@ -2283,7 +2290,7 @@ static void seqWriteExperiment(AjPSeqout outseq)
 	cur = (AjPStr) ajListIterNext(it); /* skip first, should be Tax */
 	while((cur = (AjPStr) ajListIterNext(it)))
 	{
-	    if(ilen+ajStrLen(cur) >= 77)
+	    if(ilen+ajStrLen(cur) >= 79)
 	    {
 		ajFmtPrintF(outseq->File, ";\n", cur);
 		ilen = 0;
@@ -2371,6 +2378,8 @@ static void seqWriteEmbl(AjPSeqout outseq)
     AjIList it;
     AjPStr cur;
     ajint ilen;
+    AjPStr tmpstr = NULL;
+    const AjPStr tmpline = NULL;
     
     if(!ftfmt)
 	ajStrAssC(&ftfmt, "embl");
@@ -2391,7 +2400,7 @@ static void seqWriteEmbl(AjPSeqout outseq)
 	it = ajListIterRead(outseq->Acclist);
 	while((cur = (AjPStr) ajListIterNext(it)))
 	{
-	    if(ilen + ajStrLen(cur) > 77)
+	    if(ilen + ajStrLen(cur) > 79)
 	    {
 		ajFmtPrintF(outseq->File, ";\n", cur);
 		ilen = 0;
@@ -2422,6 +2431,208 @@ static void seqWriteEmbl(AjPSeqout outseq)
     /* no need to bother with outseq->Gi because EMBL doesn't use it */
     
     if(ajStrLen(outseq->Desc))
+    {
+	ajStrAssS(&tmpstr,  outseq->Desc);
+	ajStrWrap(&tmpstr, 75);
+	tmpline = ajStrTokC(tmpstr, "\n");
+	while (tmpline)
+	{
+	    ajFmtPrintF(outseq->File, "DE   %S\n", tmpline);
+	    tmpline = ajStrTokC(NULL, "\n");
+	}
+    }
+
+    if(ajListLength(outseq->Keylist))
+    {
+        ilen=0;
+        it = ajListIterRead(outseq->Keylist);
+        while((cur = (AjPStr) ajListIterNext(it)))
+        {
+            if(ilen+ajStrLen(cur) >= 79)
+            {
+                ajFmtPrintF(outseq->File, ";\n", cur);
+                ilen = 0;
+            }
+
+            if(ilen == 0)
+            {
+                ajFmtPrintF(outseq->File, "KW   ", cur);
+                ilen = 6;
+            }
+            else
+            {
+                ajFmtPrintF(outseq->File, "; ", cur);
+                ilen += 2;
+            }
+            ajFmtPrintF(outseq->File, "%S", cur);
+            ilen += ajStrLen(cur);
+        }
+        ajListIterFree(&it) ;
+        ajFmtPrintF(outseq->File, ".\n", cur);
+    }
+    
+    if(ajStrLen(outseq->Tax))
+        ajFmtPrintF(outseq->File, "OS   %S\n", outseq->Tax);
+    
+    if(ajListLength(outseq->Taxlist) > 1)
+    {
+        ilen=0;
+        it = ajListIterRead(outseq->Taxlist);
+        cur = (AjPStr) ajListIterNext(it); /* skip first, should be Tax */
+        while((cur = (AjPStr) ajListIterNext(it)))
+        {
+            if(ilen+ajStrLen(cur) >= 79)
+            {
+                ajFmtPrintF(outseq->File, ";\n", cur);
+                ilen = 0;
+            }
+
+            if(ilen == 0)
+            {
+                ajFmtPrintF(outseq->File, "OC   ", cur);
+                ilen = 6;
+            }
+            else
+            {
+                ajFmtPrintF(outseq->File, "; ", cur);
+                ilen += 2;
+            }
+            ajFmtPrintF(outseq->File, "%S", cur);
+            ilen += ajStrLen(cur);
+        }
+        ajListIterFree(&it) ;
+        ajFmtPrintF(outseq->File, ".\n", cur);
+    }
+    
+    if(seqoutUfoLocal(outseq))
+    {
+        outseq->Ftquery = ajFeattabOutNewSSF(ftfmt, outseq->Name,
+                                             ajStrStr(outseq->Type),
+                                             outseq->File);
+        if(!ajFeatWrite(outseq->Ftquery, outseq->Fttable))
+            ajWarn("seqWriteEmbl features output failed UFO: '%S'",
+                   outseq->Ufo);
+    }
+    
+    ajSeqCount(outseq->Seq, b);
+    ajFmtPrintF(outseq->File,
+                "SQ   Sequence %d BP; %d A; %d C; %d G; %d T; %d other;\n",
+                ajStrLen(outseq->Seq), b[0], b[1], b[2], b[3], b[4]);
+    
+    seqSeqFormat(ajStrLen(outseq->Seq), &sf);
+    strcpy(sf->endstr, "\n//");
+    sf->tab = 4;
+    sf->spacer = 11;
+    sf->width = 60;
+    sf->numright = ajTrue;
+    sf->numwidth = 9;
+    sf->numjust = ajTrue;
+    
+    seqWriteSeq(outseq, sf);
+
+    ajStrDel(&tmpstr);
+
+    return;
+}
+
+
+
+
+
+
+
+/* @funcstatic seqWriteEmblnew ************************************************
+**
+** Writes a sequence in new EMBL forma, introduced in EMBL release 87t.
+**
+** @param [u] outseq [AjPSeqout] Sequence output object.
+** @return [void]
+** @@
+******************************************************************************/
+
+static void seqWriteEmblnew(AjPSeqout outseq)
+{
+    static SeqPSeqFormat sf = NULL;
+    ajint b[5];
+    static AjPStr ftfmt = NULL;
+    AjIList it;
+    AjPStr cur;
+    ajint ilen;
+    ajint i;
+    AjPStr idstr = NULL;
+    AjPStr svstr = NULL;
+    AjPStr tmpstr = NULL;
+    const AjPStr tmpline = NULL;
+
+    if(!ftfmt)
+        ajStrAssC(&ftfmt, "embl");
+    
+    if(ajStrMatchC(outseq->Type, "P"))
+    {
+        seqWriteSwiss(outseq);
+        return;
+    }
+    
+    if(ajStrLen(outseq->Sv))
+    {
+        ajStrAssS(&svstr, outseq->Sv);
+        i = ajStrFindC(svstr, ".");
+        if(i >= 0)
+            ajStrTrim(&svstr, i+1);
+    }
+    else
+       ajStrAssC(&svstr, "1");
+
+    if(ajStrLen(outseq->Acc))
+        ajStrAssS(&idstr, outseq->Acc);
+    else
+        ajStrAssS(&idstr, outseq->Name);
+
+    ajFmtPrintF(outseq->File,
+                "ID   %S; SV %S; linear; DNA; STD; UNC; %d BP.\n",
+                idstr, svstr, ajStrLen(outseq->Seq));
+    ajStrDel(&svstr);
+    
+    if(ajListLength(outseq->Acclist))
+    {
+        ilen=0;
+        it = ajListIterRead(outseq->Acclist);
+        while((cur = (AjPStr) ajListIterNext(it)))
+        {
+            if(ilen + ajStrLen(cur) > 79)
+            {
+                ajFmtPrintF(outseq->File, ";\n");
+                ilen = 0;
+            }
+
+            if(ilen == 0)
+            {
+                ajFmtPrintF(outseq->File, "AC   ");
+                ilen = 6;
+            }
+            else
+            {
+                ajFmtPrintF(outseq->File, "; ");
+                ilen += 2;
+            }
+
+            ajFmtPrintF(outseq->File, "%S", cur);
+            ilen += ajStrLen(cur);
+
+        }
+        ajListIterFree(&it) ;
+        ajFmtPrintF(outseq->File, ";\n", cur);
+    }
+
+    /* no SV line in the new format - see the ID line */
+    /*
+    if(ajStrLen(outseq->Sv))
+        ajFmtPrintF(outseq->File, "SV   %S\n", outseq->Sv);
+    */
+    
+    /* no need to bother with outseq->Gi because EMBL doesn't use it */
+    
+    if(ajStrLen(outseq->Desc))
 	ajFmtPrintF(outseq->File, "DE   %S\n", outseq->Desc);
     
     if(ajListLength(outseq->Keylist))
@@ -2430,7 +2641,7 @@ static void seqWriteEmbl(AjPSeqout outseq)
 	it = ajListIterRead(outseq->Keylist);
 	while((cur = (AjPStr) ajListIterNext(it)))
 	{
-	    if(ilen+ajStrLen(cur) >= 77)
+	    if(ilen+ajStrLen(cur) >= 79)
 	    {
 		ajFmtPrintF(outseq->File, ";\n", cur);
 		ilen = 0;
@@ -2463,7 +2674,7 @@ static void seqWriteEmbl(AjPSeqout outseq)
 	cur = (AjPStr) ajListIterNext(it); /* skip first, should be Tax */
 	while((cur = (AjPStr) ajListIterNext(it)))
 	{
-	    if(ilen+ajStrLen(cur) >= 77)
+	    if(ilen+ajStrLen(cur) >= 79)
 	    {
 		ajFmtPrintF(outseq->File, ";\n", cur);
 		ilen = 0;
@@ -2557,7 +2768,7 @@ static void seqWriteSwiss(AjPSeqout outseq)
 	it = ajListIterRead(outseq->Acclist);
 	while((cur = (AjPStr) ajListIterNext(it)))
 	{
-	    if(ilen + ajStrLen(cur) > 77)
+	    if(ilen + ajStrLen(cur) > 79)
 	    {
 		ajFmtPrintF(outseq->File, ";\n", cur);
 		ilen = 0;
@@ -2596,7 +2807,7 @@ static void seqWriteSwiss(AjPSeqout outseq)
 	cur  = (AjPStr) ajListIterNext(it); /* skip first, should be Tax */
 	while((cur = (AjPStr) ajListIterNext(it)))
 	{
-	    if(ilen+ajStrLen(cur) >= 77)
+	    if(ilen+ajStrLen(cur) >= 79)
 	    {
 		ajFmtPrintF(outseq->File, ";\n", cur);
 		ilen = 0;
@@ -2626,7 +2837,7 @@ static void seqWriteSwiss(AjPSeqout outseq)
 	it   = ajListIterRead(outseq->Keylist);
 	while((cur = (AjPStr) ajListIterNext(it)))
 	{
-	    if(ilen+ajStrLen(cur) >= 77)
+	    if(ilen+ajStrLen(cur) >= 79)
 	    {
 		ajFmtPrintF(outseq->File, ";\n", cur);
 		ilen = 0;
@@ -2724,7 +2935,7 @@ static void seqWriteGenbank(AjPSeqout outseq)
 	it   = ajListIterRead(outseq->Acclist);
 	while((cur = (AjPStr) ajListIterNext(it)))
 	{
-	    if(ilen + ajStrLen(cur) > 77)
+	    if(ilen + ajStrLen(cur) > 79)
 	    {
 		ajFmtPrintF(outseq->File, "\n", cur);
 		ilen = 0;
@@ -2766,7 +2977,7 @@ static void seqWriteGenbank(AjPSeqout outseq)
 	it = ajListIterRead(outseq->Keylist);
 	while((cur = (AjPStr) ajListIterNext(it)))
 	{
-	    if(ilen+ajStrLen(cur) >= 77)
+	    if(ilen+ajStrLen(cur) >= 79)
 	    {
 		ajFmtPrintF(outseq->File, ";\n", cur);
 		ilen = 0;
@@ -2801,7 +3012,7 @@ static void seqWriteGenbank(AjPSeqout outseq)
 	cur  = (AjPStr) ajListIterNext(it); /* skip first, should be Tax */
 	while((cur = (AjPStr) ajListIterNext(it)))
 	{
-	    if(ilen+ajStrLen(cur) >= 77)
+	    if(ilen+ajStrLen(cur) >= 79)
 	    {
 		ajFmtPrintF(outseq->File, ";\n", cur);
 		ilen = 0;
@@ -3908,10 +4119,9 @@ void ajSeqPrintOutFormat(AjPFile outf, AjBool full)
     ajFmtPrintF(outf, "# Mset  Can read seqsetall (multiple seqsets)\n");
     ajFmtPrintF(outf, "# Name         Single Save  Pro  Nuc Feat  Gap MSet\n");
     ajFmtPrintF(outf, "\n");
-    ajFmtPrintF(outf, "OutFormat {\n");
     for(i=0; seqOutFormat[i].Name; i++)
     {
-	ajFmtPrintF(outf, "  %-15s %3B  %3B  %3B  %3B  %3B  %3B  %3B '%s'\n",
+	ajFmtPrintF(outf, "  %-15s %3B  %3B  %3B  %3B  %3B  %3B  %3B \"%s\"\n",
 		    seqOutFormat[i].Name,
 		    seqOutFormat[i].Single,
 		    seqOutFormat[i].Save,
@@ -3922,7 +4132,7 @@ void ajSeqPrintOutFormat(AjPFile outf, AjBool full)
 		    seqOutFormat[i].Multiset,
 		    seqOutFormat[i].Desc);
     }
-    ajFmtPrintF(outf, "}\n\n");
+    ajFmtPrintF(outf, "\n\n");
 
     return;
 }

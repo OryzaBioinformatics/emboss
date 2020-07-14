@@ -5502,8 +5502,8 @@ static AjBool seqReadMsf(AjPSeq thys, AjPSeqin seqin)
 	    ok = ajFileBuffGetStore(buff, &rdline,
 				    seqin->Text, &thys->TextPtr);
 	    bufflines++;
-	    if(bufflines > seqMaxGcglines)
-		ok = ajFalse;
+	    /*if(bufflines > seqMaxGcglines)
+		ok = ajFalse;*/
 
 	    if(seqGcgMsfHeader(rdline, &msfitem))
 	    {
@@ -5942,11 +5942,20 @@ static AjBool seqReadEmbl(AjPSeq thys, AjPSeqin seqin)
 	ajStrAssC(&thys->TextPtr,ajStrStr(rdline));
 
     ajDebug("seqReadEmbl ID line found\n");
-    ajStrTokenAss(&handle, rdline, " \n\r");
+    ajStrTokenAss(&handle, rdline, " ;\t\n\r");
     ajStrToken(&token, &handle, NULL);	/* 'ID' */
     ajStrToken(&token, &handle, NULL);	/* entry name */
 
     seqSetName(&thys->Name, token);
+
+    ajStrToken(&token, &handle, NULL);     /* SV in new format */
+    if(ajStrMatchC(token, "SV"))
+    {
+	ajStrToken(&token, &handle, NULL);   /* Seqversion */
+	ajStrInsertK(&token, 0, '.');
+	ajStrInsert(&token, 0, thys->Name);
+	seqSvSave(thys, token);
+    }
 
     ok = ajFileBuffGetStore(buff, &rdline, seqin->Text, &thys->TextPtr);
 
@@ -6905,12 +6914,12 @@ void ajSeqPrintInFormat(AjPFile outf, AjBool full)
     ajFmtPrintF(outf, "# Feat  Can read feature annotation\n");
     ajFmtPrintF(outf, "# Gap   Can read gap characters\n");
     ajFmtPrintF(outf, "# Mset  Can read seqsetall (multiple seqsets)\n");
-    ajFmtPrintF(outf, "# Name         Try  Pro  Nuc Feat  Gap MSet\n");
+    ajFmtPrintF(outf, "# Name         Try  Pro  Nuc Feat  Gap MSet "
+		"Description\n");
     ajFmtPrintF(outf, "\n");
-    ajFmtPrintF(outf, "InFormat {\n");
     for(i=0; seqInFormatDef[i].Name; i++)
 	if(full || seqInFormatDef[i].Try)
-	    ajFmtPrintF(outf, "  %-12s %3B  %3B  %3B  %3B  %3B  %3B '%s'\n",
+	    ajFmtPrintF(outf, "  %-12s %3B  %3B  %3B  %3B  %3B  %3B \"%s\"\n",
 			seqInFormatDef[i].Name,
 			seqInFormatDef[i].Try,
 			seqInFormatDef[i].Protein,
@@ -6920,7 +6929,7 @@ void ajSeqPrintInFormat(AjPFile outf, AjBool full)
 			seqInFormatDef[i].Multiset,
 			seqInFormatDef[i].Desc);
 
-    ajFmtPrintF(outf, "}\n\n");
+    ajFmtPrintF(outf, "\n\n");
 
     return;
 }
