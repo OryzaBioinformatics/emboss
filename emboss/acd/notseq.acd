@@ -1,5 +1,5 @@
 application: notseq [
-  documentation: "Excludes a set of sequences and writes out
+  documentation: "Exclude a set of sequences and write out
                   the remaining ones"
   groups: "Edit"
 ]

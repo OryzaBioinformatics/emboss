@@ -1,5 +1,5 @@
 application: stssearch [
-  documentation: "Searches a DNA database for matches with a
+  documentation: "Search a DNA database for matches with a
                   set of STS primers"
   groups: "Nucleic:Primers"
 ]
@@ -14,7 +14,7 @@ section: input [
     type: "dna"
   ]
 
-  infile: primersfile  [
+  infile: infile  [
     parameter: "Y"
     information: "Primer file"
     knowntype: "primer pairs file"

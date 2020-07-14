@@ -32,12 +32,16 @@ section: required [
   float: gapopen  [
     standard: "Y"
     default: "1.0"
+    minimum: "0.0"
+    maximum: "100.0"
     information: "Gap opening coefficient"
   ]
 
   float: gapextend  [
     standard: "Y"
     default: "1.0"
+    minimum: "0.0"
+    maximum: "100.0"
     information: "Gap extension coefficient"
   ]
 

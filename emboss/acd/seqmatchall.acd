@@ -1,5 +1,5 @@
 application: seqmatchall [
-  documentation: "Does an all-against-all comparison of a set
+  documentation: "All-against-all comparison of a set
                   of sequences"
   groups: "Alignment:Local"
 ]
@@ -12,6 +12,7 @@ section: input [
   seqset: sequence  [
     parameter: "Y"
     type: "any"
+    aligned: "N"
   ]
 
 endsection: input

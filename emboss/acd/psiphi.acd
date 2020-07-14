@@ -1,5 +1,5 @@
 application: psiphi [
-  documentation: "Calculates phi and psi torsion angles from cleaned EMBOSS-style protein co-ordinate file"
+  documentation: "Phi and psi torsion angles from protein coordinates"
   groups: "protein:3D structure"
 ]
 

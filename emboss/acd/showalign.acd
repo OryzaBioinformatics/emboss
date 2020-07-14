@@ -11,6 +11,7 @@ section: input [
   seqset: sequence  [
     parameter: "Y"
     type: "gapany"
+    aligned: "Y"
     help: "The sequence alignment to be displayed."
   ]
 

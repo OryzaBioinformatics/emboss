@@ -32,17 +32,6 @@ section: required [
            calculated at each postition that the window is moved to."
   ]
 
-  integer: shift  [
-    standard: "Y"
-    minimum: "1"
-    maximum: "$(window)"
-    default: "1"
-    information: "Window shift increment"
-    help: "This determines the number of bases that the window is
-           moved each time after values of the percentage CG content and the
-           Observed frequency of CG are calculated within the window."
-  ]
-
   integer: minlen  [
     standard: "Y"
     minimum: "1"

@@ -1,6 +1,6 @@
 application: skipseq [
   documentation: "Reads and writes (returns) sequences,
-                  skipping the first few"
+                  skipping first few"
   groups: "Edit"
 ]
 

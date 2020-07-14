@@ -36,7 +36,7 @@ section: output [
 ]
 
   outfile: outfile  [
-    standard: "Y"
+    parameter: "Y"
     knowntype: "wordcount output"
   ]
 

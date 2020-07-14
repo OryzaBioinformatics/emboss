@@ -1,5 +1,5 @@
 application: listor [
-  documentation: "Writes a list file of the logical OR of two
+  documentation: "Write a list file of the logical OR of two
                   sets of sequences"
   groups: "Edit"
 ]
@@ -9,14 +9,16 @@ section: input [
   type: "page"
 ]
 
-  seqset: firstset  [
+  seqset: firstsequences  [
     parameter: "Y"
     type: "gapany"
+    aligned: "N"
   ]
 
-  seqset: secondset  [
+  seqset: secondsequences  [
     parameter: "Y"
     type: "gapany"
+    aligned: "N"
   ]
 
 endsection: input

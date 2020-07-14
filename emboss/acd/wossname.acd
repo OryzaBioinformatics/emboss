@@ -81,6 +81,7 @@ section: advanced [
            same code libraries and share the same look and feel, but are
            generally developed by people who wish the programs to be outside
            of the GNU Public Licence scheme"
+    knowntype: "embassy package"
   ]
 
   boolean: colon  [

@@ -61,6 +61,7 @@ section: output [
   outfile: outfile  [
     standard: "$(report)"
     knowntype: "giep output"
+    nullok: "@(!$(report))"
   ]
 
 endsection: output

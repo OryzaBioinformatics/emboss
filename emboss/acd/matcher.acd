@@ -48,7 +48,7 @@ section: additional [
            may be other interesting and significant alignments."
   ]
 
-  integer: gappenalty  [
+  integer: gapopen  [
     additional: "Y"
     information: "Gap penalty"
     default: "@($(acdprotein)? 14 : 16)"
@@ -62,7 +62,7 @@ section: additional [
            EDNAFULL matrix for nucleotide sequences."
   ]
 
-  integer: gaplength  [
+  integer: gapextend  [
     additional: "Y"
     information: "Gap length penalty"
     default: "@($(acdprotein)? 4 : 4)"

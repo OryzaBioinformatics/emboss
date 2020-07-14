@@ -16,11 +16,7 @@ seqall: sequence  [
 seqset: bsequence  [
   parameter: "Y"
   type: "any"
-]
-
-directory: directory [
-  information: "Temporary directory"
-  default: "/tmp"
+  aligned: "N"
 ]
 
 endsection: input
@@ -29,6 +25,12 @@ section: output [
   information: "Output section"
   type: "page"
 ]
+
+  outdir: outdir [
+    information: "Temporary directory"
+    default: "/tmp"
+    knowntype: "temporary file"
+  ]
 
   outfile: outfile [
   standard: "Y"

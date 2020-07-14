@@ -1,6 +1,5 @@
 application: findkm [
-  documentation: "Find Km and Vmax for an enzyme reaction by
-                  a Hanes/Woolf plot"
+  documentation: "Find Km and Vmax for an enzyme reaction"
   groups: "Enzyme Kinetics"
 ]
 

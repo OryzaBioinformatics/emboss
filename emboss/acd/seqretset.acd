@@ -17,6 +17,7 @@ section: input [
     parameter: "Y"
     features: "$(feature)"
     type: "gapany"
+    aligned: "N"
   ]
 
 endsection: input

@@ -1,6 +1,6 @@
 application: textsearch [
-  documentation: "Search sequence documentation text. SRS and
-                  Entrez are faster!"
+  documentation: "Search sequence documentation.
+                  Slow, use SRS and Entrez!"
   groups: "Display, Information"
 ]
 

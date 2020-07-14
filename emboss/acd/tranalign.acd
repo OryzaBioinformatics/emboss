@@ -17,6 +17,7 @@ section: input [
   seqset: bsequence  [
     parameter: "Y"
     type: "gapprotein"
+    aligned: "Y"
   ]
 
 endsection: input

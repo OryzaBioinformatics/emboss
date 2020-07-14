@@ -11,6 +11,7 @@ section: input [
   seqset: sequences  [
     parameter: "Y"
     type: "gapprotein"
+    aligned: "Y"
     help: "File containing a sequence alignment"
   ]
 
@@ -29,7 +30,7 @@ section: output [
   ]
 
  report: outfile  [
-   additional: "Y"
+   parameter: "Y"
    rformat: "seqtable"
    taglist: "int:TM=TransMem"
  ]

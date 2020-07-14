@@ -1,5 +1,5 @@
 application: plotcon [
-  documentation: "Plots the quality of conservation of a
+  documentation: "Plot quality of conservation of a
                   sequence alignment"
   groups: "Alignment:Multiple"
 ]
@@ -12,6 +12,7 @@ section: input [
   seqset: sequences  [
     parameter: "Y"
     type: "gapany"
+    aligned: "Y"
     help: "File containing a sequence alignment"
   ]
 

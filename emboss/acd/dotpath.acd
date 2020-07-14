@@ -1,5 +1,5 @@
 application: dotpath [
-  documentation: "Displays a non-overlapping wordmatch
+  documentation: "Non-overlapping wordmatch
                   dotplot of two sequences"
   groups: "Alignment:Dot plots"
   gui: "yes"

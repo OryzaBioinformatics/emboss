@@ -15,7 +15,7 @@ section: input [
 
   codon: cfile  [
     standard: "Y"
-    default: "Eyeastcai.cut"
+    default: "Eyeast_cai.cut"
   ]
 
 endsection: input

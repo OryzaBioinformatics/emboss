@@ -1,5 +1,5 @@
 application: oddcomp [
-  documentation: "Finds protein sequence regions with a
+  documentation: "Find protein sequence regions with a
                   biased composition"
   groups: "Protein:Motifs"
 ]
@@ -14,7 +14,7 @@ section: input [
     type: "Protein"
   ]
 
-  infile: compdatafile  [
+  infile: infile  [
     parameter: "Y"
     information: "Compseq output file to use for expected word
                   frequencies"

@@ -13,6 +13,7 @@ section: input [
     parameter: "Y"
     features: "Y"
     type: "gapany"
+    aligned: "Y"
   ]
 
   matrixf: floatmatrix  [

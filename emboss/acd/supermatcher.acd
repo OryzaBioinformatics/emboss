@@ -1,6 +1,6 @@
 application: supermatcher [
-  documentation: "Finds a match of a large sequence against
-                  one or more sequences"
+  documentation: "Match large sequences against
+                  one or more other sequences"
   groups: "Alignment:Local"
   gui: "yes"
   batch: "yes"
@@ -20,6 +20,7 @@ section: input [
   seqset: bsequence  [
     parameter: "Y"
     type: "@($(acdprotein) ? stopprotein : nucleotide)"
+    aligned: "N"
   ]
 
   matrixf: datafile  [
@@ -42,7 +43,7 @@ section: required [
   float: gapopen  [
     standard: "Y"
     information: "Gap opening penalty"
-    minimum: "1.0"
+    minimum: "0.0"
     maximum: "100.0"
     default: "@($(acdprotein)? 10.0 : 10.0)"
     expected: "10.0 for any sequence type"
@@ -51,7 +52,7 @@ section: required [
   float: gapextend  [
     standard: "Y"
     information: "Gap extension penalty"
-    minimum: "0.1"
+    minimum: "0.0"
     maximum: "10.0"
     default: "@($(acdprotein)? 0.5 : 0.5)"
     expected: "0.5 for any sequence type"

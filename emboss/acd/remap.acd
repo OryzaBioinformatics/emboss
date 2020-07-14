@@ -1,6 +1,5 @@
 application: remap [
-  documentation: "Display a sequence with restriction cut
-                  sites, translation etc.."
+  documentation: "Display sequence with restriction sites, translation etc."
   groups: "Display, Nucleic:Restriction, Nucleic:Translation"
 ]
 
@@ -181,7 +180,7 @@ section: additional [
            you have requested frames 4, 5 or 6.
            By default, all six frames will be displayed."
   ]
-						                     
+
 endsection: additional
 
 section: output [

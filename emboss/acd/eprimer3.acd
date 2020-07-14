@@ -34,10 +34,10 @@ section: input [
       delimiter: ","
       codedelimiter: ":"
       information: "Select task"
-      help: "Tell EPrimer3 what task to perform. Legal values are 0:
-             'Pick PCR primers', 1: 'Pick PCR primers and hybridization
-             probe', 2: 'Pick forward primer only', 3: 'Pick reverse primer
-             only', 4: 'Pick hybridization probe only'."
+      help: "Tell EPrimer3 what task to perform. Legal values are 1:
+             'Pick PCR primers', 2: 'Pick forward primer only',
+	      3: 'Pick reverse primer only',
+	      4: 'No primers needed'."
     ]
 
     toggle: hybridprobe [

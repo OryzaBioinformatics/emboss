@@ -12,6 +12,7 @@ section: input [
   seqset: sequence  [
     parameter: "Y"
     type: "gapany"
+    aligned: "Y"
     help: "File containing a sequence alignment."
   ]
 
@@ -58,7 +59,7 @@ section: additional [
 ]
 
   boolean: ambiguous  [
-    additional: "@(@(@(!$acdprotein)) & @($(nucmethod)==1)) |
+    additional: "@(@(@(!$(acdprotein)) & @($(nucmethod)==1)) |
                @($(acdprotein) & @($(protmethod)!=2)))"
     default: "N"
     information: "Use the ambiguous codes in the calculation."

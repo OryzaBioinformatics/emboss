@@ -14,7 +14,7 @@ section: input [
     type: "dna"
   ]
 
-  infile: primersfile  [
+  infile: infile  [
     parameter: "Y"
     information: "Primer file"
     knowntype: "primer pairs file"

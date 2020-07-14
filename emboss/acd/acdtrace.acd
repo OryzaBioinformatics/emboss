@@ -1,5 +1,6 @@
 application: acdtrace [
   documentation: "ACD compiler on-screen trace"
+  gui: "no"
   groups: "Acd"
 ]
 

@@ -13,6 +13,7 @@ section: input [
     parameter: "Y"
     help: "File containing a sequence alignment"
     type: "gapprotein"
+    aligned: "Y"
   ]
 
   datafile: datafile  [

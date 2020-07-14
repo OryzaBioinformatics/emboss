@@ -1,5 +1,5 @@
 application: restover [
-  documentation: "Finds restriction enzymes that produce a
+  documentation: "Find restriction enzymes producing
                   specific overhang"
   groups: "Nucleic:Restriction"
 ]

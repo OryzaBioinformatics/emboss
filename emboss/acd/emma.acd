@@ -214,7 +214,7 @@ section: additional [
              sequences."
     ]
 
-    float: pwgapc  [
+    float: pwgapopen  [
       additional: "$(slow)"
       default: "10.0"
       minimum: "0.0"
@@ -224,7 +224,7 @@ section: additional [
              alignments."
     ]
 
-    float: pwgapv  [
+    float: pwgapextend  [
       additional: "$(slow)"
       default: "0.1"
       minimum: "0.0"
@@ -311,7 +311,7 @@ section: additional [
     type: "frame"
   ]
 
-    float: gapc  [
+    float: gapopen  [
       additional: "Y"
       default: "10.0"
       minimum: "0.0"
@@ -322,10 +322,10 @@ section: additional [
              frequent."
     ]
 
-    float: gapv  [
+    float: gapextend  [
       additional: "Y"
       default: "5.0"
-      minimum: "0.00"
+      minimum: "0.0"
       information: "Multiple alignment: Gap extension penalty"
       valid: "Positive foating point number"
       help: "The penalty for extending a gap by 1 residue. Increasing
