@@ -449,6 +449,7 @@ static void restrict_reportHits(AjPReport report, AjPSeq seq,
     
     ajint c = 0;
     ajint len;
+    ajint cend = 0;
     
     AjPInt farray = NULL;
     ajint  nfrags;
@@ -513,8 +514,15 @@ static void restrict_reportHits(AjPReport report, AjPSeq seq,
 		ajStrAssS(&m->cod,value);
 	}
 
+
+	if(m->forward)
+	    cend = m->start+ajStrLen(m->pat)-1;
+	else
+	    cend = m->start-ajStrLen(m->pat)+1;
+
+
 	gf = ajFeatNewII (TabRpt,
-			   m->start, m->start+ajStrLen(m->pat)-1);
+			   m->start, cend);
 	ajFmtPrintS(&tmpStr, "*enzyme %S", m->cod);
 	ajFeatTagAdd(gf,  NULL, tmpStr);
 	ajFmtPrintS(&tmpStr, "*site %S", m->pat);

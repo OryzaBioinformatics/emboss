@@ -3381,7 +3381,7 @@ ajint embPatRestrictRestrict(AjPList *l, ajint hits, AjBool isos,
     ajListSort(*l,embPatRestrictStartCompare);
 
     if(alpha)
-	ajListSort(*l,embPatRestrictNameCompare);
+	ajListSort2(*l,embPatRestrictNameCompare,embPatRestrictStartCompare);
 
     ajStrDel(&ps);
 
