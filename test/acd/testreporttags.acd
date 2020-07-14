@@ -9,7 +9,6 @@ report: test [
       standard: Y
       taglist: "float:tm=Tm int:ival=Number str s=String"
       rformat: table
-      mintags: 3
 ]
 
 endsection: input

@@ -9,7 +9,6 @@ report: test [
       standard: Y
       taglist: "float:tm=Tm int:ival=Number str:s=String"
       rformat: table
-      mintags: 4
 ]
 
 integer: testnum [ min: 1 info: "Pick a number" ]
