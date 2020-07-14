@@ -1,0 +1,12 @@
+# GNUPLOT driver file for roc plot
+set title "ROC plots for data1.rocplot & data2.rocplot (combi"
+set xlabel "1 - SPEC"
+set ylabel "SENS"
+set nokey
+set noautoscale
+set xrange [0:1]
+set yrange [0:1]
+set key top outside title "Data Series" box 3
+set data style points
+set pointsize 0.45
+plot "_rocplot_dat0" smooth bezier title "Combined dataset (0.185)"

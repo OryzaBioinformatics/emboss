@@ -1,0 +1,486 @@
+MODE INFO
+modei: 2
+multimodei: 2
+datamodei: 1
+
+
+
+NUMBER OF INPUT FILES
+numfiles: 2
+
+
+
+NAMES ONLY OF INPUT FILES
+hitsnames[0]: data1.rocplot
+hitsnames[1]: data2.rocplot
+
+
+
+LISTS OF HITS IN EACH FILE
+>>>>>  FILE 0 >>>>>
+TRUE
+TRUE
+TRUE
+TRUE
+TRUE
+TRUE
+TRUE
+TRUE
+TRUE
+TRUE
+TRUE
+TRUE
+TRUE
+TRUE
+TRUE
+TRUE
+TRUE
+TRUE
+TRUE
+TRUE
+TRUE
+TRUE
+TRUE
+TRUE
+TRUE
+TRUE
+TRUE
+TRUE
+TRUE
+TRUE
+TRUE
+TRUE
+TRUE
+TRUE
+TRUE
+TRUE
+TRUE
+TRUE
+TRUE
+TRUE
+TRUE
+TRUE
+TRUE
+TRUE
+TRUE
+TRUE
+TRUE
+TRUE
+TRUE
+TRUE
+TRUE
+TRUE
+TRUE
+TRUE
+TRUE
+TRUE
+TRUE
+TRUE
+TRUE
+TRUE
+TRUE
+TRUE
+TRUE
+TRUE
+TRUE
+TRUE
+TRUE
+TRUE
+TRUE
+TRUE
+TRUE
+TRUE
+TRUE
+TRUE
+TRUE
+TRUE
+TRUE
+TRUE
+TRUE
+TRUE
+TRUE
+TRUE
+TRUE
+TRUE
+TRUE
+TRUE
+TRUE
+TRUE
+TRUE
+TRUE
+TRUE
+TRUE
+TRUE
+TRUE
+TRUE
+TRUE
+TRUE
+TRUE
+TRUE
+CROSS
+TRUE
+TRUE
+CROSS
+TRUE
+TRUE
+TRUE
+TRUE
+TRUE
+TRUE
+CROSS
+TRUE
+TRUE
+CROSS
+TRUE
+TRUE
+TRUE
+CROSS
+TRUE
+TRUE
+TRUE
+CROSS
+TRUE
+TRUE
+CROSS
+TRUE
+TRUE
+CROSS
+TRUE
+FALSE
+TRUE
+UNCERTAIN
+TRUE
+TRUE
+TRUE
+CROSS
+TRUE
+TRUE
+TRUE
+CROSS
+TRUE
+TRUE
+UNCERTAIN
+UNKNOWN
+FALSE
+FALSE
+UNKNOWN
+FALSE
+FALSE
+UNKNOWN
+TRUE
+TRUE
+UNCERTAIN
+UNKNOWN
+FALSE
+FALSE
+UNKNOWN
+FALSE
+FALSE
+UNKNOWN
+TRUE
+TRUE
+UNCERTAIN
+UNKNOWN
+FALSE
+FALSE
+UNKNOWN
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+
+
+
+>>>>>  FILE 1 >>>>>
+TRUE
+TRUE
+TRUE
+TRUE
+TRUE
+TRUE
+TRUE
+TRUE
+TRUE
+TRUE
+TRUE
+TRUE
+TRUE
+TRUE
+TRUE
+TRUE
+TRUE
+TRUE
+TRUE
+TRUE
+TRUE
+TRUE
+TRUE
+TRUE
+TRUE
+TRUE
+TRUE
+TRUE
+TRUE
+TRUE
+TRUE
+TRUE
+TRUE
+TRUE
+TRUE
+TRUE
+TRUE
+TRUE
+TRUE
+TRUE
+TRUE
+TRUE
+TRUE
+TRUE
+TRUE
+TRUE
+TRUE
+TRUE
+TRUE
+TRUE
+TRUE
+CROSS
+TRUE
+TRUE
+CROSS
+TRUE
+TRUE
+TRUE
+CROSS
+TRUE
+TRUE
+TRUE
+CROSS
+TRUE
+TRUE
+CROSS
+TRUE
+TRUE
+CROSS
+TRUE
+FALSE
+TRUE
+UNCERTAIN
+TRUE
+TRUE
+TRUE
+CROSS
+TRUE
+TRUE
+TRUE
+CROSS
+TRUE
+TRUE
+UNCERTAIN
+UNKNOWN
+FALSE
+FALSE
+UNKNOWN
+FALSE
+FALSE
+UNKNOWN
+TRUE
+TRUE
+UNCERTAIN
+UNKNOWN
+FALSE
+FALSE
+UNKNOWN
+FALSE
+FALSE
+UNKNOWN
+TRUE
+TRUE
+UNCERTAIN
+UNKNOWN
+FALSE
+FALSE
+UNKNOWN
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+FALSE
+
+
+
+NUMBER OF RELATIVES
+nrelatives[0]: 140
+nrelatives[1]: 140
+
+
+
+For hit     1 ntrue=    1 ntrue_sum=0.000
+For hit     2 ntrue=    2 ntrue_sum=0.000
+For hit     3 ntrue=    3 ntrue_sum=0.000
+For hit     4 ntrue=    4 ntrue_sum=0.000
+For hit     0 ntrue=    4 ntrue_sum=4.000
+For hit     0 ntrue=    5 ntrue_sum=4.000
+For hit     0 ntrue=    6 ntrue_sum=4.000
+For hit     0 ntrue=    6 ntrue_sum=10.000
+For hit     0 ntrue=    7 ntrue_sum=10.000
+For hit     0 ntrue=    8 ntrue_sum=10.000
+For hit     0 ntrue=    9 ntrue_sum=10.000
+For hit     0 ntrue=    9 ntrue_sum=19.000
+For hit     0 ntrue=   10 ntrue_sum=19.000
+For hit     0 ntrue=   11 ntrue_sum=19.000
+For hit     0 ntrue=   12 ntrue_sum=19.000
+For hit     0 ntrue=   12 ntrue_sum=31.000
+For hit     0 ntrue=   13 ntrue_sum=31.000
+For hit     0 ntrue=   14 ntrue_sum=31.000
+For hit     0 ntrue=   14 ntrue_sum=45.000
+For hit     0 ntrue=   15 ntrue_sum=45.000
+For hit     0 ntrue=   16 ntrue_sum=45.000
+For hit     0 ntrue=   16 ntrue_sum=61.000
+For hit     0 ntrue=   17 ntrue_sum=61.000
+For hit     0 ntrue=   17 ntrue_sum=78.000
+For hit     0 ntrue=   18 ntrue_sum=78.000
+For hit     0 ntrue=   18 ntrue_sum=96.000
+For hit     0 ntrue=   19 ntrue_sum=96.000
+For hit     0 ntrue=   20 ntrue_sum=96.000
+For hit     0 ntrue=   21 ntrue_sum=96.000
+For hit     0 ntrue=   21 ntrue_sum=117.000
+For hit     0 ntrue=   22 ntrue_sum=117.000
+For hit     0 ntrue=   23 ntrue_sum=117.000
+For hit     0 ntrue=   24 ntrue_sum=117.000
+For hit     0 ntrue=   24 ntrue_sum=141.000
+For hit     0 ntrue=   25 ntrue_sum=141.000
+For hit     0 ntrue=   26 ntrue_sum=141.000
+For hit     0 ntrue=   26 ntrue_sum=167.000
+For hit     0 ntrue=   26 ntrue_sum=193.000
+For hit     0 ntrue=   26 ntrue_sum=219.000
+For hit     0 ntrue=   26 ntrue_sum=245.000
+For hit     0 ntrue=   26 ntrue_sum=271.000
+For hit     0 ntrue=   26 ntrue_sum=297.000
+For hit     0 ntrue=   26 ntrue_sum=323.000
+For hit     0 ntrue=   26 ntrue_sum=349.000
+For hit     0 ntrue=   27 ntrue_sum=349.000
+For hit     0 ntrue=   28 ntrue_sum=349.000
+For hit     0 ntrue=   28 ntrue_sum=377.000
+For hit     0 ntrue=   28 ntrue_sum=405.000
+For hit     0 ntrue=   28 ntrue_sum=433.000
+For hit     0 ntrue=   28 ntrue_sum=461.000
+For hit     0 ntrue=   28 ntrue_sum=489.000
+For hit     0 ntrue=   28 ntrue_sum=517.000
+For hit     0 ntrue=   28 ntrue_sum=545.000
+For hit     0 ntrue=   28 ntrue_sum=573.000
+For hit     0 ntrue=   29 ntrue_sum=573.000
+For hit     0 ntrue=   30 ntrue_sum=573.000
+For hit     0 ntrue=   30 ntrue_sum=603.000
+For hit     0 ntrue=   30 ntrue_sum=633.000
+For hit     0 ntrue=   30 ntrue_sum=663.000
+For hit     0 ntrue=   30 ntrue_sum=693.000
+For hit     0 ntrue=   30 ntrue_sum=723.000
+For hit     0 ntrue=   30 ntrue_sum=753.000
+For hit     0 ntrue=   30 ntrue_sum=783.000
+For hit     0 ntrue=   30 ntrue_sum=813.000
+For hit     0 ntrue=   30 ntrue_sum=843.000
+For hit     0 ntrue=   30 ntrue_sum=873.000
+For hit     0 ntrue=   30 ntrue_sum=903.000
+For hit     0 ntrue=   30 ntrue_sum=933.000
+For hit     0 ntrue=   30 ntrue_sum=963.000
+For hit     0 ntrue=   30 ntrue_sum=993.000
+For hit     0 ntrue=   30 ntrue_sum=1023.000
+For hit     0 ntrue=   30 ntrue_sum=1053.000
+For hit     0 ntrue=   30 ntrue_sum=1083.000
+For hit     0 ntrue=   30 ntrue_sum=1113.000
+For hit     0 ntrue=   30 ntrue_sum=1143.000
+For hit     0 ntrue=   30 ntrue_sum=1173.000
+For hit     0 ntrue=   30 ntrue_sum=1203.000
+For hit     0 ntrue=   30 ntrue_sum=1233.000
+For hit     0 ntrue=   30 ntrue_sum=1263.000
+For hit     0 ntrue=   30 ntrue_sum=1293.000
+ROC NUMBER
+roc: 50
+
+
+
+ROC VALUES
+rocn[0]: 0.000000
+
+
+
+COUNT OF HITS
+hitcnt[0]: 80
+
+
+
