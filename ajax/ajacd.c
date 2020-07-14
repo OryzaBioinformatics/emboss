@@ -868,6 +868,7 @@ static void acdSetOutdir(AcdPAcd thys);
 static void acdSetOutdiscrete(AcdPAcd thys);
 static void acdSetOutdistance(AcdPAcd thys);
 static void acdSetOutfile(AcdPAcd thys);
+static void acdSetOutfileall(AcdPAcd thys);
 static void acdSetOutfreq(AcdPAcd thys);
 static void acdSetOutmatrix(AcdPAcd thys);
 static void acdSetOutmatrixf(AcdPAcd thys);
@@ -1008,7 +1009,7 @@ AcdOAttr acdAttrAppl[] =
     {"batch", VT_STR, "",
 	 "Suitability for running in batch"},
     {"embassy", VT_STR, "",
-         "EMBASSY package name"},
+	 "EMBASSY package name"},
     {"external", VT_STR, "",
 	 "Third party tool(s) required by this program"},
     {"cpu", VT_STR, "",
@@ -1403,6 +1404,20 @@ AcdOAttr acdAttrOutfile[] =
 	 "Default file extension"},
     {"append", VT_BOOL, "N",
 	 "Append to an existing file"},
+    {"nulldefault", VT_BOOL, "N",
+	 "Defaults to 'no file'"},
+    {"nullok", VT_BOOL, "N",
+	 "Can accept a null filename as 'no file'"},
+    {NULL, VT_NULL, NULL,
+	 NULL}
+};
+
+AcdOAttr acdAttrOutfileall[] =
+{
+    {"name", VT_STR, "",
+	 "Default file name"},
+    {"extension", VT_STR, "",
+	 "Default file extension"},
     {"nulldefault", VT_BOOL, "N",
 	 "Defaults to 'no file'"},
     {"nullok", VT_BOOL, "N",
@@ -1935,6 +1950,10 @@ static AcdOAttr acdCalcTree[] =
 {
     {"treecount", VT_INT, "",
 	 "Number of trees"},
+    {"speciescount", VT_INT, "",
+	 "Number of species"},
+    {"haslengths", VT_BOOL, "",
+	 "Branch lengths defined"},
     {NULL, VT_NULL, NULL,
 	 NULL}
 };
@@ -2186,6 +2205,12 @@ AcdOQual acdQualOutfile[] =
     {NULL, NULL, NULL, NULL}
 };
 
+AcdOQual acdQualOutfileall[] =
+{
+    {"odirectory","",  "string",  "Output directory"},
+    {NULL, NULL, NULL, NULL}
+};
+
 AcdOQual acdQualOutfreq[] =
 {
     {"odirectory","",  "string",  "Output directory"},
@@ -2413,16 +2438,16 @@ AcdOType acdType[] =
     {"datafile",           "input",            acdSecInput,
 	 acdAttrDatafile,  acdSetDatafile,     NULL,
 	 AJFALSE, &acdUseData, "Data file" },
-    {"directory",          "input",            NULL,
+    {"directory",          "input",            acdSecInput,
 	 acdAttrDirectory, acdSetDirectory,    NULL,
 	 AJFALSE, &acdUseMisc, "Directory" },
     {"dirlist",	           "input",            acdSecInput,
 	 acdAttrDirlist,   acdSetDirlist,      NULL,
 	 AJFALSE, &acdUseMisc, "Directory with files" },
-    {"discretestates",     "input",            NULL,
+    {"discretestates",     "input",            acdSecInput,
 	 acdAttrDiscrete,acdSetDiscretestates, NULL,
 	 AJTRUE,  &acdUseData, "Discrete states file" },
-    {"distances",         "input",            NULL,
+    {"distances",         "input",             acdSecInput,
 	 acdAttrDistances,acdSetDistances, NULL,
 	 AJTRUE,  &acdUseData, "Distance matrix" },
     {"features",           "input",            acdSecInput,
@@ -2431,13 +2456,13 @@ AcdOType acdType[] =
     {"featout",            "output",           acdSecOutput,
 	 acdAttrFeatout,   acdSetFeatout,      acdQualFeatout,
 	 AJTRUE,  &acdUseFeatout, "Writeable feature table" },
-    {"filelist",	   "input",            NULL,
+    {"filelist",	   "input",            acdSecInput,
 	 acdAttrFilelist,  acdSetFilelist,     NULL,
 	 AJFALSE, &acdUseMisc, "Comma-separated file list" },
     {"float",              "simple",           NULL,
 	 acdAttrFloat,     acdSetFloat,        NULL,
 	 AJFALSE, &acdUseMisc, "Floating point number" },
-    {"frequencies",         "input",            NULL,
+    {"frequencies",         "input",           acdSecInput,
 	 acdAttrFrequencies,acdSetFrequencies, NULL,
 	 AJTRUE,  &acdUseData, "Frequency value(s)" },
     {"graph",              "graph",            acdSecOutput,
@@ -2468,7 +2493,7 @@ AcdOType acdType[] =
 	 acdAttrOutdata,   acdSetOutdata,   acdQualOutdata,
 	 AJTRUE,  &acdUseOutfile, "Formatted output file" },
     {"outdir",             "output",            acdSecOutput,
-	 acdAttrOutdir,    acdSetOutdir,    NULL,
+	 acdAttrOutdir,    acdSetOutdir,        NULL,
 	 AJTRUE,  &acdUseMisc, "Output directory" },
     {"outdiscrete",        "output",            acdSecOutput,
 	 acdAttrOutdiscrete, acdSetOutdiscrete,    acdQualOutdiscrete,
@@ -2479,6 +2504,9 @@ AcdOType acdType[] =
     {"outfile",            "output",           acdSecOutput,
 	 acdAttrOutfile,   acdSetOutfile,   acdQualOutfile,
 	 AJTRUE,  &acdUseOutfile, "Output file" },
+    {"outfileall",         "output",           acdSecOutput,
+	 acdAttrOutfileall,   acdSetOutfileall,   acdQualOutfileall,
+	 AJTRUE,  &acdUseOutfile, "Multiple output files" },
     {"outfreq",            "output",           acdSecOutput,
 	 acdAttrOutfreq,   acdSetOutfreq,   acdQualOutfreq,
 	 AJTRUE,  &acdUseOutfile, "Frequency value(s)" },
@@ -2542,7 +2570,7 @@ AcdOType acdType[] =
     {"toggle",            "simple",           NULL,
 	 acdAttrToggle,      acdSetToggle,         NULL,
 	 AJFALSE, &acdUseMisc, "Toggle value Yes/No" },
-    {"tree",               "input",            NULL,
+    {"tree",               "input",            acdSecInput,
 	 acdAttrTree,      acdSetTree,         NULL,
 	 AJTRUE,  &acdUseData, "Phylogenetic tree" },
     {"xygraph",            "graph",            acdSecOutput,
@@ -8362,6 +8390,8 @@ static void acdSetOutdir(AcdPAcd thys)
     thys->Value = val;
     ajStrAssS(&thys->ValStr, reply);
 
+    ajStrDel(&ext);
+
     return;
 }
 
@@ -8540,6 +8570,141 @@ static void acdSetOutfile(AcdPAcd thys)
     acdAttrToBool(thys, "nullok", ajFalse, &nullok);
     acdAttrToBool(thys, "nulldefault", ajFalse, &nulldefault);
     acdAttrToBool(thys, "append", ajFalse, &append);
+    acdOutDirectory(&dir);
+    
+    required = acdIsRequired(thys);
+    if(nullok && nulldefault)
+    {
+	if (acdDefinedEmpty(thys))  /* user set to empty - make default name */
+	    acdOutFilename(&defreply, name, ext);
+	else				/* leave empty */
+	    acdReplyInit(thys, "", &defreply);
+    }
+    else
+    {
+	acdOutFilename(&outfname, name, ext);
+	acdReplyInit(thys, ajStrStr(outfname), &defreply);
+    }
+    acdPromptOutfile(thys);
+    
+    for(itry=acdPromptTry; itry && !ok; itry--)
+    {
+	ok = ajTrue;	   /* accept the default if nothing changes */
+	
+	ajStrAssS(&reply, defreply);
+	
+	if(required)
+	    acdUserGet(thys, &reply);
+	
+	if(ajStrLen(reply))
+	{
+	    ajStrAssS(&fullfname, reply);
+	    ajFileSetDir(&fullfname, dir);
+	    if(append)
+		val = ajFileNewApp(fullfname);
+	    else
+		val = ajFileNewOut(fullfname);
+
+	    if(!val)
+	    {
+		acdBadVal(thys, required,
+			  "Unable to open file '%S' for output",
+			  fullfname);
+		ok = ajFalse;
+	    }
+	}
+	else
+	    if(!nullok)
+	    {
+		acdBadVal(thys, required,
+			  "Output file is required");
+		ok = ajFalse;
+	    }
+    }
+    
+    if(!ok)
+	acdBadRetry(thys);
+    
+    thys->Value = val;
+    ajStrAssS(&thys->ValStr, fullfname);
+    
+    return;
+}
+
+
+
+
+/* @func ajAcdGetOutfileall ***************************************************
+**
+** Returns an item of type Outfile as defined in a named ACD item.
+** Called by the application after all ACD values have been set,
+** and simply returns what the ACD item already has.
+**
+** @param [r] token [const char*] Text token name
+** @return [AjPFile] File object. The file was already opened by
+**         acdSetOutfile so this just returns the pointer.
+** @cre failure to find an item with the right name and type aborts.
+** @@
+******************************************************************************/
+
+AjPFile ajAcdGetOutfileall(const char *token)
+{
+    return acdGetValue(token, "outfileall");
+}
+
+
+
+
+/* @funcstatic acdSetOutfileall ***********************************************
+**
+** Using the definition in the ACD file, and any values for the
+** item or its associated qualifiers provided on the command line,
+** prompts the user if necessary (and possible) and
+** sets the actual value for an ACD outfileall item.
+**
+** Understands all attributes and associated qualifiers for this item type.
+**
+** The default value, if stdout or filtering is on is "stdout" for the
+** first file.
+**
+** Otherwise an output file name is constructed.
+**
+** Various file naming options are defined, but not yet implemented here.
+**
+** @param [u] thys [AcdPAcd] ACD item.
+** @return [void]
+** @see ajFileNewOut
+** @@
+******************************************************************************/
+
+static void acdSetOutfileall(AcdPAcd thys)
+{
+    AjPFile val;
+    
+    AjBool required = ajFalse;
+    AjBool ok       = ajFalse;
+
+    static AjPStr defreply = NULL;
+    static AjPStr reply    = NULL;
+    ajint itry;
+    AjBool nullok;
+    AjBool nulldefault;
+    AjBool append = ajFalse;
+    
+    static AjPStr name      = NULL;
+    static AjPStr ext       = NULL;
+    static AjPStr dir       = NULL;
+    static AjPStr outfname  = NULL;
+    static AjPStr fullfname = NULL;
+    
+    val = NULL;				/* set the default value */
+    
+    acdAttrResolve(thys, "name", &name);
+    acdAttrResolve(thys, "extension", &ext);
+    acdGetValueAssoc(thys, "odirectory", &dir);
+    
+    acdAttrToBool(thys, "nullok", ajFalse, &nullok);
+    acdAttrToBool(thys, "nulldefault", ajFalse, &nulldefault);
     acdOutDirectory(&dir);
     
     required = acdIsRequired(thys);
@@ -11734,11 +11899,15 @@ static void acdSetTree(AcdPAcd thys)
 	    continue;
 
 	ajStrFromInt(&thys->SetStr[0],i); /* number of trees */
+	ajStrFromInt(&thys->SetStr[1],val[0]->Size); /* number of trees */
+	ajStrFromBool(&thys->SetStr[2],val[0]->HasLengths);
 	ajStrAssS(&thys->ValStr, val[0]->Tree);
     }
     else
     {
 	ajStrFromInt(&thys->SetStr[0],0);
+	ajStrFromInt(&thys->SetStr[1],0);
+	ajStrFromBool(&thys->SetStr[2],ajFalse);
 	ajStrAssC(&thys->ValStr, "");
     }
 
@@ -12271,12 +12440,12 @@ static void acdHelpAssoc(const AcdPAcd thys, AjPStr *str, const char* name)
 	    if(name && strcmp(name, quals[i].Name))
 		continue;
 	    if(thys->PNum)
-		ajFmtPrintS(&qname, "-%s%d",
+		ajFmtPrintS(&qname, " -%s%d",
 			    quals[i].Name, thys->PNum);
 	    else
-		ajFmtPrintS(&qname, "-%s", quals[i].Name);
+		ajFmtPrintS(&qname, " -%s", quals[i].Name);
 	    ajStrAssC(&qtype, quals[i].Type);
-	    ajFmtPrintS(&line, "   %-20S %-10S ",
+	    ajFmtPrintS(&line, "  %-20S %-10S ",
 			qname,  qtype);
 	    ajStrAssC(&text, quals[i].Help);
 	    acdTextFormat(&text);
@@ -12332,7 +12501,9 @@ static void acdHelpAppend(const AcdPAcd thys, AjPStr *str, char flag)
 	defstr = nullstr;
     
     ajStrAssC(&nostr, "");
-    if(acdIsQtype(thys) && ajStrMatchCC("boolean", acdType[thys->Type].Name))
+    if(acdIsQtype(thys) &&
+       (ajStrMatchCC("boolean", acdType[thys->Type].Name) ||
+	ajStrMatchCC("toggle", acdType[thys->Type].Name) ))
     {
 	if(ajStrToBool(defstr, &boolval) && boolval)
 	    ajStrAssC(&nostr, "[no]");
@@ -13570,9 +13741,9 @@ static void acdHelpAssocTable(const AcdPAcd thys, AjPList tablist, char flag)
 	acdLog("++ assoc[%d].Name %S\n", i, pa->Name);
 	AJNEW0(item);
 	if(thys->PNum)
-	    ajFmtPrintS(&item->Qual, "-%S%d", pa->Name, pa->PNum);
+	    ajFmtPrintS(&item->Qual, " -%S%d", pa->Name, pa->PNum);
 	else
-	    ajFmtPrintS(&item->Qual, "-%S", pa->Name);
+	    ajFmtPrintS(&item->Qual, " -%S", pa->Name);
 	ajFmtPrintS(&line, "  %-20S %-10S ",
 		    qname,  qtype);
 	acdHelpText(pa, &item->Help);
@@ -13626,7 +13797,9 @@ static void acdHelpTable(const AcdPAcd thys, AjPList tablist, char flag)
 	defstr = nullstr;
     
     ajStrAssC(&nostr, "");
-    if(acdIsQtype(thys) && ajStrMatchCC("boolean", acdType[thys->Type].Name))
+    if(acdIsQtype(thys) &&
+       (ajStrMatchCC("boolean", acdType[thys->Type].Name) ||
+	ajStrMatchCC("toggle", acdType[thys->Type].Name) ))
     {
 	if(ajStrToBool(defstr, &boolval))
 	{
@@ -14319,9 +14492,9 @@ static void acdSetAll(void)
     if (acdDoTrace)
     {
 	iendsec = acdFindKeyC("endsection");
-	ajUser("");
-	ajUser("Line Std        ACD_Type  Name and 'value'");
-	ajUser("---- --- ---------------  ----------------");
+	ajUser("Trace:");
+	ajUser("Trace: Line Std        ACD_Type  Name and 'value'");
+	ajUser("Trace: ---- --- ---------------  ----------------");
     }
 
     for(acdSetCurr=acdList; acdSetCurr; acdSetCurr = acdSetCurr->Next)
@@ -14351,21 +14524,21 @@ static void acdSetAll(void)
 		if (pa->Assoc)
 		    continue;
 		else
-		    ajUser("%4d %s %15s: %S '%S'",
+		    ajUser("Trace: %4d %s %15s: %S '%S'",
 			   pa->LineNum, level, acdType[pa->Type].Name,
 			   pa->Name, pa->ValStr);
 	    }
 	    else if(acdIsStype(pa))
 	    {
-		ajUser("%4d %s %15s: %S",
+		ajUser("Trace: %4d %s %15s: %S",
 		       pa->LineNum, level, acdKeywords[pa->Type].Name,
 		       pa->Name);
 		if (pa->Type == iendsec)
-		    ajUser("");
+		    ajUser("Trace:");
 	    }
 	    else
 	    {
-		ajUser("%4d %s %15s: %S '%S'",
+		ajUser("Trace: %4d %s %15s: %S '%S'",
 		       pa->LineNum, nostring, acdKeywords[pa->Type].Name,
 		       pa->Name, pa->ValStr);
 	    }
@@ -15153,7 +15326,7 @@ static AjBool acdVarResolve(AjPStr* var)
     if (acdDoTrace)
     {
 	if (ifun || ivar)
-	    ajUser("                          resolved '%S' => '%S'",
+	    ajUser("Trace:                           resolved '%S' => '%S'",
 		   savein, *var);
     }
     ajStrDelReuse(&savein);
@@ -20834,6 +21007,17 @@ static void acdValidAppl(const AcdPAcd thys)
     if(!ajStrLen(thys->AttrStr[i]))
 	acdErrorValid("Application has no documentation defined");
 
+    else
+    {
+	if(!isupper((int)ajStrChar(thys->AttrStr[i], 0)))
+	{
+	    if (islower((int)ajStrChar(thys->AttrStr[i], 0)))
+		acdWarn("Documentation string starts in lower case");
+	    else
+		acdWarn("Documentation string starts non-alphabetic");
+	}
+    }
+
     /* must have a group attribute */
 
     i = acdFindAttrC(acdAttrAppl, "groups");
@@ -21393,16 +21577,33 @@ static void acdValidQual(const AcdPAcd thys)
     /* check for type */
 
     if(ajStrMatchCC(acdType[thys->Type].Name, "infile") ||
-       ajStrMatchCC(acdType[thys->Type].Name, "filelist"))
+       ajStrMatchCC(acdType[thys->Type].Name, "filelist") ||
+       ajStrMatchCC(acdType[thys->Type].Name, "directory") ||
+       ajStrMatchCC(acdType[thys->Type].Name, "dirlist"))
     {
 	if(!isparam && !acdAttrTest(thys, "nullok"))
 	{
-	    if(*acdType[thys->Type].UseCount == 1)
-		acdErrorValid("First input file '%S' is not a parameter",
-			      thys->Token);
+	    if(ajStrMatchCC(acdType[thys->Type].Name, "directory") ||
+	       ajStrMatchCC(acdType[thys->Type].Name, "dirlist"))
+	    {
+		if(*acdType[thys->Type].UseCount == 1)
+		    acdErrorValid("First input directory '%S' is not a "
+				  "parameter",
+				  thys->Token);
+		else
+		    acdWarn("Subsequent input directory '%S' is not a "
+			    "parameter",
+			    thys->Token);
+	    }
 	    else
-		acdWarn("Subsequent input file '%S' is not a parameter",
-			thys->Token);
+	    {
+		if(*acdType[thys->Type].UseCount == 1)
+		    acdErrorValid("First input file '%S' is not a parameter",
+				  thys->Token);
+		else
+		    acdWarn("Subsequent input file '%S' is not a parameter",
+			    thys->Token);
+	    }
 	}
 
 	qualCountInfile++;
@@ -21411,22 +21612,48 @@ static void acdValidQual(const AcdPAcd thys)
 	    if(!ajStrSuffixC(thys->Token, "file"))
 		acdWarn("Infile qualifier '%S' is not 'infile' or '*file'",
 			thys->Token);
+	    else
+	    {
+		if((qualCountInfile > 1) ||
+		   !ajStrMatchC(thys->Token, "infile"))
+		    inMulti = ajTrue;
+		if((qualCountInfile == 1) &&
+		   !ajStrMatchC(thys->Token, "infile"))
+		    acdWarn("First input file qualifier '%S' is not 'infile'",
+			    thys->Token);
+	    }
 	}
 	else if(ajStrMatchCC(acdType[thys->Type].Name, "filelist"))
 	{
 	    if(!ajStrSuffixC(thys->Token, "files"))
 		acdWarn("Filelist qualifier '%S' is not '*files'",
 			thys->Token);
+	    else
+	    {
+		if(qualCountInfile > 1)
+		    inMulti = ajTrue;
+		/* no fixed qualifier name for first input filelist */
+	    }
 	}
-	else
+	else if(ajStrMatchCC(acdType[thys->Type].Name, "directory") ||
+		ajStrMatchCC(acdType[thys->Type].Name, "dirlist"))
 	{
-	    if((qualCountInfile > 1) ||
-	       !ajStrMatchC(thys->Token, "infile"))
-		inMulti = ajTrue;
-	    if((qualCountInfile == 1) &&
-	       !ajStrMatchC(thys->Token, "infile"))
-		acdWarn("First input file qualifier '%S' is not 'infile'",
+	    if(ajStrSuffixC(thys->Token, "outdir"))
+		acdWarn("Directory qualifier '%S' has outdir style name "
+			"'*outdir'",
 			thys->Token);
+	    else if(!ajStrSuffixC(thys->Token, "dir") &&
+		    !ajStrSuffixC(thys->Token, "path") &&
+		    !ajStrSuffixC(thys->Token, "directory"))
+		acdWarn("Directory qualifier '%S' is not '*directory or *dir'"
+			" or *path'",
+			thys->Token);
+	    else
+	    {
+		if(qualCountInfile > 1)
+		    inMulti = ajTrue;
+		/* no fixed qualifier name for first input directory */
+	    }
 	}
 
 	tmpstr = acdAttrValue(thys, "knowntype");
@@ -21500,7 +21727,7 @@ static void acdValidQual(const AcdPAcd thys)
 	qualCountOutfile++;
 	if(ajStrMatchCC(acdType[thys->Type].Name, "outdir") &&
 	   !ajStrSuffixC(thys->Token, "outdir"))
-	    acdWarn("Outfile qualifier '%S' is not 'outdir' or '*outdir'",
+	    acdWarn("Outdir qualifier '%S' is not 'outdir' or '*outdir'",
 		    thys->Token);
 	else
 	{
@@ -21508,9 +21735,10 @@ static void acdValidQual(const AcdPAcd thys)
 	       !ajStrMatchC(thys->Token, "outdir"))
 		outMulti = ajTrue;
 	    if((qualCountOutfile == 1) &&
-	       !ajStrMatchC(thys->Token, "outdir"))
+	       !ajStrMatchC(thys->Token, "outdir") &&
+	       !ajStrSuffixC(thys->Token, "outdir"))
 		acdWarn("First output directory qualifier '%S' "
-			"is not 'outdir'",
+			"is not 'outdir' or '*outdir'",
 			thys->Token);
 	}
 	
@@ -21607,7 +21835,7 @@ static void acdValidQual(const AcdPAcd thys)
 	if(!ajStrSuffixC(thys->Token, "outseq") &&
 	   !ajStrSuffixC(thys->Token, "outfile"))
 	    acdWarn("Sequence output qualifier '%S' is not 'outseq' "
-		    "or '*outseq' or 'outfile'",
+		    "or '*outseq' or '*outfile'",
 		    thys->Token);
 
 	else
@@ -21757,8 +21985,12 @@ static void acdValidKnowntype(const AcdPAcd thys)
     if (ajStrMatchC(acdKnownType, "file"))
     {
 	if (!ajStrMatchCC(acdType[thys->Type].Name, "infile") &&
-	    !ajStrMatchCC(acdType[thys->Type].Name, "filelist") &&
-	    !ajStrMatchCC(acdType[thys->Type].Name, "outfile"))
+	    !ajStrMatchCC(acdType[thys->Type].Name, "datafile") &&
+	    !ajStrMatchCC(acdType[thys->Type].Name, "directory") &&
+	    !ajStrMatchCC(acdType[thys->Type].Name, "dirlist") &&
+	    !ajStrMatchCC(acdType[thys->Type].Name, "outfile") &&
+	    !ajStrMatchCC(acdType[thys->Type].Name, "outdir") &&
+	    !ajStrMatchCC(acdType[thys->Type].Name, "filelist"))
 	{
 	    acdWarn("Knowntype '%S' defined for type '%S', used for '%s'",
 		    typestr, acdKnownType, acdType[thys->Type].Name);
@@ -21849,6 +22081,14 @@ static void acdReadKnowntypes(AjPTable* desctable, AjPTable* typetable)
 		ajRegSubI(knownxp, 2, &knownName);
 		ajRegSubI(knownxp, 3, &knownDesc);
 		ajStrSubstituteKK(&knownName, '_', ' ');
+		if(ajStrMatchCaseC(knownType, "infile") ||
+		   ajStrMatchCaseC(knownType, "filelist") ||
+		   ajStrMatchCaseC(knownType, "datafile") ||
+		   ajStrMatchCaseC(knownType, "outfile"))
+		{
+		    ajWarn("Knowntype '%S' in file %S line %d - use 'file'",
+			   knownType, knownFName, iline);
+		}
 		if(ajTablePut(*typetable, knownName, knownType))
 		    ajWarn("Duplicate knowntype name '%S' in file %S line %d",
 			   knownName, knownFName, iline);
