@@ -1,35 +1,49 @@
-appl: revseq [
+application: revseq [
   documentation: "Reverse and complement a sequence"
   groups: "Edit"
 ]
 
-section: input [ info: "input Section" type: page ]
-seqall: sequence  [
-  parameter: "Y"
-  type: "dna"
+section: input [
+  information: "Input section"
+  type: "page"
 ]
+
+  seqall: sequence  [
+    parameter: "Y"
+    type: "gapdna"
+  ]
 
 endsection: input
 
-section: advanced [ info: "advanced Section" type: page ]
-bool: reverse  [
-  default: "Y"
-  prompt: "Reverse sequence"
-  help: "Set this to be false if you do not wish to reverse the output sequence"
+section: advanced [
+  information: "Advanced section"
+  type: "page"
 ]
 
-bool: complement  [
-  default: "Y"
-  prompt: "Complement sequence"
-  help: "Set this to be false if you do not wish to complement the output sequence"
-]
+  boolean: reverse  [
+    default: "Y"
+    prompt: "Reverse sequence"
+    help: "Set this to be false if you do not wish to reverse the
+           output sequence"
+  ]
+
+  boolean: complement  [
+    default: "Y"
+    prompt: "Complement sequence"
+    help: "Set this to be false if you do not wish to complement the
+           output sequence"
+  ]
 
 endsection: advanced
 
-section: output [ info: "output Section" type: page ]
-seqoutall: outseq  [
-  parameter: "Y"
-  extension: "rev"
+section: output [
+  information: "Output section"
+  type: "page"
 ]
+
+  seqoutall: outseq  [
+    parameter: "Y"
+    extension: "rev"
+  ]
 
 endsection: output
