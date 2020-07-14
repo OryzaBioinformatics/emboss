@@ -42,6 +42,7 @@ typedef struct AjSReport {
   AjBool Showacc;		/* Report accession number */
   AjBool Showdes;		/* Report sequence description */
   AjBool Showusa;		/* Report USA (-rusa) or only seqname */
+  AjBool Showscore;		/* Report score (if optional for format) */
   AjBool Multi;			/* if true, assume >1 sequence */
   ajint Mintags;		/* Minimum number of tags to report */
   ajint Count;			/* Number of sequences reported so far */
