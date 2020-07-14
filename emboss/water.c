@@ -22,6 +22,8 @@
 #include "emboss.h"
 
 
+
+
 /* @prog water ****************************************************************
 **
 ** Smith-Waterman local alignment
@@ -38,79 +40,74 @@ int main(int argc, char **argv)
     AjPStr n;
     AjPStr ss;
 
-    AjPFile outf=NULL;
-    AjBool  show=ajFalse;
+    AjBool  show = ajFalse;
 
-    ajint    lena;
-    ajint    lenb;
-    ajint    i;
+    ajint lena;
+    ajint lenb;
 
-    char   *p;
-    char   *q;
+    char *p;
+    char *q;
 
-    ajint start1=0;
-    ajint start2=0;
+    ajint start1 = 0;
+    ajint start2 = 0;
 
 
-    float  *path;
-    ajint    *compass;
+    float *path;
+    ajint *compass;
 
     AjPMatrixf matrix;
-    AjPSeqCvt  cvt=0;
-    float      **sub;
+    AjPSeqCvt cvt = 0;
+    float **sub;
 
     float gapopen;
     float gapextend;
 
-    ajint maxarr=1000;
+    ajint maxarr = 1000;
     ajint len;
 
     float score;
     ajint begina;
     ajint beginb;
 
-    AjBool dobrief=ajTrue;
-    AjBool fasta=ajFalse;
-    AjPStr tmpstr=NULL;
+    AjBool dobrief = ajTrue;
+    AjPStr tmpstr  = NULL;
 
-    float id=0.;
-    float sim=0.;
-    float idx=0.;
-    float simx=0.;
+    float id   = 0.;
+    float sim  = 0.;
+    float idx  = 0.;
+    float simx = 0.;
 
 
     embInit("water", argc, argv);
-
+    
     matrix    = ajAcdGetMatrixf("datafile");
     a         = ajAcdGetSeq("asequence");
     ajSeqTrim(a);
-    seqall    = ajAcdGetSeqall("seqall");
+    seqall    = ajAcdGetSeqall("bsequence");
     gapopen   = ajAcdGetFloat("gapopen");
     gapextend = ajAcdGetFloat("gapextend");
     dobrief   = ajAcdGetBool("brief");
-    /* fasta     = ajAcdGetBool("fasta");*/
     align     = ajAcdGetAlign("outfile");
-
+    
     /* obsolete. Can be uncommented in acd file and here to reuse */
-
-    /* outf      = ajAcdGetOutfile("originalfile"); */
+    
     /* show      = ajAcdGetBool("showinternals"); */
-
+    
     m  = ajStrNew();
     n  = ajStrNew();
     ss = ajStrNew();
-
+    
     gapopen = ajRoundF(gapopen, 8);
     gapextend = ajRoundF(gapextend, 8);
-
+    
     AJCNEW(path, maxarr);
     AJCNEW(compass, maxarr);
-
+    
     sub = ajMatrixfArray(matrix);
     cvt = ajMatrixfCvt(matrix);
-
+    
     begina=ajSeqBegin(a)+ajSeqOffset(a);
-
+    
     while(ajSeqallNext(seqall,&b))
     {
 	lena = ajSeqLen(a);
@@ -118,6 +115,10 @@ int main(int argc, char **argv)
 	lenb = ajSeqLen(b);
 
 	len = lena*lenb;
+
+	if(len < 0)
+	    ajFatal("Sequences too big. Try 'matcher' or 'supermatcher'");
+
 	if(len>maxarr)
 	{
 	    AJCRESIZE(path,len);
@@ -137,87 +138,55 @@ int main(int argc, char **argv)
 	ajStrAssC(&m,"");
 	ajStrAssC(&n,"");
 
-	embAlignPathCalc(p,q,lena,lenb,gapopen,gapextend,path,sub,cvt,
-			compass,show);
+	embAlignPathCalcSW(p,q,lena,lenb,gapopen,gapextend,path,sub,cvt,
+			   compass,show);
 
 	score=embAlignScoreSWMatrix(path,compass,gapopen,gapextend,a,b,lena,
-			    lenb,sub,cvt,&start1,&start2);
+				    lenb,sub,cvt,&start1,&start2);
 
 	embAlignWalkSWMatrix(path,compass,gapopen,gapextend,a,b,&m,&n,lena,
-			    lenb,sub,cvt,&start1,&start2);
+			     lenb,sub,cvt,&start1,&start2);
 
-	if(outf && !fasta)
-	{
-	  embAlignPrintLocal(outf,ajSeqChar(a),ajSeqChar(b),m,n,start1,
-			     start2,score,1,sub,cvt,ajSeqName(a),
-			     ajSeqName(b),begina,beginb);
-
-	  if(!dobrief)
-	  {
-	    embAlignCalcSimilarity(m,n,sub,cvt,lena,lenb,&id,&sim,&idx,
-				   &simx);
-	    ajFmtPrintF(outf,"\n%%id = %5.2f\t\t\t%%similarity = %5.2f\n",
-			id,sim);
-	    ajFmtPrintF(outf,"Overall %%id = %5.2f\t\tOverall "
-			"%%similarity = %5.2f\n",idx,simx);
-	  }
-	}
-	else if (outf)	{
-	  ajFmtPrintF(outf,">%s\n",ajSeqName(a));
-
-	  len = ajStrLen(m);
-	  for (i=0;i<len; i+=60)
-	  {
-		(void) ajStrAssSub (&ss,m,i,i+60-1);
-		(void) ajFmtPrintF (outf,"%S\n", ss);
-	    }
-	    ajFmtPrintF(outf,">%s\n",ajSeqName(b));
-	    len = ajStrLen(n);
-	    for (i=0;i<len; i+=60)
-	    {
-		(void) ajStrAssSub (&ss,n,i,i+60-1);
-		(void) ajFmtPrintF (outf,"%S\n", ss);
-	    }
-	}
 	ajDebug("ReportLocal call start1:%d begina:%d start2:%d beginb:%d\n",
 		start1, begina, start2, beginb);
-	embAlignReportLocal (align, a, b, m, n,
-			     start1, start2,
-			     gapopen, gapextend,
-			     score, matrix, begina, beginb);
-	if (!dobrief)
+	embAlignReportLocal(align, a, b, m, n,
+			    start1, start2,
+			    gapopen, gapextend,
+			    score, matrix, begina, beginb);
+	if(!dobrief)
 	{
-	  embAlignCalcSimilarity(m,n,sub,cvt,lena,lenb,&id,&sim,&idx,
-				 &simx);
-	  ajFmtPrintAppS(&tmpstr,"Longest_Identity = %5.2f%%\n",
-			 id);
-	  ajFmtPrintAppS(&tmpstr,"Longest_Similarity = %5.2f%%\n",
-			 sim);
-	  ajFmtPrintAppS(&tmpstr,"Shortest_Identity = %5.2f%%\n",
-			 idx);
-	  ajFmtPrintAppS(&tmpstr,"Shortest_Similarity = %5.2f%%",
-			 simx);
-	  ajAlignSetSubHeaderApp(align, tmpstr);
+	    embAlignCalcSimilarity(m,n,sub,cvt,lena,lenb,&id,&sim,&idx,
+				   &simx);
+	    ajFmtPrintAppS(&tmpstr,"Longest_Identity = %5.2f%%\n",
+			   id);
+	    ajFmtPrintAppS(&tmpstr,"Longest_Similarity = %5.2f%%\n",
+			   sim);
+	    ajFmtPrintAppS(&tmpstr,"Shortest_Identity = %5.2f%%\n",
+			   idx);
+	    ajFmtPrintAppS(&tmpstr,"Shortest_Similarity = %5.2f%%",
+			   simx);
+	    ajAlignSetSubHeaderApp(align, tmpstr);
 	}
-	ajAlignWrite (align);
+	ajAlignWrite(align);
 	ajAlignReset(align);
 
     }
-
+    
     ajAlignClose(align);
     ajAlignDel(&align);
-
-    AJFREE (compass);
-    AJFREE (path);
-
+    
     AJFREE(compass);
     AJFREE(path);
-
+    
+    AJFREE(compass);
+    AJFREE(path);
+    
     ajStrDel(&n);
     ajStrDel(&m);
     ajStrDel(&ss);
     ajStrDel(&tmpstr);
-
+    
     ajExit();
+
     return 0;
 }

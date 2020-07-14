@@ -42,6 +42,14 @@ Description
    Typically, the cost of extending a gap is set to be 5-10 times lower
    than the cost for opening a gap.
    
+Algorithm
+
+   The Smith-Waterman algorithm contains no negative scores in the path
+   matrix it creates. The algorithm starts the alignment at the highest
+   path matrix score and works backwards until a cell contains zero.
+   
+   See the Reference Smith et al. for details.
+   
 Usage
 
    Here is a sample session with water
@@ -58,9 +66,9 @@ Output alignment [hba_human.water]:
    
 Command line arguments
 
-   Mandatory qualifiers:
-  [-sequencea]         sequence   Sequence USA
-  [-seqall]            seqall     Sequence database USA
+   Standard (Mandatory) qualifiers:
+  [-asequence]         sequence   Sequence USA
+  [-bsequence]         seqall     Sequence database USA
    -gapopen            float      The gap open penalty is the score taken away
                                   when a gap is created. The best value
                                   depends on the choice of comparison matrix.
@@ -84,7 +92,7 @@ Command line arguments
                                   scoring.
   [-outfile]           align      Output alignment file name
 
-   Optional qualifiers:
+   Additional (Optional) qualifiers:
    -datafile           matrixf    This is the scoring matrix file used when
                                   comparing sequences. By default it is the
                                   file 'EBLOSUM62' (for proteins) or the file
@@ -92,11 +100,12 @@ Command line arguments
                                   files are found in the 'data' directory of
                                   the EMBOSS installation.
 
-   Advanced qualifiers:
+   Advanced (Unprompted) qualifiers:
    -[no]brief          boolean    Brief identity and similarity
 
    Associated qualifiers:
-  "-sequencea" related qualifiers
+
+   "-asequence" associated qualifiers
    -sbegin1             integer    First base used
    -send1               integer    Last base used, def=seq length
    -sreverse1           boolean    Reverse (if DNA)
@@ -106,13 +115,13 @@ Command line arguments
    -slower1             boolean    Make lower case
    -supper1             boolean    Make upper case
    -sformat1            string     Input sequence format
-   -sopenfile1          string     Input filename
    -sdbname1            string     Database name
    -sid1                string     Entryname
    -ufo1                string     UFO features
    -fformat1            string     Features format
    -fopenfile1          string     Features file name
-  "-seqall" related qualifiers
+
+   "-bsequence" associated qualifiers
    -sbegin2             integer    First base used
    -send2               integer    Last base used, def=seq length
    -sreverse2           boolean    Reverse (if DNA)
@@ -122,15 +131,14 @@ Command line arguments
    -slower2             boolean    Make lower case
    -supper2             boolean    Make upper case
    -sformat2            string     Input sequence format
-   -sopenfile2          string     Input filename
    -sdbname2            string     Database name
    -sid2                string     Entryname
    -ufo2                string     UFO features
    -fformat2            string     Features format
    -fopenfile2          string     Features file name
-  "-outfile" related qualifiers
+
+   "-outfile" associated qualifiers
    -aformat3            string     Alignment format
-   -aopenfile3          string     Alignment file name
    -aextension3         string     File name extension
    -adirectory3         string     Output directory
    -aname3              string     Base file name
@@ -144,11 +152,8 @@ Command line arguments
    -auto                boolean    Turn off prompts
    -stdout              boolean    Write standard output
    -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for required and optional values
+   -options             boolean    Prompt for standard and additional values
    -debug               boolean    Write debug output to program.dbg
-   -acdlog              boolean    Write ACD processing log to program.acdlog
-   -acdpretty           boolean    Rewrite ACD file as program.acdpretty
-   -acdtable            boolean    Write HTML table of options
    -verbose             boolean    Report some/full command line options
    -help                boolean    Report command line options. More
                                   information on associated and general
@@ -159,10 +164,10 @@ Command line arguments
    -die                 boolean    Report deaths
    
 
-   Mandatory qualifiers Allowed values Default
-   [-sequencea]
+   Standard (Mandatory) qualifiers Allowed values Default
+   [-asequence]
    (Parameter 1) Sequence USA Readable sequence Required
-   [-seqall]
+   [-bsequence]
    (Parameter 2) Sequence database USA Readable sequence(s) Required
    -gapopen The gap open penalty is the score taken away when a gap is
    created. The best value depends on the choice of comparison matrix.
@@ -180,14 +185,14 @@ Command line arguments
    control gap scoring. Number from 0.100 to 10.000 0.5 for any sequence
    [-outfile]
    (Parameter 3) Output alignment file name Alignment output file
-   Optional qualifiers Allowed values Default
+   Additional (Optional) qualifiers Allowed values Default
    -datafile This is the scoring matrix file used when comparing
    sequences. By default it is the file 'EBLOSUM62' (for proteins) or the
    file 'EDNAFULL' (for nucleic sequences). These files are found in the
    'data' directory of the EMBOSS installation. Comparison matrix file in
    EMBOSS data path EBLOSUM62 for protein
    EDNAFULL for DNA
-   Advanced qualifiers Allowed values Default
+   Advanced (Unprompted) qualifiers Allowed values Default
    -[no]brief Brief identity and similarity Boolean value Yes/No Yes
    
 Input file format
@@ -440,7 +445,7 @@ Output file format
   
 ########################################
 # Program:  water
-# Rundate:  Thu May 22 11:00:10 2003
+# Rundate:  Thu Nov 27 15:26:01 2003
 # Align_format: srspair
 # Report_file: hba_human.water
 ########################################
