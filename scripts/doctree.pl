@@ -1,4 +1,4 @@
-#!/usr/local/bin/perl -w
+#!/usr/bin/perl -w
 
 # Converts the EMBOSS Web pages on the Sanger Centre Web server
 # to a version that is easy to distribute and can be included

@@ -1,4 +1,4 @@
-#!/usr/local/bin/perl -w
+#!/usr/bin/perl -w
 
 
 if ($ARGV[0]) {$funcfile = $ARGV[0]}

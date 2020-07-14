@@ -1,4 +1,4 @@
-#!/usr/local/bin/perl -w
+#!/usr/bin/perl -w
 
 ##########################
 # DONE
@@ -79,7 +79,7 @@ sub runtest ($) {
   my $testid = "";
   my $testin = "";
   my $timeout = $timeoutdef;
-  my $ppcmd = "";
+  my $ppcmd = "EMBOSSRC=../../ ;export EMBOSSRC ;EMBOSS_RCHOME=N ;export EMBOSS_RCHOME ;";
   my $qqcmd = "";
   my %testfile = ();
   my %outfile = ();
@@ -88,7 +88,7 @@ sub runtest ($) {
   my $testq = 0;
   my $testa = 0;
   my $testpath="";
-  my $packa="";
+  my $packa="unknown";
 
 # these are globals, used by the caller
 
@@ -107,7 +107,9 @@ sub runtest ($) {
       $testid = $1;
       $testin = "";
       $cmdline = "";
+      $dirname = "";
       $ifile=0;
+      $packa = "unknown";
       print LOG "Test <$testid>\n";
       $sysstat = system( "rm -rf $testid");
       $status = $sysstat >> 8;
@@ -143,6 +145,8 @@ sub runtest ($) {
 	    else {print STDERR "No HTML docs for $testapp\n";$misshtml++;}
 	    if (-e "../../doc/programs/text/$testapp.txt") {$tfm{$testapp}++}
 	    else {print STDERR "No tfm text docs for $testapp\n";$misstext++;}
+	    if (-e "../../doc/sourceforge/apps/$testapp.html") {$sf{$testapp}++}
+	    else {print STDERR "No SourceForge docs for $testapp\n";$misssf++;}
 	}
     }
     elsif ($line =~ /^DL\s+(success|keep|all)/) {$globaltestdelete = $1}
@@ -159,12 +163,17 @@ sub runtest ($) {
 	$testa = 1;
 	$testapp = $1;
 	$apcount{$testapp}++;
+	if ($packa eq "unknown") {
+	    print STDERR "No AB line before AA line in test $testid\n";
+	}
 	if (!defined($tfm{$testapp})) {
 	    $tfm{$testapp}=0;
 	    if (-e "../../doc/programs/html/$testapp.html") {$tfm{$testapp}++}
 	    else {print STDERR "No HTML docs for $testapp\n";$misshtml++;}
 	    if (-e "../../doc/programs/text/$testapp.txt") {$tfm{$testapp}++}
 	    else {print STDERR "No tfm text docs for $testapp\n";$misstext++;}
+	    if (-e "../../doc/sourceforge/embassy/$packa/$testapp.html") {$sf{$testapp}++}
+	    else {print STDERR "No SourceForge docs for $testapp\n";$misssf++;}
 	}
     }
     elsif ($line =~ /^AB\s*(.*)/) {$packa = $1}
@@ -186,6 +195,18 @@ sub runtest ($) {
       $outdir{$dirname} = $idir;
       print LOG "Known directory [$idir] <$1>\n";
       $idir++;
+    }
+
+# directoryfile - output file example
+
+    elsif ($line =~ /^DF\s+(\S+)/) {
+      if (!$idir) {
+	$testerr = "$retcode{22} $testid/*/$1\n";
+	print STDERR $testerr;
+	print LOG $testerr;
+	return 20;
+      }
+      print LOG "Known example in directory [$idir] <$dirname/$1>\n";
     }
 
 # filename - must be unique
@@ -272,6 +293,7 @@ sub runtest ($) {
 
   if ($testa) {	# for "embassy" apps (AA lines) we can skip
     if ($testappname && !defined($acdname{$testapp})) { # embassy make not run
+	print STDERR "Embassy application $testapp ($packa) not installed - skip\n";
       $skipembassy++;
       return 0;
     }
@@ -656,9 +678,13 @@ $numtests = 0;
 $testappname=0;
 $misshtml=0;
 $misstext=0;
+$misssf=0;
 %without = ();
 %dotest = ();
 %tfm = ();
+%sf = ();
+
+$logfile = "qatest.log";
 
 foreach $test (@ARGV) {
   if ($test =~ /^-(.*)/) {
@@ -668,6 +694,7 @@ foreach $test (@ARGV) {
     elsif ($opt eq "ka") {$defdelete="all"}
     elsif ($opt =~ /without=(\S+)/) {$without{$1}=1}
     elsif ($opt =~ /t=([0-9]+)/) {$timeoutdef=int($1)}
+    elsif ($opt =~ /logfile=(\S+)/) {$logfile=$1}
     else {print STDERR "+++ unknown option '$opt'\n"; usage()}
   }
   else {
@@ -720,6 +747,7 @@ $SIG{ALRM} = sub { print STDERR "+++ timeout handler\n"; die "qatest timeout" };
 	    "19" => "Directory not found",
 	    "20" => "Duplicate directory definition",
 	    "21" => "Not empty directory",
+	    "22" => "Undefined directory",
             "99" => "Testing"
 );
 
@@ -757,7 +785,7 @@ if (!$numtests) {
 }
 
 open (IN, "../qatest.dat") || die "Cannot open qatest.dat";
-open (LOG, ">qatest.log") || die "Cannot open qatest.log";
+open (LOG, ">$logfile") || die "Cannot open $logfile";
 
 # make qatest.log unbuffered and be sure to reset the current filehandle
 $fh = select LOG; $|=1; select $fh;
@@ -887,7 +915,7 @@ print STDERR "Tests total: $totall pass: $tpass fail: $tfail\n";
 print STDERR "Skipped: $totskip check: $skipcheck embassy: $skipembassy requirements: $skipreq\n";
 
 print STDERR "No tests: $tnotest\n";
-print STDERR "Missing documentation html: $misshtml text: $misstext\n";
+print STDERR "Missing documentation html: $misshtml text: $misstext sourceforge: $misssf\n";
 print STDERR "Time: $alltime seconds\n";
 print LOG "Time: $alltime seconds\n";
 

@@ -1,4 +1,4 @@
-#!/usr/local/bin/perl -w
+#!/usr/bin/perl -w
 
 $last = "unknown";
 $mtot=$mbad=$mdesc=$mundef=0;

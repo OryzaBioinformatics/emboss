@@ -1,4 +1,4 @@
-#!/usr/local/bin/perl -w
+#!/usr/bin/perl -w
 
 # Runs valgrind, a Linux utility to check for memory leaks.
 # Alternatives are third (3rd degree) on OSF

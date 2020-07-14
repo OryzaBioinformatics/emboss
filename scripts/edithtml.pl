@@ -1,4 +1,4 @@
-#!/usr/local/bin/perl -w
+#!/usr/bin/perl -w
 
 # This is a utility to aid prople who wish to edit the html
 # documentation for an application.  It is somewhat more friendly than
@@ -36,10 +36,10 @@ $docdir = "/data/www/Software/EMBOSS/Apps";
 ###################################################################
 $editor = $ENV{'EDITOR'};
 if (!defined $editor || $editor eq "") {
-    print "What is your favourite editor [pico] >";
+    print "What is your favourite editor [emacs] >";
     $editor = <STDIN>;
     chomp $editor;
-    if ($editor eq "") {$editor = 'pico';}
+    if ($editor eq "") {$editor = 'emacs';}
 }
 
 print "Utility to edit an application's html documentation\n\n";
@@ -99,7 +99,8 @@ if ($result == 1) {
 	print "WARNING: This program has not yet been committed to CVS.\n";
 	print "This is not a problem because users won't see the web page\nuntil it is added to the index page.\n";
 	print "Continue (y/n) >";
-	$ans = <STDIN>;
+###	$ans = <STDIN>;
+	$ans = "skip";
 	$ans = lc($ans);
 	if ($ans !~ /^y/) {die "Exiting.\n";}
 }
@@ -111,7 +112,8 @@ if ($result == 1) {
 ###################################################################
 if (!-e "$docdir/$application.html") {
     print "Create a web page for this program? (y/n) ";
-    $ans = <STDIN>;
+###    $ans = <STDIN>;
+    $ans = "skip";
     $ans=lc($ans);
     if ($ans !~ /^y/) {
 	die "Exiting.\n";
@@ -163,7 +165,8 @@ will be an entry at the end of the index page for you to move into
 position. 
 \n\n";
 print "Edit the index web page (y/n) >";
-$ans = <STDIN>;
+###$ans = <STDIN>;
+$ans = "skip";
 $ans=lc($ans);
 if ($ans =~ /^y/) {  
 
@@ -183,7 +186,8 @@ $desc
 ###################################################################
 
 print "CVS commit text and html copies in the EMBOSS package (y/n) >";
-$ans = <STDIN>;
+###$ans = <STDIN>;
+$ans = "skip";
 $ans=lc($ans);
 if ($ans !~ /^y/) {  
     die "Exiting.\n";   

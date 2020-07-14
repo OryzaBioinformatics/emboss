@@ -1,4 +1,4 @@
-#!/usr/local/bin/perl -w
+#!/usr/bin/perl -w
 
 # creates and commits the Makefile.am for the text and html doc directories
 # the default is to do the text directory.
@@ -12,8 +12,13 @@ my $dir;
 my $html;
 my $cvsdoc;
 
+open (VERS, "embossversion -full -auto|") || die "Cannot run embossversion";
+while (<VERS>) {
+    if(/BaseDirectory: +(\S+)/) {$distribtop = $1}
+}
+close VERS;
 # where the CVS tree program doc pages are
-  $cvsdoc = "/packages/emboss_dev/$ENV{'USER'}/emboss/emboss/doc/programs/";
+$cvsdoc = "$distribtop/doc/programs/";
 
 if ($#ARGV >= 0) {
   $html = 1;
@@ -70,6 +75,7 @@ close (M);
 system("mv make.temp Makefile.am");
 
 # cvs commit it
-system("cvs commit -m'new makefile' Makefile.am");
+print "cvs commit -m'new makefile' Makefile.am\n";
+#system("cvs commit -m'new makefile' Makefile.am");
 
 

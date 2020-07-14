@@ -1,12 +1,12 @@
-#!/usr/local/bin/perl -w
+#!/usr/bin/perl -w
 
 use English;
 
 sub srsref {
-    return "<a href=\"/srs6bin/cgi-bin/wgetz?-e+[EFUNC-ID:$_[0]]\">$_[0]</a>";
+    return "<a href=\"http://srs.rfcgr.mrc.ac.uk/srs7bin/cgi-bin/wgetz?-e+[EFUNC-ID:$_[0]]\">$_[0]</a>";
 }
 sub srsdref {
-    return "<a href=\"/srs6bin/cgi-bin/wgetz?-e+[EDATA-ID:$_[0]]\">$_[0]</a>";
+    return "<a href=\"http://srs.rfcgr.mrc.ac.uk/srs7bin/cgi-bin/wgetz?-e+[EDATA-ID:$_[0]]\">$_[0]</a>";
 }
 
 sub secttest($$) {
@@ -26,6 +26,13 @@ sub secttest($$) {
 	print "bad category '$ctype' in section '$sect'\n";
     }
     return $stype;
+}
+
+sub testvar($) {
+    my ($tvar) = @_;
+    if (defined($cppreserved{$tvar})) {
+	print "bad variable '$tvar' - reserved word in C++, use '$cppreserved{$tvar}'\n";
+    }
 }
 
 sub testnew($$) {
@@ -71,9 +78,9 @@ sub testassign($$\@\@) {
     if ($tx !~ /[w]/) {
 	print "bad category assign - code1 '$tx' not 'w'\n";
     }
-    if ($tx !~ /[D]/) {
-	print "bad category assign - code1 '$tx' not 'D'\n";
-    }
+#    if ($tx !~ /[D]/) {
+#	print "bad category assign - code1 '$tx' not 'D'\n";
+#    }
 }
 
 sub testmodify($$\@\@) {
@@ -192,10 +199,14 @@ $pubout = "public";
 $local = "local";
 $infile = "";
 $lib = "unknown";
+$countglobal=0;
+$countstatic=0;
 
+### cppreserved is a list of C++ reserved words not to be used as param names.
 ### test is whether to test the return etc.
 ### body is whether to print the body code
 
+%cppreserved = ("this" => "thys", "bool" => "boule", "string" => "strng");
 %test = ("func" => 1, "funcstatic" => 1, "funclist" => 0, "prog" => 0);
 %body = ("func" => 1, "funcstatic" => 1, "funclist" => 1, "prog" => 1);
 
@@ -294,6 +305,7 @@ while ($source =~ m"[/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]"gos) {
 
 	if ($token eq "section")  {
 	    $OFILE = HTML;
+	    $countglobal++;
 	    ($sect, $srest) = ($data =~ /\S+\s+([^*\n]+)\s*(.*)/gos);
 	    $sect =~ s/\s+/ /gos;
 	    $sect =~ s/^ //gos;
@@ -305,11 +317,12 @@ while ($source =~ m"[/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]"gos) {
 	    print "Section $sect\n";
 	}
 
-	if ($token eq "func" || $token eq "prog")  {
+	elsif ($token eq "func" || $token eq "prog")  {
 	    $ismacro = 0;
 	    $isprog = 0;
 	    if ($token eq "prog") {$isprog = 1}
 	    $OFILE = HTML;
+	    $countglobal++;
 	    if ($sect ne $lastfsect) {
 		print $OFILE "<hr><h2><a name=\"$sect\">\n";
 		print $OFILE "$sect</a></h2>\n";
@@ -357,7 +370,8 @@ while ($source =~ m"[/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]"gos) {
 	    $srest =~ s/\n\n/\nDE\n/gos;
 	    $srest =~ s/>/\&gt;/gos;
 	    $srest =~ s/</\&lt;/gos;
-	    print SRS "DE $srest";
+	    chomp $srest;
+	    print SRS "DE $srest\n";
 	    print SRS "XX\n";
 
 	    $fargs =~ s/\s+/ /gos;    # all whitespace is one space
@@ -379,10 +393,11 @@ while ($source =~ m"[/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]"gos) {
 #           print "-----------------------------\n";
 	}
 
-	if ($token eq "funcstatic")  {
+	elsif ($token eq "funcstatic")  {
 	    $ismacro = 0;
 	    $isprog = 0;
 	    $OFILE = HTMLB;
+	    $countstatic++;
 	    if ($sect ne $laststatfsect) {
 		print $OFILE "<hr><h2><a name=\"$sect\">\n";
 		print $OFILE "$sect</a></h2>\n";
@@ -420,7 +435,8 @@ while ($source =~ m"[/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]"gos) {
 	    $srest =~ s/\n\n/\nDE\n/gos;
 	    $srest =~ s/>/\&gt;/gos;
 	    $srest =~ s/</\&lt;/gos;
-	    print SRS "DE $srest";
+	    chomp $srest;
+	    print SRS "DE $srest\n";
 	    print SRS "XX\n";
 
 	    $fargs =~ s/\s+/ /gos;    # all whitespace is one space
@@ -436,9 +452,10 @@ while ($source =~ m"[/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]"gos) {
 	    @largs = split(/,/, $fargs);
 	}
 
-	if ($token eq "macro")  {
+	elsif ($token eq "macro")  {
 	    $ismacro = 1;
 	    $OFILE = HTML;
+	    $countglobal++;
 	    if ($sect ne $lastfsect) {
 		print $OFILE "<hr><h2><a name=\"$sect\">\n";
 		print $OFILE "$sect</a></h2>\n";
@@ -477,15 +494,17 @@ while ($source =~ m"[/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]"gos) {
 	    $srest =~ s/\n\n/\nDE\n/gos;
 	    $srest =~ s/>/\&gt;/gos;
 	    $srest =~ s/</\&lt;/gos;
-	    print SRS "DE $srest";
+	    chomp $srest;
+	    print SRS "DE $srest\n";
 	    print SRS "XX\n";
 	}
 
-	if ($token eq "funclist")  {
+	elsif ($token eq "funclist")  {
 	    $ismacro = 0;
 	    $isprog = 0;
 	    $islist = 1;
 	    $OFILE = HTMLB;
+	    $countstatic++;
 	    if ($sect ne $laststatfsect) {
 		print $OFILE "<hr><h2><a name=\"$sect\">\n";
 		print $OFILE "$sect</a></h2>\n";
@@ -515,11 +534,12 @@ while ($source =~ m"[/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]"gos) {
 	    $srest =~ s/\n\n/\nDE\n/gos;
 	    $srest =~ s/>/\&gt;/gos;
 	    $srest =~ s/</\&lt;/gos;
-	    print SRS "DE $srest";
+	    chomp $srest;
+	    print SRS "DE $srest\n";
 	    print SRS "XX\n";
 	}
 
-	if ($token eq "param")  {
+	elsif ($token eq "param")  {
 	    if (!$intable) {
 		print $OFILE "<p><table border=3>\n";
 		print $OFILE "<tr><th>RW</th><th>Name</th><th>Type</th><th>Description</th></tr>\n";
@@ -537,10 +557,11 @@ while ($source =~ m"[/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]"gos) {
 	    $cast =~ s/\{/\[/gos;	# brackets fixed
 	    $cast =~ s/\}/\]/gos;	# brackets fixed
 
-	    if ($code !~ /^[rwufdv?][CDENPU]*$/) { # deleted OSU (all unused)
+	    if ($code !~ /^[rwufdv?][CENP]*$/) { # deleted OSU (all unused)
 		print "bad code <$code> var: <$var>\n";
 	    }
 
+	    testvar($var);
 	    if ($ismacro) {               # No code to test for macros
 	    }
 	    else {
@@ -579,9 +600,10 @@ while ($source =~ m"[/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]"gos) {
 	    $drest =~ s/\n\n/\nPD\n/gos;
 	    $drest =~ s/>/\&gt;/gos;
 	    $drest =~ s/</\&lt;/gos;
+	    chomp $drest;
 	    print SRS "PN [$acnt]\n";
 	    print SRS "PA $code $var $cast\n";
-	    print SRS "PD $drest";
+	    print SRS "PD $drest\n";
 	    print SRS "PX\n";
 
 	    if (!$prest) {print "bad \@param '$var', no description\n"}
@@ -720,7 +742,7 @@ while ($source =~ m"[/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]"gos) {
 	    }
 	}
 
-	if ($token eq "return")  {
+	elsif ($token eq "return")  {
 	    if (!$intable) {
 		print $OFILE "<p><table border=3>\n";
 		print $OFILE "<tr><th>RW</th><th>Name</th><th>Type</th><th>Description</th></tr>\n";
@@ -747,12 +769,13 @@ while ($source =~ m"[/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]"gos) {
 	    $drest =~ s/\n\n/\nRD\n/gos;
 	    $drest =~ s/>/\&gt;/gos;
 	    $drest =~ s/</\&lt;/gos;
+	    chomp $drest;
 	    print SRS "RT $rtype\n";
-	    print SRS "RD $drest";
+	    print SRS "RD $drest\n";
 	    print SRS "RX\n";
 	}
 
-	if ($token eq "category")  {
+	elsif ($token eq "category")  {
 	    if (!$intable) {
 		print $OFILE "<p><table border=3>\n";
 		print $OFILE "<tr><th>Datatype</th><th>Category</th><th>Description</th></tr>\n";
@@ -780,8 +803,10 @@ while ($source =~ m"[/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]"gos) {
 	    $drest =~ s/\n\n/\nCD\n/gos;
 	    $drest =~ s/>/\&gt;/gos;
 	    $drest =~ s/</\&lt;/gos;
-	    print SRS "CT $rtype\n";
-	    print SRS "CD $drest";
+	    chomp $drest;
+	    print SRS "CA $ctype\n";
+	    print SRS "CT $cdata\n";
+	    print SRS "CD $drest\n";
 	    print SRS "CX\n";
 
 	    print "category $ctype [$cdata] $fname $pubout $lib : $crest\n";
@@ -823,14 +848,13 @@ while ($source =~ m"[/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]"gos) {
 	    }
 	}
 
-	if ($token eq "cc")  {
+	elsif ($token eq "cc")  {
 	    next;
 	}
 
-	if ($token eq "@")  {
+	elsif ($token eq "@")  {
 	    last;
 	}
-
     }
     if ($type) {
 #       print "acnt: $acnt largs: $#largs\n";
@@ -875,7 +899,19 @@ while ($source =~ m"[/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]"gos) {
     }
 }
 
+if (!$countglobal) {
+    open (EMPTY, ">$pubout.empty") || die "Cannot open  $pubout.empty";
+    close EMPTY;
+    print HTML "<p>No public functions in source file $infile</p>"
+}
+if (!$countstatic) {
+    open (EMPTY, ">$local\_static.empty") || die "Cannot open $local\_static.empty";
+    close EMPTY;
+    print HTMLB "<p>No static functions in source file $infile</p>"
+}
+
 print HTML "</body></html>\n";
 print HTMLB "</body></html>\n";
 close HTML;
 close HTMLB;
+

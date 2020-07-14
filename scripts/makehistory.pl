@@ -1,4 +1,4 @@
-#!/usr/local/bin/perl -w
+#!/usr/bin/perl -w
 
 # This is a utility to create the history
 # include files for the EMBOSS application documentation.

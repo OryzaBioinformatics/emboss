@@ -1,4 +1,4 @@
-#!/usr/local/bin/perl -w
+#!/usr/bin/perl -w
 
 # This is a utility to convert the ChangeLog file to HTML
 
@@ -9,10 +9,10 @@
 ###################################################################
 
 # where the CVS tree ChangeLog file is
-my $cvsfile = "/packages/emboss_dev/$ENV{'USER'}/emboss/emboss/ChangeLog";
+my $cvsfile = "/homes/pmr/hgmp/ChangeLog";
 
 # where the web page file is
-my $htmlfile = "/data/www/Software/EMBOSS/Doc/ChangeLog.html";
+my $htmlfile = "/homes/pmr/hgmp/doc/sourceforge/developers/changelog.html";
 
 
 my @headings;	# list of heading titles

@@ -1,4 +1,4 @@
-#!/usr/local/bin/perl -w
+#!/usr/bin/perl -w
 
 $showline=0;
 if ($#ARGV > 1) {$showline = 1}

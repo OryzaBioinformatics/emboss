@@ -1,4 +1,4 @@
-#!/usr/local/bin/perl -w
+#!/usr/bin/perl -w
 
 if (!defined($ARGV[0])) {
   print STDERR "Usage: dbilist.pl <index>\n";

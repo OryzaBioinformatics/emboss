@@ -1,4 +1,4 @@
-#!/usr/local/bin/perl -w
+#!/usr/bin/perl -w
 
 use English;
 $pubout = "public";
@@ -9,10 +9,10 @@ $lib = "unknown";
 
 
 sub srsref {
-    return "<a href=\"/srs6bin/cgi-bin/wgetz?-e+[EFUNC-ID:$_[0]]\">$_[0]</a>";
+    return "<a href=\"http://srs.rfcgr.mrc.ac.uk/srs7bin/cgi-bin/wgetz?-e+[EFUNC-ID:$_[0]]\">$_[0]</a>";
 }
 sub srsdref {
-    return "<a href=\"/srs6bin/cgi-bin/wgetz?-e+[EDATA-ID:$_[0]]\">$_[0]</a>";
+    return "<a href=\"http://srs.rfcgr.mrc.ac.uk/srs7bin/cgi-bin/wgetz?-e+[EDATA-ID:$_[0]]\">$_[0]</a>";
 }
 
 if ($ARGV[0]) {$infile = $ARGV[0];}
@@ -21,6 +21,8 @@ if ($ARGV[1]) {$lib = $ARGV[1];}
 $source = "";
 $lasttoken = "";
 $intable = 0;
+$countglobal=0;
+$countstatic=0;
 
 if ($infile) {
     ($file) = ($infile =~ /([^\/]+)$/);
@@ -119,6 +121,7 @@ while ($source =~ m"[\/][*][^*]*[*]+([^\/*][^*]*[*]+)*[\/]"gos) {
 	if ($token eq "data")  {
 	    $nattr = 0;
 	    $OFILE = HTML;
+	    $countglobal++;
 	    $type = $token;
 	    ($name, $frest) = ($data =~ /\S+\s+(\S+)\s*(.*)/gos);
 	    $dtypedefname = "";
@@ -171,6 +174,7 @@ while ($source =~ m"[\/][*][^*]*[*]+([^\/*][^*]*[*]+)*[\/]"gos) {
 	elsif ($token eq "datastatic")  {
 	    $nattr = 0;
 	    $OFILE = HTMLB;
+	    $countstatic++;
 	    $type = $token;
 	    ($name, $frest) = ($data =~ /\S+\s+(\S+)\s*(.*)/gos);
 	    print "Static data type $name\n";
@@ -222,6 +226,7 @@ while ($source =~ m"[\/][*][^*]*[*]+([^\/*][^*]*[*]+)*[\/]"gos) {
 	elsif ($token eq "datatype")  {
 	    $nattr = 0;
 	    $OFILE = HTMLB;
+	    $countstatic++;
 	    $type = $token;
 	    ($name, $frest) = ($data =~ /\S+\s+(\S+)\s*(.*)/gos);
 	    $dattrs = "";
@@ -682,6 +687,17 @@ while ($source =~ m"[\/][*][^*]*[*]+([^\/*][^*]*[*]+)*[\/]"gos) {
     }
 }
 
+
+if (!$countglobal) {
+    open (EMPTY, ">$pubout.empty") || die "Cannot open  $pubout.empty";
+    close EMPTY;
+    print HTML "<p>No public datatype definitions in source file $infile</p>"
+}
+if (!$countstatic) {
+    open (EMPTY, ">$local\_static.empty") || die "Cannot open $local\_static.empty";
+    close EMPTY;
+    print HTMLB "<p>No static datatype definitions in source file $infile</p>"
+}
 print HTML "</body></html>\n";
 print HTMLB "</body></html>\n";
 close HTML;
