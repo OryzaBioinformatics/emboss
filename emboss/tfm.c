@@ -26,7 +26,9 @@
 
 
 static void tfm_FindAppDocRoot(AjPStr* docroot);
-static AjBool tfm_FindAppDoc(AjPStr program, AjBool html, AjPStr* path);
+static AjBool tfm_FindAppDoc(const AjPStr program, const AjPStr docroot,
+			     AjBool html, AjPStr* path);
+static void tfm_FixImages(AjPStr *line, const AjPStr path);
 
 
 
@@ -46,10 +48,11 @@ int main(int argc, char **argv)
     AjBool more;
     AjPStr path = NULL;			/* path of file to be displayed */
     AjPStr cmd  = NULL;			/* command line for running 'more' */
-    AjPFile infile = NULL;
-    AjPStr line    = NULL;		/* buffer for infile lines */
-    AjPStr pager   = NULL;
-
+    AjPFile infile  = NULL;
+    AjPStr  line    = NULL;		/* buffer for infile lines */
+    AjPStr  pager   = NULL;
+    AjPStr  docroot = NULL;
+    
     char *shellpager = NULL;
 
     embInit("tfm", argc, argv);
@@ -59,18 +62,21 @@ int main(int argc, char **argv)
     html    = ajAcdGetBool("html");
     more    = ajAcdGetBool("more");
 
-    cmd   = ajStrNew();
-    path  = ajStrNew();
-    pager = ajStrNew();
-    line  = ajStrNew();
+    cmd     = ajStrNew();
+    path    = ajStrNew();
+    pager   = ajStrNew();
+    line    = ajStrNew();
+    docroot = ajStrNew();
     
+
+    tfm_FindAppDocRoot(&docroot);
     
     /* is a search string specified - should be tested in tfm.acd file */
     if(!ajStrLen(program))
 	ajFatal("No program name specified.");
     
-    if(!tfm_FindAppDoc(program, html, &path))
-	ajFatal("The documentation for program '%S' was not found.", program);
+    if(!tfm_FindAppDoc(program, docroot, html, &path))
+	ajDie("No documentation found for program '%S'.", program);
     
     /* outputing to STDOUT and piping through 'more'? */
     if(ajFileStdout(outfile) && more)
@@ -84,7 +90,7 @@ int main(int argc, char **argv)
 		ajStrAssC(&pager,"more");
 	}
 	ajFmtPrintS(&cmd,"%S %S",pager,path);
-	ajSystem(&cmd);
+	ajSystem(cmd);
     }
     else
     {
@@ -92,7 +98,11 @@ int main(int argc, char **argv)
 	infile = ajFileNewIn(path);
 
 	while(ajFileGets(infile, &line))
+	{
+	    if(html)
+		tfm_FixImages(&line,docroot);
 	    ajFmtPrintF(outfile, "%S", line);
+	}
 
 	ajFileClose(&infile);
     }
@@ -166,42 +176,112 @@ static void tfm_FindAppDocRoot(AjPStr* docroot)
 **
 ** return the path to the program documentation html or text file
 **
-** @param [r] program [AjPStr] program name
+** @param [r] program [const AjPStr] program name
+** @param [r] docroot [const AjPStr] documentation root
 ** @param [r] html [AjBool] whether html required
 ** @param [w] path [AjPStr*] returned path
 ** @return [AjBool] success
 ** @@
 ******************************************************************************/
 
-static AjBool tfm_FindAppDoc(AjPStr program, AjBool html, AjPStr* path)
+static AjBool tfm_FindAppDoc(const AjPStr program, const AjPStr docroot,
+			     AjBool html, AjPStr* path)
 {
-    AjPStr docroot = NULL;
+    AjPStr target = NULL;
+    AjBool ret    = ajFalse;
+    
+    target = ajStrNew();
 
-    docroot = ajStrNew();
-
-    tfm_FindAppDocRoot(&docroot);
+    ajStrAssS(&target,docroot);
 
     if(html)
     {
-	ajStrAppC(&docroot, "html/");
-	ajStrAss(path, docroot);
+	ajStrAppC(&target, "html/");
+	ajStrAssS(path, target);
 	ajStrApp(path, program);
 	ajStrAppC(path, ".html");
     }
     else
     {
-	ajStrAppC(&docroot, "text/");
-	ajStrAss(path, docroot);
+	ajStrAppC(&target, "text/");
+	ajStrAssS(path, target);
 	ajStrApp(path, program);
 	ajStrAppC(path, ".txt");
     }
 
-    ajStrDel(&docroot);
+
 
     /* does the file exist and is it readable? */
-    if(ajFileStat(path, AJ_FILE_R))
-	return ajTrue;
+    if(ajFileStat(*path, AJ_FILE_R))
+	ret = ajTrue;
 
-    return ajFalse;
+    ajStrDel(&target);
+
+    return ret;
 }
 
+
+
+
+/* @funcstatic tfm_FixImages *************************************************
+**
+** Add full path to installed or local image files
+**
+** @param [w] line [AjPStr*] html line
+** @param [r] path [const AjPStr] file location
+** @return [void]
+** @@
+******************************************************************************/
+
+static void tfm_FixImages(AjPStr *line, const AjPStr path)
+{
+    AjPStr newpath = NULL;
+    AjPStr name = NULL;
+    AjPStr pre  = NULL;
+    AjPStr post = NULL;
+    
+    const char *p    = NULL;
+    const char *q    = NULL;
+
+#ifdef __CYGWIN__
+    char *root = NULL;
+#endif
+    
+    q = ajStrStr(*line);
+
+    if(!(p = strstr(q,"<img")))
+	return;
+
+    if(!(p=strstr(p,"src=")))
+	return;
+
+    newpath = ajStrNewC("");
+    name    = ajStrNew();
+    pre     = ajStrNew();
+    post    = ajStrNew();
+    
+#ifdef __CYGWIN__
+    if((root=getenv("EMBOSSCYGROOT")))
+	ajFmtPrintS(&newpath,"%s",root);
+#endif
+
+    ajStrApp(&newpath,path);
+
+    ajStrAssSubC(&pre,q,0,p-q+4);
+    p += 5;
+    while(*p && *p!='"')
+    {
+	ajStrAppK(&name,*p);
+	++p;
+    }
+    ajStrAssC(&post,p);
+
+    ajFmtPrintS(line,"%Sfile://%S/html/%S%S",pre,newpath,name,post);
+
+    ajStrDel(&newpath);
+    ajStrDel(&name);
+    ajStrDel(&post);
+    ajStrDel(&pre);
+    
+    return;
+}

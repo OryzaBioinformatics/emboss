@@ -15,6 +15,7 @@ section: input [
     information: "Program to search for"
     help: "Enter the name of an EMBOSS program"
     minlength: "1"
+    knowntype: "emboss program"
   ]
 
 endsection: input
