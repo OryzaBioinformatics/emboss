@@ -199,6 +199,13 @@ Command line arguments
                                   for, and which cut, will be reported whether
                                   or not they have a commercial supplier.
    -table              menu       Genetic code to use
+   -frame              menu       This allows you to specify the frames that
+                                  are translated. If you are not displaying
+                                  cut sites on the reverse sense, then the
+                                  reverse sense translations will not be
+                                  displayed even if you have requested frames
+                                  4, 5 or 6. By default, all six frames will
+                                  be displayed.
    -[no]cutlist        boolean    This produces lists in the output of the
                                   enzymes that cut, those that cut but are
                                   excluded because that cut fewer times than
@@ -277,8 +284,8 @@ Command line arguments
    Associated qualifiers:
 
    "-sequence" associated qualifiers
-   -sbegin1             integer    First base used
-   -send1               integer    Last base used, def=seq length
+   -sbegin1             integer    Start of each sequence to be used
+   -send1               integer    End of each sequence to be used
    -sreverse1           boolean    Reverse (if DNA)
    -sask1               boolean    Ask for begin/end/reverse
    -snucleotide1        boolean    Sequence is nucleotide
@@ -381,6 +388,21 @@ Command line arguments
    22 (Scenedesmus obliquus)
    23 (Thraustochytrium Mitochondrial)
    0
+   -frame This allows you to specify the frames that are translated. If
+   you are not displaying cut sites on the reverse sense, then the
+   reverse sense translations will not be displayed even if you have
+   requested frames 4, 5 or 6. By default, all six frames will be
+   displayed.
+   1  (1)
+   2  (2)
+   3  (3)
+   F  (Forward three frames)
+   -1 (-1)
+   -2 (-2)
+   -3 (-3)
+   R  (Reverse three frames)
+   6  (All six frames)
+   6
    -[no]cutlist This produces lists in the output of the enzymes that
    cut, those that cut but are excluded because that cut fewer times than
    mincut or more times than maxcut and those enzymes that do not cut.
@@ -1016,6 +1038,7 @@ See also
    plotorf Plot potential open reading frames
    prettyplot Displays aligned sequences, with colouring and boxing
    prettyseq Output sequence with translated ranges
+   recite Find changes to an enzyme site that introduce new enzyme sites
    recoder Remove restriction sites but maintain the same translation
    redata Search REBASE for enzyme name, references, suppliers etc
    restover Finds restriction enzymes that produce a specific overhang
@@ -1034,8 +1057,9 @@ See also
    
 Author(s)
 
-   Gary Williams (gwilliam © hgmp.mrc.ac.uk)
-   HGMP-RC, Genome Campus, Hinxton, Cambridge CB10 1SB, UK
+   Gary Williams (gwilliam © rfcgr.mrc.ac.uk)
+   MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
+   Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
    
 History
 

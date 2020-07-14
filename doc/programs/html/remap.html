@@ -273,6 +273,13 @@ IT IS DONE FOR YOU.
                                   for, and which cut, will be reported whether
                                   or not they have a commercial supplier.
    -table              menu       Genetic code to use
+   -frame              menu       This allows you to specify the frames that
+                                  are translated. If you are not displaying
+                                  cut sites on the reverse sense, then the
+                                  reverse sense translations will not be
+                                  displayed even if you have requested frames
+                                  4, 5 or 6. By default, all six frames will
+                                  be displayed.
    -[no]cutlist        boolean    This produces lists in the output of the
                                   enzymes that cut, those that cut but are
                                   excluded because that cut fewer times than
@@ -351,8 +358,8 @@ IT IS DONE FOR YOU.
    Associated qualifiers:
 
    "-sequence" associated qualifiers
-   -sbegin1             integer    First base used
-   -send1               integer    Last base used, def=seq length
+   -sbegin1             integer    Start of each sequence to be used
+   -send1               integer    End of each sequence to be used
    -sreverse1           boolean    Reverse (if DNA)
    -sask1               boolean    Ask for begin/end/reverse
    -snucleotide1        boolean    Sequence is nucleotide
@@ -500,6 +507,13 @@ PpiI</td>
 <td>Genetic code to use</td>
 <td><table><tr><td>0</td> <td><i>(Standard)</i></td></tr><tr><td>1</td> <td><i>(Standard (with alternative initiation codons))</i></td></tr><tr><td>2</td> <td><i>(Vertebrate Mitochondrial)</i></td></tr><tr><td>3</td> <td><i>(Yeast Mitochondrial)</i></td></tr><tr><td>4</td> <td><i>(Mold, Protozoan, Coelenterate Mitochondrial and Mycoplasma/Spiroplasma)</i></td></tr><tr><td>5</td> <td><i>(Invertebrate Mitochondrial)</i></td></tr><tr><td>6</td> <td><i>(Ciliate Macronuclear and Dasycladacean)</i></td></tr><tr><td>9</td> <td><i>(Echinoderm Mitochondrial)</i></td></tr><tr><td>10</td> <td><i>(Euplotid Nuclear)</i></td></tr><tr><td>11</td> <td><i>(Bacterial)</i></td></tr><tr><td>12</td> <td><i>(Alternative Yeast Nuclear)</i></td></tr><tr><td>13</td> <td><i>(Ascidian Mitochondrial)</i></td></tr><tr><td>14</td> <td><i>(Flatworm Mitochondrial)</i></td></tr><tr><td>15</td> <td><i>(Blepharisma Macronuclear)</i></td></tr><tr><td>16</td> <td><i>(Chlorophycean Mitochondrial)</i></td></tr><tr><td>21</td> <td><i>(Trematode Mitochondrial)</i></td></tr><tr><td>22</td> <td><i>(Scenedesmus obliquus)</i></td></tr><tr><td>23</td> <td><i>(Thraustochytrium Mitochondrial)</i></td></tr></table></td>
 <td>0</td>
+</tr>
+
+<tr>
+<td>-frame</td>
+<td>This allows you to specify the frames that are translated. If you are not displaying cut sites on the reverse sense, then the reverse sense translations will not be displayed even if you have requested frames 4, 5 or 6. By default, all six frames will be displayed.</td>
+<td><table><tr><td>1</td> <td><i>(1)</i></td></tr><tr><td>2</td> <td><i>(2)</i></td></tr><tr><td>3</td> <td><i>(3)</i></td></tr><tr><td>F</td> <td><i>(Forward three frames)</i></td></tr><tr><td>-1</td> <td><i>(-1)</i></td></tr><tr><td>-2</td> <td><i>(-2)</i></td></tr><tr><td>-3</td> <td><i>(-3)</i></td></tr><tr><td>R</td> <td><i>(Reverse three frames)</i></td></tr><tr><td>6</td> <td><i>(All six frames)</i></td></tr></table></td>
+<td>6</td>
 </tr>
 
 <tr>
@@ -1310,6 +1324,7 @@ None.
 <tr><td><a href="plotorf.html">plotorf</a></td><td>Plot potential open reading frames</td></tr>
 <tr><td><a href="prettyplot.html">prettyplot</a></td><td>Displays aligned sequences, with colouring and boxing</td></tr>
 <tr><td><a href="prettyseq.html">prettyseq</a></td><td>Output sequence with translated ranges</td></tr>
+<tr><td><a href="recite.html">recite</a></td><td>Find changes to an enzyme site that introduce new enzyme sites</td></tr>
 <tr><td><a href="recoder.html">recoder</a></td><td>Remove restriction sites but maintain the same translation</td></tr>
 <tr><td><a href="redata.html">redata</a></td><td>Search REBASE for enzyme name, references, suppliers etc</td></tr>
 <tr><td><a href="restover.html">restover</a></td><td>Finds restriction enzymes that produce a specific overhang</td></tr>
@@ -1339,9 +1354,11 @@ None.
 </H2>
 
 
-Gary Williams (gwilliam&nbsp;&copy;&nbsp;hgmp.mrc.ac.uk)
+Gary Williams (gwilliam&nbsp;&copy;&nbsp;rfcgr.mrc.ac.uk)
 <br>
-HGMP-RC, Genome Campus, Hinxton, Cambridge CB10 1SB, UK
+MRC Rosalind Franklin Centre for Genomics Research
+Wellcome Trust Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
+
 
 
 
