@@ -4,17 +4,6 @@ application: entrails [
   groups: "Utils:Misc"
 ]
 
-section: output [
-  information: "Output section"
-  type: "page"
-]
-
-  outfile: outfile  [
-    parameter: "Y"
-    knowntype: "entrails output"
-  ]
-
-endsection: output
 
 section: additional [
   information: "Additional section"
@@ -29,3 +18,14 @@ section: additional [
   ]
 
 endsection: additional
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  outfile: outfile  [
+    parameter: "Y"
+    knowntype: "entrails output"
+  ]
+
+endsection: output

@@ -1,44 +1,42 @@
 application: psiphi [
-  documentation: "calculates phi and psi torsion angles from cleaned EMBOSS-style protein co-ordinate file"
-  groups: "protein: 3D structure"
+  documentation: "Calculates phi and psi torsion angles from cleaned EMBOSS-style protein co-ordinate file"
+  groups: "protein:3D structure"
 ]
 
 section: input [
-  information: "input section"
+  information: "Input section"
   type: "page"
 ]
 
-  infile: sequence [
+  infile: infile [
     parameter: "Y"
-    information: "clean coordinate file"
+    information: "Clean coordinate file"
+    knowntype: "protein clean coordinates"
   ]
 
 endsection: input
 
 section: required [
-  information: "required section"
+  information: "Required section"
   type: "page"
 ]
 
   integer: chainnumber [
-  parameter: "Y"
-  additional: "Y"
-  information: "number of the chain for which torsion angles should be calculated"
+  standard: "Y"
+  information: "Number of the chain for which torsion angles should be calculated"
   default: 1
-  min: 1
+  minimum: 1
 ]
 
   integer: startresiduenumber [
-  parameter: "Y"
-  additional: "Y"
-  information: "first residue in chain for which torsion angles should be calculated"
+  standard: "Y"
+  information: "First residue in chain for which torsion angles should be calculated"
   default: 1
-  min: 1
+  minimum: 1
 ]
   integer: finishresiduenumber [
-  parameter: "Y"
-  additional: "Y"
-  information: "last residue in chain for which torsion angles should be calculated (1 = last residue)"
+  standard: "Y"
+  information: "Last residue in chain for which torsion angles should be calculated (1 = last residue)"
   default: 1
 
 ]
@@ -47,14 +45,14 @@ endsection: required
 
 
 section: advanced [
-  information: "advanced section"
+  information: "Advanced section"
   type: "page"
 ]
 
 endsection: advanced
 
 section: output [
-  information: "output Section"
+  information: "Output section"
   type: "page"
 ]
 
@@ -63,7 +61,6 @@ section: output [
     rformat: "table"
     multiple: "N"
     precision: "1"
-    prompt: "angles file for output"
     taglist: "float:phi float:psi"
   ]
 

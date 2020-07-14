@@ -59,15 +59,16 @@ section: output [
   type: "page"
 ]
 
-  seqout: outseq  [
-    parameter: "Y"
-  ]
-
   align: outfile  [
     parameter: "Y"
     aformat: "simple"
     minseqs: "2"
     maxseqs: "2"
+    aglobal: "Y"
+  ]
+
+  seqout: outseq  [
+    parameter: "Y"
   ]
 
 endsection: output

@@ -94,7 +94,7 @@ section: advanced [
     default: "N"
     information: "List individual enzymes with their fragments"
     help: "This gives the fragment lengths of the forward sense strand
-           produced by complete restriction by each restriction enzyme on it
+           produced by complete restriction by each restriction enzyme on its
            own. Results are added to the tail section of the report."
   ]
 

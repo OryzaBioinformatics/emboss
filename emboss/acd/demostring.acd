@@ -1,5 +1,5 @@
 application: demostring [
-  documentation: "demonstration of the string functions"
+  documentation: "Demonstration of the string functions"
   groups: "Test"
 ]
 

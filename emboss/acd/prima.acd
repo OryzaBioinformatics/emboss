@@ -102,6 +102,48 @@ section: additional [
 
   endsection: productsection
 
+  section: primersection [
+    information: "Primer options"
+    type: "frame"
+  ]
+
+    toggle: primer [
+      additional: "Y"
+      information: "Pick PCR primer(s)"
+      default: "Y"
+      help: "Specify primer properties"
+    ]
+
+    integer: minprimerlen  [
+      additional: "$(primer)"
+      default: "18"
+      information: "Minimum primer length"
+    ]
+
+    integer: maxprimerlen  [
+      additional: "$(primer)"
+      default: "22"
+      information: "Maximum primer length"
+    ]
+
+    float: minpmgccont  [
+      additional: "$(primer)"
+      minimum: ".30"
+      maximum: ".70"
+      default: ".40"
+      information: "Minimum primer GC fraction"
+    ]
+
+    float: maxpmgccont  [
+      additional: "$(primer)"
+      minimum: ".30"
+      maximum: ".70"
+      default: ".55"
+      information: "Maximum primer GC fraction"
+    ]
+
+  endsection: primersection
+
 endsection: additional
 
 section: advanced [
@@ -113,37 +155,6 @@ section: advanced [
     default: "50"
     information: "Minimum overlap of sequences"
   ]
-
-  section: primersection [
-    information: "Primer options"
-    type: "frame"
-  ]
-
-    integer: minprimerlen  [
-      default: "18"
-      information: "Minimum primer length"
-    ]
-
-    integer: maxprimerlen  [
-      default: "22"
-      information: "Maximum primer length"
-    ]
-
-    float: minpmgccont  [
-      minimum: ".30"
-      maximum: ".70"
-      default: ".40"
-      information: "Minimum primer GC fraction"
-    ]
-
-    float: maxpmgccont  [
-      minimum: ".30"
-      maximum: ".70"
-      default: ".55"
-      information: "Maximum primer GC fraction"
-    ]
-
-  endsection: primersection
 
   float: saltconc  [
     minimum: "1"

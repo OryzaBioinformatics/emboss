@@ -1,5 +1,5 @@
 application: patmattest [
-  documentation: "test of pattern matching"
+  documentation: "Test of pattern matching"
   groups: "Test"
 ]
 

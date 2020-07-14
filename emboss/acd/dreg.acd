@@ -1,5 +1,5 @@
 application: dreg [
-  documentation: "regular expression search of a nucleotide
+  documentation: "Regular expression search of a nucleotide
                   sequence"
   groups: "Nucleic:Motifs"
 ]

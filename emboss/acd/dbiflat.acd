@@ -11,6 +11,15 @@ section: input [
   type: "page"
 ]
 
+  string: dbname  [
+    parameter: "Y"
+    maxlength: "19"
+    minlength: "2"
+    information: "Database name"
+    knowntype: "emboss database name"
+    pattern: "[A-z][A-z0-9_]+"
+  ]
+
   list: idformat  [
     standard: "y"
     information: "Entry format"
@@ -41,14 +50,6 @@ section: required [
   information: "Required section"
   type: "page"
 ]
-
-  string: dbname  [
-    parameter: "Y"
-    maxlength: "19"
-    minlength: "1"
-    information: "Database name"
-    knowntype: "emboss database name"
-  ]
 
   string: release  [
     standard: "Y"
@@ -88,12 +89,6 @@ section: advanced [
     knowntype: "filename wildcard"
   ]
 
-  directory: indexdirectory  [
-    default: "."
-    information: "Index directory"
-    knowntype: "output directory"
-  ]
-
   integer: maxindex  [
     default: "0"
     minimum: "0"
@@ -119,3 +114,16 @@ section: advanced [
   ]
 
 endsection: advanced
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  outdir: indexoutdir [
+    default: "."
+    information: "Index directory"
+    knowntype: "output directory"
+  ]
+
+endsection: output

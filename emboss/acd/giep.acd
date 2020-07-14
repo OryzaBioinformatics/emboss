@@ -21,21 +21,18 @@ section: advanced [
 ]
 
   float: step  [
-    standard: "N"
-    information: "pH step value"
+    information: "Step pH value"
     minimum: ".01"
     maximum: "1."
     default: ".5"
   ]
 
   integer: amino  [
-    standard: "N"
-  information: "Number of N-termini"
+    information: "Number of N-termini"
     default: "1"
   ]
 
-  bool: termini  [
-    standard: "N"
+  boolean: termini  [
     default: "Y"
     information: "Include charge at N and C terminus"
   ]
@@ -47,14 +44,12 @@ section: output [
   type: "page"
 ]
 
-  bool: plot  [
-    standard: "N"
+  toggle: plot  [
     default: "N"
     information: "Plot charge vs pH"
   ]
 
-  bool: report  [
-    standard: "N"
+  toggle: report  [
     default: "Y"
     information: "Write results to a file"
   ]
@@ -65,6 +60,7 @@ section: output [
 
   outfile: outfile  [
     standard: "$(report)"
+    knowntype: "giep output"
   ]
 
 endsection: output

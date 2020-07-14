@@ -14,9 +14,10 @@ section: input [
   string: dbname  [
     parameter: "Y"
     maxlength: "19"
-    minlength: "1"
+    minlength: "2"
     information: "Database name"
     knowntype: "emboss database name"
+    pattern: "[A-z][A-z0-9_]+"
   ]
 
   directory: directory  [
@@ -97,12 +98,6 @@ section: advanced [
     knowntype: "filename wildcard"
   ]
 
-  directory: indexdirectory  [
-    default: "."
-    information: "Index directory"
-    knowntype: "output directory"
-  ]
-
   string: sortoptions  [
     default: "-T . -k 1,1"
     information: "Sort option(s)"
@@ -132,3 +127,16 @@ section: advanced [
   ]
 
 endsection: advanced
+
+section: output [
+  information: "Output section"
+  type: "page"
+]
+
+  outdir: indexoutdir  [
+    default: "."
+    information: "Index directory"
+    knowntype: "output directory"
+  ]
+
+endsection: output

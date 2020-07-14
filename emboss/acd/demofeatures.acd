@@ -1,5 +1,5 @@
 application: demofeatures [
-  documentation: "demonstration of the feature functions"
+  documentation: "Demonstration of the feature functions"
   groups: "Test"
 ]
 

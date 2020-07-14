@@ -1,5 +1,5 @@
 application: demosequence [
-  documentation: "demonstration of the sequence functions"
+  documentation: "Demonstration of the sequence functions"
   groups: "Test"
 ]
 

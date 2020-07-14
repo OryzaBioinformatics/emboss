@@ -56,6 +56,29 @@ section: required [
 
 endsection: required
 
+
+section: additional [
+  information: "Additional section"
+  type: "page"
+]
+
+  float: threshold  [
+    additional: "Y"
+    default: "+5.0"
+    help: "Threshold value to discriminate weak from potential PEST
+           motifs. Valid PEST motifs are discriminated into 'poor' and
+           'potential' motifs depending on this threshold score. By default,
+           the default value is set to +5.0 based on experimental data.
+           Alterations are not recommended since significance is a matter of
+           biology, not mathematics."
+    information: "Threshold score"
+    maximum: "+55.0"
+    minimum: "-55.0"
+    precision: "2"
+  ]
+
+endsection: additional
+
 section: advanced [
   information: "Advanced section"
   type: "page"
@@ -104,25 +127,3 @@ section: output [
   ]
 
 endsection: output
-
-section: additional [
-  information: "Additional section"
-  type: "page"
-]
-
-  float: threshold  [
-    additional: "Y"
-    default: "+5.0"
-    help: "Threshold value to discriminate weak from potential PEST
-           motifs. Valid PEST motifs are discriminated into 'poor' and
-           'potential' motifs depending on this threshold score. By default,
-           the default value is set to +5.0 based on experimental data.
-           Alterations are not recommended since significance is a matter of
-           biology, not mathematics."
-    information: "Threshold score"
-    maximum: "+55.0"
-    minimum: "-55.0"
-    precision: "2"
-  ]
-
-endsection: additional

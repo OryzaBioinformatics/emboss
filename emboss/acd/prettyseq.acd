@@ -33,19 +33,6 @@ section: required [
 
 endsection: required
 
-section: advanced [
-  information: "Advanced section"
-  type: "page"
-]
-
-  integer: width  [
-    minimum: "10"
-    default: "60"
-    information: "Width of screen"
-  ]
-
-endsection: advanced
-
 section: additional [
   information: "Additional section"
   type: "page"
@@ -70,6 +57,19 @@ section: additional [
   ]
 
 endsection: additional
+
+section: advanced [
+  information: "Advanced section"
+  type: "page"
+]
+
+  integer: width  [
+    minimum: "10"
+    default: "60"
+    information: "Width of screen"
+  ]
+
+endsection: advanced
 
 section: output [
   information: "Output section"
