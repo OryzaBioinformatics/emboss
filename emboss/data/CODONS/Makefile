@@ -33,8 +33,8 @@ POST_INSTALL = :
 NORMAL_UNINSTALL = :
 PRE_UNINSTALL = :
 POST_UNINSTALL = :
-build_triplet = i686-pc-linux-gnu
-host_triplet = i686-pc-linux-gnu
+build_triplet = x86_64-unknown-linux-gnu
+host_triplet = x86_64-unknown-linux-gnu
 subdir = emboss/data/CODONS
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
@@ -59,21 +59,21 @@ pkgdataDATA_INSTALL = $(INSTALL_DATA)
 DATA = $(pkgdata_DATA)
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
 pkgdatadir = $(prefix)/share/$(PACKAGE)/data/CODONS
-ACLOCAL = ${SHELL} /scratch/emboss/emboss/missing --run aclocal-1.9
-AJAX_FIXED_ROOT = \"/scratch/emboss/emboss/emboss\"
+ACLOCAL = ${SHELL} /m1/emboss/emboss/missing --run aclocal-1.9
+AJAX_FIXED_ROOT = \"/m1/emboss/emboss/emboss\"
 AMDEP_FALSE = #
 AMDEP_TRUE = 
 AMPNG_FALSE = #
 AMPNG_TRUE = 
-AMTAR = ${SHELL} /scratch/emboss/emboss/missing --run tar
+AMTAR = ${SHELL} /m1/emboss/emboss/missing --run tar
 AR = ar
-AUTOCONF = ${SHELL} /scratch/emboss/emboss/missing --run autoconf
-AUTOHEADER = ${SHELL} /scratch/emboss/emboss/missing --run autoheader
-AUTOMAKE = ${SHELL} /scratch/emboss/emboss/missing --run automake-1.9
+AUTOCONF = ${SHELL} /m1/emboss/emboss/missing --run autoconf
+AUTOHEADER = ${SHELL} /m1/emboss/emboss/missing --run autoheader
+AUTOMAKE = ${SHELL} /m1/emboss/emboss/missing --run automake-1.9
 AWK = gawk
 CC = gcc
 CCDEPMODE = depmode=gcc3
-CFLAGS =   -O2
+CFLAGS =   -O2 -Wall -fno-strict-aliasing
 CPP = gcc -E
 CPPFLAGS = -DAJ_LinuxLF -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE  -DLENDIAN -DNO_AUTH
 CXX = g++
@@ -81,16 +81,16 @@ CXXCPP = g++ -E
 CXXDEPMODE = depmode=gcc3
 CXXFLAGS = -g -O2  -I/usr/X11R6/include
 CYGPATH_W = echo
-DEFS = -DPACKAGE_NAME=\"\" -DPACKAGE_TARNAME=\"\" -DPACKAGE_VERSION=\"\" -DPACKAGE_STRING=\"\" -DPACKAGE_BUGREPORT=\"\" -DPACKAGE=\"EMBOSS\" -DVERSION=\"2.10.0\" -DSTDC_HEADERS=1 -DHAVE_SYS_TYPES_H=1 -DHAVE_SYS_STAT_H=1 -DHAVE_STDLIB_H=1 -DHAVE_STRING_H=1 -DHAVE_MEMORY_H=1 -DHAVE_STRINGS_H=1 -DHAVE_INTTYPES_H=1 -DHAVE_STDINT_H=1 -DHAVE_UNISTD_H=1 -DHAVE_DLFCN_H=1 -DHAVE_DIRENT_H=1 -DSTDC_HEADERS=1 -DHAVE_UNISTD_H=1 -DGETPGRP_VOID=1 -DHAVE_STRFTIME=1 -DHAVE_UNISTD_H=1 -DHAVE_FORK=1 -DHAVE_VFORK=1 -DHAVE_WORKING_VFORK=1 -DHAVE_WORKING_FORK=1 -DHAVE_VPRINTF=1 -DHAVE_MEMMOVE=1 -DHAVE_LIBM=1 -DPLD_png=1 
+DEFS = -DPACKAGE_NAME=\"\" -DPACKAGE_TARNAME=\"\" -DPACKAGE_VERSION=\"\" -DPACKAGE_STRING=\"\" -DPACKAGE_BUGREPORT=\"\" -DPACKAGE=\"EMBOSS\" -DVERSION=\"3.0.0\" -DSTDC_HEADERS=1 -DHAVE_SYS_TYPES_H=1 -DHAVE_SYS_STAT_H=1 -DHAVE_STDLIB_H=1 -DHAVE_STRING_H=1 -DHAVE_MEMORY_H=1 -DHAVE_STRINGS_H=1 -DHAVE_INTTYPES_H=1 -DHAVE_STDINT_H=1 -DHAVE_UNISTD_H=1 -DHAVE_DLFCN_H=1 -DHAVE_DIRENT_H=1 -DSTDC_HEADERS=1 -DHAVE_UNISTD_H=1 -DGETPGRP_VOID=1 -DHAVE_STRFTIME=1 -DHAVE_UNISTD_H=1 -DHAVE_FORK=1 -DHAVE_VFORK=1 -DHAVE_WORKING_VFORK=1 -DHAVE_WORKING_FORK=1 -DHAVE_VPRINTF=1 -DHAVE_MEMMOVE=1 -DHAVE_LIBM=1 -DPLD_png=1 
 DEPDIR = .deps
 ECHO = echo
 ECHO_C = 
 ECHO_N = -n
 ECHO_T = 
 EGREP = grep -E
-EMBOSS_TOP = /scratch/emboss/emboss
+EMBOSS_TOP = /m1/emboss/emboss
 EXEEXT = 
-F77 = g77
+F77 = f95
 FFLAGS = -g -O2
 HAVE_MEMMOVE = 
 HAVE_STRERROR = 
@@ -113,7 +113,7 @@ LIBS = -lm  -lgd -lpng -lz -lm
 LIBTOOL = $(SHELL) $(top_builddir)/libtool
 LN_S = ln -s
 LTLIBOBJS = 
-MAKEINFO = ${SHELL} /scratch/emboss/emboss/missing --run makeinfo
+MAKEINFO = ${SHELL} /m1/emboss/emboss/missing --run makeinfo
 NEEDAJAX = 
 NEEDAJAX_FALSE = 
 NEEDAJAX_TRUE = #
@@ -138,16 +138,16 @@ RANLIB = ranlib
 SET_MAKE = 
 SHELL = /bin/sh
 STRIP = strip
-VERSION = 2.10.0
-XLIB =  -L/usr/X11R6/lib -lX11 
+VERSION = 3.0.0
+XLIB =  -L/usr/X11R6/lib64 -lX11 
 X_CFLAGS =  -I/usr/X11R6/include
 X_EXTRA_LIBS = 
-X_LIBS =  -L/usr/X11R6/lib
+X_LIBS =  -L/usr/X11R6/lib64
 X_PRE_LIBS =  -lSM -lICE
 ac_ct_AR = ar
 ac_ct_CC = gcc
 ac_ct_CXX = g++
-ac_ct_F77 = g77
+ac_ct_F77 = f95
 ac_ct_RANLIB = ranlib
 ac_ct_STRIP = strip
 am__fastdepCC_FALSE = #
@@ -160,22 +160,22 @@ am__quote =
 am__tar = ${AMTAR} chof - "$$tardir"
 am__untar = ${AMTAR} xf -
 bindir = ${exec_prefix}/bin
-build = i686-pc-linux-gnu
+build = x86_64-unknown-linux-gnu
 build_alias = 
-build_cpu = i686
+build_cpu = x86_64
 build_os = linux-gnu
-build_vendor = pc
+build_vendor = unknown
 datadir = ${prefix}/share
 exec_prefix = ${prefix}
 havejavac = 
-host = i686-pc-linux-gnu
+host = x86_64-unknown-linux-gnu
 host_alias = 
-host_cpu = i686
+host_cpu = x86_64
 host_os = linux-gnu
-host_vendor = pc
+host_vendor = unknown
 includedir = ${prefix}/include
 infodir = ${prefix}/info
-install_sh = /scratch/emboss/emboss/install-sh
+install_sh = /m1/emboss/emboss/install-sh
 libdir = ${exec_prefix}/lib
 libexecdir = ${exec_prefix}/libexec
 localstatedir = ${prefix}/var
@@ -188,26 +188,56 @@ sbindir = ${exec_prefix}/sbin
 sharedstatedir = ${prefix}/com
 sysconfdir = ${prefix}/etc
 target_alias = 
-pkgdata_DATA = Eacc.cut Eadenovirus5.cut Eadenovirus7.cut Eaidlav.cut \
+pkgdata_DATA = Cut.index \
+               Eacica.cut Eagrtu.cut Eanasp.cut Earath.cut Eazovi.cut \
+               Ebacme.cut Ebacst.cut Ebacsu.cut Ebacsu_high.cut Ebommo.cut \
+               Ebovin.cut Ebpphx.cut Ebraja.cut Ebrana.cut Ebrare.cut \
+               Ecaeel.cut Ecanal.cut Ecanfa.cut Ecaucr.cut Echick.cut \
+               Echlre.cut Echltr.cut Ecloab.cut Ecrigr.cut Ecyapa.cut \
+               Edayhoff.cut Edicdi.cut Edicdi_high.cut \
+               Edrome.cut Edrome_high.cut \
+               Eecoli.cut Eecoli_high.cut \
+               Eemeni.cut Eemeni_mit.cut Eemeni_high.cut Eerwct.cut \
+               Ehaein.cut Ehalma.cut Ehalsa.cut Ehorvu.cut Ehuman.cut \
+               Eklepn.cut Eklula.cut Elacdl.cut Elyces.cut \
+               Emacfa.cut Emaize.cut Emaize_chl.cut Emammal_high.cut \
+               Emanse.cut Emarpo_chl.cut Emedsa.cut \
+               Emetth.cut Emouse.cut Emyctu.cut \
+               Eneigo.cut Eneucr.cut Eoncmy.cut Eorysa.cut Eorysa_chl.cut \
+               Epea.cut Epethy.cut Ephavu.cut Epig.cut Eplafa.cut \
+               Eprovu.cut Epseae.cut Epsepu.cut Epsesm.cut\
+               Erabit.cut Erat.cut Erhile.cut Erhime.cut \
+               Erhoca.cut Erhosh.cut \
+               Esalsa.cut Esalty.cut Eschma.cut \
+               Eschpo.cut Eschpo_cai.cut Eschpo_high.cut \
+               Eserma.cut Esheep.cut Esoltu.cut Esoybn.cut Espiol.cut \
+               Estaau.cut Estrco.cut Estrmu.cut Estrpn.cut Estrpu.cut \
+               Esyncy.cut Esynco.cut \
+               Etetth.cut Etheth.cut Etobac.cut Etobac_chl.cut \
+               Etrybr.cut Etrycr.cut \
+               Evibch.cut Ewheat.cut Exenla.cut \
+               Eyeast.cut Eyeast_cai.cut Eyeast_high.cut Eyeast_mit.cut \
+               Eyeren.cut Eyerpe.cut \
+               Eacc.cut Eadenovirus5.cut Eadenovirus7.cut Eaidlav.cut \
                Eanasp.cut Eani.cut Eani_h.cut Eanidmit.cut Easn.cut \
                Eath.cut Eatu.cut Eavi.cut Ebja.cut Ebly.cut Ebme.cut \
                Ebmo.cut Ebna.cut Ebov.cut Ebovsp.cut Ebst.cut \
                Ebsu.cut Ebsu_h.cut Ecac.cut Ecal.cut Eccr.cut Ecel.cut \
                Echi.cut Echicken.cut Echisp.cut Echk.cut Echmp.cut \
                Echnt.cut Echos.cut Echzm.cut Echzmrubp.cut Ecpx.cut \
-               Ecre.cut Ecrisp.cut Ectr.cut Edayhoff.cut Eddi.cut \
+               Ecre.cut Ecrisp.cut Ectr.cut Eddi.cut \
                Eddi_h.cut Edog.cut Edro.cut Edro_h.cut Edrosophila.cut \
                Eeca.cut Eeco.cut Eeco_h.cut Eecoli.cut Ef1.cut \
                Efish.cut Efmdvpolyp.cut Eham.cut Ehha.cut Ehin.cut \
-               Ehma.cut Ehum.cut Ehuman.cut Ekla.cut Ekpn.cut \
-               Ella.cut Emac.cut Emaize.cut Emam_h.cut Emixlg.cut \
-               Emouse.cut Emsa.cut Emse.cut Emta.cut Emtu.cut \
+               Ehma.cut Ehum.cut Ekla.cut Ekpn.cut \
+               Ella.cut Emac.cut Emam_h.cut Emixlg.cut \
+               Emsa.cut Emse.cut Emta.cut Emtu.cut \
                Emus.cut Emussp.cut Emva.cut Emze.cut Emzecp.cut \
                Encr.cut Eneu.cut Engo.cut Eoncsp.cut Epae.cut \
-               Epea.cut Epet.cut Epfa.cut Ephix174.cut Ephv.cut \
+               Epet.cut Epfa.cut Ephix174.cut Ephv.cut \
                Ephy.cut Epig.cut Epolyomaa2.cut Epombe.cut Epombecai.cut \
                Epot.cut Eppu.cut Epse.cut Epsy.cut Epvu.cut Erab.cut \
-               Erabbit.cut Erabsp.cut Erat.cut Eratsp.cut Erca.cut \
+               Erabbit.cut Erabsp.cut Eratsp.cut Erca.cut \
                Erhm.cut Eric.cut Erle.cut Erme.cut Ersp.cut Esalsp.cut \
                Esau.cut Esco.cut Esgi.cut Eshp.cut Eshpsp.cut Esli.cut \
                Eslm.cut Esma.cut Esmi.cut Esmu.cut Esoy.cut Espi.cut \
@@ -215,7 +245,7 @@ pkgdata_DATA = Eacc.cut Eadenovirus5.cut Eadenovirus7.cut Eaidlav.cut \
                Esus.cut Esv40.cut Esyhsp.cut Esynsp.cut Etbr.cut \
                Etcr.cut Eter.cut Etetsp.cut Etob.cut Etobcp.cut \
                Etom.cut Etrb.cut Evco.cut Ewht.cut Exel.cut Exenopus.cut \
-               Eyeast.cut Eyeastcai.cut Eyen.cut Eysc.cut Eysc_h.cut \
+               Eyeastcai.cut Eyen.cut Eysc.cut Eysc_h.cut \
                Eyscmt.cut Eysp.cut Ezebrafish.cut Ezma.cut
 
 all: all-am

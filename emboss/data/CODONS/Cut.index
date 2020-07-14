@@ -1,0 +1,137 @@
+#EMBOSS codon usage tables
+#
+#Original EMBOSS tables were taken from:
+#
+# Mike Cherry's codonusage database 1992
+#  ftp://ftp.ebi.ac.uk/pub/databases/codonusage
+#
+# Transterm database 1994
+#  ftp://ftp.ebi.ac.uk/pub/databases/transterm
+#
+# and provided by the EMBOSS team for missing taxonomic groups
+#
+#Naming: bacteria are Egss
+#        plants are 3 letter abbreviations etc.
+#        animals are common names etc.
+#        organelles are prefix ch or suffix mt/mit (make standard)
+#
+# Old files are now considered obsolete and are replaced as follows:
+# File name       Species (Old name)
+# =========       ==================
+
+Eacica.cut       Acinetobacter_calcoaceticus (Eacc.cut)
+Eagrtu.cut       Agrobacterium_tumefaciens_str__C58 (Eatu.cut)
+Eanasp.cut       Anabaena_sp_ (Eanasp.cut)
+Earath.cut       Arabidopsis_thaliana (Eath.cut)
+Eazovi.cut       Azotobacter_vinelandii (Eazovi.cut)
+Ebacme.cut       Bacillus_megaterium (Ebme.cut)
+Ebacst.cut       Geobacillus_stearothermophilus (Ebst.cut)
+Ebacsu.cut       Bacillus_subtilis (Ebsu.cut)
+Ebacsu_high.cut  Bacillus_subtilis (high) (Ebsu_h.cut)
+Ebommo.cut       Bombyx_mori (silkmoth) (Ebmo.cut)
+Ebovin.cut       Bos_taurus (Ebov.cut)
+Ebpphx.cut       Bacteriophage phi-X174 (Ephix174.cut)
+Ebraja.cut       Bradyrhizobium_japonicum_USDA_110 (Ebja.cut)
+Ebrana.cut       Brassica_napus (rape) (Ebna.cut)
+Ebrare.cut       Brachydanio_rerio (zebrafish) (Ezebrafish.cut)
+Ecaeel.cut       Caenorhabditis_elegans (nematode) (Ecel.cut)
+Ecanal.cut       Candida_albicans (Ecal.cut)
+Ecanfa.cut       Canis_familiaris (dog) (Edog.cut)
+Ecaucr.cut       Caulobacter_crescentus_CB15 (Eccr.cut)
+Echick.cut       Gallus_gallus (Echk.cut)
+Echlre.cut       Chlamydomonas_reinhardtii (Ecre.cut)
+Echltr.cut       Chlamydia_trachomatis_D_UW-3_CX (Ectr.cut)
+Ecloab.cut       Clostridium_acetobutylicum_ATCC_824 (Ecac.cut)
+Ecrigr.cut       Cricetulus_greseus (hamster) (Eham.cut)
+Ecyapa.cut       Cyanophora_paradoxa (Ecpx.cut)
+Edayhoff.cut  artificial ... needs stop codon frequency (Edayhoff.cut)
+Edicdi.cut       Dictyostelium_discoideum (Eddi.cut)
+Edicdi_high.cut  Dictyostelium_discoideum (high) (Eddi_h.cut)
+Edrome.cut       Drosophila_melanogaster (Edro.cut)
+Edrome_high.cut  Drosophila_melanogaster (high) (Edro_h.cut)
+Eecoli.cut       Escherichia_coli_K12 (Eeco.cut)
+Eecoli_high.cut  Escherichia_coli_K12 (high) (Eeco_h.cut)
+Eemeni.cut       Emericella_nidulans (Eani.cut)
+Eemeni_mit.cut   mitochondrion_Emericella_nidulans (Eanidmit.cut)
+Eemeni_high.cut  Emericella_nidulans highly expressed (Eani_h.cut)
+Eerwct.cut       Erwinia_carotovora_subsp__atroseptica_SCRI1043. (Eeca.cut)
+Ehaein.cut       Haemophilus_influenzae_Rd_KW20 (Ehin.cut)
+Ehalma.cut       Haloarcula_marismortui_ATCC_43049 (Halobacterium marismortui) (Ehma.cut)
+Ehalsa.cut       Halobacterium_salinarum_NRC-1 (Halobacterium halobium) (Ehha.cut)
+Ehorvu.cut       Hordeum_vulgare_subsp__vulgare (Barley) (Ebly.cut)
+Ehuman.cut       Homo_sapiens (Ehum.cut)
+Eklepn.cut       Klebsiella_pneumoniae (Ekpn.cut)
+Eklula.cut       Kluyveromyces_lactis_NRRL_Y-1140 (Ekla.cut)
+Elacdl.cut       Lactococcus_lactis_subsp__lactis_Il1403 L. delbrueckii subsp lactis (Ella.cut)
+Elyces.cut       Lycopersicon_esculentum (tomato) (Etom.cut)
+Emacfa.cut       Macaca_fascicularis (Emac.cut)
+Emaize.cut       Zea_mays (Ezma.cut)
+Emaize_chl.cut   chloroplast_Zea_mays (Echzm.cut)
+Emammal_high.cut Mammalian species (high) (Emam_h.cut)
+Emanse.cut       Manduca_sexta (Emse.cut)
+Emarpo_chl.cut   chloroplast_Marchantia_polymorpha (liverwort) (Echmp.cut)
+Emedsa.cut       Medicago_sativa (Emsa.cut)
+Emetth.cut       Methanothermobacter_thermautotrophicus_str__Delta_H (Emta.cut)
+Emouse.cut       Mus_musculus (mus.cutE)
+Emyctu.cut       Mycobacterium_tuberculosis_H37Rv (Emtu.cut)
+Eneigo.cut       Neisseria_gonorrhoeae (Engo.cut)
+Eneucr.cut       Neurospora_crassa (Encr.cut)
+Eoncmy.cut       Oncorhynchus_mykiss (rainbow trout) (Eoncsp.cut)
+Eorysa.cut       Oryza_sativa (rice) (Eric.cut)
+Eorysa_chl.cut   chloroplast_Oryza_sativa (Echos.cut)
+Epea.cut         Pisum_sativum (pea) (Epea.cut)
+Epethy.cut       Petunia_x_hybrida (Ephy.cut)
+Ephavu.cut       Phaseolus_vulgaris (lima bean)(Ephv.cut)
+Epig.cut         Sus_scrofa (pig) (Epig.cut)
+Eplafa.cut       Plasmodium_falciparum_3D7 (Epfa.cut)
+Eprovu.cut       Proteus_vulgaris. (Epvu.cut)
+Epseae.cut       Pseudomonas_aeruginosa_PAO1 (Epae.cut)
+Epsepu.cut       Pseudomonas_putida_KT2440 (Eppu.cut)
+Epsesm.cut       Pseudomonas_syringae_pv__tomato_str__DC3000 (Epsy.cut)
+Erabit.cut       Oryctolagus_cuniculus (rabbit) (Erab.cut)
+Erat.cut         Rattus_norvegicus (Erat.cut)
+Erhile.cut       Rhizobium_leguminosarum (Erle.cut)
+Erhime.cut       Sinorhizobium_meliloti_1021 (Erhm.cut)
+Erhoca.cut       Rhodobacter_capsulatus (Erca.cut)
+Erhosh.cut       Rhodobacter_sphaeroides (Ersp.cut)
+Esalsa.cut       Salmo_salar (Atlantic salmon) (Esalsp.cut)
+Esalty.cut       Salmonella_typhimurium_LT2 (Esty.cut)
+Eschma.cut       Schistosoma_mansoni (smi.cutE)
+Eschpo.cut       Schizosaccharomyces_pombe (Espo.cut)
+Eschpo_cai.cut   Schizosaccharomyces pombe (CAI equivalent) (Epombecai.cut)
+Eschpo_high.cut  Schizosaccharomyces_pombe (high)(Espo_h.cut)
+Eserma.cut       Serratia_marcescens (Esma.cut)
+Esheep.cut       Ovis_aries (sheep) (Eshp.cut)
+Esoltu.cut       Solanum_tuberosum (potato) (Epot.cut)
+Esoybn.cut       Glycine_max (soybean) (Esoy.cut)
+Espiol.cut       Spinacia_oleracea (spinach) (Espi.cut)
+Estaau.cut       Staphylococcus_aureus (sau.cutE)
+Estrco.cut       Streptomyces_coelicolor_A3_2_ (Esco.cut)
+Estrmu.cut       Streptococcus_mutans_UA159 (Esmu.cut)
+Estrpn.cut       Streptococcus_pneumoniae_R6 (Espn.cut)
+Estrpu.cut       Strongylocentrotus_purpuratus (sea urchin) (Espu.cut)
+Esv40.cut        Simian Virus 40 (Esv40.cut)
+Esynco.cut       Synechococcus_sp__WH_8102 (Esynsp.cut)
+Esyncy.cut       Synechocystis_sp__PCC_6803 (Esyhsp.cut)
+Etetpy.cut       Tetrahymena_thermophila (Etetsp.cut)
+Etheth.cut       Thermus_thermophilus_HB8 (Eter.cut) 
+Etobac.cut       Nicotiana_tabacum (tobacco) (Etob.cut)
+Etobac_chl.cut   chloroplast_Nicotiana_tabacum (Echnt.cut)
+Etrybr.cut       Trypanosoma_brucei (Etbr.cut)
+Etrycr.cut       Trypanosoma_cruzi (Etcr.cut)
+Evibch.cut       Vibrio_cholerae_O1_biovar_eltor_str__N16961 (Evco.cut)
+Ewheat.cut       Triticum_aestivum (wheat) (Ewht.cut)
+Exenla.cut       Xenopus_laevis (Exel.cut)
+Eyeast.cut      Saccharomyces_cerevisiae (Eyeast.cut)
+Eyeast_cai.cut  Saccharomyces_cerevisiae original CAI set (Eyeastcai.cut)
+Eyeast_high.cut Saccharomyces_cerevisiae (high) (Eysc_h.cut)
+Eyeast_mit.cut  mitochondrion_Saccharomyces_cerevisiae (Eyscmt.cut)
+Eyeren.cut      Yersinia_enterocolitica (Eyen.cut)
+Eyerpe.cut      Yersinia pestis
+
+
+#Missing species from the large CUTG files:
+#
+#Shigella flexneri (E) - see E.coli O157
+
+
