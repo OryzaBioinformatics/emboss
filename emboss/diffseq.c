@@ -142,10 +142,10 @@ int main(int argc, char **argv)
     AjPFeattabOut seq1out = NULL;
     AjPFeattabOut seq2out = NULL;
     AjPStr tmpstr=NULL;
-    AjBool global;	/* true if want to report the differences at the ends */
+    AjBool global;    /* true if want to report the differences at the ends */
     ajint over1start;	/* start and end positions of match overlap */
-    ajint over1end;	/* ... for sequence 1 */
-    ajint over2start;	/* overlap for sequence 2 */
+    ajint over1end;	        /* ... for sequence 1 */
+    ajint over2start = 0;	/* overlap for sequence 2 */
     ajint over2end;
 
                          

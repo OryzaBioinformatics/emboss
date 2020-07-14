@@ -134,7 +134,7 @@ int main(int argc, char **argv)
 	    ajStrAssC(&temp,p+1);
 	    ajStrAssC(&savereg,p+1);
 
-	    match = embPatMatchFind(temp, str);
+	    match = embPatMatchFind(temp, str, ajFalse, ajFalse);
 	    number = embPatMatchGetNumber(match);
 
 	    for(i=0; i<number; i++)

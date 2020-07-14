@@ -69,6 +69,7 @@ int main(int argc, char **argv)
     AjPSeq a;
     AjPFile outf;
     AjPCod codon;
+    AjPStr codestr;
     AjPStr substr;
     AjPStr revstr;
     AjPStr *frames;
@@ -90,6 +91,7 @@ int main(int argc, char **argv)
     ajint len;
     ajint i;
     ajint v = 0;
+    ajint gcode;
 
     const char *p;
 
@@ -98,13 +100,16 @@ int main(int argc, char **argv)
     embInit("showorf", argc, argv);
 
     a         = ajAcdGetSeq("sequence");
-    codon     = ajAcdGetCodon("cfile");
+    codestr = ajAcdGetListI("table", 1);
     width     = ajAcdGetInt("width");
     outf      = ajAcdGetOutfile("outfile");
     frames    = ajAcdGetList("frames");
     isrule    = ajAcdGetBool("ruler");
     isp       = ajAcdGetBool("plabel");
     isn       = ajAcdGetBool("nlabel");
+
+    ajStrToInt(codestr, &gcode);
+    codon     = ajCodNewCode(gcode);
 
     for(i=0;i<6;++i)
 	mark[i]=0;

@@ -43,6 +43,7 @@ int main(int argc, char **argv)
     AjPSeqall seqall = NULL;
     AjPSeq seq       = NULL;
     AjPSeqout seqout = NULL;
+    AjPFile logf     = NULL;
 
     ajint ncds  = 0;
     ajint nmrna = 0;
@@ -71,6 +72,7 @@ int main(int argc, char **argv)
     dotran = ajAcdGetBool("translation");
 
     seqout = ajAcdGetSeqout("outseq");
+    logf = ajAcdGetOutfile("outfile");
 
     cds  = ajStrNew();
     mrna = ajStrNew();
@@ -83,6 +85,26 @@ int main(int argc, char **argv)
     */
     ajStrAssS(&usa,ajSeqallGetUsa(seqall));
 
+    if(docds)
+	ajFmtPrintF(logf, "   CDS");
+
+    if(domrna)
+	ajFmtPrintF(logf, "  mRNA");
+
+    if(dotran)
+	ajFmtPrintF(logf, " Trans");
+
+    ajFmtPrintF(logf, " Total Sequence\n");
+    if(docds)
+	ajFmtPrintF(logf, " =====");
+
+    if(domrna)
+	ajFmtPrintF(logf, " =====");
+
+    if(dotran)
+	ajFmtPrintF(logf, " =====");
+
+    ajFmtPrintF(logf, " ===== ========\n");
     while(ajSeqallNext(seqall,&seq))
     {
 	if(docds)
@@ -102,6 +124,7 @@ int main(int argc, char **argv)
 	    }
 	    if(ncds)
 		AJFREE(cdslines);
+	    ajFmtPrintF(logf, "%6d", ncds);
 	}
 
 	if(domrna)
@@ -122,6 +145,7 @@ int main(int argc, char **argv)
 
 	    if(nmrna)
 		AJFREE(mrnalines);
+	    ajFmtPrintF(logf, "%6d", nmrna);
 	}
 
 
@@ -135,9 +159,11 @@ int main(int argc, char **argv)
 		ajStrDel(&tranlines[i]);
 	    }
 
-	    if(nmrna)
+	    if(ntran)
 		AJFREE(tranlines);
+	    ajFmtPrintF(logf, "%6d", ntran);
 	}
+	ajFmtPrintF(logf, "%6d %s\n", ncds+nmrna+ntran, ajSeqName(seq));
     }
 
 

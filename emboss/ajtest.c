@@ -24,7 +24,7 @@ int main(int argc, char **argv)
 
     seqall = ajAcdGetSeqall ("sequence");
     seqset = ajAcdGetSeqset ("bsequence");
-    dir = ajAcdGetDirectoryName("directory");
+    dir = ajAcdGetOutdirName("outdir");
 
     ajUser("Directory '%S'", dir);
     ajUser("Set of %d", ajSeqsetSize(seqset));

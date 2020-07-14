@@ -160,8 +160,8 @@ int main(int argc, char **argv, char **env)
 
     pairwise_matrix = ajAcdGetInfile("pairwisedata");
 
-    pw_gapc = ajAcdGetFloat( "pwgapc");
-    pw_gapv = ajAcdGetFloat( "pwgapv");
+    pw_gapc = ajAcdGetFloat( "pwgapopen");
+    pw_gapv = ajAcdGetFloat( "pwgapextend");
 
     matrix = ajAcdGetList( "matrix");
     m1c = *ajStrStr(*matrix);
@@ -190,8 +190,8 @@ int main(int argc, char **argv, char **env)
 
 
     ma_matrix = ajAcdGetInfile("mamatrix");
-    gapc      = ajAcdGetFloat("gapc");
-    gapv      = ajAcdGetFloat("gapv");
+    gapc      = ajAcdGetFloat("gapopen");
+    gapv      = ajAcdGetFloat("gapextend");
     endgaps   = ajAcdGetBool("endgaps");
     norgap    = ajAcdGetBool("norgap");
     nohgap    = ajAcdGetBool("nohgap");

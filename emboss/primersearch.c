@@ -183,7 +183,7 @@ int main(int argc, char **argv)
 
     seqall     = ajAcdGetSeqall("seqall");
     outf       = ajAcdGetOutfile("outfile");
-    primerFile = ajAcdGetInfile("primersfile");
+    primerFile = ajAcdGetInfile("infile");
     mmp        = ajAcdGetInt("mismatchpercent");
 
     /* build list of forward/reverse primer pairs as read from primerfile */

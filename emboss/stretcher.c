@@ -165,8 +165,8 @@ int main(int argc, char **argv)
     seq0    = ajAcdGetSeq("asequence");
     seq1    = ajAcdGetSeq("bsequence");
     matrix  = ajAcdGetMatrix("datafile");
-    gdelval = ajAcdGetInt("gappenalty");
-    ggapval = ajAcdGetInt("gaplength");
+    gdelval = ajAcdGetInt("gapopen");
+    ggapval = ajAcdGetInt("gapextend");
     align   = ajAcdGetAlign("outfile");
 
     /* obsolete. Can be uncommented in acd file and here to reuse */

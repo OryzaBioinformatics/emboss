@@ -68,7 +68,7 @@ int main(int argc, char **argv)
 	regexp = embPatSeqCreateRegExp(cut,0);
 
 	/* find the matches */
-	results = embPatMatchFind(regexp,test);
+	results = embPatMatchFind(regexp,test, ajFalse, ajFalse);
 
 
 	ajFmtPrintF(outf,"01234567890123456789012345\n");

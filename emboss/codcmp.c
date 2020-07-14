@@ -59,7 +59,9 @@ int main(int argc, char **argv)
 
     for(i=0;i < 64;++i)
         if(!first->fraction[i] || !second->fraction[i])
+	{
             ++unused;
+	}
         else
         {
             t = first->fraction[i] - second->fraction[i];

@@ -1432,6 +1432,7 @@ static AjBool dbigcg_ParsePir(AjPFile libr,
     static AjPRegexp ac2exp = NULL;
     static AjPRegexp keyexp = NULL;
     static AjPRegexp taxexp = NULL;
+    static AjPRegexp tax2exp = NULL;
     static AjPRegexp wrdexp = NULL;
     static AjPRegexp phrexp = NULL;
     ajint rpos;
@@ -1487,6 +1488,9 @@ static AjBool dbigcg_ParsePir(AjPFile libr,
 
     if(!phrexp)				/* allow . for "sp." */
 	phrexp = ajRegCompC(" *([^,;\n\r]+)");
+
+    if(!tax2exp)				/* allow . for "sp." */
+	tax2exp = ajRegCompC(" *([^,;\n\r()]+)");
 
     if(!acexp)
 	acexp = ajRegCompC("^C;Accession:");
@@ -1562,6 +1566,7 @@ static AjBool dbigcg_ParsePir(AjPFile libr,
 		{
 		    ajRegSubI(phrexp, 1, &tmpfd);
 		    ajStrToUpper(&tmpfd);
+		    ajStrChompEnd(&tmpfd);
 		    ajDebug("++key '%S'\n", tmpfd);
 		    embDbiMaxlen(&tmpfd, &maxFieldLen[keyfield]);
 
@@ -1583,9 +1588,9 @@ static AjBool dbigcg_ParsePir(AjPFile libr,
 	    if(ajRegExec(taxexp, rline))
 	    {
 		ajRegPost(taxexp, &tmpline);
-		while(ajRegExec(phrexp, tmpline))
+		while(ajRegExec(tax2exp, tmpline))
 		{
-		    ajRegSubI(phrexp, 1, &tmpfd);
+		    ajRegSubI(tax2exp, 1, &tmpfd);
 		    ajStrToUpper(&tmpfd);
 		    ajDebug("++tax '%S'\n", tmpfd);
 		    embDbiMaxlen(&tmpfd, &maxFieldLen[taxfield]);
@@ -1598,7 +1603,7 @@ static AjBool dbigcg_ParsePir(AjPFile libr,
 			fd = ajCharNew(tmpfd);
 			ajListPushApp(fdl[taxfield], fd);
 		    }
-		    ajRegPost(phrexp, &tmpline);
+		    ajRegPost(tax2exp, &tmpline);
 		}
 	    }
 	}

@@ -85,7 +85,7 @@ int main(int argc, char **argv)
 
     embInit("stssearch", argc, argv);
 
-    primfile = ajAcdGetInfile("primersfile");
+    primfile = ajAcdGetInfile("infile");
     out      = ajAcdGetOutfile("outfile");
     seqall   = ajAcdGetSeqall("seqall");
 

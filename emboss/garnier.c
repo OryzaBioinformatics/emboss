@@ -635,7 +635,7 @@ static void garnier_report(AjPReport report, AjPFeattable TabRpt,
     ajint nna = 20;
     ajint parr[4];
     char carr[] = "HETC";
-    char type[5000];
+    char* type;
     ajint iarr[4];
     ajint dharr[]=
     {
@@ -678,6 +678,8 @@ static void garnier_report(AjPReport report, AjPFeattable TabRpt,
     end = to-from+1;
     n0  = end;
     
+    type = AJALLOC0(n0*sizeof(char));
+
     sascii = aascii;
     
     if(idc<=0)
@@ -817,6 +819,7 @@ static void garnier_report(AjPReport report, AjPFeattable TabRpt,
     
     ajReportSetTail(report, tmpStr);
     
+    AJFREE(type);
     ajStrDel(&tmpStr);
     ajStrDel(&strExtend);
     ajStrDel(&strHelix);

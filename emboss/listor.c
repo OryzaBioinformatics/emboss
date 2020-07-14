@@ -69,8 +69,8 @@ int main(int argc, char **argv)
 
     embInit("listor", argc, argv);
 
-    seq1     = ajAcdGetSeqset("firstset");
-    seq2     = ajAcdGetSeqset("secondset");
+    seq1     = ajAcdGetSeqset("firstsequences");
+    seq2     = ajAcdGetSeqset("secondsequences");
     list     = ajAcdGetOutfile("outfile");
     operator = ajAcdGetList("operator");
 

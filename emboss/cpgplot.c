@@ -109,7 +109,7 @@ int main(int argc, char **argv)
 
     seqall    = ajAcdGetSeqall("sequence");
     window    = ajAcdGetInt("window");
-    shift     = ajAcdGetInt("shift");
+    shift     = 1;     /* other values broken - needs rewrite to fix*/
     outf      = ajAcdGetOutfile("outfile");
     minobsexp = ajAcdGetFloat("minoe");
     minlen    = ajAcdGetInt("minlen");
@@ -296,7 +296,7 @@ static void cpgplot_countbases(const char *seq, const char *bases,
 	codea=codeb;
 	codeb=ajAZToBin(seq[i+1]);
 
-        if(!(15-codea))   /* look for abiguity code 'N' */
+        if(!(15-codea))   /* look for ambiguity code 'N' */
         {
 	    *cx = *cx + 0.25;
 	    if(!(15-codeb))

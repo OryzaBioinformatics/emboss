@@ -25,11 +25,24 @@
 #define CODONS 64
 #define TABLE_ESTIMATE 1000
 
+typedef struct CutgSValues
+{
+    ajint Count[CODONS];
+    ajint CdsCount;
+    AjPStr Division;
+    AjPStr Doc;
+    AjPStr Species;
+    ajint Warn;
+    ajint Skip;
+} CutgOValues;
+#define CutgPValues CutgOValues*
 
+static AjPStr savepid = NULL;
 
-
-static char *cutgextract_next(AjPFile inf, AjPInt *array);
-static void cutgextract_readcodons(AjPFile inf, AjPInt *count);
+static char *cutgextract_next(AjPFile inf, const AjPStr wildspecies,
+			      AjPStr* pspecies, AjPStr* pdoc);
+static ajint cutgextract_readcodons(AjPFile inf, AjBool allrecords,
+				    ajint *count);
 
 
 
@@ -47,34 +60,36 @@ int main(int argc, char **argv)
 {
     char *codons[]=
     {
-	"TAG","TAA","TGA","GCG","GCA","GCT","GCC","TGT",
-	"TGC","GAT","GAC","GAA","GAG","TTT","TTC","GGT",
-	"GGG","GGA","GGC","CAT","CAC","ATA","ATT","ATC",
-	"AAA","AAG","CTA","TTA","TTG","CTT","CTC","CTG",
-	"ATG","AAT","AAC","CCG","CCA","CCT","CCC","CAA",
-	"CAG","CGT","CGA","CGC","AGG","AGA","CGG","TCG",
-	"TCA","AGT","TCT","TCC","AGC","ACG","ACT","ACA",
-	"ACC","GTA","GTT","GTC","GTG","TGG","TAT","TAC"
+	"TAG","TAA","TGA","GCG","GCA","GCT","GCC","TGT", /* 00-07 */
+	"TGC","GAT","GAC","GAA","GAG","TTT","TTC","GGT", /* 08-15 */
+	"GGG","GGA","GGC","CAT","CAC","ATA","ATT","ATC", /* 16-23 */
+	"AAA","AAG","CTA","TTA","TTG","CTT","CTC","CTG", /* 24-31 */
+	"ATG","AAT","AAC","CCG","CCA","CCT","CCC","CAA", /* 32-39 */
+	"CAG","CGT","CGA","CGC","AGG","AGA","CGG","TCG", /* 40-47 */
+	"TCA","AGT","TCT","TCC","AGC","ACG","ACT","ACA", /* 48-55 */
+	"ACC","GTA","GTT","GTC","GTG","TGG","TAT","TAC"	 /* 56-63 */
     };
 
     char *aa=
 	"***AAAACCDDEEFFGGGGHHIIIKKLLLLLLMNNPPPPQQRRRRRRSSSSSSTTTTVVVVWYY";
+
+    const char* thiscodon = NULL;
 
     AjPFile inf     = NULL;
     AjPFile outf    = NULL;
     char *entryname = NULL;
     AjPStr fname    = NULL;
     AjPStr line     = NULL;
-    AjPInt count    = NULL;
     AjPStr key      = NULL;
     AjPStr tmpkey   = NULL;
-    AjPInt value    = NULL;
+    AjBool allrecords = AJFALSE;
 
     AjPTable table  = NULL;
     ajint i = 0;
     ajint j = 0;
-    ajint n = 0;
+    ajint k = 0;
     ajint x = 0;
+    ajint savecount[3];
 
     AjPStr *array = NULL;
     AjPCod codon  = NULL;
@@ -82,15 +97,22 @@ int main(int argc, char **argv)
     char c;
 
     AjPList flist = NULL;
+    AjPFile logf = NULL;
     AjPStr  entry = NULL;
+    AjPStr  baseentry = NULL;
     AjPStr  wild  = NULL;
-
+    AjPStr division = NULL;
+    AjPStr release = NULL;
+    AjPStr wildspecies = NULL;
+    CutgPValues value = NULL;
+    AjPStr docstr = NULL;
+    AjPStr species = NULL;
+    AjPStr filename = NULL;
+    ajint nstops;
 
     embInit("cutgextract",argc,argv);
 
-
     line   = ajStrNew();
-    count  = ajIntNew();
     tmpkey = ajStrNew();
     fname  = ajStrNew();
 
@@ -100,43 +122,71 @@ int main(int argc, char **argv)
 
     flist = ajAcdGetDirlist("directory");
     wild  = ajAcdGetString("wildspec");
+    release  = ajAcdGetString("release");
+    logf = ajAcdGetOutfile("outfile");
+    wildspecies = ajAcdGetString("species");
+    filename = ajAcdGetString("filename");
+    allrecords = ajAcdGetBool("allrecords");
 
+    ajStrInsertC(&release, 0, "CUTG");
+    ajStrCleanWhite(&release);
 
     while(ajListPop(flist,(void **)&entry))
     {
-	if(!ajStrMatchWild(entry,wild))
+	ajStrAssS(&baseentry, entry);
+	ajFileNameTrim(&baseentry);
+	ajDebug("Testing file '%S'\n", entry);
+	if(!ajStrMatchWild(baseentry,wild))
 	{
 	    ajStrDel(&entry);
 	    continue;
 	}
 
+	ajDebug("... matched wildcard '%S'\n", wild);
 	inf = ajFileNewIn(entry);
 	if(!inf)
 	    ajFatal("cannot open file %S",entry);
 
+	ajFmtPrintS(&division, "%F", inf);
+	ajFileNameShorten(&division);
 
-	while((entryname = cutgextract_next(inf,&count)))
+	while((entryname = cutgextract_next(inf, wildspecies,
+					    &species, &docstr)))
 	{
-	    cutgextract_readcodons(inf,&count);
-
-	    ajStrAssC(&tmpkey,entryname);
+	    if(ajStrLen(filename))
+		ajStrAssS(&tmpkey,filename);
+	    else
+		ajStrAssC(&tmpkey,entryname);
 
 	    /* See if organism is already in the table */
 	    value = ajTableGet(table,tmpkey);
 	    if(!value)			/* Initialise */
 	    {
-		key = ajStrNewC(ajStrStr(tmpkey));
-		ajTablePut(table,(const void *)key,(void *)count);
-		count = ajIntNew();
+		key = ajStrNewS(tmpkey);
+		AJNEW0(value);
+		ajStrAssS(&value->Species,species);
+		ajStrAssS(&value->Division, division);
+		ajTablePut(table,(const void *)key,(void *)value);
 	    }
-	    else			/* Sum the values */
+	    for(k=0;k<3;k++)
+		savecount[k] = value->Count[k];
+	    nstops = cutgextract_readcodons(inf,allrecords, value->Count);
+	    if(nstops < 1)
 	    {
-		for(i=0;i<CODONS;++i)
-		{
-		    n = ajIntGet(value,i);
-		    n += ajIntGet(count,i);
-		    ajIntPut(&value,i,n);
-		}
+		value->Skip++;
+		continue;
+	    }
+	    value->CdsCount++;
+	    if(nstops>1)
+	    {
+		value->CdsCount += (nstops - 1);
+		value->Warn++;
+		ajWarn("Found %d stop codons (%d %d %d) for CDS '%S'",
+		       nstops,
+		       value->Count[0] - savecount[0],
+		       value->Count[1] - savecount[1],
+		       value->Count[2] - savecount[2],
+		       savepid);
 	    }
 	}
 	ajStrDel(&entry);
@@ -149,35 +199,65 @@ int main(int argc, char **argv)
     while(array[i])
     {
 	key   = array[i++];
-	value = (AjPInt) array[i++];
+	value = (CutgPValues) array[i++];
 	codon = ajCodNew();
 	sum   = 0;
 	for(j=0;j<CODONS;++j)
 	{
-	    sum += ajIntGet(value,j);
+	    sum += value->Count[j];
 	    x = ajCodIndexC(codons[j]);
-	    codon->num[x] = ajIntGet(value,j);
+	    codon->num[x] = value->Count[j];
+	    thiscodon = codons[x];
 
 	    c = aa[j];
 	    if(c=='*')
 		codon->aa[x] = 27;
 	    else
 		codon->aa[x] = c-'A';
-
 	}
-	ajCodCalculateUsage(&codon,sum);
+	ajCodCalculateUsage(codon,sum);
 
+	ajStrAppC(&key, ".cut");
+	if(allrecords)
+	{
+	    if(value->Warn)
+		ajFmtPrintF(logf, "Writing %S CDS: %d Warnings: %d\n",
+			    key, value->CdsCount, value->Warn);
+	    else
+		ajFmtPrintF(logf, "Writing %S CDS: %d\n",
+			    key, value->CdsCount);
+	}
+	else
+	{
+	    if(value->Skip)
+		ajFmtPrintF(logf, "Writing %S CDS: %d Skipped: %d\n",
+			    key, value->CdsCount, value->Skip);
+	    else
+		ajFmtPrintF(logf, "Writing %S CDS: %d\n",
+			    key, value->CdsCount);
+	}
 
-	ajFmtPrintS(&fname,"CODONS/%S.cut",key);
+	ajFmtPrintS(&fname,"CODONS/%S",key);
 	ajFileDataNewWrite(fname,&outf);
 	if(!outf)
 	    ajFatal("Cannot open output file %S",fname);
+
+	ajCodAssName(codon, key);
+	ajCodAssSpecies(codon, value->Species);
+	ajCodAssDivision(codon, value->Division);
+	ajCodAssRelease(codon, release);
+	ajCodAssNumcds(codon, value->CdsCount);
+	ajCodAssNumcodon(codon, sum);
+
 	ajCodWrite(codon, outf);
 	ajFileClose(&outf);
 
 
 	ajStrDel(&key);
-	ajIntDel(&value);
+	ajStrDel(&value->Division);
+	ajStrDel(&value->Doc);
+	ajStrDel(&value->Species);
+	AJFREE(value);
 	ajCodDel(&codon);
     }
 
@@ -193,23 +273,43 @@ int main(int argc, char **argv)
 
 /* @funcstatic cutgextract_next ***********************************************
 **
-** Undocumented.
+** Reads the first line of a CUTG database entry,
+** returning the name of the species.
 **
-** @param [u] inf [AjPFile] Undocumented
-** @param [w] array [AjPInt*] Undocumented
+** Each entry has one line beginning with '>' followed by fields
+** delimited by a backslash:
+**
+** GenBank entry name
+** GenBank accession number
+** GenBank feature location
+** Length of feature in nucleotides
+** Protein ID
+** Genus and species
+** Genbank entry description and feature qualifiers
+**
+** The second line is 64 integers giving the number of times each codon
+** appears in this coding sequence.
+**
+** @param [u] inf [AjPFile] Input CUTG database file
+** @param [r] wildspecies [const AjPStr] Wildcard species to select
+** @param [w] pspecies [AjPStr*] Species for this entry
+** @param [w] pdoc [AjPStr*] Documentation for this entry
 ** @return [char*] Undocumented
 ** @@
 ******************************************************************************/
 
-static char* cutgextract_next(AjPFile inf, AjPInt *array)
+static char* cutgextract_next(AjPFile inf, const AjPStr wildspecies,
+			      AjPStr* pspecies, AjPStr* pdoc)
 {
     static AjPStr line = NULL;
     static AjPStr org  = NULL;
-    AjPStrTok token    = NULL;
+    AjPStrTok handle    = NULL;
+    AjPStr token = NULL;
     ajint i;
     ajint len;
     char *p = NULL;
     char c;
+    AjBool done = ajFalse;
 
     if(!line)
     {
@@ -218,18 +318,76 @@ static char* cutgextract_next(AjPFile inf, AjPInt *array)
     }
 
     ajStrAssC(&line,"");
+    ajStrAssC(pdoc,"");
+    while (!done)
+    {
 
-    while(*ajStrStr(line) != '>')
-	if(!ajFileReadLine(inf,&line))
-	    return NULL;
+	while(*ajStrStr(line) != '>')
+	    if(!ajFileReadLine(inf,&line))
+		return NULL;
 
-    token = ajStrTokenInit(line,"\\\n\t\r");
-    for(i=0;i<6;++i)
-	ajStrToken(&org,&token,"\\\n\t\r");
+	handle = ajStrTokenInit(line,"\\\n\t\r");
+	for(i=0;i<7;++i) {
+	    ajStrToken(&token,&handle,"\\\n\t\r");
+	    if(i==5)
+	    {
+		ajStrAssC(&org,"E");
+		ajStrApp(&org, token);
+		ajStrAssS(pspecies, token);
+		if(ajStrMatchWild(token,wildspecies))
+		{
+		    done = ajTrue;
+		}
+	    }
 
-    ajStrTokenClear(&token);
+	    switch(i)
+	    {
+	    case 0:
+		ajStrAppC(pdoc, "#ID ");
+		ajStrApp(pdoc, token);
+		ajStrAppC(pdoc, "\n");
+		break;
+	    case 1:
+		ajStrAppC(pdoc, "#AC ");
+		ajStrApp(pdoc, token);
+		ajStrAppC(pdoc, "\n");
+		break;
+	    case 2:
+		ajStrAppC(pdoc, "#FT ");
+		ajStrApp(pdoc, token);
+		ajStrAppC(pdoc, "\n");
+		break;
+	    case 3:
+		ajStrAppC(pdoc, "#FL ");
+		ajStrApp(pdoc, token);
+		ajStrAppC(pdoc, "\n");
+		break;
+	    case 4:
+		ajStrAppC(pdoc, "#PI ");
+		ajStrApp(pdoc, token);
+		ajStrAppC(pdoc, "\n");
+		ajStrAssS(&savepid, token);
+		break;
+	    case 5:
+		ajStrAppC(pdoc, "#OS ");
+		ajStrApp(pdoc, token);
+		ajStrAppC(pdoc, "\n");
+		break;
+	    case 6:
+		ajStrAppC(pdoc, "#DE ");
+		ajStrApp(pdoc, token);
+		ajStrAppC(pdoc, "\n");
+		break;
+	    default:
+		break;
+	    }
+	}
 
-    ajStrInsertC(&org,0,"E");
+	ajStrTokenClear(&handle);
+	if(!done)
+	    if(!ajFileReadLine(inf,&line))
+		return NULL;
+    }
 
     len = ajStrLen(org);
     p   = ajStrStrMod(&org);
@@ -242,6 +400,7 @@ static char* cutgextract_next(AjPFile inf, AjPInt *array)
 
     if(p[strlen(p)-1]=='_')
 	p[strlen(p)-1]='\0';
+    ajStrDel(&token);
 
     return p;
 }
@@ -251,14 +410,29 @@ static char* cutgextract_next(AjPFile inf, AjPInt *array)
 
 /* @funcstatic cutgextract_readcodons *****************************************
 **
-** Undocumented.
+** Reads the codon frequency line from a CUTG database entry.
 **
-** @param [u] inf [AjPFile] Undocumented
-** @param [w] count [AjPInt*] Undocumented
+** Codons are reported according to the number of codons per amino acid
+** (6, 4, 2, 3, 1, stop) in the order:
+** 
+** CGA CGC CGG CGU AGA AGG CUA CUC CUG CUU UUA UUG UCA UCC UCG UCU AGC AGU
+**  R   R   R   R   R   R   L   L   L   L   L   L   S   S   S   S   S   S
+** ACA ACC ACG ACU CCA CCC CCG CCU GCA GCC GCG GCU GGA GGC GGG GGU
+**  T   T   T   T   P   P   P   P   A   A   A   A   G   G   G   G
+** GUA GUC GUG GUU AAA AAG AAC AAU CAA CAG CAC CAU GAA GAG GAC GAU
+**  V   V   V   V   K   K   N   N   Q   Q   H   H   E   E   D   D
+** UAC UAU UGC UGU UUC UUU AUA AUC AUU AUG UGG UAA UAG UGA
+**  Y   Y   C   C   F   F   I   I   I   M   W   *   *   *
+** @param [u] inf [AjPFile] Input CUTG database file
+** @param [r] allrecords [AjBool] If false, skip bad records with more than
+**                             one stop codon in the standard genetic code
+** @param [w] count [ajint*] Codon usage total so far for this species
+** @return [ajint] Number of stop codons, assuming a standard genetic code
 ** @@
 ******************************************************************************/
 
-static void cutgextract_readcodons(AjPFile inf, AjPInt *count)
+static ajint cutgextract_readcodons(AjPFile inf, AjBool allrecords,
+				    ajint *count)
 {
     static int cutidx[] =
     {
@@ -269,10 +443,12 @@ static void cutgextract_readcodons(AjPFile inf, AjPInt *count)
     };
     static AjPStr line  = NULL;
     static AjPStr value = NULL;
+    ajint thiscount[64];
 
     AjPStrTok token = NULL;
     ajint i;
     ajint n = 0;
+    ajint nstops = 0;
 
 
     if(!line)
@@ -290,10 +466,21 @@ static void cutgextract_readcodons(AjPFile inf, AjPInt *count)
     {
 	ajStrToken(&value,&token," \n\t\r");
 	ajStrToInt(value,&n);
-	ajIntPut(count,cutidx[i],n);
+	thiscount[cutidx[i]] = n;
+	if(i>60)
+	    nstops += n;
     }
+
+    if(!allrecords)
+	if(nstops > 1)
+	    return -1;
+
+    for(i=0;i<CODONS;++i)
+    {
+	count[i] += thiscount[i];
+    }	
 
     ajStrTokenClear(&token);
 
-    return;
+    return nstops;
 }

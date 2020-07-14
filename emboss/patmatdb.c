@@ -81,7 +81,7 @@ int main(int argc, char **argv)
 	ajStrToUpper(&str);
 
 	/* comparing the reg exps to sequence for matches. */
-	match 	= embPatMatchFind(regexp, str);
+	match 	= embPatMatchFind(regexp, str, ajFalse, ajFalse);
 
 	/*returns the number of posix matches in the structure. */
 	number 	= embPatMatchGetNumber(match);

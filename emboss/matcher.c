@@ -307,8 +307,8 @@ int main(int argc, char **argv)
     ajSeqTrim(seq2);
     matrix  = ajAcdGetMatrix("datafile");
     K       = ajAcdGetInt("alternatives");
-    gdelval = ajAcdGetInt("gappenalty");
-    ggapval = ajAcdGetInt("gaplength");
+    gdelval = ajAcdGetInt("gapopen");
+    ggapval = ajAcdGetInt("gapextend");
     align   = ajAcdGetAlign("outfile");
 
 

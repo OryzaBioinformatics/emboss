@@ -51,6 +51,7 @@ int main(int argc, char **argv)
     ajNamPrintRsAttr(outf, full);
     ajAlignPrintFormat(outf, full);
     ajReportPrintFormat(outf, full);
+    ajCodPrintFormat(outf, full);
 
     ajGraphPrintType(outf, full);
 
