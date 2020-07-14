@@ -25,7 +25,7 @@
 #include "emboss.h"
 
 static void megamerger_Merge (AjPList matchlist, AjPSeq seq1, AjPSeq seq2,
-			      AjPSeqout seqout, AjPFile outfile);
+		      AjPSeqout seqout, AjPFile outfile, AjBool prefer);
 
 
 
@@ -45,13 +45,15 @@ int main(int argc, char **argv)
     AjPTable seq1MatchTable =0 ;
     AjPList matchlist=NULL ;
     AjPFile outfile;
+    AjBool prefer;
 
     embInit("megamerger", argc, argv);
 
     wordlen = ajAcdGetInt ("wordsize");
-    seq1 = ajAcdGetSeq ("seqa");
-    seq2 = ajAcdGetSeq ("seqb");
-    outfile = ajAcdGetOutfile ("report");
+    seq1 = ajAcdGetSeq ("asequence");
+    seq2 = ajAcdGetSeq ("bsequence");
+    prefer = ajAcdGetBool ("prefer");
+    outfile = ajAcdGetOutfile ("outfile");
     seqout = ajAcdGetSeqout ("outseq");
 
     /* trim sequences to -sbegin and -send */
@@ -72,7 +74,7 @@ int main(int argc, char **argv)
     if (ajListLength(matchlist))
     {
 	/* make the output file */
-	megamerger_Merge(matchlist, seq1, seq2, seqout, outfile);
+	megamerger_Merge(matchlist, seq1, seq2, seqout, outfile, prefer);
 
 	/* tidy up */
 	embWordMatchListDelete(&matchlist); /* free the match structures */
@@ -96,12 +98,13 @@ int main(int argc, char **argv)
 ** @param [r] seq2 [AjPSeq] Sequence to be merged.
 ** @param [r] seqout [AjPSeqout] Output merged sequence
 ** @param [r] outfile [AjPFile] Output file containing report.
+** @param [r] prefer [AjBool] If TRUE, use the first sequence when there is a mismatch
 ** @return [void]
 ** @@
 ******************************************************************************/
 
 static void megamerger_Merge (AjPList matchlist, AjPSeq seq1, AjPSeq seq2,
-			      AjPSeqout seqout, AjPFile outfile)
+		      AjPSeqout seqout, AjPFile outfile, AjBool prefer)
 {
     AjIList iter=NULL;			/* match list iterator */
     EmbPWordMatch p=NULL;  		/* match structure */
@@ -209,35 +212,45 @@ static void megamerger_Merge (AjPList matchlist, AjPSeq seq1, AjPSeq seq2,
 		(void) ajFmtPrintF(outfile, "Mismatch %s %d\n",
 				   ajSeqName(seq2), prev2end);
 
-	    mid1 = (prev1end + p->seq1start-1)/2;
-	    mid2 = (prev2end + p->seq2start-1)/2;
-	    /* is the mismatch closer to the ends of seq1 or seq2? */
-	    if (AJMIN(mid1, ajSeqLen(seq1)-mid1-1) <
-		AJMIN(mid2, ajSeqLen(seq2)-mid2-1))
-	    {
-		(void) ajFmtPrintF(outfile, "Mismatch is closer to the ends "
+            if (prefer) {
+                /* use sequence 1 as the 'correct' one */
+	        (void) ajStrAssSub(&tmp, s1, prev1end, p->seq1start-1);
+	        ajStrToUpper(&tmp);
+	        ajStrApp(&seqstr, tmp);
+            	
+            } else {
+                /* use the sequence where the mismatch is furthest from the end as the
+                'correct' one */
+	        mid1 = (prev1end + p->seq1start-1)/2;
+	        mid2 = (prev2end + p->seq2start-1)/2;
+	        /* is the mismatch closer to the ends of seq1 or seq2? */
+	        if (AJMIN(mid1, ajSeqLen(seq1)-mid1-1) <
+		    AJMIN(mid2, ajSeqLen(seq2)-mid2-1))
+	        {
+		    (void) ajFmtPrintF(outfile, "Mismatch is closer to the ends "
 				   "of %s, so use %s in the merged "
 				   "sequence\n\n", ajSeqName(seq1),
 				   ajSeqName(seq2));
-		if (prev2end < p->seq2start)
-		{
-		    (void) ajStrAssSub(&tmp, s2, prev2end, p->seq2start-1);
-		    ajStrToUpper(&tmp);
-		    ajStrApp(&seqstr, tmp);
+		    if (prev2end < p->seq2start)
+		    {
+		        (void) ajStrAssSub(&tmp, s2, prev2end, p->seq2start-1);
+		        ajStrToUpper(&tmp);
+		        ajStrApp(&seqstr, tmp);
 
-		}
-	    }
-	    else
-	    {
-		(void) ajFmtPrintF(outfile,
+		    }
+	        }
+	        else
+	        {
+		    (void) ajFmtPrintF(outfile,
 				   "Mismatch is closer to the ends of %s, "
 				   "so use %s in the merged sequence\n\n",
 				   ajSeqName(seq2), ajSeqName(seq1));
-		if (prev1end < p->seq1start)
-		{
-		    (void) ajStrAssSub(&tmp, s1, prev1end, p->seq1start-1);
-		    ajStrToUpper(&tmp);
-		    ajStrApp(&seqstr, tmp);
+		    if (prev1end < p->seq1start)
+		    {
+		        (void) ajStrAssSub(&tmp, s1, prev1end, p->seq1start-1);
+		        ajStrToUpper(&tmp);
+		        ajStrApp(&seqstr, tmp);
+		    }
 		}
 	    }
 	}

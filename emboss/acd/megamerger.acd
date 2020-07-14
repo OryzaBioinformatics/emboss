@@ -1,46 +1,71 @@
-appl: megamerger [
-  documentation: "Merge two large overlapping nucleic acid sequences"
+application: megamerger [
+  documentation: "Merge two large overlapping nucleic acid
+                  sequences"
   groups: "Alignment:Consensus"
-  gui: yes
-  batch: yes
-  cpu: medium
+  gui: "yes"
+  batch: "yes"
+  cpu: "medium"
 ]
 
-section: input [ info: "input Section" type: page ]
-sequence: seqa  [
-  parameter: "Y"
-  type: "DNA"
+section: input [
+  information: "Input section"
+  type: "page"
 ]
 
-sequence: seqb  [
-  parameter: "Y"
-  type: "DNA"
-]
+  sequence: asequence  [
+    parameter: "Y"
+    type: "DNA"
+  ]
+
+  sequence: bsequence [
+    parameter: "Y"
+    type: "DNA"
+  ]
 
 endsection: input
 
-section: required [ info: "required Section" type: page ]
-integer: wordsize  [
-  required: "Y"
-  default: "20"
-  minimum: "2"
-  information: "Word size"
+section: required [
+  information: "Required section"
+  type: "page"
 ]
+
+  integer: wordsize  [
+    required: "Y"
+    default: "20"
+    minimum: "2"
+    information: "Word size"
+  ]
+
+  boolean: prefer  [
+    optional: "Y"
+    default: "N"
+    information: "Use the first sequence when there is a
+                  mismatch"
+    help: "When a mismatch between the two sequence is discovered, one
+           or other of the two sequences must be used to create the merged
+           sequence over this mismatch region. The default action is to
+           create the merged sequence using the sequence where the mismatch
+           is closest to that sequence's centre. If this option is used, then
+           the fist sequence (seqa) will always be used in preference to the
+           other sequence when there is a mismatch."
+  ]
 
 endsection: required
 
-section: output [ info: "output Section" type: page ]
-seqout: outseq  [
-  parameter: "Y"
-  extension: "merged"
+section: output [
+  information: "Output section"
+  type: "page"
 ]
 
-outfile: report  [
-  parameter: "Y"
-  extension: "megamerger"
-#  default: "stdout"
-  information: "Output report"
-]
+  seqout: outseq  [
+    parameter: "Y"
+    extension: "merged"
+  ]
+
+  outfile: outfile  [
+    parameter: "Y"
+    extension: "megamerger"
+    standardtype: "megamerger report"
+  ]
 
 endsection: output
-

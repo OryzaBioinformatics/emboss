@@ -70,12 +70,84 @@ Command line arguments
   [-outseq]            seqout     Output sequence USA
   [-report]            outfile    Output report
 
-   Optional qualifiers: (none)
+   Optional qualifiers:
+   -prefer             boolean    When a mismatch between the two sequence is
+                                  discovered, one or other of the two
+                                  sequences must be used to create the merged
+                                  sequence over this mismatch region. The
+                                  default action is to create the merged
+                                  sequence using the sequence where the
+                                  mismatch is closest to that sequence's
+                                  centre. If this option is used, then the
+                                  fist sequence (seqa) will always be used in
+                                  preference to the other sequence when there
+                                  is a mismatch.
+
    Advanced qualifiers: (none)
+   Associated qualifiers:
+  "-seqa" related qualifiers
+   -sbegin1             integer    First base used
+   -send1               integer    Last base used, def=seq length
+   -sreverse1           boolean    Reverse (if DNA)
+   -sask1               boolean    Ask for begin/end/reverse
+   -snucleotide1        boolean    Sequence is nucleotide
+   -sprotein1           boolean    Sequence is protein
+   -slower1             boolean    Make lower case
+   -supper1             boolean    Make upper case
+   -sformat1            string     Input sequence format
+   -sopenfile1          string     Input filename
+   -sdbname1            string     Database name
+   -sid1                string     Entryname
+   -ufo1                string     UFO features
+   -fformat1            string     Features format
+   -fopenfile1          string     Features file name
+  "-seqb" related qualifiers
+   -sbegin2             integer    First base used
+   -send2               integer    Last base used, def=seq length
+   -sreverse2           boolean    Reverse (if DNA)
+   -sask2               boolean    Ask for begin/end/reverse
+   -snucleotide2        boolean    Sequence is nucleotide
+   -sprotein2           boolean    Sequence is protein
+   -slower2             boolean    Make lower case
+   -supper2             boolean    Make upper case
+   -sformat2            string     Input sequence format
+   -sopenfile2          string     Input filename
+   -sdbname2            string     Database name
+   -sid2                string     Entryname
+   -ufo2                string     UFO features
+   -fformat2            string     Features format
+   -fopenfile2          string     Features file name
+  "-outseq" related qualifiers
+   -osformat3           string     Output seq format
+   -osextension3        string     File name extension
+   -osname3             string     Base file name
+   -osdirectory3        string     Output directory
+   -osdbname3           string     Database name to add
+   -ossingle3           boolean    Separate file for each entry
+   -oufo3               string     UFO features
+   -offormat3           string     Features format
+   -ofname3             string     Features file name
+   -ofdirectory3        string     Output directory
+  "-report" related qualifiers
+   -odirectory4         string     Output directory
+
    General qualifiers:
-  -help                boolean    Report command line options. More
+   -auto                boolean    Turn off prompts
+   -stdout              boolean    Write standard output
+   -filter              boolean    Read standard input, write standard output
+   -options             boolean    Prompt for required and optional values
+   -debug               boolean    Write debug output to program.dbg
+   -acdlog              boolean    Write ACD processing log to program.acdlog
+   -acdpretty           boolean    Rewrite ACD file as program.acdpretty
+   -acdtable            boolean    Write HTML table of options
+   -verbose             boolean    Report some/full command line options
+   -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
+   -warning             boolean    Report warnings
+   -error               boolean    Report errors
+   -fatal               boolean    Report fatal errors
+   -die                 boolean    Report deaths
    
 
    Mandatory qualifiers Allowed values Default
@@ -89,7 +161,13 @@ Command line arguments
    [-report]
    (Parameter 4) Output report Output file <sequence>.megamerger
    Optional qualifiers Allowed values Default
-   (none)
+   -prefer When a mismatch between the two sequence is discovered, one or
+   other of the two sequences must be used to create the merged sequence
+   over this mismatch region. The default action is to create the merged
+   sequence using the sequence where the mismatch is closest to that
+   sequence's centre. If this option is used, then the fist sequence
+   (seqa) will always be used in preference to the other sequence when
+   there is a mismatch. Boolean value Yes/No No
    Advanced qualifiers Allowed values Default
    (none)
    
@@ -706,8 +784,8 @@ See also
    
 Author(s)
 
-   This application was written by Gary Williams
-   (gwilliam@hgmp.mrc.ac.uk)
+   Gary Williams (gwilliam © hgmp.mrc.ac.uk)
+   HGMP-RC, Genome Campus, Hinxton, Cambridge CB10 1SB, UK
    
 History
 
