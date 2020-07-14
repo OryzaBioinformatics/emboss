@@ -21,18 +21,18 @@
 ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 ******************************************************************************/
 
-
 #include "emboss.h"
 #include <ctype.h>
 
-/* declare functions */
 
-static int infoalign_Getrefseq (AjPStr refseq, AjPSeqset seqset);
-static void infoalign_OutputFloat (AjPFile outfile, float num, AjBool html,
+
+
+static int infoalign_Getrefseq(AjPStr refseq, AjPSeqset seqset);
+static void infoalign_OutputFloat(AjPFile outfile, float num, AjBool html,
 				   AjBool after);
-static void infoalign_OutputInt (AjPFile outfile, ajint num, AjBool html,
+static void infoalign_OutputInt(AjPFile outfile, ajint num, AjBool html,
 				 AjBool after);
-static void infoalign_OutputStr (AjPFile outfile, AjPStr str, AjBool html,
+static void infoalign_OutputStr(AjPFile outfile, AjPStr str, AjBool html,
 				 AjBool after, ajint minlength);
 static void infoalign_Compare(AjPSeq ref, AjPSeq seq, ajint **sub,
 			      AjPSeqCvt cvt, ajint *seqlength,
@@ -58,12 +58,12 @@ int main(int argc, char **argv)
     ajint  nrefseq;	/* numeric reference sequence */
     AjPMatrix matrix;	/* scoring matrix structure */
     ajint **sub;	/* integer scoring matrix */
-    AjPSeqCvt  cvt=0;	/* conversion table for scoring matrix */
+    AjPSeqCvt cvt = 0;	/* conversion table for scoring matrix */
     float identity;
     ajint ident;
     float fplural;
-    AjPStr cons = ajStrNew();
-    AjPSeq consensus = ajSeqNew();
+    AjPStr cons;
+    AjPSeq consensus;
 
     AjPSeq ref;
     AjPSeq seq;
@@ -95,41 +95,48 @@ int main(int argc, char **argv)
 
     AjPStr usa;
     AjPStr name;
-    AjPStr altusa=ajStrNewC("-");	/* default name when the real name
+    AjPStr altusa;			/* default name when the real name
 					   is not known */
-    AjPStr altname=ajStrNewC("-");
-    /*    ajint length; */
+    AjPStr altname;
+
     AjPStr desc;
-    AjPStr xxx=NULL;
+    AjPStr xxx = NULL;
 
-    (void) embInit ("infoalign", argc, argv);
+    embInit("infoalign", argc, argv);
 
 
-    seqset = ajAcdGetSeqset ("sequence");
-    refseq = ajAcdGetString ("refseq");
-    matrix  = ajAcdGetMatrix ("matrix");
+    seqset  = ajAcdGetSeqset("sequence");
+    refseq  = ajAcdGetString("refseq");
+    matrix  = ajAcdGetMatrix("matrix");
 
-    ajSeqsetFill (seqset);
+    ajSeqsetFill(seqset);
 
-    outfile = ajAcdGetOutfile ("outfile");
+    outfile = ajAcdGetOutfile("outfile");
 
-    html = ajAcdGetBool("html");
-    doheader = ajAcdGetBool("heading");
-    dousa = ajAcdGetBool("usa");
-    doname = ajAcdGetBool("name");
-    doseqlength = ajAcdGetBool("seqlength");
+    html          = ajAcdGetBool("html");
+    doheader      = ajAcdGetBool("heading");
+    dousa         = ajAcdGetBool("usa");
+    doname        = ajAcdGetBool("name");
+    doseqlength   = ajAcdGetBool("seqlength");
     doalignlength = ajAcdGetBool("alignlength");
-    dogaps = ajAcdGetBool("gaps");
-    dogapcount = ajAcdGetBool("gapcount");
-    doidcount = ajAcdGetBool("idcount");
-    dosimcount = ajAcdGetBool("simcount");
-    dodifcount = ajAcdGetBool("diffcount");
-    dochange = ajAcdGetBool("change");
-    dodesc = ajAcdGetBool("description");
+    dogaps        = ajAcdGetBool("gaps");
+    dogapcount    = ajAcdGetBool("gapcount");
+    doidcount     = ajAcdGetBool("idcount");
+    dosimcount    = ajAcdGetBool("simcount");
+    dodifcount    = ajAcdGetBool("diffcount");
+    dochange      = ajAcdGetBool("change");
+    dodesc        = ajAcdGetBool("description");
 
     /* consensus parameters */
     fplural   = ajAcdGetFloat("plurality");
     identity  = ajAcdGetFloat("identity");
+
+
+    cons      = ajStrNew();
+    consensus = ajSeqNew();
+    altusa    = ajStrNewC("-");
+    altname   = ajStrNewC("-");
+
 
     /* get conversion table and scoring matrix */
     cvt = ajMatrixCvt(matrix);
@@ -141,151 +148,150 @@ int main(int argc, char **argv)
     /* change the % plurality to the fraction of absolute total weight */
     fplural = ajSeqsetTotweight(seqset) * fplural / 100;
 
-    /* change the % identity to the number of identical sequences at a
-       position required for consensus */
+    /*
+    ** change the % identity to the number of identical sequences at a
+    ** position required for consensus
+    */
     ident = ajSeqsetSize(seqset) * identity / 100;
 
     /* get the consensus sequence */
-    embConsCalc (seqset, matrix, ajSeqsetSize(seqset), ajSeqsetLen(seqset),
+    embConsCalc(seqset, matrix, ajSeqsetSize(seqset), ajSeqsetLen(seqset),
 		 fplural, 0.0, ident, &cons);
-    ajSeqAssSeq(consensus, cons);	/* set the sequence string */
-    /* name the sequence */
-    ajSeqAssName(consensus, (xxx=ajStrNewC("Consensus")));
+    ajSeqAssSeq(consensus, cons);
+
+    ajSeqAssName(consensus,(xxx=ajStrNewC("Consensus")));
 
     /* get the reference sequence */
-    if (nrefseq == -1)
+    if(nrefseq == -1)
 	ref = consensus;
     else
 	ref = ajSeqsetGetSeq(seqset, nrefseq);
 
 
-
     /* start the HTML table */
-    if (html)
-	(void) ajFmtPrintF(outfile,
-			   "<table border cellpadding=4 bgcolor="
-			   "\"#FFFFF0\">\n");
+    if(html)
+	ajFmtPrintF(outfile,"<table border cellpadding=4 bgcolor="
+		    "\"#FFFFF0\">\n");
 
     /* print the header information */
-    if (doheader)
+    if(doheader)
     {
-	if (html)			/* start the HTML table title line and
-					   output the Name header */
-	    (void) ajFmtPrintF(outfile, "<tr>");
+	/* start the HTML table title line and output the Name header */
+	if(html)			
+	    ajFmtPrintF(outfile, "<tr>");
 	else
-	    (void) ajFmtPrintF(outfile, "%s", "# ");
+	    ajFmtPrintF(outfile, "%s", "# ");
 
-	if (dousa)
+	if(dousa)
 	{
-	    if (html)
-		(void) ajFmtPrintF(outfile, "<th>USA</th>");
+	    if(html)
+		ajFmtPrintF(outfile, "<th>USA</th>");
 	    else
-		(void) ajFmtPrintF(outfile, "%-16s", "USA");
+		ajFmtPrintF(outfile, "%-16s", "USA");
 	}
 
-	if (doname)
+	if(doname)
 	{
-	    if (html)
-		(void) ajFmtPrintF(outfile, "<th>Name</th>");
+	    if(html)
+		ajFmtPrintF(outfile, "<th>Name</th>");
 	    else
-		(void) ajFmtPrintF(outfile, "%-12s", "Name");
+		ajFmtPrintF(outfile, "%-12s", "Name");
 	}
 
-	if (doseqlength)
+	if(doseqlength)
 	{
-	    if (html)
-		(void) ajFmtPrintF(outfile, "<th>Sequence Length</th>");
+	    if(html)
+		ajFmtPrintF(outfile, "<th>Sequence Length</th>");
 	    else
-		(void) ajFmtPrintF(outfile, "SeqLen\t");
+		ajFmtPrintF(outfile, "SeqLen\t");
 	}
 
-	if (doalignlength)
+	if(doalignlength)
 	{
-	    if (html)
-		(void) ajFmtPrintF(outfile, "<th>Aligned Length</th>");
+	    if(html)
+		ajFmtPrintF(outfile, "<th>Aligned Length</th>");
 	    else
-		(void) ajFmtPrintF(outfile, "AlignLen\t");
+		ajFmtPrintF(outfile, "AlignLen\t");
 	}
 
-	if (dogaps)
+	if(dogaps)
 	{
-	    if (html)
-		(void) ajFmtPrintF(outfile, "<th>Gaps</th>");
+	    if(html)
+		ajFmtPrintF(outfile, "<th>Gaps</th>");
 	    else
-		(void) ajFmtPrintF(outfile, "Gaps\t");
+		ajFmtPrintF(outfile, "Gaps\t");
 	}
 
-	if (dogapcount)
+	if(dogapcount)
 	{
-	    if (html)
-		(void) ajFmtPrintF(outfile, "<th>Gap Length</th>");
+	    if(html)
+		ajFmtPrintF(outfile, "<th>Gap Length</th>");
 	    else
-		(void) ajFmtPrintF(outfile, "GapLen\t");
+		ajFmtPrintF(outfile, "GapLen\t");
 	}
 
-	if (doidcount)
+	if(doidcount)
 	{
-	    if (html)
-		(void) ajFmtPrintF(outfile, "<th>Identity</th>");
+	    if(html)
+		ajFmtPrintF(outfile, "<th>Identity</th>");
 	    else
-		(void) ajFmtPrintF(outfile, "Ident\t");
+		ajFmtPrintF(outfile, "Ident\t");
 	}
 
-	if (dosimcount)
+	if(dosimcount)
 	{
-	    if (html)
-		(void) ajFmtPrintF(outfile, "<th>Similarity</th>");
+	    if(html)
+		ajFmtPrintF(outfile, "<th>Similarity</th>");
 	    else
-		(void) ajFmtPrintF(outfile, "Similar\t");
+		ajFmtPrintF(outfile, "Similar\t");
 	}
 
-	if (dodifcount)
+	if(dodifcount)
 	{
-	    if (html)
-		(void) ajFmtPrintF(outfile, "<th>Difference</th>");
+	    if(html)
+		ajFmtPrintF(outfile, "<th>Difference</th>");
 	    else
-		(void) ajFmtPrintF(outfile, "Differ\t");
+		ajFmtPrintF(outfile, "Differ\t");
 	}
 
-	if (dochange)
+	if(dochange)
 	{
-	    if (html)
-		(void) ajFmtPrintF(outfile, "<th>%% Change</th>");
+	    if(html)
+		ajFmtPrintF(outfile, "<th>%% Change</th>");
 	    else
-		(void) ajFmtPrintF(outfile, "%% Change\t");
+		ajFmtPrintF(outfile, "%% Change\t");
 	}
 
-	if (dodesc)
+	if(dodesc)
 	{
-	    if (html)
-		(void) ajFmtPrintF(outfile, "<th>Description</th>");
+	    if(html)
+		ajFmtPrintF(outfile, "<th>Description</th>");
 	    else
-		(void) ajFmtPrintF(outfile, "Description");
+		ajFmtPrintF(outfile, "Description");
 	}
 
 	/* end the HTML table title line */
-	if (html)
-	    (void) ajFmtPrintF(outfile, "</tr>\n");
+	if(html)
+	    ajFmtPrintF(outfile, "</tr>\n");
 	else
-	    (void) ajFmtPrintF(outfile, "\n");
+	    ajFmtPrintF(outfile, "\n");
     }
 
 
-    for (i=0; i<ajSeqsetSize(seqset); i++)
+    for(i=0; i<ajSeqsetSize(seqset); i++)
     {
     	seq = ajSeqsetGetSeq(seqset, i);
 
 	/* get the usa ('-' if unknown) */
 	usa = ajSeqGetUsa(seq);
-	if (ajStrLen(usa) == 0)
+	if(ajStrLen(usa) == 0)
 	    usa = altusa;
 
 	/* get the name ('-' if unknown) */
 	name = ajSeqGetName(seq);
-	if (ajStrLen(name) == 0)
+	if(ajStrLen(name) == 0)
 	    name = altname;
 
-	/*	length = ajSeqLen(seq); */
 	desc = ajSeqGetDesc(seq);
 
 	/* get the stats from the comparison to the reference sequence */
@@ -295,86 +301,86 @@ int main(int argc, char **argv)
 
 
 	/* start table line */
-	if (html)
+	if(html)
 	    ajFmtPrintF(outfile, "<tr>");
 
-	if (dousa)
+	if(dousa)
 	    infoalign_OutputStr(outfile, usa, html,
 				(dodesc || dochange ||
 				 dodifcount || dosimcount ||
 				 doidcount || dogapcount || dogaps ||
 				 doseqlength || doalignlength || doname), 18);
-
-	if (doname)
+	
+	if(doname)
 	    infoalign_OutputStr(outfile, name, html,
 				(dodesc || dochange ||
 				 dodifcount || dosimcount ||
 				 doidcount || dogapcount || dogaps ||
 				 doseqlength || doalignlength), 14);
-
-	if (doseqlength)
+	
+	if(doseqlength)
 	    infoalign_OutputInt(outfile, seqlength, html,
 				(dodesc || dochange ||
 				 dodifcount || dosimcount ||
 				 doidcount || dogapcount ||
 				 dogaps || doalignlength));
-
-	if (doalignlength)
+	
+	if(doalignlength)
 	    infoalign_OutputInt(outfile, alignlength, html,
 				(dodesc || dochange ||
 				 dodifcount || dosimcount ||
 				 doidcount || dogapcount || dogaps));
-
-	if (dogaps)
+	
+	if(dogaps)
 	    infoalign_OutputInt(outfile, gaps, html,
 				(dodesc || dochange ||
 				 dodifcount || dosimcount ||
 				 doidcount || dogapcount));
-
-	if (dogapcount)
+	
+	if(dogapcount)
 	    infoalign_OutputInt(outfile, gapcount, html,
 				(dodesc || dochange ||
 				 dodifcount || dosimcount ||
 				 doidcount));
-
-	if (doidcount)
+	
+	if(doidcount)
 	    infoalign_OutputInt(outfile, idcount, html,
 				(dodesc || dochange || dodifcount ||
 				 dosimcount));
-
-	if (dosimcount)
+	
+	if(dosimcount)
 	    infoalign_OutputInt(outfile, simcount, html, (dodesc || dochange ||
 							  dodifcount));
-
-	if (dodifcount)
+	
+	if(dodifcount)
 	    infoalign_OutputInt(outfile, difcount, html, (dodesc || dochange));
-
-	if (dochange)
+	
+	if(dochange)
 	    infoalign_OutputFloat(outfile, change, html, dodesc);
-
-	if (dodesc)
+	
+	if(dodesc)
 	    infoalign_OutputStr(outfile, desc, html, ajFalse, NOLIMIT);
-
+	
 	/* end table line */
-	if (html)
-	    (void) ajFmtPrintF(outfile, "</tr>\n");
+	if(html)
+	    ajFmtPrintF(outfile, "</tr>\n");
 	else
-	    (void) ajFmtPrintF(outfile, "\n");
+	    ajFmtPrintF(outfile, "\n");
     }
-
-
+    
+    
     /* end the HTML table */
-    if (html)
-	(void) ajFmtPrintF(outfile, "</table>\n");
-
-    (void) ajFileClose(&outfile);
-
+    if(html)
+	ajFmtPrintF(outfile, "</table>\n");
+    
+    ajFileClose(&outfile);
+    
     /* tidy up */
     ajStrDel(&altusa);
     ajStrDel(&altname);
     ajStrDel(&xxx);
     ajSeqDel(&consensus);
-
+    
     ajExit();
     return 0;
 }
@@ -399,19 +405,19 @@ int main(int argc, char **argv)
 ** @@
 ******************************************************************************/
 
-static void infoalign_OutputFloat (AjPFile outfile, float num, AjBool html,
-				   AjBool after)
+static void infoalign_OutputFloat(AjPFile outfile, float num, AjBool html,
+				  AjBool after)
 {
-    if (html)
-	(void) ajFmtPrintF(outfile, "<td>");
+    if(html)
+	ajFmtPrintF(outfile, "<td>");
 
-    (void) ajFmtPrintF(outfile, "%f", num);
+    ajFmtPrintF(outfile, "%f", num);
 
-    if (html)
-	(void) ajFmtPrintF(outfile, "</td>\n");
+    if(html)
+	ajFmtPrintF(outfile, "</td>\n");
     else
-	if (after)
-	    (void) ajFmtPrintF(outfile, "\t");
+	if(after)
+	    ajFmtPrintF(outfile, "\t");
 
     return;
 }
@@ -436,19 +442,18 @@ static void infoalign_OutputFloat (AjPFile outfile, float num, AjBool html,
 ** @@
 ******************************************************************************/
 
-static void infoalign_OutputInt (AjPFile outfile, ajint num, AjBool html,
-				 AjBool after)
+static void infoalign_OutputInt(AjPFile outfile, ajint num, AjBool html,
+				AjBool after)
 {
+    if(html)
+	ajFmtPrintF(outfile, "<td>");
 
-    if (html)
-	(void) ajFmtPrintF(outfile, "<td>");
-
-    (void) ajFmtPrintF(outfile, "%d", num);
-    if (html)
-	(void) ajFmtPrintF(outfile, "</td>\n");
+    ajFmtPrintF(outfile, "%d", num);
+    if(html)
+	ajFmtPrintF(outfile, "</td>\n");
     else
-	if (after)
-	    (void) ajFmtPrintF(outfile, "\t");
+	if(after)
+	    ajFmtPrintF(outfile, "\t");
 
     return;
 }
@@ -475,37 +480,36 @@ static void infoalign_OutputInt (AjPFile outfile, ajint num, AjBool html,
 ** @@
 ******************************************************************************/
 
-static void infoalign_OutputStr (AjPFile outfile, AjPStr str, AjBool html,
+static void infoalign_OutputStr(AjPFile outfile, AjPStr str, AjBool html,
 				 AjBool after, ajint minlength)
 {
-    AjPStr marginfmt=ajStrNewL(10);
+    AjPStr marginfmt;
 
-    /* ajFmtPrintF doesn't seem to deal with formats like "%-*S"
-       correctly, so ...  */
+    marginfmt = ajStrNewL(10);
+
+    /* ajFmtPrintF doesn't seem to deal with formats like "%-*S" correctly */
     ajFmtPrintS(&marginfmt, "%%-%dS", minlength);
 
-    if (html)
-	(void) ajFmtPrintF(outfile, "<td>");
+    if(html)
+	ajFmtPrintF(outfile, "<td>");
 
-    if (html || !after || minlength == NOLIMIT)
-	(void) ajFmtPrintF(outfile, "%S", str);
+    if(html || !after || minlength == NOLIMIT)
+	ajFmtPrintF(outfile, "%S", str);
     else
 	/*
-	 *  Make the formatting nice:
-	 *  If this is the last item, don't put spaces or TABs after it.
-	 *  Try to fit the name in 'minlength' spaces, else just add a
-	 *  TAB after it
-	 */
-	(void) ajFmtPrintF(outfile, ajStrStr(marginfmt), str);
+	**  Format:
+	**  If this is the last item, don't put spaces or TABs after it.
+	**  Try to fit the name in 'minlength' spaces, else just add a
+	**  TAB after it
+	*/
+	ajFmtPrintF(outfile, ajStrStr(marginfmt), str);
 
-    if (html)
-	(void) ajFmtPrintF(outfile, "</td>\n");
+    if(html)
+	ajFmtPrintF(outfile, "</td>\n");
     else
-	if (after &&  ajStrLen(str) >= minlength)
-	    (void) ajFmtPrintF(outfile, "\t");
+	if(after &&  ajStrLen(str) >= minlength)
+	    ajFmtPrintF(outfile, "\t");
 
-
-    /* tidy up */
     ajStrDel(&marginfmt);
 
     return;
@@ -526,31 +530,28 @@ static void infoalign_OutputStr (AjPFile outfile, AjPStr str, AjBool html,
 ** @@
 ******************************************************************************/
 
-static int infoalign_Getrefseq (AjPStr refseq, AjPSeqset seqset)
+static int infoalign_Getrefseq(AjPStr refseq, AjPSeqset seqset)
 {
     ajint i;
     AjPSeq seq;
 
-    for (i=0; i<ajSeqsetSize(seqset); i++)
+    for(i=0; i<ajSeqsetSize(seqset); i++)
     {
 	seq = ajSeqsetGetSeq(seqset, i);
-	if (!ajStrCmpO(ajSeqGetName(seq), refseq))
+	if(!ajStrCmpO(ajSeqGetName(seq), refseq))
 	    return i;
     }
 
     /* not a name of a sequence, so it must be a number */
-    if (ajStrToInt(refseq, &i))
-    {
-	if (i < 0 || i > ajSeqsetSize(seqset))
-	    ajFatal("Reference sequence number < 0 or > number "
-		    "of input sequences: %d", i);
-	return i-1;
-    }
-    else
+    if(!ajStrToInt(refseq, &i))
 	ajFatal("Reference sequence is not a sequence ID or a number: %S",
 		refseq);
 
-    return -1;		/* to make the compiler happy */
+    if(i < 0 || i > ajSeqsetSize(seqset))
+	ajFatal("Reference sequence number < 0 or > number "
+		"of input sequences: %d", i);
+
+    return i-1;
 }
 
 
@@ -562,7 +563,7 @@ static int infoalign_Getrefseq (AjPStr refseq, AjPSeqset seqset)
 ** reference sequence
 **
 ** @param [r] ref [AjPSeq] the reference sequence
-** @param [r] seq [AjPSeq] the sequence to be changed
+** @param [r] seq [AjPSeq] the sequence to be compared to 'ref'
 ** @param [r] sub [ajint **] scoring matrix
 ** @param [r] cvt [AjPSeqCvt] conversion table for scoring matrix
 ** @param [r] seqlength [ajint *] sequence length
@@ -585,36 +586,40 @@ static void infoalign_Compare(AjPSeq ref, AjPSeq seq, ajint **sub,
 			      float *change)
 {
     ajint i;
+    ajint lenseq;
+    ajint lenref;
+    char *s;
+    char *r;
 
-    ajint lenseq = ajSeqLen(seq);
-    ajint lenref = ajSeqLen(ref);
+    AjBool inGap = ajFalse;	/* true if in a gap in 'seq' */
+    ajint begin;
+    ajint end;
 
-    char *s = ajSeqChar(seq);	/* the original char * of the sequence */
-    char *r = ajSeqChar(ref);
-
-    AjBool inGap = ajFalse;
-    ajint begin, end;
+    lenseq = ajSeqLen(seq);
+    lenref = ajSeqLen(ref);
+    s = ajSeqChar(seq);
+    r = ajSeqChar(ref);
 
     /* initialise counts */
-    *seqlength = 0;
+    *seqlength   = 0;
     *alignlength = 0;
-    *gaps = 0;
+    *gaps     = 0;
     *gapcount = 0;
-    *idcount = 0;
+    *idcount  = 0;
     *simcount = 0;
     *difcount = 0;
-    *change = 0.0;
+    *change   = 0.0;
 
     /* ignore gaps at the ends of the sequence */
-    for (begin = 0; s[begin] == '-'; begin++);
-    for (end = lenseq-1; s[end] == '-'; end--);
+    for(begin = 0; s[begin] == '-'; begin++);
+    for(end = lenseq-1; s[end] == '-'; end--);
 
-    for (i=begin; i<=end; i++)
+    for(i=begin; i<=end; i++)
     {
 	/* count gaps and their length */
-	if (s[i] == '-')
+	if(s[i] == '-')
 	{
-	    if (!inGap)
+	    if(!inGap)
 	    {
 		inGap = ajTrue;
 		(*gaps)++;
@@ -622,37 +627,34 @@ static void infoalign_Compare(AjPSeq ref, AjPSeq seq, ajint **sub,
 	    (*gapcount)++;
 	}
 	else
+	{
 	    inGap = ajFalse;
 
-
-	/* count identity, similarity, differences */
-	/* are we past the end of the reference sequence ? */
-	if (i >= lenref)
-	    (*difcount)++;
-	else
-	{
-	    /* identity */
-	    if (toupper((int)r[i]) == toupper((int)s[i]))
-		(*idcount)++;
-	    /* similarity */
-	    else if (sub[ajSeqCvtK(cvt, r[i])][ajSeqCvtK(cvt, s[i])] > 0)
-		(*simcount)++;
-	    /* difference */
+	    /*
+	    ** count identity, similarity, differences
+	    ** Past the end of the reference sequence ?
+	    */
+	    if(i >= lenref)
+	        (*difcount)++;
 	    else
-		(*difcount)++;
+	    {
+	        /* identity */
+	        if((toupper((int)r[i]) == toupper((int)s[i])))
+		    (*idcount)++;
+	        /* similarity */
+	        else if(sub[ajSeqCvtK(cvt, r[i])][ajSeqCvtK(cvt, s[i])] > 0)
+		    (*simcount)++;
+	        /* difference */
+	        else
+		    (*difcount)++;
+	    }
 	}
     }
 
-    /* get lengths */
-    /* length of sequence excluding gaps */
-    *seqlength = *idcount + *simcount + *difcount;;
-    /* length of aligned sequence with internal gaps */
-    *alignlength = *gapcount + *seqlength;
+    *seqlength   = *idcount + *simcount + *difcount;
+    *alignlength = end-begin+1;
 
-    /* calculate change */
-    *change = (float)(end-begin+1 - *idcount)*100.0/(float)(end-begin+1);
+    *change = (float)(*alignlength - *idcount)*100.0/(float)(*alignlength);
 
     return;
 }
-
-
