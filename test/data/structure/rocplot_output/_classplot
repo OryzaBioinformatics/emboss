@@ -1,9 +1,0 @@
-# GNUPLOT driver file for classification plot
-set title "Classification plot for data1.rocplot & data2.rocp"
-set xlabel "Number of hits detected"
-set ylabel "Proportion of hits detected that are of a certain type"
-set nokey
-set key top outside title "Data Series" box 3
-set data style points
-set pointsize 0.45
-plot "_classplot_dat0" smooth bezier title "True hits", "_classplot_dat1" smooth bezier title "Cross hits", "_classplot_dat2" smooth bezier title "Uncertain hits", "_classplot_dat3" smooth bezier title "Unknown hits", "_classplot_dat4" smooth bezier title "False hits"
