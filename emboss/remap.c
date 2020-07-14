@@ -252,6 +252,8 @@ int main(int argc, char **argv)
 				   default_maxcuts, blunt, sticky, commercial,
 				   restrictlist);
 
+	ajDebug("Remap found %d hits\n", hits);
+
 	if(hits)
 	{
 	    /* this bit is lifted from printHits */
@@ -282,7 +284,7 @@ int main(int argc, char **argv)
 
 	/* create the format to display */
 	embShowAddBlank(ss);
-	embShowAddRE(ss, 1, restrictlist, flat);
+	embShowAddRE(ss, 1, restrictlist, plasmid, flat);
 	embShowAddSeq(ss, numberseq, threeletter, uppercase, highlight);
 
 	if(!numberseq)
@@ -292,7 +294,7 @@ int main(int argc, char **argv)
 	if(reverse)
 	{
 	    embShowAddComp(ss, numberseq);
-	    embShowAddRE(ss, -1, restrictlist, flat);
+	    embShowAddRE(ss, -1, restrictlist, plasmid, flat);
 	}
 
 
