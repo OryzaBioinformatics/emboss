@@ -39,7 +39,7 @@ typedef struct AjSMwh
 /*
  *  prototypes
  */
-static void mwfilter_readdata(AjPStr datafile, AjPDouble *rmarray,
+static void mwfilter_readdata(AjPFile datafile, AjPDouble *rmarray,
 			      AjPDouble *darray);
 static void mwfilter_readexp(AjPFile inf, AjPDouble *exparray);
 static void mwfilter_noisedel(AjPDouble exparray, ajint expn,
@@ -67,7 +67,7 @@ int main(int argc, char **argv)
 
     float tolerance = 0.0;
 
-    AjPStr datafile = NULL;
+    AjPFile datafile = NULL;
 
     AjPDouble rmarray  = NULL;
     AjPDouble darray   = NULL;
@@ -84,7 +84,7 @@ int main(int argc, char **argv)
 
     inf       = ajAcdGetInfile("infile");
     tolerance = ajAcdGetFloat("tolerance");
-    datafile  = ajAcdGetString("datafile");
+    datafile  = ajAcdGetDatafile("datafile");
     showdel   = ajAcdGetBool("showdel");
     outf      = ajAcdGetOutfile("outfile");
 
@@ -96,7 +96,8 @@ int main(int argc, char **argv)
 
     /* Get keratin/trypsin & oxymet/oxythr/sodium data */
     mwfilter_readdata(datafile, &rmarray, &darray);
-    rmn = ajDoubleLen(rmarray);
+   ajFileClose(&datafile);
+     rmn = ajDoubleLen(rmarray);
     dn  = ajDoubleLen(darray);
 
     /* Get experimental results */
@@ -133,7 +134,6 @@ int main(int argc, char **argv)
     ajListDel(&dlist);
 
 
-    ajFileClose(&inf);
     ajFileClose(&outf);
 
     ajExit();
@@ -147,25 +147,20 @@ int main(int argc, char **argv)
 **
 ** Read molecular weight exclusion file.
 **
-** @param [r] datafile [AjPStr] Name of datafile (Emwfilter.dat)
+** @param [r] datafile [AjPFile] Datafile (Emwfilter.dat)
 ** @param [w] rmarray [AjPDouble*] keratin/trypsin data etc
 ** @param [w] darray [AjPDouble*] oxymet/sodium data etc
 ** @@
 ******************************************************************************/
-static void mwfilter_readdata(AjPStr datafile, AjPDouble *rmarray,
+static void mwfilter_readdata(AjPFile inf, AjPDouble *rmarray,
 			      AjPDouble *darray)
 {
-    AjPFile inf=NULL;
     ajint   rmn = 0;
     ajint   dn  = 0;
 
     AjPStr  line = NULL;
     char    c;
     double  n;
-
-    ajFileDataNew(datafile,&inf);
-    if(!inf)
-	ajFatal("Cannot open filter data file [%S]",datafile);
 
     line = ajStrNew();
 

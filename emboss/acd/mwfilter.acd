@@ -1,45 +1,62 @@
-appl: mwfilter [
+application: mwfilter [
   documentation: "Filter noisy molwts from mass spec output"
   groups: "Protein:Composition"
 ]
 
-section: input [ info: "input Section" type: page ]
-infile: infile  [
-  parameter: "Y"
-  information: "Molecular weight file input"
+section: input [
+  information: "Input section"
+  type: "page"
 ]
+
+  infile: infile  [
+    parameter: "Y"
+    information: "Molecular weight file input"
+    standardtype: "molwt list"
+  ]
 
 endsection: input
 
-section: required [ info: "required Section" type: page ]
-
-float: tolerance  [
-  required: "Y"
-  information: "ppm tolerance"
-  default: "50.0"
+section: required [
+  information: "Required section"
+  type: "page"
 ]
 
-bool: showdel [
-  optional: Y
-  information: "Output deleted mwts"
-  default: N
-]
+  float: tolerance  [
+    required: "Y"
+    information: "ppm tolerance"
+    default: "50.0"
+  ]
+
+  boolean: showdel  [
+    optional: "Y"
+    information: "Output deleted mwts"
+    default: "N"
+  ]
 
 endsection: required
 
-section: advanced [ info: "advanced Section" type: page ]
-string: datafile  [
-  optional: "N"
-  default: "Emwfilter.dat"
-  information: "Data file of noisy molecular weights"
+section: advanced [
+  information: "Advanced section"
+  type: "page"
 ]
+
+  datafile: datafile  [
+    default: "Emwfilter.dat"
+    information: "Data file of noisy molecular weights"
+    standardtype: "molwt list"
+  ]
 
 endsection: advanced
 
-section: output [ info: "output Section" type: page ]
-outfile: outfile  [
-  parameter: "Y"
-  extension: "mwfilter"
+section: output [
+  information: "Output section"
+  type: "page"
 ]
-endsection: output
 
+  outfile: outfile  [
+    parameter: "Y"
+    extension: "mwfilter"
+    standardtype: "molwt list"
+  ]
+
+endsection: output
