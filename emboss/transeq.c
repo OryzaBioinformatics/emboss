@@ -28,7 +28,6 @@
 
 
 
-static void transeq_GetRegions(const AjPRange regions, AjPSeq seq);
 static void transeq_Trim(AjPSeq seq);
 static void transeq_GetFrames(AjPStr const *framelist, AjBool *frames);
 static void transeq_Clean(AjPSeq seq);
@@ -54,10 +53,10 @@ int main(int argc, char **argv)
     AjPStr *tablelist;
     ajint table;
     AjPRange regions;
+    AjPRange seqregions;
     AjBool trim;
     AjBool clean;
     AjBool defr  = ajFalse; /* true if the range covers the whole sequence */
-    AjBool first = ajTrue;  /* true if this is the first sequence done     */
     AjBool alternate;
 
     int i;
@@ -86,16 +85,14 @@ int main(int argc, char **argv)
 
     while(ajSeqallNext(seqall, &seq))
     {
-        if(first)
-        {
-            first = ajFalse;
-	    if(ajRangeDefault(regions, ajSeqStr(seq)))
-	        defr = ajTrue;
-	}
+	ajSeqTrim(seq);
+
+	seqregions = ajRangeCopy(regions);
+        defr = ajRangeDefault(seqregions, seq);
 
 	/* get regions to translate */
 	if(!defr)
-	    transeq_GetRegions(regions, seq);
+	    ajRangeSeqExtract(seqregions, seq);
 
         for(i=0; i<6; i++)
 	{
@@ -120,6 +117,7 @@ int main(int argc, char **argv)
 	        ajSeqDel(&pep);
 	    }
 	}
+	ajRangeDel(&seqregions);
     }
 
     ajSeqWriteClose(seqout);
@@ -130,41 +128,6 @@ int main(int argc, char **argv)
     return 0;
 }
 
-
-
-
-/* @funcstatic transeq_GetRegions *********************************************
-**
-** Changes a sequence to only the specified regions
-** A set of regions is specified by a set of pairs of positions.
-** The positions are integers.
-** They are separated by any non-digit, non-alpha character.
-** Examples of region specifications are:
-** 24-45, 56-78
-** 1:45, 67=99;765..888
-** 1,5,8,10,23,45,57,99
-**
-** @param [r] regions [const AjPRange] regions to extract
-** @param [u] seq [AjPSeq] sequence to extract sequence from,
-**                        returned as the extracted exons only
-** @return [void]
-** @@
-******************************************************************************/
-
-static void transeq_GetRegions(const AjPRange regions, AjPSeq seq)
-{
-
-    AjPStr newstr = NULL;
-
-    newstr = ajStrNew();
-
-    ajRangeStrExtract(regions, ajSeqStr(seq), &newstr);
-    ajSeqReplace(seq, newstr);
-
-    ajStrDel(&newstr);
-
-    return;
-}
 
 
 

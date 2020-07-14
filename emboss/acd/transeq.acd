@@ -56,7 +56,7 @@ section: additional [
 
   range: regions  [
     additional: "Y"
-    default: "$(sequence.begin)-$(sequence.end)"
+    default: ""
     information: "Regions to translate (eg: 4-57,78-94)"
     help: "Regions to translate. \
            If this is left blank, then the complete sequence is translated. \
