@@ -479,6 +479,23 @@ cgtaggtggt
    
    Example 4
    
+   To extract the CDS region with the exons joined into one sequence:
+   
+
+% extractfeat tembl:hsfau1 -type CDS -join stdout 
+Extract features from a sequence
+
+>HSFAU1_782_1912 [CDS] H.sapiens fau 1 gene
+atgcagctctttgtccgcgcccaggagctacacaccttcgaggtgaccggccaggaaacg
+gtcgcccagatcaaggctcatgtagcctcactggagggcattgccccggaagatcaagtc
+gtgctcctggcaggcgcgcccctggaggatgaggccactctgggccagtgcggggtggag
+gccctgactaccctggaagtagcaggccgcatgcttggaggtaaagtccatggttccctg
+gcccgtgctggaaaagtgagaggtcagactcctaaggtggccaaacaggagaagaagaag
+aagaagacaggtcgggctaagcggcggatgcagtacaaccggcgctttgtcaacgttgtg
+cccacctttggcaagaagaagggccccaatgccaactcttaa
+   
+   Example 5
+   
    To write out the 7 residues around all phosphorylated residues in the
    tsw database:
    
@@ -630,12 +647,85 @@ Command line arguments
                                   to be a part of the sequence ID name. If
                                   you set this to be TRUE then the name is
                                   added to the ID name of the output sequence.
+   -describe           string     To aid you in identifying some further
+                                  properties of a feature that has been
+                                  output, this lets you specify one or more
+                                  tag names that should be added to the output
+                                  sequence Description text, together with
+                                  their values (if any). For example, if this
+                                  is set to be 'gene', then if any output
+                                  feature has the tag (for example)
+                                  '/gene="BRCA1"' associated with it, then the
+                                  text '(gene="BRCA1")' will be added to the
+                                  Description line. Tags are the types of
+                                  extra values that a feature may have. For
+                                  example in the EMBL feature table, a 'CDS'
+                                  type of feature may have the tags '/codon',
+                                  '/codon_start', '/db_xref', '/EC_number',
+                                  '/evidence', '/exception', '/function',
+                                  '/gene', '/label', '/map', '/note',
+                                  '/number', '/partial', '/product',
+                                  '/protein_id', '/pseudo', '/standard_name',
+                                  '/translation', '/transl_except',
+                                  '/transl_table', or '/usedin'. Some of these
+                                  tags also have values, for example '/gene'
+                                  can have the value of the gene name.
+                                  By default no feature tag is displayed. You
+                                  can set this to match any feature tag you
+                                  wish to show.
+                                  The tag may be wildcarded by using '*'.
+                                  If you wish to extract more than one tag,
+                                  separate their names with the character '|',
+                                  eg:
+                                  gene | label
 
    Advanced qualifiers: (none)
+   Associated qualifiers:
+  "-sequence" related qualifiers
+   -sbegin1             integer    First base used
+   -send1               integer    Last base used, def=seq length
+   -sreverse1           boolean    Reverse (if DNA)
+   -sask1               boolean    Ask for begin/end/reverse
+   -snucleotide1        boolean    Sequence is nucleotide
+   -sprotein1           boolean    Sequence is protein
+   -slower1             boolean    Make lower case
+   -supper1             boolean    Make upper case
+   -sformat1            string     Input sequence format
+   -sopenfile1          string     Input filename
+   -sdbname1            string     Database name
+   -sid1                string     Entryname
+   -ufo1                string     UFO features
+   -fformat1            string     Features format
+   -fopenfile1          string     Features file name
+  "-outseq" related qualifiers
+   -osformat2           string     Output seq format
+   -osextension2        string     File name extension
+   -osname2             string     Base file name
+   -osdirectory2        string     Output directory
+   -osdbname2           string     Database name to add
+   -ossingle2           boolean    Separate file for each entry
+   -oufo2               string     UFO features
+   -offormat2           string     Features format
+   -ofname2             string     Features file name
+   -ofdirectory2        string     Output directory
+
    General qualifiers:
-  -help                boolean    Report command line options. More
+   -auto                boolean    Turn off prompts
+   -stdout              boolean    Write standard output
+   -filter              boolean    Read standard input, write standard output
+   -options             boolean    Prompt for required and optional values
+   -debug               boolean    Write debug output to program.dbg
+   -acdlog              boolean    Write ACD processing log to program.acdlog
+   -acdpretty           boolean    Rewrite ACD file as program.acdpretty
+   -acdtable            boolean    Write HTML table of options
+   -verbose             boolean    Report some/full command line options
+   -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
+   -warning             boolean    Report warnings
+   -error               boolean    Report errors
+   -fatal               boolean    Report fatal errors
+   -die                 boolean    Report deaths
    
 
    Mandatory qualifiers Allowed values Default
@@ -727,6 +817,25 @@ Command line arguments
    is useful for the type to be a part of the sequence ID name. If you
    set this to be TRUE then the name is added to the ID name of the
    output sequence. Boolean value Yes/No No
+   -describe To aid you in identifying some further properties of a
+   feature that has been output, this lets you specify one or more tag
+   names that should be added to the output sequence Description text,
+   together with their values (if any). For example, if this is set to be
+   'gene', then if any output feature has the tag (for example)
+   '/gene="BRCA1"' associated with it, then the text '(gene="BRCA1")'
+   will be added to the Description line. Tags are the types of extra
+   values that a feature may have. For example in the EMBL feature table,
+   a 'CDS' type of feature may have the tags '/codon', '/codon_start',
+   '/db_xref', '/EC_number', '/evidence', '/exception', '/function',
+   '/gene', '/label', '/map', '/note', '/number', '/partial', '/product',
+   '/protein_id', '/pseudo', '/standard_name', '/translation',
+   '/transl_except', '/transl_table', or '/usedin'. Some of these tags
+   also have values, for example '/gene' can have the value of the gene
+   name. By default no feature tag is displayed. You can set this to
+   match any feature tag you wish to show. The tag may be wildcarded by
+   using '*'. If you wish to extract more than one tag, separate their
+   names with the character '|', eg: gene | label Any string is accepted
+   An empty string is accepted
    Advanced qualifiers Allowed values Default
    (none)
    
@@ -885,7 +994,7 @@ SQ   Sequence 2016 BP; 421 A; 562 C; 538 G; 495 T; 0 other;
 6
 //
    
-  Input files for usage example 4
+  Input files for usage example 5
   
    'tsw:*' is a sequence entry in the example protein database 'tsw'
    
@@ -1039,7 +1148,7 @@ SQ   Sequence 2016 BP; 421 A; 562 C; 538 G; 495 T; 0 other;
 6
 //
    
-  Input files for usage example 4
+  Input files for usage example 5
   
    'tsw:*' is a sequence entry in the example protein database 'tsw'
    
@@ -1128,8 +1237,8 @@ See also
    
 Author(s)
 
-   This application was written by Gary Williams
-   (gwilliam@hgmp.mrc.ac.uk)
+   Gary Williams (gwilliam © hgmp.mrc.ac.uk)
+   HGMP-RC, Genome Campus, Hinxton, Cambridge CB10 1SB, UK
    
 History
 
