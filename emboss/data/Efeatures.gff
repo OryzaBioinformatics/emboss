@@ -1,849 +1,1337 @@
+# Updated to EMBL/GenBank/DDBJ FTv5.0 by Peter Rice 17th Jan 2003
+# Updated to EMBL/GenBank/DDBJ FTv6.2 by Peter Rice 27th Jan 2005
+# New in 6.2 is alternate mandatory qualifiers, shown by m rather than M
+# where e.g. /citation or /compare is used for a conflict
+
 misc_feature
-	/citation
-                      /db_xref                   
-                      /evidence
-                      /function
-                      /gene
-                      /label
-                      /map
-                      /note
-                      /partial
-                      /number
-                      /phenotype
-                      /product
-                      /pseudo
-                      /standard_name
-                      /usedin
-		      /Sequence
+	/allele
+        /citation
+        /db_xref                   
+        /evidence
+        /function
+        /gene
+        /label
+	/locus_tag
+        /map
+        /note
+	/number
+	/old_locus_tag
+        # removed after FTv5.0 for new entries - use <> in location instead
+	#        /partial
+        /phenotype
+        /product
+        /pseudo
+        /standard_name
+        /usedin
+
 attenuator
-	/citation
-	/db_xref
-	/evidence
-	/gene
-	/label
-	/map
-	/note
-	/partial
-	/phenotype
-	/usedin
+        /allele
+        /citation
+        /db_xref
+        /evidence
+        /gene
+        /label
+	/locus_tag
+        /map
+        /note
+	/old_locus_tag
+	/operon
+	# removed in FTv5.0 for new entries - use <> in location instead
+	#        /partial
+        /phenotype
+        /usedin
+
+#org=prokaryotes
+#mol=DNA
+
 C_region
+        /allele
+        /citation
+        /db_xref
+        /evidence
+        /gene
+        /label
+	/locus_tag
+        /map
+        /note
+	/old_locus_tag
+	# removed in FTv5.0 for new entries - use <> in location instead
+	#        /partial
+        /product
+        /pseudo
+        /standard_name
+        /usedin
+
+#up=CDS
+#org=eukaryotes
+
+CAAT_signal
+	/allele
+        /citation
+        /db_xref                     
+        /evidence
+        /gene
+        /label
+	/locus_tag
+        /map
+        /note
+	/old_locus_tag
+	# removed in FTv5.0 for new entries - use <> in location instead
+	#        /partial
+        /usedin
+
+#org=eukaryotes,eukaryotic_viruses
+#mol=DNA
+
+CDS
+        m/translation
+        m/pseudo
+	 /allele
+         /citation
+         /codon
+         /codon_start
+         /db_xref        
+         /EC_number
+         /evidence
+         /exception
+         /function
+         /gene
+         /label
+	 /locus_tag
+         /map
+         /note
+         /number
+	 /old_locus_tag
+	 /operon
+	 # removed in FTv5.0 for new entries - use <> in location instead
+	 #        /partial
+         /product
+         /protein_id
+         /standard_name
+         /transl_except
+         /transl_table
+         /usedin
+
+conflict
+       m/citation
+       m/compare
+        /db_xref
+        /evidence
+        /label
+        /map
+        /note
+        /gene
+	/locus_tag
+	/old_locus_tag
+# use /replace="" for a deletion
+        /replace
+        /usedin
+
+D-loop
+	/allele
+        /citation
+        /db_xref
+        /evidence
+        /gene
+        /label
+	/locus_tag
+        /map
+        /note
+	/old_locus_tag
+	# removed in FTv5.0 for new entries - use <> in location instead
+	#        /partial
+        /usedin
+
+#mol=DNA
+
+D_segment
+	/allele
+        /citation
+        /db_xref
+        /evidence
+        /gene
+        /label
+	/locus_tag
+        /map
+        /note
+	/old_locus_tag
+	# removed in FTv5.0 for new entries - use <> in location instead
+	#        /partial
+        /product
+        /pseudo
+        /standard_name
+        /usedin
+
+#up=CDS
+#org=eukaryotes
+
+enhancer
+	/allele
+	/bound_moiety
+        /citation
+        /db_xref        
+        /evidence
+        /gene
+        /label
+	/locus_tag
+        /map
+        /note
+	/old_locus_tag
+	# removed in FTv5.0 for new entries - use <> in location instead
+	#        /partial
+        /standard_name
+        /usedin
+
+#org=eukaryotes,eukaryotic_viruses
+
+exon
+	/allele
+        /citation
+        /db_xref                    
+        /EC_number
+        /evidence
+        /function
+        /gene
+        /label
+	/locus_tag
+        /map
+        /note
+        /number
+	/old_locus_tag
+	# removed in FTv5.0 for new entries - use <> in location instead
+	#        /partial
+        /product
+        /pseudo
+        /standard_name
+        /usedin
+
+# New in 6.2
+gap
+	M/estimated_length
+	/map
+	/note
+
+GC_signal
+	/allele
+        /citation
+        /db_xref                    
+        /evidence
+        /gene
+        /label
+	/locus_tag
+        /map
+        /note
+	/old_locus_tag
+	# removed in FTv5.0 for new entries - use <> in location instead
+	#        /partial
+        /usedin
+
+#org=eukaryotes,eukaryotic_viruses
+
+gene
+        /allele
+        /citation
+        /db_xref
+        /evidence
+        /function
+	# gene added as genbank has several entries
+        /gene  
+        /label
+	/locus_tag
+        /map
+        /note
+	/old_locus_tag
+	/operon
+	# removed in FTv5.0 for new entries - use <> in location instead
+	#        /partial
+        /product
+        /pseudo
+        /phenotype
+        /standard_name
+        /usedin
+
+iDNA
+	/allele
+        /citation
+        /db_xref                    
+        /evidence
+        /function
+	/gene
+        /label
+	/locus_tag
+        /map
+        /note
+        /number
+ 	/old_locus_tag
+	# removed in FTv5.0 for new entries - use <> in location instead
+	#        /partial
+        /standard_name
+        /usedin
+
+#mol=DNA
+
+intron
+	/allele
+        /citation
+        /cons_splice
+        /db_xref                    
+        /evidence
+        /function
+        /gene
+        /label
+	/locus_tag
+        /map
+        /note
+        /number
+ 	/old_locus_tag
+	# removed in FTv5.0 for new entries - use <> in location instead
+	#        /partial
+        /standard_name
+        /usedin
+
+J_segment
+	/allele
+        /citation
+        /db_xref
+        /evidence
+        /gene
+	/locus_tag
+        /map
+        /note
+ 	/old_locus_tag
+	# removed in FTv5.0 for new entries - use <> in location instead
+	#        /partial
+        /product
+        /pseudo
+        /standard_name
+        /usedin
+
+#up=CDS
+#org=eukaryotes
+
+LTR
+	/allele
+        /citation
+        /db_xref                    
+        /evidence
+        /function
+        /gene
+        /label
+	/locus_tag
+        /map
+        /note
+ 	/old_locus_tag
+	# removed in FTv5.0 for new entries - use <> in location instead
+	#        /partial
+        /standard_name
+        /usedin
+
+mat_peptide
+	/allele
+        /citation
+        /db_xref                    
+        /EC_number
+        /evidence
+        /function
+        /gene
+        /label
+	/locus_tag
+        /map
+        /note
+ 	/old_locus_tag
+	# removed in FTv5.0 for new entries - use <> in location instead
+	#        /partial
+        /product
+        /pseudo
+        /standard_name
+        /usedin
+
+misc_binding
+       M/bound_moiety
+        /allele
+        /citation
+        /db_xref                    
+        /evidence
+        /function
+        /gene
+        /label
+	/locus_tag
+        /map
+        /note
+ 	/old_locus_tag
+	# removed in FTv5.0 for new entries - use <> in location instead
+	#        /partial
+        /usedin
+
+misc_difference
+	/allele
+        /citation
+        /clone
+	/compare
+        /db_xref
+        /evidence                   
+        /gene
+        /label
+	/locus_tag
+        /map                    
+        /note
+ 	/old_locus_tag
+	# removed in FTv5.0 for new entries - use <> in location instead
+	#        /partial
+	/phenotype
+        /replace  
+        /standard_name
+        /usedin
+
+misc_recomb
+	/allele
+        /citation
+        /db_xref                     
+        /evidence
+        /gene
+        /label
+	/locus_tag
+        /map
+        /note
+ 	/old_locus_tag
+	# No longer mandatory /organism from FTv5.0
+	# If omitted, assume only the SOURCE organism is involved
+        /organism
+	# removed in FTv5.0 for new entries - use <> in location instead
+	#        /partial
+        /standard_name
+        /usedin
+
+#mol=DNA
+
+misc_RNA
+	/allele
+        /citation
+        /db_xref                    
+        /evidence
+        /function
+        /gene
+        /label
+	/locus_tag
+        /map
+        /note
+ 	/old_locus_tag
+	/operon
+	# removed in FTv5.0 for new entries - use <> in location instead
+	#        /partial
+        /product
+        /standard_name
+        /usedin
+
+misc_signal
+	/allele
+        /citation
+        /db_xref                 
+        /evidence
+        /function
+        /gene
+        /label
+	/locus_tag
+        /map
+        /note
+ 	/old_locus_tag
+	# removed in FTv5.0 for new entries - use <> in location instead
+	#        /partial
+        /phenotype
+        /standard_name
+        /usedin
+
+misc_structure
+	/allele
+        /citation
+        /db_xref                  
+        /evidence
+        /function
+        /gene
+        /label
+	/locus_tag
+        /map
+        /note
+ 	/old_locus_tag
+	# removed in FTv5.0 for new entries - use <> in location instead
+	#        /partial
+        /standard_name
+        /usedin
+
+modified_base
+       M/mod_base
+        /allele
+        /citation
+        /db_xref                     
+        /evidence
+        /frequency
+        /gene
+        /label
+	/locus_tag
+        /map
+        /note
+	/old_locus_tag
+        /usedin
+
+mRNA
+	/allele
+        /citation
+        /db_xref                     
+        /evidence
+        /function
+        /gene
+        /label
+	/locus_tag
+        /map
+        /note
+ 	/old_locus_tag
+	/operon
+	# removed in FTv5.0 for new entries - use <> in location instead
+	#        /partial
+        /product
+        /pseudo
+        /standard_name
+        /usedin
+
+# removed in EMBL FTv3.0 Jan 2001
+#mutation
+#        /citation
+#        /db_xref
+#        /frequency
+#        /gene
+#        /label
+#	/locus_tag
+#        /map
+#        /note
+#        /phenotype
+#        /product
+#        /replace
+#        /standard_name
+#        /usedin
+
+N_region
+	/allele
+        /citation
+        /db_xref
+        /evidence
+        /gene
+        /label
+	/locus_tag
+        /map
+        /note
+ 	/old_locus_tag
+	# removed in FTv5.0 for new entries - use <> in location instead
+	#        /partial
+        /product
+        /pseudo
+        /standard_name
+        /usedin
+
+#up=CDS
+#org=eukaryotes
+
+old_sequence
+       m/citation
+       m/compare
+        /allele
+        /db_xref
+        /evidence
+        /gene
+        /label
+	/locus_tag
+        /map
+        /note
+ 	/old_locus_tag
+	# removed in FTv5.0 for new entries - use <> in location instead
+	#        /partial
+	#use /replace="" to annotate a deletion
+        /replace
+        /usedin
+
+# New in FT 6.2
+operon
+	M/operon
+	 /allele
+	 /citation
+	 /db_xref
+	 /evidence
+	 /function
+	 /label
+	 /map
+	 /note
+	 /phenotype
+	 /pseudo
+	 /standard_name
+	 /usedin
+
+# New in FT 6.2
+oriT
+	/allele
+	/bound_moiety
 	/citation
 	/db_xref
+	# Only /direction=LEFT or RIGHT are valid
+	/direction
 	/evidence
 	/gene
 	/label
+	/locus_tag
 	/map
 	/note
-	/partial
-	/product
-	/pseudo
+	/old_locus_tag
+	/rpt_family
+	/rpt_type
+	/rpt_unit
 	/standard_name
 	/usedin
-CAAT_signal
-	/citation
-                      /db_xref                     
-                      /evidence
-                      /gene
-                      /label
-                      /map
-                      /note
-                      /partial
-                      /usedin
-CDS
-/citation
-                      /codon
-                      /codon_start
-                      /db_xref                      
-                      /EC_number
-                      /evidence
-                      /exception
-                      /function
-                      /gene
-                      /label
-                      /map
-                      /note
-                      /number
-                      /partial
-                      /product
-                      /protein_id
-                      /pseudo
-		      /sequence
-                      /standard_name
-                      /translation
-                      /transl_except
-                      /transl_table
-                      /usedin
-conflict
-		     M/citation
-		     /db_xref
-                      /evidence
-                      /label
-                      /map
-                      /note
-                      /gene
-                      /replace
-                      /usedin
-D-loop
-	/citation
-                      /db_xref
-                      /evidence
-                      /gene
-                      /label
-                      /map
-                      /note
-                      /partial
-                      /usedin
-D_segment
-	/citation
-                      /db_xref
-                      /evidence
-                      /gene
-                      /label
-                      /map
-                      /note
-                      /partial
-                      /product
-                      /pseudo
-                      /standard_name
-                      /usedin
-enhancer
-	/citation
-                      /db_xref                      
-                      /evidence
-                      /gene
-                      /label
-                      /map
-                      /note
-                      /partial
-                      /standard_name
-                      /usedin
-exon
-	/citation
-                      /db_xref                    
-                      /EC_number
-                      /evidence
-                      /function
-                      /gene
-                      /label
-                      /map
-                      /note
-                      /number
-                      /partial
-                      /product
-                      /pseudo
-		      /sequence
-                      /standard_name
-                      /usedin
-GC_signal
-	/citation
-                      /db_xref                    
-                      /evidence
-                      /gene
-                      /label
-                      /map
-                      /note
-                      /partial
-                      /usedin
-gene
-	/allele
-                      /citation
-                      /db_xref
-                      /evidence
-                      /function
-# gene added as genbank has several entrys
-                      /gene  
-                      /label
-                      /map
-                      /note
-                      /partial
-                      /product
-                      /pseudo
-                      /phenotype
-                      /standard_name
-                      /usedin
-iDNA
-	/citation
-                      /db_xref                    
-                      /evidence
-                      /function
-                      /label
-                      /gene
-                      /map
-                      /note
-                      /number
-                      /partial
-                      /standard_name
-                      /usedin
-intron
-	/citation
-                      /cons_splice
-                      /db_xref                    
-                      /evidence
-                      /function
-                      /gene
-                      /label
-                      /map
-                      /note
-                      /number
-                      /partial
-		      /sequence
-                      /standard_name
-                      /usedin
-J_segment
-	/citation
-                      /db_xref
-                      /evidence
-                      /gene
-                      /map
-                      /note
-                      /partial
-                      /product
-                      /pseudo
-                      /standard_name
-                      /usedin
-LTR
-	/citation
-                      /db_xref                    
-                      /evidence
-                      /function
-                      /gene
-                      /label
-                      /map
-                      /note
-                      /partial
-                      /standard_name
-                      /usedin
-mat_peptide
-	/citation
-                      /db_xref                    
-                      /EC_number
-                      /evidence
-                      /function
-                      /gene
-                      /label
-                      /map
-                      /note
-                      /partial
-                      /product
-                      /pseudo
-                      /standard_name
-                      /usedin
-misc_binding
-	M/bound_moiety
-/citation
-                      /db_xref                    
-                      /evidence
-                      /function
-                      /gene
-                      /label
-                      /map
-                      /note
-                      /partial
-                      /usedin
-misc_difference
-	/citation
-                      /clone
-                      /db_xref
-                      /evidence                   
-                      /gene
-                      /label
-                      /map                    
-                      /note
-                      /partial
-                      /replace  
-                      /standard_name
-                      /usedin
-misc_recomb
-	M/organism
-	/citation
-                      /db_xref                     
-                      /evidence
-                      /gene
-                      /label
-                      /map
-                      /note
-                      /partial
-                      /standard_name
-                      /usedin
-misc_RNA
-	/citation
-                      /db_xref                    
-                      /evidence
-                      /function
-                      /gene
-                      /label
-                      /map
-                      /note
-                      /partial
-                      /product
-                      /standard_name
-                      /usedin
-misc_signal
-	/citation
-                      /db_xref                 
-                      /evidence
-                      /function
-                      /gene
-                      /label
-                      /map
-                      /note
-                      /partial
-                      /phenotype
-                      /standard_name
-                      /usedin
-misc_structure
-	/citation
-                      /db_xref                  
-                      /evidence
-                      /function
-                      /gene
-                      /label
-                      /map
-                      /note
-                      /partial
-                      /standard_name
-                      /usedin
-modified_base
-	M/mod_base
-	/citation
-                      /db_xref                     
-                      /evidence
-                      /frequency
-                      /gene
-                      /label
-                      /map
-                      /note
-                      /usedin
-mRNA
-	/citation
-                      /db_xref                     
-                      /evidence
-                      /function
-                      /gene
-                      /label
-                      /map
-                      /note
-                      /partial
-                      /product
-                      /pseudo
-                      /standard_name
-                      /usedin
-mutation
-	/citation
-                      /db_xref
-                      /frequency
-                      /gene
-                      /label
-                      /map
-                      /note
-                      /phenotype
-                      /product
-                      /replace
-                      /standard_name
-                      /usedin
-N_region
-/citation
-                      /db_xref
-                      /evidence
-                      /gene
-                      /label
-                      /map
-                      /note
-                      /partial
-                      /product
-                      /pseudo
-                      /standard_name
-                      /usedin
-old_sequence
-	M/citation
-	/db_xref
-                      /evidence
-                      /gene
-                      /label
-                      /map
-                      /note
-                      /partial
-                      /replace
-                      /usedin
+
+#mol=DNA
+
 polyA_signal
-	/citation
-                      /db_xref                    
-                      /evidence
-                      /gene
-                      /label
-                      /map
-                      /note
-                      /partial
-                      /usedin
-polyA_site
-	/citation
-                      /db_xref                    
-                      /evidence
-                      /gene
-                      /label
-                      /map
-                      /note
-                      /usedin
-precursor_RNA
-	/citation
-                      /db_xref
-                      /evidence
-                      /function
-                      /gene
-                      /label
-                      /map
-                      /note
-                      /partial
-                      /standard_name
-                      /usedin
-prim_transcript
-	/citation
-                      /db_xref                                  
-                      /evidence
-                      /function
-                      /gene
-                      /label
-                      /map
-                      /note
-                      /partial
-                      /standard_name
-                      /usedin
-primer_bind
-	/citation
-                      /db_xref                    
-                      /evidence
-                      /gene
-                      /label
-                      /map
-                      /note
-                      /partial
-                      /standard_name
-                      /PCR_conditions
-                      /usedin
-promoter
-	/citation
-                      /db_xref                   
-                      /evidence
-                      /gene
-                      /function
-                      /label
-                      /map
-                      /note
-                      /partial
-                      /phenotype
-                      /pseudo
-                      /standard_name
-                      /usedin
-protein_bind
-	M/bound_moiety
-	/citation
-                      /db_xref                   
-                      /evidence
-                      /function
-                      /gene
-                      /label
-                      /map
-                      /partial
-                      /note
-                      /standard_name
-                      /usedin
-RBS
-	/citation
-                      /db_xref                     
-                      /evidence
-                      /gene
-                      /label
-                      /map
-                      /note
-                      /partial
-                      /standard_name
-                      /usedin
-repeat_region
-	/citation
-                      /db_xref                     
-                      /evidence
-                      /function
-                      /gene
-                      /label
-                      /map
-                      /note
-                      /partial
-                      /rpt_family
-                      /rpt_type
-                      /rpt_unit
-                      /standard_name
-                      /usedin
-repeat_unit
-	/citation
-                      /db_xref                     
-                      /evidence
-                      /function
-                      /gene
-                      /label
-                      /map
-                      /note
-                      /partial
-                      /rpt_family
-                      /rpt_type
-                      /rpt_unit
-                      /usedin
-rep_origin
-	/citation
-                      /db_xref               
-                      /direction
-                      /evidence
-                      /gene
-                      /label
-                      /map
-                      /note
-                      /partial
-                      /standard_name
-                      /usedin
-rRNA
-	/citation
-                      /db_xref                  
-                      /evidence
-                      /function
-                      /gene
-                      /label
-                      /map
-                      /note
-                      /partial
-                      /product
-                      /pseudo
-                      /standard_name
-                      /usedin
-S_region
-	/citation
-                      /db_xref
-                      /evidence
-                      /gene
-                      /label
-                      /map
-                      /note
-                      /partial
-                      /product
-                      /pseudo
-                      /standard_name
-                      /usedin
-satellite
-	/citation
-                      /db_xref                      
-                      /evidence
-                      /gene
-                      /label
-                      /map
-                      /note
-                      /partial
-                      /rpt_type
-                      /rpt_family
-                      /rpt_unit
-                      /standard_name
-                      /usedin
-scRNA
-/citation
-                      /db_xref                      
-                      /evidence
-                      /function
-                      /gene
-                      /label
-                      /map
-                      /note
-                      /partial
-                      /product
-                      /pseudo
-                      /standard_name
-                      /usedin
-sig_peptide
-/citation
-                      /db_xref                      
-                      /evidence
-                      /function
-                      /gene
-                      /label
-                      /map
-                      /note
-                      /partial
-                      /product
-                      /pseudo
-                      /standard_name
-                      /usedin
-snRNA
-	/citation
-                      /db_xref                      
-                      /evidence
-                      /function
-                      /gene
-                      /label
-                      /map
-                      /note
-                      /partial
-                      /product
-                      /pseudo
-                      /standard_name
-                      /usedin
-source
-	M/organism
-	/cell_line
-                      /cell_type
-                      /chloroplast
-                      /chromoplast
-                      /chromosome
-                      /citation
-                      /clone
-                      /clone_lib
-                      /country
-                      /cultivar
-                      /cyanelle
-                      /db_xref                    
-                      /dev_stage                     
-                      /evidence
-                      /focus
-                      /frequency
-                      /germline
-                      /haplotype
-                      /lab_host
-                      /insertion_seq
-                      /isolate
-                      /kinetoplast
-                      /label
-                      /macronuclear
-                      /map
-                      /mitochondrion
-                      /note
-                      /organelle
-                      /plasmid
-                      /pop_variant
-                      /proviral
-                      /rearranged
-                      /sequenced_mol
-                      /serotype
-                      /sex
-                      /specimen_voucher
-                      /specific_host
-                      /strain
-                      /sub_clone
-                      /sub_species
-                      /sub_strain
-                      /tissue_lib
-                      /tissue_type
-                      /transposon
-                      /usedin
-                      /variety
-                      /virion
-stem_loop
-	/citation
-                      /db_xref                     
-                      /evidence
-                      /function
-                      /gene
-                      /label
-                      /map
-                      /note
-                      /partial
-                      /standard_name
-                      /usedin
-STS
-	/citation
-                      /db_xref
-                      /evidence                   
-                      /standard_name
-                      /gene
-                      /label      
-                      /usedin
-                      /note
-                      /partial
-                      /map
-TATA_signal 
-	    /citation
-                      /db_xref                      
-                      /evidence
-                      /gene
-                      /label
-                      /map
-                      /note
-                      /partial
-                      /usedin
-terminator
-	/citation
-                      /db_xref                     
-                      /evidence
-                      /gene
-                      /label
-                      /map
-                      /note
-                      /partial
-                      /standard_name
-                      /usedin
-transit_peptide
-	/citation
-                      /db_xref                     
-                      /evidence
-                      /function
-                      /gene
-                      /label
-                      /map
-                      /note
-                      /partial
-                      /product
-                      /pseudo
-                      /standard_name
-                      /usedin
-tRNA
-	/anticodon
-                      /citation
-                      /db_xref                     
-                      /evidence
-                      /function
-                      /gene
-                      /label
-                      /map
-                      /note
-                      /partial
-                      /product
-                      /pseudo
-                      /standard_name
-                      /usedin
-unsure
-                      /citation
-                      /db_xref                     
-                      /evidence
-		      /gene
-                      /label
-                      /map
-                      /note
-                      /replace
-                      /usedin
-V_region
-	/citation
-                      /db_xref
-                      /evidence
-                      /gene
-                      /label
-                      /map
-                      /note
-                      /partial
-                      /product
-                      /pseudo
-                      /standard_name
-                      /usedin
-V_segment
-	/citation
-                      /db_xref
-                      /evidence
-                      /gene
-                      /label
-                      /map
-                      /note
-                      /partial
-                      /product
-                      /pseudo
-                      /standard_name
-                      /usedin
-variation
 	/allele
-                      /citation
-                      /db_xref
-                      /evidence                     
-                      /frequency
-                      /gene
-                      /label
-                      /map
-                      /note
-                      /partial
-                      /phenotype
-                      /product
-                      /replace
-                      /standard_name
-                      /usedin
+        /citation
+        /db_xref                    
+        /evidence
+        /gene
+        /label
+	/locus_tag
+        /map
+        /note
+ 	/old_locus_tag
+	# removed in FTv5.0 for new entries - use <> in location instead
+	#        /partial
+        /usedin
+
+#org=eukaryotes,eukaryotic_viruses
+
+polyA_site
+	/allele
+        /citation
+        /db_xref                    
+        /evidence
+        /gene
+        /label
+	/locus_tag
+        /map
+        /note
+ 	/old_locus_tag
+        /usedin
+
+#org=eukaryotes,eukaryotic_viruses
+
+precursor_RNA
+	/allele
+        /citation
+        /db_xref
+        /evidence
+        /function
+        /gene
+        /label
+	/locus_tag
+        /map
+        /note
+ 	/old_locus_tag
+	/operon
+	# removed in FTv5.0 for new entries - use <> in location instead
+	#        /partial
+	# added in FTv3.0 Jan 2001
+        /product        
+        /standard_name
+        /usedin
+
+prim_transcript
+	/allele
+        /citation
+        /db_xref                    
+        /evidence
+        /function
+        /gene
+        /label
+	/locus_tag
+        /map
+        /note
+ 	/old_locus_tag
+	# removed in FTv5.0 for new entries - use <> in location instead
+	#        /partial
+        /standard_name
+        /usedin
+
+primer_bind
+	/allele
+        /citation
+        /db_xref                    
+        /evidence
+        /gene
+        /label
+	/locus_tag
+        /map
+        /note
+ 	/old_locus_tag
+	# removed in FTv5.0 for new entries - use <> in location instead
+	#        /partial
+        /PCR_conditions
+        /standard_name
+        /usedin
+
+promoter
+	/allele
+	/bound_moiety
+        /citation
+        /db_xref                   
+        /evidence
+        /function
+        /gene
+        /label
+	/locus_tag
+        /map
+        /note
+ 	/old_locus_tag
+	/operon
+	# removed in FTv5.0 for new entries - use <> in location instead
+	#        /partial
+        /phenotype
+        /pseudo
+        /standard_name
+        /usedin
+
+#mol=DNA
+
+# Use RBS instead for ribosome binding sites
+protein_bind
+       M/bound_moiety
+        /allele
+        /citation
+        /db_xref                   
+        /evidence
+        /function
+        /gene
+        /label
+	/locus_tag
+        /map
+        /note
+ 	/old_locus_tag
+	# removed in FTv5.0 for new entries - use <> in location instead
+	#        /partial
+        /standard_name
+        /usedin
+
+RBS
+	/allele
+        /citation
+        /db_xref                     
+        /evidence
+        /gene
+        /label
+	/locus_tag
+        /map
+        /note
+ 	/old_locus_tag
+	# removed in FTv5.0 for new entries - use <> in location instead
+	# /partial
+        /standard_name
+        /usedin
+
+repeat_region
+	/allele
+        /citation
+        /db_xref                     
+        /evidence
+        /function
+        /gene
+	# moved from source key 1-July-2002
+	/insertion_seq
+        /label
+	/locus_tag
+        /map
+        /note
+ 	/old_locus_tag
+	# removed in FTv5.0 for new entries - use <> in location instead
+	#        /partial
+        /rpt_family
+        /rpt_type
+        /rpt_unit
+        /standard_name
+	# moved from source key 1-July-2002
+	/transposon
+        /usedin
+
+repeat_unit
+	/allele
+        /citation
+        /db_xref                     
+        /evidence
+        /function
+        /gene
+        /label
+	/locus_tag
+        /map
+        /note
+ 	/old_locus_tag
+	# removed in FTv5.0 for new entries - use <> in location instead
+	#        /partial
+        /rpt_family
+	# preferred: annotate in repeat_region
+        /rpt_type
+	# preferred: annotate in repeat_region
+        /rpt_unit
+        /usedin
+
+rep_origin
+	/allele
+        /citation
+        /db_xref               
+        /direction
+        /evidence
+        /gene
+        /label
+	/locus_tag
+        /map
+        /note
+ 	/old_locus_tag
+	# removed in FTv5.0 for new entries - use <> in location instead
+	#        /partial
+        /standard_name
+        /usedin
+
+rRNA
+	/allele
+        /citation
+        /db_xref                  
+        /evidence
+        /function
+        /gene
+        /label
+	/locus_tag
+        /map
+        /note
+ 	/old_locus_tag
+	# removed in FTv5.0 for new entries - use <> in location instead
+	#        /partial
+	# use /product for rRNA sizes
+        /product
+        /pseudo
+        /standard_name
+        /usedin
+
+S_region
+	/allele
+        /citation
+        /db_xref
+        /evidence
+        /gene
+        /label
+	/locus_tag
+        /map
+        /note
+ 	/old_locus_tag
+	# removed in FTv5.0 for new entries - use <> in location instead
+	#        /partial
+        /product
+        /pseudo
+        /standard_name
+        /usedin
+
+#up=misc_signal
+#org=eukaryotes
+
+satellite
+	/allele
+        /citation
+        /db_xref        
+        /evidence
+        /gene
+        /label
+	/locus_tag
+        /map
+        /note
+ 	/old_locus_tag
+	# removed in FTv5.0 for new entries - use <> in location instead
+	#        /partial
+        /rpt_type
+        /rpt_family
+        /rpt_unit
+        /standard_name
+        /usedin
+
+#mol=DNA
+
+scRNA
+	/allele
+        /citation
+        /db_xref        
+        /evidence
+        /function
+        /gene
+        /label
+	/locus_tag
+        /map
+        /note
+ 	/old_locus_tag
+	# removed in FTv5.0 for new entries - use <> in location instead
+	#        /partial
+        /product
+        /pseudo
+        /standard_name
+        /usedin
+
+sig_peptide
+	/allele
+        /citation
+        /db_xref        
+        /evidence
+        /function
+        /gene
+        /label
+	/locus_tag
+        /map
+        /note
+ 	/old_locus_tag
+	# removed in FTv5.0 for new entries - use <> in location instead
+	#        /partial
+        /product
+        /pseudo
+        /standard_name
+        /usedin
+
+snoRNA
+	/allele
+        /citation
+        /db_xref        
+        /evidence
+        /function
+        /gene
+        /label
+	/locus_tag
+        /map
+        /note
+ 	/old_locus_tag
+        /product
+        /pseudo
+        /standard_name
+        /usedin
+
+snRNA
+	/allele
+        /citation
+        /db_xref        
+        /evidence
+        /function
+        /gene
+        /label
+	/locus_tag
+        /map
+        /note
+ 	/old_locus_tag
+	# removed in FTv5.0 for new entries - use <> in location instead
+	#	/partial
+        /product
+        /pseudo
+        /standard_name
+        /usedin
+
+source
+       M/organism
+        /cell_line
+        /cell_type
+	# replace by /organelle in FTv3.0 Jan 2001
+	#        /chloroplast  
+	#        /chromoplast
+        /chromosome
+        /citation
+        /clone
+        /clone_lib
+        /country
+        /cultivar
+	# replace by /organelle in FTv3.0 Jan 2001
+	#        /cyanelle
+        /db_xref                    
+        /dev_stage
+	/ecotype
+	# /environmental_sample and /isolation_source should appear together
+	/environmental_sample
+	# removed in FT 6.2               
+        # /evidence
+        /focus
+        /frequency
+        /germline
+        /haplotype
+	# moved to repeat_region key from 1-July-2002
+        #/insertion_seq
+        /isolate
+	# /environmental_sample and /isolation_source should appear together
+	/isolation_source
+	# replace by /organelle in FTv3.0 Jan 2001
+	#        /kinetoplast
+        # removed in FT 6.2
+	# /lab_host
+        /label
+        /macronuclear
+        /map
+	# replace by /organelle in FTv3.0 Jan 2001
+	#        /mitochondrion
+	# New in FTv5.0
+	# mandatory from 01-July-2003
+	# Removed (to ID line) in FT 6.2
+	/mol_type
+        /note
+        /organelle
+        /plasmid
+        /pop_variant
+        /proviral
+        /rearranged
+	# new in FTv5.0
+	/segment
+        # Removed (to ID line) in FT 6.2
+	# /sequenced_mol
+        /serotype
+	/serovar
+        /sex
+        /specimen_voucher
+        /specific_host
+        /strain
+        /sub_clone
+        /sub_species
+        /sub_strain
+        /tissue_lib
+        /tissue_type
+	# transgenic is supposed to be only in extra source keys for an entry
+	/transgenic
+        # moved to repeat_region key from 1-July-2002
+        #/transposon
+        /usedin
+        /variety
+        /virion
+
+stem_loop
+	/allele
+        /citation
+        /db_xref                     
+        /evidence
+        /function
+        /gene
+        /label
+	/locus_tag
+        /map
+        /note
+ 	/old_locus_tag
+	/operon
+	# removed in FTv5.0 for new entries - use <> in location instead
+	#        /partial
+        /standard_name
+        /usedin
+
+STS
+# Location to include the primer(s) annotated usually in primer_bind feature
+	/allele
+        /citation
+        /db_xref
+        /evidence                   
+        /gene
+        /label      
+	/locus_tag
+        /map
+        /note
+ 	/old_locus_tag
+	# removed in FTv5.0 for new entries - use <> in location instead
+	#        /partial
+        /standard_name
+        /usedin
+
+#mol=DNA
+#up=misc_binding
+
+TATA_signal
+	/allele
+        /citation
+        /db_xref        
+        /evidence
+        /gene
+        /label
+	/locus_tag
+        /map
+        /note
+ 	/old_locus_tag
+	# removed in FTv5.0 for new entries - use <> in location instead
+	#        /partial
+        /usedin
+
+#org=eukaryotes,eukaryotic_viruses
+#mol=DNA
+
+terminator
+	/allele
+        /citation
+        /db_xref                     
+        /evidence
+        /gene
+        /label
+	/locus_tag
+        /map
+        /note
+	/old_locus_tag
+	/operon
+	# removed in FTv5.0 for new entries - use <> in location instead
+	#        /partial
+        /standard_name
+        /usedin
+
+#mol=DNA
+
+transit_peptide
+	/allele
+        /citation
+        /db_xref                     
+        /evidence
+        /function
+        /gene
+        /label
+	/locus_tag
+        /map
+        /note
+ 	/old_locus_tag
+	# removed in FTv5.0 for new entries - use <> in location instead
+	#        /partial
+        /product
+        /pseudo
+        /standard_name
+        /usedin
+
+tRNA
+	/allele
+        /anticodon
+        /citation
+        /db_xref                     
+        /evidence
+        /function
+        /gene
+        /label
+	/locus_tag
+        /map
+        /note
+ 	/old_locus_tag
+	# removed in FTv5.0 for new entries - use <> in location instead
+	#        /partial
+        /product
+        /pseudo
+        /standard_name
+        /usedin
+
+unsure
+	/allele
+        /citation
+	/compare
+        /db_xref                     
+        /evidence
+        /gene
+        /label
+	/locus_tag
+        /map
+        /note
+ 	/old_locus_tag
+	# use /replace="" for a deletion
+        /replace
+        /usedin
+
+V_region
+	/allele
+        /citation
+        /db_xref
+        /evidence
+        /gene
+        /label
+	/locus_tag
+        /map
+        /note
+ 	/old_locus_tag
+	# removed in FTv5.0 for new entries - use <> in location instead
+	#        /partial
+        /product
+        /pseudo
+        /standard_name
+        /usedin
+
+#up=CDS
+#org=eukaryotes
+
+V_segment
+	/allele
+        /citation
+        /db_xref
+        /evidence
+        /gene
+        /label
+	/locus_tag
+        /map
+        /note
+ 	/old_locus_tag
+	# removed in FTv5.0 for new entries - use <> in location instead
+	#        /partial
+        /product
+        /pseudo
+        /standard_name
+        /usedin
+
+#up=CDS
+#org=eukaryotes
+
+variation
+        /allele
+        /citation
+	/compare
+        /db_xref
+        /evidence                     
+        /frequency
+        /gene
+        /label
+	/locus_tag
+        /map
+        /note
+ 	/old_locus_tag
+	# removed in FTv5.0 for new entries - use <> in location instead
+	#        /partial
+        /phenotype
+        /product
+	# Use /replace="" for deletion
+        /replace
+        /standard_name
+        /usedin
+
 3'clip
-	/citation
-                      /db_xref                   
-                      /evidence
-                      /function
-                      /gene
-                      /label
-                      /map
-                      /note
-                      /partial
-                      /standard_name
-                      /usedin
+	/allele
+        /citation
+        /db_xref                   
+        /evidence
+        /function
+        /gene
+        /label
+	/locus_tag
+        /map
+        /note
+ 	/old_locus_tag
+	# removed in FTv5.0 for new entries - use <> in location instead
+	#        /partial
+        /standard_name
+        /usedin
+
 3'UTR
-	/citation
-                      /db_xref                   
-                      /evidence
-                      /function
-                      /gene
-                      /label
-                      /map
-                      /note
-                      /partial
-                      /standard_name
-                      /usedin
+	/allele
+        /citation
+        /db_xref                   
+        /evidence
+        /function
+        /gene
+        /label
+	/locus_tag
+        /map
+        /note
+ 	/old_locus_tag
+	# removed in FTv5.0 for new entries - use <> in location instead
+	#        /partial
+        /standard_name
+        /usedin
+
 5'clip
-	/citation
-                      /db_xref                   
-                      /evidence
-                      /function
-                      /gene
-                      /label
-                      /map
-                      /note
-                      /partial
-                      /standard_name
-                      /usedin
+	/allele
+        /citation
+        /db_xref                   
+        /evidence
+        /function
+        /gene
+        /label
+	/locus_tag
+        /map
+        /note
+ 	/old_locus_tag
+	# removed in FTv5.0 for new entries - use <> in location instead
+	#        /partial
+        /standard_name
+        /usedin
+
 5'UTR
-	/citation
-                      /db_xref                   
-                      /evidence
-                      /function
-                      /gene
-                      /label
-                      /map
-                      /note
-                      /partial
-                      /standard_name
-                      /usedin
+	/allele
+        /citation
+        /db_xref                   
+        /evidence
+        /function
+        /gene
+        /label
+	/locus_tag
+        /map
+        /note
+ 	/old_locus_tag
+	# removed in FTv5.0 for new entries - use <> in location instead
+	#        /partial
+        /standard_name
+        /usedin
+
 -10_signal
-	/citation
-                      /db_xref                   
-                      /evidence
-                      /function
-                      /gene
-                      /label
-                      /map
-                      /note
-                      /partial
-                      /standard_name
-                      /usedin
+	/allele
+        /citation
+        /db_xref                   
+        /evidence
+        /function
+        /gene
+        /label
+	/locus_tag
+        /map
+        /note
+ 	/old_locus_tag
+	/operon
+	# removed in FTv5.0 for new entries - use <> in location instead
+	#        /partial
+        /standard_name
+        /usedin
+
+#org=prokaryotes
+#mol=DNA
+
 -35_signal
-	/citation
-                      /db_xref                   
-                      /evidence
-                      /function
-                      /gene
-                      /label
-                      /map
-                      /note
-                      /partial
-                      /standard_name
-                      /usedin
+	/allele
+        /citation
+        /db_xref                   
+        /evidence
+        /function
+        /gene
+        /label
+	/locus_tag
+        /map
+        /note
+ 	/old_locus_tag
+	/operon
+	# removed in FTv5.0 for new entries - use <> in location instead
+	#        /partial
+        /standard_name
+        /usedin
+
+#org=prokaryotes
+#mol=DNA
+
+# Placeholder for "no feature key"
+# Used when marking a region to comment on it
+# or for use in another feature's location
+# Otherwise, use misc_feature
 -
-	/citation
-                      /db_xref
-                      /evidence
-                      /function
-                      /gene
-                      /label
-                      /map
-                      /note
-                      /partial
-                      /number
-                      /phenotype
-                      /product
-                      /pseudo
-                      /standard_name
-                      /usedin
+        /citation
+        /db_xref
+        /evidence
+        /function
+        /gene
+        /label
+	/locus_tag
+        /map
+        /note
+        /number
+ 	/old_locus_tag
+	# removed in FTv5.0 for new entries - use <> in location instead
+	#        /partial
+        /phenotype
+        /product
+        /pseudo
+        /standard_name
+        /usedin
+
+
+
 Finished
 	/Note
 similarity

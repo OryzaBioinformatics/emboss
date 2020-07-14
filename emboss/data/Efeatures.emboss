@@ -4,8 +4,12 @@
 # === EMBL/GenBank/DDBJ feature tags ===
 
 # Updated to EMBL/GenBank/DDBJ FTv5.0 by Peter Rice 17th Jan 2003
+# Updated to EMBL/GenBank/DDBJ FTv6.2 by Peter Rice 27th Jan 2005
+# New in 6.2 is alternate mandatory qualifiers, shown by m rather than M
+# where e.g. /citation or /compare is used for a conflict
 
 misc_feature
+	/allele
         /citation
         /db_xref                   
         /evidence
@@ -16,8 +20,9 @@ misc_feature
         /map
         /note
 	/number
-        /partial
-        /number
+	/old_locus_tag
+        # removed after FTv5.0 for new entries - use <> in location instead
+	#        /partial
         /phenotype
         /product
         /pseudo
@@ -25,6 +30,7 @@ misc_feature
         /usedin
 
 attenuator
+	/allele
         /citation
         /db_xref
         /evidence
@@ -33,12 +39,18 @@ attenuator
 	/locus_tag
         /map
         /note
+	/old_locus_tag
+	/operon
 	# removed in FTv5.0 for new entries - use <> in location instead
 	#        /partial
         /phenotype
         /usedin
 
+#org=prokaryotes
+#mol=DNA
+
 C_region
+	/allele
         /citation
         /db_xref
         /evidence
@@ -47,6 +59,7 @@ C_region
 	/locus_tag
         /map
         /note
+	/old_locus_tag
 	# removed in FTv5.0 for new entries - use <> in location instead
 	#        /partial
         /product
@@ -54,7 +67,11 @@ C_region
         /standard_name
         /usedin
 
+#up=CDS
+#org=eukaryotes
+
 CAAT_signal
+	/allele
         /citation
         /db_xref                     
         /evidence
@@ -63,38 +80,46 @@ CAAT_signal
 	/locus_tag
         /map
         /note
+	/old_locus_tag
 	# removed in FTv5.0 for new entries - use <> in location instead
 	#        /partial
         /usedin
+
+#org=eukaryotes,eukaryotic_viruses
+#mol=DNA
 
 CDS
-        /citation
-        /codon
-        /codon_start
-        /db_xref        
-        /EC_number
-        /evidence
-        /exception
-        /function
-        /gene
-        /label
-	/locus_tag
-        /map
-        /note
-        /number
-	# removed in FTv5.0 for new entries - use <> in location instead
-	#        /partial
-        /product
-        /protein_id
-        /pseudo
-        /standard_name
-        /translation
-        /transl_except
-        /transl_table
-        /usedin
+        m/translation
+        m/pseudo
+	 /allele
+         /citation
+         /codon
+         /codon_start
+         /db_xref        
+         /EC_number
+         /evidence
+         /exception
+         /function
+         /gene
+         /label
+	 /locus_tag
+         /map
+         /note
+         /number
+	 /old_locus_tag
+	 /operon
+	 # removed in FTv5.0 for new entries - use <> in location instead
+	 #        /partial
+         /product
+         /protein_id
+         /standard_name
+         /transl_except
+         /transl_table
+         /usedin
 
 conflict
-       M/citation
+       m/citation
+       m/compare
         /db_xref
         /evidence
         /label
@@ -102,10 +127,13 @@ conflict
         /note
         /gene
 	/locus_tag
+	/old_locus_tag
+# use /replace="" for a deletion
         /replace
         /usedin
 
 D-loop
+	/allele
         /citation
         /db_xref
         /evidence
@@ -114,18 +142,24 @@ D-loop
 	/locus_tag
         /map
         /note
+	/old_locus_tag
 	# removed in FTv5.0 for new entries - use <> in location instead
 	#        /partial
         /usedin
 
+#mol=DNA
+
 D_segment
+	/allele
         /citation
         /db_xref
         /evidence
         /gene
         /label
+	/locus_tag
         /map
         /note
+	/old_locus_tag
 	# removed in FTv5.0 for new entries - use <> in location instead
 	#        /partial
         /product
@@ -133,7 +167,12 @@ D_segment
         /standard_name
         /usedin
 
+#up=CDS
+#org=eukaryotes
+
 enhancer
+	/allele
+	/bound_moiety
         /citation
         /db_xref        
         /evidence
@@ -142,12 +181,16 @@ enhancer
 	/locus_tag
         /map
         /note
+	/old_locus_tag
 	# removed in FTv5.0 for new entries - use <> in location instead
 	#        /partial
         /standard_name
         /usedin
 
+#org=eukaryotes,eukaryotic_viruses
+
 exon
+	/allele
         /citation
         /db_xref                    
         /EC_number
@@ -159,6 +202,7 @@ exon
         /map
         /note
         /number
+	/old_locus_tag
 	# removed in FTv5.0 for new entries - use <> in location instead
 	#        /partial
         /product
@@ -166,7 +210,14 @@ exon
         /standard_name
         /usedin
 
+# New in 6.2
+gap
+	M/estimated_length
+	/map
+	/note
+
 GC_signal
+	/allele
         /citation
         /db_xref                    
         /evidence
@@ -175,9 +226,12 @@ GC_signal
 	/locus_tag
         /map
         /note
+	/old_locus_tag
 	# removed in FTv5.0 for new entries - use <> in location instead
 	#        /partial
         /usedin
+
+#org=eukaryotes,eukaryotic_viruses
 
 gene
         /allele
@@ -188,9 +242,11 @@ gene
 	# gene added as genbank has several entries
         /gene  
         /label
-        /map
 	/locus_tag
+        /map
         /note
+	/old_locus_tag
+	/operon
 	# removed in FTv5.0 for new entries - use <> in location instead
 	#        /partial
         /product
@@ -200,22 +256,27 @@ gene
         /usedin
 
 iDNA
+	/allele
         /citation
         /db_xref                    
         /evidence
         /function
-        /label
         /gene
-        /map
+        /label
 	/locus_tag
+        /map
         /note
         /number
+	/old_locus_tag
 	# removed in FTv5.0 for new entries - use <> in location instead
 	#        /partial
         /standard_name
         /usedin
 
+#mol=DNA
+
 intron
+	/allele
         /citation
         /cons_splice
         /db_xref                    
@@ -227,12 +288,14 @@ intron
         /map
         /note
         /number
+	/old_locus_tag
 	# removed in FTv5.0 for new entries - use <> in location instead
 	#        /partial
         /standard_name
         /usedin
 
 J_segment
+	/allele
         /citation
         /db_xref
         /evidence
@@ -240,6 +303,7 @@ J_segment
 	/locus_tag
         /map
         /note
+	/old_locus_tag
 	# removed in FTv5.0 for new entries - use <> in location instead
 	#        /partial
         /product
@@ -247,7 +311,11 @@ J_segment
         /standard_name
         /usedin
 
+#up=CDS
+#org=eukaryotes
+
 LTR
+	/allele
         /citation
         /db_xref                    
         /evidence
@@ -257,12 +325,14 @@ LTR
 	/locus_tag
         /map
         /note
+	/old_locus_tag
 	# removed in FTv5.0 for new entries - use <> in location instead
 	#        /partial
         /standard_name
         /usedin
 
 mat_peptide
+	/allele
         /citation
         /db_xref                    
         /EC_number
@@ -273,6 +343,7 @@ mat_peptide
 	/locus_tag
         /map
         /note
+	/old_locus_tag
 	# removed in FTv5.0 for new entries - use <> in location instead
 	#        /partial
         /product
@@ -282,6 +353,7 @@ mat_peptide
 
 misc_binding
        M/bound_moiety
+	/allele
         /citation
         /db_xref                    
         /evidence
@@ -291,13 +363,16 @@ misc_binding
 	/locus_tag
         /map
         /note
+	/old_locus_tag
 	# removed in FTv5.0 for new entries - use <> in location instead
 	#        /partial
         /usedin
 
 misc_difference
+	/allele
         /citation
         /clone
+	/compare
         /db_xref
         /evidence                   
         /gene
@@ -305,15 +380,16 @@ misc_difference
 	/locus_tag
         /map                    
         /note
+	/old_locus_tag
 	# removed in FTv5.0 for new entries - use <> in location instead
 	#        /partial
+	/phenotype
         /replace  
         /standard_name
         /usedin
 
 misc_recomb
-	# No longer mandatory /organism from FTv5.0
-        /organism
+	/allele
         /citation
         /db_xref                     
         /evidence
@@ -322,12 +398,19 @@ misc_recomb
 	/locus_tag
         /map
         /note
+	/old_locus_tag
+	# No longer mandatory /organism from FTv5.0
+	# If omitted, assume only the SOURCE organism is involved
+        /organism
 	# removed in FTv5.0 for new entries - use <> in location instead
 	#        /partial
         /standard_name
         /usedin
 
+#mol=DNA
+
 misc_RNA
+	/allele
         /citation
         /db_xref                    
         /evidence
@@ -337,6 +420,8 @@ misc_RNA
 	/locus_tag
         /map
         /note
+	/old_locus_tag
+	/operon
 	# removed in FTv5.0 for new entries - use <> in location instead
 	#        /partial
         /product
@@ -344,6 +429,7 @@ misc_RNA
         /usedin
 
 misc_signal
+	/allele
         /citation
         /db_xref                 
         /evidence
@@ -353,6 +439,7 @@ misc_signal
 	/locus_tag
         /map
         /note
+	/old_locus_tag
 	# removed in FTv5.0 for new entries - use <> in location instead
 	#        /partial
         /phenotype
@@ -360,6 +447,7 @@ misc_signal
         /usedin
 
 misc_structure
+	/allele
         /citation
         /db_xref                  
         /evidence
@@ -369,6 +457,7 @@ misc_structure
 	/locus_tag
         /map
         /note
+	/old_locus_tag
 	# removed in FTv5.0 for new entries - use <> in location instead
 	#        /partial
         /standard_name
@@ -376,6 +465,7 @@ misc_structure
 
 modified_base
        M/mod_base
+	/allele
         /citation
         /db_xref                     
         /evidence
@@ -385,9 +475,11 @@ modified_base
 	/locus_tag
         /map
         /note
+	/old_locus_tag
         /usedin
 
 mRNA
+	/allele
         /citation
         /db_xref                     
         /evidence
@@ -397,6 +489,8 @@ mRNA
 	/locus_tag
         /map
         /note
+	/old_locus_tag
+	/operon
 	# removed in FTv5.0 for new entries - use <> in location instead
 	#        /partial
         /product
@@ -421,6 +515,7 @@ mRNA
 #        /usedin
 
 N_region
+	/allele
         /citation
         /db_xref
         /evidence
@@ -429,6 +524,7 @@ N_region
 	/locus_tag
         /map
         /note
+	/old_locus_tag
 	# removed in FTv5.0 for new entries - use <> in location instead
 	#        /partial
         /product
@@ -436,8 +532,13 @@ N_region
         /standard_name
         /usedin
 
+#up=CDS
+#org=eukaryotes
+
 old_sequence
-       M/citation
+       m/citation
+       m/compare
+        /allele
         /db_xref
         /evidence
         /gene
@@ -445,12 +546,54 @@ old_sequence
 	/locus_tag
         /map
         /note
+	/old_locus_tag
 	# removed in FTv5.0 for new entries - use <> in location instead
 	#        /partial
+	#use /replace="" to annotate a deletion
         /replace
         /usedin
 
+# New in FT 6.2
+operon
+	M/operon
+	 /allele
+	 /citation
+	 /db_xref
+	 /evidence
+	 /function
+	 /label
+	 /map
+	 /note
+	 /phenotype
+	 /pseudo
+	 /standard_name
+	 /usedin
+
+# New in FT 6.2
+oriT
+	/allele
+	/bound_moiety
+	/citation
+	/db_xref
+	# Only /direction=LEFT or RIGHT are valid
+	/direction
+	/evidence
+	/gene
+	/label
+	/locus_tag
+	/map
+	/note
+	/old_locus_tag
+	/rpt_family
+	/rpt_type
+	/rpt_unit
+	/standard_name
+	/usedin
+
+#mol=DNA
+
 polyA_signal
+	/allele
         /citation
         /db_xref                    
         /evidence
@@ -459,11 +602,15 @@ polyA_signal
 	/locus_tag
         /map
         /note
+	/old_locus_tag
 	# removed in FTv5.0 for new entries - use <> in location instead
 	#        /partial
         /usedin
 
+#org=eukaryotes,eukaryotic_viruses
+
 polyA_site
+	/allele
         /citation
         /db_xref                    
         /evidence
@@ -472,8 +619,13 @@ polyA_site
 	/locus_tag
         /map
         /note
+	/old_locus_tag
         /usedin
+
+#org=eukaryotes,eukaryotic_viruses
+
 precursor_RNA
+	/allele
         /citation
         /db_xref
         /evidence
@@ -483,6 +635,8 @@ precursor_RNA
 	/locus_tag
         /map
         /note
+	/old_locus_tag
+	/operon
 	# removed in FTv5.0 for new entries - use <> in location instead
 	#        /partial
 	# added in FTv3.0 Jan 2001
@@ -491,6 +645,7 @@ precursor_RNA
         /usedin
 
 prim_transcript
+	/allele
         /citation
         /db_xref                    
         /evidence
@@ -500,12 +655,14 @@ prim_transcript
 	/locus_tag
         /map
         /note
+	/old_locus_tag
 	# removed in FTv5.0 for new entries - use <> in location instead
 	#        /partial
         /standard_name
         /usedin
 
 primer_bind
+	/allele
         /citation
         /db_xref                    
         /evidence
@@ -514,22 +671,27 @@ primer_bind
 	/locus_tag
         /map
         /note
+	/old_locus_tag
 	# removed in FTv5.0 for new entries - use <> in location instead
 	#        /partial
-        /standard_name
         /PCR_conditions
+        /standard_name
         /usedin
 
 promoter
+	/allele
+	/bound_moiety
         /citation
         /db_xref                   
         /evidence
-        /gene
         /function
+        /gene
         /label
 	/locus_tag
         /map
         /note
+	/old_locus_tag
+	/operon
 	# removed in FTv5.0 for new entries - use <> in location instead
 	#        /partial
         /phenotype
@@ -537,8 +699,12 @@ promoter
         /standard_name
         /usedin
 
+#mol=DNA
+
+# Use RBS instead for ribosome binding sites
 protein_bind
        M/bound_moiety
+        /allele
         /citation
         /db_xref                   
         /evidence
@@ -547,13 +713,15 @@ protein_bind
         /label
 	/locus_tag
         /map
+        /note
+	/old_locus_tag
 	# removed in FTv5.0 for new entries - use <> in location instead
 	#        /partial
-        /note
         /standard_name
         /usedin
 
 RBS
+	/allele
         /citation
         /db_xref                     
         /evidence
@@ -562,12 +730,14 @@ RBS
 	/locus_tag
         /map
         /note
+	/old_locus_tag
 	# removed in FTv5.0 for new entries - use <> in location instead
 	# /partial
         /standard_name
         /usedin
 
 repeat_region
+	/allele
         /citation
         /db_xref                     
         /evidence
@@ -579,6 +749,7 @@ repeat_region
 	/locus_tag
         /map
         /note
+	/old_locus_tag
 	# removed in FTv5.0 for new entries - use <> in location instead
 	#        /partial
         /rpt_family
@@ -590,6 +761,7 @@ repeat_region
         /usedin
 
 repeat_unit
+	/allele
         /citation
         /db_xref                     
         /evidence
@@ -599,14 +771,18 @@ repeat_unit
 	/locus_tag
         /map
         /note
+	/old_locus_tag
 	# removed in FTv5.0 for new entries - use <> in location instead
 	#        /partial
         /rpt_family
+	# preferred: annotate in repeat_region
         /rpt_type
+	# preferred: annotate in repeat_region
         /rpt_unit
         /usedin
 
 rep_origin
+	/allele
         /citation
         /db_xref               
         /direction
@@ -616,12 +792,14 @@ rep_origin
 	/locus_tag
         /map
         /note
+	/old_locus_tag
 	# removed in FTv5.0 for new entries - use <> in location instead
 	#        /partial
         /standard_name
         /usedin
 
 rRNA
+	/allele
         /citation
         /db_xref                  
         /evidence
@@ -631,14 +809,17 @@ rRNA
 	/locus_tag
         /map
         /note
+	/old_locus_tag
 	# removed in FTv5.0 for new entries - use <> in location instead
 	#        /partial
+	# use /product for rRNA sizes
         /product
         /pseudo
         /standard_name
         /usedin
 
 S_region
+	/allele
         /citation
         /db_xref
         /evidence
@@ -647,6 +828,7 @@ S_region
 	/locus_tag
         /map
         /note
+	/old_locus_tag
 	# removed in FTv5.0 for new entries - use <> in location instead
 	#        /partial
         /product
@@ -654,7 +836,11 @@ S_region
         /standard_name
         /usedin
 
+#up=misc_signal
+#org=eukaryotes
+
 satellite
+	/allele
         /citation
         /db_xref        
         /evidence
@@ -663,6 +849,7 @@ satellite
 	/locus_tag
         /map
         /note
+	/old_locus_tag
 	# removed in FTv5.0 for new entries - use <> in location instead
 	#        /partial
         /rpt_type
@@ -671,7 +858,10 @@ satellite
         /standard_name
         /usedin
 
+#mol=DNA
+
 scRNA
+	/allele
         /citation
         /db_xref        
         /evidence
@@ -681,6 +871,7 @@ scRNA
 	/locus_tag
         /map
         /note
+	/old_locus_tag
 	# removed in FTv5.0 for new entries - use <> in location instead
 	#        /partial
         /product
@@ -689,6 +880,7 @@ scRNA
         /usedin
 
 sig_peptide
+	/allele
         /citation
         /db_xref        
         /evidence
@@ -698,6 +890,7 @@ sig_peptide
 	/locus_tag
         /map
         /note
+	/old_locus_tag
 	# removed in FTv5.0 for new entries - use <> in location instead
 	#        /partial
         /product
@@ -706,6 +899,7 @@ sig_peptide
         /usedin
 
 snoRNA
+	/allele
         /citation
         /db_xref        
         /evidence
@@ -715,12 +909,14 @@ snoRNA
 	/locus_tag
         /map
         /note
+	/old_locus_tag
         /product
         /pseudo
         /standard_name
         /usedin
 
 snRNA
+	/allele
         /citation
         /db_xref        
         /evidence
@@ -730,6 +926,7 @@ snRNA
 	/locus_tag
         /map
         /note
+	/old_locus_tag
 	# removed in FTv5.0 for new entries - use <> in location instead
 	#	/partial
         /product
@@ -754,9 +951,11 @@ source
 	#        /cyanelle
         /db_xref                    
         /dev_stage
+	/ecotype
 	# /environmental_sample and /isolation_source should appear together
 	/environmental_sample                  
-        /evidence
+	# removed in FT 6.2               
+        # /evidence
         /focus
         /frequency
         /germline
@@ -768,7 +967,8 @@ source
 	/isolation_source
 	# replace by /organelle in FTv3.0 Jan 2001
 	#        /kinetoplast
-        /lab_host
+        # removed in FT 6.2
+	# /lab_host
         /label
         /macronuclear
         /map
@@ -785,8 +985,10 @@ source
         /rearranged
 	# new in FTv5.0
 	/segment
-        /sequenced_mol
+        # Removed (to ID line) in FT 6.2
+	# /sequenced_mol
         /serotype
+        /serovar
         /sex
         /specimen_voucher
         /specific_host
@@ -805,6 +1007,7 @@ source
         /virion
 
 stem_loop
+	/allele
         /citation
         /db_xref                     
         /evidence
@@ -814,12 +1017,16 @@ stem_loop
 	/locus_tag
         /map
         /note
+	/old_locus_tag
+	/operon
 	# removed in FTv5.0 for new entries - use <> in location instead
 	#        /partial
-	/serovar
         /standard_name
         /usedin
+
 STS
+# Location to include the primer(s) annotated usually in primer_bind feature
+	/allele
         /citation
         /db_xref
         /evidence                   
@@ -828,12 +1035,17 @@ STS
 	/locus_tag
         /map
         /note
+	/old_locus_tag
 	# removed in FTv5.0 for new entries - use <> in location instead
 	#        /partial
         /standard_name
         /usedin
 
+#mol=DNA
+#up=misc_binding
+
 TATA_signal 
+	/allele
         /citation
         /db_xref        
         /evidence
@@ -842,24 +1054,35 @@ TATA_signal
 	/locus_tag
         /map
         /note
+	/old_locus_tag
 	# removed in FTv5.0 for new entries - use <> in location instead
 	#        /partial
         /usedin
 
+#org=eukaryotes,eukaryotic_viruses
+#mol=DNA
+
 terminator
+	/allele
         /citation
         /db_xref                     
         /evidence
         /gene
         /label
+	/locus_tag
         /map
         /note
+	/old_locus_tag
+	/operon
 	# removed in FTv5.0 for new entries - use <> in location instead
 	#        /partial
         /standard_name
         /usedin
 
+#mol=DNA
+
 transit_peptide
+	/allele
         /citation
         /db_xref                     
         /evidence
@@ -869,6 +1092,7 @@ transit_peptide
 	/locus_tag
         /map
         /note
+	/old_locus_tag
 	# removed in FTv5.0 for new entries - use <> in location instead
 	#        /partial
         /product
@@ -877,6 +1101,7 @@ transit_peptide
         /usedin
 
 tRNA
+	/allele
         /anticodon
         /citation
         /db_xref                     
@@ -887,6 +1112,7 @@ tRNA
 	/locus_tag
         /map
         /note
+	/old_locus_tag
 	# removed in FTv5.0 for new entries - use <> in location instead
 	#        /partial
         /product
@@ -895,7 +1121,9 @@ tRNA
         /usedin
 
 unsure
+	/allele
         /citation
+	/compare
         /db_xref                     
         /evidence
         /gene
@@ -903,10 +1131,13 @@ unsure
 	/locus_tag
         /map
         /note
+	/old_locus_tag
+	# use /replace="" for a deletion
         /replace
         /usedin
 
 V_region
+	/allele
         /citation
         /db_xref
         /evidence
@@ -915,6 +1146,7 @@ V_region
 	/locus_tag
         /map
         /note
+	/old_locus_tag
 	# removed in FTv5.0 for new entries - use <> in location instead
 	#        /partial
         /product
@@ -922,7 +1154,11 @@ V_region
         /standard_name
         /usedin
 
+#up=CDS
+#org=eukaryotes
+
 V_segment
+        /allele
         /citation
         /db_xref
         /evidence
@@ -931,16 +1167,21 @@ V_segment
 	/locus_tag
         /map
         /note
+	/old_locus_tag
 	# removed in FTv5.0 for new entries - use <> in location instead
 	#        /partial
         /product
         /pseudo
         /standard_name
         /usedin
+
+#up=CDS
+#org=eukaryotes
 
 variation
         /allele
         /citation
+	/compare
         /db_xref
         /evidence                     
         /frequency
@@ -949,15 +1190,18 @@ variation
 	/locus_tag
         /map
         /note
+	/old_locus_tag
 	# removed in FTv5.0 for new entries - use <> in location instead
 	#        /partial
         /phenotype
         /product
+	# Use /replace="" for deletion
         /replace
         /standard_name
         /usedin
 
 3'clip
+	/allele
         /citation
         /db_xref                   
         /evidence
@@ -967,12 +1211,14 @@ variation
 	/locus_tag
         /map
         /note
+	/old_locus_tag
 	# removed in FTv5.0 for new entries - use <> in location instead
 	#        /partial
         /standard_name
         /usedin
 
 3'UTR
+	/allele
         /citation
         /db_xref                   
         /evidence
@@ -982,12 +1228,14 @@ variation
 	/locus_tag
         /map
         /note
+	/old_locus_tag
 	# removed in FTv5.0 for new entries - use <> in location instead
 	#        /partial
         /standard_name
         /usedin
 
 5'clip
+	/allele
         /citation
         /db_xref                   
         /evidence
@@ -997,12 +1245,14 @@ variation
 	/locus_tag
         /map
         /note
+	/old_locus_tag
 	# removed in FTv5.0 for new entries - use <> in location instead
 	#        /partial
         /standard_name
         /usedin
 
 5'UTR
+	/allele
         /citation
         /db_xref                   
         /evidence
@@ -1012,12 +1262,14 @@ variation
 	/locus_tag
         /map
         /note
+	/old_locus_tag
 	# removed in FTv5.0 for new entries - use <> in location instead
 	#        /partial
         /standard_name
         /usedin
 
 -10_signal
+	/allele
         /citation
         /db_xref                   
         /evidence
@@ -1027,12 +1279,18 @@ variation
 	/locus_tag
         /map
         /note
+	/old_locus_tag
+	/operon
 	# removed in FTv5.0 for new entries - use <> in location instead
 	#        /partial
         /standard_name
         /usedin
+
+#org=prokaryotes
+#mol=DNA
 
 -35_signal
+	/allele
         /citation
         /db_xref                   
         /evidence
@@ -1042,11 +1300,20 @@ variation
 	/locus_tag
         /map
         /note
+	/old_locus_tag
+	/operon
 	# removed in FTv5.0 for new entries - use <> in location instead
 	#        /partial
         /standard_name
         /usedin
 
+#org=prokaryotes
+#mol=DNA
+
+# Placeholder for "no feature key"
+# Used when marking a region to comment on it
+# or for use in another feature's location
+# Otherwise, use misc_feature
 -
         /citation
         /db_xref
@@ -1057,9 +1324,10 @@ variation
 	/locus_tag
         /map
         /note
+        /number
+	/old_locus_tag
 	# removed in FTv5.0 for new entries - use <> in location instead
 	#        /partial
-        /number
         /phenotype
         /product
         /pseudo
