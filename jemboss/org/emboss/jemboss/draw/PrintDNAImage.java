@@ -53,13 +53,15 @@ public class PrintDNAImage extends ScrollPanel
   /** alignment sequence panel */
   private DNADraw dna;
   /** prefix of file           */
-  private String filePrefix;
+//private String filePrefix;
   /** status field for print preview */
   private JTextField statusField = new JTextField("");
   /** number of residues per line    */
   private int nResPerLine = 0;
   /** line attributes */
   private Hashtable lineAttr;
+  /** type (jpeg/png) */
+  private String type;
 
   /**
   *
@@ -103,9 +105,13 @@ public class PrintDNAImage extends ScrollPanel
 
     try
     {
-      String type = showOptions();
+      File fsave = showOptions();
+
+      if(fsave == null)
+        return;
+
       RenderedImage rendImage = createDNAImage(0);
-      writeImageToFile(rendImage,new File(filePrefix+"."+type),type);
+      writeImageToFile(rendImage,fsave,type);
     }
     catch(NoClassDefFoundError ex)
     {
@@ -240,39 +246,41 @@ public class PrintDNAImage extends ScrollPanel
   * Provide some options for the image created
   *
   */
-  private String showOptions()
+  private File showOptions()
   {
-    JPanel joptions = new JPanel();
-    Box YBox = Box.createVerticalBox();
-    joptions.add(YBox);
+    String cwd = System.getProperty("user.dir");
+    JFileChooser fc = new JFileChooser(cwd);
+    File fselect = new File(cwd+System.getProperty("file.separator")+
+                            "dna_image.jpeg"); 
+    fc.setSelectedFile(fselect);
 
 // file name prefix
-    JComboBox formatSelect = null;
-    JTextField fileField   = null;
-    Box XBox;
+    Box bdown = Box.createVerticalBox();
+    bdown.add(Box.createVerticalGlue());
 
-    JLabel jlab = new JLabel("File prefix: ");
-    String def = System.getProperty("user.dir")+
-                 System.getProperty("file.separator")+
-                 "      ";
+    JLabel labFormat = new JLabel("Select Format:");
+    Font font = labFormat.getFont();
+    labFormat.setFont(font.deriveFont(Font.BOLD));
 
-    fileField = new JTextField(def);
-    XBox = Box.createHorizontalBox();
-    XBox.add(jlab);
-    XBox.add(fileField);
-    XBox.add(Box.createHorizontalGlue());
-    YBox.add(XBox);
+    bdown.add(labFormat);
 
-// format
-    formatSelect =
+    Box bacross = Box.createHorizontalBox();
+    JComboBox formatSelect = 
        new JComboBox(javax.imageio.ImageIO.getWriterFormatNames());
-    YBox.add(formatSelect);
+    Dimension d = formatSelect.getPreferredSize();
+    formatSelect.setMaximumSize(d);
+    bacross.add(Box.createHorizontalGlue());
+    bacross.add(formatSelect);
+    bdown.add(bacross);
 
 // file prefix & format options
-    JOptionPane.showMessageDialog(null,joptions,"Options",
-                               JOptionPane.PLAIN_MESSAGE);
-    filePrefix = fileField.getText().trim();
-    return (String)formatSelect.getSelectedItem();
+    fc.setAccessory(bdown);
+    int n = fc.showSaveDialog(null);
+    if(n == JFileChooser.CANCEL_OPTION)
+      return null;
+
+    type = (String)formatSelect.getSelectedItem();
+    return fc.getSelectedFile();
   }
 
 

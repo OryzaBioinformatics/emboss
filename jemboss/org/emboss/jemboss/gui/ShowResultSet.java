@@ -36,6 +36,7 @@ import java.util.Hashtable;
 import java.util.Enumeration;
 
 import org.emboss.grout.*;
+import org.emboss.jemboss.graphics.*;
 import org.emboss.jemboss.gui.filetree.FileEditorDisplay;
 import org.emboss.jemboss.JembossParams;
 
@@ -128,14 +129,27 @@ public class ShowResultSet extends JFrame
 // now load png files into pane
     for(int i=0; i<stabs.length;i++)
     {
-      ImageIcon i1 = new ImageIcon((byte [])reslist.get(stabs[i]));
-      ImageIconJPanel iiPanel = new ImageIconJPanel(i1);
-      r1 = new JScrollPane(iiPanel);
-      r1.getViewport().setBackground(Color.white);
-      if(stabs[i] != null)
+      if(stabs[i].endsWith(".dat"))
       {
-        rtp.add(r1,i);
+        Graph2DPlot gp = new Graph2DPlot();
+        r1 = new JScrollPane(gp);
+        gp.setFileData(new String((byte [])reslist.get(stabs[i])),
+                       stabs[i]);
+        rtp.add(r1, i);
         rtp.setTitleAt(i,stabs[i]);
+        setJMenuBar(gp.getMenuBar(false, this));
+      }
+      else
+      {
+        ImageIcon i1 = new ImageIcon((byte [])reslist.get(stabs[i]));
+        ImageIconJPanel iiPanel = new ImageIconJPanel(i1);
+        r1 = new JScrollPane(iiPanel);
+        r1.getViewport().setBackground(Color.white);
+        if(stabs[i] != null)
+        {
+          rtp.add(r1,i);
+          rtp.setTitleAt(i,stabs[i]);
+        }
       }
     }
 
@@ -184,6 +198,16 @@ public class ShowResultSet extends JFrame
       remove(menuBar.getToolBar());
       getContentPane().add(grout.getToolBar(),BorderLayout.NORTH);
     }
+    else if(title.endsWith(".dat"))
+    {
+      Graph2DPlot graph = getGraph2DPlot((JScrollPane)rtp.getSelectedComponent());
+      if(graph == null)
+        return;
+
+      JMenuBar graphMenuBar = graph.getMenuBar(false, this);
+      remove(menuBar.getToolBar());
+      setJMenuBar(graphMenuBar);
+    }
     else 
     {
       setJMenuBar(menuBar);
@@ -192,6 +216,16 @@ public class ShowResultSet extends JFrame
 
       getContentPane().add(menuBar.getToolBar(),BorderLayout.NORTH);
     }
+  }
+
+
+  private Graph2DPlot getGraph2DPlot(JScrollPane jsp)
+  {
+    Component comp = jsp.getViewport().getView();
+    if(comp instanceof Graph2DPlot)
+        return (Graph2DPlot)comp;
+
+    return null;
   }
 
   /**
@@ -204,7 +238,6 @@ public class ShowResultSet extends JFrame
   */
   private String[] addHashContentsToTab(Hashtable h,JTabbedPane rtp)
   {
-
     ScrollPanel s1;
     JScrollPane r1;
 
@@ -218,7 +251,8 @@ public class ShowResultSet extends JFrame
       String thiskey = (String)enumer.nextElement().toString();
       if(!thiskey.equals(cmd))
       {
-        if (thiskey.endsWith("png") || thiskey.endsWith("html"))
+        if( thiskey.endsWith("png") || thiskey.endsWith("html") ||
+            thiskey.endsWith(".dat") )
         {
           int index = findInt(thiskey);
           if(index>0 && index < stabs.length)
@@ -262,7 +296,6 @@ public class ShowResultSet extends JFrame
             panel.setX3DFile(new String((byte[])h.get(thiskey)));
           rtp.add(thiskey,panel);
           setJMenuBar(panel.getMenuBar());
-
         }
         else
         {

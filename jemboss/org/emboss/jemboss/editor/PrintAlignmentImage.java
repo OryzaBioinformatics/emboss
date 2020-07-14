@@ -54,14 +54,14 @@ public class PrintAlignmentImage extends ScrollPanel
   private int pageIndex = 0; 
   /** alignment sequence panel */
   private GraphicSequenceCollection gsc;
-  /** prefix of file           */
-  private String filePrefix;
   /** status field for print preview */
   private JTextField statusField = new JTextField("");
   /** number of residues per line    */
   private int nResPerLine = 0;
   /** use anti aliasing (default is false) */
   private boolean antiAlias = false;
+  /** file format */
+  private String ftype;
 
   /**
   *
@@ -151,13 +151,16 @@ public class PrintAlignmentImage extends ScrollPanel
 
     try
     {
-      String type = showOptions(true);
+      String fsave = showOptions();
+      if(fsave == null)
+        return;
+
       int npages = gsc.getNumberPages(format,nResPerLine);
       for(int i=0;i<npages;i++)
       {
         RenderedImage rendImage = createAlignmentImage(i);
-        writeImageToFile(rendImage,
-                      new File(filePrefix+i+"."+type),type);
+        writeImageToFile(rendImage, new File(fsave+i+"."+ftype),
+                         ftype);
       }
     }
     catch(NoClassDefFoundError ex)
@@ -222,11 +225,11 @@ public class PrintAlignmentImage extends ScrollPanel
   * Print to one jpeg or png file
   *
   */
-  public void print(String type,
+  public void print(String filePrefix,
                     double leftMargin, double rightMargin,
                     double topMargin, double btmMargin)
   {
-    this.print(nResPerLine,type,filePrefix,
+    this.print(nResPerLine,ftype,filePrefix,
                leftMargin,rightMargin,topMargin,btmMargin);
   }
 
@@ -286,46 +289,94 @@ public class PrintAlignmentImage extends ScrollPanel
   /**
   *
   * Provide some options for the image created
+  * @param showFileOptions      display file options
+  *
+  */
+  protected String showOptions()
+  {
+// no. of residues per line
+    Box YBox = Box.createVerticalBox();
+    YBox.add(Box.createVerticalGlue());
+
+    if(format == null)
+      format = new PageFormat();
+    String mres = Integer.toString(gsc.getResiduesPerLine(format));
+    JLabel jres = new JLabel("Residues per line: [max:"+mres+"]");
+    if(nResPerLine != 0)
+      mres = Integer.toString(nResPerLine);
+ 
+    YBox.add(jres);
+    JTextField maxResiduesField = new JTextField(mres,4);
+    Dimension d = maxResiduesField.getPreferredSize();
+    maxResiduesField.setMaximumSize(d);
+
+    Box bacross = Box.createHorizontalBox();
+    bacross.add(Box.createHorizontalGlue());
+    bacross.add(maxResiduesField);
+    YBox.add(bacross);
+
+// file chooser
+    String cwd = System.getProperty("user.dir");
+    JFileChooser fc = new JFileChooser(cwd);
+    File fselect = new File(cwd+
+                            System.getProperty("file.separator")+
+                            "jae_image.jpeg");
+    fc.setSelectedFile(fselect);
+
+// file name prefix
+    JLabel labFormat = new JLabel("Select Format:");
+    Font font = labFormat.getFont();
+    labFormat.setFont(font.deriveFont(Font.BOLD));
+    YBox.add(labFormat);
+
+    bacross = Box.createHorizontalBox();
+    JComboBox formatSelect =
+       new JComboBox(javax.imageio.ImageIO.getWriterFormatNames());
+    d = formatSelect.getPreferredSize();
+    formatSelect.setMaximumSize(d);
+    bacross.add(Box.createHorizontalGlue());
+    bacross.add(formatSelect);
+    YBox.add(bacross);
+
+// file prefix & format options
+    fc.setAccessory(YBox);
+    int n = fc.showSaveDialog(null);
+    if(n == JFileChooser.CANCEL_OPTION)
+      return null;
+
+    nResPerLine = Integer.parseInt(maxResiduesField.getText());
+    ftype = (String)formatSelect.getSelectedItem();
+
+// remove file extension
+    String fsave = fc.getSelectedFile().getAbsolutePath().toLowerCase();
+    if(fsave.endsWith(".png") || 
+       fsave.endsWith(".jpg") ||
+       fsave.endsWith(".jpeg") )
+    {
+      int ind = fsave.lastIndexOf(".");
+      fsave = fc.getSelectedFile().getAbsolutePath();
+      fsave = fsave.substring(0,ind);
+    }
+    else
+      fsave = fc.getSelectedFile().getAbsolutePath();
+
+    return fsave;
+  }
+
+  /**
+  *
+  * Provide some options for the image created
   * @param showFileOptions	display file options
   *	
   */
-  protected String showOptions(boolean showFileOptions)
+  protected String showPrintPreviewOptions()
   {
     JPanel joptions = new JPanel();
     Box YBox = Box.createVerticalBox();
     joptions.add(YBox);
 
-// file name prefix
-    JComboBox formatSelect = null;
-    JTextField fileField   = null;
-    Box XBox;
-
-    if(showFileOptions)
-    {
-      JLabel jlab = new JLabel("File prefix: ");
-      String def = System.getProperty("user.dir")+
-                   System.getProperty("file.separator");
-                   
-      try
-      {
-        def = def.concat(gsc.getName());
-      }
-      catch(Exception e){}
-      fileField = new JTextField(def);
-      XBox = Box.createHorizontalBox();
-      XBox.add(jlab);
-      XBox.add(fileField);
-      XBox.add(Box.createHorizontalGlue());
-      YBox.add(XBox);
-
-// format
-      formatSelect = 
-         new JComboBox(javax.imageio.ImageIO.getWriterFormatNames());
-      YBox.add(formatSelect);
-    }
-
 // no. of residues per line
-    XBox = Box.createHorizontalBox();
+    Box XBox = Box.createHorizontalBox();
     if(format == null)
       format = new PageFormat();
     String mres = Integer.toString(gsc.getResiduesPerLine(format));
@@ -343,12 +394,6 @@ public class PrintAlignmentImage extends ScrollPanel
                                JOptionPane.PLAIN_MESSAGE);
   
     nResPerLine = Integer.parseInt(maxResiduesField.getText());
-    if(showFileOptions)
-    {  
-      filePrefix = fileField.getText().trim();
-      return (String)formatSelect.getSelectedItem();
-    }
-
     return null;
   }
 
@@ -502,7 +547,7 @@ public class PrintAlignmentImage extends ScrollPanel
     if(format == null)
       format = getFormatDialog();
 
-    showOptions(false);
+    showPrintPreviewOptions();
     final int npages = gsc.getNumberPages(format,nResPerLine);
     statusField.setText(pageIndex+"1 of "+npages+" page(s)");
 

@@ -58,7 +58,7 @@ public class Jemboss implements ActionListener
 /** Scroll pane for local filemanager */
   private JScrollPane scrollTree;
 /** true if in client-server mode (using SOAP) */
-  static boolean withSoap;
+  public static boolean withSoap;
 /** to manage the pending results */
   public static PendingResults resultsManager;
 /** Jemboss window dimension */
@@ -131,11 +131,25 @@ public class Jemboss implements ActionListener
     }
 
     f = new JFrame("Jemboss");
+
+    // set to the working dir
+    if(!withSoap &&
+       mysettings.getUserHome().equals(System.getProperty("user.home")))
+    {
+      mysettings.setUserHome(System.getProperty("user.dir"));
+      if(mysettings.getDebug())
+        System.out.println("Standalone mode");
+    }
+
     // make the local file manager
     tree = new DragTree(new File(mysettings.getUserHome()),
                         f, mysettings);
 
-    scrollTree = new JScrollPane(tree);
+    JPanel filePanel = new JPanel(new BorderLayout());
+    filePanel.add(new LocalTreeToolBar(mysettings),
+                  BorderLayout.NORTH);
+    filePanel.add(tree,BorderLayout.CENTER);
+    scrollTree = new JScrollPane(filePanel);
 
     JPanel p1 = new JPanel(new BorderLayout());         // menu panel
     ScrollPanel p2 = new ScrollPanel(new GridLayout()); // emboss form pain
@@ -158,16 +172,9 @@ public class Jemboss implements ActionListener
     extend.setToolTipText("Open and close file manager.");
 
     Dimension d = f.getToolkit().getScreenSize();
-    if(withSoap)
-    {
-      resultsManager = new PendingResults(mysettings);
-      btmMenu.add(resultsManager.statusPanel(f));
-    }
-    else
-    {
-      btmMenu.add(Box.createHorizontalGlue());
-      btmMenu.add(Box.createHorizontalStrut(5));
-    }
+
+    resultsManager = new PendingResults(mysettings);
+    btmMenu.add(resultsManager.statusPanel(f));
     btmMenu.add(extend);
     pform.add(btmMenu,BorderLayout.SOUTH);
 
@@ -209,7 +216,6 @@ public class Jemboss implements ActionListener
                          mainMenu,f,jform);
 
     f.addWindowListener(new winExit());
-
   }
 
 
@@ -265,15 +271,9 @@ public class Jemboss implements ActionListener
     if(args.length > 0)
     {
       if(args[0].equalsIgnoreCase("local"))
-      {
         withSoap = false; 
-        System.out.println("Standalone mode");
-      }
       else 
-      {
         withSoap = true; 
-        System.out.println("Client-server mode");
-      }
     }
     else
       withSoap = true;

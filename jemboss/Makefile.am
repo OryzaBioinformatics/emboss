@@ -17,8 +17,8 @@ if ISCYGWIN
 	  export CLASSPATH; \
           mv -f ./org/emboss/jemboss/editor/PrintAlignmentImage.java ./org/emboss/jemboss/editor/PrintAlignmentImage.java_o; \
           mv -f org/emboss/jemboss/draw/PrintDNAImage.java org/emboss/jemboss/draw/PrintDNAImage.java_o; \
-          javac -d . org/emboss/jemboss/draw/DNADraw.java; \
-	  javac -d . org/emboss/jemboss/Jemboss.java; \
+          javac -target 1.3 -source 1.3 -d . org/emboss/jemboss/draw/DNADraw.java; \
+	  javac -target 1.3 -source 1.3 -d . org/emboss/jemboss/Jemboss.java; \
           mv -f ./org/emboss/jemboss/editor/PrintAlignmentImage.java_o ./org/emboss/jemboss/editor/PrintAlignmentImage.java; \
           mv -f org/emboss/jemboss/draw/PrintDNAImage.java_o org/emboss/jemboss/draw/PrintDNAImage.java; \
 	  else \
@@ -26,8 +26,8 @@ if ISCYGWIN
 	  export CLASSPATH; \
           mv -f ./org/emboss/jemboss/editor/PrintAlignmentImage.java ./org/emboss/jemboss/editor/PrintAlignmentImage.java_o; \
           mv -f org/emboss/jemboss/draw/PrintDNAImage.java org/emboss/jemboss/draw/PrintDNAImage.java_o; \
-          javac -d . org/emboss/jemboss/draw/DNADraw.java; \
-	  javac -d . org/emboss/jemboss/Jemboss.java; \
+          javac -target 1.3 -source 1.3 -d . org/emboss/jemboss/draw/DNADraw.java; \
+	  javac -target 1.3 -source 1.3 -d . org/emboss/jemboss/Jemboss.java; \
           mv -f ./org/emboss/jemboss/editor/PrintAlignmentImage.java_o ./org/emboss/jemboss/editor/PrintAlignmentImage.java; \
           mv -f org/emboss/jemboss/draw/PrintDNAImage.java_o org/emboss/jemboss/draw/PrintDNAImage.java; \
 	  fi); \
@@ -41,8 +41,8 @@ else
 	  export CLASSPATH; \
           mv -f ./org/emboss/jemboss/editor/PrintAlignmentImage.java ./org/emboss/jemboss/editor/PrintAlignmentImage.java_o; \
           mv -f org/emboss/jemboss/draw/PrintDNAImage.java org/emboss/jemboss/draw/PrintDNAImage.java_o; \
-          javac -d . org/emboss/jemboss/draw/DNADraw.java; \
-	  javac -d . org/emboss/jemboss/Jemboss.java; \
+          javac -target 1.3 -source 1.3 -d . org/emboss/jemboss/draw/DNADraw.java; \
+	  javac -target 1.3 -source 1.3 -d . org/emboss/jemboss/Jemboss.java; \
           mv -f ./org/emboss/jemboss/editor/PrintAlignmentImage.java_o ./org/emboss/jemboss/editor/PrintAlignmentImage.java; \
           mv -f org/emboss/jemboss/draw/PrintDNAImage.java_o org/emboss/jemboss/draw/PrintDNAImage.java; \
 	  else \
@@ -50,8 +50,8 @@ else
 	  export CLASSPATH; \
           mv -f ./org/emboss/jemboss/editor/PrintAlignmentImage.java ./org/emboss/jemboss/editor/PrintAlignmentImage.java_o; \
           mv -f org/emboss/jemboss/draw/PrintDNAImage.java org/emboss/jemboss/draw/PrintDNAImage.java_o; \
-          javac -d . org/emboss/jemboss/draw/DNADraw.java; \
-	  javac -d . org/emboss/jemboss/Jemboss.java; \
+          javac -target 1.3 -source 1.3 -d . org/emboss/jemboss/draw/DNADraw.java; \
+	  javac -target 1.3 -source 1.3 -d . org/emboss/jemboss/Jemboss.java; \
           mv -f ./org/emboss/jemboss/editor/PrintAlignmentImage.java_o ./org/emboss/jemboss/editor/PrintAlignmentImage.java; \
           mv -f org/emboss/jemboss/draw/PrintDNAImage.java_o org/emboss/jemboss/draw/PrintDNAImage.java; \
 	  fi); \

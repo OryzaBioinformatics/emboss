@@ -64,6 +64,32 @@ public class PendingResults
     pendingResults = new Vector();
   }
 
+ 
+  /**
+  *
+  * Standalone method to record start of new process.
+  *
+  */
+  public void addRunningJob()
+  {
+    running_jobs++;
+    if(jobButton != null)
+      jobButton.setText(jobStatus());
+  }
+
+  /**
+  *
+  * Standalone method to record end of new process.
+  *
+  */
+  public void deleteRunningJob()
+  {
+    running_jobs--;
+    completed_jobs++; 
+    if(jobButton != null)
+      jobButton.setText(jobStatus());
+  }
+
 
   /**
   *
@@ -76,6 +102,7 @@ public class PendingResults
     running_jobs = 0;
     pendingResults.removeAllElements();
   }
+
 
   /**
   *
@@ -136,17 +163,6 @@ public class PendingResults
     }
     return h;
   }
-
-//public Hashtable statusHash() 
-//{
-//  Hashtable h = new Hashtable();
-//  for (int i=0 ; i < pendingResults.size(); ++i)
-//  {
-//    JembossProcess er = (JembossProcess)pendingResults.get(i);
-//    h.put(er.getJob(),new Boolean(er.isCompleted()));
-//  }
-//  return h;
-//}
 
   /**
   *
@@ -216,13 +232,6 @@ public class PendingResults
       JembossProcess er = (JembossProcess)pendingResults.get(i);
       resToQuery.put(er.getJob(),er.getProject());
     }
-
-//  params.addElement(new Parameter("prog", String.class,
-//                                  "", null));
-//  params.addElement(new Parameter("options", String.class,
-//                                  "", null));
-//  params.addElement(new Parameter("queries", Hashtable.class,
-//                                  resToQuery, null));
 
     params.addElement("");
     params.addElement("");
@@ -351,6 +360,8 @@ public class PendingResults
     {
       public void actionPerformed(ActionEvent e)
       {
+        if(!org.emboss.jemboss.Jemboss.withSoap)
+          return;
         jobPanel.setCursor(new Cursor(Cursor.WAIT_CURSOR));
         showPendingResults(f);
         jobPanel.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
@@ -390,7 +401,7 @@ public class PendingResults
     if ((completed_jobs == 0) && (running_jobs == 0)) 
     {
       JOptionPane.showMessageDialog(f,"You can only view pending results\n"
-				    + "if any background jobs have been\n"
+				    + "if batch/background jobs have been\n"
 				    + "submitted in the current session.");
     } 
     else 

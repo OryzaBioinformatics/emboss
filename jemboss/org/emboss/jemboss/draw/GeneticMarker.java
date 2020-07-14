@@ -101,7 +101,7 @@ public class GeneticMarker extends JPanel
     bacross.add(new JLabel("stop"));
     bacross.add(Box.createHorizontalStrut(4));
    
-//   final ColourPanel markerColour = new ColourPanel("Marker Colour", 
+//   final ColourPanel markerColour = new ColourPanel("Feature Colour", 
 //                                            Color.red);
     final JButton markerColour = setUpColorButton(Color.red);
     bacross.add(markerColour);
@@ -144,7 +144,7 @@ public class GeneticMarker extends JPanel
     bdown.add(bacross);
 
     bacross = Box.createHorizontalBox();
-    JButton addMarker = new JButton("Add Marker");
+    JButton addMarker = new JButton("Add Feature");
     addMarker.addActionListener(new ActionListener()
     {
       public void actionPerformed(ActionEvent e)

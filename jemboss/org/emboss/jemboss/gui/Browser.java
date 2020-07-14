@@ -19,18 +19,20 @@
 *
 ********************************************************************/
 
-
 package org.emboss.jemboss.gui;
 
 
 import javax.swing.*;
 import javax.swing.event.*;
+import javax.swing.tree.*;
 import java.awt.*;
 import java.awt.geom.*;
 import java.awt.event.*;
 import java.net.*;
 import java.io.*;
 import java.util.Vector;
+import javax.swing.border.*;
+
 import org.emboss.jemboss.JembossParams;
 
 
@@ -43,6 +45,8 @@ public class Browser extends JFrame
                      implements HyperlinkListener, ActionListener
 {
 
+  /** status field */
+  private JTextField statusField;
   /** URL cache combo field */
   private MemoryComboBox urlField;
   /** HTML pane   */
@@ -54,14 +58,15 @@ public class Browser extends JFrame
   /** done cursor */
   private Cursor cdone = new Cursor(Cursor.DEFAULT_CURSOR);
   /** Help topics */
-  private String topics[] = { "About Jemboss",
+  private String topics[] = { "Home", "About",
                               "User Guide",
                               "File Manager", 
                               "Results Manager", 
                               "Sequence List", 
-                              "Jemboss Alignment Editor"};
-  /** JList spLeft */
-  private JList spLeft;
+                              "Alignment Editor"};
+  private String embossTopics[] =
+                            { "Home", "Apps"};
+
   /** JSplitPane sp */
   private JSplitPane sp;
   /** Back menu option */
@@ -104,6 +109,10 @@ public class Browser extends JFrame
 
     if(mysettings.isBrowserProxy())
     {
+      System.setProperty("http.proxyHost",mysettings.getBrowserProxyHost());
+      System.setProperty("http.proxyPort", Integer.toString(
+                          mysettings.getBrowserProxyPort()));
+   
       System.setProperty("proxyHost",mysettings.getBrowserProxyHost());
       System.setProperty("proxyPort", Integer.toString(
                           mysettings.getBrowserProxyPort()));
@@ -256,6 +265,7 @@ public class Browser extends JFrame
     // url field
     JLabel urlLabel = new JLabel("URL:");
     urlField = new MemoryComboBox(urlCache);
+    urlField.addActionListener(this);
     int urlFieldHeight = (int)urlField.getPreferredSize().getHeight();
 
 // Icon tool bar
@@ -268,16 +278,26 @@ public class Browser extends JFrame
         Graphics2D g2 = (Graphics2D)g;
 
         g2.setColor(new Color(0,128,0));
-        g2.fill(Browser.makeShape(4,12,14,22,14,16,18,16,18,12));
+
+        float loc1[][] = { {4,12}, {14,22}, {14,16}, 
+                                   {18,16}, {18,12} };
+        g2.fill(Browser.makeShape(loc1));
         g2.setColor(Color.green);
-        g2.fill(Browser.makeShape(4,12,14,2,14,8,18,8,18,12));
+
+        float loc2[][] = { {4,12}, {14,2}, {14,8}, 
+                                   {18,8}, {18,12} };
+        g2.fill(Browser.makeShape(loc2));
 
         if(!isEnabled())
         {
           g2.setColor(Color.gray);
-          g2.fill(Browser.makeShape(5,12,14,21,14,15,18,15,18,12));
+          float loc3[][] = { {5,12}, {14,21}, {14,15}, 
+                                     {18,15}, {18,12} };
+          g2.fill(Browser.makeShape(loc3));
           g2.setColor(Color.lightGray);
-          g2.fill(Browser.makeShape(5,12,14,3,14,9,18,9,18,12));
+          float loc4[][] = { {5,12}, {14,3}, {14,9}, 
+                                     {18,9}, {18,12} };
+          g2.fill(Browser.makeShape(loc4));
         }
         setSize(22,24);
       }
@@ -299,16 +319,27 @@ public class Browser extends JFrame
         Graphics2D g2 = (Graphics2D)g;
 
         g2.setColor(new Color(0,128,0));
-        g2.fill(Browser.makeShape(4,12,4,16,8,16,8,22,18,12));
+
+        float loc1[][] = { {4,12}, {4,16}, {8,16}, 
+                                   {8,22}, {18,12} };
+
+        g2.fill(Browser.makeShape(loc1));
         g2.setColor(Color.green);
-        g2.fill(Browser.makeShape(4,12,4,8,8,8,8,2,18,12));
+
+        float loc2[][] = { {4,12}, {4,8}, {8,8},
+                                   {8,2}, {18,12} };
+        g2.fill(Browser.makeShape(loc2));
 
         if(!isEnabled())
         {
           g2.setColor(Color.gray);
-          g2.fill(Browser.makeShape(4,12,4,15,8,15,8,21,17,12));
+          float loc3[][] = { {4,12}, {4,15}, {8,15},
+                                     {8,21}, {17,12} };
+          g2.fill(Browser.makeShape(loc3));
           g2.setColor(Color.lightGray);
-          g2.fill(Browser.makeShape(4,12,4,7,8,7,8,3,17,12));
+          float loc4[][] = { {4,12}, {4,7}, {8,7},
+                                     {8,3}, {17,12} };
+          g2.fill(Browser.makeShape(loc4));
         }
 
         setSize(22,24);
@@ -353,9 +384,9 @@ public class Browser extends JFrame
   private void setBrowserSize()
   {
     Dimension screenSize = getToolkit().getScreenSize();
-    int width  = screenSize.width * 5 / 10;
-    int height = screenSize.height * 7 / 10;
-    setBounds(width/5, height/7, width, height);
+    int width  = (int)(screenSize.width * 0.6);
+    int height = (int)(screenSize.height * 0.85);
+    setBounds((int)(width*.59), (int)(height*.02), width, height);
   }
 
 
@@ -370,61 +401,6 @@ public class Browser extends JFrame
     htmlPane.setEditable(false);
     htmlPane.setCaretPosition(0);
     
-    final ClassLoader cl = this.getClass().getClassLoader();
-
-    final JList list = new JList(topics); 
-    list.addListSelectionListener(new ListSelectionListener()
-    {
-      public void valueChanged(ListSelectionEvent e)
-      {
-	String selectedValue = (String)list.getSelectedValue();
-        URL inURL = null;
-	if(selectedValue.equals("File Manager"))
-	  inURL = cl.getResource("resources/filemgr.html");
-        else if(selectedValue.equals("About Jemboss"))
-          inURL = cl.getResource("resources/readme.html");
-        else if(selectedValue.equals("Jemboss Alignment Editor"))
-          inURL = cl.getResource("resources/readmeAlign.html");
-	else if(selectedValue.equals("Sequence List"))
-          inURL = cl.getResource("resources/seqList.html");
-        else if(selectedValue.equals("Results Manager"))
-          inURL = cl.getResource("resources/results.html");
-	else if (selectedValue.equals("User Guide"))
-        {
-	  try
-          {
-	    inURL = new URL("http://www.rfcgr.mrc.ac.uk/Software/EMBOSS/Jemboss/guide.html");
-	  }
-	  catch(MalformedURLException me){}
-	}
- 
-        if(inURL != null)
-        {
-          try
-          {
-            htmlPane.setPage(inURL);
-            if(!urlField.isItem(inURL))
-              urlField.addURL(inURL);
-            else
-	    {
-              urlField.setSelectedItem(inURL);
-              urlField.setLastIndex(inURL);
-            }
-          }
-          catch(IOException ioe)
-          {
-            setCursor(cdone);
-            warnUser("Can't follow link to " + inURL );
-          }
-          backMenu.setEnabled(urlField.isBackPage());
-          backBt.setEnabled(urlField.isBackPage());
-  
-          fwdMenu.setEnabled(urlField.isForwardPage());
-          fwdBt.setEnabled(urlField.isForwardPage());
-	}
-      }
-    });
-
     Box bacross = Box.createHorizontalBox();
     bacross.add(Box.createHorizontalGlue());
     JButton listClose = new JButton()
@@ -451,9 +427,8 @@ public class Browser extends JFrame
     listClose.setPreferredSize(new Dimension(15,15));
     bacross.add(listClose);
 
-
     JPanel leftPane = new JPanel(new BorderLayout());
-    JScrollPane leftScroll = new JScrollPane(list);
+    JScrollPane leftScroll = new JScrollPane(getWebScape());
     leftPane.add(bacross, BorderLayout.NORTH);
     leftPane.add(leftScroll, BorderLayout.CENTER);
     leftScroll.getViewport().setBackground(Color.white);
@@ -469,7 +444,16 @@ public class Browser extends JFrame
 
     // ensures html wraps properly
     htmlPane.setPreferredSize(getPreferredSize());
-    getContentPane().add(sp, BorderLayout.CENTER);   
+    getContentPane().add(sp, BorderLayout.CENTER);  
+
+    // status field
+    Border loweredbevel = BorderFactory.createLoweredBevelBorder();
+    Border raisedbevel = BorderFactory.createRaisedBevelBorder();
+    Border compound = BorderFactory.createCompoundBorder(raisedbevel,loweredbevel);
+    statusField = new JTextField();
+    statusField.setBorder(compound);
+    statusField.setEditable(false);
+    getContentPane().add(statusField, BorderLayout.SOUTH);
   }
 
   /**
@@ -500,7 +484,7 @@ public class Browser extends JFrame
     {
       try
       {
-        url = new URL("http://www.rfcgr.mrc.ac.uk/Software/EMBOSS/Jemboss/");
+        url = new URL("http://emboss.sourceforge.net/Jemboss/");
       }
       catch(MalformedURLException me){}
     }
@@ -556,7 +540,7 @@ public class Browser extends JFrame
   */
   public void hyperlinkUpdate(HyperlinkEvent event) 
   {
-    if (event.getEventType() == HyperlinkEvent.EventType.ACTIVATED)
+    if(event.getEventType() == HyperlinkEvent.EventType.ACTIVATED)
     {
       setCursor(cbusy);
       try 
@@ -575,11 +559,15 @@ public class Browser extends JFrame
       {
         setCursor(cdone);
         warnUser("Can't follow link to " +  
-                  event.getURL().toExternalForm() );
+                  event.getDescription() );
       }
       
       setCursor(cdone);
     }
+    else if(event.getEventType() == HyperlinkEvent.EventType.ENTERED)
+      statusField.setText(event.getDescription());
+    else if(event.getEventType() == HyperlinkEvent.EventType.EXITED)
+      statusField.setText("");
   }
 
 
@@ -595,26 +583,24 @@ public class Browser extends JFrame
                                   JOptionPane.ERROR_MESSAGE);
   }
 
+
   /**
   *
-  * Use to draw a Shape.
+  * Used to draw a Shape.
   *
   */
-  public static GeneralPath makeShape(float a1, float b1,
-        float a2, float b2, float a3, float b3, float a4, 
-        float b4, float a5, float b5)
+  public static GeneralPath makeShape(float loc[][])
   {
     GeneralPath path = new GeneralPath(GeneralPath.WIND_NON_ZERO);
-                                                                                
-    path.moveTo(a1,b1);
-    path.lineTo(a2,b2);
-    path.lineTo(a3,b3);
-    path.lineTo(a4,b4);
-    path.lineTo(a5,b5);
-    path.closePath();
-                                                                                
+
+    path.moveTo(loc[0][0],loc[0][1]);
+
+    for(int i=1; i<loc.length; i++)
+      path.lineTo(loc[i][0],loc[i][1]);
+
     return path;
   }
+
 
 
 
@@ -634,7 +620,124 @@ public class Browser extends JFrame
     }
   }
 
+  
+  public JTree getWebScape()
+  {
+    DefaultMutableTreeNode top =
+        new DefaultMutableTreeNode("Jemboss WebScape");
+    createNodes(top);
+    
+    final JTree webScape = new JTree(top);
+    webScape.setShowsRootHandles(true);
+    webScape.expandRow(1);
+    webScape.getSelectionModel().setSelectionMode
+            (TreeSelectionModel.SINGLE_TREE_SELECTION);
+    webScape.addTreeSelectionListener(new TreeSelectionListener()
+    {
+      public void valueChanged(TreeSelectionEvent e) 
+      {
+        ClassLoader cl = this.getClass().getClassLoader();
+        DefaultMutableTreeNode node = (DefaultMutableTreeNode)
+                       webScape.getLastSelectedPathComponent();
 
+        if (node == null) return;
+        Object nodeInfo = node.getUserObject();
+        if(node.isLeaf()) 
+        {
+          String loc = null;
+          DefaultMutableTreeNode parent = (DefaultMutableTreeNode)node.getParent();
+          String category = (String)parent.getUserObject();
+
+          String selectedValue = (String)nodeInfo;
+          URL inURL = null;
+          if(selectedValue.equals("File Manager"))
+            inURL = cl.getResource("resources/filemgr.html");
+          else if(selectedValue.equals("About"))
+            inURL = cl.getResource("resources/readme.html");
+          else if(selectedValue.equals("Alignment Editor"))
+            inURL = cl.getResource("resources/readmeAlign.html");
+          else if(selectedValue.equals("Sequence List"))
+            inURL = cl.getResource("resources/seqList.html");
+          else if(selectedValue.equals("Results Manager"))
+            inURL = cl.getResource("resources/results.html");
+          else if (selectedValue.equals("User Guide"))
+            loc = "http://emboss.sourceforge.net/Jemboss/guide.html";
+          else if(selectedValue.equals("Home") && category.equals("Jemboss"))
+            loc = "http://emboss.sourceforge.net/Jemboss/";
+          else if(selectedValue.equals("Home") && category.equals("EMBOSS"))
+            loc = "http://emboss.sourceforge.net/";
+          else if(selectedValue.equals("Apps") && category.equals("EMBOSS"))
+            loc = "http://emboss.sourceforge.net/apps";
+
+          if(loc != null) 
+          {
+            try
+            {
+              inURL = new URL(loc);
+            }
+            catch(MalformedURLException me)
+            {
+              warnUser("Can't follow link to " + loc);
+            }
+          }
+
+          if(inURL != null)
+          {
+            try
+            {
+              htmlPane.setPage(inURL);
+              if(!urlField.isItem(inURL))
+                urlField.addURL(inURL);
+              else
+              {
+                urlField.setSelectedItem(inURL);
+                urlField.setLastIndex(inURL);
+              }
+            }
+            catch(IOException ioe)
+            {
+              setCursor(cdone);
+              warnUser("Can't follow link to " + inURL );
+            }
+            backMenu.setEnabled(urlField.isBackPage());
+            backBt.setEnabled(urlField.isBackPage());
+                                                                                
+            fwdMenu.setEnabled(urlField.isForwardPage());
+            fwdBt.setEnabled(urlField.isForwardPage());
+          }
+        }
+      }
+    });
+
+    webScape.setRootVisible(false);
+    return webScape;
+  }
+
+  private void createNodes(DefaultMutableTreeNode top)
+  {
+    DefaultMutableTreeNode category = null;
+    DefaultMutableTreeNode topic    = null;
+
+    category = new DefaultMutableTreeNode("Jemboss");
+    top.add(category);
+    
+    for(int i=0; i<topics.length; i++)
+    {
+      topic = new DefaultMutableTreeNode(topics[i]);
+      category.add(topic);
+    }
+
+    category = new DefaultMutableTreeNode("EMBOSS");
+    top.add(category);
+                                                                                
+    for(int i=0; i<embossTopics.length; i++)
+    {
+      topic = new DefaultMutableTreeNode(embossTopics[i]);
+      category.add(topic);
+    }
+
+  }
+  
   public static void main(String args[])
   {
     ClassLoader cl = ClassLoader.getSystemClassLoader();

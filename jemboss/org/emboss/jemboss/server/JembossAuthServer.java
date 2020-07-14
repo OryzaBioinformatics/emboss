@@ -1,4 +1,4 @@
-/****************************************************************
+/*
 *      
 *  This program is free software; you can redistribute it and/or
 *  modify it under the terms of the GNU General Public License
@@ -39,30 +39,30 @@ public class JembossAuthServer
   /** SOAP results directory */
   private String tmproot = new String("/tmp/SOAP/emboss/");
   /** Jemboss log file       */
-  private String logFile = new String(tmproot+"/jemboss.log");
+  private final String logFile = new String(tmproot+"/jemboss.log");
   /** Jemboss error log file */
-  private String errorLog = new String(tmproot+"/jemboss_error.log");
+  private final String errorLog = new String(tmproot+"/jemboss_error.log");
   /** file separator */
-  private String fs = new String(System.getProperty("file.separator"));
+  private final String fs = new String(System.getProperty("file.separator"));
   /** path separator */
-  private String ps = new String(System.getProperty("path.separator"));
+  private final String ps = new String(System.getProperty("path.separator"));
   /** line seperator */
-  private String ls = System.getProperty("line.separator");
+  private final String ls = System.getProperty("line.separator");
 
 //get paths to EMBOSS
   /** jemboss properties */
-  JembossParams jp  = new JembossParams();
+  final JembossParams jp  = new JembossParams();
   /** plplot path */
-  String plplot     = jp.getPlplot();
+  final String plplot     = jp.getPlplot();
   /** emboss data path */
-  String embossData = jp.getEmbossData();
+  final String embossData = jp.getEmbossData();
   /** emboss binary path */
-  String embossBin  = jp.getEmbossBin();
+  final String embossBin  = jp.getEmbossBin();
   /** path environment variable */
-  String embossPath = embossBin + ps + jp.getEmbossPath();
+  final String embossPath = embossBin + ps + jp.getEmbossPath();
 
   /** emboss run environment */
-  private String[] env = 
+  final private String[] env = 
   {
     "PATH=" + embossPath,
     "PLPLOT_LIB=" + plplot,
@@ -72,7 +72,7 @@ public class JembossAuthServer
   };
  
   /** emboss run environment as a string */ 
-  private String environ = "PATH=" + embossPath+ " "+
+  private final String environ = "PATH=" + embossPath+ " "+
                            "PLPLOT_LIB=" + plplot +" "+
                            "EMBOSS_DATA=" + embossData +" "+
                            jp.getEmbossEnvironment();
@@ -89,10 +89,9 @@ public class JembossAuthServer
   */
   public Vector show_acd(String appName)
   {
-
-    Vector acd = new Vector();
+    Vector acd = new Vector(4);
     StringBuffer acdText = new StringBuffer();
-    String acdToParse = new String(jp.getAcdDirToParse() + appName + ".acd");
+    final String acdToParse = new String(jp.getAcdDirToParse() + appName + ".acd");
 
     try
     {
@@ -130,9 +129,9 @@ public class JembossAuthServer
   */
   public Vector getWossname()
   {
-    String[] envp = jp.getEmbossEnvironmentArray(env);
-    Vector wossOut = new Vector();
-    String embossCommand = new String(embossBin + 
+    final String[] envp = jp.getEmbossEnvironmentArray(env);
+    Vector wossOut = new Vector(4);
+    final String embossCommand = new String(embossBin + 
                    "wossname -colon -gui -auto");
  
     RunEmbossApplication2 rea = new RunEmbossApplication2(embossCommand,
@@ -156,8 +155,8 @@ public class JembossAuthServer
   */
   public Vector show_help(String applName)
   {
-    String[] envp = jp.getEmbossEnvironmentArray(env);
-    String command = embossBin.concat("tfm " + applName + " -html -nomore");
+    final String[] envp = jp.getEmbossEnvironmentArray(env);
+    final String command = embossBin.concat("tfm " + applName + " -html -nomore");
     RunEmbossApplication2 rea = new RunEmbossApplication2(command,
                                                        envp,null);
     rea.waitFor();
@@ -166,7 +165,7 @@ public class JembossAuthServer
     if(helptext.equals(""))
       helptext = "No help available for this application.";
 
-    Vector vans = new Vector();
+    Vector vans = new Vector(2);
     vans.add("helptext");
     vans.add(helptext);
 
@@ -187,11 +186,13 @@ public class JembossAuthServer
   public Vector call_ajax(String fileContent, String seqtype,
                           String userName, byte[] passwd)
   {
-
-    Vector vans = new Vector();
+    Vector vans = new Vector(8);
     Ajax aj = new Ajax();
     if(!verifyUser(aj,userName,passwd,vans))
+    {
+      vans.trimToSize();
       return vans;
+    }
 
     boolean afile = false;
     boolean fexists = false;
@@ -234,6 +235,7 @@ public class JembossAuthServer
                          errorLog);
         vans.add("status");
         vans.add("1");
+        vans.trimToSize();
         return vans;
       }
     }
@@ -263,6 +265,7 @@ public class JembossAuthServer
                          errorLog);
         vans.add("status");
         vans.add("1");
+        vans.trimToSize();
         return vans;
       }
     }
@@ -300,7 +303,7 @@ public class JembossAuthServer
     String fn = null;
     File tf = null;
 
-    Vector vans = new Vector();
+    Vector vans = new Vector(8);
 
     // create temporary file
     if( ((fileContent.indexOf(":") < 0) ||
@@ -324,6 +327,7 @@ public class JembossAuthServer
                          errorLog);
         vans.add("status");
         vans.add("1");
+        vans.trimToSize();
         return vans;
       }
     }
@@ -353,6 +357,7 @@ public class JembossAuthServer
                          errorLog);
         vans.add("status");
         vans.add("1");
+        vans.trimToSize();
         return vans;
       }
     }
@@ -375,6 +380,7 @@ public class JembossAuthServer
                          errorLog);
       vans.add("status");
       vans.add("1");
+      vans.trimToSize();
     }
 
     if(afile)
@@ -392,9 +398,9 @@ public class JembossAuthServer
   */
   public Vector show_db()
   {
-    String[] envp = jp.getEmbossEnvironmentArray(env);
-    Vector showdbOut = new Vector();
-    String embossCommand = new String(embossBin + "showdb -auto");
+    final String[] envp = jp.getEmbossEnvironmentArray(env);
+    Vector showdbOut = new Vector(8);
+    final String embossCommand = new String(embossBin + "showdb -auto");
 
     RunEmbossApplication2 rea = new RunEmbossApplication2(embossCommand,
                                                           envp,null);
@@ -404,7 +410,10 @@ public class JembossAuthServer
     showdbOut.add(rea.getStatus());
      
     if(!rea.getStatus().equals("0"))
+    {
+      showdbOut.trimToSize();
       return showdbOut;
+    }
                         
     showdbOut.add("showdb");
     showdbOut.add(rea.getProcessStdout());
@@ -458,10 +467,9 @@ public class JembossAuthServer
   public synchronized Vector run_prog(String embossCommand, String options,
                             Vector inFiles, String userName, byte[] passwd)
   {
-
     tmproot = tmproot.concat(userName+fs);
     Ajax aj = new Ajax();
-    Vector result = new Vector();
+    Vector result = new Vector(6,1);
 
     if(!verifyUser(aj,userName,passwd,result))
       return result;
@@ -476,6 +484,7 @@ public class JembossAuthServer
       result.add(warn);
       result.add("status");
       result.add("1");
+      result.trimToSize();
       return result;
     }
 
@@ -522,6 +531,7 @@ public class JembossAuthServer
         result.add(warnmsg);
         result.add("status");
         result.add("1");
+        result.trimToSize();
         return result;
       }
     }
@@ -646,7 +656,6 @@ public class JembossAuthServer
 
       for(int i=0;i<passwd.length;i++)
         passwd[i] = '\0';
-
     }
     else      //batch or background
     {
@@ -924,11 +933,14 @@ public class JembossAuthServer
                     String notes, String userName, byte[] passwd)
   {
     Ajax aj = new Ajax();
-    Vector v = new Vector();
+    Vector v = new Vector(4);
     if(!verifyUser(aj,userName,passwd,v))
+    {
+      v.trimToSize();
       return v;
+    }
 
-    String fn = tmproot + fs + userName+ fs + 
+    final String fn = tmproot + fs + userName+ fs + 
                      project + fs + filename;
     boolean ok = aj.putFile(userName,passwd,environ,
                             fn,notes.getBytes());
@@ -961,11 +973,13 @@ public class JembossAuthServer
   public Vector delete_saved_results(String project, String cl,
                                 String userName, byte[] passwd)
   {
-
-    Vector dsr = new Vector();
+    Vector dsr = new Vector(4);
     Ajax aj = new Ajax();
     if(!verifyUser(aj,userName,passwd,dsr))
+    {
+      dsr.trimToSize();
       return dsr;
+    }
 
     tmproot = tmproot.concat(userName+fs);
 
@@ -1016,11 +1030,17 @@ public class JembossAuthServer
     boolean lsd = aj.listDirs(userName,passwd,environ,tmproot);
     
     String outStd = aj.getOutStd();
-    StringTokenizer stok = new StringTokenizer(outStd,"\n");
 
-    while(stok.hasMoreTokens())
+    int indStart = 0;
+    int indEnd   = 0;
+//  StringTokenizer stok = new StringTokenizer(outStd,"\n");
+//  while(stok.hasMoreTokens())
+    while((indEnd = outStd.indexOf("\n",indStart)) > -1) 
     {
-      String dirname = stok.nextToken();
+//    String dirname = stok.nextToken();
+      String dirname = outStd.substring(indStart,indEnd);
+      indStart = indEnd+1;
+
       lsr.add(dirname);
       byte fbuf[] = aj.getFile(userName,passwd,environ,
                      tmproot + dirname + fs + ".desc");
@@ -1265,7 +1285,7 @@ public class JembossAuthServer
                     "STDOUT "+aj.getOutStd()+"\n"+
                     "MSG    "+msg,errorLog);
 
-    Vector vans = new Vector();
+    Vector vans = new Vector(4);
     vans.add("msg");
     vans.add(aj.getErrStd());
 

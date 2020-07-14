@@ -62,7 +62,7 @@ public class Wizard
     }
     else if(n == 1 || n == 2)
     {
-      JFrame f = new JFrame("Genetic Marker");
+      JFrame f = new JFrame("Genetic Feature");
    
       Vector block = new Vector();
       Vector restrictionEnzyme = new Vector();
@@ -107,7 +107,7 @@ public class Wizard
       bdown.add(bacross);
 
       bdown.add(Box.createHorizontalStrut(10));
-      bdown.add(new JLabel("Genetic Markers"));
+      bdown.add(new JLabel("Genetic Feature"));
       bacross = Box.createHorizontalBox();
       bacross.add(gm);
       bacross.add(Box.createHorizontalGlue());

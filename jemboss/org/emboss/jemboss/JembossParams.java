@@ -844,7 +844,6 @@ public class JembossParams
   public String[] getEmbossEnvironmentArray(String[] envp)
   {
     embossEnvironment = embossEnvironment.trim();
-    embossEnvironment = embossEnvironment.replace(':',' ');
     embossEnvironment = embossEnvironment.replace(',',' ');
 
     if(embossEnvironment.equals(""))

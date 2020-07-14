@@ -90,7 +90,7 @@ public class DNADraw extends ScrollPanel
     lineAttr = new Hashtable();
     lineAttr.put("start",new Integer(0));
     lineAttr.put("end",new Integer(4000));
-    lineAttr.put("lsize",new Integer(10));
+    lineAttr.put("lsize",new Integer(5));
     lineAttr.put("circular",new Boolean(true));
 
     MouseListener mouseListener = new MouseAdapter()
@@ -117,11 +117,11 @@ public class DNADraw extends ScrollPanel
                     current_dna.repaint(); 
                     f.setVisible(false);
                     f.dispose();       
-                    Enumeration enum = block.elements();
+                    Enumeration enumBk = block.elements();
                     int nelement = 0;
-                    while(enum.hasMoreElements())
+                    while(enumBk.hasMoreElements())
                     {
-                      Vector v = (Vector)enum.nextElement();
+                      Vector v = (Vector)enumBk.nextElement();
                       if(v.contains(drawBlock))
                         block.removeElementAt(nelement);   
                       nelement++;
@@ -288,19 +288,19 @@ public class DNADraw extends ScrollPanel
     if(majorTicks == null || minorTicks == null)
       calculateTickPosistions();
 
-    Enumeration enum = minorTicks.elements();
-    while(enum.hasMoreElements())
+    Enumeration enumTk = minorTicks.elements();
+    while(enumTk.hasMoreElements())
     {
-      int tick = ((Integer)enum.nextElement()).intValue();
+      int tick = ((Integer)enumTk.nextElement()).intValue();
       int x = ((diameter-location.x)*(tick-start)/(end-start))+location.x;
       int y = ymid+(int)((lineSize+widDash)/2);
       g2.drawLine(x,ymid,x,y);
     }
 
-    enum = majorTicks.elements();
-    while(enum.hasMoreElements())
+    enumTk = majorTicks.elements();
+    while(enumTk.hasMoreElements())
     {
-      int tick = ((Integer)enum.nextElement()).intValue();
+      int tick = ((Integer)enumTk.nextElement()).intValue();
       int x = ((diameter-location.x)*(tick-start)/(end-start))+location.x;
       int y = ymid+(lineSize/2)+(int)widDash;
       g2.drawLine(x,ymid,x,y);
@@ -312,10 +312,10 @@ public class DNADraw extends ScrollPanel
 
     if(restrictionEnzyme != null)
     {
-      enum = restrictionEnzyme.elements();
-      while(enum.hasMoreElements())
+      enumTk = restrictionEnzyme.elements();
+      while(enumTk.hasMoreElements())
       {
-        Vector re = (Vector)enum.nextElement();
+        Vector re = (Vector)enumTk.nextElement();
         String reLabel = (String)re.elementAt(0);
         int pos = ((Integer)re.elementAt(1)).intValue();
         g2.setColor((Color)re.elementAt(2));
@@ -372,10 +372,10 @@ public class DNADraw extends ScrollPanel
         reXPositions = new int[nsize];
         reYPositions = new int[nsize];
       }
-      Enumeration enum = restrictionEnzyme.elements();
-      while(enum.hasMoreElements())
+      Enumeration enumRes = restrictionEnzyme.elements();
+      while(enumRes.hasMoreElements())
       {
-        Vector re = (Vector)enum.nextElement();
+        Vector re = (Vector)enumRes.nextElement();
         String reLabel = (String)re.elementAt(0);
         int pos = ((Integer)re.elementAt(1)).intValue();
         g2.setColor((Color)re.elementAt(2));
@@ -462,10 +462,10 @@ public class DNADraw extends ScrollPanel
     }
 
     AffineTransform newOrig;
-    Enumeration enum = ticks.elements();
-    while(enum.hasMoreElements())
+    Enumeration enumTk = ticks.elements();
+    while(enumTk.hasMoreElements())
     {
-      int tick = ((Integer)enum.nextElement()).intValue();
+      int tick = ((Integer)enumTk.nextElement()).intValue();
       double theta = Math.toRadians(-getAngleFromPosition(tick,rad));
       if(theta > pi)
         theta = theta - pi*2.d;
@@ -553,9 +553,15 @@ public class DNADraw extends ScrollPanel
     int start = getStart();
     int end   = getEnd();
 
+    if(majorTick == 0)
+      return;
+
     for(int i=startTick; i<end; i+=majorTick)
       if(i >= start)
         majorTicks.add(new Integer(i));
+
+    if(minorTick == 0)
+      return;
 
     for(int i=startTick; i<end; i+=minorTick)
     {
@@ -928,12 +934,12 @@ public class DNADraw extends ScrollPanel
     optionMenu.add(tickMarks);
 
 
-    JMenuItem gmarker = new JMenuItem("Genetic Markers");
+    JMenuItem gmarker = new JMenuItem("Genetic Features");
     gmarker.addActionListener(new ActionListener()
     {
       public void actionPerformed(ActionEvent e)
       {
-        JFrame f = new JFrame("Genetic Marker");
+        JFrame f = new JFrame("Genetic Features");
         GeneticMarker gm = new GeneticMarker(current_dna,
                                              block);
         JScrollPane gmScroll = new JScrollPane(gm);

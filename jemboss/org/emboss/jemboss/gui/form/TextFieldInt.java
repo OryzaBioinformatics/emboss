@@ -93,8 +93,10 @@ public class TextFieldInt extends TextFieldSink
         else 
         {
           if(source[i] != ',')
+          {
             toolkit.beep();
-          System.err.println("insertString: " + source[i]);
+            System.err.println("insertString: " + source[i]);
+          }
         }
       }
       super.insertString(offs, new String(result, 0, j), a);

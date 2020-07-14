@@ -179,6 +179,7 @@ public class ProgList
            {
              exist = true;
              index = j;
+             break;
            }
          }
 
@@ -200,6 +201,7 @@ public class ProgList
              {
                exist = true;
                index = j;
+               break;
              }
            }
            if(!exist) 

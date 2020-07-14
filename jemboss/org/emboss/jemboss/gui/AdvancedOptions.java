@@ -29,6 +29,7 @@ import javax.swing.event.*;
 import java.awt.event.*;
 import org.emboss.jemboss.gui.form.Separator;
 import org.emboss.jemboss.JembossParams;
+import org.emboss.jemboss.Jemboss;
 import org.emboss.jemboss.gui.filetree.FileSave;
 
 /**
@@ -96,18 +97,21 @@ public class AdvancedOptions extends JPanel
     bdown.add(Box.createVerticalStrut(5));
 
 //frequency of job manager updates
-    jobMgr = new JComboBox(time);
-    jobMgr.setSelectedIndex(2);
-    int hgt = (new Double(jobMgr.getPreferredSize().getHeight())).intValue();
-    jobMgr.setPreferredSize(new Dimension(70,hgt));
-    jobMgr.setMaximumSize(new Dimension(70,hgt));
-    bleft =  Box.createHorizontalBox();
-    bleft.add(jobMgr);
-    JLabel ljobMgr = new JLabel(" Job Manager update frequency");
-    ljobMgr.setForeground(Color.black);
-    bleft.add(ljobMgr);
-    bleft.add(Box.createHorizontalGlue());
-    bdown.add(bleft);
+    if(Jemboss.withSoap)
+    {
+      jobMgr = new JComboBox(time);
+      jobMgr.setSelectedIndex(2);
+      int hgt = (new Double(jobMgr.getPreferredSize().getHeight())).intValue();
+      jobMgr.setPreferredSize(new Dimension(70,hgt));
+      jobMgr.setMaximumSize(new Dimension(70,hgt));
+      bleft =  Box.createHorizontalBox();
+      bleft.add(jobMgr);
+      JLabel ljobMgr = new JLabel(" Job Manager update frequency");
+      ljobMgr.setForeground(Color.black);
+      bleft.add(ljobMgr);
+      bleft.add(Box.createHorizontalGlue());
+      bdown.add(bleft);
+    }
 
     bdown.add(Box.createVerticalStrut(5));
     bdown.add(new Separator(new Dimension(400,10)));

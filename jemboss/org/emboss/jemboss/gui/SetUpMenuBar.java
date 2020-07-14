@@ -56,6 +56,8 @@ public class SetUpMenuBar
   private ServerSetup ss = null;
   /** advanced options */
   private AdvancedOptions ao;
+  /** favorites menu */
+  private JMenu favMenu;
 
   /**
   *
@@ -177,11 +179,11 @@ public class SetUpMenuBar
       public void actionPerformed(ActionEvent e)
       {
         if(ss == null)
-          ss = new ServerSetup(mysettings);
+          ss = new ServerSetup(mysettings,withSoap);
         int sso = JOptionPane.showConfirmDialog(f,ss,"Jemboss Settings",
                              JOptionPane.OK_CANCEL_OPTION,
                              JOptionPane.PLAIN_MESSAGE,null);
-        if(sso == JOptionPane.OK_OPTION)
+        if(sso == JOptionPane.OK_OPTION && withSoap)
           ss.setNewSettings();
       }
     });
@@ -262,6 +264,9 @@ public class SetUpMenuBar
     toolMenu.add(toolWorkList);
     menuPanel.add(toolMenu);
 
+    favMenu = new JMenu("Favourites");
+    menuPanel.add(favMenu);
+
     JMenu helpMenu = new JMenu("Help");
     helpMenu.setMnemonic(KeyEvent.VK_H);
 
@@ -318,6 +323,17 @@ public class SetUpMenuBar
 
     f.setJMenuBar(menuPanel);
 
+   }
+
+   /**
+   *
+   * Get the favorites JMenu
+   * @return favorites JMenu
+   *
+   */
+   public JMenu getFavoriteJMenu()
+   {
+     return favMenu;
    }
 
    /**
@@ -379,9 +395,44 @@ public class SetUpMenuBar
     }
   }
 
+  /**
+  *
+  * Write out a tab delimeted file containing the
+  * favorite menu items.
+  *
+  */
+  private void writeFavorites()
+  {
+    File fseq = new File(System.getProperty("user.home")
+                + System.getProperty("file.separator")
+                + ".jembossFavorites");
+    try
+    {
+      PrintWriter fout = new PrintWriter(new FileWriter(fseq));
+      int nmenu = favMenu.getItemCount();
+      for(int i=0;i<nmenu;i++)
+      {
+        JMenuItem favItem = favMenu.getItem(i);
+             
+        if(favItem == null)  // JSepartor
+        {
+          fout.println();
+          continue;
+        }
+
+        fout.println(favItem.getText()+"\t"+
+                     favItem.getActionCommand());
+      }
+      fout.close();
+    }
+    catch (IOException ioe){ }
+    catch (NullPointerException npe) {}
+                                                                                
+  }
 
   public void exitJemboss()
   {
+    writeFavorites();
     String fs = new String(System.getProperty("file.separator"));
     String cwd = new String(System.getProperty("user.dir") + fs);
     if(ao.isSaveUserHomeSelected())

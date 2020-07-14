@@ -59,7 +59,7 @@ public class TextFieldFloat extends TextFieldSink
       // This should never happen because insertString allows
       // only properly formatted data to get in the field.
       toolkit.beep();
-      System.err.println("TextFieldFloat getValue: " + retVal);
+//    System.err.println("TextFieldFloat getValue: " + retVal);
     }
     return retVal;
   }
@@ -94,7 +94,7 @@ public class TextFieldFloat extends TextFieldSink
         {
           if(source[i] != ',')
             toolkit.beep();
-          System.err.println("insertString: " + source[i]);
+//        System.err.println("insertString: " + source[i]);
         }
       }
       super.insertString(offs, new String(result, 0, j), a);

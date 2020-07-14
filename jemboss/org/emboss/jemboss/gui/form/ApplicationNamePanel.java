@@ -58,8 +58,8 @@ public class ApplicationNamePanel extends JPanel
     Font font = new Font("Dialog", Font.BOLD, fontSize);
     setFont(font);
     FontMetrics metrics = getFontMetrics(font);
-    int width = metrics.stringWidth(name);
-    setPreferredSize(new Dimension(width, fontSize+1));   
+    int width   = metrics.stringWidth(name+"   ");
+    setPreferredSize(new Dimension(width, fontSize+1)); 
     setBackground(Color.white);
   } 
 

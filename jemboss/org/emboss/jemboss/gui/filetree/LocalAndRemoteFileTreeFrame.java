@@ -70,6 +70,8 @@ public class LocalAndRemoteFileTreeFrame extends JFrame
 //                                                 this, mysettings);
 
       final JPanel localPanel = new JPanel(new BorderLayout());
+      localPanel.add(new LocalTreeToolBar(mysettings), 
+                     BorderLayout.NORTH);
       JScrollPane localTree = new JScrollPane(ltree);   
 
       final JSplitPane treePane = new JSplitPane(JSplitPane.VERTICAL_SPLIT,

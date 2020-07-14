@@ -75,6 +75,9 @@ public class SectionPanel
   private Box lab[];
   /** available databases */
   private String db[];
+
+//private JComboBox graphics;
+
   /** ACD parser for the application selected */
   private ParseAcd parseAcd;
   /** number of fields in the ACD */
@@ -163,7 +166,7 @@ public class SectionPanel
             JTextField rangeField[], JCheckBox  checkBox[],
             InputSequenceAttributes inSeqAttr[],
             JembossComboPopup fieldOption[], JList multiOption[], 
-            SetInFileCard inSeq[], ListFilePanel filelist[],
+            SetInFileCard inSeq[], ListFilePanel filelist[], JComboBox graphics,
             String db[], String des, Box lab[], int numofFields,
             JembossParams mysettings, boolean withSoap, String[] envp)
   {
@@ -188,6 +191,7 @@ public class SectionPanel
     this.mysettings = mysettings;
     this.withSoap = withSoap; 
     this.f = f;
+//  this.graphics = graphics;
 
 //using JNI?
     nf = nff;
@@ -248,8 +252,7 @@ public class SectionPanel
             nf < numofFields )
     {
      
-      if(!(att.equals("graph") || att.equals("xygraph")
-        || att.equals("var")   || att.equals("variable")) )
+      if(!(att.equals("var") || att.equals("variable"))) 
       {
         numberOfParameters++;
         final int h = parseAcd.getGuiHandleNumber(nf);
@@ -272,6 +275,16 @@ public class SectionPanel
         if(att.startsWith("appl"))
         {
           setAppTitle(des,p3);
+        }
+        else if(att.endsWith("graph"))
+        {
+          Dimension d  = graphics.getPreferredSize();
+          d = new Dimension(150,(int)d.getHeight());
+          graphics.setMaximumSize(d);
+          graphics.setPreferredSize(d);
+
+          pan.add(graphics);
+          pan.add(new JLabel(" Graph Format"));
         }
         else if(att.startsWith("int"))
         {
@@ -1202,7 +1215,8 @@ public class SectionPanel
       else
       {
         c.setVisible(useThis);
-        lab[field].setVisible(useThis);
+        if(lab[field] != null)
+          lab[field].setVisible(useThis);
       }
     }
   }

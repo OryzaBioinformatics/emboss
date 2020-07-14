@@ -477,7 +477,7 @@ public class ResultsMenuBar extends JMenuBar
             String fsize = (String)fntSize.getSelectedItem();
             if(fsize.indexOf(".") > -1)
               fsize = fsize.substring(0,fsize.indexOf("."));
-            fnt = new Font(fnt.getFontName(),fnt.getStyle(),
+            fnt = new Font("monospaced",fnt.getStyle(),
                            Integer.parseInt(fsize));
             jtp.setFont(fnt);
           } catch(NumberFormatException nfe){}
@@ -659,7 +659,20 @@ public class ResultsMenuBar extends JMenuBar
     {
       JScrollPane jsp = (JScrollPane)(rtb.getSelectedComponent());
       return (JTextPane)(jsp.getViewport().getView());
-    } catch(ClassCastException cce) {}
+    }
+    catch(ClassCastException cce) 
+    {
+      try    //standalone results
+      {
+        JPanel panel = (JPanel)rtb.getSelectedComponent();
+        JScrollPane jsp = (JScrollPane)(panel.getComponent(0));
+        ScrollPanel panel2 = (ScrollPanel)jsp.getViewport().getView();
+        return (JTextPane)panel2.getComponent(0);
+      } 
+      catch(ClassCastException cce2) 
+      {
+      }
+    }
 
     return null;
   }
@@ -678,7 +691,19 @@ public class ResultsMenuBar extends JMenuBar
     {
       JScrollPane jsp = (JScrollPane)(rtb.getComponentAt(index));
       return (JTextComponent)(jsp.getViewport().getView());
-    } catch(ClassCastException cce) {}
+    } catch(ClassCastException cce) 
+    {
+      try    //standalone results
+      {
+        JPanel panel = (JPanel)rtb.getComponentAt(index);
+        JScrollPane jsp = (JScrollPane)(panel.getComponent(0));
+        ScrollPanel panel2 = (ScrollPanel)jsp.getViewport().getView();
+        return (JTextPane)panel2.getComponent(0);
+      }
+      catch(ClassCastException cce2)
+      {
+      }
+    }
     
     return null;
   }

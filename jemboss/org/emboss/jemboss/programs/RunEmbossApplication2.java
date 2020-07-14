@@ -46,6 +46,40 @@ public class RunEmbossApplication2
   private StderrHandler stderrh;
   private JTextArea textArea;
 
+
+  /**
+  *
+  * @param embossCommand        emboss command to run
+  * @param envp                 environment
+  * @param project              running directory
+  *
+  */
+  public RunEmbossApplication2(String[] embossCommand,
+                       String[] envp, File project)
+  {
+    this.project = project;
+    status = "0";
+
+    Runtime embossRun = Runtime.getRuntime();
+    try
+    {
+      p = embossRun.exec(embossCommand,envp,project);
+
+      // 2 threads to read in stdout & stderr buffers
+      // to prevent blocking
+      stdouth = new StdoutHandler(this);
+      stderrh = new StderrHandler(this);
+      stdouth.start();
+      stderrh.start();
+    }
+    catch(IOException ioe)
+    {
+      System.out.println("RunEmbossApplication2 Error executing: "+
+                          embossCommand);
+      status = "1";
+    }
+  }
+
   /**
   *
   * @param embossCommand        emboss command to run

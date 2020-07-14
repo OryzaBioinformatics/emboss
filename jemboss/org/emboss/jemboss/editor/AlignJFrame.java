@@ -240,8 +240,11 @@ public class AlignJFrame extends JFrame
       public void actionPerformed(ActionEvent e)
       {   
         PrintAlignmentImage pai = new PrintAlignmentImage(gsc);
-        String type = pai.showOptions(true);
-        pai.print(type,0.,0.,0.,0.);
+        String fsave = pai.showOptions();
+        if(fsave == null)
+          return;
+
+        pai.print(fsave,0.,0.,0.,0.);
       }
     });
     printMenu.add(printOneImage);
@@ -267,7 +270,7 @@ public class AlignJFrame extends JFrame
       public void actionPerformed(ActionEvent e)
       {  
         PrintAlignmentImage pai = new PrintAlignmentImage(gsc);
-        String type = pai.showOptions(false);
+        String type = pai.showPrintPreviewOptions();
         pai.printSinglePagePreview();
       }
     });

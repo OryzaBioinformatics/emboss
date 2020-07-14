@@ -425,14 +425,15 @@ deploy_axis_services()
   AXIS=$1/axis
   CLASSPATH=$AXIS/axis.jar::$AXIS/jaxrpc.jar:$AXIS/saaj.jar:$AXIS/commons-logging.jar:
   CLASSPATH=${CLASSPATH}:$AXIS/commons-discovery.jar:$AXIS/wsdl4j.jar:$AXIS/servlet.jar
-  CLASSPATH=${CLASSPATH}:$JEMBOSS_LIB/jnet.jar:$JEMBOSS_LIB/jsse.jar:$JEMBOSS_LIB/jcert.jar
+#  CLASSPATH=${CLASSPATH}:$JEMBOSS_LIB/jnet.jar:$JEMBOSS_LIB/jsse.jar:$JEMBOSS_LIB/jcert.jar
   CLASSPATH=${CLASSPATH}:$JEMBOSS_LIB/xerces.jar
 
   SERVICE=$2
   URL=$3
-  JAVAHOME=$4
-  OPT_PROP1=$5
-  OPT_PROP2=$6
+  URL2=$4
+  JAVAHOME=$5
+  OPT_PROP1=$6
+  OPT_PROP2=$7
 
   echo
 # echo "$JAVAHOME/bin/java -classpath $CLASSPATH $OPT_PROP1 $OPT_PROP2 \\ "
@@ -445,6 +446,10 @@ deploy_axis_services()
 
   echo "#!/bin/csh " > deploy.csh
   echo "$JAVAHOME/bin/java -classpath $CLASSPATH $OPT_PROP1 $OPT_PROP2 org.apache.axis.client.AdminClient -l$URL/axis/services JembossServer.wsdd" >> deploy.csh
+  echo "" >> deploy.csh
+  echo 'if ($status != 0) then' >> deploy.csh
+  echo "  $JAVAHOME/bin/java -classpath $CLASSPATH $OPT_PROP1 $OPT_PROP2 org.apache.axis.client.AdminClient -l$URL2/axis/services JembossServer.wsdd" >> deploy.csh
+  echo "endif" >> deploy.csh
   chmod u+x deploy.csh
 }
 
@@ -453,7 +458,7 @@ deploy_auth_services()
 
   JEMBOSS_LIB=$1
   CLASSPATH=$JEMBOSS_LIB/soap.jar:$JEMBOSS_LIB/activation.jar:$JEMBOSS_LIB/xerces.jar:$JEMBOSS_LIB/mail.jar
-  CLASSPATH=${CLASSPATH}:$JEMBOSS_LIB/jnet.jar:$JEMBOSS_LIB/jsse.jar:$JEMBOSS_LIB/jcert.jar
+#  CLASSPATH=${CLASSPATH}:$JEMBOSS_LIB/jnet.jar:$JEMBOSS_LIB/jsse.jar:$JEMBOSS_LIB/jcert.jar
 
   SERVICE=$2
   URL=$3
@@ -871,7 +876,7 @@ echo
 getJavaHomePath
 JAVA_HOME=$JAVA_HOME_TMP
 if [ "$JAVA_HOME" != "0" ]; then
-  echo "Enter java (1.3 or above) location [$JAVA_HOME_TMP]: "
+  echo "Enter java (1.4 or above) location [$JAVA_HOME_TMP]: "
   read JAVA_HOME
 
   if [ "$JAVA_HOME" = "" ]; then 
@@ -1108,6 +1113,25 @@ if [ $INSTALL_TYPE = "1" ]; then
   done
   echo "$TOMCAT_ROOT" >> $RECORD
   echo
+
+  if [ -d "$TOMCAT_ROOT/webapps/axis/WEB-INF/classes/org" ]; then
+    echo
+    echo "It looks like an installation has already been carried out in: "
+    echo "$TOMCAT_ROOT/webapps/axis/WEB-INF/classes/ "
+    echo "It is recommended that tomcat is removed and a fresh copy of tomcat used."
+    echo "This is likely to fail if you continue."
+    read BLANK
+  fi
+
+  if [ -d "$TOMCAT_ROOT/webapps/axis/WEB-INF/classes/resources" ]; then
+    echo
+    echo "It looks like an installation has already been carried out in: "
+    echo "$TOMCAT_ROOT/webapps/axis/WEB-INF/classes/ "
+    echo "It is recommended that tomcat is removed and a fresh copy of tomcat used."
+    echo "This is likely to fail if you continue."
+    read BLANK
+  fi
+
 #
 # Apache AXIS (SOAP)
 #
@@ -1248,11 +1272,11 @@ $JAVA_HOME/bin/jar cvf $JEMBOSS/resources/resources.jar EPAM* EBLOSUM* ENUC*
 #
 
 if [ $AUTH = "y" ]; then
-  $JAVA_HOME/bin/javac -classpath $JEMBOSS $JEMBOSS/org/emboss/jemboss/server/JembossAuthServer.java
-  $JAVA_HOME/bin/javac -classpath $JEMBOSS $JEMBOSS/org/emboss/jemboss/server/JembossFileAuthServer.java
+  $JAVA_HOME/bin/javac -target 1.3 -source 1.3 -classpath $JEMBOSS $JEMBOSS/org/emboss/jemboss/server/JembossAuthServer.java
+  $JAVA_HOME/bin/javac -target 1.3 -source 1.3 -classpath $JEMBOSS $JEMBOSS/org/emboss/jemboss/server/JembossFileAuthServer.java
 else
-  $JAVA_HOME/bin/javac -classpath $JEMBOSS $JEMBOSS/org/emboss/jemboss/server/JembossServer.java
-  $JAVA_HOME/bin/javac -classpath $JEMBOSS $JEMBOSS/org/emboss/jemboss/server/JembossFileServer.java
+  $JAVA_HOME/bin/javac -target 1.3 -source 1.3 -classpath $JEMBOSS $JEMBOSS/org/emboss/jemboss/server/JembossServer.java
+  $JAVA_HOME/bin/javac -target 1.3 -source 1.3 -classpath $JEMBOSS $JEMBOSS/org/emboss/jemboss/server/JembossFileServer.java
 fi
 
 if [ "$MACOSX" = "y" ]; then
@@ -1313,6 +1337,10 @@ if [ "$AUTH_TYPE" = "3" ]; then
     echo "setenv LD_PRELOAD /lib/libpam.so" >> tomstart
   elif [ -f "/usr/lib/libpam.so" ]; then
     echo "setenv LD_PRELOAD /usr/lib/libpam.so" >> tomstart
+  elif [ -f "/lib64/libpam.so" ]; then
+    echo "setenv LD_PRELOAD /lib64/libpam.so" >> tomstart
+  elif [ -f "/usr/lib64/libpam.so" ]; then
+    echo "setenv LD_PRELOAD /usr/lib64/libpam.so" >> tomstart  
   else
     echo
     echo "WARNING: don't know what to set LD_PRELOAD to"
@@ -1446,7 +1474,7 @@ if [ "$SSL" != "y" ]; then
     ./tomstart
 
     sleep 25
-    deploy_axis_services $JEMBOSS/lib JembossServer.wsdd http://localhost:$PORT/ $JAVA_HOME "" ""
+    deploy_axis_services $JEMBOSS/lib JembossServer.wsdd http://localhost:$PORT/ http://$LOCALHOST:$PORT/ $JAVA_HOME "" ""
   fi
 
 else
@@ -1517,7 +1545,7 @@ else
     OPT_PROP1="-Djava.protocol.handler.pkgs=com.sun.net.ssl.internal.www.protocol"
     OPT_PROP2="-Djavax.net.ssl.trustStore=$JEMBOSS/resources/client.keystore"
 
-    deploy_axis_services $JEMBOSS/lib JembossServer.wsdd https://localhost:$PORT/ $JAVA_HOME $OPT_PROP1 $OPT_PROP2
+    deploy_axis_services $JEMBOSS/lib JembossServer.wsdd https://localhost:$PORT/ https://$LOCALHOST:$PORT $JAVA_HOME $OPT_PROP1 $OPT_PROP2
   fi
 fi
 

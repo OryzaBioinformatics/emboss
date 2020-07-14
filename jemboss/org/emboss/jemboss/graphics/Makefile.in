@@ -35,7 +35,7 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
-subdir = jemboss/org/emboss/jemboss/programs
+subdir = jemboss/org/emboss/jemboss/graphics
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/m4/general.m4 \
@@ -58,7 +58,7 @@ am__installdirs = "$(DESTDIR)$(pkgdatadir)"
 pkgdataDATA_INSTALL = $(INSTALL_DATA)
 DATA = $(pkgdata_DATA)
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
-pkgdatadir = $(prefix)/share/$(PACKAGE)/jemboss/org/emboss/jemboss/programs
+pkgdatadir = $(prefix)/share/$(PACKAGE)/jemboss/org/emboss/jemboss/graphics
 ACLOCAL = @ACLOCAL@
 AJAX_FIXED_ROOT = @AJAX_FIXED_ROOT@
 AMDEP_FALSE = @AMDEP_FALSE@
@@ -188,10 +188,7 @@ sbindir = @sbindir@
 sharedstatedir = @sharedstatedir@
 sysconfdir = @sysconfdir@
 target_alias = @target_alias@
-pkgdata_DATA = BatchUpdateTimer.java JembossProcess.java ListFile.java \
-ResultList.java ResultsUpdateTimer.java RunEmbossApplication.java \
-RunEmbossApplication2.java
-
+pkgdata_DATA = Graph2DPlot.java PrintPlot.java
 all: all-am
 
 .SUFFIXES:
@@ -204,9 +201,9 @@ $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am  $(am__configure_deps)
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu  jemboss/org/emboss/jemboss/programs/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu  jemboss/org/emboss/jemboss/graphics/Makefile'; \
 	cd $(top_srcdir) && \
-	  $(AUTOMAKE) --gnu  jemboss/org/emboss/jemboss/programs/Makefile
+	  $(AUTOMAKE) --gnu  jemboss/org/emboss/jemboss/graphics/Makefile
 .PRECIOUS: Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \
@@ -380,9 +377,9 @@ install-exec-hook:
 	@if test "${JAVA_OK}" != "yes" ; then \
 	  echo "No class files to copy"; \
 	else \
-	  $(top_srcdir)/mkinstalldirs $(DESTDIR)$(prefix)/share/$(PACKAGE)/jemboss/org/emboss/jemboss/programs; \
+	  $(top_srcdir)/mkinstalldirs $(DESTDIR)$(prefix)/share/$(PACKAGE)/jemboss/org/emboss/jemboss/graphics; \
 	for i in *.class; do \
-	  ${INSTALL_DATA} $$i $(DESTDIR)$(prefix)/share/$(PACKAGE)/jemboss/org/emboss/jemboss/programs; \
+	  ${INSTALL_DATA} $$i $(DESTDIR)$(prefix)/share/$(PACKAGE)/jemboss/org/emboss/jemboss/graphics; \
 	done; \
 	fi
 # Tell versions [3.59,3.63) of GNU make to not export all variables.

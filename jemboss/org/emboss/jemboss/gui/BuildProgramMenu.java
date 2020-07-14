@@ -56,8 +56,11 @@ public class BuildProgramMenu
   private SplashThread splashThread;
   /** environment vars */
   private String[] envp;
+  /** current appliction loaded */
+  private int currentApp = -1;
+  /** favorite menu */
+  private Favorites favorites;
 
-  
   /**
   *
   *  @param  p1 		menu pane
@@ -97,24 +100,28 @@ public class BuildProgramMenu
     }
     else 
     {
+      String[] env = null;
+      
       if(mysettings.isCygwin())
-        envp = new String[5];  /* environment vars */
+        env = new String[4];  /* environment vars */
       else
-        envp = new String[4];
+        env = new String[3];
       String ps = new String(System.getProperty("path.separator"));
       String embossBin  = mysettings.getEmbossBin();
       String embossPath = mysettings.getEmbossPath();
       embossPath = new String("PATH" + ps +
                       embossPath + ps + embossBin + ps);
-      envp[0] = "PATH=" + embossPath;
-      envp[1] = "PLPLOT_LIB=" + mysettings.getPlplot();
-      envp[2] = "EMBOSS_DATA=" + mysettings.getEmbossData();
-      envp[3] = "HOME=" + System.getProperty("user.home") + fs;
+      env[0] = "PATH=" + embossPath;
+      env[1] = "PLPLOT_LIB=" + mysettings.getPlplot();
+//    env[2] = "EMBOSS_DATA=" + mysettings.getEmbossData();
+      env[2] = "HOME=" + System.getProperty("user.home") + fs;
       if(mysettings.isCygwin())
-        envp[4] = "EMBOSSCYGROOT=" + mysettings.getCygwinRoot();
+        env[3] = "EMBOSSCYGROOT=" + mysettings.getCygwinRoot();
+
+      envp = mysettings.getEmbossEnvironmentArray(env);
     }
 
-
+    
     SwingWorker groupworker = new SwingWorker() 
     {
       String woss = "";
@@ -248,21 +255,11 @@ public class BuildProgramMenu
                                       embossCommand,envp,null);
           rea.waitFor();
           woss = rea.getProcessStdout();
-          Process processWoss = rea.getProcess();
 
           embossCommand = new String(embossBin + "showdb -auto");
           rea = new RunEmbossApplication2(embossCommand,envp,null);
           rea.waitFor();
           String showdbOut = rea.getProcessStdout();
-
-          try 
-          {
-            processWoss.waitFor();
-          } 
-          catch (InterruptedException interre)
-          {
-            System.out.println("BuildProgramMenu received interruption error");
-          }
 
           Database d = new Database(showdbOut);
           db = d.getDB();
@@ -322,7 +319,7 @@ public class BuildProgramMenu
           splashing.doneSomething("");
 
         int npG = progs.getNumPrimaryGroups();
-        menuBar.setLayout(new  GridLayout(npG,1));
+        menuBar.setLayout(new GridLayout(npG,1));
    
         final int numProgs = progs.getNumProgs();
         final String allAcd[] = progs.getProgsList();
@@ -331,6 +328,43 @@ public class BuildProgramMenu
         p1.add(menuBar, BorderLayout.NORTH);
         f.setVisible(true);
 
+// favorites
+        favorites = new Favorites(mainMenu.getFavoriteJMenu());
+        JMenuItem favItems[] = favorites.getFavorites();
+        for(int i=0; i<favItems.length;i++)
+        {
+          favItems[i].addActionListener(new ActionListener()
+          {
+            public void actionPerformed(ActionEvent e)
+            {
+              f.setCursor(cbusy);
+              if(e.getActionCommand().equals("ADD") &&
+                 currentApp > -1)
+              {
+                JMenuItem favItem = favorites.add(allAcd[currentApp],
+                                              allDes[currentApp]);
+                favItem.addActionListener(new ActionListener()
+                {
+                  public void actionPerformed(ActionEvent e)
+                  {
+                    f.setCursor(cbusy);
+                    currentApp = setForm(e,f,scrollProgForm,numProgs,p2,
+                             mysettings,cwd,allAcd,allDes,withSoap);
+                    f.setCursor(cdone);
+                  }
+                });
+              }
+              else if(e.getActionCommand().equals("EDIT"))
+                favorites.edit(allAcd);
+              else
+                currentApp = setForm(e,f,scrollProgForm,numProgs,p2,
+                             mysettings,cwd,allAcd,allDes,withSoap);
+              f.setCursor(cdone);
+            }
+          });
+        }
+
+// main menu
         JMenuItem mi[] = new JMenuItem[numProgs];
         mi = progs.getMenuItems();
         int nm = progs.getNumberMenuItems();
@@ -343,27 +377,8 @@ public class BuildProgramMenu
             public void actionPerformed(ActionEvent e)
             {
               f.setCursor(cbusy);
-              JMenuItem source = (JMenuItem)(e.getSource());
-              String p = source.getText();
-              int ind = p.indexOf(" ");
-              p = p.substring(0,ind).trim();
-
-              for(int k=0;k<numProgs;k++)
-              {
-                if(p.equalsIgnoreCase(allAcd[k]))
-                {
-                  p2.removeAll();
-                  String acdText = getAcdText(allAcd[k],mysettings,
-                                                         withSoap);
-                  BuildJembossForm bjf = new BuildJembossForm(allDes[k],
-                                db,allAcd[k],envp,cwd,acdText,
-                                withSoap,p2,mysettings,f);
-                  scrollProgForm.setViewportView(p2);               
-                  JViewport vp = scrollProgForm.getViewport();
-                  vp.setViewPosition(new Point(0,0));
-                  break;
-                }
-              }
+              currentApp= setForm(e,f,scrollProgForm,numProgs,p2,
+                          mysettings,cwd,allAcd,allDes,withSoap);
               f.setCursor(cdone);
             }
           });
@@ -420,6 +435,7 @@ public class BuildProgramMenu
             f.setCursor(cbusy);
             int index = progList.getSelectedIndex();
             p2.removeAll();
+            currentApp = index;
             String acdText = getAcdText(allAcd[index],mysettings,
                                                        withSoap);
             BuildJembossForm bjf = new BuildJembossForm(allDes[index],
@@ -443,6 +459,60 @@ public class BuildProgramMenu
         p1.setPreferredSize(dp1);
         p1.setMaximumSize(dp1);
         p1.setMinimumSize(dp1);
+
+
+// search tool bar
+        final JRadioButton radioAND = new JRadioButton("AND");
+        JRadioButton radioOR  = new JRadioButton("OR");
+        Font fnt = new Font("SansSerif", Font.BOLD, 10);
+        radioAND.setFont(fnt);
+        radioOR.setFont(fnt);
+        radioAND.setSelected(true);
+                                                                                            
+        ButtonGroup group = new ButtonGroup();
+        group.add(radioAND);
+        group.add(radioOR);
+
+        JToolBar toolBar = new JToolBar(JToolBar.VERTICAL);
+        final JTextField search = new JTextField(12);
+        search.addActionListener(new ActionListener()
+        {
+          public void actionPerformed(ActionEvent e)
+          {
+            new KeywordSearch(search,woss,mysettings,withSoap,
+                              radioAND.isSelected());
+          }
+        });
+
+        Box bacross = Box.createHorizontalBox();
+        JLabel keyw = new JLabel("Keyword Search");
+        keyw.setFont(fnt);
+        bacross.add(keyw);
+        JButton go = new JButton("GO");
+        go.setFont(new Font("monospaced", Font.BOLD, 10));
+        go.setMargin(new Insets(0,0,0,0));
+        go.setForeground(new Color(0,51,102));
+        go.addActionListener(new ActionListener()
+        {
+          public void actionPerformed(ActionEvent e)
+          {
+            new KeywordSearch(search,woss,mysettings,withSoap,
+                              radioAND.isSelected());
+          }
+        });
+        bacross.add(Box.createHorizontalStrut(2));
+        bacross.add(go);
+        bacross.add(Box.createHorizontalGlue());
+        toolBar.add(bacross);
+        toolBar.add(search);
+
+        bacross = Box.createHorizontalBox();
+        bacross.add(radioAND);
+        bacross.add(radioOR);
+        bacross.add(Box.createHorizontalGlue());
+        toolBar.add(bacross);
+
+        p1.add(toolBar, BorderLayout.SOUTH);
 
 // put on the logo
         ClassLoader cl = this.getClass().getClassLoader();
@@ -475,6 +545,7 @@ public class BuildProgramMenu
             source.setSelectionBackground(Color.cyan);
             int index = source.getSelectedIndex();
             p2.removeAll();
+            currentApp = index;
             String acdText = getAcdText(allAcd[index],mysettings,
                                                        withSoap);
             BuildJembossForm bjf = new BuildJembossForm(allDes[index],
@@ -495,6 +566,40 @@ public class BuildProgramMenu
     };
     groupworker.start();
 
+  }
+
+  private int setForm(ActionEvent e, JFrame f, JScrollPane scrollProgForm,
+                      int numProgs, ScrollPanel p2, JembossParams mysettings, 
+                      String cwd, String allAcd[], String allDes[],
+                      boolean withSoap)
+  {
+//  JMenuItem source = (JMenuItem)(e.getSource());
+                  
+    String p = e.getActionCommand();
+    int ind = p.indexOf(" ");
+
+    if(ind > -1)
+      p = p.substring(0,ind).trim();
+                                                                                                     
+    for(int k=0;k<numProgs;k++)
+    {
+      if(p.equalsIgnoreCase(allAcd[k]))
+      {
+        p2.removeAll();
+        currentApp = k;
+
+        String acdText = getAcdText(allAcd[k],mysettings,
+                                               withSoap);
+        BuildJembossForm bjf = new BuildJembossForm(allDes[k],
+                      db,allAcd[k],envp,cwd,acdText,
+                      withSoap,p2,mysettings,f);
+        scrollProgForm.setViewportView(p2);
+        JViewport vp = scrollProgForm.getViewport();
+        vp.setViewPosition(new Point(0,0));
+        break;
+      }
+    }
+    return currentApp;
   }
 
   /**
@@ -551,9 +656,13 @@ public class BuildProgramMenu
       try
       {
         BufferedReader in = new BufferedReader(new FileReader(acdToParse));
+        StringBuffer buff = new StringBuffer();
+        
         while((line = in.readLine()) != null)
-          acdText = acdText.concat(line + "\n");
+          buff = buff.append(line + "\n");
+
         in.close();
+        acdText = buff.toString();
       }
       catch (IOException e)
       {

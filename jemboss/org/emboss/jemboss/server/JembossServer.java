@@ -518,7 +518,7 @@ public class JembossServer
       embossCommand = embossCommand.concat(endCmd);
     }
 
-    Enumeration enum = inFiles.keys();
+    Enumeration enumFiles = inFiles.keys();
     String appl   = embossCommand.substring(0,embossCommand.indexOf(" "));
     String rest   = embossCommand.substring(embossCommand.indexOf(" "));
     embossCommand = embossBin.concat(embossCommand);
@@ -562,9 +562,9 @@ public class JembossServer
       dout.println("Application: " + appl + ls + rest);
       dout.println("Started at " + dat + ls + ls + "Input files:");
   
-      while (enum.hasMoreElements())
+      while (enumFiles.hasMoreElements())
       {
-        String thiskey = (String)enum.nextElement().toString();
+        String thiskey = (String)enumFiles.nextElement().toString();
         File f = new File(project + fs + thiskey);
         descript = descript.concat(project+fs+thiskey);
         dout.println(project + fs + thiskey);
@@ -1072,10 +1072,10 @@ public class JembossServer
   {
 
     Vector vans = new Vector();
-    Enumeration enum = resToQuery.keys();
-    while (enum.hasMoreElements())
+    Enumeration enumRes = resToQuery.keys();
+    while (enumRes.hasMoreElements())
     {
-      String thiskey = (String)enum.nextElement().toString();
+      String thiskey = (String)enumRes.nextElement().toString();
       String thiselm = (String)resToQuery.get(thiskey);
 //    System.out.println("KEY : "+thiskey+" ELEMENT: "+thiselm);
       File f = new File(tmproot+fs+thiskey+fs+".finished");
