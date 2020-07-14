@@ -1,7 +1,7 @@
 # Example ACD file for QA testing - for calculated attributes
 #
 
-appl: qatestcalcfeatures [ groups: "test" doc: "ACD file for QA testing" ]
+appl: qatestcalcfeat [ groups: "test" doc: "ACD file for QA testing" ]
 
 #sequence: test [ param: Y ]
 #

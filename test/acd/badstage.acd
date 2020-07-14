@@ -1,6 +1,6 @@
 # ACD file for QA testing - missing the application definition
 #
-appl: noleftq [ doc: "testing" group: "testing" ]
+appl: badstage [ doc: "testing" group: "testing" ]
 
 dingsbum: wotsit [ info: "Dingsbum is german for wotsit" ]
 

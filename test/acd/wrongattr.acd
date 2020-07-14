@@ -1,6 +1,6 @@
 # ACD file for QA testing - missing the application definition
 #
-appl: noleftq [ doc: "testing" group: "testing" ]
+appl: wrongattr [ doc: "testing" group: "testing" ]
 
 sequence: sequence [ param: Y ]
 

@@ -1,6 +1,6 @@
 # ACD file for QA testing - missing the application definition
 #
-appl: noleftq [ doc: "testing" group: "testing" ]
+appl: leftend [ doc: "testing" group: "testing" ]
 
 outfile: outtest [
 

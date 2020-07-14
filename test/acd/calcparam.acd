@@ -1,7 +1,7 @@
 # Example ACD file for QA testing
 #
 
-appl: qatest [ groups: "test" doc: "ACD file for QA testing" ]
+appl: calcparam [ groups: "test" doc: "ACD file for QA testing" ]
 
 sequence: asequence [ param: Y features: Y ]
 

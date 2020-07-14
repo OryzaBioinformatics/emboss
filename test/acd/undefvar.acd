@@ -1,6 +1,6 @@
 # ACD file for QA testing - missing the application definition
 #
-appl: ambigvar [ doc: "testing" group: "testing" ]
+appl: undefvar [ doc: "testing" group: "testing" ]
 
 sequence: sequence [ param: Y ]
 

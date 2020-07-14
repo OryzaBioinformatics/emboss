@@ -1,6 +1,6 @@
 # ACD file for QA testing - bad qualifier name
 #
-appl: run [ doc: "testing" group: "testing" ]
+appl: badqualname [ doc: "testing" group: "testing" ]
 
 sequence: sequence1 [ param: Y ]
 
