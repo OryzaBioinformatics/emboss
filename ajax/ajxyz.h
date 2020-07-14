@@ -398,9 +398,9 @@ typedef struct AjSHit
 {
   AjPStr    Seq;	/* Sequence as string */
   ajint     Start;      /* Start of sequence or signature alignment relative to full length 
-			    swissprot sequence */
+			    swissprot sequence, this is an index so starts at 0 */
   ajint     End;        /* End of sequence or signature alignment relative to full length 
-			    swissprot sequence */
+			    swissprot sequence, this is an index so starts at 0 */
   AjPStr Acc;           /* Accession number of sequence entry  */
   AjPStr    Spr;        /* Swissprot code of sequence entry */
   AjPStr    Typeobj;    /* Primary classification of hit - objective*/
@@ -440,6 +440,7 @@ typedef struct AjSHitlist
     AjPStr  Fold;
     AjPStr  Superfamily;
     AjPStr  Family;
+    AjPStr  Model;
     ajint    Sunid_Family;        /* SCOP sunid for family */
     AjBool  Priority;   /* True if the Hitlist is high priority. */
     ajint   N;            /* No. of hits */
@@ -556,17 +557,17 @@ typedef struct AjSAtom
 
 typedef struct AjSChain
 {
-  char       Id;         /*Chain id, ('.' if one wasn't specified in the 
+/**/  char       Id;         /*Chain id, ('.' if one wasn't specified in the 
 			   original PDB file)*/
-  ajint        Nres;       /*No. of amino acid residues*/
-  ajint        Nlig;       /*No. of groups which are non-covalently associated 
+/**/  ajint        Nres;       /*No. of amino acid residues*/
+/**/  ajint        Nlig;       /*No. of groups which are non-covalently associated 
 			   with the chain, excluding water ("heterogens")*/
 
-  ajint    numHelices;   /* No. of helices in the chain according to the PDB file*/
-  ajint   numStrands;   /* No. of strands in the chain according to the PDB file */
+/**/  ajint    numHelices;   /* No. of helices in the chain according to the PDB file*/
+/**/  ajint   numStrands;   /* No. of strands in the chain according to the PDB file */
 
-  AjPStr     Seq;	 /* sequence as string */
-  AjPList    Atoms;      /*List of Atom objects for (potentially multiple models)
+/**/  AjPStr     Seq;	 /* sequence as string */
+/**/  AjPList    Atoms;      /*List of Atom objects for (potentially multiple models)
 			  of the polypeptide chain and any groups (ligands) that 
 			  could be uniquely associated with a chain*/
 } AjOChain, *AjPChain;
@@ -589,21 +590,21 @@ typedef struct AjSChain
 
 typedef struct AjSPdb
 {
-  AjPStr     Pdb;        /*PDB code*/
-  AjPStr     Compnd;     /*Text from COMPND records in PDB file*/
-  AjPStr     Source;     /*Text from SOURCE records in PDB file*/
-  ajint        Method;     /*Exp. type, value is either XRAY or NMR*/
-  float      Reso;       /*Resolution of an XRAY structure or 0*/
-  ajint        Nmod;       /*No. of models (always 1 for XRAY structures)*/
-  ajint        Nchn;       /*No. polypeptide chains */
-  AjPChain  *Chains;     /*Array of pointers to AjSChain structures*/
-  ajint      Ngp;        /* No. groups that could not be uniquely associated with a chain 
+/**/  AjPStr     Pdb;        /*PDB code*/
+/**/  AjPStr     Compnd;     /*Text from COMPND records in PDB file*/
+/**/  AjPStr     Source;     /*Text from SOURCE records in PDB file*/
+/**/  ajint        Method;     /*Exp. type, value is either XRAY or NMR*/
+/**/  float      Reso;       /*Resolution of an XRAY structure or 0*/
+/**/  ajint        Nmod;       /*No. of models (always 1 for XRAY structures)*/
+/**/  ajint        Nchn;       /*No. polypeptide chains */
+/**/  AjPChain  *Chains;     /*Array of pointers to AjSChain structures*/
+/**/  ajint      Ngp;        /* No. groups that could not be uniquely associated with a chain 
 			    in the SEQRES records */
-  AjPChar    gpid;	   /*Array of chain (group) id's for groups that 
+/**/  AjPChar    gpid;	   /*Array of chain (group) id's for groups that 
 			     could not be uniquely associated with a chain */
-  AjPList   Groups;     /*List of Atom objects for groups that could not 
+/**/  AjPList   Groups;     /*List of Atom objects for groups that could not 
 			   be uniquely associated with a chain */
-  AjPList   Water;     /*List of Atom objects for water molecules (which can 
+/**/  AjPList   Water;     /*List of Atom objects for water molecules (which can 
 			   never be uniquely associated with a chain */
 }AjOPdb, *AjPPdb;
 
@@ -1011,7 +1012,7 @@ AjBool ajXyzDiscordToCoords(AjPDiscord dis_cord, AjPList *out);
 void ajXyzCoordDel(AjPCoord *pthis);
 AjPCoord ajXyzCoordNew(void);
 
-AjBool ajXyzSunidToScopInfo (ajint sunid, AjPStr *family, AjPStr *superfamily, AjPStr *fold, AjPList list);
+AjBool ajXyzSunidToScopInfo (ajint sunid, AjPStr *family, AjPStr *superfamily, AjPStr *fold, AjPStr *class, AjPList list);
 
 
 AjPPdbtosp ajXyzPdbtospNew(ajint n);
@@ -1150,6 +1151,7 @@ ajint         ajXyzScophitCompFam(const void *hit1, const void *hit2);
 ajint         ajXyzScophitCompAcc(const void *hit1, const void *hit2);
 ajint         ajXyzScophitCompSunid(const void *entry1, const void *entry2);
 ajint         ajXyzScophitCompScore(const void *hit1, const void *hit2); 
+ajint         ajXyzScophitCompPval(const void *hit1, const void *hit2); 
 
 AjPHit        ajXyzHitNew(void);
 void          ajXyzHitDel(AjPHit *pthis);
@@ -1171,6 +1173,8 @@ AjBool ajXyzHitlistWriteSubset(AjPFile outf, AjPHitlist thys, AjPInt ok);
 
 AjBool        ajXyzHitlistToScophits(AjPList in, AjPList *out);
 AjBool        ajXyzHitlistClassify(AjPHitlist *hits, AjPList targets, 
+				   ajint thresh);
+AjBool        ajXyzHitlistClassifyLigand(AjPHitlist *hits, AjPList targets, 
 				   ajint thresh);
 AjBool        ajXyzHitlistPriorityHigh(AjPHitlist *list);
 AjBool        ajXyzHitlistPriorityLow(AjPHitlist *list);
@@ -1255,6 +1259,10 @@ AjBool        ajXyzSignatureAlignSeqall(AjPSignature sig, AjPSeqall db, ajint n,
 					AjPHitlist *hits, ajint nterm);
 AjBool        ajXyzSignatureHitsWrite(AjPFile outf, AjPSignature sig, 
 				      AjPHitlist hits, ajint n);
+AjBool        ajXyzSignatureHitsWriteHitlist(AjPFile outf, 
+					     AjPHitlist hits, ajint n);
+
+AjPHitlist   ajXyzSignatureHitsRead(AjPFile inf);
 AjBool        ajXyzSignatureAlignWrite(AjPFile outf, AjPSignature sig, 
 				       AjPHitlist hits);
 AjBool        ajXyzSignatureAlignWriteBlock(AjPFile outf, AjPSignature sig, 

@@ -356,7 +356,8 @@ typedef struct AjSSeq {
   AjPStr Date;			/* Date */
   AjPStr Desc;			/* One-line description */
   AjPStr Doc;			/* Obsolete - see TextPtr */
-  AjBool Rev;			/* true: reverse-complemented */
+  AjBool Rev;			/* true: to be reverse-complemented */
+  AjBool Reversed;		/* true: has been reverse-complemented */
   ajint Begin;			/* start position (processed on reading) */
   ajint End;			/* end position (processed on reading)( */
   ajint Offset;			/* offset from start */

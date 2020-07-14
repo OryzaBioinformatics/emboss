@@ -26,6 +26,7 @@
 #include <sys/stat.h>
 #include <pwd.h>
 #include <string.h>
+#include <errno.h>
 #include <unistd.h>
 #include <limits.h>
 
@@ -38,6 +39,14 @@ static ajint fileOpenCnt = 0;
 static ajint fileOpenMax = 0;
 static ajint fileCloseCnt = 0;
 static ajint fileOpenTot = 0;
+
+static AjPRegexp fileUserExp = NULL;
+static AjPRegexp fileWildExp = NULL;
+static AjPRegexp fileEntryExp = NULL;
+static AjPRegexp fileFileExp = NULL;
+static AjPRegexp fileRestExp = NULL;
+static AjPRegexp fileDirExp = NULL;
+static AjPRegexp fileFilenameExp = NULL;
 
 static void   fileBuffInit (AjPFileBuff thys);
 static void   fileBuffLineAdd (AjPFileBuff thys, AjPStr line);
@@ -133,7 +142,8 @@ AjPFile ajFileNewInPipe (const AjPStr name) {
     (void) ajSysArglist (tmpname, &pgm, &arglist);
     ajDebug ("execvp ('%S', NULL)\n", tmpname);
     (void) execvp (pgm, arglist);
-    ajFatal ("execvp failed\n"); /* should never get here */
+    ajFatal ("execvp ('%S', NULL) failed: '%s'\n",
+	     tmpname, strerror(errno)); /* should never get here */
   }
 
   ajDebug ("pid %d, pipe '%d', '%d'\n",
@@ -177,8 +187,6 @@ AjPFile ajFileNewIn (const AjPStr name) {
     static AjPStr userstr = NULL;
     static AjPStr reststr = NULL;
     static AjPStr tmpname = NULL;
-    static AjPRegexp userexp = NULL;
-    static AjPRegexp wildexp = NULL;
     struct passwd* pass = NULL;
     AjPStr dirname=NULL;
     AjPStr wildname=NULL;
@@ -201,10 +209,10 @@ AjPFile ajFileNewIn (const AjPStr name) {
     if (ajStrChar(tmpname, 0) == '~')
     {
 	ajDebug("starts with '~'\n");
-	if (!userexp) userexp = ajRegCompC("^~([^/]*)");
-	(void) ajRegExec(userexp, tmpname);
-	ajRegSubI (userexp, 1, &userstr);
-	(void) ajRegPost (userexp, &reststr);
+	if (!fileUserExp) fileUserExp = ajRegCompC("^~([^/]*)");
+	(void) ajRegExec(fileUserExp, tmpname);
+	ajRegSubI (fileUserExp, 1, &userstr);
+	(void) ajRegPost (fileUserExp, &reststr);
 	ajDebug("  user: '%S' rest: '%S'\n", userstr, reststr);
 	if (ajStrLen(userstr))
 	{
@@ -223,13 +231,13 @@ AjPFile ajFileNewIn (const AjPStr name) {
 	}
     }
 
-    if (!wildexp)
-	wildexp = ajRegCompC("(.*/)?([^/]*[*?][^/]*)$");
+    if (!fileWildExp)
+	fileWildExp = ajRegCompC("(.*/)?([^/]*[*?][^/]*)$");
 
-    if (ajRegExec(wildexp, tmpname))
+    if (ajRegExec(fileWildExp, tmpname))
     {					/* wildcard file names */
-	(void) ajRegSubI(wildexp, 1, &dirname);
-	(void) ajRegSubI(wildexp, 2, &wildname);
+	(void) ajRegSubI(fileWildExp, 1, &dirname);
+	(void) ajRegSubI(fileWildExp, 2, &wildname);
 	ajDebug("wild dir '%S' files '%S'\n", dirname, wildname);
 	ptr = ajFileNewDW(dirname, wildname);
 	ajStrDel(&dirname);
@@ -406,12 +414,16 @@ AjPFile ajFileNewOut (const AjPStr name) {
 
   return thys;
 }
+
 /* @func ajFileNewOutD ********************************************************
 **
 ** Creates a new output file object with a specified directory and name.
 **
 ** 'stdout' and 'stderr' are special names for standard output and
 ** standard error respectively.
+**
+** If the filename already has a directory specified,
+** the "dir" argument is ignored.
 **
 ** @param [rN] dir [const AjPStr] Directory (optional, can be empty or NULL).
 ** @param [r] name [const AjPStr] File name.
@@ -424,6 +436,8 @@ AjPFile ajFileNewOutD (const AjPStr dir, const AjPStr name) {
   AjPFile thys;
   static AjPStr dirfix = NULL;
 
+  ajDebug("ajFileNewOutD ('%S' '%S')\n", dir, name);
+
   if (ajStrMatchC(name, "stdout"))
     return ajFileNewF(stdout);
   if (ajStrMatchC(name, "stderr"))
@@ -432,15 +446,21 @@ AjPFile ajFileNewOutD (const AjPStr dir, const AjPStr name) {
   AJNEW0(thys);
 
   if (!ajStrLen(dir)) {
-
     thys->fp = fopen (ajStrStr(name), "w");
+    ajDebug("ajFileNewOutD open name '%S'\n", name);
   }
   else {
-    ajStrAssS(&dirfix, dir);
-    if (ajStrChar(dir, -1) != '/')
-      ajStrAppC (&dirfix, "/");
-    ajStrApp (&dirfix, name);
+    if (ajFileHasDir(name)) {
+      ajStrAssS (&dirfix, name);
+    }
+    else {
+      ajStrAssS(&dirfix, dir);
+      if (ajStrChar(dir, -1) != '/')
+	ajStrAppC (&dirfix, "/");
+      ajStrApp (&dirfix, name);
+    }
     thys->fp = fopen (ajStrStr(dirfix), "w");
+    ajDebug("ajFileNewOutD open dirfix '%S'\n", dirfix);
   }
 
   if (!thys->fp) {
@@ -458,6 +478,68 @@ AjPFile ajFileNewOutD (const AjPStr dir, const AjPStr name) {
     fileOpenMax = fileOpenCnt;
 
   return thys;
+}
+
+/* @func ajFileSetDir ********************************************************
+**
+** Adds a default directory to a filename.
+** If the filename already has a directory, then this is left unchanged.
+**
+** 'stdout' and 'stderr' are special names for standard output and
+** standard error respectively which need no directory.
+**
+** @param [r] pname [AjPStr*] File name.
+** @param [rN] dir [const AjPStr] Directory (optional, can be empty or NULL).
+** @return [AjBool] ajTrue if the filename was changed
+** @@
+******************************************************************************/
+
+AjBool ajFileSetDir (AjPStr *pname, const AjPStr dir) {
+
+  static AjPStr dirfix = NULL;
+  AjBool ret = ajFalse;
+
+  ajDebug ("ajFileSetDir name '%S' dir '%S'\n", *pname, dir);
+
+  if (ajStrMatchC(*pname, "stdout"))
+    return ret;
+  if (ajStrMatchC(*pname, "stderr"))
+    return ret;
+
+  if (!ajStrLen(dir))
+    return ret;
+
+  if (ajFileHasDir(*pname))
+    return ret;
+
+  ajStrAssS(&dirfix, dir);
+  if (ajStrChar(dir, -1) != '/')
+    ajStrAppC (&dirfix, "/");
+  ajStrApp (&dirfix, *pname);
+  
+  ajStrAssS (pname, dirfix);
+  ret = ajTrue;
+
+  ajDebug ("ajFileSetDir changed name '%S'\n", *pname);
+
+  return ret;
+}
+
+/* @func ajFileHasDir ********************************************************
+**
+** Tests whether a filename includes a directory specification.
+**
+** @param [r] name [AjPStr] File name.
+** @return [AjBool] ajTrue if directory filename syntax was found
+** @@
+******************************************************************************/
+
+AjBool ajFileHasDir (const AjPStr name) {
+  if (ajStrFindC(name, "/") < 0)
+    return ajFalse;
+
+  return ajTrue;
+
 }
 
 /* @func ajFileNewF ***********************************************************
@@ -1282,33 +1364,30 @@ AjBool ajFileNameShorten (AjPStr* fname) {
 
   static AjPStr tmpstr = NULL;
 
-  static AjPRegexp entryexp = NULL;
-  static AjPRegexp fileexp = NULL;
-  static AjPRegexp restexp = NULL;
 
-  if (!entryexp)		/* entryname at end */
-    entryexp = ajRegCompC(":([A-Za-z0-9_-]+)$");
+  if (!fileEntryExp)		/* entryname at end */
+    fileEntryExp = ajRegCompC(":([A-Za-z0-9_-]+)$");
 
-  if (ajRegExec(entryexp, *fname)) {
-    ajRegSubI(entryexp, 1, &tmpstr);
+  if (ajRegExec(fileEntryExp, *fname)) {
+    ajRegSubI(fileEntryExp, 1, &tmpstr);
     (void) ajStrAssS (fname, tmpstr);
     return ajTrue;
   }
 
-  if (!fileexp)	/* name.ext */
-    fileexp = ajRegCompC("([A-Za-z0-9_-]+)[.][A-Za-z0-9_-]+$");
+  if (!fileFileExp)	/* name.ext */
+    fileFileExp = ajRegCompC("([A-Za-z0-9_-]+)[.][A-Za-z0-9_-]+$");
 
-  if (ajRegExec(fileexp, *fname)) {
-    ajRegSubI(fileexp, 1, &tmpstr);
+  if (ajRegExec(fileFileExp, *fname)) {
+    ajRegSubI(fileFileExp, 1, &tmpstr);
     (void) ajStrAssS (fname, tmpstr);
     return ajTrue;
   }
 
-  if (!restexp)			/* last valid word */
-    restexp = ajRegCompC("([A-Za-z0-9_-]+)[^A-Za-z0-9_-]*$");
+  if (!fileRestExp)			/* last valid word */
+    fileRestExp = ajRegCompC("([A-Za-z0-9_-]+)[^A-Za-z0-9_-]*$");
 
-  if (ajRegExec(restexp, *fname)) {
-    ajRegSubI(restexp, 1, &tmpstr);
+  if (ajRegExec(fileRestExp, *fname)) {
+    ajRegSubI(fileRestExp, 1, &tmpstr);
     (void) ajStrAssS (fname, tmpstr);
     return ajTrue;
   }
@@ -1541,17 +1620,18 @@ AjBool ajFileGetwd (AjPStr* dir) {
 
 AjBool ajFileDirUp (AjPStr* dir) {
 
-  static AjPRegexp direxp = NULL;
-  static AjPStr tmpdir = NULL;
+  AjPStr tmpdir = NULL;
 
-  if (!direxp)
-    direxp = ajRegCompC ("^(.*/)[^/]+/?$");
+  if (!fileDirExp)
+    fileDirExp = ajRegCompC ("^(.*/)[^/]+/?$");
 
   ajStrAssS (&tmpdir, *dir);
-  if (!ajRegExec (direxp, tmpdir)) /* no match to pattern */
+  if (!ajRegExec (fileDirExp, tmpdir)) /* no match to pattern */
     return ajFalse;
-
-  ajRegSubI (direxp, 1, dir);
+ 
+  ajRegSubI (fileDirExp, 1, dir);
+  ajStrDel(&tmpdir);
+ 
   return ajTrue;
 
 }
@@ -1601,6 +1681,14 @@ void ajFileExit (void) {
 
   ajDebug ("File usage : %d opened, %d closed, %d max, %d total\n",
 	   fileOpenCnt, fileCloseCnt, fileOpenMax, fileOpenTot);
+
+  ajRegFree (&fileUserExp);
+  ajRegFree (&fileWildExp);
+  ajRegFree (&fileEntryExp);
+  ajRegFree (&fileFileExp);
+  ajRegFree (&fileRestExp);
+  ajRegFree (&fileDirExp);
+  ajRegFree (&fileFilenameExp);
 
   return;
 }
@@ -2371,10 +2459,46 @@ AjBool ajFileBuffGetStore (const AjPFileBuff thys, AjPStr* pdest,
 
   ret =  ajFileBuffGetL (thys, pdest, &fpos);
 
-  if(!store)
-      return ret;
+  if (store && ret)
+  {
+      ajDebug ("ajFileBuffGetStore:\n%S", *pdest);
+      ajFmtPrintAppS(astr,"%S",*pdest);
+  }
 
-  ajFmtPrintAppS(astr,"%S",*pdest);
+  return ret;
+}
+
+/* @func ajFileBuffGetStoreL **************************************************
+**
+** Reads a line from a buffered file. Also appends the line to
+** a given string if the append flag is true. A double NULL character
+** is added afterwards. If the buffer has data, reads from the
+** buffer. If the buffer is exhausted, reads from the file. If the file is
+** exhausted, sets end of file and returns. If end of file was already set,
+** looks for another file to open.
+**
+** @param [r] thys [const AjPFileBuff] Buffered input file.
+** @param [w] pdest [AjPStr*] Buffer to hold results.
+** @param [w] fpos [ajlong*] File position before the read.
+** @param [r] store [AjBool] append if true
+** @param [w] astr [AjPStr*] string to append to
+** @return [AjBool] ajTrue if data was read.
+** @@
+******************************************************************************/
+
+AjBool ajFileBuffGetStoreL (const AjPFileBuff thys, AjPStr* pdest,
+			    ajlong* fpos,
+			    AjBool store, AjPStr *astr)
+{
+  AjBool ret;
+
+  ret =  ajFileBuffGetL (thys, pdest, fpos);
+
+  if (store && ret)
+  {
+      ajDebug ("ajFileBuffGetStoreL:\n%S", *pdest);
+      ajFmtPrintAppS(astr,"%S",*pdest);
+  }
 
   return ret;
 }
@@ -2831,6 +2955,27 @@ void ajFileBuffReset (const AjPFileBuff thys) {
   return;
 }
 
+/* @func ajFileBuffResetStore *************************************************
+**
+** Resets the pointer and current record of a file buffer so the next read
+** starts at the first buffered line.
+**
+** @param [u] thys [const AjPFileBuff] File buffer
+** @param [r] store [AjBool] append if true
+** @param [w] astr [AjPStr*] string to append to
+** @return [void]
+** @@
+******************************************************************************/
+
+void ajFileBuffResetStore (const AjPFileBuff thys,
+			   AjBool store, AjPStr *astr)
+{
+    ajFileBuffReset (thys);
+    if (store)
+	ajStrAssC (astr, "");
+    return;
+}
+
 /* @func ajFileBuffResetPos ***************************************************
 **
 ** Resets the pointer and current record of a file buffer so the next read
@@ -3033,6 +3178,31 @@ void ajFileBuffClear (const AjPFileBuff thys, ajint lines) {
   return;
 }
 
+/* @func ajFileBuffClear ******************************************************
+**
+** Deletes processed lines from a file buffer. The buffer has a record
+** (Pos) of the next unprocessed line in the buffer.
+**
+** Unbuffered files need special handling. The buffer can be turned off
+** while it still contains data. If so, we have to carefully run it down.
+** If this runs it to zero, we may want to save the last line read.
+**
+** @param [u] thys [const AjPFileBuff] File buffer
+** @param [r] lines [ajint] Number of lines to retain. -1 deletes everything.
+** @param [r] store [AjBool] append if true
+** @param [w] astr [AjPStr*] string to append to
+** @return [void]
+** @@
+******************************************************************************/
+
+void ajFileBuffClearStore (const AjPFileBuff thys, ajint lines,
+			   AjPStr rdline, AjBool store, AjPStr *astr)
+{
+    ajFileBuffClear (thys, lines);
+    if (store && ajStrLen(rdline))
+	ajStrTrim (astr, -ajStrLen(rdline));
+}
+
 /* @func ajFileBuffNobuff *****************************************************
 **
 ** Sets file to be unbuffered. If it already has buffered data, we have to
@@ -3044,6 +3214,9 @@ void ajFileBuffClear (const AjPFileBuff thys, ajint lines) {
 ******************************************************************************/
 
 void ajFileBuffNobuff (const AjPFileBuff thys) {
+
+  if (!thys)
+    return;
 
   ajDebug ("ajFileBuffNoBuff %F buffsize: %d\n", thys->File, thys->Size);
   thys->Nobuff = ajTrue;
@@ -3240,7 +3413,6 @@ AjBool ajFileNameDirSet (AjPStr* filename, const AjPStr dir) {
 ******************************************************************************/
 
 AjBool ajFileNameDirSetC (AjPStr* filename, const char* dir) {
-  static AjPRegexp fileexp = NULL;
   static AjPStr tmpstr = NULL;
   static AjPStr tmpdir = NULL;
   static AjPStr tmpnam = NULL;
@@ -3248,23 +3420,20 @@ AjBool ajFileNameDirSetC (AjPStr* filename, const char* dir) {
   if (!dir)
     return ajFalse;
 
-  if (!fileexp)
-    fileexp = ajRegCompC ("(.*/)?([^/]+)$");
+  if (!fileFilenameExp)
+    fileFilenameExp = ajRegCompC ("(.*/)?([^/]+)$");
 
-  ajDebug ("ajFileNameDirSetC '%S', '%s'\n", *filename, dir);
   ajStrAssS (&tmpstr, *filename);
-  if (ajRegExec(fileexp, tmpstr)) {
-    ajRegSubI(fileexp, 1, &tmpdir);
-    ajRegSubI(fileexp, 2, &tmpnam);
+  if (ajRegExec(fileFilenameExp, tmpstr)) {
+    ajRegSubI(fileFilenameExp, 1, &tmpdir);
+    ajRegSubI(fileFilenameExp, 2, &tmpnam);
     if (ajStrLen(tmpdir)) {
-      ajDebug ("Directory not replaced\n");
       return ajFalse;			/* we already have a directory */
     }
     if (dir[strlen(dir)-1] == '/')
       ajFmtPrintS (filename, "%s%S", dir, tmpnam);
     else
       ajFmtPrintS (filename, "%s/%S", dir, tmpnam);
-    ajDebug ("Directory replaced: '%S'\n", *filename);
   }
   return ajTrue;
 }
@@ -3502,9 +3671,6 @@ AjBool ajFileTestSkip (AjPStr fullname, AjPStr exc, AjPStr inc,
   static AjPStr token = NULL;
   static AjPStr tmpname=NULL;
 
-  ajDebug ("ajFileTestSkip: file '%S' exclude: '%S' include: '%S'\n",
-	   fullname, exc, inc);
-
   ajStrAssS (&tmpname, fullname);
   if (ignoredirectory)
     ajFileDirTrim(&tmpname);
@@ -3515,8 +3681,6 @@ AjBool ajFileTestSkip (AjPStr fullname, AjPStr exc, AjPStr inc,
       if (ajStrMatchWild (fullname, token) ||
 	  (ignoredirectory && ajStrMatchWild (tmpname, token))) {
 	ret = ajFalse;
-	ajDebug ("ajFileTestSkip: file '%S' excluded by '%S'\n",
-	  fullname, token);
       }
     }
     (void) ajStrTokenReset (&handle);
@@ -3527,8 +3691,6 @@ AjBool ajFileTestSkip (AjPStr fullname, AjPStr exc, AjPStr inc,
     if (ajStrMatchWild (fullname, token) ||
 	  (ignoredirectory && ajStrMatchWild (tmpname, token))) {
       ret = ajTrue;
-      ajDebug ("ajFileTestSkip: file '%S' included by '%S'\n",
-	       fullname, token);
     }
   }
   (void) ajStrTokenReset (&handle);
@@ -3539,8 +3701,6 @@ AjBool ajFileTestSkip (AjPStr fullname, AjPStr exc, AjPStr inc,
       if (ajStrMatchWild (fullname, token) ||
 	  (ignoredirectory && ajStrMatchWild (tmpname, token))) {
 	ret = ajFalse;
-	ajDebug ("ajFileTestSkip: file '%S' excluded by '%S'\n",
-	  fullname, token);
       }
     }
     (void) ajStrTokenReset (&handle);
@@ -3561,7 +3721,6 @@ AjBool ajFileDirTrim (AjPStr* name)
 {
   ajint i;
 
-  ajDebug ("ajFileDirTrim input: '%S'\n", *name);
   if (!ajStrLen(*name))
     return ajFalse;
 
@@ -3570,7 +3729,6 @@ AjBool ajFileDirTrim (AjPStr* name)
     return ajFalse;
 
   ajStrTrim (name, i+1);
-  ajDebug ("ajFileDirTrim result: '%S'\n", *name);
 
   return ajTrue;
 }

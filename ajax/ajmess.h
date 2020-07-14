@@ -85,7 +85,8 @@ void ajMessVError (char *format, va_list args) ; /* error message and
 						    file */
 void ajMessErrorCode(char *name);      /* as above but uses code to
 					  get message */
-void ajMessExit(char *format, ...) ;  /* error message, write to log
+void ajMessExit (void);
+void ajMessExitmsg(char *format, ...) ;  /* error message, write to log
 					 file & exit */
 void ajMessWarning (char *format, ...); /* warning message */
 void ajMessSetErr (char *filename, ajint line_num);

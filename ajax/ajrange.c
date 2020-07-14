@@ -687,6 +687,47 @@ AjBool ajRangeStrMask (AjPStr *str, AjPRange thys, AjPStr maskchar) {
 }
 
 
+/* @func ajRangeStrToLower *******************************************************
+**
+** Change the range in a String to lower-case
+** @param [w] str [AjPStr *] string to be lower-cased
+** @param [r] thys [AjPRange] range object
+**
+** @return [AjBool] true if string modified
+** @@
+******************************************************************************/
+AjBool ajRangeStrToLower (AjPStr *str, AjPRange thys) {
+
+    ajint nr = ajRangeNumber(thys);
+    ajint i;
+    ajint st;
+    ajint en;
+    AjBool result=ajFalse;
+    AjPStr substr = ajStrNew();
+
+    for(i=0; i<nr; ++i)
+    {
+	result = ajTrue;
+	(void) ajRangeValues(thys,i,&st,&en);
+
+	/* change range positions to string positions */
+	--st;
+	--en;
+
+	/* extract the region and lowercase */
+	(void) ajStrAppSub(&substr, *str, st, en);
+	(void) ajStrToLower(&substr);
+	/* remove and replace the lowercased region */
+	(void) ajStrCut (str, st, en);
+        (void) ajStrInsert(str, st, substr);
+	(void) ajStrClear(&substr);        
+    }
+    (void) ajStrDel(&substr);
+    
+    return result;
+}
+
+
 /* @func ajRangeOverlapSingle *************************************************
 **
 ** Detect an overlap of a single range to a region of a sequence

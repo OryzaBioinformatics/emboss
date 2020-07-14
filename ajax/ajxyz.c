@@ -618,6 +618,7 @@ AjPHitlist  ajXyzHitlistNew(ajint n)
     ret->Fold=ajStrNew();
     ret->Superfamily=ajStrNew();
     ret->Family=ajStrNew();
+    ret->Model=ajStrNew();
     ret->Priority=ajFalse;
     
     ret->N=n;
@@ -1551,6 +1552,8 @@ void ajXyzHitlistDel(AjPHitlist *pthis)
 	ajStrDel(&(*pthis)->Superfamily);
     if((*pthis)->Family)
 	ajStrDel(&(*pthis)->Family);
+    if((*pthis)->Model)
+	ajStrDel(&(*pthis)->Model);
     
     for(x=0;x<(*pthis)->N; x++)
 	if((*pthis)->hits[x])
@@ -2672,7 +2675,14 @@ AjBool        ajXyzSignatureAlignSeq(AjPSignature S, AjPSeq seq, AjPHit *hit,
 
     /* Backtrack through matrix */
     alg[maxp]='*';
-    for(this=path[max].prev, score=path[max].val; sidx>0; this=path[this].prev)
+/*    for(this=path[max].prev, score=path[max].val; sidx>0; this=path[this].prev)
+	{
+	    thisp= this - (ajint) ((sidx=(ajint)floor((double)(this/nres))) 
+				   * nres);
+	    alg[thisp]='*';
+	}*/
+
+    for(this=path[max].prev; sidx>0; this=path[this].prev)
 	{
 	    thisp= this - (ajint) ((sidx=(ajint)floor((double)(this/nres))) 
 				   * nres);
@@ -3138,6 +3148,128 @@ AjBool        ajXyzSignatureAlignWriteBlock(AjPFile outf, AjPSignature sig,
 }
 
 
+/* @func ajXyzSignatureHitsRead ***********************************************
+**
+** Allocates and writes a Hitlist with hits from a signature hits file. This 
+** is intended for reading the results from scans of a signature against a 
+** protein sequence database.  
+**
+** @param [w] inf  [AjPFile]      Input file stream
+**
+** @return [AjPHitlist] Hitlist object that was allocated.
+** @@
+******************************************************************************/
+AjPHitlist ajXyzSignatureHitsRead(AjPFile inf)
+{
+    AjPList list   =NULL;
+    AjPHitlist ret =NULL;
+    ajint  Sunid_Family=0;
+    AjBool   ok    =ajTrue;
+    AjPHit tmphit  =NULL;
+    
+
+    AjPStr class   =NULL;
+    AjPStr fold    =NULL;
+    AjPStr super   =NULL;
+    AjPStr family  =NULL;
+    AjPStr line    =NULL;
+    
+    if(!inf)
+    {
+	ajWarn("NULL file pointer passed to ajXyzSignatureHitsRead");
+	return NULL;
+    }
+    
+
+    list    = ajListNew();
+    class   = ajStrNew();
+    fold    = ajStrNew();
+    super   = ajStrNew();
+    family  = ajStrNew();
+    line    = ajStrNew();
+
+    
+    
+    while(ok && ajFileReadLine(inf,&line))
+    {
+	if(ajStrPrefixC(line,"SI"))
+	{
+	    ajFmtScanS(line, "%*s %d", &Sunid_Family);
+	}
+	else if(ajStrPrefixC(line,"CL"))
+	{
+	    ajStrAssC(&class,ajStrStr(line)+3);
+	    ajStrClean(&class);
+	}
+	else if(ajStrPrefixC(line,"FO"))
+	{
+	    ajStrAssC(&fold,ajStrStr(line)+3);
+	    while((ok=ajFileReadLine(inf,&line)))
+	    {
+		if(ajStrPrefixC(line,"XX"))
+		    break;
+		ajStrAppC(&fold,ajStrStr(line)+3);
+	    }
+	    ajStrClean(&fold);
+	}
+	else if(ajStrPrefixC(line,"SF"))
+	{
+	    ajStrAssC(&super,ajStrStr(line)+3);
+	    while((ok = ajFileReadLine(inf,&line)))
+	    {
+		if(ajStrPrefixC(line,"XX"))
+		    break;
+		ajStrAppC(&super,ajStrStr(line)+3);
+	    }
+	    ajStrClean(&super);
+	}
+	else if(ajStrPrefixC(line,"FA"))
+	{
+	    ajStrAssC(&family,ajStrStr(line)+3);
+	    while((ok = ajFileReadLine(inf,&line)))
+	    {
+		if(ajStrPrefixC(line,"XX"))
+		    break;
+		ajStrAppC(&family,ajStrStr(line)+3);
+	    }
+	    ajStrClean(&family);
+	}
+	else if(ajStrPrefixC(line,"HI"))
+	{
+	    tmphit=ajXyzHitNew();
+	    ajFmtScanS(line, "%*s %*d %S %d %d %S %S %S %f %f %f", 
+		       &tmphit->Acc, 
+		       &tmphit->Start, 
+		       &tmphit->End, 
+		       &tmphit->Group, 
+		       &tmphit->Typeobj, 
+		       &tmphit->Typesbj, 
+		       &tmphit->Score, 
+		       &tmphit->Pval, 
+		       &tmphit->Eval);
+	    ajListPush(list, (void *)tmphit);
+	}
+    }
+    ret = ajXyzHitlistNew(ajListLength(list));
+    ajStrAssS(&ret->Class, class);
+    ajStrAssS(&ret->Fold, fold);
+    ajStrAssS(&ret->Superfamily, super);
+    ajStrAssS(&ret->Family, family);
+    ret->Sunid_Family = Sunid_Family;
+    
+    ret->N=ajListToArray(list, (void ***)&(ret->hits));
+    
+
+    ajListDel(&list);
+    ajStrDel(&class);
+    ajStrDel(&fold);
+    ajStrDel(&super);
+    ajStrDel(&family);
+    ajStrDel(&line);
+    
+    return ret;
+}
+
 
 /* @func ajXyzSignatureHitsWrite *********************************************
 **
@@ -3185,14 +3317,28 @@ AjBool        ajXyzSignatureHitsWrite(AjPFile outf, AjPSignature sig,
     {
 	if(ajStrMatchC(hits->hits[x]->Typeobj, "FALSE"))
 	    nf++;
-	if(nf==n)
+	if(nf>n)
 	    break;
+	if(MAJSTRLEN(hits->hits[x]->Acc))
+	{
+	    
 	ajFmtPrintF(outf, "HI  %-6d%-10S%-5d%-5d%-15S%-10S%-10S%-7.1f%-7.3f%-7.3f\n", 
 		    x+1, hits->hits[x]->Acc, 
 		    hits->hits[x]->Start+1, hits->hits[x]->End+1,
 		    hits->hits[x]->Group, 
 		    hits->hits[x]->Typeobj, hits->hits[x]->Typesbj, 
 		    hits->hits[x]->Score, hits->hits[x]->Pval, hits->hits[x]->Eval);
+    }
+	else
+	{
+	ajFmtPrintF(outf, "HI  %-6d%-10S%-5d%-5d%-15S%-10S%-10S%-7.1f%-7.3f%-7.3f\n", 
+		    x+1, hits->hits[x]->Spr, 
+		    hits->hits[x]->Start+1, hits->hits[x]->End+1,
+		    hits->hits[x]->Group, 
+		    hits->hits[x]->Typeobj, hits->hits[x]->Typesbj, 
+		    hits->hits[x]->Score, hits->hits[x]->Pval, hits->hits[x]->Eval);
+	}
+	
 	
     }
     
@@ -3205,6 +3351,80 @@ AjBool        ajXyzSignatureHitsWrite(AjPFile outf, AjPSignature sig,
 }
 
 
+/* @func ajXyzSignatureHitsWriteHitlist ***************************************
+**
+** Identical to ajXyzSignatureHitsWrite except that the signature itself is
+** not used as a source of data for printing.
+**
+** @param [w] outf [AjPFile]      Output file stream
+** @param [r] hits [AjPHitlist]   Hitlist objects with hits from scan
+** @param [r] n    [ajint]        Max. no. false hits to output
+**
+** @return [AjBool] True if file was written
+** @@
+******************************************************************************/
+AjBool        ajXyzSignatureHitsWriteHitlist(AjPFile outf, 
+				      AjPHitlist hits, ajint n)
+{
+    ajint  x=0;
+    ajint  nf=0;
+    
+    
+    /*Check args*/
+    if(!outf || !hits)
+	return ajFalse;
+
+    
+    /*Print header info*/
+    ajFmtPrintF(outf, "DE   Results of signature search\nXX\n");
+
+
+    /*Print SCOP classification records of signature */
+    ajFmtPrintF(outf,"CL   %S",hits->Class);
+    ajFmtPrintSplit(outf,hits->Fold,"\nXX\nFO   ",75," \t\n\r");
+    ajFmtPrintSplit(outf,hits->Superfamily,"XX\nSF   ",75," \t\n\r");
+    ajFmtPrintSplit(outf,hits->Family,"XX\nFA   ",75," \t\n\r");
+    ajFmtPrintF(outf,"XX\nSI   %d\n", hits->Sunid_Family);
+    ajFmtPrintF(outf,"XX\n");
+    
+    
+    /*Loop through list and print out data*/
+    for(x=0;x<hits->N; x++)
+    {
+	if(ajStrMatchC(hits->hits[x]->Typeobj, "FALSE"))
+	    nf++;
+	if(nf==n)
+	    break;
+	if(MAJSTRLEN(hits->hits[x]->Acc))
+	{
+	    
+	ajFmtPrintF(outf, "HI  %-6d%-10S%-5d%-5d%-15S%-10S%-10S%-7.1f%-7.3f%-7.3f\n", 
+		    x+1, hits->hits[x]->Acc, 
+		    hits->hits[x]->Start+1, hits->hits[x]->End+1,
+		    hits->hits[x]->Group, 
+		    hits->hits[x]->Typeobj, hits->hits[x]->Typesbj, 
+		    hits->hits[x]->Score, hits->hits[x]->Pval, hits->hits[x]->Eval);
+    }
+	else
+	{
+	ajFmtPrintF(outf, "HI  %-6d%-10S%-5d%-5d%-15S%-10S%-10S%-7.1f%-7.3f%-7.3f\n", 
+		    x+1, hits->hits[x]->Spr, 
+		    hits->hits[x]->Start+1, hits->hits[x]->End+1,
+		    hits->hits[x]->Group, 
+		    hits->hits[x]->Typeobj, hits->hits[x]->Typesbj, 
+		    hits->hits[x]->Score, hits->hits[x]->Pval, hits->hits[x]->Eval);
+	}
+	
+	
+    }
+    
+    /*Print tail info*/
+    ajFmtPrintF(outf, "XX\n//\n");
+    
+    
+    /*Clean up and return*/ 
+    return ajTrue;
+}
 
 
 
@@ -8650,7 +8870,7 @@ AjBool ajXyzHitlistWrite(AjPFile outf, AjPHitlist thys)
 	ajFmtPrintSplit(outf,thys->Superfamily,"XX\nSF   ",75," \t\n\r");
     if(MAJSTRLEN(thys->Family))
 	ajFmtPrintSplit(outf,thys->Family,"XX\nFA   ",75," \t\n\r");
-    if(MAJSTRLEN(thys->Family))
+    if(MAJSTRLEN(thys->Family) && thys->Sunid_Family)
 	ajFmtPrintF(outf,"XX\nSI   %d\n", thys->Sunid_Family);
     
 
@@ -8665,7 +8885,8 @@ AjBool ajXyzHitlistWrite(AjPFile outf, AjPHitlist thys)
 	    ajFmtPrintF(outf, "XX\n");
 	}
 	
-	ajFmtPrintF(outf, "%-5s%S\n", "TY", thys->hits[x]->Typeobj);
+	if(MAJSTRLEN(thys->hits[x]->Typeobj))
+	    ajFmtPrintF(outf, "%-5s%S\n", "TY", thys->hits[x]->Typeobj);
 	ajFmtPrintF(outf, "XX\n");
 	ajFmtPrintF(outf, "%-5s%.2f\n", "SC", thys->hits[x]->Score);
 	ajFmtPrintF(outf, "XX\n");
@@ -8753,7 +8974,8 @@ AjBool ajXyzHitlistWriteSubset(AjPFile outf, AjPHitlist thys, AjPInt ok)
 		ajFmtPrintF(outf, "XX\n");
 	    }
 	    
-	    ajFmtPrintF(outf, "%-5s%S\n", "TY", thys->hits[x]->Typeobj);
+	    if(MAJSTRLEN(thys->hits[x]->Typeobj))
+		ajFmtPrintF(outf, "%-5s%S\n", "TY", thys->hits[x]->Typeobj);
 	    ajFmtPrintF(outf, "XX\n");
 	    ajFmtPrintF(outf, "%-5s%.2f\n", "SC", thys->hits[x]->Score);
 	    ajFmtPrintF(outf, "XX\n");
@@ -9460,6 +9682,8 @@ AjPScophit  ajXyzScophitMerge(AjPScophit hit1, AjPScophit hit2)
     ret = ajXyzScophitNew();
     temp = ajStrNew();
     
+    
+		    
 
     ajStrAssS(&(ret->Acc), hit1->Acc);
     ajStrAssS(&(ret->Spr), hit1->Spr);
@@ -10288,6 +10512,36 @@ ajint ajXyzScophitCompScore(const void *hit1, const void *hit2)
 
 }
 
+/* @func ajXyzScophitCompPval ******************************************************
+ **
+ ** Function to sort AjOScophit objects by Pval record. Usually called by 
+ ** ajListSort.
+ **
+ ** @param [r] hit1  [const void*] Pointer to AjOHit object 1
+ ** @param [r] hit2  [const void*] Pointer to AjOHit object 2
+ **
+ ** @return [ajint] 1 if Pval1>Pval2, 0 if Pval1==Pval2, else -1.
+ ** @@
+ ******************************************************************************/
+ajint ajXyzScophitCompPval(const void *hit1, const void *hit2)
+{
+    AjPScophit p  = NULL;
+    AjPScophit q  = NULL;
+
+    p = (*(AjPScophit*)hit1);
+    q = (*(AjPScophit*)hit2);
+    
+    if(p->Pval < q->Pval)
+        return -1;
+    else if (p->Pval == q->Pval)
+        return 0;
+    else
+        return 1;
+
+
+}
+
+
 
 
 /* @func ajXyzScophitCompAcc *********************************************************
@@ -10560,7 +10814,7 @@ ajint ajXyzHitlistCompFold(const void *hit1, const void *hit2)
 
 /* @func ajXyzHitlistClassify *************************************************
 **
-** Classifies a list of signature-sequence hits (held in a Hitlist object) 
+** Classifies a list of signatur -sequence hits (held in a Hitlist object) 
 ** according to list of target sequences (a list of AjOHitlist objects).
 ** 
 ** Writes the Group, Typeobj (primary classification) & Typesbj (secondary
@@ -10631,7 +10885,8 @@ AjBool        ajXyzHitlistClassify(AjPHitlist *hits, AjPList targets,
     ajint       tpos=0;			/*Temp. position counter */
     ajint       x=0;			/*Loop counter*/
 
-
+    AjPStr      tmpstr=NULL;
+    
 
     
     /* Check args */
@@ -10643,9 +10898,10 @@ AjBool        ajXyzHitlistClassify(AjPHitlist *hits, AjPList targets,
     
 
 
-    /*Create list & list iterator*/
+    /*Create list & list iterator & other memory*/
     itert=ajListIter(targets);
     idxlist = ajListNew();
+    tmpstr  = ajStrNew();
     
 
     /*Loop through list of targets filling list of Hitidx structures */
@@ -10657,7 +10913,11 @@ AjBool        ajXyzHitlistClassify(AjPHitlist *hits, AjPList targets,
 	    ptri=ajXyzHitidxNew();
 	    ptri->hptr=ptrt->hits[x];
 	    ptri->lptr=ptrt;
-	    ajStrAssS(&ptri->Id, ptrt->hits[x]->Acc);
+	    if(MAJSTRLEN(ptrt->hits[x]->Acc))
+		ajStrAssS(&ptri->Id, ptrt->hits[x]->Acc);
+	    else
+		ajStrAssS(&ptri->Id, ptrt->hits[x]->Spr);
+	    
 	    ajListPush(idxlist,(AjPHitidx) ptri);
 	}
     }
@@ -10667,20 +10927,31 @@ AjBool        ajXyzHitlistClassify(AjPHitlist *hits, AjPList targets,
     ajListSort(idxlist, ajXyzCompId);
     idxsiz = ajListToArray(idxlist, (void ***) &idxarr);
         
-    
+
+/*			printf("0\n"); */
 
 
     /*Loop through list of hits */
     for(x=0; x<(*hits)->N; x++)
     {
-	if((pos=ajXyzHitidxBinSearch((*hits)->hits[x]->Acc, idxarr, idxsiz))!=-1)
+	if((MAJSTRLEN((*hits)->hits[x]->Acc)))
+	    pos=ajXyzHitidxBinSearch((*hits)->hits[x]->Acc, idxarr, idxsiz);
+	else
+	    pos=ajXyzHitidxBinSearch((*hits)->hits[x]->Spr, idxarr, idxsiz);
+	if(pos!=-1)
 	{
 	    /* Id was found */
 	    /*The list may contain multiple entries for the same Id, so 
 	      search the current position and then up the list for other 
 	      matching strings*/
 	    tpos=pos; 
-	    while(ajStrMatchCase(idxarr[tpos]->Id, (*hits)->hits[x]->Acc))
+
+	    if(MAJSTRLEN((*hits)->hits[x]->Acc))
+		ajStrAssS(&tmpstr, (*hits)->hits[x]->Acc);
+	    else
+		ajStrAssS(&tmpstr, (*hits)->hits[x]->Spr);
+
+	    while(ajStrMatchCase(idxarr[tpos]->Id, tmpstr))
 	    {
 		if(ajXyzHitsOverlap(idxarr[tpos]->hptr, 
 				    (*hits)->hits[x], thresh))
@@ -10693,6 +10964,9 @@ AjBool        ajXyzHitlistClassify(AjPHitlist *hits, AjPList targets,
 		    {
 			ajStrAssS(&(*hits)->hits[x]->Typeobj, 
 				  (idxarr[tpos]->hptr)->Typeobj);
+
+/*			printf("1\n"); */
+			
 			ajStrAssC(&(*hits)->hits[x]->Typesbj, 
 				  "TRUE");
 			ajStrAssS(&(*hits)->hits[x]->Group, 
@@ -10706,6 +10980,9 @@ AjBool        ajXyzHitlistClassify(AjPHitlist *hits, AjPList targets,
 		    {
 			ajStrAssC(&(*hits)->hits[x]->Typeobj, "CROSS");
 			ajStrAssC(&(*hits)->hits[x]->Typesbj, "CROSS");
+
+/*			printf("2\n"); */
+
 			ajStrAssC(&(*hits)->hits[x]->Group, "NOT_APPLICABLE");
 		    }
 		    else
@@ -10713,6 +10990,9 @@ AjBool        ajXyzHitlistClassify(AjPHitlist *hits, AjPList targets,
 		    {
 			ajStrAssC(&(*hits)->hits[x]->Typeobj, "FALSE");
 			ajStrAssC(&(*hits)->hits[x]->Typesbj, "FALSE");
+
+/*			printf("3\n"); */
+
 			ajStrAssC(&(*hits)->hits[x]->Group, "NOT_APPLICABLE");
 		    }
 		}
@@ -10727,6 +11007,9 @@ AjBool        ajXyzHitlistClassify(AjPHitlist *hits, AjPList targets,
 		    {
 			ajStrAssC(&(*hits)->hits[x]->Typeobj, "UNKNOWN");
 			ajStrAssC(&(*hits)->hits[x]->Typesbj, "UNKNOWN");
+
+/*			printf("4\n"); */
+
 			ajStrAssC(&(*hits)->hits[x]->Group, "NOT_APPLICABLE");
 		    }
 		}
@@ -10741,9 +11024,13 @@ AjBool        ajXyzHitlistClassify(AjPHitlist *hits, AjPList targets,
 	    /*Search down the list*/
 	    tpos=pos+1; 
 
+	    if(MAJSTRLEN((*hits)->hits[x]->Acc))
+		ajStrAssS(&tmpstr, (*hits)->hits[x]->Acc);
+	    else
+		ajStrAssS(&tmpstr, (*hits)->hits[x]->Spr);
 
 	    if(tpos<idxsiz) 
-		while(ajStrMatchCase(idxarr[tpos]->Id, (*hits)->hits[x]->Acc))
+		while(ajStrMatchCase(idxarr[tpos]->Id, tmpstr))
 		{
 
 		    if(ajXyzHitsOverlap(idxarr[tpos]->hptr, 
@@ -10758,15 +11045,23 @@ AjBool        ajXyzHitlistClassify(AjPHitlist *hits, AjPList targets,
 			    ajStrAssS(&(*hits)->hits[x]->Typeobj, 
 				     (idxarr[tpos]->hptr)->Typeobj);
 			    ajStrAssC(&(*hits)->hits[x]->Typesbj, "TRUE");
+
+/*			    printf("5\n"); */
+
 			    ajStrAssS(&(*hits)->hits[x]->Group, 
 				      (idxarr[tpos]->hptr)->Group);
 			}
-			else if(ajStrMatchCase((idxarr[tpos]->lptr)->Fold, 
-					       (*hits)->Fold))
+			else if((ajStrMatchCase((idxarr[tpos]->lptr)->Fold, 
+					       (*hits)->Fold)) &&
+				     (ajStrMatchCase((idxarr[tpos]->lptr)->Class, 
+					   (*hits)->Class)))
 			    /*SCOP fold is identical*/
 			{	
 			    ajStrAssC(&(*hits)->hits[x]->Typeobj, "CROSS");
 			    ajStrAssC(&(*hits)->hits[x]->Typesbj, "CROSS");
+
+/*			printf("6\n"); */
+
 			    ajStrAssC(&(*hits)->hits[x]->Group, "NOT_APPLICABLE");
 			}
 			else
@@ -10774,16 +11069,28 @@ AjBool        ajXyzHitlistClassify(AjPHitlist *hits, AjPList targets,
 			{
 			    ajStrAssC(&(*hits)->hits[x]->Typeobj, "FALSE");
 			    ajStrAssC(&(*hits)->hits[x]->Typesbj, "FALSE");
+
+/*			printf("7\n");*/
+
 			    ajStrAssC(&(*hits)->hits[x]->Group, "NOT_APPLICABLE");
 			}
 		    }
   		    else
 		    {
 			/* Id was found but there was no overlap so set 
-			   classification to UNKNOWN*/
-			ajStrAssC(&(*hits)->hits[x]->Typeobj, "UNKNOWN");
-			ajStrAssC(&(*hits)->hits[x]->Typesbj, "UNKNOWN");
-			ajStrAssC(&(*hits)->hits[x]->Group, "NOT_APPLICABLE");
+			   classification to UNKNOWN, but only if it has 
+			   not already been set */
+			if((!ajStrMatchC((*hits)->hits[x]->Typesbj, "TRUE")) &&
+		       (!ajStrMatchC((*hits)->hits[x]->Typesbj, "CROSS")) &&
+		       (!ajStrMatchC((*hits)->hits[x]->Typesbj, "FALSE")))
+			{
+			    ajStrAssC(&(*hits)->hits[x]->Typeobj, "UNKNOWN");
+			    ajStrAssC(&(*hits)->hits[x]->Typesbj, "UNKNOWN");
+
+/*			printf("8\n"); */
+
+			    ajStrAssC(&(*hits)->hits[x]->Group, "NOT_APPLICABLE");
+			}
 		    }
 
 
@@ -10794,13 +11101,283 @@ AjBool        ajXyzHitlistClassify(AjPHitlist *hits, AjPList targets,
 
 	    
 	}
-    
-    
+	    
 	else
 	{
 	    /* Id was NOT found so set classification to UNKNOWN*/
 	    ajStrAssC(&(*hits)->hits[x]->Typeobj, "UNKNOWN");
 	    ajStrAssC(&(*hits)->hits[x]->Typesbj, "UNKNOWN");
+
+/*			printf("9\n"); */
+
+	    ajStrAssC(&(*hits)->hits[x]->Group, "NOT_APPLICABLE");
+	}
+    }
+    
+
+/*			printf("10\n"); */
+
+    /*Clean up and return*/ 
+    while(ajListPop(idxlist, (void **) &ptri))
+	ajXyzHitidxDel(&ptri);	
+    ajListDel(&idxlist);
+    AJFREE(idxarr);
+    ajListIterFree(itert);
+    ajStrDel(&tmpstr);
+    return ajTrue;
+}
+
+
+
+
+
+/* @func ajXyzHitlistClassifyLigand *******************************************
+**
+** This is the same as ajXyzHitlistClassify except that it is for classifying
+** hits from signatures for ligands.  The SCOP Class, Superfamily and Fold 
+** records are not present and there is no notion of a CROSS hit.  Otherwise
+** everything else is the same.
+**
+**
+** @param [r] hits    [AjPHitist *] Pointer to Hitlist object with hits
+** @param [r] targets [AjPList]     List of AjOHitlist objects with targets
+** @param [r] thresh  [ajint]       Minimum length (residues) of overlap 
+** required for two hits with the same code to be counted as the same hit.
+**
+** @return [AjBool] True on success, else False
+** @@
+******************************************************************************/
+AjBool        ajXyzHitlistClassifyLigand(AjPHitlist *hits, AjPList targets, 
+					 ajint thresh)
+{  
+    /* A list of Hitidx structures is derived from the list of AjOHitlist 
+       objects to allow rapid searching for a given protein accession number*/
+
+    AjIList     itert=NULL;		/*List iterator for targets*/
+    AjPHitlist  ptrt=NULL;		/*Pointer for targets (hitlist structure) */
+    AjPHitidx   ptri=NULL;		/*Pointer for index (Hitidx structure) */
+
+    AjPHitidx  *idxarr=NULL;		/*Array of Hitidx structures */
+    AjPList     idxlist=NULL;		/*List of Hitidx structures */
+    ajint       idxsiz=0;		/*No.target sequences*/
+    ajint       pos=0;			/*Position of a matching code in Hitidx 
+					  structure*/
+    ajint       tpos=0;			/*Temp. position counter */
+    ajint       x=0;			/*Loop counter*/
+
+    AjPStr      tmpstr=NULL;
+    
+
+    
+    /* Check args */
+    if(!(*hits) || (!targets))
+    {
+	ajWarn("NULL args passed to ajXyzHitlistClassify\n");
+	return ajFalse;
+    }
+    
+
+
+    /*Create list & list iterator & other memory*/
+    itert=ajListIter(targets);
+    idxlist = ajListNew();
+    tmpstr  = ajStrNew();
+    
+
+    /*Loop through list of targets filling list of Hitidx structures */
+    while((ptrt=(AjPHitlist)ajListIterNext(itert)))
+    {
+	/*Write Hitidx structure*/
+	for(x=0;x<ptrt->N;x++)
+	{
+	    ptri=ajXyzHitidxNew();
+	    ptri->hptr=ptrt->hits[x];
+	    ptri->lptr=ptrt;
+	    if(MAJSTRLEN(ptrt->hits[x]->Acc))
+		ajStrAssS(&ptri->Id, ptrt->hits[x]->Acc);
+	    else
+		ajStrAssS(&ptri->Id, ptrt->hits[x]->Spr);
+	    
+	    ajListPush(idxlist,(AjPHitidx) ptri);
+	}
+    }
+
+    
+    /* Order the list of Hitidx structures by Id and transform into an array*/
+    ajListSort(idxlist, ajXyzCompId);
+    idxsiz = ajListToArray(idxlist, (void ***) &idxarr);
+        
+
+    /*Loop through list of hits */
+    for(x=0; x<(*hits)->N; x++)
+    {
+	if((MAJSTRLEN((*hits)->hits[x]->Acc)))
+	    pos=ajXyzHitidxBinSearch((*hits)->hits[x]->Acc, idxarr, idxsiz);
+	else
+	    pos=ajXyzHitidxBinSearch((*hits)->hits[x]->Spr, idxarr, idxsiz);
+	if(pos!=-1)
+	{
+	    /* Id was found */
+	    /*The list may contain multiple entries for the same Id, so 
+	      search the current position and then up the list for other 
+	      matching strings*/
+	    tpos=pos; 
+
+	    if(MAJSTRLEN((*hits)->hits[x]->Acc))
+		ajStrAssS(&tmpstr, (*hits)->hits[x]->Acc);
+	    else
+		ajStrAssS(&tmpstr, (*hits)->hits[x]->Spr);
+
+	    while(ajStrMatchCase(idxarr[tpos]->Id, tmpstr))
+	    {
+		if(ajXyzHitsOverlap(idxarr[tpos]->hptr, 
+				    (*hits)->hits[x], thresh))
+		{	
+
+		    if(ajStrMatchCase((idxarr[tpos]->lptr)->Family, 
+				      (*hits)->Family)) 
+			/*SCOP family is identical*/
+		    {
+			ajStrAssS(&(*hits)->hits[x]->Typeobj, 
+				  (idxarr[tpos]->hptr)->Typeobj);
+
+			ajStrAssC(&(*hits)->hits[x]->Typesbj, 
+				  "TRUE");
+			ajStrAssS(&(*hits)->hits[x]->Group, 
+				  (idxarr[tpos]->hptr)->Group);
+		    }
+		    /* NO CROSS HITS FOR LIGAND 
+		       else if((ajStrMatchCase((idxarr[tpos]->lptr)->Fold, 
+		       (*hits)->Fold)) &&
+		       (ajStrMatchCase((idxarr[tpos]->lptr)->Class, 
+		       (*hits)->Class)))
+		       {
+		       ajStrAssC(&(*hits)->hits[x]->Typeobj, "CROSS");
+		       ajStrAssC(&(*hits)->hits[x]->Typesbj, "CROSS");
+		       
+		       ajStrAssC(&(*hits)->hits[x]->Group, "NOT_APPLICABLE");
+		       }
+		       */
+		    else
+			/*SCOP families are different*/
+		    {
+			/* The same stretch of sequence might contain two or more ligand
+			   binding sites for diferent ligands, and so belong to two or 
+			   more different "Family" (ligand types). So only assign the 
+			   hit as FALSE if we have not already assigned it as TRUE. */
+			   
+			if(!ajStrMatchCaseC((*hits)->hits[x]->Typesbj, "TRUE"))
+			{
+			    ajStrAssC(&(*hits)->hits[x]->Typeobj, "FALSE");
+			    ajStrAssC(&(*hits)->hits[x]->Typesbj, "FALSE");
+			    ajStrAssC(&(*hits)->hits[x]->Group, "NOT_APPLICABLE");
+			}	
+		    }
+		}
+		else
+		{
+		    /* Id was found but there was no overlap so set 
+		       classification to UNKNOWN, but only if it has 
+		       not already been set */
+		    if((!ajStrMatchC((*hits)->hits[x]->Typesbj, "TRUE")) &&
+		       (!ajStrMatchC((*hits)->hits[x]->Typesbj, "CROSS")) &&
+		       (!ajStrMatchC((*hits)->hits[x]->Typesbj, "FALSE")))
+		    {
+			ajStrAssC(&(*hits)->hits[x]->Typeobj, "UNKNOWN");
+			ajStrAssC(&(*hits)->hits[x]->Typesbj, "UNKNOWN");
+
+			ajStrAssC(&(*hits)->hits[x]->Group, "NOT_APPLICABLE");
+		    }
+		}
+		    
+
+
+		tpos--;	
+		if(tpos<0) 
+		    break;
+	    }	    
+				    
+	    /*Search down the list*/
+	    tpos=pos+1; 
+
+	    if(MAJSTRLEN((*hits)->hits[x]->Acc))
+		ajStrAssS(&tmpstr, (*hits)->hits[x]->Acc);
+	    else
+		ajStrAssS(&tmpstr, (*hits)->hits[x]->Spr);
+
+	    if(tpos<idxsiz) 
+		while(ajStrMatchCase(idxarr[tpos]->Id, tmpstr))
+		{
+
+		    if(ajXyzHitsOverlap(idxarr[tpos]->hptr, 
+					(*hits)->hits[x], thresh))
+		    {	
+			if(ajStrMatchCase((idxarr[tpos]->lptr)->Family, 
+					  (*hits)->Family)) 
+
+			    /*SCOP family is identical*/
+			{
+			    ajStrAssS(&(*hits)->hits[x]->Typeobj, 
+				     (idxarr[tpos]->hptr)->Typeobj);
+			    ajStrAssC(&(*hits)->hits[x]->Typesbj, "TRUE");
+
+			    ajStrAssS(&(*hits)->hits[x]->Group, 
+				      (idxarr[tpos]->hptr)->Group);
+			}
+			/* NO CROSS HITS FOR LIGAND
+			else if((ajStrMatchCase((idxarr[tpos]->lptr)->Fold, 
+					       (*hits)->Fold)) &&
+				     (ajStrMatchCase((idxarr[tpos]->lptr)->Class, 
+					   (*hits)->Class)))
+			{	
+			    ajStrAssC(&(*hits)->hits[x]->Typeobj, "CROSS");
+			    ajStrAssC(&(*hits)->hits[x]->Typesbj, "CROSS");
+
+			    ajStrAssC(&(*hits)->hits[x]->Group, "NOT_APPLICABLE");
+			} */
+			else
+			    /*SCOP families are different*/
+			{
+			    /* The same stretch of sequence might contain two or more ligand
+			       binding sites for diferent ligands, and so belong to two or 
+			       more different "Family" (ligand types). So only assign the 
+			       hit as FALSE if we have not already assigned it as TRUE. */
+			   
+			    if(!ajStrMatchCaseC((*hits)->hits[x]->Typesbj, "TRUE"))
+			    {
+				ajStrAssC(&(*hits)->hits[x]->Typeobj, "FALSE");
+				ajStrAssC(&(*hits)->hits[x]->Typesbj, "FALSE");
+
+				ajStrAssC(&(*hits)->hits[x]->Group, "NOT_APPLICABLE");
+			    }
+			}
+		    }
+  		    else
+		    {
+			/* Id was found but there was no overlap so set 
+			   classification to UNKNOWN, but only if it has 
+			   not already been set */
+			if((!ajStrMatchC((*hits)->hits[x]->Typesbj, "TRUE")) &&
+			   (!ajStrMatchC((*hits)->hits[x]->Typesbj, "CROSS")) &&
+			   (!ajStrMatchC((*hits)->hits[x]->Typesbj, "FALSE")))
+			{
+			    ajStrAssC(&(*hits)->hits[x]->Typeobj, "UNKNOWN");
+			    ajStrAssC(&(*hits)->hits[x]->Typesbj, "UNKNOWN");
+
+			    ajStrAssC(&(*hits)->hits[x]->Group, "NOT_APPLICABLE");
+			}
+		    }
+		    tpos++;	
+		    if(tpos==idxsiz) 
+			break;
+		}
+	}
+	else
+	{
+	    /* Id was NOT found so set classification to UNKNOWN*/
+	    ajStrAssC(&(*hits)->hits[x]->Typeobj, "UNKNOWN");
+	    ajStrAssC(&(*hits)->hits[x]->Typesbj, "UNKNOWN");
+
 	    ajStrAssC(&(*hits)->hits[x]->Group, "NOT_APPLICABLE");
 	}
     }
@@ -10812,8 +11389,11 @@ AjBool        ajXyzHitlistClassify(AjPHitlist *hits, AjPList targets,
     ajListDel(&idxlist);
     AJFREE(idxarr);
     ajListIterFree(itert);
+    ajStrDel(&tmpstr);
     return ajTrue;
 }
+
+
 
 
 
@@ -11868,6 +12448,8 @@ AjBool ajXyzScophitsWrite(AjPFile outf, AjPList list)
     
     AjPScophit thys = NULL;
     
+    iter=ajListIter(list);
+    
 
     while((thys = (AjPScophit)ajListIterNext(iter)))
     {
@@ -11876,17 +12458,37 @@ AjBool ajXyzScophitsWrite(AjPFile outf, AjPList list)
             return ajFalse;
 
         if(MAJSTRLEN(thys->Class))
-            ajFmtPrintF(outf,"CL   %S\n",thys->Class);
+        {
+	    ajFmtPrintF(outf,"CL   %S\n",thys->Class);	    
+	    ajFmtPrintF(outf, "XX\n");
+	}
+	
         if(MAJSTRLEN(thys->Fold))
-            ajFmtPrintSplit(outf,thys->Fold,"XX\nFO   ",75," \t\n\r");
+        {
+	    ajFmtPrintSplit(outf,thys->Fold,"XX\nFO   ",75," \t\n\r");
+	    ajFmtPrintF(outf, "XX\n");
+	}
+	
         if(MAJSTRLEN(thys->Superfamily))
-            ajFmtPrintSplit(outf,thys->Superfamily,"XX\nSF   ",75," \t\n\r");
+        {
+	    ajFmtPrintSplit(outf,thys->Superfamily,"XX\nSF   ",75," \t\n\r");
+	    ajFmtPrintF(outf, "XX\n");
+	}
+	
         if(MAJSTRLEN(thys->Family))
-            ajFmtPrintSplit(outf,thys->Family,"XX\nFA   ",75," \t\n\r");
+        {
+	    ajFmtPrintSplit(outf,thys->Family,"XX\nFA   ",75," \t\n\r");
+	    ajFmtPrintF(outf, "XX\n");
+	}
+	
         if(MAJSTRLEN(thys->Family))
-            ajFmtPrintF(outf,"XX\nSI   %d\n", thys->Sunid_Family);
-    
-        ajFmtPrintF(outf, "%-5s%S\n", "TY", thys->Typeobj);
+        {
+	    ajFmtPrintF(outf,"XX\nSI   %d\n", thys->Sunid_Family);
+	    ajFmtPrintF(outf, "XX\n");
+	}
+	
+	if(MAJSTRLEN(thys->Typeobj))
+	    ajFmtPrintF(outf, "%-5s%S\n", "TY", thys->Typeobj);
         ajFmtPrintF(outf, "XX\n");
         ajFmtPrintF(outf, "%-5s%.5f\n", "SC", thys->Score);
         ajFmtPrintF(outf, "XX\n");
@@ -13208,7 +13810,7 @@ ajint ajXyzCoordBinSearchScore(float score, AjPCoord *arr, ajint siz)
  ** @return [AjBool]  True if a swissprot identifier code was found for the Scop code.
  ** @@
  *************************************************************************************/
-AjBool ajXyzSunidToScopInfo (ajint sunid, AjPStr *family, AjPStr *superfamily, AjPStr *fold, AjPList list)
+AjBool ajXyzSunidToScopInfo (ajint sunid, AjPStr *family, AjPStr *superfamily, AjPStr *fold, AjPStr *class, AjPList list)
 {
     AjPScop *arr    = NULL;             /* array derived from list */
     ajint  dim      = 0;                /* size of the array */
@@ -13239,6 +13841,7 @@ AjBool ajXyzSunidToScopInfo (ajint sunid, AjPStr *family, AjPStr *superfamily, A
         ajStrAssS(family, arr[idx]->Family);
         ajStrAssS(superfamily, arr[idx]->Superfamily);
         ajStrAssS(fold, arr[idx]->Fold);
+        ajStrAssS(class, arr[idx]->Class);
 
         AJFREE(arr);
         return ajTrue;

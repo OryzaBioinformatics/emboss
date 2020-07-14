@@ -637,7 +637,7 @@ AjBool ajListNth(AjPList thys, ajint n, void** x)
 ** @@
 ******************************************************************************/
 
-AjBool ajListPop(AjPList thys, void** x)
+AjBool ajListPop (AjPList thys, void** x)
 {
 
     if (!thys)
@@ -652,6 +652,31 @@ AjBool ajListPop(AjPList thys, void** x)
     thys->First->Prev = NULL;
 
     thys->Count--;
+    return ajTrue;
+}
+
+/* @func ajListPeek ***********************************************************
+**
+** Return the first node but keep it on the list
+**
+** @param [u] thys [AjPList] List
+** @param [P] x [void**] pointer to pointer to data
+** @return [AjBool] ajTrue on success.
+** @@
+******************************************************************************/
+
+AjBool ajListPeek (AjPList thys, void** x)
+{
+
+    if (!thys)
+	return ajFalse;
+
+    if (!thys->Count)
+      return ajFalse;
+
+    if (x)
+	*x = listNodeItem(thys->First);
+
     return ajTrue;
 }
 
@@ -725,6 +750,31 @@ AjBool ajListstrPop (AjPList thys, AjPStr* x)
     thys->First->Prev = NULL;
 
     thys->Count--;
+    return ajTrue;
+}
+
+/* @func ajListstrPeek ********************************************************
+**
+** Return the first node but keep it on the list.
+**
+** @param [u] thys [AjPList] List
+** @param [P] x [AjPStr*] String
+** @return [AjBool] ajTrue on success.
+** @@
+******************************************************************************/
+
+AjBool ajListstrPeek (AjPList thys, AjPStr* x)
+{
+
+    if (!thys)
+	return ajFalse;
+
+    if (!thys->Count)
+	return ajFalse;
+
+    if (x)
+	*x = (AjPStr) listNodeItem(thys->First);
+
     return ajTrue;
 }
 

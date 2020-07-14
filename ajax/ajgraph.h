@@ -100,6 +100,7 @@ void          ajGraphDataxySetMaxima(AjPGraphData graphdata, float xmin,
 				     float xmax, float ymin, float ymax);
 void          ajGraphDataxySetTypeC(AjPGraphData graphdata, char* type);
 
+void          ajGraphDataTrace (AjPGraphData thys);
 void          ajGraphDia (PLFLT x0, PLFLT y0, PLFLT size);
 void          ajGraphDiaFill (PLFLT x0, PLFLT y0, PLFLT size);
 void          ajGraphDots (PLFLT *x1,PLFLT *y1, ajint numofdots);

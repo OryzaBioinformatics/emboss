@@ -780,7 +780,7 @@ AjBool ajSeqsetIsNuc (AjPSeqset thys)
 	return ajTrue;
 
     seq = thys->Seq[0];
-    if (!ajSeqTypeGapnuc(seq))
+    if (!ajSeqTypeGapnucS(&seq->Seq))
 	return ajTrue;
 
     return ajFalse;
@@ -800,7 +800,7 @@ AjBool ajSeqsetIsRna (AjPSeqset thys)
     AjPSeq seq;
 
     seq = thys->Seq[0];
-    if (!ajSeqTypeGaprna(seq))
+    if (!ajSeqTypeGaprnaS(&seq->Seq))
 	return ajTrue;
 
     return ajFalse;
@@ -821,7 +821,7 @@ AjBool ajSeqsetIsDna (AjPSeqset thys)
     AjPSeq seq;
 
     seq = thys->Seq[0];
-    if (!ajSeqTypeGapdna(seq))
+    if (!ajSeqTypeGapdnaS(&seq->Seq))
 	return ajTrue;
 
     return ajFalse;
@@ -848,7 +848,7 @@ AjBool ajSeqsetIsProt (AjPSeqset thys)
 	return ajFalse;
 
     seq = thys->Seq[0];
-    if (!ajSeqTypeAnyprot(seq))
+    if (!ajSeqTypeAnyprotS(&seq->Seq))
 	return ajTrue;
 
     return ajFalse;
@@ -1120,6 +1120,7 @@ AjPSeq ajSeqNewL (size_t size)
 	pthis->Seq = ajStrNew();
 
     pthis->Rev = ajFalse;
+    pthis->Reversed = ajFalse;
     pthis->EType = 0;
     pthis->Format = 0;
     pthis->Begin = 0;
@@ -1174,6 +1175,7 @@ AjPSeq ajSeqNewS (AjPSeq seq)
 
 
     pthis->Rev = seq->Rev;
+    pthis->Reversed = seq->Reversed;
     pthis->EType = seq->EType;
     pthis->Format = seq->Format;
     pthis->Begin = seq->Begin;
@@ -1682,6 +1684,7 @@ void ajSeqClear (AjPSeq thys)
     thys->Begin=0;
     thys->End=0;
     thys->Rev = ajFalse;
+    thys->Reversed = ajFalse;
 
     while(ajListstrPop(thys->Acclist,&ptr))
 	ajStrDel(&ptr);
@@ -1695,6 +1698,28 @@ void ajSeqClear (AjPSeq thys)
     ajFeattableDel(&thys->Fttable);
 
     return;
+}
+
+
+/* @func ajSeqallClear ***********************************************************
+**
+** Resets all data for a sequence stream object so that it can be reused.
+**
+** @param [uP] thys [AjPSeqall] Sequence stream
+** @return [void]
+** @@
+******************************************************************************/
+
+void ajSeqallClear (AjPSeqall thys)
+{
+  ajSeqClear (thys->Seq);
+  ajSeqinClear(thys->Seqin);
+  thys->Count=0;
+  thys->Begin=0;
+  thys->End=0;
+  thys->Rev=ajFalse;
+  
+  return;
 }
 
 
@@ -2031,7 +2056,10 @@ void ajSeqAssSeq (AjPSeq thys, AjPStr str)
     (void) ajStrAssS (&thys->Seq, str);
     thys->Begin = 0;
     thys->End = 0;
+    thys->Offset = 0;
+    thys->Offend = 0;
     thys->Rev = ajFalse;
+    thys->Reversed = ajFalse;
 
     return;
 }
@@ -2137,7 +2165,10 @@ void ajSeqReplace (AjPSeq thys, AjPStr seq)
     (void) ajStrAssS (&thys->Seq, seq);
     thys->Begin = 0;
     thys->End = 0;
+    thys->Offset = 0;
+    thys->Offend = 0;
     thys->Rev = ajFalse;
+    thys->Reversed = ajFalse;
 
     return;
 }
@@ -2157,13 +2188,18 @@ void ajSeqReplaceC (AjPSeq thys, char* seq)
     (void) ajStrAssC (&thys->Seq, seq);
     thys->Begin = 0;
     thys->End = 0;
+    thys->Offset = 0;
+    thys->Offend = 0;
     thys->Rev = ajFalse;
+    thys->Reversed = ajFalse;
     return;
 }
 
 /* @func ajSeqSetRange ********************************************************
 **
 ** Sets the start and end positions for a sequence (not for a sequence set).
+** At one time reverse complemented a nucleotide sequence if required
+** but this is now not done. It upsets sequence trimming.
 **
 ** @param [P] seq [AjPSeq] Sequence object to be set.
 ** @param [r] ibegin [ajint] Start position. Negative values are from the end.
@@ -2187,6 +2223,9 @@ void ajSeqSetRange (AjPSeq seq, ajint ibegin, ajint iend)
     ajDebug ("      result: (len: %d %d..%d)\n",
 	     ajSeqLen(seq), seq->Begin, seq->End);
 
+    if (seq->Rev)
+	ajSeqReverse (seq);
+
     return;
 }
 
@@ -2209,7 +2248,7 @@ void ajSeqMakeUsa (AjPSeq thys, AjPSeqin seqin)
 	     thys->Name, thys->Formatstr, thys->Db,
 	     thys->Entryname, thys->Filename);
 
-    ajSeqTrace (thys);
+    /* ajSeqTrace (thys); */
 
     if (seqin)
 	ajSeqinTrace (seqin);
@@ -2300,7 +2339,10 @@ void ajSeqToLower (AjPSeq thys)
 
 /* @func ajSeqReverse *********************************************************
 **
-** Reverses and complements a nucleotide sequence.
+** Reverses and complements a nucleotide sequence, nuless it is already done.
+**
+** If the sequence may have been reversed already, use ajSeqReverseForce
+** to make sure the sequence is reversed.
 **
 ** @param [u] thys [AjPSeq] Sequence
 ** @return [void]
@@ -2312,16 +2354,55 @@ void ajSeqReverse (AjPSeq thys)
     ajint ibegin = thys->Begin;
     ajint iend = thys->End;
 
-    ajDebug ("ajSeqReverse len: %d Begin: %d End: %d\n",
-	     ajSeqLen(thys), thys->Begin, thys->End);
+    ajDebug ("ajSeqReverse len: %d Begin: %d End: %d Rev: %B Reversed: %B\n",
+	     ajSeqLen(thys), thys->Begin, thys->End,
+	     thys->Rev, thys->Reversed);
+
+    if (thys->Reversed)		/* means we have already reversed it */
+      return;
 
     thys->End = -(ibegin);
     thys->Begin = -(iend);
+    thys->Reversed = ajTrue;
+    if (!thys->Rev)
+      thys->Rev = ajTrue;
 
     (void) ajSeqReverseStr(&thys->Seq);
 
     ajDebug ("      result len: %d Begin: %d End: %d\n",
 	     ajSeqLen(thys), thys->Begin, thys->End);
+
+    if (thys->Fttable)
+	ajFeattableReverse(thys->Fttable);
+
+    return;
+}
+
+/* @func ajSeqReverseForce ****************************************************
+**
+** Reverses and complements a nucleotide sequence.
+** Forces reversal to be done even if the sequence is flagged
+** as already reversed.
+**
+** This happens, for example, where an input sequence has been reversed
+** with -sreverse on the command line, but the application needs to reverse it
+** in processing both directions.
+**
+** @param [u] thys [AjPSeq] Sequence
+** @return [void]
+** @@
+******************************************************************************/
+
+void ajSeqReverseForce (AjPSeq thys)
+{
+    ajDebug ("ajSeqReverse len: %d Begin: %d End: %d Rev: %B Reversed: %B\n",
+	     ajSeqLen(thys), thys->Begin, thys->End,
+	     thys->Rev, thys->Reversed);
+
+    if (thys->Reversed)		/* means we have already reversed it */
+      thys->Reversed = ajFalse;		/* but we want to reverse it anyway */
+
+    ajSeqReverse (thys);
 
     return;
 }
@@ -2488,7 +2569,7 @@ AjBool ajSeqIsNuc (AjPSeq thys)
     if (ajStrMatchC(thys->Type, "P"))
 	return ajFalse;
 
-    if (!ajSeqTypeGapnuc(thys))		/* returns char 0 on success */
+    if (!ajSeqTypeGapnucS(&thys->Seq)) /* returns char 0 on success */
 	return ajTrue;
 
     ajDebug ("ajSeqIsNuc failed\n", thys->Type);
@@ -2515,7 +2596,7 @@ AjBool ajSeqIsProt (AjPSeq thys)
     if (ajStrMatchC(thys->Type, "N"))
 	return ajFalse;
 
-    if (!ajSeqTypeAnyprot(thys))	/* returns char 0 on success */
+    if (!ajSeqTypeAnyprotS(&thys->Seq))	/* returns char 0 on success */
 	return ajTrue;
 
     ajDebug ("ajSeqIsProt failed\n", thys->Type);
@@ -2783,6 +2864,8 @@ void ajSeqTrace (AjPSeq seq)
 	ajDebug ( "  Length: %d\n", ajSeqLen(seq));
     if (seq->Rev)
 	ajDebug ( "     Rev: %B\n", seq->Rev);
+    if (seq->Reversed)
+	ajDebug ( "Reversed: %B\n", seq->Reversed);
     if (seq->Begin)
 	ajDebug ( "   Begin: %d\n", ajSeqBegin(seq));
     if (seq->End)
@@ -3063,6 +3146,8 @@ ajint ajSeqLen (AjPSeq seq)
 **
 ** Returns the sequence direction.
 **
+** See ajSeqReversed for whether it has already been reverse-complemented
+**
 ** @param [P] seq [AjPSeq] Sequence object
 ** @return [AjBool] Sequence Direction.
 ** @@
@@ -3071,6 +3156,20 @@ ajint ajSeqLen (AjPSeq seq)
 AjBool ajSeqGetReverse (AjPSeq seq)
 {
     return seq->Rev;
+}
+
+/* @func ajSeqGetReversed *****************************************************
+**
+** Returns whether the sequence has been reversed
+**
+** @param [P] seq [AjPSeq] Sequence object
+** @return [AjBool] Sequence Direction.
+** @@
+******************************************************************************/
+
+AjBool ajSeqGetReversed (AjPSeq seq)
+{
+    return seq->Reversed;
 }
 
 /* @func ajSeqCharCopy ********************************************************
@@ -3593,7 +3692,9 @@ AjPSeqout ajSeqoutNew (void)
     pthis->Desc = ajStrNew();
     pthis->Type = ajStrNew();
     pthis->EType = 0;
+    pthis->Outputtype = ajStrNew();
     pthis->Db = ajStrNew();
+    pthis->Setdb = ajStrNew();
     pthis->Full = ajStrNew();
     pthis->Date = ajStrNew();
     pthis->Doc = ajStrNew();
@@ -3604,6 +3705,7 @@ AjPSeqout ajSeqoutNew (void)
     pthis->Formatstr = ajStrNew();
     pthis->Format = 0;
     pthis->Filename = ajStrNew();
+    pthis->Directory = ajStrNew();
     pthis->Entryname = ajStrNew();
     pthis->Seq = ajStrNew();
     pthis->File = NULL;
@@ -3665,15 +3767,20 @@ void ajSeqoutDel (AjPSeqout* pthis)
     ajStrDel (&thys->Tax);
     ajStrDel (&thys->Desc);
     ajStrDel (&thys->Type);
+    ajStrDel (&thys->Outputtype);
     ajStrDel (&thys->Db);
+    ajStrDel (&thys->Setdb);
     ajStrDel (&thys->Full);
     ajStrDel (&thys->Date);
     ajStrDel (&thys->Doc);
     ajStrDel (&thys->Usa);
     ajStrDel (&thys->Ufo);
+    ajStrDel (&thys->FtFormat);
+    ajStrDel (&thys->FtFilename);
     ajStrDel (&thys->Informatstr);
     ajStrDel (&thys->Formatstr);
     ajStrDel (&thys->Filename);
+    ajStrDel (&thys->Directory);
     ajStrDel (&thys->Entryname);
     ajStrDel (&thys->Seq);
     ajStrDel (&thys->Extension);
@@ -3966,6 +4073,7 @@ ajint ajSeqPosII (ajint ilen, ajint imin, ajint ipos)
 /* @func ajSeqTrim ************************************************************
 **
 ** Trim a sequence using the Begin and Ends.
+** Also reverse complements a nucleotide sequence if required.
 **
 ** @param [rw] thys [AjPSeq] Sequence to be trimmed.
 ** @return [AjBool] AjTrue returned if successful.
@@ -3978,14 +4086,19 @@ AjBool ajSeqTrim(AjPSeq thys)
     ajint begin;
     ajint end;
 
-    ajDebug("Trimming %d from %d to %d\n",
-	    thys->Seq->Len,thys->Begin,thys->End);
+    ajDebug("Trimming %d from %d to %d Rev: %B Reversed: %B\n",
+	    thys->Seq->Len,thys->Begin,thys->End, thys->Rev, thys->Reversed);
+
+    if (thys->Rev)
+	ajSeqReverse (thys);
 
     begin = ajSeqPos(thys, thys->Begin);
     end = ajSeqPos(thys, thys->End);
 
-    ajDebug("Trimming %d from %d (%d) to %d (%d)\n",
-	    thys->Seq->Len,thys->Begin,begin, thys->End, end);
+    ajDebug("Trimming %d from %d (%d) to %d (%d) Rev: %B Reversed: %B\n",
+	    thys->Seq->Len,thys->Begin,begin, thys->End, end,
+	    thys->Rev, thys->Reversed);
+
     if (thys->End)
     {
 	if(end < begin)
@@ -4003,20 +4116,27 @@ AjBool ajSeqTrim(AjPSeq thys)
     ajDebug("After Trimming len = %d\n",thys->Seq->Len);
     /*ajDebug("After Trimming len = %d '%S'\n",thys->Seq->Len, thys->Seq);*/
 
+
+    if (okay && thys->Fttable)
+    {
+	okay = ajFeattableTrimOff(thys->Fttable, thys->Offset, thys->Seq->Len);
+    }
+
     return okay;
 }
 
 /* @func ajSeqGapCount ********************************************************
 **
-** returns the number of gaps in a sequence (counting any possible
+** Returns the number of gaps in a sequence (counting any possible
 ** gap character
 **
 ** @param [w] thys [AjPSeq] Sequence object
 ** @return [ajint] Number of gaps
 ******************************************************************************/
 
-ajint ajSeqGapCount (AjPSeq thys) {
-  return ajSeqGapCountS (thys->Seq);
+ajint ajSeqGapCount (AjPSeq thys)
+{
+    return ajSeqGapCountS (thys->Seq);
 }
 
 /* @func ajSeqGapCountS *******************************************************
@@ -4028,21 +4148,23 @@ ajint ajSeqGapCount (AjPSeq thys) {
 ** @return [ajint] Number of gaps
 ******************************************************************************/
 
-ajint ajSeqGapCountS (AjPStr str) {
+ajint ajSeqGapCountS (AjPStr str)
+{
 
-  ajint ret=0;
+    ajint ret=0;
 
-  static char testchars[] = "-~."; /* all known gap characters */
-  char *testgap = testchars;
+    static char testchars[] = "-~."; /* all known gap characters */
+    char *testgap = testchars;
 
-  ajDebug("ajSeqGapCountS '%S'\n", str);
+    ajDebug("ajSeqGapCountS '%S'\n", str);
 
-  while (*testgap) {
-    ret += ajStrCountK(str, *testgap);
-    testgap++;
-  }
+    while (*testgap)
+    {
+	ret += ajStrCountK(str, *testgap);
+	testgap++;
+    }
 
-  return ret;
+    return ret;
 }
 
 /* @func ajSeqGapStandard *****************************************************
@@ -4054,27 +4176,30 @@ ajint ajSeqGapCountS (AjPStr str) {
 ** @return [void]
 ******************************************************************************/
 
-void ajSeqGapStandard (AjPSeq thys, char gapch) {
+void ajSeqGapStandard (AjPSeq thys, char gapch)
+{
 
-  char newgap = '-';
-  static char testchars[] = "-~."; /* all known gap characters */
-  char *testgap = testchars;
+    char newgap = '-';
+    static char testchars[] = "-~."; /* all known gap characters */
+    char *testgap = testchars;
 
-  if (gapch)
-    newgap = gapch;
+    if (gapch)
+	newgap = gapch;
 
-  ajDebug("ajSeqGapStandard '%c'=>'%c' '%S'\n", gapch, newgap, thys->Seq);
+    ajDebug("ajSeqGapStandard '%c'=>'%c' '%S'\n", gapch, newgap, thys->Seq);
 
-  while (*testgap) {
-    if (newgap != *testgap) {
-      ajStrSubstituteKK (&thys->Seq, *testgap, newgap);
-      ajDebug(" replaced         '%c'=>'%c' '%S'\n",
-	      *testgap, newgap, thys->Seq);
+    while (*testgap)
+    {
+	if (newgap != *testgap)
+	{
+	    ajStrSubstituteKK (&thys->Seq, *testgap, newgap);
+	    ajDebug(" replaced         '%c'=>'%c' '%S'\n",
+		    *testgap, newgap, thys->Seq);
+	}
+	testgap++;
     }
-    testgap++;
-  }
 
-  return;
+    return;
 }
 
 /* @func ajSeqFill ************************************************************
@@ -4095,8 +4220,8 @@ ajint ajSeqFill (AjPSeq seq, ajint len)
 
     if (ajSeqLen(seq) < len)
     {
-      ilen = len - ajSeqLen(seq);
-      ajStrFill (&seq->Seq, len, '-');
+	ilen = len - ajSeqLen(seq);
+	ajStrFill (&seq->Seq, len, '-');
     }
 
     ajDebug ("      result: (len: %d added: %d\n",
@@ -4104,4 +4229,3 @@ ajint ajSeqFill (AjPSeq seq, ajint len)
 
     return ilen;
 }
-

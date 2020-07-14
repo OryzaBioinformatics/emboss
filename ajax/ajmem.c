@@ -138,10 +138,7 @@ void* ajMemCalloc0 (ajlong count, ajlong nbytes,
   ptr = ajMemCalloc(count, nbytes, file, line);
   (void) memset (ptr, 0, count*nbytes);
 
-  memAlloc += (count*nbytes);
   memZero += (count*nbytes);
-  memCount++;
-  memTotal++;
 
   return ptr;
 }

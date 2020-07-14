@@ -135,6 +135,12 @@ struct comp {
 };
 #define	EMITTING(cp)	((cp)->regcode != (cp)->regdummy)
 
+static ajlong regAlloc = 0;
+static ajlong regFree = 0;
+static ajlong regFreeCount = 0;
+static ajlong regCount = 0;
+static ajlong regTotal = 0;
+
 /*
  * Forward declarations for hsregcomp()'s friends.
  */
@@ -203,6 +209,13 @@ regexp * hsregcomp(const char *exp)
     if (r == NULL)
 	FAIL("out of space");
 
+    regAlloc += sizeof(regexp) + co.regsize;
+    regCount ++;
+    regTotal ++;
+
+    /* ajDebug("hsregcomp %x size %d regexp '%s'\n",
+       r, (int) (sizeof(regexp) + (size_t)co.regsize), exp); */
+
     /* Second pass: emit code. */
     co.regparse = (char *)exp;
     co.regnpar = 1;
@@ -216,6 +229,7 @@ regexp * hsregcomp(const char *exp)
     r->reganch = 0;
     r->regmust = NULL;
     r->regmlen = 0;
+    r->regsize = co.regsize;
     scan = r->program+1;		/* First BRANCH. */
     if (OP(regnext(scan)) == END)
     {					/* Only one top-level choice. */
@@ -771,7 +785,6 @@ struct exec {
 
 
 
-
 /*
  * Forwards.
  */
@@ -1143,7 +1156,35 @@ static char* regnext(register char *p)
 }
 
 
+/* @func hsregfree ************************************************************
+**
+** Free a regular expression structure, and log the memory management stats
+**
+** @param [?] r [regexp**] Regular expression structure
+** @return [void]
+** @@
+******************************************************************************/
 
+void hsregfree(regexp **r)
+{
+  /*
+//  ajDebug("hsregfree size regexp %d\n",
+//	  (ajint) sizeof(regexp));
+//  ajDebug("hsregfree %x\n", *r);
+//  ajDebug("hsregfree regsize %d\n",
+//	  (ajint) sizeof(**r));
+//  ajDebug("hsregfree data %d\n",
+//	  (ajint) (**r).regsize);
+//  ajDebug("hsregfree %x size regexp %d data %d regsize %d\n", *r,
+//	  (ajint) sizeof(regexp), (ajint) (**r).regsize,
+//	  (ajint) sizeof(**r));
+  */
+
+  regFreeCount += 1;
+  regFree += sizeof(regexp) + (**r).regsize;
+  regTotal --;
+  AJFREE(*r);
+}
 
 
 #ifdef DEBUG

@@ -52,6 +52,10 @@
 #include <stropts.h>
 #endif
 
+#if defined (__SVR4) && defined (__sun)
+#include <signal.h>
+#endif
+
 #ifdef HAVE_POLL		/* Only for OSs without FD macros */
 #include <poll.h>
 #endif
@@ -2731,6 +2735,9 @@ static int java_jembossctl(ajint command, AjPStr username, AjPStr password,
 	    ajStrAppC(errstd,"Error receiving (java_batch)\n");
 #ifdef __hpux
 	signal(SIGCLD,SIG_IGN);
+#endif
+#if defined (__SVR4) && defined (__sun)
+	signal(SIGCHLD,SIG_IGN);
 #endif
 	break;
 

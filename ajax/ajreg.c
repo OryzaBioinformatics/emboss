@@ -43,6 +43,12 @@
 #include "ajax.h"
 #include "ajreg.h"
 
+static ajlong regAlloc = 0;
+static ajlong regFree = 0;
+static ajlong regFreeCount = 0;
+static ajlong regCount = 0;
+static ajlong regTotal = 0;
+
 /* constructors */
 
 /* @func ajRegComp ************************************************************
@@ -55,7 +61,17 @@
 ******************************************************************************/
 
 AjPRegexp ajRegComp (AjPStr exp) {
-  return hsregcomp (ajStrStr(exp));
+  AjPRegexp ret;
+  ret = hsregcomp (ajStrStr(exp));
+  if (ret)
+  {
+    regAlloc += sizeof(ret);
+    regCount ++;
+    regTotal ++;
+    ajDebug("ajRegComp %x size %d regexp '%S'\n",
+	    ret, (int) sizeof(ret), exp);
+  }
+  return ret;
 }
 
 /* @func ajRegCompC ***********************************************************
@@ -416,7 +432,14 @@ void ajRegSubC (AjPRegexp rp, const char* source, AjPStr* dest) {
 ******************************************************************************/
 
 void ajRegFree (AjPRegexp* pexp) {
-  AJFREE (*pexp);
+  if (!pexp) return;
+  if (!*pexp) return;
+  ajDebug("ajRegFree %x size regexp %d\n", *pexp,
+	  (ajint) sizeof(*pexp));
+  regFreeCount += 1;
+  regFree += sizeof(**pexp);
+  regTotal --;
+  hsregfree (pexp);
   *pexp = NULL;
 }
 
@@ -457,3 +480,22 @@ void ajRegTrace (AjPRegexp exp) {
   (void) ajStrDelReuse (&str);
   return;
 }
+
+/* @func ajRegExit ************************************************************
+**
+** Prints a summary of regular expression (AjPRegexp) usage with debug calls
+**
+** @return [void]
+** @@
+******************************************************************************/
+
+void ajRegExit (void) {
+
+  ajDebug ("Regexp usage (bytes): %ld allocated, %ld freed, %ld in use\n",
+	   regAlloc, regFree, regAlloc - regFree);
+  ajDebug ("Regexp usage (number): %ld allocated, %ld freed %ld in use\n",
+	   regTotal, regFreeCount, regCount);
+
+  return;
+}
+

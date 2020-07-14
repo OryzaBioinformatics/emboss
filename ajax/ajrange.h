@@ -26,6 +26,7 @@ extern "C"
 ** @use ajRangeStrExtract Extract substrings defined by range
 ** @use ajRangeStrStuff The opposite of ajRangeStrExtract
 ** @use ajRangeStrMask Mask the range in a String
+** @use ajRangeStrToLower Change to lower-case the range in a String
 ** @use ajRangeOverlapSingle Detect an overlap of a range to a sequence region
 ** @use ajRangeOverlaps Detect overlaps of a set of ranges to a seq region
 ** @use ajRangeOrdered Test if ranges are in ascending non-overlapping order
@@ -63,6 +64,7 @@ AjBool    ajRangeStrExtractList (AjPList outliststr, AjPRange thys,
 AjBool    ajRangeStrExtract (AjPStr *outstr, AjPRange thys, AjPStr instr);
 AjBool    ajRangeStrStuff (AjPStr *outstr, AjPRange thys, AjPStr instr);
 AjBool    ajRangeStrMask (AjPStr *str, AjPRange thys, AjPStr maskchar);
+AjBool    ajRangeStrToLower (AjPStr *str, AjPRange thys);
 ajint	  ajRangeOverlapSingle (ajint start, ajint end,
 				ajint pos, ajint length);
 ajint	  ajRangeOverlaps (AjPRange thys, ajint pos, ajint length);

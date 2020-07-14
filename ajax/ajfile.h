@@ -79,6 +79,7 @@ typedef struct AjSFileBuffList {
 ** @mod ajFileBuffLoad Reads all input lines from a file into the buffer.
 ** @mod ajFileBuffGet Reads a line from a buffered file.
 ** @mod ajFileBuffGetStore Reads a line from a buffered file with append.
+** @mod ajFileBuffGetStoreL Reads a line from a buffered file with append.
 ** @use ajFileBuffEmpty Tests whether a file buffer is empty.
 ** @use ajFileBuffTrace Writes debug messages to indicate the contents
 **                      of a buffered file.
@@ -109,6 +110,9 @@ typedef struct AjSFileBuff {
 /* ============= prototypes =========================*/
 
 void        ajFileBuffClear (const AjPFileBuff thys, ajint lines);
+void        ajFileBuffClearStore (const AjPFileBuff thys, ajint lines,
+				  AjPStr rdline, AjBool store, AjPStr *astr);
+void        ajFileBuffClear (const AjPFileBuff thys, ajint lines);
 void        ajFileBuffDel (AjPFileBuff* pthis);
 AjBool      ajFileBuffEmpty (const AjPFileBuff thys);
 AjBool      ajFileBuffEnd (const AjPFileBuff thys);
@@ -122,6 +126,8 @@ AjBool      ajFileBuffGetL (const AjPFileBuff thys, AjPStr *pdest,
 			    ajlong* fpos);
 AjBool      ajFileBuffGetStore (const AjPFileBuff thys, AjPStr* pdest,
 				AjBool store, AjPStr *astr);
+AjBool      ajFileBuffGetStoreL (const AjPFileBuff thys, AjPStr* pdest,
+				 ajlong* fpos, AjBool store, AjPStr *astr);
 void        ajFileBuffLoad (const AjPFileBuff thys);
 void        ajFileBuffLoadC (const AjPFileBuff thys, const char* str);
 void        ajFileBuffLoadS (const AjPFileBuff thys, const AjPStr str);
@@ -137,6 +143,8 @@ AjPFileBuff ajFileBuffNewS (const AjPStr data);
 void        ajFileBuffNobuff (const AjPFileBuff thys);
 void        ajFileBuffReset (const AjPFileBuff thys);
 void        ajFileBuffResetPos (const AjPFileBuff thys);
+void        ajFileBuffResetStore (const AjPFileBuff thys,
+				  AjBool store, AjPStr *astr);
 AjBool      ajFileBuffSetFile (AjPFileBuff* pthys, AjPFile file);
 ajint       ajFileBuffSize (void);
 void        ajFileBuffStripHtml (const AjPFileBuff thys);
@@ -166,6 +174,7 @@ AjBool      ajFileGets (const AjPFile thys, AjPStr *pdest);
 AjBool      ajFileGetsL (const AjPFile thys, AjPStr *pdest, ajlong* fpos);
 AjBool      ajFileGetsTrim  (const AjPFile thys, AjPStr *pdest);
 AjBool      ajFileGetsTrimL (const AjPFile thys, AjPStr *pdest, ajlong* fpos);
+AjBool      ajFileHasDir (const AjPStr name);
 ajlong      ajFileLength (AjPStr fname);
 const char* ajFileName (const AjPFile thys);
 AjBool      ajFileNameDirSet  (AjPStr* filename, const AjPStr dir);
@@ -198,6 +207,7 @@ ajint 	    ajFileScan (AjPStr path, AjPStr filename, AjPList *result,
 			AjBool show, AjBool dolist, AjPList *list,
 			AjPList rlist, AjBool recurs, const AjPFile outf);
 ajint       ajFileSeek (const AjPFile thys, ajlong offset, ajint wherefrom);
+AjBool      ajFileSetDir (AjPStr *pname, const AjPStr dir);
 AjBool      ajFileStat (AjPStr *filename, ajint mode);
 AjBool      ajFileStderr (const AjPFile file);
 AjBool      ajFileStdin (const AjPFile file);

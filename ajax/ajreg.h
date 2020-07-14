@@ -28,26 +28,27 @@ AjBool ajRegExecC (AjPRegexp prog, const char* str);
 
 /* test substrings */
 
-ajint ajRegLenI (AjPRegexp rp, ajint isub);
+ajint  ajRegLenI (AjPRegexp rp, ajint isub);
 AjBool ajRegPost (AjPRegexp rp, AjPStr* post);
 AjBool ajRegPostC (AjPRegexp rp, const char** post);
 
+ajint  ajRegOffset (AjPRegexp rp);
+ajint  ajRegOffsetI (AjPRegexp rp, ajint isub);
+ajint  ajRegOffsetC (AjPRegexp rp);
+ajint  ajRegOffsetIC (AjPRegexp rp, ajint isub);
+
 /* substitute substrings */
 
-ajint ajRegOffset (AjPRegexp rp);
-ajint ajRegOffsetI (AjPRegexp rp, ajint isub);
-ajint ajRegOffsetC (AjPRegexp rp);
-ajint ajRegOffsetIC (AjPRegexp rp, ajint isub);
-
-void ajRegSub (AjPRegexp rp, AjPStr source, AjPStr* dest);
-void ajRegSubI (AjPRegexp rp, ajint isub, AjPStr* dest);
-void ajRegSubC (AjPRegexp rp, const char* source, AjPStr* dest);
+void   ajRegSub (AjPRegexp rp, AjPStr source, AjPStr* dest);
+void   ajRegSubI (AjPRegexp rp, ajint isub, AjPStr* dest);
+void   ajRegSubC (AjPRegexp rp, const char* source, AjPStr* dest);
 
 /* destructor */
 
-void ajRegFree (AjPRegexp* pexp);
-void ajRegTrace (AjPRegexp exp);
+void   ajRegFree (AjPRegexp* pexp);
+void   ajRegTrace (AjPRegexp exp);
 
+void   ajRegExit (void);
 #endif
 
 #ifdef __cplusplus

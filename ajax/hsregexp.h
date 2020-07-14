@@ -46,6 +46,7 @@ typedef struct regexp {
 	char *startp[NSUBEXP];
 	char *endp[NSUBEXP];
 	const char *orig;	/* AJAX extension: start of original */
+	ajlong regsize;	/* AJAX extension: size */
 	char regstart;		/* Internal use only. */
 	char reganch;		/* Internal use only. */
         char padding[2];        /* Some chumminess with compiler */
@@ -59,6 +60,7 @@ extern ajint hsregexec(regexp *rp, const char *s);
 extern void hsregsub(const regexp *rp, const char *src, char *dst);
 extern void hsregerror(const char *message);
 extern void hsregerror2(const char* fmt, const char *str);
+extern void hsregfree (regexp **r);
 
 #ifndef HAVE_MEMMOVE
 #ifndef EXIT_FAILURE

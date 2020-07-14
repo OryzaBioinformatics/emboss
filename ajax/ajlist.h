@@ -64,6 +64,8 @@ typedef struct AjSListNode {
 ** @cast ajListLast Set pointer to last node's data. Doesn't remove the node.
 ** @cast ajListLength get the number of nodes in a linked list.
 ** @cast ajListstrLength get the number of nodes in an AjPStr linked list.
+** @cast ajListPeek Returns the first node but keeps it on the list
+** @cast ajListstrPop Returns the first node but keeps it on the list
 ** @cast ajListPop Removes and returns the first node.
 ** @cast ajListstrPop Removes and returns the first AjPStr node.
 ** @use ajListFind For each node in the list call a function
@@ -137,6 +139,7 @@ AjPList     ajListNew (void);          /* return header */
 AjPList     ajListNewArgs   (void* x, ...);  /* new header returned */
 AjPListNode ajListNodesNew (void *x, ...);  /* same as NewArgs but no header */
 AjBool      ajListNth (AjPList thys, ajint n, void** x);
+AjBool      ajListPeek    (AjPList list, void** x);
 AjBool      ajListPop    (AjPList list, void** x);
 AjBool      ajListPopEnd(AjPList thys, void** x);
 void        ajListPush   (AjPList list, void* x);      /* " " */
@@ -152,6 +155,7 @@ AjPList     ajListstrNew (void);          /* return header */
 AjPList     ajListstrNewArgs   (AjPStr x, ...);  /* new header returned */
 void        ajListstrMap (AjPList thys,
 			  void apply(AjPStr* x, void* cl), void* cl);
+AjBool      ajListstrPeek    (AjPList list, AjPStr* x);
 AjBool      ajListstrPop    (AjPList list, AjPStr* x);
 AjBool      ajListstrPopEnd (AjPList thys, AjPStr *x);
 void        ajListstrPush (AjPList list, AjPStr x);

@@ -1541,31 +1541,31 @@ AjBool ajAlignValid (AjPAlign thys) {
   ajDebug("ajAlignValid format '%S' %d Nmin %d Nmax %d\n",
 	  thys->Formatstr, thys->Format, thys->Nmin, thys->Nmax);
 
-  if (!thys->Format) {
+  if (!thys->Format) {		/* test acdc-alignbadformat */
     if (!ajAlignFindFormat(thys->Formatstr, &thys->Format)) {
-      ajFatal("Unknown alignment format '%S'", thys->Formatstr);
+      ajErr ("Unknown alignment format '%S'", thys->Formatstr);
       return ajFalse;
     }
   }
 
   if ( alignFormat[thys->Format].Minseq  &&
        thys->Nmin < alignFormat[thys->Format].Minseq) {
-    ajFatal("Alignment format specifies at least %d sequences, "
-	    "alignment has only %d",
-	    alignFormat[thys->Format].Minseq, thys->Nmin);
+    ajErr ("Alignment format specifies at least %d sequences, "
+	   "alignment has only %d",
+	   alignFormat[thys->Format].Minseq, thys->Nmin);
     return ajFalse;
   }
 
   if ( alignFormat[thys->Format].Maxseq  &&
        thys->Nmax > alignFormat[thys->Format].Maxseq) {
-    ajFatal("Alignment format specifies at most %d sequences, "
-	    "alignment has  %d",
-	    alignFormat[thys->Format].Minseq, thys->Nmin);
+    ajErr ("Alignment format specifies at most %d sequences, "
+	   "alignment has %d",
+	   alignFormat[thys->Format].Maxseq, thys->Nmax);
     return ajFalse;
   }
 
   if (thys->Width < 10) {
-    ajWarn("Alignment width (awidth=%d) too narrow, reset to 10",
+    ajWarn("Alignment width (-awidth=%d) too narrow, reset to 10",
 	   thys->Width);
     thys->Width=10;
   }
