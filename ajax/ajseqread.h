@@ -30,31 +30,41 @@ typedef struct SeqSAccess {
   char *Name;			/* Access method name used in emboss.default */
   AjBool (*Access) (AjPSeqin seqin); /* Access function */
   AjBool (*AccessFree) (void* qrydata); /* Access cleanup function */
-} SeqOAccess, *SeqPAccess;
+} SeqOAccess;
 
-AjPSeqall    ajSeqallFile (AjPStr usa);
+#define SeqPAccess SeqOAccess*
+
+AjPSeqall    ajSeqallFile (const AjPStr usa);
 AjBool       ajSeqAllRead (AjPSeq thys, AjPSeqin seqin);
-AjBool       ajSeqGetFromUsa (AjPStr thys, AjBool protein, AjPSeq *seq);
-AjBool       ajSeqsetGetFromUsa(AjPStr thys, AjPSeqset *seq);
-AjBool       ajSeqFormatTest (AjPStr format);
+AjBool       ajSeqGetFromUsa (const AjPStr thys, AjBool protein, AjPSeq *seq);
+AjBool       ajSeqFormatTest (const AjPStr format);
 void         ajSeqinClear (AjPSeqin thys);
 void         ajSeqinDel (AjPSeqin* pthis);
 AjPSeqin     ajSeqinNew (void);
-AjBool       ajSeqParseFasta(AjPStr str, AjPStr* id, AjPStr* acc,
-			     AjPStr* sv, AjPStr* desc);
-AjBool       ajSeqParseNcbi(AjPStr str, AjPStr* id, AjPStr* acc,
-			    AjPStr* sv, AjPStr* gi, AjPStr* desc);
 void         ajSeqinSetNuc (AjPSeqin seqin);
 void         ajSeqinSetProt (AjPSeqin seqin);
 void         ajSeqinSetRange (AjPSeqin seqin, ajint ibegin, ajint iend);
-AjBool       ajSeqReadSelex(AjPFile inf, AjPFile outf);
-void         ajSeqinUsa (AjPSeqin* pthis, AjPStr Usa);
-void         ajSeqPrintInFormat (AjPFile outf, AjBool full);
+void         ajSeqinUsa (AjPSeqin* pthis, const AjPStr Usa);
+AjBool       ajSeqParseFasta(const AjPStr str, AjPStr* id, AjPStr* acc,
+			     AjPStr* sv, AjPStr* desc);
+AjBool       ajSeqParseNcbi(const AjPStr str, AjPStr* id, AjPStr* acc,
+			    AjPStr* sv, AjPStr* gi, AjPStr* desc);
+void         ajSeqQueryClear (AjPSeqQuery thys);
+void         ajSeqQueryDel (AjPSeqQuery *pthis);
+AjBool       ajSeqQueryIs (AjPSeqQuery qry);
+AjPSeqQuery  ajSeqQueryNew (void);
+void         ajSeqQueryStarclear (AjPSeqQuery qry);
+void         ajSeqQueryTrace (const AjPSeqQuery qry);
+AjBool       ajSeqQueryWild (AjPSeqQuery qry);
+void         ajSeqPrintInFormat (const AjPFile outf, AjBool full);
 AjBool       ajSeqRead (AjPSeq thys, AjPSeqin seqin);
-ajint        ajSeqsetApp (AjPSeqset thys, AjPSeq seq);
-AjBool       ajSeqsetRead (AjPSeqset thys, AjPSeqin seqin);
+ajint        ajSeqsetApp (AjPSeqset thys, const AjPSeq seq);
+AjBool       ajSeqsetGetFromUsa(const AjPStr thys, AjPSeqset *seq);
 AjBool       ajSeqsetFromList (AjPSeqset thys, AjPList list);
-ajint        ajSeqsetFromPair (AjPSeqset thys, AjPSeq seqa, AjPSeq seqb);
+ajint        ajSeqsetFromPair (AjPSeqset thys,
+			       const AjPSeq seqa, const AjPSeq seqb);
+AjBool       ajSeqsetallRead (AjPList thys, AjPSeqin seqin);
+AjBool       ajSeqsetRead (AjPSeqset thys, AjPSeqin seqin);
 
 #endif
 
