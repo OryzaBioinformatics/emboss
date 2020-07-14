@@ -60,20 +60,33 @@ restriction enzymes, as predicted from analysis of genomic sequences,
 are also listed. 
 
 <p>
+
 The home page of REBASE is:
 <A HREF="http://rebase.neb.com/">http://rebase.neb.com/</A>
 
 <p>
+
 This program derives recognition site and cleavage information from the
 "withrefm" file of an REBASE distribution.  It creates three files in
 the EMBOSS data subdirectory REBASE.  A pattern file, a reference file
 and a supplier file.  
 
 <p>
+
+It will also (by default) produce an 'embossre.equ' file.  This can be
+turned off by setting the -equivalences option to be false.  This option
+calculates an 'embossre.equ' file using restriction enzyme prototypes in
+the "withrefm" file.  The 'embossre.equ' file is a file of preferred
+isoschizomers.  You may edit it to contain your available restriction
+enzymes. 
+
+<p>
+
 The EMBOSS programs that find restriction cutting sites use the data
 files produced by this program and will not work without them. 
 
 <p>
+
 Running this program may be the job of your system manager. 
 
 <H2>
@@ -89,7 +102,8 @@ Running this program may be the job of your system manager.
 
 % <b>rebaseextract </b>
 Extract data from REBASE
-Full pathname of WITHREFM: <b>../../data/withrefm</b>
+Full pathname of WITHREFM file: <b>../../data/withrefm</b>
+Full pathname of PROTO file: <b>../../data/proto</b>
 
 </pre></td></tr></table><p>
 <p>
@@ -111,22 +125,41 @@ IT IS DONE FOR YOU.
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
    Mandatory qualifiers:
-  [-inf]               infile     Full pathname of WITHREFM
+  [-inf]               infile     Full pathname of WITHREFM file
+  [-proto]             infile     Full pathname of PROTO file
 
-   Optional qualifiers: (none)
+   Optional qualifiers:
+   -[no]equivalences   boolean    This option calculates an embossre.equ file
+                                  using restriction enzyme prototypes in the
+                                  withrefm file.
+
    Advanced qualifiers: (none)
+   Associated qualifiers: (none)
    General qualifiers:
-  -help                boolean    Report command line options. More
+   -auto                boolean    Turn off prompts
+   -stdout              boolean    Write standard output
+   -filter              boolean    Read standard input, write standard output
+   -options             boolean    Prompt for required and optional values
+   -debug               boolean    Write debug output to program.dbg
+   -acdlog              boolean    Write ACD processing log to program.acdlog
+   -acdpretty           boolean    Rewrite ACD file as program.acdpretty
+   -acdtable            boolean    Write HTML table of options
+   -verbose             boolean    Report some/full command line options
+   -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
+   -warning             boolean    Report warnings
+   -error               boolean    Report errors
+   -fatal               boolean    Report fatal errors
+   -die                 boolean    Report deaths
 
 
 </pre>
 </td></tr></table>
 <P>
 
-<table border cellspacing=0 cellpadding=3 bgcolor="#f5f5ff">
-<tr bgcolor="#FFFFD0">
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
 <th align="left" colspan=2>Mandatory qualifiers</th>
 <th align="left">Allowed values</th>
 <th align="left">Default</th>
@@ -134,22 +167,32 @@ IT IS DONE FOR YOU.
 
 <tr>
 <td>[-inf]<br>(Parameter 1)</td>
-<td>Full pathname of WITHREFM</td>
+<td>Full pathname of WITHREFM file</td>
 <td>Input file</td>
 <td><b>Required</b></td>
 </tr>
 
-<tr bgcolor="#FFFFD0">
+<tr>
+<td>[-proto]<br>(Parameter 2)</td>
+<td>Full pathname of PROTO file</td>
+<td>Input file</td>
+<td><b>Required</b></td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
 <th align="left" colspan=2>Optional qualifiers</th>
 <th align="left">Allowed values</th>
 <th align="left">Default</th>
 </tr>
 
 <tr>
-<td colspan=4>(none)</td>
+<td>-[no]equivalences</td>
+<td>This option calculates an embossre.equ file using restriction enzyme prototypes in the withrefm file.</td>
+<td>Boolean value Yes/No</td>
+<td>Yes</td>
 </tr>
 
-<tr bgcolor="#FFFFD0">
+<tr bgcolor="#FFFFCC">
 <th align="left" colspan=2>Advanced qualifiers</th>
 <th align="left">Allowed values</th>
 <th align="left">Default</th>
@@ -180,7 +223,7 @@ href="ftp://ftp.neb.com/pub/rebase/withrefm.005">ftp://ftp.neb.com/pub/rebase/wi
 <a name="input.1"></a>
 <h3>Input files for usage example </h3>
 <p><h3>File: ../../data/withrefm</h3>
-<table width="90%"><tr><td bgcolor="#FFDDFF">
+<table width="90%"><tr><td bgcolor="#FFCCFF">
 <pre>
  
 REBASE version 106                                              withrefm.106
@@ -289,6 +332,58 @@ Zebala, J.A., (1993) Diss. Abstr., vol. 54, pp. 1394-1398.
 
 </pre>
 </td></tr></table><p>
+<p><h3>File: ../../data/proto</h3>
+<table width="90%"><tr><td bgcolor="#FFCCFF">
+<pre>
+ 
+REBASE version 305                                              proto.305
+ 
+    =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    REBASE, The Restriction Enzyme Database   http://rebase.neb.com
+    Copyright (c)  Dr. Richard J. Roberts, 2003.   All rights reserved.
+    =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+ 
+Rich Roberts                                                    Apr 30 2003
+ 
+
+
+
+	    TYPE II ENZYMES
+	    ---------------
+
+BsiYI                          CCNNNNN^NNGG
+BsrI                           ACTGG (1/-1)
+HaeIII                         GG^CC
+HpaII                          C^CGG
+Ksp632I                        CTCTTC (1/4)
+MaeII                          A^CGT
+
+
+
+	    TYPE I ENZYMES
+	    ---------------
+
+EcoAI                          GAGNNNNNNNGTCA
+EcoBI                          TGANNNNNNNNTGCT
+EcoDI                          TTANNNNNNNGTCY
+EcoDR2                         TCANNNNNNGTCG
+EcoDR3                         TCANNNNNNNATCG
+EcoDXXI                        TCANNNNNNNRTTC
+EcoEI                          GAGNNNNNNNATGC
+EcoKI                          AACNNNNNNGTGC
+
+
+
+	    TYPE III ENZYMES
+	    ---------------
+
+EcoPI                          AGACC
+EcoP15I                        CAGCAG (25/27)
+HinfIII                        CGAAT
+StyLTI                         CAGAG
+
+</pre>
+</td></tr></table><p>
 
 
 <H2>
@@ -300,8 +395,19 @@ Zebala, J.A., (1993) Diss. Abstr., vol. 54, pp. 1394-1398.
 <a name="output.1"></a>
 <h3>Output files for usage example </h3>
 <p><h3>File: REBASE</h3>
-<table width="90%"><tr><td bgcolor="#DDFFDD">
+<table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
+</pre>
+</td></tr></table><p>
+<p><h3>File: embossre.equ</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+Bsc4I BsiYI
+Bse1I BsrI
+BshI HaeIII
+BsiSI HpaII
+Bsu6I Ksp632I
+HpyCH4IV MaeII
 </pre>
 </td></tr></table><p>
 
@@ -317,6 +423,19 @@ directory. There are three:
 	<li> embossre.ref		Enzyme references
 	<li> embossre.sup		Enzyme suppliers
 </ul>
+
+<p>
+
+<b>rebaseextract</b> will also (by default) produce an 'embossre.equ'
+file in the EMBOSS data directory.  This can be turned off by setting
+the -equivalences option to be false.  This option calculates an
+'embossre.equ' file using restriction enzyme prototypes in the
+"withrefm" file.  The 'embossre.equ' file is a file of preferred
+isoschizomers.  You may edit it to contain your available restriction
+enzymes. 
+
+<p>
+
 
 
 <H2>
@@ -406,8 +525,11 @@ It exits with status 0 unless an error is reported.
 </H2>
 
 
-This application was written by Alan Bleasby <a
-href="mailto:ableasby@hgmp.mrc.ac.uk">(ableasby@hgmp.mrc.ac.uk)</a>
+Alan Bleasby (ableasby&nbsp;&copy;&nbsp;hgmp.mrc.ac.uk)
+<br>
+HGMP-RC, Genome Campus, Hinxton, Cambridge CB10 1SB, UK
+
+
 
 <H2>
     History
@@ -415,6 +537,11 @@ href="mailto:ableasby@hgmp.mrc.ac.uk">(ableasby@hgmp.mrc.ac.uk)</a>
 
 
 Completed 12th April 1999
+
+<!--
+<p>
+[an error occurred while processing this directive]
+-->
 
 <H2>
     Target users

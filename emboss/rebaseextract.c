@@ -32,7 +32,8 @@
 #define DATANAME  "REBASE/embossre.enz"
 #define DATANAME2 "REBASE/embossre.ref"
 #define DATANAME3 "REBASE/embossre.sup"
-
+#define DATANAME4 "embossre.equ"
+#define EQUGUESS  5000
 
 
 static void rebex_process_pattern(AjPStr *pattern, AjPStr *code, AjPFile outf,
@@ -40,8 +41,6 @@ static void rebex_process_pattern(AjPStr *pattern, AjPStr *code, AjPFile outf,
 static void rebex_printEnzHeader(AjPFile outf);
 static void rebex_printRefHeader(AjPFile outf);
 static void rebex_printSuppHeader(AjPFile outf);
-
-
 
 
 
@@ -54,6 +53,7 @@ static void rebex_printSuppHeader(AjPFile outf);
 int main(int argc, char **argv)
 {
     AjPFile inf   = NULL;
+    AjPFile infp  = NULL;
     AjPFile outf  = NULL;
     AjPFile outf2 = NULL;
     AjPFile outf3 = NULL;
@@ -69,16 +69,33 @@ int main(int argc, char **argv)
     AjPStr  pfname;
     AjBool  isrefm = ajFalse;
     AjBool  isref  = ajFalse;
-    AjBool hassup;
+    AjBool  hassup;
 
     ajint     count;
     ajlong    pos;
     ajint     i;
 
-
+    AjBool    doequ;
+    AjPFile   oute      = NULL;
+    AjPStr    isostr    = NULL;
+    AjPTable  ptable    = NULL;
+    AjPStr    key       = NULL;
+    AjPStr    value     = NULL;
+    AjPStrTok handle    = NULL;
+    AjPStr    token     = NULL;
+    AjPStr    line2     = NULL;
+    
+    AjBool    isproto   = ajFalse;
+    char      c;
+    char      *sptr     = NULL;
+    
     embInit("rebaseextract",argc,argv);
 
-    inf = ajAcdGetInfile("inf");
+    inf   = ajAcdGetInfile("inf");
+    infp  = ajAcdGetInfile("proto");
+    doequ = ajAcdGetBool("equivalences");
+    
+
     pfname = ajStrNewC(DATANAME);
     ajFileDataNewWrite(pfname,&outf);
     rebex_printEnzHeader(outf);
@@ -90,9 +107,18 @@ int main(int argc, char **argv)
     ajStrAssC(&pfname,DATANAME3);
     ajFileDataNewWrite(pfname,&outf3);
     rebex_printSuppHeader(outf3);
+
+    if(doequ)
+    {
+	ajStrAssC(&pfname,DATANAME4);
+	ajFileDataNewWrite(pfname,&oute);
+	ptable = ajStrTableNew(EQUGUESS);
+	isostr = ajStrNew();
+    }
     ajStrDel(&pfname);
 
     line     = ajStrNew();
+    line2    = ajStrNew();
     code     = ajStrNew();
     pattern  = ajStrNew();
     isoschiz = ajStrNew();
@@ -100,8 +126,7 @@ int main(int argc, char **argv)
     tit      = ajStrNew();
     sou      = ajStrNew();
     comm     = ajStrNew();
-
-
+    token    = ajStrNew();
 
     /*
      *  Extract Supplier information
@@ -117,6 +142,17 @@ int main(int argc, char **argv)
 	    break;
     }
 
+
+    while(ajFileReadLine(infp,&line))
+    {
+	if(ajStrFindC(line,"proto.")>=0)
+	    isproto = ajTrue;
+
+	
+	if(strstr(ajStrStr(line),"Rich Roberts"))
+	    break;
+    }
+
     if(!isrefm)
     {
 	if(isref)
@@ -126,6 +162,32 @@ int main(int argc, char **argv)
     }
 
 
+    if(!isproto)
+	ajFatal("Invalid PROTO file specified");
+
+
+
+    while(doequ && ajFileReadLine(infp,&line))
+    {
+	if(!ajStrLen(line))
+	    continue;
+	sptr = ajStrStr(line);
+	c = *sptr;
+	if(c>='A' && c<='Z')
+	{
+	    while(*sptr!=' ')
+		++sptr;
+	    while(*sptr==' ')
+		++sptr;
+	    
+	    key   = ajStrNew();
+	    value = ajStrNewC(sptr);
+	    ajStrCleanWhite(&value);
+	    ajFmtScanS(line,"%S",&key);
+	    ajTablePut(ptable,(const void *)key, (void *)value);
+	}
+    }
+    
     if(!ajFileReadLine(inf,&line))
 	ajFatal("No Supplier Information Found");
     if(!ajFileReadLine(inf,&line))
@@ -149,20 +211,36 @@ int main(int argc, char **argv)
 	    continue;
 	ajStrAssC(&code,ajStrStr(line)+3);
 	/* Get isoschizomers */
-	if(!ajFileReadLine(inf,&line))
+	if(!ajFileReadLine(inf,&line2))
 	    ajFatal("Unexpected EOF");
 
-	if(ajStrLen(line)>3)
-	    ajStrAssC(&isoschiz,ajStrStr(line)+3);
+	if(ajStrLen(line2)>3)
+	{
+	    ajStrAssC(&isoschiz,ajStrStr(line2)+3);
+	}
 	else
 	    ajStrAssC(&isoschiz,"");
+
 
 	/* Get recognition sequence */
 	if(!ajFileReadLine(inf,&line))
 	    ajFatal("Unexpected EOF");
 
 	if(ajStrLen(line)>3)
+	{
 	    ajStrAssC(&pattern,ajStrStr(line)+3);
+
+	    if(doequ && ajStrLen(line2)>3)
+	    {
+		ajStrAssS(&isostr,isoschiz);
+		handle = ajStrTokenInit(isostr,"\t\n>,");
+	        ajStrToken (&token, &handle, NULL);
+		if((value=ajTableGet(ptable,(const void *)token)))
+		    if(ajStrMatch(value,pattern))
+			ajFmtPrintF(oute,"%S %S\n",code,token);
+		ajStrTokenClear(&handle);
+	    }
+	}
 	else
 	    ajStrAssC(&pattern,"");
 
@@ -247,13 +325,22 @@ int main(int argc, char **argv)
     }
 
 
+    if(doequ)
+    {
+	ajStrDel(&isostr);
+	ajFileClose(&oute);
+	ajStrTableFree(&ptable);
+    }
 
     ajFileClose(&inf);
+    ajFileClose(&infp);
     ajFileClose(&outf);
     ajFileClose(&outf2);
 
 
     ajStrDel(&line);
+    ajStrDel(&line2);
+    ajStrDel(&token);
     ajStrDel(&isoschiz);
     ajStrDel(&tit);
     ajStrDel(&meth);

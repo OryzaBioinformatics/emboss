@@ -1,16 +1,32 @@
-appl: rebaseextract [
+application: rebaseextract [
   documentation: "Extract data from REBASE"
   groups: "Utils:Database creation"
-  gui: yes
-  batch: yes
-  cpu: medium
+  gui: "yes"
+  batch: "yes"
+  cpu: "medium"
 ]
 
-section: input [ info: "input Section" type: page ]
-infile: inf  [
-  parameter: "Y"
-  prompt: "Full pathname of WITHREFM"
+section: input [
+  information: "Input section"
+  type: "page"
 ]
+
+  infile: inf  [
+    parameter: "Y"
+    prompt: "Full pathname of WITHREFM file"
+  ]
+
+  infile: proto  [
+    parameter: "Y"
+    prompt: "Full pathname of PROTO file"
+  ]
+
+  boolean: equivalences  [
+    optional: "Y"
+    default: "Y"
+    prompt: "Create prototype equivalence file"
+    help: "This option calculates an embossre.equ file using
+           restriction enzyme prototypes in the withrefm file."
+  ]
 
 endsection: input
-

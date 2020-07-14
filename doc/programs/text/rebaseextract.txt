@@ -26,6 +26,13 @@ Description
    in the EMBOSS data subdirectory REBASE. A pattern file, a reference
    file and a supplier file.
    
+   It will also (by default) produce an 'embossre.equ' file. This can be
+   turned off by setting the -equivalences option to be false. This
+   option calculates an 'embossre.equ' file using restriction enzyme
+   prototypes in the "withrefm" file. The 'embossre.equ' file is a file
+   of preferred isoschizomers. You may edit it to contain your available
+   restriction enzymes.
+   
    The EMBOSS programs that find restriction cutting sites use the data
    files produced by this program and will not work without them.
    
@@ -38,7 +45,8 @@ Usage
 
 % rebaseextract 
 Extract data from REBASE
-Full pathname of WITHREFM: ../../data/withrefm
+Full pathname of WITHREFM file: ../../data/withrefm
+Full pathname of PROTO file: ../../data/proto
    
    Go to the input files for this example
    Go to the output files for this example
@@ -46,21 +54,44 @@ Full pathname of WITHREFM: ../../data/withrefm
 Command line arguments
 
    Mandatory qualifiers:
-  [-inf]               infile     Full pathname of WITHREFM
+  [-inf]               infile     Full pathname of WITHREFM file
+  [-proto]             infile     Full pathname of PROTO file
 
-   Optional qualifiers: (none)
+   Optional qualifiers:
+   -[no]equivalences   boolean    This option calculates an embossre.equ file
+                                  using restriction enzyme prototypes in the
+                                  withrefm file.
+
    Advanced qualifiers: (none)
+   Associated qualifiers: (none)
    General qualifiers:
-  -help                boolean    Report command line options. More
+   -auto                boolean    Turn off prompts
+   -stdout              boolean    Write standard output
+   -filter              boolean    Read standard input, write standard output
+   -options             boolean    Prompt for required and optional values
+   -debug               boolean    Write debug output to program.dbg
+   -acdlog              boolean    Write ACD processing log to program.acdlog
+   -acdpretty           boolean    Rewrite ACD file as program.acdpretty
+   -acdtable            boolean    Write HTML table of options
+   -verbose             boolean    Report some/full command line options
+   -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
+   -warning             boolean    Report warnings
+   -error               boolean    Report errors
+   -fatal               boolean    Report fatal errors
+   -die                 boolean    Report deaths
    
 
    Mandatory qualifiers Allowed values Default
    [-inf]
-   (Parameter 1) Full pathname of WITHREFM Input file Required
+   (Parameter 1) Full pathname of WITHREFM file Input file Required
+   [-proto]
+   (Parameter 2) Full pathname of PROTO file Input file Required
    Optional qualifiers Allowed values Default
-   (none)
+   -[no]equivalences This option calculates an embossre.equ file using
+   restriction enzyme prototypes in the withrefm file. Boolean value
+   Yes/No Yes
    Advanced qualifiers Allowed values Default
    (none)
    
@@ -194,18 +225,84 @@ Sato, S., Hutchison, C.A. III, Harris, J.I., (1977) Proc. Natl. Acad. Sci. U. S
 . A., vol. 74, pp. 542-546.
 Zebala, J.A., (1993) Diss. Abstr., vol. 54, pp. 1394-1398.
    
+  File: ../../data/proto
+  
+
+REBASE version 305                                              proto.305
+
+    =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    REBASE, The Restriction Enzyme Database   http://rebase.neb.com
+    Copyright (c)  Dr. Richard J. Roberts, 2003.   All rights reserved.
+    =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+Rich Roberts                                                    Apr 30 2003
+
+
+
+
+            TYPE II ENZYMES
+            ---------------
+
+BsiYI                          CCNNNNN^NNGG
+BsrI                           ACTGG (1/-1)
+HaeIII                         GG^CC
+HpaII                          C^CGG
+Ksp632I                        CTCTTC (1/4)
+MaeII                          A^CGT
+
+
+
+            TYPE I ENZYMES
+            ---------------
+
+EcoAI                          GAGNNNNNNNGTCA
+EcoBI                          TGANNNNNNNNTGCT
+EcoDI                          TTANNNNNNNGTCY
+EcoDR2                         TCANNNNNNGTCG
+EcoDR3                         TCANNNNNNNATCG
+EcoDXXI                        TCANNNNNNNRTTC
+EcoEI                          GAGNNNNNNNATGC
+EcoKI                          AACNNNNNNGTGC
+
+
+
+            TYPE III ENZYMES
+            ---------------
+
+EcoPI                          AGACC
+EcoP15I                        CAGCAG (25/27)
+HinfIII                        CGAAT
+StyLTI                         CAGAG
+   
 Output file format
 
   Output files for usage example
   
   File: REBASE
   
+  File: embossre.equ
+  
+Bsc4I BsiYI
+Bse1I BsrI
+BshI HaeIII
+BsiSI HpaII
+Bsu6I Ksp632I
+HpyCH4IV MaeII
+   
    The output files are held in the REBASE subdirectory of the EMBOSS
    data directory. There are three:
      * embossre.enz Enzyme pattern file
      * embossre.ref Enzyme references
      * embossre.sup Enzyme suppliers
        
+   rebaseextract will also (by default) produce an 'embossre.equ' file in
+   the EMBOSS data directory. This can be turned off by setting the
+   -equivalences option to be false. This option calculates an
+   'embossre.equ' file using restriction enzyme prototypes in the
+   "withrefm" file. The 'embossre.equ' file is a file of preferred
+   isoschizomers. You may edit it to contain your available restriction
+   enzymes.
+   
 Data files
 
    The "withrefm" file of an REBASE distribution is the input file for
@@ -249,7 +346,8 @@ See also
    
 Author(s)
 
-   This application was written by Alan Bleasby (ableasby@hgmp.mrc.ac.uk)
+   Alan Bleasby (ableasby © hgmp.mrc.ac.uk)
+   HGMP-RC, Genome Campus, Hinxton, Cambridge CB10 1SB, UK
    
 History
 
