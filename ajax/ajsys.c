@@ -797,12 +797,15 @@ char* ajSysFgets(char *buf, int size, FILE *fp)
         return NULL;
 
     cnt = 0;
-    while((c = getc(fp))!=EOF && c!='\r' && c!='\n' && cnt!=size-1)
+
+    while(cnt!=size-1)
     {
+	c = getc(fp);
+	if(c==EOF || c=='\r' || c=='\n')
+	    break;
         *(p++) = c;
         ++cnt;
     }
-
 
     *p ='\0';
 
