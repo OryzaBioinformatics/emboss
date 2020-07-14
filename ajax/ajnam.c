@@ -198,6 +198,12 @@ NamOAttr namRsAttrs[] =
 
     {"identifier", "", "standard identifier (defaults to name)"},
     {"release", "", "release of the resource"},
+
+    {"order", "", "order of a primary B+tree"},
+    {"fill", "", "max number of entries in a primary B+tree bucket"},
+    {"secorder", "", "order of a secondary B+tree"},
+    {"secfill", "", "max number of entries in a secondary B+tree bucket"},
+    {"kwlimit", "", "cut-off length for a secondary B+tree key"},
     {NULL, NULL, NULL}
 };
 
@@ -214,6 +220,7 @@ NamOValid namDbTypes[] =
 NamOValid namRsTypes[] =
 {
     {"Blast", "Blast database file"},
+    {"Index", "Blast database file"},
     {NULL, NULL}
 };
 
@@ -752,6 +759,10 @@ static ajint namMethod2Scope(const AjPStr method)
 	result = (METHOD_ENTRY | METHOD_QUERY | METHOD_ALL);
     else if(!ajStrCmpC(method, "gcg"))
 	result = (METHOD_ENTRY | METHOD_QUERY | METHOD_ALL);
+    else if(!ajStrCmpC(method, "entrez"))
+	result = (METHOD_ENTRY | METHOD_QUERY);
+    else if(!ajStrCmpC(method, "seqhound"))
+	result = (METHOD_ENTRY | METHOD_QUERY);
     /* not in ajseqdb seqAccess list */
     /*
        else if(!ajStrCmpC(method, "corba"))
@@ -904,6 +915,7 @@ void ajNamListListDatabases(AjPList dbnames)
     void **array;
 
     array = ajTableToarray(namMasterTable, NULL);
+    ajDebug("ajNamListListDatabases\n");
 
     for(i = 0; array[i]; i += 2)
     {
@@ -1226,6 +1238,8 @@ static void namListParse(AjPList listwords, AjPList listcount,
 	    else
 	    {
 		ajStrAssS(&name, curword);
+		if(!ajNamIsDbname(name))
+		    ajErr("Invalid database name '%S'", name);
 		namUser("saving db name '%S'\n", name);
 	    }
 	}
@@ -1424,6 +1438,43 @@ static void namListParse(AjPList listwords, AjPList listcount,
     }
     
     return;
+}
+
+
+
+
+/* @func ajNamIsDbname ********************************************************
+**
+** Returns true if the name is a valid database name.
+** 
+** Database names must start with a letter, and have 1 or more letters,
+** numbers or underscores. No other characters are permitted.
+**
+** @param [r] name [const AjPStr] character string to find in getenv list
+** @return [AjBool] True if name was defined.
+** @@
+**
+******************************************************************************/
+
+AjBool ajNamIsDbname(const AjPStr name)
+{
+    const char* cp = ajStrStr(name);
+
+    if (!*cp)
+	return ajFalse;
+
+    if (!isalpha((int)*cp++))
+	return ajFalse;
+    if (!*cp)
+	return ajFalse;
+
+    while (*cp)
+    {
+	if(!isalnum((int)*cp) && (*cp != '_'))
+	    return ajFalse;
+	cp++;
+    }
+    return ajTrue;
 }
 
 
@@ -1755,6 +1806,7 @@ void ajNamInit(const char* prefix)
     AjPStr prefixCap     = NULL;
     AjPStr debugStr      = NULL;
     AjPStr debugVal      = NULL;
+    AjPStr homercVal      = NULL;
     
     /* create new table to hold the values */
     
@@ -1845,8 +1897,6 @@ void ajNamInit(const char* prefix)
     
     /* look for .embossrc in an arbitrary directory */
     
-    ajStrAssC(&debugStr, prefix);
-    
     prefixRoot= getenv("EMBOSSRC");
     
     if(prefixRoot)
@@ -1874,16 +1924,17 @@ void ajNamInit(const char* prefix)
     
     prefixRoot= getenv("HOME");
     
-    ajStrAppC(&debugStr, "_RCHOME");
-    ajStrToUpper(&debugStr);
+    ajStrAssC(&prefixStr, prefix);
     
-    if(ajNamGetenv(debugStr, &debugVal))
+    ajStrAppC(&prefixStr, "_RCHOME");
+    ajStrToUpper(&prefixStr);
+    
+    if(ajNamGetenv(prefixStr, &homercVal))
 	ajStrToBool(debugVal, &namDoHomeRc);
 
-    ajStrDel(&debugStr);
-    ajStrDel(&debugVal);
+    ajStrDel(&homercVal);
     
-    if(namDoHomeRc &&prefixRoot)
+    if(namDoHomeRc && prefixRoot)
     {
 	ajStrAssC(&namRootStr, prefixRoot);
 	ajStrAppC(&namRootStr, "/.");
@@ -2458,7 +2509,6 @@ static void namError(const char* fmt, ...)
 
 
 
-
 /* @func ajNamRootInstall *****************************************************
 **
 ** Returns the install directory root for all file searches
@@ -2825,4 +2875,54 @@ AjBool ajNamSetControl(const char* optionName)
     ajDie("Unknown ajNamSetControl control option '%s'", optionName);
 
     return ajFalse;
+}
+
+
+
+
+/* @func ajNamRsAttrValueC **************************************************
+**
+** Return the value for a resource attribute
+**
+** @param [r] name [const char *] resource name
+** @param [r] attribute [const char *] resource attribute
+** @param [w] value [AjPStr *] resource value
+
+**
+** @return [AjBool] true if found
+** @@
+******************************************************************************/
+
+AjBool ajNamRsAttrValueC(const char *name, const char *attribute,
+			 AjPStr *value)
+{
+    ajint i;
+    ajint j;
+    NamPEntry fnew = NULL;
+    void **array   = NULL;
+    AjPStr *rsattr = NULL;
+    AjBool found   = ajFalse;
+    
+    array = ajTableToarray(namMasterTable, NULL);
+
+    for(i = 0; array[i] && !found; i += 2)
+    {
+	fnew =(NamPEntry) array[i+1];
+	if(fnew->type == TYPE_RESOURCE)
+	    if(!ajStrCmpC(fnew->name,name))
+	    {
+		rsattr = (AjPStr *) fnew->data;
+		for(j=0; namRsAttrs[j].Name; ++j)
+		    if(!strcmp(namRsAttrs[j].Name,attribute))
+			if(ajStrLen(rsattr[j]))
+			{
+			    ajStrAssS(value,rsattr[j]);
+			    found = ajTrue;
+			    break;
+			}
+	    }
+    }
+    AJFREE(array);
+
+    return found;
 }

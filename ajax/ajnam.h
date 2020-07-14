@@ -28,6 +28,7 @@ AjBool ajNamGetenvC (const char* name, AjPStr* value);
 AjBool ajNamGetValue (const AjPStr name, AjPStr* value);
 AjBool ajNamGetValueC (const char *name, AjPStr* value);
 void   ajNamInit (const char* prefix);
+AjBool ajNamIsDbname(const AjPStr name);
 void   ajNamListDatabases(void); /* test routine */
 void   ajNamListListDatabases (AjPList dbnames);
 void   ajNamListListResources (AjPList dbnames);
@@ -40,6 +41,8 @@ AjBool ajNamRootBase (AjPStr* rootbase);
 AjBool ajNamRootInstall (AjPStr* root);
 AjBool ajNamRootPack (AjPStr* pack);
 AjBool ajNamRootVersion (AjPStr* version);
+AjBool ajNamRsAttrValueC(const char *name, const char *attribute,
+			 AjPStr *value);
 AjBool ajNamSetControl (const char* optionName);
 void   ajNamVariables (void); /* "" "" may want to delete later */
 #endif
