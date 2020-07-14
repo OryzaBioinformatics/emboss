@@ -65,11 +65,13 @@ typedef struct AjSSeqout {
   AjPStr Extension;
   ajint Count;
   AjPList Savelist;
-} AjOSeqout, *AjPSeqout;
+} AjOSeqout;
+
+#define AjPSeqout AjOSeqout*
 
 void         ajSeqAllWrite (AjPSeqout outseq, AjPSeq seq);
-AjBool       ajSeqFileNewOut (AjPSeqout seqout, AjPStr name);
-ajint        ajSeqoutCheckGcg (AjPSeqout outseq);
+AjBool       ajSeqFileNewOut (AjPSeqout seqout, const AjPStr name);
+ajint        ajSeqoutCheckGcg (const AjPSeqout outseq);
 void         ajSeqoutClear (AjPSeqout thys);
 void         ajSeqoutDel (AjPSeqout* thys);
 AjBool       ajSeqOutFormatDefault (AjPStr* pformat);
@@ -77,16 +79,16 @@ AjBool       ajSeqOutFormatSingle (AjPStr format);
 AjPSeqout    ajSeqoutNew (void);
 AjPSeqout    ajSeqoutNewF (AjPFile file);
 AjBool       ajSeqoutOpen (AjPSeqout thys);
-AjBool       ajSeqOutSetFormat (AjPSeqout thys, AjPStr format);
-AjBool       ajSeqOutSetFormatC (AjPSeqout thys, char* format);
-void         ajSeqoutTrace (AjPSeqout seq);
-void         ajSeqPrintOutFormat (AjPFile outf, AjBool full);
-void         ajSeqoutUsa (AjPSeqout* pthis, AjPStr Usa);
-void         ajSeqsetWrite (AjPSeqout seqout, AjPSeqset seq);
-void         ajSeqWrite (AjPSeqout seqout, AjPSeq seq);
+AjBool       ajSeqOutSetFormat (AjPSeqout thys, const AjPStr format);
+AjBool       ajSeqOutSetFormatC (AjPSeqout thys, const char* format);
+void         ajSeqoutTrace (const AjPSeqout seq);
+void         ajSeqPrintOutFormat (const AjPFile outf, AjBool full);
+void         ajSeqoutUsa (AjPSeqout* pthis, const AjPStr Usa);
+void         ajSeqsetWrite (AjPSeqout seqout, const AjPSeqset seq);
+void         ajSeqWrite (AjPSeqout seqout, const AjPSeq seq);
 void         ajSeqWriteClose (AjPSeqout outseq);
-void         ajSeqWriteXyz(AjPFile outf, AjPStr seq, char *prefix);
-void         ajSssWriteXyz(AjPFile outf, AjPStr seq, char *prefix);
+void         ajSeqWriteXyz(AjPFile outf, const AjPStr seq, const char *prefix);
+void         ajSssWriteXyz(AjPFile outf, const AjPStr seq, const char *prefix);
 
 
 #endif
