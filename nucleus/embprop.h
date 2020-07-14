@@ -39,24 +39,25 @@ typedef struct EmbSPropFrag	/* Enzyme digestion structure */
     ajint     end;
     double    molwt;
     AjBool    isfrag;
-} EmbOPropFrag, *EmbPPropFrag;
+} EmbOPropFrag;
+#define EmbPPropFrag EmbOPropFrag*
 
 
 
 void    embPropAminoRead (AjPFile fp);
   /* void    embPropAminoRead (void); */
-void 	embPropCalcFragments (char *s, ajint n, ajint begin,
+void 	embPropCalcFragments (const char *s, ajint n, ajint begin,
 			      AjPList *l, AjPList *pa,
 			      AjBool unfavoured, AjBool overlap,
 			      AjBool allpartials, ajint *ncomp, ajint *npart,
 			      AjPStr *rname);
-double  embPropCalcMolextcoeff(char *s, ajint start, ajint end);
-double  embPropCalcMolwt (char *s, ajint start, ajint end);
+double  embPropCalcMolextcoeff(const char *s, ajint start, ajint end);
+double  embPropCalcMolwt (const char *s, ajint start, ajint end);
   /* new method for chemically modified ends */
-double  embPropCalcMolwtMod (char *s, ajint start, ajint end,
+double  embPropCalcMolwtMod (const char *s, ajint start, ajint end,
 			     double nmass, double cmass);
-char*   embPropCharToThree (char c);
-char*   embPropIntToThree (ajint c);
+const char*   embPropCharToThree (char c);
+const char*   embPropIntToThree (ajint c);
 AjPStr  embPropProtGaps (AjPSeq seq, ajint pad);
 AjPStr  embPropProt1to3 (AjPSeq seq, ajint pad);
 AjBool  embPropPurine (char base);

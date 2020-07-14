@@ -6,7 +6,7 @@ extern "C"
 #ifndef embcons_h
 #define embcons_h
 
-void embConsCalc (AjPSeqset seqset, AjPMatrix cmpmatrix,
+void embConsCalc (const AjPSeqset seqset, const AjPMatrix cmpmatrix,
 	ajint nseqs, ajint mlen,float fplural, float setcase,
 	ajint identity, AjPStr *cons);
 

@@ -56,7 +56,7 @@
 ** For a 4-byte unsigned ajlong ajint this will work if the word size
 ** is less than 16, otherwise there aren't enough bits to hold the number.
 **
-** @param [r] seq [char *] the sequence to use
+** @param [r] seq [const char *] the sequence to use
 ** @param [r] wordsize [ajint] the size of word of sequence to convert to int
 ** @param [r] offset [ajint] the offset into the sequence of the start of
 **                         the word
@@ -66,7 +66,7 @@
 ** @return [ajulong] the encoded word
 ******************************************************************************/
 
-ajulong embNmerNuc2int(char *seq, ajint wordsize, ajint offset,
+ajulong embNmerNuc2int(const char *seq, ajint wordsize, ajint offset,
 		       AjBool *otherflag)
 {
     ajint i;
@@ -106,7 +106,7 @@ ajulong embNmerNuc2int(char *seq, ajint wordsize, ajint offset,
 
 /* @func embNmerInt2nuc *******************************************************
 **
-** Decodes a unsigned ajlong ajint number into a word of a nucleic sequence.
+** Decodes a unsigned long int number into a word of a nucleic sequence.
 ** The returned nucleic sequence is pre-pended to anything already in
 ** the string 'seq'.
 **
@@ -144,7 +144,7 @@ ajint embNmerInt2nuc(AjPStr *seq, ajint wordsize, ajulong value)
 ** For a 4-byte unsigned ajlong ajint this will work if the word size
 ** is less than 8, otherwise there aren't enough bits to hold the number.
 **
-** @param [r] seq [char *] the sequence to use
+** @param [r] seq [const char *] the sequence to use
 ** @param [r] wordsize [ajint] the size of word of sequence to convert to int
 ** @param [r] offset [ajint] the offset into the sequence of the start of
 **                         the word
@@ -156,7 +156,7 @@ ajint embNmerInt2nuc(AjPStr *seq, ajint wordsize, ajulong value)
 ** @return [ajulong] the encoded word
 ******************************************************************************/
 
-ajulong embNmerProt2int(char *seq, ajint wordsize, ajint offset,
+ajulong embNmerProt2int(const char *seq, ajint wordsize, ajint offset,
 			AjBool *otherflag, AjBool ignorebz)
 {
     ajint i;

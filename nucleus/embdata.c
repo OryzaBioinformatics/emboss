@@ -33,9 +33,8 @@
 
 
 
-static AjBool dataListNextLine(AjPFile pfile, char *commentLine,
+static AjBool dataListNextLine(AjPFile pfile, const char *commentLine,
 				 AjPStr * line);
-static void dataListRead(AjPList data, AjPFile pfile);
 
 
 
@@ -45,25 +44,25 @@ static void dataListRead(AjPList data, AjPFile pfile);
 ** Deletes the tables of data list. Calls ajTableFree for each table in the
 ** list, and then calls ajListFree to free the actual list.
 **
-** @param [w] data [AjPList] is the list of data tables to delete
+** @param [w] data [AjPList*] is the list of data tables to delete
 ** @return [void]
 **
 ** @@
 ******************************************************************************/
 
-void embDataListDel(AjPList data)
+void embDataListDel(AjPList* data)
 {
    AjIList iter;
    AjPTable table;
 
-   iter = ajListIter(data);
+   iter = ajListIterRead(*data);
    while(ajListIterMore(iter))
    {
       table = ajListIterNext(iter);
       ajTableFree(&table);
    }
-   ajListIterFree(iter);
-   ajListFree(&data);
+   ajListIterFree(&iter);
+   ajListFree(data);
 
    return;
 }
@@ -74,10 +73,10 @@ void embDataListDel(AjPList data)
 /* @funcstatic dataListNextLine ***********************************************
 **
 ** private function to read in the next line of data from the file. It is
-** called from dataListRead.
+** called from embDataListRead.
 **
-** @param [r] pfile [AjPFile] file poiter to the data file
-** @param [r] commentLine [char *] the character used as the to describe the
+** @param [u] pfile [AjPFile] file pointer to the data file
+** @param [r] commentLine [const char *] the character(s) used to describe the
 **        start of a comment line in the data file
 ** @param [w] line [AjPStr *] Buffer to hold the current line
 ** @return [AjBool] returns AjTrue if found another line of input otherwise
@@ -86,7 +85,7 @@ void embDataListDel(AjPList data)
 ** @@
 ******************************************************************************/
 
-static AjBool dataListNextLine(AjPFile pfile, char *commentLine,
+static AjBool dataListNextLine(AjPFile pfile, const char *commentLine,
 			       AjPStr * line)
 {
    ajint i;
@@ -110,20 +109,19 @@ static AjBool dataListNextLine(AjPFile pfile, char *commentLine,
 
 
 
-/* @funcstatic dataListRead ***************************************************
+/* @func embDataListRead ******************************************************
 **
 ** General routine for reading in data from a file. The keys and values of
-** each table are stored as AjPStr. This is a private routine, It is called
-** from embDataListInit.
+** each table are stored as AjPStr.
 **
 ** @param [w] data [AjPList] is the list of data tables.
-** @param [r] pfile [AjPFile] pointer to the data file
+** @param [u] pfile [AjPFile] pointer to the data file
 ** @return [void]
 **
 ** @@
 ******************************************************************************/
 
-static void dataListRead(AjPList data, AjPFile pfile)
+void embDataListRead(AjPList data, AjPFile pfile)
 {
    AjPStr line = NULL;
    AjPStrTok tokens;
@@ -183,7 +181,7 @@ static void dataListRead(AjPList data, AjPFile pfile)
 	 /* check for end of data block*/
 	 if(! ajStrCmpC(key, endOfData))
 	     break;
-         iter = ajListIter(data);
+         iter = ajListIterRead(data);
          while(ajListIterMore(iter))
          {
             ptable = ajListIterNext(iter);
@@ -198,38 +196,7 @@ static void dataListRead(AjPList data, AjPFile pfile)
    ajStrDel(&tmp);
    ajStrDel(&line);
    ajStrTokenClear(&tokens);
-   ajListIterFree(iter);
-
-   return;
-}
-
-
-
-
-/* @func embDataListInit ******************************************************
-**
-** Reads in the data file and puts the data into the list of tables. The
-** keys and values of each table are stored as AjPStr.
-**
-** @param [w] data [AjPList] llist of data tables
-** @param [r] file_name [AjPStr] the data filename
-**
-** @return [void]
-** @@
-******************************************************************************/
-
-void embDataListInit(AjPList data, AjPStr file_name)
-{
-   AjPFile pfile = NULL;
-
-
-   /* open the data table file */
-   ajFileDataNew(file_name, &pfile);
-   if(pfile==NULL)
-       ajFatal("Unable to find the data file %S", file_name);
-
-   dataListRead(data, pfile);
-   ajFileClose(&pfile);
+   ajListIterFree(&iter);
 
    return;
 }
@@ -247,7 +214,8 @@ void embDataListInit(AjPList data, AjPStr file_name)
 ** order. Only returns a list of pointers to the data. It does not copy the
 ** tables.
 **
-** @param [r] fullList [AjPList] The list containing all the tables of data
+** @param [r] fullList [const AjPList] The list containing all the tables
+**                                     of data
 ** @param [w] returnList [AjPList] The new list containing just the tables
 **        requested
 ** @param [r] required [ajuint] used to request tables. A value of 1
@@ -259,13 +227,13 @@ void embDataListInit(AjPList data, AjPStr file_name)
 ** @@
 ******************************************************************************/
 
-void embDataListGetTables(AjPList fullList, AjPList returnList,
+void embDataListGetTables(const AjPList fullList, AjPList returnList,
 			   ajuint required)
 {
    AjIList iter;
    AjPTable table;
 
-   iter = ajListIter(fullList);
+   iter = ajListIterRead(fullList);
    while(ajListIterMore(iter))
    {
       table = ajListIterNext(iter);
@@ -273,7 +241,7 @@ void embDataListGetTables(AjPList fullList, AjPList returnList,
       required >>= 1;
    }
 
-   ajListIterFree(iter);
+   ajListIterFree(&iter);
 
    return;
 }
@@ -292,7 +260,8 @@ void embDataListGetTables(AjPList fullList, AjPList returnList,
 ** the lowest set bit in the value determines which table is returned i.e.
 ** a value of 66 would request the second table (not the seventh)
 **
-** @param [r] fullList [AjPList] The list containing all the tables of data
+** @param [r] fullList [const AjPList] The list containing all the tables
+**                                     of data
 ** @param [r] required [ajuint] used to request a table. A value of 1
 **        requests the first table, a value of 16 requests the fifth table,
 **        a value of 14 returns the second table in the original list.
@@ -301,12 +270,12 @@ void embDataListGetTables(AjPList fullList, AjPList returnList,
 ** @@
 ******************************************************************************/
 
-AjPTable embDataListGetTable(AjPList fullList, ajuint required)
+AjPTable embDataListGetTable(const AjPList fullList, ajuint required)
 {
    AjIList iter;
    AjPTable returnTable = NULL;
 
-   iter = ajListIter(fullList);
+   iter = ajListIterRead(fullList);
    while(ajListIterMore(iter))
    {
       returnTable = ajListIterNext(iter);
@@ -316,7 +285,7 @@ AjPTable embDataListGetTable(AjPList fullList, ajuint required)
    }
 
 
-   ajListIterFree(iter);
+   ajListIterFree(&iter);
 
    return returnTable;
 }

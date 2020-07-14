@@ -37,14 +37,14 @@ static ajint embMolFragSort(const void* a, const void* b);
 **
 ** Create a sorted list of molwt fragments
 **
-** @param [r] thys [AjPStr] sequence
+** @param [r] thys [const AjPStr] sequence
 ** @param [r] rno [ajint] 1=Trypsin 2=LysC 3=ArgC 4=AspN 5=V8b 6=V8p
 **                        7=Chy 8=CNBr
 ** @param [w] l [AjPList*] list for results
 ** @return [ajint] number of fragments
 ******************************************************************************/
 
-ajint embMolGetFrags(AjPStr thys, ajint rno, AjPList *l)
+ajint embMolGetFrags(const AjPStr thys, ajint rno, AjPList *l)
 {
     static struct enz
     {
@@ -69,7 +69,7 @@ ajint embMolGetFrags(AjPStr thys, ajint rno, AjPList *l)
 
     ajint len;
     ajint pos;
-    char *p;
+    const char *p;
 
     static AjPInt defcut =NULL;
     ajint defcnt;

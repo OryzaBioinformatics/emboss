@@ -7,59 +7,129 @@ extern "C"
 #define embshow_h
 
 
+/********* Descriptor object types *****************/
+
+enum ShowEValtype
+{
+    SH_SEQ,
+    SH_BLANK,
+    SH_TICK,
+    SH_TICKNUM,
+    SH_COMP,
+    SH_TRAN,
+    SH_RE,
+    SH_FT,
+    SH_NOTE
+};
+
 /* @data EmbPShow *************************************************************
 **
-** NUCLEUS data structure for EmbPShow object
+** NUCLEUS data structure for EmbPShow object for a sequence
 **
+** @attr list [AjPList] list of EmbPShowInfo structures
+**
+** @cc information about the sequence
+**
+** @attr seq [const AjPSeq] the sequence
+** @attr nucleic [AjBool] ajTrue = the sequence is nucleic
+** @attr offset [ajint] offset to start numbering at
+** @attr start [ajint] sequence position to start printing at
+** @attr end [ajint] sequence position to stop printing at
+**
+** @cc information about the page layout
+**
+** @attr width [ajint] width of sequence to display on each line
+** @attr length [ajint] length of a page (0 = indefinite)
+** @attr margin [ajint] margin for numbers
+** @attr html [AjBool] ajTrue = format page for HTML
+** @@
 ******************************************************************************/
 
 typedef struct EmbSShow {
-  AjPList list;		/* list of EmbPShowInfo structures */
-/* information about the sequence */
-  AjPSeq seq;		/* the sequence */
-  AjBool nucleic;	/* ajTrue = the sequence is nucleic */
-  ajint offset;  		/* offset to start numbering at */
-  ajint start;		/* sequence position to start printing at */
-  ajint end;		/* sequence position to stop printing at */
-/* information about the page layout */
-  ajint width;		/* width of sequence to display on each line */
-  ajint length;		/* length of a page (0 = indefinite) */
-  ajint margin;		/* margin for numbers */
-  AjBool html;		/* ajTrue = format page for HTML */
-} EmbOShow, *EmbPShow;
+  AjPList list;
+  const AjPSeq seq;
+  AjBool nucleic;
+  ajint offset;
+  ajint start;
+  ajint end;
+  ajint width;
+  ajint length;
+  ajint margin;
+  AjBool html;
+} EmbOShow;
+#define EmbPShow EmbOShow*
 
 
 /* @data EmbPShowInfo *********************************************************
 **
-** NUCLEUS data structure for node of list of descriptors object pointers
 **
+** The sequence and associated things to show are held in an ordered list
+** of type EmbPShowInfo. This list is held in the structure EmbPShow.
+**
+** The things to show are displayed around the sequence in the order that
+** they are held on the list.
+**
+** EmbPShowInfo holds the descriptor (one of EmbPShowBlank, EmbPShowTicks,
+** EmbPShowSeq, EmbPShowComp, etc.) and the type of the descriptor (one of
+** SH_BLANK, SH_TICKS, SH_SEQ, SH_COMP, etc.  )
+**
+** Each descriptor (EmbPShowSeq, EmbPShowBlank, EmbPShowTicks, etc.) holds
+** information that could be useful in displaying its type of information.
+**
+** So, for example:
+**
+** EmbPShow could have a list of:
+** ----------------------------
+**
+** EmbPShowInfo->type=SH_BLANK
+**    |       ->info=EmbPShowBlank
+**    |
+** EmbPShowInfo->type=SH_TICKS
+**    |       ->info=EmbPShowTicks
+**    |
+** EmbPShowInfo->type=SH_SEQ
+**    |       ->info=EmbPShowSeq
+**    |
+** EmbPShowInfo->type=SH_COMP
+**    |       ->info=EmbPShowComp
+**    |
+** EmbPShowInfo->type=etc.
+**    |       ->info=etc.
+**    |
+**   etc.
+**
+** @attr type [int] Type of information (enumerated list)
+** @attr info [void*] Information descriptor (set of available descriptors)
+** @@
 ******************************************************************************/
 
 typedef struct EmbSShowInfo {
-  ajint type;
+  int type;
   void * info;
-} EmbOShowInfo, *EmbPShowInfo;
+} EmbOShowInfo;
+#define EmbPShowInfo EmbOShowInfo*
 
 
 
-
-/********* Descriptor object types *****************/
-
-enum ShowEValtype {SH_SEQ, SH_BLANK, SH_TICK, SH_TICKNUM, SH_COMP,
-SH_TRAN, SH_RE, SH_FT, SH_NOTE};
 
 /* @data EmbPShowSeq **********************************************************
 **
 ** NUCLEUS data structure for sequence information, type = SH_SEQ
 **
+** @attr number [AjBool] ajTrue = number the sequence
+** @attr threeletter [AjBool] ajTrue = display proteins in three letter code
+** @attr upperrange [const AjPRange] range of sequence to uppercase
+** @attr highlight [const AjPRange] range of sequence to colour in HTML
+** @@
 ******************************************************************************/
 
 typedef struct EmbSShowSeq {
-  AjBool number;	/* ajTrue = number the sequence */
-  AjBool threeletter;	/* ajTrue = display proteins in three letter code */
-  AjPRange upperrange;	/* range of sequence to uppercase */
-  AjPRange highlight;	/* range of sequence to colour in HTML */
-} EmbOShowSeq, *EmbPShowSeq;
+  AjBool number;
+  AjBool threeletter;
+  const AjPRange upperrange;
+  const AjPRange highlight;
+} EmbOShowSeq;
+#define EmbPShowSeq EmbOShowSeq*
 
 /* blank line information, type = SH_BLANK */
 
@@ -67,143 +137,187 @@ typedef struct EmbSShowSeq {
 **
 ** NUCLEUS data structure for  blank line information, type = SH_BLANK
 **
+** @attr dummy [AjBool] Dummy attribute - no specific information needed
+**                      AJNEW0() falls over if 0 bytes are allocated, so
+**                      put in this dummy to pad the structure out
+** @@
 ******************************************************************************/
 
 typedef struct EmbSShowBlank {
-/* AJNEW0() falls over if 0 bytes are allocated, so put in this dummy to
-pad the structure out
-*/
   AjBool dummy;
-} EmbOShowBlank, *EmbPShowBlank;
+} EmbOShowBlank;
+#define EmbPShowBlank EmbOShowBlank*
 
 /* @data EmbPShowTicks ********************************************************
 **
 ** NUCLEUS data structure for tick line information, type = SH_TICK
 **
+** @attr dummy [AjBool] Dummy attribute - no specific information needed
+**                      AJNEW0() falls over if 0 bytes are allocated, so
+**                      put in this dummy to pad the structure out
+** @@
 ******************************************************************************/
 
 typedef struct EmbSShowTicks {
-/* AJNEW0() falls over if 0 bytes are allocated, so put in this dummy to
-pad the structure out
-*/
   AjBool dummy;
-} EmbOShowTicks, *EmbPShowTicks;
+} EmbOShowTicks;
+#define EmbPShowTicks EmbOShowTicks*
 
 /* @data EmbPShowTicknum ******************************************************
 **
 ** NUCLEUS data structure for tick number line information, type = SH_TICKNUM
 **
+** @attr dummy [AjBool] Dummy attribute - no specific information needed
+**                      AJNEW0() falls over if 0 bytes are allocated, so
+**                      put in this dummy to pad the structure out
+** @@
 ******************************************************************************/
 
 typedef struct EmbSShowTicknum {
-/* AJNEW0() falls over if 0 bytes are allocated, so put in this dummy to
-pad the structure out
-*/
   AjBool dummy;
-} EmbOShowTicknum, *EmbPShowTicknum;
+} EmbOShowTicknum;
+#define EmbPShowTicknum EmbOShowTicknum*
 
 /* @data EmbPShowTran *********************************************************
 **
 ** NUCLEUS data structure for translation information, type = SH_TRAN
 **
+** @attr transeq [AjPSeq] Copy of our stored translation
+** @attr trnTable [const AjPTrn] translation table
+** @attr frame [ajint] 1,2,3,-1,-2 or -3 = frame to translate
+** @attr threeletter [AjBool] ajTrue = display in three letter code
+** @attr number [AjBool] ajTrue = number the translation
+** @attr tranpos [ajint] store of translation position for numbering
+** @attr regions [const AjPRange] only translate in these regions,
+**                                NULL = do all
+** @attr orfminsize [ajint] minimum size of ORF to display
+** @attr lcinterorf [AjBool] ajTrue = put the inter-orf regions in lower case
+** @attr firstorf [AjBool] ajTrue = beginning of the seq is a possible ORF
+** @attr lastorf [AjBool] ajTrue = end of the seq is a possible ORF
+** @attr showframe [AjBool] ajTrue = write the frame number
+** @@
 ******************************************************************************/
 
 typedef struct EmbSShowTran {
-  AjPSeq transeq;	/* our stored translation */
-  AjPTrn trnTable;	/* translation table */
-  ajint frame;		/* 1,2,3,-1,-2 or -3 = frame to translate */
-  AjBool threeletter;	/* ajTrue = display in three letter code */
-  AjBool number;	/* ajTrue = number the translation */
-  ajint tranpos;	/* store of translation position for numbering */
-  AjPRange regions;	/* only translate in these regions, NULL = do all */
-  ajint orfminsize;	/* minimum size of ORF to display */
-  AjBool lcinterorf;    /* ajTrue = put the inter-orf regions in lower case */
-  AjBool firstorf;      /* ajTrue = beginning of the seq is a possible ORF */
-  AjBool lastorf;       /* ajTrue = end of the seq is a possible ORF */
-  AjBool showframe;     /* ajTrue = write the frame number*/
-} EmbOShowTran, *EmbPShowTran;
+  AjPSeq transeq;
+  const AjPTrn trnTable;
+  ajint frame;
+  AjBool threeletter;
+  AjBool number;
+  ajint tranpos;
+  const AjPRange regions;
+  ajint orfminsize;
+  AjBool lcinterorf;
+  AjBool firstorf;
+  AjBool lastorf;
+  AjBool showframe;
+} EmbOShowTran;
+#define EmbPShowTran EmbOShowTran*
 
 /* @data EmbPShowComp *********************************************************
 **
 ** NUCLEUS data structure for sequence complement information, type = SH_COMP
 **
+** @attr number [AjBool] ajTrue = number the complement
+** @@
 ******************************************************************************/
 
 typedef struct EmbSShowComp {
-  AjBool number;	/* ajTrue = number the complement */
-} EmbOShowComp, *EmbPShowComp;
+  AjBool number;
+} EmbOShowComp;
+#define EmbPShowComp EmbOShowComp*
 
 /* @data EmbPShowRE ***********************************************************
 **
 ** NUCLEUS data structure for RE cut site information, type = SH_RE
 **
+** @attr sense [ajint]  1 or -1 = sense to display
+** @attr flat [AjBool] ajTrue = display in flat format with recognition sites
+** @attr matches [AjPList] list of AjPMatmatch matches
+** @attr hits [ajint]  number of hits in list
+** @attr sitelist [AjPList] list of EmbSShowREsite
+** @@
 ******************************************************************************/
 
 typedef struct EmbSShowRE {
-  ajint sense;			/* 1 or -1 = sense to display */
-  AjBool flat;			/* ajTrue = display in flat format with recognition sites */
-  AjPList matches;		/* list of AjPMatmatch matches */
-  ajint hits;			/* number of hits in list */
-  AjPList sitelist;		/* list of EmbSShowREsite */
-} EmbOShowRE, *EmbPShowRE;
+  ajint sense;
+  AjBool flat;
+  AjPList matches;
+  ajint hits;
+  AjPList sitelist;
+} EmbOShowRE;
+#define EmbPShowRE EmbOShowRE*
 
 /* @data EmbPShowFT ***********************************************************
 **
 ** NUCLEUS data structure for  Feature information, type = SH_FT
 **
+** @attr feat [AjPFeattable] Feature table
+** @@
 ******************************************************************************/
 
 typedef struct EmbSShowFT {
   AjPFeattable feat;
-} EmbOShowFT, *EmbPShowFT;
+} EmbOShowFT;
+#define EmbPShowFT EmbOShowFT*
 
 /* @data EmbPShowNote *********************************************************
 **
 ** NUCLEUS data structure for annotation information, type = SH_NOTE
 **
+** @attr regions [const AjPRange] regions to annotate, NULL = no regions
+** @@
 ******************************************************************************/
 
 typedef struct EmbSShowNote {
-  AjPRange regions;	/* regions to note, NULL = no regions */
-} EmbOShowNote, *EmbPShowNote;
+  const AjPRange regions;
+} EmbOShowNote;
+#define EmbPShowNote EmbOShowNote*
 
 
 /********* assorted structures ***********/
 
 /* @data EmbPShowREsite *******************************************************
 **
-** NUCLEUS data structure for RE cut site position list node
+** NUCLEUS data structure for Restriction Enzyme cut site position list node
 **
+** @attr pos [ajint] cut site position
+** @attr name [AjPStr] name of Restriction Enzyme
+** @@
 ******************************************************************************/
 
 typedef struct EmbSShowREsite {
-  ajint pos;		/* cut site position */
-  AjPStr name;		/* name of RE */
-} EmbOShowREsite, *EmbPShowREsite;
+  ajint pos;
+  AjPStr name;
+} EmbOShowREsite;
+#define EmbPShowREsite EmbOShowREsite*
 
 
 /* declare functions **********************************************/
-EmbPShow embShowNew (AjPSeq seq, ajint begin, ajint end, ajint width,
+EmbPShow embShowNew (const AjPSeq seq, ajint begin, ajint end, ajint width,
 		     ajint length, ajint margin, AjBool html, ajint offset);
 void     embShowDel (EmbPShow* pthis);
 
 void     embShowAddSeq (EmbPShow thys, AjBool number, AjBool threeletter,
-			AjPRange upperrange, AjPRange colour);
+			const AjPRange upperrange, const AjPRange colour);
 void     embShowAddBlank (EmbPShow thys);
 void     embShowAddTicks (EmbPShow thys);
 void     embShowAddTicknum (EmbPShow thys);
 void     embShowAddComp (EmbPShow thys, AjBool number);
-void     embShowAddTran (EmbPShow thys, AjPTrn trnTable, ajint frame,
-			 AjBool threeletter, AjBool number, AjPRange regions,
+void     embShowAddTran (EmbPShow thys, const AjPTrn trnTable, ajint frame,
+			 AjBool threeletter, AjBool number,
+			 const AjPRange regions,
 			 ajint orfminsize, AjBool lcinterorf,
 			 AjBool firstorf, AjBool lastorf, AjBool showframe);
-void     embShowAddRE (EmbPShow thys, ajint sense, AjPList restrictlist,
+void     embShowAddRE (EmbPShow thys, ajint sense, const AjPList restrictlist,
 		       AjBool flat);
-void     embShowAddFT (EmbPShow thys, AjPFeattable feat);
-void     embShowAddNote (EmbPShow thys, AjPRange regions);
-void     embShowPrint (AjPFile out, EmbPShow thys);
-void     embShowUpperRange (AjPStr *line, AjPRange upperrange, ajint pos);
-void     embShowColourRange (AjPStr *line, AjPRange colour, ajint pos);
+void     embShowAddFT (EmbPShow thys, const AjPFeattable feat);
+void     embShowAddNote (EmbPShow thys, const AjPRange regions);
+void     embShowPrint (AjPFile out, const EmbPShow thys);
+void     embShowUpperRange (AjPStr *line,
+			    const AjPRange upperrange, ajint pos);
+void     embShowColourRange (AjPStr *line,
+			     const AjPRange colour, ajint pos);
 
 #endif
 

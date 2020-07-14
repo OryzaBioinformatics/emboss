@@ -63,7 +63,7 @@ static ajint propFragCompare(const void *a, const void *b);
 **
 ** Read amino acid properties from Eamino.dat
 **
-** @param [r] mfptr [AjPFile] Input file object
+** @param [u] mfptr [AjPFile] Input file object
 ** @return [void]
 ** @@
 ******************************************************************************/
@@ -73,7 +73,7 @@ void embPropAminoRead(AjPFile mfptr)
     AjPStr  line  = NULL;
     AjPStr  delim = NULL;
 
-    char *p;
+    const char *p;
 
     ajint cols = 0;
 
@@ -92,9 +92,9 @@ void embPropAminoRead(AjPFile mfptr)
 	while(*p && (*p<'A' || *p>'Z'))
 	    ++p;
 
-	cols = ajStrTokenCount(&line,ajStrStr(delim));
+	cols = ajStrTokenCount(line,ajStrStr(delim));
 	EmbPropTable[ajAZToInt(toupper((ajint)*p))] =
-	    ajArrDoubleLine(&line,ajStrStr(delim),cols,2,cols);
+	    ajArrDoubleLine(line,ajStrStr(delim),cols,2,cols);
     }
 
 
@@ -114,7 +114,7 @@ void embPropAminoRead(AjPFile mfptr)
 ** Calculate the molecular weight of a protein sequence
 ** This is a shell around embPropCalcMolwtMod using water as the modifier.
 **
-** @param [r] s [char *] sequence
+** @param [r] s [const char *] sequence
 ** @param [r] start [ajint] start position
 ** @param [r] end [ajint] end position
 **
@@ -122,7 +122,7 @@ void embPropAminoRead(AjPFile mfptr)
 ** @@
 ******************************************************************************/
 
-double embPropCalcMolwt(char *s, ajint start, ajint end)
+double embPropCalcMolwt(const char *s, ajint start, ajint end)
 {
     return embPropCalcMolwtMod(s,start,end,EMBPROPMSTN_H, EMBPROPMSTC_OH );
 }
@@ -135,7 +135,7 @@ double embPropCalcMolwt(char *s, ajint start, ajint end)
 ** Calculate the molecular weight of a protein sequence
 ** with chemically modified termini
 **
-** @param [r] s [char *] sequence
+** @param [r] s [const char *] sequence
 ** @param [r] start [ajint] start position
 ** @param [r] end [ajint] end position
 ** @param [r] nmass [double] mass of the N-terminal group
@@ -145,10 +145,10 @@ double embPropCalcMolwt(char *s, ajint start, ajint end)
 ** @@
 ******************************************************************************/
 
-double embPropCalcMolwtMod(char *s, ajint start, ajint end, double nmass,
+double embPropCalcMolwtMod(const char *s, ajint start, ajint end, double nmass,
 			   double cmass)
 {
-    char *p;
+    const char *p;
     double sum;
     ajint i;
     ajint len;
@@ -174,7 +174,7 @@ double embPropCalcMolwtMod(char *s, ajint start, ajint end, double nmass,
 **
 ** Calculate the molecular extinction coefficient of a protein sequence
 **
-** @param [r] s [char *] sequence
+** @param [r] s [const char *] sequence
 ** @param [r] start [ajint] start position
 ** @param [r] end [ajint] end position
 **
@@ -182,10 +182,10 @@ double embPropCalcMolwtMod(char *s, ajint start, ajint end, double nmass,
 ** @@
 ******************************************************************************/
 
-double embPropCalcMolextcoeff(char *s, ajint start, ajint end)
+double embPropCalcMolextcoeff(const char *s, ajint start, ajint end)
 {
 
-    char *p;
+    const char *p;
     double sum;
     ajint i;
     ajint len;
@@ -214,11 +214,11 @@ double embPropCalcMolextcoeff(char *s, ajint start, ajint end)
 **
 ** @param [r] c [char] integer code
 **
-** @return [char*] three letter amino acid code
+** @return [const char*] three letter amino acid code
 ** @@
 ******************************************************************************/
 
-char* embPropCharToThree(char c)
+const char* embPropCharToThree(char c)
 {
     return embPropIntToThree(ajAZToInt(c));
 }
@@ -232,13 +232,13 @@ char* embPropCharToThree(char c)
 **
 ** @param [r] c [ajint] integer code
 **
-** @return [char*] three letter amino acid code
+** @return [const char*] three letter amino acid code
 ** @@
 ******************************************************************************/
 
-char* embPropIntToThree(ajint c)
+const char* embPropIntToThree(ajint c)
 {
-    static char *tab[]=
+    static const char *tab[]=
     {
 	"Ala","Asx","Cys","Asp","Glu","Phe","Gly","His","Ile","---","Lys",
 	"Leu","Met","Asn","---","Pro","Gln","Arg","Ser","Thr","---",
@@ -255,7 +255,7 @@ char* embPropIntToThree(ajint c)
 **
 ** Read amino acd properties
 **
-** @param [r] s [char *] sequence
+** @param [r] s [const char *] sequence
 ** @param [r] n [ajint] "enzyme" number
 ** @param [r] begin [ajint] sequence offset
 ** @param [w] l [AjPList *] list to push hits to
@@ -271,7 +271,7 @@ char* embPropIntToThree(ajint c)
 ** @@
 ******************************************************************************/
 
-void embPropCalcFragments(char *s, ajint n, ajint begin,
+void embPropCalcFragments(const char *s, ajint n, ajint begin,
 			  AjPList *l, AjPList *pa,
 			  AjBool unfavoured, AjBool overlap,
 			  AjBool allpartials, ajint *ncomp, ajint *npart,
@@ -505,7 +505,7 @@ static ajint propFragCompare(const void *a, const void *b)
 
 AjPStr embPropProtGaps(AjPSeq seq, ajint pad)
 {
-    char *p;
+    const char *p;
     AjPStr temp;
     ajint i;
 
@@ -542,8 +542,8 @@ AjPStr embPropProtGaps(AjPSeq seq, ajint pad)
 
 AjPStr embPropProt1to3(AjPSeq seq, ajint pad)
 {
-    char *p;
-    char *p3;
+    const char *p;
+    const char *p3;
     AjPStr temp;
     ajint i;
 

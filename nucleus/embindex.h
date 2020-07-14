@@ -27,21 +27,20 @@ extern "C"
 #define BTNO_BALANCE 100L
 #define BTNO_NODE    100L
 
-/* Internal/Leaf node structure
-**
-** ajint	NodeType		Root, Internal or Leaf
-** long long    BlockOffset		Offset within mainindex
-** ajint	Nkeys			Number of keys filled
-** ajint	TotLen			Total length of keys
-** long long	Left			Left Sibling
-** long long    Right			Right Sibling
-** long long	Overflow		Offset to overflow block
-** long long	PrevNode		Previous node
-** ajint[nkeys] Key lengths (or keys/pointers in overflow pages)
-** Keys/Pointers
-** Final pointer
-*/
 
+/* @data EmbPBtNode ***********************************************************
+**
+** Btree node
+**
+** @attr NodeType [ajint] Root, Internal or Leaf
+** @attr BlockOffset [ajlong] Offset within mainindex
+** @attr Nkeys [ajint] Number of keys filled
+** @attr TotLen [ajint] Total length of keys
+** @attr Left [ajlong] Left Sibling
+** @attr Right [ajlong] Right Sibling
+** @attr Overflow [ajlong] Offset to overflow block
+** @attr PrevNode [ajlong] Previous node
+*****************************************************************************/
 
 typedef struct EmbSBtNode
 {
@@ -53,40 +52,63 @@ typedef struct EmbSBtNode
     ajlong Right;
     ajlong Overflow;
     ajlong PrevNode;
-} EmbOBtNode, *EmbPBtNode;
+} EmbOBtNode;
+#define EmbPBtNode EmbOBtNode*
 
-
+/* @data EmbPBtId ***************************************************
+**
+** Btree ID
+**
+** @attr id [AjPStr] Unique ID
+** @attr dbno [ajint] Database file number
+** @attr dups [ajint] Duplicates
+** @attr offset [ajlong] Offset within database file (ftello)
+******************************************************************************/
 
 typedef struct EmbSBtId
 {
-    AjPStr id;		/* Unique ID */
-    ajint  dbno;	/* Database file number */
+    AjPStr id;
+    ajint  dbno;
     ajint  dups;
-    ajlong offset;      /* Offset within database file (ftello) */
-} EmbOBtId, *EmbPBtId;
+    ajlong offset;
+} EmbOBtId;
+#define EmbPBtId EmbOBtId*
 
 
+/* @data EmbPBtWild ***************************************************
+**
+** Btree wildcard
+**
+** @attr id [AjPStr] Wildcard ID
+** @attr pageno [ajlong] Page number of leaf
+** @attr first [AjBool] true for first search
+** @attr list [AjPList] list of EmbPBtIds
+******************************************************************************/
 
 typedef struct EmbSBtWild
 {
-    AjPStr id;		/* Wildcard ID            */
-    ajlong pageno;	/* Page number of leaf    */
-    AjBool first;	/* true for first search  */
-    AjPList list;	/* list of EmbPBtIds      */
-} EmbOBtWild, *EmbPBtWild;
+    AjPStr id;
+    ajlong pageno;
+    AjBool first;
+    AjPList list;
+} EmbOBtWild;
+#define EmbPBtWild EmbOBtWild*
 
 
 
 
-/* Bucket structure on disc
+/* @data EmbPBucket ***************************************************
 **
-** ajint	NodeType
-** ajint	Nentries
-** long long	Overflow
-** ajint[Nentries] key lengths
+** Bucket structure on disc
+**
 ** Key, filenumber, ftell ID, subkey page (char*, ajint, ajlong, ajlong)
-*/
-    
+**
+** @attr NodeType [ajint] Node type
+** @attr Nentries [ajint] Number of entries
+** @attr Overflow [ajlong] Offset to overflow block
+** @attr keylen [ajint*] key lengths
+** @attr Ids [EmbPBtId*] Ids
+******************************************************************************/
 
 typedef struct EmbSBucket
 {
@@ -95,7 +117,8 @@ typedef struct EmbSBucket
     ajlong   Overflow;
     ajint    *keylen;
     EmbPBtId *Ids;
-} EmbOBucket, *EmbPBucket;
+} EmbOBucket;
+#define EmbPBucket EmbOBucket*
 
 
 
@@ -304,6 +327,17 @@ typedef struct EmbSBucket
 #endif
 
 
+/* @data EmbPBtpage ***************************************************
+**
+** Btree page
+**
+** @attr pageno [ajlong] Page number
+** @attr dirty [ajint] Undocumented
+** @attr next [struct EmbSBtpage*] Next page
+** @attr prev [struct EmbSBtpage*] Previous page
+** @attr buf [unsigned char*] Buffer
+******************************************************************************/
+
 typedef struct EmbSBtpage
 {
     ajlong pageno;
@@ -311,8 +345,28 @@ typedef struct EmbSBtpage
     struct EmbSBtpage *next;
     struct EmbSBtpage *prev;
     unsigned char *buf;
-} EmbOBtpage, *EmbPBtpage;
+} EmbOBtpage;
+#define EmbPBtpage EmbOBtpage*
 
+
+/* @data EmbPBtcache ***************************************************
+**
+** B tree cache
+**
+** @attr fp [FILE*] Undocumented
+** @attr pagesize [ajint] Undocumented
+** @attr totsize [ajlong] Undocumented
+** @attr lru [EmbPBtpage] Undocumented
+** @attr mru [EmbPBtpage] Undocumented
+** @attr listLength [ajint] Undocumented
+** @attr order [ajint] Undocumented
+** @attr level [ajint] Undocumented
+** @attr cachesize [ajint] Undocumented
+** @attr nperbucket [ajint] Undocumented
+** @attr replace [AjPStr] Undocumented
+** @attr count [ajlong] Undocumented
+** @attr deleted [AjBool] Undocumented
+******************************************************************************/
 
 typedef struct EmbSBtCache
 {
@@ -329,7 +383,8 @@ typedef struct EmbSBtCache
     AjPStr replace;
     ajlong count;
     AjBool deleted;
-} EmbOBtcache, *EmbPBtcache;
+} EmbOBtcache;
+#define EmbPBtcache EmbOBtcache*
 
 
 
@@ -340,35 +395,36 @@ EmbPBtcache embBtreeCacheNewC(const char *file, const char *mode,
 EmbPBtpage  embBtreeCacheRead(EmbPBtcache cache, ajlong pageno);
 EmbPBtpage  embBtreeCacheWrite(EmbPBtcache cache, ajlong pageno);
 void        embBtreeCreateRootNode(EmbPBtcache cache);
-EmbPBtpage  embBtreeFindInsert(EmbPBtcache cache, char *key);
+EmbPBtpage  embBtreeFindInsert(EmbPBtcache cache, const char *key);
 
-ajint embBtreeReadDir(AjPStr **filelist, AjPStr fdirectory, AjPStr files,
-		      AjPStr exclude);
-AjBool embBtreeWriteFileList(AjPStr *filelist, ajint nfiles,
-			     AjPStr fdirectory, AjPStr idirectory,
-			     AjPStr dbname);
+ajint embBtreeReadDir(AjPStr **filelist, const AjPStr fdirectory,
+		      const AjPStr files,
+		      const AjPStr exclude);
+AjBool embBtreeWriteFileList(const AjPStr *filelist, ajint nfiles,
+			     const AjPStr fdirectory, const AjPStr idirectory,
+			     const AjPStr dbname);
 void     embBtreeCacheDel(EmbPBtcache *thys);
-void     embBtreeInsertId(EmbPBtcache cache, EmbPBtId id);
+void     embBtreeInsertId(EmbPBtcache cache, const EmbPBtId id);
 void     embBtreeIdDel(EmbPBtId *thys);
 EmbPBtId embBtreeIdNew(void);
-EmbPBtId embBtreeIdFromKey(EmbPBtcache cache, char *key);
-void     embBtreeWriteParams(EmbPBtcache cache, char *fn);
-void     embBtreeReadParams(char *fn, ajint *order, ajint *nperbucket,
+EmbPBtId embBtreeIdFromKey(EmbPBtcache cache, const char *key);
+void     embBtreeWriteParams(const EmbPBtcache cache, const char *fn);
+void     embBtreeReadParams(const char *fn, ajint *order, ajint *nperbucket,
 			    ajint *pagesize, ajint *level, ajint *cachesize);
 void     embBtreeCacheSync(EmbPBtcache cache);
 
-AjBool   embBtreeDeleteId(EmbPBtcache cache, EmbPBtId id);
+AjBool   embBtreeDeleteId(EmbPBtcache cache, const EmbPBtId id);
 void     embBtreeJoinLeaves(EmbPBtcache cache);
 
-EmbPBtWild embBtreeWildNew(EmbPBtcache cache, AjPStr wild);
+EmbPBtWild embBtreeWildNew(EmbPBtcache cache, const AjPStr wild);
 void       embBtreeWildDel(EmbPBtWild *thys);
-EmbPBtpage embBtreeFindInsertW(EmbPBtcache cache, char *key);
+EmbPBtpage embBtreeFindInsertW(EmbPBtcache cache, const char *key);
 EmbPBtId   embBtreeIdFromKeyW(EmbPBtcache cache, EmbPBtWild wild);
-AjBool     embBtreeReplaceId(EmbPBtcache cache, EmbPBtId rid);
+AjBool     embBtreeReplaceId(EmbPBtcache cache, const EmbPBtId rid);
 
-AjPStr*    embBtreeReadEntries(char *filename);
+AjPStr*    embBtreeReadEntries(const char *filename);
 void       embBtreeInsertDupId(EmbPBtcache cache, EmbPBtId id);
-AjPList    embBtreeDupFromKey(EmbPBtcache cache, char *key);
+AjPList    embBtreeDupFromKey(EmbPBtcache cache, const char *key);
 
 
 #endif

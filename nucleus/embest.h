@@ -15,12 +15,18 @@ extern "C"
 ** NUCLEUS internal data structure for est2genome EMBOSS application
 ** to maintain internal hash lists.
 **
+** @attr name [char*] Name
+** @attr offset [unsigned long] Offset
+** @attr text_offset [unsigned long] Text offset
+** @attr next [struct hash_list*] Next in list
+** @@
 ******************************************************************************/
 
 typedef struct hash_list
 {
   char *name;
-  unsigned long offset, text_offset;
+  unsigned long offset;
+  unsigned long text_offset;
   struct hash_list *next;
 }
 HASH_LIST;
@@ -35,17 +41,27 @@ typedef enum { NOT_A_SITE=1, DONOR=2, ACCEPTOR=4 } donor_acceptor;
 **
 ** NUCLEUS data structure for EST alignments (originally for est2genome)
 **
+** @attr gstart [ajint] Genomic start
+** @attr estart [ajint] EST start
+** @attr gstop [ajint] Genomic stop
+** @attr estop [ajint] EST stop
+** @attr score [ajint] Score
+** @attr len [ajint] Length
+** @attr align_path [ajint*] Path
+** @@
 ******************************************************************************/
 
 typedef struct EmbSEstAlign
 {
-  ajint gstart, estart;
-  ajint gstop, estop;
+  ajint gstart;
+  ajint estart;
+  ajint gstop;
+  ajint estop;
   ajint score;
   ajint len;
   ajint *align_path;
-}
-EmbOEstAlign, *EmbPEstAlign;
+} EmbOEstAlign;
+#define EmbPEstAlign EmbOEstAlign*
 
 
 
@@ -257,35 +273,37 @@ FILE *openfile_in_seqpath_arg(char *basename, char *ext, char *mode,
 AjPSeq into_sequence( char *name, char *desc, char *s );
 AjPSeq subseq( AjPSeq seq, ajint start, ajint stop );
 
-EmbPEstAlign embEstAlignNonRecursive ( AjPSeq est, AjPSeq genome,
+EmbPEstAlign embEstAlignNonRecursive ( const AjPSeq est, const AjPSeq genome,
 				       ajint match, ajint mismatch,
 				       ajint gap_penalty, ajint intron_penalty,
 				       ajint splice_penalty,
-				       AjPSeq splice_sites,
+				       const AjPSeq splice_sites,
 				       ajint backtrack, ajint needleman,
 				       ajint init_path );
 
-EmbPEstAlign embEstAlignLinearSpace ( AjPSeq est, AjPSeq genome,
+EmbPEstAlign embEstAlignLinearSpace ( const AjPSeq est, const AjPSeq genome,
 				      ajint match, ajint mismatch,
 				      ajint gap_penalty, ajint intron_penalty,
 				      ajint splice_penalty,
-				      AjPSeq splice_sites,
+				      const AjPSeq splice_sites,
 				      float max_area );
 
-AjPSeq       embEstFindSpliceSites( AjPSeq genome, ajint direction );
+AjPSeq       embEstFindSpliceSites( const AjPSeq genome, ajint direction );
 void         embEstFreeAlign( EmbPEstAlign *ge );
 ajint          embEstGetSeed (void);
 void         embEstMatInit (ajint match, ajint mismatch, ajint gap,
 			    ajint neutral, char pad_char);
-void         embEstOutBlastStyle ( AjPFile ofile, AjPSeq genome, AjPSeq est,
-				   EmbPEstAlign ge, ajint match,
-				   ajint mismatch, ajint gap_penalty,
-				   ajint intron_penalty,
-				   ajint splice_penalty,
-				   ajint gapped, ajint reverse  );
+void         embEstOutBlastStyle ( AjPFile ofile,
+				  const AjPSeq genome, const AjPSeq est,
+				  const EmbPEstAlign ge, ajint match,
+				  ajint mismatch, ajint gap_penalty,
+				  ajint intron_penalty,
+				  ajint splice_penalty,
+				  ajint gapped, ajint reverse  );
 
-void         embEstPrintAlign( AjPFile ofile, AjPSeq genome, AjPSeq est,
-			       EmbPEstAlign ge, ajint width );
+void         embEstPrintAlign( AjPFile ofile,
+			      const AjPSeq genome, const AjPSeq est,
+			      const EmbPEstAlign ge, ajint width );
 void         embEstSetDebug (void);
 void         embEstSetVerbose (void);
 AjPSeq       embEstShuffleSeq( AjPSeq seq, ajint in_place, ajint *seed );

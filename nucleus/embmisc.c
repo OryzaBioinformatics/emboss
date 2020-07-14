@@ -26,14 +26,14 @@
 ** The words are tested one at a time until a match is found.
 ** Whitespace and , ; | characters can separate the words in the pattern.
 **
-** @param [r] str [AjPStr] string to test
-** @param [r] pattern [AjPStr] pattern to match with
+** @param [r] str [const AjPStr] string to test
+** @param [r] pattern [const AjPStr] pattern to match with
 **
 ** @return [AjBool] ajTrue = found a match
 ** @@
 ******************************************************************************/
 
-AjBool embMiscMatchPattern (AjPStr str, AjPStr pattern)
+AjBool embMiscMatchPattern (const AjPStr str, const AjPStr pattern)
 {
 
     char whiteSpace[] = " \t\n\r,;|";  /* skip whitespace and , ; | */

@@ -29,8 +29,8 @@
 **
 ** Calculates a consensus.
 **
-** @param [r] seqset [AjPSeqset] multiple alignment
-** @param [r] cmpmatrix [AjPMatrix] comparison scoring matrix
+** @param [r] seqset [const AjPSeqset] multiple alignment
+** @param [r] cmpmatrix [const AjPMatrix] comparison scoring matrix
 ** @param [r] nseqs [ajint] number of sequences in alignment
 ** @param [r] mlen [ajint] length of alignment
 ** @param [r] fplural [float] no. of +ve scoring matches below which
@@ -43,7 +43,7 @@
 ** @return [void]
 ******************************************************************************/
 
-void embConsCalc(AjPSeqset seqset,AjPMatrix cmpmatrix,
+void embConsCalc(const AjPSeqset seqset,const AjPMatrix cmpmatrix,
 		 ajint nseqs, ajint mlen,float fplural,float setcase,
 		 ajint identity, AjPStr *cons)
 {
@@ -66,7 +66,7 @@ void embConsCalc(AjPSeqset seqset,AjPMatrix cmpmatrix,
 
     AjPSeqCvt cvt  = 0;
     AjPFloat score = NULL;
-    char **seqcharptr;
+    const char **seqcharptr;
     char res;
     char nocon;
 

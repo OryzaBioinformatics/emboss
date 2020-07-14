@@ -8,11 +8,11 @@ extern "C"
 
 
 
-void     embDataListDel( AjPList data);
-AjPTable embDataListGetTable( AjPList fullList, ajuint required);
-void     embDataListGetTables( AjPList fullList, AjPList returnList,
-			       ajuint required);
-void     embDataListInit( AjPList data, AjPStr file_name);
+void     embDataListDel(AjPList *data);
+AjPTable embDataListGetTable(const AjPList fullList, ajuint required);
+void     embDataListGetTables(const AjPList fullList, AjPList returnList,
+			      ajuint required);
+void     embDataListRead(AjPList data, AjPFile file);
 
 #endif
 

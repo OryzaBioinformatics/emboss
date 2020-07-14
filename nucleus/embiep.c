@@ -114,7 +114,7 @@ void embIepPkRead(void)
 {
     AjPFile inf = NULL;
     AjPStr line;
-    char *p;
+    const char *p;
     double  amino    = 8.6;
     double  carboxyl = 3.6;
     char ch;
@@ -172,21 +172,21 @@ void embIepPkRead(void)
 
 
 
-/* @func embIepComp  **********************************************************
+/* @func embIepComp ***********************************************************
 **
 ** Calculate the amino acid composition of a protein sequence
 **
-** @param [r] s [char *] protein sequence
+** @param [r] s [const char *] protein sequence
 ** @param [r] amino [ajint] number of amino termini
 ** @param [w] c [ajint *] amino acid composition
 **
 ** @return [void]
 ******************************************************************************/
 
-void embIepComp(char *s, ajint amino, ajint *c)
+void embIepComp(const char *s, ajint amino, ajint *c)
 {
     ajint i;
-    char *p;
+    const char *p;
 
     for(i=0;i<EMBIEPSIZE;++i)
 	c[i]=0;
@@ -241,8 +241,8 @@ void embIepCalcK(double *K)
 ** Calculate the number of H+ bound
 ** Amino acids for which there is no entry in Epk.dat have this set to 0.0
 **
-** @param [r] K [double *] dissociation constants
-** @param [r] c [ajint *] sequence composition
+** @param [r] K [const double *] dissociation constants
+** @param [r] c [const ajint *] sequence composition
 ** @param [w] op [ajint *] printout flags
 ** @param [r] H [double] hydrogen ion concentration
 ** @param [w] pro [double *] number of protons bound
@@ -250,7 +250,8 @@ void embIepCalcK(double *K)
 ** @return [void]
 ******************************************************************************/
 
-void embIepGetProto(double *K, ajint *c, ajint *op, double H, double *pro)
+void embIepGetProto(const double *K, const ajint *c,
+		    ajint *op, double H, double *pro)
 {
     ajint i;
 
@@ -279,14 +280,14 @@ void embIepGetProto(double *K, ajint *c, ajint *op, double H, double *pro)
 **
 ** Calculate the number of H+ bound
 **
-** @param [r] c [ajint *] sequence composition
-** @param [r] pro [double *] number of protons
+** @param [r] c [const ajint *] sequence composition
+** @param [r] pro [const double *] number of protons
 ** @param [w] total [double *] total protons
 **
 ** @return [double] charge
 ******************************************************************************/
 
-double embIepGetCharge(ajint *c, double *pro, double *total)
+double embIepGetCharge(const ajint *c, const double *pro, double *total)
 {
     ajint i;
     double C;
@@ -311,15 +312,16 @@ double embIepGetCharge(ajint *c, double *pro, double *total)
 **
 ** Calculate the pH nearest the IEP or return 0.0 if one doesn't exist
 **
-** @param [r] c [ajint *] sequence composition
-** @param [r] K [double *] sequence dissociation constants
+** @param [r] c [const ajint *] sequence composition
+** @param [r] K [const double *] sequence dissociation constants
 ** @param [w] op [ajint *] printout flags
 ** @param [w] pro [double *] number of protons
 **
 ** @return [double] IEP or 0.0
 ******************************************************************************/
 
-double embIepPhConverge(ajint *c, double *K, ajint *op, double *pro)
+double embIepPhConverge(const ajint *c, const double *K,
+			ajint *op, double *pro)
 {
     double sum = 0.0;
     double charge;
@@ -370,7 +372,7 @@ double embIepPhConverge(ajint *c, double *K, ajint *op, double *pro)
 **
 ** Calculate the pH nearest the IEP.
 **
-** @param [r] s [char *] sequence
+** @param [r] s [const char *] sequence
 ** @param [r] amino [ajint] number of N-termini
 ** @param [w] iep [double *] IEP
 ** @param [r] termini [AjBool] use termini
@@ -378,7 +380,7 @@ double embIepPhConverge(ajint *c, double *K, ajint *op, double *pro)
 ** @return [AjBool] True if IEP exists
 ******************************************************************************/
 
-AjBool embIepIEP(char *s, ajint amino, double *iep, AjBool termini)
+AjBool embIepIEP(const char *s, ajint amino, double *iep, AjBool termini)
 {
     ajint *c    = NULL;
     ajint *op   = NULL;

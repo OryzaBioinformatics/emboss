@@ -24,7 +24,8 @@
 #include "limits.h"
 
 
-static void matPushHitInt(AjPStr *n, EmbPMatPrints *m, AjPList *l, ajint pos,
+static void matPushHitInt(const AjPStr n, const EmbPMatPrints m,
+			  AjPList *l, ajint pos,
 			  ajint score, ajint elem, ajint hpe, ajint hpm);
 
 
@@ -35,8 +36,8 @@ static void matPushHitInt(AjPStr *n, EmbPMatPrints *m, AjPList *l, ajint pos,
 ** Put a matching protein matrix (EmbPMatPrints) on the heap
 ** as an EmbPMatMatch structure
 **
-** @param [r] n [AjPStr *] Sequence name
-** @param [r] m [EmbPMatPrints *] Matching fingerprint element
+** @param [r] n [const AjPStr] Sequence name
+** @param [r] m [const EmbPMatPrints] Matching fingerprint element
 ** @param [w] l [AjPList *] List to push hits to
 ** @param [r] pos [ajint] Sequence position of element
 ** @param [r] score [ajint] Score of element
@@ -47,21 +48,22 @@ static void matPushHitInt(AjPStr *n, EmbPMatPrints *m, AjPList *l, ajint pos,
 ** @return [void]
 ******************************************************************************/
 
-static void matPushHitInt(AjPStr *n, EmbPMatPrints *m, AjPList *l, ajint pos,
+static void matPushHitInt(const AjPStr n, const EmbPMatPrints m,
+			  AjPList *l, ajint pos,
 			  ajint score, ajint elem, ajint hpe, ajint hpm)
 {
     EmbPMatMatch mat;
 
     AJNEW0 (mat);
-    mat->seqname = ajStrNewC(ajStrStr(*n));
-    mat->cod     = ajStrNewC(ajStrStr((*m)->cod));
-    mat->acc     = ajStrNewC(ajStrStr((*m)->acc));
-    mat->tit     = ajStrNewC(ajStrStr((*m)->tit));
+    mat->seqname = ajStrNewC(ajStrStr(n));
+    mat->cod     = ajStrNewC(ajStrStr((m)->cod));
+    mat->acc     = ajStrNewC(ajStrStr((m)->acc));
+    mat->tit     = ajStrNewC(ajStrStr((m)->tit));
     mat->pat     = ajStrNew();
-    mat->n       = (*m)->n;
-    mat->len     = (*m)->len[elem];
-    mat->thresh  = (*m)->thresh[elem];
-    mat->max     = (*m)->max[elem];
+    mat->n       = (m)->n;
+    mat->len     = (m)->len[elem];
+    mat->thresh  = (m)->thresh[elem];
+    mat->max     = (m)->max[elem];
     mat->element = elem;
     mat->start   = pos;
     mat->score   = score;
@@ -131,82 +133,91 @@ void embMatPrintsInit(AjPFile *fp)
 ** Fill a protein matrix structure (EmbPMatPrints) from a data file
 ** Gets next entry.
 **
-** @param [r] fp [AjPFile *] data file pointer
-** @param [r] s [EmbPMatPrints *] matrix structure to populate
+** @param [u] fp [AjPFile] data file pointer
 **
-** @return [AjBool] True if structure filled
+** @return [EmbPMatPrints] matrix structure
+** @category new [EmbPMatPrints] Read protein matrix structure from a data file
 ******************************************************************************/
 
-AjBool embMatProtReadInt(AjPFile *fp, EmbPMatPrints *s)
+EmbPMatPrints embMatProtReadInt(AjPFile fp)
 {
+    EmbPMatPrints ret;
     AjPStr line;
 
     ajint i;
     ajint j;
     ajint m;
-    char *p;
+    const char *p;
 
     line = ajStrNewC("#");
 
     p = ajStrStr(line);
     while(!*p || *p=='#' || *p=='!' || *p=='\n')
     {
-	if(!ajFileReadLine(*fp,&line))
+	if(!ajFileReadLine(fp,&line))
 	{
 	    ajStrDel(&line);
-	    return ajFalse;
+	    return NULL;
 	}
 	p = ajStrStr(line);
     }
 
-    AJNEW0 (*s);
+    ajDebug("embMatProtReadint starting\n");
+    ajDebug ("Line: %S\n", line);
 
-    (*s)->cod = ajStrNew();
-    ajStrAss(&(*s)->cod,line);
+    AJNEW0 (ret);
 
-    ajFileReadLine(*fp,&line);
-    (*s)->acc = ajStrNew();
-    ajStrAss(&(*s)->acc,line);
-    ajFileReadLine(*fp,&line);
-    ajStrToInt(line,&(*s)->n);
-    ajFileReadLine(*fp,&line);
-    (*s)->tit = ajStrNew();
-    ajStrAss(&(*s)->tit,line);
+    ret->cod = ajStrNew();
+    ajStrAssS(&ret->cod,line);
 
-    AJCNEW((*s)->len, (*s)->n);
-    AJCNEW((*s)->max, (*s)->n);
-    AJCNEW((*s)->thresh, (*s)->n);
-    AJCNEW((*s)->matrix, (*s)->n);
+    ajFileReadLine(fp,&line);
+    ret->acc = ajStrNew();
+    ajStrAssS(&ret->acc,line);
+    ajFileReadLine(fp,&line);
+    ajStrToInt(line,&ret->n);
+    ajFileReadLine(fp,&line);
+    ret->tit = ajStrNew();
+    ajStrAssS(&ret->tit,line);
 
-    for(m=0;m<(*s)->n;++m)
+    ajDebug ("Lineb: %S\n", line);
+    AJCNEW(ret->len, ret->n);
+    AJCNEW(ret->max, ret->n);
+    AJCNEW(ret->thresh, ret->n);
+    AJCNEW(ret->matrix, ret->n);
+
+    for(m=0;m<ret->n;++m)
     {
-	ajFileReadLine(*fp,&line);
-	ajStrToInt(line,&(*s)->len[m]);
-	ajFileReadLine(*fp,&line);
-	ajStrToInt(line,&(*s)->thresh[m]);
-	ajFileReadLine(*fp,&line);
-	ajStrToInt(line,&(*s)->max[m]);
+	ajFileReadLine(fp,&line);
+	ajStrToInt(line,&ret->len[m]);
+	ajFileReadLine(fp,&line);
+	ajStrToInt(line,&ret->thresh[m]);
+	ajFileReadLine(fp,&line);
+	ajStrToInt(line,&ret->max[m]);
+	ajDebug ("m: %d/%d len:%d thresh:%d max:%d\n",
+		 m, ret->n, ret->len[m], ret->thresh[m], ret->max[m]);
 	for(i=0;i<26;++i)
 	{
-	    AJCNEW((*s)->matrix[m][i], (*s)->len[m]);
-	    ajFileReadLine(*fp,&line);
+	    AJCNEW0(ret->matrix[m][i], ret->len[m]);
+	    ajFileReadLine(fp,&line);
+	    ajDebug ("Linec [%d][%d]: %S\n", m, i, line);
 	    p = ajStrStr(line);
-	    for(j=0;j<(*s)->len[m];++j)
+	    for(j=0;j<ret->len[m];++j)
 	    {
 		if(!j)
-		    p = strtok(p," ");
+		    p = ajSysStrtok(p," ");
 		else
-		    p = strtok(NULL," ");
-		sscanf(p,"%d",&(*s)->matrix[m][i][j]);
+		    p = ajSysStrtok(NULL," ");
+		sscanf(p,"%d",&ret->matrix[m][i][j]);
 	    }
 	}
     }
 
-    ajFileReadLine(*fp,&line);
+    ajFileReadLine(fp,&line);
+    ajDebug ("Linec: %S\n", line);
 
     ajStrDel(&line);
 
-    return ajTrue;
+    return ret;
 }
 
 
@@ -216,7 +227,7 @@ AjBool embMatProtReadInt(AjPFile *fp, EmbPMatPrints *s)
 **
 ** Deallocate a protein matrix structure (EmbPMatPrints)
 **
-** @param [w] s [EmbPMatPrints *] matrix structure
+** @param [d] s [EmbPMatPrints *] matrix structure
 **
 ** @return [void]
 ******************************************************************************/
@@ -253,9 +264,9 @@ void embMatProtDelInt(EmbPMatPrints *s)
 **
 ** Scan a protein sequence with a fingerprint
 **
-** @param [r] s [AjPStr *] Sequence
-** @param [r] n [AjPStr *] name of sequence
-** @param [r] m [EmbPMatPrints *] Fingerprint matrix
+** @param [r] s [const AjPStr] Sequence
+** @param [r] n [const AjPStr] name of sequence
+** @param [r] m [const EmbPMatPrints] Fingerprint matrix
 ** @param [w] l [AjPList *] List to push hits to
 ** @param [w] all [AjBool *] Set if all elements match
 ** @param [w] ordered [AjBool *] Set if all elements are in order
@@ -264,7 +275,8 @@ void embMatProtDelInt(EmbPMatPrints *s)
 ** @return [ajint] number of hits
 ******************************************************************************/
 
-ajint embMatProtScanInt(AjPStr *s, AjPStr *n, EmbPMatPrints *m, AjPList *l,
+ajint embMatProtScanInt(const AjPStr s, const AjPStr n, const EmbPMatPrints m,
+			AjPList *l,
 			AjBool *all, AjBool *ordered, AjBool overlap)
 {
     EmbPMatMatch mm;
@@ -289,9 +301,9 @@ ajint embMatProtScanInt(AjPStr *s, AjPStr *n, EmbPMatPrints *m, AjPList *l,
     ajint i;
     ajint j;
 
-    t = ajStrNewC(ajStrStr(*s));
+    t = ajStrNewC(ajStrStr(s));
     ajStrToUpper(&t);
-    p = q = ajStrStr(t);
+    p = q = ajStrStrMod(&t);
     slen = ajStrLen(t);
     for(i=0;i<slen;++i,++p)
 	*p = ajSysItoC(ajAZToInt((ajint)*p));
@@ -302,20 +314,20 @@ ajint embMatProtScanInt(AjPStr *s, AjPStr *n, EmbPMatPrints *m, AjPList *l,
 
     hpm=0;
 
-    for(elem=(*m)->n - 1;elem >= 0;--elem)
+    for(elem=(m)->n - 1;elem >= 0;--elem)
     {
 	hpe = 0;
 
-	mlen     = (*m)->len[elem];
-	minpc    = (*m)->thresh[elem];
-	maxscore = (*m)->max[elem];
+	mlen     = (m)->len[elem];
+	minpc    = (m)->thresh[elem];
+	maxscore = (m)->max[elem];
 
 	limit = slen-mlen;
 	for(i=0;i<limit;++i)
 	{
 	    sum = 0;
 	    for(j=0;j<mlen;++j)
-		sum += (*m)->matrix[elem][(ajint) p[i+j]][j];
+		sum += (m)->matrix[elem][(ajint) p[i+j]][j];
 	    score = (sum*100)/maxscore;
 	    if(score>=minpc)
 	    {

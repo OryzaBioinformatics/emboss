@@ -14,62 +14,99 @@ typedef ajint *PMAT_INT[26];
 **
 ** NUCLEUS data structure for PRINTS protein fingerprints
 **
+** @attr cod [AjPStr] gc line
+** @attr acc [AjPStr] gx line
+** @attr tit [AjPStr] gt line
+** @attr n [ajint] Number of motifs in fingerprint
+** @attr len [ajint*] Lengths of motifs
+** @attr thresh [ajint*] % of maximum score for matrix
+** @attr max [ajint*] Maximum score for matrix
+** @attr matrix [PMAT_INT*] Matrices
+** @@
 ******************************************************************************/
 
 typedef struct EmbSMatPrints
 {
-    AjPStr cod;				/* gc line                         */
-    AjPStr acc;				/* gx line                         */
-    AjPStr tit;				/* gt line                         */
-    ajint    n;				/* Number of motifs in fingerprint */
-    ajint    *len;			/* Lengths of motifs               */
-    ajint    *thresh;			/* % of maximum score for matrix   */
-    ajint    *max;			/* Maximum score for matrix        */
-    PMAT_INT *matrix;			/* Matrices                        */
-} EmbOMatPrints, *EmbPMatPrints;
+    AjPStr cod;
+    AjPStr acc;
+    AjPStr tit;
+    ajint    n;
+    ajint    *len;
+    ajint    *thresh;
+    ajint    *max;
+    PMAT_INT *matrix;
+} EmbOMatPrint;
+#define EmbPMatPrints EmbOMatPrint*
 
 /* @data EmbPMatMatch *********************************************************
 **
 ** NUCLEUS data structure for sequence matrix matches
 **
+** @attr seqname [AjPStr] Sequence name
+** @attr cod [AjPStr] Matrix name
+** @attr acc [AjPStr] Matrix accession number
+** @attr tit [AjPStr] Matrix title
+** @attr pat [AjPStr] Pattern
+** @attr n [ajint] Number of motifs in fingerprint
+** @attr len [ajint] Lengths of motifs
+** @attr thresh [ajint] % of maximum score for matrix
+** @attr max [ajint] Maximum score for matrix
+** @attr element [ajint] Number of matching element
+** @attr start [ajint] Start of match
+** @attr end [ajint] End of match
+** @attr score [ajint] Score of match
+** @attr hpe [ajint] Hits per element (so far)
+** @attr hpm [ajint] Hits per motif (so far)
+** @attr all [AjBool] Can be set if all elements match
+** @attr ordered [AjBool] Can be set if "all" and in order
+** @attr forward [AjBool] on forward strand
+** @attr mm [ajint] Number of mismatches
+** @attr cut1 [ajint] Undocumented
+** @attr cut2 [ajint] Undocumented
+** @attr cut3 [ajint] Undocumented
+** @attr cut4 [ajint] Undocumented
+** @attr iso [AjPStr] Holds names of isoschizomers
+** @@
 ******************************************************************************/
 
 typedef struct EmbSMatMatch
 {
-    AjPStr seqname;			/* Sequence name                   */
-    AjPStr cod;				/* Matrix name                     */
-    AjPStr acc;				/* Matrix accession number         */
-    AjPStr tit;				/* Matrix title                    */
-    AjPStr pat;                         /* Pattern                         */
-    ajint    n;				/* Number of motifs in fingerprint */
-    ajint    len;				/* Lengths of motifs               */
-    ajint    thresh;			/* % of maximum score for matrix   */
-    ajint    max;				/* Maximum score for matrix        */
-    ajint    element;			/* Number of matching element      */
-    ajint    start;			/* Start of match                  */
-    ajint    end;				/* End of match			   */
-    ajint    score;			/* Score of match                  */
-    ajint    hpe;				/* Hits per element (so far)       */
-    ajint    hpm;				/* Hits per motif (so far)         */
-    AjBool all;			      /* Can be set if all elements match  */
-    AjBool ordered;		      /* Can be set if "all" and in order  */
-    AjBool forward;			/* on forward strand               */
-    ajint    mm;				/* Number of mismatches            */
+    AjPStr seqname;
+    AjPStr cod;
+    AjPStr acc;
+    AjPStr tit;
+    AjPStr pat;
+    ajint    n;
+    ajint    len;
+    ajint    thresh;
+    ajint    max;
+    ajint    element;
+    ajint    start;
+    ajint    end;
+    ajint    score;
+    ajint    hpe;
+    ajint    hpm;
+    AjBool all;
+    AjBool ordered;
+    AjBool forward;
+    ajint    mm;
     ajint    cut1;
     ajint    cut2;
     ajint    cut3;
     ajint    cut4;
-    AjPStr iso;				/* Holds names of isoschizomers    */
-} EmbOMatMatch, *EmbPMatMatch;
+    AjPStr iso;
+} EmbOMatMatch;
+#define EmbPMatMatch EmbOMatMatch*
 
 
 
 void   embMatMatchDel (EmbPMatMatch *s);
 void   embMatPrintsInit (AjPFile *fp);
 void   embMatProtDelInt (EmbPMatPrints *s);
-AjBool embMatProtReadInt (AjPFile *fp, EmbPMatPrints *s);
-ajint    embMatProtScanInt (AjPStr *s, AjPStr *n, EmbPMatPrints *m, AjPList *l,
-			  AjBool *all, AjBool *ordered, AjBool overlap);
+EmbPMatPrints embMatProtReadInt (AjPFile fp);
+ajint    embMatProtScanInt (const AjPStr s, const AjPStr n,
+			    const EmbPMatPrints m, AjPList *l,
+			    AjBool *all, AjBool *ordered, AjBool overlap);
 
 #endif
 

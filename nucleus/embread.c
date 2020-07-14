@@ -31,7 +31,7 @@
 **
 ** Read amino acid properties from amino.dat
 **
-** @param [r] s [char*] datafile name
+** @param [r] s [const char*] datafile name
 ** @param [w] a [double**] array for amino acid values
 ** @param [r] fill [double] initialisation value
 **
@@ -39,12 +39,12 @@
 ** @@
 ******************************************************************************/
 
-AjBool embReadAminoDataDoubleC(char *s, double **a, double fill)
+AjBool embReadAminoDataDoubleC(const char *s, double **a, double fill)
 {
     AjPFile inf;
     AjPStr  line;
 
-    char *p;
+    const char *p;
     ajint  idx;
     ajint  i;
 
@@ -112,7 +112,7 @@ AjBool embReadAminoDataDoubleC(char *s, double **a, double fill)
 **
 ** Read amino acid properties from amino.dat
 **
-** @param [r] s [char*] datafile name
+** @param [r] s [const char*] datafile name
 ** @param [w] a [float**] array for amino acid values
 ** @param [r] fill [float] initialisation value
 **
@@ -120,12 +120,12 @@ AjBool embReadAminoDataDoubleC(char *s, double **a, double fill)
 ** @@
 ******************************************************************************/
 
-AjBool embReadAminoDataFloatC(char *s, float **a, float fill)
+AjBool embReadAminoDataFloatC(const char *s, float **a, float fill)
 {
     AjPFile inf;
     AjPStr  line;
 
-    char *p;
+    const char *p;
     ajint  idx;
     ajint  i;
 
@@ -191,7 +191,7 @@ AjBool embReadAminoDataFloatC(char *s, float **a, float fill)
 **
 ** Read amino acid properties from amino.dat
 **
-** @param [r] s [char*] datafile name
+** @param [r] s [const char*] datafile name
 ** @param [w] a [ajint**] array for amino acid values
 ** @param [r] fill [ajint] initialisation value
 **
@@ -199,12 +199,12 @@ AjBool embReadAminoDataFloatC(char *s, float **a, float fill)
 ** @@
 ******************************************************************************/
 
-AjBool embReadAminoDataIntC(char *s, ajint **a, ajint fill)
+AjBool embReadAminoDataIntC(const char *s, ajint **a, ajint fill)
 {
     AjPFile inf;
     AjPStr  line;
 
-    char *p;
+    const char *p;
     ajint  idx;
     ajint  i;
 

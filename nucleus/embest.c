@@ -117,32 +117,32 @@ static ajint lsimmat[256][256];
 static AjBool verbose;
 static AjBool debug;
 static float estRand3(ajint *idum);
-static char* estShuffleSeq(char *s, ajint *seed);
 static ajint estPairRemember(ajint col, ajint row);
 static ajint estSavePairCmp(const void *a, const void *b);
 static void  estPairInit(ajint max_bytes);
 static void  estPairFree(void);
 static ajint estDoNotForget(ajint col, ajint row);
-static ajint estAlignMidpt(AjPSeq est, AjPSeq genome,
+static ajint estAlignMidpt(const AjPSeq est, const AjPSeq genome,
 			   ajint match, ajint mismatch,
 			   ajint gap_penalty, ajint intron_penalty,
 			    ajint splice_penalty,
-			    AjPSeq splice_sites,
+			    const AjPSeq splice_sites,
 			    ajint middle, ajint *gleft, ajint *gright);
 
-static EmbPEstAlign estAlignRecursive(AjPSeq est, AjPSeq genome,
+static EmbPEstAlign estAlignRecursive(const AjPSeq est, const AjPSeq genome,
 				      ajint match, ajint mismatch,
 				      ajint gap_penalty, ajint intron_penalty,
 				      ajint splice_penalty,
-				      AjPSeq splice_sites,
+				      const AjPSeq splice_sites,
 				      float max_area, ajint init_path);
 
 static void  estWriteMsp(AjPFile ofile, ajint *matches,
 			 ajint *len, ajint *tsub,
-			 AjPSeq genome, ajint gsub, ajint gpos, AjPSeq est,
+			 const AjPSeq genome, ajint gsub, ajint gpos,
+			 const AjPSeq est,
 			 ajint esub, ajint epos, ajint reverse, ajint gapped);
 
-static char* estShuffleSeq(char *s, ajint *seed);
+static const char* estShuffleSeq(char *s, ajint *seed);
 
 
 
@@ -275,19 +275,19 @@ void embEstMatInit(ajint match, ajint mismatch, ajint gap,
 **     if forward==1 then search fot GT/AG
 **     else               search for CT/AC
 **
-** @param [r] genome [AjPSeq] Genomic sequence
+** @param [r] genome [const AjPSeq] Genomic sequence
 ** @param [r] forward [ajint] Boolean. 1 = forward direction
 **
 ** @return [AjPSeq] Sequence of bitmask codes for splice sites.
 ** @@
 ******************************************************************************/
 
-AjPSeq embEstFindSpliceSites(AjPSeq genome, ajint forward )
+AjPSeq embEstFindSpliceSites(const AjPSeq genome, ajint forward )
 {
     AjPSeq sites;
     ajint pos;
     ajint genomelen;
-    char *s;
+    const char *s;
     char *sitestr;
 
     sites     = ajSeqNew();
@@ -350,9 +350,9 @@ AjPSeq embEstFindSpliceSites(AjPSeq genome, ajint forward )
 **
 ** Shuffle the sequence.
 **
-** @param [r] seq [AjPSeq] Original sequence
+** @param [u] seq [AjPSeq] Original sequence
 ** @param [r] in_place [ajint] Boolean 1=shuffle in place
-** @param [r] seed [ajint*] Random number seed.
+** @param [u] seed [ajint*] Random number seed.
 **
 ** @return [AjPSeq] shuffled sequence.
 ** @@
@@ -361,14 +361,18 @@ AjPSeq embEstFindSpliceSites(AjPSeq genome, ajint forward )
 AjPSeq embEstShuffleSeq( AjPSeq seq, ajint in_place, ajint *seed )
 {
     AjPSeq shuffled;
+    AjPStr shufflestr;
 
     if(!in_place)
 	shuffled = ajSeqNewS(seq);
     else
 	shuffled = seq;
 
-    estShuffleSeq(ajSeqChar(shuffled), seed);
+    shufflestr = ajSeqStrCopy(shuffled);
 
+    estShuffleSeq(ajStrStrMod(&shufflestr), seed);
+
+    ajSeqReplace(shuffled, shufflestr);
     return shuffled;
 }
 
@@ -379,14 +383,14 @@ AjPSeq embEstShuffleSeq( AjPSeq seq, ajint in_place, ajint *seed )
 **
 ** in-place shuffle of a string
 **
-** @param [r] s [char*] String
-** @param [r] seed [ajint*] Seed
+** @param [u] s [char*] String
+** @param [u] seed [ajint*] Seed
 **
-** @return [char*] shuffled string.
+** @return [const char*] shuffled string.
 ** @@
 ******************************************************************************/
 
-static char* estShuffleSeq( char *s, ajint *seed )
+static const char* estShuffleSeq( char *s, ajint *seed )
 {
     EstPKeyValue tmp;
     ajint n;
@@ -417,7 +421,7 @@ static char* estShuffleSeq( char *s, ajint *seed )
 **
 ** Random number generator.
 **
-** @param [r] idum [ajint*] Seed
+** @param [w] idum [ajint*] Seed
 **
 ** @return [float] Random flaoting point number.
 ** @@
@@ -498,7 +502,7 @@ static float estRand3(ajint *idum)
 **
 ** Free a genomic EST alignment structure
 **
-** @param [r] ge [EmbPEstAlign*] Genomic EST alignment data structure
+** @param [d] ge [EmbPEstAlign*] Genomic EST alignment data structure
 **
 ** @return [void]
 ** @@
@@ -523,18 +527,18 @@ void embEstFreeAlign(EmbPEstAlign *ge)
 **
 ** Print the alignment
 **
-** @param [r] ofile [AjPFile] Output file
-** @param [r] genome [AjPSeq] Genomic sequence
-** @param [r] est [AjPSeq] EST sequence
-** @param [r] ge [EmbPEstAlign] Genomic EST alignment
+** @param [u] ofile [AjPFile] Output file
+** @param [r] genome [const AjPSeq] Genomic sequence
+** @param [r] est [const AjPSeq] EST sequence
+** @param [r] ge [const EmbPEstAlign] Genomic EST alignment
 ** @param [r] width [ajint] Output width (in bases)
 **
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-void embEstPrintAlign(AjPFile ofile, AjPSeq genome, AjPSeq est,
-		      EmbPEstAlign ge, ajint width )
+void embEstPrintAlign(AjPFile ofile, const AjPSeq genome, const AjPSeq est,
+		      const EmbPEstAlign ge, ajint width )
 {
     ajint gpos;
     ajint epos;
@@ -547,8 +551,8 @@ void embEstPrintAlign(AjPFile ofile, AjPSeq genome, AjPSeq est,
     char *gbuf;
     char *ebuf;
     char *sbuf;
-    char *genomeseq;
-    char *estseq;
+    const char *genomeseq;
+    const char *estseq;
 
     ajint *gcoord;
     ajint *ecoord;
@@ -754,14 +758,14 @@ void embEstPrintAlign(AjPFile ofile, AjPSeq genome, AjPSeq est,
 **     C[epos] is the score of the best path to the column epos
 **
 **
-** @param [r] est [AjPSeq] Sequence of EST
-** @param [r] genome [AjPSeq] Sequence of genomic region
+** @param [r] est [const AjPSeq] Sequence of EST
+** @param [r] genome [const AjPSeq] Sequence of genomic region
 ** @param [r] match [ajint] Match score
 ** @param [r] mismatch [ajint] Mismatch penalty (positive)
 ** @param [r] gap_penalty [ajint] Gap penalty
 ** @param [r] intron_penalty [ajint] Intron penalty
 ** @param [r] splice_penalty [ajint] Splice site penalty
-** @param [r] splice_sites [AjPSeq] Marked splice sites.
+** @param [r] splice_sites [const AjPSeq] Marked splice sites.
 **     The intron_penalty may be modified to splice_penalty if splice_sites is
 **     non-null and there are DONOR and ACCEPTOR sites at the start and
 **     end of the intron.
@@ -779,17 +783,17 @@ void embEstPrintAlign(AjPFile ofile, AjPSeq genome, AjPSeq est,
 ** @@
 ******************************************************************************/
 
-EmbPEstAlign embEstAlignNonRecursive(AjPSeq est, AjPSeq genome,
+EmbPEstAlign embEstAlignNonRecursive(const AjPSeq est, const AjPSeq genome,
 				     ajint match, ajint mismatch,
 				     ajint gap_penalty, ajint intron_penalty,
 				     ajint splice_penalty,
-				     AjPSeq splice_sites,
+				     const AjPSeq splice_sites,
 				     ajint backtrack, ajint needleman,
 				     ajint init_path)
 {
     AjPSeq gdup = NULL;
     AjPSeq edup = NULL;
-    char* splice_sites_str;
+    const char* splice_sites_str;
     unsigned char **ppath = NULL;
     unsigned char *path   = NULL;
     ajint *score1;
@@ -809,8 +813,8 @@ EmbPEstAlign embEstAlignNonRecursive(AjPSeq est, AjPSeq genome,
     ajint delete_genome;
     ajint delete_est;
     ajint intron;
-    char *gseq;
-    char *eseq;
+    const char *gseq;
+    const char *eseq;
     char g;
     ajint max;
     ajint total = 0;
@@ -1300,14 +1304,14 @@ EmbPEstAlign embEstAlignNonRecursive(AjPSeq est, AjPSeq genome,
 **
 ** Align EST sequence to genomic in linear space
 **
-** @param [r] est [AjPSeq] Sequence of EST
-** @param [r] genome [AjPSeq] Sequence of genomic region
+** @param [r] est [const AjPSeq] Sequence of EST
+** @param [r] genome [const AjPSeq] Sequence of genomic region
 ** @param [r] match [ajint] Match score
 ** @param [r] mismatch [ajint] Mismatch penalty (positive)
 ** @param [r] gap_penalty [ajint] Gap penalty
 ** @param [r] intron_penalty [ajint] Intron penalty
 ** @param [r] splice_penalty [ajint] Splice site penalty
-** @param [r] splice_sites [AjPSeq] Marked splice sites.
+** @param [r] splice_sites [const AjPSeq] Marked splice sites.
 **     The intron_penalty may be modified to splice_penalty if splice_sites is
 **     non-null and there are DONOR and ACCEPTOR sites at the start and
 **     end of the intron.
@@ -1318,12 +1322,12 @@ EmbPEstAlign embEstAlignNonRecursive(AjPSeq est, AjPSeq genome,
 ** @@
 ******************************************************************************/
 
-EmbPEstAlign embEstAlignLinearSpace( AjPSeq est, AjPSeq genome,
+EmbPEstAlign embEstAlignLinearSpace( const AjPSeq est, const AjPSeq genome,
 				    ajint match, ajint mismatch,
 				    ajint gap_penalty,
 				    ajint intron_penalty,
 				    ajint splice_penalty,
-				    AjPSeq splice_sites,
+				    const AjPSeq splice_sites,
 				    float megabytes )
 {
     EmbPEstAlign ge;
@@ -1432,14 +1436,14 @@ EmbPEstAlign embEstAlignLinearSpace( AjPSeq est, AjPSeq genome,
 ** Modified Smith-Waterman/Needleman to align an EST or mRNA to a Genomic
 **     sequence, allowing for introns
 **
-** @param [r] est [AjPSeq] Sequence of EST
-** @param [r] genome [AjPSeq] Sequence of genomic region
+** @param [r] est [const AjPSeq] Sequence of EST
+** @param [r] genome [const AjPSeq] Sequence of genomic region
 ** @param [r] match [ajint] Match score
 ** @param [r] mismatch [ajint] Mismatch penalty (positive)
 ** @param [r] gap_penalty [ajint] Gap penalty
 ** @param [r] intron_penalty [ajint] Intron penalty
 ** @param [r] splice_penalty [ajint] Splice site penalty
-** @param [r] splice_sites [AjPSeq] Marked splice sites.
+** @param [r] splice_sites [const AjPSeq] Marked splice sites.
 **     The intron_penalty may be modified to splice_penalty if splice_sites is
 **     non-null and there are DONOR and ACCEPTOR sites at the start and
 **     end of the intron.
@@ -1455,11 +1459,12 @@ EmbPEstAlign embEstAlignLinearSpace( AjPSeq est, AjPSeq genome,
 ** @@
 ******************************************************************************/
 
-static EmbPEstAlign estAlignRecursive( AjPSeq est, AjPSeq genome,
+static EmbPEstAlign estAlignRecursive( const AjPSeq est,const  AjPSeq genome,
 				      ajint match, ajint mismatch,
 				      ajint gap_penalty, ajint intron_penalty,
 				      ajint splice_penalty,
-				      AjPSeq splice_sites, float max_area,
+				      const AjPSeq splice_sites,
+				      float max_area,
 				      ajint init_path)
 {
     ajint middle;
@@ -1666,14 +1671,14 @@ static EmbPEstAlign estAlignRecursive( AjPSeq est, AjPSeq genome,
 **     If the alignment crosses middle by a est deletion (ie horizontally) then
 **              gleft == gright
 **
-** @param [r] est [AjPSeq] Sequence of EST
-** @param [r] genome [AjPSeq] Sequence of genomic region
+** @param [r] est [const AjPSeq] Sequence of EST
+** @param [r] genome [const AjPSeq] Sequence of genomic region
 ** @param [r] match [ajint] Match score
 ** @param [r] mismatch [ajint] Mismatch penalty (positive)
 ** @param [r] gap_penalty [ajint] Gap penalty
 ** @param [r] intron_penalty [ajint] Intron penalty
 ** @param [r] splice_penalty [ajint] Splice site penalty
-** @param [r] splice_sites [AjPSeq] Marked splice sites.
+** @param [r] splice_sites [const AjPSeq] Marked splice sites.
 **     The intron_penalty may be modified to splice_penalty if splice_sites is
 **     non-null and there are DONOR and ACCEPTOR sites at the start and
 **     end of the intron.
@@ -1682,10 +1687,10 @@ static EmbPEstAlign estAlignRecursive( AjPSeq est, AjPSeq genome,
 **     genome coordinates where the best path crosses epos=middle, so this
 **     should be called recursively to generate the complete alignment in
 **     linear space.
-** @param [r] gleft [ajint*] genome left coordinate at the crossing point.
+** @param [w] gleft [ajint*] genome left coordinate at the crossing point.
 **     If the alignment crosses middle in a diagonal fashion then
 **              gleft+1 == gright
-** @param [r] gright [ajint*] genome right coordinate at the crossing point.
+** @param [w] gright [ajint*] genome right coordinate at the crossing point.
 **     If the alignment crosses middle in a diagonal fashion then
 **              gleft+1 == gright
 **
@@ -1693,10 +1698,10 @@ static EmbPEstAlign estAlignRecursive( AjPSeq est, AjPSeq genome,
 ** @@
 ******************************************************************************/
 
-static ajint estAlignMidpt( AjPSeq est, AjPSeq genome, ajint match,
+static ajint estAlignMidpt( const AjPSeq est, const AjPSeq genome, ajint match,
 			   ajint mismatch, ajint gap_penalty,
 			   ajint intron_penalty,
-			   ajint splice_penalty, AjPSeq splice_sites,
+			   ajint splice_penalty, const AjPSeq splice_sites,
 			   ajint middle, ajint *gleft, ajint *gright )
 {
     AjPSeq gdup = NULL;
@@ -1715,8 +1720,8 @@ static ajint estAlignMidpt( AjPSeq est, AjPSeq genome, ajint match,
     ajint delete_genome;
     ajint delete_est;
     ajint intron;
-    char *gseq;
-    char *eseq;
+    const char *gseq;
+    const char *eseq;
     char g;
     ajint max;
     ajint is_acceptor;
@@ -1726,7 +1731,7 @@ static ajint estAlignMidpt( AjPSeq est, AjPSeq genome, ajint match,
     EstPCoord midpt1;
     EstPCoord midpt2;
     EstPCoord best_intron_midpt;
-    char *splice_sites_str;
+    const char *splice_sites_str;
 
     splice_sites_str = ajSeqChar(splice_sites);
 
@@ -2085,21 +2090,32 @@ static void estPairFree(void)
 static ajint estDoNotForget( ajint col, ajint row )
 {
 
+/*
     if(rpairs >= limit_rpair_size)
     {
 	ajErr("rpairs %d beyond maximum %d", rpairs+1, limit_rpair_size);
 	ajErr("increase space threshold to repeat this search");
-	return 0;		     /* failure - ran out of memory */
+	return 0;		     /# failure - ran out of memory #/
     }
-
+*/
     if( rpairs >= rpair_size )
     {
 	rpair_size = (rpairs == 0 ? 10000 : 2*rpairs);
 
-	if(rpair_size > limit_rpair_size) /* enforce the limit */
+/*
+	if(rpair_size > limit_rpair_size) /# enforce the limit #/
 	    rpair_size = limit_rpair_size;
+*/
 
+	ajDebug("Rpair resize: %d to %d\n", rpairs, rpair_size);
 	AJCRESIZE(rpair, rpair_size);
+
+	if (!rpair)
+	{
+	    ajDie("Memory limit exceeded in allocating space for rpairs");
+	    return 0;		     /* failure - ran out of memory */
+	}
+
 	if(verbose)
 	{
 	    ajDebug("rpairs %d allocated rpair_size %d rpair: %x\n",
@@ -2131,10 +2147,10 @@ static ajint estDoNotForget( ajint col, ajint row )
 **
 ** output in blast style.
 **
-** @param [r] blast [AjPFile] Output file
-** @param [r] genome [AjPSeq] Genomic sequence
-** @param [r] est [AjPSeq] EST sequence
-** @param [r] ge [EmbPEstAlign] Genomic EST alignment
+** @param [u] blast [AjPFile] Output file
+** @param [r] genome [const AjPSeq] Genomic sequence
+** @param [r] est [const AjPSeq] EST sequence
+** @param [r] ge [const EmbPEstAlign] Genomic EST alignment
 ** @param [r] match [ajint] Match score
 ** @param [r] mismatch [ajint] Mismatch penalty
 ** @param [r] gap_penalty [ajint] Gap penalty
@@ -2147,8 +2163,8 @@ static ajint estDoNotForget( ajint col, ajint row )
 ** @@
 ******************************************************************************/
 
-void embEstOutBlastStyle(AjPFile blast, AjPSeq genome, AjPSeq est,
-			 EmbPEstAlign ge, ajint match, ajint mismatch,
+void embEstOutBlastStyle(AjPFile blast, const AjPSeq genome, const AjPSeq est,
+			 const EmbPEstAlign ge, ajint match, ajint mismatch,
 			 ajint gap_penalty, ajint intron_penalty,
 			 ajint splice_penalty, ajint gapped, ajint reverse)
 {
@@ -2165,8 +2181,8 @@ void embEstOutBlastStyle(AjPFile blast, AjPSeq genome, AjPSeq est,
     ajint total_matches = 0;
     ajint total_len     = 0;
     float percent;
-    char *genomestr;
-    char *eststr;
+    const char *genomestr;
+    const char *eststr;
     ajint goff;
     ajint eoff;
 
@@ -2321,14 +2337,14 @@ void embEstOutBlastStyle(AjPFile blast, AjPSeq genome, AjPSeq est,
 **
 ** write out the MSP (maximally scoring pair).
 **
-** @param [r] ofile [AjPFile] Output file
-** @param [r] matches [ajint*] Number of matches found
-** @param [r] len [ajint*] Length of alignment
-** @param [r] tsub [ajint*] Score
-** @param [r] genome [AjPSeq] Genomic sequence
+** @param [u] ofile [AjPFile] Output file
+** @param [w] matches [ajint*] Number of matches found
+** @param [w] len [ajint*] Length of alignment
+** @param [w] tsub [ajint*] Score
+** @param [r] genome [const AjPSeq] Genomic sequence
 ** @param [r] gsub [ajint] Genomic start position
 ** @param [r] gpos [ajint] Genomic end position
-** @param [r] est [AjPSeq] EST sequence
+** @param [r] est [const AjPSeq] EST sequence
 ** @param [r] esub [ajint] EST start position
 ** @param [r] epos [ajint] EST end position
 ** @param [r] reverse [ajint] Boolean 1=reverse the EST sequence
@@ -2341,7 +2357,8 @@ void embEstOutBlastStyle(AjPFile blast, AjPSeq genome, AjPSeq est,
 
 static void estWriteMsp(AjPFile ofile, ajint *matches,
 			ajint *len, ajint *tsub,
-			AjPSeq genome, ajint gsub, ajint gpos, AjPSeq est,
+			const AjPSeq genome, ajint gsub, ajint gpos,
+			const AjPSeq est,
 			ajint esub, ajint epos, ajint reverse, ajint gapped)
 {
     float percent;

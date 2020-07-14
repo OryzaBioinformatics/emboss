@@ -6,7 +6,9 @@ extern "C"
 #ifndef embinit_h
 #define embinit_h
 
-AjStatus embInit (char *pgm, ajint argc, char *argv[]);
+AjStatus embInit (const char *pgm, ajint argc, char * const argv[]);
+AjStatus embInitP (const char *pgm, ajint argc, char * const argv[],
+		   const char *package);
 
 #endif
 

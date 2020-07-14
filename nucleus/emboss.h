@@ -20,7 +20,11 @@
 #include "embshow.h"
 #include "embmisc.h"
 #include "embmol.h"
-#include "embxyz.h"
+#include "embpdb.h"
+#include "embdomain.h"
+#include "embsig.h"
+#include "embdmx.h"
 #include "embindex.h"
+#include "embgotoh.h"
 
 #endif

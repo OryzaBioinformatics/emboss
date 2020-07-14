@@ -11,8 +11,11 @@ extern "C"
 
 /* @data EmbPMolFrag **********************************************************
 **
-** Nucleus seqeunce molecular fragment object.
+** Nucleus sequence molecular fragment object.
 **
+** @attr begin [ajint] Start
+** @attr end [ajint] End
+** @attr mwt [double] Molecular weight
 ** @@
 ******************************************************************************/
 
@@ -21,11 +24,12 @@ typedef struct EmbSMolFrag
     ajint begin;
     ajint end;
     double mwt;
-} EmbOMolFrag, *EmbPMolFrag;
+} EmbOMolFrag;
+#define EmbPMolFrag EmbOMolFrag*
 
 
 
-ajint embMolGetFrags(AjPStr thys, ajint rno, AjPList *l);
+ajint embMolGetFrags(const AjPStr thys, ajint rno, AjPList *l);
 
 
 

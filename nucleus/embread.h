@@ -8,9 +8,9 @@ extern "C"
 
 #define AJREADAMINO 28
 
-AjBool embReadAminoDataDoubleC (char *s, double **a, double fill);
-AjBool embReadAminoDataFloatC  (char *s, float **a, float fill);
-AjBool embReadAminoDataIntC    (char *s, ajint **a, ajint fill);
+AjBool embReadAminoDataDoubleC (const char *s, double **a, double fill);
+AjBool embReadAminoDataFloatC  (const char *s, float **a, float fill);
+AjBool embReadAminoDataIntC    (const char *s, ajint **a, ajint fill);
 
 #endif
 

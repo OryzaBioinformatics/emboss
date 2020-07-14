@@ -32,11 +32,11 @@ extern "C"
 #define embnmer_h
 
 
-ajulong embNmerNuc2int (char *seq, ajint wordsize, ajint offset,
+ajulong embNmerNuc2int (const char *seq, ajint wordsize, ajint offset,
 			AjBool *otherflag);
 ajint   embNmerInt2nuc (AjPStr *seq, ajint wordsize,
 			ajulong value);
-ajulong embNmerProt2int (char *seq, ajint wordsize, ajint offset,
+ajulong embNmerProt2int (const char *seq, ajint wordsize, ajint offset,
 			 AjBool *otherflag, AjBool ignorebz);
 ajint   embNmerInt2prot (AjPStr *seq, ajint wordsize,
 			ajulong value, AjBool ignorebz);

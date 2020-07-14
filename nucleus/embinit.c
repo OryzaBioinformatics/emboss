@@ -27,15 +27,16 @@
 ** and other input into local structures which applications can request.
 ** Must be called in each EMBOSS program first.
 **
-** @param [r] pgm [char*] Application name, used as the name of the ACD file
+** @param [r] pgm [const char*] Application name, used as the name of
+**                              the ACD file
 ** @param [r] argc [ajint] Number of arguments provided on the command line,
 **        usually passsed as-is by the calling application.
-** @param [r] argv [char* []] Actual arguments as an array of text.
+** @param [r] argv [char* const[]] Actual arguments as an array of text.
 ** @return [AjStatus] Always returns ajStatusOK or aborts.
 ** @@
 ******************************************************************************/
 
-AjStatus embInit (char *pgm, ajint argc, char *argv[])
+AjStatus embInit (const char *pgm, ajint argc, char * const argv[])
 {
     ajNamInit("emboss");
 
@@ -52,16 +53,18 @@ AjStatus embInit (char *pgm, ajint argc, char *argv[])
 ** and other input into local structures which applications can request.
 ** Must be called in each EMBOSS program first.
 **
-** @param [r] pgm [char*] Application name, used as the name of the ACD file
+** @param [r] pgm [const char*] Application name, used as the name
+**                              of the ACD file
 ** @param [r] argc [ajint] Number of arguments provided on the command line,
 **        usually passsed as-is by the calling application.
-** @param [r] argv [char* []] Actual arguments as an array of text.
-** @param [r] package [char*] Package name, used to find the ACD file
+** @param [r] argv [char* const[]] Actual arguments as an array of text.
+** @param [r] package [const char*] Package name, used to find the ACD file
 ** @return [AjStatus] Always returns ajStatusOK or aborts.
 ** @@
 ******************************************************************************/
 
-AjStatus embInitP (char *pgm, ajint argc, char *argv[], char *package)
+AjStatus embInitP (const char *pgm, ajint argc, char * const argv[],
+		   const char *package)
 {
   ajNamInit(package);
 

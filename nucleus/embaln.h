@@ -9,98 +9,131 @@ extern "C"
 #define PAZ  26
 #define PAZ1 27
 
-void embAlignCalcSimilarity(AjPStr m, AjPStr n, float **sub, AjPSeqCvt cvt,
+void embAlignCalcSimilarity(const AjPStr m, const AjPStr n,
+			    const AjFloatArray *sub, const AjPSeqCvt cvt,
 			    ajint lenm, ajint lenn, float *id, float *sim,
 			    float *idx, float *simx);
 
-void embAlignPathCalc(char *a, char *b, ajint lena, ajint lenb, float gapopen,
-		     float gapextend, float *path, float **sub, AjPSeqCvt cvt,
-		     ajint *compass, AjBool show);
+void embAlignPathCalc(const char *a, const char *b,
+		      ajint lena, ajint lenb, float gapopen,
+		      float gapextend, float *path,
+		      float * const *sub, const AjPSeqCvt cvt,
+		      ajint *compass, AjBool show);
 
-void embAlignPathCalcSW(char *a, char *b, ajint lena, ajint lenb,
+void embAlignPathCalcSW(const char *a, const char *b, ajint lena, ajint lenb,
 			float gapopen, float gapextend, float *path,
-			float **sub, AjPSeqCvt cvt, ajint *compass,
+			float * const *sub, const AjPSeqCvt cvt,
+			ajint *compass,
 			AjBool show);
 
-void embAlignPrintGlobal(AjPFile outf, char *a, char *b, AjPStr m, AjPStr n,
-			ajint start1, ajint start2, float score, AjBool mark,
-			float **sub, AjPSeqCvt cvt, char *namea,
-			char *nameb, ajint begina, ajint beginb);
-void embAlignPrintLocal(AjPFile outf, char *a, char *b, AjPStr m, AjPStr n,
-		       ajint start1, ajint start2, float score, AjBool mark,
-		       float **sub, AjPSeqCvt cvt, char *namea,
-		       char *nameb, ajint begina, ajint beginb);
-void embAlignPrintProfile(AjPFile outf, char *a, char *b, AjPStr m, AjPStr n,
+void embAlignPrintGlobal(AjPFile outf, const char *a, const char *b,
+			 const AjPStr m, const AjPStr n,
 			 ajint start1, ajint start2, float score, AjBool mark,
-			 float **fmatrix, char *namea,
-			 char *nameb, ajint begina, ajint beginb);
+			 float * const *sub, const AjPSeqCvt cvt,
+			 const char *namea,
+			 const char *nameb, ajint begina, ajint beginb);
+void embAlignPrintLocal(AjPFile outf, const char *a, const char *b,
+			const AjPStr m, const AjPStr n,
+			ajint start1, ajint start2, float score, AjBool mark,
+			float * const *sub, const AjPSeqCvt cvt,
+			const char *namea,
+			const char *nameb, ajint begina, ajint beginb);
+void embAlignPrintProfile(AjPFile outf, const char *a, const char *b,
+			  const AjPStr m, const AjPStr n,
+			  ajint start1, ajint start2, float score, AjBool mark,
+			  float * const *fmatrix, const char *namea,
+			  const char *nameb, ajint begina, ajint beginb);
 
-void embAlignProfilePathCalc(char *a, ajint mlen, ajint slen, float gapopen,
-			    float gapextend, float *path, float **fmatrix,
-			    ajint *compass, AjBool show);
+void embAlignProfilePathCalc(const char *a,
+			     ajint mlen, ajint slen, float gapopen,
+			     float gapextend, float *path,
+			     float * const *fmatrix,
+			     ajint *compass, AjBool show);
 
-void embAlignReportGlobal (AjPAlign align, AjPSeq seqa, AjPSeq seqb,
-			  AjPStr m, AjPStr n,
-			  ajint start1, ajint start2,
-			  float gapopen, float gapextend,
-			  float score, AjPMatrixf matrix,
+void embAlignReportGlobal (AjPAlign align,
+			   const AjPSeq seqa, const AjPSeq seqb,
+			   const AjPStr m, const AjPStr n,
+			   ajint start1, ajint start2,
+			   float gapopen, float gapextend,
+			   float score, const AjPMatrixf matrix,
 			   ajint offset1, ajint offset2);
-void embAlignReportLocal (AjPAlign align, AjPSeq seqa, AjPSeq seqb,
-			  AjPStr m, AjPStr n,
+void embAlignReportLocal (AjPAlign align,
+			  const AjPSeq seqa, const AjPSeq seqb,
+			  const AjPStr m, const AjPStr n,
 			  ajint start1, ajint start2,
 			  float gapopen, float gapextend,
-			  float score, AjPMatrixf matrix,
+			  float score, const AjPMatrixf matrix,
 			  ajint offset1, ajint offset2);
-void embAlignReportProfile(AjPAlign align, AjPSeqset seqset,
-			   char *a, char *b, AjPStr m, AjPStr n,
+void embAlignReportProfile(AjPAlign align, const AjPSeqset seqset,
+			   const char *a, const char *b,
+			   const AjPStr m, const AjPStr n,
 			   ajint start1, ajint start2,
 			   float score, AjBool mark,
-			   float **fmatrix, char *namea,
-			   char *nameb, ajint begina, ajint beginb);
+			   float * const *fmatrix, const char *namea,
+			   const char *nameb, ajint begina, ajint beginb);
 
-float embAlignScoreNWMatrix(float *path, AjPSeq a, AjPSeq b, float **fmatrix,
-			    AjPSeqCvt cvt, ajint lena, ajint lenb,
-			    float gapopen, ajint *compass,
+float embAlignScoreNWMatrix(const float *path, const AjPSeq a, const AjPSeq b,
+			    float * const *fmatrix,
+			    const AjPSeqCvt cvt, ajint lena, ajint lenb,
+			    float gapopen, const ajint *compass,
 			    float gapextend, ajint *start1, ajint *start2);
 
-float embAlignScoreProfileMatrix(float *path, ajint *compass, float gapopen,
-				 float gapextend, AjPStr b,
-				 ajint clen, ajint slen, float **fmatrix,
+float embAlignScoreProfileMatrix(const float *path, const ajint *compass,
+				 float gapopen,
+				 float gapextend, const AjPStr b,
+				 ajint clen, ajint slen,
+				 float * const *fmatrix,
 				 ajint *start1, ajint *start2);
-float embAlignScoreSWMatrix(float *path, ajint *compass, float gapopen,
-			    float gapextend,  AjPSeq a, AjPSeq b,
-			    ajint lena, ajint lenb, float **sub,
-			    AjPSeqCvt cvt, ajint *start1, ajint *start2);
+float embAlignScoreSWMatrix(const float *path, const ajint *compass,
+			    float gapopen,
+			    float gapextend,  const AjPSeq a, const AjPSeq b,
+			    ajint lena, ajint lenb, float * const *sub,
+			    const AjPSeqCvt cvt, ajint *start1, ajint *start2);
 
-void embAlignWalkNWMatrix(float *path, AjPSeq a, AjPSeq b, AjPStr *m,
+void embAlignWalkNWMatrix(const float *path, const AjPSeq a, const AjPSeq b,
+			  AjPStr *m,
 			  AjPStr *n, ajint lena, ajint lenb, ajint *start1,
 			  ajint *start2, float gapopen,
-			  float gapextend, AjPSeqCvt cvt,
-			  ajint *compass, float **sub);
-void embAlignWalkProfileMatrix(float *path, ajint *compass, float gapopen,
-			      float gapextend, AjPStr cons, AjPStr b,
-			      AjPStr *m, AjPStr *n, ajint clen, ajint slen,
-			      float **fmatrix, ajint *start1, ajint *start2);
-void embAlignWalkSWMatrix(float *path, ajint *compass, float gapopen,
-			 float gapextend, AjPSeq a, AjPSeq b, AjPStr *m,
-			 AjPStr *n, ajint lena, ajint lenb, float **sub,
-			 AjPSeqCvt cvt, ajint *start1, ajint *start2);
+			  float gapextend, const AjPSeqCvt cvt,
+			  const ajint *compass, float * const *sub);
+void embAlignWalkProfileMatrix(const float *path, const ajint *compass,
+			       float gapopen,
+			       float gapextend,
+			       const AjPStr cons, const AjPStr b,
+			       AjPStr *m, AjPStr *n, ajint clen, ajint slen,
+			       float * const *fmatrix,
+			       ajint *start1, ajint *start2);
+void embAlignWalkSWMatrix(const float *path, const ajint *compass,
+			  float gapopen,
+			  float gapextend, const AjPSeq a, const AjPSeq b,
+			  AjPStr *m,
+			  AjPStr *n, ajint lena, ajint lenb,
+			  float * const *sub,
+			  const AjPSeqCvt cvt, ajint *start1, ajint *start2);
 
-void embAlignPathCalcFast(char *a, char *b, ajint lena, ajint lenb,
+void embAlignPathCalcFast(const char *a, const char *b, ajint lena, ajint lenb,
 			  float gapopen, float gapextend, float *path,
-			  float **sub, AjPSeqCvt cvt,
+			  float * const *sub, const AjPSeqCvt cvt,
 			  ajint *compass, AjBool show, ajint width);
 
-float embAlignScoreSWMatrixFast(float *path, ajint *compass, float gapopen,
-				float gapextend,  AjPSeq a, AjPSeq b,
-				ajint lena, ajint lenb, float **sub,
-				AjPSeqCvt cvt, ajint *start1, ajint *start2,
+float embAlignScoreSWMatrixFast(const float *path, const ajint *compass,
+				float gapopen,
+				float gapextend,
+				const AjPSeq a, const AjPSeq b,
+				ajint lena, ajint lenb,
+				float * const *sub,
+				const AjPSeqCvt cvt,
+				ajint *start1, ajint *start2,
 				ajint width);
 
-void embAlignWalkSWMatrixFast(float *path, ajint *compass, float gapopen,
-			      float gapextend, AjPSeq a, AjPSeq b, AjPStr *m,
-			      AjPStr *n, ajint lena, ajint lenb, float **sub,
-			      AjPSeqCvt cvt, ajint *start1, ajint *start2,
+void embAlignWalkSWMatrixFast(const float *path, const ajint *compass,
+			      float gapopen,
+			      float gapextend, const AjPSeq a, const AjPSeq b,
+			      AjPStr *m,
+			      AjPStr *n, ajint lena, ajint lenb,
+			      float * const *sub,
+			      const AjPSeqCvt cvt,
+			      ajint *start1, ajint *start2,
 			      ajint width);
 
 #endif
