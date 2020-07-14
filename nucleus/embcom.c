@@ -947,6 +947,9 @@ static void comSortFreq(comtrace *set)
     ajint b;
     comtrace strutt;
 
+    strutt.ind = 0;
+    strutt.pc = 0.;
+
     for(a=1;a<4;++a)
 	for(b=3;b>=a;--b)
 	    if(set[b-1].pc>set[b].pc)

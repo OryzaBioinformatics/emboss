@@ -1539,10 +1539,12 @@ static void wordListInsertNodeOld(AjPListNode* pnode, void* x)
 
 void embWordUnused(void)
 {
-    EmbOWordMatch match;
+    EmbPWordMatch match;
     AjPTable ajptable = NULL;
 
-    wordGetWholeMatch(&match,ajptable);
+    AJNEW0(match);
+
+    wordGetWholeMatch(match,ajptable);
     wordCurListTrace(NULL);	/* comment out in embWordBuildMatchTable */
     wordCurIterTrace(NULL);	/* comment out in embWordBuildMatchTable */
     wordNewListTrace(0, NULL);	/* comment out in embWordBuildMatchTable */

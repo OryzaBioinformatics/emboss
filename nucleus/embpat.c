@@ -105,6 +105,9 @@ AjPStr embPatSeqCreateRegExp(const AjPStr thys, AjBool protein)
 
 AjPStr embPatSeqCreateRegExpC(const char *ptr, AjBool protein)
 {
+
+/* codes for A-Z including ambiguity codes */
+
     char *nucpatternmatch[] =
     {
 	"[Aa]", "[CcGgTtUu]", "[Cc]", "[AaGgTtUu]",
@@ -129,13 +132,14 @@ AjPStr embPatSeqCreateRegExpC(const char *ptr, AjBool protein)
 
     AjPStr regexp  = 0;
     ajint match;
-    char match2[2] = "";
+    char match2[2] = " ";
 
 
     regexp = ajStrNewL(strlen(ptr) * 4); /* just a rough guess */
 
     while(*ptr != '\0')
     {
+	/* alphabetic characters converted to character sets */
 	if((*ptr > 64 && *ptr < 91) || (*ptr > 96 && *ptr < 123))
 	{
 	    if(*ptr > 91)
@@ -201,7 +205,7 @@ EmbPPatMatch embPatSeqMatchFindC(const AjPSeq seq, const char *reg)
     protein = ajSeqIsProt(seq);
 
     regexp  = embPatSeqCreateRegExpC(reg,protein);
-    results = embPatMatchFind(regexp, ajSeqStr(seq));
+    results = embPatMatchFind(regexp, ajSeqStr(seq), ajFalse, ajFalse);
 
     ajStrDel(&regexp);
 
@@ -217,14 +221,17 @@ EmbPPatMatch embPatSeqMatchFindC(const AjPSeq seq, const char *reg)
 **
 ** @param [r] regexp [const AjPStr] Regular expression string.
 ** @param [r] strng [const AjPStr] String to be searched.
+** @param [r] left [AjBool] has to match the start
+** @param [r] right [AjBool] has to match the end
 **
 ** @return [EmbPPatMatch] Results of the pattern matching.
 **
 ******************************************************************************/
 
-EmbPPatMatch embPatMatchFind(const AjPStr regexp, const AjPStr strng)
+EmbPPatMatch embPatMatchFind(const AjPStr regexp, const AjPStr strng,
+			     AjBool left, AjBool right)
 {
-    return embPatMatchFindC(regexp, ajStrStr(strng));
+    return embPatMatchFindC(regexp, ajStrStr(strng), left, right);
 }
 
 
@@ -236,12 +243,15 @@ EmbPPatMatch embPatMatchFind(const AjPStr regexp, const AjPStr strng)
 **
 ** @param [r] regexp [const AjPStr] Regular expression string.
 ** @param [r] sptr   [const char *] String to be searched.
+** @param [r] left [AjBool] has to match the start
+** @param [r] right [AjBool] has to match the end
 **
 ** @return [EmbPPatMatch] Results of the pattern matching.
 **
 ******************************************************************************/
 
-EmbPPatMatch embPatMatchFindC(const AjPStr regexp, const char *sptr)
+EmbPPatMatch embPatMatchFindC(const AjPStr regexp, const char *sptr,
+			     AjBool left, AjBool right)
 {
     AjPRegexp regcomp = NULL;
     EmbPPatMatch results;
@@ -255,11 +265,22 @@ EmbPPatMatch embPatMatchFindC(const AjPStr regexp, const char *sptr)
     const char *ptr;
     AjBool nterm = ajFalse;
     AjPListNode node;
+    AjPStr regstr = NULL;
 
     if(*regexp->Ptr == '^')
 	nterm  = ajTrue;
     
-    regcomp = ajRegComp(regexp);
+    regstr = ajStrNewS(regexp);
+    if(left)
+    {
+	if(!nterm)
+	    ajStrInsertC(&regstr, 0, "^");
+	nterm = ajTrue;
+    }
+    if(right)
+	ajStrAppC(&regstr, "$");
+
+    regcomp = ajRegComp(regstr);
 
     ptr = sptr;
 
@@ -283,6 +304,9 @@ EmbPPatMatch embPatMatchFindC(const AjPStr regexp, const char *sptr)
 
     ajRegFree(&regcomp);
     results->number  = ajListLength(poslist);
+
+    ajDebug("embPatMatchFindC '%S' nterm:%B results: %d\n",
+	    regstr, nterm, results->number);
     
     if(results->number)
     {
@@ -318,6 +342,8 @@ EmbPPatMatch embPatMatchFindC(const AjPStr regexp, const char *sptr)
 	ajListFree(&poslist);
 	ajListFree(&lenlist);
     }
+
+    ajStrDel(&regstr);
 
     return results;
 }
@@ -3117,7 +3143,7 @@ ajint embPatVariablePattern(const AjPStr pattern,
         **/
 	AJFREE(sotable);
 	regexp = embPatPrositeToRegExp(pattern); /* original pattern */
-	ppm = embPatMatchFind(regexp,text);
+	ppm = embPatMatchFind(regexp,text,amino,carboxyl);
 	n = embPatMatchGetNumber(ppm);
 	for(i=0;i<n;++i)
 	{
@@ -3588,7 +3614,8 @@ ajint embPatRestrictMatch(const AjPSeq seq, ajint begin, ajint end,
     AjPStr  binstr;
     AjPStr  binrev;
     AjPStr  *ea;
-
+    AjPStr  tmpstr = NULL;
+    
     EmbPPatRestrict enz;
 
 
@@ -3648,11 +3675,24 @@ ajint embPatRestrictMatch(const AjPSeq seq, ajint begin, ajint end,
     if(plasmid)
     {
 	plen <<= 1;
-	ajStrAppC(&substr,ajStrStr(substr));
-	ajStrAppC(&binstr,ajStrStr(binstr));
+	tmpstr = ajStrNew();
+	ajStrAssS(&tmpstr,substr);
+	ajStrAppC(&tmpstr,ajStrStr(substr));
+	ajStrAssS(&substr,tmpstr);
 
-	ajStrAppC(&revstr,ajStrStr(revstr));
-	ajStrAppC(&binrev,ajStrStr(binrev));
+	ajStrAssS(&tmpstr,binstr);
+	ajStrAppC(&tmpstr,ajStrStr(binstr));
+	ajStrAssS(&binstr,tmpstr);
+	
+	ajStrAssS(&tmpstr,revstr);
+	ajStrAppC(&tmpstr,ajStrStr(revstr));
+	ajStrAssS(&revstr,tmpstr);
+
+	ajStrAssS(&tmpstr,binrev);
+	ajStrAppC(&tmpstr,ajStrStr(binrev));
+	ajStrAssS(&binrev,tmpstr);
+
+	ajStrDel(&tmpstr);
     }
 
     q = ajStrStrMod(&binrev);
@@ -3952,9 +3992,9 @@ void embPatFuzzSearch(ajint type, ajint begin, const AjPStr pattern,
     ajint start;
     ajint end;
     ajint count = 0;
-    
-    ajDebug("embPatFuzzSearch type %d\n", type);
 
+    ajDebug("embPatFuzzSearch type %d pattern: '%S'\n", type, pattern);
+    
     switch(type)
     {
     case 1:
@@ -3992,7 +4032,7 @@ void embPatFuzzSearch(ajint type, ajint begin, const AjPStr pattern,
 	break;
 
     case 5:
-	ppm = embPatMatchFind(regexp,text);
+	ppm = embPatMatchFind(regexp,text, left, right);
 	n   = embPatMatchGetNumber(ppm);
 	count = n;
 	
@@ -4000,6 +4040,8 @@ void embPatFuzzSearch(ajint type, ajint begin, const AjPStr pattern,
 	{
 	    start = embPatMatchGetStart(ppm,i);
 	    end   = embPatMatchGetEnd(ppm,i);
+	    ajDebug("embPatFuzzSearch embPatMatchFind left:%B start:%d\n",
+		    left, start);
 	    if(left && start)
 	    {
 		--count;
@@ -4010,7 +4052,19 @@ void embPatFuzzSearch(ajint type, ajint begin, const AjPStr pattern,
 		--count;
 		continue;
 	    }
-	    embPatPushHit(l,name,start,end-start+1,begin,0);
+	    if(!right || (right && start==ajStrLen(text)-
+			     (end-start+1)))
+	    {
+		ajDebug("embPatFuzzSearch type 5 push hit %B..%B %d..%d\n",
+			left, right, start, end);
+		embPatPushHit(l,name,start,end-start+1,
+			      begin,0);
+	    }
+	    else
+	    {
+		ajDebug("embPatFuzzSearch type 5 skip hit %B..%B %d..%d\n",
+			left, right, start, end);
+	    }
 
 	}
 	embPatMatchDel(&ppm);

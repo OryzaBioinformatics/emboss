@@ -30,7 +30,7 @@ NUCLSRC =  embaln.c embcom.c embcons.c \
 
 libnucleus_la_SOURCES = $(NUCLSRC)
 
-libnucleus_la_LDFLAGS =  -version-info 1:0:1
+libnucleus_la_LDFLAGS =  -version-info 3:0:0
 
 include_HEADERS = emboss.h \
 		 embaln.h embcom.h embcons.h \

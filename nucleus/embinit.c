@@ -66,7 +66,7 @@ AjStatus embInit (const char *pgm, ajint argc, char * const argv[])
 AjStatus embInitP (const char *pgm, ajint argc, char * const argv[],
 		   const char *package)
 {
-  ajNamInit(package);
+  ajNamInit("emboss");
 
-  return ajAcdInit (pgm, argc, argv);
+  return ajAcdInitP (pgm, argc, argv, package);
 }

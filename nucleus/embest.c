@@ -851,6 +851,9 @@ EmbPEstAlign embEstAlignNonRecursive(const AjPSeq est, const AjPSeq genome,
 
     char dbgmsg[512] = "<undefined>\n";
 
+    best_start.right = 0;
+    best_start.left  = 0;
+
     splice_sites_str = ajSeqChar(splice_sites);
     e_len_pack = ajSeqLen(est)/4+1;
 
