@@ -3,10 +3,10 @@
 use English;
 
 sub srsref {
-    return "<a href=\"http://srs.rfcgr.mrc.ac.uk/srs7bin/cgi-bin/wgetz?-e+[EFUNC-ID:$_[0]]\">$_[0]</a>";
+    return "<a href=\"http://srs.ebi.ac.uk/srs7bin/cgi-bin/wgetz?-e+[EFUNC-ID:$_[0]]\">$_[0]</a>";
 }
 sub srsdref {
-    return "<a href=\"http://srs.rfcgr.mrc.ac.uk/srs7bin/cgi-bin/wgetz?-e+[EDATA-ID:$_[0]]\">$_[0]</a>";
+    return "<a href=\"http://srs.ebi.ac.uk/srs7bin/cgi-bin/wgetz?-e+[EDATA-ID:$_[0]]\">$_[0]</a>";
 }
 
 sub secttest($$) {
@@ -571,10 +571,21 @@ while ($source =~ m"[/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]"gos) {
 		}
 		else {
 		    ($tcast,$tname) = ($curarg =~ /(\S.*\S)\s+(\S+)/);
-		    if (!$tname) {
+		    if (!defined($tname)) {
 			$tcast = $curarg;
-			if (!$var && $curarg eq "...") {
-			    $var = $tname = "vararg";
+			if (!$var) {
+			    if($curarg eq "...") {
+				$var = $tname = "vararg";
+			    }
+			    else {
+				print "bad argument \#$acnt parsing failed for '$curarg'\n";
+				$var = "unknown";
+				$tname = "undefined";
+			    }
+			}
+			else {
+				print "bad argument \#$acnt parsing failed for '$curarg'\n";
+				$tname = "undefined";
 			}
 		    }
 		    $castfix = $cast;
@@ -584,6 +595,8 @@ while ($source =~ m"[/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]"gos) {
 		    }
 		    if (!$isprog && ($var ne $tname)) {
 			print "bad var <$var> <$tname>\n";
+			print "bad var <$var>\n";
+			print "bad var <$tname>\n";
 		    }
 		}
 	    }

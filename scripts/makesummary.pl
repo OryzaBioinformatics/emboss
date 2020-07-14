@@ -141,11 +141,13 @@ print "\n";
 print "AcdValid warnings and errors\n";
 print "============================\n";
 
-open (AV, "acdvalidreport.txt") || die "Cannot open acdvalid.txt";
+open (AV, "acdvalidreport.txt") || die "Cannot open acdvalidreport.txt";
 
 $toto = $tote = $totw = 0;
 while (<AV>) {
-    if (/^ *(\d+) [*] /) {$tote += $1}
+    if (/^ *(\d+) EMBOSS and (\d+) EMBASSY applications/) {next}
+    elsif (/^\s*$/) {next}
+    elsif (/^ *(\d+) [*] /) {$tote += $1}
     elsif (/^ *(\d+) /) {$totw += $1}
     else {$toto++}
 }

@@ -50,9 +50,20 @@ print OUT qq|
 </HEAD>
 <BODY BGCOLOR="#FFFFFF" text="#000000">
 
-<!--#include file="header1.inc" -->
+<table align=center border=0 cellspacing=0 cellpadding=0>
+<tr><td valign=top>
+<A HREF="/index.html" ONMOUSEOVER="self.status='Go to the EMBOSS home page';return true"><img border=0 src="/images/emboss_icon.jpg" alt="" width=150 height=48></a>
+</td>
+<td align=left valign=middle>
+<b><font size="+6">
+
 Change Log
-<!--#include file="header2.inc" -->  
+
+</font></b>
+</td></tr>
+</table>
+<br>&nbsp;
+<p>
 
 |;
 

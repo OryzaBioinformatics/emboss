@@ -1,10 +1,18 @@
 #!/usr/local/bin/perl -w
 
 $name = shift @ARGV;
+open(ACD, "/homes/pmr/local/share/EMBOSS/acd/$name.acd") || die "Cannot open $name.acd";
+while(<ACD>) {
+    if(/^\s+embassy:\s+"([^\"]+)"\s*$/) {$embassyname = $1;}
+}
+close ACD;
 
 $cnt=0;
 while (<>) {
-    if (!$cnt++) {print "$name\n"}
+    if (!$cnt++) {
+	if(defined($embassyname)) {print "+$name ($embassyname)\n"}
+	else {print "$name\n"}
+    }
     s/ \S+\/([^\/.]+[.]acd) / $1 /;
     print;
 }
