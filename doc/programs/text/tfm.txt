@@ -104,7 +104,7 @@ megamerger       Merge two large overlapping nucleic acid sequences
 merger           Merge two overlapping nucleic acid sequences
 
 ALIGNMENT DIFFERENCES
-diffseq          Find differences (SNPs) between nearly identical sequences
+diffseq          Find differences between nearly identical sequences
 
 ALIGNMENT DOT PLOTS
 dotmatcher       Displays a thresholded dotplot of two sequences
@@ -113,7 +113,6 @@ dottup           Displays a wordmatch dotplot of two sequences
 polydot          Displays all-against-all dotplots of a set of sequences
 
 ALIGNMENT GLOBAL
-alignwrap        Aligns a set of sequences to a seed alignment
 est2genome       Align EST and genomic DNA sequences
 needle           Needleman-Wunsch global alignment
 stretcher        Finds the best global alignment between two sequences
@@ -148,6 +147,7 @@ showalign        Displays a multiple sequence alignment
 showdb           Displays information on the currently available databases
 showfeat         Show features of a sequence
 showseq          Display a sequence with features, translation etc
+sixpack          Display a DNA sequence with 6-frame translation and ORFs
 textsearch       Search sequence documentation text. SRS and Entrez are faster!
 
 EDIT
@@ -171,7 +171,6 @@ seqret           Reads and writes (returns) sequences
 seqretsplit      Reads and writes (returns) sequences in individual files
 skipseq          Reads and writes (returns) sequences, skipping the first few
 splitter         Split a sequence into (overlapping) smaller sequences
-swissparse       Retrieves sequences from swissprot using keyword search
 trimest          Trim poly-A tails off EST sequences
 trimseq          Trim ambiguous bits off the ends of sequences
 union            Reads sequence fragments and builds one sequence
@@ -186,7 +185,7 @@ coderet          Extract CDS, mRNA and translations from feature tables
 extractfeat      Extract features from a sequence
 maskfeat         Mask off features of a sequence
 showfeat         Show features of a sequence
-swissparse       Retrieves sequences from swissprot using keyword search
+twofeat          Finds neighbouring pairs of features in sequences
 
 INFORMATION
 infoalign        Information on a multiple sequence alignment
@@ -216,6 +215,7 @@ compseq          Counts the composition of dimer/trimer/etc words in a sequence
 dan              Calculates DNA RNA/DNA melting temperature
 freak            Residue/base frequency table or plot
 isochore         Plots isochores in large DNA sequences
+sirna            Finds siRNA duplexes in mRNA
 wordcount        Counts words of a specified size in a DNA sequence
 
 NUCLEIC CPG ISLANDS
@@ -230,6 +230,9 @@ getorf           Finds and extracts open reading frames (ORFs)
 marscan          Finds MAR/SAR sites in nucleic sequences
 plotorf          Plot potential open reading frames
 showorf          Pretty output of DNA translations
+sixpack          Display a DNA sequence with 6-frame translation and ORFs
+syco             Synonymous codon usage Gribskov statistic plot
+tcode            Fickett TESTCODE statistic to identify protein-coding DNA
 wobble           Wobble base plot
 
 NUCLEIC MOTIFS
@@ -278,6 +281,7 @@ prettyseq        Output sequence with translated ranges
 remap            Display a sequence with restriction cut sites, translation etc
 showorf          Pretty output of DNA translations
 showseq          Display a sequence with features, translation etc
+sixpack          Display a DNA sequence with 6-frame translation and ORFs
 transeq          Translate nucleic acid sequences
 
 PHYLOGENY
@@ -291,35 +295,6 @@ pepcoil          Predicts coiled coil regions
 pepnet           Displays proteins as a helical net
 pepwheel         Shows protein sequences as helices
 tmap             Displays membrane spanning regions
-
-PROTEIN 3D STRUCTURE
-contacts         Reads coordinate files and writes files of intra-chain residue
--residue contact data
-dichet           Parse dictionary of heterogen groups
-fraggle          Removes fragment sequences from a seqsearch hits file
-hmmgen           Generates a hidden Markov model for each alignment in a direct
-ory
-interface        Reads coordinate files and writes files of inter-chain residue
--residue contact data
-profgen          Generates various profiles for each alignment in a directory
-psiblasts        Runs PSI-BLAST given scopalign alignments
-scopalign        Generate alignments for families in a scop classification file
- by using STAMP
-scoprep          Reorder scop classificaiton file so that the representative st
-ructure of each family is given first
-scopreso         Removes low resolution domains from a scop classification file
-seqalign         Generate extended alignments for families in a scop families f
-ile by using CLUSTALW with seed alignments
-seqsearch        Generate files of hits for families in a scop classification f
-ile by using PSI-BLAST with seed alignments
-seqsort          Reads multiple files of hits and writes a non-ambiguous file o
-f hits (scop families file) plus a validation file
-seqwords         Generate file of hits for scop families by searching swissprot
- with keywords
-siggen           Generates a sparse protein signature from an alignment and res
-idue contact data
-sigscan          Scans a signature against swissprot and writes a signature hit
-s files
 
 PROTEIN COMPOSITION
 backtranseq      Back translate a protein sequence
@@ -347,6 +322,7 @@ oddcomp          Finds protein sequence regions with a biased composition
 patmatdb         Search a protein sequence with a motif
 patmatmotifs     Search a PROSITE motif database with a protein sequence
 pepcoil          Predicts coiled coil regions
+pestfind         Finds PEST motifs as potential proteolytic cleavage sites
 preg             Regular expression search of a protein sequence
 pscan            Scans proteins using PRINTS
 sigcleave        Reports protein signal cleavage sites
@@ -363,26 +339,9 @@ prophet          Gapped alignment for profiles
 UTILS DATABASE CREATION
 aaindexextract   Extract data from AAINDEX
 cutgextract      Extract data from CUTG
-domainer         Reads protein coordinate files and writes domains coordinate f
-iles
-funky            Reads clean coordinate files and writes file of protein-hetero
-gen contact data
-hetparse         Converts raw dictionary of heterogen groups to a file in embl-
-like format
-nrscope          Converts redundant EMBL-format SCOP file to non-redundant one
-pdbparse         Parses pdb files and writes cleaned-up protein coordinate file
-s
-pdbtosp          Convert raw swissprot:pdb equivalence file to embl-like format
 printsextract    Extract data from PRINTS
 prosextract      Builds the PROSITE motif database for patmatmotifs to search
 rebaseextract    Extract data from REBASE
-scope            Convert raw scop classification file to embl-like format
-scopnr           Removes redundant domains from a scop classification file
-scopparse        Converts raw scop classification files to a file in embl-like
-format
-scopseqs         Adds pdb and swissprot sequence records to a scop classificati
-on file
-seqnr            Removes redundant hits from a scop families file
 tfextract        Extract data from TRANSFAC
 
 UTILS DATABASE INDEXING
@@ -407,7 +366,6 @@ Finds programs by keywords in their one-line documentation
 ALPHABETIC LIST OF PROGRAMS
 aaindexextract   Extract data from AAINDEX
 abiview          Reads ABI file and display the trace
-alignwrap        Aligns a set of sequences to a seed alignment
 antigenic        Finds antigenic sites in proteins
 backtranseq      Back translate a protein sequence
 banana           Bending and curvature plot in B-DNA
@@ -423,8 +381,6 @@ codcmp           Codon usage table comparison
 coderet          Extract CDS, mRNA and translations from feature tables
 compseq          Counts the composition of dimer/trimer/etc words in a sequence
 cons             Creates a consensus from multiple alignments
-contacts         Reads coordinate files and writes files of intra-chain residue
--residue contact data
 cpgplot          Plot CpG rich areas
 cpgreport        Reports all CpG rich regions
 cusp             Create a codon usage table
@@ -437,12 +393,9 @@ dbiflat          Index a flat file database
 dbigcg           Index a GCG formatted database
 degapseq         Removes gap characters from sequences
 descseq          Alter the name or description of a sequence
-dichet           Parse dictionary of heterogen groups
-diffseq          Find differences (SNPs) between nearly identical sequences
+diffseq          Find differences between nearly identical sequences
 digest           Protein proteolytic enzyme or reagent cleavage digest
 distmat          Creates a distance matrix from multiple alignments
-domainer         Reads protein coordinate files and writes domains coordinate f
-iles
 dotmatcher       Displays a thresholded dotplot of two sequences
 dotpath          Displays a non-overlapping wordmatch dotplot of two sequences
 dottup           Displays a wordmatch dotplot of two sequences
@@ -460,10 +413,7 @@ etandem          Looks for tandem repeats in a nucleotide sequence
 extractfeat      Extract features from a sequence
 extractseq       Extract regions from a sequence
 findkm           Find Km and Vmax for an enzyme reaction by a Hanes/Woolf plot
-fraggle          Removes fragment sequences from a seqsearch hits file
 freak            Residue/base frequency table or plot
-funky            Reads clean coordinate files and writes file of protein-hetero
-gen contact data
 fuzznuc          Nucleic acid pattern search
 fuzzpro          Protein pattern search
 fuzztran         Protein pattern search after translation
@@ -471,16 +421,10 @@ garnier          Predicts protein secondary structure
 geecee           Calculates the fractional GC content of nucleic acid sequences
 getorf           Finds and extracts open reading frames (ORFs)
 helixturnhelix   Report nucleic acid binding motifs
-hetparse         Converts raw dictionary of heterogen groups to a file in embl-
-like format
-hmmgen           Generates a hidden Markov model for each alignment in a direct
-ory
 hmoment          Hydrophobic moment calculation
 iep              Calculates the isoelectric point of a protein
 infoalign        Information on a multiple sequence alignment
 infoseq          Displays some simple information about sequences
-interface        Reads coordinate files and writes files of inter-chain residue
--residue contact data
 isochore         Plots isochores in large DNA sequences
 lindna           Draws linear maps of DNA constructs
 listor           Writes a list file of the logical OR of two sets of sequences
@@ -494,12 +438,12 @@ msbar            Mutate sequence beyond all recognition
 mwcontam         Shows molwts that match across a set of files
 mwfilter         Filter noisy molwts from mass spec output
 needle           Needleman-Wunsch global alignment
+needle           Protein global alignment against DNA
 newcpgreport     Report CpG rich areas
 newcpgseek       Reports CpG rich regions
 newseq           Type in a short new sequence
 noreturn         Removes carriage return from ASCII files
 notseq           Excludes a set of sequences and writes out the remaining ones
-nrscope          Converts redundant EMBL-format SCOP file to non-redundant one
 nthseq           Writes one sequence from a multiple set of sequences
 octanol          Displays protein hydropathy
 oddcomp          Finds protein sequence regions with a biased composition
@@ -507,9 +451,6 @@ palindrome       Looks for inverted repeats in a nucleotide sequence
 pasteseq         Insert one sequence into another
 patmatdb         Search a protein sequence with a motif
 patmatmotifs     Search a PROSITE motif database with a protein sequence
-pdbparse         Parses pdb files and writes cleaned-up protein coordinate file
-s
-pdbtosp          Convert raw swissprot:pdb equivalence file to embl-like format
 pepcoil          Predicts coiled coil regions
 pepinfo          Plots simple amino acid properties in parallel
 pepnet           Displays proteins as a helical net
@@ -517,6 +458,7 @@ pepstats         Protein statistics
 pepwheel         Shows protein sequences as helices
 pepwindow        Displays protein hydropathy
 pepwindowall     Displays protein hydropathy of a set of sequences
+pestfind         Finds PEST motifs as potential proteolytic cleavage sites
 plotcon          Plots the quality of conservation of a sequence alignment
 plotorf          Plot potential open reading frames
 polydot          Displays all-against-all dotplots of a set of sequences
@@ -525,13 +467,11 @@ prettyplot       Displays aligned sequences, with colouring and boxing
 prettyseq        Output sequence with translated ranges
 primersearch     Searches DNA sequences for matches with primer pairs
 printsextract    Extract data from PRINTS
-profgen          Generates various profiles for each alignment in a directory
 profit           Scan a sequence or database with a matrix or profile
 prophecy         Creates matrices/profiles from multiple alignments
 prophet          Gapped alignment for profiles
 prosextract      Builds the PROSITE motif database for patmatmotifs to search
 pscan            Scans proteins using PRINTS
-psiblasts        Runs PSI-BLAST given scopalign alignments
 rebaseextract    Extract data from REBASE
 recoder          Remove restriction sites but maintain the same translation
 redata           Search REBASE for enzyme name, references, suppliers etc
@@ -539,30 +479,10 @@ remap            Display a sequence with restriction cut sites, translation etc
 restover         Finds restriction enzymes that produce a specific overhang
 restrict         Finds restriction enzyme cleavage sites
 revseq           Reverse and complement a sequence
-scopalign        Generate alignments for families in a scop classification file
- by using STAMP
-scope            Convert raw scop classification file to embl-like format
-scopnr           Removes redundant domains from a scop classification file
-scopparse        Converts raw scop classification files to a file in embl-like
-format
-scoprep          Reorder scop classificaiton file so that the representative st
-ructure of each family is given first
-scopreso         Removes low resolution domains from a scop classification file
-scopseqs         Adds pdb and swissprot sequence records to a scop classificati
-on file
 seealso          Finds programs sharing group names
-seqalign         Generate extended alignments for families in a scop families f
-ile by using CLUSTALW with seed alignments
 seqmatchall      Does an all-against-all comparison of a set of sequences
-seqnr            Removes redundant hits from a scop families file
 seqret           Reads and writes (returns) sequences
 seqretsplit      Reads and writes (returns) sequences in individual files
-seqsearch        Generate files of hits for families in a scop classification f
-ile by using PSI-BLAST with seed alignments
-seqsort          Reads multiple files of hits and writes a non-ambiguous file o
-f hits (scop families file) plus a validation file
-seqwords         Generate file of hits for scop families by searching swissprot
- with keywords
 showalign        Displays a multiple sequence alignment
 showdb           Displays information on the currently available databases
 showfeat         Show features of a sequence
@@ -570,19 +490,17 @@ showorf          Pretty output of DNA translations
 showseq          Display a sequence with features, translation etc
 shuffleseq       Shuffles a set of sequences maintaining composition
 sigcleave        Reports protein signal cleavage sites
-siggen           Generates a sparse protein signature from an alignment and res
-idue contact data
-sigscan          Scans a signature against swissprot and writes a signature hit
-s files
 silent           Silent mutation restriction enzyme scan
+sirna            Finds siRNA duplexes in mRNA
+sixpack          Display a DNA sequence with 6-frame translation and ORFs
 skipseq          Reads and writes (returns) sequences, skipping the first few
 splitter         Split a sequence into (overlapping) smaller sequences
 stretcher        Finds the best global alignment between two sequences
 stssearch        Searches a DNA database for matches with a set of STS primers
 supermatcher     Finds a match of a large sequence against one or more sequence
 s
-swissparse       Retrieves sequences from swissprot using keyword search
 syco             Synonymous codon usage Gribskov statistic plot
+tcode            Fickett TESTCODE statistic to identify protein-coding DNA
 textsearch       Search sequence documentation text. SRS and Entrez are faster!
 tfextract        Extract data from TRANSFAC
 tfm              Displays a program's help documentation manual
@@ -592,6 +510,7 @@ tranalign        Align nucleic coding regions given the aligned proteins
 transeq          Translate nucleic acid sequences
 trimest          Trim poly-A tails off EST sequences
 trimseq          Trim ambiguous bits off the ends of sequences
+twofeat          Finds neighbouring pairs of features in sequences
 union            Reads sequence fragments and builds one sequence
 vectorstrip      Strips out DNA between a pair of vector sequences
 water            Smith-Waterman local alignment
@@ -637,7 +556,6 @@ NUCLEIC TRANSCRIPTION
 NUCLEIC TRANSLATION
 PHYLOGENY
 PROTEIN 2D STRUCTURE
-PROTEIN 3D STRUCTURE
 PROTEIN COMPOSITION
 PROTEIN MOTIFS
 PROTEIN MUTATION
@@ -681,7 +599,6 @@ Keyword to search for, or blank to list all programs:
      * NUCLEIC TRANSLATION
      * PHYLOGENY
      * PROTEIN 2D STRUCTURE
-     * PROTEIN 3D STRUCTURE
      * PROTEIN COMPOSITION
      * PROTEIN MOTIFS
      * PROTEIN MUTATION
@@ -698,7 +615,6 @@ Keyword to search for, or blank to list all programs:
 % wossname '' -html -prelink 'http://www.uk.embnet.org/Software/EMBOSS/Apps/' -
 postlink '.html' -out wossname.html
 Finds programs by keywords in their one-line documentation
-Keyword to search for, or blank to list all programs:
 
    Go to the output files for this example
 
@@ -804,10 +720,27 @@ Command line arguments
                                   to only report those programs that can be
                                   run from a GUI
 
+   Associated qualifiers:
+  "-outfile" related qualifiers
+   -odirectory          string     Output directory
+
    General qualifiers:
-  -help                boolean    Report command line options. More
+   -auto                boolean    Turn off prompts
+   -stdout              boolean    Write standard output
+   -filter              boolean    Read standard input, write standard output
+   -options             boolean    Prompt for required and optional values
+   -debug               boolean    Write debug output to program.dbg
+   -acdlog              boolean    Write ACD processing log to program.acdlog
+   -acdpretty           boolean    Rewrite ACD file as program.acdpretty
+   -acdtable            boolean    Write HTML table of options
+   -verbose             boolean    Report some/full command line options
+   -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
+   -warning             boolean    Report warnings
+   -error               boolean    Report errors
+   -fatal               boolean    Report fatal errors
+   -die                 boolean    Report deaths
 
 
    Mandatory qualifiers Allowed values Default
@@ -908,8 +841,8 @@ ALIGNMENT CONSENSUS
 
 ALIGNMENT DIFFERENCES
 
-   Program name                        Description
-   diffseq      Find differences (SNPs) between nearly identical sequences
+   Program name                     Description
+   diffseq      Find differences between nearly identical sequences
 
 ALIGNMENT DOT PLOTS
 
@@ -922,7 +855,6 @@ ALIGNMENT DOT PLOTS
 ALIGNMENT GLOBAL
 
    Program name                      Description
-   alignwrap    Aligns a set of sequences to a seed alignment
    est2genome   Align EST and genomic DNA sequences
    needle       Needleman-Wunsch global alignment
    stretcher    Finds the best global alignment between two sequences
@@ -949,10 +881,22 @@ ALIGNMENT MULTIPLE
 
 DISPLAY
 
-   Program name              Description
+    Program name                         Description
+   abiview        Reads ABI file and display the trace
    [Part of this file has been deleted for brevity]
-   pscan        Scans proteins using PRINTS
-   sigcleave    Reports protein signal cleavage sites
+   antigenic      Finds antigenic sites in proteins
+   digest         Protein proteolytic enzyme or reagent cleavage digest
+   fuzzpro        Protein pattern search
+   fuzztran       Protein pattern search after translation
+   helixturnhelix Report nucleic acid binding motifs
+   oddcomp        Finds protein sequence regions with a biased composition
+   patmatdb       Search a protein sequence with a motif
+   patmatmotifs   Search a PROSITE motif database with a protein sequence
+   pepcoil        Predicts coiled coil regions
+   pestfind       Finds PEST motifs as potential proteolytic cleavage sites
+   preg           Regular expression search of a protein sequence
+   pscan          Scans proteins using PRINTS
+   sigcleave      Reports protein signal cleavage sites
 
 PROTEIN MUTATION
 
@@ -972,27 +916,10 @@ UTILS DATABASE CREATION
    Program name Description
    aaindexextract Extract data from AAINDEX
    cutgextract Extract data from CUTG
-   domainer Reads protein coordinate files and writes domains coordinate
-   files
-   funky Reads clean coordinate files and writes file of
-   protein-heterogen contact data
-   hetparse Converts raw dictionary of heterogen groups to a file in
-   embl-like format
-   nrscope Converts redundant EMBL-format SCOP file to non-redundant one
-   pdbparse Parses pdb files and writes cleaned-up protein coordinate
-   files
-   pdbtosp Convert raw swissprot:pdb equivalence file to embl-like format
    printsextract Extract data from PRINTS
    prosextract Builds the PROSITE motif database for patmatmotifs to
    search
    rebaseextract Extract data from REBASE
-   scope Convert raw scop classification file to embl-like format
-   scopnr Removes redundant domains from a scop classification file
-   scopparse Converts raw scop classification files to a file in
-   embl-like format
-   scopseqs Adds pdb and swissprot sequence records to a scop
-   classification file
-   seqnr Removes redundant hits from a scop families file
    tfextract Extract data from TRANSFAC
 
 UTILS DATABASE INDEXING
@@ -1032,10 +959,10 @@ UTILS MISC
    on the currently available databases textsearch Search sequence
    documentation text. SRS and Entrez are faster! tfm Displays a
    program's help documentation manual whichdb Search all databases for
-   an entry Author(s) This application was written by Gary Williams
-   (gwilliam@hgmp.mrc.ac.uk) History Finished Target users This program
-   is intended to be used by everyone and everything, from naive users to
-   embedded scripts. Comments
+   an entry Author(s) Gary Williams (gwilliam © hgmp.mrc.ac.uk) HGMP-RC,
+   Genome Campus, Hinxton, Cambridge CB10 1SB, UK History Target users
+   This program is intended to be used by everyone and everything, from
+   naive users to embedded scripts. Comments
    
 Command line arguments
 
@@ -1056,10 +983,27 @@ Command line arguments
                                   proceed to the next page.
 
    Advanced qualifiers: (none)
+   Associated qualifiers:
+  "-outfile" related qualifiers
+   -odirectory          string     Output directory
+
    General qualifiers:
-  -help                boolean    Report command line options. More
+   -auto                boolean    Turn off prompts
+   -stdout              boolean    Write standard output
+   -filter              boolean    Read standard input, write standard output
+   -options             boolean    Prompt for required and optional values
+   -debug               boolean    Write debug output to program.dbg
+   -acdlog              boolean    Write ACD processing log to program.acdlog
+   -acdpretty           boolean    Rewrite ACD file as program.acdpretty
+   -acdtable            boolean    Write HTML table of options
+   -verbose             boolean    Report some/full command line options
+   -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
+   -warning             boolean    Report warnings
+   -error               boolean    Report errors
+   -fatal               boolean    Report fatal errors
+   -die                 boolean    Report deaths
    
 
    Mandatory qualifiers Allowed values Default
@@ -1140,8 +1084,8 @@ See also
    
 Author(s)
 
-   This application was written by Gary Williams
-   (gwilliam@hgmp.mrc.ac.uk)
+   Gary Williams (gwilliam © hgmp.mrc.ac.uk)
+   HGMP-RC, Genome Campus, Hinxton, Cambridge CB10 1SB, UK
    
 History
 

@@ -100,15 +100,20 @@ static void tfm_FindAppDocRoot (AjPStr* docroot)
 
     AjPStr docrootinst = NULL;
 
-    docrootinst = ajStrNew();
+    ajNamGetValueC("docroot", docroot);
 
     /* look at EMBOSS doc files */
 
     /* try to open the installed doc directory */
-    (void) ajNamRootInstall (&docrootinst);
-    (void) ajFileDirFix (&docrootinst);
-    ajFmtPrintS (docroot, "%Sshare/EMBOSS/doc/programs/",
-		 docrootinst);
+    if (!ajStrLen(*docroot))
+    {
+      (void) ajNamRootInstall (&docrootinst);
+      (void) ajFileDirFix (&docrootinst);
+      ajFmtPrintS (docroot, "%Sshare/EMBOSS/doc/",
+		   docrootinst);
+    }
+    (void) ajFileDirFix (docroot);
+    ajFmtPrintAppS(docroot, "programs/");
     if (!ajFileDir(docroot))
     {
 	/*
