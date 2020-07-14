@@ -10,7 +10,7 @@ F;179-212/Domain: carboxyl-terminal propeptide #link EAG #status predicted <ECP>
 F;96-162-165/Cross-link: heme P460 (Lys-Cys-Cys) #status predicted
 F;38,90/Active site: Cys, His #status experimental
 F;14,17/Binding site: heme (Cys) (covalent) #status experimental
-F;1564-1565/Cleavage site: Arg-Ser (thrombin) #status experimental
+F;64-65/Cleavage site: Arg-Ser (thrombin) #status experimental
 F;145-147/Cross-link: 5-imidazolinone (Cys-Gly) #status predicted
 F;104-107/Disulfide bonds: redox-active #status experimental
 F;6-105,112-193/Domain: SH2 #status predicted <SH2>
