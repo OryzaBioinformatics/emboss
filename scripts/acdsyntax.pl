@@ -28,8 +28,38 @@ while (<ACDSTATS>) {
 close ACDSTATS;
 
 open (TABLE, ">test.html");
-
 print TABLE "<HTML><HEAD></HEAD><BODY>\n";
+
+open (CONTENTS, ">content.html");
+
+print CONTENTS "<html><head><title>
+EMBOSS: AJAX Command Definition (ACD files)</title></head>
+
+<body bgcolor=\"\#ffffff\" text=\"\#000000\">
+
+
+
+<table align=\"center\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\">
+<tbody><tr><td valign=\"top\">
+<a href=\"index.html\" <img border=\"0\"
+  src=\"contents_files/emboss_icon.jpg\" alt=\"\"
+   width=\"150\" height=\"48\"></a>
+</td>
+<td align=\"left\" valign=\"middle\">
+<b><font size=\"+6\">
+
+AJAX Command Definition (ACD files)
+</font></b>
+</td></tr>
+</tbody></table>
+
+<br>&nbsp;
+
+<h3><a href=\"syntax.html\">ACD </a></h3>
+
+";
+
+$contentlevel=0;
 
 # read the entrails full output
 
@@ -1134,6 +1164,21 @@ while (<TEMPLATE>) {
 	    print STDERR "Unidentified comment in line $lcnt: $_";
 	}
 
+	if (/^<a name=([^>]+)>/)  {
+	    $contentname = $1;
+	}
+	if (/^<h([1-3])>([^<]+)<\/h/) {
+	    $level=$1;
+	    while ($contentlevel > $level) {
+		print CONTENTS "</ul>\n"; 
+		$contentlevel--;
+	    }
+	    while ($contentlevel < $level) {
+		print CONTENTS "<ul>\n"; 
+		$contentlevel++;
+	    }
+	    print CONTENTS "<a href=\"syntax.html#$contentname\">$2</a><br>\n"
+	}
 	if ($testacdsect) {$testacdsect{$stype} .= $_}
 	if ($testacdtype) {$testacdtype{$ttype} .= $_}
 	if ($testattrsect) {$testattrsect{$sattr} .= $_}
@@ -1221,7 +1266,8 @@ while (<TEMPLATE>) {
 	$isubtable=0;
     }
     elsif ($insert =~ /^qual-(\S+)/) {
-	$ts = ucfirst($1);
+	$s = $1;
+	$ts = ucfirst($s);
 	dotableattrqual($s,"$ts qualifiers.");
     }
     elsif ($insert eq "tableothervars") {
@@ -1237,6 +1283,9 @@ close TEMPLATE;
 print TABLE "</BODY></HTML>\n";
 
 close TABLE;
+print CONTENTS "</BODY></HTML>\n";
+
+close CONTENTS;
 
 foreach $s (sort (keys ( %section))) {
     if (!defined($donesection{$s})) {
