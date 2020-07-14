@@ -1317,6 +1317,38 @@ AjPStr ajFmtPrintS (AjPStr* pthis, const char* fmt, ...)
     return thys;
 }
 
+/* @func ajFmtVPrintS *********************************************************
+**
+** Formats the "..." arguments into an AjPStr according to fmt.
+** If AjPStr is not large enough then if it is the only one i.e
+** Use = 1 then increase till it fits. Else return 0 if it does not
+** fit. If it fits return the address of the new AjPStr.
+**
+** @param [u] pthis [AjPStr*] String to be written too.
+** @param [r] fmt [const char*] Format for string.
+** @param [r] ap [va_list] Variable length argument list
+**
+** @return [AjPStr] Output string
+**
+** @error on unsuccessful writing return 0
+**
+** @@
+** NOTE: unsafe may be best to pass a pointer to the pointer new
+** as it passes back 0 if not able to be done
+******************************************************************************/
+
+AjPStr ajFmtVPrintS (AjPStr* pthis, const char* fmt, va_list ap)
+{
+    volatile AjPStr thys;
+
+    (void) ajStrModL(pthis, 32);
+    thys = *pthis;
+
+    thys->Len = ajFmtVfmtStrCL(&thys->Ptr, 0, &thys->Res, fmt, ap);
+
+    return thys;
+}
+
 /* @func ajFmtPrintAppS *******************************************************
 **
 ** Formats the "..." arguments and appends to an AjPStr according to fmt.

@@ -62,6 +62,7 @@ void   ajFmtPuts (const char *str, ajint len,
 		  ajuint flags[256], ajint width, ajint precision);
 AjPStr ajFmtStr (const char *fmt, ...);
 AjPStr ajFmtPrintS (AjPStr *pthis, const char *fmt, ...) ;
+AjPStr ajFmtVPrintS (AjPStr *pthis, const char *fmt, va_list ap) ;
 AjPStr ajFmtPrintAppS (AjPStr *pthis, const char *fmt, ...) ;
 ajint  ajFmtVfmtCL (char* buf, ajint size, const char* fmt,
 		    va_list ap);
