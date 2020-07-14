@@ -16,7 +16,7 @@
   src="http://www.hgmp.mrc.ac.uk/Software/EMBOSS/emboss_icon.gif"></a></p>
   </td>
   <td>
-  <h2 align=center>ACD Syntax 2.8.0</h2>
+  <h2 align=center>ACD Syntax 2.9.0</h2>
   </td>
  </tr>
 </table>
@@ -421,6 +421,29 @@ necessary. Most string values are free text, although strings can be
 used by a program for any input that is not covered by a defined ACD
 type.</p>
 
+<!-- #acdtype-toggle -->
+<h5>Toggle</h5>
+
+<p>Toggle parameters are simple switches, and work in the same way as
+"boolean" parameters. Toggle parameters are intended for use in
+turning on/off other parameters. When ACD parameters are grouped in
+sections, a clean ACD file will  have all the "required" parameters in
+the "requierd" secion and all the "additional" parameters ni the
+"additional" section. Some of these will have calculated values for
+the "standard" and "additional" attributes, controlled by the value of
+another parameter. The "toggle" parameters are designed to be used in
+these calculated values, and can be ni the "required" section even if
+not themselves defined as "standard".</p>
+
+<p>Exactly like "boolean" parameters, if they
+are entered on the command line the value will be Y (True), if they are absent
+from the command line the value will be the default value. The name can also be
+prefixed by 'no' to force the value to be N (False). This is needed if the
+default value is Y (True). The data value is Y for yes and N for
+no.</p>
+
+
+
 <a name=sect2312>&nbsp;</a>
 <a name=fnB3>&nbsp;</a>
 <!-- #acdtype-section-input -->
@@ -529,7 +552,7 @@ command line options.</p>
 <p>Non-sequence-related data file. This data type
 refers to files that are to be used in the program and do usually not contain
 sequence data. The type of data can be identified by a "knowntype"
-attribute and matched to Outfile standard types, or to report, aligm, featout,
+attribute and matched to Outfile standard types, or to report, align, featout,
 or seqout formats.</p>
 
 <!-- #acdtype-matrix -->
@@ -623,7 +646,7 @@ to define one or more phylogenetic trees. By defining a specific ACD
 type EMBOSS can provide detailed type checking, and can automatically
 detect and validate the various alternative formats that phylip
 supports without the need for complex extra command line options. The
-trees aer currently parsed by phylip itself, but in the near future we
+trees are currently parsed by phylip itself, but in the near future we
 will implement parsing methods in ACD processing.</p>
 
 <a name=sect2313>&nbsp;</a>
@@ -686,6 +709,52 @@ sequence formats.</p>
 Can also be stored with the sequence if the sequence output
 "features" attribute is set.</p>
 
+<!-- #acdtype-outcodon -->
+<h5>Outcodon</h5>
+
+<p>Output file containing codon usage data.
+The default data format can be specified by an "oformat" attribute
+which the <i>-oformat</i> associated qualifier can override.</p>
+
+<!-- #acdtype-outcpdb -->
+<h5>Outcpdb</h5>
+
+<p>Output file containing cleaned PDB protein structure data.
+The default data format can be specified by an "oformat" attribute
+which the <i>-oformat</i> associated qualifier can override.</p>
+
+<!-- #acdtype-outdata -->
+<h5>Outdata</h5>
+
+<p>Output file containing cleaned formatted data as tables or lists.
+The default data format can be specified by an "oformat" attribute
+which the <i>-oformat</i> associated qualifier can override.</p>
+
+<p>Multiple <b>outdata</b> definitions are by default appended to a
+single file. The individual ACD definitions allow the format of each
+file section to be defined.</p>
+
+<!-- #acdtype-outdir -->
+<h5>Outdir</h5>
+
+<p>Output directory for multiple output files to be written.
+Specifying an <b>outditr</b> allows other properties to be defined,
+including the default file extension with the "extension" attribute.</p>
+
+<!-- #acdtype-outdiscrete -->
+<h5>Outdiscrete</h5>
+
+<p>Output file containing phylogenetics discrete characteristics data.
+The default data format can be specified by an "oformat" attribute
+which the <i>-oformat</i> associated qualifier can override.</p>
+
+<!-- #acdtype-outdistance -->
+<h5>Outdistance</h5>
+
+<p>Output file containing phylogenetics distance matrix data.
+The default data format can be specified by an "oformat" attribute
+which the <i>-oformat</i> associated qualifier can override.</p>
+
 <!-- #acdtype-outfile -->
 <h5>Outfile</h5>
 
@@ -694,6 +763,48 @@ text. This data type refers to files that are to be used in the program and do
 usually not contain sequence data. The type of data can be identified by a
 "knowntype" attribute and matched to an Infile standard type for
 use as input to another program.</p>
+
+<!-- #acdtype-outfreq -->
+<h5>Outfreq</h5>
+
+<p>Output file containing phylogenetics character frequency data.
+The default data format can be specified by an "oformat" attribute
+which the <i>-oformat</i> associated qualifier can override.</p>
+
+<!-- #acdtype-outmatrix -->
+<h5>Outmatrix</h5>
+
+<p>Output file containing integer comparison matrix data.
+The default data format can be specified by an "oformat" attribute
+which the <i>-oformat</i> associated qualifier can override.</p>
+
+<!-- #acdtype-outmatrixf -->
+<h5>Outmatrixf</h5>
+
+<p>Output file containing floating point comparison matrix data.
+The default data format can be specified by an "oformat" attribute
+which the <i>-oformat</i> associated qualifier can override.</p>
+
+<!-- #acdtype-outproperties -->
+<h5>Outproperties</h5>
+
+<p>Output file containing phylogenetics property data.
+The default data format can be specified by an "oformat" attribute
+which the <i>-oformat</i> associated qualifier can override.</p>
+
+<!-- #acdtype-outscop -->
+<h5>Outscop</h5>
+
+<p>Output file containing SCOP protein domain data.
+The default data format can be specified by an "oformat" attribute
+which the <i>-oformat</i> associated qualifier can override.</p>
+
+<!-- #acdtype-outtree -->
+<h5>Outtree</h5>
+
+<p>Output file containing phylogenetic tree data.
+The default data format can be specified by an "oformat" attribute
+which the <i>-oformat</i> associated qualifier can override.</p>
 
 <!-- #acdtype-report -->
 <h5>Report</h5>
@@ -1122,19 +1233,19 @@ are data type-specific attributes.</p>
 <a name=sect2411>&nbsp;</a>
 <h4>2.4.1.1 The global attributes</h4>
 
-<p>code</p>
+<p><i>code:</i></p>
 
 <p>A code word (no spaces) which is searched for
 in the file codes.english to give a standard prompt, for example when asking
 for an alignment gap penalty. The standard default prompts are in the same
 file. The code word is not case-sensitive. <i>information</i> is preferred.</p>
 
-<p>default</p>
+<p><i>default:</i></p>
 
 <p>Defines the default value for the parameter,
 which can be dependent on the values of parameters defined earlier.</p>
 
-<p>expect</p>
+<p><i>expect:</i></p>
 
 <p>A string used in the "Default" column
 of the command line syntax table in the documentation. This table is
@@ -1142,46 +1253,46 @@ automatically generated from the ACD file, and in most cases there is a
 reasonable value generated. Where there is no suitable value, this attribute
 should be used to provide one.</p>
 
-<p>help</p>
+<p<i>help:</i></p>
 
 <p>The string shown when the <i>-help</i>
 qualifier is used on the command line</p>
 
-<p>information</p>
+<p><i>information:</i></p>
 
 <p>The string giving information about the
 parameter, for use on Web forms and in GUIs and also a default prompt to the
 user</p>
 
-<p>missing</p>
+<p><i>missing:</i></p>
 
 <p>Indicates whether a qualifier can have no
 value, especially when it appears on the command line (for example to override
 a default value in the ACD file).</p>
 
-<p>additional</p>
+<p><i>additional:</i></p>
 
 <p>Indicates if the parameter should be queried
 for when the <i>-options</i> qualifier is set on the command line.</p>
 
-<p>param</p>
+<p><i>param:</i></p>
 
 <p>Defines a parameter on the command line which can appear without a
 qualifier name. Also implies that the value is <i>required</i> and
 will be prompted for if missing.</p>
 
-<p>prompt</p>
+<p><i>prompt:</i></p>
 
 <p>The string used if the user has to be queried
 for a value, though <i>information</i> can be used instead and usually only one
 will be defined. <i>information</i> is preferred.</p>
 
-<p>standard</p>
+<p><i>standard:</i></p>
 
 <p>Indicates whether a parameter is mandatory and
 will be prompted for if missing.</p>
 
-<p>valid</p>
+<p><i>valid:</i></p>
 
 <p>A string used in the "Allowed values"
 column of the command line syntax table in the documentation. This table is
@@ -1189,19 +1300,19 @@ automatically generated from the ACD file, and in most cases there is a
 reasonable value generated. Where there is no suitable value, this attribute
 should be used to provide one.</p>
 
-<p>needed</p>
+<p><i>needed:</i></p>
 
 <p>Indicates whether a parameter is expected to be
 included in a GUI form. Some parameters are available on the command line, but
 are not generally useful to users, or can cause confusion when presented in a
 GUI form with all other options.</p>
 
-<p>comment</p>
+<p><i>comment:</i></p>
 
 <p>A comment, provided for use by the EBI's SoapLab
 project but not defined in the standard ACD files.</p>
 
-<p>style</p>
+<p><i>style:</i></p>
 
 <p>Provided for use by the EBI's SoapLab project
 but not defined in the standard ACD files.</p>
@@ -1428,7 +1539,7 @@ fractions cannot be represented accurately in binary form.
 
 <p>Although there are (currently) no specific attributes for a boolean
 ACD type, care should be taken over the definition of the
-<i>information:</i> and <i>help:</i> attributes. These aer used to
+<i>information:</i> and <i>help:</i> attributes. These are used to
 prompt the user (interactively or via a GUI), and to provide help
 text. The text provided in each case should reflect the expected
 default value of the boolean option, which may be the opposite of what
@@ -1484,6 +1595,21 @@ check the string value. ACD uses the Perl-compatible regular
 expression library (PCRE) so any Perl-compatible regular expression should be
 usable.</p>
 
+<!-- #acdattr-toggle -->
+<h5>Toggle</h5>
+
+<p>Although there are (currently) no specific attributes for a toggle
+ACD type, care should be taken over the definition of the
+<i>information:</i> and <i>help:</i> attributes. These are used to
+prompt the user (interactively or via a GUI), and to provide help
+text. The text provided in each case should reflect the expected
+default value of the toggle option, which may be the opposite of what
+the name implies. For example, if set to "Y" by default, then the
+command line option would typically be "-noxxx" where "xxx" is the
+qualifier. If set to "N" by default, then the default action may be
+the opposite of what the information or help text implies. If the
+value is calculated, the user may need some extra guidance.</p>
+
 <a name=sect24122>&nbsp;</a>
 <!-- #acdattr-section-input -->
 <h5>2.4.1.2.2 Input</h5>
@@ -1523,14 +1649,36 @@ effect as setting the <i>default:</i> attribute.</p>
 <i>name:</i> and <i>extension:</i>. The <i>directory:</i> attribute
 defines the EMBOSS data subdirectory to be searched.</p>
 
+<p>The <i>nullok:</i> attribute allows a default value to be replaced
+by an empty string or by -noxxx on the command line if the application
+can run without a data file. The application must be able to accept a
+null value for this qualifier.</p>
+
 <!-- #acdattr-directory -->
 <h5>Directory</h5>
+
+<p>The <i>extension:</i> attribute sets the extension for all
+files read from the directory. FIles with other extensions will not be
+read</p>
 
 <p>The <i>fullpath:</i> attribute can be used to require a full rather
 than a relative path specification for a directory.</p>
 
 <p>If a null value (the current directory) is allowed,the
 <i>nullok:</i> attribute must be set true.</p>
+
+<p>The <i>nullok:</i> attribute allows a default value to be replaced
+by an empty string or by -noxxx on the command line if the application
+can run without a directory. The application must be able to accept a
+null value for this qualifier.</p>
+
+<p>The <i>nulldefault:</i> attribute overrides the default name
+generation, and uses an empty string (no directory) as the default for
+programs where a directory is only occasionally required. If an empty
+string is specified on the command line, the standard default value
+will be generated instead. In combination with the <i>nullok:</i> and
+<i>missing:</i> attributes, this allows qualifiers to be null by
+default, and turned on from the command line.</p>
 
 <!-- #acdattr-dirlist -->
 <h5>Dirlist</h5>
@@ -1540,6 +1688,11 @@ than a relative path specification for a directory.</p>
 
 <p>If a null value (the current directory) is allowed,the
 <i>nullok:</i> attribute must be set true.</p>
+
+<p>The <i>nullok:</i> attribute allows a default value to be replaced
+by an empty string or by -noxxx on the command line if the application
+can run without a directory. The application must be able to accept a
+null value for this qualifier.</p>
 
 <!-- #acdattr-discretestates -->
 <h5>Discretestates</h5>
@@ -1588,13 +1741,25 @@ by an empty string or by -noxxx on the command line if the application
 can run without a distance file.
 </p>
 
-
 <!-- #acdattr-features -->
 <h5>Features</h5>
 
 <p>The <i>type:</i> attribute defines whether the feature input is
 "protein" or "nucleotide". There is a default based on the type of any
 input sequence, but a value should always be specified.</p>
+
+<p>The <i>nullok:</i> attribute allows a default value to be replaced
+by an empty string or by -noxxx on the command line if the application
+can run without features input. The application must be able to accept a
+null value for this qualifier.</p>
+
+<p>The <i>nulldefault:</i> attribute overrides the default name
+generation, and uses an empty string (no feature input) as the default for
+programs where a directory is only occasionally required. If an empty
+string is specified on the command line, the standard default value
+will be generated instead. In combination with the <i>nullok:</i> and
+<i>missing:</i> attributes, this allows qualifiers to be null by
+default, and turned on from the command line.</p>
 
 <!-- #acdattr-filelist -->
 <h5>Filelist</h5>
@@ -1734,7 +1899,8 @@ include the full original text of the input sequence or database entry.</p>
 
 <p>The <i>nullok:</i> attribute allows a default value to be replaced
 by an empty string or by -noxxx on the command line if the application
-can run without a sequence input.</p>
+can run without a sequence input. The application must be able to accept a
+null value for this qualifier.</p>
 
 <p>The <i>sask:</i> attribute sets the defauklt for the <i>-sask</i>
 qualifier, and if set to "Y" specifies that the program will prompt
@@ -1742,6 +1908,14 @@ the user for a sequence begin and end position, and prompt for the
 reversing of a nucleotide sequence. The EMBOSS "yank" program works
 with fragments of sequences, and uses the <i>sask:</i> attribute to
 prompt the user.</p>
+
+<p>The <i>nulldefault:</i> attribute overrides the default name
+generation, and uses an empty string (no sequence input) as the default for
+programs where seqeunce input is only occasionally required. If an empty
+string is specified on the command line, the standard default value
+will be generated instead. In combination with the <i>nullok:</i> and
+<i>missing:</i> attributes, this allows qualifiers to be null by
+default, and turned on from the command line.</p>
 
 <!-- #acdattr-seqall -->
 <h5>Seqall</h5>
@@ -1761,7 +1935,16 @@ include the full original text of the input sequence or database entry.</p>
 
 <p>The <i>nullok:</i> attribute allows a default value to be replaced
 by an empty string or by -noxxx on the command line if the application
-can run without a sequence input.</p>
+can run without a sequence input. The application must be able to accept a
+null value for this qualifier.</p>
+
+<p>The <i>nulldefault:</i> attribute overrides the default name
+generation, and uses an empty string (no sequence input) as the default for
+programs where seqeunce input is only occasionally required. If an empty
+string is specified on the command line, the standard default value
+will be generated instead. In combination with the <i>nullok:</i> and
+<i>missing:</i> attributes, this allows qualifiers to be null by
+default, and turned on from the command line.</p>
 
 <!-- #acdattr-seqset -->
 <h5>Seqset</h5>
@@ -1781,7 +1964,16 @@ include the full original text of the input sequence or database entry.</p>
 
 <p>The <i>nullok:</i> attribute allows a default value to be replaced
 by an empty string or by -noxxx on the command line if the application
-can run without a sequence input.</p>
+can run without a sequence input. The application must be able to accept a
+null value for this qualifier.</p>
+
+<p>The <i>nulldefault:</i> attribute overrides the default name
+generation, and uses an empty string (no sequence input) as the default for
+programs where sequence input is only occasionally required. If an empty
+string is specified on the command line, the standard default value
+will be generated instead. In combination with the <i>nullok:</i> and
+<i>missing:</i> attributes, this allows qualifiers to be null by
+default, and turned on from the command line.</p>
 
 <!-- #acdattr-seqsetall -->
 <h5>Seqsetall</h5>
@@ -1801,7 +1993,16 @@ include the full original text of the input sequence or database entry.</p>
 
 <p>The <i>nullok:</i> attribute allows a default value to be replaced
 by an empty string or by -noxxx on the command line if the application
-can run without a sequence input.</p>
+can run without a sequence input. The application must be able to accept a
+null value for this qualifier.</p>
+
+<p>The <i>nulldefault:</i> attribute overrides the default name
+generation, and uses an empty string (no sequence input) as the default for
+programs where sequence input is only occasionally required. If an empty
+string is specified on the command line, the standard default value
+will be generated instead. In combination with the <i>nullok:</i> and
+<i>missing:</i> attributes, this allows qualifiers to be null by
+default, and turned on from the command line.</p>
 
 <!-- #acdattr-tree -->
 <h5>Tree</h5>
@@ -1992,11 +2193,19 @@ programs that produce a global alignment.</p>
 The <i>multiple:</i> attribute should be set true if the output can
 contain more than one alignment from the same input.</p>
 
+<p>If a null value (the current directory) is allowed,the
+<i>nullok:</i> attribute must be set true.</p>
+
 <p>The <i>nullok:</i> attribute allows a default value to be replaced
 by an empty string or by -noxxx on the command line if the application
-can run without an alignment output file.
-</p>
+can run without an alignment file. The application must be able to accept a
+null value for this qualifier.</p>
 
+<p>The <i>nulldefault:</i> attribute overrides the default name
+generation, and uses an empty string (no alignment file) as the default
+for programs where an alignment file is only occasionally
+required. If an empty string is specified on the command line, the
+standard default value will be generated instead.</p>
 
 <!-- #acdattr-featout -->
 <h5>Featout</h5>
@@ -2014,12 +2223,151 @@ format.</p>
 "protein" or "nucleotide". There is a default based on the type of any
 input sequence, but a value should always be specified.</p>
 
+<p>The <i>nullok:</i> attribute allows a default value to be replaced
+by an empty string or by -noxxx on the command line if the application
+can run without this feature output.
+</p>
+
+<p>The <i>nulldefault:</i> attribute overrides the default name
+generation, and uses an empty string (no feature output) as the default for
+programs where feature output is only occasionally required. If an empty
+string is specified on the command line, the standard default value
+will be generated instead. In combination with the <i>nullok:</i> and
+<i>missing:</i> attributes, this allows qualifiers to be null by
+default, and turned on from the command line.</p>
+
 <p>The <i>offormat:</i> attribute defines the default value for the
 <i>-offormat</i> qualifier, used as the feature format and the default
 feature file extension.</p>
 
 <p>The <i>ofname:</i> attribute defines the default value for the
 <i>-ofname</i> qualifier, used as the default base file name</p>
+
+<!-- #acdattr-outcodon -->
+<h5>Outcodon</h5>
+
+<p>The <i>extension:</i> attribute will default to the output file
+format.</p>
+
+<p>The <i>nulldefault:</i> attribute overrides the default name
+generation, and uses an empty string (no data output) as the default for
+programs where data output is only occasionally required. If an empty
+string is specified on the command line, the standard default value
+will be generated instead. In combination with the <i>nullok:</i> and
+<i>missing:</i> attributes, this allows qualifiers to be null by
+default, and turned on from the command line.</p>
+
+<p>The <i>oformat:</i> attribute defines the default value for the
+<i>-oformat</i> qualifier, used as the file format and the default
+file extension.</p>
+
+<!-- #acdattr-outcpdb -->
+<h5>Outcpdb</h5>
+
+<p>The <i>extension:</i> attribute will default to the output file
+format.</p>
+
+<p>The <i>nulldefault:</i> attribute overrides the default name
+generation, and uses an empty string (no data output) as the default for
+programs where data output is only occasionally required. If an empty
+string is specified on the command line, the standard default value
+will be generated instead. In combination with the <i>nullok:</i> and
+<i>missing:</i> attributes, this allows qualifiers to be null by
+default, and turned on from the command line.</p>
+
+<p>The <i>oformat:</i> attribute defines the default value for the
+<i>-oformat</i> qualifier, used as the file format and the default
+file extension.</p>
+
+<!-- #acdattr-outdata -->
+<h5>Outdata</h5>
+
+<p>The <i>extension:</i> attribute will default to the output file
+format.</p>
+
+<p>The <i>nulldefault:</i> attribute overrides the default name
+generation, and uses an empty string (no data output) as the default for
+programs where data output is only occasionally required. If an empty
+string is specified on the command line, the standard default value
+will be generated instead. In combination with the <i>nullok:</i> and
+<i>missing:</i> attributes, this allows qualifiers to be null by
+default, and turned on from the command line.</p>
+
+<p>The <i>oformat:</i> attribute defines the default value for the
+<i>-oformat</i> qualifier, used as the file format and the default
+file extension.</p>
+
+<!-- #acdattr-outdir -->
+<h5>Outdir</h5>
+
+<p>The <i>extension:</i> attribute sets the default extension for all
+files written to the directory.</p>
+
+<p>The <i>nulldefault:</i> attribute overrides the default name
+generation, and uses an empty string (no data output) as the default for
+programs where data output is only occasionally required. If an empty
+string is specified on the command line, the standard default value
+will be generated instead. In combination with the <i>nullok:</i> and
+<i>missing:</i> attributes, this allows qualifiers to be null by
+default, and turned on from the command line.</p>
+
+<p>The <i>fullpath:</i> attribute requires the path to be specified in
+full when passed to the program, although the user may provide a path
+from the current working directory.</p>
+
+<!-- #acdattr-outdiscrete -->
+<h5>Outdiscrete</h5>
+
+<p>The <i>extension:</i> attribute will default to the output file
+format.</p>
+
+<p>The <i>nulldefault:</i> attribute overrides the default name
+generation, and uses an empty string (no data output) as the default for
+programs where data output is only occasionally required. If an empty
+string is specified on the command line, the standard default value
+will be generated instead. In combination with the <i>nullok:</i> and
+<i>missing:</i> attributes, this allows qualifiers to be null by
+default, and turned on from the command line.</p>
+
+<p>The <i>oformat:</i> attribute defines the default value for the
+<i>-oformat</i> qualifier, used as the file format and the default
+file extension.</p>
+
+<!-- #acdattr-outdistance -->
+<h5>Outdistance</h5>
+
+<p>The <i>extension:</i> attribute will default to the output file
+format.</p>
+
+<p>The <i>nulldefault:</i> attribute overrides the default name
+generation, and uses an empty string (no data output) as the default for
+programs where data output is only occasionally required. If an empty
+string is specified on the command line, the standard default value
+will be generated instead. In combination with the <i>nullok:</i> and
+<i>missing:</i> attributes, this allows qualifiers to be null by
+default, and turned on from the command line.</p>
+
+<p>The <i>oformat:</i> attribute defines the default value for the
+<i>-oformat</i> qualifier, used as the file format and the default
+file extension.</p>
+
+<!-- #acdattr-outfreq -->
+<h5>Outfreq</h5>
+
+<p>The <i>extension:</i> attribute will default to the output file
+format.</p>
+
+<p>The <i>nulldefault:</i> attribute overrides the default name
+generation, and uses an empty string (no data output) as the default for
+programs where data output is only occasionally required. If an empty
+string is specified on the command line, the standard default value
+will be generated instead. In combination with the <i>nullok:</i> and
+<i>missing:</i> attributes, this allows qualifiers to be null by
+default, and turned on from the command line.</p>
+
+<p>The <i>oformat:</i> attribute defines the default value for the
+<i>-oformat</i> qualifier, used as the file format and the default
+file extension.</p>
 
 <!-- #acdattr-outfile -->
 <h5>Outfile</h5>
@@ -2033,12 +2381,14 @@ read in ($(asequence.name) if the sequence parameter is named asequence).</p>
 <p>The <i>extension:</i> attribute will default to the program name,
 and is usually left as the default value.</p>
 
-<p>The <i>nulldefault:</i> attribute overrides the defaule name
+<p>The <i>nulldefault:</i> attribute overrides the default name
 generation, and uses an empty string (no output file) as the default
 for programs where an output file is only occasionally
 required. Examples include programs where the original output format
 is available, usually for users that still require it for parsing in
-automated scripts.</p>
+automated scripts. In combination with the <i>nullok:</i> and
+<i>missing:</i> attributes, this allows qualifiers to be null by
+default, and turned on from the command line.</p>
 
 <p>The <i>nullok:</i> attribute allows a default value to be replaced
 by an empty string or by -noxxx on the command line if the application
@@ -2053,6 +2403,96 @@ recommended value.</p>
 the end of an existing output file. By default, the output file will
 be overwritten.</p>
 
+
+<!-- #acdattr-outmatrix -->
+<h5>Outmatrix</h5>
+
+<p>The <i>extension:</i> attribute will default to the output file
+format.</p>
+
+<p>The <i>nulldefault:</i> attribute overrides the default name
+generation, and uses an empty string (no data output) as the default for
+programs where data output is only occasionally required. If an empty
+string is specified on the command line, the standard default value
+will be generated instead. In combination with the <i>nullok:</i> and
+<i>missing:</i> attributes, this allows qualifiers to be null by
+default, and turned on from the command line.</p>
+
+<p>The <i>oformat:</i> attribute defines the default value for the
+<i>-oformat</i> qualifier, used as the file format and the default
+file extension.</p>
+
+<!-- #acdattr-outmatrixf -->
+<h5>Outmatrixf</h5>
+
+<p>The <i>extension:</i> attribute will default to the output file
+format.</p>
+
+<p>The <i>nulldefault:</i> attribute overrides the default name
+generation, and uses an empty string (no data output) as the default for
+programs where data output is only occasionally required. If an empty
+string is specified on the command line, the standard default value
+will be generated instead. In combination with the <i>nullok:</i> and
+<i>missing:</i> attributes, this allows qualifiers to be null by
+default, and turned on from the command line.</p>
+
+<p>The <i>oformat:</i> attribute defines the default value for the
+<i>-oformat</i> qualifier, used as the file format and the default
+file extension.</p>
+
+<!-- #acdattr-outproperties -->
+<h5>Outproperties</h5>
+
+<p>The <i>extension:</i> attribute will default to the output file
+format.</p>
+
+<p>The <i>nulldefault:</i> attribute overrides the default name
+generation, and uses an empty string (no data output) as the default for
+programs where data output is only occasionally required. If an empty
+string is specified on the command line, the standard default value
+will be generated instead. In combination with the <i>nullok:</i> and
+<i>missing:</i> attributes, this allows qualifiers to be null by
+default, and turned on from the command line.</p>
+
+<p>The <i>oformat:</i> attribute defines the default value for the
+<i>-oformat</i> qualifier, used as the file format and the default
+file extension.</p>
+
+<!-- #acdattr-outscop -->
+<h5>Outscop</h5>
+
+<p>The <i>extension:</i> attribute will default to the output file
+format.</p>
+
+<p>The <i>nulldefault:</i> attribute overrides the default name
+generation, and uses an empty string (no data output) as the default for
+programs where data output is only occasionally required. If an empty
+string is specified on the command line, the standard default value
+will be generated instead. In combination with the <i>nullok:</i> and
+<i>missing:</i> attributes, this allows qualifiers to be null by
+default, and turned on from the command line.</p>
+
+<p>The <i>oformat:</i> attribute defines the default value for the
+<i>-oformat</i> qualifier, used as the file format and the default
+file extension.</p>
+
+<!-- #acdattr-outtree -->
+<h5>Outtree</h5>
+
+<p>The <i>extension:</i> attribute will default to the output file
+format.</p>
+
+<p>The <i>nulldefault:</i> attribute overrides the default name
+generation, and uses an empty string (no data output) as the default for
+programs where data output is only occasionally required. If an empty
+string is specified on the command line, the standard default value
+will be generated instead. In combination with the <i>nullok:</i> and
+<i>missing:</i> attributes, this allows qualifiers to be null by
+default, and turned on from the command line.</p>
+
+<p>The <i>oformat:</i> attribute defines the default value for the
+<i>-oformat</i> qualifier, used as the file format and the default
+file extension.</p>
 
 <!-- #acdattr-report -->
 <h5>Report</h5>
@@ -2081,14 +2521,23 @@ The <i>mintags:</i> attribute appears to be obsolete.</p>
 
 <p>The <i>nullok:</i> attribute allows a default value to be replaced
 by an empty string or by -noxxx on the command line if the application
-can run without a report output file.
+can run without a report output file. The application must be able to accept a
+null value for this qualifier.
 </p>
 
-The <i>rextension:</i> attribute sets the default value for the
+<p>The <i>nulldefault:</i> attribute overrides the default name
+generation, and uses an empty string (no report output) as the default for
+programs where report output is only occasionally required. If an empty
+string is specified on the command line, the standard default value
+will be generated instead. In combination with the <i>nullok:</i> and
+<i>missing:</i> attributes, this allows qualifiers to be null by
+default, and turned on from the command line.</p>
+
+<pThe <i>rextension:</i> attribute sets the default value for the
 <i>-rextension</i> qualifier, which is normally the program name..</p>
 
 The <i>rscoreshow:</i> attribute specifies whether the feature score
-value should appear in the report. WHere a score is not set by the
+value should appear in the report. Where a score is not set by the
 program, the default 0.0 score is normally excluded in this way.</p>
 
 <!-- #acdattr-seqout -->
@@ -2111,8 +2560,17 @@ output sequnce type clear.</p>
 
 <p>The <i>nullok:</i> attribute allows a default value to be replaced
 by an empty string or by -noxxx on the command line if the application
-can run without this sequence output.
+can run without this sequence output. The application must be able to accept a
+null value for this qualifier.
 </p>
+
+<p>The <i>nulldefault:</i> attribute overrides the default name
+generation, and uses an empty string (no sequence output) as the default for
+programs where sequence output is only occasionally required. If an empty
+string is specified on the command line, the standard default value
+will be generated instead. In combination with the <i>nullok:</i> and
+<i>missing:</i> attributes, this allows qualifiers to be null by
+default, and turned on from the command line.</p>
 
 <!-- #acdattr-seqoutall -->
 <h5>Seqoutall</h5>
@@ -2134,8 +2592,17 @@ output sequnce type clear.</p>
 
 <p>The <i>nullok:</i> attribute allows a default value to be replaced
 by an empty string or by -noxxx on the command line if the application
-can run without this sequence output.
+can run without this sequence output. The application must be able to accept a
+null value for this qualifier.
 </p>
+
+<p>The <i>nulldefault:</i> attribute overrides the default name
+generation, and uses an empty string (no sequence output) as the default for
+programs where sequence output is only occasionally required. If an empty
+string is specified on the command line, the standard default value
+will be generated instead. In combination with the <i>nullok:</i> and
+<i>missing:</i> attributes, this allows qualifiers to be null by
+default, and turned on from the command line.</p>
 
 <p>The <i>ossingle:</i> attribute sets the default value for the
 <i>-ossingle</i> qualifier and can be set to "Y" to direct output to
@@ -2162,8 +2629,17 @@ output sequnce type clear.</p>
 
 <p>The <i>nullok:</i> attribute allows a default value to be replaced
 by an empty string or by -noxxx on the command line if the application
-can run without this sequence output.
+can run without this sequence output. The application must be able to accept a
+null value for this qualifier.
 </p>
+
+<p>The <i>nulldefault:</i> attribute overrides the default name
+generation, and uses an empty string (no sequence output) as the default for
+programs where sequence output is only occasionally required. If an empty
+string is specified on the command line, the standard default value
+will be generated instead. In combination with the <i>nullok:</i> and
+<i>missing:</i> attributes, this allows qualifiers to be null by
+default, and turned on from the command line.</p>
 
 <a name=sect24125>&nbsp;</a>
 <!-- #acdattr-section-graph -->
@@ -2179,8 +2655,18 @@ can run without this sequence output.
 
 <p>The <i>nullok:</i> attribute allows a default value to be replaced
 by an empty string or by -noxxx on the command line if the application
-can run without this graph output.
-</p>
+can run without this graph output. The application must be able to accept a
+null value for this qualifier.</p>
+
+<p>The <i>nulldefault:</i> attribute overrides the default name
+generation, and uses an empty string (no graph) as the default
+for programs where a graph is only occasionally
+required. If an empty string is specified on the command line, the
+standard default value will be generated instead.</p>
+
+<p>The <i>goutfile:</i> attribute specifies the base file name for
+output. It can be used to direct output to a named file rather than
+default to the first sequence name in the input.</p>
 
 <p>The command line qualifiers can be defined as ACD attributes. The
 most used are <i>gtitle:</i>, <i>gxtitle:</i> and <i>gytitle:</i>. 
@@ -2192,6 +2678,12 @@ most used are <i>gtitle:</i>, <i>gxtitle:</i> and <i>gytitle:</i>.
 by an empty string or by -noxxx on the command line if the application
 can run without this graph output.
 </p>
+
+<p>The <i>nulldefault:</i> attribute overrides the default name
+generation, and uses an empty string (no graph) as the default
+for programs where a graph is only occasionally
+required. If an empty string is specified on the command line, the
+standard default value will be generated instead.</p>
 
 <p>The command line qualifiers can be defined as ACD attributes. The
 most used are <i>gtitle:</i>, <i>gxtitle:</i> and <i>gytitle:</i>. 
@@ -3544,7 +4036,7 @@ Too short - minimum length is 4 characters
 HGMP RC in Hinxton, UK with input from Peter Rice at the Sanger Centre
 and Gary Williams at the HGMP RC. it is now maintained by <a
 href="mailto:pmr@ebi.ac.uk">Peter Rice at the European Bioinformatics
-Institute</p>
+Institute</a></p>
 
 <p>A web version can be found at
 http://www.uk.embnet.org/Software/EMBOSS/Acd/</p>

@@ -7,7 +7,7 @@ SUBDIRS = plplot ajax nucleus emboss test doc jemboss
 # AJAX_FIXED_ROOT = \"`pwd`/emboss/acd\"
 
 # files with nonstandard names in this directory
-EXTRA_DIST = COMPAT LICENSE KNOWN_BUGS ONEWS PROBLEMS FAQ ChangeLog
+EXTRA_DIST = COMPAT LICENSE KNOWN_BUGS ONEWS PROBLEMS FAQ ChangeLog depcomp ltmain.sh
 
 # tar to pick up the other directories
 # then remove any CVS subdirectories

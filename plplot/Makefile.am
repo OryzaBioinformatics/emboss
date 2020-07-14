@@ -18,7 +18,12 @@ AM_CFLAGS =
 endif
 endif
 
-INCLUDES = $(X_CFLAGS) -I$(srcdir)/ -I/usr/include/gd
+if ISCYGWIN
+AM_LDFLAGS = -no-undefined -Wl,--add-stdcall-alias -Wl,--export-all-symbols -Wl,--enable-auto-import -lX11 -lgd -lpng -lz
+endif
+
+
+INCLUDES = $(X_CFLAGS) -I$(srcdir)/ -I/usr/include/gd -DPREFIX=\"$(prefix)\" -DEMBOSS_TOP=\"$(EMBOSS_TOP)\"
 LIBS =
 
 PLPLOTSRC = pdfutils.c plargs.c plbox.c plcont.c plcore.c \
@@ -33,7 +38,7 @@ libplplot_la_SOURCES = $(PLPLOTSRC)
 
 libplplot_la_LDFLAGS = -version-info 5:0:0
 
-noinst_HEADERS = drivers.h pdf.h plcore.h plevent.h plplotP.h plxwd.h \
+include_HEADERS = drivers.h pdf.h plcore.h plevent.h plplotP.h plxwd.h \
 metadefs.h plConfig.h pldebug.h plplot.h plstrm.h plDevs.h
 
 

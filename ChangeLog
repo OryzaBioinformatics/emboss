@@ -1,3 +1,171 @@
+Version 2.9.0
+	ajListMapRead and ajListstrMapRead functions for read-only lists.
+	As an added check, the functions these call for each element have
+	a different prototype.
+
+	ajStrStr function now returns const, as do various 'Get' functions.
+	The few cases where a true char* is needed must now call
+	ajStrStrMod with the AjPStr passed by reference so that we can
+	check it is being modified. All calls to ajStrStr in EMBOSS and
+	most EMBASSY packages have been resolved to compiler remove
+	warning messages. ajStrFix also needs the AjPStr passed by
+	reference.
+
+	tfm -html now gives full path to image files.
+
+	Remove need for the definition of PLPLOT_LIB.
+
+	Add configuration for cygwin dlls.
+
+	Allow filenames of the form drive:/filename for cygwin.
+
+	Fixes for list files with sequence ranges in the USAs. The
+	sequence input object is now reset during list processing.
+
+	Sequence sets with begin and end positions are now automatically
+	trimmed on input. This applies for example to list input with
+	ranges in the USAs for programs such as polydot which were
+	previously reporting the entire sequence.
+
+	graph output now has the default title including the date in
+	dd-mmm-yy format instead of the unreadable dd/mm/yy format.
+
+	Align output for seqmatchall (like wordmatch). The algorithm is
+	not maintaining the sequence accession and description
+	information. They may be restored in a future update.
+
+        infoalign now also displays the weight of the sequences in the
+        alignment.  This can be turned off using '-noweight'. 
+
+	New output types in ACD for all input data types, including those
+	for phylogenetics and protein structure data. Initially these are
+	a new AjPOutfile type with a defined format (fixed until any of
+	them has a choice).
+
+	Programs that produce graphics or text (outfile) output now
+	by default will not create the outfile if there is a graph (done
+	by setting the nullok attribute of the outfile).
+
+	Acdvalid now checks for incomplete ACD types and attributes.
+
+        trimest now has the option '-toplower' which changes the
+        poly-A tail to lower-case instead of cutting it off. 
+
+	new ACD attribute 'relation' added to all ACD types. This will
+	hold some information about how output data types relate to inputs
+	and parameters. The syntax of the string is not yet clear. Running
+	of EMBOSS programs will not be affected - the relation string is
+	defined for web services and related wrappers to maintain
+	provenance better.
+
+	New ACD function oneof added, syntax is @($(var)=={a,b,c}) to test
+	for a choice of menu options. Intended to clean up some ACD files
+	- but they are already clean so it may not be useful. At some
+	stage the unused ACD functions should be declared obsolete for
+	simplicity (and efficiency). We will leave the code in place, but
+	remove them from the list of functions tested.
+
+	acdvalid now tests the knowntype attribute for strings. ACD files
+	have been cleanup up to give knowntypes for all strings (defined
+	in knowntypes.standard) or to convert strings to datafile or other
+	ACD types as appropriate.
+
+        showfeat now has the qualifier '-annotation'. This allows you to
+        add your own brief annotations of regions on the displayed
+        figure. 
+
+        remap now has has the option '-frame' which allows you to specify
+        a list of the frames to be translated and displayed.
+
+	Major cleanup of @data documentation. Added @datatype for typedef
+	data types (e.g. AjBool). Checking all have attributes, and all
+	attribute names and types match. Comments in the code are moved to
+	the @attr documentation. Added an @cc documentation line for
+	comments.
+
+	Eprimer3 has been changed so that it runs a separate child process
+	of primer3_core for every sequence. This is to cure a problem
+	seen when more than about 23 sequences were input, in which there
+	was some blocking contention between the input and output streams.
+
+	Major cleanup of ACD files to match acdvalid standards. Featout
+	qualifiers are now -outfeat, which means all output start with
+	-out but it does clash with -outfile so -outf is not always usable
+	as an abbreviation.
+
+	Options for emma have been cleaned up. -insist is no longer used
+	(use -sprotein instead) and -slowfast is now a simple boolean
+	-slow. Both changed lead to a much cleaner ACD file.
+
+	Options for eprimer3 have been cleaned up. New options -primer
+	(true) and -hybridprobe (false) make the dependencies far
+	simpler. The default task is now 1 (same as the old zero) and the
+	-hybridprobe option is needed to calculate the hybridization
+	probes. This removes a lot of dependencies on tasks 1 and 4
+	(hybridprobe) and not-task-4 (primer)
+
+	New AjPDir to hold directory path and default extension. Intended
+	for domainatrix applications. This requires changing
+	ajAcdGetDirectory to return an AjPDir and providing
+	ajAcdGetDirectoryName to return the path as a string. Several
+	programs were changed to reflect this changed call.
+
+	New ACD type outdirectory for a directory to which files will be
+	written. Must have a knowntype describing the files that will
+	appear there. Expected qualifier name is -outdir.
+
+	compseq now has the option '-calcfreq'. This makes it calculate
+	the expecetd frequencies of the words in the sequences from the
+	observed frequencies of the single bases or residues in those
+	frequencies.
+
+	HTML data from remote sites is becoming more complex. EMBOSS now
+	makes a first pass to look for a single preformatted block and
+	accepts this as the data (thus avoiding horrors such as the Entrez
+	headers and javascript which NCBI's search service includes).
+	At the sdame time, an old fix to patch SRS 6.1.0 output has been
+	removed as this clashed with the new code.
+
+	Optional outputs have a new behaviour. With nulldefault defined,
+	an output is, by default, turned off and will return a NULL value
+	to the calling program if nullok is set. Setting the value to ""
+	on the command lne will now ask for the standard filename to be
+	generated. The "missing" attribute, if defined, allows simply
+	-qualname on the commandline to request the default filename,
+	although care must be taken to avoid anything following the
+	qualifier appearing to be a filename. This means the qualifier
+	must be last on the commandline, or must be followed by another
+	qualifier.
+
+	Indexing programs dbifasta and dbiflat no longer store the source
+	directory in the division.lkp file - directory is specified in the
+	database definition. This was only done originally to share index
+	files with "efetch" at the Sanger Centre. With index files and
+	data files in the same directory (as for efetch) it is not needed.
+
+	All ACD files revised for new acdvalid checks.
+
+	New ACD section "additional" added for qualifiers with
+	additional:"Y" defined. These have been put in the "advanced"
+	section until now. Acdvalid checks that these qualidfiers are in
+	the appropriate section.
+
+	Acdvalid now checks that qualifiers are in the expected
+	section. All input qualifiers (including cfile and datafile) aer
+	now in the input section, all output qualifiers are in the output
+	section. All (remaining) standard, addional and advanced
+	qualifiers are in the "required" "additional" and "advanced"
+	sections.
+
+	New ACD type "toggle" added. This is the same as "boolean" but is
+	allowed in any section by "acdvalid" checks. Toggle is to be used
+	for ACD qualifiers that "toggle" (turn on or off) other
+	qualifiers. An example in many ACD files would be "-plot".
+	
+	Cirdna and lindna now dynamically allocate memory. For simplicity
+	they do still have an upper limit for the number of groups and
+	labels per group, but no longer have static arrays.
+
 Version 2.8.0
 	tfm accepts the PAGER environment variable. It can be overrided
 	by EMBOSS_PAGER.

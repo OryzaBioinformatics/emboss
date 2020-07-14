@@ -22,7 +22,8 @@ prima primers \
 seqinfo seqretall seqretallfeat seqretset seqretsingle seqrettype \
 testplot treetypedisplay
 
-bin_PROGRAMS = aaindexextract abiview acdc acdpretty acdtable acdvalid \
+bin_PROGRAMS = aaindexextract abiview \
+acdc acdpretty acdtable acdtrace acdvalid \
 antigenic \
 backtranseq banana biosed btwisted \
 cai chaos charge checktrans chips cirdna codcmp coderet \
@@ -46,7 +47,7 @@ pepwheel pepwindow pepwindowall \
 plotcon plotorf polydot preg \
 prettyplot prettyseq primersearch printsextract \
 profit prophecy prophet \
-prosextract pscan \
+prosextract pscan psiphi\
 rebaseextract recoder redata remap restover restrict revseq \
 seealso seqmatchall seqret seqretsplit \
 showalign showdb showfeat showorf showseq \
@@ -66,6 +67,7 @@ abiview_SOURCES = abiview.c
 acdc_SOURCES = acdc.c
 acdpretty_SOURCES = acdpretty.c
 acdtable_SOURCES = acdtable.c
+acdtrace_SOURCES = acdtrace.c
 acdvalid_SOURCES = acdvalid.c
 antigenic_SOURCES = antigenic.c
 backtranseq_SOURCES = backtranseq.c
@@ -174,6 +176,7 @@ prophecy_SOURCES = prophecy.c
 prophet_SOURCES = prophet.c
 prosextract_SOURCES = prosextract.c
 pscan_SOURCES = pscan.c
+psiphi_SOURCES = psiphi.c
 rebaseextract_SOURCES = rebaseextract.c
 recoder_SOURCES = recoder.c
 redata_SOURCES = redata.c
@@ -248,7 +251,12 @@ seqrettype_SOURCES = seqrettype.c
 testplot_SOURCES = testplot.c
 treetypedisplay_SOURCES = treetypedisplay.c
 
+# Uncomment to use dual libraries
+if ISCYGWIN
+LDADD = ../nucleus/libnucleus.la ../ajax/libajax.la ../plplot/libplplot.la $(XLIB)
+else
 LDADD = ../nucleus/libnucleus.la ../ajax/libajaxg.la ../ajax/libajax.la ../plplot/libplplot.la $(XLIB)
+endif
 
 pkgdata_DATA = emboss.default.template
 pkgdatadir=$(prefix)/share/$(PACKAGE)

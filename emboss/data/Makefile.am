@@ -25,7 +25,7 @@ pkgdata_DATA = EBLOSUM30 EBLOSUM35 EBLOSUM40 EBLOSUM45 EBLOSUM50 \
                Esig.euk Esig.pro \
                Etags.embl Etags.emboss Etags.gff \
                Etags.pir Etags.protein Etags.swiss \
-               Etcode.dat Ewhite-wimley.dat \
+               Etcode.dat Evdw.dat Ewhite-wimley.dat \
                embossre.equ Emwfilter.dat Emass.dat Emassmod.dat
 
 pkgdatadir=$(prefix)/share/$(PACKAGE)/data
