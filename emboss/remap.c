@@ -39,10 +39,15 @@ static void remap_CutList (AjPFile outfile,
 	ajint maxcuts);
 static void remap_NoCutList (AjPFile outfile, AjPTable hittable,
 			     AjBool html, AjPStr enzymes, AjBool blunt,
-			     AjBool sticky, ajint sitelen, AjBool commercial);
+			     AjBool sticky, ajint sitelen, AjBool commercial,
+			     AjBool ambiguity, AjBool limit, AjPTable retable);
 static void remap_DelTable(AjPTable * table);
 static void remap_read_file_of_enzyme_names(AjPStr *enzymes);
 static int remap_ajStrCmpCase (const void* str1, const void* str2);
+static void remap_ajStrDel (void** str, void* cl);
+static void rebase_RenamePreferred(AjPList list, AjPTable table, 
+	AjPList newlist);
+static void remap_RestrictPreferred(AjPList l, AjPTable t);
 
 /* structure for counts and isoschizomers of a restriction enzyme hit */
 typedef struct SValue
@@ -106,7 +111,6 @@ int main(int argc, char **argv)
     AjBool plasmid;
     AjBool commercial;
     AjBool limit;
-    AjBool equiv;
     AjPFile   enzfile=NULL;
     AjPFile   equfile=NULL;
     AjPTable  retable=NULL;
@@ -149,7 +153,6 @@ int main(int argc, char **argv)
     commercial = ajAcdGetBool ("commercial");
     limit = ajAcdGetBool ("limit");
     enzymes = ajAcdGetString ("enzymes");
-    equiv = ajAcdGetBool("preferred");
 
     if (!blunt  && !sticky)
 	ajFatal("Blunt/Sticky end cutters shouldn't both be disabled.");
@@ -208,11 +211,11 @@ int main(int argc, char **argv)
 	ajFileDataNewC(ENZDATA, &enzfile);
 	if(!enzfile)
 	    ajFatal("Cannot locate enzyme file. Run REBASEEXTRACT");
-	if (equiv)
+	if (limit)
 	{
 	    ajFileDataNewC(EQUDATA,&equfile);
 	    if (!equfile)
-		equiv=ajFalse;
+		limit=ajFalse;
 	    else
 		remap_read_equiv(&equfile, &retable);
 	}
@@ -225,9 +228,13 @@ int main(int argc, char **argv)
 				   &restrictlist);
 
 	if (hits)
+	{
 	    /* this bit is lifted from printHits */
 	    (void) embPatRestrictRestrict(&restrictlist, hits, !limit,
 					  ajFalse);
+	    if(limit)
+		remap_RestrictPreferred(restrictlist,retable);
+	}
 
 	/* tidy up */
 	ajFileClose(&enzfile);
@@ -268,22 +275,28 @@ int main(int argc, char **argv)
 	    if (reverse)
 		(void) embShowAddBlank(ss);
 
-	    (void) embShowAddTran (ss, trnTable, 1, threeletter, numberseq,
-				   NULL, orfminsize, AJFALSE, AJFALSE, AJFALSE, AJFALSE);
-	    (void) embShowAddTran (ss, trnTable, 2, threeletter, numberseq,
-				   NULL, orfminsize, AJFALSE, AJFALSE, AJFALSE, AJFALSE);
-	    (void) embShowAddTran (ss, trnTable, 3, threeletter, numberseq,
-				   NULL, orfminsize, AJFALSE, AJFALSE, AJFALSE, AJFALSE);
+	    (void) embShowAddTran (ss, trnTable, 1, threeletter,
+				   numberseq, NULL, orfminsize,
+				   AJFALSE, AJFALSE, AJFALSE, AJFALSE);
+	    (void) embShowAddTran (ss, trnTable, 2, threeletter,
+				   numberseq, NULL, orfminsize,
+				   AJFALSE, AJFALSE, AJFALSE, AJFALSE);
+	    (void) embShowAddTran (ss, trnTable, 3, threeletter,
+				   numberseq, NULL, orfminsize,
+				   AJFALSE, AJFALSE, AJFALSE, AJFALSE);
 
 	    if (reverse)
 	    {
 		(void) embShowAddTicks(ss);
-		(void) embShowAddTran (ss, trnTable, -3, threeletter, numberseq, 
-				       NULL, orfminsize, AJFALSE, AJFALSE, AJFALSE, AJFALSE);
-		(void) embShowAddTran (ss, trnTable, -2, threeletter, numberseq, 
-				       NULL, orfminsize, AJFALSE, AJFALSE, AJFALSE, AJFALSE);
-		(void) embShowAddTran (ss, trnTable, -1, threeletter, numberseq, 
-				     NULL, orfminsize, AJFALSE, AJFALSE, AJFALSE, AJFALSE);
+		(void) embShowAddTran (ss, trnTable, -3, threeletter,
+				       numberseq, NULL, orfminsize,
+				       AJFALSE, AJFALSE, AJFALSE, AJFALSE);
+		(void) embShowAddTran (ss, trnTable, -2, threeletter,
+				       numberseq, NULL, orfminsize,
+				       AJFALSE, AJFALSE, AJFALSE, AJFALSE);
+		(void) embShowAddTran (ss, trnTable, -1, threeletter,
+				       numberseq, NULL, orfminsize,
+				       AJFALSE, AJFALSE, AJFALSE, AJFALSE);
 	    }
 	}
 
@@ -295,7 +308,8 @@ int main(int argc, char **argv)
 	    remap_CutList(outfile, hittable,
 	    		limit, html, mincuts, maxcuts);
 	    remap_NoCutList(outfile, hittable, html, enzymes, blunt,
-			sticky, sitelen, commercial);
+			sticky, sitelen, commercial, ambiguity, 
+			limit, retable);
 	}
 
 	/* add a gratuitous newline at the end of the sequence */
@@ -306,7 +320,7 @@ int main(int argc, char **argv)
 
 	while(ajListPop(restrictlist,(void **)&mm))
 	    embMatMatchDel(&mm);
-	(void) ajListDel(&restrictlist);
+	(void) ajListFree(&restrictlist);
 
         remap_DelTable(&hittable);
 
@@ -565,14 +579,18 @@ static void remap_CutList (AjPFile outfile,
 ** @param [r] blunt [AjBool] Allow blunt cutters
 ** @param [r] sticky [AjBool] Allow sticky cutters
 ** @param [r] sitelen [ajint] minimum length of recognition site
-** @param [r] commercial [AjBool] Allow comemrcially supplied cutters
+** @param [r] commercial [AjBool] Allow commercially supplied cutters
+** @param [r] ambiguity [AjBool] Allow ambiguous patterns
+** @param [r] limit [AjBool] True if allow isoschizomers
+** @param [r] retable [AjPTable] Table from embossre.equ file 
 ** @return [void]
 ** @@
 ******************************************************************************/
 
 static void remap_NoCutList (AjPFile outfile, AjPTable hittable,
 			     AjBool html, AjPStr enzymes, AjBool blunt,
-			     AjBool sticky, ajint sitelen, AjBool commercial)
+			     AjBool sticky, ajint sitelen, AjBool commercial,
+			     AjBool ambiguity, AjBool limit, AjPTable retable)
 {
 
     /* for iterating over hittable */
@@ -607,6 +625,9 @@ static void remap_NoCutList (AjPFile outfile, AjPTable hittable,
     ajint rejected_count = 0;
 
     EmbPPatRestrict enz;
+
+    /* for renaming preferred isoschizomers */
+    AjPList newlist;
 
 /*
 **
@@ -670,12 +691,15 @@ static void remap_NoCutList (AjPFile outfile, AjPTable hittable,
 
     ajFileDataNewC(ENZDATA, &enzfile);
 
-    /* push all enzyme names matching the required criteria onto nocutlist */
+    /* push all enzyme names without the required criteria onto nocutlist */
+
     enz = embPatRestrictNew();
     while(embPatRestrictReadEntry(&enz, &enzfile))
     {
-        /* if user entered explicit enzyme list, then check to see if
-	   this it one */
+        /* 
+        ** If user entered explicit enzyme list, then check to see if
+	** this is one of that explicit list 
+	*/
         if (!isall) {
             found = AJFALSE;
             for(i=0; i<ne; ++i) {
@@ -684,31 +708,55 @@ static void remap_NoCutList (AjPFile outfile, AjPTable hittable,
                     break;
                 }
             }
-	    if (!found)
+	    if (!found)			/* not in the explicit list */
 		continue;
+	    ajDebug("RE %S is in the input explicit list of REs\n", enz->cod);
 	}
 
-	if(!enz->ncuts) {
+	/* ignore ncuts==0 as they are unknown */
+	if(!enz->ncuts) {		/* number of cut positions */
+            ajDebug("RE %S has an unknown number of cut positions\n", enz->cod);
 	    continue;
 	}
-	if(enz->len < sitelen) {
+        ajDebug("RE %S has a known number of cut sites\n", enz->cod);
+	if(enz->len < sitelen) {	/* recognition site length */
+            ajDebug("RE %S does not have a long enough recognition site\n", 
+            	enz->cod);
 	    rejected_count++;
 	    continue;
 	}
-	if(!blunt && enz->blunt) {
+	if(!blunt && enz->blunt) {	/* blunt/sticky */
+            ajDebug("RE %S is blunt\n", enz->cod);
 	    rejected_count++;
 	    continue;
 	}
-	if(!sticky && !enz->blunt) {
+	if(!sticky && !enz->blunt) {	/* blunt/sticky */
+            ajDebug("RE %S is sticky\n", enz->cod);
 	    rejected_count++;
 	    continue;
 	}
 	/* commercially available enzymes have uppercase patterns */
 	p = ajStrStr(enz->pat);
-	if ((*p >= 'a' && *p <= 'z') && commercial) {
+
+        /* 
+        ** The -commercial qualifier is only used if we are searching
+	** through 'all' of the REBASE database - if we have specified an
+	** explicit list of enzymes then they are searched for whether or
+	** not they are commercially available
+	*/
+	if ((*p >= 'a' && *p <= 'z') && commercial && isall) {
+            ajDebug("RE %S is not commercial\n", enz->cod);
 	    rejected_count++;
 	    continue;
         }
+
+	if (!ambiguity && ajStrFindCaseC(enz->pat, "N") != -1) {
+	    ajDebug("RE %S is ambiguous\n", enz->cod);
+	    rejected_count++;
+	    continue;	
+	}
+
+        ajDebug("RE %S matches all required criteria\n", enz->cod);
 
         code = ajStrNew();
 	ajStrAssS(&code, enz->cod);
@@ -725,6 +773,20 @@ static void remap_NoCutList (AjPFile outfile, AjPTable hittable,
     if (ne)
 	AJFREE (ea);
 
+/*
+** Change names of enzymes in the non-cutter list to that of preferred (prototype) 
+** enzyme name so that the isoschizomers of cutters will be removed from the 
+** non-cutter list in the next bit.
+** Remove duplicate prototype names.
+*/
+    if (limit) {
+        newlist = ajListstrNew();
+        rebase_RenamePreferred(nocutlist, retable, newlist);
+        ajListstrFree(&nocutlist);
+        nocutlist = newlist;
+        ajListUnique(nocutlist, remap_ajStrCmpCase, remap_ajStrDel);
+    }
+
 
 /*
 **
@@ -737,11 +799,11 @@ static void remap_NoCutList (AjPFile outfile, AjPTable hittable,
 	    "that cut\n");
 
     /*
-     *  This steps down both lists at the same time, comparing names and
-     *  iterating to the next name in whichever list whose name compares
-     *  alphabetically before the other.  Where a match is found, the
-     *  nocutlist item is deleted.
-     */
+    **  This steps down both lists at the same time, comparing names and
+    **  iterating to the next name in whichever list whose name compares
+    **  alphabetically before the other.  Where a match is found, the
+    **  nocutlist item is deleted.
+    */
 
     ajListSort(nocutlist, remap_ajStrCmpCase);
     ajListSort(cutlist, remap_ajStrCmpCase);
@@ -766,11 +828,18 @@ static void remap_NoCutList (AjPFile outfile, AjPTable hittable,
 	ajDebug("compare cutname, nocutname: %S %S ", cutname, nocutname);
 	ajDebug("ajStrCmpCase=%d\n", i);
 	if (i == 0)
-	{			/* match - so remove from nocutlist */
+	{
+	    /* match - so remove from nocutlist */
 	    ajDebug("ajListstrRemove %S\n", nocutname);
 	    ajListstrRemove(niter);
 	    nocutname = (AjPStr)ajListIterNext(niter);
-	    cutname = (AjPStr)ajListIterNext(citer);
+	    /* 
+	    ** Don't increment the cutname list pointer here
+	    ** - there may be more than one entry in the nocutname
+	    ** list with the same name because we have converted 
+	    ** isoschizomers to their preferred name
+	    */
+	    /* cutname = (AjPStr)ajListIterNext(citer); */
 	}
 	else if (i == -1)
 	    /* cutlist name sorts before nocutlist name */
@@ -828,13 +897,14 @@ static void remap_NoCutList (AjPFile outfile, AjPTable hittable,
 /*
 **
 ** Print the count of rejected enzymes
+** N.B. This is the count of ALL rejected enzymes including all isoschizomers
 **
 */
 
     if (html)
         (void) ajFmtPrintF(outfile, "<H2>");
     (void) ajFmtPrintF(outfile,
-		       "\n\n# Number of enzymes not matching "
+		       "\n\n# No. of cutting REs not matching "
 		       "SITELEN, BLUNT, STICKY, COMMERCIAL criteria\n\n");
     if (html)
 	(void) ajFmtPrintF(outfile, "</H2>\n");
@@ -855,7 +925,7 @@ static void remap_NoCutList (AjPFile outfile, AjPTable hittable,
 
 /* @funcstatic remap_read_equiv ***********************************************
 **
-** Lifted from Alan's restrict.c but reads the equ file.
+** Lifted from Alan's restrict.c - reads the embossre.equ file.
 **
 ** @param [r] equfile [AjPFile*] file to read then close.
 ** @param [wP] table [AjPTable*] table to write to.
@@ -945,7 +1015,8 @@ static void remap_read_file_of_enzyme_names(AjPStr *enzymes)
 ** @@
 ******************************************************************************/
 
-static int remap_ajStrCmpCase (const void* str1, const void* str2) {
+static int remap_ajStrCmpCase (const void* str1, const void* str2) 
+{
   const char* cp;
   const char* cq;
 
@@ -963,3 +1034,149 @@ static int remap_ajStrCmpCase (const void* str1, const void* str2) {
   return 0;
 
 }
+
+/* @funcstatic remap_ajStrDel *********************************************
+**
+** Deletes a string when called by ajListUnique
+**
+** @param [r] str [void**] string to delete
+** @param [r] cl [void*] not used
+** @return [void]
+** @@
+******************************************************************************/
+
+static void remap_ajStrDel (void** str, void* cl) 
+{
+
+  ajStrDel((AjPStr*)str);
+
+}
+
+/* @funcstatic rebase_RenamePreferred ******************************************
+**
+** Iterates through a list of strings
+** Forteach string it checks if that string occurs as
+** a key in a table.
+** If a match is found then the value of the table entry is appended
+** to the output list, else the old string name is appended to the output list.
+**
+** @param [r] list [AjPList] Inout list of strings
+** @param [r] table [AjPTable] Table of replacements
+** @param [U] list [AjPList] Returned new list of strings
+** @return [void]
+** @@
+******************************************************************************/
+static void rebase_RenamePreferred(AjPList list, AjPTable table, 
+	AjPList newlist) 
+{
+    AjIList iter = NULL;
+    AjPStr key = NULL;
+    AjPStr value = NULL;
+    AjPStr name = NULL;
+
+    iter = ajListIter(list);
+               
+    while((key = (AjPStr)ajListIterNext(iter)))
+    {
+        /* 
+        ** If we find a key-value entry, write the new value to the new list
+        ** else write the old key name to the new list
+        */
+        value = ajTableGet(table, key);
+        name = ajStrNew();
+        if (value) {
+	    ajDebug("Rename: %S renamed to %S\n", key, value);
+            ajStrAssS(&name, value);
+	} else {
+	    ajDebug("Rename: %S not found\n", key);
+	    ajStrAssS(&name, key);
+	}
+        ajListstrPushApp(newlist, name);
+    }
+                      
+    ajListIterFree(iter);
+
+
+    return; 
+}
+/* @funcstatic remap_RestrictPreferred ***************************************
+**
+** Replace RE names by the name of the prototype for that RE
+** This is derived from embPatRestrictPreferred - it differs in that it also
+** converts the name of the prototype RE in the list of isoschizomers
+** into the name that is being changed in m->cod.
+** i.e a name of X with prototype name B and isoschizomer list of "A, B, C"
+** will be change to a name of B and isoschizomer list of "A, X, C"
+** If the old name is not in the isoschizomer list, it will be added to it.
+**
+** @param [rw] l [AjPList] list of EmbPMatMatch hits
+** @param [r] t [AjPTable] table from embossre.equ file
+**
+** @return [void]
+** @@
+******************************************************************************/
+static void remap_RestrictPreferred(AjPList l, AjPTable t)
+{
+    AjIList iter = NULL;
+    EmbPMatMatch m = NULL;
+    AjPStr value = NULL;
+    AjPStr newiso = NULL;
+    AjBool found;		/* name found in isoschizomer list */
+        	    
+    /* for parsing value->iso string */
+    AjPStrTok tok;
+    char tokens[] = " ,";
+    AjPStr code = NULL;
+
+    iter = ajListIter(l);
+    
+    while((m = (EmbPMatMatch)ajListIterNext(iter)))
+    {
+	found = ajFalse;
+	
+    	/* get prototype name */
+    	value = ajTableGet(t, m->cod);
+    	if(value) 
+    	{
+    	    newiso = ajStrNew();
+	    /* parse isoschizomer names from m->iso */
+            tok = ajStrTokenInit(m->iso,  tokens);
+            while (ajStrToken (&code, &tok, tokens))
+            {
+	        if (ajStrLen(newiso) > 0)
+	            ajStrAppC(&newiso, ",");
+		/* have we found the prototype name? */
+	        if (!ajStrCmpCase(code, value)) 
+	        {
+	            ajStrApp(&newiso, m->cod);
+	            found = ajTrue;
+	        } else {
+	            ajStrApp(&newiso, code);
+	        }
+
+            }
+            ajStrTokenClear(&tok);
+
+	    /* if the name was not replaced, then add it in now */
+	    if (!found) {
+	        if (ajStrLen(newiso) > 0)
+	            ajStrAppC(&newiso, ",");
+	        ajStrApp(&newiso, m->cod);	
+	    }
+	    
+	    ajDebug("RE: %S -> %S iso=%S newiso=%S\n", m->cod, value, m->iso, newiso);
+
+	    /* replace the old iso string with the new one */
+	    ajStrAss(&m->iso, newiso);
+
+	    /* rename the enzyme to the prototype name */
+    	    ajStrAssS(&m->cod, value);
+    	}
+    }
+    
+    ajListIterFree(iter);     
+    
+    return; 
+}
+
+
