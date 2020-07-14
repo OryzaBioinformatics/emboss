@@ -1186,3 +1186,168 @@ SQ   Sequence 1675 BP; 479 A; 406 C; 330 G; 460 T; 0 other;
      tgctctttta tgaatttttt ttcttcaaat ttttatttta aatattgagg caaaatggtt      1620
      tgtcggaata gaataaaagt attttctatt tggttgttta ttttcgaaag agatg           1675
 //
+ID   AAHSP70B   standard; DNA; INV; 4712 BP.
+XX
+AC   M96661;
+XX
+SV   M96661.1
+XX
+DT   09-SEP-1992 (Rel. 33, Created)
+DT   04-MAR-2000 (Rel. 63, Last updated, Version 3)
+XX
+DE   Anopheles albimanus heat shock protein 70 (hsp70) gene (clone p70b),
+DE   complete cds.
+XX
+KW   heat shock protein 70.
+XX
+OS   Anopheles albimanus
+OC   Eukaryota; Metazoa; Arthropoda; Hexapoda; Insecta; Pterygota; Neoptera;
+OC   Endopterygota; Diptera; Nematocera; Culicoidea; Anopheles.
+XX
+RN   [1]
+RP   1-4712
+RX   MEDLINE; 97242549.
+RA   Benedict M.Q., Cockburn A.F., Seawright J.A.;
+RT   "The Hsp70 heat-shock gene family of the mosquito Anopheles albimanus";
+RL   Insect Mol. Biol. 2(2):93-102(1993).
+XX
+DR   GOA; P41827; P41827.
+DR   SWISS-PROT; P41827; HS74_ANOAL.
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..4712
+FT                   /db_xref="taxon:7167"
+FT                   /organism="Anopheles albimanus"
+FT   CDS             complement(1..1506)
+FT                   /codon_start=1
+FT                   /db_xref="GOA:P41827"
+FT                   /db_xref="SWISS-PROT:P41827"
+FT                   /note="carboxy terminus truncated in clone isolated"
+FT                   /partial
+FT                   /gene="hsp70"
+FT                   /product="heat shock protein 70, hsp70A2"
+FT                   /protein_id="AAC41542.1"
+FT                   /translation="MPSAIGIDLGTTYSCVGVFQHGKVEIIANDQGNRTTPSYVAFSDT
+FT                   ERLIGDAAKNQVAMNPTNTVFDAKRLIGRKFDDPKIQADMKHWPFTVVNDGGKPKIRVE
+FT                   FKGERKTFAPEEISSMVLTKMKETAEAYLGQSVKNAVITVPAYFNDSQRQATKDAGAIA
+FT                   GLNVMRIINEPTAAALAYGLDKNLKGERNVLIFDLGGGTFDVSILTIDEGSLFEVRSTA
+FT                   GDTHLGGEDFDNRMVGHFVEEFKRKHKKDLSKNARALRRLRTACERAKRTLSSSTEATI
+FT                   EIDALMDGIDYYTKISRARFEELCSDLFRSTLQPVEKALSDAKMDKSSIHDIVLVGGST
+FT                   RIPKVQSLLQNFFAGKSLNLSINPDEAVAYGAAVQAAILSGDKDDKIQDVLLVDVAPLS
+FT                   LGIETAGGVMTKLIERNSRIPCKQTQIFSTYADNQPGVSIQVFEGERAMTKDNNLLGQF
+FT                   DLSGIPPAPRGVPQIEVTFDLDANGILNVAAKEKSTGKEKNITI"
+FT   5'UTR           complement(1507..(1687.1690))
+FT                   /gene="hsp70"
+FT   TATA_signal     complement(1712..1719)
+FT                   /note="tandem overlapping TATA boxes"
+FT                   /gene="hsp70"
+FT   TATA_signal     2493..2500
+FT                   /note="tandem overlapping TATA boxes"
+FT                   /gene="hsp70"
+FT   5'UTR           (2522.2525)..2705
+FT                   /gene="hsp70"
+FT   CDS             2706..4628
+FT                   /codon_start=1
+FT                   /db_xref="GOA:P41827"
+FT                   /db_xref="SWISS-PROT:P41827"
+FT                   /note="single base deletion between nucleotides 3418 and
+FT                   3419 predicts premature termination in this clone.
+FT                   Insertion of 'N' restores reading frame and is silent"
+FT                   /gene="hsp70"
+FT                   /product="heat shock protein 70, hsp70A2"
+FT                   /protein_id="AAC41543.1"
+FT                   /translation="MPSAIGIDLGTTYSCVGVFQHGKVEIIANDQGNRTTPSYVAFSDT
+FT                   ERLIGDAAKNQVAMNPTNTVFDAKRLIGRKFDDPKIQADMKHWPFTVVNDGGKPKIRVE
+FT                   FKGERKTFAPEEISSMVLTKMKETAEAYLGQSVKNAVITVPAYFNDSQRQATKDAGAIA
+FT                   GLNVMRIINEPTAAALAYGLDKNLKGERNVLIFDLGGGTFDVSILTIDEGSLFEVRSTA
+FT                   GDTHLGGEDFDNRMVGHFVEEFKRKHKKDLSKNARALRRLRTACERAKRTLSSSTEATI
+FT                   EIDALMDGIDYYTKISRARFEELCSDLFRSTLQPVEKALSDAKMDKSSIHDIVLVGGST
+FT                   RIPKVQSLLQNFFAGKSLNLSINPDEAVAYGAAVQAAILSGDKDDKIQDVLLVDVAPLS
+FT                   LGIETAGGVMTKLIERNSRIPCKQTQIFSTYADNQPGVSIQVFEGERAMTKDNNLLGQF
+FT                   DLSGIPPAPRGVPQIEVTFDLDANGILNVAAKEKSTGKEKNITIKNDKGRLSQADIDRM
+FT                   VSEAEKFREEDEKQRERISARNQLEAYCFNLKQSLDGEGASKLSDADRKTVQDRCEETL
+FT                   RWIDGNTMADKEEFEHKMQELTKACSPIMTKLHQQAAGGPSPSSCAQQAGGFGGRTGPT
+FT                   VEEVD"
+XX
+SQ   Sequence 4712 BP; 1191 A; 1163 C; 1225 G; 1132 T; 1 other;
+     gatcgtgata ttcttctcct ttccggtgct cttctcctta gctgccacgt tcaggattcc        60
+     gttggcatcc agatcgaagg tcacctcgat ctgtggcaca ccacgtggag ccgggggaat       120
+     gcccgagagg tcaaactgtc ccagaagatt gttgtccttg gtcatggctc gttctccctc       180
+     gaacacctgg atcgaaacgc cgggctggtt gtcggcgtat gtcgagaaga tctgcgtctg       240
+     tttgcacgga atgcgcgagt tgcgctcaat cagcttcgtc atcacacctc cggccgtctc       300
+     aattccaagc gacaatggag cgacatccac tagcagtacg tcttgaatct tatcgtcctt       360
+     gtctccgctg aggatggccg cctgtaccgc tgcaccgtaa gccacggcct catccggatt       420
+     gatcgaaagg ttcagagact ttccagcgaa aaagttctgc agcaaggact gcaccttcgg       480
+     gatgcgtgtg gagcctccta ccaggacgat atcgtgaatg gagctcttat ccatcttcgc       540
+     atcggacaga gccttttcca ctggctgcag cgtcgaacgg aacaagtcag aacacagctc       600
+     ctcgaatcgt gcccggctga tcttcgtgta ataatcgatg ccatccatca gggcgtcaat       660
+     ctcgatcgtt gcctccgtgc tcgaggacag tgtgcgcttc gccctctcgc atgccgttct       720
+     caaacgacgc agagcgcgag cgttcttcga cagatccttc ttgtgctttc gtttgaattc       780
+     ttccacgaag tggcccacca ttcggttatc gaagtcttcg cctcccaaat gagtatctcc       840
+     ggccgtggat cgtacctcaa acagtgatcc ctcgtcgatc gtcagaatgg acacgtcgaa       900
+     ggtgccgcct cccagatcga agatcagaac attgcgttct ccctttaggt tcttatccaa       960
+     gccatacgcc agagctgctg ccgtcggttc gttgatgatg cgcatcacat tcagtccagc      1020
+     gatggctcca gcatcctttg tggcctgtcg ctggctgtcg ttgaagtagg ctggtactgt      1080
+     gatgactgca ttttttactg actggcccag gtaggcttcg gcggtttcct tcatcttcgt      1140
+     cagcaccatc gaactgattt cctccggggc aaaggttttg cgctcgccct tgaactcgac      1200
+     gcggatcttg ggcttaccac cgtcatttac caccgtgaat ggccagtgct tcatatcggc      1260
+     ttggatcttc ggatcgtcga atttgcgtcc aatcagtcgc ttggcatcga acaccgtgtt      1320
+     agtcggattc atggccactt ggttcttggc tgcatctccg atgagtcgct cagtgtccga      1380
+     gaacgcaacg tagctcggtg tcgttcggtt gccctggtcg tttgcgatga tctccacctt      1440
+     tccatgctgg aacacaccaa cgcaggagta cgtggtgccc agatcgattc cgattgccga      1500
+     aggcattctg tgtctctgtg gttcaacttc gatgaatatg ctttctcaaa tcactcaaac      1560
+     tggtgtgcac aattatacgc tttctgatgc aacaattgat tcactctggt cactgcttgt      1620
+     tactttgaaa cactttattt ttcacgtgtt tgcacttgtt actctcagct cgctcagatt      1680
+     caaattgacg acagctgctc gaacggaccg gtttatatac cacaccactc gatttctaga      1740
+     aggttcgagc actttccaca gctctccgct aggctactcg aacgcgatga gggagattgt      1800
+     atgccgcgtt ctggaaattt ctcgcgtacg aatcatcaaa gcggacccgg ctatttttag      1860
+     ccaatcgcgt gcgtgatgat ggaaaacgca agaatgtgcg agaggagaga gagtgaggtg      1920
+     gacaaaaaat gtgtttgctt ttgaaagtgt ttattcctct taacttttaa caacattaaa      1980
+     agaatgctgg atttaattta acagaataca ttttcaacaa agcagcttgt aggtcacaat      2040
+     gcgtttatta ttatgataaa gtgcatatag ttaaggaaag ctattagaaa ggaatattaa      2100
+     ttttattgca cctcaagttt gcgtaggcta acaattgtta gaattattta aatttgattt      2160
+     taataatatt ttgttcacaa cttgccctga aaaattgatt tgaatgatcg taaaatttat      2220
+     aaaactgtta ttgaataatc cgttacgagt tatgcggaat aaattaataa atcaacattc      2280
+     agttatgtcc ctcctcgctc gctctcctct cgcacattct tgcgttttcc atcatcacgc      2340
+     acgcgattgg cttaaaaata gccgggtccg ctttgatgat tcgtacgcga gagatttcca      2400
+     gaatgcggca tacaatctcc ctcatcgcgt tcgagtagcc tagcggagag ctgtggaaag      2460
+     tgctcgaacc ttctagaaat cgagtggtgt ggtatataaa ccggtccgtt cgagcagctg      2520
+     tcgtcaattt gaatctgagc gagctgagag taacaagtgc aaacacgtga aaaataaagt      2580
+     gtttcaaagt aacaagcagt gaccagagtg aatcaattgt tgcatcagaa agcgtataat      2640
+     tgtgcacacc agtttgagtg atttgagaaa gcatattcat cgaagttgaa ccacagagac      2700
+     acagaatgcc ttcggcaatc ggaatcgatc tgggcaccac gtactcctgc gttggtgtgt      2760
+     tccagcatgg aaaggtggag atcatcgcaa acgaccaggg caaccgaacg acaccgagct      2820
+     acgttgcgtt ctcggacact gagcgactca tcggagatgc agccaagaac caagtggcca      2880
+     tgaatccgac taacacggtg ttcgatgcca agcgactgat tggacgcaaa ttcgacgatc      2940
+     cgaagatcca agccgatatg aagcactggc cattcacggt ggtaaatgac ggtggtaagc      3000
+     ccaagatccg cgtcgagttc aagggcgagc gcaaaacctt tgccccggag gaaatcagtt      3060
+     cgatggtgct gacgaagatg aaggaaaccg ccgaagccta cctgggccag tcagtaaaaa      3120
+     atgcagtcat cacagtacca gcctacttca acgacagcca gcgacaggcc acaaaggatg      3180
+     ctggagccat cgctggactg aatgtgatgc gcatcatcaa cgaaccgacg gcagcagctc      3240
+     tggcgtatgg cttggataag aacctaaagg gagaacgcaa tgttctgatc ttcgatctgg      3300
+     gaggcggcac cttcgacgtg tccattctga cgatcgacga gggatcactg tttgaggtac      3360
+     gatccacggc cggagatact catttgggag gcgaagactt cgataaccga atggtgggnc      3420
+     acttcgtgga agaattcaaa cgaaagcaca agaaggatct gtcgaagaac gctcgcgctc      3480
+     tgcgtcgttt gagaacggca tgcgagaggg cgaagcgcac actgtcctcg agcacggagg      3540
+     caacgatcga aattgacgcc ctgatggatg gcatcgatta ttacacgaag atcagccggg      3600
+     cacgattcga ggagctgtgt tctgacttgt tccgttcgac gctgcagcca gtggaaaagg      3660
+     ctctgtccga tgcgaagatg gataagagct ccattcacga tatcgtcctg gtaggagggt      3720
+     ccacacgcat cccgaaggtg cagtccttgc tgcagaactt tttcgctgga aagtctctga      3780
+     acctttcgat caatccggat gaggccgtgg cttacggtgc agcggtacag gcggccatcc      3840
+     tcagcggaga caaggacgat aagattcaag acgtactgct agtggatgtc gctccattgt      3900
+     cgcttggaat tgagacggcc ggaggtgtga tgacgaagct gattgagcgc aactcgcgca      3960
+     ttccgtgcaa acagacgcag atcttctcga catacgccga caaccagccc ggcgtttcga      4020
+     tccaggtgtt cgagggagaa cgagccatga ccaaggacaa caatcttctg ggacagtttg      4080
+     acctctcggg cattcccccg gctccacgtg gtgtgccaca gatcgaggtg accttcgatc      4140
+     tggatgccaa cggaatcctg aacgtggcag ctaaggagaa gagcaccgga aaggagaaga      4200
+     atatcacgat caagaacgac aagggtcgcc tatcgcaggc cgatatcgat cgaatggtgt      4260
+     cggaagctga gaagttccgc gaggaggatg agaagcaacg cgaacgcatc tctgcccgca      4320
+     atcagctcga ggcttactgc ttcaacctga aacagtcgct ggacggcgaa ggagcgagta      4380
+     aactcagcga tgccgatcgc aagacagtgc aggatcgatg cgaagagact ctgcgatgga      4440
+     tcgacggcaa cacaatggcc gataaggagg agttcgagca caagatgcaa gagctaacga      4500
+     aggcatgcag ccccatcatg acgaaactgc accagcaggc agctggcggg ccctcgccaa      4560
+     gcagttgcgc acagcaagct ggaggatttg gaggaaggac gggtccgaca gtggaagaag      4620
+     tggattaagg agtagaaata acggagattt ataattgatt cgaagaggat ggcattgact      4680
+     gaatatgatt actcatatag tatgttccta tg                                    4712
+//
