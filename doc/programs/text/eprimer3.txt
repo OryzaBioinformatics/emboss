@@ -101,17 +101,57 @@ Command line arguments
   [-outfile]           outfile    Output file name
 
    Additional (Optional) qualifiers (* if not always prompted):
-   -task               menu       Tell EPrimer3 what task to perform. Legal
+   -primer             toggle     Tell EPrimer3 to pick primer(s)
+*  -task               menu       Tell EPrimer3 what task to perform. Legal
                                   values are 0: 'Pick PCR primers', 1: 'Pick
                                   PCR primers and hybridization probe', 2:
                                   'Pick forward primer only', 3: 'Pick reverse
                                   primer only', 4: 'Pick hybridization probe
                                   only'.
-                                  The tasks should be self explanatory.
-                                  Briefly, an 'internal oligo' is intended to
-                                  be used as a hybridization probe (hyb probe)
-                                  to detect the PCR product after
-                                  amplification.
+   -hybridprobe        toggle     An 'internal oligo' is intended to be used
+                                  as a hybridization probe (hyb probe) to
+                                  detect the PCR product after amplification.
+*  -oligomishyblibraryfile infile     Similar to MISPRIMING-LIBRARY, except tha
+t
+                                  the event we seek to avoid is hybridization
+                                  of the internal oligo to sequences in this
+                                  library rather than priming from them.
+                                  The file must be in (a slightly restricted)
+                                  FASTA format (W. B. Pearson and D.J. Lipman,
+                                  PNAS 85:8 pp 2444-2448 [1988]); we briefly
+                                  discuss the organization of this file below.
+                                  If this parameter is specified then
+                                  EPrimer3 locally aligns each candidate oligo
+                                  against each library sequence and rejects
+                                  those primers for which the local alignment
+                                  score times a specified weight (see below)
+                                  exceeds INTERNAL-OLIGO-MAX-MISHYB. (The
+                                  maximum value of the weight is arbitrarily
+                                  set to 12.0.)
+                                  Each sequence entry in the FASTA-format file
+                                  must begin with an 'id line' that starts
+                                  with '>'. The contents of the id line is
+                                  'slightly restricted' in that EPrimer3
+                                  parses everything after any optional
+                                  asterisk ('*') as a floating point number to
+                                  use as the weight mentioned above. If the
+                                  id line contains no asterisk then the weight
+                                  defaults to 1.0. The alignment scoring
+                                  system used is the same as for calculating
+                                  complementarity among oligos (e.g.
+                                  SELF-ANY). The remainder of an entry
+                                  contains the sequence as lines following the
+                                  id line up until a line starting with '>'
+                                  or the end of the file. Whitespace and
+                                  newlines are ignored. Characters 'A', 'T',
+                                  'G', 'C', 'a', 't', 'g', 'c' are retained
+                                  and any other character is converted to 'N'
+                                  (with the consequence that any IUB / IUPAC
+                                  codes for ambiguous bases are converted to
+                                  'N'). There are no restrictions on line
+                                  length.
+                                  An empty value for this parameter indicates
+                                  that no library should be used.
    -numreturn          integer    The maximum number of primer pairs to
                                   return. Primer pairs returned are sorted by
                                   their 'quality', in other words by the value
@@ -397,42 +437,13 @@ Command line arguments
 *  -oligomaxpolyx      integer    The maximum allowable length of an internal
                                   oligo mononucleotide repeat, for example
                                   AAAAAA.
+*  -oligomaxmishyb     float      Similar to MAX-MISPRIMING except that this
+                                  parameter applies to the similarity of
+                                  candidate internal oligos to the library
+                                  specified in INTERNAL-OLIGO-MISHYB-LIBRARY.
 
    Advanced (Unprompted) qualifiers:
-   -explainflag        boolean    If this flag is non-0, produce LEFT-EXPLAIN,
-                                  RIGHT-EXPLAIN, and INTERNAL-OLIGO-EXPLAIN
-                                  output tags, which are intended to provide
-                                  information on the number of oligos and
-                                  primer pairs that EPrimer3 examined, and
-                                  statistics on the number discarded for
-                                  various reasons.
-   -fileflag           boolean    If the associated value is non-0, then
-                                  EPrimer3 creates two output files for each
-                                  input SEQUENCE. File (sequence-id).for lists
-                                  all acceptable forward primers for
-                                  (sequence-id), and (sequence-id).rev lists
-                                  all acceptable reverse primers for
-                                  (sequence-id), where (sequence-id) is the
-                                  value of the SEQUENCE-ID tag (which must be
-                                  supplied). In addition, if the input tag
-                                  TASK is 1 or 4, EPrimer3 produces a file
-                                  (sequence-id).int, which lists all
-                                  acceptable internal oligos.
-   -firstbaseindex     integer    This parameter is the index of the first
-                                  base in the input sequence. For input and
-                                  output using 1-based indexing (such as that
-                                  used in GenBank and to which many users are
-                                  accustomed) set this parameter to 1. For
-                                  input and output using 0-based indexing set
-                                  this parameter to 0. (This parameter also
-                                  affects the indexes in the contents of the
-                                  files produced when the primer file flag is
-                                  set.)
-   -pickanyway         boolean    If true pick a primer pair even if
-                                  LEFT-INPUT, RIGHT-INPUT, or
-                                  INTERNAL-OLIGO-INPUT violates specific
-                                  constraints.
-   -mispriminglibrary  infile     The name of a file containing a nucleotide
+   -mispriminglibraryfile infile     The name of a file containing a nucleotide
                                   sequence library of sequences to avoid
                                   amplifying (for example repetitive
                                   sequences, or possibly the sequences of
@@ -473,6 +484,39 @@ Command line arguments
                                   length.
                                   An empty value for this parameter indicates
                                   that no repeat library should be used.
+   -explainflag        boolean    If this flag is true, produce LEFT-EXPLAIN,
+                                  RIGHT-EXPLAIN, and INTERNAL-OLIGO-EXPLAIN
+                                  output tags, which are intended to provide
+                                  information on the number of oligos and
+                                  primer pairs that EPrimer3 examined, and
+                                  statistics on the number discarded for
+                                  various reasons.
+   -fileflag           boolean    If the associated value is true, then
+                                  EPrimer3 creates two output files for each
+                                  input SEQUENCE. File (sequence-id).for lists
+                                  all acceptable forward primers for
+                                  (sequence-id), and (sequence-id).rev lists
+                                  all acceptable reverse primers for
+                                  (sequence-id), where (sequence-id) is the
+                                  value of the SEQUENCE-ID tag (which must be
+                                  supplied). In addition, if the input tag
+                                  TASK is 1 or 4, EPrimer3 produces a file
+                                  (sequence-id).int, which lists all
+                                  acceptable internal oligos.
+   -firstbaseindex     integer    This parameter is the index of the first
+                                  base in the input sequence. For input and
+                                  output using 1-based indexing (such as that
+                                  used in GenBank and to which many users are
+                                  accustomed) set this parameter to 1. For
+                                  input and output using 0-based indexing set
+                                  this parameter to 0. (This parameter also
+                                  affects the indexes in the contents of the
+                                  files produced when the primer file flag is
+                                  set.)
+   -pickanyway         boolean    If true pick a primer pair even if
+                                  LEFT-INPUT, RIGHT-INPUT, or
+                                  INTERNAL-OLIGO-INPUT violates specific
+                                  constraints.
    -maxmispriming      float      The maximum allowed weighted similarity with
                                   any sequence in MISPRIMING-LIBRARY.
    -pairmaxmispriming  float      The maximum allowed sum of weighted
@@ -558,56 +602,12 @@ Command line arguments
                                   PCR Protocols: Current Methods and
                                   Applications', 1993, pp 31-40, Humana Press,
                                   Totowa NJ).
-   -oligomishyblibrary infile     Similar to MISPRIMING-LIBRARY, except that
-                                  the event we seek to avoid is hybridization
-                                  of the internal oligo to sequences in this
-                                  library rather than priming from them.
-                                  The file must be in (a slightly restricted)
-                                  FASTA format (W. B. Pearson and D.J. Lipman,
-                                  PNAS 85:8 pp 2444-2448 [1988]); we briefly
-                                  discuss the organization of this file below.
-                                  If this parameter is specified then
-                                  EPrimer3 locally aligns each candidate oligo
-                                  against each library sequence and rejects
-                                  those primers for which the local alignment
-                                  score times a specified weight (see below)
-                                  exceeds INTERNAL-OLIGO-MAX-MISHYB. (The
-                                  maximum value of the weight is arbitrarily
-                                  set to 12.0.)
-                                  Each sequence entry in the FASTA-format file
-                                  must begin with an 'id line' that starts
-                                  with '>'. The contents of the id line is
-                                  'slightly restricted' in that EPrimer3
-                                  parses everything after any optional
-                                  asterisk ('*') as a floating point number to
-                                  use as the weight mentioned above. If the
-                                  id line contains no asterisk then the weight
-                                  defaults to 1.0. The alignment scoring
-                                  system used is the same as for calculating
-                                  complementarity among oligos (e.g.
-                                  SELF-ANY). The remainder of an entry
-                                  contains the sequence as lines following the
-                                  id line up until a line starting with '>'
-                                  or the end of the file. Whitespace and
-                                  newlines are ignored. Characters 'A', 'T',
-                                  'G', 'C', 'a', 't', 'g', 'c' are retained
-                                  and any other character is converted to 'N'
-                                  (with the consequence that any IUB / IUPAC
-                                  codes for ambiguous bases are converted to
-                                  'N'). There are no restrictions on line
-                                  length.
-                                  An empty value for this parameter indicates
-                                  that no library should be used.
-   -oligomaxmishyb     float      Similar to MAX-MISPRIMING except that this
-                                  parameter applies to the similarity of
-                                  candidate internal oligos to the library
-                                  specified in INTERNAL-OLIGO-MISHYB-LIBRARY.
 
    Associated qualifiers:
 
    "-sequence" associated qualifiers
-   -sbegin1             integer    First base used
-   -send1               integer    Last base used, def=seq length
+   -sbegin1             integer    Start of each sequence to be used
+   -send1               integer    End of each sequence to be used
    -sreverse1           boolean    Reverse (if DNA)
    -sask1               boolean    Ask for begin/end/reverse
    -snucleotide1        boolean    Sequence is nucleotide
@@ -647,18 +647,44 @@ Command line arguments
    [-outfile]
    (Parameter 2) Output file name Output file <sequence>.eprimer3
    Additional (Optional) qualifiers Allowed values Default
+   -primer Tell EPrimer3 to pick primer(s) Toggle value Yes/No Y
    -task Tell EPrimer3 what task to perform. Legal values are 0: 'Pick
    PCR primers', 1: 'Pick PCR primers and hybridization probe', 2: 'Pick
    forward primer only', 3: 'Pick reverse primer only', 4: 'Pick
-   hybridization probe only'. The tasks should be self explanatory.
-   Briefly, an 'internal oligo' is intended to be used as a hybridization
-   probe (hyb probe) to detect the PCR product after amplification.
-   0 (Pick PCR primers)
-   1 (Pick PCR primers and hybridization probe)
+   hybridization probe only'.
+   1 (Pick PCR primers)
    2 (Pick forward primer only)
    3 (Pick reverse primer only)
-   4 (Pick hybridization probe only)
-   0
+   4 (No primers needed)
+   1
+   -hybridprobe An 'internal oligo' is intended to be used as a
+   hybridization probe (hyb probe) to detect the PCR product after
+   amplification. Toggle value Yes/No N
+   -oligomishyblibraryfile Similar to MISPRIMING-LIBRARY, except that the
+   event we seek to avoid is hybridization of the internal oligo to
+   sequences in this library rather than priming from them. The file must
+   be in (a slightly restricted) FASTA format (W. B. Pearson and D.J.
+   Lipman, PNAS 85:8 pp 2444-2448 [1988]); we briefly discuss the
+   organization of this file below. If this parameter is specified then
+   EPrimer3 locally aligns each candidate oligo against each library
+   sequence and rejects those primers for which the local alignment score
+   times a specified weight (see below) exceeds
+   INTERNAL-OLIGO-MAX-MISHYB. (The maximum value of the weight is
+   arbitrarily set to 12.0.) Each sequence entry in the FASTA-format file
+   must begin with an 'id line' that starts with '>'. The contents of the
+   id line is 'slightly restricted' in that EPrimer3 parses everything
+   after any optional asterisk ('*') as a floating point number to use as
+   the weight mentioned above. If the id line contains no asterisk then
+   the weight defaults to 1.0. The alignment scoring system used is the
+   same as for calculating complementarity among oligos (e.g. SELF-ANY).
+   The remainder of an entry contains the sequence as lines following the
+   id line up until a line starting with '>' or the end of the file.
+   Whitespace and newlines are ignored. Characters 'A', 'T', 'G', 'C',
+   'a', 't', 'g', 'c' are retained and any other character is converted
+   to 'N' (with the consequence that any IUB / IUPAC codes for ambiguous
+   bases are converted to 'N'). There are no restrictions on line length.
+   An empty value for this parameter indicates that no library should be
+   used. Input file Required
    -numreturn The maximum number of primer pairs to return. Primer pairs
    returned are sorted by their 'quality', in other words by the value of
    the objective function (where a lower number indicates a better primer
@@ -852,38 +878,18 @@ Command line arguments
    as high as INTERNAL-OLIGO-SELF-ANY. Number up to 9999.990 12.00
    -oligomaxpolyx The maximum allowable length of an internal oligo
    mononucleotide repeat, for example AAAAAA. Integer 0 or more 5
+   -oligomaxmishyb Similar to MAX-MISPRIMING except that this parameter
+   applies to the similarity of candidate internal oligos to the library
+   specified in INTERNAL-OLIGO-MISHYB-LIBRARY. Number up to 9999.990 12.0
    Advanced (Unprompted) qualifiers Allowed values Default
-   -explainflag If this flag is non-0, produce LEFT-EXPLAIN,
-   RIGHT-EXPLAIN, and INTERNAL-OLIGO-EXPLAIN output tags, which are
-   intended to provide information on the number of oligos and primer
-   pairs that EPrimer3 examined, and statistics on the number discarded
-   for various reasons. Boolean value Yes/No No
-   -fileflag If the associated value is non-0, then EPrimer3 creates two
-   output files for each input SEQUENCE. File (sequence-id).for lists all
-   acceptable forward primers for (sequence-id), and (sequence-id).rev
-   lists all acceptable reverse primers for (sequence-id), where
-   (sequence-id) is the value of the SEQUENCE-ID tag (which must be
-   supplied). In addition, if the input tag TASK is 1 or 4, EPrimer3
-   produces a file (sequence-id).int, which lists all acceptable internal
-   oligos. Boolean value Yes/No No
-   -firstbaseindex This parameter is the index of the first base in the
-   input sequence. For input and output using 1-based indexing (such as
-   that used in GenBank and to which many users are accustomed) set this
-   parameter to 1. For input and output using 0-based indexing set this
-   parameter to 0. (This parameter also affects the indexes in the
-   contents of the files produced when the primer file flag is set.) Any
-   integer value 1
-   -pickanyway If true pick a primer pair even if LEFT-INPUT,
-   RIGHT-INPUT, or INTERNAL-OLIGO-INPUT violates specific constraints.
-   Boolean value Yes/No No
-   -mispriminglibrary The name of a file containing a nucleotide sequence
-   library of sequences to avoid amplifying (for example repetitive
-   sequences, or possibly the sequences of genes in a gene family that
-   should not be amplified.) The file must be in (a slightly restricted)
-   FASTA format (W. B. Pearson and D.J. Lipman, PNAS 85:8 pp 2444-2448
-   [1988]); we briefly discuss the organization of this file below. If
-   this parameter is specified then EPrimer3 locally aligns each
-   candidate primer against each library sequence and rejects those
+   -mispriminglibraryfile The name of a file containing a nucleotide
+   sequence library of sequences to avoid amplifying (for example
+   repetitive sequences, or possibly the sequences of genes in a gene
+   family that should not be amplified.) The file must be in (a slightly
+   restricted) FASTA format (W. B. Pearson and D.J. Lipman, PNAS 85:8 pp
+   2444-2448 [1988]); we briefly discuss the organization of this file
+   below. If this parameter is specified then EPrimer3 locally aligns
+   each candidate primer against each library sequence and rejects those
    primers for which the local alignment score times a specified weight
    (see below) exceeds MAX-MISPRIMING. (The maximum value of the weight
    is arbitrarily set to 100.0.) Each sequence entry in the FASTA-format
@@ -901,6 +907,29 @@ Command line arguments
    / IUPAC codes for ambiguous bases are converted to 'N'). There are no
    restrictions on line length. An empty value for this parameter
    indicates that no repeat library should be used. Input file Required
+   -explainflag If this flag is true, produce LEFT-EXPLAIN,
+   RIGHT-EXPLAIN, and INTERNAL-OLIGO-EXPLAIN output tags, which are
+   intended to provide information on the number of oligos and primer
+   pairs that EPrimer3 examined, and statistics on the number discarded
+   for various reasons. Boolean value Yes/No No
+   -fileflag If the associated value is true, then EPrimer3 creates two
+   output files for each input SEQUENCE. File (sequence-id).for lists all
+   acceptable forward primers for (sequence-id), and (sequence-id).rev
+   lists all acceptable reverse primers for (sequence-id), where
+   (sequence-id) is the value of the SEQUENCE-ID tag (which must be
+   supplied). In addition, if the input tag TASK is 1 or 4, EPrimer3
+   produces a file (sequence-id).int, which lists all acceptable internal
+   oligos. Boolean value Yes/No No
+   -firstbaseindex This parameter is the index of the first base in the
+   input sequence. For input and output using 1-based indexing (such as
+   that used in GenBank and to which many users are accustomed) set this
+   parameter to 1. For input and output using 0-based indexing set this
+   parameter to 0. (This parameter also affects the indexes in the
+   contents of the files produced when the primer file flag is set.) Any
+   integer value 1
+   -pickanyway If true pick a primer pair even if LEFT-INPUT,
+   RIGHT-INPUT, or INTERNAL-OLIGO-INPUT violates specific constraints.
+   Boolean value Yes/No No
    -maxmispriming The maximum allowed weighted similarity with any
    sequence in MISPRIMING-LIBRARY. Number up to 9999.990 12.00
    -pairmaxmispriming The maximum allowed sum of weighted similarities of
@@ -953,34 +982,6 @@ Command line arguments
    in Molecular Biology, Vol. 15: PCR Protocols: Current Methods and
    Applications', 1993, pp 31-40, Humana Press, Totowa NJ). Number up to
    1000.000 9.0
-   -oligomishyblibrary Similar to MISPRIMING-LIBRARY, except that the
-   event we seek to avoid is hybridization of the internal oligo to
-   sequences in this library rather than priming from them. The file must
-   be in (a slightly restricted) FASTA format (W. B. Pearson and D.J.
-   Lipman, PNAS 85:8 pp 2444-2448 [1988]); we briefly discuss the
-   organization of this file below. If this parameter is specified then
-   EPrimer3 locally aligns each candidate oligo against each library
-   sequence and rejects those primers for which the local alignment score
-   times a specified weight (see below) exceeds
-   INTERNAL-OLIGO-MAX-MISHYB. (The maximum value of the weight is
-   arbitrarily set to 12.0.) Each sequence entry in the FASTA-format file
-   must begin with an 'id line' that starts with '>'. The contents of the
-   id line is 'slightly restricted' in that EPrimer3 parses everything
-   after any optional asterisk ('*') as a floating point number to use as
-   the weight mentioned above. If the id line contains no asterisk then
-   the weight defaults to 1.0. The alignment scoring system used is the
-   same as for calculating complementarity among oligos (e.g. SELF-ANY).
-   The remainder of an entry contains the sequence as lines following the
-   id line up until a line starting with '>' or the end of the file.
-   Whitespace and newlines are ignored. Characters 'A', 'T', 'G', 'C',
-   'a', 't', 'g', 'c' are retained and any other character is converted
-   to 'N' (with the consequence that any IUB / IUPAC codes for ambiguous
-   bases are converted to 'N'). There are no restrictions on line length.
-   An empty value for this parameter indicates that no library should be
-   used. Input file Required
-   -oligomaxmishyb Similar to MAX-MISPRIMING except that this parameter
-   applies to the similarity of candidate internal oligos to the library
-   specified in INTERNAL-OLIGO-MISHYB-LIBRARY. Number up to 9999.990 12.0
    
 Input file format
 
@@ -1278,8 +1279,9 @@ See also
    
 Author(s)
 
-   Gary Williams (gwilliam © hgmp.mrc.ac.uk)
-   HGMP-RC, Genome Campus, Hinxton, Cambridge CB10 1SB, UK
+   Gary Williams (gwilliam © rfcgr.mrc.ac.uk)
+   MRC Rosalind Franklin Centre for Genomics Research Wellcome Trust
+   Genome Campus, Hinxton, Cambridge, CB10 1SB, UK
    
    The Whitehead Institute's primer3 program is not part of this program,
    but it must be set up on your system and on your path.

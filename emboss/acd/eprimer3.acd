@@ -16,7 +16,7 @@ section: input [
            must be presented 5' to 3'"
   ]
 
-    boolean: primer [
+    toggle: primer [
       additional: "Y"
       information: "Pick PCR primer(s)"
       default: "Y"
@@ -40,7 +40,7 @@ section: input [
              only', 4: 'Pick hybridization probe only'."
     ]
 
-    boolean: hybridprobe [
+    toggle: hybridprobe [
       additional: "Y"
       information: "Pick hybridization probe"
       default: "N"
@@ -203,6 +203,7 @@ section: additional [
       help: "The sequence of a forward primer to check and around
              which to design reverse primers and optional internal oligos.
              Must be a substring of SEQUENCE."
+      knowntype: "nucleotide sequence"
     ]
 
     string: reverseinput  [
@@ -212,6 +213,7 @@ section: additional [
       help: "The sequence of a reverse primer to check and around
              which to design forward primers and optional internal oligos.
              Must be a substring of the reverse strand of SEQUENCE."
+      knowntype: "nucleotide sequence"
     ]
 
   endsection: seqoptsection
@@ -477,6 +479,7 @@ section: additional [
       help: "The sequence of an internal oligo to check and around
              which to design forward and reverse primers. Must be a substring
              of SEQUENCE."
+      knowntype: "nucleotide sequence"
     ]
 
   endsection: oligosinput
