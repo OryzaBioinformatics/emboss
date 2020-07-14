@@ -17,6 +17,19 @@
 
 # SET emboss_logfile /packages/emboss/emboss/log
 
+# Pagesize - this is the size of disc page blocks and is
+# required by the 'dbx' indexing programs and 'method: emboss'
+# We recommend a value of 2048
+
+SET PAGESIZE 2048
+
+# Cachesize - a cache of disc pages to be used by the 'dbx'
+# indexing system and is required for 'method emboss'. It is
+# the number of PAGESIZE blocks to cache. We recommend
+# a value of 200
+
+SET CACHESIZE 200
+
 ##################################################################
 # Test Databases
 # Used by the qatest.pl scriupt to test an EMBOSS installation.
@@ -505,3 +518,15 @@ DB tgenbank [ type: N dir: $emboss_tempdata/genbank
 # ]
 
 
+##################################################################
+# Resource definitions for the dbx indexing system.
+##################################################################
+
+RES embl [ type: Index
+  idlen:  15
+  acclen: 15
+  svlen:  15
+  keylen: 15
+  deslen: 15
+  orglen: 15
+]
