@@ -62,7 +62,7 @@ int main(int argc, char **argv)
     ajint length;
     ajint zstart;
     ajint zend;
-    char *p;
+    const char *p;
     ajint seqlength;
     AjPStr tmpstr  = NULL;
     AjPStr tailstr = NULL;
@@ -109,7 +109,7 @@ int main(int argc, char **argv)
 	p=ajStrStr(regexp);
 	if(*p && *p!=' ' && *p!='^')
 	{
-	    p=strtok(p," ");
+	    p=ajSysStrtok(p," ");
 	    ajStrAssC(&name,p);
 	    if(prune)
 		if(ajStrMatchCaseC(name,"myristyl") ||
@@ -123,7 +123,7 @@ int main(int argc, char **argv)
 			ajFileReadLine(inf, &regexp);
 		    continue;
 		}
-	    p=strtok(NULL," ");
+	    p=ajSysStrtok(NULL," ");
 	    ajStrAssC(&accession,p);
 	}
 

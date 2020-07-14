@@ -70,14 +70,14 @@ int main(int argc, char **argv)
     ajStrAssC(&fthit, "hit");
 
     /*converting the Prosite motif to a reg exps */
-    regexp =embPatPrositeToRegExp(&motif);
+    regexp =embPatPrositeToRegExp(motif);
 
     ajFmtPrintAppS(&tmpstr, "Motif: %S\n", motif);
     ajReportSetHeader(report, tmpstr);
 
     while(ajSeqallNext(seqall, &seq))
     {
-	str = ajSeqStr(seq);
+	str = ajSeqStrCopy(seq);
 	ajStrToUpper(&str);
 
 	/* comparing the reg exps to sequence for matches. */
@@ -130,6 +130,7 @@ int main(int argc, char **argv)
 	    ajFeattableDel(&tab);
 	}
 	embPatMatchDel(&match);
+	ajStrDel(&str);
     }
 
     ajStrDel(&regexp);

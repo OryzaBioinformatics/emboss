@@ -54,7 +54,7 @@ int main(int argc, char **argv, char **env)
     
     search  = ajAcdGetString("search");
     outfile = ajAcdGetOutfile("outfile");
-    html    = ajAcdGetBool("html");
+    html    = ajAcdGetToggle("html");
     link1   = ajAcdGetString("prelink");
     link2   = ajAcdGetString("postlink");
     groups  = ajAcdGetBool("groups");

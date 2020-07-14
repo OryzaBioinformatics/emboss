@@ -44,30 +44,38 @@ AjIUB aj_base_iubS[256];      /* base letters and their alternatives */
 
 
 
-static AjPFloat2d distmat_calc_match(char** seqcharptr, ajint len, ajint nseqs,
+static AjPFloat2d distmat_calc_match(char* const * seqcharptr,
+				     ajint len, ajint nseqs,
 				     AjBool ambig, AjBool nuc,
 				     AjPFloat2d* gap);
-static AjPFloat2d distmat_uncorrected(AjPFloat2d match, AjPFloat2d gap,
+static AjPFloat2d distmat_uncorrected(const AjPFloat2d match,
+				      const AjPFloat2d gap,
 				      float gapwt, ajint len, ajint nseqs,
 				      AjBool nuc);
 
 /* correction methods for multiple subst. */
-static AjPFloat2d distmat_JukesCantor(AjPFloat2d match, AjPFloat2d gap,
+static AjPFloat2d distmat_JukesCantor(const AjPFloat2d match,
+				      const AjPFloat2d gap,
 				      float gapwt, ajint mlen, ajint nseqs,
 				      AjBool nuc);
-static AjPFloat2d distmat_Kimura(char** seqcharptr, ajint len, ajint nseqs);
-static AjPFloat2d distmat_KimuraProt(char** seqcharptr, ajint mlen,
+static AjPFloat2d distmat_Kimura(char* const * seqcharptr,
+				 ajint len, ajint nseqs);
+static AjPFloat2d distmat_KimuraProt(char* const * seqcharptr,
+				     ajint mlen,
 				     ajint nseqs);
-static AjPFloat2d distmat_Tamura(char** seqcharptr, ajint len, ajint nseqs);
-static AjPFloat2d distmat_TajimaNei(char** seqcharptr, AjPFloat2d match,
-                            ajint mlen, ajint nseqs, AjBool nuc);
-static AjPFloat2d distmat_JinNei(char** seqcharptr, ajint len, ajint nseqs,
+static AjPFloat2d distmat_Tamura(char* const * seqcharptr,
+				 ajint len, ajint nseqs);
+static AjPFloat2d distmat_TajimaNei(char* const * seqcharptr,
+				    const AjPFloat2d match,
+				    ajint mlen, ajint nseqs, AjBool nuc);
+static AjPFloat2d distmat_JinNei(char* const * seqcharptr,
+				 ajint len, ajint nseqs,
 				 AjBool calc_a, float var_a);
 
 /* output routine and misc routines */
 static void distmat_outputDist(AjPFile outf, ajint nseqs, ajint mlen,
-			       AjPSeqset seqset, AjPFloat2d match,
-			       AjPFloat2d gap, float gapwt,
+			       const AjPSeqset seqset, const AjPFloat2d match,
+			       const AjPFloat2d gap, float gapwt,
 			       ajint method, AjBool ambig, AjBool nuc,
 			       ajint posn, ajint incr);
 static float distmat_checkambigNuc(char m1, char m2);
@@ -75,7 +83,7 @@ static float distmat_checkambigProt(ajint t1, ajint t2);
 static void distmat_checkSubs(ajint t1, ajint t2, ajint* trans, ajint* tranv);
 static void distmat_checkRY(ajint t1, ajint t2, ajint* trans, ajint* tranv);
 
-static char** distmat_getSeq(AjPSeqset seqset, ajint nseqs, ajint mlen,
+static char** distmat_getSeq(const AjPSeqset seqset, ajint nseqs, ajint mlen,
 			     ajint incr, ajint posn, ajint* len);
 
 
@@ -94,7 +102,7 @@ int main (int argc, char * argv[])
     float gapwt;
     float var_a;
 
-    char  *p;
+    const char  *p;
     char **seqcharptr;
 
     AjPSeqset seqset = NULL;
@@ -197,7 +205,7 @@ int main (int argc, char * argv[])
 
     /* free allocated memory */
     for(i=0;i<nseqs;i++)
-	ajCharFree(seqcharptr[i]);
+	ajCharFree(&seqcharptr[i]);
     AJFREE(seqcharptr);
 
     if(method == 0 || method == 1 || method == 4 )
@@ -217,14 +225,15 @@ int main (int argc, char * argv[])
 **
 ** K Tamura, Mol. Biol. Evol. 1992, 9, 678.
 **
-** @param [r] seqcharptr [char**] Array of sequences as C strings
+** @param [r] seqcharptr [char* const *] Array of sequences as C strings
 ** @param [r] len [ajint] Length
 ** @param [r] nseqs [ajint] Number of sequences
 ** @return [AjPFloat2d] corrected distance matrix
 **
 ******************************************************************************/
 
-static AjPFloat2d distmat_Tamura(char** seqcharptr, ajint len, ajint nseqs)
+static AjPFloat2d distmat_Tamura(char* const * seqcharptr,
+				 ajint len, ajint nseqs)
 {
     ajint i;
     ajint j;
@@ -373,14 +382,15 @@ static AjPFloat2d distmat_Tamura(char** seqcharptr, ajint len, ajint nseqs)
 **
 ** M Kimura, J. Mol. Evol., 1980, 16, 111.
 **
-** @param [r] seqcharptr [char**] Array of sequences as C strings
+** @param [r] seqcharptr [char* const *] Array of sequences as C strings
 ** @param [r] len [ajint] Length
 ** @param [r] nseqs [ajint] Number of sequences
 ** @return [AjPFloat2d] corrected distance matrix
 **
 ******************************************************************************/
 
-static AjPFloat2d distmat_Kimura(char** seqcharptr, ajint len, ajint nseqs)
+static AjPFloat2d distmat_Kimura(char* const * seqcharptr,
+				 ajint len, ajint nseqs)
 {
     ajint i;
     ajint j;
@@ -476,14 +486,14 @@ static AjPFloat2d distmat_Kimura(char** seqcharptr, ajint len, ajint nseqs)
 **
 ** Kimura protein distance
 **
-** @param [r] seqcharptr [char**] Array of sequences as C strings
+** @param [r] seqcharptr [char* const *] Array of sequences as C strings
 ** @param [r] mlen [ajint] Length
 ** @param [r] nseqs [ajint] Number of sequences
 ** @return [AjPFloat2d] corrected distance matrix
 **
 ******************************************************************************/
 
-static AjPFloat2d distmat_KimuraProt(char** seqcharptr, ajint mlen,
+static AjPFloat2d distmat_KimuraProt(char* const * seqcharptr, ajint mlen,
 				     ajint nseqs)
 {
     ajint i;
@@ -569,17 +579,18 @@ static AjPFloat2d distmat_KimuraProt(char** seqcharptr, ajint mlen,
 ** Sum the no. of matches between each pair of sequence in an
 ** alignment.
 **
-** @param [r] seqcharptr [char**] Array of sequences as C strings
+** @param [r] seqcharptr [char* const *] Array of sequences as C strings
 ** @param [r] len [ajint] Length
 ** @param [r] nseqs [ajint] Number of sequences
 ** @param [r] ambig [AjBool] Ambiguity codes
 ** @param [r] nuc [AjBool] Nucleotide
-** @param [r] gap [AjPFloat2d*] Gaps
+** @param [u] gap [AjPFloat2d*] Gaps
 ** @return [AjPFloat2d] corrected distance matrix
 **
 ******************************************************************************/
 
-static AjPFloat2d distmat_calc_match(char** seqcharptr, ajint len, ajint nseqs,
+static AjPFloat2d distmat_calc_match(char* const * seqcharptr,
+				     ajint len, ajint nseqs,
 				     AjBool ambig, AjBool nuc, AjPFloat2d* gap)
 {
 
@@ -655,8 +666,8 @@ static AjPFloat2d distmat_calc_match(char** seqcharptr, ajint len, ajint nseqs,
 **
 **        D = p-distance = 1 - (matches/(posns_scored + gaps*gap_penalty))
 **
-** @param [r] match [AjPFloat2d] Matches
-** @param [r] gap [AjPFloat2d] Gaps
+** @param [r] match [const AjPFloat2d] Matches
+** @param [r] gap [const AjPFloat2d] Gaps
 ** @param [r] gapwt [float] Gap weight
 ** @param [r] len [ajint] Length
 ** @param [r] nseqs [ajint] Number of sequences
@@ -665,7 +676,8 @@ static AjPFloat2d distmat_calc_match(char** seqcharptr, ajint len, ajint nseqs,
 **
 ******************************************************************************/
 
-static AjPFloat2d distmat_uncorrected(AjPFloat2d match, AjPFloat2d gap,
+static AjPFloat2d distmat_uncorrected(const AjPFloat2d match,
+				      const AjPFloat2d gap,
 				      float gapwt, ajint len, ajint nseqs,
 				      AjBool nuc)
 {
@@ -712,8 +724,8 @@ static AjPFloat2d distmat_uncorrected(AjPFloat2d match, AjPFloat2d gap,
 **
 ** Tajima and Nei, Mol. Biol. Evol. 1984, 1, 269.
 **
-** @param [r] seqcharptr [char**] Array of sequences as C strings
-** @param [r] match [AjPFloat2d] Matches
+** @param [r] seqcharptr [char* const *] Array of sequences as C strings
+** @param [r] match [const AjPFloat2d] Matches
 ** @param [r] mlen [ajint] Length
 ** @param [r] nseqs [ajint] Number of sequences
 ** @param [r] nuc [AjBool] Nucleotide
@@ -721,7 +733,8 @@ static AjPFloat2d distmat_uncorrected(AjPFloat2d match, AjPFloat2d gap,
 **
 ******************************************************************************/
 
-static AjPFloat2d distmat_TajimaNei(char** seqcharptr, AjPFloat2d match,
+static AjPFloat2d distmat_TajimaNei(char* const * seqcharptr,
+				    const AjPFloat2d match,
 				    ajint mlen, ajint nseqs, AjBool nuc)
 {
 
@@ -918,7 +931,7 @@ static AjPFloat2d distmat_TajimaNei(char** seqcharptr, AjPFloat2d match,
 **
 **  Jin and Nei, Mol. Biol. Evol. 82, 7, 1990.
 **
-** @param [r] seqcharptr [char**] Array of sequences as C strings
+** @param [r] seqcharptr [char* const *] Array of sequences as C strings
 ** @param [r] mlen [ajint] Length
 ** @param [r] nseqs [ajint] Number of sequences
 ** @param [r] calc_a [AjBool] Calculation
@@ -926,7 +939,8 @@ static AjPFloat2d distmat_TajimaNei(char** seqcharptr, AjPFloat2d match,
 ** @return [AjPFloat2d] corrected distance matrix
 ******************************************************************************/
 
-static AjPFloat2d distmat_JinNei(char** seqcharptr, ajint mlen, ajint nseqs,
+static AjPFloat2d distmat_JinNei(char* const * seqcharptr,
+				 ajint mlen, ajint nseqs,
 				 AjBool calc_a, float var_a)
 {
     ajint i;
@@ -1080,8 +1094,8 @@ static AjPFloat2d distmat_JinNei(char** seqcharptr, ajint mlen, ajint nseqs,
 ** of Protein Molecules", Jukes & Cantor, in Mammalian Prot. Metab.,
 ** III, 1969, pp. 21-132.
 **
-** @param [r] match [AjPFloat2d] Matches
-** @param [r] gap [AjPFloat2d] Gaps
+** @param [r] match [const AjPFloat2d] Matches
+** @param [r] gap [const AjPFloat2d] Gaps
 ** @param [r] gapwt [float] Gap weight
 ** @param [r] mlen [ajint] Length
 ** @param [r] nseqs [ajint] Number of sequences
@@ -1090,7 +1104,8 @@ static AjPFloat2d distmat_JinNei(char** seqcharptr, ajint mlen, ajint nseqs,
 **
 ******************************************************************************/
 
-static AjPFloat2d distmat_JukesCantor(AjPFloat2d match, AjPFloat2d gap,
+static AjPFloat2d distmat_JukesCantor(const AjPFloat2d match,
+				      const AjPFloat2d gap,
 				      float gapwt, ajint mlen, ajint nseqs,
 				      AjBool nuc)
 {
@@ -1140,8 +1155,8 @@ static AjPFloat2d distmat_JukesCantor(AjPFloat2d match, AjPFloat2d gap,
 **
 ** @param [r] t1 [ajint] Transition score
 ** @param [r] t2 [ajint] Transversion score
-** @param [r] trans [ajint*] Transitions
-** @param [r] tranv [ajint*] Transversions
+** @param [w] trans [ajint*] Transitions
+** @param [w] tranv [ajint*] Transversions
 ** @return [void]
 **
 ******************************************************************************/
@@ -1191,8 +1206,8 @@ static void distmat_checkRY(ajint t1, ajint t2, ajint* trans, ajint* tranv)
 **
 ** @param [r] t1 [ajint] Transition score
 ** @param [r] t2 [ajint] Transversion score
-** @param [r] trans [ajint*] Transitions
-** @param [r] tranv [ajint*] Transversions
+** @param [w] trans [ajint*] Transitions
+** @param [w] tranv [ajint*] Transversions
 ** @return [void]
 **
 ******************************************************************************/
@@ -1347,17 +1362,17 @@ static float distmat_checkambigNuc(char m1, char m2)
 ** Get the part of the sequences that the distances are calculated from.
 ** i.e. codon positions 1, 2, 3 or 1 & 2.
 **
-** @param [r] seqset [AjPSeqset] Sequence set object
+** @param [r] seqset [const AjPSeqset] Sequence set object
 ** @param [r] nseqs [ajint] Number of sequences
 ** @param [r] mlen [ajint] Length
 ** @param [r] incr [ajint] Increment
 ** @param [r] posn [ajint] Position
-** @param [r] len [ajint*] length of longest sequence
+** @param [w] len [ajint*] length of longest sequence
 ** @return [char**] Sequences as an array of C strings
 **
 ******************************************************************************/
 
-static char** distmat_getSeq(AjPSeqset seqset, ajint nseqs, ajint mlen,
+static char** distmat_getSeq(const AjPSeqset seqset, ajint nseqs, ajint mlen,
 			     ajint incr, ajint posn, ajint* len)
 {
     ajint i;
@@ -1365,7 +1380,7 @@ static char** distmat_getSeq(AjPSeqset seqset, ajint nseqs, ajint mlen,
     ajint count;
 
     AjBool onetwo = ajFalse;
-    char*  pseqset;
+    const char*  pseqset;
     char** pseq;
 
 
@@ -1414,12 +1429,12 @@ static char** distmat_getSeq(AjPSeqset seqset, ajint nseqs, ajint mlen,
 **
 ** Output the distance matrix
 **
-** @param [r] outf [AjPFile] Output file
+** @param [u] outf [AjPFile] Output file
 ** @param [r] nseqs [ajint] Number of sequences
 ** @param [r] mlen [ajint] Length
-** @param [r] seqset [AjPSeqset] Sequence set object
-** @param [r] match [AjPFloat2d] Matches
-** @param [r] gap [AjPFloat2d] Gaps
+** @param [r] seqset [const AjPSeqset] Sequence set object
+** @param [r] match [const AjPFloat2d] Matches
+** @param [r] gap [const AjPFloat2d] Gaps
 ** @param [r] gapwt [float] Gap weight
 ** @param [r] method [ajint] Method
 ** @param [r] ambig [AjBool] Ambiguities
@@ -1431,8 +1446,9 @@ static char** distmat_getSeq(AjPSeqset seqset, ajint nseqs, ajint mlen,
 ******************************************************************************/
 
 static void distmat_outputDist(AjPFile outf, ajint nseqs, ajint mlen,
-			       AjPSeqset seqset, AjPFloat2d match,
-			       AjPFloat2d gap, float gapwt, ajint method,
+			       const AjPSeqset seqset,
+			       const AjPFloat2d match,
+			       const AjPFloat2d gap, float gapwt, ajint method,
 			       AjBool ambig, AjBool nuc, ajint posn,
 			       ajint incr)
 {

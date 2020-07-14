@@ -61,7 +61,7 @@ int main(int argc, char **argv)
 	    ajFmtPrintF(outf, "Type:\t\tDNA\n");
 	    ajFmtPrintF(outf, "Length:\t\t%d basepairs\n", len);
 	    seqstr = ajSeqStr(seq);
-	    pgc = ajMeltGC(&seqstr,len);
+	    pgc = ajMeltGC(seqstr,len);
 	    ajFmtPrintF(outf, "GC Content:\t%-8.4f%%\n", pgc*100.0);
 	}
 	else if(ajSeqIsProt(seq))

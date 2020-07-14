@@ -98,7 +98,7 @@ int main(int argc, char **argv)
 **
 ** Read molecular weight files.
 **
-** @param [r] files [AjPList] List of files
+** @param [u] files [AjPList] List of files
 ** @param [w] lists [AjPList**] Array of lists for molwts
 ** @param [w] n [ajint*] number of files/lists
 ** @@
@@ -162,8 +162,8 @@ static void mwcontam_readdata(AjPList files, AjPList **lists,
 ** Compare two lists for matching molwts leaving the result in
 ** the second list.
 **
-** @param [r] one [AjPList] First list
-** @param [u] two [AjPList*] Second list
+** @param [u] one [AjPList] First list
+** @param [d] two [AjPList*] Second list, deleted at the end
 ** @param [r] tolerance [float] mw tolerance (ppm)
 ** @@
 ******************************************************************************/

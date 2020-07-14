@@ -38,7 +38,7 @@ ajint ipoints;
 
 int main(int argc, char **argv)
 {
-    AjPGraphData graphdata;
+    AjPGraphPlpData graphdata;
     ajint i;
     AjPGraph mult;
     AjBool overlap;
@@ -55,10 +55,10 @@ int main(int argc, char **argv)
     /* This is used for drawing several graphs in one window */
 
     /* create a new graph */
-    graphdata = ajGraphxyDataNewI(ipoints);
+    graphdata = ajGraphPlpDataNewI(ipoints);
 
     /* add graph to list in a multiple graph */
-    ajGraphxyAddGraph(mult,graphdata);
+    ajGraphDataAdd(mult,graphdata);
 
     /* set overlap based on bool*/
     ajGraphxySetOverLap(mult, overlap);
@@ -71,20 +71,20 @@ int main(int argc, char **argv)
     }
 
     /* embGraphSetData(graphdata,&array[0][0]);*/
-    ajGraphxyDataSetYtitleC(graphdata,"SINE(degrees)");
-    ajGraphxyDataSetXtitleC(graphdata,"degrees");
-    ajGraphxyDataSetTitleC(graphdata,"hello");
-    ajGraphxySetColour(graphdata,GREEN);
+    ajGraphPlpDataSetYTitleC(graphdata,"SINE(degrees)");
+    ajGraphPlpDataSetXTitleC(graphdata,"degrees");
+    ajGraphPlpDataSetTitleC(graphdata,"hello");
+    ajGraphPlpDataSetColour(graphdata,GREEN);
 
     if(!overlap)
     {
-	ajGraphDataObjAddRect(graphdata,70.0,0.55,80.0,0.45,GREEN,1);
-	ajGraphDataObjAddText(graphdata,82.0,0.5,GREEN,"Sine");
+	ajGraphPlpDataAddRect(graphdata,70.0,0.55,80.0,0.45,GREEN,1);
+	ajGraphPlpDataAddText(graphdata,82.0,0.5,GREEN,"Sine");
     }
 
-    graphdata = ajGraphxyDataNewI(ipoints);
+    graphdata = ajGraphPlpDataNewI(ipoints);
 
-    ajGraphxyAddGraph(mult,graphdata);
+    ajGraphDataAdd(mult,graphdata);
 
     for(i=0;i<ipoints; i++)
     {
@@ -92,23 +92,23 @@ int main(int argc, char **argv)
 	graphdata->y[i] = cos(ajDegToRad((float)i));
     }
 
-    ajGraphxyDataSetXtitleC(graphdata,"degrees");
-    ajGraphxyDataSetYtitleC(graphdata,"COS(degrees)");
-    ajGraphxyDataSetTitleC(graphdata,"hello");
-    ajGraphxySetColour(graphdata,RED);
+    ajGraphPlpDataSetXTitleC(graphdata,"degrees");
+    ajGraphPlpDataSetYTitleC(graphdata,"COS(degrees)");
+    ajGraphPlpDataSetTitleC(graphdata,"hello");
+    ajGraphPlpDataSetColour(graphdata,RED);
 
     if(!overlap)
     {
-	ajGraphDataObjAddLine(graphdata,5.0,0.1,15.0,0.1,RED);
-	ajGraphDataObjAddText(graphdata,17.0,0.1,RED,"Cosine");
+	ajGraphPlpDataAddLine(graphdata,5.0,0.1,15.0,0.1,RED);
+	ajGraphPlpDataAddText(graphdata,17.0,0.1,RED,"Cosine");
     }
 
     /* now set larger axis than needed */
-    ajGraphDataxySetMaxMin(graphdata,0.0,(float)ipoints,-0.5,1.5);
+    ajGraphPlpDataSetMaxMin(graphdata,0.0,(float)ipoints,-0.5,1.5);
 
-    graphdata = ajGraphxyDataNewI(ipoints);
-    ajGraphxySetLineType(graphdata, 3);
-    ajGraphxyAddGraph(mult,graphdata);
+    graphdata = ajGraphPlpDataNewI(ipoints);
+    ajGraphPlpDataSetLineType(graphdata, 3);
+    ajGraphDataAdd(mult,graphdata);
 
     for(i=0;i<ipoints; i++)
     {
@@ -116,33 +116,33 @@ int main(int argc, char **argv)
 	graphdata->y[i] = (tan(ajDegToRad(i))*0.2);
     }
 
-    ajGraphxyDataSetXtitleC(graphdata,"degrees");
-    ajGraphxyDataSetYtitleC(graphdata,"TAN(degrees)");
-    ajGraphxyDataSetTitleC(graphdata,"hello");
-    ajGraphxySetLineType(graphdata, 2);
-    ajGraphxySetColour(graphdata,BLUE);
+    ajGraphPlpDataSetXTitleC(graphdata,"degrees");
+    ajGraphPlpDataSetYTitleC(graphdata,"TAN(degrees)");
+    ajGraphPlpDataSetTitleC(graphdata,"hello");
+    ajGraphPlpDataSetLineType(graphdata, 2);
+    ajGraphPlpDataSetColour(graphdata,BLUE);
 
     if(!overlap)
     {
-	ajGraphDataObjAddRect(graphdata,5.0,9.0,15.0,8.5,BLUE,0);
-	ajGraphDataObjAddText(graphdata,17.0,8.75,BLUE,"Tangent");
+	ajGraphPlpDataAddRect(graphdata,5.0,9.0,15.0,8.5,BLUE,0);
+	ajGraphPlpDataAddText(graphdata,17.0,8.75,BLUE,"Tangent");
     }
 
-    ajGraphxyYtitleC(mult,"sin,cos,tan");
-    ajGraphxyXtitleC(mult,"degrees");
-    ajGraphxyTitleC(mult,"Trig functions");
+    ajGraphSetYTitleC(mult,"sin,cos,tan");
+    ajGraphSetXTitleC(mult,"degrees");
+    ajGraphSetTitleC(mult,"Trig functions");
 
     ajGraphxySetYStart(mult,0.0);
     ajGraphxySetYEnd(mult,2.0);
 
     if(overlap)
     {
-	ajGraphObjAddRect(mult,5.0,9.0,15.0,8.5,BLUE,0);
-	ajGraphObjAddRect(mult,5.0,8.0,15.0,7.5,GREEN,1);
-	ajGraphObjAddLine(mult,5.0,6.75,15.0,6.75,RED);
-	ajGraphObjAddText(mult,17.0,8.75,BLUE,"Tangent");
-	ajGraphObjAddText(mult,17.0,7.75,GREEN,"Sine");
-	ajGraphObjAddText(mult,17.0,6.75,RED,"Cosine");
+	ajGraphAddRect(mult,5.0,9.0,15.0,8.5,BLUE,0);
+	ajGraphAddRect(mult,5.0,8.0,15.0,7.5,GREEN,1);
+	ajGraphAddLine(mult,5.0,6.75,15.0,6.75,RED);
+	ajGraphAddText(mult,17.0,8.75,BLUE,"Tangent");
+	ajGraphAddText(mult,17.0,7.75,GREEN,"Sine");
+	ajGraphAddText(mult,17.0,6.75,RED,"Cosine");
     }
 
     ajGraphxyDisplay(mult,AJTRUE);

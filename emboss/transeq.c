@@ -28,9 +28,9 @@
 
 
 
-static void transeq_GetRegions(AjPRange regions, AjPSeq seq);
+static void transeq_GetRegions(const AjPRange regions, AjPSeq seq);
 static void transeq_Trim(AjPSeq seq);
-static void transeq_GetFrames(AjPStr *framelist, AjBool *frames);
+static void transeq_GetFrames(AjPStr const *framelist, AjBool *frames);
 static void transeq_Clean(AjPSeq seq);
 
 
@@ -144,20 +144,21 @@ int main(int argc, char **argv)
 ** 1:45, 67=99;765..888
 ** 1,5,8,10,23,45,57,99
 **
-** @param [r] regions [AjPRange] regions to extract
-** @param [r] seq [AjPSeq] sequence to extract sequence from
+** @param [r] regions [const AjPRange] regions to extract
+** @param [u] seq [AjPSeq] sequence to extract sequence from,
+**                        returned as the extracted exons only
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-static void transeq_GetRegions(AjPRange regions, AjPSeq seq)
+static void transeq_GetRegions(const AjPRange regions, AjPSeq seq)
 {
 
     AjPStr newstr = NULL;
 
     newstr = ajStrNew();
 
-    ajRangeStrExtract(&newstr, regions, ajSeqStr(seq));
+    ajRangeStrExtract(regions, ajSeqStr(seq), &newstr);
     ajSeqReplace(seq, newstr);
 
     ajStrDel(&newstr);
@@ -172,7 +173,6 @@ static void transeq_GetRegions(AjPRange regions, AjPSeq seq)
 **
 ** Removes X, and/or * characters from the end of the translation
 **
-**
 ** @param [u] seq [AjPSeq] sequence to trim
 ** @return [void]
 ** @@
@@ -186,8 +186,8 @@ static void transeq_Trim(AjPSeq seq)
     ajint i;
     ajint len;
 
-    s = ajSeqStr(seq);
-    p = ajStrStr(s);
+    s = ajSeqStrCopy(seq);
+    p = ajStrStrMod(&s);
     
     len = ajStrLen(s)-1;
 
@@ -201,6 +201,7 @@ static void transeq_Trim(AjPSeq seq)
 
     if(i < len)
 	ajStrTruncate(&s, i+1);
+    ajSeqReplace(seq, s);
 
     return;
 }
@@ -239,13 +240,13 @@ static void transeq_Clean(AjPSeq seq)
 ** Frame numbers are ordered in the vector as:
 ** 1, 2, 3 -1, -2, -3
 **
-** @param [r] framelist [AjPStr*] list of frame numbers
-** @param [u] frames [AjBool*] Boolean vector
+** @param [r] framelist [AjPStr const *] list of frame numbers
+** @param [w] frames [AjBool*] Boolean vector
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-static void transeq_GetFrames(AjPStr *framelist, AjBool *frames)
+static void transeq_GetFrames(AjPStr const *framelist, AjBool *frames)
 {
     int i;
 

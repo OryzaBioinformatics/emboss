@@ -39,15 +39,23 @@ static char *testset[] =
 int main(int argc, char **argv)
 {
     AjPStr cut    = NULL;
+    AjPStr cutseq = NULL;
     AjPStr new    = NULL;
     AjPStr test   = NULL;
     AjPStr regexp = NULL;
+    AjPFile outf  = NULL;
     EmbPPatMatch results = NULL;
     AjPSeq seq;
     ajint i;
     ajint j;
 
     embInit("patmattest", argc, argv);
+
+    seq = ajAcdGetSeq("sequence1");
+
+    cutseq = ajAcdGetString("expression");
+
+    outf = ajAcdGetOutfile("outfile");
 
     ajStrAssC(&test,"GAATTCCCGGAGATTCCGACTC");
 
@@ -63,41 +71,39 @@ int main(int argc, char **argv)
 	results = embPatMatchFind(regexp,test);
 
 
-	ajUser("01234567890123456789012345");
-	ajUser("%S",test);
-	ajUser("%S %S",cut,regexp);
-	ajUser("%d matches found",results->number);
+	ajFmtPrintF(outf,"01234567890123456789012345\n");
+	ajFmtPrintF(outf,"%S\n",test);
+	ajFmtPrintF(outf,"%S %S\n",cut,regexp);
+	ajFmtPrintF(outf,"%d matches found\n",results->number);
 	for(j=0;j<results->number;j++)
-	    ajUser("start = %d len = %d",results->start[j],results->len[j]);
-	ajUser(" ");
+	    ajFmtPrintF(outf,"start = %d len = %d\n",
+			results->start[j],results->len[j]);
+	ajFmtPrintF(outf," \n");
 	embPatMatchDel(&results);
 	ajStrDel(&regexp);
 	ajStrDel(&cut);
     }
     ajStrDel(&test);
 
-    seq = ajAcdGetSeq("sequence1");
-
-    cut = ajAcdGetString("expression");
-
-    results = embPatSeqMatchFind(seq, cut);
-    ajUser("%S",cut);
-    ajUser("%d matches found",results->number);
+    results = embPatSeqMatchFind(seq, cutseq);
+    ajFmtPrintF(outf,"%S\n",cutseq);
+    ajFmtPrintF(outf,"%d matches found\n",results->number);
     for(j=0;j < embPatMatchGetNumber(results) ;j++)
     {
-	ajUser("start = %d len = %d",embPatMatchGetStart(results,j),
-	       embPatMatchGetLen(results,j));
+	ajFmtPrintF(outf,"start = %d len = %d\n",
+		    embPatMatchGetStart(results,j),
+		    embPatMatchGetLen(results,j));
 	/* get a copy of the string */
 	new = ajStrNewL(results->len[j]);
 	ajStrAssSub(&new,ajSeqStr(seq),embPatMatchGetStart(results,j),
 		    embPatMatchGetEnd(results,j));
-	ajUser("%S",new);
+	ajFmtPrintF(outf,"%S\n",new);
 	ajStrDel(&new);
     }
 
-    ajUser(" ");
+    ajFmtPrintF(outf," \n");
     embPatMatchDel(&results);
-    ajStrDel(&cut);
+    ajStrDel(&cutseq);
     ajSeqDel(&seq);
 
     ajExit();

@@ -48,7 +48,7 @@ int main(int argc, char **argv)
     seqout   = ajAcdGetSeqout("outseq");
     regions  = ajAcdGetRange("regions");
     maskchar = ajAcdGetString("maskchar");
-    tolower  = ajAcdGetBool("tolower");
+    tolower  = ajAcdGetToggle("tolower");
 
     beg = ajSeqBegin(seq)-1;
     end = ajSeqEnd(seq)-1;
@@ -63,9 +63,9 @@ int main(int argc, char **argv)
     ** ToLower the regions, else replace with maskseq
     */
     if(tolower || ajStrLen(maskchar) == 0 || ajStrMatchC(maskchar, " "))
-    	ajRangeStrToLower(&str, regions);
+    	ajRangeStrToLower(regions, &str);
     else
-        ajRangeStrMask(&str, regions, maskchar);
+        ajRangeStrMask(regions, maskchar, &str);
     
     ajSeqReplace(seq, str);
     ajSeqWrite(seqout, seq);

@@ -44,8 +44,8 @@ int main(int argc, char **argv)
     AjPFile outf = NULL;
     AjPStr  line = NULL;
     ajint pos;
-    char *p;
-    char *q;
+    const char *p;
+    const char *q;
     char c;
     char d = '\0';
 
@@ -169,15 +169,15 @@ int main(int argc, char **argv)
 **
 ** Undocumented.
 **
-** @param [?] line [AjPStr*] Undocumented
-** @param [?] pos [ajint] Undocumented
+** @param [w] line [AjPStr*] Undocumented
+** @param [r] pos [ajint] Undocumented
 ** @@
 ******************************************************************************/
 
 static void intconv_modLineInt(AjPStr *line, ajint pos)
 {
     AjPStr t;
-    char *p;
+    const char *p;
 
     t = ajStrNew();
     p = ajStrStr(*line);
@@ -205,15 +205,15 @@ static void intconv_modLineInt(AjPStr *line, ajint pos)
 **
 ** Undocumented.
 **
-** @param [?] line [AjPStr*] Undocumented
-** @param [?] pos [ajint] Undocumented
+** @param [w] line [AjPStr*] Undocumented
+** @param [r] pos [ajint] Undocumented
 ** @@
 ******************************************************************************/
 
 static void intconv_modLineLong(AjPStr *line, ajint pos)
 {
     AjPStr t;
-    char   *p;
+    const char   *p;
 
     t = ajStrNew();
     p = ajStrStr(*line);

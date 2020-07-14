@@ -31,15 +31,20 @@
 
 
 
-static void prophecy_simple_matrix(AjPSeqset seqset, AjPFile outf, AjPStr name,
+static void prophecy_simple_matrix(const AjPSeqset seqset, AjPFile outf,
+				   const AjPStr name,
 				   ajint thresh);
-static void prophecy_gribskov_profile(AjPSeqset seqset, float **sub,
-				      AjPFile outf, AjPStr name, ajint thresh,
+static void prophecy_gribskov_profile(const AjPSeqset seqset,
+				      float **sub,
+				      AjPFile outf, const AjPStr name,
+				      ajint thresh,
 				      float gapopen, float gapextend,
 				      AjPStr *cons);
-static void prophecy_henikoff_profile(AjPSeqset seqset, AjPMatrixf imtx,
-				      float **sub, ajint thresh, AjPSeqCvt cvt,
-				      AjPFile outf, AjPStr name,
+static void prophecy_henikoff_profile(const AjPSeqset seqset,
+				      const AjPMatrixf imtx,
+				      float **sub,
+				      ajint thresh, const AjPSeqCvt cvt,
+				      AjPFile outf, const AjPStr name,
 				      float gapopen, float gapextend,
 				      AjPStr *cons);
 
@@ -61,7 +66,7 @@ int main(int argc, char **argv)
     AjPStr cons  = NULL;
 
     ajint thresh;
-    char *p;
+    const char *p;
     AjPStr *type;
 
     float **sub = NULL;
@@ -116,18 +121,19 @@ int main(int argc, char **argv)
 **
 ** Undocumented.
 **
-** @param [?] seqset [AjPSeqset] Undocumented
-** @param [?] outf [AjPFile] Undocumented
-** @param [?] name [AjPStr] Undocumented
-** @param [?] thresh [ajint] Undocumented
+** @param [r] seqset [const AjPSeqset] Undocumented
+** @param [u] outf [AjPFile] Undocumented
+** @param [r] name [const AjPStr] Undocumented
+** @param [r] thresh [ajint] Undocumented
 ** @@
 ******************************************************************************/
 
 
-static void prophecy_simple_matrix(AjPSeqset seqset, AjPFile outf, AjPStr name,
-		   ajint thresh)
+static void prophecy_simple_matrix(const AjPSeqset seqset, AjPFile outf,
+				   const AjPStr name,
+				   ajint thresh)
 {
-    char *p;
+    const char *p;
     ajint nseqs;
     ajint mlen;
     ajint len;
@@ -228,19 +234,20 @@ static void prophecy_simple_matrix(AjPSeqset seqset, AjPFile outf, AjPStr name,
 **
 ** Undocumented.
 **
-** @param [?] seqset [AjPSeqset] Undocumented
-** @param [?] sub [float**] Undocumented
-** @param [?] outf [AjPFile] Undocumented
-** @param [?] name [AjPStr] Undocumented
-** @param [?] thresh [ajint] Undocumented
-** @param [?] gapopen [float] Undocumented
-** @param [?] gapextend [float] Undocumented
-** @param [?] cons [AjPStr*] Undocumented
+** @param [r] seqset [const AjPSeqset] Undocumented
+** @param [w] sub [float**] Undocumented
+** @param [u] outf [AjPFile] Undocumented
+** @param [r] name [const AjPStr] Undocumented
+** @param [r] thresh [ajint] Undocumented
+** @param [r] gapopen [float] Undocumented
+** @param [r] gapextend [float] Undocumented
+** @param [w] cons [AjPStr*] Undocumented
 ** @@
 ******************************************************************************/
 
-static void prophecy_gribskov_profile(AjPSeqset seqset, float **sub,
-				      AjPFile outf, AjPStr name, ajint thresh,
+static void prophecy_gribskov_profile(const AjPSeqset seqset, float **sub,
+				      AjPFile outf, const AjPStr name,
+				      ajint thresh,
 				      float gapopen, float gapextend,
 				      AjPStr *cons)
 {
@@ -254,8 +261,8 @@ static void prophecy_gribskov_profile(AjPSeqset seqset, float **sub,
     ajint i;
     ajint j;
     static char *valid="ACDEFGHIKLMNPQRSTVWY";
-    char *p;
-    char *q;
+    const char *p;
+    const char *q;
     float score;
     float sum;
     ajint gsum;
@@ -454,24 +461,25 @@ static void prophecy_gribskov_profile(AjPSeqset seqset, float **sub,
 **
 ** Undocumented.
 **
-** @param [?] seqset [AjPSeqset] Undocumented
-** @param [?] imtx [AjPMatrixf] Undocumented
-** @param [?] sub [float**] Undocumented
-** @param [?] thresh [ajint] Undocumented
-** @param [?] cvt [AjPSeqCvt] Undocumented
-** @param [?] outf [AjPFile] Undocumented
-** @param [?] name [AjPStr] Undocumented
-** @param [?] gapopen [float] Undocumented
-** @param [?] gapextend [float] Undocumented
-** @param [?] cons [AjPStr*] Undocumented
+** @param [r] seqset [const AjPSeqset] Undocumented
+** @param [r] imtx [const AjPMatrixf] Undocumented
+** @param [w] sub [float**] Undocumented
+** @param [r] thresh [ajint] Undocumented
+** @param [r] cvt [const AjPSeqCvt] Undocumented
+** @param [u] outf [AjPFile] Undocumented
+** @param [r] name [const AjPStr] Undocumented
+** @param [r] gapopen [float] Undocumented
+** @param [r] gapextend [float] Undocumented
+** @param [w] cons [AjPStr*] Undocumented
 ** @@
 ******************************************************************************/
 
 
-static void prophecy_henikoff_profile(AjPSeqset seqset, AjPMatrixf imtx,
+static void prophecy_henikoff_profile(const AjPSeqset seqset,
+				      const AjPMatrixf imtx,
 				      float **sub,
-				      ajint thresh, AjPSeqCvt cvt,
-				      AjPFile outf, AjPStr name,
+				      ajint thresh, const AjPSeqCvt cvt,
+				      AjPFile outf, const AjPStr name,
 				      float gapopen, float gapextend,
 				      AjPStr *cons)
 {
@@ -481,8 +489,8 @@ static void prophecy_henikoff_profile(AjPSeqset seqset, AjPMatrixf imtx,
     ajint i;
     ajint j;
     static char *valid="ACDEFGHIKLMNPQRSTVWY";
-    char *p;
-    char *q;
+    const char *p;
+    const char *q;
     float score;
     float sum;
     float psum;

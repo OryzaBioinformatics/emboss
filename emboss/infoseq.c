@@ -52,11 +52,12 @@ int main(int argc, char **argv)
 
     AjPFile outfile;
 
-    AjPStr usa;
-    AjPStr name;
-    AjPStr acc;
-    AjPStr gi;
-    AjPStr sv;
+    const AjPStr usa;
+    const AjPStr name;
+    const AjPStr acc;
+    const AjPStr gi;
+    const AjPStr sv;
+    const AjPStr desc;
     AjPStr altusa;	/* default name when the real name is not known */
     AjPStr altname;
     AjPStr altacc;
@@ -65,7 +66,6 @@ int main(int argc, char **argv)
     ajint length;
     AjBool type = ajTrue;			/* ajTrue if Protein */
     float pgc = 0.0;
-    AjPStr desc;
     AjBool firsttime = ajTrue;
 
     embInit("infoseq", argc, argv);
@@ -225,9 +225,7 @@ int main(int argc, char **argv)
 	length = ajSeqLen(seq);
 	if(dopgc && !type)
 	{
-	    AjPStr seqstr ;
-	    seqstr = ajSeqStr(seq);
-	    pgc = ajMeltGC(&seqstr,length);
+	    pgc = ajMeltGC(ajSeqStr(seq),length);
 	    pgc *= 100;			/* percentage */
 	}
 	desc = ajSeqGetDesc(seq);

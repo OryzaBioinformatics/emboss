@@ -61,7 +61,8 @@ typedef struct AjSRinfo
     ajint cut2;
     ajint cut3;
     ajint cut4;
-} AjORinfo, *AjPRinfo;
+} AjORinfo;
+#define AjPRinfo AjORinfo*
 
 
 
@@ -93,28 +94,31 @@ typedef struct Mutant
     AjPStr reaa;
     char   obase;
     char   nbase;
-} OMutant, *Mutant;
+} OMutant;
+#define Mutant OMutant*
 
 
 
 
-static ajint  recoder_readRE(AjPList *relist, AjPStr enzymes);
-static AjPList recoder_rematch(AjPStr sstr, AjPList ressite, AjPStr* tailstr,
-			       AjPStr sname, ajint RStotal, ajint radj,
+static ajint  recoder_readRE(AjPList *relist, const AjPStr enzymes);
+static AjPList recoder_rematch(const AjPStr sstr, AjPList ressite,
+			       AjPStr* tailstr,
+			       const AjPStr sname, ajint RStotal, ajint radj,
 			       AjBool rev, ajint begin, ajint end,
 			       AjBool tshow);
-static AjPList recoder_checkTrans(AjPStr seq,EmbPMatMatch match,
-				  AjPRinfo rlp, ajint begin, ajint radj,
+static AjPList recoder_checkTrans(const AjPStr seq,const EmbPMatMatch match,
+				  const AjPRinfo rlp, ajint begin, ajint radj,
 				  AjBool rev, ajint end, ajint pos,
 				  AjBool* empty);
-static AjBool recoder_checkPat(AjPStr seq,EmbPMatMatch match,
-			       AjPRinfo rlp, ajint radj, AjBool rev,
+static AjBool recoder_checkPat(const EmbPMatMatch match,
+			       const AjPRinfo rlp, ajint radj, AjBool rev,
 			       ajint begin, ajint end);
 static ajint recoder_changebase(char pbase, char* tbase);
 static void  recoder_mutFree(Mutant* mut);
 static ajint recoder_basecompare(const void *a, const void *b);
 
-static void recoder_fmt_seq(char* title, AjPStr seq, AjPStr* tailstr,
+static void recoder_fmt_seq(const char* title, const AjPStr seq,
+			    AjPStr* tailstr,
 			    ajint start, AjBool num);
 static void recoder_fmt_muts(AjPList muts, AjPFeattable feat, AjBool rev);
 
@@ -134,7 +138,7 @@ int main(int argc, char **argv)
     AjPFeattable feat=NULL;
 
     AjPStr sstr  = NULL;
-    AjPStr sname = NULL;	     /* seq name */
+    const AjPStr sname = NULL;	     /* seq name */
     AjPStr revcomp = NULL;	     /* rev complement of seq */
     AjPStr enzymes = NULL;           /* string for RE selection */
 
@@ -250,10 +254,10 @@ int main(int argc, char **argv)
 ** Looks for RE matches and test new bases to find those that
 ** give the same translation.
 **
-** @param [r] sstr [AjPStr] Search sequence as a string
-** @param [r] relist [AjPList] Regular expression list
-** @param [r] tailstr [AjPStr*] Report tail as a string
-** @param [r] sname [AjPStr] Sequence name
+** @param [r] sstr [const AjPStr] Search sequence as a string
+** @param [u] relist [AjPList] Regular expression list
+** @param [w] tailstr [AjPStr*] Report tail as a string
+** @param [r] sname [const AjPStr] Sequence name
 ** @param [r] RStotal [ajint] Restriction sites
 ** @param [r] radj [ajint] Position adjustment for reversed sequence
 ** @param [r] rev [AjBool] Reverse sequence
@@ -264,8 +268,9 @@ int main(int argc, char **argv)
 **                   maintaining same translation.
 ******************************************************************************/
 
-static AjPList recoder_rematch(AjPStr sstr, AjPList relist, AjPStr* tailstr,
-			       AjPStr sname, ajint RStotal, ajint radj,
+static AjPList recoder_rematch(const AjPStr sstr, AjPList relist,
+			       AjPStr* tailstr,
+			       const AjPStr sname, ajint RStotal, ajint radj,
 			       AjBool rev, ajint begin, ajint end,
 			       AjBool tshow)
 {
@@ -331,20 +336,20 @@ static AjPList recoder_rematch(AjPStr sstr, AjPList relist, AjPStr* tailstr,
        	     continue;
         }
         ajStrToUpper(&rlp->site);          /* RS to upper case */
-        ajStrAss(&str,rlp->site);          /* str holds RS pat */
+        ajStrAssS(&str,rlp->site);          /* str holds RS pat */
 
 	patlist = ajListNew();             /* list for matches */
 
 	/* convert our RS pattern to a reg expression    */
 	/* "0" means DNA & so does any ambig conversions */
 
-        if(!embPatClassify(&str,&dummy,&dummy,&dummy,
+        if(!embPatClassify(str,&str,&dummy,&dummy,&dummy,
                     &dummy,&dummy,&dummy,0)) continue;
 
 	/* find pattern matches in seq with NO mismatches */
 	mm = 0;
-	pats = embPatBruteForce(&sstr,&str,ajFalse,ajFalse,
-				&patlist,begin+1,mm,&sname);
+	pats = embPatBruteForce(sstr,str,ajFalse,ajFalse,
+				patlist,begin+1,mm,sname);
 
 	if(pats)
         {
@@ -352,7 +357,7 @@ static AjPList recoder_rematch(AjPStr sstr, AjPList relist, AjPStr* tailstr,
             {
               patlen = match->len;
 
-              if(recoder_checkPat(sstr,match,rlp,radj,
+              if(recoder_checkPat(match,rlp,radj,
 				  rev,begin,end))
               {
                   for(pos=0;pos<patlen;pos++)
@@ -390,11 +395,11 @@ static AjPList recoder_rematch(AjPStr sstr, AjPList relist, AjPStr* tailstr,
 ** Read in RE information from REBASE file.
 **
 ** @param [w] relist [AjPList*] returns restriction site information as a list
-** @param [r] enzymes [AjPStr] Selected enzymes to read
+** @param [r] enzymes [const AjPStr] Selected enzymes to read
 ** @return [ajint] Number of restriction sites in list
 **
 ******************************************************************************/
-static ajint recoder_readRE(AjPList *relist,AjPStr enzymes)
+static ajint recoder_readRE(AjPList *relist, const AjPStr enzymes)
 {
     EmbPPatRestrict rptr = NULL;	/* store RE info */
     AjPFile fin = NULL;			/* file pointer to RE file data */
@@ -433,7 +438,7 @@ static ajint recoder_readRE(AjPList *relist,AjPStr enzymes)
 
     /* read RE data into AjPRestrict obj */
 
-    while(embPatRestrictReadEntry(&rptr,&fin))
+    while(embPatRestrictReadEntry(rptr,fin))
     {
      	if(!isall)           /* only select enzymes on command line */
 	{
@@ -473,9 +478,8 @@ static ajint recoder_readRE(AjPList *relist,AjPStr enzymes)
 **
 ** Checks whether the RS pattern falls within the sequence string
 **
-** @param [r] seq [AjPStr] Sequence as a string
-** @param [r] match [EmbPMatMatch] Match data
-** @param [r] rlp [AjPRinfo] Restriction site info
+** @param [r] match [const EmbPMatMatch] Match data
+** @param [r] rlp [const AjPRinfo] Restriction site info
 ** @param [r] radj [ajint] Adjustment for reversed sequence
 ** @param [r] rev [AjBool] Reverse sequence
 ** @param [r] begin [ajint] Start position
@@ -483,8 +487,8 @@ static ajint recoder_readRE(AjPList *relist,AjPStr enzymes)
 ** @return [AjBool] ajTrue if the pattern is found
 **
 ******************************************************************************/
-static AjBool recoder_checkPat(AjPStr seq,EmbPMatMatch match,
-			       AjPRinfo rlp, ajint radj, AjBool rev,
+static AjBool recoder_checkPat(const EmbPMatMatch match,
+			       const AjPRinfo rlp, ajint radj, AjBool rev,
 			       ajint begin, ajint end)
 {
     ajint mpos;
@@ -535,9 +539,9 @@ static AjBool recoder_checkPat(AjPStr seq,EmbPMatMatch match,
 ** Identify mutations at a site in the RS pattern that result in the
 ** same translation.
 **
-** @param [r] seq [AjPStr] Sequence as a string
-** @param [r] match [EmbPMatMatch] Match data
-** @param [r] rlp [AjPRinfo] Restriction site info
+** @param [r] dna [const AjPStr] Sequence as a string
+** @param [r] match [const EmbPMatMatch] Match data
+** @param [r] rlp [const AjPRinfo] Restriction site info
 ** @param [r] begin [ajint] Start position
 ** @param [r] radj [ajint] Adjustment for reversed sequence
 ** @param [r] rev [AjBool] Reverse sequence
@@ -549,14 +553,14 @@ static AjBool recoder_checkPat(AjPStr seq,EmbPMatMatch match,
 **
 ******************************************************************************/
 
-static AjPList recoder_checkTrans(AjPStr seq,EmbPMatMatch match,
-				  AjPRinfo rlp, ajint begin, ajint radj,
+static AjPList recoder_checkTrans(const AjPStr dna, const EmbPMatMatch match,
+				  const AjPRinfo rlp, ajint begin, ajint radj,
 				  AjBool rev, ajint end, ajint pos,
 				  AjBool* empty)
 {
     char *pseq;
     char *pseqm;
-    char *prs;
+    const char *prs;
     char *s;
 
     Mutant  tresult;
@@ -576,13 +580,15 @@ static AjPList recoder_checkTrans(AjPStr seq,EmbPMatMatch match,
     ajint  x;
     ajint  nb;
 
+    AjPStr seq = NULL;
 
+    seq = ajStrNewS(dna);
 
     *empty = ajTrue;
     mpos  = match->start;         /* start posn of match in seq */
     rmpos = radj-mpos-match->len; /* start posn of match in rev seq */
 
-    pseq  = ajStrStr(seq);        /* pointer to start of seq */
+    pseq  = ajStrStrMod(&seq);        /* pointer to start of seq */
     pseqm = pseq+mpos-(begin+1);  /* pointer to start of match in seq */
     prs   = ajStrStr(rlp->site);  /* pointer to start of RS pattern */
 
@@ -642,6 +648,7 @@ static AjPList recoder_checkTrans(AjPStr seq,EmbPMatMatch match,
     pseq[x] = base;          /* resubstitute orig base */
 
     ajStrDel(&s1);
+    ajStrDel(&seq);
     ajTrnDel(&table);
 
     return res;
@@ -656,7 +663,7 @@ static AjPList recoder_checkTrans(AjPStr seq,EmbPMatMatch match,
 ** same translation.
 **
 ** @param [r] pbase [char] Base
-** @param [r] tbase [char*] C string with alternative bases
+** @param [w] tbase [char*] C string with alternative bases
 ** @return [ajint] number of bases stored in tbase
 **
 ******************************************************************************/
@@ -729,19 +736,20 @@ static ajint recoder_changebase(char pbase, char* tbase)
 **
 ** Write sequence to the output file.
 **
-** @param [r] title [char*] Title for sequence report
-** @param [r] seq [AjPStr] Sequence as a string
-** @param [r] tailstr [AjPStr*] Report tail as a string
+** @param [r] title [const char*] Title for sequence report
+** @param [r] seq [const AjPStr] Sequence as a string
+** @param [w] tailstr [AjPStr*] Report tail as a string
 ** @param [r] start [ajint] Start position
 ** @param [r] num [AjBool] Numbered sequence
 ** @return [void]
 **
 ******************************************************************************/
 
-static void recoder_fmt_seq(char* title, AjPStr seq, AjPStr* tailstr,
+static void recoder_fmt_seq(const char* title, const AjPStr seq,
+			    AjPStr* tailstr,
 			    ajint start, AjBool num)
 {
-    char *p;
+    const char *p;
     ajint m;
     ajint i;
     ajint tlen;
@@ -789,8 +797,8 @@ static void recoder_fmt_seq(char* title, AjPStr seq, AjPStr* tailstr,
 **
 ** Write de-restricted sites to feature table
 **
-** @param [r] muts [AjPList] List of derestricted sites
-** @param [r] feat [AjPFeattable] Feature table object
+** @param [u] muts [AjPList] List of derestricted sites
+** @param [u] feat [AjPFeattable] Feature table object
 ** @param [r] rev [AjBool] Reverse direction
 ** @return [void]
 ******************************************************************************/

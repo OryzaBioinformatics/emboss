@@ -70,7 +70,8 @@ typedef struct SPoint
     float y1;
     float x2;
     float y2;
-} OPoint, *PPoint;
+} OPoint;
+#define PPoint OPoint*
 
 
 
@@ -95,7 +96,7 @@ int main(int argc, char **argv)
     AjOTime ajtime;
     time_t tim;
 
-    char **seqcharptr;
+    const char **seqcharptr;
 
     float *x;
     float *y;
@@ -118,7 +119,7 @@ int main(int argc, char **argv)
     ajint bin;
     ajint bin2;
     AjPGraph graphs = NULL;
-    AjPGraphData gdata;
+    AjPGraphPlpData gdata;
     AjPList list = NULL;
 
 
@@ -127,7 +128,7 @@ int main(int argc, char **argv)
     ajTimeLocal(tim,&ajtime);
     ajtime.format = 0;
 
-    ajGraphInit ("plotcon", argc, argv);
+    ajGraphInit("plotcon", argc, argv);
 
     seqset = ajAcdGetSeqset("sequences");
 
@@ -218,7 +219,7 @@ int main(int argc, char **argv)
     /*************** End of Loop ***************/
 
     ajGraphSetCharSize(0.50);
-    gdata = ajGraphxyDataNewI(ajSeqsetLen(seqset));
+    gdata = ajGraphPlpDataNewI(ajSeqsetLen(seqset));
 
 
     for(bin=0;bin<numbins;bin++)
@@ -234,14 +235,14 @@ int main(int argc, char **argv)
     }
 
 
-    ajGraphDataxyMaxMin(gdata->y,ajSeqsetLen(seqset),&ymin,&ymax);
-    ajGraphDataxySetMaxima(gdata,0,ajSeqsetLen(seqset),ymin,ymax);
+    ajGraphArrayMaxMin(gdata->y,ajSeqsetLen(seqset),&ymin,&ymax);
+    ajGraphPlpDataSetMaxima(gdata,0,ajSeqsetLen(seqset),ymin,ymax);
     
-    ajGraphDataxySetTypeC(gdata,"2D Plot");
-    ajGraphxyAddGraph(graphs,gdata);
+    ajGraphPlpDataSetTypeC(gdata,"2D Plot");
+    ajGraphDataAdd(graphs,gdata);
     ajGraphxySetYTick(graphs, ajTrue);
-    ajGraphxyTitleC(graphs,"Similarity Plot of Aligned Sequences");
-    ajGraphxyYtitleC(graphs,"Similarity");
+    ajGraphSetTitleC(graphs,"Similarity Plot of Aligned Sequences");
+    ajGraphSetYTitleC(graphs,"Similarity");
     
     ajGraphxyDisplay(graphs,ajTrue);
     

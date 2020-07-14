@@ -36,8 +36,8 @@
 
 
 
-static void rebex_process_pattern(AjPStr *pattern, AjPStr *code, AjPFile outf,
-		     AjBool hassup);
+static void rebex_process_pattern(const AjPStr pattern, const AjPStr code,
+				  AjPFile outf, AjBool hassup);
 static void rebex_printEnzHeader(AjPFile outf);
 static void rebex_printRefHeader(AjPFile outf);
 static void rebex_printSuppHeader(AjPFile outf);
@@ -88,7 +88,7 @@ int main(int argc, char **argv)
     
     AjBool isproto = ajFalse;
     char c;
-    char *sptr = NULL;
+    const char *sptr = NULL;
     
     embInit("rebaseextract",argc,argv);
 
@@ -325,7 +325,7 @@ int main(int argc, char **argv)
 	ajFmtPrintF(outf2,"//\n");
 
 
-	rebex_process_pattern(&pattern,&code,outf,hassup);
+	rebex_process_pattern(pattern,code,outf,hassup);
 
     }
 
@@ -366,24 +366,26 @@ int main(int argc, char **argv)
 **
 ** Convert rebase pattern into emboss pattern
 **
-** @param [r] pattern [AjPStr*] rebase recog sequence
-** @param [r] code [AjPStr*] re name
-** @param [w] outf [AjPFile] outfile
+** @param [r] pattern [const AjPStr] rebase recognition sequence
+** @param [r] code [const AjPStr] re name
+** @param [u] outf [AjPFile] outfile
 ** @param [r] hassup [AjBool] has a supplier
 ** @@
 ******************************************************************************/
 
-static void rebex_process_pattern(AjPStr *pattern, AjPStr *code, AjPFile outf,
+static void rebex_process_pattern(const AjPStr pattern, const AjPStr code,
+				  AjPFile outf,
 				  AjBool hassup)
 {
-    AjPStr temp;
-    AjPStr ppat;
-    AjPStrTok tokens;
+    AjPStr temp = NULL;
+    AjPStr ppat = NULL;
+    AjPStrTok tokens = NULL;
+    AjPStr tmppattern = NULL;
 
-    char *p;
-    char *q;
+    const char *p;
+    const char *q;
     char *r;
-    char *t;
+    const char *t;
 
     AjBool hascarat;
 
@@ -397,18 +399,18 @@ static void rebex_process_pattern(AjPStr *pattern, AjPStr *code, AjPFile outf,
     ajint i;
     AjBool blunt = ajFalse;
 
-
-    ajStrToUpper(pattern);
+    tmppattern = ajStrNewS(pattern);
+    ajStrToUpper(&tmppattern);
     temp = ajStrNew();
     ppat = ajStrNew();
 
-    tokens=ajStrTokenInit(*pattern,",");
+    tokens=ajStrTokenInit(tmppattern,",");
 
     while(ajStrToken(&ppat,&tokens,","))
     {
-	ajFmtPrintF(outf,"%s\t",ajStrStr(*code));
+	ajFmtPrintF(outf,"%S\t",code);
 
-	ajStrAssC(&temp,ajStrStr(ppat));
+	ajStrAssS(&temp,ppat);
 
 	hascarat = ajFalse;
 	p = ajStrStr(ppat);
@@ -426,8 +428,7 @@ static void rebex_process_pattern(AjPStr *pattern, AjPStr *code, AjPFile outf,
 	    sscanf(p+1,"%d/%d",&cut1,&cut2);
 	    q=p+1;
 	    if(!(q=strchr(q,(ajint)'(')))
-		ajFatal("Bad pattern %s in %s",ajStrStr(*code),
-			ajStrStr(*pattern));
+		ajFatal("Bad pattern %S in %S",code,pattern);
 	    sscanf(q+1,"%d/%d",&cut3,&cut4);
 	    cut1 *= -1;
 	    cut2 *= -1;
@@ -435,10 +436,10 @@ static void rebex_process_pattern(AjPStr *pattern, AjPStr *code, AjPFile outf,
 	    --cut2;
 
 	    if(!(p=strchr(p,(ajint)')')))
-		ajFatal("%s mismatched parentheses",ajStrStr(*code));
+		ajFatal("%S mismatched parentheses",code);
 
 	    p = ajStrStr(ppat);
-	    r = ajStrStr(temp);
+	    r = ajStrStrMod(&temp);
 	    while(*p)
 	    {
 		if(*p>='A' && *p<='Z')
@@ -472,7 +473,7 @@ static void rebex_process_pattern(AjPStr *pattern, AjPStr *code, AjPFile outf,
 		    blunt = ajFalse;
 
 		p = ajStrStr(ppat);
-		r = ajStrStr(temp);
+		r = ajStrStrMod(&temp);
 		while(*p)
 		{
 		    if(*p>='A' && *p<='Z')
@@ -493,7 +494,7 @@ static void rebex_process_pattern(AjPStr *pattern, AjPStr *code, AjPFile outf,
 	    else			/* probably a carat */
 	    {
 		p = ajStrStr(ppat);
-		r = ajStrStr(temp);
+		r = ajStrStrMod(&temp);
 		cut1 = 0;
 		hascarat = ajFalse;
 
@@ -565,6 +566,7 @@ static void rebex_process_pattern(AjPStr *pattern, AjPStr *code, AjPFile outf,
 			len,ncuts,blunt,cut1,cut2);
     }
 
+    ajStrDel(&tmppattern);
     ajStrDel(&temp);
     ajStrDel(&ppat);
     ajStrTokenClear(&tokens);

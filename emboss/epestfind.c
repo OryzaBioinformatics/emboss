@@ -44,33 +44,41 @@
 
 
 
-/* @data PestfindPData ************************************************
+/* @datastatic PestfindPData **************************************************
 ** Pestfind data object.
 ** Holds results for application pestfind.
 ** PestfindPData is implemented as a pointer to a C data structure.
 ** @alias PestfindSData
 ** @alias PestfindOData
+**
+** @attr Type [ajint] 1 for potential, 2 for poor and 3 for invalid motifs
+** @attr Begin [ajint] Start position of PEST motif
+** @attr End [ajint] End position of PEST motif
+** @attr Length [ajint] Length of PEST motif
+** @attr Pscore [double] PEST score
+** @attr Hydind [double] Hydrophobicity index
+** @attr Pstpct [double] Mass percent (w/w) of DEPST
 ** @@
-********************************************************************/
+******************************************************************************/
 
 typedef struct PestfindSData
 {
-    /* Type = 1 for potential, 2 for poor and 3 for invalid motifs */
     ajint Type;
-    ajint Begin;		    /* Start position of PEST motif */
-    ajint End;			    /* End position of PEST motif */
-    ajint Length;		    /* Length of PEST motif */
-    double Pscore;		    /* PEST score */
-    double Hydind;		    /* Hydrophobicity index */
-    double Pstpct;		    /* Mass percent (w/w) of DEPST */
-} PestfindOData, *PestfindPData;
+    ajint Begin;
+    ajint End;
+    ajint Length;
+    double Pscore;
+    double Hydind;
+    double Pstpct;
+} PestfindOData;
+#define PestfindPData PestfindOData*
 
 
 
 
 /* @macro ajStrIterIsBegin ******************************************
 ** Start point condition for a string iterator.
-** @param [r] iter [AjIStr] String iterator.
+** @param [r] iter [const AjIStr] String iterator.
 ** @return [AjBool] returns true for the first iteration
 ** and false for all subsequent.
 ** @@
@@ -85,7 +93,7 @@ typedef struct PestfindSData
 
 /* @macro ajStrIterIsEnd ********************************************
 ** End point condition for a string iterator.
-** @param [r] iter [AjIStr] String iterator.
+** @param [r] iter [const AjIStr] String iterator.
 ** @return [AjBool] returns AjTrue for the last iteration
 ** and AjFalse for all preceeding.
 ** @@
@@ -100,7 +108,7 @@ typedef struct PestfindSData
 
 /* @macro ajStrIterPos **********************************************
 ** Position of a string iterator.
-** @param [r] iter [AjIStr] String iterator.
+** @param [r] iter [const AjIStr] String iterator.
 ** @return [ajint] returns the current position of a string iterator 
 ** within the target string.
 ** @@
@@ -117,8 +125,8 @@ typedef struct PestfindSData
 /* @macro ajStrAssSubItrBeg *****************************************
 ** Assigns a substring from begin to current point of iteration.
 ** @param [w] substr [AjPStr] Target string.
-** @param [r] str [AjPStr] Source string.
-** @param [r] iter [AjIStr] String iterator.
+** @param [r] str [const AjPStr] Source string.
+** @param [r] iter [const AjIStr] String iterator.
 ** @return [AjBool] ajTrue if string was reallocated. 
 ** @@
 ** This macro returns a pointer to a substring assigned from the
@@ -134,8 +142,8 @@ typedef struct PestfindSData
 /* @macro ajStrAssSubItrEnd *****************************************
 ** Assigns substring from the current point of iteration until the end.
 ** @param [w] substr [AjPStr] Target string.
-** @param [r] str [AjPStr] Source string.
-** @param [r] iter [AjIStr] String iterator.
+** @param [r] str [const AjPStr] Source string.
+** @param [r] iter [const AjIStr] String iterator.
 ** @return [AjBool] ajTrue if string was reallocated. 
 ** @@
 ** This macro returns a pointer to a substring assigned from the
@@ -284,7 +292,6 @@ int main(int argc, char **argv)
     AjPStr  map    = NULL;		/* string for motif map */
     AjPStr  str    = NULL;		/* sequence string */
     AjPStr  substr = NULL;		/* sequence sub-string */
-    AjPStr  datafn = NULL;		/* data filename */
     AjPStr  sorder = NULL;		/* sort order */
     AjIList itrlst = NULL;		/* iterator list */
     AjIStr  itrbeg = NULL;		/* iterator begin of motif */
@@ -294,7 +301,7 @@ int main(int argc, char **argv)
     AjBool  dspinv = AJTRUE;		/* display invalid motifs */
     AjBool  dspmap = AJTRUE;		/* display map of motifs */
     AjPGraph graph = NULL;		/* graphics object */
-    AjPGraphData plot = NULL;	      /* sub set of graphics object */
+    AjPGraphPlpData plot = NULL;	      /* sub set of graphics object */
     
     PestfindPData pstdat = NULL;	/* PEST find data object */
     /*
@@ -364,7 +371,7 @@ int main(int argc, char **argv)
     dspmap = ajAcdGetBool("map");
     trshld = ajAcdGetFloat("threshold");
     outf   = ajAcdGetOutfile("outfile");
-    datafn = ajAcdGetString("aadata");
+    mfptr = ajAcdGetDatafile("aadata");
     sorder = ajAcdGetSelectI("order", 1);
     graph  = ajAcdGetGraphxy("graph");
     begin  = ajSeqBegin(seq);
@@ -373,10 +380,6 @@ int main(int argc, char **argv)
     str    = ajStrNew();
     substr = ajStrNew();
     reslst = ajListNew();
-    
-    ajFileDataNew(datafn, &mfptr); /* Open the amino acid datafile. */
-    if(!mfptr)
-	ajFatal("Amino acid datafile %S not found\n", datafn);
     
     embPropAminoRead(mfptr);
     ajFileClose(&mfptr);	  /* Close the amino acid datafile. */
@@ -563,7 +566,7 @@ int main(int argc, char **argv)
 	ajFmtPrintF(outf, "       from positions %d to %d and sorted by "
 		    "%S.\n\n", begin, end, sorder);
     }
-    itrlst = ajListIter(reslst);
+    itrlst = ajListIterRead(reslst);
     while(ajListIterMore(itrlst))
     {
 	pstdat = (PestfindPData) ajListIterNext(itrlst);
@@ -617,7 +620,7 @@ int main(int argc, char **argv)
 	ajFmtPrintF(outf, "---------+---------+");
 	ajFmtPrintF(outf, "\n\n");
 	ajListSort(reslst, pestfind_compare_position);
-	itrlst = ajListIter(reslst);
+	itrlst = ajListIterRead(reslst);
 	i = 0;
 	while(i <= seqlen)
 	{
@@ -681,72 +684,72 @@ int main(int argc, char **argv)
     ajFileClose(&outf);			/* Close the output file. */
     
     /* Display graphics. */
-    plot = ajGraphxyDataNewI(seqlen);
+    plot = ajGraphPlpDataNewI(seqlen);
     ajGraphxySetOverLap(graph, ajFalse);
-    ajGraphDataxySetTypeC(plot, "2D Plot");
-    ajGraphxyDataSetTitleC(plot, "PEST-find");
+    ajGraphPlpDataSetTypeC(plot, "2D Plot");
+    ajGraphPlpDataSetTitleC(plot, "PEST-find");
     ajFmtPrintS(&map, "Sequence %s from %d to %d", ajSeqName(seq),
 		begin, end);
-    ajGraphxyDataSetXtitle(plot, map);
-    ajGraphxyDataSetYtitleC(plot, "PEST score");
-    ajGraphDataxySetMaxMin(plot, (float) 1, (float) seqlen, ymin, ymax);
-    ajGraphDataxySetMaxima(plot, (float) 1, (float) seqlen, ymin, ymax);
+    ajGraphPlpDataSetXTitle(plot, map);
+    ajGraphPlpDataSetYTitleC(plot, "PEST score");
+    ajGraphPlpDataSetMaxMin(plot, (float) 1, (float) seqlen, ymin, ymax);
+    ajGraphPlpDataSetMaxima(plot, (float) 1, (float) seqlen, ymin, ymax);
     /* threshold line */
-    ajGraphDataObjAddLine(plot, (float) 0, (float) trshld, (float) seqlen,
+    ajGraphPlpDataAddLine(plot, (float) 0, (float) trshld, (float) seqlen,
 			  (float) trshld, AQUAMARINE);
     ajFmtPrintS(&map, "threshold %+.2f", trshld);
-    ajGraphDataObjAddText(plot, (float) 0 + 2, (float) trshld + 2,
+    ajGraphPlpDataAddText(plot, (float) 0 + 2, (float) trshld + 2,
 			  AQUAMARINE, ajStrStr(map));
     ajListSort(reslst, pestfind_compare_position);
-    itrlst = ajListIter(reslst);
+    itrlst = ajListIterRead(reslst);
     while(ajListIterMore(itrlst))
     {
 	pstdat = (PestfindPData) ajListIterNext(itrlst);
 	if((pstdat->Type) == PSTPOT)
 	{
-	    ajGraphDataObjAddLine(plot, (float) (pstdat->Begin),
+	    ajGraphPlpDataAddLine(plot, (float) (pstdat->Begin),
 				  (float) (pstdat->Pscore),
 				  (float) (pstdat->End),
 				  (float) (pstdat->Pscore), GREEN);
 	    ajFmtPrintS(&map, "%+.2f", (pstdat->Pscore));
-	    ajGraphDataObjAddText(plot, (float) (pstdat->Begin) + 2,
+	    ajGraphPlpDataAddText(plot, (float) (pstdat->Begin) + 2,
 				  (float) (pstdat->Pscore) + 2, GREEN,
 				  ajStrStr(map));
 	}
 
 	if((pstdat->Type) == PSTWEA)
 	{
-	    ajGraphDataObjAddLine(plot, (float) (pstdat->Begin),
+	    ajGraphPlpDataAddLine(plot, (float) (pstdat->Begin),
 				  (float) (pstdat->Pscore),
 				  (float) (pstdat->End),
 				  (float) (pstdat->Pscore), RED);
 	    ajFmtPrintS(&map, "%+.2f", (pstdat->Pscore));
-	    ajGraphDataObjAddText(plot, (float) (pstdat->Begin) + 2,
+	    ajGraphPlpDataAddText(plot, (float) (pstdat->Begin) + 2,
 				  (float) (pstdat->Pscore) + 2, RED,
 				  ajStrStr(map));
 	}
 
 	if((pstdat->Type) == PSTINV)
 	{
-	    ajGraphDataObjAddLine(plot, (float) (pstdat->Begin),
+	    ajGraphPlpDataAddLine(plot, (float) (pstdat->Begin),
 				  (float) (pstdat->Pscore),
 				  (float) (pstdat->End),
 				  (float) (pstdat->Pscore), BROWN);
-	    ajGraphDataObjAddText(plot, (float) (pstdat->Begin) + 2,
+	    ajGraphPlpDataAddText(plot, (float) (pstdat->Begin) + 2,
 				  (float) (pstdat->Pscore) + 2, BROWN,
 				  "inv.");
 	}
     }
 
-    ajGraphxyAddGraph(graph, plot);
+    ajGraphDataAdd(graph, plot);
     ajGraphSetCharSize(0.50);
-    ajGraphxyTitleC(graph, "PEST-find");
+    ajGraphSetTitleC(graph, "PEST-find");
     ajGraphxyDisplay(graph, AJTRUE);
     ajGraphCloseWin();
     ajGraphxyDel(&graph);
     
     /* clean-up and destruction */
-    itrlst = ajListIter(reslst);
+    itrlst = ajListIterRead(reslst);
     while(ajListIterMore(itrlst))
     {
 	pstdat = (PestfindPData) ajListIterNext(itrlst);
@@ -759,9 +762,8 @@ int main(int argc, char **argv)
     ajStrDel(&map);		/* Delete the map string. */
     ajStrDel(&str);		/* Delete the sequence string. */
     ajStrDel(&substr);		/* Delete the sequence sub-string. */
-    ajStrDel(&datafn);	       	/* Delete the data file name string. */
     ajStrDel(&sorder);		/* Delete the sort order string. */
-    ajListIterFree(itrlst);	/* Delete the result list iterator. */
+    ajListIterFree(&itrlst);	/* Delete the result list iterator. */
     ajStrIterFree(&itrbeg); 	/* Delete the iterator of the outer loop. */
     ajStrIterFree(&itrend); 	/* Delete the iterator of the inner loop. */
     

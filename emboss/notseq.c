@@ -25,7 +25,7 @@
 
 
 
-static void notseq_readfile(AjPStr *pattern);
+static void notseq_readfile(const AjPStr exclude, AjPStr *pattern);
 
 
 
@@ -43,6 +43,7 @@ int main(int argc, char **argv)
     AjPSeqout seqout;
     AjPSeqout junkout;
     AjPSeq seq = NULL;
+    AjPStr exclude = NULL;
     AjPStr pattern = NULL;
     AjPStr name = NULL;
     AjPStr acc  = NULL;
@@ -53,14 +54,14 @@ int main(int argc, char **argv)
     seqout  = ajAcdGetSeqoutall("outseq");
     junkout = ajAcdGetSeqoutall("junkoutseq");
     seqall  = ajAcdGetSeqall("sequence");
-    pattern = ajAcdGetString("exclude");
+    exclude = ajAcdGetString("exclude");
 
-    notseq_readfile(&pattern);
+    notseq_readfile(exclude, &pattern);
 
     while(ajSeqallNext(seqall, &seq))
     {
-	ajStrAss(&name, ajSeqGetName(seq));
-	ajStrAss(&acc, ajSeqGetAcc(seq));
+	ajStrAssS(&name, ajSeqGetName(seq));
+	ajStrAssS(&acc, ajSeqGetAcc(seq));
 
 	if(embMiscMatchPattern(name, pattern) ||
 	    embMiscMatchPattern(acc, pattern))
@@ -98,23 +99,32 @@ int main(int argc, char **argv)
 ** If the list of names starts with a '@', open that file, read in
 ** the list of names and replaces the input string with the names
 **
-** @param [r] pattern [AjPStr*] names to search for or '@file'
+** Else simlpy copy the exclude list
+**
+** @param [r] exclude [const AjPStr] names to search for or '@file'
+** @param [w] pattern [AjPStr*] names to search for or '@file'
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-static void notseq_readfile(AjPStr *pattern)
+static void notseq_readfile(const AjPStr exclude, AjPStr *pattern)
 {
     AjPFile file = NULL;
     AjPStr line;
-    char *p = NULL;
+    AjPStr filename = NULL;
+    const char *p = NULL;
 
-    if(ajStrFindC(*pattern, "@") == 0)
+    if(ajStrFindC(exclude, "@") != 0)
     {
-        ajStrTrimC(pattern, "@");       /* remove the @ */
-        file = ajFileNewIn(*pattern);
+	ajStrAssS(pattern, exclude);
+    }
+    else
+    {
+	ajStrAssS(&filename, exclude);
+        ajStrTrimC(&filename, "@");       /* remove the @ */
+        file = ajFileNewIn(filename);
         if(file == NULL)
-            ajFatal("Cannot open the file of sequence names: '%S'", pattern);
+            ajFatal("Cannot open the file of sequence names: '%S'", filename);
 
         /* blank off the file name and replace with the sequence names */
         ajStrClear(pattern);
@@ -130,6 +140,7 @@ static void notseq_readfile(AjPStr *pattern)
             ajStrAppC(pattern, ",");
         }
         ajStrDel(&line);
+        ajStrDel(&filename);
 
         ajFileClose(&file);
     }

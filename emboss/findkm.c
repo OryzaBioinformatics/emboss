@@ -29,10 +29,11 @@
 
 
 
-static float findkm_summation(float *arr, ajint number);
-static float findkm_multisum (float *arr1, float *arr2, ajint number);
-static float findkm_findmax(float *arr1, ajint number);
-static float findkm_findmin(float *arr1, ajint number);
+static float findkm_summation(const float *arr, ajint number);
+static float findkm_multisum (const float *arr1, const float *arr2,
+			      ajint number);
+static float findkm_findmax(const float *arr1, ajint number);
+static float findkm_findmin(const float *arr1, ajint number);
 
 
 
@@ -49,8 +50,8 @@ int main(int argc, char **argv)
     AjPFile outfile = NULL;
     AjPStr line;
     AjPGraph graphLB = NULL;
-    AjPGraphData xygraph  = NULL;
-    AjPGraphData xygraph2 = NULL;
+    AjPGraphPlpData xygraph  = NULL;
+    AjPGraphPlpData xygraph2 = NULL;
     AjBool doplot;
 
     ajint N=0;
@@ -223,12 +224,12 @@ int main(int argc, char **argv)
 
     if(doplot)
     {
-	xygraph = ajGraphxyDataNewI(N);
-	ajGraphxyAddDataPtrPtr(xygraph, S, V);
-	ajGraphxyAddGraph(graphLB, xygraph);
-	ajGraphxyDataSetTitleC(xygraph, "Michaelis Menten Plot");
-	ajGraphxyDataSetXtitleC(xygraph, "[S]");
-	ajGraphxyDataSetYtitleC(xygraph, "V");
+	xygraph = ajGraphPlpDataNewI(N);
+	ajGraphPlpDataSetXY(xygraph, S, V);
+	ajGraphDataAdd(graphLB, xygraph);
+	ajGraphPlpDataSetTitleC(xygraph, "Michaelis Menten Plot");
+	ajGraphPlpDataSetXTitleC(xygraph, "[S]");
+	ajGraphPlpDataSetYTitleC(xygraph, "V");
 
 	ajGraphxySetXStart(graphLB, 0.0);
 	ajGraphxySetXEnd(graphLB, xmax2);
@@ -236,23 +237,23 @@ int main(int argc, char **argv)
 	ajGraphxySetYEnd(graphLB, ymax2);
 	ajGraphxySetXRangeII(graphLB, (ajint)0.0, (ajint)xmax2);
 	ajGraphxySetYRangeII(graphLB, (ajint)0.0, (ajint)ymax2);
-	ajGraphDataObjAddLine(xygraph, 0.0, 0.0, S[0], V[0], (ajint)BLACK);
+	ajGraphPlpDataAddLine(xygraph, 0.0, 0.0, S[0], V[0], (ajint)BLACK);
 	ajGraphxySetCirclePoints(graphLB, ajTrue);
-	ajGraphDataxySetMaxMin(xygraph,0.0,xmax2,0.0,ymax2);
+	ajGraphPlpDataSetMaxMin(xygraph,0.0,xmax2,0.0,ymax2);
 
 
-	ajGraphDataxyMaxMin(S,N,&amin,&amax);
-	ajGraphDataxyMaxMin(V,N,&bmin,&bmax);
-	ajGraphDataxySetMaxima(xygraph,amin,amax,bmin,bmax);
-	ajGraphDataxySetTypeC(xygraph,"2D Plot Float");
+	ajGraphArrayMaxMin(S,N,&amin,&amax);
+	ajGraphArrayMaxMin(V,N,&bmin,&bmax);
+	ajGraphPlpDataSetMaxima(xygraph,amin,amax,bmin,bmax);
+	ajGraphPlpDataSetTypeC(xygraph,"2D Plot Float");
 
-	xygraph2 = ajGraphxyDataNewI(N);
-	ajGraphxyAddDataPtrPtr(xygraph2, xdata, ydata);
-	ajGraphxyAddGraph(graphLB, xygraph2);
+	xygraph2 = ajGraphPlpDataNewI(N);
+	ajGraphPlpDataSetXY(xygraph2, xdata, ydata);
+	ajGraphDataAdd(graphLB, xygraph2);
 
-	ajGraphxyDataSetTitleC(xygraph2, "Hanes Woolf Plot");
-	ajGraphxyDataSetXtitleC(xygraph2, "[S]");
-	ajGraphxyDataSetYtitleC(xygraph2, "[S]/V");
+	ajGraphPlpDataSetTitleC(xygraph2, "Hanes Woolf Plot");
+	ajGraphPlpDataSetXTitleC(xygraph2, "[S]");
+	ajGraphPlpDataSetYTitleC(xygraph2, "[S]/V");
 
 	ajGraphxySetXStart(graphLB, cutx);
 	ajGraphxySetXEnd(graphLB, upperXlimit);
@@ -262,15 +263,15 @@ int main(int argc, char **argv)
 	ajGraphxySetYRangeII(graphLB, (ajint)0.0, (ajint)upperYlimit);
 
 	ajGraphxySetCirclePoints(graphLB, ajTrue);
-	ajGraphDataxySetMaxMin(xygraph2, cutx,upperXlimit,0.0,upperYlimit);
-	ajGraphDataxyMaxMin(xdata,N,&amin,&amax);
-	ajGraphDataxyMaxMin(ydata,N,&bmin,&bmax);
-	ajGraphDataxySetMaxima(xygraph2,amin,amax,bmin,bmax);
-	ajGraphDataxySetTypeC(xygraph2,"2D Plot");
+	ajGraphPlpDataSetMaxMin(xygraph2, cutx,upperXlimit,0.0,upperYlimit);
+	ajGraphArrayMaxMin(xdata,N,&amin,&amax);
+	ajGraphArrayMaxMin(ydata,N,&bmin,&bmax);
+	ajGraphPlpDataSetMaxima(xygraph2,amin,amax,bmin,bmax);
+	ajGraphPlpDataSetTypeC(xygraph2,"2D Plot");
 
 
 
-	ajGraphxyTitleC(graphLB,"FindKm");
+	ajGraphSetTitleC(graphLB,"FindKm");
 	ajGraphxySetOverLap(graphLB,ajFalse);
 	ajGraphxyDisplay(graphLB, ajTrue);
     }
@@ -295,14 +296,14 @@ int main(int argc, char **argv)
 **
 ** Undocumented.
 **
-** @param [?] arr [float*] Undocumented
-** @param [?] number [ajint] Undocumented
+** @param [r] arr [const float*] Undocumented
+** @param [r] number [ajint] Array size
 ** @return [float] Undocumented
 ** @@
 ******************************************************************************/
 
 
-static float findkm_summation(float *arr, ajint number)
+static float findkm_summation(const float *arr, ajint number)
 {
     ajint i;
     float sum=0;
@@ -320,14 +321,15 @@ static float findkm_summation(float *arr, ajint number)
 **
 ** Undocumented.
 **
-** @param [?] arr1 [float*] Undocumented
-** @param [?] arr2 [float*] Undocumented
-** @param [?] number [ajint] Undocumented
+** @param [r] arr1 [const float*] Undocumented
+** @param [r] arr2 [const float*] Undocumented
+** @param [r] number [ajint] Array size
 ** @return [float] Undocumented
 ** @@
 ******************************************************************************/
 
-static float findkm_multisum(float *arr1, float *arr2, ajint number)
+static float findkm_multisum(const float *arr1, const float *arr2,
+			     ajint number)
 {
     ajint i;
     float sum = 0;
@@ -345,13 +347,13 @@ static float findkm_multisum(float *arr1, float *arr2, ajint number)
 **
 ** Undocumented.
 **
-** @param [?] arr [float*] Undocumented
-** @param [?] number [ajint] Undocumented
+** @param [r] arr [const float*] Undocumented
+** @param [r] number [ajint] Array size
 ** @return [float] Undocumented
 ** @@
 ******************************************************************************/
 
-static float findkm_findmax(float *arr, ajint number)
+static float findkm_findmax(const float *arr, ajint number)
 {
     ajint i;
     float max;
@@ -372,13 +374,13 @@ static float findkm_findmax(float *arr, ajint number)
 **
 ** Undocumented.
 **
-** @param [?] arr [float*] Undocumented
-** @param [?] number [ajint] Undocumented
+** @param [r] arr [const float*] Undocumented
+** @param [r] number [ajint] Array size
 ** @return [float] Undocumented
 ** @@
 ******************************************************************************/
 
-static float findkm_findmin(float *arr, ajint number)
+static float findkm_findmin(const float *arr, ajint number)
 {
     ajint i;
     float min;

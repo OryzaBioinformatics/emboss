@@ -56,7 +56,8 @@ typedef struct AjSPrimer
     float prodTm;
     float prodGC;
     ajint   score;
-} AjOPrimer, *AjPPrimer;
+} AjOPrimer;
+#define AjPPrimer AjOPrimer*
 
 
 
@@ -76,52 +77,55 @@ typedef struct AjSPair
 {
     AjPPrimer f;
     AjPPrimer r;
-} AjOPair, *AjPPair;
+} AjOPair;
+#define AjPPair AjOPair*
 
 
 
 
-static ajint prima_primalign(char *a, char *b);
-static void prima_reject_self(AjPList *forlist,AjPList *revlist,
+static ajint prima_primalign(const char *a, const char *b);
+static void prima_reject_self(AjPList forlist,AjPList revlist,
 			      ajint *neric, ajint *nfred);
-static void prima_best_primer(AjPList *forlist, AjPList *revlist,
+static void prima_best_primer(AjPList forlist, AjPList revlist,
 			      ajint *neric, ajint *nfred);
-static void prima_test_multi(AjPList *forlist, AjPList *revlist,
+static void prima_test_multi(AjPList forlist, AjPList revlist,
 			     ajint *neric, ajint *nfred,
-			     AjPStr seq, AjPStr rseq, ajint len);
-static ajint prima_seq_align(char *a, char *b, ajint len);
+			     const AjPStr seq, const AjPStr rseq, ajint len);
+static ajint prima_seq_align(const char *a, const char *b, ajint len);
 static void  prima_PrimerDel(AjPPrimer *p);
 static ajint prima_Compare(const void *a, const void *b);
 static ajint prima_PosCompare(const void *a, const void *b);
 static ajint prima_PosEndCompare(const void *a, const void *b);
 /*static float prima_probAlign(AjPStr *seq1, AjPStr *seq2);*/
-static void prima_prune_nearby(AjPList *pairlist, ajint *npair, ajint range);
-static void prima_check_overlap(AjPList *pairlist, ajint *npair,
+static void prima_prune_nearby(AjPList pairlist, ajint *npair, ajint range);
+static void prima_check_overlap(AjPList pairlist, ajint *npair,
 				ajint overlap);
 static void prima_TwoSortscorepos(AjPList *pairlist);
 static void prima_RevSort(AjPList *alist);
 
 
-static void prima_testproduct(AjPStr seqstr, ajint startpos, ajint endpos,
+static void prima_testproduct(const AjPStr seqstr,
+			      ajint startpos, ajint endpos,
 			      ajint primerlen, ajint minprimerlen,
 			      ajint maxprimerlen, float minpmGCcont,
 			      float maxpmGCcont, ajint minprimerTm,
 			      ajint maxprimerTm, ajint minprodlen,
 			      ajint maxprodlen, float prodTm,
 			      float prodGC, ajint seqlen, AjPPrimer *eric,
-			      AjPPrimer *fred, AjPList *forlist,
-			      AjPList *revlist, ajint *neric, ajint *nfred,
+			      AjPPrimer *fred, AjPList forlist,
+			      AjPList revlist, ajint *neric, ajint *nfred,
 			      ajint stepping_value, float saltconc,
 			      float dnaconc, AjBool isDNA, ajint begin);
 
-static void prima_testtarget(AjPStr seqstr, AjPStr revstr, ajint targetstart,
+static void prima_testtarget(const AjPStr seqstr, const AjPStr revstr,
+			     ajint targetstart,
 			     ajint targetend, ajint minprimerlen,
 			     ajint maxprimerlen, ajint seqlen,
 			     float minprimerTm, float maxprimerTm,
 			     float minpmGCcont, float maxpmGCcont,
 			     float minprodGCcont, float maxprodGCcont,
 			     float saltconc, float dnaconc,
-			     AjPList *pairlist, ajint *npair);
+			     AjPList pairlist, ajint *npair);
 
 
 
@@ -236,7 +240,7 @@ int main(int argc, char **argv)
     saltconc = ajAcdGetFloat("saltconc");
     dnaconc  = ajAcdGetFloat("dnaconc");
 
-    targetrange = ajAcdGetBool("targetrange");
+    targetrange = ajAcdGetToggle("targetrange");
     targetstart = ajAcdGetInt("targetstart");
     targetend   = ajAcdGetInt("targetend");
 
@@ -312,7 +316,7 @@ int main(int argc, char **argv)
     {
 	ajStrAssSubC(&p1,ajStrStr(substr),targetstart-begin,targetend-begin);
 
-	prodGC = ajMeltGC(&substr,seqlen);
+	prodGC = ajMeltGC(substr,seqlen);
 	prodTm = ajProdTm(prodGC,saltconc,seqlen);
 
 	if(prodGC<minprodGCcont || prodGC>maxprodGCcont)
@@ -328,7 +332,7 @@ int main(int argc, char **argv)
 			 minprimerlen, maxprimerlen,
 			 seqlen, minprimerTm, maxprimerTm, minpmGCcont,
 			 maxpmGCcont, minprodGCcont, maxprodGCcont, saltconc,
-			 dnaconc, &pairlist, &npair);
+			 dnaconc, pairlist, &npair);
     }
 
 
@@ -354,7 +358,7 @@ int main(int argc, char **argv)
 
 	    v1 = endpos-startpos+1;
 	    ajStrAssSubC(&p1,ajStrStr(substr),startpos,endpos);
-	    prodGC = ajMeltGC(&p1,v1);
+	    prodGC = ajMeltGC(p1,v1);
 	    prodTm = ajProdTm(prodGC,saltconc,v1);
 
 	    if(prodGC<minprodGCcont || prodGC>maxprodGCcont)
@@ -367,7 +371,7 @@ int main(int argc, char **argv)
 			      minprimerlen, maxprimerlen,minpmGCcont,
 			      maxpmGCcont, minprimerTm, maxprimerTm,
 			      minprodlen, maxprodlen, prodTm, prodGC, seqlen,
-			      &eric,&fred,&forlist,&revlist,&neric,&nfred,
+			      &eric,&fred,forlist,revlist,&neric,&nfred,
 			      stepping_value, saltconc,dnaconc, isDNA, begin);
 	    if(!neric)
 		continue;
@@ -376,19 +380,19 @@ int main(int argc, char **argv)
 
 	    /* Now reject those primers with self-complementarity */
 
-	    prima_reject_self(&forlist,&revlist,&neric,&nfred);
+	    prima_reject_self(forlist,revlist,&neric,&nfred);
 	    if(!neric)
 		continue;
 
 	    /* Reject any primers that could bind elsewhere in the
                sequence */
-	    prima_test_multi(&forlist,&revlist,&neric,&nfred,substr,revstr,
+	    prima_test_multi(forlist,revlist,&neric,&nfred,substr,revstr,
 			     seqlen);
 
 
 
 	    /* Now select the least complementary pair (if any) */
-	    prima_best_primer(&forlist, &revlist, &neric, &nfred);
+	    prima_best_primer(forlist, revlist, &neric, &nfred);
 	    if(!neric)
 		continue;
 
@@ -409,9 +413,9 @@ int main(int argc, char **argv)
     {
 	/* Get rid of primer pairs nearby the top scoring ones */
 	prima_TwoSortscorepos(&pairlist);
-	prima_prune_nearby(&pairlist, &npair, maxprimerlen-1);
+	prima_prune_nearby(pairlist, &npair, maxprimerlen-1);
 	ajListSort(pairlist,prima_PosCompare);
-	prima_check_overlap(&pairlist,&npair,overlap);
+	prima_check_overlap(pairlist,&npair,overlap);
     }
 
 
@@ -549,13 +553,13 @@ int main(int argc, char **argv)
 **
 ** Align two sequences and return match percentage
 **
-** @param [r] a [char*] sequence a
-** @param [r] b [char*] sequence b
+** @param [r] a [const char*] sequence a
+** @param [r] b [const char*] sequence b
 ** @return [ajint] percent match
 ** @@
 ******************************************************************************/
 
-static ajint prima_primalign(char *a, char *b)
+static ajint prima_primalign(const char *a, const char *b)
 {
     ajint plen;
     ajint qlen;
@@ -564,8 +568,8 @@ static ajint prima_primalign(char *a, char *b)
     ajint n = 0;
     ajint mm = 0;
     ajint j;
-    char *p;
-    char *q;
+    const char *p;
+    const char *q;
     ajint alen;
     ajint blen;
 
@@ -610,44 +614,45 @@ static ajint prima_primalign(char *a, char *b)
 **
 ** Undocumented.
 **
-** @param [?] seqstr [AjPStr] Undocumented
-** @param [?] startpos [ajint] Undocumented
-** @param [?] endpos [ajint] Undocumented
-** @param [?] primerlen [ajint] Undocumented
-** @param [?] minprimerlen [ajint] Undocumented
-** @param [?] maxprimerlen [ajint] Undocumented
-** @param [?] minpmGCcont [float] Undocumented
-** @param [?] maxpmGCcont [float] Undocumented
-** @param [?] minprimerTm [ajint] Undocumented
-** @param [?] maxprimerTm [ajint] Undocumented
-** @param [?] minprodlen [ajint] Undocumented
-** @param [?] maxprodlen [ajint] Undocumented
-** @param [?] prodTm [float] Undocumented
-** @param [?] prodGC [float] Undocumented
-** @param [?] seqlen [ajint] Undocumented
-** @param [?] eric [AjPPrimer*] Undocumented
-** @param [?] fred [AjPPrimer*] Undocumented
-** @param [?] forlist [AjPList*] Undocumented
-** @param [?] revlist [AjPList*] Undocumented
-** @param [?] neric [ajint*] Undocumented
-** @param [?] nfred [ajint*] Undocumented
-** @param [?] stepping_value [ajint] Undocumented
-** @param [?] saltconc [float] Undocumented
-** @param [?] dnaconc [float] Undocumented
-** @param [?] isDNA [AjBool] Undocumented
-** @param [?] begin [ajint] Undocumented
+** @param [r] seqstr [const AjPStr] Undocumented
+** @param [r] startpos [ajint] Undocumented
+** @param [r] endpos [ajint] Undocumented
+** @param [r] primerlen [ajint] Undocumented
+** @param [r] minprimerlen [ajint] Undocumented
+** @param [r] maxprimerlen [ajint] Undocumented
+** @param [r] minpmGCcont [float] Undocumented
+** @param [r] maxpmGCcont [float] Undocumented
+** @param [r] minprimerTm [ajint] Undocumented
+** @param [r] maxprimerTm [ajint] Undocumented
+** @param [r] minprodlen [ajint] Undocumented
+** @param [r] maxprodlen [ajint] Undocumented
+** @param [r] prodTm [float] Undocumented
+** @param [r] prodGC [float] Undocumented
+** @param [r] seqlen [ajint] Undocumented
+** @param [w] eric [AjPPrimer*] Undocumented
+** @param [w] fred [AjPPrimer*] Undocumented
+** @param [u] forlist [AjPList] Undocumented
+** @param [u] revlist [AjPList] Undocumented
+** @param [w] neric [ajint*] Undocumented
+** @param [w] nfred [ajint*] Undocumented
+** @param [r] stepping_value [ajint] Undocumented
+** @param [r] saltconc [float] Undocumented
+** @param [r] dnaconc [float] Undocumented
+** @param [r] isDNA [AjBool] Undocumented
+** @param [r] begin [ajint] Undocumented
 ** @@
 ******************************************************************************/
 
-static void prima_testproduct(AjPStr seqstr, ajint startpos, ajint endpos,
+static void prima_testproduct(const AjPStr seqstr,
+			      ajint startpos, ajint endpos,
 			      ajint primerlen, ajint minprimerlen,
 			      ajint maxprimerlen, float minpmGCcont,
 			      float maxpmGCcont, ajint minprimerTm,
 			      ajint maxprimerTm, ajint minprodlen,
 			      ajint maxprodlen, float prodTm, float prodGC,
 			      ajint seqlen, AjPPrimer *eric,
-			      AjPPrimer *fred, AjPList *forlist,
-			      AjPList *revlist, ajint *neric,
+			      AjPPrimer *fred, AjPList forlist,
+			      AjPList revlist, ajint *neric,
 			      ajint *nfred, ajint stepping_value,
 			      float saltconc, float dnaconc,
 			      AjBool isDNA, ajint begin)
@@ -692,7 +697,7 @@ static void prima_testproduct(AjPStr seqstr, ajint startpos, ajint endpos,
 	if(primerTm<minprimerTm || primerTm>maxprimerTm)
 	    continue;
 
-	primGCcont = ajMeltGC(&substr, thisplen);
+	primGCcont = ajMeltGC(substr, thisplen);
 
 	/* If GC content out of range ignore rest of loop iteration */
 	if(primGCcont<minpmGCcont || primGCcont>maxpmGCcont)
@@ -711,7 +716,7 @@ static void prima_testproduct(AjPStr seqstr, ajint startpos, ajint endpos,
 	(*eric)->primGCcont = primGCcont;
 	(*eric)->prodTm     = prodTm;
 	(*eric)->prodGC     = prodGC;
-	ajListPush(*forlist, (void*)*eric);
+	ajListPush(forlist, (void*)*eric);
 	(*neric)++;
     }
 
@@ -739,7 +744,7 @@ static void prima_testproduct(AjPStr seqstr, ajint startpos, ajint endpos,
 	if(primerTm<minprimerTm || primerTm>maxprimerTm)
 	    continue;
 
-	primGCcont = ajMeltGC(&substr, thisplen);
+	primGCcont = ajMeltGC(substr, thisplen);
 	/* If GC content out of range ignore rest of loop iteration */
 	if(primGCcont<minpmGCcont || primGCcont>maxpmGCcont)
 	    continue;
@@ -754,7 +759,7 @@ static void prima_testproduct(AjPStr seqstr, ajint startpos, ajint endpos,
 	(*fred)->primerlen  = thisplen;
 	(*fred)->primerTm   = primerTm;
 	(*fred)->primGCcont = primGCcont;
-	ajListPush(*revlist, (void*)*fred);
+	ajListPush(revlist, (void*)*fred);
 	(*nfred)++;
     }
 
@@ -764,7 +769,7 @@ static void prima_testproduct(AjPStr seqstr, ajint startpos, ajint endpos,
     if(!*nfred)
     {
 	*neric = 0;
-	while(ajListPop(*forlist,(void**)&rubbish))
+	while(ajListPop(forlist,(void**)&rubbish))
 	    prima_PrimerDel(&rubbish);
     }
 
@@ -778,14 +783,14 @@ static void prima_testproduct(AjPStr seqstr, ajint startpos, ajint endpos,
 **
 ** reject self complementary primers
 **
-** @param [?] forlist [AjPList*] Undocumented
-** @param [?] revlist [AjPList*] Undocumented
-** @param [?] neric [ajint*] Undocumented
-** @param [?] nfred [ajint*] Undocumented
+** @param [u] forlist [AjPList] Undocumented
+** @param [u] revlist [AjPList] Undocumented
+** @param [u] neric [ajint*] Undocumented
+** @param [u] nfred [ajint*] Undocumented
 ** @@
 ******************************************************************************/
 
-static void prima_reject_self(AjPList *forlist,AjPList *revlist, ajint *neric,
+static void prima_reject_self(AjPList forlist,AjPList revlist, ajint *neric,
 			      ajint *nfred)
 {
     ajint count;
@@ -807,14 +812,14 @@ static void prima_reject_self(AjPList *forlist,AjPList *revlist, ajint *neric,
     count = *neric;
     for(i=0;i<*neric;++i)
     {
-	ajListPop(*forlist,(void **)&tmp);
+	ajListPop(forlist,(void **)&tmp);
 	len = tmp->primerlen;
 	cut = (len/2)-1;
 	ajStrAssSubC(&str1,ajStrStr(tmp->substr),0,cut);
 	ajStrAssSubC(&str2,ajStrStr(tmp->substr),cut+1,len-1);
 	x = prima_primalign(ajStrStr(str1),ajStrStr(str2));
 	if(x<SIMLIMIT)
-	    ajListPushApp(*forlist,(void *)tmp);
+	    ajListPushApp(forlist,(void *)tmp);
 	else
 	{
 	    prima_PrimerDel(&tmp);
@@ -827,7 +832,7 @@ static void prima_reject_self(AjPList *forlist,AjPList *revlist, ajint *neric,
     {
 	ajStrDel(&str1);
 	ajStrDel(&str2);
-	while(ajListPop(*revlist,(void**)&tmp))
+	while(ajListPop(revlist,(void**)&tmp))
 	    prima_PrimerDel(&tmp);
 	*nfred=0;
 	return;
@@ -841,7 +846,7 @@ static void prima_reject_self(AjPList *forlist,AjPList *revlist, ajint *neric,
 
     for(j=0; j<*nfred; ++j)
     {
-	ajListPop(*revlist,(void **)&tmp);
+	ajListPop(revlist,(void **)&tmp);
 	len = tmp ->primerlen;
 	cut = (len/2)-1;
 	ajStrAssSubC(&str1,ajStrStr(tmp->substr),0,cut);
@@ -849,7 +854,7 @@ static void prima_reject_self(AjPList *forlist,AjPList *revlist, ajint *neric,
 	x = prima_primalign(ajStrStr(str1),ajStrStr(str2));
 
 	if(x<SIMLIMIT)
-	    ajListPushApp(*revlist,(void *)tmp);
+	    ajListPushApp(revlist,(void *)tmp);
 	else
 	{
 	    --count;
@@ -860,7 +865,7 @@ static void prima_reject_self(AjPList *forlist,AjPList *revlist, ajint *neric,
 
     if(!*nfred)
     {
-	while(ajListPop(*forlist,(void**)&tmp))
+	while(ajListPop(forlist,(void**)&tmp))
 	    prima_PrimerDel(&tmp);
 	*neric=0;
     }
@@ -877,14 +882,14 @@ static void prima_reject_self(AjPList *forlist,AjPList *revlist, ajint *neric,
 **
 ** BEST PRIMER FUNCTION
 **
-** @param [?] forlist [AjPList*] Undocumented
-** @param [?] revlist [AjPList*] Undocumented
-** @param [?] neric [ajint*] Undocumented
-** @param [?] nfred [ajint*] Undocumented
+** @param [u] forlist [AjPList] Undocumented
+** @param [u] revlist [AjPList] Undocumented
+** @param [w] neric [ajint*] Undocumented
+** @param [w] nfred [ajint*] Undocumented
 ** @@
 ******************************************************************************/
 
-static void prima_best_primer(AjPList *forlist, AjPList *revlist,
+static void prima_best_primer(AjPList forlist, AjPList revlist,
 			      ajint *neric, ajint *nfred)
 {
     ajint bestf;
@@ -912,11 +917,11 @@ static void prima_best_primer(AjPList *forlist, AjPList *revlist,
 
     for(i=0;i<*neric; ++i)
     {
-	ajListPop(*forlist, (void**)&temp);
+	ajListPop(forlist, (void**)&temp);
 
 	for(j=0; j<*nfred; ++j)
 	{
-	    ajListPop(*revlist, (void**)&temp2);
+	    ajListPop(revlist, (void**)&temp2);
 
 	    x=prima_primalign(ajStrStr(temp->substr),
 			      ajStrStr(temp2->substr));
@@ -931,19 +936,19 @@ static void prima_best_primer(AjPList *forlist, AjPList *revlist,
 		bestr=j;
 		lowx=x;
 	    }
-	    ajListPushApp(*revlist, (void *)temp2);
+	    ajListPushApp(revlist, (void *)temp2);
 
 	}
-	ajListPushApp(*forlist, (void *)temp);
+	ajListPushApp(forlist, (void *)temp);
     }
 
 
     if(!good)
     {
-	while(ajListPop(*forlist,(void **)&temp))
+	while(ajListPop(forlist,(void **)&temp))
 	    prima_PrimerDel(&temp);
 
-	while(ajListPop(*revlist,(void **)&temp))
+	while(ajListPop(revlist,(void **)&temp))
 	    prima_PrimerDel(&temp);
 	*neric = 0;
 	*nfred = 0;
@@ -957,17 +962,17 @@ static void prima_best_primer(AjPList *forlist, AjPList *revlist,
     */
     for(i=0;i<bestf;++i)
     {
-	ajListPop(*forlist,(void **)&temp);
+	ajListPop(forlist,(void **)&temp);
 	prima_PrimerDel(&temp);
     }
 
     /* Next on the list is a hit */
-    ajListPop(*forlist,(void **)&hitf);
+    ajListPop(forlist,(void **)&hitf);
 
     /* Get rid of anything left on the list */
     for(i++;i<*neric;++i)
     {
-	ajListPop(*forlist,(void **)&temp);
+	ajListPop(forlist,(void **)&temp);
 	prima_PrimerDel(&temp);
     }
 
@@ -975,19 +980,19 @@ static void prima_best_primer(AjPList *forlist, AjPList *revlist,
     /* Get the best rev one in hitr, discard the rest */
     for(i=0;i<bestr;++i)
     {
-	ajListPop(*revlist,(void **)&temp);
+	ajListPop(revlist,(void **)&temp);
 	prima_PrimerDel(&temp);
     }
-    ajListPop(*revlist,(void **)&hitr);
+    ajListPop(revlist,(void **)&hitr);
 
     for(i++;i<*nfred;++i)
     {
-	ajListPop(*revlist,(void **)&temp);
+	ajListPop(revlist,(void **)&temp);
 	prima_PrimerDel(&temp);
     }
 
-    ajListPushApp(*forlist,(void *)hitf);
-    ajListPushApp(*revlist,(void *)hitr);
+    ajListPushApp(forlist,(void *)hitf);
+    ajListPushApp(revlist,(void *)hitr);
 
     *neric = 1;
     *nfred = 1;
@@ -1080,34 +1085,35 @@ static ajint prima_PosEndCompare(const void *a, const void *b)
 **
 ** Undocumented.
 **
-** @param [?] seqstr [AjPStr] Undocumented
-** @param [?] revstr [AjPStr] Undocumented
-** @param [?] targetstart [ajint] Undocumented
-** @param [?] targetend [ajint] Undocumented
-** @param [?] minprimerlen [ajint] Undocumented
-** @param [?] maxprimerlen [ajint] Undocumented
-** @param [?] seqlen [ajint] Undocumented
-** @param [?] minprimerTm [float] Undocumented
-** @param [?] maxprimerTm [float] Undocumented
-** @param [?] minpmGCcont [float] Undocumented
-** @param [?] maxpmGCcont [float] Undocumented
-** @param [?] minprodGCcont [float] Undocumented
-** @param [?] maxprodGCcont [float] Undocumented
-** @param [?] saltconc [float] Undocumented
-** @param [?] dnaconc [float] Undocumented
-** @param [?] pairlist [AjPList*] Undocumented
-** @param [?] npair [ajint*] Undocumented
+** @param [r] seqstr [const AjPStr] Undocumented
+** @param [r] revstr [const AjPStr] Undocumented
+** @param [r] targetstart [ajint] Undocumented
+** @param [r] targetend [ajint] Undocumented
+** @param [r] minprimerlen [ajint] Undocumented
+** @param [r] maxprimerlen [ajint] Undocumented
+** @param [r] seqlen [ajint] Undocumented
+** @param [r] minprimerTm [float] Undocumented
+** @param [r] maxprimerTm [float] Undocumented
+** @param [r] minpmGCcont [float] Undocumented
+** @param [r] maxpmGCcont [float] Undocumented
+** @param [r] minprodGCcont [float] Undocumented
+** @param [r] maxprodGCcont [float] Undocumented
+** @param [r] saltconc [float] Undocumented
+** @param [r] dnaconc [float] Undocumented
+** @param [u] pairlist [AjPList] Undocumented
+** @param [w] npair [ajint*] Undocumented
 ** @@
 ******************************************************************************/
 
-static void prima_testtarget(AjPStr seqstr, AjPStr revstr, ajint targetstart,
+static void prima_testtarget(const AjPStr seqstr, const AjPStr revstr,
+			     ajint targetstart,
 			     ajint targetend, ajint minprimerlen,
 			     ajint maxprimerlen, ajint seqlen,
 			     float minprimerTm, float maxprimerTm,
 			     float minpmGCcont, float maxpmGCcont,
 			     float minprodGCcont, float maxprodGCcont,
 			     float saltconc, float dnaconc,
-			     AjPList *pairlist, ajint *npair)
+			     AjPList pairlist, ajint *npair)
 {
 
 
@@ -1150,9 +1156,9 @@ static void prima_testtarget(AjPStr seqstr, AjPStr revstr, ajint targetstart,
     ajint fsc = 0;
     ajint rsc = 0;
 
-    char *s;
-    char *s2;
-    char *p;
+    const char *s;
+    const char *s2;
+    const char *p;
     ajint  pv;
     ajint  plimit;
     ajint  pcount;
@@ -1189,7 +1195,7 @@ static void prima_testtarget(AjPStr seqstr, AjPStr revstr, ajint targetstart,
 	    if(primerTm <minprimerTm || primerTm>maxprimerTm)
 		continue;
 
-	    primGCcont= ajMeltGC(&fstr, thisplen);
+	    primGCcont= ajMeltGC(fstr, thisplen);
 	    if(primGCcont< minpmGCcont || primGCcont >maxpmGCcont)
 		continue;
 
@@ -1260,7 +1266,7 @@ static void prima_testtarget(AjPStr seqstr, AjPStr revstr, ajint targetstart,
 		if(primerTm <minprimerTm || primerTm>maxprimerTm)
 		    continue;
 
-		primGCcont= ajMeltGC(&rstr, thisplen);
+		primGCcont= ajMeltGC(rstr, thisplen);
 		if(primGCcont< minpmGCcont || primGCcont >maxpmGCcont)
 		    continue;
 
@@ -1323,7 +1329,7 @@ static void prima_testtarget(AjPStr seqstr, AjPStr revstr, ajint targetstart,
     }
 
     ajStrAssSubC(&str1,ajStrStr(seqstr),forstart+flen,revstart-1);
-    prodgc = ajMeltGC(&str1,revstart-(forstart+flen));
+    prodgc = ajMeltGC(str1,revstart-(forstart+flen));
 
 
 
@@ -1350,7 +1356,7 @@ static void prima_testtarget(AjPStr seqstr, AjPStr revstr, ajint targetstart,
     AJNEW0(ppair);
     ppair->f = f;
     ppair->r = r;
-    ajListPush(*pairlist,(void *)ppair);
+    ajListPush(pairlist,(void *)ppair);
     *npair = 1;
 
     return;
@@ -1363,19 +1369,20 @@ static void prima_testtarget(AjPStr seqstr, AjPStr revstr, ajint targetstart,
 **
 ** Undocumented.
 **
-** @param [?] forlist [AjPList*] Undocumented
-** @param [?] revlist [AjPList*] Undocumented
-** @param [?] neric [ajint*] Undocumented
-** @param [?] nfred [ajint*] Undocumented
-** @param [?] seq [AjPStr] Undocumented
-** @param [?] rseq [AjPStr] Undocumented
-** @param [?] len [ajint] Undocumented
+** @param [u] forlist [AjPList] Undocumented
+** @param [u] revlist [AjPList] Undocumented
+** @param [w] neric [ajint*] Undocumented
+** @param [w] nfred [ajint*] Undocumented
+** @param [r] seq [const AjPStr] Undocumented
+** @param [r] rseq [const AjPStr] Undocumented
+** @param [r] len [ajint] Undocumented
 ** @@
 ******************************************************************************/
 
 
-static void prima_test_multi(AjPList *forlist, AjPList *revlist, ajint *neric,
-			     ajint *nfred, AjPStr seq, AjPStr rseq, ajint len)
+static void prima_test_multi(AjPList forlist, AjPList revlist, ajint *neric,
+			     ajint *nfred, const AjPStr seq,
+			     const  AjPStr rseq, ajint len)
 {
     AjPPrimer tmp;
     AjPStr st;
@@ -1387,9 +1394,9 @@ static void prima_test_multi(AjPList *forlist, AjPList *revlist, ajint *neric,
     ajint count;
     ajint limit;
 
-    char *s;
-    char *r;
-    char *p;
+    const char *s;
+    const char *r;
+    const char *p;
 
     st = ajStrNew();
 
@@ -1400,7 +1407,7 @@ static void prima_test_multi(AjPList *forlist, AjPList *revlist, ajint *neric,
 
     for(i=0;i<*neric;++i)
     {
-	ajListPop(*forlist,(void **)&tmp);
+	ajListPop(forlist,(void **)&tmp);
 	count = 0;
 	v = tmp->primerlen;
 	limit = len-v+1;
@@ -1421,13 +1428,13 @@ static void prima_test_multi(AjPList *forlist, AjPList *revlist, ajint *neric,
 	    --pc;
 	}
 	else
-	    ajListPushApp(*forlist,(void *)tmp);
+	    ajListPushApp(forlist,(void *)tmp);
     }
 
     *neric = pc;
     if(!*neric)
     {
-	while(ajListPop(*revlist,(void **)&tmp))
+	while(ajListPop(revlist,(void **)&tmp))
 	    prima_PrimerDel(&tmp);
 	*nfred = 0;
 	ajStrDel(&st);
@@ -1438,7 +1445,7 @@ static void prima_test_multi(AjPList *forlist, AjPList *revlist, ajint *neric,
     pc = *nfred;
     for(i=0;i<*nfred;++i)
     {
-	ajListPop(*revlist,(void **)&tmp);
+	ajListPop(revlist,(void **)&tmp);
 	count = 0;
 	v = tmp->primerlen;
 	limit = len-v+1;
@@ -1461,13 +1468,13 @@ static void prima_test_multi(AjPList *forlist, AjPList *revlist, ajint *neric,
 	    --pc;
 	}
 	else
-	    ajListPushApp(*revlist,(void *)tmp);
+	    ajListPushApp(revlist,(void *)tmp);
     }
 
     *nfred = pc;
     if(!*nfred)
     {
-	while(ajListPop(*forlist,(void **)&tmp))
+	while(ajListPop(forlist,(void **)&tmp))
 	    prima_PrimerDel(&tmp);
 	*neric = 0;
     }
@@ -1484,14 +1491,14 @@ static void prima_test_multi(AjPList *forlist, AjPList *revlist, ajint *neric,
 **
 ** Undocumented.
 **
-** @param [?] a [char*] Undocumented
-** @param [?] b [char*] Undocumented
-** @param [?] len [ajint] Undocumented
+** @param [r] a [const char*] Undocumented
+** @param [r] b [const char*] Undocumented
+** @param [r] len [ajint] Undocumented
 ** @return [ajint] Undocumented
 ** @@
 ******************************************************************************/
 
-static ajint prima_seq_align(char *a, char *b, ajint len)
+static ajint prima_seq_align(const char *a, const char *b, ajint len)
 {
     ajint i;
     ajint count;
@@ -1511,13 +1518,13 @@ static ajint prima_seq_align(char *a, char *b, ajint len)
 **
 ** Undocumented.
 **
-** @param [?] pairlist [AjPList*] Undocumented
-** @param [?] npair [ajint*] Undocumented
-** @param [?] range [ajint] Undocumented
+** @param [u] pairlist [AjPList] Undocumented
+** @param [w] npair [ajint*] Undocumented
+** @param [r] range [ajint] Undocumented
 ** @@
 ******************************************************************************/
 
-static void prima_prune_nearby(AjPList *pairlist, ajint *npair, ajint range)
+static void prima_prune_nearby(AjPList pairlist, ajint *npair, ajint range)
 {
     AjPPair pair;
 
@@ -1536,11 +1543,11 @@ static void prima_prune_nearby(AjPList *pairlist, ajint *npair, ajint range)
     {
 	for(j=0;j<i;++j)	/* Ignore those already processed */
 	{
-	    ajListPop(*pairlist,(void **)&pair);
-	    ajListPushApp(*pairlist,(void *)pair);
+	    ajListPop(pairlist,(void **)&pair);
+	    ajListPushApp(pairlist,(void *)pair);
 	}
 
-	ajListPop(*pairlist,(void **)&pair);/* Get next high scoring pair */
+	ajListPop(pairlist,(void **)&pair);/* Get next high scoring pair */
 	len  = pair->f->primerlen;
 	fst  = pair->f->start + len -1;
 	blim = fst-range;
@@ -1550,15 +1557,15 @@ static void prima_prune_nearby(AjPList *pairlist, ajint *npair, ajint range)
 	blim2 = pair->r->start - range;
 	elim2 = pair->r->start + range;
 
-	ajListPushApp(*pairlist,(void *)pair);
+	ajListPushApp(pairlist,(void *)pair);
 	count = *npair;
 	for(j=i+1;j<*npair;++j)
 	{
-	    ajListPop(*pairlist,(void **)&pair);
+	    ajListPop(pairlist,(void **)&pair);
 	    fst2=pair->f->start+pair->f->primerlen-1;
 	    if((fst2<blim || fst2>elim) && (pair->r->start<blim2 ||
 					    pair->r->start>elim2))
-		ajListPushApp(*pairlist,(void *)pair);
+		ajListPushApp(pairlist,(void *)pair);
 	    else
 	    {
 		prima_PrimerDel(&pair->f);
@@ -1581,13 +1588,13 @@ static void prima_prune_nearby(AjPList *pairlist, ajint *npair, ajint range)
 **
 ** Undocumented.
 **
-** @param [?] pairlist [AjPList*] Undocumented
-** @param [?] npair [ajint*] Undocumented
-** @param [?] overlap [ajint] Undocumented
+** @param [u] pairlist [AjPList] Undocumented
+** @param [w] npair [ajint*] Undocumented
+** @param [r] overlap [ajint] Undocumented
 ** @@
 ******************************************************************************/
 
-static void prima_check_overlap(AjPList *pairlist, ajint *npair, ajint overlap)
+static void prima_check_overlap(AjPList pairlist, ajint *npair, ajint overlap)
 {
     AjPPair pair;
 
@@ -1601,20 +1608,20 @@ static void prima_check_overlap(AjPList *pairlist, ajint *npair, ajint overlap)
     {
 	for(j=0;j<i;++j)
 	{
-	    ajListPop(*pairlist,(void **)&pair);
-	    ajListPushApp(*pairlist,(void *)pair);
+	    ajListPop(pairlist,(void **)&pair);
+	    ajListPushApp(pairlist,(void *)pair);
 	}
 
-	ajListPop(*pairlist,(void **)&pair);
+	ajListPop(pairlist,(void **)&pair);
 
 	end   = pair->r->start;
 	limit = end-overlap;
-	ajListPushApp(*pairlist,(void *)pair);
+	ajListPushApp(pairlist,(void *)pair);
 
 	count = *npair;
 	for(j=i+1;j<*npair;++j)
 	{
-	    ajListPop(*pairlist,(void **)&pair);
+	    ajListPop(pairlist,(void **)&pair);
 	    if(pair->f->start+pair->f->primerlen-1 < limit)
 	    {
 		prima_PrimerDel(&pair->f);
@@ -1622,7 +1629,7 @@ static void prima_check_overlap(AjPList *pairlist, ajint *npair, ajint overlap)
 		--count;
 	    }
 	    else
-		ajListPushApp(*pairlist,(void *)pair);
+		ajListPushApp(pairlist,(void *)pair);
 	}
 
 	*npair = count;
@@ -1642,7 +1649,7 @@ static void prima_check_overlap(AjPList *pairlist, ajint *npair, ajint overlap)
 ** double sort and RevSort, called within that, to sort on the
 ** primer end position
 **
-** @param [?] pairlist [AjPList*] Undocumented
+** @param [w] pairlist [AjPList*] Original list - replaced by a new list
 ** @@
 ******************************************************************************/
 
@@ -1699,7 +1706,7 @@ static void prima_TwoSortscorepos(AjPList *pairlist)
 **
 ** See TwoSortscorepos
 **
-** @param [?] alist [AjPList*] Undocumented
+** @param [u] alist [AjPList*] Undocumented
 ** @@
 ******************************************************************************/
 

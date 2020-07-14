@@ -25,7 +25,8 @@
 
 
 
-static void coderet_put_seq(AjPSeq seq, AjPStr strseq, ajint n, char *name,
+static void coderet_put_seq(const AjPSeq seq, const AjPStr strseq,
+			    ajint n, const char *name,
 			    ajint type, AjPSeqout seqout);
 
 
@@ -159,16 +160,17 @@ int main(int argc, char **argv)
 **
 ** Undocumented.
 **
-** @param [?] seq [AjPSeq] Undocumented
-** @param [?] strseq [AjPStr] Undocumented
-** @param [?] n [ajint] Undocumented
-** @param [?] name [char*] Undocumented
-** @param [?] type [ajint] Undocumented
-** @param [?] seqout [AjPSeqout] Undocumented
+** @param [r] seq [const AjPSeq] Undocumented
+** @param [r] strseq [const AjPStr] Undocumented
+** @param [r] n [ajint] Undocumented
+** @param [r] name [const char*] Undocumented
+** @param [r] type [ajint] Undocumented
+** @param [u] seqout [AjPSeqout] Undocumented
 ** @@
 ******************************************************************************/
 
-static void coderet_put_seq(AjPSeq seq, AjPStr strseq, ajint n, char *name,
+static void coderet_put_seq(const AjPSeq seq, const AjPStr strseq,
+			    ajint n, const char *name,
 			    ajint type, AjPSeqout seqout)
 {
     AjPSeq nseq = NULL;

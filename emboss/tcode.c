@@ -67,7 +67,8 @@ typedef struct AjSTestcode
     AjPFloat cprobT;
     AjPFloat pweights;
     AjPFloat cweights;
-} AjOTestcode,*AjPTestcode;
+} AjOTestcode;
+#define AjPTestcode AjOTestcode*
 
 
 
@@ -75,12 +76,13 @@ typedef struct AjSTestcode
 static AjBool tcode_readdata(AjPTestcode *table1, AjPFile datafile);
 static AjPTestcode tcode_new(void);
 static void tcode_del(AjPTestcode *thys);
-static float tcode_slide(AjPStr substr, ajint window, AjPTestcode tables,
+static float tcode_slide(const AjPStr substr, ajint window,
+			 const AjPTestcode tables,
 			 ajint pos);
-static ajint tcode_index(AjPFloat array, float value);
-static void tcode_report(AjPReport report, AjPInt from, AjPInt to,
-			 AjPFloat testcodes, ajint npoints,
-			 AjPFeattable ftable, AjPSeq seq);
+static ajint tcode_index(const AjPFloat array, float value);
+static void tcode_report(AjPReport report, const AjPInt from, const AjPInt to,
+			 const AjPFloat testcodes, ajint npoints,
+			 AjPFeattable ftable, const AjPSeq seq);
 
 
 
@@ -100,7 +102,7 @@ int main(int argc, char **argv)
     AjPFeattable ftable = NULL;
     AjPFile datafile    = NULL;
     AjPTestcode table1  = NULL;
-    AjPStr seqstr       = NULL;
+    const AjPStr seqstr       = NULL;
     AjPStr substr	= NULL;
     AjBool plot         = ajFalse;
     
@@ -117,7 +119,7 @@ int main(int argc, char **argv)
     AjPInt   to        = NULL;
 
     AjPGraph graph     = NULL;
-    AjPGraphData this  = NULL;
+    AjPGraphPlpData this  = NULL;
 
     ajint i;
     float ymin = 0.;
@@ -130,7 +132,7 @@ int main(int argc, char **argv)
     seqall   = ajAcdGetSeqall("sequence");
     window   = ajAcdGetInt("window");
     datafile = ajAcdGetDatafile("datafile");
-    plot     = ajAcdGetBool("plot");
+    plot     = ajAcdGetToggle("plot");
     step     = ajAcdGetInt("step");
     
     if(plot)
@@ -186,10 +188,10 @@ int main(int argc, char **argv)
 	    tcode_report(report, from, to, testcodes, npoints, ftable, seq);
 	else
 	{
-	    this = ajGraphxyDataNewI(npoints);
-	    ajGraphDataxySetTypeC(this,"2D plot");
+	    this = ajGraphPlpDataNewI(npoints);
+	    ajGraphPlpDataSetTypeC(this,"2D plot");
 	    ajGraphxySetOverLap(graph,ajFalse);
-	    ajGraphDataxyMaxMin(this->y,npoints,&ymin,&ymax);
+	    ajGraphArrayMaxMin(this->y,npoints,&ymin,&ymax);
 
 	    for(i=0;i<npoints;++i)
 	    {
@@ -197,24 +199,24 @@ int main(int argc, char **argv)
 				    / 2);
 		this->y[i] = ajFloatGet(testcodes,i);
 	    }
-	    ajGraphDataxySetMaxima(this,this->x[0],this->x[npoints-1],
+	    ajGraphPlpDataSetMaxima(this,this->x[0],this->x[npoints-1],
 				   0.,1.37);
 
 
 
-	    ajGraphxySetTitleDo (graph, ajTrue);
-	    ajGraphxyDataSetYtitleC(this,"TESTCODE value");
-	    ajGraphxyDataSetXtitleC(this,"Sequence mid position");
+	    ajGraphSetTitleDo(graph, ajTrue);
+	    ajGraphPlpDataSetYTitleC(this,"TESTCODE value");
+	    ajGraphPlpDataSetXTitleC(this,"Sequence mid position");
 
 	    
-	    ajGraphxyTitleC(graph,"Fickett TESTCODE plot");
+	    ajGraphSetTitleC(graph,"Fickett TESTCODE plot");
 
-	    ajGraphDataObjAddLine(this,this->x[0],0.74,this->x[npoints-1],
+	    ajGraphPlpDataAddLine(this,this->x[0],0.74,this->x[npoints-1],
 				  0.74,1);
-	    ajGraphDataObjAddLine(this,this->x[0],0.95,this->x[npoints-1],
+	    ajGraphPlpDataAddLine(this,this->x[0],0.95,this->x[npoints-1],
 				  0.95,3);
 
-	    ajGraphxyAddGraph(graph,this);
+	    ajGraphDataAdd(graph,this);
 	    ajGraphxyDisplay(graph,ajTrue);
 	}
 	
@@ -240,7 +242,7 @@ int main(int argc, char **argv)
 ** Read Etcode.dat data file
 **
 ** @param [w] table1 [AjPTestcode*] data object
-** @param [r] datafile [AjPFile] data file object 
+** @param [u] datafile [AjPFile] data file object 
 ** @return [AjBool] true if successful read
 ** @@
 ******************************************************************************/
@@ -458,16 +460,17 @@ static void tcode_del(AjPTestcode *thys)
 **
 ** Return a single TESTCODE value
 **
-** @param [r] substr [AjPStr] sequence
+** @param [r] substr [const AjPStr] sequence
 ** @param [r] window [ajint] size of sliding window
-** @param [r] table [AjPTestcode] testcode data object
+** @param [r] table [const AjPTestcode] testcode data object
 ** @param [r] pos [ajint] start position within sequence
 **
 ** @return [float] Testcode value
 ** @@
 ******************************************************************************/
 
-static float tcode_slide(AjPStr substr, ajint window, AjPTestcode table,
+static float tcode_slide(const AjPStr substr, ajint window,
+			 const AjPTestcode table,
 			 ajint pos)
 {
     ajint asum = 0;
@@ -498,7 +501,7 @@ static float tcode_slide(AjPStr substr, ajint window, AjPTestcode table,
     float p8 = 0.;
     
     
-    char  *p = NULL;
+    const char  *p = NULL;
     char  c;
     
     ajint scores[3][4];
@@ -623,14 +626,14 @@ static float tcode_slide(AjPStr substr, ajint window, AjPTestcode table,
 **
 ** Return an index into a TESTCODE data object probability array
 **
-** @param [r] array [AjPFloat] probability array
+** @param [r] array [const AjPFloat] probability array
 ** @param [r] value [float] value to return index for
 **
 ** @return [ajint] index
 ** @@
 ******************************************************************************/
 
-static ajint tcode_index(AjPFloat array, float value)
+static ajint tcode_index(const AjPFloat array, float value)
 {
     ajint i = 0;
     float thisval = 0.;
@@ -658,21 +661,21 @@ static ajint tcode_index(AjPFloat array, float value)
 **
 ** Print TESTCODE results
 **
-** @param [w] report [AjPReport] report object
-** @param [r] from [AjPInt] window start positions
-** @param [r] to [AjPInt] window end positions
-** @param [r] testcodes [AjPFloat] testcode values for windows
+** @param [u] report [AjPReport] report object
+** @param [r] from [const AjPInt] window start positions
+** @param [r] to [const AjPInt] window end positions
+** @param [r] testcodes [const AjPFloat] testcode values for windows
 ** @param [r] npoints [ajint] number of data points
-** @param [w] ftable [AjPFeattable] feature table for loading report
-** @param [r] seq [AjPSeq] original sequence
+** @param [u] ftable [AjPFeattable] feature table for loading report
+** @param [r] seq [const AjPSeq] original sequence
 **
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-static void tcode_report(AjPReport report, AjPInt from, AjPInt to,
-			 AjPFloat testcodes, ajint npoints,
-			 AjPFeattable ftable, AjPSeq seq)
+static void tcode_report(AjPReport report, const AjPInt from, const AjPInt to,
+			 const AjPFloat testcodes, ajint npoints,
+			 AjPFeattable ftable, const AjPSeq seq)
 {
     AjPFeature feat = NULL;
     AjPStr tmpstr   = NULL;

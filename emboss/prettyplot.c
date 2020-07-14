@@ -72,7 +72,7 @@
 #define BOXRIG      0x0008
 #define BOXCOLOURED 0x0010
 
-char **seqcharptr;
+const char **seqcharptr;
 ajint **seqcolptr;
 ajint **seqboxptr;
 ajint *seqcount = 0;
@@ -89,7 +89,7 @@ char *constr = 0;
 
 static ajint prettyplot_calcseqperpage(float yincr,float y,AjBool consensus);
 static ajint prettyplot_fillinboxes(float ystart, ajint length, ajint numseq,
-				    ajint resbreak, AjPSeqCvt cvt,
+				    ajint resbreak, const AjPSeqCvt cvt,
 				    float yincr, ajint numres,
 				    AjBool consensus,AjBool title,
 				    ajint start, ajint end,AjBool boxcol,
@@ -182,7 +182,7 @@ int main(int argc, char **argv)
     float simthresh = 1.0;
     float relthresh = 0.5;
     float part = 0.0;
-    char *cptr;
+    const char *cptr;
     ajint resbreak;
     float fplural;
     float ystart;
@@ -916,9 +916,11 @@ int main(int argc, char **argv)
 
 	    if(colourbyconsensus)
 	    {
+		part = matrix[ajSeqCvtK(cvt, seqcharptr[j][k])]
+		    [ajSeqCvtK(cvt, seqcharptr[highindex][k])];
 		if(con && seqcharptr[highindex][k] == seqcharptr[j][k])
 		    seqcolptr[j][k] = cidentity;
-		else if(part)
+		else if(part > 0.0)
 		    seqcolptr[j][k] = csimilarity;
 		else
 		    seqcolptr[j][k] = cother;
@@ -1021,9 +1023,9 @@ int main(int argc, char **argv)
 **
 ** Undocumented.
 **
-** @param [?] yincr [float] Undocumented
-** @param [?] y [float] Undocumented
-** @param [?] consensus [AjBool] Undocumented
+** @param [r] yincr [float] Undocumented
+** @param [r] y [float] Undocumented
+** @param [r] consensus [AjBool] Undocumented
 ** @return [ajint] Undocumented
 ** @@
 ******************************************************************************/
@@ -1052,29 +1054,29 @@ static ajint prettyplot_calcseqperpage(float yincr,float y,AjBool consensus)
 **
 ** Undocumented.
 **
-** @param [?] ystart [float] Undocumented
-** @param [?] length [ajint] Undocumented
-** @param [?] numseq [ajint] Undocumented
-** @param [?] resbreak [ajint] Undocumented
-** @param [?] cvt [AjPSeqCvt] Undocumented
-** @param [?] yincr [float] Undocumented
-** @param [?] numres [ajint] Undocumented
-** @param [?] consensus [AjBool] Undocumented
-** @param [?] title [AjBool] Undocumented
-** @param [?] start [ajint] Undocumented
-** @param [?] end [ajint] Undocumented
-** @param [?] boxcol [AjBool] Undocumented
-** @param [?] boxit [AjBool] Undocumented
-** @param [?] seqstart [ajint] Undocumented
-** @param [?] seqend [ajint] Undocumented
-** @param [?] datacol [ajint] Undocumented
-** @param [?] datacs [float] Undocumented
+** @param [r] ystart [float] Undocumented
+** @param [r] length [ajint] Undocumented
+** @param [r] numseq [ajint] Undocumented
+** @param [r] resbreak [ajint] Undocumented
+** @param [r] cvt [const AjPSeqCvt] Undocumented
+** @param [r] yincr [float] Undocumented
+** @param [r] numres [ajint] Undocumented
+** @param [r] consensus [AjBool] Undocumented
+** @param [r] title [AjBool] Undocumented
+** @param [r] start [ajint] Undocumented
+** @param [r] end [ajint] Undocumented
+** @param [r] boxcol [AjBool] Undocumented
+** @param [r] boxit [AjBool] Undocumented
+** @param [r] seqstart [ajint] Undocumented
+** @param [r] seqend [ajint] Undocumented
+** @param [r] datacol [ajint] Undocumented
+** @param [r] datacs [float] Undocumented
 ** @return [ajint] Undocumented
 ** @@
 ******************************************************************************/
 
 static ajint prettyplot_fillinboxes(float ystart, ajint length, ajint numseq,
-				    ajint resbreak, AjPSeqCvt cvt,
+				    ajint resbreak, const AjPSeqCvt cvt,
 				    float yincr, ajint numres,
 				    AjBool consensus,AjBool title,
 				    ajint start, ajint end,AjBool boxcol,
@@ -1166,7 +1168,7 @@ static ajint prettyplot_fillinboxes(float ystart, ajint length, ajint numseq,
     if(shownames)
     {
 	for(i=seqstart,l=0;i<seqend;i++,l++)
-	    ajGraphTextStart (-charlen,y-(yincr*l),ajStrStr(seqnames[i]));
+	    ajGraphTextStart(-charlen,y-(yincr*l),ajStrStr(seqnames[i]));
 
 	if(consensus && (numseq==seqend))
 	    ajGraphTextStart(-charlen,y-(yincr*((seqend-seqstart)+1)),

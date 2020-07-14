@@ -52,7 +52,8 @@ typedef struct SPoint
     float y1;
     float x2;
     float y2;
-} OPoint, *PPoint;
+} OPoint;
+#define PPoint OPoint*
 
 
 
@@ -70,8 +71,8 @@ int main(int argc, char **argv)
     AjPSeq seq2;
     AjPStr aa0str = 0;
     AjPStr aa1str = 0;
-    char *s1;
-    char *s2;
+    const char *s1;
+    const char *s2;
     char *strret = NULL;
     ajint i;
     ajint j;
@@ -126,7 +127,7 @@ int main(int argc, char **argv)
     PPoint ppt = NULL;
     float xa[1];
     float ya[1];
-    AjPGraphData gdata=NULL;
+    AjPGraphPlpData gdata=NULL;
     AjPStr tit   = NULL;
     AjIList iter = NULL;
     float x1 = 0.;
@@ -146,7 +147,7 @@ int main(int argc, char **argv)
     
     seq        = ajAcdGetSeq("asequence");
     seq2       = ajAcdGetSeq("bsequence");
-    stretch    = ajAcdGetBool("stretch");
+    stretch    = ajAcdGetToggle("stretch");
     graph      = ajAcdGetGraph("graph");
     xygraph    = ajAcdGetGraphxy("xygraph");
     windowsize = ajAcdGetInt("windowsize");
@@ -199,8 +200,8 @@ int main(int argc, char **argv)
     
     
     if(!stretch)
-	if( ajStrLen(graph->subtitle) <=1)
-	    ajStrApp(&graph->subtitle,subt);
+	if( ajStrLen(ajGraphGetSubTitle(graph)) <=1)
+	    ajGraphSetSubTitle(graph,subt);
     
     
     if(!stretch)
@@ -209,16 +210,16 @@ int main(int argc, char **argv)
 		       0.0-xmargin,(float)max+xmargin);
 
 	ajGraphTextMid(max*0.5,(ajSeqLen(seq2))+xmargin-onefifth,
-		       ajStrStr(graph->title));
+		       ajGraphGetTitleC(graph));
 	ajGraphTextMid((ajSeqLen(seq))*0.5,0.0-(xmargin/2.0),
-		       ajStrStr(graph->xaxis));
+		       ajGraphGetXTitleC(graph));
 	ajGraphTextLine(0.0-(xmargin*0.75),(ajSeqLen(seq2))*0.5,
 			0.0-(xmargin*0.75),(ajSeqLen(seq)),
-			ajStrStr(graph->yaxis),0.5);
+			ajGraphGetYTitleC(graph),0.5);
 
 	ajGraphSetCharSize(0.5);
 	ajGraphTextMid(max*0.5,(ajSeqLen(seq2))+xmargin-(onefifth*3),
-		       ajStrStr(graph->subtitle));
+		       ajGraphGetSubTitleC(graph));
     }
     
     
@@ -397,23 +398,23 @@ int main(int argc, char **argv)
     else			/* the xy graph for -stretch */
     {
 	tit = ajStrNew();
-	ajFmtPrintS(&tit,"%S",xygraph->title);
+	ajFmtPrintS(&tit,"%S",ajGraphGetTitle(xygraph));
 
 
-	gdata = ajGraphxyDataNewI(1);
+	gdata = ajGraphPlpDataNewI(1);
 	xa[0] = (float)b1;
 	ya[0] = (float)b2;
 
-	ajGraphxyTitleC(xygraph,ajStrStr(tit));
+	ajGraphSetTitleC(xygraph,ajStrStr(tit));
 
-	ajGraphxyXtitleC(xygraph,ajSeqName(seq));
-	ajGraphxyYtitleC(xygraph,ajSeqName(seq2));
+	ajGraphSetXTitleC(xygraph,ajSeqName(seq));
+	ajGraphSetYTitleC(xygraph,ajSeqName(seq2));
 
-	ajGraphDataxySetTypeC(gdata,"2D Plot Float");
-	ajGraphxyDataSetTitle(gdata,subt);
-	ajGraphDataxySetMaxMin(gdata,(float)b1,(float)e1,(float)b2,
+	ajGraphPlpDataSetTypeC(gdata,"2D Plot Float");
+	ajGraphPlpDataSetTitle(gdata,subt);
+	ajGraphPlpDataSetMaxMin(gdata,(float)b1,(float)e1,(float)b2,
 			       (float)e2);
-	ajGraphDataxySetMaxima(gdata,(float)b1,(float)e1,(float)b2,
+	ajGraphPlpDataSetMaxima(gdata,(float)b1,(float)e1,(float)b2,
 			       (float)e2);
 	ajGraphxySetXStart(xygraph,(float)b1);
 	ajGraphxySetXEnd(xygraph,(float)e1);
@@ -426,20 +427,20 @@ int main(int argc, char **argv)
 
 	if(list)
 	{
-	    iter = ajListIter(list);
+	    iter = ajListIterRead(list);
 	    while((ppt = ajListIterNext(iter)))
 	    {
 		x1 = ppt->x1+b1-1;
 		y1 = ppt->y1+b2-1;
 		x2 = ppt->x2+b1-1;
 		y2 = ppt->y2+b2-1;
-		ajGraphObjAddLine(xygraph,x1,y1,x2,y2,0);
+		ajGraphAddLine(xygraph,x1,y1,x2,y2,0);
 	    }
-	    ajListIterFree(iter);
+	    ajListIterFree(&iter);
 	}
 
-	ajGraphxyAddDataPtrPtr(gdata,xa,ya);
-	ajGraphxyReplaceGraph(xygraph,gdata);
+	ajGraphPlpDataSetXY(gdata,xa,ya);
+	ajGraphDataReplace(xygraph,gdata);
 
 
 	ajGraphxyDisplay(xygraph,ajFalse);
@@ -473,11 +474,11 @@ int main(int argc, char **argv)
 **
 ** Undocumented.
 **
-** @param [?] l [AjPList*] Undocumented
-** @param [?] x1 [float] Undocumented
-** @param [?] y1 [float] Undocumented
-** @param [?] x2 [float] Undocumented
-** @param [?] y2 [float] Undocumented
+** @param [u] l [AjPList*] Undocumented
+** @param [r] x1 [float] Undocumented
+** @param [r] y1 [float] Undocumented
+** @param [r] x2 [float] Undocumented
+** @param [r] y2 [float] Undocumented
 ** @param [r] stretch [AjBool] Do a stretch plot
 ** @return [void]
 ** @@

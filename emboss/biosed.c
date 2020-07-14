@@ -23,8 +23,9 @@
 #include "emboss.h"
 
 
-static void biosed_replace(AjPStr *substr, AjPStr target, AjPStr replace);
-static void biosed_delete(AjPStr *substr, AjPStr target);
+static void biosed_replace(AjPStr *substr,
+			   const AjPStr target, const AjPStr replace);
+static void biosed_delete(AjPStr *substr, const AjPStr target);
 
 
 
@@ -50,12 +51,12 @@ int main(int argc, char **argv)
     ajint        begin;
     ajint        end;
 
-    char *p = NULL;
+    const char *p = NULL;
 
     embInit("biosed", argc, argv);
 
     seqall  = ajAcdGetSeqall("sequence");
-    delete  = ajAcdGetBool("delete");
+    delete  = ajAcdGetToggle("delete");
     target  = ajAcdGetString("target");
     replace = ajAcdGetString("replace");
     outseq  = ajAcdGetSeqout("outseq");
@@ -101,14 +102,15 @@ int main(int argc, char **argv)
 ** Generic (unoptimised) replacement of all matching string subsections
 **
 ** @param [w] substr [AjPStr *] sequence
-** @param [r] target [AjPStr] target pattern
-** @param [r] replace [AjPStr] replacement subsequence
+** @param [r] target [const AjPStr] target pattern
+** @param [r] replace [const AjPStr] replacement subsequence
 **
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-static void biosed_replace(AjPStr *substr, AjPStr target, AjPStr replace)
+static void biosed_replace(AjPStr *substr,
+			   const AjPStr target, const AjPStr replace)
 {
     AjPStr str = NULL;
     AjPStr tmp = NULL;
@@ -116,9 +118,9 @@ static void biosed_replace(AjPStr *substr, AjPStr target, AjPStr replace)
     ajint  tlen;
     ajint  end = 0;
 
-    char   *p = NULL;
-    char   *q  = NULL;
-    char   *v;
+    const char   *p = NULL;
+    const char   *q  = NULL;
+    const char   *v;
 
     str = ajStrNew();
     tmp = ajStrNew();
@@ -157,24 +159,24 @@ static void biosed_replace(AjPStr *substr, AjPStr target, AjPStr replace)
 ** Generic (unoptimised) delete of all matching string subsections
 **
 ** @param [w] substr [AjPStr*] sequence
-** @param [r] target [AjPStr] target pattern
+** @param [r] target [const AjPStr] target pattern
 **
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-static void biosed_delete(AjPStr *substr, AjPStr target)
+static void biosed_delete(AjPStr *substr, const AjPStr target)
 {
     AjPStr str = NULL;
     char   *p  = NULL;
     char   *q  = NULL;
-    char   *v  = NULL;
+    const char   *v  = NULL;
     char   *t  = NULL;
     ajint  tlen = 0;
 
     str = ajStrNew();
     ajStrAssS(&str,*substr);
-    p = ajStrStr(str);
+    p = ajStrStrMod(&str);
     v = ajStrStr(target);
     tlen = ajStrLen(target);
 

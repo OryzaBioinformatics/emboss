@@ -67,9 +67,9 @@ int main(int argc, char **argv)
     ajSeqAssDesc(newseq, ajSeqGetDesc(seq));
 
     /* do the insertion here */
-    str = ajSeqStr(newseq);
-    ajStrAssC(&str, ajSeqChar(seq));
+    str = ajSeqStrCopy(seq);
     ajStrInsert(&str, pos, ajSeqStr(insertseq));
+    ajSeqReplace(newseq, str);
 
     /* set the type of the output sequence (is this required?) */
     ajSeqType(newseq);

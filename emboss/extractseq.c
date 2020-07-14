@@ -64,7 +64,7 @@ int main(int argc, char **argv)
     if(separate)
     {
 	strlist = ajListstrNew();
-	ajRangeStrExtractList(strlist, regions, ajSeqStr(seq));
+	ajRangeStrExtractList(regions, ajSeqStr(seq), strlist);
 	nr = ajRangeNumber(regions);
 	for(i=0; i<nr; i++)
 	{
@@ -75,7 +75,7 @@ int main(int argc, char **argv)
 	    newseq = ajSeqNew();
 
 	    /* create a name for the new sequence */
-	    ajStrAss(&name, ajSeqGetName(seq));
+	    ajStrAssS(&name, ajSeqGetName(seq));
 	    ajStrAppC(&name, "_");
 	    ajStrFromInt(&value, st);
 	    ajStrApp(&name, value);
@@ -114,7 +114,7 @@ int main(int argc, char **argv)
 	**  concatenate all regions from the sequence into the same
 	**  sequence
 	*/
-	ajRangeStrExtract(&newstr, regions, ajSeqStr(seq));
+	ajRangeStrExtract(regions, ajSeqStr(seq), &newstr);
 	ajSeqReplace(seq, newstr);
 	ajStrClear(&newstr);
 	ajSeqAllWrite(seqout, seq);

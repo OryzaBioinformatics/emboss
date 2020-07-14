@@ -131,8 +131,8 @@ int main(int argc, char **argv)
     while(ajSeqallNext(seqall, &seq))
     {
 	ajSeqToUpper(seq);
-	ajStrAss(&seqstr, ajSeqStr(seq));
-	ajStrAss(&revstr, ajSeqStr(seq));
+	ajStrAssS(&seqstr, ajSeqStr(seq));
+	ajStrAssS(&revstr, ajSeqStr(seq));
 	ajSeqReverseStr(&revstr);
 	ajDebug("Testing: %s\n", ajSeqName(seq));
 	ntests = 0;

@@ -36,11 +36,12 @@
 
 
 static void antigenic_readAnti(AjPFloat *agp);
-static void antigenic_padit(AjPFile *outf, ajint b, ajint e);
-static void antigenic_dumptoFeat(ajint nhits, AjPInt hp,AjPInt hpos,
-				 AjPInt hlen,AjPFloat thisap,
-				 AjPFloat hwt, AjPFeattabOut featout,
-				 char *seqname,ajint begin);
+static void antigenic_padit(AjPFile outf, ajint b, ajint e);
+static void antigenic_dumptoFeat(ajint nhits, const AjPInt hp,
+				 const AjPInt hpos, const AjPInt hlen,
+				 const AjPFloat thisap, const AjPFloat hwt,
+				 AjPFeattabOut featout,
+				 const char *seqname,ajint begin);
 
 
 
@@ -144,7 +145,7 @@ int main(int argc, char **argv)
 	ajStrAssSubC(&sstr,ajStrStr(strand),start,stop);
 	len  = ajStrLen(substr);
 
-	q = p = ajStrStr(substr);
+	q = p = ajStrStrMod(&substr);
 	for(i=0;i<len;++i,++p)
 	    *p = (char) ajAZToInt(*p);
 
@@ -226,10 +227,10 @@ int main(int argc, char **argv)
 	  ajStrAssSubC(&stmp,ajStrStr(sstr),istart,iend);
 	  ajFmtPrintF(outf," Sequence:  %S\n",stmp);
 	  ajFmtPrintF(outf,"            |");
-	  antigenic_padit(&outf,istart,iend);
+	  antigenic_padit(outf,istart,iend);
 	  ajFmtPrintF(outf,"|\n");
 	  ajFmtPrintF(outf,"%13d",istart+begin);
-	  antigenic_padit(&outf,istart,iend);
+	  antigenic_padit(outf,istart,iend);
 	  ajFmtPrintF(outf,"%d\n",iend+begin);
 	}
 
@@ -263,10 +264,10 @@ int main(int argc, char **argv)
 		  ajStrAssSubC(&stmp,ajStrStr(sstr),istart,iend);
 		  ajFmtPrintF(outf," Sequence:  %S\n",stmp);
 		  ajFmtPrintF(outf,"            |");
-		  antigenic_padit(&outf,istart,iend);
+		  antigenic_padit(outf,istart,iend);
 		  ajFmtPrintF(outf,"|\n");
 		  ajFmtPrintF(outf,"%13d",istart+begin);
-		  antigenic_padit(&outf,istart,iend);
+		  antigenic_padit(outf,istart,iend);
 		  ajFmtPrintF(outf,"%d\n",iend+begin);
 		}
 
@@ -331,9 +332,9 @@ int main(int argc, char **argv)
 
 /* @funcstatic antigenic_readAnti ********************************************
 **
-** Undocumented.
+** Reads the antigenicity index data file
 **
-** @param [?] agp [AjPFloat*] Undocumented
+** @param [w] agp [AjPFloat*] Data values from antigenicity index data file
 ** @return [void]
 ** @@
 ******************************************************************************/
@@ -375,7 +376,7 @@ static void antigenic_readAnti(AjPFloat *agp)
 
     while(ajFileGets(mfptr, &line))
     {
-	p = ajStrStr(line);
+	p = ajStrStrMod(&line);
 	if(*p=='#' || *p=='!' || *p=='\n')
 	    continue;
 
@@ -442,21 +443,21 @@ static void antigenic_readAnti(AjPFloat *agp)
 
 /* @funcstatic antigenic_padit ************************************************
 **
-** Undocumented.
+** Adds spaces to the output to fill a gap bwteeen begin and end positions
 **
-** @param [?] outf [AjPFile*] Undocumented
-** @param [?] b [ajint] Undocumented
-** @param [?] e [ajint] Undocumented
+** @param [u] outf [AjPFile] Output text file
+** @param [r] b [ajint] Begin
+** @param [r] e [ajint] End
 ** @@
 ******************************************************************************/
 
 
-static void antigenic_padit(AjPFile *outf, ajint b, ajint e)
+static void antigenic_padit(AjPFile outf, ajint b, ajint e)
 {
     ajint i;
 
     for(i=0;i<e-b-1;++i)
-	ajFmtPrintF(*outf," ");
+	ajFmtPrintF(outf," ");
 
     return;
 }
@@ -468,21 +469,22 @@ static void antigenic_padit(AjPFile *outf, ajint b, ajint e)
 **
 ** Undocumented.
 **
-** @param [?] nhits [ajint] Undocumented
-** @param [?] hp [AjPInt] Undocumented
-** @param [?] hpos [AjPInt] Undocumented
-** @param [?] hlen [AjPInt] Undocumented
-** @param [?] thisap [AjPFloat] Undocumented
-** @param [?] hwt [AjPFloat] Undocumented
-** @param [?] featout [AjPFeattabOut] Undocumented
-** @param [?] seqname [char*] Undocumented
-** @param [?] begin [ajint] Undocumented
+** @param [r] nhits [ajint] Undocumented
+** @param [r] hp [const AjPInt] Undocumented
+** @param [r] hpos [const AjPInt] Undocumented
+** @param [r] hlen [const AjPInt] Undocumented
+** @param [r] thisap [const AjPFloat] Undocumented
+** @param [r] hwt [const AjPFloat] Undocumented
+** @param [u] featout [AjPFeattabOut] Undocumented
+** @param [r] seqname [const char*] Undocumented
+** @param [r] begin [ajint] Undocumented
 ** @@
 ******************************************************************************/
 
-static void antigenic_dumptoFeat(ajint nhits, AjPInt hp, AjPInt hpos,
-				 AjPInt hlen, AjPFloat thisap, AjPFloat hwt,
-				 AjPFeattabOut featout, char *seqname,
+static void antigenic_dumptoFeat(ajint nhits, const AjPInt hp,
+				 const AjPInt hpos, const AjPInt hlen,
+				 const AjPFloat thisap, const AjPFloat hwt,
+				 AjPFeattabOut featout, const char *seqname,
 				 ajint begin)
 {
     AjPFeattable feattable;

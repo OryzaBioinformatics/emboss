@@ -35,9 +35,10 @@
 
 
 
-static void newcpgseek_cpgsearch(AjPFile *outf, ajint s, ajint len, char *seq,
-				 char *name, ajint begin, ajint *score);
-static void newcpgseek_calcgc(ajint from, ajint to, char *p, ajint *dcg,
+static void newcpgseek_cpgsearch(AjPFile *outf, ajint s, ajint len,
+				 const char *seq,
+				 const char *name, ajint begin, ajint score);
+static void newcpgseek_calcgc(ajint from, ajint to, const char *p, ajint *dcg,
 			      ajint *dgc, ajint *gc);
 
 
@@ -92,7 +93,7 @@ int main(int argc, char **argv)
 	ajFmtPrintF(outf,"        CpG  %%CG  CG/GC\n");
 
 	newcpgseek_cpgsearch(&outf,0,len,ajStrStr(substr),ajSeqName(seq),
-			     begin,&score);
+			     begin,score);
 	ajFmtPrintF(outf,"-------------------------------------------\n");
 
 	ajStrDel(&strand);
@@ -115,19 +116,19 @@ int main(int argc, char **argv)
 **
 ** Perform cpg search
 **
-** @param [r] outf [AjPFile*] outfile
+** @param [u] outf [AjPFile*] outfile
 ** @param [r] from [ajint] start pos
 ** @param [r] to [ajint] end pos
-** @param [r] p [char*] sequence
-** @param [r] name [char*] sequence name
+** @param [r] p [const char*] sequence
+** @param [r] name [const char*] sequence name
 ** @param [r] begin [ajint] start in sequence
-** @param [w] score [ajint*] score
+** @param [r] score [ajint] score
 ** @@
 ******************************************************************************/
 
 static void newcpgseek_cpgsearch(AjPFile *outf, ajint from, ajint to,
-				 char *p, char *name, ajint begin,
-				 ajint *score)
+				 const char *p, const char *name, ajint begin,
+				 ajint score)
 {
     ajint i;
     ajint c;
@@ -147,7 +148,7 @@ static void newcpgseek_cpgsearch(AjPFile *outf, ajint from, ajint to,
     for(i=from,c=to-1,sum=ssum=t=top=0,lsum=-1,z=begin-1;i<to;++i,ssum=sum)
     {
 	if(p[i]=='C' && p[i+1]=='G' && c-i)
-	    sum+=*score+1;
+	    sum+=score+1;
 	--sum;
 
 	if(sum<0)
@@ -207,14 +208,14 @@ static void newcpgseek_cpgsearch(AjPFile *outf, ajint from, ajint to,
 **
 ** @param [r] from [ajint] from
 ** @param [r] to [ajint] to
-** @param [r] p [char*] sequence
+** @param [r] p [const char*] sequence
 ** @param [w] dcg [ajint*] number cg
 ** @param [w] dgc [ajint*] number gc
 ** @param [w] gc [ajint*] number c or g
 ** @@
 ******************************************************************************/
 
-static void newcpgseek_calcgc(ajint from, ajint to, char *p, ajint *dcg,
+static void newcpgseek_calcgc(ajint from, ajint to, const char *p, ajint *dcg,
 			      ajint *dgc, ajint *gc)
 {
 

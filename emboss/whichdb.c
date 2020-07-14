@@ -58,7 +58,7 @@ int main(int argc, char **argv)
     
     entry   = ajAcdGetString("entry");
     outf    = ajAcdGetOutfile("outfile");
-    get     = ajAcdGetBool("get");
+    get     = ajAcdGetToggle("get");
     showall = ajAcdGetBool("showall");
     
     if(!ajStrLen(entry))

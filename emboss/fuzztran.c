@@ -25,9 +25,9 @@
 
 
 
-static void fuzztran_save_hits(AjPList *l, ajint hits, ajint fnum,
-			       AjPStr pro,
-			       AjPFeattable* ptab, AjPSeq seq);
+static void fuzztran_save_hits(AjPList l, ajint hits, ajint fnum,
+			       const AjPStr pro,
+			       AjPFeattable* ptab, const AjPSeq seq);
 
 
 
@@ -115,9 +115,9 @@ int main(int argc, char **argv)
     plen = ajStrLen(pattern);
     ajStrAssC(&opattern,ajStrStr(pattern));
 
-    if(!(type=embPatGetType(&pattern,mismatch,1,&m,&amino,&carboxyl)))
+    if(!(type=embPatGetType(opattern,&pattern,mismatch,1,&m,&amino,&carboxyl)))
 	ajFatal("Illegal pattern");
-    embPatCompile(type,pattern,opattern,&plen,&buf,off,&sotable,&solimit,
+    embPatCompile(type,pattern,&plen,&buf,off,&sotable,&solimit,
 		  &m,&regexp,&skipm,mismatch);
 
 
@@ -137,114 +137,114 @@ int main(int argc, char **argv)
 	if(!ajStrCmpC(frame,"F"))
 	{
 	    ajTrnStrFrame(ttable,text,1,&pro);
-	    embPatFuzzSearch(type,begin,pattern,opattern,seqname,pro,&l,
+	    embPatFuzzSearch(type,begin,pattern,seqname,pro,l,
 			     plen,mismatch,amino,carboxyl,buf,off,sotable,
 			     solimit,regexp,skipm,&hits,m,&tidy);
 	    if(hits)
-		fuzztran_save_hits(&l,hits,1, pro, &tab, seq);
+		fuzztran_save_hits(l,hits,1, pro, &tab, seq);
 
 	    ajStrAssC(&pro,"");
 
 	    ajTrnStrFrame(ttable,text,2,&pro);
-	    embPatFuzzSearch(type,begin,pattern,opattern,seqname,pro,&l,
+	    embPatFuzzSearch(type,begin,pattern,seqname,pro,l,
 			     plen,mismatch,amino,carboxyl,buf,off,sotable,
 			     solimit,regexp,skipm,&hits,m,&tidy);
 	    if(hits)
-		fuzztran_save_hits(&l,hits,2, pro, &tab, seq);
+		fuzztran_save_hits(l,hits,2, pro, &tab, seq);
 
 	    ajStrAssC(&pro,"");
 
 	    ajTrnStrFrame(ttable,text,3,&pro);
-	    embPatFuzzSearch(type,begin,pattern,opattern,seqname,pro,&l,
+	    embPatFuzzSearch(type,begin,pattern,seqname,pro,l,
 			     plen,mismatch,amino,carboxyl,buf,off,sotable,
 			     solimit,regexp,skipm,&hits,m,&tidy);
 	    if(hits)
-		fuzztran_save_hits(&l,hits,3, pro, &tab, seq);
+		fuzztran_save_hits(l,hits,3, pro, &tab, seq);
 
 	    ajStrAssC(&pro,"");
 	}
 	else if(!ajStrCmpC(frame,"R"))
 	{
 	    ajTrnStrFrame(ttable,text,-1,&pro);
-	    embPatFuzzSearch(type,begin,pattern,opattern,seqname,pro,&l,
+	    embPatFuzzSearch(type,begin,pattern,seqname,pro,l,
 			     plen,mismatch,amino,carboxyl,buf,off,sotable,
 			     solimit,regexp,skipm,&hits,m,&tidy);
 	    if(hits)
-		fuzztran_save_hits(&l,hits, -1, pro, &tab, seq);
+		fuzztran_save_hits(l,hits, -1, pro, &tab, seq);
 
 	    ajStrAssC(&pro,"");
 
 	    ajTrnStrFrame(ttable,text,-2,&pro);
-	    embPatFuzzSearch(type,begin,pattern,opattern,seqname,pro,&l,
+	    embPatFuzzSearch(type,begin,pattern,seqname,pro,l,
 			     plen,mismatch,amino,carboxyl,buf,off,sotable,
 			     solimit,regexp,skipm,&hits,m,&tidy);
 	    if(hits)
-		fuzztran_save_hits(&l,hits,-2, pro, &tab, seq);
+		fuzztran_save_hits(l,hits,-2, pro, &tab, seq);
 
 	    ajStrAssC(&pro,"");
 
 	    ajTrnStrFrame(ttable,text,-3,&pro);
-	    embPatFuzzSearch(type,begin,pattern,opattern,seqname,pro,&l,
+	    embPatFuzzSearch(type,begin,pattern,seqname,pro,l,
 			     plen,mismatch,amino,carboxyl,buf,off,sotable,
 			     solimit,regexp,skipm,&hits,m,&tidy);
 	    if(hits)
-		fuzztran_save_hits(&l,hits,-3, pro, &tab, seq);
+		fuzztran_save_hits(l,hits,-3, pro, &tab, seq);
 
 	    ajStrAssC(&pro,"");
 	}
 	else if(!ajStrCmpC(frame,"6"))
 	{
 	    ajTrnStrFrame(ttable,text,1,&pro);
-	    embPatFuzzSearch(type,begin,pattern,opattern,seqname,pro,&l,
+	    embPatFuzzSearch(type,begin,pattern,seqname,pro,l,
 			     plen,mismatch,amino,carboxyl,buf,off,sotable,
 			     solimit,regexp,skipm,&hits,m,&tidy);
 	    if(hits)
-		fuzztran_save_hits(&l,hits, 1, pro, &tab, seq);
+		fuzztran_save_hits(l,hits, 1, pro, &tab, seq);
 
 	    ajStrAssC(&pro,"");
 
 	    ajTrnStrFrame(ttable,text,2,&pro);
-	    embPatFuzzSearch(type,begin,pattern,opattern,seqname,pro,&l,
+	    embPatFuzzSearch(type,begin,pattern,seqname,pro,l,
 			     plen,mismatch,amino,carboxyl,buf,off,sotable,
 			     solimit,regexp,skipm,&hits,m,&tidy);
 	    if(hits)
-		fuzztran_save_hits(&l,hits, 2, pro, &tab, seq);
+		fuzztran_save_hits(l,hits, 2, pro, &tab, seq);
 
 	    ajStrAssC(&pro,"");
 
 	    ajTrnStrFrame(ttable,text,3,&pro);
-	    embPatFuzzSearch(type,begin,pattern,opattern,seqname,pro,&l,
+	    embPatFuzzSearch(type,begin,pattern,seqname,pro,l,
 			     plen,mismatch,amino,carboxyl,buf,off,sotable,
 			     solimit,regexp,skipm,&hits,m,&tidy);
 	    if(hits)
-		fuzztran_save_hits(&l,hits,3, pro, &tab, seq);
+		fuzztran_save_hits(l,hits,3, pro, &tab, seq);
 
 	    ajStrAssC(&pro,"");
 
 	    ajTrnStrFrame(ttable,text,-1,&pro);
-	    embPatFuzzSearch(type,begin,pattern,opattern,seqname,pro,&l,
+	    embPatFuzzSearch(type,begin,pattern,seqname,pro,l,
 			     plen,mismatch,amino,carboxyl,buf,off,sotable,
 			     solimit,regexp,skipm,&hits,m,&tidy);
 	    if(hits)
-		fuzztran_save_hits(&l,hits,-1, pro, &tab, seq);
+		fuzztran_save_hits(l,hits,-1, pro, &tab, seq);
 
 	    ajStrAssC(&pro,"");
 
 	    ajTrnStrFrame(ttable,text,-2,&pro);
-	    embPatFuzzSearch(type,begin,pattern,opattern,seqname,pro,&l,
+	    embPatFuzzSearch(type,begin,pattern,seqname,pro,l,
 			     plen,mismatch,amino,carboxyl,buf,off,sotable,
 			     solimit,regexp,skipm,&hits,m,&tidy);
 	    if(hits)
-		fuzztran_save_hits(&l,hits, -2, pro, &tab, seq);
+		fuzztran_save_hits(l,hits, -2, pro, &tab, seq);
 
 	    ajStrAssC(&pro,"");
 
 	    ajTrnStrFrame(ttable,text,-3,&pro);
-	    embPatFuzzSearch(type,begin,pattern,opattern,seqname,pro,&l,
+	    embPatFuzzSearch(type,begin,pattern,seqname,pro,l,
 			     plen,mismatch,amino,carboxyl,buf,off,sotable,
 			     solimit,regexp,skipm,&hits,m,&tidy);
 	    if(hits)
-		fuzztran_save_hits(&l,hits, -3, pro, &tab, seq);
+		fuzztran_save_hits(l,hits, -3, pro, &tab, seq);
 
 	    ajStrAssC(&pro,"");
 	}
@@ -252,11 +252,11 @@ int main(int argc, char **argv)
 	{
 	    ajStrToInt(frame,&frameno);
 	    ajTrnStrFrame(ttable,text,frameno,&pro);
-	    embPatFuzzSearch(type,begin,pattern,opattern,seqname,pro,&l,
+	    embPatFuzzSearch(type,begin,pattern,seqname,pro,l,
 			     plen,mismatch,amino,carboxyl,buf,off,sotable,
 			     solimit,regexp,skipm,&hits,m,&tidy);
 	    if(hits)
-		fuzztran_save_hits(&l,hits,frameno, pro, &tab, seq);
+		fuzztran_save_hits(l,hits,frameno, pro, &tab, seq);
 
 	    ajStrAssC(&pro,"");
 	}
@@ -299,19 +299,19 @@ int main(int argc, char **argv)
 **
 ** Save the hits in a feature table for later reporting.
 **
-** @param [?] l [AjPList*] List of hits stored as EmbPMatch objects
-** @param [?] hits [ajint] Number of hits
-** @param [?] fnum [ajint] Frame number 1, 2, 3, -1, -2 or -3.
-** @param [r] pro [AjPStr] Protein translation
-** @param [?] ptab [AjPFeattable*] Feature table (created if first use)
-** @param [?] seq [AjPSeq] Sequence
+** @param [u] l [AjPList] List of hits stored as EmbPMatch objects
+** @param [r] hits [ajint] Number of hits
+** @param [r] fnum [ajint] Frame number 1, 2, 3, -1, -2 or -3.
+** @param [r] pro [const AjPStr] Protein translation
+** @param [u] ptab [AjPFeattable*] Feature table (created if first use)
+** @param [r] seq [const AjPSeq] Sequence
 ** @@
 ******************************************************************************/
 
 
-static void fuzztran_save_hits(AjPList *l, ajint hits, ajint fnum,
-			       AjPStr pro,
-			       AjPFeattable* ptab, AjPSeq seq)
+static void fuzztran_save_hits(AjPList l, ajint hits, ajint fnum,
+			       const AjPStr pro,
+			       AjPFeattable* ptab, const AjPSeq seq)
 {
     ajint i;
     EmbPMatMatch m;
@@ -361,11 +361,11 @@ static void fuzztran_save_hits(AjPList *l, ajint hits, ajint fnum,
     if(ff)
 	ff -= 3;
 
-    ajListReverse(*l);
+    ajListReverse(l);
 
     for(i=0;i<hits;++i)
     {
-	ajListPop(*l,(void **)&m);
+	ajListPop(l,(void **)&m);
 	if(forward)
 	{
 	    npos  = (m->start*3) + ff + (begin-1);

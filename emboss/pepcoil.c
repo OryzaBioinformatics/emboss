@@ -58,7 +58,7 @@ int main(int argc, char **argv)
     ajint end;
     ajint len;
 
-    char *p;
+    const char *p;
     char *q;
 
     ajint i;
@@ -140,11 +140,11 @@ int main(int argc, char **argv)
 
 	len = ajStrLen(substr);
 
-	q = p = ajStrStr(substr);
-	for(i=0;i<len;++i,++p)
-	    *p = (char) ajAZToInt(*p);
+	q = ajStrStrMod(&substr);
+	for(i=0;i<len;++i,++q)
+	    *q = (char) ajAZToInt(*q);
 
-	p = q;
+	p = ajStrStr(substr);
 
 	maxmaxscore = -1.0;
 	isub = window -1;
@@ -341,7 +341,7 @@ static void pepcoil_readcoildat(AjPFloat2d *rdat)
     static  char delim[]=" \t\n";
 
     char *p;
-    char *q;
+    const char *q;
     ajint n;
     ajint c;
 
@@ -355,7 +355,7 @@ static void pepcoil_readcoildat(AjPFloat2d *rdat)
 
     while(ajFileGets(mfptr, &line))
     {
-	p=ajStrStr(line);
+	p=ajStrStrMod(&line);
 	if(*p=='#' || *p=='!' || !*p) continue;
 	ajCharToUpper(p);
 	q=p;

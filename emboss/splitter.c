@@ -138,7 +138,7 @@ static void splitter_write(AjPSeqout seqout, AjPSeq subseq, ajint start,
 
 
     /* create a name for the subsequence */
-    ajStrAss(&name, ajSeqGetName(seq));
+    ajStrAssS(&name, ajSeqGetName(seq));
     ajStrAppC(&name, "_");
     ajStrFromInt(&value, ajSeqBegin(seq)+start);
     ajStrApp(&name, value);

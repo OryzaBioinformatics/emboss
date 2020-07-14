@@ -172,7 +172,7 @@ int main(int argc, char **argv)
 	ajFileDataNewWrite(fname,&outf);
 	if(!outf)
 	    ajFatal("Cannot open output file %S",fname);
-	ajCodWrite(outf,codon);
+	ajCodWrite(codon, outf);
 	ajFileClose(&outf);
 
 
@@ -195,8 +195,8 @@ int main(int argc, char **argv)
 **
 ** Undocumented.
 **
-** @param [?] inf [AjPFile] Undocumented
-** @param [?] array [AjPInt*] Undocumented
+** @param [u] inf [AjPFile] Undocumented
+** @param [w] array [AjPInt*] Undocumented
 ** @return [char*] Undocumented
 ** @@
 ******************************************************************************/
@@ -232,7 +232,7 @@ static char* cutgextract_next(AjPFile inf, AjPInt *array)
     ajStrInsertC(&org,0,"E");
 
     len = ajStrLen(org);
-    p   = ajStrStr(org);
+    p   = ajStrStrMod(&org);
     for(i=0;i<len;++i)
     {
 	c = p[i];
@@ -253,8 +253,8 @@ static char* cutgextract_next(AjPFile inf, AjPInt *array)
 **
 ** Undocumented.
 **
-** @param [?] inf [AjPFile] Undocumented
-** @param [?] count [AjPInt*] Undocumented
+** @param [u] inf [AjPFile] Undocumented
+** @param [w] count [AjPInt*] Undocumented
 ** @@
 ******************************************************************************/
 

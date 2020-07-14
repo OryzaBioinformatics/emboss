@@ -40,14 +40,19 @@
 
 
 
-static ajint stretcher_Ealign(char *A, char *B, ajint M, ajint N, ajint G,
+static ajint stretcher_Ealign(const char *A, const char *B,
+			      ajint M, ajint N, ajint G,
 			      ajint H,ajint *S, ajint* NC);
-static ajint stretcher_Calcons(char *aa0, ajint n0, char *aa1, ajint n1,
-			       ajint* res);
-static ajint stretcher_Discons(char* seqc0, char *seqc1, ajint nc);
-static ajint stretcher_Align(char *A, char *B, ajint M, ajint N, ajint tb,
+static ajint stretcher_Calcons(const char *aa0, ajint n0,
+			       const char *aa1, ajint n1,
+			       const ajint* res);
+static ajint stretcher_Discons(const char* seqc0, const char *seqc1, ajint nc);
+static ajint stretcher_Align(const char *A, const char *B,
+			     ajint M, ajint N, ajint tb,
 			     ajint te);
-static ajint stretcher_CheckScore(unsigned char *A,unsigned char *B,ajint M,
+static ajint stretcher_CheckScore(const unsigned char *A,
+				  const unsigned char *B,
+				  ajint M,
 				   ajint N,ajint *S,ajint *NC);
 
 
@@ -145,7 +150,8 @@ int main(int argc, char **argv)
 {
     AjPStr aa0str = 0;
     AjPStr aa1str = 0;
-    char *s1,*s2;
+    const char *s1;
+    const char *s2;
     ajint gdelval;
     ajint ggapval;
     ajint i;
@@ -291,18 +297,19 @@ static ajint nmax=0;
 **
 ** Undocumented
 **
-** @param [r] A [char*] Undocumented
-** @param [r] B [char*] Undocumented
+** @param [r] A [const char*] Undocumented
+** @param [r] B [const char*] Undocumented
 ** @param [r] M [ajint] Undocumented
 ** @param [r] N [ajint] Undocumented
 ** @param [r] G [ajint] Undocumented
 ** @param [r] H [ajint] Undocumented
-** @param [r] S [ajint*] Undocumented
-** @param [r] NC [ajint*] Undocumented
+** @param [w] S [ajint*] Undocumented
+** @param [w] NC [ajint*] Undocumented
 ** @return [ajint] Undocumented
 ******************************************************************************/
 
-static ajint stretcher_Ealign(char *A,char *B,ajint M,ajint N,ajint G,
+static ajint stretcher_Ealign(const char *A,const char *B,
+			      ajint M,ajint N,ajint G,
 			      ajint H,ajint *S,ajint *NC)
 {
     ajint c;
@@ -358,8 +365,8 @@ static ajint stretcher_Ealign(char *A,char *B,ajint M,ajint N,ajint G,
 ** A[1..M] and B[1..N] that begins(ends) with a delete if tb(te) is zero
 ** and appends such a conversion to the current script.
 **
-** @param [r] A [char*] Undocumented
-** @param [r] B [char*] Undocumented
+** @param [r] A [const char*] Undocumented
+** @param [r] B [const char*] Undocumented
 ** @param [r] M [ajint] Undocumented
 ** @param [r] N [ajint] Undocumented
 ** @param [r] tb [ajint] Undocumented
@@ -367,7 +374,8 @@ static ajint stretcher_Ealign(char *A,char *B,ajint M,ajint N,ajint G,
 ** @return [ajint] Undocumented
 ******************************************************************************/
 
-static ajint stretcher_Align(char *A,char *B,ajint M,ajint N,ajint tb,ajint te)
+static ajint stretcher_Align(const char *A,const char *B,
+			     ajint M,ajint N,ajint tb,ajint te)
 {
     ajint midi;
     ajint midj;
@@ -558,16 +566,17 @@ static ajint stretcher_Align(char *A,char *B,ajint M,ajint N,ajint tb,ajint te)
 **
 ** Undocumented
 **
-** @param [r] aa0 [char*] Undocumented
+** @param [r] aa0 [const char*] Undocumented
 ** @param [r] n0 [ajint] Undocumented
-** @param [r] aa1 [char*] Undocumented
+** @param [r] aa1 [const char*] Undocumented
 ** @param [r] n1 [ajint] Undocumented
-** @param [r] res [ajint*] Undocumented
+** @param [r] res [const ajint*] Undocumented
 ** @return [ajint] Undocumented
 ******************************************************************************/
 
-static ajint stretcher_Calcons(char *aa0,ajint n0,char *aa1,ajint n1,
-			       ajint *res)
+static ajint stretcher_Calcons(const char *aa0,ajint n0,
+			       const char *aa1,ajint n1,
+			       const ajint *res)
 {
     ajint i0;
     ajint i1;
@@ -575,9 +584,9 @@ static ajint stretcher_Calcons(char *aa0,ajint n0,char *aa1,ajint n1,
     ajint nc;
     char *sp0;
     char *sp1;
-    ajint *rp;
-    char *sq1;
-    char *sq2;
+    const ajint *rp;
+    const char *sq1;
+    const char *sq2;
 
     int min0;
     int min1;
@@ -641,13 +650,13 @@ static ajint stretcher_Calcons(char *aa0,ajint n0,char *aa1,ajint n1,
 **
 ** Undocumented
 **
-** @param [r] seqc0 [char*] Undocumented
-** @param [r] seqc1 [char*] Undocumented
+** @param [r] seqc0 [const char*] Undocumented
+** @param [r] seqc1 [const char*] Undocumented
 ** @param [r] nc [ajint] Undocumented
 ** @return [ajint] Undocumented
 ******************************************************************************/
 
-static ajint stretcher_Discons(char *seqc0, char *seqc1, ajint nc)
+static ajint stretcher_Discons(const char *seqc0, const char *seqc1, ajint nc)
 {
 #define MAXOUT 201
 
@@ -694,9 +703,9 @@ static ajint stretcher_Discons(char *seqc0, char *seqc1, ajint nc)
     ajlong qqoff;
     ajint lloff;
     ajint have_res;
-    char *name01;
-    char *name0;
-    char *name1;
+    const char *name01;
+    const char *name0;
+    const char *name1;
     ajint n0;
     ajint smark[4] =
     {
@@ -1000,16 +1009,18 @@ static ajint stretcher_Discons(char *seqc0, char *seqc1, ajint nc)
 **
 ** return the score of the alignment stored in S
 **
-** @param [r] A [unsigned char*] Undocumented
-** @param [r] B [unsigned char*] Undocumented
+** @param [r] A [const unsigned char*] Undocumented
+** @param [r] B [const unsigned char*] Undocumented
 ** @param [r] M [ajint] Undocumented
 ** @param [r] N [ajint] Undocumented
-** @param [r] S [ajint*] Undocumented
-** @param [r] NC [ajint*] Undocumented
+** @param [w] S [ajint*] Undocumented
+** @param [w] NC [ajint*] Undocumented
 ** @return [ajint] Undocumented
 ******************************************************************************/
 
-static ajint stretcher_CheckScore(unsigned char *A,unsigned char *B,ajint M,
+static ajint stretcher_CheckScore(const unsigned char *A,
+				  const unsigned char *B,
+				  ajint M,
 				  ajint N,ajint *S,ajint *NC)
 {
     register ajint i;

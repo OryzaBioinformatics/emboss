@@ -40,7 +40,7 @@ int main(int argc, char **argv)
 
     AjBool  haspattern;
 
-    char   *p;
+    const char   *p;
 
 
     AjPStr line  = NULL;
@@ -63,7 +63,7 @@ int main(int argc, char **argv)
 
     embInit("prosextract", argc, argv);
 
-    temp = ajAcdGetString("infdat");
+    temp = ajAcdGetDirectoryName("infdat");
 
     line = ajStrNew();
     text = ajStrNew();
@@ -102,8 +102,8 @@ int main(int argc, char **argv)
 		haspattern = ajTrue;
 		/*save id*/
 		p = ajStrStr(line);
-		p = strtok(p," \t;");
-		p = strtok(NULL," \t;");
+		p = ajSysStrtok(p," \t;");
+		p = ajSysStrtok(NULL," \t;");
 		ajStrAssC(&id,p);
 		ajFmtPrintF(outf, "%s ", ajStrStr(id));
 		continue;
@@ -122,8 +122,8 @@ int main(int argc, char **argv)
 	if(ajStrPrefixC(line, "AC") )
 	{
 	    p = ajStrStr(line);
-	    p = strtok(p, " \t;");
-	    p = strtok(NULL, " \t;");
+	    p = ajSysStrtok(p, " \t;");
+	    p = ajSysStrtok(NULL, " \t;");
 	    ajStrAssC(&ac,p);
 	    ajFmtPrintF(outf, "%s\n ", ajStrStr(ac));
 	    continue;
@@ -132,8 +132,8 @@ int main(int argc, char **argv)
     	if(ajStrPrefixC(line, "DE") )
 	{
 	    p = ajStrStr(line);
-	    p = strtok(p, " \t.");
-	    p = strtok(NULL, " \t.");
+	    p = ajSysStrtok(p, " \t.");
+	    p = ajSysStrtok(NULL, " \t.");
 	    ajStrAssC(&de,p);
 	    ajFmtPrintF(outf, "%s\n ", ajStrStr(de));
 	    continue;
@@ -147,14 +147,14 @@ int main(int argc, char **argv)
 	    while(ajStrPrefixC(line,"PA"))
 	    {
 		p = ajStrStr(line);
-		p = strtok(p, " \t.");
-		p = strtok(NULL, " \t.");
+		p = ajSysStrtok(p, " \t.");
+		p = ajSysStrtok(NULL, " \t.");
 		ajStrAppC(&pa,p);
 		ajFileReadLine(infdat, &line);
 	    }
 
 	    ajFmtPrintF(outf, "%s\n", ajStrStr(pa));
-	    re = embPatPrositeToRegExp(&pa);
+	    re = embPatPrositeToRegExp(pa);
 	    ajFmtPrintF(outf, "^%s\n\n", ajStrStr(re));
 	    ajStrDel(&re);
 	    continue;
@@ -190,7 +190,7 @@ int main(int argc, char **argv)
 	    storepos = ajFileTell(infdoc);
 	    /* save out the documentation text to acc numbered outfiles . */
 	    p = ajStrStr(text)+1;
-	    p = strtok(p, ";");
+	    p = ajSysStrtok(p, ";");
 	    ajStrAssC(&temp, ajStrStr(fname));
 	    ajStrAppC(&temp, p);
 

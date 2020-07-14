@@ -27,10 +27,11 @@
 
 
 
-static void tfscan_print_hits(AjPStr name, AjPList *l, ajint hits,
+static void tfscan_print_hits(const AjPStr name, AjPList *l, ajint hits,
 			      AjPFile outf, ajint begin, ajint end,
-			      AjPTable t, AjPSeq seq, ajint minlength,
-			      AjPTable btable);
+			      const AjPTable t, const AjPSeq seq,
+			      ajint minlength,
+			      const AjPTable btable);
 
 
 
@@ -74,7 +75,7 @@ int main(int argc, char **argv)
     ajint sum;
     ajint v;
 
-    char *p;
+    const char *p;
 
 
     embInit("tfscan", argc, argv);
@@ -99,11 +100,14 @@ int main(int argc, char **argv)
     else if(*p=='V')
 	ajStrAssC(&pname,"tfvertebrate");
     else if(*p=='C')
-	pname = ajAcdGetString("custom");
+	inf = ajAcdGetDatafile("custom");
 
-    ajFileDataNew(pname,&inf);
-    if(!inf)
-	ajFatal("Either EMBOSS_DATA undefined or TFEXTRACT needs running");
+    if(*p!='C')
+    {
+	ajFileDataNew(pname,&inf);
+	if(!inf)
+	    ajFatal("Either EMBOSS_DATA undefined or TFEXTRACT needs running");
+    }
 
     name     = ajStrNew();
     acc      = ajStrNew();
@@ -149,7 +153,7 @@ int main(int argc, char **argv)
 	    ajStrAssS(&opattern,pattern);
 	    ajStrAssC(&bf,p);
 	    
-	    v = embPatVariablePattern(&pattern,opattern,substr,pname,l,0,
+	    v = embPatVariablePattern(pattern,substr,pname,l,0,
 				      mismatch,begin);
 	    if(v)
 	    {
@@ -196,23 +200,24 @@ int main(int argc, char **argv)
 **
 ** Print matches to transcription factor sites
 **
-** @param [r] name [AjPStr] name of test sequence
+** @param [r] name [const AjPStr] name of test sequence
 ** @param [w] l [AjPList*] list of hits
 ** @param [r] hits [ajint] number of hits
-** @param [w] outf [AjPFile] output file
+** @param [u] outf [AjPFile] output file
 ** @param [r] begin [ajint] sequence start
 ** @param [r] end [ajint] sequence end
-** @param [r] t [AjPTable] table of accession numbers
-** @param [r] seq [AjPSeq] test sequence
+** @param [r] t [const AjPTable] table of accession numbers
+** @param [r] seq [const AjPSeq] test sequence
 ** @param [r] minlength [ajint] minimum length of pattern
-** @param [r] btable [AjPtable] BF lines from transfac (if any)
+** @param [r] btable [const AjPTable] BF lines from transfac (if any)
 ** @@
 ******************************************************************************/
 
-static void tfscan_print_hits(AjPStr name, AjPList *l,
+static void tfscan_print_hits(const AjPStr name, AjPList *l,
 			      ajint hits, AjPFile outf,
-			      ajint begin, ajint end, AjPTable t,
-			      AjPSeq seq, ajint minlength, AjPTable btable)
+			      ajint begin, ajint end, const AjPTable t,
+			      const AjPSeq seq, ajint minlength,
+			      const  AjPTable btable)
 {
     ajint i;
     EmbPMatMatch m;

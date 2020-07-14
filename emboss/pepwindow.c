@@ -42,14 +42,14 @@ int main(int argc, char **argv)
 {
     AjPFile datafile;
     AjPStr aa0str = 0;
-    char *s1;
+    const char *s1;
     AjPSeq seq;
     ajint llen;
     float matrix[AZ];
     ajint i;
     ajint midpoint;
     ajint j;
-    AjPGraphData graphdata;
+    AjPGraphPlpData graphdata;
     AjPGraph mult;
     float min = 555.5;
     float max = -555.5;
@@ -67,13 +67,13 @@ int main(int argc, char **argv)
 
     aa0str = ajStrNewL(ajSeqLen(seq)+1);
 
-    graphdata = ajGraphxyDataNewI(ajSeqLen(seq)-llen);
+    graphdata = ajGraphPlpDataNewI(ajSeqLen(seq)-llen);
 
     midpoint = (ajint)((llen+1)/2);
 
-    ajGraphDataxySetTypeC(graphdata,"2D Plot");
+    ajGraphPlpDataSetTypeC(graphdata,"2D Plot");
 
-    ajGraphxyAddGraph(mult,graphdata);
+    ajGraphDataAdd(mult,graphdata);
 
     for(i=0;i<ajSeqLen(seq);i++)
 	ajStrAppK(&aa0str,(char)ajAZToInt(*s1++));
@@ -102,12 +102,12 @@ int main(int argc, char **argv)
 	s1++;
     }
 
-    ajGraphDataxySetMaxima(graphdata,0.,(float)ajSeqLen(seq),min,max);
+    ajGraphPlpDataSetMaxima(graphdata,0.,(float)ajSeqLen(seq),min,max);
 
     min = min*1.1;
     max = max*1.1;
 
-    ajGraphDataxySetMaxMin(graphdata,0.0,(float)ajSeqLen(seq),min,max);
+    ajGraphPlpDataSetMaxMin(graphdata,0.0,(float)ajSeqLen(seq),min,max);
     ajGraphxySetMaxMin(mult,0.0,(float)ajSeqLen(seq),min,max);
 
     ajGraphxyDisplay(mult,AJTRUE);
@@ -124,7 +124,7 @@ int main(int argc, char **argv)
 **
 ** Read the NAKAI (AAINDEX) data file
 **
-** @param [r] file [AjPFile] Input file
+** @param [u] file [AjPFile] Input file
 ** @param [w] matrix [float[]] Data values for each amino acid
 ** @return [AjBool] ajTrue on success
 ** @@
@@ -139,7 +139,7 @@ static AjBool pepwindow_getnakaidata(AjPFile file, float matrix[])
     AjPStr description = NULL;
     AjPStrTok token;
     ajint line = 0;
-    char *ptr;
+    const char *ptr;
 
 
     if(!file)

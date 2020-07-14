@@ -34,7 +34,7 @@
 ** @alias AjSRinfo
 ** @alias AjORinfo
 **
-** @attr code [AjPStr] Undocumented
+** @attr code [AjPStr] structure for silent mutation info
 ** @attr site [AjPStr] Undocumented
 ** @attr ncuts [ajint] Undocumented
 ** @attr cut1 [ajint] Undocumented
@@ -45,14 +45,15 @@
 
 typedef struct AjSRinfo
 {
-    AjPStr code;   /*structure for silent mutation info*/
+    AjPStr code;
     AjPStr site;
     ajint ncuts;
     ajint cut1;
     ajint cut2;
     ajint cut3;
     ajint cut4;
-} AjORinfo, *AjPRinfo;
+} AjORinfo;
+#define AjPRinfo AjORinfo*
 
 
 
@@ -86,20 +87,23 @@ typedef struct AjSSilent
     AjBool issilent;
     char   obase;
     char   nbase;
-} AjOSilent, *AjPSilent;
+} AjOSilent;
+#define AjPSilent AjOSilent*
 
 
 
 
-static AjPList silent_mismatch(AjPStr sstr, AjPList ressite, AjPStr* tailstr,
-			       AjPStr sname, ajint RStotal, ajint begin,
+static AjPList silent_mismatch(const AjPStr sstr, AjPList ressite,
+			       AjPStr* tailstr,
+			       const AjPStr sname, ajint RStotal, ajint begin,
 			       ajint radj, AjBool rev, ajint end,
 			       AjBool tshow);
-static ajint silent_restr_read(AjPList *relist, AjPStr enzymes);
-static AjBool silent_checktrans(AjPStr seq,EmbPMatMatch match,
-				AjPRinfo rlp, ajint begin, ajint radj,
-				AjBool rev, ajint end, AjPSilent *res);
-static void silent_fmt_sequence(char* title, AjPStr seq, AjPStr* tailstr,
+static ajint silent_restr_read(AjPList *relist, const AjPStr enzymes);
+static AjPSilent silent_checktrans(const AjPStr seq,const EmbPMatMatch match,
+				const AjPRinfo rlp, ajint begin, ajint radj,
+				AjBool rev, ajint end);
+static void silent_fmt_sequence(const char* title, const AjPStr seq,
+				AjPStr* tailstr,
 				ajint start, AjBool num);
 static void silent_fmt_hits(AjPList hits, AjPFeattable feat,
 			    AjBool silent, AjBool rev);
@@ -123,7 +127,7 @@ int main(int argc, char **argv)
     AjPFeattable feat=NULL;
     AjPStr sstr   = NULL;
 
-    AjPStr sname   = NULL;
+    const AjPStr sname   = NULL;
     AjPStr revcomp = NULL;
     ajint RStotal;
     AjPStr enzymes = NULL;                /* string for RE selection */
@@ -253,10 +257,10 @@ int main(int argc, char **argv)
 **
 ** Undocumented.
 **
-** @param [r] sstr [AjPStr] sequence
-** @param [r] relist [AjPList] restriction enzymes
+** @param [r] sstr [const AjPStr] sequence
+** @param [u] relist [AjPList] restriction enzymes
 ** @param [w] tailstr [AjPStr*] Report tail as a string
-** @param [r] sname [AjPStr] sequence names
+** @param [r] sname [const AjPStr] sequence names
 ** @param [r] RStotal [ajint] number of REs
 ** @param [r] begin [ajint] start position
 ** @param [r] radj [ajint] reverse sequence numbering adjustment
@@ -267,8 +271,9 @@ int main(int argc, char **argv)
 ** @@
 ******************************************************************************/
 
-static AjPList silent_mismatch(AjPStr sstr, AjPList relist, AjPStr* tailstr,
-			       AjPStr sname, ajint RStotal, ajint begin,
+static AjPList silent_mismatch(const AjPStr sstr, AjPList relist,
+			       AjPStr* tailstr,
+			       const AjPStr sname, ajint RStotal, ajint begin,
 			       ajint radj,AjBool rev, ajint end,
 			       AjBool tshow)
 {
@@ -328,16 +333,17 @@ static AjPList silent_mismatch(AjPStr sstr, AjPList relist, AjPStr* tailstr,
 	    continue;
 	}
 	ajStrToUpper(&rlp->site);   /* convert all RS to upper case */
-	ajStrAss(&str,rlp->site);      /* str now holds RS patterns */
+	ajStrAssS(&str,rlp->site);      /* str now holds RS patterns */
 
 	patlist = ajListNew();
-        if(!embPatClassify(&str,&dummy,&dummy,&dummy,&dummy,&dummy,&dummy,0))
+        if(!embPatClassify(str,&str,
+			   &dummy,&dummy,&dummy,&dummy,&dummy,&dummy,0))
 	    continue;
 
 
 	mm = 0;
-	hits=embPatBruteForce(&sstr,&str,ajFalse,ajFalse,&patlist,begin+1,mm,
-                              &sname);
+	hits=embPatBruteForce(sstr,str,ajFalse,ajFalse,patlist,begin+1,mm,
+                              sname);
 
 	if(hits)
 	    while(ajListPop(patlist,(void**)&match))
@@ -345,15 +351,16 @@ static AjPList silent_mismatch(AjPStr sstr, AjPList relist, AjPStr* tailstr,
  	else
         {
 	    mm = 1;
-	    hits = embPatBruteForce(&sstr,&str,ajFalse,ajFalse,&patlist,
-				  begin+1,mm,&sname);
+	    hits = embPatBruteForce(sstr,str,ajFalse,ajFalse,patlist,
+				  begin+1,mm,sname);
 
 	    if(hits)
 		for(i=0;i<hits;++i)
 		{
 		    ajListPop(patlist,(void**)&match);
-		    if(silent_checktrans(sstr,match,rlp,begin,radj,
-					 rev,end,&res))
+		    res = silent_checktrans(sstr,match,rlp,begin,radj,
+					    rev,end);
+		    if (res)
 			ajListPushApp(results,(void *)res);
 		    embMatMatchDel(&match);
          	}
@@ -379,12 +386,12 @@ static AjPList silent_mismatch(AjPStr sstr, AjPList relist, AjPStr* tailstr,
 ** Read restriction enzyme data
 **
 ** @param [w] relist [AjPList*] restriction enzyme data
-** @param [r] enzymes [AjPStr] restriction enzyme data to fetch
+** @param [r] enzymes [const AjPStr] restriction enzyme data to fetch
 ** @return [ajint] number of enzymes read
 ** @@
 ******************************************************************************/
 
-static ajint silent_restr_read(AjPList *relist,AjPStr enzymes)
+static ajint silent_restr_read(AjPList *relist,const AjPStr enzymes)
 {
     EmbPPatRestrict rptr = NULL;
     AjPFile fin = NULL;
@@ -420,7 +427,7 @@ static ajint silent_restr_read(AjPList *relist,AjPStr enzymes)
             isall = ajFalse;
     }
 
-    while(embPatRestrictReadEntry(&rptr,&fin))
+    while(embPatRestrictReadEntry(rptr,fin))
     {
      	if(!isall)
 	{
@@ -462,27 +469,27 @@ static ajint silent_restr_read(AjPList *relist,AjPStr enzymes)
 **
 ** Determine whether silent mutation exists
 **
-** @param [r] seq [AjPStr] sequence
-** @param [r] match [EmbPMatMatch] pattern match
-** @param [r] rlp [AjPRinfo] RE information
+** @param [r] seq [const AjPStr] sequence
+** @param [r] match [const EmbPMatMatch] pattern match
+** @param [r] rlp [const AjPRinfo] RE information
 ** @param [r] begin [ajint] start position
 ** @param [r] radj [ajint] reverse numbering adjustment
 ** @param [r] rev [AjBool] do complement
 ** @param [r] end [ajint] end position
-** @param [w] res [AjPSilent*] Undocumented
-** @return [AjBool] true if silent found
+** @return [AjPSilent] silent mutation object or NULL if not found
 ** @@
 ******************************************************************************/
 
-static AjBool silent_checktrans(AjPStr seq,EmbPMatMatch match,
-				AjPRinfo rlp, ajint begin, ajint radj,
-				AjBool rev, ajint end, AjPSilent *res)
+static AjPSilent silent_checktrans(const AjPStr seq,const EmbPMatMatch match,
+				const AjPRinfo rlp, ajint begin, ajint radj,
+				AjBool rev, ajint end)
 {
-    char *p = NULL;
-    char *q = NULL;
-    char *s = NULL;
+    AjPSilent ret;
+    const char *p = NULL;
+    const char *q = NULL;
+    const char *s = NULL;
     char *t;
-    char *u;
+    const char *u;
     ajint matchpos;
     ajint framep;
 
@@ -497,11 +504,14 @@ static AjBool silent_checktrans(AjPStr seq,EmbPMatMatch match,
     ajint fpos;
     ajint rpos;
     ajint x;
+    AjPStr tstr = NULL;
 
     matchpos = match->start;
     fpos = matchpos;
     rpos=radj-fpos-match->len;
-    t = ajStrStr(seq);
+
+    tstr = ajStrNewS(seq);
+    t = ajStrStrMod(&tstr);
 
     p = t+fpos-(begin+1);
 
@@ -521,23 +531,26 @@ static AjBool silent_checktrans(AjPStr seq,EmbPMatMatch match,
     else
     {
         ajWarn("Possibly corrupt RE file");
-        return ajFalse;
+	ajStrDel(&tstr);
+        return NULL;
     }
 
     if(!rev)                  /* forward strand */
     {
 	if(matchpos+min<0||matchpos+max>end+1)
 	{
-		/*Cut site not in sequence range*/
-		return ajFalse;
+	    /*Cut site not in sequence range*/
+	    ajStrDel(&tstr);
+	    return NULL;
 	}
     }
     else                       /* reverse strand */
     {
 	if(radj-matchpos-1-min>end+1||radj-matchpos-1-max<begin)
 	{
-		/*Cut site not in sequence range*/
-		return ajFalse;
+	    /*Cut site not in sequence range*/
+	    ajStrDel(&tstr);
+	    return NULL;
 	}
     }
 
@@ -571,33 +584,34 @@ static AjBool silent_checktrans(AjPStr seq,EmbPMatMatch match,
 
     t[x] = c;  /* changes mutated base in seq back to original base */
 
-    AJNEW(*res);
-    (*res)->obase = c;
-    (*res)->nbase = rc;
-    (*res)->code  = ajStrNewC(ajStrStr(rlp->code));
-    (*res)->site  = ajStrNewC(ajStrStr(rlp->site));
-    (*res)->seqaa = ajStrNewC(ajStrStr(s1));
-    (*res)->reaa  = ajStrNewC(ajStrStr(s2));
+    AJNEW(ret);
+    ret->obase = c;
+    ret->nbase = rc;
+    ret->code  = ajStrNewC(ajStrStr(rlp->code));
+    ret->site  = ajStrNewC(ajStrStr(rlp->site));
+    ret->seqaa = ajStrNewC(ajStrStr(s1));
+    ret->reaa  = ajStrNewC(ajStrStr(s2));
     if(ajStrMatch(s1,s2))
-	(*res)->issilent = ajTrue;
+	ret->issilent = ajTrue;
     else
-	(*res)->issilent = ajFalse;
+	ret->issilent = ajFalse;
     if(!rev)
     {
-       	(*res)->match = matchpos;
-        (*res)->base  = matchpos+count;
+       	ret->match = matchpos;
+        ret->base  = matchpos+count;
     }
     else
     {
-	(*res)->match = rpos;
-	(*res)->base  = rpos+match->len-1-count;
+	ret->match = rpos;
+	ret->base  = rpos+match->len-1-count;
     }
 
+    ajStrDel(&tstr);
     ajStrDel(&s1);
     ajStrDel(&s2);
     ajTrnDel(&table);
 
-    return ajTrue;
+    return ret;
 }
 
 
@@ -607,18 +621,19 @@ static AjBool silent_checktrans(AjPStr seq,EmbPMatMatch match,
 **
 ** Output sequence information
 **
-** @param [r] seq [AjPStr] sequence
-** @param [w] outf [AjPFile] outfile
+** @param [r] title [const char*] Title (header) string
+** @param [r] seq [const AjPStr] sequence
+** @param [w] tailstr [AjPStr*] Generated footer string
 ** @param [r] start [ajint] start position
 ** @param [r] num [AjBool] Adjust numbering
 ** @@
 ******************************************************************************/
 
-static void silent_fmt_sequence(char* title,
-				AjPStr seq, AjPStr* tailstr, ajint start,
+static void silent_fmt_sequence(const char* title,
+				const AjPStr seq, AjPStr* tailstr, ajint start,
 				AjBool num)
 {
-    char *p;
+    const char *p;
     ajint m;
     ajint i;
     ajint tlen;
@@ -666,8 +681,8 @@ static void silent_fmt_sequence(char* title,
 **
 ** Output silent mutation information
 **
-** @param [r] hits [AjPList] results
-** @param [w] feat [AjPFeattable] Feature table object
+** @param [u] hits [AjPList] results
+** @param [u] feat [AjPFeattable] Feature table object
 ** @param [r] silent [AjBool] Silent mutation
 ** @param [r] rev [AjBool] Reverse direction
 ** @@
@@ -730,9 +745,9 @@ static void silent_fmt_hits(AjPList hits, AjPFeattable feat,
 **
 ** Divide hitlist into separate silent/non-silent lists
 **
-** @param [r] hits [AjPList*] hitlist
-** @param [w] silents [AjPList*] silent hits
-** @param [w] nonsilents [AjPList*] non-silent hits
+** @param [u] hits [AjPList*] hitlist
+** @param [u] silents [AjPList*] silent hits
+** @param [u] nonsilents [AjPList*] non-silent hits
 ** @param [r] allmut [AjBool] do non-silents
 ** @@
 ******************************************************************************/

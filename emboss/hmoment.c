@@ -26,10 +26,11 @@
 
 
 
-static float hmoment_calchm(char *p, int pos, int window, ajint angle);
-static void  hmoment_addgraph(AjPGraph graph, ajint limit, float *x, float *y,
+static float hmoment_calchm(const char *p, int pos, int window, ajint angle);
+static void  hmoment_addgraph(AjPGraph graph, ajint limit,
+			      const float *x, const float *y,
 			      float ymax, ajint colour, ajint angle,
-			      ajint window, float baseline, char *sname);
+			      ajint window, float baseline, const char *sname);
 
 
 
@@ -69,14 +70,14 @@ int main(int argc, char **argv)
     float *ya = NULL;
     float *yb = NULL;
 
-    char *p;
-    char *sname;
+    const char *p;
+    const char *sname;
 
 
     ajGraphInit("hmoment", argc, argv);
 
     seqall    = ajAcdGetSeqall("seqall");
-    plot      = ajAcdGetBool("plot");
+    plot      = ajAcdGetToggle("plot");
     window    = ajAcdGetInt("window");
     aangle    = ajAcdGetInt("aangle");
     bangle    = ajAcdGetInt("bangle");
@@ -196,34 +197,35 @@ int main(int argc, char **argv)
 **
 ** Undocumented.
 **
-** @param [?] graph [AjPGraph] Undocumented
-** @param [?] limit [ajint] Undocumented
-** @param [?] x [float*] Undocumented
-** @param [?] y [float*] Undocumented
-** @param [?] ymax [float] Undocumented
-** @param [?] colour [ajint] Undocumented
-** @param [?] angle [ajint] Undocumented
-** @param [?] window [ajint] Undocumented
-** @param [?] baseline [float] Undocumented
-** @param [?] sname [char*] Sequence name
+** @param [u] graph [AjPGraph] Undocumented
+** @param [r] limit [ajint] Undocumented
+** @param [r] x [const float*] Undocumented
+** @param [r] y [const float*] Undocumented
+** @param [r] ymax [float] Undocumented
+** @param [r] colour [ajint] Undocumented
+** @param [r] angle [ajint] Undocumented
+** @param [r] window [ajint] Undocumented
+** @param [r] baseline [float] Undocumented
+** @param [r] sname [const char*] Sequence name
 ** @@
 ******************************************************************************/
 
 
-static void hmoment_addgraph(AjPGraph graph, ajint limit, float *x, float *y,
+static void hmoment_addgraph(AjPGraph graph, ajint limit,
+			     const float *x, const float *y,
 			     float ymax, ajint colour, ajint angle,
-			     ajint window, float baseline, char *sname)
+			     ajint window, float baseline, const char *sname)
 {
     ajint i;
 
-    AjPGraphData data;
+    AjPGraphPlpData data;
     AjPStr st = NULL;
 
     if(limit<1)
 	return;
 
 
-    data = ajGraphxyDataNewI(limit);
+    data = ajGraphPlpDataNewI(limit);
 
     st = ajStrNew();
 
@@ -233,24 +235,24 @@ static void hmoment_addgraph(AjPGraph graph, ajint limit, float *x, float *y,
 	data->y[i] = y[i];
     }
 
-    ajGraphxySetColour(data,colour);
-    ajGraphDataxySetMaxMin(data,x[0],x[limit-1],0.,ymax);
-    ajGraphDataxySetMaxima(data,x[0],x[limit-1],0.,ymax);
+    ajGraphPlpDataSetColour(data,colour);
+    ajGraphPlpDataSetMaxMin(data,x[0],x[limit-1],0.,ymax);
+    ajGraphPlpDataSetMaxima(data,x[0],x[limit-1],0.,ymax);
 
-    ajGraphDataxySetTypeC(data,"2D Plot Float");
+    ajGraphPlpDataSetTypeC(data,"2D Plot Float");
 
     ajFmtPrintS(&st,"HMOMENT of %s. Window:%d",sname,window);
-    ajGraphxyDataSetTitle(data,st);
+    ajGraphPlpDataSetTitle(data,st);
 
     ajFmtPrintS(&st,"uH (%d deg)",angle);
-    ajGraphxyDataSetYtitle(data,st);
+    ajGraphPlpDataSetYTitle(data,st);
 
     ajFmtPrintS(&st,"Position (w=%d)",window);
-    ajGraphxyDataSetXtitle(data,st);
+    ajGraphPlpDataSetXTitle(data,st);
 
-    ajGraphDataObjAddLine(data,x[0],baseline,x[limit-1],baseline,BLUE);
+    ajGraphPlpDataAddLine(data,x[0],baseline,x[limit-1],baseline,BLUE);
 
-    ajGraphxyAddGraph(graph,data);
+    ajGraphDataAdd(graph,data);
 
     ajStrDel(&st);
 
@@ -264,16 +266,16 @@ static void hmoment_addgraph(AjPGraph graph, ajint limit, float *x, float *y,
 **
 ** Undocumented.
 **
-** @param [?] p [char*] Undocumented
-** @param [?] pos [int] Undocumented
-** @param [?] window [int] Undocumented
-** @param [?] angle [ajint] Undocumented
+** @param [r] p [const char*] Undocumented
+** @param [r] pos [int] Undocumented
+** @param [r] window [int] Undocumented
+** @param [r] angle [ajint] Undocumented
 ** @return [float] Undocumented
 ** @@
 ******************************************************************************/
 
 
-static float hmoment_calchm(char *p, int pos, int window, ajint angle)
+static float hmoment_calchm(const char *p, int pos, int window, ajint angle)
 {
     ajint  i;
     double h;

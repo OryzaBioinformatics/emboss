@@ -79,7 +79,7 @@ int main(int argc, char **argv)
 ** Catches duplicate names, and builds a new unique name for this run
 **
 ** @param [w] table [AjPTable] Table of names used so far
-** @param [r] seq [AjPSeq] Sequence object
+** @param [u] seq [AjPSeq] Sequence object, possibly renamed
 ** @return [AjPStr] Pointer to old name, or NULL if unchanged
 ******************************************************************************/
 

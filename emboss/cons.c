@@ -50,7 +50,7 @@ int main(int argc, char **argv)
     ajint   identity;
     float fplural;
     float setcase;
-    char  *p;
+    const char  *p;
     AjPSeqset seqset;
     AjPSeqout seqout;
     AjPSeq    seqo;

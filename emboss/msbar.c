@@ -26,15 +26,18 @@
 
 
 
-static void msbar_blockmutn(AjPStr *str, AjBool isnuc, AjPStr *blocklist,
+static void msbar_blockmutn(AjPStr *str, AjBool isnuc,
+			    AjPStr const *blocklist,
 			    ajint min, ajint max, AjBool inframe);
-static void msbar_codonmutn(AjPStr *str, AjBool isnuc, AjPStr *codonlist,
+static void msbar_codonmutn(AjPStr *str, AjBool isnuc,
+			    AjPStr const *codonlist,
 			    AjBool inframe);
-static void msbar_pointmutn(AjPStr *str, AjBool isnuc, AjPStr *pointlist);
+static void msbar_pointmutn(AjPStr *str, AjBool isnuc,
+			    AjPStr const *pointlist);
 static void msbar_Insert(AjPStr *str, AjBool isnuc, ajint start, ajint end);
 static void msbar_Move(AjPStr *str, ajint start, ajint end, ajint destination);
 static void msbar_Duplicate(AjPStr *str, ajint start, ajint end);
-static AjBool msbar_Unlike(AjPStr str, AjPSeqall other);
+static AjBool msbar_Unlike(const AjPStr str, AjPSeqall other);
 
 
 
@@ -110,7 +113,7 @@ int main(int argc, char **argv)
         for(try=0; try<attempts; try++)
 	{
 	    /* get a copy of the sequence string */
-	    ajStrAss(&str, ajSeqStr(seq));
+	    ajStrAssS(&str, ajSeqStr(seq));
 
 	    /* do the mutation operations */
 	    for(i=0; i<count; i++)
@@ -150,14 +153,14 @@ int main(int argc, char **argv)
 **
 ** @param [u] str [AjPStr*] sequence to mutate
 ** @param [r] isnuc [AjBool] TRUE if sequence is nucleic
-** @param [r] blocklist [AjPStr*] Types of block mutations to perform
+** @param [r] blocklist [AjPStr const *] Types of block mutations to perform
 ** @param [r] min [ajint] minimum size of block
 ** @param [r] max [ajint] maximum size of block
 ** @param [r] inframe [AjBool] mutate blocks preserving codon frame if TRUE
 ** @@
 ******************************************************************************/
 
-static void msbar_blockmutn(AjPStr *str, AjBool isnuc, AjPStr *blocklist,
+static void msbar_blockmutn(AjPStr *str, AjBool isnuc, AjPStr const *blocklist,
 			    ajint min, ajint max, AjBool inframe)
 {
     ajint i = -1;
@@ -266,12 +269,12 @@ static void msbar_blockmutn(AjPStr *str, AjBool isnuc, AjPStr *blocklist,
 **
 ** @param [u] str [AjPStr*] Sequence to mutate
 ** @param [r] isnuc [AjBool] TRUE if sequence is nucleic
-** @param [r] codonlist [AjPStr*] Types of codon mutations to perform
+** @param [r] codonlist [AjPStr const *] Types of codon mutations to perform
 ** @param [r] inframe [AjBool] mutate blocks preserving codon frame if TRUE
 ** @@
 ******************************************************************************/
 
-static void msbar_codonmutn(AjPStr *str, AjBool isnuc, AjPStr *codonlist,
+static void msbar_codonmutn(AjPStr *str, AjBool isnuc, AjPStr const *codonlist,
 			    AjBool inframe)
 {
     ajint rpos;
@@ -368,11 +371,11 @@ static void msbar_codonmutn(AjPStr *str, AjBool isnuc, AjPStr *codonlist,
 **
 ** @param [u] str [AjPStr*] sequence to mutate
 ** @param [r] isnuc [AjBool] TRUE if sequence is nucleic
-** @param [r] pointlist [AjPStr*] Types of point mutations to perform
+** @param [r] pointlist [AjPStr const *] Types of point mutations to perform
 ** @@
 ******************************************************************************/
 
-static void msbar_pointmutn(AjPStr *str, AjBool isnuc, AjPStr *pointlist)
+static void msbar_pointmutn(AjPStr *str, AjBool isnuc, AjPStr const *pointlist)
 {
     ajint i = -1;
     ajint rpos, rpos2;
@@ -505,7 +508,7 @@ static void msbar_Move(AjPStr *str, ajint start, ajint end, ajint destination)
 {
     AjPStr mov = NULL;
 
-    ajStrAss(&mov, *str);
+    ajStrAssS(&mov, *str);
     ajStrSub(&mov, start, end);
     ajStrInsert(str, destination, mov);
     ajStrDel(&mov);
@@ -540,13 +543,13 @@ static void msbar_Duplicate(AjPStr *str, ajint start, ajint end)
 **
 ** Check that the sequence is unlike any other input sequence
 **
-** @param [r] str [AjPStr] sequence to check
-** @param [r] other [AjPSeqall] set of sequences to check against
+** @param [r] str [const AjPStr] sequence to check
+** @param [u] other [AjPSeqall] set of sequences to check against
 ** @return [AjBool] True if unlike any other sequence
 ** @@
 ******************************************************************************/
 
-static AjBool msbar_Unlike(AjPStr str, AjPSeqall other)
+static AjBool msbar_Unlike(const AjPStr str, AjPSeqall other)
 {
     AjPSeq nextother;
 

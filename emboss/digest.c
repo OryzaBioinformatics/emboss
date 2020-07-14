@@ -26,10 +26,11 @@
 
 
 
-static void digest_report_hits(AjPReport report, AjPSeq seq,
+static void digest_report_hits(AjPReport report, const AjPSeq seq,
 			       AjPFeattable TabRpt,
-			       AjPList l, ajint be, char *s);
-static void digest_print_hits(AjPList l, AjPFile outf, ajint be, char *s);
+			       AjPList l, ajint be, const char *s);
+static void digest_print_hits(AjPList l, AjPFile outf, ajint be,
+			      const char *s);
 
 
 
@@ -61,7 +62,6 @@ int main(int argc, char **argv)
     AjPStr tmpStr = NULL;
     AjPList  l;
     AjPList  pa;
-    AjPStr   datafn = NULL;
     AjPFile mfptr   = NULL;
 
     ajint     ncomp;
@@ -76,7 +76,7 @@ int main(int argc, char **argv)
     overlap     = ajAcdGetBool("overlap");
     allpartials = ajAcdGetBool("allpartials");
     report      = ajAcdGetReport("outfile");
-    datafn      = ajAcdGetString("aadata");
+    mfptr       = ajAcdGetDatafile("aadata");
 
     /* obsolete. Can be uncommented in acd file and here to reuse */
 
@@ -96,10 +96,6 @@ int main(int argc, char **argv)
     rname = ajStrNew();
     
     TabRpt = ajFeattableNewSeq(a);
-    
-    ajFileDataNew(datafn, &mfptr);
-    if(!mfptr)
-	ajFatal("%S  not found\n",datafn);
     
     embPropAminoRead(mfptr);
     
@@ -197,16 +193,16 @@ int main(int argc, char **argv)
 **
 ** Undocumented.
 **
-** @param [?] l [AjPList] Undocumented
-** @param [?] outf [AjPFile] Undocumented
-** @param [?] be [ajint] Undocumented
-** @param [?] s [char*] Undocumented
+** @param [u] l [AjPList] Undocumented
+** @param [u] outf [AjPFile] Undocumented
+** @param [r] be [ajint] Undocumented
+** @param [r] s [const char*] Undocumented
 ** @@
 ******************************************************************************/
 
 
 
-static void digest_print_hits(AjPList l, AjPFile outf, ajint be, char *s)
+static void digest_print_hits(AjPList l, AjPFile outf, ajint be, const char *s)
 {
     EmbPPropFrag fr;
     AjPStr t;
@@ -252,17 +248,17 @@ static void digest_print_hits(AjPList l, AjPFile outf, ajint be, char *s)
 ** Undocumented.
 **
 ** @param [w] report [AjPReport] report
-** @param [r] seq [AjPSeq] sequence object
-** @param [w] TabRpt [AjPFeattable] feature table object to store results
-** @param [?] l [AjPList] Undocumented
-** @param [?] be [ajint] Undocumented
-** @param [?] s [char*] Undocumented
+** @param [r] seq [const AjPSeq] sequence object
+** @param [u] TabRpt [AjPFeattable] feature table object to store results
+** @param [u] l [AjPList] Undocumented
+** @param [r] be [ajint] Undocumented
+** @param [r] s [const char*] Undocumented
 ** @@
 ******************************************************************************/
 
-static void digest_report_hits(AjPReport report, AjPSeq seq,
+static void digest_report_hits(AjPReport report, const AjPSeq seq,
 			       AjPFeattable TabRpt, AjPList l, ajint be,
-			       char* s)
+			       const char* s)
 {
     AjPFeature gf = NULL;
     EmbPPropFrag fr;

@@ -25,14 +25,14 @@
 
 
 
-static void seqmatchall_matchListPrint(void **x,void *cl);
-static void seqmatchall_listPrint(AjPFile outfile, AjPList list);
+static void seqmatchall_matchListPrint(void *x,void *cl);
+static void seqmatchall_listPrint(AjPAlign align, const AjPList list);
 
 
 
 
-static AjPSeq seq2;
-static AjPSeq seq1;
+static const AjPSeq seq2;
+static const AjPSeq seq1;
 
 ajint statwordlen;
 
@@ -50,7 +50,7 @@ int main(int argc, char **argv)
     AjPTable seq1MatchTable = 0;
     AjPList matchlist;
     AjPSeqset seqset;
-    AjPFile outfile;
+    AjPAlign align = NULL;
 
     ajint i;
     ajint j;
@@ -60,8 +60,9 @@ int main(int argc, char **argv)
 
     seqset      = ajAcdGetSeqset("sequence1");
     statwordlen = ajAcdGetInt("wordsize");
-    outfile     = ajAcdGetOutfile("outfile");
+    align    = ajAcdGetAlign("outfile");
 
+    /* ajAlignSetExternal(align, ajTrue); */
     embWordLength(statwordlen);
 
     for(i=0;i<ajSeqsetSize(seqset);i++)
@@ -79,18 +80,22 @@ int main(int argc, char **argv)
 		    {
 			matchlist = embWordBuildMatchTable(&seq1MatchTable,
 							   seq2, ajTrue);
-			if(matchlist)
+			if (ajListLength(matchlist))
 			{
-			    seqmatchall_listPrint(outfile, matchlist);
-			    /* free the match structures */
-			    embWordMatchListDelete(&matchlist);
+			    seqmatchall_listPrint(align, matchlist);
+			    ajAlignWrite(align);
+			    ajAlignReset(align);
 			}
+			/* free the match structures */
+			embWordMatchListDelete(&matchlist);
 		    }
 		}
 	    }
-	    embWordFreeTable(seq1MatchTable); /* free table of words */
+	    embWordFreeTable(&seq1MatchTable); /* free table of words */
 	}
     }
+
+    ajAlignClose(align);
 
     ajExit();
 
@@ -104,24 +109,44 @@ int main(int argc, char **argv)
 **
 ** Undocumented.
 **
-** @param [r] x [void**] Undocumented
+** @param [r] x [void*] Undocumented
 ** @param [r] cl [void*] Undocumented
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-static void seqmatchall_matchListPrint(void **x,void *cl)
+static void seqmatchall_matchListPrint(void *x,void *cl)
 {
     EmbPWordMatch p;
-    AjPFile outfile;
+    AjPAlign align;
+    AjPStr sub1=NULL;
+    AjPStr sub2=NULL;
 
-    p = (EmbPWordMatch)*x;
-    outfile = (AjPFile) cl;
-
+    p = (EmbPWordMatch)x;
+    align = (AjPAlign) cl;
+/*
     ajFmtPrintF(outfile, "%d  %d %d %s %d %d %s\n",
 		(*p).length,
 		(*p).seq1start+1,(*p).seq1start+(*p).length,seq1->Name->Ptr,
 		(*p).seq2start+1,(*p).seq2start+(*p).length,seq2->Name->Ptr);
+*/
+    ajStrAssSub(&sub1, ajSeqStr(p->sequence),
+		p->seq1start+1,
+		p->seq1start+p->length);
+
+    ajStrAssSub(&sub2, ajSeqStr(p->sequence),
+		p->seq2start+1,
+		p->seq2start+p->length);
+
+    ajAlignDefineCC(align, ajStrStr(sub1), ajStrStr(sub2),
+		    seq1->Name->Ptr, seq2->Name->Ptr);
+    ajAlignSetScoreI(align, p->length);
+    ajAlignSetSubRange(align,
+       p->seq1start, p->seq1start + 1, p->seq1start + p->length,
+       p->seq2start, p->seq2start + 1, p->seq2start + p->length);
+
+    ajStrDel(&sub1);
+    ajStrDel(&sub2);
 
     return;
 }
@@ -133,14 +158,14 @@ static void seqmatchall_matchListPrint(void **x,void *cl)
 **
 ** Undocumented.
 **
-** @param [?] outfile [AjPFile] Undocumented
-** @param [?] list [AjPList] Undocumented
+** @param [u] align [AjPAlign] Alignment object
+** @param [r] list [const AjPList] Undocumented
 ** @@
 ******************************************************************************/
 
-static void seqmatchall_listPrint(AjPFile outfile, AjPList list)
+static void seqmatchall_listPrint(AjPAlign align, const AjPList list)
 {
-    ajListMap(list,seqmatchall_matchListPrint, outfile);
+    ajListMapRead(list,seqmatchall_matchListPrint, align);
 
     return;
 }

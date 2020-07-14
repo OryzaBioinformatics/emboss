@@ -25,9 +25,9 @@
 
 
 
-static void fuzzpro_report_hits(AjPList *l, ajint hits,
+static void fuzzpro_report_hits(AjPList l, ajint hits,
 				AjPReport report,
-				AjPFeattable tab, AjPSeq seq);
+				AjPFeattable tab, const AjPSeq seq);
 
 
 
@@ -97,9 +97,9 @@ int main(int argc, char **argv)
     plen = ajStrLen(pattern);
 
     ajStrAssC(&opattern,ajStrStr(pattern));
-    if(!(type=embPatGetType(&pattern,mismatch,1,&m,&amino,&carboxyl)))
+    if(!(type=embPatGetType(opattern,&pattern,mismatch,1,&m,&amino,&carboxyl)))
 	ajFatal("Illegal pattern");
-    embPatCompile(type,pattern,opattern,&plen,&buf,off,&sotable,&solimit,&m,
+    embPatCompile(type,pattern,&plen,&buf,off,&sotable,&solimit,&m,
 		  &regexp,&skipm,mismatch);
 
     text = ajStrNew();
@@ -114,14 +114,14 @@ int main(int argc, char **argv)
 	ajStrAssSubC(&text,ajSeqChar(seq),begin-1,end-1);
 	ajStrToUpper(&text);
 
-	embPatFuzzSearch(type,begin,pattern,opattern,seqname,text,&l,
+	embPatFuzzSearch(type,begin,pattern,seqname,text,l,
 			 plen,mismatch,amino,carboxyl,buf,off,sotable,
 			 solimit,regexp,skipm,&hits,m,&tidy);
 
 	if(hits)
 	{
 	    tab = ajFeattableNewProt(seqname);
-	    fuzzpro_report_hits(&l,hits,report, tab, seq);
+	    fuzzpro_report_hits(l,hits,report, tab, seq);
 	    ajFeattableDel(&tab);
 	}
 
@@ -156,17 +156,17 @@ int main(int argc, char **argv)
 **
 ** Undocumented.
 **
-** @param [?] l [AjPList*] Undocumented
-** @param [?] hits [ajint] Undocumented
-** @param [?] report [AjPReport] Report object
-** @param [?] tab [AjPFeattable] Feature table
-** @param [?] seq [AjPSeq] Sequence
+** @param [u] l [AjPList] Undocumented
+** @param [r] hits [ajint] Undocumented
+** @param [u] report [AjPReport] Report object
+** @param [u] tab [AjPFeattable] Feature table
+** @param [r] seq [const AjPSeq] Sequence
 ** @@
 ******************************************************************************/
 
-static void fuzzpro_report_hits(AjPList *l, ajint hits,
+static void fuzzpro_report_hits(AjPList l, ajint hits,
 				AjPReport report,
-				AjPFeattable tab, AjPSeq seq)
+				AjPFeattable tab, const AjPSeq seq)
 {
     ajint i;
     EmbPMatMatch m;
@@ -182,11 +182,11 @@ static void fuzzpro_report_hits(AjPList *l, ajint hits,
 
     s = ajStrNew();
 
-    ajListReverse(*l);
+    ajListReverse(l);
 
     for(i=0;i<hits;++i)
     {
-	ajListPop(*l,(void **)&m);
+	ajListPop(l,(void **)&m);
         gf = ajFeatNew(tab, NULL, fthit,
 		       m->start,
 		       m->start + m->len - 1,

@@ -24,10 +24,12 @@
 
 
 
-static void listor_Output(AjPFile list, ajint Operator, AjPSeqset seq1,
-	AjPSeqset seq2, ajint *hits1, ajint *hits2, ajint n1, ajint n2);
+static void listor_Output(AjPFile list, ajint Operator,
+			  const AjPSeqset seq1, const AjPSeqset seq2,
+			  const ajint *hits1, const ajint *hits2,
+			  ajint n1, ajint n2);
 
-static void listor_Write(AjPFile list, AjPSeqset seqset, ajint i);
+static void listor_Write(AjPFile list, const AjPSeqset seqset, ajint i);
 
 
 
@@ -186,20 +188,21 @@ int main(int argc, char **argv)
 **
 ** Writes out USA of a sequence to a file
 **
-** @param [r] list [AjPFile] Output file
+** @param [u] list [AjPFile] Output file
 ** @param [r] Operator [ajint] logical operation to perform
-** @param [r] seq1 [AjPSeqset] first seqset
-** @param [r] seq2 [AjPSeqset] second seqset
-** @param [r] hits1 [ajint *] array of hits to seq1
-** @param [r] hits2 [ajint *] array of hits to seq2
+** @param [r] seq1 [const AjPSeqset] first seqset
+** @param [r] seq2 [const AjPSeqset] second seqset
+** @param [r] hits1 [const ajint *] array of hits to seq1
+** @param [r] hits2 [const ajint *] array of hits to seq2
 ** @param [r] n1 [ajint] number of sequences in seq1
 ** @param [r] n2 [ajint] number of sequences in seq2
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-static void listor_Output(AjPFile list, ajint Operator, AjPSeqset seq1,
-			  AjPSeqset seq2, ajint *hits1, ajint *hits2,
+static void listor_Output(AjPFile list, ajint Operator,
+			  const AjPSeqset seq1, const AjPSeqset seq2,
+			  const ajint *hits1, const ajint *hits2,
 			  ajint n1, ajint n2)
 {
 
@@ -248,14 +251,14 @@ static void listor_Output(AjPFile list, ajint Operator, AjPSeqset seq1,
 **
 ** Writes out USA of a sequence to a file
 **
-** @param [r] list [AjPFile] Output file
-** @param [r] seqset [AjPSeqset] seqset
+** @param [u] list [AjPFile] Output file
+** @param [r] seqset [const AjPSeqset] seqset
 ** @param [r] i [ajint] index into seqset for the sequence to write
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-static void listor_Write(AjPFile list, AjPSeqset seqset, ajint i)
+static void listor_Write(AjPFile list, const AjPSeqset seqset, ajint i)
 {
     ajFmtPrintF(list, "%S\n", ajSeqGetUsa(ajSeqsetGetSeq(seqset, i)));
 

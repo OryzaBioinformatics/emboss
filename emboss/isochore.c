@@ -43,7 +43,8 @@ typedef struct AjSIntarr
 {
     ajint Size;
     ajint* Array;
-} AjOIntarr, *AjPIntarr;
+} AjOIntarr;
+#define AjPIntarr AjOIntarr*
 
 
 
@@ -63,7 +64,8 @@ typedef struct AjSFltarr
 {
     ajint Size;
     float* Array;
-} AjOFltarr, *AjPFltarr;
+} AjOFltarr;
+#define AjPFltarr AjOFltarr*
 
 
 
@@ -73,8 +75,7 @@ static AjPFltarr isochore_FltarrNew0(size_t size);
 
 
 
-/* @program isochore **********************************************************
-**
+/* @prog isochore *************************************************************
 **
 ** Calculates the G+C content of a DNA sequence
 ** by sliding a window of size "iwin" in increments of "ishift" bases
@@ -96,21 +97,14 @@ static AjPFltarr isochore_FltarrNew0(size_t size);
 ******************************************************************************/
 
 
-/* @prog isochore *************************************************************
-**
-** Plots isochores in large DNA sequences
-**
-******************************************************************************/
-
 int main(int argc, char **argv)
 {
-
     AjPSeq seq;
     AjPFile out;
     AjPFltarr results;
 
     AjPGraph plot;
-    AjPGraphData graphdata;
+    AjPGraphPlpData graphdata;
 
     ajint iwin;
     ajint ishift;
@@ -119,7 +113,7 @@ int main(int argc, char **argv)
     ajint k;
     ajint ipos;
     ajint isize;
-    char *sq;
+    const char *sq;
     ajint igc;
     ajint imax;
     ajint ibeg;
@@ -188,21 +182,21 @@ int main(int argc, char **argv)
 
     /* create the graph */
 
-    graphdata = ajGraphxyDataNew();
+    graphdata = ajGraphPlpDataNew();
 
-    ajGraphDataxyMaxMin(results->Array,isize,&amin,&amax);
+    ajGraphArrayMaxMin(results->Array,isize,&amin,&amax);
 
-    ajGraphDataxySetMaxima(graphdata,(float)ipos,(float)(ipos+(ishift*isize)),
+    ajGraphPlpDataSetMaxima(graphdata,(float)ipos,(float)(ipos+(ishift*isize)),
 			   amin,amax);
-    ajGraphDataxySetMaxMin(graphdata,(float)ipos,(float)(ipos+(ishift*isize)),
+    ajGraphPlpDataSetMaxMin(graphdata,(float)ipos,(float)(ipos+(ishift*isize)),
 			   amin,amax);
-    ajGraphDataxySetTypeC(graphdata,"2D Plot");
-    ajGraphxyDataSetTitleC(graphdata,"");
+    ajGraphPlpDataSetTypeC(graphdata,"2D Plot");
+    ajGraphPlpDataSetTitleC(graphdata,"");
 
 
 
-    ajGraphxyAddGraph(plot,graphdata);
-    ajGraphxyAddDataCalcPtr(graphdata, isize,(float)(ipos),(float)ishift,
+    ajGraphDataAdd(plot,graphdata);
+    ajGraphPlpDataCalcXY(graphdata, isize,(float)(ipos),(float)ishift,
 			    results->Array);
 
 
@@ -244,7 +238,7 @@ int main(int argc, char **argv)
 **
 ** Undocumented.
 **
-** @param [?] size [size_t] Undocumented
+** @param [r] size [size_t] Undocumented
 ** @return [AjPFltarr] Undocumented
 ** @@
 ******************************************************************************/

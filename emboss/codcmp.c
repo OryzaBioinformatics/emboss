@@ -68,8 +68,8 @@ int main(int argc, char **argv)
         }
 
     ajFmtPrintF(outf,"# CODCMP codon usage table comparison\n");
-    ajFmtPrintF(outf,"# %s vs %s\n\n",ajStrStr(first->name),
-                ajStrStr(second->name));
+    ajFmtPrintF(outf,"# %s vs %s\n\n",ajCodGetNameC(first),
+                ajCodGetNameC(second));
 
     if(unused<64)
     {

@@ -18,9 +18,7 @@ int main (int argc, char **argv)
     char strand   = '+';
     ajint frame   = 0;
     AjBool sortbytype;
-    AjBool dictionary;
     AjBool sortbystart;
-    AjBool tracedict;
     AjPFeature feature;
     AjPFeattabOut output = NULL;
     ajint i;
@@ -28,13 +26,9 @@ int main (int argc, char **argv)
 
     embInit("demofeatures", argc, argv);
 
-    output      = ajAcdGetFeatout("featout");
-    dictionary  = ajAcdGetBool("dictionary");
+    output      = ajAcdGetFeatout("outfeat");
     sortbytype  = ajAcdGetBool("typesort");
     sortbystart = ajAcdGetBool("startsort");
-    tracedict   = ajAcdGetBool("tracedict");
-
-    /* first read the dictionary if one is to be used */
 
     ajStrAssC(&name,"seq1");
 

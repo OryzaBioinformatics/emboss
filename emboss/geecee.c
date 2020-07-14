@@ -36,7 +36,7 @@ int main(int argc, char **argv)
 
     AjPSeq seq;
     AjPSeqall seqall;
-    AjPStr seqstr;
+    const AjPStr seqstr;
     AjPFile outf;
     ajint len;
     float pgc;
@@ -52,7 +52,7 @@ int main(int argc, char **argv)
 	ajSeqTrim(seq);
 	seqstr = ajSeqStr(seq);
 	len    = ajSeqLen(seq);
-	pgc    = ajMeltGC(&seqstr,len); /* forward strand for now... */
+	pgc    = ajMeltGC(seqstr,len); /* forward strand for now... */
 
 	ajFmtPrintF(outf, "%-12s %5.2f\n", ajSeqName(seq), pgc);
     }

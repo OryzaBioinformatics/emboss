@@ -345,12 +345,13 @@ ajint pamh1[MAXSQ];		/* used for kfact replacement */
 
 
 static void garnier_report(AjPReport report, AjPFeattable TabRpt,
-			   AjPSeq seqobj,
+			   const AjPSeq seqobj,
 			   ajint from, ajint to, char *seq,
 			   ajint begin, ajint Idc);
-static void garnier_do(AjPFile outf, ajint s, ajint len, char *seq, char *name,
+static void garnier_do(AjPFile outf, ajint s, ajint len,
+		       char *seq, const char *name,
 		       ajint begin, ajint Idc);
-static void garnier_makemap (char *input, ajint *map, ajint n);
+static void garnier_makemap (const char *input, ajint *map, ajint n);
 
 
 
@@ -397,15 +398,16 @@ int main(int argc, char **argv)
 	ajStrToUpper(&strand);
 
 	ajStrAssSubC(&substr,ajStrStr(strand),begin-1,end-1);
-
 	len = ajStrLen(substr);
 
 	garnier_report(report, TabRpt, seq, 1, len,
-		       ajStrStr(substr),begin-1,Idc);
+		       ajStrStrMod(&substr),begin-1,Idc);
 	if(outf)
+	{
+	    ajStrAssSubC(&substr,ajStrStr(strand),begin-1,end-1);
 	    garnier_do(outf,0,len,
-		       ajStrStr(substr),ajSeqName(seq),begin-1,Idc);
-
+		       ajStrStrMod(&substr),ajSeqName(seq),begin-1,Idc);
+	}
 	ajStrDel(&strand);
 
 	ajReportWrite(report, TabRpt, seq);
@@ -432,19 +434,19 @@ int main(int argc, char **argv)
 **
 ** Undocumented.
 **
-** @param [?] outf [AjPFile] Undocumented
-** @param [?] from [ajint] Undocumented
-** @param [?] to [ajint] Undocumented
-** @param [?] seq [char*] Undocumented
-** @param [?] name [char*] Undocumented
-** @param [?] begin [ajint] Undocumented
-** @param [?] Idc [ajint] Undocumented
+** @param [u] outf [AjPFile] Undocumented
+** @param [r] from [ajint] Undocumented
+** @param [r] to [ajint] Undocumented
+** @param [u] seq [char*] Undocumented
+** @param [r] name [const char*] Undocumented
+** @param [r] begin [ajint] Undocumented
+** @param [r] Idc [ajint] Undocumented
 ** @@
 ******************************************************************************/
 
 
 static void garnier_do(AjPFile outf, ajint from, ajint to, char *seq,
-		       char *name, ajint begin, ajint Idc)
+		       const char *name, ajint begin, ajint Idc)
 {
     char *refstr="\n Please cite:\n Garnier, Osguthorpe and Robson (1978)"
       " J. Mol. Biol. 120:97-120\n";
@@ -608,19 +610,19 @@ static void garnier_do(AjPFile outf, ajint from, ajint to, char *seq,
 **
 ** Undocumented.
 **
-** @param [?] report [AjPReport] Undocumented
-** @param [?] TabRpt [AjPFeattable] Undocumented
-** @param [?] seqobj [AjPSeq] Undocumented
-** @param [?] from [ajint] Undocumented
-** @param [?] to [ajint] Undocumented
-** @param [?] seq [char*] Undocumented
-** @param [?] begin [ajint] Undocumented
-** @param [?] Idc [ajint] Undocumented
+** @param [u] report [AjPReport] Undocumented
+** @param [u] TabRpt [AjPFeattable] Undocumented
+** @param [r] seqobj [const AjPSeq] Undocumented
+** @param [r] from [ajint] Undocumented
+** @param [r] to [ajint] Undocumented
+** @param [w] seq [char*] Undocumented
+** @param [r] begin [ajint] Undocumented
+** @param [r] Idc [ajint] Undocumented
 ** @@
 ******************************************************************************/
 
 static void garnier_report(AjPReport report, AjPFeattable TabRpt,
-			   AjPSeq seqobj,
+			   const AjPSeq seqobj,
 			   ajint from, ajint to, char *seq,
 			   ajint begin, ajint Idc)
 {
@@ -831,13 +833,13 @@ static void garnier_report(AjPReport report, AjPFeattable TabRpt,
 **
 ** Undocumented.
 **
-** @param [?] input [char*] Undocumented
-** @param [?] map [ajint*] Undocumented
-** @param [?] n [ajint] Undocumented
+** @param [r] input [const char*] Undocumented
+** @param [w] map [ajint*] Undocumented
+** @param [r] n [ajint] Undocumented
 ** @@
 ******************************************************************************/
 
-static void garnier_makemap(char *input, ajint *map, ajint n)
+static void garnier_makemap(const char *input, ajint *map, ajint n)
 {
     ajint i;
 

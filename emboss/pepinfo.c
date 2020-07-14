@@ -31,17 +31,20 @@
 
 
 
-static void pepinfo_plotHistInt2(AjPHist hist, AjPSeq seq,
-				 ajint * results, ajint hist_num,
-				 char* header, char* xtext, char * ytext);
-static void pepinfo_plotGraph2Float(AjPGraph graphs, AjPSeq seq,
-				    float * results, char* title_text,
-				    char * xtext, char * ytext,
+static void pepinfo_plotHistInt2(AjPHist hist, const AjPSeq seq,
+				 const ajint * results, ajint hist_num,
+				 const char* header,
+				 const char* xtext, const char * ytext);
+static void pepinfo_plotGraph2Float(AjPGraph graphs, const AjPSeq seq,
+				    const float * results,
+				    const char* title_text,
+				    const char * xtext, const char * ytext,
 				    ajint plotcolour);
-static void pepinfo_printFloatResults(AjPFile outfile, AjPSeq seq,
-				      float * results, char* header);
-static void pepinfo_printIntResults(AjPFile outfile, AjPSeq seq,
-				    ajint * results, char* header);
+static void pepinfo_printFloatResults(AjPFile outfile, const AjPSeq seq,
+				      const float * results,
+				      const char* header);
+static void pepinfo_printIntResults(AjPFile outfile, const AjPSeq seq,
+				    const ajint* results, const char* header);
 
 
 
@@ -73,8 +76,8 @@ int main(int argc, char **argv)
     AjPSeq inseq;
     AjPFile outfile;
     ajint hwindow;
-    AjPStr aa_properties;
-    AjPStr aa_hydropathy;
+    AjPFile aa_properties;
+    AjPFile aa_hydropathy;
 
     AjBool do_seq;
     AjBool do_general;
@@ -151,8 +154,8 @@ int main(int argc, char **argv)
     do_general    = ajAcdGetBool("generalplot");
     do_hydropathy = ajAcdGetBool("hydropathyplot");
 
-    aa_properties = ajAcdGetString("aaproperties");
-    aa_hydropathy = ajAcdGetString("aahydropathy");
+    aa_properties = ajAcdGetDatafile("aaproperties");
+    aa_hydropathy = ajAcdGetDatafile("aahydropathy");
 
     graphs = ajAcdGetGraphxy("graph");
 
@@ -182,10 +185,10 @@ int main(int argc, char **argv)
 
 	/*initialize properties list*/
 	aa_props = ajListNew();
-	embDataListInit(aa_props, aa_properties);
+	embDataListRead(aa_props, aa_properties);
 
 	/* Get first table from properties list of tables */
-	listIter = ajListIter(aa_props);
+	listIter = ajListIterRead(aa_props);
 
 	/* calculate plot */
 	for(i = 0; i < 9; i++)
@@ -272,10 +275,10 @@ int main(int argc, char **argv)
 
 
 	/* Delete Data tables*/
-	embDataListDel(aa_props);
+	embDataListDel(&aa_props);
 
 	/*delete hist object*/
-	ajHistDelete(hist);
+	ajHistDelete(&hist);
     }
 
     /* if hydropathy plot required */
@@ -288,10 +291,10 @@ int main(int argc, char **argv)
 
 	/* get data from amino acid properties */
 	aa_hydro = ajListNew();
-	embDataListInit(aa_hydro, aa_hydropathy);
+	embDataListRead(aa_hydro, aa_hydropathy);
 
 	/* Get first table from properties list */
-	listIter = ajListIter(aa_hydro);
+	listIter = ajListIterRead(aa_hydro);
 
 	/* calculate plot */
 	for(i=0; i < 3; i++)
@@ -378,7 +381,7 @@ int main(int argc, char **argv)
 	    ajGraphNewPage(ajFalse);
 
 	ajGraphSetCharSize(0.50);
-	ajGraphxyTitleC(graphs,"Pepinfo");
+	ajGraphSetTitleC(graphs,"Pepinfo");
 
 	ajGraphxyDisplay(graphs,AJTRUE);
     }
@@ -404,16 +407,16 @@ int main(int argc, char **argv)
 **  for each primitive data type (as I write them). So far have
 **  printIntResults and printFloatResults. They are public routines
 **
-** @param [r] outfile [AjPFile] file to output to.
-** @param [r] seq     [AjPSeq]  Sequence
-** @param [r] results [ajint*]    ajint array of reuslts.
-** @param [r] header  [char*]   header line
+** @param [u] outfile [AjPFile] file to output to.
+** @param [r] seq     [const AjPSeq]  Sequence
+** @param [r] results [const ajint*]  array of reuslts.
+** @param [r] header  [const char*]   header line
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-static void pepinfo_printIntResults(AjPFile outfile, AjPSeq seq,
-				    ajint * results, char * header)
+static void pepinfo_printIntResults(AjPFile outfile, const AjPSeq seq,
+				    const ajint* results, const char * header)
 {
     ajint i;
     AjPStr aa;
@@ -442,16 +445,17 @@ static void pepinfo_printIntResults(AjPFile outfile, AjPSeq seq,
 **
 ** Routine to print out Float results data
 **
-** @param [r] outfile [AjPFile] file to output to.
-** @param [r] seq     [AjPSeq]  Sequence
-** @param [r] results [float*]  float array of results.
-** @param [r] header  [char*]   header line
+** @param [u] outfile [AjPFile] file to output to.
+** @param [r] seq     [const AjPSeq]  Sequence
+** @param [r] results [const float*] array of results.
+** @param [r] header  [const char*]   header line
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-static void pepinfo_printFloatResults(AjPFile outfile, AjPSeq seq,
-				      float * results, char * header)
+static void pepinfo_printFloatResults(AjPFile outfile, const AjPSeq seq,
+				      const float * results,
+				      const char * header)
 {
     ajint i;
     AjPStr aa;
@@ -480,23 +484,24 @@ static void pepinfo_printFloatResults(AjPFile outfile, AjPSeq seq,
 ** Create and add graph from set of results to graph set.
 **
 ** @param [u] graphs [AjPGraph] Graphs set to add new graph to.
-** @param [r] seq     [AjPSeq]  Sequence
-** @param [r] results [float*]  float array of results.
-** @param [r] title_text [char*] title for graph
-** @param [r] xtext      [char*] x label.
-** @param [r] ytext      [char*] y label.
+** @param [r] seq     [const AjPSeq]  Sequence
+** @param [r] results [const float*]  array of results.
+** @param [r] title_text [const char*] title for graph
+** @param [r] xtext      [const char*] x label.
+** @param [r] ytext      [const char*] y label.
 ** @param [r] plotcolour [ajint]   Pen colour to plot the graph in.
 ** @return [void]
 **
 ******************************************************************************/
 
-static void pepinfo_plotGraph2Float(AjPGraph graphs, AjPSeq seq,
-				    float * results, char * title_text,
-				    char * xtext, char * ytext,
+static void pepinfo_plotGraph2Float(AjPGraph graphs, const AjPSeq seq,
+				    const float * results,
+				    const  char * title_text,
+				    const char * xtext, const char * ytext,
 				    ajint plotcolour)
 {
 
-    AjPGraphData plot;
+    AjPGraphPlpData plot;
 
     ajint npts = 0;
 
@@ -505,24 +510,24 @@ static void pepinfo_plotGraph2Float(AjPGraph graphs, AjPSeq seq,
 
     npts = seq_end - seq_start;
 
-    ajGraphDataxyMaxMin(results,npts,&ymin,&ymax);
+    ajGraphArrayMaxMin(results,npts,&ymin,&ymax);
 
     /*
     **  initialise plot, the number of points will be the length of the data
     **  in the results structure
     */
-    plot = ajGraphxyDataNewI(npts);
+    plot = ajGraphPlpDataNewI(npts);
 
     /*Set up rest of plot information*/
-    ajGraphxyDataSetTitleC(plot, title_text);
-    ajGraphxyDataSetXtitleC(plot, xtext);
-    ajGraphxyDataSetYtitleC(plot, ytext);
-    ajGraphDataxySetMaxMin(plot,(float)1,(float)npts,ymin,ymax);
-    ajGraphDataxySetMaxima(plot,(float)1,(float)npts,ymin,ymax);
-    ajGraphDataxySetTypeC(plot,"2D Plot");
+    ajGraphPlpDataSetTitleC(plot, title_text);
+    ajGraphPlpDataSetXTitleC(plot, xtext);
+    ajGraphPlpDataSetYTitleC(plot, ytext);
+    ajGraphPlpDataSetMaxMin(plot,(float)1,(float)npts,ymin,ymax);
+    ajGraphPlpDataSetMaxima(plot,(float)1,(float)npts,ymin,ymax);
+    ajGraphPlpDataSetTypeC(plot,"2D Plot");
 
-    ajGraphxyAddDataCalcPtr(plot, npts, seq_begin, 1.0, results);
-    ajGraphxyAddGraph(graphs, plot);
+    ajGraphPlpDataCalcXY(plot, npts, seq_begin, 1.0, results);
+    ajGraphDataAdd(graphs, plot);
 
     return;
 }
@@ -535,19 +540,20 @@ static void pepinfo_plotGraph2Float(AjPGraph graphs, AjPSeq seq,
 ** Add a histogram data to the set set.
 **
 ** @param [u] hist   [AjPHist] Histogram set to add new set to.
-** @param [r] seq     [AjPSeq]  Sequence
-** @param [r] results [ajint*]  float array of results.
+** @param [r] seq     [const AjPSeq]  Sequence
+** @param [r] results [const ajint*]  array of results.
 ** @param [r] hist_num [ajint] the number of the histogram set.
-** @param [r] header  [char*] title.
-** @param [r] xtext   [char*] x label.
-** @param [r] ytext   [char*] y label.
+** @param [r] header  [const char*] title.
+** @param [r] xtext   [const char*] x label.
+** @param [r] ytext   [const char*] y label.
 ** @return [void]
 **
 ******************************************************************************/
 
-static void pepinfo_plotHistInt2(AjPHist hist, AjPSeq seq, ajint * results,
-				 ajint hist_num, char * header,
-				 char * xtext, char * ytext)
+static void pepinfo_plotHistInt2(AjPHist hist,
+				 const AjPSeq seq, const ajint * results,
+				 ajint hist_num, const char * header,
+				 const char * xtext, const char * ytext)
 {
     ajint npts;
     ajint i;

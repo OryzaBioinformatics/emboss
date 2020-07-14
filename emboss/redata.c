@@ -62,8 +62,7 @@ int main(int argc, char **argv)
     AjPStr line    = NULL;
     AjPStr enzline = NULL;
 
-    char   *p;
-    char   *q;
+    const char   *p;
     AjPStr str;
     AjPStr iso;
 
@@ -117,10 +116,10 @@ int main(int argc, char **argv)
 
 	if(*p=='#' || *p=='\n' || *p=='!')
 	    continue;
-	p = strtok(p," \t\n");
+	p = ajSysStrtok(p," \t\n");
 	ajStrAssC(&str,p);
-	while(*p) ++p;
-	*p = ' ';
+/*	while(*p) ++p;
+	*p = ' ';*/
 
 	if(ajStrMatchCase(str,enzyme))
 	    break;
@@ -129,16 +128,15 @@ int main(int argc, char **argv)
     /* Only do the rest if a matching enzyme was found */
     if(ajStrMatchCase(str,enzyme))
     {
-	ajFmtPrintF(outf,"%s\n\n",ajStrStr(str));
+	ajFmtPrintF(outf,"%S\n\n",str);
 	while(ajStrMatchCase(str,enzyme))
 	{
 	    p = ajStrStr(enzline);
-	    p = strtok(p," \t\n");
+	    p = ajSysStrtok(p," \t\n");
 	    ajStrAssC(&str,p);
-	    p = strtok(NULL," \t\n");
+	    p = ajSysStrtok(NULL," \t\n");
 	    ajStrAssC(&line,p);
-	    while(*p) ++p;
-	    ++p;
+	    p = ajSysStrtok(NULL,"\n");
 	    sscanf(p,"%d%d",&len,&ncuts);
 	    if(ncuts==2)
 		sscanf(p,"%d%d%d%d%d",&len,&ncuts,&blunt,&cut1,&cut2);
@@ -163,10 +161,8 @@ int main(int argc, char **argv)
 		break;
 
 	    p = ajStrStr(enzline);
-	    p = strtok(p," \t\n");
+	    p = ajSysStrtok(p," \t\n");
 	    ajStrAssC(&str,p);
-	    while(*p) ++p;
-	    *p = ' ';
 	}
 
 	/* Read the reference file */
@@ -220,13 +216,14 @@ int main(int argc, char **argv)
 	{
 	    ajFmtPrintF(outf,"\nSuppliers:\n");
 	    p = ajStrStr(line);
-	    q = ajStrStr(key);
-
 	    while(*p)
 	    {
-		*q = *p;
+		ajStrAssK(&key,*p);
 		value = ajTableGet(t,key);
-		ajFmtPrintF(outf,"%s\n",ajStrStr(value));
+		if (value)
+		    ajFmtPrintF(outf,"%S\n",value);
+		else
+		    ajFmtPrintF(outf,"'%S' not in suppliers file\n",key);
 		++p;
 	    }
 	}
@@ -276,7 +273,7 @@ int main(int argc, char **argv)
 **
 ** Read list of RE suppliers into table
 **
-** @param [r] inf [AjPFile] infile
+** @param [u] inf [AjPFile] infile
 ** @return [AjPTable] Undocumented
 ** @@
 ******************************************************************************/
@@ -290,8 +287,8 @@ static AjPTable redata_supply_table(AjPFile inf)
     AjPStr key;
     AjPStr value;
 
-    char *p;
-    char *q;
+    const char *p;
+    const char *q;
     char c;
 
     t = ajStrTableNew(SUPPGUESS);

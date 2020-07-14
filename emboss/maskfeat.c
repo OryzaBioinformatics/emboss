@@ -25,8 +25,8 @@
 
 
 
-static void maskfeat_FeatSeqMask(AjPSeq seq, AjPStr type, 
-				 AjPStr maskchar, AjBool tolower);
+static void maskfeat_FeatSeqMask(AjPSeq seq, const AjPStr type, 
+				 const AjPStr maskchar, AjBool tolower);
 
 static void maskfeat_StrToLower(AjPStr *str, ajint begin, ajint end);
 
@@ -55,7 +55,7 @@ int main(int argc, char **argv)
     seqout   = ajAcdGetSeqout("outseq");
     type     = ajAcdGetString("type");
     maskchar = ajAcdGetString("maskchar");
-    tolower  = ajAcdGetBool("tolower");
+    tolower  = ajAcdGetToggle("tolower");
 
     while(ajSeqallNext(seqall, &seq))
     {
@@ -80,22 +80,23 @@ int main(int argc, char **argv)
 ** Masks features of a sequence
 **
 ** @param [u] seq [AjPSeq] sequence
-** @param [r] type [AjPStr] types of features to mask as wildcarded string
-** @param [r] maskchar [AjPStr] character to mask with
+** @param [r] type [const AjPStr] types of features to mask as
+**                                wildcarded string
+** @param [r] maskchar [const AjPStr] character to mask with
 ** @param [r] tolower [AjBool] if True then 'mask' by changing to lower-case
 ** @return [void]
 ** @@
 ******************************************************************************/
 
 
-static void maskfeat_FeatSeqMask(AjPSeq seq, AjPStr type, 
-				 AjPStr maskchar, AjBool tolower)
+static void maskfeat_FeatSeqMask(AjPSeq seq, const AjPStr type, 
+				 const AjPStr maskchar, AjBool tolower)
 {
     AjIList    iter = NULL ;
     AjPFeature gf   = NULL ;
     AjPStr str = NULL;
-    AjPFeattable feat;
-    char whiteSpace[] = " \t\n\r,;";	/* skip whitespace and , ; */
+    const AjPFeattable feat;
+    char whiteSpace[] = " \t\n\r,;|";	/* skip whitespace and , ; | */
     AjPStrTok tokens;
     AjPStr key = NULL;
     AjBool lower;
@@ -111,13 +112,13 @@ static void maskfeat_FeatSeqMask(AjPSeq seq, AjPStr type,
     /* get the feature table of the sequence */
     feat = ajSeqGetFeat(seq);
 
-    ajStrAss(&str, ajSeqStr(seq));
+    ajStrAssS(&str, ajSeqStr(seq));
 
     /* For all features... */
 
     if(feat && feat->Features)
     {
-	iter = ajListIter(feat->Features) ;
+	iter = ajListIterRead(feat->Features) ;
 	while(ajListIterMore(iter))
 	{
 	    gf = ajListIterNext(iter) ;
@@ -135,7 +136,7 @@ static void maskfeat_FeatSeqMask(AjPSeq seq, AjPStr type,
 	    ajStrTokenClear( &tokens);
 	    ajStrDel(&key);
 	}
-	ajListIterFree(iter);
+	ajListIterFree(&iter);
     }
 
     ajSeqReplace(seq, str);

@@ -26,10 +26,11 @@
 
 
 
-static void plotorf_norfs(char *seq, char *rev, ajint n, float **x, float **y,
-			  AjPInt *cnt, ajint beg, AjPStr *starts,
-			  ajint nstarts, AjPStr *stops, ajint nstops);
-static AjBool plotorf_isin(char *p, AjPStr *str, ajint n);
+static void plotorf_norfs(const char *seq, const char *rev,
+			  ajint n, float **x, float **y,
+			  AjPInt *cnt, ajint beg, AjPStr const *starts,
+			  ajint nstarts, AjPStr const *stops, ajint nstops);
+static AjBool plotorf_isin(const char *p, AjPStr const *str, ajint n);
 
 
 
@@ -64,7 +65,7 @@ int main(int argc, char **argv)
     ajint nstops;
 
     AjPGraph graph;
-    AjPGraphData data;
+    AjPGraphPlpData data;
 
     float *x[6];
     float *y[6];
@@ -122,31 +123,31 @@ int main(int argc, char **argv)
     {
 	plotorf_norfs(ajStrStr(str),ajStrStr(rev),i,x,y,&cnt,beg,starts,
 		      nstarts,stops,nstops);
-	data = ajGraphxyDataNewI(2);
+	data = ajGraphPlpDataNewI(2);
 	data->numofpoints = 0;
 
 
-	ajGraphxyAddGraph(graph,data);
+	ajGraphDataAdd(graph,data);
 	ajGraphxySetOverLap(graph,ajFalse);
 	ajGraphxySetYTick(graph, ajFalse);
-	ajGraphDataxySetMaxima(data,(float)beg,(float)end,0.0,1.0);
-	ajGraphDataxySetTypeC(data,"Multi 2D Plot Small");
-	ajGraphxyDataSetYtitleC(data,"Orf");
-	ajGraphxyDataSetXtitleC(data,"Sequence");
-	ajGraphxyDataSetTitleC(data,ftit[i]);
+	ajGraphPlpDataSetMaxima(data,(float)beg,(float)end,0.0,1.0);
+	ajGraphPlpDataSetTypeC(data,"Multi 2D Plot Small");
+	ajGraphPlpDataSetYTitleC(data,"Orf");
+	ajGraphPlpDataSetXTitleC(data,"Sequence");
+	ajGraphPlpDataSetTitleC(data,ftit[i]);
 
 	for(j=0;j<ajIntGet(cnt,i);++j)
-	    ajGraphDataObjAddRect(data,y[i][j],0.0,
+	    ajGraphPlpDataAddRect(data,y[i][j],0.0,
 					      x[i][j],1.0,4,1);
     }
 
 
-    ajGraphxySetTitleDo(graph, ajTrue);
+    ajGraphSetTitleDo(graph, ajTrue);
     ajGraphxySetMaxMin(graph,(float)beg,(float)end,0.0,1.0);
 
     ajGraphxySetYStart(graph,0.0);
     ajGraphxySetYEnd(graph,2.0);
-    ajGraphxyTitleC(graph,"Potential codons (rectangles)");
+    ajGraphSetTitleC(graph,"Potential codons (rectangles)");
     ajGraphxyDisplay(graph,ajTrue);
 
 
@@ -175,30 +176,31 @@ int main(int argc, char **argv)
 **
 ** Undocumented.
 **
-** @param [r] seq [char*] nucleic sequence
-** @param [r] rev [char*] reverse sequence
+** @param [r] seq [const char*] nucleic sequence
+** @param [r] rev [const char*] reverse sequence
 ** @param [r] n [ajint] length
 ** @param [w] x [float**] xpos
 ** @param [w] y [float**] ypos
 ** @param [w] cnt [AjPInt*] orf count
 ** @param [r] beg [ajint] sequence strat
-** @param [w] starts [AjPStr*] start posns
+** @param [r] starts [AjPStr const *] start posns
 ** @param [r] nstarts [ajint] number of starts
-** @param [w] stops [AjPStr*] stop posns
+** @param [r] stops [AjPStr const *] stop posns
 ** @param [r] nstops [ajint] number of stops
 ** @@
 ******************************************************************************/
 
-static void plotorf_norfs(char *seq, char *rev, ajint n, float **x, float **y,
-			  AjPInt *cnt, ajint beg, AjPStr *starts,
-			  ajint nstarts, AjPStr *stops, ajint nstops)
+static void plotorf_norfs(const char *seq, const char *rev,
+			  ajint n, float **x, float **y,
+			  AjPInt *cnt, ajint beg, AjPStr const *starts,
+			  ajint nstarts, AjPStr const *stops, ajint nstops)
 {
     ajint len;
     ajint i;
     ajint count;
     AjBool inframe;
     ajint po;
-    char *p;
+    const char *p;
 
 
 
@@ -301,14 +303,14 @@ static void plotorf_norfs(char *seq, char *rev, ajint n, float **x, float **y,
 **
 ** True if codon at p occurs in string str
 **
-** @param [r] p [char*] codon
-** @param [r] str [AjPStr*] sequence
+** @param [r] p [const char*] codon
+** @param [r] str [AjPStr const *] sequence
 ** @param [r] n [ajint] str length
 ** @return [AjBool] true if found
 ** @@
 ******************************************************************************/
 
-static AjBool plotorf_isin(char *p, AjPStr *str, ajint n)
+static AjBool plotorf_isin(const char *p, AjPStr const *str, ajint n)
 {
     ajint i;
     AjBool ret;

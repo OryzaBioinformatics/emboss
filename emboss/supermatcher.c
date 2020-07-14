@@ -62,8 +62,9 @@ typedef struct concatS
 static void supermatcher_matchListOrder(void **x,void *cl);
 static void supermatcher_orderandconcat(AjPList list,AjPList ordered);
 static void supermatcher_removelists(void **x,void *cl);
-static ajint supermatcher_findstartpoints(AjPTable *seq1MatchTable,AjPSeq b,
-					  AjPSeq a, ajint *start1,
+static ajint supermatcher_findstartpoints(AjPTable *seq1MatchTable,
+					  const AjPSeq b,
+					  const AjPSeq a, ajint *start1,
 					  ajint *start2, ajint *end1,
 					  ajint *end2, ajint width);
 static void supermatcher_findmax(void **x,void *cl);
@@ -95,7 +96,7 @@ int main(int argc, char **argv)
     AjPSeqall seq1;
     AjPSeqset seq2;
     AjPSeq a;
-    AjPSeq b;
+    const AjPSeq b;
     AjPStr m = 0;
     AjPStr n = 0;
 
@@ -108,8 +109,8 @@ int main(int argc, char **argv)
     ajint    lena = 0;
     ajint    lenb = 0;
 
-    char   *p;
-    char   *q;
+    const char   *p;
+    const char   *q;
 
     AjPMatrixf matrix;
     AjPSeqCvt cvt = 0;
@@ -167,11 +168,7 @@ int main(int argc, char **argv)
 
     embWordLength(wordlen);
 
-    for(k=0;k<ajSeqsetSize(seq2);k++)
-    {
-	b = ajSeqsetGetSeq(seq2, k);
-	ajSeqTrim(b);
-    }
+    ajSeqsetTrim(seq2);
 
     while(ajSeqallNext(seq1,&a))
     {
@@ -282,7 +279,7 @@ int main(int argc, char **argv)
 	    ajStrDel(&n);
 	}
 
-	embWordFreeTable(seq1MatchTable); /* free table of words */
+	embWordFreeTable(&seq1MatchTable); /* free table of words */
 	seq1MatchTable=0;
 
 	ajStrDel(&m);
@@ -325,7 +322,7 @@ static void supermatcher_matchListOrder(void **x,void *cl)
     offset = (*p).seq1start-(*p).seq2start;
 
     /* iterate through ordered list to find if it exists already*/
-    listIter = ajListIter(ordered);
+    listIter = ajListIterRead(ordered);
 
     while(!ajListIterDone( listIter))
     {
@@ -337,11 +334,11 @@ static void supermatcher_matchListOrder(void **x,void *cl)
 	    con->total+= (*p).length;
 	    con->count++;
 	    ajListPushApp(con->list,p);
-	    ajListIterFree(listIter);
+	    ajListIterFree(&listIter);
 	    return;
 	}
     }
-    ajListIterFree(listIter);
+    ajListIterFree(&listIter);
 
     /* not found so add it */
     AJNEW(c);
@@ -362,7 +359,8 @@ static void supermatcher_matchListOrder(void **x,void *cl)
 **
 ** Undocumented.
 **
-** @param [r] list [AjPList] unordered input list
+** @param [u] list [AjPList] unordered input list - elements added to the
+**                           ordered list, but apparently not deleted.
 ** @param [w] ordered [AjPList] ordered output list
 ** @return [void]
 ** @@
@@ -438,8 +436,8 @@ static void supermatcher_findmax(void **x,void *cl)
 ** Undocumented.
 **
 ** @param [w] seq1MatchTable [AjPTable*] match table
-** @param [r] b [AjPSeq] second sequence
-** @param [r] a [AjPSeq] first sequence
+** @param [r] b [const AjPSeq] second sequence
+** @param [r] a [const AjPSeq] first sequence
 ** @param [w] start1 [ajint*] start in sequence 1
 ** @param [w] start2 [ajint*] start in sequence 2
 ** @param [w] end1 [ajint*] end in sequence 1
@@ -449,8 +447,9 @@ static void supermatcher_findmax(void **x,void *cl)
 ** @@
 ******************************************************************************/
 
-static ajint supermatcher_findstartpoints(AjPTable *seq1MatchTable,AjPSeq b,
-					  AjPSeq a, ajint *start1,
+static ajint supermatcher_findstartpoints(AjPTable *seq1MatchTable,
+					  const AjPSeq b,
+					  const AjPSeq a, ajint *start1,
 					  ajint *start2, ajint *end1,
 					  ajint *end2, ajint width)
 {

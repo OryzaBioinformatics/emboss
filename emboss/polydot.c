@@ -31,8 +31,8 @@ static ajint which;
 
 
 
-static void polydot_drawPlotlines(void **x, void *cl);
-static void polydot_plotMatches(AjPList list);
+static void polydot_drawPlotlines(void *x, void *cl);
+static void polydot_plotMatches(const AjPList list);
 
 
 
@@ -47,10 +47,10 @@ int main(int argc, char **argv)
 {
 
     AjPSeqset seqset;
-    AjPSeq seq1;
-    AjPSeq seq2;
+    const AjPSeq seq1;
+    const AjPSeq seq2;
     ajint wordlen;
-    AjPTable seq1MatchTable =0 ;
+    AjPTable seq1MatchTable = NULL;
     AjPList matchlist ;
     AjPGraph graph = 0;
     ajint i;
@@ -72,9 +72,6 @@ int main(int argc, char **argv)
     float ticklen;
     float onefifth;
     AjPFeattable *tabptr = NULL;
-    AjPStr ufo    = NULL;
-    AjPStr format = NULL;
-    AjPStr ext    = NULL;
     AjPFeattabOut seq1out = NULL;
     AjPStr sajb = NULL;
 
@@ -85,10 +82,8 @@ int main(int argc, char **argv)
     graph    = ajAcdGetGraph("graph");
     gap      = ajAcdGetInt("gap");
     boxit    = ajAcdGetBool("boxit");
-    dumpfeat = ajAcdGetBool("dumpfeat");
-    format   = ajAcdGetString("format");
-
-    ext = ajAcdGetString("ext");
+    seq1out  = ajAcdGetFeatout("outfeat");
+    dumpfeat = ajAcdGetToggle("dumpfeat");
 
     sajb = ajStrNew();
     embWordLength(wordlen);
@@ -124,7 +119,7 @@ int main(int argc, char **argv)
     ajGraphOpenWin(graph, 0.0-xmargin,(total+xmargin)*1.35,0.0-ymargin,
 		   total+ymargin);
     ajGraphTextMid((total+xmargin)*0.5,(total+ymargin)*0.9,
-		   ajStrStr(graph->title));
+		   ajGraphGetTitleC(graph));
     ajGraphSetCharSize(0.3);
     
     
@@ -187,7 +182,7 @@ int main(int argc, char **argv)
 		ystart += (float)ajSeqLen(seq2)+(float)gap;
 	    }
 	}
-	embWordFreeTable(seq1MatchTable);
+	embWordFreeTable(&seq1MatchTable);
 	seq1MatchTable = NULL;
 	xstart += (float)ajSeqLen(seq1)+(float)gap;
 	ystart = 0.0;
@@ -207,18 +202,10 @@ int main(int argc, char **argv)
 			 ajStrStr(sajb));
     }
     
-    if(dumpfeat)
+    if(dumpfeat && seq1out)
     {
-	seq1out = ajFeattabOutNew();
 	for(i=0;i<ajSeqsetSize(seqset);i++)
 	{
-	    seq1 = ajSeqsetGetSeq(seqset, i);
-	    ajStrAss(&ufo,format);
-	    ajStrAppC(&ufo,":");
-	    ajStrAppC(&ufo,ajSeqName(seq1));
-	    ajStrAppC(&ufo,".");
-	    ajStrApp(&ufo,ext);
-	    ajFeattabOutOpen(seq1out, ufo);
 	    ajFeatWrite(seq1out, tabptr[i]);
 	}
     }
@@ -241,13 +228,13 @@ int main(int argc, char **argv)
 **
 ** Undocumented.
 **
-** @param [r] x [void**] Undocumented
+** @param [r] x [void*] Undocumented
 ** @param [r] cl [void*] Undocumented
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-static void polydot_drawPlotlines(void **x, void *cl)
+static void polydot_drawPlotlines(void *x, void *cl)
 {
     EmbPWordMatch p;
     PLFLT x1;
@@ -255,14 +242,14 @@ static void polydot_drawPlotlines(void **x, void *cl)
     PLFLT x2;
     PLFLT y2;
 
-    p = (EmbPWordMatch)*x;
+    p = (EmbPWordMatch)x;
 
     lines[which]++;
-    pts[which]+= (*p).length;
-    x1 = x2 = ((*p).seq1start)+xstart;
-    y1 = y2 = (PLFLT)((*p).seq2start)+ystart;
-    x2 += (*p).length;
-    y2 += (PLFLT)(*p).length;
+    pts[which]+= p->length;
+    x1 = x2 = (p->seq1start)+xstart;
+    y1 = y2 = (PLFLT)(p->seq2start)+ystart;
+    x2 += p->length;
+    y2 += (PLFLT)p->length;
 
     ajGraphLine(x1, y1, x2, y2);
 
@@ -276,14 +263,14 @@ static void polydot_drawPlotlines(void **x, void *cl)
 **
 ** Undocumented.
 **
-** @param [?] list [AjPList] Undocumented
+** @param [r] list [const AjPList] Undocumented
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-static void polydot_plotMatches(AjPList list)
+static void polydot_plotMatches(const AjPList list)
 {
-    ajListMap(list,polydot_drawPlotlines, NULL);
+    ajListMapRead(list,polydot_drawPlotlines, NULL);
 
     return;
 }

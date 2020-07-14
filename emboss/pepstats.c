@@ -77,7 +77,6 @@ int main(int argc, char **argv)
     double molar_ext_coeff;
 
     float *dhstat = NULL;
-    AjPStr datafn = NULL;
     AjPFile mfptr = NULL;
     AjPSeq  seq = NULL;
     
@@ -86,14 +85,10 @@ int main(int argc, char **argv)
     a       = ajAcdGetSeqall("sequence");
     termini = ajAcdGetBool("termini");
     outf    = ajAcdGetOutfile("outfile");
-    datafn  = ajAcdGetString("aadata");
+    mfptr  = ajAcdGetDatafile("aadata");
 
     substr = ajStrNew();
 
-
-    ajFileDataNew(datafn, &mfptr);
-    if(!mfptr)
-	ajFatal("%S  not found\n",datafn);
 
     embPropAminoRead(mfptr);
 

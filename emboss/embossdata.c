@@ -28,8 +28,9 @@
 
 
 
-static void embossdata_check_dir(AjPStr d, AjPFile outf);
-static void embossdata_check_file(AjPStr d, AjPStr file, AjPFile outf);
+static void embossdata_check_dir(const AjPStr d, AjPFile outf);
+static void embossdata_check_file(const AjPStr d, const AjPStr file,
+				  AjPFile outf);
 static AjPStr embossdata_data_dir(void);
 
 
@@ -72,7 +73,7 @@ int main(int argc, char **argv)
 
     filename = ajAcdGetString("filename");
     fetch    = ajAcdGetBool("fetch");
-    showall  = ajAcdGetBool("showall");
+    showall  = ajAcdGetToggle("showall");
     rstrs    = ajAcdGetSelect("reject");
     outf     = ajAcdGetOutfile("outfile");
 
@@ -107,7 +108,7 @@ int main(int argc, char **argv)
     */
     if(fetch)
     {
-	ajStrAss(&path,ddir);
+	ajStrAssS(&path,ddir);
 	ajFileScan(path,filename,&flocs,ajFalse,ajFalse,NULL,rlist,
 		   recurs, outf);
 	if(!ajListPop(flocs,(void **)&t))
@@ -159,14 +160,14 @@ int main(int argc, char **argv)
 	if((p = getenv("HOME")))
 	{
 	    ajStrAssC(&hdir, p);
-	    ajStrAss(&directory, hdir);
+	    ajStrAssS(&directory, hdir);
 	    if(isname)
 		embossdata_check_file(directory,filename,outf);
 	    else
 		embossdata_check_dir(directory,outf);
 
 	    /* ~/.embossdata */
-	    ajStrAss(&directory, hdir);
+	    ajStrAssS(&directory, hdir);
 	    ajStrAppC(&directory, "/.embossdata");
 	    if(isname)
 		embossdata_check_file(directory,filename,outf);
@@ -178,7 +179,7 @@ int main(int argc, char **argv)
 	/* DATA */
 	if(isname)
 	{
-	    ajStrAss(&path,ddir);
+	    ajStrAssS(&path,ddir);
 	    ajFileScan(path,filename,&flocs,ajFalse,ajFalse,NULL,rlist,
 		       recurs,outf);
 
@@ -198,7 +199,7 @@ int main(int argc, char **argv)
     /* Just show all the files in the EMBOSS Installation data directory */
     if(showall)
     {
-	ajStrAss(&path,ddir);
+	ajStrAssS(&path,ddir);
 	ajFileScan(path,NULL,NULL,ajTrue,ajFalse,NULL,rlist,recurs,outf);
     }
 
@@ -223,14 +224,14 @@ int main(int argc, char **argv)
 **
 ** Undocumented.
 **
-** @param [?] d [AjPStr] Undocumented
-** @param [?] outf [AjPFile] Undocumented
+** @param [r] d [const AjPStr] Undocumented
+** @param [u] outf [AjPFile] Undocumented
 ** @@
 ******************************************************************************/
 
 
 
-static void embossdata_check_dir(AjPStr d, AjPFile outf)
+static void embossdata_check_dir(const AjPStr d, AjPFile outf)
 {
     if(ajSysIsDirectory(ajStrStr(d)))
 	ajFmtPrintF(outf,"%-60.60S Exists\n",d);
@@ -247,19 +248,20 @@ static void embossdata_check_dir(AjPStr d, AjPFile outf)
 **
 ** Undocumented.
 **
-** @param [?] d [AjPStr] Undocumented
-** @param [?] file [AjPStr] Undocumented
-** @param [?] outf [AjPFile] Undocumented
+** @param [r] d [const AjPStr] Undocumented
+** @param [r] file [const AjPStr] Undocumented
+** @param [u] outf [AjPFile] Undocumented
 ** @@
 ******************************************************************************/
 
-static void embossdata_check_file(AjPStr d, AjPStr file, AjPFile outf)
+static void embossdata_check_file(const AjPStr d, const AjPStr file,
+				  AjPFile outf)
 {
     AjPStr s;
 
     s = ajStrNew();
 
-    ajStrAss(&s,d);
+    ajStrAssS(&s,d);
     ajStrAppC(&s,"/");
     ajStrApp(&s,file);
     if(ajSysIsRegular(ajStrStr(s)))

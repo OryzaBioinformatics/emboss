@@ -34,6 +34,7 @@
 **
 ** @attr patstr [AjPStr] Undocumented
 ** @attr origpat [AjPStr] Undocumented
+** @attr type [ajint] Undocumented
 ** @attr len [ajint] Undocumented
 ** @attr real_len [ajint] Undocumented
 ** @attr amino [AjBool] Undocumented
@@ -62,7 +63,7 @@ typedef struct clip_pattern
     ajuint solimit;
     EmbOPatBYPNode off[AJALPHA];
     AjPStr re;
-    ajint **skipm;
+    ajint** skipm;
     void* tidy;
 }*CPattern;
 
@@ -92,36 +93,40 @@ typedef struct vector
 
 /* constructors */
 static void vectorstrip_initialise_cp(CPattern* pat);
-static void vectorstrip_initialise_vector(Vector* vec, AjPStr name,
-					  AjPStr five, AjPStr three);
+static Vector vectorstrip_initialise_vector(const AjPStr name,
+					    const AjPStr five,
+					    const AjPStr three);
 static void vectorstrip_read_vector_data(AjPFile vectorfile,
-					 AjPList* vectorlist);
+					 AjPList vectorlist);
 
 /* destructors */
-static void vectorstrip_free_list(AjPList list);
+static void vectorstrip_free_list(AjPList *list);
 static void vectorstrip_free_cp(CPattern* pat);
 
 
 /* data processing */
-static void vectorstrip_process_pattern(AjPStr pat, AjPList* hitlist,
-					AjPStr seqname, AjPStr seqstr,
+static void vectorstrip_process_pattern(const AjPStr pat, AjPList hitlist,
+					const AjPStr seqname,
+					const AjPStr seqstr,
 					ajint threshold, ajint begin,
 					AjBool besthits);
-static void vectorstrip_process_hits(AjPList fivelist, AjPList threelist,
-				     AjPSeq sequence, AjPSeqout seqout,
+static void vectorstrip_process_hits(const AjPList fivelist,
+				     const AjPList threelist,
+				     const AjPSeq sequence, AjPSeqout seqout,
 				     AjPFile outf);
 static void vectorstrip_scan_sequence(Vector vector, AjPSeqout seqout,
 				      AjPFile outf, AjPSeq sequence,
 				      ajint mis_per, AjBool besthits);
-static void vectorstrip_ccs_pattern(AjPStr pattern, AjPList* hitlist,
-				    AjPStr seqname, AjPStr seqstr,
+static void vectorstrip_ccs_pattern(const AjPStr pattern, AjPList hitlist,
+				    const AjPStr seqname, const AjPStr seqstr,
 				    ajint begin, ajint* hits, ajint mm);
 /* result output */
-static void vectorstrip_write_sequence(AjPSeq sequence, AjPSeqout seqout,
+static void vectorstrip_write_sequence(const AjPSeq sequence,
+				       AjPSeqout seqout,
 				       ajint start, ajint end, AjPFile outf);
-static void vectorstrip_print_hits(AjPList l, AjPFile outf, AjPStr seq,
+static void vectorstrip_print_hits(AjPList l, AjPFile outf, const AjPStr seq,
 				   ajint begin);
-static void vectorstrip_reportseq(AjPStr seqstr, AjPFile outf);
+static void vectorstrip_reportseq(const AjPStr seqstr, AjPFile outf);
 
 
 
@@ -155,7 +160,7 @@ int main(int argc, char **argv)
     seqall     = ajAcdGetSeqall("sequence");
     outf       = ajAcdGetOutfile("outfile");
     seqout     = ajAcdGetSeqoutall("outseq");
-    vec        = ajAcdGetBool("vectorfile");
+    vec        = ajAcdGetToggle("vectorfile");
     besthits   = ajAcdGetBool("besthits");
     fiveprime  = ajAcdGetString("linkerA");
     threeprime = ajAcdGetString("linkerB");
@@ -165,14 +170,14 @@ int main(int argc, char **argv)
 
     /* data from command line or file? */
     if(vec == AJTRUE)
-	vectorstrip_read_vector_data(vectorfile, &vectorlist);
+	vectorstrip_read_vector_data(vectorfile, vectorlist);
     else
     {
 	Vector v = NULL;
 	AjPStr name = NULL;
 	name = ajStrNewC("no_name");
 
-	vectorstrip_initialise_vector(&v, name, fiveprime, threeprime);
+	v = vectorstrip_initialise_vector(name, fiveprime, threeprime);
 	ajListPushApp(vectorlist, v);
 	ajStrDel(&name);
     }
@@ -190,14 +195,14 @@ int main(int argc, char **argv)
     /* search each sequence for the vectors */
     while(ajSeqallNext(seqall,&seq))
     {
-	AjIList iter=ajListIter(vectorlist);
+	AjIList iter=ajListIterRead(vectorlist);
 	while(!ajListIterDone(iter))
 	{
 	    Vector vec = ajListIterNext(iter);
 	    vectorstrip_scan_sequence(vec, seqout, outf, seq, threshold,
 				      besthits);
 	}
-	ajListIterFree(iter);
+	ajListIterFree(&iter);
     }
 
 
@@ -254,21 +259,22 @@ static void vectorstrip_initialise_cp(CPattern* pat)
 **
 ** Initialises data members of a Vector.
 **
-** @param [w] vec [Vector*] New vector object
-** @param [r] name [AjPStr] string representing name of vector
-** @param [r] five [AjPStr] string representing 5' pattern
-** @param [r] three [AjPStr] string representing 3' pattern
-** @return [void]
+** @param [r] name [const AjPStr] string representing name of vector
+** @param [r] five [const AjPStr] string representing 5' pattern
+** @param [r] three [const AjPStr] string representing 3' pattern
+** @return [Vector] Vector object
 ******************************************************************************/
-static void vectorstrip_initialise_vector(Vector* vec, AjPStr name,
-					  AjPStr five, AjPStr three)
+static Vector vectorstrip_initialise_vector(const AjPStr name,
+					    const AjPStr five,
+					    const  AjPStr three)
 {
-    AJNEW(*vec);
-    (*vec)->name       = ajStrNewS(name);
-    (*vec)->fiveprime  = ajStrNewS(five);
-    (*vec)->threeprime = ajStrNewS(three);
+    Vector vec;
+    AJNEW(vec);
+    vec->name       = ajStrNewS(name);
+    vec->fiveprime  = ajStrNewS(five);
+    vec->threeprime = ajStrNewS(three);
 
-    return;
+    return vec;
 }
 
 
@@ -278,15 +284,15 @@ static void vectorstrip_initialise_vector(Vector* vec, AjPStr name,
 **
 ** Reads vector data from a file into a list of Vectors.
 **
-** @param [r] vectorfile [AjPFile] the file containing vector data
-** @param [w] vectorlist [AjPList*] list to store vector data
+** @param [u] vectorfile [AjPFile] the file containing vector data
+** @param [w] vectorlist [AjPList] list to store vector data
 **                                  contains one node for each set of
 **                                  vector data in vectorfile
 ** @return [void]
 ******************************************************************************/
 
 static void vectorstrip_read_vector_data(AjPFile vectorfile,
-					 AjPList* vectorlist)
+					 AjPList vectorlist)
 {
     AjPStr rdline = NULL;
     AjPStrTok handle = NULL;
@@ -317,8 +323,8 @@ static void vectorstrip_read_vector_data(AjPFile vectorfile,
 
 	if(ajStrLen(five) || ajStrLen(three))
 	{
-	    vectorstrip_initialise_vector(&vector, name, five, three);
-	    ajListPushApp(*vectorlist, vector);
+	    vector = vectorstrip_initialise_vector(name, five, three);
+	    ajListPushApp(vectorlist, vector);
 	}
 	ajStrDel(&name);
 	ajStrDel(&five);
@@ -340,23 +346,23 @@ static void vectorstrip_read_vector_data(AjPFile vectorfile,
 **
 ** Frees a list of EmbPMatMatch.
 **
-** @param [d] list [AjPList] the list of EmbPMatMatch to be freed
+** @param [d] list [AjPList*] the list of EmbPMatMatch to be freed
 ** @return [void]
 ******************************************************************************/
 
-static void vectorstrip_free_list(AjPList list)
+static void vectorstrip_free_list(AjPList *list)
 {
     AjIList iter;
 
-    iter = ajListIter(list);
+    iter = ajListIterRead(*list);
     while(!ajListIterDone(iter))
     {
 	EmbPMatMatch fm = ajListIterNext(iter);
 	embMatMatchDel(&fm);
     }
-    ajListFree(&list);
-    ajListDel(&list);
-    ajListIterFree(iter);
+    ajListFree(list);
+    ajListDel(list);
+    ajListIterFree(&iter);
 
     return;
 }
@@ -408,18 +414,21 @@ static void vectorstrip_free_cp(CPattern* pat)
 ** The pattern may be repeatedly recompiled using embPatCompile in order to
 ** allow searching with different numbers of mismatches.
 **
-** @param [r] pattern [AjPStr] the pattern to be searched
-** @param [w] hitlist [AjPList*] list to which hits will be written
-** @param [r] seqname [AjPStr] the name of the sequence
-** @param [r] seqstr [AjPStr] string representing the sequence to be searched
+** @param [r] pattern [const AjPStr] the pattern to be searched
+** @param [w] hitlist [AjPList] list to which hits will be written
+** @param [r] seqname [const AjPStr] the name of the sequence
+** @param [r] seqstr [const AjPStr] string representing the sequence
+**                                  to be searched
 ** @param [r] threshold [ajint] max allowable percent mismatch based on length
 **                              of pattern
 ** @param [r] begin [ajint] start position of sequence
 ** @param [r] besthits [AjBool] Best hits
 ** @return [void]
 ******************************************************************************/
-static void vectorstrip_process_pattern(AjPStr pattern, AjPList* hitlist,
-					AjPStr seqname, AjPStr seqstr,
+static void vectorstrip_process_pattern(const AjPStr pattern,
+					AjPList hitlist,
+					const AjPStr seqname,
+					const AjPStr seqstr,
 					ajint threshold, ajint begin,
 					AjBool besthits)
 {
@@ -469,18 +478,19 @@ static void vectorstrip_process_pattern(AjPStr pattern, AjPList* hitlist,
 ** Parameters modified:
 ** results written to outf and seqout
 **
-** @param [r] fivelist [AjPList] list of EmbPMatMatch representing hits of 5'
-**                               pattern against the sequence
-** @param [r] threelist [AjPList] list of EmbPMatMatch representing hits of 3'
-**                                pattern against the sequence
-** @param [r] sequence [AjPSeq] the sequence itself
-** @param [r] seqout [AjPSeqout] place to writesubsequences
-** @param [r] outf [AjPFile] file for writing information about the hits
+** @param [r] fivelist [const AjPList] list of EmbPMatMatch representing hits
+**                              of 5'  pattern against the sequence
+** @param [r] threelist [const AjPList] list of EmbPMatMatch representing hits
+**                               of 3'  pattern against the sequence
+** @param [r] sequence [const AjPSeq] the sequence itself
+** @param [u] seqout [AjPSeqout] place to writesubsequences
+** @param [u] outf [AjPFile] file for writing information about the hits
 ** @return [void]
 ******************************************************************************/
 
-static void vectorstrip_process_hits(AjPList fivelist, AjPList threelist,
-				     AjPSeq sequence, AjPSeqout seqout,
+static void vectorstrip_process_hits(const AjPList fivelist,
+				     const AjPList threelist,
+				     const AjPSeq sequence, AjPSeqout seqout,
 				     AjPFile outf)
 {
     ajint i = 0;
@@ -496,7 +506,7 @@ static void vectorstrip_process_hits(AjPList fivelist, AjPList threelist,
     five  = ajIntNew();	/* start positions for hits with 5' pattern */
     three = ajIntNew();	/* start positions for hits with 3' pattern */
 
-    iter = ajListIter(fivelist);
+    iter = ajListIterRead(fivelist);
 
     /* populate five and three with start positions */
     while(!ajListIterDone(iter))
@@ -505,16 +515,16 @@ static void vectorstrip_process_hits(AjPList fivelist, AjPList threelist,
 	ajIntPut(&five, i, ((m->len) + (m->start)));
 	i++;
     }
-    ajListIterFree(iter);
+    ajListIterFree(&iter);
 
-    iter = ajListIter(threelist);
+    iter = ajListIterRead(threelist);
     while(!ajListIterDone(iter))
     {
 	m = ajListIterNext(iter);
 	ajIntPut(&three, j, (m->start -1));
 	j++;
     }
-    ajListIterFree(iter);
+    ajListIterFree(&iter);
 
     /* classify the hits */
     if((ajListLength(fivelist) ==1 && ajListLength(threelist) == 1)
@@ -606,8 +616,8 @@ static void vectorstrip_process_hits(AjPList fivelist, AjPList threelist,
 **
 ** Scans a Vector against a sequence
 **
-** @param [r] vector [Vector] the vector data
-** @param [r] seqout [AjPSeqout] where to write out subsequences
+** @param [r] vector [const Vector] the vector data
+** @param [u] seqout [AjPSeqout] where to write out subsequences
 ** @param [w] outf [AjPFile] file for writing results details
 ** @param [w] sequence [AjPSeq] the sequence to be scanned
 ** @param [r] mis_per [ajint] max mismatch percentage
@@ -616,7 +626,7 @@ static void vectorstrip_process_hits(AjPList fivelist, AjPList threelist,
 ** @return [void]
 ******************************************************************************/
 
-static void vectorstrip_scan_sequence(Vector vector, AjPSeqout seqout,
+static void vectorstrip_scan_sequence(const Vector vector, AjPSeqout seqout,
 				      AjPFile outf, AjPSeq sequence,
 				      ajint mis_per, AjBool besthits)
 {
@@ -643,11 +653,11 @@ static void vectorstrip_scan_sequence(Vector vector, AjPSeqout seqout,
     ajStrToUpper(&text);
 
     if(ajStrLen(vector->fiveprime))
-	vectorstrip_process_pattern(vector->fiveprime, &fivelist, seqname,
+	vectorstrip_process_pattern(vector->fiveprime, fivelist, seqname,
 				    text, mis_per, begin, besthits);
 
     if(ajStrLen(vector->threeprime))
-	vectorstrip_process_pattern(vector->threeprime, &threelist, seqname,
+	vectorstrip_process_pattern(vector->threeprime, threelist, seqname,
 				    text, mis_per, begin, besthits);
 
     if(!(ajListLength(fivelist) || ajListLength(threelist)))
@@ -666,8 +676,8 @@ static void vectorstrip_scan_sequence(Vector vector, AjPSeqout seqout,
 	vectorstrip_process_hits(fivelist, threelist, sequence, seqout, outf);
     }
 
-    vectorstrip_free_list(fivelist);
-    vectorstrip_free_list(threelist);
+    vectorstrip_free_list(&fivelist);
+    vectorstrip_free_list(&threelist);
     ajStrDel(&seqname);
     ajStrDel(&text);
 
@@ -682,18 +692,18 @@ static void vectorstrip_scan_sequence(Vector vector, AjPSeqout seqout,
 ** Classifies, compiles and searches pattern against seqstr with
 ** mm mismatches
 **
-** @param [r] pattern [AjPStr] pattern to be searched for
-** @param [w] hitlist [AjPList*] list of hits
-** @param [r] seqname [AjPStr] name of sequence to be searched
-** @param [r] seqstr [AjPStr] string representing sequence to be searched
+** @param [r] pattern [const AjPStr] pattern to be searched for
+** @param [w] hitlist [AjPList] list of hits
+** @param [r] seqname [const AjPStr] name of sequence to be searched
+** @param [r] seqstr [const AjPStr] string representing sequence to be searched
 ** @param [r] begin [ajint] start position of sequence
 ** @param [w] hits [ajint*] number of hits
 ** @param [r] mm [ajint] number of mismatches
 ** @return [void]
 ******************************************************************************/
 
-static void vectorstrip_ccs_pattern(AjPStr pattern, AjPList* hitlist,
-				    AjPStr seqname, AjPStr seqstr,
+static void vectorstrip_ccs_pattern(const AjPStr pattern, AjPList hitlist,
+				    const AjPStr seqname, const AjPStr seqstr,
 				    ajint begin, ajint* hits, ajint mm)
 {
     /* set up CPattern */
@@ -705,7 +715,7 @@ static void vectorstrip_ccs_pattern(AjPStr pattern, AjPList* hitlist,
     /* copy the original pattern for Henry Spencer code */
     ajStrAssC(&(cpat->origpat), ajStrStr(pattern));
 
-    if(!(cpat->type = embPatGetType(&(cpat->patstr),mm,0,
+    if(!(cpat->type = embPatGetType((cpat->origpat),&(cpat->patstr),mm,0,
 				    &(cpat->real_len),
 				    &(cpat->amino),
 				    &(cpat->carboxyl))))
@@ -716,7 +726,7 @@ static void vectorstrip_ccs_pattern(AjPStr pattern, AjPList* hitlist,
     }
 
     embPatCompile(cpat->type, cpat->patstr,
-		  cpat->origpat, &(cpat->len),
+		  &(cpat->len),
 		  &(cpat->buf), cpat->off,
 		  &(cpat->sotable), &(cpat->solimit),
 		  &(cpat->real_len), &(cpat->re),
@@ -724,7 +734,7 @@ static void vectorstrip_ccs_pattern(AjPStr pattern, AjPList* hitlist,
 
 
     embPatFuzzSearch(cpat->type, begin, cpat->patstr,
-		     cpat->origpat, seqname, seqstr, hitlist,
+		     seqname, seqstr, hitlist,
 		     cpat->len, mm, cpat->amino,
 		     cpat->carboxyl, cpat->buf,
 		     cpat->off, cpat->sotable,
@@ -748,17 +758,17 @@ static void vectorstrip_ccs_pattern(AjPStr pattern, AjPList* hitlist,
 ** sequence (hit positions, number of mismatches, sequences trimmed
 ** from 5' and 3' ends) are written to outf
 **
-** @param [r] sequence [AjPSeq] the entire sequence
+** @param [r] sequence [const AjPSeq] the entire sequence
 ** @param [w] seqout [AjPSeqout] where to write out subsequences
 ** @param [r] start [ajint] start position of desired subsequence relative
 **                          to sequence
 ** @param [r] end [ajint] end position of desired subsequence relative
 **                        to sequence
-** @param [w] outf [AjPFile] file to write details of output subsequence
+** @param [u] outf [AjPFile] file to write details of output subsequence
 ** @return [void]
 ******************************************************************************/
 
-static void vectorstrip_write_sequence(AjPSeq sequence, AjPSeqout seqout,
+static void vectorstrip_write_sequence(const AjPSeq sequence, AjPSeqout seqout,
 				       ajint start, ajint end, AjPFile outf)
 {
     AjPStr name = NULL;
@@ -771,7 +781,7 @@ static void vectorstrip_write_sequence(AjPSeq sequence, AjPSeqout seqout,
     AjPStr outs      = NULL;
 
     seqcp = ajSeqNewS(sequence);
-    name  = ajStrDup(ajSeqGetName(seqcp));
+    name  = ajStrNewS(ajSeqGetName(seqcp));
     num   = ajStrNew();
 
     if(start <= end)
@@ -826,13 +836,16 @@ static void vectorstrip_write_sequence(AjPSeq sequence, AjPSeqout seqout,
 ** Output hit positions and number of mismatches of a pattern against a
 ** sequence to file
 **
-** @param [r] hitlist [AjPList] list of hits of pattern against the sequence
-** @param [w] outf [AjPFile] file for writing information about the hits
-** @param [r] seq [AjPStr] string representation of sequence
+** @param [u] hitlist [AjPList] list of hits of pattern against the sequence
+**                              reversed during processing (could iterate
+**                              backwards instead now)
+** @param [u] outf [AjPFile] file for writing information about the hits
+** @param [r] seq [const AjPStr] string representation of sequence
 ** @param [r] begin [ajint] start of sequence
 ** @return [void]
 ******************************************************************************/
-static void vectorstrip_print_hits(AjPList hitlist, AjPFile outf, AjPStr seq,
+static void vectorstrip_print_hits(AjPList hitlist, AjPFile outf,
+				   const AjPStr seq,
 				   ajint begin)
 {
     EmbPMatMatch m;
@@ -842,7 +855,7 @@ static void vectorstrip_print_hits(AjPList hitlist, AjPFile outf, AjPStr seq,
     s=ajStrNew();
 
     ajListReverse(hitlist);
-    iter = ajListIter(hitlist);
+    iter = ajListIterRead(hitlist);
 
     while(!ajListIterDone(iter))
     {
@@ -854,7 +867,7 @@ static void vectorstrip_print_hits(AjPList hitlist, AjPFile outf, AjPStr seq,
 
     }
 
-    ajListIterFree(iter);
+    ajListIterFree(&iter);
     ajStrDel(&s);
 
     return;
@@ -868,12 +881,12 @@ static void vectorstrip_print_hits(AjPList hitlist, AjPFile outf, AjPStr seq,
 ** Formatted output of sequence data.
 ** sequence is written to outf in lines of length 50.
 **
-** @param [r] seqstr [AjPStr] sequence to be output
-** @param [r] outf [AjPFile] file to write to
+** @param [r] seqstr [const AjPStr] sequence to be output
+** @param [u] outf [AjPFile] file to write to
 ** @return [void]
 ******************************************************************************/
 
-static void vectorstrip_reportseq(AjPStr seqstr, AjPFile outf)
+static void vectorstrip_reportseq(const AjPStr seqstr, AjPFile outf)
 {
     AjPStr tmp = NULL;
     ajint x = 0;

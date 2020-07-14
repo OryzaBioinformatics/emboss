@@ -60,7 +60,7 @@ int main(int argc, char **argv)
     jmin  = ajAcdGetInt("jmin");
     jmax  = ajAcdGetInt("jmax");
 
-    omnia = ajAcdGetBool("omnia");
+    omnia = ajAcdGetToggle("omnia");
     freq  = ajAcdGetBool("freq");
     print = ajAcdGetBool("print");
 

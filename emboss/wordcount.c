@@ -58,7 +58,7 @@ int main(int argc, char **argv)
 	**       printWordTable(table);              ?? print table of words ??
 	**  }
 	*/
-	embWordFreeTable(table);	/* free table of words */
+	embWordFreeTable(&table);	/* free table of words */
     }
     else
 	ajFatal("ERROR generating word table");

@@ -196,19 +196,23 @@ static ajint ali_ok[LENGTH];
 
 static void tmap_profile2(ajint prof, ajint antal, ajint poss, ajint span);
 static float tmap_length1(ajint nr, ajint start, ajint stopp);
-static void tmap_present3p(ajint antal, ajint *npos, ajint *cpos, ajint poss,
-			   ajint nr, AjPSeqset seqset, AjPReport outfile);
+static void tmap_present3p(ajint antal, const ajint *npos, const ajint *cpos,
+			   ajint poss,
+			   ajint nr, const AjPSeqset seqset,
+			   AjPReport outfile);
 static ajint tmap_peak1(ajint start, ajint stopp, float *parameter);
 static ajint tmap_vec_to_stst(ajint *vec, ajint *start, ajint *stopp,
 			      ajint length);
 static void tmap_weights(char [][LENGTH], ajint, ajint, float *);
 static void tmap_refpos2(ajint, ajint);
-static float tmap_summa1(ajint start, ajint stopp, float *parameter);
+static float tmap_summa1(ajint start, ajint stopp, const float *parameter);
 static ajint tmap_pred1(float, float, float, ajint);
-static ajint tmap_insert_in_vector(ajint *start, ajint *stopp, ajint max,
+static ajint tmap_insert_in_vector(ajint *start, ajint *stopp,
+				   ajint max,
 				   ajint starttmp, ajint stopptmp,
 				   ajint *pred, ajint predparameter);
-static ajint tmap_tm_in_vector(ajint *start, ajint *stopp, ajint max,
+static ajint tmap_tm_in_vector(const ajint *start, const ajint *stopp,
+			       ajint max,
 			       ajint starttmp, ajint stopptmp);
 static void tmap_align_rel(ajint antal, ajint poss, ajint span);
 static void tmap_plot2(AjPGraph mult);
@@ -263,7 +267,7 @@ int main(int argc, char **argv)
 
     for(i=0;i<=nr;i++)
     {
-	char *temp;
+	const char *temp;
 
 	ajSeqsetToUpper(seqset);
 	temp = ajSeqsetSeq(seqset, i);
@@ -362,8 +366,8 @@ static void tmap_refpos2(ajint refnr, ajint poss)
 **
 ** Returns 1 if so, otherwise 0
 **
-** @param [?] pos [ajint] Undocumented
-** @param [?] nr [ajint] Undocumented
+** @param [r] pos [ajint] Undocumented
+** @param [r] nr [ajint] Undocumented
 ** @return [ajint] Undocumented
 ** @@
 ******************************************************************************/
@@ -454,17 +458,17 @@ static float tmap_length1(ajint nr, ajint start, ajint stopp)
 ** Presents results from predictions
 **
 ** @param [r] antal [ajint] Undocumented
-** @param [w] npos [ajint*] Undocumented
-** @param [w] cpos [ajint*] Undocumented
+** @param [r] npos [const ajint*] Undocumented
+** @param [r] cpos [const ajint*] Undocumented
 ** @param [r] poss [ajint] Undocumented
 ** @param [r] nr [ajint] Undocumented
-** @param [r] seqset [AjPSeqset] Undocumented
-** @param [w] report [AjPReport] Undocumented
+** @param [r] seqset [const AjPSeqset] Undocumented
+** @param [u] report [AjPReport] Undocumented
 ** @@
 ******************************************************************************/
 
-static void tmap_present3p(ajint antal, ajint *npos, ajint *cpos,
-			   ajint poss, ajint nr, AjPSeqset seqset,
+static void tmap_present3p(ajint antal, const ajint *npos, const ajint *cpos,
+			   ajint poss, ajint nr, const AjPSeqset seqset,
 			   AjPReport report)
 
 {
@@ -475,14 +479,15 @@ static void tmap_present3p(ajint antal, ajint *npos, ajint *cpos,
     AjPStr tmp = NULL;
     AjPStr hdr = NULL;
     AjPSeq seq;
+    const AjPSeq cseq;
     AjPStr cons = NULL;
     ajint calcid;
     ajint calcsim;
     ajint calcgap;
     ajint calclen;
 
-    ajSeqsetConsStats(seqset, NULL, &cons,
-		      &calcid, &calcsim, &calcgap, &calclen);
+    ajAlignConsStats(seqset, NULL, &cons,
+		     &calcid, &calcsim, &calcgap, &calclen);
 
     ajStrAssC(&hdr, "");
     ajReportSetHeader(report, hdr);
@@ -506,8 +511,8 @@ static void tmap_present3p(ajint antal, ajint *npos, ajint *cpos,
 
     for(j=0; j<=nr; j++)
     {
-	seq = ajSeqsetGetSeq(seqset, j);
-	feat = ajFeattableNewSeq(seq);
+	cseq = ajSeqsetGetSeq(seqset, j);
+	feat = ajFeattableNewSeq(cseq);
 	tmap_refpos2(j, poss);
 	ajStrAssC(&hdr, "");
 	ajReportSetHeader(report, hdr);
@@ -517,7 +522,7 @@ static void tmap_present3p(ajint antal, ajint *npos, ajint *cpos,
 	    ajFmtPrintS(&tmp,"*TM %2d",i);
 	    ajFeatTagAdd(seqf,NULL,tmp);
 	}
-	ajReportWrite(report, feat, seq);
+	ajReportWrite(report, feat, cseq);
 	ajFeattableDel(&feat);
     }
 
@@ -968,12 +973,12 @@ static ajint tmap_peak1(ajint start, ajint stopp, float *parameter)
 **
 ** @param [r] start [ajint] Undocumented
 ** @param [r] stopp [ajint] Undocumented
-** @param [r] parameter [float*] Undocumented
+** @param [r] parameter [const float*] Undocumented
 ** @return [float] sum
 ** @@
 ******************************************************************************/
 
-static float tmap_summa1(ajint start, ajint stopp, float *parameter)
+static float tmap_summa1(ajint start, ajint stopp, const float *parameter)
 {
     float summa = 0;
     ajint i;
@@ -991,16 +996,17 @@ static float tmap_summa1(ajint start, ajint stopp, float *parameter)
 **
 ** Checks if segment already in TM vector
 **
-** @param [?] start [ajint*] Undocumented
-** @param [?] stopp [ajint*] Undocumented
-** @param [?] max [ajint] Undocumented
-** @param [?] starttmp [ajint] Undocumented
-** @param [?] stopptmp [ajint] Undocumented
+** @param [r] start [const ajint*] Undocumented
+** @param [r] stopp [const ajint*] Undocumented
+** @param [r] max [ajint] Undocumented
+** @param [r] starttmp [ajint] Undocumented
+** @param [r] stopptmp [ajint] Undocumented
 ** @return [ajint] Undocumented
 ** @@
 ******************************************************************************/
 
-static ajint tmap_tm_in_vector(ajint *start, ajint *stopp, ajint max,
+static ajint tmap_tm_in_vector(const ajint *start, const ajint *stopp,
+			       ajint max,
 			       ajint starttmp, ajint stopptmp)
 {
     ajint i;
@@ -1125,15 +1131,15 @@ static ajint tmap_vec_to_stst(ajint *vec, ajint *start, ajint *stopp,
 ** Calculates number of differences between sequence 'testnr' and all
 **  other sequences (Ref. Vingron & Argos, CABIOS 5 (1989) 115-121).
 **
-** @param [r] s [char{}{LENGTH}] sekvensmatris (sequence matrix)
+** @param [r] sw [CONST char{}{LENGTH}] sekvensmatris (sequence matrix)
 ** @param [r] poss [ajint] antal positioner i sekvenserna
 **                         (position in sequence)
 ** @param [r] nr [ajint] max nr av sekvenserna (max number of sequences)
-** @param [r] norm_sk [float*] vektor for vikterna (vector)
+** @param [w] norm_sk [float*] vektor for vikterna (vector)
 ** @@
 ******************************************************************************/
 
-static void tmap_weights(char s[][LENGTH], ajint poss, ajint nr,
+static void tmap_weights(char sw[][LENGTH], ajint poss, ajint nr,
 			 float *norm_sk)
 {
     ajint i;
@@ -1146,7 +1152,7 @@ static void tmap_weights(char s[][LENGTH], ajint poss, ajint nr,
 	for(i=0; i<=nr; i++)
 	    if(i!=testnr)
 		for(j=1, skillnad[testnr]=0; j<=poss; j++)
-		    if(s[testnr][j]!=s[i][j])
+		    if(sw[testnr][j]!=sw[i][j])
 			skillnad[testnr]++;
 
     /* Normalize 'skillnad[]' */
@@ -1279,7 +1285,7 @@ static void tmap_align_rel(ajint antal, ajint poss, ajint span)
 
 static void tmap_plot2(AjPGraph mult)
 {
-  AjPGraphData graph = NULL;
+  AjPGraphPlpData graphdata = NULL;
   float max = -10.0;
   float min = 10.0;
   ajint i;
@@ -1297,21 +1303,21 @@ static void tmap_plot2(AjPGraph mult)
 	  min = profile[j][i];
       }
     }
-    graph = ajGraphxyDataNew();
-    ajGraphDataxySetTypeC(graph,"Overlay 2D Plot");
+    graphdata = ajGraphPlpDataNew();
+    ajGraphPlpDataSetTypeC(graphdata,"Overlay 2D Plot");
 
-    ajGraphxyAddDataCalcPtr(graph,poss,0.0,1.0,&profile[j][0]);
+    ajGraphPlpDataCalcXY(graphdata,poss,0.0,1.0,&profile[j][0]);
 
-    ajGraphDataxySetMaxima(graph,0.,(float)poss,min,max);
+    ajGraphPlpDataSetMaxima(graphdata,0.,(float)poss,min,max);
 
-    ajGraphxyDataSetXtitleC(graph,"Residue no.");
-    ajGraphxyDataSetYtitleC(graph,"");
-    ajGraphxyDataSetTitleC(graph,"");
-    ajGraphxyDataSetSubtitleC(graph,"");
+    ajGraphPlpDataSetXTitleC(graphdata,"Residue no.");
+    ajGraphPlpDataSetYTitleC(graphdata,"");
+    ajGraphPlpDataSetTitleC(graphdata,"");
+    ajGraphPlpDataSetSubTitleC(graphdata,"");
 
-    ajGraphxyAddGraph(mult,graph);
+    ajGraphDataAdd(mult,graphdata);
   }
-  ajGraphxySetLineType(graph, 2);
+  ajGraphPlpDataSetLineType(graphdata, 2);
   ajGraphxySetGaps(mult,AJTRUE);
   ajGraphxySetOverLap(mult,AJTRUE);
 
@@ -1324,12 +1330,12 @@ static void tmap_plot2(AjPGraph mult)
   max = max*1.1;
 
   ajGraphxySetMaxMin(mult,0.0,(float)poss,min,max);
-  ajGraphxyTitleC(mult,"Tmap");
+  ajGraphSetTitleC(mult,"Tmap");
 
   max = max *0.95;
 
   for(i=1; i<=tm_number; i++)
-    ajGraphObjAddRect(mult,(float)tm_segment[i][0],max,(float)tm_segment[i][1],
+    ajGraphAddRect(mult,(float)tm_segment[i][0],max,(float)tm_segment[i][1],
 		      max+((max-min)*0.01),BLACK,1);
 
   ajGraphxyDisplay(mult,AJFALSE);

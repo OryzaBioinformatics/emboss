@@ -30,10 +30,10 @@
 
 
 
-static void  charge_addgraph(AjPGraph graph, ajint limit, float *x,
-			     float *y, float ymax, float ymin,
-			     ajint window, char *sname);
-static AjPFloat charge_read_amino(AjPFile* fp);
+static void  charge_addgraph(AjPGraph graph, ajint limit, const float *x,
+			     const float *y, float ymax, float ymin,
+			     ajint window, const char *sname);
+static AjPFloat charge_read_amino(AjPFile fp);
 
 
 
@@ -54,7 +54,6 @@ int main(int argc, char **argv)
     AjPFile    outf;
     AjPFile    cdata;
     AjPStr     str    = NULL;
-    AjPStr     aadata = NULL;
 
     AjBool     plot;
     AjPGraph   graph = NULL;
@@ -78,28 +77,24 @@ int main(int argc, char **argv)
     float sum = 0.;
 
 
-    char *p;
-    char *sname;
+    const char *p;
+    const char *sname;
 
 
     ajGraphInit("charge", argc, argv);
 
     seqall    = ajAcdGetSeqall("seqall");
-    plot      = ajAcdGetBool("plot");
+    plot      = ajAcdGetToggle("plot");
     window    = ajAcdGetInt("window");
-    aadata    = ajAcdGetString("aadata");
+    cdata    = ajAcdGetDatafile("aadata");
 
     /* only one will be used - see variable 'plot' */
 
     outf  = ajAcdGetOutfile("outfile");
     graph = ajAcdGetGraphxy("graph");
 
-    ajFileDataNew(aadata,&cdata);
-    if(!cdata)
-	ajFatal("Cannot open amino acid data file %S",aadata);
-
-
-    chg = charge_read_amino(&cdata);
+    chg = charge_read_amino(cdata);
+    ajFileClose(&cdata);
 
     str = ajStrNew();
 
@@ -159,8 +154,8 @@ int main(int argc, char **argv)
 	{
 	    ajGraphSetMulti(graph,1);
 	    ajGraphxySetOverLap(graph,ajFalse);
-	    ajGraphxyXtitleC(graph,"Position");
-	    ajGraphxyYtitleC(graph,"Charge");
+	    ajGraphSetXTitleC(graph,"Position");
+	    ajGraphSetYTitleC(graph,"Charge");
 	    charge_addgraph(graph,limit,x,y,ymax,ymin,window,sname);
 	    if(limit>0)
 		ajGraphxyDisplay(graph,ajFalse);
@@ -180,8 +175,6 @@ int main(int argc, char **argv)
 
     ajStrDel(&str);
 
-    ajFileClose(&cdata);
-
     ajExit();
 
     return 0;
@@ -193,31 +186,31 @@ int main(int argc, char **argv)
 **
 ** Undocumented.
 **
-** @param [?] graph [AjPGraph] graph object
-** @param [?] limit [ajint] range
-** @param [?] x [float*] x co-ords
-** @param [?] y [float*] y co-ords
-** @param [?] ymax [float] max y value
-** @param [?] ymin [float] max x value
-** @param [?] window [ajint] window
-** @param [?] sname [char*] sequence name
+** @param [u] graph [AjPGraph] graph object
+** @param [r] limit [ajint] range
+** @param [r] x [const float*] x co-ords
+** @param [r] y [const float*] y co-ords
+** @param [r] ymax [float] max y value
+** @param [r] ymin [float] max x value
+** @param [r] window [ajint] window
+** @param [r] sname [const char*] sequence name
 ** @@
 ******************************************************************************/
 
-static void charge_addgraph(AjPGraph graph, ajint limit, float *x,
-			    float *y, float ymax, float ymin,
-			    ajint window, char *sname)
+static void charge_addgraph(AjPGraph graph, ajint limit, const float *x,
+			    const float *y, float ymax, float ymin,
+			    ajint window, const char *sname)
 {
     ajint i;
 
-    AjPGraphData data;
+    AjPGraphPlpData data;
     AjPStr st = NULL;
     float baseline = 0.;
 
     if(limit<1)
 	return;
 
-    data = ajGraphxyDataNewI(limit);
+    data = ajGraphPlpDataNewI(limit);
 
     st = ajStrNew();
 
@@ -227,24 +220,24 @@ static void charge_addgraph(AjPGraph graph, ajint limit, float *x,
 	data->y[i] = y[i];
     }
 
-    ajGraphxySetColour(data,BLACK);
-    ajGraphDataxySetMaxMin(data,x[0],x[limit-1],ymin,ymax);
-    ajGraphDataxySetMaxima(data,x[0],x[limit-1],ymin,ymax);
+    ajGraphPlpDataSetColour(data,BLACK);
+    ajGraphPlpDataSetMaxMin(data,x[0],x[limit-1],ymin,ymax);
+    ajGraphPlpDataSetMaxima(data,x[0],x[limit-1],ymin,ymax);
 
     ajFmtPrintS(&st,"CHARGE of %s. Window:%d",sname,window);
-    ajGraphxyDataSetTitle(data,st);
-    ajGraphxyTitleC(graph,ajStrStr(st));
+    ajGraphPlpDataSetTitle(data,st);
+    ajGraphSetTitleC(graph,ajStrStr(st));
 
-    ajGraphDataxySetTypeC(data,"2D Plot Float");
+    ajGraphPlpDataSetTypeC(data,"2D Plot Float");
     ajFmtPrintS(&st,"Charge");
-    ajGraphxyDataSetYtitle(data,st);
+    ajGraphPlpDataSetYTitle(data,st);
 
     ajFmtPrintS(&st,"Position");
-    ajGraphxyDataSetXtitle(data,st);
+    ajGraphPlpDataSetXTitle(data,st);
 
-    ajGraphDataObjAddLine(data,x[0],baseline,x[limit-1],baseline,BLUE);
+    ajGraphPlpDataAddLine(data,x[0],baseline,x[limit-1],baseline,BLUE);
 
-    ajGraphxyAddGraph(graph,data);
+    ajGraphDataAdd(graph,data);
 
     ajStrDel(&st);
 
@@ -258,12 +251,12 @@ static void charge_addgraph(AjPGraph graph, ajint limit, float *x,
 **
 ** Undocumented.
 **
-** @param [?] fp [AjPFile*] Undocumented
+** @param [u] fp [AjPFile] Undocumented
 ** @return [AjPFloat] Undocumented
 ** @@
 ******************************************************************************/
 
-static AjPFloat charge_read_amino(AjPFile* fp)
+static AjPFloat charge_read_amino(AjPFile fp)
 {
     AjPStr   line;
     AjPFloat chg = NULL;
@@ -275,7 +268,7 @@ static AjPFloat charge_read_amino(AjPFile* fp)
     chg  = ajFloatNew();
 
 
-    while(ajFileReadLine(*fp,&line))
+    while(ajFileReadLine(fp,&line))
     {
 	if(*ajStrStr(line)=='#' || !ajStrLen(line))
 	    continue;
@@ -285,7 +278,6 @@ static AjPFloat charge_read_amino(AjPFile* fp)
 	ajFloatPut(&chg,idx,v);
     }
 
-    ajFileClose(fp);
     ajStrDel(&line);
 
     return chg;

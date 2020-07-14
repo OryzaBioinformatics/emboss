@@ -35,7 +35,7 @@ static AjBool overlap;
 ** @attr forwardEnd [ajint] End forward
 ** @attr revStart [ajint] Start reverse
 ** @attr revEnd [ajint] End reverse
-** @attr next [struct palindrome *] Pointer to next in list
+** @attr next [struct palindrome*] Pointer to next in list
 ******************************************************************************/
 
 typedef struct palindrome
@@ -52,14 +52,15 @@ typedef struct palindrome
 
 static Palindrome palindrome_New(ajint fstart, ajint fend, ajint rstart,
 				 ajint rend);
-static AjBool palindrome_AInB(Palindrome a, Palindrome b);
-static AjBool palindrome_AOverB(Palindrome a, Palindrome b);
+static AjBool palindrome_AInB(const Palindrome a, const Palindrome b);
+static AjBool palindrome_AOverB(const Palindrome a, const Palindrome b);
 static AjBool palindrome_Over(ajint astart, ajint aend, ajint bstart,
 			     ajint bend);
-static void   palindrome_Print(AjPFile outfile, AjPStr seq, Palindrome pal,
+static void   palindrome_Print(AjPFile outfile,
+			       const AjPStr seq, const Palindrome pal,
 			       ajint maxLen);
-static AjBool palindrome_Longer(Palindrome a, Palindrome b);
-static void   palindrome_Swap(Palindrome a, Palindrome b);
+static AjBool palindrome_Longer(const Palindrome a, const Palindrome b);
+static void   palindrome_Swap(const Palindrome a, Palindrome b);
 
 
 
@@ -227,11 +228,8 @@ int main(int argc, char **argv)
 			    {
 				if(palindrome_Longer(ppal, pnext))
 				{
-				    ajDebug("swap...\n");
 				    palindrome_Swap(ppal, pnext);
 				}
-				else
-				    ajDebug("keep...\n");
 
 				found = AJTRUE;
 				break;
@@ -298,10 +296,10 @@ int main(int argc, char **argv)
 **
 ** Create new Palindrome object
 **
-** @param [?] fstart [ajint] Undocumented
-** @param [?] fend [ajint] Undocumented
-** @param [?] rstart [ajint] Undocumented
-** @param [?] rend [ajint] Undocumented
+** @param [r] fstart [ajint] Undocumented
+** @param [r] fend [ajint] Undocumented
+** @param [r] rstart [ajint] Undocumented
+** @param [r] rend [ajint] Undocumented
 ** @return [Palindrome] Undocumented
 ** @@
 ******************************************************************************/
@@ -330,13 +328,13 @@ static Palindrome palindrome_New(ajint fstart, ajint fend, ajint rstart,
 ** Test whether Palindrome A is within Palindrome B (is a subset of B)
 ** in both halves of the stem
 **
-** @param [?] a [Palindrome] Undocumented
-** @param [?] b [Palindrome] Undocumented
+** @param [r] a [const Palindrome] Undocumented
+** @param [r] b [const Palindrome] Undocumented
 ** @return [AjBool] Undocumented
 ** @@
 ******************************************************************************/
 
-static AjBool palindrome_AInB(Palindrome a, Palindrome b)
+static AjBool palindrome_AInB(const Palindrome a, const Palindrome b)
 {
     if((a->forwardStart >= b->forwardStart) &&
        (a->forwardEnd <=b->forwardEnd))
@@ -354,13 +352,13 @@ static AjBool palindrome_AInB(Palindrome a, Palindrome b)
 **
 ** Test whether Palindrome A overlaps Palindrome A on both halves of the stem
 **
-** @param [?] a [Palindrome] Undocumented
-** @param [?] b [Palindrome] Undocumented
+** @param [r] a [const Palindrome] Undocumented
+** @param [r] b [const Palindrome] Undocumented
 ** @return [AjBool] Undocumented
 ** @@
 ******************************************************************************/
 
-static AjBool palindrome_AOverB(Palindrome a, Palindrome b)
+static AjBool palindrome_AOverB(const Palindrome a, const Palindrome b)
 {
     if(palindrome_Over(a->forwardStart, a->forwardEnd,
 		       b->forwardStart, b->forwardEnd) &&
@@ -378,10 +376,10 @@ static AjBool palindrome_AOverB(Palindrome a, Palindrome b)
 **
 ** Test whether two regions overlap each other
 **
-** @param [?] astart [ajint] Undocumented
-** @param [?] aend [ajint] Undocumented
-** @param [?] bstart [ajint] Undocumented
-** @param [?] bend [ajint] Undocumented
+** @param [r] astart [ajint] Undocumented
+** @param [r] aend [ajint] Undocumented
+** @param [r] bstart [ajint] Undocumented
+** @param [r] bend [ajint] Undocumented
 ** @return [AjBool] Undocumented
 ** @@
 ******************************************************************************/
@@ -405,13 +403,13 @@ static AjBool palindrome_Over(ajint astart, ajint aend, ajint bstart,
 ** Test whether the stem of Palindrome A is longer than the stem of
 ** Palindrome B
 **
-** @param [?] a [Palindrome] Undocumented
-** @param [?] b [Palindrome] Undocumented
+** @param [r] a [const Palindrome] Undocumented
+** @param [r] b [const Palindrome] Undocumented
 ** @return [AjBool] Undocumented
 ** @@
 ******************************************************************************/
 
-static AjBool palindrome_Longer(Palindrome a, Palindrome b)
+static AjBool palindrome_Longer(const Palindrome a, const Palindrome b)
 {
     if((a->forwardEnd - a->forwardStart) >
        (b->forwardEnd - b->forwardStart))
@@ -427,12 +425,12 @@ static AjBool palindrome_Longer(Palindrome a, Palindrome b)
 **
 ** Set Palindrome B to be the same position as Palindrome A 
 **
-** @param [?] a [Palindrome] Undocumented
-** @param [?] b [Palindrome] Undocumented
+** @param [r] a [const Palindrome] Undocumented
+** @param [w] b [Palindrome] Undocumented
 ** @@
 ******************************************************************************/
 
-static void palindrome_Swap(Palindrome a, Palindrome b)
+static void palindrome_Swap(const Palindrome a, Palindrome b)
 {
     b->forwardStart =  a->forwardStart;
     b->forwardEnd =  a->forwardEnd;
@@ -449,21 +447,22 @@ static void palindrome_Swap(Palindrome a, Palindrome b)
 **
 ** Output results to file
 **
-** @param [?] outfile [AjPFile] Undocumented
-** @param [?] seq [AjPStr] Undocumented
-** @param [?] pal [Palindrome] Undocumented
+** @param [u] outfile [AjPFile] Undocumented
+** @param [r] seq [const AjPStr] Undocumented
+** @param [r] pal [const Palindrome] Undocumented
 ** @param [r] maxLen [ajint] Maximum palindrome length
 ** @@
 ******************************************************************************/
 
-static void palindrome_Print(AjPFile outfile, AjPStr seq, Palindrome pal,
+static void palindrome_Print(AjPFile outfile,
+			     const AjPStr seq, const Palindrome pal,
 			     ajint maxLen)
 {
 
     ajint i;
     ajint j;
 
-    if(pal->forwardEnd - pal->forwardStart +1 > maxLen)
+    if(pal->forwardEnd - pal->forwardStart > maxLen)
 	return;
 
     ajFmtPrintF(outfile, "%-5d ", (pal->forwardStart+1));

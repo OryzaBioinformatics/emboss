@@ -47,7 +47,8 @@ int main(int argc, char **argv)
     AjPStr pattern;
     AjPStr pfname;
 
-    char *p;
+    const char *p;
+    char *q;
 
     AjBool gid=ajFalse;
     AjBool done=ajFalse;
@@ -89,15 +90,15 @@ int main(int argc, char **argv)
 	    gid  = ajTrue;
 	    done = ajFalse;
 	    fp = oout;
-	    p = strtok(p," \t\n");
-	    p = strtok(NULL," \t\n");
+	    p = ajSysStrtok(p," \t\n");
+	    p = ajSysStrtok(NULL," \t\n");
 	    ajStrAssC(&id,p);
 	}
 
 	if(ajStrPrefixC(line,"AC"))
 	{
-	    p = strtok(p," \t\n");
-	    p = strtok(NULL," \t\n");
+	    p = ajSysStrtok(p," \t\n");
+	    p = ajSysStrtok(NULL," \t\n");
 	    ajStrAssC(&acc,p);
 	}
 
@@ -112,25 +113,25 @@ int main(int argc, char **argv)
 
 	if(ajStrPrefixC(line,"SQ") || ajStrPrefixC(line,"SE"))
 	{
-	    p = strtok(p," .\t\n");
-	    p = strtok(NULL," .\t\n");
+	    p = ajSysStrtok(p," .\t\n");
+	    p = ajSysStrtok(NULL," .\t\n");
 	    if(!p)
 		ajStrAssC(&pattern,"");
 	    else
 		ajStrAssC(&pattern,p);
-	    p = ajStrStr(pattern);
+	    q = ajStrStrMod(&pattern);
 
-	    while(*p)
+	    while(*q)
 	    {
-		if(*p=='[')
-		    *p = '(';
+		if(*q=='[')
+		    *q = '(';
 
-		if(*p==':')
-		    *p = ',';
+		if(*q==':')
+		    *q = ',';
 
-		if(*p==']')
-		    *p = ')';
-		++p;
+		if(*q==']')
+		    *q = ')';
+		++q;
 	    }
 	}
 

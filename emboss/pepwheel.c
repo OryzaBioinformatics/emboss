@@ -27,8 +27,8 @@
 
 
 
-static void pepwheel_plotresidue(char c, float r, float a, char *squares,
-				 char *circles, char *diamonds,
+static void pepwheel_plotresidue(char c, float r, float a,const  char *squares,
+				 const char *circles, const char *diamonds,
 				 float xmin,float xmax,
 				 float ymin,float ymax);
 static void pepwheel_drawocta(float x, float y, float size);
@@ -112,7 +112,7 @@ int main(int argc, char **argv)
     squares     = ajAcdGetString("squares");
     diamonds    = ajAcdGetString("diamonds");
     wheel       = ajAcdGetBool("wheel");
-    amphipathic = ajAcdGetBool("amphipathic");
+    amphipathic = ajAcdGetToggle("amphipathic");
 
     ajStrToUpper(&octags);
     ajStrToUpper(&squares);
@@ -255,9 +255,9 @@ static void pepwheel_drawocta(float x, float y, float size)
 ** @param [r] c [char] char to plot
 ** @param [r] r [float] radius
 ** @param [r] a [float] angle
-** @param [r] squares [char*] residues for squares
-** @param [r] octags [char*] residues for octagons
-** @param [r] diamonds [char*] residues for diamonds
+** @param [r] squares [const char*] residues for squares
+** @param [r] octags [const char*] residues for octagons
+** @param [r] diamonds [const char*] residues for diamonds
 ** @param [r] xmin [float] co-ord
 ** @param [r] xmax [float] co-ord
 ** @param [r] ymin [float] co-ord
@@ -265,8 +265,8 @@ static void pepwheel_drawocta(float x, float y, float size)
 ** @@
 ******************************************************************************/
 
-static void pepwheel_plotresidue(char c, float r, float a, char *squares,
-				 char *octags, char *diamonds,
+static void pepwheel_plotresidue(char c, float r, float a, const char *squares,
+				 const char *octags, const char *diamonds,
 				 float xmin, float xmax,
 				 float ymin, float ymax)
 {

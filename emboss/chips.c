@@ -69,7 +69,7 @@ int main(int argc, char **argv)
 	if(!sum)
 	{
 	    ajCodCalculateUsage(&codon,ccnt);
-	    Nc = ajCodCalcNc(&codon);
+	    Nc = ajCodCalcNc(codon);
 	    
 	    ajFmtPrintF(outf,"%-20s Nc = %.3f\n",ajSeqName(seq),Nc);
 	    ajCodClear(&codon);
@@ -79,7 +79,7 @@ int main(int argc, char **argv)
     if(sum)
     {
 	ajCodCalculateUsage(&codon,ccnt);
-	Nc = ajCodCalcNc(&codon);
+	Nc = ajCodCalcNc(codon);
 	
 	ajFmtPrintF(outf,"# CHIPS codon usage statistics\n\n");
 	ajFmtPrintF(outf,"Nc = %.3f\n",Nc);

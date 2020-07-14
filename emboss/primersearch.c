@@ -73,7 +73,7 @@ typedef struct primerguts
     ajuint solimit;
     EmbOPatBYPNode off[AJALPHA];
     AjPStr re;
-    ajint **skipm;
+    ajint** skipm;
     void* tidy;
 } *PGuts;
 
@@ -103,8 +103,8 @@ typedef struct primerhit
     AjPStr seqname;
     AjPStr desc;
     AjPStr acc;
-    AjPStr forward;		/* pattern that hits forward strand */
-    AjPStr reverse;		/* pattern that hits reverse strand */
+    AjPStr forward;
+    AjPStr reverse;
     ajint forward_pos;
     ajint reverse_pos;
     ajint amplen;
@@ -144,19 +144,21 @@ static void psearch_initialise_pguts(PGuts* primer);
 /* "destructors" */
 static void psearch_free_pguts(PGuts* primer);
 static void psearch_free_primer(void** x, void* cl);
-static void psearch_clean_hitlist(AjPList hlist);
+static void psearch_clean_hitlist(AjPList* hlist);
 
 /* utilities */
 static void psearch_read_primers(AjPList* primerList, AjPFile primerFile,
 				 ajint mmp);
 static AjBool psearch_classify_and_compile(Primer* primdata);
-static void psearch_primer_search(AjPList primerList, AjPSeq seq,
+static void psearch_primer_search(const AjPList primerList, const AjPSeq seq,
 				  AjPFile outf);
-static void psearch_scan_seq(Primer primdata, AjPSeq seq, AjBool reverse,
+static void psearch_scan_seq(const Primer primdata,
+			     const AjPSeq seq, AjBool reverse,
 			     AjPFile outf);
-static void psearch_store_hits(Primer primdata, AjPList fhits_list,
-			       AjPList rhits_list, AjPSeq seq, AjBool reverse);
-static void psearch_print_hits(AjPList primerList, AjPFile outf);
+static void psearch_store_hits(const Primer primdata, AjPList fhits_list,
+			       AjPList rhits_list, const AjPSeq seq,
+			       AjBool reverse);
+static void psearch_print_hits(const AjPList primerList, AjPFile outf);
 
 
 
@@ -264,7 +266,7 @@ static void psearch_initialise_pguts(PGuts* primer)
 **
 ** Frees up all the internal members of a PGuts struct
 **
-** @param [?] primer [PGuts*] Undocumented
+** @param [d] primer [PGuts*] Undocumented
 ** @return [void]
 ** @@
 ******************************************************************************/
@@ -317,7 +319,7 @@ static void psearch_free_primer(void **x, void *cl)
     ajStrDel(&primdata->Name);
 
     /* clean up hitlist */
-    lIter = ajListIter(primdata->hitlist);
+    lIter = ajListIterRead(primdata->hitlist);
     while(!ajListIterDone(lIter))
     {
 	PHit phit = ajListIterNext(lIter);
@@ -332,7 +334,7 @@ static void psearch_free_primer(void **x, void *cl)
 
     ajListFree(&primdata->hitlist);
     ajListDel(&primdata->hitlist);
-    ajListIterFree(lIter);
+    ajListIterFree(&lIter);
 
     AJFREE(primdata);
 
@@ -346,23 +348,23 @@ static void psearch_free_primer(void **x, void *cl)
 **
 ** Clean the hitlist
 **
-** @param [u] hlist [AjPList] Undocumented
+** @param [d] hlist [AjPList*] Undocumented
 ** @@
 ******************************************************************************/
 
-static void psearch_clean_hitlist(AjPList hlist)
+static void psearch_clean_hitlist(AjPList* hlist)
 {
     AjIList lIter;
 
-    lIter = ajListIter(hlist);
+    lIter = ajListIterRead(*hlist);
     while(!ajListIterDone(lIter))
     {
 	EmbPMatMatch fm = ajListIterNext(lIter);
 	embMatMatchDel(&fm);
     }
-    ajListFree(&hlist);
-    ajListDel(&hlist);
-    ajListIterFree(lIter);
+    ajListFree(hlist);
+    ajListDel(hlist);
+    ajListIterFree(&lIter);
 
     return;
 }
@@ -377,8 +379,8 @@ static void psearch_clean_hitlist(AjPList hlist)
 ** read primers in from primerfile, classify and compile the patterns
 **
 ** @param [w] primerList [AjPList*] primer list
-** @param [?] primerFile [AjPFile] Undocumented
-** @param [?] mmp [ajint] Undocumented
+** @param [u] primerFile [AjPFile] Undocumented
+** @param [r] mmp [ajint] Undocumented
 ** @@
 ******************************************************************************/
 
@@ -469,7 +471,8 @@ static AjBool psearch_classify_and_compile(Primer* primdata)
 
     /* forward primer */
     if(!((*primdata)->forward->type =
-	 embPatGetType(&((*primdata)->forward->patstr),
+	 embPatGetType(((*primdata)->forward->origpat),
+		       &((*primdata)->forward->patstr),
 		       (*primdata)->forward->mm,0,
 		       &((*primdata)->forward->real_len),
 		       &((*primdata)->forward->amino),
@@ -478,7 +481,8 @@ static AjBool psearch_classify_and_compile(Primer* primdata)
 
     /* reverse primer */
     if(!((*primdata)->reverse->type =
-	 embPatGetType(&((*primdata)->reverse->patstr),
+	 embPatGetType(((*primdata)->reverse->origpat),
+		       &((*primdata)->reverse->patstr),
 		       (*primdata)->reverse->mm,0,
 		       &((*primdata)->reverse->real_len),
 		       &((*primdata)->reverse->amino),
@@ -487,7 +491,6 @@ static AjBool psearch_classify_and_compile(Primer* primdata)
 
     embPatCompile((*primdata)->forward->type,
 		  (*primdata)->forward->patstr,
-		  (*primdata)->forward->origpat,
 		  &((*primdata)->forward->len),
 		  &((*primdata)->forward->buf),
 		  (*primdata)->forward->off,
@@ -500,7 +503,6 @@ static AjBool psearch_classify_and_compile(Primer* primdata)
 
     embPatCompile((*primdata)->reverse->type,
 		  (*primdata)->reverse->patstr,
-		  (*primdata)->reverse->origpat,
 		  &((*primdata)->reverse->len),
 		  &((*primdata)->reverse->buf),
 		  (*primdata)->reverse->off,
@@ -521,18 +523,19 @@ static AjBool psearch_classify_and_compile(Primer* primdata)
 **
 ** tests the primers in primdata against seq and writes results to outfile
 **
-** @param [r] primerList [AjPList] primer list
-** @param [r] seq [AjPSeq] sequence
+** @param [r] primerList [const AjPList] primer list
+** @param [r] seq [const AjPSeq] sequence
 ** @param [w] outf [AjPFile] outfile
 ** @@
 ******************************************************************************/
 
-static void psearch_primer_search(AjPList primerList, AjPSeq seq, AjPFile outf)
+static void psearch_primer_search(const AjPList primerList, const AjPSeq seq,
+				  AjPFile outf)
 {
     AjIList listIter;
 
     /* test each list node against this sequence */
-    listIter = ajListIter(primerList);
+    listIter = ajListIterRead(primerList);
     while(!ajListIterDone(listIter))
     {
 	Primer curr_primer = ajListIterNext(listIter);
@@ -541,7 +544,7 @@ static void psearch_primer_search(AjPList primerList, AjPSeq seq, AjPFile outf)
 	psearch_scan_seq(curr_primer, seq, AJTRUE, outf);
     }
 
-    ajListIterFree(listIter);
+    ajListIterFree(&listIter);
 
     return;
 }
@@ -555,14 +558,15 @@ static void psearch_primer_search(AjPList primerList, AjPSeq seq, AjPFile outf)
 ** sense or reverse complemented
 ** works out amplimer length if the two primers both hit
 **
-** @param [r] primdata [Primer] primer data
-** @param [r] seq [AjPSeq] sequence
+** @param [r] primdata [const Primer] primer data
+** @param [r] seq [const AjPSeq] sequence
 ** @param [r] reverse [AjBool] do reverse
 ** @param [w] outf [AjPFile] outfile
 ** @@
 ******************************************************************************/
 
-static void psearch_scan_seq(Primer primdata, AjPSeq seq, AjBool reverse,
+static void psearch_scan_seq(const Primer primdata,
+			     const AjPSeq seq, AjBool reverse,
 			     AjPFile outf)
 {
     AjPStr seqstr = NULL;
@@ -575,9 +579,10 @@ static void psearch_scan_seq(Primer primdata, AjPSeq seq, AjBool reverse,
 
     /* initialise variables for search */
     ajStrAssC(&seqname,ajSeqName(seq));
-    ajSeqToUpper(seq);
     ajStrAssS(&seqstr, ajSeqStr(seq));
     ajStrAssS(&revstr, ajSeqStr(seq));
+    ajStrToUpper(&seqstr);
+    ajStrToUpper(&revstr);
     ajSeqReverseStr(&revstr);
     fhits_list = ajListNew();
     rhits_list = ajListNew();
@@ -588,10 +593,9 @@ static void psearch_scan_seq(Primer primdata, AjPSeq seq, AjBool reverse,
 	embPatFuzzSearch(primdata->forward->type,
 			 ajSeqBegin(seq),
 			 primdata->forward->patstr,
-			 primdata->forward->origpat,
 			 seqname,
 			 seqstr,
-			 &fhits_list,
+			 fhits_list,
 			 primdata->forward->len,
 			 primdata->forward->mm,
 			 primdata->forward->amino,
@@ -610,10 +614,9 @@ static void psearch_scan_seq(Primer primdata, AjPSeq seq, AjBool reverse,
 	    embPatFuzzSearch(primdata->reverse->type,
 			     ajSeqBegin(seq),
 			     primdata->reverse->patstr,
-			     primdata->reverse->origpat,
 			     seqname,
 			     revstr,
-			     &rhits_list,
+			     rhits_list,
 			     primdata->reverse->len,
 			     primdata->reverse->mm,
 			     primdata->reverse->amino,
@@ -634,10 +637,9 @@ static void psearch_scan_seq(Primer primdata, AjPSeq seq, AjBool reverse,
 	embPatFuzzSearch(primdata->reverse->type,
 			 ajSeqBegin(seq),
 			 primdata->reverse->patstr,
-			 primdata->reverse->origpat,
 			 seqname,
 			 seqstr,
-			 &fhits_list,
+			 fhits_list,
 			 primdata->reverse->len,
 			 primdata->reverse->mm,
 			 primdata->reverse->amino,
@@ -656,10 +658,9 @@ static void psearch_scan_seq(Primer primdata, AjPSeq seq, AjBool reverse,
 	    embPatFuzzSearch(primdata->forward->type,
 			     ajSeqBegin(seq),
 			     primdata->forward->patstr,
-			     primdata->forward->origpat,
 			     seqname,
 			     revstr,
-			     &rhits_list,
+			     rhits_list,
 			     primdata->forward->len,
 			     primdata->forward->mm,
 			     primdata->forward->amino,
@@ -680,8 +681,8 @@ static void psearch_scan_seq(Primer primdata, AjPSeq seq, AjBool reverse,
 	psearch_store_hits(primdata, fhits_list, rhits_list, seq, reverse);
 
     /* tidy up */
-    psearch_clean_hitlist(fhits_list);
-    psearch_clean_hitlist(rhits_list);
+    psearch_clean_hitlist(&fhits_list);
+    psearch_clean_hitlist(&rhits_list);
 
     ajStrDel(&seqstr);
     ajStrDel(&revstr);
@@ -697,16 +698,17 @@ static void psearch_scan_seq(Primer primdata, AjPSeq seq, AjBool reverse,
 **
 ** Store primer hits
 **
-** @param [r] primdata [Primer] primer data
+** @param [r] primdata [const Primer] primer data
 ** @param [w] fhits [AjPList] forward hits
 ** @param [w] rhits [AjPList] reverse hits
-** @param [r] seq [AjPSeq] sequence
+** @param [r] seq [const AjPSeq] sequence
 ** @param [r] reverse [AjBool] do reverse
 ** @@
 ******************************************************************************/
 
-static void psearch_store_hits(Primer primdata, AjPList fhits, AjPList rhits,
-			       AjPSeq seq, AjBool reverse)
+static void psearch_store_hits(const Primer primdata,
+			       AjPList fhits, AjPList rhits,
+			       const AjPSeq seq, AjBool reverse)
 {
     ajint amplen = 0;
     AjIList fi;
@@ -714,7 +716,7 @@ static void psearch_store_hits(Primer primdata, AjPList fhits, AjPList rhits,
 
     PHit primerhit = NULL;
 
-    fi = ajListIter(fhits);
+    fi = ajListIterRead(fhits);
     while(!ajListIterDone(fi))
     {
 	EmbPMatMatch fm = NULL;
@@ -722,7 +724,7 @@ static void psearch_store_hits(Primer primdata, AjPList fhits, AjPList rhits,
 	amplen = 0;
 
 	fm = ajListIterNext(fi);
-	ri = ajListIter(rhits);
+	ri = ajListIterRead(rhits);
 	while(!ajListIterDone(ri))
 	{
 	    ajint seqlen = ajSeqLen(seq);
@@ -769,10 +771,10 @@ static void psearch_store_hits(Primer primdata, AjPList fhits, AjPList rhits,
 	**  clean up rListIter here as it will be new'ed again next
 	**  time through
 	*/
-	ajListIterFree(ri);
+	ajListIterFree(&ri);
     }
 
-    ajListIterFree(fi);
+    ajListIterFree(&fi);
     return;
 }
 
@@ -783,22 +785,22 @@ static void psearch_store_hits(Primer primdata, AjPList fhits, AjPList rhits,
 **
 ** Print primer hits
 **
-** @param [r] primerList [AjPList] primer hits
+** @param [r] primerList [const AjPList] primer hits
 ** @param [w] outf [AjPFile] outfile
 ** @@
 ******************************************************************************/
 
-static void psearch_print_hits(AjPList primerList, AjPFile outf)
+static void psearch_print_hits(const AjPList primerList, AjPFile outf)
 {
     /* iterate through list of hits */
     AjIList lIter;
 
     ajint count = 1;
-    lIter = ajListIter(primerList);
+    lIter = ajListIterRead(primerList);
     while(!ajListIterDone(lIter))
     {
 	Primer primer = ajListIterNext(lIter);
-	AjIList hIter = ajListIter(primer->hitlist);
+	AjIList hIter = ajListIterRead(primer->hitlist);
 	count = 1;
 
 	ajFmtPrintF(outf, "\nPrimer name %s\n", ajStrStr(primer->Name));
@@ -821,9 +823,9 @@ static void psearch_print_hits(AjPList primerList, AjPFile outf)
 	    ajFmtPrintF(outf, "\tAmplimer length: %d bp\n", hit->amplen);
 	    count++;
 	}
-	ajListIterFree(hIter);
+	ajListIterFree(&hIter);
     }
-    ajListIterFree(lIter);
+    ajListIterFree(&lIter);
 
     return;
 }

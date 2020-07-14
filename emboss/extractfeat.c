@@ -25,47 +25,53 @@
 
 
 
-static void extractfeat_FeatSeqExtract(AjPSeq seq, AjPSeqout seqout,
+static void extractfeat_FeatSeqExtract(const AjPSeq seq, AjPSeqout seqout,
 				       AjPFeattable featab, ajint before,
 				       ajint after, AjBool join,
-				       AjBool featinname, AjPStr describe);
+				       AjBool featinname,
+				       const AjPStr describe);
 
-static void extractfeat_GetFeatseq(AjPSeq seq, AjPFeature gf, AjPStr
-				   *gfstr, AjBool sense);
+static void extractfeat_GetFeatseq(const AjPSeq seq, const AjPFeature gf,
+				   AjPStr *gfstr, AjBool sense);
 
 static void extractfeat_WriteOut(AjPSeqout seqout, AjPStr *featstr,
 				 AjBool compall, AjBool sense, ajint firstpos,
 				 ajint lastpos,
-				 ajint before, ajint after, AjPSeq seq,
-				 AjBool remote, AjPStr type,
-				 AjBool featinname, AjPStr describestr);
+				 ajint before, ajint after,
+				 const AjPSeq seq,
+				 AjBool remote, const AjPStr type,
+				 AjBool featinname,
+				 const AjPStr describestr);
 
-static void extractfeat_BeforeAfter(AjPSeq seq, AjPStr * featstr,
+static void extractfeat_BeforeAfter(const AjPSeq seq, AjPStr * featstr,
 				    ajint firstpos, ajint lastpos,
 				    ajint before, ajint after,
 				    AjBool sense);
 
-static void extractfeat_GetRegionPad(AjPSeq seq, AjPStr *featstr, ajint
+static void extractfeat_GetRegionPad(const AjPSeq seq, AjPStr *featstr, ajint
 				     start, ajint end, AjBool sense,
 				     AjBool beginning);
 
-static void extractfeat_FeatureFilter(AjPFeattable featab, AjPStr
-				      source, AjPStr type, ajint sense,
+static void extractfeat_FeatureFilter(AjPFeattable featab,
+				      const AjPStr source, const AjPStr type,
+				      ajint sense,
 				      float minscore,
-				      float maxscore, AjPStr tag,
-				      AjPStr value);
+				      float maxscore, const AjPStr tag,
+				      const AjPStr value);
 
-static AjBool extractfeat_MatchFeature(AjPFeature gf, AjPStr
-				       source, AjPStr type, ajint sense,
+static AjBool extractfeat_MatchFeature(const AjPFeature gf,
+				       const AjPStr source, const AjPStr type,
+				       ajint sense,
 				       float minscore,
-				       float maxscore, AjPStr tag,
-				       AjPStr value, AjBool *tagsmatch);
+				       float maxscore, const AjPStr tag,
+				       const AjPStr value, AjBool *tagsmatch);
 
-static AjBool extractfeat_MatchPatternTags(AjPFeature feat, AjPStr tpattern,
-					   AjPStr vpattern);
+static AjBool extractfeat_MatchPatternTags(const AjPFeature feat,
+					   const AjPStr tpattern,
+					   const AjPStr vpattern);
 
-static AjBool extractfeat_MatchPatternDescribe(AjPFeature feat, 
-					       AjPStr describe,
+static AjBool extractfeat_MatchPatternDescribe(const AjPFeature feat, 
+					       const AjPStr describe,
 					       AjPStr *strout);
 
 
@@ -152,22 +158,23 @@ int main(int argc, char **argv)
 ** to the parent if this is a multiple join and 'join' is set TRUE.
 ** When writing out, get the amount 'before' and 'after' the feature.
 **
-** @param [u] seq [AjPSeq] sequence
+** @param [r] seq [const AjPSeq] sequence
 ** @param [u] seqout [AjPSeqout] output sequence
-** @param [r] featab [AjPFeattable] features to extract
+** @param [u] featab [AjPFeattable] features to extract
 ** @param [r] before [ajint] region before feature to add to extraction
 ** @param [r] after [ajint] region after feature to add to extraction
 ** @param [r] join [AjBool] concatenate 'join()' features
 ** @param [r] featinname [AjBool] TRUE if want the type to be part of the name
-** @param [r] describe [AjPStr] patterns of tag name for describe line
+** @param [r] describe [const AjPStr] patterns of tag name for describe line
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-static void extractfeat_FeatSeqExtract(AjPSeq seq, AjPSeqout seqout,
+static void extractfeat_FeatSeqExtract(const AjPSeq seq, AjPSeqout seqout,
 				       AjPFeattable featab, ajint before,
 				       ajint after, AjBool join,
-				       AjBool featinname, AjPStr describe)
+				       AjBool featinname,
+				       const AjPStr describe)
 {
     AjIList iter = NULL;
     AjPFeature gf = NULL;
@@ -200,7 +207,7 @@ static void extractfeat_FeatSeqExtract(AjPSeq seq, AjPSeqout seqout,
         describeout = ajStrNew();
 
 
-	iter = ajListIter(featab->Features);
+	iter = ajListIterRead(featab->Features);
 	while(ajListIterMore(iter))
 	{
 	    gf = ajListIterNext(iter) ;
@@ -295,7 +302,7 @@ static void extractfeat_FeatSeqExtract(AjPSeq seq, AjPSeqout seqout,
 	    
 	    /* get 'type' name of feature */
 	    if(single || parent)
-	    	ajStrAss(&type, gf->Type);
+	    	ajStrAssS(&type, gf->Type);
 	    
 	    /*
 	    ** if single or parent, get 'before' + 'after' sequence
@@ -333,9 +340,9 @@ static void extractfeat_FeatSeqExtract(AjPSeq seq, AjPSeqout seqout,
 			ajStrLen(featseq));
             }
 	    else
-            	ajStrAss(&featseq, tmpseq);
+            	ajStrAssS(&featseq, tmpseq);
 	}
-	ajListIterFree(iter) ;
+	ajListIterFree(&iter) ;
 	
 	/*
 	** write out any previous sequence(s)
@@ -362,18 +369,18 @@ static void extractfeat_FeatSeqExtract(AjPSeq seq, AjPSeqout seqout,
 **
 ** Get the sequence string of a feature (complement if reverse sense)
 **
-** @param [u] seq [AjPSeq] input sequence
-** @param [r] gf [AjPFeature] feature
-** @param [r] gfstr [AjPStr *] the resulting feature sequence string
+** @param [r] seq [const AjPSeq] input sequence
+** @param [r] gf [const AjPFeature] feature
+** @param [w] gfstr [AjPStr *] the resulting feature sequence string
 ** @param [r] sense [AjBool] FALSE if reverse sense, so complement the result
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-static void extractfeat_GetFeatseq(AjPSeq seq, AjPFeature gf, AjPStr
-				   *gfstr, AjBool sense)
+static void extractfeat_GetFeatseq(const AjPSeq seq, const AjPFeature gf, 
+				   AjPStr *gfstr, AjBool sense)
 {
-    AjPStr str = NULL;		/* sequence string */
+    const AjPStr str = NULL;		/* sequence string */
     AjPStr tmp = NULL;
 
     str = ajSeqStr(seq);
@@ -388,7 +395,7 @@ static void extractfeat_GetFeatseq(AjPSeq seq, AjPFeature gf, AjPStr
     if(!sense)
     	ajSeqReverseStr(&tmp);
 
-    ajStrAss(gfstr, tmp);
+    ajStrAssS(gfstr, tmp);
 
     ajStrDel(&tmp);
 
@@ -411,11 +418,11 @@ static void extractfeat_GetFeatseq(AjPSeq seq, AjPFeature gf, AjPStr
 ** @param [r] lastpos [ajint] position of end of feature
 ** @param [r] before [ajint] region before feature to get
 ** @param [r] after [ajint] region after feature to get
-** @param [u] seq [AjPSeq] input sequence
+** @param [r] seq [const AjPSeq] input sequence
 ** @param [r] remote [AjBool] TRUE if must abort becuase it includes Remote IDs
-** @param [u] type [AjPStr] type of feature
+** @param [r] type [const AjPStr] type of feature
 ** @param [r] featinname [AjBool] TRUE if want the type to be part of the name
-** @param [u] describestr [AjPStr] tag names/values for description line
+** @param [r] describestr [const AjPStr] tag names/values for description line
 ** @return [void]
 ** @@
 ******************************************************************************/
@@ -423,8 +430,9 @@ static void extractfeat_GetFeatseq(AjPSeq seq, AjPFeature gf, AjPStr
 static void extractfeat_WriteOut(AjPSeqout seqout, AjPStr *featstr,
 				 AjBool compall, AjBool sense, ajint firstpos,
 				 ajint lastpos, ajint before, ajint after,
-				 AjPSeq seq, AjBool remote, AjPStr type,
-				 AjBool featinname, AjPStr describestr)
+				 const AjPSeq seq, AjBool remote,
+				 const AjPStr type,
+				 AjBool featinname, const AjPStr describestr)
 {
     AjPSeq newseq = NULL;
     AjPStr name   = NULL;	/* new name of the sequence */
@@ -531,7 +539,7 @@ static void extractfeat_WriteOut(AjPSeqout seqout, AjPStr *featstr,
 **
 ** Extracts regions before and after a feature (complement if necessary)
 **
-** @param [u] seq [AjPSeq] input sequence
+** @param [r] seq [const AjPSeq] input sequence
 ** @param [u] featstr [AjPStr *] sequence string of feature
 ** @param [r] firstpos [ajint] position of start of feature
 ** @param [r] lastpos [ajint] position of end of feature
@@ -542,13 +550,13 @@ static void extractfeat_WriteOut(AjPSeqout seqout, AjPStr *featstr,
 ** @@
 ******************************************************************************/
 
-static void extractfeat_BeforeAfter(AjPSeq seq, AjPStr * featstr,
+static void extractfeat_BeforeAfter(const AjPSeq seq, AjPStr * featstr,
 				    ajint firstpos, ajint lastpos,
 				    ajint before, ajint after,
 				    AjBool sense)
 
 {
-    AjPStr str = NULL;			/* sequence string */
+    const AjPStr str = NULL;			/* sequence string */
     ajint start;
     ajint end;
     ajint featlen;
@@ -683,8 +691,8 @@ static void extractfeat_BeforeAfter(AjPSeq seq, AjPStr * featstr,
 **
 ** Gets a subsequence string and pads with N or X if it is off the end
 **
-** @param [r] seq [AjPSeq] Sequence to extract from
-** @param [u] featstr [AjPStr *] sequence string of feature
+** @param [r] seq [const AjPSeq] Sequence to extract from
+** @param [w] featstr [AjPStr *] sequence string of feature
 ** @param [r] start [ajint] start position
 ** @param [r] end [ajint] end position
 ** @param [r] sense [AjBool] FALSE if reverse sense
@@ -693,8 +701,8 @@ static void extractfeat_BeforeAfter(AjPSeq seq, AjPStr * featstr,
 ** @@
 ******************************************************************************/
 
-static void extractfeat_GetRegionPad(AjPSeq seq, AjPStr *featstr, ajint
-				     start, ajint end, AjBool sense,
+static void extractfeat_GetRegionPad(const AjPSeq seq, AjPStr *featstr,
+				     ajint start, ajint end, AjBool sense,
 				     AjBool beginning)
 {
     ajint tmp;
@@ -776,22 +784,23 @@ static void extractfeat_GetRegionPad(AjPSeq seq, AjPStr *featstr, ajint
 **
 ** Removes unwanted features from a feature table
 **
-** @param [r] featab [AjPFeattable] Feature table to filter
-** @param [r] source [AjPStr] Required Source pattern
-** @param [r] type [AjPStr] Required Type pattern
+** @param [u] featab [AjPFeattable] Feature table to filter
+** @param [r] source [const AjPStr] Required Source pattern
+** @param [r] type [const AjPStr] Required Type pattern
 ** @param [r] sense [ajint] Required Sense pattern +1,0,-1 (or other value$
 ** @param [r] minscore [float] Min required Score pattern
 ** @param [r] maxscore [float] Max required Score pattern
-** @param [r] tag [AjPStr] Required Tag pattern
-** @param [r] value [AjPStr] Required Value pattern
+** @param [r] tag [const AjPStr] Required Tag pattern
+** @param [r] value [const AjPStr] Required Value pattern
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-static void extractfeat_FeatureFilter(AjPFeattable featab, AjPStr
-				      source, AjPStr type, ajint sense,
+static void extractfeat_FeatureFilter(AjPFeattable featab,
+				      const AjPStr source, const AjPStr type,
+				      ajint sense,
 				      float minscore, float maxscore,
-				      AjPStr tag, AjPStr value)
+				      const AjPStr tag, const AjPStr value)
 {
     AjIList iter = NULL;
     AjPFeature gf = NULL;
@@ -822,7 +831,8 @@ static void extractfeat_FeatureFilter(AjPFeattable featab, AjPStr
 		ajListRemove(iter);
 	    }
 	}
-    }
+	ajListIterFree(&iter);
+   }
 
     return;
 }
@@ -834,24 +844,25 @@ static void extractfeat_FeatureFilter(AjPFeattable featab, AjPStr
 **
 ** Test if a feature matches a set of criteria
 **
-** @param [r] gf [AjPFeature] Feature to test
-** @param [r] source [AjPStr] Required Source pattern
-** @param [r] type [AjPStr] Required Type pattern
+** @param [r] gf [const AjPFeature] Feature to test
+** @param [r] source [const AjPStr] Required Source pattern
+** @param [r] type [const AjPStr] Required Type pattern
 ** @param [r] sense [ajint] Required Sense pattern +1,0,-1 (or other value)
 ** @param [r] minscore [float] Min required Score pattern
 ** @param [r] maxscore [float] Max required Score pattern
-** @param [r] tag [AjPStr] Required Tag pattern
-** @param [r] value [AjPStr] Required Value pattern
+** @param [r] tag [const AjPStr] Required Tag pattern
+** @param [r] value [const AjPStr] Required Value pattern
 ** @param [u] tagsmatch [AjBool *] true if a join has matching tag/values
 ** @return [AjBool] True if feature matches criteria
 ** @@
 ******************************************************************************/
 
-static AjBool extractfeat_MatchFeature(AjPFeature gf, AjPStr source,
-				       AjPStr type, ajint sense,
+static AjBool extractfeat_MatchFeature(const AjPFeature gf,
+				       const AjPStr source,
+				       const AjPStr type, ajint sense,
 				       float minscore,
-				       float maxscore, AjPStr tag,
-				       AjPStr value, AjBool *tagsmatch)
+				       float maxscore, const AjPStr tag,
+				       const AjPStr value, AjBool *tagsmatch)
 {
     AjBool scoreok;
 
@@ -903,16 +914,17 @@ static AjBool extractfeat_MatchFeature(AjPFeature gf, AjPStr source,
 ** Checks for a match of the tagpattern and valuepattern to at least one
 ** tag=value pair
 **
-** @param [r] feat [AjPFeature] Feature to process
-** @param [r] tpattern [AjPStr] tags pattern to match with
-** @param [r] vpattern [AjPStr] values pattern to match with
+** @param [r] feat [const AjPFeature] Feature to process
+** @param [r] tpattern [const AjPStr] tags pattern to match with
+** @param [r] vpattern [const AjPStr] values pattern to match with
 **
 ** @return [AjBool] ajTrue = found a match
 ** @@
 ******************************************************************************/
 
-static AjBool extractfeat_MatchPatternTags(AjPFeature feat, AjPStr tpattern,
-					   AjPStr vpattern)
+static AjBool extractfeat_MatchPatternTags(const AjPFeature feat,
+					   const AjPStr tpattern,
+					   const AjPStr vpattern)
 {
     AjIList titer;                      /* iterator for feat */
     static AjPStr tagnam = NULL;        /* tag structure */
@@ -958,7 +970,7 @@ static AjBool extractfeat_MatchPatternTags(AjPFeature feat, AjPStr tpattern,
             break;
         }
     }
-    ajListIterFree(titer);
+    ajListIterFree(&titer);
 
     return val;
 }
@@ -973,16 +985,16 @@ static AjBool extractfeat_MatchPatternTags(AjPFeature feat, AjPStr tpattern,
 ** with their values, (if any), to a returned string ready to be
 ** added to the sequence's Description line.
 **
-** @param [r] feat [AjPFeature] Feature to process
-** @param [r] describe [AjPStr] tags patterns to search with
+** @param [r] feat [const AjPFeature] Feature to process
+** @param [r] describe [const AjPStr] tags patterns to search with
 ** @param [w] strout [AjPStr*] returned string to add to Description line
 **
 ** @return [AjBool] ajTrue if any matching tags were found
 ** @@
 ******************************************************************************/
 
-static AjBool extractfeat_MatchPatternDescribe(AjPFeature feat, 
-					       AjPStr describe,
+static AjBool extractfeat_MatchPatternDescribe(const AjPFeature feat, 
+					       const AjPStr describe,
 					       AjPStr *strout)
 {
     AjIList titer;                      /* iterator for feat */
@@ -1014,7 +1026,7 @@ static AjBool extractfeat_MatchPatternDescribe(AjPFeature feat,
             }
         }	
     }
-    ajListIterFree(titer);
+    ajListIterFree(&titer);
 
     if(val)
         ajStrAppC(strout, ") ");

@@ -64,7 +64,7 @@ int main(int argc, char **argv)
     float *yave;
     float *curve;
     float *bend;
-    char *ptr;
+    const char *ptr;
     ajint i;
     ajint k;
     ajint j;
@@ -276,7 +276,8 @@ int main(int argc, char **argv)
 
 	ajGraphOpenWin(graph,-1.0, (float)numres+10.0, 0.0, ystart+5.0);
 
-	ajGraphTextMid((numres+10.0)/2.0, ystart+2.5,ajStrStr(graph->title));
+	ajGraphTextMid((numres+10.0)/2.0, ystart+2.5,
+		       ajGraphGetTitleC(graph));
 
 	ajGraphGetOut(&fxp,&fyp,&ixlen,&iylen,&ixoff,&iyoff);
 

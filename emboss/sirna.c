@@ -29,16 +29,17 @@
 
 
 
-static void sirna_report(AjPReport report, AjPSeq seq,
+static void sirna_report(AjPReport report, const AjPSeq seq,
 			 AjBool poliii, AjBool aa, AjBool tt, AjBool polybase,
 			 AjBool context, AjPSeqout seqout);
-static ajint sirna_begin(AjPSeq seq, AjPReport report, AjBool poliii,
+static ajint sirna_begin(const AjPSeq seq, AjPReport report, AjBool poliii,
 			  AjBool aa, AjBool tt, AjBool polybase,
 			  AjBool context);
 static void sirna_new_value(AjPList list, ajint pos, ajint score, 
 			    ajint GCcount);
 static int sirna_compare_score(const void* v1, const void* v2);
-static void sirna_output(AjPList list, AjPFeattable TabRpt, AjPSeq seq,
+static void sirna_output(const AjPList list,
+			 AjPFeattable TabRpt, const AjPSeq seq,
 			 AjBool context, AjPSeqout seqout);
 
 
@@ -61,7 +62,8 @@ typedef struct SValue
     ajint pos;
     ajint GCcount;
     ajint score;
-} OValue, *PValue;
+} OValue;
+#define PValue OValue*
 
 
  
@@ -116,20 +118,20 @@ int main(int argc, char **argv)
 ** finds regions that can be used as siRNAs
 **
 ** @param [u] report [AjPReport] Undocumented
-** @param [r] seq [AjPSeq] Sequence
+** @param [r] seq [const AjPSeq] Sequence
 ** @param [r] poliii [AjBool] True if want poliii expressable probes
 ** @param [r] aa [AjBool] True if want AA at start of region
 ** @param [r] tt [AjBool] True if want TT at end of region
 ** @param [r] polybase [AjBool] True if we allow 4-mers of any base
 ** @param [r] context [AjBool] True if we wish to show the 2 bases before
 **                              the probe region
-** @param [r] seqout [AjPSeqout] Ouput sequence object
+** @param [u] seqout [AjPSeqout] Ouput sequence object
 ** @return [void] 
 ** @@
 ******************************************************************************/
 
 
-static void sirna_report(AjPReport report, AjPSeq seq, AjBool poliii,
+static void sirna_report(AjPReport report, const AjPSeq seq, AjBool poliii,
 			 AjBool aa, AjBool tt, AjBool polybase,
 			 AjBool context, AjPSeqout seqout)
 {
@@ -143,7 +145,7 @@ static void sirna_report(AjPReport report, AjPSeq seq, AjBool poliii,
     ajint shift = 1;	       /* want to evaluate at each position */
     ajint count_gc;	     /* number of G + C bases in the window */
     char c;
-    char *cseq;
+    const char *cseq;
     ajint aaaa_count;
     ajint cccc_count;
     ajint gggg_count;
@@ -405,18 +407,19 @@ static void sirna_report(AjPReport report, AjPSeq seq, AjBool poliii,
 ** Finds the start position of the CDS  or uses -sbegin if no feature table
 ** Adds some explanation to the report header.
 **
-** @param [r] seq [AjPSeq] Sequence
-** @param [r] report [AjPReport] Report object
+** @param [r] seq [const AjPSeq] Sequence
+** @param [u] report [AjPReport] Report object
 ** @param [r] poliii [AjBool] True if want poliii expressable probes
 ** @param [r] aa [AjBool] True if want AA at start of region
 ** @param [r] tt [AjBool] True if want TT at end of region
 ** @param [r] polybase [AjBool] True if we allow 4-mers of any base
-** @param [r] context [AjBool] True if we wish to show the 2 bases before the probe region
+** @param [r] context [AjBool] True if we wish to show the 2 bases
+**                           before the probe region
 ** @return [ajint] start of CDS region (using positions starting from 0)
 ** @@
 ******************************************************************************/
 
-static ajint sirna_begin(AjPSeq seq, AjPReport report, AjBool poliii,
+static ajint sirna_begin(const AjPSeq seq, AjPReport report, AjBool poliii,
 			 AjBool aa, AjBool tt, AjBool polybase,
 			 AjBool context)
 {
@@ -460,7 +463,7 @@ static ajint sirna_begin(AjPSeq seq, AjPReport report, AjBool poliii,
     /* are there any features - find the first CDS feature */
     if(featab && featab->Features)
     {
-	iter = ajListIter(featab->Features);
+	iter = ajListIterRead(featab->Features);
 	while(ajListIterMore(iter))
 	{
 	    gf = ajListIterNext(iter);
@@ -475,7 +478,7 @@ static ajint sirna_begin(AjPSeq seq, AjPReport report, AjBool poliii,
 		break;
 	    }
 	}
-	ajListIterFree(iter);
+	ajListIterFree(&iter);
     }
 
     /* if didn't find a CDS, assume -sbegin is the CDS */
@@ -593,17 +596,18 @@ static int sirna_compare_score(const void* v1, const void* v2)
 **
 ** Output the probes
 **
-** @param [r] list [AjPList] list of PValue structures
+** @param [r] list [const AjPList] list of PValue structures
 ** @param [u] TabRpt [AjPFeattable] feature table 
-** @param [r] seq [AjPSeq] Sequence
+** @param [r] seq [const AjPSeq] Sequence
 ** @param [r] context [AjBool] True if we wish to show the 2 bases before
 **                             the probe region
-** @param [r] seqout [AjPSeqout] Ouput sequence object
+** @param [u] seqout [AjPSeqout] Ouput sequence object
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-static void sirna_output(AjPList list, AjPFeattable TabRpt, AjPSeq seq,
+static void sirna_output(const AjPList list,
+			 AjPFeattable TabRpt, const AjPSeq seq,
 			 AjBool context, AjPSeqout seqout)
 {
     AjIList iter;
@@ -629,7 +633,7 @@ static void sirna_output(AjPList list, AjPFeattable TabRpt, AjPSeq seq,
     /* if no hits then ignore much of this routine */
     if(ajListLength(list))
     {
-	iter = ajListIter(list);
+	iter = ajListIterRead(list);
 	while((value = ajListIterNext(iter)) != NULL)
 	{
 	    /* ajDebug("(%d) %d %d\n", value->pos+1, value->score,
@@ -680,7 +684,7 @@ static void sirna_output(AjPList list, AjPFeattable TabRpt, AjPSeq seq,
 
 	    /* give it a name */
 	    ajDebug("Doing name\n");
-	    ajStrAss(&name, ajSeqGetName(seq));
+	    ajStrAssS(&name, ajSeqGetName(seq));
 	    ajStrAppC(&name, "_");
 	    ajStrFromInt(&tmpStr, value->pos+1);
 	    ajStrApp(&name, tmpStr);
@@ -700,7 +704,7 @@ static void sirna_output(AjPList list, AjPFeattable TabRpt, AjPSeq seq,
 	    /* prepare sequence string for re-use */
 	    ajStrClear(&subseq);
 	}
-	ajListIterFree(iter);
+	ajListIterFree(&iter);
     }
   
     ajStrDel(&tmpStr);

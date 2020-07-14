@@ -53,7 +53,7 @@ int main(int argc, char **argv)
     AjPFile compdata;
     ajint window;
     ajint pos;
-    char *s;
+    const char *s;
     ajlong result;
     ajlong *bigarray;
     ajlong *windowbuffer;		/* ring buffer for sliding window */
@@ -262,8 +262,8 @@ int main(int argc, char **argv)
 **
 ** Undocumented.
 **
-** @param [?] no_elements [ajlong] Undocumented
-** @param [?] bigarray [ajlong**] Undocumented
+** @param [r] no_elements [ajlong] Undocumented
+** @param [w] bigarray [ajlong**] Undocumented
 ** @return [ajint] Undocumented
 ** @@
 ******************************************************************************/
@@ -282,9 +282,9 @@ static ajint oddcomp_makebigarray(ajlong no_elements, ajlong **bigarray)
 **
 ** Undocumented.
 **
-** @param [?] exptable [AjPTable*] Undocumented
-** @param [?] compdata [AjPFile] Undocumented
-** @param [?] size [ajint*] Undocumented
+** @param [w] exptable [AjPTable*] Table created
+** @param [u] compdata [AjPFile] Undocumented
+** @param [w] size [ajint*] Undocumented
 ** @return [ajint] Undocumented
 ** @@
 ******************************************************************************/

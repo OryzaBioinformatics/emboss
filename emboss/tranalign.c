@@ -25,8 +25,9 @@
 
 
 
-static void tranalign_AddGaps (AjPSeq newseq, AjPSeq nseq, AjPSeq pseq,
-	ajint npos);
+static void tranalign_AddGaps (AjPSeq newseq,
+			       const AjPSeq nseq, const AjPSeq pseq,
+			       ajint npos);
 
 
 
@@ -43,7 +44,7 @@ int main(int argc, char **argv)
     AjPSeqset protseq;	/* input aligned protein sequences */
     AjPSeqout seqout;
     AjPSeq nseq;	/* next nucleic sequence to align */
-    AjPSeq pseq;	/* next protein sequence use in alignmnet */
+    const AjPSeq pseq;	/* next protein sequence use in alignmnet */
     AjPTrn trnTable;
     AjPSeq pep;		/* translation of nseq */
     AjPStr *tablelist;
@@ -139,18 +140,19 @@ int main(int argc, char **argv)
 
 /* @funcstatic tranalign_AddGaps **********************************************
 **
-** Adds bases or gaps to newstr from nseq guided by pseq
+** Adds bases or gaps to newseq from nseq guided by pseq
 ** starting at npos
 **
-** @param [r] newseq [AjPSeq] newseq
-** @param [r] nseq [AjPSeq] nseq
-** @param [r] pseq [AjPSeq] pseq
+** @param [u] newseq [AjPSeq] newseq
+** @param [r] nseq [const AjPSeq] nseq
+** @param [r] pseq [const AjPSeq] pseq
 ** @param [r] npos [ajint] nseq start pos
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-static void tranalign_AddGaps(AjPSeq newseq, AjPSeq nseq, AjPSeq pseq,
+static void tranalign_AddGaps(AjPSeq newseq,
+			      const AjPSeq nseq, const AjPSeq pseq,
 			      ajint npos)
 {
 

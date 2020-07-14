@@ -86,7 +86,7 @@ int main(int argc, char **argv)
 
     for(i=0;i<sets;i++)
 	AJFREE(data[i]);
-    ajHistDelete(hist);
+    ajHistDelete(&hist);
 
     /* now do again but copy the data */
     hist = ajHistNewG(sets,points, graph);
@@ -132,7 +132,7 @@ int main(int argc, char **argv)
     ajHistSetBlackandWhite(hist , AJFALSE);
     ajHistDisplay(hist);
 
-    ajHistDelete(hist);
+    ajHistDelete(&hist);
 
 
     ajExit();

@@ -71,8 +71,8 @@ int main(int argc, char **argv)
 
     ajAlignSetExternal(align, ajTrue);
 
-    seq1out  =  ajAcdGetFeatout("afeatout");
-    seq2out  =  ajAcdGetFeatout("bfeatout");
+    seq1out  =  ajAcdGetFeatout("aoutfeat");
+    seq2out  =  ajAcdGetFeatout("boutfeat");
 
     embWordLength(wordlen);
     if(embWordGetTable(&seq1MatchTable, seq1))
@@ -81,7 +81,7 @@ int main(int argc, char **argv)
     if(matchlist && outf)
 	ajFmtPrintF(outf, "FINALLY length = %d\n",ajListLength(matchlist));
 
-    embWordFreeTable(seq1MatchTable);	/* free table of words */
+    embWordFreeTable(&seq1MatchTable);	/* free table of words */
 
     if(outf)
 	ajFmtPrintF(outf, "%10s %10s Length\n", ajSeqName(seq1),
@@ -92,7 +92,7 @@ int main(int argc, char **argv)
 	if(outf)
 	    embWordMatchListPrint(outf, matchlist);
 
-	iter = ajListIter(matchlist) ;
+	iter = ajListIterRead(matchlist) ;
 	while(embWordMatchIter(iter, &start1, &start2, &len))
 	{
 	    ajAlignDefineSS(align, seq1, seq2);
@@ -101,7 +101,7 @@ int main(int argc, char **argv)
 			       start1, start1 + 1, start1 + len,
 			       start2, start2 + 1, start2 + len);
 	}
-	ajListIterFree(iter) ;
+	ajListIterFree(&iter) ;
 
 	embWordMatchListConvToFeat(matchlist,&Tab1,&Tab2,seq1, seq2);
 

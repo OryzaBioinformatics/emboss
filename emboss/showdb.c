@@ -25,13 +25,15 @@
 
 
 
-static void showdb_DBOut(AjPFile outfile, AjPStr dbname, AjPStr type,
-			 AjBool id, AjBool qry, AjBool all, AjPStr comment,
-			 AjPStr release, AjBool html, AjBool dotype,
+static void showdb_DBOut(AjPFile outfile,
+			 const AjPStr dbname, const AjPStr type,
+			 AjBool id, AjBool qry, AjBool all,
+			 const AjPStr comment,
+			 const AjPStr release, AjBool html, AjBool dotype,
 			 AjBool doid, AjBool doqry, AjBool doall,
 			 AjBool dofields, AjBool docomment, AjBool dorelease);
 
-static AjPStr showdb_GetFields(AjPStr dbname);
+static AjPStr showdb_GetFields(const AjPStr dbname);
 
 
 
@@ -218,7 +220,7 @@ int main(int argc, char **argv)
 	ajListSort(dbnames, ajStrCmp);
 
 	/* iterate through the dbnames list */
-	iter = ajListIter(dbnames);
+	iter = ajListIterRead(dbnames);
 
 	/* write out protein databases */
 	while((dbname = ajListIterNext(iter)) != NULL)
@@ -236,8 +238,8 @@ int main(int argc, char **argv)
 
 
 	/* reset the iterator */
-	ajListIterFree(iter);
-	iter = ajListIter(dbnames);
+	ajListIterFree(&iter);
+	iter = ajListIterRead(dbnames);
 
 	/* now write out nucleic databases */
 	while((dbname = ajListIterNext(iter)) != NULL)
@@ -255,7 +257,8 @@ int main(int argc, char **argv)
 		ajFatal("The database '%S' does not exist", dbname);
 	}
 
-	ajListIterFree(iter);
+	ajListIterFree(&iter);
+	ajListDel(&dbnames);
     }
     
     /* end the HTML table */
@@ -277,13 +280,13 @@ int main(int argc, char **argv)
 ** Output db information
 **
 ** @param [w] outfile [AjPFile] outfile
-** @param [r] dbname [AjPStr] database name
-** @param [r] type [AjPStr] type
+** @param [r] dbname [const AjPStr] database name
+** @param [r] type [const AjPStr] type
 ** @param [r] id [AjBool] id
 ** @param [r] qry [AjBool] queryable
 ** @param [r] all [AjBool] all info
-** @param [r] comment [AjPStr] db comment
-** @param [r] release [AjPStr] db release
+** @param [r] comment [const AjPStr] db comment
+** @param [r] release [const AjPStr] db release
 ** @param [r] html [AjBool] do html
 ** @param [r] dotype [AjBool] show type
 ** @param [r] doid [AjBool] show id
@@ -295,9 +298,11 @@ int main(int argc, char **argv)
 ** @@
 ******************************************************************************/
 
-static void showdb_DBOut(AjPFile outfile, AjPStr dbname, AjPStr type,
-			 AjBool id, AjBool qry, AjBool all, AjPStr comment,
-			 AjPStr release, AjBool html, AjBool dotype,
+static void showdb_DBOut(AjPFile outfile,
+			 const AjPStr dbname, const AjPStr type,
+			 AjBool id, AjBool qry, AjBool all,
+			 const AjPStr comment,
+			 const AjPStr release, AjBool html, AjBool dotype,
 			 AjBool doid, AjBool doqry, AjBool doall,
 			 AjBool dofields, AjBool docomment, AjBool dorelease)
 {
@@ -420,12 +425,12 @@ static void showdb_DBOut(AjPFile outfile, AjPStr dbname, AjPStr type,
 **
 ** Get a database's valid query fields (apart from the default 'id' and 'acc')
 **
-** @param [r] dbname [AjPStr] database name
+** @param [r] dbname [const AjPStr] database name
 ** @return [AjPStr] the available search fields
 ** @@
 ******************************************************************************/
 
-static AjPStr showdb_GetFields(AjPStr dbname)
+static AjPStr showdb_GetFields(const AjPStr dbname)
 {
     static AjPStr str = NULL;
     AjPSeqQuery query;
@@ -433,7 +438,7 @@ static AjPStr showdb_GetFields(AjPStr dbname)
 
     query = ajSeqQueryNew();
 
-    ajStrAss(&query->DbName, dbname);
+    ajStrAssS(&query->DbName, dbname);
     ajNamDbData(query);
     ajStrAssS(&str, query->DbFields);
 

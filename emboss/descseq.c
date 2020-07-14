@@ -55,7 +55,7 @@ int main(int argc, char **argv)
 	/* is there a name? */
 	if(ajStrLen(name))
 	{
-	    ajStrAss(&temp, ajSeqGetName(seq));
+	    ajStrAssS(&temp, ajSeqGetName(seq));
 	    ajStrApp(&temp, name);
 	    ajSeqAssName(seq, temp);
 	}
@@ -63,7 +63,7 @@ int main(int argc, char **argv)
 	/* is there a description? */
 	if(ajStrLen(desc))
 	{
-	    ajStrAss(&temp, ajSeqGetDesc(seq));
+	    ajStrAssS(&temp, ajSeqGetDesc(seq));
 	    ajStrApp(&temp, desc);
 	    ajSeqAssDesc(seq, temp);
 	}

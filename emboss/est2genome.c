@@ -67,8 +67,9 @@ ajint debug;
 
 
 
-static void  est2genome_make_output(AjPFile ofile, AjPSeq genome, AjPSeq est,
-				    EmbPEstAlign ge, ajint match,
+static void  est2genome_make_output(AjPFile ofile,
+				    const AjPSeq genome, const AjPSeq est,
+				    const EmbPEstAlign ge, ajint match,
 				    ajint mismatch, ajint gap_penalty,
 				    ajint intron_penalty,
 				    ajint splice_penalty, ajint minscore,
@@ -112,7 +113,6 @@ int main(int argc, char **argv)
     ajint seed;
     ajint best=1;
     ajint search_mode;
-    char *mode;
     AjPStr modestr   = NULL;
     AjPFile outfile  = NULL;
     AjPSeqall estset = NULL;
@@ -121,8 +121,8 @@ int main(int argc, char **argv)
 
     embInit("est2genome", argc, argv);
 
-    estset  = ajAcdGetSeqall("est");
-    genome  = ajAcdGetSeq("genome");
+    estset  = ajAcdGetSeqall("estsequence");
+    genome  = ajAcdGetSeq("genomesequence");
     outfile = ajAcdGetOutfile("outfile");
 
     /* the alignment penalties */
@@ -163,19 +163,18 @@ int main(int argc, char **argv)
     ** is always in the forward direction.
     */
 
-    modestr = ajAcdGetString("mode");
-    mode    = ajStrStr(modestr);
+    modestr = ajAcdGetListI("mode",1);
 
-    if(!strcmp(mode,"both"))
+    if(ajStrMatchC(modestr,"both"))
 	search_mode = BOTH;
-    else if(!strcmp(mode,"forward"))
+    else if(ajStrMatchC(modestr,"forward"))
 	search_mode = FORWARD_ONLY;
-    else if(!strcmp(mode,"reverse"))
+    else if(ajStrMatchC(modestr,"reverse"))
 	search_mode = REVERSE_ONLY;
     else
     {
-	ajErr("search mode  %s must be one of: "
-	      "both, forward, reverse\n", mode);
+	ajErr("search mode %S must be one of: "
+	      "both, forward, reverse\n", modestr);
 	exit(1);
     }
 
@@ -243,7 +242,7 @@ int main(int argc, char **argv)
 	else
 	    splice_sites = NULL;
 
-	if(search_mode == BOTH)
+	if(search_mode == BOTH && splice)
 	    reversed_splice_sites = embEstFindSpliceSites( genome, 0 );
 	else
 	    reversed_splice_sites = NULL;
@@ -343,7 +342,7 @@ int main(int argc, char **argv)
 		    {
 			ajFmtPrintF(outfile,
 				    "Note Best alignment is between forward "
-				    "est and forward genome, but splice  "
+				    "est and forward genome, but splice "
 				    "sites imply REVERSED GENE\n");
 			est2genome_make_output(outfile, genome, est, bge,
 					       match, mismatch, gap_penalty,
@@ -362,7 +361,7 @@ int main(int argc, char **argv)
 		    {
 			ajFmtPrintF(outfile,
 				    "Note Best alignment is between forward "
-				    "est and forward genome, and splice  "
+				    "est and forward genome, and splice "
 				    "sites imply forward gene\n");
 			est2genome_make_output(outfile, genome, est, fge,
 					       match, mismatch,
@@ -410,8 +409,8 @@ int main(int argc, char **argv)
 		    else
 		    {
 			ajFmtPrintF(outfile,
-				    "Note Best alignment is between reversed"
-				    " est and forward genome, and splice  "
+				    "Note Best alignment is between reversed "
+				    "est and forward genome, and splice "
 				    "sites imply forward gene\n");
 			est2genome_make_output(outfile, genome, reversed_est,
 					       rge, match, mismatch,
@@ -492,24 +491,25 @@ int main(int argc, char **argv)
 **
 ** Undocumented.
 **
-** @param [?] ofile [AjPFile] Undocumented
-** @param [?] genome [AjPSeq] Undocumented
-** @param [?] est [AjPSeq] Undocumented
-** @param [?] ge [EmbPEstAlign] Undocumented
-** @param [?] match [ajint] Undocumented
-** @param [?] mismatch [ajint] Undocumented
-** @param [?] gap_penalty [ajint] Undocumented
-** @param [?] intron_penalty [ajint] Undocumented
-** @param [?] splice_penalty [ajint] Undocumented
-** @param [?] minscore [ajint] Undocumented
-** @param [?] align [ajint] Undocumented
-** @param [?] width [ajint] Undocumented
-** @param [?] reverse [ajint] Undocumented
+** @param [u] ofile [AjPFile] Undocumented
+** @param [r] genome [const AjPSeq] Undocumented
+** @param [r] est [const AjPSeq] Undocumented
+** @param [r] ge [const EmbPEstAlign] Undocumented
+** @param [r] match [ajint] Undocumented
+** @param [r] mismatch [ajint] Undocumented
+** @param [r] gap_penalty [ajint] Undocumented
+** @param [r] intron_penalty [ajint] Undocumented
+** @param [r] splice_penalty [ajint] Undocumented
+** @param [r] minscore [ajint] Undocumented
+** @param [r] align [ajint] Undocumented
+** @param [r] width [ajint] Undocumented
+** @param [r] reverse [ajint] Undocumented
 ** @@
 ******************************************************************************/
 
-static void est2genome_make_output(AjPFile ofile, AjPSeq genome, AjPSeq est,
-				   EmbPEstAlign ge, ajint match,
+static void est2genome_make_output(AjPFile ofile,
+				   const AjPSeq genome, const AjPSeq est,
+				   const EmbPEstAlign ge, ajint match,
 				   ajint mismatch, ajint gap_penalty,
 				   ajint intron_penalty, ajint splice_penalty,
 				   ajint minscore, ajint align, ajint width,

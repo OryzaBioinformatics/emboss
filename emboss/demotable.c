@@ -23,9 +23,9 @@
 
 
 
-static AjPStr demotable_getsubfromstring(AjPStr line, ajint which);
+static AjPStr demotable_getsubfromstring(const AjPStr line, ajint which);
 static void demotable_typePrint (const void* key, void** value, void* cl);
-static void demotable_freetype (const void* key, void** value, void* cl);
+static void demotable_freetype (const void** key, void** value, void* cl);
 
 
 
@@ -85,7 +85,7 @@ int main(int argc, char **argv)
     ajTableMap(type, demotable_typePrint, NULL);
 
     /* use the map function to free all memory */
-    ajTableMap(type, demotable_freetype, NULL);
+    ajTableMapDel(type, demotable_freetype, NULL);
     ajTableFree(&type);
 
     ajExit();
@@ -99,13 +99,13 @@ int main(int argc, char **argv)
 **
 ** Undocumented.
 **
-** @param [?] line [AjPStr] Undocumented
-** @param [?] which [ajint] Undocumented
+** @param [r] line [const AjPStr] Undocumented
+** @param [r] which [ajint] Undocumented
 ** @return [AjPStr] Undocumented
 ** @@
 ******************************************************************************/
 
-static AjPStr demotable_getsubfromstring(AjPStr line, ajint which)
+static AjPStr demotable_getsubfromstring(const AjPStr line, ajint which)
 {
     static AjPRegexp gffexp = NULL;
     AjPStr temp = NULL;
@@ -126,9 +126,9 @@ static AjPStr demotable_getsubfromstring(AjPStr line, ajint which)
 **
 ** Undocumented.
 **
-** @param [?] key [const void*] Undocumented
-** @param [?] value [void**] Undocumented
-** @param [?] cl [void*] Undocumented
+** @param [r] key [const void*] Undocumented
+** @param [r] value [void**] Undocumented
+** @param [r] cl [void*] Undocumented
 ** @return [void]
 ** @@
 ******************************************************************************/
@@ -153,23 +153,26 @@ static void demotable_typePrint(const void* key, void** value, void* cl)
 **
 ** Undocumented.
 **
-** @param [?] key [const void*] Undocumented
-** @param [?] value [void**] Undocumented
-** @param [?] cl [void*] Undocumented
+** @param [r] key [const void**] Undocumented
+** @param [r] value [void**] Undocumented
+** @param [r] cl [void*] Undocumented
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-static void demotable_freetype(const void* key, void** value, void* cl)
+static void demotable_freetype(const void** key, void** value, void* cl)
 {
     AjPStr keystr;
     ajint *valptr;
 
-    keystr = (AjPStr) key;
+    keystr = (AjPStr) *key;
     valptr = (ajint *) *value;
 
     ajStrDel(&keystr);
     AJFREE(valptr);
+
+    *key = NULL;
+    *value = NULL;
 
     return;
 }

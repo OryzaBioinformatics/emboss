@@ -82,7 +82,7 @@ int main(int argc, char **argv)
     AjPInt hp = NULL;
     AjPFloat hwt = NULL;
 
-    char *p;
+    const char *p;
     char *q;
 
     ajint i;
@@ -139,10 +139,10 @@ int main(int argc, char **argv)
         ajStrAssSubC(&sstr,ajStrStr(strand),begin-1,end-1);
 	len    = ajStrLen(substr);
 
-        q = p = ajStrStr(substr);
-	for(i=0;i<len;++i,++p)
-	    *p = (char) ajAZToInt(*p);
-	p = q;
+        q = ajStrStrMod(&substr);
+	for(i=0;i<len;++i,++q)
+	    *q = (char) ajAZToInt(*q);
+	p = ajStrStr(substr);
 
 	maxsite   = n = 0;
 	maxweight = 0.0;
@@ -203,7 +203,7 @@ int main(int argc, char **argv)
 	    if(outf)
 		ajFmtPrintF(outf,"\nNo scores over %.2f\n",minweight);
 	    ajFmtPrintS(&tailStr,"\nNo scores over %.2f\n",minweight);
-	    ajReportSetTail(report, tailStr);
+	    ajReportSetSubTail(report, tailStr);
 	}
 	else
 	{
@@ -345,8 +345,8 @@ static ajint sigcleave_readSig(AjPFloat2d *matrix,AjBool prokaryote)
 
     float **mat;
 
-    char *p;
-    char *q;
+    const char *p;
+    const char *q;
 
     ajint xcols = 0;
     ajint cols  = 0;
@@ -392,7 +392,7 @@ static ajint sigcleave_readSig(AjPFloat2d *matrix,AjBool prokaryote)
 	while((*p!='\n') && (*p<'A' || *p>'Z'))
 	    ++p;
 
-	cols = ajStrTokenCount(&line,ajStrStr(delim));
+	cols = ajStrTokenCount(line,ajStrStr(delim));
 
 	if(pass)
 	{

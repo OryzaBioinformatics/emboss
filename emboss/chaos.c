@@ -41,7 +41,7 @@ int main(int argc, char **argv)
     float x = 0.5;
     float y = 0.5;
     float x2;
-    char *ptr;
+    const char *ptr;
     ajint i;
     ajint a = 0;
     ajint c = 0;

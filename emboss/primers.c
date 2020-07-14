@@ -30,26 +30,32 @@
 #include <stdio.h>
 
 static FILE * primers_start_write(int fd);
-static void primers_write(AjPStr str, FILE *stream);
+static void primers_write(const AjPStr str, FILE *stream);
 static void primers_end_write(FILE *stream);
 static AjPStr primers_read(int fd);
-static void primers_send_range(FILE * stream, char * tag, AjPRange value);
+static void primers_send_range(FILE * stream,
+			       const char * tag, const AjPRange value);
 /* static void primers_send_range2(FILE * stream,
    char * tag, AjPRange value); */
-static void primers_send_int(FILE * stream, char * tag, ajint value);
-static void primers_send_float(FILE * stream, char * tag, float value);
-static void primers_send_bool(FILE * stream, char * tag, AjBool value);
-static void primers_send_string(FILE * stream, char * tag, AjPStr value);
+static void primers_send_int(FILE * stream, const char * tag, ajint value);
+static void primers_send_float(FILE * stream, const char * tag, float value);
+static void primers_send_bool(FILE * stream, const char * tag, AjBool value);
+static void primers_send_string(FILE * stream,
+				const char * tag, const AjPStr value);
 /* static void primers_send_stringC(FILE * stream,
    char * tag, char * value); */
 static void primers_send_end(FILE * stream);
-static void primers_report (AjPFile outfile, AjPStr output, ajint numreturn);
-static void primers_output_report(AjPFile outfile, AjPTable table,
-	ajint numreturn);
-static AjPStr primers_tableget(char * key1, ajint number, char *key2,
-	AjPTable table);
-static void primers_write_primer(AjPFile outfile, char *tag, AjPStr pos,
-	AjPStr tm, AjPStr gc, AjPStr seq);
+static void primers_report (AjPFile outfile,
+			    const AjPStr output, ajint numreturn);
+static void primers_output_report(AjPFile outfile, const AjPTable table,
+				  ajint numreturn);
+static AjPStr primers_tableget(const char * key1, ajint number,
+			       const char *key2,
+			       const AjPTable table);
+static void primers_write_primer(AjPFile outfile,
+				 const char *tag, const AjPStr pos,
+				 const AjPStr tm, const AjPStr gc,
+				 const AjPStr seq);
 
 /* @prog primers **************************************************************
 **
@@ -573,7 +579,7 @@ static AjPStr primers_read(int fd)
 **
 ** Writes the end-of-input flag '=' to the input stream of primer3_core
 **
-** @param [r] stream [FILE *] File handle
+** @param [u] stream [FILE *] File handle
 ** @return [void]
 **
 ******************************************************************************/
@@ -588,14 +594,15 @@ static void primers_send_end(FILE * stream)
 **
 ** Write range data to primer3_core as 'start,length start2,length2,etc'
 **
-** @param [r] stream [FILE *] File handle
-** @param [r] tag [char *] Tag of primer3 data type
-** @param [r] value [AjPRange] Ranges to write
+** @param [u] stream [FILE *] File handle
+** @param [r] tag [const char *] Tag of primer3 data type
+** @param [r] value [const AjPRange] Ranges to write
 ** @return [void]
 **
 ******************************************************************************/
 
-static void primers_send_range(FILE * stream, char * tag, AjPRange value)
+static void primers_send_range(FILE * stream,
+			       const char * tag, const AjPRange value)
 {
 
   AjPStr str=ajStrNew();
@@ -624,14 +631,15 @@ static void primers_send_range(FILE * stream, char * tag, AjPRange value)
 **
 ** Write alternate display of ranges as 'a-b c-d' to primer3_core
 **
-** #param [r] stream [FILE *] File handle
-** #param [r] tag [char *] Tag of primer3 data type
-** #param [r] value [AjPRange] Ranges to write
+** #param [u] stream [FILE *] File handle
+** #param [r] tag [const char *] Tag of primer3 data type
+** #param [r] value [const AjPRange] Ranges to write
 ** #return [void]
 **
 ******************************************************************************/
 /* NOT USED
-//static void primers_send_range2(FILE * stream, char * tag, AjPRange value)
+//static void primers_send_range2(FILE * stream,
+//                                const char * tag, const AjPRange value)
 //{
 //
 //  AjPStr str=ajStrNew();
@@ -660,13 +668,13 @@ static void primers_send_range(FILE * stream, char * tag, AjPRange value)
 **
 ** Write integer to primer3_core
 **
-** @param [r] stream [FILE *] File handle
-** @param [r] tag [char *] Tag of primer3 data type
+** @param [u] stream [FILE *] File handle
+** @param [r] tag [const char *] Tag of primer3 data type
 ** @param [r] value [ajint] Integer value to write
 ** @return [void]
 **
 ******************************************************************************/
-static void primers_send_int(FILE * stream, char * tag, ajint value)
+static void primers_send_int(FILE * stream, const char * tag, ajint value)
 {
 
   AjPStr str=ajStrNew();
@@ -681,13 +689,13 @@ static void primers_send_int(FILE * stream, char * tag, ajint value)
 **
 ** Write float to primer3_core
 **
-** @param [r] stream [FILE *] File handle
-** @param [r] tag [char *] Tag of primer3 data type
+** @param [u] stream [FILE *] File handle
+** @param [r] tag [const char *] Tag of primer3 data type
 ** @param [r] value [float] Float value to write
 ** @return [void]
 **
 ******************************************************************************/
-static void primers_send_float(FILE * stream, char * tag, float value)
+static void primers_send_float(FILE * stream, const char * tag, float value)
 {
 
   AjPStr str=ajStrNew();
@@ -702,13 +710,13 @@ static void primers_send_float(FILE * stream, char * tag, float value)
 **
 ** Write boolean to primer3_core
 **
-** @param [r] stream [FILE *] File handle
-** @param [r] tag [char *] Tag of primer3 data type
+** @param [u] stream [FILE *] File handle
+** @param [r] tag [const char *] Tag of primer3 data type
 ** @param [r] value [AjBool] Boolean value to write
 ** @return [void]
 **
 ******************************************************************************/
-static void primers_send_bool(FILE * stream, char * tag, AjBool value)
+static void primers_send_bool(FILE * stream, const char * tag, AjBool value)
 {
 
   AjPStr str=ajStrNew();
@@ -724,13 +732,14 @@ static void primers_send_bool(FILE * stream, char * tag, AjBool value)
 ** Write string to primer3_core
 **
 **
-** @param [r] stream [FILE *] File handle
-** @param [r] tag [char *] Tag of primer3 data type
-** @param [r] value [AjPStr] String value to write
+** @param [u] stream [FILE *] File handle
+** @param [r] tag [const char *] Tag of primer3 data type
+** @param [r] value [const AjPStr] String value to write
 ** @return [void]
 **
 ******************************************************************************/
-static void primers_send_string(FILE * stream, char * tag, AjPStr value)
+static void primers_send_string(FILE * stream,
+				const char * tag, const AjPStr value)
 {
 
   AjPStr str=ajStrNew();
@@ -747,14 +756,15 @@ static void primers_send_string(FILE * stream, char * tag, AjPStr value)
 **
 ** Write char * to primer3_core
 **
-** #param [r] stream [FILE *] File handle
-** #param [r] tag [char *] Tag of primer3 data type
-** #param [r] value [char *] Char * value to write
+** #param [u] stream [FILE *] File handle
+** #param [r] tag [const char *] Tag of primer3 data type
+** #param [r] value [const char *] Char * value to write
 ** #return [void]
 **
 ******************************************************************************/
 /* NOT USED
-//static void primers_send_stringC(FILE * stream, char * tag, char * value)
+//static void primers_send_stringC(FILE * stream,
+//                                 const char * tag, const char * value)
 //{
 //
 //  AjPStr str=ajStrNew();
@@ -790,12 +800,12 @@ static FILE* primers_start_write(int fd)
 **
 ** Write a tag=value AjPStr to the primer3_core input stream
 **
-** @param [r] str [AjPStr] Input string
-** @param [r] stream [FILE *] Stream piped to primer3_core
+** @param [r] str [const AjPStr] Input string
+** @param [u] stream [FILE *] Stream piped to primer3_core
 ** @return [void]
 **
 ******************************************************************************/
-static void primers_write(AjPStr str, FILE *stream)
+static void primers_write(const AjPStr str, FILE *stream)
 {
 
   fputs( ajStrStr(str), stream );
@@ -805,7 +815,7 @@ static void primers_write(AjPStr str, FILE *stream)
 **
 ** Close the stream piping in to primer3_core
 **
-** @param [r] stream [FILE *] Stream
+** @param [u] stream [FILE *] Stream
 ** @return [void]
 **
 ******************************************************************************/
@@ -820,13 +830,14 @@ static void primers_end_write(FILE *stream)
 **
 ** Read output of primer3_core into a temporary table of tag/value results
 **
-** @param [r] outfile [AjPFile] Report outfile
-** @param [r] output [AjPStr] Output from primer3_core
+** @param [u] outfile [AjPFile] Report outfile
+** @param [r] output [const AjPStr] Output from primer3_core
 ** @param [r] numreturn [ajint] Number of results to return for each sequence
 ** @return [void]
 **
 ******************************************************************************/
-static void primers_report (AjPFile outfile, AjPStr output, ajint numreturn)
+static void primers_report (AjPFile outfile,
+			    const AjPStr output, ajint numreturn)
 {
 
   AjPStr line = NULL;
@@ -907,13 +918,13 @@ resulting primer are interleaved */
 **
 ** Read the results out of the tag/value table and write to report
 **
-** @param [r] outfile [AjPFile] Report outfile
-** @param [r] table [AjPTable] Table of tag/value result pairs
+** @param [u] outfile [AjPFile] Report outfile
+** @param [r] table [const AjPTable] Table of tag/value result pairs
 ** @param [r] numreturn [ajint] Number of results to return for each sequence
 ** @return [void]
 **
 ******************************************************************************/
-static void primers_output_report(AjPFile outfile, AjPTable table,
+static void primers_output_report(AjPFile outfile, const AjPTable table,
 	ajint numreturn)
 {
   AjPStr key = NULL;
@@ -1058,15 +1069,17 @@ PRIMER_PRODUCT_SIZE=137
 **
 ** Read the results out of the tag/value table
 **
-** @param [r] key1 [char *] First half of table key base string
+** @param [r] key1 [const char *] First half of table key base string
 ** @param [r] number [ajint] Table key numeric part
-** @param [r] key2 [char *] Second half of table key base string (minus '_')
-** @param [r] table [AjPTable] Table of tag/value result pairs
+** @param [r] key2 [const char *] Second half of table key base string
+**                                (minus '_')
+** @param [r] table [const AjPTable] Table of tag/value result pairs
 ** @return [AjPStr] Table value
 **
 ******************************************************************************/
-static AjPStr primers_tableget(char *key1, ajint number, char *key2,
-			       AjPTable table)
+static AjPStr primers_tableget(const char *key1, ajint number,
+			       const char *key2,
+			       const AjPTable table)
 {
   AjPStr fullkey = NULL;
   AjPStr keynum = NULL;
@@ -1096,17 +1109,19 @@ static AjPStr primers_tableget(char *key1, ajint number, char *key2,
 **
 ** Write out one primer or oligo line to the output file
 **
-** @param [r] outfile [AjPFile] Report outfile
-** @param [r] tag [char *] Tag on output line
-** @param [r] pos [AjPStr] Start and length string
-** @param [r] tm [AjPStr] Tm of primer
-** @param [r] gc [AjPStr] GC% of primer
-** @param [r] seq [AjPStr] Sequence of primer
+** @param [u] outfile [AjPFile] Report outfile
+** @param [r] tag [const char *] Tag on output line
+** @param [r] pos [const AjPStr] Start and length string
+** @param [r] tm [const AjPStr] Tm of primer
+** @param [r] gc [const AjPStr] GC% of primer
+** @param [r] seq [const AjPStr] Sequence of primer
 ** @return [void]
 **
 ******************************************************************************/
-static void primers_write_primer(AjPFile outfile, char *tag, AjPStr pos,
-	AjPStr tm, AjPStr gc, AjPStr seq)
+static void primers_write_primer(AjPFile outfile,
+				 const char *tag, const AjPStr pos,
+				 const AjPStr tm, const AjPStr gc,
+				 const AjPStr seq)
 {
 
   ajint startint;
@@ -1115,18 +1130,21 @@ static void primers_write_primer(AjPFile outfile, char *tag, AjPStr pos,
   float gcfloat;
   AjPStr start = NULL;
   ajint comma;
+  AjPStr posstr = NULL;
 
   if (pos != NULL) {
+    posstr = ajStrNewS(pos);
     ajStrToFloat(tm, &tmfloat);
     ajStrToFloat(gc, &gcfloat);
-    comma = ajStrFindC(pos, ",");
-    ajStrAss(&start, pos);
+    comma = ajStrFindC(posstr, ",");
+    ajStrAssS(&start, posstr);
     ajStrCut(&start, comma, ajStrLen(start)-1);
     ajStrToInt(start, &startint);
-    ajStrCut(&pos, 0, comma);
-    ajStrToInt(pos, &lenint);
+    ajStrCut(&posstr, 0, comma);
+    ajStrToInt(posstr, &lenint);
     (void) ajFmtPrintF(outfile, "     %s  %6d %4d  %2.2f  %2.2f  %S\n\n",
     	tag, startint, lenint, tmfloat, gcfloat, seq);
+    ajStrDel(&posstr);
   }
 
 /* tidy up */

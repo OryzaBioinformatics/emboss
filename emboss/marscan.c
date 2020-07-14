@@ -175,35 +175,38 @@ int main(int argc, char **argv)
     ajStrAssC(&opattern8, ajStrStr(pattern8));
     ajStrAssC(&opattern8rev, ajStrStr(pattern8rev));
 
-    if(!(type16=embPatGetType(&pattern16, mismatch16, 0, &m16, &amino16,
+    if(!(type16=embPatGetType(opattern16,&pattern16,
+			      mismatch16, 0, &m16, &amino16,
 			      &carboxyl16)))
 	ajFatal("Illegal pattern");
 
-    embPatCompile(type16, pattern16, opattern16, &plen16,
+    embPatCompile(type16, pattern16, &plen16,
 		  &buf16, off16, &sotable16, &solimit16,
 		  &m16, &regexp16, &skipm16, mismatch16);
 
-    if(!(type16rev=embPatGetType(&pattern16rev, mismatch16rev, 0, &m16rev,
+    if(!(type16rev=embPatGetType(opattern16rev, &pattern16rev,
+				 mismatch16rev, 0, &m16rev,
 				 &amino16rev, &carboxyl16rev)))
 	ajFatal("Illegal pattern");
 
-    embPatCompile(type16rev, pattern16rev, opattern16rev, &plen16rev,
+    embPatCompile(type16rev, pattern16rev, &plen16rev,
 		  &buf16rev, off16rev, &sotable16rev, &solimit16rev,
 		  &m16rev, &regexp16rev, &skipm16rev, mismatch16rev);
 
-    if(!(type8=embPatGetType(&pattern8, mismatch8, 0, &m8, &amino8,
+    if(!(type8=embPatGetType(opattern8, &pattern8, mismatch8, 0, &m8, &amino8,
 			     &carboxyl8)))
 	ajFatal("Illegal pattern");
 
-    embPatCompile(type8, pattern8, opattern8, &plen8,
+    embPatCompile(type8, pattern8, &plen8,
 		  &buf8, off8, &sotable8, &solimit8,
 		  &m8, &regexp8, &skipm8, mismatch8);
 
-    if(!(type8rev=embPatGetType(&pattern8rev, mismatch8rev, 0, &m8rev,
+    if(!(type8rev=embPatGetType(opattern8rev, &pattern8rev,
+				mismatch8rev, 0, &m8rev,
 				&amino8rev, &carboxyl8rev)))
 	ajFatal("Illegal pattern");
 
-    embPatCompile(type8rev, pattern8rev, opattern8rev, &plen8rev,
+    embPatCompile(type8rev, pattern8rev, &plen8rev,
 		  &buf8rev, off8rev, &sotable8rev, &solimit8rev,
 		  &m8rev, &regexp8rev, &skipm8rev, mismatch8rev);
 
@@ -225,24 +228,24 @@ int main(int argc, char **argv)
 	ajStrToUpper(&text);
 	adj = begin+end+1;
 
-	embPatFuzzSearch(type16, begin, pattern16, opattern16, seqname,
-			 text, &l16, plen16, mismatch16, amino16, carboxyl16,
+	embPatFuzzSearch(type16, begin, pattern16, seqname,
+			 text, l16, plen16, mismatch16, amino16, carboxyl16,
 			 buf16, off16, sotable16, solimit16, regexp16,
 			 skipm16, &hits16, m16, &tidy16);
 
-	embPatFuzzSearch(type16rev, begin, pattern16rev, opattern16rev,
-			 seqname, text, &l16rev, plen16rev, mismatch16rev,
+	embPatFuzzSearch(type16rev, begin, pattern16rev,
+			 seqname, text, l16rev, plen16rev, mismatch16rev,
 			 amino16rev, carboxyl16rev, buf16rev, off16rev,
 			 sotable16rev, solimit16rev, regexp16rev, skipm16rev,
 			 &hits16rev, m16rev, &tidy16rev);
 
-	embPatFuzzSearch(type8, begin, pattern8, opattern8, seqname, text,
-			 &l8, plen8, mismatch8, amino8, carboxyl8, buf8, off8,
+	embPatFuzzSearch(type8, begin, pattern8, seqname, text,
+			 l8, plen8, mismatch8, amino8, carboxyl8, buf8, off8,
 			 sotable8, solimit8, regexp8, skipm8, &hits8, m8,
 			 &tidy8);
 
-	embPatFuzzSearch(type8rev, begin, pattern8rev, opattern8rev,
-			 seqname, text, &l8rev, plen8rev, mismatch8rev,
+	embPatFuzzSearch(type8rev, begin, pattern8rev,
+			 seqname, text, l8rev, plen8rev, mismatch8rev,
 			 amino8rev, carboxyl8rev, buf8rev, off8rev,
 			 sotable8rev, solimit8rev, regexp8rev, skipm8rev,
 			 &hits8rev, m8rev, &tidy8rev);
@@ -341,8 +344,8 @@ int main(int argc, char **argv)
 ** steps down the two lists of matches looking for hits within the required
 ** maximum distance
 **
-** @param [r] l16 [AjPList] List of length 16 hits (both forward and reverse)
-** @param [r] l8 [AjPList] List of length 8 hits (both forward and reverse)
+** @param [u] l16 [AjPList] List of length 16 hits (both forward and reverse)
+** @param [u] l8 [AjPList] List of length 8 hits (both forward and reverse)
 ** @param [u] tab [AjPFeattable*] feature table
 ** @return [void]
 ** @@
@@ -427,7 +430,7 @@ static void marscan_stepdown(AjPList l16, AjPList l8, AjPFeattable *tab)
 ** gets the next position from a list and checks to see if we have a match
 ** within MAXDIST of the last match in the other list
 **
-** @param [r] l [AjPList] the list of matching positions
+** @param [u] l [AjPList] the list of matching positions
 ** @param [u] thisprev [ajint *] pointer to last stored position of
 **                                this pattern
 ** @param [r] otherprev [ajint] last stored position of the other pattern

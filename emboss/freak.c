@@ -40,7 +40,7 @@ int main(int argc, char **argv)
     AjPStr str   = NULL;
     AjBool plot;
     AjPGraph graph=NULL;
-    AjPGraphData fgraph=NULL;
+    AjPGraphPlpData fgraph=NULL;
     AjPStr st = NULL;
 
     ajint c;
@@ -53,8 +53,8 @@ int main(int argc, char **argv)
     ajint i;
     ajint j;
     ajint k;
-    char *p;
-    char *q;
+    const char *p;
+    const char *q;
     float f;
 
     float *x = NULL;
@@ -67,7 +67,7 @@ int main(int argc, char **argv)
     ajGraphInit("freak", argc, argv);
 
     seqall = ajAcdGetSeqall("seqall");
-    plot   = ajAcdGetBool("plot");
+    plot   = ajAcdGetToggle("plot");
     step   = ajAcdGetInt("step");
     window = ajAcdGetInt("window");
     bases  = ajAcdGetString("letters");
@@ -88,7 +88,7 @@ int main(int argc, char **argv)
 	pos = ajSeqallBegin(seqall);
 	end = ajSeqallEnd(seqall);
 
-	str = ajSeqStr(seq);
+	str = ajSeqStrCopy(seq);
 	ajStrToUpper(&str);
 	p = ajStrStr(str);
 
@@ -133,32 +133,33 @@ int main(int argc, char **argv)
 	}
 	else if(plot && c)
 	{
-	    fgraph = ajGraphxyDataNewI(c);
-	    ajGraphxyTitle(graph,ajSeqGetName(seq));
+	    fgraph = ajGraphPlpDataNewI(c);
+	    ajGraphSetTitle(graph,ajSeqGetName(seq));
 	    ajFmtPrintS(&st,"From %d to %d. Residues:%s Window:%d Step:%d",
 			pos+1,end+1,ajStrStr(bases),window,step);
-	    ajGraphxySubtitle(graph,st);
-	    ajGraphxyXtitleC(graph,"Position");
-	    ajGraphxyYtitleC(graph,"Frequency");
+	    ajGraphSetSubTitle(graph,st);
+	    ajGraphSetXTitleC(graph,"Position");
+	    ajGraphSetYTitleC(graph,"Frequency");
 	    ajGraphxySetXStart(graph,x[0]);
 	    ajGraphxySetXEnd(graph,x[c-1]);
 	    ajGraphxySetYStart(graph,0.);
 	    ajGraphxySetYEnd(graph,y[c-1]);
 	    ajGraphxySetXRangeII(graph,x[0],x[c-1]);
 	    ajGraphxySetYRangeII(graph,0.,y[c-1]);
-	    ajGraphDataxySetMaxMin(fgraph,x[0],x[c-1],0.,1.0);
-	    ajGraphDataxyMaxMin(y,c,&min,&max);
-	    ajGraphDataxySetMaxima(fgraph,x[0],x[c-1],min,max);
-	    ajGraphDataxySetTypeC(fgraph,"2D Plot");
+	    ajGraphPlpDataSetMaxMin(fgraph,x[0],x[c-1],0.,1.0);
+	    ajGraphArrayMaxMin(y,c,&min,&max);
+	    ajGraphPlpDataSetMaxima(fgraph,x[0],x[c-1],min,max);
+	    ajGraphPlpDataSetTypeC(fgraph,"2D Plot");
 
-	    ajGraphxyAddDataPtrPtr(fgraph,x,y);
-	    ajGraphxyReplaceGraph(graph,fgraph);
+	    ajGraphPlpDataSetXY(fgraph,x,y);
+	    ajGraphDataReplace(graph,fgraph);
 	    ajGraphxyDisplay(graph,ajFalse);
 	}
 
 
 	AJFREE(x);
 	AJFREE(y);
+	ajStrDel(&str);
     }
 
     if(plot)

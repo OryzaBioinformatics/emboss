@@ -57,10 +57,10 @@ static char *back     = NULL;
 static char *front    = NULL;
 static char *maxback  = NULL;
 static char *maxfront = NULL;
-char* sq = NULL;
-ajint gap;
-ajint max;
-ajint score;
+static char* sq = NULL;
+static ajint gap;
+static ajint max;
+static ajint score;
 
 
 
@@ -113,9 +113,9 @@ int main(int argc, char **argv)
 
     cvt = ajSeqCvtNewText("ACGTN");
     ajSeqNum(sequence, cvt, &tseq);
-    sq = ajStrStr(tseq);
+    sq = ajStrStrMod(&tseq);
 
-    /* careful - sequence can be shgorter than the maximum repeat length */
+    /* careful - sequence can be shorter than the maximum repeat length */
 
     if((len=ajStrLen(substr)) < maxrepeat)
       maxrepeat = ajStrLen(substr);
@@ -199,8 +199,10 @@ int main(int argc, char **argv)
 ** Prints the original output format, but simply returns if the
 ** output file is NULL.
 **
-** @param [?] outf [AjPFile] Undocumented
-** @param [?] begin [ajint] Undocumented
+** Sets the printed region to 'Z' to exlucde it from further analysis.
+**
+** @param [u] outf [AjPFile] Undocumented
+** @param [r] begin [ajint] Undocumented
 ** @@
 ******************************************************************************/
 
@@ -227,14 +229,14 @@ static void equicktandem_print(AjPFile outf, ajint begin)
 **
 ** Saves a result as a feature.
 **
-** @param [?] tab [AjPFeattable] Undocumented
-** @param [?] begin [ajint] Undocumented
+** @param [u] tab [AjPFeattable] Undocumented
+** @param [r] begin [ajint] Undocumented
 ** @@
 ******************************************************************************/
 
 static void equicktandem_report(AjPFeattable tab, ajint begin)
 {
-    char* cp;
+    static char* cp;
 
     AjPFeature gf;
     static AjPStr rpthit = NULL;

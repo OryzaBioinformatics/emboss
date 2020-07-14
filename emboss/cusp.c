@@ -66,7 +66,7 @@ int main(int argc, char **argv)
 
     ajFmtPrintF(outf,"# CUSP codon usage file\n");
     ajFmtPrintF(outf,"# Codon\tAmino acid\tFract   /1000\tNumber\n");
-    ajCodWrite(outf,codon);
+    ajCodWrite(codon, outf);
     ajFileClose(&outf);
 
     ajStrDel(&substr);

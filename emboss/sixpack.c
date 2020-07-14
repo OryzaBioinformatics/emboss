@@ -26,15 +26,16 @@
 
 
 
-static int sixpack_findorfs(AjPSeqout *outseq, AjPFile *outf, ajint s,
-			    ajint len, char *seq, char *name, ajint orfml, 
+static int sixpack_findorfs(AjPSeqout outseq, AjPFile outf, ajint s,
+			    ajint len, const char *seq,
+			    const char *name, ajint orfml, 
 			    AjBool addedasterisk, AjBool firstorf,
 			    ajint frame, 
-			    char *origname, AjBool mstart);
+			    const char *origname, AjBool mstart);
 
-static void sixpack_ajprintseq(AjPSeqout *outseq, char *seq, ajint begin,
-			       int end, ajint orflength, char *name,
-			       ajint count, ajint frame, char *origname,
+static void sixpack_ajprintseq(AjPSeqout outseq, const char *seq, ajint begin,
+			       int end, ajint orflength, const char *name,
+			       ajint count, ajint frame, const char *origname,
 			       ajint min_orflength);
 
 
@@ -55,7 +56,7 @@ int main(int argc, char **argv)
     ajint peplen;
     AjPSeq seq;
     AjPSeq pep;
-    AjPStr pepseq = NULL;
+    const AjPStr pepseq = NULL;
     AjPStr substr = NULL;
     EmbPShow ss;
     AjPFile outfile;
@@ -138,7 +139,7 @@ int main(int argc, char **argv)
 	else
 	{
 	    descriptionline = ajStrNew();
-	    ajStrAss(&descriptionline, ajSeqGetDesc(seq));
+	    ajStrAssS(&descriptionline, ajSeqGetDesc(seq));
 	    ajStrWrap(&descriptionline, width+margin);
 	    ajFmtPrintF(outfile, "%S\n", descriptionline);
 	    ajStrDel(&descriptionline);
@@ -219,7 +220,7 @@ int main(int argc, char **argv)
 	pepend = ajSeqEnd(pep)-1;
 	pepseq = ajSeqStr(pep);
 
-	ajStrAssSubC(&substr,ajStrStr(pepseq),pepbegin,pepend);
+	ajStrAssSub(&substr,pepseq,pepbegin,pepend);
 
 	/* end with a '*' if we want to and there is not one there already */
 	ajDebug("last residue =%c\n", ajSeqChar(pep)[pepend]);
@@ -235,7 +236,7 @@ int main(int argc, char **argv)
 	  
 	peplen = ajStrLen(substr);
 
-	totalorf += sixpack_findorfs(&outseq, &outfile, 0, peplen,
+	totalorf += sixpack_findorfs(outseq, outfile, 0, peplen,
 				     ajStrStr(substr),
 				     ajSeqName(pep), orfminsize,
 				     addedasterisk, firstorf,
@@ -260,28 +261,29 @@ int main(int argc, char **argv)
 **
 ** Finds ORFs and prints report
 **
-** @param [?] outseq [AjPSeqout*] File where to write fasta sequences
-** @param [?] outf [AjPFile*] File where to write the report on ORFs 
-** @param [?] from [ajint] 0
-** @param [?] to [ajint] Length of the sequence
-** @param [?] p [char*] Sequence
-** @param [?] name [char*] Name of the translated sequence (with frame number)
-** @param [?] min_orflength [ajint] Minimum size of the ORFs to report
+** @param [u] outseq [AjPSeqout] File where to write fasta sequences
+** @param [u] outf [AjPFile] File where to write the report on ORFs 
+** @param [r] from [ajint] 0
+** @param [r] to [ajint] Length of the sequence
+** @param [r] p [const char*] Sequence
+** @param [r] name [const char*] Name of the translated sequence
+**                               (with frame number)
+** @param [r] min_orflength [ajint] Minimum size of the ORFs to report
 ** @param [r] addedasterisk [AjBool] True if an asterisk was added at the end
-** @param [?] firstorf [AjBool] ajTrue to find first ORF
-** @param [?] frame [ajint] Frame number
-** @param [?] origname [char*] Original name of the sequence (DNA)
-** @param [?] mstart [AjBool] ajTrue to start with methionine codon only
+** @param [r] firstorf [AjBool] ajTrue to find first ORF
+** @param [r] frame [ajint] Frame number
+** @param [r] origname [const char*] Original name of the sequence (DNA)
+** @param [r] mstart [AjBool] ajTrue to start with methionine codon only
 ** @return [int] number of orfs
 ** @@
 ******************************************************************************/
 
-static int sixpack_findorfs(AjPSeqout *outseq, AjPFile *outf, ajint from,
-			    ajint to, char *p, char *name,
+static int sixpack_findorfs(AjPSeqout outseq, AjPFile outf, ajint from,
+			    ajint to, const char *p, const char *name,
 			    ajint min_orflength,
 			    AjBool addedasterisk, AjBool firstorf,
 			    ajint frame, 
-			    char *origname, AjBool mstart)
+			    const char *origname, AjBool mstart)
 
 {
     ajint i;
@@ -349,7 +351,7 @@ static int sixpack_findorfs(AjPSeqout *outseq, AjPFile *outf, ajint from,
 	}
     }
     
-    ajFmtPrintF(*outf,"Total ORFs in frame %d : %5d\n", frame, orfnb);
+    ajFmtPrintF(outf,"Total ORFs in frame %d : %5d\n", frame, orfnb);
     
     return orfnb;
 }
@@ -361,24 +363,26 @@ static int sixpack_findorfs(AjPSeqout *outseq, AjPFile *outf, ajint from,
 **
 ** Prints ORFs in the sequence file
 **
-** @param [?] outseq [AjPSeqout*] File where to write fasta sequences
-** @param [?] seq [char*] Sequence to write
-** @param [?] begin [ajint] Start position of the ORF to write
-** @param [?] end [int] End position of the ORF to write
-** @param [?] orflength [ajint] Size of the current ORF
-** @param [?] name [char*] Name of the translated sequence (with frame number)
-** @param [?] count [ajint] Number of the ORF to be written in this frame
-** @param [?] frame [ajint] Frame number
-** @param [?] origname [char*] Original name of the sequence (DNA)
-** @param [?] min_orflength [ajint] Minimum size for an ORF
+** @param [u] outseq [AjPSeqout] File where to write fasta sequences
+** @param [r] seq [const char*] Sequence to write
+** @param [r] begin [ajint] Start position of the ORF to write
+** @param [r] end [int] End position of the ORF to write
+** @param [r] orflength [ajint] Size of the current ORF
+** @param [r] name [const char*] Name of the translated sequence
+**                              (with frame number)
+** @param [r] count [ajint] Number of the ORF to be written in this frame
+** @param [r] frame [ajint] Frame number
+** @param [r] origname [const char*] Original name of the sequence (DNA)
+** @param [r] min_orflength [ajint] Minimum size for an ORF
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-static void sixpack_ajprintseq(AjPSeqout *outseq, char *seq, ajint begin, int
-			       end, ajint orflength, char *name,
+static void sixpack_ajprintseq(AjPSeqout outseq,
+			       const char *seq, ajint begin, int
+			       end, ajint orflength, const char *name,
 			       ajint count, ajint frame, 
-			       char *origname, ajint min_orflength)
+			       const char *origname, ajint min_orflength)
 {
     AjPSeq sq;
     AjPStr str;
@@ -396,7 +400,7 @@ static void sixpack_ajprintseq(AjPSeqout *outseq, char *seq, ajint begin, int
 		name,count,origname,frame,count,min_orflength,orflength);
     ajSeqAssName(sq,nm);
 
-    ajSeqWrite(*outseq, sq);
+    ajSeqWrite(outseq, sq);
 
     ajStrDel(&nm);
     ajStrDel(&str);

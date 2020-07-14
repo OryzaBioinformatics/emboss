@@ -86,10 +86,10 @@ static ajint nmax;
 static AjPSeqCvt cvt;
 
 static EtandemPCons etandem_consCreate(void);
-static void etandem_consDestroy(EtandemPCons cons);
+static void etandem_consDestroy(EtandemPCons *cons);
 static void etandem_basicReport(AjPFeattable tab, AjPFile outfile,
-				EtandemPCons a);
-static void etandem_report(EtandemPCons a);
+				const EtandemPCons a);
+static void etandem_report(EtandemPCons *a);
 static void etandem_finalReport(AjPFeattable tab, AjPFile outfile);
 
 #define ATAB(x,y) (a->tab[x+5*y])
@@ -127,20 +127,20 @@ static EtandemPCons etandem_consCreate(void)
 **
 ** Undocumented.
 **
-** @param [?] cons [EtandemPCons] Undocumented
+** @param [d] cons [EtandemPCons*] Undocumented
 ** @@
 ******************************************************************************/
 
-static void etandem_consDestroy(EtandemPCons cons)
+static void etandem_consDestroy(EtandemPCons *cons)
 {
 
-    if(!cons)
+    if(!*cons)
 	return;
     --nCons;
-    AJFREE(cons->max);
-    AJFREE(cons->bestMax);
-    AJFREE(cons->tab);
-    AJFREE(cons);
+    AJFREE((*cons)->max);
+    AJFREE((*cons)->bestMax);
+    AJFREE((*cons)->tab);
+    AJFREE(*cons);
 
     return;
 }
@@ -160,15 +160,15 @@ static EtandemPCons reportRoot = &reportRootStruct;
 **
 ** Undocumented.
 **
-** @param [r] tab [AjPFeattable] Feature table
-** @param [r] outfile [AjPFile] Output file (null unless original output
+** @param [u] tab [AjPFeattable] Feature table
+** @param [u] outfile [AjPFile] Output file (null unless original output
 **                              is needed)
-** @param [?] a [EtandemPCons] Undocumented
+** @param [r] a [const EtandemPCons] Undocumented
 ** @@
 ******************************************************************************/
 
 static void etandem_basicReport(AjPFeattable tab, AjPFile outfile,
-				EtandemPCons a)
+				const EtandemPCons a)
 {
     ajint j;
     ajint copies;
@@ -237,25 +237,25 @@ static void etandem_basicReport(AjPFeattable tab, AjPFile outfile,
 **
 ** Undocumented.
 **
-** @param [?] a [EtandemPCons] Undocumented
+** @param [d] a [EtandemPCons*] Undocumented
 ** @@
 ******************************************************************************/
 
-static void etandem_report(EtandemPCons a)
+static void etandem_report(EtandemPCons *a)
 {
     ajint j;
     ajint firstchar;
 
-    if(a->bestScore >= thresh)
+    if((*a)->bestScore >= thresh)
     {
 	if(uniform)
 	    goto good;
 
 	/* else check not a single letter pattern */
-	firstchar = a->bestMax[0];
+	firstchar = (*a)->bestMax[0];
 
-	for(j = 1; j < a->repeat; j++)
-	    if(a->bestMax[j] != firstchar)
+	for(j = 1; j < (*a)->repeat; j++)
+	    if((*a)->bestMax[j] != firstchar)
 		goto good;
     }
 
@@ -263,8 +263,8 @@ static void etandem_report(EtandemPCons a)
     return;
 
  good:
-    a->next = reportRoot->next;
-    reportRoot->next = a;
+    (*a)->next = reportRoot->next;
+    reportRoot->next = *a;
 
     return;
 }
@@ -276,8 +276,8 @@ static void etandem_report(EtandemPCons a)
 **
 ** Undocumented.
 **
-** @param [r] tab [AjPFeattable] Feature table
-** @param [r] outfile [AjPFile] Output file (null unless original output
+** @param [u] tab [AjPFeattable] Feature table
+** @param [u] outfile [AjPFile] Output file (null unless original output
 **                              is needed)
 ** @@
 ******************************************************************************/
@@ -309,7 +309,7 @@ static void etandem_finalReport(AjPFeattable tab, AjPFile outfile)
 	    if(a->ibest >= start && a->start <= end)
 	    {
 		olda->next = a->next;
-		etandem_consDestroy(a);
+		etandem_consDestroy(&a);
 		a = olda;
 	    }
     }
@@ -331,7 +331,7 @@ int main(int argc, char **argv)
 
     ajint ibase;
     ajint base;
-    char *cp;
+    const char *cp;
     AjPSeq sequence = NULL;
     ajint i;
     ajint j;
@@ -445,7 +445,7 @@ int main(int argc, char **argv)
 		    {
 			if(DEBUG) ajDebug("D");
 			olda->next = a->next;
-			etandem_report(a);
+			etandem_report(&a);
 			a = olda;
 		    }
 		}
@@ -474,7 +474,7 @@ int main(int argc, char **argv)
 				ajDebug("B");
 				etandem_basicReport(tab, outfile, b);
 			    }
-			    etandem_consDestroy(b);
+			    etandem_consDestroy(&b);
 			    b = oldb;
 			}
 			else
@@ -485,7 +485,7 @@ int main(int argc, char **argv)
 				ajDebug("A");
 				etandem_basicReport(tab, outfile, a);
 			    }
-			    etandem_consDestroy(a);
+			    etandem_consDestroy(&a);
 			    a = olda;
 			    goto nexta;
 			}
@@ -506,7 +506,7 @@ int main(int argc, char **argv)
 	while((a = root->next))
 	{
 	    root->next = a->next;
-	    etandem_report(a);
+	    etandem_report(&a);
 	}
     }
 

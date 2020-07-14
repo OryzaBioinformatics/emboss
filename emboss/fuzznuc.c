@@ -28,7 +28,7 @@
 static void fuzznuc_report_hits(AjPList *l, ajint hits,
 				AjBool sc, ajint thits,
 				AjPReport report,
-				AjPFeattable tab, AjPSeq seq);
+				AjPFeattable tab, const AjPSeq seq);
 
 
 
@@ -97,9 +97,9 @@ int main(int argc, char **argv)
     /* Copy original pattern regexps */
     ajStrAssC(&opattern,ajStrStr(pattern));
 
-    if(!(type=embPatGetType(&pattern,mismatch,0,&m,&amino,&carboxyl)))
+    if(!(type=embPatGetType(opattern,&pattern,mismatch,0,&m,&amino,&carboxyl)))
 	ajFatal("Illegal pattern");
-    embPatCompile(type,pattern,opattern,&plen,&buf,off,&sotable,&solimit,&m,
+    embPatCompile(type,pattern,&plen,&buf,off,&sotable,&solimit,&m,
 		  &regexp,&skipm,mismatch);
 
     text = ajStrNew();
@@ -115,13 +115,13 @@ int main(int argc, char **argv)
 	ajStrToUpper(&text);
 	adj = begin+end+1;
 
-	embPatFuzzSearch(type,begin,pattern,opattern,seqname,text,&l,
+	embPatFuzzSearch(type,begin,pattern,seqname,text,l,
 			 plen,mismatch,amino,carboxyl,buf,off,sotable,
 			 solimit,regexp,skipm,&hits,m,&tidy);
 	if(sc)
 	{
 	    ajSeqReverseStr(&text);
-	    embPatFuzzSearch(type,begin,pattern,opattern,seqname,text,&l,
+	    embPatFuzzSearch(type,begin,pattern,seqname,text,l,
 			     plen,mismatch,amino,carboxyl,buf,off,sotable,
 			     solimit,regexp,skipm,&thits,m,&tidy);
 	    ajSeqReverseStr(&text);
@@ -168,13 +168,13 @@ int main(int argc, char **argv)
 **
 ** Undocumented.
 **
-** @param [?] l [AjPList*] Undocumented
-** @param [?] hits [ajint] Undocumented
-** @param [?] sc [AjBool] Undocumented
-** @param [?] thits [ajint] Undocumented
-** @param [?] report [AjPReport] Report object
-** @param [?] tab [AjPFeattable] Feature table
-** @param [?] seq [AjPSeq] Sequence
+** @param [u] l [AjPList*] Undocumented
+** @param [r] hits [ajint] Undocumented
+** @param [r] sc [AjBool] Undocumented
+** @param [r] thits [ajint] Undocumented
+** @param [u] report [AjPReport] Report object
+** @param [u] tab [AjPFeattable] Feature table
+** @param [r] seq [const AjPSeq] Sequence
 ** @@
 ******************************************************************************/
 
@@ -182,7 +182,7 @@ int main(int argc, char **argv)
 static void fuzznuc_report_hits(AjPList *l, ajint hits,
 				AjBool sc, ajint thits,
 				AjPReport report,
-			        AjPFeattable tab, AjPSeq seq)
+			        AjPFeattable tab, const AjPSeq seq)
 {
     ajint i;
     EmbPMatMatch m;

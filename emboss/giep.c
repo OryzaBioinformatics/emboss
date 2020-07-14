@@ -63,7 +63,7 @@ int main(int argc, char **argv)
     double charge;
 
 #ifndef GROUT
-    AjPGraphData phGraph=NULL;
+    AjPGraphPlpData phGraph=NULL;
 #endif
     AjPStr tit=NULL;
     AjPStr tmp=NULL;
@@ -183,14 +183,14 @@ int main(int argc, char **argv)
 
 
 #ifndef GROUT
-	    phGraph=ajGraphxyDataNewI(npoints);
-	    ajGraphxyTitleC(graph,ajStrStr(tit));
-	    ajGraphxyXtitleC(graph,"pH");
-	    ajGraphxyYtitleC(graph,"Charge");
+	    phGraph=ajGraphPlpDataNewI(npoints);
+	    ajGraphSetTitleC(graph,ajStrStr(tit));
+	    ajGraphSetXTitleC(graph,"pH");
+	    ajGraphSetYTitleC(graph,"Charge");
 
-	    ajGraphDataxySetTypeC(phGraph,"2D Plot Float");
-	    ajGraphDataxySetMaxMin(phGraph,1.0,14.0,minchg,maxchg);
-	    ajGraphDataxySetMaxima(phGraph,1.0,14.0,minchg,maxchg);
+	    ajGraphPlpDataSetTypeC(phGraph,"2D Plot Float");
+	    ajGraphPlpDataSetMaxMin(phGraph,1.0,14.0,minchg,maxchg);
+	    ajGraphPlpDataSetMaxima(phGraph,1.0,14.0,minchg,maxchg);
 	    ajGraphxySetXStart(graph,1.0);
 	    ajGraphxySetXEnd(graph,14.0);
 	    ajGraphxySetYStart(graph,minchg);
@@ -198,8 +198,8 @@ int main(int argc, char **argv)
 	    ajGraphxySetXRangeII(graph,1,14);
 	    ajGraphxySetYRangeII(graph,(ajint)minchg,(ajint)maxchg);
 
-	    ajGraphxyAddDataPtrPtr(phGraph,xa,ya);
-	    ajGraphxyReplaceGraph(graph,phGraph);
+	    ajGraphPlpDataSetXY(phGraph,xa,ya);
+	    ajGraphDataReplace(graph,phGraph);
 
 
 	    ajGraphxyDisplay(graph,ajFalse);
@@ -222,7 +222,7 @@ int main(int argc, char **argv)
 #ifndef GROUT
     ajGraphClose();
 #else
-    ajXmlClearFile(graph);
+    ajXmlClearFile(&graph);
 #endif
     AJFREE (K);
     AJFREE (pro);
