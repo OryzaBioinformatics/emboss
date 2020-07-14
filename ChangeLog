@@ -1,4 +1,141 @@
 Version 3.0.0
+	water, needle and other alignment programs occasionally could
+	report suboptimal alignments (off by the gap extension penalty
+	score). The reported alignments were correct, but rearranging the
+	gaps could give a slightly higher score. Matcher and stretcher use
+	different alignment functions and were unaffected.
+
+	Cpgplot no longer has a -shift option to speed processing on long
+	sequences. The output was broken. We will restore it if there is
+	demand.
+
+	Two new variables added for developers using the MYEMBOSS package
+	to write their own EMBOSS programs. EMBOSS_MYEMBOSSROOT (the same
+	will work for other EMBASSY packages) points to the location of
+	the ACD files for an EMBASSY package which is not installed - as
+	would be the case for an ordinary user developing and maintaining
+	their own code using MYEMBOSS. This requires the use of embInitP
+	rather than embInit to pass the package name - something all
+	EMBASSY programs should (and will do). The second variable is
+	EMBOSS_ACDUTILROOT and is required so that utilities such as
+	acdvalid can also find the ACD files. Utilities acdvalid, acdc,
+	acdhelp, acdtable and acdpretty use embInit as they no nothing
+	about any package name.
+
+	Sequence sets (seqset and seqsetall) have a new ACD attribute
+	"aligned" which is true or false. If true, the sequences will be
+	extended with gaps and passed to the application as a full
+	alignment. It is assumed that they are already aligned. If false,
+	the application needs all sequences in memory but has no need for
+	aligned input. The aligned attribute is required (to help ACD
+	parsers) so acdvalid will object if it is not found.
+
+	embossdata now requires a filename, or an empty string to search
+	for all files. If no filename is given, it will prompt for one
+	with a default of an empty string.
+
+	acdvalid now tests the order in which sections appear in the ACD
+	file. The order must be: input, required, additional, advanced,
+	output. There are already constraints on which ACD data types can
+	appear in each section. All existing ACD files passed this test.
+	If any external ACD files have a problem the acdvalid tests can be
+	revised.
+
+	Sequence format "experiment" is now correctly the Staden package
+	experiment file format. The description is taken from the "EX"
+	experiment description line. EMBL line types (including features)
+	are allowed in this format and are supported if used before the
+	sequence. The accuracy values are read and stored (one per base,
+	using the highest base value if all 4 bases have individual
+	numbers) and written. These values could possibly be passed to
+	primer3, for example.
+
+	Staden and GCG input formats can now parse out comments from
+	anywhere in the sequence records.
+
+	Nexus and nexusnon output formats now correctly report the
+	datatype for protein alignments.
+
+	Documentation of the @data datatype header tags updated on the
+	developers webpages.
+
+	Coderet reports the number of CDS, mRNA and translation sequences
+	to an output file. Requested for easier tracing of inputs that
+	gave no sequences.
+
+	Nbrf (pir) input can now read from an SRSWWW server. The problem
+	was that SRS reports an extra ">P1;seqid" header before the
+	sequence. Now if there is no sequence, a duplicate header (one
+	with the same ID) can be skipped.
+
+	Clustal output format no longer writes in blocks of 10.
+
+	Clustal and other multiple sequence formats were unable to return
+	single named sequences. Fixed for all such formats.
+	
+	Phylip3 output renamed phylipnon for compatibility with other
+	formats. The phylip3 name is retained for back compatibility. The
+	header for phylip non-interleaved format is corrected to that
+	accepted by phylip 3.6 (no need for YF on the header line, and
+	correct number of sequences). Documentation of these formats (for
+	seqret and general format documentation) has been updated.
+
+	Programs chips, cusp, prettyseq and showtran used a codon usage
+	table as input only to define the genetic code (amino acids for
+	each codon) for the table they produce. This is no longer needed
+	as a new AjPCod constructor ajCodNewCode can be given a genetic
+	code (default 0 to use the standard code) and will set the amino
+	acid data.
+
+	The ajCodClear function now clears all data, including the amino
+	acid assignments, for use in reading multiple codon usage
+	formats. A new function ajCodClearData clears only the data and
+	other values, and leaves the amino acid assignments in case other
+	applications may make the same assumptions.
+	
+	Codon usage input filenames can now be used to set the output
+	filename. The codcmp program for example will no longer default to
+	"outfile.codcmp" for output. However, this can cause unexpected
+	results when a codon usage table and a sequence are read in, so
+	codon usage filenames are only used if no other input file (or
+	sequence, or feature table, or other input type) has been
+	read. This is done by passing a "reset" boolean when setting the
+	saved first input file name so that other inputs can overwrite a
+	name defined by a codon usage input. A remaining side effect is
+	that if the first input is stdin (for example with -filter on)
+	then a second input file can now set the default for output. The
+	recommendation for anyone developing wrappers is to always
+	explicitly set the output filenames if there is a need to know the
+	name for a specific output.
+
+	Codon usage tables support multiple formats. All can be read
+	automatically. EMBOSS will now, for example, accept native GCG
+	codon usage tables including those used by the codonusage and
+	transterm databases. The format can be specified for "codon" input
+	by a -format quialifier. Outcodon is now used as an ACD datatype
+	for writing codon usage tables, and has a -oformat qualifier. A
+	new application codcopy can interconvert the codon usage table
+	formats. The default codon usage table format is called "emboss"
+	and includes structured comments to identify the species, database
+	release, database division, number of CDSs and codons, and GC
+	content. These values are calculated of searched for in the text
+	within a file for other formats.
+
+	In the emboss.default and .embossrc files the same name can be
+	used for variables, databases, and resources. In previous versions
+	a single table was used and name clashes could occur. This becomes
+	an issue with the increasing use of resource definitions.
+
+	Colours for abiview set to the ABI standard colours.
+
+	Sequence types explicitly set in source code for cons, sixpack and
+	backtranseq. GCG format output was showing nucleotide instead of
+	protein sequence type.
+
+	Correction to reversed sequence numbering for local alignments
+	from water.
+	
+Version 2.10.0
 	Profile analysis with gprof indicates that the regular expressions
 	(and the PCRE library) are very inefficient. Wildcards in regular
 	expressions lead to millions of recursive calls to the match

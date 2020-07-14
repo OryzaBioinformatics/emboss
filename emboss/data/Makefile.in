@@ -201,10 +201,12 @@ SUBDIRS = AAINDEX CODONS REBASE PRINTS PROSITE
 pkgdata_DATA = EBLOSUM30 EBLOSUM35 EBLOSUM40 EBLOSUM45 EBLOSUM50 \
                EBLOSUM55 EBLOSUM60 EBLOSUM62 EBLOSUM62-12 EBLOSUM65 \
                EBLOSUM70 EBLOSUM75 EBLOSUM80 EBLOSUM85 EBLOSUM90 \
-               EBLOSUMN EDNAFULL EDNAMAT EGC.0 EGC.1 EGC.10 EGC.11 \
-               EGC.12 EGC.13 EGC.14 EGC.15 EGC.16 EGC.2 EGC.21 \
-               EGC.22 EGC.23 EGC.3 EGC.4 EGC.5 EGC.6 EGC.9 ENUC.4.2 \
-               ENUC.4.4 EPAM10 EPAM100 EPAM110 EPAM120 EPAM130 EPAM140 \
+               EBLOSUMN EDNAFULL EDNAMAT \
+               EGC.0 EGC.1 EGC.10 EGC.11 EGC.12 EGC.13 EGC.14 EGC.15 EGC.16 \
+               EGC.2 EGC.21 EGC.22 EGC.23 \
+               EGC.3 EGC.4 EGC.5 EGC.6 EGC.9 EGC.index EGC.txt \
+               ENUC.4.2 ENUC.4.4 \
+               EPAM10 EPAM100 EPAM110 EPAM120 EPAM130 EPAM140 \
                EPAM150 EPAM160 EPAM170 EPAM180 EPAM190 EPAM20 \
                EPAM200 EPAM210 EPAM220 EPAM230 EPAM240 EPAM250 \
                EPAM260 EPAM270 EPAM280 EPAM290 EPAM30 EPAM300 \
@@ -224,7 +226,8 @@ pkgdata_DATA = EBLOSUM30 EBLOSUM35 EBLOSUM40 EBLOSUM45 EBLOSUM50 \
                Etags.embl Etags.emboss Etags.gff \
                Etags.pir Etags.protein Etags.swiss \
                Etcode.dat Evdw.dat Ewhite-wimley.dat \
-               embossre.equ Emwfilter.dat Emass.dat Emassmod.dat
+               embossre.equ Emwfilter.dat Emass.dat Emassmod.dat \
+               Matrices.nucleotide Matrices.protein Matrices.proteinstructure
 
 all: all-recursive
 

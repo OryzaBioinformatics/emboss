@@ -3,10 +3,11 @@ pkgdata_DATA = aaindexextract.acd abiview.acd acdc.acd acdlog.acd \
 	acdpretty.acd acdtable.acd acdtrace.acd acdvalid.acd ajbad.acd \
 	ajfeatest.acd ajtest.acd antigenic.acd backtranseq.acd banana.acd \
 	biosed.acd btwisted.acd cai.acd chaos.acd charge.acd checktrans.acd \
-	chips.acd cirdna.acd codcmp.acd coderet.acd complex.acd \
+	chips.acd cirdna.acd codcmp.acd codcopy.acd coderet.acd complex.acd \
 	compseq.acd cons.acd corbatest.acd cpgplot.acd cpgreport.acd \
 	cusp.acd cutgextract.acd cutseq.acd dan.acd dbiblast.acd \
-	dbifasta.acd dbiflat.acd dbigcg.acd degapseq.acd demoalign.acd \
+	dbifasta.acd dbiflat.acd dbigcg.acd dbxfasta.acd dbxflat.acd \
+	dbxgcg.acd degapseq.acd demoalign.acd \
 	demofeatures.acd demolist.acd demoreport.acd demosequence.acd \
 	demostring.acd demotable.acd descseq.acd diffseq.acd digest.acd \
 	distmat.acd dotmatcher.acd dotpath.acd dottup.acd dreg.acd \

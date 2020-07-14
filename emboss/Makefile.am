@@ -30,10 +30,11 @@ acdc acdpretty acdtable acdtrace acdvalid \
 antigenic \
 backtranseq banana biosed btwisted \
 cai chaos charge checktrans chips \
-cirdna codcmp coderet \
+cirdna codcmp codcopy coderet \
 compseq cons cpgplot cpgreport \
 cusp cutgextract cutseq \
 dan dbiblast dbifasta dbiflat dbigcg \
+dbxfasta dbxflat dbxgcg \
 degapseq descseq diffseq digest distmat \
 dotmatcher dotpath dottup dreg \
 einverted embossdata embossversion emma \
@@ -106,6 +107,9 @@ dbiblast_SOURCES = dbiblast.c
 dbifasta_SOURCES = dbifasta.c
 dbiflat_SOURCES = dbiflat.c
 dbigcg_SOURCES = dbigcg.c
+dbxfasta_SOURCES = dbxfasta.c
+dbxflat_SOURCES = dbxflat.c
+dbxgcg_SOURCES = dbxgcg.c
 degapseq_SOURCES = degapseq.c
 descseq_SOURCES = descseq.c
 diffseq_SOURCES = diffseq.c
