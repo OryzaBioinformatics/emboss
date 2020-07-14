@@ -32,7 +32,8 @@ static void showfeat_ShowFeatSeq (AjPFile outfile, AjPSeq seq, ajint beg,
 				  AjBool forward, AjBool reverse,
 				  AjBool unknown, AjBool strand,
 				  AjBool source, AjBool position,
-				  AjBool type, AjBool tags, AjBool values);
+				  AjBool type, AjBool tags, AjBool values, 
+				  AjBool stricttags);
 
 static void showfeat_WriteFeat(AjPStr line, char strand, ajint fstart,
 			       ajint fend, ajint width, ajint beg, ajint end);
@@ -50,14 +51,9 @@ static ajint showfeat_CompareFeatType (const void * a, const void * b);
 static ajint showfeat_CompareFeatPos (const void * a, const void * b);
 
 static AjBool showfeat_MatchPatternTags (AjPFeature feat, AjPStr tpattern,
-					AjPStr vpattern);
-
+				AjPStr vpattern, AjBool stricttags,
+				AjPStr *tagstmp, AjBool values);
 static void showfeat_AddPos(AjPStr *posout, ajint start, ajint end);
-
-static void showfeat_AddTagsStr(AjPStr *tagout, AjPFeature feat,
-				AjBool values);
-
-
 
 
 
@@ -94,7 +90,7 @@ int main(int argc, char **argv)
     AjBool type;
     AjBool tags;
     AjBool values;
-
+    AjBool stricttags;
 
     ajint i;
     ajint beg, end;
@@ -124,6 +120,7 @@ int main(int argc, char **argv)
     type = ajAcdGetBool ("type");
     tags = ajAcdGetBool ("tags");
     values = ajAcdGetBool ("values");
+    stricttags = ajAcdGetBool ("stricttags");
 
     while (ajSeqallNext(seqall, &seq))
     {
@@ -177,12 +174,11 @@ int main(int argc, char **argv)
 
 
 	/* show the features */
-
 	(void) showfeat_ShowFeatSeq (outfile, seq, beg, end, matchsource,
 				     matchtype, matchtag, matchvalue,
 				     sortlist, width, collapse, forward,
 				     reverse, unknown, strand, source,
-				     position, type, tags, values);
+				     position, type, tags, values, stricttags);
 
 	/* end the HTML PRE block */
 	if (html)
@@ -225,6 +221,7 @@ int main(int argc, char **argv)
 ** @param [r] type [AjBool] show type of feature
 ** @param [r] tags [AjBool] show tags and values of feature
 ** @param [r] values [AjBool] show tag values of feature
+** @param [r] stricttags [AjBool] only show those tags that match the specified patterns
 ** @return [void]
 ** @@
 ******************************************************************************/
@@ -238,7 +235,8 @@ static void showfeat_ShowFeatSeq (AjPFile outfile, AjPSeq seq, ajint beg,
 				  AjBool forward, AjBool reverse,
 				  AjBool unknown, AjBool strand,
 				  AjBool source, AjBool position,
-				  AjBool type, AjBool tags, AjBool values)
+				  AjBool type, AjBool tags, AjBool values, 
+				  AjBool stricttags)
 {
     AjIList    iter = NULL ;
     AjPFeature gf   = NULL ;
@@ -251,6 +249,7 @@ static void showfeat_ShowFeatSeq (AjPFile outfile, AjPSeq seq, ajint beg,
     AjBool first = ajTrue;
     AjPStr sourceout = NULL;
     AjPStr typeout   = NULL;
+    AjPStr tagstmp   = NULL;
     AjPStr tagsout   = NULL;
     AjPStr posout    = NULL;
 
@@ -267,6 +266,7 @@ static void showfeat_ShowFeatSeq (AjPFile outfile, AjPSeq seq, ajint beg,
 	return;
 
     lineout = ajStrNew();
+    tagstmp = ajStrNewC("");
     tagsout = ajStrNewC("");
     posout  = ajStrNewC("");
 
@@ -317,11 +317,10 @@ static void showfeat_ShowFeatSeq (AjPFile outfile, AjPSeq seq, ajint beg,
 		continue;
 	    if (!unknown && gf->Strand == '\0')
 		continue;
-
 	    /* check that we want to output this match of source, type */
 	    if (!embMiscMatchPattern (gf->Source, matchsource) ||
 		!embMiscMatchPattern (gf->Type, matchtype) ||
-		!showfeat_MatchPatternTags(gf, matchtag, matchvalue))
+		!showfeat_MatchPatternTags(gf, matchtag, matchvalue, stricttags, &tagstmp, values))
 		continue;
 
 	    /* check that the feature is within the range we wish to display */
@@ -370,8 +369,11 @@ static void showfeat_ShowFeatSeq (AjPFile outfile, AjPSeq seq, ajint beg,
 		}
 
 	    }
-	    /* add tags to tagout */
-	    showfeat_AddTagsStr(&tagsout, gf, values);
+
+	    /* append current tags to tagsout */
+	    ajStrApp(&tagsout, tagstmp);
+	    ajStrClear(&tagstmp);
+
 	    /* add positions to posout */
 	    showfeat_AddPos(&posout, gf->Start, gf->End);
 
@@ -396,6 +398,7 @@ static void showfeat_ShowFeatSeq (AjPFile outfile, AjPSeq seq, ajint beg,
     /* tidy up */
     (void) ajFeattableDel(&feat);
 
+    ajStrDel(&tagstmp);
     ajStrDel(&tagsout);
     ajStrDel(&posout);
     ajStrDel(&lineout);
@@ -692,18 +695,21 @@ static ajint showfeat_CompareFeatPos (const void * a, const void * b)
 /* @funcstatic showfeat_MatchPatternTags **************************************
 **
 ** Checks for a match of the tagpattern and valuepattern to at least one
-** tag=value pair
+** tag=value pair and returns the tag/value pairs ready for display in tagsout
 **
 ** @param [r] feat [AjPFeature] Feature to process
 ** @param [r] tpattern [AjPStr] tags pattern to match with
 ** @param [r] vpattern [AjPStr] values pattern to match with
+** @param [r] stricttags [AjBool] remove any tag-value pairs that do not match the patterns
+** @param [r] tagstmp [AjPStr *] tags out string
+** @param [r] values [AjBool] display values of tags
 **
 ** @return [AjBool] ajTrue = found a match
 ** @@
 ******************************************************************************/
 
 static AjBool showfeat_MatchPatternTags (AjPFeature feat, AjPStr tpattern,
-                                         AjPStr vpattern)
+	AjPStr vpattern, AjBool stricttags, AjPStr *tagstmp, AjBool values)
 {
     AjIList titer;                      /* iterator for feat */
     static AjPStr tagnam=NULL;          /* tag structure */
@@ -712,43 +718,87 @@ static AjBool showfeat_MatchPatternTags (AjPFeature feat, AjPStr tpattern,
     AjBool tval;                        /* tags result */
     AjBool vval;                        /* value result */
 
-
     /*
-     *  if there are no tags to match, but the patterns are
-     *  both '*', then allow this as a match
-     */
-    if (!ajStrCmpC(tpattern, "*") &&
-        !ajStrCmpC(vpattern, "*"))
-        return ajTrue;
+    **  Even if there are no tags to match, but the patterns are
+    **  both '*', then allow this as a match.
+    **  There are no tags to add to tagstmp, so just return now.
+    **/
+    if (ajListLength(feat->Tags) == 0 && 
+        !ajStrCmpC(tpattern, "*") && 
+        !ajStrCmpC(vpattern, "*")) 
+    {
+        val = ajTrue;
+    }
 
     /* iterate through the tags and test for match to patterns */
     titer = ajFeatTagIter(feat);
     while (ajFeatTagval(titer, &tagnam, &tagval)) {
         tval = embMiscMatchPattern(tagnam, tpattern);
-/*
-** If tag has no value then
-**   If vpattern is '*' the value pattern is a match
-** Else check vpattern
-*/
+
+        /*
+        ** If tag has no value then
+        **   If vpattern is '*' the value pattern is a match
+        ** Else check vpattern
+        */
+
         if (!ajStrLen(tagval)) {
             if (!ajStrCmpC(vpattern, "*"))
             	vval = ajTrue;
             else
 		vval = ajFalse;
-        } else
-            vval = embMiscMatchPattern(tagval, vpattern);
+        } else {
+            /*
+            ** The value can be one or more words and the vpattern could
+	    ** be the whole phrase, so test not only each word in vpattern against the
+	    ** value, but also test to see if there is a match of the whole of vpattern
+	    ** without spitting it up into words. 
+            */
+            vval = (ajStrMatch(tagval, vpattern) || embMiscMatchPattern(tagval, vpattern));
+	}
 
         if (tval && vval) {
             val = ajTrue;
-            break;
+            /* 
+            ** Got a match, add it to the tagstmp string
+            ** If we have explicitly asked for a translation tag, then we get it appended.
+            ** A match to tpattern='*' is not explicitly asking for a translation tag.
+            ** So display if tpattern != '*' or tagnam != "translation"
+            */
+	        if (ajStrCmpC(tpattern, "*") || ajStrCmpC(tagnam, "translation"))
+	        {
+	            if (values == ajTrue)
+		        (void) ajFmtPrintAppS(tagstmp, " %S=\"%S\"", tagnam, tagval);
+	            else
+		        (void) ajFmtPrintAppS(tagstmp, " %S", tagnam);
+	        }
+        } else {
+            /* 
+            ** Not got a match, add it to the tagstmp string anyway if not 'stricttags'
+            */
+            if (!stricttags) {
+                /*
+                **  Don't display the translation tag - it is far too long :-)
+                */
+	        if (ajStrCmpC(tagnam, "translation"))
+	        {
+	            if (values == ajTrue)
+		        (void) ajFmtPrintAppS(tagstmp, " %S=\"%S\"", tagnam, tagval);
+	            else
+		        (void) ajFmtPrintAppS(tagstmp, " %S", tagnam);
+	        }
+            }	
         }
     }
     (void) ajListIterFree(titer);
 
+    /*
+    ** If we didn't get a match, then clear the tagstmp string
+    */
+    if (!val)
+        ajStrClear(tagstmp);
+
     return val;
 }
-
-
 
 
 /* @funcstatic showfeat_AddPos ************************************************
@@ -776,51 +826,4 @@ static void showfeat_AddPos(AjPStr *posout, ajint start, ajint end)
 }
 
 
-
-/* @funcstatic showfeat_AddTagsStr ********************************************
-**
-** writes the tags to the tagsout string
-**
-** @param [r] tagsout [AjPStr *] tags out string
-** @param [r] feat [AjPFeature] Feature to use
-** @param [r] values [AjBool] display values of tags
-**
-** @return [void]
-** @@
-******************************************************************************/
-
-static void showfeat_AddTagsStr(AjPStr *tagsout, AjPFeature feat,
-				AjBool values)
-{
-    AjIList titer;			/* iterator for taglist */
-    AjPStr tagnam = NULL;
-    AjPStr tagval = NULL;
-
-    tagnam = ajStrNew();
-    tagval = ajStrNew();
-
-    /* iterate through the tags and test for match to patterns */
-    /* debug - there is something wrong with the list */
-
-    titer = ajFeatTagIter(feat);
-
-    /*
-     *   don't display the translation tag - it is far too long :-)
-     */
-    while (ajFeatTagval(titer, &tagnam, &tagval))
-	if (ajStrCmpC(tagnam, "translation"))
-	{
-	    if (values == ajTrue)
-		(void) ajFmtPrintAppS(tagsout, " %S=\"%S\"", tagnam, tagval);
-	    else
-		(void) ajFmtPrintAppS(tagsout, " %S", tagnam);
-	}
-
-    (void) ajListIterFree(titer);
-
-    ajStrDel(&tagnam);
-    ajStrDel(&tagval);
-
-    return;
-}
 
