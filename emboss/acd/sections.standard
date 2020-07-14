@@ -3,42 +3,39 @@
 #
 # top level (page) sections
 # =========================
+additional page Additional section
 advanced page Advanced section
 input page Input section
 output page Output section
 required page Required section
 #
-# 1 afeature
-# 1 bfeature
-# 1 relation
-# 1 selection
 #
 # sub level (frame) sections
 # ==========================
 afeaturesection input First feature options
 bfeaturesection input Second feature options
-consensussection advanced Consensus section
+consensussection additional Consensus section
 datasection output Data output section
-dendsection advanced Dendrogram options
-fastalignsection advanced Fast align options
-featuresection advanced Feature display options
+fastalignsection additional Fast align options
+featuresection additional Feature display options
 featurerelationsection input Feature relation options
-gapsection advanced Gap options
+gapoptions additional Gap options
+gapsection required Gap options
 htmlsection output Html section
 markupsection output Markup section
-matrixsection advanced Matrix options
-oligosinput advanced Internal oligo input
-oligosection advanced Internal oligo options
-profiletypesection advanced Profile type specific options
+matrixsection additional Matrix options
+oligosinput additional Internal oligo input
+oligosection additional Internal oligo options
+profiletypesection required Profile type specific options
 primersection advanced Primer options
 primerweights advanced Primer penalty weights
-programsection advanced Program options
-productsection advanced Product options
-protalignsection advanced Protein align options
+programsection additional Program options
+productsection additional Product options
+protalignsection additional Protein align options
 remapsection advanced Restriction map options
 seqinsection input Sequence input options
-seqoptsection advanced Sequence options
-slowalignsection advanced Slow align options
-targetsection advanced Target options
-thermosection advanced Thermodynamic options
+seqoptsection additional Sequence options
+slowalignsection additional Slow align options
+targetsection required Target options
+thermosection additional Thermodynamic options
 vectorfilesection input Vector input options
