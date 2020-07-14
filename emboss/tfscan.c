@@ -28,7 +28,7 @@
 
 static void tfscan_print_hits(AjPStr name, AjPList *l, ajint hits,
 			      AjPFile outf, ajint begin, ajint end,
-			      AjPTable t, AjPSeq seq);
+			      AjPTable t, AjPSeq seq, ajint minlength);
 
 
 
@@ -65,6 +65,8 @@ int main(int argc, char **argv)
     AjPTable  atable=NULL;
 
     ajint mismatch;
+    ajint minlength;
+    
     ajint sum;
     ajint v;
 
@@ -73,10 +75,11 @@ int main(int argc, char **argv)
 
     embInit("tfscan", argc, argv);
 
-    seqall    = ajAcdGetSeqall("sequence");
-    outf      = ajAcdGetOutfile("outfile");
-    mismatch  = ajAcdGetInt("mismatch");
-    menu      = ajAcdGetList("menu");
+    seqall     = ajAcdGetSeqall("sequence");
+    outf       = ajAcdGetOutfile("outfile");
+    mismatch   = ajAcdGetInt("mismatch");
+    minlength  = ajAcdGetInt("minlength");
+    menu       = ajAcdGetList("menu");
 
     pname = ajStrNew();
     p=ajStrStr(*menu);
@@ -137,7 +140,7 @@ int main(int argc, char **argv)
 	}
 
 	if(sum)
-	    tfscan_print_hits(name,&l,sum,outf,begin,end,atable,seq);
+	    tfscan_print_hits(name,&l,sum,outf,begin,end,atable,seq,minlength);
 	ajFileSeek(inf,0L,0);
 	ajListDel(&l);
 	ajStrTableFree(&atable);
@@ -170,15 +173,17 @@ int main(int argc, char **argv)
 ** @param [w] outf [AjPFile] output file
 ** @param [r] begin [ajint] sequence start
 ** @param [r] end [ajint] sequence end
-** @param [?] t [AjPTable] table of accession numbers
+** @param [r] t [AjPTable] table of accession numbers
 ** @param [r] seq [AjPSeq] test sequence
+** @param [r] minlength [ajint] minimum length of pattern
 ** @@
 ******************************************************************************/
 
 
 static void tfscan_print_hits(AjPStr name, AjPList *l,
 			      ajint hits, AjPFile outf,
-			      ajint begin, ajint end, AjPTable t, AjPSeq seq)
+			      ajint begin, ajint end, AjPTable t,
+			      AjPSeq seq, ajint minlength)
 {
     ajint i;
     EmbPMatMatch m;
@@ -198,9 +203,10 @@ static void tfscan_print_hits(AjPStr name, AjPList *l,
 
 	ajStrAssSubC(&s,ajSeqChar(seq),m->start-1,m->start+m->len-2);
 
-	ajFmtPrintF(outf,"%-20s %-8s %-5d %-5d %s\n",ajStrStr(m->seqname),
-		    ajStrStr(acc),m->start,
-		    m->start+m->len-1,ajStrStr(s));
+	if(ajStrLen(s) >= minlength)
+	    ajFmtPrintF(outf,"%-20s %-8s %-5d %-5d %s\n",ajStrStr(m->seqname),
+			ajStrStr(acc),m->start,
+			m->start+m->len-1,ajStrStr(s));
 
 	embMatMatchDel(&m);
     }

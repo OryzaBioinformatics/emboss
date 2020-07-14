@@ -43,6 +43,19 @@ section: required [
 
 endsection: required
 
+section: advanced [
+  information: "Advanced section"
+  type: "page"
+]
+
+  integer: minlength  [
+    optional: "Y"
+    default: "1"
+    minimum: "1"
+    information: "Display matches equal to or above this length"
+  ]
+ 
+endsection: advanced
 section: output [
   information: "Output section"
   type: "page"
