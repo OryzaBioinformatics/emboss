@@ -973,7 +973,10 @@ public class JembossServer
     {
       public boolean accept(File cwd, String name)
       {
-        return name.endsWith(".png");
+        if( name.endsWith(".png") ||
+            name.endsWith(".dat") )
+          return true;
+        return false;
       };
     });
 
