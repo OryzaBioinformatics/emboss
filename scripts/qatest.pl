@@ -389,7 +389,7 @@ sub runtest ($) {
 # This file was not defined
 
     if (!defined($outfile{$file})) {
-      $testerr = "$retcode{3} <$testid/$file>\n";
+      $testerr = "$retcode{3} $testid/$file\n";
       print STDERR $testerr;
       print LOG $testerr;
       chdir ("..");
