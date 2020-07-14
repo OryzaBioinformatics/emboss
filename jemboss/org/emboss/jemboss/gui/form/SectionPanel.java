@@ -837,6 +837,17 @@ public class SectionPanel
   }
 
 
+/**
+*
+* Given an ACD variable and the value it takes, resolve any dependent 
+* attribute values.
+*
+* @param int nod number of dependent values
+* @param Dependent dep[] dependents
+* @param String textVal value of variable
+* @param String varName variable name
+*
+*/
   private void resolveDependents(int nod, Dependent dep[], String textVal, 
                                  String varName)
   {
@@ -851,14 +862,14 @@ public class SectionPanel
         AcdVarResolve avr = new AcdVarResolve(exp,textVal,varName,parseAcd,
                             numofFields,textf,textInt,textFloat,fieldOption,
                             checkBox);
+
+//      System.out.println(exp + "EXP ==> " + avr.getResult() + " " + textVal);
         exp = avr.getResult();
       }
       catch(NullPointerException npe)
       {
         continue;
       }
-
-//    System.out.println(exp + "EXP ==> " + avr.getResult() + " " + textVal);
 
       AcdFunResolve afr = new AcdFunResolve(exp);
       String result = afr.getResult();
