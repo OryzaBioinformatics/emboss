@@ -74,12 +74,10 @@ int main(int argc, char **argv)
 
     ajNamListListDatabases(dblist);
 
-    AjErrorLevel.error = ajFalse;
-
     while(ajListPop(dblist,(void **)&lnam))
     {
 	ajStrAssS(&name,lnam);
-	ajStrDel(&lnam);
+	/* ajStrDel(&lnam); */ /* do not delete - internal ajNam string */
 
 	if(!ajNamDbDetails(name,&type,&id,&qry,&all,&comm,&rel))
 	    continue;

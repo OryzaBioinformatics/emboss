@@ -62,6 +62,10 @@ Usage
 Search all databases for an entry
 ID or Accession number: hsfau1
 Output file [outfile.whichdb]: 
+Warning: Cannot open division file '' for database 'qapirexc'
+
+   EMBOSS An error in ajseqdb.c at line 2525:
+seqCdQryOpen failed
    
    Go to the output files for this example
    
@@ -76,10 +80,27 @@ Command line arguments
    -get                boolean    Retrieve sequences
    -showall            boolean    Show failed attempts
 
+   Associated qualifiers:
+  "-outfile" related qualifiers
+   -odirectory          string     Output directory
+
    General qualifiers:
-  -help                boolean    Report command line options. More
+   -auto                boolean    Turn off prompts
+   -stdout              boolean    Write standard output
+   -filter              boolean    Read standard input, write standard output
+   -options             boolean    Prompt for required and optional values
+   -debug               boolean    Write debug output to program.dbg
+   -acdlog              boolean    Write ACD processing log to program.acdlog
+   -acdpretty           boolean    Rewrite ACD file as program.acdpretty
+   -acdtable            boolean    Write HTML table of options
+   -verbose             boolean    Report some/full command line options
+   -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
+   -warning             boolean    Report warnings
+   -error               boolean    Report errors
+   -fatal               boolean    Report fatal errors
+   -die                 boolean    Report deaths
    
 
    Mandatory qualifiers Allowed values Default
@@ -168,7 +189,8 @@ See also
    
 Author(s)
 
-   This application was written by Alan Bleasby (ableasby@hgmp.mrc.ac.uk)
+   Alan Bleasby (ableasby © hgmp.mrc.ac.uk)
+   HGMP-RC, Genome Campus, Hinxton, Cambridge CB10 1SB, UK
    
 History
 
