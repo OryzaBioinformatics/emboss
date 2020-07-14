@@ -1,8 +1,13 @@
 # some simple testing stuff
 
-SET emboss_qadata /homes/pmr/hgmp/test
+SET emboss_qadata /homes/pmr/cvsemboss/test
+SET emboss_tempdata /homes/pmr/local/share/EMBOSS/test
 
-SET emboss_timetoday "2005-07-15 12:00:00"
+# Standard date for test runs - set to the date of the release
+# Used to make the output consistent where an application reports
+# today's date
+
+SET emboss_timetoday "2006-07-15 12:00:00"
 
 #######################################
 # Standard test databases
@@ -393,21 +398,21 @@ DB qaxpirall  [ type: P format: nbrf method: embossgcg
 ### access method SRS
 #####################
 
-DB qasrs [ type: N format: embl method: srs
-  dbalias: embl
-  fields: "sv des org"     # key omitted to test error messages
-  comment: "EMBL in local srs installation"
-]
+#DB qasrs [ type: N format: embl method: srs
+#  dbalias: embl
+#  fields: "sv des org"     # key omitted to test error messages
+#  comment: "EMBL in local srs installation"
+#]
 
 ##########################
 ### access method SRSFASTA
 ##########################
 
-DB qasrsfasta [ type: N format: fasta method: srsfasta
-  dbalias: embl
-  fields: "sv des org key"
-  comment: "EMBL in local srs installation, fasta format"
-]
+#DB qasrsfasta [ type: N format: fasta method: srsfasta
+#  dbalias: embl
+#  fields: "sv des org key"
+#  comment: "EMBL in local srs installation, fasta format"
+#]
 
 ########################
 ### access method SRSWWW
