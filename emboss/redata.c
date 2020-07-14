@@ -103,7 +103,7 @@ int main(int argc, char **argv)
 
     ajStrCleanWhite(&enzyme);
 
-
+    line   = ajStrNew();
     enzline=ajStrNew();
     str    =ajStrNew();
     key    =ajStrNewC(".");
@@ -127,8 +127,6 @@ int main(int argc, char **argv)
 	*p=' ';
 	if(ajStrMatchCase(str,enzyme)) break;
     }
-    ajFileClose(&supfile);
-
 
     /* Only do the rest if a matching enzyme was found */
     if(ajStrMatchCase(str,enzyme))
@@ -235,9 +233,13 @@ int main(int argc, char **argv)
 		ajFmtPrintF(outf,"%s\n",ajStrStr(line));
 	    }
 	}
-	for(i=0;i<ne;++i)
-	    ajStrDel(&ea[i]);
-	AJFREE(ea);
+
+	if(ajStrLen(iso))
+	{
+	    for(i=0;i<ne;++i)
+	        ajStrDel(&ea[i]);
+	    AJFREE(ea);
+        }
     }
     else
 	ajFmtPrintF(outf,"Restriction enzyme %s not found\n",ajStrStr(enzyme));
