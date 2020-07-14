@@ -15,6 +15,7 @@ section: input [
 
   codon: cfile  [
     additional: "Y"
+    default: "Ehuman.cut"
   ]
 
 endsection: input

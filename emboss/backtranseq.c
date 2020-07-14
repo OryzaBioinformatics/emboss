@@ -58,6 +58,7 @@ int main(int argc, char **argv)
     ajCodBacktranslate(&back,substr,codon);
 
     ajSeqAssSeq (a, back);
+    ajSeqSetNuc (a);
 
     ajSeqWrite(outf,a);
 

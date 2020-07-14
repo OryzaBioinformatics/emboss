@@ -388,9 +388,11 @@ static void sixpack_ajprintseq(AjPSeqout outseq,
     AjPStr str;
     AjPStr nm;
 
-    sq   = ajSeqNew();
     str  = ajStrNew();
     nm   = ajStrNew();
+
+    sq   = ajSeqNew();
+    ajSeqSetProt(sq);
 
     ajStrAssSubC(&str,seq,begin,end);
     ajSeqReplace(sq,str);
