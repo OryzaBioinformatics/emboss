@@ -29,11 +29,14 @@ extern "C"
 typedef struct SeqSAccess {
   char *Name;			/* Access method name used in emboss.default */
   AjBool (*Access) (AjPSeqin seqin); /* Access function */
+  AjBool (*AccessFree) (void* qrydata); /* Access cleanup function */
 } SeqOAccess, *SeqPAccess;
 
 AjPSeqall    ajSeqallFile (AjPStr usa);
 AjBool       ajSeqAllRead (AjPSeq thys, AjPSeqin seqin);
 AjBool       ajSeqGetFromUsa (AjPStr thys, AjBool protein, AjPSeq *seq);
+AjBool       ajSeqsetGetFromUsa(AjPStr thys, AjPSeqset *seq);
+AjBool       ajSeqFormatTest (AjPStr format);
 void         ajSeqinClear (AjPSeqin thys);
 void         ajSeqinDel (AjPSeqin* pthis);
 AjPSeqin     ajSeqinNew (void);
