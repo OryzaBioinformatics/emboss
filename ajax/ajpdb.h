@@ -56,23 +56,83 @@ extern "C"
 ** @attr  Mod     [ajint]  Model number.
 ** @attr  Chn     [ajint]  Chain number. 
 ** @attr  Gpn     [ajint]  Group number. 
-** @attr  Type    [char]   'P' (protein atom), 'H' ("heterogens") or 'W' 
-**        (water).
 ** @attr  Idx     [ajint]  Residue number - index into sequence.
-** @attr  Pdb     [AjPStr] Residue number - according to original PDB file.
+** @attr  Pdb     [AjPStr] Residue number string from the original PDB file.
 ** @attr  Id1     [char]   Standard residue identifier or 'X' for unknown 
 **        types or '.' for heterogens and water. 
 ** @attr  Id3     [AjPStr] Residue or group identifier. 
+** @attr  Type    [char]   'P' (protein atom), 'H' ("heterogens") or 'W' 
+**        (water).
 ** @attr  Atm     [AjPStr] Atom identifier. 
 ** @attr  X       [float]  X coordinate. 
 ** @attr  Y       [float]  Y coordinate. 
 ** @attr  Z       [float]  Z coordinate. 
 ** @attr  O       [float]  Occupancy. 
 ** @attr  B       [float]  B value thermal factor. 
-** @attr  Phi     [float]  Phi angle. 
-** @attr  Psi     [float]  Psi angle. 
-** @attr  Area    [float]  Residue solvent accessible area. 
-**  
+** 
+** 
+** @new     ajAtomNew Default Atom constructor.
+** @delete  ajAtomDel Default Atom destructor.
+** @assign  ajAtomCopy Replicates an Atom object.
+** @assign  ajAtomListCopy Replicates a list of Atom objects.
+** @use     embAtomInContact Determines whether two atoms are in physical 
+**          contact.
+** @use     embAtomDistance Returns the distance (Angstroms) between two 
+**          atoms.
+** @use     embVdwRad Returns the van der Waals radius of an atom.
+** @other   embPdbListHeterogens Construct a list of arrays of Atom objects 
+**          for ligands in the current Pdb object (a single array for each
+**          ligand). 
+** 
+** @@
+****************************************************************************/
+
+typedef struct AjSAtom
+{
+    ajint   Mod;    
+    ajint   Chn;    
+    ajint   Gpn;    
+    ajint   Idx;    
+    AjPStr  Pdb;          
+    char    Id1;    
+    AjPStr  Id3;         
+    char    Type;  
+    AjPStr  Atm;         
+    float   X;     
+    float   Y;     
+    float   Z;     
+    float   O;     
+    float   B;     
+} AjOAtom;
+#define AjPAtom AjOAtom*
+
+
+
+
+
+
+
+/* @data AjPResidue ***********************************************************
+**
+** Ajax Residue object.
+** 
+** Holds data for an amino acid residue.
+**
+** AjPResidue is implemented as a pointer to a C data structure.
+**
+** @alias AjSResidue
+** @alias AjOResidue
+**
+**
+** @attr  Mod     [ajint]  Model number.
+** @attr  Chn  [ajint]  Chain number.
+** @attr  Idx [ajint]	Residue number. Can be used to index into the 
+**    polypeptide sequence (the Seq element of an AjSChain object). Idx numbers
+**    start at 1 and run sequentially.
+** @attr Pdb [AjPStr]	Residue number string from the original PDB file.
+** @attr Id1 [char] 	Standard 1-letter residue identifier or 'X' for
+**                       unknown types.
+** @attr Id3 [AjPStr]	3-letter residue identifier code.
 ** @attr  eNum    [ajint]  Element serial number (for secondary structure 
 **        from the PDB file).
 ** @attr  eId     [AjPStr] Element identifier (for secondary structure from 
@@ -90,7 +150,10 @@ extern "C"
 **       ('G'), PI-HELIX ('I'), EXTENDED CONFORMATION ('E'), ISOLATED BRIDGE 
 **       ('B' or 'b'), TURN ('T') or COIL (none of the above) ('C') (for 
 **       secondary structure from STRIDE).
-**
+** @attr  Phi     [float]  Phi angle. 
+** @attr  Psi     [float]  Psi angle. 
+** @attr  Area    [float]  Residue solvent accessible area. 
+**  
 ** @attr  all_abs   [float]  Absolute accessibility, all atoms. 
 ** @attr  all_rel   [float]  Relative accessibility, all atoms. 
 ** @attr  side_abs  [float]  Absolute accessibility, atoms in sidechain. 
@@ -102,63 +165,79 @@ extern "C"
 ** @attr  pol_abs   [float]  Absolute accessibility, polar atoms. 
 ** @attr  pol_rel   [float]  Relative accessibility, polar atoms. 
 **
-** 
-** 
-** @new     ajAtomNew Default Atom constructor.
-** @delete  ajAtomDel Default Atom destructor.
-** @assign  ajAtomCopy Replicates an Atom object.
-** @assign  ajAtomListCopy Replicates a list of Atom objects.
-** @use     embAtomInContact Determines whether two atoms are in physical 
-**          contact.
-** @use     embAtomDistance Returns the distance (Angstroms) between two 
-**          atoms.
-** @use     embVdwRad Returns the van der Waals radius of an atom.
-** @other   embPdbListHeterogens Construct a list of arrays of Atom objects 
-**          for ligands in the current Pdb object (a single array for each
-**          ligand). 
+**
+** @new     ajResidueNew Default Residue constructor.
+** @delete  ajResidueDel Default Residue destructor.
+** @assign  ajResidueCopy Replicates a Residue object.
+** @assign  ajResidueListCopy Replicates a list of Residue objects.
+** @use ajResidueEnv1 Assigns environment based on side chain accessibility and
+**  secondary structure.
+** @use ajResidueEnv2 Assigns environment based on side chain accessibility and
+**  secondary structure.
+** @use ajResidueEnv3 Assigns environment based on side chain accessibility and
+**  secondary structure.
+** @use ajResidueEnv4 Assigns environment based on side chain accessibility and
+**  secondary structure.
+** @use ajResidueEnv5 Assigns environment based on side chain accessibility and
+**  secondary structure.
+** @use ajResidueEnv6 Assigns environment based on side chain accessibility and
+**  secondary structure.
+** @use ajResidueEnv7 Assigns environment based on side chain accessibility and
+**  secondary structure.
+** @use ajResidueEnv8 Assigns environment based on side chain accessibility and
+**  secondary structure.
+** @use ajResidueEnv9 Assigns environment based on side chain accessibility
+**  and secondary structure.
+** @use ajResidueEnv10 Assigns environment based on side chain accessibility 
+** and secondary structure.
+** @use ajResidueEnv11 Assigns environment based on side chain accessibility
+**  and secondary structure.
+** @use ajResidueEnv12 Assigns environment based on side chain accessibility
+**  and secondary structure.
+** @use ajResidueEnv13 Assigns environment based on side chain accessibility
+**  and secondary structure.
+** @use ajResidueEnv14 Assigns environment based on side chain accessibility
+**  and secondary structure.
+** @use ajResidueEnv15 Assigns environment based on side chain accessibility
+**  and secondary structure.
+** @use ajResidueEnv16 Assigns environment based on side chain accessibility
+**  and secondary structure.
+** @use ajResidueSSEnv  Assigns secondary structure environment of a residue.
 ** @@
-****************************************************************************/
-
-typedef struct AjSAtom
+******************************************************************************/
+typedef struct AjSResidue
 {
-    ajint   Mod;    
-    ajint   Chn;    
-    ajint   Gpn;    
-    char    Type;  
-    ajint   Idx;    
-    AjPStr  Pdb;   
-    char    Id1;   
-    AjPStr  Id3;   
-    AjPStr  Atm;   
-    float   X;     
-    float   Y;     
-    float   Z;     
-    float   O;     
-    float   B;     
-    float   Phi;   
-    float   Psi;   
-    float   Area;  
+    ajint    Mod;
+    ajint    Chn;
+    ajint    Idx;
+    AjPStr   Pdb;
+    char     Id1;
+    AjPStr   Id3;    
 
-    ajint   eNum;  
-    AjPStr  eId;   
-    char    eType;    
-    ajint   eClass;   
- 
-    ajint   eStrideNum; 
-    char    eStrideType;
+    ajint    eNum;  
+    AjPStr   eId;   
+    char     eType;    
+    ajint    eClass;   
+    ajint    eStrideNum; 
+    char     eStrideType;
+    float    Phi;
+    float    Psi;
+    float    Area;
 
-    float   all_abs;  
-    float   all_rel;  
-    float   side_abs;    
-    float   side_rel;    
-    float   main_abs;    
-    float   main_rel;    
-    float   npol_abs;    
-    float   npol_rel;    
-    float   pol_abs;  
-    float   pol_rel;  
-} AjOAtom;
-#define AjPAtom AjOAtom*
+    float    all_abs;  
+    float    all_rel;  
+    float    side_abs;    
+    float    side_rel;    
+    float    main_abs;    
+    float    main_rel;    
+    float    npol_abs;    
+    float    npol_rel;    
+    float    pol_abs;  
+    float    pol_rel;  
+} AjOResidue, *AjPResidue;
+
+
+
 
 
 
@@ -194,12 +273,13 @@ typedef struct AjSAtom
 **                               models) of the polypeptide chain and any 
 **                               groups (ligands) that could be uniquely 
 **                               associated with a chain.
+** @attr  Residues    [AjPList]  List of Residue objects for (potentially multiple
+**                               models) of the polypeptide chain. 
 **
 **
 ** 
 ** @new     ajChainNew Default Chain constructor.
 ** @delete  ajChainDel Default Chain destructor.
-**
 ** @@
 ****************************************************************************/
 
@@ -212,6 +292,7 @@ typedef struct AjSChain
     ajint    numStrands;  
     AjPStr   Seq;      
     AjPList  Atoms;    
+    AjPList  Residues;    
 } AjOChain;
 #define AjPChain AjOChain*
 
@@ -257,6 +338,10 @@ typedef struct AjSChain
 ** @new     ajPdbReadNew Pdb constructor from reading CCF format file.
 ** @new     ajPdbReadFirstModelNew Pdb constructor from reading CCF format 
 **          file (retrive data for 1st model only).
+** @new     ajPdbReadoldNew Pdb constructor from reading CCF format file
+**          lacking residue-level description in RE records.
+** @new     ajPdbReadoldFirstModelNew Pdb constructor from reading CCF format 
+**          file lacking residue-level description in RE records.
 ** @delete  ajPdbDel Default Pdb destructor.
 ** @assign  ajPdbCopy Replicates a Pdb object.
 ** @use     ajPdbGetEStrideType Reads a Pdb object and writes a string with 
@@ -517,16 +602,25 @@ typedef struct AjSVdwall
 ** @attr  Mat   [AjPInt2d] Contact map. 
 ** @attr  Dim   [ajint]    Dimension of contact map. 
 ** @attr  Ncon  [ajint]    No. of contacts (1's in contact map). 
+** @attr  en    [ajint]    Entry number. 
+** @attr  ns    [ajint]    No. of sites (ajLIGAND only)
+** @attr  sn    [ajint]    Site number (ajLIGAND only)
+** @attr  Desc  [AjPStr]   Description of ligand (ajLIGAND only)
 ** 
 ** 
 ** @new     ajCmapNew Default Cmap constructor.
-** @new     ajCmapReadINew Cmap constructor from reading file in CON (embl-like)
+** @new     ajCmapReadINew Cmap constructor from reading file in CON
+**          (embl-like)format (see documentation for the EMBASSY DOMAINATRIX
+**          package).
+** @new     ajCmapReadCNew Cmap constructor from reading file in CON 
 **          format (see documentation for the EMBASSY DOMAINATRIX package).
-** @new     ajCmapReadCNew Cmap constructor from reading file in CON (embl-like)
+** @new     ajCmapReadNew Cmap constructor from reading file in CON 
 **          format (see documentation for the EMBASSY DOMAINATRIX package).
-** @new     ajCmapReadNew Cmap constructor from reading file in CON (embl-like)
-**          format (see documentation for the EMBASSY DOMAINATRIX package).
+** @new     ajCmapReadAllNew Constructs list of Cmap objects from reading file 
+**          in CON format (see documentation for the EMBASSY 
+**          DOMAINATRIX package).
 ** @delete  ajCmapDel Default Cmap destructor.
+** @output  ajCmapWrite Write Cmap object to file in CON format.
 **
 ** @@
 ****************************************************************************/
@@ -549,6 +643,11 @@ typedef struct AjSCmap
     AjPInt2d  Mat;    
     ajint     Dim;    
     ajint     Ncon;   
+
+    ajint     en;
+    ajint     ns;
+    ajint     sn;
+    AjPStr    Desc;
 } AjOCmap;
 #define AjPCmap AjOCmap*
 
@@ -657,19 +756,54 @@ void         ajVdwresDel(AjPVdwres *ptr);
 /* ======================================================================= */
 AjPAtom      ajAtomNew(void);
 void         ajAtomDel(AjPAtom *ptr);
-AjBool       ajAtomCopy(AjPAtom *to, const AjPAtom from);
-AjBool       ajAtomListCopy(AjPList *to, const AjPList from);
-
+ajint       ajAtomCopy(AjPAtom *to, const AjPAtom from);
+ajint       ajAtomListCopy(AjPList *to, const AjPList from);
 
 
 
 
 /* ======================================================================= */
-/* ============================ Cmap object ============================== */
+/* ========================== Residue object ============================= */
 /* ======================================================================= */
-AjPCmap      ajCmapNew(ajint n);
-void         ajCmapDel(AjPCmap *ptr);
+AjPResidue  ajResidueNew(void);
+void        ajResidueDel(AjPResidue *ptr);
+ajint       ajResidueCopy(AjPResidue *to, const AjPResidue from);
+AjBool      ajResidueListCopy(AjPList *to, const AjPList from);
 
+ajint       ajResidueEnv1(const AjPResidue res, char SEnv,
+		       AjPStr *OEnv, AjPFile logf);
+ajint       ajResidueEnv2(const AjPResidue res, char SEnv,
+		       AjPStr *OEnv, AjPFile logf);
+ajint       ajResidueEnv3(const AjPResidue res, char SEnv,
+		       AjPStr *OEnv, AjPFile logf);
+ajint       ajResidueEnv4(const AjPResidue res, char SEnv,
+		       AjPStr *OEnv, AjPFile logf);
+ajint       ajResidueEnv5(const AjPResidue res, char SEnv,
+		       AjPStr *OEnv, AjPFile logf);
+ajint       ajResidueEnv6(const AjPResidue res, char SEnv,
+		       AjPStr *OEnv, AjPFile logf);
+ajint       ajResidueEnv7(const AjPResidue res, char SEnv,
+		       AjPStr *OEnv, AjPFile logf);
+ajint       ajResidueEnv8(const AjPResidue res, char SEnv,
+		       AjPStr *OEnv, AjPFile logf);
+ajint       ajResidueEnv9(const AjPResidue res, char SEnv,
+		       AjPStr *OEnv, AjPFile logf);
+ajint       ajResidueEnv10(const AjPResidue res, char SEnv,
+			AjPStr *OEnv, AjPFile logf);
+ajint       ajResidueEnv11(const AjPResidue res, char SEnv,
+			AjPStr *OEnv, AjPFile logf);
+ajint       ajResidueEnv12(const AjPResidue res, char SEnv,
+			AjPStr *OEnv, AjPFile logf);
+ajint       ajResidueEnv13(const AjPResidue res, char SEnv,
+			AjPStr *OEnv, AjPFile logf);
+ajint       ajResidueEnv14(const AjPResidue res, char SEnv,
+			AjPStr *OEnv, AjPFile logf);
+ajint       ajResidueEnv15(const AjPResidue res, char SEnv,
+			AjPStr *OEnv, AjPFile logf);
+ajint       ajResidueEnv16(const AjPResidue res, char SEnv,
+			AjPStr *OEnv, AjPFile logf);
+
+ajint       ajResidueSSEnv(const AjPResidue res, char *SEnv,AjPFile logf);
 
 
 
@@ -695,7 +829,6 @@ void         ajChainDel(AjPChain *ptr);
 
 
 
-
 /* ======================================================================= */
 /* ============================ Pdb object =============================== */
 /* ======================================================================= */
@@ -704,8 +837,11 @@ void         ajPdbDel(AjPPdb *ptr);
 AjBool       ajPdbCopy(AjPPdb *to, const AjPPdb from);
 AjBool       ajPdbChnidToNum(char id, const AjPPdb pdb, ajint *chn);
 
-AjPPdb       ajPdbReadNew(AjPFile inf);
+AjPPdb       ajPdbReadNew(AjPFile inf, ajint mode);
+AjPPdb       ajPdbReadAllModelsNew(AjPFile inf);
 AjPPdb       ajPdbReadFirstModelNew(AjPFile inf);
+AjPPdb       ajPdbReadoldNew(AjPFile inf);
+AjPPdb       ajPdbReadoldFirstModelNew(AjPFile inf);
 AjBool       ajPdbWriteAll(AjPFile out, const AjPPdb obj);
 AjBool       ajPdbWriteSegment(AjPFile outf, const AjPPdb pdb, 
 			       const AjPStr seq, char chn,
@@ -740,9 +876,15 @@ AjPVdwall    ajVdwallReadNew(AjPFile inf);
 /* ======================================================================= */
 /* =========================== Cmap object =============================== */
 /* ======================================================================= */
+AjPCmap      ajCmapNew(ajint n);
 AjPCmap      ajCmapReadCNew(AjPFile inf, char chn, ajint mod);
 AjPCmap      ajCmapReadINew(AjPFile inf, ajint chn, ajint mod);
 AjPCmap      ajCmapReadNew(AjPFile inf, ajint mode, ajint chn, ajint mod);
+AjPList      ajCmapReadAllNew(AjPFile inf);
+void         ajCmapDel(AjPCmap *ptr);
+AjBool       ajCmapWrite(AjPFile outf, const AjPCmap cmap);
+
+
 
 
 

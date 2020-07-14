@@ -418,16 +418,17 @@ AjPList  ajPdbtospReadAllNew(AjPFile inf)
 
 /* @func ajCmapReadINew ****************************************************
 **
-** Read a Cmap object from a file in CON (embl-like) format (see 
+** Read a Cmap object from a file in CON  format (see 
 ** documentation for DOMAINATRIX "contacts" application). Takes the chain 
-** identifier as an integer.
+** identifier as an integer. If the arguments mod and chn are both 0, the 
+** function will read the next Cmap in the file.
 ** 
 ** @param [u] inf     [AjPFile]  Input file stream
 ** @param [r] chn     [ajint]    Chain number
 ** @param [r] mod     [ajint]    Model number
 **
 ** @return [AjPCmap] Pointer to new Cmap object.
-** @category new [AjPCmap] Cmap constructor from reading file in embl-like
+** @category new [AjPCmap] Cmap constructor from reading file in CON
 **           format (see documentation for the EMBASSY DOMAINATRIX package).
 ** @@
 ****************************************************************************/
@@ -448,16 +449,16 @@ AjPList  ajPdbtospReadAllNew(AjPFile inf)
 
 /* @func ajCmapReadCNew ****************************************************
 **
-** Read a Cmap object from a file in CON format (embl-like) (see 
+** Read a Cmap object from a file in CON format (see 
 ** documentation for DOMAINATRIX "contacts" application). Takes the chain 
-** identifier as a character.
+** identifier as a character.  
 ** 
 ** @param [u] inf     [AjPFile]  Input file stream
 ** @param [r] chn     [char]     Chain number
 ** @param [r] mod     [ajint]    Model number
 **
 ** @return [AjPCmap]   Pointer to new Cmap object.
-** @category new [AjPCmap] Cmap constructor from reading file in embl-like
+** @category new [AjPCmap] Cmap constructor from reading file in CON
 **              format (see documentation for the EMBASSY DOMAINATRIX package).
 ** @@
 ****************************************************************************/
@@ -476,12 +477,41 @@ AjPCmap ajCmapReadCNew(AjPFile inf, char chn, ajint mod)
 
 
 
+/* @func ajCmapReadAllNew ***************************************************
+**
+** Read every Cmap object from a file in CON format (see 
+** documentation for DOMAINATRIX "contacts" application) and returns a list
+** of these objects. 
+** 
+** @param [u] inf     [AjPFile]  Input file stream
+**
+** @return [AjPList]   List of Cmap objects.
+*** @@
+****************************************************************************/
+
+AjPList ajCmapReadAllNew(AjPFile inf)
+{
+  AjPList ret  = NULL;
+  AjPCmap cmap = NULL;
+
+  ret = ajListNew();
+
+  while((cmap = ajCmapReadNew(inf, CMAP_MODE_I, 0, 0)))
+    ajListPushApp(ret, cmap);
+
+  return ret;
+}
+
+
+
+
 /* @func ajCmapReadNew *****************************************************
 **
-** Read a Cmap object from a file in CON format (embl-like) (see 
+** Read a Cmap object from a file in CON format (see 
 ** documentation for DOMAINATRIX "contacts" application). This is not 
 ** usually called by the user, who uses ajCmapReadINew or ajCmapReadCNew 
-** instead.
+** instead.  If mode==CMAP_MODE_I, chn==0 and  mod==0, the function will 
+** read the next Cmap in the file.
 ** 
 ** @param [u] inf     [AjPFile]  Input file stream.
 ** @param [r] mode    [ajint]    Mode, either CMAP_MODE_I (treat chn arg as  
@@ -491,7 +521,7 @@ AjPCmap ajCmapReadCNew(AjPFile inf, char chn, ajint mod)
 ** @param [r] mod     [ajint]    Model number.
 **
 ** @return [AjPCmap] True on success (an object read)
-** @category new [AjPCmap] Cmap constructor from reading file in embl-like
+** @category new [AjPCmap] Cmap constructor from reading file in CON
 **              format (see documentation for the EMBASSY DOMAINATRIX package).
 ** @@
 ****************************************************************************/
@@ -505,6 +535,9 @@ AjPCmap ajCmapReadNew(AjPFile inf, ajint mode, ajint chn, ajint mod)
     static   AjPStr temp_domid = NULL;   /* Temp. domain id  */
     static   AjPStr temp_ligid = NULL;   /* Temp. ligand id  */
     static   AjPStr type       = NULL;   /* Type of contact  */
+    static   AjPStr desc       = NULL;   /* Ligand description,  SITES output
+					    only */
+    static   AjPStr tmpstr     = NULL;   /* Housekeeping */
     AjPStr   token             = NULL;   /* For parsing      */
         
     ajint    smcon     = 0;      /* No. of SM contacts       */	
@@ -516,14 +549,17 @@ AjPCmap ajCmapReadNew(AjPFile inf, ajint mode, ajint chn, ajint mod)
     ajint    cn2       = -1;     /* Chain number 2 */
     char     id1       = -1;     /* Chain id 1     */
     char     id2       = -1;     /* Chain id 2     */
-    ajint    nres1     = 0;      /* No. of residues in domain / chain 1 */	
-    ajint    nres2     = 0;      /* No. of residues in domain / chain 2 */	
+    ajint    nres1     = 0;      /* No. of residues in domain / chain 1 */
+    ajint    nres2     = 0;      /* No. of residues in domain / chain 2 */
     AjPStr   seq1      = NULL;   /* Sequence 1 */
     AjPStr   seq2      = NULL;   /* Sequence 2 */
            
     AjBool   idok      = ajFalse; /* If the required chain has been found */
-    AjBool   valid_id  = ajFalse; /* If an ID line has been read */
 
+    ajint     en;                /* Entry number. */
+    ajint     ns;                /* No. of sites, SITES output only */
+    ajint     sn;                /* Site number, SITES output only */
+    
     /* Check args */	
     if(!inf)
     {	
@@ -536,6 +572,9 @@ AjPCmap ajCmapReadNew(AjPFile inf, ajint mode, ajint chn, ajint mod)
     if(mode==CMAP_MODE_C)
 	if(chn=='_')
 	    chn='.';
+
+
+
     
     /* Initialise strings */
     if(!line)
@@ -544,14 +583,43 @@ AjPCmap ajCmapReadNew(AjPFile inf, ajint mode, ajint chn, ajint mod)
 	temp_id    = ajStrNew();
 	temp_domid = ajStrNew();
 	temp_ligid = ajStrNew();
+	desc       = ajStrNew();
+	tmpstr     = ajStrNew();
     }
     
 
     /* Start of main loop */
     while((ajFileReadLine(inf, &line)))
     {
+        /* // */
+	if(ajStrPrefixC(line, "//"))
+	{
+        /* If the delimiter between entries is found and ret is non-NULL, i.e.
+           has been allocated, the function should return. */
+	  ajStrDel(&seq1);
+	  ajStrDel(&seq2);
+	  return ret;	
+	}
+
+
+        /* SI */
+	else if(ajStrPrefixC(line, "SI"))
+	{ 
+	  token = ajStrTokC(line, ";");
+	  ajFmtScanS(token, "%*s %*s %d", &sn);
+
+	  token = ajStrTokC(NULL, ";");
+	  ajFmtScanS(token, "%*s %d", &ns);
+        }
+	/* EN */
+	else if(ajStrPrefixC(line, "EN"))
+	{
+	    ajFmtScanS(line, "%*s %*c%d", &en);
+	}
+	
+	    
 	/* TY */
-	if(ajStrPrefixC(line, "TY"))
+	else if(ajStrPrefixC(line, "TY"))
 	{
 	    ajFmtScanS(line, "%*s %S", &type);
 	    ajStrClear(&seq1);
@@ -564,52 +632,75 @@ AjPCmap ajCmapReadNew(AjPFile inf, ajint mode, ajint chn, ajint mod)
 	    nres2=0;
 	}
 
-	/* EX, NE and EN records are not parsed */
+	/* EX, NE records are not parsed */
 
 	/* ID */
 	else if(ajStrPrefixC(line, "ID"))
 	{
-	    valid_id = ajTrue;
-
 	    token = ajStrTokC(line, ";");
-	    ajFmtScanS(line, "%*s %*s %S", &temp_id);
+	    ajFmtScanS(token, "%*s %*s %S", &temp_id);
 	    token = ajStrTokC(NULL, ";");
-	    ajFmtScanS(line, "%*s %S", &temp_domid);
+	    ajFmtScanS(token, "%*s %S", &temp_domid);
 	    token = ajStrTokC(NULL, ";");
-	    ajFmtScanS(line, "%*s %S", &temp_ligid);
+	    ajFmtScanS(token, "%*s %S", &temp_ligid);
 	}
 
 	/* DE records are not parsed (SITES output) */
+	else if(ajStrPrefixC(line, "DE"))
+	{
+	  ajStrAssSub(&desc, line, 4, -1);
+	}
 
 	/* CN */
 	else if(ajStrPrefixC(line, "CN"))
 	{
 	    token = ajStrTokC(line, ";");
-	    ajFmtScanS(line, "%*s %*s %d", &md);
-	    if(md == '.')
-		md = 0;	    
+	    /* ajFmtScanS(token, "%*s %*s %d", &md);
+            if(md == '.')
+	       md = 0;	
+	       */
 
-	    token = ajStrTokC(NULL, ";");
-	    ajFmtScanS(line, "%*s %d", &cn1);
-
-	    token = ajStrTokC(NULL, ";");
-	    ajFmtScanS(line, "%*s %d", &cn2);
-
-	    token = ajStrTokC(NULL, ";");
-	    ajFmtScanS(line, "%*s %c", &id1);
-
-	    token = ajStrTokC(NULL, ";");
-	    ajFmtScanS(line, "%*s %c", &id2);
-
-	    token = ajStrTokC(NULL, ";");
-	    ajFmtScanS(line, "%*s %d", &nres1);
-	    if(nres1 == '.')
-		nres1 = 0;
+	    ajFmtScanS(token, "%*s %*s %S", &tmpstr);
+	    if(ajStrMatchC(tmpstr, "."))
+		md = 0;	
+	    else
+		ajFmtScanS(tmpstr, "%d", &md);
 	    
 	    token = ajStrTokC(NULL, ";");
-	    ajFmtScanS(line, "%*s %d", &nres2);
-	    if(nres2 == '.')
-		nres2 = 0;
+	    ajFmtScanS(token, "%*s %d", &cn1);
+
+	    token = ajStrTokC(NULL, ";");
+	    ajFmtScanS(token, "%*s %d", &cn2);
+
+	    token = ajStrTokC(NULL, ";");
+	    ajFmtScanS(token, "%*s %c", &id1);
+
+	    token = ajStrTokC(NULL, ";");
+	    ajFmtScanS(token, "%*s %c", &id2);
+
+	    token = ajStrTokC(NULL, ";");
+	    /* ajFmtScanS(token, "%*s %d", &nres1);
+	    if(nres1 == '.')
+	       nres1 = 0; */
+
+	    ajFmtScanS(token, "%*s %S", &tmpstr);
+	    if(ajStrMatchC(tmpstr, "."))
+		nres1 = 0;	
+	    else
+		ajFmtScanS(tmpstr, "%d", &nres1);
+
+
+	    token = ajStrTokC(NULL, ";");
+	    /* ajFmtScanS(token, "%*s %d", &nres2);
+	       if((char)nres2 == '.')
+	       nres2 = 0; */
+
+	    ajFmtScanS(token, "%*s %S", &tmpstr);
+	    if(ajStrMatchC(tmpstr, "."))
+		nres2 = 0;	
+	    else
+		ajFmtScanS(tmpstr, "%d", &nres2);
+
 	}
 
 	/* S1 */
@@ -628,39 +719,51 @@ AjPCmap ajCmapReadNew(AjPFile inf, ajint mode, ajint chn, ajint mod)
 	    ajStrCleanWhite(&seq2);
 	}
 	/* NC */	    
-	else if((ajStrPrefixC(line, "NC")) && (md==mod))
+	else if((ajStrPrefixC(line, "NC")) && 
+		((md==mod) || ((chn==0)&&(mod==0)&&(mode==CMAP_MODE_I))))
 	{
 	    token = ajStrTokC(line, ";");
-	    ajFmtScanS(line, "%*s %*s %d", &smcon);
+	    ajFmtScanS(token, "%*s %*s %d", &smcon);
 
 	    token = ajStrTokC(NULL, ";");
-	    ajFmtScanS(line, "%*s %d", &licon);
+	    ajFmtScanS(token, "%*s %d", &licon);
 	    
 
+
 	    /*
-	    ** The third conditional is to capture those few domains which are 
-	    ** made up from more than one chain.  For these, the chain 
+	    ** The fourth conditional is to capture those few domains which 
+	    ** are made up from more than one chain.  For these, the chain 
 	    ** character passed in might be an A or a B (e.g. the character
 	    ** extracted from the scop domain code) whereas the chain id given
-	    ** in the contact map file will be a '.' - because of how scopparse 
-	    ** copes with these cases. (A '.' is also in the contact maps for
-	    ** where a chain id was not specified in the original pdb file).
+	    ** in the contact map file will be a '.' - because of how 
+	    ** scopparse copes with these cases. (A '.' is also in the contact
+	    ** maps for where a chain id was not specified in the original
+            ** pdb file).
 	    */
 
-	    if(((cn1==chn)&&(mode==CMAP_MODE_I)) ||
-	       ((toupper((int)id1)==toupper(chn))&&(mode==CMAP_MODE_C))||
-	       ((toupper((int)id1)=='.') && (toupper(chn)!='.') &&
-		(mode==CMAP_MODE_C)))
+	    if( ((cn1==chn)&&(mode==CMAP_MODE_I))                       ||
+		((chn==0)&&(mod==0)&&(mode==CMAP_MODE_I))               ||
+		((toupper((int)id1)==toupper(chn))&&(mode==CMAP_MODE_C))||
+		((toupper((int)id1)=='.') && (toupper(chn)!='.') &&
+		(mode==CMAP_MODE_C))
+		)
 	    {
 		idok=ajTrue;
 		
 		/* Allocate contact map and write values */
-		if(ajStrMatchC(type, "LIGAND"))
-		    (ret) = ajCmapNew(licon);
+		if(ajStrMatchC(type, "INTER"))
+		{
+		    if(nres1>nres2)
+			(ret) = ajCmapNew(nres1);
+		    else
+			(ret) = ajCmapNew(nres2);
+		}
 		else
-		    (ret) = ajCmapNew(smcon);
-		
+		    (ret) = ajCmapNew(nres1);
+
 		ajStrAssS(&(ret)->Id, temp_id);
+		ajStrAssS(&(ret)->Domid, temp_domid);
+		ajStrAssS(&(ret)->Ligid, temp_ligid);
 		
 		if(ajStrMatchC(type, "INTRA"))
 		{
@@ -673,9 +776,12 @@ AjPCmap ajCmapReadNew(AjPFile inf, ajint mode, ajint chn, ajint mod)
 		    (ret)->Ncon = smcon;
 		}
 		else if(ajStrMatchC(type, "LIGAND"))
-		{
+		  {
 		    ret->Type = ajLIGAND;
 		    (ret)->Ncon = licon;
+		    ret->ns = ns;
+		    ret->sn = sn;
+		    ajStrAssS(&ret->Desc, desc);
 		}
 		else
 		    ajFatal("Unrecognised contact type");
@@ -686,6 +792,8 @@ AjPCmap ajCmapReadNew(AjPFile inf, ajint mode, ajint chn, ajint mod)
 		ret->Chid2 = id2;
 		ret->Nres1 = nres1;
 		ret->Nres2 = nres2;
+		ret->en = en;
+
 		
 		ajStrAssS(&ret->Seq1, seq1);
 		ajStrAssS(&ret->Seq2, seq2);		
@@ -693,15 +801,17 @@ AjPCmap ajCmapReadNew(AjPFile inf, ajint mode, ajint chn, ajint mod)
 	}
 
 	/* SM */
-	else if((ajStrPrefixC(line, "SM")) && (md==mod) && (idok))
+	else if((ajStrPrefixC(line, "SM")) && 
+		((md==mod) || ((chn==0)&&(mod==0)&&(mode==CMAP_MODE_I)))
+		&& (idok))
 	{
 	    ajFmtScanS(line, "%*s %*s %d %*c %*s %d", &x, &y);
 
 	    /* Check residue number is in range */
 	    if((x>(ret)->Dim) || (y>(ret)->Dim))
 		ajFatal("Fatal attempt to write bad data in "
-			"ajCmapReadNew\nEmail culprit: "
-			"jison@hgmp.mrc.ac.uk\n");
+			"ajCmapReadNew\nFile: %S (%S)\nx: %d y:%d\nEmail culprit: "
+			"jison@hgmp.mrc.ac.uk\n", ajFileGetName(inf), temp_id, x, y);
 	    
 	    /* Enter '1' in matrix to indicate contact */
 	    ajInt2dPut(&(ret)->Mat, x-1, y-1, 1);
@@ -709,15 +819,17 @@ AjPCmap ajCmapReadNew(AjPFile inf, ajint mode, ajint chn, ajint mod)
 	}
 
 	/* LI */
-	else if((ajStrPrefixC(line, "LI")) && (md==mod) && (idok))
+	else if((ajStrPrefixC(line, "LI")) && 
+		((md==mod) || ((chn==0)&&(mod==0)&&(mode==CMAP_MODE_I)))
+		&& (idok))
 	{
 	    ajFmtScanS(line, "%*s %*s %d", &x);
 
 	    /* Check residue number is in range */
-	    if((x>(ret)->Dim) || (y>(ret)->Dim))
+	    if((x>(ret)->Dim))
 		ajFatal("Fatal attempt to write bad data in "
-			"ajCmapReadNew\nEmail culprit: "
-			"jison@hgmp.mrc.ac.uk\n");
+			"ajCmapReadNew\nFile: %S (%S)\nx: %d\nEmail culprit: "
+			"jison@hgmp.mrc.ac.uk\n", ajFileGetName(inf), temp_id, x);
 	    
 	    /* Enter '1' in matrix to indicate contact.  For ligand contacts, 
 	       the first row / column only is used. */
@@ -726,14 +838,7 @@ AjPCmap ajCmapReadNew(AjPFile inf, ajint mode, ajint chn, ajint mod)
 	}
     }
 
-    if(!valid_id)
-    {
-	ajWarn("No valid ID in contact map file");	
-	ajStrDel(&seq1);
-	ajStrDel(&seq2);
-	return NULL;
-    }
-    
+
     ajStrDel(&seq1);
     ajStrDel(&seq2);
     return ret;	
@@ -1004,9 +1109,6 @@ AjPHet ajHetReadRawNew(AjPFile inf)
 }
 
 
-
-
-
 /* @func ajPdbReadFirstModelNew ********************************************
 **
 ** Reads a clean coordinate file file (see documentation for DOMAINATRIX 
@@ -1022,6 +1124,503 @@ AjPHet ajHetReadRawNew(AjPFile inf)
 ****************************************************************************/
 
 AjPPdb ajPdbReadFirstModelNew(AjPFile inf) 
+{
+    return( (AjPPdb) ajPdbReadNew(inf, 0));
+}
+
+
+
+/* @func ajPdbReadAllModelsNew **********************************************
+**
+** Reads a clean coordinate file (see documentation for DOMAINATRIX "pdbparse" 
+** application) and writes a filled Pdb object.  Data for all models is read.
+**
+** @param [u] inf  [AjPFile] Pointer to clean coordinate file
+**
+** @return [AjPPdb] Pointer to Pdb object.
+** @category new [AjPPdb] Pdb constructor from reading ccf format file.
+** @@
+****************************************************************************/
+
+AjPPdb ajPdbReadAllModelsNew(AjPFile inf)
+{
+    return( (AjPPdb) ajPdbReadNew(inf, 1));
+}
+
+
+
+/* @func ajPdbReadNew *******************************************************
+**
+** Reads a clean coordinate file file (see documentation for DOMAINATRIX 
+** "pdbparse" application) and writes a filled Pdb object. Data for the first
+** model only is read in.
+**
+** @param [u] inf  [AjPFile] Pointer to clean coordinate file
+** @param [r] mode [ajint] Mode. 0==Read first model only. 1==Read all models.
+**
+** @return [AjPPdb] Pointer to Pdb object.
+** @category new [AjPPdb] Pdb constructor from reading ccf format file
+**                         (retrive data for 1st model only).
+** @@
+****************************************************************************/
+
+AjPPdb ajPdbReadNew(AjPFile inf, ajint mode) 
+{
+    AjPPdb ret = NULL;
+    
+    ajint nmod = 0;
+    ajint ncha = 0;
+    ajint ngrp = 0;
+    ajint nc   = 0;
+    ajint mod  = 0;
+    ajint chn  = 0;
+    ajint gpn  = 0;
+
+
+    float reso = 0.0;
+
+    AjPStr line      = NULL;
+    AjPStr token     = NULL;
+    AjPStr idstr     = NULL;
+    AjPStr destr     = NULL;
+    AjPStr osstr     = NULL;
+    AjPStr xstr      = NULL;
+    AjPStrTok handle = NULL;
+    
+    AjPAtom    atom     = NULL;
+    AjPResidue residue  = NULL;
+
+    /* Intitialise strings */
+    line  = ajStrNew();
+    token = ajStrNew();
+    idstr = ajStrNew();
+    destr = ajStrNew();
+    osstr = ajStrNew();
+    xstr  = ajStrNew();
+
+    /* Start of main application loop */
+    while(ajFileReadLine(inf,&line))
+    {
+	if(ajStrPrefixC(line,"XX"))
+	    continue;
+
+	/* Parse ID */
+	else if(ajStrPrefixC(line,"ID"))
+	{
+	    ajStrTokenAss(&handle,line," \n\t\r");
+	    ajStrToken(&token,&handle,NULL);
+	    ajStrToken(&idstr,&handle,NULL);
+	    continue;
+	}
+
+	
+	/* Parse number of chains */
+	else if(ajStrPrefixC(line,"CN"))
+	{
+	    ajStrTokenAss(&handle,line," []\n\t\r");
+	    ajStrToken(&token,&handle,NULL);
+	    ajStrToken(&token,&handle,NULL);
+	    ajStrToInt(token,&nc);
+	    continue;
+	}
+	
+
+	/* Parse description text */
+	else if(ajStrPrefixC(line,"DE"))
+	{
+	    ajStrTokenAss (&handle, line, " ");
+	    ajStrToken (&token, &handle, NULL);
+	    /* 'DE' */
+	    ajStrToken (&token, &handle, "\n\r");
+	    /* desc */
+	    if (ajStrLen(destr))
+	    {
+		ajStrAppC (&destr, " ");
+		ajStrApp (&destr, token);
+	    }
+	    else
+		ajStrAssS(&destr, token);
+	    continue;
+	}
+
+
+	/* Parse source text */
+	else if(ajStrPrefixC(line,"OS"))
+	{
+	    ajStrTokenAss (&handle, line, " ");
+	    ajStrToken (&token, &handle, NULL);
+	    /* 'OS' */
+	    ajStrToken (&token, &handle, "\n\r");
+	    /* source */
+	    if (ajStrLen(osstr))
+	    {
+		ajStrAppC (&osstr, " ");
+		ajStrApp (&osstr, token);
+	    }
+	    else
+		ajStrAssS(&osstr, token);
+	    continue;
+	}
+	
+
+	/* Parse experimental line */
+	else if(ajStrPrefixC(line,"EX"))
+	{
+	    ajStrTokenAss(&handle,line," ;\n\t\r");
+	    ajStrToken(&token,&handle,NULL);
+	    ajStrToken(&token,&handle,NULL);
+
+	    ajStrToken(&xstr,&handle,NULL); /* method */
+	    ajStrToken(&token,&handle,NULL);
+
+	    ajStrToken(&token,&handle,NULL); /* reso */
+	    ajStrToFloat(token,&reso);
+	    ajStrToken(&token,&handle,NULL);
+	    ajStrToken(&token,&handle,NULL); /* nmod */
+	    ajStrToInt(token,&nmod);
+	    ajStrToken(&token,&handle,NULL);
+
+	    ajStrToken(&token,&handle,NULL); /* ncha */
+	    ajStrToInt(token,&ncha);
+
+	    ajStrToken(&token,&handle,NULL); /* nlig */
+	    ajStrToInt(token,&ngrp);
+
+	    ret = ajPdbNew(ncha);
+
+	    ajStrAssS(&(ret)->Pdb,idstr);
+	    ajStrAssS(&(ret)->Compnd,destr);
+	    ajStrAssS(&(ret)->Source,osstr);
+	    if(ajStrMatchC(xstr,"xray"))
+		(ret)->Method = ajXRAY;
+	    else
+		(ret)->Method = ajNMR;
+
+	    (ret)->Reso = reso;
+
+	    /* 
+	     **   0==Read first model only. Number of models is hard-coded to 1
+	     **   as only the data for the first model is read in. 
+	     **   1==Read all models. 
+	     */
+
+	    if(mode == 0)
+		(ret)->Nmod = 1;
+	    else if(mode == 1)
+		(ret)->Nmod = nmod;
+	    else
+		ajFatal("Unrecognised mode in ajPdbReadNew");
+	    
+	    (ret)->Nchn = ncha;
+	    (ret)->Ngp  = ngrp;
+	}
+	
+
+	/* Parse information line */
+	else if(ajStrPrefixC(line,"IN"))
+	{
+	    ajStrTokenAss(&handle,line," ;\n\t\r");
+	    ajStrToken(&token,&handle,NULL);
+	    ajStrToken(&token,&handle,NULL);
+
+	    /* id value */
+	    ajStrToken(&token,&handle,NULL); 
+	    (ret)->Chains[nc-1]->Id=*ajStrStr(token);
+	    ajStrToken(&token,&handle,NULL);
+
+	    /* residues */
+	    ajStrToken(&token,&handle,NULL); 
+	    ajStrToInt(token,&(ret)->Chains[nc-1]->Nres);
+	    ajStrToken(&token,&handle,NULL);
+
+	    /* hetatm */
+	    ajStrToken(&token,&handle,NULL); 
+	    ajStrToInt(token,&(ret)->Chains[nc-1]->Nlig);
+
+	    /* helices */
+	    ajStrToken(&token,&handle,NULL); 
+	    ajStrToInt(token,&(ret)->Chains[nc-1]->numHelices);
+
+	    /* strands */
+	    ajStrToken(&token,&handle,NULL); 
+	    ajStrToInt(token,&(ret)->Chains[nc-1]->numStrands);
+
+	    /* sheets */
+	    /*
+	    ajStrToken(&token,&handle,NULL); 
+	    ajStrToInt(token,&(ret)->Chains[nc-1]->numSheets);
+	    */
+	    /* turns */
+	    /*
+	    ajStrToken(&token,&handle,NULL); 
+	    ajStrToInt(token,&(ret)->Chains[nc-1]->numTurns);
+	    */
+	    continue;
+	}
+  
+
+	/* Parse sequence line */
+	else if(ajStrPrefixC(line,"SQ"))
+	{
+	    while(ajFileReadLine(inf,&line) && !ajStrPrefixC(line,"XX"))
+		ajStrAppC(&(ret)->Chains[nc-1]->Seq,ajStrStr(line));
+	    ajStrCleanWhite(&(ret)->Chains[nc-1]->Seq);
+	    continue;
+	}
+
+
+	/* Parse atom line */
+	else if(ajStrPrefixC(line,"AT"))
+	{
+	    mod = chn = gpn = 0;
+	    
+	    /* Skip AT record */
+	    ajStrTokenAss(&handle,line," \t\n\r");
+	    ajStrToken(&token,&handle,NULL);
+
+	    /* Model number. 0==Read first model only */
+	    ajStrToken(&token,&handle,NULL);
+	    ajStrToInt(token,&mod);
+	    if((mode == 0) && (mod!=1))
+		break;
+
+	    /* Chain number */
+	    ajStrToken(&token,&handle,NULL);
+	    ajStrToInt(token,&chn);
+
+	    /* Group number */
+	    ajStrToken(&token,&handle,NULL);
+	    ajStrToInt(token,&gpn);
+	    
+	    /* Allocate object */
+	    /* AJNEW0(atom); */
+	    atom = ajAtomNew();
+
+	    atom->Mod = mod;
+	    atom->Chn = chn;
+	    atom->Gpn = gpn;
+	    
+	    /* Residue number */
+	    ajStrToken(&token,&handle,NULL);
+	    ajStrToInt(token,&atom->Idx);
+
+	    /* Residue number string */
+	    ajStrToken(&token,&handle,NULL);
+	    ajStrAssS(&atom->Pdb,token);
+
+	    /* Residue id, 1 char */
+	    ajStrToken(&token,&handle,NULL);
+	    atom->Id1 = *ajStrStr(token);
+	    
+	    /* Residue id, 3 char */
+	    ajStrToken(&token,&handle,NULL);
+	    ajStrAssS(&atom->Id3,token);
+
+	    /* Atom type */
+	    ajStrToken(&token,&handle,NULL);
+	    atom->Type = *ajStrStr(token);
+	    
+	    /* Atom identifier */
+	    ajStrToken(&token,&handle,NULL);
+	    ajStrAssS(&atom->Atm,token);
+
+	    /* X coordinate */
+	    ajStrToken(&token,&handle,NULL);
+	    ajStrToFloat(token,&atom->X);
+
+	    /* Y coordinate */
+	    ajStrToken(&token,&handle,NULL);
+	    ajStrToFloat(token,&atom->Y);
+
+	    /* Z coordinate */
+	    ajStrToken(&token,&handle,NULL);
+	    ajStrToFloat(token,&atom->Z);
+
+	    /* Occupancy */
+	    ajStrToken(&token,&handle,NULL);
+	    ajStrToFloat(token,&atom->O);
+
+	    /* B value thermal factor.  */
+	    ajStrToken(&token,&handle,NULL);
+	    ajStrToFloat(token,&atom->B);
+
+
+	    /* 
+	     ** Push atom onto appropriate list. 
+	     ** Check for coordinates for water or groups that could not
+	     ** be uniquely assigned to a chain
+	     */
+	    if(chn==0)
+	    {
+		/* Heterogen */
+		if(atom->Type == 'H')
+		    ajListPushApp((ret)->Groups,(void *)atom);
+		else if(atom->Type == 'W')
+		    ajListPushApp((ret)->Water,(void *)atom);
+		else
+		    ajFatal("Unexpected parse error in "
+			    "ajPdbReadFirstModelNew. Email "
+			    "jison@hgmp.mrc.ac.uk");
+	    }
+	    else
+		ajListPushApp((ret)->Chains[chn-1]->Atoms,(void *)atom);
+	}
+	
+	/* Parse residue line */
+	else if(ajStrPrefixC(line,"RE"))
+	{
+	    mod = chn = 0;
+	    
+	    /* Skip RE record */
+	    ajStrTokenAss(&handle,line," \t\n\r");
+	    ajStrToken(&token,&handle,NULL);
+
+	    /* Model number. 0==Read first model only */
+	    ajStrToken(&token,&handle,NULL);
+	    ajStrToInt(token,&mod);
+	    if((mode == 0) && (mod!=1))
+		break;
+
+	    /* Chain number */
+	    ajStrToken(&token,&handle,NULL);
+	    ajStrToInt(token,&chn);
+
+	    /* Allocate object */
+	    /* AJNEW0(residue); */
+	    residue = ajResidueNew();
+
+	    residue->Mod = mod;
+	    residue->Chn = chn;
+	    
+	    /* Residue number */
+	    ajStrToken(&token,&handle,NULL);
+	    ajStrToInt(token,&residue->Idx);
+
+	    /* Residue number (original string) */
+	    ajStrToken(&token,&handle,NULL);
+	    ajStrAssS(&residue->Pdb,token);
+
+	    /* Residue id, 1 char */
+	    ajStrToken(&token,&handle,NULL);
+	    residue->Id1 = *ajStrStr(token);
+	    
+	    /* Residue id, 3 char */
+	    ajStrToken(&token,&handle,NULL);
+	    ajStrAssS(&residue->Id3,token);
+
+	    /* Element serial number (PDB elements) */
+	    ajStrToken(&token,&handle,NULL);
+	    ajStrToInt(token,&residue->eNum);
+	    
+	    /* Element identifier  (PDB elements) */
+	    ajStrToken(&token,&handle,NULL);
+	    ajStrAssS(&residue->eId,token);
+
+	    /* Element type (PDB elements) */
+	    ajStrToken(&token,&handle,NULL);
+	    residue->eType = *ajStrStr(token);
+
+	    /* Class of helix  (PDB elements) */ 
+	    ajStrToken(&token,&handle,NULL);
+	    ajStrToInt(token,&residue->eClass);
+
+	    /* Number of the element (stride) */
+	    ajStrToken(&token,&handle,NULL);
+	    ajStrToInt(token,&residue->eStrideNum);
+
+	    /* Element type (stride) */
+	    ajStrToken(&token,&handle,NULL);
+	    residue->eStrideType = *ajStrStr(token);
+
+	    /* Phi angle */
+	    ajStrToken(&token,&handle,NULL);
+            ajStrToFloat(token,&residue->Phi);
+
+	    /* Psi angle */
+            ajStrToken(&token,&handle,NULL);
+            ajStrToFloat(token,&residue->Psi);
+
+	    /* Residue solvent accessible area.  */
+            ajStrToken(&token,&handle,NULL);
+            ajStrToFloat(token,&residue->Area);
+
+	    /* Absolute accessibility, all atoms.  */
+            ajStrToken(&token,&handle,NULL);
+            ajStrToFloat(token,&residue->all_abs);
+
+	    /* Relative accessibility, all atoms. */
+            ajStrToken(&token,&handle,NULL);
+            ajStrToFloat(token,&residue->all_rel);
+	    
+	    /* Absolute accessibility, atoms in sidechain.  */
+            ajStrToken(&token,&handle,NULL);
+            ajStrToFloat(token,&residue->side_abs);
+
+	    /* Relative accessibility, atoms in sidechain.  */
+            ajStrToken(&token,&handle,NULL);
+            ajStrToFloat(token,&residue->side_rel);
+
+	    /* Absolute accessibility, atoms in mainchain. */
+            ajStrToken(&token,&handle,NULL);
+            ajStrToFloat(token,&residue->main_abs);
+
+	    /* Relative accessibility, atoms in mainchain. */
+            ajStrToken(&token,&handle,NULL);
+            ajStrToFloat(token,&residue->main_rel);
+
+	    /* Absolute accessibility, nonpolar atoms. */
+            ajStrToken(&token,&handle,NULL);
+            ajStrToFloat(token,&residue->npol_abs);
+
+	    /* Relative accessibility, nonpolar atoms. */
+            ajStrToken(&token,&handle,NULL);
+            ajStrToFloat(token,&residue->npol_rel);
+
+	    /* Absolute accessibility, polar atoms. */
+            ajStrToken(&token,&handle,NULL);
+            ajStrToFloat(token,&residue->pol_abs);
+
+	    /* Relative accessibility, polar atoms. */
+            ajStrToken(&token,&handle,NULL);
+            ajStrToFloat(token,&residue->pol_rel);
+
+	    ajListPushApp((ret)->Chains[chn-1]->Residues,(void *)residue);  
+	}
+    }
+    /* End of main application loop */
+    
+    ajStrTokenClear(&handle);
+    ajStrDel(&line);
+    ajStrDel(&token);
+    ajStrDel(&idstr);
+    ajStrDel(&destr);
+    ajStrDel(&osstr);
+    ajStrDel(&xstr);
+
+
+    return ret;
+}
+
+
+
+
+
+
+
+/* @func ajPdbReadoldNew ******************************************************
+**
+** Reads a clean coordinate file (see documentation for DOMAINATRIX "pdbparse" 
+** application) lacking residue-level description in RE records and writes a 
+** filled Pdb object.
+** 
+** @param [u] inf  [AjPFile] Pointer to clean coordinate file
+**
+** @return [AjPPdb] Pointer to Pdb object.
+** @category new [AjPPdb] Pdb constructor from reading ccf format file.
+** @@
+****************************************************************************/
+
+AjPPdb ajPdbReadoldNew(AjPFile inf)
 {
     AjPPdb ret = NULL;
     
@@ -1044,6 +1643,388 @@ AjPPdb ajPdbReadFirstModelNew(AjPFile inf)
     AjPStrTok handle = NULL;
     
     AjPAtom atom     = NULL;
+    AjPResidue res     = NULL;
+    ajint      rn_last = -100000;
+    ajint      mn_last = -100000;
+
+
+    /* Intitialise strings */
+    line  = ajStrNew();
+    token = ajStrNew();
+    idstr = ajStrNew();
+    destr = ajStrNew();
+    osstr = ajStrNew();
+    xstr  = ajStrNew();
+
+    /* Start of main application loop */
+    while(ajFileReadLine(inf,&line))
+    {
+	if(ajStrPrefixC(line,"XX"))
+	    continue;
+
+	/* Parse ID */
+	if(ajStrPrefixC(line,"ID"))
+	{
+	    ajStrTokenAss(&handle,line," \n\t\r");
+	    ajStrToken(&token,&handle,NULL);
+	    ajStrToken(&idstr,&handle,NULL);
+	    continue;
+	}
+
+	
+	/* Parse number of chains */
+	if(ajStrPrefixC(line,"CN"))
+	{
+	    ajStrTokenAss(&handle,line," []\n\t\r");
+	    ajStrToken(&token,&handle,NULL);
+	    ajStrToken(&token,&handle,NULL);
+	    ajStrToInt(token,&nc);
+	    continue;
+	}
+	
+
+	/* Parse description text */
+	if(ajStrPrefixC(line,"DE"))
+	{
+	    ajStrTokenAss (&handle, line, " ");
+	    ajStrToken (&token, &handle, NULL);
+	    /* 'DE' */
+	    ajStrToken (&token, &handle, "\n\r");
+	    /* desc */
+	    if (ajStrLen(destr))
+	    {
+		ajStrAppC (&destr, " ");
+		ajStrApp (&destr, token);
+	    }
+	    else
+		ajStrAssS(&destr, token);
+	    continue;
+	}
+
+
+	/* Parse source text */
+	if(ajStrPrefixC(line,"OS"))
+	{
+	    ajStrTokenAss (&handle, line, " ");
+	    ajStrToken (&token, &handle, NULL);
+	    /* 'OS' */
+	    ajStrToken (&token, &handle, "\n\r");
+	    /* source */
+	    if (ajStrLen(osstr))
+	    {
+		ajStrAppC (&osstr, " ");
+		ajStrApp (&osstr, token);
+	    }
+	    else
+		ajStrAssS(&osstr, token);
+	    continue;
+	}
+	
+
+	/* Parse experimental line */
+	if(ajStrPrefixC(line,"EX"))
+	{
+	    ajStrTokenAss(&handle,line," ;\n\t\r");
+	    ajStrToken(&token,&handle,NULL);
+	    ajStrToken(&token,&handle,NULL);
+
+	    ajStrToken(&xstr,&handle,NULL); /* method */
+	    ajStrToken(&token,&handle,NULL);
+
+	    ajStrToken(&token,&handle,NULL); /* reso */
+	    ajStrToFloat(token,&reso);
+	    ajStrToken(&token,&handle,NULL);
+	    ajStrToken(&token,&handle,NULL); /* nmod */
+	    ajStrToInt(token,&nmod);
+	    ajStrToken(&token,&handle,NULL);
+
+	    ajStrToken(&token,&handle,NULL); /* nchn */
+	    ajStrToInt(token,&ncha);
+
+	    ajStrToken(&token,&handle,NULL); /* nlig */
+	    ajStrToInt(token,&ngrp);
+
+	    ret = ajPdbNew(ncha);
+
+	    ajStrAssS(&(ret)->Pdb,idstr);
+	    ajStrAssS(&(ret)->Compnd,destr);
+	    ajStrAssS(&(ret)->Source,osstr);
+	    if(ajStrMatchC(xstr,"xray"))
+		(ret)->Method = ajXRAY;
+	    else
+		(ret)->Method = ajNMR;
+
+	    (ret)->Reso = reso;
+	    (ret)->Nmod = nmod;
+	    (ret)->Nchn = ncha;
+	    (ret)->Ngp  = ngrp;
+	}
+	
+
+	/* Parse information line */
+	if(ajStrPrefixC(line,"IN"))
+	{
+	    ajStrTokenAss(&handle,line," ;\n\t\r");
+	    ajStrToken(&token,&handle,NULL);
+	    ajStrToken(&token,&handle,NULL);
+	    ajStrToken(&token,&handle,NULL); /* id value */
+	    (ret)->Chains[nc-1]->Id=*ajStrStr(token);
+	    ajStrToken(&token,&handle,NULL);
+	    ajStrToken(&token,&handle,NULL); /* residues */
+	    ajStrToInt(token,&(ret)->Chains[nc-1]->Nres);
+	    ajStrToken(&token,&handle,NULL);
+	    /* hetatm */
+	    ajStrToken(&token,&handle,NULL); 
+	    ajStrToInt(token,&(ret)->Chains[nc-1]->Nlig);
+	    /* helices */
+	    ajStrToken(&token,&handle,NULL); 
+	    ajStrToInt(token,&(ret)->Chains[nc-1]->numHelices);
+	    /* strands */
+	    ajStrToken(&token,&handle,NULL); 
+	    ajStrToInt(token,&(ret)->Chains[nc-1]->numStrands);
+	    /* sheets */
+	    /*
+	    ajStrToken(&token,&handle,NULL); 
+	    ajStrToInt(token,&(ret)->Chains[nc-1]->numSheets);
+	    */
+	    /* turns */
+	    /*
+	    ajStrToken(&token,&handle,NULL); 
+	    ajStrToInt(token,&(ret)->Chains[nc-1]->numTurns);
+	    */
+	    continue;
+	}
+  
+
+	/* Parse sequence line */
+	if(ajStrPrefixC(line,"SQ"))
+	{
+	    while(ajFileReadLine(inf,&line) && !ajStrPrefixC(line,"XX"))
+		ajStrAppC(&(ret)->Chains[nc-1]->Seq,ajStrStr(line));
+	    ajStrCleanWhite(&(ret)->Chains[nc-1]->Seq);
+	    continue;
+	}
+
+
+	/* Parse coordinate line */
+	if(ajStrPrefixC(line,"CO"))
+	{
+	    mod = chn = gpn = 0;
+	    
+	    ajStrTokenAss(&handle,line," \t\n\r");
+	    ajStrToken(&token,&handle,NULL);
+
+	    ajStrToken(&token,&handle,NULL);
+	    ajStrToInt(token,&mod);
+
+	    ajStrToken(&token,&handle,NULL);
+	    ajStrToInt(token,&chn);
+
+	    ajStrToken(&token,&handle,NULL);
+	    ajStrToInt(token,&gpn);
+	    
+	    /* AJNEW0(atom); */
+	    atom = ajAtomNew();
+	    
+	    atom->Mod = mod;
+	    atom->Chn = chn;
+	    atom->Gpn = gpn;
+	    
+	    ajStrToken(&token,&handle,NULL);
+	    atom->Type = *ajStrStr(token);
+	    
+	    ajStrToken(&token,&handle,NULL);
+	    ajStrToInt(token,&atom->Idx);
+
+	    ajStrToken(&token,&handle,NULL);
+	    ajStrAssS(&atom->Pdb,token);
+
+	    
+	    /* Residue object */
+	    if(atom->Type=='P')
+	    {
+		/* New model */
+		if(atom->Mod != mn_last)
+		{
+		    rn_last = -100000;
+		    mn_last = atom->Mod;
+		}
+		/* New residue */
+		if(atom->Idx != rn_last)
+		{
+		    res = ajResidueNew();
+
+		    res->Mod     = atom->Mod;
+		    res->Chn     = atom->Chn;
+		    res->Idx     = atom->Idx;
+		    ajStrAssS(&res->Pdb, atom->Pdb);
+		}	
+	    }	
+
+	    ajStrToken(&token,&handle,NULL);
+	    res->eType = *ajStrStr(token);
+
+	    ajStrToken(&token,&handle,NULL);
+	    ajStrToInt(token,&res->eNum);
+
+	    ajStrToken(&token,&handle,NULL);
+	    ajStrAssS(&res->eId,token);
+	    
+	    ajStrToken(&token,&handle,NULL);
+	    ajStrToInt(token,&res->eClass);
+
+	    ajStrToken(&token,&handle,NULL);
+	    res->eStrideType = *ajStrStr(token);
+
+	    ajStrToken(&token,&handle,NULL);
+	    ajStrToInt(token,&res->eStrideNum);
+
+	    ajStrToken(&token,&handle,NULL);
+	    atom->Id1 = *ajStrStr(token);
+	    res->Id1  = atom->Id1;
+	    
+	    ajStrToken(&token,&handle,NULL);
+	    ajStrAssS(&atom->Id3,token);
+	    ajStrAssS(&res->Id3, atom->Id3);
+
+	    ajStrToken(&token,&handle,NULL);
+	    ajStrAssS(&atom->Atm,token);
+
+	    ajStrToken(&token,&handle,NULL);
+	    ajStrToFloat(token,&atom->X);
+
+	    ajStrToken(&token,&handle,NULL);
+	    ajStrToFloat(token,&atom->Y);
+
+	    ajStrToken(&token,&handle,NULL);
+	    ajStrToFloat(token,&atom->Z);
+
+	    ajStrToken(&token,&handle,NULL);
+	    ajStrToFloat(token,&atom->O);
+
+	    ajStrToken(&token,&handle,NULL);
+	    ajStrToFloat(token,&atom->B);
+
+	    ajStrToken(&token,&handle,NULL);
+            ajStrToFloat(token,&res->Phi);
+
+            ajStrToken(&token,&handle,NULL);
+            ajStrToFloat(token,&res->Psi);
+
+            ajStrToken(&token,&handle,NULL);
+            ajStrToFloat(token,&res->Area);
+
+            ajStrToken(&token,&handle,NULL);
+            ajStrToFloat(token,&res->all_abs);
+
+            ajStrToken(&token,&handle,NULL);
+            ajStrToFloat(token,&res->all_rel);
+
+            ajStrToken(&token,&handle,NULL);
+            ajStrToFloat(token,&res->side_abs);
+
+            ajStrToken(&token,&handle,NULL);
+            ajStrToFloat(token,&res->side_rel);
+
+            ajStrToken(&token,&handle,NULL);
+            ajStrToFloat(token,&res->main_abs);
+
+            ajStrToken(&token,&handle,NULL);
+            ajStrToFloat(token,&res->main_rel);
+
+            ajStrToken(&token,&handle,NULL);
+            ajStrToFloat(token,&res->npol_abs);
+
+            ajStrToken(&token,&handle,NULL);
+            ajStrToFloat(token,&res->npol_rel);
+
+            ajStrToken(&token,&handle,NULL);
+            ajStrToFloat(token,&res->pol_abs);
+
+            ajStrToken(&token,&handle,NULL);
+            ajStrToFloat(token,&res->pol_rel);
+
+
+	    /* Check for coordinates for water or groups that could not
+	       be uniquely assigned to a chain */
+	    if(chn==0)
+	    {
+		/* Heterogen */
+		if(atom->Type == 'H')
+		    ajListPushApp((ret)->Groups,(void *)atom);
+		else if(atom->Type == 'W')
+		    ajListPushApp((ret)->Water,(void *)atom);
+		else
+		    ajFatal("Unexpected parse error in ajPdbRead. "
+			    "Email jison@hgmp.mrc.ac.uk");
+	    }
+	    else
+		ajListPushApp((ret)->Chains[chn-1]->Atoms,(void *)atom);
+
+	    
+	    ajListPushApp((ret)->Chains[chn-1]->Residues,(void *)res);
+	}
+    }
+    /* End of main application loop */
+    
+
+
+    ajStrTokenClear(&handle);
+    ajStrDel(&line);
+    ajStrDel(&token);
+    ajStrDel(&idstr);
+    ajStrDel(&destr);
+    ajStrDel(&osstr);
+    ajStrDel(&xstr);
+
+    return ret;
+}
+
+
+
+
+
+
+/* @func ajPdbReadoldFirstModelNew ********************************************
+**
+** Reads a clean coordinate file file (see documentation for DOMAINATRIX 
+** "pdbparse" application) lacking residue-level description in RE records and 
+** writes a filled Pdb object. Data for the first model only is read in.
+**
+** @param [u] inf  [AjPFile] Pointer to clean coordinate file
+**
+** @return [AjPPdb] Pointer to Pdb object.
+** @category new [AjPPdb] Pdb constructor from reading ccf format file
+**                         (retrive data for 1st model only).
+** @@
+****************************************************************************/
+
+AjPPdb ajPdbReadoldFirstModelNew(AjPFile inf) 
+{
+    AjPPdb ret = NULL;
+    
+    ajint nmod = 0;
+    ajint ncha = 0;
+    ajint ngrp = 0;
+    ajint nc   = 0;
+    ajint mod  = 0;
+    ajint chn  = 0;
+    ajint gpn  = 0;
+
+    float reso = 0.0;
+
+    AjPStr line      = NULL;
+    AjPStr token     = NULL;
+    AjPStr idstr     = NULL;
+    AjPStr destr     = NULL;
+    AjPStr osstr     = NULL;
+    AjPStr xstr      = NULL;
+    AjPStrTok handle = NULL;
+    
+    AjPAtom atom     = NULL;
+    AjPResidue res     = NULL;
+    ajint      rn_last = -100000;
+    ajint      mn_last = -100000;
 
     /* Intitialise strings */
     line  = ajStrNew();
@@ -1246,29 +2227,52 @@ AjPPdb ajPdbReadFirstModelNew(AjPFile inf)
 	    ajStrToken(&token,&handle,NULL);
 	    ajStrAssS(&atom->Pdb,token);
 
-	    ajStrToken(&token,&handle,NULL);
-	    atom->eType = *ajStrStr(token);
+	    /* Residue object */
+	    if(atom->Type=='P')
+	    {
+		/* New model */
+		if(atom->Mod != mn_last)
+		{
+		    rn_last = -100000;
+		    mn_last = atom->Mod;
+		}
+		/* New residue */
+		if(atom->Idx != rn_last)
+		{
+		    res = ajResidueNew();
+
+		    res->Mod     = atom->Mod;
+		    res->Chn     = atom->Chn;
+		    res->Idx     = atom->Idx;
+		    ajStrAssS(&res->Pdb, atom->Pdb);
+		}	
+	    }
+
 
 	    ajStrToken(&token,&handle,NULL);
-	    ajStrToInt(token,&atom->eNum);
+	    res->eType = *ajStrStr(token);
 
 	    ajStrToken(&token,&handle,NULL);
-	    ajStrAssS(&atom->eId,token);
+	    ajStrToInt(token,&res->eNum);
+
+	    ajStrToken(&token,&handle,NULL);
+	    ajStrAssS(&res->eId,token);
 	    
 	    ajStrToken(&token,&handle,NULL);
-	    ajStrToInt(token,&atom->eClass);
+	    ajStrToInt(token,&res->eClass);
 
 	    ajStrToken(&token,&handle,NULL);
-	    atom->eStrideType = *ajStrStr(token);
+	    res->eStrideType = *ajStrStr(token);
 
 	    ajStrToken(&token,&handle,NULL);
-	    ajStrToInt(token,&atom->eStrideNum);
+	    ajStrToInt(token,&res->eStrideNum);
 
 	    ajStrToken(&token,&handle,NULL);
 	    atom->Id1 = *ajStrStr(token);
 	    
 	    ajStrToken(&token,&handle,NULL);
 	    ajStrAssS(&atom->Id3,token);
+	    ajStrAssS(&res->Id3, atom->Id3);
 
 	    ajStrToken(&token,&handle,NULL);
 	    ajStrAssS(&atom->Atm,token);
@@ -1289,43 +2293,43 @@ AjPPdb ajPdbReadFirstModelNew(AjPFile inf)
 	    ajStrToFloat(token,&atom->B);
 
 	    ajStrToken(&token,&handle,NULL);
-            ajStrToFloat(token,&atom->Phi);
+            ajStrToFloat(token,&res->Phi);
 
             ajStrToken(&token,&handle,NULL);
-            ajStrToFloat(token,&atom->Psi);
+            ajStrToFloat(token,&res->Psi);
 
             ajStrToken(&token,&handle,NULL);
-            ajStrToFloat(token,&atom->Area);
+            ajStrToFloat(token,&res->Area);
 
             ajStrToken(&token,&handle,NULL);
-            ajStrToFloat(token,&atom->all_abs);
+            ajStrToFloat(token,&res->all_abs);
 
             ajStrToken(&token,&handle,NULL);
-            ajStrToFloat(token,&atom->all_rel);
+            ajStrToFloat(token,&res->all_rel);
 
             ajStrToken(&token,&handle,NULL);
-            ajStrToFloat(token,&atom->side_abs);
+            ajStrToFloat(token,&res->side_abs);
 
             ajStrToken(&token,&handle,NULL);
-            ajStrToFloat(token,&atom->side_rel);
+            ajStrToFloat(token,&res->side_rel);
 
             ajStrToken(&token,&handle,NULL);
-            ajStrToFloat(token,&atom->main_abs);
+            ajStrToFloat(token,&res->main_abs);
 
             ajStrToken(&token,&handle,NULL);
-            ajStrToFloat(token,&atom->main_rel);
+            ajStrToFloat(token,&res->main_rel);
 
             ajStrToken(&token,&handle,NULL);
-            ajStrToFloat(token,&atom->npol_abs);
+            ajStrToFloat(token,&res->npol_abs);
 
             ajStrToken(&token,&handle,NULL);
-            ajStrToFloat(token,&atom->npol_rel);
+            ajStrToFloat(token,&res->npol_rel);
 
             ajStrToken(&token,&handle,NULL);
-            ajStrToFloat(token,&atom->pol_abs);
+            ajStrToFloat(token,&res->pol_abs);
 
             ajStrToken(&token,&handle,NULL);
-            ajStrToFloat(token,&atom->pol_rel);
+            ajStrToFloat(token,&res->pol_rel);
 
 	    /* Check for coordinates for water or groups that could not
 	    ** be uniquely assigned to a chain
@@ -1344,350 +2348,8 @@ AjPPdb ajPdbReadFirstModelNew(AjPFile inf)
 	    }
 	    else
 		ajListPushApp((ret)->Chains[chn-1]->Atoms,(void *)atom);
-	}
-    }
-    /* End of main application loop */
-    
-    ajStrTokenClear(&handle);
-    ajStrDel(&line);
-    ajStrDel(&token);
-    ajStrDel(&idstr);
-    ajStrDel(&destr);
-    ajStrDel(&osstr);
-    ajStrDel(&xstr);
 
-    return ret;
-}
-
-
-
-
-
-/* @func ajPdbReadNew ******************************************************
-**
-** Reads a clean coordinate file (see documentation for DOMAINATRIX "pdbparse" 
-** application) and writes a filled Pdb object.
-**
-** @param [u] inf  [AjPFile] Pointer to clean coordinate file
-**
-** @return [AjPPdb] Pointer to Pdb object.
-** @category new [AjPPdb] Pdb constructor from reading ccf format file.
-** @@
-****************************************************************************/
-
-AjPPdb ajPdbReadNew(AjPFile inf)
-{
-    AjPPdb ret = NULL;
-    
-    ajint nmod = 0;
-    ajint ncha = 0;
-    ajint ngrp = 0;
-    ajint nc   = 0;
-    ajint mod  = 0;
-    ajint chn  = 0;
-    ajint gpn  = 0;
-
-    float reso = 0.0;
-
-    AjPStr line      = NULL;
-    AjPStr token     = NULL;
-    AjPStr idstr     = NULL;
-    AjPStr destr     = NULL;
-    AjPStr osstr     = NULL;
-    AjPStr xstr      = NULL;
-    AjPStrTok handle = NULL;
-    
-    AjPAtom atom     = NULL;
-
-    /* Intitialise strings */
-    line  = ajStrNew();
-    token = ajStrNew();
-    idstr = ajStrNew();
-    destr = ajStrNew();
-    osstr = ajStrNew();
-    xstr  = ajStrNew();
-
-    /* Start of main application loop */
-    while(ajFileReadLine(inf,&line))
-    {
-	if(ajStrPrefixC(line,"XX"))
-	    continue;
-
-	/* Parse ID */
-	if(ajStrPrefixC(line,"ID"))
-	{
-	    ajStrTokenAss(&handle,line," \n\t\r");
-	    ajStrToken(&token,&handle,NULL);
-	    ajStrToken(&idstr,&handle,NULL);
-	    continue;
-	}
-
-	
-	/* Parse number of chains */
-	if(ajStrPrefixC(line,"CN"))
-	{
-	    ajStrTokenAss(&handle,line," []\n\t\r");
-	    ajStrToken(&token,&handle,NULL);
-	    ajStrToken(&token,&handle,NULL);
-	    ajStrToInt(token,&nc);
-	    continue;
-	}
-	
-
-	/* Parse description text */
-	if(ajStrPrefixC(line,"DE"))
-	{
-	    ajStrTokenAss (&handle, line, " ");
-	    ajStrToken (&token, &handle, NULL);
-	    /* 'DE' */
-	    ajStrToken (&token, &handle, "\n\r");
-	    /* desc */
-	    if (ajStrLen(destr))
-	    {
-		ajStrAppC (&destr, " ");
-		ajStrApp (&destr, token);
-	    }
-	    else
-		ajStrAssS(&destr, token);
-	    continue;
-	}
-
-
-	/* Parse source text */
-	if(ajStrPrefixC(line,"OS"))
-	{
-	    ajStrTokenAss (&handle, line, " ");
-	    ajStrToken (&token, &handle, NULL);
-	    /* 'OS' */
-	    ajStrToken (&token, &handle, "\n\r");
-	    /* source */
-	    if (ajStrLen(osstr))
-	    {
-		ajStrAppC (&osstr, " ");
-		ajStrApp (&osstr, token);
-	    }
-	    else
-		ajStrAssS(&osstr, token);
-	    continue;
-	}
-	
-
-	/* Parse experimental line */
-	if(ajStrPrefixC(line,"EX"))
-	{
-	    ajStrTokenAss(&handle,line," ;\n\t\r");
-	    ajStrToken(&token,&handle,NULL);
-	    ajStrToken(&token,&handle,NULL);
-
-	    ajStrToken(&xstr,&handle,NULL); /* method */
-	    ajStrToken(&token,&handle,NULL);
-
-	    ajStrToken(&token,&handle,NULL); /* reso */
-	    ajStrToFloat(token,&reso);
-	    ajStrToken(&token,&handle,NULL);
-	    ajStrToken(&token,&handle,NULL); /* nmod */
-	    ajStrToInt(token,&nmod);
-	    ajStrToken(&token,&handle,NULL);
-
-	    ajStrToken(&token,&handle,NULL); /* nchn */
-	    ajStrToInt(token,&ncha);
-
-	    ajStrToken(&token,&handle,NULL); /* nlig */
-	    ajStrToInt(token,&ngrp);
-
-	    ret = ajPdbNew(ncha);
-
-	    ajStrAssS(&(ret)->Pdb,idstr);
-	    ajStrAssS(&(ret)->Compnd,destr);
-	    ajStrAssS(&(ret)->Source,osstr);
-	    if(ajStrMatchC(xstr,"xray"))
-		(ret)->Method = ajXRAY;
-	    else
-		(ret)->Method = ajNMR;
-
-	    (ret)->Reso = reso;
-	    (ret)->Nmod = nmod;
-	    (ret)->Nchn = ncha;
-	    (ret)->Ngp  = ngrp;
-	}
-	
-
-	/* Parse information line */
-	if(ajStrPrefixC(line,"IN"))
-	{
-	    ajStrTokenAss(&handle,line," ;\n\t\r");
-	    ajStrToken(&token,&handle,NULL);
-	    ajStrToken(&token,&handle,NULL);
-	    ajStrToken(&token,&handle,NULL); /* id value */
-	    (ret)->Chains[nc-1]->Id=*ajStrStr(token);
-	    ajStrToken(&token,&handle,NULL);
-	    ajStrToken(&token,&handle,NULL); /* residues */
-	    ajStrToInt(token,&(ret)->Chains[nc-1]->Nres);
-	    ajStrToken(&token,&handle,NULL);
-	    /* hetatm */
-	    ajStrToken(&token,&handle,NULL); 
-	    ajStrToInt(token,&(ret)->Chains[nc-1]->Nlig);
-	    /* helices */
-	    ajStrToken(&token,&handle,NULL); 
-	    ajStrToInt(token,&(ret)->Chains[nc-1]->numHelices);
-	    /* strands */
-	    ajStrToken(&token,&handle,NULL); 
-	    ajStrToInt(token,&(ret)->Chains[nc-1]->numStrands);
-	    /* sheets */
-	    /*
-	    ajStrToken(&token,&handle,NULL); 
-	    ajStrToInt(token,&(ret)->Chains[nc-1]->numSheets);
-	    */
-	    /* turns */
-	    /*
-	    ajStrToken(&token,&handle,NULL); 
-	    ajStrToInt(token,&(ret)->Chains[nc-1]->numTurns);
-	    */
-	    continue;
-	}
-  
-
-	/* Parse sequence line */
-	if(ajStrPrefixC(line,"SQ"))
-	{
-	    while(ajFileReadLine(inf,&line) && !ajStrPrefixC(line,"XX"))
-		ajStrAppC(&(ret)->Chains[nc-1]->Seq,ajStrStr(line));
-	    ajStrCleanWhite(&(ret)->Chains[nc-1]->Seq);
-	    continue;
-	}
-
-
-	/* Parse coordinate line */
-	if(ajStrPrefixC(line,"CO"))
-	{
-	    mod = chn = gpn = 0;
-	    
-	    ajStrTokenAss(&handle,line," \t\n\r");
-	    ajStrToken(&token,&handle,NULL);
-
-	    ajStrToken(&token,&handle,NULL);
-	    ajStrToInt(token,&mod);
-
-	    ajStrToken(&token,&handle,NULL);
-	    ajStrToInt(token,&chn);
-
-	    ajStrToken(&token,&handle,NULL);
-	    ajStrToInt(token,&gpn);
-	    
-	    /* AJNEW0(atom); */
-	    atom = ajAtomNew();
-	    
-	    atom->Mod = mod;
-	    atom->Chn = chn;
-	    atom->Gpn = gpn;
-	    
-
-	    ajStrToken(&token,&handle,NULL);
-	    atom->Type = *ajStrStr(token);
-	    
-	    ajStrToken(&token,&handle,NULL);
-	    ajStrToInt(token,&atom->Idx);
-
-	    ajStrToken(&token,&handle,NULL);
-	    ajStrAssS(&atom->Pdb,token);
-
-	    ajStrToken(&token,&handle,NULL);
-	    atom->eType = *ajStrStr(token);
-
-	    ajStrToken(&token,&handle,NULL);
-	    ajStrToInt(token,&atom->eNum);
-
-	    ajStrToken(&token,&handle,NULL);
-	    ajStrAssS(&atom->eId,token);
-	    
-	    ajStrToken(&token,&handle,NULL);
-	    ajStrToInt(token,&atom->eClass);
-
-	    ajStrToken(&token,&handle,NULL);
-	    atom->eStrideType = *ajStrStr(token);
-
-	    ajStrToken(&token,&handle,NULL);
-	    ajStrToInt(token,&atom->eStrideNum);
-
-	    ajStrToken(&token,&handle,NULL);
-	    atom->Id1 = *ajStrStr(token);
-	    
-	    ajStrToken(&token,&handle,NULL);
-	    ajStrAssS(&atom->Id3,token);
-
-	    ajStrToken(&token,&handle,NULL);
-	    ajStrAssS(&atom->Atm,token);
-
-	    ajStrToken(&token,&handle,NULL);
-	    ajStrToFloat(token,&atom->X);
-
-	    ajStrToken(&token,&handle,NULL);
-	    ajStrToFloat(token,&atom->Y);
-
-	    ajStrToken(&token,&handle,NULL);
-	    ajStrToFloat(token,&atom->Z);
-
-	    ajStrToken(&token,&handle,NULL);
-	    ajStrToFloat(token,&atom->O);
-
-	    ajStrToken(&token,&handle,NULL);
-	    ajStrToFloat(token,&atom->B);
-
-	    ajStrToken(&token,&handle,NULL);
-            ajStrToFloat(token,&atom->Phi);
-
-            ajStrToken(&token,&handle,NULL);
-            ajStrToFloat(token,&atom->Psi);
-
-            ajStrToken(&token,&handle,NULL);
-            ajStrToFloat(token,&atom->Area);
-
-            ajStrToken(&token,&handle,NULL);
-            ajStrToFloat(token,&atom->all_abs);
-
-            ajStrToken(&token,&handle,NULL);
-            ajStrToFloat(token,&atom->all_rel);
-
-            ajStrToken(&token,&handle,NULL);
-            ajStrToFloat(token,&atom->side_abs);
-
-            ajStrToken(&token,&handle,NULL);
-            ajStrToFloat(token,&atom->side_rel);
-
-            ajStrToken(&token,&handle,NULL);
-            ajStrToFloat(token,&atom->main_abs);
-
-            ajStrToken(&token,&handle,NULL);
-            ajStrToFloat(token,&atom->main_rel);
-
-            ajStrToken(&token,&handle,NULL);
-            ajStrToFloat(token,&atom->npol_abs);
-
-            ajStrToken(&token,&handle,NULL);
-            ajStrToFloat(token,&atom->npol_rel);
-
-            ajStrToken(&token,&handle,NULL);
-            ajStrToFloat(token,&atom->pol_abs);
-
-            ajStrToken(&token,&handle,NULL);
-            ajStrToFloat(token,&atom->pol_rel);
-
-
-	    /* Check for coordinates for water or groups that could not
-	       be uniquely assigned to a chain */
-	    if(chn==0)
-	    {
-		/* Heterogen */
-		if(atom->Type == 'H')
-		    ajListPushApp((ret)->Groups,(void *)atom);
-		else if(atom->Type == 'W')
-		    ajListPushApp((ret)->Water,(void *)atom);
-		else
-		    ajFatal("Unexpected parse error in ajPdbRead. "
-			    "Email jison@hgmp.mrc.ac.uk");
-	    }
-	    else
-		ajListPushApp((ret)->Chains[chn-1]->Atoms,(void *)atom);
+	    ajListPushApp((ret)->Chains[chn-1]->Residues,(void *)res);
 	}
     }
     /* End of main application loop */
@@ -1703,6 +2365,7 @@ AjPPdb ajPdbReadNew(AjPFile inf)
 
     return ret;
 }
+
 
 
 
@@ -1727,6 +2390,38 @@ AjPAtom ajAtomNew(void)
     ret->Id3   = ajStrNew();
     ret->Atm   = ajStrNew();
     ret->Pdb   = ajStrNew();
+/*    ret->eId   = ajStrNew(); */
+
+    ret->Id1   = '.';
+/*    ret->eType = '.'; 
+    ajStrAssC(&ret->eId, ".");
+    ret->eStrideType = '.'; */
+    
+
+    return ret;
+}
+
+
+
+
+/* @func ajResidueNew *****************************************************
+**
+** Residue object constructor.
+** This is normally called by the ajChainNew function.
+**
+** @return [AjPResidue] Pointer to a Residue object
+** @category new [AjPResidue] Default Residue constructor.
+** @@
+****************************************************************************/
+
+AjPResidue ajResidueNew(void)
+{
+    AjPResidue ret = NULL;
+    
+    AJNEW0(ret);
+    
+    ret->Pdb   = ajStrNew();
+    ret->Id3   = ajStrNew();
     ret->eId   = ajStrNew();
 
     ret->Id1   = '.';
@@ -1734,10 +2429,8 @@ AjPAtom ajAtomNew(void)
     ajStrAssC(&ret->eId, ".");
     ret->eStrideType = '.';
     
-
     return ret;
 }
-
 
 
 
@@ -1758,8 +2451,9 @@ AjPChain ajChainNew(void)
   
     AJNEW0(ret);
 
-    ret->Seq    = ajStrNewC("");
-    ret->Atoms  = ajListNew();
+    ret->Seq      = ajStrNewC("");
+    ret->Atoms    = ajListNew();
+    ret->Residues = ajListNew();
 
     return ret;
 }
@@ -1970,6 +2664,7 @@ AjPCmap ajCmapNew(ajint n)
     ret->Ligid = ajStrNew();    	
     ret->Seq1  = ajStrNew();
     ret->Seq2  = ajStrNew();
+    ret->Desc  = ajStrNew();
     ret->Chid1 = '.';
     ret->Chid2 = '.';
        
@@ -2070,6 +2765,40 @@ void ajAtomDel(AjPAtom *ptr)
     ajStrDel(&pthis->Id3);
     ajStrDel(&pthis->Atm);
     ajStrDel(&pthis->Pdb);
+/*    ajStrDel(&pthis->eId); */
+
+    AJFREE(pthis);
+    (*ptr) = NULL;
+
+    return;
+}
+
+
+
+
+
+/* @func ajResidueDel **********************************************************
+**
+** Destructor for residue object.
+**
+** @param [d] ptr [AjPResidue*] Residue object pointer
+**
+** @return [void]
+** @category delete [AjPResidue] Default Residue destructor.
+** @@
+****************************************************************************/
+
+void ajResidueDel(AjPResidue *ptr)
+{
+    AjPResidue pthis;
+
+    pthis = *ptr;
+
+    if(!ptr || !pthis)
+	return;
+
+    ajStrDel(&pthis->Pdb);
+    ajStrDel(&pthis->Id3);
     ajStrDel(&pthis->eId);
 
     AJFREE(pthis);
@@ -2077,6 +2806,8 @@ void ajAtomDel(AjPAtom *ptr)
 
     return;
 }
+
+
 
 
 
@@ -2096,7 +2827,8 @@ void ajAtomDel(AjPAtom *ptr)
 void ajChainDel(AjPChain *ptr)
 {
     AjPChain pthis;
-    AjPAtom atm = NULL;
+    AjPAtom    atm = NULL;
+    AjPResidue res = NULL;
 
     pthis = *ptr;
 
@@ -2106,8 +2838,12 @@ void ajChainDel(AjPChain *ptr)
     while(ajListPop(pthis->Atoms,(void **)&atm))
 	ajAtomDel(&atm);
 
+    while(ajListPop(pthis->Residues,(void **)&res))
+	ajResidueDel(&res);
+
     ajStrDel(&pthis->Seq);
     ajListDel(&pthis->Atoms);
+    ajListDel(&pthis->Residues);
 
     AJFREE(pthis);
     (*ptr) = NULL;
@@ -2159,8 +2895,7 @@ void ajPdbDel(AjPPdb *ptr)
     while(ajListPop(pthis->Groups,(void **)&atm))
 	ajAtomDel(&atm);
     ajListDel(&pthis->Groups);
-    
-    
+
     for(i=0;i<nc;++i)
 	ajChainDel(&pthis->Chains[i]);
     AJFREE(pthis->Chains);
@@ -2324,6 +3059,11 @@ void ajVdwresDel(AjPVdwres *ptr)
 
 void ajCmapDel(AjPCmap *ptr)
 {
+    if(!ptr)
+	return;
+    if(!(*ptr))
+	return;
+
     if((*ptr)->Id)
 	ajStrDel(&(*ptr)->Id);
 
@@ -2338,6 +3078,9 @@ void ajCmapDel(AjPCmap *ptr)
 
     if((*ptr)->Seq2)
 	ajStrDel(&(*ptr)->Seq2);
+
+    if((*ptr)->Desc)
+        ajStrDel(&(*ptr)->Desc);
 
     if((*ptr)->Mat)
 	ajInt2dDel(&(*ptr)->Mat);
@@ -2439,11 +3182,11 @@ AjBool ajAtomCopy(AjPAtom *to, const AjPAtom from)
     (*to)->Mod   = from->Mod;
     (*to)->Chn   = from->Chn;    
     (*to)->Gpn   = from->Gpn;
-    (*to)->Type  = from->Type;
     (*to)->Idx   = from->Idx;
     ajStrAssS(&((*to)->Pdb), from->Pdb);
     (*to)->Id1   = from->Id1;
     ajStrAssS(&((*to)->Id3), from->Id3);
+    (*to)->Type  = from->Type;
     ajStrAssS(&((*to)->Atm), from->Atm);
     (*to)->X     = from->X;
     (*to)->Y     = from->Y;
@@ -2451,11 +3194,52 @@ AjBool ajAtomCopy(AjPAtom *to, const AjPAtom from)
     (*to)->O     = from->O;
     (*to)->B     = from->B;
 
+    return ajTrue;
+}
+
+
+
+
+/* @func ajResidueCopy ******************************************************
+**
+** Copies the data from a Residue object to an Residue object; the new object
+** is created if needed. 
+** 
+** IMPORTANT - THIS DOES NOT COPY THE eNum & eType ELEMENTS, WHICH ARE SET 
+** TO ZERO and '.' INSTEAD.
+** 
+** @param [w] to   [AjPResidue*]  Residue object pointer
+** @param [r] from [const AjPResidue]   Residue object pointer
+**
+** @return [AjBool] True on success
+** @@
+****************************************************************************/
+
+AjBool ajResidueCopy(AjPResidue *to, const AjPResidue from)
+{
+    if(!to)
+    {
+	ajWarn("Bad arg (NULL) passed to ajResidueCopy");
+	return ajFalse;
+    }
+
+    if(!(*to))
+	*to = ajResidueNew();
+
+    (*to)->Mod   = from->Mod;
+    (*to)->Chn   = from->Chn;    
+    (*to)->Idx   = from->Idx;
+    ajStrAssS(&((*to)->Pdb), from->Pdb);
+    (*to)->Id1   = from->Id1;
+    ajStrAssS(&((*to)->Id3), from->Id3);
+    (*to)->Phi     = from->Phi;
+    (*to)->Psi     = from->Psi;
+    (*to)->Area    = from->Area;
+
     (*to)->eNum  = from->eNum; 
     ajStrAssS(&((*to)->eId), from->eId);
     (*to)->eType = from->eType;
     (*to)->eClass= from->eClass; 
-
     (*to)->eStrideNum  = from->eStrideNum; 
     (*to)->eStrideType = from->eStrideType; 
 
@@ -2473,6 +3257,7 @@ AjBool ajAtomCopy(AjPAtom *to, const AjPAtom from)
 
     return ajTrue;
 }
+
 
 
 
@@ -2517,6 +3302,60 @@ AjBool ajAtomListCopy(AjPList *to, const AjPList from)
        new=ajAtomNew();
 	
        ajAtomCopy(&new, hit);
+
+       /* Push scophit onto list */
+       ajListPushApp(*to, new);
+   }
+
+
+   ajListIterFree(&iter);
+   return ajTrue; 
+}
+
+
+
+
+
+
+/* @func ajResidueListCopy **************************************************
+**
+** Read a list of Residue structures and writes a copy of the list.  The 
+** data are copied and the list is created if necessary.
+** 
+** @param [w] to       [AjPList *] List of Residue objects to write
+** @param [r] from     [const AjPList]   List of Residue objects to read
+**
+** @return [AjBool] True if list was copied ok.
+** @@
+****************************************************************************/
+
+AjBool ajResidueListCopy(AjPList *to, const AjPList from)
+{
+/* AjPList ret  = NULL; */
+   AjIList iter = NULL;
+   AjPResidue hit  = NULL;
+   AjPResidue new  = NULL;
+
+   /* Check arg's */
+   if(!from || !to)
+   {
+       ajWarn("Bad arg's passed to ajResidueListCopy\n");
+       return ajFalse;
+   }
+    
+   /* Allocate the new list, if necessary */
+   if(!(*to))
+       *to=ajListNew();
+    
+   /* Initialise the iterator */
+   iter=ajListIterRead(from);
+    
+   /* Iterate through the list of Atom objects */
+   while((hit=(AjPResidue)ajListIterNext(iter)))
+   {
+       new=ajResidueNew();
+	
+       ajResidueCopy(&new, hit);
 
        /* Push scophit onto list */
        ajListPushApp(*to, new);
@@ -2602,6 +3441,8 @@ AjBool ajPdbCopy(AjPPdb *to, const AjPPdb from)
 /*	(*to)->Chains[x]->Atoms = ajAtomListCopy(from->Chains[x]->Atoms); */
 	if(!ajAtomListCopy(&(*to)->Chains[x]->Atoms, from->Chains[x]->Atoms))
 	    ajFatal("Error copying Atoms list");	    
+	if(!ajResidueListCopy(&(*to)->Chains[x]->Residues, from->Chains[x]->Residues))
+	    ajFatal("Error copying Residues list");	    
     }
     
 
@@ -2638,6 +3479,2125 @@ AjBool ajPdbCopy(AjPPdb *to, const AjPPdb from)
 ****************************************************************************/
 
 
+
+/* @func ajResidueSSEnv **********************************************************
+**
+** Assigns secondary structure environment of a residue
+**
+** @param  [r] res [const AjPResidue]    Residue object
+** @param  [w] SEnv [char*] Character for the Secondary structure environment
+** @param  [w] logf [AjPFile] Log file
+** @return [AjBool] ajTrue on success
+** @@
+******************************************************************************/
+AjBool   ajResidueSSEnv(const AjPResidue res, char *SEnv, AjPFile logf)
+{
+    *SEnv='\0';
+    ajFmtPrintF(logf, "R:%c-%d S:%c A:%.2f\n", res->Id1, res->Idx, 
+		res->eStrideType, res->side_rel);
+  
+    if(res->eStrideType == 'H' ||
+       res->eStrideType == 'G')
+	*SEnv='H';
+    else if(res->eStrideType == 'E' ||
+	    res->eStrideType == 'B' ||
+	    res->eStrideType == 'b')
+	*SEnv='S';
+    else if(res->eStrideType == 'T' ||
+	    res->eStrideType == 'C' ||
+	    res->eStrideType == 'I')
+	*SEnv='C';
+    else if(res->eStrideType == '.')	/*If no stride assignment, get pdb assignment*/
+    {
+	if(res->eType == 'H')
+	    *SEnv='H';
+	else if(res->eType == 'E')
+	    *SEnv='S';
+	else if(res->eType == 'C' ||
+		res->eType == 'T')
+	    *SEnv='C';
+	else if(res->eType == '.')
+	{
+	    ajFmtPrintF(logf, "SEnv unknown for residue %d\n", res->Idx);
+	    /* *SEnv='C';  */
+	    *SEnv='\0';  
+	    return ajFalse;
+	}
+    }
+
+    return ajTrue;
+}
+
+
+
+
+
+
+
+/* @func ajResidueEnv1 ***********************************************************
+**
+** Assigns environment based only of side chain accessibility and secondary
+** structure.  Assigns environment of "*" as default.
+**
+** @param [r] res [const AjPResidue] Residue object
+** @param [r] SEnv [char]          Secondary structure environment code
+** @param [w] OEnv [AjPStr*]       Character for the overall environment class 
+** @param  [w] logf [AjPFile] Log file
+** @return [ajint] Number of environments
+** @@
+******************************************************************************/
+ajint   ajResidueEnv1(const AjPResidue res, char SEnv, AjPStr *OEnv, AjPFile logf)
+{
+    if(SEnv=='\0')
+    {
+	ajStrClear(OEnv);
+	return 0;
+    }
+  
+    if((res->side_rel <= 15) && (SEnv == 'H'))
+	ajStrAssC(OEnv,"AA");
+    else if((res->side_rel <= 15) && (SEnv == 'S'))
+	ajStrAssC(OEnv,"AB");
+    else if((res->side_rel <= 15) && (SEnv == 'C'))
+	ajStrAssC(OEnv,"AC");
+    else if((res->side_rel > 15) && (res->side_rel <= 30) && (SEnv == 'H'))
+	ajStrAssC(OEnv,"AD"); 
+    else if((res->side_rel > 15) && (res->side_rel <= 30) && (SEnv == 'S'))
+	ajStrAssC(OEnv,"AE");
+    else if((res->side_rel > 15) && (res->side_rel <= 30) && (SEnv == 'C'))
+	ajStrAssC(OEnv,"AF");
+    else if((res->side_rel > 30) && (res->side_rel <= 45) && (SEnv == 'H'))
+	ajStrAssC(OEnv,"AG");
+    else if((res->side_rel > 30) && (res->side_rel <= 45) && (SEnv == 'S'))
+	ajStrAssC(OEnv,"AH");
+    else if((res->side_rel > 30) && (res->side_rel <= 45) && (SEnv == 'C'))
+	ajStrAssC(OEnv,"AI");
+    else if((res->side_rel > 45) && (res->side_rel <= 60) && (SEnv == 'H'))
+	ajStrAssC(OEnv,"AJ");
+    else if((res->side_rel > 45) && (res->side_rel <= 60) && (SEnv == 'S'))
+	ajStrAssC(OEnv,"AK");
+    else if((res->side_rel > 45) && (res->side_rel <= 60) && (SEnv == 'C'))
+	ajStrAssC(OEnv,"AL");
+    else if((res->side_rel > 60) && (res->side_rel <= 75) && (SEnv == 'H'))
+	ajStrAssC(OEnv,"AM");
+    else if((res->side_rel > 60) && (res->side_rel <= 75) && (SEnv == 'S'))
+	ajStrAssC(OEnv,"AN");  
+    else if((res->side_rel > 60) && (res->side_rel <= 75) && (SEnv == 'C'))
+	ajStrAssC(OEnv,"AO"); 
+    else if((res->side_rel > 75) && (res->side_rel <= 90) && (SEnv == 'H'))
+	ajStrAssC(OEnv,"AP");
+    else if((res->side_rel > 75) && (res->side_rel <= 90) && (SEnv == 'S'))
+	ajStrAssC(OEnv,"AQ");
+    else if((res->side_rel > 75) && (res->side_rel <= 90) && (SEnv == 'C'))
+	ajStrAssC(OEnv,"AR");
+    else if((res->side_rel > 90) && (SEnv == 'H'))
+	ajStrAssC(OEnv,"AS");  
+    else if((res->side_rel > 90) && (SEnv == 'S'))
+	ajStrAssC(OEnv,"AT");
+    else if((res->side_rel > 90) && (SEnv == 'C'))
+	ajStrAssC(OEnv,"AU");
+    else
+    {
+	ajStrClear(OEnv); 
+	ajFmtPrintF(logf, "OEnv unassigned for residue %d\n", res->Idx); 
+	return 0;
+    }
+
+    /*The total number of environments*/
+    return 21;
+}
+
+
+
+
+
+
+
+/* @func ajResidueEnv2 ***********************************************************
+**
+** Assigns environment based on side chain accessibility and secondary 
+** structure.  Assigns environment of "*" as default.
+**
+** @param [r] res [const AjPResidue] Residue object
+** @param [r] SEnv [char]          Secondary structure environment code
+** @param [w] OEnv [AjPStr*]       Character for the overall environment class 
+** @param  [w] logf [AjPFile] Log file
+** @return [ajint] Number of environments
+** @@
+******************************************************************************/
+ajint   ajResidueEnv2(const AjPResidue res, char SEnv, AjPStr *OEnv, AjPFile logf)
+{
+    float BLimit=40; /* Upper limit for the relative solvent
+			accessible area for a buried residue */
+    float PBLimit=114; /* Upper limit for the relative solvent
+  			  accessible area for a Parially buried
+  			  residue */
+  
+    float HLimit=45; /* Upper limit for the fraction polar measure of
+			a Hydrophobic residue */
+    float MPLimit=67; /* Upper limit for the fraction polar measure of
+  			 a Moderately oplar residue */
+  
+    AjPStr   BEnv=NULL;
+
+    if(!res)
+    {
+	ajWarn("No residue to ajResidueEnv");
+	return 0;
+    }
+  
+    ajStrClear(OEnv);
+    BEnv=ajStrNew();
+
+    ajFmtPrintF(logf, "R:%c-%d S:%c A:%.2f f:%.2f\n",
+		res->Id1, res->Idx, res->eType,
+		res->side_rel, res->pol_rel);
+  
+    /*Assign the basic classes*/
+
+    /*Buried, Hydrophobic*/
+    if((res->side_rel <= BLimit) &&
+       (res->pol_rel <= HLimit))
+	ajStrAssC(&BEnv, "B1");  
+    /*buried, moderately polar*/
+    else if((res->side_rel <= BLimit) &&
+	    (res->pol_rel > HLimit) &&
+	    (res->pol_rel <= MPLimit)) 
+	ajStrAssC(&BEnv, "B2");
+    /*buried, polar*/
+    else if((res->side_rel <= BLimit) &&
+	    (res->pol_rel > MPLimit))
+	ajStrAssC(&BEnv, "B3");
+    /*Partially buried, moderately Polar*/
+    else if((res->side_rel > BLimit) &&
+	    (res->side_rel <= PBLimit) &&
+	    (res->pol_rel <= MPLimit))
+	ajStrAssC(&BEnv, "P1");
+    /*Partially buried, Polar*/
+    else if((res->side_rel > BLimit) &&
+	    (res->side_rel <= PBLimit) &&
+	    (res->pol_rel > MPLimit))
+	ajStrAssC(&BEnv, "P2");
+    /*Exposed*/
+    else if(res->side_rel > PBLimit)
+	ajStrAssC(&BEnv, "E");
+    else
+    {
+	ajStrClear(OEnv); 
+	ajFmtPrintF(logf, "BEnv unassigned for residue %d\n", res->Idx);
+	ajStrDel(&BEnv);
+	return 0;
+    }
+  
+    /*Assign overall environment class*/
+    if((ajStrMatchC(BEnv, "B1")) && (SEnv == 'H'))
+	ajStrAssC(OEnv,"AA");
+    else if((ajStrMatchC(BEnv, "B1")) && (SEnv == 'S'))
+	ajStrAssC(OEnv,"AB");
+    else if((ajStrMatchC(BEnv, "B1")) && (SEnv == 'C'))
+	ajStrAssC(OEnv,"AC");
+    else if((ajStrMatchC(BEnv, "B2")) && (SEnv == 'H'))
+	ajStrAssC(OEnv,"AD");
+    else if((ajStrMatchC(BEnv, "B2")) && (SEnv == 'S'))
+	ajStrAssC(OEnv,"AE");
+    else if((ajStrMatchC(BEnv, "B2")) && (SEnv == 'C'))
+	ajStrAssC(OEnv,"AF");
+    else if((ajStrMatchC(BEnv, "B3")) && (SEnv == 'H'))
+	ajStrAssC(OEnv,"AG");
+    else if((ajStrMatchC(BEnv, "B3")) && (SEnv == 'S'))
+	ajStrAssC(OEnv,"AH");
+    else if((ajStrMatchC(BEnv, "B3")) && (SEnv == 'C'))
+	ajStrAssC(OEnv,"AI");
+    else if((ajStrMatchC(BEnv, "P1")) && (SEnv == 'H'))
+	ajStrAssC(OEnv,"AJ");
+    else if((ajStrMatchC(BEnv, "P1")) && (SEnv == 'S'))
+	ajStrAssC(OEnv,"AK");
+    else if((ajStrMatchC(BEnv, "P1")) && (SEnv == 'C'))
+	ajStrAssC(OEnv,"AL");
+    else if((ajStrMatchC(BEnv, "P2")) && (SEnv == 'H'))
+	ajStrAssC(OEnv,"AM");
+    else if((ajStrMatchC(BEnv, "P2")) && (SEnv == 'S'))
+	ajStrAssC(OEnv,"AN");
+    else if((ajStrMatchC(BEnv, "P2")) && (SEnv == 'C'))
+	ajStrAssC(OEnv,"AO");
+    else if((ajStrMatchC(BEnv, "E")) && (SEnv == 'H'))
+	ajStrAssC(OEnv,"AP");
+    else if((ajStrMatchC(BEnv, "E")) && (SEnv == 'S'))
+	ajStrAssC(OEnv,"AQ");
+    else if((ajStrMatchC(BEnv, "E")) && (SEnv == 'C'))
+	ajStrAssC(OEnv,"AR");
+    else
+    {
+	ajStrClear(OEnv); 
+	ajFmtPrintF(logf, "OEnv unassigned for residue %d\n", res->Idx);
+	ajStrDel(&BEnv);
+	return 0;
+    }
+
+    ajStrDel(&BEnv);
+
+    return 18;
+
+}
+
+
+
+
+
+
+
+/* @func ajResidueEnv3 ***********************************************************
+**
+** Assigns environment based on side chain accessibility and secondary
+** structure.  Assigns environment of "*" as default.
+**
+** @param [r] res [const AjPResidue] Residue object
+** @param [r] SEnv [char]          Secondary structure environment code
+** @param [w] OEnv [AjPStr*]       Character for the overall environment class 
+** @param  [w] logf [AjPFile] Log file
+** @return [ajint] Number of environments
+** @@
+******************************************************************************/
+ajint   ajResidueEnv3(const AjPResidue res, char SEnv, AjPStr *OEnv, AjPFile logf)
+{
+    float BLimit=5; /* Upper limit for the relative solvent accessible
+		       area for a buried residue */
+    float PBLimit=25; /* Upper limit for the relative solvent
+  			 accessible area for a Parially buried residue */
+  
+    float PolLimit1=10;
+    float PolLimit2=30;
+    float PolLimit3=50;
+    float PolLimit4=80;
+
+  
+    AjPStr   BEnv=NULL;
+
+    if(!res)
+    {
+	ajWarn("No res to ajResidueEnv");
+	return 0;
+    }
+  
+    ajStrClear(OEnv);
+    BEnv=ajStrNew();
+
+    ajFmtPrintF(logf, "R:%c-%d S:%c A:%.2f f:%.2f\n",
+		res->Id1, res->Idx, res->eType,
+		res->side_rel, res->pol_rel);
+  
+    /*Assign the basic classes*/
+
+    /*Buried, Hydrophobic*/
+    if((res->side_rel <= BLimit) &&
+       (res->pol_rel <= PolLimit1))
+	ajStrAssC(&BEnv, "B1");  
+    /*buried, moderately polar*/
+    else if((res->side_rel <= BLimit) &&
+	    (res->pol_rel > PolLimit1) &&
+	    (res->pol_rel <= PolLimit2)) 
+	ajStrAssC(&BEnv, "B2");
+    else if((res->side_rel <= BLimit) &&
+	    (res->pol_rel > PolLimit2) &&
+	    (res->pol_rel <= PolLimit3)) 
+	ajStrAssC(&BEnv, "B3");
+    else if((res->side_rel <= BLimit) &&
+	    (res->pol_rel > PolLimit3) &&
+	    (res->pol_rel <= PolLimit4)) 
+	ajStrAssC(&BEnv, "B4");
+    else if((res->side_rel <= BLimit) &&
+	    (res->pol_rel > PolLimit4)) 
+	ajStrAssC(&BEnv, "B5");
+    /*Partially buried, moderately Polar*/
+    else if((res->side_rel > BLimit) &&
+	    (res->side_rel <= PBLimit) &&
+	    (res->pol_rel <= PolLimit3))
+	ajStrAssC(&BEnv, "P1");
+    /*Partially buried, Polar*/
+    else if((res->side_rel > BLimit) &&
+	    (res->side_rel <= PBLimit) &&
+	    (res->pol_rel > PolLimit3))
+	ajStrAssC(&BEnv, "P2");
+    /*Exposed*/
+    else if(res->side_rel > PBLimit)
+	ajStrAssC(&BEnv, "E");
+    else
+    {
+	ajStrClear(OEnv); 
+	ajFmtPrintF(logf, "BEnv unassigned for residue %d\n", res->Idx);
+
+	ajStrDel(&BEnv);
+	return 0;
+    }
+  
+    /*Assign overall environment class*/
+    if((ajStrMatchC(BEnv, "B1")) && (SEnv == 'H'))
+	ajStrAssC(OEnv,"AA");
+    else if((ajStrMatchC(BEnv, "B1")) && (SEnv == 'S'))
+	ajStrAssC(OEnv,"AB");
+    else if((ajStrMatchC(BEnv, "B1")) && (SEnv == 'C'))
+	ajStrAssC(OEnv,"AC");
+    else if((ajStrMatchC(BEnv, "B2")) && (SEnv == 'H'))
+	ajStrAssC(OEnv,"AD");
+    else if((ajStrMatchC(BEnv, "B2")) && (SEnv == 'S'))
+	ajStrAssC(OEnv,"AE");
+    else if((ajStrMatchC(BEnv, "B2")) && (SEnv == 'C'))
+	ajStrAssC(OEnv,"AF");
+    else if((ajStrMatchC(BEnv, "B3")) && (SEnv == 'H'))
+	ajStrAssC(OEnv,"AG");
+    else if((ajStrMatchC(BEnv, "B3")) && (SEnv == 'S'))
+	ajStrAssC(OEnv,"AH");
+    else if((ajStrMatchC(BEnv, "B3")) && (SEnv == 'C'))
+	ajStrAssC(OEnv,"AI");
+    else if((ajStrMatchC(BEnv, "B4")) && (SEnv == 'H'))
+	ajStrAssC(OEnv,"AJ");
+    else if((ajStrMatchC(BEnv, "B4")) && (SEnv == 'S'))
+	ajStrAssC(OEnv,"AK");
+    else if((ajStrMatchC(BEnv, "B4")) && (SEnv == 'C'))
+	ajStrAssC(OEnv,"AL"); 
+    else if((ajStrMatchC(BEnv, "B5")) && (SEnv == 'H'))
+	ajStrAssC(OEnv,"AM");
+    else if((ajStrMatchC(BEnv, "B5")) && (SEnv == 'S'))
+	ajStrAssC(OEnv,"AN");
+    else if((ajStrMatchC(BEnv, "B5")) && (SEnv == 'C'))
+	ajStrAssC(OEnv,"AO");
+    else if((ajStrMatchC(BEnv, "P1")) && (SEnv == 'H'))
+	ajStrAssC(OEnv,"AP");
+    else if((ajStrMatchC(BEnv, "P1")) && (SEnv == 'S'))
+	ajStrAssC(OEnv,"AQ");
+    else if((ajStrMatchC(BEnv, "P1")) && (SEnv == 'C'))
+	ajStrAssC(OEnv,"AR");
+    else if((ajStrMatchC(BEnv, "P2")) && (SEnv == 'H'))
+	ajStrAssC(OEnv,"AS");
+    else if((ajStrMatchC(BEnv, "P2")) && (SEnv == 'S'))
+	ajStrAssC(OEnv,"AT");
+    else if((ajStrMatchC(BEnv, "P2")) && (SEnv == 'C'))
+	ajStrAssC(OEnv,"AU");
+    else if((ajStrMatchC(BEnv, "E")) && (SEnv == 'H'))
+	ajStrAssC(OEnv,"AV");
+    else if((ajStrMatchC(BEnv, "E")) && (SEnv == 'S'))
+	ajStrAssC(OEnv,"AW");
+    else if((ajStrMatchC(BEnv, "E")) && (SEnv == 'C'))
+	ajStrAssC(OEnv,"AX");
+    else
+    {
+	ajStrClear(OEnv); 
+	ajFmtPrintF(logf, "OEnv unassigned for residue %d\n", res->Idx);
+
+	ajStrDel(&BEnv);
+	return 0;
+    }
+
+    ajStrDel(&BEnv);
+
+    return 24;
+
+}
+
+/* @func ajResidueEnv4 ***********************************************************
+**
+** Assigns environment based only of side chain accessibility and secondary 
+** structure.  Assigns environment of "*" as default.
+**
+** @param [r] res [const AjPResidue] Residue object
+** @param [r] SEnv [char]          Secondary structure environment code
+** @param [w] OEnv [AjPStr*]       Character for the overall environment class 
+** @param  [w] logf [AjPFile] Log file
+** @return [ajint] Number of environments
+** @@
+******************************************************************************/
+ajint   ajResidueEnv4(const AjPResidue res, char SEnv, AjPStr *OEnv, AjPFile logf)
+{
+    ajStrClear(OEnv);
+    if(SEnv=='\0')
+    {
+	ajStrClear(OEnv);
+	return 0;
+    }
+  
+    if((res->side_rel <= 5) && (SEnv == 'H'))
+	ajStrAssC(OEnv,"AA");
+    else if((res->side_rel <= 5) && (SEnv == 'S'))
+	ajStrAssC(OEnv,"AB");
+    else if((res->side_rel <= 5) && (SEnv == 'C'))
+	ajStrAssC(OEnv,"AC");
+    else if((res->side_rel > 5) && (res->side_rel <= 25) && (SEnv == 'H'))
+	ajStrAssC(OEnv,"AD");
+    else if((res->side_rel > 5) && (res->side_rel <= 25) && (SEnv == 'S'))
+	ajStrAssC(OEnv,"AE");
+    else if((res->side_rel > 5) && (res->side_rel <= 25) && (SEnv == 'C'))
+	ajStrAssC(OEnv,"AF");
+    else if((res->side_rel > 25) && (SEnv == 'H'))
+	ajStrAssC(OEnv,"AG");
+    else if((res->side_rel > 25) && (SEnv == 'S'))
+	ajStrAssC(OEnv,"AH");
+    else if((res->side_rel > 25) && (SEnv == 'C'))
+	ajStrAssC(OEnv,"AI");
+    else
+    {
+	ajStrClear(OEnv);
+	ajFmtPrintF(logf, "OEnv unassigned for residue %d\n", res->Idx); 
+
+	return 0;
+    }
+
+    return 9;
+
+}
+
+
+
+
+
+
+
+/* @func ajResidueEnv5 ***********************************************************
+** Assigns environment based on side chain accessibility and secondary 
+** structure.  Assigns environment of "*" as default.
+** @param [r] res [const AjPResidue] Residue object
+** @param [r] SEnv [char]          Secondary structure environment code
+** @param [w] OEnv [AjPStr*]       Character for the overall environment class 
+** @param  [w] logf [AjPFile] Log file
+** @return [ajint] Number of environments
+** @@
+******************************************************************************/
+ajint   ajResidueEnv5(const AjPResidue res, char SEnv, AjPStr *OEnv, AjPFile logf)
+{
+    float BLimit=5; /* Upper limit for the relative solvent accessible
+		       area for a buried residue */ /* */
+    float PBLimit=25; /* Upper limit for the relative solvent
+  			 accessible area for a Parially buried residue */
+  
+    float PolLimit1=10;
+    float PolLimit2=30;
+    float PolLimit3=50;
+    float PolLimit4=80;
+
+  
+    AjPStr   BEnv=NULL;
+
+    if(!res)
+    {
+	ajWarn("No residue to ajResidueEnv");
+	return 0;
+    }
+  
+    ajStrClear(OEnv);
+    BEnv=ajStrNew();
+
+    ajFmtPrintF(logf, "R:%c-%d S:%c A:%.2f f:%.2f\n",
+		res->Id1, res->Idx, res->eType,
+		res->side_rel, res->pol_rel);
+  
+    /*Assign the basic classes*/
+
+    /*Buried*/
+    if(res->side_rel <= BLimit)
+	ajStrAssC(&BEnv, "B");  
+    /*partially buried, hydrophobic*/
+    else if((res->side_rel > BLimit) &&
+	    (res->side_rel <= PBLimit) &&
+	    (res->pol_rel <= PolLimit1))
+	ajStrAssC(&BEnv, "P1");  
+    /*partially buried, moderately polar*/
+    else if((res->side_rel > BLimit) &&
+	    (res->side_rel <= PBLimit) &&
+	    (res->pol_rel > PolLimit1) &&
+	    (res->pol_rel <= PolLimit2)) 
+	ajStrAssC(&BEnv, "P2");
+    else if((res->side_rel > BLimit) &&
+	    (res->side_rel <= PBLimit) &&
+	    (res->pol_rel > PolLimit2) &&
+	    (res->pol_rel <= PolLimit3)) 
+	ajStrAssC(&BEnv, "P3");
+    else if((res->side_rel > BLimit) &&
+	    (res->side_rel <= PBLimit) &&
+	    (res->pol_rel > PolLimit3) &&
+	    (res->pol_rel <= PolLimit4)) 
+	ajStrAssC(&BEnv, "P4");
+    /*partially buried, polar*/
+    else if((res->side_rel > BLimit) &&
+	    (res->side_rel <= PBLimit) &&
+	    (res->pol_rel > PolLimit4)) 
+	ajStrAssC(&BEnv, "P5");
+    /*Exposed, moderately Polar*/
+    else if((res->side_rel > PBLimit) &&
+	    (res->pol_rel <= PolLimit3))
+	ajStrAssC(&BEnv, "E1");
+    /*Exposed, Polar*/
+    else if((res->side_rel > PBLimit) &&
+	    (res->pol_rel > PolLimit3))
+	ajStrAssC(&BEnv, "E2");
+    else
+    {
+	ajStrClear(OEnv); 
+	ajFmtPrintF(logf, "BEnv unassigned for residue %d\n", res->Idx);
+
+	ajStrDel(&BEnv);
+	return 0;
+    }
+  
+    /*Assign overall environment class*/
+    if((ajStrMatchC(BEnv, "B")) && (SEnv == 'H'))
+	ajStrAssC(OEnv,"AA");
+    else if((ajStrMatchC(BEnv, "B")) && (SEnv == 'S'))
+	ajStrAssC(OEnv,"AB");
+    else if((ajStrMatchC(BEnv, "B")) && (SEnv == 'C'))
+	ajStrAssC(OEnv,"AC");
+    else if((ajStrMatchC(BEnv, "P1")) && (SEnv == 'H'))
+	ajStrAssC(OEnv,"AD");
+    else if((ajStrMatchC(BEnv, "P1")) && (SEnv == 'S'))
+	ajStrAssC(OEnv,"AE");
+    else if((ajStrMatchC(BEnv, "P1")) && (SEnv == 'C'))
+	ajStrAssC(OEnv,"AF");
+    else if((ajStrMatchC(BEnv, "P2")) && (SEnv == 'H'))
+	ajStrAssC(OEnv,"AG");
+    else if((ajStrMatchC(BEnv, "P2")) && (SEnv == 'S'))
+	ajStrAssC(OEnv,"AH");
+    else if((ajStrMatchC(BEnv, "P2")) && (SEnv == 'C'))
+	ajStrAssC(OEnv,"AI");
+    else if((ajStrMatchC(BEnv, "P3")) && (SEnv == 'H'))
+	ajStrAssC(OEnv,"AJ");
+    else if((ajStrMatchC(BEnv, "P3")) && (SEnv == 'S'))
+	ajStrAssC(OEnv,"AK");
+    else if((ajStrMatchC(BEnv, "P3")) && (SEnv == 'C'))
+	ajStrAssC(OEnv,"AL"); 
+    else if((ajStrMatchC(BEnv, "P4")) && (SEnv == 'H'))
+	ajStrAssC(OEnv,"AM");
+    else if((ajStrMatchC(BEnv, "P4")) && (SEnv == 'S'))
+	ajStrAssC(OEnv,"AN");
+    else if((ajStrMatchC(BEnv, "P4")) && (SEnv == 'C'))
+	ajStrAssC(OEnv,"AO");
+    else if((ajStrMatchC(BEnv, "P5")) && (SEnv == 'H'))
+	ajStrAssC(OEnv,"AP");
+    else if((ajStrMatchC(BEnv, "P5")) && (SEnv == 'S'))
+	ajStrAssC(OEnv,"AQ");
+    else if((ajStrMatchC(BEnv, "P5")) && (SEnv == 'C'))
+	ajStrAssC(OEnv,"AR");
+    else if((ajStrMatchC(BEnv, "E1")) && (SEnv == 'H'))
+	ajStrAssC(OEnv,"AS");
+    else if((ajStrMatchC(BEnv, "E1")) && (SEnv == 'S'))
+	ajStrAssC(OEnv,"AT");
+    else if((ajStrMatchC(BEnv, "E1")) && (SEnv == 'C'))
+	ajStrAssC(OEnv,"AU");
+    else if((ajStrMatchC(BEnv, "E2")) && (SEnv == 'H'))
+	ajStrAssC(OEnv,"AV");
+    else if((ajStrMatchC(BEnv, "E2")) && (SEnv == 'S'))
+	ajStrAssC(OEnv,"AW");
+    else if((ajStrMatchC(BEnv, "E2")) && (SEnv == 'C'))
+	ajStrAssC(OEnv,"AX");
+    else
+    {
+	ajStrClear(OEnv); 
+	ajFmtPrintF(logf, "OEnv unassigned for residue %d\n", res->Idx);
+
+	ajStrDel(&BEnv);
+	return 0;
+    }
+
+    ajStrDel(&BEnv);
+
+    return 24;
+
+}
+
+
+
+
+
+
+
+
+/* @func ajResidueEnv6 ***********************************************************
+**
+** Assigns environment based on side chain accessibility and secondary 
+** structure.  Assigns environment of "*" as default.
+**
+** @param [r] res [const AjPResidue] Residue object
+** @param [r] SEnv [char]          Secondary structure environment code
+** @param [w] OEnv [AjPStr*]       Character for the overall environment class 
+** @param  [w] logf [AjPFile] Log file
+** @return [ajint] Number of environments
+** @@
+******************************************************************************/
+ajint   ajResidueEnv6(const AjPResidue res, char SEnv, AjPStr *OEnv, AjPFile logf)
+{
+    float BLimit=5; /* Upper limit for the relative solvent accessible
+		       area for a buried residue */
+    float PBLimit=25; /* Upper limit for the relative solvent
+  			 accessible area for a Parially buried residue */
+  
+    float PolLimit1=10;
+    float PolLimit2=30;
+    float PolLimit3=50;
+    float PolLimit4=80;
+
+  
+    AjPStr   BEnv=NULL;
+
+    if(!res)
+    {
+	ajWarn("No residue to ajResidueEnv");
+	return 0;
+    }
+  
+    ajStrClear(OEnv);
+    BEnv=ajStrNew();
+
+    ajFmtPrintF(logf, "R:%c-%d S:%c A:%.2f f:%.2f\n",
+		res->Id1, res->Idx, res->eType,
+		res->side_rel, res->pol_rel);
+  
+    /*Assign the basic classes*/
+
+    /*Buried*/
+    if(res->side_rel <= BLimit)
+	ajStrAssC(&BEnv, "B");  
+    /*Partially buried, hydrophobic*/
+    else if((res->side_rel > BLimit) &&
+	    (res->side_rel <= PBLimit) &&
+	    (res->pol_rel <= PolLimit3))
+	ajStrAssC(&BEnv, "P1");
+    /*Partially buried, Polar*/
+    else if((res->side_rel > BLimit) &&
+	    (res->side_rel <= PBLimit) &&
+	    (res->pol_rel > PolLimit3))
+	ajStrAssC(&BEnv, "P2");
+    /*partially buried, hydrophobic*/
+    else if((res->side_rel > PBLimit) &&
+	    (res->pol_rel <= PolLimit1))
+	ajStrAssC(&BEnv, "E1");  
+    /*partially buried, moderately polar*/
+    else if((res->side_rel > PBLimit) &&
+	    (res->pol_rel > PolLimit1) &&
+	    (res->pol_rel <= PolLimit2)) 
+	ajStrAssC(&BEnv, "E2");
+    else if((res->side_rel > PBLimit) &&
+	    (res->pol_rel > PolLimit2) &&
+	    (res->pol_rel <= PolLimit3)) 
+	ajStrAssC(&BEnv, "E3");
+    else if((res->side_rel > PBLimit) &&
+	    (res->pol_rel > PolLimit3) &&
+	    (res->pol_rel <= PolLimit4)) 
+	ajStrAssC(&BEnv, "E4");
+    /*partially buried, polar*/
+    else if((res->side_rel > PBLimit) &&
+	    (res->pol_rel > PolLimit4)) 
+	ajStrAssC(&BEnv, "E5");
+    else
+    {
+	ajStrClear(OEnv); 
+	ajFmtPrintF(logf, "BEnv unassigned for residue %d\n", res->Idx);
+
+	ajStrDel(&BEnv);
+	return 0;
+    }
+  
+    /*Assign overall environment class*/
+    if((ajStrMatchC(BEnv, "B")) && (SEnv == 'H'))
+	ajStrAssC(OEnv,"AA");
+    else if((ajStrMatchC(BEnv, "B")) && (SEnv == 'S'))
+	ajStrAssC(OEnv,"AB");
+    else if((ajStrMatchC(BEnv, "B")) && (SEnv == 'C'))
+	ajStrAssC(OEnv,"AC");
+    else if((ajStrMatchC(BEnv, "P1")) && (SEnv == 'H'))
+	ajStrAssC(OEnv,"AD");
+    else if((ajStrMatchC(BEnv, "P1")) && (SEnv == 'S'))
+	ajStrAssC(OEnv,"AE");
+    else if((ajStrMatchC(BEnv, "P1")) && (SEnv == 'C'))
+	ajStrAssC(OEnv,"AF");
+    else if((ajStrMatchC(BEnv, "P2")) && (SEnv == 'H'))
+	ajStrAssC(OEnv,"AG");
+    else if((ajStrMatchC(BEnv, "P2")) && (SEnv == 'S'))
+	ajStrAssC(OEnv,"AH");
+    else if((ajStrMatchC(BEnv, "P2")) && (SEnv == 'C'))
+	ajStrAssC(OEnv,"AI");
+    else if((ajStrMatchC(BEnv, "E1")) && (SEnv == 'H'))
+	ajStrAssC(OEnv,"AJ");
+    else if((ajStrMatchC(BEnv, "E1")) && (SEnv == 'S'))
+	ajStrAssC(OEnv,"AK");
+    else if((ajStrMatchC(BEnv, "E1")) && (SEnv == 'C'))
+	ajStrAssC(OEnv,"AL"); 
+    else if((ajStrMatchC(BEnv, "E2")) && (SEnv == 'H'))
+	ajStrAssC(OEnv,"AM");
+    else if((ajStrMatchC(BEnv, "E2")) && (SEnv == 'S'))
+	ajStrAssC(OEnv,"AN");
+    else if((ajStrMatchC(BEnv, "E2")) && (SEnv == 'C'))
+	ajStrAssC(OEnv,"AO");
+    else if((ajStrMatchC(BEnv, "E3")) && (SEnv == 'H'))
+	ajStrAssC(OEnv,"AP");
+    else if((ajStrMatchC(BEnv, "E3")) && (SEnv == 'S'))
+	ajStrAssC(OEnv,"AQ");
+    else if((ajStrMatchC(BEnv, "E3")) && (SEnv == 'C'))
+	ajStrAssC(OEnv,"AR");
+    else if((ajStrMatchC(BEnv, "E4")) && (SEnv == 'H'))
+	ajStrAssC(OEnv,"AS");
+    else if((ajStrMatchC(BEnv, "E4")) && (SEnv == 'S'))
+	ajStrAssC(OEnv,"AT");
+    else if((ajStrMatchC(BEnv, "E4")) && (SEnv == 'C'))
+	ajStrAssC(OEnv,"AU");
+    else if((ajStrMatchC(BEnv, "E5")) && (SEnv == 'H'))
+	ajStrAssC(OEnv,"AV");
+    else if((ajStrMatchC(BEnv, "E5")) && (SEnv == 'S'))
+	ajStrAssC(OEnv,"AW");
+    else if((ajStrMatchC(BEnv, "E5")) && (SEnv == 'C'))
+	ajStrAssC(OEnv,"AX");
+    else
+    {
+	ajStrClear(OEnv); 
+	ajFmtPrintF(logf, "OEnv unassigned for residue %d\n", res->Idx);
+
+	ajStrDel(&BEnv);
+	return 0;
+    }
+
+    ajStrDel(&BEnv);
+
+    return 24;
+
+}
+
+
+
+
+
+
+
+
+
+/* @func ajResidueEnv7 ***********************************************************
+**
+** Assigns environment based on side chain accessibility and secondary 
+** structure.  Assigns environment of "*" as default.
+**
+** @param [r] res [const AjPResidue] Residue object
+** @param [r] SEnv [char]          Secondary structure environment code
+** @param [w] OEnv [AjPStr*]       Character for the overall environment class 
+** @param  [w] logf [AjPFile] Log file
+** @return [ajint] Number of environments
+** @@
+******************************************************************************/
+ajint   ajResidueEnv7(const AjPResidue res, char SEnv, AjPStr *OEnv, AjPFile logf)
+{
+    float BLimit=5; /* Upper limit for the relative solvent accessible
+		       area for a buried residue */
+    float PBLimit=25; /* Upper limit for the relative solvent
+  			 accessible area for a Parially buried residue */
+  
+    float PolLimit1=10;
+    float PolLimit2=50;
+    float PolLimit3=90;
+  
+    AjPStr   BEnv=NULL;
+
+    if(!res)
+    {
+	ajWarn("No residue to ajResidueEnv");
+	ajStrDel(&BEnv);
+	return 0;
+    }
+  
+    ajStrClear(OEnv);
+    BEnv=ajStrNew();
+
+    ajFmtPrintF(logf, "R:%c-%d S:%c A:%.2f f:%.2f\n",
+		res->Id1, res->Idx, res->eType,
+		res->side_rel, res->pol_rel);
+  
+    /*Assign the basic classes*/
+
+    /*Buried*/
+    if((res->side_rel <= BLimit) &&
+       (res->pol_rel <=PolLimit1))
+	ajStrAssC(&BEnv, "B1");  
+    else if((res->side_rel <= BLimit) &&
+	    (res->pol_rel > PolLimit1) &&
+	    (res->pol_rel <= PolLimit3))
+	ajStrAssC(&BEnv, "B2"); 
+    else if((res->side_rel <= BLimit) &&
+	    (res->pol_rel > PolLimit3))
+	ajStrAssC(&BEnv, "B3");
+    else if((res->side_rel > BLimit) &&
+	    (res->side_rel <= PBLimit))
+	ajStrAssC(&BEnv, "P");
+    else if((res->side_rel > PBLimit) &&
+	    (res->pol_rel <= PolLimit1))
+	ajStrAssC(&BEnv, "E1");
+    else if((res->side_rel > PBLimit) &&
+	    (res->pol_rel > PolLimit1) &&
+	    (res->pol_rel <= PolLimit2))
+	ajStrAssC(&BEnv, "E2");
+    else if((res->side_rel > PBLimit) &&
+	    (res->pol_rel > PolLimit2) &&
+	    (res->pol_rel <= PolLimit3))
+	ajStrAssC(&BEnv, "E3");
+    else if((res->side_rel > PBLimit) && (res->pol_rel > PolLimit3))
+	ajStrAssC(&BEnv, "E4");
+    else
+    {
+	ajStrClear(OEnv); 
+	ajFmtPrintF(logf, "BEnv unassigned for residue %d\n", res->Idx);
+
+	ajStrDel(&BEnv);
+	return 0;
+    }
+  
+    /*Assign overall environment class*/
+    if((ajStrMatchC(BEnv, "B1")) && (SEnv == 'H'))
+	ajStrAssC(OEnv,"AA");
+    else if((ajStrMatchC(BEnv, "B1")) && (SEnv == 'S'))
+	ajStrAssC(OEnv,"AB");
+    else if((ajStrMatchC(BEnv, "B1")) && (SEnv == 'C'))
+	ajStrAssC(OEnv,"AC");
+    else if((ajStrMatchC(BEnv, "B2")) && (SEnv == 'H'))
+	ajStrAssC(OEnv,"AD");
+    else if((ajStrMatchC(BEnv, "B2")) && (SEnv == 'S'))
+	ajStrAssC(OEnv,"AE");
+    else if((ajStrMatchC(BEnv, "B2")) && (SEnv == 'C'))
+	ajStrAssC(OEnv,"AF");
+    else if((ajStrMatchC(BEnv, "B3")) && (SEnv == 'H'))
+	ajStrAssC(OEnv,"AG");
+    else if((ajStrMatchC(BEnv, "B3")) && (SEnv == 'S'))
+	ajStrAssC(OEnv,"AH");
+    else if((ajStrMatchC(BEnv, "B3")) && (SEnv == 'C'))
+	ajStrAssC(OEnv,"AI");
+    else if((ajStrMatchC(BEnv, "P")) && (SEnv == 'H'))
+	ajStrAssC(OEnv,"AJ");
+    else if((ajStrMatchC(BEnv, "P")) && (SEnv == 'S'))
+	ajStrAssC(OEnv,"AK");
+    else if((ajStrMatchC(BEnv, "P")) && (SEnv == 'C'))
+	ajStrAssC(OEnv,"AL"); 
+    else if((ajStrMatchC(BEnv, "E1")) && (SEnv == 'H'))
+	ajStrAssC(OEnv,"AM");
+    else if((ajStrMatchC(BEnv, "E1")) && (SEnv == 'S'))
+	ajStrAssC(OEnv,"AN");
+    else if((ajStrMatchC(BEnv, "E1")) && (SEnv == 'C'))
+	ajStrAssC(OEnv,"AO");
+    else if((ajStrMatchC(BEnv, "E2")) && (SEnv == 'H'))
+	ajStrAssC(OEnv,"AP");
+    else if((ajStrMatchC(BEnv, "E2")) && (SEnv == 'S'))
+	ajStrAssC(OEnv,"AQ");
+    else if((ajStrMatchC(BEnv, "E2")) && (SEnv == 'C'))
+	ajStrAssC(OEnv,"AR");
+    else if((ajStrMatchC(BEnv, "E3")) && (SEnv == 'H'))
+	ajStrAssC(OEnv,"AS");
+    else if((ajStrMatchC(BEnv, "E3")) && (SEnv == 'S'))
+	ajStrAssC(OEnv,"AT");
+    else if((ajStrMatchC(BEnv, "E3")) && (SEnv == 'C'))
+	ajStrAssC(OEnv,"AU");
+    else if((ajStrMatchC(BEnv, "E4")) && (SEnv == 'H'))
+	ajStrAssC(OEnv,"AV");
+    else if((ajStrMatchC(BEnv, "E4")) && (SEnv == 'S'))
+	ajStrAssC(OEnv,"AW");
+    else if((ajStrMatchC(BEnv, "E4")) && (SEnv == 'C'))
+	ajStrAssC(OEnv,"AX");
+    else
+    {
+	ajStrClear(OEnv); 
+	ajFmtPrintF(logf, "OEnv unassigned for residue %d\n", res->Idx);
+
+	ajStrDel(&BEnv);
+	return 0;
+    }
+
+    ajStrDel(&BEnv);
+
+    return 24;
+
+}
+
+
+
+
+
+
+/* @func ajResidueEnv8 ***********************************************************
+**
+** Assigns environment based only of side chain accessibility and secondary 
+** structure.  Assigns environment of "*" as default.
+**
+** @param [r] res [const AjPResidue] Residue object
+** @param [r] SEnv [char]          Secondary structure environment code
+** @param [w] OEnv [AjPStr*]       Character for the overall environment class 
+** @param  [w] logf [AjPFile] Log file
+** @return [ajint] Number of environments
+** @@
+******************************************************************************/
+ajint   ajResidueEnv8(const AjPResidue res, char SEnv, AjPStr *OEnv, AjPFile logf)
+{
+    ajStrClear(OEnv);
+    if(SEnv=='\0')
+    {
+	ajStrClear(OEnv);
+	return 0;
+    }
+  
+    if((res->pol_rel <= 15) && (SEnv == 'H'))
+	ajStrAssC(OEnv,"AA");
+    else if((res->pol_rel <= 15) && (SEnv == 'S'))
+	ajStrAssC(OEnv,"AB");
+    else if((res->pol_rel <= 15) && (SEnv == 'C'))
+	ajStrAssC(OEnv,"AC");
+    else if((res->pol_rel > 15) && (res->pol_rel <= 30) && (SEnv == 'H'))
+	ajStrAssC(OEnv,"AD");
+    else if((res->pol_rel > 15) && (res->pol_rel <= 30) && (SEnv == 'S'))
+	ajStrAssC(OEnv,"AE");
+    else if((res->pol_rel > 15) && (res->pol_rel <= 30) && (SEnv == 'C'))
+	ajStrAssC(OEnv,"AF");
+    else if((res->pol_rel > 30) && (res->pol_rel <= 45) && (SEnv == 'H'))
+	ajStrAssC(OEnv,"AG");
+    else if((res->pol_rel > 30) && (res->pol_rel <= 45) && (SEnv == 'S'))
+	ajStrAssC(OEnv,"AH");
+    else if((res->pol_rel > 30) && (res->pol_rel <= 45) && (SEnv == 'C'))
+	ajStrAssC(OEnv,"AI");
+    else if((res->pol_rel > 45) && (res->pol_rel <= 60) && (SEnv == 'H'))
+	ajStrAssC(OEnv,"AJ");
+    else if((res->pol_rel > 45) && (res->pol_rel <= 60) && (SEnv == 'S'))
+	ajStrAssC(OEnv,"AK");
+    else if((res->pol_rel > 45) && (res->pol_rel <= 60) && (SEnv == 'C'))
+	ajStrAssC(OEnv,"AL");
+    else if((res->pol_rel > 60) && (res->pol_rel <= 75) && (SEnv == 'H'))
+	ajStrAssC(OEnv,"AM");
+    else if((res->pol_rel > 60) && (res->pol_rel <= 75) && (SEnv == 'S'))
+	ajStrAssC(OEnv,"AN");  
+    else if((res->pol_rel > 60) && (res->pol_rel <= 75) && (SEnv == 'C'))
+	ajStrAssC(OEnv,"AO"); 
+    else if((res->pol_rel > 75) && (res->pol_rel <= 90) && (SEnv == 'H'))
+	ajStrAssC(OEnv,"AP");
+    else if((res->pol_rel > 75) && (res->pol_rel <= 90) && (SEnv == 'S'))
+	ajStrAssC(OEnv,"AQ");
+    else if((res->pol_rel > 75) && (res->pol_rel <= 90) && (SEnv == 'C'))
+	ajStrAssC(OEnv,"AR");
+    else if((res->pol_rel > 90) && (SEnv == 'H'))
+	ajStrAssC(OEnv,"AS");  
+    else if((res->pol_rel > 90)&& (SEnv == 'S'))
+	ajStrAssC(OEnv,"AT");
+    else if((res->pol_rel > 90)&& (SEnv == 'C'))
+	ajStrAssC(OEnv,"AU");
+    else
+    {
+	ajStrClear(OEnv); 
+	ajFmtPrintF(logf, "OEnv unassigned for residue %d\n", res->Idx); 
+
+	return 0;
+    }
+
+    return 21;
+
+}
+
+
+
+
+
+
+/* @func ajResidueEnv9 ***********************************************************
+**
+** Assigns environment based only of side chain accessibility and secondary 
+** structure.  Assigns environment of "*" as default.
+**
+** @param [r] res [const AjPResidue] Residue object
+** @param [r] SEnv [char]          Secondary structure environment code
+** @param [w] OEnv [AjPStr*]       Character for the overall environment class 
+** @param  [w] logf [AjPFile] Log file
+** @return [ajint] Number of environments
+** @@
+******************************************************************************/
+ajint   ajResidueEnv9(const AjPResidue res, char SEnv, AjPStr *OEnv, AjPFile logf)
+{
+    ajStrClear(OEnv);
+    if(SEnv=='\0')
+    {
+	ajStrClear(OEnv);
+	return 0;
+    }
+  
+    if((res->pol_rel <= 5) && (SEnv == 'H'))
+	ajStrAssC(OEnv,"AA");
+    else if((res->pol_rel <= 5) && (SEnv == 'S'))
+	ajStrAssC(OEnv,"AB");
+    else if((res->pol_rel <= 5) && (SEnv == 'C'))
+	ajStrAssC(OEnv,"AC");
+    else if((res->pol_rel > 5) && (res->pol_rel <= 25) && (SEnv == 'H'))
+	ajStrAssC(OEnv,"AD");
+    else if((res->pol_rel > 5) && (res->pol_rel <= 25) && (SEnv == 'S'))
+	ajStrAssC(OEnv,"AE");
+    else if((res->pol_rel > 5) && (res->pol_rel <= 25) && (SEnv == 'C'))
+	ajStrAssC(OEnv,"AF");
+    else if((res->pol_rel > 25) && (SEnv == 'H'))
+	ajStrAssC(OEnv,"AG");
+    else if((res->pol_rel > 25) && (SEnv == 'S'))
+	ajStrAssC(OEnv,"AH");
+    else if((res->pol_rel > 25) && (SEnv == 'C'))
+	ajStrAssC(OEnv,"AI");
+    else
+    {
+	ajStrClear(OEnv);
+	ajFmtPrintF(logf, "OEnv unassigned for residue %d\n", res->Idx); 
+	
+	return 0;
+    }
+
+    return 9;
+
+}
+
+
+
+
+
+
+/* @func ajResidueEnv10 **********************************************************
+**
+** Assigns environment based on side chain accessibility and secondary 
+** structure.  Assigns environment of "*" as default.
+**
+** @param [r] res [const AjPResidue] Residue object
+** @param [r] SEnv [char]          Secondary structure environment code
+** @param [w] OEnv [AjPStr*]       Character for the overall environment class 
+** @param  [w] logf [AjPFile] Log file
+** @return [ajint] Number of environments
+** @@
+******************************************************************************/
+ajint   ajResidueEnv10(const AjPResidue res, char SEnv, AjPStr *OEnv, AjPFile logf)
+{
+    float BLimit=5; /* Upper limit for the relative solvent accessible
+		       area for a buried residue */
+    float PBLimit=25; /* Upper limit for the relative solvent
+  			 accessible area for a Parially buried residue */
+  
+    float HLimit=5; /* Upper limit for the fraction polar measure of a
+		       Hydrophobic residue */
+    float MPLimit=25; /* Upper limit for the fraction polar measure of
+  			 a Moderately oplar residue */
+  
+    AjPStr   BEnv=NULL;
+
+    if(!res)
+    {
+	ajWarn("No residue to ajResidueEnv");
+	return 0;
+    }
+  
+    ajStrClear(OEnv);
+    BEnv=ajStrNew();
+
+    ajFmtPrintF(logf, "R:%c-%d S:%c A:%.2f f:%.2f\n",
+		res->Id1, res->Idx, res->eType,
+		res->side_rel, res->pol_rel);
+  
+    /*Assign the basic classes*/
+  
+    /*Buried, Hydrophobic*/
+    if((res->side_rel <= BLimit) &&
+       (res->pol_rel <= HLimit))
+	ajStrAssC(&BEnv, "B1");  
+    /*buried, moderately polar*/
+    else if((res->side_rel <= BLimit) &&
+	    (res->pol_rel > HLimit) &&
+	    (res->pol_rel <= MPLimit)) 
+	ajStrAssC(&BEnv, "B2");
+    /*buried, polar*/
+    else if((res->side_rel <= BLimit) &&
+	    (res->pol_rel > MPLimit))
+	ajStrAssC(&BEnv, "B3");
+    /*Partially buried, moderately hydrophobic*/
+    else if((res->side_rel > BLimit) &&
+	    (res->side_rel <= PBLimit) &&
+	    (res->pol_rel <= HLimit))
+	ajStrAssC(&BEnv, "P1");
+    /*Partially buried, moderately polar*/
+    else if((res->side_rel > BLimit) &&
+	    (res->side_rel <= PBLimit) &&
+	    (res->pol_rel > HLimit) &&
+	    (res->pol_rel <= MPLimit))
+	ajStrAssC(&BEnv, "P2");
+    /*Partially buried, polar*/
+    else if((res->side_rel > BLimit) &&
+	    (res->side_rel <= PBLimit) && (res->pol_rel > MPLimit))
+	ajStrAssC(&BEnv, "P3");
+    /*Exposed, moderately polar*/
+    else if((res->side_rel > PBLimit) &&
+	    (res->pol_rel <= MPLimit))
+	ajStrAssC(&BEnv, "E1");
+    /*Exposed, polar*/
+    else if((res->side_rel > PBLimit) &&
+	    (res->pol_rel > MPLimit))
+	ajStrAssC(&BEnv, "E2");
+    else
+    {
+	 ajStrClear(OEnv);
+	ajFmtPrintF(logf, "BEnv unassigned for residue %d\n", res->Idx);
+	
+	ajStrDel(&BEnv);
+	return 0;
+    }
+  
+    /*Assign overall environment class*/
+    if((ajStrMatchC(BEnv, "B1")) && (SEnv == 'H'))
+	ajStrAssC(OEnv,"AA");
+    else if((ajStrMatchC(BEnv, "B1")) && (SEnv == 'S'))
+	ajStrAssC(OEnv,"AB");
+    else if((ajStrMatchC(BEnv, "B1")) && (SEnv == 'C'))
+	ajStrAssC(OEnv,"AC");
+    else if((ajStrMatchC(BEnv, "B2")) && (SEnv == 'H'))
+	ajStrAssC(OEnv,"AD");
+    else if((ajStrMatchC(BEnv, "B2")) && (SEnv == 'S'))
+	ajStrAssC(OEnv,"AE");
+    else if((ajStrMatchC(BEnv, "B2")) && (SEnv == 'C'))
+	ajStrAssC(OEnv,"AF");
+    else if((ajStrMatchC(BEnv, "B3")) && (SEnv == 'H'))
+	ajStrAssC(OEnv,"AG");
+    else if((ajStrMatchC(BEnv, "B3")) && (SEnv == 'S'))
+	ajStrAssC(OEnv,"AH");
+    else if((ajStrMatchC(BEnv, "B3")) && (SEnv == 'C'))
+	ajStrAssC(OEnv,"AI");
+    else if((ajStrMatchC(BEnv, "P1")) && (SEnv == 'H'))
+	ajStrAssC(OEnv,"AJ");
+    else if((ajStrMatchC(BEnv, "P1")) && (SEnv == 'S'))
+	ajStrAssC(OEnv,"AK");
+    else if((ajStrMatchC(BEnv, "P1")) && (SEnv == 'C'))
+	ajStrAssC(OEnv,"AL"); 
+    else if((ajStrMatchC(BEnv, "P2")) && (SEnv == 'H'))
+	ajStrAssC(OEnv,"AM");
+    else if((ajStrMatchC(BEnv, "P2")) && (SEnv == 'S'))
+	ajStrAssC(OEnv,"AN");
+    else if((ajStrMatchC(BEnv, "P2")) && (SEnv == 'C'))
+	ajStrAssC(OEnv,"AO");
+    else if((ajStrMatchC(BEnv, "P3")) && (SEnv == 'H'))
+	ajStrAssC(OEnv,"AP");
+    else if((ajStrMatchC(BEnv, "P3")) && (SEnv == 'S'))
+	ajStrAssC(OEnv,"AQ");
+    else if((ajStrMatchC(BEnv, "P3")) && (SEnv == 'C'))
+	ajStrAssC(OEnv,"AR");
+    else if((ajStrMatchC(BEnv, "E1")) && (SEnv == 'H'))
+	ajStrAssC(OEnv,"AS");
+    else if((ajStrMatchC(BEnv, "E1")) && (SEnv == 'S'))
+	ajStrAssC(OEnv,"AT");
+    else if((ajStrMatchC(BEnv, "E1")) && (SEnv == 'C'))
+	ajStrAssC(OEnv,"AU");
+    else if((ajStrMatchC(BEnv, "E2")) && (SEnv == 'H'))
+	ajStrAssC(OEnv,"AV");
+    else if((ajStrMatchC(BEnv, "E2")) && (SEnv == 'S'))
+	ajStrAssC(OEnv,"AW");
+    else if((ajStrMatchC(BEnv, "E2")) && (SEnv == 'C'))
+	ajStrAssC(OEnv,"AX");
+    else
+    {
+ 	ajStrClear(OEnv); 
+	ajFmtPrintF(logf, "OEnv unassigned for residue %d\n", res->Idx);
+
+	ajStrDel(&BEnv);
+	return 0;
+    }
+
+    ajStrDel(&BEnv);
+  
+    return 24;
+
+}
+
+
+
+
+
+
+
+
+
+
+/* @func ajResidueEnv11 **********************************************************
+**
+** Assigns environment based on side chain accessibility and secondary 
+** structure.  Assigns environment of "*" as default.
+**
+** @param [r] res [const AjPResidue] Residue object
+** @param [r] SEnv [char]          Secondary structure environment code
+** @param [w] OEnv [AjPStr*]       Character for the overall environment class 
+** @param  [w] logf [AjPFile] Log file
+** @return [ajint] Number of environments
+** @@
+******************************************************************************/
+ajint   ajResidueEnv11(const AjPResidue res, char SEnv, AjPStr *OEnv, AjPFile logf)
+{
+    float BLimit=5; /*Upper limit for the relative solvent accessible
+		      area for a buried residue*/
+    float PBLimit=25; /*Upper limit for the relative solvent
+			accessible area for a Parially buried
+			residue*/
+
+    float PolLimit1=10;
+    float PolLimit2=30;
+    float PolLimit3=50;
+    float PolLimit4=70;
+    float PolLimit5=90;
+
+  
+    AjPStr   BEnv=NULL;
+
+    if(!res)
+    {
+	ajWarn("No residue to ajResidueEnv");
+	return 0;
+    }
+  
+    ajStrClear(OEnv);
+    BEnv=ajStrNew();
+
+    ajFmtPrintF(logf, "R:%c-%d S:%c A:%.2f f:%.2f\n",
+		res->Id1, res->Idx, res->eType,
+		res->side_rel, res->pol_rel);
+  
+    /*Assign the basic classes*/
+  
+    if((res->side_rel <= BLimit) &&
+       (res->pol_rel <= PolLimit1))
+	ajStrAssC(&BEnv, "B1");    
+    else if((res->side_rel <= BLimit) &&
+	    (res->pol_rel > PolLimit1) &&
+	    (res->pol_rel <= PolLimit2)) 
+	ajStrAssC(&BEnv, "B2");
+    else if((res->side_rel <= BLimit) &&
+	    (res->pol_rel > PolLimit2) &&
+	    (res->pol_rel <= PolLimit3)) 
+	ajStrAssC(&BEnv, "B3");
+    else if((res->side_rel <= BLimit) &&
+	    (res->pol_rel > PolLimit3) &&
+	    (res->pol_rel <= PolLimit4)) 
+	ajStrAssC(&BEnv, "B4");
+    else if((res->side_rel <= BLimit) &&
+	    (res->pol_rel > PolLimit4) &&
+	    (res->pol_rel <= PolLimit5)) 
+	ajStrAssC(&BEnv, "B5");
+    else if((res->side_rel <= BLimit) &&
+	    (res->pol_rel > PolLimit5)) 
+	ajStrAssC(&BEnv, "B6");
+    else if((res->side_rel > BLimit) &&
+	    (res->side_rel <= PBLimit))
+	ajStrAssC(&BEnv, "P");
+    else if(res->side_rel > PBLimit)
+	ajStrAssC(&BEnv, "E");
+    else
+    {
+	ajStrClear(OEnv); 
+	ajFmtPrintF(logf, "BEnv unassigned for residue %d\n", res->Idx);
+
+	ajStrDel(&BEnv);
+	return 0;
+    }
+  
+    /*Assign overall environment class*/
+    if((ajStrMatchC(BEnv, "B1")) && (SEnv == 'H'))
+	ajStrAssC(OEnv,"AA");
+    else if((ajStrMatchC(BEnv, "B1")) && (SEnv == 'S'))
+	ajStrAssC(OEnv,"AB");
+    else if((ajStrMatchC(BEnv, "B1")) && (SEnv == 'C'))
+	ajStrAssC(OEnv,"AC");
+    else if((ajStrMatchC(BEnv, "B2")) && (SEnv == 'H'))
+	ajStrAssC(OEnv,"AD");
+    else if((ajStrMatchC(BEnv, "B2")) && (SEnv == 'S'))
+	ajStrAssC(OEnv,"AE");
+    else if((ajStrMatchC(BEnv, "B2")) && (SEnv == 'C'))
+	ajStrAssC(OEnv,"AF");
+    else if((ajStrMatchC(BEnv, "B3")) && (SEnv == 'H'))
+	ajStrAssC(OEnv,"AG");
+    else if((ajStrMatchC(BEnv, "B3")) && (SEnv == 'S'))
+	ajStrAssC(OEnv,"AH");
+    else if((ajStrMatchC(BEnv, "B3")) && (SEnv == 'C'))
+	ajStrAssC(OEnv,"AI");
+    else if((ajStrMatchC(BEnv, "B4")) && (SEnv == 'H'))
+	ajStrAssC(OEnv,"AJ");
+    else if((ajStrMatchC(BEnv, "B4")) && (SEnv == 'S'))
+	ajStrAssC(OEnv,"AK");
+    else if((ajStrMatchC(BEnv, "B4")) && (SEnv == 'C'))
+	ajStrAssC(OEnv,"AL"); 
+    else if((ajStrMatchC(BEnv, "B5")) && (SEnv == 'H'))
+	ajStrAssC(OEnv,"AM");
+    else if((ajStrMatchC(BEnv, "B5")) && (SEnv == 'S'))
+	ajStrAssC(OEnv,"AN");
+    else if((ajStrMatchC(BEnv, "B5")) && (SEnv == 'C'))
+	ajStrAssC(OEnv,"AO");
+    else if((ajStrMatchC(BEnv, "B6")) && (SEnv == 'H'))
+	ajStrAssC(OEnv,"AP");
+    else if((ajStrMatchC(BEnv, "B6")) && (SEnv == 'S'))
+	ajStrAssC(OEnv,"AQ");
+    else if((ajStrMatchC(BEnv, "B6")) && (SEnv == 'C'))
+	ajStrAssC(OEnv,"AR");
+    else if((ajStrMatchC(BEnv, "P")) && (SEnv == 'H'))
+	ajStrAssC(OEnv,"AS");
+    else if((ajStrMatchC(BEnv, "P")) && (SEnv == 'S'))
+	ajStrAssC(OEnv,"AT");
+    else if((ajStrMatchC(BEnv, "P")) && (SEnv == 'C'))
+	ajStrAssC(OEnv,"AU");
+    else if((ajStrMatchC(BEnv, "E")) && (SEnv == 'H'))
+	ajStrAssC(OEnv,"AV");
+    else if((ajStrMatchC(BEnv, "E")) && (SEnv == 'S'))
+	ajStrAssC(OEnv,"AW");
+    else if((ajStrMatchC(BEnv, "E")) && (SEnv == 'C'))
+	ajStrAssC(OEnv,"AX");
+    else
+    {
+	ajStrClear(OEnv);
+	ajFmtPrintF(logf, "OEnv unassigned for residue %d\n", res->Idx);
+
+	ajStrDel(&BEnv);
+	return 0;
+    }
+
+    ajStrDel(&BEnv);
+
+    return 24;
+
+} 
+
+
+
+
+
+
+
+/* @func ajResidueEnv12 **********************************************************
+**
+** Assigns environment based on side chain accessibility and secondary 
+** structure.  Assigns environment of "*" as default.
+**
+** @param [r] res [const AjPResidue] Residue object
+** @param [r] SEnv [char]          Secondary structure environment code
+** @param [w] OEnv [AjPStr*]       Character for the overall environment class 
+** @param  [w] logf [AjPFile] Log file
+** @return [ajint] Number of environments
+** @@
+******************************************************************************/
+ajint   ajResidueEnv12(const AjPResidue res, char SEnv, AjPStr *OEnv, AjPFile logf)
+{
+    float BLimit=5; /* Upper limit for the relative solvent accessible
+		       area for a buried residue */
+    float PBLimit=25; /* Upper limit for the relative solvent
+  			 accessible area for a Parially buried residue */
+  
+    float PolLimit1=10;
+    float PolLimit2=30;
+    float PolLimit3=50;
+    float PolLimit4=70;
+    float PolLimit5=90;
+
+  
+    AjPStr   BEnv=NULL;
+
+    if(!res)
+    {
+	ajWarn("No residue to ajResidueEnv");
+	return 0;
+    }
+  
+    ajStrClear(OEnv);
+    BEnv=ajStrNew();
+
+    ajFmtPrintF(logf, "R:%c-%d S:%c A:%.2f f:%.2f\n", res->Id1, res->Idx, res->eType, res->side_rel, res->pol_rel);
+  
+    /*Assign the basic classes*/
+  
+    if((res->side_rel <= BLimit))
+	ajStrAssC(&BEnv, "B");    
+    else if((res->side_rel > BLimit) &&
+	    (res->side_rel <= PBLimit) &&
+	    (res->pol_rel <= PolLimit1))
+	ajStrAssC(&BEnv, "P1");
+    else if((res->side_rel > BLimit) &&
+	    (res->side_rel <= PBLimit) &&
+	    (res->pol_rel > PolLimit1) &&
+	    (res->pol_rel <= PolLimit2))
+	ajStrAssC(&BEnv, "P2");
+    else if((res->side_rel > BLimit) &&
+	    (res->side_rel <= PBLimit) &&
+	    (res->pol_rel > PolLimit2) &&
+	    (res->pol_rel <= PolLimit3))
+	ajStrAssC(&BEnv, "P3");
+    else if((res->side_rel > BLimit) &&
+	    (res->side_rel <= PBLimit) &&
+	    (res->pol_rel > PolLimit3) &&
+	    (res->pol_rel <= PolLimit4))
+	ajStrAssC(&BEnv, "P4");
+    else if((res->side_rel > BLimit) &&
+	    (res->side_rel <= PBLimit) &&
+	    (res->pol_rel > PolLimit4) &&
+	    (res->pol_rel <= PolLimit5))
+	ajStrAssC(&BEnv, "P5");
+    else if((res->side_rel > BLimit) &&
+	    (res->side_rel <= PBLimit) &&
+	    (res->pol_rel > PolLimit5))
+	ajStrAssC(&BEnv, "P6");
+    else if(res->side_rel > PBLimit)
+	ajStrAssC(&BEnv, "E"); 
+    else
+    {
+	ajStrClear(OEnv);
+	ajFmtPrintF(logf, "BEnv unassigned for residue %d\n", res->Idx);
+	ajStrDel(&BEnv);
+	return 0;
+    }
+  
+    /*Assign overall environment class*/
+    if((ajStrMatchC(BEnv, "B")) && (SEnv == 'H'))
+	ajStrAssC(OEnv,"AA");
+    else if((ajStrMatchC(BEnv, "B")) && (SEnv == 'S'))
+	ajStrAssC(OEnv,"AB");
+    else if((ajStrMatchC(BEnv, "B")) && (SEnv == 'C'))
+	ajStrAssC(OEnv,"AC");
+    else if((ajStrMatchC(BEnv, "P1")) && (SEnv == 'H'))
+	ajStrAssC(OEnv,"AD");
+    else if((ajStrMatchC(BEnv, "P1")) && (SEnv == 'S'))
+	ajStrAssC(OEnv,"AE");
+    else if((ajStrMatchC(BEnv, "P1")) && (SEnv == 'C'))
+	ajStrAssC(OEnv,"AF");
+    else if((ajStrMatchC(BEnv, "P2")) && (SEnv == 'H'))
+	ajStrAssC(OEnv,"AG");
+    else if((ajStrMatchC(BEnv, "P2")) && (SEnv == 'S'))
+	ajStrAssC(OEnv,"AH");
+    else if((ajStrMatchC(BEnv, "P2")) && (SEnv == 'C'))
+	ajStrAssC(OEnv,"AI");
+    else if((ajStrMatchC(BEnv, "P3")) && (SEnv == 'H'))
+	ajStrAssC(OEnv,"AJ");
+    else if((ajStrMatchC(BEnv, "P3")) && (SEnv == 'S'))
+	ajStrAssC(OEnv,"AK");
+    else if((ajStrMatchC(BEnv, "P3")) && (SEnv == 'C'))
+	ajStrAssC(OEnv,"AL"); 
+    else if((ajStrMatchC(BEnv, "P4")) && (SEnv == 'H'))
+	ajStrAssC(OEnv,"AM");
+    else if((ajStrMatchC(BEnv, "P4")) && (SEnv == 'S'))
+	ajStrAssC(OEnv,"AN");
+    else if((ajStrMatchC(BEnv, "P4")) && (SEnv == 'C'))
+	ajStrAssC(OEnv,"AO");
+    else if((ajStrMatchC(BEnv, "P5")) && (SEnv == 'H'))
+	ajStrAssC(OEnv,"AP");
+    else if((ajStrMatchC(BEnv, "P5")) && (SEnv == 'S'))
+	ajStrAssC(OEnv,"AQ");
+    else if((ajStrMatchC(BEnv, "P5")) && (SEnv == 'C'))
+	ajStrAssC(OEnv,"AR");
+    else if((ajStrMatchC(BEnv, "P6")) && (SEnv == 'H'))
+	ajStrAssC(OEnv,"AS");
+    else if((ajStrMatchC(BEnv, "P6")) && (SEnv == 'S'))
+	ajStrAssC(OEnv,"AT");
+    else if((ajStrMatchC(BEnv, "P6")) && (SEnv == 'C'))
+	ajStrAssC(OEnv,"AU");
+    else if((ajStrMatchC(BEnv, "E")) && (SEnv == 'H'))
+	ajStrAssC(OEnv,"AV");
+    else if((ajStrMatchC(BEnv, "E")) && (SEnv == 'S'))
+	ajStrAssC(OEnv,"AW");
+    else if((ajStrMatchC(BEnv, "E")) && (SEnv == 'C'))
+	ajStrAssC(OEnv,"AX");
+    else
+    {
+	ajStrClear(OEnv); 
+	ajFmtPrintF(logf, "OEnv unassigned for residue %d\n", res->Idx);
+
+	ajStrDel(&BEnv);
+	return 0;
+    }
+
+    ajStrDel(&BEnv);
+
+    return 24;
+
+} 
+
+
+
+
+
+
+
+
+
+/* @func ajResidueEnv13 **********************************************************
+**
+** Assigns environment based on side chain accessibility and secondary 
+** structure.  Assigns environment of "*" as default.
+**
+** @param [r] res [const AjPResidue] Residue object
+** @param [r] SEnv [char]          Secondary structure environment code
+** @param [w] OEnv [AjPStr*]       Character for the overall environment class 
+** @param  [w] logf [AjPFile] Log file
+** @return [ajint] Number of environments
+** @@
+******************************************************************************/
+ajint   ajResidueEnv13(const AjPResidue res, char SEnv, AjPStr *OEnv, AjPFile logf)
+{
+    float BLimit=5; /* Upper limit for the relative solvent accessible
+		       area for a buried residue */
+    float PBLimit=25; /* Upper limit for the relative solvent
+  			 accessible area for a Parially buried residue */
+  
+    float PolLimit1=10;
+    float PolLimit2=30;
+    float PolLimit3=50;
+    float PolLimit4=70;
+    float PolLimit5=90;
+
+    AjPStr   BEnv=NULL;
+
+    if(!res)
+    {
+	ajWarn("No residue to ajResidueEnv");
+	return 0;
+    }
+  
+    ajStrClear(OEnv);
+    BEnv=ajStrNew();
+
+    ajFmtPrintF(logf, "R:%c-%d S:%c A:%.2f f:%.2f\n",
+		res->Id1, res->Idx, res->eType,
+		res->side_rel, res->pol_rel);
+  
+    /*Assign the basic classes*/
+    if((res->side_rel <= BLimit))
+	ajStrAssC(&BEnv, "B");    
+    else if((res->side_rel > BLimit) &&
+	    (res->side_rel <= PBLimit))
+	ajStrAssC(&BEnv, "P");
+    else if((res->side_rel > PBLimit) &&
+	    (res->pol_rel <= PolLimit1))
+	ajStrAssC(&BEnv, "E1");
+    else if((res->side_rel > PBLimit) &&
+	    (res->pol_rel > PolLimit1) &&
+	    (res->pol_rel <= PolLimit2))
+	ajStrAssC(&BEnv, "E2");
+    else if((res->side_rel > PBLimit) &&
+	    (res->pol_rel > PolLimit2) &&
+	    (res->pol_rel <= PolLimit3))
+	ajStrAssC(&BEnv, "E3");
+    else if((res->side_rel > PBLimit) &&
+	    (res->pol_rel > PolLimit3) &&
+	    (res->pol_rel <= PolLimit4))
+	ajStrAssC(&BEnv, "E4"); 
+    else if((res->side_rel > PBLimit) &&
+	    (res->pol_rel > PolLimit4) &&
+	    (res->pol_rel <= PolLimit5))
+	ajStrAssC(&BEnv, "E5"); 
+    else if((res->side_rel > PBLimit) &&
+	    (res->pol_rel > PolLimit5))
+	ajStrAssC(&BEnv, "E6");
+    else
+    {
+ 	ajStrClear(OEnv); 
+	ajFmtPrintF(logf, "BEnv unassigned for residue %d\n", res->Idx);
+
+	ajStrDel(&BEnv);
+	return 0;
+    }
+  
+    /*Assign overall environment class*/
+    if((ajStrMatchC(BEnv, "B")) && (SEnv == 'H'))
+	ajStrAssC(OEnv,"AA");
+    else if((ajStrMatchC(BEnv, "B")) && (SEnv == 'S'))
+	ajStrAssC(OEnv,"AB");
+    else if((ajStrMatchC(BEnv, "B")) && (SEnv == 'C'))
+	ajStrAssC(OEnv,"AC");
+    else if((ajStrMatchC(BEnv, "P")) && (SEnv == 'H'))
+	ajStrAssC(OEnv,"AD");
+    else if((ajStrMatchC(BEnv, "P")) && (SEnv == 'S'))
+	ajStrAssC(OEnv,"AE");
+    else if((ajStrMatchC(BEnv, "P")) && (SEnv == 'C'))
+	ajStrAssC(OEnv,"AF");
+    else if((ajStrMatchC(BEnv, "E1")) && (SEnv == 'H'))
+	ajStrAssC(OEnv,"AG");
+    else if((ajStrMatchC(BEnv, "E1")) && (SEnv == 'S'))
+	ajStrAssC(OEnv,"AH");
+    else if((ajStrMatchC(BEnv, "E1")) && (SEnv == 'C'))
+	ajStrAssC(OEnv,"AI");
+    else if((ajStrMatchC(BEnv, "E2")) && (SEnv == 'H'))
+	ajStrAssC(OEnv,"AJ");
+    else if((ajStrMatchC(BEnv, "E2")) && (SEnv == 'S'))
+	ajStrAssC(OEnv,"AK");
+    else if((ajStrMatchC(BEnv, "E2")) && (SEnv == 'C'))
+	ajStrAssC(OEnv,"AL"); 
+    else if((ajStrMatchC(BEnv, "E3")) && (SEnv == 'H'))
+	ajStrAssC(OEnv,"AM");
+    else if((ajStrMatchC(BEnv, "E3")) && (SEnv == 'S'))
+	ajStrAssC(OEnv,"AN");
+    else if((ajStrMatchC(BEnv, "E3")) && (SEnv == 'C'))
+	ajStrAssC(OEnv,"AO");
+    else if((ajStrMatchC(BEnv, "E4")) && (SEnv == 'H'))
+	ajStrAssC(OEnv,"AP");
+    else if((ajStrMatchC(BEnv, "E4")) && (SEnv == 'S'))
+	ajStrAssC(OEnv,"AQ");
+    else if((ajStrMatchC(BEnv, "E4")) && (SEnv == 'C'))
+	ajStrAssC(OEnv,"AR");
+    else if((ajStrMatchC(BEnv, "E5")) && (SEnv == 'H'))
+	ajStrAssC(OEnv,"AS");
+    else if((ajStrMatchC(BEnv, "E5")) && (SEnv == 'S'))
+	ajStrAssC(OEnv,"AT");
+    else if((ajStrMatchC(BEnv, "E5")) && (SEnv == 'C'))
+	ajStrAssC(OEnv,"AU");
+    else if((ajStrMatchC(BEnv, "E6")) && (SEnv == 'H'))
+	ajStrAssC(OEnv,"AV");
+    else if((ajStrMatchC(BEnv, "E6")) && (SEnv == 'S'))
+	ajStrAssC(OEnv,"AW");
+    else if((ajStrMatchC(BEnv, "E6")) && (SEnv == 'C'))
+	ajStrAssC(OEnv,"AX");
+    else
+    {
+	ajStrClear(OEnv); 
+	ajFmtPrintF(logf, "OEnv unassigned for residue %d\n", res->Idx);
+
+	ajStrDel(&BEnv);
+	return 0;
+    }
+
+    ajStrDel(&BEnv);
+
+    return 24;
+
+} 
+
+
+
+
+
+
+
+
+/* @func ajResidueEnv14 **********************************************************
+**
+** Assigns environment based on side chain accessibility and secondary 
+** structure.  Assigns environment of "*" as default.
+**
+** @param [r] res [const AjPResidue] Residue object
+** @param [r] SEnv [char]          Secondary structure environment code
+** @param [w] OEnv [AjPStr*]       Character for the overall environment class 
+** @param  [w] logf [AjPFile] Log file
+** @return [ajint] Number of environments
+** @@
+******************************************************************************/
+ajint   ajResidueEnv14(const AjPResidue res, char SEnv, AjPStr *OEnv, AjPFile logf)
+{
+    float PBLimit=25; /* Upper limit for the relative solvent
+  			accessible area for a Parially buried residue */
+  
+    float PolLimit1=5;
+    float PolLimit2=15;
+    float PolLimit3=25;
+    float PolLimit4=40;
+    float PolLimit5=60;
+    float PolLimit6=80;
+ 
+
+    AjPStr   BEnv=NULL;
+
+    if(!res)
+    {
+	ajWarn("No residue to ajResidueEnv");
+	return 0;
+    }
+  
+    ajStrClear(OEnv);
+    BEnv=ajStrNew();
+
+    ajFmtPrintF(logf, "R:%c-%d S:%c A:%.2f f:%.2f\n",
+		res->Id1, res->Idx, res->eType,
+		res->side_rel, res->pol_rel);
+
+    if((res->side_rel <= PBLimit) &&
+       (res->pol_rel <= PolLimit1))
+	ajStrAssC(&BEnv, "B1");
+    else if((res->side_rel <= PBLimit) &&
+	    (res->pol_rel > PolLimit1) &&
+	    (res->pol_rel <= PolLimit2))
+	ajStrAssC(&BEnv, "B2");
+    else if((res->side_rel <= PBLimit) &&
+	    (res->pol_rel > PolLimit2) &&
+	    (res->pol_rel <= PolLimit3))
+	ajStrAssC(&BEnv, "B3");
+    else if((res->side_rel <= PBLimit) &&
+	    (res->pol_rel > PolLimit3) &&
+	    (res->pol_rel <= PolLimit4))
+	ajStrAssC(&BEnv, "B4");
+    else if((res->side_rel <= PBLimit) &&
+	    (res->pol_rel > PolLimit4) &&
+	    (res->pol_rel <= PolLimit5))
+	ajStrAssC(&BEnv, "B5");
+    else if((res->side_rel <= PBLimit) &&
+	    (res->pol_rel > PolLimit5) &&
+	    (res->pol_rel <= PolLimit6))
+	ajStrAssC(&BEnv, "B6");
+    else if((res->side_rel <= PBLimit) &&
+	    (res->pol_rel > PolLimit6))
+	ajStrAssC(&BEnv, "B7");
+    else if((res->side_rel > PBLimit))
+	ajStrAssC(&BEnv, "E");
+    else
+    {
+ 	ajStrClear(OEnv);
+	ajFmtPrintF(logf, "BEnv unassigned for residue %d\n", res->Idx);
+
+	ajStrDel(&BEnv);
+	return 0;
+    }
+
+    /*Assign overall environment class*/
+    if((ajStrMatchC(BEnv, "B1")) && (SEnv == 'H'))
+	ajStrAssC(OEnv,"AA");
+    else if((ajStrMatchC(BEnv, "B1")) && (SEnv == 'S'))
+	ajStrAssC(OEnv,"AB");
+    else if((ajStrMatchC(BEnv, "B1")) && (SEnv == 'C'))
+	ajStrAssC(OEnv,"AC");
+    else if((ajStrMatchC(BEnv, "B2")) && (SEnv == 'H'))
+	ajStrAssC(OEnv,"AD");
+    else if((ajStrMatchC(BEnv, "B2")) && (SEnv == 'S'))
+	ajStrAssC(OEnv,"AE");
+    else if((ajStrMatchC(BEnv, "B2")) && (SEnv == 'C'))
+	ajStrAssC(OEnv,"AF");
+    else if((ajStrMatchC(BEnv, "B3")) && (SEnv == 'H'))
+	ajStrAssC(OEnv,"AG");
+    else if((ajStrMatchC(BEnv, "B3")) && (SEnv == 'S'))
+	ajStrAssC(OEnv,"AH");
+    else if((ajStrMatchC(BEnv, "B3")) && (SEnv == 'C'))
+	ajStrAssC(OEnv,"AI");
+    else if((ajStrMatchC(BEnv, "B4")) && (SEnv == 'H'))
+	ajStrAssC(OEnv,"AJ");
+    else if((ajStrMatchC(BEnv, "B4")) && (SEnv == 'S'))
+	ajStrAssC(OEnv,"AK");
+    else if((ajStrMatchC(BEnv, "B4")) && (SEnv == 'C'))
+	ajStrAssC(OEnv,"AL"); 
+    else if((ajStrMatchC(BEnv, "B5")) && (SEnv == 'H'))
+	ajStrAssC(OEnv,"AM");
+    else if((ajStrMatchC(BEnv, "B5")) && (SEnv == 'S'))
+	ajStrAssC(OEnv,"AN");
+    else if((ajStrMatchC(BEnv, "B5")) && (SEnv == 'C'))
+	ajStrAssC(OEnv,"AO");
+    else if((ajStrMatchC(BEnv, "B6")) && (SEnv == 'H'))
+	ajStrAssC(OEnv,"AP");
+    else if((ajStrMatchC(BEnv, "B6")) && (SEnv == 'S'))
+	ajStrAssC(OEnv,"AQ");
+    else if((ajStrMatchC(BEnv, "B6")) && (SEnv == 'C'))
+	ajStrAssC(OEnv,"AR");
+    else if((ajStrMatchC(BEnv, "B7")) && (SEnv == 'H'))
+	ajStrAssC(OEnv,"AS");
+    else if((ajStrMatchC(BEnv, "B7")) && (SEnv == 'S'))
+	ajStrAssC(OEnv,"AT");
+    else if((ajStrMatchC(BEnv, "B7")) && (SEnv == 'C'))
+	ajStrAssC(OEnv,"AU");
+    else if((ajStrMatchC(BEnv, "E")) && (SEnv == 'H'))
+	ajStrAssC(OEnv,"AV");
+    else if((ajStrMatchC(BEnv, "E")) && (SEnv == 'S'))
+	ajStrAssC(OEnv,"AW");
+    else if((ajStrMatchC(BEnv, "E")) && (SEnv == 'C'))
+	ajStrAssC(OEnv,"AX");
+    else
+    {
+	ajStrClear(OEnv); 
+	ajFmtPrintF(logf, "OEnv unassigned for residue %d\n", res->Idx);
+
+	ajStrDel(&BEnv);
+	return 0;
+    }
+
+    ajStrDel(&BEnv);
+    return 24;
+
+} 
+
+
+
+
+
+
+
+/* @func ajResidueEnv15 **********************************************************
+**
+** Assigns environment based on side chain accessibility and secondary 
+** structure.   Assigns environment of "*" as default.
+**
+** @param [r] res [const AjPResidue] Residue object
+** @param [r] SEnv [char]          Secondary structure environment code
+** @param [w] OEnv [AjPStr*]       Character for the overall environment class 
+** @param  [w] logf [AjPFile] Log file
+** @return [ajint] Number of environments
+** @@
+******************************************************************************/
+ajint   ajResidueEnv15(const AjPResidue res, char SEnv, AjPStr *OEnv, AjPFile logf)
+{
+    float PBLimit=25;			/* Upper limit for the
+  					   relative solvent accessible
+  					   area for a Parially buried
+  					   residue */
+  
+    float PolLimit1=5;
+    float PolLimit2=15;
+    float PolLimit3=25;
+    float PolLimit4=35;
+    float PolLimit5=45;
+    float PolLimit6=75;
+ 
+
+    AjPStr   BEnv=NULL;
+
+    if(!res)
+    {
+	ajWarn("No residue to ajResidueEnv");
+	return 0;
+    }
+  
+    ajStrClear(OEnv);
+    BEnv=ajStrNew();
+
+    ajFmtPrintF(logf, "R:%c-%d S:%c A:%.2f f:%.2f\n",
+		res->Id1, res->Idx, res->eType,
+		res->side_rel, res->pol_rel);
+
+    if((res->side_rel <= PBLimit) && (res->pol_rel <= PolLimit1))
+	ajStrAssC(&BEnv, "B1");
+    else if((res->side_rel <= PBLimit) &&
+	    (res->pol_rel > PolLimit1) &&
+	    (res->pol_rel <= PolLimit2))
+	ajStrAssC(&BEnv, "B2");
+    else if((res->side_rel <= PBLimit) &&
+	    (res->pol_rel > PolLimit2) &&
+	    (res->pol_rel <= PolLimit3))
+	ajStrAssC(&BEnv, "B3");
+    else if((res->side_rel <= PBLimit) &&
+	    (res->pol_rel > PolLimit3) &&
+	    (res->pol_rel <= PolLimit4))
+	ajStrAssC(&BEnv, "B4");
+    else if((res->side_rel <= PBLimit) &&
+	    (res->pol_rel > PolLimit4) &&
+	    (res->pol_rel <= PolLimit5))
+	ajStrAssC(&BEnv, "B5");
+    else if((res->side_rel <= PBLimit) &&
+	    (res->pol_rel > PolLimit5) &&
+	    (res->pol_rel <= PolLimit6))
+	ajStrAssC(&BEnv, "B6");
+    else if((res->side_rel <= PBLimit) &&
+	    (res->pol_rel > PolLimit6))
+	ajStrAssC(&BEnv, "B7");
+    else if((res->side_rel > PBLimit))
+	ajStrAssC(&BEnv, "E");
+    else
+    {
+	ajStrClear(OEnv); 
+	ajFmtPrintF(logf, "BEnv unassigned for residue %d\n", res->Idx);
+
+	ajStrDel(&BEnv);
+	return 0;
+    }
+
+    /*Assign overall environment class*/
+    if((ajStrMatchC(BEnv, "B1")) && (SEnv == 'H'))
+	ajStrAssC(OEnv,"AA");
+    else if((ajStrMatchC(BEnv, "B1")) && (SEnv == 'S'))
+	ajStrAssC(OEnv,"AB");
+    else if((ajStrMatchC(BEnv, "B1")) && (SEnv == 'C'))
+	ajStrAssC(OEnv,"AC");
+    else if((ajStrMatchC(BEnv, "B2")) && (SEnv == 'H'))
+	ajStrAssC(OEnv,"AD");
+    else if((ajStrMatchC(BEnv, "B2")) && (SEnv == 'S'))
+	ajStrAssC(OEnv,"AE");
+    else if((ajStrMatchC(BEnv, "B2")) && (SEnv == 'C'))
+	ajStrAssC(OEnv,"AF");
+    else if((ajStrMatchC(BEnv, "B3")) && (SEnv == 'H'))
+	ajStrAssC(OEnv,"AG");
+    else if((ajStrMatchC(BEnv, "B3")) && (SEnv == 'S'))
+	ajStrAssC(OEnv,"AH");
+    else if((ajStrMatchC(BEnv, "B3")) && (SEnv == 'C'))
+	ajStrAssC(OEnv,"AI");
+    else if((ajStrMatchC(BEnv, "B4")) && (SEnv == 'H'))
+	ajStrAssC(OEnv,"AJ");
+    else if((ajStrMatchC(BEnv, "B4")) && (SEnv == 'S'))
+	ajStrAssC(OEnv,"AK");
+    else if((ajStrMatchC(BEnv, "B4")) && (SEnv == 'C'))
+	ajStrAssC(OEnv,"AL"); 
+    else if((ajStrMatchC(BEnv, "B5")) && (SEnv == 'H'))
+	ajStrAssC(OEnv,"AM");
+    else if((ajStrMatchC(BEnv, "B5")) && (SEnv == 'S'))
+	ajStrAssC(OEnv,"AN");
+    else if((ajStrMatchC(BEnv, "B5")) && (SEnv == 'C'))
+	ajStrAssC(OEnv,"AO");
+    else if((ajStrMatchC(BEnv, "B6")) && (SEnv == 'H'))
+	ajStrAssC(OEnv,"AP");
+    else if((ajStrMatchC(BEnv, "B6")) && (SEnv == 'S'))
+	ajStrAssC(OEnv,"AQ");
+    else if((ajStrMatchC(BEnv, "B6")) && (SEnv == 'C'))
+	ajStrAssC(OEnv,"AR");
+    else if((ajStrMatchC(BEnv, "B7")) && (SEnv == 'H'))
+	ajStrAssC(OEnv,"AS");
+    else if((ajStrMatchC(BEnv, "B7")) && (SEnv == 'S'))
+	ajStrAssC(OEnv,"AT");
+    else if((ajStrMatchC(BEnv, "B7")) && (SEnv == 'C'))
+	ajStrAssC(OEnv,"AU");
+    else if((ajStrMatchC(BEnv, "E")) && (SEnv == 'H'))
+	ajStrAssC(OEnv,"AV");
+    else if((ajStrMatchC(BEnv, "E")) && (SEnv == 'S'))
+	ajStrAssC(OEnv,"AW");
+    else if((ajStrMatchC(BEnv, "E")) && (SEnv == 'C'))
+	ajStrAssC(OEnv,"AX");
+    else
+    {
+	ajStrClear(OEnv); 
+	ajFmtPrintF(logf, "OEnv unassigned for residue %d\n", res->Idx);
+
+	ajStrDel(&BEnv);
+	return 0;
+    }
+
+    ajStrDel(&BEnv);
+
+    return 24;
+} 
+
+
+
+
+
+
+
+
+/* @func ajResidueEnv16 **********************************************************
+**
+** Assigns environment based on side chain accessibility and secondary 
+** structure.  Assigns environment of "*" as default.
+**
+** @param [r] res [const AjPResidue] Residue object
+** @param [r] SEnv [char]          Secondary structure environment code
+** @param [w] OEnv [AjPStr*]       Character for the overall environment class 
+** @param  [w] logf [AjPFile] Log file
+** @return [ajint] Number of environments
+** @@
+******************************************************************************/
+ajint   ajResidueEnv16(const AjPResidue res, char SEnv, AjPStr *OEnv, AjPFile logf)
+{
+    float BLimit=5; /* Upper limit for the relative solvent accessible
+		       area for a buried residue */
+  
+    float PolLimit1=5;
+    float PolLimit2=15;
+    float PolLimit3=25;
+    float PolLimit4=35;
+    float PolLimit5=45;
+    float PolLimit6=75;
+ 
+
+    AjPStr   BEnv=NULL;
+
+    if(!res)
+    {
+	ajWarn("No residue to ajResidueEnv");
+	return 0;
+    }
+  
+    ajStrClear(OEnv);
+    BEnv=ajStrNew();
+
+    ajFmtPrintF(logf, "R:%c-%d S:%c A:%.2f f:%.2f\n",
+		res->Id1, res->Idx, 
+		res->eType, res->side_rel, res->pol_rel);
+
+    if((res->side_rel <= BLimit) &&
+       (res->pol_rel <= PolLimit1))
+	ajStrAssC(&BEnv, "B1");
+    else if((res->side_rel <= BLimit) &&
+	    (res->pol_rel > PolLimit1) &&
+	    (res->pol_rel <= PolLimit2))
+	ajStrAssC(&BEnv, "B2");
+    else if((res->side_rel <= BLimit) &&
+	    (res->pol_rel > PolLimit2) &&
+	    (res->pol_rel <= PolLimit3))
+	ajStrAssC(&BEnv, "B3");
+    else if((res->side_rel <= BLimit) &&
+	    (res->pol_rel > PolLimit3) &&
+	    (res->pol_rel <= PolLimit4))
+	ajStrAssC(&BEnv, "B4");
+    else if((res->side_rel <= BLimit) &&
+	    (res->pol_rel > PolLimit4) &&
+	    (res->pol_rel <= PolLimit5))
+	ajStrAssC(&BEnv, "B5");
+    else if((res->side_rel <= BLimit) &&
+	    (res->pol_rel > PolLimit5) &&
+	    (res->pol_rel <= PolLimit6))
+	ajStrAssC(&BEnv, "B6");
+    else if((res->side_rel <= BLimit) &&
+	    (res->pol_rel > PolLimit6))
+	ajStrAssC(&BEnv, "B7");
+    else if((res->side_rel > BLimit))
+	ajStrAssC(&BEnv, "E");
+    else
+    {
+	ajStrClear(OEnv); 
+	ajFmtPrintF(logf, "BEnv unassigned for residue %d\n", res->Idx);
+
+	ajStrDel(&BEnv);
+	return 0;
+    }
+
+    /*Assign overall environment class*/
+    if((ajStrMatchC(BEnv, "B1")) && (SEnv == 'H'))
+	ajStrAssC(OEnv,"AA");
+    else if((ajStrMatchC(BEnv, "B1")) && (SEnv == 'S'))
+	ajStrAssC(OEnv,"AB");
+    else if((ajStrMatchC(BEnv, "B1")) && (SEnv == 'C'))
+	ajStrAssC(OEnv,"AC");
+    else if((ajStrMatchC(BEnv, "B2")) && (SEnv == 'H'))
+	ajStrAssC(OEnv,"AD");
+    else if((ajStrMatchC(BEnv, "B2")) && (SEnv == 'S'))
+	ajStrAssC(OEnv,"AE");
+    else if((ajStrMatchC(BEnv, "B2")) && (SEnv == 'C'))
+	ajStrAssC(OEnv,"AF");
+    else if((ajStrMatchC(BEnv, "B3")) && (SEnv == 'H'))
+	ajStrAssC(OEnv,"AG");
+    else if((ajStrMatchC(BEnv, "B3")) && (SEnv == 'S'))
+	ajStrAssC(OEnv,"AH");
+    else if((ajStrMatchC(BEnv, "B3")) && (SEnv == 'C'))
+	ajStrAssC(OEnv,"AI");
+    else if((ajStrMatchC(BEnv, "B4")) && (SEnv == 'H'))
+	ajStrAssC(OEnv,"AJ");
+    else if((ajStrMatchC(BEnv, "B4")) && (SEnv == 'S'))
+	ajStrAssC(OEnv,"AK");
+    else if((ajStrMatchC(BEnv, "B4")) && (SEnv == 'C'))
+	ajStrAssC(OEnv,"AL"); 
+    else if((ajStrMatchC(BEnv, "B5")) && (SEnv == 'H'))
+	ajStrAssC(OEnv,"AM");
+    else if((ajStrMatchC(BEnv, "B5")) && (SEnv == 'S'))
+	ajStrAssC(OEnv,"AN");
+    else if((ajStrMatchC(BEnv, "B5")) && (SEnv == 'C'))
+	ajStrAssC(OEnv,"AO");
+    else if((ajStrMatchC(BEnv, "B6")) && (SEnv == 'H'))
+	ajStrAssC(OEnv,"AP");
+    else if((ajStrMatchC(BEnv, "B6")) && (SEnv == 'S'))
+	ajStrAssC(OEnv,"AQ");
+    else if((ajStrMatchC(BEnv, "B6")) && (SEnv == 'C'))
+	ajStrAssC(OEnv,"AR");
+    else if((ajStrMatchC(BEnv, "B7")) && (SEnv == 'H'))
+	ajStrAssC(OEnv,"AS");
+    else if((ajStrMatchC(BEnv, "B7")) && (SEnv == 'S'))
+	ajStrAssC(OEnv,"AT");
+    else if((ajStrMatchC(BEnv, "B7")) && (SEnv == 'C'))
+	ajStrAssC(OEnv,"AU");
+    else if((ajStrMatchC(BEnv, "E")) && (SEnv == 'H'))
+	ajStrAssC(OEnv,"AV");
+    else if((ajStrMatchC(BEnv, "E")) && (SEnv == 'S'))
+	ajStrAssC(OEnv,"AW");
+    else if((ajStrMatchC(BEnv, "E")) && (SEnv == 'C'))
+	ajStrAssC(OEnv,"AX");
+    else
+    {
+	ajStrClear(OEnv); 
+	ajFmtPrintF(logf, "OEnv unassigned for residue %d\n", res->Idx);
+
+	ajStrDel(&BEnv);
+	return 0;
+    }
+
+
+    ajStrDel(&BEnv);
+
+    return 24;
+
+} 
+
+
+
+
+
+
 /* @func ajPdbGetEStrideType ************************************************
 **
 ** Reads a Pdb object and writes a string with the secondary structure. The
@@ -2658,10 +5618,9 @@ AjBool ajPdbCopy(AjPPdb *to, const AjPPdb from)
 
 ajint  ajPdbGetEStrideType(const AjPPdb obj, ajint chn, AjPStr *EStrideType)
 {
-    AjPAtom tmp    = NULL;
-    AjIList iter   = NULL;
-    ajint idx      = 0;
-    ajint last_res = -10000;
+    AjPResidue tmp    = NULL;
+    AjIList    iter   = NULL;
+    ajint      idx    = 0;
     
 
     if(!obj || !EStrideType || (chn<1))
@@ -2687,20 +5646,11 @@ ajint  ajPdbGetEStrideType(const AjPPdb obj, ajint chn, AjPStr *EStrideType)
     }
     
     /* Set all positions to . */
-    ajStrAppKI(EStrideType,  (const char) ".", obj->Chains[idx]->Nres);   
+    ajStrAppKI(EStrideType,  (const char) '.', obj->Chains[idx]->Nres);   
 
-    iter=ajListIterRead(obj->Chains[idx]->Atoms);
-    while((tmp=(AjPAtom)ajListIterNext(iter)))
-    {
-	/* New residue */
-	if(tmp->Idx != last_res)
-	{
-	    (*EStrideType)->Ptr[tmp->Idx-1] = tmp->eStrideType;
-	    last_res = tmp->Idx;
-	}
-	else
-	    continue;
-    }
+    iter=ajListIterRead(obj->Chains[idx]->Residues); 
+    while((tmp=(AjPResidue)ajListIterNext(iter)))
+	(*EStrideType)->Ptr[tmp->Idx-1] = tmp->eStrideType;
     
 
     ajListIterFree(&iter);
@@ -2859,10 +5809,11 @@ ajint ajPdbtospArrFindPdbid(const AjPPdbtosp *arr, ajint siz, const AjPStr id)
 
 AjBool ajPdbWriteAll(AjPFile outf, const AjPPdb obj)
 {
-    ajint x      = 0;
-    ajint y      = 0;
-    AjIList iter = NULL;
-    AjPAtom tmp  = NULL;
+    ajint x         = 0;
+    ajint y         = 0;
+    AjIList iter    = NULL;
+    AjPAtom tmp     = NULL;
+    AjPResidue tmpr = NULL;
     
     /* Write the header information */
 
@@ -2934,7 +5885,73 @@ AjBool ajPdbWriteAll(AjPFile outf, const AjPPdb obj)
     
     
 
-    /* Write coordinate list */
+    /* Write RESIDUES list */
+    for(x=1;x<=obj->Nmod;x++)
+    {
+	for(y=0;y<obj->Nchn;y++)
+	{
+	    iter=ajListIterRead(obj->Chains[y]->Residues);
+	    while(ajListIterMore(iter))
+	    {
+		tmpr=(AjPResidue)ajListIterNext(iter);
+		if(tmpr->Mod>x)
+		    break;
+		else if(tmpr->Mod!=x)
+		    continue;
+		else	
+		{
+		    ajFmtPrintF(outf, "%-5s%-5d%-5d%-5d%-6S%-2c%-6S", 
+				"RE", 
+				tmpr->Mod, 
+				tmpr->Chn, 
+				tmpr->Idx, 
+				tmpr->Pdb,
+				tmpr->Id1, 
+				tmpr->Id3);
+		    
+			
+		    if(tmpr->eNum != 0)
+			ajFmtPrintF(outf, "%-5d", tmpr->eNum);
+		    else
+			ajFmtPrintF(outf, "%-5c", '.');
+		    ajFmtPrintF(outf, "%-5S%-5c", tmpr->eId, tmpr->eType);
+
+		    if(tmpr->eType == 'H')
+			ajFmtPrintF(outf, "%-5d", tmpr->eClass);
+		    else
+			ajFmtPrintF(outf, "%-5c", '.');
+		    
+		    if(tmpr->eStrideNum != 0)
+			ajFmtPrintF(outf, "%-5d", tmpr->eStrideNum);
+		    else
+			ajFmtPrintF(outf, "%-5c", '.');
+		    ajFmtPrintF(outf, "%-5c", tmpr->eStrideType);
+
+
+		    ajFmtPrintF(outf, "%8.2f%8.2f%8.2f%8.2f%8.2f"
+				"%8.2f%8.2f%8.2f%8.2f%8.2f%8.2f%8.2f"
+				"%8.2f\n", 
+				tmpr->Phi,
+				tmpr->Psi,
+				tmpr->Area, 
+				tmpr->all_abs, 
+				tmpr->all_rel, 
+				tmpr->side_abs, 
+				tmpr->side_rel, 
+				tmpr->main_abs, 
+				tmpr->main_rel, 
+				tmpr->npol_abs, 
+				tmpr->npol_rel, 
+				tmpr->pol_abs, 
+				tmpr->pol_rel);
+		}
+	    }
+	    ajListIterFree(&iter);			
+	} 	
+    }
+
+
+    /* Write ATOMS list */
     for(x=1;x<=obj->Nmod;x++)
     {
 	for(y=0;y<obj->Nchn;y++)
@@ -2951,105 +5968,42 @@ AjBool ajPdbWriteAll(AjPFile outf, const AjPPdb obj)
 		else	
 		{
 		    if(tmp->Type=='H')
-			ajFmtPrintF(outf, "%-5s%-5d%-5d%-5d%-5c%-6c%-6S%-5c"
-				    "%-5c%-5c%-5c%-5c%-5c%-2c"
-				    "%6S    %-4S"
-				    "%8.3f%9.3f%9.3f%8.2f%8.2f%8.2f%8.2f"
-				    "%8.2f%8.2f%8.2f%8.2f%8.2f%8.2f%8.2f"
-				    "%8.2f%8.2f%8.2f%8.2f\n", 
-				    "CO", 
+			ajFmtPrintF(outf, "%-5s%-5d%-5d%-5d%-5c%-6S%-2c%-6S%-2c%-6S"
+				    "%9.3f%9.3f%9.3f%8.2f%8.2f\n", 
+				    "AT", 
 				    tmp->Mod, 
 				    tmp->Chn, 
 				    tmp->Gpn, 
-				    tmp->Type, 
 				    '.',
 				    tmp->Pdb, 
-				    '.', 
-				    '.', 
-				    '.', 
-				    '.', 
-				    '.', 
-				    '.', 
 				    tmp->Id1,
 				    tmp->Id3,
+				    tmp->Type, 
 				    tmp->Atm, 
 				    tmp->X, 
 				    tmp->Y, 
 				    tmp->Z,
 				    tmp->O,
-				    tmp->B, 
-				    tmp->Phi,
-				    tmp->Psi,
-				    tmp->Area, 
-				    tmp->all_abs, 
-				    tmp->all_rel, 
-				    tmp->side_abs, 
-				    tmp->side_rel, 
-				    tmp->main_abs, 
-				    tmp->main_rel, 
-				    tmp->npol_abs, 
-				    tmp->npol_rel, 
-				    tmp->pol_abs, 
-				    tmp->pol_rel);
+				    tmp->B);
 		    else
 		    {
-			ajFmtPrintF(outf, "%-5s%-5d%-5d%-5c%-5c%-6d%-6S%-5c", 
-				    "CO", 
+			ajFmtPrintF(outf, "%-5s%-5d%-5d%-5c%-5d%-6S%-2c%-6S%-2c%-6S"
+				    "%9.3f%9.3f%9.3f%8.2f%8.2f\n", 
+				    "AT", 
 				    tmp->Mod, 
 				    tmp->Chn, 
-				    '.',
-				    tmp->Type, 
+				    '.', 
 				    tmp->Idx, 
-				    tmp->Pdb,
-				    tmp->eType);
-			
-			if(tmp->eNum != 0)
-			    ajFmtPrintF(outf, "%-5d", tmp->eNum);
-			else
-			    ajFmtPrintF(outf, "%-5c", '.');
-
-
-			ajFmtPrintF(outf, "%-5S", tmp->eId);
-
-			if(tmp->eType == 'H')
-			    ajFmtPrintF(outf, "%-5d", tmp->eClass);
-			else
-			    ajFmtPrintF(outf, "%-5c", '.');
-
-
-			ajFmtPrintF(outf, "%-5c", tmp->eStrideType);
-			if(tmp->eStrideNum != 0)
-			    ajFmtPrintF(outf, "%-5d", tmp->eStrideNum);
-			else
-			    ajFmtPrintF(outf, "%-5c", '.');
-
-
-
-			ajFmtPrintF(outf, "%-2c%6S    %-4S%8.3f%9.3f%9.3f"
-				    "%8.2f%8.2f%8.2f%8.2f%8.2f%8.2f%8.2f"
-				    "%8.2f%8.2f%8.2f%8.2f%8.2f%8.2f%8.2f"
-				    "%8.2f\n", 
-				    tmp->Id1, 
+				    tmp->Pdb, 
+				    tmp->Id1,
 				    tmp->Id3,
+				    tmp->Type, 
 				    tmp->Atm, 
 				    tmp->X, 
 				    tmp->Y, 
 				    tmp->Z,
 				    tmp->O,
-				    tmp->B,
-				    tmp->Phi,
-				    tmp->Psi,
-				    tmp->Area, 
-				    tmp->all_abs, 
-				    tmp->all_rel, 
-				    tmp->side_abs, 
-				    tmp->side_rel, 
-				    tmp->main_abs, 
-				    tmp->main_rel, 
-				    tmp->npol_abs, 
-				    tmp->npol_rel, 
-				    tmp->pol_abs, 
-				    tmp->pol_rel);
+				    tmp->B);
 		    }
 		}
 	    }
@@ -3067,46 +6021,23 @@ AjBool ajPdbWriteAll(AjPFile outf, const AjPPdb obj)
 		continue;
 	    else	
 	    {
-		ajFmtPrintF(outf, "%-5s%-5d%-5c%-5d%-5c%-6c%-6S%-5c%-5c%-5c"
-			    "%-5c%-5c%-5c%-2c"
-			    "%6S    %-4S"
-			    "%8.3f%9.3f%9.3f%8.2f%8.2f%8.2f%8.2f%8.2f%8.2f"
-			    "%8.2f%8.2f%8.2f%8.2f%8.2f%8.2f%8.2f%8.2f%8.2f\n", 
-			    "CO", 
+		ajFmtPrintF(outf, "%-5s%-5d%-5c%-5d%-5c%-6S%-2c%-6S%-2c%-6S"
+			    "%9.3f%9.3f%9.3f%8.2f%8.2f\n", 
+			    "AT", 
 			    tmp->Mod, 
-			    '.',
+			    '.', 
 			    tmp->Gpn, 
-			    tmp->Type, 
-			    '.', 
-			    tmp->Pdb, 
-			    '.', 
-			    '.', 
-			    '.', 
-			    '.', 
-			    '.', 
 			    '.',
+			    tmp->Pdb,
 			    tmp->Id1,
 			    tmp->Id3,
+			    tmp->Type, 
 			    tmp->Atm, 
 			    tmp->X, 
 			    tmp->Y, 
 			    tmp->Z,
 			    tmp->O,
-			    tmp->B,
-			    tmp->Phi,
-			    tmp->Psi,
-			    tmp->Area, 
-			    tmp->all_abs, 
-			    tmp->all_rel, 
-			    tmp->side_abs, 
-			    tmp->side_rel, 
-			    tmp->main_abs, 
-			    tmp->main_rel, 
-			    tmp->npol_abs, 
-			    tmp->npol_rel, 
-			    tmp->pol_abs, 
-			    tmp->pol_rel);
-
+			    tmp->B);
 	    }
 	}
 	ajListIterFree(&iter);			
@@ -3123,49 +6054,28 @@ AjBool ajPdbWriteAll(AjPFile outf, const AjPPdb obj)
 		continue;
 	    else	
 	    {
-		ajFmtPrintF(outf, "%-5s%-5d%-5c%-5c%-5c%-6c%-6S%-5c%-5c"
-			    "%-5c%-5c%-5c%-5c%-2c"
-			    "%6S    %-4S"
-			    "%8.3f%9.3f%9.3f%8.2f%8.2f%8.2f%8.2f%8.2f%8.2f"
-			    "%8.2f%8.2f%8.2f%8.2f%8.2f%8.2f%8.2f%8.2f%8.2f\n",
-			    "CO", 
+		ajFmtPrintF(outf, "%-5s%-5d%-5c%-5c%-5c%-6S%-2c%-6S%-2c%-6S"
+			    "%9.3f%9.3f%9.3f%8.2f%8.2f\n",
+			    "AT", 
 			    tmp->Mod, 
 			    '.', 
 			    '.', 
-			    tmp->Type, 
-			    '.', 
+			    '.',
 			    tmp->Pdb, 
-			    '.', 
-			    '.', 
-			    '.', 
-			    '.',
-			    '.', 
-			    '.',
 			    tmp->Id1,
 			    tmp->Id3,
+			    tmp->Type, 
 			    tmp->Atm, 
 			    tmp->X, 
 			    tmp->Y, 
 			    tmp->Z,
 			    tmp->O,
-			    tmp->B, 
-			    tmp->Phi,
-			    tmp->Psi,
-			    tmp->Area, 
-			    tmp->all_abs, 
-			    tmp->all_rel, 
-			    tmp->side_abs, 
-			    tmp->side_rel, 
-			    tmp->main_abs, 
-			    tmp->main_rel, 
-			    tmp->npol_abs, 
-			    tmp->npol_rel, 
-			    tmp->pol_abs, 
-			    tmp->pol_rel);
+			    tmp->B);
 	    }
 	}
 	ajListIterFree(&iter);			
     }
+
     ajFmtPrintF(outf, "//\n");    
 
 
@@ -3177,7 +6087,7 @@ AjBool ajPdbWriteAll(AjPFile outf, const AjPPdb obj)
 
 
 
-/* @func ajPbdWriteSegment *************************************************
+/* @func ajPdbWriteSegment *************************************************
 **
 ** Writes a clean coordinate file for a segment, e.g. a domain. The segment 
 ** corresponds to a sequence that is passed to the function.
@@ -3195,7 +6105,7 @@ AjBool ajPdbWriteAll(AjPFile outf, const AjPPdb obj)
 ** @@
 ** 
 ****************************************************************************/
-AjBool ajPbdWriteSegment(AjPFile outf, const AjPPdb pdb, const AjPStr segment, 
+AjBool ajPdbWriteSegment(AjPFile outf, const AjPPdb pdb, const AjPStr segment, 
 			  char chnid, const AjPStr domain, AjPFile errf)
 {
     ajint chn;
@@ -3203,11 +6113,13 @@ AjBool ajPbdWriteSegment(AjPFile outf, const AjPPdb pdb, const AjPStr segment,
     ajint end       = 0;
     char  id;
     
-    AjIList  iter        = NULL;
-    AjPAtom  atm         = NULL;
-    AjPAtom  atm2        = NULL;
-    AjBool   found_start = ajFalse;
-    AjBool   found_end   = ajFalse;    
+    AjIList    iter        = NULL;
+    AjPAtom    atm         = NULL;
+    AjPAtom    atm2        = NULL;
+    AjPResidue res         = NULL;
+    AjPResidue res2        = NULL;
+    AjBool     found_start = ajFalse;
+    AjBool     found_end   = ajFalse;    
 
 
    
@@ -3290,6 +6202,85 @@ AjBool ajPbdWriteSegment(AjPFile outf, const AjPPdb pdb, const AjPStr segment,
     /* Initialise the iterator */
     iter = ajListIterRead(pdb->Chains[chn-1]->Atoms);
     
+
+
+    /* Iterate through the list of residues */
+    while((res=(AjPResidue)ajListIterNext(iter)))
+    {
+	if(res->Mod!=1)
+	    break;
+	if(!found_start)
+	{
+	    if(res->Idx == start)
+		found_start = ajTrue;	
+	    else		
+		continue;
+	}	
+	if(!found_end)
+	{
+	    if(res->Idx == end)
+		found_end = ajTrue;     
+	}
+	/*  The end position has been found, and the current residue is 
+	 ** not the final residue.
+	 */
+	else if(res->Idx != end && found_end)
+	    break;
+	    
+	    
+	/* Print out coordinate line */
+	ajFmtPrintF(outf, "%-5s%-5d%-5d%-5d%-6S%-2c%-6S", 
+		    "RE", 
+		    res->Mod, 
+		    1, 		/* chn number is always given as 1 */
+		    res->Idx-start+1, 
+		    res->Pdb,
+		    res->Id1, 
+		    res->Id3);
+
+	if(res->eNum != 0)
+	    ajFmtPrintF(outf, "%-5d", res->eNum);
+	else
+	    ajFmtPrintF(outf, "%-5c", '.');
+	ajFmtPrintF(outf, "%-5S%-5c", res->eId, res->eType);
+	
+	if(res->eType == 'H')
+	    ajFmtPrintF(outf, "%-5d", res->eClass);
+	else
+	    ajFmtPrintF(outf, "%-5c", '.');
+	
+	if(res->eStrideNum != 0)
+	    ajFmtPrintF(outf, "%-5d", res->eStrideNum);
+	else
+	    ajFmtPrintF(outf, "%-5c", '.');
+	ajFmtPrintF(outf, "%-5c", res->eStrideType);
+	
+	
+	ajFmtPrintF(outf, "%8.2f%8.2f%8.2f%8.2f%8.2f"
+		    "%8.2f%8.2f%8.2f%8.2f%8.2f%8.2f%8.2f"
+		    "%8.2f\n", 
+		    res->Phi,
+		    res->Psi,
+		    res->Area, 
+		    res->all_abs, 
+		    res->all_rel, 
+		    res->side_abs, 
+		    res->side_rel, 
+		    res->main_abs, 
+		    res->main_rel, 
+		    res->npol_abs, 
+		    res->npol_rel, 
+		    res->pol_abs, 
+		    res->pol_rel);
+	
+		    
+	/* Assign pointer for this chain */
+	res2 = res;
+    }
+    
+    ajListIterFree(&iter);			
+    
+
     
     /* Iterate through the list of atoms */
     while((atm=(AjPAtom)ajListIterNext(iter)))
@@ -3318,59 +6309,24 @@ AjBool ajPbdWriteSegment(AjPFile outf, const AjPPdb pdb, const AjPStr segment,
 	    
 	    
 	/* Print out coordinate line */
-	ajFmtPrintF(outf, "%-5s%-5d%-5d%-5c%-5c%-6d%-6S%-5c",
-		    "CO", 
-		    atm->Mod,		/* It will always be 1 */
-		    1,			/* chn number is always given as 1 */
-		    '.',
-		    atm->Type, 
+	ajFmtPrintF(outf, "%-5s%-5d%-5d%-5c%-5d%-6S%-2c%-6S%-2c%-6S"
+		    "%9.3f%9.3f%9.3f%8.2f%8.2f\n"
+		    "AT", 
+		    atm->Mod, /* It will always be 1 */
+		    1, 	      /* chn number is always given as 1 */ 
+		    '.', 
 		    atm->Idx-start+1, 
 		    atm->Pdb, 
-		    atm->eType);
-	if(atm->eNum != 0)
-	    ajFmtPrintF(outf, "%-5d", atm->eNum);
-	else
-	    ajFmtPrintF(outf, "%-5c", '.');
-	ajFmtPrintF(outf, "%-5S", atm->eId);
-
-	if(atm->eType == 'H')
-	    ajFmtPrintF(outf, "%-5d", atm->eClass);
-	else
-	    ajFmtPrintF(outf, "%-5c", '.');
-
-
-	ajFmtPrintF(outf, "%-5c", atm->eStrideType);
-	if(atm->eStrideNum != 0)
-	    ajFmtPrintF(outf, "%-5d", atm->eStrideNum);
-	else
-	    ajFmtPrintF(outf, "%-5c", '.');
-
-	ajFmtPrintF(outf, "%-2c%6S    %-4S%8.3f%9.3f%9.3f%8.2f%8.2f"
-		    "%8.2f%8.2f%8.2f%8.2f%8.2f%8.2f%8.2f%8.2f%8.2f"
-		    "%8.2f%8.2f%8.2f%8.2f\n", 
-		    atm->Id1, 
+		    atm->Id1,
 		    atm->Id3,
+		    atm->Type, 
 		    atm->Atm, 
 		    atm->X, 
 		    atm->Y, 
-		    atm->Z, 
-		    atm->O, 
-		    atm->B,
-		    atm->Phi,
-		    atm->Psi,
-		    atm->Area, 
-		    atm->all_abs, 
-		    atm->all_rel, 
-		    atm->side_abs, 
-		    atm->side_rel, 
-		    atm->main_abs, 
-		    atm->main_rel, 
-		    atm->npol_abs, 
-		    atm->npol_rel, 
-		    atm->pol_abs, 
-		    atm->pol_rel);
-	    
-	    
+		    atm->Z,
+		    atm->O,
+		    atm->B);
+	
 	/* Assign pointer for this chain */
 	atm2 = atm;
     }
@@ -3452,7 +6408,7 @@ AjBool ajHetWrite(AjPFile outf, const AjPHet obj, AjBool dogrep)
 **
 ****************************************************************************/
 
-AjBool       ajPdbtospWrite(AjPFile outf, const AjPList list)
+AjBool   ajPdbtospWrite(AjPFile outf, const AjPList list)
 {
     AjIList    iter = NULL;
     AjPPdbtosp tmp  = NULL;
@@ -3480,6 +6436,204 @@ AjBool       ajPdbtospWrite(AjPFile outf, const AjPList list)
 
     return ajTrue;
 }
+
+
+
+/* @func ajCmapWrite *****************************************************
+**
+** Write a Cmap object to file in CON format (see documentation for 
+** DOMAINATRIX "contacts" application). 
+** 
+** @param [u] outf    [AjPFile]  Output file stream.
+** @param [r] cmap    [const AjPCmap]  Cmap object pointer.
+**
+** @return [AjBool] True on success (object was written succesfully)
+** @category output [AjPCmap] Write Cmap object to file in CON format.
+** @@
+****************************************************************************/
+AjBool   ajCmapWrite(AjPFile outf, const AjPCmap cmap)
+{
+    ajint x = 0;
+    ajint y = 0;
+    AjPStr Id=NULL;
+    AjPStr Domid=NULL;
+    AjPStr Ligid=NULL;
+    AjPStr res1=NULL;
+    AjPStr res2=NULL;
+
+    Id    = ajStrNew();
+    Domid = ajStrNew();
+    Ligid = ajStrNew();
+    res1 = ajStrNew();
+    res2 = ajStrNew();
+    
+
+    if(!cmap || !outf)
+    {
+	ajStrDel(&Id);
+	ajStrDel(&Domid);
+	ajStrDel(&Ligid);
+	ajStrDel(&res1);
+	ajStrDel(&res2);
+	
+	return ajFalse;
+    }
+    
+    
+    /* EN */
+    ajFmtPrintF(outf, "%-5s[%d]\n", "EN", cmap->en);
+    ajFmtPrintF(outf, "XX\n");  
+
+    /* ID */
+    if(MAJSTRLEN(cmap->Id))
+	ajStrAssS(&Id, cmap->Id);
+    else
+	ajStrAssC(&Id, ".");
+
+    if(MAJSTRLEN(cmap->Domid))
+	ajStrAssS(&Domid, cmap->Domid);
+    else
+	ajStrAssC(&Domid, ".");
+
+    if(MAJSTRLEN(cmap->Ligid))
+	ajStrAssS(&Ligid, cmap->Ligid);
+    else
+	ajStrAssC(&Ligid, ".");
+
+    
+    ajFmtPrintF(outf, "%-5sPDB %S; DOM %S; LIG %S;\n", 
+		"ID", 
+		Id, Domid, Ligid);
+    ajFmtPrintF(outf, "XX\n");  
+
+    
+    /* DE */
+    ajFmtPrintF(outf, "DE   %S\n", cmap->Desc);
+    ajFmtPrintF(outf, "XX\n");
+
+    /* SI */
+    ajFmtPrintF(outf, "%-5sSN %d; NS %d\n", "SI", cmap->sn, cmap->ns);
+    ajFmtPrintF(outf, "XX\n");
+    
+    /* CN */
+    if((cmap->Type ==  ajINTRA)||(cmap->Type ==  ajLIGAND))
+	ajFmtPrintF(outf, "%-5sMO .; CN1 %d; CN2 .; ID1 %c; ID2 .; "
+		    "NRES1 %d; NRES2 .\n",
+		    "CN", 
+		    cmap->Chn1, 
+		    cmap->Chid1, 
+		    cmap->Nres1);
+    else if(cmap->Type ==  ajINTER)
+	ajFmtPrintF(outf, "%-5sMO .; CN1 %d; CN2 %d; ID1 %c; ID2 %c; "
+		    "NRES1 %d; NRES2 %d\n",
+		    "CN", 
+		    cmap->Chn1, 
+		    cmap->Chn2, 
+		    cmap->Chid1, 
+		    cmap->Chid2, 
+		    cmap->Nres1,
+		    cmap->Nres2);
+    else
+	ajFatal("cmap type not known in ajCmapWrite");
+
+    
+    /* S1 */
+    if(MAJSTRLEN(cmap->Seq1))
+    {
+	ajSeqWriteXyz(outf, cmap->Seq1, "S1");
+	ajFmtPrintF(outf, "XX\n");	
+    }
+    
+
+    /* S2 */
+    if(cmap->Type ==  ajINTER)
+    {
+	if(MAJSTRLEN(cmap->Seq2))
+	{
+	    ajSeqWriteXyz(outf, cmap->Seq2, "S2");
+	    ajFmtPrintF(outf, "XX\n");	
+	}
+    }
+    
+    /* NC */
+    if((cmap->Type ==  ajINTRA)||(cmap->Type ==  ajINTER))
+    {
+	ajFmtPrintF(outf, "%-5sSM %d; LI .\n", "NC", cmap->Ncon);
+	ajFmtPrintF(outf, "XX\n");  
+    }
+    else
+    {
+	ajFmtPrintF(outf, "%-5sSM .; LI %d\n", "NC", cmap->Ncon);
+	ajFmtPrintF(outf, "XX\n");  
+    }
+
+    /* SM or LI */
+    if(cmap->Type ==  ajINTRA)    
+    {
+	for(x=0; x<cmap->Nres1; x++)
+	    for(y=x+1; y<cmap->Nres1; y++)
+	    {	
+		if((ajInt2dGet(cmap->Mat, x, y)==1))
+		{
+		    /* Assign residue id. */
+		    if(!ajBaseAa1ToAa3(ajStrChar(cmap->Seq1, x), &res1))
+			ajFatal("Index out of range in ajCmapWrite");
+		
+		    if(!ajBaseAa1ToAa3(ajStrChar(cmap->Seq1, y), &res2))
+			ajFatal("Index out of range in ajCmapWrite");
+
+		    /* Print out the contact. */
+		    ajFmtPrintF(outf, "%-5s%S %d ; %S %d\n", "SM", res1, x+1, 
+				res2, y+1);	
+		}
+	    }
+    }
+    else if(cmap->Type ==  ajINTER)    
+    {
+	for(x=0; x<cmap->Nres1; x++)
+	    for(y=x+1; y<cmap->Nres2; y++)
+	    {	
+		if((ajInt2dGet(cmap->Mat, x, y)==1))
+		{
+		    /* Assign residue id. */
+		    if(!ajBaseAa1ToAa3(ajStrChar(cmap->Seq1, x), &res1))
+			ajFatal("Index out of range in ajCmapWrite");
+		
+		    if(!ajBaseAa1ToAa3(ajStrChar(cmap->Seq2, y), &res2))
+			ajFatal("Index out of range in ajCmapWrite");
+
+		    /* Print out the contact. */
+		    ajFmtPrintF(outf, "%-5s%S %d ; %S %d\n", "SM", res1, x+1, 
+				res2, y+1);	
+		}
+	    }
+    }
+    else if(cmap->Type ==  ajLIGAND)    
+    {
+	for(x=0; x<cmap->Nres1; x++)
+	    if((ajInt2dGet(cmap->Mat, 0, x)==1))
+	    {
+		/* Assign residue id. */
+		if(!ajBaseAa1ToAa3(ajStrChar(cmap->Seq1, x), &res1))
+		    ajFatal("Index out of range in ajCmapWrite");
+		
+		/* Print out the contact. */
+		ajFmtPrintF(outf, "%-5s%S %d\n", "LI", res1, x+1);
+	    }
+    }
+    
+    ajFmtPrintF(outf, "//\n");
+
+    ajStrDel(&Id);
+    ajStrDel(&Domid);
+    ajStrDel(&Ligid);
+    ajStrDel(&res1);
+    ajStrDel(&res2);
+    return ajTrue;
+}
+
+
+
 
 
 

@@ -530,9 +530,20 @@ AjBool embDmxHitsWrite(AjPFile outf, const AjPHitlist hits, ajint maxhits)
 
     /*Print SCOP classification records of signature */
     ajFmtPrintF(outf,"CL   %S",hits->Class);
+
+    ajFmtPrintSplit(outf,hits->Fold,"FO   ",75," \t\n\r");
+    ajFmtPrintF(outf, "XX\n");
+    ajFmtPrintSplit(outf,hits->Superfamily,"SF   ",75," \t\n\r");
+    ajFmtPrintF(outf, "XX\n");
+    ajFmtPrintSplit(outf,hits->Family,"FA   ",75," \t\n\r");
+    ajFmtPrintF(outf, "XX\n");
+
+    /*
     ajFmtPrintSplit(outf,hits->Fold,"\nXX\nFO   ",75," \t\n\r");
     ajFmtPrintSplit(outf,hits->Superfamily,"XX\nSF   ",75," \t\n\r");
     ajFmtPrintSplit(outf,hits->Family,"XX\nFA   ",75," \t\n\r");
+    */
+
     ajFmtPrintF(outf,"XX\nSI   %d\n", hits->Sunid_Family);
     ajFmtPrintF(outf,"XX\n");
     
@@ -1933,6 +1944,173 @@ AjBool embDmxSeqCompall(const AjPList input, AjPFloat2d *scores,
     AJFREE(inseqs);
 
     return ajTrue;
+}
+
+
+
+
+/* @func embDmxScophitReadAllFasta ********************************************
+**
+** Reads a DHF file and returns a list of Scophit objects. 
+** Parsing routine is identical to embHitlistReadFasta.
+** 
+** @param [u] inf      [AjPFile]  DHF file.
+**
+** @return [AjPList] List of Scophit object pointers, or NULL (error).
+** @@
+******************************************************************************/
+
+AjPList  embDmxScophitReadAllFasta(AjPFile inf)
+{
+    AjPScophit hit       = NULL;    /* Current hit.                     */
+    AjPList    tmplist   = NULL;    /* Temp. list of hits               */
+    AjBool     donefirst = ajFalse; /* Read first code line.            */
+    ajint     ntok       = 0;       /* No. tokens in a line.            */
+    AjPStr    token      = NULL;
+    AjPStr    line       = NULL;    /* Line of text.                    */
+    AjPStr    subline    = NULL;
+    AjBool    ok         = ajFalse;
+    AjBool    parseok    = ajFalse;
+    AjPStr    type       = NULL;
+    
+
+    /* Allocate strings */
+    line     = ajStrNew();
+    subline  = ajStrNew();
+    tmplist  = ajListNew();
+    type     = ajStrNew();
+    
+
+    while((ok = ajFileReadLine(inf,&line)))
+    {
+	if(ajStrPrefixC(line,">"))
+	{
+	    /* Process the last hit */
+	    if(donefirst)
+	    {
+		if(MAJSTRLEN(hit->Seq))
+		    ajStrCleanWhite(&hit->Seq);
+		ajListPushApp(tmplist, hit);
+	    }
+	    
+	    /* Check line has correct no. of tokens and allocate Hit */
+	    ajStrAssSub(&subline, line, 1, -1);
+	    if( (ntok=ajStrTokenCount(subline, "^")) != 17)
+		ajFatal("Incorrect no. (%d) of tokens on line %S\n", ntok, line);
+	    else
+	    {
+		parseok = ajTrue;
+		hit     = ajDmxScophitNew();
+	    }
+	    
+	    /* Acc */
+	    token = ajStrTokC(subline, "^");
+	    ajStrAssS(&hit->Acc, token);
+	    ajStrChomp(&hit->Acc); 
+	    if(ajStrMatchC(hit->Acc, "."))
+		ajStrClear(&hit->Acc);
+
+	    /* Spr */
+	    token = ajStrTokC(NULL, "^");
+	    ajStrAssS(&hit->Spr, token);
+	    if(ajStrMatchC(hit->Spr, "."))
+		ajStrClear(&hit->Spr);
+
+	    /* Start */
+	    token = ajStrTokC(NULL, "^");
+	    ajFmtScanS(token, "%d", &hit->Start);
+
+	    /* End */
+	    token = ajStrTokC(NULL, "^");
+	    ajFmtScanS(token, "%d", &hit->End);
+	    
+	    /* Type */
+	    token = ajStrTokC(NULL, "^");
+	    ajStrAssS(&type, token);
+
+	    if(ajStrMatchC(type, "SCOP"))
+		hit->Type = ajSCOP;
+	    else if(ajStrMatchC(type, "CATH"))
+		hit->Type = ajCATH;
+
+	    /* Dom */
+	    token = ajStrTokC(NULL, "^");
+	    ajStrAssS(&hit->Dom, token);
+	    if(ajStrMatchC(hit->Dom, "."))
+		ajStrClear(&hit->Dom);
+
+	    /* Read domain identifier */
+	    token = ajStrTokC(NULL, "^");
+	    ajFmtScanS(token, "%d", &hit->Sunid_Family);
+	    
+
+	    token = ajStrTokC(NULL, "^");
+	    ajStrAssS(&hit->Class, token);
+	    if(ajStrMatchC(hit->Class, "."))
+		ajStrClear(&hit->Class);	
+
+	    token = ajStrTokC(NULL, "^");
+	    ajStrAssS(&hit->Architecture, token);
+	    if(ajStrMatchC(hit->Architecture, "."))
+		ajStrClear(&hit->Architecture);
+
+	    token = ajStrTokC(NULL, "^");
+	    ajStrAssS(&hit->Topology, token);
+	    if(ajStrMatchC(hit->Topology, "."))
+		ajStrClear(&hit->Topology);
+
+	    token = ajStrTokC(NULL, "^");
+	    ajStrAssS(&hit->Fold, token);
+	    if(ajStrMatchC(hit->Fold, "."))
+		ajStrClear(&hit->Fold);
+
+	    token = ajStrTokC(NULL, "^");
+	    ajStrAssS(&hit->Superfamily, token);
+	    if(ajStrMatchC(hit->Superfamily, "."))
+		ajStrClear(&hit->Superfamily);
+
+	    token = ajStrTokC(NULL, "^");
+	    ajStrAssS(&hit->Family, token);
+	    if(ajStrMatchC(hit->Family, "."))
+		ajStrClear(&hit->Family);
+
+	    token = ajStrTokC(NULL, "^");
+	    ajStrAssS(&hit->Model, token);
+	    if(ajStrMatchC(hit->Model, "."))
+		ajStrClear(&hit->Model);
+
+	    token = ajStrTokC(NULL, "^");
+	    ajFmtScanS(token, "%f", &hit->Score);
+	    
+	    token = ajStrTokC(NULL, "^");
+	    ajFmtScanS(token, "%f", &hit->Pval);
+
+	    token = ajStrTokC(NULL, "^");
+	    ajFmtScanS(token, "%f", &hit->Eval);
+
+	    donefirst = ajTrue;
+	}
+	else
+	    ajStrApp(&hit->Seq, line);
+    }
+
+
+    /* EOF therefore process last hit */
+    if((!ok) && (parseok))
+    {
+	ajStrCleanWhite(&hit->Seq);
+	ajListPushApp(tmplist, hit);
+    }
+
+
+    /* Tidy up */
+    ajStrDel(&line);
+    ajStrDel(&subline);
+    ajStrDel(&type);
+    
+    
+    /* File read error */
+    return tmplist;
 }
 
 

@@ -89,14 +89,6 @@ typedef struct EmbSSigcell
 /* ================= Prototypes for private functions ==================== */
 /* ======================================================================= */
 
-AjPSigdat    embSigdatNew(ajint nres, ajint ngap);
-
-AjPSigpos    embSigposNew(ajint ngap);
-
-void         embSigdatDel(AjPSigdat *pthis);
-
-void         embSigposDel(AjPSigpos *thys);
-
 EmbPHitidx   embHitidxNew(void);
 
 void         embHitidxDel(EmbPHitidx *pthis);
@@ -165,7 +157,7 @@ AjBool       embHitlistReadFoldFasta(AjPFile scopf,
 ** the gap arrays (gsiz and grfq) being filled in order of increasing gap 
 ** size.
 **
-** @param [r] nres [ajint]   Number of emprical residues.
+** @param [r] nres [ajint]   Number of emprical residues / environments.
 ** @param [r] ngap [ajint]   Number of emprical gaps.
 ** 
 ** @return [AjPSigdat] Pointer to a Sigdat object
@@ -175,10 +167,12 @@ AjBool       embHitlistReadFoldFasta(AjPFile scopf,
 AjPSigdat embSigdatNew(ajint nres, ajint ngap)
 {
     AjPSigdat ret = NULL;
-
+    ajint x=0;
+    
 
     AJNEW0(ret);
     ret->nres = nres;
+    ret->nenv = nres;
     ret->ngap = ngap;
 
     if(ngap)
@@ -202,6 +196,12 @@ AjPSigdat embSigdatNew(ajint nres, ajint ngap)
 	ret->rfrq = ajIntNewL((ajint) nres);
         ajIntPut(&ret->rfrq, nres-1, (ajint)0);
 	ajChararrPut(&ret->rids, nres-1, (char)' ');
+
+	AJCNEW0(ret->eids, nres);
+	for(x=0;x<nres;x++)
+	    ret->eids[x]=ajStrNew();
+	ret->efrq = ajIntNewL((ajint) nres);
+        ajIntPut(&ret->efrq, nres-1, (ajint)0);
     }
     else
     {
@@ -209,6 +209,10 @@ AjPSigdat embSigdatNew(ajint nres, ajint ngap)
 	ret->rfrq = ajIntNew();
 	ajIntPut(&ret->rfrq, 0, (ajint)0);
 	ajChararrPut(&ret->rids, 0, (char)' ');
+
+	/* ret->eids is *NOT* allocated in this case. */
+	ret->efrq = ajIntNew();
+	ajIntPut(&ret->efrq, 0, (ajint)0);
     }
     
     return ret;
@@ -285,12 +289,21 @@ void embSigposDel(AjPSigpos *pthis)
 
 void embSigdatDel(AjPSigdat *pthis)
 {
-
+    ajint x=0;
+    
     ajIntDel(&(*pthis)->gsiz);
     ajIntDel(&(*pthis)->gfrq);
     ajIntDel(&(*pthis)->rfrq);
     ajChararrDel(&(*pthis)->rids);
-    
+
+    if((*pthis)->eids)
+    {
+	for(x=0; x<(*pthis)->nres; x++)
+	    ajStrDel(&((*pthis)->eids[x]));
+	AJFREE((*pthis)->eids);    
+    }
+    ajIntDel(&(*pthis)->efrq);
+
     AJFREE(*pthis);    
     *pthis = NULL;
 
@@ -903,12 +916,18 @@ AjPSignature embSignatureNew(ajint n)
 
 
     AJNEW0(ret);
-    ret->Class       = ajStrNew();
+    ret->Class        = ajStrNew();
     ret->Architecture = ajStrNew();
     ret->Topology     = ajStrNew();
-    ret->Fold        = ajStrNew();
-    ret->Superfamily = ajStrNew();
-    ret->Family      = ajStrNew();
+    ret->Fold         = ajStrNew();
+    ret->Superfamily  = ajStrNew();
+    ret->Family       = ajStrNew();
+
+    ret->Id           = ajStrNew();
+    ret->Domid        = ajStrNew();
+    ret->Ligid        = ajStrNew();
+    ret->Desc         = ajStrNew();
+
     ret->npos = n;
 
     /* Create arrays of pointers to Sigdat & Sigpos structures */
@@ -1061,6 +1080,16 @@ void embSignatureDel(AjPSignature *ptr)
 	ajStrDel(&(*ptr)->Superfamily);
     if((*ptr)->Family)
 	ajStrDel(&(*ptr)->Family);
+
+    if((*ptr)->Id)
+	ajStrDel(&(*ptr)->Id);
+    if((*ptr)->Domid)
+	ajStrDel(&(*ptr)->Domid);
+    if((*ptr)->Ligid)
+	ajStrDel(&(*ptr)->Ligid);
+    if((*ptr)->Desc)
+	ajStrDel(&(*ptr)->Desc);
+
 
     if((*ptr)->dat)
 	AJFREE((*ptr)->dat);
@@ -1327,6 +1356,61 @@ ajint embMatchinvScore(const void *hit1, const void *hit2)
 
 
 
+/* @func embMatchLigid ********************************************************
+**
+** Function to sort Hit objects by Ligid record (referenced via Sig element).
+**
+** @param [r] hit1  [const void*] Pointer to Hit object 1
+** @param [r] hit2  [const void*] Pointer to Hit object 2
+**
+** @return [ajint] -1 if Ligid1 should sort before Ligid2, +1 if the Ligid2 
+** should sort first. 0 if they are identical.
+** @@
+******************************************************************************/
+
+ajint embMatchLigid(const void *hit1, const void *hit2)
+{
+    AjPHit p = NULL;
+    AjPHit q = NULL;
+
+    p = (*(AjPHit*)hit1);
+    q = (*(AjPHit*)hit2);
+    
+    return ajStrCmpO(p->Sig->Ligid, q->Sig->Ligid);
+}
+
+
+
+
+/* @func embMatchSN ******************************************************
+**
+** Function to sort Hit objects by sn element within Sig element. Usually
+** called by ajListSort.
+**
+** @param [r] hit1  [const void*] Pointer to Hit object 1
+** @param [r] hit2  [const void*] Pointer to Hit object 2
+**
+** @return [ajint] 1 if sn1<sn2, 0 if sn1==sn2, else -1.
+** @@
+****************************************************************************/
+
+ajint embMatchSN(const void *hit1, const void *hit2)
+{
+    AjPHit p = NULL;
+    AjPHit q = NULL;
+
+    p = (*(AjPHit*)hit1);
+    q = (*(AjPHit*)hit2);
+    
+    if(p->Sig->sn < q->Sig->sn)
+	return -1;
+    else if (p->Sig->sn == q->Sig->sn)
+	return 0;
+
+    return 1;
+}
+
+
 /* ======================================================================= */
 /* ============================== Casts ===================================*/
 /* ======================================================================= */
@@ -1447,8 +1531,8 @@ AjPHit embHitReadFasta(AjPFile inf)
 		ajStrDel(&subline);
 		return hit;
 	    }	
-	    else
-		hit = embHitNew();
+/*	    else
+		hit = embHitNew(); */
 
 	    /* Check line has correct no. of tokens and allocate Hit */
 	    ajStrAssSub(&subline, line, 1, -1);
@@ -2772,6 +2856,7 @@ AjPSignature embSignatureReadNew(AjPFile inf)
     AjPSignature ret = NULL;
     
     static AjPStr type   = NULL;
+    static AjPStr typesig= NULL;
     static AjPStr line   = NULL;
     static AjPStr class  = NULL;
     static AjPStr arch   = NULL;
@@ -2780,6 +2865,11 @@ AjPSignature embSignatureReadNew(AjPFile inf)
     static AjPStr super  = NULL;
     static AjPStr family = NULL;
     ajint  Sunid_Family;        /* SCOP sunid for family */
+
+    static AjPStr id     = NULL;
+    static AjPStr domid  = NULL;
+    static AjPStr ligid  = NULL;
+    static AjPStr desc   = NULL;
 
     AjBool ok   = ajFalse;
     ajint  npos = 0;   /* No. signature positions */
@@ -2791,7 +2881,16 @@ AjPSignature embSignatureReadNew(AjPFile inf)
     ajint  v1   = 0;
     ajint  v2   = 0;
     char   c1   = '\0';
+    static AjPStr env  = NULL;
+    AjPStr   token             = NULL;   /* For parsing      */
     
+    /* Signature of type ajLIGAND only */
+    ajint     ns;
+    ajint     sn;
+    ajint     np;
+    ajint     pn;
+    ajint     minpatch;
+    ajint     maxgap;
     
     /* CHECK ARG'S */
     if(!inf)
@@ -2808,6 +2907,13 @@ AjPSignature embSignatureReadNew(AjPFile inf)
 	super   = ajStrNew();
 	family  = ajStrNew();
 	line    = ajStrNew();
+	id      = ajStrNew();
+	domid   = ajStrNew();
+	ligid   = ajStrNew();
+	desc    = ajStrNew();
+	type    = ajStrNew();
+	typesig = ajStrNew();
+	env     = ajStrNew();
     }
 
 
@@ -2816,9 +2922,59 @@ AjPSignature embSignatureReadNew(AjPFile inf)
 
     while(ok && !ajStrPrefixC(line,"//"))
     {
+      /* Records for signatures of type ajLIGAND only */
+      /* IS */
+      	if(ajStrPrefixC(line,"IS"))
+	{
+	    token = ajStrTokC(line, ";");
+	    ajFmtScanS(line, "%*s %*s %d", &sn);
+
+	    token = ajStrTokC(NULL, ";");
+	    ajFmtScanS(token, "%*s %d", &ns);
+	  }
+
+	/* IP */
+      	else if(ajStrPrefixC(line,"IP"))
+	  {
+	    token = ajStrTokC(line, ";");
+	    ajFmtScanS(line, "%*s %*s %d", &pn);
+
+	    token = ajStrTokC(NULL, ";");
+	    ajFmtScanS(token, "%*s %d", &np);
+
+	    token = ajStrTokC(NULL, ";");
+	    ajFmtScanS(token, "%*s %d", &minpatch);
+
+	    token = ajStrTokC(NULL, ";");
+	    ajFmtScanS(token, "%*s %d", &maxgap);
+	  }
+
+	/* DE */
+      	else if(ajStrPrefixC(line,"DE"))
+	  {
+	    ajFmtScanS(line, "%*s%S", &desc);
+	  }
+
+	/* ID */
+      	else if(ajStrPrefixC(line,"ID"))
+	  {
+	    token = ajStrTokC(line, ";");
+	    ajFmtScanS(line, "%*s %*s %S", &id);
+	    token = ajStrTokC(NULL, ";");
+	    ajFmtScanS(token, "%*s %S", &domid);
+	    token = ajStrTokC(NULL, ";");
+	    ajFmtScanS(token, "%*s %S", &ligid);
+	  }
+
+
+
 	if(ajStrPrefixC(line,"TY"))
 	{
 	    ajFmtScanS(line, "%*s %S", &type);
+	}
+	else if(ajStrPrefixC(line,"TS"))
+	{
+	    ajFmtScanS(line, "%*s %S", &typesig);
 	}
 	else if(ajStrPrefixC(line,"XX"))
 	{
@@ -2879,7 +3035,7 @@ AjPSignature embSignatureReadNew(AjPFile inf)
 	}
 	else if(ajStrPrefixC(line,"NP"))
 	{
-	    ajFmtScanS(line, "NP%d", &npos);
+	    ajFmtScanS(line, "NP %d", &npos);
 
 	    /* Create signature structure */
 	    (ret)=embSignatureNew(npos);
@@ -2888,6 +3044,14 @@ AjPSignature embSignatureReadNew(AjPFile inf)
 		(ret)->Type = ajSCOP;
 	    else if(ajStrMatchC(type, "CATH"))
 		(ret)->Type = ajCATH;
+	    else if(ajStrMatchC(type, "LIGAND"))
+		(ret)->Type = ajLIGAND;
+
+	    if(ajStrMatchC(typesig, "1D"))
+		(ret)->Typesig = aj1D;
+	    else if(ajStrMatchC(typesig, "3D"))
+		(ret)->Typesig = aj3D;
+
 	    ajStrAssS(&(ret)->Class, class);
 	    ajStrAssS(&(ret)->Architecture, arch);
 	    ajStrAssS(&(ret)->Topology, top);
@@ -2895,6 +3059,19 @@ AjPSignature embSignatureReadNew(AjPFile inf)
 	    ajStrAssS(&(ret)->Superfamily, super);
 	    ajStrAssS(&(ret)->Family, family);
 	    (ret)->Sunid_Family = Sunid_Family;	
+
+	    /* ajLIGAND only */
+	    ajStrAssS(&(ret)->Id, id);
+	    ajStrAssS(&(ret)->Domid, domid);
+	    ajStrAssS(&(ret)->Ligid, ligid);
+	    ajStrAssS(&(ret)->Desc, desc);
+	    ret->ns = ns;
+	    ret->sn = sn;
+	    ret->np = np;
+	    ret->pn = pn;
+	    ret->minpatch = minpatch;
+	    ret->maxgap   = maxgap;
+
 	}
 	else if(ajStrPrefixC(line,"NN"))
 	{
@@ -2903,8 +3080,8 @@ AjPSignature embSignatureReadNew(AjPFile inf)
 
 	    /* Safety check */
 	    if(n>npos)
-		ajFatal("Dangerous error in input file caught in "
-			"embSignatureReadNew.\n Email jison@hgmp.mrc.ac.uk");
+		ajFatal("Dangerous error in input file: n (%d) > npos (%d). Caught in "
+			"embSignatureReadNew.\n Email jison@hgmp.mrc.ac.uk", n, npos);
 	}
 	else if(ajStrPrefixC(line,"IN"))
 	    {
@@ -2925,9 +3102,27 @@ AjPSignature embSignatureReadNew(AjPFile inf)
 		{
 		    if(!(ok = ajFileReadLine(inf,&line)))
 			break;
-		    ajFmtScanS(line, "%*s %c %*c %d", &c1,&v2);
-		    ajChararrPut(&(ret)->dat[n-1]->rids,i,c1);
-		    ajIntPut(&(ret)->dat[n-1]->rfrq,i,v2);
+
+		    if(ret->Typesig == aj1D)
+		    {
+			ajFmtScanS(line, "%*s %c %*c %d", &c1,&v2);
+			ajChararrPut(&(ret)->dat[n-1]->rids,i,c1);
+			ajIntPut(&(ret)->dat[n-1]->rfrq,i,v2);
+		    }
+		    else if(ret->Typesig == aj3D)
+		    {
+			ajFmtScanS(line, "%*s %S %*c %d", &env,&v2);
+			ajStrAssS(&(ret)->dat[n-1]->eids[i], env);
+			ajIntPut(&(ret)->dat[n-1]->efrq,i,v2);
+		    }
+		    else
+		    {
+			/* This code block identical to above */
+			ajWarn("Signature type (1D or 3D) not known in embSignatureWrite. Presuming 1D");
+			ajFmtScanS(line, "%*s %c %*c %d", &c1,&v2);
+			ajChararrPut(&(ret)->dat[n-1]->rids,i,c1);
+			ajIntPut(&(ret)->dat[n-1]->rfrq,i,v2);
+		    }
 		}
 		if(!ok)
 		    break;
@@ -2985,7 +3180,49 @@ AjBool embSignatureWrite(AjPFile outf, const AjPSignature obj)
 	ajFmtPrintF(outf, "TY   SCOP\nXX\n");
     else if ((obj->Type == ajCATH))
 	ajFmtPrintF(outf, "TY   CATH\nXX\n");
+    else if ((obj->Type == ajLIGAND))
+	ajFmtPrintF(outf, "TY   LIGAND\nXX\n");
 
+
+    if((obj->Typesig == aj1D))  
+	ajFmtPrintF(outf, "TS   1D\nXX\n");
+    else if ((obj->Typesig == aj3D))
+	ajFmtPrintF(outf, "TS   3D\nXX\n");
+    else
+    {
+	ajWarn("Signature type (1D or 3D) not known in embSignatureWrite. Presuming 1D");
+	ajFmtPrintF(outf, "TS   1D\nXX\n");
+    }
+    
+    if(MAJSTRLEN(obj->Class))
+    {	ajFmtPrintF(outf,"CL   %S\n",obj->Class);
+	ajFmtPrintF(outf, "XX\n");
+    }
+    if(MAJSTRLEN(obj->Architecture))
+    {	ajFmtPrintF(outf,"AR   %S\n",obj->Architecture);
+	ajFmtPrintF(outf, "XX\n");
+    }
+    if(MAJSTRLEN(obj->Topology))
+    {	ajFmtPrintF(outf,"TP   %S\n",obj->Topology);
+	ajFmtPrintF(outf, "XX\n");
+    }
+    if(MAJSTRLEN(obj->Fold))
+    {
+	ajFmtPrintSplit(outf,obj->Fold,"FO   ",75," \t\n\r");
+	ajFmtPrintF(outf, "XX\n");
+    }
+    if(MAJSTRLEN(obj->Superfamily))
+    {
+	ajFmtPrintSplit(outf,obj->Superfamily,"SF   ",75," \t\n\r");
+	ajFmtPrintF(outf, "XX\n");
+    }
+    if(MAJSTRLEN(obj->Family))
+    {
+	ajFmtPrintSplit(outf,obj->Family,"FA   ",75," \t\n\r");
+	ajFmtPrintF(outf, "XX\n");
+    }
+
+    /*
     if(MAJSTRLEN(obj->Class))
 	ajFmtPrintF(outf,"CL   %S",obj->Class);
     if(MAJSTRLEN(obj->Architecture))
@@ -2998,22 +3235,88 @@ AjBool embSignatureWrite(AjPFile outf, const AjPSignature obj)
 	ajFmtPrintSplit(outf,obj->Superfamily,"XX\nSF   ",75," \t\n\r");
     if(MAJSTRLEN(obj->Family))
 	ajFmtPrintSplit(outf,obj->Family,"XX\nFA   ",75," \t\n\r");
-    if(obj->Sunid_Family)
-	ajFmtPrintF(outf,"XX\nSI   %d\nXX\n", obj->Sunid_Family);
+	*/
 
+    if(obj->Sunid_Family)
+	ajFmtPrintF(outf,"SI   %d\nXX\n", obj->Sunid_Family);
+	
+
+
+
+
+    /* Signatures of type ajLIGAND only */
+    if(obj->Type == ajLIGAND)
+    {
+      ajFmtPrintF(outf, "%-5sPDB %S; DOM %S; LIG %S;\n", 
+		  "ID", 
+		  obj->Id, 
+		  obj->Domid,
+		  obj->Ligid);
+      ajFmtPrintF(outf, "XX\n"); 
+
+      ajFmtPrintF(outf, "%-5s%S\n", 
+		  "DE", 
+		  obj->Desc);
+      ajFmtPrintF(outf, "XX\n");   
+
+      ajFmtPrintF(outf, "%-5sSN %d; NS %d\n", 
+		  "IS", 
+		  obj->sn, 
+		  obj->ns);
+      ajFmtPrintF(outf, "XX\n");   
+
+      ajFmtPrintF(outf, "%-5sPN %d; NP %d; MP %d; MG %d\n", 
+		  "IP", 
+		  obj->pn, 
+		  obj->np, 
+		  obj->minpatch, 
+		  obj->maxgap);
+      ajFmtPrintF(outf, "XX\n");   
+    }
 
     ajFmtPrintF(outf,"NP   %d\n",obj->npos);
     for(i=0;i<obj->npos;++i)
     {
 	ajFmtPrintF(outf,"XX\nNN   [%d]\n",i+1);
-	ajFmtPrintF(outf,"XX\nIN   NRES %d ; NGAP %d ; WSIZ %d\nXX\n",
-		    obj->dat[i]->nres, obj->dat[i]->ngap,
-		    obj->dat[i]->wsiz);
 
-	for(j=0;j<obj->dat[i]->nres;++j)
-	    ajFmtPrintF(outf,"AA   %c ; %d\n",
-			(char)  ajChararrGet(obj->dat[i]->rids, j),
-			(ajint) ajIntGet(obj->dat[i]->rfrq, j));
+
+
+	if(obj->Typesig == aj1D)
+	{
+	    ajFmtPrintF(outf,"XX\nIN   NRES %d ; NGAP %d ; WSIZ %d\nXX\n",
+			obj->dat[i]->nres, obj->dat[i]->ngap,
+			obj->dat[i]->wsiz);
+	    for(j=0;j<obj->dat[i]->nres;++j)
+		ajFmtPrintF(outf,"AA   %c ; %d\n",
+			    (char)  ajChararrGet(obj->dat[i]->rids, j),
+			    (ajint) ajIntGet(obj->dat[i]->rfrq, j));
+	}
+	else if (obj->Typesig == aj3D)
+	{
+	    ajFmtPrintF(outf,"XX\nIN   NRES %d ; NGAP %d ; WSIZ %d\nXX\n",
+			obj->dat[i]->nenv, obj->dat[i]->ngap,
+			obj->dat[i]->wsiz);
+	    for(j=0;j<obj->dat[i]->nenv;++j)
+	    {
+		ajFmtPrintF(outf,"AA   %S ; %d\n",
+			    obj->dat[i]->eids[j], 
+			    (ajint) ajIntGet(obj->dat[i]->efrq, j));
+	    }
+	}
+	else
+	{
+	    ajWarn("Type of signature (1D or 3D) unknown in embSignatureWrite. Presuming 1D.");
+	    /* This code block identical to above */
+	    ajFmtPrintF(outf,"XX\nIN   NRES %d ; NGAP %d ; WSIZ %d\nXX\n",
+			obj->dat[i]->nres, obj->dat[i]->ngap,
+			obj->dat[i]->wsiz);
+	    for(j=0;j<obj->dat[i]->nres;++j)
+		ajFmtPrintF(outf,"AA   %c ; %d\n",
+			    (char)  ajChararrGet(obj->dat[i]->rids, j),
+			    (ajint) ajIntGet(obj->dat[i]->rfrq, j));
+	}
+	
+
 	ajFmtPrintF(outf,"XX\n");
 	for(j=0;j<obj->dat[i]->ngap;++j)
 	    ajFmtPrintF(outf,"GA   %d ; %d\n",
@@ -3180,6 +3483,8 @@ AjPHitlist embSignatureHitsRead(AjPFile inf)
 	(ret)->Type = ajSCOP;
     else if(ajStrMatchC(type, "CATH"))
 	(ret)->Type = ajCATH;
+    else if(ajStrMatchC(type, "LIGAND"))
+      (ret)->Type = ajLIGAND;
     
     ret->N=ajListToArray(list, (void ***)&(ret->hits));
     
@@ -3240,6 +3545,8 @@ AjBool embSignatureHitsWrite(AjPFile outf, const AjPSignature sig,
 	ajFmtPrintF(outf, "TY   SCOP\nXX\n");
     else if ((sig->Type == ajCATH))
 	ajFmtPrintF(outf, "TY   CATH\nXX\n");
+    else if ((sig->Type == ajLIGAND))
+	ajFmtPrintF(outf, "TY   LIGAND\nXX\n");
     if(MAJSTRLEN(sig->Class))
 	ajFmtPrintF(outf,"CL   %S",sig->Class);
     if(MAJSTRLEN(sig->Architecture))    
@@ -3789,21 +4096,64 @@ AjBool embSignatureCompile(AjPSignature *S, float gapo, float gape,
 	    }
 
 	/* CALCULATE RESIDUE MATCH VALUES */
-	for(z=0;z<26; z++)
+	if( (*S)->Typesig==aj1D)
 	{
-	    for(div=0, y=0; y<(*S)->dat[x]->nres; y++)
+	    for(z=0;z<26; z++)
 	    {
-		div+=(ajIntGet((*S)->dat[x]->rfrq, y));
+		for(div=0, y=0; y<(*S)->dat[x]->nres; y++)
+		{
+		    div+=(ajIntGet((*S)->dat[x]->rfrq, y));
 		
-		(*S)->pos[x]->subs[z] += 
-		    (ajIntGet((*S)->dat[x]->rfrq, y)) * 
-			sub[ajSeqCvtK(cvt,(char)((ajint)'A'+z))]
-			    [ajSeqCvtK(cvt, ajChararrGet((*S)->dat[x]->rids,
-							 y))];
+		    (*S)->pos[x]->subs[z] += 
+			(ajIntGet((*S)->dat[x]->rfrq, y)) * 
+			    sub[ajSeqCvtK(cvt,(char)((ajint)'A'+z))]
+				[ajSeqCvtK(cvt, ajChararrGet((*S)->dat[x]->rids,
+							     y))];
+		}
+		(*S)->pos[x]->subs[z] /= div;
 	    }
-	    (*S)->pos[x]->subs[z] /= div;
+	}
+	else if( (*S)->Typesig==aj3D)
+	{
+	    for(z=0;z<26; z++)
+	    {
+		for(div=0, y=0; y<(*S)->dat[x]->nenv; y++)
+		{
+		    div+=(ajIntGet((*S)->dat[x]->efrq, y));
+		
+		    /* Environments are rows and residue identities are columns. */
+		    (*S)->pos[x]->subs[z] += 
+			(ajIntGet((*S)->dat[x]->efrq, y)) * 
+			    sub[ajSeqCvtKSRow(cvt, (*S)->dat[x]->eids[y])]
+				[ajSeqCvtK(cvt,(char)((ajint)'A'+z))];
+
+		}
+		(*S)->pos[x]->subs[z] /= div;
+	    }
+	}
+	else
+	{
+	    ajWarn("Signature type (1D or 3D) not known in embSignatureCompile. Presuming 1D");
+	    
+	    /* This code block identical to above */
+	    for(z=0;z<26; z++)
+	    {
+		for(div=0, y=0; y<(*S)->dat[x]->nres; y++)
+		{
+		    div+=(ajIntGet((*S)->dat[x]->rfrq, y));
+		
+		    (*S)->pos[x]->subs[z] += 
+			(ajIntGet((*S)->dat[x]->rfrq, y)) * 
+			    sub[ajSeqCvtK(cvt,(char)((ajint)'A'+z))]
+				[ajSeqCvtK(cvt, ajChararrGet((*S)->dat[x]->rids,
+							     y))];
+		}
+		(*S)->pos[x]->subs[z] /= div;
+	    }
 	}
 	
+	       
+		
 	/* FREE tgap & tpen ARRAYS */
 	AJFREE(tgap);
 	AJFREE(tpen);
@@ -3846,6 +4196,8 @@ AjBool embSignatureAlignSeq(const AjPSignature S, const AjPSeq seq,
     ajint  nresm1 = 0;	  /*== nres-1 */
     static EmbPSigcell path = NULL;  /*Path matrix as 1D array */
 
+    static ajint savedim = 0;		/* dimension of path */
+    static ajint savenres = 0;		/* dimension of alg and p */
     ajint dim =0;         /*Dimension of 1D path matrix == nres 
 				   * S->npos */
     static char *p = NULL;  /*Protein sequence */
@@ -3898,22 +4250,26 @@ AjBool embSignatureAlignSeq(const AjPSignature S, const AjPSeq seq,
     {
 	/* CREATE PATH MATRIX */
 	AJCNEW(path, dim);
+	savedim = dim;
 
 	/* CREATE ALIGNMENT AND PROTEIN SEQUENCE STRINGS */
 	alg = AJALLOC((nres*sizeof(char))+1);
 	p = AJALLOC((nres*sizeof(char))+1);
+	savenres = nres;
     }	
     else 
     {
 	/* CREATE PATH MATRIX */
-	if(dim > (ajint) sizeof(path)/sizeof(EmbOSigcell))
+	if(dim > savedim)
+	{
 	    AJCRESIZE(path, dim);
-
+	}
 	/* CREATE ALIGNMENT AND PROTEIN SEQUENCE STRINGS */
-	if((nres) > (ajint) sizeof(alg)/sizeof(char))
+	if((nres) > savenres)
 	{
 	    AJCRESIZE(alg, nres+1);
 	    AJCRESIZE(p, nres+1);
+	    savenres = nres;
 	}
     }
 
@@ -3921,7 +4277,7 @@ AjBool embSignatureAlignSeq(const AjPSignature S, const AjPSeq seq,
 
     /*
     ** INITIALISE PATH MATRIX
-    ** Only necessary to initilise <try> element to ajFalse
+    ** Only necessary to initialise <try> element to ajFalse
     */
     for(cnt=0;cnt<dim;cnt++)
 	path[cnt].visited = ajFalse;
@@ -4129,6 +4485,9 @@ AjBool embSignatureAlignSeq(const AjPSignature S, const AjPSeq seq,
     
 
     /* Write hit structure */
+    if(!(*hit))
+	*hit = embHitNew();
+    
     ajStrAssC(&(*hit)->Model, "SPARSE");    
     ajStrAssC(&(*hit)->Alg, alg);
     ajStrAssS(&(*hit)->Seq, P);

@@ -41,6 +41,8 @@ extern "C"
 /*****************************************************************************/
 /* These functions are NOT YET DOCUMENTED in the appropriate data structures */
 /*****************************************************************************/
+AjPList       embDmxScophitReadAllFasta(AjPFile in);
+
 AjBool        embDmxHitlistToScophits(const AjPList in, 
 				      AjPList *out);
 

@@ -38,6 +38,190 @@ extern "C"
 
 
 
+/* @data AjPSigpos **********************************************************
+**
+** Ajax Sigpos object.
+**
+** Holds data for compiled signature position
+**
+** AjPSigpos is implemented as a pointer to a C data structure.
+**
+** @alias AjSSigpos
+** @alias AjOSigpos
+**
+**
+** 
+** @attr  ngaps [ajint]   No. of gaps 
+** @attr  gsiz  [ajint*]  Gap sizes 
+** @attr  gpen  [float*]  Gap penalties 
+** @attr  subs  [float*]  Residue match values 
+** 
+** @new embSigposNew Default Sigdat object constructor
+** @delete embSigposDel Default Sigdat object destructor
+** @@
+****************************************************************************/
+typedef struct AJSSigpos
+{
+    ajint    ngaps;      
+    ajint   *gsiz;       
+    float   *gpen;       
+    float   *subs;       
+} AJOSigpos, *AjPSigpos;
+
+
+
+
+
+/* @data AjPSigdat **********************************************************
+**
+** Ajax Sigdat object.
+**
+** Holds empirical data for an (uncompiled) signature position. 
+** Important: Functions which manipulate this structure rely on the data in 
+** the gap arrays (gsiz and grfq) being filled in order of increasing gap 
+** size.
+**
+** AjPSigdat is implemented as a pointer to a C data structure.
+**
+** @alias AjSSigdat
+** @alias AjOSigdat
+**
+**
+**
+** @attr  nres [ajint]    No. diff. types of residue
+** @attr  rids [AjPChar]  Residue id's 
+** @attr  rfrq [AjPInt]   Residue frequencies 
+** 
+** @attr  nenv [ajint]    No. diff. types of environment
+** @attr  eids [AjPStr*]  Environment id's
+** @attr  efrq [AjPInt]   Environment frequencies 
+**
+** @attr  ngap [ajint]    No. diff. sizes of empirical gap
+** @attr  gsiz [AjPInt]   Gap sizes 
+** @attr  gfrq [AjPInt]   Frequencies of gaps of each size
+** @attr  wsiz [ajint]    Window size for this gap 
+**
+** @new embSigdatNew Default Sigdat object constructor
+** @delete embSigdatDel Default Sigdat object destructor
+** @@
+****************************************************************************/
+typedef struct AJSSigdat
+{
+    ajint       nres;         
+    AjPChar     rids;
+    AjPInt      rfrq;         
+
+    ajint       nenv;         
+    AjPStr     *eids;
+    AjPInt      efrq;         
+
+    ajint       ngap;         
+    AjPInt      gsiz;         
+    AjPInt      gfrq;         
+
+    ajint       wsiz;         
+} AJOSigdat, *AjPSigdat;
+
+
+
+
+
+/* @data AjPSignature *******************************************************
+**
+** Ajax Signature object.
+**
+** AjPSignature is implemented as a pointer to a C data structure.
+**
+** @alias AjSSignature
+** @alias AjOSignature
+**
+** 
+**
+** @attr  Type         [ajint]       Type, either ajSCOP (1) or ajCATH (2)
+** for domain signatures, or ajLIGAND (3) for ligand signatures.
+** @attr  Typesig      [ajint]       Type, either aj1D (1) or aj3D (2)
+** for sequence or structure-based signatures respectively. 
+** @attr  Class        [AjPStr]      SCOP classification.
+** @attr  Architecture [AjPStr]      CATH classification.
+** @attr  Topology     [AjPStr]      CATH classification.
+** @attr  Fold         [AjPStr]      SCOP classification.
+** @attr  Superfamily  [AjPStr]      SCOP classification.
+** @attr  Family       [AjPStr]      SCOP classification.
+** @attr  Sunid_Family [ajint]       SCOP sunid for family. 
+** @attr  npos         [ajint]       No. of signature positions.
+** @attr  pos          [AjPSigpos*]  Array of derived data for puropses of 
+**                                   alignment.
+** @attr  dat          [AjPSigdat*]  Array of empirical data.
+**
+** @attr  Id    [AjPStr]   Protein id code. 
+** @attr  Domid [AjPStr]   Domain id code. 
+** @attr  Ligid [AjPStr]   Ligand id code. 
+** @attr  Desc  [AjPStr]   Description of ligand (ajLIGAND only)
+** @attr  ns    [ajint]    No. of sites (ajLIGAND only)
+** @attr  sn    [ajint]    Site number (ajLIGAND only)
+** @attr  np    [ajint]    No. of patches (ajLIGAND only)
+** @attr  pn    [ajint]    Patch number (ajLIGAND only)
+** @attr  minpatch  [ajint]   Max. patch size (residues) (ajLIGAND only)
+** @attr  maxgap   [ajint]    Min. gap distance (residues) (ajLIGAND only)
+** @new    embSignatureNew Default Signature constructor
+** @delete embSignatureDel Default Signature destructor
+** @output embSignatureWrite Write signature to file.
+** @input  embSignatureReadNew Construct a Signature object from reading a 
+**         file in embl-like format (see documentation for the DOMAINATRIX
+**         "sigscan" application).
+** @output embSignatureWrite Write a Signature object to a file in embl-like 
+**         format (see documentation for the DOMAINATRIX "sigscan" 
+**         application).
+** @input  embSignatureHitsRead Construct a Hitlist object from reading a 
+**         signature hits file (see documentation for the DOMAINATRIX 
+**         "sigscan" application). 
+** @output embSignatureHitsWrite Writes a list of Hit objects to a 
+**         signature hits file (see documentation for the DOMAINATRIX 
+**         "sigscan" application). 
+** @modify embSignatureCompile Compiles a Signature object.  The signature 
+**         must first have been allocated by using the embSignatureNew 
+**         function.
+** @use    embSignatureAlignSeq Performs an alignment of a signature to a 
+**         protein sequence. The signature must have first been compiled by 
+**         calling embSignatureCompile.  Write a Hit object with the result.
+** @use    embSignatureAlignSeqall Performs an alignment of a signature to
+**         protein sequences. The signature must have first been compiled by 
+**         calling embSignatureCompile.  Write a list of Hit objects with 
+**         the result.
+** @@
+****************************************************************************/
+typedef struct AjSSignature
+{
+    ajint       Type;
+    ajint       Typesig;
+    AjPStr      Class;
+    AjPStr      Architecture;
+    AjPStr      Topology;
+    AjPStr      Fold;
+    AjPStr      Superfamily;
+    AjPStr      Family;
+    ajint       Sunid_Family; 
+    ajint       npos;       
+    AjPSigpos  *pos;        
+    AjPSigdat  *dat;        
+
+    AjPStr    Id;     
+    AjPStr    Domid;     
+    AjPStr    Ligid;     
+    AjPStr    Desc;
+    ajint     ns;
+    ajint     sn;
+    ajint     np;
+    ajint     pn;
+    ajint     minpatch;
+    ajint     maxgap;
+} AjOSignature, *AjPSignature;
+
+
+
+
+
+
 /* @data AjPHit *************************************************************
 **
 ** Ajax hit object.
@@ -79,6 +263,9 @@ extern "C"
 ** @attr  Target   [AjBool]  Used for garbage collection.
 ** @attr  Target2  [AjBool]  Also used for garbage collection.
 ** @attr  Priority [AjBool]  Also used for garbage collection.
+** @attr  Sig      [AjPSignature] Pointer to signature object for which hit
+** was generated. Used as a pointer only - memory is never freed or allocated
+** to it.
 **
 **
 ** 
@@ -91,6 +278,9 @@ extern "C"
 ** @use    embMatchScore Sort Hit objects by Score element.
 ** @use    embMatchinvScore Sort (inverted order) Hit objects by Score 
 **         element.
+** @use    embMatchLigid Sort Hit objects by Ligid element in Sig element.
+** @use    embMatch Sort Hit objects by Ligid element in Sig element.
+
 ** @use    embHitsOverlap Checks for overlap between two Hit objects.
 ** 
 ** @@
@@ -117,6 +307,8 @@ typedef struct AjSHit
   AjBool  Target;     
   AjBool  Target2;    
   AjBool  Priority;   
+
+  AjPSignature Sig;
 } AjOHit, *AjPHit;
 
 
@@ -206,150 +398,22 @@ typedef struct AjSHitlist
 
 
 
-/* @data AjPSigpos **********************************************************
-**
-** Ajax Sigpos object.
-**
-** Holds data for compiled signature position
-**
-** AjPSigpos is implemented as a pointer to a C data structure.
-**
-** @alias AjSSigpos
-** @alias AjOSigpos
-**
-**
-** 
-** @attr  ngaps [ajint]   No. of gaps 
-** @attr  gsiz  [ajint*]  Gap sizes 
-** @attr  gpen  [float*]  Gap penalties 
-** @attr  subs  [float*]  Residue match values 
-** 
-** @new embSigposNew Default Sigdat object constructor
-** @delete embSigposDel Default Sigdat object destructor
-** @@
-****************************************************************************/
-typedef struct AJSSigpos
-{
-    ajint    ngaps;      
-    ajint   *gsiz;       
-    float   *gpen;       
-    float   *subs;       
-} AJOSigpos, *AjPSigpos;
+
+
+/* ======================================================================= */
+/* =========================== Sigdat object ============================= */
+/* ======================================================================= */
+AjPSigdat    embSigdatNew(ajint nres, ajint ngap);
+void         embSigdatDel(AjPSigdat *pthis);
 
 
 
 
-
-/* @data AjPSigdat **********************************************************
-**
-** Ajax Sigdat object.
-**
-** Holds empirical data for an (uncompiled) signature position. 
-** Important: Functions which manipulate this structure rely on the data in 
-** the gap arrays (gsiz and grfq) being filled in order of increasing gap 
-** size.
-**
-** AjPSigdat is implemented as a pointer to a C data structure.
-**
-** @alias AjSSigdat
-** @alias AjOSigdat
-**
-**
-**
-** @attr  nres [ajint]    No. diff. types of residue
-** @attr  rids [AjPChar]  Residue id's 
-** @attr  rfrq [AjPInt]   Residue frequencies 
-**
-** @attr  ngap [ajint]    No. diff. sizes of empirical gap
-** @attr  gsiz [AjPInt]   Gap sizes 
-** @attr  gfrq [AjPInt]   Frequencies of gaps of each size
-** @attr  wsiz [ajint]    Window size for this gap 
-**
-** @new embSigdatNew Default Sigdat object constructor
-** @delete embSigdatDel Default Sigdat object destructor
-** @@
-****************************************************************************/
-typedef struct AJSSigdat
-{
-    ajint       nres;         
-    AjPChar     rids;         
-    AjPInt      rfrq;         
-    ajint       ngap;         
-    AjPInt      gsiz;         
-    AjPInt      gfrq;         
-    ajint       wsiz;         
-} AJOSigdat, *AjPSigdat;
-
-
-
-
-
-/* @data AjPSignature *******************************************************
-**
-** Ajax Signature object.
-**
-** AjPSignature is implemented as a pointer to a C data structure.
-**
-** @alias AjSSignature
-** @alias AjOSignature
-**
-** 
-**
-** @attr  Type          [ajint]     Domain type, either ajSCOP (1) or ajCATH (2).
-** @attr  Class        [AjPStr]      SCOP classification.
-** @attr  Architecture [AjPStr]      CATH classification.
-** @attr  Topology     [AjPStr]      CATH classification.
-** @attr  Fold         [AjPStr]      SCOP classification.
-** @attr  Superfamily  [AjPStr]      SCOP classification.
-** @attr  Family       [AjPStr]      SCOP classification.
-** @attr  Sunid_Family [ajint]       SCOP sunid for family. 
-** @attr  npos         [ajint]       No. of signature positions.
-** @attr  pos          [AjPSigpos*]  Array of derived data for puropses of 
-**                                   alignment.
-** @attr  dat          [AjPSigdat*]  Array of empirical data.
-**
-** @new    embSignatureNew Default Signature constructor
-** @delete embSignatureDel Default Signature destructor
-** @output embSignatureWrite Write signature to file.
-** @input  embSignatureReadNew Construct a Signature object from reading a 
-**         file in embl-like format (see documentation for the DOMAINATRIX
-**         "sigscan" application).
-** @output embSignatureWrite Write a Signature object to a file in embl-like 
-**         format (see documentation for the DOMAINATRIX "sigscan" 
-**         application).
-** @input  embSignatureHitsRead Construct a Hitlist object from reading a 
-**         signature hits file (see documentation for the DOMAINATRIX 
-**         "sigscan" application). 
-** @output embSignatureHitsWrite Writes a list of Hit objects to a 
-**         signature hits file (see documentation for the DOMAINATRIX 
-**         "sigscan" application). 
-** @modify embSignatureCompile Compiles a Signature object.  The signature 
-**         must first have been allocated by using the embSignatureNew 
-**         function.
-** @use    embSignatureAlignSeq Performs an alignment of a signature to a 
-**         protein sequence. The signature must have first been compiled by 
-**         calling embSignatureCompile.  Write a Hit object with the result.
-** @use    embSignatureAlignSeqall Performs an alignment of a signature to
-**         protein sequences. The signature must have first been compiled by 
-**         calling embSignatureCompile.  Write a list of Hit objects with 
-**         the result.
-** @@
-****************************************************************************/
-typedef struct AjSSignature
-{
-    ajint       Type;
-    AjPStr      Class;
-    AjPStr      Architecture;
-    AjPStr      Topology;
-    AjPStr      Fold;
-    AjPStr      Superfamily;
-    AjPStr      Family;
-    ajint       Sunid_Family; 
-    ajint       npos;       
-    AjPSigpos  *pos;        
-    AjPSigdat  *dat;        
-} AjOSignature, *AjPSignature;
-
+/* ======================================================================= */
+/* =========================== Sigpos object ============================= */
+/* ======================================================================= */
+AjPSigpos    embSigposNew(ajint ngap);
+void         embSigposDel(AjPSigpos *thys);
 
 
 
@@ -398,8 +462,11 @@ ajint         embMatchScore(const void *hit1,
 ajint         embMatchinvScore(const void *hit1, 
 			       const void *hit2);
 
+ajint         embMatchLigid(const void *hit1, 
+			    const void *hit2);
 
-
+ajint         embMatchSN(const void *hit1, 
+			 const void *hit2);
 
 
 /* ======================================================================= */

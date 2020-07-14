@@ -610,15 +610,16 @@ static AjBool WriteSeqresDomain(AjPFile errf, AjPFile outf, const AjPPdb pdb,
     const char  *p;
     char  id;
 
-    AjPStr   tmp1        = NULL;
-    AjPStr   tmp2        = NULL;
-    AjBool   found_start = ajFalse;
-    AjBool   found_end   = ajFalse;
-    AjBool   nostart     = ajFalse;
-    AjBool   noend       = ajFalse;
-    AjIList  iter        = NULL;
-    AjPAtom  atm         = NULL;
-    AjPStr   tmpstr      = NULL;
+    AjPStr      tmp1        = NULL;
+    AjPStr      tmp2        = NULL;
+    AjBool      found_start = ajFalse;
+    AjBool      found_end   = ajFalse;
+    AjBool      nostart     = ajFalse;
+    AjBool      noend       = ajFalse;
+    AjIList     iter        = NULL;
+    AjPAtom     atm         = NULL;
+    AjPStr      tmpstr      = NULL;
+/*    AjPResidue *resarr      = NULL; */
     
 
     /* Allocate strings etc */
@@ -649,6 +650,10 @@ static AjBool WriteSeqresDomain(AjPFile errf, AjPFile outf, const AjPPdb pdb,
 
 	    return ajFalse;
 	}
+
+/*	if(resarr)
+	    AJFREE(resarr);
+	ajListToArray(pdb->Chains[chn-1]->Residues, (void ***) &resarr);  */
 
 
 	/* Intitialise iterator for list of atoms */
@@ -699,9 +704,11 @@ static AjBool WriteSeqresDomain(AjPFile errf, AjPFile outf, const AjPPdb pdb,
 
 		    /* Start position found */
 		    /* if(!ajStrCmpCase(atm->Pdb, scop->Start[z])) */
-		    if(ajStrMatchWild(atm->Pdb, tmpstr))		    
+		    if(ajStrMatchWild(atm->Pdb, tmpstr))		     
+		    /* if(ajStrMatchWild(resarr[atm->Idx-1]->Pdb, tmpstr))   */
 		    {
 			if(!ajStrMatch(atm->Pdb, scop->Start[z]))
+			/* if(!ajStrMatch(resarr[atm->Idx-1]->Pdb, scop->Start[z])) */
 			{
 			    ajWarn("Domain start found by wildcard match "
 				   "only in WriteSeqresDomain");
@@ -774,8 +781,10 @@ static AjBool WriteSeqresDomain(AjPFile errf, AjPFile outf, const AjPPdb pdb,
 		    /* End found */
 		    /* if(!ajStrCmpCase(atm->Pdb, scop->End[z])) */
 		    if(ajStrMatchWild(atm->Pdb, tmpstr))
+			/* if(ajStrMatchWild(resarr[atm->Idx-1]->Pdb, tmpstr)) */
 		    {
-			if(!ajStrMatch(atm->Pdb, scop->End[z]))
+			 if(!ajStrMatch(atm->Pdb, scop->End[z])) 
+			 /* if(!ajStrMatch(resarr[atm->Idx-1]->Pdb, scop->End[z])) */
 			{
 			    ajWarn("Domain end found by wildcard match only "
 				   "in WriteSeqresDomain");
@@ -876,6 +885,8 @@ static AjBool WriteSeqresDomain(AjPFile errf, AjPFile outf, const AjPPdb pdb,
 		    rcnt,
 		    p);
 
+/*    if(resarr)
+	AJFREE(resarr); */
     ajStrDel(&tmp1);
     ajStrDel(&tmp2);
     ajStrDel(&tmpstr);
@@ -913,12 +924,15 @@ static AjBool WriteAtomChain(AjPFile outf, const AjPPdb pdb,
     AjPAtom atm     = NULL;
     AjPAtom atm2    = NULL;
     ajint acnt;
-    
+/*    AjPResidue *resarr      = NULL; */
+
 
     /* Check args are not NULL */
     if(!outf || !pdb || mod<1 || chn<1)
 	return ajFalse;
     
+
+/*    ajListToArray(pdb->Chains[chn-1]->Residues, (void ***) &resarr);  */
 
     doneter = ajFalse;
     iter = ajListIterRead(pdb->Chains[chn-1]->Atoms);	
@@ -955,6 +969,7 @@ static AjBool WriteAtomChain(AjPFile outf, const AjPPdb pdb,
 			    atm2->Id3, 
 			    pdb->Chains[chn-1]->Id, 
 			    atm2->Pdb, 
+			    /* resarr[atm2->Idx-1]->Pdb,  */
 			    " ");
 	    }
 	    else
@@ -995,6 +1010,7 @@ static AjBool WriteAtomChain(AjPFile outf, const AjPPdb pdb,
 			atm->Id3, 
 			pdb->Chains[chn-1]->Id, 
 			atm->Pdb, 
+			/* resarr[atm->Idx-1]->Pdb,  */
 			atm->X, 
 			atm->Y, 
 			atm->Z, 
@@ -1023,6 +1039,10 @@ static AjBool WriteAtomChain(AjPFile outf, const AjPPdb pdb,
     }
     ajListIterFree(&iter);				    
 
+
+    
+/*    if(resarr)
+	AJFREE(resarr); */
     return ajTrue;
 }
 
@@ -1073,8 +1093,9 @@ static AjBool WriteAtomDomain(AjPFile errf, AjPFile outf, const AjPPdb pdb,
     AjPAtom  atm         = NULL;
     AjPAtom  atm2        = NULL;
     AjPStr   tmpstr      = NULL;
-    
+/*    AjPResidue *resarr      = NULL; */
 
+    
     /* Allocate strings etc */
     tmpstr = ajStrNew();
     
@@ -1097,6 +1118,9 @@ static AjBool WriteAtomDomain(AjPFile errf, AjPFile outf, const AjPPdb pdb,
 	    }
 	
 	
+/*	ajListToArray(pdb->Chains[chn-1]->Residues, (void ***) &resarr);  */
+
+
 	/* Iteratre up to the correct model */
 	iter=ajListIterRead(pdb->Chains[chn-1]->Atoms);	
 	
@@ -1156,9 +1180,11 @@ static AjBool WriteAtomDomain(AjPFile errf, AjPFile outf, const AjPPdb pdb,
 
 		/* Start position found */
 		/* if(!ajStrCmpCase(atm->Pdb, scop->Start[z])) */
-		if(ajStrMatchWild(atm->Pdb, tmpstr))
+		 if(ajStrMatchWild(atm->Pdb, tmpstr)) 
+		     /* if(ajStrMatchWild(resarr[atm->Idx-1]->Pdb, tmpstr)) */
 		{
-		    if(!ajStrMatch(atm->Pdb, scop->Start[z]))
+		     if(!ajStrMatch(atm->Pdb, scop->Start[z])) 
+			 /* if(!ajStrMatch(resarr[atm->Idx-1]->Pdb, scop->Start[z])) */
 		    {
 			ajWarn("Domain start found by wildcard match only "
 			       "in WriteAtomDomain");
@@ -1185,9 +1211,11 @@ static AjBool WriteAtomDomain(AjPFile errf, AjPFile outf, const AjPPdb pdb,
 
 		/* End position found */
 		/* if(!ajStrCmpCase(atm->Pdb, scop->End[z])) */
-		if(ajStrMatchWild(atm->Pdb, tmpstr))
+		 if(ajStrMatchWild(atm->Pdb, tmpstr)) 
+		     /* if(ajStrMatchWild(resarr[atm->Idx-1]->Pdb, tmpstr)) */
 		{
-		    if(!ajStrMatch(atm->Pdb, scop->End[z]))
+		     if(!ajStrMatch(atm->Pdb, scop->End[z])) 
+			 /* if(!ajStrMatch(resarr[atm->Idx-1]->Pdb, scop->End[z])) */
 		    {
 			ajWarn("Domain end found by wildcard match only "
 			       "in WriteAtomDomain");
@@ -1229,7 +1257,8 @@ static AjBool WriteAtomDomain(AjPFile errf, AjPFile outf, const AjPPdb pdb,
 			    atm->Atm, 
 			    atm->Id3, 
 			    id,
-			    atm->Pdb, 
+			    atm->Pdb,  
+			    /* resarr[atm->Idx-1]->Pdb,  */
 			    atm->X, 
 			    atm->Y, 
 			    atm->Z, 
@@ -6550,19 +6579,25 @@ static void diagnostic(AjPPdbfile *pdbfile, ajint n)
 ****************************************************************************/
 static AjBool PdbfileToPdb(AjPPdb *ret, AjPPdbfile pdb)
 {
-    ajint i=0;			  /* Loop counter */
-    ajint idx=0;                  /* Index into chain array */
-    ajint j=0;			  /* Loop counter */
-    AjPAtom atm=NULL;		  /* Atom object */
-    ajint nchn=0;                   /* No. chains that have min. no. of aa's */
-    AjPInt lookup;                /* Array of chain numbers for chains in 
-				     ret for all chains in pdb.A '0' is 
-				     given for chains with < threshold no.
-				     of aa's */
-				     
+    ajint      i    =0;          /* Loop counter */
+    ajint      idx  =0;          /* Index into chain array */
+    ajint      j    =0;		 /* Loop counter */
+    AjPAtom    atm  =NULL;	 /* Atom object */
+    AjPResidue res  =NULL;	 /* Residue object */
+    ajint      nchn =0;          /* No. chains that have min. no. of aa's */
+    AjPInt     lookup;           /* Array of chain numbers for chains in 
+				    ret for all chains in pdb.A '0' is 
+				    given for chains with < threshold no.
+				    of aa's */
+    ajint    chn=0;
+    ajint    rn_last = -100000;
+    ajint    mn_last = -100000;
     
-
-
+    ajint    eNum;  
+    AjPStr   eId=NULL;   
+    char     eType;    
+    ajint    eClass;   
+    
     
     if( !ret || !pdb)
     {
@@ -6575,6 +6610,9 @@ static AjBool PdbfileToPdb(AjPPdb *ret, AjPPdbfile pdb)
 	ajWarn("Bad arg's passed to PdbfileToPdb");
 	return ajFalse;
     }
+    
+
+    eId = ajStrNew();
     
     
     lookup = ajIntNewL(pdb->nchains);
@@ -6680,10 +6718,10 @@ static AjBool PdbfileToPdb(AjPPdb *ret, AjPPdbfile pdb)
 	    atm->B=(pdb)->b[j];
 
 
-	    ajStrAssS(&atm->eId, (pdb)->elementId[j]);
-	    atm->eNum   = (pdb)->elementNum[j];
-	    atm->eType  = (pdb)->elementType[j];
-	    atm->eClass = (pdb)->helixClass[j];
+	    ajStrAssS(&eId, (pdb)->elementId[j]);
+	    eNum   = (pdb)->elementNum[j];
+	    eType  = (pdb)->elementType[j];
+	    eClass = (pdb)->helixClass[j];
 	    
 
 	    if((pdb)->linetype[j]==PDBPARSE_COORDGP)
@@ -6693,17 +6731,54 @@ static AjBool PdbfileToPdb(AjPPdb *ret, AjPPdbfile pdb)
 	    else
 	    {
 		if((pdb)->chainok[(pdb)->chnn[j]-1])
-	     /* ajListPushApp((*ret)->Chains[(pdb)->chnn[j]-1]->Atoms, atm); */
-		    ajListPushApp((*ret)->Chains[ajIntGet(lookup, (pdb)->chnn[j]-1)-1]->Atoms, atm); 
+		{
+		    /* ajListPushApp((*ret)->Chains[(pdb)->chnn[j]-1]->Atoms, atm); */
+		    /* ajListPushApp((*ret)->Chains[ajIntGet(lookup, (pdb)->chnn[j]-1)-1]->Atoms, atm); */
+		    chn = ajIntGet(lookup, (pdb)->chnn[j]-1)-1;
+		    
+		    ajListPushApp((*ret)->Chains[chn]->Atoms, atm); 
+
+		    /* Write residue object */
+		    if(atm->Type=='P')
+		    {
+			/* New model */
+			if(atm->Mod != mn_last)
+			{
+			    rn_last = -100000;
+			    mn_last = atm->Mod;
+			}
+
+			/* New residue */
+			if(atm->Idx != rn_last)
+			{
+			    res = ajResidueNew();
+
+			    res->Mod     = atm->Mod;
+			    res->Chn     = atm->Chn;
+			    res->Idx     = atm->Idx;
+			    ajStrAssS(&res->Pdb, atm->Pdb);
+			    res->Id1     = atm->Id1;
+			    ajStrAssS(&res->Id3, atm->Id3);
+
+			    res->eNum    = eNum;  
+			    ajStrAssS(&res->eId, eId);
+			    res->eType   = eType;    
+			    res->eClass  = eClass;   
+
+			    ajListPushApp((*ret)->Chains[chn]->Residues, (void *) res);
+			    rn_last = atm->Idx;
+			}
+		    }
+		}
 		else
 		    ajAtomDel(&atm);
 	    }
-	    
 	}
 	else continue;
     }
     
     ajIntDel(&lookup);
+    ajStrDel(&eId);
     return ajTrue;
 }	
 
@@ -7174,8 +7249,8 @@ AjPPdb ajPdbReadRawNew(AjPFile inf, const AjPStr pdbid, ajint min_chain_size,
     AjPPdbfile pdbfile      =NULL; /* Pdbfile structure (for raw data)    */
     AjPPdb     ret          =NULL;  /* Pdb structure (for parsed data)     */
     AjPElements elms=NULL;         /* Elements structure (for parsed data)*/
-    
 
+    
 
     if(!inf || !logf)
     {
@@ -7297,6 +7372,7 @@ AjPPdb ajPdbReadRawNew(AjPFile inf, const AjPStr pdbid, ajint min_chain_size,
 	ajPdbDel(&ret);
 	return NULL;	
     }
+
 
     /* Tidy up and return */
     PdbfileDel(&pdbfile);

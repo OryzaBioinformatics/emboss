@@ -456,7 +456,7 @@ float embVdwRad(const AjPAtom atm, const AjPVdwall vdw)
 AjBool embPdbToIdx(ajint *idx, const AjPPdb pdb, const AjPStr res, ajint chn)
 {
     AjIList  iter = NULL;
-    AjPAtom  atm  = NULL;
+    AjPResidue  residue  = NULL;
     
     
     if(!pdb || !(res) || !(idx))
@@ -473,30 +473,30 @@ AjBool embPdbToIdx(ajint *idx, const AjPPdb pdb, const AjPStr res, ajint chn)
     
 
     /* Initialise the iterator */
-    iter=ajListIterRead(pdb->Chains[chn-1]->Atoms);
+    iter=ajListIterRead(pdb->Chains[chn-1]->Residues);
 
 
-    /* Iterate through the list of atoms */
-    while((atm = (AjPAtom)ajListIterNext(iter)))
+    /* Iterate through the list of residues */
+    while((residue = (AjPResidue)ajListIterNext(iter)))
     {
-	if(atm->Chn!=chn)
+	if(residue->Chn!=chn)
 	    continue;
 	
 	/*
 	** Hard-coded to work on model 1
-	** Continue / break if a non-protein atom is found or model no. !=1
+	** Continue / break if a non-protein residue is found or model no. !=1
 	*/
-	if(atm->Mod!=1)
+	if(residue->Mod!=1)
 	    break;
 
-	if(atm->Type!='P') 
-	    continue;
+	/* if(residue->Type!='P') 
+	    continue; */
 
 	/* If we have found the residue */
-	if(ajStrMatch(res, atm->Pdb))
+	if(ajStrMatch(res, residue->Pdb))
 	{
 	    ajListIterFree(&iter);		
-	    *idx = atm->Idx;
+	    *idx = residue->Idx;
 	    return ajTrue;
 	}
     }
@@ -659,7 +659,7 @@ AjBool embPdbListHeterogens(const AjPPdb pdb, AjPList *list_heterogens,
 
 
 
-/* @func embPdbAtomIndexI ***************************************************
+/* @func embPdbResidueIndexI ***************************************************
 **
 ** Reads a Pdb object and writes an integer array which gives the index into 
 ** the protein sequence for structured residues (residues for which electron
@@ -674,59 +674,64 @@ AjBool embPdbListHeterogens(const AjPPdb pdb, AjPList *list_heterogens,
 ** @@
 ****************************************************************************/
 
-AjBool embPdbAtomIndexI(const AjPPdb pdb, ajint chn, AjPInt *idx)
+AjBool embPdbResidueIndexI(const AjPPdb pdb, ajint chn, AjPInt *idx)
 {
     AjIList  iter = NULL;
-    AjPAtom  atm  = NULL;
-    ajint this_rn = 0;
-    ajint last_rn = -1000;
-    ajint resn    = 0;     /* Sequential count of residues */
+    AjPResidue  res  = NULL;
+/*    ajint this_rn = 0;
+    ajint last_rn = -1000; */
+    ajint resn    = 0;  
     
     
     if(!pdb || !(*idx))
     {
-	ajWarn("Bad arg's passed to embPdbAtomIndexI");
+	ajWarn("Bad arg's passed to embPdbResidueIndexI");
 	return ajFalse;
     }
     
     if((chn > pdb->Nchn) || (!pdb->Chains))
     {
-	ajWarn("Bad arg's passed to embPdbAtomIndexI");
+	ajWarn("Bad arg's passed to embPdbResidueIndexI");
 	return ajFalse;
     }
     
 
     /* Initialise the iterator */
-    iter=ajListIterRead(pdb->Chains[chn-1]->Atoms);
+    iter=ajListIterRead(pdb->Chains[chn-1]->Residues);
 
 
-    /* Iterate through the list of atoms */
-    while((atm=(AjPAtom)ajListIterNext(iter)))
+    /* Iterate through the list of residues */
+    while((res=(AjPResidue)ajListIterNext(iter)))
     {
-	if(atm->Chn!=chn)
+	if(res->Chn!=chn)
 	    continue;
 	
 	/* Hard-coded to work on model 1 */
-	/* Continue / break if a non-protein atom is found or 
+	/* Continue / break if a non-protein residue is found or 
 	   model no. !=1 */
-	if(atm->Mod!=1)
+	if(res->Mod!=1)
 	    break;
-	if(atm->Type!='P') 
-	    continue;
+	/*
+	   if(res->Type!='P') 
+	   continue; */
 
 
 	/* If we are onto a new residue */
-	this_rn=atm->Idx;
+	/*
+	this_rn=res->Idx;
 	if(this_rn!=last_rn)
 	{
-	    ajIntPut(&(*idx), resn++, atm->Idx);
+	    ajIntPut(&(*idx), resn++, res->Idx);
 	    last_rn=this_rn;
-	}
+	}*/
+
+	ajIntPut(&(*idx), resn++, res->Idx);
+
     }
         
     if(resn==0)
     {
-	ajWarn("Chain not found in embPdbAtomIndexI");
+	ajWarn("Chain not found in embPdbResidueIndexI");
 	ajListIterFree(&iter);		
 	return ajFalse;
     }
@@ -739,7 +744,7 @@ AjBool embPdbAtomIndexI(const AjPPdb pdb, ajint chn, AjPInt *idx)
 
 
 
-/* @func embPdbAtomIndexC ***************************************************
+/* @func embPdbResidueIndexC ***************************************************
 **
 ** Reads a Pdb object and writes an integer array which gives the index into 
 ** the protein sequence for structured residues (residues for which electron
@@ -754,17 +759,17 @@ AjBool embPdbAtomIndexI(const AjPPdb pdb, ajint chn, AjPInt *idx)
 ** @@
 ****************************************************************************/
 
-AjBool embPdbAtomIndexC(const AjPPdb pdb, char chn, AjPInt *idx)
+AjBool embPdbResidueIndexC(const AjPPdb pdb, char chn, AjPInt *idx)
 {
     ajint chnn;
     
     if(!ajPdbChnidToNum(chn, pdb, &chnn))
     {
-	ajWarn("Chain not found in embPdbAtomIndexC");
+	ajWarn("Chain not found in embPdbResidueIndexC");
 	return ajFalse;
     }
     
-    if(!embPdbAtomIndexI(pdb, chnn, idx))
+    if(!embPdbResidueIndexI(pdb, chnn, idx))
 	return ajFalse;
 
     return ajTrue;
@@ -774,7 +779,7 @@ AjBool embPdbAtomIndexC(const AjPPdb pdb, char chn, AjPInt *idx)
 
 
 
-/* @func embPdbAtomIndexICA *************************************************
+/* @func embPdbResidueIndexICA *************************************************
 **
 ** Reads a Pdb object and writes an integer array which gives the index into 
 ** the protein sequence for structured residues (residues for which electron
@@ -791,7 +796,7 @@ AjBool embPdbAtomIndexC(const AjPPdb pdb, char chn, AjPInt *idx)
 ** @@
 ****************************************************************************/
 
-AjBool embPdbAtomIndexICA(const AjPPdb pdb,
+AjBool embPdbResidueIndexICA(const AjPPdb pdb,
 			  ajint chn, AjPInt *idx, ajint *nres)
 {
     AjIList iter  = NULL;
@@ -802,13 +807,13 @@ AjBool embPdbAtomIndexICA(const AjPPdb pdb,
     
     if(!pdb || !(*idx))
     {
-	ajWarn("Bad arg's passed to embPdbAtomIndexICA");
+	ajWarn("Bad arg's passed to embPdbResidueIndexICA");
 	return ajFalse;
     }
     
     if((chn > pdb->Nchn) || (!pdb->Chains))
     {
-	ajWarn("Bad arg's passed to embPdbAtomIndexICA");
+	ajWarn("Bad arg's passed to embPdbResidueIndexICA");
 	return ajFalse;
     }
     
@@ -844,7 +849,7 @@ AjBool embPdbAtomIndexICA(const AjPPdb pdb,
         
     if(resn==0)
     {
-	ajWarn("Chain not found in embPdbAtomIndexICA");
+	ajWarn("Chain not found in embPdbResidueIndexICA");
 	ajListIterFree(&iter);		
 	return ajFalse;
     }
@@ -860,7 +865,7 @@ AjBool embPdbAtomIndexICA(const AjPPdb pdb,
 
 
 
-/* @func embPdbAtomIndexCCA *************************************************
+/* @func embPdbResidueIndexCCA *************************************************
 **
 ** Reads a Pdb object and writes an integer array which gives the index into 
 ** the protein sequence for structured residues (residues for which electron
@@ -877,17 +882,17 @@ AjBool embPdbAtomIndexICA(const AjPPdb pdb,
 ** @@
 ****************************************************************************/
 
-AjBool embPdbAtomIndexCCA(const AjPPdb pdb, char chn, AjPInt *idx, ajint *nres)
+AjBool embPdbResidueIndexCCA(const AjPPdb pdb, char chn, AjPInt *idx, ajint *nres)
 {
     ajint chnn;
     
     if(!ajPdbChnidToNum(chn, pdb, &chnn))
     {
-	ajWarn("Chain not found in embPdbAtomIndexCCA");
+	ajWarn("Chain not found in embPdbResidueIndexCCA");
 	return ajFalse;
     }
     
-    if(!embPdbAtomIndexICA(pdb, chnn, idx, nres))
+    if(!embPdbResidueIndexICA(pdb, chnn, idx, nres))
 	return ajFalse;
 
 

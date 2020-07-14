@@ -1072,7 +1072,7 @@ static ajint domainSortDomainID(const void *DomID1, const void *DomID2)
 /* @func ajCathReadAllNew **************************************************
 **
 ** Reads a DCF file (domain classification file) for CATH domains. This file
-** is in DCF format (embl-like, see documentation for DOMAINATRIX "cathparse"
+** is in DCF format (see documentation for DOMAINATRIX "cathparse"
 ** application) and creates a list of Cath objects for the entire content.
 ** 
 ** @param [u] inf  [AjPFile]     Pointer to CATH classification file
@@ -1705,7 +1705,7 @@ AjPList   ajCathReadAllRawNew(AjPFile cathf, AjPFile domf, AjPFile namesf,
 /* @func ajCathReadCNew ****************************************************
 **
 ** Read a Cath object from a DCF file (domain classification file) in DCF 
-** format (embl-like) (see documentation for 
+** format (see documentation for 
 ** DOMAINATRIX "cathparse" application).
 **
 ** @param [u] inf   [AjPFile]  Input file stream
@@ -1922,7 +1922,7 @@ AjPList   ajCathReadAllRawNew(AjPFile cathf, AjPFile domf, AjPFile namesf,
 /* @func ajCathReadNew *****************************************************
 **
 ** Read a Cath object from a DCF file (domain classification file) which is
-** in DCF format (embl-like) (see documentation for 
+** in DCF format (see documentation for 
 ** DOMAINATRIX "cathparse" application).
 **
 ** @param [u] inf   [AjPFile]  Input file stream
@@ -2002,7 +2002,7 @@ AjPList  ajDomainReadAllNew(AjPFile inf)
 /* @func ajScopReadAllNew **************************************************
 **
 ** Reads the DCF file (domain classification file) of SCOP domains. The DCF
-** file is in DCF format (embl-like), see documentation 
+** file is in DCF format (see documentation 
 ** for DOMAINATRIX "scopparse" application). The function creates a list of 
 ** cop objects for the entire content.
 ** 
@@ -2372,7 +2372,7 @@ AjPDomain ajDomainReadNew(AjPFile inf, const AjPStr entry)
 /* @func ajScopReadNew *****************************************************
 **
 ** Read a Scop object from a DCF file (domain classification file). The DCF
-** file is in DCF format (embl-like) (see documentation for 
+** file is in DCF format (see documentation for 
 ** DOMAINATRIX "scopparse" application).
 **
 ** @param [u] inf   [AjPFile] Input file stream.
@@ -2448,7 +2448,7 @@ AjPDomain ajDomainReadCNew(AjPFile inf, const char *entry, ajint dtype)
 /* @func ajScopReadCNew ****************************************************
 **
 ** Read a Scop object from a DCF file (domain classification file) in DCF
-** format (embl-like) (see documentation for 
+** format (see documentation for 
 ** DOMAINATRIX "scopparse" application).
 **
 ** @param [u] inf   [AjPFile]  Input file stream
@@ -2553,13 +2553,20 @@ AjPScop ajScopReadCNew(AjPFile inf, const char *entry)
 	return NULL;
     
     
-    while(ok && !ajStrPrefixC(line,"//"))
+    while(ok && (!ajStrPrefixC(line,"//")))
     {
 	if(ajStrPrefixC(line,"XX"))
 	{
 	    ok = ajFileReadLine(inf,&line);
 	    continue;
 	}
+	/* Empty line */
+	if(!(MAJSTRLEN(line)))
+	{
+	    ok = ajFileReadLine(inf,&line);
+	    continue;
+	}
+   
 	ajRegExec(exp1,line);
 	ajRegPost(exp1,&str);
 
@@ -2574,7 +2581,7 @@ AjPScop ajScopReadCNew(AjPFile inf, const char *entry)
 	else if(ajStrPrefixC(line,"FO"))
 	{
 	    ajStrAssS(&fold,str);
-	    while(ajFileReadLine(inf,&line))
+	    while((ok=ajFileReadLine(inf,&line)))
 	    {
 		if(ajStrPrefixC(line,"XX"))
 		    break;
@@ -2585,7 +2592,7 @@ AjPScop ajScopReadCNew(AjPFile inf, const char *entry)
 	else if(ajStrPrefixC(line,"SF"))
 	{
 	    ajStrAssS(&super,str);
-	    while(ajFileReadLine(inf,&line))
+	    while((ok=ajFileReadLine(inf,&line)))
 	    {
 		if(ajStrPrefixC(line,"XX"))
 		    break;
@@ -2596,7 +2603,7 @@ AjPScop ajScopReadCNew(AjPFile inf, const char *entry)
 	else if(ajStrPrefixC(line,"FA"))
 	{
 	    ajStrAssS(&family,str);
-	    while(ajFileReadLine(inf,&line))
+	    while((ok=ajFileReadLine(inf,&line)))
 	    {
 		if(ajStrPrefixC(line,"XX"))
 		    break;
@@ -2607,7 +2614,7 @@ AjPScop ajScopReadCNew(AjPFile inf, const char *entry)
 	else if(ajStrPrefixC(line,"DO"))
 	{
 	    ajStrAssS(&domain,str);
-	    while(ajFileReadLine(inf,&line))
+	    while((ok=ajFileReadLine(inf,&line)))
 	    {
 		if(ajStrPrefixC(line,"XX"))
 		    break;
@@ -3683,19 +3690,24 @@ AjBool ajPdbWriteDomain(AjPFile outf, const AjPPdb pdb,
     AjPStr seq    = NULL;   
     AjPStr tmpstr = NULL;
         
-    AjBool   found_start = ajFalse;
-    AjBool   found_end   = ajFalse;
-    AjBool   nostart     = ajFalse;
-    AjBool   noend       = ajFalse;
-    AjIList  iter        = NULL;
-    AjPAtom  atm         = NULL;
-    AjPAtom  atm2        = NULL;
-    
+    AjBool      found_start = ajFalse;
+    AjBool      found_end   = ajFalse;
+    AjBool      nostart     = ajFalse;
+    AjBool      noend       = ajFalse;
+    AjIList     iter        = NULL;
+    AjPAtom     atm         = NULL;
+    AjPAtom     atm2        = NULL;
+    AjPResidue  res         = NULL;
+    AjPResidue  res2        = NULL;
+/*    AjPResidue *resarr      = NULL; */
+
     /* Intitialise strings */
     seq    = ajStrNew();
     tmpseq = ajStrNew();
     tmpstr = ajStrNew();
     
+
+
     /* Check for unknown or zero-length chains */
     for(z=0;z<scop->N;z++)
 	if(!ajPdbChnidToNum(scop->Chain[z], pdb, &chn))
@@ -3722,7 +3734,7 @@ AjBool ajPdbWriteDomain(AjPFile outf, const AjPPdb pdb,
 	    return ajFalse;
 	}
     
-    
+
     /* Write header info. to domain coordinate file */
     ajFmtPrintF(outf, "%-5s%S\n", "ID", scop->Entry);
     ajFmtPrintF(outf, "XX\n");
@@ -3742,7 +3754,8 @@ AjBool ajPdbWriteDomain(AjPFile outf, const AjPPdb pdb,
     
     /* The NCHN and NMOD are hard-coded to 1 for domain files */
     
-    
+
+
     /* Start of main application loop */
     /* Print out data up to co-ordinates list */
     for(z=0;
@@ -3758,7 +3771,7 @@ AjBool ajPdbWriteDomain(AjPFile outf, const AjPPdb pdb,
 	
 
 	/* Initialise the iterator */
-	iter=ajListIterRead(pdb->Chains[chn-1]->Atoms);
+	iter=ajListIterRead(pdb->Chains[chn-1]->Residues);
 
 
 	/*
@@ -3790,26 +3803,22 @@ AjBool ajPdbWriteDomain(AjPFile outf, const AjPPdb pdb,
 	if(!found_start || !found_end)
 	{
 	    /* Iterate through the list of atoms */
-	    while((atm=(AjPAtom)ajListIterNext(iter)))
+	    while((res=(AjPResidue)ajListIterNext(iter)))
 	    {
-		/* Hard-coded to work on model 1 */
-		/*
-		** Continue if a non-protein atom is found or break if
-		** model no. !=1
-		*/
-		if(atm->Mod!=1 || (found_start && found_end))
+		/* 
+		 ** Hard-coded to work on model 1
+		 ** Break if model no. !=1
+		 */
+		if(res->Mod!=1 || (found_start && found_end))
 		    break; 
-		if(atm->Type!='P')
-		    continue;
 
-
-		/* if(atm->Type!='P' || atm->Mod!=1 
+		/* if(res->Type!='P' || res->Mod!=1 
 		   || (found_start && found_end))
 		    break; */
 
 
 		/* If we are onto a new residue */
-		this_rn=atm->Idx;
+		this_rn=res->Idx;
 		if(this_rn!=last_rn)
 		{
 		    last_rn=this_rn;
@@ -3824,10 +3833,10 @@ AjBool ajPdbWriteDomain(AjPFile outf, const AjPPdb pdb,
 			ajStrAppK(&tmpstr, '*');
 			
 			/* Start position found  */
-		        /*if(!ajStrCmpCase(atm->Pdb, scop->Start[z])) */
-			if(ajStrMatchWild(atm->Pdb, tmpstr))
+		        /*if(!ajStrCmpCase(res->Pdb, scop->Start[z])) */
+			if(ajStrMatchWild(res->Pdb, tmpstr))
 			{
-			    if(!ajStrMatch(atm->Pdb, scop->Start[z]))
+			    if(!ajStrMatch(res->Pdb, scop->Start[z]))
 			    {
 				ajWarn("Domain start found by wildcard "
 				       "match only "
@@ -3839,7 +3848,7 @@ AjBool ajPdbWriteDomain(AjPFile outf, const AjPPdb pdb,
 					    scop->Entry);
 			    }
 			    
-			    start=atm->Idx;
+			    start=res->Idx;
 			    found_start=ajTrue;	
 			}
 			else	
@@ -3857,10 +3866,10 @@ AjBool ajPdbWriteDomain(AjPFile outf, const AjPPdb pdb,
 			ajStrAppK(&tmpstr, '*');
 
 			/* End position found */
-			/*if(!ajStrCmpCase(atm->Pdb, scop->End[z])) */
-			if(ajStrMatchWild(atm->Pdb, tmpstr))
+			/*if(!ajStrCmpCase(res->Pdb, scop->End[z])) */
+			if(ajStrMatchWild(res->Pdb, tmpstr))
 			{
-			    if(!ajStrMatch(atm->Pdb, scop->End[z]))
+			    if(!ajStrMatch(res->Pdb, scop->End[z]))
 			    {
 				ajWarn("Domain end found by wildcard "
 				       "match only "
@@ -3872,7 +3881,7 @@ AjBool ajPdbWriteDomain(AjPFile outf, const AjPPdb pdb,
 					    scop->Entry);
 			    }
 
-			    end = atm->Idx;
+			    end = res->Idx;
 			    found_end = ajTrue;       
 			    break;
 			}
@@ -3881,8 +3890,6 @@ AjBool ajPdbWriteDomain(AjPFile outf, const AjPPdb pdb,
 	    }
 	}
 	
-	
-
 	/* Diagnostics if start position was not found */
 	if(!found_start)		
 	{
@@ -3921,7 +3928,7 @@ AjBool ajPdbWriteDomain(AjPFile outf, const AjPPdb pdb,
     }
     /* End of main application loop */
     
-    
+
     /*
     ** If the domain was composed of more than once chain then a '.' is
     ** given as the chain identifier
@@ -3935,8 +3942,6 @@ AjBool ajPdbWriteDomain(AjPFile outf, const AjPPdb pdb,
 	    id = '.';
     }
     
-
-
     /* Write sequence to domain coordinate file */
     ajFmtPrintF(outf, "XX\n");	
     ajFmtPrintF(outf, "%-5s[1]\n", "CN");	
@@ -3962,7 +3967,7 @@ AjBool ajPdbWriteDomain(AjPFile outf, const AjPPdb pdb,
     ajFmtPrintF(outf, "XX\n");	
 
     
-    /* Write co-ordinates list to domain coordinate file */        
+    /* Write residue list to domain coordinate file */        
     for(nostart=ajFalse, noend=ajFalse, 
 	z=0; z<scop->N;
 	z++,found_start=ajFalse, found_end=ajFalse)
@@ -3973,6 +3978,174 @@ AjBool ajPdbWriteDomain(AjPFile outf, const AjPPdb pdb,
 	*/
 	ajPdbChnidToNum(scop->Chain[z], pdb, &chn);
 	
+	/* Initialise the iterator */
+	iter = ajListIterRead(pdb->Chains[chn-1]->Residues);
+
+
+	/* Increment res. counter from last chain if appropriate */
+	if(noend)
+	    rn_mod += res2->Idx;
+	else	 
+	    rn_mod += finalrn;
+
+	
+	/* Check whether start and end of domain are specified */
+	if(!ajStrCmpC(scop->Start[z], "."))
+	    nostart = ajTrue;
+	else
+	    nostart=ajFalse;
+	
+	if(!ajStrCmpC(scop->End[z], "."))
+	    noend = ajTrue;
+	else 
+	    noend = ajFalse;
+	
+
+	/* Iterate through the list of residues */
+	while((res=(AjPResidue)ajListIterNext(iter)))
+	{
+	    /* Break if model no. !=1 */
+	    if(res->Mod!=1)
+		break;
+
+	    /* The start position has not been found yet */
+	    if(!found_start)
+	    {
+		/* Start position was specified */
+		if(!nostart)
+		{
+		    ajStrAssS(&tmpstr, scop->Start[z]);
+		    ajStrAppK(&tmpstr, '*');
+
+		    /* Start position found */
+		    /*if(!ajStrCmpCase(res->Pdb, scop->Start[z])) */
+		    if(ajStrMatchWild(res->Pdb, tmpstr))		    
+		    {
+			if(!ajStrMatch(res->Pdb, scop->Start[z]))
+			{
+			    ajWarn("Domain start found by wildcard match only "
+				   "in ajPdbWriteDomain");
+			    ajFmtPrintF(errf, "//\n%S\nERROR Domain "
+					"start found "
+					"by wildcard match only in "
+					"ajPdbWriteDomain\n", scop->Entry);
+			}
+			    
+
+			rn_mod -= res->Idx-1;
+			found_start = ajTrue;	
+		    }
+		    else	
+			continue;
+		}
+		else	
+		    found_start=ajTrue;	
+	    }	
+
+	    
+	    /*
+	     ** The end position was specified, but has not 
+	     ** been found yet
+	     */
+	    if(!found_end && !noend)
+	    {
+		ajStrAssS(&tmpstr, scop->End[z]);
+		ajStrAppK(&tmpstr, '*');
+
+		/* End position found */
+		/*if(!ajStrCmpCase(res->Pdb, scop->End[z])) */
+		if(ajStrMatchWild(res->Pdb, tmpstr))
+		{
+		    if(!ajStrMatch(res->Pdb, scop->End[z]))
+		    {
+			ajWarn("Domain end found by wildcard match only "
+			       "in ajPdbWriteDomain");
+			ajFmtPrintF(errf, "//\n%S\nERROR Domain end found "
+				    "by wildcard match only in "
+				    "ajPdbWriteDomain\n", scop->Entry);
+		    }
+
+		    found_end = ajTrue;     
+		    finalrn   = res->Idx;
+		}
+	    }	
+	    /*
+	    ** The end position was specified and has been found, and
+	    ** the current atom no longer belongs to this final residue
+	    */
+	    else if(res->Idx != finalrn && !noend)
+		break;
+	    
+	    ajFmtPrintF(outf, "%-5s%-5d%-5d%-5d%-6S%-2c%-6S", 
+			"RE", 
+			res->Mod, /* It will always be 1 */
+		        1, /* chn number is always given as 1 */
+			res->Idx+rn_mod, 
+			res->Pdb,
+			res->Id1, 
+			res->Id3);
+	    
+			
+	    if(res->eNum != 0)
+		ajFmtPrintF(outf, "%-5d", res->eNum);
+	    else
+		ajFmtPrintF(outf, "%-5c", '.');
+	    ajFmtPrintF(outf, "%-5S%-5c", res->eId, res->eType);
+	    
+	    if(res->eType == 'H')
+		ajFmtPrintF(outf, "%-5d", res->eClass);
+	    else
+		ajFmtPrintF(outf, "%-5c", '.');
+	    
+	    if(res->eStrideNum != 0)
+		ajFmtPrintF(outf, "%-5d", res->eStrideNum);
+	    else
+		ajFmtPrintF(outf, "%-5c", '.');
+	    ajFmtPrintF(outf, "%-5c", res->eStrideType);
+	    
+
+	    ajFmtPrintF(outf, "%8.2f%8.2f%8.2f%8.2f%8.2f"
+			"%8.2f%8.2f%8.2f%8.2f%8.2f%8.2f%8.2f"
+			"%8.2f\n", 
+			res->Phi,
+			res->Psi,
+			res->Area, 
+			res->all_abs, 
+			res->all_rel, 
+			res->side_abs, 
+			res->side_rel, 
+			res->main_abs, 
+			res->main_rel, 
+			res->npol_abs, 
+			res->npol_rel, 
+			res->pol_abs, 
+			res->pol_rel);
+
+	    /* Assign pointer for this chain */
+	    res2 = res;
+	}
+
+	ajListIterFree(&iter);			
+    } 	
+    
+
+
+    /* Write atom list to domain coordinate file */        
+    for(nostart=ajFalse, noend=ajFalse, 
+	z=0; z<scop->N;
+	z++,found_start=ajFalse, found_end=ajFalse)
+    {
+	/*
+	** Unknown or Zero length chains have already been checked for
+	** so no additional checking is needed here
+	*/
+	ajPdbChnidToNum(scop->Chain[z], pdb, &chn);
+	
+/*	if(resarr)
+	    AJFREE(resarr);
+	ajListToArray(pdb->Chains[chn-1]->Residues, (void ***) &resarr);  */
+	
+
 	/* Initialise the iterator */
 	iter = ajListIterRead(pdb->Chains[chn-1]->Atoms);
 
@@ -4024,9 +4197,11 @@ AjBool ajPdbWriteDomain(AjPFile outf, const AjPPdb pdb,
 
 		    /* Start position found */
 		    /*if(!ajStrCmpCase(atm->Pdb, scop->Start[z])) */
-		    if(ajStrMatchWild(atm->Pdb, tmpstr))		    
+		    if(ajStrMatchWild(atm->Pdb, tmpstr))      
+/*		    if(ajStrMatchWild(resarr[atm->Idx-1]->Pdb, tmpstr))	 */
 		    {
-			if(!ajStrMatch(atm->Pdb, scop->Start[z]))
+			if(!ajStrMatch(atm->Pdb, scop->Start[z])) 
+			/* if(!ajStrMatch(resarr[atm->Idx-1]->Pdb, scop->Start[z])) */
 			{
 			    ajWarn("Domain start found by wildcard match only "
 				   "in ajPdbWriteDomain");
@@ -4047,7 +4222,7 @@ AjBool ajPdbWriteDomain(AjPFile outf, const AjPPdb pdb,
 		    found_start=ajTrue;	
 	    }	
 
-	    
+
 	    /*
 	    ** The end position was specified, but has not 
 	    ** been found yet
@@ -4059,9 +4234,11 @@ AjBool ajPdbWriteDomain(AjPFile outf, const AjPPdb pdb,
 
 		/* End position found */
 		/*if(!ajStrCmpCase(atm->Pdb, scop->End[z])) */
-		if(ajStrMatchWild(atm->Pdb, tmpstr))
+		 if(ajStrMatchWild(atm->Pdb, tmpstr)) 
+		     /* if(ajStrMatchWild(resarr[atm->Idx-1]->Pdb, tmpstr)) */
 		{
-		    if(!ajStrMatch(atm->Pdb, scop->End[z]))
+		     if(!ajStrMatch(atm->Pdb, scop->End[z]))  
+        	 /* if(!ajStrMatch(resarr[atm->Idx-1]->Pdb, scop->End[z])) */
 		    {
 			ajWarn("Domain end found by wildcard match only "
 			       "in ajPdbWriteDomain");
@@ -4081,60 +4258,25 @@ AjBool ajPdbWriteDomain(AjPFile outf, const AjPPdb pdb,
 	    else if(atm->Idx != finalrn && !noend)
 		break;
 	    
-	    
+
 	    /* Print out coordinate line */
-	    ajFmtPrintF(outf, "%-5s%-5d%-5d%-5c%-5c%-6d%-6S%-5c",
-			"CO", 
-			atm->Mod,     /* It will always be 1 */
-			1,	      /* chn number is always given as 1 */
-			'.',
-			atm->Type, 
+	    ajFmtPrintF(outf, "%-5s%-5d%-5d%-5c%-5d%-6S%-2c%-6S%-2c%-6S"
+			"%9.3f%9.3f%9.3f%8.2f%8.2f\n", 
+			"AT", 
+			atm->Mod, /* It will always be 1 */
+			atm->Chn, /* chn number is always given as 1 */
+			'.', 
 			atm->Idx+rn_mod, 
 			atm->Pdb, 
-			atm->eType);
-	    if(atm->eNum != 0)
-		ajFmtPrintF(outf, "%-5d", atm->eNum);
-	    else
-		ajFmtPrintF(outf, "%-5c", '.');
-	    ajFmtPrintF(outf, "%-5S", atm->eId);
-
-	    if(atm->eType == 'H')
-		ajFmtPrintF(outf, "%-5d", atm->eClass);
-	    else
-		ajFmtPrintF(outf, "%-5c", '.');
-
-
-	    ajFmtPrintF(outf, "%-5c", atm->eStrideType);
-			if(atm->eStrideNum != 0)
-			    ajFmtPrintF(outf, "%-5d", atm->eStrideNum);
-			else
-			    ajFmtPrintF(outf, "%-5c", '.');
-
-	    ajFmtPrintF(outf, "%-2c%6S    %-4S%8.3f%9.3f%9.3f%8.2f%8.2f"
-			"%8.2f%8.2f%8.2f%8.2f%8.2f%8.2f%8.2f%8.2f%8.2f"
-			"%8.2f%8.2f%8.2f%8.2f\n", 
-			atm->Id1, 
+			atm->Id1,
 			atm->Id3,
+			atm->Type, 
 			atm->Atm, 
 			atm->X, 
 			atm->Y, 
-			atm->Z, 
-			atm->O, 
-			atm->B,
-			atm->Phi,
-			atm->Psi,
-			atm->Area, 
-			atm->all_abs, 
-			atm->all_rel, 
-			atm->side_abs, 
-			atm->side_rel, 
-			atm->main_abs, 
-			atm->main_rel, 
-			atm->npol_abs, 
-			atm->npol_rel, 
-			atm->pol_abs, 
-			atm->pol_rel);
-	    
+			atm->Z,
+			atm->O,
+			atm->B);
 	    
 	    /* Assign pointer for this chain */
 	    atm2 = atm;
@@ -4142,13 +4284,15 @@ AjBool ajPdbWriteDomain(AjPFile outf, const AjPPdb pdb,
 
 	ajListIterFree(&iter);			
     } 	
-    
-    
+
+
     /* Write last line in file */
     ajFmtPrintF(outf, "//\n");    
     
 
     /* Tidy up */
+/*    if(resarr)
+	AJFREE(resarr); */
     ajStrDel(&seq);
     ajStrDel(&tmpseq);
     ajStrDel(&tmpstr);    
@@ -4165,8 +4309,8 @@ AjBool ajPdbWriteDomain(AjPFile outf, const AjPPdb pdb,
 /* @func ajCathWrite *******************************************************
 **
 ** Write contents of a Cath object to an output DCF file (domain 
-** classification file) in DCF format (embl-like)
-** (see documentation for DOMAINATRIX "cathparse" application).
+** classification file) in DCF format (see documentation for DOMAINATRIX
+** "cathparse" application).
 ** 
 ** @param [u] outf [AjPFile] Output file stream
 ** @param [r] obj  [const AjPCath] Cath object
@@ -4317,8 +4461,8 @@ AjBool ajDomainWrite(AjPFile outf, const AjPDomain obj)
 /* @func ajScopWrite *******************************************************
 **
 ** Write contents of a Scop object to a DCF file (domain classification 
-** file).  The DCF file uses DCF format (embl-like).
-** (see documentation for DOMAINATRIX "scopparse" application).
+** file).  The DCF file uses DCF format (see documentation for DOMAINATRIX
+** "scopparse" application).
 **
 ** @param [u] outf [AjPFile] Output file stream
 ** @param [r] obj  [const AjPScop] Scop object
