@@ -195,7 +195,8 @@ void     embShowAddTicknum (EmbPShow thys);
 void     embShowAddComp (EmbPShow thys, AjBool number);
 void     embShowAddTran (EmbPShow thys, AjPTrn trnTable, ajint frame,
 			 AjBool threeletter, AjBool number, AjPRange regions,
-			 ajint orfminsize, AjBool lcinterorf, AjBool firstorf, AjBool lastorf, AjBool showframe);
+			 ajint orfminsize, AjBool lcinterorf,
+			 AjBool firstorf, AjBool lastorf, AjBool showframe);
 void     embShowAddRE (EmbPShow thys, ajint sense, AjPList restrictlist,
 		       AjBool flat);
 void     embShowAddFT (EmbPShow thys, AjPFeattable feat);

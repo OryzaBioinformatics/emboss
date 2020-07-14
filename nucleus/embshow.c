@@ -138,15 +138,15 @@ static void    showFillFT(EmbPShow thys, AjPList lines, EmbPShowFT info,
 static void    showFillNote(EmbPShow thys, AjPList lines, EmbPShowNote info,
 			  ajint pos);
 
-static void showDelSeq (EmbPShowSeq info);
-static void showDelBlank (EmbPShowBlank info);
-static void showDelTicks (EmbPShowTicks info);
-static void showDelTicknum (EmbPShowTicknum info);
-static void showDelComp (EmbPShowComp info);
-static void showDelTran (EmbPShowTran info);
-static void showDelRE (EmbPShowRE info);
-static void showDelFT (EmbPShowFT info);
-static void showDelNote (EmbPShowNote info);
+static void showDelSeq (EmbPShowSeq* pinfo);
+static void showDelBlank (EmbPShowBlank* pinfo);
+static void showDelTicks (EmbPShowTicks* pinfo);
+static void showDelTicknum (EmbPShowTicknum* pinfo);
+static void showDelComp (EmbPShowComp* pinfo);
+static void showDelTran (EmbPShowTran* pinfo);
+static void showDelRE (EmbPShowRE* pinfo);
+static void showDelFT (EmbPShowFT* pinfo);
+static void showDelNote (EmbPShowNote* pinfo);
 static void showAddTags(AjPStr *tagsout, AjPFeature feat, AjBool values);
 
 
@@ -260,7 +260,6 @@ void embShowDel (EmbPShow* pthis)
     AjIList iter;
     EmbPShowInfo infostruct;
     ajint type;				/* descriptor type */
-    void * info;			/* descriptor */
     void *ptr=NULL;
 
     (void) ajDebug("embShowDel\n");
@@ -286,44 +285,43 @@ void embShowDel (EmbPShow* pthis)
 
 	/* iterate through the descriptors filling out the lines */
 	type = infostruct->type;
-	info = infostruct->info;
 
 	switch (type)
 	{
 	case SH_SEQ:
-	    (void) showDelSeq(info);
+	    (void) showDelSeq((EmbPShowSeq*) &infostruct->info);
 	    break;
 
 	case SH_BLANK:
-	    (void) showDelBlank(info);
+	    (void) showDelBlank((EmbPShowBlank*) &infostruct->info);
 	    break;
 
 	case SH_TICK:
-	    (void) showDelTicks(info);
+	    (void) showDelTicks((EmbPShowTicks*) &infostruct->info);
 	    break;
 
 	case SH_TICKNUM:
-	    (void) showDelTicknum(info);
+	    (void) showDelTicknum((EmbPShowTicknum*) &infostruct->info);
 	    break;
 
 	case SH_COMP:
-	    (void) showDelComp(info);
+	    (void) showDelComp((EmbPShowComp*) &infostruct->info);
 	    break;
 
 	case SH_TRAN:
-	    (void) showDelTran(info);
+	    (void) showDelTran((EmbPShowTran*) &infostruct->info);
 	    break;
 
 	case SH_RE:
-	    (void) showDelRE(info);
+	    (void) showDelRE((EmbPShowRE*) &infostruct->info);
 	    break;
 
 	case SH_FT:
-	    (void) showDelFT(info);
+	    (void) showDelFT((EmbPShowFT*) &infostruct->info);
 	    break;
 
 	case SH_NOTE:
-	    (void) showDelNote(info);
+	    (void) showDelNote((EmbPShowNote*) &infostruct->info);
 	    break;
 
 	default:
@@ -350,14 +348,14 @@ void embShowDel (EmbPShow* pthis)
 **
 ** Deletes a show sequence descriptor object.
 **
-** @param [P] info [EmbPShowSeq] Show sequence descriptor object
+** @param [P] pinfo [EmbPShowSeq*] Show sequence descriptor object
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-static void showDelSeq (EmbPShowSeq info) {
+static void showDelSeq (EmbPShowSeq* pinfo) {
 
-  AJFREE(info);
+  AJFREE(*pinfo);
 
 }
 
@@ -365,14 +363,14 @@ static void showDelSeq (EmbPShowSeq info) {
 **
 ** Deletes a show blank descriptor object.
 **
-** @param [P] info [EmbPShowBlank] Show blank descriptor object
+** @param [P] pinfo [EmbPShowBlank*] Show blank descriptor object
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-static void showDelBlank (EmbPShowBlank info) {
+static void showDelBlank (EmbPShowBlank* pinfo) {
 
-  AJFREE(info);
+  AJFREE(*pinfo);
 
 }
 
@@ -380,14 +378,14 @@ static void showDelBlank (EmbPShowBlank info) {
 **
 ** Deletes a show ticks descriptor object.
 **
-** @param [P] info [EmbPShowTicks] Show ticks descriptor object
+** @param [P] pinfo [EmbPShowTicks*] Show ticks descriptor object
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-static void showDelTicks (EmbPShowTicks info) {
+static void showDelTicks (EmbPShowTicks* pinfo) {
 
-  AJFREE(info);
+  AJFREE(*pinfo);
 
 }
 
@@ -395,14 +393,14 @@ static void showDelTicks (EmbPShowTicks info) {
 **
 ** Deletes a show tick numbers descriptor object.
 **
-** @param [P] info [EmbPShowTicknum] Show tick numbers descriptor object
+** @param [P] pinfo [EmbPShowTicknum*] Show tick numbers descriptor object
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-static void showDelTicknum (EmbPShowTicknum info) {
+static void showDelTicknum (EmbPShowTicknum* pinfo) {
 
-  AJFREE(info);
+  AJFREE(*pinfo);
 
 }
 
@@ -410,14 +408,14 @@ static void showDelTicknum (EmbPShowTicknum info) {
 **
 ** Deletes a show complement descriptor object.
 **
-** @param [P] info [EmbPShowComp] Show complement descriptor object
+** @param [P] pinfo [EmbPShowComp*] Show complement descriptor object
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-static void showDelComp (EmbPShowComp info) {
+static void showDelComp (EmbPShowComp* pinfo) {
 
-  AJFREE(info);
+  AJFREE(*pinfo);
 
 }
 
@@ -425,15 +423,15 @@ static void showDelComp (EmbPShowComp info) {
 **
 ** Deletes a show translation descriptor object.
 **
-** @param [P] info [EmbPShowTran] Show translation descriptor object
+** @param [P] pinfo [EmbPShowTran*] Show translation descriptor object
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-static void showDelTran (EmbPShowTran info) {
-
+static void showDelTran (EmbPShowTran* pinfo) {
+  EmbPShowTran info = *pinfo;
   ajSeqDel (&info->transeq);
-  AJFREE(info);
+  AJFREE(*pinfo);
 
 }
 
@@ -441,21 +439,24 @@ static void showDelTran (EmbPShowTran info) {
 **
 ** Deletes a show restriction enzyme descriptor object.
 **
-** @param [P] info [EmbPShowRE] Show restriction enzyme descriptor object
+** @param [P] pinfo [EmbPShowRE*] Show restriction enzyme descriptor object
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-static void showDelRE (EmbPShowRE info) {
+static void showDelRE (EmbPShowRE* pinfo) {
 
-    void *ptr;
+  void *ptr;
+  EmbPShowRE info = *pinfo;
 
+  ajListFree(&info->matches);	/* the nodes are elsewhere */
+ 
+  while(ajListPop(info->sitelist,(void **)&ptr))
+    AJFREE(ptr);
 
-    while(ajListPop(info->sitelist,(void **)&ptr))
-	AJFREE(ptr);
+  ajListFree(&info->sitelist);
 
-  ajListDel(&info->sitelist);
-  AJFREE(info);
+  AJFREE(*pinfo);
 
 }
 
@@ -463,15 +464,17 @@ static void showDelRE (EmbPShowRE info) {
 **
 ** Deletes a show feature table descriptor object.
 **
-** @param [P] info [EmbPShowFT] Show feature table descriptor object
+** @param [P] pinfo [EmbPShowFT*] Show feature table descriptor object
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-static void showDelFT (EmbPShowFT info) {
+static void showDelFT (EmbPShowFT* pinfo) {
 
-  (void) ajFeattableDel(&(info->feat)); /* cloned pointer in showseq etc.*/
-  AJFREE(info);
+  EmbPShowFT info = *pinfo;
+
+  (void) ajFeattableDel (&info->feat); /* cloned pointer in showseq etc.*/
+  AJFREE(*pinfo);
 
 }
 
@@ -480,14 +483,14 @@ static void showDelFT (EmbPShowFT info) {
 **
 ** Deletes a show annotation region descriptor object.
 **
-** @param [P] info [EmbPShowNote] Show annotation region descriptor object
+** @param [P] pinfo [EmbPShowNote*] Show annotation region descriptor object
 ** @return [void]
 ** @@
 ******************************************************************************/
 
-static void showDelNote (EmbPShowNote info) {
+static void showDelNote (EmbPShowNote* pinfo) {
 
-  AJFREE(info);
+  AJFREE(*pinfo);
 
 }
 
@@ -687,14 +690,14 @@ void embShowAddTran (EmbPShow thys, AjPTrn trnTable, ajint frame,
 void embShowAddRE (EmbPShow thys, ajint sense, AjPList restrictlist,
 		   AjBool flat) {
   EmbPShowRE info;
-(void) ajDebug("embShowAddRE\n");
+  (void) ajDebug("embShowAddRE\n");
 
   AJNEW0(info);
 
   info->sense = sense;		/* 1 or -1 = sense to translate */
   info->flat = flat;		/* upright or flat display */
   info->hits = ajListLength(restrictlist);
-  info->matches = restrictlist;
+  info->matches = ajListCopy(restrictlist);
   info->sitelist = NULL;	/* show we have not yet created this list */
 
   (void) ajListPushApp(thys->list, showInfoNew(info, SH_RE));
@@ -719,8 +722,8 @@ void embShowAddFT (EmbPShow thys, AjPFeattable feat) {
 
   AJNEW0(info);
 
-  info->feat = feat;	/* store the feature table */
-
+  ajFeattableCopy (&info->feat, feat); /* store the feature table */
+  
   (void) ajListPushApp(thys->list, showInfoNew(info, SH_FT));
 
   return;
