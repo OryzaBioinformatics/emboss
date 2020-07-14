@@ -36,13 +36,13 @@ Usage
 
 % newseq 
 Type in a short new sequence.
-Output sequence [outfile.fasta]: swiss::mycc.pep
 Name of the sequence: cytoc
 Description of the sequence: fragment of cytochrome c
 Type of sequence
          N : Nucleic
          P : Protein
 Type of sequence [N]: p
+Output sequence [outfile.fasta]: swiss::mycc.pep
 Enter the sequence: KKKEERADLIAY
    
    Go to the output files for this example
@@ -50,7 +50,6 @@ Enter the sequence: KKKEERADLIAY
 Command line arguments
 
    Mandatory qualifiers:
-  [-outseq]            seqout     Output sequence USA
   [-name]              string     The name of of the sequence should be a
                                   single word that you will use to identify
                                   the sequence. It should have no (or few)
@@ -58,6 +57,7 @@ Command line arguments
   [-description]       string     Enter any description of the sequence that
                                   you require.
   [-type]              menu       Type of sequence
+  [-outseq]            seqout     Output sequence USA
   [-sequence]          string     The sequence itself.
                                   Because of the limitation of the operating
                                   system, you will only be able to type in a
@@ -70,28 +70,54 @@ Command line arguments
 
    Optional qualifiers: (none)
    Advanced qualifiers: (none)
+   Associated qualifiers:
+  "-outseq" related qualifiers
+   -osformat4           string     Output seq format
+   -osextension4        string     File name extension
+   -osname4             string     Base file name
+   -osdirectory4        string     Output directory
+   -osdbname4           string     Database name to add
+   -ossingle4           boolean    Separate file for each entry
+   -oufo4               string     UFO features
+   -offormat4           string     Features format
+   -ofname4             string     Features file name
+   -ofdirectory4        string     Output directory
+
    General qualifiers:
-  -help                boolean    Report command line options. More
+   -auto                boolean    Turn off prompts
+   -stdout              boolean    Write standard output
+   -filter              boolean    Read standard input, write standard output
+   -options             boolean    Prompt for required and optional values
+   -debug               boolean    Write debug output to program.dbg
+   -acdlog              boolean    Write ACD processing log to program.acdlog
+   -acdpretty           boolean    Rewrite ACD file as program.acdpretty
+   -acdtable            boolean    Write HTML table of options
+   -verbose             boolean    Report some/full command line options
+   -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
+   -warning             boolean    Report warnings
+   -error               boolean    Report errors
+   -fatal               boolean    Report fatal errors
+   -die                 boolean    Report deaths
    
 
    Mandatory qualifiers Allowed values Default
-   [-outseq]
-   (Parameter 1) Output sequence USA Writeable sequence <sequence>.format
    [-name]
-   (Parameter 2) The name of of the sequence should be a single word that
+   (Parameter 1) The name of of the sequence should be a single word that
    you will use to identify the sequence. It should have no (or few)
    punctuation characters in it. Any string is accepted An empty string
    is accepted
    [-description]
-   (Parameter 3) Enter any description of the sequence that you require.
+   (Parameter 2) Enter any description of the sequence that you require.
    Any string is accepted An empty string is accepted
    [-type]
-   (Parameter 4) Type of sequence
+   (Parameter 3) Type of sequence
    N (Nucleic)
    P (Protein)
    N
+   [-outseq]
+   (Parameter 4) Output sequence USA Writeable sequence <sequence>.format
    [-sequence]
    (Parameter 5) The sequence itself. Because of the limitation of the
    operating system, you will only be able to type in a short sequence of
@@ -181,8 +207,8 @@ See also
    
 Author(s)
 
-   This application was written by Gary Williams
-   (gwilliam@hgmp.mrc.ac.uk)
+   Gary Williams (gwilliam © hgmp.mrc.ac.uk)
+   HGMP-RC, Genome Campus, Hinxton, Cambridge CB10 1SB, UK
    
 History
 

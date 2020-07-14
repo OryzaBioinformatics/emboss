@@ -91,9 +91,6 @@ human         N    OK  OK  OK  EMBL human sequences
 humanest      N    OK  OK  OK  EMBL human EST sequences
 invertebrate  N    OK  OK  OK  EMBL invertebrate sequences
 mammalian     N    OK  OK  OK  EMBL mammalian sequences
-maskutrdb     N    OK  OK  OK  Masked 3' UTR database for Chris Sanderson proje
-ct
-mmunigene     N    OK  OK  OK  mmunigene
 mouseest      N    OK  OK  OK  EMBL mouse EST sequences
 organelle     N    OK  OK  OK  EMBL organelle sequences
 otherest      N    OK  OK  OK  EMBL other EST sequences
@@ -109,10 +106,8 @@ synthetic     N    OK  OK  OK  EMBL synthetic sequences
 tembl         N    OK  OK  OK  EMBL in native format with EMBL CD-ROM index
 tgenbank      N    OK  OK  OK  GenBank in native format with EMBL CD-ROM index
 tigregad      N    OK  OK  OK  TIGR EGAD sequences
-tigrhgi       N    OK  OK  OK  TIGR HGI sequences
 tigrmgi       N    OK  OK  OK  TIGR MGI sequences
 unclassified  N    OK  OK  OK  EMBL unclassified sequences
-utrdb         N    OK  OK  OK  3' UTR database for Chris Sanderson project
 vertebrate    N    OK  OK  OK  EMBL vertebrate sequences
 viral         N    OK  OK  OK  EMBL viral sequences
    
@@ -214,10 +209,6 @@ index
 
  mammalian N OK   OK   OK   EMBL mammalian sequences
 
- maskutrdb N OK   OK   OK   Masked 3' UTR database for Chris Sanderson project
-
- mmunigene N OK   OK   OK   mmunigene
-
  mouseest N OK   OK   OK   EMBL mouse EST sequences
 
  organelle N OK   OK   OK   EMBL organelle sequences
@@ -248,13 +239,9 @@ index
 
  tigregad N OK   OK   OK   TIGR EGAD sequences
 
- tigrhgi N OK   OK   OK   TIGR HGI sequences
-
  tigrmgi N OK   OK   OK   TIGR MGI sequences
 
  unclassified N OK   OK   OK   EMBL unclassified sequences
-
- utrdb N OK   OK   OK   3' UTR database for Chris Sanderson project
 
  vertebrate N OK   OK   OK   EMBL vertebrate sequences
 
@@ -326,9 +313,6 @@ human         N    OK  OK  OK  EMBL human sequences
 humanest      N    OK  OK  OK  EMBL human EST sequences
 invertebrate  N    OK  OK  OK  EMBL invertebrate sequences
 mammalian     N    OK  OK  OK  EMBL mammalian sequences
-maskutrdb     N    OK  OK  OK  Masked 3' UTR database for Chris Sanderson proje
-ct
-mmunigene     N    OK  OK  OK  mmunigene
 mouseest      N    OK  OK  OK  EMBL mouse EST sequences
 organelle     N    OK  OK  OK  EMBL organelle sequences
 otherest      N    OK  OK  OK  EMBL other EST sequences
@@ -344,10 +328,8 @@ synthetic     N    OK  OK  OK  EMBL synthetic sequences
 tembl         N    OK  OK  OK  EMBL in native format with EMBL CD-ROM index
 tgenbank      N    OK  OK  OK  GenBank in native format with EMBL CD-ROM index
 tigregad      N    OK  OK  OK  TIGR EGAD sequences
-tigrhgi       N    OK  OK  OK  TIGR HGI sequences
 tigrmgi       N    OK  OK  OK  TIGR MGI sequences
 unclassified  N    OK  OK  OK  EMBL unclassified sequences
-utrdb         N    OK  OK  OK  3' UTR database for Chris Sanderson project
 vertebrate    N    OK  OK  OK  EMBL vertebrate sequences
 viral         N    OK  OK  OK  EMBL viral sequences
    
@@ -389,8 +371,6 @@ human
 humanest
 invertebrate
 mammalian
-maskutrdb
-mmunigene
 mouseest
 organelle
 otherest
@@ -406,10 +386,8 @@ synthetic
 tembl
 tgenbank
 tigregad
-tigrhgi
 tigrmgi
 unclassified
-utrdb
 vertebrate
 viral
    
@@ -452,8 +430,6 @@ human         N
 humanest      N
 invertebrate  N
 mammalian     N
-maskutrdb     N
-mmunigene     N
 mouseest      N
 organelle     N
 otherest      N
@@ -469,10 +445,8 @@ synthetic     N
 tembl         N
 tgenbank      N
 tigregad      N
-tigrhgi       N
 tigrmgi       N
 unclassified  N
-utrdb         N
 vertebrate    N
 viral         N
    
@@ -485,6 +459,9 @@ Command line arguments
    -html               boolean    Format output as an HTML table
    -[no]protein        boolean    Display protein databases
    -[no]nucleic        boolean    Display nucleic acid databases
+   -fields             boolean    This displays the search fields that can be
+                                  used on this database, other than the
+                                  standard 'id' or 'acc' fields.
    -release            boolean    Display 'release' column
    -outfile            outfile    If you enter the name of a file here then
                                   this program will write the database details
@@ -505,10 +482,27 @@ Command line arguments
    -all                boolean    Display 'all' column
    -comment            boolean    Display 'comment' column
 
+   Associated qualifiers:
+  "-outfile" related qualifiers
+   -odirectory          string     Output directory
+
    General qualifiers:
-  -help                boolean    Report command line options. More
+   -auto                boolean    Turn off prompts
+   -stdout              boolean    Write standard output
+   -filter              boolean    Read standard input, write standard output
+   -options             boolean    Prompt for required and optional values
+   -debug               boolean    Write debug output to program.dbg
+   -acdlog              boolean    Write ACD processing log to program.acdlog
+   -acdpretty           boolean    Rewrite ACD file as program.acdpretty
+   -acdtable            boolean    Write HTML table of options
+   -verbose             boolean    Report some/full command line options
+   -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
+   -warning             boolean    Report warnings
+   -error               boolean    Report errors
+   -fatal               boolean    Report fatal errors
+   -die                 boolean    Report deaths
    
 
    Mandatory qualifiers Allowed values Default
@@ -519,6 +513,9 @@ Command line arguments
    -html Format output as an HTML table Boolean value Yes/No No
    -[no]protein Display protein databases Boolean value Yes/No Yes
    -[no]nucleic Display nucleic acid databases Boolean value Yes/No Yes
+   -fields This displays the search fields that can be used on this
+   database, other than the standard 'id' or 'acc' fields. Boolean value
+   Yes/No No
    -release Display 'release' column Boolean value Yes/No No
    -outfile If you enter the name of a file here then this program will
    write the database details into that file. Output file stdout
@@ -582,9 +579,6 @@ human         N    OK  OK  OK  EMBL human sequences
 humanest      N    OK  OK  OK  EMBL human EST sequences
 invertebrate  N    OK  OK  OK  EMBL invertebrate sequences
 mammalian     N    OK  OK  OK  EMBL mammalian sequences
-maskutrdb     N    OK  OK  OK  Masked 3' UTR database for Chris Sanderson proje
-ct
-mmunigene     N    OK  OK  OK  mmunigene
 mouseest      N    OK  OK  OK  EMBL mouse EST sequences
 organelle     N    OK  OK  OK  EMBL organelle sequences
 otherest      N    OK  OK  OK  EMBL other EST sequences
@@ -600,10 +594,8 @@ synthetic     N    OK  OK  OK  EMBL synthetic sequences
 tembl         N    OK  OK  OK  EMBL in native format with EMBL CD-ROM index
 tgenbank      N    OK  OK  OK  GenBank in native format with EMBL CD-ROM index
 tigregad      N    OK  OK  OK  TIGR EGAD sequences
-tigrhgi       N    OK  OK  OK  TIGR HGI sequences
 tigrmgi       N    OK  OK  OK  TIGR MGI sequences
 unclassified  N    OK  OK  OK  EMBL unclassified sequences
-utrdb         N    OK  OK  OK  3' UTR database for Chris Sanderson project
 vertebrate    N    OK  OK  OK  EMBL vertebrate sequences
 viral         N    OK  OK  OK  EMBL viral sequences
    
@@ -720,8 +712,8 @@ See also
    
 Author(s)
 
-   This application was written by Gary Williams
-   (gwilliam@hgmp.mrc.ac.uk)
+   Gary Williams (gwilliam © hgmp.mrc.ac.uk)
+   HGMP-RC, Genome Campus, Hinxton, Cambridge CB10 1SB, UK
    
 History
 

@@ -228,18 +228,51 @@ IT IS DONE FOR YOU.
                                   a zero count.
 
    Advanced qualifiers: (none)
+   Associated qualifiers:
+  "-sequence" related qualifiers
+   -sbegin1             integer    First base used
+   -send1               integer    Last base used, def=seq length
+   -sreverse1           boolean    Reverse (if DNA)
+   -sask1               boolean    Ask for begin/end/reverse
+   -snucleotide1        boolean    Sequence is nucleotide
+   -sprotein1           boolean    Sequence is protein
+   -slower1             boolean    Make lower case
+   -supper1             boolean    Make upper case
+   -sformat1            string     Input sequence format
+   -sopenfile1          string     Input filename
+   -sdbname1            string     Database name
+   -sid1                string     Entryname
+   -ufo1                string     UFO features
+   -fformat1            string     Features format
+   -fopenfile1          string     Features file name
+  "-outfile" related qualifiers
+   -odirectory3         string     Output directory
+
    General qualifiers:
-  -help                boolean    Report command line options. More
+   -auto                boolean    Turn off prompts
+   -stdout              boolean    Write standard output
+   -filter              boolean    Read standard input, write standard output
+   -options             boolean    Prompt for required and optional values
+   -debug               boolean    Write debug output to program.dbg
+   -acdlog              boolean    Write ACD processing log to program.acdlog
+   -acdpretty           boolean    Rewrite ACD file as program.acdpretty
+   -acdtable            boolean    Write HTML table of options
+   -verbose             boolean    Report some/full command line options
+   -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
+   -warning             boolean    Report warnings
+   -error               boolean    Report errors
+   -fatal               boolean    Report fatal errors
+   -die                 boolean    Report deaths
 
 
 </pre>
 </td></tr></table>
 <P>
 
-<table border cellspacing=0 cellpadding=3 bgcolor="#f5f5ff">
-<tr bgcolor="#FFFFD0">
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
 <th align="left" colspan=2>Mandatory qualifiers</th>
 <th align="left">Allowed values</th>
 <th align="left">Default</th>
@@ -267,7 +300,7 @@ Thus if you want to count codon frequencies, you should enter 3 here.</td>
 <td><i>&lt;sequence&gt;</i>.compseq</td>
 </tr>
 
-<tr bgcolor="#FFFFD0">
+<tr bgcolor="#FFFFCC">
 <th align="left" colspan=2>Optional qualifiers</th>
 <th align="left">Allowed values</th>
 <th align="left">Default</th>
@@ -313,7 +346,7 @@ These are not commonly used codes and you may wish not to count words containing
 <td>Yes</td>
 </tr>
 
-<tr bgcolor="#FFFFD0">
+<tr bgcolor="#FFFFCC">
 <th align="left" colspan=2>Advanced qualifiers</th>
 <th align="left">Allowed values</th>
 <th align="left">Default</th>
@@ -343,7 +376,7 @@ Normal sequence(s) USA.
 'tembl:hsfau' is a sequence entry in the example nucleic acid database 'tembl'
 <p>
 <p><h3>Database entry: tembl:hsfau</h3>
-<table width="90%"><tr><td bgcolor="#FFDDFF">
+<table width="90%"><tr><td bgcolor="#FFCCFF">
 <pre>
 ID   HSFAU      standard; RNA; HUM; 518 BP.
 XX
@@ -425,7 +458,7 @@ SQ   Sequence 518 BP; 125 A; 139 C; 148 G; 106 T; 0 other;
 <a name="input.3"></a>
 <h3>Input files for usage example 3</h3>
 <p><h3>File: ../../data/prev.comp</h3>
-<table width="90%"><tr><td bgcolor="#FFDDFF">
+<table width="90%"><tr><td bgcolor="#FFCCFF">
 <pre>
 #
 # Output from 'compseq'
@@ -543,7 +576,7 @@ IUPAC ambiguity codes or other unusual characters in.
 <a name="output.1"></a>
 <h3>Output files for usage example </h3>
 <p><h3>File: result3.comp</h3>
-<table width="90%"><tr><td bgcolor="#DDFFDD">
+<table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 #
 # Output from 'compseq'
@@ -585,7 +618,7 @@ Other	0		0.0000000	0.0000000	10000000000.0000000
 <a name="output.2"></a>
 <h3>Output files for usage example 2</h3>
 <p><h3>File: result6.comp</h3>
-<table width="90%"><tr><td bgcolor="#DDFFDD">
+<table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 #
 # Output from 'compseq'
@@ -698,7 +731,7 @@ Other	0		0.0000000	0.0000000	10000000000.0000000
 <a name="output.3"></a>
 <h3>Output files for usage example 3</h3>
 <p><h3>File: result3.comp</h3>
-<table width="90%"><tr><td bgcolor="#DDFFDD">
+<table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 #
 # Output from 'compseq'
@@ -956,8 +989,10 @@ amounts of memory.
 </H2>
 
 
-This application was written by Gary Williams <a
-href="mailto:gwilliam@hgmp.mrc.ac.uk">(gwilliam@hgmp.mrc.ac.uk)</a>
+Gary Williams (gwilliam&nbsp;&copy;&nbsp;hgmp.mrc.ac.uk)
+<br>
+HGMP-RC, Genome Campus, Hinxton, Cambridge CB10 1SB, UK
+
 
 <H2>
     History
@@ -973,6 +1008,11 @@ has changed.  It is now 'False' by default instead of being 'True' by
 default for nucleic sequences.  Too many people were getting confused by
 the counts being done on both senses, so this is now done on only the
 forward sense by default. 
+
+<!--
+<p>
+[an error occurred while processing this directive]
+-->
 
 <H2>
     Target users

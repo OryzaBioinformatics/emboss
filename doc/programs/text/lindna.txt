@@ -87,10 +87,33 @@ Command line arguments
                                   or increase the size, respectively
 
    Advanced qualifiers: (none)
+   Associated qualifiers:
+  "-graphout" related qualifiers
+   -gprompt             boolean    Graph prompting
+   -gtitle              string     Graph title
+   -gsubtitle           string     Graph subtitle
+   -gxtitle             string     Graph x axis title
+   -gytitle             string     Graph y axis title
+   -goutfile            string     Output file for non interactive displays
+   -gdirectory          string     Output directory
+
    General qualifiers:
-  -help                boolean    Report command line options. More
+   -auto                boolean    Turn off prompts
+   -stdout              boolean    Write standard output
+   -filter              boolean    Read standard input, write standard output
+   -options             boolean    Prompt for required and optional values
+   -debug               boolean    Write debug output to program.dbg
+   -acdlog              boolean    Write ACD processing log to program.acdlog
+   -acdpretty           boolean    Rewrite ACD file as program.acdpretty
+   -acdtable            boolean    Write HTML table of options
+   -verbose             boolean    Report some/full command line options
+   -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
+   -warning             boolean    Report warnings
+   -error               boolean    Report errors
+   -fatal               boolean    Report fatal errors
+   -die                 boolean    Report deaths
    
 
    Mandatory qualifiers Allowed values Default
@@ -309,8 +332,8 @@ See also
    
 Author(s)
 
-   This application was written by Nicolas Tourasse
-   (nicolas.tourasse@biotek.uio.no) at the Biotechnology Center of Oslo.
+   Nicolas Tourasse (nicolas.tourasse © biotek.uio.no)
+   Biotechnology Center of Oslo
    
 History
 

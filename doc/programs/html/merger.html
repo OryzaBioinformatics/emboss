@@ -172,18 +172,87 @@ IT IS DONE FOR YOU.
    -gapextend          float      Gap extension penalty
 
    Advanced qualifiers: (none)
+   Associated qualifiers:
+  "-seqa" related qualifiers
+   -sbegin1             integer    First base used
+   -send1               integer    Last base used, def=seq length
+   -sreverse1           boolean    Reverse (if DNA)
+   -sask1               boolean    Ask for begin/end/reverse
+   -snucleotide1        boolean    Sequence is nucleotide
+   -sprotein1           boolean    Sequence is protein
+   -slower1             boolean    Make lower case
+   -supper1             boolean    Make upper case
+   -sformat1            string     Input sequence format
+   -sopenfile1          string     Input filename
+   -sdbname1            string     Database name
+   -sid1                string     Entryname
+   -ufo1                string     UFO features
+   -fformat1            string     Features format
+   -fopenfile1          string     Features file name
+  "-seqb" related qualifiers
+   -sbegin2             integer    First base used
+   -send2               integer    Last base used, def=seq length
+   -sreverse2           boolean    Reverse (if DNA)
+   -sask2               boolean    Ask for begin/end/reverse
+   -snucleotide2        boolean    Sequence is nucleotide
+   -sprotein2           boolean    Sequence is protein
+   -slower2             boolean    Make lower case
+   -supper2             boolean    Make upper case
+   -sformat2            string     Input sequence format
+   -sopenfile2          string     Input filename
+   -sdbname2            string     Database name
+   -sid2                string     Entryname
+   -ufo2                string     UFO features
+   -fformat2            string     Features format
+   -fopenfile2          string     Features file name
+  "-outseq" related qualifiers
+   -osformat3           string     Output seq format
+   -osextension3        string     File name extension
+   -osname3             string     Base file name
+   -osdirectory3        string     Output directory
+   -osdbname3           string     Database name to add
+   -ossingle3           boolean    Separate file for each entry
+   -oufo3               string     UFO features
+   -offormat3           string     Features format
+   -ofname3             string     Features file name
+   -ofdirectory3        string     Output directory
+  "-outfile" related qualifiers
+   -aformat4            string     Alignment format
+   -aopenfile4          string     Alignment file name
+   -aextension4         string     File name extension
+   -adirectory4         string     Output directory
+   -aname4              string     Base file name
+   -awidth4             integer    Alignment width
+   -aaccshow4           boolean    Show accession number in the header
+   -adesshow4           boolean    Show description in the header
+   -ausashow4           boolean    Show the full USA in the alignment
+   -aglobal4            boolean    Show the full sequence in alignment
+
    General qualifiers:
-  -help                boolean    Report command line options. More
+   -auto                boolean    Turn off prompts
+   -stdout              boolean    Write standard output
+   -filter              boolean    Read standard input, write standard output
+   -options             boolean    Prompt for required and optional values
+   -debug               boolean    Write debug output to program.dbg
+   -acdlog              boolean    Write ACD processing log to program.acdlog
+   -acdpretty           boolean    Rewrite ACD file as program.acdpretty
+   -acdtable            boolean    Write HTML table of options
+   -verbose             boolean    Report some/full command line options
+   -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
+   -warning             boolean    Report warnings
+   -error               boolean    Report errors
+   -fatal               boolean    Report fatal errors
+   -die                 boolean    Report deaths
 
 
 </pre>
 </td></tr></table>
 <P>
 
-<table border cellspacing=0 cellpadding=3 bgcolor="#f5f5ff">
-<tr bgcolor="#FFFFD0">
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
 <th align="left" colspan=2>Mandatory qualifiers</th>
 <th align="left">Allowed values</th>
 <th align="left">Default</th>
@@ -217,7 +286,7 @@ IT IS DONE FOR YOU.
 <td>&nbsp;</td>
 </tr>
 
-<tr bgcolor="#FFFFD0">
+<tr bgcolor="#FFFFCC">
 <th align="left" colspan=2>Optional qualifiers</th>
 <th align="left">Allowed values</th>
 <th align="left">Default</th>
@@ -244,7 +313,7 @@ IT IS DONE FOR YOU.
 <td>5</td>
 </tr>
 
-<tr bgcolor="#FFFFD0">
+<tr bgcolor="#FFFFCC">
 <th align="left" colspan=2>Advanced qualifiers</th>
 <th align="left">Allowed values</th>
 <th align="left">Default</th>
@@ -274,7 +343,7 @@ nucleic acid.)
 'tembl:eclacy' is a sequence entry in the example nucleic acid database 'tembl'
 <p>
 <p><h3>Database entry: tembl:eclacy</h3>
-<table width="90%"><tr><td bgcolor="#FFDDFF">
+<table width="90%"><tr><td bgcolor="#FFCCFF">
 <pre>
 ID   ECLACY     standard; DNA; PRO; 1500 BP.
 XX
@@ -369,7 +438,7 @@ SQ   Sequence 1500 BP; 315 A; 342 C; 357 G; 486 T; 0 other;
 </pre>
 </td></tr></table><p>
 <p><h3>Database entry: tembl:eclaca</h3>
-<table width="90%"><tr><td bgcolor="#FFDDFF">
+<table width="90%"><tr><td bgcolor="#FFCCFF">
 <pre>
 ID   ECLACA     standard; DNA; PRO; 1832 BP.
 XX
@@ -517,7 +586,7 @@ uppercase.
 <a name="output.1"></a>
 <h3>Output files for usage example </h3>
 <p><h3>File: eclacy.fasta</h3>
-<table width="90%"><tr><td bgcolor="#DDFFDD">
+<table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 &gt;ECLACY V00295.1 E. coli lacY gene (codes for lactose permease).
 ttccagctgagcgccggtcgctaccattaccagttggtctggtgtcaaaaataataataa
@@ -576,11 +645,11 @@ agcttccggccagcgccagcccgcccatggtaaccaccggcagagcggtcgac
 </pre>
 </td></tr></table><p>
 <p><h3>File: eclacy.out2</h3>
-<table width="90%"><tr><td bgcolor="#DDFFDD">
+<table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 ########################################
 # Program:  merger
-# Rundate:  Thu Nov 07 14:34:54 2002
+# Rundate:  Thu May 22 10:36:05 2003
 # Align_format: simple
 # Report_file: eclacy.out2
 ########################################
@@ -756,14 +825,22 @@ None.
 </H2>
 
 
-This application was written by Gary Williams <a
-href="mailto:gwilliam@hgmp.mrc.ac.uk">(gwilliam@hgmp.mrc.ac.uk)</a>
+Gary Williams (gwilliam&nbsp;&copy;&nbsp;hgmp.mrc.ac.uk)
+<br>
+HGMP-RC, Genome Campus, Hinxton, Cambridge CB10 1SB, UK
+
+
 
 <H2>
     History
 </H2>
 
 Written (Gary Williams) 1999
+
+<!--
+<p>
+[an error occurred while processing this directive]
+-->
 
 <H2>
     Target users

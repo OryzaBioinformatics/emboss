@@ -53,10 +53,44 @@ Command line arguments
    Advanced qualifiers:
    -separate           boolean    Separate the trace graphs for the 4 bases
 
+   Associated qualifiers:
+  "-outseq" related qualifiers
+   -osformat2           string     Output seq format
+   -osextension2        string     File name extension
+   -osname2             string     Base file name
+   -osdirectory2        string     Output directory
+   -osdbname2           string     Database name to add
+   -ossingle2           boolean    Separate file for each entry
+   -oufo2               string     UFO features
+   -offormat2           string     Features format
+   -ofname2             string     Features file name
+   -ofdirectory2        string     Output directory
+  "-graph" related qualifiers
+   -gprompt             boolean    Graph prompting
+   -gtitle              string     Graph title
+   -gsubtitle           string     Graph subtitle
+   -gxtitle             string     Graph x axis title
+   -gytitle             string     Graph y axis title
+   -goutfile            string     Output file for non interactive displays
+   -gdirectory          string     Output directory
+
    General qualifiers:
-  -help                boolean    Report command line options. More
+   -auto                boolean    Turn off prompts
+   -stdout              boolean    Write standard output
+   -filter              boolean    Read standard input, write standard output
+   -options             boolean    Prompt for required and optional values
+   -debug               boolean    Write debug output to program.dbg
+   -acdlog              boolean    Write ACD processing log to program.acdlog
+   -acdpretty           boolean    Rewrite ACD file as program.acdpretty
+   -acdtable            boolean    Write HTML table of options
+   -verbose             boolean    Report some/full command line options
+   -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
+   -warning             boolean    Report warnings
+   -error               boolean    Report errors
+   -fatal               boolean    Report fatal errors
+   -die                 boolean    Report deaths
    
 
    Mandatory qualifiers Allowed values Default
@@ -182,7 +216,8 @@ See also
    
 Author(s)
 
-   This application was written by Tim Carver (tcarver@hgmp.mrc.ac.uk)
+   Tim Carver (tcarver © hgmp.mrc.ac.uk)
+   HGMP-RC, Genome Campus, Hinxton, Cambridge CB10 1SB, UK
    
 History
 

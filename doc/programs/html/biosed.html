@@ -168,17 +168,59 @@ Replace all 'RGD' protein motifs with 'XXRGDXX'
    Advanced qualifiers:
    -delete             boolean    Delete the target sequence sections
 
+   Associated qualifiers:
+  "-sequence" related qualifiers
+   -sbegin1             integer    First base used
+   -send1               integer    Last base used, def=seq length
+   -sreverse1           boolean    Reverse (if DNA)
+   -sask1               boolean    Ask for begin/end/reverse
+   -snucleotide1        boolean    Sequence is nucleotide
+   -sprotein1           boolean    Sequence is protein
+   -slower1             boolean    Make lower case
+   -supper1             boolean    Make upper case
+   -sformat1            string     Input sequence format
+   -sopenfile1          string     Input filename
+   -sdbname1            string     Database name
+   -sid1                string     Entryname
+   -ufo1                string     UFO features
+   -fformat1            string     Features format
+   -fopenfile1          string     Features file name
+  "-outseq" related qualifiers
+   -osformat2           string     Output seq format
+   -osextension2        string     File name extension
+   -osname2             string     Base file name
+   -osdirectory2        string     Output directory
+   -osdbname2           string     Database name to add
+   -ossingle2           boolean    Separate file for each entry
+   -oufo2               string     UFO features
+   -offormat2           string     Features format
+   -ofname2             string     Features file name
+   -ofdirectory2        string     Output directory
+
    General qualifiers:
-  -help                boolean    Report command line options. More
+   -auto                boolean    Turn off prompts
+   -stdout              boolean    Write standard output
+   -filter              boolean    Read standard input, write standard output
+   -options             boolean    Prompt for required and optional values
+   -debug               boolean    Write debug output to program.dbg
+   -acdlog              boolean    Write ACD processing log to program.acdlog
+   -acdpretty           boolean    Rewrite ACD file as program.acdpretty
+   -acdtable            boolean    Write HTML table of options
+   -verbose             boolean    Report some/full command line options
+   -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
+   -warning             boolean    Report warnings
+   -error               boolean    Report errors
+   -fatal               boolean    Report fatal errors
+   -die                 boolean    Report deaths
 
 
 </pre>
 </td></tr></table>
 <P>
-<table border cellspacing=0 cellpadding=3 bgcolor="#f5f5ff">
-<tr bgcolor="#FFFFD0">
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
 <th align="left" colspan=2>Mandatory qualifiers</th>
 <th align="left">Allowed values</th>
 <th align="left">Default</th>
@@ -212,7 +254,7 @@ Replace all 'RGD' protein motifs with 'XXRGDXX'
 <td><i>&lt;sequence&gt;</i>.<i>format</i></td>
 </tr>
 
-<tr bgcolor="#FFFFD0">
+<tr bgcolor="#FFFFCC">
 <th align="left" colspan=2>Optional qualifiers</th>
 <th align="left">Allowed values</th>
 <th align="left">Default</th>
@@ -222,7 +264,7 @@ Replace all 'RGD' protein motifs with 'XXRGDXX'
 <td colspan=4>(none)</td>
 </tr>
 
-<tr bgcolor="#FFFFD0">
+<tr bgcolor="#FFFFCC">
 <th align="left" colspan=2>Advanced qualifiers</th>
 <th align="left">Allowed values</th>
 <th align="left">Default</th>
@@ -272,7 +314,7 @@ It reads the USA of one or more nucleic acid or protein sequences.
 'tembl:hsfau' is a sequence entry in the example nucleic acid database 'tembl'
 <p>
 <p><h3>Database entry: tembl:hsfau</h3>
-<table width="90%"><tr><td bgcolor="#FFDDFF">
+<table width="90%"><tr><td bgcolor="#FFCCFF">
 <pre>
 ID   HSFAU      standard; RNA; HUM; 518 BP.
 XX
@@ -357,7 +399,7 @@ SQ   Sequence 518 BP; 125 A; 139 C; 148 G; 106 T; 0 other;
 'tsw:AMIR_PSEAE' is a sequence entry in the example protein database 'tsw'
 <p>
 <p><h3>Database entry: tsw:AMIR_PSEAE</h3>
-<table width="90%"><tr><td bgcolor="#FFDDFF">
+<table width="90%"><tr><td bgcolor="#FFCCFF">
 <pre>
 ID   AMIR_PSEAE     STANDARD;      PRT;   196 AA.
 AC   P10932;
@@ -445,7 +487,7 @@ The sequence will be in uppercase.
 <a name="output.1"></a>
 <h3>Output files for usage example </h3>
 <p><h3>File: hsfau.rna</h3>
-<table width="90%"><tr><td bgcolor="#DDFFDD">
+<table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 &gt;HSFAU X65923.1 H.sapiens fau mRNA
 UUCCUCUUUCUCGACUCCAUCUUCGCGGUAGCUGGGACCGCCGUUCAGUCGCCAAUAUGC
@@ -463,7 +505,7 @@ UCUAAUAAAAAAGCCACUUAGUUCAGUCAAAAAAAAAA
 <a name="output.2"></a>
 <h3>Output files for usage example 2</h3>
 <p><h3>File: AMIR_PSEAE.pep</h3>
-<table width="90%"><tr><td bgcolor="#DDFFDD">
+<table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 &gt;AMIR_PSEAE P10932 ALIPHATIC AMIDASE REGULATOR.
 MSANSLLGSLRELQVLVLNPPGEVSDALVLQLIRIGCSVRQCWXXPPPXXEAFDVPVDVV
@@ -717,8 +759,9 @@ None.
         Who has worked on the program in the past.
    -->
 
-This application was written by Alan Bleasby <a
-href="mailto:ableasby@hgmp.mrc.ac.uk">(ableasby@hgmp.mrc.ac.uk)</a>
+Alan Bleasby (ableasby&nbsp;&copy;&nbsp;hgmp.mrc.ac.uk)
+<br>
+HGMP-RC, Genome Campus, Hinxton, Cambridge CB10 1SB, UK
 
 
 
@@ -746,8 +789,10 @@ href="mailto:ableasby@hgmp.mrc.ac.uk">(ableasby@hgmp.mrc.ac.uk)</a>
 
 Written (Jan 2002) - Alan Bleasby
 
-
-
+<!--
+<p>
+[an error occurred while processing this directive]
+-->
 
 
 

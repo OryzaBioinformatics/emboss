@@ -151,17 +151,31 @@ Full pathname of file aaindex1: ~/aaindex1
 
    Optional qualifiers: (none)
    Advanced qualifiers: (none)
+   Associated qualifiers: (none)
    General qualifiers:
-  -help                boolean    Report command line options. More
+   -auto                boolean    Turn off prompts
+   -stdout              boolean    Write standard output
+   -filter              boolean    Read standard input, write standard output
+   -options             boolean    Prompt for required and optional values
+   -debug               boolean    Write debug output to program.dbg
+   -acdlog              boolean    Write ACD processing log to program.acdlog
+   -acdpretty           boolean    Rewrite ACD file as program.acdpretty
+   -acdtable            boolean    Write HTML table of options
+   -verbose             boolean    Report some/full command line options
+   -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
+   -warning             boolean    Report warnings
+   -error               boolean    Report errors
+   -fatal               boolean    Report fatal errors
+   -die                 boolean    Report deaths
 
 
 </pre>
 </td></tr></table>
 <P>
-<table border cellspacing=0 cellpadding=3 bgcolor="#f5f5ff">
-<tr bgcolor="#FFFFD0">
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
 <th align="left" colspan=2>Mandatory qualifiers</th>
 <th align="left">Allowed values</th>
 <th align="left">Default</th>
@@ -174,7 +188,7 @@ Full pathname of file aaindex1: ~/aaindex1
 <td><b>Required</b></td>
 </tr>
 
-<tr bgcolor="#FFFFD0">
+<tr bgcolor="#FFFFCC">
 <th align="left" colspan=2>Optional qualifiers</th>
 <th align="left">Allowed values</th>
 <th align="left">Default</th>
@@ -184,7 +198,7 @@ Full pathname of file aaindex1: ~/aaindex1
 <td colspan=4>(none)</td>
 </tr>
 
-<tr bgcolor="#FFFFD0">
+<tr bgcolor="#FFFFCC">
 <th align="left" colspan=2>Advanced qualifiers</th>
 <th align="left">Allowed values</th>
 <th align="left">Default</th>
@@ -222,7 +236,7 @@ IT IS DONE FOR YOU.
 <a name="input.1"></a>
 <h3>Input files for usage example </h3>
 <p><h3>File: ../../data/aaindex1.test</h3>
-<table width="90%"><tr><td bgcolor="#FFDDFF">
+<table width="90%"><tr><td bgcolor="#FFCCFF">
 <pre>
 H CHOP780101
 D Normalized frequency of beta-turn (Chou-Fasman, 1978a)
@@ -391,7 +405,7 @@ for further information on report formats.
 <a name="output.1"></a>
 <h3>Output files for usage example </h3>
 <p><h3>File: AAINDEX</h3>
-<table width="90%"><tr><td bgcolor="#DDFFDD">
+<table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 </pre>
 </td></tr></table><p>
@@ -670,8 +684,10 @@ you can set their '-data' qualifier to use any of the files produced by
    -->
 
 
-This application was written by Peter Rice <a
-href="peter.rice@uk.lionbioscience.com">(peter.rice@uk.lionbioscience.com)</a>
+Peter Rice (pmr&nbsp;&copy;&nbsp;ebi.ac.uk)
+<br>
+Informatics Division, European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
+
  
 
 
@@ -700,9 +716,10 @@ href="peter.rice@uk.lionbioscience.com">(peter.rice@uk.lionbioscience.com)</a>
 Written (25 June 2002) - Peter Rice
 
 
-
-
-
+<!--
+<p>
+[an error occurred while processing this directive]
+-->
 
 
 

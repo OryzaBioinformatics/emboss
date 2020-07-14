@@ -154,18 +154,51 @@ IT IS DONE FOR YOU.
 
    Optional qualifiers: (none)
    Advanced qualifiers: (none)
+   Associated qualifiers:
+  "-sequence" related qualifiers
+   -sbegin2             integer    First base used
+   -send2               integer    Last base used, def=seq length
+   -sreverse2           boolean    Reverse (if DNA)
+   -sask2               boolean    Ask for begin/end/reverse
+   -snucleotide2        boolean    Sequence is nucleotide
+   -sprotein2           boolean    Sequence is protein
+   -slower2             boolean    Make lower case
+   -supper2             boolean    Make upper case
+   -sformat2            string     Input sequence format
+   -sopenfile2          string     Input filename
+   -sdbname2            string     Database name
+   -sid2                string     Entryname
+   -ufo2                string     UFO features
+   -fformat2            string     Features format
+   -fopenfile2          string     Features file name
+  "-outfile" related qualifiers
+   -odirectory3         string     Output directory
+
    General qualifiers:
-  -help                boolean    Report command line options. More
+   -auto                boolean    Turn off prompts
+   -stdout              boolean    Write standard output
+   -filter              boolean    Read standard input, write standard output
+   -options             boolean    Prompt for required and optional values
+   -debug               boolean    Write debug output to program.dbg
+   -acdlog              boolean    Write ACD processing log to program.acdlog
+   -acdpretty           boolean    Rewrite ACD file as program.acdpretty
+   -acdtable            boolean    Write HTML table of options
+   -verbose             boolean    Report some/full command line options
+   -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
+   -warning             boolean    Report warnings
+   -error               boolean    Report errors
+   -fatal               boolean    Report fatal errors
+   -die                 boolean    Report deaths
 
 
 </pre>
 </td></tr></table>
 <P>
 
-<table border cellspacing=0 cellpadding=3 bgcolor="#f5f5ff">
-<tr bgcolor="#FFFFD0">
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
 <th align="left" colspan=2>Mandatory qualifiers</th>
 <th align="left">Allowed values</th>
 <th align="left">Default</th>
@@ -192,7 +225,7 @@ IT IS DONE FOR YOU.
 <td><i>&lt;sequence&gt;</i>.profit</td>
 </tr>
 
-<tr bgcolor="#FFFFD0">
+<tr bgcolor="#FFFFCC">
 <th align="left" colspan=2>Optional qualifiers</th>
 <th align="left">Allowed values</th>
 <th align="left">Default</th>
@@ -202,7 +235,7 @@ IT IS DONE FOR YOU.
 <td colspan=4>(none)</td>
 </tr>
 
-<tr bgcolor="#FFFFD0">
+<tr bgcolor="#FFFFCC">
 <th align="left" colspan=2>Advanced qualifiers</th>
 <th align="left">Allowed values</th>
 <th align="left">Default</th>
@@ -233,7 +266,7 @@ nucleic acid sequence USAs.
 'tsw:*' is a sequence entry in the example protein database 'tsw'
 <p>
 <p><h3>File: ../../data/outfile.prophecy</h3>
-<table width="90%"><tr><td bgcolor="#FFDDFF">
+<table width="90%"><tr><td bgcolor="#FFCCFF">
 <pre>
 # Pure Frequency Matrix
 # Columns are amino acid counts A-&gt;Z
@@ -276,7 +309,7 @@ Consensus	DEVGGEALGRLLVVYPWTQR
 <a name="output.1"></a>
 <h3>Output files for usage example </h3>
 <p><h3>File: outfile.profit</h3>
-<table width="90%"><tr><td bgcolor="#DDFFDD">
+<table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 # PROF scan using simple frequency matrix mymatrix
 # Scores &gt;= threshold 75 (max score 76)
@@ -369,14 +402,22 @@ None.
 </H2>
 
 
-This application was written by Alan Bleasby <a
-href="mailto:ableasby@hgmp.mrc.ac.uk">(ableasby@hgmp.mrc.ac.uk)</a>
+Alan Bleasby (ableasby&nbsp;&copy;&nbsp;hgmp.mrc.ac.uk)
+<br>
+HGMP-RC, Genome Campus, Hinxton, Cambridge CB10 1SB, UK
+
+
 
 <H2>
     History
 </H2>
 
 Written (1999) - Alan Bleasby
+
+<!--
+<p>
+[an error occurred while processing this directive]
+-->
 
 <H2>
     Target users

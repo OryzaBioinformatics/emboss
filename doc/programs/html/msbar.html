@@ -197,18 +197,76 @@ IT IS DONE FOR YOU.
                                   given here, then the matching mutated
                                   sequence is written with a warning message.
 
+   Associated qualifiers:
+  "-sequence" related qualifiers
+   -sbegin1             integer    First base used
+   -send1               integer    Last base used, def=seq length
+   -sreverse1           boolean    Reverse (if DNA)
+   -sask1               boolean    Ask for begin/end/reverse
+   -snucleotide1        boolean    Sequence is nucleotide
+   -sprotein1           boolean    Sequence is protein
+   -slower1             boolean    Make lower case
+   -supper1             boolean    Make upper case
+   -sformat1            string     Input sequence format
+   -sopenfile1          string     Input filename
+   -sdbname1            string     Database name
+   -sid1                string     Entryname
+   -ufo1                string     UFO features
+   -fformat1            string     Features format
+   -fopenfile1          string     Features file name
+  "-other" related qualifiers
+   -sbegin              integer    First base used
+   -send                integer    Last base used, def=seq length
+   -sreverse            boolean    Reverse (if DNA)
+   -sask                boolean    Ask for begin/end/reverse
+   -snucleotide         boolean    Sequence is nucleotide
+   -sprotein            boolean    Sequence is protein
+   -slower              boolean    Make lower case
+   -supper              boolean    Make upper case
+   -sformat             string     Input sequence format
+   -sopenfile           string     Input filename
+   -sdbname             string     Database name
+   -sid                 string     Entryname
+   -ufo                 string     UFO features
+   -fformat             string     Features format
+   -fopenfile           string     Features file name
+  "-outseq" related qualifiers
+   -osformat2           string     Output seq format
+   -osextension2        string     File name extension
+   -osname2             string     Base file name
+   -osdirectory2        string     Output directory
+   -osdbname2           string     Database name to add
+   -ossingle2           boolean    Separate file for each entry
+   -oufo2               string     UFO features
+   -offormat2           string     Features format
+   -ofname2             string     Features file name
+   -ofdirectory2        string     Output directory
+
    General qualifiers:
-  -help                boolean    Report command line options. More
+   -auto                boolean    Turn off prompts
+   -stdout              boolean    Write standard output
+   -filter              boolean    Read standard input, write standard output
+   -options             boolean    Prompt for required and optional values
+   -debug               boolean    Write debug output to program.dbg
+   -acdlog              boolean    Write ACD processing log to program.acdlog
+   -acdpretty           boolean    Rewrite ACD file as program.acdpretty
+   -acdtable            boolean    Write HTML table of options
+   -verbose             boolean    Report some/full command line options
+   -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
+   -warning             boolean    Report warnings
+   -error               boolean    Report errors
+   -fatal               boolean    Report fatal errors
+   -die                 boolean    Report deaths
 
 
 </pre>
 </td></tr></table>
 <P>
 
-<table border cellspacing=0 cellpadding=3 bgcolor="#f5f5ff">
-<tr bgcolor="#FFFFD0">
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
 <th align="left" colspan=2>Mandatory qualifiers</th>
 <th align="left">Allowed values</th>
 <th align="left">Default</th>
@@ -256,7 +314,7 @@ IT IS DONE FOR YOU.
 <td><i>&lt;sequence&gt;</i>.<i>format</i></td>
 </tr>
 
-<tr bgcolor="#FFFFD0">
+<tr bgcolor="#FFFFCC">
 <th align="left" colspan=2>Optional qualifiers</th>
 <th align="left">Allowed values</th>
 <th align="left">Default</th>
@@ -269,7 +327,7 @@ IT IS DONE FOR YOU.
 <td>No</td>
 </tr>
 
-<tr bgcolor="#FFFFD0">
+<tr bgcolor="#FFFFCC">
 <th align="left" colspan=2>Advanced qualifiers</th>
 <th align="left">Allowed values</th>
 <th align="left">Default</th>
@@ -315,7 +373,7 @@ IT IS DONE FOR YOU.
 'tembl:eclac' is a sequence entry in the example nucleic acid database 'tembl'
 <p>
 <p><h3>Database entry: tembl:eclac</h3>
-<table width="90%"><tr><td bgcolor="#FFDDFF">
+<table width="90%"><tr><td bgcolor="#FFCCFF">
 <pre>
 ID   ECLAC      standard; DNA; PRO; 7477 BP.
 XX
@@ -435,7 +493,7 @@ RP   1146-1282
 <a name="output.1"></a>
 <h3>Output files for usage example </h3>
 <p><h3>File: eclac.fasta</h3>
-<table width="90%"><tr><td bgcolor="#DDFFDD">
+<table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 &gt;ECLAC J01636.1 E.coli lactose operon with lacI, lacZ, lacY and lacA genes.
 gacaccatcgaatggcgcaaaacctttcgcggtatggcatgatagcgcccggaagagagt
@@ -447,19 +505,19 @@ gcgccgtcgcaaattgtcgcggcgattaaatctcgcgccgatcaactgggtgccagcgtg
 gtggtgtcgatggtagaacgaagcggcgtcgaagcctgtaaagcggcggtgcacaatctt
 ctcgcgcaacgcgtcagtgggctgatcattaactatccgctggatgaccaggatgccatt
 gctgtggaagctgcctgcactaatgttccggcgttatttcttgatgtctctgaccagaca
-cccatcaacagtattattttctcccaGgaagacggtacgcgactgggcgtggagcatctg
+cccatcaacagtattattttctcccatgaagacggtacgcgactgggcgtggagcatctg
 gtcgcattgggtcaccagcaaatcgcgctgttagcgggcccattaagttctgtctcggcg
 cgtctgcgtctggctggctggcataaatatctcactcgcaatcaaattcagccgatagcg
 gaacgggaaggcgactggagtgccatgtccggttttcaacaaaccatgcaaatgctgaat
 gagggcatcgttcccactgcgatgctggttgccaacgatcagatggcgctgggcgcaatg
-cgcgccattaccgagtccgggctgcgcgttggtgcggatatctcggtagGgggatacgac
+cgcgccattaccgagtccgggctgcgcgttggtgcggatatctcggtagtgggatacgac
 gataccgaagacagctcatgttatatcccgccgtcaaccaccatcaaacaggattttcgc
 ctgctggggcaaaccagcgtggaccgcttgctgcaactctctcagggccaggcggtgaag
 ggcaatcagctgttgcccgtctcactggtgaaaagaaaaaccaccctggcgcccaatacg
 caaaccgcctctccccgcgcgttggccgattcattaatgcagctggcacgacaggtttcc
-cgactggaaagcgggcagtgagcgcaacgcaattaatgtgagttagctcactcattaggc
+cgactggaaagcgggcagtgagcgcaacgcaattaaGgtgagttagctcactcattaggc
 accccaggctttacactttatgcttccggctcgtatgttgtgtggaattgtgagcggata
-acaatttcacacaggaaacagctatgaccatgattacggattcactggccgtcgttttac
+acaatttcacacaggaaacagctatgaccatgattacggattcactggccgAcgttttac
 aacgtcgtgactgggaaaaccctggcgttacccaacttaatcgccttgcagcacatcccc
 ctttcgccagctggcgtaatagcgaagaggcccgcaccgatcgcccttcccaacagttgc
 gcagcctgaatggcgaatggcgctttgcctggtttccggcaccagaagcggtgccggaaa
@@ -473,7 +531,7 @@ gtgacggcagttatctggaagatcaggatatgtggcggatgagcggcattttccgtgacg
 tctcgttgctgcataaaccgactacacaaatcagcgatttccatgttgccactcgcttta
 atgatgatttcagccgcgctgtactggaggctgaagttcagatgtgcggcgagttgcgtg
 actacctacgggtaacagtttctttatggcagggtgaaacgcaggtcgccagcggcaccg
-cgcctttcggcggtgaaattatcgatgagcgtggtggttatgccgatcgcgtcacactac
+cgcctttcgTcggtgaaattatcgatgagcgtggtggttatgccgatcgcgtcacactac
 gtctgaacgtcgaaaacccgaaactgtggagcgccgaaatcccgaatctctatcgtgcgg
 tggttgaactgcacaccgccgacggcacgctgattgaagcagaagcctgcgatgtcggtt
 tccgcgaggtgcggattgaaaatggtctgctgctgctgaacggcaagccgttgctgattc
@@ -500,7 +558,7 @@ gtatttatctaggcttttgttttaacgccggtgcgccagcagtagaggcatttattgaga
 aagtcagccgtcgcagtaatttcgaatttggtcgcgcgcggatgtttggctgtgttggct
 gggcgctgtgtgcctcgattgtcggcatcatgttcaccatcaataatcagtttgttttct
 ggctgggctctggctgtgcactcatcctcgccgttttactctttttcgccaaaacggatg
-cgccctcttctgccacggttgccaatgcggtaggtgccaaccattcggcatttagcctta
+cgccctcttctgccacggttgccaatgcggtaggtgccaaccattcggcGtttagcctta
 agctggcactggaactgttcagacagccaaaactgtggtttttgtcactgtatgttattg
 gcgtttcctgcacctacgatgtttttgaccaacagtttgctaatttctttacttcgttct
 ttgctaccggtgaacagggtacgcgggtatttggctacgtaacgacaatgggcgaattac
@@ -517,14 +575,14 @@ gcaagctatttaccgatatgtgcgaaggcttaccggaaaaaagacttcgtgggaaaacgt
 taatgtatgagtttaatcactcgcatccatcagaagttgaaaaaagagaaagcctgatta
 aagaaatgtttgccacggtaggggaaaacgcctgggtagaaccgcctgtctatttctctt
 acggttccaacatccatataggccgcaatttttatgcaaatttcaatttaaccattgtcg
-Gtgactacacggtaacaatcggtgataacgtactgattgcacccaacgttactctttccg
+atgactacacggtaacaatcggtgataacgtactgattgcacccaacgttactctttccg
 ttacgggacaccctgtacaccatgaattgagaaaaaacggcgagatgtactcttttccga
-taacgattggcaataacgtctggatcggaagtcatgtggttattCatccaggcgtcacca
+taacgattggcaataacgtctggatcggaagtcatgtggttattaatccaggcgtcacca
 tcggggataattctgttattggcgcgggtagtatcgtcacaaaagacattccaccaaacg
 tcgtggcggctggcgttccttgtcgggttattcgcgaaataaacgaccgggataagcact
 attatttcaaagattataaagttgaatcgtcagtttaaattataaaaattgcctgatacg
 ctgcgcttatcaggcctacaagttcagcgatctacattagccgcatccggcatgaacaaa
-gcgcaggaacaagcgtcgcatcatgcctctttgacccacagctgcggaaaacgtactggt
+gcgcaggaacaagcgtcgcatcatgTctctttgacccacagctgcggaaaacgtactggt
 gcaaaacgcagggttatgatcatcagcccaacgacgcacagcgcatgaaatgcccagtcc
 atcaggtaattgccgctgatactacgcagcacgccagaaaaccacggggcaagcccggcg
 atgataaaaccgattccctgcataaacgccaccagcttgccagcaatagccggttgcaca
@@ -538,7 +596,7 @@ acgcgaaccggagtggttgttgtcttgtgggaagaggcgacctcgcgggcgctttgccac
 caccaggcaaagagcgcaacaacggcaggcagcgccaccaggcgagtgtttgataccagg
 tttcgctatgttgaactaaccagggcgttatggcggcaccaagcccaccgccgcccatca
 gagccgcggaccacagccccatcaccagtggcgtgcgctgctgaaaccgccgtttaatca
-ccgGagcatcaccgcctgaatgatgccgatccccaccccaccaagcagtgcgctgctaag
+ccgaagcatcaccgcctgaatgatgccgatccccaccccaccaagcagtgcgctgctaag
 cagcagcgcactttgcgggtaaagctcacgcatcaatgcaccgacggcaatcagcaacag
 actgatggcgacactgcgacgttcgctgacatgctgatgaagccagcttccggccagcgc
 cagcccgcccatggtaaccaccggcagagcggtcgac
@@ -615,14 +673,22 @@ None.
 </H2>
 
 
-This application was written by Gary Williams <a
-href="mailto:gwilliam@hgmp.mrc.ac.uk">(gwilliam@hgmp.mrc.ac.uk)</a>
+Gary Williams (gwilliam&nbsp;&copy;&nbsp;hgmp.mrc.ac.uk)
+<br>
+HGMP-RC, Genome Campus, Hinxton, Cambridge CB10 1SB, UK
+
+
 
 <H2>
     History
 </H2>
 
-Writetn (1999) - Gary Williams
+Written (1999) - Gary Williams
+
+<!--
+<p>
+[an error occurred while processing this directive]
+-->
 
 <H2>
     Target users

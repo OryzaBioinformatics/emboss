@@ -130,10 +130,68 @@ Command line arguments
                                   given here, then the matching mutated
                                   sequence is written with a warning message.
 
+   Associated qualifiers:
+  "-sequence" related qualifiers
+   -sbegin1             integer    First base used
+   -send1               integer    Last base used, def=seq length
+   -sreverse1           boolean    Reverse (if DNA)
+   -sask1               boolean    Ask for begin/end/reverse
+   -snucleotide1        boolean    Sequence is nucleotide
+   -sprotein1           boolean    Sequence is protein
+   -slower1             boolean    Make lower case
+   -supper1             boolean    Make upper case
+   -sformat1            string     Input sequence format
+   -sopenfile1          string     Input filename
+   -sdbname1            string     Database name
+   -sid1                string     Entryname
+   -ufo1                string     UFO features
+   -fformat1            string     Features format
+   -fopenfile1          string     Features file name
+  "-other" related qualifiers
+   -sbegin              integer    First base used
+   -send                integer    Last base used, def=seq length
+   -sreverse            boolean    Reverse (if DNA)
+   -sask                boolean    Ask for begin/end/reverse
+   -snucleotide         boolean    Sequence is nucleotide
+   -sprotein            boolean    Sequence is protein
+   -slower              boolean    Make lower case
+   -supper              boolean    Make upper case
+   -sformat             string     Input sequence format
+   -sopenfile           string     Input filename
+   -sdbname             string     Database name
+   -sid                 string     Entryname
+   -ufo                 string     UFO features
+   -fformat             string     Features format
+   -fopenfile           string     Features file name
+  "-outseq" related qualifiers
+   -osformat2           string     Output seq format
+   -osextension2        string     File name extension
+   -osname2             string     Base file name
+   -osdirectory2        string     Output directory
+   -osdbname2           string     Database name to add
+   -ossingle2           boolean    Separate file for each entry
+   -oufo2               string     UFO features
+   -offormat2           string     Features format
+   -ofname2             string     Features file name
+   -ofdirectory2        string     Output directory
+
    General qualifiers:
-  -help                boolean    Report command line options. More
+   -auto                boolean    Turn off prompts
+   -stdout              boolean    Write standard output
+   -filter              boolean    Read standard input, write standard output
+   -options             boolean    Prompt for required and optional values
+   -debug               boolean    Write debug output to program.dbg
+   -acdlog              boolean    Write ACD processing log to program.acdlog
+   -acdpretty           boolean    Rewrite ACD file as program.acdpretty
+   -acdtable            boolean    Write HTML table of options
+   -verbose             boolean    Report some/full command line options
+   -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
+   -warning             boolean    Report warnings
+   -error               boolean    Report errors
+   -fatal               boolean    Report fatal errors
+   -die                 boolean    Report deaths
    
 
    Mandatory qualifiers Allowed values Default
@@ -374,19 +432,19 @@ gcgccgtcgcaaattgtcgcggcgattaaatctcgcgccgatcaactgggtgccagcgtg
 gtggtgtcgatggtagaacgaagcggcgtcgaagcctgtaaagcggcggtgcacaatctt
 ctcgcgcaacgcgtcagtgggctgatcattaactatccgctggatgaccaggatgccatt
 gctgtggaagctgcctgcactaatgttccggcgttatttcttgatgtctctgaccagaca
-cccatcaacagtattattttctcccaGgaagacggtacgcgactgggcgtggagcatctg
+cccatcaacagtattattttctcccatgaagacggtacgcgactgggcgtggagcatctg
 gtcgcattgggtcaccagcaaatcgcgctgttagcgggcccattaagttctgtctcggcg
 cgtctgcgtctggctggctggcataaatatctcactcgcaatcaaattcagccgatagcg
 gaacgggaaggcgactggagtgccatgtccggttttcaacaaaccatgcaaatgctgaat
 gagggcatcgttcccactgcgatgctggttgccaacgatcagatggcgctgggcgcaatg
-cgcgccattaccgagtccgggctgcgcgttggtgcggatatctcggtagGgggatacgac
+cgcgccattaccgagtccgggctgcgcgttggtgcggatatctcggtagtgggatacgac
 gataccgaagacagctcatgttatatcccgccgtcaaccaccatcaaacaggattttcgc
 ctgctggggcaaaccagcgtggaccgcttgctgcaactctctcagggccaggcggtgaag
 ggcaatcagctgttgcccgtctcactggtgaaaagaaaaaccaccctggcgcccaatacg
 caaaccgcctctccccgcgcgttggccgattcattaatgcagctggcacgacaggtttcc
-cgactggaaagcgggcagtgagcgcaacgcaattaatgtgagttagctcactcattaggc
+cgactggaaagcgggcagtgagcgcaacgcaattaaGgtgagttagctcactcattaggc
 accccaggctttacactttatgcttccggctcgtatgttgtgtggaattgtgagcggata
-acaatttcacacaggaaacagctatgaccatgattacggattcactggccgtcgttttac
+acaatttcacacaggaaacagctatgaccatgattacggattcactggccgAcgttttac
 aacgtcgtgactgggaaaaccctggcgttacccaacttaatcgccttgcagcacatcccc
 ctttcgccagctggcgtaatagcgaagaggcccgcaccgatcgcccttcccaacagttgc
 gcagcctgaatggcgaatggcgctttgcctggtttccggcaccagaagcggtgccggaaa
@@ -400,7 +458,7 @@ gtgacggcagttatctggaagatcaggatatgtggcggatgagcggcattttccgtgacg
 tctcgttgctgcataaaccgactacacaaatcagcgatttccatgttgccactcgcttta
 atgatgatttcagccgcgctgtactggaggctgaagttcagatgtgcggcgagttgcgtg
 actacctacgggtaacagtttctttatggcagggtgaaacgcaggtcgccagcggcaccg
-cgcctttcggcggtgaaattatcgatgagcgtggtggttatgccgatcgcgtcacactac
+cgcctttcgTcggtgaaattatcgatgagcgtggtggttatgccgatcgcgtcacactac
 gtctgaacgtcgaaaacccgaaactgtggagcgccgaaatcccgaatctctatcgtgcgg
 tggttgaactgcacaccgccgacggcacgctgattgaagcagaagcctgcgatgtcggtt
 tccgcgaggtgcggattgaaaatggtctgctgctgctgaacggcaagccgttgctgattc
@@ -427,7 +485,7 @@ gtatttatctaggcttttgttttaacgccggtgcgccagcagtagaggcatttattgaga
 aagtcagccgtcgcagtaatttcgaatttggtcgcgcgcggatgtttggctgtgttggct
 gggcgctgtgtgcctcgattgtcggcatcatgttcaccatcaataatcagtttgttttct
 ggctgggctctggctgtgcactcatcctcgccgttttactctttttcgccaaaacggatg
-cgccctcttctgccacggttgccaatgcggtaggtgccaaccattcggcatttagcctta
+cgccctcttctgccacggttgccaatgcggtaggtgccaaccattcggcGtttagcctta
 agctggcactggaactgttcagacagccaaaactgtggtttttgtcactgtatgttattg
 gcgtttcctgcacctacgatgtttttgaccaacagtttgctaatttctttacttcgttct
 ttgctaccggtgaacagggtacgcgggtatttggctacgtaacgacaatgggcgaattac
@@ -444,14 +502,14 @@ gcaagctatttaccgatatgtgcgaaggcttaccggaaaaaagacttcgtgggaaaacgt
 taatgtatgagtttaatcactcgcatccatcagaagttgaaaaaagagaaagcctgatta
 aagaaatgtttgccacggtaggggaaaacgcctgggtagaaccgcctgtctatttctctt
 acggttccaacatccatataggccgcaatttttatgcaaatttcaatttaaccattgtcg
-Gtgactacacggtaacaatcggtgataacgtactgattgcacccaacgttactctttccg
+atgactacacggtaacaatcggtgataacgtactgattgcacccaacgttactctttccg
 ttacgggacaccctgtacaccatgaattgagaaaaaacggcgagatgtactcttttccga
-taacgattggcaataacgtctggatcggaagtcatgtggttattCatccaggcgtcacca
+taacgattggcaataacgtctggatcggaagtcatgtggttattaatccaggcgtcacca
 tcggggataattctgttattggcgcgggtagtatcgtcacaaaagacattccaccaaacg
 tcgtggcggctggcgttccttgtcgggttattcgcgaaataaacgaccgggataagcact
 attatttcaaagattataaagttgaatcgtcagtttaaattataaaaattgcctgatacg
 ctgcgcttatcaggcctacaagttcagcgatctacattagccgcatccggcatgaacaaa
-gcgcaggaacaagcgtcgcatcatgcctctttgacccacagctgcggaaaacgtactggt
+gcgcaggaacaagcgtcgcatcatgTctctttgacccacagctgcggaaaacgtactggt
 gcaaaacgcagggttatgatcatcagcccaacgacgcacagcgcatgaaatgcccagtcc
 atcaggtaattgccgctgatactacgcagcacgccagaaaaccacggggcaagcccggcg
 atgataaaaccgattccctgcataaacgccaccagcttgccagcaatagccggttgcaca
@@ -465,7 +523,7 @@ acgcgaaccggagtggttgttgtcttgtgggaagaggcgacctcgcgggcgctttgccac
 caccaggcaaagagcgcaacaacggcaggcagcgccaccaggcgagtgtttgataccagg
 tttcgctatgttgaactaaccagggcgttatggcggcaccaagcccaccgccgcccatca
 gagccgcggaccacagccccatcaccagtggcgtgcgctgctgaaaccgccgtttaatca
-ccgGagcatcaccgcctgaatgatgccgatccccaccccaccaagcagtgcgctgctaag
+ccgaagcatcaccgcctgaatgatgccgatccccaccccaccaagcagtgcgctgctaag
 cagcagcgcactttgcgggtaaagctcacgcatcaatgcaccgacggcaatcagcaacag
 actgatggcgacactgcgacgttcgctgacatgctgatgaagccagcttccggccagcgc
 cagcccgcccatggtaaccaccggcagagcggtcgac
@@ -508,12 +566,12 @@ See also
    
 Author(s)
 
-   This application was written by Gary Williams
-   (gwilliam@hgmp.mrc.ac.uk)
+   Gary Williams (gwilliam © hgmp.mrc.ac.uk)
+   HGMP-RC, Genome Campus, Hinxton, Cambridge CB10 1SB, UK
    
 History
 
-   Writetn (1999) - Gary Williams
+   Written (1999) - Gary Williams
    
 Target users
 

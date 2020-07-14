@@ -75,16 +75,6 @@ along the alignment.
 % <b>pepwindowall ../../data/globins.msf -gxtitle="Base Number" -gytitle="hydropathy" </b>
 Displays protein hydropathy of a set of sequences
 Graph type [x11]: <b>cps</b>
-Error: ERROR only homogenous number of points allowed for multiple graphs
-
-Error: ERROR only homogenous number of points allowed for multiple graphs
-
-Error: ERROR only homogenous number of points allowed for multiple graphs
-
-Error: ERROR only homogenous number of points allowed for multiple graphs
-
-Error: ERROR only homogenous number of points allowed for multiple graphs
-
 
 Created pepwindowall.ps
 
@@ -112,22 +102,61 @@ IT IS DONE FOR YOU.
   [-graph]             xygraph    Graph type
 
    Optional qualifiers:
-   -datafile           datafile   nakai database file
+   -datafile           datafile   Aaindex database file
    -length             integer    window size
 
    Advanced qualifiers: (none)
+   Associated qualifiers:
+  "-msf" related qualifiers
+   -sbegin1             integer    First base used
+   -send1               integer    Last base used, def=seq length
+   -sreverse1           boolean    Reverse (if DNA)
+   -sask1               boolean    Ask for begin/end/reverse
+   -snucleotide1        boolean    Sequence is nucleotide
+   -sprotein1           boolean    Sequence is protein
+   -slower1             boolean    Make lower case
+   -supper1             boolean    Make upper case
+   -sformat1            string     Input sequence format
+   -sopenfile1          string     Input filename
+   -sdbname1            string     Database name
+   -sid1                string     Entryname
+   -ufo1                string     UFO features
+   -fformat1            string     Features format
+   -fopenfile1          string     Features file name
+  "-graph" related qualifiers
+   -gprompt2            boolean    Graph prompting
+   -gtitle2             string     Graph title
+   -gsubtitle2          string     Graph subtitle
+   -gxtitle2            string     Graph x axis title
+   -gytitle2            string     Graph y axis title
+   -goutfile2           string     Output file for non interactive displays
+   -gdirectory2         string     Output directory
+
    General qualifiers:
-  -help                boolean    Report command line options. More
+   -auto                boolean    Turn off prompts
+   -stdout              boolean    Write standard output
+   -filter              boolean    Read standard input, write standard output
+   -options             boolean    Prompt for required and optional values
+   -debug               boolean    Write debug output to program.dbg
+   -acdlog              boolean    Write ACD processing log to program.acdlog
+   -acdpretty           boolean    Rewrite ACD file as program.acdpretty
+   -acdtable            boolean    Write HTML table of options
+   -verbose             boolean    Report some/full command line options
+   -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
+   -warning             boolean    Report warnings
+   -error               boolean    Report errors
+   -fatal               boolean    Report fatal errors
+   -die                 boolean    Report deaths
 
 
 </pre>
 </td></tr></table>
 <P>
 
-<table border cellspacing=0 cellpadding=3 bgcolor="#f5f5ff">
-<tr bgcolor="#FFFFD0">
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
 <th align="left" colspan=2>Mandatory qualifiers</th>
 <th align="left">Allowed values</th>
 <th align="left">Default</th>
@@ -147,7 +176,7 @@ IT IS DONE FOR YOU.
 <td><i>EMBOSS_GRAPHICS</i> value, or x11</td>
 </tr>
 
-<tr bgcolor="#FFFFD0">
+<tr bgcolor="#FFFFCC">
 <th align="left" colspan=2>Optional qualifiers</th>
 <th align="left">Allowed values</th>
 <th align="left">Default</th>
@@ -155,7 +184,7 @@ IT IS DONE FOR YOU.
 
 <tr>
 <td>-datafile</td>
-<td>nakai database file</td>
+<td>Aaindex database file</td>
 <td>Data file</td>
 <td>Enakai.dat</td>
 </tr>
@@ -167,7 +196,7 @@ IT IS DONE FOR YOU.
 <td>7</td>
 </tr>
 
-<tr bgcolor="#FFFFD0">
+<tr bgcolor="#FFFFCC">
 <th align="left" colspan=2>Advanced qualifiers</th>
 <th align="left">Allowed values</th>
 <th align="left">Default</th>
@@ -195,7 +224,7 @@ aligned sequences.
 <a name="input.1"></a>
 <h3>Input files for usage example </h3>
 <p><h3>File: ../../data/globins.msf</h3>
-<table width="90%"><tr><td bgcolor="#FFDDFF">
+<table width="90%"><tr><td bgcolor="#FFCCFF">
 <pre>
 !!AA_MULTIPLE_ALIGNMENT 1.0
 
@@ -381,10 +410,12 @@ None.
 </H2>
 
 
-This application was written by Ian Longden <a
-href="mailto:il@sanger.ac.uk">(il@sanger.ac.uk)</a> Informatics
-Division, The Sanger Centre, Wellcome Trust Genome Campus, Hinxton,
-Cambridge, CB10 1SA, UK.
+Ian Longden (il&nbsp;&copy;&nbsp;sanger.ac.uk)
+<br>
+Sanger Institute, Wellcome Trust Genome Campus, Hinxton,
+Cambridge, CB10 1SA, UK.                      
+
+
 
 <H2>
     History
@@ -393,6 +424,12 @@ Cambridge, CB10 1SA, UK.
 <pre>
 Completed 4th June 1999.
 </pre>
+
+<!--
+<p>
+[an error occurred while processing this directive]
+-->
+
 <H2>
     Target users
 </H2>

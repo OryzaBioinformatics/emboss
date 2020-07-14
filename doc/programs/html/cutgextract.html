@@ -118,19 +118,31 @@ EDIT HERE
    Advanced qualifiers:
    -wildspec           string     Type of codon file
 
+   Associated qualifiers: (none)
    General qualifiers:
-  -help                boolean    Report command line options. More
+   -auto                boolean    Turn off prompts
+   -stdout              boolean    Write standard output
+   -filter              boolean    Read standard input, write standard output
+   -options             boolean    Prompt for required and optional values
+   -debug               boolean    Write debug output to program.dbg
+   -acdlog              boolean    Write ACD processing log to program.acdlog
+   -acdpretty           boolean    Rewrite ACD file as program.acdpretty
+   -acdtable            boolean    Write HTML table of options
+   -verbose             boolean    Report some/full command line options
+   -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
+   -warning             boolean    Report warnings
+   -error               boolean    Report errors
+   -fatal               boolean    Report fatal errors
+   -die                 boolean    Report deaths
 
 
 </pre>
 </td></tr></table>
 <P>
-<table border cellspacing=0 cellpadding=3 bgcolor="#f5f5ff">
-
-   EMBOSS An error in ajacd.c at line 11198:
-unknown attribute 'name' for 'directory'
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+Error: File /packages/emboss_dev/gwilliam/emboss/emboss/emboss/acd/cutgextract.acd line 7: (directory) Unknown attribute 'name'
 
 
 
@@ -413,12 +425,10 @@ None.
         Who has worked on the program in the past.
    -->
 
-This application was written by Alan Bleasby <a
-href="mailto:ableasby@hgmp.mrc.ac.uk">(ableasby@hgmp.mrc.ac.uk)</a>
+Alan Bleasby (ableasby&nbsp;&copy;&nbsp;hgmp.mrc.ac.uk)
+<br>
+HGMP-RC, Genome Campus, Hinxton, Cambridge CB10 1SB, UK
 
-**************** 
-EDIT HERE
-**************** 
 
 
 
@@ -443,12 +453,13 @@ EDIT HERE
         What changes have been made.
    -->
 
+
 Written (date) - author.
 
-**************** 
-EDIT HERE
-**************** 
-
+<!--
+<p>
+[an error occurred while processing this directive]
+-->
 
 
 

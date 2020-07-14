@@ -112,7 +112,7 @@ Find differences between nearly identical sequences
 % <b>diffseq tembl:ap000504 tembl:af129756 </b>
 Find differences between nearly identical sequences
 Word size [10]: <b></b>
-Output report [ap000504.diffseq]: <b></b>
+Output report file [ap000504.diffseq]: <b></b>
 
 </pre></td></tr></table><p>
 <p>
@@ -174,18 +174,88 @@ IT IS DONE FOR YOU.
                                   columns and no feature information is given.
 
    Advanced qualifiers: (none)
+   Associated qualifiers:
+  "-asequence" related qualifiers
+   -sbegin1             integer    First base used
+   -send1               integer    Last base used, def=seq length
+   -sreverse1           boolean    Reverse (if DNA)
+   -sask1               boolean    Ask for begin/end/reverse
+   -snucleotide1        boolean    Sequence is nucleotide
+   -sprotein1           boolean    Sequence is protein
+   -slower1             boolean    Make lower case
+   -supper1             boolean    Make upper case
+   -sformat1            string     Input sequence format
+   -sopenfile1          string     Input filename
+   -sdbname1            string     Database name
+   -sid1                string     Entryname
+   -ufo1                string     UFO features
+   -fformat1            string     Features format
+   -fopenfile1          string     Features file name
+  "-bsequence" related qualifiers
+   -sbegin2             integer    First base used
+   -send2               integer    Last base used, def=seq length
+   -sreverse2           boolean    Reverse (if DNA)
+   -sask2               boolean    Ask for begin/end/reverse
+   -snucleotide2        boolean    Sequence is nucleotide
+   -sprotein2           boolean    Sequence is protein
+   -slower2             boolean    Make lower case
+   -supper2             boolean    Make upper case
+   -sformat2            string     Input sequence format
+   -sopenfile2          string     Input filename
+   -sdbname2            string     Database name
+   -sid2                string     Entryname
+   -ufo2                string     UFO features
+   -fformat2            string     Features format
+   -fopenfile2          string     Features file name
+  "-outfile" related qualifiers
+   -rformat             string     Report format
+   -rname               string     Base file name
+   -rextension          string     File name extension
+   -rdirectory          string     Output directory
+   -raccshow            boolean    Show accession number in the report
+   -rdesshow            boolean    Show description in the report
+   -rscoreshow          boolean    Show the score in the report
+   -rusashow            boolean    Show the full USA in the report
+  "-afeatout" related qualifiers
+   -offormat            string     Output feature format
+   -ofopenfile          string     Features file name
+   -ofextension         string     File name extension
+   -ofdirectory         string     Output directory
+   -ofname              string     Base file name
+   -ofsingle            boolean    Separate file for each entry
+  "-bfeatout" related qualifiers
+   -offormat            string     Output feature format
+   -ofopenfile          string     Features file name
+   -ofextension         string     File name extension
+   -ofdirectory         string     Output directory
+   -ofname              string     Base file name
+   -ofsingle            boolean    Separate file for each entry
+
    General qualifiers:
-  -help                boolean    Report command line options. More
+   -auto                boolean    Turn off prompts
+   -stdout              boolean    Write standard output
+   -filter              boolean    Read standard input, write standard output
+   -options             boolean    Prompt for required and optional values
+   -debug               boolean    Write debug output to program.dbg
+   -acdlog              boolean    Write ACD processing log to program.acdlog
+   -acdpretty           boolean    Rewrite ACD file as program.acdpretty
+   -acdtable            boolean    Write HTML table of options
+   -verbose             boolean    Report some/full command line options
+   -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
+   -warning             boolean    Report warnings
+   -error               boolean    Report errors
+   -fatal               boolean    Report fatal errors
+   -die                 boolean    Report deaths
 
 
 </pre>
 </td></tr></table>
 <P>
 
-<table border cellspacing=0 cellpadding=3 bgcolor="#f5f5ff">
-<tr bgcolor="#FFFFD0">
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
 <th align="left" colspan=2>Mandatory qualifiers</th>
 <th align="left">Allowed values</th>
 <th align="left">Default</th>
@@ -219,7 +289,7 @@ IT IS DONE FOR YOU.
 <td>&nbsp;</td>
 </tr>
 
-<tr bgcolor="#FFFFD0">
+<tr bgcolor="#FFFFCC">
 <th align="left" colspan=2>Optional qualifiers</th>
 <th align="left">Allowed values</th>
 <th align="left">Default</th>
@@ -247,7 +317,7 @@ If this option is set true then the output report file's format is changed to a 
 <td>No</td>
 </tr>
 
-<tr bgcolor="#FFFFD0">
+<tr bgcolor="#FFFFCC">
 <th align="left" colspan=2>Advanced qualifiers</th>
 <th align="left">Allowed values</th>
 <th align="left">Default</th>
@@ -285,7 +355,7 @@ sequence USAs.
 'tembl:ap000504' is a sequence entry in the example nucleic acid database 'tembl'
 <p>
 <p><h3>Database entry: tembl:ap000504</h3>
-<table width="90%"><tr><td bgcolor="#FFDDFF">
+<table width="90%"><tr><td bgcolor="#FFCCFF">
 <pre>
 ID   AP000504   standard; DNA; HUM; 100000 BP.
 XX
@@ -395,7 +465,7 @@ CC   sequence archive Web site (http://www-alis.tokyo.jst.go.jp/HGS/top.
 </pre>
 </td></tr></table><p>
 <p><h3>Database entry: tembl:af129756</h3>
-<table width="90%"><tr><td bgcolor="#FFDDFF">
+<table width="90%"><tr><td bgcolor="#FFCCFF">
 <pre>
 ID   AF129756   standard; DNA; HUM; 184666 BP.
 XX
@@ -555,10 +625,10 @@ By default <b>diffseq</b> writes a 'diffseq' report file.
 <a name="output.1"></a>
 <h3>Output files for usage example </h3>
 <p><h3>File: AF129756.diffgff</h3>
-<table width="90%"><tr><td bgcolor="#DDFFDD">
+<table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 ##gff-version 2.0
-##date 2002-11-07
+##date 2003-05-22
 ##Type DNA AF129756
 AF129756	diffseq	conflict	6882	6882	1.000	+	.	Sequence "AF129756.1" ; note "SNP in AP000504" ; replace "a"
 AF129756	diffseq	conflict	7830	7830	1.000	+	.	Sequence "AF129756.2" ; note "SNP in AP000504" ; replace "g"
@@ -665,10 +735,10 @@ AF129756	diffseq	conflict	103855	103855	1.000	+	.	Sequence "AF129756.105" ; note
 </pre>
 </td></tr></table><p>
 <p><h3>File: AP000504.diffgff</h3>
-<table width="90%"><tr><td bgcolor="#DDFFDD">
+<table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 ##gff-version 2.0
-##date 2002-11-07
+##date 2003-05-22
 ##Type DNA AP000504
 AP000504	diffseq	conflict	847	847	1.000	+	.	Sequence "AP000504.1" ; note "SNP in AF129756" ; replace "t"
 AP000504	diffseq	conflict	1795	1795	1.000	+	.	Sequence "AP000504.2" ; note "SNP in AF129756" ; replace "a"
@@ -775,11 +845,11 @@ AP000504	diffseq	conflict	97827	97827	1.000	+	.	Sequence "AP000504.105" ; note "
 </pre>
 </td></tr></table><p>
 <p><h3>File: ap000504.diffseq</h3>
-<table width="90%"><tr><td bgcolor="#DDFFDD">
+<table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 ########################################
 # Program: diffseq
-# Rundate: Thu Nov 07 14:17:54 2002
+# Rundate: Thu May 22 14:44:04 2003
 # Report_format: diffseq
 # Report_file: ap000504.diffseq
 # Additional_files: 2
@@ -1240,14 +1310,12 @@ None.
 </H2>
 <!--
         Who has worked on the program in the past.
-e.g.
-
-This application was written by Alan Bleasby <a
-href="mailto:ableasby@hgmp.mrc.ac.uk">(ableasby@hgmp.mrc.ac.uk)</a>
    -->
 
-This application was written by Gary Williams <a
-href="mailto:gwilliam@hgmp.mrc.ac.uk">(gwilliam@hgmp.mrc.ac.uk)</a>
+Gary Williams (gwilliam&nbsp;&copy;&nbsp;hgmp.mrc.ac.uk)
+<br>
+HGMP-RC, Genome Campus, Hinxton, Cambridge CB10 1SB, UK
+
 
 <H2>
     History
@@ -1260,6 +1328,11 @@ href="mailto:gwilliam@hgmp.mrc.ac.uk">(gwilliam@hgmp.mrc.ac.uk)</a>
 Written 15th Aug 2000 - Gary Williams.
 <br>
 18th Aug 2000 - Added writing out GFF files of the mismatched regions
+
+<!--
+<p>
+[an error occurred while processing this directive]
+-->
 
 <H2>
     Target users

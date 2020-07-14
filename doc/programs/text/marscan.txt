@@ -58,6 +58,9 @@ Description
    predicts 80% of MARs and SARs, suggesting that at least one other type
    of MAR/SAR may exist which does not contain a MRS.
    
+   It it still not at all clear whether MAR/SARs are real biological
+   phenomena or just experimental artefacts.
+   
    The problem of how to define and find MARs is still being actively
    invetsigated. For a recent evaluation of this method and others, see
    reference 3.
@@ -70,7 +73,7 @@ Usage
 % marscan 
 Finds MAR/SAR sites in nucleic sequences
 Input sequence(s): tembl:u01317
-Output report [hshbb.marscan]: 
+Output feature report [hshbb.marscan]: 
    
    Go to the input files for this example
    Go to the output files for this example
@@ -89,10 +92,50 @@ Command line arguments
 
    Optional qualifiers: (none)
    Advanced qualifiers: (none)
+   Associated qualifiers:
+  "-sequence" related qualifiers
+   -sbegin1             integer    First base used
+   -send1               integer    Last base used, def=seq length
+   -sreverse1           boolean    Reverse (if DNA)
+   -sask1               boolean    Ask for begin/end/reverse
+   -snucleotide1        boolean    Sequence is nucleotide
+   -sprotein1           boolean    Sequence is protein
+   -slower1             boolean    Make lower case
+   -supper1             boolean    Make upper case
+   -sformat1            string     Input sequence format
+   -sopenfile1          string     Input filename
+   -sdbname1            string     Database name
+   -sid1                string     Entryname
+   -ufo1                string     UFO features
+   -fformat1            string     Features format
+   -fopenfile1          string     Features file name
+  "-outfile" related qualifiers
+   -rformat2            string     Report format
+   -rname2              string     Base file name
+   -rextension2         string     File name extension
+   -rdirectory2         string     Output directory
+   -raccshow2           boolean    Show accession number in the report
+   -rdesshow2           boolean    Show description in the report
+   -rscoreshow2         boolean    Show the score in the report
+   -rusashow2           boolean    Show the full USA in the report
+
    General qualifiers:
-  -help                boolean    Report command line options. More
+   -auto                boolean    Turn off prompts
+   -stdout              boolean    Write standard output
+   -filter              boolean    Read standard input, write standard output
+   -options             boolean    Prompt for required and optional values
+   -debug               boolean    Write debug output to program.dbg
+   -acdlog              boolean    Write ACD processing log to program.acdlog
+   -acdpretty           boolean    Rewrite ACD file as program.acdpretty
+   -acdtable            boolean    Write HTML table of options
+   -verbose             boolean    Report some/full command line options
+   -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
+   -warning             boolean    Report warnings
+   -error               boolean    Report errors
+   -fatal               boolean    Report fatal errors
+   -die                 boolean    Report deaths
    
 
    Mandatory qualifiers Allowed values Default
@@ -298,7 +341,7 @@ Output file format
   File: hshbb.marscan
   
 ##gff-version 2.0
-##date 2002-11-07
+##date 2003-05-22
 ##Type DNA HSHBB
 HSHBB   marscan misc_signal     2242    2458    0.000   +       .       Sequenc
 e "HSHBB.1" ; note "*type MAR/SAR recognition site (MRS)" ; note "*start8bp 245
@@ -368,7 +411,7 @@ Known bugs
    
 See also
 
-   Program name                       Description
+   Program name                        Description
    dreg         regular expression search of a nucleotide sequence
    fuzznuc      Nucleic acid pattern search
    fuzztran     Protein pattern search after translation
@@ -376,12 +419,14 @@ See also
    plotorf      Plot potential open reading frames
    showorf      Pretty output of DNA translations
    sixpack      Display a DNA sequence with 6-frame translation and ORFs
+   syco         Synonymous codon usage Gribskov statistic plot
+   tcode        Fickett TESTCODE statistic to identify protein-coding DNA
    wobble       Wobble base plot
    
 Author(s)
 
-   This application was written by Gary Williams
-   (gwilliam@hgmp.mrc.ac.uk)
+   Gary Williams (gwilliam © hgmp.mrc.ac.uk)
+   HGMP-RC, Genome Campus, Hinxton, Cambridge CB10 1SB, UK
    
 History
 

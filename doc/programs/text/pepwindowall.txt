@@ -27,16 +27,6 @@ Usage
 hy" 
 Displays protein hydropathy of a set of sequences
 Graph type [x11]: cps
-Error: ERROR only homogenous number of points allowed for multiple graphs
-
-Error: ERROR only homogenous number of points allowed for multiple graphs
-
-Error: ERROR only homogenous number of points allowed for multiple graphs
-
-Error: ERROR only homogenous number of points allowed for multiple graphs
-
-Error: ERROR only homogenous number of points allowed for multiple graphs
-
 
 Created pepwindowall.ps
    
@@ -50,14 +40,53 @@ Command line arguments
   [-graph]             xygraph    Graph type
 
    Optional qualifiers:
-   -datafile           datafile   nakai database file
+   -datafile           datafile   Aaindex database file
    -length             integer    window size
 
    Advanced qualifiers: (none)
+   Associated qualifiers:
+  "-msf" related qualifiers
+   -sbegin1             integer    First base used
+   -send1               integer    Last base used, def=seq length
+   -sreverse1           boolean    Reverse (if DNA)
+   -sask1               boolean    Ask for begin/end/reverse
+   -snucleotide1        boolean    Sequence is nucleotide
+   -sprotein1           boolean    Sequence is protein
+   -slower1             boolean    Make lower case
+   -supper1             boolean    Make upper case
+   -sformat1            string     Input sequence format
+   -sopenfile1          string     Input filename
+   -sdbname1            string     Database name
+   -sid1                string     Entryname
+   -ufo1                string     UFO features
+   -fformat1            string     Features format
+   -fopenfile1          string     Features file name
+  "-graph" related qualifiers
+   -gprompt2            boolean    Graph prompting
+   -gtitle2             string     Graph title
+   -gsubtitle2          string     Graph subtitle
+   -gxtitle2            string     Graph x axis title
+   -gytitle2            string     Graph y axis title
+   -goutfile2           string     Output file for non interactive displays
+   -gdirectory2         string     Output directory
+
    General qualifiers:
-  -help                boolean    Report command line options. More
+   -auto                boolean    Turn off prompts
+   -stdout              boolean    Write standard output
+   -filter              boolean    Read standard input, write standard output
+   -options             boolean    Prompt for required and optional values
+   -debug               boolean    Write debug output to program.dbg
+   -acdlog              boolean    Write ACD processing log to program.acdlog
+   -acdpretty           boolean    Rewrite ACD file as program.acdpretty
+   -acdtable            boolean    Write HTML table of options
+   -verbose             boolean    Report some/full command line options
+   -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
+   -warning             boolean    Report warnings
+   -error               boolean    Report errors
+   -fatal               boolean    Report fatal errors
+   -die                 boolean    Report deaths
    
 
    Mandatory qualifiers Allowed values Default
@@ -70,7 +99,7 @@ Command line arguments
    x11, tektronics, tekt, tek4107t, tek, none, null, text, data, xterm,
    png EMBOSS_GRAPHICS value, or x11
    Optional qualifiers Allowed values Default
-   -datafile nakai database file Data file Enakai.dat
+   -datafile Aaindex database file Data file Enakai.dat
    -length window size Integer from 1 to 200 7
    Advanced qualifiers Allowed values Default
    (none)
@@ -222,9 +251,9 @@ See also
    
 Author(s)
 
-   This application was written by Ian Longden (il@sanger.ac.uk)
-   Informatics Division, The Sanger Centre, Wellcome Trust Genome Campus,
-   Hinxton, Cambridge, CB10 1SA, UK.
+   Ian Longden (il © sanger.ac.uk)
+   Sanger Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge,
+   CB10 1SA, UK.
    
 History
 

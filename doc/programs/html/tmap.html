@@ -125,18 +125,59 @@ IT IS DONE FOR YOU.
    -outfile            outfile    Output file name
 
    Advanced qualifiers: (none)
+   Associated qualifiers:
+  "-msf" related qualifiers
+   -sbegin1             integer    First base used
+   -send1               integer    Last base used, def=seq length
+   -sreverse1           boolean    Reverse (if DNA)
+   -sask1               boolean    Ask for begin/end/reverse
+   -snucleotide1        boolean    Sequence is nucleotide
+   -sprotein1           boolean    Sequence is protein
+   -slower1             boolean    Make lower case
+   -supper1             boolean    Make upper case
+   -sformat1            string     Input sequence format
+   -sopenfile1          string     Input filename
+   -sdbname1            string     Database name
+   -sid1                string     Entryname
+   -ufo1                string     UFO features
+   -fformat1            string     Features format
+   -fopenfile1          string     Features file name
+  "-graph" related qualifiers
+   -gprompt             boolean    Graph prompting
+   -gtitle              string     Graph title
+   -gsubtitle           string     Graph subtitle
+   -gxtitle             string     Graph x axis title
+   -gytitle             string     Graph y axis title
+   -goutfile            string     Output file for non interactive displays
+   -gdirectory          string     Output directory
+  "-outfile" related qualifiers
+   -odirectory          string     Output directory
+
    General qualifiers:
-  -help                boolean    Report command line options. More
+   -auto                boolean    Turn off prompts
+   -stdout              boolean    Write standard output
+   -filter              boolean    Read standard input, write standard output
+   -options             boolean    Prompt for required and optional values
+   -debug               boolean    Write debug output to program.dbg
+   -acdlog              boolean    Write ACD processing log to program.acdlog
+   -acdpretty           boolean    Rewrite ACD file as program.acdpretty
+   -acdtable            boolean    Write HTML table of options
+   -verbose             boolean    Report some/full command line options
+   -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
+   -warning             boolean    Report warnings
+   -error               boolean    Report errors
+   -fatal               boolean    Report fatal errors
+   -die                 boolean    Report deaths
 
 
 </pre>
 </td></tr></table>
 <P>
 
-<table border cellspacing=0 cellpadding=3 bgcolor="#f5f5ff">
-<tr bgcolor="#FFFFD0">
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
 <th align="left" colspan=2>Mandatory qualifiers</th>
 <th align="left">Allowed values</th>
 <th align="left">Default</th>
@@ -156,7 +197,7 @@ IT IS DONE FOR YOU.
 <td><i>EMBOSS_GRAPHICS</i> value, or x11</td>
 </tr>
 
-<tr bgcolor="#FFFFD0">
+<tr bgcolor="#FFFFCC">
 <th align="left" colspan=2>Optional qualifiers</th>
 <th align="left">Allowed values</th>
 <th align="left">Default</th>
@@ -169,7 +210,7 @@ IT IS DONE FOR YOU.
 <td>tmap.res</td>
 </tr>
 
-<tr bgcolor="#FFFFD0">
+<tr bgcolor="#FFFFCC">
 <th align="left" colspan=2>Advanced qualifiers</th>
 <th align="left">Allowed values</th>
 <th align="left">Default</th>
@@ -199,7 +240,7 @@ IT IS DONE FOR YOU.
 'tsw:opsd_human' is a sequence entry in the example protein database 'tsw'
 <p>
 <p><h3>Database entry: tsw:opsd_human</h3>
-<table width="90%"><tr><td bgcolor="#FFDDFF">
+<table width="90%"><tr><td bgcolor="#FFCCFF">
 <pre>
 ID   OPSD_HUMAN     STANDARD;      PRT;   348 AA.
 AC   P08100; Q16414;
@@ -321,7 +362,7 @@ SQ   SEQUENCE   348 AA;  38892 MW;  07443BEA CRC32;
 <p><h3>Graphics File: tmap.ps</h3>
 <p><img src="tmap.1.tmap.gif" alt="[tmap results]">
 <p><h3>File: tmap.res</h3>
-<table width="90%"><tr><td bgcolor="#DDFFDD">
+<table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 Program TMAP, version 46, to predict transmembrane segments from .msf file.
 The program reads a multiple alignment file of the GCG multiple sequence format
@@ -462,16 +503,25 @@ None.
 Original program by Bengt Persson and Patrick Argos.
 <p>
 
-This application was modified for inclusion in EMBOSS by Ian Longden <a
-href="mailto:il@sanger.ac.uk">(il@sanger.ac.uk)</a> Informatics
-Division, The Sanger Centre, Wellcome Trust Genome Campus, Hinxton,
-Cambridge, CB10 1SA, UK.
+This application was modified for inclusion in EMBOSS by 
+
+Ian Longden (il&nbsp;&copy;&nbsp;sanger.ac.uk)
+<br>
+Sanger Institute, Wellcome Trust Genome Campus, Hinxton,
+Cambridge, CB10 1SA, UK.                      
+
 
 <H2>
     History
 </H2>
 
 Completed 17th June 1999.
+
+<!--
+<p>
+[an error occurred while processing this directive]
+-->
+
 <H2>
     Target users
 </H2>

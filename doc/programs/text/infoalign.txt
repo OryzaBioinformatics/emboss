@@ -112,6 +112,22 @@ Output file [globins.infoalign]:
    
    Go to the output files for this example
    
+   Example 8
+   
+   
+% infoalign -auto tembl:eclac* -out test.out 
+
+   Go to the input files for this example
+   Go to the output files for this example
+   
+   Example 9
+   
+   
+% infoalign -auto tembl:eclacz -out test.out 
+
+   Go to the input files for this example
+   Go to the output files for this example
+   
 Command line arguments
 
    Mandatory qualifiers:
@@ -171,10 +187,43 @@ Command line arguments
    -change             boolean    Display % number of changed positions
    -description        boolean    Display 'description' column
 
+   Associated qualifiers:
+  "-sequence" related qualifiers
+   -sbegin1             integer    First base used
+   -send1               integer    Last base used, def=seq length
+   -sreverse1           boolean    Reverse (if DNA)
+   -sask1               boolean    Ask for begin/end/reverse
+   -snucleotide1        boolean    Sequence is nucleotide
+   -sprotein1           boolean    Sequence is protein
+   -slower1             boolean    Make lower case
+   -supper1             boolean    Make upper case
+   -sformat1            string     Input sequence format
+   -sopenfile1          string     Input filename
+   -sdbname1            string     Database name
+   -sid1                string     Entryname
+   -ufo1                string     UFO features
+   -fformat1            string     Features format
+   -fopenfile1          string     Features file name
+  "-outfile" related qualifiers
+   -odirectory2         string     Output directory
+
    General qualifiers:
-  -help                boolean    Report command line options. More
+   -auto                boolean    Turn off prompts
+   -stdout              boolean    Write standard output
+   -filter              boolean    Read standard input, write standard output
+   -options             boolean    Prompt for required and optional values
+   -debug               boolean    Write debug output to program.dbg
+   -acdlog              boolean    Write ACD processing log to program.acdlog
+   -acdpretty           boolean    Rewrite ACD file as program.acdpretty
+   -acdtable            boolean    Write HTML table of options
+   -verbose             boolean    Report some/full command line options
+   -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
+   -warning             boolean    Report warnings
+   -error               boolean    Report errors
+   -fatal               boolean    Report fatal errors
+   -die                 boolean    Report deaths
    
 
    Mandatory qualifiers Allowed values Default
@@ -291,6 +340,176 @@ HBA_HORSE  TVLTSKYR~~~~~~
 MYG_PHYCA  KDIAAKYKELGYQG
 GLB5_PETMA Y~~~~~~~~~~~~~
 LGB2_LUPLU IVIKKEMNDAA~~~
+   
+  Input files for usage example 8
+  
+   'tembl:eclac*' is a sequence entry in the example nucleic acid
+   database 'tembl'
+   
+  Input files for usage example 9
+  
+  Database entry: tembl:eclacz
+  
+ID   ECLACZ     standard; DNA; PRO; 3078 BP.
+XX
+AC   V00296;
+XX
+SV   V00296.1
+XX
+DT   13-JUL-1983 (Rel. 03, Created)
+DT   06-MAR-1996 (Rel. 47, Last updated, Version 4)
+XX
+DE   E. coli gene lacZ coding for beta-galactosidase (EC 3.2.1.23).
+XX
+KW   galactosidase.
+XX
+OS   Escherichia coli
+OC   Bacteria; Proteobacteria; gamma subdivision; Enterobacteriaceae;
+OC   Escherichia.
+XX
+RN   [1]
+RP   1-3078
+RX   MEDLINE; 84028567.
+RA   Kalnins A., Otto K., Ruether U., Mueller-Hill B.;
+RT   "Sequence of the lacZ gene of Escherichia coli";
+RL   EMBO J. 2:593-597(1983).
+XX
+RN   [2]
+RX   MEDLINE; 87275876.
+RA   Zell R., Fritz H.J.;
+RT   "DNA mismatch-repair in Escherichia coli counteracting the hydrolytic
+RT   deamination of 5-methyl-cytosine residues";
+RL   EMBO J. 6:1809-1815(1987).
+XX
+DR   SWISS-PROT; P00722; BGAL_ECOLI.
+XX
+CC   Data kindly reviewed (18-MAY-1983) by U. Ruether
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..3078
+FT                   /db_xref="taxon:562"
+FT                   /organism="Escherichia coli"
+FT   CDS             <1..3072
+FT                   /db_xref="SWISS-PROT:P00722"
+FT                   /note="galactosidase"
+FT                   /transl_table=11
+FT                   /protein_id="CAA23573.1"
+FT                   /translation="TMITDSLAVVLQRRDWENPGVTQLNRLAAHPPFASWRNSEEART
+D
+FT                   RPSQQLRSLNGEWRFAWFPAPEAVPESWLECDLPEADTVVVPSNWQMHGYDAPIYTNV
+T
+FT                   YPITVNPPFVPTENPTGCYSLTFNVDESWLQEGQTRIIFDGVNSAFHLWCNGRWVGYG
+Q
+FT                   DSRLPSEFDLSAFLRAGENRLAVMVLRWSDGSYLEDQDMWRMSGIFRDVSLLHKPTTQ
+I
+FT                   SDFHVATRFNDDFSRAVLEAEVQMCGELRDYLRVTVSLWQGETQVASGTAPFGGEIID
+E
+
+
+  [Part of this file has been deleted for brevity]
+
+     gaggcccgca ccgatcgccc ttcccaacag ttgcgcagcc tgaatggcga atggcgcttt       18
+0
+     gcctggtttc cggcaccaga agcggtgccg gaaagctggc tggagtgcga tcttcctgag       24
+0
+     gccgatactg tcgtcgtccc ctcaaactgg cagatgcacg gttacgatgc gcccatctac       30
+0
+     accaacgtaa cctatcccat tacggtcaat ccgccgtttg ttcccacgga gaatccgacg       36
+0
+     ggttgttact cgctcacatt taatgttgat gaaagctggc tacaggaagg ccagacgcga       42
+0
+     attatttttg atggcgttaa ctcggcgttt catctgtggt gcaacgggcg ctgggtcggt       48
+0
+     tacggccagg acagtcgttt gccgtctgaa tttgacctga gcgcattttt acgcgccgga       54
+0
+     gaaaaccgcc tcgcggtgat ggtgctgcgt tggagtgacg gcagttatct ggaagatcag       60
+0
+     gatatgtggc ggatgagcgg cattttccgt gacgtctcgt tgctgcataa accgactaca       66
+0
+     caaatcagcg atttccatgt tgccactcgc tttaatgatg atttcagccg cgctgtactg       72
+0
+     gaggctgaag ttcagatgtg cggcgagttg cgtgactacc tacgggtaac agtttcttta       78
+0
+     tggcagggtg aaacgcaggt cgccagcggc accgcgcctt tcggcggtga aattatcgat       84
+0
+     gagcgtggtg gttatgccga tcgcgtcaca ctacgtctga acgtcgaaaa cccgaaactg       90
+0
+     tggagcgccg aaatcccgaa tctctatcgt gcggtggttg aactgcacac cgccgacggc       96
+0
+     acgctgattg aagcagaagc ctgcgatgtc ggtttccgcg aggtgcggat tgaaaatggt      102
+0
+     ctgctgctgc tgaacggcaa gccgttgctg attcgaggcg ttaaccgtca cgagcatcat      108
+0
+     cctctgcatg gtcaggtcat ggatgagcag acgatggtgc aggatatcct gctgatgaag      114
+0
+     cagaacaact ttaacgccgt gcgctgttcg cattatccga accatccgct gtggtacacg      120
+0
+     ctgtgcgacc gctacggcct gtatgtggtg gatgaagcca atattgaaac ccacggcatg      126
+0
+     gtgccaatga atcgtctgac cgatgatccg cgctggctac cggcgatgag cgaacgcgta      132
+0
+     acgcgaatgg tgcagcgcga tcgtaatcac ccgagtgtga tcatctggtc gctggggaat      138
+0
+     gaatcaggcc acggcgctaa tcacgacgcg ctgtatcgct ggatcaaatc tgtcgatcct      144
+0
+     tcccgcccgg tgcagtatga aggcggcgga gccgacacca cggccaccga tattatttgc      150
+0
+     ccgatgtacg cgcgcgtgga tgaagaccag cccttcccgg ctgtgccgaa atggtccatc      156
+0
+     aaaaaatggc tttcgctacc tggagagacg cgcccgctga tcctttgcga atacgcccac      162
+0
+     gcgatgggta acagtcttgg cggtttcgct aaatactggc aggcgtttcg tcagtatccc      168
+0
+     cgtttacagg gcggcttcgt ctgggactgg gtggatcagt cgctgattaa atatgatgaa      174
+0
+     aacggcaacc cgtggtcggc ttacggcggt gattttggcg atacgccgaa cgatcgccag      180
+0
+     ttctgtatga acggtctggt ctttgccgac cgcacgccgc atccagcgct gacggaagca      186
+0
+     aaacaccagc agcagttttt ccagttccgt ttatccgggc aaaccatcga agtgaccagc      192
+0
+     gaatacctgt tccgtcatag cgataacgag ctcctgcact ggatggtggc gctggatggt      198
+0
+     aagccgctgg caagcggtga agtgcctctg gatgtcgctc cacaaggtaa acagttgatt      204
+0
+     gaactgcctg aactaccgca gccggagagc gccgggcaac tctggctcac agtacgcgta      210
+0
+     gtgcaaccga acgcgaccgc atggtcagaa gccgggcaca tcagcgcctg gcagcagtgg      216
+0
+     cgtctggcgg aaaacctcag tgtgacgctc cccgccgcgt cccacgccat cccgcatctg      222
+0
+     accaccagcg aaatggattt ttgcatcgag ctgggtaata agcgttggca atttaaccgc      228
+0
+     cagtcaggct ttctttcaca gatgtggatt ggcgataaaa aacaactgct gacgccgctg      234
+0
+     cgcgatcagt tcacccgtgc accgctggat aacgacattg gcgtaagtga agcgacccgc      240
+0
+     attgacccta acgcctgggt cgaacgctgg aaggcggcgg gccattacca ggccgaagca      246
+0
+     gcgttgttgc agtgcacggc agatacactt gctgatgcgg tgctgattac gaccgctcac      252
+0
+     gcgtggcagc atcaggggaa aaccttattt atcagccgga aaacctaccg gattgatggt      258
+0
+     agtggtcaaa tggcgattac cgttgatgtt gaagtggcga gcgatacacc gcatccggcg      264
+0
+     cggattggcc tgaactgcca gctggcgcag gtagcagagc gggtaaactg gctcggatta      270
+0
+     gggccgcaag aaaactatcc cgaccgcctt actgccgcct gttttgaccg ctgggatctg      276
+0
+     ccattgtcag acatgtatac cccgtacgtc ttcccgagcg aaaacggtct gcgctgcggg      282
+0
+     acgcgcgaat tgaattatgg cccacaccag tggcgcggcg acttccagtt caacatcagc      288
+0
+     cgctacagtc aacagcaact gatggaaacc agccatcgcc atctgctgca cgcggaagaa      294
+0
+     ggcacatggc tgaatatcga cggtttccat atggggattg gtggcgacga ctcctggagc      300
+0
+     ccgtcagtat cggcggaatt ccagctgagc gccggtcgct accattacca gttggtctgg      306
+0
+     tgtcaaaaat aataataa                                                    307
+8
+//
    
 Output file format
 
@@ -487,6 +706,36 @@ msf::../../data/globins.msf:GLB5_PETMA  GLB5_PETMA    151       153     1
 msf::../../data/globins.msf:LGB2_LUPLU  LGB2_LUPLU    153       153     0
 0       21      28      104     86.274513
    
+  Output files for usage example 8
+  
+  File: test.out
+  
+# USA             Name        SeqLen    AlignLen        Gaps    GapLen  Ident
+Similar Differ  % Change        Description
+tembl-id:ECLAC    ECLAC         7477    7477    0       0       65      0
+7412    99.130669       E.coli lactose operon with lacI, lacZ, lacY and lacA ge
+nes.
+tembl-id:ECLACA   ECLACA        1832    1832    0       0       71      0
+1761    96.124451       Escherichia coli lacA gene for thiogalactoside transace
+tylase
+tembl-id:ECLACI   ECLACI        1113    1113    0       0       67      0
+1046    93.980232       E. coli laci gene (codes for the lac repressor).
+tembl-id:ECLACY   ECLACY        1500    1500    0       0       68      0
+1432    95.466667       E. coli lacY gene (codes for lactose permease).
+tembl-id:ECLACZ   ECLACZ        3078    3078    0       0       72      0
+3006    97.660820       E. coli gene lacZ coding for beta-galactosidase (EC 3.2
+.1.23).
+   
+  Output files for usage example 9
+  
+  File: test.out
+  
+# USA             Name        SeqLen    AlignLen        Gaps    GapLen  Ident
+Similar Differ  % Change        Description
+tembl-id:ECLACZ   ECLACZ        3078    3078    0       0       0       0
+3078    100.000000      E. coli gene lacZ coding for beta-galactosidase (EC 3.2
+.1.23).
+   
    The first non-blank line is the heading. This is followed by one line
    per sequence containing the following columns of data separated by one
    of more space or TAB characters:
@@ -606,8 +855,8 @@ See also
    
 Author(s)
 
-   This application was written by Gary Williams
-   (gwilliam@hgmp.mrc.ac.uk)
+   Gary Williams (gwilliam © hgmp.mrc.ac.uk)
+   HGMP-RC, Genome Campus, Hinxton, Cambridge CB10 1SB, UK
    
 History
 

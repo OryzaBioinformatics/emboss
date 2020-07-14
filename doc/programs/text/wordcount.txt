@@ -33,10 +33,43 @@ Command line arguments
 
    Optional qualifiers: (none)
    Advanced qualifiers: (none)
+   Associated qualifiers:
+  "-sequence" related qualifiers
+   -sbegin1             integer    First base used
+   -send1               integer    Last base used, def=seq length
+   -sreverse1           boolean    Reverse (if DNA)
+   -sask1               boolean    Ask for begin/end/reverse
+   -snucleotide1        boolean    Sequence is nucleotide
+   -sprotein1           boolean    Sequence is protein
+   -slower1             boolean    Make lower case
+   -supper1             boolean    Make upper case
+   -sformat1            string     Input sequence format
+   -sopenfile1          string     Input filename
+   -sdbname1            string     Database name
+   -sid1                string     Entryname
+   -ufo1                string     UFO features
+   -fformat1            string     Features format
+   -fopenfile1          string     Features file name
+  "-outfile" related qualifiers
+   -odirectory          string     Output directory
+
    General qualifiers:
-  -help                boolean    Report command line options. More
+   -auto                boolean    Turn off prompts
+   -stdout              boolean    Write standard output
+   -filter              boolean    Read standard input, write standard output
+   -options             boolean    Prompt for required and optional values
+   -debug               boolean    Write debug output to program.dbg
+   -acdlog              boolean    Write ACD processing log to program.acdlog
+   -acdpretty           boolean    Rewrite ACD file as program.acdpretty
+   -acdtable            boolean    Write HTML table of options
+   -verbose             boolean    Report some/full command line options
+   -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
+   -warning             boolean    Report warnings
+   -error               boolean    Report errors
+   -fatal               boolean    Report fatal errors
+   -die                 boolean    Report deaths
    
 
    Mandatory qualifiers Allowed values Default
@@ -188,53 +221,53 @@ ggg     26
 cag     25
 ctt     25
 tcc     25
-ggt     24
 ccc     24
+ggt     24
 ctc     23
 tgt     23
-gca     22
-cgt     22
-ccg     22
 cac     22
+ccg     22
+cgt     22
+gca     22
 agc     21
+cgg     19
 acg     19
 ttg     19
-cgg     19
 tcg     18
 ttc     17
 cat     17
 agg     17
-act     16
 gtc     16
 gag     16
+act     16
 aac     15
-gga     14
-atc     14
 tct     14
-tca     13
+atc     14
+gga     14
 cta     13
+tca     13
 atg     12
 gtt     11
-acc     11
 gta     11
+acc     11
+caa     10
+tga     10
 aca     10
 tac     10
-tga     10
-caa     10
-gac     9
 agt     9
 tag     9
+gac     9
 ttt     8
 cga     7
-gat     6
 taa     6
+gat     6
 tat     5
 aga     5
 gaa     4
-aat     3
 ata     3
-tta     3
 att     3
+aat     3
+tta     3
 aag     2
 aaa     1
    
@@ -287,9 +320,9 @@ See also
    
 Author(s)
 
-   This application was written by Ian Longden (il@sanger.ac.uk)
-   Informatics Division, The Sanger Centre, Wellcome Trust Genome Campus,
-   Hinxton, Cambridge, CB10 1SA, UK.
+   Ian Longden (il © sanger.ac.uk)
+   Sanger Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge,
+   CB10 1SA, UK.
    
 History
 

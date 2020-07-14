@@ -137,18 +137,58 @@ IT IS DONE FOR YOU.
 
    Optional qualifiers: (none)
    Advanced qualifiers: (none)
+   Associated qualifiers:
+  "-sequence" related qualifiers
+   -sbegin1             integer    First base used
+   -send1               integer    Last base used, def=seq length
+   -sreverse1           boolean    Reverse (if DNA)
+   -sask1               boolean    Ask for begin/end/reverse
+   -snucleotide1        boolean    Sequence is nucleotide
+   -sprotein1           boolean    Sequence is protein
+   -slower1             boolean    Make lower case
+   -supper1             boolean    Make upper case
+   -sformat1            string     Input sequence format
+   -sopenfile1          string     Input filename
+   -sdbname1            string     Database name
+   -sid1                string     Entryname
+   -ufo1                string     UFO features
+   -fformat1            string     Features format
+   -fopenfile1          string     Features file name
+  "-outfile" related qualifiers
+   -rformat2            string     Report format
+   -rname2              string     Base file name
+   -rextension2         string     File name extension
+   -rdirectory2         string     Output directory
+   -raccshow2           boolean    Show accession number in the report
+   -rdesshow2           boolean    Show description in the report
+   -rscoreshow2         boolean    Show the score in the report
+   -rusashow2           boolean    Show the full USA in the report
+
    General qualifiers:
-  -help                boolean    Report command line options. More
+   -auto                boolean    Turn off prompts
+   -stdout              boolean    Write standard output
+   -filter              boolean    Read standard input, write standard output
+   -options             boolean    Prompt for required and optional values
+   -debug               boolean    Write debug output to program.dbg
+   -acdlog              boolean    Write ACD processing log to program.acdlog
+   -acdpretty           boolean    Rewrite ACD file as program.acdpretty
+   -acdtable            boolean    Write HTML table of options
+   -verbose             boolean    Report some/full command line options
+   -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
+   -warning             boolean    Report warnings
+   -error               boolean    Report errors
+   -fatal               boolean    Report fatal errors
+   -die                 boolean    Report deaths
 
 
 </pre>
 </td></tr></table>
 <P>
 
-<table border cellspacing=0 cellpadding=3 bgcolor="#f5f5ff">
-<tr bgcolor="#FFFFD0">
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
 <th align="left" colspan=2>Mandatory qualifiers</th>
 <th align="left">Allowed values</th>
 <th align="left">Default</th>
@@ -175,7 +215,7 @@ IT IS DONE FOR YOU.
 <td>&nbsp;</td>
 </tr>
 
-<tr bgcolor="#FFFFD0">
+<tr bgcolor="#FFFFCC">
 <th align="left" colspan=2>Optional qualifiers</th>
 <th align="left">Allowed values</th>
 <th align="left">Default</th>
@@ -185,7 +225,7 @@ IT IS DONE FOR YOU.
 <td colspan=4>(none)</td>
 </tr>
 
-<tr bgcolor="#FFFFD0">
+<tr bgcolor="#FFFFCC">
 <th align="left" colspan=2>Advanced qualifiers</th>
 <th align="left">Allowed values</th>
 <th align="left">Default</th>
@@ -215,7 +255,7 @@ The input sequence can be one or more protein sequences.
 'tsw:act1_fugru' is a sequence entry in the example protein database 'tsw'
 <p>
 <p><h3>Database entry: tsw:act1_fugru</h3>
-<table width="90%"><tr><td bgcolor="#FFDDFF">
+<table width="90%"><tr><td bgcolor="#FFCCFF">
 <pre>
 ID   ACT1_FUGRU     STANDARD;      PRT;   375 AA.
 AC   P53484;
@@ -308,11 +348,11 @@ By default <b>antigenic</b> writes a 'motif' report file.
 <a name="output.1"></a>
 <h3>Output files for usage example </h3>
 <p><h3>File: act1_fugru.antigenic</h3>
-<table width="90%"><tr><td bgcolor="#DDFFDD">
+<table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 ########################################
 # Program: antigenic
-# Rundate: Thu Nov 07 14:15:47 2002
+# Rundate: Thu May 22 10:21:52 2003
 # Report_format: motif
 # Report_file: act1_fugru.antigenic
 ########################################
@@ -421,10 +461,10 @@ Max_score_pos at "*"
 <a name="output.2"></a>
 <h3>Output files for usage example 2</h3>
 <p><h3>File: act1_fugru.antigenic</h3>
-<table width="90%"><tr><td bgcolor="#DDFFDD">
+<table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 ##gff-version 2.0
-##date 2002-11-07
+##date 2003-05-22
 ##Type Protein ACT1_FUGRU
 ACT1_FUGRU	antigenic	site	214	222	1.207	+	.	Sequence "ACT1_FUGRU.1" ; note "*pos 218"
 ACT1_FUGRU	antigenic	site	131	145	1.187	+	.	Sequence "ACT1_FUGRU.2" ; note "*pos 137"
@@ -764,9 +804,11 @@ None.
     Author(s)
 </H2>
 
+Alan Bleasby (ableasby&nbsp;&copy;&nbsp;hgmp.mrc.ac.uk)
+<br>
+HGMP-RC, Genome Campus, Hinxton, Cambridge CB10 1SB, UK
 
-This application was written by Alan Bleasby <a
-href="mailto:ableasby@hgmp.mrc.ac.uk">(ableasby@hgmp.mrc.ac.uk)</a>
+ 
 
 <p>
 Original program "ANTIGENIC" by Peter Rice (EGCG 1991)
@@ -777,6 +819,10 @@ Original program "ANTIGENIC" by Peter Rice (EGCG 1991)
 
 
 Completed 9th March 1999
+<!--
+<p>
+[an error occurred while processing this directive] 
+-->
 
 <H2>
     Target users

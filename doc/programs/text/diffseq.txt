@@ -37,7 +37,7 @@ Usage
 % diffseq tembl:ap000504 tembl:af129756 
 Find differences between nearly identical sequences
 Word size [10]: 
-Output report [ap000504.diffseq]: 
+Output report file [ap000504.diffseq]: 
    
    Go to the input files for this example
    Go to the output files for this example
@@ -75,10 +75,80 @@ Command line arguments
                                   columns and no feature information is given.
 
    Advanced qualifiers: (none)
+   Associated qualifiers:
+  "-asequence" related qualifiers
+   -sbegin1             integer    First base used
+   -send1               integer    Last base used, def=seq length
+   -sreverse1           boolean    Reverse (if DNA)
+   -sask1               boolean    Ask for begin/end/reverse
+   -snucleotide1        boolean    Sequence is nucleotide
+   -sprotein1           boolean    Sequence is protein
+   -slower1             boolean    Make lower case
+   -supper1             boolean    Make upper case
+   -sformat1            string     Input sequence format
+   -sopenfile1          string     Input filename
+   -sdbname1            string     Database name
+   -sid1                string     Entryname
+   -ufo1                string     UFO features
+   -fformat1            string     Features format
+   -fopenfile1          string     Features file name
+  "-bsequence" related qualifiers
+   -sbegin2             integer    First base used
+   -send2               integer    Last base used, def=seq length
+   -sreverse2           boolean    Reverse (if DNA)
+   -sask2               boolean    Ask for begin/end/reverse
+   -snucleotide2        boolean    Sequence is nucleotide
+   -sprotein2           boolean    Sequence is protein
+   -slower2             boolean    Make lower case
+   -supper2             boolean    Make upper case
+   -sformat2            string     Input sequence format
+   -sopenfile2          string     Input filename
+   -sdbname2            string     Database name
+   -sid2                string     Entryname
+   -ufo2                string     UFO features
+   -fformat2            string     Features format
+   -fopenfile2          string     Features file name
+  "-outfile" related qualifiers
+   -rformat             string     Report format
+   -rname               string     Base file name
+   -rextension          string     File name extension
+   -rdirectory          string     Output directory
+   -raccshow            boolean    Show accession number in the report
+   -rdesshow            boolean    Show description in the report
+   -rscoreshow          boolean    Show the score in the report
+   -rusashow            boolean    Show the full USA in the report
+  "-afeatout" related qualifiers
+   -offormat            string     Output feature format
+   -ofopenfile          string     Features file name
+   -ofextension         string     File name extension
+   -ofdirectory         string     Output directory
+   -ofname              string     Base file name
+   -ofsingle            boolean    Separate file for each entry
+  "-bfeatout" related qualifiers
+   -offormat            string     Output feature format
+   -ofopenfile          string     Features file name
+   -ofextension         string     File name extension
+   -ofdirectory         string     Output directory
+   -ofname              string     Base file name
+   -ofsingle            boolean    Separate file for each entry
+
    General qualifiers:
-  -help                boolean    Report command line options. More
+   -auto                boolean    Turn off prompts
+   -stdout              boolean    Write standard output
+   -filter              boolean    Read standard input, write standard output
+   -options             boolean    Prompt for required and optional values
+   -debug               boolean    Write debug output to program.dbg
+   -acdlog              boolean    Write ACD processing log to program.acdlog
+   -acdpretty           boolean    Rewrite ACD file as program.acdpretty
+   -acdtable            boolean    Write HTML table of options
+   -verbose             boolean    Report some/full command line options
+   -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
+   -warning             boolean    Report warnings
+   -error               boolean    Report errors
+   -fatal               boolean    Report fatal errors
+   -die                 boolean    Report deaths
    
 
    Mandatory qualifiers Allowed values Default
@@ -461,7 +531,7 @@ Output file format
   File: AF129756.diffgff
   
 ##gff-version 2.0
-##date 2002-11-07
+##date 2003-05-22
 ##Type DNA AF129756
 AF129756        diffseq conflict        6882    6882    1.000   +       .
 Sequence "AF129756.1" ; note "SNP in AP000504" ; replace "a"
@@ -667,7 +737,7 @@ Sequence "AF129756.105" ; note "SNP in AP000504" ; replace "c"
   File: AP000504.diffgff
   
 ##gff-version 2.0
-##date 2002-11-07
+##date 2003-05-22
 ##Type DNA AP000504
 AP000504        diffseq conflict        847     847     1.000   +       .
 Sequence "AP000504.1" ; note "SNP in AF129756" ; replace "t"
@@ -874,7 +944,7 @@ Sequence "AP000504.105" ; note "SNP in AF129756" ; replace "t"
   
 ########################################
 # Program: diffseq
-# Rundate: Thu Nov 07 14:17:54 2002
+# Rundate: Thu May 22 14:44:04 2003
 # Report_format: diffseq
 # Report_file: ap000504.diffseq
 # Additional_files: 2
@@ -1149,8 +1219,8 @@ See also
    
 Author(s)
 
-   This application was written by Gary Williams
-   (gwilliam@hgmp.mrc.ac.uk)
+   Gary Williams (gwilliam © hgmp.mrc.ac.uk)
+   HGMP-RC, Genome Campus, Hinxton, Cambridge CB10 1SB, UK
    
 History
 

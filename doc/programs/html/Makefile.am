@@ -50,6 +50,7 @@ pkgdata2_DATA = isochore.html kitsch.html lindna.html listor.html \
                newcpgreport.html newcpgseek.html newseq.html noreturn.html \
                notseq.html nthseq.html nucleic_2d_structure_group.html \
                nucleic_codon_usage_group.html \
+               nucleic_codon_usage_nucleic_gene_finding_group.html \
                nucleic_composition_group.html \
                nucleic_cpg_islands_group.html \
                nucleic_gene_finding_group.html nucleic_motifs_group.html \
@@ -77,10 +78,11 @@ pkgdata2_DATA = isochore.html kitsch.html lindna.html listor.html \
                showdb.html showfeat.html showorf.html showseq.html \
                shuffleseq.html sigcleave.html silent.html sirna.html \
                sixpack.html skipseq.html splitter.html stretcher.html \
-               stssearch.html supermatcher.html syco.html textsearch.html \
-               tfextract.html tfm.html tfscan.html tmap.html topo.html \
-               tranalign.html transeq.html trimest.html trimseq.html \
-               twofeat.html union.html utils_database_creation_group.html \
+               stssearch.html supermatcher.html syco.html tcode.html \
+               textsearch.html tfextract.html tfm.html tfscan.html \
+               tmap.html topo.html tranalign.html transeq.html trimest.html \
+               trimseq.html twofeat.html union.html \
+               utils_database_creation_group.html \
                utils_database_indexing_group.html utils_misc_group.html \
                vectorstrip.html water.html whichdb.html wobble.html \
                wordcount.html wordmatch.html wossname.html yank.html \

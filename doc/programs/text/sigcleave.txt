@@ -44,10 +44,50 @@ Command line arguments
                                   changes the default scoring data file name
 
    Advanced qualifiers: (none)
+   Associated qualifiers:
+  "-sequence" related qualifiers
+   -sbegin1             integer    First base used
+   -send1               integer    Last base used, def=seq length
+   -sreverse1           boolean    Reverse (if DNA)
+   -sask1               boolean    Ask for begin/end/reverse
+   -snucleotide1        boolean    Sequence is nucleotide
+   -sprotein1           boolean    Sequence is protein
+   -slower1             boolean    Make lower case
+   -supper1             boolean    Make upper case
+   -sformat1            string     Input sequence format
+   -sopenfile1          string     Input filename
+   -sdbname1            string     Database name
+   -sid1                string     Entryname
+   -ufo1                string     UFO features
+   -fformat1            string     Features format
+   -fopenfile1          string     Features file name
+  "-outfile" related qualifiers
+   -rformat2            string     Report format
+   -rname2              string     Base file name
+   -rextension2         string     File name extension
+   -rdirectory2         string     Output directory
+   -raccshow2           boolean    Show accession number in the report
+   -rdesshow2           boolean    Show description in the report
+   -rscoreshow2         boolean    Show the score in the report
+   -rusashow2           boolean    Show the full USA in the report
+
    General qualifiers:
-  -help                boolean    Report command line options. More
+   -auto                boolean    Turn off prompts
+   -stdout              boolean    Write standard output
+   -filter              boolean    Read standard input, write standard output
+   -options             boolean    Prompt for required and optional values
+   -debug               boolean    Write debug output to program.dbg
+   -acdlog              boolean    Write ACD processing log to program.acdlog
+   -acdpretty           boolean    Rewrite ACD file as program.acdpretty
+   -acdtable            boolean    Write HTML table of options
+   -verbose             boolean    Report some/full command line options
+   -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
+   -warning             boolean    Report warnings
+   -error               boolean    Report errors
+   -fatal               boolean    Report fatal errors
+   -die                 boolean    Report deaths
    
 
    Mandatory qualifiers Allowed values Default
@@ -183,7 +223,7 @@ Output file format
   
 ########################################
 # Program: sigcleave
-# Rundate: Thu Nov 07 14:48:24 2002
+# Rundate: Thu May 22 10:58:29 2003
 # Report_format: motif
 # Report_file: ach2_drome.sig
 ########################################
@@ -203,53 +243,53 @@ Output file format
           29           41
  mature_peptide: NPDAKRLYDDLLSNYNRLIRPVSNNTDTVLVKLGLRLSQLIDLNLKDQIL
 
-(2) Score 3.632 length 13 at residues 308->320
- Sequence: LLISEIIPSTSLA
+(2) Score 12.135 length 13 at residues 26->38
+ Sequence: LCLLLVLLLLCET
            |           |
-         308           320
- mature_peptide: LPLLGKYLLFTMLLVGLSVVITIIILNIHYRKPSTHKMRPWIRSFFIKRL
+          26           38
+ mature_peptide: VQANPDAKRLYDDLLSNYNRLIRPVSNNTDTVLVKLGLRLSQLIDLNLKD
 
-(3) Score 3.751 length 13 at residues 527->539
- Sequence: LFLWLFMIASLVG
-           |           |
-         527           539
- mature_peptide: TFVILGEAPSLYDDTKAIDVQLSDVAKQIYNLTEKKN
-
-(4) Score 4.026 length 13 at residues 31->43
- Sequence: VLLLLCETVQANP
-           |           |
-          31           43
- mature_peptide: DAKRLYDDLLSNYNRLIRPVSNNTDTVLVKLGLRLSQLIDLNLKDQILTT
-
-(5) Score 5.057 length 13 at residues 24->36
- Sequence: KPLCLLLVLLLLC
-           |           |
-          24           36
- mature_peptide: ETVQANPDAKRLYDDLLSNYNRLIRPVSNNTDTVLVKLGLRLSQLIDLNL
-
-(6) Score 6.981 length 13 at residues 330->342
- Sequence: FTMLLVGLSVVIT
-           |           |
-         330           342
- mature_peptide: IIILNIHYRKPSTHKMRPWIRSFFIKRLPKLLLMRVPKDLLRDLAANKIN
-
-(7) Score 7.360 length 13 at residues 528->540
- Sequence: FLWLFMIASLVGT
-           |           |
-         528           540
- mature_peptide: FVILGEAPSLYDDTKAIDVQLSDVAKQIYNLTEKKN
-
-(8) Score 10.465 length 13 at residues 28->40
+(3) Score 10.465 length 13 at residues 28->40
  Sequence: LLLVLLLLCETVQ
            |           |
           28           40
  mature_peptide: ANPDAKRLYDDLLSNYNRLIRPVSNNTDTVLVKLGLRLSQLIDLNLKDQI
 
-(9) Score 12.135 length 13 at residues 26->38
- Sequence: LCLLLVLLLLCET
+(4) Score 7.360 length 13 at residues 528->540
+ Sequence: FLWLFMIASLVGT
            |           |
-          26           38
- mature_peptide: VQANPDAKRLYDDLLSNYNRLIRPVSNNTDTVLVKLGLRLSQLIDLNLKD
+         528           540
+ mature_peptide: FVILGEAPSLYDDTKAIDVQLSDVAKQIYNLTEKKN
+
+(5) Score 6.981 length 13 at residues 330->342
+ Sequence: FTMLLVGLSVVIT
+           |           |
+         330           342
+ mature_peptide: IIILNIHYRKPSTHKMRPWIRSFFIKRLPKLLLMRVPKDLLRDLAANKIN
+
+(6) Score 5.057 length 13 at residues 24->36
+ Sequence: KPLCLLLVLLLLC
+           |           |
+          24           36
+ mature_peptide: ETVQANPDAKRLYDDLLSNYNRLIRPVSNNTDTVLVKLGLRLSQLIDLNL
+
+(7) Score 4.026 length 13 at residues 31->43
+ Sequence: VLLLLCETVQANP
+           |           |
+          31           43
+ mature_peptide: DAKRLYDDLLSNYNRLIRPVSNNTDTVLVKLGLRLSQLIDLNLKDQILTT
+
+(8) Score 3.751 length 13 at residues 527->539
+ Sequence: LFLWLFMIASLVG
+           |           |
+         527           539
+ mature_peptide: TFVILGEAPSLYDDTKAIDVQLSDVAKQIYNLTEKKN
+
+(9) Score 3.632 length 13 at residues 308->320
+ Sequence: LLISEIIPSTSLA
+           |           |
+         308           320
+ mature_peptide: LPLLGKYLLFTMLLVGLSVVITIIILNIHYRKPSTHKMRPWIRSFFIKRL
 
 
 #---------------------------------------
@@ -360,9 +400,13 @@ See also
    
 Author(s)
 
-   This application was written by Alan Bleasby (ableasby@hgmp.mrc.ac.uk)
+   Alan Bleasby (ableasby © hgmp.mrc.ac.uk)
+   HGMP-RC, Genome Campus, Hinxton, Cambridge CB10 1SB, UK
    
-   Original program "SIGCLEAVE" by Peter Rice (EGCG 1989)
+   Original program "SIGCLEAVE" (EGCG 1989) by Peter Rice
+   (pmr © ebi.ac.uk)
+   Informatics Division, European Bioinformatics Institute, Wellcome
+   Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
    
 History
 

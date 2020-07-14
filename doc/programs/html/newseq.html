@@ -82,13 +82,13 @@ Type in a short sequence to the file 'mycc.pep' in SWISSPROT format:
 
 % <b>newseq </b>
 Type in a short new sequence.
-Output sequence [outfile.fasta]: <b>swiss::mycc.pep</b>
 Name of the sequence: <b>cytoc</b>
 Description of the sequence: <b>fragment of cytochrome c</b>
 Type of sequence
          N : Nucleic
          P : Protein
 Type of sequence [N]: <b>p</b>
+Output sequence [outfile.fasta]: <b>swiss::mycc.pep</b>
 Enter the sequence: <b>KKKEERADLIAY</b>
 
 </pre></td></tr></table><p>
@@ -111,7 +111,6 @@ IT IS DONE FOR YOU.
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
    Mandatory qualifiers:
-  [-outseq]            seqout     Output sequence USA
   [-name]              string     The name of of the sequence should be a
                                   single word that you will use to identify
                                   the sequence. It should have no (or few)
@@ -119,6 +118,7 @@ IT IS DONE FOR YOU.
   [-description]       string     Enter any description of the sequence that
                                   you require.
   [-type]              menu       Type of sequence
+  [-outseq]            seqout     Output sequence USA
   [-sequence]          string     The sequence itself.
                                   Because of the limitation of the operating
                                   system, you will only be able to type in a
@@ -131,49 +131,75 @@ IT IS DONE FOR YOU.
 
    Optional qualifiers: (none)
    Advanced qualifiers: (none)
+   Associated qualifiers:
+  "-outseq" related qualifiers
+   -osformat4           string     Output seq format
+   -osextension4        string     File name extension
+   -osname4             string     Base file name
+   -osdirectory4        string     Output directory
+   -osdbname4           string     Database name to add
+   -ossingle4           boolean    Separate file for each entry
+   -oufo4               string     UFO features
+   -offormat4           string     Features format
+   -ofname4             string     Features file name
+   -ofdirectory4        string     Output directory
+
    General qualifiers:
-  -help                boolean    Report command line options. More
+   -auto                boolean    Turn off prompts
+   -stdout              boolean    Write standard output
+   -filter              boolean    Read standard input, write standard output
+   -options             boolean    Prompt for required and optional values
+   -debug               boolean    Write debug output to program.dbg
+   -acdlog              boolean    Write ACD processing log to program.acdlog
+   -acdpretty           boolean    Rewrite ACD file as program.acdpretty
+   -acdtable            boolean    Write HTML table of options
+   -verbose             boolean    Report some/full command line options
+   -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
+   -warning             boolean    Report warnings
+   -error               boolean    Report errors
+   -fatal               boolean    Report fatal errors
+   -die                 boolean    Report deaths
 
 
 </pre>
 </td></tr></table>
 <P>
 
-<table border cellspacing=0 cellpadding=3 bgcolor="#f5f5ff">
-<tr bgcolor="#FFFFD0">
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
 <th align="left" colspan=2>Mandatory qualifiers</th>
 <th align="left">Allowed values</th>
 <th align="left">Default</th>
 </tr>
 
 <tr>
-<td>[-outseq]<br>(Parameter 1)</td>
-<td>Output sequence USA</td>
-<td>Writeable sequence</td>
-<td><i>&lt;sequence&gt;</i>.<i>format</i></td>
-</tr>
-
-<tr>
-<td>[-name]<br>(Parameter 2)</td>
+<td>[-name]<br>(Parameter 1)</td>
 <td>The name of of the sequence should be a single word that you will use to identify the sequence. It should have no (or few) punctuation characters in it.</td>
 <td>Any string is accepted</td>
 <td><i>An empty string is accepted</i></td>
 </tr>
 
 <tr>
-<td>[-description]<br>(Parameter 3)</td>
+<td>[-description]<br>(Parameter 2)</td>
 <td>Enter any description of the sequence that you require.</td>
 <td>Any string is accepted</td>
 <td><i>An empty string is accepted</i></td>
 </tr>
 
 <tr>
-<td>[-type]<br>(Parameter 4)</td>
+<td>[-type]<br>(Parameter 3)</td>
 <td>Type of sequence</td>
 <td><table><tr><td>N</td> <td><i>(Nucleic)</i></td></tr><tr><td>P</td> <td><i>(Protein)</i></td></tr></table></td>
 <td>N</td>
+</tr>
+
+<tr>
+<td>[-outseq]<br>(Parameter 4)</td>
+<td>Output sequence USA</td>
+<td>Writeable sequence</td>
+<td><i>&lt;sequence&gt;</i>.<i>format</i></td>
 </tr>
 
 <tr>
@@ -185,7 +211,7 @@ The keyboard will beep at you when you have reached this limit and you will not 
 <td><i>An empty string is accepted</i></td>
 </tr>
 
-<tr bgcolor="#FFFFD0">
+<tr bgcolor="#FFFFCC">
 <th align="left" colspan=2>Optional qualifiers</th>
 <th align="left">Allowed values</th>
 <th align="left">Default</th>
@@ -195,7 +221,7 @@ The keyboard will beep at you when you have reached this limit and you will not 
 <td colspan=4>(none)</td>
 </tr>
 
-<tr bgcolor="#FFFFD0">
+<tr bgcolor="#FFFFCC">
 <th align="left" colspan=2>Advanced qualifiers</th>
 <th align="left">Allowed values</th>
 <th align="left">Default</th>
@@ -229,7 +255,7 @@ The keyboard will beep at you when you have reached this limit and you will not 
 <a name="output.1"></a>
 <h3>Output files for usage example </h3>
 <p><h3>File: mycc.pep</h3>
-<table width="90%"><tr><td bgcolor="#DDFFDD">
+<table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 ID   cytoc          STANDARD;      PRT;    12 AA.
 DE   fragment of cytochrome c
@@ -340,8 +366,11 @@ None.
 </H2>
 
 
-This application was written by Gary Williams <a
-href="mailto:gwilliam@hgmp.mrc.ac.uk">(gwilliam@hgmp.mrc.ac.uk)</a>
+Gary Williams (gwilliam&nbsp;&copy;&nbsp;hgmp.mrc.ac.uk)
+<br>
+HGMP-RC, Genome Campus, Hinxton, Cambridge CB10 1SB, UK
+
+
 
 <H2>
     History
@@ -349,6 +378,11 @@ href="mailto:gwilliam@hgmp.mrc.ac.uk">(gwilliam@hgmp.mrc.ac.uk)</a>
 
 
 Written (1999) - Gary Williams
+
+<!--
+<p>
+[an error occurred while processing this directive]
+-->
 
 <H2>
     Target users

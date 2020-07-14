@@ -30,6 +30,36 @@ Description
    direction of transcription. Optionally the full sequence alignment is
    printed as well (see the example).
    
+Algorithm
+
+   The program uses a linear-space divide-and-conquer strategy (Myers and
+   Miller, 1988; Huang, 1994) to limit memory use:
+   
+   1. A first pass Smith-Waterman local alignment scan is done to find
+   the start and end of the maximally scoring segments.
+   
+   2. Subsequences corresponding to these segments are extracted
+   
+   3a. If the product of the subsequences' lengths is less than a
+   user-defined threshold (i.e. they will fit in memory) the segments are
+   realigned using the Needleman-Wunsch global alignment algorithm, which
+   will give the same result as the Smith-Waterman since the subsequences
+   are guaranteed to align end-to-end.
+   
+   3b. If the product of the lengths exceeds the threshold (a full
+   alignment will not fit in memory) the alignment is made recursively by
+   splitting the spliced (EST) sequence in half and finding the genome
+   sequence position which aligns with the mid-point. The process is
+   repeated until the product of gthe lengths is less than the threshold.
+   The divided sequences are aligned separately and then merged.
+   
+   4. The genome sequence is searched against the forward and reverse
+   strands of the spliced (EST) sequence, assuming a forward gene
+   splicing direction (i.e. GT/AG consensus).
+   
+   5. Then the best-scoring orientation is realigned assuming reverse
+   splicing (CT/AC consensus). The overall best alignment is reported.
+   
 Usage
 
    Here is a sample session with est2genome
@@ -98,10 +128,59 @@ Command line arguments
                                   (unknown).
    -width              integer    Alignment width
 
+   Associated qualifiers:
+  "-est" related qualifiers
+   -sbegin1             integer    First base used
+   -send1               integer    Last base used, def=seq length
+   -sreverse1           boolean    Reverse (if DNA)
+   -sask1               boolean    Ask for begin/end/reverse
+   -snucleotide1        boolean    Sequence is nucleotide
+   -sprotein1           boolean    Sequence is protein
+   -slower1             boolean    Make lower case
+   -supper1             boolean    Make upper case
+   -sformat1            string     Input sequence format
+   -sopenfile1          string     Input filename
+   -sdbname1            string     Database name
+   -sid1                string     Entryname
+   -ufo1                string     UFO features
+   -fformat1            string     Features format
+   -fopenfile1          string     Features file name
+  "-genome" related qualifiers
+   -sbegin2             integer    First base used
+   -send2               integer    Last base used, def=seq length
+   -sreverse2           boolean    Reverse (if DNA)
+   -sask2               boolean    Ask for begin/end/reverse
+   -snucleotide2        boolean    Sequence is nucleotide
+   -sprotein2           boolean    Sequence is protein
+   -slower2             boolean    Make lower case
+   -supper2             boolean    Make upper case
+   -sformat2            string     Input sequence format
+   -sopenfile2          string     Input filename
+   -sdbname2            string     Database name
+   -sid2                string     Entryname
+   -ufo2                string     UFO features
+   -fformat2            string     Features format
+   -fopenfile2          string     Features file name
+  "-outfile" related qualifiers
+   -odirectory3         string     Output directory
+
    General qualifiers:
-  -help                boolean    Report command line options. More
+   -auto                boolean    Turn off prompts
+   -stdout              boolean    Write standard output
+   -filter              boolean    Read standard input, write standard output
+   -options             boolean    Prompt for required and optional values
+   -debug               boolean    Write debug output to program.dbg
+   -acdlog              boolean    Write ACD processing log to program.acdlog
+   -acdpretty           boolean    Rewrite ACD file as program.acdpretty
+   -acdtable            boolean    Write HTML table of options
+   -verbose             boolean    Report some/full command line options
+   -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
+   -warning             boolean    Report warnings
+   -error               boolean    Report errors
+   -fatal               boolean    Report fatal errors
+   -die                 boolean    Report deaths
    
 
    Mandatory qualifiers Allowed values Default
@@ -599,7 +678,17 @@ G
    
 References
 
-   Mott, R (19) CABIOS.
+   1. Mott R. (1997) EST_GENOME: a program to align spliced DNA sequences
+   to unspliced genomic DNA. Comput. Applic. 13:477-478
+   
+   2. Huang X (1994) On global sequence alignment. Comput. Applic.
+   Biosci. 10:227-235.
+   
+   3. Myers, EW and Miller, W (1988) Optimal alignments in linear space.
+   Comput. Applic. Biosci. 4:11-17
+   
+   4. Smith, TE and Waterman, MS (1981) Identification of common
+   molecular subseqeunces. J. Mol. Biol. 147:195-197
    
 Warnings
 
@@ -626,8 +715,9 @@ See also
 Author(s)
 
    This application was modified for inclusion in EMBOSS by Peter Rice
-   (pmr@sanger.ac.uk) Informatics Division, The Sanger Centre, Wellcome
-   Trust Genome Campus, Hinxton, Cambridge, CB10 1SA, UK.
+   (pmr © ebi.ac.uk)
+   Informatics Division, European Bioinformatics Institute, Wellcome
+   Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
    
    The original program was est_genome, written by Richard Mott at the
    Sanger Centre. The original version is available from
@@ -635,8 +725,6 @@ Author(s)
    
 History
 
-   Finished.
-   
 Target users
 
    This program is intended to be used by everyone and everything, from

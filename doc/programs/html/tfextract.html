@@ -159,18 +159,32 @@ IT IS DONE FOR YOU.
 
    Optional qualifiers: (none)
    Advanced qualifiers: (none)
+   Associated qualifiers: (none)
    General qualifiers:
-  -help                boolean    Report command line options. More
+   -auto                boolean    Turn off prompts
+   -stdout              boolean    Write standard output
+   -filter              boolean    Read standard input, write standard output
+   -options             boolean    Prompt for required and optional values
+   -debug               boolean    Write debug output to program.dbg
+   -acdlog              boolean    Write ACD processing log to program.acdlog
+   -acdpretty           boolean    Rewrite ACD file as program.acdpretty
+   -acdtable            boolean    Write HTML table of options
+   -verbose             boolean    Report some/full command line options
+   -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
+   -warning             boolean    Report warnings
+   -error               boolean    Report errors
+   -fatal               boolean    Report fatal errors
+   -die                 boolean    Report deaths
 
 
 </pre>
 </td></tr></table>
 <P>
 
-<table border cellspacing=0 cellpadding=3 bgcolor="#f5f5ff">
-<tr bgcolor="#FFFFD0">
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
 <th align="left" colspan=2>Mandatory qualifiers</th>
 <th align="left">Allowed values</th>
 <th align="left">Default</th>
@@ -183,7 +197,7 @@ IT IS DONE FOR YOU.
 <td><b>Required</b></td>
 </tr>
 
-<tr bgcolor="#FFFFD0">
+<tr bgcolor="#FFFFCC">
 <th align="left" colspan=2>Optional qualifiers</th>
 <th align="left">Allowed values</th>
 <th align="left">Default</th>
@@ -193,7 +207,7 @@ IT IS DONE FOR YOU.
 <td colspan=4>(none)</td>
 </tr>
 
-<tr bgcolor="#FFFFD0">
+<tr bgcolor="#FFFFCC">
 <th align="left" colspan=2>Advanced qualifiers</th>
 <th align="left">Allowed values</th>
 <th align="left">Default</th>
@@ -214,7 +228,12 @@ IT IS DONE FOR YOU.
 It reads in the TRANSFAC file <b>site.dat</b> distributed from the TRANSFAC
 site:
 <p>
+<!--
 <A HREF="http://transfac.gbf.de/cgi-bin/download/download.pl">http://transfac.gbf.de/cgi-bin/download/download.pl</A>
+-->
+<A HREF="ftp://transfac.gbf.de/pub/transfac/ascii/old/tf_3.2/transfac32.tar.Z">
+ftp://transfac.gbf.de/pub/transfac/ascii/old/tf_3.2/transfac32.tar.Z
+</A>
 
 <p>
 
@@ -222,7 +241,7 @@ site:
 <a name="input.1"></a>
 <h3>Input files for usage example </h3>
 <p><h3>File: ../../data/site.dat</h3>
-<table width="90%"><tr><td bgcolor="#FFDDFF">
+<table width="90%"><tr><td bgcolor="#FFCCFF">
 <pre>
 AC  R00077
 XX
@@ -343,28 +362,28 @@ XX
 <a name="output.1"></a>
 <h3>Output files for usage example </h3>
 <p><h3>File: tffungi</h3>
-<table width="90%"><tr><td bgcolor="#DDFFDD">
-<pre>
-</pre>
-</td></tr></table><p>
-<p><h3>File: tfinsect</h3>
-<table width="90%"><tr><td bgcolor="#DDFFDD">
-<pre>
-</pre>
-</td></tr></table><p>
-<p><h3>File: tfother</h3>
-<table width="90%"><tr><td bgcolor="#DDFFDD">
-<pre>
-</pre>
-</td></tr></table><p>
-<p><h3>File: tfplant</h3>
-<table width="90%"><tr><td bgcolor="#DDFFDD">
+<table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 Y$ADH1_02            ACAATATGGACTTCCTCTTTTCTGG R04140
 </pre>
 </td></tr></table><p>
+<p><h3>File: tfinsect</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+</pre>
+</td></tr></table><p>
+<p><h3>File: tfother</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+</pre>
+</td></tr></table><p>
+<p><h3>File: tfplant</h3>
+<table width="90%"><tr><td bgcolor="#CCFFCC">
+<pre>
+</pre>
+</td></tr></table><p>
 <p><h3>File: tfvertebrate</h3>
-<table width="90%"><tr><td bgcolor="#DDFFDD">
+<table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 HS$ALBU_01           tGGTTAGtaattactaa R00077
 HS$ALBU_02           TTGGCA R00078
@@ -516,8 +535,10 @@ None.
 </H2>
 
 
-This application was written by Alan Bleasby <a
-href="mailto:ableasby@hgmp.mrc.ac.uk">(ableasby@hgmp.mrc.ac.uk)</a>
+Alan Bleasby (ableasby&nbsp;&copy;&nbsp;hgmp.mrc.ac.uk)
+<br>
+HGMP-RC, Genome Campus, Hinxton, Cambridge CB10 1SB, UK
+
 
 <H2>
     History
@@ -525,6 +546,11 @@ href="mailto:ableasby@hgmp.mrc.ac.uk">(ableasby@hgmp.mrc.ac.uk)</a>
 
 
 Written Summer 2000 - Alan Bleasby.
+
+<!--
+<p>
+[an error occurred while processing this directive]
+-->
 
 <H2>
     Target users

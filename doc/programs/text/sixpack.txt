@@ -44,9 +44,9 @@ Usage
 
 % sixpack 
 Display a DNA sequence with 6-frame translation and ORFs
-Input sequence: tembl:hsfau
-Output file [hsfau.sixpack]: 
-Output sequence [hsfau.fasta]: 
+Input sequence: tembl:paamir
+Output file [paamir.sixpack]: 
+Output sequence [paamir.fasta]: 
    
    Go to the input files for this example
    Go to the output files for this example
@@ -115,10 +115,54 @@ Command line arguments
                                   to be numbered.
    -html               boolean    Use HTML formatting
 
+   Associated qualifiers:
+  "-sequence" related qualifiers
+   -sbegin1             integer    First base used
+   -send1               integer    Last base used, def=seq length
+   -sreverse1           boolean    Reverse (if DNA)
+   -sask1               boolean    Ask for begin/end/reverse
+   -snucleotide1        boolean    Sequence is nucleotide
+   -sprotein1           boolean    Sequence is protein
+   -slower1             boolean    Make lower case
+   -supper1             boolean    Make upper case
+   -sformat1            string     Input sequence format
+   -sopenfile1          string     Input filename
+   -sdbname1            string     Database name
+   -sid1                string     Entryname
+   -ufo1                string     UFO features
+   -fformat1            string     Features format
+   -fopenfile1          string     Features file name
+  "-outfile" related qualifiers
+   -odirectory2         string     Output directory
+  "-outseq" related qualifiers
+   -osformat            string     Output seq format
+   -osextension         string     File name extension
+   -osname              string     Base file name
+   -osdirectory         string     Output directory
+   -osdbname            string     Database name to add
+   -ossingle            boolean    Separate file for each entry
+   -oufo                string     UFO features
+   -offormat            string     Features format
+   -ofname              string     Features file name
+   -ofdirectory         string     Output directory
+
    General qualifiers:
-  -help                boolean    Report command line options. More
+   -auto                boolean    Turn off prompts
+   -stdout              boolean    Write standard output
+   -filter              boolean    Read standard input, write standard output
+   -options             boolean    Prompt for required and optional values
+   -debug               boolean    Write debug output to program.dbg
+   -acdlog              boolean    Write ACD processing log to program.acdlog
+   -acdpretty           boolean    Rewrite ACD file as program.acdpretty
+   -acdtable            boolean    Write HTML table of options
+   -verbose             boolean    Report some/full command line options
+   -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
+   -warning             boolean    Report warnings
+   -error               boolean    Report errors
+   -fatal               boolean    Report fatal errors
+   -die                 boolean    Report deaths
    
 
    Mandatory qualifiers Allowed values Default
@@ -198,288 +242,376 @@ Input file format
    
   Input files for usage example
   
-   'tembl:hsfau' is a sequence entry in the example nucleic acid database
-   'tembl'
+   'tembl:paamir' is a sequence entry in the example nucleic acid
+   database 'tembl'
    
-  Database entry: tembl:hsfau
+  Database entry: tembl:paamir
   
-ID   HSFAU      standard; RNA; HUM; 518 BP.
+ID   PAAMIR     standard; DNA; PRO; 2167 BP.
 XX
-AC   X65923;
+AC   X13776; M43175;
 XX
-SV   X65923.1
+SV   X13776.1
 XX
-DT   13-MAY-1992 (Rel. 31, Created)
-DT   23-SEP-1993 (Rel. 37, Last updated, Version 10)
+DT   19-APR-1989 (Rel. 19, Created)
+DT   17-FEB-1997 (Rel. 50, Last updated, Version 22)
 XX
-DE   H.sapiens fau mRNA
+DE   Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase regulation
 XX
-KW   fau gene.
+KW   aliphatic amidase regulator; amiC gene; amiR gene.
 XX
-OS   Homo sapiens (human)
-OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia
-;
-OC   Eutheria; Primates; Catarrhini; Hominidae; Homo.
+OS   Pseudomonas aeruginosa
+OC   Bacteria; Proteobacteria; gamma subdivision; Pseudomonadaceae; Pseudomonas
+.
 XX
 RN   [1]
-RP   1-518
-RA   Michiels L.M.R.;
+RP   1167-2167
+RA   Rice P.M.;
 RT   ;
-RL   Submitted (29-APR-1992) to the EMBL/GenBank/DDBJ databases.
-RL   L.M.R. Michiels, University of Antwerp, Dept of Biochemistry,
-RL   Universiteisplein 1, 2610 Wilrijk, BELGIUM
+RL   Submitted (16-DEC-1988) to the EMBL/GenBank/DDBJ databases.
+RL   Rice P.M., EMBL, Postfach 10-2209, Meyerhofstrasse 1, 6900 Heidelberg, FRG
+.
 XX
 RN   [2]
-RP   1-518
-RX   MEDLINE; 93368957.
-RA   Michiels L., Van der Rauwelaert E., Van Hasselt F., Kas K., Merregaert J.;
-RT   " fau cDNA encodes a ubiquitin-like-S30 fusion protein and is expressed as
-RT   an antisense sequences in the Finkel-Biskis-Reilly murine sarcoma virus";
-RL   Oncogene 8:2537-2546(1993).
+RP   1167-2167
+RX   MEDLINE; 89211409.
+RA   Lowe N., Rice P.M., Drew R.E.;
+RT   "Nucleotide sequence of the aliphatic amidase regulator gene of Pseudomona
+s
+RT   aeruginosa";
+RL   FEBS Lett. 246:39-43(1989).
 XX
-DR   SWISS-PROT; P35544; UBIM_HUMAN.
-DR   SWISS-PROT; Q05472; RS30_HUMAN.
+RN   [3]
+RP   1-1292
+RX   MEDLINE; 91317707.
+RA   Wilson S., Drew R.;
+RT   "Cloning and DNA seqence of amiC, a new gene regulating expression of the
+RT   Pseudomonas aeruginosa aliphatic amidase, and purification of the amiC
+RT   product.";
+RL   J. Bacteriol. 173:4914-4921(1991).
 XX
-FH   Key             Location/Qualifiers
-FH
-FT   source          1..518
-FT                   /chromosome="11q"
-FT                   /db_xref="taxon:9606"
-FT                   /organism="Homo sapiens"
-FT                   /tissue_type="placenta"
-FT                   /clone_lib="cDNA"
-FT                   /clone="pUIA 631"
-FT                   /map="13"
-FT   misc_feature    57..278
-FT                   /note="ubiquitin like part"
-FT   CDS             57..458
-FT                   /db_xref="SWISS-PROT:P35544"
-FT                   /db_xref="SWISS-PROT:Q05472"
-FT                   /gene="fau"
-FT                   /protein_id="CAA46716.1"
-FT                   /translation="MQLFVRAQELHTFEVTGQETVAQIKAHVASLEGIAPEDQVVLLA
-G
-FT                   APLEDEATLGQCGVEALTTLEVAGRMLGGKVHGSLARAGKVRGQTPKVAKQEKKKKKT
-G
-FT                   RAKRRMQYNRRFVNVVPTFGKKKGPNANS"
-FT   misc_feature    98..102
-FT                   /note="nucleolar localization signal"
-FT   misc_feature    279..458
-FT                   /note="S30 part"
-FT   polyA_signal    484..489
-FT   polyA_site      509
+RN   [4]
+RP   1-2167
+RA   Rice P.M.;
+RT   ;
+RL   Submitted (04-SEP-1991) to the EMBL/GenBank/DDBJ databases.
+RL   Rice P.M., EMBL, Postfach 10-2209, Meyerhofstrasse 1, 6900 Heidelberg, FRG
+.
 XX
-SQ   Sequence 518 BP; 125 A; 139 C; 148 G; 106 T; 0 other;
-     ttcctctttc tcgactccat cttcgcggta gctgggaccg ccgttcagtc gccaatatgc        6
+DR   SWISS-PROT; P10932; AMIR_PSEAE.
+DR   SWISS-PROT; P27017; AMIC_PSEAE.
+DR   SWISS-PROT; Q51417; AMIS_PSEAE.
+
+
+  [Part of this file has been deleted for brevity]
+
+FT                   phenotype"
+FT                   /replace=""
+FT                   /gene="amiC"
+FT   misc_feature    1
+FT                   /note="last base of an XhoI site"
+FT   misc_feature    648..653
+FT                   /note="end of 658bp XhoI fragment, deletion in  pSW3 cause
+s
+FT                   constitutive expression of amiE"
+FT   conflict        1281
+FT                   /replace="g"
+FT                   /citation=[3]
+XX
+SQ   Sequence 2167 BP; 363 A; 712 C; 730 G; 362 T; 0 other;
+     ggtaccgctg gccgagcatc tgctcgatca ccaccagccg ggcgacggga actgcacgat        6
 0
-     agctctttgt ccgcgcccag gagctacaca ccttcgaggt gaccggccag gaaacggtcg       12
+     ctacctggcg agcctggagc acgagcgggt tcgcttcgta cggcgctgag cgacagtcac       12
 0
-     cccagatcaa ggctcatgta gcctcactgg agggcattgc cccggaagat caagtcgtgc       18
+     aggagaggaa acggatggga tcgcaccagg agcggccgct gatcggcctg ctgttctccg       18
 0
-     tcctggcagg cgcgcccctg gaggatgagg ccactctggg ccagtgcggg gtggaggccc       24
+     aaaccggcgt caccgccgat atcgagcgct cgcacgcgta tggcgcattg ctcgcggtcg       24
 0
-     tgactaccct ggaagtagca ggccgcatgc ttggaggtaa agttcatggt tccctggccc       30
+     agcaactgaa ccgcgagggc ggcgtcggcg gtcgcccgat cgaaacgctg tcccaggacc       30
 0
-     gtgctggaaa agtgagaggt cagactccta aggtggccaa acaggagaag aagaagaaga       36
+     ccggcggcga cccggaccgc tatcggctgt gcgccgagga cttcattcgc aaccgggggg       36
 0
-     agacaggtcg ggctaagcgg cggatgcagt acaaccggcg ctttgtcaac gttgtgccca       42
+     tacggttcct cgtgggctgc tacatgtcgc acacgcgcaa ggcggtgatg ccggtggtcg       42
 0
-     cctttggcaa gaagaagggc cccaatgcca actcttaagt cttttgtaat tctggctttc       48
+     agcgcgccga cgcgctgctc tgctacccga ccccctacga gggcttcgag tattcgccga       48
 0
-     tctaataaaa aagccactta gttcagtcaa aaaaaaaa                               51
-8
+     acatcgtcta cggcggtccg gcgccgaacc agaacagtgc gccgctggcg gcgtacctga       54
+0
+     ttcgccacta cggcgagcgg gtggtgttca tcggctcgga ctacatctat ccgcgggaaa       60
+0
+     gcaaccatgt gatgcgccac ctgtatcgcc agcacggcgg cacggtgctc gaggaaatct       66
+0
+     acattccgct gtatccctcc gacgacgact tgcagcgcgc cgtcgagcgc atctaccagg       72
+0
+     cgcgcgccga cgtggtcttc tccaccgtgg tgggcaccgg caccgccgag ctgtatcgcg       78
+0
+     ccatcgcccg tcgctacggc gacggcaggc ggccgccgat cgccagcctg accaccagcg       84
+0
+     aggcggaggt ggcgaagatg gagagtgacg tggcagaggg gcaggtggtg gtcgcgcctt       90
+0
+     acttctccag catcgatacg cccgccagcc gggccttcgt ccaggcctgc catggtttct       96
+0
+     tcccggagaa cgcgaccatc accgcctggg ccgaggcggc ctactggcag accttgttgc      102
+0
+     tcggccgcgc cgcgcaggcc gcaggcaact ggcgggtgga agacgtgcag cggcacctgt      108
+0
+     acgacatcga catcgacgcg ccacaggggc cggtccgggt ggagcgccag aacaaccaca      114
+0
+     gccgcctgtc ttcgcgcatc gcggaaatcg atgcgcgcgg cgtgttccag gtccgctggc      120
+0
+     agtcgcccga accgattcgc cccgaccctt atgtcgtcgt gcataacctc gacgactggt      126
+0
+     ccgccagcat gggcggggga ccgctcccat gagcgccaac tcgctgctcg gcagcctgcg      132
+0
+     cgagttgcag gtgctggtcc tcaacccgcc gggggaggtc agcgacgccc tggtcttgca      138
+0
+     gctgatccgc atcggttgtt cggtgcgcca gtgctggccg ccgccggaag ccttcgacgt      144
+0
+     gccggtggac gtggtcttca ccagcatttt ccagaatggc caccacgacg agatcgctgc      150
+0
+     gctgctcgcc gccgggactc cgcgcactac cctggtggcg ctggtggagt acgaaagccc      156
+0
+     cgcggtgctc tcgcagatca tcgagctgga gtgccacggc gtgatcaccc agccgctcga      162
+0
+     tgcccaccgg gtgctgcctg tgctggtatc ggcgcggcgc atcagcgagg aaatggcgaa      168
+0
+     gctgaagcag aagaccgagc agctccagga ccgcatcgcc ggccaggccc ggatcaacca      174
+0
+     ggccaaggtg ttgctgatgc agcgccatgg ctgggacgag cgcgaggcgc accagcacct      180
+0
+     gtcgcgggaa gcgatgaagc ggcgcgagcc gatcctgaag atcgctcagg agttgctggg      186
+0
+     aaacgagccg tccgcctgag cgatccgggc cgaccagaac aataacaaga ggggtatcgt      192
+0
+     catcatgctg ggactggttc tgctgtacgt tggcgcggtg ctgtttctca atgccgtctg      198
+0
+     gttgctgggc aagatcagcg gtcgggaggt ggcggtgatc aacttcctgg tcggcgtgct      204
+0
+     gagcgcctgc gtcgcgttct acctgatctt ttccgcagca gccgggcagg gctcgctgaa      210
+0
+     ggccggagcg ctgaccctgc tattcgcttt tacctatctg tgggtggccg ccaaccagtt      216
+0
+     cctcgag                                                                216
+7
 //
    
 Output file format
 
   Output files for usage example
   
-  File: hsfau.fasta
+  File: paamir.fasta
   
->HSFAU_1_ORF1  Translation of HSFAU in frame 1, ORF 1, threshold 1, 33aa
-FLFLDSIFAVAGTAVQSPICSSLSAPRSYTPSR
->HSFAU_1_ORF2  Translation of HSFAU in frame 1, ORF 2, threshold 1, 12aa
-PARKRSPRSRLM
->HSFAU_1_ORF3  Translation of HSFAU in frame 1, ORF 3, threshold 1, 33aa
-PHWRALPRKIKSCSWQARPWRMRPLWASAGWRP
->HSFAU_1_ORF4  Translation of HSFAU in frame 1, ORF 4, threshold 1, 4aa
-LPWK
->HSFAU_1_ORF5  Translation of HSFAU in frame 1, ORF 5, threshold 1, 18aa
-QAACLEVKFMVPWPVLEK
->HSFAU_1_ORF6  Translation of HSFAU in frame 1, ORF 6, threshold 1, 61aa
-EVRLLRWPNRRRRRRRQVGLSGGCSTTGALSTLCPPLARRRAPMPTLKSFVILAFSNKKA
-T
->HSFAU_1_ORF7  Translation of HSFAU in frame 1, ORF 7, threshold 1, 6aa
-FSQKKX
->HSFAU_2_ORF1  Translation of HSFAU in frame 2, ORF 1, threshold 1, 9aa
-SSFSTPSSR
->HSFAU_2_ORF2  Translation of HSFAU in frame 2, ORF 2, threshold 1, 58aa
-LGPPFSRQYAALCPRPGATHLRGDRPGNGRPDQGSCSLTGGHCPGRSSRAPGRRAPGG
->HSFAU_2_ORF3  Translation of HSFAU in frame 2, ORF 3, threshold 1, 23aa
-GHSGPVRGGGPDYPGSSRPHAWR
->HSFAU_2_ORF4  Translation of HSFAU in frame 2, ORF 4, threshold 1, 16aa
-SSWFPGPCWKSERSDS
->HSFAU_2_ORF5  Translation of HSFAU in frame 2, ORF 5, threshold 1, 14aa
-GGQTGEEEEEDRSG
->HSFAU_2_ORF6  Translation of HSFAU in frame 2, ORF 6, threshold 1, 30aa
-AADAVQPALCQRCAHLWQEEGPQCQLLSLL
->HSFAU_2_ORF7  Translation of HSFAU in frame 2, ORF 7, threshold 1, 17aa
-FWLSLIKKPLSSVKKKX
->HSFAU_3_ORF1  Translation of HSFAU in frame 3, ORF 1, threshold 1, 151aa
-PLSRLHLRGSWDRRSVANMQLFVRAQELHTFEVTGQETVAQIKAHVASLEGIAPEDQVVL
-LAGAPLEDEATLGQCGVEALTTLEVAGRMLGGKVHGSLARAGKVRGQTPKVAKQEKKKKK
-TGRAKRRMQYNRRFVNVVPTFGKKKGPNANS
->HSFAU_3_ORF2  Translation of HSFAU in frame 3, ORF 2, threshold 1, 8aa
-VFCNSGFL
->HSFAU_3_ORF3  Translation of HSFAU in frame 3, ORF 3, threshold 1, 10aa
-KSHLVQSKKK
->HSFAU_4_ORF1  Translation of HSFAU in frame 4, ORF 1, threshold 1, 36aa
-FFLTELSGFFIRESQNYKRLKSWHWGPSSCQRWAQR
->HSFAU_4_ORF2  Translation of HSFAU in frame 4, ORF 2, threshold 1, 10aa
-QSAGCTASAA
->HSFAU_4_ORF3  Translation of HSFAU in frame 4, ORF 3, threshold 1, 14aa
-PDLSSSSSSPVWPP
->HSFAU_4_ORF4  Translation of HSFAU in frame 4, ORF 4, threshold 1, 27aa
-ESDLSLFQHGPGNHELYLQACGLLLPG
->HSFAU_4_ORF5  Translation of HSFAU in frame 4, ORF 5, threshold 1, 38aa
-SGPPPRTGPEWPHPPGARLPGARLDLPGQCPPVRLHEP
->HSFAU_4_ORF6  Translation of HSFAU in frame 4, ORF 6, threshold 1, 42aa
-SGRPFPGRSPRRCVAPGRGQRAAYWRLNGGPSYREDGVEKEE
->HSFAU_5_ORF1  Translation of HSFAU in frame 5, ORF 1, threshold 1, 4aa
-FFFD
->HSFAU_5_ORF2  Translation of HSFAU in frame 5, ORF 2, threshold 1, 6aa
-TKWLFY
->HSFAU_5_ORF3  Translation of HSFAU in frame 5, ORF 3, threshold 1, 8aa
-RKPELQKT
->HSFAU_5_ORF4  Translation of HSFAU in frame 5, ORF 4, threshold 1, 44aa
-ELALGPFFLPKVGTTLTKRRLYCIRRLARPVFFFFFSCLATLGV
->HSFAU_5_ORF5  Translation of HSFAU in frame 5, ORF 5, threshold 1, 11aa
-PLTFPARAREP
->HSFAU_5_ORF6  Translation of HSFAU in frame 5, ORF 6, threshold 1, 37aa
-TLPPSMRPATSRVVRASTPHWPRVASSSRGAPARSTT
->HSFAU_5_ORF7  Translation of HSFAU in frame 5, ORF 7, threshold 1, 11aa
-SSGAMPSSEAT
->HSFAU_5_ORF8  Translation of HSFAU in frame 5, ORF 8, threshold 1, 45aa
-ALIWATVSWPVTSKVCSSWARTKSCILATERRSQLPRRWSRERGX
->HSFAU_6_ORF1  Translation of HSFAU in frame 6, ORF 1, threshold 1, 3aa
-FFF
->HSFAU_6_ORF2  Translation of HSFAU in frame 6, ORF 2, threshold 1, 2aa
-LN
->HSFAU_6_ORF3  Translation of HSFAU in frame 6, ORF 3, threshold 1, 117aa
-VAFLLEKARITKDLRVGIGALLLAKGGHNVDKAPVVLHPPLSPTCLLLLLLLFGHLRSLT
-SHFSSTGQGTMNFTSKHAACYFQGSQGLHPALAQSGLILQGRACQEHDLIFRGNALQ
->HSFAU_6_ORF4  Translation of HSFAU in frame 6, ORF 4, threshold 1, 19aa
-GYMSLDLGDRFLAGHLEGV
->HSFAU_6_ORF5  Translation of HSFAU in frame 6, ORF 5, threshold 1, 12aa
-LLGADKELHIGD
->HSFAU_6_ORF6  Translation of HSFAU in frame 6, ORF 6, threshold 1, 15aa
-TAVPATAKMESRKRX
-   
-  File: hsfau.sixpack
-  
-HSFAU
-H.sapiens fau mRNA
-
-
-          F  L  F  L  D  S  I  F  A  V  A  G  T  A  V  Q  S  P  I  C     F1
-           S  S  F  S  T  P  S  S  R  *  L  G  P  P  F  S  R  Q  Y  A    F2
-            P  L  S  R  L  H  L  R  G  S  W  D  R  R  S  V  A  N  M  Q   F3
-        1 ttcctctttctcgactccatcttcgcggtagctgggaccgccgttcagtcgccaatatgc 60
-          ----:----|----:----|----:----|----:----|----:----|----:----|
-        1 aaggagaaagagctgaggtagaagcgccatcgaccctggcggcaagtcagcggttatacg 60
-           X  R  K  R  S  E  M  K  A  T  A  P  V  A  T  *  D  G  I  H    F6
-          X  G  R  E  R  S  W  R  R  P  L  Q  S  R  R  E  T  A  L  I     F5
-            E  E  K  E  V  G  D  E  R  Y  S  P  G  G  N  L  R  W  Y  A   F4
-
-
-          S  S  L  S  A  P  R  S  Y  T  P  S  R  *  P  A  R  K  R  S     F1
-           A  L  C  P  R  P  G  A  T  H  L  R  G  D  R  P  G  N  G  R    F2
-            L  F  V  R  A  Q  E  L  H  T  F  E  V  T  G  Q  E  T  V  A   F3
-       61 agctctttgtccgcgcccaggagctacacaccttcgaggtgaccggccaggaaacggtcg 120
-          ----:----|----:----|----:----|----:----|----:----|----:----|
-       61 tcgagaaacaggcgcgggtcctcgatgtgtggaagctccactggccggtcctttgccagc 120
-           L  E  K  D  A  G  L  L  *  V  G  E  L  H  G  A  L  F  R  D    F6
-          C  S  K  T  R  A  W  S  S  C  V  K  S  T  V  P  W  S  V  T     F5
-            A  R  Q  G  R  G  P  A  V  C  R  R  P  S  R  G  P  F  P  R   F4
-
-
-          P  R  S  R  L  M  *  P  H  W  R  A  L  P  R  K  I  K  S  C     F1
-           P  D  Q  G  S  C  S  L  T  G  G  H  C  P  G  R  S  S  R  A    F2
-            Q  I  K  A  H  V  A  S  L  E  G  I  A  P  E  D  Q  V  V  L   F3
-      121 cccagatcaaggctcatgtagcctcactggagggcattgccccggaagatcaagtcgtgc 180
-          ----:----|----:----|----:----|----:----|----:----|----:----|
-      121 gggtctagttccgagtacatcggagtgacctcccgtaacggggccttctagttcagcacg 180
-           G  L  D  L  S  M  Y  G  *  Q  L  A  N  G  R  F  I  L  D  H    F6
-          A  W  I  L  A  *  T  A  E  S  S  P  M  A  G  S  S  *  T  T     F5
-            G  S  *  P  E  H  L  R  V  P  P  C  Q  G  P  L  D  L  R  A   F4
-
-
-          S  W  Q  A  R  P  W  R  M  R  P  L  W  A  S  A  G  W  R  P     F1
-           P  G  R  R  A  P  G  G  *  G  H  S  G  P  V  R  G  G  G  P    F2
-            L  A  G  A  P  L  E  D  E  A  T  L  G  Q  C  G  V  E  A  L   F3
-      181 tcctggcaggcgcgcccctggaggatgaggccactctgggccagtgcggggtggaggccc 240
-          ----:----|----:----|----:----|----:----|----:----|----:----|
-      181 aggaccgtccgcgcggggacctcctactccggtgagacccggtcacgccccacctccggg 240
-           E  Q  C  A  R  G  Q  L  I  L  G  S  Q  A  L  A  P  H  L  G    F6
-          S  R  A  P  A  G  R  S  S  S  A  V  R  P  W  H  P  T  S  A     F5
-            G  P  L  R  A  G  P  P  H  P  W  E  P  G  T  R  P  P  P  G   F4
-
-
-          *  L  P  W  K  *  Q  A  A  C  L  E  V  K  F  M  V  P  W  P     F1
-           D  Y  P  G  S  S  R  P  H  A  W  R  *  S  S  W  F  P  G  P    F2
+>PAAMIR_1_ORF1  Translation of PAAMIR in frame 1, ORF 1, threshold 1, 53aa
+GTAGRASARSPPAGRRELHDLPGEPGARAGSLRTALSDSHRRGNGWDRTRSGR
+>PAAMIR_1_ORF2  Translation of PAAMIR in frame 1, ORF 2, threshold 1, 28aa
+SACCSPKPASPPISSARTRMAHCSRSSN
+>PAAMIR_1_ORF3  Translation of PAAMIR in frame 1, ORF 3, threshold 1, 52aa
+TARAASAVARSKRCPRTPAATRTAIGCAPRTSFATGGYGSSWAATCRTRARR
+>PAAMIR_1_ORF4  Translation of PAAMIR in frame 1, ORF 4, threshold 1, 43aa
+CRWSSAPTRCSATRPPTRASSIRRTSSTAVRRRTRTVRRWRRT
+>PAAMIR_1_ORF5  Translation of PAAMIR in frame 1, ORF 5, threshold 1, 23aa
+FATTASGWCSSARTTSIRGKATM
+>PAAMIR_1_ORF6  Translation of PAAMIR in frame 1, ORF 6, threshold 1, 72aa
+CATCIASTAARCSRKSTFRCIPPTTTCSAPSSASTRRAPTWSSPPWWAPAPPSCIAPSPV
+ATATAGGRRSPA
+>PAAMIR_1_ORF7  Translation of PAAMIR in frame 1, ORF 7, threshold 1, 357aa
+PPARRRWRRWRVTWQRGRWWSRLTSPASIRPPAGPSSRPAMVSSRRTRPSPPGPRRPTGR
+PCCSAAPRRPQATGGWKTCSGTCTTSTSTRHRGRSGWSARTTTAACLRASRKSMRAACSR
+SAGSRPNRFAPTLMSSCITSTTGPPAWAGDRSHERQLAARQPARVAGAGPQPAGGGQRRP
+GLAADPHRLFGAPVLAAAGSLRRAGGRGLHQHFPEWPPRRDRCAARRRDSAHYPGGAGGV
+RKPRGALADHRAGVPRRDHPAARCPPGAACAGIGAAHQRGNGEAEAEDRAAPGPHRRPGP
+DQPGQGVADAAPWLGRARGAPAPVAGSDEAARADPEDRSGVAGKRAVRLSDPGRPEQ
+>PAAMIR_1_ORF8  Translation of PAAMIR in frame 1, ORF 8, threshold 1, 88aa
+QEGYRHHAGTGSAVRWRGAVSQCRLVAGQDQRSGGGGDQLPGRRAERLRRVLPDLFRSSR
+AGLAEGRSADPAIRFYLSVGGRQPVPRX
+>PAAMIR_2_ORF1  Translation of PAAMIR in frame 2, ORF 1, threshold 1, 35aa
+VPLAEHLLDHHQPGDGNCTIYLASLEHERVRFVRR
+>PAAMIR_2_ORF2  Translation of PAAMIR in frame 2, ORF 2, threshold 1, 252aa
+ATVTGEETDGIAPGAAADRPAVLRNRRHRRYRALARVWRIARGRATEPRGRRRRSPDRNA
+VPGPRRRPGPLSAVRRGLHSQPGGTVPRGLLHVAHAQGGDAGGRARRRAALLPDPLRGLR
+VFAEHRLRRSGAEPEQCAAGGVPDSPLRRAGGVHRLGLHLSAGKQPCDAPPVSPARRHGA
+RGNLHSAVSLRRRLAARRRAHLPGARRRGLLHRGGHRHRRAVSRHRPSLRRRQAAADRQP
+DHQRGGGGEDGE
+>PAAMIR_2_ORF3  Translation of PAAMIR in frame 2, ORF 3, threshold 1, 125aa
+RGRGAGGGRALLLQHRYARQPGLRPGLPWFLPGERDHHRLGRGGLLADLVARPRRAGRRQ
+LAGGRRAAAPVRHRHRRATGAGPGGAPEQPQPPVFAHRGNRCARRVPGPLAVARTDSPRP
+LCRRA
+>PAAMIR_2_ORF4  Translation of PAAMIR in frame 2, ORF 4, threshold 1, 210aa
+PRRLVRQHGRGTAPMSANSLLGSLRELQVLVLNPPGEVSDALVLQLIRIGCSVRQCWPPP
+EAFDVPVDVVFTSIFQNGHHDEIAALLAAGTPRTTLVALVEYESPAVLSQIIELECHGVI
+TQPLDAHRVLPVLVSARRISEEMAKLKQKTEQLQDRIAGQARINQAKVLLMQRHGWDERE
+AHQHLSREAMKRREPILKIAQELLGNEPSA
+>PAAMIR_2_ORF5  Translation of PAAMIR in frame 2, ORF 5, threshold 1, 96aa
+AIRADQNNNKRGIVIMLGLVLLYVGAVLFLNAVWLLGKISGREVAVINFLVGVLSACVAF
+YLIFSAAAGQGSLKAGALTLLFAFTYLWVAANQFLE
+>PAAMIR_3_ORF1  Translation of PAAMIR in frame 3, ORF 1, threshold 1, 429aa
+YRWPSICSITTSRATGTARSTWRAWSTSGFASYGAERQSQERKRMGSHQERPLIGLLFSE
+TGVTADIERSHAYGALLAVEQLNREGGVGGRPIETLSQDPGGDPDRYRLCAEDFIRNRGV
+RFLVGCYMSHTRKAVMPVVERADALLCYPTPYEGFEYSPNIVYGGPAPNQNSAPLAAYLI
+RHYGERVVFIGSDYIYPRESNHVMRHLYRQHGGTVLEEIYIPLYPSDDDLQRAVERIYQA
+RADVVFSTVVGTGTAELYRAIARRYGDGRRPPIASLTTSEAEVAKMESDVAEGQVVVAPY
+FSSIDTPASRAFVQACHGFFPENATITAWAEAAYWQTLLLGRAAQAAGNWRVEDVQRHLY
 
 
   [Part of this file has been deleted for brevity]
 
-      301 cacgaccttttcactctccagtctgaggattccaccggtttgtcctcttcttcttcttct 360
-           T  S  S  F  H  S  T  L  S  R  L  H  G  F  L  L  L  L  L  L    F6
-          R  A  P  F  T  L  P  *  V  G  L  T  A  L  C  S  F  F  F  F     F5
-            H  Q  F  L  S  L  D  S  E  *  P  P  W  V  P  S  S  S  S  S   F4
+SEPMNTTRSP
+>PAAMIR_5_ORF11  Translation of PAAMIR in frame 5, ORF 11, threshold 1, 19aa
+WRIRYAASGALFWFGAGPP
+>PAAMIR_5_ORF12  Translation of PAAMIR in frame 5, ORF 12, threshold 1, 10aa
+TMFGEYSKPS
+>PAAMIR_5_ORF13  Translation of PAAMIR in frame 5, ORF 13, threshold 1, 3aa
+GVG
+>PAAMIR_5_ORF14  Translation of PAAMIR in frame 5, ORF 14, threshold 1, 20aa
+QSSASARSTTGITALRVCDM
+>PAAMIR_5_ORF15  Translation of PAAMIR in frame 5, ORF 15, threshold 1, 19aa
+QPTRNRTPRLRMKSSAHSR
+>PAAMIR_5_ORF16  Translation of PAAMIR in frame 5, ORF 16, threshold 1, 107aa
+RSGSPPGSWDSVSIGRPPTPPSRFSCSTASNAPYACERSISAVTPVSENSRPISGRSWCD
+PIRFLSCDCRSAPYEANPLVLQARQVDRAVPVARLVVIEQMLGQRYX
+>PAAMIR_6_ORF1  Translation of PAAMIR in frame 6, ORF 1, threshold 1, 11aa
+RGTGWRPPTDR
+>PAAMIR_6_ORF2  Translation of PAAMIR in frame 6, ORF 2, threshold 1, 36aa
+KRIAGSALRPSASPARLLRKRSGRTRRRRSARRPGS
+>PAAMIR_6_ORF3  Translation of PAAMIR in frame 6, ORF 3, threshold 1, 7aa
+SPPPPDR
+>PAAMIR_6_ORF4  Translation of PAAMIR in frame 6, ORF 4, threshold 1, 8aa
+SCPATRRH
+>PAAMIR_6_ORF5  Translation of PAAMIR in frame 6, ORF 5, threshold 1, 14aa
+ETAPRQRTAEPVPA
+>PAAMIR_6_ORF6  Translation of PAAMIR in frame 6, ORF 6, threshold 1, 61aa
+RYPSCYCSGRPGSLRRTARFPATPERSSGSARAASSLPATGAGAPRARPSHGAASATPWP
+G
+>PAAMIR_6_ORF7  Translation of PAAMIR in frame 6, ORF 7, threshold 1, 23aa
+SGPGRRCGPGAARSSASASPFPR
+>PAAMIR_6_ORF8  Translation of PAAMIR in frame 6, ORF 8, threshold 1, 18aa
+CAAPIPAQAAPGGHRAAG
+>PAAMIR_6_ORF9  Translation of PAAMIR in frame 6, ORF 9, threshold 1, 8aa
+SRRGTPAR
+>PAAMIR_6_ORF10  Translation of PAAMIR in frame 6, ORF 10, threshold 1, 16aa
+SARAPRGFRTPPAPPG
+>PAAMIR_6_ORF11  Translation of PAAMIR in frame 6, ORF 11, threshold 1, 22aa
+CAESRRRAAQRSRRGGHSGKCW
+>PAAMIR_6_ORF12  Translation of PAAMIR in frame 6, ORF 12, threshold 1, 32aa
+RPRPPARRRLPAAASTGAPNNRCGSAARPGRR
+>PAAMIR_6_ORF13  Translation of PAAMIR in frame 6, ORF 13, threshold 1, 5aa
+PPPAG
+>PAAMIR_6_ORF14  Translation of PAAMIR in frame 6, ORF 14, threshold 1, 407aa
+GPAPATRAGCRAASWRSWERSPAHAGGPVVEVMHDDIRVGANRFGRLPADLEHAARIDFR
+DARRQAAVVVLALHPDRPLWRVDVDVVQVPLHVFHPPVACGLRGAAEQQGLPVGRLGPGG
+DGRVLREETMAGLDEGPAGGRIDAGEVRRDHHLPLCHVTLHLRHLRLAGGQAGDRRPPAV
+AVATGDGAIQLGGAGAHHGGEDHVGARLVDALDGALQVVVGGIQRNVDFLEHRAAVLAIQ
+VAHHMVAFPRIDVVRADEHHPLAVVANQVRRQRRTVLVRRRTAVDDVRRILEALVGGRVA
+EQRVGALDHRHHRLARVRHVAAHEEPYPPVANEVLGAQPIAVRVAAGVLGQRFDRATADA
+ALAVQLLDREQCAIRVRALDIGGDAGFGEQQADQRPLLVRSHPFPLL
+>PAAMIR_6_ORF15  Translation of PAAMIR in frame 6, ORF 15, threshold 1, 39aa
+LSLSAVRSEPARAPGSPGRSCSSRRPAGGDRADARPAVP
+   
+  File: paamir.sixpack
+  
+PAAMIR
+Pseudomonas aeruginosa amiC and amiR gene for aliphatic amidase
+regulation
 
 
-          R  Q  V  G  L  S  G  G  C  S  T  T  G  A  L  S  T  L  C  P     F1
-           D  R  S  G  *  A  A  D  A  V  Q  P  A  L  C  Q  R  C  A  H    F2
-            T  G  R  A  K  R  R  M  Q  Y  N  R  R  F  V  N  V  V  P  T   F3
-      361 agacaggtcgggctaagcggcggatgcagtacaaccggcgctttgtcaacgttgtgccca 420
+          G  T  A  G  R  A  S  A  R  S  P  P  A  G  R  R  E  L  H  D     F1
+           V  P  L  A  E  H  L  L  D  H  H  Q  P  G  D  G  N  C  T  I    F2
+            Y  R  W  P  S  I  C  S  I  T  T  S  R  A  T  G  T  A  R  S   F3
+        1 ggtaccgctggccgagcatctgctcgatcaccaccagccgggcgacgggaactgcacgat 60
           ----:----|----:----|----:----|----:----|----:----|----:----|
-      361 tctgtccagcccgattcgccgcctacgtcatgttggccgcgaaacagttgcaacacgggt 420
-           L  C  T  P  S  L  P  P  H  L  V  V  P  A  K  D  V  N  H  G    F6
-          F  V  P  R  A  L  R  R  I  C  Y  L  R  R  K  T  L  T  T  G     F5
-            S  L  D  P  *  A  A  S  A  T  C  G  A  S  Q  *  R  Q  A  W   F4
+        1 ccatggcgaccggctcgtagacgagctagtggtggtcggcccgctgcccttgacgtgcta 60
+           P  V  A  P  R  A  D  A  R  D  G  G  A  P  R  R  S  S  C  S    F6
+          X  Y  R  Q  G  L  M  Q  E  I  V  V  L  R  A  V  P  V  A  R     F5
+            T  G  S  A  S  C  R  S  S  *  W  W  G  P  S  P  F  Q  V  I   F4
 
 
-          P  L  A  R  R  R  A  P  M  P  T  L  K  S  F  V  I  L  A  F     F1
-           L  W  Q  E  E  G  P  Q  C  Q  L  L  S  L  L  *  F  W  L  S    F2
-            F  G  K  K  K  G  P  N  A  N  S  *  V  F  C  N  S  G  F  L   F3
-      421 cctttggcaagaagaagggccccaatgccaactcttaagtcttttgtaattctggctttc 480
+          L  P  G  E  P  G  A  R  A  G  S  L  R  T  A  L  S  D  S  H     F1
+           Y  L  A  S  L  E  H  E  R  V  R  F  V  R  R  *  A  T  V  T    F2
+            T  W  R  A  W  S  T  S  G  F  A  S  Y  G  A  E  R  Q  S  Q   F3
+       61 ctacctggcgagcctggagcacgagcgggttcgcttcgtacggcgctgagcgacagtcac 120
           ----:----|----:----|----:----|----:----|----:----|----:----|
-      421 ggaaaccgttcttcttcccggggttacggttgagaattcagaaaacattaagaccgaaag 480
-           G  K  A  L  L  L  A  G  I  G  V  R  L  D  K  T  I  R  A  K    F6
-          V  K  P  L  F  F  P  G  L  A  L  E  *  T  K  Q  L  E  P  K     F5
-            R  Q  C  S  S  P  G  W  H  W  S  K  L  R  K  Y  N  Q  S  E   F4
+       61 gatggaccgctcggacctcgtgctcgcccaagcgaagcatgccgcgactcgctgtcagtg 120
+           R  G  P  S  G  P  A  R  A  P  E  S  R  V  A  S  L  S  L  *    F6
+          D  V  Q  R  A  Q  L  V  L  P  N  A  E  Y  P  A  S  R  C  D     F5
+            *  R  A  L  R  S  C  S  R  T  R  K  T  R  R  Q  A  V  T  V   F4
 
 
-          S  N  K  K  A  T  *  F  S  Q  K  K  X                          F1
-           L  I  K  K  P  L  S  S  V  K  K  K  X                         F2
-            *  *  K  S  H  L  V  Q  S  K  K  K                           F3
-      481 tctaataaaaaagccacttagttcagtcaaaaaaaaaa                       518
+          R  R  G  N  G  W  D  R  T  R  S  G  R  *  S  A  C  C  S  P     F1
+           G  E  E  T  D  G  I  A  P  G  A  A  A  D  R  P  A  V  L  R    F2
+            E  R  K  R  M  G  S  H  Q  E  R  P  L  I  G  L  L  F  S  E   F3
+      121 aggagaggaaacggatgggatcgcaccaggagcggccgctgatcggcctgctgttctccg 180
           ----:----|----:----|----:----|----:----|----:----|----:----|
-      481 agattattttttcggtgaatcaagtcagtttttttttt                       518
-           E  L  L  F  A  V  *  N  L  *  F  F  F                         F6
-          R  *  Y  F  L  W  K  T  *  D  F  F  F                          F5
-            R  I  F  F  G  S  L  E  T  L  F  F                           F4
+      121 tcctctcctttgcctaccctagcgtggtcctcgccggcgactagccggacgacaagaggc 180
+           L  L  P  F  P  H  S  R  V  L  L  P  R  Q  D  A  Q  Q  E  G    F6
+          C  S  L  F  R  I  P  D  C  W  S  R  G  S  I  P  R  S  N  E     F5
+            P  S  S  V  S  P  I  A  G  P  A  A  A  S  R  G  A  T  R  R   F4
+
+
+          K  P  A  S  P  P  I  S  S  A  R  T  R  M  A  H  C  S  R  S     F1
+           N  R  R  H  R  R  Y  R  A  L  A  R  V  W  R  I  A  R  G  R    F2
+            T  G  V  T  A  D  I  E  R  S  H  A  Y  G  A  L  L  A  V  E   F3
+      181 aaaccggcgtcaccgccgatatcgagcgctcgcacgcgtatggcgcattgctcgcggtcg 240
+          ----:----|----:----|----:----|----:----|----:----|----:----|
+      181 tttggccgcagtggcggctatagctcgcgagcgtgcgcataccgcgtaacgagcgccagc 240
+           F  G  A  D  G  G  I  D  L  A  R  V  R  I  A  C  Q  E  R  D    F6
+          S  V  P  T  V  A  S  I  S  R  E  C  A  Y  P  A  N  S  A  T     F5
+            F  R  R  *  R  R  Y  R  A  S  A  R  T  H  R  M  A  R  P  R   F4
+
+
+          S  N  *  T  A  R  A  A  S  A  V  A  R  S  K  R  C  P  R  T     F1
+
+
+  [Part of this file has been deleted for brevity]
+
+     1981 caacgacccgttctagtcgccagccctccaccgccactagttgaaggaccagccgcacga 2040
+           T  A  P  C  S  *  R  D  P  P  P  P  S  *  S  G  P  R  R  A    F6
+          P  Q  Q  A  L  D  A  T  P  L  H  R  H  D  V  E  Q  D  A  H     F5
+            N  S  P  L  I  L  P  R  S  T  A  T  I  L  K  R  T  P  T  S   F4
+
+
+          E  R  L  R  R  V  L  P  D  L  F  R  S  S  R  A  G  L  A  E     F1
+           S  A  C  V  A  F  Y  L  I  F  S  A  A  A  G  Q  G  S  L  K    F2
+            A  P  A  S  R  S  T  *  S  F  P  Q  Q  P  G  R  A  R  *  R   F3
+     2041 gagcgcctgcgtcgcgttctacctgatcttttccgcagcagccgggcagggctcgctgaa 2100
+          ----:----|----:----|----:----|----:----|----:----|----:----|
+     2041 ctcgcggacgcagcgcaagatggactagaaaaggcgtcgtcggcccgtcccgagcgactt 2100
+           S  R  R  R  R  T  R  G  S  R  K  R  L  L  R  A  P  S  A  S    F6
+          Q  A  G  A  D  R  E  V  Q  D  K  G  C  C  G  P  L  A  R  Q     F5
+            L  A  Q  T  A  N  *  R  I  K  E  A  A  A  P  C  P  E  S  F   F4
+
+
+          G  R  S  A  D  P  A  I  R  F  Y  L  S  V  G  G  R  Q  P  V     F1
+           A  G  A  L  T  L  L  F  A  F  T  Y  L  W  V  A  A  N  Q  F    F2
+            P  E  R  *  P  C  Y  S  L  L  P  I  C  G  W  P  P  T  S  S   F3
+     2101 ggccggagcgctgaccctgctattcgcttttacctatctgtgggtggccgccaaccagtt 2160
+          ----:----|----:----|----:----|----:----|----:----|----:----|
+     2101 ccggcctcgcgactgggacgataagcgaaaatggatagacacccaccggcggttggtcaa 2160
+           P  R  L  A  S  G  A  I  R  K  *  R  D  T  P  P  R  W  G  T    F6
+          L  G  S  R  Q  G  Q  *  E  S  K  G  I  Q  P  H  G  G  V  L     F5
+            A  P  A  S  V  R  S  N  A  K  V  *  R  H  T  A  A  L  W  N   F4
+
+
+          P  R  X                                                        F1
+           L  E                                                          F2
+            S                                                            F3
+     2161 cctcgag                                                      2167
+          ----:----|----:----|----:----|----:----|----:----|----:----|
+     2161 ggagctc                                                      2167
+           G  R                                                          F6
+          E  E  L                                                        F5
+            R  S                                                         F4
 
 ##############################
 Minimum size of ORFs : 1
 
-Total ORFs in frame 1 :     7
-Total ORFs in frame 2 :     7
-Total ORFs in frame 3 :     3
-Total ORFs in frame 4 :     6
-Total ORFs in frame 5 :     8
-Total ORFs in frame 6 :     6
+Total ORFs in frame 1 :     8
+Total ORFs in frame 2 :     5
+Total ORFs in frame 3 :    13
+Total ORFs in frame 4 :    10
+Total ORFs in frame 5 :    16
+Total ORFs in frame 6 :    15
 
-Total ORFs :    37
+Total ORFs :    67
 ##############################
    
 Data files
@@ -648,6 +780,8 @@ See also
    showfeat Show features of a sequence
    showorf Pretty output of DNA translations
    showseq Display a sequence with features, translation etc
+   syco Synonymous codon usage Gribskov statistic plot
+   tcode Fickett TESTCODE statistic to identify protein-coding DNA
    textsearch Search sequence documentation text. SRS and Entrez are
    faster!
    transeq Translate nucleic acid sequences
@@ -655,8 +789,9 @@ See also
    
 Author(s)
 
-   This application was written by Thomas Laurent
-   (thomas.laurent@uk.lionbioscience.com)
+   Thomas Laurent (thomas.laurent © uk.lionbioscience.com)
+   Lion Bioscience Ltd, Compass House, 80-82 Newmarket Road, Cambridge,
+   CB5 8DZ, UK
    
 History
 

@@ -52,10 +52,50 @@ Command line arguments
    Advanced qualifiers:
    -idc                integer    idc param
 
+   Associated qualifiers:
+  "-sequencea" related qualifiers
+   -sbegin1             integer    First base used
+   -send1               integer    Last base used, def=seq length
+   -sreverse1           boolean    Reverse (if DNA)
+   -sask1               boolean    Ask for begin/end/reverse
+   -snucleotide1        boolean    Sequence is nucleotide
+   -sprotein1           boolean    Sequence is protein
+   -slower1             boolean    Make lower case
+   -supper1             boolean    Make upper case
+   -sformat1            string     Input sequence format
+   -sopenfile1          string     Input filename
+   -sdbname1            string     Database name
+   -sid1                string     Entryname
+   -ufo1                string     UFO features
+   -fformat1            string     Features format
+   -fopenfile1          string     Features file name
+  "-outfile" related qualifiers
+   -rformat2            string     Report format
+   -rname2              string     Base file name
+   -rextension2         string     File name extension
+   -rdirectory2         string     Output directory
+   -raccshow2           boolean    Show accession number in the report
+   -rdesshow2           boolean    Show description in the report
+   -rscoreshow2         boolean    Show the score in the report
+   -rusashow2           boolean    Show the full USA in the report
+
    General qualifiers:
-  -help                boolean    Report command line options. More
+   -auto                boolean    Turn off prompts
+   -stdout              boolean    Write standard output
+   -filter              boolean    Read standard input, write standard output
+   -options             boolean    Prompt for required and optional values
+   -debug               boolean    Write debug output to program.dbg
+   -acdlog              boolean    Write ACD processing log to program.acdlog
+   -acdpretty           boolean    Rewrite ACD file as program.acdpretty
+   -acdtable            boolean    Write HTML table of options
+   -verbose             boolean    Report some/full command line options
+   -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
+   -warning             boolean    Report warnings
+   -error               boolean    Report errors
+   -fatal               boolean    Report fatal errors
+   -die                 boolean    Report deaths
    
 
    Mandatory qualifiers Allowed values Default
@@ -178,7 +218,7 @@ Output file format
   
 ########################################
 # Program: garnier
-# Rundate: Thu Nov 07 14:33:25 2002
+# Rundate: Thu May 22 10:33:00 2003
 # Report_format: tagseq
 # Report_file: amic_pseae.garnier
 ########################################
@@ -344,13 +384,12 @@ Author(s)
    (wrp@virginia.edu) and released as part of his FASTA package.
    
    This application was modified for inclusion in EMBOSS by Rodrigo Lopez
-   (rls@ebi.ac.uk) European Bioinformatics Institute, Wellcome Trust
-   Genome Campus, Hinxton, Cambridge, CB10 1SD, UK.
+   (rls © ebi.ac.uk)
+   European Bioinformatics Institute, Wellcome Trust Genome Campus,
+   Hinxton, Cambridge CB10 1SD, UK
    
 History
 
-   None.
-   
 Target users
 
    This program is intended to be used by everyone and everything, from

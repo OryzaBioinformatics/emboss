@@ -37,6 +37,31 @@ DB swnew [
    directory: /data/embl
 ]
 
+  Fields Indexed
+  
+   By default, dbiblast will index the ID name and the accession number
+   (if present).
+   If they are present in your database, you may specify that dbiblast
+   should index the Sequence Version and GI number and the words in the
+   description by using the '-fields' qualifier with the appropriate
+   values.
+   
+  Indexing the Blast database
+  
+   dbiblast can't use the new style of Blast indices. You must create the
+   old style of Blast indices by adding -A F to the formatdb command
+   line.
+   
+   The reason is that NCBI have not documented the new format, so we
+   cannot extend dbiblast to read it.
+   
+   If you have the original (fasta format) file you can build the
+   previous blast database format with:
+   
+   formatdb -A F
+   
+   This turns off the new "ASN.1" formatting. blastall will still work.
+   
 Usage
 
    Here is a sample session with dbiblast
@@ -87,10 +112,24 @@ Command line arguments
    -[no]cleanup        boolean    Clean up temporary files
    -sourcefile         boolean    Use FASTA source file
 
+   Associated qualifiers: (none)
    General qualifiers:
-  -help                boolean    Report command line options. More
+   -auto                boolean    Turn off prompts
+   -stdout              boolean    Write standard output
+   -filter              boolean    Read standard input, write standard output
+   -options             boolean    Prompt for required and optional values
+   -debug               boolean    Write debug output to program.dbg
+   -acdlog              boolean    Write ACD processing log to program.acdlog
+   -acdpretty           boolean    Rewrite ACD file as program.acdpretty
+   -acdtable            boolean    Write HTML table of options
+   -verbose             boolean    Report some/full command line options
+   -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
+   -warning             boolean    Report warnings
+   -error               boolean    Report errors
+   -fatal               boolean    Report fatal errors
+   -die                 boolean    Report deaths
    
 
    Mandatory qualifiers Allowed values Default
@@ -197,7 +236,9 @@ References
    
 Warnings
 
-   None.
+   dbiblast can't use the new style of Blast indices. You must create the
+   old style of Blast indices by adding -A F to the formatdb command
+   line.
    
 Diagnostic Error Messages
 
@@ -209,7 +250,9 @@ Exit status
    
 Known bugs
 
-   None.
+   dbiblast can't use the new style of Blast indices. You must create the
+   old style of Blast indices by adding -A F to the formatdb command
+   line.
    
 See also
 
@@ -220,9 +263,9 @@ See also
    
 Author(s)
 
-   This application was written by Peter Rice (pmr@sanger.ac.uk)
-   Informatics Division, The Sanger Centre, Wellcome Trust Genome Campus,
-   Hinxton, Cambridge, CB10 1SA, UK.
+   This application was written by Peter Rice (pmr © ebi.ac.uk)
+   Informatics Division, European Bioinformatics Institute, Wellcome
+   Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
    
 History
 

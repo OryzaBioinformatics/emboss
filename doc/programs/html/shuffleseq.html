@@ -101,18 +101,60 @@ IT IS DONE FOR YOU.
    Advanced qualifiers:
    -shuffle            integer    Number of shuffles
 
+   Associated qualifiers:
+  "-sequence" related qualifiers
+   -sbegin1             integer    First base used
+   -send1               integer    Last base used, def=seq length
+   -sreverse1           boolean    Reverse (if DNA)
+   -sask1               boolean    Ask for begin/end/reverse
+   -snucleotide1        boolean    Sequence is nucleotide
+   -sprotein1           boolean    Sequence is protein
+   -slower1             boolean    Make lower case
+   -supper1             boolean    Make upper case
+   -sformat1            string     Input sequence format
+   -sopenfile1          string     Input filename
+   -sdbname1            string     Database name
+   -sid1                string     Entryname
+   -ufo1                string     UFO features
+   -fformat1            string     Features format
+   -fopenfile1          string     Features file name
+  "-outseq" related qualifiers
+   -osformat2           string     Output seq format
+   -osextension2        string     File name extension
+   -osname2             string     Base file name
+   -osdirectory2        string     Output directory
+   -osdbname2           string     Database name to add
+   -ossingle2           boolean    Separate file for each entry
+   -oufo2               string     UFO features
+   -offormat2           string     Features format
+   -ofname2             string     Features file name
+   -ofdirectory2        string     Output directory
+
    General qualifiers:
-  -help                boolean    Report command line options. More
+   -auto                boolean    Turn off prompts
+   -stdout              boolean    Write standard output
+   -filter              boolean    Read standard input, write standard output
+   -options             boolean    Prompt for required and optional values
+   -debug               boolean    Write debug output to program.dbg
+   -acdlog              boolean    Write ACD processing log to program.acdlog
+   -acdpretty           boolean    Rewrite ACD file as program.acdpretty
+   -acdtable            boolean    Write HTML table of options
+   -verbose             boolean    Report some/full command line options
+   -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
+   -warning             boolean    Report warnings
+   -error               boolean    Report errors
+   -fatal               boolean    Report fatal errors
+   -die                 boolean    Report deaths
 
 
 </pre>
 </td></tr></table>
 <P>
 
-<table border cellspacing=0 cellpadding=3 bgcolor="#f5f5ff">
-<tr bgcolor="#FFFFD0">
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
 <th align="left" colspan=2>Mandatory qualifiers</th>
 <th align="left">Allowed values</th>
 <th align="left">Default</th>
@@ -132,7 +174,7 @@ IT IS DONE FOR YOU.
 <td><i>&lt;sequence&gt;</i>.<i>format</i></td>
 </tr>
 
-<tr bgcolor="#FFFFD0">
+<tr bgcolor="#FFFFCC">
 <th align="left" colspan=2>Optional qualifiers</th>
 <th align="left">Allowed values</th>
 <th align="left">Default</th>
@@ -142,7 +184,7 @@ IT IS DONE FOR YOU.
 <td colspan=4>(none)</td>
 </tr>
 
-<tr bgcolor="#FFFFD0">
+<tr bgcolor="#FFFFCC">
 <th align="left" colspan=2>Advanced qualifiers</th>
 <th align="left">Allowed values</th>
 <th align="left">Default</th>
@@ -172,7 +214,7 @@ IT IS DONE FOR YOU.
 'tembl:mmam' is a sequence entry in the example nucleic acid database 'tembl'
 <p>
 <p><h3>Database entry: tembl:mmam</h3>
-<table width="90%"><tr><td bgcolor="#FFDDFF">
+<table width="90%"><tr><td bgcolor="#FFCCFF">
 <pre>
 ID   MMAM       standard; RNA; MUS; 366 BP.
 XX
@@ -233,24 +275,24 @@ SQ   Sequence 366 BP; 100 A; 90 C; 85 G; 89 T; 2 other;
 <a name="output.1"></a>
 <h3>Output files for usage example </h3>
 <p><h3>File: mmam.fasta</h3>
-<table width="90%"><tr><td bgcolor="#DDFFDD">
+<table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 &gt;MMAM L48662.1 Mus musculus (cell line C3H/F2-11) chromosome 12 anti-DNA antibody heavy chain mRNA.
-caatccaaacgcagtggttgccgagcccggaagaaccctctagggttattacttacagct
-gacactggggtagagcggtccagcagtgttagtcttgcagtgtctgtctatcggacaagc
-ggtcataggaactcagcagatccctcctggatcgacacaccaacgagtagattcgatcta
-gctgttagcgacctaatatcaacttcactaccgccgaaccaataagctaccggctttaac
-acgcgatatttcccatagatccaataaacaatttcatgtggtttggggaaaaaaactttg
-ccagtaatttggcngtgacgccatcccaatggngagtgcataaaatgtggtggcgcgcat
-tatttc
+tcgcacgccgatagaatgaagcatcgactcagtagataaattcgaggcctagctgacggg
+atggggtactcgtccaaaaagtgagccaatgcgtattgatgtattgactagttcgatgac
+accccgctaaaggtccagtgacacccatcgttcactccaactgggtagtagatttcgatc
+tcttattgcctccccagcaaaggactctgcaaggacggggtgcgcgctcntngggtccat
+ccattcaaagacatgatgatttcacgaagtatcgcgaaatataagctgtacatggcatcg
+tttacattcgttctgggtcccgcatcgagaatctaaaacccaggatcctgaatatctaca
+tgcata
 &gt;MMAM L48662.1 Mus musculus (cell line C3H/F2-11) chromosome 12 anti-DNA antibody heavy chain mRNA.
-tgttctctagaaaatcacgacatttgtggtgtaccaggccctcgcggaaacgcggtaaaa
-aaacgataactggccaggcgagaacataaggcaatctagagagcgacaganggggaaccg
-agttgtgcgccagtttatctatcgggcggtcgcgcccgcttcctccccaaaacttaacgg
-agctgcacattaacgtggctgacgatactatttacccagatagccttggttccttagatt
-cgaagttgcactgttgtagacgagtggaaataaagtccgcatattacttaaatccgngtc
-actggatgctatctatgtattctactacactagctggctcacacatagataactccctta
-ccggct
+ggattgggataactntttatacgagcgtagtctaacgaacaaaatactcctaatacggat
+gcccgacgtcggtgaaacaggtaaccctcaaaacgtgtcattttgtccgtaatcctgact
+tggatcccgggaaccggcattggaggggattgtggtgtacactactggtataatgtcgaa
+tgatgacatctctccatgtgtcgagtctcgtgttcagccctagccagagagacggaccgg
+ggacagcatatcagccgatctgaattgacaccctcgggttaatctctcctacgcgcagca
+gcctaaacatgccacactcatcgtgaataacctaagttagtcaaatcaagttnacgcatg
+acatct
 </pre>
 </td></tr></table><p>
 
@@ -330,14 +372,19 @@ None.
 </H2>
 
 
-This application was written by Michael Schmitz <a
-href="mailto:mschmitz@lbl.gov">(mschmitz@lbl.gov)</a>
+Michael Schmitz (mschmitz&nbsp;&copy;&nbsp;lbl.gov)
+<br>
+Lawrence Berkeley Labs, USA
+
 
 <H2>
     History
 </H2>
 
-Finished.
+<!--
+<p>
+[an error occurred while processing this directive]
+-->
 
 <H2>
     Target users

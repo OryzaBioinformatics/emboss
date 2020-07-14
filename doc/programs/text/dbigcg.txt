@@ -30,6 +30,15 @@ DB embl [
    directory: /data/gcg/gcgembl
 ]
 
+  Fields Indexed
+  
+   By default, dbigcg will index the ID name and the accession number (if
+   present).
+   If they are present in your database, you may also specify that
+   dbiflat should index the Sequence Version and GI number, the Keywords
+   and Taxonomy names and the words in the description by using the
+   '-fields' qualifier with the appropriate values.
+   
 Usage
 
    Here is a sample session with dbigcg
@@ -73,10 +82,24 @@ Command line arguments
    -[no]systemsort     boolean    Use system sort utility
    -[no]cleanup        boolean    Clean up temporary files
 
+   Associated qualifiers: (none)
    General qualifiers:
-  -help                boolean    Report command line options. More
+   -auto                boolean    Turn off prompts
+   -stdout              boolean    Write standard output
+   -filter              boolean    Read standard input, write standard output
+   -options             boolean    Prompt for required and optional values
+   -debug               boolean    Write debug output to program.dbg
+   -acdlog              boolean    Write ACD processing log to program.acdlog
+   -acdpretty           boolean    Rewrite ACD file as program.acdpretty
+   -acdtable            boolean    Write HTML table of options
+   -verbose             boolean    Report some/full command line options
+   -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
+   -warning             boolean    Report warnings
+   -error               boolean    Report errors
+   -fatal               boolean    Report fatal errors
+   -die                 boolean    Report deaths
    
 
    Mandatory qualifiers Allowed values Default
@@ -204,9 +227,9 @@ See also
    
 Author(s)
 
-   This application was written by Peter Rice (pmr@sanger.ac.uk)
-   Informatics Division, The Sanger Centre, Wellcome Trust Genome Campus,
-   Hinxton, Cambridge, CB10 1SA, UK.
+   Peter Rice (pmr © ebi.ac.uk)
+   Informatics Division, European Bioinformatics Institute, Wellcome
+   Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
    
 History
 

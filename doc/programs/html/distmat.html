@@ -399,17 +399,50 @@ Output file [outfile.distmat]:
                                   al.] and this is the default.
 
    Advanced qualifiers: (none)
+   Associated qualifiers:
+  "-msf" related qualifiers
+   -sbegin1             integer    First base used
+   -send1               integer    Last base used, def=seq length
+   -sreverse1           boolean    Reverse (if DNA)
+   -sask1               boolean    Ask for begin/end/reverse
+   -snucleotide1        boolean    Sequence is nucleotide
+   -sprotein1           boolean    Sequence is protein
+   -slower1             boolean    Make lower case
+   -supper1             boolean    Make upper case
+   -sformat1            string     Input sequence format
+   -sopenfile1          string     Input filename
+   -sdbname1            string     Database name
+   -sid1                string     Entryname
+   -ufo1                string     UFO features
+   -fformat1            string     Features format
+   -fopenfile1          string     Features file name
+  "-outf" related qualifiers
+   -odirectory2         string     Output directory
+
    General qualifiers:
-  -help                boolean    Report command line options. More
+   -auto                boolean    Turn off prompts
+   -stdout              boolean    Write standard output
+   -filter              boolean    Read standard input, write standard output
+   -options             boolean    Prompt for required and optional values
+   -debug               boolean    Write debug output to program.dbg
+   -acdlog              boolean    Write ACD processing log to program.acdlog
+   -acdpretty           boolean    Rewrite ACD file as program.acdpretty
+   -acdtable            boolean    Write HTML table of options
+   -verbose             boolean    Report some/full command line options
+   -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
+   -warning             boolean    Report warnings
+   -error               boolean    Report errors
+   -fatal               boolean    Report fatal errors
+   -die                 boolean    Report deaths
 
 
 </pre>
 </td></tr></table>
 <P>
-<table border cellspacing=0 cellpadding=3 bgcolor="#f5f5ff">
-<tr bgcolor="#FFFFD0">
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
 <th align="left" colspan=2>Mandatory qualifiers</th>
 <th align="left">Allowed values</th>
 <th align="left">Default</th>
@@ -443,7 +476,7 @@ Output file [outfile.distmat]:
 <td><i>&lt;sequence&gt;</i>.distmat</td>
 </tr>
 
-<tr bgcolor="#FFFFD0">
+<tr bgcolor="#FFFFCC">
 <th align="left" colspan=2>Optional qualifiers</th>
 <th align="left">Allowed values</th>
 <th align="left">Default</th>
@@ -484,7 +517,7 @@ Output file [outfile.distmat]:
 <td>1.0</td>
 </tr>
 
-<tr bgcolor="#FFFFD0">
+<tr bgcolor="#FFFFCC">
 <th align="left" colspan=2>Advanced qualifiers</th>
 <th align="left">Allowed values</th>
 <th align="left">Default</th>
@@ -533,7 +566,7 @@ meaningful information from this analysis.
 <a name="input.1"></a>
 <h3>Input files for usage example </h3>
 <p><h3>File: ../../data/pax.align</h3>
-<table width="90%"><tr><td bgcolor="#FFDDFF">
+<table width="90%"><tr><td bgcolor="#FFCCFF">
 <pre>
 PileUp
 
@@ -675,7 +708,7 @@ bases or amino acids.
 <a name="output.1"></a>
 <h3>Output files for usage example </h3>
 <p><h3>File: pax.distmat</h3>
-<table width="90%"><tr><td bgcolor="#DDFFDD">
+<table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 Distance Matrix
 ---------------
@@ -942,8 +975,10 @@ None.
         Who has worked on the program in the past.
    -->
 
-This application was written by Tim Carver <a
-href="mailto:tcarver@hgmp.mrc.ac.uk">(tcarver@hgmp.mrc.ac.uk)</a>
+Tim Carver (tcarver&nbsp;&copy;&nbsp;hgmp.mrc.ac.uk)
+<br>
+HGMP-RC, Genome Campus, Hinxton, Cambridge CB10 1SB, UK
+
 
 
 
@@ -959,7 +994,10 @@ href="mailto:tcarver@hgmp.mrc.ac.uk">(tcarver@hgmp.mrc.ac.uk)</a>
 
 Written (March 2001) - Tim Carver
 
-
+<!--
+<p>
+[an error occurred while processing this directive]
+-->
 
 
 

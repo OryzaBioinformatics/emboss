@@ -118,6 +118,10 @@ of MAR/SAR may exist which does not contain a MRS.
 
 <p>
 
+It it still not at all clear whether MAR/SARs are real biological phenomena
+or just experimental artefacts.
+
+<p>
 
 The problem of how to define and find MARs is still being actively
 invetsigated.  For a recent evaluation of this method and others, see
@@ -143,7 +147,7 @@ reference 3.
 % <b>marscan </b>
 Finds MAR/SAR sites in nucleic sequences
 Input sequence(s): <b>tembl:u01317</b>
-Output report [hshbb.marscan]: <b></b>
+Output feature report [hshbb.marscan]: <b></b>
 
 </pre></td></tr></table><p>
 <p>
@@ -174,17 +178,57 @@ Output report [hshbb.marscan]: <b></b>
 
    Optional qualifiers: (none)
    Advanced qualifiers: (none)
+   Associated qualifiers:
+  "-sequence" related qualifiers
+   -sbegin1             integer    First base used
+   -send1               integer    Last base used, def=seq length
+   -sreverse1           boolean    Reverse (if DNA)
+   -sask1               boolean    Ask for begin/end/reverse
+   -snucleotide1        boolean    Sequence is nucleotide
+   -sprotein1           boolean    Sequence is protein
+   -slower1             boolean    Make lower case
+   -supper1             boolean    Make upper case
+   -sformat1            string     Input sequence format
+   -sopenfile1          string     Input filename
+   -sdbname1            string     Database name
+   -sid1                string     Entryname
+   -ufo1                string     UFO features
+   -fformat1            string     Features format
+   -fopenfile1          string     Features file name
+  "-outfile" related qualifiers
+   -rformat2            string     Report format
+   -rname2              string     Base file name
+   -rextension2         string     File name extension
+   -rdirectory2         string     Output directory
+   -raccshow2           boolean    Show accession number in the report
+   -rdesshow2           boolean    Show description in the report
+   -rscoreshow2         boolean    Show the score in the report
+   -rusashow2           boolean    Show the full USA in the report
+
    General qualifiers:
-  -help                boolean    Report command line options. More
+   -auto                boolean    Turn off prompts
+   -stdout              boolean    Write standard output
+   -filter              boolean    Read standard input, write standard output
+   -options             boolean    Prompt for required and optional values
+   -debug               boolean    Write debug output to program.dbg
+   -acdlog              boolean    Write ACD processing log to program.acdlog
+   -acdpretty           boolean    Rewrite ACD file as program.acdpretty
+   -acdtable            boolean    Write HTML table of options
+   -verbose             boolean    Report some/full command line options
+   -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
+   -warning             boolean    Report warnings
+   -error               boolean    Report errors
+   -fatal               boolean    Report fatal errors
+   -die                 boolean    Report deaths
 
 
 </pre>
 </td></tr></table>
 <P>
-<table border cellspacing=0 cellpadding=3 bgcolor="#f5f5ff">
-<tr bgcolor="#FFFFD0">
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
 <th align="left" colspan=2>Mandatory qualifiers</th>
 <th align="left">Allowed values</th>
 <th align="left">Default</th>
@@ -204,7 +248,7 @@ Output report [hshbb.marscan]: <b></b>
 <td>&nbsp;</td>
 </tr>
 
-<tr bgcolor="#FFFFD0">
+<tr bgcolor="#FFFFCC">
 <th align="left" colspan=2>Optional qualifiers</th>
 <th align="left">Allowed values</th>
 <th align="left">Default</th>
@@ -214,7 +258,7 @@ Output report [hshbb.marscan]: <b></b>
 <td colspan=4>(none)</td>
 </tr>
 
-<tr bgcolor="#FFFFD0">
+<tr bgcolor="#FFFFCC">
 <th align="left" colspan=2>Advanced qualifiers</th>
 <th align="left">Allowed values</th>
 <th align="left">Default</th>
@@ -261,7 +305,7 @@ IT IS DONE FOR YOU.
 'tembl:u01317' is a sequence entry in the example nucleic acid database 'tembl'
 <p>
 <p><h3>Database entry: tembl:u01317</h3>
-<table width="90%"><tr><td bgcolor="#FFDDFF">
+<table width="90%"><tr><td bgcolor="#FFCCFF">
 <pre>
 ID   HSHBB      standard; DNA; HUM; 73308 BP.
 XX
@@ -426,10 +470,10 @@ By default <b>marscan</b> writes a GFF (Gene Feature Format) report file.
 <a name="output.1"></a>
 <h3>Output files for usage example </h3>
 <p><h3>File: hshbb.marscan</h3>
-<table width="90%"><tr><td bgcolor="#DDFFDD">
+<table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 ##gff-version 2.0
-##date 2002-11-07
+##date 2003-05-22
 ##Type DNA HSHBB
 HSHBB	marscan	misc_signal	2242	2458	0.000	+	.	Sequence "HSHBB.1" ; note "*type MAR/SAR recognition site (MRS)" ; note "*start8bp 2451" ; note "*end8bp 2458" ; note "*start16bp 2242" ; note "*end16bp 2257"
 HSHBB	marscan	misc_signal	17654	17730	0.000	+	.	Sequence "HSHBB.2" ; note "*type MAR/SAR recognition site (MRS)" ; note "*start8bp 17723" ; note "*end8bp 17730" ; note "*start16bp 17654" ; note "*end16bp 17669"
@@ -648,6 +692,8 @@ None.
 <tr><td><a href="plotorf.html">plotorf</a></td><td>Plot potential open reading frames</td></tr>
 <tr><td><a href="showorf.html">showorf</a></td><td>Pretty output of DNA translations</td></tr>
 <tr><td><a href="sixpack.html">sixpack</a></td><td>Display a DNA sequence with 6-frame translation and ORFs</td></tr>
+<tr><td><a href="syco.html">syco</a></td><td>Synonymous codon usage Gribskov statistic plot</td></tr>
+<tr><td><a href="tcode.html">tcode</a></td><td>Fickett TESTCODE statistic to identify protein-coding DNA</td></tr>
 <tr><td><a href="wobble.html">wobble</a></td><td>Wobble base plot</td></tr>
 </table>
 
@@ -672,15 +718,9 @@ None.
         Who has worked on the program in the past.
    -->
 
-This application was written by Gary Williams <a
-href="mailto:gwilliam@hgmp.mrc.ac.uk">(gwilliam@hgmp.mrc.ac.uk)</a>
-
-
-
-
-
-
-
+Gary Williams (gwilliam&nbsp;&copy;&nbsp;hgmp.mrc.ac.uk)
+<br>
+HGMP-RC, Genome Campus, Hinxton, Cambridge CB10 1SB, UK
 
 
 
@@ -701,8 +741,10 @@ Written (Jan 2001) - Gary Williams.
 
 Changed output file to standard EMBOSS report format (April 2002) - Peter Rice
 
-
-
+<!--
+<p>
+[an error occurred while processing this directive]
+-->
 
 
 

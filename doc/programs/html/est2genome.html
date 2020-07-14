@@ -69,6 +69,65 @@ indicates, based on the splice site information, the gene's predicted
 direction of transcription. Optionally the full sequence alignment is
 printed as well (see the example).
 
+
+
+
+
+<H2>
+    Algorithm
+</H2>
+    
+<!--
+ Algorithms
+ Pseudocode/Vague description/Handwaving/web links to useful pages
+-->   
+
+
+The program uses a linear-space divide-and-conquer strategy (Myers and 
+Miller, 1988; Huang, 1994) to limit memory use:
+
+<p>
+
+1. A first pass Smith-Waterman local alignment scan is done to find the 
+start and end of the maximally scoring segments.
+
+<p>
+
+2. Subsequences corresponding to these segments are extracted
+
+<p>
+
+3a. If the product of the subsequences' lengths is less than a 
+user-defined threshold (i.e. they will fit in memory) the segments are 
+realigned using the Needleman-Wunsch global alignment algorithm, which 
+will give the same result as the Smith-Waterman since the subsequences 
+are guaranteed to align end-to-end.
+
+<p>
+
+3b. If the product of the lengths exceeds the threshold (a full 
+alignment will not fit in memory) the alignment is made recursively by 
+splitting the spliced (EST) sequence in half and finding the genome 
+sequence position which aligns with the mid-point. The process is 
+repeated until the product of gthe lengths is less than the threshold. 
+The divided sequences are aligned separately and then merged.
+
+<p>
+
+4. The genome sequence is searched against the forward and reverse 
+strands of the spliced (EST) sequence, assuming a forward gene splicing 
+direction (i.e. GT/AG consensus).
+
+<p>
+
+5. Then the best-scoring orientation is realigned assuming reverse 
+splicing (CT/AC consensus). The overall best alignment is reported.
+
+
+
+
+
+
 <H2>
     Usage
 </H2>
@@ -159,18 +218,67 @@ IT IS DONE FOR YOU.
                                   (unknown).
    -width              integer    Alignment width
 
+   Associated qualifiers:
+  "-est" related qualifiers
+   -sbegin1             integer    First base used
+   -send1               integer    Last base used, def=seq length
+   -sreverse1           boolean    Reverse (if DNA)
+   -sask1               boolean    Ask for begin/end/reverse
+   -snucleotide1        boolean    Sequence is nucleotide
+   -sprotein1           boolean    Sequence is protein
+   -slower1             boolean    Make lower case
+   -supper1             boolean    Make upper case
+   -sformat1            string     Input sequence format
+   -sopenfile1          string     Input filename
+   -sdbname1            string     Database name
+   -sid1                string     Entryname
+   -ufo1                string     UFO features
+   -fformat1            string     Features format
+   -fopenfile1          string     Features file name
+  "-genome" related qualifiers
+   -sbegin2             integer    First base used
+   -send2               integer    Last base used, def=seq length
+   -sreverse2           boolean    Reverse (if DNA)
+   -sask2               boolean    Ask for begin/end/reverse
+   -snucleotide2        boolean    Sequence is nucleotide
+   -sprotein2           boolean    Sequence is protein
+   -slower2             boolean    Make lower case
+   -supper2             boolean    Make upper case
+   -sformat2            string     Input sequence format
+   -sopenfile2          string     Input filename
+   -sdbname2            string     Database name
+   -sid2                string     Entryname
+   -ufo2                string     UFO features
+   -fformat2            string     Features format
+   -fopenfile2          string     Features file name
+  "-outfile" related qualifiers
+   -odirectory3         string     Output directory
+
    General qualifiers:
-  -help                boolean    Report command line options. More
+   -auto                boolean    Turn off prompts
+   -stdout              boolean    Write standard output
+   -filter              boolean    Read standard input, write standard output
+   -options             boolean    Prompt for required and optional values
+   -debug               boolean    Write debug output to program.dbg
+   -acdlog              boolean    Write ACD processing log to program.acdlog
+   -acdpretty           boolean    Rewrite ACD file as program.acdpretty
+   -acdtable            boolean    Write HTML table of options
+   -verbose             boolean    Report some/full command line options
+   -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
+   -warning             boolean    Report warnings
+   -error               boolean    Report errors
+   -fatal               boolean    Report fatal errors
+   -die                 boolean    Report deaths
 
 
 </pre>
 </td></tr></table>
 <P>
 
-<table border cellspacing=0 cellpadding=3 bgcolor="#f5f5ff">
-<tr bgcolor="#FFFFD0">
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
 <th align="left" colspan=2>Mandatory qualifiers</th>
 <th align="left">Allowed values</th>
 <th align="left">Default</th>
@@ -197,7 +305,7 @@ IT IS DONE FOR YOU.
 <td><i>&lt;sequence&gt;</i>.est2genome</td>
 </tr>
 
-<tr bgcolor="#FFFFD0">
+<tr bgcolor="#FFFFCC">
 <th align="left" colspan=2>Optional qualifiers</th>
 <th align="left">Allowed values</th>
 <th align="left">Default</th>
@@ -245,7 +353,7 @@ IT IS DONE FOR YOU.
 <td>30</td>
 </tr>
 
-<tr bgcolor="#FFFFD0">
+<tr bgcolor="#FFFFCC">
 <th align="left" colspan=2>Advanced qualifiers</th>
 <th align="left">Allowed values</th>
 <th align="left">Default</th>
@@ -337,7 +445,7 @@ finished sequence.
 'tembl:hs989235' is a sequence entry in the example nucleic acid database 'tembl'
 <p>
 <p><h3>Database entry: tembl:hs989235</h3>
-<table width="90%"><tr><td bgcolor="#FFDDFF">
+<table width="90%"><tr><td bgcolor="#FFCCFF">
 <pre>
 ID   HS989235   standard; RNA; EST; 495 BP.
 XX
@@ -429,7 +537,7 @@ SQ   Sequence 495 BP; 73 A; 135 C; 169 G; 104 T; 14 other;
 </pre>
 </td></tr></table><p>
 <p><h3>Database entry: tembl:hsnfg9</h3>
-<table width="90%"><tr><td bgcolor="#FFDDFF">
+<table width="90%"><tr><td bgcolor="#FFCCFF">
 <pre>
 ID   HSNFG9     standard; DNA; HUM; 33760 BP.
 XX
@@ -549,7 +657,7 @@ FT                   /clone_lib="CV007K"
 <a name="output.1"></a>
 <h3>Output files for usage example </h3>
 <p><h3>File: hs989235.est2genome</h3>
-<table width="90%"><tr><td bgcolor="#DDFFDD">
+<table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 Note Best alignment is between forward est and forward genome, but splice  sites imply REVERSED GENE
 Exon       163  91.8 25685 25874 HSNFG9           1   193 HS989235      yo13c02.s1 Soares adult brain N2b5HB55Y Homo sapiens cDNA clone IMAGE:177794 3', mRNA sequence.
@@ -776,7 +884,25 @@ length so the program runs only about 1.5 times slower.
 </H2>
 
 
-Mott, R (19) CABIOS.
+1. Mott R. (1997) EST_GENOME: a program to align spliced DNA sequences to 
+unspliced genomic DNA.  Comput. Applic. 13:477-478
+
+<p>
+
+2. Huang X (1994) On global sequence alignment. Comput. Applic. Biosci. 
+10:227-235.
+
+<p>
+
+3. Myers, EW and Miller, W (1988) Optimal alignments in linear space. 
+Comput. Applic. Biosci. 4:11-17
+
+<p>
+
+4. Smith, TE and Waterman, MS (1981) Identification of common molecular 
+subseqeunces. J. Mol. Biol. 147:195-197
+
+
 
 <H2>
     Warnings
@@ -825,10 +951,12 @@ None.
 </H2>
 
 
-This application was modified for inclusion in EMBOSS by Peter Rice <a
-href="mailto:pmr@sanger.ac.uk">(pmr@sanger.ac.uk)</a> Informatics
-Division, The Sanger Centre, Wellcome Trust Genome Campus, Hinxton,
-Cambridge, CB10 1SA, UK.
+This application was modified for inclusion in EMBOSS by 
+Peter Rice (pmr&nbsp;&copy;&nbsp;ebi.ac.uk)
+<br>
+Informatics Division, European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
+
+
 
 <p>
 The original program was est_genome, written by Richard Mott at the Sanger
@@ -840,7 +968,10 @@ ftp://ftp.sanger.ac.uk/pub/pmr/est_genome.4.tar.Z</a>
     History
 </H2>
 
-Finished.
+<!--
+<p>
+[an error occurred while processing this directive]
+-->
 
 <H2>
     Target users

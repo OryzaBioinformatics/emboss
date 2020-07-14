@@ -76,6 +76,22 @@ DB emrod [
 ]  
 </pre>
 
+
+
+<h3>Fields Indexed</H3>
+
+By default, <b>dbiflat</b> will index the ID name and the accession
+number.
+
+<br>
+
+If they are present in your database, you may also specify that
+<b>dbiflat</b> should index the Sequence Version and GI number, the
+Keywords and Taxonomy names and the words in the description by using
+the '-fields' qualifier with the appropriate values. 
+                        
+
+
 <H2>
     Usage
 </H2>
@@ -159,18 +175,32 @@ IT IS DONE FOR YOU.
    -[no]systemsort     boolean    Use system sort utility
    -[no]cleanup        boolean    Clean up temporary files
 
+   Associated qualifiers: (none)
    General qualifiers:
-  -help                boolean    Report command line options. More
+   -auto                boolean    Turn off prompts
+   -stdout              boolean    Write standard output
+   -filter              boolean    Read standard input, write standard output
+   -options             boolean    Prompt for required and optional values
+   -debug               boolean    Write debug output to program.dbg
+   -acdlog              boolean    Write ACD processing log to program.acdlog
+   -acdpretty           boolean    Rewrite ACD file as program.acdpretty
+   -acdtable            boolean    Write HTML table of options
+   -verbose             boolean    Report some/full command line options
+   -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
+   -warning             boolean    Report warnings
+   -error               boolean    Report errors
+   -fatal               boolean    Report fatal errors
+   -die                 boolean    Report deaths
 
 
 </pre>
 </td></tr></table>
 <P>
 
-<table border cellspacing=0 cellpadding=3 bgcolor="#f5f5ff">
-<tr bgcolor="#FFFFD0">
+<table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
+<tr bgcolor="#FFFFCC">
 <th align="left" colspan=2>Mandatory qualifiers</th>
 <th align="left">Allowed values</th>
 <th align="left">Default</th>
@@ -218,7 +248,7 @@ IT IS DONE FOR YOU.
 <td>00/00/00</td>
 </tr>
 
-<tr bgcolor="#FFFFD0">
+<tr bgcolor="#FFFFCC">
 <th align="left" colspan=2>Optional qualifiers</th>
 <th align="left">Allowed values</th>
 <th align="left">Default</th>
@@ -228,7 +258,7 @@ IT IS DONE FOR YOU.
 <td colspan=4>(none)</td>
 </tr>
 
-<tr bgcolor="#FFFFD0">
+<tr bgcolor="#FFFFCC">
 <th align="left" colspan=2>Advanced qualifiers</th>
 <th align="left">Allowed values</th>
 <th align="left">Default</th>
@@ -425,10 +455,11 @@ None.
 </H2>
 
 
-This application was written by Peter Rice <a
-href="mailto:pmr@sanger.ac.uk">(pmr@sanger.ac.uk)</a> Informatics
-Division, The Sanger Centre, Wellcome Trust Genome Campus, Hinxton,
-Cambridge, CB10 1SA, UK.
+Peter Rice (pmr&nbsp;&copy;&nbsp;ebi.ac.uk)
+<br>
+Informatics Division, European Bioinformatics Institute, Wellcome Trust Genome Campus, Hinxton, Cambridge CB10 1SD, UK
+
+
 
 <H2>
     History
@@ -436,6 +467,11 @@ Cambridge, CB10 1SA, UK.
 
 
 Completed December 1999
+
+<!--
+<p>
+[an error occurred while processing this directive]
+-->
 
 <H2>
     Target users

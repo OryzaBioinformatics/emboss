@@ -114,10 +114,58 @@ Command line arguments
                                   displayed.
    -featout            featout    File for output features
 
+   Associated qualifiers:
+  "-sequence" related qualifiers
+   -sbegin1             integer    First base used
+   -send1               integer    Last base used, def=seq length
+   -sreverse1           boolean    Reverse (if DNA)
+   -sask1               boolean    Ask for begin/end/reverse
+   -snucleotide1        boolean    Sequence is nucleotide
+   -sprotein1           boolean    Sequence is protein
+   -slower1             boolean    Make lower case
+   -supper1             boolean    Make upper case
+   -sformat1            string     Input sequence format
+   -sopenfile1          string     Input filename
+   -sdbname1            string     Database name
+   -sid1                string     Entryname
+   -ufo1                string     UFO features
+   -fformat1            string     Features format
+   -fopenfile1          string     Features file name
+  "-outfile" related qualifiers
+   -odirectory2         string     Output directory
+  "-graph" related qualifiers
+   -gprompt3            boolean    Graph prompting
+   -gtitle3             string     Graph title
+   -gsubtitle3          string     Graph subtitle
+   -gxtitle3            string     Graph x axis title
+   -gytitle3            string     Graph y axis title
+   -goutfile3           string     Output file for non interactive displays
+   -gdirectory3         string     Output directory
+  "-featout" related qualifiers
+   -offormat            string     Output feature format
+   -ofopenfile          string     Features file name
+   -ofextension         string     File name extension
+   -ofdirectory         string     Output directory
+   -ofname              string     Base file name
+   -ofsingle            boolean    Separate file for each entry
+
    General qualifiers:
-  -help                boolean    Report command line options. More
+   -auto                boolean    Turn off prompts
+   -stdout              boolean    Write standard output
+   -filter              boolean    Read standard input, write standard output
+   -options             boolean    Prompt for required and optional values
+   -debug               boolean    Write debug output to program.dbg
+   -acdlog              boolean    Write ACD processing log to program.acdlog
+   -acdpretty           boolean    Rewrite ACD file as program.acdpretty
+   -acdtable            boolean    Write HTML table of options
+   -verbose             boolean    Report some/full command line options
+   -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
+   -warning             boolean    Report warnings
+   -error               boolean    Report errors
+   -fatal               boolean    Report fatal errors
+   -die                 boolean    Report deaths
    
 
    Mandatory qualifiers Allowed values Default
@@ -301,10 +349,10 @@ RNU68037 from 1 to 1218
 
  Length 329 (596..924)
    
-  File: rnu68037.out2
+  File: rnu68037.gff
   
 ##gff-version 2.0
-##date 2002-11-07
+##date 2003-05-22
 ##Type DNA RNU68037
 RNU68037        cpgplot misc_feature    104     509     0.000   +       .
 Sequence "RNU68037.1"
@@ -381,12 +429,12 @@ See also
    
 Author(s)
 
-   This application was written by Alan Bleasby (ableasby@hgmp.mrc.ac.uk)
+   Alan Bleasby (ableasby © hgmp.mrc.ac.uk)
+   HGMP-RC, Genome Campus, Hinxton, Cambridge CB10 1SB, UK
    
 History
 
 Completed 23rd March 1999.
-Last modified 28th July 1999.
 
 Target users
 

@@ -63,12 +63,13 @@ Finds or fetches the data files read in by the EMBOSS programs
 .embossdata                                                  Does not exist
 /people/gwilliam                                             Exists
 /people/gwilliam/.embossdata                                 Does not exist
-/packages/emboss_dev/gwilliam/emboss/emboss/emboss/data      Exists
+../rebaseextract-keep/                                       Exists
    
    Example 2
    
-   Display the names of data file in all of the possible data
-   directories:
+   Display the names of data files in all of the possible data
+   directories: This is run on a small test system and so the results
+   will probably be different when you run this.
    
 
 % embossdata -showall 
@@ -209,8 +210,8 @@ DIRECTORY: /packages/emboss_dev/gwilliam/emboss/emboss/emboss/data
   Evdw.dat
   Efeatures.emboss
   Efeatures.swiss
-  Etags.emboss
   Etags.swiss
+  Etags.emboss
   Efeatures.pir
   Efeatures.protein
   Etags.pir
@@ -218,6 +219,7 @@ DIRECTORY: /packages/emboss_dev/gwilliam/emboss/emboss/emboss/data
   Emwfilter.dat
   Emassmod.dat
   Emass.dat
+  Etcode.dat
 
 
 DIRECTORY: /packages/emboss_dev/gwilliam/emboss/emboss/emboss/data/CODONS
@@ -244,6 +246,7 @@ DIRECTORY: /packages/emboss_dev/gwilliam/emboss/emboss/emboss/data/CODONS
   Ebovsp.cut
   Ebst.cut
   Ebsu.cut
+  Ef1.cut
   Ebsu_h.cut
   Ecac.cut
   Ecal.cut
@@ -273,7 +276,6 @@ DIRECTORY: /packages/emboss_dev/gwilliam/emboss/emboss/emboss/data/CODONS
   Eeco.cut
   Eeco_h.cut
   Eecoli.cut
-  Ef1.cut
   Efish.cut
   Efmdvpolyp.cut
   Eham.cut
@@ -907,10 +909,27 @@ Command line arguments
                                   that should be ignored when displaying data
                                   directories.
 
+   Associated qualifiers:
+  "-outf" related qualifiers
+   -odirectory          string     Output directory
+
    General qualifiers:
-  -help                boolean    Report command line options. More
+   -auto                boolean    Turn off prompts
+   -stdout              boolean    Write standard output
+   -filter              boolean    Read standard input, write standard output
+   -options             boolean    Prompt for required and optional values
+   -debug               boolean    Write debug output to program.dbg
+   -acdlog              boolean    Write ACD processing log to program.acdlog
+   -acdpretty           boolean    Rewrite ACD file as program.acdpretty
+   -acdtable            boolean    Write HTML table of options
+   -verbose             boolean    Report some/full command line options
+   -help                boolean    Report command line options. More
                                   information on associated and general
                                   qualifiers can be found with -help -verbose
+   -warning             boolean    Report warnings
+   -error               boolean    Report errors
+   -fatal               boolean    Report fatal errors
+   -die                 boolean    Report deaths
    
 
    Mandatory qualifiers Allowed values Default
@@ -1005,13 +1024,11 @@ See also
    
 Author(s)
 
-   This application was written by Gary Williams
-   (gwilliam@hgmp.mrc.ac.uk)
+   Gary Williams (gwilliam © hgmp.mrc.ac.uk)
+   HGMP-RC, Genome Campus, Hinxton, Cambridge CB10 1SB, UK
    
 History
 
-   Finished.
-   
 Target users
 
    This program is intended to be used by everyone and everything, from
