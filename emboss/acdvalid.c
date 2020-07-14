@@ -29,8 +29,8 @@
 **
 ** ACD file compiler and logging.
 **
-** Unlike other ACD report programs (acdpretty and acdtable) acdlog will run
-** through command line checking and prompting the user, while logging the
+** Unlike other ACD report programs (acdpretty and acdtable) acdvalid will run
+** through command line checking and prompting the user, while checking the
 ** internal data.
 **
 ******************************************************************************/
