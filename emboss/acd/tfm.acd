@@ -12,8 +12,7 @@ section: input [
   string: program  [
     parameter: "Y"
     default: ""
-    missing: "N"
-    prompt: "Program to search for"
+    information: "Program to search for"
     help: "Enter the name of an EMBOSS program"
     minlength: "1"
   ]
@@ -26,25 +25,23 @@ section: output [
 ]
 
   outfile: outfile  [
-    optional: "Y"
+    additional: "Y"
     default: "stdout"
-    prompt: "Output program details to a file"
-    help: "If you enter the name of a file here then this program will
-           write the program names and brief descriptions into that file."
+    knowntype: "text documentation"
   ]
 
   boolean: html  [
-    optional: "Y"
+    additional: "Y"
     default: "N"
-    prompt: "Format the output for HTML"
+    information: "Format the output for HTML"
     help: "This will format the output for displaying as a WWW
            document."
   ]
 
   boolean: more  [
-    optional: "Y"
+    additional: "Y"
     default: "@(!$(html))"
-    prompt: "Display a screenful at a time"
+    information: "Display a screenful at a time"
     help: "This uses the standard UNIX utility 'more' to display the
            text page-by-page, waiting for you to read one screen-full before
            going on to the next page. When you have finished reading a page,

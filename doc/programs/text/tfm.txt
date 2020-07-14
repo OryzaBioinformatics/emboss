@@ -20,13 +20,6 @@ Description
    The documentation is also available however through the program tfm as
    normal text.
    
-   tfm is unusual for an EMBOSS program in that it expects to be used
-   interactively and so it displays the documentation text a page at a
-   time, pausing after every page for the user to proess the SPACE bar on
-   their keyboard. (i.e. it uses the UNIX program more to display the
-   information). This behaviour can be turned off by using the qualifier
-   -nomore.
-   
    If you have problems understanding the function or usage of an EMBOSS
    program, then you should contact the EMBOSS mailing list
    (emboss@embnet.org).
@@ -36,6 +29,36 @@ Description
    stands for Read The Fine* Manual; so this is The Fine* Manual.
    
    * Insert the expletive of your choice here!
+   
+  Paged text output to the screen
+  
+   tfm is unusual for an EMBOSS program in that it expects to be used
+   interactively and so it displays the documentation text a page at a
+   time, pausing after every page for the user to press the SPACE bar on
+   their keyboard. (i.e. it uses the UNIX program more to display the
+   information). This behaviour can be turned off by using the qualifier
+   -nomore.
+   
+   The text is paged to the screen using the UNIX program 'more'. The
+   program 'more' is a very standard way for text files to be displayed
+   in UNIX. You might, however, prefer the text to be displayed using
+   other programs, for example 'less' (which has more functionality than
+   'more' and is used by many people). The UNIX environment variable
+   'PAGER' can be set to hold the name of your preferred program. If you
+   have PAGER set, then tfm will use this specified program instead of
+   using the default 'more' program. (If you want tfm to use a specified
+   program that is different to the normal 'PAGER' program, then 'PAGER'
+   can be overriden by setting the environment variable 'EMBOSS_PAGER' to
+   hold the name of the program that should only be used to display text
+   in tfm).
+   
+   'PAGER' can be set in UNIX by a command like:
+   setenv PAGER less
+   
+   To get help on 'more' when using it to display text, press the '?'
+   key.
+   To get help on 'less' when using it to display text, press the 'h'
+   key.
    
 Usage
 
@@ -284,7 +307,7 @@ showseq          Display a sequence with features, translation etc
 sixpack          Display a DNA sequence with 6-frame translation and ORFs
 transeq          Translate nucleic acid sequences
 
-PHYLOGENY
+PHYLOGENY DISTANCE MATRIX
 distmat          Creates a distance matrix from multiple alignments
 
 PROTEIN 2D STRUCTURE
@@ -482,6 +505,7 @@ revseq           Reverse and complement a sequence
 seealso          Finds programs sharing group names
 seqmatchall      Does an all-against-all comparison of a set of sequences
 seqret           Reads and writes (returns) sequences
+seqret           Reads and writes (returns) sequences
 seqretsplit      Reads and writes (returns) sequences in individual files
 showalign        Displays a multiple sequence alignment
 showdb           Displays information on the currently available databases
@@ -554,7 +578,7 @@ NUCLEIC REPEATS
 NUCLEIC RESTRICTION
 NUCLEIC TRANSCRIPTION
 NUCLEIC TRANSLATION
-PHYLOGENY
+PHYLOGENY DISTANCE MATRIX
 PROTEIN 2D STRUCTURE
 PROTEIN COMPOSITION
 PROTEIN MOTIFS
@@ -597,7 +621,7 @@ Keyword to search for, or blank to list all programs:
      * NUCLEIC RESTRICTION
      * NUCLEIC TRANSCRIPTION
      * NUCLEIC TRANSLATION
-     * PHYLOGENY
+     * PHYLOGENY DISTANCE MATRIX
      * PROTEIN 2D STRUCTURE
      * PROTEIN COMPOSITION
      * PROTEIN MOTIFS
@@ -620,14 +644,14 @@ Finds programs by keywords in their one-line documentation
 
 Command line arguments
 
-   Mandatory qualifiers:
+   Standard (Mandatory) qualifiers:
   [-search]            string     Enter a word or words here and a
                                   case-independent search for it will be made
                                   in the one-line documentation of all of the
                                   EMBOSS programs. If no keyword is specified,
                                   all programs will be listed.
 
-   Optional qualifiers (* if not always prompted):
+   Additional (Optional) qualifiers (* if not always prompted):
    -explode            boolean    The groups that EMBOSS applications belong
                                   to have two forms, exploded and not
                                   exploded. The exploded group names are more
@@ -639,9 +663,7 @@ Command line arguments
                                   names as: 'NAME1', 'NAME2', 'NAME1 NAME2',
                                   NAME2 NAME1'. The non-expanded names are
                                   simply like: 'NAME1 NAME2'.
-   -outfile            outfile    If you enter the name of a file here then
-                                  this program will write the program names
-                                  and brief descriptions into that file.
+   -outfile            outfile    Output file name
    -html               boolean    If you are sending the output to a file,
                                   this will format it for displaying as a
                                   table in a WWW document.
@@ -676,7 +698,7 @@ Command line arguments
                                   descriptions instead of the programs being
                                   listed in their functional groups.
 
-   Advanced qualifiers:
+   Advanced (Unprompted) qualifiers:
    -[no]emboss         boolean    If you use this option then EMBOSS program
                                   documentation will be searched. If this
                                   option is set to be false, then only the
@@ -721,18 +743,16 @@ Command line arguments
                                   run from a GUI
 
    Associated qualifiers:
-  "-outfile" related qualifiers
+
+   "-outfile" associated qualifiers
    -odirectory          string     Output directory
 
    General qualifiers:
    -auto                boolean    Turn off prompts
    -stdout              boolean    Write standard output
    -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for required and optional values
+   -options             boolean    Prompt for standard and additional values
    -debug               boolean    Write debug output to program.dbg
-   -acdlog              boolean    Write ACD processing log to program.acdlog
-   -acdpretty           boolean    Rewrite ACD file as program.acdpretty
-   -acdtable            boolean    Write HTML table of options
    -verbose             boolean    Report some/full command line options
    -help                boolean    Report command line options. More
                                   information on associated and general
@@ -743,13 +763,13 @@ Command line arguments
    -die                 boolean    Report deaths
 
 
-   Mandatory qualifiers Allowed values Default
+   Standard (Mandatory) qualifiers Allowed values Default
    [-search]
    (Parameter 1) Enter a word or words here and a case-independent search
    for it will be made in the one-line documentation of all of the EMBOSS
    programs. If no keyword is specified, all programs will be listed. Any
    string is accepted An empty string is accepted
-   Optional qualifiers Allowed values Default
+   Additional (Optional) qualifiers Allowed values Default
    -explode The groups that EMBOSS applications belong to have two forms,
    exploded and not exploded. The exploded group names are more numerous
    and often vaguely phrased than the non-exploded ones. The exploded
@@ -758,9 +778,7 @@ Command line arguments
    names as: 'NAME1', 'NAME2', 'NAME1 NAME2', NAME2 NAME1'. The
    non-expanded names are simply like: 'NAME1 NAME2'. Boolean value
    Yes/No No
-   -outfile If you enter the name of a file here then this program will
-   write the program names and brief descriptions into that file. Output
-   file stdout
+   -outfile Output file name Output file stdout
    -html If you are sending the output to a file, this will format it for
    displaying as a table in a WWW document. Boolean value Yes/No No
    -prelink If you are outputting to a file in HTML format, you can make
@@ -784,7 +802,7 @@ Command line arguments
    -alphabetic If you use this option, then you will get a single list of
    the program names and descriptions instead of the programs being
    listed in their functional groups. Boolean value Yes/No No
-   Advanced qualifiers Allowed values Default
+   Advanced (Unprompted) qualifiers Allowed values Default
    -[no]emboss If you use this option then EMBOSS program documentation
    will be searched. If this option is set to be false, then only the
    EMBASSY programs will be searched (if the -embassy option is true).
@@ -966,13 +984,11 @@ UTILS MISC
    
 Command line arguments
 
-   Mandatory qualifiers:
+   Standard (Mandatory) qualifiers:
   [-program]           string     Enter the name of an EMBOSS program
 
-   Optional qualifiers:
-   -outfile            outfile    If you enter the name of a file here then
-                                  this program will write the program names
-                                  and brief descriptions into that file.
+   Additional (Optional) qualifiers:
+   -outfile            outfile    Output file name
    -html               boolean    This will format the output for displaying
                                   as a WWW document.
    -more               boolean    This uses the standard UNIX utility 'more'
@@ -982,20 +998,18 @@ Command line arguments
                                   reading a page, press the SPACE bar to
                                   proceed to the next page.
 
-   Advanced qualifiers: (none)
+   Advanced (Unprompted) qualifiers: (none)
    Associated qualifiers:
-  "-outfile" related qualifiers
+
+   "-outfile" associated qualifiers
    -odirectory          string     Output directory
 
    General qualifiers:
    -auto                boolean    Turn off prompts
    -stdout              boolean    Write standard output
    -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for required and optional values
+   -options             boolean    Prompt for standard and additional values
    -debug               boolean    Write debug output to program.dbg
-   -acdlog              boolean    Write ACD processing log to program.acdlog
-   -acdpretty           boolean    Rewrite ACD file as program.acdpretty
-   -acdtable            boolean    Write HTML table of options
    -verbose             boolean    Report some/full command line options
    -help                boolean    Report command line options. More
                                   information on associated and general
@@ -1006,14 +1020,12 @@ Command line arguments
    -die                 boolean    Report deaths
    
 
-   Mandatory qualifiers Allowed values Default
+   Standard (Mandatory) qualifiers Allowed values Default
    [-program]
    (Parameter 1) Enter the name of an EMBOSS program A string of at least
    1 characters Required
-   Optional qualifiers Allowed values Default
-   -outfile If you enter the name of a file here then this program will
-   write the program names and brief descriptions into that file. Output
-   file stdout
+   Additional (Optional) qualifiers Allowed values Default
+   -outfile Output file name Output file stdout
    -html This will format the output for displaying as a WWW document.
    Boolean value Yes/No No
    -more This uses the standard UNIX utility 'more' to display the text
@@ -1021,7 +1033,7 @@ Command line arguments
    to the next page. When you have finished reading a page, press the
    SPACE bar to proceed to the next page. Boolean value Yes/No
    @(!$(html))
-   Advanced qualifiers Allowed values Default
+   Advanced (Unprompted) qualifiers Allowed values Default
    (none)
    
 Input file format
