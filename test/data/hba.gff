@@ -1,6 +1,6 @@
 ##gff-version 2.0
 ##date 2003-10-28
-##Type unknown <<null>> HBA_HUMAN
+##Type Protein HBA_HUMAN
 HBA_HUMAN	SWISSPROT	init_met	0	0	0.000	+	.	Sequence "HBA_HUMAN.1"
 HBA_HUMAN	SWISSPROT	metal	58	58	0.000	+	.	Sequence "HBA_HUMAN.2" ; note "IRON" ; comment "HEME DISTAL LIGAND"
 HBA_HUMAN	SWISSPROT	metal	87	87	0.000	+	.	Sequence "HBA_HUMAN.3" ; note "IRON" ; comment "HEME PROXIMAL LIGAND"

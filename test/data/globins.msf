@@ -2,13 +2,13 @@
 
   ../data/globins.msf MSF:  164 Type: P 25/06/01 CompCheck: 4278 ..
 
-  Name: HBB_HUMAN Len: 164  Check: 6914 Weight: 0.14
-  Name: HBB_HORSE Len: 164  Check: 6007 Weight: 0.15
-  Name: HBA_HUMAN Len: 164  Check: 3921 Weight: 0.15
-  Name: HBA_HORSE Len: 164  Check: 4770 Weight: 0.19
-  Name: MYG_PHYCA Len: 164  Check: 7930 Weight: 0.23
-  Name: GLB5_PETMA Len: 164  Check: 1857 Weight: 0.21
-  Name: LGB2_LUPLU Len: 164  Check: 2879 Weight: 0.10
+  Name: HBB_HUMAN Len: 164  Check: 6914 Weight: 0.61
+  Name: HBB_HORSE Len: 164  Check: 6007 Weight: 0.65
+  Name: HBA_HUMAN Len: 164  Check: 3921 Weight: 0.65
+  Name: HBA_HORSE Len: 164  Check: 4770 Weight: 0.83
+  Name: MYG_PHYCA Len: 164  Check: 7930 Weight: 1.00
+  Name: GLB5_PETMA Len: 164  Check: 1857 Weight: 0.91
+  Name: LGB2_LUPLU Len: 164  Check: 2879 Weight: 0.43
 
 //
 
