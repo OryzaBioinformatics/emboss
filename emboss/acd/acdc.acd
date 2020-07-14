@@ -1,0 +1,4 @@
+application: acdc [
+  documentation: "ACD compiler"
+  groups: "Acd"
+]
