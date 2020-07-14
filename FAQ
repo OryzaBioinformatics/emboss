@@ -89,12 +89,12 @@ Trends in Genetics June 2000, vol 16, No 6. pp.276-277
 SECTION B - Installation & Compilation
 ======================================
 
-Q) EMBOSS won't compile properly
+Q) How do I compile EMBOSS?
 
 A) Make sure you have the latest code and if you have compiled before
    try the following:-
 
-   rm config.cache
+   rm config.cache    (if that file exists)
    make clean
    ./configure
    make
@@ -104,13 +104,52 @@ A) Make sure you have the latest code and if you have compiled before
    ./configure
    make
  
+   The above will produce the EMBOSS programs in the 'emboss'
+   subdirectory and you can set your PATH variable to point there.
+   This method is suitable for EMBOSS developers.
+
+   For system-wide installations we recommend installing the
+   EMBOSS programs into a different directory to the source
+   code (e.g. in the directory tree /usr/local/emboss). To do
+   this type [e.g.]:
+      ./configure --prefix=/usr/local/emboss
+      make                    [to make sure there are no errors, then]
+      make install            [if there are no errors]
+   You should then add [e.g.] /usr/local/emboss/bin to your PATH
+   variable [e.g.]
+      set path=(/usr/local/emboss/bin $path)        [csh/tcsh shells]
+      export PATH="$PATH /usr/local/emboss/bin"     [sh/bash shells]
 
 
+Q) I have an AMD64/Opteron/EM64T system. How do I prevent the compiled
+   programs giving segmentation faults?
+
+A) Start with a fresh extraction of the EMBOSS source and, before
+   configuring, type (for all the above systems):
+
+   setenv CC "cc -D__amd64__"           [csh/tcsh shells]  or
+   export CC="cc -D__amd64__"           [bash/sh]
+
+   Note that the above is case sensitive, there is only one space
+   character between the quotes and that there are 4 underscores
+   in total (two each side of the amd64).
+
+
+Q) I have a Linux system and compilation ends prematurely saying that
+   it can't find the -lX11 libraries ... but I know I have X11
+   installed.
+
+A) You may well have the X11 server installed but you haven't installed
+   the X11 development files. For example, on RPM distributions, you need
+   to install:
+     xorg-x11-devel           (xorg-based X11 distros) or
+     XFree86-devel            (XFree86-based X11 distros)
+     
 
 Q) I'm trying to compile EMBOSS with the PNG support
 
 A) If you have  gd-1.7.3, zlib-1.1.3 and libpng-1.0.5 or greater
-   then the normal compile should work! However due to gd no longer
+   then the normal configure/compile should work! However, due to gd no longer
    supporting gif format then you may need to install gd, zlib and
    libpng locally.
 
@@ -310,8 +349,34 @@ A)  a) from the anonymous cvs code.
     available from our FTP server ftp://ftp.uk.embnet.org/pub/EMBOSS/ 
     in file MSE-0.0.4.tar.gz 
 
+
+    If you have done a full installation of EMBOSS using a 'prefix'
+    e.g. you configured with ./configure --prefix=/usr/local/emboss
+    and followed this with a 'make install' then:
+
+       1) gunzip and untar the file anywhere
+       gunzip MSE-0.0.4.tar.gz
+       tar xvf MSE-0.0.4.tar
+
+       2) go into the mse directory
+       cd MSE-0.0.4
+
+       3) configure using the same prefix and compile [e.g.]:
+       ./configure --prefix=/usr/local/emboss
+       make
+       make install
+
+       N.B. If you configured without using a prefix but did do
+            a 'make install' (or specified a prefix of /usr/local,
+            which amounts to the same thing) then you must configure
+            using:
+            ./configure --prefix=/usr/local --enable-localforce
+
+
+    If, on the other hand, you did not do a 'make install' then:
+
        1) Go to the emboss directory 
-       cd EMBOSS-0.0.4
+       cd EMBOSS-2.10.0
 
        2) make new directory embassy if it does not exist already.
        mkdir embassy
@@ -319,7 +384,7 @@ A)  a) from the anonymous cvs code.
        3) Go into that directory
        cd embassy
 
-       4) unzip and untar the file
+       4) gunzip and untar the file
        gunzip MSE-0.0.4.tar.gz
        tar xvf MSE-0.0.4.tar
 
@@ -430,7 +495,8 @@ Q) I have Emboss installed on our development server and I'm preparing a
 
     However, when testing this I have found a couple of problems;
 
-    1) Although the Emboss programs work, I can't see any of the extracted data.
+    1) Although the Emboss programs work, I can't see any of the extracted
+    data.
     For instance remap gives the error;
 
                EMBOSS An error in remap.c at line 167:
@@ -513,85 +579,6 @@ A) This most often happens when using GNU LD. If both shared and
    (Alan Bleasby 14 Feb 2001)
 
 
-
-
-Q) Has anybody compiled and set up the EMBOSS package under Mac OS-X ? 
-
-A) This is how I was able to build EMBOSS on MacOSX.
-   I tested EMBOSS-1.0.1.tar.gz release of last fall 
-
-   STEP 0
-     if not done, install MacOSX developer CD package
-
-   STEP 1
-    -- as root make cc compiler known as gcc (which it is)
-    -- (this will make your life simpler installing gnu-based packages)
-    cd /usr/bin
-    ln cc gcc
- 
-   STEP 2
-    -- unpack EMBOSS-*.tar.gz somewhere
-    gnutar -zxf EMBOSS-1.0.1.tar.gz
-    cd EMBOSS-1.0.0
- 
-   STEP 3
-    -- edit configure  file to fix some things
-    -- configure -> ltconfig has problem with passing $host value
-    -- remove -lX11 as constant (so --without-x works)
-
-   # fix ltconfig call so host is specified (some configure bug)
-   << find
-   $libtool_flags --no-verify $ac_aux_dir/ltmain.sh $host \
-   >> change to
-   $libtool_flags --no-verify $ac_aux_dir/ltmain.sh darwin \
-
-   << find
-   if test "$no_x" = yes; then
-     # Not all programs may use this symbol, but it does not hurt to define it.
-     cat >> confdefs.h <<\EOF
-   #define X_DISPLAY_MISSING 1
-   EOF
-
-     X_CFLAGS= X_PRE_LIBS= X_LIBS= X_EXTRA_LIBS=
-   else
-   >> add this X_LIBS=-lX11 line
-     X_LIBS=-lX11 
-     if test -n "$x_includes"; then
-       X_CFLAGS="$X_CFLAGS -I$x_includes"
-     fi
-
-   << find
-      XLIB="$X_LIBS -lX11 $X_EXTRA_LIBS"
-   >> change to
-      XLIB="$X_LIBS $X_EXTRA_LIBS"
-
-
-   STEP 4
-     -- configure and make. after above edits, the make worked
-     ./configure --host=darwin --without-x  
-     make >& log.make &
-  
-   STEP 5
-     -- test some things
-     emboss/getorf test/data/dna.genbank -outseq stdout
-     emboss/pepstats test/data/prot.swiss -outfile stdout
-   
-     -- try a graphic one
-     setenv PLPLOT_LIB `pwd`/plplot/lib
-     emboss/plotorf -graph ps test/embl/rod.dat
-  
-     -- install in default /usr/local/... as root
-     make install
-
-
-   Notes:
-
-   -- you will need to fetch and install some standard data
-     to use several programs (see emboss/data/)
-  
-   -- w/o an X Window server, default graphics won't show up.
-      Tenon(?) sells an Xwindow server for MacOSX
-   (Don Gilbert gilbertd@bio.indiana.edu 14 May 2001)
 
 
 SECTION C - Graphics
