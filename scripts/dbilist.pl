@@ -72,7 +72,7 @@ if (!$isindex) {
     $entpos = 300-$entrecordlen+($i*$entrecordlen);
     seek (ENT, $entpos, 0);
     read (ENT, $entrecord, $entrecordlen, 0);
-    ($entid,$entref, $entseq, $entfile) = unpack ("A$entidlen\V2v", $entrecord);
+    ($entid,$entref, $entseq, $entfile) = unpack ("A$entidlen"."V2v", $entrecord);
     print "Entry $i pos $entpos file $entfile offsets $entref,$entseq '$entid'\n";
     $i++;
   }
@@ -94,7 +94,7 @@ else {
 
       seek (ENT, 300-$entrecordlen+($entrec*$entrecordlen), 0);
       read (ENT, $entrecord, $entrecordlen, 0);
-      ($entid,$entref, $entseq, $entfile) = unpack ("A$entidlen\V2v", $entrecord);
+      ($entid,$entref, $entseq, $entfile) = unpack ("A$entidlen"."V2v", $entrecord);
 
       $recnum = $hitnum+$j-1;
       print "Hit record $recnum: Entry $entrec file $entfile offsets $entref,$entseq '$entid'\n";
