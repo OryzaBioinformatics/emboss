@@ -24,28 +24,25 @@ Usage
 
 % printsextract 
 Extract data from PRINTS
-Input file: ../../data/prints.test
+Full pathname of prints.dat: ../../data/prints.test
    
    Go to the input files for this example
    Go to the output files for this example
    
 Command line arguments
 
-   Mandatory qualifiers:
-  [-inf]               infile     Full pathname of prints.dat
+   Standard (Mandatory) qualifiers:
+  [-infile]            infile     Full pathname of prints.dat
 
-   Optional qualifiers: (none)
-   Advanced qualifiers: (none)
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers: (none)
    Associated qualifiers: (none)
    General qualifiers:
    -auto                boolean    Turn off prompts
    -stdout              boolean    Write standard output
    -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for required and optional values
+   -options             boolean    Prompt for standard and additional values
    -debug               boolean    Write debug output to program.dbg
-   -acdlog              boolean    Write ACD processing log to program.acdlog
-   -acdpretty           boolean    Rewrite ACD file as program.acdpretty
-   -acdtable            boolean    Write HTML table of options
    -verbose             boolean    Report some/full command line options
    -help                boolean    Report command line options. More
                                   information on associated and general
@@ -56,12 +53,12 @@ Command line arguments
    -die                 boolean    Report deaths
    
 
-   Mandatory qualifiers Allowed values Default
-   [-inf]
+   Standard (Mandatory) qualifiers Allowed values Default
+   [-infile]
    (Parameter 1) Full pathname of prints.dat Input file Required
-   Optional qualifiers Allowed values Default
+   Additional (Optional) qualifiers Allowed values Default
    (none)
-   Advanced qualifiers Allowed values Default
+   Advanced (Unprompted) qualifiers Allowed values Default
    (none)
    
 Input file format

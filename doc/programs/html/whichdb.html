@@ -141,10 +141,13 @@ databases.
 Search all databases for an entry
 ID or Accession number: <b>hsfau1</b>
 Output file [outfile.whichdb]: <b></b>
-Warning: Cannot open division file '<null>' for database 'qapirexc'
-
-   EMBOSS An error in ajseqdb.c at line 2525:
-seqCdQryOpen failed
+Warning: Cannot open division file '<null>' for database 'ensdnamasked'
+Warning: seqCdQry failed
+Warning: Cannot open division file '<null>' for database 'ensdnam'
+Warning: seqCdQry failed
+Error: socket connect failed for database 'tgb'
+socket connect failed for database 'tgb': <b></b>
+Connection timed out
 
 </pre></td></tr></table><p>
 <p>
@@ -160,28 +163,26 @@ seqCdQryOpen failed
 
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
-   Mandatory qualifiers (* if not always prompted):
+   Standard (Mandatory) qualifiers (* if not always prompted):
   [-entry]             string     ID or Accession number
 *  -outfile            outfile    Output file name
 
-   Optional qualifiers: (none)
-   Advanced qualifiers:
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers:
    -get                boolean    Retrieve sequences
    -showall            boolean    Show failed attempts
 
    Associated qualifiers:
-  "-outfile" related qualifiers
+
+   "-outfile" associated qualifiers
    -odirectory          string     Output directory
 
    General qualifiers:
    -auto                boolean    Turn off prompts
    -stdout              boolean    Write standard output
    -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for required and optional values
+   -options             boolean    Prompt for standard and additional values
    -debug               boolean    Write debug output to program.dbg
-   -acdlog              boolean    Write ACD processing log to program.acdlog
-   -acdpretty           boolean    Rewrite ACD file as program.acdpretty
-   -acdtable            boolean    Write HTML table of options
    -verbose             boolean    Report some/full command line options
    -help                boolean    Report command line options. More
                                   information on associated and general
@@ -197,7 +198,7 @@ seqCdQryOpen failed
 <P>
 <table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=2>Mandatory qualifiers</th>
+<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
 <th align="left">Allowed values</th>
 <th align="left">Default</th>
 </tr>
@@ -217,7 +218,7 @@ seqCdQryOpen failed
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=2>Optional qualifiers</th>
+<th align="left" colspan=2>Additional (Optional) qualifiers</th>
 <th align="left">Allowed values</th>
 <th align="left">Default</th>
 </tr>
@@ -227,7 +228,7 @@ seqCdQryOpen failed
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=2>Advanced qualifiers</th>
+<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
 <th align="left">Allowed values</th>
 <th align="left">Default</th>
 </tr>

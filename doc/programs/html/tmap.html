@@ -117,16 +117,17 @@ IT IS DONE FOR YOU.
 
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
-   Mandatory qualifiers:
-  [-msf]               seqset     File containing a sequence alignment
+   Standard (Mandatory) qualifiers:
+  [-sequences]         seqset     File containing a sequence alignment
    -graph              xygraph    Graph type
 
-   Optional qualifiers:
-   -outfile            outfile    Output file name
+   Additional (Optional) qualifiers:
+   -outfile            report     Output report file name
 
-   Advanced qualifiers: (none)
+   Advanced (Unprompted) qualifiers: (none)
    Associated qualifiers:
-  "-msf" related qualifiers
+
+   "-sequences" associated qualifiers
    -sbegin1             integer    First base used
    -send1               integer    Last base used, def=seq length
    -sreverse1           boolean    Reverse (if DNA)
@@ -136,13 +137,13 @@ IT IS DONE FOR YOU.
    -slower1             boolean    Make lower case
    -supper1             boolean    Make upper case
    -sformat1            string     Input sequence format
-   -sopenfile1          string     Input filename
    -sdbname1            string     Database name
    -sid1                string     Entryname
    -ufo1                string     UFO features
    -fformat1            string     Features format
    -fopenfile1          string     Features file name
-  "-graph" related qualifiers
+
+   "-graph" associated qualifiers
    -gprompt             boolean    Graph prompting
    -gtitle              string     Graph title
    -gsubtitle           string     Graph subtitle
@@ -150,18 +151,23 @@ IT IS DONE FOR YOU.
    -gytitle             string     Graph y axis title
    -goutfile            string     Output file for non interactive displays
    -gdirectory          string     Output directory
-  "-outfile" related qualifiers
-   -odirectory          string     Output directory
+
+   "-outfile" associated qualifiers
+   -rformat             string     Report format
+   -rname               string     Base file name
+   -rextension          string     File name extension
+   -rdirectory          string     Output directory
+   -raccshow            boolean    Show accession number in the report
+   -rdesshow            boolean    Show description in the report
+   -rscoreshow          boolean    Show the score in the report
+   -rusashow            boolean    Show the full USA in the report
 
    General qualifiers:
    -auto                boolean    Turn off prompts
    -stdout              boolean    Write standard output
    -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for required and optional values
+   -options             boolean    Prompt for standard and additional values
    -debug               boolean    Write debug output to program.dbg
-   -acdlog              boolean    Write ACD processing log to program.acdlog
-   -acdpretty           boolean    Rewrite ACD file as program.acdpretty
-   -acdtable            boolean    Write HTML table of options
    -verbose             boolean    Report some/full command line options
    -help                boolean    Report command line options. More
                                   information on associated and general
@@ -178,15 +184,15 @@ IT IS DONE FOR YOU.
 
 <table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=2>Mandatory qualifiers</th>
+<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
 <th align="left">Allowed values</th>
 <th align="left">Default</th>
 </tr>
 
 <tr>
-<td>[-msf]<br>(Parameter 1)</td>
+<td>[-sequences]<br>(Parameter 1)</td>
 <td>File containing a sequence alignment</td>
-<td>Readable sequences</td>
+<td>Readable set of sequences</td>
 <td><b>Required</b></td>
 </tr>
 
@@ -198,20 +204,20 @@ IT IS DONE FOR YOU.
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=2>Optional qualifiers</th>
+<th align="left" colspan=2>Additional (Optional) qualifiers</th>
 <th align="left">Allowed values</th>
 <th align="left">Default</th>
 </tr>
 
 <tr>
 <td>-outfile</td>
-<td>Output file name</td>
-<td>Output file</td>
-<td>tmap.res</td>
+<td>Output report file name</td>
+<td>Report output file</td>
+<td>&nbsp;</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=2>Advanced qualifiers</th>
+<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
 <th align="left">Allowed values</th>
 <th align="left">Default</th>
 </tr>
@@ -364,40 +370,47 @@ SQ   SEQUENCE   348 AA;  38892 MW;  07443BEA CRC32;
 <p><h3>File: tmap.res</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
-Program TMAP, version 46, to predict transmembrane segments from .msf file.
-The program reads a multiple alignment file of the GCG multiple sequence format
-and predicts membrane-spanning regions according to the algorithm in
-Persson &amp; Argos (1994), J. Mol. Biol. 237, 182-192.
+########################################
+# Program: tmap
+# Rundate: Thu Nov 27 15:25:53 2003
+# Report_format: seqtable
+# Report_file: tmap.res
+########################################
 
-RESULTS from program TMAP, edition 46'
+#=======================================
+#
+# Sequence: Consensus     from: 1   to: 348
+# HitCount: 7
+#=======================================
 
-Numbers give: a) number of transmembrane segment
-              b) start of TM segment (alignment position / residue number)
-              c) end of TM segment (alignment position / residue number)
-              d) length of TM segment within parentheses
+  Start     End TransMem Sequence
+     43      69        1 YMFLLIVLGFPINFLTLYVTVQHKKLR
+     73      97        2 NYILLNLAVADLFMVLGGFTSTLYT
+    112     140        3 LEGFFATLGGEIALWSLVVLAIERYVVVC
+    148     176        4 FGENHAIMGVAFTWVMALACAAPPLAGWS
+    201     229        5 ESFVIYMFVVHFTIPMIIIFFCYGQLVFT
+    255     275        6 IIMVIAFLICWVPYASVAFYI
+    282     302        7 NFGPIFMTIPAFFAKSAAIYN
 
-PREDICTED TRANSMEMBRANE SEGMENTS FOR ALIGNMENT 
+#---------------------------------------
+#---------------------------------------
+#=======================================
+#
+# Sequence: OPSD_HUMAN     from: 1   to: 348
+# HitCount: 7
+#=======================================
 
-  TM  1:   43 -   69  (27.0)
-  TM  2:   73 -   97  (25.0)
-  TM  3:  112 -  140  (29.0)
-  TM  4:  148 -  176  (29.0)
-  TM  5:  201 -  229  (29.0)
-  TM  6:  255 -  275  (21.0)
-  TM  7:  282 -  302  (21.0)
+  Start     End TransMem Sequence
+     43      69        1 YMFLLIVLGFPINFLTLYVTVQHKKLR
+     73      97        2 NYILLNLAVADLFMVLGGFTSTLYT
+    112     140        3 LEGFFATLGGEIALWSLVVLAIERYVVVC
+    148     176        4 FGENHAIMGVAFTWVMALACAAPPLAGWS
+    201     229        5 ESFVIYMFVVHFTIPMIIIFFCYGQLVFT
+    255     275        6 IIMVIAFLICWVPYASVAFYI
+    282     302        7 NFGPIFMTIPAFFAKSAAIYN
 
-
-PREDICTED TRANSMEMBRANE SEGMENTS FOR PROTEIN OPSD_HUMAN
-
-  TM  1:   43 -   69 (27)
-  TM  2:   73 -   97 (25)
-  TM  3:  112 -  140 (29)
-  TM  4:  148 -  176 (29)
-  TM  5:  201 -  229 (29)
-  TM  6:  255 -  275 (21)
-  TM  7:  282 -  302 (21)
-
-
+#---------------------------------------
+#---------------------------------------
 </pre>
 </td></tr></table><p>
 

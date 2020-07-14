@@ -54,19 +54,20 @@ Split a sequence into (overlapping) smaller sequences
    
 Command line arguments
 
-   Mandatory qualifiers:
+   Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Sequence database USA
   [-outseq]            seqoutall  Output sequence(s) USA
 
-   Optional qualifiers:
+   Additional (Optional) qualifiers:
    -size               integer    Size to split at
    -overlap            integer    Overlap between split sequences
 
-   Advanced qualifiers:
+   Advanced (Unprompted) qualifiers:
    -addoverlap         boolean    Add overlap to size
 
    Associated qualifiers:
-  "-sequence" related qualifiers
+
+   "-sequence" associated qualifiers
    -sbegin1             integer    First base used
    -send1               integer    Last base used, def=seq length
    -sreverse1           boolean    Reverse (if DNA)
@@ -76,13 +77,13 @@ Command line arguments
    -slower1             boolean    Make lower case
    -supper1             boolean    Make upper case
    -sformat1            string     Input sequence format
-   -sopenfile1          string     Input filename
    -sdbname1            string     Database name
    -sid1                string     Entryname
    -ufo1                string     UFO features
    -fformat1            string     Features format
    -fopenfile1          string     Features file name
-  "-outseq" related qualifiers
+
+   "-outseq" associated qualifiers
    -osformat2           string     Output seq format
    -osextension2        string     File name extension
    -osname2             string     Base file name
@@ -98,11 +99,8 @@ Command line arguments
    -auto                boolean    Turn off prompts
    -stdout              boolean    Write standard output
    -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for required and optional values
+   -options             boolean    Prompt for standard and additional values
    -debug               boolean    Write debug output to program.dbg
-   -acdlog              boolean    Write ACD processing log to program.acdlog
-   -acdpretty           boolean    Rewrite ACD file as program.acdpretty
-   -acdtable            boolean    Write HTML table of options
    -verbose             boolean    Report some/full command line options
    -help                boolean    Report command line options. More
                                   information on associated and general
@@ -113,16 +111,16 @@ Command line arguments
    -die                 boolean    Report deaths
    
 
-   Mandatory qualifiers Allowed values Default
+   Standard (Mandatory) qualifiers Allowed values Default
    [-sequence]
    (Parameter 1) Sequence database USA Readable sequence(s) Required
    [-outseq]
    (Parameter 2) Output sequence(s) USA Writeable sequence(s)
    <sequence>.format
-   Optional qualifiers Allowed values Default
+   Additional (Optional) qualifiers Allowed values Default
    -size Size to split at Integer 1 or more 10000
    -overlap Overlap between split sequences Integer 0 or more 0
-   Advanced qualifiers Allowed values Default
+   Advanced (Unprompted) qualifiers Allowed values Default
    -addoverlap Add overlap to size Boolean value Yes/No No
    
 Input File Format

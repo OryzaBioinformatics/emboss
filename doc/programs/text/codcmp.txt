@@ -23,6 +23,49 @@ Description
    the differences squared is reported in the output file, together with
    the number of unused codons.
    
+  Statistical significance
+  
+   Question:
+   
+   How do you interpret the statistical significance of any difference
+   between the tables?
+   
+   Answer:
+   
+   This is a very interesting question. I don't think that there is any
+   way to say if it is statistically significant just from looking at it,
+   as it is essentially a descriptive statistic about the difference
+   between two 64-mer vectors. If you have a whole lot of sequences and
+   codcmp results for all the possible pairwise comparisons, then the
+   resulting distance matrix can be used to build a phylogenetic tree
+   based on codon usage.
+   
+   However, if you generate a series of random sequences, measure their
+   codon usage and then do codcmp between each of your test sequences and
+   all the random sequences, you could then use a z-test to see if the
+   result between the two test sequences was outside of the top or bottom
+   5%.
+   
+   This would assume that the codcmp results were normally distributed,
+   but you could test that too. The simplest way is just to plot them and
+   look for a bell-curve. For more rigour, find the mean and standard
+   deviation of your results from the random sequences, use the normal
+   distribution equation to generate a theoretical distribution for that
+   mean and standard deviation, and then perform a chi square between the
+   random data and the theoretically generated normal distribution. If
+   you generate two sets of random data, each based on your two test
+   sequences, an F-test should be used to establish that they have equal
+   variances. Then you can safely go ahead and perform the z-test.
+   
+   You could use shuffle to base your random sequences on the test
+   sequences - so that would ensure the randomised background had the
+   same nucleotide content.
+   
+   F-tests, z-tests and chi-tests can all be done in Excel, as well as
+   being standard in most statistical analysis packages.
+   
+   Answered by Derek Gatherer <d.gatherer © vir.gla.ac.uk> 21 Nov 2003
+   
 Usage
 
    Here is a sample session with codcmp
@@ -41,26 +84,24 @@ Output file [outfile.codcmp]:
    
 Command line arguments
 
-   Mandatory qualifiers:
+   Standard (Mandatory) qualifiers:
   [-first]             codon      First codon usage file
-  [-second]            codon      Second codon usage file
+  [-second]            codon      Second codon usage file for comparison
   [-outfile]           outfile    Output file name
 
-   Optional qualifiers: (none)
-   Advanced qualifiers: (none)
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers: (none)
    Associated qualifiers:
-  "-outfile" related qualifiers
+
+   "-outfile" associated qualifiers
    -odirectory3         string     Output directory
 
    General qualifiers:
    -auto                boolean    Turn off prompts
    -stdout              boolean    Write standard output
    -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for required and optional values
+   -options             boolean    Prompt for standard and additional values
    -debug               boolean    Write debug output to program.dbg
-   -acdlog              boolean    Write ACD processing log to program.acdlog
-   -acdpretty           boolean    Rewrite ACD file as program.acdpretty
-   -acdtable            boolean    Write HTML table of options
    -verbose             boolean    Report some/full command line options
    -help                boolean    Report command line options. More
                                   information on associated and general
@@ -71,18 +112,18 @@ Command line arguments
    -die                 boolean    Report deaths
    
 
-   Mandatory qualifiers Allowed values Default
+   Standard (Mandatory) qualifiers Allowed values Default
    [-first]
    (Parameter 1) First codon usage file Codon usage file in EMBOSS data
    path Ehum.cut
    [-second]
-   (Parameter 2) Second codon usage file Codon usage file in EMBOSS data
-   path Ehum.cut
+   (Parameter 2) Second codon usage file for comparison Codon usage file
+   in EMBOSS data path Ehum.cut
    [-outfile]
    (Parameter 3) Output file name Output file <sequence>.codcmp
-   Optional qualifiers Allowed values Default
+   Additional (Optional) qualifiers Allowed values Default
    (none)
-   Advanced qualifiers Allowed values Default
+   Advanced (Unprompted) qualifiers Allowed values Default
    (none)
    
 Input file format

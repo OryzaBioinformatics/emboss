@@ -75,7 +75,7 @@ Mask off regions of a sequence.
    
 Command line arguments
 
-   Mandatory qualifiers:
+   Standard (Mandatory) qualifiers:
   [-sequence]          sequence   Sequence USA
    -regions            range      Regions to mask.
                                   A set of regions is specified by a set of
@@ -89,7 +89,7 @@ Command line arguments
                                   1,5,8,10,23,45,57,99
   [-outseq]            seqout     Output sequence USA
 
-   Optional qualifiers (* if not always prompted):
+   Additional (Optional) qualifiers (* if not always prompted):
    -tolower            boolean    The region can be 'masked' by converting the
                                   sequence characters to lower-case, some
                                   non-EMBOSS programs e.g. fasta can interpret
@@ -108,9 +108,10 @@ Command line arguments
                                   lower-case, just as with the '-lowercase'
                                   flag.
 
-   Advanced qualifiers: (none)
+   Advanced (Unprompted) qualifiers: (none)
    Associated qualifiers:
-  "-sequence" related qualifiers
+
+   "-sequence" associated qualifiers
    -sbegin1             integer    First base used
    -send1               integer    Last base used, def=seq length
    -sreverse1           boolean    Reverse (if DNA)
@@ -120,13 +121,13 @@ Command line arguments
    -slower1             boolean    Make lower case
    -supper1             boolean    Make upper case
    -sformat1            string     Input sequence format
-   -sopenfile1          string     Input filename
    -sdbname1            string     Database name
    -sid1                string     Entryname
    -ufo1                string     UFO features
    -fformat1            string     Features format
    -fopenfile1          string     Features file name
-  "-outseq" related qualifiers
+
+   "-outseq" associated qualifiers
    -osformat2           string     Output seq format
    -osextension2        string     File name extension
    -osname2             string     Base file name
@@ -142,11 +143,8 @@ Command line arguments
    -auto                boolean    Turn off prompts
    -stdout              boolean    Write standard output
    -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for required and optional values
+   -options             boolean    Prompt for standard and additional values
    -debug               boolean    Write debug output to program.dbg
-   -acdlog              boolean    Write ACD processing log to program.acdlog
-   -acdpretty           boolean    Rewrite ACD file as program.acdpretty
-   -acdtable            boolean    Write HTML table of options
    -verbose             boolean    Report some/full command line options
    -help                boolean    Report command line options. More
                                   information on associated and general
@@ -157,7 +155,7 @@ Command line arguments
    -die                 boolean    Report deaths
    
 
-   Mandatory qualifiers Allowed values Default
+   Standard (Mandatory) qualifiers Allowed values Default
    [-sequence]
    (Parameter 1) Sequence USA Readable sequence Required
    -regions Regions to mask. A set of regions is specified by a set of
@@ -167,7 +165,7 @@ Command line arguments
    range None
    [-outseq]
    (Parameter 2) Output sequence USA Writeable sequence <sequence>.format
-   Optional qualifiers Allowed values Default
+   Additional (Optional) qualifiers Allowed values Default
    -tolower The region can be 'masked' by converting the sequence
    characters to lower-case, some non-EMBOSS programs e.g. fasta can
    interpret this as a masked region. The sequence is unchanged apart
@@ -179,7 +177,7 @@ Command line arguments
    be the SPACE character or a null character, then the sequence is
    'masked' by changing it to lower-case, just as with the '-lowercase'
    flag. Any string is accepted 'X' for protein, 'N' for nucleic
-   Advanced qualifiers Allowed values Default
+   Advanced (Unprompted) qualifiers Allowed values Default
    (none)
    
 Input file format

@@ -97,16 +97,16 @@ iR gene for aliphatic amidase regulation
 
 Command line arguments
 
-   Mandatory qualifiers:
+   Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Sequence database USA
 
-   Optional qualifiers:
+   Additional (Optional) qualifiers:
    -outfile            outfile    If you enter the name of a file here then
                                   this program will write the sequence details
                                   into that file.
    -html               boolean    Format output as an HTML table
 
-   Advanced qualifiers:
+   Advanced (Unprompted) qualifiers:
    -only               boolean    This is a way of shortening the command line
                                   if you only want a few things to be
                                   displayed. Instead of specifying:
@@ -127,7 +127,8 @@ Command line arguments
    -description        boolean    Display 'description' column
 
    Associated qualifiers:
-  "-sequence" related qualifiers
+
+   "-sequence" associated qualifiers
    -sbegin1             integer    First base used
    -send1               integer    Last base used, def=seq length
    -sreverse1           boolean    Reverse (if DNA)
@@ -137,24 +138,21 @@ Command line arguments
    -slower1             boolean    Make lower case
    -supper1             boolean    Make upper case
    -sformat1            string     Input sequence format
-   -sopenfile1          string     Input filename
    -sdbname1            string     Database name
    -sid1                string     Entryname
    -ufo1                string     UFO features
    -fformat1            string     Features format
    -fopenfile1          string     Features file name
-  "-outfile" related qualifiers
+
+   "-outfile" associated qualifiers
    -odirectory          string     Output directory
 
    General qualifiers:
    -auto                boolean    Turn off prompts
    -stdout              boolean    Write standard output
    -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for required and optional values
+   -options             boolean    Prompt for standard and additional values
    -debug               boolean    Write debug output to program.dbg
-   -acdlog              boolean    Write ACD processing log to program.acdlog
-   -acdpretty           boolean    Rewrite ACD file as program.acdpretty
-   -acdtable            boolean    Write HTML table of options
    -verbose             boolean    Report some/full command line options
    -help                boolean    Report command line options. More
                                   information on associated and general
@@ -165,14 +163,14 @@ Command line arguments
    -die                 boolean    Report deaths
    
 
-   Mandatory qualifiers Allowed values Default
+   Standard (Mandatory) qualifiers Allowed values Default
    [-sequence]
    (Parameter 1) Sequence database USA Readable sequence(s) Required
-   Optional qualifiers Allowed values Default
+   Additional (Optional) qualifiers Allowed values Default
    -outfile If you enter the name of a file here then this program will
    write the sequence details into that file. Output file stdout
    -html Format output as an HTML table Boolean value Yes/No No
-   Advanced qualifiers Allowed values Default
+   Advanced (Unprompted) qualifiers Allowed values Default
    -only This is a way of shortening the command line if you only want a
    few things to be displayed. Instead of specifying: '-nohead -noname
    -noacc -notype -nopgc -nodesc' to get only the length output, you can

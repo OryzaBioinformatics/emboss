@@ -141,11 +141,11 @@ Trim poly-A tails off EST sequences
 
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
-   Mandatory qualifiers:
+   Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Sequence database USA
   [-outseq]            seqoutall  Output sequence(s) USA
 
-   Optional qualifiers:
+   Additional (Optional) qualifiers:
    -minlength          integer    This is the minimum length that a poly-A (or
                                   poly-T) tail must have before it is
                                   removed. If there are mismatches in the tail
@@ -174,7 +174,7 @@ Trim poly-A tails off EST sequences
                                   this option is not set, then the sense will
                                   not be changed.
 
-   Advanced qualifiers:
+   Advanced (Unprompted) qualifiers:
    -[no]fiveprime      boolean    If this is set true, then the 5' end of teh
                                   sequence is inspected for poly-T tails.
                                   These will be removed if they are longer
@@ -182,7 +182,8 @@ Trim poly-A tails off EST sequences
                                   then the 5' end is ignored.
 
    Associated qualifiers:
-  "-sequence" related qualifiers
+
+   "-sequence" associated qualifiers
    -sbegin1             integer    First base used
    -send1               integer    Last base used, def=seq length
    -sreverse1           boolean    Reverse (if DNA)
@@ -192,13 +193,13 @@ Trim poly-A tails off EST sequences
    -slower1             boolean    Make lower case
    -supper1             boolean    Make upper case
    -sformat1            string     Input sequence format
-   -sopenfile1          string     Input filename
    -sdbname1            string     Database name
    -sid1                string     Entryname
    -ufo1                string     UFO features
    -fformat1            string     Features format
    -fopenfile1          string     Features file name
-  "-outseq" related qualifiers
+
+   "-outseq" associated qualifiers
    -osformat2           string     Output seq format
    -osextension2        string     File name extension
    -osname2             string     Base file name
@@ -214,11 +215,8 @@ Trim poly-A tails off EST sequences
    -auto                boolean    Turn off prompts
    -stdout              boolean    Write standard output
    -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for required and optional values
+   -options             boolean    Prompt for standard and additional values
    -debug               boolean    Write debug output to program.dbg
-   -acdlog              boolean    Write ACD processing log to program.acdlog
-   -acdpretty           boolean    Rewrite ACD file as program.acdpretty
-   -acdtable            boolean    Write HTML table of options
    -verbose             boolean    Report some/full command line options
    -help                boolean    Report command line options. More
                                   information on associated and general
@@ -234,7 +232,7 @@ Trim poly-A tails off EST sequences
 <P>
 <table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=2>Mandatory qualifiers</th>
+<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
 <th align="left">Allowed values</th>
 <th align="left">Default</th>
 </tr>
@@ -254,7 +252,7 @@ Trim poly-A tails off EST sequences
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=2>Optional qualifiers</th>
+<th align="left" colspan=2>Additional (Optional) qualifiers</th>
 <th align="left">Allowed values</th>
 <th align="left">Default</th>
 </tr>
@@ -282,7 +280,7 @@ For example the terminal 4 A's of GCAGAAAA would be removed with the default val
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=2>Advanced qualifiers</th>
+<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
 <th align="left">Allowed values</th>
 <th align="left">Default</th>
 </tr>

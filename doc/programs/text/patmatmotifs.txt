@@ -81,11 +81,11 @@ Output report [opsd_human.patmatmotifs]:
    
 Command line arguments
 
-   Mandatory qualifiers:
+   Standard (Mandatory) qualifiers:
   [-sequence]          sequence   Sequence USA
   [-outfile]           report     Output report file name
 
-   Optional qualifiers:
+   Additional (Optional) qualifiers:
    -full               boolean    Provide full documentation for matching
                                   patterns
    -[no]prune          boolean    Ignore simple patterns. If this is true then
@@ -95,9 +95,10 @@ Command line arguments
                                   camp_phospho_site, pkc_phospho_site,
                                   ck2_phospho_site, and tyr_phospho_site.
 
-   Advanced qualifiers: (none)
+   Advanced (Unprompted) qualifiers: (none)
    Associated qualifiers:
-  "-sequence" related qualifiers
+
+   "-sequence" associated qualifiers
    -sbegin1             integer    First base used
    -send1               integer    Last base used, def=seq length
    -sreverse1           boolean    Reverse (if DNA)
@@ -107,13 +108,13 @@ Command line arguments
    -slower1             boolean    Make lower case
    -supper1             boolean    Make upper case
    -sformat1            string     Input sequence format
-   -sopenfile1          string     Input filename
    -sdbname1            string     Database name
    -sid1                string     Entryname
    -ufo1                string     UFO features
    -fformat1            string     Features format
    -fopenfile1          string     Features file name
-  "-outfile" related qualifiers
+
+   "-outfile" associated qualifiers
    -rformat2            string     Report format
    -rname2              string     Base file name
    -rextension2         string     File name extension
@@ -127,11 +128,8 @@ Command line arguments
    -auto                boolean    Turn off prompts
    -stdout              boolean    Write standard output
    -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for required and optional values
+   -options             boolean    Prompt for standard and additional values
    -debug               boolean    Write debug output to program.dbg
-   -acdlog              boolean    Write ACD processing log to program.acdlog
-   -acdpretty           boolean    Rewrite ACD file as program.acdpretty
-   -acdtable            boolean    Write HTML table of options
    -verbose             boolean    Report some/full command line options
    -help                boolean    Report command line options. More
                                   information on associated and general
@@ -142,19 +140,19 @@ Command line arguments
    -die                 boolean    Report deaths
    
 
-   Mandatory qualifiers Allowed values Default
+   Standard (Mandatory) qualifiers Allowed values Default
    [-sequence]
    (Parameter 1) Sequence USA Readable sequence Required
    [-outfile]
    (Parameter 2) Output report file name Report output file
-   Optional qualifiers Allowed values Default
+   Additional (Optional) qualifiers Allowed values Default
    -full Provide full documentation for matching patterns Boolean value
    Yes/No No
    -[no]prune Ignore simple patterns. If this is true then these simple
    post-translational modification sites are not reported: myristyl,
    asn_glycosylation, camp_phospho_site, pkc_phospho_site,
    ck2_phospho_site, and tyr_phospho_site. Boolean value Yes/No Yes
-   Advanced qualifiers Allowed values Default
+   Advanced (Unprompted) qualifiers Allowed values Default
    (none)
    
 Input file format
@@ -296,7 +294,7 @@ Output file format
   
 ########################################
 # Program: patmatmotifs
-# Rundate: Thu May 22 10:36:41 2003
+# Rundate: Thu Nov 27 15:22:43 2003
 # Report_format: dbmotif
 # Report_file: opsd_human.patmatmotifs
 ########################################
@@ -308,8 +306,7 @@ Output file format
 #
 # Full: Yes
 # Prune: Yes
-# Data_file: /packages/emboss_dev/gwilliam/emboss/emboss/emboss/data/PROSITE/pr
-osite.lines
+# Data_file: ../prosextract-keep/PROSITE/prosite.lines
 #
 #=======================================
 
@@ -481,13 +478,13 @@ See also
     Program name                         Description
    antigenic      Finds antigenic sites in proteins
    digest         Protein proteolytic enzyme or reagent cleavage digest
+   epestfind      Finds PEST motifs as potential proteolytic cleavage sites
    fuzzpro        Protein pattern search
    fuzztran       Protein pattern search after translation
    helixturnhelix Report nucleic acid binding motifs
    oddcomp        Finds protein sequence regions with a biased composition
    patmatdb       Search a protein sequence with a motif
    pepcoil        Predicts coiled coil regions
-   pestfind       Finds PEST motifs as potential proteolytic cleavage sites
    preg           Regular expression search of a protein sequence
    pscan          Scans proteins using PRINTS
    sigcleave      Reports protein signal cleavage sites

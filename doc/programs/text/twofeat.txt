@@ -84,7 +84,7 @@ Output report [hsfau.twofeat]:
    
 Command line arguments
 
-   Mandatory qualifiers:
+   Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Sequence database USA
    -atype              string     By default every feature in the feature
                                   table is allowed. You can set this to be any
@@ -116,12 +116,9 @@ Command line arguments
                                   then no min or max range is specified
    -maxrange           integer    If this is less than or equal to 'minrange',
                                   then no min or max range is specified
-  [-outfile]           report     File for output of neighbouring feature
-                                  regions. This contains details of the pairs
-                                  of features. By default, it is written in
-                                  TABLE format.
+  [-outfile]           report     Output report file name
 
-   Optional qualifiers (* if not always prompted):
+   Additional (Optional) qualifiers (* if not always prompted):
    -asource            string     By default any feature source in the feature
                                   table is allowed. You can set this to match
                                   any feature source you wish to allow.
@@ -285,9 +282,10 @@ Command line arguments
                                   specify an invalid feature type name, then
                                   the default name 'misc_feature' is used.
 
-   Advanced qualifiers: (none)
+   Advanced (Unprompted) qualifiers: (none)
    Associated qualifiers:
-  "-sequence" related qualifiers
+
+   "-sequence" associated qualifiers
    -sbegin1             integer    First base used
    -send1               integer    Last base used, def=seq length
    -sreverse1           boolean    Reverse (if DNA)
@@ -297,13 +295,13 @@ Command line arguments
    -slower1             boolean    Make lower case
    -supper1             boolean    Make upper case
    -sformat1            string     Input sequence format
-   -sopenfile1          string     Input filename
    -sdbname1            string     Database name
    -sid1                string     Entryname
    -ufo1                string     UFO features
    -fformat1            string     Features format
    -fopenfile1          string     Features file name
-  "-outfile" related qualifiers
+
+   "-outfile" associated qualifiers
    -rformat2            string     Report format
    -rname2              string     Base file name
    -rextension2         string     File name extension
@@ -317,11 +315,8 @@ Command line arguments
    -auto                boolean    Turn off prompts
    -stdout              boolean    Write standard output
    -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for required and optional values
+   -options             boolean    Prompt for standard and additional values
    -debug               boolean    Write debug output to program.dbg
-   -acdlog              boolean    Write ACD processing log to program.acdlog
-   -acdpretty           boolean    Rewrite ACD file as program.acdpretty
-   -acdtable            boolean    Write HTML table of options
    -verbose             boolean    Report some/full command line options
    -help                boolean    Report command line options. More
                                   information on associated and general
@@ -332,7 +327,7 @@ Command line arguments
    -die                 boolean    Report deaths
    
 
-   Mandatory qualifiers Allowed values Default
+   Standard (Mandatory) qualifiers Allowed values Default
    [-sequence]
    (Parameter 1) Sequence database USA Readable sequence(s) Required
    -atype By default every feature in the feature table is allowed. You
@@ -356,10 +351,8 @@ Command line arguments
    -maxrange If this is less than or equal to 'minrange', then no min or
    max range is specified Any integer value 0
    [-outfile]
-   (Parameter 2) File for output of neighbouring feature regions. This
-   contains details of the pairs of features. By default, it is written
-   in TABLE format. Report output file
-   Optional qualifiers Allowed values Default
+   (Parameter 2) Output report file name Report output file
+   Additional (Optional) qualifiers Allowed values Default
    -asource By default any feature source in the feature table is
    allowed. You can set this to match any feature source you wish to
    allow. The source name is usually either the name of the program that
@@ -493,7 +486,7 @@ Command line arguments
    feature types. If you specify an invalid feature type name, then the
    default name 'misc_feature' is used. Any string is accepted
    misc_feature
-   Advanced qualifiers Allowed values Default
+   Advanced (Unprompted) qualifiers Allowed values Default
    (none)
    
 Input file format
@@ -616,7 +609,7 @@ Output file format
   
 ########################################
 # Program: twofeat
-# Rundate: Thu May 22 10:59:08 2003
+# Rundate: Thu Nov 27 15:25:59 2003
 # Report_format: table
 # Report_file: hsfau.twofeat
 ########################################
@@ -637,6 +630,14 @@ Output file format
   
   File: hsfau.twofeat
   
+##gff-version 2.0
+##date 2003-11-27
+##Type DNA HSFAU
+HSFAU   EMBL    polyA_signal    484     489     0.000   +       .       Sequenc
+e "HSFAU.6"
+HSFAU   EMBL    polyA_site      509     509     0.000   +       .       Sequenc
+e "HSFAU.7" ; FeatFlags "0x40"
+   
 Data files
 
    None.

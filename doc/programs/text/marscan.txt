@@ -73,14 +73,14 @@ Usage
 % marscan 
 Finds MAR/SAR sites in nucleic sequences
 Input sequence(s): tembl:u01317
-Output feature report [hshbb.marscan]: 
+Output report [hshbb.marscan]: 
    
    Go to the input files for this example
    Go to the output files for this example
    
 Command line arguments
 
-   Mandatory qualifiers:
+   Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Sequence database USA
   [-outfile]           report     File for output of MAR/SAR recognition
                                   signature (MRS) regions. This contains
@@ -90,10 +90,11 @@ Command line arguments
                                   strand of the genomic DNA, within 200 bp of
                                   each other.
 
-   Optional qualifiers: (none)
-   Advanced qualifiers: (none)
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers: (none)
    Associated qualifiers:
-  "-sequence" related qualifiers
+
+   "-sequence" associated qualifiers
    -sbegin1             integer    First base used
    -send1               integer    Last base used, def=seq length
    -sreverse1           boolean    Reverse (if DNA)
@@ -103,13 +104,13 @@ Command line arguments
    -slower1             boolean    Make lower case
    -supper1             boolean    Make upper case
    -sformat1            string     Input sequence format
-   -sopenfile1          string     Input filename
    -sdbname1            string     Database name
    -sid1                string     Entryname
    -ufo1                string     UFO features
    -fformat1            string     Features format
    -fopenfile1          string     Features file name
-  "-outfile" related qualifiers
+
+   "-outfile" associated qualifiers
    -rformat2            string     Report format
    -rname2              string     Base file name
    -rextension2         string     File name extension
@@ -123,11 +124,8 @@ Command line arguments
    -auto                boolean    Turn off prompts
    -stdout              boolean    Write standard output
    -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for required and optional values
+   -options             boolean    Prompt for standard and additional values
    -debug               boolean    Write debug output to program.dbg
-   -acdlog              boolean    Write ACD processing log to program.acdlog
-   -acdpretty           boolean    Rewrite ACD file as program.acdpretty
-   -acdtable            boolean    Write HTML table of options
    -verbose             boolean    Report some/full command line options
    -help                boolean    Report command line options. More
                                   information on associated and general
@@ -138,7 +136,7 @@ Command line arguments
    -die                 boolean    Report deaths
    
 
-   Mandatory qualifiers Allowed values Default
+   Standard (Mandatory) qualifiers Allowed values Default
    [-sequence]
    (Parameter 1) Sequence database USA Readable sequence(s) Required
    [-outfile]
@@ -147,9 +145,9 @@ Command line arguments
    MRS consists of two recognition sites, one of 8 bp and one of 16 bp on
    either sense strand of the genomic DNA, within 200 bp of each other.
    Report output file
-   Optional qualifiers Allowed values Default
+   Additional (Optional) qualifiers Allowed values Default
    (none)
-   Advanced qualifiers Allowed values Default
+   Advanced (Unprompted) qualifiers Allowed values Default
    (none)
    
 Input file format
@@ -341,7 +339,7 @@ Output file format
   File: hshbb.marscan
   
 ##gff-version 2.0
-##date 2003-05-22
+##date 2003-11-27
 ##Type DNA HSHBB
 HSHBB   marscan misc_signal     2242    2458    0.000   +       .       Sequenc
 e "HSHBB.1" ; note "*type MAR/SAR recognition site (MRS)" ; note "*start8bp 245

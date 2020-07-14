@@ -70,7 +70,7 @@ Output report [hsfau.restrict]:
    
 Command line arguments
 
-   Mandatory qualifiers:
+   Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Sequence database USA
    -sitelen            integer    This sets the minimum length of the
                                   restriction enzyme recognition site. Any
@@ -100,8 +100,8 @@ Command line arguments
                                   PpiI
   [-outfile]           report     Output report file name
 
-   Optional qualifiers: (none)
-   Advanced qualifiers:
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers:
    -min                integer    This sets the minimum number of cuts for any
                                   restriction enzyme that will be considered.
                                   Any enzymes that cut fewer times than this
@@ -170,7 +170,8 @@ Command line arguments
    -name               boolean    Show sequence name
 
    Associated qualifiers:
-  "-sequence" related qualifiers
+
+   "-sequence" associated qualifiers
    -sbegin1             integer    First base used
    -send1               integer    Last base used, def=seq length
    -sreverse1           boolean    Reverse (if DNA)
@@ -180,13 +181,13 @@ Command line arguments
    -slower1             boolean    Make lower case
    -supper1             boolean    Make upper case
    -sformat1            string     Input sequence format
-   -sopenfile1          string     Input filename
    -sdbname1            string     Database name
    -sid1                string     Entryname
    -ufo1                string     UFO features
    -fformat1            string     Features format
    -fopenfile1          string     Features file name
-  "-outfile" related qualifiers
+
+   "-outfile" associated qualifiers
    -rformat2            string     Report format
    -rname2              string     Base file name
    -rextension2         string     File name extension
@@ -200,11 +201,8 @@ Command line arguments
    -auto                boolean    Turn off prompts
    -stdout              boolean    Write standard output
    -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for required and optional values
+   -options             boolean    Prompt for standard and additional values
    -debug               boolean    Write debug output to program.dbg
-   -acdlog              boolean    Write ACD processing log to program.acdlog
-   -acdpretty           boolean    Rewrite ACD file as program.acdpretty
-   -acdtable            boolean    Write HTML table of options
    -verbose             boolean    Report some/full command line options
    -help                boolean    Report command line options. More
                                   information on associated and general
@@ -215,7 +213,7 @@ Command line arguments
    -die                 boolean    Report deaths
    
 
-   Mandatory qualifiers Allowed values Default
+   Standard (Mandatory) qualifiers Allowed values Default
    [-sequence]
    (Parameter 1) Sequence database USA Readable sequence(s) Required
    -sitelen This sets the minimum length of the restriction enzyme
@@ -234,9 +232,9 @@ Command line arguments
    HinfI PpiI Any string is accepted all
    [-outfile]
    (Parameter 2) Output report file name Report output file
-   Optional qualifiers Allowed values Default
+   Additional (Optional) qualifiers Allowed values Default
    (none)
-   Advanced qualifiers Allowed values Default
+   Advanced (Unprompted) qualifiers Allowed values Default
    -min This sets the minimum number of cuts for any restriction enzyme
    that will be considered. Any enzymes that cut fewer times than this
    will be ignored. Integer from 1 to 1000 1
@@ -408,7 +406,7 @@ Output file format
   
 ########################################
 # Program: restrict
-# Rundate: Thu May 22 13:31:43 2003
+# Rundate: Thu Nov 27 15:23:42 2003
 # Report_format: table
 # Report_file: hsfau.restrict
 ########################################
@@ -492,7 +490,7 @@ Output file format
   
 ########################################
 # Program: restrict
-# Rundate: Thu May 22 15:01:50 2003
+# Rundate: Thu Nov 27 15:23:43 2003
 # Report_format: table
 # Report_file: hsfau.restrict
 ########################################
@@ -602,7 +600,7 @@ Output file format
   
 ########################################
 # Program: restrict
-# Rundate: Thu May 22 15:02:58 2003
+# Rundate: Thu Nov 27 15:23:43 2003
 # Report_format: table
 # Report_file: hsfau.restrict
 ########################################
@@ -654,50 +652,50 @@ Output file format
 
   [Part of this file has been deleted for brevity]
 
-# [ACTGG]
+# [CCNNNNNNNGG]
 #       15      36      77      95      99      196
 #
 # BsrI:
-# [CCNGG]
+# [ACTGG]
 #       70      151     297
 #
 # BssKI:
-# [CCWGG]
+# [CCNGG]
 #       15      21      30      45      51      54
 #       76      226
 #
 # EcoRII:
-# [GGCC]
+# [CCWGG]
 #       15      30      45      51      75      76
 #       226
 #
 # HaeIII:
-# [GCGC]
+# [GGCC]
 #       10      17      25      35      39      79
 #       103     104     106
 #
 # HhaI:
-# [GAYNNNNNVTC]
+# [GCGC]
 #       2       75      117     118     206
 #
 # Hin4I:
-# [GCGC]
+# [GAYNNNNNVTC]
 #       32      116     370
 #
 # Hin6I:
-# [GTYRAC]
+# [GCGC]
 #       2       73      117     120     206
 #
 # HindII:
-# [CCGG]
+# [GTYRAC]
 #       111     407
 #
 # HpaII:
-# [ACGT]
+# [CCGG]
 #       59      103     123     233
 #
 # MaeII:
-# [TCGA]
+# [ACGT]
 #       109     409
 #
 # TaqI:

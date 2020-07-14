@@ -31,19 +31,20 @@ Output report [laci_ecoli.hth]:
    
 Command line arguments
 
-   Mandatory qualifiers:
+   Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Sequence database USA
   [-outfile]           report     Output report file name
 
-   Optional qualifiers:
+   Additional (Optional) qualifiers:
    -mean               float      Mean value
    -sd                 float      Standard Deviation value
    -minsd              float      Minimum SD
    -eightyseven        boolean    Use the old (1987) weight data
 
-   Advanced qualifiers: (none)
+   Advanced (Unprompted) qualifiers: (none)
    Associated qualifiers:
-  "-sequence" related qualifiers
+
+   "-sequence" associated qualifiers
    -sbegin1             integer    First base used
    -send1               integer    Last base used, def=seq length
    -sreverse1           boolean    Reverse (if DNA)
@@ -53,13 +54,13 @@ Command line arguments
    -slower1             boolean    Make lower case
    -supper1             boolean    Make upper case
    -sformat1            string     Input sequence format
-   -sopenfile1          string     Input filename
    -sdbname1            string     Database name
    -sid1                string     Entryname
    -ufo1                string     UFO features
    -fformat1            string     Features format
    -fopenfile1          string     Features file name
-  "-outfile" related qualifiers
+
+   "-outfile" associated qualifiers
    -rformat2            string     Report format
    -rname2              string     Base file name
    -rextension2         string     File name extension
@@ -73,11 +74,8 @@ Command line arguments
    -auto                boolean    Turn off prompts
    -stdout              boolean    Write standard output
    -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for required and optional values
+   -options             boolean    Prompt for standard and additional values
    -debug               boolean    Write debug output to program.dbg
-   -acdlog              boolean    Write ACD processing log to program.acdlog
-   -acdpretty           boolean    Rewrite ACD file as program.acdpretty
-   -acdtable            boolean    Write HTML table of options
    -verbose             boolean    Report some/full command line options
    -help                boolean    Report command line options. More
                                   information on associated and general
@@ -88,17 +86,17 @@ Command line arguments
    -die                 boolean    Report deaths
    
 
-   Mandatory qualifiers Allowed values Default
+   Standard (Mandatory) qualifiers Allowed values Default
    [-sequence]
    (Parameter 1) Sequence database USA Readable sequence(s) Required
    [-outfile]
    (Parameter 2) Output report file name Report output file
-   Optional qualifiers Allowed values Default
+   Additional (Optional) qualifiers Allowed values Default
    -mean Mean value Number from 1.000 to 10000.000 238.71
    -sd Standard Deviation value Number from 1.000 to 10000.000 293.61
    -minsd Minimum SD Number from 0.000 to 100.000 2.5
    -eightyseven Use the old (1987) weight data Boolean value Yes/No No
-   Advanced qualifiers Allowed values Default
+   Advanced (Unprompted) qualifiers Allowed values Default
    (none)
    
 Input file format
@@ -240,7 +238,7 @@ Output file format
   
 ########################################
 # Program: helixturnhelix
-# Rundate: Thu May 22 10:33:02 2003
+# Rundate: Thu Nov 27 15:22:12 2003
 # Report_format: motif
 # Report_file: laci_ecoli.hth
 ########################################
@@ -271,9 +269,13 @@ Data files
 
    The data files are stored in the standard EMBOSS data directory. The
    names are:
+   
      * Ehth.dat matrix file
      * Ehth87.dat 1987 shorter matrix file
        
+   The old (1987) data has a motif length of 20 residues, whilst the
+   default data (Ehth.dat) has a motif length of 22 residues.
+   
    With care these can be replaced to suit your data sets. If the files
    are placed in the following directories they will be used in
    preference to the files in the EMBOSS distribution data directory:
@@ -347,6 +349,7 @@ See also
    Program name                        Description
    antigenic    Finds antigenic sites in proteins
    digest       Protein proteolytic enzyme or reagent cleavage digest
+   epestfind    Finds PEST motifs as potential proteolytic cleavage sites
    fuzzpro      Protein pattern search
    fuzztran     Protein pattern search after translation
    garnier      Predicts protein secondary structure
@@ -357,7 +360,6 @@ See also
    pepcoil      Predicts coiled coil regions
    pepnet       Displays proteins as a helical net
    pepwheel     Shows protein sequences as helices
-   pestfind     Finds PEST motifs as potential proteolytic cleavage sites
    preg         Regular expression search of a protein sequence
    pscan        Scans proteins using PRINTS
    sigcleave    Reports protein signal cleavage sites

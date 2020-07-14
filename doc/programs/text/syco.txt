@@ -38,13 +38,13 @@ Created syco.ps
    
 Command line arguments
 
-   Mandatory qualifiers (* if not always prompted):
+   Standard (Mandatory) qualifiers (* if not always prompted):
   [-sequence]          sequence   Sequence USA
 *  -graph              xygraph    Graph type
 *  -outfile            outfile    Output file name
 
-   Optional qualifiers: (none)
-   Advanced qualifiers:
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers:
    -cfile              codon      Codon usage file
    -window             integer    Averaging window
    -uncommon           boolean    Show common codon usage
@@ -52,7 +52,8 @@ Command line arguments
    -plot               boolean    Produce plot
 
    Associated qualifiers:
-  "-sequence" related qualifiers
+
+   "-sequence" associated qualifiers
    -sbegin1             integer    First base used
    -send1               integer    Last base used, def=seq length
    -sreverse1           boolean    Reverse (if DNA)
@@ -62,13 +63,13 @@ Command line arguments
    -slower1             boolean    Make lower case
    -supper1             boolean    Make upper case
    -sformat1            string     Input sequence format
-   -sopenfile1          string     Input filename
    -sdbname1            string     Database name
    -sid1                string     Entryname
    -ufo1                string     UFO features
    -fformat1            string     Features format
    -fopenfile1          string     Features file name
-  "-graph" related qualifiers
+
+   "-graph" associated qualifiers
    -gprompt             boolean    Graph prompting
    -gtitle              string     Graph title
    -gsubtitle           string     Graph subtitle
@@ -76,18 +77,16 @@ Command line arguments
    -gytitle             string     Graph y axis title
    -goutfile            string     Output file for non interactive displays
    -gdirectory          string     Output directory
-  "-outfile" related qualifiers
+
+   "-outfile" associated qualifiers
    -odirectory          string     Output directory
 
    General qualifiers:
    -auto                boolean    Turn off prompts
    -stdout              boolean    Write standard output
    -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for required and optional values
+   -options             boolean    Prompt for standard and additional values
    -debug               boolean    Write debug output to program.dbg
-   -acdlog              boolean    Write ACD processing log to program.acdlog
-   -acdpretty           boolean    Rewrite ACD file as program.acdpretty
-   -acdtable            boolean    Write HTML table of options
    -verbose             boolean    Report some/full command line options
    -help                boolean    Report command line options. More
                                   information on associated and general
@@ -98,7 +97,7 @@ Command line arguments
    -die                 boolean    Report deaths
    
 
-   Mandatory qualifiers Allowed values Default
+   Standard (Mandatory) qualifiers Allowed values Default
    [-sequence]
    (Parameter 1) Sequence USA Readable sequence Required
    -graph Graph type EMBOSS has a list of known devices, including
@@ -106,9 +105,9 @@ Command line arguments
    x11, tektronics, tekt, tek4107t, tek, none, null, text, data, xterm,
    png EMBOSS_GRAPHICS value, or x11
    -outfile Output file name Output file <sequence>.syco
-   Optional qualifiers Allowed values Default
+   Additional (Optional) qualifiers Allowed values Default
    (none)
-   Advanced qualifiers Allowed values Default
+   Advanced (Unprompted) qualifiers Allowed values Default
    -cfile Codon usage file Codon usage file in EMBOSS data path Ehum.cut
    -window Averaging window Any integer value 30
    -uncommon Show common codon usage Boolean value Yes/No No

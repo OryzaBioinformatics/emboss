@@ -155,13 +155,13 @@ IT IS DONE FOR YOU.
 
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
-   Mandatory qualifiers:
-  [-sequencea]         sequence   Sequence USA
+   Standard (Mandatory) qualifiers:
+  [-sequence]          sequence   Sequence USA
    -menu               menu       Select number
   [-outfile]           report     Output report file name
 
-   Optional qualifiers: (none)
-   Advanced qualifiers:
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers:
    -unfavoured         boolean    Trypsin will not normally cut after a K if
                                   it is followed by (e.g.) another K or a P.
                                   Specifying this shows those cuts. as well as
@@ -176,7 +176,8 @@ IT IS DONE FOR YOU.
                                   than one potential cut site are included.
 
    Associated qualifiers:
-  "-sequencea" related qualifiers
+
+   "-sequence" associated qualifiers
    -sbegin1             integer    First base used
    -send1               integer    Last base used, def=seq length
    -sreverse1           boolean    Reverse (if DNA)
@@ -186,13 +187,13 @@ IT IS DONE FOR YOU.
    -slower1             boolean    Make lower case
    -supper1             boolean    Make upper case
    -sformat1            string     Input sequence format
-   -sopenfile1          string     Input filename
    -sdbname1            string     Database name
    -sid1                string     Entryname
    -ufo1                string     UFO features
    -fformat1            string     Features format
    -fopenfile1          string     Features file name
-  "-outfile" related qualifiers
+
+   "-outfile" associated qualifiers
    -rformat2            string     Report format
    -rname2              string     Base file name
    -rextension2         string     File name extension
@@ -206,11 +207,8 @@ IT IS DONE FOR YOU.
    -auto                boolean    Turn off prompts
    -stdout              boolean    Write standard output
    -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for required and optional values
+   -options             boolean    Prompt for standard and additional values
    -debug               boolean    Write debug output to program.dbg
-   -acdlog              boolean    Write ACD processing log to program.acdlog
-   -acdpretty           boolean    Rewrite ACD file as program.acdpretty
-   -acdtable            boolean    Write HTML table of options
    -verbose             boolean    Report some/full command line options
    -help                boolean    Report command line options. More
                                   information on associated and general
@@ -227,13 +225,13 @@ IT IS DONE FOR YOU.
 
 <table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=2>Mandatory qualifiers</th>
+<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
 <th align="left">Allowed values</th>
 <th align="left">Default</th>
 </tr>
 
 <tr>
-<td>[-sequencea]<br>(Parameter 1)</td>
+<td>[-sequence]<br>(Parameter 1)</td>
 <td>Sequence USA</td>
 <td>Readable sequence</td>
 <td><b>Required</b></td>
@@ -254,7 +252,7 @@ IT IS DONE FOR YOU.
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=2>Optional qualifiers</th>
+<th align="left" colspan=2>Additional (Optional) qualifiers</th>
 <th align="left">Allowed values</th>
 <th align="left">Default</th>
 </tr>
@@ -264,7 +262,7 @@ IT IS DONE FOR YOU.
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=2>Advanced qualifiers</th>
+<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
 <th align="left">Allowed values</th>
 <th align="left">Default</th>
 </tr>
@@ -470,7 +468,7 @@ By default <b>digest</b> writes a 'seqtable' report file.
 <pre>
 ########################################
 # Program: digest
-# Rundate: Thu May 22 10:23:38 2003
+# Rundate: Thu Nov 27 15:19:44 2003
 # Report_format: seqtable
 # Report_file: opsd_human.digest
 ########################################
@@ -583,6 +581,7 @@ None.
 <table border cellpadding=4 bgcolor="#FFFFF0">
 <tr><th>Program name</th><th>Description</th></tr>
 <tr><td><a href="antigenic.html">antigenic</a></td><td>Finds antigenic sites in proteins</td></tr>
+<tr><td><a href="epestfind.html">epestfind</a></td><td>Finds PEST motifs as potential proteolytic cleavage sites</td></tr>
 <tr><td><a href="fuzzpro.html">fuzzpro</a></td><td>Protein pattern search</td></tr>
 <tr><td><a href="fuzztran.html">fuzztran</a></td><td>Protein pattern search after translation</td></tr>
 <tr><td><a href="helixturnhelix.html">helixturnhelix</a></td><td>Report nucleic acid binding motifs</td></tr>
@@ -590,7 +589,6 @@ None.
 <tr><td><a href="patmatdb.html">patmatdb</a></td><td>Search a protein sequence with a motif</td></tr>
 <tr><td><a href="patmatmotifs.html">patmatmotifs</a></td><td>Search a PROSITE motif database with a protein sequence</td></tr>
 <tr><td><a href="pepcoil.html">pepcoil</a></td><td>Predicts coiled coil regions</td></tr>
-<tr><td><a href="pestfind.html">pestfind</a></td><td>Finds PEST motifs as potential proteolytic cleavage sites</td></tr>
 <tr><td><a href="preg.html">preg</a></td><td>Regular expression search of a protein sequence</td></tr>
 <tr><td><a href="pscan.html">pscan</a></td><td>Scans proteins using PRINTS</td></tr>
 <tr><td><a href="sigcleave.html">sigcleave</a></td><td>Reports protein signal cleavage sites</td></tr>

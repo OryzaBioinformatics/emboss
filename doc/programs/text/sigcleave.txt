@@ -9,6 +9,10 @@ Function
    
 Description
 
+   Signal peptides mediate translocation across the ER membrane in
+   eukaryotes. In prokaryotes signal peptides mediate translocation
+   across the inner and outer membranes.
+   
    sigcleave predicts the site of cleavage between a signal sequence and
    the mature exported protein. The predictive accuracy is estimated to
    be around 75-80% for both prokaryotic and eukaryotic proteins.
@@ -16,6 +20,26 @@ Description
    sigcleave uses the method of von Heijne as modified by von Heijne in
    his later book where treatment of positions -1 and -3 in the matrix is
    slightly altered (see references).
+   
+  Why isn't there a cutoff to eliminate internal sites?
+  
+   The program predicts cleavage sites inside the whole protein. Apart
+   from the N-terminal sites, the other sites are not biologically
+   relevant. Why isn't there a cutoff to eliminate internal sites?
+   
+   The answer is partly because these sites can be relevant in some
+   biological cases (additional pre-processing for example), but mostly
+   because ...
+   
+   There is one thing in bioinformatics you can not be certain of ... the
+   start of a protein sequence. The end is easy to predict. The start
+   depends on promoters, transcriptional controls, splicing, etc.
+   
+   Most importantly, sigcleave is not perfect - you should check the
+   results and decide whether you like the prediction.
+   
+   Also, remember you can put -send 50 on the command line to make sure
+   it only checks the first 50 residues.
    
 Usage
 
@@ -33,19 +57,20 @@ Output report [ach2_drome.sig]:
    
 Command line arguments
 
-   Mandatory qualifiers:
+   Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Sequence database USA
    -minweight          float      Minimum scoring weight value for the
                                   predicted cleavage site
   [-outfile]           report     Output report file name
 
-   Optional qualifiers:
+   Additional (Optional) qualifiers:
    -prokaryote         boolean    Specifies the sequence is prokaryotic and
                                   changes the default scoring data file name
 
-   Advanced qualifiers: (none)
+   Advanced (Unprompted) qualifiers: (none)
    Associated qualifiers:
-  "-sequence" related qualifiers
+
+   "-sequence" associated qualifiers
    -sbegin1             integer    First base used
    -send1               integer    Last base used, def=seq length
    -sreverse1           boolean    Reverse (if DNA)
@@ -55,13 +80,13 @@ Command line arguments
    -slower1             boolean    Make lower case
    -supper1             boolean    Make upper case
    -sformat1            string     Input sequence format
-   -sopenfile1          string     Input filename
    -sdbname1            string     Database name
    -sid1                string     Entryname
    -ufo1                string     UFO features
    -fformat1            string     Features format
    -fopenfile1          string     Features file name
-  "-outfile" related qualifiers
+
+   "-outfile" associated qualifiers
    -rformat2            string     Report format
    -rname2              string     Base file name
    -rextension2         string     File name extension
@@ -75,11 +100,8 @@ Command line arguments
    -auto                boolean    Turn off prompts
    -stdout              boolean    Write standard output
    -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for required and optional values
+   -options             boolean    Prompt for standard and additional values
    -debug               boolean    Write debug output to program.dbg
-   -acdlog              boolean    Write ACD processing log to program.acdlog
-   -acdpretty           boolean    Rewrite ACD file as program.acdpretty
-   -acdtable            boolean    Write HTML table of options
    -verbose             boolean    Report some/full command line options
    -help                boolean    Report command line options. More
                                   information on associated and general
@@ -90,17 +112,17 @@ Command line arguments
    -die                 boolean    Report deaths
    
 
-   Mandatory qualifiers Allowed values Default
+   Standard (Mandatory) qualifiers Allowed values Default
    [-sequence]
    (Parameter 1) Sequence database USA Readable sequence(s) Required
    -minweight Minimum scoring weight value for the predicted cleavage
    site Number from 0.000 to 100.000 3.5
    [-outfile]
    (Parameter 2) Output report file name Report output file
-   Optional qualifiers Allowed values Default
+   Additional (Optional) qualifiers Allowed values Default
    -prokaryote Specifies the sequence is prokaryotic and changes the
    default scoring data file name Boolean value Yes/No No
-   Advanced qualifiers Allowed values Default
+   Advanced (Unprompted) qualifiers Allowed values Default
    (none)
    
 Input file format
@@ -223,7 +245,7 @@ Output file format
   
 ########################################
 # Program: sigcleave
-# Rundate: Thu May 22 10:58:29 2003
+# Rundate: Thu Nov 27 15:25:41 2003
 # Report_format: motif
 # Report_file: ach2_drome.sig
 ########################################
@@ -387,6 +409,7 @@ See also
     Program name                         Description
    antigenic      Finds antigenic sites in proteins
    digest         Protein proteolytic enzyme or reagent cleavage digest
+   epestfind      Finds PEST motifs as potential proteolytic cleavage sites
    fuzzpro        Protein pattern search
    fuzztran       Protein pattern search after translation
    helixturnhelix Report nucleic acid binding motifs
@@ -394,7 +417,6 @@ See also
    patmatdb       Search a protein sequence with a motif
    patmatmotifs   Search a PROSITE motif database with a protein sequence
    pepcoil        Predicts coiled coil regions
-   pestfind       Finds PEST motifs as potential proteolytic cleavage sites
    preg           Regular expression search of a protein sequence
    pscan          Scans proteins using PRINTS
    

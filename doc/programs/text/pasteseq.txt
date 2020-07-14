@@ -51,19 +51,20 @@ Insert one sequence into another
    
 Command line arguments
 
-   Mandatory qualifiers:
-  [-sequence]          sequence   Sequence USA
-  [-insseq]            sequence   Sequence to insert
+   Standard (Mandatory) qualifiers:
+  [-asequence]         sequence   Sequence USA
+  [-bsequence]         sequence   Sequence to insert
    -pos                integer    The position in the main input sequence to
                                   insert after.
                                   To insert before the start use the position
                                   0.
   [-outseq]            seqout     Output sequence USA
 
-   Optional qualifiers: (none)
-   Advanced qualifiers: (none)
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers: (none)
    Associated qualifiers:
-  "-sequence" related qualifiers
+
+   "-asequence" associated qualifiers
    -sbegin1             integer    First base used
    -send1               integer    Last base used, def=seq length
    -sreverse1           boolean    Reverse (if DNA)
@@ -73,13 +74,13 @@ Command line arguments
    -slower1             boolean    Make lower case
    -supper1             boolean    Make upper case
    -sformat1            string     Input sequence format
-   -sopenfile1          string     Input filename
    -sdbname1            string     Database name
    -sid1                string     Entryname
    -ufo1                string     UFO features
    -fformat1            string     Features format
    -fopenfile1          string     Features file name
-  "-insseq" related qualifiers
+
+   "-bsequence" associated qualifiers
    -sbegin2             integer    First base used
    -send2               integer    Last base used, def=seq length
    -sreverse2           boolean    Reverse (if DNA)
@@ -89,13 +90,13 @@ Command line arguments
    -slower2             boolean    Make lower case
    -supper2             boolean    Make upper case
    -sformat2            string     Input sequence format
-   -sopenfile2          string     Input filename
    -sdbname2            string     Database name
    -sid2                string     Entryname
    -ufo2                string     UFO features
    -fformat2            string     Features format
    -fopenfile2          string     Features file name
-  "-outseq" related qualifiers
+
+   "-outseq" associated qualifiers
    -osformat3           string     Output seq format
    -osextension3        string     File name extension
    -osname3             string     Base file name
@@ -111,11 +112,8 @@ Command line arguments
    -auto                boolean    Turn off prompts
    -stdout              boolean    Write standard output
    -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for required and optional values
+   -options             boolean    Prompt for standard and additional values
    -debug               boolean    Write debug output to program.dbg
-   -acdlog              boolean    Write ACD processing log to program.acdlog
-   -acdpretty           boolean    Rewrite ACD file as program.acdpretty
-   -acdtable            boolean    Write HTML table of options
    -verbose             boolean    Report some/full command line options
    -help                boolean    Report command line options. More
                                   information on associated and general
@@ -126,19 +124,19 @@ Command line arguments
    -die                 boolean    Report deaths
    
 
-   Mandatory qualifiers Allowed values Default
-   [-sequence]
+   Standard (Mandatory) qualifiers Allowed values Default
+   [-asequence]
    (Parameter 1) Sequence USA Readable sequence Required
-   [-insseq]
+   [-bsequence]
    (Parameter 2) Sequence to insert Readable sequence Required
    -pos The position in the main input sequence to insert after. To
    insert before the start use the position 0. Integer 0 or more
-   $(sequence.end)
+   $(asequence.end)
    [-outseq]
    (Parameter 3) Output sequence USA Writeable sequence <sequence>.format
-   Optional qualifiers Allowed values Default
+   Additional (Optional) qualifiers Allowed values Default
    (none)
-   Advanced qualifiers Allowed values Default
+   Advanced (Unprompted) qualifiers Allowed values Default
    (none)
    
 Input file format

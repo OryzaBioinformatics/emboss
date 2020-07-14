@@ -40,7 +40,6 @@ Usage
 
 % dotmatcher tsw:hba_human tsw:hbb_human -graph cps 
 Displays a thresholded dotplot of two sequences
-Display as data [N]: 
 
 Created dotmatcher.ps
    
@@ -49,16 +48,13 @@ Created dotmatcher.ps
    
 Command line arguments
 
-   Mandatory qualifiers (* if not always prompted):
-  [-sequencea]         sequence   Sequence USA
-  [-sequenceb]         sequence   Sequence USA
-*  -data               boolean    Output the match data to a file instead of
-                                  plotting it
+   Standard (Mandatory) qualifiers (* if not always prompted):
+  [-asequence]         sequence   Sequence USA
+  [-bsequence]         sequence   Sequence USA
 *  -graph              graph      Graph type
 *  -xygraph            xygraph    Graph type
-*  -outfile            outfile    Display as data
 
-   Optional qualifiers:
+   Additional (Optional) qualifiers:
    -windowsize         integer    window size over which to test threshhold
    -threshold          integer    threshold
    -matrixfile         matrix     This is the scoring matrix file used when
@@ -68,11 +64,12 @@ Command line arguments
                                   files are found in the 'data' directory of
                                   the EMBOSS installation.
 
-   Advanced qualifiers:
+   Advanced (Unprompted) qualifiers:
    -stretch            boolean    Display a non-proportional graph
 
    Associated qualifiers:
-  "-sequencea" related qualifiers
+
+   "-asequence" associated qualifiers
    -sbegin1             integer    First base used
    -send1               integer    Last base used, def=seq length
    -sreverse1           boolean    Reverse (if DNA)
@@ -82,13 +79,13 @@ Command line arguments
    -slower1             boolean    Make lower case
    -supper1             boolean    Make upper case
    -sformat1            string     Input sequence format
-   -sopenfile1          string     Input filename
    -sdbname1            string     Database name
    -sid1                string     Entryname
    -ufo1                string     UFO features
    -fformat1            string     Features format
    -fopenfile1          string     Features file name
-  "-sequenceb" related qualifiers
+
+   "-bsequence" associated qualifiers
    -sbegin2             integer    First base used
    -send2               integer    Last base used, def=seq length
    -sreverse2           boolean    Reverse (if DNA)
@@ -98,13 +95,13 @@ Command line arguments
    -slower2             boolean    Make lower case
    -supper2             boolean    Make upper case
    -sformat2            string     Input sequence format
-   -sopenfile2          string     Input filename
    -sdbname2            string     Database name
    -sid2                string     Entryname
    -ufo2                string     UFO features
    -fformat2            string     Features format
    -fopenfile2          string     Features file name
-  "-graph" related qualifiers
+
+   "-graph" associated qualifiers
    -gprompt             boolean    Graph prompting
    -gtitle              string     Graph title
    -gsubtitle           string     Graph subtitle
@@ -112,7 +109,8 @@ Command line arguments
    -gytitle             string     Graph y axis title
    -goutfile            string     Output file for non interactive displays
    -gdirectory          string     Output directory
-  "-xygraph" related qualifiers
+
+   "-xygraph" associated qualifiers
    -gprompt             boolean    Graph prompting
    -gtitle              string     Graph title
    -gsubtitle           string     Graph subtitle
@@ -120,18 +118,13 @@ Command line arguments
    -gytitle             string     Graph y axis title
    -goutfile            string     Output file for non interactive displays
    -gdirectory          string     Output directory
-  "-outfile" related qualifiers
-   -odirectory          string     Output directory
 
    General qualifiers:
    -auto                boolean    Turn off prompts
    -stdout              boolean    Write standard output
    -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for required and optional values
+   -options             boolean    Prompt for standard and additional values
    -debug               boolean    Write debug output to program.dbg
-   -acdlog              boolean    Write ACD processing log to program.acdlog
-   -acdpretty           boolean    Rewrite ACD file as program.acdpretty
-   -acdtable            boolean    Write HTML table of options
    -verbose             boolean    Report some/full command line options
    -help                boolean    Report command line options. More
                                   information on associated and general
@@ -142,13 +135,11 @@ Command line arguments
    -die                 boolean    Report deaths
    
 
-   Mandatory qualifiers Allowed values Default
-   [-sequencea]
+   Standard (Mandatory) qualifiers Allowed values Default
+   [-asequence]
    (Parameter 1) Sequence USA Readable sequence Required
-   [-sequenceb]
+   [-bsequence]
    (Parameter 2) Sequence USA Readable sequence Required
-   -data Output the match data to a file instead of plotting it Boolean
-   value Yes/No No
    -graph Graph type EMBOSS has a list of known devices, including
    postscript, ps, hpgl, hp7470, hp7580, meta, colourps, cps, xwindows,
    x11, tektronics, tekt, tek4107t, tek, none, null, text, data, xterm,
@@ -157,8 +148,7 @@ Command line arguments
    postscript, ps, hpgl, hp7470, hp7580, meta, colourps, cps, xwindows,
    x11, tektronics, tekt, tek4107t, tek, none, null, text, data, xterm,
    png EMBOSS_GRAPHICS value, or x11
-   -outfile Display as data Output file <sequence>.dotmatcher
-   Optional qualifiers Allowed values Default
+   Additional (Optional) qualifiers Allowed values Default
    -windowsize window size over which to test threshhold Integer 3 or
    more 10
    -threshold threshold Integer 0 or more 23
@@ -168,7 +158,7 @@ Command line arguments
    'data' directory of the EMBOSS installation. Comparison matrix file in
    EMBOSS data path EBLOSUM62 for protein
    EDNAFULL for DNA
-   Advanced qualifiers Allowed values Default
+   Advanced (Unprompted) qualifiers Allowed values Default
    -stretch Display a non-proportional graph Boolean value Yes/No No
    
 Input file format

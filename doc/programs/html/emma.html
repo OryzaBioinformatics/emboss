@@ -590,14 +590,14 @@ of your sequences between each bootstrap sample.
 Multiple alignment program - interface to ClustalW program
 Input sequence(s): <b>../../data/globins.fasta</b>
 Output sequence [hbb_human.aln]: <b></b>
-Output file [hbb_human.dnd]: <b></b>
-..clustalw -infile=00024615A -outfile=00024615B -align -type=protein -output=gcg -pwmatrix=blosum -pwgapopen=10.000 -pwgapext=0.100 -newtree=00024615C -matrix=blosum -gapopen=10.000 -gapext=5.000 -gapdist=8 -hgapresidues=GPSNDQEKR -maxdiv=30..
+Dendogram output filename [hbb_human.dnd]: <b></b>
+..clustalw -infile=00024634A -outfile=00024634B -align -type=protein -output=gcg -pwmatrix=blosum -pwgapopen=10.000 -pwgapext=0.100 -newtree=00024634C -matrix=blosum -gapopen=10.000 -gapext=5.000 -gapdist=8 -hgapresidues=GPSNDQEKR -maxdiv=30..
 
 
 
 
 
- CLUSTAL W (1.82) Multiple Sequence Alignments
+ CLUSTAL W (1.83) Multiple Sequence Alignments
 
 
 
@@ -633,7 +633,7 @@ Sequences (4:7) Aligned. Score:  12
 Sequences (5:6) Aligned. Score:  21
 Sequences (5:7) Aligned. Score:  7
 Sequences (6:7) Aligned. Score:  11
-Guide tree        file created:   [00024615C]
+Guide tree        file created:   [00024634C]
 Start of Multiple Alignment
 There are 6 groups
 Aligning...
@@ -647,7 +647,7 @@ Sequence:5     Score:865
 Sequence:6     Score:797
 Sequence:7     Score:1044
 Alignment Score 4164
-GCG-Alignment file created      [00024615B]
+GCG-Alignment file created      [00024634B]
 
 </pre></td></tr></table><p>
 <p>
@@ -735,16 +735,15 @@ IT IS DONE FOR YOU.
 
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
-   Mandatory qualifiers:
-  [-inseqs]            seqall     Sequence database USA
-  [-outseq]            seqoutset  The sequence alignment output filename
-  [-dendoutfile]       outfile    The dendogram output filename
+   Standard (Mandatory) qualifiers:
+  [-sequence]          seqall     Sequence database USA
+  [-outseq]            seqoutset  Output sequence set USA
+  [-dendoutfile]       outfile    Dendogram output filename
 
-   Optional qualifiers (* if not always prompted):
-   -onlydend           boolean    only produce dendrogram file
-*  -dend               boolean    select if you want to do alignment using an
-                                  old dendrogram
-*  -dendfile           string     name of old dendrogram file
+   Additional (Optional) qualifiers (* if not always prompted):
+   -onlydend           boolean    Only produce dendrogram file
+*  -dend               boolean    Do alignment using an old dendrogram
+*  -dendfile           string     Name of old dendrogram file
    -insist             boolean    Insist that the sequence type is changed to
                                   protein
    -slowfast           menu       A distance is calculated between every pair
@@ -924,11 +923,10 @@ IT IS DONE FOR YOU.
                                   less identical than this level to any other
                                   sequences will be aligned later.
 
-   Advanced qualifiers:
-   -prot               boolean    Do not change this value
-
+   Advanced (Unprompted) qualifiers: (none)
    Associated qualifiers:
-  "-inseqs" related qualifiers
+
+   "-sequence" associated qualifiers
    -sbegin1             integer    First base used
    -send1               integer    Last base used, def=seq length
    -sreverse1           boolean    Reverse (if DNA)
@@ -938,13 +936,13 @@ IT IS DONE FOR YOU.
    -slower1             boolean    Make lower case
    -supper1             boolean    Make upper case
    -sformat1            string     Input sequence format
-   -sopenfile1          string     Input filename
    -sdbname1            string     Database name
    -sid1                string     Entryname
    -ufo1                string     UFO features
    -fformat1            string     Features format
    -fopenfile1          string     Features file name
-  "-outseq" related qualifiers
+
+   "-outseq" associated qualifiers
    -osformat2           string     Output seq format
    -osextension2        string     File name extension
    -osname2             string     Base file name
@@ -955,18 +953,16 @@ IT IS DONE FOR YOU.
    -offormat2           string     Features format
    -ofname2             string     Features file name
    -ofdirectory2        string     Output directory
-  "-dendoutfile" related qualifiers
+
+   "-dendoutfile" associated qualifiers
    -odirectory3         string     Output directory
 
    General qualifiers:
    -auto                boolean    Turn off prompts
    -stdout              boolean    Write standard output
    -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for required and optional values
+   -options             boolean    Prompt for standard and additional values
    -debug               boolean    Write debug output to program.dbg
-   -acdlog              boolean    Write ACD processing log to program.acdlog
-   -acdpretty           boolean    Rewrite ACD file as program.acdpretty
-   -acdtable            boolean    Write HTML table of options
    -verbose             boolean    Report some/full command line options
    -help                boolean    Report command line options. More
                                   information on associated and general
@@ -983,13 +979,13 @@ IT IS DONE FOR YOU.
 
 <table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=2>Mandatory qualifiers</th>
+<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
 <th align="left">Allowed values</th>
 <th align="left">Default</th>
 </tr>
 
 <tr>
-<td>[-inseqs]<br>(Parameter 1)</td>
+<td>[-sequence]<br>(Parameter 1)</td>
 <td>Sequence database USA</td>
 <td>Readable sequence(s)</td>
 <td><b>Required</b></td>
@@ -997,41 +993,41 @@ IT IS DONE FOR YOU.
 
 <tr>
 <td>[-outseq]<br>(Parameter 2)</td>
-<td>The sequence alignment output filename</td>
+<td>Output sequence set USA</td>
 <td>Writeable sequences</td>
 <td><i>&lt;sequence&gt;</i>.<i>format</i></td>
 </tr>
 
 <tr>
 <td>[-dendoutfile]<br>(Parameter 3)</td>
-<td>The dendogram output filename</td>
+<td>Dendogram output filename</td>
 <td>Output file</td>
 <td><i>&lt;sequence&gt;</i>.emma</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=2>Optional qualifiers</th>
+<th align="left" colspan=2>Additional (Optional) qualifiers</th>
 <th align="left">Allowed values</th>
 <th align="left">Default</th>
 </tr>
 
 <tr>
 <td>-onlydend</td>
-<td>only produce dendrogram file</td>
+<td>Only produce dendrogram file</td>
 <td>Boolean value Yes/No</td>
 <td>No</td>
 </tr>
 
 <tr>
 <td>-dend</td>
-<td>select if you want to do alignment using an old dendrogram</td>
+<td>Do alignment using an old dendrogram</td>
 <td>Boolean value Yes/No</td>
 <td>No</td>
 </tr>
 
 <tr>
 <td>-dendfile</td>
-<td>name of old dendrogram file</td>
+<td>Name of old dendrogram file</td>
 <td>Any string is accepted</td>
 <td>NULL</td>
 </tr>
@@ -1209,16 +1205,13 @@ We also supply an identity matrix which gives a score of 1.0 to two identical am
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=2>Advanced qualifiers</th>
+<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
 <th align="left">Allowed values</th>
 <th align="left">Default</th>
 </tr>
 
 <tr>
-<td>-prot</td>
-<td>Do not change this value</td>
-<td>Boolean value Yes/No</td>
-<td>@($(insist) ? @(!$(inseqs.protein)):$(inseqs.protein))</td>
+<td colspan=4>(none)</td>
 </tr>
 
 </table>

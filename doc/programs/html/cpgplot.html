@@ -125,6 +125,7 @@ Minimum length of an island [200]: <b></b>
 Minimum observed/expected [0.6]: <b></b>
 Minimum percentage [50.]: <b></b>
 Output file [rnu68037.cpgplot]: <b></b>
+Output features [rnu68037.gff]: <b></b>
 
 Created cpgplot.ps
 
@@ -166,7 +167,7 @@ IT IS DONE FOR YOU.
 
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
-   Mandatory qualifiers:
+   Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Sequence database USA
    -window             integer    The percentage CG content and the Observed
                                   frequency of CG is calculated within a
@@ -193,9 +194,10 @@ IT IS DONE FOR YOU.
                                   island parameters and the output details of
                                   any CpG islands that are found.
   [-graph]             xygraph    Graph type
+  [-featout]           featout    File for output features
 
-   Optional qualifiers: (none)
-   Advanced qualifiers:
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers:
    -[no]obsexp         boolean    If this is set to true then the graph of the
                                   observed to expected ratio of C plus G to
                                   CpG within a window is displayed.
@@ -205,10 +207,10 @@ IT IS DONE FOR YOU.
    -[no]pc             boolean    If this is set to true then the graph of the
                                   percentage C plus G within a window is
                                   displayed.
-   -featout            featout    File for output features
 
    Associated qualifiers:
-  "-sequence" related qualifiers
+
+   "-sequence" associated qualifiers
    -sbegin1             integer    First base used
    -send1               integer    Last base used, def=seq length
    -sreverse1           boolean    Reverse (if DNA)
@@ -218,15 +220,16 @@ IT IS DONE FOR YOU.
    -slower1             boolean    Make lower case
    -supper1             boolean    Make upper case
    -sformat1            string     Input sequence format
-   -sopenfile1          string     Input filename
    -sdbname1            string     Database name
    -sid1                string     Entryname
    -ufo1                string     UFO features
    -fformat1            string     Features format
    -fopenfile1          string     Features file name
-  "-outfile" related qualifiers
+
+   "-outfile" associated qualifiers
    -odirectory2         string     Output directory
-  "-graph" related qualifiers
+
+   "-graph" associated qualifiers
    -gprompt3            boolean    Graph prompting
    -gtitle3             string     Graph title
    -gsubtitle3          string     Graph subtitle
@@ -234,23 +237,21 @@ IT IS DONE FOR YOU.
    -gytitle3            string     Graph y axis title
    -goutfile3           string     Output file for non interactive displays
    -gdirectory3         string     Output directory
-  "-featout" related qualifiers
-   -offormat            string     Output feature format
-   -ofopenfile          string     Features file name
-   -ofextension         string     File name extension
-   -ofdirectory         string     Output directory
-   -ofname              string     Base file name
-   -ofsingle            boolean    Separate file for each entry
+
+   "-featout" associated qualifiers
+   -offormat4           string     Output feature format
+   -ofopenfile4         string     Features file name
+   -ofextension4        string     File name extension
+   -ofdirectory4        string     Output directory
+   -ofname4             string     Base file name
+   -ofsingle4           boolean    Separate file for each entry
 
    General qualifiers:
    -auto                boolean    Turn off prompts
    -stdout              boolean    Write standard output
    -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for required and optional values
+   -options             boolean    Prompt for standard and additional values
    -debug               boolean    Write debug output to program.dbg
-   -acdlog              boolean    Write ACD processing log to program.acdlog
-   -acdpretty           boolean    Rewrite ACD file as program.acdpretty
-   -acdtable            boolean    Write HTML table of options
    -verbose             boolean    Report some/full command line options
    -help                boolean    Report command line options. More
                                   information on associated and general
@@ -267,7 +268,7 @@ IT IS DONE FOR YOU.
 
 <table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=2>Mandatory qualifiers</th>
+<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
 <th align="left">Allowed values</th>
 <th align="left">Default</th>
 </tr>
@@ -328,8 +329,15 @@ IT IS DONE FOR YOU.
 <td><i>EMBOSS_GRAPHICS</i> value, or x11</td>
 </tr>
 
+<tr>
+<td>[-featout]<br>(Parameter 4)</td>
+<td>File for output features</td>
+<td>Writeable feature table</td>
+<td><i>unknown.gff</i></td>
+</tr>
+
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=2>Optional qualifiers</th>
+<th align="left" colspan=2>Additional (Optional) qualifiers</th>
 <th align="left">Allowed values</th>
 <th align="left">Default</th>
 </tr>
@@ -339,7 +347,7 @@ IT IS DONE FOR YOU.
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=2>Advanced qualifiers</th>
+<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
 <th align="left">Allowed values</th>
 <th align="left">Default</th>
 </tr>
@@ -363,13 +371,6 @@ IT IS DONE FOR YOU.
 <td>If this is set to true then the graph of the percentage C plus G within a window is displayed.</td>
 <td>Boolean value Yes/No</td>
 <td>Yes</td>
-</tr>
-
-<tr>
-<td>-featout</td>
-<td>File for output features</td>
-<td>Writeable feature table</td>
-<td><i>unknown.gff</i></td>
 </tr>
 
 </table>
@@ -504,7 +505,7 @@ RNU68037 from 1 to 1218
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 ##gff-version 2.0
-##date 2003-05-22
+##date 2003-11-27
 ##Type DNA RNU68037
 RNU68037	cpgplot	misc_feature	104	509	0.000	+	.	Sequence "RNU68037.1"
 RNU68037	cpgplot	misc_feature	596	924	0.000	+	.	Sequence "RNU68037.2"

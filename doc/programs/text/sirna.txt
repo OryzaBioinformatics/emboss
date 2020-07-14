@@ -247,7 +247,7 @@ Output sequence [hsfau.fasta]:
    
 Command line arguments
 
-   Mandatory qualifiers:
+   Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Sequence database USA
   [-outfile]           report     The output is a table of the forward and
                                   reverse parts of the 21 base siRNA duplex.
@@ -271,7 +271,7 @@ Command line arguments
                                   probes are unique to the gene you wish to
                                   use it on.
 
-   Optional qualifiers:
+   Additional (Optional) qualifiers:
    -poliii             boolean    This option allows you to select only the 21
                                   base probes that start with a purine and so
                                   can be expressed from Pol III expression
@@ -309,9 +309,10 @@ Command line arguments
                                   SHOULD NOT INCLUDE THE TWO BASES IN BRACKETS
                                   WHEN YOU PLACE AN ORDER FOR THE PROBES.
 
-   Advanced qualifiers: (none)
+   Advanced (Unprompted) qualifiers: (none)
    Associated qualifiers:
-  "-sequence" related qualifiers
+
+   "-sequence" associated qualifiers
    -sbegin1             integer    First base used
    -send1               integer    Last base used, def=seq length
    -sreverse1           boolean    Reverse (if DNA)
@@ -321,13 +322,13 @@ Command line arguments
    -slower1             boolean    Make lower case
    -supper1             boolean    Make upper case
    -sformat1            string     Input sequence format
-   -sopenfile1          string     Input filename
    -sdbname1            string     Database name
    -sid1                string     Entryname
    -ufo1                string     UFO features
    -fformat1            string     Features format
    -fopenfile1          string     Features file name
-  "-outfile" related qualifiers
+
+   "-outfile" associated qualifiers
    -rformat2            string     Report format
    -rname2              string     Base file name
    -rextension2         string     File name extension
@@ -336,7 +337,8 @@ Command line arguments
    -rdesshow2           boolean    Show description in the report
    -rscoreshow2         boolean    Show the score in the report
    -rusashow2           boolean    Show the full USA in the report
-  "-outseq" related qualifiers
+
+   "-outseq" associated qualifiers
    -osformat3           string     Output seq format
    -osextension3        string     File name extension
    -osname3             string     Base file name
@@ -352,11 +354,8 @@ Command line arguments
    -auto                boolean    Turn off prompts
    -stdout              boolean    Write standard output
    -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for required and optional values
+   -options             boolean    Prompt for standard and additional values
    -debug               boolean    Write debug output to program.dbg
-   -acdlog              boolean    Write ACD processing log to program.acdlog
-   -acdpretty           boolean    Rewrite ACD file as program.acdpretty
-   -acdtable            boolean    Write HTML table of options
    -verbose             boolean    Report some/full command line options
    -help                boolean    Report command line options. More
                                   information on associated and general
@@ -367,7 +366,7 @@ Command line arguments
    -die                 boolean    Report deaths
    
 
-   Mandatory qualifiers Allowed values Default
+   Standard (Mandatory) qualifiers Allowed values Default
    [-sequence]
    (Parameter 1) Sequence database USA Readable sequence(s) Required
    [-outfile]
@@ -387,7 +386,7 @@ Command line arguments
    mRNA databases (e.g. REFSEQ) to confirm that the probes are unique to
    the gene you wish to use it on. Writeable sequence(s)
    <sequence>.format
-   Optional qualifiers Allowed values Default
+   Additional (Optional) qualifiers Allowed values Default
    -poliii This option allows you to select only the 21 base probes that
    start with a purine and so can be expressed from Pol III expression
    vectors. This is the NARN(17)YNN pattern that has been suggested by
@@ -415,7 +414,7 @@ Command line arguments
    some context for the probe region. YOU SHOULD NOT INCLUDE THE TWO
    BASES IN BRACKETS WHEN YOU PLACE AN ORDER FOR THE PROBES. Boolean
    value Yes/No No
-   Advanced qualifiers Allowed values Default
+   Advanced (Unprompted) qualifiers Allowed values Default
    (none)
    
 Input file format
@@ -646,7 +645,7 @@ taaaaaagccacttagttcagtc
   
 ########################################
 # Program: sirna
-# Rundate: Thu May 22 10:58:32 2003
+# Rundate: Thu Nov 27 15:25:43 2003
 # Report_format: table
 # Report_file: hsfau.sirna
 ########################################
@@ -756,7 +755,7 @@ taaaaaagccacttagttcagtc
   
 ########################################
 # Program: sirna
-# Rundate: Thu May 22 10:58:33 2003
+# Rundate: Thu Nov 27 15:25:43 2003
 # Report_format: table
 # Report_file: hsfau.sirna
 ########################################

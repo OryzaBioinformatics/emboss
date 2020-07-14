@@ -21,7 +21,7 @@ Usage
 
 % prosextract 
 Builds the PROSITE motif database for patmatmotifs to search
-Enter name of prosite directory: ../../data/
+Name of prosite directory: ../../data/
    
    Go to the output files for this example
    
@@ -31,21 +31,18 @@ Enter name of prosite directory: ../../data/
    
 Command line arguments
 
-   Mandatory qualifiers:
-  [-infdat]            string     Enter name of prosite directory
+   Standard (Mandatory) qualifiers:
+  [-infdat]            string     Name of prosite directory
 
-   Optional qualifiers: (none)
-   Advanced qualifiers: (none)
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers: (none)
    Associated qualifiers: (none)
    General qualifiers:
    -auto                boolean    Turn off prompts
    -stdout              boolean    Write standard output
    -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for required and optional values
+   -options             boolean    Prompt for standard and additional values
    -debug               boolean    Write debug output to program.dbg
-   -acdlog              boolean    Write ACD processing log to program.acdlog
-   -acdpretty           boolean    Rewrite ACD file as program.acdpretty
-   -acdtable            boolean    Write HTML table of options
    -verbose             boolean    Report some/full command line options
    -help                boolean    Report command line options. More
                                   information on associated and general
@@ -56,13 +53,13 @@ Command line arguments
    -die                 boolean    Report deaths
    
 
-   Mandatory qualifiers Allowed values Default
+   Standard (Mandatory) qualifiers Allowed values Default
    [-infdat]
-   (Parameter 1) Enter name of prosite directory Any string is accepted
-   An empty string is accepted
-   Optional qualifiers Allowed values Default
+   (Parameter 1) Name of prosite directory Any string is accepted An
+   empty string is accepted
+   Additional (Optional) qualifiers Allowed values Default
    (none)
-   Advanced qualifiers Allowed values Default
+   Advanced (Unprompted) qualifiers Allowed values Default
    (none)
    
 Input file format

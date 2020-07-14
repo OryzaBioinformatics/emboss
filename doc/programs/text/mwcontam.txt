@@ -24,7 +24,7 @@ Usage
 
 % mwcontam 
 Shows molwts that match across a set of files
-Comma-separated file list: ../../data/mw1.dat,../../data/mw2.dat,../../data/mw3
+Comma separated file list: ../../data/mw1.dat,../../data/mw2.dat,../../data/mw3
 .dat
 ppm tolerance [50.0]: 
 Output file [outfile.mwcontam]: 
@@ -34,26 +34,24 @@ Output file [outfile.mwcontam]:
    
 Command line arguments
 
-   Mandatory qualifiers:
+   Standard (Mandatory) qualifiers:
   [-files]             filelist   Comma separated file list
    -tolerance          float      ppm tolerance
   [-outfile]           outfile    Output file name
 
-   Optional qualifiers: (none)
-   Advanced qualifiers: (none)
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers: (none)
    Associated qualifiers:
-  "-outfile" related qualifiers
+
+   "-outfile" associated qualifiers
    -odirectory2         string     Output directory
 
    General qualifiers:
    -auto                boolean    Turn off prompts
    -stdout              boolean    Write standard output
    -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for required and optional values
+   -options             boolean    Prompt for standard and additional values
    -debug               boolean    Write debug output to program.dbg
-   -acdlog              boolean    Write ACD processing log to program.acdlog
-   -acdpretty           boolean    Rewrite ACD file as program.acdpretty
-   -acdtable            boolean    Write HTML table of options
    -verbose             boolean    Report some/full command line options
    -help                boolean    Report command line options. More
                                   information on associated and general
@@ -64,16 +62,16 @@ Command line arguments
    -die                 boolean    Report deaths
    
 
-   Mandatory qualifiers Allowed values Default
+   Standard (Mandatory) qualifiers Allowed values Default
    [-files]
    (Parameter 1) Comma separated file list Comma-separated file list
    comma-separated file list
    -tolerance ppm tolerance Any numeric value 50.0
    [-outfile]
    (Parameter 2) Output file name Output file <sequence>.mwcontam
-   Optional qualifiers Allowed values Default
+   Additional (Optional) qualifiers Allowed values Default
    (none)
-   Advanced qualifiers Allowed values Default
+   Advanced (Unprompted) qualifiers Allowed values Default
    (none)
    
 Input file format

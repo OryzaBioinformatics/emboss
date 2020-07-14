@@ -12,16 +12,16 @@ Description
    cai calculates the Codon Adaptation Index. This is a simple, effective
    measure of synonymous codon usage bias.
    
-   The index uses a reference set of highly expressed genes from a
+   The CAI index uses a reference set of highly expressed genes from a
    species to assess the relative merits of each codon, and a score for a
-   gene is calculated from the frequency of use of all codons in that
-   gene. The index assesses the extent to which selection has been
-   effective in moulding the pattern of codon usage. In that respect it
-   is useful for predicting the level of expression of a gene, for
-   assessing the adaptation of viral genes to their hosts, and for making
-   comparisons of codon usage in different organisms. The index may also
-   give an approximate indication of the likely success of heterologous
-   gene expression.
+   gene sequence is calculated from the frequency of use of all codons in
+   that gene sequence. The index assesses the extent to which selection
+   has been effective in moulding the pattern of codon usage. In that
+   respect it is useful for predicting the level of expression of a gene,
+   for assessing the adaptation of viral genes to their hosts, and for
+   making comparisons of codon usage in different organisms. The index
+   may also give an approximate indication of the likely success of
+   heterologous gene expression.
    
 Usage
 
@@ -38,15 +38,16 @@ Output file [ab009602.cai]:
    
 Command line arguments
 
-   Mandatory qualifiers:
+   Standard (Mandatory) qualifiers:
   [-seqall]            seqall     Sequence database USA
-   -cfile              codon      Codon usage file
+   -cfile              codon      Codon usage table name
   [-outfile]           outfile    Output file name
 
-   Optional qualifiers: (none)
-   Advanced qualifiers: (none)
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers: (none)
    Associated qualifiers:
-  "-seqall" related qualifiers
+
+   "-seqall" associated qualifiers
    -sbegin1             integer    First base used
    -send1               integer    Last base used, def=seq length
    -sreverse1           boolean    Reverse (if DNA)
@@ -56,24 +57,21 @@ Command line arguments
    -slower1             boolean    Make lower case
    -supper1             boolean    Make upper case
    -sformat1            string     Input sequence format
-   -sopenfile1          string     Input filename
    -sdbname1            string     Database name
    -sid1                string     Entryname
    -ufo1                string     UFO features
    -fformat1            string     Features format
    -fopenfile1          string     Features file name
-  "-outfile" related qualifiers
+
+   "-outfile" associated qualifiers
    -odirectory2         string     Output directory
 
    General qualifiers:
    -auto                boolean    Turn off prompts
    -stdout              boolean    Write standard output
    -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for required and optional values
+   -options             boolean    Prompt for standard and additional values
    -debug               boolean    Write debug output to program.dbg
-   -acdlog              boolean    Write ACD processing log to program.acdlog
-   -acdpretty           boolean    Rewrite ACD file as program.acdpretty
-   -acdtable            boolean    Write HTML table of options
    -verbose             boolean    Report some/full command line options
    -help                boolean    Report command line options. More
                                   information on associated and general
@@ -84,16 +82,16 @@ Command line arguments
    -die                 boolean    Report deaths
    
 
-   Mandatory qualifiers Allowed values Default
+   Standard (Mandatory) qualifiers Allowed values Default
    [-seqall]
    (Parameter 1) Sequence database USA Readable sequence(s) Required
-   -cfile Codon usage file Codon usage file in EMBOSS data path
+   -cfile Codon usage table name Codon usage file in EMBOSS data path
    Eyeastcai.cut
    [-outfile]
    (Parameter 2) Output file name Output file <sequence>.cai
-   Optional qualifiers Allowed values Default
+   Additional (Optional) qualifiers Allowed values Default
    (none)
-   Advanced qualifiers Allowed values Default
+   Advanced (Unprompted) qualifiers Allowed values Default
    (none)
    
 Input file format

@@ -306,7 +306,7 @@ Usage
 % emowse 
 Protein identification by mass spectrometry
 Input sequence(s): tsw:*
-Input file: ../../data/test.mowse
+Name of molecular weight data file: ../../data/test.mowse
 Whole sequence molwt [0]: 
 Output file [100k_rat.emowse]: 
    
@@ -315,23 +315,24 @@ Output file [100k_rat.emowse]:
    
 Command line arguments
 
-   Mandatory qualifiers:
-  [-sequences]         seqall     Sequence database USA
+   Standard (Mandatory) qualifiers:
+  [-sequence]          seqall     Sequence database USA
   [-infile]            infile     Name of molecular weight data file
    -weight             integer    Whole sequence molwt
-   -outfile            outfile    Output file name
+  [-outfile]           outfile    Output file name
 
-   Optional qualifiers: (none)
-   Advanced qualifiers:
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers:
    -enzyme             menu       Enzyme or reagent
    -aadata             string     Molecular weight data for amino acids
    -pcrange            integer    Allowed whole sequence weight variability
    -frequencies        string     Frequencies file
-   -tolerance          float      (no help text) float value
+   -tolerance          float      Tolerance
    -partials           float      Partials factor
 
    Associated qualifiers:
-  "-sequences" related qualifiers
+
+   "-sequence" associated qualifiers
    -sbegin1             integer    First base used
    -send1               integer    Last base used, def=seq length
    -sreverse1           boolean    Reverse (if DNA)
@@ -341,24 +342,21 @@ Command line arguments
    -slower1             boolean    Make lower case
    -supper1             boolean    Make upper case
    -sformat1            string     Input sequence format
-   -sopenfile1          string     Input filename
    -sdbname1            string     Database name
    -sid1                string     Entryname
    -ufo1                string     UFO features
    -fformat1            string     Features format
    -fopenfile1          string     Features file name
-  "-outfile" related qualifiers
-   -odirectory          string     Output directory
+
+   "-outfile" associated qualifiers
+   -odirectory3         string     Output directory
 
    General qualifiers:
    -auto                boolean    Turn off prompts
    -stdout              boolean    Write standard output
    -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for required and optional values
+   -options             boolean    Prompt for standard and additional values
    -debug               boolean    Write debug output to program.dbg
-   -acdlog              boolean    Write ACD processing log to program.acdlog
-   -acdpretty           boolean    Rewrite ACD file as program.acdpretty
-   -acdtable            boolean    Write HTML table of options
    -verbose             boolean    Report some/full command line options
    -help                boolean    Report command line options. More
                                   information on associated and general
@@ -369,16 +367,17 @@ Command line arguments
    -die                 boolean    Report deaths
    
 
-   Mandatory qualifiers Allowed values Default
-   [-sequences]
+   Standard (Mandatory) qualifiers Allowed values Default
+   [-sequence]
    (Parameter 1) Sequence database USA Readable sequence(s) Required
    [-infile]
    (Parameter 2) Name of molecular weight data file Input file Required
    -weight Whole sequence molwt Any integer value 0
-   -outfile Output file name Output file <sequence>.emowse
-   Optional qualifiers Allowed values Default
+   [-outfile]
+   (Parameter 3) Output file name Output file <sequence>.emowse
+   Additional (Optional) qualifiers Allowed values Default
    (none)
-   Advanced qualifiers Allowed values Default
+   Advanced (Unprompted) qualifiers Allowed values Default
    -enzyme Enzyme or reagent
    1 (Trypsin)
    2 (Lys-C)
@@ -394,7 +393,7 @@ Command line arguments
    -pcrange Allowed whole sequence weight variability Integer from 0 to
    75 25
    -frequencies Frequencies file Any string is accepted Efreqs.dat
-   -tolerance (no help text) float value Number from 0.100 to 1.000 0.1
+   -tolerance Tolerance Number from 0.100 to 1.000 0.1
    -partials Partials factor Number from 0.100 to 1.000 0.4
    
 Input file format

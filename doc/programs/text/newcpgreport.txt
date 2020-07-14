@@ -69,7 +69,7 @@ Output file [rnu68037.newcpgreport]:
    
 Command line arguments
 
-   Mandatory qualifiers:
+   Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Sequence database USA
    -window             integer    Window size
    -shift              integer    Shift increment
@@ -78,10 +78,11 @@ Command line arguments
    -minpc              float      Minimum percentage
   [-outfile]           outfile    Output file name
 
-   Optional qualifiers: (none)
-   Advanced qualifiers: (none)
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers: (none)
    Associated qualifiers:
-  "-sequence" related qualifiers
+
+   "-sequence" associated qualifiers
    -sbegin1             integer    First base used
    -send1               integer    Last base used, def=seq length
    -sreverse1           boolean    Reverse (if DNA)
@@ -91,24 +92,21 @@ Command line arguments
    -slower1             boolean    Make lower case
    -supper1             boolean    Make upper case
    -sformat1            string     Input sequence format
-   -sopenfile1          string     Input filename
    -sdbname1            string     Database name
    -sid1                string     Entryname
    -ufo1                string     UFO features
    -fformat1            string     Features format
    -fopenfile1          string     Features file name
-  "-outfile" related qualifiers
+
+   "-outfile" associated qualifiers
    -odirectory2         string     Output directory
 
    General qualifiers:
    -auto                boolean    Turn off prompts
    -stdout              boolean    Write standard output
    -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for required and optional values
+   -options             boolean    Prompt for standard and additional values
    -debug               boolean    Write debug output to program.dbg
-   -acdlog              boolean    Write ACD processing log to program.acdlog
-   -acdpretty           boolean    Rewrite ACD file as program.acdpretty
-   -acdtable            boolean    Write HTML table of options
    -verbose             boolean    Report some/full command line options
    -help                boolean    Report command line options. More
                                   information on associated and general
@@ -119,7 +117,7 @@ Command line arguments
    -die                 boolean    Report deaths
    
 
-   Mandatory qualifiers Allowed values Default
+   Standard (Mandatory) qualifiers Allowed values Default
    [-sequence]
    (Parameter 1) Sequence database USA Readable sequence(s) Required
    -window Window size Integer 1 or more 100
@@ -129,9 +127,9 @@ Command line arguments
    -minpc Minimum percentage Number from 0.000 to 100.000 50.
    [-outfile]
    (Parameter 2) Output file name Output file <sequence>.newcpgreport
-   Optional qualifiers Allowed values Default
+   Additional (Optional) qualifiers Allowed values Default
    (none)
-   Advanced qualifiers Allowed values Default
+   Advanced (Unprompted) qualifiers Allowed values Default
    (none)
    
 Input file format
@@ -323,7 +321,7 @@ See also
    
    1. newcpgseek and cpgreport - both declare a putative island if the
    score is higher than a threshold (17 at the moment). They now also
-   displaying the actual CpG count, the % CG and the observed/expected
+   display the actual CpG count, the % CG and the observed/expected
    ration in the region where the score is above the threshold. This
    scoring method based on sum/frequencies overpredicts islands but finds
    the smaller ones around primary exons. newcpgseek uses the same method
@@ -343,7 +341,7 @@ See also
    the EBI's ftp server as well as on the EBI's SRS server.
    
    geecee measures CG content in the entire input sequence and is not to
-   be used to detect CpG islands. It can be usefull for detecting
+   be used to detect CpG islands. It can be useful for detecting
    sequences that MIGHT contain an island.
    
 Author(s)

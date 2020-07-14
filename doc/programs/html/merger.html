@@ -155,13 +155,13 @@ IT IS DONE FOR YOU.
 
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
-   Mandatory qualifiers:
-  [-seqa]              sequence   Sequence USA
-  [-seqb]              sequence   Sequence USA
+   Standard (Mandatory) qualifiers:
+  [-asequence]         sequence   Sequence USA
+  [-bsequence]         sequence   Sequence USA
   [-outseq]            seqout     Output sequence USA
-  [-outfile]           align      Output alignment and explanation
+  [-outfile]           align      Output alignment file name
 
-   Optional qualifiers:
+   Additional (Optional) qualifiers:
    -datafile           matrixf    This is the scoring matrix file used when
                                   comparing sequences. By default it is the
                                   file 'EBLOSUM62' (for proteins) or the file
@@ -171,9 +171,10 @@ IT IS DONE FOR YOU.
    -gapopen            float      Gap opening penalty
    -gapextend          float      Gap extension penalty
 
-   Advanced qualifiers: (none)
+   Advanced (Unprompted) qualifiers: (none)
    Associated qualifiers:
-  "-seqa" related qualifiers
+
+   "-asequence" associated qualifiers
    -sbegin1             integer    First base used
    -send1               integer    Last base used, def=seq length
    -sreverse1           boolean    Reverse (if DNA)
@@ -183,13 +184,13 @@ IT IS DONE FOR YOU.
    -slower1             boolean    Make lower case
    -supper1             boolean    Make upper case
    -sformat1            string     Input sequence format
-   -sopenfile1          string     Input filename
    -sdbname1            string     Database name
    -sid1                string     Entryname
    -ufo1                string     UFO features
    -fformat1            string     Features format
    -fopenfile1          string     Features file name
-  "-seqb" related qualifiers
+
+   "-bsequence" associated qualifiers
    -sbegin2             integer    First base used
    -send2               integer    Last base used, def=seq length
    -sreverse2           boolean    Reverse (if DNA)
@@ -199,13 +200,13 @@ IT IS DONE FOR YOU.
    -slower2             boolean    Make lower case
    -supper2             boolean    Make upper case
    -sformat2            string     Input sequence format
-   -sopenfile2          string     Input filename
    -sdbname2            string     Database name
    -sid2                string     Entryname
    -ufo2                string     UFO features
    -fformat2            string     Features format
    -fopenfile2          string     Features file name
-  "-outseq" related qualifiers
+
+   "-outseq" associated qualifiers
    -osformat3           string     Output seq format
    -osextension3        string     File name extension
    -osname3             string     Base file name
@@ -216,9 +217,9 @@ IT IS DONE FOR YOU.
    -offormat3           string     Features format
    -ofname3             string     Features file name
    -ofdirectory3        string     Output directory
-  "-outfile" related qualifiers
+
+   "-outfile" associated qualifiers
    -aformat4            string     Alignment format
-   -aopenfile4          string     Alignment file name
    -aextension4         string     File name extension
    -adirectory4         string     Output directory
    -aname4              string     Base file name
@@ -232,11 +233,8 @@ IT IS DONE FOR YOU.
    -auto                boolean    Turn off prompts
    -stdout              boolean    Write standard output
    -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for required and optional values
+   -options             boolean    Prompt for standard and additional values
    -debug               boolean    Write debug output to program.dbg
-   -acdlog              boolean    Write ACD processing log to program.acdlog
-   -acdpretty           boolean    Rewrite ACD file as program.acdpretty
-   -acdtable            boolean    Write HTML table of options
    -verbose             boolean    Report some/full command line options
    -help                boolean    Report command line options. More
                                   information on associated and general
@@ -253,20 +251,20 @@ IT IS DONE FOR YOU.
 
 <table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=2>Mandatory qualifiers</th>
+<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
 <th align="left">Allowed values</th>
 <th align="left">Default</th>
 </tr>
 
 <tr>
-<td>[-seqa]<br>(Parameter 1)</td>
+<td>[-asequence]<br>(Parameter 1)</td>
 <td>Sequence USA</td>
 <td>Readable sequence</td>
 <td><b>Required</b></td>
 </tr>
 
 <tr>
-<td>[-seqb]<br>(Parameter 2)</td>
+<td>[-bsequence]<br>(Parameter 2)</td>
 <td>Sequence USA</td>
 <td>Readable sequence</td>
 <td><b>Required</b></td>
@@ -281,13 +279,13 @@ IT IS DONE FOR YOU.
 
 <tr>
 <td>[-outfile]<br>(Parameter 4)</td>
-<td>Output alignment and explanation</td>
+<td>Output alignment file name</td>
 <td>Alignment output file</td>
 <td>&nbsp;</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=2>Optional qualifiers</th>
+<th align="left" colspan=2>Additional (Optional) qualifiers</th>
 <th align="left">Allowed values</th>
 <th align="left">Default</th>
 </tr>
@@ -314,7 +312,7 @@ IT IS DONE FOR YOU.
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=2>Advanced qualifiers</th>
+<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
 <th align="left">Allowed values</th>
 <th align="left">Default</th>
 </tr>
@@ -649,7 +647,7 @@ agcttccggccagcgccagcccgcccatggtaaccaccggcagagcggtcgac
 <pre>
 ########################################
 # Program:  merger
-# Rundate:  Thu May 22 10:36:05 2003
+# Rundate:  Thu Nov 27 15:22:29 2003
 # Align_format: simple
 # Report_file: eclacy.out2
 ########################################

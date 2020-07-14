@@ -34,14 +34,14 @@ Output alignment [eclac.supermatcher]:
    
 Command line arguments
 
-   Mandatory qualifiers:
-  [-seqa]              seqall     Sequence database USA
-  [-seqb]              seqset     Sequence set USA
+   Standard (Mandatory) qualifiers:
+  [-asequence]         seqall     Sequence database USA
+  [-bsequence]         seqset     Sequence set USA
    -gapopen            float      Gap opening penalty
    -gapextend          float      Gap extension penalty
    -outfile            align      Output alignment file name
 
-   Optional qualifiers:
+   Additional (Optional) qualifiers:
    -datafile           matrixf    This is the scoring matrix file used when
                                   comparing sequences. By default it is the
                                   file 'EBLOSUM62' (for proteins) or the file
@@ -52,9 +52,10 @@ Command line arguments
    -wordlen            integer    word length for initial matching
    -errorfile          outfile    Error file to be written to
 
-   Advanced qualifiers: (none)
+   Advanced (Unprompted) qualifiers: (none)
    Associated qualifiers:
-  "-seqa" related qualifiers
+
+   "-asequence" associated qualifiers
    -sbegin1             integer    First base used
    -send1               integer    Last base used, def=seq length
    -sreverse1           boolean    Reverse (if DNA)
@@ -64,13 +65,13 @@ Command line arguments
    -slower1             boolean    Make lower case
    -supper1             boolean    Make upper case
    -sformat1            string     Input sequence format
-   -sopenfile1          string     Input filename
    -sdbname1            string     Database name
    -sid1                string     Entryname
    -ufo1                string     UFO features
    -fformat1            string     Features format
    -fopenfile1          string     Features file name
-  "-seqb" related qualifiers
+
+   "-bsequence" associated qualifiers
    -sbegin2             integer    First base used
    -send2               integer    Last base used, def=seq length
    -sreverse2           boolean    Reverse (if DNA)
@@ -80,15 +81,14 @@ Command line arguments
    -slower2             boolean    Make lower case
    -supper2             boolean    Make upper case
    -sformat2            string     Input sequence format
-   -sopenfile2          string     Input filename
    -sdbname2            string     Database name
    -sid2                string     Entryname
    -ufo2                string     UFO features
    -fformat2            string     Features format
    -fopenfile2          string     Features file name
-  "-outfile" related qualifiers
+
+   "-outfile" associated qualifiers
    -aformat             string     Alignment format
-   -aopenfile           string     Alignment file name
    -aextension          string     File name extension
    -adirectory          string     Output directory
    -aname               string     Base file name
@@ -97,18 +97,16 @@ Command line arguments
    -adesshow            boolean    Show description in the header
    -ausashow            boolean    Show the full USA in the alignment
    -aglobal             boolean    Show the full sequence in alignment
-  "-errorfile" related qualifiers
+
+   "-errorfile" associated qualifiers
    -odirectory          string     Output directory
 
    General qualifiers:
    -auto                boolean    Turn off prompts
    -stdout              boolean    Write standard output
    -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for required and optional values
+   -options             boolean    Prompt for standard and additional values
    -debug               boolean    Write debug output to program.dbg
-   -acdlog              boolean    Write ACD processing log to program.acdlog
-   -acdpretty           boolean    Rewrite ACD file as program.acdpretty
-   -acdtable            boolean    Write HTML table of options
    -verbose             boolean    Report some/full command line options
    -help                boolean    Report command line options. More
                                   information on associated and general
@@ -119,27 +117,27 @@ Command line arguments
    -die                 boolean    Report deaths
    
 
-   Mandatory qualifiers Allowed values Default
-   [-seqa]
+   Standard (Mandatory) qualifiers Allowed values Default
+   [-asequence]
    (Parameter 1) Sequence database USA Readable sequence(s) Required
-   [-seqb]
-   (Parameter 2) Sequence set USA Readable sequences Required
+   [-bsequence]
+   (Parameter 2) Sequence set USA Readable set of sequences Required
    -gapopen Gap opening penalty Number from 1.000 to 100.000 10.0 for any
    sequence type
    -gapextend Gap extension penalty Number from 0.100 to 10.000 0.5 for
    any sequence type
    -outfile Output alignment file name Alignment output file
-   Optional qualifiers Allowed values Default
+   Additional (Optional) qualifiers Allowed values Default
    -datafile This is the scoring matrix file used when comparing
    sequences. By default it is the file 'EBLOSUM62' (for proteins) or the
    file 'EDNAFULL' (for nucleic sequences). These files are found in the
    'data' directory of the EMBOSS installation. Comparison matrix file in
    EMBOSS data path EBLOSUM62 for protein
    EDNAFULL for DNA
-   -width Alignment width Any integer value 16
+   -width Alignment width Integer 1 or more 16
    -wordlen word length for initial matching Integer 3 or more 6
    -errorfile Error file to be written to Output file supermatcher.error
-   Advanced qualifiers Allowed values Default
+   Advanced (Unprompted) qualifiers Allowed values Default
    (none)
    
 Input file format
@@ -337,7 +335,7 @@ Output file format
   
 ########################################
 # Program:  supermatcher
-# Rundate:  Thu May 22 10:58:40 2003
+# Rundate:  Thu Nov 27 15:25:47 2003
 # Align_format: simple
 # Report_file: eclac.supermatcher
 ########################################

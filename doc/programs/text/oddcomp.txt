@@ -57,7 +57,7 @@ Usage
 % oddcomp 
 Finds protein sequence regions with a biased composition
 Input sequence(s): tsw:*
-Input file: ../../data/oddcomp.comp
+'compseq' file to use for expected word frequencies: ../../data/oddcomp.comp
 Window size to consider (e.g. 30 aa) [30]: 
 Output file [100k_rat.oddcomp]: out.odd
    
@@ -66,9 +66,9 @@ Output file [100k_rat.oddcomp]: out.odd
    
 Command line arguments
 
-   Mandatory qualifiers:
+   Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Sequence database USA
-  [-compdata]          infile     This is a file in the format of the output
+  [-compdatafile]      infile     This is a file in the format of the output
                                   produced by 'compseq' that is used to set
                                   the minimum frequencies of words in this
                                   analysis.
@@ -78,8 +78,8 @@ Command line arguments
                                   40 aa stretch you should enter 40 here.
   [-outfile]           outfile    This is the results file.
 
-   Optional qualifiers: (none)
-   Advanced qualifiers:
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers:
    -[no]ignorebz       boolean    The amino acid code B represents Asparagine
                                   or Aspartic acid and the code Z represents
                                   Glutamine or Glutamic acid.
@@ -89,7 +89,8 @@ Command line arguments
                                   words.
 
    Associated qualifiers:
-  "-sequence" related qualifiers
+
+   "-sequence" associated qualifiers
    -sbegin1             integer    First base used
    -send1               integer    Last base used, def=seq length
    -sreverse1           boolean    Reverse (if DNA)
@@ -99,24 +100,21 @@ Command line arguments
    -slower1             boolean    Make lower case
    -supper1             boolean    Make upper case
    -sformat1            string     Input sequence format
-   -sopenfile1          string     Input filename
    -sdbname1            string     Database name
    -sid1                string     Entryname
    -ufo1                string     UFO features
    -fformat1            string     Features format
    -fopenfile1          string     Features file name
-  "-outfile" related qualifiers
+
+   "-outfile" associated qualifiers
    -odirectory4         string     Output directory
 
    General qualifiers:
    -auto                boolean    Turn off prompts
    -stdout              boolean    Write standard output
    -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for required and optional values
+   -options             boolean    Prompt for standard and additional values
    -debug               boolean    Write debug output to program.dbg
-   -acdlog              boolean    Write ACD processing log to program.acdlog
-   -acdpretty           boolean    Rewrite ACD file as program.acdpretty
-   -acdtable            boolean    Write HTML table of options
    -verbose             boolean    Report some/full command line options
    -help                boolean    Report command line options. More
                                   information on associated and general
@@ -127,10 +125,10 @@ Command line arguments
    -die                 boolean    Report deaths
    
 
-   Mandatory qualifiers Allowed values Default
+   Standard (Mandatory) qualifiers Allowed values Default
    [-sequence]
    (Parameter 1) Sequence database USA Readable sequence(s) Required
-   [-compdata]
+   [-compdatafile]
    (Parameter 2) This is a file in the format of the output produced by
    'compseq' that is used to set the minimum frequencies of words in this
    analysis. Input file Required
@@ -140,9 +138,9 @@ Command line arguments
    here. Integer 10 or more 30
    [-outfile]
    (Parameter 4) This is the results file. Output file <sequence>.oddcomp
-   Optional qualifiers Allowed values Default
+   Additional (Optional) qualifiers Allowed values Default
    (none)
-   Advanced qualifiers Allowed values Default
+   Advanced (Unprompted) qualifiers Allowed values Default
    -[no]ignorebz The amino acid code B represents Asparagine or Aspartic
    acid and the code Z represents Glutamine or Glutamic acid. These are
    not commonly used codes and you may wish not to count words containing
@@ -253,13 +251,13 @@ See also
     Program name                         Description
    antigenic      Finds antigenic sites in proteins
    digest         Protein proteolytic enzyme or reagent cleavage digest
+   epestfind      Finds PEST motifs as potential proteolytic cleavage sites
    fuzzpro        Protein pattern search
    fuzztran       Protein pattern search after translation
    helixturnhelix Report nucleic acid binding motifs
    patmatdb       Search a protein sequence with a motif
    patmatmotifs   Search a PROSITE motif database with a protein sequence
    pepcoil        Predicts coiled coil regions
-   pestfind       Finds PEST motifs as potential proteolytic cleavage sites
    preg           Regular expression search of a protein sequence
    pscan          Scans proteins using PRINTS
    sigcleave      Reports protein signal cleavage sites

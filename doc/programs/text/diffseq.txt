@@ -37,14 +37,16 @@ Usage
 % diffseq tembl:ap000504 tembl:af129756 
 Find differences between nearly identical sequences
 Word size [10]: 
-Output report file [ap000504.diffseq]: 
+Output report [ap000504.diffseq]: 
+Output features [AP000504.diffgff]: 
+Second output features [AF129756.diffgff]: 
    
    Go to the input files for this example
    Go to the output files for this example
    
 Command line arguments
 
-   Mandatory qualifiers:
+   Standard (Mandatory) qualifiers:
   [-asequence]         sequence   Sequence USA
   [-bsequence]         sequence   Sequence USA
    -wordsize           integer    The similar regions between the two
@@ -59,13 +61,12 @@ Command line arguments
                                   improve the resolution of nearby
                                   differences, but the program will go much
                                   slower.
-   -outfile            report     Output report file
+  [-outfile]           report     Output report file name
+  [-afeatout]          featout    File for output of first sequence's features
+  [-bfeatout]          featout    File for output of second sequence's
+                                  features
 
-   Optional qualifiers:
-   -afeatout           featout    File for output of first sequence's normal
-                                  tab delimited gff's
-   -bfeatout           featout    File for output of second sequence's normal
-                                  tab delimited gff's
+   Additional (Optional) qualifiers:
    -columns            boolean    The default format for the output report
                                   file is to have several lines per difference
                                   giving the sequence positions, sequences
@@ -74,9 +75,10 @@ Command line arguments
                                   report file's format is changed to a set of
                                   columns and no feature information is given.
 
-   Advanced qualifiers: (none)
+   Advanced (Unprompted) qualifiers: (none)
    Associated qualifiers:
-  "-asequence" related qualifiers
+
+   "-asequence" associated qualifiers
    -sbegin1             integer    First base used
    -send1               integer    Last base used, def=seq length
    -sreverse1           boolean    Reverse (if DNA)
@@ -86,13 +88,13 @@ Command line arguments
    -slower1             boolean    Make lower case
    -supper1             boolean    Make upper case
    -sformat1            string     Input sequence format
-   -sopenfile1          string     Input filename
    -sdbname1            string     Database name
    -sid1                string     Entryname
    -ufo1                string     UFO features
    -fformat1            string     Features format
    -fopenfile1          string     Features file name
-  "-bsequence" related qualifiers
+
+   "-bsequence" associated qualifiers
    -sbegin2             integer    First base used
    -send2               integer    Last base used, def=seq length
    -sreverse2           boolean    Reverse (if DNA)
@@ -102,45 +104,44 @@ Command line arguments
    -slower2             boolean    Make lower case
    -supper2             boolean    Make upper case
    -sformat2            string     Input sequence format
-   -sopenfile2          string     Input filename
    -sdbname2            string     Database name
    -sid2                string     Entryname
    -ufo2                string     UFO features
    -fformat2            string     Features format
    -fopenfile2          string     Features file name
-  "-outfile" related qualifiers
-   -rformat             string     Report format
-   -rname               string     Base file name
-   -rextension          string     File name extension
-   -rdirectory          string     Output directory
-   -raccshow            boolean    Show accession number in the report
-   -rdesshow            boolean    Show description in the report
-   -rscoreshow          boolean    Show the score in the report
-   -rusashow            boolean    Show the full USA in the report
-  "-afeatout" related qualifiers
-   -offormat            string     Output feature format
-   -ofopenfile          string     Features file name
-   -ofextension         string     File name extension
-   -ofdirectory         string     Output directory
-   -ofname              string     Base file name
-   -ofsingle            boolean    Separate file for each entry
-  "-bfeatout" related qualifiers
-   -offormat            string     Output feature format
-   -ofopenfile          string     Features file name
-   -ofextension         string     File name extension
-   -ofdirectory         string     Output directory
-   -ofname              string     Base file name
-   -ofsingle            boolean    Separate file for each entry
+
+   "-outfile" associated qualifiers
+   -rformat3            string     Report format
+   -rname3              string     Base file name
+   -rextension3         string     File name extension
+   -rdirectory3         string     Output directory
+   -raccshow3           boolean    Show accession number in the report
+   -rdesshow3           boolean    Show description in the report
+   -rscoreshow3         boolean    Show the score in the report
+   -rusashow3           boolean    Show the full USA in the report
+
+   "-afeatout" associated qualifiers
+   -offormat4           string     Output feature format
+   -ofopenfile4         string     Features file name
+   -ofextension4        string     File name extension
+   -ofdirectory4        string     Output directory
+   -ofname4             string     Base file name
+   -ofsingle4           boolean    Separate file for each entry
+
+   "-bfeatout" associated qualifiers
+   -offormat5           string     Output feature format
+   -ofopenfile5         string     Features file name
+   -ofextension5        string     File name extension
+   -ofdirectory5        string     Output directory
+   -ofname5             string     Base file name
+   -ofsingle5           boolean    Separate file for each entry
 
    General qualifiers:
    -auto                boolean    Turn off prompts
    -stdout              boolean    Write standard output
    -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for required and optional values
+   -options             boolean    Prompt for standard and additional values
    -debug               boolean    Write debug output to program.dbg
-   -acdlog              boolean    Write ACD processing log to program.acdlog
-   -acdpretty           boolean    Rewrite ACD file as program.acdpretty
-   -acdtable            boolean    Write HTML table of options
    -verbose             boolean    Report some/full command line options
    -help                boolean    Report command line options. More
                                   information on associated and general
@@ -151,7 +152,7 @@ Command line arguments
    -die                 boolean    Report deaths
    
 
-   Mandatory qualifiers Allowed values Default
+   Standard (Mandatory) qualifiers Allowed values Default
    [-asequence]
    (Parameter 1) Sequence USA Readable sequence Required
    [-bsequence]
@@ -163,18 +164,21 @@ Command line arguments
    each other will be grouped as a single region of difference. This
    value may be made smaller (4?) to improve the resolution of nearby
    differences, but the program will go much slower. Integer 2 or more 10
-   -outfile Output report file Report output file
-   Optional qualifiers Allowed values Default
-   -afeatout File for output of first sequence's normal tab delimited
-   gff's Writeable feature table $(asequence.name).diffgff
-   -bfeatout File for output of second sequence's normal tab delimited
-   gff's Writeable feature table $(bsequence.name).diffgff
+   [-outfile]
+   (Parameter 3) Output report file name Report output file
+   [-afeatout]
+   (Parameter 4) File for output of first sequence's features Writeable
+   feature table $(asequence.name).diffgff
+   [-bfeatout]
+   (Parameter 5) File for output of second sequence's features Writeable
+   feature table $(bsequence.name).diffgff
+   Additional (Optional) qualifiers Allowed values Default
    -columns The default format for the output report file is to have
    several lines per difference giving the sequence positions, sequences
    and features. If this option is set true then the output report file's
    format is changed to a set of columns and no feature information is
    given. Boolean value Yes/No No
-   Advanced qualifiers Allowed values Default
+   Advanced (Unprompted) qualifiers Allowed values Default
    (none)
    
 Input file format
@@ -531,7 +535,7 @@ Output file format
   File: AF129756.diffgff
   
 ##gff-version 2.0
-##date 2003-05-22
+##date 2003-11-27
 ##Type DNA AF129756
 AF129756        diffseq conflict        6882    6882    1.000   +       .
 Sequence "AF129756.1" ; note "SNP in AP000504" ; replace "a"
@@ -737,7 +741,7 @@ Sequence "AF129756.105" ; note "SNP in AP000504" ; replace "c"
   File: AP000504.diffgff
   
 ##gff-version 2.0
-##date 2003-05-22
+##date 2003-11-27
 ##Type DNA AP000504
 AP000504        diffseq conflict        847     847     1.000   +       .
 Sequence "AP000504.1" ; note "SNP in AF129756" ; replace "t"
@@ -944,7 +948,7 @@ Sequence "AP000504.105" ; note "SNP in AF129756" ; replace "t"
   
 ########################################
 # Program: diffseq
-# Rundate: Thu May 22 14:44:04 2003
+# Rundate: Thu Nov 27 15:19:43 2003
 # Report_format: diffseq
 # Report_file: ap000504.diffseq
 # Additional_files: 2

@@ -63,7 +63,15 @@ length as the window is moved along the sequence.
 
 
 
+<H2>
+   Algorithm
+</H2>
 
+
+<b>charge</b> uses the column "charge" from the datafile
+<i>Eamino.dat</i>.  It gives the residues 'D' and 'E' a charge of -1,
+'K' and 'R' a charge of +1, and the residue 'H' a charge of +0.5.  Then
+it calculates the mean charge across -window (default is 5). 
 
 
 
@@ -124,20 +132,21 @@ Output file [hbb_human.charge]:
 
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
-   Mandatory qualifiers (* if not always prompted):
+   Standard (Mandatory) qualifiers (* if not always prompted):
   [-seqall]            seqall     Sequence database USA
 *  -graph              xygraph    Graph type
 *  -outfile            outfile    Output file name
 
-   Optional qualifiers:
+   Additional (Optional) qualifiers:
    -window             integer    Window
 
-   Advanced qualifiers:
+   Advanced (Unprompted) qualifiers:
    -aadata             string     Amino acid property data file name
    -plot               boolean    Produce graphic
 
    Associated qualifiers:
-  "-seqall" related qualifiers
+
+   "-seqall" associated qualifiers
    -sbegin1             integer    First base used
    -send1               integer    Last base used, def=seq length
    -sreverse1           boolean    Reverse (if DNA)
@@ -147,13 +156,13 @@ Output file [hbb_human.charge]:
    -slower1             boolean    Make lower case
    -supper1             boolean    Make upper case
    -sformat1            string     Input sequence format
-   -sopenfile1          string     Input filename
    -sdbname1            string     Database name
    -sid1                string     Entryname
    -ufo1                string     UFO features
    -fformat1            string     Features format
    -fopenfile1          string     Features file name
-  "-graph" related qualifiers
+
+   "-graph" associated qualifiers
    -gprompt             boolean    Graph prompting
    -gtitle              string     Graph title
    -gsubtitle           string     Graph subtitle
@@ -161,18 +170,16 @@ Output file [hbb_human.charge]:
    -gytitle             string     Graph y axis title
    -goutfile            string     Output file for non interactive displays
    -gdirectory          string     Output directory
-  "-outfile" related qualifiers
+
+   "-outfile" associated qualifiers
    -odirectory          string     Output directory
 
    General qualifiers:
    -auto                boolean    Turn off prompts
    -stdout              boolean    Write standard output
    -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for required and optional values
+   -options             boolean    Prompt for standard and additional values
    -debug               boolean    Write debug output to program.dbg
-   -acdlog              boolean    Write ACD processing log to program.acdlog
-   -acdpretty           boolean    Rewrite ACD file as program.acdpretty
-   -acdtable            boolean    Write HTML table of options
    -verbose             boolean    Report some/full command line options
    -help                boolean    Report command line options. More
                                   information on associated and general
@@ -188,7 +195,7 @@ Output file [hbb_human.charge]:
 <P>
 <table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=2>Mandatory qualifiers</th>
+<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
 <th align="left">Allowed values</th>
 <th align="left">Default</th>
 </tr>
@@ -215,7 +222,7 @@ Output file [hbb_human.charge]:
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=2>Optional qualifiers</th>
+<th align="left" colspan=2>Additional (Optional) qualifiers</th>
 <th align="left">Allowed values</th>
 <th align="left">Default</th>
 </tr>
@@ -228,7 +235,7 @@ Output file [hbb_human.charge]:
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=2>Advanced qualifiers</th>
+<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
 <th align="left">Allowed values</th>
 <th align="left">Default</th>
 </tr>

@@ -93,19 +93,20 @@ IT IS DONE FOR YOU.
 
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
-   Mandatory qualifiers:
+   Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Sequence database USA
   [-outfile]           report     Output report file name
 
-   Optional qualifiers:
+   Additional (Optional) qualifiers:
    -mean               float      Mean value
    -sd                 float      Standard Deviation value
    -minsd              float      Minimum SD
    -eightyseven        boolean    Use the old (1987) weight data
 
-   Advanced qualifiers: (none)
+   Advanced (Unprompted) qualifiers: (none)
    Associated qualifiers:
-  "-sequence" related qualifiers
+
+   "-sequence" associated qualifiers
    -sbegin1             integer    First base used
    -send1               integer    Last base used, def=seq length
    -sreverse1           boolean    Reverse (if DNA)
@@ -115,13 +116,13 @@ IT IS DONE FOR YOU.
    -slower1             boolean    Make lower case
    -supper1             boolean    Make upper case
    -sformat1            string     Input sequence format
-   -sopenfile1          string     Input filename
    -sdbname1            string     Database name
    -sid1                string     Entryname
    -ufo1                string     UFO features
    -fformat1            string     Features format
    -fopenfile1          string     Features file name
-  "-outfile" related qualifiers
+
+   "-outfile" associated qualifiers
    -rformat2            string     Report format
    -rname2              string     Base file name
    -rextension2         string     File name extension
@@ -135,11 +136,8 @@ IT IS DONE FOR YOU.
    -auto                boolean    Turn off prompts
    -stdout              boolean    Write standard output
    -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for required and optional values
+   -options             boolean    Prompt for standard and additional values
    -debug               boolean    Write debug output to program.dbg
-   -acdlog              boolean    Write ACD processing log to program.acdlog
-   -acdpretty           boolean    Rewrite ACD file as program.acdpretty
-   -acdtable            boolean    Write HTML table of options
    -verbose             boolean    Report some/full command line options
    -help                boolean    Report command line options. More
                                   information on associated and general
@@ -156,7 +154,7 @@ IT IS DONE FOR YOU.
 
 <table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=2>Mandatory qualifiers</th>
+<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
 <th align="left">Allowed values</th>
 <th align="left">Default</th>
 </tr>
@@ -176,7 +174,7 @@ IT IS DONE FOR YOU.
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=2>Optional qualifiers</th>
+<th align="left" colspan=2>Additional (Optional) qualifiers</th>
 <th align="left">Allowed values</th>
 <th align="left">Default</th>
 </tr>
@@ -210,7 +208,7 @@ IT IS DONE FOR YOU.
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=2>Advanced qualifiers</th>
+<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
 <th align="left">Allowed values</th>
 <th align="left">Default</th>
 </tr>
@@ -391,7 +389,7 @@ By default <b>helixturnhelix</b> writes a 'motif' report file.
 <pre>
 ########################################
 # Program: helixturnhelix
-# Rundate: Thu May 22 10:33:02 2003
+# Rundate: Thu Nov 27 15:22:12 2003
 # Report_format: motif
 # Report_file: laci_ecoli.hth
 ########################################
@@ -429,10 +427,19 @@ Maximum_score_at at "*"
 The data files are stored in the standard EMBOSS data directory. The
 names are:
 
+<p>
+
 <ul>
    <li> Ehth.dat          matrix file
    <li> Ehth87.dat        1987 shorter matrix file
 </ul>
+
+<p>
+
+The old (1987) data has a motif length of 20 residues, whilst the default
+data (Ehth.dat) has a motif length of 22 residues. 
+
+<p>
 
 With care these can be replaced to suit your data sets. If the files are
 placed in the following directories they will be used in preference to
@@ -543,6 +550,7 @@ None.
 <tr><th>Program name</th><th>Description</th></tr>
 <tr><td><a href="antigenic.html">antigenic</a></td><td>Finds antigenic sites in proteins</td></tr>
 <tr><td><a href="digest.html">digest</a></td><td>Protein proteolytic enzyme or reagent cleavage digest</td></tr>
+<tr><td><a href="epestfind.html">epestfind</a></td><td>Finds PEST motifs as potential proteolytic cleavage sites</td></tr>
 <tr><td><a href="fuzzpro.html">fuzzpro</a></td><td>Protein pattern search</td></tr>
 <tr><td><a href="fuzztran.html">fuzztran</a></td><td>Protein pattern search after translation</td></tr>
 <tr><td><a href="garnier.html">garnier</a></td><td>Predicts protein secondary structure</td></tr>
@@ -553,7 +561,6 @@ None.
 <tr><td><a href="pepcoil.html">pepcoil</a></td><td>Predicts coiled coil regions</td></tr>
 <tr><td><a href="pepnet.html">pepnet</a></td><td>Displays proteins as a helical net</td></tr>
 <tr><td><a href="pepwheel.html">pepwheel</a></td><td>Shows protein sequences as helices</td></tr>
-<tr><td><a href="pestfind.html">pestfind</a></td><td>Finds PEST motifs as potential proteolytic cleavage sites</td></tr>
 <tr><td><a href="preg.html">preg</a></td><td>Regular expression search of a protein sequence</td></tr>
 <tr><td><a href="pscan.html">pscan</a></td><td>Scans proteins using PRINTS</td></tr>
 <tr><td><a href="sigcleave.html">sigcleave</a></td><td>Reports protein signal cleavage sites</td></tr>

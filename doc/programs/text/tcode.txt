@@ -105,7 +105,7 @@ Created tcode.ps
    
 Command line arguments
 
-   Mandatory qualifiers (* if not always prompted):
+   Standard (Mandatory) qualifiers (* if not always prompted):
   [-sequence]          seqall     Sequence database USA
    -window             integer    This is the number of nucleotide bases over
                                   which the TESTCODE statistic will be
@@ -115,8 +115,8 @@ Command line arguments
 *  -outfile            report     Output report file name
 *  -graph              xygraph    Graph type
 
-   Optional qualifiers: (none)
-   Advanced qualifiers:
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers:
    -plot               boolean    On selection a graph of the sequence (X
                                   axis) plotted against the coding score (Y
                                   axis) will be displayed. Sequence above the
@@ -134,7 +134,8 @@ Command line arguments
                                   and compositional information.
 
    Associated qualifiers:
-  "-sequence" related qualifiers
+
+   "-sequence" associated qualifiers
    -sbegin1             integer    First base used
    -send1               integer    Last base used, def=seq length
    -sreverse1           boolean    Reverse (if DNA)
@@ -144,13 +145,13 @@ Command line arguments
    -slower1             boolean    Make lower case
    -supper1             boolean    Make upper case
    -sformat1            string     Input sequence format
-   -sopenfile1          string     Input filename
    -sdbname1            string     Database name
    -sid1                string     Entryname
    -ufo1                string     UFO features
    -fformat1            string     Features format
    -fopenfile1          string     Features file name
-  "-outfile" related qualifiers
+
+   "-outfile" associated qualifiers
    -rformat             string     Report format
    -rname               string     Base file name
    -rextension          string     File name extension
@@ -159,7 +160,8 @@ Command line arguments
    -rdesshow            boolean    Show description in the report
    -rscoreshow          boolean    Show the score in the report
    -rusashow            boolean    Show the full USA in the report
-  "-graph" related qualifiers
+
+   "-graph" associated qualifiers
    -gprompt             boolean    Graph prompting
    -gtitle              string     Graph title
    -gsubtitle           string     Graph subtitle
@@ -172,11 +174,8 @@ Command line arguments
    -auto                boolean    Turn off prompts
    -stdout              boolean    Write standard output
    -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for required and optional values
+   -options             boolean    Prompt for standard and additional values
    -debug               boolean    Write debug output to program.dbg
-   -acdlog              boolean    Write ACD processing log to program.acdlog
-   -acdpretty           boolean    Rewrite ACD file as program.acdpretty
-   -acdtable            boolean    Write HTML table of options
    -verbose             boolean    Report some/full command line options
    -help                boolean    Report command line options. More
                                   information on associated and general
@@ -187,7 +186,7 @@ Command line arguments
    -die                 boolean    Report deaths
    
 
-   Mandatory qualifiers Allowed values Default
+   Standard (Mandatory) qualifiers Allowed values Default
    [-sequence]
    (Parameter 1) Sequence database USA Readable sequence(s) Required
    -window This is the number of nucleotide bases over which the TESTCODE
@@ -199,9 +198,9 @@ Command line arguments
    postscript, ps, hpgl, hp7470, hp7580, meta, colourps, cps, xwindows,
    x11, tektronics, tekt, tek4107t, tek, none, null, text, data, xterm,
    png EMBOSS_GRAPHICS value, or x11
-   Optional qualifiers Allowed values Default
+   Additional (Optional) qualifiers Allowed values Default
    (none)
-   Advanced qualifiers Allowed values Default
+   Advanced (Unprompted) qualifiers Allowed values Default
    -plot On selection a graph of the sequence (X axis) plotted against
    the coding score (Y axis) will be displayed. Sequence above the green
    line is coding, that below the red line is non-coding. Boolean value
@@ -406,7 +405,7 @@ Output file format
   
 ########################################
 # Program: tcode
-# Rundate: Thu May 22 10:58:48 2003
+# Rundate: Thu Nov 27 15:25:49 2003
 # Report_format: table
 # Report_file: hsfau1.tcode
 ########################################

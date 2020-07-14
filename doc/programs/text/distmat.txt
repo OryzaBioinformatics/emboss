@@ -199,16 +199,16 @@ Output file [pax.distmat]:
    
 Command line arguments
 
-   Mandatory qualifiers (* if not always prompted):
-  [-msf]               seqset     File containing a sequence alignment.
+   Standard (Mandatory) qualifiers (* if not always prompted):
+  [-sequence]          seqset     File containing a sequence alignment.
 *  -nucmethod          menu       Multiple substitution correction methods for
                                   nucleotides.
 *  -protmethod         menu       Multiple substitution correction methods for
                                   proteins.
-  [-outf]              outfile    Enter a name for the distance matrix
+  [-outfile]           outfile    Output file name
 
-   Optional qualifiers (* if not always prompted):
-*  -ambiguous          boolean    Option to use the abiguous codes in the
+   Additional (Optional) qualifiers (* if not always prompted):
+*  -ambiguous          boolean    Option to use the ambiguous codes in the
                                   calculation of the Jukes-Cantor method or if
                                   the sequences are proteins.
 *  -gapweight          float      Option to weight gaps in the uncorrected
@@ -226,9 +226,10 @@ Command line arguments
                                   suggested value to be used is 1.0 [Jin et
                                   al.] and this is the default.
 
-   Advanced qualifiers: (none)
+   Advanced (Unprompted) qualifiers: (none)
    Associated qualifiers:
-  "-msf" related qualifiers
+
+   "-sequence" associated qualifiers
    -sbegin1             integer    First base used
    -send1               integer    Last base used, def=seq length
    -sreverse1           boolean    Reverse (if DNA)
@@ -238,24 +239,21 @@ Command line arguments
    -slower1             boolean    Make lower case
    -supper1             boolean    Make upper case
    -sformat1            string     Input sequence format
-   -sopenfile1          string     Input filename
    -sdbname1            string     Database name
    -sid1                string     Entryname
    -ufo1                string     UFO features
    -fformat1            string     Features format
    -fopenfile1          string     Features file name
-  "-outf" related qualifiers
+
+   "-outfile" associated qualifiers
    -odirectory2         string     Output directory
 
    General qualifiers:
    -auto                boolean    Turn off prompts
    -stdout              boolean    Write standard output
    -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for required and optional values
+   -options             boolean    Prompt for standard and additional values
    -debug               boolean    Write debug output to program.dbg
-   -acdlog              boolean    Write ACD processing log to program.acdlog
-   -acdpretty           boolean    Rewrite ACD file as program.acdpretty
-   -acdtable            boolean    Write HTML table of options
    -verbose             boolean    Report some/full command line options
    -help                boolean    Report command line options. More
                                   information on associated and general
@@ -266,10 +264,10 @@ Command line arguments
    -die                 boolean    Report deaths
    
 
-   Mandatory qualifiers Allowed values Default
-   [-msf]
-   (Parameter 1) File containing a sequence alignment. Readable sequences
-   Required
+   Standard (Mandatory) qualifiers Allowed values Default
+   [-sequence]
+   (Parameter 1) File containing a sequence alignment. Readable set of
+   sequences Required
    -nucmethod Multiple substitution correction methods for nucleotides.
    0 (Uncorrected)
    1 (Jukes-Cantor)
@@ -283,11 +281,10 @@ Command line arguments
    1 (Jukes-Cantor)
    2 (Kimura Protein)
    0
-   [-outf]
-   (Parameter 2) Enter a name for the distance matrix Output file
-   <sequence>.distmat
-   Optional qualifiers Allowed values Default
-   -ambiguous Option to use the abiguous codes in the calculation of the
+   [-outfile]
+   (Parameter 2) Output file name Output file <sequence>.distmat
+   Additional (Optional) qualifiers Allowed values Default
+   -ambiguous Option to use the ambiguous codes in the calculation of the
    Jukes-Cantor method or if the sequences are proteins. Boolean value
    Yes/No No
    -gapweight Option to weight gaps in the uncorrected (nucleotide) and
@@ -301,7 +298,7 @@ Command line arguments
    -parametera User defined a parameter to be use in the Jin-Nei Gamma
    distance calculation. The suggested value to be used is 1.0 [Jin et
    al.] and this is the default. Any numeric value 1.0
-   Advanced qualifiers Allowed values Default
+   Advanced (Unprompted) qualifiers Allowed values Default
    (none)
    
 Input file format

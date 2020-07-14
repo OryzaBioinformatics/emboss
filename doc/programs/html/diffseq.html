@@ -112,7 +112,9 @@ Find differences between nearly identical sequences
 % <b>diffseq tembl:ap000504 tembl:af129756 </b>
 Find differences between nearly identical sequences
 Word size [10]: <b></b>
-Output report file [ap000504.diffseq]: <b></b>
+Output report [ap000504.diffseq]: <b></b>
+Output features [AP000504.diffgff]: <b></b>
+Second output features [AF129756.diffgff]: <b></b>
 
 </pre></td></tr></table><p>
 <p>
@@ -143,7 +145,7 @@ IT IS DONE FOR YOU.
 
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
-   Mandatory qualifiers:
+   Standard (Mandatory) qualifiers:
   [-asequence]         sequence   Sequence USA
   [-bsequence]         sequence   Sequence USA
    -wordsize           integer    The similar regions between the two
@@ -158,13 +160,12 @@ IT IS DONE FOR YOU.
                                   improve the resolution of nearby
                                   differences, but the program will go much
                                   slower.
-   -outfile            report     Output report file
+  [-outfile]           report     Output report file name
+  [-afeatout]          featout    File for output of first sequence's features
+  [-bfeatout]          featout    File for output of second sequence's
+                                  features
 
-   Optional qualifiers:
-   -afeatout           featout    File for output of first sequence's normal
-                                  tab delimited gff's
-   -bfeatout           featout    File for output of second sequence's normal
-                                  tab delimited gff's
+   Additional (Optional) qualifiers:
    -columns            boolean    The default format for the output report
                                   file is to have several lines per difference
                                   giving the sequence positions, sequences
@@ -173,9 +174,10 @@ IT IS DONE FOR YOU.
                                   report file's format is changed to a set of
                                   columns and no feature information is given.
 
-   Advanced qualifiers: (none)
+   Advanced (Unprompted) qualifiers: (none)
    Associated qualifiers:
-  "-asequence" related qualifiers
+
+   "-asequence" associated qualifiers
    -sbegin1             integer    First base used
    -send1               integer    Last base used, def=seq length
    -sreverse1           boolean    Reverse (if DNA)
@@ -185,13 +187,13 @@ IT IS DONE FOR YOU.
    -slower1             boolean    Make lower case
    -supper1             boolean    Make upper case
    -sformat1            string     Input sequence format
-   -sopenfile1          string     Input filename
    -sdbname1            string     Database name
    -sid1                string     Entryname
    -ufo1                string     UFO features
    -fformat1            string     Features format
    -fopenfile1          string     Features file name
-  "-bsequence" related qualifiers
+
+   "-bsequence" associated qualifiers
    -sbegin2             integer    First base used
    -send2               integer    Last base used, def=seq length
    -sreverse2           boolean    Reverse (if DNA)
@@ -201,45 +203,44 @@ IT IS DONE FOR YOU.
    -slower2             boolean    Make lower case
    -supper2             boolean    Make upper case
    -sformat2            string     Input sequence format
-   -sopenfile2          string     Input filename
    -sdbname2            string     Database name
    -sid2                string     Entryname
    -ufo2                string     UFO features
    -fformat2            string     Features format
    -fopenfile2          string     Features file name
-  "-outfile" related qualifiers
-   -rformat             string     Report format
-   -rname               string     Base file name
-   -rextension          string     File name extension
-   -rdirectory          string     Output directory
-   -raccshow            boolean    Show accession number in the report
-   -rdesshow            boolean    Show description in the report
-   -rscoreshow          boolean    Show the score in the report
-   -rusashow            boolean    Show the full USA in the report
-  "-afeatout" related qualifiers
-   -offormat            string     Output feature format
-   -ofopenfile          string     Features file name
-   -ofextension         string     File name extension
-   -ofdirectory         string     Output directory
-   -ofname              string     Base file name
-   -ofsingle            boolean    Separate file for each entry
-  "-bfeatout" related qualifiers
-   -offormat            string     Output feature format
-   -ofopenfile          string     Features file name
-   -ofextension         string     File name extension
-   -ofdirectory         string     Output directory
-   -ofname              string     Base file name
-   -ofsingle            boolean    Separate file for each entry
+
+   "-outfile" associated qualifiers
+   -rformat3            string     Report format
+   -rname3              string     Base file name
+   -rextension3         string     File name extension
+   -rdirectory3         string     Output directory
+   -raccshow3           boolean    Show accession number in the report
+   -rdesshow3           boolean    Show description in the report
+   -rscoreshow3         boolean    Show the score in the report
+   -rusashow3           boolean    Show the full USA in the report
+
+   "-afeatout" associated qualifiers
+   -offormat4           string     Output feature format
+   -ofopenfile4         string     Features file name
+   -ofextension4        string     File name extension
+   -ofdirectory4        string     Output directory
+   -ofname4             string     Base file name
+   -ofsingle4           boolean    Separate file for each entry
+
+   "-bfeatout" associated qualifiers
+   -offormat5           string     Output feature format
+   -ofopenfile5         string     Features file name
+   -ofextension5        string     File name extension
+   -ofdirectory5        string     Output directory
+   -ofname5             string     Base file name
+   -ofsingle5           boolean    Separate file for each entry
 
    General qualifiers:
    -auto                boolean    Turn off prompts
    -stdout              boolean    Write standard output
    -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for required and optional values
+   -options             boolean    Prompt for standard and additional values
    -debug               boolean    Write debug output to program.dbg
-   -acdlog              boolean    Write ACD processing log to program.acdlog
-   -acdpretty           boolean    Rewrite ACD file as program.acdpretty
-   -acdtable            boolean    Write HTML table of options
    -verbose             boolean    Report some/full command line options
    -help                boolean    Report command line options. More
                                   information on associated and general
@@ -256,7 +257,7 @@ IT IS DONE FOR YOU.
 
 <table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=2>Mandatory qualifiers</th>
+<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
 <th align="left">Allowed values</th>
 <th align="left">Default</th>
 </tr>
@@ -283,30 +284,30 @@ IT IS DONE FOR YOU.
 </tr>
 
 <tr>
-<td>-outfile</td>
-<td>Output report file</td>
+<td>[-outfile]<br>(Parameter 3)</td>
+<td>Output report file name</td>
 <td>Report output file</td>
 <td>&nbsp;</td>
 </tr>
 
-<tr bgcolor="#FFFFCC">
-<th align="left" colspan=2>Optional qualifiers</th>
-<th align="left">Allowed values</th>
-<th align="left">Default</th>
-</tr>
-
 <tr>
-<td>-afeatout</td>
-<td>File for output of first sequence's normal tab delimited gff's</td>
+<td>[-afeatout]<br>(Parameter 4)</td>
+<td>File for output of first sequence's features</td>
 <td>Writeable feature table</td>
 <td>$(asequence.name).diffgff</td>
 </tr>
 
 <tr>
-<td>-bfeatout</td>
-<td>File for output of second sequence's normal tab delimited gff's</td>
+<td>[-bfeatout]<br>(Parameter 5)</td>
+<td>File for output of second sequence's features</td>
 <td>Writeable feature table</td>
 <td>$(bsequence.name).diffgff</td>
+</tr>
+
+<tr bgcolor="#FFFFCC">
+<th align="left" colspan=2>Additional (Optional) qualifiers</th>
+<th align="left">Allowed values</th>
+<th align="left">Default</th>
 </tr>
 
 <tr>
@@ -318,7 +319,7 @@ If this option is set true then the output report file's format is changed to a 
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=2>Advanced qualifiers</th>
+<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
 <th align="left">Allowed values</th>
 <th align="left">Default</th>
 </tr>
@@ -628,7 +629,7 @@ By default <b>diffseq</b> writes a 'diffseq' report file.
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 ##gff-version 2.0
-##date 2003-05-22
+##date 2003-11-27
 ##Type DNA AF129756
 AF129756	diffseq	conflict	6882	6882	1.000	+	.	Sequence "AF129756.1" ; note "SNP in AP000504" ; replace "a"
 AF129756	diffseq	conflict	7830	7830	1.000	+	.	Sequence "AF129756.2" ; note "SNP in AP000504" ; replace "g"
@@ -738,7 +739,7 @@ AF129756	diffseq	conflict	103855	103855	1.000	+	.	Sequence "AF129756.105" ; note
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
 ##gff-version 2.0
-##date 2003-05-22
+##date 2003-11-27
 ##Type DNA AP000504
 AP000504	diffseq	conflict	847	847	1.000	+	.	Sequence "AP000504.1" ; note "SNP in AF129756" ; replace "t"
 AP000504	diffseq	conflict	1795	1795	1.000	+	.	Sequence "AP000504.2" ; note "SNP in AF129756" ; replace "a"
@@ -849,7 +850,7 @@ AP000504	diffseq	conflict	97827	97827	1.000	+	.	Sequence "AP000504.105" ; note "
 <pre>
 ########################################
 # Program: diffseq
-# Rundate: Thu May 22 14:44:04 2003
+# Rundate: Thu Nov 27 15:19:43 2003
 # Report_format: diffseq
 # Report_file: ap000504.diffseq
 # Additional_files: 2

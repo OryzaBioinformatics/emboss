@@ -51,19 +51,84 @@ Codon usage table comparison
 This program reads in two codon usage table files.
 
 <p>
+
 It counts the number of the 64 possible codons which are unused (i.e. 
 has a usage fraction of 0) in either one or the other or both of the
 codon usage tables.  
 
 <p>
+
 The usage fraction of a codon is its proportion (0 to 1) of the total of
 the codons in the sequences used to construct the usage table. 
 
 <p>
+
 For each codon that is used in both tables, it takes the difference
 between the usage fraction.  The sum of the differences and the sum of
 the differences squared is reported in the output file, together with
 the number of unused codons. 
+
+
+<H3>
+   Statistical significance
+</H3>
+
+<b>Question:</b>
+
+<p>
+
+How do you interpret the statistical significance of any difference
+between the tables?
+
+<p>
+
+<b>Answer:</b>
+
+<p>
+
+This is a very interesting question.  I don't think that there is any
+way to say if it is statistically significant just from looking at it,
+as it is essentially a descriptive statistic about the difference
+between two 64-mer vectors.  If you have a whole lot of sequences and
+codcmp results for all the possible pairwise comparisons, then the
+resulting distance matrix can be used to build a phylogenetic tree based
+on codon usage. 
+
+<p>
+
+However, if you generate a series of random sequences, measure their codon 
+usage and then do codcmp between each of your test sequences and all the 
+random sequences, you could then use a z-test to see if the result between 
+the two test sequences was outside of the top or bottom 5%.
+
+<p>
+
+This would assume that the codcmp results were normally distributed, but
+you could test that too.  The simplest way is just to plot them and look 
+for a bell-curve.  For more rigour, find the mean and standard deviation of 
+your results from the random sequences, use the normal distribution 
+equation to generate a theoretical distribution for that mean and standard 
+deviation, and then perform a chi square between the random data and the 
+theoretically generated normal distribution.  If you generate two sets of 
+random data, each based on your two test sequences, an F-test should be 
+used to establish that they have equal variances.  Then you can safely go 
+ahead and perform the z-test.
+
+<p>
+
+You could use shuffle to base your random sequences on the test
+sequences - so that would ensure the randomised background had the same
+nucleotide content. 
+
+<p>
+
+F-tests, z-tests and chi-tests can all be done in Excel, as well as
+being standard in most statistical analysis packages. 
+
+<p>
+
+<i>Answered by Derek Gatherer &lt;d.gatherer&nbsp;&copy;&nbsp;vir.gla.ac.uk&gt; 21 Nov 2003</i>
+
 
 <H2>
     Usage
@@ -116,26 +181,24 @@ IT IS DONE FOR YOU.
 
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
-   Mandatory qualifiers:
+   Standard (Mandatory) qualifiers:
   [-first]             codon      First codon usage file
-  [-second]            codon      Second codon usage file
+  [-second]            codon      Second codon usage file for comparison
   [-outfile]           outfile    Output file name
 
-   Optional qualifiers: (none)
-   Advanced qualifiers: (none)
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers: (none)
    Associated qualifiers:
-  "-outfile" related qualifiers
+
+   "-outfile" associated qualifiers
    -odirectory3         string     Output directory
 
    General qualifiers:
    -auto                boolean    Turn off prompts
    -stdout              boolean    Write standard output
    -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for required and optional values
+   -options             boolean    Prompt for standard and additional values
    -debug               boolean    Write debug output to program.dbg
-   -acdlog              boolean    Write ACD processing log to program.acdlog
-   -acdpretty           boolean    Rewrite ACD file as program.acdpretty
-   -acdtable            boolean    Write HTML table of options
    -verbose             boolean    Report some/full command line options
    -help                boolean    Report command line options. More
                                   information on associated and general
@@ -152,7 +215,7 @@ IT IS DONE FOR YOU.
 
 <table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=2>Mandatory qualifiers</th>
+<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
 <th align="left">Allowed values</th>
 <th align="left">Default</th>
 </tr>
@@ -166,7 +229,7 @@ IT IS DONE FOR YOU.
 
 <tr>
 <td>[-second]<br>(Parameter 2)</td>
-<td>Second codon usage file</td>
+<td>Second codon usage file for comparison</td>
 <td>Codon usage file in EMBOSS data path</td>
 <td>Ehum.cut</td>
 </tr>
@@ -179,7 +242,7 @@ IT IS DONE FOR YOU.
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=2>Optional qualifiers</th>
+<th align="left" colspan=2>Additional (Optional) qualifiers</th>
 <th align="left">Allowed values</th>
 <th align="left">Default</th>
 </tr>
@@ -189,7 +252,7 @@ IT IS DONE FOR YOU.
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=2>Advanced qualifiers</th>
+<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
 <th align="left">Allowed values</th>
 <th align="left">Default</th>
 </tr>

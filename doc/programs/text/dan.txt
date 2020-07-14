@@ -53,7 +53,7 @@ Created dan.ps
    
 Command line arguments
 
-   Mandatory qualifiers (* if not always prompted):
+   Standard (Mandatory) qualifiers (* if not always prompted):
   [-sequence]          seqall     Sequence database USA
    -windowsize         integer    The values of melting point and other
                                   thermodynamic properties of the sequence are
@@ -85,13 +85,13 @@ Command line arguments
                                   the melting point etc. in each window along
                                   the sequence is output to the file.
 
-   Optional qualifiers (* if not always prompted):
+   Additional (Optional) qualifiers (* if not always prompted):
 *  -temperature        float      If -thermo has been specified then this
                                   specifies the temperature at which to
                                   calculate the DeltaG, DeltaH and DeltaS
                                   values.
 
-   Advanced qualifiers:
+   Advanced (Unprompted) qualifiers:
    -rna                boolean    This specifies that the sequence is an RNA
                                   sequnce and not a DNA sequence.
    -product            boolean    This prompts for percent formamide, percent
@@ -105,7 +105,8 @@ Command line arguments
                                   produced.
 
    Associated qualifiers:
-  "-sequence" related qualifiers
+
+   "-sequence" associated qualifiers
    -sbegin1             integer    First base used
    -send1               integer    Last base used, def=seq length
    -sreverse1           boolean    Reverse (if DNA)
@@ -115,13 +116,13 @@ Command line arguments
    -slower1             boolean    Make lower case
    -supper1             boolean    Make upper case
    -sformat1            string     Input sequence format
-   -sopenfile1          string     Input filename
    -sdbname1            string     Database name
    -sid1                string     Entryname
    -ufo1                string     UFO features
    -fformat1            string     Features format
    -fopenfile1          string     Features file name
-  "-graph" related qualifiers
+
+   "-graph" associated qualifiers
    -gprompt             boolean    Graph prompting
    -gtitle              string     Graph title
    -gsubtitle           string     Graph subtitle
@@ -129,7 +130,8 @@ Command line arguments
    -gytitle             string     Graph y axis title
    -goutfile            string     Output file for non interactive displays
    -gdirectory          string     Output directory
-  "-outfile" related qualifiers
+
+   "-outfile" associated qualifiers
    -rformat             string     Report format
    -rname               string     Base file name
    -rextension          string     File name extension
@@ -143,11 +145,8 @@ Command line arguments
    -auto                boolean    Turn off prompts
    -stdout              boolean    Write standard output
    -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for required and optional values
+   -options             boolean    Prompt for standard and additional values
    -debug               boolean    Write debug output to program.dbg
-   -acdlog              boolean    Write ACD processing log to program.acdlog
-   -acdpretty           boolean    Rewrite ACD file as program.acdpretty
-   -acdtable            boolean    Write HTML table of options
    -verbose             boolean    Report some/full command line options
    -help                boolean    Report command line options. More
                                   information on associated and general
@@ -158,7 +157,7 @@ Command line arguments
    -die                 boolean    Report deaths
    
 
-   Mandatory qualifiers Allowed values Default
+   Standard (Mandatory) qualifiers Allowed values Default
    [-sequence]
    (Parameter 1) Sequence database USA Readable sequence(s) Required
    -windowsize The values of melting point and other thermodynamic
@@ -192,11 +191,11 @@ Command line arguments
    -outfile If a plot is not being produced then data on the melting
    point etc. in each window along the sequence is output to the file.
    Report output file
-   Optional qualifiers Allowed values Default
+   Additional (Optional) qualifiers Allowed values Default
    -temperature If -thermo has been specified then this specifies the
    temperature at which to calculate the DeltaG, DeltaH and DeltaS
    values. Number from 0.000 to 100.000 25.
-   Advanced qualifiers Allowed values Default
+   Advanced (Unprompted) qualifiers Allowed values Default
    -rna This specifies that the sequence is an RNA sequnce and not a DNA
    sequence. Boolean value Yes/No No
    -product This prompts for percent formamide, percent of mismatches
@@ -392,7 +391,7 @@ Output file format
   
 ########################################
 # Program: dan
-# Rundate: Thu May 22 10:22:02 2003
+# Rundate: Thu Nov 27 15:18:08 2003
 # Report_format: seqtable
 # Report_file: paamir.dan
 ########################################

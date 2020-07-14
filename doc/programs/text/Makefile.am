@@ -15,21 +15,21 @@ pkgdata_DATA =  SITE-DIRECTED.txt aaindexextract.txt abiview.txt \
                edollop.txt edolpenny.txt efactor.txt efitch.txt \
                egendist.txt einverted.txt ekitsch.txt embossdata.txt \
                embossversion.txt emix.txt emma.txt emowse.txt eneighbor.txt \
-               entret.txt epenny.txt eprimer3.txt eprotdist.txt \
-               eprotpars.txt equicktandem.txt erestml.txt eseqboot.txt \
-               est2genome.txt etandem.txt extractfeat.txt extractseq.txt \
-               factor.txt findkm.txt fitch.txt freak.txt fuzznuc.txt \
-               fuzzpro.txt fuzztran.txt garnier.txt geecee.txt gendist.txt \
-               getorf.txt helixturnhelix.txt hetparse.txt hmmgen.txt \
-               hmoment.txt iep.txt infoalign.txt infoseq.txt interface.txt
-pkgdata2_DATA = isochore.txt kitsch.txt lindna.txt listor.txt marscan.txt \
-               maskfeat.txt maskseq.txt matcher.txt megamerger.txt \
-               merger.txt mix.txt msbar.txt mse.txt mwcontam.txt \
-               mwfilter.txt needle.txt neighbor.txt newcpgreport.txt \
-               newcpgseek.txt newseq.txt noreturn.txt notseq.txt nthseq.txt \
-               octanol.txt oddcomp.txt palindrome.txt pasteseq.txt \
-               patmatdb.txt patmatmotifs.txt penny.txt pepcoil.txt \
-               pepinfo.txt pepnet.txt pepstats.txt pepwheel.txt \
+               entret.txt epenny.txt epestfind.txt eprimer3.txt \
+               eprotdist.txt eprotpars.txt equicktandem.txt erestml.txt \
+               eseqboot.txt est2genome.txt etandem.txt extractfeat.txt \
+               extractseq.txt factor.txt findkm.txt fitch.txt freak.txt \
+               fuzznuc.txt fuzzpro.txt fuzztran.txt garnier.txt geecee.txt \
+               gendist.txt getorf.txt helixturnhelix.txt hetparse.txt \
+               hmmgen.txt hmoment.txt iep.txt infoalign.txt infoseq.txt
+pkgdata2_DATA = interface.txt isochore.txt kitsch.txt lindna.txt listor.txt \
+               marscan.txt maskfeat.txt maskseq.txt matcher.txt \
+               megamerger.txt merger.txt mix.txt msbar.txt mse.txt \
+               mwcontam.txt mwfilter.txt needle.txt neighbor.txt \
+               newcpgreport.txt newcpgseek.txt newseq.txt noreturn.txt \
+               notseq.txt nthseq.txt octanol.txt oddcomp.txt palindrome.txt \
+               pasteseq.txt patmatdb.txt patmatmotifs.txt penny.txt \
+               pepcoil.txt pepinfo.txt pepnet.txt pepstats.txt pepwheel.txt \
                pepwindow.txt pepwindowall.txt pestfind.txt plotcon.txt \
                plotorf.txt polydot.txt preg.txt prettyplot.txt \
                prettyseq.txt primersearch.txt printsextract.txt profit.txt \

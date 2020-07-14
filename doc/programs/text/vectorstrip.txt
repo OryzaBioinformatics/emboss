@@ -68,22 +68,23 @@ Output sequence [pbluescript.fasta]: vector.fasta
    
 Command line arguments
 
-   Mandatory qualifiers (* if not always prompted):
+   Standard (Mandatory) qualifiers (* if not always prompted):
   [-sequence]          seqall     Sequence database USA
   [-[no]vectorfile]    boolean    Are your vector sequences in a file?
-* [-vectors]           infile     Name of vectorfile
+*  -vectorsfile        infile     Name of vectorfile
    -mismatch           integer    Max allowed % mismatch
    -[no]besthits       boolean    Show only the best hits (minimise
                                   mismatches)?
 *  -linkera            string     5' sequence
 *  -linkerb            string     3' sequence
-  [-outf]              outfile    Output file name
+  [-outfile]           outfile    Output file name
   [-outseq]            seqoutall  Output sequence(s) USA
 
-   Optional qualifiers: (none)
-   Advanced qualifiers: (none)
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers: (none)
    Associated qualifiers:
-  "-sequence" related qualifiers
+
+   "-sequence" associated qualifiers
    -sbegin1             integer    First base used
    -send1               integer    Last base used, def=seq length
    -sreverse1           boolean    Reverse (if DNA)
@@ -93,35 +94,33 @@ Command line arguments
    -slower1             boolean    Make lower case
    -supper1             boolean    Make upper case
    -sformat1            string     Input sequence format
-   -sopenfile1          string     Input filename
    -sdbname1            string     Database name
    -sid1                string     Entryname
    -ufo1                string     UFO features
    -fformat1            string     Features format
    -fopenfile1          string     Features file name
-  "-outf" related qualifiers
-   -odirectory4         string     Output directory
-  "-outseq" related qualifiers
-   -osformat5           string     Output seq format
-   -osextension5        string     File name extension
-   -osname5             string     Base file name
-   -osdirectory5        string     Output directory
-   -osdbname5           string     Database name to add
-   -ossingle5           boolean    Separate file for each entry
-   -oufo5               string     UFO features
-   -offormat5           string     Features format
-   -ofname5             string     Features file name
-   -ofdirectory5        string     Output directory
+
+   "-outfile" associated qualifiers
+   -odirectory3         string     Output directory
+
+   "-outseq" associated qualifiers
+   -osformat4           string     Output seq format
+   -osextension4        string     File name extension
+   -osname4             string     Base file name
+   -osdirectory4        string     Output directory
+   -osdbname4           string     Database name to add
+   -ossingle4           boolean    Separate file for each entry
+   -oufo4               string     UFO features
+   -offormat4           string     Features format
+   -ofname4             string     Features file name
+   -ofdirectory4        string     Output directory
 
    General qualifiers:
    -auto                boolean    Turn off prompts
    -stdout              boolean    Write standard output
    -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for required and optional values
+   -options             boolean    Prompt for standard and additional values
    -debug               boolean    Write debug output to program.dbg
-   -acdlog              boolean    Write ACD processing log to program.acdlog
-   -acdpretty           boolean    Rewrite ACD file as program.acdpretty
-   -acdtable            boolean    Write HTML table of options
    -verbose             boolean    Report some/full command line options
    -help                boolean    Report command line options. More
                                   information on associated and general
@@ -132,14 +131,13 @@ Command line arguments
    -die                 boolean    Report deaths
    
 
-   Mandatory qualifiers Allowed values Default
+   Standard (Mandatory) qualifiers Allowed values Default
    [-sequence]
    (Parameter 1) Sequence database USA Readable sequence(s) Required
    [-[no]vectorfile]
    (Parameter 2) Are your vector sequences in a file? Boolean value
    Yes/No Yes
-   [-vectors]
-   (Parameter 3) Name of vectorfile Input file Required
+   -vectorsfile Name of vectorfile Input file Required
    -mismatch Max allowed % mismatch Any integer value 10
    -[no]besthits Show only the best hits (minimise mismatches)? Boolean
    value Yes/No Yes
@@ -147,14 +145,14 @@ Command line arguments
    accepted
    -linkerb 3' sequence Any string is accepted An empty string is
    accepted
-   [-outf]
-   (Parameter 4) Output file name Output file <sequence>.vectorstrip
+   [-outfile]
+   (Parameter 3) Output file name Output file <sequence>.vectorstrip
    [-outseq]
-   (Parameter 5) Output sequence(s) USA Writeable sequence(s)
+   (Parameter 4) Output sequence(s) USA Writeable sequence(s)
    <sequence>.format
-   Optional qualifiers Allowed values Default
+   Additional (Optional) qualifiers Allowed values Default
    (none)
-   Advanced qualifiers Allowed values Default
+   Advanced (Unprompted) qualifiers Allowed values Default
    (none)
    
 Input file format

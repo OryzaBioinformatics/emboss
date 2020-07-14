@@ -196,12 +196,12 @@ Picks PCR primers and hybridization oligos
 
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
-   Mandatory qualifiers:
+   Standard (Mandatory) qualifiers:
   [-sequence]          seqall     The sequence from which to choose primers.
                                   The sequence must be presented 5' to 3'
   [-outfile]           outfile    Output file name
 
-   Optional qualifiers (* if not always prompted):
+   Additional (Optional) qualifiers (* if not always prompted):
    -task               menu       Tell EPrimer3 what task to perform. Legal
                                   values are 0: 'Pick PCR primers', 1: 'Pick
                                   PCR primers and hybridization probe', 2:
@@ -499,7 +499,7 @@ Picks PCR primers and hybridization oligos
                                   oligo mononucleotide repeat, for example
                                   AAAAAA.
 
-   Advanced qualifiers:
+   Advanced (Unprompted) qualifiers:
    -explainflag        boolean    If this flag is non-0, produce LEFT-EXPLAIN,
                                   RIGHT-EXPLAIN, and INTERNAL-OLIGO-EXPLAIN
                                   output tags, which are intended to provide
@@ -705,7 +705,8 @@ Picks PCR primers and hybridization oligos
                                   specified in INTERNAL-OLIGO-MISHYB-LIBRARY.
 
    Associated qualifiers:
-  "-sequence" related qualifiers
+
+   "-sequence" associated qualifiers
    -sbegin1             integer    First base used
    -send1               integer    Last base used, def=seq length
    -sreverse1           boolean    Reverse (if DNA)
@@ -715,24 +716,21 @@ Picks PCR primers and hybridization oligos
    -slower1             boolean    Make lower case
    -supper1             boolean    Make upper case
    -sformat1            string     Input sequence format
-   -sopenfile1          string     Input filename
    -sdbname1            string     Database name
    -sid1                string     Entryname
    -ufo1                string     UFO features
    -fformat1            string     Features format
    -fopenfile1          string     Features file name
-  "-outfile" related qualifiers
+
+   "-outfile" associated qualifiers
    -odirectory2         string     Output directory
 
    General qualifiers:
    -auto                boolean    Turn off prompts
    -stdout              boolean    Write standard output
    -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for required and optional values
+   -options             boolean    Prompt for standard and additional values
    -debug               boolean    Write debug output to program.dbg
-   -acdlog              boolean    Write ACD processing log to program.acdlog
-   -acdpretty           boolean    Rewrite ACD file as program.acdpretty
-   -acdtable            boolean    Write HTML table of options
    -verbose             boolean    Report some/full command line options
    -help                boolean    Report command line options. More
                                   information on associated and general
@@ -748,7 +746,7 @@ Picks PCR primers and hybridization oligos
 <P>
 <table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=2>Mandatory qualifiers</th>
+<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
 <th align="left">Allowed values</th>
 <th align="left">Default</th>
 </tr>
@@ -768,7 +766,7 @@ Picks PCR primers and hybridization oligos
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=2>Optional qualifiers</th>
+<th align="left" colspan=2>Additional (Optional) qualifiers</th>
 <th align="left">Allowed values</th>
 <th align="left">Default</th>
 </tr>
@@ -1097,7 +1095,7 @@ INTERNAL-OLIGO-SELF-END is meaningless when applied to internal oligos used for 
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=2>Advanced qualifiers</th>
+<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
 <th align="left">Allowed values</th>
 <th align="left">Default</th>
 </tr>

@@ -120,10 +120,10 @@ IT IS DONE FOR YOU.
 
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
-   Mandatory qualifiers:
+   Standard (Mandatory) qualifiers:
   [-search]            string     Enter the name of an EMBOSS program
 
-   Optional qualifiers (* if not always prompted):
+   Additional (Optional) qualifiers (* if not always prompted):
    -explode            boolean    The groups that EMBOSS applications belong
                                   to have two forms, exploded and not
                                   exploded. The exploded group names are more
@@ -142,9 +142,7 @@ IT IS DONE FOR YOU.
                                   programs reported as sharing a similar
                                   function than you will if you specify that
                                   you wish to use non-exploded names
-   -outfile            outfile    If you enter the name of a file here then
-                                  this program will write the program names
-                                  and brief descriptions into that file.
+   -outfile            outfile    Output file name
    -html               boolean    If you are sending the output to a file,
                                   this will format it for displaying as a
                                   table in a WWW document.
@@ -174,7 +172,7 @@ IT IS DONE FOR YOU.
    -groups             boolean    If you use this option, then only the group
                                   names will output to the file
 
-   Advanced qualifiers:
+   Advanced (Unprompted) qualifiers:
    -[no]emboss         boolean    If you use this option then EMBOSS program
                                   documentation will be searched. If this
                                   option is set to be false, then only the
@@ -209,18 +207,16 @@ IT IS DONE FOR YOU.
                                   the group name if this option is true.
 
    Associated qualifiers:
-  "-outfile" related qualifiers
+
+   "-outfile" associated qualifiers
    -odirectory          string     Output directory
 
    General qualifiers:
    -auto                boolean    Turn off prompts
    -stdout              boolean    Write standard output
    -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for required and optional values
+   -options             boolean    Prompt for standard and additional values
    -debug               boolean    Write debug output to program.dbg
-   -acdlog              boolean    Write ACD processing log to program.acdlog
-   -acdpretty           boolean    Rewrite ACD file as program.acdpretty
-   -acdtable            boolean    Write HTML table of options
    -verbose             boolean    Report some/full command line options
    -help                boolean    Report command line options. More
                                   information on associated and general
@@ -237,7 +233,7 @@ IT IS DONE FOR YOU.
 
 <table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=2>Mandatory qualifiers</th>
+<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
 <th align="left">Allowed values</th>
 <th align="left">Default</th>
 </tr>
@@ -250,7 +246,7 @@ IT IS DONE FOR YOU.
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=2>Optional qualifiers</th>
+<th align="left" colspan=2>Additional (Optional) qualifiers</th>
 <th align="left">Allowed values</th>
 <th align="left">Default</th>
 </tr>
@@ -265,7 +261,7 @@ Using expanded group names will find many more programs which share at least som
 
 <tr>
 <td>-outfile</td>
-<td>If you enter the name of a file here then this program will write the program names and brief descriptions into that file.</td>
+<td>Output file name</td>
 <td>Output file</td>
 <td>stdout</td>
 </tr>
@@ -308,7 +304,7 @@ then if you enter '.html' here, the second half of the URL after the program nam
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=2>Advanced qualifiers</th>
+<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
 <th align="left">Allowed values</th>
 <th align="left">Default</th>
 </tr>

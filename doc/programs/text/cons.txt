@@ -58,11 +58,11 @@ Output sequence [dna.fasta]: aligned.cons
    
 Command line arguments
 
-   Mandatory qualifiers:
-  [-msf]               seqset     File containing a sequence alignment.
+   Standard (Mandatory) qualifiers:
+  [-sequence]          seqset     File containing a sequence alignment.
   [-outseq]            seqout     Output sequence USA
 
-   Optional qualifiers:
+   Additional (Optional) qualifiers:
    -datafile           matrix     This is the scoring matrix file used when
                                   comparing sequences. By default it is the
                                   file 'EBLOSUM62' (for proteins) or the file
@@ -80,15 +80,16 @@ Command line arguments
                                   Therefore, if this is set to the number of
                                   sequences in the alignment only columns of
                                   identities contribute to the consensus.
-   -name               string     Name of the consensus sequence
    -setcase            float      Sets the threshold for the positive matches
                                   above which the consensus is is upper-case
                                   and below which the consensus is in
                                   lower-case.
+   -name               string     Name of the consensus sequence
 
-   Advanced qualifiers: (none)
+   Advanced (Unprompted) qualifiers: (none)
    Associated qualifiers:
-  "-msf" related qualifiers
+
+   "-sequence" associated qualifiers
    -sbegin1             integer    First base used
    -send1               integer    Last base used, def=seq length
    -sreverse1           boolean    Reverse (if DNA)
@@ -98,13 +99,13 @@ Command line arguments
    -slower1             boolean    Make lower case
    -supper1             boolean    Make upper case
    -sformat1            string     Input sequence format
-   -sopenfile1          string     Input filename
    -sdbname1            string     Database name
    -sid1                string     Entryname
    -ufo1                string     UFO features
    -fformat1            string     Features format
    -fopenfile1          string     Features file name
-  "-outseq" related qualifiers
+
+   "-outseq" associated qualifiers
    -osformat2           string     Output seq format
    -osextension2        string     File name extension
    -osname2             string     Base file name
@@ -120,11 +121,8 @@ Command line arguments
    -auto                boolean    Turn off prompts
    -stdout              boolean    Write standard output
    -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for required and optional values
+   -options             boolean    Prompt for standard and additional values
    -debug               boolean    Write debug output to program.dbg
-   -acdlog              boolean    Write ACD processing log to program.acdlog
-   -acdpretty           boolean    Rewrite ACD file as program.acdpretty
-   -acdtable            boolean    Write HTML table of options
    -verbose             boolean    Report some/full command line options
    -help                boolean    Report command line options. More
                                   information on associated and general
@@ -135,13 +133,13 @@ Command line arguments
    -die                 boolean    Report deaths
    
 
-   Mandatory qualifiers Allowed values Default
-   [-msf]
-   (Parameter 1) File containing a sequence alignment. Readable sequences
-   Required
+   Standard (Mandatory) qualifiers Allowed values Default
+   [-sequence]
+   (Parameter 1) File containing a sequence alignment. Readable set of
+   sequences Required
    [-outseq]
    (Parameter 2) Output sequence USA Writeable sequence <sequence>.format
-   Optional qualifiers Allowed values Default
+   Additional (Optional) qualifiers Allowed values Default
    -datafile This is the scoring matrix file used when comparing
    sequences. By default it is the file 'EBLOSUM62' (for proteins) or the
    file 'EDNAFULL' (for nucleic sequences). These files are found in the
@@ -157,12 +155,12 @@ Command line arguments
    Therefore, if this is set to the number of sequences in the alignment
    only columns of identities contribute to the consensus. Integer 0 or
    more 0
-   -name Name of the consensus sequence Any string is accepted An empty
-   string is accepted
    -setcase Sets the threshold for the positive matches above which the
    consensus is is upper-case and below which the consensus is in
-   lower-case. Any numeric value 0
-   Advanced qualifiers Allowed values Default
+   lower-case. Any numeric value @( $(sequence.totweight) / 2)
+   -name Name of the consensus sequence Any string is accepted An empty
+   string is accepted
+   Advanced (Unprompted) qualifiers Allowed values Default
    (none)
    
 Input file format
@@ -204,8 +202,8 @@ Output file format
   File: aligned.cons
   
 >EMBOSS_001
-acgtacgtacgtacgtacgtnnnnacgtacgtacgtacgtnnnnnnnnnnnnnnnnnnnn
-nnnnnnnnnnnnnnnnnnnnacgtacgtacgtacgtacgtacgtacgtnnnnacgtacgt
+ACGTACGTACGTACGTACGTnnnnACGTACGTACGTACGTnnnnnnnnnnnnnnnnnnnn
+nnnnnnnnnnnnnnnnnnnnACGTACGTACGTACGTACGTACGTACGTnnnnACGTACGT
    
 Data files
 

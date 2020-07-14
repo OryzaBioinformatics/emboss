@@ -41,11 +41,11 @@ Created prettyplot.ps
    
 Command line arguments
 
-   Mandatory qualifiers (* if not always prompted):
-  [-msf]               seqset     File containing a sequence alignment
-*  -graph              graph      Graph type
+   Standard (Mandatory) qualifiers:
+  [-sequences]         seqset     File containing a sequence alignment
+   -graph              graph      Graph type
 
-   Optional qualifiers:
+   Additional (Optional) qualifiers:
    -residuesperline    integer    The number of residues to be displayed on
                                   each line
    -resbreak           integer    Residues before a space
@@ -100,11 +100,10 @@ Command line arguments
    -showscore          integer    Print residue scores
    -portrait           boolean    Set page to Portrait
 
-   Advanced qualifiers:
-   -data               boolean    (no help text) boolean value
-
+   Advanced (Unprompted) qualifiers: (none)
    Associated qualifiers:
-  "-msf" related qualifiers
+
+   "-sequences" associated qualifiers
    -sbegin1             integer    First base used
    -send1               integer    Last base used, def=seq length
    -sreverse1           boolean    Reverse (if DNA)
@@ -114,13 +113,13 @@ Command line arguments
    -slower1             boolean    Make lower case
    -supper1             boolean    Make upper case
    -sformat1            string     Input sequence format
-   -sopenfile1          string     Input filename
    -sdbname1            string     Database name
    -sid1                string     Entryname
    -ufo1                string     UFO features
    -fformat1            string     Features format
    -fopenfile1          string     Features file name
-  "-graph" related qualifiers
+
+   "-graph" associated qualifiers
    -gprompt             boolean    Graph prompting
    -gtitle              string     Graph title
    -gsubtitle           string     Graph subtitle
@@ -133,11 +132,8 @@ Command line arguments
    -auto                boolean    Turn off prompts
    -stdout              boolean    Write standard output
    -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for required and optional values
+   -options             boolean    Prompt for standard and additional values
    -debug               boolean    Write debug output to program.dbg
-   -acdlog              boolean    Write ACD processing log to program.acdlog
-   -acdpretty           boolean    Rewrite ACD file as program.acdpretty
-   -acdtable            boolean    Write HTML table of options
    -verbose             boolean    Report some/full command line options
    -help                boolean    Report command line options. More
                                   information on associated and general
@@ -148,15 +144,15 @@ Command line arguments
    -die                 boolean    Report deaths
    
 
-   Mandatory qualifiers Allowed values Default
-   [-msf]
-   (Parameter 1) File containing a sequence alignment Readable sequences
-   Required
+   Standard (Mandatory) qualifiers Allowed values Default
+   [-sequences]
+   (Parameter 1) File containing a sequence alignment Readable set of
+   sequences Required
    -graph Graph type EMBOSS has a list of known devices, including
    postscript, ps, hpgl, hp7470, hp7580, meta, colourps, cps, xwindows,
    x11, tektronics, tekt, tek4107t, tek, none, null, text, data, xterm,
    png EMBOSS_GRAPHICS value, or x11
-   Optional qualifiers Allowed values Default
+   Additional (Optional) qualifiers Allowed values Default
    -residuesperline The number of residues to be displayed on each line
    Any integer value 50
    -resbreak Residues before a space Integer 1 or more Same as
@@ -211,8 +207,8 @@ Command line arguments
    EDNAFULL for DNA
    -showscore Print residue scores Any integer value -1
    -portrait Set page to Portrait Boolean value Yes/No No
-   Advanced qualifiers Allowed values Default
-   -data (no help text) boolean value Boolean value Yes/No No
+   Advanced (Unprompted) qualifiers Allowed values Default
+   (none)
    
 Input file format
 

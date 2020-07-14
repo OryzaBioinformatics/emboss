@@ -24,7 +24,7 @@ Usage
 
 % abiview -graph cps 
 Reads ABI file and display the trace
-Input file: ../../data/abiview.abi
+ABI trace file: ../../data/abiview.abi
 Output sequence [abiview.fasta]: 
 
 Created abiview.ps
@@ -34,12 +34,12 @@ Created abiview.ps
    
 Command line arguments
 
-   Mandatory qualifiers:
-  [-fname]             infile     Name of the ABI trace file
-  [-outseq]            seqout     Sequence file
+   Standard (Mandatory) qualifiers:
+  [-infile]            infile     ABI trace file
+  [-outseq]            seqout     Output sequence USA
    -graph              xygraph    Graph type
 
-   Optional qualifiers:
+   Additional (Optional) qualifiers:
    -startbase          integer    First base to report or display
    -endbase            integer    Last sequence base to report or display. If
                                   the default is set to zero then the value of
@@ -50,11 +50,12 @@ Command line arguments
    -window             integer    Sequence display window size
    -bases              string     Base graphs to be displayed
 
-   Advanced qualifiers:
+   Advanced (Unprompted) qualifiers:
    -separate           boolean    Separate the trace graphs for the 4 bases
 
    Associated qualifiers:
-  "-outseq" related qualifiers
+
+   "-outseq" associated qualifiers
    -osformat2           string     Output seq format
    -osextension2        string     File name extension
    -osname2             string     Base file name
@@ -65,7 +66,8 @@ Command line arguments
    -offormat2           string     Features format
    -ofname2             string     Features file name
    -ofdirectory2        string     Output directory
-  "-graph" related qualifiers
+
+   "-graph" associated qualifiers
    -gprompt             boolean    Graph prompting
    -gtitle              string     Graph title
    -gsubtitle           string     Graph subtitle
@@ -78,11 +80,8 @@ Command line arguments
    -auto                boolean    Turn off prompts
    -stdout              boolean    Write standard output
    -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for required and optional values
+   -options             boolean    Prompt for standard and additional values
    -debug               boolean    Write debug output to program.dbg
-   -acdlog              boolean    Write ACD processing log to program.acdlog
-   -acdpretty           boolean    Rewrite ACD file as program.acdpretty
-   -acdtable            boolean    Write HTML table of options
    -verbose             boolean    Report some/full command line options
    -help                boolean    Report command line options. More
                                   information on associated and general
@@ -93,16 +92,16 @@ Command line arguments
    -die                 boolean    Report deaths
    
 
-   Mandatory qualifiers Allowed values Default
-   [-fname]
-   (Parameter 1) Name of the ABI trace file Input file Required
+   Standard (Mandatory) qualifiers Allowed values Default
+   [-infile]
+   (Parameter 1) ABI trace file Input file Required
    [-outseq]
-   (Parameter 2) Sequence file Writeable sequence <sequence>.format
+   (Parameter 2) Output sequence USA Writeable sequence <sequence>.format
    -graph Graph type EMBOSS has a list of known devices, including
    postscript, ps, hpgl, hp7470, hp7580, meta, colourps, cps, xwindows,
    x11, tektronics, tekt, tek4107t, tek, none, null, text, data, xterm,
    png EMBOSS_GRAPHICS value, or x11
-   Optional qualifiers Allowed values Default
+   Additional (Optional) qualifiers Allowed values Default
    -startbase First base to report or display Integer 0 or more 0
    -endbase Last sequence base to report or display. If the default is
    set to zero then the value of this is taken as the maximum number of
@@ -112,7 +111,7 @@ Command line arguments
    Yes
    -window Sequence display window size Any integer value 40
    -bases Base graphs to be displayed Any string is accepted GATC
-   Advanced qualifiers Allowed values Default
+   Advanced (Unprompted) qualifiers Allowed values Default
    -separate Separate the trace graphs for the 4 bases Boolean value
    Yes/No No
    

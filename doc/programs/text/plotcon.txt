@@ -24,7 +24,7 @@ Description
    
    The average similarity is calculated by:
    
-Av. Sim. =       sum( Mij*wi + Mji*w2  )
+Av. Sim. =       sum( Mij*wi + Mji*wj  )
                       -------------------
                   (Nseq*Wsize)*((Nseq-1)*Wsize)
 
@@ -34,6 +34,17 @@ Av. Sim. =       sum( Mij*wi + Mji*w2  )
    i,j - with respect to residue i or j
    Nseq - number of sequences in the alignment
    Wsize - window size
+   
+   This program is useful for gaining a qualitative insight into where
+   there are regions of conservation in a group of aligned sequences.
+   
+   Note that you should only compare the results of two runs of plotcon
+   if you use the same window size in each. This is because the
+   'similarity score' units that are output are very sensitive to the
+   size of the window. A large window (e.g. 100) gives a nice, smooth
+   curve, and very low 'similarity score' units, whereas a small window
+   (e.g. 4) gives a very spikey, noisy plot with 'similarity score' units
+   of a round 1.00
    
 Usage
 
@@ -51,15 +62,14 @@ Created plotcon.ps
    
 Command line arguments
 
-   Mandatory qualifiers (* if not always prompted):
-  [-msf]               seqset     File containing a sequence alignment
+   Standard (Mandatory) qualifiers:
+  [-sequences]         seqset     File containing a sequence alignment
    -winsize            integer    Number of columns to average alignment
                                   quality over. The larger this value is, the
                                   smoother the plot will be.
-*  -graph              xygraph    Graph type
-*  -outfile            outfile    Display as data
+   -graph              xygraph    Graph type
 
-   Optional qualifiers:
+   Additional (Optional) qualifiers:
    -scorefile          matrix     This is the scoring matrix file used when
                                   comparing sequences. By default it is the
                                   file 'EBLOSUM62' (for proteins) or the file
@@ -67,12 +77,10 @@ Command line arguments
                                   files are found in the 'data' directory of
                                   the EMBOSS installation.
 
-   Advanced qualifiers:
-   -data               boolean    Output the match data to a file instead of
-                                  plotting it
-
+   Advanced (Unprompted) qualifiers: (none)
    Associated qualifiers:
-  "-msf" related qualifiers
+
+   "-sequences" associated qualifiers
    -sbegin1             integer    First base used
    -send1               integer    Last base used, def=seq length
    -sreverse1           boolean    Reverse (if DNA)
@@ -82,13 +90,13 @@ Command line arguments
    -slower1             boolean    Make lower case
    -supper1             boolean    Make upper case
    -sformat1            string     Input sequence format
-   -sopenfile1          string     Input filename
    -sdbname1            string     Database name
    -sid1                string     Entryname
    -ufo1                string     UFO features
    -fformat1            string     Features format
    -fopenfile1          string     Features file name
-  "-graph" related qualifiers
+
+   "-graph" associated qualifiers
    -gprompt             boolean    Graph prompting
    -gtitle              string     Graph title
    -gsubtitle           string     Graph subtitle
@@ -96,18 +104,13 @@ Command line arguments
    -gytitle             string     Graph y axis title
    -goutfile            string     Output file for non interactive displays
    -gdirectory          string     Output directory
-  "-outfile" related qualifiers
-   -odirectory          string     Output directory
 
    General qualifiers:
    -auto                boolean    Turn off prompts
    -stdout              boolean    Write standard output
    -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for required and optional values
+   -options             boolean    Prompt for standard and additional values
    -debug               boolean    Write debug output to program.dbg
-   -acdlog              boolean    Write ACD processing log to program.acdlog
-   -acdpretty           boolean    Rewrite ACD file as program.acdpretty
-   -acdtable            boolean    Write HTML table of options
    -verbose             boolean    Report some/full command line options
    -help                boolean    Report command line options. More
                                   information on associated and general
@@ -118,10 +121,10 @@ Command line arguments
    -die                 boolean    Report deaths
    
 
-   Mandatory qualifiers Allowed values Default
-   [-msf]
-   (Parameter 1) File containing a sequence alignment Readable sequences
-   Required
+   Standard (Mandatory) qualifiers Allowed values Default
+   [-sequences]
+   (Parameter 1) File containing a sequence alignment Readable set of
+   sequences Required
    -winsize Number of columns to average alignment quality over. The
    larger this value is, the smoother the plot will be. Any integer value
    4
@@ -129,17 +132,15 @@ Command line arguments
    postscript, ps, hpgl, hp7470, hp7580, meta, colourps, cps, xwindows,
    x11, tektronics, tekt, tek4107t, tek, none, null, text, data, xterm,
    png EMBOSS_GRAPHICS value, or x11
-   -outfile Display as data Output file <sequence>.plotcon
-   Optional qualifiers Allowed values Default
+   Additional (Optional) qualifiers Allowed values Default
    -scorefile This is the scoring matrix file used when comparing
    sequences. By default it is the file 'EBLOSUM62' (for proteins) or the
    file 'EDNAFULL' (for nucleic sequences). These files are found in the
    'data' directory of the EMBOSS installation. Comparison matrix file in
    EMBOSS data path EBLOSUM62 for protein
    EDNAFULL for DNA
-   Advanced qualifiers Allowed values Default
-   -data Output the match data to a file instead of plotting it Boolean
-   value Yes/No No
+   Advanced (Unprompted) qualifiers Allowed values Default
+   (none)
    
 Input file format
 

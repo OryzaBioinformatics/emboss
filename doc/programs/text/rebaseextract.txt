@@ -53,26 +53,23 @@ Full pathname of PROTO file: ../../data/proto
    
 Command line arguments
 
-   Mandatory qualifiers:
-  [-inf]               infile     Full pathname of WITHREFM file
-  [-proto]             infile     Full pathname of PROTO file
+   Standard (Mandatory) qualifiers:
+  [-infile]            infile     Full pathname of WITHREFM file
+  [-protofile]         infile     Full pathname of PROTO file
 
-   Optional qualifiers:
+   Additional (Optional) qualifiers:
    -[no]equivalences   boolean    This option calculates an embossre.equ file
                                   using restriction enzyme prototypes in the
                                   withrefm file.
 
-   Advanced qualifiers: (none)
+   Advanced (Unprompted) qualifiers: (none)
    Associated qualifiers: (none)
    General qualifiers:
    -auto                boolean    Turn off prompts
    -stdout              boolean    Write standard output
    -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for required and optional values
+   -options             boolean    Prompt for standard and additional values
    -debug               boolean    Write debug output to program.dbg
-   -acdlog              boolean    Write ACD processing log to program.acdlog
-   -acdpretty           boolean    Rewrite ACD file as program.acdpretty
-   -acdtable            boolean    Write HTML table of options
    -verbose             boolean    Report some/full command line options
    -help                boolean    Report command line options. More
                                   information on associated and general
@@ -83,16 +80,16 @@ Command line arguments
    -die                 boolean    Report deaths
    
 
-   Mandatory qualifiers Allowed values Default
-   [-inf]
+   Standard (Mandatory) qualifiers Allowed values Default
+   [-infile]
    (Parameter 1) Full pathname of WITHREFM file Input file Required
-   [-proto]
+   [-protofile]
    (Parameter 2) Full pathname of PROTO file Input file Required
-   Optional qualifiers Allowed values Default
+   Additional (Optional) qualifiers Allowed values Default
    -[no]equivalences This option calculates an embossre.equ file using
    restriction enzyme prototypes in the withrefm file. Boolean value
    Yes/No Yes
-   Advanced qualifiers Allowed values Default
+   Advanced (Unprompted) qualifiers Allowed values Default
    (none)
    
 Input file format

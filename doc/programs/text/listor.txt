@@ -92,13 +92,13 @@ Output file [file1.list]:
    
 Command line arguments
 
-   Mandatory qualifiers:
+   Standard (Mandatory) qualifiers:
   [-firstset]          seqset     Sequence set USA
   [-secondset]         seqset     Sequence set USA
-  [-outlist]           outfile    The list of sequence names will be written
+  [-outfile]           outfile    The list of sequence names will be written
                                   to this list file
 
-   Optional qualifiers:
+   Additional (Optional) qualifiers:
    -operator           menu       The following logical operators combine the
                                   sequences in the following ways:
                                   OR - gives all that occur in one set or the
@@ -111,9 +111,10 @@ Command line arguments
                                   set except for those that also occur in the
                                   second
 
-   Advanced qualifiers: (none)
+   Advanced (Unprompted) qualifiers: (none)
    Associated qualifiers:
-  "-firstset" related qualifiers
+
+   "-firstset" associated qualifiers
    -sbegin1             integer    First base used
    -send1               integer    Last base used, def=seq length
    -sreverse1           boolean    Reverse (if DNA)
@@ -123,13 +124,13 @@ Command line arguments
    -slower1             boolean    Make lower case
    -supper1             boolean    Make upper case
    -sformat1            string     Input sequence format
-   -sopenfile1          string     Input filename
    -sdbname1            string     Database name
    -sid1                string     Entryname
    -ufo1                string     UFO features
    -fformat1            string     Features format
    -fopenfile1          string     Features file name
-  "-secondset" related qualifiers
+
+   "-secondset" associated qualifiers
    -sbegin2             integer    First base used
    -send2               integer    Last base used, def=seq length
    -sreverse2           boolean    Reverse (if DNA)
@@ -139,24 +140,21 @@ Command line arguments
    -slower2             boolean    Make lower case
    -supper2             boolean    Make upper case
    -sformat2            string     Input sequence format
-   -sopenfile2          string     Input filename
    -sdbname2            string     Database name
    -sid2                string     Entryname
    -ufo2                string     UFO features
    -fformat2            string     Features format
    -fopenfile2          string     Features file name
-  "-outlist" related qualifiers
+
+   "-outfile" associated qualifiers
    -odirectory3         string     Output directory
 
    General qualifiers:
    -auto                boolean    Turn off prompts
    -stdout              boolean    Write standard output
    -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for required and optional values
+   -options             boolean    Prompt for standard and additional values
    -debug               boolean    Write debug output to program.dbg
-   -acdlog              boolean    Write ACD processing log to program.acdlog
-   -acdpretty           boolean    Rewrite ACD file as program.acdpretty
-   -acdtable            boolean    Write HTML table of options
    -verbose             boolean    Report some/full command line options
    -help                boolean    Report command line options. More
                                   information on associated and general
@@ -167,15 +165,15 @@ Command line arguments
    -die                 boolean    Report deaths
    
 
-   Mandatory qualifiers Allowed values Default
+   Standard (Mandatory) qualifiers Allowed values Default
    [-firstset]
-   (Parameter 1) Sequence set USA Readable sequences Required
+   (Parameter 1) Sequence set USA Readable set of sequences Required
    [-secondset]
-   (Parameter 2) Sequence set USA Readable sequences Required
-   [-outlist]
+   (Parameter 2) Sequence set USA Readable set of sequences Required
+   [-outfile]
    (Parameter 3) The list of sequence names will be written to this list
    file Output file <sequence>.listor
-   Optional qualifiers Allowed values Default
+   Additional (Optional) qualifiers Allowed values Default
    -operator The following logical operators combine the sequences in the
    following ways: OR - gives all that occur in one set or the other AND
    - gives only those which occur in both sets XOR - gives those which
@@ -187,7 +185,7 @@ Command line arguments
    X (XOR - only those not in both sets)
    N (NOT - those of the first set that are not in the second)
    OR
-   Advanced qualifiers Allowed values Default
+   Advanced (Unprompted) qualifiers Allowed values Default
    (none)
    
 Input file format

@@ -93,6 +93,20 @@ be turned off by setting the qualifier '-limit' to be false.) The reported
 enzyme from any one group of isoschizomers (the prototype) is specified in
 the REBASE database and the information is held in the data file 'embossre.equ'.
 You may edit this file to set your own preferred prototype,if you wish.
+
+<p>
+
+As well as the display of where enzymes cut in the sequence, <b>remap</b> displays:
+
+<p>
+
+<ul>
+<li>The list of enzymes that cut the sequence and match the required criteria.
+<li>The list of enzymes that cut the sequence and fail the MINCUTS criteria.
+<li>The list of enzymes that cut the sequence and fail the MAXCUTS criteria.
+<li>The list of enzymes that do not cut the sequence but which match all the required criteria.
+<li>The number of enzymes that cut the sequence and fail the SITELEN, BLUNT, STICKY, COMMERCIAL, AMBIGUOUS criteria.
+</ul>
    
 <H2>
     Usage
@@ -189,7 +203,7 @@ IT IS DONE FOR YOU.
 
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
-   Mandatory qualifiers:
+   Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Sequence database USA
    -enzymes            string     The name 'all' reads in all enzyme names
                                   from the REBASE database. You can specify
@@ -217,11 +231,9 @@ IT IS DONE FOR YOU.
                                   restriction enzyme recognition site. Any
                                   enzymes with sites shorter than this will be
                                   ignored.
-  [-outfile]           outfile    If you enter the name of a file here then
-                                  this program will write the sequence details
-                                  into that file.
+  [-outfile]           outfile    Output file name
 
-   Optional qualifiers:
+   Additional (Optional) qualifiers:
    -mincuts            integer    This sets the minimum number of cuts for any
                                   restriction enzyme that will be considered.
                                   Any enzymes that cut fewer times than this
@@ -288,7 +300,7 @@ IT IS DONE FOR YOU.
                                   of enzymes rather than searching 'all' of
                                   them.
 
-   Advanced qualifiers:
+   Advanced (Unprompted) qualifiers:
    -[no]translation    boolean    This displays the 6-frame translations of
                                   the sequence in the output.
    -[no]reverse        boolean    This displays the cut sites and translation
@@ -337,7 +349,8 @@ IT IS DONE FOR YOU.
    -html               boolean    Use HTML formatting
 
    Associated qualifiers:
-  "-sequence" related qualifiers
+
+   "-sequence" associated qualifiers
    -sbegin1             integer    First base used
    -send1               integer    Last base used, def=seq length
    -sreverse1           boolean    Reverse (if DNA)
@@ -347,24 +360,21 @@ IT IS DONE FOR YOU.
    -slower1             boolean    Make lower case
    -supper1             boolean    Make upper case
    -sformat1            string     Input sequence format
-   -sopenfile1          string     Input filename
    -sdbname1            string     Database name
    -sid1                string     Entryname
    -ufo1                string     UFO features
    -fformat1            string     Features format
    -fopenfile1          string     Features file name
-  "-outfile" related qualifiers
+
+   "-outfile" associated qualifiers
    -odirectory2         string     Output directory
 
    General qualifiers:
    -auto                boolean    Turn off prompts
    -stdout              boolean    Write standard output
    -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for required and optional values
+   -options             boolean    Prompt for standard and additional values
    -debug               boolean    Write debug output to program.dbg
-   -acdlog              boolean    Write ACD processing log to program.acdlog
-   -acdpretty           boolean    Rewrite ACD file as program.acdpretty
-   -acdtable            boolean    Write HTML table of options
    -verbose             boolean    Report some/full command line options
    -help                boolean    Report command line options. More
                                   information on associated and general
@@ -381,7 +391,7 @@ IT IS DONE FOR YOU.
 
 <table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=2>Mandatory qualifiers</th>
+<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
 <th align="left">Allowed values</th>
 <th align="left">Default</th>
 </tr>
@@ -418,13 +428,13 @@ PpiI</td>
 
 <tr>
 <td>[-outfile]<br>(Parameter 2)</td>
-<td>If you enter the name of a file here then this program will write the sequence details into that file.</td>
+<td>Output file name</td>
 <td>Output file</td>
 <td><i>&lt;sequence&gt;</i>.remap</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=2>Optional qualifiers</th>
+<th align="left" colspan=2>Additional (Optional) qualifiers</th>
 <th align="left">Allowed values</th>
 <th align="left">Default</th>
 </tr>
@@ -514,7 +524,7 @@ PpiI</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=2>Advanced qualifiers</th>
+<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
 <th align="left">Allowed values</th>
 <th align="left">Default</th>
 </tr>
@@ -876,10 +886,12 @@ E.coli lactose operon with lacI, lacZ, lacY and lacA genes.
 
 
 
+# Enzymes which cut less frequently than the MINCUTS criterion
 # Enzymes &lt; MINCUTS Frequency	Isoschizomers
 
 
 
+# Enzymes which cut more frequently than the MAXCUTS criterion
 # Enzymes &gt; MAXCUTS Frequency	Isoschizomers
 
 
@@ -889,7 +901,8 @@ E.coli lactose operon with lacI, lacZ, lacY and lacA genes.
 
 
 
-# No. of cutting REs not matching SITELEN, BLUNT, STICKY, COMMERCIAL criteria
+# No. of cutting enzymes which do not match the
+# SITELEN, BLUNT, STICKY, COMMERCIAL, AMBIGUOUS citeria
 
 0
 
@@ -934,10 +947,12 @@ E.coli lactose operon with lacI, lacZ, lacY and lacA genes.
 
 
 
+# Enzymes which cut less frequently than the MINCUTS criterion
 # Enzymes &lt; MINCUTS Frequency	Isoschizomers
 
 
 
+# Enzymes which cut more frequently than the MAXCUTS criterion
 # Enzymes &gt; MAXCUTS Frequency	Isoschizomers
 
 
@@ -948,7 +963,8 @@ AclI      BamHI     BceAI     BsrI      ClaI      EcoRI     EcoRII    HaeIII
 Hin4I     HindII    HindIII   KpnI      MaeII     NotI      
 
 
-# No. of cutting REs not matching SITELEN, BLUNT, STICKY, COMMERCIAL criteria
+# No. of cutting enzymes which do not match the
+# SITELEN, BLUNT, STICKY, COMMERCIAL, AMBIGUOUS citeria
 
 0
 
@@ -999,10 +1015,12 @@ E.coli lactose operon with lacI, lacZ, lacY and lacA genes.
 
 
 
+# Enzymes which cut less frequently than the MINCUTS criterion
 # Enzymes &lt; MINCUTS Frequency
 
 
 
+# Enzymes which cut more frequently than the MAXCUTS criterion
 # Enzymes &gt; MAXCUTS Frequency
 
 
@@ -1013,7 +1031,8 @@ AclI      BamHI     BceAI     Bse1I     BshI      ClaI      EcoRI     EcoRII
 Hin4I     HindII    HindIII   HpyCH4IV  KpnI      NotI      
 
 
-# No. of cutting REs not matching SITELEN, BLUNT, STICKY, COMMERCIAL criteria
+# No. of cutting enzymes which do not match the
+# SITELEN, BLUNT, STICKY, COMMERCIAL, AMBIGUOUS citeria
 
 0
 
@@ -1029,27 +1048,23 @@ ECLAC
 E.coli lactose operon with lacI, lacZ, lacY and lacA genes.
 
                                                                   Ksp632I
-                                                        &gt;.........====
-                                                          HpaII
+          
+                                                         BHpaII
                                                           &gt;===
-                        HhaI                             BssKI
-                        ==&gt;=                            &gt;=====
-                 TaqI   Hin6I                         HhaI
-                 &gt;===   &gt;===                          ==&gt;=
-              BsiYI                      AciI         Hin6I
-              ======&gt;====             &gt;..====         &gt;===
+                        HhaI                          HhaI
+                                                      ==&gt;=
+              BsiTaqI   Hin6I            AciI         Hin6I
+                 &gt;===   &gt;===          &gt;..====         &gt;===
           GACACCATCGAATGGCGCAAAACCTTTCGCGGTATGGCATGATAGCGCCCGGAAGAGAGT
                    10        20        30        40        50        60        
           ----:----|----:----|----:----|----:----|----:----|----:----|
           CTGTGGTAGCTTACCGCGTTTTGGAAAGCGCCATACCGTACTATCGCGGGCCTTCTCTCA
-              ====&lt;======                &lt;===         ===&lt;
-              BsiYI                      AciI         Hin6I
-                 ===&lt;   ===&lt;                          =&lt;==  &lt;.....====
-                 TaqI   Hin6I                         HhaI        Ksp632I
-                        =&lt;==                             =====&lt;
-                        HhaI                             BssKI
+                 ===&lt;   ===&lt;             &lt;===         ===&lt;
+              BsiTaqI   Hin6I            AciI         Hin6I
+                                                      =&lt;==  &lt;.....====
+                        HhaI                          HhaI        Ksp632I
                                                           ===&lt;
-                                                          HpaII
+                                                         BHpaII
 
 
 # Enzymes that cut  Frequency	Isoschizomers
@@ -1064,10 +1079,12 @@ E.coli lactose operon with lacI, lacZ, lacY and lacA genes.
 
 
 
+# Enzymes which cut less frequently than the MINCUTS criterion
 # Enzymes &lt; MINCUTS Frequency	Isoschizomers
 
 
 
+# Enzymes which cut more frequently than the MAXCUTS criterion
 # Enzymes &gt; MAXCUTS Frequency	Isoschizomers
 
 
@@ -1078,7 +1095,8 @@ AclI      BamHI     BceAI     BsrI      ClaI      EcoRI     EcoRII    HaeIII
 Hin4I     HindII    HindIII   KpnI      MaeII     NotI      
 
 
-# No. of cutting REs not matching SITELEN, BLUNT, STICKY, COMMERCIAL criteria
+# No. of cutting enzymes which do not match the
+# SITELEN, BLUNT, STICKY, COMMERCIAL, AMBIGUOUS citeria
 
 0
 
@@ -1123,13 +1141,13 @@ the input list of enzymes), will not be listed.
 <p>
 
 Then a list is displayed of the enzymes whose names were input and which
-match the other criteria ('-sitelen', '-blunt', '-sticky' or
+match the other criteria ('-sitelen', '-blunt', '-sticky', '-ambiguity' or
 '-commercial') but which do not cut. 
 
 <p>
 
 Finally the number of enzymes that were rejected from consideration
-because they do not match the '-sitelen', '-blunt', '-sticky' or
+because they do not match the '-sitelen', '-blunt', '-sticky', '-ambiguity' or
 '-commercial' criteria is displayed.
 
 <p>
@@ -1138,7 +1156,7 @@ The '-flatreformat' qualifier changes the display to emphasise the
 recognition site of the restriction enzyme, which is indicated by a row
 of '=' characters.  The cut site if pointed to by a '&gt;' or '&lt;' character
 and if the cut site is not within or imemdiately adjacent to the
-recognition site, they are linked by a row or '.' characters.  
+recognition site, they are linked by a row of '.' characters.  
 
 <p>
 

@@ -34,21 +34,22 @@ pkgdata_DATA =  abiview.1.abiview.gif chaos.1.chaos.gif cirdna.1.cirdna.gif \
                efactor.html efitch.html egendist.html einverted.html \
                ekitsch.html embossdata.html embossversion.html emix.html \
                emma.html emowse.html eneighbor.html entret.html \
-               enzyme_kinetics_group.html epenny.html eprimer3.html \
-               eprotdist.html eprotpars.html equicktandem.html erestml.html \
-               eseqboot.html est2genome.html etandem.html extractfeat.html \
-               extractseq.html factor.html feature_tables_group.html \
-               findkm.html fitch.html freak.html fuzznuc.html fuzzpro.html \
-               fuzztran.html garnier.html geecee.html gendist.html \
-               getorf.html groups.html helixturnhelix.html hetparse.html \
-               hmmgen.html hmoment.html iep.html index.html infoalign.html \
-               information_group.html infoseq.html interface.html
-pkgdata2_DATA = isochore.html kitsch.html lindna.html listor.html \
-               marscan.html maskfeat.html maskseq.html matcher.html \
-               megamerger.html merger.html mix.html msbar.html mse.html \
-               mwcontam.html mwfilter.html needle.html neighbor.html \
-               newcpgreport.html newcpgseek.html newseq.html noreturn.html \
-               notseq.html nthseq.html nucleic_2d_structure_group.html \
+               enzyme_kinetics_group.html epenny.html epestfind.html \
+               eprimer3.html eprotdist.html eprotpars.html \
+               equicktandem.html erestml.html eseqboot.html est2genome.html \
+               etandem.html extractfeat.html extractseq.html factor.html \
+               feature_tables_group.html findkm.html fitch.html freak.html \
+               fuzznuc.html fuzzpro.html fuzztran.html garnier.html \
+               geecee.html gendist.html getorf.html groups.html \
+               helixturnhelix.html hetparse.html hmmgen.html hmoment.html \
+               iep.html index.html infoalign.html information_group.html \
+               infoseq.html interface.html isochore.html kitsch.html
+pkgdata2_DATA = lindna.html listor.html marscan.html maskfeat.html \
+               maskseq.html matcher.html megamerger.html merger.html \
+               mix.html msbar.html mse.html mwcontam.html mwfilter.html \
+               needle.html neighbor.html newcpgreport.html newcpgseek.html \
+               newseq.html noreturn.html notseq.html nthseq.html \
+               nucleic_2d_structure_group.html \
                nucleic_codon_usage_group.html \
                nucleic_codon_usage_nucleic_gene_finding_group.html \
                nucleic_composition_group.html \
@@ -62,7 +63,8 @@ pkgdata2_DATA = isochore.html kitsch.html lindna.html listor.html \
                palindrome.html pasteseq.html patmatdb.html \
                patmatmotifs.html penny.html pepcoil.html pepinfo.html \
                pepnet.html pepstats.html pepwheel.html pepwindow.html \
-               pepwindowall.html pestfind.html phylogeny_group.html \
+               pepwindowall.html pestfind.html \
+               phylogeny_distance_matrix_group.html phylogeny_group.html \
                plotcon.html plotorf.html polydot.html preg.html \
                prettyplot.html prettyseq.html primersearch.html \
                printsextract.html profit.html prophecy.html prophet.html \

@@ -41,22 +41,23 @@ Output file [paamir.showorf]:
    
 Command line arguments
 
-   Mandatory qualifiers:
+   Standard (Mandatory) qualifiers:
   [-sequence]          sequence   Sequence USA
    -frames             menu       Select one or more values
   [-outfile]           outfile    Output file name
 
-   Optional qualifiers:
+   Additional (Optional) qualifiers:
    -[no]ruler          boolean    Add a ruler
    -[no]plabel         boolean    Number translations
    -[no]nlabel         boolean    Number DNA sequence
 
-   Advanced qualifiers:
-   -cfile              codon      Codon usage file
+   Advanced (Unprompted) qualifiers:
+   -cfile              codon      Codon usage table name
    -width              integer    Width of screen
 
    Associated qualifiers:
-  "-sequence" related qualifiers
+
+   "-sequence" associated qualifiers
    -sbegin1             integer    First base used
    -send1               integer    Last base used, def=seq length
    -sreverse1           boolean    Reverse (if DNA)
@@ -66,24 +67,21 @@ Command line arguments
    -slower1             boolean    Make lower case
    -supper1             boolean    Make upper case
    -sformat1            string     Input sequence format
-   -sopenfile1          string     Input filename
    -sdbname1            string     Database name
    -sid1                string     Entryname
    -ufo1                string     UFO features
    -fformat1            string     Features format
    -fopenfile1          string     Features file name
-  "-outfile" related qualifiers
+
+   "-outfile" associated qualifiers
    -odirectory2         string     Output directory
 
    General qualifiers:
    -auto                boolean    Turn off prompts
    -stdout              boolean    Write standard output
    -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for required and optional values
+   -options             boolean    Prompt for standard and additional values
    -debug               boolean    Write debug output to program.dbg
-   -acdlog              boolean    Write ACD processing log to program.acdlog
-   -acdpretty           boolean    Rewrite ACD file as program.acdpretty
-   -acdtable            boolean    Write HTML table of options
    -verbose             boolean    Report some/full command line options
    -help                boolean    Report command line options. More
                                   information on associated and general
@@ -94,7 +92,7 @@ Command line arguments
    -die                 boolean    Report deaths
    
 
-   Mandatory qualifiers Allowed values Default
+   Standard (Mandatory) qualifiers Allowed values Default
    [-sequence]
    (Parameter 1) Sequence USA Readable sequence Required
    -frames Select one or more values
@@ -108,12 +106,13 @@ Command line arguments
    1,2,3,4,5,6
    [-outfile]
    (Parameter 2) Output file name Output file <sequence>.showorf
-   Optional qualifiers Allowed values Default
+   Additional (Optional) qualifiers Allowed values Default
    -[no]ruler Add a ruler Boolean value Yes/No Yes
    -[no]plabel Number translations Boolean value Yes/No Yes
    -[no]nlabel Number DNA sequence Boolean value Yes/No Yes
-   Advanced qualifiers Allowed values Default
-   -cfile Codon usage file Codon usage file in EMBOSS data path Ehum.cut
+   Advanced (Unprompted) qualifiers Allowed values Default
+   -cfile Codon usage table name Codon usage file in EMBOSS data path
+   Ehum.cut
    -width Width of screen Integer 10 or more 50
    
 Input file format

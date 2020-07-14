@@ -31,7 +31,7 @@ Usage
 
 % lindna -graph cps 
 Draws linear maps of DNA constructs
-Input file [inputfile]: ../../data/data.linp
+input file containing mapping data [inputfile]: ../../data/data.linp
 do you want a ruler [Y]: 
       1 : Open
       2 : Filled
@@ -45,15 +45,15 @@ Created lindna.ps
    
 Command line arguments
 
-   Mandatory qualifiers:
+   Standard (Mandatory) qualifiers:
    -graphout           graph      Graph type
-   -inputfile          infile     input file containing mapping data
+  [-infile]            infile     input file containing mapping data
    -[no]ruler          boolean    do you want a ruler
    -blocktype          selection  type of blocks: Open, Filled, or Outline.
                                   Option 'Outline' draws filled blocks
                                   surrounded by a black border
 
-   Optional qualifiers:
+   Additional (Optional) qualifiers:
    -intersymbol        selection  type of junctions between blocks
    -intercolour        integer    colour of junctions between blocks (enter a
                                   colour number)
@@ -86,9 +86,10 @@ Command line arguments
                                   ranges. Enter a number <1 or >1 to decrease
                                   or increase the size, respectively
 
-   Advanced qualifiers: (none)
+   Advanced (Unprompted) qualifiers: (none)
    Associated qualifiers:
-  "-graphout" related qualifiers
+
+   "-graphout" associated qualifiers
    -gprompt             boolean    Graph prompting
    -gtitle              string     Graph title
    -gsubtitle           string     Graph subtitle
@@ -101,11 +102,8 @@ Command line arguments
    -auto                boolean    Turn off prompts
    -stdout              boolean    Write standard output
    -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for required and optional values
+   -options             boolean    Prompt for standard and additional values
    -debug               boolean    Write debug output to program.dbg
-   -acdlog              boolean    Write ACD processing log to program.acdlog
-   -acdpretty           boolean    Rewrite ACD file as program.acdpretty
-   -acdtable            boolean    Write HTML table of options
    -verbose             boolean    Report some/full command line options
    -help                boolean    Report command line options. More
                                   information on associated and general
@@ -116,17 +114,18 @@ Command line arguments
    -die                 boolean    Report deaths
    
 
-   Mandatory qualifiers Allowed values Default
+   Standard (Mandatory) qualifiers Allowed values Default
    -graphout Graph type EMBOSS has a list of known devices, including
    postscript, ps, hpgl, hp7470, hp7580, meta, colourps, cps, xwindows,
    x11, tektronics, tekt, tek4107t, tek, none, null, text, data, xterm,
    png EMBOSS_GRAPHICS value, or x11
-   -inputfile input file containing mapping data Input file inputfile
+   [-infile]
+   (Parameter 1) input file containing mapping data Input file inputfile
    -[no]ruler do you want a ruler Boolean value Yes/No Yes
    -blocktype type of blocks: Open, Filled, or Outline. Option 'Outline'
    draws filled blocks surrounded by a black border Choose from selection
    list of values Filled
-   Optional qualifiers Allowed values Default
+   Additional (Optional) qualifiers Allowed values Default
    -intersymbol type of junctions between blocks Choose from selection
    list of values Straight
    -intercolour colour of junctions between blocks (enter a colour
@@ -155,7 +154,7 @@ Command line arguments
    -postext space between text and ticks, blocks, and ranges. Enter a
    number <1 or >1 to decrease or increase the size, respectively Any
    numeric value 1
-   Advanced qualifiers Allowed values Default
+   Advanced (Unprompted) qualifiers Allowed values Default
    (none)
    
 Input file format

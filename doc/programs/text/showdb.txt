@@ -82,7 +82,7 @@ ensdnamasked  N    OK  OK  OK  ENSEMBL dna masked
 ensembl       N    OK  OK  OK  ENSEMBL
 est           N    OK  OK  OK  EMBL EST sequences
 fungal        N    OK  OK  OK  EMBL fungal sequences
-gb            N    OK  OK  OK  Genbank
+gb            N    OK  OK  OK  Genbank updates
 genbank       N    OK  OK  OK  Genbank
 gss           N    OK  OK  OK  EMBL GSS sequences
 hsunigene     N    OK  -   -   hsunigene
@@ -92,6 +92,8 @@ humanest      N    OK  OK  OK  EMBL human EST sequences
 invertebrate  N    OK  OK  OK  EMBL invertebrate sequences
 mammalian     N    OK  OK  OK  EMBL mammalian sequences
 mouseest      N    OK  OK  OK  EMBL mouse EST sequences
+newgb         N    OK  OK  OK  Genbank updates
+newgenbank    N    OK  OK  OK  Genbank updates
 organelle     N    OK  OK  OK  EMBL organelle sequences
 otherest      N    OK  OK  OK  EMBL other EST sequences
 othervertebrate N    OK  OK  OK  EMBL other vertebrate sequences
@@ -104,6 +106,7 @@ rodent        N    OK  OK  OK  EMBL rodent sequences
 sts           N    OK  OK  OK  EMBL STS sequences
 synthetic     N    OK  OK  OK  EMBL synthetic sequences
 tembl         N    OK  OK  OK  EMBL in native format with EMBL CD-ROM index
+tgb           N    OK  -   -   Genbank IDs
 tgenbank      N    OK  OK  OK  GenBank in native format with EMBL CD-ROM index
 tigregad      N    OK  OK  OK  TIGR EGAD sequences
 tigrmgi       N    OK  OK  OK  TIGR MGI sequences
@@ -191,7 +194,7 @@ index
 
  fungal N OK   OK   OK   EMBL fungal sequences
 
- gb N OK   OK   OK   Genbank
+ gb N OK   OK   OK   Genbank updates
 
  genbank N OK   OK   OK   Genbank
 
@@ -210,6 +213,10 @@ index
  mammalian N OK   OK   OK   EMBL mammalian sequences
 
  mouseest N OK   OK   OK   EMBL mouse EST sequences
+
+ newgb N OK   OK   OK   Genbank updates
+
+ newgenbank N OK   OK   OK   Genbank updates
 
  organelle N OK   OK   OK   EMBL organelle sequences
 
@@ -234,6 +241,8 @@ index
  synthetic N OK   OK   OK   EMBL synthetic sequences
 
  tembl N OK   OK   OK   EMBL in native format with EMBL CD-ROM index
+
+ tgb N OK   -    -    Genbank IDs
 
  tgenbank N OK   OK   OK   GenBank in native format with EMBL CD-ROM index
 
@@ -304,7 +313,7 @@ ensdnamasked  N    OK  OK  OK  ENSEMBL dna masked
 ensembl       N    OK  OK  OK  ENSEMBL
 est           N    OK  OK  OK  EMBL EST sequences
 fungal        N    OK  OK  OK  EMBL fungal sequences
-gb            N    OK  OK  OK  Genbank
+gb            N    OK  OK  OK  Genbank updates
 genbank       N    OK  OK  OK  Genbank
 gss           N    OK  OK  OK  EMBL GSS sequences
 hsunigene     N    OK  -   -   hsunigene
@@ -314,6 +323,8 @@ humanest      N    OK  OK  OK  EMBL human EST sequences
 invertebrate  N    OK  OK  OK  EMBL invertebrate sequences
 mammalian     N    OK  OK  OK  EMBL mammalian sequences
 mouseest      N    OK  OK  OK  EMBL mouse EST sequences
+newgb         N    OK  OK  OK  Genbank updates
+newgenbank    N    OK  OK  OK  Genbank updates
 organelle     N    OK  OK  OK  EMBL organelle sequences
 otherest      N    OK  OK  OK  EMBL other EST sequences
 othervertebrate N    OK  OK  OK  EMBL other vertebrate sequences
@@ -326,6 +337,7 @@ rodent        N    OK  OK  OK  EMBL rodent sequences
 sts           N    OK  OK  OK  EMBL STS sequences
 synthetic     N    OK  OK  OK  EMBL synthetic sequences
 tembl         N    OK  OK  OK  EMBL in native format with EMBL CD-ROM index
+tgb           N    OK  -   -   Genbank IDs
 tgenbank      N    OK  OK  OK  GenBank in native format with EMBL CD-ROM index
 tigregad      N    OK  OK  OK  TIGR EGAD sequences
 tigrmgi       N    OK  OK  OK  TIGR MGI sequences
@@ -372,6 +384,8 @@ humanest
 invertebrate
 mammalian
 mouseest
+newgb
+newgenbank
 organelle
 otherest
 othervertebrate
@@ -384,6 +398,7 @@ rodent
 sts
 synthetic
 tembl
+tgb
 tgenbank
 tigregad
 tigrmgi
@@ -431,6 +446,8 @@ humanest      N
 invertebrate  N
 mammalian     N
 mouseest      N
+newgb         N
+newgenbank    N
 organelle     N
 otherest      N
 othervertebrate N
@@ -443,6 +460,7 @@ rodent        N
 sts           N
 synthetic     N
 tembl         N
+tgb           N
 tgenbank      N
 tigregad      N
 tigrmgi       N
@@ -452,8 +470,8 @@ viral         N
    
 Command line arguments
 
-   Mandatory qualifiers: (none)
-   Optional qualifiers:
+   Standard (Mandatory) qualifiers: (none)
+   Additional (Optional) qualifiers:
    -database           string     Name of a single database to give
                                   information on
    -html               boolean    Format output as an HTML table
@@ -463,11 +481,9 @@ Command line arguments
                                   used on this database, other than the
                                   standard 'id' or 'acc' fields.
    -release            boolean    Display 'release' column
-   -outfile            outfile    If you enter the name of a file here then
-                                  this program will write the database details
-                                  into that file.
+   -outfile            outfile    Output file name
 
-   Advanced qualifiers:
+   Advanced (Unprompted) qualifiers:
    -only               boolean    This is a way of shortening the command line
                                   if you only want a few things to be
                                   displayed. Instead of specifying:
@@ -483,18 +499,16 @@ Command line arguments
    -comment            boolean    Display 'comment' column
 
    Associated qualifiers:
-  "-outfile" related qualifiers
+
+   "-outfile" associated qualifiers
    -odirectory          string     Output directory
 
    General qualifiers:
    -auto                boolean    Turn off prompts
    -stdout              boolean    Write standard output
    -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for required and optional values
+   -options             boolean    Prompt for standard and additional values
    -debug               boolean    Write debug output to program.dbg
-   -acdlog              boolean    Write ACD processing log to program.acdlog
-   -acdpretty           boolean    Rewrite ACD file as program.acdpretty
-   -acdtable            boolean    Write HTML table of options
    -verbose             boolean    Report some/full command line options
    -help                boolean    Report command line options. More
                                   information on associated and general
@@ -505,9 +519,9 @@ Command line arguments
    -die                 boolean    Report deaths
    
 
-   Mandatory qualifiers Allowed values Default
+   Standard (Mandatory) qualifiers Allowed values Default
    (none)
-   Optional qualifiers Allowed values Default
+   Additional (Optional) qualifiers Allowed values Default
    -database Name of a single database to give information on Any string
    is accepted An empty string is accepted
    -html Format output as an HTML table Boolean value Yes/No No
@@ -517,9 +531,8 @@ Command line arguments
    database, other than the standard 'id' or 'acc' fields. Boolean value
    Yes/No No
    -release Display 'release' column Boolean value Yes/No No
-   -outfile If you enter the name of a file here then this program will
-   write the database details into that file. Output file stdout
-   Advanced qualifiers Allowed values Default
+   -outfile Output file name Output file stdout
+   Advanced (Unprompted) qualifiers Allowed values Default
    -only This is a way of shortening the command line if you only want a
    few things to be displayed. Instead of specifying: '-nohead -notype
    -noid -noquery -noall' to get only the comment output, you can specify
@@ -570,7 +583,7 @@ ensdnamasked  N    OK  OK  OK  ENSEMBL dna masked
 ensembl       N    OK  OK  OK  ENSEMBL
 est           N    OK  OK  OK  EMBL EST sequences
 fungal        N    OK  OK  OK  EMBL fungal sequences
-gb            N    OK  OK  OK  Genbank
+gb            N    OK  OK  OK  Genbank updates
 genbank       N    OK  OK  OK  Genbank
 gss           N    OK  OK  OK  EMBL GSS sequences
 hsunigene     N    OK  -   -   hsunigene
@@ -580,6 +593,8 @@ humanest      N    OK  OK  OK  EMBL human EST sequences
 invertebrate  N    OK  OK  OK  EMBL invertebrate sequences
 mammalian     N    OK  OK  OK  EMBL mammalian sequences
 mouseest      N    OK  OK  OK  EMBL mouse EST sequences
+newgb         N    OK  OK  OK  Genbank updates
+newgenbank    N    OK  OK  OK  Genbank updates
 organelle     N    OK  OK  OK  EMBL organelle sequences
 otherest      N    OK  OK  OK  EMBL other EST sequences
 othervertebrate N    OK  OK  OK  EMBL other vertebrate sequences
@@ -592,6 +607,7 @@ rodent        N    OK  OK  OK  EMBL rodent sequences
 sts           N    OK  OK  OK  EMBL STS sequences
 synthetic     N    OK  OK  OK  EMBL synthetic sequences
 tembl         N    OK  OK  OK  EMBL in native format with EMBL CD-ROM index
+tgb           N    OK  -   -   Genbank IDs
 tgenbank      N    OK  OK  OK  GenBank in native format with EMBL CD-ROM index
 tigregad      N    OK  OK  OK  TIGR EGAD sequences
 tigrmgi       N    OK  OK  OK  TIGR MGI sequences

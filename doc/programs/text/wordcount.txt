@@ -26,15 +26,16 @@ Output file [rnu68037.wordcount]:
    
 Command line arguments
 
-   Mandatory qualifiers:
+   Standard (Mandatory) qualifiers:
   [-sequence]          sequence   Sequence USA
    -wordsize           integer    Word size
    -outfile            outfile    Output file name
 
-   Optional qualifiers: (none)
-   Advanced qualifiers: (none)
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers: (none)
    Associated qualifiers:
-  "-sequence" related qualifiers
+
+   "-sequence" associated qualifiers
    -sbegin1             integer    First base used
    -send1               integer    Last base used, def=seq length
    -sreverse1           boolean    Reverse (if DNA)
@@ -44,24 +45,21 @@ Command line arguments
    -slower1             boolean    Make lower case
    -supper1             boolean    Make upper case
    -sformat1            string     Input sequence format
-   -sopenfile1          string     Input filename
    -sdbname1            string     Database name
    -sid1                string     Entryname
    -ufo1                string     UFO features
    -fformat1            string     Features format
    -fopenfile1          string     Features file name
-  "-outfile" related qualifiers
+
+   "-outfile" associated qualifiers
    -odirectory          string     Output directory
 
    General qualifiers:
    -auto                boolean    Turn off prompts
    -stdout              boolean    Write standard output
    -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for required and optional values
+   -options             boolean    Prompt for standard and additional values
    -debug               boolean    Write debug output to program.dbg
-   -acdlog              boolean    Write ACD processing log to program.acdlog
-   -acdpretty           boolean    Rewrite ACD file as program.acdpretty
-   -acdtable            boolean    Write HTML table of options
    -verbose             boolean    Report some/full command line options
    -help                boolean    Report command line options. More
                                   information on associated and general
@@ -72,14 +70,14 @@ Command line arguments
    -die                 boolean    Report deaths
    
 
-   Mandatory qualifiers Allowed values Default
+   Standard (Mandatory) qualifiers Allowed values Default
    [-sequence]
    (Parameter 1) Sequence USA Readable sequence Required
    -wordsize Word size Integer 2 or more 4
    -outfile Output file name Output file <sequence>.wordcount
-   Optional qualifiers Allowed values Default
+   Additional (Optional) qualifiers Allowed values Default
    (none)
-   Advanced qualifiers Allowed values Default
+   Advanced (Unprompted) qualifiers Allowed values Default
    (none)
    
 Input file format
@@ -210,64 +208,64 @@ ctg     54
 tgg     53
 gcc     53
 ggc     51
-cgc     47
 gct     47
+cgc     47
 gtg     40
 tgc     39
 cct     38
 gcg     36
 cca     29
 ggg     26
+tcc     25
 cag     25
 ctt     25
-tcc     25
-ccc     24
 ggt     24
-ctc     23
+ccc     24
 tgt     23
-cac     22
-ccg     22
+ctc     23
 cgt     22
 gca     22
+cac     22
+ccg     22
 agc     21
+ttg     19
 cgg     19
 acg     19
-ttg     19
 tcg     18
 ttc     17
 cat     17
 agg     17
 gtc     16
-gag     16
 act     16
+gag     16
 aac     15
-tct     14
 atc     14
 gga     14
-cta     13
+tct     14
 tca     13
+cta     13
 atg     12
-gtt     11
 gta     11
 acc     11
+gtt     11
+tac     10
 caa     10
 tga     10
 aca     10
-tac     10
 agt     9
 tag     9
 gac     9
 ttt     8
 cga     7
-taa     6
 gat     6
+taa     6
 tat     5
 aga     5
 gaa     4
 ata     3
 att     3
-aat     3
 tta     3
+aat     3
 aag     2
 aaa     1
    

@@ -154,21 +154,18 @@ IT IS DONE FOR YOU.
 
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
-   Mandatory qualifiers:
-  [-inf]               infile     Full pathname of transfac SITE.DAT
+   Standard (Mandatory) qualifiers:
+  [-infile]            infile     Full pathname of transfac SITE.DAT
 
-   Optional qualifiers: (none)
-   Advanced qualifiers: (none)
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers: (none)
    Associated qualifiers: (none)
    General qualifiers:
    -auto                boolean    Turn off prompts
    -stdout              boolean    Write standard output
    -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for required and optional values
+   -options             boolean    Prompt for standard and additional values
    -debug               boolean    Write debug output to program.dbg
-   -acdlog              boolean    Write ACD processing log to program.acdlog
-   -acdpretty           boolean    Rewrite ACD file as program.acdpretty
-   -acdtable            boolean    Write HTML table of options
    -verbose             boolean    Report some/full command line options
    -help                boolean    Report command line options. More
                                   information on associated and general
@@ -185,20 +182,20 @@ IT IS DONE FOR YOU.
 
 <table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=2>Mandatory qualifiers</th>
+<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
 <th align="left">Allowed values</th>
 <th align="left">Default</th>
 </tr>
 
 <tr>
-<td>[-inf]<br>(Parameter 1)</td>
+<td>[-infile]<br>(Parameter 1)</td>
 <td>Full pathname of transfac SITE.DAT</td>
 <td>Input file</td>
 <td><b>Required</b></td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=2>Optional qualifiers</th>
+<th align="left" colspan=2>Additional (Optional) qualifiers</th>
 <th align="left">Allowed values</th>
 <th align="left">Default</th>
 </tr>
@@ -208,7 +205,7 @@ IT IS DONE FOR YOU.
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=2>Advanced qualifiers</th>
+<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
 <th align="left">Allowed values</th>
 <th align="left">Default</th>
 </tr>
@@ -364,7 +361,7 @@ XX
 <p><h3>File: tffungi</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
-Y$ADH1_02            ACAATATGGACTTCCTCTTTTCTGG R04140
+Y$ADH1_02            ACAATATGGACTTCCTCTTTTCTGG R04140 T00322; GCR1;Quality: 2; Species: yeast, Saccharomyces cerevisiae.
 </pre>
 </td></tr></table><p>
 <p><h3>File: tfinsect</h3>
@@ -385,13 +382,13 @@ Y$ADH1_02            ACAATATGGACTTCCTCTTTTCTGG R04140
 <p><h3>File: tfvertebrate</h3>
 <table width="90%"><tr><td bgcolor="#CCFFCC">
 <pre>
-HS$ALBU_01           tGGTTAGtaattactaa R00077
-HS$ALBU_02           TTGGCA R00078
-HS$ALBU_03           TGGCA R00079
-HS$ALBU_04           TTAATAAT R00080
-HS$ALBU_05           TCTAGTTAATAATCTACAAT R00081
-MOUSE$FCGR3A_01      GTCTGCTGACC R04412
-MOUSE$FCGR3A_02      TTCCTC R04413
+HS$ALBU_01           tGGTTAGtaattactaa R00077 T01951; HNF-1C;Quality: 1; Species: human, Homo sapiens.
+HS$ALBU_02           TTGGCA R00078 T00599; NF-1/L;Quality: 6; Species: rat, Rattus norvegicus.
+HS$ALBU_03           TGGCA R00079 T00599; NF-1/L;Quality: 6; Species: rat, Rattus norvegicus.
+HS$ALBU_04           TTAATAAT R00080 T00015; AFP1;Quality: 6; Species: human, Homo sapiens.
+HS$ALBU_05           TCTAGTTAATAATCTACAAT R00081 T00369; HNF-1;Quality: 4; Species: rat, Rattus norvegicus.
+MOUSE$FCGR3A_01      GTCTGCTGACC R04412 T00874; USF;Quality: 2; Species: human, Homo sapiens.
+MOUSE$FCGR3A_02      TTCCTC R04413 T00702; PU.1;Quality: 3; Species: mouse, Mus musculus.
 </pre>
 </td></tr></table><p>
 

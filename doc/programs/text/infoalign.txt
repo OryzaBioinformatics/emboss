@@ -33,6 +33,64 @@ Description
    be manually edited and read in by any other EMBOSS program that can
    read in one or more sequence to be analysed.
    
+Algorithm
+
+   The set of aligned sequences is read in.
+   
+   If the reference sequence is the consensus sequence (this is the
+   default) then this is calculated. If the reference sequence is
+   specified as an ordinal number, then the sequences are counted (from
+   1) until the reference sequence is identified. If the reference
+   sequence is specified by its name then the names of the sequences are
+   compared to the specified name until the reference sequence is
+   identified.
+   
+Foreach sequence:
+
+  Find the position of the first residue or base which is not a gap character.
+
+  Find the position of the last residue or base which is not a gap character.
+
+  Foreach position from the first non-gap character to the last non-gap
+character:
+
+    if the position is a gap character, then
+
+      increment the 'GapLen' count
+
+      if this character is the start of a new gap, increment the 'Gaps' count
+
+    else
+
+      the character at this position of the sequence and in the
+      reference sequence are now compared.
+
+      if the sequence character and the reference character are identical
+      (apart from case) then
+
+        increment the 'Ident' count
+
+      else if the similarity matrix score for the two characters is > 0
+      (i.e.  if they are similar) then
+
+        increment the 'Similar' count
+
+      else
+
+        increment the 'Different' count
+
+  The 'SeqLen' length of the sequence is the number of non-gap characters
+  in the sequence (i.e. 'Ident' + 'Similar' + 'Different')
+
+  The 'AlignLen' length of the sequence is the length from the first
+  non-gap character to the last non-gap character.  (i.e.  the number of
+  bases or residues of the sequence plus the number of gap characters
+  internal to the sequence.)
+
+  The '%Change' value for the sequence is calculated as:
+
+  ('AlignLen' - 'Ident') * 100 / 'AlignLen'
+
 Usage
 
    Here is a sample session with infoalign
@@ -130,13 +188,13 @@ Output file [globins.infoalign]:
    
 Command line arguments
 
-   Mandatory qualifiers:
+   Standard (Mandatory) qualifiers:
   [-sequence]          seqset     The sequence alignment to be displayed.
   [-outfile]           outfile    If you enter the name of a file here then
                                   this program will write the sequence details
                                   into that file.
 
-   Optional qualifiers:
+   Additional (Optional) qualifiers:
    -refseq             string     If you give the number in the alignment or
                                   the name of a sequence, it will be taken to
                                   be the reference sequence. The reference
@@ -154,7 +212,7 @@ Command line arguments
                                   the EMBOSS installation.
    -html               boolean    Format output as an HTML table
 
-   Advanced qualifiers:
+   Advanced (Unprompted) qualifiers:
    -plurality          float      Set a cut-off for the % of positive scoring
                                   matches below which there is no consensus.
                                   The default plurality is taken as 50% of the
@@ -188,7 +246,8 @@ Command line arguments
    -description        boolean    Display 'description' column
 
    Associated qualifiers:
-  "-sequence" related qualifiers
+
+   "-sequence" associated qualifiers
    -sbegin1             integer    First base used
    -send1               integer    Last base used, def=seq length
    -sreverse1           boolean    Reverse (if DNA)
@@ -198,24 +257,21 @@ Command line arguments
    -slower1             boolean    Make lower case
    -supper1             boolean    Make upper case
    -sformat1            string     Input sequence format
-   -sopenfile1          string     Input filename
    -sdbname1            string     Database name
    -sid1                string     Entryname
    -ufo1                string     UFO features
    -fformat1            string     Features format
    -fopenfile1          string     Features file name
-  "-outfile" related qualifiers
+
+   "-outfile" associated qualifiers
    -odirectory2         string     Output directory
 
    General qualifiers:
    -auto                boolean    Turn off prompts
    -stdout              boolean    Write standard output
    -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for required and optional values
+   -options             boolean    Prompt for standard and additional values
    -debug               boolean    Write debug output to program.dbg
-   -acdlog              boolean    Write ACD processing log to program.acdlog
-   -acdpretty           boolean    Rewrite ACD file as program.acdpretty
-   -acdtable            boolean    Write HTML table of options
    -verbose             boolean    Report some/full command line options
    -help                boolean    Report command line options. More
                                   information on associated and general
@@ -226,15 +282,15 @@ Command line arguments
    -die                 boolean    Report deaths
    
 
-   Mandatory qualifiers Allowed values Default
+   Standard (Mandatory) qualifiers Allowed values Default
    [-sequence]
-   (Parameter 1) The sequence alignment to be displayed. Readable
+   (Parameter 1) The sequence alignment to be displayed. Readable set of
    sequences Required
    [-outfile]
    (Parameter 2) If you enter the name of a file here then this program
    will write the sequence details into that file. Output file
    <sequence>.infoalign
-   Optional qualifiers Allowed values Default
+   Additional (Optional) qualifiers Allowed values Default
    -refseq If you give the number in the alignment or the name of a
    sequence, it will be taken to be the reference sequence. The reference
    sequence is the one against which all the other sequences are
@@ -248,7 +304,7 @@ Command line arguments
    EMBOSS data path EBLOSUM62 for protein
    EDNAFULL for DNA
    -html Format output as an HTML table Boolean value Yes/No No
-   Advanced qualifiers Allowed values Default
+   Advanced (Unprompted) qualifiers Allowed values Default
    -plurality Set a cut-off for the % of positive scoring matches below
    which there is no consensus. The default plurality is taken as 50% of
    the total weight of all the sequences in the alignment. Number from
@@ -519,18 +575,18 @@ Output file format
   
 # USA             Name        SeqLen    AlignLen        Gaps    GapLen  Ident
 Similar Differ  % Change        Description
-msf::../../data/globins.msf:HBB_HUMAN   HBB_HUMAN     150       154     3
-4       48      10      92      68.000000
-msf::../../data/globins.msf:HBB_HORSE   HBB_HORSE     150       154     3
-4       48      10      92      68.000000
-msf::../../data/globins.msf:HBA_HUMAN   HBA_HUMAN     144       147     2
-3       45      7       92      68.750000
-msf::../../data/globins.msf:HBA_HORSE   HBA_HORSE     144       147     2
-3       48      4       92      66.666664
-msf::../../data/globins.msf:MYG_PHYCA   MYG_PHYCA     157       161     3
-4       25      13      119     84.076431
-msf::../../data/globins.msf:GLB5_PETMA  GLB5_PETMA    151       153     1
-2       21      13      117     86.092712
+msf::../../data/globins.msf:HBB_HUMAN   HBB_HUMAN     146       150     3
+4       48      10      88      68.000000
+msf::../../data/globins.msf:HBB_HORSE   HBB_HORSE     146       150     3
+4       48      10      88      68.000000
+msf::../../data/globins.msf:HBA_HUMAN   HBA_HUMAN     141       144     2
+3       45      7       89      68.750000
+msf::../../data/globins.msf:HBA_HORSE   HBA_HORSE     141       144     2
+3       48      4       89      66.666664
+msf::../../data/globins.msf:MYG_PHYCA   MYG_PHYCA     153       157     3
+4       25      13      115     84.076431
+msf::../../data/globins.msf:GLB5_PETMA  GLB5_PETMA    149       151     1
+2       21      13      115     86.092712
 msf::../../data/globins.msf:LGB2_LUPLU  LGB2_LUPLU    153       153     0
 0       11      20      122     92.810455
    
@@ -540,17 +596,17 @@ msf::../../data/globins.msf:LGB2_LUPLU  LGB2_LUPLU    153       153     0
   
 # Name        SeqLen    AlignLen        Gaps    GapLen  Ident   Similar Differ
 % Change        Description
-HBB_HUMAN     150       154     3       4       48      10      92      68.0000
+HBB_HUMAN     146       150     3       4       48      10      88      68.0000
 00
-HBB_HORSE     150       154     3       4       48      10      92      68.0000
+HBB_HORSE     146       150     3       4       48      10      88      68.0000
 00
-HBA_HUMAN     144       147     2       3       45      7       92      68.7500
+HBA_HUMAN     141       144     2       3       45      7       89      68.7500
 00
-HBA_HORSE     144       147     2       3       48      4       92      66.6666
+HBA_HORSE     141       144     2       3       48      4       89      66.6666
 64
-MYG_PHYCA     157       161     3       4       25      13      119     84.0764
+MYG_PHYCA     153       157     3       4       25      13      115     84.0764
 31
-GLB5_PETMA    151       153     1       2       21      13      117     86.0927
+GLB5_PETMA    149       151     1       2       21      13      115     86.0927
 12
 LGB2_LUPLU    153       153     0       0       11      20      122     92.8104
 55
@@ -559,24 +615,24 @@ LGB2_LUPLU    153       153     0       0       11      20      122     92.8104
   
   File: globins.infoalign
   
-HBB_HUMAN     150
-HBB_HORSE     150
-HBA_HUMAN     144
-HBA_HORSE     144
-MYG_PHYCA     157
-GLB5_PETMA    151
+HBB_HUMAN     146
+HBB_HORSE     146
+HBA_HUMAN     141
+HBA_HORSE     141
+MYG_PHYCA     153
+GLB5_PETMA    149
 LGB2_LUPLU    153
    
   Output files for usage example 4
   
   File: globins.infoalign
   
-HBB_HUMAN     4 92
-HBB_HORSE     4 92
-HBA_HUMAN     3 92
-HBA_HORSE     3 92
-MYG_PHYCA     4 119
-GLB5_PETMA    2 117
+HBB_HUMAN     4 88
+HBB_HORSE     4 88
+HBA_HUMAN     3 89
+HBA_HORSE     3 89
+MYG_PHYCA     4 115
+GLB5_PETMA    2 115
 LGB2_LUPLU    0 122
    
   Output files for usage example 5
@@ -601,73 +657,73 @@ LGB2_LUPLU    0
 </th><th>% Change</th><th>Description</th></tr>
 <tr><td>msf::../../data/globins.msf:HBB_HUMAN</td>
 <td>HBB_HUMAN</td>
+<td>146</td>
 <td>150</td>
-<td>154</td>
 <td>3</td>
 <td>4</td>
 <td>48</td>
 <td>10</td>
-<td>92</td>
+<td>88</td>
 <td>68.000000</td>
 <td></td>
 </tr>
 <tr><td>msf::../../data/globins.msf:HBB_HORSE</td>
 <td>HBB_HORSE</td>
+<td>146</td>
 <td>150</td>
-<td>154</td>
 <td>3</td>
 <td>4</td>
 <td>48</td>
 <td>10</td>
-<td>92</td>
+<td>88</td>
 <td>68.000000</td>
 <td></td>
 </tr>
 <tr><td>msf::../../data/globins.msf:HBA_HUMAN</td>
 <td>HBA_HUMAN</td>
+<td>141</td>
 <td>144</td>
-<td>147</td>
 <td>2</td>
 <td>3</td>
 <td>45</td>
 <td>7</td>
-<td>92</td>
+<td>89</td>
 <td>68.750000</td>
 <td></td>
 </tr>
 <tr><td>msf::../../data/globins.msf:HBA_HORSE</td>
 <td>HBA_HORSE</td>
+<td>141</td>
 <td>144</td>
-<td>147</td>
 <td>2</td>
 <td>3</td>
 <td>48</td>
 <td>4</td>
-<td>92</td>
+<td>89</td>
 <td>66.666664</td>
 <td></td>
 </tr>
 <tr><td>msf::../../data/globins.msf:MYG_PHYCA</td>
 <td>MYG_PHYCA</td>
+<td>153</td>
 <td>157</td>
-<td>161</td>
 <td>3</td>
 <td>4</td>
 <td>25</td>
 <td>13</td>
-<td>119</td>
+<td>115</td>
 <td>84.076431</td>
 <td></td>
 </tr>
 <tr><td>msf::../../data/globins.msf:GLB5_PETMA</td>
 <td>GLB5_PETMA</td>
+<td>149</td>
 <td>151</td>
-<td>153</td>
 <td>1</td>
 <td>2</td>
 <td>21</td>
 <td>13</td>
-<td>117</td>
+<td>115</td>
 <td>86.092712</td>
 <td></td>
 </tr>
@@ -691,18 +747,18 @@ LGB2_LUPLU    0
   
 # USA             Name        SeqLen    AlignLen        Gaps    GapLen  Ident
 Similar Differ  % Change        Description
-msf::../../data/globins.msf:HBB_HUMAN   HBB_HUMAN     150       154     3
-4       150     0       0       0.000000
-msf::../../data/globins.msf:HBB_HORSE   HBB_HORSE     150       154     3
-4       126     10      14      16.000000
-msf::../../data/globins.msf:HBA_HUMAN   HBA_HUMAN     144       147     2
-3       51      19      74      64.583336
-msf::../../data/globins.msf:HBA_HORSE   HBA_HORSE     144       147     2
-3       54      18      72      62.500000
-msf::../../data/globins.msf:MYG_PHYCA   MYG_PHYCA     157       161     3
-4       34      22      101     78.343948
-msf::../../data/globins.msf:GLB5_PETMA  GLB5_PETMA    151       153     1
-2       26      27      98      82.781456
+msf::../../data/globins.msf:HBB_HUMAN   HBB_HUMAN     146       150     3
+4       146     0       0       2.666667
+msf::../../data/globins.msf:HBB_HORSE   HBB_HORSE     146       150     3
+4       122     10      14      18.666666
+msf::../../data/globins.msf:HBA_HUMAN   HBA_HUMAN     141       144     2
+3       48      19      74      66.666664
+msf::../../data/globins.msf:HBA_HORSE   HBA_HORSE     141       144     2
+3       51      18      72      64.583336
+msf::../../data/globins.msf:MYG_PHYCA   MYG_PHYCA     153       157     3
+4       30      22      101     80.891716
+msf::../../data/globins.msf:GLB5_PETMA  GLB5_PETMA    149       151     1
+2       24      27      98      84.105957
 msf::../../data/globins.msf:LGB2_LUPLU  LGB2_LUPLU    153       153     0
 0       21      28      104     86.274513
    
@@ -760,7 +816,7 @@ tembl-id:ECLACZ   ECLACZ        3078    3078    0       0       0       0
      * Different - number of characters which score <= 0 in the
        comparison matrix when compared to the reference sequence.
      * %Change - a simple measure of the percentage change as compared to
-       the reference sequence: (GapLen - Ident) * 100 / GapLen.
+       the reference sequence: (AlignLen - Ident) * 100 / AlignLen
      * Description - the description annotation of teh sequence (if any).
        
    If qualifiers to inhibit various columns of information are used, then

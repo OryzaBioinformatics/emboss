@@ -41,7 +41,7 @@ Usage
    The input sequence is the human herpesvirus tandem repeat.
    
 
-% etandem 
+% etandem -noorigfile 
 Looks for tandem repeats in a nucleotide sequence
 Input sequence: tembl:hhtetra
 Minimum repeat size [10]: 6
@@ -53,21 +53,22 @@ Output report [hhtetra.tan]:
    
 Command line arguments
 
-   Mandatory qualifiers:
+   Standard (Mandatory) qualifiers:
   [-sequence]          sequence   Sequence USA
    -minrepeat          integer    Minimum repeat size
    -maxrepeat          integer    Maximum repeat size
   [-outfile]           report     Output report file name
 
-   Optional qualifiers: (none)
-   Advanced qualifiers:
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers:
    -threshold          integer    Threshold score
    -mismatch           boolean    Allow N as a mismatch
    -uniform            boolean    Allow uniform consensus
    -origfile           outfile    Output file name
 
    Associated qualifiers:
-  "-sequence" related qualifiers
+
+   "-sequence" associated qualifiers
    -sbegin1             integer    First base used
    -send1               integer    Last base used, def=seq length
    -sreverse1           boolean    Reverse (if DNA)
@@ -77,13 +78,13 @@ Command line arguments
    -slower1             boolean    Make lower case
    -supper1             boolean    Make upper case
    -sformat1            string     Input sequence format
-   -sopenfile1          string     Input filename
    -sdbname1            string     Database name
    -sid1                string     Entryname
    -ufo1                string     UFO features
    -fformat1            string     Features format
    -fopenfile1          string     Features file name
-  "-outfile" related qualifiers
+
+   "-outfile" associated qualifiers
    -rformat2            string     Report format
    -rname2              string     Base file name
    -rextension2         string     File name extension
@@ -92,18 +93,16 @@ Command line arguments
    -rdesshow2           boolean    Show description in the report
    -rscoreshow2         boolean    Show the score in the report
    -rusashow2           boolean    Show the full USA in the report
-  "-origfile" related qualifiers
+
+   "-origfile" associated qualifiers
    -odirectory          string     Output directory
 
    General qualifiers:
    -auto                boolean    Turn off prompts
    -stdout              boolean    Write standard output
    -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for required and optional values
+   -options             boolean    Prompt for standard and additional values
    -debug               boolean    Write debug output to program.dbg
-   -acdlog              boolean    Write ACD processing log to program.acdlog
-   -acdpretty           boolean    Rewrite ACD file as program.acdpretty
-   -acdtable            boolean    Write HTML table of options
    -verbose             boolean    Report some/full command line options
    -help                boolean    Report command line options. More
                                   information on associated and general
@@ -114,7 +113,7 @@ Command line arguments
    -die                 boolean    Report deaths
    
 
-   Mandatory qualifiers Allowed values Default
+   Standard (Mandatory) qualifiers Allowed values Default
    [-sequence]
    (Parameter 1) Sequence USA Readable sequence Required
    -minrepeat Minimum repeat size Integer, 2 or higher 10
@@ -122,9 +121,9 @@ Command line arguments
    Same as -minrepeat
    [-outfile]
    (Parameter 2) Output report file name Report output file
-   Optional qualifiers Allowed values Default
+   Additional (Optional) qualifiers Allowed values Default
    (none)
-   Advanced qualifiers Allowed values Default
+   Advanced (Unprompted) qualifiers Allowed values Default
    -threshold Threshold score Any integer value 20
    -mismatch Allow N as a mismatch Boolean value Yes/No No
    -uniform Allow uniform consensus Boolean value Yes/No No
@@ -251,7 +250,7 @@ Output file format
   
 ########################################
 # Program: etandem
-# Rundate: Thu May 22 10:28:47 2003
+# Rundate: Thu Nov 27 15:21:58 2003
 # Report_format: table
 # Report_file: hhtetra.tan
 ########################################

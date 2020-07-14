@@ -27,28 +27,27 @@ Usage
 % embossversion 
 Writes the current EMBOSS version number
 
-2.7.0
+2.8.0
    
 Command line arguments
 
-   Mandatory qualifiers: (none)
-   Optional qualifiers:
-   -outfile            outfile    Output file
+   Standard (Mandatory) qualifiers: (none)
+   Additional (Optional) qualifiers:
+   -full               boolean    Show all EMBOSS version information fields
+   -outfile            outfile    Output file name
 
-   Advanced qualifiers: (none)
+   Advanced (Unprompted) qualifiers: (none)
    Associated qualifiers:
-  "-outfile" related qualifiers
+
+   "-outfile" associated qualifiers
    -odirectory          string     Output directory
 
    General qualifiers:
    -auto                boolean    Turn off prompts
    -stdout              boolean    Write standard output
    -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for required and optional values
+   -options             boolean    Prompt for standard and additional values
    -debug               boolean    Write debug output to program.dbg
-   -acdlog              boolean    Write ACD processing log to program.acdlog
-   -acdpretty           boolean    Rewrite ACD file as program.acdpretty
-   -acdtable            boolean    Write HTML table of options
    -verbose             boolean    Report some/full command line options
    -help                boolean    Report command line options. More
                                   information on associated and general
@@ -59,12 +58,14 @@ Command line arguments
    -die                 boolean    Report deaths
    
 
-   Mandatory qualifiers  Allowed values Default
-   (none)
-   Optional qualifiers   Allowed values Default
-   -outfile Output file  Output file    stdout
-   Advanced qualifiers   Allowed values Default
-   (none)
+Standard (Mandatory) qualifiers                    Allowed values       Default
+(none)
+Additional (Optional) qualifiers                   Allowed values       Default
+-full    Show all EMBOSS version information fields Boolean value Yes/No
+   No
+-outfile Output file name                          Output file          stdout
+Advanced (Unprompted) qualifiers                   Allowed values       Default
+(none)
    
 Input file format
 

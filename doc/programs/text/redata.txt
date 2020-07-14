@@ -41,7 +41,7 @@ Output file [outfile.redata]:
    
 Command line arguments
 
-   Mandatory qualifiers:
+   Standard (Mandatory) qualifiers:
   [-enzyme]            string     Enter the name of the restrcition enzyme
                                   that you wish to get details of. The names
                                   often have a 'I' in them - this is a capital
@@ -50,26 +50,24 @@ Command line arguments
                                   'aaei')
   [-outfile]           outfile    Output file name
 
-   Optional qualifiers: (none)
-   Advanced qualifiers:
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers:
    -[no]isoschizomers  boolean    Show other enzymes with this specificity.
                                   (Isoschizomers)
    -[no]references     boolean    Show references
    -[no]suppliers      boolean    Show suppliers
 
    Associated qualifiers:
-  "-outfile" related qualifiers
+
+   "-outfile" associated qualifiers
    -odirectory2         string     Output directory
 
    General qualifiers:
    -auto                boolean    Turn off prompts
    -stdout              boolean    Write standard output
    -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for required and optional values
+   -options             boolean    Prompt for standard and additional values
    -debug               boolean    Write debug output to program.dbg
-   -acdlog              boolean    Write ACD processing log to program.acdlog
-   -acdpretty           boolean    Rewrite ACD file as program.acdpretty
-   -acdtable            boolean    Write HTML table of options
    -verbose             boolean    Report some/full command line options
    -help                boolean    Report command line options. More
                                   information on associated and general
@@ -80,7 +78,7 @@ Command line arguments
    -die                 boolean    Report deaths
    
 
-   Mandatory qualifiers Allowed values Default
+   Standard (Mandatory) qualifiers Allowed values Default
    [-enzyme]
    (Parameter 1) Enter the name of the restrcition enzyme that you wish
    to get details of. The names often have a 'I' in them - this is a
@@ -88,9 +86,9 @@ Command line arguments
    ('AaeI' is the same as 'aaei') Any string is accepted BamHI
    [-outfile]
    (Parameter 2) Output file name Output file <sequence>.redata
-   Optional qualifiers Allowed values Default
+   Additional (Optional) qualifiers Allowed values Default
    (none)
-   Advanced qualifiers Allowed values Default
+   Advanced (Unprompted) qualifiers Allowed values Default
    -[no]isoschizomers Show other enzymes with this specificity.
    (Isoschizomers) Boolean value Yes/No Yes
    -[no]references Show references Boolean value Yes/No Yes

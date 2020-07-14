@@ -263,7 +263,7 @@ Output file [paamir.showseq]:
    
 Command line arguments
 
-   Mandatory qualifiers (* if not always prompted):
+   Standard (Mandatory) qualifiers (* if not always prompted):
   [-sequence]          seqall     Sequence database USA
    -format             menu       Display format
 *  -things             menu       Specify a list of one or more code
@@ -274,11 +274,9 @@ Command line arguments
                                   complement sequence, ticks line, frame 1
                                   translation, blank line; then you should
                                   enter 'S,C,T,1,B'.
-  [-outfile]           outfile    If you enter the name of a file here then
-                                  this program will write the sequence details
-                                  into that file.
+  [-outfile]           outfile    Output file name
 
-   Optional qualifiers:
+   Additional (Optional) qualifiers:
    -translate          range      Regions to translate (if translating).
                                   If this is left blank the complete sequence
                                   is translated.
@@ -438,7 +436,7 @@ Command line arguments
                                   a feature that match the specified tag and
                                   value will be displayed.
 
-   Advanced qualifiers:
+   Advanced (Unprompted) qualifiers:
    -orfminsize         integer    This sets the minimum size of Open Reading
                                   Frames (ORFs) to display in the
                                   translations. All other translation regions
@@ -521,7 +519,8 @@ Command line arguments
    -html               boolean    Use HTML formatting
 
    Associated qualifiers:
-  "-sequence" related qualifiers
+
+   "-sequence" associated qualifiers
    -sbegin1             integer    First base used
    -send1               integer    Last base used, def=seq length
    -sreverse1           boolean    Reverse (if DNA)
@@ -531,24 +530,21 @@ Command line arguments
    -slower1             boolean    Make lower case
    -supper1             boolean    Make upper case
    -sformat1            string     Input sequence format
-   -sopenfile1          string     Input filename
    -sdbname1            string     Database name
    -sid1                string     Entryname
    -ufo1                string     UFO features
    -fformat1            string     Features format
    -fopenfile1          string     Features file name
-  "-outfile" related qualifiers
+
+   "-outfile" associated qualifiers
    -odirectory2         string     Output directory
 
    General qualifiers:
    -auto                boolean    Turn off prompts
    -stdout              boolean    Write standard output
    -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for required and optional values
+   -options             boolean    Prompt for standard and additional values
    -debug               boolean    Write debug output to program.dbg
-   -acdlog              boolean    Write ACD processing log to program.acdlog
-   -acdpretty           boolean    Rewrite ACD file as program.acdpretty
-   -acdtable            boolean    Write HTML table of options
    -verbose             boolean    Report some/full command line options
    -help                boolean    Report command line options. More
                                   information on associated and general
@@ -559,7 +555,7 @@ Command line arguments
    -die                 boolean    Report deaths
    
 
-   Mandatory qualifiers Allowed values Default
+   Standard (Mandatory) qualifiers Allowed values Default
    [-sequence]
    (Parameter 1) Sequence database USA Readable sequence(s) Required
    -format Display format
@@ -595,10 +591,8 @@ Command line arguments
    A  (Annotation)
    B,N,T,S,A,F
    [-outfile]
-   (Parameter 2) If you enter the name of a file here then this program
-   will write the sequence details into that file. Output file
-   <sequence>.showseq
-   Optional qualifiers Allowed values Default
+   (Parameter 2) Output file name Output file <sequence>.showseq
+   Additional (Optional) qualifiers Allowed values Default
    -translate Regions to translate (if translating). If this is left
    blank the complete sequence is translated. A set of regions is
    specified by a set of pairs of positions. The positions are integers.
@@ -713,7 +707,7 @@ Command line arguments
    will be displayed. If this is set to be true, then only those
    tag/value pairs in a feature that match the specified tag and value
    will be displayed. Boolean value Yes/No No
-   Advanced qualifiers Allowed values Default
+   Advanced (Unprompted) qualifiers Allowed values Default
    -orfminsize This sets the minimum size of Open Reading Frames (ORFs)
    to display in the translations. All other translation regions are
    masked by changing the amino acids to '-' characters. Integer 0 or

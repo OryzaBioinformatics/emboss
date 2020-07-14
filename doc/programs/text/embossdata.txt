@@ -63,7 +63,7 @@ Finds or fetches the data files read in by the EMBOSS programs
 .embossdata                                                  Does not exist
 /people/gwilliam                                             Exists
 /people/gwilliam/.embossdata                                 Does not exist
-../rebaseextract-keep/                                       Exists
+/packages/emboss_dev/gwilliam/emboss/emboss/emboss/data      Exists
    
    Example 2
    
@@ -886,7 +886,7 @@ File /packages/emboss_dev/gwilliam/emboss/emboss/emboss/data/EPAM Exists
    
 Command line arguments
 
-   Mandatory qualifiers (* if not always prompted):
+   Standard (Mandatory) qualifiers (* if not always prompted):
 *  -filename           string     This specifies the name of the file that
                                   should be fetched into the current directory
                                   or searched for in all of the directories
@@ -894,34 +894,32 @@ Command line arguments
                                   a data file. The name of the file is not
                                   altered when it is fetched.
 
-   Optional qualifiers (* if not always prompted):
+   Additional (Optional) qualifiers (* if not always prompted):
    -showall            boolean    Show all potential EMBOSS data files
 *  -fetch              boolean    Fetch a data file
-   -outf               outfile    This specifies the name of the file that the
+   -outfile            outfile    This specifies the name of the file that the
                                   results of a search for a file in the
                                   various data directories is written to. By
                                   default these results are written to the
                                   screen (stdout).
 
-   Advanced qualifiers:
+   Advanced (Unprompted) qualifiers:
    -reject             selection  This specifies the names of the
                                   sub-directories of the EMBOSS data directory
                                   that should be ignored when displaying data
                                   directories.
 
    Associated qualifiers:
-  "-outf" related qualifiers
+
+   "-outfile" associated qualifiers
    -odirectory          string     Output directory
 
    General qualifiers:
    -auto                boolean    Turn off prompts
    -stdout              boolean    Write standard output
    -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for required and optional values
+   -options             boolean    Prompt for standard and additional values
    -debug               boolean    Write debug output to program.dbg
-   -acdlog              boolean    Write ACD processing log to program.acdlog
-   -acdpretty           boolean    Rewrite ACD file as program.acdpretty
-   -acdtable            boolean    Write HTML table of options
    -verbose             boolean    Report some/full command line options
    -help                boolean    Report command line options. More
                                   information on associated and general
@@ -932,19 +930,20 @@ Command line arguments
    -die                 boolean    Report deaths
    
 
-   Mandatory qualifiers Allowed values Default
+   Standard (Mandatory) qualifiers Allowed values Default
    -filename This specifies the name of the file that should be fetched
    into the current directory or searched for in all of the directories
    that EMBOSS programs search when looking for a data file. The name of
    the file is not altered when it is fetched. Any string is accepted An
    empty string is accepted
-   Optional qualifiers Allowed values Default
+   Additional (Optional) qualifiers Allowed values Default
    -showall Show all potential EMBOSS data files Boolean value Yes/No No
    -fetch Fetch a data file Boolean value Yes/No No
-   -outf This specifies the name of the file that the results of a search
-   for a file in the various data directories is written to. By default
-   these results are written to the screen (stdout). Output file stdout
-   Advanced qualifiers Allowed values Default
+   -outfile This specifies the name of the file that the results of a
+   search for a file in the various data directories is written to. By
+   default these results are written to the screen (stdout). Output file
+   stdout
+   Advanced (Unprompted) qualifiers Allowed values Default
    -reject This specifies the names of the sub-directories of the EMBOSS
    data directory that should be ignored when displaying data
    directories. Choose from selection list of values 3, 5, 6

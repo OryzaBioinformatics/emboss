@@ -65,13 +65,13 @@ Output report [opsd_human.digest]:
    
 Command line arguments
 
-   Mandatory qualifiers:
-  [-sequencea]         sequence   Sequence USA
+   Standard (Mandatory) qualifiers:
+  [-sequence]          sequence   Sequence USA
    -menu               menu       Select number
   [-outfile]           report     Output report file name
 
-   Optional qualifiers: (none)
-   Advanced qualifiers:
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers:
    -unfavoured         boolean    Trypsin will not normally cut after a K if
                                   it is followed by (e.g.) another K or a P.
                                   Specifying this shows those cuts. as well as
@@ -86,7 +86,8 @@ Command line arguments
                                   than one potential cut site are included.
 
    Associated qualifiers:
-  "-sequencea" related qualifiers
+
+   "-sequence" associated qualifiers
    -sbegin1             integer    First base used
    -send1               integer    Last base used, def=seq length
    -sreverse1           boolean    Reverse (if DNA)
@@ -96,13 +97,13 @@ Command line arguments
    -slower1             boolean    Make lower case
    -supper1             boolean    Make upper case
    -sformat1            string     Input sequence format
-   -sopenfile1          string     Input filename
    -sdbname1            string     Database name
    -sid1                string     Entryname
    -ufo1                string     UFO features
    -fformat1            string     Features format
    -fopenfile1          string     Features file name
-  "-outfile" related qualifiers
+
+   "-outfile" associated qualifiers
    -rformat2            string     Report format
    -rname2              string     Base file name
    -rextension2         string     File name extension
@@ -116,11 +117,8 @@ Command line arguments
    -auto                boolean    Turn off prompts
    -stdout              boolean    Write standard output
    -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for required and optional values
+   -options             boolean    Prompt for standard and additional values
    -debug               boolean    Write debug output to program.dbg
-   -acdlog              boolean    Write ACD processing log to program.acdlog
-   -acdpretty           boolean    Rewrite ACD file as program.acdpretty
-   -acdtable            boolean    Write HTML table of options
    -verbose             boolean    Report some/full command line options
    -help                boolean    Report command line options. More
                                   information on associated and general
@@ -131,8 +129,8 @@ Command line arguments
    -die                 boolean    Report deaths
    
 
-   Mandatory qualifiers Allowed values Default
-   [-sequencea]
+   Standard (Mandatory) qualifiers Allowed values Default
+   [-sequence]
    (Parameter 1) Sequence USA Readable sequence Required
    -menu Select number
    1 (Trypsin)
@@ -146,9 +144,9 @@ Command line arguments
    1
    [-outfile]
    (Parameter 2) Output report file name Report output file
-   Optional qualifiers Allowed values Default
+   Additional (Optional) qualifiers Allowed values Default
    (none)
-   Advanced qualifiers Allowed values Default
+   Advanced (Unprompted) qualifiers Allowed values Default
    -unfavoured Trypsin will not normally cut after a K if it is followed
    by (e.g.) another K or a P. Specifying this shows those cuts. as well
    as the favoured ones. Boolean value Yes/No No
@@ -300,7 +298,7 @@ Output file format
   
 ########################################
 # Program: digest
-# Rundate: Thu May 22 10:23:38 2003
+# Rundate: Thu Nov 27 15:19:44 2003
 # Report_format: seqtable
 # Report_file: opsd_human.digest
 ########################################
@@ -383,6 +381,7 @@ See also
 
     Program name                         Description
    antigenic      Finds antigenic sites in proteins
+   epestfind      Finds PEST motifs as potential proteolytic cleavage sites
    fuzzpro        Protein pattern search
    fuzztran       Protein pattern search after translation
    helixturnhelix Report nucleic acid binding motifs
@@ -390,7 +389,6 @@ See also
    patmatdb       Search a protein sequence with a motif
    patmatmotifs   Search a PROSITE motif database with a protein sequence
    pepcoil        Predicts coiled coil regions
-   pestfind       Finds PEST motifs as potential proteolytic cleavage sites
    preg           Regular expression search of a protein sequence
    pscan          Scans proteins using PRINTS
    sigcleave      Reports protein signal cleavage sites

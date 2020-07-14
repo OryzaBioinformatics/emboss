@@ -49,8 +49,8 @@ Report overlapping matches [Y]:
    
 Command line arguments
 
-   Mandatory qualifiers:
-  [-insequence]        seqall     Sequence database USA
+   Standard (Mandatory) qualifiers:
+  [-sequence]          seqall     Sequence database USA
    -minpallen          integer    Enter minimum length of palindrome
    -maxpallen          integer    Enter maximum length of palindrome
    -gaplimit           integer    Enter maximum gap between repeated regions
@@ -58,10 +58,11 @@ Command line arguments
   [-outfile]           outfile    Output file name
    -[no]overlap        boolean    Report overlapping matches
 
-   Optional qualifiers: (none)
-   Advanced qualifiers: (none)
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers: (none)
    Associated qualifiers:
-  "-insequence" related qualifiers
+
+   "-sequence" associated qualifiers
    -sbegin1             integer    First base used
    -send1               integer    Last base used, def=seq length
    -sreverse1           boolean    Reverse (if DNA)
@@ -71,24 +72,21 @@ Command line arguments
    -slower1             boolean    Make lower case
    -supper1             boolean    Make upper case
    -sformat1            string     Input sequence format
-   -sopenfile1          string     Input filename
    -sdbname1            string     Database name
    -sid1                string     Entryname
    -ufo1                string     UFO features
    -fformat1            string     Features format
    -fopenfile1          string     Features file name
-  "-outfile" related qualifiers
+
+   "-outfile" associated qualifiers
    -odirectory2         string     Output directory
 
    General qualifiers:
    -auto                boolean    Turn off prompts
    -stdout              boolean    Write standard output
    -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for required and optional values
+   -options             boolean    Prompt for standard and additional values
    -debug               boolean    Write debug output to program.dbg
-   -acdlog              boolean    Write ACD processing log to program.acdlog
-   -acdpretty           boolean    Rewrite ACD file as program.acdpretty
-   -acdtable            boolean    Write HTML table of options
    -verbose             boolean    Report some/full command line options
    -help                boolean    Report command line options. More
                                   information on associated and general
@@ -99,8 +97,8 @@ Command line arguments
    -die                 boolean    Report deaths
    
 
-   Mandatory qualifiers Allowed values Default
-   [-insequence]
+   Standard (Mandatory) qualifiers Allowed values Default
+   [-sequence]
    (Parameter 1) Sequence database USA Readable sequence(s) Required
    -minpallen Enter minimum length of palindrome Integer 1 or more 10
    -maxpallen Enter maximum length of palindrome Any integer value 100
@@ -110,9 +108,9 @@ Command line arguments
    [-outfile]
    (Parameter 2) Output file name Output file <sequence>.palindrome
    -[no]overlap Report overlapping matches Boolean value Yes/No Yes
-   Optional qualifiers Allowed values Default
+   Additional (Optional) qualifiers Allowed values Default
    (none)
-   Advanced qualifiers Allowed values Default
+   Advanced (Unprompted) qualifiers Allowed values Default
    (none)
    
 Input file format

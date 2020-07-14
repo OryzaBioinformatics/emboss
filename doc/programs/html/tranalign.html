@@ -147,17 +147,18 @@ Align nucleic coding regions given the aligned proteins
 
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
-   Mandatory qualifiers:
-  [-nsequence]         seqall     Nucleotide sequences to be aligned
-  [-psequence]         seqset     Protein sequence alignment
+   Standard (Mandatory) qualifiers:
+  [-asequence]         seqall     Sequence database USA
+  [-bsequence]         seqset     Sequence set USA
   [-outseq]            seqoutset  Output sequence set USA
 
-   Optional qualifiers:
+   Additional (Optional) qualifiers:
    -table              menu       Code to use
 
-   Advanced qualifiers: (none)
+   Advanced (Unprompted) qualifiers: (none)
    Associated qualifiers:
-  "-nsequence" related qualifiers
+
+   "-asequence" associated qualifiers
    -sbegin1             integer    First base used
    -send1               integer    Last base used, def=seq length
    -sreverse1           boolean    Reverse (if DNA)
@@ -167,13 +168,13 @@ Align nucleic coding regions given the aligned proteins
    -slower1             boolean    Make lower case
    -supper1             boolean    Make upper case
    -sformat1            string     Input sequence format
-   -sopenfile1          string     Input filename
    -sdbname1            string     Database name
    -sid1                string     Entryname
    -ufo1                string     UFO features
    -fformat1            string     Features format
    -fopenfile1          string     Features file name
-  "-psequence" related qualifiers
+
+   "-bsequence" associated qualifiers
    -sbegin2             integer    First base used
    -send2               integer    Last base used, def=seq length
    -sreverse2           boolean    Reverse (if DNA)
@@ -183,13 +184,13 @@ Align nucleic coding regions given the aligned proteins
    -slower2             boolean    Make lower case
    -supper2             boolean    Make upper case
    -sformat2            string     Input sequence format
-   -sopenfile2          string     Input filename
    -sdbname2            string     Database name
    -sid2                string     Entryname
    -ufo2                string     UFO features
    -fformat2            string     Features format
    -fopenfile2          string     Features file name
-  "-outseq" related qualifiers
+
+   "-outseq" associated qualifiers
    -osformat3           string     Output seq format
    -osextension3        string     File name extension
    -osname3             string     Base file name
@@ -205,11 +206,8 @@ Align nucleic coding regions given the aligned proteins
    -auto                boolean    Turn off prompts
    -stdout              boolean    Write standard output
    -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for required and optional values
+   -options             boolean    Prompt for standard and additional values
    -debug               boolean    Write debug output to program.dbg
-   -acdlog              boolean    Write ACD processing log to program.acdlog
-   -acdpretty           boolean    Rewrite ACD file as program.acdpretty
-   -acdtable            boolean    Write HTML table of options
    -verbose             boolean    Report some/full command line options
    -help                boolean    Report command line options. More
                                   information on associated and general
@@ -225,22 +223,22 @@ Align nucleic coding regions given the aligned proteins
 <P>
 <table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=2>Mandatory qualifiers</th>
+<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
 <th align="left">Allowed values</th>
 <th align="left">Default</th>
 </tr>
 
 <tr>
-<td>[-nsequence]<br>(Parameter 1)</td>
-<td>Nucleotide sequences to be aligned</td>
+<td>[-asequence]<br>(Parameter 1)</td>
+<td>Sequence database USA</td>
 <td>Readable sequence(s)</td>
 <td><b>Required</b></td>
 </tr>
 
 <tr>
-<td>[-psequence]<br>(Parameter 2)</td>
-<td>Protein sequence alignment</td>
-<td>Readable sequences</td>
+<td>[-bsequence]<br>(Parameter 2)</td>
+<td>Sequence set USA</td>
+<td>Readable set of sequences</td>
 <td><b>Required</b></td>
 </tr>
 
@@ -252,7 +250,7 @@ Align nucleic coding regions given the aligned proteins
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=2>Optional qualifiers</th>
+<th align="left" colspan=2>Additional (Optional) qualifiers</th>
 <th align="left">Allowed values</th>
 <th align="left">Default</th>
 </tr>
@@ -265,7 +263,7 @@ Align nucleic coding regions given the aligned proteins
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=2>Advanced qualifiers</th>
+<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
 <th align="left">Allowed values</th>
 <th align="left">Default</th>
 </tr>

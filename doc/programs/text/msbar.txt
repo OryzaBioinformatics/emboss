@@ -95,7 +95,7 @@ Output sequence [eclac.fasta]:
    
 Command line arguments
 
-   Mandatory qualifiers (* if not always prompted):
+   Standard (Mandatory) qualifiers (* if not always prompted):
   [-sequence]          seqall     Sequence database USA
    -count              integer    Number of times to perform the mutation
                                   operations
@@ -105,13 +105,13 @@ Command line arguments
                                   are only done if the sequence is nucleic.
   [-outseq]            seqoutall  Output sequence(s) USA
 
-   Optional qualifiers (* if not always prompted):
+   Additional (Optional) qualifiers (* if not always prompted):
 *  -inframe            boolean    Do 'codon' and 'block' operations in frame
 
-   Advanced qualifiers:
+   Advanced (Unprompted) qualifiers:
    -minimum            integer    Minimum size for a block mutation
    -maximum            integer    Maximum size for a block mutation
-   -other              seqall     If you require that the resulting mutated
+   -othersequence      seqall     If you require that the resulting mutated
                                   sequence should not match a set of other
                                   sequences, then you can specify that set of
                                   sequences here. For example, if you require
@@ -131,7 +131,8 @@ Command line arguments
                                   sequence is written with a warning message.
 
    Associated qualifiers:
-  "-sequence" related qualifiers
+
+   "-sequence" associated qualifiers
    -sbegin1             integer    First base used
    -send1               integer    Last base used, def=seq length
    -sreverse1           boolean    Reverse (if DNA)
@@ -141,13 +142,13 @@ Command line arguments
    -slower1             boolean    Make lower case
    -supper1             boolean    Make upper case
    -sformat1            string     Input sequence format
-   -sopenfile1          string     Input filename
    -sdbname1            string     Database name
    -sid1                string     Entryname
    -ufo1                string     UFO features
    -fformat1            string     Features format
    -fopenfile1          string     Features file name
-  "-other" related qualifiers
+
+   "-othersequence" associated qualifiers
    -sbegin              integer    First base used
    -send                integer    Last base used, def=seq length
    -sreverse            boolean    Reverse (if DNA)
@@ -157,13 +158,13 @@ Command line arguments
    -slower              boolean    Make lower case
    -supper              boolean    Make upper case
    -sformat             string     Input sequence format
-   -sopenfile           string     Input filename
    -sdbname             string     Database name
    -sid                 string     Entryname
    -ufo                 string     UFO features
    -fformat             string     Features format
    -fopenfile           string     Features file name
-  "-outseq" related qualifiers
+
+   "-outseq" associated qualifiers
    -osformat2           string     Output seq format
    -osextension2        string     File name extension
    -osname2             string     Base file name
@@ -179,11 +180,8 @@ Command line arguments
    -auto                boolean    Turn off prompts
    -stdout              boolean    Write standard output
    -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for required and optional values
+   -options             boolean    Prompt for standard and additional values
    -debug               boolean    Write debug output to program.dbg
-   -acdlog              boolean    Write ACD processing log to program.acdlog
-   -acdpretty           boolean    Rewrite ACD file as program.acdpretty
-   -acdtable            boolean    Write HTML table of options
    -verbose             boolean    Report some/full command line options
    -help                boolean    Report command line options. More
                                   information on associated and general
@@ -194,7 +192,7 @@ Command line arguments
    -die                 boolean    Report deaths
    
 
-   Mandatory qualifiers Allowed values Default
+   Standard (Mandatory) qualifiers Allowed values Default
    [-sequence]
    (Parameter 1) Sequence database USA Readable sequence(s) Required
    -count Number of times to perform the mutation operations Integer 0 or
@@ -230,24 +228,24 @@ Command line arguments
    [-outseq]
    (Parameter 2) Output sequence(s) USA Writeable sequence(s)
    <sequence>.format
-   Optional qualifiers Allowed values Default
+   Additional (Optional) qualifiers Allowed values Default
    -inframe Do 'codon' and 'block' operations in frame Boolean value
    Yes/No No
-   Advanced qualifiers Allowed values Default
+   Advanced (Unprompted) qualifiers Allowed values Default
    -minimum Minimum size for a block mutation Integer 0 or more 1
    -maximum Maximum size for a block mutation Any integer value 10
-   -other If you require that the resulting mutated sequence should not
-   match a set of other sequences, then you can specify that set of
-   sequences here. For example, if you require that the mutated sequence
-   should not be the same as the input sequence, enter the input sequence
-   here. If you want the result to be different to previous results of
-   this program, specify the previous result sequences here. The program
-   will check that the result does not match the sequences specified here
-   before writing it out. If a match is found, then the mutation is
-   started again with a fresh copy of the input sequence. If, after 10
-   such retries, there is still a match to the set of sequence given
-   here, then the matching mutated sequence is written with a warning
-   message. Readable sequence(s) asis:N
+   -othersequence If you require that the resulting mutated sequence
+   should not match a set of other sequences, then you can specify that
+   set of sequences here. For example, if you require that the mutated
+   sequence should not be the same as the input sequence, enter the input
+   sequence here. If you want the result to be different to previous
+   results of this program, specify the previous result sequences here.
+   The program will check that the result does not match the sequences
+   specified here before writing it out. If a match is found, then the
+   mutation is started again with a fresh copy of the input sequence. If,
+   after 10 such retries, there is still a match to the set of sequence
+   given here, then the matching mutated sequence is written with a
+   warning message. Readable sequence(s) asis:N
    
 Input file format
 
@@ -432,7 +430,7 @@ gcgccgtcgcaaattgtcgcggcgattaaatctcgcgccgatcaactgggtgccagcgtg
 gtggtgtcgatggtagaacgaagcggcgtcgaagcctgtaaagcggcggtgcacaatctt
 ctcgcgcaacgcgtcagtgggctgatcattaactatccgctggatgaccaggatgccatt
 gctgtggaagctgcctgcactaatgttccggcgttatttcttgatgtctctgaccagaca
-cccatcaacagtattattttctcccatgaagacggtacgcgactgggcgtggagcatctg
+cccatcaacagAattattttctcccatgaagacggtacgcgactgggcgtggagcatctg
 gtcgcattgggtcaccagcaaatcgcgctgttagcgggcccattaagttctgtctcggcg
 cgtctgcgtctggctggctggcataaatatctcactcgcaatcaaattcagccgatagcg
 gaacgggaaggcgactggagtgccatgtccggttttcaacaaaccatgcaaatgctgaat
@@ -442,9 +440,9 @@ gataccgaagacagctcatgttatatcccgccgtcaaccaccatcaaacaggattttcgc
 ctgctggggcaaaccagcgtggaccgcttgctgcaactctctcagggccaggcggtgaag
 ggcaatcagctgttgcccgtctcactggtgaaaagaaaaaccaccctggcgcccaatacg
 caaaccgcctctccccgcgcgttggccgattcattaatgcagctggcacgacaggtttcc
-cgactggaaagcgggcagtgagcgcaacgcaattaaGgtgagttagctcactcattaggc
+cgactggaaagcgggcagtgagcgcaacgcaattaatgtgagttagctcactcattaggc
 accccaggctttacactttatgcttccggctcgtatgttgtgtggaattgtgagcggata
-acaatttcacacaggaaacagctatgaccatgattacggattcactggccgAcgttttac
+acaatttcacacaggaaacagctatgaccatgattacggattcactggccgtcgttttac
 aacgtcgtgactgggaaaaccctggcgttacccaacttaatcgccttgcagcacatcccc
 ctttcgccagctggcgtaatagcgaagaggcccgcaccgatcgcccttcccaacagttgc
 gcagcctgaatggcgaatggcgctttgcctggtttccggcaccagaagcggtgccggaaa
@@ -458,7 +456,7 @@ gtgacggcagttatctggaagatcaggatatgtggcggatgagcggcattttccgtgacg
 tctcgttgctgcataaaccgactacacaaatcagcgatttccatgttgccactcgcttta
 atgatgatttcagccgcgctgtactggaggctgaagttcagatgtgcggcgagttgcgtg
 actacctacgggtaacagtttctttatggcagggtgaaacgcaggtcgccagcggcaccg
-cgcctttcgTcggtgaaattatcgatgagcgtggtggttatgccgatcgcgtcacactac
+cgcctttcggcggtgaaattatcgatgagcgtggtggttatgccgatcgcgtcacactac
 gtctgaacgtcgaaaacccgaaactgtggagcgccgaaatcccgaatctctatcgtgcgg
 tggttgaactgcacaccgccgacggcacgctgattgaagcagaagcctgcgatgtcggtt
 tccgcgaggtgcggattgaaaatggtctgctgctgctgaacggcaagccgttgctgattc
@@ -480,12 +478,12 @@ tgttcggtttattctttttcttttacttttttatcatgggagcctacttcccgtttttcc
 cgatttggctacatgacatcaaccatatcagcaaaagtgatacgggtattatttttgccg
 ctatttctctgttctcgctattattccaaccgctgtttggtctgctttctgacaaactcg
 ggctgcgcaaatacctgctgtggattattaccggcatgttagtgatgtttgcgccgttct
-ttatttttatcttcgggccactgttacaatacaacattttagtaggatcgattgttggtg
+ttatttttatcttcgggccactgttacaatacaacattttagtaggatcgattgttgCtg
 gtatttatctaggcttttgttttaacgccggtgcgccagcagtagaggcatttattgaga
-aagtcagccgtcgcagtaatttcgaatttggtcgcgcgcggatgtttggctgtgttggct
+aagtcagccgtcgcagtaGtttcgaatttggtcgcgcgcggatgtttggctgtgttggct
 gggcgctgtgtgcctcgattgtcggcatcatgttcaccatcaataatcagtttgttttct
 ggctgggctctggctgtgcactcatcctcgccgttttactctttttcgccaaaacggatg
-cgccctcttctgccacggttgccaatgcggtaggtgccaaccattcggcGtttagcctta
+cgccctcttctgccacggttgccaatgcggtaggtgccaaccGttcggcatttagcctta
 agctggcactggaactgttcagacagccaaaactgtggtttttgtcactgtatgttattg
 gcgtttcctgcacctacgatgtttttgaccaacagtttgctaatttctttacttcgttct
 ttgctaccggtgaacagggtacgcgggtatttggctacgtaacgacaatgggcgaattac
@@ -509,7 +507,7 @@ tcggggataattctgttattggcgcgggtagtatcgtcacaaaagacattccaccaaacg
 tcgtggcggctggcgttccttgtcgggttattcgcgaaataaacgaccgggataagcact
 attatttcaaagattataaagttgaatcgtcagtttaaattataaaaattgcctgatacg
 ctgcgcttatcaggcctacaagttcagcgatctacattagccgcatccggcatgaacaaa
-gcgcaggaacaagcgtcgcatcatgTctctttgacccacagctgcggaaaacgtactggt
+gcgcaggaacaagcgtcgcatcatgcctctttgacccacagctgcggaaaacgtactggt
 gcaaaacgcagggttatgatcatcagcccaacgacgcacagcgcatgaaatgcccagtcc
 atcaggtaattgccgctgatactacgcagcacgccagaaaaccacggggcaagcccggcg
 atgataaaaccgattccctgcataaacgccaccagcttgccagcaatagccggttgcaca

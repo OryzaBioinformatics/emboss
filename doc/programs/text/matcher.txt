@@ -57,12 +57,12 @@ Output alignment [hba_human.matcher]:
    
 Command line arguments
 
-   Mandatory qualifiers:
-  [-sequencea]         sequence   Sequence USA
-  [-sequenceb]         sequence   Sequence USA
+   Standard (Mandatory) qualifiers:
+  [-asequence]         sequence   Sequence USA
+  [-bsequence]         sequence   Sequence USA
   [-outfile]           align      Output alignment file name
 
-   Optional qualifiers:
+   Additional (Optional) qualifiers:
    -datafile           matrix     This is the scoring matrix file used when
                                   comparing sequences. By default it is the
                                   file 'EBLOSUM62' (for proteins) or the file
@@ -98,9 +98,10 @@ Command line arguments
                                   using the gap extension penalty to control
                                   gap scoring.
 
-   Advanced qualifiers: (none)
+   Advanced (Unprompted) qualifiers: (none)
    Associated qualifiers:
-  "-sequencea" related qualifiers
+
+   "-asequence" associated qualifiers
    -sbegin1             integer    First base used
    -send1               integer    Last base used, def=seq length
    -sreverse1           boolean    Reverse (if DNA)
@@ -110,13 +111,13 @@ Command line arguments
    -slower1             boolean    Make lower case
    -supper1             boolean    Make upper case
    -sformat1            string     Input sequence format
-   -sopenfile1          string     Input filename
    -sdbname1            string     Database name
    -sid1                string     Entryname
    -ufo1                string     UFO features
    -fformat1            string     Features format
    -fopenfile1          string     Features file name
-  "-sequenceb" related qualifiers
+
+   "-bsequence" associated qualifiers
    -sbegin2             integer    First base used
    -send2               integer    Last base used, def=seq length
    -sreverse2           boolean    Reverse (if DNA)
@@ -126,15 +127,14 @@ Command line arguments
    -slower2             boolean    Make lower case
    -supper2             boolean    Make upper case
    -sformat2            string     Input sequence format
-   -sopenfile2          string     Input filename
    -sdbname2            string     Database name
    -sid2                string     Entryname
    -ufo2                string     UFO features
    -fformat2            string     Features format
    -fopenfile2          string     Features file name
-  "-outfile" related qualifiers
+
+   "-outfile" associated qualifiers
    -aformat3            string     Alignment format
-   -aopenfile3          string     Alignment file name
    -aextension3         string     File name extension
    -adirectory3         string     Output directory
    -aname3              string     Base file name
@@ -148,11 +148,8 @@ Command line arguments
    -auto                boolean    Turn off prompts
    -stdout              boolean    Write standard output
    -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for required and optional values
+   -options             boolean    Prompt for standard and additional values
    -debug               boolean    Write debug output to program.dbg
-   -acdlog              boolean    Write ACD processing log to program.acdlog
-   -acdpretty           boolean    Rewrite ACD file as program.acdpretty
-   -acdtable            boolean    Write HTML table of options
    -verbose             boolean    Report some/full command line options
    -help                boolean    Report command line options. More
                                   information on associated and general
@@ -163,14 +160,14 @@ Command line arguments
    -die                 boolean    Report deaths
    
 
-   Mandatory qualifiers Allowed values Default
-   [-sequencea]
+   Standard (Mandatory) qualifiers Allowed values Default
+   [-asequence]
    (Parameter 1) Sequence USA Readable sequence Required
-   [-sequenceb]
+   [-bsequence]
    (Parameter 2) Sequence USA Readable sequence Required
    [-outfile]
    (Parameter 3) Output alignment file name Alignment output file
-   Optional qualifiers Allowed values Default
+   Additional (Optional) qualifiers Allowed values Default
    -datafile This is the scoring matrix file used when comparing
    sequences. By default it is the file 'EBLOSUM62' (for proteins) or the
    file 'EDNAFULL' (for nucleic sequences). These files are found in the
@@ -197,7 +194,7 @@ Command line arguments
    by setting the gap penalty to zero (or very low) and using the gap
    extension penalty to control gap scoring. Positive integer 4 for any
    sequence
-   Advanced qualifiers Allowed values Default
+   Advanced (Unprompted) qualifiers Allowed values Default
    (none)
    
 Input file format
@@ -451,7 +448,7 @@ Output file format
   
 ########################################
 # Program:  matcher
-# Rundate:  Thu May 22 10:34:26 2003
+# Rundate:  Thu Nov 27 15:22:25 2003
 # Align_format: markx0
 # Report_file: hba_human.matcher
 ########################################
@@ -501,7 +498,7 @@ HBB_HU ENFRLLGNVLVCVLAHHFGKEFTPPVQAAYQKVVAGVANALAHKY
   
 ########################################
 # Program:  matcher
-# Rundate:  Thu May 22 10:34:26 2003
+# Rundate:  Thu Nov 27 15:22:25 2003
 # Align_format: markx0
 # Report_file: hba_human.matcher
 ########################################

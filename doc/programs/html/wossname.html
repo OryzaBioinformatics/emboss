@@ -291,7 +291,7 @@ showseq          Display a sequence with features, translation etc
 sixpack          Display a DNA sequence with 6-frame translation and ORFs
 transeq          Translate nucleic acid sequences
 
-PHYLOGENY
+PHYLOGENY DISTANCE MATRIX
 distmat          Creates a distance matrix from multiple alignments
 
 PROTEIN 2D STRUCTURE
@@ -322,6 +322,7 @@ pepwindowall     Displays protein hydropathy of a set of sequences
 PROTEIN MOTIFS
 antigenic        Finds antigenic sites in proteins
 digest           Protein proteolytic enzyme or reagent cleavage digest
+epestfind        Finds PEST motifs as potential proteolytic cleavage sites
 fuzzpro          Protein pattern search
 fuzztran         Protein pattern search after translation
 helixturnhelix   Report nucleic acid binding motifs
@@ -329,7 +330,6 @@ oddcomp          Finds protein sequence regions with a biased composition
 patmatdb         Search a protein sequence with a motif
 patmatmotifs     Search a PROSITE motif database with a protein sequence
 pepcoil          Predicts coiled coil regions
-pestfind         Finds PEST motifs as potential proteolytic cleavage sites
 preg             Regular expression search of a protein sequence
 pscan            Scans proteins using PRINTS
 sigcleave        Reports protein signal cleavage sites
@@ -420,6 +420,7 @@ embossversion    Writes the current EMBOSS version number
 emma             Multiple alignment program - interface to ClustalW program
 emowse           Protein identification by mass spectrometry
 entret           Reads and writes (returns) flatfile entries
+epestfind        Finds PEST motifs as potential proteolytic cleavage sites
 eprimer3         Picks PCR primers and hybridization oligos
 equicktandem     Finds tandem repeats
 est2genome       Align EST and genomic DNA sequences
@@ -472,7 +473,6 @@ pepstats         Protein statistics
 pepwheel         Shows protein sequences as helices
 pepwindow        Displays protein hydropathy
 pepwindowall     Displays protein hydropathy of a set of sequences
-pestfind         Finds PEST motifs as potential proteolytic cleavage sites
 plotcon          Plots the quality of conservation of a sequence alignment
 plotorf          Plot potential open reading frames
 polydot          Displays all-against-all dotplots of a set of sequences
@@ -575,7 +575,7 @@ NUCLEIC REPEATS
 NUCLEIC RESTRICTION
 NUCLEIC TRANSCRIPTION
 NUCLEIC TRANSLATION
-PHYLOGENY
+PHYLOGENY DISTANCE MATRIX
 PROTEIN 2D STRUCTURE
 PROTEIN COMPOSITION
 PROTEIN MOTIFS
@@ -626,7 +626,7 @@ Keyword to search for, or blank to list all programs: <b></b>
 <li><a href="#NUCLEIC RESTRICTION">NUCLEIC RESTRICTION</a></li>
 <li><a href="#NUCLEIC TRANSCRIPTION">NUCLEIC TRANSCRIPTION</a></li>
 <li><a href="#NUCLEIC TRANSLATION">NUCLEIC TRANSLATION</a></li>
-<li><a href="#PHYLOGENY">PHYLOGENY</a></li>
+<li><a href="#PHYLOGENY DISTANCE MATRIX">PHYLOGENY DISTANCE MATRIX</a></li>
 <li><a href="#PROTEIN 2D STRUCTURE">PROTEIN 2D STRUCTURE</a></li>
 <li><a href="#PROTEIN COMPOSITION">PROTEIN COMPOSITION</a></li>
 <li><a href="#PROTEIN MOTIFS">PROTEIN MOTIFS</a></li>
@@ -671,14 +671,14 @@ IT IS DONE FOR YOU.
 
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
-   Mandatory qualifiers:
+   Standard (Mandatory) qualifiers:
   [-search]            string     Enter a word or words here and a
                                   case-independent search for it will be made
                                   in the one-line documentation of all of the
                                   EMBOSS programs. If no keyword is specified,
                                   all programs will be listed.
 
-   Optional qualifiers (* if not always prompted):
+   Additional (Optional) qualifiers (* if not always prompted):
    -explode            boolean    The groups that EMBOSS applications belong
                                   to have two forms, exploded and not
                                   exploded. The exploded group names are more
@@ -690,9 +690,7 @@ IT IS DONE FOR YOU.
                                   names as: 'NAME1', 'NAME2', 'NAME1 NAME2',
                                   NAME2 NAME1'. The non-expanded names are
                                   simply like: 'NAME1 NAME2'.
-   -outfile            outfile    If you enter the name of a file here then
-                                  this program will write the program names
-                                  and brief descriptions into that file.
+   -outfile            outfile    Output file name
    -html               boolean    If you are sending the output to a file,
                                   this will format it for displaying as a
                                   table in a WWW document.
@@ -724,7 +722,7 @@ IT IS DONE FOR YOU.
                                   descriptions instead of the programs being
                                   listed in their functional groups.
 
-   Advanced qualifiers:
+   Advanced (Unprompted) qualifiers:
    -[no]emboss         boolean    If you use this option then EMBOSS program
                                   documentation will be searched. If this
                                   option is set to be false, then only the
@@ -769,18 +767,16 @@ IT IS DONE FOR YOU.
                                   run from a GUI
 
    Associated qualifiers:
-  "-outfile" related qualifiers
+
+   "-outfile" associated qualifiers
    -odirectory          string     Output directory
 
    General qualifiers:
    -auto                boolean    Turn off prompts
    -stdout              boolean    Write standard output
    -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for required and optional values
+   -options             boolean    Prompt for standard and additional values
    -debug               boolean    Write debug output to program.dbg
-   -acdlog              boolean    Write ACD processing log to program.acdlog
-   -acdpretty           boolean    Rewrite ACD file as program.acdpretty
-   -acdtable            boolean    Write HTML table of options
    -verbose             boolean    Report some/full command line options
    -help                boolean    Report command line options. More
                                   information on associated and general
@@ -797,7 +793,7 @@ IT IS DONE FOR YOU.
 
 <table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=2>Mandatory qualifiers</th>
+<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
 <th align="left">Allowed values</th>
 <th align="left">Default</th>
 </tr>
@@ -810,7 +806,7 @@ IT IS DONE FOR YOU.
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=2>Optional qualifiers</th>
+<th align="left" colspan=2>Additional (Optional) qualifiers</th>
 <th align="left">Allowed values</th>
 <th align="left">Default</th>
 </tr>
@@ -824,7 +820,7 @@ IT IS DONE FOR YOU.
 
 <tr>
 <td>-outfile</td>
-<td>If you enter the name of a file here then this program will write the program names and brief descriptions into that file.</td>
+<td>Output file name</td>
 <td>Output file</td>
 <td>stdout</td>
 </tr>
@@ -872,7 +868,7 @@ then if you enter '.html' here, the second half of the URL after the programname
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=2>Advanced qualifiers</th>
+<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
 <th align="left">Allowed values</th>
 <th align="left">Default</th>
 </tr>
@@ -998,6 +994,7 @@ that the programs belong to or the word that is being searched for.
 
 <tr><td><a href="http://www.uk.embnet.org/Software/EMBOSS/Apps/antigenic.html">antigenic</a></td><td>Finds antigenic sites in proteins</td></tr>
 <tr><td><a href="http://www.uk.embnet.org/Software/EMBOSS/Apps/digest.html">digest</a></td><td>Protein proteolytic enzyme or reagent cleavage digest</td></tr>
+<tr><td><a href="http://www.uk.embnet.org/Software/EMBOSS/Apps/epestfind.html">epestfind</a></td><td>Finds PEST motifs as potential proteolytic cleavage sites</td></tr>
 <tr><td><a href="http://www.uk.embnet.org/Software/EMBOSS/Apps/fuzzpro.html">fuzzpro</a></td><td>Protein pattern search</td></tr>
 <tr><td><a href="http://www.uk.embnet.org/Software/EMBOSS/Apps/fuzztran.html">fuzztran</a></td><td>Protein pattern search after translation</td></tr>
 <tr><td><a href="http://www.uk.embnet.org/Software/EMBOSS/Apps/helixturnhelix.html">helixturnhelix</a></td><td>Report nucleic acid binding motifs</td></tr>
@@ -1005,7 +1002,6 @@ that the programs belong to or the word that is being searched for.
 <tr><td><a href="http://www.uk.embnet.org/Software/EMBOSS/Apps/patmatdb.html">patmatdb</a></td><td>Search a protein sequence with a motif</td></tr>
 <tr><td><a href="http://www.uk.embnet.org/Software/EMBOSS/Apps/patmatmotifs.html">patmatmotifs</a></td><td>Search a PROSITE motif database with a protein sequence</td></tr>
 <tr><td><a href="http://www.uk.embnet.org/Software/EMBOSS/Apps/pepcoil.html">pepcoil</a></td><td>Predicts coiled coil regions</td></tr>
-<tr><td><a href="http://www.uk.embnet.org/Software/EMBOSS/Apps/pestfind.html">pestfind</a></td><td>Finds PEST motifs as potential proteolytic cleavage sites</td></tr>
 <tr><td><a href="http://www.uk.embnet.org/Software/EMBOSS/Apps/preg.html">preg</a></td><td>Regular expression search of a protein sequence</td></tr>
 <tr><td><a href="http://www.uk.embnet.org/Software/EMBOSS/Apps/pscan.html">pscan</a></td><td>Scans proteins using PRINTS</td></tr>
 <tr><td><a href="http://www.uk.embnet.org/Software/EMBOSS/Apps/sigcleave.html">sigcleave</a></td><td>Reports protein signal cleavage sites</td></tr>

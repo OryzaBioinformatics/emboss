@@ -507,11 +507,11 @@ EHVYSFP
 
 <table CELLSPACING=0 CELLPADDING=3 BGCOLOR="#f5f5ff" ><tr><td>
 <pre>
-   Mandatory qualifiers:
+   Standard (Mandatory) qualifiers:
   [-sequence]          seqall     Sequence database USA
   [-outseq]            seqout     Output sequence USA
 
-   Optional qualifiers:
+   Additional (Optional) qualifiers:
    -before             integer    If this value is greater than 0 then that
                                   number of bases or residues before the
                                   feature are included in the extracted
@@ -649,8 +649,8 @@ EHVYSFP
                                   their values (if any). For example, if this
                                   is set to be 'gene', then if any output
                                   feature has the tag (for example)
-                                  '/gene="BRCA1"' associated with it, then the
-                                  text '(gene="BRCA1")' will be added to the
+                                  '/gene=BRCA1' associated with it, then the
+                                  text '(gene=BRCA1)' will be added to the
                                   Description line. Tags are the types of
                                   extra values that a feature may have. For
                                   example in the EMBL feature table, a 'CDS'
@@ -673,9 +673,10 @@ EHVYSFP
                                   eg:
                                   gene | label
 
-   Advanced qualifiers: (none)
+   Advanced (Unprompted) qualifiers: (none)
    Associated qualifiers:
-  "-sequence" related qualifiers
+
+   "-sequence" associated qualifiers
    -sbegin1             integer    First base used
    -send1               integer    Last base used, def=seq length
    -sreverse1           boolean    Reverse (if DNA)
@@ -685,13 +686,13 @@ EHVYSFP
    -slower1             boolean    Make lower case
    -supper1             boolean    Make upper case
    -sformat1            string     Input sequence format
-   -sopenfile1          string     Input filename
    -sdbname1            string     Database name
    -sid1                string     Entryname
    -ufo1                string     UFO features
    -fformat1            string     Features format
    -fopenfile1          string     Features file name
-  "-outseq" related qualifiers
+
+   "-outseq" associated qualifiers
    -osformat2           string     Output seq format
    -osextension2        string     File name extension
    -osname2             string     Base file name
@@ -707,11 +708,8 @@ EHVYSFP
    -auto                boolean    Turn off prompts
    -stdout              boolean    Write standard output
    -filter              boolean    Read standard input, write standard output
-   -options             boolean    Prompt for required and optional values
+   -options             boolean    Prompt for standard and additional values
    -debug               boolean    Write debug output to program.dbg
-   -acdlog              boolean    Write ACD processing log to program.acdlog
-   -acdpretty           boolean    Rewrite ACD file as program.acdpretty
-   -acdtable            boolean    Write HTML table of options
    -verbose             boolean    Report some/full command line options
    -help                boolean    Report command line options. More
                                   information on associated and general
@@ -727,7 +725,7 @@ EHVYSFP
 <P>
 <table border cellspacing=0 cellpadding=3 bgcolor="#ccccff">
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=2>Mandatory qualifiers</th>
+<th align="left" colspan=2>Standard (Mandatory) qualifiers</th>
 <th align="left">Allowed values</th>
 <th align="left">Default</th>
 </tr>
@@ -747,7 +745,7 @@ EHVYSFP
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=2>Optional qualifiers</th>
+<th align="left" colspan=2>Additional (Optional) qualifiers</th>
 <th align="left">Allowed values</th>
 <th align="left">Default</th>
 </tr>
@@ -846,7 +844,7 @@ pax* | 10</td>
 
 <tr>
 <td>-describe</td>
-<td>To aid you in identifying some further properties of a feature that has been output, this lets you specify one or more tag names that should be added to the output sequence Description text, together with their values (if any). For example, if this is set to be 'gene', then if any output feature has the tag (for example) '/gene="BRCA1"' associated with it, then the text '(gene="BRCA1")' will be added to the Description line. Tags are the types of extra values that a feature may have. For example in the EMBL feature table, a 'CDS' type of feature may have the tags '/codon', '/codon_start', '/db_xref', '/EC_number', '/evidence', '/exception', '/function', '/gene', '/label', '/map', '/note', '/number', '/partial', '/product', '/protein_id', '/pseudo', '/standard_name', '/translation', '/transl_except', '/transl_table', or '/usedin'. Some of these tags also have values, for example '/gene' can have the value of the gene name.
+<td>To aid you in identifying some further properties of a feature that has been output, this lets you specify one or more tag names that should be added to the output sequence Description text, together with their values (if any). For example, if this is set to be 'gene', then if any output feature has the tag (for example) '/gene=BRCA1' associated with it, then the text '(gene=BRCA1)' will be added to the Description line. Tags are the types of extra values that a feature may have. For example in the EMBL feature table, a 'CDS' type of feature may have the tags '/codon', '/codon_start', '/db_xref', '/EC_number', '/evidence', '/exception', '/function', '/gene', '/label', '/map', '/note', '/number', '/partial', '/product', '/protein_id', '/pseudo', '/standard_name', '/translation', '/transl_except', '/transl_table', or '/usedin'. Some of these tags also have values, for example '/gene' can have the value of the gene name.
 By default no feature tag is displayed. You can set this to match any feature tag you wish to show.
 The tag may be wildcarded by using '*'.
 If you wish to extract more than one tag, separate their names with the character '|', eg:
@@ -856,7 +854,7 @@ gene | label</td>
 </tr>
 
 <tr bgcolor="#FFFFCC">
-<th align="left" colspan=2>Advanced qualifiers</th>
+<th align="left" colspan=2>Advanced (Unprompted) qualifiers</th>
 <th align="left">Allowed values</th>
 <th align="left">Default</th>
 </tr>
