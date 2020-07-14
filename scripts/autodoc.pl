@@ -17,7 +17,7 @@
   my %progdone = ();	# key=program name, value = set to 1 if documentation exists
   my %progdir = ();	# key=program name, value = EMBASSY name if EMBASSY program
 
-  my $embassy;		# EMBASSY of current programs being done, "" if not an EMBASSY program
+  my $embassy;		# name of current EMBASSY directory being done, "" if not an EMBASSY program
   my $docdir;		# name of directory holding the set of EMBASSY programs being done
 
 # read in from the EMBOSS application 'wossname'
@@ -466,8 +466,9 @@ sub checkincludefile ( $$$ ) {
 </tr>\n";
       }
 
-# check the documentation for this file exists
-      if (-e "$docdir/$thisprogram.html") {
+# check the documentation for this file exists and is not a symbolic link 
+# (EMBASSY program docs have symbolic links to the main EMBOSS doc directory)
+      if (-e "$docdir/$thisprogram.html" && ! -l "$docdir/$thisprogram.html") {
 #       print "$thisprogram.html found\n";
 # if this is an EMBASSY document, note which EMBASSY directory it is in
         if ($embassy ne "") {$progdir{$thisprogram} = $embassy}
@@ -503,7 +504,13 @@ sub checkincludefile ( $$$ ) {
 
 
 # check on the existence of the 'seealso' include file for this application
-      system "seealso $thisprogram -auto -html -post '.html' -out x.x";
+# if this is not an EMBASSY program, then we don't want to include EMBASSY
+# programs in the SEE ALSO file
+      if ($embassy eq "") {
+        system "seealso $thisprogram -auto -noembassy -html -post '.html' -out x.x";
+      } else {
+        system "seealso $thisprogram -auto -html -post '.html' -out x.x";
+      }
       system "perl -p -i -e 's/SEE ALSO/See also/g;' x.x";
       checkincludefile($thisprogram, $docdir, 'isee');
 
